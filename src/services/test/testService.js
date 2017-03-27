@@ -1,4 +1,4 @@
-var Finsemble = require('finsemble/libs/FrontEnd.js');
+var Finsemble = require('@chartiq/finsemble');
 var baseService = Finsemble.baseService;
 
 /**

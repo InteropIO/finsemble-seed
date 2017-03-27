@@ -1,4 +1,4 @@
-var Finsemble = require('finsemble');
+var Finsemble = require('@chartiq/finsemble');
 var RouterClient = Finsemble.Clients.RouterClient;
 var BaseClient = Finsemble.Clients.BaseClient;
 var WindowClient = Finsemble.Clients.WindowClient;
