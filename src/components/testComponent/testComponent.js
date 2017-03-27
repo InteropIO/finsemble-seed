@@ -1,8 +1,8 @@
 var path = require('path');
 var testClient = require('../../clients/testClient.js');
 
-FSBL.addClient('TestClient', testClient);
-FSBL.useAllClients();
+FSBL.addClient('TestClient', testClient); // TERRY: shouldn't this line be in testClient.js?
+FSBL.useAllClients(); // TERRY: What does this do? Can we make this automagic for developers?
 
 FSBL.initialize(onReady);
 
@@ -17,12 +17,14 @@ function setInputValue(val) {
 	myInput.value = val;
 	saveState();
 }
+
 function saveState() {
 	WindowClient.setAppState({
 		field: 'symbol',
 		value: myInput.value
 	});
 }
+
 function restoreState() {
 	WindowClient.getAppState({
 		field: 'symbol'
@@ -31,16 +33,17 @@ function restoreState() {
 			alert(err.message);
 			return;
 		}
-		setInputValue(state);
+		setInputValue(state); // TERRY: Triggers a save, which from within a restore could confuse people.
 	});
 }
 
 function handleInputKeyup(e) {
-	saveState();
-	if (e.keyIdentifier === 'enter') {
+	saveState(); // TERRY: Kind of weird to save state on keystrokes. I think maybe we should have a button to demonstrate?
+	if (e.keyIdentifier === 'enter') { //TERRY: Deprecated. See: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyIdentifier
 		publishSymbolChange();
 	}
 }
+
 function publishSymbolChange() {
 	LinkerClient.publish('symbol', myInput.value);
 }
@@ -48,6 +51,7 @@ function publishSymbolChange() {
 function spawnADialog() {
 	TestClient.spawnADialog();
 }
+
 function onReady() {
 	
 	//gathering references.
