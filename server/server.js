@@ -6,7 +6,7 @@ var app = express();
 var nocache = require('nocache');
 var path = require('path');
 //app.use(express.static(rootDir));
-app.use(express.static(path.join(__dirname,"..",'/node_modules/finsemble/dist')));
+app.use(express.static(path.join(__dirname,"..",'/node_modules/@chartiq/finsemble/dist')));
 app.use("/localServices",express.static(path.join(__dirname,"..",'/built/')));
 console.log("/localServices",__dirname + '/built/')
 var PORT = process.env.PORT || 80;
