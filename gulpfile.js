@@ -72,7 +72,7 @@ gulp.task('devServer', gulp.series(
 	function (done) {				
 		var exec = require('child_process').exec;
 		//This runs essentially runs 'PORT=80 node server/server.js'
-		var serverExec = exec('node ' + path.join(__dirname, '/server/server.js'), { env: { 'PORT': 80, NODE_ENV: "dev" } });
+		var serverExec = exec('node ' + path.join(__dirname, '/node_fileserver/server.js'), { env: { 'PORT': 80, NODE_ENV: "dev" } });
 		serverExec.stdout.on("data", function (data) {
 			//Prints server output to your terminal.
 			console.log("SERVER STDOUT:", data);
