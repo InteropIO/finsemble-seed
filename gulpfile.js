@@ -8,10 +8,10 @@ var configPath = path.join(__dirname, '/configs/finConfig.json');
 
 function copyStaticFiles() {
 	return gulp.src([
-				path.join(__dirname, '/src/**/*'),
-				path.join('!' + __dirname, '/src/**/*.js')
-			])	
-			.pipe(gulp.dest(path.join(__dirname, '/built/')));
+		path.join(__dirname, '/src/**/*'),
+		path.join('!' + __dirname, '/src/**/*.js')
+	])
+		.pipe(gulp.dest(path.join(__dirname, '/built/')));
 }
 
 function wipeBuilt(done) {
@@ -26,7 +26,7 @@ function wipe(dir, cb) {
 		if (cb) {
 			cb();
 		}
-	}).catch(function (err) { 
+	}).catch(function (err) {
 		console.error(err);
 	});
 }
@@ -45,7 +45,7 @@ function webpackComponents() {
 }
 function launchOpenfin() {
 	return openfinLauncher.launchOpenFin({
-		configPath: configPath
+		configPath: 'http://localhost:80/config'
 	});
 };
 gulp.task('wipeBuilt', gulp.series(wipeBuilt));
@@ -69,7 +69,7 @@ gulp.task('devServer', gulp.series(
 	webpackClients,
 	webpackServices,
 	webpackComponents,
-	function (done) {				
+	function (done) {
 		var exec = require('child_process').exec;
 		//This runs essentially runs 'PORT=80 node server/server.js'
 		var serverExec = exec('node ' + path.join(__dirname, '/node_fileserver/server.js'), { env: { 'PORT': 80, NODE_ENV: "dev" } });
@@ -87,5 +87,5 @@ gulp.task('devServer', gulp.series(
 			console.log('ERROR:' + data);
 		});
 	})
-); 
+);
 gulp.task('default', gulp.series('devServer'));

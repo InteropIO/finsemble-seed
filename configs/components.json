@@ -1,0 +1,28 @@
+{
+    "testComponent": {
+        "window": {
+            "url": "/localServices/components/testComponent/testComponent.html",
+            "frame": false,
+            "resizable": false,
+            "autoShow": true,
+            "addToWorkspace": true,
+            "defaultTop": "center",
+            "defaultLeft": "center",
+            "defaultWidth": 800,
+            "defaultHeight": 600,
+            "customData": {
+                "persists": true,
+                "FSBLHeader": true,
+                "componentType": "testComponent",
+                "isPinned": false,
+                "launchableByUser": true
+            }
+        },
+        "linker": {
+            "symbol": {
+                "receive": true,
+                "transmit": true
+            }
+        }
+    }
+}

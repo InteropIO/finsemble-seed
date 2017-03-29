@@ -1,0 +1,13 @@
+{
+    "beforeLaunch": [],
+    "workers": [
+        {
+            "useWindow": true,
+            "visible": true,
+            "active": true,
+            "html": "/localServices/services/test/test.html",
+            "name": "testService",
+            "files": "localServices/services/test/testService.js"
+        }
+    ]
+}
