@@ -1,4 +1,8 @@
 
+var Finsemble = require("finsemble/libs/Server");
+console.log(Finsemble.FinsembleConfigs);
+
+
 module.exports = function () {
     return {
         "FSBL": {
