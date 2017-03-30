@@ -2,6 +2,7 @@ var path = require('path');
 var fs = require("fs");
 var glob = require("glob");
 var glob_entries = require('webpack-glob-entries');
+var componentsToBuild = require('../configs/componentsToBuild.json');
 
 function getDirectories(srcpath) {
 	return fs.readdirSync(srcpath).filter(function (file) {
@@ -16,6 +17,8 @@ for (var key in entry) {
 	//e.g., components/myComponent/myComponent
 	entry[path.join(key, key)] = currentPath;
 }
+Object.assign(entry, componentsToBuild);
+
 module.exports = {
 	devtool: 'source-map',
 	entry: entry,
