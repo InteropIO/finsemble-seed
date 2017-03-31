@@ -27,8 +27,8 @@ Using the CLI
 
 These commands can be run from your command line in your finsemble directory:
 
-- `new-fsbl-components` - Creates a new Finsemble component. This command creates stub css/html/js files inside of src/components.
-- `new-fsbl-react-component` - Same as above but also adds React build dependencies to webpack. 
+- `finsemble-cli add component <yourComponentName>` - Creates a new Finsemble component. This command creates stub css/html/js files inside of src/components.
+- `finsemble-cli add component <yourComponentName> --react-component=true` - Same as above but also adds React build dependencies to webpack. 
 
 
-- `new-fsbl-service` - Creates a new service. The terminal will prompt you for a name (omit 'Service' from the name). Answer "yes" when asked whether to create a Client. Client API files will be created for components to access your service.
+- `finsemble-cli add service <yourServiceName> --create-client=true` - Creates a new microservice.
