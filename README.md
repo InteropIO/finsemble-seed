@@ -16,7 +16,7 @@ node.js is required to build Finsemble applications and must be installed before
 From the command line in your finsemble directory:
 
 - Install Finsemble dependencies: `npm install`
-- Install Finsemble Command Line Interface (CLI): `npm link`
+- Install Finsemble CLI: `npm install -g @chartiq/finsemble-cli`
 - Run the sample app: `npm run dev`
 
 
