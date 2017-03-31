@@ -34,6 +34,10 @@ function webpackClients() {
 	return gulpWebpack(require('./configs/webpack.clients.config.js'), webpack)
 		.pipe(gulp.dest(path.join(__dirname, '/built/clients')));
 }
+function webpackReactComponents() {
+	return gulpWebpack(require('./configs/webpack.react.components.config.js'), webpack)
+		.pipe(gulp.dest(path.join(__dirname, '/built/')));
+}
 function webpackServices() {
 	return gulpWebpack(require('./configs/webpack.services.config.js'), webpack)
 		.pipe(gulp.dest(path.join(__dirname, '/built/services')));
@@ -60,7 +64,8 @@ gulp.task('build', gulp.series(
 	'copy',
 	webpackClients,
 	webpackServices,
-	webpackComponents
+	webpackComponents,
+	webpackReactComponents
 ));
 
 gulp.task('devServer', gulp.series(
@@ -69,6 +74,7 @@ gulp.task('devServer', gulp.series(
 	webpackClients,
 	webpackServices,
 	webpackComponents,
+	webpackReactComponents,
 	function (done) {
 		var exec = require('child_process').exec;
 		//This runs essentially runs 'PORT=80 node server/server.js'
