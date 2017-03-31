@@ -1,0 +1,9 @@
+{
+    "workspaces": [
+        {
+            "name": "Default Workspace with No Windows",
+            "windows": [],
+            "components": []
+        }
+	]
+}
