@@ -8,10 +8,10 @@ var configPath = path.join(__dirname, '/configs/finConfig.json');
 
 function copyStaticFiles() {
 	return gulp.src([
-		path.join(__dirname, '/src/**/*'),
-		path.join('!' + __dirname, '/src/**/*.js')
+		path.join(__dirname, '/src/components/**/*'),
+		path.join('!' + __dirname, '/src/components/**/*.jsx')
 	])
-		.pipe(gulp.dest(path.join(__dirname, '/built/')));
+		.pipe(gulp.dest(path.join(__dirname, '/built/components/')));
 }
 
 function wipeBuilt(done) {
