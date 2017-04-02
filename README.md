@@ -11,24 +11,26 @@ Getting started
 
 *Note: Configure your Finsemble dev environment on a Windows machine. For Mac developers we recommend running Windows under Bootcamp (https://support.apple.com/en-us/HT201468)*
 
-node.js is required to build Finsemble applications and must be installed before you begin: https://nodejs.org/en/
+node.js is required to build Finsemble applications and must be installed before you begin: https://nodejs.org/en/. We recommend version 6.10.1 LTS. *Finsemble has not been tested in node 7.0+.*
 
 From the command line in your finsemble directory:
 
-- Install Finsemble dependencies: `npm install`
-- Install Finsemble CLI: `npm install -g @chartiq/finsemble-cli`
-- Run the sample app: `npm run dev`
+- Install Finsemble dependencies: 
+
+`> npm install`
+- Install Finsemble Command Line Interface (CLI): 
+
+`> npm link`
+
+- Run the sample app: 
+
+`> npm run dev`
 
 
 *Note: The first time you run the sample app, Finsemble will download required assets such as the OpenFin desktop container. This may take a few minutes if you are on a slow Internet connection.*
 
 Using the CLI
 ----
+After installing the CLI, run the command without any arguments to see a list of available commands and examples.
 
-These commands can be run from your command line in your finsemble directory:
-
-- `finsemble-cli add component <yourComponentName>` - Creates a new Finsemble component. This command creates stub css/html/js files inside of src/components.
-- `finsemble-cli add component <yourComponentName> --react-component=true` - Same as above but also adds React build dependencies to webpack. 
-
-
-- `finsemble-cli add service <yourServiceName> --create-client=true` - Creates a new microservice.
+`> finsemble-cli`
