@@ -30,6 +30,102 @@ function wipe(dir, cb) {
 		console.error(err);
 	});
 }
+
+/**
+ *  Watcher for components. Builds everything whenever a source file changes.
+ *  @todo, make it smarter - only rebuild the folder that changed.
+ */
+function watchReactComponents(done) {
+	watch('./src/components/**/*', { ignoreInitial: true }, gulp.series(
+		wipeComponents,
+		copyComponentsTobuilt,
+		buildComponents,
+		buildSass,
+		function (done) {
+			buildsInTheQueue.components--;
+			buildsInTheQueue.sass--;
+			done();
+		},
+		buildComplete
+	));
+	done();
+}
+
+/**
+ *  Watcher for Clients. Builds everything whenever a source file changes.
+ */
+function watchClients(done) {
+	watch('./src/clients/*', { ignoreInitial: true }, gulp.series(
+		wipeClients,
+		webpackClients,
+		webpackServices,
+		function (done) {
+			buildsInTheQueue.Clients--;
+			done();
+		},
+		buildComplete));
+	done();
+}
+
+/**
+ *  Watcher for Clients. Builds everything whenever a source file changes.
+ */
+function watchServices(done) {
+	watch('./src/services/**/*.js', { ignoreInitial: true }, gulp.series(
+		wipeServices,
+		copyServicesTobuilt,
+		buildServices,
+		function (done) {
+			buildsInTheQueue.services--;
+			done();
+		},
+		buildComplete));
+	done();
+}
+
+/**
+ *  Helper function to delete directories.
+ */
+function wipe(dir, cb) {
+	del(dir, { force: true }).then(function () {
+		if (cb) {
+			cb();
+		}
+	});
+}
+
+/**
+ *  Wipes the service dir.
+ */
+function wipeServices(done) {
+	wipe(path.join(__dirname, '/built/services/'), done);
+}
+
+/**
+ *  Wipes the clients dir.
+ */
+function wipeClients(done) {
+	wipe(path.join(__dirname, '/built/clients/'), done);
+}
+/**
+ * Removes everything in built.
+ */
+function wipebuilt(done) {
+	if (directoryExists(path.join(__dirname, "/built/"))) {
+		wipe(path.join(__dirname, '/built/'), done);
+	} else {
+		done();
+	}
+
+}
+
+/**
+ *  Wipes the component directory.
+ */
+function wipeComponents(done) {
+	wipe(path.join(__dirname, '/built/components'), done);
+}
+
 function webpackClients() {
 	return gulpWebpack(require('./configs/webpack.clients.config.js'), webpack)
 		.pipe(gulp.dest(path.join(__dirname, '/built/clients')));
