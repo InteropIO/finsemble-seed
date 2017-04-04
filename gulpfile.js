@@ -2,17 +2,26 @@ var gulp = require('gulp-4.0.build');
 var path = require("path");
 var gulpWebpack = require('gulp-webpack');
 var webpack = require("webpack");
+var watch = require("gulp-watch");
 var del = require('del');
 var openfinLauncher = require('openfin-launcher');
 var configPath = path.join(__dirname, '/configs/finConfig.json');
 
-function copyStaticFiles() {
+function copyStaticComponentsFiles() {
 	return gulp.src([
 		path.join(__dirname, '/src/components/**/*'),
 		path.join('!' + __dirname, '/src/components/**/*.jsx')
 	])
 		.pipe(gulp.dest(path.join(__dirname, '/built/components/')));
 }
+
+function copyStaticFiles() {
+	return gulp.src([path.join(__dirname, '/src/services/**/*.html'),
+	//ignores the js files in service, but copies over the html files.
+	path.join('!' + __dirname, '/src/services/**/*.js')])
+		.pipe(gulp.dest(path.join(__dirname, '/built/services')));
+}
+
 
 function wipeBuilt(done) {
 	var dir = path.join(__dirname, '/built/');
@@ -38,15 +47,9 @@ function wipe(dir, cb) {
 function watchReactComponents(done) {
 	watch('./src/components/**/*', { ignoreInitial: true }, gulp.series(
 		wipeComponents,
-		copyComponentsTobuilt,
-		buildComponents,
-		buildSass,
-		function (done) {
-			buildsInTheQueue.components--;
-			buildsInTheQueue.sass--;
-			done();
-		},
-		buildComplete
+		copyStaticComponentsFiles,
+		webpackReactComponents,
+		webpackComponents
 	));
 	done();
 }
@@ -57,13 +60,8 @@ function watchReactComponents(done) {
 function watchClients(done) {
 	watch('./src/clients/*', { ignoreInitial: true }, gulp.series(
 		wipeClients,
-		webpackClients,
-		webpackServices,
-		function (done) {
-			buildsInTheQueue.Clients--;
-			done();
-		},
-		buildComplete));
+		webpackClients
+		));
 	done();
 }
 
@@ -73,13 +71,8 @@ function watchClients(done) {
 function watchServices(done) {
 	watch('./src/services/**/*.js', { ignoreInitial: true }, gulp.series(
 		wipeServices,
-		copyServicesTobuilt,
-		buildServices,
-		function (done) {
-			buildsInTheQueue.services--;
-			done();
-		},
-		buildComplete));
+		copyStaticFiles,
+		webpackServices));
 	done();
 }
 
@@ -128,7 +121,7 @@ function wipeComponents(done) {
 
 function webpackClients() {
 	return gulpWebpack(require('./configs/webpack.clients.config.js'), webpack)
-		.pipe(gulp.dest(path.join(__dirname, '/built/clients')));
+		.pipe(gulp.dest(path.join(__dirname, '/built/')));
 }
 function webpackReactComponents() {
 	return gulpWebpack(require('./configs/webpack.react.components.config.js'), webpack)
@@ -152,7 +145,8 @@ gulp.task('wipeBuilt', gulp.series(wipeBuilt));
 
 
 gulp.task('copy', gulp.series(
-	copyStaticFiles
+	copyStaticFiles,
+	copyStaticComponentsFiles
 ));
 gulp.task('wp', gulp.series(webpackComponents))
 gulp.task('build', gulp.series(
@@ -171,6 +165,9 @@ gulp.task('devServer', gulp.series(
 	webpackServices,
 	webpackComponents,
 	webpackReactComponents,
+	watchReactComponents,
+	watchClients,
+	watchServices,
 	function (done) {
 		var exec = require('child_process').exec;
 		//This runs essentially runs 'PORT=80 node server/server.js'
