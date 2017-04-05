@@ -1,0 +1,25 @@
+* {
+	display: block;
+}
+
+body {
+	margin: 0;
+}
+
+section {
+	display: flex;
+	flex-direction: row;
+	padding: 10px;
+}
+
+section > field {
+	width:30%;
+}
+
+section > owed, section > account {
+	display: inline-block;
+	padding: 0 10px;
+	border-bottom: solid gray 1px;
+	margin: 0 10px;
+	width: 70%;
+}
