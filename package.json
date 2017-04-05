@@ -7,7 +7,8 @@
     "dev": "gulp --gulpfile=./gulpfile.js",
     "cp": "gulp copy --gulpfile=./gulpfile.js",
     "build": "gulp build --gulpfile=./gulpfile.js",
-    "wp": "gulp wp --gulpfile=./gulpfile.js"
+    "wp": "gulp wp --gulpfile=./gulpfile.js",
+    "update": "npm update @chartiq/finsemble && npm update -g @chartiq/finsemble-cli"
   },
   "author": "",
   "license": "ISC",
