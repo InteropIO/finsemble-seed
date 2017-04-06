@@ -1,34 +1,3 @@
 {
-	"Chat": {
-		"window": {
-			"url": "http://finsemble.chartiq.com/components/premium/chat/chat.html",
-			"name": "mainChat",
-			"defaultTop": 200,
-			"defaultLeft": 100,
-			"defaultWidth": 180,
-			"defaultHeight": 400,
-			"minWidth": 180,
-			"minHeight": 400
-		},
-		"component": {
-			"type": "Chat"
-		},
-		"foreign": {
-			"services": {
-				"workspaceService": {
-					"isArrangable": true,
-					"persists": true
-				}
-			},
-			"components": {
-				"App Launcher": {
-					"launchableByUser": false
-				},
-				"Window Manager": {
-					"FSBLHeader": true,
-					"hideLinker": true
-				}
-			}
-		}
-	}
+
 }

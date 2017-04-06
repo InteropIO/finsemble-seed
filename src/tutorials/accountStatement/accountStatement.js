@@ -8,11 +8,11 @@ var owed={
 }
 
 function saveState(accountNumber){
-	FSBL.Clients.WindowClient.setAppState({ field: 'accountNumber', value: accountNumber });
+	FSBL.Clients.WindowClient.setComponentState({ field: 'accountNumber', value: accountNumber });
 }
 
 function getState(){
-	FSBL.Clients.WindowClient.getAppState({
+	FSBL.Clients.WindowClient.getComponentState({
 		field: 'accountNumber',
 	}, function (err, state) {
 		if (state === null) {

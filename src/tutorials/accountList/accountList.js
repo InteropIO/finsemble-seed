@@ -21,10 +21,10 @@ var advancedIsRunning=false;
 
 //STEP 6
 function saveState(){
-	FSBL.Clients.WindowClient.setAppState({ field: 'customerIndex', value: customerIndex });
+	FSBL.Clients.WindowClient.setComponentState({ field: 'customerIndex', value: customerIndex });
 }
 function getState(){
-	FSBL.Clients.WindowClient.getAppState({
+	FSBL.Clients.WindowClient.getComponentState({
 		field: 'customerIndex',
 	}, function (err, state) {
 		if (state === null) {
