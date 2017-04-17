@@ -45,7 +45,7 @@ function wipe(dir, cb) {
  *  @todo, make it smarter - only rebuild the folder that changed.
  */
 function watchReactComponents(done) {
-	watch('./src/components/**/*', { ignoreInitial: true }, gulp.series(
+	watch(path.join(__dirname,'./src/components/**/*'), { ignoreInitial: true }, gulp.series(
 		wipeComponents,
 		copyStaticComponentsFiles,
 		webpackReactComponents,
@@ -58,7 +58,7 @@ function watchReactComponents(done) {
  *  Watcher for Clients. Builds everything whenever a source file changes.
  */
 function watchClients(done) {
-	watch('./src/clients/*', { ignoreInitial: true }, gulp.series(
+	watch(path.join(__dirname,'./src/clients/*'), { ignoreInitial: true }, gulp.series(
 		wipeClients,
 		webpackClients
 		));
@@ -69,7 +69,7 @@ function watchClients(done) {
  *  Watcher for Clients. Builds everything whenever a source file changes.
  */
 function watchServices(done) {
-	watch('./src/services/**/*.js', { ignoreInitial: true }, gulp.series(
+	watch(path.join(__dirname,'./src/services/**/*.js'), { ignoreInitial: true }, gulp.series(
 		wipeServices,
 		copyStaticFiles,
 		webpackServices));
@@ -120,20 +120,20 @@ function wipeComponents(done) {
 }
 
 function webpackClients() {
-	return gulpWebpack(require('./configs/webpack.clients.config.js'), webpack)
+	return gulpWebpack(require(path.join(__dirname, './configs/webpack.clients.config.js')), webpack)
 		.pipe(gulp.dest(path.join(__dirname, '/built/')));
 }
 function webpackReactComponents() {
-	return gulpWebpack(require('./configs/webpack.react.components.config.js'), webpack)
+	return gulpWebpack(require(path.join(__dirname,'./configs/webpack.react.components.config.js')), webpack)
 		.pipe(gulp.dest(path.join(__dirname, '/built/')));
 }
 function webpackServices() {
-	return gulpWebpack(require('./configs/webpack.services.config.js'), webpack)
+	return gulpWebpack(require(path.join(__dirname,'./configs/webpack.services.config.js')), webpack)
 		.pipe(gulp.dest(path.join(__dirname, '/built/services')));
 }
 
 function webpackComponents() {
-	return gulpWebpack(require('./configs/webpack.components.config.js'), webpack)
+	return gulpWebpack(require(path.join(__dirname,'./configs/webpack.components.config.js')), webpack)
 		.pipe(gulp.dest(path.join(__dirname, '/built/components')));
 }
 function launchOpenfin() {
@@ -171,7 +171,10 @@ gulp.task('devServer', gulp.series(
 	function (done) {
 		var exec = require('child_process').exec;
 		//This runs essentially runs 'PORT=80 node server/server.js'
-		var serverExec = exec('node ' + path.join(__dirname, '/node_fileserver/server.js'), { env: { 'PORT': 80, NODE_ENV: "dev" } });
+		var serverPath = path.join(__dirname, '/node_fileserver/server.js');
+		//allows for spaces in paths.
+		serverPath = '"' + serverPath + '"';
+		var serverExec = exec('node ' + serverPath, { env: { 'PORT': 80, NODE_ENV: "dev" } });
 		serverExec.stdout.on("data", function (data) {
 			//Prints server output to your terminal.
 			console.log("SERVER STDOUT:", data);
