@@ -15,7 +15,7 @@ for (var key in entry) {
 	delete entry[key];
 	var newKey = key.replace("Service", "");
 	if (key !== "baseClient") {
-		entry[path.join(newKey, newKey)] = currentPath;
+		entry[path.join(newKey, newKey +'Service')] = currentPath;
 	} else {
 		entry[path.join(newKey)] = currentPath;
 	}
