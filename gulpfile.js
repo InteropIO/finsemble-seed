@@ -6,6 +6,8 @@ var watch = require("gulp-watch");
 var del = require('del');
 var openfinLauncher = require('openfin-launcher');
 var configPath = path.join(__dirname, '/configs/finConfig.json');
+//new
+var StartupConfig = require("./configs/startup");
 
 function copyStaticComponentsFiles() {
 	return gulp.src([
@@ -136,9 +138,10 @@ function webpackComponents() {
 	return gulpWebpack(require(path.join(__dirname,'./configs/webpack.components.config.js')), webpack)
 		.pipe(gulp.dest(path.join(__dirname, '/built/components')));
 }
-function launchOpenfin() {
+function launchOpenfin(env) {
 	return openfinLauncher.launchOpenFin({
-		configPath: 'http://localhost:80/config'
+		//new
+		configPath: StartupConfig[env].serverConfig
 	});
 };
 gulp.task('wipeBuilt', gulp.series(wipeBuilt));
@@ -174,13 +177,13 @@ gulp.task('devServer', gulp.series(
 		var serverPath = path.join(__dirname, '/node_fileserver/server.js');
 		//allows for spaces in paths.
 		serverPath = '"' + serverPath + '"';
-		var serverExec = exec('node ' + serverPath, { env: { 'PORT': 80, NODE_ENV: "dev" } });
+		var serverExec = exec('node ' + serverPath, { env: { 'PORT': StartupConfig["dev"].serverPort, NODE_ENV: "dev" } });
 		serverExec.stdout.on("data", function (data) {
 			//Prints server output to your terminal.
 			console.log("SERVER STDOUT:", data);
 			if (data.indexOf("listening on port") > -1) {
 				//Once the server is up and running, we launch openfin.
-				launchOpenfin();
+				launchOpenfin('dev');
 				done();
 			}
 		});
