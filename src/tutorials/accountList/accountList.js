@@ -60,8 +60,8 @@ function launchAccountDetailAdvanced(accountNumber){
 	var alive=false;
 	FSBL.Clients.LauncherClient.getActiveDescriptors(function(err, response){
 		advancedIsRunning=false;
-		for(let id in response.data){
-			var descriptor=response.data[id];
+		for(let id in response){
+			var descriptor=response[id];
 			if(descriptor.customData.component.type=="accountDetail"){
 				alive=true;
 				break;
