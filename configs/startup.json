@@ -1,0 +1,22 @@
+{
+    "production": {
+        "serverPort": 3375,
+        "serverConfig": "http://localhost:3375/config",
+        "clientRoute": "http://localhost:3375/"
+    },
+    "staging": {
+        "serverPort": 3375,
+        "serverConfig": "http://localhost:3375/config",
+        "clientRoute": "http://localhost:3375/"
+    },
+    "dev": {
+        "serverPort": 3375,
+        "serverConfig": "http://localhost:3375/config",
+        "clientRoute": "http://localhost:3375/yourSubDirectory"
+    },
+    "local": {
+        "serverPort": 3375,
+        "serverConfig": "http://localhost:3375/config",
+        "clientRoute": "http://localhost:3375/"
+    }
+}

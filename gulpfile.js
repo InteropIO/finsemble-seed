@@ -4,8 +4,11 @@ var gulpWebpack = require('gulp-webpack');
 var webpack = require("webpack");
 var watch = require("gulp-watch");
 var del = require('del');
+var sass = require('gulp-sass');
 var openfinLauncher = require('openfin-launcher');
 var configPath = path.join(__dirname, '/configs/finConfig.json');
+//new
+var StartupConfig = require("./configs/startup");
 
 function copyStaticComponentsFiles() {
 	return gulp.src([
@@ -39,7 +42,17 @@ function wipe(dir, cb) {
 		console.error(err);
 	});
 }
-
+function buildSass(done) {
+	done();
+	//soon
+	// return gulp.src([
+	// 	path.join(__dirname, '/src/components/**/**/*.scss'),
+	// 	//compiles sass down to finsemble.css
+	// 	path.join(__dirname, '/src/components/assets/*.scss')
+	// ])
+	// 	.pipe(sass().on('error', sass.logError))
+	// 	.pipe(gulp.dest(path.join(__dirname, '/built/components/')));
+}
 /**
  *  Watcher for components. Builds everything whenever a source file changes.
  *  @todo, make it smarter - only rebuild the folder that changed.
@@ -136,9 +149,10 @@ function webpackComponents() {
 	return gulpWebpack(require(path.join(__dirname,'./configs/webpack.components.config.js')), webpack)
 		.pipe(gulp.dest(path.join(__dirname, '/built/components')));
 }
-function launchOpenfin() {
+function launchOpenfin(env) {
 	return openfinLauncher.launchOpenFin({
-		configPath: 'http://localhost:80/config'
+		//new
+		configPath: StartupConfig[env].serverConfig
 	});
 };
 gulp.task('wipeBuilt', gulp.series(wipeBuilt));
@@ -155,7 +169,8 @@ gulp.task('build', gulp.series(
 	webpackClients,
 	webpackServices,
 	webpackComponents,
-	webpackReactComponents
+	webpackReactComponents,
+	buildSass
 ));
 
 gulp.task('devServer', gulp.series(
@@ -168,19 +183,20 @@ gulp.task('devServer', gulp.series(
 	watchReactComponents,
 	watchClients,
 	watchServices,
+	buildSass,
 	function (done) {
 		var exec = require('child_process').exec;
 		//This runs essentially runs 'PORT=80 node server/server.js'
 		var serverPath = path.join(__dirname, '/node_fileserver/server.js');
 		//allows for spaces in paths.
 		serverPath = '"' + serverPath + '"';
-		var serverExec = exec('node ' + serverPath, { env: { 'PORT': 80, NODE_ENV: "dev" } });
+		var serverExec = exec('node ' + serverPath, { env: { 'PORT': StartupConfig["dev"].serverPort, NODE_ENV: "dev" } });
 		serverExec.stdout.on("data", function (data) {
 			//Prints server output to your terminal.
 			console.log("SERVER STDOUT:", data);
 			if (data.indexOf("listening on port") > -1) {
 				//Once the server is up and running, we launch openfin.
-				launchOpenfin();
+				launchOpenfin('dev');
 				done();
 			}
 		});
