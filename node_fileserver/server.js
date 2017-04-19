@@ -6,20 +6,16 @@ var app = express();
 var nocache = require('nocache');
 var path = require('path');
 var finConfig = require("./FinsembleConfigs");
-app.use(express.static(path.join(__dirname, "..", '/node_modules/@chartiq/finsemble/dist')));
-app.use(express.static(path.join(__dirname, "..", '/built/')));
-console.log("/localServices", __dirname + '/built/')
+//This is where express will server our system components and the components that you create.
+//It should match what's at the end of your `clientRoute` in `configs/startup.json`.
+app.use("/yourSubDirectory", express.static(path.join(__dirname, "..", '/node_modules/@chartiq/finsemble/dist')));
+app.use("/yourSubDirectory", express.static(path.join(__dirname, "..", '/built/')));
 var PORT = process.env.PORT || 3375;
 
 var server = app.listen(PORT, function () {
-	//new	
-	global.host = server.address().address;
-	global.port = server.address().port;
-
 	app.use(nocache());
 	app.get("/config", function (req, res) {
-		//new
-		res.send(finConfig(req, res));
+		res.send(finConfig());
 	})
 	Chat.setup(app, server);
 	console.log("listening on port " + PORT);
