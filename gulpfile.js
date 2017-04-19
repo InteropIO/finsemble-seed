@@ -4,6 +4,7 @@ var gulpWebpack = require('gulp-webpack');
 var webpack = require("webpack");
 var watch = require("gulp-watch");
 var del = require('del');
+var sass = require('gulp-sass');
 var openfinLauncher = require('openfin-launcher');
 var configPath = path.join(__dirname, '/configs/finConfig.json');
 //new
@@ -41,7 +42,17 @@ function wipe(dir, cb) {
 		console.error(err);
 	});
 }
-
+function buildSass(done) {
+	done();
+	//soon
+	// return gulp.src([
+	// 	path.join(__dirname, '/src/components/**/**/*.scss'),
+	// 	//compiles sass down to finsemble.css
+	// 	path.join(__dirname, '/src/components/assets/*.scss')
+	// ])
+	// 	.pipe(sass().on('error', sass.logError))
+	// 	.pipe(gulp.dest(path.join(__dirname, '/built/components/')));
+}
 /**
  *  Watcher for components. Builds everything whenever a source file changes.
  *  @todo, make it smarter - only rebuild the folder that changed.
@@ -158,7 +169,8 @@ gulp.task('build', gulp.series(
 	webpackClients,
 	webpackServices,
 	webpackComponents,
-	webpackReactComponents
+	webpackReactComponents,
+	buildSass
 ));
 
 gulp.task('devServer', gulp.series(
@@ -171,6 +183,7 @@ gulp.task('devServer', gulp.series(
 	watchReactComponents,
 	watchClients,
 	watchServices,
+	buildSass,
 	function (done) {
 		var exec = require('child_process').exec;
 		//This runs essentially runs 'PORT=80 node server/server.js'
