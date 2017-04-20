@@ -3,8 +3,6 @@
 * All rights reserved.
 */
 
-@import '../sass/_globals';
-
 .icon-fsbl-chat.badge:after{    
     position: relative;
     height:0.625rem;
@@ -25,10 +23,21 @@ body {
 	bottom:0;  
 }
 
+
+html.desktop-active {
+  body:before,body:after{ 
+    background:$primary-accent-color;
+  }
+}
+
+html.desktop-active:before, html.desktop-active:after {
+  background:$primary-accent-color;
+}
+
 /* Create a series of empty pseudo-elements... */
 html:before,html:after,body:before,body:after{
     content:"";
-    background:$window-frame-inactive-color;
+    background: $window-frame-inactive-color;
     position:fixed;
     display:block;
     z-index:2147483647;
@@ -58,49 +67,6 @@ body:after{
     top:0;
     bottom:0;
     left:0;
-}
-
-html.desktop-active {
-  body:before,body:after{ 
-    background:$primary-accent-color;
-  }
-}
-
-html.desktop-active:before, html.desktop-active:after {
-  background:$primary-accent-color;
-}
-
-.footer-logo {
-    float: left;
-    height: 25px;
-    display: none;
-    line-height: 45px;
-    margin-top: 1em;
-}
-
-.ciq-night .dark-footer-logo {
-  display: inline-block !important;
-}
-
-.ciq-day .light-footer-logo {
-  display:inline-block !important;
-}
-
-.nav-bar-header-icon {
-  display:none;
-}
-
-@media(max-width:696px){
-  .nav-bar-header-icon {
-    display:inline-block;
-  }
-  .nav-bar-header-text {
-    display:none;
-  }
-}
-
-.cq-no-drag {
-  -webkit-app-region:no-drag;
 }
 
 .menu-button{

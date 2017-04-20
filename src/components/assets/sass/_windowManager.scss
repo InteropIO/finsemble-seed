@@ -1,5 +1,3 @@
-@import '_globals';
-
 .cq-drag {
   cursor: -webkit-grab;	
   -webkit-app-region: drag;
@@ -17,7 +15,7 @@
     align-items: center;
     flex-direction: row;
     justify-content: center;
-    background: $window-header-color;
+    background: $window-header-background-color;
     border-bottom: 1px solid $window-frame-inactive-color;
     width: 100%;
     z-index: 2147483646;  
@@ -37,8 +35,6 @@
   align-items:center;
   justify-content: flex-start;    
   display:flex;    
- 
-
 }
 
 .fsbl-window-control-center {    
@@ -100,12 +96,6 @@
    margin-left: 4px;
    border-radius: 2px; 
 }
-.ciq-day .fsbl-window-manager-icon {
-	color:black;
-}
-
-.ciq-day .fsbl-window-manager-icon :hover {
-  background-color: #2C2E2F; }
 
 .fsbl-linker{
   cursor: pointer;

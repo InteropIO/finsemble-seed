@@ -1,6 +1,4 @@
-@import '_globals';
-@import '_variablesMenus';
-body {
+body.menu {
 	margin:0px;
 	font-family: Roboto;	
 	font-weight:300;
@@ -16,7 +14,7 @@ body {
 }
 .menu-section-label {
 	padding:10px 0 10px 20px;
-	color:$primary-accent-color;
+	color: $primary-accent-color;
 	text-transform: uppercase;
 	font-weight: 700;
 	font-family: Roboto Condensed;	
@@ -28,7 +26,7 @@ body {
 	color: $menu-primary-font-color;
 }
 
-ul {
+.menu ul {
 	list-style-type: none;
 	width:100%;
 	padding-left:0;
@@ -71,3 +69,10 @@ ul {
 	display:flex;
 }
 
+.app-launcher-pinned, .app-launcher-component-pinner:hover {	
+	color: $primary-accent-color;
+}
+
+.app-launcher-delete:hover {
+	color: $negative-action-color;
+}
