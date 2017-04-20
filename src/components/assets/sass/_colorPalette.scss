@@ -1,0 +1,11 @@
+/* The color palette is used in pretty much every component. The windowManager and toolbars use it for highlight colors, menus use it for accent colors. If you use our buttons, they get their coloring from these colors.*/
+$primary-accent-color: #398bff;
+$primary-hover-font-color: white;
+
+$secondary-accent-color: #1D4970;
+$secondary-hover-font-color: white;
+
+/* As of 4-20-17, only used in the toolbar for workspace icons and chat notification.*/
+$tertiary-accent-color: #ffd803;
+$negative-action-color: #f22613;
+

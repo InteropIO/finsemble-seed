@@ -9,6 +9,10 @@ Finsemble.addComponents(require("../configs/components.json"));
 //Modify this file to adjust what users see when loading the app for the first time.
 Finsemble.setDefaultWorkspaces(require("../configs/defaultWorkspaces.json"));
 
+//sets path for any css overwrites
+Finsemble.setCSSOverridesPath('/fin/components/assets/css/finsemble-overrides.css');
+
+
 //Soon you will be able to change your default storage
 Finsemble.setDefaultStorage("localStorage");
 

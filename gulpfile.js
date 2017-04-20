@@ -44,14 +44,13 @@ function wipe(dir, cb) {
 }
 function buildSass(done) {
 	done();
-	//soon
-	// return gulp.src([
-	// 	path.join(__dirname, '/src/components/**/**/*.scss'),
-	// 	//compiles sass down to finsemble.css
-	// 	path.join(__dirname, '/src/components/assets/*.scss')
-	// ])
-	// 	.pipe(sass().on('error', sass.logError))
-	// 	.pipe(gulp.dest(path.join(__dirname, '/built/components/')));
+	return gulp.src([
+		path.join(__dirname, '/src/components/**/**/*.scss'),
+		//compiles sass down to finsemble.css
+		path.join(__dirname, '/src/components/assets/*.scss')
+	])
+		.pipe(sass().on('error', sass.logError))
+		.pipe(gulp.dest(path.join(__dirname, '/built/components/')));
 }
 /**
  *  Watcher for components. Builds everything whenever a source file changes.
@@ -62,7 +61,8 @@ function watchReactComponents(done) {
 		wipeComponents,
 		copyStaticComponentsFiles,
 		webpackReactComponents,
-		webpackComponents
+		webpackComponents,
+		buildSass
 	));
 	done();
 }
