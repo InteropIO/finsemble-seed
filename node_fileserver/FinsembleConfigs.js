@@ -15,12 +15,12 @@ Finsemble.setDefaultStorage("localStorage");
 
 //Gets your hostname/port/etc for your application.
 var StartupConfig = require("../configs/startup");
-
+var env = process.env.NODE_ENV ? process.env.NODE_ENV : "local";
+Finsemble.setUUID("Finsemble" + "-" + env);
+var hostname = StartupConfig[env].clientRoute;
+Finsemble.updateBaseUrl(hostname);
 
 module.exports = function () {
-    var env = process.env.NODE_ENV ? process.env.NODE_ENV : "local";
-    Finsemble.setUUID("Finsemble" + "-" + env);
-    var hostname = StartupConfig[env].clientRoute;
-    Finsemble.updateBaseUrl(hostname);
+
     return Finsemble.getConfig();
 };

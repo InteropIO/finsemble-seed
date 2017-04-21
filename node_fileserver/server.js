@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 var express = require("express");
-var Chat = require("./chat");
 var app = express();
 var nocache = require('nocache');
 var path = require('path');
@@ -17,7 +16,6 @@ var server = app.listen(PORT, function () {
 	app.get("/config", function (req, res) {
 		res.send(finConfig());
 	})
-	Chat.setup(app, server);
 	console.log("listening on port " + PORT);
 	app.use(function (req, res, next) {
 		console.log("Retrieving: ", req.url);
