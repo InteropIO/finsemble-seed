@@ -10,7 +10,7 @@ Finsemble.addComponents(require("../configs/components.json"));
 Finsemble.setDefaultWorkspaces(require("../configs/defaultWorkspaces.json"));
 
 //sets path for any css overwrites. 
-//**FULL PATH REQUIRED IF YOU WANT IT TO WORK WITH COMPONENTS YOU DON'T CREATE**
+//**FULL PATH REQUIRED IF YOU WANT IT TO WORK WITH USER DEFINED COMPONENTS**
 //Uncomment for a McDonald's themed experience
 //Modify `./src/components/assets/css/finsemble-overrides.scss` to change the theming.
 //Finsemble.setCSSOverridesPath('http://localhost:3375/yourSubDirectory/components/assets/css/finsemble-overrides.css');
