@@ -1,3 +1,39 @@
 {
-
+  "injected": {
+        "window": {
+            "url": "http://google.com",
+            "frame": false,
+            "resizable": true,
+            "autoShow": true,
+            "defaultTop": "center",
+            "defaultLeft": "center",
+            "defaultWidth": 800,
+            "defaultHeight": 600
+        },
+        "component": {
+            "type": "injected"
+        },
+        "foreign": {
+            "services": {
+                "workspaceService": {
+                    "isArrangable": true
+                },
+                "launcherService": {
+                    "inject": true
+                }
+            },
+            "components": {
+                "App Launcher": {
+                    "launchableByUser": true
+                },
+                "Window Manager": {
+                    "FSBLHeader": true,
+                    "persistWindowState": true
+                },
+                "Toolbar": {
+                    "iconClass": "injected"
+                }
+            }
+        }
+    }
 }
