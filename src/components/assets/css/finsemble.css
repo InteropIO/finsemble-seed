@@ -1,0 +1,733 @@
+/* The color palette is used in pretty much every component. The windowManager and toolbars use it for highlight colors, menus use it for accent colors. If you use our buttons, they get their coloring from these colors.*/
+/* As of 4-20-17, only used in the toolbar for workspace icons and chat notification.*/
+/* Also the window-header background color */
+.hidden {
+  display: none !important; }
+
+.fsbl-button {
+  margin: 0 auto;
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  background: #FAFAFA;
+  border: 1px solid #EEEEEE;
+  color: #000;
+  transition: .2s ease; }
+
+.fsbl-button i {
+  vertical-align: middle;
+  margin: 0 6px; }
+
+.fsbl-button:hover {
+  background: #398bff;
+  border: 1px solid #398bff;
+  transition: 0.2s ease-in;
+  cursor: pointer; }
+
+.fsbl-button:hover {
+  color: #FFF;
+  transition: 0.2s ease-out; }
+
+.fsbl-button-lg {
+  width: 210px;
+  font-size: 14pt;
+  padding: 14px 0px;
+  margin: 15px auto; }
+
+.fsbl-button-md {
+  width: 140px;
+  padding: 9px 0px;
+  margin: 10px auto; }
+
+.fsbl-button-sm {
+  width: 70px;
+  padding: 5px 0px;
+  margin: 5px auto; }
+
+/*widgets*/
+.ciq--div {
+  padding: .25em; }
+
+.flex-start {
+  align-self: flex-start; }
+
+/* Gives the control icons the proper width on websites using bootstrap. */
+i, i:before, i:after, .fsbl-window-manager-icon {
+  box-sizing: content-box; }
+
+/*!
+* Copyright 2017 by ChartIQ, Inc.
+* All rights reserved.
+*/
+/* The color palette is used in pretty much every component. The windowManager and toolbars use it for highlight colors, menus use it for accent colors. If you use our buttons, they get their coloring from these colors.*/
+/* As of 4-20-17, only used in the toolbar for workspace icons and chat notification.*/
+/* Also the window-header background color */
+.hidden {
+  display: none !important; }
+
+.fsbl-button {
+  margin: 0 auto;
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  background: #FAFAFA;
+  border: 1px solid #EEEEEE;
+  color: #000;
+  transition: .2s ease; }
+
+.fsbl-button i {
+  vertical-align: middle;
+  margin: 0 6px; }
+
+.fsbl-button:hover {
+  background: #398bff;
+  border: 1px solid #398bff;
+  transition: 0.2s ease-in;
+  cursor: pointer; }
+
+.fsbl-button:hover {
+  color: #FFF;
+  transition: 0.2s ease-out; }
+
+.fsbl-button-lg {
+  width: 210px;
+  font-size: 14pt;
+  padding: 14px 0px;
+  margin: 15px auto; }
+
+.fsbl-button-md {
+  width: 140px;
+  padding: 9px 0px;
+  margin: 10px auto; }
+
+.fsbl-button-sm {
+  width: 70px;
+  padding: 5px 0px;
+  margin: 5px auto; }
+
+/*widgets*/
+.ciq--div {
+  padding: .25em; }
+
+.flex-start {
+  align-self: flex-start; }
+
+/* Gives the control icons the proper width on websites using bootstrap. */
+i, i:before, i:after, .fsbl-window-manager-icon {
+  box-sizing: content-box; }
+
+.icon-fsbl-chat.badge:after {
+  position: relative;
+  height: 0.625rem;
+  width: 0.625rem;
+  top: -0.625rem;
+  right: 0.325rem;
+  color: #ffd803; }
+
+body {
+  padding: 0px !important;
+  box-sizing: border-box;
+  position: absolute;
+  /*Without this, opening the side panels ruin everything*/
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0; }
+
+/* Create a series of empty pseudo-elements... */
+html:before, html:after, body:before, body:after {
+  content: "";
+  background: #1d4970;
+  position: fixed;
+  display: block;
+  z-index: 2147483647; }
+
+/* ...and position them! */
+html:before {
+  height: 1px;
+  left: 0;
+  right: 0;
+  top: 0; }
+
+html:after {
+  width: 1px;
+  top: 0;
+  right: 0;
+  bottom: 0; }
+
+body:before {
+  height: 1px;
+  right: 0;
+  bottom: 0;
+  left: 0; }
+
+body:after {
+  width: 1px;
+  top: 0;
+  bottom: 0;
+  left: 0; }
+
+html.desktop-active body:before, html.desktop-active body:after {
+  background: #398bff; }
+
+html.desktop-active:before, html.desktop-active:after {
+  background: #398bff; }
+
+.footer-logo {
+  float: left;
+  height: 25px;
+  display: none;
+  line-height: 45px;
+  margin-top: 1em; }
+
+.ciq-night .dark-footer-logo {
+  display: inline-block !important; }
+
+.ciq-day .light-footer-logo {
+  display: inline-block !important; }
+
+.nav-bar-header-icon {
+  display: none; }
+
+@media (max-width: 696px) {
+  .nav-bar-header-icon {
+    display: inline-block; }
+  .nav-bar-header-text {
+    display: none; } }
+
+.cq-no-drag {
+  -webkit-app-region: no-drag; }
+
+.menu-button {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1.5em;
+  background: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #398bff;
+  display: inline-block;
+  position: relative;
+  line-height: 27px;
+  height: 27px;
+  padding: 0 10px;
+  cursor: pointer;
+  border: none;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  transition: all .2s 0s, opacity .2s 0s;
+  -webkit-border-radius: 1px;
+  -moz-border-radius: 1px;
+  -ms-border-radius: 1px;
+  border-radius: 1px;
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); }
+
+/* The color palette is used in pretty much every component. The windowManager and toolbars use it for highlight colors, menus use it for accent colors. If you use our buttons, they get their coloring from these colors.*/
+/* As of 4-20-17, only used in the toolbar for workspace icons and chat notification.*/
+/* Also the window-header background color */
+.hidden {
+  display: none !important; }
+
+.fsbl-button {
+  margin: 0 auto;
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  background: #FAFAFA;
+  border: 1px solid #EEEEEE;
+  color: #000;
+  transition: .2s ease; }
+
+.fsbl-button i {
+  vertical-align: middle;
+  margin: 0 6px; }
+
+.fsbl-button:hover {
+  background: #398bff;
+  border: 1px solid #398bff;
+  transition: 0.2s ease-in;
+  cursor: pointer; }
+
+.fsbl-button:hover {
+  color: #FFF;
+  transition: 0.2s ease-out; }
+
+.fsbl-button-lg {
+  width: 210px;
+  font-size: 14pt;
+  padding: 14px 0px;
+  margin: 15px auto; }
+
+.fsbl-button-md {
+  width: 140px;
+  padding: 9px 0px;
+  margin: 10px auto; }
+
+.fsbl-button-sm {
+  width: 70px;
+  padding: 5px 0px;
+  margin: 5px auto; }
+
+/*widgets*/
+.ciq--div {
+  padding: .25em; }
+
+.flex-start {
+  align-self: flex-start; }
+
+/* Gives the control icons the proper width on websites using bootstrap. */
+i, i:before, i:after, .fsbl-window-manager-icon {
+  box-sizing: content-box; }
+
+.cq-drag {
+  cursor: -webkit-grab;
+  -webkit-app-region: drag; }
+
+.cq-drag-area:active {
+  cursor: -webkit-grabbing; }
+
+.fsbl-window-header-bar {
+  text-align: center;
+  display: flex;
+  height: 32px;
+  position: fixed;
+  align-items: center;
+  flex-direction: row;
+  justify-content: center;
+  background: #1C2A35;
+  border-bottom: 1px solid #1d4970;
+  width: 100%;
+  z-index: 2147483646;
+  top: 0;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  color: white; }
+
+.fsbl-window-control-left {
+  height: 100%;
+  flex: .33;
+  margin-left: 2px;
+  align-content: center;
+  align-items: center;
+  justify-content: flex-start;
+  display: flex; }
+
+.fsbl-window-control-center {
+  height: 100%;
+  flex: .33;
+  align-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  width: 100%; }
+
+.fsbl-window-control-right {
+  margin-right: 2px;
+  flex: .33;
+  height: 100%;
+  align-content: center;
+  display: flex;
+  justify-content: flex-end; }
+
+.fsbl-window-manager-icon {
+  color: white;
+  font-size: 15px;
+  width: 21px;
+  padding: 0px 6px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+
+.fsbl-window-minimize {
+  align-items: flex-end; }
+
+.fsbl-window-manager-icon:hover {
+  background-color: #398bff;
+  cursor: pointer; }
+
+/* So it sits over the border*/
+.fsbl-window-close {
+  margin-right: -1px; }
+
+.fsbl-window-close:hover {
+  background-color: #f22613; }
+
+.linker-groups {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center; }
+
+.linker-group {
+  width: 5px;
+  height: 18px;
+  margin-left: 4px;
+  border-radius: 2px; }
+
+.ciq-day .fsbl-window-manager-icon {
+  color: black; }
+
+.ciq-day .fsbl-window-manager-icon :hover {
+  background-color: #2C2E2F; }
+
+.fsbl-linker {
+  cursor: pointer;
+  display: flex;
+  height: 100%;
+  /* So it sits over the border*/
+  margin-left: -1px;
+  align-items: center;
+  justify-content: center;
+  align-content: center; }
+
+.fsbl-linker:hover {
+  background: #398bff;
+  transition: background .3s ease; }
+
+/* perfect-scrollbar v0.6.12 */
+.ps-container {
+  -ms-touch-action: none;
+  touch-action: none;
+  overflow: hidden !important;
+  -ms-overflow-style: none; }
+
+@supports (-ms-overflow-style: none) {
+  .ps-container {
+    overflow: auto !important; } }
+
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+  .ps-container {
+    overflow: auto !important; } }
+
+.ps-container.ps-active-x > .ps-scrollbar-x-rail,
+.ps-container.ps-active-y > .ps-scrollbar-y-rail {
+  display: block;
+  background-color: transparent; }
+
+.ps-container.ps-in-scrolling {
+  pointer-events: none; }
+
+.ps-container.ps-in-scrolling.ps-x > .ps-scrollbar-x-rail {
+  background-color: #eee;
+  opacity: 0.9; }
+
+.ps-container.ps-in-scrolling.ps-x > .ps-scrollbar-x-rail > .ps-scrollbar-x {
+  background-color: #999; }
+
+.ps-container.ps-in-scrolling.ps-y > .ps-scrollbar-y-rail {
+  background-color: #eee;
+  opacity: 0.9; }
+
+.ps-container.ps-in-scrolling.ps-y > .ps-scrollbar-y-rail > .ps-scrollbar-y {
+  background-color: #999; }
+
+.ps-container > .ps-scrollbar-x-rail {
+  display: none;
+  position: absolute;
+  /* please don't change 'position' */
+  opacity: 0;
+  -webkit-transition: background-color .2s linear, opacity .2s linear;
+  -moz-transition: background-color .2s linear, opacity .2s linear;
+  -o-transition: background-color .2s linear, opacity .2s linear;
+  transition: background-color .2s linear, opacity .2s linear;
+  bottom: 0px;
+  /* there must be 'bottom' for ps-scrollbar-x-rail */
+  height: 15px; }
+
+.ps-container > .ps-scrollbar-x-rail > .ps-scrollbar-x {
+  position: absolute;
+  /* please don't change 'position' */
+  background-color: #aaa;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, -webkit-border-radius .2s ease-in-out;
+  transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, -webkit-border-radius .2s ease-in-out;
+  -moz-transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out, -moz-border-radius .2s ease-in-out;
+  -o-transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out;
+  transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out;
+  transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out, -webkit-border-radius .2s ease-in-out, -moz-border-radius .2s ease-in-out;
+  bottom: 2px;
+  /* there must be 'bottom' for ps-scrollbar-x */
+  height: 6px; }
+
+.ps-container > .ps-scrollbar-x-rail:hover > .ps-scrollbar-x, .ps-container > .ps-scrollbar-x-rail:active > .ps-scrollbar-x {
+  height: 11px; }
+
+.ps-container > .ps-scrollbar-y-rail {
+  display: none;
+  position: absolute;
+  /* please don't change 'position' */
+  opacity: 0;
+  -webkit-transition: background-color .2s linear, opacity .2s linear;
+  -moz-transition: background-color .2s linear, opacity .2s linear;
+  -o-transition: background-color .2s linear, opacity .2s linear;
+  transition: background-color .2s linear, opacity .2s linear;
+  right: 0;
+  /* there must be 'right' for ps-scrollbar-y-rail */
+  width: 15px; }
+
+.ps-container > .ps-scrollbar-y-rail > .ps-scrollbar-y {
+  position: absolute;
+  /* please don't change 'position' */
+  background-color: #aaa;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, -webkit-border-radius .2s ease-in-out;
+  transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, -webkit-border-radius .2s ease-in-out;
+  -moz-transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out, -moz-border-radius .2s ease-in-out;
+  -o-transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out;
+  transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out;
+  transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out, -webkit-border-radius .2s ease-in-out, -moz-border-radius .2s ease-in-out;
+  right: 2px;
+  /* there must be 'right' for ps-scrollbar-y */
+  width: 6px; }
+
+.ps-container > .ps-scrollbar-y-rail:hover > .ps-scrollbar-y, .ps-container > .ps-scrollbar-y-rail:active > .ps-scrollbar-y {
+  width: 11px; }
+
+.ps-container:hover.ps-in-scrolling {
+  pointer-events: none; }
+
+.ps-container:hover.ps-in-scrolling.ps-x > .ps-scrollbar-x-rail {
+  background-color: #eee;
+  opacity: 0.9; }
+
+.ps-container:hover.ps-in-scrolling.ps-x > .ps-scrollbar-x-rail > .ps-scrollbar-x {
+  background-color: #999; }
+
+.ps-container:hover.ps-in-scrolling.ps-y > .ps-scrollbar-y-rail {
+  background-color: #eee;
+  opacity: 0.9; }
+
+.ps-container:hover.ps-in-scrolling.ps-y > .ps-scrollbar-y-rail > .ps-scrollbar-y {
+  background-color: #999; }
+
+.ps-container:hover > .ps-scrollbar-x-rail,
+.ps-container:hover > .ps-scrollbar-y-rail {
+  opacity: 0.6; }
+
+.ps-container:hover > .ps-scrollbar-x-rail:hover {
+  background-color: #eee;
+  opacity: 0.9; }
+
+.ps-container:hover > .ps-scrollbar-x-rail:hover > .ps-scrollbar-x {
+  background-color: #999; }
+
+.ps-container:hover > .ps-scrollbar-y-rail:hover {
+  background-color: #eee;
+  opacity: 0.9; }
+
+.ps-container:hover > .ps-scrollbar-y-rail:hover > .ps-scrollbar-y {
+  background-color: #999; }
+
+.ps-container:hover > .ps-scrollbar-y-rail:hover {
+  background-color: transparent;
+  width: 6px; }
+
+.ps-container > .ps-scrollbar-y-rail:hover > .ps-scrollbar-y, .ps-container > .ps-scrollbar-y-rail:active > .ps-scrollbar-y {
+  width: 9px; }
+
+.ps-container > .ps-scrollbar-y-rail {
+  right: 6px !important; }
+
+.toolbar-wrap {
+  background-color: #1C2A35;
+  color: #fff;
+  text-align: center;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-around; }
+
+.toolbar-icon {
+  padding-right: 10px;
+  padding-left: 10px; }
+
+.toolbar-row {
+  display: flex;
+  flex-direction: row;
+  height: 40px;
+  width: 100%;
+  position: fixed;
+  top: 0; }
+
+.toolbar-row-left {
+  align-items: center;
+  align-self: center;
+  display: flex;
+  height: 100%; }
+
+.toolbar-row-center {
+  align-items: center;
+  display: flex; }
+
+.toolbar-row-right {
+  display: flex;
+  margin-left: auto;
+  align-items: center;
+  align-self: center; }
+
+.pinned-workspace-icon {
+  color: #ffd803; }
+
+.toolbar-brand-logo {
+  width: 25px;
+  height: 27px;
+  margin: 4px 14px;
+  background: url("../../assets/img/finsembleDarkBG_Solo@1.5x.png");
+  background-size: 100% 100%; }
+
+.primary-hover:hover {
+  background-color: #398bff;
+  color: white;
+  cursor: pointer; }
+
+.secondary-hover {
+  border: 1px solid transparent; }
+
+.secondary-hover:hover {
+  background: #1D4970;
+  color: white;
+  border: 1px solid #398bff;
+  cursor: pointer; }
+
+.form-group {
+  display: flex;
+  flex-direction: row;
+  margin: 25px 0; }
+
+.form-group label {
+  flex: .35; }
+
+.form-group input, .form-group select {
+  flex: .65; }
+
+.remove-workspace:hover {
+  color: #f22613; }
+
+.pin-workspace:hover {
+  color: #398bff; }
+
+.pinned-workspace-pin {
+  color: #398bff; }
+
+.pinned-workspace-pin:hover {
+  color: black; }
+
+/* The color palette is used in pretty much every component. The windowManager and toolbars use it for highlight colors, menus use it for accent colors. If you use our buttons, they get their coloring from these colors.*/
+/* As of 4-20-17, only used in the toolbar for workspace icons and chat notification.*/
+/* Also the window-header background color */
+.hidden {
+  display: none !important; }
+
+.fsbl-button {
+  margin: 0 auto;
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  background: #FAFAFA;
+  border: 1px solid #EEEEEE;
+  color: #000;
+  transition: .2s ease; }
+
+.fsbl-button i {
+  vertical-align: middle;
+  margin: 0 6px; }
+
+.fsbl-button:hover {
+  background: #398bff;
+  border: 1px solid #398bff;
+  transition: 0.2s ease-in;
+  cursor: pointer; }
+
+.fsbl-button:hover {
+  color: #FFF;
+  transition: 0.2s ease-out; }
+
+.fsbl-button-lg {
+  width: 210px;
+  font-size: 14pt;
+  padding: 14px 0px;
+  margin: 15px auto; }
+
+.fsbl-button-md {
+  width: 140px;
+  padding: 9px 0px;
+  margin: 10px auto; }
+
+.fsbl-button-sm {
+  width: 70px;
+  padding: 5px 0px;
+  margin: 5px auto; }
+
+/*widgets*/
+.ciq--div {
+  padding: .25em; }
+
+.flex-start {
+  align-self: flex-start; }
+
+/* Gives the control icons the proper width on websites using bootstrap. */
+i, i:before, i:after, .fsbl-window-manager-icon {
+  box-sizing: content-box; }
+
+.form-group {
+  display: flex;
+  flex-direction: row;
+  margin: 25px 0; }
+
+.form-group label {
+  flex: .35; }
+
+.form-group input, .form-group select {
+  flex: .65; }
+
+body.dialog {
+  -webkit-appearance: none;
+  overflow: hidden;
+  font-family: 'Roboto', sans-serif;
+  font-size: 12pt;
+  font-weight: 300;
+  /* Styling for General Typography */
+  /* Always Show Number Input Arrows, Give A Bit Of Space */ }
+  body.dialog h2 {
+    font-weight: 100;
+    color: #000;
+    font-size: 18pt;
+    margin: -5px 0px 20px 0px; }
+  body.dialog .dialog {
+    margin: 40px 20px; }
+  body.dialog .dialog-question {
+    font-weight: 300;
+    color: #000;
+    font-size: 15pt;
+    margin-bottom: 35px;
+    text-align: center; }
+  body.dialog input[type=number]::-webkit-inner-spin-button,
+  body.dialog input[type=number]::-webkit-outer-spin-button {
+    opacity: 1; }
+  body.dialog input::-webkit-outer-spin-button,
+  body.dialog input::-webkit-inner-spin-button {
+    margin-left: 5px; }
+  body.dialog input {
+    -webkit-appearance: none;
+    color: #000;
+    text-align: right;
+    font-size: 12pt;
+    font-weight: 300;
+    vertical-align: middle;
+    background-color: #f6f6f6;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    padding-left: 15px;
+    width: 100%;
+    max-width: 100%;
+    padding: 3px 10px;
+    border: 1px solid #F6F6F6;
+    box-sizing: border-box; }
