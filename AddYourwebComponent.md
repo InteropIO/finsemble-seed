@@ -43,6 +43,9 @@
     ```
         "components/{YourFolderName}/{TheJavascriptFileName}": "./src/components/{YourFolderName}/{your js/jsx file}"
     ```
+    *`TheJavascriptFileName` should just be the name without extensions. This is the file that you'll reference inside of your html file.*
+    
+    
     to `configs/componentsToBuild.json`
 * Run `npm run dev`
 
