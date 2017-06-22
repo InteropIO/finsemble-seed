@@ -5,21 +5,32 @@ var app = express();
 var nocache = require('nocache');
 var path = require('path');
 var finConfig = require("./FinsembleConfigs");
-//This is where express will server our system components and the components that you create.
-//It should match what's at the end of your `clientRoute` in `configs/startup.json`.
-app.use("/yourSubDirectory", express.static(path.join(__dirname, "..", '/built/')));
-app.use("/yourSubDirectory", express.static(path.join(__dirname, "..", '/node_modules/@chartiq/finsemble/dist')));
+
+// picks up built components and services defined in seed
+app.use("/fin", express.static(path.join(__dirname, "..", '/built/')));
+
+// picks up application config from seed
+app.use("/fin/configs/", express.static(path.join(__dirname, "..", '/configs/')));
+
+// picks up the rest from the Finsemble NPM module
+app.use("/fin", express.static(path.join(__dirname, "..", '/node_modules/@chartiq/finsemble/dist')));
 
 var PORT = process.env.PORT || 3375;
 
 var server = app.listen(PORT, function () {
 	app.use(nocache());
+
+	// "/config" as defined in the startup.json maps below to the OpenFin manifest/config file 
+	// (e.g. config/desktop-local.json) located in the Finsemble Module. The manifest includes the top 
+	// level finsemble config. This "dynamic" approach supports OPTIONAL server-side changes 
+	// to the config (see FinsembleConfig.js)
 	app.get("/config", function (req, res) {
 		res.send(finConfig());
 	})
+
 	console.log("listening on port " + PORT);
 	app.use(function (req, res, next) {
-		console.log("Retrieving: ", req.url);
+		console.log("Retrieving file...");
 		next();
 	});
 });
