@@ -3,8 +3,16 @@
     "devMode": false,
     "isAuthEnabled": true,
     "cssOverridePath": "/fin/components/assets/css/finsemble.css",
+    "workspaces": [
+        {
+            "name": "Default Workspace with No Windows",
+            "windows": [],
+            "initializedWindows":[],
+            "components": []
+        }
+    ],
     "components" : {
-        "injected": {
+        "Google": {
             "window": {
                 "url": "http://google.com",
                 "frame": false,
@@ -16,7 +24,7 @@
                 "defaultHeight": 600
             },
             "component": {
-                "type": "injected"
+                "type": "Google"
             },
             "foreign": {
                 "services": {
