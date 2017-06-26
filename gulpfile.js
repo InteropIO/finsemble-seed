@@ -1,6 +1,6 @@
 var gulp = require('gulp-4.0.build');
 var path = require("path");
-var gulpWebpack = require('gulp-webpack');
+var gulpWebpack = require('webpack-stream-fixed');
 var webpack = require("webpack");
 var watch = require("gulp-watch");
 var del = require('del');
@@ -9,6 +9,12 @@ var openfinLauncher = require('openfin-launcher');
 var configPath = path.join(__dirname, '/configs/finConfig.json');
 //new
 var StartupConfig = require("./configs/startup");
+var chalk = require('chalk');
+chalk.enabled = true;
+var serverOutColor = chalk.yellow;
+var errorOutColor = chalk.red;
+var webpackOutColor = chalk.cyan;
+var initialBuildFinished = false;
 
 function copyStaticComponentsFiles() {
 	return gulp.src([
@@ -57,7 +63,7 @@ function buildSass(done) {
  *  @todo, make it smarter - only rebuild the folder that changed.
  */
 function watchReactComponents(done) {
-	watch(path.join(__dirname,'./src/components/**/*'), { ignoreInitial: true }, gulp.series(
+	watch(path.join(__dirname, './src/components/**/*'), { ignoreInitial: true }, gulp.series(
 		wipeComponents,
 		copyStaticComponentsFiles,
 		webpackReactComponents,
@@ -71,10 +77,10 @@ function watchReactComponents(done) {
  *  Watcher for Clients. Builds everything whenever a source file changes.
  */
 function watchClients(done) {
-	watch(path.join(__dirname,'./src/clients/*'), { ignoreInitial: true }, gulp.series(
+	watch(path.join(__dirname, './src/clients/*'), { ignoreInitial: true }, gulp.series(
 		wipeClients,
 		webpackClients
-		));
+	));
 	done();
 }
 
@@ -82,7 +88,7 @@ function watchClients(done) {
  *  Watcher for Clients. Builds everything whenever a source file changes.
  */
 function watchServices(done) {
-	watch(path.join(__dirname,'./src/services/**/*.js'), { ignoreInitial: true }, gulp.series(
+	watch(path.join(__dirname, './src/services/**/*.js'), { ignoreInitial: true }, gulp.series(
 		wipeServices,
 		copyStaticFiles,
 		webpackServices));
@@ -132,59 +138,72 @@ function wipeComponents(done) {
 	wipe(path.join(__dirname, '/dist/components'), done);
 }
 
-function webpackClients() {
-	return gulpWebpack(require(path.join(__dirname, './configs/webpack.clients.config.js')), webpack)
-		.pipe(gulp.dest(path.join(__dirname, '/dist/')));
-}
-function webpackReactComponents() {
-	return gulpWebpack(require(path.join(__dirname,'./configs/webpack.react.components.config.js')), webpack)
-		.pipe(gulp.dest(path.join(__dirname, '/dist/')));
-}
-function webpackServices() {
-	return gulpWebpack(require(path.join(__dirname,'./configs/webpack.services.config.js')), webpack)
-		.pipe(gulp.dest(path.join(__dirname, '/dist/services')));
+function handleWebpackStdOut(data, done) {
+	let notAnError = !data.includes('build failed');
+	if (notAnError) {
+		console.log(webpackOutColor(data));
+	}
+	
+	if (data.includes('webpack is watching')) {
+
+		if (initialBuildFinished && notAnError) {
+			// buildComplete();
+		} else if (!initialBuildFinished) {
+			done();
+		}
+	}
 }
 
-function webpackComponents() {
-	return gulpWebpack(require(path.join(__dirname,'./configs/webpack.components.config.js')), webpack)
-		.pipe(gulp.dest(path.join(__dirname, '/dist/components')));
+function webpackComponents(done) {
+	const exec = require('child_process').exec;
+	const instance = exec('node ./build/child_processes/componentBuildProcess.js');
+	instance.stdout.on('data', function (data) {
+		handleWebpackStdOut(data, done);
+		var filesToBuild = require('./build/webpack/webpack.files.entries.json');
+		if (Object.keys(filesToBuild).length === 0) {
+			done();
+		}
+	});
 }
+
 function launchOpenfin(env) {
 	return openfinLauncher.launchOpenFin({
 		//new
 		configPath: StartupConfig[env].serverConfig
 	});
 };
-gulp.task('wipeDist', gulp.series(wipeDist));
 
+gulp.task('wipeDist', gulp.series(wipeDist));
 
 gulp.task('copy', gulp.series(
 	copyStaticFiles,
 	copyStaticComponentsFiles
 ));
+
 gulp.task('wp', gulp.series(webpackComponents))
 gulp.task('build', gulp.series(
 	'wipeDist',
 	'copy',
-	webpackClients,
-	webpackServices,
+	// webpackClients,
+	// webpackServices,
 	webpackComponents,
-	webpackReactComponents,
+	// webpackReactComponents,
 	buildSass
 ));
 
 gulp.task('devServer', gulp.series(
 	'wipeDist',
 	'copy',
-	webpackClients,
-	webpackServices,
+	// webpackClients,
+	// webpackServices,
 	webpackComponents,
-	webpackReactComponents,
-	watchReactComponents,
-	watchClients,
-	watchServices,
+	// webpackReactComponents,
+	// watchReactComponents,
+	// watchClients,
+	// watchServices,
 	buildSass,
 	function (done) {
+		initialBuildFinished = true;
 		var exec = require('child_process').exec;
 		//This runs essentially runs 'PORT=80 node server/server.js'
 		var serverPath = path.join(__dirname, '/node_fileserver/server.js');
