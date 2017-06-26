@@ -15,19 +15,19 @@ function copyStaticComponentsFiles() {
 		path.join(__dirname, '/src/components/**/*'),
 		path.join('!' + __dirname, '/src/components/**/*.jsx')
 	])
-		.pipe(gulp.dest(path.join(__dirname, '/built/components/')));
+		.pipe(gulp.dest(path.join(__dirname, '/dist/components/')));
 }
 
 function copyStaticFiles() {
 	return gulp.src([path.join(__dirname, '/src/services/**/*.html'),
 	//ignores the js files in service, but copies over the html files.
 	path.join('!' + __dirname, '/src/services/**/*.js')])
-		.pipe(gulp.dest(path.join(__dirname, '/built/services')));
+		.pipe(gulp.dest(path.join(__dirname, '/dist/services')));
 }
 
 
-function wipeBuilt(done) {
-	var dir = path.join(__dirname, '/built/');
+function wipeDist(done) {
+	var dir = path.join(__dirname, '/dist/');
 	console.log('dir', dir);
 	wipe(dir, done);
 }
@@ -50,7 +50,7 @@ function buildSass(done) {
 		path.join(__dirname, '/src/components/assets/*.scss')
 	])
 		.pipe(sass().on('error', sass.logError))
-		.pipe(gulp.dest(path.join(__dirname, '/built/components/')));
+		.pipe(gulp.dest(path.join(__dirname, '/dist/components/')));
 }
 /**
  *  Watcher for components. Builds everything whenever a source file changes.
@@ -104,21 +104,21 @@ function wipe(dir, cb) {
  *  Wipes the service dir.
  */
 function wipeServices(done) {
-	wipe(path.join(__dirname, '/built/services/'), done);
+	wipe(path.join(__dirname, '/dist/services/'), done);
 }
 
 /**
  *  Wipes the clients dir.
  */
 function wipeClients(done) {
-	wipe(path.join(__dirname, '/built/clients/'), done);
+	wipe(path.join(__dirname, '/dist/clients/'), done);
 }
 /**
- * Removes everything in built.
+ * Removes everything in dist.
  */
-function wipebuilt(done) {
-	if (directoryExists(path.join(__dirname, "/built/"))) {
-		wipe(path.join(__dirname, '/built/'), done);
+function wipedist(done) {
+	if (directoryExists(path.join(__dirname, "/dist/"))) {
+		wipe(path.join(__dirname, '/dist/'), done);
 	} else {
 		done();
 	}
@@ -129,25 +129,25 @@ function wipebuilt(done) {
  *  Wipes the component directory.
  */
 function wipeComponents(done) {
-	wipe(path.join(__dirname, '/built/components'), done);
+	wipe(path.join(__dirname, '/dist/components'), done);
 }
 
 function webpackClients() {
 	return gulpWebpack(require(path.join(__dirname, './configs/webpack.clients.config.js')), webpack)
-		.pipe(gulp.dest(path.join(__dirname, '/built/')));
+		.pipe(gulp.dest(path.join(__dirname, '/dist/')));
 }
 function webpackReactComponents() {
 	return gulpWebpack(require(path.join(__dirname,'./configs/webpack.react.components.config.js')), webpack)
-		.pipe(gulp.dest(path.join(__dirname, '/built/')));
+		.pipe(gulp.dest(path.join(__dirname, '/dist/')));
 }
 function webpackServices() {
 	return gulpWebpack(require(path.join(__dirname,'./configs/webpack.services.config.js')), webpack)
-		.pipe(gulp.dest(path.join(__dirname, '/built/services')));
+		.pipe(gulp.dest(path.join(__dirname, '/dist/services')));
 }
 
 function webpackComponents() {
 	return gulpWebpack(require(path.join(__dirname,'./configs/webpack.components.config.js')), webpack)
-		.pipe(gulp.dest(path.join(__dirname, '/built/components')));
+		.pipe(gulp.dest(path.join(__dirname, '/dist/components')));
 }
 function launchOpenfin(env) {
 	return openfinLauncher.launchOpenFin({
@@ -155,7 +155,7 @@ function launchOpenfin(env) {
 		configPath: StartupConfig[env].serverConfig
 	});
 };
-gulp.task('wipeBuilt', gulp.series(wipeBuilt));
+gulp.task('wipeDist', gulp.series(wipeDist));
 
 
 gulp.task('copy', gulp.series(
@@ -164,7 +164,7 @@ gulp.task('copy', gulp.series(
 ));
 gulp.task('wp', gulp.series(webpackComponents))
 gulp.task('build', gulp.series(
-	'wipeBuilt',
+	'wipeDist',
 	'copy',
 	webpackClients,
 	webpackServices,
@@ -174,7 +174,7 @@ gulp.task('build', gulp.series(
 ));
 
 gulp.task('devServer', gulp.series(
-	'wipeBuilt',
+	'wipeDist',
 	'copy',
 	webpackClients,
 	webpackServices,
