@@ -99,6 +99,7 @@ module.exports = {
 				from: './src/components/',
 				to: './components/',
 				force: false,
+				ignore:['*.js*']
 			},
 			{
 				from: './configs/',
@@ -110,11 +111,6 @@ module.exports = {
 				to: './services/',
 				force: true,
 				ignore: ["*.js"]
-			},
-			{
-				from: './src/clients/',
-				to: './clients/',
-				force: true
 			},
 			{
 				from: './src/thirdParty/',
