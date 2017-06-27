@@ -206,7 +206,7 @@ gulp.task('devServer', gulp.series(
 		initialBuildFinished = true;
 		var exec = require('child_process').exec;
 		//This runs essentially runs 'PORT=80 node server/server.js'
-		var serverPath = path.join(__dirname, '/node_fileserver/server.js');
+		var serverPath = path.join(__dirname, '/server/server.js');
 		//allows for spaces in paths.
 		serverPath = '"' + serverPath + '"';
 		var serverExec = exec('node ' + serverPath, { env: { 'PORT': StartupConfig["dev"].serverPort, NODE_ENV: "dev" } });
