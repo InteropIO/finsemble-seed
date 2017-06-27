@@ -34,8 +34,10 @@ for (var key in clients) {
 	entry[path.join(dir, key)] = key;
 }
 console.log("ENTRY", entry);
-if (!entry) {
-	module.exports = null;
+if (Object.keys(entry).length === 0) {
+	//If you have no clients, services, or components, we throw a json file in there just to get webpack copying the requisite files over for you.
+	var configPath = path.normalize("configs/generalConfig");
+	entry[configPath] = "/configs/generalConfig.json"
 }
 module.exports = {
 	devtool: 'source-map',
