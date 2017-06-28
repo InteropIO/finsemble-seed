@@ -2,7 +2,8 @@
 	"comment": "this file defines application-level config for development, adding on top of the core config",
 	"importConfig": [
 		"configs/components.json",
-		"configs/services.json"
+		"configs/services.json",
+        "configs/defaultWorkspaces.json"
 	],
 	"devMode": false,
 	"isAuthEnabled": false,
