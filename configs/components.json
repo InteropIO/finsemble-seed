@@ -93,7 +93,7 @@
 						"launchableByUser": true
 					},
 					"Window Manager": {
-						"persistWindowState": false,
+						"persistWindowState": true,
 						"FSBLHeader": true,
 						"showLinker": false
 					}
