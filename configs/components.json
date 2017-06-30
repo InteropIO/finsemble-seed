@@ -17,42 +17,6 @@
                 }
             },
             "component": {
-                "menuItems": [
-                    {
-                        "@TODO": "this is not implemented yet in Toolbar"
-                    },
-                    {
-                        "align": "left",
-                        "icon": "@TODO name of icon",
-                        "component": "File Menu"
-                    },
-                    {
-                        "align": "left",
-                        "label": "Workspaces",
-                        "component": "Workspace Management Menu"
-                    },
-                    {
-                        "align": "left",
-                        "label": "Apps",
-                        "component": "Workspace Management Menu"
-                    },
-                    {
-                        "align": "right",
-                        "icon": "@TODO",
-                        "method": "autoArrange"
-                    },
-                    {
-                        "align": "right",
-                        "icon": "@TODO",
-                        "method": "bringToFront"
-                    },
-                    {
-                        "align": "right",
-                        "icon": "@TODO",
-                        "method": "launchChat"
-                    }
-                ],
-                "type": "Toolbar",
                 "spawnOnStartup": true,
                 "spawnOnAllMonitors": true
             },
@@ -78,9 +42,6 @@
 				"url": "https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html",
 				"height": 800,
 				"width": 1000
-			},
-			"component": {
-				"type": "Finsemble Documentation"
 			},
 			"foreign": {
 				"services": {
