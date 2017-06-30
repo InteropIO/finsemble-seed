@@ -3,7 +3,6 @@
     "components": {
         "Toolbar": {
             "window": {
-                "id": "launcher",
                 "url": "/components/system/toolbar/toolbar.html",
                 "height": 40,
                 "top": 0,
@@ -37,29 +36,29 @@
                 }
             }
         },
-		"Finsemble Documentation": {
-			"window": {
-				"url": "https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html",
-				"height": 800,
-				"width": 1000
-			},
-			"foreign": {
-				"services": {
-					"dockingService": {
-						"isArrangable": true
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"launchableByUser": true
-					},
-					"Window Manager": {
-						"persistWindowState": true,
-						"FSBLHeader": true,
-						"showLinker": false
-					}
-				}
-			}
-		}
-	}
+        "Finsemble Documentation": {
+            "window": {
+                "url": "https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html",
+                "height": 800,
+                "width": 1000
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "persistWindowState": true,
+                        "FSBLHeader": true,
+                        "showLinker": false
+                    }
+                }
+            }
+        }
+    }
 }
