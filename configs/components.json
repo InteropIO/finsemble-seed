@@ -1,39 +1,74 @@
 {
     "comment": "this file contains the components that will be loaded into Finsemble.",
     "components": {
-        "injected": {
+        "Toolbar": {
             "window": {
-                "url": "http://google.com",
-                "frame": false,
-                "resizable": true,
-                "autoShow": true,
-                "defaultTop": "center",
-                "defaultLeft": "center",
-                "defaultWidth": 800,
-                "defaultHeight": 600
+                "id": "launcher",
+                "url": "/components/system/toolbar/toolbar.html",
+                "height": 40,
+                "top": 0,
+                "left": 0,
+                "right": 0,
+                "position": "available",
+                "claimMonitorSpace": true,
+                "options": {
+                    "resizable": false,
+                    "showTaskbarIcon": false
+                }
             },
             "component": {
-                "type": "injected"
+                "menuItems": [
+                    {
+                        "@TODO": "this is not implemented yet in Toolbar"
+                    },
+                    {
+                        "align": "left",
+                        "icon": "@TODO name of icon",
+                        "component": "File Menu"
+                    },
+                    {
+                        "align": "left",
+                        "label": "Workspaces",
+                        "component": "Workspace Management Menu"
+                    },
+                    {
+                        "align": "left",
+                        "label": "Apps",
+                        "component": "Workspace Management Menu"
+                    },
+                    {
+                        "align": "right",
+                        "icon": "@TODO",
+                        "method": "autoArrange"
+                    },
+                    {
+                        "align": "right",
+                        "icon": "@TODO",
+                        "method": "bringToFront"
+                    },
+                    {
+                        "align": "right",
+                        "icon": "@TODO",
+                        "method": "launchChat"
+                    }
+                ],
+                "type": "Toolbar",
+                "spawnOnStartup": true,
+                "spawnOnAllMonitors": true
             },
             "foreign": {
                 "services": {
-                    "workspaceService": {
-                        "isArrangable": true
-                    },
-                    "launcherService": {
-                        "inject": true
+                    "dockingService": {
+                        "isArrangable": false
                     }
                 },
                 "components": {
                     "App Launcher": {
-                        "launchableByUser": true
+                        "launchableByUser": false
                     },
                     "Window Manager": {
-                        "FSBLHeader": true,
-                        "persistWindowState": true
-                    },
-                    "Toolbar": {
-                        "iconClass": "injected"
+                        "persistWindowState": false,
+                        "FSBLHeader": false
                     }
                 }
             }
