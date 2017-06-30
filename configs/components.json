@@ -1,39 +1,104 @@
 {
-  "injected": {
-        "window": {
-            "url": "http://google.com",
-            "frame": false,
-            "resizable": true,
-            "autoShow": true,
-            "defaultTop": "center",
-            "defaultLeft": "center",
-            "defaultWidth": 800,
-            "defaultHeight": 600
-        },
-        "component": {
-            "type": "injected"
-        },
-        "foreign": {
-            "services": {
-                "workspaceService": {
-                    "isArrangable": true
-                },
-                "launcherService": {
-                    "inject": true
+    "comment": "this file contains the components that will be loaded into Finsemble.",
+    "components": {
+        "Toolbar": {
+            "window": {
+                "id": "launcher",
+                "url": "/components/system/toolbar/toolbar.html",
+                "height": 40,
+                "top": 0,
+                "left": 0,
+                "right": 0,
+                "position": "available",
+                "claimMonitorSpace": true,
+                "options": {
+                    "resizable": false,
+                    "showTaskbarIcon": false
                 }
             },
-            "components": {
-                "App Launcher": {
-                    "launchableByUser": true
+            "component": {
+                "menuItems": [
+                    {
+                        "@TODO": "this is not implemented yet in Toolbar"
+                    },
+                    {
+                        "align": "left",
+                        "icon": "@TODO name of icon",
+                        "component": "File Menu"
+                    },
+                    {
+                        "align": "left",
+                        "label": "Workspaces",
+                        "component": "Workspace Management Menu"
+                    },
+                    {
+                        "align": "left",
+                        "label": "Apps",
+                        "component": "Workspace Management Menu"
+                    },
+                    {
+                        "align": "right",
+                        "icon": "@TODO",
+                        "method": "autoArrange"
+                    },
+                    {
+                        "align": "right",
+                        "icon": "@TODO",
+                        "method": "bringToFront"
+                    },
+                    {
+                        "align": "right",
+                        "icon": "@TODO",
+                        "method": "launchChat"
+                    }
+                ],
+                "type": "Toolbar",
+                "spawnOnStartup": true,
+                "spawnOnAllMonitors": true
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "isArrangable": false
+                    }
                 },
-                "Window Manager": {
-                    "FSBLHeader": true,
-                    "persistWindowState": true
-                },
-                "Toolbar": {
-                    "iconClass": "injected"
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": false
+                    },
+                    "Window Manager": {
+                        "persistWindowState": false,
+                        "FSBLHeader": false
+                    }
                 }
             }
-        }
-    }
+        },
+		"Finsemble Documentation": {
+			"window": {
+				"url": "https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html",
+				"height": 800,
+				"width": 1000
+			},
+			"component": {
+				"type": "Finsemble Documentation"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"persistWindowState": true,
+						"FSBLHeader": true,
+						"showLinker": false
+					}
+				}
+			}
+		}
+	}
 }

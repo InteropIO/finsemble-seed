@@ -1,0 +1,23 @@
+{
+	"comment": "this file defines application-level config for development, adding on top of the core config",
+	"devMode": false,
+	"isAuthEnabled": false,
+	"defaultStorage": "localStorage",
+	"storage": {},
+	"betaFeatures": {
+		"docking": {
+			"enabled": false
+		},
+		"assimilation": {
+			"enabled": false,
+			"mode": "whitelist",
+			"whitelist": {},
+			"blacklist": {}
+		}
+	},
+	"importConfig": [
+		"configs/components.json",
+		"configs/services.json",
+        "configs/defaultWorkspaces.json"
+	]
+}

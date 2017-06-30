@@ -1,3 +1,4 @@
 {
-    "workers": []
+    "comment": "The services object houses any custom services that you'd like to import into Finsemble.",
+    "services": {}
 }
