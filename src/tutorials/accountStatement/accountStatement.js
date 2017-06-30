@@ -34,7 +34,7 @@ function createLinkage(){
 	});
 }
 
-document.addEventListener("DOMContentLoaded", function () {
+FSBL.addEventListener("onReady", function () {
 	FSBL.useAllClients();
 	FSBL.initialize(function(){
 		createLinkage();

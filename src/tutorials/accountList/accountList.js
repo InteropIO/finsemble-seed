@@ -129,7 +129,7 @@ function renderPage(){
 	}
 }
 
-document.addEventListener("DOMContentLoaded", function () {
+FSBL.addEventListener("onReady", function () {
 	FSBL.useAllClients();
 	FSBL.initialize(function(){
 		//alert(FSBL.Clients.WindowClient.options.customData.component["account-type"]);
