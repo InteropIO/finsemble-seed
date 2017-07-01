@@ -18,6 +18,7 @@ function setCustomerIndex(accountNumber){
 }
 
 var advancedIsRunning=false;
+var accountDetailSpawnResponse=null;
 
 //STEP 6
 function saveState(){
@@ -56,6 +57,7 @@ function communicateBetweenComponents(){
 
 // STEP 3
 function launchAccountDetailAdvanced(accountNumber){
+/**/
 	advancedIsRunning=true;
 	var alive=false;
 	FSBL.Clients.LauncherClient.getActiveDescriptors(function(err, response){
@@ -73,43 +75,33 @@ function launchAccountDetailAdvanced(accountNumber){
 			FSBL.Clients.RouterClient.transmit(descriptor.name, accountNumber);
 		}
 	});
+
 }
 
 // STEP 2
-function launchAccountDetail(accountNumber){
+function launchAccountDetail(selectedAccountNumber){
 	if(advancedIsRunning) return;
-	setCustomerIndex(accountNumber);
+	setCustomerIndex(selectedAccountNumber);
 
-	var xy=getWindowLocation();
-
-	FSBL.Clients.LauncherClient.spawn("accountDetail", {
-		addToWorkspace: true,
-		options:{ /* specify where we want accountDetail to be positioned */
-			"defaultLeft": xy.x,
-			"defaultTop": xy.y,
-			"defaultWidth": 200,
-			"defaultHeight": xy.h,
-			customData:{
-				component:{ /* provide some initialization data to accountDetail */
-					"accountNumber": accountNumber
-				}
-			}
+/**/
+	FSBL.Clients.LauncherClient.spawn("accountDetail",
+		{
+			addToWorkspace: true,
+			left: "adjacent",
+			data: {accountNumber: selectedAccountNumber}
+		}, function(err, response){
+			console.log("spawn() returns information about the new component", response);
+			accountDetailSpawnResponse=response;
 		}
-	}, function(err, response){
-	});
+	);
 }
 
-function getWindowLocation(){
-	// Fetch the current coordinates of this component
-	// Add the width in order to get the coordinates for where
-	// we want to pop up the account detail
-	var w=FSBL.Clients.WindowClient.options;
-	var xy={
-		x: w.defaultLeft + w.defaultWidth,
-		y: w.defaultTop,
-		h: w.defaultHeight
-	};
-	return xy;
+function relocateAccountDetail(){
+	FSBL.Clients.LauncherClient.showWindow(accountDetailSpawnResponse.windowIdentifier,
+	{
+		left:"aligned",
+		top:"adjacent"
+	});
 }
 
 function clickCustomer(event){
@@ -127,15 +119,19 @@ function renderPage(){
 		row.find("account").parent().click(customer[0], clickCustomer);
 		$("body").append(row);
 	}
+
+	var relocate=$("<button>Relocate Detail</button>");
+	relocate.click(function(){
+		relocateAccountDetail();
+	});
+	$("body").append(relocate);
 }
 
 FSBL.addEventListener("onReady", function () {
-	FSBL.useAllClients();
-	FSBL.initialize(function(){
-		//alert(FSBL.Clients.WindowClient.options.customData.component["account-type"]);
-		FSBL.Clients.WindowClient.setWindowTitle("Account List");
-		renderPage();
-		communicateBetweenComponents(); // --> Step 4
-		getState();
-	});
+	//alert(FSBL.Clients.WindowClient.options.customData.component["account-type"]);
+
+	FSBL.Clients.WindowClient.setWindowTitle("Account List");
+	renderPage();
+	communicateBetweenComponents(); // --> Step 4
+	getState();
 })

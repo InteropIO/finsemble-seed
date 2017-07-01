@@ -44,16 +44,13 @@ function listenForCustomer(){
 
 // STEP 2
 function getInitialCustomer(){
-	var accountNumber=FSBL.Clients.WindowClient.options.customData.component["accountNumber"];
+	var accountNumber=FSBL.Clients.WindowClient.getSpawnData()["accountNumber"];
 	setAccountNumber(accountNumber);
 }
 
 FSBL.addEventListener("onReady", function () {
-	FSBL.useAllClients();
-	FSBL.initialize(function(){
-		getInitialCustomer();
-		listenForCustomer();
-		communicateBetweenComponents();
-		getState();
-	});
+	getInitialCustomer();
+	listenForCustomer();
+	communicateBetweenComponents();
+	getState();
 })

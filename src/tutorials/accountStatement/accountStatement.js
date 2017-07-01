@@ -35,9 +35,6 @@ function createLinkage(){
 }
 
 FSBL.addEventListener("onReady", function () {
-	FSBL.useAllClients();
-	FSBL.initialize(function(){
-		createLinkage();
-		getState();
-	});
+	createLinkage();
+	getState();
 })
