@@ -8,23 +8,28 @@ var customers=[
 
 var customerIndex=-1;
 function setCustomerIndex(accountNumber){
-	for(var i=0;i<customers.length;i++){
-		if(customers[i][0]==accountNumber){
+	var i;
+	for(i=0;i<customers.length;i++){
+		if(customers[i][0]===accountNumber){
 			customerIndex=i;
 		}
 	}
 	if(i==customers.length) customerIndex=0;
-	saveState();
+	setState();
 }
 
 var advancedIsRunning=false;
 var accountDetailSpawnResponse=null;
 
 //STEP 6
-function saveState(){
+function setState(){
+/*
 	FSBL.Clients.WindowClient.setComponentState({ field: 'customerIndex', value: customerIndex });
+*/
 }
+
 function getState(){
+/*
 	FSBL.Clients.WindowClient.getComponentState({
 		field: 'customerIndex',
 	}, function (err, state) {
@@ -33,49 +38,57 @@ function getState(){
 		}
 		customerIndex=state;
 	});
+*/
 }
 
 // STEP 4
 function communicateBetweenComponents(){
 	// Set up a server to respond to requests from clients. Here, clients will send requests for the next customer in the list.
 	// We will respond by traversing through the customer list and sending the response
+/*
 	FSBL.Clients.RouterClient.addResponder("accountTraversal", function(err, query){
 		if(err) return;
-		if(query.data.action=="next"){
+		if(query.data.action==="next"){
 			customerIndex++;
 			if(customerIndex==customers.length) customerIndex=0;
-		}else if(query.data.action=="prev"){
+		}else if(query.data.action==="prev"){
 			customerIndex--;
-			if(customerIndex==-1) customerIndex=customers.length-1;
+			if(customerIndex===-1) customerIndex=customers.length-1;
 		}
-		saveState();
+		setState();
 
 		// Respond to the accountDetail client with the next customer
 		query.sendQueryResponse(null, customers[customerIndex][0]);
 	});
+*/
 }
 
 // STEP 3
-function launchAccountDetailAdvanced(accountNumber){
-/**/
+function launchAccountDetailAdvanced(selectedAccountNumber){
+/*
 	advancedIsRunning=true;
-	var alive=false;
-	FSBL.Clients.LauncherClient.getActiveDescriptors(function(err, response){
-		advancedIsRunning=false;
-		for(let id in response){
-			var descriptor=response[id];
-			if(descriptor.customData.component.type=="accountDetail"){
-				alive=true;
-				break;
-			}
-		}
-		if(!alive){
-			launchAccountDetail(accountNumber);
-		}else{
-			FSBL.Clients.RouterClient.transmit(descriptor.name, accountNumber);
-		}
-	});
 
+	// A windowIdentifier describes a component window. We create a unique windowName by using our current window's name and appending.
+	// showWindow() will show this windowName if it's found. If not, then it will launch a new accountDetail coponent, and give it this name.
+	var windowIdentifier={
+		componentType: "accountDetail",
+		windowName: FSBL.Clients.WindowClient.options.name + ".accountDetail"
+	};
+
+	FSBL.Clients.LauncherClient.showWindow(windowIdentifier,
+		{
+			addToWorkspace: true,
+			left: "adjacent",
+			spawnIfNotFound: true,
+			data: {accountNumber: selectedAccountNumber}
+		}, function(err, response){
+			console.log("spawn() returns information about the new component", response);
+			accountDetailSpawnResponse=response;
+			// After the component is launched, or displayed, we tell the child which account number to use.
+			FSBL.Clients.RouterClient.transmit(windowIdentifier.windowName, selectedAccountNumber);
+		}
+	);
+*/
 }
 
 // STEP 2
@@ -83,7 +96,7 @@ function launchAccountDetail(selectedAccountNumber){
 	if(advancedIsRunning) return;
 	setCustomerIndex(selectedAccountNumber);
 
-/**/
+/*
 	FSBL.Clients.LauncherClient.spawn("accountDetail",
 		{
 			addToWorkspace: true,
@@ -94,14 +107,15 @@ function launchAccountDetail(selectedAccountNumber){
 			accountDetailSpawnResponse=response;
 		}
 	);
+*/
 }
 
 function relocateAccountDetail(){
 	FSBL.Clients.LauncherClient.showWindow(accountDetailSpawnResponse.windowIdentifier,
-	{
-		left:"aligned",
-		top:"adjacent"
-	});
+		{
+			left:"aligned",
+			top:"adjacent"
+		});
 }
 
 function clickCustomer(event){
@@ -134,4 +148,4 @@ FSBL.addEventListener("onReady", function () {
 	renderPage();
 	communicateBetweenComponents(); // --> Step 4
 	getState();
-})
+});

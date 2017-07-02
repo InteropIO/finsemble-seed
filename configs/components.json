@@ -1,6 +1,93 @@
 {
     "comment": "this file contains the components that will be loaded into Finsemble.",
     "components": {
+        "accountDetail": {
+            "window": {
+                "url": "/components/accountDetail/accountDetail.html",
+                "width": 800,
+                "height": 600
+            },
+            "component": {
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "FSBLHeader": true,
+                        "persistWindowState": true
+                    },
+                    "Toolbar": {
+                        "iconClass": "accountDetail"
+                    }
+                }
+            }
+        },
+        "accountList": {
+            "window": {
+                "url": "/components/accountList/accountList.html",
+                "width": 800,
+                "height": 600
+            },
+            "component": {
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "FSBLHeader": true,
+                        "persistWindowState": true
+                    },
+                    "Toolbar": {
+                        "iconClass": "accountList"
+                    }
+                }
+            }
+        },
+        "accountStatement": {
+            "window": {
+                "url": "/components/accountStatement/accountStatement.html",
+                "width": 800,
+                "height": 600
+            },
+            "component": {
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "FSBLHeader": true,
+                        "persistWindowState": true
+                    },
+                    "Toolbar": {
+                        "iconClass": "accountStatement"
+                    }
+                }
+            }
+        },
         "Toolbar": {
             "window": {
                 "url": "/components/system/toolbar/toolbar.html",
