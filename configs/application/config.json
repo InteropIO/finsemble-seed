@@ -9,16 +9,32 @@
 			"enabled": true
 		},
 		"assimilation": {
-			"enabled": false,
+			"enabled": true,
 			"mode": "whitelist",
 			"whitelist": {},
-			"blacklist": {}
+			"blacklist": {},
+			"appAssets": [
+				{
+					"comment": "Necessary application for assimilation to work.",
+					"src": "/hosted/assimilation.zip",
+					"version": "1.0.2",
+					"alias": "assimilation",
+					"target": "CppWindowsHook.exe"
+				},
+				{
+					"comment": "Example application. Replace the contents of this object with your own zip file.",
+					"src": "/hosted/putty.zip",
+					"version": "1.0.0",
+					"alias": "putty",
+					"target": "putty.exe"
+				}
+			]
 		}
 	},
 	"importConfig": [
 		"configs/components.json",
 		"configs/finsembleComponents.json",
 		"configs/services.json",
-        "configs/defaultWorkspaces.json"
+		"configs/defaultWorkspaces.json"
 	]
 }
