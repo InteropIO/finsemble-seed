@@ -88,46 +88,13 @@
                 }
             }
         },
-        "Toolbar": {
-            "window": {
-                "url": "/components/system/toolbar/toolbar.html",
-                "height": 40,
-                "top": 0,
-                "left": 0,
-                "right": 0,
-                "position": "available",
-                "claimMonitorSpace": true,
-                "options": {
-                    "resizable": false,
-                    "showTaskbarIcon": false
-                }
-            },
-            "component": {
-                "spawnOnStartup": true,
-                "spawnOnAllMonitors": true
-            },
-            "foreign": {
-                "services": {
-                    "dockingService": {
-                        "isArrangable": false
-                    }
-                },
-                "components": {
-                    "App Launcher": {
-                        "launchableByUser": false
-                    },
-                    "Window Manager": {
-                        "persistWindowState": false,
-                        "FSBLHeader": false
-                    }
-                }
-            }
-        },
-        "Finsemble Documentation": {
+        "Getting Started Tutorial": {
             "window": {
                 "url": "https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html",
                 "height": 800,
                 "width": 1000
+            },
+            "component":{
             },
             "foreign": {
                 "services": {

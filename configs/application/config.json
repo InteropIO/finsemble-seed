@@ -6,7 +6,7 @@
 	"storage": {},
 	"betaFeatures": {
 		"docking": {
-			"enabled": false
+			"enabled": true
 		},
 		"assimilation": {
 			"enabled": false,
@@ -17,6 +17,7 @@
 	},
 	"importConfig": [
 		"configs/components.json",
+		"configs/finsembleComponents.json",
 		"configs/services.json",
         "configs/defaultWorkspaces.json"
 	]
