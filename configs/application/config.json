@@ -6,10 +6,10 @@
 	"storage": {},
 	"betaFeatures": {
 		"docking": {
-			"enabled": true
+			"enabled": false
 		},
 		"assimilation": {
-			"enabled": true,
+			"enabled": false,
 			"mode": "whitelist",
 			"whitelist": {},
 			"blacklist": {},
