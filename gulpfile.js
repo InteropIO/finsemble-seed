@@ -8,7 +8,7 @@ var sass = require('gulp-sass');
 var openfinLauncher = require('openfin-launcher');
 var configPath = path.join(__dirname, '/configs/finConfig.json');
 //new
-var StartupConfig = require("./configs/startup");
+var StartupConfig = require("./configs/other/server-environment-startup");
 var chalk = require('chalk');
 chalk.enabled = true;
 var serverOutColor = chalk.yellow;

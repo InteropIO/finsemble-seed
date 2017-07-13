@@ -8,14 +8,15 @@ var bodyParser = require("body-parser");
 var chalk = require('chalk');
 var outputColor = chalk.yellow;
 var express = require("express");
+//var Chat = require("./chat");
+//var Redis = require("./redis");
 var app = express();
-var nocache = require('nocache');
 var path = require('path');
-var rootDir = path.join(__dirname, "/../dist");
-var finConfig = require("./FinsembleConfigs");
+var rootDir = path.join(__dirname, "/../");
 var cacheAge;
 var oneDay = 60 * 60 * 24 * 1000; // in millseconds
 
+// No caching in development, but cache otherwise
 if (process.env.NODE_ENV === "dev") {
 	cacheAge = 0;
 } else {
@@ -24,37 +25,34 @@ if (process.env.NODE_ENV === "dev") {
 
 console.log(outputColor("SERVER SERVING FROM " + rootDir + " with caching maxage = ", cacheAge));
 
-app.use(function (req, res, next) {
-	var filename = path.basename(req.url);
-	var extension = path.extname(filename);
-	if (extension === '.html') {
-		console.log(outputColor("Node Server Retriving " + req.url));
-	}
-	next();
-});
+// Support for Chat
+app.use(bodyParser.urlencoded({
+	extended: false
+}));
 
-console.log(rootDir);
+// For Assimulation
+app.use("/hosted", express.static(path.join(__dirname, "/../hosted"), {
+	maxage: cacheAge
+}));
+
 app.use("/yourSubDirectory", express.static(rootDir, {
 	maxage: cacheAge
 }));
 app.use("/yourSubDirectory", express.static(path.join(__dirname, "..", '/node_modules/@chartiq/finsemble/dist')));
 global.root = "/yourSubDirectory";
 
-app.use(bodyParser.urlencoded({
-	extended: false
+// Application Root
+app.use("/fin", express.static(rootDir, {
+	maxage: cacheAge
 }));
+global.root = "/fin";
 var PORT = process.env.PORT || 3375;
 
 var server = app.listen(PORT, function () {
+	console.log(chalk.green("listening on port " + PORT));
 	global.host = server.address().address;
 	global.port = server.address().port;
-	app.use(nocache());
-	app.get("/config", function (req, res) {
-		res.send(finConfig(req, res));
-	});
-	console.log(chalk.green("listening on port " + PORT));
-	app.use(function (req, res, next) {
-		next();
-	});
-
+	//Chat.setup(app, server);
+	//Redis.setup(app);
+	console.log(chalk.green("server up.........................."));
 });

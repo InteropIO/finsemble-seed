@@ -1,23 +1,30 @@
 {
-	"comment": "this file defines application-level config for development, adding on top of the core config",
-	"devMode": false,
+	"comment": "Top-level application config for development, adding on top of the core config",
+	"mode": "",
 	"isAuthEnabled": false,
 	"defaultStorage": "localStorage",
+	"debugServiceDelay":0,
 	"storage": {},
 	"betaFeatures": {
 		"docking": {
-			"enabled": false
+			"enabled": true
 		},
 		"assimilation": {
-			"enabled": false,
-			"mode": "whitelist",
-			"whitelist": {},
-			"blacklist": {}
+			"enabled": false
+		}
+	},
+	"services": {
+		"chatService": {
+				"visible": false,
+				"active": true,
+				"name": "chatService",
+				"html": "$servicesRoot/chat/chat.html",
+				"file": "$servicesRoot/chat/chatService.js"
 		}
 	},
 	"importConfig": [
-		"configs/components.json",
-		"configs/services.json",
-        "configs/defaultWorkspaces.json"
+		"$applicationRoot/configs/application/components.json",
+		"$applicationRoot/configs/application/services.json",
+        "$applicationRoot/configs/other/defaultWorkspaces.json"
 	]
 }
