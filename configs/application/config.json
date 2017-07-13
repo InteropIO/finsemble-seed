@@ -13,17 +13,9 @@
 			"enabled": false
 		}
 	},
-	"services": {
-		"chatService": {
-				"visible": false,
-				"active": true,
-				"name": "chatService",
-				"html": "$servicesRoot/chat/chat.html",
-				"file": "$servicesRoot/chat/chatService.js"
-		}
-	},
 	"importConfig": [
 		"$applicationRoot/configs/application/components.json",
+		"$applicationRoot/configs/application/systemComponents.json",
 		"$applicationRoot/configs/application/services.json",
         "$applicationRoot/configs/other/defaultWorkspaces.json"
 	]

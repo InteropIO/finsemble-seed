@@ -65,8 +65,8 @@
         }
     ],
     "finsemble": {
-        "applicationRoot": "http://localhost:3375/fin",
-        "moduleRoot": "$applicationRoot/node_modules/@chartiq/finsemble/dist",
+        "applicationRoot": "http://localhost:3375/fin/dist",
+        "moduleRoot": "http://localhost:3375/fin/node_modules/@chartiq/finsemble/dist",
         "importConfig": [
             "$applicationRoot/configs/application/config.json"
         ]
