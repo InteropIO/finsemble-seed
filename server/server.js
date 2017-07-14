@@ -8,8 +8,6 @@ var bodyParser = require("body-parser");
 var chalk = require('chalk');
 var outputColor = chalk.yellow;
 var express = require("express");
-//var Chat = require("./chat");
-//var Redis = require("./redis");
 var app = express();
 var path = require('path');
 var rootDir = path.join(__dirname, "/../");
@@ -24,11 +22,6 @@ if (process.env.NODE_ENV === "dev") {
 }
 
 console.log(outputColor("SERVER SERVING FROM " + rootDir + " with caching maxage = ", cacheAge));
-
-// Support for Chat
-app.use(bodyParser.urlencoded({
-	extended: false
-}));
 
 // For Assimulation
 app.use("/hosted", express.static(path.join(__dirname, "/../hosted"), {
@@ -54,7 +47,5 @@ var server = app.listen(PORT, function () {
 	console.log(chalk.green("listening on port " + PORT));
 	global.host = server.address().address;
 	global.port = server.address().port;
-	//Chat.setup(app, server);
-	//Redis.setup(app);
 	console.log(chalk.green("server up.........................."));
 });
