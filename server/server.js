@@ -28,18 +28,12 @@ app.use("/hosted", express.static(path.join(__dirname, "/../hosted"), {
 	maxage: cacheAge
 }));
 
-// Can here set up you own directory path to replace "/fin" sample below -- must align with paths thoughout openfin/minifest-*.json
+// Sample server root set to "/yourSubDirectory" -- must align with paths thoughout configs/openfin/manifest-local.json and configs/other/server-environment-startup.json
 app.use("/yourSubDirectory", express.static(rootDir, {
 	maxage: cacheAge
 }));
-app.use("/yourSubDirectory", express.static(path.join(__dirname, "..", '/node_modules/@chartiq/finsemble/dist')));
 global.root = "/yourSubDirectory";
 
-// Sample Application Root set to "/fin" -- must align with paths thoughout openfin/minifest-*.json
-app.use("/fin", express.static(rootDir, {
-	maxage: cacheAge
-}));
-global.root = "/fin";
 
 var PORT = process.env.PORT || 3375;
 

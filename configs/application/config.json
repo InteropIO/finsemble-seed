@@ -10,7 +10,10 @@
 			"enabled": true
 		},
 		"assimilation": {
-			"enabled": false
+			"enabled": false,
+			"blacklist": [],
+			"whitelist": [],
+			"onlySpawned": false
 		}
 	},
 	"importConfig": [
