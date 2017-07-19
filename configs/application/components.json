@@ -1,5 +1,118 @@
 {
     "comment": "Houses config for custom components that you'd like to import into Finsemble.",
     "components": {
-	}
+        "accountDetail": {
+            "window": {
+                "url": "$applicationRoot/components/accountDetail/accountDetail.html",
+                "width": 800,
+                "height": 600
+            },
+            "component": {
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "FSBLHeader": true,
+                        "persistWindowState": true
+                    },
+                    "Toolbar": {
+                        "iconClass": "accountDetail"
+                    }
+                }
+            }
+        },
+        "accountList": {
+            "window": {
+                "url": "$applicationRoot/components/accountList/accountList.html",
+                "width": 800,
+                "height": 600
+            },
+            "component": {
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "FSBLHeader": true,
+                        "persistWindowState": true
+                    },
+                    "Toolbar": {
+                        "iconClass": "accountList"
+                    }
+                }
+            }
+        },
+        "accountStatement": {
+            "window": {
+                "url": "$applicationRoot/components/accountStatement/accountStatement.html",
+                "width": 800,
+                "height": 600
+            },
+            "component": {
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "FSBLHeader": true,
+                        "persistWindowState": true
+                    },
+                    "Toolbar": {
+                        "iconClass": "accountStatement"
+                    }
+                }
+            }
+        },
+        "Getting Started Tutorial": {
+            "window": {
+                "url": "https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html",
+                "height": 800,
+                "width": 1000
+            },
+            "component":{
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "persistWindowState": true,
+                        "FSBLHeader": true,
+                        "showLinker": false
+                    }
+                }
+            }
+        }
+    }
 }
