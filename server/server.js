@@ -11,15 +11,7 @@ var express = require("express");
 var app = express();
 var path = require('path');
 var rootDir = path.join(__dirname, "/../");
-var cacheAge;
-var oneDay = 60 * 60 * 24 * 1000; // in millseconds
-
-// No caching in development, but cache otherwise
-if (process.env.NODE_ENV === "dev") {
-	cacheAge = 0;
-} else {
-	cacheAge = 5 * oneDay;
-}
+var cacheAge = 0;
 
 console.log(outputColor("SERVER SERVING FROM " + rootDir + " with caching maxage = ", cacheAge));
 
