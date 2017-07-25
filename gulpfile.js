@@ -8,7 +8,7 @@ var sass = require('gulp-sass');
 var openfinLauncher = require('openfin-launcher');
 var configPath = path.join(__dirname, '/configs/finConfig.json');
 //new
-var StartupConfig = require("./configs/startup");
+var StartupConfig = require("./configs/other/server-environment-startup");
 var chalk = require('chalk');
 chalk.enabled = true;
 var serverOutColor = chalk.yellow;
@@ -25,12 +25,13 @@ function copyStaticComponentsFiles() {
 }
 
 function copyStaticFiles() {
+	gulp.src([path.join(__dirname, '/configs/**/*')])
+		.pipe(gulp.dest(path.join(__dirname, '/dist/configs/')));
 	return gulp.src([path.join(__dirname, '/src/services/**/*.html'),
 	//ignores the js files in service, but copies over the html files.
 	path.join('!' + __dirname, '/src/services/**/*.js')])
 		.pipe(gulp.dest(path.join(__dirname, '/dist/services')));
 }
-
 
 function wipeDist(done) {
 	var dir = path.join(__dirname, '/dist/');

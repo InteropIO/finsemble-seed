@@ -1,40 +1,25 @@
 {
-	"comment": "this file defines application-level config for development, adding on top of the core config",
-	"devMode": false,
+	"comment": "Top-level application config for development, adding on top of the core config",
+	"mode": "",
 	"isAuthEnabled": false,
 	"defaultStorage": "localStorage",
+	"debugServiceDelay":0,
 	"storage": {},
 	"betaFeatures": {
 		"docking": {
-			"enabled": false
+			"enabled": true
 		},
 		"assimilation": {
 			"enabled": false,
-			"mode": "whitelist",
-			"whitelist": {},
-			"blacklist": {},
-			"appAssets": [
-				{
-					"comment": "Necessary application for assimilation to work.",
-					"src": "/hosted/assimilation.zip",
-					"version": "1.0.2",
-					"alias": "assimilation",
-					"target": "CppWindowsHook.exe"
-				},
-				{
-					"comment": "Example application. Replace the contents of this object with your own zip file.",
-					"src": "/hosted/putty.zip",
-					"version": "1.0.0",
-					"alias": "putty",
-					"target": "putty.exe"
-				}
-			]
+			"blacklist": [],
+			"whitelist": [],
+			"onlySpawned": false
 		}
 	},
 	"importConfig": [
-		"configs/components.json",
-		"configs/finsembleComponents.json",
-		"configs/services.json",
-		"configs/defaultWorkspaces.json"
+		"$applicationRoot/configs/application/components.json",
+		"$applicationRoot/configs/application/systemComponents.json",
+		"$applicationRoot/configs/application/services.json",
+        "$applicationRoot/configs/other/defaultWorkspaces.json"
 	]
 }
