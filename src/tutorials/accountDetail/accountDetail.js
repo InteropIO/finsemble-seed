@@ -18,6 +18,7 @@ function getState(){
 		field: 'accountNumber',
 	}, function (err, state) {
 		if (state === null) {
+			getInitialCustomer();
 			return;
 		}
 		setAccountNumber(state);
@@ -54,7 +55,6 @@ function getInitialCustomer(){
 }
 
 FSBL.addEventListener("onReady", function () {
-	getInitialCustomer();
 	listenForCustomer();
 	communicateBetweenComponents();
 	getState();
