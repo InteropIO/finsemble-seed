@@ -50,6 +50,7 @@ function wipe(dir, cb) {
 		console.error(err);
 	});
 }
+
 function buildSass(done) {
 	done();
 	return gulp.src([
@@ -85,7 +86,10 @@ function watchClients(done) {
 	));
 	done();
 }
-
+function watchSass(done) {
+	watch(path.join(__dirname, './src/components/assets/**/*'), {}, gulp.series(buildSass));
+	done();
+}
 /**
  *  Watcher for Clients. Builds everything whenever a source file changes.
  */
@@ -210,6 +214,7 @@ gulp.task('devServer', gulp.series(
 	// watchClients,
 	// watchServices,
 	buildSass,
+	watchSass,
 	copyNodeModules,
 	function (done) {
 		initialBuildFinished = true;

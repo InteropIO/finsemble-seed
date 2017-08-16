@@ -67,6 +67,7 @@
     "finsemble": {
         "applicationRoot": "http://localhost:3375/",
         "moduleRoot": "http://localhost:3375/finsemble",
+        "cssOverridePath": "$applicationRoot/components/assets/css/finsemble-overrides.css",
         "importConfig": [
             "$applicationRoot/configs/application/config.json"
         ]
