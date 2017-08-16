@@ -49,6 +49,7 @@ function wipe(dir, cb) {
 		console.error(err);
 	});
 }
+
 function buildSass(done) {
 	done();
 	return gulp.src([
@@ -84,7 +85,10 @@ function watchClients(done) {
 	));
 	done();
 }
-
+function watchSass(done) {
+	watch(path.join(__dirname, './src/components/assets/**/*'), {}, gulp.series(buildSass));
+	done();
+}
 /**
  *  Watcher for Clients. Builds everything whenever a source file changes.
  */
@@ -144,7 +148,7 @@ function handleWebpackStdOut(data, done) {
 	if (notAnError) {
 		console.log(webpackOutColor(data));
 	}
-	
+
 	if (data.includes('webpack is watching')) {
 
 		if (initialBuildFinished && notAnError) {
@@ -202,7 +206,7 @@ gulp.task('devServer', gulp.series(
 	// watchReactComponents,
 	// watchClients,
 	// watchServices,
-	buildSass,
+	watchSass,
 	function (done) {
 		initialBuildFinished = true;
 		var exec = require('child_process').exec;
