@@ -15,6 +15,7 @@ var serverOutColor = chalk.yellow;
 var errorOutColor = chalk.red;
 var webpackOutColor = chalk.cyan;
 var initialBuildFinished = false;
+var shell = require('shelljs');
 
 function copyStaticComponentsFiles() {
 	return gulp.src([
@@ -49,6 +50,7 @@ function wipe(dir, cb) {
 		console.error(err);
 	});
 }
+
 function buildSass(done) {
 	done();
 	return gulp.src([
@@ -84,7 +86,10 @@ function watchClients(done) {
 	));
 	done();
 }
-
+function watchSass(done) {
+	watch(path.join(__dirname, './src/components/assets/**/*'), {}, gulp.series(buildSass));
+	done();
+}
 /**
  *  Watcher for Clients. Builds everything whenever a source file changes.
  */
@@ -144,7 +149,7 @@ function handleWebpackStdOut(data, done) {
 	if (notAnError) {
 		console.log(webpackOutColor(data));
 	}
-	
+
 	if (data.includes('webpack is watching')) {
 
 		if (initialBuildFinished && notAnError) {
@@ -181,6 +186,12 @@ gulp.task('copy', gulp.series(
 	copyStaticComponentsFiles
 ));
 
+function copyNodeModules() {
+	return gulp.src([
+		path.join(__dirname, '/node_modules/@chartiq/finsemble/dist/**/*')
+	])
+		.pipe(gulp.dest(path.join(__dirname, '/dist/finsemble/')));
+}
 gulp.task('wp', gulp.series(webpackComponents))
 gulp.task('build', gulp.series(
 	'wipeDist',
@@ -203,6 +214,8 @@ gulp.task('devServer', gulp.series(
 	// watchClients,
 	// watchServices,
 	buildSass,
+	watchSass,
+	copyNodeModules,
 	function (done) {
 		initialBuildFinished = true;
 		var exec = require('child_process').exec;
@@ -216,8 +229,10 @@ gulp.task('devServer', gulp.series(
 			console.log("SERVER STDOUT:", data);
 			if (data.indexOf("listening on port") > -1) {
 				//Once the server is up and running, we launch openfin.
-				launchOpenfin('dev');
-				done();
+				setTimeout(function () {
+					launchOpenfin('dev');
+					done();
+				}, 2000);
 			}
 		});
 		//Prints server errors to your terminal.

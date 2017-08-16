@@ -1,0 +1,37 @@
+/* First, we can list a brand palette from which we can source our colors */
+/* Nomura Red - #ca2420 */
+/* Nomura Dark Red - #a11816 */
+/* Nomura Grey - #777777 */
+
+
+/* The color palette is used in pretty much every component. The windowManager and toolbars use it for highlight colors, menus use it for accent colors. If you use our buttons, they get their coloring from these colors.*/
+$primary-accent-color: #039bff;
+$secondary-accent-color: #1D4970;
+
+$toolbar-background-color: #1C2A36;
+$toolbar-primary-font-color: #FFF;
+
+/* Set your button backgrounds and hover states */
+$secondary-hover-accent-color: #1D4970;
+$light-hover-accent: #184C7A;
+$negative-action-color: #EF1436;
+
+
+/* Also the window-header background color */
+$window-header-background-color: #ECF0F1;
+$active-header-background-color: #1D4970;
+$inactive-header-button-hover: #bdc3c7;
+
+
+/* General Typography  */
+$header-text-color: #000;
+$primary-hover-font-color: #FFF;
+$secondary-hover-font-color: #FFF;
+$header-colorbutton-hover-icon: #FFF;
+$component-font-color: rgb(100%, 54.9%, 0%);
+
+
+/* As of 4-20-17, only used in the toolbar for workspace icons and chat notification.*/
+$workspace-icon-color: #FFD803;
+/* Component and App Icons are either designated SVG's or will have the $pimary-accent-color variable applied by default */
+/* If you wish to change this, please see _toolbar.scss line 100 */
