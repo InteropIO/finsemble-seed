@@ -15,16 +15,10 @@ var cacheAge = 0;
 
 console.log(outputColor("SERVER SERVING FROM " + rootDir + " with caching maxage = ", cacheAge));
 
-// For Assimulation
-app.use("/hosted", express.static(path.join(__dirname, "/../hosted"), {
-	maxage: cacheAge
-}));
-
 // Sample server root set to "/yourSubDirectory" -- must align with paths thoughout configs/openfin/manifest-local.json and configs/other/server-environment-startup.json
-app.use("/yourSubDirectory", express.static(rootDir, {
+app.use("/", express.static(path.join(__dirname, '../dist'), {
 	maxage: cacheAge
 }));
-global.root = "/yourSubDirectory";
 
 
 var PORT = process.env.PORT || 3375;
