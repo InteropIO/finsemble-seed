@@ -20,6 +20,7 @@
 		"$applicationRoot/configs/application/components.json",
 		"$applicationRoot/configs/application/systemComponents.json",
 		"$applicationRoot/configs/application/services.json",
-        "$applicationRoot/configs/other/defaultWorkspaces.json"
+		"$applicationRoot/configs/other/defaultWorkspaces.json",
+		"$applicationRoot/configs/application/processConfig.json"
 	]
 }

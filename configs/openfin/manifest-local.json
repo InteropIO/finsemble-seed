@@ -52,13 +52,7 @@
     "fileName": "ChartIQ-local-installer",
     "appAssets": [
         {
-            "src": "http://localhost:3375/finsemble/hosted/assimilation.zip",
-            "version": "1.0.4",
-            "alias": "assimilation",
-            "target": "assimilationMain.exe"
-        },
-        {
-            "src": "http://localhost:3375/finsemble//hosted/putty.zip",
+            "src": "http://localhost:3375/yourSubDirectory/node_modules/@chartiq/finsemble/dist//hosted/putty.zip",
             "version": "1.0.0",
             "alias": "putty",
             "target": "putty.exe"

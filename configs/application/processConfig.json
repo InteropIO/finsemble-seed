@@ -1,0 +1,32 @@
+{
+    "processConfig": {
+        "processPools": [
+            {
+                "poolID": "systemComponents",
+                "components": [
+                    "Toolbar",
+                    "App Launcher",
+                    "Workspace Overflow Menu",
+                    "Workspace Management Menu",
+                    "linkerWindow",
+                    "defaultAuthentication",
+                    "dialogSignOn",
+                    "dialogTemplate",
+                    "dialogTest",
+                    "File Menu",
+                    "AdHocComponent",
+                    "Process Monitor"
+                ]
+            },
+            {
+                "poolID": "advancedCharts",
+                "components": [
+                    "Advanced Chart"
+                ]
+            }
+        ],
+        "defaultPool": {
+            "poolID": "defaultPool"
+        }
+    }
+}
