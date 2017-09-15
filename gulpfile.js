@@ -206,6 +206,7 @@ gulp.task('devServer', gulp.series(
 	// watchReactComponents,
 	// watchClients,
 	// watchServices,
+	buildSass,
 	watchSass,
 	function (done) {
 		initialBuildFinished = true;

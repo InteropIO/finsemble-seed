@@ -1,26 +1,22 @@
-/* First, we can list a brand palette from which we can source our colors */
-/* Nomura Red - #ca2420 */
-/* Nomura Dark Red - #a11816 */
-/* Nomura Grey - #777777 */
+/* The color palette is used in pretty much every component. The windowManager and toolbars use it for highlight colors, menus use it for accent colors. If you use our buttons, they get their coloring from these colors.
+NOTE: The toolbar icon is controlled via its config. If you'd like to replace it with a different icon. Replace it in `src/configs/application/systemComponents.json`*/
+$primary-accent-color: #ffc400;
+$secondary-accent-color: #d23939;
+$tertiary-accent-color: #ffd803;
 
-
-/* The color palette is used in pretty much every component. The windowManager and toolbars use it for highlight colors, menus use it for accent colors. If you use our buttons, they get their coloring from these colors.*/
-$primary-accent-color: #039bff;
-$secondary-accent-color: #1D4970;
-
-$toolbar-background-color: #1C2A36;
+$toolbar-background-color: #d90303;
 $toolbar-primary-font-color: #FFF;
 
 /* Set your button backgrounds and hover states */
-$secondary-hover-accent-color: #1D4970;
-$light-hover-accent: #184C7A;
-$negative-action-color: #EF1436;
-
+$secondary-hover-accent-color: #ffd803;
+$light-hover-accent: $secondary-hover-accent-color;
+$negative-action-color: #f22613;
 
 /* Also the window-header background color */
 $window-header-background-color: #ECF0F1;
-$active-header-background-color: #1D4970;
+$active-header-background-color: $secondary-accent-color;
 $inactive-header-button-hover: #bdc3c7;
+$window-frame-inactive-color: $primary-accent-color;
 
 
 /* General Typography  */

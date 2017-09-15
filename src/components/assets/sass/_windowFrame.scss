@@ -3,7 +3,7 @@
 * All rights reserved.
 */
 
-.icon-fsbl-chat.badge:after{    
+.icon-fsbl-chat.badge:after{
     position: relative;
     height:0.625rem;
     width:0.625rem;
@@ -20,12 +20,12 @@ body {
 	top:0;
 	left:0;
 	right:0;
-	bottom:0;  
+	bottom:0;
 }
 
 
 html.desktop-active {
-  body:before,body:after{ 
+  body:before,body:after{
     background:$active-header-background-color;
   }
 }
@@ -96,5 +96,37 @@ body:after{
   border-radius: 1px;
   -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) ;
   -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) ;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) ; 
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) ;
+}
+
+
+html.groupMask {
+    body {
+        background-color: $secondary-accent-color;
+        border: 5px solid $primary-accent-color;
+        margin: 0px;    
+    }
+
+    /* ...and position them! */
+    html:before{
+        height:0px;
+    }
+    html:after{
+        width:0px;
+        top:0;
+        right:0;
+        bottom:0;
+    }
+    body:before{
+        height:0px;
+        right:0;
+        bottom:0;
+        left:0;
+    }
+    body:after{
+        width:0px;
+        top:0;
+        bottom:0;
+        left:0;
+    }
 }
