@@ -86,7 +86,7 @@ function watchClients(done) {
 	done();
 }
 function watchSass(done) {
-	watch(path.join(__dirname, './src/components/assets/**/*'), {}, gulp.series(buildSass));
+	watch(path.join(__dirname, '/src/components/assets/**/*'), {}, gulp.series(buildSass));
 	done();
 }
 /**
