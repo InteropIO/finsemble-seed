@@ -13,7 +13,8 @@ Finsemble.setDefaultStorage("localStorage");
 
 
 Finsemble.updateBaseUrl(hostname);
-Finsemble.setCSSOverridesPath(path.join(StartupConfig[env].clientRoute,'/dist/components/assets/css/finsemble-overrides.css'));
+//Turns everything red
+//Finsemble.setCSSOverridesPath(path.join(StartupConfig[env].clientRoute,'/dist/components/assets/css/finsemble-overrides.css'));
 
 
 module.exports = function (req, res) {
