@@ -1,0 +1,33 @@
+/* The color palette is used in pretty much every component. The windowManager and toolbars use it for highlight colors, menus use it for accent colors. If you use our buttons, they get their coloring from these colors.
+NOTE: The toolbar icon is controlled via its config. If you'd like to replace it with a different icon. Replace it in `src/configs/application/systemComponents.json`*/
+$primary-accent-color: #ffc400;
+$secondary-accent-color: #d23939;
+$tertiary-accent-color: #ffd803;
+
+$toolbar-background-color: #d90303;
+$toolbar-primary-font-color: #FFF;
+
+/* Set your button backgrounds and hover states */
+$secondary-hover-accent-color: #ffd803;
+$light-hover-accent: $secondary-hover-accent-color;
+$negative-action-color: #f22613;
+
+/* Also the window-header background color */
+$window-header-background-color: #ECF0F1;
+$active-header-background-color: $secondary-accent-color;
+$inactive-header-button-hover: #bdc3c7;
+$window-frame-inactive-color: $primary-accent-color;
+
+
+/* General Typography  */
+$header-text-color: #000;
+$primary-hover-font-color: #FFF;
+$secondary-hover-font-color: #FFF;
+$header-colorbutton-hover-icon: #FFF;
+$component-font-color: rgb(100%, 54.9%, 0%);
+
+
+/* As of 4-20-17, only used in the toolbar for workspace icons and chat notification.*/
+$workspace-icon-color: #FFD803;
+/* Component and App Icons are either designated SVG's or will have the $pimary-accent-color variable applied by default */
+/* If you wish to change this, please see _toolbar.scss line 100 */

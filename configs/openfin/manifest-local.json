@@ -61,6 +61,7 @@
     "finsemble": {
         "applicationRoot": "http://localhost:3375/yourSubDirectory/dist",
         "moduleRoot": "http://localhost:3375/yourSubDirectory/node_modules/@chartiq/finsemble/dist",
+        "cssOverridePath": "$applicationRoot/components/assets/css/finsemble-overrides.css",
         "importConfig": [
             "$applicationRoot/configs/application/config.json"
         ]
