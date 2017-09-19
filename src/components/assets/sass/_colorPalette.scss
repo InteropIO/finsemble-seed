@@ -1,23 +1,43 @@
-/* The color palette is used in pretty much every component. The windowManager and toolbars use it for highlight colors, menus use it for accent colors. If you use our buttons, they get their coloring from these colors.
-NOTE: The toolbar icon is controlled via its config. If you'd like to replace it with a different icon. Replace it in `src/configs/application/systemComponents.json`*/
-$primary-accent-color: #ffc400;
-$secondary-accent-color: #d23939;
-$tertiary-accent-color: #ffd803;
+/* The Finsemble _colorPalette controls your primary theming options throughout the application. */
+/* Within this document, you can modify each of these SASS variables, which are distributed throughout the subsequent .scss files */
 
-$toolbar-background-color: #d90303;
+/* ~~ Color Glossary ~~ */
+/* Default Finsemble Colors */
+
+/* blue: #039BFF; */
+/* dark background: #1C2A36; */
+/* white: #FFFFFF; */
+/* dark blue: #1D4970; */
+
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+
+/* Need to modify a single instance of a color within the app? */
+/* Option 1: Search the src/components/sass folder by a specific SCSS $variable */
+/* Option 2: Search the src/components/sass fodler by the HTML/CSS .class */
+/* Note: By editing the individual .scss files, this could hinder _colorPalette from managing your theme. */
+
+
+/* The Primary Accent Color controls many icons, buttons, and some typography. The default Finsemble blue is #039BFF. */
+$primary-accent-color: #039bff;
+/* Opaque Primary Accent Color for drag-to-share overlay */
+$primary-accent-color-opaque: rgba(3, 155, 255, 0.75);
+/* Secondary Accent Color. The default Finsemble dark-blue is #1D4970. */
+$secondary-accent-color: #1D4970;
+
+/* Main Toolbar Colors */
+$toolbar-background-color: #1C2A36;
 $toolbar-primary-font-color: #FFF;
 
-/* Set your button backgrounds and hover states */
-$secondary-hover-accent-color: #ffd803;
-$light-hover-accent: $secondary-hover-accent-color;
-$negative-action-color: #f22613;
-
-/* Also the window-header background color */
+/* Window Header Background Colors */
 $window-header-background-color: #ECF0F1;
-$active-header-background-color: $secondary-accent-color;
+$active-header-background-color: #1D4970;
 $inactive-header-button-hover: #bdc3c7;
-$window-frame-inactive-color: $primary-accent-color;
 
+/* Window Header Button Hover States */
+$light-hover-accent: #184C7A;
+$negative-action-color: #EF1436;
 
 /* General Typography  */
 $header-text-color: #000;
@@ -27,7 +47,9 @@ $header-colorbutton-hover-icon: #FFF;
 $component-font-color: rgb(100%, 54.9%, 0%);
 
 
-/* As of 4-20-17, only used in the toolbar for workspace icons and chat notification.*/
+/* Workspace Icons and Chat Notifications */
 $workspace-icon-color: #FFD803;
+
+/* Other Icons: */
 /* Component and App Icons are either designated SVG's or will have the $pimary-accent-color variable applied by default */
 /* If you wish to change this, please see _toolbar.scss line 100 */
