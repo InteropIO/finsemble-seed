@@ -232,7 +232,7 @@ gulp.task('devServer', gulp.series(
 				done();
 			})
 		} catch (e) {
-
+			done();
 		}	
 		
 	},
