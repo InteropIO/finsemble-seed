@@ -215,21 +215,26 @@ gulp.task('devServer', gulp.series(
 	buildSass,
 	watchSass,
 	function (done) {
-		var angularComponents = require('./build/angular-components.json');
-		async.each(angularComponents, function (component, cb) {
-			var dir = shell.pwd();
-			cd(component.source);
-			shellExec('ng build --output-path ' + component['output-directory'], function () {
-				cd(dir);
-				cb();
-			}, function () {
-				//handle errors
-				cb();
-			})
+		try { // in case there is no file
+			var angularComponents = require('./build/angular-components.json');
+			async.each(angularComponents, function (component, cb) {
+				var dir = shell.pwd();
+				cd(component.source);
+				shellExec('ng build --output-path ' + component['output-directory'], function () {
+					cd(dir);
+					cb();
+				}, function () {
+					//handle errors
+					cb();
+				})
 			
-		}, function () {
-			done();
-		})
+			}, function () {
+				done();
+			})
+		} catch (e) {
+
+		}	
+		
 	},
 	function (done) {
 		initialBuildFinished = true;
