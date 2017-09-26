@@ -19,37 +19,34 @@
 /* Note: By editing the individual .scss files, this could hinder _colorPalette from managing your theme. */
 
 
-/* The Primary Accent Color controls many icons, buttons, and some typography. The default Finsemble blue is #039BFF. */
-$primary-accent-color: #039bff;
-/* Opaque Primary Accent Color for drag-to-share overlay */
-$primary-accent-color-opaque: rgba(3, 155, 255, 0.75);
-/* Secondary Accent Color. The default Finsemble dark-blue is #1D4970. */
-$secondary-accent-color: #1D4970;
 
-/* Main Toolbar Colors */
-$toolbar-background-color: #1C2A36;
-$toolbar-primary-font-color: #FFF;
+$primary-accent-color: #039bff; /* The Primary-Accent-Color controls several icons, buttons, and some typography. This is the main brand color. */
+$primary-accent-color-opaque: rgba(3, 155, 255, 0.75); /* Opaque Primary-Accent-Color for drag-to-share overlay */
+$secondary-accent-color: #1D4970; /* Secondary-Accent-Color. This is used for background elements and toolbars. */
 
-/* Window Header Background Colors */
-$window-header-background-color: #ECF0F1;
-$active-header-background-color: #1D4970;
-$inactive-header-button-hover: #bdc3c7;
-$window-frame-inactive-color: $primary-accent-color;
 
-/* Window Header Button Hover States */
-$light-hover-accent: #184C7A;
-$negative-action-color: #EF1436;
+$toolbar-background-color: #1C2A36; /* Main Toolbar Background Color */
+$toolbar-primary-font-color: #FFF; /* Main Toolbar Text Color. Default is white on dark backgrounds. */
+
+
+$window-header-background-color: #ECF0F1; /* Default Component Header Background Colors */
+$active-header-background-color: #1D4970; /* Active Component Header Background Colors */
+$window-frame-inactive-color: $window-header-background-color;
+
+
+$light-hover-accent: #184C7A; /* Active Component Header Button Hover */
+$inactive-header-button-hover: #bdc3c7; /* Inactive Component Header Button Hover */
+$negative-action-color: #EF1436; /* Component Header Close Button Hover */
 
 /* General Typography  */
-$header-text-color: #000;
-$primary-hover-font-color: #FFF;
-$secondary-hover-font-color: #FFF;
-$header-colorbutton-hover-icon: #FFF;
+$primary-hover-font-color: #FFF;   /* Toolbar .pimary-hover Text Color */
+$secondary-hover-font-color: #FFF; /* Toolbar .secondary-hover Text Color */
+$header-text-color: #000;  /* Component Header Text Color */
+$header-colorbutton-hover-icon: #FFF; /* Component Header Button-Hover Icon Color */
 $component-font-color: rgb(100%, 54.9%, 0%);
 
 
-/* Workspace Icons and Chat Notifications */
-$workspace-icon-color: #FFD803;
+$workspace-icon-color: #FFD803; /* Workspace Icons and Chat Notifications */
 
 /* Other Icons: */
 /* Component and App Icons are either designated SVG's or will have the $pimary-accent-color variable applied by default */
