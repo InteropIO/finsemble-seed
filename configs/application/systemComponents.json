@@ -149,7 +149,7 @@
 		},
 		"defaultAuthentication": {
 			"window": {
-				"url": "$moduleRoot/components/system/dialogs/defaultAuthentication.html",
+				"url": "$moduleRoot/services/authentication/defaultAuthentication.html",
 				"top": "center",
 				"left": "center",
 				"width": 358,
