@@ -127,9 +127,16 @@
 				"url": "$moduleRoot/components/system/linker/linker.html",
 				"width": 65,
 				"height": 163,
-				"ephemeral": true
+				"ephemeral": true,
+				"options": {
+					"autoShow": false,
+					"name": "Finsemble Linker Window"
+				}
 			},
-			"component": {},
+			"component": {
+				"spawnOnStartup": true,
+				"category": "system"
+			},
 			"foreign": {
 				"services": {
 					"dockingService": {

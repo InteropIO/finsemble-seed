@@ -1,7 +1,7 @@
 {
 	"comment": "Top-level application config for development, adding on top of the core config",
 	"mode": "",
-	"isAuthEnabled": false,
+	"isAuthEnabled": true,
 	"defaultStorage": "localStorage",
 	"debugServiceDelay":0,
 	"storage": {},
