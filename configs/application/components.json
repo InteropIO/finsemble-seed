@@ -22,7 +22,7 @@
                     "Window Manager": {
                         "persistWindowState": true,
                         "FSBLHeader": true,
-                        "showLinker": true
+                        "showLinker": false
                     }
                 }
             }
