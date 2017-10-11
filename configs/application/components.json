@@ -7,8 +7,7 @@
                 "height": 800,
                 "width": 1000
             },
-            "component":{
-            },
+            "component": {},
             "foreign": {
                 "services": {
                     "dockingService": {
@@ -23,6 +22,42 @@
                         "persistWindowState": true,
                         "FSBLHeader": true,
                         "showLinker": false
+                    }
+                }
+            }
+        },
+        "testComponent": {
+            "window": {
+                "url": "$applicationRoot/components/testComponent/testComponent.html",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 800,
+                "height": 600
+            },
+            "component": {
+                "inject": false
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "showLinker": false,
+                        "FSBLHeader": true,
+                        "persistWindowState": true
+                    },
+                    "Toolbar": {
+                        "iconClass": "testComponent"
                     }
                 }
             }

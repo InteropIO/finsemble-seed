@@ -10,28 +10,46 @@ var outputColor = chalk.yellow;
 var express = require("express");
 var app = express();
 var path = require('path');
-var rootDir = path.join(__dirname, "/../");
+var rootDir = path.join(__dirname, "/../dist");
+var moduleDirectory = path.join(__dirname, "/../node_modules/@chartiq/finsemble/dist")
 var cacheAge = 0;
 
 console.log(outputColor("SERVER SERVING FROM " + rootDir + " with caching maxage = ", cacheAge));
 
-// For Assimulation
-app.use("/hosted", express.static(path.join(__dirname, "/../hosted"), {
-	maxage: cacheAge
-}));
+if (process.env.NODE_ENV === "dev") {
+	require("./dev/dev")(app, startServer);
+} else {
+	startServer();
+}
 
-// Sample server root set to "/yourSubDirectory" -- must align with paths thoughout configs/openfin/manifest-local.json and configs/other/server-environment-startup.json
-app.use("/yourSubDirectory", express.static(rootDir, {
-	maxage: cacheAge
-}));
-global.root = "/yourSubDirectory";
+function startServer(compiler) {///compiler here is webpack and comes from the dev file and
+
+	console.log("Starting Server")
+	// For Assimulation
+	app.use("/hosted", express.static(path.join(__dirname, "/../hosted"), {
+		maxage: cacheAge
+	}));
+
+	// Sample server root set to "/yourSubDirectory" -- must align with paths thoughout configs/openfin/manifest-local.json and configs/other/server-environment-startup.json
+	app.use("/yourSubDirectory", express.static(rootDir, {
+		maxage: cacheAge
+	}));
+	app.use("/finsemble", express.static(moduleDirectory, {
+		maxage: cacheAge
+	}));
+	global.root = "/yourSubDirectory";
 
 
-var PORT = process.env.PORT || 3375;
+	var PORT = process.env.PORT || 3375;
 
-var server = app.listen(PORT, function () {
-	console.log(chalk.green("listening on port " + PORT));
-	global.host = server.address().address;
-	global.port = server.address().port;
-	console.log(chalk.green("server up.........................."));
-});
+	var server = app.listen(PORT, function () {
+		console.log(chalk.green("listening on port " + PORT));
+		global.host = server.address().address;
+		global.port = server.address().port;
+		console.log(chalk.green("server up.........................."));
+		if (process.env.NODE_ENV === "dev") {
+			require("./hotreload/middleware").webpackSocketHotMiddleware(compiler, { sockets: true, server: server });
+		}
+	});
+
+}

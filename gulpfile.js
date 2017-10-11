@@ -19,7 +19,7 @@ var initialBuildFinished = false;
 function copyStaticComponentsFiles() {
 	return gulp.src([
 		path.join(__dirname, '/src/components/**/*'),
-		path.join('!' + __dirname, '/src/components/**/*.jsx')
+		path.join('!' + __dirname, '/src/components/**/*.js*')
 	])
 		.pipe(gulp.dest(path.join(__dirname, '/dist/components/')));
 }
@@ -201,7 +201,7 @@ gulp.task('devServer', gulp.series(
 	'copy',
 	// webpackClients,
 	// webpackServices,
-	webpackComponents,
+	//webpackComponents,
 	// webpackReactComponents,
 	// watchReactComponents,
 	// watchClients,

@@ -2,6 +2,7 @@ var path = require('path');
 var fs = require("fs");
 var glob = require("glob");
 var glob_entries = require('webpack-glob-entries');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 function getDirectories(srcpath) {
 	return fs.readdirSync(srcpath).filter(function (file) {
@@ -15,11 +16,15 @@ for (var key in entry) {
 	delete entry[key];
 	var newKey = key.replace("Service", "");
 	if (key !== "baseClient") {
-		entry[path.join(newKey, newKey +'Service')] = currentPath;
+		entry[path.join(newKey, newKey + 'Service')] = currentPath;
 	} else {
 		entry[path.join(newKey)] = currentPath;
 	}
 }
+
+if (Object.keys(entry).length === 0) {
+	return module.exports = null;
+};
 module.exports = {
 	devtool: 'source-map',
 	entry: entry,
@@ -33,16 +38,44 @@ module.exports = {
 				"add-module-exports"
 			]
 		},
-			{
-				test: /\.html$/,
-				loader: "html-loader",				
-			}
+		{
+			test: /\.html$/,
+			loader: "html-loader",
+		}
 		]
 	},
+	plugins: [
+		new CopyWebpackPlugin([
+			{
+				from: './src/components/',
+				to: './components/',
+				force: false,
+				ignore: ['*.js']
+			},
+			{
+				from: './configs/',
+				to: './configs/',
+				force: true
+			},
+			{
+				from: './src/services/',
+				to: './services/',
+				force: true,
+				ignore: ["*.js"]
+			},
+			{
+				from: './src/thirdParty/',
+				to: './thirdParty/',
+				force: false,
+				ignore: ["*.js"]
+			},
+		])
+	],
 	output: {
 		filename: "[name].js",
 		libraryTarget: 'umd',
-		path: path.join(__dirname, '../', '/built/services')
+		path: path.join(__dirname, '../', '/built/services'),
+		publicPath: 'http://localhost:3375/yourSubDirectory/'
 	},
 	watch: false
 };
