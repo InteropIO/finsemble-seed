@@ -5,6 +5,8 @@ var webpack = require("webpack");
 var watch = require("gulp-watch");
 var del = require('del');
 var sass = require('gulp-sass');
+var async = require('async');
+var shell = require('shelljs');
 var openfinLauncher = require('openfin-launcher');
 var configPath = path.join(__dirname, '/configs/finConfig.json');
 //new
@@ -15,6 +17,11 @@ var serverOutColor = chalk.yellow;
 var errorOutColor = chalk.red;
 var webpackOutColor = chalk.cyan;
 var initialBuildFinished = false;
+var exec = require('child_process').exec;
+var shell = require('shelljs');
+var shellExec = shell.exec;
+var cd = shell.cd;
+var async = require("async");
 
 function copyStaticComponentsFiles() {
 	return gulp.src([
@@ -160,7 +167,6 @@ function handleWebpackStdOut(data, done) {
 }
 
 function webpackComponents(done) {
-	const exec = require('child_process').exec;
 	const instance = exec('node ./build/child_processes/componentBuildProcess.js');
 	instance.stdout.on('data', function (data) {
 		handleWebpackStdOut(data, done);
@@ -209,8 +215,29 @@ gulp.task('devServer', gulp.series(
 	buildSass,
 	watchSass,
 	function (done) {
+		try { // in case there is no file
+			var angularComponents = require('./build/angular-components.json');
+			async.each(angularComponents, function (component, cb) {
+				var dir = shell.pwd();
+				cd(component.source);
+				shellExec('ng build --output-path ' + component['output-directory'], function () {
+					cd(dir);
+					cb();
+				}, function () {
+					//handle errors
+					cb();
+				})
+			
+			}, function () {
+				done();
+			})
+		} catch (e) {
+			done();
+		}	
+		
+	},
+	function (done) {
 		initialBuildFinished = true;
-		var exec = require('child_process').exec;
 		//This runs essentially runs 'PORT=80 node server/server.js'
 		var serverPath = path.join(__dirname, '/server/server.js');
 		//allows for spaces in paths.
