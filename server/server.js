@@ -16,11 +16,9 @@ var cacheAge = 0;
 
 console.log(outputColor("SERVER SERVING FROM " + rootDir + " with caching maxage = ", cacheAge));
 
-if (process.env.NODE_ENV === "dev") {
-	require("./dev/dev")(app, startServer);
-} else {
-	startServer();
-}
+
+startServer();
+
 
 function startServer(compiler) {///compiler here is webpack and comes from the dev file and
 
@@ -48,7 +46,9 @@ function startServer(compiler) {///compiler here is webpack and comes from the d
 		global.port = server.address().port;
 		console.log(chalk.green("server up.........................."));
 		if (process.env.NODE_ENV === "dev") {
-			require("./hotreload/middleware").webpackSocketHotMiddleware(compiler, { sockets: true, server: server });
+			require("./dev/hotreload")(app, server, function () {
+				process.send('serverStarted');
+			});
 		}
 	});
 

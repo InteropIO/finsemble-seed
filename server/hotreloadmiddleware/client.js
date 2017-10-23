@@ -313,4 +313,5 @@ function start() {
 			setOptionsAndConnect: setOptionsAndConnect
 		};
 	}
+	window.hotreload = module.exports;
 }

@@ -26,14 +26,15 @@ for (let key in componentsToBuild) {
 	newEntry.name = key;
 	newEntry.entry[component.output] = Array.isArray(component.entry) ? component.entry : [component.entry];
 	if (enableHMR && shouldIHMR(key)) {
-		path.resolve(__dirname, '../../server/hotreload/'),
-			newEntry.entry[component.output].push(path.resolve(__dirname, '../../server/hotreload/') + '/client?reload=true&sockets=true&name=' + key);
+		path.resolve(__dirname, '../../server/hotreloadmiddleware/'),
+			newEntry.entry[component.output].push(path.resolve(__dirname, '../../server/hotreloadmiddleware/') + '/client?reload=true&sockets=true&name=' + key);
 
 		newEntry.plugins.push(new webpack.HotModuleReplacementPlugin(),
 			new webpack.NoEmitOnErrorsPlugin());
 	}
 	entries.push(newEntry);
 }
+
 var clients = glob_entries(path.join(__dirname, '/../../', "/src/clients/*.js"));
 var dir = "clients";
 for (var key in clients) {

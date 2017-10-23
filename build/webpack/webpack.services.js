@@ -4,28 +4,39 @@ var glob = require("glob");
 var glob_entries = require('webpack-glob-entries');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
+
 function getDirectories(srcpath) {
 	return fs.readdirSync(srcpath).filter(function (file) {
 		return fs.statSync(path.join(srcpath, file)).isFile();
 	});
 }
-var entry = glob_entries(path.join(__dirname, '../', "/src/services/**/*"));
-var dir = 'services';
-for (var key in entry) {
-	var currentPath = entry[key];
-	delete entry[key];
+
+var services = glob_entries(path.join(__dirname, '../', "/src/services/**/*"));
+
+var entry = {};
+
+for (var key in services) {
+	var currentPath = services[key];
+	var folder = key.replace("Service", "");
 	var newKey = key.replace("Service", "");
-	if (key !== "baseClient") {
-		entry[path.join(newKey, newKey + 'Service')] = currentPath;
-	} else {
-		entry[path.join(newKey)] = currentPath;
+	var entryKey = 'services/' + folder + "/" + key;
+	entry[entryKey] = [currentPath];
+}
+
+function buildComponentIgnore() {
+	var components = require('./webpack.entries.json');
+	for (var key in components) {
+		var filename = components[key].entry.split("/").pop();
+		componentIgnores.push("*" + filename);
 	}
 }
 
 if (Object.keys(entry).length === 0) {
-	return module.exports = null;
+	return module.exports = null;//If we don't have services there is no need to create an entry json
 };
+
 module.exports = {
+	name: "services",
 	devtool: 'source-map',
 	entry: entry,
 	target: 'web',
@@ -69,7 +80,9 @@ module.exports = {
 				force: false,
 				ignore: ["*.js"]
 			},
-		])
+		], {
+				ignore: componentIgnores
+			})
 	],
 	output: {
 		filename: "[name].js",

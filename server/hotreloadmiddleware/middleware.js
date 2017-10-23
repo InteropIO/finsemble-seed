@@ -28,7 +28,7 @@ function setupHttpReload(compiler, opts) {
 		eventStream.publish({ action: "building" });
 	});
 	compiler.plugin("done", function (statsResult) {
-    // Keep hold of latest stats so they can be propagated to new clients
+		// Keep hold of latest stats so they can be propagated to new clients
 		latestStats = statsResult;
 		publishStats("built", latestStats, eventStream, opts.log);
 	});
@@ -38,8 +38,8 @@ function setupHttpReload(compiler, opts) {
 		if (!pathMatch(req.url, opts.path)) { return next(); }
 		eventStream.handler(req, res);
 		if (latestStats) {
-      // Explicitly not passing in `log` fn as we don't want to log again on
-      // the server
+			// Explicitly not passing in `log` fn as we don't want to log again on
+			// the server
 			publishStats("sync", latestStats, eventStream);
 		}
 	};
@@ -55,7 +55,7 @@ function setupSocketReload(compiler, opts) {
 		eventStream.publish({ action: "building" });
 	});
 	compiler.plugin("done", function (statsResult) {
-    // Keep hold of latest stats so they can be propagated to new clients
+		// Keep hold of latest stats so they can be propagated to new clients
 		latestStats = statsResult;
 		publishStats("built", latestStats, eventStream, opts.log);
 	});
@@ -83,8 +83,8 @@ function createEventStream(heartbeat) {
 				'Content-Type': 'text/event-stream;charset=utf-8',
 				'Cache-Control': 'no-cache, no-transform',
 				'Connection': 'keep-alive',
-        // While behind nginx, event stream should not be buffered:
-        // http://nginx.org/docs/http/ngx_http_proxy_module.html#proxy_buffering
+				// While behind nginx, event stream should not be buffered:
+				// http://nginx.org/docs/http/ngx_http_proxy_module.html#proxy_buffering
 				'X-Accel-Buffering': 'no'
 			});
 			res.write('\n');
@@ -120,9 +120,8 @@ function createSocketStream(opts) {
 		});
 		clients[clientId] = socket;
 	});
-  //io.on(opts.path, function (socket) {
 
-  //});
+
 
 	setInterval(function heartbeatTick() {
 		everyClient(function (client) {
@@ -132,7 +131,6 @@ function createSocketStream(opts) {
 	return {
 
 		publish: function (payload) {
-			console.log("publish to client");
 			everyClient(function (client) {
 				client.emit("data", JSON.stringify(payload));
 			});
@@ -143,12 +141,12 @@ function createSocketStream(opts) {
 
 
 function publishStats(action, statsResult, eventStream, log) {
-  // For multi-compiler, stats will be an object with a 'children' array of stats
+	// For multi-compiler, stats will be an object with a 'children' array of stats
 	var bundles = extractBundles(statsResult.toJson({ errorDetails: false }));
 	bundles.forEach(function (stats) {
 		if (log) {
-			log("webpack built " + (stats.name ? stats.name + " " : "") +
-        stats.hash + " in " + stats.time + "ms");
+			//log("webpack built " + (stats.name ? stats.name + " " : "") +
+			// stats.hash + " in " + stats.time + "ms");
 		}
 		eventStream.publish({
 			name: stats.name,
@@ -163,13 +161,13 @@ function publishStats(action, statsResult, eventStream, log) {
 }
 
 function extractBundles(stats) {
-  // Stats has modules, single bundle
+	// Stats has modules, single bundle
 	if (stats.modules) { return [stats]; }
 
-  // Stats has children, multiple bundles
+	// Stats has children, multiple bundles
 	if (stats.children && stats.children.length) { return stats.children; }
 
-  // Not sure, assume single
+	// Not sure, assume single
 	return [stats];
 }
 
