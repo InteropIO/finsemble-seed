@@ -32,6 +32,9 @@ function startServer(compiler) {///compiler here is webpack and comes from the d
 	app.use("/yourSubDirectory", express.static(rootDir, {
 		maxage: cacheAge
 	}));
+	app.use("/yourSubDirectory/configs", express.static("./configs", {
+		maxage: cacheAge
+	}));
 	app.use("/finsemble", express.static(moduleDirectory, {
 		maxage: cacheAge
 	}));
