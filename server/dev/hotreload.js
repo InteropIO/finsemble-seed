@@ -21,6 +21,7 @@ module.exports = function loadDev(app, server, cb) {
 		}
 		webpackArray.push(buildItem);
 	}
+
 	var allBuilt = false;
 	var compiler = webpack(webpackArray);
 	if (webpackArray.length === 0) return cb(compiler);
@@ -31,6 +32,7 @@ module.exports = function loadDev(app, server, cb) {
 	function webpackReporter(item) {//For some reason this allows us to get more than three builds in.
 
 	}
+
 	compiler.plugin("done", function (statsResult) {
 		// Keep hold of latest stats so they can be propagated to new clients
 		var latestStats = statsResult;
@@ -54,19 +56,22 @@ module.exports = function loadDev(app, server, cb) {
 		}
 		console.log("wepack build complete");
 	});
+
 	function handleWebpackError(err) {
 		if (!allBuilt) {
 			console.error("There was in error before the server started. Please fix and restart");
 			process.exit();
 		}
 	}
+
 	app.use(webpackDevMiddlewareInstance);
+
 	require("../hotreloadmiddleware/middleware").webpackSocketHotMiddleware(compiler, { sockets: true, server: server });
+
 	webpackDevMiddlewareInstance.waitUntilValid(function () {//When build is complete we call the callback.
 		//The compiler is sent through so that hot reload can pick it up
 		allBuilt = true;
 		console.log("build complete");
-
 		cb(compiler);
 	});
 };
