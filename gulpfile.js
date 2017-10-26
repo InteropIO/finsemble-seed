@@ -68,8 +68,8 @@ function watchSass(done) {
 }
 
 function watchStatic() {
-	watch(path.join(__dirname, '/src/**/*.css'), { ignoreInitial: true }).pipe(gulp.dest('dist'));
-	return watch(path.join(__dirname, '/src/**/*.html'), { ignoreInitial: true }).pipe(gulp.dest('dist'));
+	watch(path.join(__dirname, '/src/**/*.css'), { ignoreInitial: true }).pipe(gulp.dest(path.join(__dirname, '/dist/')));
+	return watch(path.join(__dirname, '/src/**/*.html'), { ignoreInitial: true }).pipe(gulp.dest(path.join(__dirname, '/dist/')));
 }
 
 function wipedist(done) {
@@ -78,7 +78,6 @@ function wipedist(done) {
 	} else {
 		done();
 	}
-
 }
 
 function handleWebpackStdOut(data, done) {
