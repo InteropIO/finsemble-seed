@@ -102,10 +102,13 @@ function webpackComponents(done) {
 	webpack(webpack_config, function (err,stats) {
 		done();
 	})
-
-
 }
-
+function webpackServices(done) {
+	var webpack_config = require('./build/webpack/webpack.services.js')
+	webpack(webpack_config, function (err,stats) {
+		done();
+	})
+}
 function launchOpenfin(env) {
 	return openfinLauncher.launchOpenFin({
 		//new
@@ -164,6 +167,7 @@ gulp.task('production', gulp.series(
 	'wipeDist',
 	'copy',
 	webpackComponents,
+	webpackServices,
 	buildSass,
 	watchSass,
 	function (done) {
