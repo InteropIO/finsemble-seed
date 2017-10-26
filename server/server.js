@@ -41,7 +41,6 @@ function startServer(compiler) {///compiler here is webpack and comes from the d
 		maxage: cacheAge
 	}));
 
-	global.root = "/";
 
 	var PORT = process.env.PORT || 3375;
 
@@ -53,6 +52,8 @@ function startServer(compiler) {///compiler here is webpack and comes from the d
 			require("./dev/hotreload")(app, server, function () {
 				process.send('serverStarted');
 			});
+		} else if(process.send) {
+			process.send('serverStarted');
 		}
 	});
 }

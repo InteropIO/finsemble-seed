@@ -1,7 +1,7 @@
 var gulp = require('gulp-4.0.build');
 var path = require("path");
-var gulpWebpack = require('webpack-stream-fixed');
-var webpack = require("webpack");
+var webpack_stream = require('webpack-stream');
+
 var watch = require("gulp-watch");
 var del = require('del');
 var sass = require('gulp-sass');
@@ -9,6 +9,7 @@ var openfinLauncher = require('openfin-launcher');
 var configPath = path.join(__dirname, '/configs/finConfig.json');
 //new
 var StartupConfig = require("./configs/other/server-environment-startup");
+const webpack = require('webpack');
 var chalk = require('chalk');
 chalk.enabled = true;
 var serverOutColor = chalk.yellow;
@@ -66,6 +67,11 @@ function watchSass(done) {
 	done();
 }
 
+function watchStatic() {
+	watch(path.join(__dirname, '/src/**/*.css'), { ignoreInitial: true }).pipe(gulp.dest('dist'));
+	return watch(path.join(__dirname, '/src/**/*.html'), { ignoreInitial: true }).pipe(gulp.dest('dist'));
+}
+
 function wipedist(done) {
 	if (directoryExists(path.join(__dirname, "/dist/"))) {
 		wipe(path.join(__dirname, '/dist/'), done);
@@ -92,15 +98,12 @@ function handleWebpackStdOut(data, done) {
 }
 
 function webpackComponents(done) {
-	const exec = require('child_process').exec;
-	const instance = exec('node ./build/child_processes/componentBuildProcess.js');
-	instance.stdout.on('data', function (data) {
-		handleWebpackStdOut(data, done);
-		var filesToBuild = require('./build/webpack/webpack.files.entries.json');
-		if (Object.keys(filesToBuild).length === 0) {
-			done();
-		}
-	});
+	var webpack_config = require('./build/webpack/webpack.files.js')
+	webpack(webpack_config, function (err,stats) {
+		done();
+	})
+
+
 }
 
 function launchOpenfin(env) {
@@ -129,11 +132,13 @@ gulp.task('build', gulp.series(
 ));
 
 gulp.task('devServer', gulp.series(
+
 	'wipeDist',
 	'copy',
 	buildSass,
 	watchSass,
 	function (done) {
+		watchStatic();
 		initialBuildFinished = true;
 		var exec = require('child_process').spawn;
 		//This runs essentially runs 'PORT=80 node server/server.js'
@@ -154,4 +159,36 @@ gulp.task('devServer', gulp.series(
 		});
 	})
 );
+
+gulp.task('production', gulp.series(
+	'wipeDist',
+	'copy',
+	webpackComponents,
+	buildSass,
+	watchSass,
+	function (done) {
+
+		initialBuildFinished = true;
+		var exec = require('child_process').spawn;
+		//This runs essentially runs 'PORT=80 node server/server.js'
+		var serverPath = path.join(__dirname, '/server/server.js');
+		//allows for spaces in paths.
+		var serverExec = exec('node', ['--debug', serverPath, { stdio: 'inherit' }], { env: { 'PORT': StartupConfig["prod"].serverPort, NODE_ENV: "prod" }, stdio: [process.stdin, process.stdout, 'pipe', "ipc"] });
+
+		serverExec.on("message", function (data) {
+			if (data === "serverStarted") {
+				launchOpenfin("prod");
+				done();
+			}
+		});
+		serverExec.on('exit', code => console.log('final exit code is', code));
+		//Prints server errors to your terminal.
+		serverExec.stderr.on("data", function (data) {
+			console.log(errorOutColor('ERROR:' + data));
+		});
+	})
+);
+
+
 gulp.task('default', gulp.series('devServer'));
+gulp.task('prod', gulp.series('production'));

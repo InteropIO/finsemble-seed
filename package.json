@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "gulp --gulpfile=./gulpfile.js",
+    "prod": "gulp --gulpfile=./gulpfile.js production",
     "cp": "gulp copy --gulpfile=./gulpfile.js",
     "build": "gulp build --gulpfile=./gulpfile.js",
     "wp": "gulp wp --gulpfile=./gulpfile.js",
@@ -42,6 +43,7 @@
     "webpack": "2.*",
     "webpack-dev-middleware": "^1.12.0",
     "webpack-glob-entries": "^1.0.1",
+    "webpack-stream": "^4.0.0",
     "webpack-stream-fixed": "^3.2.0"
   }
 }
