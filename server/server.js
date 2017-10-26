@@ -16,9 +16,7 @@ var cacheAge = 0;
 
 console.log(outputColor("SERVER SERVING FROM " + rootDir + " with caching maxage = ", cacheAge));
 
-
 startServer();
-
 
 function startServer(compiler) {///compiler here is webpack and comes from the dev file and
 
@@ -32,11 +30,18 @@ function startServer(compiler) {///compiler here is webpack and comes from the d
 	app.use("/yourSubDirectory", express.static(rootDir, {
 		maxage: cacheAge
 	}));
+
+	//Make the config public
+	app.use("/yourSubDirectory/configs", express.static("./configs", {
+		maxage: cacheAge
+	}));
+
+	//Open up the Finsemble Components,services, and clients
 	app.use("/finsemble", express.static(moduleDirectory, {
 		maxage: cacheAge
 	}));
-	global.root = "/yourSubDirectory";
 
+	global.root = "/yourSubDirectory";
 
 	var PORT = process.env.PORT || 3375;
 
@@ -44,12 +49,10 @@ function startServer(compiler) {///compiler here is webpack and comes from the d
 		console.log(chalk.green("listening on port " + PORT));
 		global.host = server.address().address;
 		global.port = server.address().port;
-		console.log(chalk.green("server up.........................."));
-		if (process.env.NODE_ENV === "dev") {
+		if (process.env.NODE_ENV === "dev") {//Setup hotreload in the dev environment
 			require("./dev/hotreload")(app, server, function () {
 				process.send('serverStarted');
 			});
 		}
 	});
-
 }
