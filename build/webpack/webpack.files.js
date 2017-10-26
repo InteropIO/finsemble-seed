@@ -1,3 +1,8 @@
+//  config settings
+var enableHMR = true;//Enable Hot Reload
+var HMRBlacklist = ["testComponent"];//Components to explude
+var HMRWhitelist = [];//Only reload these components
+
 var path = require('path');
 var git = require('git-rev-sync');
 var glob_entries = require('webpack-glob-entries');
@@ -5,9 +10,7 @@ var webpack = require("webpack")
 var componentsToBuild = require('./webpack.files.entries.json');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var defaultConfig = require("./defaultWebpackConfig");
-var enableHMR = true;//Enable Hot Reload
-var HMRBlacklist = ["testComponent"];//Components to explude
-var HMRWhitelist = [];//Only reload these components
+
 if (!process.env.NODE_ENV) {// if we are in production turn off hotreload
 	enableHMR = false;
 }

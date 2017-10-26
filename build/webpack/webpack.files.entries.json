@@ -1,7 +1,1 @@
-{
-
-	"testComponent":{
-		"output": "components/testComponent/ts",
-        "entry": "./src/components/testComponent/ts.jsx"
-	}
-}
+{}
