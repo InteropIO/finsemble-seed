@@ -130,6 +130,7 @@ gulp.task('build', gulp.series(
 
 gulp.task('devServer', gulp.series(
 	'wipeDist',
+	'copy',
 	buildSass,
 	watchSass,
 	function (done) {

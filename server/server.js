@@ -26,13 +26,13 @@ function startServer(compiler) {///compiler here is webpack and comes from the d
 		maxage: cacheAge
 	}));
 
-	// Sample server root set to "/yourSubDirectory" -- must align with paths thoughout configs/openfin/manifest-local.json and configs/other/server-environment-startup.json
-	app.use("/yourSubDirectory", express.static(rootDir, {
+	// Sample server root set to "/" -- must align with paths thoughout configs/openfin/manifest-local.json and configs/other/server-environment-startup.json
+	app.use("/", express.static(rootDir, {
 		maxage: cacheAge
 	}));
 
 	//Make the config public
-	app.use("/yourSubDirectory/configs", express.static("./configs", {
+	app.use("/configs", express.static("./configs", {
 		maxage: cacheAge
 	}));
 
@@ -41,7 +41,7 @@ function startServer(compiler) {///compiler here is webpack and comes from the d
 		maxage: cacheAge
 	}));
 
-	global.root = "/yourSubDirectory";
+	global.root = "/";
 
 	var PORT = process.env.PORT || 3375;
 

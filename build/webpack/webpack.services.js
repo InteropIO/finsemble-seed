@@ -2,7 +2,6 @@ var path = require('path');
 var fs = require("fs");
 var glob = require("glob");
 var glob_entries = require('webpack-glob-entries');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 
 function getDirectories(srcpath) {
@@ -21,14 +20,6 @@ for (var key in services) {
 	var newKey = key.replace("Service", "");
 	var entryKey = 'services/' + folder + "/" + key;
 	entry[entryKey] = [currentPath];
-}
-
-function buildComponentIgnore() {
-	var components = require('./webpack.entries.json');
-	for (var key in components) {
-		var filename = components[key].entry.split("/").pop();
-		componentIgnores.push("*" + filename);
-	}
 }
 
 if (Object.keys(entry).length === 0) {
@@ -56,39 +47,12 @@ module.exports = {
 		]
 	},
 	plugins: [
-		new CopyWebpackPlugin([
-			{
-				from: './src/components/',
-				to: './components/',
-				force: false,
-				ignore: ['*.js']
-			},
-			{
-				from: './configs/',
-				to: './configs/',
-				force: true
-			},
-			{
-				from: './src/services/',
-				to: './services/',
-				force: true,
-				ignore: ["*.js"]
-			},
-			{
-				from: './src/thirdParty/',
-				to: './thirdParty/',
-				force: false,
-				ignore: ["*.js"]
-			},
-		], {
-				ignore: componentIgnores
-			})
 	],
 	output: {
 		filename: "[name].js",
 		libraryTarget: 'umd',
 		path: path.join(__dirname, '../', '/built/services'),
-		publicPath: 'http://localhost:3375/yourSubDirectory/'
+		publicPath: 'http://localhost:3375/'
 	},
 	watch: false
 };

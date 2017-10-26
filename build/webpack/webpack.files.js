@@ -3,57 +3,120 @@ var git = require('git-rev-sync');
 var glob_entries = require('webpack-glob-entries');
 var webpack = require("webpack")
 var componentsToBuild = require('./webpack.files.entries.json');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 var enableHMR = true;//Enable Hot Reload
 var HMRBlacklist = [];//Components to explude
 var HMRWhitelist = [];//Only reload these components
-var HMRMethod = 'blacklist';
-if (HMRWhitelist.length) { HMRMethod = 'whitelist'; }
-var entry = {};
 
 function shouldIHMR(key) {
-	if (HMRMethod === 'whitelist' && HMRWhitelist.includes(key)) {
-		return true;
-	} else if (HMRMethod === 'blacklist' && !HMRBlacklist.includes(key)) {
+	if (!enableHMR) return false;//Hotreload is off
+	if (HMRWhitelist.length) {// If we have a whitelist then the entry must be in here
+		if (HMRWhitelist.includes(key)) return true;
+	} else if (!HMRBlacklist.includes(key)) {// No whitelist and not in the black list.
 		return true;
 	}
-	return false;
+	return false;// No whitelist and in the blacklist
 }
-var entries = [];
+
+var entries = [];//Are entry list
+var entry = {};// Object for non hotreload files
+var reloadEntry = {};//We put all of our hotreload files here
+
+
 for (let key in componentsToBuild) {
 	let component = componentsToBuild[key];
-	var newEntry = defaults();
-	newEntry.name = key;
-	newEntry.entry[component.output] = Array.isArray(component.entry) ? component.entry : [component.entry];
-	if (enableHMR && shouldIHMR(key)) {
-		path.resolve(__dirname, '../../server/hotreloadmiddleware/'),
-			newEntry.entry[component.output].push(path.resolve(__dirname, '../../server/hotreloadmiddleware/') + '/client?reload=true&sockets=true&name=' + key);
-
-		newEntry.plugins.push(new webpack.HotModuleReplacementPlugin(),
-			new webpack.NoEmitOnErrorsPlugin());
+	if (!enableHMR || !shouldIHMR(key)) {//add to the non hotreload entry
+		entry[component.output] = component.entry;
+		continue;
 	}
-	entries.push(newEntry);
+	reloadEntry[component.output] = [
+		component.entry,
+		path.resolve(__dirname, '../../server/hotreloadmiddleware/') + '/client?reload=true&sockets=true&name=' + key//inject the hotreload client
+		//and tell it to use sockets
+	];
 }
 
-var clients = glob_entries(path.join(__dirname, '/../../', "/src/clients/*.js"));
-var dir = "clients";
-for (var key in clients) {
-	var currentPath = clients[key];
-	delete clients[key];
-	//e.g., clients/testClient : testClient.js
-	//This is so the clients are put in the right folder.
+var componentIgnores = [];
+function buildComponentIgnore() {//Dont copy files that we build
+	var components = componentsToBuild;
+	for (var key in components) {
+		var filename = components[key].entry.split("/").pop();
+		componentIgnores.push("*" + filename);
+	}
+}
+var mainEntry = false;//Where to place the copy.
+if (Object.keys(entry).length) {//If we have entries in here build the entry file
+	mainEntry = true;
 	var newEntry = defaults();
-	newEntry.name = key;
-	newEntry.entry[component.output] = [path.join(dir, key)];
+	newEntry.entry = entry;
+	newEntry.plugins.push(new CopyWebpackPlugin([
+		{
+			from: './src/components/',
+			to: './components/',
+			force: false,
+			ignore: ['*.js']
+		},
+		{
+			from: './configs/',
+			to: './configs/',
+			force: true
+		},
+		{
+			from: './src/services/',
+			to: './services/',
+			force: true,
+			ignore: ["*.js"]
+		},
+		{
+			from: './src/thirdParty/',
+			to: './thirdParty/',
+			force: false,
+			ignore: ["*.js"]
+		},
+	], {
+			ignore: componentIgnores
+		}));
 	entries.push(newEntry);
-	//entry[path.join(dir, key)] = key;
 }
 
-if (Object.keys(entry).length === 0) {
-	//If you have no clients, services, or components, we throw a json file in there just to get webpack copying the requisite files over for you.
-	//var configPath = path.normalize("configs/application/config");
-	//entry[configPath] = "/configs/application/config.json"
+if (Object.keys(reloadEntry).length) {//If we have entries in here build the entry file
+	var hotReloadEntry = defaults();
+	hotReloadEntry.plugins.push(new webpack.HotModuleReplacementPlugin(),//Add in the hot reload plugins
+		new webpack.NoEmitOnErrorsPlugin());
+	if (!mainEntry) {
+		hotReloadEntry.plugins.push(new CopyWebpackPlugin([
+			{
+				from: './src/components/',
+				to: './dist/components/',
+				force: true
+			},
+			{
+				from: './configs/',
+				to: './configs/',
+				force: true
+			},
+			{
+				from: './src/services/',
+				to: './services/',
+				force: true,
+				ignore: ["*.js"]
+			},
+			{
+				from: './src/thirdParty/',
+				to: './thirdParty/',
+				force: false,
+				ignore: ["*.js"]
+			},
+		]));
+	}
+	hotReloadEntry.entry = reloadEntry;
+	entries.push(hotReloadEntry);
 }
+
+
+
+
 function defaults() {// Our defualt entry
 	return {
 		devtool: 'source-map',
@@ -115,7 +178,7 @@ function defaults() {// Our defualt entry
 			filename: "[name].js",
 			sourceMapFilename: "[name].map.js",
 			path: path.resolve(__dirname, '../../dist/'),
-			publicPath: 'http://localhost:3375/yourSubDirectory/'
+			publicPath: 'http://localhost:3375/'
 		},
 		watch: true,
 		resolve: {
@@ -130,3 +193,6 @@ function defaults() {// Our defualt entry
 	};
 }
 module.exports = entries;
+
+
+

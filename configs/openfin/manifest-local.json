@@ -59,7 +59,7 @@
         }
     ],
     "finsemble": {
-        "applicationRoot": "http://localhost:3375/yourSubDirectory",
+        "applicationRoot": "http://localhost:3375",
         "moduleRoot": "http://localhost:3375/finsemble",
         "importConfig": [
             "$applicationRoot/configs/application/config.json"
