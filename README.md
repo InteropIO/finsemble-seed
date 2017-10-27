@@ -8,16 +8,18 @@ For information on getting started, visit https://documentation.chartiq.com/fins
 
 ## Hot Reload
 
-We've added the ability to hot reload your Finsemble components! Through webpack, we've added middlewware to the component/client build process that allows your changes to appear instantly. Files that are webpack built, such as Javascript files, SASS files, or any required files, will be hot reloaded into the component and show the changes immediately after a file changes.  HTML and CSS files, which aren't webpack built, will immediate have their modified files copied to the `dist` directory, but will not show up in the component until reloaded (e.g. right-click reload or ctrl-r).
+We've added the ability to hot reload your Finsemble components! Through webpack, we've added middlewware to the component/client build process that allows your changes to appear instantly. Files that are built by webpack (e.g., Javascript files, SASS files, or any required files), will be hot reloaded immediately after a file changes. HTML and CSS files, which aren't built by webpack, will immediately have their modified files copied to the `dist` directory, but will not show up in the component until reloaded (e.g. right-click reload or ctrl-r).
 
 We use `webpack-dev-middleware` to handle the webpack build process.
 
-Our hotereload middleware, located at `server/hotreloadmiddleware` listens for updates to your webpacked files and emits those changes to our client side middleware which handles the reloading of your components. Hotreload has two options for emitting the updates, `http` and `websockets`. Since web browsers have a maximum number of http client connections for a single domain, we default to using websockets.(Finsemble is a mutli-window framework and treats every window as a seperate browser tab each having their own connections to your server).
+Our hot reload middleware, located at `server/hotreloadmiddleware` listens for updates to your webpacked files and emits those changes to our client side middleware; from there, we reload your components. Hotreload has two options for emitting the updates, `http` and `websockets`. Since web browsers have a maximum number of http client connections for a single domain, we default to using websockets.(Finsemble is a mutli-window framework and treats every window as a seperate browser tab, each having their own connections to your server).
 
 In your dev environment, we handle the full build process and attach the required middleware inside of `server/dev/hoteload.js`. This file grabs all of your webpack files located at `build/webpack/`, builds them, and then <b>stores them in memory</b>.
 
-We've made adding your components/applications easy with `webpack.files.entries.json` for your entries and `build/webpack/webpack.files.js` constructs the webpack file.
-The format for the `json` file should look like:
+We've made adding your components/applications easy with `webpack.files.entries.json` for your entries. `build/webpack/webpack.files.js` constructs the webpack file.
+
+The format for your entry in the `webpack.files.entries.json` should look like:
+
 ```
 {
 "name": {
@@ -26,7 +28,7 @@ The format for the `json` file should look like:
     }
 }
 ```
-*The output will be placed inside of the `dist` folder once built.*
+
 
 If you wanted to add our middleware to your own webpack file you need to add two things:
 
@@ -36,7 +38,7 @@ If you wanted to add our middleware to your own webpack file you need to add two
 
  There are three configs inside of `build/webpack/webpack.files.js` that control how we use hotreload:
 
-* `enableHMR` -  This enable hotreload for you components.
+* `enableHMR` -  This enables hotreload for you components.
 * `HMRBlacklist` - An array of entries that will be skip hotreload.
 * `HMRWhitelist` -  An array of entries to hotreload.
 
