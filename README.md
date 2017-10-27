@@ -6,9 +6,9 @@ For information on getting started, visit https://documentation.chartiq.com/fins
 
 *Note: The first time you run the sample app, Finsemble will download required assets including the OpenFin Runtime. This may take a few minutes if you are on a slow Internet connection.*
 
-## Hotreload
+## Hot Reload
 
-We've added the ability to hot reload your Finsemble components! Through webpack, we've added middlewware to the component/client build process that allows your changes to appear instantly. Files that are webpack built, such as Javascript files, SASS files, or any required files, will be hot reloaded into the component and show the changes immediately after a file changes.  HTML and CSS files, which aren't webpack built, will immediate have their modified files copied to the distribution directory, but will not show up in the component until reloaded (e.g. right-click reload or ctrl-r).
+We've added the ability to hot reload your Finsemble components! Through webpack, we've added middlewware to the component/client build process that allows your changes to appear instantly. Files that are webpack built, such as Javascript files, SASS files, or any required files, will be hot reloaded into the component and show the changes immediately after a file changes.  HTML and CSS files, which aren't webpack built, will immediate have their modified files copied to the `dist` directory, but will not show up in the component until reloaded (e.g. right-click reload or ctrl-r).
 
 We use `webpack-dev-middleware` to handle the webpack build process.
 
