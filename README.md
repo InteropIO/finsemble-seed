@@ -8,7 +8,7 @@ For information on getting started, visit https://documentation.chartiq.com/fins
 
 ## Hot Reload
 
-We've added the ability to hot reload your Finsemble components! Through webpack, we've added middlewware to the component/client build process that allows your changes to appear instantly. Files that are built by webpack (e.g., Javascript files, SASS files, or any required files), will be hot reloaded immediately after a file changes. HTML and CSS files, which aren't built by webpack, will immediately have their modified files copied to the `dist` directory, but will not show up in the component until reloaded (e.g. right-click reload or ctrl-r).
+We've added the ability to hot reload your Finsemble components! We've added middleware to webpack that allows your changes to appear instantly. Files that are built by webpack (e.g., Javascript files, SASS files, or any required files), will be hot reloaded immediately after a file changes. HTML and CSS files, which aren't built by webpack, will immediately have their modified files copied to the `dist` directory, but will not show up in the component until reloaded (e.g. right-click reload or ctrl-r).
 
 We use `webpack-dev-middleware` to handle the webpack build process.
 
