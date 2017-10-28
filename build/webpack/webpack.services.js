@@ -3,24 +3,31 @@ var fs = require("fs");
 var glob = require("glob");
 var glob_entries = require('webpack-glob-entries');
 
+
 function getDirectories(srcpath) {
 	return fs.readdirSync(srcpath).filter(function (file) {
 		return fs.statSync(path.join(srcpath, file)).isFile();
 	});
 }
-var entry = glob_entries(path.join(__dirname, '../', "/src/services/**/*"));
-var dir = 'services';
-for (var key in entry) {
-	var currentPath = entry[key];
-	delete entry[key];
+
+var services = glob_entries(path.join(__dirname, '../', "/src/services/**/*"));
+
+var entry = {};
+
+for (var key in services) {
+	var currentPath = services[key];
+	var folder = key.replace("Service", "");
 	var newKey = key.replace("Service", "");
-	if (key !== "baseClient") {
-		entry[path.join(newKey, newKey +'Service')] = currentPath;
-	} else {
-		entry[path.join(newKey)] = currentPath;
-	}
+	var entryKey = 'services/' + folder + "/" + key;
+	entry[entryKey] = [currentPath];
 }
+
+if (Object.keys(entry).length === 0) {
+	return module.exports = null;//If we don't have services there is no need to create an entry json
+};
+
 module.exports = {
+	name: "services",
 	devtool: 'source-map',
 	entry: entry,
 	target: 'web',
@@ -33,16 +40,19 @@ module.exports = {
 				"add-module-exports"
 			]
 		},
-			{
-				test: /\.html$/,
-				loader: "html-loader",				
-			}
+		{
+			test: /\.html$/,
+			loader: "html-loader",
+		}
 		]
 	},
+	plugins: [
+	],
 	output: {
 		filename: "[name].js",
 		libraryTarget: 'umd',
-		path: path.join(__dirname, '../', '/built/services')
+		path: path.join(__dirname, '../', '/built/services'),
+		publicPath: 'http://localhost:3375/'
 	},
 	watch: false
 };
