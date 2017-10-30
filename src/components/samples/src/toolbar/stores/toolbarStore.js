@@ -3,6 +3,8 @@
 * All rights reserved.
 */
 import async from "async";
+import * as menuConfig from '../config.json';
+
 /**
  *
  * @class _ToolbarStore
@@ -28,21 +30,31 @@ class _ToolbarStore {
 
 
 	/**
-	 * Load the menus from the config.
-	 * The first toolbar that comes up spawns menus from the config to improve performance.
+	 * Load the menus from the config.json. If there are no items in config.json, menus are loaded from the Finsemble Config `finsemble.menus` item.
+	 *
 	 *
 	 * @param {any} done
 	 * @param {any} self
 	 * @memberof _ToolbarStore
 	 */
 	loadMenusFromConfig(done, self) {
-		FSBL.Clients.ConfigClient.get({ field: "finsemble.menus" }, function (err, menus) {
+		console.log('in loadmenus', menuConfig);
+		if (Array.isArray(menuConfig)) {
 			self.Store.setValue({
 				field: "menus",
-				value: menus
+				value: menuConfig
 			});
+			if (FSBL.Clients.ConfigClient.set) { FSBL.Clients.ConfigClient.set({ field: "finsemble.menus", value: menuConfig }); }
 			done();
-		});
+		} else {
+			FSBL.Clients.ConfigClient.get({ field: "finsemble.menus" }, function (err, menus) {
+				self.Store.setValue({
+					field: "menus",
+					value: menus
+				});
+				done();
+			});
+		}
 	}
 
 
@@ -56,13 +68,15 @@ class _ToolbarStore {
 	addListeners(done, self) {
 		// menus change - menus come from config
 		FSBL.Clients.DataStoreClient.getStore({ store: "Finsemble-Configuration-Store", global: true }, function (err, configStore) {
-			configStore.addListener({ field: "finsemble.menus" }, function (err, data) {
-				self.Store.setValue({
-					field: "menus",
-					value: data.value
+			if (configStore) {
+				configStore.addListener({ field: "finsemble.menus" }, function (err, data) {
+					self.Store.setValue({
+						field: "menus",
+						value: data.value
+					});
+					self.getSectionsFromMenus(data.value);
 				});
-				self.getSectionsFromMenus(data.value);
-			});
+			}
 			done();
 		});
 	}

@@ -128,7 +128,7 @@ var Actions = {
 			});
 		}
 		if (settings.list) {
-			commonItems = settings.list.filter(function (n) {
+			var commonItems = settings.list.filter(function (n) {
 				return keys.indexOf(n) !== -1;
 			});
 
