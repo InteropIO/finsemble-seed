@@ -1,0 +1,29 @@
+@import '../assets/sass/menus';
+@import '../assets/sass/globals';
+
+.menu-item-actions {
+	flex:.17;
+}
+.workspace-actions {
+	padding-bottom: 0px;
+}
+
+.workspace-action:first-of-type > i {
+	padding-right: 7px;
+	margin-top: 2px;
+}
+
+.menu-item-label {
+	flex:.8;
+}
+
+.menu-secondary {
+	padding-top:8px;
+}
+
+.active-workspace > div {
+	font-weight: 500;
+}
+body {
+	overflow-y: hidden;
+}

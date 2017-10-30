@@ -3,7 +3,7 @@
 	"mode": "",
 	"isAuthEnabled": true,
 	"defaultStorage": "localStorage",
-	"debugServiceDelay":0,
+	"debugServiceDelay": 0,
 	"storage": {},
 	"betaFeatures": {
 		"docking": {
@@ -17,9 +17,6 @@
 		}
 	},
 	"importConfig": [
-		"$applicationRoot/configs/application/components.json",
-		"$applicationRoot/configs/application/systemComponents.json",
-		"$applicationRoot/configs/application/services.json",
-        "$applicationRoot/configs/other/defaultWorkspaces.json"
+		"$applicationRoot/components/samples/configs/sampleComponents.json"
 	]
 }

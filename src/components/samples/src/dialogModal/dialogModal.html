@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Modal Dialog</title>
+    <style>
+        body {
+            background-color: black;
+        }
+    </style>
+</head>
+
+<body>
+
+</body>
+<script>
+    FSBL.addEventListener('onReady', function(){
+        document.body.addEventListener('keydown', function(e){
+            if(e.code === 'Escape'){
+                FSBL.Clients.DialogManager.hideModal();
+            }
+        })
+        FSBL.Clients.DialogManager.registerModal();
+    });
+</script>
+</html>
