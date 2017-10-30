@@ -88,7 +88,7 @@ module.exports = {
 		filename: "[name].js",
 		libraryTarget: 'umd',
 		path: path.join(__dirname, '../', '/built/services'),
-		publicPath: 'http://localhost:3375/yourSubDirectory/'
+		publicPath: 'http://localhost:3375/'
 	},
 	watch: false
 };

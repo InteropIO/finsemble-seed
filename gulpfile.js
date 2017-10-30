@@ -19,7 +19,8 @@ var initialBuildFinished = false;
 function copyStaticComponentsFiles() {
 	return gulp.src([
 		path.join(__dirname, '/src/components/**/*'),
-		path.join('!' + __dirname, '/src/components/**/*.js*')
+		path.join('!' + __dirname, '/src/components/**/*.js'),
+		path.join('!' + __dirname, '/src/components/**/*.jsx')
 	])
 		.pipe(gulp.dest(path.join(__dirname, '/dist/components/')));
 }
@@ -130,6 +131,7 @@ gulp.task('build', gulp.series(
 
 gulp.task('devServer', gulp.series(
 	'wipeDist',
+	"copy",
 	buildSass,
 	watchSass,
 	function (done) {

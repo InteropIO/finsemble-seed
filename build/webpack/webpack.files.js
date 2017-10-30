@@ -115,7 +115,7 @@ function defaults() {// Our defualt entry
 			filename: "[name].js",
 			sourceMapFilename: "[name].map.js",
 			path: path.resolve(__dirname, '../../dist/'),
-			publicPath: 'http://localhost:3375/yourSubDirectory/'
+			publicPath: 'http://localhost:3375/'
 		},
 		watch: true,
 		resolve: {

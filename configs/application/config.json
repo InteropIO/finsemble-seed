@@ -1,7 +1,7 @@
 {
 	"comment": "Top-level application config for development, adding on top of the core config",
 	"mode": "",
-	"isAuthEnabled": true,
+	"isAuthEnabled": false,
 	"defaultStorage": "localStorage",
 	"debugServiceDelay": 0,
 	"storage": {},
@@ -17,6 +17,7 @@
 		}
 	},
 	"importConfig": [
-		"$applicationRoot/components/samples/configs/sampleComponents.json"
+		"$applicationRoot/components/samples/sampleComponents.json",
+		"$applicationRoot/configs/application/components.json"
 	]
 }
