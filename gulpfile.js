@@ -19,7 +19,7 @@ var initialBuildFinished = false;
 function copyStaticComponentsFiles() {
 	return gulp.src([
 		path.join(__dirname, '/src/components/**/*'),
-		path.join('!' + __dirname, '/src/components/**/*.jsx')
+		path.join('!' + __dirname, '/src/components/**/*.js*')
 	])
 		.pipe(gulp.dest(path.join(__dirname, '/dist/components/')));
 }
@@ -60,73 +60,12 @@ function buildSass(done) {
 		.pipe(sass().on('error', sass.logError))
 		.pipe(gulp.dest(path.join(__dirname, '/dist/components/')));
 }
-/**
- *  Watcher for components. Builds everything whenever a source file changes.
- *  @todo, make it smarter - only rebuild the folder that changed.
- */
-function watchReactComponents(done) {
-	watch(path.join(__dirname, './src/components/**/*'), { ignoreInitial: true }, gulp.series(
-		wipeComponents,
-		copyStaticComponentsFiles,
-		webpackReactComponents,
-		webpackComponents,
-		buildSass
-	));
-	done();
-}
 
-/**
- *  Watcher for Clients. Builds everything whenever a source file changes.
- */
-function watchClients(done) {
-	watch(path.join(__dirname, './src/clients/*'), { ignoreInitial: true }, gulp.series(
-		wipeClients,
-		webpackClients
-	));
-	done();
-}
 function watchSass(done) {
 	watch(path.join(__dirname, '/src/components/assets/**/*'), {}, gulp.series(buildSass));
 	done();
 }
-/**
- *  Watcher for Clients. Builds everything whenever a source file changes.
- */
-function watchServices(done) {
-	watch(path.join(__dirname, './src/services/**/*.js'), { ignoreInitial: true }, gulp.series(
-		wipeServices,
-		copyStaticFiles,
-		webpackServices));
-	done();
-}
 
-/**
- *  Helper function to delete directories.
- */
-function wipe(dir, cb) {
-	del(dir, { force: true }).then(function () {
-		if (cb) {
-			cb();
-		}
-	});
-}
-
-/**
- *  Wipes the service dir.
- */
-function wipeServices(done) {
-	wipe(path.join(__dirname, '/dist/services/'), done);
-}
-
-/**
- *  Wipes the clients dir.
- */
-function wipeClients(done) {
-	wipe(path.join(__dirname, '/dist/clients/'), done);
-}
-/**
- * Removes everything in dist.
- */
 function wipedist(done) {
 	if (directoryExists(path.join(__dirname, "/dist/"))) {
 		wipe(path.join(__dirname, '/dist/'), done);
@@ -134,13 +73,6 @@ function wipedist(done) {
 		done();
 	}
 
-}
-
-/**
- *  Wipes the component directory.
- */
-function wipeComponents(done) {
-	wipe(path.join(__dirname, '/dist/components'), done);
 }
 
 function handleWebpackStdOut(data, done) {
@@ -198,36 +130,26 @@ gulp.task('build', gulp.series(
 
 gulp.task('devServer', gulp.series(
 	'wipeDist',
-	'copy',
-	// webpackClients,
-	// webpackServices,
-	webpackComponents,
-	// webpackReactComponents,
-	// watchReactComponents,
-	// watchClients,
-	// watchServices,
 	buildSass,
 	watchSass,
 	function (done) {
 		initialBuildFinished = true;
-		var exec = require('child_process').exec;
+		var exec = require('child_process').spawn;
 		//This runs essentially runs 'PORT=80 node server/server.js'
 		var serverPath = path.join(__dirname, '/server/server.js');
 		//allows for spaces in paths.
-		serverPath = '"' + serverPath + '"';
-		var serverExec = exec('node ' + serverPath, { env: { 'PORT': StartupConfig["dev"].serverPort, NODE_ENV: "dev" } });
-		serverExec.stdout.on("data", function (data) {
-			//Prints server output to your terminal.
-			console.log("SERVER STDOUT:", data);
-			if (data.indexOf("listening on port") > -1) {
-				//Once the server is up and running, we launch openfin.
-				launchOpenfin('dev');
+		var serverExec = exec('node', ['--debug', serverPath, { stdio: 'inherit' }], { env: { 'PORT': StartupConfig["dev"].serverPort, NODE_ENV: "dev" }, stdio: [process.stdin, process.stdout, 'pipe', "ipc"] });
+
+		serverExec.on("message", function (data) {
+			if (data === "serverStarted") {
+				launchOpenfin("dev");
 				done();
 			}
 		});
+		serverExec.on('exit', code => console.log('final exit code is', code));
 		//Prints server errors to your terminal.
 		serverExec.stderr.on("data", function (data) {
-			console.log('ERROR:' + data);
+			console.log(errorOutColor('ERROR:' + data));
 		});
 	})
 );
