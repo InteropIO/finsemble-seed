@@ -48,13 +48,9 @@ var LinkerStore = Object.assign({}, EventEmitter.prototype, {
 			var finWindow = FSBL.Clients.WindowClient.finWindow;
 
 			self.setState(data);
-			FSBL.Clients.Logger.perf.verbose("s1 before fitToDOM: ", performance.now());
 			FSBL.Clients.WindowClient.fitToDOM();
-			FSBL.Clients.Logger.perf.verbose("s1 after fitToDOM: ", performance.now());
 
-			FSBL.Clients.Logger.perf.verbose("s1 Before show: ", performance.now());
 			finWindow.showAt(data.windowBounds.left, data.windowBounds.top + 20, function () {
-				FSBL.Clients.Logger.perf.verbose("s1 After show: ", performance.now());
 			});
 
 			finWindow.focus();
