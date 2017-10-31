@@ -60,7 +60,7 @@ To get the sample system components to work:
 		]
 	}
 	```
-3. Copy `src\components\samples\build\webpack.files.entries.json` to `build\webpack` to add all the components to the build process.
+3. Copy `src\samples\build\webpack.files.entries.json` to `build\webpack` to add all the components to the build process.
 
 Once you have done this, quit and rebuild and run Finsemble again. You will see a toolbar appear at the top of the screen. From the toolbar you can launch other sample components including our Workspace Management Menu, File Menu and App Launcher.
 
