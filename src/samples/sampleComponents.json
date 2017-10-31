@@ -3,7 +3,7 @@
 	"components": {
 		"App Launcher": {
 			"window": {
-				"url": "$applicationRoot/components/samples/src/appLauncher/appLauncher.html",
+				"url": "$applicationRoot/components/src/appLauncher/appLauncher.html",
 				"top": 32,
 				"left": 45,
 				"width": 350,
@@ -33,7 +33,7 @@
 		},
 		"Overflow Menu": {
 			"window": {
-				"url": "$applicationRoot/components/samples/src/overflowMenu/overflowMenu.html",
+				"url": "$applicationRoot/components/src/overflowMenu/overflowMenu.html",
 				"top": 32,
 				"left": 45,
 				"width": 350,
@@ -63,7 +63,7 @@
 		},
 		"Workspace Management Menu": {
 			"window": {
-				"url": "$applicationRoot/components/samples/src/workspaceManagementMenu/workspaceManagementMenu.html",
+				"url": "$applicationRoot/components/src/workspaceManagementMenu/workspaceManagementMenu.html",
 				"top": 32,
 				"left": 45,
 				"width": 310,
@@ -96,7 +96,7 @@
 		},
 		"linkerWindow": {
 			"window": {
-				"url": "$applicationRoot/components/samples/src/linker/linker.html",
+				"url": "$applicationRoot/components/src/linker/linker.html",
 				"width": 65,
 				"height": 163,
 				"ephemeral": true,
@@ -128,7 +128,7 @@
 		},
 		"defaultAuthentication": {
 			"window": {
-				"url": "$applicationRoot/components/samples/src/authentication/defaultAuthentication.html",
+				"url": "$applicationRoot/components/src/authentication/defaultAuthentication.html",
 				"top": "center",
 				"left": "center",
 				"width": 358,
@@ -199,7 +199,7 @@
 		},
 		"File Menu": {
 			"window": {
-				"url": "http://localhost:3375/components/samples/src/fileMenu/fileMenu.html?",
+				"url": "http://localhost:3375/components/src/fileMenu/fileMenu.html?",
 				"top": 0,
 				"left": 100,
 				"width": 125,
@@ -232,7 +232,7 @@
 		},
 		"AdhocComponentForm": {
 			"window": {
-				"url": "$applicationRoot/components/samples/src/adhocComponentForm/adhocComponentForm.html",
+				"url": "$applicationRoot/components/src/adhocComponentForm/adhocComponentForm.html",
 				"width": 350,
 				"height": 175,
 				"position": "absolute",
@@ -264,7 +264,7 @@
 		},
 		"Docking Move Mask": {
 			"window": {
-				"url": "$applicationRoot/components/samples/src/dockingGroupMask/dockingGroupMask.html",
+				"url": "$applicationRoot/components/src/dockingGroupMask/dockingGroupMask.html",
 				"frame": false,
 				"resizable": false,
 				"showTaskbarIcon": false,
@@ -295,7 +295,7 @@
 		},
 		"yesNo": {
 			"window": {
-				"url": "$applicationRoot/components/samples/src/yesNoDialog/yesNoDialog.html",
+				"url": "$applicationRoot/components/src/yesNoDialog/yesNoDialog.html",
 				"width": 350,
 				"height": 175,
 				"position": "absolute",
@@ -334,7 +334,7 @@
 		},
 		"singleInput": {
 			"window": {
-				"url": "$applicationRoot/components/samples/src/singleInputDialog/singleInputDialog.html",
+				"url": "$applicationRoot/components/src/singleInputDialog/singleInputDialog.html",
 				"width": 350,
 				"height": 175,
 				"position": "absolute",
@@ -373,7 +373,7 @@
 		},
 		"dialogModal": {
 			"window": {
-				"url": "$applicationRoot/components/samples/src/dialogModal/dialogModal.html",
+				"url": "$applicationRoot/components/src/dialogModal/dialogModal.html",
 				"width": "100%",
 				"height": "100%",
 				"position": "virtual",
@@ -409,7 +409,7 @@
 		"Toolbar": {
 			"window": {
 				"id": "launcher",
-				"url": "$applicationRoot/components/samples/src/toolbar/toolbar.html",
+				"url": "$applicationRoot/components/src/toolbar/toolbar.html",
 				"height": 40,
 				"top": 0,
 				"left": 0,

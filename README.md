@@ -38,7 +38,7 @@ To build and run the sample application:
 
 This starts up the "dev runner" which is responsible for building, watching, and launching your application. The first time you run this command, assets will be downloaded. These assets include the OpenFin runtime environment. It may take some time for this to download. For a more in-depth discussion of what's happening in the build process, see the [The Finsemble Build Process](https://documentation.chartiq.com/finsemble/tutorial-theFinsembleBuildProcess.html) overview.
 
-Once the assets are downloaded, the sample application will start. By default the sample application launches with one window showing a documentation page.
+Once the assets are downloaded, the sample application will start. By default the sample application launches with one window showing a documentation page. There are two components that are required by Finsemble, which are in the `src\components\src` folder, the "Docking Move Mask" (dockingGroupMask) and our Window Title Bar (windowTitleBar).
 
 ### Quitting Finsemble
 
@@ -49,7 +49,7 @@ Press Ctrl-C in your command prompt to quit Finsemble. Once you have the sample 
 ### Sample System Components
 
 To get the sample system components to work:
-1. Copy the contents of the `src\components\samples` folder into the `src\components` folder.
+1. Copy the contents of the `src\samples` folder into the `src\components` folder.
 2. The samples include a configuration file. To make sure sure this config gets imported into finsemble, add it to the `configs\application\config.json` to the importConfig Section:
 	```
 	{
