@@ -42,22 +42,25 @@ Once the assets are downloaded, the sample application will start. By default th
 
 ### Quitting Finsemble
 
-Press Ctrl-C in your command prompt to quit Finsemble. Once you have the sample components, you can look at the File Menu component for an example or quitting via the UI. While development, if you have hung node or OpenFin processes, those can be killed using:
+Press Ctrl-C in your command prompt to quit Finsemble. Once you have the sample components, you can look at the File Menu component for an example or quitting via the UI. During development, if you have hung node or OpenFin processes, those can be killed using:
 
 `finsemble-cli kill`
 
 ### Sample System Components
 
-To get the sample system components to work, copy the contents of the `src\components\samples` folder into the `src\components` folder. The sample folder includes a configuration file. To make sure sure this config gets imported into finsemble, add it to the `configs\application\config.json` to the importConfig Section:
-
-```
-{
-	...
-	"importConfig": [
-		"$applicationRoot/components/sampleComponents.json",
-	]
-}
-```
+To get the sample system components to work:
+1. Copy the contents of the `src\components\samples` folder into the `src\components` folder.
+2. The samples include a configuration file. To make sure sure this config gets imported into finsemble, add it to the `configs\application\config.json` to the importConfig Section:
+	```
+	{
+		...
+		"importConfig": [
+			"$applicationRoot/configs/application/components.json",
+			"$applicationRoot/components/sampleComponents.json"
+		]
+	}
+	```
+3. Copy `src\components\samples\build\webpack.files.entries.json` to `build\webpack` to add all the components to the build process.
 
 Once you have done this, quit and rebuild and run Finsemble again. You will see a toolbar appear at the top of the screen. From the toolbar you can launch other sample components including our Workspace Management Menu, File Menu and App Launcher.
 
@@ -83,4 +86,4 @@ We've made adding your components/applications easy `webpack.files.entries.json`
 * `HMRBlacklist` - An array of entries that will be skipped hotreload.
 * `HMRWhitelist` -  An array of entries to hotreload.
 
-*This currently does not work on services.*
+*This does not work on services.*

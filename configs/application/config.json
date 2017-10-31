@@ -17,7 +17,6 @@
 		}
 	},
 	"importConfig": [
-		"$applicationRoot/components/samples/sampleComponents.json",
 		"$applicationRoot/configs/application/components.json"
 	]
 }
