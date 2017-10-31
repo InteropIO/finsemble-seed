@@ -94,6 +94,7 @@ export default class Toolbar extends React.Component {
 					buttonComponent = <FinsembleButton iconClasses="pinned-icon" buttonType={["AppLauncher", "Toolbar"]} key={i} {...button}></FinsembleButton>;
 					break;
 				case "menuLauncher":
+					if (button.preSpawn !== false) button.preSpawn = true;
 					buttonComponent = <FinsembleButton buttonType={["MenuLauncher", "Toolbar"]} key={i} {...button}></FinsembleButton>;
 					break;
 				}
