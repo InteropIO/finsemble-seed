@@ -249,14 +249,14 @@ function createLocalStore(done) {
 		monitorDimensions: {}
 	};
 
-	FSBL.Clients.DataStoreClient.createStore({ store: "Finsemble-AppLauncher-Local-Store", values: defaultData }, function (err, store) {
+	FSBL.Clients.DistributedStoreClient.createStore({ store: "Finsemble-AppLauncher-Local-Store", values: defaultData }, function (err, store) {
 		appLauncherStore = store;
 		done();
 	});
 }
 
 function getToolbarStore(done) {
-	FSBL.Clients.DataStoreClient.getStore({ global: true, store: "Finsemble-Toolbar-Store" }, function (err, store) {
+	FSBL.Clients.DistributedStoreClient.getStore({ global: true, store: "Finsemble-Toolbar-Store" }, function (err, store) {
 		ToolbarStore = store;
 		store.getValue({ field: "pins" }, function (err, pins) {
 			if (pins) { Actions.filterPinsFromToolbar(pins); }

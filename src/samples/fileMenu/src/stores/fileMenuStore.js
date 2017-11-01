@@ -13,7 +13,7 @@ const constants = {
 var FileMenuStore = Object.assign({}, EventEmitter.prototype, {
 	/**
 	 * Sets initial values for the store.
-	 * @todo convert to the dataStoreClient.
+	 * @todo convert to the DistributedStoreClient.
 	 */
 	initialize: function () {
 		var self = this;

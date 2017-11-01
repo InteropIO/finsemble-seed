@@ -13,7 +13,7 @@ export default class WorkspaceLauncherButton extends React.Component {
 
 	onClick(e) {
 		var self = this;
-		FSBL.Clients.DataStoreClient.getStore({ store: "Finsemble-WorkspaceMenu-Global-Store", global: true }, function (err, store) {
+		FSBL.Clients.DistributedStoreClient.getStore({ store: "Finsemble-WorkspaceMenu-Global-Store", global: true }, function (err, store) {
 			store.Dispatcher.dispatch({ actionType: "switchToWorkspace", data: {
 				name: self.props.label
 			}});
