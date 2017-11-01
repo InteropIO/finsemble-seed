@@ -42,7 +42,7 @@
     height: 100%;
     width: 100%;
     z-index: 1000000;
-    background-color: $primary-accent-color;
+    background-color: $scrim-overlay;
     top: 0;
     left: 0;
     justify-content: center;
@@ -53,7 +53,7 @@
     align-items: center;
 }
 .fsbl-share-scrim i.no {
-    background-color:$negative-action-color
+    background-color:$scrim-negative-overlay;
 }
 
 .fsbl-button:hover {
