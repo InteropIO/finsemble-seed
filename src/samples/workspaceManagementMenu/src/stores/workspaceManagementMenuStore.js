@@ -503,7 +503,7 @@ function getToolbarStore(done) {
  */
 function initialize(cb) {
 	WindowClient = FSBL.Clients.WindowClient;
-	StoreClient = FSBL.Clients.DataStoreClient;
+	StoreClient = FSBL.Clients.DistributedStoreClient;
 	Logger = FSBL.Clients.Logger;
 	async.parallel(
 		[createGlobalStore, createLocalStore, getToolbarStore],

@@ -27,7 +27,7 @@ It also uses a customized FinsembleButton as the overflowMenuControl for the "ce
 ## Config and Dynamic Updates
 
 ### The Toolbar Store
-The Toolbar component creates a global store using the Finsemble [DataStoreClient](https://documentation.chartiq.com/finsemble/DataStoreClient.html) called 'Finsemble-Toolbar-Store'. The toolbar initially loads the items from the config into the `menus` field of the store. Updating the `menus` field will update the items on the toolbar.
+The Toolbar component creates a global store using the Finsemble [DistributedStoreClient](https://documentation.chartiq.com/finsemble/DistributedStoreClient.html) called 'Finsemble-Toolbar-Store'. The toolbar initially loads the items from the config into the `menus` field of the store. Updating the `menus` field will update the items on the toolbar.
 
 ### Toolbar Pins
 The FinsembleToolbar also provides the functionality to "pin" items to the toolbar in the "center" section. For this functionality, the components that need to pin items to the Toolbar need to add a pin to the `pins` field of the Toolbar Store. The pins are configured in the same way as the items in the `menuItems`. For sample code, see the [AppLauncher component](../appLauncher/) and the [WorkspaceManagement component](../workspaceManagementMenu/) which make use of this functionality.

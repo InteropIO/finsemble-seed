@@ -194,7 +194,7 @@ var Actions = {
  */
 function initialize(cb) {
 	WindowClient = FSBL.Clients.WindowClient;
-	StoreClient = FSBL.Clients.DataStoreClient;
+	StoreClient = FSBL.Clients.DistributedStoreClient;
 
 	StoreClient.createStore({ store: "windowTitleBarStore", values: windowTitleBarStoreDefaults }, function (err, store) {
 		windowTitleBarStore = store;

@@ -11,7 +11,7 @@ import * as menuConfig from '../config.json';
  */
 class _ToolbarStore {
 	/**
-	 * Creates a Local Store and a Global Store using the DataStoreClient. The Local Store is used for component state.
+	 * Creates a Local Store and a Global Store using the DistributedStoreClient. The Local Store is used for component state.
 	 * The global store is used to allow other components to add/remove items from the Toolbar
 	 *
 	 * @param {any} done
@@ -19,9 +19,9 @@ class _ToolbarStore {
 	 * @memberof _ToolbarStore
 	 */
 	createStores(done, self) {
-		FSBL.Clients.DataStoreClient.createStore({ store: "Finsemble-ToolbarLocal-Store" }, function (err, store) {
+		FSBL.Clients.DistributedStoreClient.createStore({ store: "Finsemble-ToolbarLocal-Store" }, function (err, store) {
 			self.Store = store;
-			FSBL.Clients.DataStoreClient.createStore({ store: "Finsemble-Toolbar-Store", global: true, values: { mainToolbar: fin.desktop.Window.getCurrent().name } }, function (err, store) {
+			FSBL.Clients.DistributedStoreClient.createStore({ store: "Finsemble-Toolbar-Store", global: true, values: { mainToolbar: fin.desktop.Window.getCurrent().name } }, function (err, store) {
 				self.GlobalStore = store;
 			});
 			done();
@@ -67,7 +67,7 @@ class _ToolbarStore {
 	 */
 	addListeners(done, self) {
 		// menus change - menus come from config
-		FSBL.Clients.DataStoreClient.getStore({ store: "Finsemble-Configuration-Store", global: true }, function (err, configStore) {
+		FSBL.Clients.DistributedStoreClient.getStore({ store: "Finsemble-Configuration-Store", global: true }, function (err, configStore) {
 			if (configStore) {
 				configStore.addListener({ field: "finsemble.menus" }, function (err, data) {
 					self.Store.setValue({
