@@ -262,37 +262,6 @@
 				}
 			}
 		},
-		"Docking Move Mask": {
-			"window": {
-				"url": "$applicationRoot/components/src/dockingGroupMask/dockingGroupMask.html",
-				"frame": false,
-				"resizable": false,
-				"showTaskbarIcon": false,
-				"options": {
-					"opacity": 0.7,
-					"autoShow": false
-				}
-			},
-			"component": {
-				"category": "system"
-			},
-			"foreign": {
-				"services": {
-					"dockingService": {
-						"isArrangable": false
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"launchableByUser": false
-					},
-					"Window Manager": {
-						"FSBLHeader": false,
-						"persistWindowState": false
-					}
-				}
-			}
-		},
 		"yesNo": {
 			"window": {
 				"url": "$applicationRoot/components/src/yesNoDialog/yesNoDialog.html",
