@@ -3,8 +3,9 @@
 @import '_variablesMenus';
 body.menu {
 	margin:0px;
-	font-family: Roboto;	
+	font-family: Roboto;
 	font-weight:300;
+	overflow-y:hidden;
 	overflow-x:hidden;
 	height:100%;
 	-webkit-user-select: none;
@@ -16,11 +17,11 @@ body.menu {
 	flex-direction: row;
 }
 .menu-section-label {
-	padding:10px 0 10px 20px;
+	padding:10px 0px 10px 20px;
 	color:$primary-accent-color;
 	text-transform: uppercase;
 	font-weight: 700;
-	font-family: Roboto Condensed;	
+	font-family: Roboto Condensed;
 	width:100%;
 }
 
@@ -29,7 +30,9 @@ body.menu {
 	color: $menu-primary-font-color;
 }
 
-.menu ul {
+.menu .menu-section {
+	overflow-x: hidden;
+	overflow-y: auto;
 	list-style-type: none;
 	width:100%;
 	padding-left:0;
@@ -52,7 +55,7 @@ body.menu {
 
 .menu-item {
 	display:flex;
-	flex-direction:row;	
+	flex-direction:row;
 	padding-left: 20px;
 	padding-right: 10px;
 	cursor:pointer;
@@ -71,19 +74,22 @@ body.menu {
 	height:100%;
 	flex: .75;
 }
+.menu-item-label-fullwidth {
+	flex: 1;
+}
 .menu-item-actions {
 	align-self: center;
 	display:flex;
-	justify-content: center;
-	flex: .14;
+	justify-content: flex-end;
+	flex: .25;
 }
 
-.menu-action {
+.menu-item-action {
 	display:flex;
 	padding: 0em .25em 0em .25em;
 }
 
-.app-launcher-pinned, .app-launcher-component-pinner:hover {	
+.finsemble-item-pinned, .ff-pin:hover {
 	color:$primary-accent-color;
 }
 
