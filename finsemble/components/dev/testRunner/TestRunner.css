@@ -1,0 +1,269 @@
+body {
+	margin:0px;
+	overflow:hidden;
+	font-family: "Roboto";
+}
+
+#mocha-stats {
+	top:32px;
+}
+#mocha h2 {
+	font-size: 18px;
+}
+#mocha .suite .suite h1 {
+	font-size: 22px;
+}
+
+#mocha h1 {
+	font-size:26px;
+}
+
+.TestRunnerWrapper{
+	height:100%;
+	/* padding:1em; */
+	width: 100%;
+	overflow: hidden;
+	position: absolute;
+	top: 0px;
+}
+
+.TestSuite {
+	position: absolute;
+	overflow: auto;
+	top:100px;
+	height: calc(100% - 100px);
+	width: 100%;
+
+	padding: 1em;
+	box-sizing: border-box;
+}
+
+#mocha .test.pass .duration {
+	font-size:16px;
+}
+
+.form-group {
+	width: 33%;
+}
+
+.form-group {
+	height:26px;
+}
+.form-group option {
+	font-size:16px;
+}
+
+#mocha .test a.replay {
+	color:black;
+	width:20px;
+	height:20px;
+	font-size:28px;
+}
+
+#mocha .test.pass::before {
+	font-size:21px;
+}
+#mocha .test.fail::before {
+	font-size:21px;
+}
+
+#mocha .test pre {
+	font-size:16px;
+}
+
+#mocha .suite .suite:first-child {
+	font-size:40px !important;
+}
+
+.highLight {
+	background-color: rgba(204, 255, 21, 0.39);
+}
+
+.suiteTitle {
+	font-size:1.25em;
+	font-weight: bold;
+}
+.TestCodeToggle {
+	margin: 1em 0 1em 1em;
+	color: gray;
+	cursor:pointer;
+}
+.TestStatsWrapper {
+	display:flex;
+}
+.TestCodeToggle:hover {
+	text-decoration: underline;
+	color: darkgray;
+}
+.header {
+	-webkit-app-region: no-drag;
+	width: 100%;
+	position: fixed;
+	top:32px;
+	left:0;
+	padding:1em;
+	height: 6em;
+	display:flex;
+	align-items: center;
+	justify-content: space-between;
+	background-color: #1D4970;
+	border: 1px solid white;
+	z-index:2;
+	color: white;
+}
+.header-left {
+	display:flex;
+	justify-content: flex-start;
+	flex:.25;
+}
+.header-center {
+	align-items: center;
+	display:flex;
+	flex: .45;
+	padding:1em;
+	flex-direction: column;
+	align-items: flex-start;
+}
+.header-right {
+	display:flex;
+	justify-content: flex-end;
+	flex: .3;
+	margin-right:1em;
+}
+
+.TestStatLabel {
+	font-size: .85em;
+}
+.TestStatValue {
+	font-size: 1.25em;
+}
+.TestStat {
+	padding: 0 1em 0 1em;
+	display:flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+ul {
+	-webkit-padding-start: 1.5em;
+}
+
+.code-error {
+	color: #de1111;
+}
+
+.TestErrorWrapper {
+	border: 3px solid #de1111;
+	margin: 1em;
+	background-color: #f4f3e6;
+}
+.TestErrorWrapper > pre {
+	margin: 0;
+}
+ul.use-icons {
+	list-style-type: none;
+}
+
+
+.test-passed:before {
+	color: green;
+	vertical-align: middle;
+	font-size: 1.75em;
+	margin-right:.5em;
+}
+.test-pending:before {
+
+	color: cyan;
+	vertical-align: middle;
+	font-size: 1.75em;
+	margin-right:.5em;
+}
+.test-failed:before {
+	color: #de1111;
+	vertical-align: middle;
+	font-size: 1.75em;
+	margin-right:.5em;
+}
+
+.TestTitle, .suiteTitle {
+	display:flex;
+	cursor: pointer;
+	align-self: center;
+}
+.TestPending {
+	color: aquamarine;
+}
+.Select-menu-outer {
+	width: 50vw !important;
+}
+
+.Select-control, .is-focused > .Select-control {
+	background-color: transparent;
+	border-right: 0px;
+	border-top: 0px;
+	border-bottom: 1px solid white;
+	border-left: 0px;
+	border-radius: 0px;
+}
+.Select-placeholder, .Select-input, .Select-input > input {
+	color: white;
+}
+.Select-arrow {
+	border-color: #fff transparent transparent
+}
+.TestWrapper {
+	display: flex;
+	flex-direction: column;
+	padding: 1em;
+	border-left: 1px solid #039bff;
+}
+
+.TestWrapper:hover {
+	border: 1px solid #039bff;
+}
+.TestRow {
+	display:flex;
+	flex-direction: row;
+}
+.TestLeft {
+	cursor: pointer;
+	display:flex;
+	justify-content: flex-start;
+	flex: .8;
+}
+.TestRight {
+	display:flex;
+	justify-content: flex-end;
+	flex: .2;
+}
+.TestCode {
+	flex: 1;
+}
+
+.TestDuration {
+    display: flex;
+    background-color: #039bff;
+    color: white;
+    flex-direction: column;
+    border-radius: 6px;
+    align-self: center;
+    margin: 1em;
+    font-size: small;
+    padding-left: 1em;
+    padding: .25em .5em;
+}
+
+.SlowTest {
+	background-color: yellow;
+}
+
+.VerySlowTest {
+	background-color: red;
+}
+
+.breadcrumbs {
+	font-weight: bolder
+}
+.superFast {
+	background-color: #039bff;
+}

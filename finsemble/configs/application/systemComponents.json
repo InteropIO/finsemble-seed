@@ -1,0 +1,93 @@
+{
+	"comment": "System component config, including app launcher, menus, etc.",
+	"components": {
+		"Finsemble Documentation": {
+			"window": {
+				"url": "http://documentation.chartiq.com/finsemble",
+				"left": "center",
+				"top": "center",
+				"height": 600,
+				"width": 900
+			},
+			"component": {
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"persistWindowState": false,
+						"FSBLHeader": true,
+						"showLinker": false
+					}
+				}
+			}
+		},
+		"About Finsemble": {
+			"window": {
+				"url": "$moduleRoot/components/system/aboutFinsemble/aboutFinsemble.html",
+				"width": 350,
+				"height": 175,
+				"position": "absolute",
+				"top": "center",
+				"left": "center",
+				"options": {
+					"resizable": false
+				}
+			},
+			"component": {
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"FSBLHeader": false,
+						"persistWindowState": false
+					}
+				}
+			}
+		},
+		"Compound Header": {
+			"window": {
+				"url": "$moduleRoot/components/system/header/header.html",
+				"height": 32,
+				"compound-header": true
+			},
+			"component": {
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"persistWindowState": false,
+						"FSBLHeader": true,
+						"showLinker": false
+					}
+				}
+			}
+		}
+	}
+}

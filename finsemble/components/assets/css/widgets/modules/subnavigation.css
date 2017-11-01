@@ -1,0 +1,104 @@
+/* Sub Navigation ul / li for overviews, financials, etc */
+.ciq-SubNavigation {
+	height: 40px;
+	padding: 10px 0px 10px 0px;
+}
+.ciq-subnav ul, .ciq-SubNavigation {
+	margin: 0px;
+	padding: 0px 0px 0px 3px;
+	list-style-type: none;
+	font-size: 10pt;
+	color: rgba(51, 51, 51, 0.75);
+	height: 100%;
+	color: #fff;
+}
+.ciq-subnav li, .ciq-subnav a {
+	float: left;
+	list-style: none;
+	display: table-cell;
+	text-decoration: none;
+	padding: 0px 5px 0px 0px;
+	height: 100%;
+	vertical-align: middle;
+	color: #fff;
+}
+.ciq-subnav li:visted, , .ciq-subnav a:visited {
+	color: #fff;
+}
+.ciq-subnav li:after {
+	content: '';
+	text-align: center;
+	display: block;
+	margin: auto;
+	margin-top: 18px;
+	height: 3px;
+	width: 0px;
+	background: transparent;
+	transition: width .3s ease, background-color .3s ease;
+}
+.ciq-subnav li.active:after {
+	height: 3px;
+	width: 0px;
+	background: transparent;
+	transition: width .3s ease, background-color .3s ease;
+}
+.ciq-subnav li:hover:after {
+	width: 100%;
+	background: #4495d1;
+}
+.ciq-subnav li.active:after {
+	width: 100%;
+	background: #4495d1;
+}
+.ciq-SubNavigation.small .ciq-subnav ul li {
+	display: table-cell;
+	clear: both;
+	padding-bottom: 5px;
+}
+
+.ciq-SubNavigation.small .ciq-subnav li:after {
+	display: none;
+}
+.ciq-SubNavigation.small .ciq-subnav li.active:after {
+	display: none;
+}
+
+.ciq-SubNavigation.small .ciq-subnav li {
+	display: block;
+	padding: 12px 16px 12px 12px !important;
+	width: 120px;
+}
+.ciq-SubNavigation.small .ciq-subnav li:hover {
+	background-color: #f7f7f7;
+}
+
+.ciq-SubNavigation.small .ciq-subnav li:hover a {
+	color: #333;
+}
+
+.ciq-SubNavigation.small .ciq-subnav li.active {
+	background-color: #11629E;
+
+}
+
+.ciq-SubNavigation.small .ciq-subnav li.active:hover a {
+	color: #f7f7f7;
+
+}
+
+.ciq-SubNavigation.small .ciq-subnav ul {
+	position: absolute;
+	z-index: 10000;
+	height: auto;
+	width: 120px;
+	border-top: 2px #4495d1;
+	left: 40px;
+	display: table;
+	top: 120px;
+	background-color: #18252e;
+	border: 1px #ddd solid;
+	border-left: 5px #4495d1 solid;
+	border-radius: 2px;
+	padding-left: 0px;
+}
+

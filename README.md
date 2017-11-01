@@ -38,7 +38,7 @@ To build and run the sample application:
 
 This starts up the "dev runner" which is responsible for building, watching, and launching your application. The first time you run this command, assets will be downloaded. These assets include the OpenFin runtime environment. It may take some time for this to download. For a more in-depth discussion of what's happening in the build process, see the [The Finsemble Build Process](https://documentation.chartiq.com/finsemble/tutorial-theFinsembleBuildProcess.html) overview.
 
-Once the assets are downloaded, the sample application will start. By default the sample application launches with one window showing a documentation page. There are two components that are required by Finsemble, which are in the `src\components\src` folder, the "Docking Move Mask" (dockingGroupMask) and our Window Title Bar (windowTitleBar).
+Once the assets are downloaded, the sample application will start. By default the sample application launches with one window showing a documentation page. There are two components that are required by Finsemble, which are in the `src\components\` folder, the "Docking Move Mask" (dockingGroupMask) and our Window Title Bar (windowTitleBar).
 
 ### Quitting Finsemble
 
@@ -60,7 +60,7 @@ To get the sample system components to work:
 		]
 	}
 	```
-3. Copy `src\samples\build\webpack.files.entries.json` to `build\webpack` to add all the components to the build process.
+3. Copy the contents of `src\samples\build\webpack.files.entries.json` into `build\webpack\webpack.files.entries.json` to add all the components to the build process.
 
 Once you have done this, quit and rebuild and run Finsemble again. You will see a toolbar appear at the top of the screen. From the toolbar you can launch other sample components including our Workspace Management Menu, File Menu and App Launcher.
 

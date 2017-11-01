@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title>signOnTest</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="signOnTest.css?{cachebuster}">
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script src="signOnTest.js?{cachebuster}"></script>
+	<style type="text/css">
+		span{
+			display: inline-block;
+		}
+		input {
+			width:300px;
+		}
+		span[col1]{
+			width:120px;
+			text-align: right;
+		}
+		span[col2]{
+			width:320px;
+		}
+		span[col3]{
+			width:300px;
+		}
+	</style>
+</head>
+<body>
+<h1>SignOnTest</h1>
+<span col1>signOnKey</span>
+<span col2><input id="authkey" value="salesforceKey"></span>
+<span col3>auth signon signOnKey</span><br>
+
+<span col1>icon</span>
+<span col2><input id="authicon" value="../../components/samples/src/assets/img/T_MenuIcons-14.svg"></span>
+<span col3>auth signon icon</span><br>
+
+<span col1>prompt</span>
+<span col2><input id="authprompt" value="Salesforce Login"></span>
+<span col3>auth signon prompt string</span><br>
+
+<span col1>userMsg</span>
+<span col2><input id="authUserMsg" value="Optional User Message"></span>
+<span col3>auth signon userMsg string (optional)</span><br>
+<br>
+<button onclick="signonRequest()">appSignOn</button>
+<button onclick="signonAccept()">appAcceptSignOn</button>
+<button onclick="signonRejectAndRetry()">appRejectAndRetrySignOn</button>
+<button onclick="signonReject()">appRejectSignOn</button>
+<button onclick="forceSignonRequest()">appSignOn(force)</button>
+<br>
+<div style="width:500px" id="signonData1"></div>
+<div style="width:500px" id="signonData2"></div>
+<div style="width:500px" id="signonData3"></div>
+<div style="width:500px" id="signonData4"></div>
+<div style="width:500px" id="signonData5"></div>
+<div style="width:500px" id="signonData6"></div>
+<div style="width:500px" id="signonData7"></div>
+<div style="width:500px" id="signonData8"></div>
+<div style="width:500px" id="signonData9"></div>
+<div style="width:500px" id="signonData10"></div>
+</body>
+</html>
+

@@ -1,0 +1,241 @@
+body {
+   font-family: sans-serif;
+   font-size: 95%;
+   margin: 1em 1.5em;
+}
+#content {
+}
+.template {
+    display: none;
+}
+p, h2 {
+}
+h1 {
+    border-bottom: 3px solid #333;
+}
+#toc {
+}
+#toc li {
+    padding: 0 0 0.5em 0;
+    font-size: 1em;
+}
+h2 {
+    border-top: 2px solid #333;
+    border-bottom: 2px solid #333;
+    padding: 0.25em 0;
+    margin: 0 0 1em 0;
+}
+.toclink {
+    padding-left: 1em;
+    font-size: 0.5em;
+}
+p.srclink {
+    border-top: 1px solid #666;
+    padding: 0.5em 0 0 0;
+    margin: 0 0 2em 0;
+}
+.messages {
+    clear: both;
+    list-style: none;
+    padding: 0.5em 0.5em 0.5em 0.5em;
+    margin: 1em;
+    width: 60ex;
+    height: 6.5em;
+    overflow: auto;
+    border: 1px solid #999;
+}
+.messages .time {
+    display: block;
+    font-size: 0.75em;
+    text-decoration: underline;
+    font-weight: bold;
+}
+.messages .txt {
+    display: block;
+    font-family: monospace;
+    margin-bottom: 1em;
+}
+.dragme {
+    width: 64px;
+    height: 64px;
+    border: 1px solid #666;
+    background: #acf;
+    margin: 0.25em;
+    padding: 0.25em;
+    cursor: pointer;
+}
+.drophere {
+    padding: 0.25em;
+    width: 15ex;
+    height: 15ex;
+    border: 1px solid #666;
+    background: #eee;
+    margin: 0 0 0 15ex;
+}
+.dragover {
+    background: #8f8;
+}
+
+
+#oldschool {
+    clear: both;
+}
+#oldschool .drophere {
+    margin: 0 0 0 15ex;
+}
+#newschool {
+    clear: both;
+}
+#newschool .dragme {
+    float: left;
+}
+#newschool .drophere {
+    margin: 0 0 0 15ex;
+}
+#newschool .dragover {
+    background: #8f8;
+}
+
+ul.draglist {
+    float: left;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+ul.draglist li {
+    margin: 0 0 10px 0;
+}
+ul.draglist li.dragme {
+    height: 32px;
+}
+ul.droplist {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 0 15ex;
+}
+ul.droplist li {
+    margin: 0 0 10px 0;
+}
+ul.droplist li.drophere {
+    height: 32px;
+}
+
+#feedback_image .drophere {
+    margin: 0 0 0 22ex;
+}
+
+#data_transfer .drophere {
+    width: 45ex;
+    height: 4em;
+    margin: 1em 0 0 22ex;
+}
+#data_transfer .content_html {
+    margin: 1em 0 0 22ex;
+}
+#data_transfer .content_html .content {
+    margin: 0.5em;
+    padding: 0.5em;
+    background: #fff;
+    border: 1px solid #ccc;
+}
+#data_transfer .content_text {
+    margin: 1em 0 0 22ex;
+}
+#data_transfer .content_text .content {
+    margin: 0.5em;
+    padding: 0.5em;
+    font-family: monospace;
+    background: #fff;
+    border: 1px solid #ccc;
+}
+#data_transfer .content_url {
+    margin: 1em 0 0 22ex;
+}
+#data_transfer .content_url .content {
+    margin: 0.5em;
+    padding: 0.5em;
+    font-family: monospace;
+    background: #fff;
+    border: 1px solid #ccc;
+}
+
+#data_transfer .draglist li {
+    width: 17ex;
+    margin: 0.25em;
+    padding: 0.25em;
+}
+#data_transfer .dragme {
+    border: 1px solid #666;
+    background: #acf;
+    cursor: pointer;
+}
+
+.events_monitor {
+    float: left;
+    margin: 0.25em;
+    padding: 0.25em;
+}
+.events_monitor dt {
+    font-family: monospace;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-decoration: underline;
+}
+.events_monitor dd {
+    font-family: monospace;
+    margin: 0; padding: 0 0 1em 0;
+}
+.toys {
+    margin: 0.25em 0.25em 0.25em 310px;
+    padding: 0.25em;
+}
+.toys div.draggable {
+    float: left;
+    width: 64px;
+    height: 64px;
+    border: 1px solid #666;
+    background: #acf;
+    margin: 0.25em;
+    padding: 0.25em;
+    cursor: pointer;
+}
+.toys img {
+    float: left;
+    display: block;
+    margin: 0.25em;
+    padding: 0.25em;
+}
+.toys form {
+    display: block;
+    margin: 0.25em;
+    padding: 0.25em;
+}
+
+.boxes {
+    margin: 0.25em 0.25em 0.25em 310px;
+    padding: 0.25em;
+}
+.boxes .droparea {
+    float: left;
+    width: 128px;
+    height: 96px;
+    border: 1px solid #666;
+    background: #eee;
+    margin: 0.25em;
+    padding: 0.25em;
+}
+.boxes #delegated {
+    clear: both;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.boxes #delegated li {
+    float: left;
+    width: 128px;
+    height: 96px;
+    border: 1px solid #666;
+    background: #eee;
+    margin: 0.25em;
+    padding: 0.25em;
+}

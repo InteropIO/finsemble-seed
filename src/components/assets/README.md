@@ -1,0 +1,1 @@
+This folder contains all of the images and SASS files necessary to style your sample components.

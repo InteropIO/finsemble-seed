@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>TestRunner</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,700,500,100,300,400italic|Roboto+Condensed:400,700,300' rel='stylesheet'
+        type='text/css'>
+    <link href="https://cdn.rawgit.com/mochajs/mocha/2.2.5/mocha.css" rel="stylesheet" />
+    <script src="https://cdn.rawgit.com/mochajs/mocha/2.2.5/mocha.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+
+    <script>
+        function getAllMethods(object) {
+            return Object.getOwnPropertyNames(object).filter(function (property) {
+                return typeof object[property] == 'function';
+            });
+        }
+    </script>
+
+    <!--<script src="assets/blanket.js" data-cover-flags="ignoreErrors debug" data-cover-adapter="assets/blanket-mocha.js"></script>-->
+</head>
+
+</head>
+
+<body>
+    <div id="TestRunner-component-wrapper">
+        <h2>
+            TestRunner
+        </h2>
+    </div>
+    <script src="TestRunner.js"></script>
+</body>
+
+</html>
