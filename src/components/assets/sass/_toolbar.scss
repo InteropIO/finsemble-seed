@@ -1,4 +1,4 @@
-.toolbar-wrap {
+/*.toolbar-wrap {
 	background-color: $toolbar-background-color;
 	color: $toolbar-primary-font-color;
 	text-align: center;
@@ -50,13 +50,7 @@
 	color: $workspace-icon-color;
 }
 
-.toolbar-brand-logo {
-	width: $brand-logo-width;
-	height: $brand-logo-height;
-	margin: $brand-logo-margin;
-	background: url($brand-logo-url);
-	background-size: 100% 100%;
-}
+
 
 .primary-hover:hover {
 	background-color:$secondary-accent-color;
@@ -99,4 +93,130 @@
 
 .pinned-icon {
 	color: $primary-accent-color;
+}*/
+
+/* New Toolbar Starts Here*/
+
+.finsemble-toolbar {
+	display: flex;
+	align-items: stretch;
+	width: 100%;
+	background: $toolbar-background-color;
+	color: $toolbar-primary-font-color;
+	align-content: center;
+	height: 39px;
+
+}
+
+.finsemble-toolbar.horizontal {
+	flex-direction: row;
+}
+
+.finsemble-toolbar.vertical {
+	flex-direction: column;
+}
+
+.finsemble-toolbar-section {
+	display: flex;
+	flex-direction: row;
+	align-content: center;
+	align-items: stretch;
+	overflow: hidden;
+}
+
+.finsemble-toolbar-section.right {
+	justify-content: flex-end;
+	order: 2;
+	flex: 1;
+	flex: 0 0 auto;
+}
+
+.finsemble-toolbar-section.left {
+	order:0;
+	justify-content: flex-start;
+	flex: 0 0 auto;
+}
+
+.finsemble-toolbar-section.center {
+	justify-content: flex-start;
+	order: 1;
+	flex: 1 1 auto;
+}
+
+.finsemble-toolbar-section.center.overflow {
+	justify-content: space-between;
+}
+
+.finsemble-toolbar-button {
+	display: table;
+    padding: 0 .4em 0 .4em;
+    height:100%;
+	border: 1px solid $toolbar-background-color;
+}
+.finsemble-toolbar-button-label {
+    font-size: .95em;
+    font-weight: 300;
+    /*font-variant: small-caps;*/
+    text-align:left;
+    letter-spacing:.25px;
+	display:table-cell;
+	vertical-align: middle;
+	align-content: center;
+}
+
+
+
+.finsemble-toolbar-button:hover {
+	background: $secondary-accent-color;
+	color: $secondary-hover-font-color;
+	border: 1px solid $light-hover-accent;
+	cursor:pointer;
+}
+
+.finsemble-toolbar-button-icon {
+	height: 100%;
+	display:table-cell;
+	vertical-align: middle;
+}
+
+.finsemble-toolbar-button-icon.left {
+	padding-right: 5px;
+}
+
+.finsemble-toolbar-button-icon.right {
+	padding-left: 5px;
+}
+
+.divider {
+	display:flex;
+	align-self: center;
+}
+.divider:before {
+	height:20px;
+	border-right:1px solid rgba(255,255,255,0.3);
+	content:'';
+	margin:0 .25em 0 .25em;
+}
+
+.pinned-icon {
+	color: #4495d1;
+	font-size:26px;
+	padding-right: .25em;
+}
+
+.pinned-workspace-icon {
+	color: $workspace-icon-color;
+}
+.toolbar-button-label-left {
+	order:-1;
+}
+.toolbar-button-label-right{
+	order:1;
+}
+
+.finsemble-toolbar-brand-logo {
+	width: $brand-logo-width;
+	height: $brand-logo-height;
+	margin: $brand-logo-margin;
+	padding: 0px !important;
 }

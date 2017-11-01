@@ -1,0 +1,101 @@
+.ciq-BidAsk ul{
+	list-style-type: none;
+	margin: 0;
+	padding: 10px;
+}
+.ciq-BidAsk .cell{
+	border:1px solid rgba(127,127,127,1);
+	cursor:-moz-grab;
+	cursor:-webkit-grab;
+	cursor:grab;
+	float:left;
+	margin:2px;
+	height:87px;
+	width:80px;
+}
+.ciq-BidAsk .cell.add{
+	cursor:default;
+}
+.ciq-BidAsk .cell table{
+	font-size: 12px;
+	height: 70px;
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none;   /* Chrome/Safari/Opera */
+	-khtml-user-select: none;    /* Konqueror */
+	-moz-user-select: none;      /* Firefox */
+	-ms-user-select: none;       /* Internet Explorer/Edge */
+	user-select: none;           /* Non-prefixed version, currently
+	                                not supported by any browser */
+}
+.ciq-BidAsk .cell.add input{
+	box-sizing:border-box;
+	border:none;
+	height:17px;
+	width:100%;
+	font-size:10px;
+	padding:0 2px;
+	margin:0;
+	vertical-align:top;
+}
+.ciq-BidAsk table{
+	border-collapse:collapse;
+	border-spacing:0px;
+	width:100%;
+}
+.ciq-BidAsk table td{
+	padding:0;
+}
+.ciq-BidAsk .symbol-area{
+	height:17px;
+	text-align:center;
+	border-bottom:1px solid rgba(127,127,127,1);
+	background-color:rgba(127,127,127,0.3);
+}
+.ciq-BidAsk .symbol-area.large-symbol{
+	font-size:smaller;
+}
+.ciq-BidAsk .symbol-area .close{
+	cursor: pointer;
+	float: right;
+	padding-right: 2px;
+	font-size: 10px;
+}
+.ciq-BidAsk .data-area{
+	vertical-align:top;
+}
+.ciq-BidAsk .data-area td:nth-of-type(2){
+	width:40px;
+}
+.ciq-BidAsk .bid-area td{
+	border-bottom:1px solid rgba(127,127,127,1);
+	text-align:right;
+	padding-right:2px;
+	background-color:rgba(255,0,0,0.2);
+	height:27px;
+}
+.ciq-BidAsk .bid-area td span{
+	vertical-align:top;
+}
+.ciq-BidAsk .ask-area td{
+	border-top:1px solid rgba(127,127,127,1);
+	text-align:right;
+	padding-right:2px;
+	background-color:rgba(0,255,0,0.2);
+	height:27px;
+}
+.ciq-BidAsk .ask-area td span{
+	vertical-align:bottom;
+}
+.ciq-BidAsk .spread-area td{
+	text-align:center;
+	border-right:1px solid rgba(127,127,127,1);
+	font-size:10px;
+	background-color:rgba(127,127,127,0.3);
+}
+.ciq-BidAsk .left{
+}
+.ciq-BidAsk .large{
+	font-size:24px;
+}
+.ciq-BidAsk .small{
+}

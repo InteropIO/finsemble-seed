@@ -1,0 +1,91 @@
+{
+	"comment": "Top-level core configuration -- the `hidden` config file that is always automatically loaded",
+	"FSBLVersion": "1.3.1",
+	"gitHash": "340e74c0d6201363011997bfef2c9fc3ad61f089",
+	"runTimeContext": "local",
+	"servicesRoot": "$moduleRoot/services",
+	"finsembleLibraryPath": "$moduleRoot/FSBL.js",
+	"premiumRoot": "$moduleRoot",
+	"thirdPartyRoot": "$moduleRoot/thirdParty",
+	"systemTrayIcon": "$moduleRoot/components/samples/src/assets/img/Finsemble_Taskbar_Icon.png",
+	"requiredServicesConfig": {
+		"routerService": {
+			"visible": false,
+			"showDevConsoleOnVisible": true,
+			"active": true,
+			"name": "routerService",
+			"html": "$servicesRoot/router/router.html",
+			"file": "$servicesRoot/router/routerService.js"
+		},
+		"dataStoreService": {
+			"useWindow": true,
+			"name": "dataStoreService",
+			"visible": false,
+			"active": true,
+			"html": "$servicesRoot/dataStore/dataStore.html",
+			"file": "$servicesRoot/dataStore/dataStoreService.js"
+		},
+		"configService": {
+			"visible": false,
+			"showDevConsoleOnVisible": true,
+			"active": true,
+			"name": "configService",
+			"html": "$servicesRoot/config/config.html",
+			"file": "$servicesRoot/config/configService.js"
+		},
+		"loggerService": {
+			"isolateRenderProcess": false,
+			"showDevConsoleOnVisible": false,
+			"visible": false,
+			"active": true,
+			"window": {
+				"defaultWidth": 1170,
+				"defaultHeight": 900
+			},
+			"name": "loggerService",
+			"html": "$servicesRoot/logger/logger.html",
+			"file": "$servicesRoot/logger/loggerService.js"
+		}
+	},
+	"splinteringConfig": {
+		"comment": "A SplinterAgent is just an openfin application that is capable of spawning specific components/services. If you try to spawn a component/service that one of these agents does not cover, it will be spawned by the defaultAgent. You can also specify maxWindowsPerAgent if you would like to limit your agents to some ceiling. This is useful when you have a particularly heavy component.",
+		"enabled": true,
+		"splinterAgents": [
+			{
+				"agentLabel": "systemComponents",
+				"components": [
+					"Toolbar",
+					"App Launcher",
+					"Workspace Overflow Menu",
+					"Workspace Management Menu",
+					"Finsemble Linker Window",
+					"defaultAuthentication",
+					"dialogSignOn",
+					"dialogTemplate",
+					"dialogTest",
+					"File Menu",
+					"AdhocComponentForm",
+					"Process Monitor"
+				]
+			},
+			{
+				"agentLabel": "advancedCharts",
+				"components": [
+					"Advanced Chart"
+				],
+				"maxWindowsPerAgent": 3
+			},
+			{
+				"agentLabel": "dockingService",
+				"services": [
+					"dockingService"
+				]
+			}
+		]
+	},
+	"importConfig": [
+		"$moduleRoot/configs/core/services.json",
+		"$moduleRoot/configs/application/devComponents.json"
+
+	]
+}

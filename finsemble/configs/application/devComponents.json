@@ -1,0 +1,99 @@
+{
+	"comment": "Dev-oriented component config, including test runner, and various other test components.",
+	"components": {
+		"Test Runner": {
+			"window": {
+				"url": "$moduleRoot/components/dev/testRunner/testRunner.html",
+				"addToWorkspace": false,
+				"top": "center",
+				"left": "center",
+				"width": 1200,
+				"height": 800
+			},
+			"component": {
+				"mode": "dev",
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": true,
+						"persistWindowState": false
+					}
+				}
+			}
+		},
+		"JSONFormatter": {
+			"window": {
+				"url": "$moduleRoot/components/system/jsonFormatter/JSONFormatter.html",
+				"top": "center",
+				"left": "center",
+				"width": 800,
+				"height": 600,
+				"ephemeral": false
+			},
+			"component": {
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Toolbar": {},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": false,
+						"persistWindowState": false
+					}
+				}
+			}
+		},
+		"JSONAllData": {
+			"window": {
+				"url": "$moduleRoot/components/system/jsonAllData/JSONAllData.html",
+				"top": "center",
+				"left": "center",
+				"width": 800,
+				"height": 600,
+				"ephemeral": false
+			},
+			"component": {
+
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Toolbar": {},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": false,
+						"persistWindowState": false
+					}
+				}
+			}
+		}
+	}
+}

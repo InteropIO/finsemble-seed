@@ -1,7 +1,7 @@
 {
 	"appLauncher": {
 		"output": "components/src/appLauncher/appLauncher",
-		"entry": "./src/components/src/appLauncher/src/app.jsx"
+		"entry": "./src/components/appLauncher/src/app.jsx"
 	},
 	"overflowMenu": {
 		"output": "components/src/overflowMenu/overflowMenu",

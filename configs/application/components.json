@@ -30,7 +30,7 @@
         },
         "Docking Move Mask": {
 			"window": {
-				"url": "$applicationRoot/components/src/dockingGroupMask/dockingGroupMask.html",
+				"url": "$applicationRoot/components/dockingGroupMask/dockingGroupMask.html",
 				"frame": false,
 				"resizable": false,
 				"showTaskbarIcon": false,
@@ -38,6 +38,35 @@
 					"opacity": 0.7,
 					"autoShow": false
 				}
+			},
+			"component": {
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"FSBLHeader": false,
+						"persistWindowState": false
+					}
+				}
+			}
+        },
+        "windowTitleBar": {
+			"window": {
+				"url": "$applicationRoot/components/windowTitleBar/windowTitleBar.js",
+				"top": "center",
+				"left": "center",
+				"width": 358,
+				"height": 458,
+				"ephemeral": true
 			},
 			"component": {
 				"category": "system"

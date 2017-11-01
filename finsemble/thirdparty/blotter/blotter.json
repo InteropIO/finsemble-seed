@@ -1,0 +1,112 @@
+{
+	"services": {
+		"blotterdataService": {
+			"useWindow": true,
+			"visible": false,
+			"active": false,
+			"name": "blotterdataService",
+			"html": "$thirdPartyRoot/blotter/services/blotterdata/blotterdata.html",
+			"files": "$thirdPartyRoot/blotter/services/blotterdata/blotterdataService.js"
+		}
+	},
+	"components": {
+		"Adaptable Trade Blotter": {
+			"window": {
+				"url": "$thirdPartyRoot/blotter/components/tradeblotter/tradeblotter.html",
+				"icon": "http://images8.webydo.com/93/9340882/3958%2f268BFDCA-400A-104D-DC0C-F6C658386289.png_400",
+				"resizable": true,
+				"autoShow": true,
+				"top": "center",
+				"left": "center",
+				"width": 1920,
+				"height": 560,
+				"addToWorkspace": true
+			},
+			"component": {
+				"type": "tradeblotter"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					},
+					"launcherService": {
+						"inject": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"persistWindowState": true,
+						"showLinker": true
+					}
+				}
+			}
+		},
+		"Adaptable Position Blotter": {
+			"window": {
+				"url": "$thirdPartyRoot/blotter/components/positionblotter/positionblotter.html",
+				"icon": "http://images8.webydo.com/93/9340882/3958%2f268BFDCA-400A-104D-DC0C-F6C658386289.png_400",
+				"resizable": true,
+				"autoShow": true,
+				"top": "center",
+				"left": "center",
+				"width": 1920,
+				"height": 560,
+				"addToWorkspace": true
+			},
+			"component": {},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"persistWindowState": true,
+						"showLinker": true
+					}
+				}
+			}
+		},
+		"Adaptable Price Blotter": {
+			"window": {
+				"url": "$thirdPartyRoot/blotter/components/priceblotter/priceblotter.html",
+				"icon": "http://images8.webydo.com/93/9340882/3958%2f268BFDCA-400A-104D-DC0C-F6C658386289.png_400",
+				"resizable": true,
+				"autoShow": true,
+				"top": "center",
+				"left": "center",
+				"width": 1920,
+				"height": 560,
+				"addToWorkspace": true
+			},
+			"component": {},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"persistWindowState": true,
+						"showLinker": true
+					}
+				}
+			}
+		}
+	}
+}

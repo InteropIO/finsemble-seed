@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "gulp --gulpfile=./gulpfile.js",
+    "prod": "gulp --gulpfile=./gulpfile.js production",
     "cp": "gulp copy --gulpfile=./gulpfile.js",
     "build": "gulp build --gulpfile=./gulpfile.js",
     "wp": "gulp wp --gulpfile=./gulpfile.js",
@@ -22,7 +23,7 @@
   "devDependencies": {
     "ansi-html": "0.0.7",
     "babel-core": "^6.24.0",
-    "babel-loader": "^6.4.1",
+    "babel-loader": "^7.1.2",
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",

@@ -1,0 +1,387 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto);
+
+
+body {
+	margin:10px;
+  width:100%;
+  font-family: 'Roboto, sans-serif';
+  font-size: 11px;
+}
+
+title {
+	font-family: 'Roboto';
+	font-size:18pt;
+}
+
+.fixedDataTableRowLayout_rowWrapper:hover .public_fixedDataTableCell_main {
+	background-color: lightgrey;
+	cursor: cell;
+}
+
+.hidden {
+  display: none !important; }
+
+.fsbl-logger-button {
+  margin-left: 2px;
+  margin-right: 2px;
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  background: #FAFAFA;
+  border: 1px solid #EEEEEE;
+  color: #000;
+  transition: .2s ease; 
+}
+
+.fsbl-logger-button i {
+  vertical-align: middle;
+  margin: 0 6px; }
+
+.fsbl-logger-button:hover {
+  background: #039bff;
+  border: 1px solid #039bff;
+  transition: 0.2s ease-in;
+  cursor: pointer; }
+
+.fsbl-logger-button:hover {
+  color: #FFF;
+  transition: 0.2s ease-out; }
+
+.fsbl-logger-button-lg {
+  width: 210px;
+  font-size: 14pt;
+  padding: 14px 0px;
+  margin: 15px auto; }
+
+.fsbl-logger-button-md {
+  width: 210px;
+  font-size: 13pt;
+  padding: 9px 0px;
+  margin: 10px auto; }
+
+.fsbl-logger-button-sm {
+  width: 70px;
+  padding: 5px 0px;
+  margin: 5px auto; }
+
+/*widgets*/
+.ciq--div {
+  padding: .25em; }
+
+.flex-start {
+  align-self: flex-start; }
+
+/* Gives the control icons the proper width on websites using bootstrap. */
+i, i:before, i:after, .fsbl-window-manager-icon {
+  box-sizing: content-box; }
+
+body.dialog input:focus {
+  border: 1px solid #039bff; }
+
+/* perfect-scrollbar v0.6.12 */
+.ps-container {
+  touch-action: none;
+  overflow: hidden !important; 
+ }
+
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+  .ps-container {
+    overflow: auto !important; } }
+
+.ps-container.ps-active-x > .ps-scrollbar-x-rail,
+.ps-container.ps-active-y > .ps-scrollbar-y-rail {
+  display: block;
+  background-color: transparent; }
+
+.ps-container.ps-in-scrolling {
+  pointer-events: none; }
+
+.ps-container.ps-in-scrolling.ps-x > .ps-scrollbar-x-rail {
+  background-color: #eee;
+  opacity: 0.9; }
+
+.ps-container.ps-in-scrolling.ps-x > .ps-scrollbar-x-rail > .ps-scrollbar-x {
+  background-color: #999; }
+
+.ps-container.ps-in-scrolling.ps-y > .ps-scrollbar-y-rail {
+  background-color: #eee;
+  opacity: 0.9; }
+
+.ps-container.ps-in-scrolling.ps-y > .ps-scrollbar-y-rail > .ps-scrollbar-y {
+  background-color: #999; }
+
+.ps-container > .ps-scrollbar-x-rail {
+  display: none;
+  position: absolute;
+  /* please don't change 'position' */
+  opacity: 0;
+  -webkit-transition: background-color .2s linear, opacity .2s linear;
+  -moz-transition: background-color .2s linear, opacity .2s linear;
+  -o-transition: background-color .2s linear, opacity .2s linear;
+  transition: background-color .2s linear, opacity .2s linear;
+  bottom: 0px;
+  /* there must be 'bottom' for ps-scrollbar-x-rail */
+  height: 15px; }
+
+.ps-container > .ps-scrollbar-x-rail > .ps-scrollbar-x {
+  position: absolute;
+  /* please don't change 'position' */
+  background-color: #aaa;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, -webkit-border-radius .2s ease-in-out;
+  transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, -webkit-border-radius .2s ease-in-out;
+  -moz-transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out, -moz-border-radius .2s ease-in-out;
+  -o-transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out;
+  transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out;
+  transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out, -webkit-border-radius .2s ease-in-out, -moz-border-radius .2s ease-in-out;
+  bottom: 2px;
+  /* there must be 'bottom' for ps-scrollbar-x */
+  height: 6px; }
+
+.ps-container > .ps-scrollbar-x-rail:hover > .ps-scrollbar-x, .ps-container > .ps-scrollbar-x-rail:active > .ps-scrollbar-x {
+  height: 11px; }
+
+.ps-container > .ps-scrollbar-y-rail {
+  display: none;
+  position: absolute;
+  /* please don't change 'position' */
+  opacity: 0;
+  -webkit-transition: background-color .2s linear, opacity .2s linear;
+  -moz-transition: background-color .2s linear, opacity .2s linear;
+  -o-transition: background-color .2s linear, opacity .2s linear;
+  transition: background-color .2s linear, opacity .2s linear;
+  right: 0;
+  /* there must be 'right' for ps-scrollbar-y-rail */
+  width: 15px; }
+
+.ps-container > .ps-scrollbar-y-rail > .ps-scrollbar-y {
+  position: absolute;
+  /* please don't change 'position' */
+  background-color: #aaa;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, -webkit-border-radius .2s ease-in-out;
+  transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, -webkit-border-radius .2s ease-in-out;
+  -moz-transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out, -moz-border-radius .2s ease-in-out;
+  -o-transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out;
+  transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out;
+  transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out, -webkit-border-radius .2s ease-in-out, -moz-border-radius .2s ease-in-out;
+  right: 2px;
+  /* there must be 'right' for ps-scrollbar-y */
+  width: 6px; }
+
+.ps-container > .ps-scrollbar-y-rail:hover > .ps-scrollbar-y, .ps-container > .ps-scrollbar-y-rail:active > .ps-scrollbar-y {
+  width: 11px; }
+
+.ps-container:hover.ps-in-scrolling {
+  pointer-events: none; }
+
+.ps-container:hover.ps-in-scrolling.ps-x > .ps-scrollbar-x-rail {
+  background-color: #eee;
+  opacity: 0.9; }
+
+.ps-container:hover.ps-in-scrolling.ps-x > .ps-scrollbar-x-rail > .ps-scrollbar-x {
+  background-color: #999; }
+
+.ps-container:hover.ps-in-scrolling.ps-y > .ps-scrollbar-y-rail {
+  background-color: #eee;
+  opacity: 0.9; }
+
+.ps-container:hover.ps-in-scrolling.ps-y > .ps-scrollbar-y-rail > .ps-scrollbar-y {
+  background-color: #999; }
+
+.ps-container:hover > .ps-scrollbar-x-rail,
+.ps-container:hover > .ps-scrollbar-y-rail {
+  opacity: 0.6; }
+
+.ps-container:hover > .ps-scrollbar-x-rail:hover {
+  background-color: #eee;
+  opacity: 0.9; }
+
+.ps-container:hover > .ps-scrollbar-x-rail:hover > .ps-scrollbar-x {
+  background-color: #999; }
+
+.ps-container:hover > .ps-scrollbar-y-rail:hover {
+  background-color: #eee;
+  opacity: 0.9; }
+
+.ps-container:hover > .ps-scrollbar-y-rail:hover > .ps-scrollbar-y {
+  background-color: #999; }
+
+.ps-container:hover > .ps-scrollbar-y-rail:hover {
+  background-color: transparent;
+  width: 6px; }
+
+.ps-container > .ps-scrollbar-y-rail:hover > .ps-scrollbar-y, .ps-container > .ps-scrollbar-y-rail:active > .ps-scrollbar-y {
+  width: 9px; }
+
+.ps-container > .ps-scrollbar-y-rail {
+  right: 6px !important; }
+
+body.menu {
+  margin: 0px;
+  font-family: Roboto;
+  font-weight: 300;
+  overflow-x: hidden;
+  height: 100%;
+  -webkit-user-select: none;
+  background-color: white; }
+
+.menu-header {
+  display: flex;
+  flex-direction: row; }
+
+.menu-section-label {
+  padding: 10px 0 10px 20px;
+  color: #039bff;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-family: Roboto Condensed;
+  width: 100%; }
+
+.menu {
+  background: #fff;
+  color: black; }
+
+.menu ul {
+  list-style-type: none;
+  width: 100%;
+  padding-left: 0;
+  margin-top: 0px;
+  margin-bottom: 0px; }
+
+.menu-secondary {
+  background: #ECF0F1;
+  padding-bottom: 10px;
+  padding-top: 10px; }
+
+.menu-primary .menu-item:hover {
+  background: #ECF0F1; }
+
+.menu-secondary .menu-item:hover {
+  background: #DADFE1; }
+
+.menu-item {
+  display: flex;
+  flex-direction: row;
+  padding-left: 20px;
+  cursor: pointer; }
+
+.menu-item-function {
+  padding: 6px 0px 6px 20px; }
+
+.menu-item-label {
+  align-self: flex-start;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 8px 0px;
+  height: 100%;
+  flex: .75; }
+
+.menu-item-actions {
+  align-self: center;
+  display: flex;
+  justify-content: center;
+  flex: .14; }
+
+.menu-action {
+  display: flex;
+  padding: 0em .25em 0em .25em; }
+
+.app-launcher-pinned, .app-launcher-component-pinner:hover {
+  color: #039bff; }
+
+.app-launcher-delete:hover {
+  color: #EF1436; }
+
+/*
+.app-launcher-pinned:hover {
+	color: $menu-primary-font-color;
+}
+*/
+.ff-pin {
+  margin-top: 1px; }
+
+.ff-new-workspace {
+  padding-right: 7px;
+  margin-top: 2px; }
+
+.divStyleGreen { 
+    color: green;
+    border-bottom:1px lightgray solid;
+    margin: 0px;
+    padding: 0px;
+    white-space:nowrap;
+}
+
+.allStyle { margin: 4px; height: 18px; vertical-align: center; color: #106020; background-color: white }
+
+.paddingStyle {	-webkit-padding-start: 4px }
+
+.sepStyle { margin: 12px }
+
+.labelStyle {}
+
+.filterStyle { width: 50px }
+
+.checkStyle {  vertical-align: bottom }
+
+.clientStyle {
+    color: #164ba0;
+    width: 260px;
+    display: inline-block;
+    text-align: left;
+    font-weight: 500;
+  }
+
+  .fileStyle { margin: 25px; color: red }
+  .ulStyle { margin: 6px; -webkit-padding-start: 0px }
+  .button5Style { height: 10px; vertical-align: center; color: white; background-color: #157c29; margin-right: 3px; }
+  .checkStyle {  vertical-align: bottom; height: 14px }
+
+  .fsbl-logger-toggle-all-span {
+    margin: 50px;
+  }
+  
+  .fsbl-logger-button.active {
+    background: blue;
+    color: white;
+  }
+
+  .topDiv {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid lightgray;
+    height: 20px;
+  }
+
+  .toggleDiv {
+    height: 10px;
+    white-space: nowrap;
+    padding-left: 404px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    color: white;
+    border-bottom: 1px solid lightgray;
+  }
+
+  .lineCount {
+    padding-top: 2px;
+    padding-left: 5px;
+    font-size: 12px;
+  }
+
+  .inputStyle1 { font-style: italic; border-color: red; color: red;  }
+  .inputStyle2 { font-style: italic; border-color: blue; color: blue;  }
+  .inputStyle3 { font-style: italic; border-color: green; color: green;  }
+  .inputStyle4 { font-style: italic; border-color: purple; color: purple;  }
+
+  .h-separator {
+    display: inline;
+    border-right: 1px solid lightgrey;
+    padding-right: 10px;
+    margin-right: 10px;
+  }

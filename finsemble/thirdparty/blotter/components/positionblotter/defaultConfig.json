@@ -1,0 +1,85 @@
+{
+        "QuickSearch": {
+        "QuickSearchText": "",
+        "QuickSearchOperator": 8,
+        "QuickSearchDisplayType": 2,
+        "QuickSearchBackColor": "#ffa500"
+    },
+    "FlashingCell": {
+        "FlashingColumns": [
+            {
+                "IsLive": true,
+                "ColumnName": "pnl",
+                "FlashingCellDuration": {
+                    "Name": "1/2 Second",
+                    "Duration": 500
+                },
+                "UpBackColor": "#008000",
+                "DownBackColor": "#FF0000",
+                "IsPredefined": true
+            },
+            {
+                "IsLive": true,
+                "ColumnName": "currentPrice",
+                "FlashingCellDuration": {
+                    "Name": "1/2 Second",
+                    "Duration": 500
+                },
+                "UpBackColor": "#008000",
+                "DownBackColor": "#FF0000",
+                "IsPredefined": true
+            },
+            {
+                "IsLive": true,
+                "ColumnName": "position",
+                "FlashingCellDuration": {
+                    "Name": "1/2 Second",
+                    "Duration": 500
+                },
+                "UpBackColor": "#008000",
+                "DownBackColor": "#FF0000",
+                "IsPredefined": true
+            }
+        ]
+    },
+    "Dashboard": {
+        "DashboardStrategyControls": [
+            {
+                "Strategy": "Functions",
+                "IsVisible": true,
+                "IsCollapsed": true
+            },
+            {
+                "Strategy": "DashboardShortcuts",
+                "IsVisible": true,
+                "IsCollapsed": true,
+                "ControlConfiguration": [
+                    "Dashboard",
+                    "Smart Edit",
+                    "Plus/Minus",
+                    "Conditional Style"
+                ]
+            },
+            {
+                "Strategy": "AdvancedSearch",
+                "IsVisible": false,
+                "IsCollapsed": true
+            },
+            {
+                "Strategy": "QuickSearch",
+                "IsVisible": true,
+                "IsCollapsed": true
+            },
+            {
+                "Strategy": "Layout",
+                "IsVisible": false,
+                "IsCollapsed": true
+            },
+            {
+                "Strategy": "Filter",
+                "IsVisible": true,
+                "IsCollapsed": true
+            }
+        ]
+    }
+}
