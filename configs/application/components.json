@@ -1,6 +1,33 @@
 {
     "comment": "Houses config for custom components that you'd like to import into Finsemble.",
     "components": {
+		"Finsemble Documentation": {
+			"window": {
+				"url": "http://documentation.chartiq.com/finsemble",
+				"left": "center",
+				"top": "center",
+				"height": 800,
+				"width": 1000
+			},
+			"component": {},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"persistWindowState": false,
+						"FSBLHeader": true,
+						"showLinker": false
+					}
+				}
+			}
+		},
         "Getting Started Tutorial": {
             "window": {
                 "url": "https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html",
