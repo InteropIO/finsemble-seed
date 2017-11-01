@@ -1,42 +1,42 @@
 {
 	"appLauncher": {
-		"output": "components/src/appLauncher/appLauncher",
+		"output": "components/appLauncher/appLauncher",
 		"entry": "./src/components/appLauncher/src/app.jsx"
 	},
 	"overflowMenu": {
-		"output": "components/src/overflowMenu/overflowMenu",
-		"entry": "./src/components/src/overflowMenu/src/app.jsx"
+		"output": "components/overflowMenu/overflowMenu",
+		"entry": "./src/components/overflowMenu/src/app.jsx"
 	},
 	"toolbar": {
-		"output": "components/src/toolbar/toolbar",
-		"entry": "./src/components/src/toolbar/src/app.jsx"
+		"output": "components/toolbar/toolbar",
+		"entry": "./src/components/toolbar/src/app.jsx"
 	},
 	"linker": {
-		"output": "components/src/linker/linker",
-		"entry": "./src/components/src/linker/src/linker.jsx"
+		"output": "components/linker/linker",
+		"entry": "./src/components/linker/src/linker.jsx"
 	},
 	"windowTitleBar": {
-		"output": "components/src/windowTitleBar/windowTitleBar",
-		"entry": "./src/components/src/windowTitleBar/src/windowTitleBar.jsx"
+		"output": "components/windowTitleBar/windowTitleBar",
+		"entry": "./src/components/windowTitleBar/src/windowTitleBar.jsx"
 	},
 	"workspaceManagementMenu": {
-		"output": "components/src/workspaceManagementMenu/workspaceManagementMenu",
-		"entry": "./src/components/src/workspaceManagementMenu/src/app.jsx"
+		"output": "components/workspaceManagementMenu/workspaceManagementMenu",
+		"entry": "./src/components/workspaceManagementMenu/src/app.jsx"
 	},
 	"fileMenu": {
-		"output": "components/src/fileMenu/fileMenu",
-		"entry": "./src/components/src/fileMenu/src/app.jsx"
+		"output": "components/fileMenu/fileMenu",
+		"entry": "./src/components/fileMenu/src/app.jsx"
 	},
 	"adhocComponentForm": {
-		"output": "components/src/adhocComponentForm/adhocComponentForm",
-		"entry": "./src/components/src/adhocComponentForm/app.jsx"
+		"output": "components/adhocComponentForm/adhocComponentForm",
+		"entry": "./src/components/adhocComponentForm/app.jsx"
 	},
 	"yesNoDialog": {
-		"output": "components/src/yesNoDialog/yesNoDialog",
-		"entry": "./src/components/src/yesNoDialog/src/app.jsx"
+		"output": "components/yesNoDialog/yesNoDialog",
+		"entry": "./src/components/yesNoDialog/src/app.jsx"
 	},
 	"singleInputDialog": {
-		"output": "components/src/singleInputDialog/singleInputDialog",
-		"entry": "./src/components/src/singleInputDialog/src/app.jsx"
+		"output": "components/singleInputDialog/singleInputDialog",
+		"entry": "./src/components/singleInputDialog/src/app.jsx"
 	}
 }

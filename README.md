@@ -49,7 +49,7 @@ Press Ctrl-C in your command prompt to quit Finsemble. Once you have the sample 
 ### Sample System Components
 
 To get the sample system components to work:
-1. Copy the contents of the `src\samples` folder into the `src\components` folder.
+1. Copy all the contents of the `src\samples` folder, except the `build` folder into the `src\components` folder.
 2. The samples include a configuration file. To make sure sure this config gets imported into finsemble, add it to the `configs\application\config.json` to the importConfig Section:
 	```
 	{
