@@ -48,6 +48,7 @@
     "webpack": "2.*",
     "webpack-dev-middleware": "^1.12.0",
     "webpack-glob-entries": "^1.0.1",
+    "webpack-stream": "^4.0.0",
     "webpack-stream-fixed": "^3.2.0"
   }
 }
