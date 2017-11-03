@@ -3,6 +3,7 @@
 	"mode": "",
 	"isAuthEnabled": false,
 	"defaultStorage": "localStorage",
+	"systemTrayIcon": "$applicationRoot/components/assets/img/Finsemble_Taskbar_Icon.png",
 	"debugServiceDelay": 0,
 	"storage": {},
 	"betaFeatures": {
