@@ -1,0 +1,701 @@
+/* First, we can list a brand palette from which we can source our colors */
+/* Nomura Red - #ca2420 */
+/* Nomura Dark Red - #a11816 */
+/* Nomura Grey - #777777 */
+/* The color palette is used in pretty much every component. The windowManager and toolbars use it for highlight colors, menus use it for accent colors. If you use our buttons, they get their coloring from these colors.*/
+/* Set your button backgrounds and hover states */
+/* Also the window-header background color */
+/* General Typography  */
+/* As of 4-20-17, only used in the toolbar for workspace icons and chat notification.*/
+/* Component and App Icons are either designated SVG's or will have the $pimary-accent-color variable applied by default */
+/* If you wish to change this, please see _toolbar.scss line 100 */
+@import url(https://fonts.googleapis.com/css?family=Roboto);
+@import url(https://fonts.googleapis.com/css?family=Roboto);
+.hidden {
+  display: none !important; }
+
+.fsbl-button {
+  margin: 0 auto;
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  background: #FAFAFA;
+  border: 1px solid #EEEEEE;
+  color: #000;
+  transition: .2s ease; }
+
+.fsbl-button i {
+  vertical-align: middle;
+  margin: 0 6px; }
+
+.fsbl-button:hover {
+  background: #ca2420;
+  border: 1px solid #ca2420;
+  transition: 0.2s ease-in;
+  cursor: pointer; }
+
+.fsbl-button:hover {
+  color: #FFF;
+  transition: 0.2s ease-out; }
+
+.fsbl-button-lg {
+  width: 210px;
+  font-size: 14pt;
+  padding: 14px 0px;
+  margin: 15px auto; }
+
+.fsbl-button-md {
+  width: 210px;
+  font-size: 13pt;
+  padding: 9px 0px;
+  margin: 10px auto; }
+
+.fsbl-button-sm {
+  width: 70px;
+  padding: 5px 0px;
+  margin: 5px auto; }
+
+/*widgets*/
+.ciq--div {
+  padding: .25em; }
+
+.flex-start {
+  align-self: flex-start; }
+
+/* Gives the control icons the proper width on websites using bootstrap. */
+i, i:before, i:after, .fsbl-window-manager-icon {
+  box-sizing: content-box; }
+
+body.dialog input:focus {
+  border: 1px solid #ca2420; }
+
+/*!
+* Copyright 2017 by ChartIQ, Inc.
+* All rights reserved.
+*/
+.icon-fsbl-chat.badge:after {
+  position: relative;
+  height: 0.625rem;
+  width: 0.625rem;
+  top: -0.625rem;
+  right: 0.325rem;
+  color: #666666; }
+
+body {
+  padding: 0px !important;
+  box-sizing: border-box;
+  position: absolute;
+  /*Without this, opening the side panels ruin everything*/
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0; }
+
+html.desktop-active body:before, html.desktop-active body:after {
+  background: #a11816; }
+
+html.desktop-active:before, html.desktop-active:after {
+  background: #a11816; }
+
+/* Create a series of empty pseudo-elements... */
+html:before, html:after, body:before, body:after {
+  content: "";
+  background: #ddd;
+  position: fixed;
+  display: block;
+  z-index: 2147483647; }
+
+/* ...and position them! */
+html:before {
+  height: 1px;
+  left: 0;
+  right: 0;
+  top: 0; }
+
+html:after {
+  width: 1px;
+  top: 0;
+  right: 0;
+  bottom: 0; }
+
+body:before {
+  height: 1px;
+  right: 0;
+  bottom: 0;
+  left: 0; }
+
+body:after {
+  width: 1px;
+  top: 0;
+  bottom: 0;
+  left: 0; }
+
+.menu-button {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1.5em;
+  background: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #ca2420;
+  display: inline-block;
+  position: relative;
+  line-height: 27px;
+  height: 27px;
+  padding: 0 10px;
+  cursor: pointer;
+  border: none;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  transition: all .2s 0s, opacity .2s 0s;
+  -webkit-border-radius: 1px;
+  -moz-border-radius: 1px;
+  -ms-border-radius: 1px;
+  border-radius: 1px;
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); }
+
+.toolbar-wrap {
+  background-color: #FFF;
+  color: black;
+  text-align: center;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-around; }
+
+.toolbar-icon {
+  padding-right: 10px;
+  padding-left: 10px; }
+
+.toolbar-row {
+  display: flex;
+  flex-direction: row;
+  height: 40px;
+  width: 100%;
+  position: fixed;
+  top: 0; }
+
+.toolbar-row-left {
+  align-items: center;
+  align-self: center;
+  display: flex;
+  height: 100%; }
+
+.toolbar-row-center {
+  align-items: center;
+  display: flex; }
+
+.toolbar-row-right {
+  display: flex;
+  margin-left: auto;
+  align-items: center;
+  align-self: center;
+  height: 100%; }
+
+.ff-company:before, .ff-chart-pie:before, .ff-chart-alt-2, .ff-chart-simple, .ff-chart-advanced .ff-chart-alt-1:before {
+  font-size: 24px; }
+
+.pinned-workspace-icon {
+  color: #666666; }
+
+.toolbar-brand-logo {
+  width: 25px;
+  height: 27px;
+  margin: 4px 14px;
+  background: url("http://vignette2.wikia.nocookie.net/logopedia/images/6/6f/McDonalds.png/revision/latest?cb=20161217022233");
+  background-size: 100% 100%; }
+
+.primary-hover:hover {
+  background-color: #ca2420;
+  color: #000;
+  cursor: pointer; }
+
+.primary-hover.active {
+  background-color: #ca2420;
+  color: #000; }
+
+.primary-hover.active:hover {
+  background-color: #FFF;
+  color: black;
+  border: 1px solid #ca2420;
+  transition: background .1s ease;
+  cursor: pointer; }
+
+.secondary-hover {
+  border: 1px solid transparent; }
+
+.secondary-hover:hover {
+  background: #ECF0F1;
+  color: #000;
+  transition: background .1s ease;
+  border: 1px solid #DADFE1;
+  cursor: pointer; }
+
+.menu-icon {
+  width: 60px;
+  height: 30px; }
+
+.divider:before {
+  font-size: 20px;
+  border-right: 1px solid rgba(0, 0, 0, 0.3);
+  content: '';
+  margin: 0 .25em 0 .25em; }
+
+.pinned-icon {
+  color: #ca2420; }
+
+.cq-drag {
+  cursor: -webkit-grab;
+  -webkit-app-region: drag; }
+
+.cq-drag-area:active {
+  cursor: -webkit-grabbing; }
+
+.fsbl-window-header-bar {
+  text-align: center;
+  display: flex;
+  height: 32px;
+  position: fixed;
+  align-items: center;
+  flex-direction: row;
+  justify-content: center;
+  background: #ECF0F1;
+  border-bottom: 2px solid #ECF0F1;
+  width: 100%;
+  z-index: 2147483646;
+  top: 0;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  color: #000; }
+
+.fsbl-window-control-left {
+  height: 100%;
+  margin-left: 2px;
+  align-content: center;
+  align-items: center;
+  justify-content: flex-start;
+  display: flex; }
+
+.fsbl-window-control-center {
+  top: 5px;
+  height: calc(100% - 5px);
+  align-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  width: 100%; }
+
+.fsbl-window-control-right {
+  margin-right: 2px;
+  height: 100%;
+  align-content: center;
+  display: flex;
+  justify-content: flex-end; }
+
+.fsbl-window-manager-icon {
+  color: #000;
+  font-size: 15px;
+  width: 21px;
+  padding: 0px 6px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+
+.fsbl-window-minimize {
+  align-items: flex-end; }
+
+/* So it sits over the border*/
+.fsbl-window-close {
+  margin-right: -1px; }
+
+.fsbl-window-manager-icon:hover {
+  background-color: #DADFE1;
+  cursor: pointer; }
+
+.linker-groups {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center; }
+
+.linker-group {
+  width: 5px;
+  height: 18px;
+  margin-left: 4px;
+  border-radius: 2px; }
+
+.fsbl-linker {
+  cursor: pointer;
+  display: flex;
+  height: 100%;
+  /* So it sits over the border*/
+  margin-left: -1px;
+  align-items: center;
+  justify-content: center;
+  align-content: center; }
+
+html .fsbl-window-header-bar {
+  background: #ECF0F1;
+  color: #000; }
+
+html .fsbl-window-manager-icon {
+  color: #000; }
+
+html .fsbl-window-manager-icon:hover {
+  background-color: #DADFE1;
+  color: #000;
+  cursor: pointer; }
+
+html .fsbl-linker:hover {
+  background: #DADFE1;
+  color: #000;
+  transition: background .3s ease; }
+
+html .fsbl-window-close:hover {
+  background: #b73b3b;
+  color: #FFF; }
+
+html.desktop-active .fsbl-header {
+  background: #a11816;
+  color: #FFF; }
+
+html.desktop-active .fsbl-window-manager-icon {
+  color: #FFF; }
+
+html.desktop-active .fsbl-window-manager-icon:hover {
+  background-color: #b73b3b;
+  cursor: pointer; }
+
+html.desktop-active .fsbl-window-close:hover {
+  background: #ce1717;
+  color: #FFF; }
+
+html.desktop-active .fsbl-linker:hover {
+  background: #b73b3b;
+  color: #FFF;
+  transition: background .3s ease; }
+
+.remove-workspace:hover {
+  color: #ce1717; }
+
+.pin-workspace:hover {
+  color: #ca2420; }
+
+.pinned-workspace-pin {
+  color: #ca2420; }
+
+/* Excluded so that activated pins don't appear inactive
+.pinned-workspace-pin:hover {
+	color: $menu-primary-font-color;
+}
+*/
+/* First, we can list a brand palette from which we can source our colors */
+/* Nomura Red - #ca2420 */
+/* Nomura Dark Red - #a11816 */
+/* Nomura Grey - #777777 */
+/* The color palette is used in pretty much every component. The windowManager and toolbars use it for highlight colors, menus use it for accent colors. If you use our buttons, they get their coloring from these colors.*/
+/* Set your button backgrounds and hover states */
+/* Also the window-header background color */
+/* General Typography  */
+/* As of 4-20-17, only used in the toolbar for workspace icons and chat notification.*/
+/* Component and App Icons are either designated SVG's or will have the $pimary-accent-color variable applied by default */
+/* If you wish to change this, please see _toolbar.scss line 100 */
+.hidden {
+  display: none !important; }
+
+.fsbl-button {
+  margin: 0 auto;
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  background: #FAFAFA;
+  border: 1px solid #EEEEEE;
+  color: #000;
+  transition: .2s ease; }
+
+.fsbl-button i {
+  vertical-align: middle;
+  margin: 0 6px; }
+
+.fsbl-button:hover {
+  background: #ca2420;
+  border: 1px solid #ca2420;
+  transition: 0.2s ease-in;
+  cursor: pointer; }
+
+.fsbl-button:hover {
+  color: #FFF;
+  transition: 0.2s ease-out; }
+
+.fsbl-button-lg {
+  width: 210px;
+  font-size: 14pt;
+  padding: 14px 0px;
+  margin: 15px auto; }
+
+.fsbl-button-md {
+  width: 210px;
+  font-size: 13pt;
+  padding: 9px 0px;
+  margin: 10px auto; }
+
+.fsbl-button-sm {
+  width: 70px;
+  padding: 5px 0px;
+  margin: 5px auto; }
+
+/*widgets*/
+.ciq--div {
+  padding: .25em; }
+
+.flex-start {
+  align-self: flex-start; }
+
+/* Gives the control icons the proper width on websites using bootstrap. */
+i, i:before, i:after, .fsbl-window-manager-icon {
+  box-sizing: content-box; }
+
+body.dialog input:focus {
+  border: 1px solid #ca2420; }
+
+/* perfect-scrollbar v0.6.12 */
+.ps-container {
+  -ms-touch-action: none;
+  touch-action: none;
+  overflow: hidden !important;
+  -ms-overflow-style: none; }
+
+@supports (-ms-overflow-style: none) {
+  .ps-container {
+    overflow: auto !important; } }
+
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+  .ps-container {
+    overflow: auto !important; } }
+
+.ps-container.ps-active-x > .ps-scrollbar-x-rail,
+.ps-container.ps-active-y > .ps-scrollbar-y-rail {
+  display: block;
+  background-color: transparent; }
+
+.ps-container.ps-in-scrolling {
+  pointer-events: none; }
+
+.ps-container.ps-in-scrolling.ps-x > .ps-scrollbar-x-rail {
+  background-color: #eee;
+  opacity: 0.9; }
+
+.ps-container.ps-in-scrolling.ps-x > .ps-scrollbar-x-rail > .ps-scrollbar-x {
+  background-color: #999; }
+
+.ps-container.ps-in-scrolling.ps-y > .ps-scrollbar-y-rail {
+  background-color: #eee;
+  opacity: 0.9; }
+
+.ps-container.ps-in-scrolling.ps-y > .ps-scrollbar-y-rail > .ps-scrollbar-y {
+  background-color: #999; }
+
+.ps-container > .ps-scrollbar-x-rail {
+  display: none;
+  position: absolute;
+  /* please don't change 'position' */
+  opacity: 0;
+  -webkit-transition: background-color .2s linear, opacity .2s linear;
+  -moz-transition: background-color .2s linear, opacity .2s linear;
+  -o-transition: background-color .2s linear, opacity .2s linear;
+  transition: background-color .2s linear, opacity .2s linear;
+  bottom: 0px;
+  /* there must be 'bottom' for ps-scrollbar-x-rail */
+  height: 15px; }
+
+.ps-container > .ps-scrollbar-x-rail > .ps-scrollbar-x {
+  position: absolute;
+  /* please don't change 'position' */
+  background-color: #aaa;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, -webkit-border-radius .2s ease-in-out;
+  transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, -webkit-border-radius .2s ease-in-out;
+  -moz-transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out, -moz-border-radius .2s ease-in-out;
+  -o-transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out;
+  transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out;
+  transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out, -webkit-border-radius .2s ease-in-out, -moz-border-radius .2s ease-in-out;
+  bottom: 2px;
+  /* there must be 'bottom' for ps-scrollbar-x */
+  height: 6px; }
+
+.ps-container > .ps-scrollbar-x-rail:hover > .ps-scrollbar-x, .ps-container > .ps-scrollbar-x-rail:active > .ps-scrollbar-x {
+  height: 11px; }
+
+.ps-container > .ps-scrollbar-y-rail {
+  display: none;
+  position: absolute;
+  /* please don't change 'position' */
+  opacity: 0;
+  -webkit-transition: background-color .2s linear, opacity .2s linear;
+  -moz-transition: background-color .2s linear, opacity .2s linear;
+  -o-transition: background-color .2s linear, opacity .2s linear;
+  transition: background-color .2s linear, opacity .2s linear;
+  right: 0;
+  /* there must be 'right' for ps-scrollbar-y-rail */
+  width: 15px; }
+
+.ps-container > .ps-scrollbar-y-rail > .ps-scrollbar-y {
+  position: absolute;
+  /* please don't change 'position' */
+  background-color: #aaa;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, -webkit-border-radius .2s ease-in-out;
+  transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, -webkit-border-radius .2s ease-in-out;
+  -moz-transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out, -moz-border-radius .2s ease-in-out;
+  -o-transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out;
+  transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out;
+  transition: background-color .2s linear, height .2s linear, width .2s ease-in-out, border-radius .2s ease-in-out, -webkit-border-radius .2s ease-in-out, -moz-border-radius .2s ease-in-out;
+  right: 2px;
+  /* there must be 'right' for ps-scrollbar-y */
+  width: 6px; }
+
+.ps-container > .ps-scrollbar-y-rail:hover > .ps-scrollbar-y, .ps-container > .ps-scrollbar-y-rail:active > .ps-scrollbar-y {
+  width: 11px; }
+
+.ps-container:hover.ps-in-scrolling {
+  pointer-events: none; }
+
+.ps-container:hover.ps-in-scrolling.ps-x > .ps-scrollbar-x-rail {
+  background-color: #eee;
+  opacity: 0.9; }
+
+.ps-container:hover.ps-in-scrolling.ps-x > .ps-scrollbar-x-rail > .ps-scrollbar-x {
+  background-color: #999; }
+
+.ps-container:hover.ps-in-scrolling.ps-y > .ps-scrollbar-y-rail {
+  background-color: #eee;
+  opacity: 0.9; }
+
+.ps-container:hover.ps-in-scrolling.ps-y > .ps-scrollbar-y-rail > .ps-scrollbar-y {
+  background-color: #999; }
+
+.ps-container:hover > .ps-scrollbar-x-rail,
+.ps-container:hover > .ps-scrollbar-y-rail {
+  opacity: 0.6; }
+
+.ps-container:hover > .ps-scrollbar-x-rail:hover {
+  background-color: #eee;
+  opacity: 0.9; }
+
+.ps-container:hover > .ps-scrollbar-x-rail:hover > .ps-scrollbar-x {
+  background-color: #999; }
+
+.ps-container:hover > .ps-scrollbar-y-rail:hover {
+  background-color: #eee;
+  opacity: 0.9; }
+
+.ps-container:hover > .ps-scrollbar-y-rail:hover > .ps-scrollbar-y {
+  background-color: #999; }
+
+.ps-container:hover > .ps-scrollbar-y-rail:hover {
+  background-color: transparent;
+  width: 6px; }
+
+.ps-container > .ps-scrollbar-y-rail:hover > .ps-scrollbar-y, .ps-container > .ps-scrollbar-y-rail:active > .ps-scrollbar-y {
+  width: 9px; }
+
+.ps-container > .ps-scrollbar-y-rail {
+  right: 6px !important; }
+
+body.menu {
+  margin: 0px;
+  font-family: Roboto;
+  font-weight: 300;
+  overflow-x: hidden;
+  height: 100%;
+  -webkit-user-select: none;
+  background-color: white; }
+
+.menu-header {
+  display: flex;
+  flex-direction: row; }
+
+.menu-section-label {
+  padding: 10px 0 10px 20px;
+  color: #ca2420;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-family: Roboto Condensed;
+  width: 100%; }
+
+.menu {
+  background: #fff;
+  color: black; }
+
+.menu ul {
+  list-style-type: none;
+  width: 100%;
+  padding-left: 0;
+  margin-top: 0px;
+  margin-bottom: 0px; }
+
+.menu-secondary {
+  background: #ECF0F1;
+  padding-bottom: 10px;
+  padding-top: 10px; }
+
+.menu-primary .menu-item:hover {
+  background: #ECF0F1; }
+
+.menu-secondary .menu-item:hover {
+  background: #DADFE1; }
+
+.menu-item {
+  display: flex;
+  flex-direction: row;
+  padding-left: 20px;
+  cursor: pointer; }
+
+.menu-item-function {
+  padding: 6px 0px 6px 20px; }
+
+.menu-item-label {
+  align-self: flex-start;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 8px 0px;
+  height: 100%;
+  flex: .75; }
+
+.menu-item-actions {
+  align-self: center;
+  display: flex;
+  justify-content: center;
+  flex: .14; }
+
+.menu-action {
+  display: flex;
+  padding: 0em .25em 0em .25em; }
+
+.app-launcher-pinned, .app-launcher-component-pinner:hover {
+  color: #ca2420; }
+
+.app-launcher-delete:hover {
+  color: #ce1717; }
+
+/*
+.app-launcher-pinned:hover {
+	color: $menu-primary-font-color;
+}
+*/
+.ff-pin {
+  margin-top: 1px; }
+
+.ff-new-workspace {
+  padding-right: 7px;
+  margin-top: 2px; }

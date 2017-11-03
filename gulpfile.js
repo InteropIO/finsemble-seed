@@ -1,7 +1,7 @@
 var gulp = require('gulp-4.0.build');
 var path = require("path");
-var gulpWebpack = require('webpack-stream-fixed');
-var webpack = require("webpack");
+var webpack_stream = require('webpack-stream');
+
 var watch = require("gulp-watch");
 var del = require('del');
 var sass = require('gulp-sass');
@@ -9,6 +9,7 @@ var openfinLauncher = require('openfin-launcher');
 var configPath = path.join(__dirname, '/configs/finConfig.json');
 //new
 var StartupConfig = require("./configs/other/server-environment-startup");
+const webpack = require('webpack');
 var chalk = require('chalk');
 chalk.enabled = true;
 var serverOutColor = chalk.yellow;
@@ -16,11 +17,22 @@ var errorOutColor = chalk.red;
 var webpackOutColor = chalk.cyan;
 var initialBuildFinished = false;
 
+var componentsToBuild = require('./build/webpack/webpack.files.entries.json');
+
+function buildComponentIgnore() {//Dont copy files that we build
+	var componentIgnores = [];
+	var components = componentsToBuild;
+	for (var key in components) {
+		var filename = components[key].entry.split("/").pop();
+		componentIgnores.push(path.join('!' + __dirname,  components[key].entry));
+	}
+	return componentIgnores;
+}
+
 function copyStaticComponentsFiles() {
-	return gulp.src([
-		path.join(__dirname, '/src/components/**/*'),
-		path.join('!' + __dirname, '/src/components/**/*.jsx')
-	])
+	var source = [path.join(__dirname, '/src/components/**/*'),path.join('!' + __dirname, '/src/components/**/*.jsx')]
+	source = source.concat(buildComponentIgnore());
+	return gulp.src(source)
 		.pipe(gulp.dest(path.join(__dirname, '/dist/components/')));
 }
 
@@ -31,6 +43,12 @@ function copyStaticFiles() {
 	//ignores the js files in service, but copies over the html files.
 	path.join('!' + __dirname, '/src/services/**/*.js')])
 		.pipe(gulp.dest(path.join(__dirname, '/dist/services')));
+}
+
+function copyFinsembleDist() {//Copies the the required Finsemble files into the local directory.
+	return gulp.src([path.join(__dirname, '/node_modules/@chartiq/finsemble/dist/**/*')])
+		.pipe(gulp.dest(path.join(__dirname, '/finsemble')));
+
 }
 
 function wipeDist(done) {
@@ -60,87 +78,23 @@ function buildSass(done) {
 		.pipe(sass().on('error', sass.logError))
 		.pipe(gulp.dest(path.join(__dirname, '/dist/components/')));
 }
-/**
- *  Watcher for components. Builds everything whenever a source file changes.
- *  @todo, make it smarter - only rebuild the folder that changed.
- */
-function watchReactComponents(done) {
-	watch(path.join(__dirname, './src/components/**/*'), { ignoreInitial: true }, gulp.series(
-		wipeComponents,
-		copyStaticComponentsFiles,
-		webpackReactComponents,
-		webpackComponents,
-		buildSass
-	));
-	done();
-}
 
-/**
- *  Watcher for Clients. Builds everything whenever a source file changes.
- */
-function watchClients(done) {
-	watch(path.join(__dirname, './src/clients/*'), { ignoreInitial: true }, gulp.series(
-		wipeClients,
-		webpackClients
-	));
-	done();
-}
 function watchSass(done) {
 	watch(path.join(__dirname, '/src/components/assets/**/*'), {}, gulp.series(buildSass));
 	done();
 }
-/**
- *  Watcher for Clients. Builds everything whenever a source file changes.
- */
-function watchServices(done) {
-	watch(path.join(__dirname, './src/services/**/*.js'), { ignoreInitial: true }, gulp.series(
-		wipeServices,
-		copyStaticFiles,
-		webpackServices));
-	done();
+
+function watchStatic() {
+	watch(path.join(__dirname, '/src/**/*.css'), { ignoreInitial: true }).pipe(gulp.dest(path.join(__dirname, '/dist/')));
+	return watch(path.join(__dirname, '/src/**/*.html'), { ignoreInitial: true }).pipe(gulp.dest(path.join(__dirname, '/dist/')));
 }
 
-/**
- *  Helper function to delete directories.
- */
-function wipe(dir, cb) {
-	del(dir, { force: true }).then(function () {
-		if (cb) {
-			cb();
-		}
-	});
-}
-
-/**
- *  Wipes the service dir.
- */
-function wipeServices(done) {
-	wipe(path.join(__dirname, '/dist/services/'), done);
-}
-
-/**
- *  Wipes the clients dir.
- */
-function wipeClients(done) {
-	wipe(path.join(__dirname, '/dist/clients/'), done);
-}
-/**
- * Removes everything in dist.
- */
 function wipedist(done) {
 	if (directoryExists(path.join(__dirname, "/dist/"))) {
 		wipe(path.join(__dirname, '/dist/'), done);
 	} else {
 		done();
 	}
-
-}
-
-/**
- *  Wipes the component directory.
- */
-function wipeComponents(done) {
-	wipe(path.join(__dirname, '/dist/components'), done);
 }
 
 function handleWebpackStdOut(data, done) {
@@ -160,17 +114,17 @@ function handleWebpackStdOut(data, done) {
 }
 
 function webpackComponents(done) {
-	const exec = require('child_process').exec;
-	const instance = exec('node ./build/child_processes/componentBuildProcess.js');
-	instance.stdout.on('data', function (data) {
-		handleWebpackStdOut(data, done);
-		var filesToBuild = require('./build/webpack/webpack.files.entries.json');
-		if (Object.keys(filesToBuild).length === 0) {
-			done();
-		}
-	});
+	var webpack_config = require('./build/webpack/webpack.files.js')
+	webpack(webpack_config, function (err, stats) {
+		done();
+	})
 }
-
+function webpackServices(done) {
+	var webpack_config = require('./build/webpack/webpack.services.js')
+	webpack(webpack_config, function (err, stats) {
+		done();
+	})
+}
 function launchOpenfin(env) {
 	return openfinLauncher.launchOpenFin({
 		//new
@@ -182,7 +136,8 @@ gulp.task('wipeDist', gulp.series(wipeDist));
 
 gulp.task('copy', gulp.series(
 	copyStaticFiles,
-	copyStaticComponentsFiles
+	copyStaticComponentsFiles,
+	copyFinsembleDist
 ));
 
 gulp.task('wp', gulp.series(webpackComponents))
@@ -199,36 +154,59 @@ gulp.task('build', gulp.series(
 gulp.task('devServer', gulp.series(
 	'wipeDist',
 	'copy',
-	// webpackClients,
-	// webpackServices,
-	webpackComponents,
-	// webpackReactComponents,
-	// watchReactComponents,
-	// watchClients,
-	// watchServices,
 	buildSass,
 	watchSass,
 	function (done) {
+		watchStatic();
 		initialBuildFinished = true;
-		var exec = require('child_process').exec;
+		var exec = require('child_process').spawn;
 		//This runs essentially runs 'PORT=80 node server/server.js'
 		var serverPath = path.join(__dirname, '/server/server.js');
 		//allows for spaces in paths.
-		serverPath = '"' + serverPath + '"';
-		var serverExec = exec('node ' + serverPath, { env: { 'PORT': StartupConfig["dev"].serverPort, NODE_ENV: "dev" } });
-		serverExec.stdout.on("data", function (data) {
-			//Prints server output to your terminal.
-			console.log("SERVER STDOUT:", data);
-			if (data.indexOf("listening on port") > -1) {
-				//Once the server is up and running, we launch openfin.
-				launchOpenfin('dev');
+		var serverExec = exec('node', ['--debug', serverPath, { stdio: 'inherit' }], { env: { 'PORT': StartupConfig["dev"].serverPort, NODE_ENV: "dev" }, stdio: [process.stdin, process.stdout, 'pipe', "ipc"] });
+
+		serverExec.on("message", function (data) {
+			if (data === "serverStarted") {
+				launchOpenfin("dev");
 				done();
 			}
 		});
+		serverExec.on('exit', code => console.log('final exit code is', code));
 		//Prints server errors to your terminal.
 		serverExec.stderr.on("data", function (data) {
-			console.log('ERROR:' + data);
+			console.log(errorOutColor('ERROR:' + data));
 		});
 	})
 );
+
+gulp.task('production', gulp.series(
+	'wipeDist',
+	'copy',
+	webpackComponents,
+	webpackServices,
+	buildSass,
+	function (done) {
+		initialBuildFinished = true;
+		var exec = require('child_process').spawn;
+		//This runs essentially runs 'PORT=80 node server/server.js'
+		var serverPath = path.join(__dirname, '/server/server.js');
+		//allows for spaces in paths.
+		var serverExec = exec('node', ['--debug', serverPath, { stdio: 'inherit' }], { env: { 'PORT': StartupConfig["prod"].serverPort, NODE_ENV: "prod" }, stdio: [process.stdin, process.stdout, 'pipe', "ipc"] });
+
+		serverExec.on("message", function (data) {
+			if (data === "serverStarted") {
+				launchOpenfin("prod");
+				done();
+			}
+		});
+		serverExec.on('exit', code => console.log('final exit code is', code));
+		//Prints server errors to your terminal.
+		serverExec.stderr.on("data", function (data) {
+			console.log(errorOutColor('ERROR:' + data));
+		});
+	})
+);
+
+
 gulp.task('default', gulp.series('devServer'));
+gulp.task('prod', gulp.series('production'));

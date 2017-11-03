@@ -1,1 +1,6 @@
-{}
+{
+	"windowTitleBar": {
+		"output": "components/windowTitleBar/windowTitleBar",
+		"entry": "./src/components/windowTitleBar/src/windowTitleBar.jsx"
+	}
+}

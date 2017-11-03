@@ -1,9 +1,10 @@
 {
 	"comment": "Top-level application config for development, adding on top of the core config",
 	"mode": "",
-	"isAuthEnabled": true,
+	"isAuthEnabled": false,
 	"defaultStorage": "localStorage",
-	"debugServiceDelay":0,
+	"systemTrayIcon": "$applicationRoot/components/assets/img/Finsemble_Taskbar_Icon.png",
+	"debugServiceDelay": 0,
 	"storage": {},
 	"betaFeatures": {
 		"docking": {
@@ -17,9 +18,6 @@
 		}
 	},
 	"importConfig": [
-		"$applicationRoot/configs/application/components.json",
-		"$applicationRoot/configs/application/systemComponents.json",
-		"$applicationRoot/configs/application/services.json",
-        "$applicationRoot/configs/other/defaultWorkspaces.json"
+		"$applicationRoot/configs/application/components.json"
 	]
 }

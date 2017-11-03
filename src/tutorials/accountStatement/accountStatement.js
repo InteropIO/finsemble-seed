@@ -1,5 +1,5 @@
 
-var owed={
+var owed = {
 	"12345678": "$ 59.12",
 	"23456789": "$ 591.00",
 	"34567890": "$ 129.83",
@@ -7,11 +7,11 @@ var owed={
 	"56789012": "$ 89.25",
 }
 
-function saveState(accountNumber){
+function saveState(accountNumber) {
 	FSBL.Clients.WindowClient.setComponentState({ field: 'accountNumber', value: accountNumber });
 }
 
-function getState(){
+function getState() {
 	FSBL.Clients.WindowClient.getComponentState({
 		field: 'accountNumber',
 	}, function (err, state) {
@@ -22,14 +22,14 @@ function getState(){
 	});
 }
 
-function displayAccount(accountNumber){
+function displayAccount(accountNumber) {
 	$("account").text(accountNumber);
 	$("owed").text(owed[accountNumber]);
 	saveState(accountNumber);
 }
 
-function createLinkage(){
-	FSBL.Clients.LinkerClient.subscribe("account", function(obj){
+function createLinkage() {
+	FSBL.Clients.LinkerClient.subscribe("account", function (obj) {
 		displayAccount(obj);
 	});
 }
