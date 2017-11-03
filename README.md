@@ -4,7 +4,9 @@
 
 Visit the [Finsemble Documentation](https://documentation.chartiq.com/finsemble/) for more information.
 
-*Note: The first time you run the sample app, Finsemble will download required assets including the OpenFin Runtime. This may take a few minutes if you are on a slow Internet connection.*
+The first time you run the sample app, Finsemble will download required assets including the OpenFin Runtime. This may take a few minutes if you are on a slow Internet connection.
+
+*Note: For Finsemble versions 1.4 and higher.*
 
 ## Getting Started
 
@@ -14,7 +16,7 @@ Finsemble is an [NPM](https://www.npmjs.com/) module kept in a private NPM repos
 
 ### Installation
 
-** Note :** We recommend using "bash" for Windows instead of the standard windows command line. Bash is a little better than the Windows command line (particularly on Windows 7). [Git for Windows]((https://git-scm.com/downloads)) includes Bash. Here is a [standalone version of Bash](https://sourceforge.net/projects/win-bash/files/shell-complete/latest/).
+*Note: We recommend using "bash" for Windows instead of the standard windows command line. Bash is a little better than the Windows command line (particularly on Windows 7). [Git for Windows]((https://git-scm.com/downloads)) includes Bash. Here is a [standalone version of Bash](https://sourceforge.net/projects/win-bash/files/shell-complete/latest/).*
 
 Open a command prompt or Bash and change to the directory in which you have cloned this repository. Then run:
 
