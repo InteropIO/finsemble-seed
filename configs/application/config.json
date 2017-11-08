@@ -18,6 +18,7 @@
 		}
 	},
 	"importConfig": [
-		"$applicationRoot/configs/application/components.json"
+		"$applicationRoot/configs/application/components.json",
+		"$applicationRoot/configs/other/defaultWorkspaces.json"
 	]
 }
