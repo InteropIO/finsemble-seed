@@ -66,10 +66,6 @@ To get the sample system components to work:
 
 Once you have done this, quit and rebuild and run Finsemble again. You will see a toolbar appear at the top of the screen. From the toolbar you can launch other sample components including our Workspace Management Menu, File Menu and App Launcher.
 
-### Your First Component
-
-See our [Step by Step Tutorial](https://documentation.chartiq.com/finsemble/tutorial-buildAnAppStepByStep.html) to get started on building your own Finsemble application.
-
 ### Configuring Hot-Reload
 
 We've added the ability to hotreload your Finsemble components! Through webpack, we've added middlewware to the component/client build process that allows your changes to appear instantly.
@@ -89,3 +85,27 @@ We've made adding your components/applications easy `webpack.files.entries.json`
 * `HMRWhitelist` -  An array of entries to hotreload.
 
 *This does not work on services.*
+
+### Next steps
+
+Now that you have the Finsemble framework, you're ready to start the seed project:
+
+[Step 1: Adding Finsemble Components](http://documentation.chartiq.com/finsemble/tutorial-StepOne.html)
+
+[Step 2: Create Some Component Code](http://documentation.chartiq.com/finsemble/tutorial-StepTwo.html)
+
+[Step 3: Modifying and Accessing Component Configuration](http://documentation.chartiq.com/finsemble/tutorial-StepThree.html)
+
+[Step 4: Removing Components from the Toolbar App List](http://documentation.chartiq.com/finsemble/tutorial-StepFour.html)
+
+[Step 5: Using the Launcher Service to Spawn New components](http://documentation.chartiq.com/finsemble/tutorial-StepFive.html)
+
+[Step 6: Advanced Spawning](http://documentation.chartiq.com/finsemble/tutorial-StepSix.html)
+
+[Step 7: Communicating Between Components](http://documentation.chartiq.com/finsemble/tutorial-StepSeven.html)
+
+[Step 8: Linking Components](http://documentation.chartiq.com/finsemble/tutorial-StepEight.html)
+
+[Step 9: Making Components Aware of Workspaces](http://documentation.chartiq.com/finsemble/tutorial-StepNine.html)
+
+[Step 10: Working With Hosted Components](http://documentation.chartiq.com/finsemble/tutorial-StepTen.html)
