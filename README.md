@@ -1,1 +1,1 @@
-Check out the documentation on our [website](https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html).
+For everything you need to know about the seed project, including a step-by-step process, check out the documentation on our [website](https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html).
