@@ -7,6 +7,7 @@ The workspace management menu was built to allow users to create, delete, save, 
 ![](./screenshot.png)
 
 ### Controls used
+The controls used in this component are documented over in our Finsemble React Controls repo:
 * [FinsembleMenu](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleMenu)
 * [FinsembleMenuSection](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleMenuSection)
 * [FinsembleMenuSectionLabel](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleMenuSectionLabel)
