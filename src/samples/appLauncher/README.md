@@ -1,12 +1,13 @@
 ## AppLauncher
 
 ### Overview
-This is a menu component that will launch other components. It filters component based on a "mode" property in the component's config. This may be revisted in the future.
+This is a menu component that will launch other components. It filters components based on a "mode" property in the component's config. This may be revisted in the future.
 
 ### What it looks like
 ![](./screenshot.png)
 
 ### Controls used
+The controls used in this component are documented over in our Finsemble React Controls repo: 
 * [FinsembleMenu](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleMenu)
 * [FinsembleMenuSection](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleMenuSection)
 * [FinsembleMenuSectionLabel](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleMenuSectionLabel)
