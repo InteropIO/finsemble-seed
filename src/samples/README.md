@@ -6,6 +6,6 @@ Finsemble is a set of tools that lets you build multi-window desktop application
 
 These samples were built using React UI Controls. The primary use for the controls is for developers to assemble and customize their toolbar. Using the controls, a developer can make the toolbar do anything&mdash;quickly. The controls are available in a separate public repo: https://github.com/ChartIQ/finsemble-react-controls. 
 
-Read through the documentation to get a better idea how these components are built. Browse to each component for its relevant documentation. 
+Read through the documentation to get a better idea how the sample templates are built. Browse to each template for its relevant documentation. 
 
 
