@@ -39,7 +39,7 @@ class _ToolbarStore {
 	 */
 	loadMenusFromConfig(done, self) {
 		console.log('in loadmenus', menuConfig);
-		if (Array.isArray(menuConfig)) {
+		if (Array.isArray(menuConfig) && menuConfig.length) {
 			self.Store.setValue({
 				field: "menus",
 				value: menuConfig

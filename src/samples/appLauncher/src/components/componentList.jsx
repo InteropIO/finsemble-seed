@@ -28,30 +28,30 @@ export default class appLauncherContainer extends React.Component {
 		this.updateDom = this.updateDom.bind(this);
 		this.buildComponentItem = this.buildComponentItem.bind(this);
 	}
+
 	onComponentListUpdate(err, data) {
 		this.setState({
 			componentList: data.value
 		});
 	}
+
 	onPinsUpdate(err, data) {
 		this.setState({
 			pinnedComponents: data.value
 		});
 	}
+
 	componentDidUpdate() {
 		this.updateDom();
 	}
+
 	updateDom() {
 		FSBL.Clients.WindowClient.fitToDOM(
 			{
 				maxHeight: 500
-			}, function () {
-		}
-		);
+			}, function () {});
 	}
-	componentDidMount() {
-		this.updateDom();
-	}
+
 	setInitialState() {
 		let self = this;
 		appLauncherStore.getValue({ field: "componentList" }, function (err, data) {
@@ -140,7 +140,7 @@ export default class appLauncherContainer extends React.Component {
 			componentList = (<p>No components loaded. Make sure to check ./src/components.json to make sure you've set everything up correctly.</p>);
 		}
 
-		return (<FinsembleMenuSection scrollable={true} className="ComponentList menu-primary">
+		return (<FinsembleMenuSection maxHeight={350} scrollable={true} className="ComponentList menu-primary">
 			{componentList}
 		</FinsembleMenuSection>);
 	}

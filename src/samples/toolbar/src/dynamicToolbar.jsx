@@ -23,6 +23,7 @@ customComponents["BringToFront"] = BringToFront;
 // Styles
 import "../../assets/css/finsemble.scss";
 import "../../assets/css/finfont.css";
+import "../toolbar.scss";
 
 var pinnableItems = {
 	"componentLauncher": FinsembleButton,
@@ -94,8 +95,7 @@ export default class Toolbar extends React.Component {
 					buttonComponent = <FinsembleButton iconClasses="pinned-icon" buttonType={["AppLauncher", "Toolbar"]} key={i} {...button}></FinsembleButton>;
 					break;
 				case "menuLauncher":
-					if (button.preSpawn !== false) button.preSpawn = true;
-					buttonComponent = <FinsembleButton buttonType={["MenuLauncher", "Toolbar"]} key={i} {...button}></FinsembleButton>;
+						buttonComponent = <FinsembleButton preSpawn={true} buttonType={["MenuLauncher", "Toolbar"]} key={i} {...button}></FinsembleButton>;
 					break;
 				}
 				buttons.push(buttonComponent);
@@ -118,7 +118,7 @@ export default class Toolbar extends React.Component {
 	}
 
 	render() {
-		console.log("Toolbar Render");
+		console.log("Toolbar Render ");
 		if (!this.state.sections) return;
 		return (<FinsembleToolbar>
 			{this.getSections()}

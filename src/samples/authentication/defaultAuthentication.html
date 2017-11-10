@@ -157,9 +157,9 @@
 	//Add the config to the config service
 	function updateConfig(config, cb) {
 		var configSet = {}
-		if (config.components) configSet["components"] = config.components;
+		//if (config.components) configSet["components"] = config.components;
 		if (config.menuItems) configSet["menus"] = config.menuItems;
-		if (config.overrides) configSet["cssOverridePath"] = config.overrides;
+		//if (config.overrides) configSet["cssOverridePath"] = config.overrides;
 		FSBL.Clients.ConfigClient.processAndSet(
 			{
 				newConfig: configSet,

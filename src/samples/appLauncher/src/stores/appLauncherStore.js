@@ -22,6 +22,7 @@ var Actions = {
 				throw new Error(err);
 			}
 			//Each AppLauncher
+			console.log("componentList--",response)
 			Actions.filterComponents(response);
 		});
 	},
@@ -128,7 +129,7 @@ var Actions = {
 			});
 		}
 		if (settings.list) {
-			var commonItems = settings.list.filter(function (n) {
+			commonItems = settings.list.filter(function (n) {
 				return keys.indexOf(n) !== -1;
 			});
 

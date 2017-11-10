@@ -59,7 +59,7 @@ var Actions = {
 		}
 
 		/**
-		 * Listen for updates from the dataTransferClient.
+		 * Listen for updates from the dragAndDropClient.
 		 */
 		FSBL.Clients.RouterClient.subscribe(FSBL.Clients.WindowClient.options.name + "Finsemble.Sharer", function (err, response) {
 			if (err) { return console.error(err); }
