@@ -7,6 +7,7 @@ This is our standard dialog that presents the user with 1 - 3 choices. It can be
 ![](./screenshot.png)
 
 ### Controls Used
+The controls used in this component are documented over in our Finsemble React Controls repo:
 * [FinsembleDialog](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleDialog)
 * [FinsembleDialogQuestion](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleDialogQuestion)
 * [FinsembleDialogButton](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleDialogButton)
