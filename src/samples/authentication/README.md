@@ -1,6 +1,6 @@
 ## Authentication
 
-This is the authentication login-screen you see when finsemble starts with authentication enables.
+This is the authentication login-screen you see when Finsemble starts with authentication enables.
 
 ### Overview
 
