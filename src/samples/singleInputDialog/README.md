@@ -1,12 +1,13 @@
 ## SingleInput Dialog
 
 ### Overview
-This is the dialog we show when we need a name for a new workspace.  This component is used with `FSBL.Clients.DialogManager.open`. For more on how we've implemented dialogs, please read the [FinsembleDialog](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleDialog) control documentation.
+This is the dialog we show when we need a name for a new workspace.  This component is used with `FSBL.Clients.DialogManager.open`. For more on how we've implemented dialogs, please read the [FinsembleDialog](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleDialog) control documentation in our React Controls repo.
 
 ### What it looks like
 ![](./screenshot.png)
 
 ### Controls Used
+The controls used in this component are documented over in our Finsemble React Controls repo:
 * [FinsembleDialog](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleDialog)
 * [FinsembleDialogQuestion](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleDialogQuestion)
 * [FinsembleDialogButton](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleDialogButton)
