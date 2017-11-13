@@ -1,7 +1,7 @@
 ## AppLauncher
 
 ### Overview
-This is a menu component that will launch other components. It filters components based on a "mode" property in the component's config. This may be revisted in the future.
+This is a menu that will launch components. It filters components based on a "mode" property in the component's config. This may be revisted in the future.
 
 ### What it looks like
 ![](./screenshot.png)
