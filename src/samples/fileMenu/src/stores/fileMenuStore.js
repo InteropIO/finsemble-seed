@@ -81,6 +81,7 @@ var Actions = {
 	 *
 	 */
 	showCentralConsole() {
+		fin.desktop.Window.getCurrent().hide();
 		FSBL.Clients.RouterClient.transmit("CentralConsole-Show", true);
 	},
 	/**
@@ -119,7 +120,12 @@ var Actions = {
 	shutdownApplication() {
 		fin.desktop.Window.getCurrent().blur();
 		//FSBL.shutdownApplication();
-		Actions.saveWorkspace().then(FSBL.shutdownApplication);
+		Actions.saveWorkspace().then((choice) => {
+			if (choice === 'cancel') {
+				return;
+			}
+			FSBL.shutdownApplication();
+		});
 
 	},
 	/**

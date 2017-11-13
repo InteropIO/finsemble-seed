@@ -78,7 +78,7 @@ export default class WorkspaceActions extends React.Component {
 			</FinsembleMenuItem>);
 		});
 		return (<FinsembleMenuSection  className='menu-secondary workspace-actions'>
-			{workspaceActions};
+			{workspaceActions}
 		</FinsembleMenuSection>);
 	}
 }

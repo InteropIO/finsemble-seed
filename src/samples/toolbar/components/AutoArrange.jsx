@@ -8,7 +8,14 @@ export default class AutoArrange extends React.Component {
 			isAutoArranged: false
 		};
 		this.bindCorrectContext();
+		let self = this;
+		FSBL.Clients.RouterClient.subscribe('DockingService.AutoarrangeStatus', function (err, response) {
+			self.setState({
+				isAutoArranged: response.data.isAutoArranged
+			});
+		});
 	}
+
 	bindCorrectContext(){
 		this.autoArrange = this.autoArrange.bind(this);
 	}

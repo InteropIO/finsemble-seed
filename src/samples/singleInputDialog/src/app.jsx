@@ -101,7 +101,6 @@ class SingleInputDialog extends React.Component {
 		var self = this;
 		return (<FinsembleDialog
 			userInputTimeout={10000} behaviorOnResponse="hide"
-			isModal={true}
 			onShowRequested={this.onShowRequested}>
 				<FinsembleDialogQuestion question={this.state.inputLabel} />
 				<FinsembleDialogTextInput onInputChange={this.setInputValue} />

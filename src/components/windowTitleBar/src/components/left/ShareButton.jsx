@@ -43,13 +43,13 @@ export default class ShareButton extends React.Component {
 	}
 
     /**
-     * When the user starts to drag the share button, let the DataTransferClient know.
+     * When the user starts to drag the share button, let the DragAndDropClient know.
      *
      * @param {any} ev
      * @memberof ShareButton
      */
 	onDragStart(ev) {
-		FSBL.Clients.DataTransferClient.dragStart(ev);
+		FSBL.Clients.DragAndDropClient.dragStart(ev);
 	}
 
     /**
