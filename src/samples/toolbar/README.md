@@ -12,15 +12,15 @@ The toolbar component uses the following controls, detailed in our React Control
 - [FinsembleButton](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleButton)
 - [FinsembleToolbarSeperator](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleToolbarSeprator)
 
-The toolbar also includes an example of inserting a customized Finsemble Button control&mdash;the [WorkspaceLauncherButton](WorkspaceLauncherButton.md)
+The toolbar also includes an example of inserting a customized Finsemble Button control&mdash;the [WorkspaceLauncherButton](WorkspaceLauncherButton.md).
 
-The toolbar supports a "right", "left" and "center" section and those are created based on the `align` property of the items on the toolbar. It then creates buttons for each config (see below for a sample config) item in the `menuItems` based on the `type` property. The currently created types are:
+The toolbar supports a "right," "left," and "center" section and those are created based on the `align` property of the items on the toolbar. It then creates buttons for each config (see below for a sample config) item in the `menuItems` based on the `type` property. The currently created types are:
 
-- menu - This will create a FinsembleButton of type `MenuLauncher`, which is specifically designed to launch Menus. When the toolbar loads, it pre-spawns all menu components in a hidden state to improve performance.
-- workspace - This will create a WorkspaceLauncherButton which is designed to launch Workspaces
-- component - This will create a FinsembleButton of type `AppLauncher`, which is designed to spawn a Finsemble component
-- seperator - This will create a Seperator
-- reactComponent - This is used to insert custom react components into the Toolbar
+- menu - This will create a FinsembleButton of type `MenuLauncher`, which is specifically designed to launch menus. When the toolbar loads, it pre-spawns all menu components in a hidden state to improve performance.
+- workspace - This will create a WorkspaceLauncherButton which is designed to launch workspaces.
+- component - This will create a FinsembleButton of type `AppLauncher`, which is designed to spawn a Finsemble component.
+- seperator - This will create a seperator.
+- reactComponent - This is used to insert custom react components into the toolbar.
 
 It also uses a customized FinsembleButton as the overflowMenuControl for the "center" section of the FinsembleToolbarSection.
 
@@ -30,7 +30,7 @@ It also uses a customized FinsembleButton as the overflowMenuControl for the "ce
 The toolbar component creates a global store using the Finsemble [DistributedStoreClient](https://documentation.chartiq.com/finsemble/DistributedStoreClient.html) called 'Finsemble-Toolbar-Store'. The toolbar initially loads the items from the config into the `menus` field of the store. Updating the `menus` field will update the items on the toolbar.
 
 ### Toolbar Pins
-The FinsembleToolbar also provides the functionality to "pin" items to the toolbar in the "center" section. For this functionality, the components that need to pin items to the Toolbar need to add a pin to the `pins` field of the Toolbar Store. The pins are configured in the same way as the items in the `menuItems`. For sample code, see the [AppLauncher component](../appLauncher/) and the [WorkspaceManagement component](../workspaceManagementMenu/) which make use of this functionality.
+The FinsembleToolbar also provides the functionality to "pin" items to the toolbar in the "center" section. For this functionality, the components that need to pin items to the toolbar need to add a pin to the `pins` field of the Toolbar Store. The pins are configured in the same way as the items in the `menuItems`. For sample code, see the [AppLauncher component](../appLauncher/) and the [WorkspaceManagement component](../workspaceManagementMenu/) which make use of this functionality.
 
 The toolbar saves pins to storage using the Finsemble [StorageClient](https://documentation.chartiq.com/finsemble/StorageClient.html) and loads them back from storage on startup.
 
