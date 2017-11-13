@@ -1,7 +1,7 @@
 ## YesNo Dialog
 
 ### Overview
-This is our standard dialog that presents the user with 1 - 3 choices. It can be used to allow the user to confirm, reject, or cancel an action. All of these options can be included, and all can be excluded. This component is used with `FSBL.Clients.DialogManager.open`. For more on how we've implemented dialogs, please read the [FinsembleDialog](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleDialog) control documentation.
+This is our standard dialog that presents the user with one to three choices. It can be used to allow the user to confirm, reject, or cancel an action. All of these options can be included or excluded. This component is used with `FSBL.Clients.DialogManager.open`. For more on how we've implemented dialogs, please read the [FinsembleDialog](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleDialog) control documentation.
 
 ### What it looks like
 ![](./screenshot.png)
