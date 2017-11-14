@@ -1,10 +1,10 @@
 #  Finsemble Samples
 
-This folder contains a set of templates to help you get started using Finsemble. 
+This folder contains a set of template UI components to help you get started using Finsemble. 
 
-Finsemble is a set of tools that lets you build multi-window desktop applications that focus on coordination and collaboration. We've packaged the seed project with template components to demonstrate the sort of desktop experience that you can deliver to your users. You can use these samples wholesale or use them as building blocks. 
+Finsemble is a set of tools that lets you build multi-window desktop applications that focus on coordination and collaboration. We've packaged the seed project with template UI components to demonstrate the sort of desktop experience that you can deliver to your users. You can use these samples wholesale or use them as building blocks. 
 
-These samples were built using React UI Controls. The primary use for the controls is for developers to assemble and customize the UI experience for their users. Using the controls, a developer can make anything&mdash;quickly. The controls are available in a separate public repo: https://github.com/ChartIQ/finsemble-react-controls. 
+These samples were built using React UI controls. The primary use for the controls is for developers to assemble and customize the UI experience for their users. Using the controls, a developer can make anything&mdash;quickly. The controls are available in a separate public repo: https://github.com/ChartIQ/finsemble-react-controls. 
 
 Note that you can easily modify the look and feel of your sample components. In **Version >= 1.4**, simply edit the files inside of *src/assets/sass/*. These files contain all of the styling for the sample components. In some cases, the individual components have specific styling, and those files are found inside each component's folder.
 
