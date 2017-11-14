@@ -8,7 +8,8 @@ These samples were built using React UI Controls. The primary use for the contro
 
 Note that you can easily modify the look and feel of your sample components. In **Version >= 1.4**, simply edit the files inside of *src/assets/sass/*. These files contain all of the styling for the sample components. In some cases, the individual components have specific styling, and those files are found inside each component's folder.
 
-For **Version < 1.4&**, go to *configs/openfin/manifest-local* and add the following line inside the `finsemble` property: "cssOverridePath":"$applicationRoot/components/assets/css/finsemble-overrides.css",
+For **Version < 1.4&**, go to *configs/openfin/manifest-local* and add the following line inside the `finsemble` property:
+"cssOverridePath":"$applicationRoot/components/assets/css/finsemble-overrides.css",
 
 This tells the application to retrieve the *finsemble-overrides* file  that you will modify. In older versions of the seed project, this file sits inside of *src/assets/css/finsemble-overrides.scss*. 
 
