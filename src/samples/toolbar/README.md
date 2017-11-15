@@ -6,35 +6,35 @@ This is a sample toolbar built for the Finsemble framework using our React Contr
 
 The toolbar uses the config to [compose](https://reactjs.org/docs/composition-vs-inheritance.html) a toolbar. It uses the following controls, detailed in our React Controls repo.
 
-- [FinsembleToolbar](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleToolbar)
-- [FinsembleToolbarSection](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleToolbarSection)
-- [FinsembleButton](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleButton)
-- [FinsembleToolbarSeperator](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleToolbarSeprator)
+- [Finsemble Toolbar](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleToolbar)
+- [Finsemble Toolbar Section](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleToolbarSection)
+- [Finsemble Button](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleButton)
+- [Finsemble Toolbar Seperator](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleToolbarSeprator)
 
-The toolbar also includes an example of inserting a customized Finsemble Button control&mdash;the [WorkspaceLauncherButton](WorkspaceLauncherButton.md).
+The toolbar also includes an example of inserting a customized Finsemble Button control&mdash;the Workspace Launcher Button. The Workspace Launcher Button provides a way to switch to a specific workspace. It is built using the [Finsemble Button](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleButton) control. The click event for the button dispatches a message to the [Workspace Management Menu](https://github.com/ChartIQ/finsemble-seed/tree/master/src/samples/workspaceManagementMenu) for switching workspaces.
 
 The toolbar supports a "right," "left," and "center" section and those are created based on the `align` property of the items on the toolbar. It then creates buttons for each config (see below for a sample config) item in the `menuItems` based on the `type` property. The currently created types are:
 
-- menu - This will create a FinsembleButton of type `MenuLauncher`, which is specifically designed to launch menus. When the toolbar loads, it pre-spawns all menu components in a hidden state to improve performance.
-- workspace - This will create a WorkspaceLauncherButton which is designed to launch workspaces.
-- component - This will create a FinsembleButton of type `AppLauncher`, which is designed to spawn a Finsemble component.
+- menu - This will create a Finsemble Button of type `MenuLauncher`, which is specifically designed to launch menus. When the toolbar loads, it pre-spawns all menu components in a hidden state to improve performance.
+- workspace - This will create a Workspace Launcher Button which is designed to launch workspaces.
+- component - This will create a Finsemble Button of type `AppLauncher`, which is designed to spawn a Finsemble component.
 - seperator - This will create a seperator.
 - reactComponent - This is used to insert custom react components into the toolbar.
 
-It also uses a customized FinsembleButton as the overflowMenuControl for the "center" section of the FinsembleToolbarSection.
+It also uses a customized Finsemble Button as the `overflowMenuControl` for the "center" section of the Finsemble Toolbar Section.
 
 ## Config and Dynamic Updates
 
 ### The Toolbar Store
-The toolbar component creates a global store using the Finsemble [DistributedStoreClient](https://documentation.chartiq.com/finsemble/DistributedStoreClient.html) called 'Finsemble-Toolbar-Store'. The toolbar initially loads the items from the config into the `menus` field of the store. Updating the `menus` field will update the items on the toolbar.
+The toolbar component creates a global store using the Finsemble [Distributed Store Client](https://documentation.chartiq.com/finsemble/DistributedStoreClient.html) called 'Finsemble-Toolbar-Store'. The toolbar initially loads the items from the config into the `menus` field of the store. Updating the `menus` field will update the items on the toolbar.
 
 ### Toolbar Pins
-The FinsembleToolbar also provides the functionality to "pin" items to the toolbar in the "center" section. For this functionality, the components that need to pin items to the toolbar need to add a pin to the `pins` field of the Toolbar Store. The pins are configured in the same way as the items in the `menuItems`. For sample code, see the [AppLauncher component](../appLauncher/) and the [WorkspaceManagement component](../workspaceManagementMenu/) which make use of this functionality.
+The FinsembleToolbar also provides the functionality to "pin" items to the toolbar in the "center" section. For this functionality, the components that need to pin items to the toolbar need to add a pin to the `pins` field of the Toolbar Store. The pins are configured in the same way as the items in the `menuItems`. For sample code, see the [AppLauncher component](../appLauncher/) and the [Workspace Management component](../workspaceManagementMenu/) which make use of this functionality.
 
-The toolbar saves pins to storage using the Finsemble [StorageClient](https://documentation.chartiq.com/finsemble/StorageClient.html) and loads them back from storage on startup.
+The toolbar saves pins to storage using the Finsemble [Storage Client](https://documentation.chartiq.com/finsemble/StorageClient.html) and loads them back from storage on startup.
 
 ## Adding Custom React Components
-The FinsembleToolbar component demonstrates how to add custom React components into the toolbar using the "AutoArrange" and "BringToFront" components. To add your custom components, add them to the `customComponents` array in toolbar.jsx:
+The Finsemble Toolbar component demonstrates how to add custom React components into the toolbar using the "AutoArrange" and "BringToFront" components. To add your custom components, add them to the `customComponents` array in toolbar.jsx:
 
 ```jsx
 import MyCustomReactComponent from 'MyCustomReactComponent';
