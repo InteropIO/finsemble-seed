@@ -1,7 +1,7 @@
 # Linker Window
 
 ## Overview
-The Linker Window is our sample system component that interfaces with the Linker Service. It is used to add or remove a Finsemble component from a group. Check out [Linking Components](http://documentation.chartiq.com/finsemble/tutorial-linkingComponents.html) for more information. The Linker is launched from the Window Title Bar. 
+The Linker Window is our sample system component that interfaces with the Linker Service. It is used to add or remove a Finsemble component from a group. Check out [Linking Components](http://documentation.chartiq.com/finsemble/tutorial-linkingComponents.html) for more information. The Linker is launched from the [Window Title Bar](https://github.com/ChartIQ/finsemble-seed/tree/master/src/components/windowTitleBar). 
 
 ## How It Works
 - The Window Title Bar calls `LinkerClient.openLinkerWindow()` which sends a router query on the "Finsemble.LinkerWindow.Show" channel with the window's groups, windowIdentifier and windowBounds.
