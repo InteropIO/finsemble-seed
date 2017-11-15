@@ -4,9 +4,8 @@ This is a sample toolbar built for the Finsemble framework using our React Contr
 
 ## Controls And Other Components
 
-The toolbar uses the config to [compose](https://reactjs.org/docs/composition-vs-inheritance.html) a toolbar using our [Finsemble React Controls](https://github.com/ChartIQ/finsemble-react-controls).
+The toolbar uses the config to [compose](https://reactjs.org/docs/composition-vs-inheritance.html) a toolbar. It uses the following controls, detailed in our React Controls repo.
 
-The toolbar component uses the following controls, detailed in our React Controls repo:
 - [FinsembleToolbar](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleToolbar)
 - [FinsembleToolbarSection](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleToolbarSection)
 - [FinsembleButton](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleButton)
