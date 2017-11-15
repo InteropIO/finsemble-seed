@@ -11,8 +11,6 @@ The toolbar uses the config to [compose](https://reactjs.org/docs/composition-vs
 - [Finsemble Button](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleButton)
 - [Finsemble Toolbar Seperator](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleToolbarSeprator)
 
-The toolbar also includes an example of inserting a customized Finsemble Button control&mdash;the Workspace Launcher Button. The Workspace Launcher Button provides a way to switch to a specific workspace. The click event for the button dispatches a message to the [Workspace Management Menu](https://github.com/ChartIQ/finsemble-seed/tree/master/src/samples/workspaceManagementMenu) for switching workspaces.
-
 The toolbar supports a "right," "left," and "center" section and those are created based on the `align` property of the items on the toolbar. It then creates buttons for each config (see below for a sample config) item in the `menuItems` based on the `type` property. The currently created types are:
 
 - menu - This will create a Finsemble Button of type `MenuLauncher`, which is specifically designed to launch menus. When the toolbar loads, it pre-spawns all menu components in a hidden state to improve performance.
@@ -22,6 +20,8 @@ The toolbar supports a "right," "left," and "center" section and those are creat
 - reactComponent - This is used to insert custom react components into the toolbar.
 
 It also uses a customized Finsemble Button as the `overflowMenuControl` for the "center" section of the Finsemble Toolbar Section.
+
+Another customized Finsemble Button, the Workspace Launcher Button, provides a way to switch to a specific workspace. The click event for the button dispatches a message to the [Workspace Management Menu](https://github.com/ChartIQ/finsemble-seed/tree/master/src/samples/workspaceManagementMenu) for switching workspaces.
 
 ## Config and Dynamic Updates
 
