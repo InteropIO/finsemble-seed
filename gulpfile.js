@@ -162,9 +162,20 @@ gulp.task('devServer', gulp.series(
 		var exec = require('child_process').spawn;
 		//This runs essentially runs 'PORT=80 node server/server.js'
 		var serverPath = path.join(__dirname, '/server/server.js');
-		//allows for spaces in paths.
-		var serverExec = exec('node', ['--debug', serverPath, { stdio: 'inherit' }], { env: { 'PORT': StartupConfig["dev"].serverPort, NODE_ENV: "dev" }, stdio: [process.stdin, process.stdout, 'pipe', "ipc"] });
+		
+		// If you specify environment variables to child_process, it overwrites all environment variables, including
+		// PATH. So, copy based on our existing env variables.
+		var envCopy = process.env;
+		envCopy.PORT = StartupConfig.dev.serverPort;
+		envCopy.NODE_ENV = 'dev';
 
+		// allows for spaces in paths.
+		var serverExec = exec(
+			"node",
+			["--debug", serverPath, { stdio: "inherit" }],
+			{ env: envCopy, stdio: [process.stdin, process.stdout, "pipe", "ipc"] }
+		);
+		
 		serverExec.on("message", function (data) {
 			if (data === "serverStarted") {
 				launchOpenfin("dev");
