@@ -13,9 +13,9 @@ The toolbar uses the config to [compose](https://reactjs.org/docs/composition-vs
 
 The toolbar supports a "right," "left," and "center" section and those are created based on the `align` property of the items on the toolbar. It then creates buttons for each config (see below for a sample config) item in the `menuItems` based on the `type` property. The currently created types are:
 
-- menu - This will create a Finsemble Button of type `MenuLauncher`, which is specifically designed to launch menus. When the toolbar loads, it pre-spawns all menu components in a hidden state to improve performance.
+- menu - This will create a `MenuLauncher` type Finsemble button, which is specifically designed to launch menus. When the toolbar loads, it pre-spawns all menu components in a hidden state to improve performance.
 - workspace - This will create a Workspace Launcher Button which is designed to launch workspaces.
-- component - This will create a Finsemble Button of type `AppLauncher`, which is designed to spawn a Finsemble component.
+- component - This will create a `AppLauncher` type Finsemble button, which is designed to spawn a Finsemble component.
 - seperator - This will create a seperator.
 - reactComponent - This is used to insert custom react components into the toolbar.
 
@@ -29,12 +29,12 @@ Another customized Finsemble Button, the Workspace Launcher Button, provides a w
 The toolbar component creates a global store using the Finsemble [Distributed Store Client](https://documentation.chartiq.com/finsemble/DistributedStoreClient.html) called `Finsemble-Toolbar-Store`. The toolbar initially loads the items from the config into the `menus` field of the store. Updating the `menus` field will update the items on the toolbar.
 
 ### Toolbar Pins
-The FinsembleToolbar also provides the functionality to "pin" items to the toolbar in the "center" section. For this functionality, the components that need to pin items to the toolbar need to add a pin to the `pins` field of the Toolbar Store. The pins are configured in the same way as the items in the `menuItems`. For sample code, see the [AppLauncher component](../appLauncher/) and the [Workspace Management component](../workspaceManagementMenu/) which make use of this functionality.
+The toolbar also provides the functionality to "pin" items to the toolbar in the "center" section. For this functionality, the components that need to pin items to the toolbar need to add a pin to the `pins` field of the Toolbar Store. The pins are configured in the same way as the items in the `menuItems`. For sample code, see the [AppLauncher component](../appLauncher/) and the [Workspace Management component](../workspaceManagementMenu/) which make use of this functionality.
 
 The toolbar saves pins to storage using the Finsemble [Storage Client](https://documentation.chartiq.com/finsemble/StorageClient.html) and loads them back from storage on startup.
 
 ## Adding Custom React Components
-The Finsemble Toolbar component demonstrates how to add custom React components into the toolbar using the "AutoArrange" and "BringToFront" components. To add your custom components, add them to the `customComponents` array in *toolbar.jsx*:
+The toolbar component demonstrates how to add custom React components into the toolbar using the "AutoArrange" and "BringToFront" components. To add your custom components, add them to the `customComponents` array in *toolbar.jsx*:
 
 ```jsx
 import MyCustomReactComponent from 'MyCustomReactComponent';
