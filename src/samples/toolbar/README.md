@@ -31,7 +31,7 @@ The toolbar component creates a global store using the Finsemble [Distributed St
 ### Toolbar Pins
 The toolbar also provides the functionality to "pin" items to the toolbar in the "center" section. For this functionality, the components that need to pin items to the toolbar need to add a pin to the `pins` field of the Toolbar Store. The pins are configured in the same way as the items in the `menuItems`. For sample code, see the [AppLauncher component](../appLauncher/) and the [Workspace Management component](../workspaceManagementMenu/) which make use of this functionality.
 
-The toolbar saves pins to storage using the Finsemble [Storage Client](https://documentation.chartiq.com/finsemble/StorageClient.html) and loads them back from storage on startup.
+The toolbar saves pins to storage using the Finsemble [Storage Client](https://documentation.chartiq.com/finsemble/StorageClient.html) and loads them back from storage on start-up.
 
 ## Adding Custom React Components
 The toolbar component demonstrates how to add custom React components into the toolbar using the "AutoArrange" and "BringToFront" components. To add your custom components, add them to the `customComponents` array in *toolbar.jsx*:
