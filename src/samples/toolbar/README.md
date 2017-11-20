@@ -1,10 +1,10 @@
 # Sample Toolbar Component for Finsemble
 
-This is a sample toolbar built for the Finsemble framework using our React Controls. This is a starting point for developing a custom system toolbar for Finsemble. Our toolbar is made up of several sections, each of which can contain components. The toolbar contents are driven by a config and can be modified dynamically.
+This is a sample toolbar built for the Finsemble framework using our React controls. This is a starting point for developing a custom system toolbar for Finsemble. Our toolbar is made up of several sections, each of which can contain components. The toolbar contents are driven by a config and can be modified dynamically.
 
 ## Controls And Other Components
 
-The toolbar uses the config to [compose](https://reactjs.org/docs/composition-vs-inheritance.html) a toolbar. It uses the following controls, detailed in our React Controls repo.
+The toolbar uses the config to [compose](https://reactjs.org/docs/composition-vs-inheritance.html) a toolbar. It uses the following controls, detailed in our React controls repo.
 
 - [Finsemble Toolbar](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleToolbar)
 - [Finsemble Toolbar Section](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleToolbarSection)
