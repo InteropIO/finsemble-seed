@@ -1,9 +1,9 @@
 ## AppLauncher
 
 ### Overview
-This is a menu that will launch components. The App Launcher is a single window that is spawned by the toolbar in the background. By default, it is hidden. When the "Apps" button is clicked, the menu shows itself on the appropriate monitor; it will hide itself when the window loses focus.
+This is a menu that will launch components. The app launcher is a single window that is spawned by the toolbar in the background. By default, it is hidden. When the "Premium" button is clicked, the menu shows itself on the appropriate monitor; it will hide itself when the window loses focus.
 
-The list of launchable apps is are pulled from *configs/componentList.json*. If `components['foreign']['App Launcher'].launchableByUser` is `true`, it will be included in the App Launcher.
+The list of launchable apps is are pulled from *configs/componentList.json*. If `components['foreign']['App Launcher'].launchableByUser` is `true`, it will be included in the app launcher.
 
 
 
