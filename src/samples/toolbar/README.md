@@ -34,7 +34,7 @@ The FinsembleToolbar also provides the functionality to "pin" items to the toolb
 The toolbar saves pins to storage using the Finsemble [Storage Client](https://documentation.chartiq.com/finsemble/StorageClient.html) and loads them back from storage on startup.
 
 ## Adding Custom React Components
-The Finsemble Toolbar component demonstrates how to add custom React components into the toolbar using the "AutoArrange" and "BringToFront" components. To add your custom components, add them to the `customComponents` array in toolbar.jsx:
+The Finsemble Toolbar component demonstrates how to add custom React components into the toolbar using the "AutoArrange" and "BringToFront" components. To add your custom components, add them to the `customComponents` array in *toolbar.jsx*:
 
 ```jsx
 import MyCustomReactComponent from 'MyCustomReactComponent';
@@ -67,7 +67,7 @@ Here is a sample config to use with our sample toolbar. This config is read from
 	}
 },
 ```
-Here is a sample of the component part of the config with some components. The `type` determines what component is used to render that item on the toolbar. We have sample components for launching menus, components, switching workspaces and a `reactComponent` type for use with any custom React component.
+Here is a sample of the component part of the config with some components. The `type` determines what component is used to render that item on the toolbar. We have sample components for launching menus, components, switching workspaces, and a `reactComponent` type for use with any custom React component.
 
 ```javascript
  "component": {
