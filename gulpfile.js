@@ -172,7 +172,7 @@ gulp.task('devServer', gulp.series(
 		// allows for spaces in paths.
 		var serverExec = exec(
 			"node",
-			["--debug", serverPath, { stdio: "inherit" }],
+			["--inspect", serverPath, { stdio: "inherit" }],
 			{ env: envCopy, stdio: [process.stdin, process.stdout, "pipe", "ipc"] }
 		);
 		
@@ -202,7 +202,7 @@ gulp.task('production', gulp.series(
 		//This runs essentially runs 'PORT=80 node server/server.js'
 		var serverPath = path.join(__dirname, '/server/server.js');
 		//allows for spaces in paths.
-		var serverExec = exec('node', ['--debug', serverPath, { stdio: 'inherit' }], { env: { 'PORT': StartupConfig["prod"].serverPort, NODE_ENV: "prod" }, stdio: [process.stdin, process.stdout, 'pipe', "ipc"] });
+		var serverExec = exec('node', ['--inspect', serverPath, { stdio: 'inherit' }], { env: { 'PORT': StartupConfig["prod"].serverPort, NODE_ENV: "prod" }, stdio: [process.stdin, process.stdout, 'pipe', "ipc"] });
 
 		serverExec.on("message", function (data) {
 			if (data === "serverStarted") {
