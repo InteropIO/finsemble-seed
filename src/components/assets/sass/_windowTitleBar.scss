@@ -13,7 +13,7 @@
     display: flex;
     height: 32px;
     position: fixed;
-    align-items: center;
+    align-items: flex-end;
     flex-direction: row;
     justify-content: center;
     background: $window-header-background-color;
@@ -42,9 +42,7 @@
 }
 
 .fsbl-header-center {
-  height:100%;
-  top: 5px;
-  height: calc(100% - 5px);
+  height:calc(100% - 5px);
   align-content: center;
   display:flex;
   align-items: center;
@@ -104,9 +102,10 @@
     background-color: $inactive-header-button-hover;
     html.desktop-active & {
       background: $primary-accent-color;
-      transition: background .2s ease;   
+      transition: background .2s ease;
     }
   }
+  box-sizing: content-box !important;
 }
 
 /* So it sits over the border*/
