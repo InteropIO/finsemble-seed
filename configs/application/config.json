@@ -14,7 +14,7 @@
 			"enabled": false,
 			"blacklist": [],
 			"whitelist": [],
-			"onlySpawned": false
+			"onlySpawned": true
 		}
 	},
 	"importConfig": [
