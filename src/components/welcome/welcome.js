@@ -7,5 +7,5 @@ function launchTutorial() {
 }
 
 FSBL.addEventListener('onReady', function () {
-	FSBL.Clients.WindowClient.setWindowTitle("Sales Ticket");
+	FSBL.Clients.WindowClient.setWindowTitle("Welcome");
 });
