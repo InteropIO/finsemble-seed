@@ -35,7 +35,7 @@
                 "width": 1000
             },
             "component": {
-                "spawnOnStartup": true
+                "spawnOnStartup": false
             },
             "foreign": {
                 "services": {
