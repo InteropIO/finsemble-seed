@@ -44,17 +44,19 @@ export default class WorkspaceManagementList extends React.Component {
 	 */
 	render() {
 		let self = this;
-		let workspaceActions = [
-			{
-				iconClass: "ff-delete",
-				method: self.removeWorkspace
-			},
-			{
-				iconClass: "ff-pin",
-				method: self.togglePin
-			}
-		];
+
 		let workspaces = this.props.workspaces.map(function (workspace, i) {
+			//Separate array for each workspace. This way, the activeWorkspace can be rendered without a trashcan.
+			let workspaceActions = [
+				{
+					iconClass: "ff-delete",
+					method: self.removeWorkspace
+				},
+				{
+					iconClass: "ff-pin",
+					method: self.togglePin
+				}
+			];
 			let isActiveWorkspace = workspace.name === FSBL.Clients.WorkspaceClient.activeWorkspace.name;
 			let isPinned = self.props.pinnedWorkspaces.includes(workspace.name);
 			workspace.isPinned = isPinned;

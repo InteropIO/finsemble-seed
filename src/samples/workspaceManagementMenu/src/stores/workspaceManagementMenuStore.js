@@ -41,9 +41,9 @@ Actions = {
 
 		WorkspaceManagementGlobalStore.Dispatcher.register(function (action) {
 			switch (action.actionType) {
-			case "switchToWorkspace":
-				Actions.switchToWorkspace(action.data);
-				break;
+				case "switchToWorkspace":
+					Actions.switchToWorkspace(action.data);
+					break;
 			}
 
 		});
@@ -114,15 +114,16 @@ Actions = {
 
 		if (!newWorkspaceDialogIsActive) {
 			WorkspaceManagementStore.setValue({ field: "newWorkspaceDialogIsActive", value: true });
-		} else {
-			Actions.blurWindow();
 		}
+		Actions.blurWindow();
 
 		async.waterfall([
 			Actions.askIfUserWantsToSave,
 			Actions.handleSaveDialogResponse,
 			Actions.spawnWorkspaceInputField,
+			Actions.validateWorkspaceInput,
 			Actions.checkIfWorkspaceAlreadyExists,
+			Actions.askIfUserWantsNewWorkspace,
 			createIt,
 			Actions.notifyUserOfNewWorkspace
 		], Actions.onAsyncComplete);
@@ -140,16 +141,16 @@ Actions = {
 		if (FSBL.Clients.WorkspaceClient.activeworkspaceName === workspaceName) {
 			let dialogParams = {
 				question: "Workspace cannot be deleted while it is in use. Please switch workspaces and try again.",
-				affirmativeResponseText: "OK",
-				includeNegative: false,
-				includeCancel: false
+				affirmativeResponseLabel: "OK",
+				showNegativeButton: false,
+				showCancelButton: false
 			};
 			return Actions.spawnDialog("yesNo", dialogParams);
 		}
 
 		let dialogParams = {
 			question: "Are you sure you want to delete the workspace \"" + workspaceName + "\"?",
-			includeCancel: false
+			showCancelButton: false
 		};
 
 		/**
@@ -209,6 +210,7 @@ Actions = {
 			Actions.spawnWorkspaceInputField,
 			Actions.validateWorkspaceInput,
 			Actions.checkIfWorkspaceAlreadyExists,
+			Actions.askAboutOverwrite,
 			saveIt,
 		], Actions.onAsyncComplete);
 	},
@@ -216,7 +218,7 @@ Actions = {
 	 * Asks the user if they'd like to save their data, then loads the requested workspace.
 	 */
 	switchToWorkspace: function (data) {
-		Actions.hideWindow();
+		Actions.blurWindow();
 		let name = data.name;
 		let activeWorkspace = WorkspaceManagementStore.getValue("activeWorkspace");
 		/**
@@ -233,7 +235,9 @@ Actions = {
 		 * @param {any} callback
 		 */
 		function askAboutReload(callback) {
-			Actions.spawnDialog("yesNo", { question: "You are about to reload this workspace. Do you wish to save your changes?" }, callback);
+			Actions.spawnDialog("yesNo", {
+				question: "You are about to reload this workspace. Do you wish to save your changes?"
+			}, callback);
 		}
 
 		/**
@@ -290,6 +294,9 @@ Actions = {
 	 */
 	spawnDialog(type, data, responseCallback, spawnCallback) {
 		Logger.system.verbose("ShowWindow WorkspaceManagementMenu start");
+		if (type === "singleInput") {
+			data.showCancelButton = true;
+		}
 		FSBL.Clients.DialogManager.open(type, data, responseCallback);
 	},
 	/**
@@ -312,8 +319,8 @@ Actions = {
 		let dialogParams = {
 			inputLabel: "Enter a name for your new workspace.",
 			affirmativeButtonLabel: "Continue",
-			includeCancel: false,
-			includeNegative: false
+			showCancelButton: false,
+			showNegativeButton: false
 		};
 
 		Actions.spawnDialog("singleInput", dialogParams, onUserInput);
@@ -368,14 +375,58 @@ Actions = {
 		if (response.choice !== "cancel" && (!response.value || response.value === "")) {
 			let dialogParams = {
 				question: "Invalid workspace name. Please try again.",
-				affirmativeResponseText: "OK",
-				includeNegative: false,
-				includeCancel: false
+				affirmativeResponseLabel: "OK",
+				showNegativeButton: false,
+				showCancelButton: false
 			};
 			Actions.spawnDialog("yesNo", dialogParams);
 			return callback(new Error("Invalid workspace name."));
+		} else if (response.choice === 'cancel') {
+			return callback(new Error("cancel"));
 		}
 		callback(null, response);
+	},
+	askAboutOverwrite(params, callback) {
+		let { workspaceExists, workspaceName } = params;
+		let dialogParams = {
+			question: "This will overwrite the saved data for  \"" + workspaceName + "\". Would you like to proceed?",
+			affirmativeResponseLabel: "Yes, overwrite",
+			showCancelButton: false
+		};
+		function onUserInput(err, response) {
+			if (response.choice === "affirmative") {
+				callback(null, workspaceName);
+			} else {
+				callback(new Error("Negative"));
+			}
+		}
+		if (workspaceExists) {
+			Actions.spawnDialog("yesNo", dialogParams, onUserInput);
+		} else {
+			callback(null, workspaceName);
+		}
+	},
+	askIfUserWantsNewWorkspace(params, callback) {
+		let { workspaceExists, workspaceName } = params;
+
+		let dialogParams = {
+			question: "The workspace \"" + workspaceName + "\" already exists. A new workspace will be created.",
+			affirmativeResponseLabel: "Okay",
+			showNegativeButton: false
+		};
+
+		function onUserInput(err, response) {
+			if (response.choice === "affirmative") {
+				callback(null, workspaceName);
+			} else {
+				callback(new Error("Negative"));
+			}
+		}
+		if (workspaceExists) {
+			Actions.spawnDialog("yesNo", dialogParams, onUserInput);
+		} else {
+			callback(null, workspaceName);
+		}
 	},
 	/**
 	 * Checks if the workspace exists. If it does, it asks the user if they're comfortable overwriting that data.
@@ -389,27 +440,7 @@ Actions = {
 		let workspaceExists = FSBL.Clients.WorkspaceClient.workspaces.some(workspace => {
 			return workspace.name === workspaceName;
 		});
-		if (workspaceExists) {
-			let dialogParams = {
-				question: "This will overwrite the saved data for workspace \"" + workspaceName + "\". Would you like to proceed?",
-				affirmativeResponseText: "Yes, overwrite",
-				includeNegative: "No, cancel",
-				includeCancel: false
-			};
-			/**
-			 * Invoked when the user interacts with the dialog.
-			 */
-			function onUserInput(err, response) {
-				if (response.choice === "affirmative") {
-					callback(null, workspaceName);
-				} else {
-					callback(new Error("Negative"));
-				}
-			}
-			Actions.spawnDialog("yesNo", dialogParams, onUserInput);
-		} else {
-			callback(null, workspaceName);
-		}
+		callback(null, { workspaceExists, workspaceName });
 	},
 	/*********************************************************************************************
 	 *
@@ -461,10 +492,7 @@ Actions = {
 	 * Hides the window.
 	 */
 	hideWindow: function () {
-		Logger.system.log("Before Hide");
-		finWindow.hide(function () {
-			Logger.system.log("Hide callback");
-		});
+		this.blurWindow();
 	},
 };
 

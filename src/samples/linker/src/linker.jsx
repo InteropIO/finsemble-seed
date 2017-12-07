@@ -4,7 +4,6 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
-import { FinsembleMenu, FinsembleMenuItem, FinsembleMenuSection, FinsembleMenuSectionLabel } from "@chartiq/finsemble-react-controls";
 import "../../assets/css/finfont.css";
 import "../../assets/css/finsemble.scss";
 import "../../assets/css/CIQ_Seed.css";
@@ -27,11 +26,11 @@ class Linker extends React.Component {
 	 */
 	onStoreChanged(changeEvent) {
 		switch (changeEvent) {
-		case "state":
-			this.setState({
-				groups: LinkerStore.getGroups(),
-				attachedWindowIdentifier: LinkerStore.getAttachedWindowIdentifier()
-			});
+			case "state":
+				this.setState({
+					groups: LinkerStore.getGroups(),
+					attachedWindowIdentifier: LinkerStore.getAttachedWindowIdentifier()
+				});
 		}
 	}
 	/**
@@ -67,14 +66,16 @@ class Linker extends React.Component {
 
 		this.finWindow.addEventListener("blurred", this.onWindowBlur.bind(this));
 		LinkerStore.addListener(["stateChanged"], this.onStoreChanged);
-
-		FSBL.Clients.WindowClient.fitToDOM();
+		LinkerActions.windowMounted(); //windowMounted
+		//	FSBL.Clients.WindowClient.fitToDOM();
 		this.setState({
 			groups: LinkerStore.getGroups(),
 			attachedWindowIdentifier: LinkerStore.getAttachedWindowIdentifier()
 		});
 	}
-
+	componentDidUpdate() {
+		LinkerActions.windowMounted();
+	}
 	render() {
 		var self = this;
 		//Checkbox inside of a circle. Rendered in the center of a group if the attachedWindow is part of that group.

@@ -28,6 +28,7 @@ class SingleInputDialog extends React.Component {
 		this.handleKeydownOnBody = this.handleKeydownOnBody.bind(this);
 		this.onShowRequested = this.onShowRequested.bind(this);
 		this.setInputValue = this.setInputValue.bind(this);
+		this.sendResponse = this.sendResponse.bind(this);
 	}
 	/**
 	 * Handles escape and enter.
@@ -57,6 +58,8 @@ class SingleInputDialog extends React.Component {
 			inputValue: null,
 			inputLabel: data.inputLabel,
 			affirmativeResponseLabel: data.affirmativeResponseLabel || "Okay",
+			cancelResponseLabel: data.affirmativeResponseLabel || "Cancel",
+			showCancelButton: typeof data.showCancelButton === "undefined" ? false : data.showCancelButton
 		}, this.fitAndShow);
 	}
 	/**
@@ -82,7 +85,9 @@ class SingleInputDialog extends React.Component {
 			choice: response
 		});
 
-		this.state.inputValue = null;
+		this.setState({
+			inputValue: null
+		});
 		Array.from(document.querySelectorAll("input")).forEach((el) => el.value = "");
 	}
 	/**
@@ -100,16 +105,24 @@ class SingleInputDialog extends React.Component {
 	render() {
 		var self = this;
 		return (<FinsembleDialog
-			userInputTimeout={10000} behaviorOnResponse="hide"
-			onShowRequested={this.onShowRequested}>
-				<FinsembleDialogQuestion question={this.state.inputLabel} />
-				<FinsembleDialogTextInput onInputChange={this.setInputValue} />
+			userInputTimeout={10000}
+			behaviorOnResponse="hide"
+			onShowRequested={this.onShowRequested}
+			isModal={true}>
+			<FinsembleDialogQuestion question={this.state.inputLabel} />
+			<FinsembleDialogTextInput maxLength="40" onInputChange={this.setInputValue} />
+			<FinsembleDialogButton buttonSize="md" onClick={() => { this.sendResponse("affirmative"); }}>
+				{this.state.affirmativeResponseLabel}
+			</FinsembleDialogButton>
+			{
+				this.state.showCancelButton &&
 				<FinsembleDialogButton buttonSize="md" onClick={() => {
-					this.sendResponse("affirmative");
-				}} title="Big Button">
-					{this.state.affirmativeResponseLabel}
+					this.sendResponse("cancel");
+				}}>
+					{this.state.cancelResponseLabel}
 				</FinsembleDialogButton>
-			</FinsembleDialog>);
+			}
+		</FinsembleDialog>);
 	}
 }
 

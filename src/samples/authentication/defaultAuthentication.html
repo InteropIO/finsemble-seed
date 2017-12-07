@@ -90,7 +90,9 @@
 <body class="dialog">
 	<div class="fsbl-auth-top">
 		<img class="fsbl-logo" src="../assets/img/ciq-banner-black-100x25.png" width="100" height="25">
-		<div class="fsbl-close" id="FSBL-close" onclick="quit()"><i class="ff-close" style=color:#666></i></div>
+		<div class="fsbl-close" id="FSBL-close" onclick="quit()">
+			<i class="ff-close" style=color:#666></i>
+		</div>
 	</div>
 	<div class="form-wrapper">
 		<img src="../assets/img/finsembleLightBG_Solo@1.5x.png" alt="Finsemble Sign On" width="154" height="173">
@@ -99,12 +101,15 @@
 				Incorrect username or password
 			</div>
 			<div class="fsbl-auth-input">
-				<input type="text" id="username" placeholder="Username"><br>
+				<input type="text" id="username" placeholder="Username">
+				<br>
 			</div>
 			<div class="fsbl-auth-input">
-				<input type="password" id="password" placeholder="Password" type="submit"><br>
+				<input type="password" id="password" placeholder="Password" type="submit">
+				<br>
 			</div>
-			<div class="fsbl-button fsbl-button-md" id="submitButton" onclick="processAuthInput()"><i class="ff-check-circle"></i>Login</div>
+			<div class="fsbl-button fsbl-button-md" id="submitButton" onclick="processAuthInput()">
+				<i class="ff-check-circle"></i>Login</div>
 		</div>
 		<!-- <div><a id="authAction" class="link">Sign up</a></div> -->
 	</div>
@@ -125,9 +130,11 @@
 				console.warn("Fail Auth Get", reason);
 			})
 			.then((res) => {
+				if (!res.ok) {// just show the login page if there was a problem
+					return fin.desktop.Window.getCurrent().show();
+				}
 				return res.json();
 			}).then(data => {
-				console.log("data", data)
 				if (data) {
 					getConfig(function () {
 						acceptCredentials(data)
@@ -147,6 +154,9 @@
 				console.warn("Fail Auth Get", reason);
 			})
 			.then((res) => {
+				if (res.status !== "OK") {
+					console.warn("Auth failed");
+				}
 				return res.json();
 			}).then(data => {
 				if (data) {
@@ -157,8 +167,10 @@
 	//Add the config to the config service
 	function updateConfig(config, cb) {
 		var configSet = {}
-		//if (config.components) configSet["components"] = config.components;
+		if (config.components) configSet["components"] = config.components;
 		if (config.menuItems) configSet["menus"] = config.menuItems;
+		if (config.defaultWorkspace) configSet["workspaces"] = config.defaultWorkspace.workspaces;
+
 		//if (config.overrides) configSet["cssOverridePath"] = config.overrides;
 		FSBL.Clients.ConfigClient.processAndSet(
 			{

@@ -6,6 +6,8 @@ const constants = {
 	GET_STATE: "GET_STATE",
 	SET_STATE: "SET_STATE"
 };
+var fit = false;
+var showData = {}
 /**
  * Manages state for the linker window. Since there's only ever one linker window (for now), we move it around and pass in data to populate the colors correctly. The window where the linker button is clicked is called the `attachedWindow`.
  */
@@ -14,7 +16,8 @@ var LinkerStore = Object.assign({}, EventEmitter.prototype, {
 		//linker groups that the attached window belongs to.
 		groups: [],
 		//WindowIdentifier for window that opened the linker.
-		attachedWindowIdentifier: {}
+		attachedWindowIdentifier: {},
+		fit: false
 	},
 	/**
 	 * Getters
@@ -24,6 +27,12 @@ var LinkerStore = Object.assign({}, EventEmitter.prototype, {
 	},
 	getGroups: function () {
 		return this.values.groups;
+	},
+	getFit: function () {
+		return this.values.fit;
+	},
+	setFit: function (value) {
+		this.values.fit = value;
 	},
 	getState: function () {
 		return this.values;
@@ -45,15 +54,13 @@ var LinkerStore = Object.assign({}, EventEmitter.prototype, {
 				return FSBL.Clients.Logger.system.error("Failed to add Finsemble.LinkerWindow.Show Responder: ", error);
 			}
 			var data = queryMessage.data;
-			var finWindow = FSBL.Clients.WindowClient.finWindow;
 
+			showData = data;
 			self.setState(data);
-			FSBL.Clients.WindowClient.fitToDOM();
+			FSBL.Clients.Logger.system.log("show window");
 
-			finWindow.showAt(data.windowBounds.left, data.windowBounds.top + 20, function () {
-			});
 
-			finWindow.focus();
+
 			queryMessage.sendQueryResponse(null, data);
 		});
 	}
@@ -87,6 +94,27 @@ var Actions = {
 			});
 
 		});
+	},
+	windowMounted: function () {
+		if (!showData.windowBounds) return;
+		var finWindow = FSBL.Clients.WindowClient.finWindow;
+		if (!LinkerStore.getFit()) {
+			LinkerStore.setFit(true)
+			fit = true;
+			FSBL.Clients.WindowClient.fitToDOM(function () {
+				finWindow.showAt(showData.windowBounds.left, showData.windowBounds.top + 30, function () {
+				});
+
+			});
+		} else {
+			finWindow.showAt(showData.windowBounds.left, showData.windowBounds.top + 30, function () {
+			});
+		}
+		finWindow.focus();
+
+
+
+
 	},
 	//Adds attached window to a linker group.
 	addToGroup: function (group) {
