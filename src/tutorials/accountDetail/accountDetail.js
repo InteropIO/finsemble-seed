@@ -1,6 +1,6 @@
 
 function setAccountNumber(accountNumber) {
-	$("input[name=accountNumber").val(accountNumber);
+	$("input[name=accountNumber]").val(accountNumber);
 	FSBL.Clients.WindowClient.setWindowTitle(accountNumber);
 	FSBL.Clients.LinkerClient.publish({ dataType: "account", data: accountNumber }); // STEP 8
 	setState(accountNumber);
