@@ -32,10 +32,10 @@ export default class appLauncherContainer extends React.Component {
 
 	onComponentListUpdate(err, data) {
 		FSBL.Clients.Logger.debug("appLauncher onComponentListUpdate");
+		this.domNeedsUpdating = true; // when list changes then will need up update DOM
 		this.setState({
 			componentList: data.value
 		});
-		this.domNeedsUpdating = true; // when list changes then will need up update DOM
 	}
 
 	onPinsUpdate(err, data) {
