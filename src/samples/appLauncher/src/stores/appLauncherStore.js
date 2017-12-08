@@ -129,7 +129,7 @@ var Actions = {
 			});
 		}
 		if (settings.list) {
-			commonItems = settings.list.filter(function (n) {
+			let commonItems = settings.list.filter(function (n) {
 				return keys.indexOf(n) !== -1;
 			});
 
