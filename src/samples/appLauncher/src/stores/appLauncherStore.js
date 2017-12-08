@@ -42,7 +42,7 @@ var Actions = {
 
 		//When an app launcher button is clicked, it sends over the types of components that the app launcher can spawn. We assign that data to an object in the windowClient, and then use that to render the app launcher.
 		FSBL.Clients.RouterClient.subscribe(COMPONENT_UPDATE_CHANNEL, function (err, response) {
-			Object.assign(FSBL.Clients.WindowClient.options.customData, response.data);
+			Object.assign(FSBL.Clients.WindowClient.options.customData.spawnData, response.data);
 			if (firstTime) { // only update component list the first time to eliminate re-rendering the menu
 				Actions.getComponentList(cb);
 				firstTime = false;
@@ -115,7 +115,7 @@ var Actions = {
 	// Custom Components are always shown @TODO - make this a setting
 	filterComponents(components) {
 		var self = this;
-		var settings = FSBL.Clients.WindowClient.options.customData;
+		var settings = FSBL.Clients.WindowClient.options.customData.spawnData;
 		self.componentList = {};
 		var keys = Object.keys(components);
 		if (settings.mode) {
@@ -143,7 +143,7 @@ var Actions = {
 			});
 		}
 		if (settings.list) {
-			let commonItems = settings.list.filter(function (n) {
+			var commonItems = settings.list.filter(function (n) {
 				return keys.indexOf(n) !== -1;
 			});
 

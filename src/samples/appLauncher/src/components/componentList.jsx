@@ -36,6 +36,7 @@ export default class appLauncherContainer extends React.Component {
 		this.setState({
 			componentList: data.value
 		});
+
 	}
 
 	onPinsUpdate(err, data) {
