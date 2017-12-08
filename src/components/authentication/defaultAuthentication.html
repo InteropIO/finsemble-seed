@@ -234,7 +234,7 @@
 		data.append("json", JSON.stringify({ username: username, password: password }));
 		var credentials = { token: "dummyToken-abcdenfhij1234567890" }; // create dummy credentials
 		updateConfig({}, function () {// use this to dynamicallt update your config
-			acceptCredentials(dcredentials)
+			acceptCredentials(credentials)
 
 		})
 		fin.desktop.Window.getCurrent().hide();
