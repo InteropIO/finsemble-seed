@@ -21,6 +21,7 @@ export default class appLauncherContainer extends React.Component {
 			pinnedComponents: []
 		};
 		this.bindCorrectContext();
+		this.domNeedsUpdating = false;
 	}
 	bindCorrectContext() {
 		this.onComponentListUpdate = this.onComponentListUpdate.bind(this);
@@ -30,9 +31,12 @@ export default class appLauncherContainer extends React.Component {
 	}
 
 	onComponentListUpdate(err, data) {
+		FSBL.Clients.Logger.debug("appLauncher onComponentListUpdate");
+		this.domNeedsUpdating = true; // when list changes then will need up update DOM
 		this.setState({
 			componentList: data.value
 		});
+
 	}
 
 	onPinsUpdate(err, data) {
@@ -42,7 +46,11 @@ export default class appLauncherContainer extends React.Component {
 	}
 
 	componentDidUpdate() {
-		this.updateDom();
+		if (this.domNeedsUpdating) {
+			FSBL.Clients.Logger.debug("appLauncher componentDidUpdate updateDom");
+			this.updateDom();
+			this.domNeedsUpdating = false;
+		}
 	}
 
 	updateDom() {
@@ -118,7 +126,7 @@ export default class appLauncherContainer extends React.Component {
 			return (<div></div>);
 		}
 		var self = this;
-		console.log("this.state", this.state);
+		FSBL.Clients.Logger.debug("this.state", this.state);
 		var buildComponentItem = this.buildComponentItem;
 		var components = Object.keys(this.state.componentList);
 		//if this is greater than 0, we don't show a note telling the user to check their configs.

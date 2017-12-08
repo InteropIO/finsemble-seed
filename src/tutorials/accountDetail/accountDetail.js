@@ -22,6 +22,7 @@ function listenForCustomer() {
 
 // STEP 7
 function communicateBetweenComponents() {
+	/*
 	$("next").click(function () {
 		FSBL.Clients.RouterClient.query("accountTraversal", { action: "next" }, function (err, response) {
 			if (err) {
@@ -31,6 +32,7 @@ function communicateBetweenComponents() {
 			}
 		});
 	});
+	*/
 }
 
 // STEP 9

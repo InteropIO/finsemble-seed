@@ -45,7 +45,7 @@
                 },
                 "components": {
                     "App Launcher": {
-                        "launchableByUser": true
+                        "launchableByUser": false
                     },
                     "Window Manager": {
                         "persistWindowState": true,
@@ -115,7 +115,7 @@
 				}
 			}
 		},
-        "welcome": {
+        "Welcome Component": {
             "window": {
                 "url": "$applicationRoot/components/welcome/welcome.html",
                 "frame": false,
@@ -124,11 +124,11 @@
                 "top": "center",
                 "left": "center",
                 "width": 400,
-                "height": 375
+                "height": 400
             },
             "component": {
                 "inject": false,
-                "spawnOnStartup": true
+				"spawnOnStartup": false
             },
             "foreign": {
                 "services": {
@@ -142,7 +142,9 @@
                         "launchableByUser": true
                     },
                     "Window Manager": {
-                        "FSBLHeader": true,
+                        "FSBLHeader": {
+							"hideClose": true
+						},
                         "persistWindowState": true
                     },
                     "Toolbar": {
