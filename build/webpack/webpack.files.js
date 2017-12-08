@@ -1,19 +1,28 @@
 //  config settings
-var enableHMR = true;//Enable Hot Reload
-var HMRBlacklist = ["testComponent"];//Components to explude
-var HMRWhitelist = [];//Only reload these components
-
-var path = require('path');
-var git = require('git-rev-sync');
-var glob_entries = require('webpack-glob-entries');
-var webpack = require("webpack")
-var componentsToBuild = require('./webpack.files.entries.json');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
-var defaultConfig = require("./defaultWebpackConfig");
+const path = require('path');
+const glob_entries = require('webpack-glob-entries');
+const webpack = require("webpack")
+const componentsToBuild = require('./webpack.files.entries.json');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const defaultConfig = require("./defaultWebpackConfig");
+var enableHMR = true,//Enable Hot Reload
+	HMRBlacklist = ["testComponent"],//Components to explude
+	HMRWhitelist = [],//Only reload these components
+	componentIgnores = [],
+	webpackConfigs = [];//Our list of webpack configs list
 
 if (!process.env.NODE_ENV) {// if we are in production turn off hotreload
 	enableHMR = false;
 }
+
+function buildComponentIgnore() {//Dont copy files that we build
+	var components = componentsToBuild;
+	for (var key in components) {
+		var filename = components[key].entry.split("/").pop();
+		componentIgnores.push("*" + filename);
+	}
+}
+
 function shouldIHMR(key) {
 	if (!enableHMR) return false;//Hotreload is off
 	if (HMRWhitelist.length) {// If we have a whitelist then the entry must be in here
@@ -24,108 +33,57 @@ function shouldIHMR(key) {
 	return false;// No whitelist and in the blacklist
 }
 
-var entries = [];//Are entry list
-var entry = {};// Object for non hotreload files
-var reloadEntry = {};//We put all of our hotreload files here
-
-
-for (let key in componentsToBuild) {
-	let component = componentsToBuild[key];
-	if (!enableHMR || !shouldIHMR(key)) {//add to the non hotreload entry
-		entry[component.output] = component.entry;
-		continue;
-	}
-	reloadEntry[component.output] = [
-		component.entry,
-		path.resolve(__dirname, '../../server/hotreloadmiddleware/') + '/client?reload=true&sockets=true&name=' + key//inject the hotreload client
-		//and tell it to use sockets
-	];
-}
-
-var componentIgnores = [];
-function buildComponentIgnore() {//Dont copy files that we build
-	var components = componentsToBuild;
-	for (var key in components) {
-		var filename = components[key].entry.split("/").pop();
-		componentIgnores.push("*" + filename);
-	}
-}
-var mainEntry = false;//Where to place the copy.
-if (Object.keys(entry).length) {//If we have entries in here build the entry file
-	mainEntry = true;
-	var newEntry = defaults();
-	newEntry.entry = entry;
-	newEntry.plugins.push(new CopyWebpackPlugin([
-		{
-			from: './src/components/',
-			to: './components/',
-			force: false,
-			ignore: ["*.js","*.jsx"]
-		},
-		{
-			from: './configs/',
-			to: './configs/',
-			force: true
-		},
-		{
-			from: './src/services/',
-			to: './services/',
-			force: true,
-			ignore: ["*.js"]
-		},
-		{
-			from: './src/thirdParty/',
-			to: './thirdParty/',
-			force: false,
-			ignore: ["*.js"]
-		},
-	], {
-			ignore: componentIgnores
-		}));
-	entries.push(newEntry);
-}
-
-if (Object.keys(reloadEntry).length) {//If we have entries in here build the entry file
-	var hotReloadEntry = defaults();
-	hotReloadEntry.plugins.push(new webpack.HotModuleReplacementPlugin(),//Add in the hot reload plugins
-		new webpack.NoEmitOnErrorsPlugin());
-	if (!mainEntry) {
-		hotReloadEntry.plugins.push(new CopyWebpackPlugin([
-			{
-				from: './src/components/',
-				to: './dist/components/',
-				force: true,
-				ignore: ["*.js","*.jsx"]
-			},
-			{
-				from: './configs/',
-				to: './configs/',
-				force: true
-			},
-			{
-				from: './src/services/',
-				to: './services/',
-				force: true,
-				ignore: ["*.js"]
-			},
-			{
-				from: './src/thirdParty/',
-				to: './thirdParty/',
-				force: false,
-				ignore: ["*.js"]
-			},
-		]));
-	}
-	hotReloadEntry.entry = reloadEntry;
-	entries.push(hotReloadEntry);
-}
-
-
-
-
-function defaults() {// Our defualt entry
+// Our defualt entry
+function defaults() {
 	return new defaultConfig();
 }
-module.exports = entries;
+
+for (let key in componentsToBuild) {
+	let config = new defaults();
+
+	let component = componentsToBuild[key];
+	if (!enableHMR || !shouldIHMR(key)) {
+		//If we aren't hot reloading this thing, okay - add the config to our array.
+		config.entry[component.output] = component.entry;
+		webpackConfigs.push(config);
+		continue;
+	}
+
+	config.entry[component.output] = [
+		component.entry,
+		path.resolve(__dirname, '../../server/hotreloadmiddleware/') + '/client?reload=true&sockets=true&name=' + key//inject the hotreload client
+	];
+	//add the hot reload plugins and push.
+	config.plugins.push(new webpack.HotModuleReplacementPlugin(), new webpack.NoEmitOnErrorsPlugin());
+	webpackConfigs.push(config);
+}
+
+webpackConfigs[0].plugins.push(new CopyWebpackPlugin([
+	{
+		from: './src/components/',
+		to: './components/',
+		force: false,
+		ignore: ["*.js", "*.jsx"]
+	},
+	{
+		from: './configs/',
+		to: './configs/',
+		force: true
+	},
+	{
+		from: './src/services/',
+		to: './services/',
+		force: true,
+		ignore: ["*.js"]
+	},
+	{
+		from: './src/thirdParty/',
+		to: './thirdParty/',
+		force: false,
+		ignore: ["*.js"]
+	}
+], { ignore: componentIgnores }));
+
+module.exports = webpackConfigs;
 
 
