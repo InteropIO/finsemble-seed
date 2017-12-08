@@ -124,7 +124,7 @@
                 "top": "center",
                 "left": "center",
                 "width": 400,
-                "height": 375
+                "height": 400
             },
             "component": {
                 "inject": false,
