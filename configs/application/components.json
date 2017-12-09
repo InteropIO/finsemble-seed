@@ -1,6 +1,6 @@
 {
-    "comment": "Houses config for custom components that you'd like to import into Finsemble.",
-    "components": {
+	"comment": "Houses config for custom components that you'd like to import into Finsemble.",
+	"components": {
 		"Finsemble Documentation": {
 			"window": {
 				"url": "http://documentation.chartiq.com/finsemble",
@@ -28,34 +28,34 @@
 				}
 			}
 		},
-        "Getting Started Tutorial": {
-            "window": {
-                "url": "https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html",
-                "height": 800,
-                "width": 1000
-            },
-            "component": {
-                "spawnOnStartup": false
-            },
-            "foreign": {
-                "services": {
-                    "dockingService": {
-                        "isArrangable": true
-                    }
-                },
-                "components": {
-                    "App Launcher": {
-                        "launchableByUser": false
-                    },
-                    "Window Manager": {
-                        "persistWindowState": true,
-                        "FSBLHeader": true,
-                        "showLinker": false
-                    }
-                }
-            }
-        },
-        "Docking Move Mask": {
+		"Getting Started Tutorial": {
+			"window": {
+				"url": "https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html",
+				"height": 800,
+				"width": 1000
+			},
+			"component": {
+				"spawnOnStartup": false
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"persistWindowState": true,
+						"FSBLHeader": true,
+						"showLinker": false
+					}
+				}
+			}
+		},
+		"Docking Move Mask": {
 			"window": {
 				"url": "$applicationRoot/components/dockingGroupMask/dockingGroupMask.html",
 				"frame": false,
@@ -85,8 +85,8 @@
 					}
 				}
 			}
-        },
-        "windowTitleBar": {
+		},
+		"windowTitleBar": {
 			"window": {
 				"url": "$applicationRoot/components/windowTitleBar/windowTitleBar.js",
 				"top": "center",
@@ -115,43 +115,43 @@
 				}
 			}
 		},
-        "Welcome Component": {
-            "window": {
-                "url": "$applicationRoot/components/welcome/welcome.html",
-                "frame": false,
-                "resizable": true,
-                "autoShow": true,
-                "top": "center",
-                "left": "center",
-                "width": 400,
-                "height": 400
-            },
-            "component": {
-                "inject": false,
-				"spawnOnStartup": false
-            },
-            "foreign": {
-                "services": {
-                    "dockingService": {
-                        "canGroup": true,
-                        "isArrangable": true
-                    }
-                },
-                "components": {
-                    "App Launcher": {
-                        "launchableByUser": true
-                    },
-                    "Window Manager": {
-                        "FSBLHeader": {
+		"Welcome Component": {
+			"window": {
+				"url": "$applicationRoot/components/welcome/welcome.html",
+				"frame": false,
+				"resizable": true,
+				"autoShow": true,
+				"top": "center",
+				"left": "center",
+				"width": 400,
+				"height": 400
+			},
+			"component": {
+				"inject": false,
+				"spawnOnStartup": true
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"canGroup": true,
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"FSBLHeader": {
 							"hideClose": true
 						},
-                        "persistWindowState": true
-                    },
-                    "Toolbar": {
-                        "iconClass": "welcome"
-                    }
-                }
-            }
-        }
-    }
+						"persistWindowState": true
+					},
+					"Toolbar": {
+						"iconClass": "welcome"
+					}
+				}
+			}
+		}
+	}
 }

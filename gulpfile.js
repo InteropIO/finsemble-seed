@@ -24,13 +24,13 @@ function buildComponentIgnore() {//Dont copy files that we build
 	var components = componentsToBuild;
 	for (var key in components) {
 		var filename = components[key].entry.split("/").pop();
-		componentIgnores.push(path.join('!' + __dirname,  components[key].entry));
+		componentIgnores.push(path.join('!' + __dirname, components[key].entry));
 	}
 	return componentIgnores;
 }
 
 function copyStaticComponentsFiles() {
-	var source = [path.join(__dirname, '/src/components/**/*'),path.join('!' + __dirname, '/src/components/**/*.jsx')]
+	var source = [path.join(__dirname, '/src/components/**/*'), path.join('!' + __dirname, '/src/components/**/*.jsx')]
 	source = source.concat(buildComponentIgnore());
 	return gulp.src(source)
 		.pipe(gulp.dest(path.join(__dirname, '/dist/components/')));
@@ -162,7 +162,7 @@ gulp.task('devServer', gulp.series(
 		var exec = require('child_process').spawn;
 		//This runs essentially runs 'PORT=80 node server/server.js'
 		var serverPath = path.join(__dirname, '/server/server.js');
-		
+
 		// If you specify environment variables to child_process, it overwrites all environment variables, including
 		// PATH. So, copy based on our existing env variables.
 		var envCopy = process.env;
@@ -172,10 +172,10 @@ gulp.task('devServer', gulp.series(
 		// allows for spaces in paths.
 		var serverExec = exec(
 			"node",
-			["--inspect", serverPath, { stdio: "inherit" }],
+			[serverPath, { stdio: "inherit" }],
 			{ env: envCopy, stdio: [process.stdin, process.stdout, "pipe", "ipc"] }
 		);
-		
+
 		serverExec.on("message", function (data) {
 			if (data === "serverStarted") {
 				launchOpenfin("dev");
