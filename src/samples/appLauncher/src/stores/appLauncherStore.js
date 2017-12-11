@@ -42,6 +42,8 @@ var Actions = {
 
 		//When an app launcher button is clicked, it sends over the types of components that the app launcher can spawn. We assign that data to an object in the windowClient, and then use that to render the app launcher.
 		FSBL.Clients.RouterClient.subscribe(COMPONENT_UPDATE_CHANNEL, function (err, response) {
+
+			if (!FSBL.Clients.WindowClient.options.customData.spawnData) FSBL.Clients.WindowClient.options.customData.spawnData = {};
 			Object.assign(FSBL.Clients.WindowClient.options.customData.spawnData, response.data);
 			if (firstTime) { // only update component list the first time to eliminate re-rendering the menu
 				Actions.getComponentList(cb);
