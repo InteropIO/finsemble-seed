@@ -4,7 +4,7 @@
 This is a menu that will launch components. It filters components based on a "mode" property in the component's config. This may be revisted in the future.
 
 ### What it looks like
-![](./screenshot.png)
+![](./App_Menu.png)
 
 ### Controls used
 The controls used in this component are documented over in our Finsemble React Controls repo:
