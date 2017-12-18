@@ -5,7 +5,7 @@ The file menu offers a list of commands or choices to the user. The menu can be 
 
 
 ### What it looks like
-![](./screenshot.png)
+![](./filemenu_screenshot.png)
 
 ### Controls used
 The controls used in this component are documented over in our Finsemble React Controls repo:
