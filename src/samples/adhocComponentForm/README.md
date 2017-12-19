@@ -5,4 +5,4 @@ This is a dialog that pops up and allows users to create finsemble components fr
 **This can cause unpredictable behavior and should probably not be in your finished application.** We made this template to show how easy it was to incorporate a website into Finsemble (with no additional functionality).
 
 ### What it looks like
-![adhoc](screenshot.png) <!-- .element height="50%" width="50%" -->
+<img src="screenshot.png" height="10%">
