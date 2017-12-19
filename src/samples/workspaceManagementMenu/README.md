@@ -4,7 +4,7 @@
 The workspace management menu was built to allow users to create, delete, save, and switch workspaces.
 
 ### What it looks like
-<img src="Workspace_Menu.png" height="500">
+<img src="Workspace_Menu.png" width="40%" height="40%">
 
 
 ### Controls used
