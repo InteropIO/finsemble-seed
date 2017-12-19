@@ -5,7 +5,7 @@ The file menu offers a list of commands or choices to the user. The menu can be 
 
 
 ### What it looks like
-<img src="filemenu_screenshot.png" height="300">
+<img src="filemenu_screenshot.png" height="500">
 
 
 ### Controls used
