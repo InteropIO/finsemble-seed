@@ -4,7 +4,7 @@
 This is a menu that will launch components. It filters components based on a "mode" property in the component's config. This may be revisted in the future.
 
 ### What it looks like
-<img src="App_Menu.png" width="60%" height="60%">
+<img src="App_Menu.png" width="40%" height="40%">
 
 
 ### Controls used
