@@ -12,7 +12,7 @@ The Linker Window is our sample system component that interfaces with the Linker
 - When the user clicks on the group color to update the window's groups, the Linker Window uses the LinkerClient API to update the groups and hides itself.
 
 ## What it looks like
-<img src="Linker.png" height="500">
+<img src="App_Menu.png" width="30%" height="30%">
 
 
 
