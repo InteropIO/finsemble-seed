@@ -35,7 +35,7 @@ export default class Toolbar extends React.Component {
 	render() {
 		return (<FinsembleToolbar>
 			<FinsembleToolbarSection name="left" className="left">
-				<FinsembleButton preSpawn={true} buttonType={["MenuLauncher", "Toolbar"]} iconClasses="finsemble-toolbar-brand-logo" icon="$applicationRoot/components/assets/img/Finsemble_Taskbar_Icon.png" menuType="File Menu" />
+				<FinsembleButton preSpawn={true} buttonType={["MenuLauncher", "Toolbar"]} iconClasses="finsemble-toolbar-brand-logo" icon="https://finsemble.chartiq.com/components/assets/img/Finsemble_Taskbar_Icon.png" menuType="File Menu" />
 				<FinsembleButton preSpawn={true} buttonType={["MenuLauncher", "Toolbar"]} label="Workspaces" menuType="Workspace Management Menu" />
 				<FinsembleButton preSpawn={true} buttonType={["MenuLauncher", "Toolbar"]} label="Apps" menuType="App Launcher" />
 				<FinsembleToolbarSeparator />
