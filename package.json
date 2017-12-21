@@ -31,6 +31,7 @@
     "body-parser": "^1.18.2",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.28.7",
+    "death": "^1.1.0",
     "del": "^2.2.2",
     "express": "^4.16.2",
     "flux": "^3.1.2",
