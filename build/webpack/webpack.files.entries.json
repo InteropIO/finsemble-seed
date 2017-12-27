@@ -1,6 +1,10 @@
 {
-	"windowTitleBar": {
-		"output": "components/windowTitleBar/windowTitleBar",
-		"entry": "./src/components/windowTitleBar/src/windowTitleBar.jsx"
-	}
+    "windowTitleBar": {
+        "output": "components/windowTitleBar/windowTitleBar",
+        "entry": "./src/components/windowTitleBar/src/windowTitleBar.jsx"
+    },
+    "symbolBroadcaster": {
+        "output": "components\\symbolBroadcaster\\symbolBroadcaster",
+        "entry": ".\\src\\components\\symbolBroadcaster\\symbolBroadcaster.js"
+    }
 }

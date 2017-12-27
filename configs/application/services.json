@@ -1,4 +1,24 @@
 {
     "comment": "Houses config for any custom services that you'd like to import into Finsemble.",
-    "services": {}
+    "services": {
+        "RPCService": {
+            "useWindow": true,
+            "active": true,
+            "name": "RPCService",
+            "file": "RPC/RPCService.js",
+            "visible": false,
+            "html": "/services/RPC/RPC.html",
+            "component": {
+                "type": "service"
+            },
+            "foreign":{
+                "components":{
+                    "Window Manager": false
+                }
+            },
+            "window": {
+                "preload": "$moduleRoot/FSBL.js"
+            }
+        }
+    }
 }
