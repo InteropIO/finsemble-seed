@@ -13,8 +13,8 @@ var showData = {}
  */
 var LinkerStore = Object.assign({}, EventEmitter.prototype, {
 	values: {
-		//linker groups that the attached window belongs to.
-		groups: [],
+		//linker channels that the attached window belongs to.
+		channels: [],
 		//WindowIdentifier for window that opened the linker.
 		attachedWindowIdentifier: {},
 		fit: false
@@ -25,8 +25,8 @@ var LinkerStore = Object.assign({}, EventEmitter.prototype, {
 	getAttachedWindowIdentifier: function () {
 		return this.values.attachedWindowIdentifier;
 	},
-	getGroups: function () {
-		return this.values.groups;
+	getChannels: function () {
+		return this.values.channels;
 	},
 	getFit: function () {
 		return this.values.fit;
@@ -38,14 +38,14 @@ var LinkerStore = Object.assign({}, EventEmitter.prototype, {
 		return this.values;
 	},
 	setState: function (state) {
-		LinkerStore.values.groups = state.groups;
+		LinkerStore.values.channels = state.channels;
 		if (state.windowIdentifier) {
 			LinkerStore.values.attachedWindowIdentifier = state.windowIdentifier;
 		}
 		this.emit("stateChanged", "state");
 	},
 	/**
-	 * Moves the linker window around and populates it with group information.
+	 * Moves the linker window around and populates it with channel information.
 	 */
 	initialize: function () {
 		var self = this;
@@ -58,9 +58,6 @@ var LinkerStore = Object.assign({}, EventEmitter.prototype, {
 			showData = data;
 			self.setState(data);
 			FSBL.Clients.Logger.system.log("show window");
-
-
-
 			queryMessage.sendQueryResponse(null, data);
 		});
 	}
@@ -84,15 +81,9 @@ var Actions = {
 	//Retrieves data from the LinkerClient.
 	getState: function () {
 		let attachedWindowIdentifier = LinkerStore.getAttachedWindowIdentifier();
-		FSBL.Clients.LinkerClient.getState(attachedWindowIdentifier, function (err, response) {
-			if (err) {
-				FSBL.Clients.Logger.system.verbose("err", err);
-			}
-			AppDispatcher.dispatch({
-				actionType: constants.SET_STATE,
-				data: response
-			});
-
+		AppDispatcher.dispatch({
+			actionType: constants.SET_STATE,
+			data: FSBL.Clients.LinkerClient.getState(attachedWindowIdentifier)
 		});
 	},
 	windowMounted: function () {
@@ -111,34 +102,21 @@ var Actions = {
 			});
 		}
 		finWindow.focus();
-
-
-
-
 	},
-	//Adds attached window to a linker group.
-	addToGroup: function (group) {
+	//Adds attached window to a linker channel.
+	linkToChannel: function (channel) {
 		let attachedWindowIdentifier = LinkerStore.getAttachedWindowIdentifier();
-		FSBL.Clients.LinkerClient.addToGroup(group, attachedWindowIdentifier, function (err, response) {
-			if (err) {
-			}
-			AppDispatcher.dispatch({
-				actionType: constants.SET_STATE,
-				data: response
-			});
-
+		AppDispatcher.dispatch({
+			actionType: constants.SET_STATE,
+			data: FSBL.Clients.LinkerClient.linkToChannel(channel, attachedWindowIdentifier)
 		});
 	},
-	//Removes attached window from a linker group.
-	removeFromGroup: function (group) {
+	//Removes attached window from a linker channel.
+	unlinkFromChannel: function (channel) {
 		let attachedWindowIdentifier = LinkerStore.getAttachedWindowIdentifier();
-		FSBL.Clients.LinkerClient.removeFromGroup(group, attachedWindowIdentifier, function (err, response) {
-			if (err) {
-			}
-			AppDispatcher.dispatch({
-				actionType: constants.SET_STATE,
-				data: response
-			});
+		AppDispatcher.dispatch({
+			actionType: constants.SET_STATE,
+			data: FSBL.Clients.LinkerClient.unlinkFromChannel(channel, attachedWindowIdentifier)
 		});
 	}
 };

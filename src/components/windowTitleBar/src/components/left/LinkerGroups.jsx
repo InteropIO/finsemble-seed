@@ -16,7 +16,7 @@ export default class LinkerGroups extends React.Component {
 		windowTitleBarStore = getStore();
 		this.bindCorrectContext();
 		this.state = {
-			groups: FSBL.Clients.LinkerClient.getGroups().groups
+			groups: FSBL.Clients.LinkerClient.getState().channels
 		};
 	}
     /**
