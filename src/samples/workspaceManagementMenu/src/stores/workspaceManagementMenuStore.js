@@ -465,15 +465,16 @@ Actions = {
 	 * If the workspace is pinned, it unpins the workspace. Otherwise, we pin it to the toolbar.
 	 */
 	togglePin: function (workspace) {
-		let workspaceName = workspace.name;
+
+		let workspaceName = workspace.name.replace(/[.]/g, "^DOT^"); //No dots allowed in store fieldnames
 		//toggles the pinned state of the component. This change will be broadcast to all toolbars so that the state changes in each component.
 		let pins = Actions.getPins();
 		let thePin = {
 			type: "workspaceSwitcher",
-			label: workspaceName,
+			label: workspace.name,
 			toolbarSection: 'center'
 		};
-		let wasAlreadyPinned = Actions.isPinned(workspaceName);
+		let wasAlreadyPinned = Actions.isPinned(workspace.name);
 
 		if (wasAlreadyPinned) {
 			ToolbarStore.removeValue({ field: "pins." + workspaceName });
