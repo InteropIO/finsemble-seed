@@ -15,7 +15,6 @@ Logger.start();
 
 var LocalStorageAdapter = function (uuid) {
 	BaseStorage.call(this, arguments);
-	FSBL.Clients.StorageClient.save({ topic: "finsemble", key: "chatWindows", value: chatWindows }, function (err, response) { Logger.system.log("save....", err, response); });
 	/**
 	 * Save method.
 	 * @param {object} params
