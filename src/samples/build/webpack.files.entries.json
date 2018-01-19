@@ -38,5 +38,9 @@
 	"singleInputDialog": {
 		"output": "components/singleInputDialog/singleInputDialog",
 		"entry": "./src/components/singleInputDialog/src/app.jsx"
+	},
+	"localStorageAdapter": {
+		"output": "adapters/LocalStorageAdapter",
+		"entry":"./src/adapters/LocalStorageAdapter.js"
 	}
 }

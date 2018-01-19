@@ -13,7 +13,7 @@ var Logger = require("@chartiq/finsemble").Clients.Logger;
 //Because calls to this storage adapter will likely come from many different windows, we will log successes and failures in the central logger.
 Logger.start();
 
-var LocalStorage2 = function (uuid) {
+var LocalStorageAdapter = function (uuid) {
 	BaseStorage.call(this, arguments);
 	FSBL.Clients.StorageClient.save({ topic: "finsemble", key: "chatWindows", value: chatWindows }, function (err, response) { Logger.system.log("save....", err, response); });
 	/**
@@ -103,6 +103,6 @@ var LocalStorage2 = function (uuid) {
 };
 
 
-LocalStorage2.prototype = new BaseStorage();
-new LocalStorage2("LocalStorage2");
-module.exports = LocalStorage2;//Allows us to get access to the unintialized object
+LocalStorageAdapter.prototype = new BaseStorage();
+new LocalStorageAdapter("LocalStorageAdapter");
+module.exports = LocalStorageAdapter;//Allows us to get access to the unintialized object

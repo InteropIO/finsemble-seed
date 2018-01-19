@@ -2,11 +2,11 @@
 	"comment": "Top-level application config for development, adding on top of the core config",
 	"mode": "",
 	"isAuthEnabled": false,
-	"defaultStorage": "LocalStorage2",
+	"defaultStorage": "LocalStorageAdapter",
 	"systemTrayIcon": "$applicationRoot/components/assets/img/Finsemble_Taskbar_Icon.png",
 	"debugServiceDelay": 0,
 	"storage": {
-		"LocalStorage2": "$applicationRoot/adapters/LocalStorage2.js"
+		"LocalStorageAdapter": "$applicationRoot/adapters/LocalStorageAdapter.js"
 	},
 	"betaFeatures": {
 		"docking": {
