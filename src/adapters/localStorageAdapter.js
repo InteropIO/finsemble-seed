@@ -53,8 +53,38 @@ var LocalStorageAdapter = function (uuid) {
 		return cb(null, data);
 	};
 
+	// return prefix used to filter keys
+	this.getKeyPreface = function (self, params) {
+		var preface = self.baseName + ":" + self.userName + ":" + params.topic + ":";
+		if ("keyPrefix" in params) {
+			preface = preface + params.keyPrefix;
+		}
+		return preface;
+	};
+
 	/**
-	 * Get method.
+	 * Returns all keys stored in localstorage.
+	 * @param {*} params
+	 * @param {*} cb
+	 */
+	this.keys = function (params, cb) {
+		var keys = [];
+		var keyPreface = this.getKeyPreface(this, params);
+		var keysRegExp = new RegExp(keyPreface + ".*"); // regex to find all keys for this topic
+
+		for (var i = 0, len = localStorage.length; i < len; ++i ) {
+  			var oneKey = localStorage.key(i);
+			if (keysRegExp.test(oneKey)) { // if key is for this topic then save it
+				keys.push(oneKey);
+			}
+		}
+
+		Logger.system.debug("Storage.keys for keyPreface=" + keyPreface + " with keys=" + keys);
+		return cb(null, keys);
+	};
+
+	/**
+	 * Delete method.
 	 * @param {object} params
 	 * @param {string} params.topic A topic under which the data should be stored.
 	 * @param {string} params.key The key whose value is being deleted.
