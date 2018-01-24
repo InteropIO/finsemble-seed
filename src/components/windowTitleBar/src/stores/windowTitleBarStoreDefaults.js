@@ -19,8 +19,8 @@ export default {
 		receiverHandler: false
 	},
 	Linker: {
-		groups: {},
-		allGroups: {},
+		channels: {},
+		allChannels: {},
 		showLinkerButton: false
 	},
 	Close: {
