@@ -6,8 +6,7 @@ const constants = {
 	GET_STATE: "GET_STATE",
 	SET_STATE: "SET_STATE"
 };
-var fit = false;
-var showData = {}
+
 /**
  * Manages state for the linker window. Since there's only ever one linker window (for now), we move it around and pass in data to populate the colors correctly. The window where the linker button is clicked is called the `attachedWindow`.
  */
@@ -17,7 +16,7 @@ var LinkerStore = Object.assign({}, EventEmitter.prototype, {
 		channels: [],
 		//WindowIdentifier for window that opened the linker.
 		attachedWindowIdentifier: {},
-		fit: false
+		fittedToDOM: false
 	},
 	/**
 	 * Getters
@@ -28,19 +27,13 @@ var LinkerStore = Object.assign({}, EventEmitter.prototype, {
 	getChannels: function () {
 		return this.values.channels;
 	},
-	getFit: function () {
-		return this.values.fit;
-	},
-	setFit: function (value) {
-		this.values.fit = value;
-	},
 	getState: function () {
 		return this.values;
 	},
 	setState: function (state) {
-		LinkerStore.values.channels = state.channels;
+		this.values.channels = state.channels;
 		if (state.windowIdentifier) {
-			LinkerStore.values.attachedWindowIdentifier = state.windowIdentifier;
+			this.values.attachedWindowIdentifier = state.windowIdentifier;
 		}
 		this.emit("stateChanged", "state");
 	},
@@ -49,16 +42,14 @@ var LinkerStore = Object.assign({}, EventEmitter.prototype, {
 	 */
 	initialize: function () {
 		var self = this;
-		FSBL.Clients.RouterClient.addResponder("Finsemble.LinkerWindow.Show", function (error, queryMessage) {
+		FSBL.Clients.RouterClient.addResponder("Finsemble.LinkerWindow.SetActiveChannels", function (error, queryMessage) {
 			if (error) {
-				return FSBL.Clients.Logger.system.error("Failed to add Finsemble.LinkerWindow.Show Responder: ", error);
+				return FSBL.Clients.Logger.system.error("Failed to add Finsemble.LinkerWindow.SetActiveChannels Responder: ", error);
 			}
-			var data = queryMessage.data;
 
-			showData = data;
-			self.setState(data);
-			FSBL.Clients.Logger.system.log("show window");
-			queryMessage.sendQueryResponse(null, data);
+			self.setState( queryMessage.data);
+			FSBL.Clients.Logger.system.log("toggle Linker window");
+			queryMessage.sendQueryResponse(null, {});
 		});
 	}
 });
@@ -86,22 +77,9 @@ var Actions = {
 			data: FSBL.Clients.LinkerClient.getState(attachedWindowIdentifier)
 		});
 	},
+	// Called when the React component is mounted
 	windowMounted: function () {
-		if (!showData.windowBounds) return;
-		var finWindow = FSBL.Clients.WindowClient.finWindow;
-		if (!LinkerStore.getFit()) {
-			LinkerStore.setFit(true)
-			fit = true;
-			FSBL.Clients.WindowClient.fitToDOM(function () {
-				finWindow.showAt(showData.windowBounds.left, showData.windowBounds.top + 30, function () {
-				});
-
-			});
-		} else {
-			finWindow.showAt(showData.windowBounds.left, showData.windowBounds.top + 30, function () {
-			});
-		}
-		finWindow.focus();
+		FSBL.Clients.WindowClient.fitToDOM();
 	},
 	//Adds attached window to a linker channel.
 	linkToChannel: function (channel) {
