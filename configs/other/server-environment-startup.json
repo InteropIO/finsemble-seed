@@ -1,7 +1,7 @@
 {
     "dev": {
         "serverPort": 3375,
-        "serverConfig": "http://localhost:3375/configs/openfin/manifest-local.json",
+        "serverConfig": "http://localhost:3375/config",
         "clientRoute": "http://localhost:3375/"
     },
     "prod": {

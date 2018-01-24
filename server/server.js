@@ -43,7 +43,14 @@ function startServer(compiler) {///compiler here is webpack and comes from the d
 	app.use("/finsemble", express.static(moduleDirectory, {
 		maxage: cacheAge
 	}));
-
+	app.get("/config", function (req, res) {
+		console.log("doing config stuff")
+		var dev = require("../configs/openfin/manifest-local.json");
+		res.send(dev)
+	});
+	app.post("/switchEnvironment", function (req, res) {
+		console.log("switchEnvironment")
+	});
 
 	var PORT = process.env.PORT || 3375;
 
