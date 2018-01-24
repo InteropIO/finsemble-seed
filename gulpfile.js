@@ -190,34 +190,7 @@ gulp.task('devServer', gulp.series(
 	})
 );
 
-gulp.task('production', gulp.series(
-	'wipeDist',
-	'copy',
-	webpackComponents,
-	webpackServices,
-	buildSass,
-	function (done) {
-		initialBuildFinished = true;
-		var exec = require('child_process').spawn;
-		//This runs essentially runs 'PORT=80 node server/server.js'
-		var serverPath = path.join(__dirname, '/server/server.js');
-		//allows for spaces in paths.
-		var serverExec = exec('node', ['--inspect', serverPath, { stdio: 'inherit' }], { env: { 'PORT': StartupConfig["prod"].serverPort, NODE_ENV: "prod" }, stdio: [process.stdin, process.stdout, 'pipe', "ipc"] });
-
-		serverExec.on("message", function (data) {
-			if (data === "serverStarted") {
-				launchOpenfin("prod");
-				done();
-			}
-		});
-		serverExec.on('exit', code => console.log('final exit code is', code));
-		//Prints server errors to your terminal.
-		serverExec.stderr.on("data", function (data) {
-			console.log(errorOutColor('ERROR:' + data));
-		});
-	})
-);
-
-
 gulp.task('default', gulp.series('devServer'));
-gulp.task('prod', gulp.series('production'));
+
+//This command should be tailored to your production environment. You are responsible for moving the built files to your production server, and creating an openfin installer that points to your config.
+gulp.task('prod', gulp.series('build'));
