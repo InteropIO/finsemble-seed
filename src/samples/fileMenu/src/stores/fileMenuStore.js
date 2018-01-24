@@ -90,6 +90,7 @@ var Actions = {
 			method: "POST",
 			credentials: "include"
 		});
+		FSBL.restartApplication();
 	},
 	/**
 	 * Called on shutdown (if the workspace is dirty).

@@ -4,6 +4,7 @@
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
+var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
 var chalk = require('chalk');
 var outputColor = chalk.yellow;
@@ -15,7 +16,7 @@ var moduleDirectory = path.join(__dirname, "/../finsemble")
 var cacheAge = 0;
 
 console.log(outputColor("SERVER SERVING FROM " + rootDir + " with caching maxage = ", cacheAge));
-
+app.use(cookieParser());
 startServer();
 
 function startServer(compiler) {///compiler here is webpack and comes from the dev file and
@@ -44,12 +45,31 @@ function startServer(compiler) {///compiler here is webpack and comes from the d
 		maxage: cacheAge
 	}));
 	app.get("/config", function (req, res) {
-		console.log("doing config stuff")
-		var dev = require("../configs/openfin/manifest-local.json");
-		res.send(dev)
+		var cookie = req.cookies;
+		var config;
+		if (!cookie.env) {
+			res.cookie('env', "dev", { maxAge: 900000, httpOnly: true });
+		}
+		if (cookie.env === "prod") {
+			config = require("../configs/openfin/manifest-prod.json");
+		} else {
+			config = require("../configs/openfin/manifest-local.json");
+		}
+		console.log("doing config stuff",cookie)
+		res.send(config) //sends the config
 	});
-	app.post("/switchEnvironment", function (req, res) {
-		console.log("switchEnvironment")
+	app.post("/switchEnvironment", function (req, res, next) {
+		var cookie = req.cookies; //getter
+		if (!cookie.env) {
+			res.cookie('env', "dev", { maxAge: 900000, httpOnly: true });
+		}
+		if (cookie.env === "dev") {
+			res.cookie('env', "prod", { maxAge: 900000, httpOnly: true });
+		} else {
+			res.cookie('env', "dev", { maxAge: 900000, httpOnly: true });
+		}
+		console.log("switchEnvironment", cookie, "cookie.env: ", cookie.env)
+		next()
 	});
 
 	var PORT = process.env.PORT || 3375;
@@ -63,7 +83,7 @@ function startServer(compiler) {///compiler here is webpack and comes from the d
 			require("./dev/hotreload")(app, server, function () {
 				process.send('serverStarted');
 			});
-		} else if(process.send) {
+		} else if (process.send) {
 			process.send('serverStarted');
 		}
 	});

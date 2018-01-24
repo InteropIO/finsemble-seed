@@ -9,6 +9,11 @@ import "../../assets/css/finfont.css";
 import "../../assets/css/finsemble.scss";
 import "../fileMenu.scss";
 
+var environment = "";
+FSBL.Clients.ConfigClient.getValue({ field: "finsemble" }, function (err, finsembleConfig) {
+	environment = finsembleConfig.env;
+});
+
 class FileMenu extends React.Component {
 	render() {
 		let padding = {
@@ -25,7 +30,7 @@ class FileMenu extends React.Component {
 					<li className="menu-item menu-item-function" id="Documentation" onClick={this.spawnAbout}>About</li> */}
 				<FinsembleMenuItem label="Central Console" onClick={FileMenuActions.showCentralConsole} />
 				<FinsembleMenuItem label="Documentation" onClick={FileMenuActions.spawnDocs} />
-				<FinsembleMenuItem label="Switch Environments" onClick={FileMenuActions.switchEnv} />
+				<FinsembleMenuItem label={environment} onClick={FileMenuActions.switchEnv} />
 				{window.location.toString().includes("localhost") ?
 					<FinsembleMenuItem label="Restart" onClick={FileMenuActions.restart} />
 					: null

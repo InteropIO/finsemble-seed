@@ -64,6 +64,6 @@
         "importConfig": [
             "$applicationRoot/configs/application/config.json"
         ],
-        "env": "dev"
+        "env": "prod"
     }
 }

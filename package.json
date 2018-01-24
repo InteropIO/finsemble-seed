@@ -16,6 +16,7 @@
   "dependencies": {
     "@chartiq/finsemble": "2.0.*",
     "@chartiq/finsemble-react-controls": "^1.0.14",
+    "cookie-parser": "^1.4.3",
     "gulp-4.0.build": "^4.0.0-build.a271520",
     "nocache": "^2.0.0",
     "openfin-launcher": "^1.3.11"
