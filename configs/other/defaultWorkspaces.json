@@ -1,7 +1,7 @@
 {
     "workspaces": [
         {
-            "name": "Default Workspace with No Windows",
+            "name": "Default Workspace",
             "windows": [],
             "components": [
                 {
