@@ -2,17 +2,15 @@
 function setAccountNumber(accountNumber) {
 	$("input[name=accountNumber]").val(accountNumber);
 	FSBL.Clients.WindowClient.setWindowTitle(accountNumber);
-	FSBL.Clients.LinkerClient.publish({ dataType: "account", data: accountNumber }); // STEP 8
+	FSBL.Clients.LinkerClient.publish({ dataType: "account", data: accountNumber });
 	setState(accountNumber);
 }
 
-// STEP 5
 function getInitialCustomer() {
 	var accountNumber = FSBL.Clients.WindowClient.getSpawnData()["accountNumber"];
 	setAccountNumber(accountNumber);
 }
 
-// STEP 6
 function listenForCustomer() {
 	FSBL.Clients.RouterClient.addListener(FSBL.Clients.WindowClient.options.name, function (err, response) {
 		if (err) return;
@@ -20,7 +18,7 @@ function listenForCustomer() {
 	});
 }
 
-// STEP 7
+// Step 4.1
 function communicateBetweenComponents() {
 	/*
 	$("next").click(function () {
@@ -35,7 +33,7 @@ function communicateBetweenComponents() {
 	*/
 }
 
-// STEP 9
+// Step 3.1
 function setState(accountNumber) {
 	/*
 	FSBL.Clients.WindowClient.setComponentState({ field: 'accountNumber', value: accountNumber });
