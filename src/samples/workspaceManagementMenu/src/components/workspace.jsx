@@ -40,12 +40,16 @@ export default class Workspace extends React.Component {
 	 */
 	renderButtons() {
 		let { workspace, itemActions } = this.props;
+		//Remove trashcan for activeWorkspace. Prevents it from being deleted and causing issues.
+		if (this.props.isActiveWorkspace) {
+			let index = itemActions.findIndex(el => el.iconClass.includes('ff-delete'));
+			itemActions.splice(index, 1);
+		}
 		return itemActions.map(function (action, index) {
 			let classes = "menu-item-action";
-			if (workspace.isPinned && action.iconClass.includes("pin")) {
-				classes += " pinned-workspace-pin";
-			} else if (action.iconClass.includes("pin")) {
-				classes += " pin-workspace";
+			let iconClasses = action.iconClass;
+			if (workspace.isPinned && iconClasses.includes('pin')) {
+				iconClasses += " finsemble-item-pinned";
 			} else {
 				classes += " remove-workspace";
 			}
@@ -56,7 +60,7 @@ export default class Workspace extends React.Component {
 				}
 			}>
 				{action.iconClass &&
-					<i className={action.iconClass}></i>
+					<i className={iconClasses}></i>
 				}
 			</div>);
 		});
@@ -76,7 +80,7 @@ export default class Workspace extends React.Component {
 			actionButtons = this.renderButtons();
 		}
 
-		let classes = this.props.isActiveWorkspace ? "active-workspace" : null;
+		let classes = this.props.isActiveWorkspace ? "active-workspace workspace-name" : "workspace-name";
 		return (
 			<FinsembleMenuItem>
 				<FinsembleMenuItemLabel label={this.props.workspace.name} className={classes} onClick={this.onClick}/>

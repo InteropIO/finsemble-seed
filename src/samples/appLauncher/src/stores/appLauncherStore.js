@@ -10,35 +10,49 @@ const COMPONENT_UPDATE_CHANNEL = `${finWindow.name}.ComponentsToRender`;
 
 FSBL.Clients.RouterClient.addPubSubResponder(COMPONENT_UPDATE_CHANNEL, {});
 var Actions = {
-	initialize: function (done) {
-		//Initializes data for our store.
-		Actions.initializeComponentList();
-		Actions.getUserDefinedComponentList();
-		done();
+	initialize: function (cb) {
+		async.parallel([
+			Actions.initializeComponentList,
+			Actions.getUserDefinedComponentList
+		], function (err) {
+			if (err) {
+				console.error(err);
+			}
+			FSBL.Clients.Logger.debug("Actions.initialize done");
+			cb();
+		});
 	},
-	getComponentList() {
+	getComponentList(cb) {
 		FSBL.Clients.LauncherClient.getComponentList(function (err, response) {
 			if (err) {
 				throw new Error(err);
 			}
 			//Each AppLauncher
-			console.log("componentList--",response)
+			FSBL.Clients.Logger.debug("getComponentList from LauncherClient", response)
 			Actions.filterComponents(response);
+			if (cb) {
+				cb();
+			}
 		});
 	},
-	initializeComponentList() {
+	initializeComponentList(cb) {
 		var self = Actions;
-		Actions.getComponentList();
+		var firstTime = true;
 
 		//When an app launcher button is clicked, it sends over the types of components that the app launcher can spawn. We assign that data to an object in the windowClient, and then use that to render the app launcher.
 		FSBL.Clients.RouterClient.subscribe(COMPONENT_UPDATE_CHANNEL, function (err, response) {
-			Object.assign(FSBL.Clients.WindowClient.options.customData, response.data);
-			Actions.getComponentList();
+
+			if (!FSBL.Clients.WindowClient.options.customData.spawnData) FSBL.Clients.WindowClient.options.customData.spawnData = {};
+			Object.assign(FSBL.Clients.WindowClient.options.customData.spawnData, response.data);
+			if (firstTime) { // only update component list the first time to eliminate re-rendering the menu
+				Actions.getComponentList(cb);
+				firstTime = false;
+			}
 		});
 
 		//Whenever we add or remove a component, this event is fired. We get a list of all components, then filter it out to include only the ones that this particular launcher is capable of spawning.
 		FSBL.Clients.RouterClient.addListener("Launcher.update", function (err, response) {
-			console.log("list updated", err, response);
+			FSBL.Clients.Logger.debug("list updated", err, response);
 			if (err) {
 				return console.error(err);
 			}
@@ -46,7 +60,7 @@ var Actions = {
 		});
 	},
 	//get adhoc components that the user created from storage.
-	getUserDefinedComponentList() {
+	getUserDefinedComponentList(cb) {
 		var self = Actions;
 		FSBL.Clients.StorageClient.get({ topic: "finsemble", key: "userDefinedComponents" }, function (err, response) {
 			var data = response;
@@ -60,6 +74,7 @@ var Actions = {
 					});
 				}
 			}
+			cb();
 		});
 	},
 	//saves adhoc components
@@ -101,7 +116,7 @@ var Actions = {
 	// Custom Components are always shown @TODO - make this a setting
 	filterComponents(components) {
 		var self = this;
-		var settings = FSBL.Clients.WindowClient.options.customData;
+		var settings = FSBL.Clients.WindowClient.options.customData.spawnData;
 		self.componentList = {};
 		var keys = Object.keys(components);
 		if (settings.mode) {
@@ -129,7 +144,7 @@ var Actions = {
 			});
 		}
 		if (settings.list) {
-			commonItems = settings.list.filter(function (n) {
+			var commonItems = settings.list.filter(function (n) {
 				return keys.indexOf(n) !== -1;
 			});
 
@@ -146,25 +161,37 @@ var Actions = {
 				if (component.component.isUserDefined) { self.componentList[keys[i]] = component; }
 			}
 		}
+		FSBL.Clients.Logger.debug("appLauncher filterComponents", self.componentList, "settings", settings, "customData", FSBL.Clients.WindowClient.options.customData);
 		appLauncherStore.setValue({ field: "componentList", value: self.componentList });
 		self.saveCustomComponents();
 	},
 	//toggles the pinned state of the component. This change will be broadcast to all toolbars so that the state changes in each component.
 	togglePin(componentToToggle) {
 		var componentType = componentToToggle.component.type;
-		var componentIcon;
+		var fontIcon;
 		try {
-			componentIcon = componentToToggle.foreign.components.Toolbar.iconClass;
+			fontIcon = componentToToggle.foreign.components.Toolbar.iconClass;
 		} catch (e) {
-			componentIcon = "";
+			fontIcon = "";
 		}
+
+		var imageIcon;
+		try {
+			imageIcon = componentToToggle.foreign.components.Toolbar.iconURL;
+		} catch (e) {
+			imageIcon = "";
+		}
+
+		//No dots allowed in keys in the global store, so escaping dots
+		var componentTypeDotRemove = componentType.replace(/[.]/g, "^DOT^")
 
 		var pins = appLauncherStore.values.pins;
 		var thePin = {
 			type: "componentLauncher",
 			label: componentType,
 			component: componentType,
-			fontIcon: componentIcon,
+			fontIcon: fontIcon,
+			icon: imageIcon,
 			toolbarSection: "center"
 		};
 		var wasPinned = false;
@@ -181,9 +208,9 @@ var Actions = {
 		}
 
 		if (wasPinned) {
-			ToolbarStore.removeValue({ field: "pins." + componentType });
+			ToolbarStore.removeValue({ field: "pins." + componentTypeDotRemove });
 		} else {
-			ToolbarStore.setValue({ field: "pins." + componentType, value: thePin });
+			ToolbarStore.setValue({ field: "pins." + componentTypeDotRemove, value: thePin });
 		}
 	},
 	//Handler for when the user wants to remove an adhoc component.
@@ -234,7 +261,7 @@ var Actions = {
 	//Spawn a component.
 	launchComponent(config, data) {
 		Actions.hideWindow();
-		FSBL.Clients.LauncherClient.spawn(config.component.type, { addToWorkspace: true }, {monitor: "mine" });
+		FSBL.Clients.LauncherClient.spawn(config.component.type, { addToWorkspace: true }, { monitor: "mine" });
 	},
 	//Retrieve pins from the store.
 	getPins(cb) {
@@ -279,10 +306,11 @@ function initialize(cb) {
 		if (err) {
 			console.error(err);
 		}
-
+		FSBL.Clients.Logger.debug("appLauncherstore init done");
 		cb(appLauncherStore);
 	});
 }
+
 let getStore = () => {
 	return appLauncherStore;
 };

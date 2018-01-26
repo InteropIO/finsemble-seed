@@ -9,14 +9,14 @@ The toolbar uses the config to [compose](https://reactjs.org/docs/composition-vs
 - [Finsemble Toolbar](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleToolbar)
 - [Finsemble Toolbar Section](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleToolbarSection)
 - [Finsemble Button](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleButton)
-- [Finsemble Toolbar Seperator](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleToolbarSeprator)
+- [Finsemble Toolbar Separator](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleToolbarSeprator)
 
 The toolbar supports a "right," "left," and "center" section and those are created based on the `align` property of the items on the toolbar. It then creates buttons for each config (see below for a sample config) item in the `menuItems` based on the `type` property. The currently created types are:
 
 - menu - This will create a `MenuLauncher` type Finsemble button, which is specifically designed to launch menus. When the toolbar loads, it pre-spawns all menu components in a hidden state to improve performance.
 - workspace - This will create a Workspace Launcher button which is designed to launch workspaces.
 - component - This will create a `AppLauncher` type Finsemble button, which is designed to spawn a Finsemble component.
-- seperator - This will create a seperator.
+- separator - This will create a separator.
 - reactComponent - This is used to insert custom react components into the toolbar.
 
 It also uses a customized Finsemble button as the `overflowMenuControl` for the "center" section of the Finsemble Toolbar Section.

@@ -1,17 +1,14 @@
 ## AppLauncher
 
 ### Overview
-This is a menu that will launch components. The app launcher is a single window that is spawned by the toolbar in the background. By default, it is hidden. When the "Premium" button is clicked, the menu shows itself on the appropriate monitor; it will hide itself when the window loses focus.
-
-The list of launchable apps is are pulled from *configs/componentList.json*. If `components['foreign']['App Launcher'].launchableByUser` is `true`, it will be included in the app launcher.
-
-
+This is a menu that will launch components. It filters components based on a "mode" property in the component's config. This may be revisted in the future.
 
 ### What it looks like
-![](./screenshot.png)
+<img src="App_Menu.png" width="40%" height="40%">
+
 
 ### Controls used
-The controls used in this component are documented over in our Finsemble React Controls repo: 
+The controls used in this component are documented over in our Finsemble React Controls repo:
 * [FinsembleMenu](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleMenu)
 * [FinsembleMenuSection](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleMenuSection)
 * [FinsembleMenuSectionLabel](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleMenuSectionLabel)

@@ -1,24 +1,42 @@
 @import '../assets/sass/menus';
 @import '../assets/sass/globals';
 
-.menu-item-actions {
-	flex:.17;
-}
-.workspace-actions {
-	padding-bottom: 0px;
+html {
+	height:100%;
 }
 
-.workspace-action:first-of-type > i {
-	padding-right: 7px;
-	margin-top: 2px;
+.ComponentList {
+	width: 382px;
+}
+.appLauncher{
+	max-height: 500px;
+}
+.addComponent{
+	font-size:.8em;
+	align-self:flex-end;
+	cursor: pointer;
+	padding-right: 1.3em ;
 }
 
-.menu-item-label {
-	flex:.8;
+.empty-delete {
+	width:1em;
 }
 
-.menu-secondary {
-	padding-top:8px;
+::-webkit-scrollbar-track
+{
+	border-radius: 3px;
+}
+
+::-webkit-scrollbar {
+	width: 9px;
+	background-color: rgb(247, 247, 247);
+	border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+	cursor: pointer;
+	border-radius: inherit;
+	background-color: rgba(0,0,0,.2);
 }
 
 .active-workspace > div {
@@ -26,4 +44,10 @@
 }
 body {
 	overflow-y: hidden;
+}
+
+.workspace-name {
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
 }

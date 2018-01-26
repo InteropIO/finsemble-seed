@@ -90,7 +90,9 @@
 <body class="dialog">
 	<div class="fsbl-auth-top">
 		<img class="fsbl-logo" src="../assets/img/ciq-banner-black-100x25.png" width="100" height="25">
-		<div class="fsbl-close" id="FSBL-close" onclick="quit()"><i class="ff-close" style=color:#666></i></div>
+		<div class="fsbl-close" id="FSBL-close" onclick="quit()">
+			<i class="ff-close" style=color:#666></i>
+		</div>
 	</div>
 	<div class="form-wrapper">
 		<img src="../assets/img/finsembleLightBG_Solo@1.5x.png" alt="Finsemble Sign On" width="154" height="173">
@@ -99,12 +101,15 @@
 				Incorrect username or password
 			</div>
 			<div class="fsbl-auth-input">
-				<input type="text" id="username" placeholder="Username"><br>
+				<input type="text" id="username" placeholder="Username">
+				<br>
 			</div>
 			<div class="fsbl-auth-input">
-				<input type="password" id="password" placeholder="Password" type="submit"><br>
+				<input type="password" id="password" placeholder="Password" type="submit">
+				<br>
 			</div>
-			<div class="fsbl-button fsbl-button-md" id="submitButton" onclick="processAuthInput()"><i class="ff-check-circle"></i>Login</div>
+			<div class="fsbl-button fsbl-button-md" id="submitButton" onclick="processAuthInput()">
+				<i class="ff-check-circle"></i>Login</div>
 		</div>
 		<!-- <div><a id="authAction" class="link">Sign up</a></div> -->
 	</div>
@@ -117,7 +122,12 @@
 	}
 	//Check to see if we already have a good session
 	function checkSession() {
-		fetch("/isAuthenticated", {
+		fin.desktop.Window.getCurrent().show();
+		/**
+		 *  Use this section to verify that is a user is authenticated.
+		 * This will need to be changed to fit your needs
+		 *
+		/*fetch("/isAuthenticated", {
 			method: "GET",
 			credentials: 'include'
 		})
@@ -125,21 +135,23 @@
 				console.warn("Fail Auth Get", reason);
 			})
 			.then((res) => {
+				if (!res.ok) {// just show the login page if there was a problem
+					return fin.desktop.Window.getCurrent().show();
+				}
 				return res.json();
 			}).then(data => {
-				console.log("data", data)
 				if (data) {
-					getConfig(function () {
+					getConfig(function () {// This calls a function to pull our configs from the server. This allows us to have dynamic configs.
 						acceptCredentials(data)
 					})
 				} else {
 					fin.desktop.Window.getCurrent().show();
 				}
-			});
+			});*/
 	}
-	//Get a config for the user
+	//Get a config for the user. Update this to fit your routes and data structure
 	function getConfig(cb) {
-		fetch("/user/config", {
+		/*fetch("/user/config", {
 			method: "GET",
 			credentials: 'include'
 		})
@@ -147,18 +159,23 @@
 				console.warn("Fail Auth Get", reason);
 			})
 			.then((res) => {
+				if (res.status !== "OK") {
+					console.warn("Auth failed");
+				}
 				return res.json();
 			}).then(data => {
 				if (data) {
 					updateConfig(data, cb);
 				}
-			});
+			});*/
 	}
 	//Add the config to the config service
 	function updateConfig(config, cb) {
 		var configSet = {}
-		//if (config.components) configSet["components"] = config.components;
+		if (config.components) configSet["components"] = config.components;
 		if (config.menuItems) configSet["menus"] = config.menuItems;
+		if (config.defaultWorkspace) configSet["workspaces"] = config.defaultWorkspace.workspaces;
+
 		//if (config.overrides) configSet["cssOverridePath"] = config.overrides;
 		FSBL.Clients.ConfigClient.processAndSet(
 			{
@@ -215,8 +232,15 @@
 		var authUrl = inLogin ? "/login" : "/signup";
 		var data = new FormData();
 		data.append("json", JSON.stringify({ username: username, password: password }));
+		var credentials = { token: "dummyToken-abcdenfhij1234567890" }; // create dummy credentials
+		updateConfig({}, function () {// use this to dynamicallt update your config
+			acceptCredentials(credentials)
+
+		})
 		fin.desktop.Window.getCurrent().hide();
-		fetch(authUrl, {
+
+		//UPdate this section to fit your server routes
+		/*fetch(authUrl, {
 			method: "POST",
 			body: data,
 			credentials: 'include'
@@ -239,7 +263,7 @@
 					acceptCredentials(data.user)
 
 				})
-			});
+			});*/
 	}
 	document.body.addEventListener('keydown', handleKeydown);
 	function handleKeydown(e) {

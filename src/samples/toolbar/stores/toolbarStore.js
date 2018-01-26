@@ -4,7 +4,7 @@
 */
 import async from "async";
 import * as menuConfig from '../config.json';
-
+var storeOwner = false;
 /**
  *
  * @class _ToolbarStore
@@ -23,11 +23,22 @@ class _ToolbarStore {
 			self.Store = store;
 			FSBL.Clients.DistributedStoreClient.createStore({ store: "Finsemble-Toolbar-Store", global: true, values: { mainToolbar: fin.desktop.Window.getCurrent().name } }, function (err, store) {
 				self.GlobalStore = store;
+
+				store.getValue("mainToolbar", function (err, data) {
+					if (fin.desktop.Window.getCurrent().name === data) {
+						storeOwner = true;//until we put creator in by default
+					}
+					done();
+				})
 			});
-			done();
 		});
 	}
-
+	/**
+	 * To check if the current window is the creator of the store
+	 */
+	isStoreOwner() {
+		return storeOwner;
+	}
 
 	/**
 	 * Load the menus from the config.json. If there are no items in config.json, menus are loaded from the Finsemble Config `finsemble.menus` item.
@@ -100,6 +111,10 @@ class _ToolbarStore {
 				},
 				function (done) {
 					self.addListeners(done, self);
+				},
+				function (done) {
+					self.listenForWorkspaceUpdates();
+					done();
 				}
 			],
 			cb
@@ -143,6 +158,22 @@ class _ToolbarStore {
 	get(field) {
 		return this.Store.getValue({ field: field });
 	}
+	/**
+	 * Provides data to the workspace menu opening button.
+	 */
+	listenForWorkspaceUpdates() {
+		FSBL.Clients.RouterClient.subscribe("Finsemble.WorkspaceService.update", (err, response) => {
+			this.setWorkspaceMenuWindowName(response.data.activeWorkspace.name);
+			this.Store.setValue({ field: "activeWorkspaceName", value: response.data.activeWorkspace.name });
+		})
+	}
+
+	setWorkspaceMenuWindowName(name) {
+		if (this.Store.getValue({ field: 'workspaceMenuWindowName' }) === null) {
+			this.Store.setValue({ field: "workspaceMenuWindowName", value: name });
+		}
+	}
+
 }
 
 var ToolbarStore = new _ToolbarStore();

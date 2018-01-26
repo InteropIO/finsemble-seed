@@ -127,21 +127,21 @@ class YesNoDialog extends React.Component {
 		return (<FinsembleDialog
 			userInputTimeout={10000}
 			behaviorOnResponse="hide"
-			isModal={true}
-			onShowRequested={this.onShowRequested}>
+			onShowRequested={this.onShowRequested}
+			isModal={true}>
 			<FinsembleDialogQuestion>
 				{this.state.question}
 			</FinsembleDialogQuestion>
 
-			<FinsembleDialogButton show={this.state.showAffirmativeButton} buttonSize="md" onClick={this.sendAffirmativeResponse} title="Big Button">
+			<FinsembleDialogButton show={this.state.showAffirmativeButton} buttonSize="md" onClick={this.sendAffirmativeResponse}>
 				{this.state.affirmativeResponseLabel}
 			</FinsembleDialogButton>
 
-			<FinsembleDialogButton show={this.state.showNegativeButton} buttonSize="md" onClick={this.sendNegativeResponse} title="Big Button">
+			<FinsembleDialogButton show={this.state.showNegativeButton} buttonSize="md" onClick={this.sendNegativeResponse}>
 				{this.state.negativeResponseLabel}
 			</FinsembleDialogButton>
 
-			<FinsembleDialogButton show={this.state.showCancelButton} buttonSize="md" onClick={this.sendCancelResponse} title="Big Button">
+			<FinsembleDialogButton show={this.state.showCancelButton} buttonSize="md" onClick={this.sendCancelResponse}>
 				{this.state.cancelResponseLabel}
 			</FinsembleDialogButton>
 		</FinsembleDialog>);

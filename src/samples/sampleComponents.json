@@ -199,7 +199,7 @@
 		},
 		"File Menu": {
 			"window": {
-				"url": "http://localhost:3375/components/fileMenu/fileMenu.html?",
+				"url": "$applicationRoot/components/fileMenu/fileMenu.html?",
 				"top": 0,
 				"left": 100,
 				"width": 125,
