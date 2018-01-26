@@ -61,6 +61,7 @@
     "finsemble": {
         "applicationRoot": "http://localhost:3375/",
         "moduleRoot": "http://localhost:3375/finsemble",
+        "servicesRoot": "http://localhost:3375/finsemble/services",
         "importConfig": [
             "$applicationRoot/configs/application/config.json"
         ]

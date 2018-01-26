@@ -2,5 +2,9 @@
 	"windowTitleBar": {
 		"output": "components/windowTitleBar/windowTitleBar",
 		"entry": "./src/components/windowTitleBar/src/windowTitleBar.jsx"
+	},
+	"localStorageAdapter": {
+		"output": "adapters/LocalStorageAdapter",
+		"entry":"./src/adapters/LocalStorageAdapter.js"
 	}
 }
