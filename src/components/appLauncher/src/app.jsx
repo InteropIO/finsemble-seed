@@ -55,16 +55,10 @@ class AppLauncher extends React.Component {
 		FSBL.Clients.LauncherClient.spawn("AdhocComponentForm");
 	}
 
+
 	render() {
 		var self = this;
 		return (<FinsembleMenu>
-			<FinsembleMenuSection className="menu-secondary">
-				<FinsembleMenuItem>
-					<FinsembleMenuItemLabel onClick={this.openAdHoc}>
-						<i className="ff-new-workspace"></i> New App
-					</FinsembleMenuItemLabel>
-				</FinsembleMenuItem>
-			</FinsembleMenuSection>
 			<FinsembleMenuSectionLabel>
 				Applications
 			</FinsembleMenuSectionLabel>
