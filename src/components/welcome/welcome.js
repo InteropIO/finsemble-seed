@@ -12,5 +12,5 @@ function quitFinsemble() {
 }
 
 FSBL.addEventListener('onReady', function () {
-	FSBL.Clients.WindowClient.setWindowTitle("Welcome");
+	FSBL.Clients.WindowClient.setWindowTitle("Welcome to Finsemble!");
 });

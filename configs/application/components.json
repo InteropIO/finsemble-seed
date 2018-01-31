@@ -124,7 +124,7 @@
 				"top": "center",
 				"left": "center",
 				"width": 400,
-				"height": 400
+				"height": 370
 			},
 			"component": {
 				"inject": false,
@@ -139,12 +139,10 @@
 				},
 				"components": {
 					"App Launcher": {
-						"launchableByUser": true
+						"launchableByUser": false
 					},
 					"Window Manager": {
-						"FSBLHeader": {
-							"hideClose": true
-						},
+						"FSBLHeader": true,
 						"persistWindowState": true
 					},
 					"Toolbar": {

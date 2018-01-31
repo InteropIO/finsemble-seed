@@ -14,11 +14,13 @@ import ToolbarStore from "../stores/toolbarStore";
 import AutoArrange from "../components/AutoArrange";
 import BringToFront from "../components/BringToFront";
 import WorkspaceLauncherButton from "../components/WorkspaceLauncherButton";
+import WorkspaceMenuOpener from "../components/WorkspaceMenuOpener"
 
 // Support Dynamically Loading External Components
 var customComponents = [];
 customComponents["AutoArrange"] = AutoArrange;
 customComponents["BringToFront"] = BringToFront;
+customComponents["WorkspaceMenuOpener"] = WorkspaceMenuOpener;
 
 // Styles
 import "../../assets/css/finsemble.scss";
@@ -81,22 +83,22 @@ export default class Toolbar extends React.Component {
 				if (!button.type) button.type = "menuLauncher";
 				var buttonComponent;
 				switch (button.type) {
-				case "seperator":
-					buttonComponent = <FinsembleToolbarSeparator key={i} />;
-					break;
-				case "reactComponent":
-					let Component = customComponents[button.reactComponent];
-					buttonComponent = <Component key={i} {...button} className={"finsemble-toolbar-button"} />;
-					break;
-				case "workspaceSwitcher":
-					buttonComponent = <WorkspaceLauncherButton key={i} {...button}></WorkspaceLauncherButton>;
-					break;
-				case "componentLauncher":
-					buttonComponent = <FinsembleButton iconClasses="pinned-icon" buttonType={["AppLauncher", "Toolbar"]} key={i} {...button}></FinsembleButton>;
-					break;
-				case "menuLauncher":
+					case "seperator":
+						buttonComponent = <FinsembleToolbarSeparator key={i} />;
+						break;
+					case "reactComponent":
+						let Component = customComponents[button.reactComponent];
+						buttonComponent = <Component key={i} {...button} className={"finsemble-toolbar-button"} />;
+						break;
+					case "workspaceSwitcher":
+						buttonComponent = <WorkspaceLauncherButton key={i} {...button}></WorkspaceLauncherButton>;
+						break;
+					case "componentLauncher":
+						buttonComponent = <FinsembleButton iconClasses="pinned-icon" buttonType={["AppLauncher", "Toolbar"]} key={i} {...button}></FinsembleButton>;
+						break;
+					case "menuLauncher":
 						buttonComponent = <FinsembleButton preSpawn={true} buttonType={["MenuLauncher", "Toolbar"]} key={i} {...button}></FinsembleButton>;
-					break;
+						break;
 				}
 				buttons.push(buttonComponent);
 
@@ -109,7 +111,7 @@ export default class Toolbar extends React.Component {
 				buttons.push(<FinsembleToolbarSeparator key={sectionPosition} />);
 			}
 
-			var sectionComponent = (<FinsembleToolbarSection name={sectionPosition} pinnableItems={pinnableItems} className={sectionPosition} key={sectionPosition} handleOverflow={sectionPosition === "center"} handlePins={sectionPosition === "center"} >
+			var sectionComponent = (<FinsembleToolbarSection ref="pinSection" name={sectionPosition} pinnableItems={pinnableItems} className={sectionPosition} key={sectionPosition} handleOverflow={sectionPosition === "center"} handlePins={sectionPosition === "center"} >
 				{buttons}
 			</FinsembleToolbarSection>);
 			sections.push(sectionComponent);

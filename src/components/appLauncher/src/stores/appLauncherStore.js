@@ -13,8 +13,7 @@ var Actions = {
 	initialize: function (cb) {
 		async.parallel([
 			Actions.initializeComponentList,
-			Actions.getUserDefinedComponentList,
-			setupHotkeys
+			Actions.getUserDefinedComponentList
 		], function (err) {
 			if (err) {
 				console.error(err);
@@ -169,19 +168,30 @@ var Actions = {
 	//toggles the pinned state of the component. This change will be broadcast to all toolbars so that the state changes in each component.
 	togglePin(componentToToggle) {
 		var componentType = componentToToggle.component.type;
-		var componentIcon;
+		var fontIcon;
 		try {
-			componentIcon = componentToToggle.foreign.components.Toolbar.iconClass;
+			fontIcon = componentToToggle.foreign.components.Toolbar.iconClass;
 		} catch (e) {
-			componentIcon = "";
+			fontIcon = "";
 		}
+
+		var imageIcon;
+		try {
+			imageIcon = componentToToggle.foreign.components.Toolbar.iconURL;
+		} catch (e) {
+			imageIcon = "";
+		}
+
+		//No dots allowed in keys in the global store, so escaping dots
+		var componentTypeDotRemove = componentType.replace(/[.]/g, "^DOT^")
 
 		var pins = appLauncherStore.values.pins;
 		var thePin = {
 			type: "componentLauncher",
 			label: componentType,
 			component: componentType,
-			fontIcon: componentIcon,
+			fontIcon: fontIcon,
+			icon: imageIcon,
 			toolbarSection: "center"
 		};
 		var wasPinned = false;
@@ -198,9 +208,9 @@ var Actions = {
 		}
 
 		if (wasPinned) {
-			ToolbarStore.removeValue({ field: "pins." + componentType });
+			ToolbarStore.removeValue({ field: "pins." + componentTypeDotRemove });
 		} else {
-			ToolbarStore.setValue({ field: "pins." + componentType, value: thePin });
+			ToolbarStore.setValue({ field: "pins." + componentTypeDotRemove, value: thePin });
 		}
 	},
 	//Handler for when the user wants to remove an adhoc component.
@@ -299,25 +309,6 @@ function initialize(cb) {
 		FSBL.Clients.Logger.debug("appLauncherstore init done");
 		cb(appLauncherStore);
 	});
-}
-var keys = {};
-function setupHotkeys(cb) {
-
-	FSBL.Clients.RouterClient.subscribe("humanInterface.keydown", function (err, response) {
-		if (!keys[response.data.key]) keys[response.data.key] = {};
-		keys[response.data.key] = true;
-		if (keys[160] && keys[162] && keys[68]) {
-			if (Actions.componentList["Advanced Chart"]) {
-				FSBL.Clients.LauncherClient.spawn("Advanced Chart", { addToWorkspace: true }, { monitor: "mine" });
-			}
-		}
-	});
-	FSBL.Clients.RouterClient.subscribe("humanInterface.keyup", function (err, response) {
-		if (!keys[response.data.key]) keys[response.data.key] = {};
-		keys[response.data.key] = false;
-	});
-
-	return cb();
 }
 let getStore = () => {
 	return appLauncherStore;
