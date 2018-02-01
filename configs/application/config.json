@@ -89,6 +89,7 @@
 	},
 	"importConfig": [
 		"$applicationRoot/configs/application/components.json",
+		"$applicationRoot/configs/application/sampleComponents.json",
 		"$applicationRoot/configs/other/defaultWorkspaces.json",
 		"$applicationRoot/configs/application/services.json"
 	]

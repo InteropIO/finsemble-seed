@@ -139,7 +139,7 @@
 				},
 				"components": {
 					"App Launcher": {
-						"launchableByUser": false
+						"launchableByUser": true
 					},
 					"Window Manager": {
 						"FSBLHeader": true,
