@@ -20,6 +20,7 @@ var FileMenuStore = Object.assign({}, EventEmitter.prototype, {
 		FSBL.addEventListener("onReady", function () {
 			self.finWindow = fin.desktop.Window.getCurrent();
 			self.emit("initialized");
+
 			FSBL.Clients.ConfigClient.get({ field: "finsemble" }, function (err, config) {
 				self.finsembleConfig = config;
 			});
@@ -59,7 +60,6 @@ var FileMenuStore = Object.assign({}, EventEmitter.prototype, {
 		finWindow.hide();
 	}
 });
-
 
 var Actions = {
 	hideWindow() {
@@ -153,7 +153,14 @@ var Actions = {
 		});
 	},
 	spawnAbout() {
-		FSBL.Clients.LauncherClient.spawn("About Finsemble");
+		FSBL.Clients.LauncherClient.showWindow({
+			componentType: "About Finsemble"
+		},
+			{
+				monitor: "mine",
+				left: "center",
+				top: "center"
+			});
 	},
 	spawnDocs() {
 		FSBL.Clients.LauncherClient.spawn("Finsemble Documentation");

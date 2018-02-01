@@ -2,7 +2,6 @@ var path = require('path');
 var fs = require("fs");
 var glob = require("glob");
 var glob_entries = require('webpack-glob-entries');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 
 function getDirectories(srcpath) {
@@ -11,84 +10,34 @@ function getDirectories(srcpath) {
 	});
 }
 
-var services = glob_entries(path.join(__dirname, '../', "/src/services/**/*"));
+var services = glob_entries(path.join(__dirname, '../../', "/src/services/**/*.js"));
 
+console.log('services', services);
 var entry = {};
 
 for (var key in services) {
 	var currentPath = services[key];
+	let splitPath = currentPath.split('/services/');
+	console.log(splitPath);
 	var folder = key.replace("Service", "");
 	var newKey = key.replace("Service", "");
-	var entryKey = 'services/' + folder + "/" + key;
+	//This object builds up an object where every key is the output directory of the file, and the value is the entry file. Typically we want to preserve the path. For services, we default to putting them in their named folder (below).
+	var entryKey = 'services/' + splitPath[1];
+
+	if (key.includes('Service')) {
+		//for service files, we default to service/SERVICENAME/SERVICENAME
+		entryKey = 'services/' + folder + "/" + key;
+	}
 	entry[entryKey] = [currentPath];
 }
 
-function buildComponentIgnore() {
-	var components = require('./webpack.entries.json');
-	for (var key in components) {
-		var filename = components[key].entry.split("/").pop();
-		componentIgnores.push("*" + filename);
-	}
-}
 
 if (Object.keys(entry).length === 0) {
 	return module.exports = null;//If we don't have services there is no need to create an entry json
 };
-
-module.exports = {
-	name: "services",
-	devtool: 'source-map',
-	entry: entry,
-	target: 'web',
-	context: path.join(__dirname, '/src/services'),
-	module: {
-		loaders: [{
-			test: /\.json$/,
-			loader: "json-loader",
-			"plugins": [
-				"add-module-exports"
-			]
-		},
-		{
-			test: /\.html$/,
-			loader: "html-loader",
-		}
-		]
-	},
-	plugins: [
-		new CopyWebpackPlugin([
-			{
-				from: './src/components/',
-				to: './components/',
-				force: false,
-				ignore: ['*.js']
-			},
-			{
-				from: './configs/',
-				to: './configs/',
-				force: true
-			},
-			{
-				from: './src/services/',
-				to: './services/',
-				force: true,
-				ignore: ["*.js"]
-			},
-			{
-				from: './src/thirdParty/',
-				to: './thirdParty/',
-				force: false,
-				ignore: ["*.js"]
-			},
-		], {
-				ignore: componentIgnores
-			})
-	],
-	output: {
-		filename: "[name].js",
-		libraryTarget: 'umd',
-		path: path.join(__dirname, '../', '/built/services'),
-		publicPath: 'http://localhost:3375/'
-	},
-	watch: false
-};
+console.log(entry);
+let defaults = require('./defaultWebpackConfig');
+let config = new defaults();
+config.watch = false;
+config.entry = entry;
+module.exports = config;

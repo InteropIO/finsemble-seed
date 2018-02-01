@@ -21,9 +21,7 @@ class FileMenu extends React.Component {
 				</FinsembleMenuSectionLabel>
 			{/*Options in the file menu.*/}
 			<FinsembleMenuSection className='menu-primary'>
-				{/* Not ready yet.
-					<li className="menu-item menu-item-function" id="Documentation" onClick={this.spawnAbout}>About</li> */}
-				<FinsembleMenuItem label="Central Console" onClick={FileMenuActions.showCentralConsole} />
+				<FinsembleMenuItem label="Central Logger" onClick={FileMenuActions.showCentralConsole} />
 				<FinsembleMenuItem label="Documentation" onClick={FileMenuActions.spawnDocs} />
 				{window.location.toString().includes("localhost") ?
 					<FinsembleMenuItem label="Restart" onClick={FileMenuActions.restart} />

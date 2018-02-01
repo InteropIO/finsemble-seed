@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "gulp --gulpfile=./gulpfile.js",
-    "prod": "gulp --gulpfile=./gulpfile.js production",
+    "prod": "gulp prod --gulpfile=./gulpfile.js",
     "cp": "gulp copy --gulpfile=./gulpfile.js",
     "build": "gulp build --gulpfile=./gulpfile.js",
     "wp": "gulp wp --gulpfile=./gulpfile.js",
@@ -14,7 +14,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@chartiq/finsemble": "2.0.*",
+    "@chartiq/finsemble": "2.1.*",
     "@chartiq/finsemble-react-controls": "^1.0.14",
     "gulp-4.0.build": "^4.0.0-build.a271520",
     "nocache": "^2.0.0",
