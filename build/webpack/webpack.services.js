@@ -12,14 +12,22 @@ function getDirectories(srcpath) {
 
 var services = glob_entries(path.join(__dirname, '../../', "/src/services/**/*.js"));
 
-console.log(services);
+console.log('services', services);
 var entry = {};
 
 for (var key in services) {
 	var currentPath = services[key];
+	let splitPath = currentPath.split('/services/');
+	console.log(splitPath);
 	var folder = key.replace("Service", "");
 	var newKey = key.replace("Service", "");
-	var entryKey = 'services/' + folder + "/" + key;
+	//This object builds up an object where every key is the output directory of the file, and the value is the entry file. Typically we want to preserve the path. For services, we default to putting them in their named folder (below).
+	var entryKey = 'services/' + splitPath[1];
+
+	if (key.includes('Service')) {
+		//for service files, we default to service/SERVICENAME/SERVICENAME
+		entryKey = 'services/' + folder + "/" + key;
+	}
 	entry[entryKey] = [currentPath];
 }
 

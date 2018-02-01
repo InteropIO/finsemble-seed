@@ -23,14 +23,7 @@ body {
 	bottom:0;
 }
 
-
-html.desktop-active {
-  body:before,body:after{
-    background:$active-header-background-color;
-  }
-}
-
-html.desktop-active:before, html.desktop-active:after {
+html.desktop-active:before{
   background:$active-header-background-color;
 }
 
@@ -41,7 +34,7 @@ html:before,html:after,body:before,body:after{
     background: $window-frame-inactive-color;
     position:fixed;
     display:block;
-    z-index:2147483647;
+    z-index:2147483645;
 }
 
 /* ...and position them! */

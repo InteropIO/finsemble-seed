@@ -4,6 +4,7 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
+import ToolbarStore from "../stores/toolbarStore";
 
 // Toolbar Components
 import { FinsembleToolbar, FinsembleButton, FinsembleToolbarSection, FinsembleToolbarSeparator } from "@chartiq/finsemble-react-controls";
@@ -12,7 +13,7 @@ import { FinsembleToolbar, FinsembleButton, FinsembleToolbarSection, FinsembleTo
 import AutoArrange from "../components/AutoArrange";
 import BringToFront from "../components/BringToFront";
 import WorkspaceLauncherButton from "../components/WorkspaceLauncherButton";
-
+import WorkspaceMenuOpener from "../components/WorkspaceMenuOpener"
 // Styles
 import "../../assets/css/finsemble.scss";
 import "../../assets/css/finfont.css";
@@ -36,7 +37,7 @@ export default class Toolbar extends React.Component {
 		return (<FinsembleToolbar>
 			<FinsembleToolbarSection name="left" className="left">
 				<FinsembleButton preSpawn={true} buttonType={["MenuLauncher", "Toolbar"]} iconClasses="finsemble-toolbar-brand-logo" icon="https://finsemble.chartiq.com/components/assets/img/Finsemble_Taskbar_Icon.png" menuType="File Menu" />
-				<FinsembleButton preSpawn={true} buttonType={["MenuLauncher", "Toolbar"]} label="Workspaces" menuType="Workspace Management Menu" />
+				<WorkspaceMenuOpener  />
 				<FinsembleButton preSpawn={true} buttonType={["MenuLauncher", "Toolbar"]} label="Apps" menuType="App Launcher" />
 				<FinsembleToolbarSeparator />
 			</FinsembleToolbarSection>
@@ -51,7 +52,9 @@ export default class Toolbar extends React.Component {
 }
 
 FSBL.addEventListener("onReady", function () {
-	ReactDOM.render(
-		<Toolbar />
-		, document.getElementById("toolbar_parent"));
+	ToolbarStore.initialize(function () {
+		ReactDOM.render(
+			<Toolbar />
+			, document.getElementById("toolbar_parent"));
+	});
 });

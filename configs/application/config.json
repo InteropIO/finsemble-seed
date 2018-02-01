@@ -11,14 +11,85 @@
 			"enabled": true
 		},
 		"assimilation": {
-			"enabled": false,
+			"enabled": true,
 			"blacklist": [],
 			"whitelist": [],
 			"onlySpawned": true
 		}
 	},
+	"splinteringConfig": {
+		"comment": "A SplinterAgent is just an openfin application that is capable of spawning specific components/services. If you try to spawn a component/service that one of these agents does not cover, it will be spawned by the defaultAgent. You can also specify maxWindowsPerAgent if you would like to limit your agents to some ceiling. This is useful when you have a particularly heavy component.",
+		"enabled": true,
+		"splinterAgents": [
+			{
+				"agentLabel": "systemComponents",
+				"components": [
+					"Toolbar",
+					"App Launcher",
+					"Workspace Management Menu",
+					"Finsemble Linker Window",
+					"defaultAuthentication",
+					"dialogSignOn",
+					"dialogTemplate",
+					"dialogTest",
+					"File Menu",
+					"AdhocComponentForm",
+					"Process Monitor"
+				]
+			},
+			{
+				"agentLabel": "dockingService",
+				"services": [
+					"dockingService"
+				]
+			},
+			{
+				"agentLabel": "loggerService",
+				"services": [
+					"loggerService"
+				]
+			},
+			{
+				"agentLabel": "launcherService",
+				"services": [
+					"launcherService"
+				]
+			},
+			{
+				"agentLabel": "storageService",
+				"services": [
+					"storageService"
+				]
+			},
+			{
+				"agentLabel": "workspaceService",
+				"services": [
+					"workspaceService"
+				]
+			},
+			{
+				"agentLabel": "linkerService",
+				"services": [
+					"linkerService"
+				]
+			},
+			{
+				"agentLabel": "RPCService",
+				"services": [
+					"RPCService"
+				]
+			},
+			{
+				"agentLabel": "authenticationService",
+				"services": [
+					"authenticationService"
+				]
+			}
+		]
+	},
 	"importConfig": [
 		"$applicationRoot/configs/application/components.json",
+		"$applicationRoot/configs/application/sampleComponents.json",
 		"$applicationRoot/configs/other/defaultWorkspaces.json",
 		"$applicationRoot/configs/application/services.json"
 	]
