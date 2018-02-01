@@ -131,7 +131,7 @@ function launchOpenfin(env) {
 	var OFF_DEATH = ON_DEATH(function (signal, err) {
 		exec('taskkill /F /IM openfin.* /T', (err, stdout, stderr) => {
 			if (err) {
-				console.log(err)
+				console.error(err)
 				this.process.exit();
 				// node couldn't execute the command
 				return;
@@ -199,7 +199,7 @@ gulp.task('devServer', gulp.series(
 		serverExec.on('exit', code => console.log('final exit code is', code));
 		//Prints server errors to your terminal.
 		serverExec.stderr.on("data", function (data) {
-			console.log(errorOutColor('ERROR:' + data));
+			console.error(errorOutColor('ERROR:' + data));
 		});
 	})
 );
