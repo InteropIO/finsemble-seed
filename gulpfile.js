@@ -1,6 +1,7 @@
 var gulp = require('gulp-4.0.build');
 var path = require("path");
 var webpack_stream = require('webpack-stream');
+var ON_DEATH = require('death')({ debug: false });
 
 var watch = require("gulp-watch");
 var del = require('del');
@@ -126,6 +127,18 @@ function webpackServices(done) {
 	})
 }
 function launchOpenfin(env) {
+	const { exec } = require('child_process');
+	var OFF_DEATH = ON_DEATH(function (signal, err) {
+		exec('taskkill /F /IM openfin.* /T', (err, stdout, stderr) => {
+			if (err) {
+				console.error(err)
+				this.process.exit();
+				// node couldn't execute the command
+				return;
+			}
+			this.process.exit();
+		});
+	})
 	return openfinLauncher.launchOpenFin({
 		//new
 		configPath: StartupConfig[env].serverConfig
@@ -177,6 +190,7 @@ gulp.task('devServer', gulp.series(
 		);
 
 		serverExec.on("message", function (data) {
+
 			if (data === "serverStarted") {
 				launchOpenfin("dev");
 				done();
@@ -185,7 +199,7 @@ gulp.task('devServer', gulp.series(
 		serverExec.on('exit', code => console.log('final exit code is', code));
 		//Prints server errors to your terminal.
 		serverExec.stderr.on("data", function (data) {
-			console.log(errorOutColor('ERROR:' + data));
+			console.error(errorOutColor('ERROR:' + data));
 		});
 	})
 );
