@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<!--
+    /*!
+    * Copyright 2017 by ChartIQ, Inc.
+    * All rights reserved.
+    */
+	OAUTH Authentication example. This example uses Google as a OpenID Provider (OP).
+
+	In order to use this, change your config (sampleComponents.json) entry for "defaultAuthentication" to point to this page.
+			"defaultAuthentication": {
+			"window": {
+				"url": "$applicationRoot/components/authentication/oauthAuthentication.html",
+
+	
+	In config.json, set isAuthEnabled=true
+	{
+		"comment": "Top-level application config for development, adding on top of the core config",
+		"mode": "",
+		"isAuthEnabled": true,
+
+	Replace client_id, token_endpoint, backchannel_endpoint and client_secret values in this file and in oauthResponse.html
+	Add any business logic you require to oauthResponse.html as directed by the code comments
+-->
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title>Oauth Authentification</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script>
+		function csrf(){
+			var epoch=new Date();
+			var id=epoch.getTime().toString(36);
+			id+=Math.floor(Math.random()*Math.pow(36,2)).toString(36);
+			return id.toUpperCase();
+		};
+
+		// This is the client_id that is provided by your OP
+		var client_id="<your client id>";
+		// Should always be "code"
+		var response_type="code";
+		// Change the scope as appropriate for your OP. "openid" is the standard.
+		var scope="openid email";
+		// You must set this url as a valid redirect_uri in the admin console of your OP. Generally you can set more than one, so that you can support dev and production.
+		var redirect_uri="http://localhost:3375/components/authentication/oauthResponse.html";
+
+		var state=csrf();
+
+		// Set this to the token_endpoint for your OP.
+		var token_endpoint="https://accounts.google.com/o/oauth2/v2/auth?client_id=" + client_id + "&response_type=" + response_type + "&scope=" + scope + "&redirect_uri=" + redirect_uri + "&state=" + state;
+
+		localStorage.setItem(state, true);
+		window.location.href=token_endpoint;
+	</script>
+</html>
