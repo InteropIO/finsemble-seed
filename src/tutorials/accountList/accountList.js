@@ -45,11 +45,11 @@ var advancedIsRunning = false;
 var accountDetailSpawnResponse = null;
 
 function clickCustomer(event) {
-	launchAccountDetailAdvanced(event.data); // --> Step 3
-	launchAccountDetail(event.data); // --> Step 5
+	launchAccountDetailAdvanced(event.data);
+	launchAccountDetail(event.data);
 }
 
-// STEP 5
+//Step 2.2.2
 function launchAccountDetail(selectedAccountNumber) {
 	if (advancedIsRunning) return;
 	setCustomerIndex(selectedAccountNumber);
@@ -68,7 +68,7 @@ function launchAccountDetail(selectedAccountNumber) {
 	*/
 }
 
-// STEP 6
+// Step 2.2.7
 function launchAccountDetailAdvanced(selectedAccountNumber) {
 	/*
 	advancedIsRunning=true;
@@ -96,7 +96,7 @@ function launchAccountDetailAdvanced(selectedAccountNumber) {
 	*/
 }
 
-// STEP 7
+// Step 4.1
 /**
  * Set up a responder to respond to requests from clients.
  * When clients send requests for the next customer in the list, we will respond by traversing through the customer list and sending the response.
@@ -120,7 +120,7 @@ function communicateBetweenComponents() {
 	*/
 }
 
-//STEP 9
+//Step 3.1
 /**
  * Sets the state of a component to the Workspace
  */
@@ -154,14 +154,12 @@ function relocateAccountDetail() {
 		});
 }
 
-/**
- * Everything needs to happen after Finsemble is ready
- */
+
 FSBL.addEventListener("onReady", function () {
-	//alert(FSBL.Clients.WindowClient.options.customData.component["account-type"]); // --> STEP 3
+	//alert(FSBL.Clients.WindowClient.options.customData.component["account-type"]); // --> Step 1.4
 
 	FSBL.Clients.WindowClient.setWindowTitle("Account List");
 	renderPage();
-	communicateBetweenComponents(); // --> Step 7
-	getState(); // --> Step 9
+	communicateBetweenComponents();
+	getState();
 });
