@@ -1,5 +1,5 @@
 /* List of Customers */
-var customers = [
+customers = [
 	{acc: "12345678", name: "Sam Smith", phone: "555-555-5555"},
 	{acc: "23456789", name: "Bill Branson", phone: "555-555-5556"},
 	{acc: "34567890", name: "Tom Thomson", phone: "555-555-5557"},
