@@ -45,7 +45,7 @@
 				},
 				"components": {
 					"App Launcher": {
-						"launchableByUser": false
+						"launchableByUser": true
 					},
 					"Window Manager": {
 						"persistWindowState": true,
@@ -139,7 +139,7 @@
 				},
 				"components": {
 					"App Launcher": {
-						"launchableByUser": true
+						"launchableByUser": false
 					},
 					"Window Manager": {
 						"FSBLHeader": true,
