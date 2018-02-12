@@ -21,9 +21,10 @@ section > field {
 }
 section > input {
 	display: inline-block;
-	padding: 0 10px;
-	border-bottom: solid gray 1px;
-	margin: 0 10px;
+	padding: 5px;
+	border: 2px solid #4a6877;
+	background-color: #cad5dd;
+	margin: 0 5px;
 	width: 70%;
 }
 
@@ -36,11 +37,11 @@ input:hover {
 	background-color: #ddd;
 }
 
-save:hover, next:hover, prev:hover {
+ next:hover, prev:hover {
 	background-color: #2cabff;
 }
 
-save, next, prev {
+next, prev {
 	text-align: center;
 	background-color: #eee;
 	cursor: pointer;

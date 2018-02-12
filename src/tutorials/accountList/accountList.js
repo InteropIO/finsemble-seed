@@ -47,7 +47,7 @@ var advancedIsRunning = false;
 var accountDetailSpawnResponse = null;
 
 function clickCustomer(event) {
-	launchAccountDetailAdvanced(event.data); // --> Step 3
+	launchAccountDetailAdvanced(event.data); // --> Step 2.2.7
 	launchAccountDetail(event.data); // --> Step 2.2.3
 }
 
