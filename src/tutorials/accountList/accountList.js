@@ -20,7 +20,7 @@ function renderPage() {
 		$("#customers").append(row);
 	}
 
-	var relocate = $("<button>Relocate Detail</button>");
+	var relocate = $("<relocate>Relocate Detail</relocate>");
 	relocate.click(function () {
 		relocateAccountDetail();
 	});
