@@ -18,6 +18,7 @@ function getInitialCustomer() {
 	}
 }
 
+
 // STEP 2.2.10
 function listenForCustomer() {
 	FSBL.Clients.RouterClient.addListener(FSBL.Clients.WindowClient.options.name, function (err, response) {
@@ -25,6 +26,7 @@ function listenForCustomer() {
 		setCustomer(response.data);
 	});
 }
+
 
 // STEP 3.1
 function setState() {

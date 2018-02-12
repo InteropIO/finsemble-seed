@@ -1,5 +1,4 @@
 /* List of Customers */
-
 customers = [
 	{acc: "12345678", name: "Sam Smith", phone: "555-555-5555"},
 	{acc: "23456789", name: "Bill Branson", phone: "555-555-5556"},
@@ -42,11 +41,11 @@ function setCustomer(accountNumber) {
 	setState();
 }
 
-
 var advancedIsRunning = false;
 var accountDetailSpawnResponse = null;
 
 function clickCustomer(event) {
+
 	launchAccountDetailAdvanced(event.data); // --> Step 2.2.7
 	launchAccountDetail(event.data); // --> Step 2.2.3
 }
@@ -147,9 +146,6 @@ function communicateBetweenComponents() {
 	// });
 }
 
-/**
- * Everything needs to happen after Finsemble is ready
- */
 FSBL.addEventListener("onReady", function () {
 	//alert(FSBL.Clients.WindowClient.options.customData.component["account-type"]); // --> Step 1.4
 
