@@ -31,7 +31,7 @@ function buildAngularComponentIgnore() {//Dont copy files built by angular
 			componentIgnores.push(path.join('!' + __dirname, angularComponents[i].source, '**'));
 		}
 	} catch (ex) {
-		console.log("Error constructing angular component ignores: " + ex.message + "\n" + ex.stack);
+		console.error("Error constructing angular component ignores: " + ex.message + "\n" + ex.stack);
 	}
 	return componentIgnores;
 }
@@ -147,23 +147,23 @@ function webpackServices(done) {
 
 function angularBuild(done) {
 	try {
-		var baseCmd = 'ng build --base-href "/components/'
 
 		var process = function (row) {
 			var compName = row.source.split("/").pop();
 			var cwd = path.join(__dirname, row.source);
-			var command = baseCmd + compName + '/" --outputPath "' + path.join(__dirname, row.source, row["output-directory"]) + '"';
+			var outputPath = path.join(__dirname, row.source, row["output-directory"]);
+			var command = 'ng build --base-href "/components/{$compName}/" --outputPath "{$outputPath}"';
 			
 			// switch to components folder
 			var dir = shell.pwd();
 			shell.cd(cwd);
-			var outputNpm = shell.exec("npm install"); // CLI doesn't install NPM modules, mmake sure this happens
+			if (shell.ls('-d', '/node_modules/').length === 0) {
+				shell.exec("npm install"); // CLI doesn't install NPM modules, mmake sure this happens
+			}
 			
 			console.log('Executing: ' + command + "\nin directory: " + cwd);
 
 			var output = shell.exec(command);
-			//console.log('Angular output:', output.stdout);
-			//console.log('Angular stderr:', output.stderr);
 			console.log('Built Angular Component, exit code = ' + output.code);
 			shell.cd(dir);
 		};
