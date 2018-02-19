@@ -33,7 +33,7 @@ function shouldIHMR(key) {
 	return false;// No whitelist and in the blacklist
 }
 
-// Our defualt entry
+// Our default entry
 function defaults() {
 	return new defaultConfig();
 }
