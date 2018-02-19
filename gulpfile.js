@@ -92,7 +92,7 @@ function buildSass(done) {
 		path.join(__dirname, '/src/components/**/**/*.scss'),
 		//compiles sass down to finsemble.css
 		path.join(__dirname, '/src/components/assets/*.scss')
-	])
+	].concat(buildAngularComponentIgnore()))
 		.pipe(sass().on('error', sass.logError))
 		.pipe(gulp.dest(path.join(__dirname, '/dist/components/')));
 }
