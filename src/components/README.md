@@ -1,4 +1,4 @@
-#  Finsemble Samples
+#  Sample Presentation Components
 
 Finsemble is a set of tools that lets you build multi-window desktop applications that focus on coordination and collaboration. Components are the building blocks of a Finsemble application. A distinction can be made between presentation components, which are components created to provide common UI functionality (like dialogs and toolbars), and business components, which are components that manage real-life business objects (like chat and charts). This folder contains a set of **sample presentation components** to help you get started using Finsemble. You can use these samples wholesale or use them as templates for your own components. 
 
