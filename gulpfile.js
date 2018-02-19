@@ -158,6 +158,7 @@ function angularBuild(done) {
 			// switch to components folder
 			var dir = shell.pwd();
 			shell.cd(cwd);
+			var outputNpm = shell.exec("npm install"); // CLI doesn't install NPM modules, mmake sure this happens
 			var output = shell.exec(command);
 			//console.log('Angular output:', output.stdout);
 			//console.log('Angular stderr:', output.stderr);
