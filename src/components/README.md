@@ -11,4 +11,4 @@ For **Version < 1.4&**, go to *configs/openfin/manifest-local* and add the follo
 
 This tells the application to retrieve the *finsemble-overrides* file that you will modify. In older versions of the seed project, this file sits inside of *src/assets/css/finsemble-overrides.scss*. 
 
-Although the sample performance components and the controls are production quality, we keep them outside the core because most customers will customize the UI for their own needs. Read through the documentation to get a better idea how these components are built. Browse each sample for its relevant documentation. 
+Read through the documentation to get a better idea how these components are built. Browse each sample for its relevant documentation. 
