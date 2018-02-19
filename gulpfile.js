@@ -153,12 +153,14 @@ function angularBuild(done) {
 			var compName = row.source.split("/").pop();
 			var cwd = path.join(__dirname, row.source);
 			var command = baseCmd + compName + '/" --outputPath "' + path.join(__dirname, row.source, row["output-directory"]) + '"';
-			console.log('Executing: ' + command + "\nin directory: " + cwd);
-
+			
 			// switch to components folder
 			var dir = shell.pwd();
 			shell.cd(cwd);
 			var outputNpm = shell.exec("npm install"); // CLI doesn't install NPM modules, mmake sure this happens
+			
+			console.log('Executing: ' + command + "\nin directory: " + cwd);
+
 			var output = shell.exec(command);
 			//console.log('Angular output:', output.stdout);
 			//console.log('Angular stderr:', output.stderr);
