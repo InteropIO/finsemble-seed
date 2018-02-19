@@ -36,7 +36,7 @@ function setCustomer(accountNumber) {
 			customerIndex = i;
 			$('#customers customer account:contains('+accountNumber+')').parent().addClass("selected");
 			break;
-		} 
+		}
 	}
 	setState();
 }
@@ -47,10 +47,10 @@ var accountDetailSpawnResponse = null;
 function clickCustomer(event) {
 
 	launchAccountDetailAdvanced(event.data); // --> Step 2.2.7
-	launchAccountDetail(event.data); // --> Step 2.2.3
+	launchAccountDetail(event.data); // --> Step 2.2.2
 }
 
-// STEP 2.2.3
+// STEP 2.2.2
 function launchAccountDetail(selectedAccountNumber) {
 	if (advancedIsRunning) return;
 	setCustomer(selectedAccountNumber);
@@ -72,8 +72,6 @@ function launchAccountDetailAdvanced(selectedAccountNumber) {
 	// advancedIsRunning=true;
 	// setCustomer(selectedAccountNumber);
 
-	// // A windowIdentifier describes a component window. We create a unique windowName by using our current window's name and appending.
-	// // showWindow() will show this windowName if it's found. If not, then it will launch a new accountDetail coponent, and give it this name.
 	// var windowIdentifier={
 	// 	componentType: "accountDetail",
 	// 	windowName: FSBL.Clients.WindowClient.options.name + ".accountDetail"
@@ -88,7 +86,6 @@ function launchAccountDetailAdvanced(selectedAccountNumber) {
 	// 	}, function(err, response){
 	// 		console.log("spawn() returns information about the new component", response);
 	// 		accountDetailSpawnResponse=response;
-	// 		// After the component is launched, or displayed, we tell the child which customer to use.
 	// 		FSBL.Clients.RouterClient.transmit(windowIdentifier.windowName, customers[customerIndex]);
 	// 	}
 	// );
@@ -103,16 +100,10 @@ function relocateAccountDetail() {
 }
 
 //STEP 3.1
-/**
- * Sets the state of a component to the Workspace
- */
 function setState() {
 	// FSBL.Clients.WindowClient.setComponentState({ field: 'customerIndex', value: customerIndex });
 }
 
-/**
- * Gets the the stored state of a component
- */
 function getState() {
 	// FSBL.Clients.WindowClient.getComponentState({
 	// 	field: 'customerIndex',
@@ -141,7 +132,6 @@ function communicateBetweenComponents() {
 	// 		if (newIndex < 0) newIndex = customers.length - 1;
 	// 	}
 	// 	setCustomer(customers[newIndex].acc);
-	// 	// Respond to the accountDetail client with the next customer
 	// 	query.sendQueryResponse(null, customers[customerIndex]);
 	// });
 }
