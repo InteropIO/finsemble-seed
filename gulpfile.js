@@ -84,7 +84,7 @@
 			.pipe(gulp.dest(path.join(distPath, "components")));
 	}
 
-	/** 
+	/**
 	 * Builds files using webpack.
 	 */
 	const buildWebpack = () => {
@@ -118,6 +118,49 @@
 			});
 	};
 
+	const startServer = done => {
+		initialBuildFinished = true;
+		
+		// This runs essentially runs 'PORT=80 node server/server.js'
+		var serverPath = path.join(__dirname, "server", "server.js");
+
+		// If you specify environment variables to child_process, it overwrites all environment variables, including
+		// PATH. So, copy based on our existing env variables.
+		var envCopy = process.env;
+		if (!envCopy.PORT) {
+			envCopy.PORT = StartupConfig.dev.serverPort;
+		}
+
+		if (!envCopy.NODE_ENV) {
+			envCopy.NODE_ENV = "dev";
+		}
+
+		// allows for spaces in paths.
+		var serverExec = spawn(
+			"node",
+			[serverPath, { stdio: "inherit" }],
+			{ env: envCopy, stdio: [process.stdin, process.stdout, "pipe", "ipc"] }
+		);
+
+		serverExec.on("message", function (data) {
+			if (data === "serverStarted") {
+				if (envCopy.NODE_ENV === "dev") {
+					// Auto-launch application in dev environment
+					launchApplication(envCopy.NODE_ENV);
+				}
+
+				done();
+			}
+		});
+
+		serverExec.on("exit", code => console.log('final exit code is', code));
+
+		// Prints server errors to your terminal.
+		serverExec.stderr.on("data", function (data) {
+			console.error(errorOutColor("ERROR:" + data));
+		});
+	};
+
 	/** 
 	 * Watches files for changes to fire off copies and builds.
 	 */
@@ -144,43 +187,14 @@
 	gulp.task("devServer", gulp.series(
 		"build",
 		watchFiles,
-		done => {
-			initialBuildFinished = true;
-
-			//This runs essentially runs 'PORT=80 node server/server.js'
-			const serverPath = path.join(__dirname, "/server/server.js");
-
-			// If you specify environment variables to child_process, it overwrites all environment variables, including
-			// PATH. So, copy based on our existing env variables.
-			const envCopy = process.env;
-			envCopy.PORT = startupConfig.dev.serverPort;
-			envCopy.NODE_ENV = "dev";
-
-			// allows for spaces in paths.
-			const serverExec = spawn(
-				"node",
-				[serverPath, { stdio: "inherit" }],
-				{ env: envCopy, stdio: [process.stdin, process.stdout, "pipe", "ipc"] }
-			);
-
-			serverExec.on("message", data => {
-
-				if (data === "serverStarted") {
-					launchApplication("dev");
-					done();
-				}
-			});
-			serverExec.on("exit", code => console.log("final exit code is", code));
-			// Prints server errors to your terminal.
-			serverExec.stderr.on("data", data => {
-				console.error(errorOutColor("ERROR:" + data));
-			});
-		})
+		startServer)
 	);
 
 	gulp.task("default", gulp.series("devServer"));
 
-	//This command should be tailored to your production environment. You are responsible for moving the built files to your production server, and creating an openfin installer that points to your config.
-	gulp.task("prod", gulp.series("build"));
+
+	// This command should be tailored to your production environment. You are responsible for moving the built files to 
+	// your production server, and creating an OpenFin installer that points to your config.
+	gulp.task("prod", gulp.series("build", startServer));
 	// #endregion
 })();

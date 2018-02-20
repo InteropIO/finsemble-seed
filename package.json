@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "gulp --gulpfile=./gulpfile.js",
-    "prod": "gulp prod --gulpfile=./gulpfile.js",
+    "dev": "set NODE_ENV=dev&&gulp --gulpfile=./gulpfile.js",
+    "prod": "set NODE_ENV=prod&&gulp prod --gulpfile=./gulpfile.js",
     "build": "gulp build --gulpfile=./gulpfile.js",
     "clean": "gulp clean --gulpfile=./gulpfile.js",
     "update-finsemble": "npm update @chartiq/finsemble && npm update -g @chartiq/finsemble-cli"
