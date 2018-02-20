@@ -151,15 +151,11 @@ function angularBuild(done) {
 		var compName = row.source.split("/").pop();
 		var cwd = path.join(__dirname, row.source);
 		var outputPath = path.join(__dirname, row.source, row["output-directory"]);
-		var command = 'ng build --base-href "/components/{$compName}/" --outputPath "{$outputPath}"';
+		var command = `ng build --base-href "/components/${compName}/" --outputPath "${outputPath}"`;
 		
 		// switch to components folder
 		var dir = shell.pwd();
 		shell.cd(cwd);
-		if (shell.ls('-d', '/node_modules/').length === 0) {
-			shell.exec("npm install"); // CLI doesn't install NPM modules, mmake sure this happens
-		}
-		
 		console.log('Executing: ' + command + "\nin directory: " + cwd);
 
 		var output = shell.exec(command);
