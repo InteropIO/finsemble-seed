@@ -24,6 +24,7 @@ var angularComponentIgnores = null;
 
 function buildAngularComponentIgnore() {//Dont copy files built by angular
 	if (angularComponentIgnores === null) {
+		angularComponentIgnores = [];
 		try {
 			var angularComponents = require('./build/angular-components.json');
 			var arrayLength = angularComponents.length;
@@ -31,7 +32,6 @@ function buildAngularComponentIgnore() {//Dont copy files built by angular
 				angularComponentIgnores.push(path.join('!' + __dirname, angularComponents[i].source, '**'));
 			}
 		} catch (ex) {
-			angularComponentIgnores = [];
 			console.log("No Angular components found to exempt from Webpack build");
 		}
 	}
