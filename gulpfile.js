@@ -1,4 +1,4 @@
-var gulp = require('gulp-4.0.build');
+var gulp = require('gulp');
 var path = require("path");
 var webpack_stream = require('webpack-stream');
 var ON_DEATH = require('death')({ debug: false });
