@@ -145,6 +145,49 @@ function launchOpenfin(env) {
 	});
 };
 
+function startServer(done) {
+	watchStatic();
+	initialBuildFinished = true;
+	var exec = require('child_process').spawn;
+	//This runs essentially runs 'PORT=80 node server/server.js'
+	var serverPath = path.join(__dirname, '/server/server.js');
+
+	// If you specify environment variables to child_process, it overwrites all environment variables, including
+	// PATH. So, copy based on our existing env variables.
+	var envCopy = process.env;
+	if (!envCopy.PORT) {
+		envCopy.PORT = StartupConfig.dev.serverPort;
+	}
+
+	if (!envCopy.NODE_ENV) {
+		envCopy.NODE_ENV = 'dev';
+	}
+
+	// allows for spaces in paths.
+	var serverExec = exec(
+		"node",
+		[serverPath, { stdio: "inherit" }],
+		{ env: envCopy, stdio: [process.stdin, process.stdout, "pipe", "ipc"] }
+	);
+
+	serverExec.on("message", function (data) {
+		if (data === "serverStarted") {
+			if (envCopy.NODE_ENV === "dev") {
+				// Auto-launch application in dev environment
+				launchOpenfin(envCopy.NODE_ENV);
+			}
+			
+			done();
+		}
+	});
+	
+	serverExec.on('exit', code => console.log('final exit code is', code));
+	//Prints server errors to your terminal.
+	serverExec.stderr.on("data", function (data) {
+		console.error(errorOutColor('ERROR:' + data));
+	});
+};
+
 gulp.task('wipeDist', gulp.series(wipeDist));
 
 gulp.task('copy', gulp.series(
@@ -169,42 +212,11 @@ gulp.task('devServer', gulp.series(
 	'copy',
 	buildSass,
 	watchSass,
-	function (done) {
-		watchStatic();
-		initialBuildFinished = true;
-		var exec = require('child_process').spawn;
-		//This runs essentially runs 'PORT=80 node server/server.js'
-		var serverPath = path.join(__dirname, '/server/server.js');
-
-		// If you specify environment variables to child_process, it overwrites all environment variables, including
-		// PATH. So, copy based on our existing env variables.
-		var envCopy = process.env;
-		envCopy.PORT = StartupConfig.dev.serverPort;
-		envCopy.NODE_ENV = 'dev';
-
-		// allows for spaces in paths.
-		var serverExec = exec(
-			"node",
-			[serverPath, { stdio: "inherit" }],
-			{ env: envCopy, stdio: [process.stdin, process.stdout, "pipe", "ipc"] }
-		);
-
-		serverExec.on("message", function (data) {
-
-			if (data === "serverStarted") {
-				launchOpenfin("dev");
-				done();
-			}
-		});
-		serverExec.on('exit', code => console.log('final exit code is', code));
-		//Prints server errors to your terminal.
-		serverExec.stderr.on("data", function (data) {
-			console.error(errorOutColor('ERROR:' + data));
-		});
-	})
+	startServer)
 );
 
 gulp.task('default', gulp.series('devServer'));
 
-//This command should be tailored to your production environment. You are responsible for moving the built files to your production server, and creating an openfin installer that points to your config.
-gulp.task('prod', gulp.series('build'));
+// This command should be tailored to your production environment. You are responsible for moving the built files to 
+// your production server, and creating an OpenFin installer that points to your config.
+gulp.task('prod', gulp.series('build', startServer));
