@@ -7,7 +7,6 @@ var watch = require("gulp-watch");
 var del = require('del');
 var sass = require('gulp-sass');
 var shell = require('shelljs');
-var eachRow = require('gulp-each-row');
 var openfinLauncher = require('openfin-launcher');
 var configPath = path.join(__dirname, '/configs/finConfig.json');
 //new
@@ -21,19 +20,22 @@ var webpackOutColor = chalk.cyan;
 var initialBuildFinished = false;
 
 var componentsToBuild = require('./build/webpack/webpack.files.entries.json');
+var angularComponentIgnores = null;
 
 function buildAngularComponentIgnore() {//Dont copy files built by angular
-	var componentIgnores = [];
-	try {
-		var angularComponents = require('./build/angular-components.json');
-		var arrayLength = angularComponents.length;
-		for (var i=0; i < arrayLength; i++) {
-			componentIgnores.push(path.join('!' + __dirname, angularComponents[i].source, '**'));
+	if (angularComponentIgnores === null) {
+		try {
+			var angularComponents = require('./build/angular-components.json');
+			var arrayLength = angularComponents.length;
+			for (var i=0; i < arrayLength; i++) {
+				angularComponentIgnores.push(path.join('!' + __dirname, angularComponents[i].source, '**'));
+			}
+		} catch (ex) {
+			angularComponentIgnores = [];
+			console.log("No Angular components found to exempt from Webpack build");
 		}
-	} catch (ex) {
-		console.error("Error constructing angular component ignores: " + ex.message + "\n" + ex.stack);
 	}
-	return componentIgnores;
+	return angularComponentIgnores;
 }
 
 function buildComponentIgnore() {//Dont copy files that we build
@@ -66,7 +68,6 @@ function copyStaticFiles() {
 function copyFinsembleDist() {//Copies the the required Finsemble files into the local directory.
 	return gulp.src([path.join(__dirname, '/node_modules/@chartiq/finsemble/dist/**/*')])
 		.pipe(gulp.dest(path.join(__dirname, '/finsemble')));
-
 }
 
 function wipeDist(done) {
@@ -146,35 +147,36 @@ function webpackServices(done) {
 }
 
 function angularBuild(done) {
-	try {
-
-		var process = function (row) {
-			var compName = row.source.split("/").pop();
-			var cwd = path.join(__dirname, row.source);
-			var outputPath = path.join(__dirname, row.source, row["output-directory"]);
-			var command = 'ng build --base-href "/components/{$compName}/" --outputPath "{$outputPath}"';
-			
-			// switch to components folder
-			var dir = shell.pwd();
-			shell.cd(cwd);
-			if (shell.ls('-d', '/node_modules/').length === 0) {
-				shell.exec("npm install"); // CLI doesn't install NPM modules, mmake sure this happens
-			}
-			
-			console.log('Executing: ' + command + "\nin directory: " + cwd);
-
-			var output = shell.exec(command);
-			console.log('Built Angular Component, exit code = ' + output.code);
-			shell.cd(dir);
-		};
+	var process = function (row) {
+		var compName = row.source.split("/").pop();
+		var cwd = path.join(__dirname, row.source);
+		var outputPath = path.join(__dirname, row.source, row["output-directory"]);
+		var command = 'ng build --base-href "/components/{$compName}/" --outputPath "{$outputPath}"';
 		
-		return gulp
-			.src('./build/angular-components.json')
-			.pipe(eachRow(process));
-	} catch(ex) {
-		console.log("Error constructing angular component ignores: " + ex.message + "\n" + ex.stack);
-		done();
+		// switch to components folder
+		var dir = shell.pwd();
+		shell.cd(cwd);
+		if (shell.ls('-d', '/node_modules/').length === 0) {
+			shell.exec("npm install"); // CLI doesn't install NPM modules, mmake sure this happens
+		}
+		
+		console.log('Executing: ' + command + "\nin directory: " + cwd);
+
+		var output = shell.exec(command);
+		console.log('Built Angular Component, exit code = ' + output.code);
+		shell.cd(dir);
+	};
+
+	try {
+		var angularComponents = require('./build/angular-components.json');
+		var arrayLength = angularComponents.length;
+		for (var i=0; i < arrayLength; i++) {
+			process(angularComponents[i]);
+		}
+	} catch (ex) {
+		console.log("No Angular components found to build");
 	}
+	done();
 }
 
 function launchOpenfin(env) {
