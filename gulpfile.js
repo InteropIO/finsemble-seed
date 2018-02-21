@@ -31,35 +31,44 @@ const webpackOutColor = chalk.cyan;
 let initialBuildFinished = false;
 // #endregion
 
-const buildComponentIgnore = () => {//Dont copy files that we build
+const buildComponentIgnore = () => {
+	// Don't copy files that we build
 	const componentIgnores = [];
 	for (const key in componentsToBuild) {
-		componentIgnores.push(path.join("!" + __dirname, componentsToBuild[key].entry));
+		componentIgnores.push("!" + path.join( __dirname, componentsToBuild[key].entry));
 	}
 
 	return componentIgnores;
 }
 
 const copyStaticComponentsFiles = () => {
-	let source = [path.join(__dirname, "/src/components/**/*"), path.join("!" + __dirname, "/src/components/**/*.jsx")]
+	let source = [
+		path.join(__dirname, "/src/components/**/*"),
+		path.join("!" + __dirname, "/src/components/**/*.jsx")];
+	
 	source = source.concat(buildComponentIgnore());
-	return gulp.src(source)
+	return gulp
+		.src(source)
 		.pipe(gulp.dest(path.join(__dirname, "/dist/components/")));
 }
 
 const copyStaticFiles = () => {
-	gulp.src([path.join(__dirname, "/configs/**/*")])
+	gulp
+		.src([path.join(__dirname, "/configs/**/*")])
 		.pipe(gulp.dest(path.join(__dirname, "/dist/configs/")));
-	return gulp.src([path.join(__dirname, "/src/services/**/*.html"),
-	//ignores the js files in service, but copies over the html files.
-	path.join("!" + __dirname, "/src/services/**/*.js")])
+	// Ignores the js files in service, but copies over the html files.
+	return gulp
+		.src([
+			path.join(__dirname, "/src/services/**/*.html"),
+			"!" + path.join(__dirname, "/src/services/**/*.js")])
 		.pipe(gulp.dest(path.join(__dirname, "/dist/services")));
 }
 
-const copyFinsembleDist =() => {//Copies the the required Finsemble files into the local directory.
-	return gulp.src([path.join(__dirname, "/node_modules/@chartiq/finsemble/dist/**/*")])
+const copyFinsembleDist = () => {
+	// Copies the the required Finsemble files into the local directory.
+	return gulp
+		.src([path.join(__dirname, "/node_modules/@chartiq/finsemble/dist/**/*")])
 		.pipe(gulp.dest(path.join(__dirname, "/finsemble")));
-
 }
 
 const wipeDist = done => {
@@ -79,8 +88,7 @@ const wipe = (dir, cb) => {
 	});
 }
 
-const buildSass = done => {
-	done();
+const buildSass = () => {
 	return gulp.src([
 		path.join(__dirname, "/src/components/**/**/*.scss"),
 		//compiles sass down to finsemble.css
@@ -91,13 +99,15 @@ const buildSass = done => {
 }
 
 const watchSass = done => {
-	watch(path.join(__dirname, "/src/components/assets/**/*"), {}, gulp.series(buildSass));
+	watch(path.join(__dirname, "/src/components/assets/**/*"), {}, buildSass);
 	done();
 }
 
 const watchStatic = () => {
-	watch(path.join(__dirname, "/src/**/*.css"), { ignoreInitial: true }).pipe(gulp.dest(path.join(__dirname, "/dist/")));
-	return watch(path.join(__dirname, "/src/**/*.html"), { ignoreInitial: true }).pipe(gulp.dest(path.join(__dirname, "/dist/")));
+	watch(path.join(__dirname, "/src/**/*.css"), { ignoreInitial: true })
+		.pipe(gulp.dest(path.join(__dirname, "/dist/")));
+	return watch(path.join(__dirname, "/src/**/*.html"), { ignoreInitial: true })
+		.pipe(gulp.dest(path.join(__dirname, "/dist/")));
 }
 
 const wipedist = done => {
