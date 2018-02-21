@@ -131,21 +131,15 @@ const watchFiles = () => {
 // #region Tasks
 gulp.task("clean", clean);
 
-gulp.task("copy", copyStaticFiles);
-
-gulp.task("wp", buildWebpack);
-
 gulp.task("build", gulp.series(
 	"clean",
-	"copy",
+	copyStaticFiles,
 	buildWebpack,
 	buildSass
 ));
 
 gulp.task("devServer", gulp.series(
-	"clean",
-	"copy",
-	buildSass,
+	"build",
 	watchFiles,
 	done => {
 		initialBuildFinished = true;
