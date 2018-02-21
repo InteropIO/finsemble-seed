@@ -29,11 +29,12 @@ const errorOutColor = chalk.red;
 let initialBuildFinished = false;
 // #endregion
 
+// #region Functions
 const buildComponentIgnore = () => {
 	// Don't copy files that we build
 	const componentIgnores = [];
 	for (const key in componentsToBuild) {
-		componentIgnores.push("!" + path.join( __dirname, componentsToBuild[key].entry));
+		componentIgnores.push("!" + path.join(__dirname, componentsToBuild[key].entry));
 	}
 
 	return componentIgnores;
@@ -43,7 +44,7 @@ const copyStaticComponentsFiles = () => {
 	let source = [
 		path.join(__dirname, "/src/components/**/*"),
 		path.join("!" + __dirname, "/src/components/**/*.jsx")];
-	
+
 	source = source.concat(buildComponentIgnore());
 	return gulp
 		.src(source)
@@ -140,7 +141,9 @@ const launchOpenfin = env => {
 			process.exit();
 		});
 };
+// #endregion
 
+// #region Tasks
 gulp.task("wipeDist", gulp.series(wipeDist));
 
 gulp.task("copy", gulp.series(
@@ -149,7 +152,8 @@ gulp.task("copy", gulp.series(
 	copyFinsembleDist
 ));
 
-gulp.task("wp", gulp.series(webpackComponents))
+gulp.task("wp", gulp.series(webpackComponents));
+
 gulp.task("build", gulp.series(
 	"wipeDist",
 	"copy",
@@ -204,3 +208,4 @@ gulp.task("default", gulp.series("devServer"));
 
 //This command should be tailored to your production environment. You are responsible for moving the built files to your production server, and creating an openfin installer that points to your config.
 gulp.task("prod", gulp.series("build"));
+// #endregion
