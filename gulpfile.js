@@ -18,14 +18,17 @@ const webpackServicesConfig = require("./build/webpack/webpack.services.js")
 // #endregion
 
 // #region Constants
-const componentsToBuild = require("./build/webpack/webpack.files.entries.json");
-const StartupConfig = require("./configs/other/server-environment-startup");
+const componentsToBuild = require("./build/webpack/webpack.files.entries");
+const startupConfig = require("./configs/other/server-environment-startup");
 
 chalk.enabled = true;
 const errorOutColor = chalk.red;
 // #endregion
 
 // #region Script variables
+let distPath = path.join(__dirname, "dist");
+let srcPath = path.join(__dirname, "src");
+
 let initialBuildFinished = false;
 // #endregion
 
@@ -42,40 +45,37 @@ const buildComponentIgnore = () => {
 
 const copyStaticComponentsFiles = () => {
 	let source = [
-		path.join(__dirname, "/src/components/**/*"),
-		path.join("!" + __dirname, "/src/components/**/*.jsx")];
+		path.join(srcPath, "components", "**", "*"),
+		"!" + path.join(srcPath, "components", "**", "*.jsx")];
 
 	source = source.concat(buildComponentIgnore());
 	return gulp
 		.src(source)
-		.pipe(gulp.dest(path.join(__dirname, "/dist/components/")));
+		.pipe(gulp.dest(path.join(distPath, "components")));
 }
 
 const copyStaticFiles = () => {
 	gulp
-		.src([path.join(__dirname, "/configs/**/*")])
-		.pipe(gulp.dest(path.join(__dirname, "/dist/configs/")));
+		.src([path.join(__dirname, "configs", "**", "*")])
+		.pipe(gulp.dest(path.join(distPath, "configs")));
 	// Ignores the js files in service, but copies over the html files.
 	return gulp
 		.src([
-			path.join(__dirname, "/src/services/**/*.html"),
-			"!" + path.join(__dirname, "/src/services/**/*.js")])
-		.pipe(gulp.dest(path.join(__dirname, "/dist/services")));
+			path.join(srcPath, "services", "**", "*.html"),
+			"!" + path.join(srcPath, "services", "**", "*.js")])
+		.pipe(gulp.dest(path.join(distPath, "services")));
 }
 
 const copyFinsembleDist = () => {
 	// Copies the the required Finsemble files into the local directory.
 	return gulp
-		.src([path.join(__dirname, "/node_modules/@chartiq/finsemble/dist/**/*")])
-		.pipe(gulp.dest(path.join(__dirname, "/finsemble")));
+		.src([path.join(__dirname, "node_modules", "@chartiq", "finsemble", "dist", "**", "*")])
+		.pipe(gulp.dest(path.join(__dirname, "finsemble")));
 }
 
 const wipeDist = done => {
-	const dir = path.join(__dirname, "/dist/");
-	console.log("dir", dir);
-	wipe(dir, done);
+	wipe(distPath, done);
 }
-
 
 const wipe = (dir, cb) => {
 	del(dir, { force: true }).then(() => {
@@ -89,24 +89,22 @@ const wipe = (dir, cb) => {
 
 const buildSass = () => {
 	return gulp.src([
-		path.join(__dirname, "/src/components/**/**/*.scss"),
-		//compiles sass down to finsemble.css
-		path.join(__dirname, "/src/components/assets/*.scss")
+		path.join(srcPath, "components", "**", "*.scss")
 	])
 		.pipe(sass().on("error", sass.logError))
-		.pipe(gulp.dest(path.join(__dirname, "/dist/components/")));
+		.pipe(gulp.dest(path.join(distPath, "components")));
 }
 
 const watchSass = done => {
-	watch(path.join(__dirname, "/src/components/assets/**/*"), {}, buildSass);
+	watch(path.join(srcPath, "components", "assets", "**", "*"), {}, buildSass);
 	done();
 }
 
 const watchStatic = () => {
-	watch(path.join(__dirname, "/src/**/*.css"), { ignoreInitial: true })
-		.pipe(gulp.dest(path.join(__dirname, "/dist/")));
-	return watch(path.join(__dirname, "/src/**/*.html"), { ignoreInitial: true })
-		.pipe(gulp.dest(path.join(__dirname, "/dist/")));
+	watch(path.join(srcPath, "**", "*.css"), { ignoreInitial: true })
+		.pipe(gulp.dest(distPath));
+	return watch(path.join(srcPath, "**", "*.html"), { ignoreInitial: true })
+		.pipe(gulp.dest(distPath));
 }
 
 const webpackComponents = done => {
@@ -134,7 +132,7 @@ const launchOpenfin = env => {
 
 	return launcher
 		.launchOpenFin({
-			configPath: StartupConfig[env].serverConfig
+			configPath: startupConfig[env].serverConfig
 		})
 		.then(() => {
 			// OpenFin has closed so exit gulpfile
@@ -179,7 +177,7 @@ gulp.task("devServer", gulp.series(
 		// If you specify environment variables to child_process, it overwrites all environment variables, including
 		// PATH. So, copy based on our existing env variables.
 		const envCopy = process.env;
-		envCopy.PORT = StartupConfig.dev.serverPort;
+		envCopy.PORT = startupConfig.dev.serverPort;
 		envCopy.NODE_ENV = "dev";
 
 		// allows for spaces in paths.
