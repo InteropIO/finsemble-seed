@@ -1,52 +1,53 @@
 // #region Imports
 // NPM
-var chalk = require("chalk");
+const chalk = require("chalk");
 const { exec, spawn } = require("child_process");	
-var ON_DEATH = require("death")({ debug: false });
-var del = require("del");
-var gulp = require("gulp-4.0.build");
-var sass = require("gulp-sass");
-var watch = require("gulp-watch");
-var openfinLauncher = require("openfin-launcher");
-var path = require("path");
+const ON_DEATH = require("death")({ debug: false });
+const del = require("del");
+const gulp = require("gulp-4.0.build");
+const sass = require("gulp-sass");
+const watch = require("gulp-watch");
+const openfinLauncher = require("openfin-launcher");
+const path = require("path");
 const webpack = require("webpack");
-var webpack_stream = require("webpack-stream");
+const webpack_stream = require("webpack-stream");
 
 // local
-var webpackFilesConfig = require("./build/webpack/webpack.files.js")
-var webpackServicesConfig = require("./build/webpack/webpack.services.js")
+const webpackFilesConfig = require("./build/webpack/webpack.files.js")
+const webpackServicesConfig = require("./build/webpack/webpack.services.js")
 // #endregion
 
 // #region Constants
-var componentsToBuild = require("./build/webpack/webpack.files.entries.json");
-var StartupConfig = require("./configs/other/server-environment-startup");
+const componentsToBuild = require("./build/webpack/webpack.files.entries.json");
+const StartupConfig = require("./configs/other/server-environment-startup");
 	
 chalk.enabled = true;
-var serverOutColor = chalk.yellow;
-var errorOutColor = chalk.red;
-var webpackOutColor = chalk.cyan;
-var initialBuildFinished = false;
-
+const serverOutColor = chalk.yellow;
+const errorOutColor = chalk.red;
+const webpackOutColor = chalk.cyan;
 // #endregion
 
-function buildComponentIgnore() {//Dont copy files that we build
-	var componentIgnores = [];
-	var components = componentsToBuild;
-	for (var key in components) {
-		var filename = components[key].entry.split("/").pop();
-		componentIgnores.push(path.join("!" + __dirname, components[key].entry));
+// #region Script variables
+let initialBuildFinished = false;
+// #endregion
+
+const buildComponentIgnore = () => {//Dont copy files that we build
+	const componentIgnores = [];
+	for (const key in componentsToBuild) {
+		componentIgnores.push(path.join("!" + __dirname, componentsToBuild[key].entry));
 	}
+
 	return componentIgnores;
 }
 
-function copyStaticComponentsFiles() {
-	var source = [path.join(__dirname, "/src/components/**/*"), path.join("!" + __dirname, "/src/components/**/*.jsx")]
+const copyStaticComponentsFiles = () => {
+	let source = [path.join(__dirname, "/src/components/**/*"), path.join("!" + __dirname, "/src/components/**/*.jsx")]
 	source = source.concat(buildComponentIgnore());
 	return gulp.src(source)
 		.pipe(gulp.dest(path.join(__dirname, "/dist/components/")));
 }
 
-function copyStaticFiles() {
+const copyStaticFiles = () => {
 	gulp.src([path.join(__dirname, "/configs/**/*")])
 		.pipe(gulp.dest(path.join(__dirname, "/dist/configs/")));
 	return gulp.src([path.join(__dirname, "/src/services/**/*.html"),
@@ -55,30 +56,30 @@ function copyStaticFiles() {
 		.pipe(gulp.dest(path.join(__dirname, "/dist/services")));
 }
 
-function copyFinsembleDist() {//Copies the the required Finsemble files into the local directory.
+const copyFinsembleDist =() => {//Copies the the required Finsemble files into the local directory.
 	return gulp.src([path.join(__dirname, "/node_modules/@chartiq/finsemble/dist/**/*")])
 		.pipe(gulp.dest(path.join(__dirname, "/finsemble")));
 
 }
 
-function wipeDist(done) {
-	var dir = path.join(__dirname, "/dist/");
+const wipeDist = done => {
+	const dir = path.join(__dirname, "/dist/");
 	console.log("dir", dir);
 	wipe(dir, done);
 }
 
 
-function wipe(dir, cb) {
-	del(dir, { force: true }).then(function () {
+const wipe = (dir, cb) => {
+	del(dir, { force: true }).then(() => {
 		if (cb) {
 			cb();
 		}
-	}).catch(function (err) {
+	}).catch(err => {
 		console.error(err);
 	});
 }
 
-function buildSass(done) {
+const buildSass = done => {
 	done();
 	return gulp.src([
 		path.join(__dirname, "/src/components/**/**/*.scss"),
@@ -89,17 +90,17 @@ function buildSass(done) {
 		.pipe(gulp.dest(path.join(__dirname, "/dist/components/")));
 }
 
-function watchSass(done) {
+const watchSass = done => {
 	watch(path.join(__dirname, "/src/components/assets/**/*"), {}, gulp.series(buildSass));
 	done();
 }
 
-function watchStatic() {
+const watchStatic = () => {
 	watch(path.join(__dirname, "/src/**/*.css"), { ignoreInitial: true }).pipe(gulp.dest(path.join(__dirname, "/dist/")));
 	return watch(path.join(__dirname, "/src/**/*.html"), { ignoreInitial: true }).pipe(gulp.dest(path.join(__dirname, "/dist/")));
 }
 
-function wipedist(done) {
+const wipedist = done => {
 	if (directoryExists(path.join(__dirname, "/dist/"))) {
 		wipe(path.join(__dirname, "/dist/"), done);
 	} else {
@@ -107,7 +108,7 @@ function wipedist(done) {
 	}
 }
 
-function handleWebpackStdOut(data, done) {
+const handleWebpackStdOut = (data, done) => {
 	let notAnError = !data.includes("build failed");
 	if (notAnError) {
 		console.log(webpackOutColor(data));
@@ -123,18 +124,18 @@ function handleWebpackStdOut(data, done) {
 	}
 }
 
-function webpackComponents(done) {
-	webpack(webpackFilesConfig, function (err, stats) {
+const webpackComponents = done => {
+	webpack(webpackFilesConfig, (err, stats) => {
 		done();
 	})
 }
-function webpackServices(done) {
-	webpack(webpackServicesConfig, function (err, stats) {
+const webpackServices = done => {
+	webpack(webpackServicesConfig, (err, stats) => {
 		done();
 	})
 }
-function launchOpenfin(env) {
-	var OFF_DEATH = ON_DEATH(function (signal, err) {
+const launchOpenfin = env => {
+	const OFF_DEATH = ON_DEATH((signal, err) => {
 		exec("taskkill /F /IM openfin.* /T", (err, stdout, stderr) => {
 			if (err) {
 				console.error(err)
@@ -175,27 +176,27 @@ gulp.task("devServer", gulp.series(
 	"copy",
 	buildSass,
 	watchSass,
-	function (done) {
+	done => {
 		watchStatic();
 		initialBuildFinished = true;
 		
 		//This runs essentially runs 'PORT=80 node server/server.js'
-		var serverPath = path.join(__dirname, "/server/server.js");
+		const serverPath = path.join(__dirname, "/server/server.js");
 
 		// If you specify environment variables to child_process, it overwrites all environment variables, including
 		// PATH. So, copy based on our existing env variables.
-		var envCopy = process.env;
+		const envCopy = process.env;
 		envCopy.PORT = StartupConfig.dev.serverPort;
 		envCopy.NODE_ENV = "dev";
 
 		// allows for spaces in paths.
-		var serverExec = spawn(
+		const serverExec = spawn(
 			"node",
 			[serverPath, { stdio: "inherit" }],
 			{ env: envCopy, stdio: [process.stdin, process.stdout, "pipe", "ipc"] }
 		);
 
-		serverExec.on("message", function (data) {
+		serverExec.on("message", data => {
 
 			if (data === "serverStarted") {
 				launchOpenfin("dev");
@@ -204,7 +205,7 @@ gulp.task("devServer", gulp.series(
 		});
 		serverExec.on("exit", code => console.log("final exit code is", code));
 		//Prints server errors to your terminal.
-		serverExec.stderr.on("data", function (data) {
+		serverExec.stderr.on("data", data => {
 			console.error(errorOutColor("ERROR:" + data));
 		});
 	})
