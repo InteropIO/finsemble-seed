@@ -33,22 +33,16 @@ let initialBuildFinished = false;
 // #endregion
 
 // #region Functions
-const buildComponentIgnore = () => {
-	// Don't copy files that we build
-	const componentIgnores = [];
-	for (const key in componentsToBuild) {
-		componentIgnores.push("!" + path.join(__dirname, componentsToBuild[key].entry));
-	}
-
-	return componentIgnores;
-}
-
 const copyStaticFiles = () => {
-	let source = [
+	const source = [
 		path.join(srcPath, "components", "**", "*"),
 		"!" + path.join(srcPath, "components", "**", "*.jsx")];
 
-	source = source.concat(buildComponentIgnore());
+	// Don't copy files that we build
+	for (const key in componentsToBuild) {
+		source.push("!" + path.join(__dirname, componentsToBuild[key].entry));
+	}
+	
 	return merge(
 		gulp
 			.src(source)
@@ -110,7 +104,7 @@ const webpackServices = done => {
 }
 
 const launchApplication = env => {
-	const OFF_DEATH = ON_DEATH((signal, err) => {
+	ON_DEATH((signal, err) => {
 		exec("taskkill /F /IM openfin.* /T", (err, stdout, stderr) => {
 			// Only write the error to console if there is one and it is something other than process not found.
 			if (err && err !== 'The process "openfin.*" not found.') {
