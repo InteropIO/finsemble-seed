@@ -33,6 +33,16 @@ let initialBuildFinished = false;
 // #endregion
 
 // #region Functions
+/**
+ * Cleans the project folder of generated files.
+ */
+const clean = () => {
+	return del(distPath, { force: true });
+}
+
+/** 
+ * Copies static files to the output directory.
+ */
 const copyStaticFiles = () => {
 	const source = [
 		path.join(srcPath, "components", "**", "*"),
@@ -61,10 +71,9 @@ const copyStaticFiles = () => {
 	);
 }
 
-const clean = done => {
-	return del(distPath, { force: true });
-}
-
+/** 
+ * Builds the SASS files for the project. 
+ */
 const buildSass = () => {
 	return gulp
 		.src([path.join(srcPath, "components", "**", "*.scss")])
@@ -72,19 +81,18 @@ const buildSass = () => {
 		.pipe(gulp.dest(path.join(distPath, "components")));
 }
 
-const watchFiles = () => {
-	return merge(
-		watch(path.join(srcPath, "components", "assets", "**", "*"), {}, buildSass),
-		watch(path.join(srcPath, "**", "*.css"), { ignoreInitial: true })
-			.pipe(gulp.dest(distPath)),
-		watch(path.join(srcPath, "**", "*.html"), { ignoreInitial: true })
-			.pipe(gulp.dest(distPath)));
-}
-
+/** 
+ * Builds files using webpack.
+ */
 const buildWebpack = () => {
 	return webpack(webpackFilesConfig);
 }
 
+/**
+ * Launches the application.
+ * 
+ * @param {string} env The build environment. 
+ */
 const launchApplication = env => {
 	ON_DEATH((signal, err) => {
 		exec("taskkill /F /IM openfin.* /T", (err, stdout, stderr) => {
@@ -106,6 +114,18 @@ const launchApplication = env => {
 			process.exit();
 		});
 };
+
+/** 
+ * Watches files for changes to fire off copies and builds.
+ */
+const watchFiles = () => {
+	return merge(
+		watch(path.join(srcPath, "components", "assets", "**", "*"), {}, buildSass),
+		watch(path.join(srcPath, "**", "*.css"), { ignoreInitial: true })
+			.pipe(gulp.dest(distPath)),
+		watch(path.join(srcPath, "**", "*.html"), { ignoreInitial: true })
+			.pipe(gulp.dest(distPath)));
+}
 // #endregion
 
 // #region Tasks
@@ -154,7 +174,7 @@ gulp.task("devServer", gulp.series(
 			}
 		});
 		serverExec.on("exit", code => console.log("final exit code is", code));
-		//Prints server errors to your terminal.
+		// Prints server errors to your terminal.
 		serverExec.stderr.on("data", data => {
 			console.error(errorOutColor("ERROR:" + data));
 		});
