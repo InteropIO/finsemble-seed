@@ -1,24 +1,33 @@
-var gulp = require("gulp-4.0.build");
-var path = require("path");
-var webpack_stream = require("webpack-stream");
-var ON_DEATH = require("death")({ debug: false });
-
-var watch = require("gulp-watch");
-var del = require("del");
-var sass = require("gulp-sass");
-var openfinLauncher = require("openfin-launcher");
-var configPath = path.join(__dirname, "/configs/finConfig.json");
-//new
-var StartupConfig = require("./configs/other/server-environment-startup");
-const webpack = require("webpack");
+// #region Imports
+// NPM
 var chalk = require("chalk");
+const { exec, spawn } = require("child_process");	
+var ON_DEATH = require("death")({ debug: false });
+var del = require("del");
+var gulp = require("gulp-4.0.build");
+var sass = require("gulp-sass");
+var watch = require("gulp-watch");
+var openfinLauncher = require("openfin-launcher");
+var path = require("path");
+const webpack = require("webpack");
+var webpack_stream = require("webpack-stream");
+
+// local
+var webpackFilesConfig = require("./build/webpack/webpack.files.js")
+var webpackServicesConfig = require("./build/webpack/webpack.services.js")
+// #endregion
+
+// #region Constants
+var componentsToBuild = require("./build/webpack/webpack.files.entries.json");
+var StartupConfig = require("./configs/other/server-environment-startup");
+	
 chalk.enabled = true;
 var serverOutColor = chalk.yellow;
 var errorOutColor = chalk.red;
 var webpackOutColor = chalk.cyan;
 var initialBuildFinished = false;
 
-var componentsToBuild = require("./build/webpack/webpack.files.entries.json");
+// #endregion
 
 function buildComponentIgnore() {//Dont copy files that we build
 	var componentIgnores = [];
@@ -115,19 +124,16 @@ function handleWebpackStdOut(data, done) {
 }
 
 function webpackComponents(done) {
-	var webpack_config = require("./build/webpack/webpack.files.js")
-	webpack(webpack_config, function (err, stats) {
+	webpack(webpackFilesConfig, function (err, stats) {
 		done();
 	})
 }
 function webpackServices(done) {
-	var webpack_config = require("./build/webpack/webpack.services.js")
-	webpack(webpack_config, function (err, stats) {
+	webpack(webpackServicesConfig, function (err, stats) {
 		done();
 	})
 }
 function launchOpenfin(env) {
-	const { exec } = require("child_process");
 	var OFF_DEATH = ON_DEATH(function (signal, err) {
 		exec("taskkill /F /IM openfin.* /T", (err, stdout, stderr) => {
 			if (err) {
@@ -172,7 +178,7 @@ gulp.task("devServer", gulp.series(
 	function (done) {
 		watchStatic();
 		initialBuildFinished = true;
-		var exec = require("child_process").spawn;
+		
 		//This runs essentially runs 'PORT=80 node server/server.js'
 		var serverPath = path.join(__dirname, "/server/server.js");
 
@@ -183,7 +189,7 @@ gulp.task("devServer", gulp.series(
 		envCopy.NODE_ENV = "dev";
 
 		// allows for spaces in paths.
-		var serverExec = exec(
+		var serverExec = spawn(
 			"node",
 			[serverPath, { stdio: "inherit" }],
 			{ env: envCopy, stdio: [process.stdin, process.stdout, "pipe", "ipc"] }
