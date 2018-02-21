@@ -7,10 +7,10 @@ const del = require("del");
 const gulp = require("gulp-4.0.build");
 const sass = require("gulp-sass");
 const watch = require("gulp-watch");
+const merge = require("merge-stream");
 const launcher = require("openfin-launcher");
 const path = require("path");
 const webpack = require("webpack");
-const webpack_stream = require("webpack-stream");
 
 // local
 const webpackFilesConfig = require("./build/webpack/webpack.files.js")
@@ -43,54 +43,44 @@ const buildComponentIgnore = () => {
 	return componentIgnores;
 }
 
-const copyStaticComponentsFiles = () => {
+const copyStaticFiles = () => {
 	let source = [
 		path.join(srcPath, "components", "**", "*"),
 		"!" + path.join(srcPath, "components", "**", "*.jsx")];
 
 	source = source.concat(buildComponentIgnore());
-	return gulp
-		.src(source)
-		.pipe(gulp.dest(path.join(distPath, "components")));
-}
-
-const copyStaticFiles = () => {
-	gulp
-		.src([path.join(__dirname, "configs", "**", "*")])
-		.pipe(gulp.dest(path.join(distPath, "configs")));
-	// Ignores the js files in service, but copies over the html files.
-	return gulp
-		.src([
-			path.join(srcPath, "services", "**", "*.html"),
-			"!" + path.join(srcPath, "services", "**", "*.js")])
-		.pipe(gulp.dest(path.join(distPath, "services")));
-}
-
-const copyFinsembleDist = () => {
-	// Copies the the required Finsemble files into the local directory.
-	return gulp
-		.src([path.join(__dirname, "node_modules", "@chartiq", "finsemble", "dist", "**", "*")])
-		.pipe(gulp.dest(path.join(__dirname, "finsemble")));
+	return merge(
+		gulp
+			.src(source)
+			.pipe(gulp.dest(path.join(distPath, "components"))),
+		gulp
+			.src([path.join(__dirname, "configs", "**", "*")])
+			.pipe(gulp.dest(path.join(distPath, "configs"))),
+		gulp
+			.src([
+				path.join(srcPath, "services", "**", "*.html"),
+				"!" + path.join(srcPath, "services", "**", "*.js")])
+			.pipe(gulp.dest(path.join(distPath, "services"))),
+		gulp
+			.src([path.join(__dirname, "node_modules", "@chartiq", "finsemble", "dist", "**", "*")])
+			.pipe(gulp.dest(path.join(__dirname, "finsemble")))
+	);
 }
 
 const wipeDist = done => {
-	wipe(distPath, done);
-}
-
-const wipe = (dir, cb) => {
-	del(dir, { force: true }).then(() => {
-		if (cb) {
-			cb();
-		}
-	}).catch(err => {
-		console.error(errorOutColor(err));
-	});
+	del(distPath, { force: true })
+		.then(() => {
+			done();
+		}).catch(err => {
+			console.error(errorOutColor(err));
+		});
 }
 
 const buildSass = () => {
-	return gulp.src([
-		path.join(srcPath, "components", "**", "*.scss")
-	])
+	return gulp
+		.src([
+			path.join(srcPath, "components", "**", "*.scss")
+		])
 		.pipe(sass().on("error", sass.logError))
 		.pipe(gulp.dest(path.join(distPath, "components")));
 }
@@ -101,10 +91,11 @@ const watchSass = done => {
 }
 
 const watchStatic = () => {
-	watch(path.join(srcPath, "**", "*.css"), { ignoreInitial: true })
-		.pipe(gulp.dest(distPath));
-	return watch(path.join(srcPath, "**", "*.html"), { ignoreInitial: true })
-		.pipe(gulp.dest(distPath));
+	return merge(
+		watch(path.join(srcPath, "**", "*.css"), { ignoreInitial: true })
+			.pipe(gulp.dest(distPath)),
+		watch(path.join(srcPath, "**", "*.html"), { ignoreInitial: true })
+			.pipe(gulp.dest(distPath)));
 }
 
 const webpackComponents = done => {
@@ -118,7 +109,7 @@ const webpackServices = done => {
 	})
 }
 
-const launchOpenfin = env => {
+const launchApplication = env => {
 	const OFF_DEATH = ON_DEATH((signal, err) => {
 		exec("taskkill /F /IM openfin.* /T", (err, stdout, stderr) => {
 			// Only write the error to console if there is one and it is something other than process not found.
@@ -145,9 +136,7 @@ const launchOpenfin = env => {
 gulp.task("wipeDist", gulp.series(wipeDist));
 
 gulp.task("copy", gulp.series(
-	copyStaticFiles,
-	copyStaticComponentsFiles,
-	copyFinsembleDist
+	copyStaticFiles
 ));
 
 gulp.task("wp", gulp.series(webpackComponents));
@@ -190,7 +179,7 @@ gulp.task("devServer", gulp.series(
 		serverExec.on("message", data => {
 
 			if (data === "serverStarted") {
-				launchOpenfin("dev");
+				launchApplication("dev");
 				done();
 			}
 		});
