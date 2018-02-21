@@ -110,30 +110,6 @@ const watchStatic = () => {
 		.pipe(gulp.dest(path.join(__dirname, "/dist/")));
 }
 
-const wipedist = done => {
-	if (directoryExists(path.join(__dirname, "/dist/"))) {
-		wipe(path.join(__dirname, "/dist/"), done);
-	} else {
-		done();
-	}
-}
-
-const handleWebpackStdOut = (data, done) => {
-	let notAnError = !data.includes("build failed");
-	if (notAnError) {
-		console.log(webpackOutColor(data));
-	}
-
-	if (data.includes("webpack is watching")) {
-
-		if (initialBuildFinished && notAnError) {
-			// buildComplete();
-		} else if (!initialBuildFinished) {
-			done();
-		}
-	}
-}
-
 const webpackComponents = done => {
 	webpack(webpackFilesConfig, (err, stats) => {
 		done();
