@@ -7,7 +7,7 @@ const del = require("del");
 const gulp = require("gulp-4.0.build");
 const sass = require("gulp-sass");
 const watch = require("gulp-watch");
-const openfinLauncher = require("openfin-launcher");
+const launcher = require("openfin-launcher");
 const path = require("path");
 const webpack = require("webpack");
 const webpack_stream = require("webpack-stream");
@@ -22,9 +22,7 @@ const componentsToBuild = require("./build/webpack/webpack.files.entries.json");
 const StartupConfig = require("./configs/other/server-environment-startup");
 
 chalk.enabled = true;
-const serverOutColor = chalk.yellow;
 const errorOutColor = chalk.red;
-const webpackOutColor = chalk.cyan;
 // #endregion
 
 // #region Script variables
@@ -84,7 +82,7 @@ const wipe = (dir, cb) => {
 			cb();
 		}
 	}).catch(err => {
-		console.error(err);
+		console.error(errorOutColor(err));
 	});
 }
 
@@ -126,14 +124,14 @@ const launchOpenfin = env => {
 		exec("taskkill /F /IM openfin.* /T", (err, stdout, stderr) => {
 			// Only write the error to console if there is one and it is something other than process not found.
 			if (err && err !== 'The process "openfin.*" not found.') {
-				console.error(err)
+				console.error(errorOutColor(err));
 			}
 
 			process.exit();
 		});
 	});
 
-	return openfinLauncher
+	return launcher
 		.launchOpenFin({
 			configPath: StartupConfig[env].serverConfig
 		})
