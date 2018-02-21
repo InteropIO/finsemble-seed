@@ -61,13 +61,8 @@ const copyStaticFiles = () => {
 	);
 }
 
-const wipeDist = done => {
-	del(distPath, { force: true })
-		.then(() => {
-			done();
-		}).catch(err => {
-			console.error(errorOutColor(err));
-		});
+const clean = done => {
+	return del(distPath, { force: true });
 }
 
 const buildSass = () => {
@@ -114,23 +109,21 @@ const launchApplication = env => {
 // #endregion
 
 // #region Tasks
-gulp.task("wipeDist", gulp.series(wipeDist));
+gulp.task("clean", clean);
 
-gulp.task("copy", gulp.series(
-	copyStaticFiles
-));
+gulp.task("copy", copyStaticFiles);
 
 gulp.task("wp", buildWebpack);
 
 gulp.task("build", gulp.series(
-	"wipeDist",
+	"clean",
 	"copy",
 	buildWebpack,
 	buildSass
 ));
 
 gulp.task("devServer", gulp.series(
-	"wipeDist",
+	"clean",
 	"copy",
 	buildSass,
 	watchFiles,
