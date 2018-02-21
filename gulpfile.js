@@ -10,7 +10,7 @@ const watch = require("gulp-watch");
 const merge = require("merge-stream");
 const launcher = require("openfin-launcher");
 const path = require("path");
-const webpack = require("webpack");
+const webpack = require("webpack-stream");
 
 // local
 const webpackFilesConfig = require("./build/webpack/webpack.files.js")
@@ -72,35 +72,22 @@ const wipeDist = done => {
 
 const buildSass = () => {
 	return gulp
-		.src([
-			path.join(srcPath, "components", "**", "*.scss")
-		])
+		.src([path.join(srcPath, "components", "**", "*.scss")])
 		.pipe(sass().on("error", sass.logError))
 		.pipe(gulp.dest(path.join(distPath, "components")));
 }
 
-const watchSass = done => {
-	watch(path.join(srcPath, "components", "assets", "**", "*"), {}, buildSass);
-	done();
-}
-
-const watchStatic = () => {
+const watchFiles = () => {
 	return merge(
+		watch(path.join(srcPath, "components", "assets", "**", "*"), {}, buildSass),
 		watch(path.join(srcPath, "**", "*.css"), { ignoreInitial: true })
 			.pipe(gulp.dest(distPath)),
 		watch(path.join(srcPath, "**", "*.html"), { ignoreInitial: true })
 			.pipe(gulp.dest(distPath)));
 }
 
-const webpackComponents = done => {
-	webpack(webpackFilesConfig, (err, stats) => {
-		done();
-	})
-}
-const webpackServices = done => {
-	webpack(webpackServicesConfig, (err, stats) => {
-		done();
-	})
+const buildWebpack = () => {
+	return webpack(webpackFilesConfig);
 }
 
 const launchApplication = env => {
@@ -133,15 +120,12 @@ gulp.task("copy", gulp.series(
 	copyStaticFiles
 ));
 
-gulp.task("wp", gulp.series(webpackComponents));
+gulp.task("wp", buildWebpack);
 
 gulp.task("build", gulp.series(
 	"wipeDist",
 	"copy",
-	// webpackClients,
-	// webpackServices,
-	webpackComponents,
-	// webpackReactComponents,
+	buildWebpack,
 	buildSass
 ));
 
@@ -149,9 +133,8 @@ gulp.task("devServer", gulp.series(
 	"wipeDist",
 	"copy",
 	buildSass,
-	watchSass,
+	watchFiles,
 	done => {
-		watchStatic();
 		initialBuildFinished = true;
 
 		//This runs essentially runs 'PORT=80 node server/server.js'
