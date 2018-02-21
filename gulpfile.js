@@ -1,7 +1,7 @@
 // #region Imports
 // NPM
 const chalk = require("chalk");
-const { exec, spawn } = require("child_process");	
+const { exec, spawn } = require("child_process");
 const ON_DEATH = require("death")({ debug: false });
 const del = require("del");
 const gulp = require("gulp-4.0.build");
@@ -20,7 +20,7 @@ const webpackServicesConfig = require("./build/webpack/webpack.services.js")
 // #region Constants
 const componentsToBuild = require("./build/webpack/webpack.files.entries.json");
 const StartupConfig = require("./configs/other/server-environment-startup");
-	
+
 chalk.enabled = true;
 const serverOutColor = chalk.yellow;
 const errorOutColor = chalk.red;
@@ -134,22 +134,27 @@ const webpackServices = done => {
 		done();
 	})
 }
+
 const launchOpenfin = env => {
 	const OFF_DEATH = ON_DEATH((signal, err) => {
 		exec("taskkill /F /IM openfin.* /T", (err, stdout, stderr) => {
-			if (err) {
+			// Only write the error to console if there is one and it is something other than process not found.
+			if (err && err !== 'The process "openfin.*" not found.') {
 				console.error(err)
-				this.process.exit();
-				// node couldn't execute the command
-				return;
 			}
-			this.process.exit();
+
+			process.exit();
 		});
-	})
-	return openfinLauncher.launchOpenFin({
-		//new
-		configPath: StartupConfig[env].serverConfig
 	});
+
+	return openfinLauncher
+		.launchOpenFin({
+			configPath: StartupConfig[env].serverConfig
+		})
+		.then(() => {
+			// OpenFin has closed so exit gulpfile
+			process.exit();
+		});
 };
 
 gulp.task("wipeDist", gulp.series(wipeDist));
@@ -179,7 +184,7 @@ gulp.task("devServer", gulp.series(
 	done => {
 		watchStatic();
 		initialBuildFinished = true;
-		
+
 		//This runs essentially runs 'PORT=80 node server/server.js'
 		const serverPath = path.join(__dirname, "/server/server.js");
 
