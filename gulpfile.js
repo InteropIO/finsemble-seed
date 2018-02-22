@@ -31,8 +31,6 @@
 	// #region Script variables
 	let distPath = path.join(__dirname, "dist");
 	let srcPath = path.join(__dirname, "src");
-
-	let initialBuildFinished = false;
 	// #endregion
 
 	// #region Functions
@@ -119,14 +117,12 @@
 	};
 
 	const startServer = done => {
-		initialBuildFinished = true;
-		
 		// This runs essentially runs 'PORT=80 node server/server.js'
-		var serverPath = path.join(__dirname, "server", "server.js");
+		const serverPath = path.join(__dirname, "server", "server.js");
 
 		// If you specify environment variables to child_process, it overwrites all environment variables, including
 		// PATH. So, copy based on our existing env variables.
-		var envCopy = process.env;
+		const envCopy = process.env;
 		if (!envCopy.PORT) {
 			envCopy.PORT = StartupConfig.dev.serverPort;
 		}
@@ -135,30 +131,42 @@
 			envCopy.NODE_ENV = "dev";
 		}
 
-		// allows for spaces in paths.
-		var serverExec = spawn(
+		const serverExec = spawn(
 			"node",
-			[serverPath, { stdio: "inherit" }],
-			{ env: envCopy, stdio: [process.stdin, process.stdout, "pipe", "ipc"] }
+			[
+				serverPath,
+				{
+					stdio: "inherit"
+				}
+			],
+			{
+				env: envCopy,
+				stdio: [
+					process.stdin,
+					process.stdout,
+					"pipe",
+					"ipc"
+				]
+			}
 		);
 
-		serverExec.on("message", function (data) {
-			if (data === "serverStarted") {
-				if (envCopy.NODE_ENV === "dev") {
-					// Auto-launch application in dev environment
-					launchApplication(envCopy.NODE_ENV);
+		serverExec.on(
+			"message",
+			data => {
+				if (data === "serverStarted") {
+					if (envCopy.NODE_ENV === "dev") {
+						// Auto-launch application in dev environment
+						launchApplication(envCopy.NODE_ENV);
+					}
+
+					done();
 				}
+			});
 
-				done();
-			}
-		});
-
-		serverExec.on("exit", code => console.log('final exit code is', code));
+		serverExec.on("exit", code => console.log(`Server closed: exit code ${code}`));
 
 		// Prints server errors to your terminal.
-		serverExec.stderr.on("data", function (data) {
-			console.error(errorOutColor("ERROR:" + data));
-		});
+		serverExec.stderr.on("data", data => { console.error(errorOutColor(`ERROR: ${data}`)); });
 	};
 
 	/** 
@@ -191,7 +199,6 @@
 	);
 
 	gulp.task("default", gulp.series("devServer"));
-
 
 	// This command should be tailored to your production environment. You are responsible for moving the built files to 
 	// your production server, and creating an OpenFin installer that points to your config.
