@@ -124,7 +124,7 @@
 		// PATH. So, copy based on our existing env variables.
 		const envCopy = process.env;
 		if (!envCopy.PORT) {
-			envCopy.PORT = StartupConfig.dev.serverPort;
+			envCopy.PORT = startupConfig.dev.serverPort;
 		}
 
 		if (!envCopy.NODE_ENV) {
