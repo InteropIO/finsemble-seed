@@ -7,7 +7,7 @@
 	const { exec, spawn } = require("child_process");
 	const ON_DEATH = require("death")({ debug: false });
 	const del = require("del");
-	const gulp = require("gulp-4.0.build");
+	const gulp = require("gulp");
 	const sass = require("gulp-sass");
 	const watch = require("gulp-watch");
 	const merge = require("merge-stream");
