@@ -31,6 +31,17 @@
 	// #region Script variables
 	let distPath = path.join(__dirname, "dist");
 	let srcPath = path.join(__dirname, "src");
+
+	// If you specify environment variables to child_process, it overwrites all environment variables, including
+	// PATH. So, copy based on our existing env variables.
+	const env = process.env;
+	if (!env.PORT) {
+		env.PORT = startupConfig.dev.serverPort;
+	}
+
+	if (!env.NODE_ENV) {
+		env.NODE_ENV = "dev";
+	}
 	// #endregion
 
 	// #region Functions
@@ -91,10 +102,10 @@
 
 	/**
 	 * Launches the application.
-	 * 
-	 * @param {string} env The build environment. 
+	 *
+	 * @param {function} done Function called when method is completed.
 	 */
-	const launchApplication = env => {
+	const launchApplication = done => {
 		ON_DEATH((signal, err) => {
 			exec("taskkill /F /IM openfin.* /T", (err, stdout, stderr) => {
 				// Only write the error to console if there is one and it is something other than process not found.
@@ -106,30 +117,25 @@
 			});
 		});
 
-		return launcher
+		launcher
 			.launchOpenFin({
-				configPath: startupConfig[env].serverConfig
+				configPath: startupConfig[env.NODE_ENV].serverConfig
 			})
 			.then(() => {
 				// OpenFin has closed so exit gulpfile
 				process.exit();
 			});
+		
+		done();
 	};
 
+	/**
+	 * Starts the server.
+	 * 
+	 * @param {function} done Function called when execution has completed.
+	 */
 	const startServer = done => {
-		// This runs essentially runs 'PORT=80 node server/server.js'
 		const serverPath = path.join(__dirname, "server", "server.js");
-
-		// If you specify environment variables to child_process, it overwrites all environment variables, including
-		// PATH. So, copy based on our existing env variables.
-		const envCopy = process.env;
-		if (!envCopy.PORT) {
-			envCopy.PORT = startupConfig.dev.serverPort;
-		}
-
-		if (!envCopy.NODE_ENV) {
-			envCopy.NODE_ENV = "dev";
-		}
 
 		const serverExec = spawn(
 			"node",
@@ -140,7 +146,7 @@
 				}
 			],
 			{
-				env: envCopy,
+				env: env,
 				stdio: [
 					process.stdin,
 					process.stdout,
@@ -154,11 +160,6 @@
 			"message",
 			data => {
 				if (data === "serverStarted") {
-					if (envCopy.NODE_ENV === "dev") {
-						// Auto-launch application in dev environment
-						launchApplication(envCopy.NODE_ENV);
-					}
-
 					done();
 				}
 			});
@@ -178,30 +179,40 @@
 			watch(path.join(srcPath, "**", "*.css"), { ignoreInitial: true })
 				.pipe(gulp.dest(distPath)),
 			watch(path.join(srcPath, "**", "*.html"), { ignoreInitial: true })
-				.pipe(gulp.dest(distPath)));
+				.pipe(gulp.dest(distPath))
+		);
 	}
 	// #endregion
 
 	// #region Tasks
+	/**
+	 * Cleans the project directory.
+	 */
 	gulp.task("clean", clean);
 
-	gulp.task("build", gulp.series(
-		"clean",
-		copyStaticFiles,
-		buildWebpack,
-		buildSass
-	));
+	/**
+	 * Builds the application in the distribution directory.
+	 */
+	gulp.task("build", gulp.series("clean", copyStaticFiles, buildWebpack, buildSass));
 
-	gulp.task("devServer", gulp.series(
-		"build",
-		watchFiles,
-		startServer)
-	);
-
-	gulp.task("default", gulp.series("devServer"));
-
-	// This command should be tailored to your production environment. You are responsible for moving the built files to 
-	// your production server, and creating an OpenFin installer that points to your config.
+	/**
+	 * Builds the application and starts the server to host it.
+	 */
 	gulp.task("prod", gulp.series("build", startServer));
+
+	/**
+	 * Builds the application, starts the server and launches the Finsemble application.
+	 */
+	gulp.task("prod:run", gulp.series("prod", launchApplication));
+
+	/**
+	 * Builds the application, starts the server, launches the Finsemble application and watches for file changes.
+	 */
+	gulp.task("dev:run", gulp.series("prod:run", watchFiles));
+
+	/**
+	 * Specifies the default task to run if no task is passed in.
+	 */
+	gulp.task("default", gulp.series("dev:run"));
 	// #endregion
 })();
