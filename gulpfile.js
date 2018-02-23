@@ -32,7 +32,16 @@
 	let distPath = path.join(__dirname, "dist");
 	let srcPath = path.join(__dirname, "src");
 
-	let initialBuildFinished = false;
+	// If you specify environment variables to child_process, it overwrites all environment variables, including
+	// PATH. So, copy based on our existing env variables.
+	const env = process.env;
+	if (!env.PORT) {
+		env.PORT = startupConfig.dev.serverPort;
+	}
+
+	if (!env.NODE_ENV) {
+		env.NODE_ENV = "dev";
+	}
 	// #endregion
 
 	// #region Functions
@@ -84,7 +93,7 @@
 			.pipe(gulp.dest(path.join(distPath, "components")));
 	}
 
-	/** 
+	/**
 	 * Builds files using webpack.
 	 */
 	const buildWebpack = () => {
@@ -93,10 +102,10 @@
 
 	/**
 	 * Launches the application.
-	 * 
-	 * @param {string} env The build environment. 
+	 *
+	 * @param {function} done Function called when method is completed.
 	 */
-	const launchApplication = env => {
+	const launchApplication = done => {
 		ON_DEATH((signal, err) => {
 			exec("taskkill /F /IM openfin.* /T", (err, stdout, stderr) => {
 				// Only write the error to console if there is one and it is something other than process not found.
@@ -108,14 +117,57 @@
 			});
 		});
 
-		return launcher
+		launcher
 			.launchOpenFin({
-				configPath: startupConfig[env].serverConfig
+				configPath: startupConfig[env.NODE_ENV].serverConfig
 			})
 			.then(() => {
 				// OpenFin has closed so exit gulpfile
 				process.exit();
 			});
+		
+		done();
+	};
+
+	/**
+	 * Starts the server.
+	 * 
+	 * @param {function} done Function called when execution has completed.
+	 */
+	const startServer = done => {
+		const serverPath = path.join(__dirname, "server", "server.js");
+
+		const serverExec = spawn(
+			"node",
+			[
+				serverPath,
+				{
+					stdio: "inherit"
+				}
+			],
+			{
+				env: env,
+				stdio: [
+					process.stdin,
+					process.stdout,
+					"pipe",
+					"ipc"
+				]
+			}
+		);
+
+		serverExec.on(
+			"message",
+			data => {
+				if (data === "serverStarted") {
+					done();
+				}
+			});
+
+		serverExec.on("exit", code => console.log(`Server closed: exit code ${code}`));
+
+		// Prints server errors to your terminal.
+		serverExec.stderr.on("data", data => { console.error(errorOutColor(`ERROR: ${data}`)); });
 	};
 
 	/** 
@@ -127,60 +179,40 @@
 			watch(path.join(srcPath, "**", "*.css"), { ignoreInitial: true })
 				.pipe(gulp.dest(distPath)),
 			watch(path.join(srcPath, "**", "*.html"), { ignoreInitial: true })
-				.pipe(gulp.dest(distPath)));
+				.pipe(gulp.dest(distPath))
+		);
 	}
 	// #endregion
 
 	// #region Tasks
+	/**
+	 * Cleans the project directory.
+	 */
 	gulp.task("clean", clean);
 
-	gulp.task("build", gulp.series(
-		"clean",
-		copyStaticFiles,
-		buildWebpack,
-		buildSass
-	));
+	/**
+	 * Builds the application in the distribution directory.
+	 */
+	gulp.task("build", gulp.series("clean", copyStaticFiles, buildWebpack, buildSass));
 
-	gulp.task("devServer", gulp.series(
-		"build",
-		watchFiles,
-		done => {
-			initialBuildFinished = true;
+	/**
+	 * Builds the application and starts the server to host it.
+	 */
+	gulp.task("prod", gulp.series("build", startServer));
 
-			//This runs essentially runs 'PORT=80 node server/server.js'
-			const serverPath = path.join(__dirname, "/server/server.js");
+	/**
+	 * Builds the application, starts the server and launches the Finsemble application.
+	 */
+	gulp.task("prod:run", gulp.series("prod", launchApplication));
 
-			// If you specify environment variables to child_process, it overwrites all environment variables, including
-			// PATH. So, copy based on our existing env variables.
-			const envCopy = process.env;
-			envCopy.PORT = startupConfig.dev.serverPort;
-			envCopy.NODE_ENV = "dev";
+	/**
+	 * Builds the application, starts the server, launches the Finsemble application and watches for file changes.
+	 */
+	gulp.task("dev:run", gulp.series("prod:run", watchFiles));
 
-			// allows for spaces in paths.
-			const serverExec = spawn(
-				"node",
-				[serverPath, { stdio: "inherit" }],
-				{ env: envCopy, stdio: [process.stdin, process.stdout, "pipe", "ipc"] }
-			);
-
-			serverExec.on("message", data => {
-
-				if (data === "serverStarted") {
-					launchApplication("dev");
-					done();
-				}
-			});
-			serverExec.on("exit", code => console.log("final exit code is", code));
-			// Prints server errors to your terminal.
-			serverExec.stderr.on("data", data => {
-				console.error(errorOutColor("ERROR:" + data));
-			});
-		})
-	);
-
-	gulp.task("default", gulp.series("devServer"));
-
-	//This command should be tailored to your production environment. You are responsible for moving the built files to your production server, and creating an openfin installer that points to your config.
-	gulp.task("prod", gulp.series("build"));
+	/**
+	 * Specifies the default task to run if no task is passed in.
+	 */
+	gulp.task("default", gulp.series("dev:run"));
 	// #endregion
 })();
