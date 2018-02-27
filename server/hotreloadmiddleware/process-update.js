@@ -33,14 +33,8 @@ module.exports = function(hash, moduleMap, options) {
       if (err) return handleError(err);
 
       if(!updatedModules) {
-        if (options.warn) {
-          console.warn("[HMR] Cannot find update (Full reload needed)");
-          console.warn("[HMR] (Probably because of restarting the server)");
-        }
-        performReload();
         return null;
       }
-
       var applyCallback = function(applyErr, renewedModules) {
         if (applyErr) return handleError(applyErr);
 
