@@ -67,7 +67,7 @@ Actions = {
 						break;
 					case "renameWorkspace":
 						Logger.system.debug("WorkspaceManagementStore renameWorkspace", action.data);
-							Actions.renameWorkspace(action.data);
+						Actions.renameWorkspace(action.data);
 						break;
 				}
 
@@ -188,6 +188,7 @@ Actions = {
 		 */
 		function onUserInput(err, response) {
 			if (response.choice === "affirmative") {
+
 				if (Actions.isPinned(workspaceName)) {
 					Actions.removePin(workspaceName);
 					let thePin = {
@@ -204,7 +205,6 @@ Actions = {
 				});
 			}
 		}
-
 		Actions.spawnDialog("yesNo", dialogParams, onUserInput);
 	},
 	/**
@@ -267,7 +267,7 @@ Actions = {
 			saveIt,
 		], Actions.onAsyncComplete);
 	},
-	showPreferences: function() {
+	showPreferences: function () {
 		FSBL.Clients.LauncherClient.showWindow({
 			componentType: "UserPreferences"
 		},
@@ -526,7 +526,7 @@ Actions = {
 
 		function onUserInput(err, response) {
 			if (response.choice === "affirmative") {
-				callback(null,  { workspaceName, template } );
+				callback(null, { workspaceName, template });
 			} else {
 				callback(new Error("Negative"));
 			}
@@ -534,7 +534,7 @@ Actions = {
 		if (workspaceExists) {
 			Actions.spawnDialog("yesNo", dialogParams, onUserInput);
 		} else {
-			callback(null, { workspaceName, template } );
+			callback(null, { workspaceName, template });
 		}
 	},
 	/**
@@ -627,10 +627,13 @@ function createGlobalStore(done) {
 
 function getToolbarStore(done) {
 	//Try for a second to get the toolbar. The toolbar creates the store on startup. if this component comes up first, we'll still get our store.
-	async.retry({ times: 10, interval: 100 }, (finished) => {
-		console.info("Trying to retrieve toolbarStore.");
+	async.retry({
+		times: 10,
+		interval: 100
+	}, (callback, results) => {
 		StoreClient.getStore({ global: true, store: "Finsemble-Toolbar-Store" }, function (err, store) {
-			if (!store) return done("no store", null);
+			console.info("Trying to retrieve toolbarStore.", store);
+			if (!store) return callback("no store", null);
 			ToolbarStore = store;
 			store.getValue({ field: "pins" }, function (err, pins) {
 				if (pins) Actions.setPins(pins.value);
@@ -639,7 +642,7 @@ function getToolbarStore(done) {
 			store.addListener({ field: "pins" }, function (err, pins) {
 				if (pins) Actions.setPins(pins.value);
 			});
-			finished();
+			callback(null, null);
 		});
 	}, done);
 }
