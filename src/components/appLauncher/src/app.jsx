@@ -81,7 +81,7 @@ class AppLauncher extends React.Component {
 				</FinsembleMenuItem>
 				<FinsembleMenuItem>
 					<FinsembleMenuItemLabel onClick={this.openAppCatalog}>
-						<i className="ff-home"></i> App Catalog
+						<i className="ff-list"></i> App Catalog
 					</FinsembleMenuItemLabel>
 				</FinsembleMenuItem>
 			</FinsembleMenuSection>

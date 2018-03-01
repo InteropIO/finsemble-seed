@@ -49,11 +49,19 @@ class InputAndSelectionDialog extends React.Component {
 	// returns all the component types of a template definition to display to user for additional info. If multiple components with same type, then instead of listing each
 	// individually, only one entry will be returned with the count in parentheses.
 	getComponentTypes(templateObject) {
+		FSBL.Clients.Logger.system.debug("getComponentTypes templateObject", templateObject);
+		var componentType;
 		var componentMap = {};
 		var annotatedComponentList = [];
 		for (let i = 0; i < templateObject.windows.length; i++) {
 			let windowData = templateObject.windowData[i];
-			let componentType = windowData.customData.component.type;
+			FSBL.Clients.Logger.system.debug("getComponentTypes loop", windowData);
+			componentType = "Unknown Component";
+			if (windowData) { // current assimulation doesn't fill in windowData, so in this case use "Unknown Component" for component type
+				componentType = windowData.customData.component.type;
+			} else {
+				componentType = "Unknown Component";
+			}
 			if (!componentMap[componentType]) {
 				componentMap[componentType] = 1;
 			} else {
@@ -186,15 +194,20 @@ class InputAndSelectionDialog extends React.Component {
 	setInputWorkpaceName(e) {
 		this.setState({
 			inputWorkspaceValue: e.target.value,
-			invalidWorkspace:false
+			invalidWorkspace: false
 		});
 	}
 
 	// when a template is selected by user, update all the related state
-	setFocusedTemplateInfo(focusedTemplateName) {
+	setFocusedTemplateInfo(focusedTemplateName, click) {
 		var currentDescription = self.state.templateDefinitions[focusedTemplateName].description;
 		var currentComponents = self.state.componentTypeMap[focusedTemplateName];
-
+		if (click) {
+			this.setState({
+				inputWorkspaceValue: focusedTemplateName,
+				invalidWorkspace: false
+			});
+		}
 		this.setState({
 			focusedTemplateName,
 			currentDescription,
@@ -242,7 +255,7 @@ class InputAndSelectionDialog extends React.Component {
 									}
 
 									return (
-										<div className={classNames} key={i} onClick={() => this.setFocusedTemplateInfo(templateName)}>
+										<div className={classNames} key={i} onClick={() => this.setFocusedTemplateInfo(templateName, true)}>
 											{this.truncatedTemplaceName(templateName)}
 										</div>
 									)
@@ -271,7 +284,7 @@ class InputAndSelectionDialog extends React.Component {
 					<div className="content-section-header">Name</div>
 					<div className="content-main-row workspace-input-row">
 						<div className={workspaceInputClasses}>
-							<input ref="WorkspaceInput" autoFocus={true} placeholder={"New Workspace"} maxLength="40" onChange={this.setInputWorkpaceName} />
+							<input ref="WorkspaceInput" autoFocus={true} placeholder={"New Workspace"} maxLength="40" value={this.state.inputWorkspaceValue} onChange={this.setInputWorkpaceName} />
 						</div>
 						<div className="action-buttons-wrapper">
 							<div className="action-button workspace-action-button" onClick={() => { this.sendResponse("cancel"); }}>
