@@ -2,7 +2,16 @@
 	"comment": "Top-level application config for development, adding on top of the core config",
 	"mode": "",
 	"isAuthEnabled": false,
-	"defaultStorage": "localStorage",
+	"storage": {
+		"topicToDataStoreAdaptors" : {
+			"finsemble" : "LocalStorageAdapter",
+			"finsemble.workspace" : "LocalStorageAdapter",
+			"finsemble.workspace.cache" : "LocalStorageAdapter"
+		},
+		"dataStoreAdaptors" : {
+			"LocalStorageAdapter": "$applicationRoot/adapters/LocalStorageAdapter.js"
+		}
+	},
 	"systemTrayIcon": "$applicationRoot/components/assets/img/Finsemble_Taskbar_Icon.png",
 	"debugServiceDelay": 0,
 	"storage": {},
