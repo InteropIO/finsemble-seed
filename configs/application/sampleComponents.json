@@ -393,7 +393,8 @@
 					"resizeRegion": {
 						"bottomRightCorner": 0,
 						"size": 0
-					}
+					},
+					"minimizable": false
 				}
 			},
 			"component": {
