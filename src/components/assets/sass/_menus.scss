@@ -3,7 +3,7 @@
 @import '_variablesMenus';
 body.menu {
 	margin:0px;
-	font-family: Roboto;
+	font-family: 'Roboto';
 	font-weight:300;
 	overflow-y:hidden;
 	overflow-x:hidden;
@@ -132,7 +132,7 @@ body.menu {
 }
 */
 
-.ff-new-workspace, .ff-save-1, .ff-saveas-1 {
+.ff-new-workspace, .ff-save-1, .ff-saveas-1, .ff-settings, .ff-home {
 	padding-right: 7px;
 	margin-top: 2px;
 }

@@ -55,6 +55,7 @@ class YesNoDialog extends React.Component {
 		this.sendAffirmativeResponse = this.sendAffirmativeResponse.bind(this);
 		this.sendCancelResponse = this.sendCancelResponse.bind(this);
 		this.sendNegativeResponse = this.sendNegativeResponse.bind(this);
+		this.sendResponse = this.sendResponse.bind(this);
 	}
 	/**
 	 * When the opener requests that the dialog show itself, it also passes in initialization data. This function grabs that data, calls setState, and then fits the window to the contents of the DOM. Then we call `showDialog`, which will display the dialog on the proper monitor.
@@ -66,6 +67,7 @@ class YesNoDialog extends React.Component {
 	onShowRequested(err, response) {
 		let data = response.data;
 		this.setState({
+			hideModalOnClose: typeof data.hideModalOnClose === "undefined" ? true : data.hideModalOnClose,
 			question: data.question,
 			negativeResponseLabel: data.negativeResponseLabel || "No",
 			affirmativeResponseLabel: data.affirmativeResponseLabel || "Yes",
@@ -94,7 +96,8 @@ class YesNoDialog extends React.Component {
 	 */
 	sendResponse(response) {
 		FSBL.Clients.DialogManager.respondToOpener({
-			choice: response
+			choice: response,
+			hideModalOnClose: this.state.hideModalOnClose
 		});
 	}
 	/**

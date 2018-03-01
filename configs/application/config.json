@@ -12,9 +12,17 @@
 			"LocalStorageAdapter": "$applicationRoot/adapters/LocalStorageAdapter.js"
 		}
 	},
+	"servicesConfig": {
+		"launcher": {
+			"searchProviderAction": {
+				"title": "App Catalog",
+				"component": "App Catalog"
+			}
+		}
+	},
 	"systemTrayIcon": "$applicationRoot/components/assets/img/Finsemble_Taskbar_Icon.png",
+	"systemTrayComponent": "File Menu",
 	"debugServiceDelay": 0,
-	"storage": {},
 	"betaFeatures": {
 		"docking": {
 			"enabled": true

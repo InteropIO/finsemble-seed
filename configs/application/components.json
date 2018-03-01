@@ -151,5 +151,84 @@
 				}
 			}
 		}
+	},
+	"UserPreferences": {
+		"window": {
+			"url": "$applicationRoot/components/userPreferences/UserPreferences.html",
+			"frame": false,
+			"top": "center",
+			"left": "center",
+			"width": 800,
+			"height": 600,
+			"options": {
+				"autoShow": false,
+				"resizable": false,
+				"alwaysOnTop": true
+			}
+		},
+		"component": {
+			"category": "system",
+			"spawnOnStartup": true
+		},
+		"foreign": {
+			"services": {
+				"dockingService": {
+					"canGroup": false,
+					"isArrangable": false
+				}
+			},
+			"components": {
+				"App Launcher": {
+					"launchableByUser": false
+				},
+				"Window Manager": {
+					"FSBLHeader": false,
+					"persistWindowState": true
+				},
+				"Toolbar": {
+					"iconClass": "UserPreferences"
+				}
+			}
+		}
+	},
+	"App Catalog": {
+		"window": {
+			"url": "$applicationRoot/components/appCatalog/appCatalog.html",
+			"frame": false,
+			"top": "center",
+			"left": "center",
+			"width": 800,
+			"height": 600,
+			"options": {
+				"autoShow": true,
+				"resizable": false,
+				"alwaysOnTop": true
+			}
+		},
+		"component": {
+			"mode": "premium",
+			"advertiseReceivers": []
+		},
+		"foreign": {
+			"services": {
+				"dockingService": {
+					"canGroup": false,
+					"isArrangable": false
+				}
+			},
+			"components": {
+				"App Launcher": {
+					"launchableByUser": false
+				},
+				"Window Manager": {
+					"FSBLHeader": false,
+					"persistWindowState": false
+				},
+				"Toolbar": {
+					"iconClass": "UserPreferences"
+				}
+			}
+		}
 	}
 }
+

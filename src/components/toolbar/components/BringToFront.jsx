@@ -6,7 +6,7 @@ export default class BringToFront extends React.Component {
 		super(props);
 	}
 	bringToFront() {
-		FSBL.Clients.WorkspaceClient.bringWindowsToFront();
+		FSBL.Clients.LauncherClient.bringWindowsToFront();
 	}
 	render() {
 		//console.log('rendero')

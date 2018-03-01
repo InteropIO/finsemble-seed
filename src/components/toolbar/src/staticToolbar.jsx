@@ -11,6 +11,8 @@ import { FinsembleToolbar, FinsembleButton, FinsembleToolbarSection, FinsembleTo
 
 // External Components to show on Toolbar
 import AutoArrange from "../components/AutoArrange";
+import MinimizeAll from "../components/MinimizeAll";
+
 import BringToFront from "../components/BringToFront";
 import WorkspaceLauncherButton from "../components/WorkspaceLauncherButton";
 import WorkspaceMenuOpener from "../components/WorkspaceMenuOpener"
@@ -36,7 +38,7 @@ export default class Toolbar extends React.Component {
 	render() {
 		return (<FinsembleToolbar>
 			<FinsembleToolbarSection name="left" className="left">
-				<FinsembleButton preSpawn={true} buttonType={["MenuLauncher", "Toolbar"]} iconClasses="finsemble-toolbar-brand-logo" icon="https://finsemble.chartiq.com/components/assets/img/Finsemble_Taskbar_Icon.png" menuType="File Menu" />
+				<FinsembleButton preSpawn={true} buttonType={["MenuLauncher", "Toolbar"]} iconClasses="finsemble-toolbar-brand-logo" icon="https://localhost:3375/components/assets/img/Finsemble_Taskbar_Icon.png" menuType="File Menu" />
 				<WorkspaceMenuOpener  />
 				<FinsembleButton preSpawn={true} buttonType={["MenuLauncher", "Toolbar"]} label="Apps" menuType="App Launcher" />
 				<FinsembleToolbarSeparator />
@@ -45,6 +47,7 @@ export default class Toolbar extends React.Component {
 			<FinsembleToolbarSection name="right" className="right">
 				<FinsembleToolbarSeparator />
 				<AutoArrange />
+				<MinimizeAll />
 				<BringToFront />
 			</FinsembleToolbarSection>
 		</FinsembleToolbar>);

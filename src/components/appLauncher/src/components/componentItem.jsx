@@ -27,9 +27,7 @@ export default class componentItem extends React.Component {
 			itemAction = this.props.itemAction,
 			togglePin = this.props.togglePin;
 
-		component.component.type = this.props.name;
-
-		var name = component.component.type;
+		var name = this.props.name;
 		var delItemClassList = "empty-delete";
 		var actionItemClasses = "ff-pin";
 		var pinClassList = this.props.isPinned ? actionItemClasses + " app-launcher-pinned" : actionItemClasses + " app-launcher-component-pinner";

@@ -52,7 +52,21 @@ class AppLauncher extends React.Component {
 	}
 
 	openAdHoc() {
-		FSBL.Clients.LauncherClient.spawn("AdhocComponentForm");
+		FSBL.Clients.LauncherClient.spawn("AdhocComponentForm", { monitor: "mine" });
+	}
+
+	openAppCatalog() {
+		FSBL.Clients.LauncherClient.showWindow(
+			{
+				componentType: "App Catalog"
+			},
+			{
+				monitor: "mine",
+				staggerPixels: 0,
+				spawnIfNotFound: true,
+				left: "center",
+				top: "center"
+			});
 	}
 
 	render() {
@@ -62,6 +76,12 @@ class AppLauncher extends React.Component {
 				<FinsembleMenuItem>
 					<FinsembleMenuItemLabel onClick={this.openAdHoc}>
 						<i className="ff-new-workspace"></i> New App
+					</FinsembleMenuItemLabel>
+
+				</FinsembleMenuItem>
+				<FinsembleMenuItem>
+					<FinsembleMenuItemLabel onClick={this.openAppCatalog}>
+						<i className="ff-home"></i> App Catalog
 					</FinsembleMenuItemLabel>
 				</FinsembleMenuItem>
 			</FinsembleMenuSection>
@@ -77,6 +97,7 @@ fin.desktop.main(function () {
 	FSBL.addEventListener("onReady", function () {
 		// var Test = require('./test');
 		console.log("appLauncher app onReady");
+
 		storeExports.initialize(function (store) {
 			appLauncherStore = store;
 			ReactDOM.render(
