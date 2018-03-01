@@ -72,19 +72,6 @@ class AppLauncher extends React.Component {
 	render() {
 		var self = this;
 		return (<FinsembleMenu>
-			<FinsembleMenuSection className="menu-secondary">
-				<FinsembleMenuItem>
-					<FinsembleMenuItemLabel onClick={this.openAdHoc}>
-						<i className="ff-new-workspace"></i> New App
-					</FinsembleMenuItemLabel>
-
-				</FinsembleMenuItem>
-				<FinsembleMenuItem>
-					<FinsembleMenuItemLabel onClick={this.openAppCatalog}>
-						<i className="ff-home"></i> App Catalog
-					</FinsembleMenuItemLabel>
-				</FinsembleMenuItem>
-			</FinsembleMenuSection>
 			<FinsembleMenuSectionLabel>
 				Applications
 			</FinsembleMenuSectionLabel>
