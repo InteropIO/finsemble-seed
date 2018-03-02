@@ -36,6 +36,9 @@ export default class Search extends React.Component {
 				}
 			});
 		});
+		FSBL.Clients.HotkeyClient.addGlobalHotkey([FSBL.Clients.HotkeyClient.keyMap.esc], function () {
+			storeExports.Actions.handleClose()
+		})
 	}
 	emptyInput() {
 		this.setState({ saveText: document.getElementById("searchInput").textContent });
@@ -100,7 +103,6 @@ export default class Search extends React.Component {
 
 	}
 	setActive(err, data) {
-		console.log("active data", data.value)
 		this.setState({ active: data.value })
 	}
 	hotKeyActive() {
@@ -122,14 +124,12 @@ export default class Search extends React.Component {
 	}
 	keyPress(event) {
 		var events = ["ArrowUp", "ArrowDown", "Enter"]
-
 		if (events.includes(event.key)) {
 			if (event.key === "Enter") document.getElementById("searchInput").innerHTML = "";
 			storeExports.Actions.actionPress(event.key)
 		}
 	}
 	render() {
-		console.log("this.state.active", this.state.active)
 		return <div id="inputContainer" className="container">
 			<div className="searchSection  finsemble-toolbar-button">
 				<div ref="Search" id="searchInput" contentEditable className={"searchInput " + (this.state.active ? "active" : "compact")} placeholder="Search" onKeyDown={this.keyPress}

@@ -24,10 +24,10 @@ var Actions = {
 		return values.list;
 	},
 	listChange(err, data) {
+		console.log("list", data)
 		if (!data.value) {
 			values.list = [];
-			finWindow.isShowing(function (value) {
-			})
+
 
 		} else {
 			values.list = data.value;
@@ -41,13 +41,13 @@ var Actions = {
 		menuStore.Dispatcher.dispatch({ actionType: "menuBlur", data: "" });
 	},
 	providerItemClick(provider) {
-		FSBL.Clients.SearchClient.providerActionClick(provider);
+		FSBL.Clients.SearchClient.invokeProviderAction(provider);
 		menuStore.Dispatcher.dispatch({ actionType: "clear", data: "" });
 		menuStore.setValue({ field: "list", value: [] })
 		return finWindow.hide();
 	},
 	listItemClick(item, action) {
-		FSBL.Clients.SearchClient.resultClick(item, action)
+		FSBL.Clients.SearchClient.invokeItemAction(item, action)
 		menuStore.Dispatcher.dispatch({ actionType: "clear", data: "" });
 		menuStore.setValue({ field: "list", value: [] })
 		return finWindow.hide();
