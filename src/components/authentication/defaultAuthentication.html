@@ -117,17 +117,14 @@
 
 <script>
 	var inLogin = true;
+	//Finsemble will never come online for the authentication component and we don't want to alarm anyone.
+	FSBL.displayStartupTimeoutError = false;
 	function quit() {
 		FSBL.shutdownApplication();
 	}
 	//Check to see if we already have a good session
 	function checkSession() {
-		fin.desktop.Window.getCurrent().show();
-		/**
-		 *  Use this section to verify that is a user is authenticated.
-		 * This will need to be changed to fit your needs
-		 *
-		/*fetch("/isAuthenticated", {
+		fetch("/isAuthenticated", {
 			method: "GET",
 			credentials: 'include'
 		})
@@ -141,17 +138,17 @@
 				return res.json();
 			}).then(data => {
 				if (data) {
-					getConfig(function () {// This calls a function to pull our configs from the server. This allows us to have dynamic configs.
+					getConfig(function () {
 						acceptCredentials(data)
 					})
 				} else {
 					fin.desktop.Window.getCurrent().show();
 				}
-			});*/
+			});
 	}
-	//Get a config for the user. Update this to fit your routes and data structure
+	//Get a config for the user
 	function getConfig(cb) {
-		/*fetch("/user/config", {
+		fetch("/user/config", {
 			method: "GET",
 			credentials: 'include'
 		})
@@ -159,15 +156,16 @@
 				console.warn("Fail Auth Get", reason);
 			})
 			.then((res) => {
-				if (res.status !== "OK") {
-					console.warn("Auth failed");
+				if (res.status !== 200) {
+					console.warn("Auth failed",res);
 				}
 				return res.json();
 			}).then(data => {
+				console.log("Data from user config", data);
 				if (data) {
 					updateConfig(data, cb);
 				}
-			});*/
+			});
 	}
 	//Add the config to the config service
 	function updateConfig(config, cb) {
@@ -190,7 +188,7 @@
 	//Tell authenitcation we're all good
 	function acceptCredentials(user) {
 		FSBL.Clients.AuthenticationClient.publishAuthorization(user.username, user);
-		fin.desktop.Window.getCurrent().close(true);
+		FSBL.Clients.WindowClient.close( { removeFromWorkspace: false, closeWindow: true });
 	}
 
 	$('#password').keypress(function (e) {
@@ -232,15 +230,8 @@
 		var authUrl = inLogin ? "/login" : "/signup";
 		var data = new FormData();
 		data.append("json", JSON.stringify({ username: username, password: password }));
-		var credentials = { username: username, token: "dummyToken-abcdenfhij1234567890" }; // create dummy credentials
-		updateConfig({}, function () {// use this to dynamicallt update your config
-			acceptCredentials(credentials)
-
-		})
 		fin.desktop.Window.getCurrent().hide();
-
-		//UPdate this section to fit your server routes
-		/*fetch(authUrl, {
+		fetch(authUrl, {
 			method: "POST",
 			body: data,
 			credentials: 'include'
@@ -261,9 +252,8 @@
 				var credentials = { token: "dummyToken-abcdenfhij1234567890" }; // create dummy credentials
 				updateConfig(data.config, function () {
 					acceptCredentials(data.user)
-
-				})
-			});*/
+				});
+			});
 	}
 	document.body.addEventListener('keydown', handleKeydown);
 	function handleKeydown(e) {
@@ -275,7 +265,9 @@
 			quit();
 		}
 	}
-	checkSession();
+	FSBL.Clients.RouterClient.onReady(()=>{
+		checkSession();
+	});
 
 </script>
 

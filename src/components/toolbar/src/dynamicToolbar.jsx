@@ -13,14 +13,18 @@ import ToolbarStore from "../stores/toolbarStore";
 // External Components to show on Toolbar
 import AutoArrange from "../components/AutoArrange";
 import BringToFront from "../components/BringToFront";
+import MinimizeAll from "../components/MinimizeAll";
 import WorkspaceLauncherButton from "../components/WorkspaceLauncherButton";
 import WorkspaceMenuOpener from "../components/WorkspaceMenuOpener"
+import Search from "../components/Search"
 
 // Support Dynamically Loading External Components
 var customComponents = [];
 customComponents["AutoArrange"] = AutoArrange;
 customComponents["BringToFront"] = BringToFront;
+customComponents["MinimizeAll"] = MinimizeAll;
 customComponents["WorkspaceMenuOpener"] = WorkspaceMenuOpener;
+customComponents["Search"] = Search;
 
 // Styles
 import "../../assets/css/finsemble.scss";
@@ -44,8 +48,8 @@ export default class Toolbar extends React.Component {
 
 	bindCorrectContext() {
 		this.onSectionsUpdate = this.onSectionsUpdate.bind(this);
+		this.onPinDrag = this.onPinDrag.bind(this);
 	}
-
 
 	// called when sections change in the toolbar store
 	onSectionsUpdate(err, response) {
@@ -53,10 +57,20 @@ export default class Toolbar extends React.Component {
 	}
 
 	componentDidMount() {
+		console.log("this", this)
 		this.state.finWindow.bringToFront();
 	}
 
 	componentWillMount() {
+		var self = this;
+		ToolbarStore.setupPinnedHotKeys(function (err, data) {
+			console.log("data---", data);
+			let pin = self.refs.pinSection.element.childNodes[data - 1];
+			//Goes and finds the toolbar button and clicks it.
+			if (pin.childNodes[0] && pin.childNodes[0].children[0]) {
+				pin.childNodes[0].children[0].click();
+			}
+		});
 		ToolbarStore.Store.addListener({ field: "sections" }, this.onSectionsUpdate);
 	}
 
@@ -64,6 +78,30 @@ export default class Toolbar extends React.Component {
 		ToolbarStore.Store.removeListener({ field: "sections" }, this.onSectionsUpdate);
 	}
 
+	onPinDrag(changeEvent) {
+
+		let pins = this.refs.pinSection.state.pins;
+		let newPins = JSON.parse(JSON.stringify(pins));
+		let { destination, source } = changeEvent;
+		//user dropped without reordering.
+		if (!destination) return;
+		let target = pins[source.index];
+		newPins.splice(source.index, 1);
+		newPins.splice(destination.index, 0, target);
+		function pinsToObj(arr) {
+			let obj = {};
+			arr.forEach((el, i) => {
+				if (el) {
+					let key = el.label;
+					obj[key] = el;
+					obj[key].index = i;
+				}
+			});
+			return obj;
+		}
+		this.refs.pinSection.setState({ pins: newPins });
+		ToolbarStore.GlobalStore.setValue({ field: 'pins', value: pinsToObj(newPins) });
+	}
 	/**
 	 * This a sample dynamic toolbar which builds a toolbar from config, dynamically updates and can render any react component as a toolbar item.
 	 * The "sections" are built by the toolbar store. getSections() takes the sections object and builds right/left/center sections using the FinsembleToolbarSection control.
@@ -111,7 +149,15 @@ export default class Toolbar extends React.Component {
 				buttons.push(<FinsembleToolbarSeparator key={sectionPosition} />);
 			}
 
-			var sectionComponent = (<FinsembleToolbarSection ref="pinSection" name={sectionPosition} pinnableItems={pinnableItems} className={sectionPosition} key={sectionPosition} handleOverflow={sectionPosition === "center"} handlePins={sectionPosition === "center"} >
+			var sectionComponent = (<FinsembleToolbarSection
+				arrangeable={sectionPosition === "center"}
+				ref="pinSection"
+				name={sectionPosition}
+				pinnableItems={pinnableItems}
+				className={sectionPosition}
+				key={sectionPosition}
+				handleOverflow={sectionPosition === "center"}
+				handlePins={sectionPosition === "center"}>
 				{buttons}
 			</FinsembleToolbarSection>);
 			sections.push(sectionComponent);
@@ -122,7 +168,7 @@ export default class Toolbar extends React.Component {
 	render() {
 		console.log("Toolbar Render ");
 		if (!this.state.sections) return;
-		return (<FinsembleToolbar>
+		return (<FinsembleToolbar onDragEnd={this.onPinDrag}>
 			{this.getSections()}
 		</FinsembleToolbar>);
 	}

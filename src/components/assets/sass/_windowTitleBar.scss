@@ -1,3 +1,6 @@
+/*Symphony is 300 px.*/
+$breakpoint-small-window: 299px;
+$breakpoint-very-small-window: 175px;
 
 .cq-drag {
   cursor: -webkit-grab;
@@ -26,7 +29,7 @@
     color: $header-text-color;
     html.desktop-active & {
       background: $active-header-background-color;
-      color: #FFF;
+      color: $active-header-text-color;
     }
 }
 
@@ -41,6 +44,17 @@
   display:flex;
 }
 
+// @media (max-width: $breakpoint-small-window){
+//   .fsbl-header-left {
+//     display: none !important;
+//   }
+// }
+
+// @media (max-width: $breakpoint-very-small-window){
+//   .fsbl-minimize, .window-max, .docking-control {
+//     display: none !important;
+//   }
+// }
 .fsbl-header-center {
   height:calc(100% - 5px);
   align-content: center;
@@ -49,6 +63,9 @@
   justify-content:center;
   flex:1;
   width:100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow:hidden;
   -webkit-user-select: none;
 }
 
@@ -153,13 +170,30 @@
     align-items: center;
 }
 .linker-group {
-   width: 5px;
+   width: 7px;
    height:18px;
    margin-left: 4px;
-   border-radius: 2px;
+   border-radius: 4px;
+   border: 1px solid $window-header-background-color;
+   html.desktop-active & {
+    border: 1px solid $active-header-background-color;
+  }
+}
+.linker-group:hover {
+  cursor: pointer;
+  border: 1px solid $primary-accent-color !important;
 }
 .linker-group:nth-last-child(1) {
   margin-right: 5px;
+}
+
+.seperator {
+  width: 1px;
+  background-color: $header-text-color;
+  height: 58%;
+  html.desktop-active {
+    background-color: $active-header-text-color;
+  }
 }
 
 .fsbl-linker{

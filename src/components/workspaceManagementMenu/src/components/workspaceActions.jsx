@@ -10,24 +10,31 @@ import { getStore, Actions as WorkspaceManagementMenuActions } from "../stores/w
 export default class WorkspaceActions extends React.Component {
 	constructor() {
 		super();
-		this.userActions = [{
-			method: this.createWorkspace,
-			label: "New Workspace",
-			iconClass: "ff-new-workspace",
-			id: "NewWorkspace"
-		},
-		{
-			method: this.saveWorkspace,
-			label: "Save",
-			iconClass: "ff-save-1",
-			id: "SaveWorkspace"
-		},
-		{
-			method: this.saveWorkspaceAs,
-			label: "Save As",
-			iconClass: "ff-saveas-1",
-			id: "SaveWorkspaceAs"
-		}];
+		this.userActions = [
+			{
+				method: this.createWorkspace,
+				label: "New Workspace",
+				iconClass: "ff-new-workspace",
+				id: "NewWorkspace"
+			},
+			{
+				method: this.saveWorkspace,
+				label: "Save",
+				iconClass: "ff-save-1",
+				id: "SaveWorkspace"
+			},
+			{
+				method: this.saveWorkspaceAs,
+				label: "Save As",
+				iconClass: "ff-saveas-1",
+				id: "SaveWorkspaceAs"
+			},
+			{
+				method: this.showPreferences,
+				label: "Preferences",
+				iconClass: "ff-settings",
+				id: "Settings"
+			}];
 	}
 
 	/**
@@ -59,7 +66,11 @@ export default class WorkspaceActions extends React.Component {
 		WorkspaceManagementMenuActions.blurWindow();
 		WorkspaceManagementMenuActions.saveWorkspaceAs();
 	}
+	showPreferences() {
+		WorkspaceManagementMenuActions.blurWindow();
+		WorkspaceManagementMenuActions.showPreferences();
 
+	}
 	/**
 	 * Render method.
 	 *
@@ -77,7 +88,7 @@ export default class WorkspaceActions extends React.Component {
 				</FinsembleMenuItemLabel>
 			</FinsembleMenuItem>);
 		});
-		return (<FinsembleMenuSection  className='menu-secondary workspace-actions'>
+		return (<FinsembleMenuSection className='menu-secondary workspace-actions'>
 			{workspaceActions}
 		</FinsembleMenuSection>);
 	}

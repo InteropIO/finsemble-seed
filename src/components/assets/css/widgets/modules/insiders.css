@@ -1,0 +1,8 @@
+.ciq-Insiders tr th:nth-child(2), .ciq-Insiders tr th:nth-child(3), .ciq-Insiders tr th:nth-child(6) {
+	text-align: right !important;
+}
+
+.ciq-Insiders tr td:nth-child(2), .ciq-Insiders tr td:nth-child(3), .ciq-Insiders tr td:nth-child(6) {
+	text-align: right;
+}
+
