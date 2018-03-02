@@ -13,8 +13,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@chartiq/finsemble": "rc",
-    "@chartiq/finsemble-react-controls": "alpha",
+    "@chartiq/finsemble": "2.2.*",
+    "@chartiq/finsemble-react-controls": "1.1",
     "nocache": "^2.0.0",
     "openfin-launcher": "^1.3.11"
   },
