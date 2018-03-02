@@ -3,12 +3,12 @@
 	"mode": "",
 	"isAuthEnabled": false,
 	"storage": {
-		"topicToDataStoreAdaptors" : {
+		"topicToDataStoreAdapters" : {
 			"finsemble" : "LocalStorageAdapter",
 			"finsemble.workspace" : "LocalStorageAdapter",
 			"finsemble.workspace.cache" : "LocalStorageAdapter"
 		},
-		"dataStoreAdaptors" : {
+		"dataStoreAdapters" : {
 			"LocalStorageAdapter": "$applicationRoot/adapters/LocalStorageAdapter.js"
 		}
 	},
