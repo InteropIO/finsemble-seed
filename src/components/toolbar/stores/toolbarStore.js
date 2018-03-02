@@ -75,14 +75,15 @@ class _ToolbarStore {
 	 * @memberof _ToolbarStore
 	 */
 	loadMenusFromConfig(done, self) {
-		console.log('in loadmenus', menuConfig);
 		if (Array.isArray(menuConfig) && menuConfig.length) {
 			self.Store.setValue({
 				field: "menus",
 				value: menuConfig
 			});
-			if (FSBL.Clients.ConfigClient.set) { FSBL.Clients.ConfigClient.set({ field: "finsemble.menus", value: menuConfig }); }
 			done();
+			if (FSBL.Clients.ConfigClient.setValue) {
+				FSBL.Clients.ConfigClient.setValue({ field: "finsemble.menus", value: menuConfig });
+			}
 		} else {
 			FSBL.Clients.ConfigClient.get({ field: "finsemble.menus" }, function (err, menus) {
 				self.Store.setValue({
