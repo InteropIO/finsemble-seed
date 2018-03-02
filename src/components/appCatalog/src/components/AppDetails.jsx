@@ -40,7 +40,7 @@ export default class AppList extends React.Component {
                 <div style={{ backgroundImage: "url(src/assets/logo-placeholder-52.png)" }} className="logo"></div>
                 <div className="titleContainer">
                     <div className="title">{this.props.item.name}</div>
-                    <div className="vendor">ChartIQ</div>
+                    <div className="vendor">{this.props.item.vendor}</div>
                 </div>
                 <div onClick={this.itemClick} className="button">Open</div>
             </div>

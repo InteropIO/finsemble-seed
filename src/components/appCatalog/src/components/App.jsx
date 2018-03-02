@@ -34,6 +34,7 @@ export default class AppList extends React.Component {
 
 	render() {
 		var self = this;
+		console.log(this.props)
 		return <div className="appItem">
 			<div onClick={function () {
 				self.props.openDetails(self.props.app)
@@ -41,7 +42,7 @@ export default class AppList extends React.Component {
 				<div style={{ backgroundImage: "url(src/assets/logo-placeholder-52.png)" }} className="logo"></div>
 				<div className="titleContainer">
 					<div className="title">{this.props.app.name}</div>
-					<div className="vendor">ChartIQ</div>
+					<div className="vendor">{this.props.app.vendor}</div>
 				</div>
 			</div>
 			<div className="containerFooter">

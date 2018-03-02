@@ -1,22 +1,16 @@
 ## SingleInput Dialog
 
 ### Overview
-This is the dialog we show when we need a name for a new workspace.  This component is used with `FSBL.Clients.DialogManager.open`. For more on how we've implemented dialogs, please read the [FinsembleDialog](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleDialog) control documentation.
-
+This is the dialog we show when we need a name for a new workspace.  In addition to simplly creatingIt allows the user to select a template as the basis of their new workspace.
 ### What it looks like
 ![](./screenshot.png)
-
-### Controls Used
-The controls used in this component are documented over in our Finsemble React Controls repo:
-* [FinsembleDialog](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleDialog)
-* [FinsembleDialogQuestion](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleDialogQuestion)
-* [FinsembleDialogButton](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleDialogButton)
 
 ### Dialog Parameters
 | Param                   | Type    | Default         |
 |-------------------------|---------|-----------------|
-| question                | String  | `'No Question'` |
-| affirmativeResponseText | String  | `'Okay'`        |
+| inputLabel                | String  | `'No Question'` |
+| templateDefinitions | Object  | NA        |
+| showCancelButton | String  | `'Okay'`        |
 
 **Note, these parameters are passed in as the second parameter to `FSBL.Clients.DialogManager.open`**
 
@@ -25,20 +19,37 @@ The controls used in this component are documented over in our Finsemble React C
 |-------------------------|-----------------|
 | err                | `null` \|\| `error` |
 | response | Object       |
-| response.value    | `'affirmative', 'negative', 'cancel'`          |
+| response.choice    | `'affirmative', 'negative', 'cancel'`          |
+| response.template | String. This is the template that the new workspace will be generated from. |
+| response.value | This is the name of the new workspace. |
+
 
 ### Usage
 ```javascript
-    let dialogParams = {
-        inputLabel: 'Enter a name for your new workspace.',
-        affirmativeButtonLabel: 'Continue'
-    };
+    //cb is a callback that accepts the response of this dialog and creates a new workspace.
+    Logger.system.log("SpawnWorkspaceInput - start");
+    function onUserInput(err, response) {
+        Logger.system.log("SpawnWorkspaceInput onUserInput", response);
+        if (err) {
+            //Error objects cause async to invoke the final callback in async.waterfall.
+            err = new Error(err);
+        }
+        if (cb) {
+            cb(err, response);
+        }
+    }
 
-    FSBL.Clients.DialogManager.open('inputAndSelection', dialogParams , function (err, response) {
-       if(err){
-           throw new Error(err);
-       }
-       createWorkspace(response.value);
+    FSBL.Clients.WorkspaceClient.getTemplates(function (templateDefinitions) {
+        Logger.system.log("getTemplates", templateDefinitions);
+        let dialogParams = {
+            inputLabel: "",
+            templateDefinitions: templateDefinitions,
+            affirmativeButtonLabel: "Continue",
+            showCancelButton: false,
+            showNegativeButton: false
+        };
+
+        Actions.spawnDialog("inputAndSelection", dialogParams, onUserInput);
     });
 ```
 

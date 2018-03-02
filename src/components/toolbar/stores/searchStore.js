@@ -49,7 +49,6 @@ var Actions = {
 		cb();
 	},
 	setFocus(bool, target) {
-		console.log("focus input", bool)
 		focus = bool;
 		if (bool) {
 			menuStore.setValue({ field: "active", value: true })
@@ -76,7 +75,6 @@ var Actions = {
 			});
 
 		}
-		console.log("try close in input")
 		activeSearchBar = false;
 		if (!menuWindow) {
 			return Actions.handleClose();
@@ -102,7 +100,6 @@ var Actions = {
 		menuWindow.hide();
 	},
 	setupWindow() {
-		console.log("menuReference", menuReference);
 		if (!menuReference.finWindow) return;
 		menuWindow = fin.desktop.Window.wrap(menuReference.finWindow.app_uuid, menuReference.finWindow.name);
 	},
@@ -121,7 +118,6 @@ var Actions = {
 		menuStore.setValue({ field: "list", value: list })
 	},
 	updateMenuReference(err, data) {
-		console.log("data")
 
 		menuReference = data.value;
 		if (!menuWindow) {
@@ -136,7 +132,6 @@ var Actions = {
 		})
 	},
 	menuBlur() {
-		console.log("menu blur")
 		mouseInElement(document.getElementById("searchInput"), function (err, inBounds) {
 			if (!inBounds) {
 				Actions.handleClose();
