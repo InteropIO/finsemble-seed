@@ -199,31 +199,13 @@
 			);
 		}
 	};
-
-	/**
-	 * Updates the taks methods object with methods from the extensions object.
-	 * @param {object} taskMethods 
-	 * @param {object} extensions 
-	 */
-	const processExtensions = (taskMethods, extensions) => {
-		if (!extensions) {
-			// No extensions file found.
-			return;
-		}
-
-		Object.keys(taskMethods).forEach(key => {
-			const method = extensions[key];
-			if (method) {
-				// Extensions has a redefinition of the method, apply new method definition
-				taskMethods[key] = method;
-			}
-		});
-	};
 	// #endregion
 
 	// Update task methods with extensions
-	processExtensions(taskMethods, extensions);
-
+	if (extensions) {
+		extensions(taskMethods);
+	}
+	
 	taskMethods.pre();
 
 	// #region Task definitions
