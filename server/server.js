@@ -4,60 +4,66 @@
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
-var bodyParser = require("body-parser");
-var chalk = require('chalk');
-var outputColor = chalk.yellow;
-var express = require("express");
-var app = express();
-var path = require('path');
-var rootDir = path.join(__dirname, "/../dist");
-var moduleDirectory = path.join(__dirname, "/../finsemble")
-var cacheAge = 0;
+(() => {
+	"use strict";
 
-console.log(outputColor("SERVER SERVING FROM " + rootDir + " with caching maxage = ", cacheAge));
+	// #region Imports
+	// NPM
+	const chalk = require("chalk");
+	const express = require("express");
+	const path = require("path");
 
-startServer();
+	// Local
+	const hotreload = require("./dev/hotreload");
+	// #endregion
 
-function startServer(compiler) {///compiler here is webpack and comes from the dev file and
+	// #region Constants
+	const app = express();
+	const rootDir = path.join(__dirname, "..", "dist");
+	const moduleDirectory = path.join(__dirname, "..", "finsemble");
+	const cacheAge = 0;
+	const outputColor = chalk.yellow;
+	const PORT = process.env.PORT || 3375;
+	// #endregion
 
-	console.log("Starting Server")
-	// For Assimulation
-	app.use("/hosted", express.static(path.join(__dirname, "/../hosted"), {
-		maxage: cacheAge
-	}));
+	console.log(outputColor(`SERVER SERVING FROM ${rootDir} with caching maxage = ${cacheAge}`));
 
-	// Sample server root set to "/" -- must align with paths thoughout configs/openfin/manifest-local.json and configs/other/server-environment-startup.json
+	startServer();
 
+	const startServer = compiler => {///compiler here is webpack and comes from the dev file and
+		console.log("Starting Server");
 
-	//Make the config public
-	app.use("/configs", express.static("./configs", {
-		maxage: cacheAge
-	}));
+		// For Assimulation
+		app.use("/hosted", express.static(path.join(__dirname, "..", "hosted"), { maxage: cacheAge }));
 
+		// Sample server root set to "/" -- must align with paths thoughout configs/openfin/manifest-local.json and configs/other/server-environment-startup.json
 
-	app.use("/", express.static(rootDir, {
-		maxage: cacheAge
-	}));
-
-	//Open up the Finsemble Components,services, and clients
-	app.use("/finsemble", express.static(moduleDirectory, {
-		maxage: cacheAge
-	}));
+		//Make the config public
+		app.use("/configs", express.static("./configs", { maxage: cacheAge }));
 
 
-	var PORT = process.env.PORT || 3375;
+		app.use("/", express.static(rootDir, { maxage: cacheAge }));
 
-	var server = app.listen(PORT, function () {
-		console.log(chalk.green("listening on port " + PORT));
-		global.host = server.address().address;
-		global.port = server.address().port;
-		if (process.env.NODE_ENV === "dev") {//Setup hotreload in the dev environment
-			console.log("start hotreload")
-			require("./dev/hotreload")(app, server, function () {
-				process.send('serverStarted');
+		//Open up the Finsemble Components,services, and clients
+		app.use("/finsemble", express.static(moduleDirectory, { maxage: cacheAge }));
+
+		const server = app.listen(
+			PORT,
+			() => {
+				console.log(chalk.green(`listening on port ${PORT}`));
+
+				global.host = server.address().address;
+				global.port = server.address().port;
+
+				if (process.env.NODE_ENV === "dev") {
+					// Setup hotreload in the dev environment
+					console.log("start hotreload")
+					hotreload(app, server, () => {
+						process.send("serverStarted");
+					});
+				} else if (process.send) {
+					process.send("serverStarted");
+				}
 			});
-		} else if(process.send) {
-			process.send('serverStarted');
-		}
-	});
-}
+	}
+})();
