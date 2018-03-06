@@ -28,9 +28,7 @@
 
 	console.log(outputColor(`SERVER SERVING FROM ${rootDir} with caching maxage = ${cacheAge}`));
 
-	startServer();
-
-	const startServer = compiler => {///compiler here is webpack and comes from the dev file and
+	const startServer = () => {
 		console.log("Starting Server");
 
 		// For Assimulation
@@ -66,4 +64,6 @@
 				}
 			});
 	}
+
+	startServer();
 })();
