@@ -11,10 +11,32 @@
 	// NPM
 	const chalk = require("chalk");
 	const express = require("express");
+	const fs = require("fs");
 	const path = require("path");
 
 	// Local
-	const hotreload = require("./dev/hotreload");
+	const hotReload = require("./dev/hotreload");
+	const extensions = fs.existsSync(path.join(__dirname, "server-extensions.js")) ?
+		require("./server-extensions") :
+		{
+			/**
+			 * Method called before starting the server.
+			 */
+			pre: () => { },
+
+			/**
+			 * Method called after the server has started.
+			 */
+			post: () => { },
+
+			/**
+			 * Method called to update the server.
+			 * 
+			 * @param {express} app The express server.
+			 * @param {function} cb The function to call once finished adding functionality to the server.
+			 */
+			updateServer: (app, cb) => { cb(); }
+		};
 	// #endregion
 
 	// #region Constants
@@ -26,44 +48,50 @@
 	const PORT = process.env.PORT || 3375;
 	// #endregion
 
-	console.log(outputColor(`SERVER SERVING FROM ${rootDir} with caching maxage = ${cacheAge}`));
+	console.log(outputColor(`Server serving from ${rootDir} with caching maxAge = ${cacheAge} ms.`));
 
-	const startServer = () => {
-		console.log("Starting Server");
+	const options = { maxAge: cacheAge };
 
-		// For Assimulation
-		app.use("/hosted", express.static(path.join(__dirname, "..", "hosted"), { maxage: cacheAge }));
+	extensions.pre();
 
-		// Sample server root set to "/" -- must align with paths thoughout configs/openfin/manifest-local.json and configs/other/server-environment-startup.json
+	console.log(outputColor("Starting Server"));
 
-		//Make the config public
-		app.use("/configs", express.static("./configs", { maxage: cacheAge }));
+	// For Assimilation
+	app.use("/hosted", express.static(path.join(__dirname, "..", "hosted"), options));
 
+	// Sample server root set to "/" -- must align with paths throughout 
+	// configs/openfin/manifest-local.json and configs/other/server-environment-startup.json
 
-		app.use("/", express.static(rootDir, { maxage: cacheAge }));
+	// Make the config public
+	app.use("/configs", express.static("./configs", options));
 
-		//Open up the Finsemble Components,services, and clients
-		app.use("/finsemble", express.static(moduleDirectory, { maxage: cacheAge }));
+	app.use("/", express.static(rootDir, options));
+
+	// Open up the Finsemble Components,services, and clients
+	app.use("/finsemble", express.static(moduleDirectory, options));
+
+	extensions.updateServer(app, () => {
 
 		const server = app.listen(
 			PORT,
 			() => {
-				console.log(chalk.green(`listening on port ${PORT}`));
+				console.log(chalk.green(`Listening on port ${PORT}`));
 
 				global.host = server.address().address;
 				global.port = server.address().port;
 
-				if (process.env.NODE_ENV === "dev") {
-					// Setup hotreload in the dev environment
-					console.log("start hotreload")
-					hotreload(app, server, () => {
-						process.send("serverStarted");
-					});
-				} else if (process.send) {
+				const done = () => {
 					process.send("serverStarted");
+					extensions.post();
+				};
+
+				if (process.env.NODE_ENV === "dev") {
+					// Setup hot reload in the dev environment
+					console.log(outputColor("start hot reload"));
+					hotReload(app, server, done);
+				} else if (process.send) {
+					done();
 				}
 			});
-	}
-
-	startServer();
+	});
 })();
