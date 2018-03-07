@@ -74,13 +74,20 @@
 
 		const server = app.listen(
 			PORT,
-			() => {
+			e => {
+				if (e) {
+					console.error(e);
+					process.send("serverFailed");
+					process.exit();
+				}
+
 				console.log(chalk.green(`Listening on port ${PORT}`));
 
 				global.host = server.address().address;
 				global.port = server.address().port;
 
 				const done = () => {
+					console.log(outputColor("Server started"));
 					process.send("serverStarted");
 					extensions.post();
 				};
