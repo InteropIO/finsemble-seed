@@ -3,17 +3,24 @@
 * All rights reserved.
 */
 
-let ToolbarStore, appLauncherStore;
+let ToolbarStore, appLauncherStore, windowGroupStore;
 import async from "async";
 let finWindow = fin.desktop.Window.getCurrent();
 const COMPONENT_UPDATE_CHANNEL = `${finWindow.name}.ComponentsToRender`;
-
+function uuidv4() {
+	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+		var r = Math.random() * 16 | 0,
+			v = c === 'x' ? r : r & 0x3 | 0x8;
+		return v.toString(16);
+	});
+}
 FSBL.Clients.RouterClient.addPubSubResponder(COMPONENT_UPDATE_CHANNEL, {});
 var Actions = {
 	initialize: function (cb) {
 		async.parallel([
 			Actions.initializeComponentList,
-			Actions.getUserDefinedComponentList
+			Actions.getUserDefinedComponentList,
+			setupHotkeys
 		], function (err) {
 			if (err) {
 				console.error(err);
@@ -117,7 +124,7 @@ var Actions = {
 	filterComponents(components) {
 		var self = this;
 		var settings = FSBL.Clients.WindowClient.options.customData.spawnData;
-		self.componentList = {};
+		var componentList = {};
 		var keys = Object.keys(components);
 		if (settings.mode) {
 			if (!Array.isArray(settings.mode)) { settings.mode = [settings.mode]; }
@@ -137,7 +144,7 @@ var Actions = {
 
 					// If the current mode isn't in the list of modes for the component then don't include it in our list
 					if (commonModes.length) {
-						self.componentList[componentType] = components[componentType];
+						componentList[componentType] = components[componentType];
 					}
 				}
 
@@ -149,28 +156,59 @@ var Actions = {
 			});
 
 			for (let i = 0; i < commonItems.length; i++) {
-				self.componentList[commonItems[i]] = components[commonItems[i]];
+				componentList[commonItems[i]] = components[commonItems[i]];
 			}
 
 		}
 		if (!settings.mode && !settings.list) {
-			self.componentList = components;
+			componentList = components;
 		} else {
 			for (let i = 0; i < keys.length; i++) {
 				let component = components[keys[i]];
-				if (component.component.isUserDefined) { self.componentList[keys[i]] = component; }
+				if (component.component.isUserDefined) { componentList[keys[i]] = component; }
 			}
 		}
+
+		self.componentList = {}
+		// deal with groups
+		for (let componentType in componentList) {
+			let config = components[componentType];
+			let componentGroups = (config.component && config.component.launchGroups) ? config.component.launchGroups : false;
+			if (componentGroups) {
+				if (!Array.isArray(componentGroups)) {
+					componentGroups = [componentGroups];
+				}
+				for (let componentGroup of componentGroups) {
+					if (!self.componentList[componentGroup]) {
+						self.componentList[componentGroup] = {
+							group: componentGroup,
+							list: {}
+						}
+					}
+					self.componentList[componentGroup].list[componentType] = componentList[componentType];
+					if (componentList[componentType].component.windowGroup) componentList[componentType].params = {
+						groupName: componentList[componentType].component.windowGroup
+					}
+				}
+			}
+			config.component.type = componentType;
+			self.componentList[componentType] = componentList[componentType];
+		}
+
 		FSBL.Clients.Logger.debug("appLauncher filterComponents", self.componentList, "settings", settings, "customData", FSBL.Clients.WindowClient.options.customData);
 		appLauncherStore.setValue({ field: "componentList", value: self.componentList });
 		self.saveCustomComponents();
 	},
 	//toggles the pinned state of the component. This change will be broadcast to all toolbars so that the state changes in each component.
 	togglePin(componentToToggle) {
-		var componentType = componentToToggle.component.type;
+		var componentType = componentToToggle.group || componentToToggle.component.type;
 		var fontIcon;
 		try {
-			fontIcon = componentToToggle.foreign.components.Toolbar.iconClass;
+			if (componentToToggle.group) {
+				fontIcon = "ff-ungrid"
+			} else {
+				fontIcon = componentToToggle.foreign.components.Toolbar.iconClass;
+			}
 		} catch (e) {
 			fontIcon = "";
 		}
@@ -185,14 +223,18 @@ var Actions = {
 		//No dots allowed in keys in the global store, so escaping dots
 		var componentTypeDotRemove = componentType.replace(/[.]/g, "^DOT^")
 
-		var pins = appLauncherStore.values.pins;
+		var pins = appLauncherStore.getValue('pins');
+		let params = { addToWorkspace: true, monitor: "mine" };
+		if (componentToToggle.component && componentToToggle.component.windowGroup) params.groupName = componentToToggle.component.windowGroup;
 		var thePin = {
 			type: "componentLauncher",
 			label: componentType,
-			component: componentType,
+			component: componentToToggle.group ? componentToToggle.list : componentType,
 			fontIcon: fontIcon,
 			icon: imageIcon,
-			toolbarSection: "center"
+			toolbarSection: "center",
+			uuid: uuidv4(),
+			params: params
 		};
 		var wasPinned = false;
 		for (var i = 0; i < pins.length; i++) {
@@ -259,13 +301,33 @@ var Actions = {
 		fin.desktop.Window.getCurrent().hide();
 	},
 	//Spawn a component.
-	launchComponent(config, data) {
+	launchComponent(config, data, cb) {
 		Actions.hideWindow();
-		FSBL.Clients.LauncherClient.spawn(config.component.type, { addToWorkspace: true }, { monitor: "mine" });
+		let params = { addToWorkspace: true, monitor: "mine" };
+		if (config.component.windowGroup) params.groupName = config.component.windowGroup;
+		FSBL.Clients.LauncherClient.spawn(config.component.type, params, function (err, windowInfo) {
+			if (cb) {
+				cb(windowInfo.windowIdentifier);
+			}
+		});
 	},
 	//Retrieve pins from the store.
 	getPins(cb) {
 		appLauncherStore.getValue({ field: "pins" }, cb);
+	},
+	createNewWindowGroup(groupPrefix, cb) {
+		windowGroupStore.getValue({ field: groupPrefix }, function (err, value) {
+			var currentGroup = 1;
+			if (value) {
+				currentGroup = Math.max(...Object.keys(value)) + 1;
+			}
+			let groupName = groupPrefix + '.' + currentGroup;
+			FSBL.Clients.LauncherClient.createWindowGroup({
+				groupName: groupName
+			}, function (err, response) {
+				cb(groupName);
+			})
+		})
 	}
 };
 
@@ -297,10 +359,20 @@ function getToolbarStore(done) {
 	});
 }
 
+
+
+function getWindowGroupStore(done) {
+	FSBL.Clients.DistributedStoreClient.getStore({ global: true, store: "Finsemble-WindowGroups" }, function (err, store) {
+		windowGroupStore = store;
+		done();
+	});
+}
+
 function initialize(cb) {
 	async.parallel([
 		createLocalStore,
 		getToolbarStore,
+		getWindowGroupStore,
 		Actions.initialize
 	], function (err) {
 		if (err) {
@@ -309,6 +381,25 @@ function initialize(cb) {
 		FSBL.Clients.Logger.debug("appLauncherstore init done");
 		cb(appLauncherStore);
 	});
+}
+var keys = {};
+function setupHotkeys(cb) {
+
+	FSBL.Clients.RouterClient.subscribe("humanInterface.keydown", function (err, response) {
+		if (!keys[response.data.key]) keys[response.data.key] = {};
+		keys[response.data.key] = true;
+		if (keys[160] && keys[162] && keys[68]) {
+			if (Actions.componentList["Advanced Chart"]) {
+				FSBL.Clients.LauncherClient.spawn("Advanced Chart", { addToWorkspace: true }, { monitor: "mine" });
+			}
+		}
+	});
+	FSBL.Clients.RouterClient.subscribe("humanInterface.keyup", function (err, response) {
+		if (!keys[response.data.key]) keys[response.data.key] = {};
+		keys[response.data.key] = false;
+	});
+
+	return cb();
 }
 let getStore = () => {
 	return appLauncherStore;

@@ -57,7 +57,7 @@ export default class appLauncherContainer extends React.Component {
 		FSBL.Clients.WindowClient.fitToDOM(
 			{
 				maxHeight: 500
-			}, function () {});
+			}, function () { });
 	}
 
 	setInitialState() {
@@ -84,8 +84,25 @@ export default class appLauncherContainer extends React.Component {
 		appLauncherStore.removeListener({ field: "pins" }, this.onPinsUpdate);
 	}
 	launchComponent(component, params) {
-		fin.desktop.Window.getCurrent().hide();
-		appLauncherActions.launchComponent(component, params);
+		FSBL.Clients.WindowClient.finWindow.hide();
+		// If we are launching a group
+		if (component.group) {
+			for (let i of Object.keys(component.list)) {
+				let cloneParams = Object.assign({}, params);
+				let c = component.list[i];
+				if (c.component.windowGroup) {
+					cloneParams.groupName = c.component.windowGroup;
+				}
+				appLauncherActions.launchComponent(component.list[i], params);
+			}
+		} else {
+			if (component.component.windowGroup) {
+				params.groupName = component.component.windowGroup
+			}
+			appLauncherActions.launchComponent(component, params);
+		}
+
+
 	}
 	togglePin(component) {
 		appLauncherActions.togglePin(component);
@@ -99,9 +116,10 @@ export default class appLauncherContainer extends React.Component {
 			key = params.key,
 			config = self.state.componentList[key],
 			isUserDefined = params.isUserDefined;
-		if (!config.window ||
+		if ((!config.window ||
 			!config.foreign.components["App Launcher"] ||
-			!config.foreign.components["App Launcher"].launchableByUser) {
+			!config.foreign.components["App Launcher"].launchableByUser) &&
+			!config.group) {
 			return;
 		}
 

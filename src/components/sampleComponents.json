@@ -14,6 +14,38 @@
 				}
 			},
 			"component": {
+				"allowAdhoc": "@TODO",
+				"spawnOnStartup": false,
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": false
+					}
+				},
+				"components": {
+					"Window Manager": {
+						"persistWindowState": false,
+						"FSBLHeader": false
+					}
+				}
+			}
+		},
+		"searchMenu": {
+			"window": {
+				"url": "$applicationRoot/components/searchMenu/searchMenu.html",
+				"top": 32,
+				"left": 45,
+				"width": 350,
+				"height": 330,
+				"ephemeral": true,
+				"options": {
+					"autoShow": false
+				}
+			},
+			"component": {
+				"allowAdhoc": "@TODO",
 				"spawnOnStartup": false,
 				"category": "system"
 			},
@@ -44,6 +76,7 @@
 				}
 			},
 			"component": {
+				"allowAdhoc": "@TODO",
 				"spawnOnStartup": false,
 				"category": "system"
 			},
@@ -163,21 +196,32 @@
 				}
 			}
 		},
-		"dialogSignOn": {
+		"File Menu": {
 			"window": {
-				"url": "$applicationRoot/services/authentication/dialogSignOn.html",
-				"top": "center",
-				"left": "center",
-				"width": 358,
-				"height": 458,
-				"ephemeral": true
+				"url": "$applicationRoot/components/fileMenu/fileMenu.html?",
+				"top": 0,
+				"left": 100,
+				"width": 125,
+				"height": 80,
+				"ephemeral": true,
+				"options": {
+					"autoShow": false
+				}
 			},
 			"component": {
-				"neededClients": [
-					"LauncherClient",
-					"AuthenticationClient",
-					"StorageClient"
+				"title": "@TODO",
+				"menuItems": [
+					"@TODO config not yet implemented",
+					{
+						"label": "Documentation",
+						"url": "https://documentation.chartiq.com/finsemble"
+					},
+					{
+						"label": "Quit",
+						"method": "quitApplication"
+					}
 				],
+				"spawnOnStartup": false,
 				"category": "system"
 			},
 			"foreign": {
@@ -197,9 +241,9 @@
 				}
 			}
 		},
-		"File Menu": {
+		"Window Context Menu": {
 			"window": {
-				"url": "$applicationRoot/components/fileMenu/fileMenu.html?",
+				"url": "$applicationRoot/components/windowContextMenu/windowContextMenu.html",
 				"top": 0,
 				"left": 100,
 				"width": 125,
@@ -210,7 +254,7 @@
 				}
 			},
 			"component": {
-				"spawnOnStartup": false,
+				"spawnOnStartup": true,
 				"category": "system"
 			},
 			"foreign": {
@@ -262,9 +306,40 @@
 				}
 			}
 		},
+		"Docking Move Mask": {
+			"window": {
+				"url": "$applicationRoot/components/dockingGroupMask/dockingGroupMask.html",
+				"frame": false,
+				"resizable": false,
+				"showTaskbarIcon": false,
+				"options": {
+					"opacity": 0.7,
+					"autoShow": false
+				}
+			},
+			"component": {
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"FSBLHeader": false,
+						"persistWindowState": false
+					}
+				}
+			}
+		},
 		"yesNo": {
 			"window": {
-				"url": "$applicationRoot/components/yesNoDialog/yesNoDialog.html",
+				"url": "$applicationRoot/components/yesNoDialog/YesNoDialog.html",
 				"width": 350,
 				"height": 175,
 				"position": "absolute",
@@ -272,7 +347,8 @@
 				"left": "center",
 				"options": {
 					"resizable": false,
-					"autoShow": false
+					"autoShow": false,
+					"alwaysOnTop": true
 				}
 			},
 			"component": {
@@ -311,7 +387,48 @@
 				"left": "center",
 				"options": {
 					"resizable": false,
-					"autoShow": false
+					"autoShow": false,
+					"alwaysOnTop": true
+				}
+			},
+			"component": {
+				"category": "system",
+				"spawnOnStartup": true
+			},
+			"foreign": {
+				"clients": {
+					"dialogManager": {
+						"isDialog": true
+					}
+				},
+				"services": {
+					"dockingService": {
+						"isArrangable": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"FSBLHeader": false,
+						"persistWindowState": false
+					}
+				}
+			}
+		},
+		"inputAndSelection": {
+			"window": {
+				"url": "$applicationRoot/components/inputAndSelectionDialog/inputAndSelectionDialog.html",
+				"width": 587,
+				"height": 358,
+				"position": "absolute",
+				"top": "center",
+				"left": "center",
+				"options": {
+					"resizable": false,
+					"autoShow": false,
+					"alwaysOnTop": true
 				}
 			},
 			"component": {
@@ -343,15 +460,16 @@
 		"dialogModal": {
 			"window": {
 				"url": "$applicationRoot/components/dialogModal/dialogModal.html",
-				"width": "100%",
-				"height": "100%",
-				"position": "virtual",
+				"width": 1,
+				"height": 1,
+				"position": "absolute",
 				"top": 0,
 				"left": 0,
 				"options": {
 					"opacity": 0.4,
 					"resizable": false,
-					"autoShow": false
+					"autoShow": true,
+					"showTaskbarIcon": false
 				}
 			},
 			"component": {
@@ -399,7 +517,8 @@
 			"component": {
 				"category": "system",
 				"spawnOnStartup": true,
-				"spawnOnAllMonitors": true
+				"spawnOnAllMonitors": true,
+				"canMinimize": false
 			},
 			"foreign": {
 				"services": {
@@ -414,6 +533,35 @@
 					"Window Manager": {
 						"persistWindowState": false,
 						"FSBLHeader": false
+					}
+				}
+			}
+		},
+		"windowTitleBar": {
+			"window": {
+				"url": "$applicationRoot/components/windowTitleBar/windowTitleBar.js",
+				"top": "center",
+				"left": "center",
+				"width": 358,
+				"height": 458,
+				"ephemeral": true
+			},
+			"component": {
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"FSBLHeader": false,
+						"persistWindowState": false
 					}
 				}
 			}

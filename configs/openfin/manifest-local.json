@@ -22,7 +22,7 @@
     },
     "runtime": {
         "arguments": "--noerrdialogs  --v=1 --no-sandbox  --enable-crash-reporting",
-        "version": "8.56.26.50"
+        "version": "8.56.28.34"
     },
     "shortcut": {
         "company": "ChartIQ",
@@ -38,7 +38,7 @@
     },
     "dialogSettings": {
         "logo": "http://localhost:3375/components/assets/img/ciq-banner-100x25.png",
-        "bgColor": 4280798349,
+        "bgColor": 4280109424,
         "textColor": 4293521652,
         "progressBarBgColor": 4294967295,
         "progressBarFillColor": 4282684881,
@@ -52,8 +52,8 @@
     "fileName": "ChartIQ-local-installer",
     "appAssets": [
         {
-            "src": "http://connect2.chartiq.com/finsemble/Assimilation_1_6.zip",
-            "version": "1.0.6",
+            "src": "http://connect2.chartiq.com/finsemble/Assimilation_1_9_2.zip",
+            "version": "1.0.92",
             "alias": "assimilation",
             "target": "assimilationMain.exe"
         }

@@ -19,6 +19,7 @@
 /* Note: By editing the individual .scss files, this could hinder _colorPalette from managing your theme. */
 
 
+$active-header-text-color: #fff;
 
 $primary-accent-color: #039bff; /* The Primary-Accent-Color controls button colors on hover, the border of toolbar buttons on hover, and menu header text color. It also controls the icon color for buttons and apps. */
 
@@ -59,7 +60,7 @@ $primary-hover-font-color: #FFF;   /* This effects the toolbar pimary button tex
 
 $secondary-hover-font-color: #FFF; /* This effects the toolbar secondary button text color. */
 
-$header-text-color: rgba(255,255,255,0.7);  /* This effects the inactive component header text color. Opacity is used for improved visibility of the active component. */
+$header-text-color: rgba(255,255,255,0.85);  /* This effects the inactive component header text color. Opacity is used for improved visibility of the active component. */
 
 $header-colorbutton-hover-icon: #FFF; /* This effects the component header icon color on hover. */
 

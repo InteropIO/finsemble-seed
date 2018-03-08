@@ -105,9 +105,13 @@
 	color: $toolbar-primary-font-color;
 	align-content: center;
 	height: 39px;
-
 }
 
+//for the DnD wrapper
+.fullHeightFlex {
+	height: 100%;
+	display: flex;
+}
 .finsemble-toolbar.horizontal {
 	flex-direction: row;
 }
@@ -263,4 +267,22 @@ img.pinned-icon {
 	height: $brand-logo-height;
 	margin: $brand-logo-margin;
 	padding: 2px 0px 0px 0px !important;
+}
+
+/* Special tweaks for pinned icons */
+
+.ff-document-2 {
+	padding-bottom: 2px;
+}
+
+.ff-chart-pie {
+	font-size: 24px;
+}
+
+.ff-insiders-2 {
+	padding-top: 3px;
+}
+
+.ff-company {
+	padding-bottom: 2px;
 }

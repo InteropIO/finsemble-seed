@@ -1,37 +1,40 @@
 [
-	{
-		"type": "menuLauncher",
-		"iconClasses": "finsemble-toolbar-brand-logo",
-		"align": "left",
-		"icon": "data:image/png;base64,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",
-		"menuType": "File Menu",
-		"preSpawn": true
-	},
-	{
-		"type": "menuLauncher",
-		"align": "left",
-		"label": "Workspaces",
-		"menuType": "Workspace Management Menu",
-		"preSpawn": true
-	},
-	{
-		"type": "menuLauncher",
-		"align": "left",
-		"label": "Apps",
-		"menuType": "App Launcher",
-		"customData": {
-			"list": ["Getting Started Tutorial"]
-		},
-		"preSpawn": true
-	},
-	{
-		"align": "right",
-		"type": "reactComponent",
-		"reactComponent": "AutoArrange"
-	},
-	{
-		"align": "right",
-		"type": "reactComponent",
-		"reactComponent": "BringToFront"
-	}
+    {
+        "align": "left",
+        "iconClasses": "finsemble-toolbar-brand-logo",
+        "icon": "http://localhost:3375/components/assets/img/Finsemble_Taskbar_Icon.png",
+        "menuType": "File Menu"
+    },
+    {
+        "align": "left",
+        "type": "reactComponent",
+        "reactComponent": "Search"
+    },
+    {
+        "align": "left",
+        "label": "Workspaces",
+        "menuType": "Workspace Management Menu",
+        "reactComponent": "WorkspaceMenuOpener",
+        "type": "reactComponent"
+    },
+    {
+        "align": "right",
+        "type": "reactComponent",
+        "reactComponent": "AutoArrange"
+    },
+    {
+        "align": "right",
+        "type": "reactComponent",
+        "reactComponent": "MinimizeAll"
+    },
+    {
+        "align": "right",
+        "type": "reactComponent",
+        "reactComponent": "BringToFront"
+    },
+    {
+        "align": "left",
+        "label": "Apps",
+        "menuType": "App Launcher"
+    }
 ]

@@ -19,8 +19,8 @@ export default {
 		receiverHandler: false
 	},
 	Linker: {
-		groups: {},
-		allGroups: {},
+		channels: {},
+		allChannels: {},
 		showLinkerButton: false
 	},
 	Close: {
@@ -37,5 +37,6 @@ export default {
 		enabled: false
 	},
 	isSnapped: false,
-	isGrouped: false
+	isGrouped: false,
+	isTopRight: false
 };

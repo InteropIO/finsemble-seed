@@ -34,3 +34,97 @@
   .pinned-icon {
     color: #4495d1;
   }
+.searchSection{
+  position: relative;
+  max-width:107px;
+  overflow: visible;
+  max-height: 40px;
+  width:30px;
+}
+.left.finsemble-toolbar-section{
+  overflow: visible;
+
+}
+.container{
+  display: flex;
+  margin-right: 15px;
+}
+.searchInput{
+  position: absolute;
+  display:inline;
+  text-indent: 8px;
+  width:107px;
+  height: 40px;
+  line-height: 40px;
+  background-color: transparent;
+  border-color:transparent;
+  z-index: 2;
+  overflow: hidden;
+  white-space: nowrap;
+  transition-timing-function: ease-in-out -.1;
+  transition: width .5s,background-color 0s 0s;
+}
+.searchInput.full[contenteditable=true]:empty:before{
+  content: attr(placeholder);
+
+}
+.searchInput.compact{
+  content:"";
+  padding-left: 9px;
+  width:23px;
+  cursor: pointer;
+  /*transition: width .5s,background-color 0s .5s;*/
+
+}
+.searchInput.compact::before{
+  content:"";
+
+}
+.searchInput.full{
+  content:"";
+  padding-left:9px;
+  padding-right:9px;
+  width:23px;
+  color:white;
+  cursor: pointer;
+  background-color: #1c2a36;
+  transition: width .5s,background-color 0s .5s;
+}
+[contenteditable="true"] br {
+  display:none;
+
+}
+[contenteditable="true"] div {
+  display:none;
+
+}
+.searchInput.active{
+  display: inline-block;
+  left:0px;
+  width:261px;
+  text-align: left;
+  background-color: rgba(255, 255, 255, 1);
+  color:black;
+  cursor: initial;
+  z-index: 99;
+}
+
+img {
+	user-drag: none;
+	user-select: none;
+	-moz-user-select: none;
+	-webkit-user-drag: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+
+.searchInput::after{
+  position: absolute;
+  font-family: finfont;
+  right:10px;
+  content: "\2c";
+}
+
+div {
+  outline-color: transparent;
+}

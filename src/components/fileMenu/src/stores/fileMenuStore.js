@@ -60,7 +60,22 @@ var FileMenuStore = Object.assign({}, EventEmitter.prototype, {
 		finWindow.hide();
 	}
 });
+var keys = {};
+function setupHotKeys() {
+	FSBL.Clients.RouterClient.subscribe("humanInterface.keydown", function (err, response) {
+		if (!keys[response.data.key]) keys[response.data.key] = {};
+		keys[response.data.key] = true;
+		if (keys[162] && keys[81]) {
+			console.log("call---quit")
 
+		}
+	});
+	FSBL.Clients.RouterClient.subscribe("humanInterface.keyup", function (err, response) {
+		if (!keys[response.data.key]) keys[response.data.key] = {};
+		keys[response.data.key] = false;
+	});
+
+};
 var Actions = {
 	hideWindow() {
 		FileMenuStore.finWindow.hide();
@@ -83,6 +98,17 @@ var Actions = {
 	showCentralConsole() {
 		fin.desktop.Window.getCurrent().hide();
 		FSBL.Clients.RouterClient.transmit("CentralConsole-Show", true);
+	},
+	spawnPreferences() {
+		fin.desktop.Window.getCurrent().hide();
+		FSBL.Clients.LauncherClient.showWindow({
+			componentType: "UserPreferences"
+		},
+			{
+				monitor: "mine",
+				left: "center",
+				top: "center"
+			});
 	},
 	/**
 	 * Called on shutdown (if the workspace is dirty).
@@ -124,6 +150,7 @@ var Actions = {
 			if (choice === 'cancel') {
 				return;
 			}
+			FSBL.Clients.RouterClient.transmit("Assimilation.closeOpenFinWindows");
 			FSBL.shutdownApplication();
 		});
 
@@ -166,8 +193,8 @@ var Actions = {
 		FSBL.Clients.LauncherClient.spawn("Finsemble Documentation");
 	}
 };
-FileMenuStore.initialize();
 
+FileMenuStore.initialize();
 
 export { FileMenuStore as Store };
 export { Actions };

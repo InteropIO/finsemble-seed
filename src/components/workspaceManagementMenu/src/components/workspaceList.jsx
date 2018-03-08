@@ -4,7 +4,7 @@
  * This is a list of workspaces that the user can click on, loading them.
  */
 import React from "react";
-import { FinsembleMenuSection, FinsembleMenuSectionLabel } from "@chartiq/finsemble-react-controls";
+import { FinsembleDraggable, FinsembleDroppable, FinsembleDnDContext, FinsembleMenuSection, FinsembleMenuSectionLabel } from "@chartiq/finsemble-react-controls";
 import Workspace from "./workspace";
 import WorkspaceActions from "./workspaceActions";
 import { getStore, Actions as WorkspaceManagementMenuActions } from "../stores/workspaceManagementMenuStore";
@@ -14,6 +14,7 @@ export default class WorkspaceManagementList extends React.Component {
 	constructor(props) {
 		super(props);
 		WorkspaceManagementMenuStore = getStore();
+		this.onDragEnd = this.onDragEnd.bind(this);
 	}
 
 	/**
@@ -35,7 +36,12 @@ export default class WorkspaceManagementList extends React.Component {
 	togglePin(workspaceName) {
 		WorkspaceManagementMenuActions.togglePin(workspaceName);
 	}
+	onDragEnd(changeEvent) {
+		//User didn't make a valid drop.
+		if (!changeEvent.destination) return;
+		WorkspaceManagementMenuActions.reorderWorkspaceList(changeEvent);
 
+	}
 	/**
 	 * Render method.
 	 *
@@ -60,18 +66,32 @@ export default class WorkspaceManagementList extends React.Component {
 			let isActiveWorkspace = workspace.name === FSBL.Clients.WorkspaceClient.activeWorkspace.name;
 			let isPinned = self.props.pinnedWorkspaces.includes(workspace.name);
 			workspace.isPinned = isPinned;
-			return (<Workspace isActiveWorkspace={isActiveWorkspace}
-				key={i}
-				workspace={workspace}
-				mainAction={WorkspaceManagementMenuActions.switchToWorkspace}
-				itemActions={workspaceActions} />);
+			return (
+				<FinsembleDraggable
+					index={i}
+					key={i}
+					draggableId={workspace.name}>
+					<Workspace
+						key={i}
+						isActiveWorkspace={isActiveWorkspace}
+						workspace={workspace}
+						mainAction={WorkspaceManagementMenuActions.switchToWorkspace}
+						itemActions={workspaceActions} />
+				</FinsembleDraggable>
+			);
 		});
 
-		return (<FinsembleMenuSection className='menu-primary'>
-				<FinsembleMenuSectionLabel>
-					Workspaces
-				</FinsembleMenuSectionLabel>
-				{workspaces}
-			</FinsembleMenuSection>);
+		return (
+			<FinsembleDnDContext onDragStart={(changeEvent) => { console.log("DRAGSTART", changeEvent); }} onDragEnd={this.onDragEnd}>
+				<FinsembleMenuSection className='menu-primary'>
+					<FinsembleMenuSectionLabel>
+						Workspaces
+					</FinsembleMenuSectionLabel>
+					<FinsembleDroppable direction="vertical" droppableId="workspaceList">
+						{workspaces}
+					</FinsembleDroppable>
+				</FinsembleMenuSection>
+			</FinsembleDnDContext>
+		);
 	}
 }

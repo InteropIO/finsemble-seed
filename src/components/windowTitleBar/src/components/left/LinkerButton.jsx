@@ -22,8 +22,8 @@ export default class LinkerButton extends React.Component {
          */
         windowTitleBarStore = getStore();
         this.state = {
-            groups: {},
-            allGroups: {},
+            channels: {},
+            allChannels: {},
             showLinker: false,
             hoverState: "false"
         };
@@ -34,30 +34,30 @@ export default class LinkerButton extends React.Component {
      * @memberof LinkerButton
      */
     bindCorrectContext() {
-        this.onGroupsChange = this.onGroupsChange.bind(this);
-        this.onAllGroupsChange = this.onAllGroupsChange.bind(this);
+        this.onChannelsChange = this.onChannelsChange.bind(this);
+        this.onAllChannelsChange = this.onAllChannelsChange.bind(this);
         this.onShowLinkerButton = this.onShowLinkerButton.bind(this);
         this.hoverAction = this.hoverAction.bind(this);
     }
     /**
-     * When the user selects/deselects a group in the linkerWindow, this event listener is invoked.
+     * When the user selects/deselects a channel in the linkerWindow, this event listener is invoked.
      *
      * @param {any} err
      * @param {any} response
      * @memberof LinkerButton
      */
-    onGroupsChange(err, response) {
-        this.setState({ groups: response.value });
+    onChannelsChange(err, response) {
+        this.setState({ channels: response.value });
     }
     /**
-     * This listener is invoked when a new group is registered with linkerService.
+     * This listener is invoked when a new channel is registered with linkerService.
      *
      * @param {any} err
      * @param {any} response
      * @memberof LinkerButton
      */
-    onAllGroupsChange(err, response) {
-        this.setState({ allGroups: response.value });
+    onAllChannelsChange(err, response) {
+        this.setState({ allChannels: response.value });
     }
     /**
      * When we read the config from the window, we determine if the linker button should be shown. When that value changes, this listener is invoked.
@@ -87,9 +87,28 @@ export default class LinkerButton extends React.Component {
      * @memberof LinkerButton
      */
     showLinkerWindow(e) {
+        e.persist(); // So that React allows us to access the target
         e.preventDefault();
         e.stopPropagation();
-        FSBL.Clients.LinkerClient.openLinkerWindow(() => { });
+        let payload = {
+            channels: FSBL.Clients.LinkerClient.getState().channels,
+            windowIdentifier: FSBL.Clients.WindowClient.getWindowIdentifier()
+        };
+        FSBL.Clients.RouterClient.query("Finsemble.LinkerWindow.SetActiveChannels", payload, function () {
+            let wi = {
+                componentType: "linkerWindow"
+            };
+            // @todo, these positions should be relative to the actual element clicked rather
+            // than hard coded to the left edge of the screen
+            let params = {
+                position: 'relative',
+                left: 0,
+                top: 30,
+                forceOntoMonitor: true,
+                spawnIfNotFound: false
+            };
+            FSBL.Clients.LauncherClient.toggleWindowOnClick(e.target.parentElement, wi, params);
+        });
     }
 
     /**
@@ -109,8 +128,8 @@ export default class LinkerButton extends React.Component {
     componentWillMount() {
 
         // console.log("windowTitleBarStore--", windowTitleBarStore)
-        windowTitleBarStore.addListener({ field: "Linker.groups" }, this.onGroupsChange);
-        windowTitleBarStore.addListener({ field: "Linker.allGroups" }, this.onAllGroupsChange);
+        windowTitleBarStore.addListener({ field: "Linker.channels" }, this.onChannelsChange);
+        windowTitleBarStore.addListener({ field: "Linker.allChannels" }, this.onAllChannelsChange);
         windowTitleBarStore.addListener({ field: "Linker.showLinkerButton" }, this.onShowLinkerButton);
     }
 
@@ -120,8 +139,8 @@ export default class LinkerButton extends React.Component {
      * @memberof LinkerButton
      */
     componentWillUnmount() {
-        windowTitleBarStore.removeListener({ field: "Linker.groups" }, this.onGroupsChange);
-        windowTitleBarStore.removeListener({ field: "Linker.allGroups" }, this.onAllGroupsChange);
+        windowTitleBarStore.removeListener({ field: "Linker.channels" }, this.onChannelsChange);
+        windowTitleBarStore.removeListener({ field: "Linker.allChannels" }, this.onAllChannelsChange);
         windowTitleBarStore.removeListener({ field: "Linker.showLinkerButton" }, this.onShowLinkerButton);
     }
     /**

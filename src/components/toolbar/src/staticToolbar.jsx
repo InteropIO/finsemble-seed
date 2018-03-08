@@ -11,6 +11,8 @@ import { FinsembleToolbar, FinsembleButton, FinsembleToolbarSection, FinsembleTo
 
 // External Components to show on Toolbar
 import AutoArrange from "../components/AutoArrange";
+import MinimizeAll from "../components/MinimizeAll";
+
 import BringToFront from "../components/BringToFront";
 import WorkspaceLauncherButton from "../components/WorkspaceLauncherButton";
 import WorkspaceMenuOpener from "../components/WorkspaceMenuOpener"
@@ -45,6 +47,7 @@ export default class Toolbar extends React.Component {
 			<FinsembleToolbarSection name="right" className="right">
 				<FinsembleToolbarSeparator />
 				<AutoArrange />
+				<MinimizeAll />
 				<BringToFront />
 			</FinsembleToolbarSection>
 		</FinsembleToolbar>);
