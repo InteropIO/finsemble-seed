@@ -97,7 +97,9 @@
 	 * Builds files using webpack.
 	 */
 	const buildWebpack = done => {
-		webpack(webpackFilesConfig, done);
+		webpack(webpackFilesConfig, () => {
+			webpack(webpackServicesConfig, done);
+		});
 	}
 
 	/**
