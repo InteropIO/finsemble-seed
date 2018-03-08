@@ -128,12 +128,15 @@
 		},
 		"defaultAuthentication": {
 			"window": {
-				"url": "$applicationRoot/components/authentication/oauthAuthentication.html",
+				"url": "$applicationRoot/components/authentication/defaultAuthentication.html",
 				"top": "center",
 				"left": "center",
 				"width": 358,
 				"height": 458,
-				"ephemeral": true
+				"ephemeral": true,
+				"options": {
+					"autoShow": false
+				}
 			},
 			"component": {
 				"neededClients": [
