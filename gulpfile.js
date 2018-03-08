@@ -14,7 +14,7 @@
 	const merge = require("merge-stream");
 	const launcher = require("openfin-launcher");
 	const path = require("path");
-	const webpack = require("webpack-stream");
+	const webpack = require("webpack");
 
 	// local
 	const extensions = fs.existsSync("./gulpfile-extensions.js") ? require("./gulpfile-extensions.js") : undefined;
@@ -64,8 +64,10 @@
 		/**
 		 * Builds files using webpack.
 		 */
-		buildWebpack: () => {
-			return webpack(webpackFilesConfig);
+		buildWebpack: done => {
+			webpack(webpackFilesConfig, () => {
+				webpack(webpackServicesConfig, done);
+			});
 		},
 
 		/**

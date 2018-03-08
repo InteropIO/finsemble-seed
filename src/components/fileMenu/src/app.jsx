@@ -21,7 +21,6 @@ class FileMenu extends React.Component {
 				</FinsembleMenuSectionLabel>
 			{/*Options in the file menu.*/}
 			<FinsembleMenuSection className='menu-primary'>
-				<FinsembleMenuItem label="About" onClick={FileMenuActions.spawnAbout} />
 				<FinsembleMenuItem label="Preferences" onClick={FileMenuActions.spawnPreferences} />
 				<FinsembleMenuItem label="Central Logger" onClick={FileMenuActions.showCentralConsole} />
 				<FinsembleMenuItem label="Documentation" onClick={FileMenuActions.spawnDocs} />
