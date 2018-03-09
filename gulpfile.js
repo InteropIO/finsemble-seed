@@ -99,6 +99,7 @@
 	const buildWebpack = done => {
 		webpack(webpackFilesConfig, () => {
 			if (webpackServicesConfig) {
+				// Webpack config for services exists. Build it
 				webpack(webpackServicesConfig, done);
 			} else {
 				done();
