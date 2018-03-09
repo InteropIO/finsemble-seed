@@ -21,6 +21,8 @@ These are the tasks defined in _gulpfile.js_:
 - `dev:run` - Builds the application, starts the server, launches the Finsemble application and watches for file changes (calls "prod:run" task then the `watchFiles` function).
 - `default` - Specifies the default task to run if no task is passed in (calls the "dev:run" task).
 
+If you wish to add additional task or function calls to the existing tasks, they can be redefined in the `post` method call.
+
 Below is code that can be used as a template for _gulpfile-extensions.js_:
 
 ```js
@@ -55,6 +57,21 @@ module.exports = taskMethods => {
         console.log("Adding tasks");
 
         gulp.task("newTask", gulp.series("build"), () => { console.log("Do some other stuff here"); });
+
+        
+    /**
+	 * Redefinition of a task defined in the gulpfile.
+	 */
+	gulp.task(
+		"build",
+        gulp.series(
+            done => { console.log("pre-build task"); done(); },
+            "clean",
+            taskMethods.copyStaticFiles,
+            taskMethods.buildWebpack,
+            taskMethods.buildSass),
+            done => { console.log("post-build task"); done(); }
+        );
     }
 };
 ```
