@@ -21,20 +21,47 @@
 		{
 			/**
 			 * Method called before starting the server.
-			 */
-			pre: () => { },
+			 * 
+			 * @param {function} done Function can take one argument; an error message if one occurred.
+			 			 * @example 
+			 * const pre => {
+			 * 	try {
+			 * 		// do something that could throw an error
+			 *  } catch(e) {
+			 *		done(e);
+			 *  }
+			 * }*/
+			pre: done => { done(); },
 
 			/**
 			 * Method called after the server has started.
+			 * 
+			 * @param {function} done Function can take one argument; an error message if one occurred.
+			 *
+			 * @example 
+			 * const post => {
+			 * 	try {
+			 * 		// do something that could throw an error
+			 *  } catch(e) {
+			 *		done(e);
+			 *  }
+			 * }
 			 */
-			post: () => { },
+			post: done => { done(); },
 
 			/**
 			 * Method called to update the server.
 			 * 
 			 * @param {express} app The express server.
 			 * @param {function} cb The function to call once finished adding functionality to the server.
-			 */
+			 * @example 
+			 * const cb => {
+			 * 	try {
+			 * 		// do something that could throw an error
+			 *  } catch(e) {
+			 *		done(e);
+			 *  }
+			 * }*/
 			updateServer: (app, cb) => { cb(); }
 		};
 	// #endregion
@@ -52,53 +79,75 @@
 
 	const options = { maxAge: cacheAge };
 
-	extensions.pre();
-
 	console.log(outputColor("Starting Server"));
 
-	// For Assimilation
-	app.use("/hosted", express.static(path.join(__dirname, "..", "hosted"), options));
+	/**
+	 * Builds the server.
+	 * 
+	 * @param {string} err Error message, if an error occurred.
+	 */
+	const buildServer = err => {
+		if (err) {
+			console.error(err);
+			return;
+		}
 
-	// Sample server root set to "/" -- must align with paths throughout 
-	// configs/openfin/manifest-local.json and configs/other/server-environment-startup.json
+		// For Assimilation
+		app.use("/hosted", express.static(path.join(__dirname, "..", "hosted"), options));
 
-	// Make the config public
-	app.use("/configs", express.static("./configs", options));
+		// Sample server root set to "/" -- must align with paths throughout 
+		// configs/openfin/manifest-local.json and configs/other/server-environment-startup.json
 
-	app.use("/", express.static(rootDir, options));
+		// Make the config public
+		app.use("/configs", express.static("./configs", options));
 
-	// Open up the Finsemble Components,services, and clients
-	app.use("/finsemble", express.static(moduleDirectory, options));
+		app.use("/", express.static(rootDir, options));
 
-	extensions.updateServer(app, () => {
+		// Open up the Finsemble Components,services, and clients
+		app.use("/finsemble", express.static(moduleDirectory, options));
 
-		const server = app.listen(
-			PORT,
-			e => {
-				if (e) {
-					console.error(e);
-					process.send("serverFailed");
-					process.exit();
-				}
+		const handleError = e => {
+			if (e) {
+				console.error(e);
+				process.send("serverFailed");
+				process.exit(1);
+			}
+		}
 
-				console.log(chalk.green(`Listening on port ${PORT}`));
+		extensions.updateServer(app, err => {
+			handleError(err);
 
-				global.host = server.address().address;
-				global.port = server.address().port;
+			const server = app.listen(
+				PORT,
+				e => {
+					handleError(e);
 
-				const done = () => {
-					console.log(outputColor("Server started"));
-					process.send("serverStarted");
-					extensions.post();
-				};
+					console.log(chalk.green(`Listening on port ${PORT}`));
 
-				if (process.env.NODE_ENV === "dev") {
-					// Setup hot reload in the dev environment
-					console.log(outputColor("start hot reload"));
-					hotReload(app, server, done);
-				} else if (process.send) {
-					done();
-				}
-			});
-	});
+					global.host = server.address().address;
+					global.port = server.address().port;
+
+					const done = () => {
+						console.log(outputColor("Server started"));
+						extensions.post(err => {
+							if (err) {
+								handleError(err);
+							} else {
+								process.send("serverStarted");
+							}	
+						});	
+					};
+
+					if (process.env.NODE_ENV === "dev") {
+						// Setup hot reload in the dev environment
+						console.log(outputColor("start hot reload"));
+						hotReload(app, server, done);
+					} else if (process.send) {
+						done();
+					}
+				});
+		});
+	}
+
+	extensions.pre(buildServer);
 })();
