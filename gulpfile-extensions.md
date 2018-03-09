@@ -40,28 +40,24 @@ module.exports = taskMethods => {
 
     const gulp = require("gulp");
 
-    Object.keys(taskMethods).forEach(key => {
-        if ((key === "pre") || (key === "post")) {
-            return;
-        }
-
-        const func = taskMethods[key];
-        taskMethods[key] = () => {
-            console.log(`PRE: ${key}`);
-            const result = func(arguments);
-            console.log(`POST: ${key}`);
-
-            return result;
-        }
-    });
-
-    const pre = taskMethods.pre
+    // Extension of pre method;
+    let pre = taskMethods.pre 
     taskMethods.pre = done => {
         console.log("PRE: pre");
-        pre(() => {
+        const result = pre(() => {
             console.log("POST: pre");
             done();
-        })
+        });
+    };
+
+    // Extension of copyStaticFiles
+    let copyStaticFiles = taskMethods.copyStaticFiles 
+    taskMethods.copyStaticFiles = () => {
+        console.log("PRE: copyStaticFiles");
+        const result = copyStaticFiles();
+        console.log("POST: copyStaticFiles");
+        
+        return result;
     };
 
     const post = taskMethods.post;

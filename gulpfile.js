@@ -223,8 +223,8 @@
 		}
 
 		/**
-	 * Cleans the project directory.
-	 */
+		 * Cleans the project directory.
+		 */
 		gulp.task("clean", taskMethods.clean);
 
 		/**
