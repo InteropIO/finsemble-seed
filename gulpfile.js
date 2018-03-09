@@ -196,7 +196,7 @@
 		 */
 		watchFiles: () => {
 			return merge(
-				watch(path.join(srcPath, "components", "assets", "**", "*"), {}, buildSass),
+				watch(path.join(srcPath, "components", "assets", "**", "*"), {}, this.buildSass),
 				watch(path.join(srcPath, "**", "*.css"), { ignoreInitial: true })
 					.pipe(gulp.dest(distPath)),
 				watch(path.join(srcPath, "**", "*.html"), { ignoreInitial: true })
