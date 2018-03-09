@@ -53,25 +53,26 @@ module.exports = taskMethods => {
 
     const post = taskMethods["post"];
 
-    taskMethods["post"] = () => {
+    taskMethods["post"] = done => {
         console.log("Adding tasks");
 
-        gulp.task("newTask", gulp.series("build"), () => { console.log("Do some other stuff here"); });
+        gulp.task("newTask", gulp.series("build"), () => { console.log("Do some other stuff here");});
 
-        
-    /**
-	 * Redefinition of a task defined in the gulpfile.
-	 */
-	gulp.task(
-		"build",
-        gulp.series(
-            done => { console.log("pre-build task"); done(); },
-            "clean",
-            taskMethods.copyStaticFiles,
-            taskMethods.buildWebpack,
-            taskMethods.buildSass),
-            done => { console.log("post-build task"); done(); }
-        );
+        /**
+         * Redefinition of a task defined in the gulpfile.
+         */
+        gulp.task(
+            "build",
+            gulp.series(
+                done => { console.log("pre-build task"); done(); },
+                "clean",
+                taskMethods.copyStaticFiles,
+                taskMethods.buildWebpack,
+                taskMethods.buildSass),
+                done => { console.log("post-build task"); done(); }
+            );
+
+        done();
     }
 };
 ```

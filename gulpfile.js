@@ -142,13 +142,17 @@
 
 		/**
 		 * Method called after tasks are defined.
+		 * @param done Callback function used to signal function completion to support asynchronous execution. Can 
+		 * optionally return an error, if one occurs.
 		 */
-		post: () => { },
+		post: done => { done(); },
 
 		/**
 		 * Method called before tasks are defined.
+		 * @param done Callback function used to signal function completion to support asynchronous execution. Can 
+		 * optionally return an error, if one occurs.
 		 */
-		pre: () => { },
+		pre: done => { done(); },
 
 		/**
 		 * Starts the server.
@@ -210,42 +214,54 @@
 	if (extensions) {
 		extensions(taskMethods);
 	}
-	
-	taskMethods.pre();
 
 	// #region Task definitions
-	/**
+	const defineTasks = err => {
+		if (err) {
+			console.error(err);
+			process.exit(1);
+		}
+
+		/**
 	 * Cleans the project directory.
 	 */
-	gulp.task("clean", taskMethods.clean);
+		gulp.task("clean", taskMethods.clean);
 
-	/**
-	 * Builds the application in the distribution directory.
-	 */
-	gulp.task(
-		"build",
-		gulp.series("clean", taskMethods.copyStaticFiles, taskMethods.buildWebpack, taskMethods.buildSass));
+		/**
+		 * Builds the application in the distribution directory.
+		 */
+		gulp.task(
+			"build",
+			gulp.series("clean", taskMethods.copyStaticFiles, taskMethods.buildWebpack, taskMethods.buildSass));
 
-	/**
-	 * Builds the application and starts the server to host it.
-	 */
-	gulp.task("prod", gulp.series("build", taskMethods.startServer));
+		/**
+		 * Builds the application and starts the server to host it.
+		 */
+		gulp.task("prod", gulp.series("build", taskMethods.startServer));
 
-	/**
-	 * Builds the application, starts the server and launches the Finsemble application.
-	 */
-	gulp.task("prod:run", gulp.series("prod", taskMethods.launchApplication));
+		/**
+		 * Builds the application, starts the server and launches the Finsemble application.
+		 */
+		gulp.task("prod:run", gulp.series("prod", taskMethods.launchApplication));
 
-	/**
-	 * Builds the application, starts the server, launches the Finsemble application and watches for file changes.
-	 */
-	gulp.task("dev:run", gulp.series("prod:run", taskMethods.watchFiles));
+		/**
+		 * Builds the application, starts the server, launches the Finsemble application and watches for file changes.
+		 */
+		gulp.task("dev:run", gulp.series("prod:run", taskMethods.watchFiles));
 
-	/**
-	 * Specifies the default task to run if no task is passed in.
-	 */
-	gulp.task("default", gulp.series("dev:run"));
+		/**
+		 * Specifies the default task to run if no task is passed in.
+		 */
+		gulp.task("default", gulp.series("dev:run"));
+
+		taskMethods.post(err => {
+			if (err) {
+				console.error(err);
+				process.exit(1);
+			}
+		});
+	}
 	// #endregion
 
-	taskMethods.post();
+	taskMethods.pre(defineTasks);
 })();
