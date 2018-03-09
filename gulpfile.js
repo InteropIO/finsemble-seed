@@ -66,7 +66,7 @@
 		 */
 		buildWebpack: done => {
 			if (webpackServicesConfig) {
-				// Webpack config for sevices exists. Build it
+				// Webpack config for services exists. Build it
 				webpack(webpackServicesConfig, done);
 			} else {
 				done();
