@@ -1,261 +1,283 @@
-var gulp = require('gulp-4.0.build');
-var path = require("path");
-var webpack_stream = require('webpack-stream');
-var ON_DEATH = require('death')({ debug: false });
+(() => {
+	"use strict";
 
-var watch = require("gulp-watch");
-var del = require('del');
-var sass = require('gulp-sass');
-var shell = require('shelljs');
-var openfinLauncher = require('openfin-launcher');
-var configPath = path.join(__dirname, '/configs/finConfig.json');
-//new
-var StartupConfig = require("./configs/other/server-environment-startup");
-const webpack = require('webpack');
-var chalk = require('chalk');
-chalk.enabled = true;
-var serverOutColor = chalk.yellow;
-var errorOutColor = chalk.red;
-var webpackOutColor = chalk.cyan;
-var initialBuildFinished = false;
+	// #region Imports
+	// NPM
+	const chalk = require("chalk");
+	const { exec, spawn } = require("child_process");
+	const ON_DEATH = require("death")({ debug: false });
+	const del = require("del");
+	const gulp = require("gulp");
+	const sass = require("gulp-sass");
+	const watch = require("gulp-watch");
+	const shell = require('shelljs');
+	const merge = require("merge-stream");
+	const launcher = require("openfin-launcher");
+	const path = require("path");
+	const webpack = require("webpack");
 
-var componentsToBuild = require('./build/webpack/webpack.files.entries.json');
-var angularComponentIgnores = null;
+	// local
+	const webpackFilesConfig = require("./build/webpack/webpack.files.js")
+	const webpackServicesConfig = require("./build/webpack/webpack.services.js")
+	// #endregion
 
-function buildAngularComponentIgnore() {//Dont copy files built by angular
-	if (angularComponentIgnores === null) {
-		angularComponentIgnores = [];
+	// #region Constants
+	const componentsToBuild = require("./build/webpack/webpack.files.entries");
+	const startupConfig = require("./configs/other/server-environment-startup");
+
+	chalk.enabled = true;
+	const errorOutColor = chalk.red;
+	// #endregion
+
+	// #region Script variables
+	let distPath = path.join(__dirname, "dist");
+	let srcPath = path.join(__dirname, "src");
+
+	// If you specify environment variables to child_process, it overwrites all environment variables, including
+	// PATH. So, copy based on our existing env variables.
+	const env = process.env;
+	if (!env.PORT) {
+		env.PORT = startupConfig.dev.serverPort;
+	}
+
+	if (!env.NODE_ENV) {
+		env.NODE_ENV = "dev";
+	}
+	// #endregion
+
+	// #region Functions
+	/**
+	 * Cleans the project folder of generated files.
+	 */
+	const clean = () => {
+		return del(distPath, { force: true });
+	}
+
+	/** 
+	 * Copies static files to the output directory.
+	 */
+	const copyStaticFiles = () => {
+		const source = [
+			path.join(srcPath, "components", "**", "*"),
+			"!" + path.join(srcPath, "components", "**", "*.jsx")];
+
+		// Don't copy files that we build
+		for (const key in componentsToBuild) {
+			source.push("!" + path.join(__dirname, componentsToBuild[key].entry));
+		}
+
+		//Dont copy files built by angular
 		try {
 			var angularComponents = require('./build/angular-components.json');
 			var arrayLength = angularComponents.length;
 			for (var i=0; i < arrayLength; i++) {
-				angularComponentIgnores.push(path.join('!' + __dirname, angularComponents[i].source, '**'));
+				source.push(path.join('!' + __dirname, angularComponents[i].source, '**'));
 			}
-		} catch (ex) {
-			console.log("No Angular components found to exempt from Webpack build");
-		}
-	}
-	return angularComponentIgnores;
-}
+		} catch (ex) {}
 
-function buildComponentIgnore() {//Dont copy files that we build
-	var componentIgnores = [];
-	var components = componentsToBuild;
-	for (var key in components) {
-		var filename = components[key].entry.split("/").pop();
-		componentIgnores.push(path.join('!' + __dirname, components[key].entry));
-	}
-	componentIgnores = componentIgnores.concat(buildAngularComponentIgnore());
-	return componentIgnores;
-}
-
-function copyStaticComponentsFiles() {
-	var source = [path.join(__dirname, '/src/components/**/*'), path.join('!' + __dirname, '/src/components/**/*.jsx')]
-	source = source.concat(buildComponentIgnore());
-	return gulp.src(source)
-		.pipe(gulp.dest(path.join(__dirname, '/dist/components/')));
-}
-
-function copyStaticFiles() {
-	gulp.src([path.join(__dirname, '/configs/**/*')])
-		.pipe(gulp.dest(path.join(__dirname, '/dist/configs/')));
-	return gulp.src([path.join(__dirname, '/src/services/**/*.html'),
-	//ignores the js files in service, but copies over the html files.
-	path.join('!' + __dirname, '/src/services/**/*.js')])
-		.pipe(gulp.dest(path.join(__dirname, '/dist/services')));
-}
-
-function copyFinsembleDist() {//Copies the the required Finsemble files into the local directory.
-	return gulp.src([path.join(__dirname, '/node_modules/@chartiq/finsemble/dist/**/*')])
-		.pipe(gulp.dest(path.join(__dirname, '/finsemble')));
-}
-
-function wipeDist(done) {
-	var dir = path.join(__dirname, '/dist/');
-	console.log('dir', dir);
-	wipe(dir, done);
-}
-
-
-function wipe(dir, cb) {
-	del(dir, { force: true }).then(function () {
-		if (cb) {
-			cb();
-		}
-	}).catch(function (err) {
-		console.error(err);
-	});
-}
-
-function buildSass(done) {
-	done();
-	return gulp.src([
-		path.join(__dirname, '/src/components/**/**/*.scss'),
-		//compiles sass down to finsemble.css
-		path.join(__dirname, '/src/components/assets/*.scss')
-	].concat(buildAngularComponentIgnore()))
-		.pipe(sass().on('error', sass.logError))
-		.pipe(gulp.dest(path.join(__dirname, '/dist/components/')));
-}
-
-function watchSass(done) {
-	watch(path.join(__dirname, '/src/components/assets/**/*'), {}, gulp.series(buildSass));
-	done();
-}
-
-function watchStatic() {
-	watch(path.join(__dirname, '/src/**/*.css'), { ignoreInitial: true }).pipe(gulp.dest(path.join(__dirname, '/dist/')));
-	return watch(path.join(__dirname, '/src/**/*.html'), { ignoreInitial: true }).pipe(gulp.dest(path.join(__dirname, '/dist/')));
-}
-
-function wipedist(done) {
-	if (directoryExists(path.join(__dirname, "/dist/"))) {
-		wipe(path.join(__dirname, '/dist/'), done);
-	} else {
-		done();
-	}
-}
-
-function handleWebpackStdOut(data, done) {
-	let notAnError = !data.includes('build failed');
-	if (notAnError) {
-		console.log(webpackOutColor(data));
+		return merge(
+			gulp
+				.src(source)
+				.pipe(gulp.dest(path.join(distPath, "components"))),
+			gulp
+				.src([path.join(__dirname, "configs", "**", "*")])
+				.pipe(gulp.dest(path.join(distPath, "configs"))),
+			gulp
+				.src([
+					path.join(srcPath, "services", "**", "*.html"),
+					"!" + path.join(srcPath, "services", "**", "*.js")])
+				.pipe(gulp.dest(path.join(distPath, "services"))),
+			gulp
+				.src([path.join(__dirname, "node_modules", "@chartiq", "finsemble", "dist", "**", "*")])
+				.pipe(gulp.dest(path.join(__dirname, "finsemble")))
+		);
 	}
 
-	if (data.includes('webpack is watching')) {
-
-		if (initialBuildFinished && notAnError) {
-			// buildComplete();
-		} else if (!initialBuildFinished) {
-			done();
-		}
-	}
-}
-
-function webpackComponents(done) {
-	var webpack_config = require('./build/webpack/webpack.files.js')
-	webpack(webpack_config, function (err, stats) {
-		done();
-	})
-}
-
-function webpackServices(done) {
-	var webpack_config = require('./build/webpack/webpack.services.js')
-	webpack(webpack_config, function (err, stats) {
-		done();
-	})
-}
-
-function angularBuild(done) {
-	var process = function (row) {
-		var compName = row.source.split("/").pop();
-		var cwd = path.join(__dirname, row.source);
-		var outputPath = path.join(__dirname, row.source, row["output-directory"]);
-		var command = `ng build --base-href "/components/${compName}/" --outputPath "${outputPath}"`;
+	/** 
+	 * Builds the SASS files for the project. 
+	 */
+	const buildSass = () => {
+		const source = [path.join(srcPath, "components", "**", "*.scss")];
 		
-		// switch to components folder
-		var dir = shell.pwd();
-		shell.cd(cwd);
-		console.log('Executing: ' + command + "\nin directory: " + cwd);
+		//Dont build files built by angular
+		try {
+			var angularComponents = require('./build/angular-components.json');
+			var arrayLength = angularComponents.length;
+			for (var i=0; i < arrayLength; i++) {
+				source.push(path.join('!' + __dirname, angularComponents[i].source, '**'));
+			}
+		} catch (ex) {}
 
-		var output = shell.exec(command);
-		console.log('Built Angular Component, exit code = ' + output.code);
-		shell.cd(dir);
+		return gulp
+			.src(source)
+			.pipe(sass().on("error", sass.logError))
+			.pipe(gulp.dest(path.join(distPath, "components")));
+	}
+
+	/**
+	 * Builds files using webpack.
+	 */
+	const buildWebpack = done => {
+		webpack(webpackFilesConfig, () => {
+			if (webpackServicesConfig) {
+				// Webpack config for sevices exists. Build it
+				webpack(webpackServicesConfig, done);
+			} else {
+				done();
+			}	
+		});
+	}
+
+	const buildAngular = done => {
+		var processRow = function (row) {
+			var compName = row.source.split("/").pop();
+			var cwd = path.join(__dirname, row.source);
+			var outputPath = path.join(__dirname, row.source, row["output-directory"]);
+			var command = `ng build --base-href "/components/${compName}/" --outputPath "${outputPath}"`;
+			
+			// switch to components folder
+			var dir = shell.pwd();
+			shell.cd(cwd);
+			console.log('Executing: ' + command + "\nin directory: " + cwd);
+	
+			var output = shell.exec(command);
+			console.log('Built Angular Component, exit code = ' + output.code);
+			shell.cd(dir);
+		};
+	
+		try {
+			var angularComponents = require('./build/angular-components.json');
+		} catch (ex) {
+			console.log("No Angular component configuration found");
+		}
+
+		var arrayLength = angularComponents.length;
+		if (arrayLength > 0) {
+			for (var i=0; i < arrayLength; i++) {
+				processRow(angularComponents[i]);
+			}
+		} else {
+			console.log("No Angular components found to build");
+		}
+		
+
+		done();
+	}
+	
+
+	/**
+	 * Launches the application.
+	 *
+	 * @param {function} done Function called when method is completed.
+	 */
+	const launchApplication = done => {
+		ON_DEATH((signal, err) => {
+			exec("taskkill /F /IM openfin.* /T", (err, stdout, stderr) => {
+				// Only write the error to console if there is one and it is something other than process not found.
+				if (err && err !== 'The process "openfin.*" not found.') {
+					console.error(errorOutColor(err));
+				}
+
+				process.exit();
+			});
+		});
+
+		launcher
+			.launchOpenFin({
+				configPath: startupConfig[env.NODE_ENV].serverConfig
+			})
+			.then(() => {
+				// OpenFin has closed so exit gulpfile
+				process.exit();
+			});
+		
+		done();
 	};
 
-	try {
-		var angularComponents = require('./build/angular-components.json');
-		var arrayLength = angularComponents.length;
-		for (var i=0; i < arrayLength; i++) {
-			process(angularComponents[i]);
-		}
-	} catch (ex) {
-		console.log("No Angular components found to build");
-	}
-	done();
-}
+	/**
+	 * Starts the server.
+	 * 
+	 * @param {function} done Function called when execution has completed.
+	 */
+	const startServer = done => {
+		const serverPath = path.join(__dirname, "server", "server.js");
 
-function launchOpenfin(env) {
-	const { exec } = require('child_process');
-	var OFF_DEATH = ON_DEATH(function (signal, err) {
-		exec('taskkill /F /IM openfin.* /T', (err, stdout, stderr) => {
-			if (err) {
-				console.error(err)
-				this.process.exit();
-				// node couldn't execute the command
-				return;
-			}
-			this.process.exit();
-		});
-	})
-	return openfinLauncher.launchOpenFin({
-		//new
-		configPath: StartupConfig[env].serverConfig
-	});
-};
-
-gulp.task('wipeDist', gulp.series(wipeDist));
-
-gulp.task('copy', gulp.series(
-	copyStaticFiles,
-	copyStaticComponentsFiles,
-	copyFinsembleDist
-));
-
-gulp.task('wp', gulp.series(webpackComponents))
-gulp.task('build', gulp.series(
-	'wipeDist',
-	'copy',
-	// webpackClients,
-	// webpackServices,
-	webpackComponents,
-	// webpackReactComponents,
-	buildSass,
-	angularBuild
-));
-
-gulp.task('devServer', gulp.series(
-	'wipeDist',
-	'copy',
-	buildSass,
-	angularBuild,
-	watchSass,
-	function (done) {
-		watchStatic();
-		initialBuildFinished = true;
-		var exec = require('child_process').spawn;
-		//This runs essentially runs 'PORT=80 node server/server.js'
-		var serverPath = path.join(__dirname, '/server/server.js');
-
-		// If you specify environment variables to child_process, it overwrites all environment variables, including
-		// PATH. So, copy based on our existing env variables.
-		var envCopy = process.env;
-		envCopy.PORT = StartupConfig.dev.serverPort;
-		envCopy.NODE_ENV = 'dev';
-
-		// allows for spaces in paths.
-		var serverExec = exec(
+		const serverExec = spawn(
 			"node",
-			[serverPath, { stdio: "inherit" }],
-			{ env: envCopy, stdio: [process.stdin, process.stdout, "pipe", "ipc"] }
+			[
+				serverPath,
+				{
+					stdio: "inherit"
+				}
+			],
+			{
+				env: env,
+				stdio: [
+					process.stdin,
+					process.stdout,
+					"pipe",
+					"ipc"
+				]
+			}
 		);
 
-		serverExec.on("message", function (data) {
+		serverExec.on(
+			"message",
+			data => {
+				if (data === "serverStarted") {
+					done();
+				}
+			});
 
-			if (data === "serverStarted") {
-				launchOpenfin("dev");
-				done();
-			}
-		});
-		serverExec.on('exit', code => console.log('final exit code is', code));
-		//Prints server errors to your terminal.
-		serverExec.stderr.on("data", function (data) {
-			console.error(errorOutColor('ERROR:' + data));
-		});
-	})
-);
+		serverExec.on("exit", code => console.log(`Server closed: exit code ${code}`));
 
-gulp.task('default', gulp.series('devServer'));
+		// Prints server errors to your terminal.
+		serverExec.stderr.on("data", data => { console.error(errorOutColor(`ERROR: ${data}`)); });
+	};
 
-//This command should be tailored to your production environment. You are responsible for moving the built files to your production server, and creating an openfin installer that points to your config.
-gulp.task('prod', gulp.series('build'));
+	/** 
+	 * Watches files for changes to fire off copies and builds.
+	 */
+	const watchFiles = () => {
+		return merge(
+			watch(path.join(srcPath, "components", "assets", "**", "*"), {}, buildSass),
+			watch(path.join(srcPath, "**", "*.css"), { ignoreInitial: true })
+				.pipe(gulp.dest(distPath)),
+			watch(path.join(srcPath, "**", "*.html"), { ignoreInitial: true })
+				.pipe(gulp.dest(distPath))
+		);
+	}
+	// #endregion
+
+	// #region Tasks
+	/**
+	 * Cleans the project directory.
+	 */
+	gulp.task("clean", clean);
+
+	/**
+	 * Builds the application in the distribution directory.
+	 */
+	gulp.task("build", gulp.series("clean", copyStaticFiles, buildWebpack, buildSass, buildAngular));
+
+	/**
+	 * Builds the application and starts the server to host it.
+	 */
+	gulp.task("prod", gulp.series("build", startServer));
+
+	/**
+	 * Builds the application, starts the server and launches the Finsemble application.
+	 */
+	gulp.task("prod:run", gulp.series("prod", launchApplication));
+
+	/**
+	 * Builds the application, starts the server, launches the Finsemble application and watches for file changes.
+	 */
+	gulp.task("dev:run", gulp.series("prod:run", watchFiles));
+
+	/**
+	 * Specifies the default task to run if no task is passed in.
+	 */
+	gulp.task("default", gulp.series("dev:run"));
+	// #endregion
+})();

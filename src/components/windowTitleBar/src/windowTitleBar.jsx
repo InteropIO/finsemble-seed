@@ -19,10 +19,9 @@ import Minimize from "./components/right/MinimizeButton.jsx";
 import DockingButton from "./components/right/DockingButton.jsx";
 import Maximize from "./components/right/MaximizeButton.jsx";
 import Close from "./components/right/CloseButton.jsx";
-
-
+import BringSuiteToFront from "./components/right/BringSuiteToFront.jsx";
 import "../../assets/css/finfont.css";
-import"../../assets/css/finsemble.scss";
+import "../../assets/css/finsemble.scss";
 
 /**
  * This is the main window manager component. It's the custom window frame that we add to each window that has useFSBLHeader set to true in its windowDescriptor.
@@ -34,9 +33,11 @@ class WindowTitleBar extends React.Component {
 		windowTitleBarStore.getValue({ field: "Maximize.hide" });
 		this.state = {
 			windowTitle: windowTitleBarStore.getValue({ field: "Main.windowTitle" }),
+			minButton: !windowTitleBarStore.getValue({ field: "Minimize.hide" }),
 			maxButton: !windowTitleBarStore.getValue({ field: "Maximize.hide" }),
 			closeButton: !windowTitleBarStore.getValue({ field: "Close.hide" }),
-			showLinkerButton: windowTitleBarStore.getValue({ field: "Linker.showLinkerButton" })
+			showLinkerButton: windowTitleBarStore.getValue({ field: "Linker.showLinkerButton" }),
+			isTopRight: windowTitleBarStore.getValue({ field: "isTopRight" }),
 		};
 	}
 	/**
@@ -50,6 +51,7 @@ class WindowTitleBar extends React.Component {
 		this.onToggleDockingIcon = this.onToggleDockingIcon.bind(this);
 		this.onDocking = this.onDocking.bind(this);
 		this.showLinkerButton = this.showLinkerButton.bind(this);
+		this.isTopRight = this.isTopRight.bind(this);
 	}
 	componentWillMount() {
 		windowTitleBarStore.addListeners([
@@ -57,7 +59,8 @@ class WindowTitleBar extends React.Component {
 			{ field: "Main.showDockingTooltip", listener: this.onShowDockingToolTip },
 			{ field: "Main.dockingIcon", listener: this.onToggleDockingIcon },
 			{ field: "Main.dockingEnabled", listener: this.onDocking },
-			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton }
+			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton },
+			{ field: "isTopRight", listener: this.isTopRight},
 		]);
 	}
 
@@ -67,13 +70,18 @@ class WindowTitleBar extends React.Component {
 			{ field: "Main.showDockingTooltip", listener: this.onShowDockingToolTip },
 			{ field: "Main.dockingIcon", listener: this.onToggleDockingIcon },
 			{ field: "Main.dockingEnabled", listener: this.onDocking },
-			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton }
+			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton },
+			{ field: "isTopRight", listener: this.isTopRight},
 		]);
 	}
 
 	showLinkerButton(err, response) {
 		//console.log("showLinkerButton--", response)
 		this.setState({ showLinkerButton: response.value });
+	}
+
+	isTopRight(err, response) {
+		this.setState({ isTopRight: response.value });
 	}
 
 	onTitleChange(err, response) {
@@ -102,6 +110,8 @@ class WindowTitleBar extends React.Component {
 		//console.log("showLinkerButton--2", this.state)
 
 		let showDockingIcon = !self.state.dockingEnabled ? false : self.state.dockingIcon;
+		let isGrouped = (self.state.dockingIcon == "ejector");
+		let showMinimizeIcon = (isGrouped && self.state.isTopRight) || !isGrouped; //If not in a group or if topright in a group
 		return (<div className="fsbl-header">
 			<div className="fsbl-header-left">
 				{self.state.showLinkerButton ? <Linker /> : null}
@@ -109,9 +119,12 @@ class WindowTitleBar extends React.Component {
 			</div>
 			<div onMouseDown={this.startLongHoldTimer} className="fsbl-header-center cq-drag">{self.state.windowTitle}</div>
 			<div onMouseDown={this.startLongHoldTimer} className="fsbl-header-right">
-				{showDockingIcon ? <DockingButton /> : <Minimize />}
+				<BringSuiteToFront/>
+				{this.state.minButton && showMinimizeIcon ? <Minimize /> : null}
+				{showDockingIcon ? <DockingButton /> : null}
 				{this.state.maxButton ? <Maximize /> : null}
 				{this.state.closeButton ? <Close /> : null}
+
 			</div>
 		</div>);
 	}

@@ -2,10 +2,27 @@
 	"comment": "Top-level application config for development, adding on top of the core config",
 	"mode": "",
 	"isAuthEnabled": false,
-	"defaultStorage": "localStorage",
+	"storage": {
+		"topicToDataStoreAdapters" : {
+			"finsemble" : "LocalStorageAdapter",
+			"finsemble.workspace" : "LocalStorageAdapter",
+			"finsemble.workspace.cache" : "LocalStorageAdapter"
+		},
+		"dataStoreAdapters" : {
+			"LocalStorageAdapter": "$applicationRoot/adapters/LocalStorageAdapter.js"
+		}
+	},
+	"servicesConfig": {
+		"launcher": {
+			"searchProviderAction": {
+				"title": "App Catalog",
+				"component": "App Catalog"
+			}
+		}
+	},
 	"systemTrayIcon": "$applicationRoot/components/assets/img/Finsemble_Taskbar_Icon.png",
+	"systemTrayComponent": "File Menu",
 	"debugServiceDelay": 0,
-	"storage": {},
 	"betaFeatures": {
 		"docking": {
 			"enabled": true
@@ -14,7 +31,8 @@
 			"enabled": true,
 			"blacklist": [],
 			"whitelist": [],
-			"onlySpawned": true
+			"onlySpawned": true,
+			"throttle": 10
 		}
 	},
 	"splinteringConfig": {
@@ -89,8 +107,9 @@
 	},
 	"importConfig": [
 		"$applicationRoot/configs/application/components.json",
-		"$applicationRoot/configs/application/sampleComponents.json",
+		"$applicationRoot/components/sampleComponents.json",
 		"$applicationRoot/configs/other/defaultWorkspaces.json",
+		"$applicationRoot/configs/other/defaultWorkspaceTemplates.json",
 		"$applicationRoot/configs/application/services.json"
 	]
 }

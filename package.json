@@ -4,19 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "gulp --gulpfile=./gulpfile.js",
-    "prod": "gulp prod --gulpfile=./gulpfile.js",
-    "cp": "gulp copy --gulpfile=./gulpfile.js",
+    "dev": "set NODE_ENV=dev&&gulp --gulpfile=./gulpfile.js",
+    "prod": "set NODE_ENV=prod&&gulp prod --gulpfile=./gulpfile.js",
     "build": "gulp build --gulpfile=./gulpfile.js",
-    "wp": "gulp wp --gulpfile=./gulpfile.js",
+    "clean": "gulp clean --gulpfile=./gulpfile.js",
     "update-finsemble": "npm update @chartiq/finsemble && npm update -g @chartiq/finsemble-cli"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@chartiq/finsemble": "2.1.*",
-    "@chartiq/finsemble-react-controls": "^1.0.14",
-    "gulp-4.0.build": "^4.0.0-build.a271520",
+    "@chartiq/finsemble": "2.2.*",
+    "@chartiq/finsemble-react-controls": "1.1",
     "nocache": "^2.0.0",
     "openfin-launcher": "^1.3.11"
   },
@@ -37,11 +35,13 @@
     "flux": "^3.1.2",
     "git-rev-sync": "^1.9.1",
     "gulp-each-row": "0.0.2",
+    "gulp": "^4.0.0",
     "gulp-sass": "^3.1.0",
     "gulp-shell": "^0.6.5",
     "gulp-watch": "^4.3.11",
     "html-entities": "^1.2.0",
     "json-loader": "^0.5.4",
+    "merge-stream": "^1.0.1",
     "openfin-launcher": "^1.3.12",
     "querystring": "^0.2.0",
     "react": "^15.4.2",
@@ -52,10 +52,10 @@
     "style-loader": "^0.19.0",
     "url-join": "^2.0.2",
     "url-loader": "^0.6.2",
-    "webpack": "2.*",
+    "webpack": "^2.7.0",
     "webpack-dev-middleware": "^1.12.0",
     "webpack-glob-entries": "^1.0.1",
-    "webpack-stream": "^4.0.0",
+    "webpack-stream": "^4.0.2",
     "webpack-stream-fixed": "^3.2.0"
   }
 }

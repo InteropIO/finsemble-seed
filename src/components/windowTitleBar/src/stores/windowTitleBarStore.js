@@ -7,6 +7,7 @@ var StoreClient;
 var windowTitleBarStore;
 var WindowClient;
 import windowTitleBarStoreDefaults from "./windowTitleBarStoreDefaults";
+import * as async from "async";
 var finWindow = fin.desktop.Window.getCurrent();
 var Actions = {
 	initialize: function () {
@@ -45,17 +46,20 @@ var Actions = {
 		 * Handles whether to show the linker button.
 		 */
 		if (windowTitleBarConfig.showLinker) {
-			//Get state (group memebership) from the linkerClient. Then set the value in the header so that the title bar accurately reflects the state.
+			//Get state (channel memebership) from the linkerClient. Then set the value in the header so that the title bar accurately reflects the state.
 			let cb = (err, response) => {
-				if (response.groups) { windowTitleBarStore.setValue({ field: "Linker.groups", value: response.groups.groups }); }
+				if (response.channels) { windowTitleBarStore.setValue({ field: "Linker.channels", value: response.channels }); }
 				windowTitleBarStore.setValue({ field: "Linker.showLinkerButton", value: true });
 			};
-			FSBL.Clients.LinkerClient.getState({
+			cb(null, FSBL.Clients.LinkerClient.getState());
+			/* [Terry] no longer necessary?
+			FSBL.Clients.LinkerClient.getLinkedChannels({
 				windowName: options.name,
 				uuid: options.uuid,
 				componentType: options.customData.component.type
 			}, cb);
-			FSBL.Clients.LinkerClient.onLinksUpdate.push(cb);
+			*/
+			FSBL.Clients.LinkerClient.onStateChange(cb);
 		}
 
 		/**
@@ -74,7 +78,12 @@ var Actions = {
 		 * @param {*} err
 		 * @param {*} response
 		 */
-		var onDockingGroupUdpate = function (err, response) {
+		var onDockingGroupUpdate = function (err, response) {
+			let groupNames = Object.keys(response.data.groupData);
+			let movableGroups = groupNames
+				.filter(groupName => response.data.groupData[groupName].isMovable)
+				.map(groupName => response.data.groupData[groupName]);
+			windowTitleBarStore.setValue({ field: "Main.allMovableDockingGroups", value: movableGroups });
 			let myGroups = self.getMyDockingGroups(response.data.groupData);
 			windowTitleBarStore.setValue({ field: "Main.dockingGroups", value: myGroups });
 			/**
@@ -82,32 +91,43 @@ var Actions = {
 			 */
 			let isSnapped = false;
 			let isInMovableGroup = false;
+			let isTopRight = false;
 			for (let i = 0; i < myGroups.length; i++) {
 				let myGroup = myGroups[i];
 				if (myGroup.isMovable) {
 					isInMovableGroup = true;
+					if (FSBL.Clients.WindowClient.windowName == myGroup.topRightWindow) {
+						isTopRight = true;
+					}
 				} else {
 					isSnapped = true;
 				}
 			}
 			let icon = false;
 
-			windowTitleBarStore.setValues([
-				{ field: "isSnapped", value: isSnapped },
-				{ field: "isGrouped", value: isInMovableGroup }
-			]);
-
 			if (isSnapped) { icon = "joiner"; }
 			if (isInMovableGroup) { icon = "ejector"; }
-			windowTitleBarStore.setValues([{ field: "isGrouped", value: isInMovableGroup }, { field: "Main.dockingIcon", value: icon }]);
+
+			windowTitleBarStore.setValues([
+				{ field: "isSnapped", value: isSnapped },
+				{ field: "isGrouped", value: isInMovableGroup },
+				{ field: "isTopRight", value: isTopRight },
+				{ field: "Main.dockingIcon", value: icon }
+			]);
+
+			if (isInMovableGroup && !isTopRight) {
+				fin.desktop.Window.getCurrent().updateOptions({ showTaskbarIcon: false });
+			} else {
+				fin.desktop.Window.getCurrent().updateOptions({ showTaskbarIcon: true });
+			}
 		};
 
-		FSBL.Clients.RouterClient.subscribe("DockingService.groupUpdate", onDockingGroupUdpate);
+		FSBL.Clients.RouterClient.subscribe("Finsemble.WorkspaceService.groupUpdate", onDockingGroupUpdate);
 
 		/**
 		 * Catches a double-click on the title bar. If you don't catch this, openfin will invoke the OS-level maximize, which will put the window on top of the toolbar. `clickMaximize` will fill all of the space that finsemble allows.
 		 */
-		fin.desktop.Window.getCurrent().addEventListener("maximized", function () {
+		FSBL.Clients.WindowClient.finWindow.addEventListener("maximized", function () {
 			self.clickMaximize();
 		});
 		//default title.
@@ -127,15 +147,97 @@ var Actions = {
 	 */
 	getMyDockingGroups: function (groupData) {
 		let myGroups = [];
-		let windowName = fin.desktop.Window.getCurrent().name;
+		let windowName = FSBL.Clients.WindowClient.windowName;
 		if (groupData) {
 			for (var groupName in groupData) {
+				groupData[groupName].groupName = groupName;
 				if (groupData[groupName].windowNames.includes(windowName)) {
 					myGroups.push(groupData[groupName]);
 				}
 			}
 		}
 		return myGroups;
+	},
+	hyperFocus: function (params = {}) {
+
+		function getLinkedWindows(callback) {
+			FSBL.Clients.LinkerClient.getLinkedComponents({ channels: [linkerChannel] }, (err, data) => {
+				let windows = data.map((win) => win.windowName);
+				windowList = windowList.concat(windows);
+				callback();
+			});
+		}
+
+		function getDockedWindows(callback) {
+			function getWindows(groupName, done) {
+				FSBL.Clients.RouterClient.query("DockingService.getWindowsInGroup", { groupName }, (err, response) => {
+					windowList = windowList.concat(response.data);
+					done();
+				});
+			}
+
+			//Get the windows for every list.
+			async.forEach(dockingGroups, getWindows, callback);
+		}
+
+		function getWindowsInAppSuite(callback) {
+			FSBL.Clients.LauncherClient.getGroupsForWindow((err, data) => {
+				function getWindowsInGroup(group, done) {
+					FSBL.Clients.RouterClient.query("LauncherService.getWindowsInGroup", { groupName: group }, (err, response) => {
+						windowList = windowList.concat(response.data);
+						done();
+					});
+				}
+				if (err) return callback(err, null);
+				let groups = data;
+				if (groups) {
+					async.forEach(groups, getWindowsInGroup, callback);
+				} else {
+					callback(null, null);
+				}
+			});
+		}
+
+
+		let { linkerChannel, includeAppSuites, includeDockedGroups } = params;
+		let windowList = [],
+			tasks = [],
+			dockingGroups = [],
+			isGrouped = windowTitleBarStore.getValue({ field: "isGrouped" }),
+			movableGroups = windowTitleBarStore.getValue({ field: "Main.allMovableDockingGroups" });
+
+
+		if (linkerChannel) {
+			tasks.push(getLinkedWindows);
+		}
+
+		if (includeDockedGroups && isGrouped) {
+			dockingGroups = windowTitleBarStore.getValue({ field: "Main.dockingGroups" });
+			if (dockingGroups) {
+				dockingGroups = dockingGroups.filter(grp => grp.isMovable).map(grp => grp.groupName);
+				tasks.push(getDockedWindows);
+			}
+		}
+
+		if (includeAppSuites) {
+			tasks.push(getWindowsInAppSuite);
+		}
+
+		if (tasks.length) {
+			async.parallel(tasks, () => {
+				windowList.forEach(windowName => {
+					movableGroups.forEach((grp) => {
+						if (grp.windowNames.includes(windowName)) {
+							windowList = windowList.concat(grp.windowNames);
+						}
+					});
+				});
+				FSBL.Clients.LauncherClient.hyperFocus({ windowList });
+			});
+		}
+	},
+	hyperfocusDockingGroup: function () {
+		FSBL.Clients.RouterClient.transmit("DockingService.hyperfocusGroup", { windowName: FSBL.Clients.WindowClient.windowName });
 	},
 	/**
 	 * Handles messages coming from the windowCclient.
@@ -149,13 +251,20 @@ var Actions = {
 	 * Minimizes the window.
 	 */
 	clickMinimize: function () {
-		FSBL.Clients.WindowClient.minimize();
+		var isGrouped = windowTitleBarStore.getValue({ field: "isGrouped" });
+		if (isGrouped) {
+			FSBL.Clients.WindowClient.minimizeWithDockedWindows();
+		} else {
+			FSBL.Clients.WindowClient.minimize();
+		}
 	},
 	/**
 	 * Closes the window, allows for cleanup. Removes the window from workspace; this function is only invoked when the user clicks the close button.
 	 */
 	clickClose: function () {
-		FSBL.Clients.WindowClient.close(true);
+		FSBL.Clients.WindowClient.close({
+			removeFromWorkspace: true
+		});
 	},
 	/**
 	 * Toggles group membership. If two windows are snapped, and this button is clicked, they become part of the same group that can be moved around together.

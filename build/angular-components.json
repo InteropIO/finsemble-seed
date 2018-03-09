@@ -1,0 +1,6 @@
+[
+    {
+        "source": "./src/components/testAngular",
+        "output-directory": "../../../dist/components/testAngular"
+    }
+]

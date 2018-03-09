@@ -1,0 +1,96 @@
+.ciq-Fundamentals h3 {
+	border-bottom: 2px solid #65727B;
+	padding-top: 10px;
+	padding-bottom: 2px;
+	margin-bottom: 2px;
+	clear:both;
+}
+
+.ciq-Fundamentals table {
+	margin-bottom: 10px
+}
+
+.ciq-Fundamentals table th {
+	font-weight: bold;
+}
+
+.ciq-Fundamentals table td {
+	border:0px;
+	margin-bottom: 10px
+}
+
+.ciq-Fundamentals table tr td:first-child {
+  width: 50%;
+}
+
+.ciq-range {
+    margin-left: 15px;
+    width: 80%;
+    height: 4px;
+    margin-top: 8px;
+    position: relative;
+    background-color: transparent;
+    background-color: #ddd;
+    zoom: 1;
+    min-width: 80px;
+    max-width: 95%;
+    /* margin-right: 10px; */
+}
+
+/* line 247, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget-quote.scss */
+.ciq-range div {
+  position: absolute; }
+
+/* line 249, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget-quote.scss */
+.ciq-range-fill {
+  height: 4px;
+  background-color: transparent;
+  background-color: #4495D1;
+  zoom: 1;
+  left: 0; }
+
+/* line 255, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget-quote.scss */
+.ciq-range-tab {
+  right: 0;
+  top: -3px;
+  height: 10px;
+  width: 2px;
+  background-color: transparent;
+  background-color: #4495D1;
+  zoom: 1; }
+
+/* line 263, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget-quote.scss */
+.ciq-range-low,
+.ciq-range-high {
+  font-size: 10px;
+  font-weight: normal;
+  width: 1px;
+  text-align: center; }
+
+/* line 269, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget-quote.scss */
+.ciq-range-low {
+  left: 0%; }
+
+/* line 270, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget-quote.scss */
+.ciq-range-high {
+  right: 0%; }
+
+/* line 272, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget-quote.scss */
+.ciq-range span {
+  position: absolute;
+  display: block;
+  width: 50px;
+  top: -12px;
+  color: #CBD8E1; }
+
+/* line 280, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget-quote.scss */
+.ciq-range-low span {
+  left: -20px; }
+
+/* line 281, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget-quote.scss */
+.ciq-range-high span {
+  left: -30px; }
+
+.ciq-Fundamentals table tr:hover td {
+	background: inherit !important
+}

@@ -4,5 +4,5 @@
 */
 
 // Static vs Dynamic Toolbar
-import Toolbar from "./staticToolbar";
-//import Toolbar from "./dynamicToolbar";
+import Toolbar from "./dynamicToolbar";
+// import Toolbar from "./staticToolbar";

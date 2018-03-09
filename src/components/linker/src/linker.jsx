@@ -28,26 +28,26 @@ class Linker extends React.Component {
 		switch (changeEvent) {
 			case "state":
 				this.setState({
-					groups: LinkerStore.getGroups(),
+					channels: LinkerStore.getChannels(),
 					attachedWindowIdentifier: LinkerStore.getAttachedWindowIdentifier()
 				});
 		}
 	}
 	/**
-	 * Event handler when the user clicks on a colored rectangle, indicating that they want the attached window to join the group.
+	 * Event handler when the user clicks on a colored rectangle, indicating that they want the attached window to join the channel.
 	 *
-	 * @param {any} group
+	 * @param {any} channel
 	 * @param {any} active
 	 * @returns
 	 * @memberof Linker
 	 */
-	groupClicked(group, active) {
+	channelClicked(channel, active) {
 		var attachedWindowIdentifier = LinkerStore.getAttachedWindowIdentifier();
 		var attachedWindow = fin.desktop.Window.wrap(attachedWindowIdentifier.uuid, attachedWindowIdentifier.windowName);
 		attachedWindow.focus();
 
-		if (!active) return LinkerActions.addToGroup(group.name);
-		LinkerActions.removeFromGroup(group.name);
+		if (!active) return LinkerActions.linkToChannel(channel.name);
+		LinkerActions.unlinkFromChannel(channel.name);
 	}
 	/**
 	 * Hides window on blur.
@@ -63,13 +63,11 @@ class Linker extends React.Component {
 	 * @memberof Linker
 	 */
 	componentWillMount() {
-
 		this.finWindow.addEventListener("blurred", this.onWindowBlur.bind(this));
 		LinkerStore.addListener(["stateChanged"], this.onStoreChanged);
 		LinkerActions.windowMounted(); //windowMounted
-		//	FSBL.Clients.WindowClient.fitToDOM();
 		this.setState({
-			groups: LinkerStore.getGroups(),
+			channels: LinkerStore.getChannels(),
 			attachedWindowIdentifier: LinkerStore.getAttachedWindowIdentifier()
 		});
 	}
@@ -79,16 +77,16 @@ class Linker extends React.Component {
 	render() {
 		var self = this;
 		//Checkbox inside of a circle. Rendered in the center of a group if the attachedWindow is part of that group.
-		let activeGroupIndicator = (<i className="active-linker-group ff-check-circle"></i>);
+		let activeChannelIndicator = (<i className="active-linker-group ff-check-circle"></i>);
 		/**
-		 * This function iterates through all of the groups that have registered with the linkerClient. If the attachedWindow belongs to any of them, it renders a checkmark and a circle in the center of the group's rectangle.
+		 * This function iterates through all of the channels that have registered with the linkerClient. If the attachedWindow belongs to any of them, it renders a checkmark and a circle in the center of the channel's rectangle.
 		 **/
-		let groups = FSBL.Clients.LinkerClient.allGroups.map(function (item, index) {
-			//Boolean, whether the attachedWindow belongs to the group.
-			let activeGroup = self.state.groups.filter(function (g) { return g.name == item.name; }).length;
+		let channels = FSBL.Clients.LinkerClient.getAllChannels().map(function (item, index) {
+			//Boolean, whether the attachedWindow belongs to the channel.
+			let activeChannel = self.state.channels.filter(function (g) { return g.name == item.name; }).length;
 			let groupClass = `linkerGroup ${item.label}`;
 
-			if (activeGroup) {
+			if (activeChannel) {
 				groupClass += " active";
 			}
 
@@ -98,15 +96,15 @@ class Linker extends React.Component {
 			};
 			//returns a group row. It's essentially a colored rectangle.
 			return (<div key={item.name + index} className={groupClass} style={style} onClick={function () {
-				self.groupClicked(item, activeGroup);
+				self.channelClicked(item, activeChannel);
 			}}>
-				{activeGroup ? activeGroupIndicator : null}
+				{activeChannel ? activeChannelIndicator : null}
 			</div>);
 		});
 
 		return (
 			<div className="linkerContainer">
-				{groups}
+				{channels}
 			</div>
 		);
 	}

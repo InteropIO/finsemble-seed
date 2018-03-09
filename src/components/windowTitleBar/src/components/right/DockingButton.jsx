@@ -28,7 +28,8 @@ export default class DockingButton extends React.Component {
      *
      * @memberof DockingButton
      */
-	bindEventHandlers() {
+    bindEventHandlers() {
+        this.onClick = this.onClick.bind(this);
 		this.onStoreChanged = this.onStoreChanged.bind(this);
 		this.hoverAction = this.hoverAction.bind(this);
 	}
@@ -77,8 +78,16 @@ export default class DockingButton extends React.Component {
      *
      * @memberof DockingButton
      */
-	onClick() {
-		HeaderActions.toggleGroup();
+    onClick(e) {
+        if (this.state.dockingIcon === "ejector" && e.shiftKey) {
+            return HeaderActions.hyperFocus({
+                linkerChannel: null,
+                includeDockedGroups: true,
+                includeAppSuites: false
+            });
+        } else {
+    		HeaderActions.toggleGroup();
+        }
 	}
 
     /**
@@ -89,7 +98,7 @@ export default class DockingButton extends React.Component {
      */
 	render() {
 		let iconClass = "ff-";
-		let wrapClasses = "fsbl-icon cq-no-drag fsbl-icon-bordered";
+		let wrapClasses = "fsbl-icon cq-no-drag fsbl-icon-bordered docking-control";
 
 		iconClass += this.state.dockingIcon === "ejector" ? "attached" : "detached";
 		let toolTip = this.state.dockingIcon === "ejector" ? "Detach Window" : "Attach Windows";

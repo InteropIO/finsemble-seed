@@ -36,6 +36,16 @@
     transition: all .3s ease;
     opacity: 0.85;
 }
+
+.fsbl-share-scrim .error-message {
+    display: flex;
+    height: 100%;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    padding: 1em;
+    background-color:$scrim-negative-overlay;
+}
 .fsbl-share-scrim i {
     position: fixed;
     display: flex;

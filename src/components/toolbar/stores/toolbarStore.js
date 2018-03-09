@@ -4,6 +4,7 @@
 */
 import async from "async";
 import * as menuConfig from '../config.json';
+var keys = {};
 var storeOwner = false;
 /**
  *
@@ -21,16 +22,26 @@ class _ToolbarStore {
 	createStores(done, self) {
 		FSBL.Clients.DistributedStoreClient.createStore({ store: "Finsemble-ToolbarLocal-Store" }, function (err, store) {
 			self.Store = store;
-			FSBL.Clients.DistributedStoreClient.createStore({ store: "Finsemble-Toolbar-Store", global: true, values: { mainToolbar: fin.desktop.Window.getCurrent().name } }, function (err, store) {
-				self.GlobalStore = store;
-
-				store.getValue("mainToolbar", function (err, data) {
-					if (fin.desktop.Window.getCurrent().name === data) {
-						storeOwner = true;//until we put creator in by default
-					}
+			let monitors = {};
+			function getMonitor(monitorName, done) {
+				FSBL.Clients.LauncherClient.getMonitorInfo({ monitor: monitorName }, (err, monitorInfo) => {
+					monitors[monitorName] = monitorInfo;
 					done();
-				})
-			});
+				});
+			}
+			function createStore(err, result) {
+				let values = {};
+				if (monitors.mine.deviceId === monitors.primary.deviceId) {
+					values = { mainToolbar: fin.desktop.Window.getCurrent().name };
+					storeOwner = true;//until we put creator in by default
+				}
+
+				FSBL.Clients.DistributedStoreClient.createStore({ store: "Finsemble-Toolbar-Store", global: true, values: values }, function (err, store) {
+					self.GlobalStore = store;
+					done();
+				});
+			}
+			async.forEach(["mine", "primary"], getMonitor, createStore);
 		});
 	}
 	/**
@@ -39,6 +50,21 @@ class _ToolbarStore {
 	isStoreOwner() {
 		return storeOwner;
 	}
+	/**
+	 * Set up our hotkeys
+	 */
+	setupPinnedHotKeys(cb) {//return the number of the F key that is pressed
+		if (storeOwner) {
+			console.log("is store owner----")
+			//when ctrl+shift+3 is typed, we invoke the callback saying "3" was pressed, which spawns the 3rd component.
+			for (let i = 0; i < 10; i++) {
+				FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", `${i}`], () => {
+					if (i === 0) return cb(null, 10);
+					cb(null, i);
+				});
+			}
+		}
+	};
 
 	/**
 	 * Load the menus from the config.json. If there are no items in config.json, menus are loaded from the Finsemble Config `finsemble.menus` item.
@@ -49,14 +75,15 @@ class _ToolbarStore {
 	 * @memberof _ToolbarStore
 	 */
 	loadMenusFromConfig(done, self) {
-		console.log('in loadmenus', menuConfig);
 		if (Array.isArray(menuConfig) && menuConfig.length) {
 			self.Store.setValue({
 				field: "menus",
 				value: menuConfig
 			});
-			if (FSBL.Clients.ConfigClient.set) { FSBL.Clients.ConfigClient.set({ field: "finsemble.menus", value: menuConfig }); }
 			done();
+			if (FSBL.Clients.ConfigClient.setValue) {
+				FSBL.Clients.ConfigClient.setValue({ field: "finsemble.menus", value: menuConfig });
+			}
 		} else {
 			FSBL.Clients.ConfigClient.get({ field: "finsemble.menus" }, function (err, menus) {
 				self.Store.setValue({
@@ -95,6 +122,32 @@ class _ToolbarStore {
 	/**
 	 *
 	 *
+	 *
+	 */
+
+	setupHotkeys(cb) {
+		var self = this;
+		if (storeOwner) {
+			let keys = FSBL.Clients.HotkeyClient.keyMap;
+			FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.shift, keys.up], () => {
+				FSBL.Clients.LauncherClient.bringWindowsToFront()
+			});
+			FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.shift, keys.down], () => {
+				FSBL.Clients.WorkspaceClient.minimizeAll()
+			});
+			FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.shift, keys.f], () => {
+				console.log("hot key")
+				self.Store.setValue({ field: "searchActive", value: true });
+			});
+		}
+		return cb();
+	}
+	addListener(params, cb) {
+		this.Store.addListener(params, cb);
+	}
+	/**
+	 *
+	 *
 	 * @param {any} cb
 	 * @memberof _ToolbarStore
 	 */
@@ -111,6 +164,9 @@ class _ToolbarStore {
 				},
 				function (done) {
 					self.addListeners(done, self);
+				},
+				function (done) {
+					self.setupHotkeys(done);
 				},
 				function (done) {
 					self.listenForWorkspaceUpdates();

@@ -4,8 +4,7 @@
 This is the dialog we show when we need a name for a new workspace.  This component is used with `FSBL.Clients.DialogManager.open`. For more on how we've implemented dialogs, please read the [FinsembleDialog](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleDialog) control documentation.
 
 ### What it looks like
-<img src="Workspace_Name.png" width="50%" height="50%">
-
+![](./screenshot.png)
 
 ### Controls Used
 The controls used in this component are documented over in our Finsemble React Controls repo:

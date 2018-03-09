@@ -1,0 +1,32 @@
+import React from 'react';
+import General from './content/General';
+import Toolbar from './content/Toolbar';
+import Workspaces from './content/Workspaces';
+
+let content = {
+	general: General,
+	toolbar: Toolbar,
+	workspaces: Workspaces
+}
+export default class ContentSection extends React.Component {
+	constructor(props) {
+		super(props);
+	}
+
+	hideWindow() {
+		FSBL.Clients.DialogManager.hideModal();
+		FSBL.Clients.WindowClient.finsembleWindow.hide();
+	}
+
+	render() {
+		let Component = content[this.props.activeSection];
+		return (<div className="complex-menu-content-row">
+			<div className="complex-menu-header">
+				<div onClick={this.hideWindow} className="ff-close complex-menu-close">
+
+				</div>
+			</div>
+			<Component />
+		</div>)
+	}
+}

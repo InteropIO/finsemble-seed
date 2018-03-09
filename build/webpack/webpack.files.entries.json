@@ -42,5 +42,21 @@
 	"localStorageAdapter": {
 		"output": "adapters/LocalStorageAdapter",
 		"entry":"./src/adapters/LocalStorageAdapter.js"
-	}
+	},
+	"UserPreferences": {
+        "output": "components/userPreferences/UserPreferences",
+        "entry": "./src/components/userPreferences/src/app.jsx"
+    },
+    "appCatalog": {
+        "output": "components/appCatalog/appCatalog",
+        "entry": "./src/components/appCatalog/src/app.jsx"
+	},
+    "inputAndSelectionDialog": {
+        "output": "components/inputAndSelectionDialog/inputAndSelectionDialog",
+        "entry": "./src/components/inputAndSelectionDialog/src/app.jsx"
+	},
+    "searchMenu": {
+        "output": "components/searchMenu/searchMenu",
+        "entry": "./src/components/searchMenu/src/app.jsx"
+    }
 }

@@ -134,4 +134,5 @@ var LocalStorageAdapter = function (uuid) {
 
 LocalStorageAdapter.prototype = new BaseStorage();
 new LocalStorageAdapter("LocalStorageAdapter");
+
 module.exports = LocalStorageAdapter;//Allows us to get access to the unintialized object

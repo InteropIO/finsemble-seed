@@ -56,6 +56,7 @@ class SingleInputDialog extends React.Component {
 		let data = response.data;
 		this.setState({
 			inputValue: null,
+			hideModalOnClose: typeof data.hideModalOnClose === "undefined" ? true : data.hideModalOnClose,
 			inputLabel: data.inputLabel,
 			affirmativeResponseLabel: data.affirmativeResponseLabel || "Okay",
 			cancelResponseLabel: data.affirmativeResponseLabel || "Cancel",
@@ -79,10 +80,10 @@ class SingleInputDialog extends React.Component {
 	 * @memberof SingleInputDialog
 	 */
 	sendResponse(response) {
-
 		FSBL.Clients.DialogManager.respondToOpener({
 			value: this.state.inputValue,
-			choice: response
+			choice: response,
+			hideModalOnClose: this.state.hideModalOnClose
 		});
 
 		this.setState({
