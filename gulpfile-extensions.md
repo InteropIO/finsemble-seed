@@ -41,6 +41,10 @@ module.exports = taskMethods => {
     const gulp = require("gulp");
 
     Object.keys(taskMethods).forEach(key => {
+        if ((key === "pre") || (key === "post")) {
+            return;
+        }
+
         const func = taskMethods[key];
         taskMethods[key] = () => {
             console.log(`PRE: ${key}`);
@@ -51,9 +55,17 @@ module.exports = taskMethods => {
         }
     });
 
-    const post = taskMethods["post"];
+    const pre = taskMethods.pre
+    taskMethods.pre = done => {
+        console.log("PRE: pre");
+        pre(() => {
+            console.log("POST: pre");
+            done();
+        })
+    };
 
-    taskMethods["post"] = done => {
+    const post = taskMethods.post;
+    taskMethods.post = done => {
         console.log("Adding tasks");
 
         gulp.task("newTask", gulp.series("build"), () => { console.log("Do some other stuff here");});
