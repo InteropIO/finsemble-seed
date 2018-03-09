@@ -65,9 +65,12 @@
 		 * Builds files using webpack.
 		 */
 		buildWebpack: done => {
-			webpack(webpackFilesConfig, () => {
+			if (webpackServicesConfig) {
+				// Webpack config for sevices exists. Build it
 				webpack(webpackServicesConfig, done);
-			});
+			} else {
+				done();
+			}
 		},
 
 		/**
