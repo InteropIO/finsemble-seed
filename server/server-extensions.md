@@ -13,19 +13,26 @@ The `pre` and `post` functions do not take any arguments. The `updateServer` fun
     module.exports = {
         /**
          * Method called before starting the server.
+         * 
+         * @param done Function used to signal when pre function has finished. Can optionally pass an error message if 
+         * one occurs.
          */
-        pre: () => { console.log("pre server startup"); },
+        pre: done => { console.log("pre server startup"); done(); },
 
         /**
          * Method called after the server has started.
+         * 
+         * @param done Function used to signal when pre function has finished. Can optionally pass an error message if 
+         * one occurs.
          */
-        post: () => { console.log("post server startup"); },
+        post: done => { console.log("post server startup"); done(); },
 
         /**
          * Method called to update the server.
          * 
          * @param {express} app The express server.
-         * @param {function} cb The function to call once finished adding functionality to the server.
+         * @param {function} cb The function to call once finished adding functionality to the server. Can optionally 
+         * pass an error message if one occurs.
          */
         updateServer: (app, cb) => { console.log("modifying server"); cb(); }
     }
