@@ -99,11 +99,11 @@
 	const buildWebpack = done => {
 		webpack(webpackFilesConfig, () => {
 			if (webpackServicesConfig) {
-				// Webpack config for sevices exists. Build it
+				// Webpack config for services exists. Build it
 				webpack(webpackServicesConfig, done);
 			} else {
 				done();
-			}	
+			}
 		});
 	}
 
@@ -168,6 +168,8 @@
 			data => {
 				if (data === "serverStarted") {
 					done();
+				} else if (data === "serverFailed") {
+					process.exit(1);
 				}
 			});
 
