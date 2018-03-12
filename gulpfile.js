@@ -110,7 +110,7 @@
 					.pipe(gulp.dest(path.join(distPath, "services"))),
 				gulp
 					.src([path.join(__dirname, "node_modules", "@chartiq", "finsemble", "dist", "**", "*")])
-					.pipe(gulp.dest(path.join(__dirname, "finsemble")))
+					.pipe(gulp.dest(path.join(distPath, "finsemble")))
 			);
 		},
 

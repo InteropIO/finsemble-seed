@@ -92,19 +92,7 @@
 			return;
 		}
 
-		// For Assimilation
-		app.use("/hosted", express.static(path.join(__dirname, "..", "hosted"), options));
-
-		// Sample server root set to "/" -- must align with paths throughout 
-		// configs/openfin/manifest-local.json and configs/other/server-environment-startup.json
-
-		// Make the config public
-		app.use("/configs", express.static("./configs", options));
-
 		app.use("/", express.static(rootDir, options));
-
-		// Open up the Finsemble Components,services, and clients
-		app.use("/finsemble", express.static(moduleDirectory, options));
 
 		const handleError = e => {
 			if (e) {
