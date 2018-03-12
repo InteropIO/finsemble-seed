@@ -190,7 +190,10 @@ var Actions = {
 			});
 	},
 	spawnDocs() {
-		FSBL.Clients.LauncherClient.spawn("Finsemble Documentation");
+		fin.desktop.System.openUrlWithBrowser(
+			"https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html",
+			() => { console.log("Successfully launched documentation"); },
+			err => { console.error(`Failed to launch documentation:\n\terr`); });
 	}
 };
 
