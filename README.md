@@ -1,17 +1,22 @@
 For everything you need to know about the seed project, including a step-by-step process, check out the documentation on our [website](https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html).
 
+TODO: Update tutorials to point to _tutorials_ folder at the top level
+TODO: Move creating of components to tutorials and have URL to point to CSS
+
 # Finsemble Seed Project
 
-**Article overview goes here**
+TODO: Article overview goes here
 
 - (Project structure)[#project-structure]
 - (Extending _gulpfile.js_)[#extending-gulpfile-js]
 - (Extending server functionality)[#extending-server-functionality]
+- (Upgrade instructions)[#upgrade-instructions]
 
 ## Project structure
 
-**project structure description goes here**
+TODO: project structure description goes here
 ```
+TODO: Folder structure tree
 ```
 
 ## Extending _gulpfile.js_
@@ -141,3 +146,7 @@ The `pre` and `post` functions do not take any arguments. The `updateServer` fun
     }
 })(module);
 ```
+
+## Upgrade instructions
+
+TODO: Write section on upgrading from previous seed project
