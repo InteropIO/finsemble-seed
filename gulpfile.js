@@ -37,13 +37,15 @@
 	// If you specify environment variables to child_process, it overwrites all environment variables, including
 	// PATH. So, copy based on our existing env variables.
 	const env = process.env;
-	if (!env.PORT) {
-		env.PORT = startupConfig.dev.serverPort;
-	}
 
 	if (!env.NODE_ENV) {
 		env.NODE_ENV = "development";
 	}
+
+	if (!env.PORT) {
+		env.PORT = startupConfig[env.NODE_ENV].serverPort;
+	}
+
 	// #endregion
 
 	// #region Task Methods
