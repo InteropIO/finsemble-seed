@@ -105,9 +105,13 @@
 	color: $toolbar-primary-font-color;
 	align-content: center;
 	height: 39px;
-
 }
 
+//for the DnD wrapper
+.fullHeightFlex {
+	height: 100%;
+	display: flex;
+}
 .finsemble-toolbar.horizontal {
 	flex-direction: row;
 }
@@ -149,10 +153,11 @@
 
 .finsemble-toolbar-button {
 	display: table;
-    padding: 0 .4em 0 .4em;
+	padding: 0 .4em 0 .4em;
     height:100%;
 	border: 1px solid $toolbar-background-color;
 }
+
 .finsemble-toolbar-button-label {
     font-size: .95em;
     font-weight: 300;
@@ -164,17 +169,48 @@
 	align-content: center;
 }
 
-
-
 .finsemble-toolbar-button:hover {
 	background: $secondary-accent-color;
 	color: $secondary-hover-font-color;
-	border: 1px solid $light-hover-accent;
+	border: 1px solid transparent;
 	cursor:pointer;
+}
+@media screen and (max-device-width: 1400px) {
+	.finsemble-toolbar-workspace-button-label > .finsemble-toolbar-button-label{
+		width: 115px;
+	}
+}
+//Change the size of the workspace button label on higher-res monitors to give it more room.
+@media screen and (min-device-width: 1400px) {
+	.finsemble-toolbar-workspace-button-label > .finsemble-toolbar-button-label{
+		width: 130px;
+	}
+}
+.finsemble-toolbar-workspace-button-label > .finsemble-toolbar-button-label {
+	border: 1px solid #1D4970;
+	border-radius: 3px;
+	overflow: hidden;
+	text-align: center;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	display:block;
+	margin-top: 8px;
+	padding: 3px 6px;
+}
+
+.finsemble-toolbar-workspace-button-label > .finsemble-toolbar-button-label:hover {
+	border: 1px solid $primary-accent-color;
+}
+
+.finsemble-toolbar-workspace-button-label.finsemble-toolbar-button:hover {
+	background: none;
+	border: 1px solid transparent;
+	cursor: pointer;
 }
 
 .finsemble-toolbar-button-icon {
 	height: 100%;
+	padding-top: 2px;
 	display:table-cell;
 	vertical-align: middle;
 }
@@ -198,6 +234,11 @@
 	margin:0 .25em 0 .25em;
 }
 
+img.pinned-icon {
+	padding-top: 12px;
+	max-width: 17px;
+}
+
 .pinned-icon {
 	color: #4495d1;
 	font-size:26px;
@@ -205,7 +246,7 @@
 }
 
 .pinned-workspace-icon {
-	color: $workspace-icon-color;
+	color: $workspace-icon-color !important;
 }
 .toolbar-button-label-left {
 	order:-1;
@@ -214,9 +255,34 @@
 	order:1;
 }
 
+.finsemble-button-label {
+	padding-top: 4px;
+	overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
 .finsemble-toolbar-brand-logo {
 	width: $brand-logo-width;
 	height: $brand-logo-height;
 	margin: $brand-logo-margin;
-	padding: 0px !important;
+	padding: 2px 0px 0px 0px !important;
+}
+
+/* Special tweaks for pinned icons */
+
+.ff-document-2 {
+	padding-bottom: 2px;
+}
+
+.ff-chart-pie {
+	font-size: 24px;
+}
+
+.ff-insiders-2 {
+	padding-top: 3px;
+}
+
+.ff-company {
+	padding-bottom: 2px;
 }

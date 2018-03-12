@@ -63,7 +63,7 @@ module.exports = function () {
 			path: path.resolve(__dirname, '../../dist/'),
 			publicPath: 'http://localhost:3375/'
 		},
-		watch: true,
+		watch: false,
 		resolve: {
 			extensions: ['.js', '.jsx', '.json', 'scss', 'html'],
 			modules: [

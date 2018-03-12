@@ -2,7 +2,7 @@
 
 var webpack = require("webpack");
 var gulpWebpack = require('webpack-stream-fixed');
-var gulp = require('gulp-4.0.build');
+var gulp = require('gulp');
 var path = require('path');
 var chalk = require('chalk');
 function buildFiles() {

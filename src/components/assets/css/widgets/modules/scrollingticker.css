@@ -1,0 +1,90 @@
+.ciq-ScrollingTicker {
+	 background: #11629E;
+   width: auto !important;
+   overflow: hidden;
+    margin: 5px;
+    margin-right: 9px;
+}
+
+.ciq-ScrollingTicker .ciq-tick-wrapper {
+  display: block;
+  margin: 0px 20px;
+  height: 25px;
+  overflow: hidden;
+   }
+
+.ciq-ScrollingTicker .owl-stage-outer {
+  height: 20px;
+
+}
+
+.ciq-ScrollingTicker .owl-item {
+	padding-top: 3px;
+  text-align: center;
+}
+.ciq-ScrollingTicker .owl-dots {
+  display: none;
+}
+
+.ciq-ScrollingTicker .owl-item:hover {
+  /*padding: 0 10px;*/
+  cursor: pointer; }
+
+.ciq-ScrollingTicker .ciq-mkt-ticker div div.eod:after,
+.ciq-ScrollingTicker .ciq-mkt-ticker div div.delayed:after,
+.ciq-ScrollingTicker .ciq-mkt-ticker div div.realtime:after {
+  line-height: normal; }
+
+.ciq-ScrollingTicker .ciq-mkt-ticker div div div {
+  display: inline-block; }
+
+.ciq-ScrollingTicker .ciq-tick-name, .ciq-ScrollingTicker .ciq-tick-change, .ciq-ScrollingTicker .ciq-tick-price {
+  font-size: 14px;
+  margin: 0 2px;
+  color: #FFF;
+  float: left;}
+
+
+.ciq-ScrollingTicker .ciq-tick-change {
+  font-weight: 300; }
+
+.ciq-ScrollingTicker .ciq-tick-change.up {
+  color: #5ED040; }
+
+.ciq-ScrollingTicker .ciq-tick-change.down {
+  color: #FF5151; }
+
+
+.ciq-ScrollingTicker .ciq-overview .ciq-more-info {
+  /*top: 195px;*/
+  left: 0; }
+
+.ciq-ScrollingTicker .ciq-more-info .ciq-chart-thumb {
+  position: static; }
+
+/* Scroll Arrows */
+.ciq-ScrollingTicker .ciq-mkt-ticker .btn {
+  width: 20px;
+  height: 25px;
+  position: absolute;
+  top: 0px;
+  cursor: pointer;
+  opacity: 0.3;
+  filter: alpha(opacity=30);
+  -webkit-transition: opacity 0.5s;
+  -moz-transition: opacity 0.5s;
+  -ms-transition: opacity 0.5s;
+  -o-transition: opacity 0.5s;
+  transition: opacity 0.5s; }
+
+.ciq-ScrollingTicker .ciq-mkt-ticker .btn:hover {
+  opacity: 0.8;
+  filter: alpha(opacity=80); }
+
+.ciq-ScrollingTicker .ciq-mkt-ticker .btn.prev {
+  left: 0;
+  background: url(../img/ciq-widget-sprite.png) -80px -156px; }
+
+.ciq-ScrollingTicker .ciq-mkt-ticker .btn.next {
+  right: 0;
+  background: url(../img/ciq-widget-sprite.png) -120px -156px; }

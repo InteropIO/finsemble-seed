@@ -14,9 +14,9 @@ export default class LinkerGroups extends React.Component {
 		 * We assign in the constructor instead of via a require at the top of the file because the store is initialized asynchronously.
 		 */
 		windowTitleBarStore = getStore();
-		this.bindCorrectContext();
+        this.bindCorrectContext();
 		this.state = {
-			groups: FSBL.Clients.LinkerClient.getGroups().groups
+			channels: FSBL.Clients.LinkerClient.getState().channels
 		};
 	}
     /**
@@ -25,7 +25,7 @@ export default class LinkerGroups extends React.Component {
      * @memberof LinkerGroups
      */
 	bindCorrectContext() {
-		this.onGroupChange = this.onGroupChange.bind(this);
+		this.onChannelChange = this.onChannelChange.bind(this);
 	}
 
     /**
@@ -34,7 +34,7 @@ export default class LinkerGroups extends React.Component {
      * @memberof LinkerGroups
      */
 	componentWillMount() {
-		windowTitleBarStore.addListener({ field: "Linker.groups" }, this.onGroupChange);
+		windowTitleBarStore.addListener({ field: "Linker.channels" }, this.onChannelChange);
 	}
 
     /**
@@ -43,7 +43,7 @@ export default class LinkerGroups extends React.Component {
      * @memberof LinkerGroups
      */
 	componentWillUnmount() {
-		windowTitleBarStore.removeListener({ field: "Linker.groups" }, this.onGroupChange);
+		windowTitleBarStore.removeListener({ field: "Linker.channels" }, this.onChannelChange);
 	}
 
     /**
@@ -53,8 +53,8 @@ export default class LinkerGroups extends React.Component {
      * @param {any} response
      * @memberof LinkerGroups
      */
-	onGroupChange(err, response) {
-		this.setState({ groups: response.value });
+	onChannelChange(err, response) {
+		this.setState({ channels: response.value });
 	}
 
     /**
@@ -63,9 +63,25 @@ export default class LinkerGroups extends React.Component {
      * @param {any} newState
      * @memberof LinkerGroups
      */
-	onStoreChanged(newState) {
+    onStoreChanged(newState) {
+        console.log("store changed ", newState);
 		this.setState(newState);
-	}
+    }
+
+    onClick(e, channel) {
+        if (e.shiftKey) {
+            //leaves any docking group.
+            return HeaderActions.hyperFocus({
+                linkerChannel: channel,
+                includeDockedGroups: true,
+                includeAppSuites: false
+            });
+        }
+        FSBL.Clients.LinkerClient.bringAllToFront({
+            channel: channel,
+            restoreWindows: true
+        });
+    }
 
     /**
      * Render method.
@@ -75,19 +91,19 @@ export default class LinkerGroups extends React.Component {
      */
 	render() {
 		let self = this;
-		if (!this.state.groups) {
+		if (!this.state.channels) {
 			return (<div className="linker-groups"></div>);
 		}
 
         /**
-         * Iterate through the groups that the window belongs to, render a colored bar to denote group membership.
+         * Iterate through the channels that the window belongs to, render a colored bar to denote channel membership.
          */
-		let groups = self.state.groups.map(function (group, index) {
-			let classNames = `linker-group linker-${group.label}`;
-			return (<div key={group.name} className={classNames} style={{ background: group.color }}></div>);
+		let channels = self.state.channels.map(function (channel, index) {
+			let classNames = `linker-group linker-${channel.label}`;
+            return (<div key={channel.name} className={classNames} style={{ background: channel.color }} onMouseUp={function (e) { self.onClick(e, channel.name) }}></div>);
 		});
 		return (<div className="linker-groups">
-            {groups}
+            {channels}
         </div>);
 	}
 }

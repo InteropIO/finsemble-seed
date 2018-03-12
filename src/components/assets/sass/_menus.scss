@@ -3,7 +3,7 @@
 @import '_variablesMenus';
 body.menu {
 	margin:0px;
-	font-family: Roboto;
+	font-family: 'Roboto';
 	font-weight:300;
 	overflow-y:hidden;
 	overflow-x:hidden;
@@ -86,15 +86,44 @@ body.menu {
 
 .menu-item-action {
 	display:flex;
-	padding: 0em .25em 0em .25em;
+	padding: 0em .15em;
 }
 
-.finsemble-item-pinned, .ff-pin:hover {
-	color:$primary-accent-color;
+.ff-pin, .ff-delete {
+	margin-top: 1px;
+	padding-top: 5px;
+	width: 25px;
+	text-align: center;
+	border: 1px solid transparent;
+  }
+
+.ff-pin:hover {
+	color:black;
+	width: 25px;
+	border: 1px solid $primary-accent-color;
+	border-radius: 4px;
 }
 
-.app-launcher-delete:hover {
-	color: $negative-action-color;
+.finsemble-item-pinned {
+	color: white;
+	width: 25px;
+	background-color: $primary-accent-color;
+//	border: 1px solid transparent;
+	border-radius: 4px;
+}
+
+.finsemble-item-pinned:hover {
+	color: white;
+	width:25px;
+	background-color: #0287DE;
+//	border: 1px solid transparent;
+	border-radius: 4px;
+}
+
+.ff-delete:hover {
+	color: white;
+	background-color: #EE5C5C;
+	border-radius: 4px;
 }
 
 /*
@@ -103,11 +132,7 @@ body.menu {
 }
 */
 
-.ff-pin {
-  margin-top: 1px;
-}
-
-.ff-new-workspace {
+.ff-new-workspace, .ff-save-1, .ff-saveas-1, .ff-settings, .ff-home {
 	padding-right: 7px;
 	margin-top: 2px;
 }

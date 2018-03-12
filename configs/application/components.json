@@ -124,7 +124,7 @@
 				"top": "center",
 				"left": "center",
 				"width": 400,
-				"height": 400
+				"height": 370
 			},
 			"component": {
 				"inject": false,
@@ -142,9 +142,7 @@
 						"launchableByUser": true
 					},
 					"Window Manager": {
-						"FSBLHeader": {
-							"hideClose": true
-						},
+						"FSBLHeader": true,
 						"persistWindowState": true
 					},
 					"Toolbar": {
@@ -152,6 +150,83 @@
 					}
 				}
 			}
+		},
+		"Notepad": {
+			"window": {
+				"id": "Notepad",
+				"native": true,
+				"path": "notepad.exe",
+				"url": "",
+				"defaultHeight": 600,
+				"autoShow": true,
+				"alwaysOnTop": false,
+				"resizable": true,
+				"showTaskbarIcon": false,
+				"contextMenu": true,
+				"addToWorkspace": true
+			},
+			"component": {
+				"spawnOnHotkey": ["ctrl", "alt", "n"]
+			},
+			"foreign": {
+				"services": {
+					"workspaceService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"persistWindowState": false,
+						"FSBLHeader": true
+					},
+					"Toolbar": {
+						"iconURL": "$applicationRoot/components/assets/img/notepad.png"
+					}
+				}
+			}
+		},
+		"UserPreferences": {
+			"window": {
+				"url": "$applicationRoot/components/userPreferences/UserPreferences.html",
+				"frame": false,
+				"top": "center",
+				"left": "center",
+				"width": 800,
+				"height": 600,
+				"options": {
+					"autoShow": false,
+					"resizable": false,
+					"alwaysOnTop": true
+				}
+			},
+			"component": {
+				"category": "system",
+				"spawnOnStartup": true
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"canGroup": false,
+						"isArrangable": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"FSBLHeader": false,
+						"persistWindowState": true
+					},
+					"Toolbar": {
+						"iconClass": "UserPreferences"
+					}
+				}
+			}
 		}
 	}
 }
+

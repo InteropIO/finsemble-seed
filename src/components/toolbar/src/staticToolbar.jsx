@@ -1,0 +1,63 @@
+/*!
+* Copyright 2017 by ChartIQ, Inc.
+* All rights reserved.
+*/
+import React from "react";
+import ReactDOM from "react-dom";
+import ToolbarStore from "../stores/toolbarStore";
+
+// Toolbar Components
+import { FinsembleToolbar, FinsembleButton, FinsembleToolbarSection, FinsembleToolbarSeparator } from "@chartiq/finsemble-react-controls";
+
+// External Components to show on Toolbar
+import AutoArrange from "../components/AutoArrange";
+import MinimizeAll from "../components/MinimizeAll";
+
+import BringToFront from "../components/BringToFront";
+import WorkspaceLauncherButton from "../components/WorkspaceLauncherButton";
+import WorkspaceMenuOpener from "../components/WorkspaceMenuOpener"
+// Styles
+import "../../assets/css/finsemble.scss";
+import "../../assets/css/finfont.css";
+import "../toolbar.scss";
+
+var pinnableItems = {
+	"componentLauncher": FinsembleButton,
+	"workspaceSwitcher": WorkspaceLauncherButton
+};
+
+export default class Toolbar extends React.Component {
+	constructor(props) {
+		super(props);
+	}
+
+	componentDidMount() {
+		fin.desktop.Window.getCurrent().bringToFront();
+	}
+
+	render() {
+		return (<FinsembleToolbar>
+			<FinsembleToolbarSection name="left" className="left">
+				<FinsembleButton preSpawn={true} buttonType={["MenuLauncher", "Toolbar"]} iconClasses="finsemble-toolbar-brand-logo" icon="https://finsemble.chartiq.com/components/assets/img/Finsemble_Taskbar_Icon.png" menuType="File Menu" />
+				<WorkspaceMenuOpener  />
+				<FinsembleButton preSpawn={true} buttonType={["MenuLauncher", "Toolbar"]} label="Apps" menuType="App Launcher" />
+				<FinsembleToolbarSeparator />
+			</FinsembleToolbarSection>
+			<FinsembleToolbarSection name="center" handlePins={true} className="center" handleOverflow={true} pinnableItems={pinnableItems}></FinsembleToolbarSection>
+			<FinsembleToolbarSection name="right" className="right">
+				<FinsembleToolbarSeparator />
+				<AutoArrange />
+				<MinimizeAll />
+				<BringToFront />
+			</FinsembleToolbarSection>
+		</FinsembleToolbar>);
+	}
+}
+
+FSBL.addEventListener("onReady", function () {
+	ToolbarStore.initialize(function () {
+		ReactDOM.render(
+			<Toolbar />
+			, document.getElementById("toolbar_parent"));
+	});
+});
