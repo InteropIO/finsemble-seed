@@ -33,6 +33,7 @@
 	// #region Script variables
 	let distPath = path.join(__dirname, "dist");
 	let srcPath = path.join(__dirname, "src");
+	let watchClose;
 
 	// If you specify environment variables to child_process, it overwrites all environment variables, including
 	// PATH. So, copy based on our existing env variables.
@@ -126,6 +127,7 @@
 						console.error(errorOutColor(err));
 					}
 
+					if (watchClose) watchClose();
 					process.exit();
 				});
 			});
@@ -136,6 +138,7 @@
 				})
 				.then(() => {
 					// OpenFin has closed so exit gulpfile
+					if (watchClose) watchClose();
 					process.exit();
 				});
 
@@ -202,7 +205,8 @@
 		/** 
 		 * Watches files for changes to fire off copies and builds.
 		 */
-		watchFiles: () => {
+		watchFiles: done => {
+			watchClose = done;
 			return merge(
 				watch(path.join(srcPath, "components", "assets", "**", "*"), {}, this.buildSass),
 				watch(path.join(srcPath, "**", "*.css"), { ignoreInitial: true })
