@@ -42,7 +42,7 @@
 	}
 
 	if (!env.NODE_ENV) {
-		env.NODE_ENV = "dev";
+		env.NODE_ENV = "development";
 	}
 	// #endregion
 

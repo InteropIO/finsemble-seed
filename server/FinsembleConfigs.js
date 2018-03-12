@@ -4,7 +4,7 @@ var path = require('path');
 var urlJoin = require('url-join');
 // //Gets your hostname/port/etc for your application.
 var StartupConfig = require("../configs/startup");
-var env = process.env.NODE_ENV ? process.env.NODE_ENV : "local";
+var env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 Finsemble.setUUID("Finsemble" + "-" + env);
 var hostname = StartupConfig[env].clientRoute;
 

@@ -10,7 +10,7 @@ These are the methods defined in the `taskMethods` object:
 - `launchApplication` - Launches the Finsemble application.
 - `post` - Called after all of the tasks have been defined.
 - `pre` - Called before all of the tasks have been defeined.
-- `startServer` - Starts the server based on `NODE_ENV` environment variable ("dev" or "prod").
+- `startServer` - Starts the server based on `NODE_ENV` environment variable ("development" or "production").
 - `watchFiles` - Watches files for changes to kick off `buildSASS` or `buildWebpack`.
 
 These are the tasks defined in _gulpfile.js_:
