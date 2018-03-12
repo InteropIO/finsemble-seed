@@ -2,7 +2,9 @@
 const path = require('path');
 const glob_entries = require('webpack-glob-entries');
 const webpack = require("webpack")
-const componentsToBuild = require('./webpack.files.entries.json');
+const componentsToBuild = Object.assign(
+	require('./webpack.default.files.entries.json'),
+	require('./webpack.files.entries.json'));
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const defaultConfig = require("./defaultWebpackConfig");
 var enableHMR = true,//Enable Hot Reload

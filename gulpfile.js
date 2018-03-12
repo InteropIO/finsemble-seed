@@ -23,7 +23,9 @@
 	// #endregion
 
 	// #region Constants
-	const componentsToBuild = require("./build/webpack/webpack.files.entries");
+	const componentsToBuild = Object.assign(
+		require('./build/webpack/webpack.default.files.entries.json'),
+		require('./build/webpack/webpack.files.entries.json'));
 	const startupConfig = require("./configs/other/server-environment-startup");
 
 	chalk.enabled = true;
@@ -33,6 +35,7 @@
 	// #region Script variables
 	let distPath = path.join(__dirname, "dist");
 	let srcPath = path.join(__dirname, "src");
+	let srcDefaultPath = path.join(__dirname, "srcDefault");
 	let watchClose;
 
 	// If you specify environment variables to child_process, it overwrites all environment variables, including
@@ -88,6 +91,7 @@
 		 */
 		copyStaticFiles: () => {
 			const source = [
+				path.join(srcDefaultPath, "components", "**", "*"),
 				path.join(srcPath, "components", "**", "*"),
 				"!" + path.join(srcPath, "components", "**", "*.jsx")];
 
