@@ -21,7 +21,7 @@ The toolbar supports a "right," "left," and "center" section and those are creat
 
 It also uses a customized Finsemble Button as the `overflowMenuControl` for the "center" section of the Finsemble Toolbar Section.
 
-Another customized Finsemble Button, the Workspace Launcher Button, provides a way to switch to a specific workspace. The click event for the button dispatches a message to the [Workspace Management Menu](https://github.com/ChartIQ/finsemble-seed/tree/master/src/samples/workspaceManagementMenu) for switching workspaces.
+Another customized Finsemble Button, the Workspace Launcher Button, provides a way to switch to a specific workspace. The click event for the button dispatches a message to the [Workspace Management Menu](https://github.com/ChartIQ/finsemble-seed/tree/master/srcDefault/components/workspaceManagementMenu) for switching workspaces.
 
 ## Config and Dynamic Updates
 
