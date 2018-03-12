@@ -10,7 +10,7 @@
 	const gulp = require("gulp");
 	const sass = require("gulp-sass");
 	const watch = require("gulp-watch");
-	const shell = require('shelljs');
+	const shell = require("shelljs");
 	const merge = require("merge-stream");
 	const launcher = require("openfin-launcher");
 	const path = require("path");
@@ -24,6 +24,13 @@
 	// #region Constants
 	const componentsToBuild = require("./build/webpack/webpack.files.entries");
 	const startupConfig = require("./configs/other/server-environment-startup");
+	let angularComponents;
+	try {
+		angularComponents = require("./build/angular-components.json");
+	} catch (ex) {
+		console.log("No Angular component configuration found");
+		angularComponents = null;
+	}
 
 	chalk.enabled = true;
 	const errorOutColor = chalk.red;
@@ -67,13 +74,11 @@
 		}
 
 		//Dont copy files built by angular
-		try {
-			var angularComponents = require('./build/angular-components.json');
-			var arrayLength = angularComponents.length;
-			for (var i=0; i < arrayLength; i++) {
-				source.push(path.join('!' + __dirname, angularComponents[i].source, '**'));
-			}
-		} catch (ex) {}
+		if (angularComponents) {
+			angularComponents.forEach(comp => {
+				source.push("!" + path.join(__dirname, comp.source, '**'));
+			});
+		}
 
 		return merge(
 			gulp
@@ -100,13 +105,11 @@
 		const source = [path.join(srcPath, "components", "**", "*.scss")];
 		
 		//Dont build files built by angular
-		try {
-			var angularComponents = require('./build/angular-components.json');
-			var arrayLength = angularComponents.length;
-			for (var i=0; i < arrayLength; i++) {
-				source.push(path.join('!' + __dirname, angularComponents[i].source, '**'));
-			}
-		} catch (ex) {}
+		if (angularComponents) {
+			angularComponents.forEach(comp => {
+				source.push(path.join('!' + __dirname, comp.source, '**'));
+			});
+		}
 
 		return gulp
 			.src(source)
@@ -129,7 +132,7 @@
 	}
 
 	const buildAngular = done => {
-		var processRow = function (row) {
+		let processRow = row => {
 			var compName = row.source.split("/").pop();
 			var cwd = path.join(__dirname, row.source);
 			var outputPath = path.join(__dirname, row.source, row["output-directory"]);
@@ -138,29 +141,21 @@
 			// switch to components folder
 			var dir = shell.pwd();
 			shell.cd(cwd);
-			console.log('Executing: ' + command + "\nin directory: " + cwd);
+			console.log(`Executing: ${command}\nin directory: ${cwd}`);
 	
 			var output = shell.exec(command);
-			console.log('Built Angular Component, exit code = ' + output.code);
+			console.log(`Built Angular Component, exit code = ${output.code}`);
 			shell.cd(dir);
 		};
-	
-		try {
-			var angularComponents = require('./build/angular-components.json');
-		} catch (ex) {
-			console.log("No Angular component configuration found");
-		}
 
-		var arrayLength = angularComponents.length;
-		if (arrayLength > 0) {
-			for (var i=0; i < arrayLength; i++) {
-				processRow(angularComponents[i]);
-			}
+		if (angularComponents) {
+			angularComponents.forEach(comp => {
+				processRow(comp);
+			});
 		} else {
 			console.log("No Angular components found to build");
 		}
 		
-
 		done();
 	}
 	
