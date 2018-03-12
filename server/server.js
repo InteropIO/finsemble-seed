@@ -126,7 +126,7 @@
 						});	
 					};
 
-					if (process.env.NODE_ENV === "dev") {
+					if (process.env.NODE_ENV === "development") {
 						// Setup hot reload in the dev environment
 						console.log(outputColor("start hot reload"));
 						hotReload(app, server, done);

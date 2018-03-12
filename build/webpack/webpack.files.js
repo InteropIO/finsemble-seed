@@ -13,7 +13,7 @@ var enableHMR = true,//Enable Hot Reload
 	componentIgnores = [],
 	webpackConfigs = [];//Our list of webpack configs list
 
-if (!process.env.NODE_ENV) {// if we are in production turn off hotreload
+if (process.env.NODE_ENV === "production") {// if we are in production turn off hotreload
 	enableHMR = false;
 }
 
