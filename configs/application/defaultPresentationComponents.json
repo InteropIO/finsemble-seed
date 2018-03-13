@@ -1,46 +1,119 @@
 {
-	"comment": "Houses config for default presentation components.",
+	"comment": "Sample component config, including app launcher, menus, etc.",
 	"components": {
-		"Finsemble Documentation": {
+		"App Launcher": {
 			"window": {
-				"url": "http://documentation.chartiq.com/finsemble",
-				"left": "center",
-				"top": "center",
-				"height": 800,
-				"width": 1000
+				"url": "$applicationRoot/components/appLauncher/appLauncher.html",
+				"top": 32,
+				"left": 45,
+				"width": 350,
+				"height": 330,
+				"ephemeral": true,
+				"options": {
+					"autoShow": false
+				}
 			},
-			"component": {},
+			"component": {
+				"allowAdhoc": "@TODO",
+				"spawnOnStartup": false,
+				"category": "system"
+			},
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": true
+						"isArrangable": false
 					}
 				},
 				"components": {
-					"App Launcher": {
-						"launchableByUser": false
-					},
 					"Window Manager": {
 						"persistWindowState": false,
-						"FSBLHeader": true,
-						"showLinker": false
+						"FSBLHeader": false
 					}
 				}
 			}
 		},
-		"Getting Started Tutorial": {
+		"searchMenu": {
 			"window": {
-				"url": "https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html",
-				"height": 800,
-				"width": 1000
+				"url": "$applicationRoot/components/searchMenu/searchMenu.html",
+				"top": 32,
+				"left": 45,
+				"width": 350,
+				"height": 330,
+				"ephemeral": true,
+				"options": {
+					"autoShow": false
+				}
 			},
 			"component": {
-				"spawnOnStartup": false
+				"allowAdhoc": "@TODO",
+				"spawnOnStartup": false,
+				"category": "system"
 			},
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": true
+						"isArrangable": false
+					}
+				},
+				"components": {
+					"Window Manager": {
+						"persistWindowState": false,
+						"FSBLHeader": false
+					}
+				}
+			}
+		},
+		"Overflow Menu": {
+			"window": {
+				"url": "$applicationRoot/components/overflowMenu/overflowMenu.html",
+				"top": 32,
+				"left": 45,
+				"width": 350,
+				"height": 330,
+				"ephemeral": true,
+				"options": {
+					"autoShow": false
+				}
+			},
+			"component": {
+				"allowAdhoc": "@TODO",
+				"spawnOnStartup": false,
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": false
+					}
+				},
+				"components": {
+					"Window Manager": {
+						"persistWindowState": false,
+						"FSBLHeader": false
+					}
+				}
+			}
+		},
+		"Workspace Management Menu": {
+			"window": {
+				"url": "$applicationRoot/components/workspaceManagementMenu/workspaceManagementMenu.html",
+				"top": 32,
+				"left": 45,
+				"width": 310,
+				"height": 330,
+				"ephemeral": true,
+				"options": {
+					"autoShow": false
+				}
+			},
+			"component": {
+				"spawnOnStartup": false,
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": false
 					}
 				},
 				"components": {
@@ -48,9 +121,150 @@
 						"launchableByUser": false
 					},
 					"Window Manager": {
-						"persistWindowState": true,
-						"FSBLHeader": true,
-						"showLinker": false
+						"FSBLHeader": false,
+						"persistWindowState": false
+					}
+				}
+			}
+		},
+		"linkerWindow": {
+			"window": {
+				"url": "$applicationRoot/components/linker/linker.html",
+				"width": 65,
+				"height": 163,
+				"ephemeral": true,
+				"options": {
+					"autoShow": false,
+					"name": "Finsemble Linker Window"
+				}
+			},
+			"component": {
+				"spawnOnStartup": true,
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"FSBLHeader": false,
+						"persistWindowState": false
+					}
+				}
+			}
+		},
+		"File Menu": {
+			"window": {
+				"url": "$applicationRoot/components/fileMenu/fileMenu.html?",
+				"top": 0,
+				"left": 100,
+				"width": 125,
+				"height": 80,
+				"ephemeral": true,
+				"options": {
+					"autoShow": false
+				}
+			},
+			"component": {
+				"title": "@TODO",
+				"menuItems": [
+					"@TODO config not yet implemented",
+					{
+						"label": "Documentation",
+						"url": "https://documentation.chartiq.com/finsemble"
+					},
+					{
+						"label": "Quit",
+						"method": "quitApplication"
+					}
+				],
+				"spawnOnStartup": false,
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"FSBLHeader": false,
+						"persistWindowState": false
+					}
+				}
+			}
+		},
+		"Window Context Menu": {
+			"window": {
+				"url": "$applicationRoot/components/windowContextMenu/windowContextMenu.html",
+				"top": 0,
+				"left": 100,
+				"width": 125,
+				"height": 80,
+				"ephemeral": true,
+				"options": {
+					"autoShow": false
+				}
+			},
+			"component": {
+				"spawnOnStartup": true,
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"FSBLHeader": false,
+						"persistWindowState": false
+					}
+				}
+			}
+		},
+		"AdhocComponentForm": {
+			"window": {
+				"url": "$applicationRoot/components/adhocComponentForm/adhocComponentForm.html",
+				"width": 350,
+				"height": 175,
+				"position": "absolute",
+				"top": "center",
+				"left": "center",
+				"options": {
+					"resizable": false
+				}
+			},
+			"component": {
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"FSBLHeader": false,
+						"persistWindowState": false
 					}
 				}
 			}
@@ -82,6 +296,206 @@
 					"Window Manager": {
 						"FSBLHeader": false,
 						"persistWindowState": false
+					}
+				}
+			}
+		},
+		"yesNo": {
+			"window": {
+				"url": "$applicationRoot/components/yesNoDialog/YesNoDialog.html",
+				"width": 350,
+				"height": 175,
+				"position": "absolute",
+				"top": "center",
+				"left": "center",
+				"options": {
+					"resizable": false,
+					"autoShow": false,
+					"alwaysOnTop": true
+				}
+			},
+			"component": {
+				"category": "system",
+				"spawnOnStartup": true
+			},
+			"foreign": {
+				"clients": {
+					"dialogManager": {
+						"isDialog": true
+					}
+				},
+				"services": {
+					"dockingService": {
+						"isArrangable": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"FSBLHeader": false,
+						"persistWindowState": false
+					}
+				}
+			}
+		},
+		"singleInput": {
+			"window": {
+				"url": "$applicationRoot/components/singleInputDialog/singleInputDialog.html",
+				"width": 350,
+				"height": 175,
+				"position": "absolute",
+				"top": "center",
+				"left": "center",
+				"options": {
+					"resizable": false,
+					"autoShow": false,
+					"alwaysOnTop": true
+				}
+			},
+			"component": {
+				"category": "system",
+				"spawnOnStartup": true
+			},
+			"foreign": {
+				"clients": {
+					"dialogManager": {
+						"isDialog": true
+					}
+				},
+				"services": {
+					"dockingService": {
+						"isArrangable": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"FSBLHeader": false,
+						"persistWindowState": false
+					}
+				}
+			}
+		},
+		"inputAndSelection": {
+			"window": {
+				"url": "$applicationRoot/components/inputAndSelectionDialog/inputAndSelectionDialog.html",
+				"width": 587,
+				"height": 358,
+				"position": "absolute",
+				"top": "center",
+				"left": "center",
+				"options": {
+					"resizable": false,
+					"autoShow": false,
+					"alwaysOnTop": true
+				}
+			},
+			"component": {
+				"category": "system",
+				"spawnOnStartup": true
+			},
+			"foreign": {
+				"clients": {
+					"dialogManager": {
+						"isDialog": true
+					}
+				},
+				"services": {
+					"dockingService": {
+						"isArrangable": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"FSBLHeader": false,
+						"persistWindowState": false
+					}
+				}
+			}
+		},
+		"dialogModal": {
+			"window": {
+				"url": "$applicationRoot/components/dialogModal/dialogModal.html",
+				"width": 1,
+				"height": 1,
+				"position": "absolute",
+				"top": 0,
+				"left": 0,
+				"options": {
+					"opacity": 0.4,
+					"resizable": false,
+					"autoShow": true,
+					"showTaskbarIcon": false
+				}
+			},
+			"component": {
+				"category": "system",
+				"spawnOnStartup": true
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"FSBLHeader": false,
+						"persistWindowState": false
+					}
+				}
+			}
+		},
+		"Toolbar": {
+			"window": {
+				"id": "launcher",
+				"url": "$applicationRoot/components/toolbar/toolbar.html",
+				"height": 40,
+				"top": 0,
+				"left": 0,
+				"right": 0,
+				"position": "available",
+				"claimMonitorSpace": true,
+				"addToWorkspace": false,
+				"options": {
+					"contextMenu": false,
+					"resizable": false,
+					"showTaskbarIcon": false,
+					"resizeRegion": {
+						"bottomRightCorner": 0,
+						"size": 0
+					}
+				}
+			},
+			"component": {
+				"category": "system",
+				"spawnOnStartup": true,
+				"spawnOnAllMonitors": true,
+				"canMinimize": false
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"persistWindowState": false,
+						"FSBLHeader": false
 					}
 				}
 			}
