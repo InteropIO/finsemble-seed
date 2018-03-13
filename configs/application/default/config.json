@@ -106,10 +106,10 @@
 		]
 	},
 	"importConfig": [
-		"$applicationRoot/configs/application/defaultPresentationComponents.json",
-		"$applicationRoot/configs/application/defaultComponents.json",
-		"$applicationRoot/configs/other/defaultWorkspaces.json",
-		"$applicationRoot/configs/other/defaultWorkspaceTemplates.json",
+		"$applicationRoot/configs/application/default/presentationComponents.json",
+		"$applicationRoot/configs/application/default/components.json",
+		"$applicationRoot/configs/application/default/workspaces.json",
+		"$applicationRoot/configs/application/default/workspaceTemplates.json",
 		"$applicationRoot/configs/application/config.json",
 		"$applicationRoot/configs/application/services.json",
 		"$applicationRoot/configs/application/components.json"
