@@ -27,6 +27,7 @@
     "babel-preset-stage-0": "^6.16.0",
     "babel-preset-stage-1": "^6.16.0",
     "body-parser": "^1.18.2",
+    "cookie-parser": "1.4.3",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.28.7",
     "death": "^1.1.0",
