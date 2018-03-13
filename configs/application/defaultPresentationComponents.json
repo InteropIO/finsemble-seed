@@ -1,0 +1,158 @@
+{
+	"comment": "Houses config for default presentation components.",
+	"components": {
+		"Finsemble Documentation": {
+			"window": {
+				"url": "http://documentation.chartiq.com/finsemble",
+				"left": "center",
+				"top": "center",
+				"height": 800,
+				"width": 1000
+			},
+			"component": {},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"persistWindowState": false,
+						"FSBLHeader": true,
+						"showLinker": false
+					}
+				}
+			}
+		},
+		"Getting Started Tutorial": {
+			"window": {
+				"url": "https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html",
+				"height": 800,
+				"width": 1000
+			},
+			"component": {
+				"spawnOnStartup": false
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"persistWindowState": true,
+						"FSBLHeader": true,
+						"showLinker": false
+					}
+				}
+			}
+		},
+		"Docking Move Mask": {
+			"window": {
+				"url": "$applicationRoot/components/dockingGroupMask/dockingGroupMask.html",
+				"frame": false,
+				"resizable": false,
+				"showTaskbarIcon": false,
+				"options": {
+					"opacity": 0.7,
+					"autoShow": false
+				}
+			},
+			"component": {
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"FSBLHeader": false,
+						"persistWindowState": false
+					}
+				}
+			}
+		},
+		"windowTitleBar": {
+			"window": {
+				"url": "$applicationRoot/components/windowTitleBar/windowTitleBar.js",
+				"top": "center",
+				"left": "center",
+				"width": 358,
+				"height": 458,
+				"ephemeral": true
+			},
+			"component": {
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"FSBLHeader": false,
+						"persistWindowState": false
+					}
+				}
+			}
+		},
+		"UserPreferences": {
+			"window": {
+				"url": "$applicationRoot/components/userPreferences/UserPreferences.html",
+				"frame": false,
+				"top": "center",
+				"left": "center",
+				"width": 800,
+				"height": 600,
+				"options": {
+					"autoShow": false,
+					"resizable": false,
+					"alwaysOnTop": true
+				}
+			},
+			"component": {
+				"category": "system",
+				"spawnOnStartup": true
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"canGroup": false,
+						"isArrangable": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"FSBLHeader": false,
+						"persistWindowState": true
+					},
+					"Toolbar": {
+						"iconClass": "UserPreferences"
+					}
+				}
+			}
+		}
+	}
+}
