@@ -2,6 +2,9 @@
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
+
+//This file is referenced in the environment switching tutorial
+
 import { EventEmitter } from "events";
 
 const constants = {
@@ -190,7 +193,10 @@ var Actions = {
 			});
 	},
 	spawnDocs() {
-		FSBL.Clients.LauncherClient.spawn("Finsemble Documentation");
+		fin.desktop.System.openUrlWithBrowser(
+			"https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html",
+			() => { console.log("Successfully launched documentation"); },
+			err => { console.error(`Failed to launch documentation:\n\terr`); });
 	}
 };
 

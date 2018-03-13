@@ -21,7 +21,7 @@
         "alwaysOnTop": false
     },
     "runtime": {
-        "arguments": "--noerrdialogs  --v=1 --no-sandbox  --enable-crash-reporting",
+        "arguments": "--noerrdialogs  --v=4 --no-sandbox  --enable-crash-reporting",
         "version": "8.56.28.34"
     },
     "shortcut": {
