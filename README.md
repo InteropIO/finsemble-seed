@@ -1,11 +1,11 @@
 For everything you need to know about the seed project, including a step-by-step process, check out the documentation on our [website](https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html).
 
-TODO: Update tutorials to point to _tutorials_ folder at the top level
-TODO: Move creating of components to tutorials and have URL to point to CSS
+<!-- TODO: Update tutorials to point to _tutorials_ folder at the top level -->
+<!-- TODO: Move creating of components to tutorials and have URL to point to CSS -->
 
 # Finsemble Seed Project
 
-TODO: Article overview goes here
+This article lists and contents of the Finsemble seed project, how the seed project can be extended, and some information about upgrading from the previous seed project structure.
 
 - (Project structure)[#project-structure]
 - (Extending _gulpfile.js_)[#extending-gulpfile-js]
@@ -14,9 +14,100 @@ TODO: Article overview goes here
 
 ## Project structure
 
-TODO: project structure description goes here
+The Finsemble seed project provides some basic structure to help developers get up and running as quickly as possible. The seed project provides the basic skeleton for a Finsemble application that can be extended to suit your needs. It also includes some functionality to make development faster and easier, like a basic build process and hot reloading multiple single pages applications that make up your Finsemble application.
+
+- _gulpfile.js_ - The main gulp file for the project that includes the basic tasks used to build and run a Finsemble application for development
+- _gulpfile-extension.js_ (optional) - File that can be used to add/modify the functionality of the gulpfile. This file isn't included in the base seed project to prevent conflicts when upgrading the base project. See (Extending _gulpfile.js_)[#extending-gulpfile-js] for more information.
+- _build/webpack_ - Includes all of the files used by the seed project to build the application.
+    - _webpack.default.files.entries.json_ - The specifies the entry and output files for the files built for a default Finsemble application.
+    - _webpack.files.entries.json_ - The file where developer added files should be placed. This file is empty in the base Finsemble seed project to prevent merge conflicts when updating the seed project.
+- _configs/application_ - Contains all of the base configuration for the Finsemble application. _component.json_, _config.json_ and _services.json_ are empty and developer added configuration should go here. The files in this folder are merged together to build the application configuration. This configuration can be changed at run-time using [Dynamic Configuration](tutorials-dynamic-configuration.md).
+- _configs/openfin_ - Contains the [OpenFin application config](https://openfin.co/documentation/application-config/) used to start up the Finsemble application. The default manifest for development is included, and additional configurations can be placed in this folder.
+- _configs/other/server-environment-startup.json_ - Used to define the development and production server configurations used by the Finsemble application.
+- _server_ - Contains the server that hosts the build _dist_ folder for development purposes and includes hot reload in the development environment. 
+    - _server/server-extensions.js_ - Optional file that can be used to add functionality to the development server. See (Extending server functionality)[#extending-server-functionality].
+- _src_ - The folder where your Finsemble components should be placed for the Finsemble Build process.
+- _srcDefault_ - Includes the source for the default presentation elements included with the Finsemble seed project. These files can be extended as desired, but, if you do extend these components, we recommend you copy the folder to the _src_ directory to prevent merge conflicts when upgrading the seed project.
+    - _srcDefault/adapters_ - Contains an example Storage Adapter that saves data to local storage.
+    - _srcDefault/components/assets_ - Contains the SASS, CSS and images used to create the Finsemble application look and feel.
+- _tutorials_ - Contains the source for the components used by our [Getting started](tutorial-getting-started.md) tutorial.
+
+Project structure:
 ```
-TODO: Folder structure tree
+FINSEMBLE-SEED
+|   .gitignore
+|   gulpfile-extensions.md
+|   gulpfile.js
+|   package.json
+|   README.md
+|   
++---build
+|   \---webpack
+|           defaultWebpackConfig.js
+|           webpack.default.files.entries.json
+|           webpack.files.entries.json
+|           webpack.files.js
+|           webpack.services.js
+|           
++---configs
+|   +---application
+|   |   |   components.json
+|   |   |   config.json
+|   |   |   services.json
+|   |   |   
+|   |   \---default
+|   |           components.json
+|   |           config.json
+|   |           presentationComponents.json
+|   |           workspaces.json
+|   |           workspaceTemplates.json
+|   |           
+|   +---openfin
+|   |       manifest-local.json
+|   |       
+|   \---other
+|           server-environment-startup.json
+|           
++---server
+|   |   server.js
+|   |   
+|   +---dev
+|   |       hotreload.js
+|   |       
+|   \---hotreloadmiddleware
+|           client-overlay.js
+|           client.js
+|           helpers.js
+|           middleware.js
+|           package.json
+|           process-update.js
+|           README.md
+|           
++---src
+|   +---adapters
+|   |       .gitignore
+|   |       
+|   +---clients
+|   |       .gitignore
+|   |       
+|   +---components
+|   |       .gitignore
+|   |       
+|   +---services
+|   |       .gitignore
+|   |       
+|   \---thirdParty
+|           .gitignore
+|           
++---srcDefault
+|   +---adapters
+|   |       localStorageAdapter.js
+|   |       
+|   \---components
+|       |               
+|       +---assets
+|                   
+\---tutorials
 ```
 
 ## Extending _gulpfile.js_
@@ -149,4 +240,4 @@ The `pre` and `post` functions do not take any arguments. The `updateServer` fun
 
 ## Upgrade instructions
 
-TODO: Write section on upgrading from previous seed project
+Upgrading the seed project should be straightforward. If you have made changes to _gulpfile.js_ or to _server/server.js_ you will need to move your changes to the appropriate extensions file. Aside from that you can copy your _src_ folder, _webpack.files.entries.json_, and the contents of _configs/application_ to the new seed structure. It is recommended to remove the folders from _src/components_ you did not create or extend in order to use the latest presentation elements. You should also remove the components provided with Finsemble from _build/webpack/webpack.files.entries.json_ and _configs/application/components.json_. 
