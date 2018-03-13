@@ -1,0 +1,10 @@
+{
+  "name": "chartiq-demo-server",
+  "version": "1.0.0",
+  "private": true,
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-insert": "^0.1.0",
+    "grunt-jscrambler": "^0.2.10"
+  }
+}

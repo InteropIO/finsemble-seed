@@ -62,5 +62,9 @@
     "rpc-test": {
         "output": "components\\rpc-test\\rpc-test",
         "entry": ".\\src\\components\\rpc-test\\rpc-test.js"
+    },
+    "chart": {
+        "output": "components\\chart\\chart",
+        "entry": ".\\src\\components\\chart\\chart.js"
     }
 }
