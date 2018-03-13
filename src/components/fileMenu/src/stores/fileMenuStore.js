@@ -2,6 +2,9 @@
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
+
+//This file is referenced in the environment switching tutorial
+
 import { EventEmitter } from "events";
 
 const constants = {

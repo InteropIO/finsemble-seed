@@ -4,6 +4,9 @@
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
+
+//This file is referenced in the environment switching tutorial
+
 (() => {
 	"use strict";
 
@@ -21,9 +24,9 @@
 		{
 			/**
 			 * Method called before starting the server.
-			 * 
+			 *
 			 * @param {function} done Function can take one argument; an error message if one occurred.
-			 			 * @example 
+			 			 * @example
 			 * const pre => {
 			 * 	try {
 			 * 		// do something that could throw an error
@@ -35,10 +38,10 @@
 
 			/**
 			 * Method called after the server has started.
-			 * 
+			 *
 			 * @param {function} done Function can take one argument; an error message if one occurred.
 			 *
-			 * @example 
+			 * @example
 			 * const post => {
 			 * 	try {
 			 * 		// do something that could throw an error
@@ -51,10 +54,10 @@
 
 			/**
 			 * Method called to update the server.
-			 * 
+			 *
 			 * @param {express} app The express server.
 			 * @param {function} cb The function to call once finished adding functionality to the server.
-			 * @example 
+			 * @example
 			 * const cb => {
 			 * 	try {
 			 * 		// do something that could throw an error
@@ -83,7 +86,7 @@
 
 	/**
 	 * Builds the server.
-	 * 
+	 *
 	 * @param {string} err Error message, if an error occurred.
 	 */
 	const buildServer = err => {
@@ -95,7 +98,7 @@
 		// For Assimilation
 		app.use("/hosted", express.static(path.join(__dirname, "..", "hosted"), options));
 
-		// Sample server root set to "/" -- must align with paths throughout 
+		// Sample server root set to "/" -- must align with paths throughout
 		// configs/openfin/manifest-local.json and configs/other/server-environment-startup.json
 
 		// Make the config public
@@ -134,8 +137,8 @@
 								handleError(err);
 							} else {
 								process.send("serverStarted");
-							}	
-						});	
+							}
+						});
 					};
 
 					if (process.env.NODE_ENV === "development") {
