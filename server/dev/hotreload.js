@@ -41,7 +41,7 @@ module.exports = function loadDev(app, server, cb) {
 			var statComp = statsResult.stats[i].compilation;
 			for (var j = 0; j < statComp.errors.length; j++) {
 				var err = statComp.errors[j];
-				if (err.error.message !== prevError) {
+				if (err.error && err.error.message !== prevError) {
 					prevError = err.error.message;
 					if (!err.error.file) {
 						console.error(chalk.bold.bgRed.underline("MSG:"), err.error.error ? err.error.error.message : err.error.message,
@@ -51,6 +51,9 @@ module.exports = function loadDev(app, server, cb) {
 							"\n", chalk.bold.bgRed.underline("Error MSG:"), err.error.formatted,
 							"\n", chalk.bold.bgRed.underline("line:"), err.error.line);
 					}
+				} else {
+					// Uglify returns errors as strings, not as objects
+					console.error(chalk.bold.bgRed(err));
 				}
 			}
 		}
