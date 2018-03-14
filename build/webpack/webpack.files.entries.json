@@ -66,5 +66,9 @@
     "chart": {
         "output": "components\\chart\\chart",
         "entry": ".\\src\\components\\chart\\chart.js"
+    },
+    "iframeTest": {
+        "output": "components\\iframeTest\\iframeTest",
+        "entry": ".\\src\\components\\iframeTest\\iframeTest.js"
     }
 }
