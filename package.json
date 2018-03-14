@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "set NODE_ENV=development&&gulp --gulpfile=./gulpfile.js",
     "prod": "set NODE_ENV=production&&gulp prod --gulpfile=./gulpfile.js",
-    "build": "gulp build --gulpfile=./gulpfile.js",
+    "build": "set NODE_ENV=development&&gulp build --gulpfile=./gulpfile.js",
+    "build:prod": "set NODE_ENV=production&&gulp build --gulpfile=./gulpfile.js",
     "clean": "gulp clean --gulpfile=./gulpfile.js",
     "update-finsemble": "npm update @chartiq/finsemble && npm update -g @chartiq/finsemble-cli"
   },
@@ -15,6 +16,7 @@
   "dependencies": {
     "@chartiq/finsemble": "2.2.*",
     "@chartiq/finsemble-react-controls": "1.1",
+    "babel-minify-webpack-plugin": "^0.3.0",
     "nocache": "^2.0.0",
     "openfin-launcher": "^1.3.11"
   },
