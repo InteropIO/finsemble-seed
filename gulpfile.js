@@ -10,6 +10,7 @@
 	const gulp = require("gulp");
 	const sass = require("gulp-sass");
 	const watch = require("gulp-watch");
+	const shell = require("shelljs");
 	const merge = require("merge-stream");
 	const launcher = require("openfin-launcher");
 	const path = require("path");
