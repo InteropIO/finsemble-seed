@@ -22,9 +22,9 @@ The Finsemble seed project provides a basic structure to help developers get up 
     - _webpack.default.files.entries.json_ - This specifies the entry and output files for the files built for a default Finsemble application.
     - _webpack.files.entries.json_ - This file is where developer-added files should be listed. This file is empty in the base Finsemble seed project to prevent merge conflicts when updating the seed project.
 - _configs/application_ - This folder contains all of the base configuration for the Finsemble application. _component.json_, _config.json_ and _services.json_ are empty and developer-added configuration should go here. The files in this folder are merged together to build the application configuration. This configuration can be changed at run time using [Dynamic Configuration](https://documentation.chartiq.com/finsemble/tutorial-dynamicConfiguration.html).
-- _configs/openfin_ - Contains the [OpenFin application config](https://openfin.co/documentation/application-config/) used to start up the Finsemble application. The default manifest for development is included, and additional configurations can be placed in this folder.
+- _configs/openfin_ - Contains the [OpenFin application config](https://openfin.co/documentation/application-config/) (also known as the application manifest) used to start up the Finsemble application. The default manifest for development is included, and additional configurations can be placed in this folder.
 - _configs/other/server-environment-startup.json_ - Used to define the development and production server configurations used by the Finsemble application.
-- _server_ - Contains the server that hosts the build _dist_ folder for development purposes and includes hot reload in the development environment. 
+- _server_ - Contains the server that hosts the built _dist_ folder for development purposes and includes hot reload in the development environment. 
     - _server/server-extensions.js_ - Optional file that can be used to add functionality to the development server. See (Extending server functionality)[#extending-server-functionality].
 - _src_ - The folder where your Finsemble components should be placed for the Finsemble build process.
 - _srcDefault_ - Includes the source for the default presentation components included with the Finsemble seed project. These files can be extended as desired, but, if you do extend these components, we recommend you copy the folder to the _src_ directory to prevent merge conflicts when upgrading the seed project.
@@ -35,79 +35,79 @@ The Finsemble seed project provides a basic structure to help developers get up 
 Project structure:
 ```
 FINSEMBLE-SEED
-|   .gitignore
-|   gulpfile-extensions.md
-|   gulpfile.js
-|   package.json
-|   README.md
-|   
-+---build
-|   \---webpack
-|           defaultWebpackConfig.js
-|           webpack.default.files.entries.json
-|           webpack.files.entries.json
-|           webpack.files.js
-|           webpack.services.js
-|           
-+---configs
-|   +---application
-|   |   |   components.json
-|   |   |   config.json
-|   |   |   services.json
-|   |   |   
-|   |   \---default
-|   |           components.json
-|   |           config.json
-|   |           presentationComponents.json
-|   |           workspaces.json
-|   |           workspaceTemplates.json
-|   |           
-|   +---openfin
-|   |       manifest-local.json
-|   |       
-|   \---other
-|           server-environment-startup.json
-|           
-+---server
-|   |   server.js
-|   |   
-|   +---dev
-|   |       hotreload.js
-|   |       
-|   \---hotreloadmiddleware
-|           client-overlay.js
-|           client.js
-|           helpers.js
-|           middleware.js
-|           package.json
-|           process-update.js
-|           README.md
-|           
-+---src
-|   +---adapters
-|   |       .gitignore
-|   |       
-|   +---clients
-|   |       .gitignore
-|   |       
-|   +---components
-|   |       .gitignore
-|   |       
-|   +---services
-|   |       .gitignore
-|   |       
-|   \---thirdParty
-|           .gitignore
-|           
-+---srcDefault
-|   +---adapters
-|   |       localStorageAdapter.js
-|   |       
-|   \---components
-|       |               
-|       +---assets
-|                   
-\---tutorials
+│   .gitignore
+│   gulpfile-extensions.md
+│   gulpfile.js
+│   package.json
+│   README.md
+│   
+├───build
+│   └───webpack
+│           defaultWebpackConfig.js
+│           webpack.default.files.entries.json
+│           webpack.files.entries.json
+│           webpack.files.js
+│           webpack.services.js
+│           
+├───configs
+│   ├───application
+│   │   │   components.json
+│   │   │   config.json
+│   │   │   services.json
+│   │   │   
+│   │   └───default
+│   │           components.json
+│   │           config.json
+│   │           presentationComponents.json
+│   │           workspaces.json
+│   │           workspaceTemplates.json
+│   │           
+│   ├───openfin
+│   │       manifest-local.json
+│   │       
+│   └───other
+│           server-environment-startup.json
+│           
+├───server
+│   │   server.js
+│   │   
+│   ├───dev
+│   │       hotreload.js
+│   │       
+│   └───hotreloadmiddleware
+│           client-overlay.js
+│           client.js
+│           helpers.js
+│           middleware.js
+│           package.json
+│           process-update.js
+│           README.md
+│           
+├───src
+│   ├───adapters
+│   │       .gitignore
+│   │       
+│   ├───clients
+│   │       .gitignore
+│   │       
+│   ├───components
+│   │       .gitignore
+│   │       
+│   ├───services
+│   │       .gitignore
+│   │       
+│   └───thirdParty
+│           .gitignore
+│           
+├───srcDefault
+│   ├───adapters
+│   │       localStorageAdapter.js
+│   │       
+│   └───components
+│       │               
+│       ├───assets
+│                   
+└───tutorials
 ```
 
 ## Extending gulpfile
@@ -143,7 +143,7 @@ module.exports = taskMethods => {
 }
 ```
 
-If the _gulpfile-extensions.js_ file exists, it's contents are called as a method passing an object with the default task functions in. These methods can be overwritten or extended as needed. 
+If the _gulpfile-extensions.js_ file exists, it's contents are called as a method passing an object with the default task functions in. These methods can be overwritten or extended as needed. The `pre` and `post` methods pass in a callback function that must be called to signal that the gulpfile can continue executing. The other functions defined in `taskMethods` should be specified like a [gulp task function](https://github.com/gulpjs/gulp/blob/master/docs/API.md#gulptaskname-fn).
 
 Example _gulpfile-extensions.js_:
 ```js
@@ -152,27 +152,39 @@ module.exports = taskMethods => {
 
     const gulp = require("gulp");
 
-    // Extension of pre method;
-    let pre = taskMethods.pre 
-    taskMethods.pre = done => {
+    // Extension of pre method. Get a reference to the original function to be called later. 
+    let preOriginal = taskMethods.pre 
+    taskMethods.pre = cb => {
+        // Add extension code.
         console.log("PRE: pre");
-        const result = pre(() => {
+
+        // Call original function
+        preOriginal(() => {
+            // Call code that should be called after the original function has completed.
             console.log("POST: pre");
-            done();
+
+            // Execute callback to signal that execution in gulpfile can continue.
+            cb();
         });
     };
 
     // Extension of copyStaticFiles
-    let copyStaticFiles = taskMethods.copyStaticFiles 
-    taskMethods.copyStaticFiles = () => {
+    let copyStaticFilesOriginal = taskMethods.copyStaticFiles 
+    taskMethods.copyStaticFiles = cb => {
+        // Execute code that should be called before the original function.
         console.log("PRE: copyStaticFiles");
-        const result = copyStaticFiles();
-        console.log("POST: copyStaticFiles");
-        
-        return result;
+
+        // Execute the original function, which, in this case, returns a stream.
+        copyStaticFilesOriginal()
+            .on("end", () => {
+                // Wait for stream completion before executing additional cod. 
+                console.log("POST: copyStaticFiles");
+
+                // Execute callback to signal completion.
+                cb();
+            });
     };
 
-    const post = taskMethods.post;
     taskMethods.post = done => {
         console.log("Adding tasks");
 
