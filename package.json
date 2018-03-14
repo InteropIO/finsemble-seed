@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "set NODE_ENV=development&&gulp --gulpfile=./gulpfile.js",
     "prod": "set NODE_ENV=production&&gulp prod --gulpfile=./gulpfile.js",
-    "build": "gulp build --gulpfile=./gulpfile.js",
+    "build": "set NODE_ENV=development&&gulp build --gulpfile=./gulpfile.js",
+    "build:prod": "set NODE_ENV=production&&gulp build --gulpfile=./gulpfile.js",
     "clean": "gulp clean --gulpfile=./gulpfile.js",
     "update-finsemble": "npm update @chartiq/finsemble && npm update -g @chartiq/finsemble-cli"
   },
