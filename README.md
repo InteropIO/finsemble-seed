@@ -27,9 +27,9 @@ The Finsemble seed project provides a basic structure to help developers get up 
 - _server_ - Contains the server that hosts the built _dist_ folder for development purposes and includes hot reload in the development environment. 
     - _server/server-extensions.js_ - Optional file that can be used to add functionality to the development server. See (Extending server functionality)[#extending-server-functionality].
 - _src_ - The folder where your Finsemble components should be placed for the Finsemble build process.
-- _srcDefault_ - Includes the source for the default presentation components included with the Finsemble seed project. These files can be extended as desired, but, if you do extend these components, we recommend you copy the folder to the _src_ directory to prevent merge conflicts when upgrading the seed project.
-    - _srcDefault/adapters_ - Contains an example Storage Adapter that saves data to local storage.
-    - _srcDefault/components/assets_ - Contains the SASS, CSS and images used to create Finsemble's look and feel.
+- _src-built-in_ - Includes the source for the default presentation components included with the Finsemble seed project. These files can be extended as desired, but, if you do extend these components, we recommend you copy the folder to the _src_ directory to prevent merge conflicts when upgrading the seed project.
+    - _src-built-in/adapters_ - Contains an example Storage Adapter that saves data to local storage.
+    - _src-built-in/components/assets_ - Contains the SASS, CSS and images used to create Finsemble's look and feel.
 - _tutorials_ - Contains the source for the components used by our [Getting started](https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html) tutorial.
 
 Project structure:
@@ -99,7 +99,7 @@ FINSEMBLE-SEED
 │   └───thirdParty
 │           .gitignore
 │           
-├───srcDefault
+├───src-built-in
 │   ├───adapters
 │   │       localStorageAdapter.js
 │   │       

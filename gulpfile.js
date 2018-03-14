@@ -35,7 +35,7 @@
 	// #region Script variables
 	let distPath = path.join(__dirname, "dist");
 	let srcPath = path.join(__dirname, "src");
-	let srcDefaultPath = path.join(__dirname, "srcDefault");
+	let srcBuiltInPath = path.join(__dirname, "src-built-in");
 	let watchClose;
 
 	// If you specify environment variables to child_process, it overwrites all environment variables, including
@@ -93,7 +93,7 @@
 		 */
 		copyStaticFiles: () => {
 			const source = [
-				path.join(srcDefaultPath, "components", "**", "*"),
+				path.join(srcBuiltInPath, "components", "**", "*"),
 				path.join(srcPath, "components", "**", "*"),
 				"!" + path.join(srcPath, "components", "**", "*.jsx")];
 
