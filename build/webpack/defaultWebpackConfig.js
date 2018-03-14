@@ -1,6 +1,5 @@
 const path = require('path');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const { DefinePlugin } = require("webpack"); 
+const { DefinePlugin } = require("webpack");
 
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 
@@ -65,8 +64,7 @@ module.exports = function () {
 				"process.env": {
 			  		"NODE_ENV": JSON.stringify(env)
 				}
-		  	}),
-			new UglifyJsPlugin(),
+		  	})
 		],
 		output: {
 			filename: "[name].js",
