@@ -111,12 +111,9 @@ function createSocketStream(opts) {
 			fn(clients[id]);
 		});
 	}
-	if (opts.socketServer) {
-		var io = opts.socketServer;
-	} else {
-		var io = require('socket.io')(opts.server);
-	}
+	var io = require('socket.io')(opts.server);
 	io.on('connection', function (socket) {
+		console.log("client connected");
 		var id = clientId++;
 		socket.on('disconnect', function () {
 			delete clients[id];
@@ -140,6 +137,8 @@ function createSocketStream(opts) {
 		}
 	};
 }
+
+
 
 function publishStats(action, statsResult, eventStream, log) {
 	// For multi-compiler, stats will be an object with a 'children' array of stats

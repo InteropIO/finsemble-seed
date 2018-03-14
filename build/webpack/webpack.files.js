@@ -6,12 +6,12 @@ const componentsToBuild = require('./webpack.files.entries.json');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const defaultConfig = require("./defaultWebpackConfig");
 var enableHMR = true,//Enable Hot Reload
-	HMRBlacklist = ["testComponent"],//Components to exclude
+	HMRBlacklist = ["testComponent"],//Components to explude
 	HMRWhitelist = [],//Only reload these components
 	componentIgnores = [],
 	webpackConfigs = [];//Our list of webpack configs list
 
-if (process.env.NODE_ENV === "production") {// if we are in production turn off hotreload
+if (!process.env.NODE_ENV) {// if we are in production turn off hotreload
 	enableHMR = false;
 }
 
@@ -73,12 +73,6 @@ webpackConfigs[0].plugins.push(new CopyWebpackPlugin([
 	{
 		from: './src/services/',
 		to: './services/',
-		force: true,
-		ignore: ["*.js"]
-	},
-	{
-		from: './src/clients/',
-		to: './clients/',
 		force: true,
 		ignore: ["*.js"]
 	},
