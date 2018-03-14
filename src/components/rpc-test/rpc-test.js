@@ -16,12 +16,12 @@ function sendRPCMessage(topic, args) {
 }
 
 function runrpc() {
-	//	sendRPCMessage("FSBL.Clients.LinkerClient.addToGroup", ["group1", "***windowIdentifier***","***cb***"]);
-	//	sendRPCMessage("FSBL.Clients.LinkerClient.publish", [{dataType:"symbol", data:"AAPL"}, "***cb***"]);
-	//	sendRPCMessage("FSBL.Clients.LinkerClient.subscribe", ["symbol", "***cb***"]);
-	sendRPCMessage("FSBL.Clients.LinkerClient.addToGroup", ["group1"]);
-	sendRPCMessage("FSBL.Clients.LinkerClient.publish", [{ dataType: "symbol", data: "AAPL" }]);
-	sendRPCMessage("FSBL.Clients.LinkerClient.subscribe", ["symbol"]);
+		sendRPCMessage("FSBL.Clients.LinkerClient.addToGroup", ["group1", "***null***","***cb***"]);
+		sendRPCMessage("FSBL.Clients.LinkerClient.publish", [{dataType:"symbol", data:"AAPL"}, "***cb***"]);
+		sendRPCMessage("FSBL.Clients.LinkerClient.subscribe", ["symbol", "***cb***"]);
+	//sendRPCMessage("FSBL.Clients.LinkerClient.addToGroup", ["group1"]);
+	//sendRPCMessage("FSBL.Clients.LinkerClient.publish", [{ dataType: "symbol", data: "AAPL" }]);
+	//sendRPCMessage("FSBL.Clients.LinkerClient.subscribe", ["symbol"]);
 }
 
 FSBL.addEventListener('onReady', function () {
