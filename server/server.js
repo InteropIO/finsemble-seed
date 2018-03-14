@@ -65,7 +65,11 @@
 			 *		done(e);
 			 *  }
 			 * }*/
-			updateServer: (app, cb) => { cb(); }
+			updateServer: (app, cb) => {
+				app.use("/", express.static(rootDir, options));
+
+				cb();
+			}
 		};
 	// #endregion
 
@@ -94,8 +98,6 @@
 			console.error(err);
 			return;
 		}
-
-		app.use("/", express.static(rootDir, options));
 
 		const handleError = e => {
 			if (e) {
