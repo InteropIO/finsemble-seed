@@ -245,7 +245,12 @@ The `pre` and `post` functions do not take any arguments. The `updateServer` fun
          * @param {function} cb The function to call once you're finished adding functionality to the server. Can optionally 
          * pass an error message if one occurs.
          */
-        updateServer: (app, cb) => { console.log("modifying server"); cb(); }
+        updateServer: (app, cb) => {
+                // Hosts the dist directory at the root of the server.
+				app.use("/", express.static(path.join(__dirname, "dist"), options));
+
+				cb();
+			}
     }
 })(module);
 ```
