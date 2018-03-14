@@ -1,8 +1,4 @@
-const path = require('path');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const { DefinePlugin } = require("webpack"); 
-
-const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
+var path = require('path');
 
 module.exports = function () {
 	return {
@@ -60,14 +56,7 @@ module.exports = function () {
 				}
 			]
 		},
-		plugins: [
-			new DefinePlugin({
-				"process.env": {
-			  		"NODE_ENV": JSON.stringify(env)
-				}
-		  	}),
-			new UglifyJsPlugin(),
-		],
+		plugins: [],
 		output: {
 			filename: "[name].js",
 			sourceMapFilename: "[name].map.js",
