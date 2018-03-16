@@ -27,6 +27,7 @@
 	let angularComponents;
 	try {
 		angularComponents = require("./build/angular-components.json");
+		console.log("Angular components configuration found by gulp: " +  JSON.stringify(angularComponents));
 	} catch (ex) {
 		console.log("No Angular component configuration found");
 		angularComponents = null;
@@ -73,13 +74,6 @@
 			source.push("!" + path.join(__dirname, componentsToBuild[key].entry));
 		}
 
-		//Dont copy files built by angular
-		if (angularComponents) {
-			angularComponents.forEach(comp => {
-				source.push("!" + path.join(__dirname, comp.source, '**'));
-			});
-		}
-
 		return merge(
 			gulp
 				.src(source)
@@ -104,13 +98,6 @@
 	const buildSass = () => {
 		const source = [path.join(srcPath, "components", "**", "*.scss")];
 		
-		//Dont build files built by angular
-		if (angularComponents) {
-			angularComponents.forEach(comp => {
-				source.push(path.join('!' + __dirname, comp.source, '**'));
-			});
-		}
-
 		return gulp
 			.src(source)
 			.pipe(sass().on("error", sass.logError))
@@ -136,12 +123,12 @@
 			var compName = row.source.split("/").pop();
 			var cwd = path.join(__dirname, row.source);
 			var outputPath = path.join(__dirname, row.source, row["output-directory"]);
-			var command = `ng build --base-href "/components/${compName}/" --outputPath "${outputPath}"`;
+			var command = `ng build --no-progress --base-href "/angular-components/${compName}/" --outputPath "${outputPath}"`;
 			
 			// switch to components folder
 			var dir = shell.pwd();
 			shell.cd(cwd);
-			console.log(`Executing: ${command}\nin directory: ${cwd}`);
+			console.log(`> ${command}`);
 	
 			var output = shell.exec(command);
 			console.log(`Built Angular Component, exit code = ${output.code}`);

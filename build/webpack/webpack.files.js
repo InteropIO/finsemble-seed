@@ -5,7 +5,8 @@ const webpack = require("webpack")
 const componentsToBuild = require('./webpack.files.entries.json');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const defaultConfig = require("./defaultWebpackConfig");
-var enableHMR = true,//Enable Hot Reload
+
+let enableHMR = true,//Enable Hot Reload
 	HMRBlacklist = ["testComponent"],//Components to explude
 	HMRWhitelist = [],//Only reload these components
 	componentIgnores = [],
@@ -15,12 +16,9 @@ if (!process.env.NODE_ENV) {// if we are in production turn off hotreload
 	enableHMR = false;
 }
 
-function buildComponentIgnore() {//Dont copy files that we build
-	var components = componentsToBuild;
-	for (var key in components) {
-		var filename = components[key].entry.split("/").pop();
-		componentIgnores.push("*" + filename);
-	}
+for (var key in componentsToBuild) {
+	var filename = componentsToBuild[key].entry.split("/").pop();
+	componentIgnores.push("*" + filename);
 }
 
 function shouldIHMR(key) {
