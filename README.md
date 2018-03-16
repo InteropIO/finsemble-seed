@@ -154,7 +154,7 @@ module.exports = taskMethods => {
 
     // Extension of pre method. Get a reference to the original function to be called later. 
     let preOriginal = taskMethods.pre 
-    taskMethods.pre = cb => {
+    taskMethods.pre = (cb) => {
         // Add extension code.
         console.log("PRE: pre");
 
@@ -170,25 +170,50 @@ module.exports = taskMethods => {
 
     // Extension of copyStaticFiles
     let copyStaticFilesOriginal = taskMethods.copyStaticFiles 
-    taskMethods.copyStaticFiles = cb => {
+    taskMethods.copyStaticFiles = (cb) => {
         // Execute code that should be called before the original function.
         console.log("PRE: copyStaticFiles");
 
         // Execute the original function, which, in this case, returns a stream.
         copyStaticFilesOriginal()
-            .on("end", () => {
-                // Wait for stream completion before executing additional cod. 
-                console.log("POST: copyStaticFiles");
+            .on(
+                "end", 
+                () => {
+                    // Wait for stream completion before executing additional cod. 
+                    console.log("POST: copyStaticFiles");
 
-                // Execute callback to signal completion.
-                cb();
-            });
+                    // Execute callback to signal completion.
+                    cb();
+                });
     };
 
-    taskMethods.post = done => {
+    taskMethods.post = (cb) => {
         console.log("Adding tasks");
 
-        gulp.task("newTask", gulp.series("build"), () => { console.log("Do some other stuff here");});
+        /**
+         * Function used as part of newTask.
+         */ 
+        const newFunction = () => { 
+            console.log("Do some other stuff here");
+        };
+
+        gulp.task("newTask", gulp.series("build"), newFunction);
+
+        /**
+         * Definition of function called at the beginning of the build task.
+         */
+        const preBuildFunction = (cb) => {
+             console.log("pre-build task"); 
+             cb(); 
+        };
+
+        /**
+         * Definition of function called at the end of the build task.
+         */
+        const postBuildFunction = (cb) => { 
+            console.log("post-build task"); 
+            cb(); 
+        };
 
         /**
          * Redefinition of a task defined in the gulpfile.
@@ -196,12 +221,12 @@ module.exports = taskMethods => {
         gulp.task(
             "build",
             gulp.series(
-                done => { console.log("pre-build task"); done(); },
+                preBuildFunction,
                 "clean",
                 taskMethods.copyStaticFiles,
                 taskMethods.buildWebpack,
                 taskMethods.buildSass),
-                done => { console.log("post-build task"); done(); }
+                postBuildFunction
             );
 
         done();
@@ -228,7 +253,10 @@ The `pre` and `post` functions do not take any arguments. The `updateServer` fun
          * @param done Function used to signal when pre function has finished. Can optionally pass an error message if 
          * one occurs.
          */
-        pre: done => { console.log("pre server startup"); done(); },
+        pre(done) {
+            console.log("pre server startup");
+            done();
+        },
 
         /**
          * Method called after the server has started.
@@ -236,7 +264,10 @@ The `pre` and `post` functions do not take any arguments. The `updateServer` fun
          * @param done Function used to signal when pre function has finished. Can optionally pass an error message if 
          * one occurs.
          */
-        post: done => { console.log("post server startup"); done(); },
+        post(done) {
+            console.log("post server startup");
+            done();
+        },
 
         /**
          * Method called to update the server.
@@ -245,7 +276,7 @@ The `pre` and `post` functions do not take any arguments. The `updateServer` fun
          * @param {function} cb The function to call once you're finished adding functionality to the server. Can optionally 
          * pass an error message if one occurs.
          */
-        updateServer: (app, cb) => {
+        updateServer(app, cb) {
                 // Hosts the dist directory at the root of the server.
 				app.use("/", express.static(path.join(__dirname, "dist"), options));
 
