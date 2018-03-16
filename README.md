@@ -236,7 +236,7 @@ module.exports = taskMethods => {
 
 ## Extending server functionality
 
-Sometimes during development, it is necessary to create new API for your application. The Finsemble seed project already includes a server to host files locally for development, so it makes sense to use this server to design the new API. To allow for the extension of the server provided in the Finsemble seed project without breaking the upgrade path, the server attempts to import the _server-extensions.js_ file from the _server_ directory of the project. If _server-extensions.js_ exists, it's methods are called by the server to provide additional functionality. The _server-extensions.js_ file should return an object that contains the following functions:
+Sometimes during development, it is necessary to create new Web API (e.g. REST API) for your application to use. The Finsemble seed project already includes a server to host files locally for development, so it makes sense to use this server to design the new Web API. To allow for the extension of the server provided in the Finsemble seed project without breaking the upgrade path, the server attempts to import the _server-extensions.js_ file from the _server_ directory of the project. If _server-extensions.js_ exists, it's methods are called by the server to provide additional functionality. The _server-extensions.js_ file should return an object that contains the following functions:
 - `pre` - called before _server.js_ starts defining the default server functionality
 - `post` - called after the server is up and running
 - `updateServer` - called after the default server functionality has been defined, but before the server is started
