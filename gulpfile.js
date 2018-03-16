@@ -27,7 +27,6 @@
 	let angularComponents;
 	try {
 		angularComponents = require("./build/angular-components.json");
-		console.log("Angular components configuration found by gulp: " +  JSON.stringify(angularComponents));
 	} catch (ex) {
 		console.log("No Angular component configuration found");
 		angularComponents = null;
