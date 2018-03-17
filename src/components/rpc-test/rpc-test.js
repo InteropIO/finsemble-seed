@@ -27,15 +27,17 @@ function sendRPCMessage(endpoint, args, cb) {
 	fin.desktop.InterApplicationBus.publish("FSBL.rpc", message);
 }
 
-function runrpc() {
-	// RPC messages go over openfin channel "FSBL.rpc". The endpoint(LinkerClient.addToGroup)
-	// is put into the message. ***cb*** indicates that a callback is expected.
-	// ***null*** is null for languages that don't have an equivalent.
+// RPC messages go over openfin channel "FSBL.rpc". The endpoint(LinkerClient.addToGroup)
+// is put into the message. ***cb*** indicates that a callback is expected.
+// ***null*** is null for languages that don't have an equivalent.
+// (We'll probably need ***windowIdentifier*** once we refactor the WindowClient so that it uses FSBLWindow.)
+
+function linkme() {
 
 	// Add to purple channel
 	sendRPCMessage("LinkerClient.linkToChannel", ["group1", "***null***", "***cb***"], function () {
 		// Then switch to APPL
-		sendRPCMessage("LinkerClient.publish", [{dataType:"symbol", data:"AAPL"}]);
+		sendRPCMessage("LinkerClient.publish", [{dataType:"symbol", data:"GE"}]);
 	});
 	// Meanwile, subscribe to changes
 	sendRPCMessage("LinkerClient.subscribe", ["symbol", "***cb***"], function () {
@@ -43,7 +45,16 @@ function runrpc() {
 	});
 }
 
-FSBL.addEventListener('onReady', function () {
+function launchme() {
+	sendRPCMessage("LauncherClient.spawn", ["chart", "***null***", "***cb***"], function () {
+	});
+}
+
+function logmein() {
+	sendRPCMessage("AuthenticationClient.publishAuthorization", ["test","test"]);
+}
+
+fin.desktop.main(function () {
 	// Set up the openfin channel for receiving responses
 	fin.desktop.InterApplicationBus.subscribe("*", myChannel, function (message, uuid, name) {
 		// Handle response. Try to find the original callback and pass it the arguments returned by RPC.
@@ -55,5 +66,7 @@ FSBL.addEventListener('onReady', function () {
 	});
 
 	// Click on 'runme' to invoke runrpc()
-	document.querySelector("runme").onclick = runrpc;
+	document.querySelector("linkme").onclick = linkme;
+	document.querySelector("launchme").onclick = launchme;
+	document.querySelector("logmein").onclick = logmein;
 });

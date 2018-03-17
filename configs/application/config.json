@@ -19,6 +19,12 @@
 			}
 		}
 	},
+	"authentication": {
+		"startup": {
+			"adapter": "PASSWORD",
+			"component": "rpc-test"
+		}
+	},
 	"systemTrayIcon": "$applicationRoot/components/assets/img/Finsemble_Taskbar_Icon.png",
 	"systemTrayComponent": "File Menu",
 	"debugServiceDelay": 0,
