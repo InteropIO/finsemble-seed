@@ -12,7 +12,7 @@ let enableHMR = true,//Enable Hot Reload
 	componentIgnores = [],
 	webpackConfigs = [];//Our list of webpack configs list
 
-if (!process.env.NODE_ENV) {// if we are in production turn off hotreload
+if (process.env.NODE_ENV === "production") {// if we are in production turn off hotreload
 	enableHMR = false;
 }
 
@@ -71,6 +71,12 @@ webpackConfigs[0].plugins.push(new CopyWebpackPlugin([
 	{
 		from: './src/services/',
 		to: './services/',
+		force: true,
+		ignore: ["*.js"]
+	},
+	{
+		from: './src/clients/',
+		to: './clients/',
 		force: true,
 		ignore: ["*.js"]
 	},
