@@ -16,8 +16,11 @@
   "dependencies": {
     "@chartiq/finsemble": "2.2.*",
     "@chartiq/finsemble-react-controls": "1.1",
+    "axios": "^0.18.0",
     "babel-minify-webpack-plugin": "^0.3.0",
+    "body-parser": "^1.18.2",
     "nocache": "^2.0.0",
+    "node-persist": "^2.1.0",
     "openfin-launcher": "^1.3.11"
   },
   "devDependencies": {

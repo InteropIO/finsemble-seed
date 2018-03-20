@@ -43,6 +43,10 @@
 		"output": "adapters/LocalStorageAdapter",
 		"entry":"./src/adapters/LocalStorageAdapter.js"
 	},
+	"serverStorageAdapter": {
+		"output": "adapters/serverStorageAdapter",
+		"entry":"./src/adapters/serverStorageAdapter.js"
+	},
 	"UserPreferences": {
         "output": "components/userPreferences/UserPreferences",
         "entry": "./src/components/userPreferences/src/app.jsx"
