@@ -6,7 +6,7 @@ const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 
 let plugins =
 	[
-		new DefinePlugin({
+		new DefinePlugin({ 
 			"process.env": {
 				"NODE_ENV": JSON.stringify(env)
 			}
@@ -63,7 +63,6 @@ module.exports = function () {
 					test: /semver\.browser\.js/,
 					use: ['imports?define=>undefined']
 				},
-
 				{
 					test: /\.js(x)?$/,
 					exclude: [/node_modules/, "/chartiq/"],
