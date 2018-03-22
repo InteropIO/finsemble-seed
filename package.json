@@ -43,6 +43,7 @@
     "gulp-sass": "^3.2.0",
     "gulp-shell": "^0.6.5",
     "gulp-watch": "^4.3.11",
+    "hard-source-webpack-plugin": "^0.6.4",
     "html-entities": "^1.2.0",
     "json-loader": "^0.5.4",
     "merge-stream": "^1.0.1",

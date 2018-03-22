@@ -1,12 +1,13 @@
 const path = require('path');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const { DefinePlugin } = require("webpack");
+const hardSource = require("hard-source-webpack-plugin");
 
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 
 let plugins =
 	[
-		new DefinePlugin({ 
+		new DefinePlugin({
 			"process.env": {
 				"NODE_ENV": JSON.stringify(env)
 			}
@@ -16,6 +17,18 @@ let plugins =
 if (env === "production") {
 	// When building the production environment, minify the code.
 	plugins.push(new UglifyJsPlugin());
+} else {
+	plugins.push(new hardSource({
+		//root dir here is "dist". Back out so we dump this file into the root.
+		cacheDirectory: '../.webpack-file-cache/[confighash]',
+		// Either an absolute path or relative to webpack's options.context.
+		// Sets webpack's recordsPath if not already set.
+		environmentHash: {
+			root: process.cwd(),
+			directories: [],
+			files: ['package-lock.json'],
+		}
+	}));
 }
 
 module.exports = function () {
