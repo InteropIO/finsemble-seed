@@ -6,7 +6,7 @@ const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 
 let plugins =
 	[
-		new DefinePlugin({ 
+		new DefinePlugin({
 			"process.env": {
 				"NODE_ENV": JSON.stringify(env)
 			}
@@ -68,6 +68,7 @@ module.exports = function () {
 					exclude: [/node_modules/, "/chartiq/"],
 					loader: 'babel-loader',
 					options: {
+						cacheDirectory: './.babel_cache/',
 						presets: ['react', 'stage-1']
 					}
 				}
@@ -80,7 +81,7 @@ module.exports = function () {
 			path: path.resolve(__dirname, '../../dist/'),
 			publicPath: 'http://localhost:3375/'
 		},
-		watch: false,
+		watch: true,
 		resolve: {
 			extensions: ['.js', '.jsx', '.json', 'scss', 'html'],
 			modules: [

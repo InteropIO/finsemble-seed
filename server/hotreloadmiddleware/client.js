@@ -7,7 +7,7 @@ var options = {
 	overlay: true,
 	reload: false,
 	sockets: false,
-	log: false,
+	log: true,
 	warn: true,
 	name: '',
 	autoConnect: true

@@ -21,6 +21,7 @@
 	const extensions = fs.existsSync("./gulpfile-extensions.js") ? require("./gulpfile-extensions.js") : undefined;
 	const webpackFilesConfig = require("./build/webpack/webpack.files.js")
 	const webpackServicesConfig = require("./build/webpack/webpack.services.js")
+	const webpackAdaptersConfig = require("./build/webpack/webpack.adapters.js")
 	// #endregion
 
 	// #region Constants
@@ -113,13 +114,15 @@
 		 * Builds files using webpack.
 		 */
 		buildWebpack: done => {
-			webpack(webpackFilesConfig, () => {
-				if (webpackServicesConfig) {
-					// Webpack config for services exists. Build it
-					webpack(webpackServicesConfig, done);
-				} else {
-					done();
-				}
+			webpack(webpackAdaptersConfig, () => {
+				new webpack(webpackFilesConfig, () => {
+					if (webpackServicesConfig) {
+						// Webpack config for services exists. Build it
+						webpack(webpackServicesConfig, done);
+					} else {
+						done();
+					}
+				});
 			});
 		},
 
@@ -295,8 +298,8 @@
 		gulp.task(
 			"build",
 			gulp.series(
-				"clean",
 				taskMethods.copyStaticFiles,
+				taskMethods.buildWebpack,
 				taskMethods.buildSass,
 				taskMethods.buildAngular));
 

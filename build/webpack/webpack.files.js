@@ -6,7 +6,7 @@ const componentsToBuild = require('./webpack.files.entries.json');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const defaultConfig = require("./defaultWebpackConfig");
 
-let enableHMR = true,//Enable Hot Reload
+let enableHMR = false,//Enable Hot Reload
 	HMRBlacklist = ["testComponent"],//Components to explude
 	HMRWhitelist = [],//Only reload these components
 	componentIgnores = [],
@@ -35,27 +35,49 @@ function shouldIHMR(key) {
 function defaults() {
 	return new defaultConfig();
 }
+let entries = {
+	vendor: ['react', 'react-dom', 'async']
+};
 
 for (let key in componentsToBuild) {
 	let config = new defaults();
 
 	let component = componentsToBuild[key];
 	if (!enableHMR || !shouldIHMR(key)) {
-		//If we aren't hot reloading this thing, okay - add the config to our array.
-		config.entry[component.output] = component.entry;
-		webpackConfigs.push(config);
+		if (component.entry.includes("src/adapter")) {
+			continue;
+		} else {
+			//If we aren't hot reloading this thing, okay - add the config to our array.
+			entries[component.output] = component.entry;
+		}
 		continue;
 	}
 
 	config.entry[component.output] = [
-		component.entry,
-		path.resolve(__dirname, '../../server/hotreloadmiddleware/') + '/client?reload=true&sockets=true&name=' + key//inject the hotreload client
+		component.entry
+		// path.resolve(__dirname, '../../server/hotreloadmiddleware/') + '/client?reload=true&sockets=true&name=' + key//inject the hotreload client
 	];
 	//add the hot reload plugins and push.
-	config.plugins.push(new webpack.HotModuleReplacementPlugin(), new webpack.NoEmitOnErrorsPlugin());
+	config.plugins.push(new webpack.NoEmitOnErrorsPlugin());
 	webpackConfigs.push(config);
 }
+webpackConfigs[0] = new defaults();
+webpackConfigs[0].entry = entries;
+// console.log(webpackConfigs[0].entry);
 
+// webpackConfigs[0].plugins.push(new webpack.optimize.CommonsChunkPlugin({
+// 	name: "vendor",
+// 	// filename: "vendor.js"
+// 	// (Give the chunk a different name)
+
+// 	minChunks: Infinity,
+// 	// (with more entries, this ensures that no other module
+// 	//  goes into the vendor chunk)
+// }));
+// webpackConfigs[0].plugins.push(new webpack.optimize.CommonsChunkPlugin({
+// 	name: 'manifest',
+// 	chunks: ['vendor']
+// }));
 webpackConfigs[0].plugins.push(new CopyWebpackPlugin([
 	{
 		from: './src/components/',
