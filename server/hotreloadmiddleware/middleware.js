@@ -24,10 +24,12 @@ function setupHttpReload(compiler, opts) {
 	var latestStats = null;
 	compiler.plugin("compile", function () {
 		latestStats = null;
+
 		if (opts.log) { opts.log("webpack building..."); }
 		eventStream.publish({ action: "building" });
 	});
 	compiler.plugin("done", function (statsResult) {
+		console.log("WEBPACK BUILT")
 		// Keep hold of latest stats so they can be propagated to new clients
 		latestStats = statsResult;
 		publishStats("built", latestStats, eventStream, opts.log);
@@ -50,12 +52,14 @@ function setupHttpReload(compiler, opts) {
 function setupSocketReload(compiler, opts) {
 	var eventStream = createSocketStream(opts);
 	compiler.plugin("compile", function () {
+		console.log("Webpack building, socket reload");
 		latestStats = null;
 		if (opts.log) { opts.log("webpack building..."); }
 		eventStream.publish({ action: "building" });
 	});
 	compiler.plugin("done", function (statsResult) {
 		// Keep hold of latest stats so they can be propagated to new clients
+		console.log("Webpack built, socket reload");
 		latestStats = statsResult;
 		publishStats("built", latestStats, eventStream, opts.log);
 	});
@@ -77,6 +81,7 @@ function createEventStream(heartbeat) {
 	}, heartbeat).unref();
 	return {
 		handler: function (req, res) {
+			console.log("Middleware,", req.path);
 			req.socket.setKeepAlive(true);
 			res.writeHead(200, {
 				'Access-Control-Allow-Origin': '*',
@@ -114,7 +119,7 @@ function createSocketStream(opts) {
 	if (opts.socketServer) {
 		var io = opts.socketServer;
 	} else {
-		var io = require('socket.io')(opts.server);
+		var io = require('socket.io').listen(opts.server);
 	}
 	io.on('connection', function (socket) {
 		var id = clientId++;
@@ -123,7 +128,6 @@ function createSocketStream(opts) {
 		});
 		clients[clientId] = socket;
 	});
-
 
 
 	setInterval(function heartbeatTick() {

@@ -50,12 +50,12 @@
 	// #endregion
 
 	// #region Task Methods
-	/** 
-	 * Object containing all of the methods used by the gulp tasks. 
+	/**
+	 * Object containing all of the methods used by the gulp tasks.
 	 */
 	const taskMethods = {
-		/** 
-		 * Builds the SASS files for the project. 
+		/**
+		 * Builds the SASS files for the project.
 		 */
 		buildSass: () => {
 			return gulp
@@ -85,7 +85,7 @@
 			return del(distPath, { force: true });
 		},
 
-		/** 
+		/**
 		 * Copies static files to the output directory.
 		 */
 		copyStaticFiles: () => {
@@ -149,21 +149,21 @@
 
 		/**
 		 * Method called after tasks are defined.
-		 * @param done Callback function used to signal function completion to support asynchronous execution. Can 
+		 * @param done Callback function used to signal function completion to support asynchronous execution. Can
 		 * optionally return an error, if one occurs.
 		 */
 		post: done => { done(); },
 
 		/**
 		 * Method called before tasks are defined.
-		 * @param done Callback function used to signal function completion to support asynchronous execution. Can 
+		 * @param done Callback function used to signal function completion to support asynchronous execution. Can
 		 * optionally return an error, if one occurs.
 		 */
 		pre: done => { done(); },
 
 		/**
 		 * Starts the server.
-		 * 
+		 *
 		 * @param {function} done Function called when execution has completed.
 		 */
 		startServer: done => {
@@ -204,7 +204,7 @@
 			serverExec.stderr.on("data", data => { console.error(errorOutColor(`ERROR: ${data}`)); });
 		},
 
-		/** 
+		/**
 		 * Watches files for changes to fire off copies and builds.
 		 */
 		watchFiles: done => {
@@ -242,7 +242,7 @@
 		 */
 		gulp.task(
 			"build",
-			gulp.series("clean", taskMethods.copyStaticFiles, taskMethods.buildWebpack, taskMethods.buildSass));
+			gulp.series("clean", taskMethods.copyStaticFiles, taskMethods.buildSass));
 
 		/**
 		 * Builds the application and starts the server to host it.

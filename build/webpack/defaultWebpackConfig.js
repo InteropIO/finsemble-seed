@@ -4,7 +4,7 @@ const { DefinePlugin } = require("webpack");
 
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 
-const plugins =
+let plugins =
 	[
 		new DefinePlugin({
 			"process.env": {
