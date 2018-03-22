@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "set NODE_ENV=development&&gulp --gulpfile=./gulpfile.js",
     "prod": "set NODE_ENV=production&&gulp prod --gulpfile=./gulpfile.js",
+    "prod:run": "set NODE_ENV=production&&gulp prod:run --gulpfile=./gulpfile.js",
     "build": "set NODE_ENV=development&&gulp build --gulpfile=./gulpfile.js",
     "build:prod": "set NODE_ENV=production&&gulp build --gulpfile=./gulpfile.js",
     "clean": "gulp clean --gulpfile=./gulpfile.js",

@@ -303,7 +303,7 @@
 		/**
 		 * Builds the application and starts the server to host it.
 		 */
-		gulp.task("prod", gulp.series("build", taskMethods.startServer));
+		gulp.task("prod", gulp.series("build", taskMethods.buildWebpack, taskMethods.startServer));
 
 		/**
 		 * Builds the application, starts the server and launches the Finsemble application.
