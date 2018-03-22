@@ -35,6 +35,7 @@ module.exports = function () {
 	return {
 		devtool: 'source-map',
 		entry: {},
+		stats: "minimal",
 		module: {
 			rules: [
 				{

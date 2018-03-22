@@ -75,7 +75,6 @@ webpackConfig.plugins.push(new CopyWebpackPlugin([
 		force: true
 	}
 ], { ignore: componentIgnores }));
-
 webpackConfig.entry = entries;
 
 module.exports = webpackConfig;
