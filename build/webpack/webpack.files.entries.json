@@ -54,9 +54,5 @@
     "searchMenu": {
         "output": "components/searchMenu/searchMenu",
         "entry": "./src/components/searchMenu/src/app.jsx"
-    },
-    "truck": {
-        "output": "components\\truck\\truck",
-        "entry": ".\\src\\components\\truck\\truck.js"
     }
 }

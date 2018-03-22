@@ -5,21 +5,12 @@ const webpack = require("webpack")
 const componentsToBuild = require('./webpack.files.entries.json');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const defaultConfig = require("./defaultWebpackConfig");
-
 let enableHMR = false,//Enable Hot Reload
 	HMRBlacklist = ["testComponent"],//Components to explude
 	HMRWhitelist = [],//Only reload these components
 	componentIgnores = [],
-	webpackConfigs = [];//Our list of webpack configs list
+	webpackConfig = null;//Our list of webpack configs list
 
-if (process.env.NODE_ENV === "production") {// if we are in production turn off hotreload
-	enableHMR = false;
-}
-
-for (var key in componentsToBuild) {
-	var filename = componentsToBuild[key].entry.split("/").pop();
-	componentIgnores.push("*" + filename);
-}
 
 // Our default entry
 function defaults() {
@@ -32,7 +23,7 @@ for (let key in componentsToBuild) {
 	entries[component.output] = component.entry;
 }
 webpackConfig = new defaults();
-webpackConfig.entry = entries;
+
 // console.log(webpackConfig.entry);
 
 // webpackConfig.plugins.push(new webpack.optimize.CommonsChunkPlugin({
@@ -77,9 +68,16 @@ webpackConfig.plugins.push(new CopyWebpackPlugin([
 		to: './thirdParty/',
 		force: false,
 		ignore: ["*.js"]
+	},
+	{
+		from: './node_modules/@chartiq/finsemble/dist',
+		to: path.join(__dirname, "../../Finsemble/"),
+		force: true
 	}
 ], { ignore: componentIgnores }));
 
-module.exports = webpackConfigs;
+webpackConfig.entry = entries;
+
+module.exports = webpackConfig;
 
 
