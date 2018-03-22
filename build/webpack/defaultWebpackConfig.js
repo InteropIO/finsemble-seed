@@ -36,7 +36,9 @@ module.exports = function () {
 		devtool: 'source-map',
 		entry: {},
 		stats: {
-			warnings: true
+			// Add built modules information
+			modules: true,
+			errors: true
 		},
 		module: {
 			rules: [

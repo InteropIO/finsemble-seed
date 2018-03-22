@@ -298,7 +298,6 @@
 		gulp.task(
 			"build",
 			gulp.series(
-				taskMethods.copyStaticFiles,
 				taskMethods.buildWebpack,
 				taskMethods.buildSass,
 				taskMethods.buildAngular));
@@ -316,7 +315,7 @@
 		/**
 		 * Builds the application, starts the server, launches the Finsemble application and watches for file changes.
 		 */
-		gulp.task("dev:run", gulp.series("build", taskMethods.startServer, taskMethods.launchApplication, taskMethods.watchFiles));
+		gulp.task("dev:run", gulp.series("build", taskMethods.startServer, taskMethods.launchApplication));
 
 		/**
 		 * Specifies the default task to run if no task is passed in.
