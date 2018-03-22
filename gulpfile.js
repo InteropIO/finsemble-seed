@@ -313,7 +313,7 @@
 		/**
 		 * Builds the application, starts the server, launches the Finsemble application and watches for file changes.
 		 */
-		gulp.task("dev:run", gulp.series("prod:run", taskMethods.watchFiles));
+		gulp.task("dev:run", gulp.series("build", taskMethods.startServer, taskMethods.launchApplication, taskMethods.watchFiles));
 
 		/**
 		 * Specifies the default task to run if no task is passed in.
