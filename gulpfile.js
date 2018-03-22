@@ -115,7 +115,7 @@
 		 */
 		buildWebpack: done => {
 			webpack(webpackAdaptersConfig, () => {
-				new webpack(webpackFilesConfig, () => {
+				webpack(webpackFilesConfig, () => {
 					if (webpackServicesConfig) {
 						// Webpack config for services exists. Build it
 						webpack(webpackServicesConfig, done);

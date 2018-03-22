@@ -35,11 +35,6 @@ module.exports = function () {
 	return {
 		devtool: 'source-map',
 		entry: {},
-		stats: {
-			// Add built modules information
-			modules: true,
-			errors: true
-		},
 		module: {
 			rules: [
 				{
