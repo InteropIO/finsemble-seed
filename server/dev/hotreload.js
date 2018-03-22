@@ -8,7 +8,8 @@ var chalk = require('chalk');
  *
  */
 var glob_entries = require('webpack-glob-entries');
-module.exports = function loadDev(app, server, cb) {
+module.exports = function loadDev(params, cb) {
+	let { app, server } = params;
 	var webPackFiles = glob_entries(path.join(__dirname, "../../", "/build/webpack/webpack*.js"));//get all build files
 	var webpackArray = [];
 
@@ -24,7 +25,6 @@ module.exports = function loadDev(app, server, cb) {
 
 	var allBuilt = false;
 	var compiler = webpack(webpackArray);
-	if (webpackArray.length === 0) return cb(compiler);
 	var webpackDevMiddlewareInstance = require("webpack-dev-middleware")(compiler, {//build the webpack files and store them in memory
 		noInfo: true, publicPath: "http://localhost:3375/", error: handleWebpackError, reporter: webpackReporter
 	});
@@ -41,7 +41,7 @@ module.exports = function loadDev(app, server, cb) {
 			var statComp = statsResult.stats[i].compilation;
 			for (var j = 0; j < statComp.errors.length; j++) {
 				var err = statComp.errors[j];
-				if (err.error.message !== prevError) {
+				if (err.error && err.error.message !== prevError) {
 					prevError = err.error.message;
 					if (!err.error.file) {
 						console.error(chalk.bold.bgRed.underline("MSG:"), err.error.error ? err.error.error.message : err.error.message,
@@ -51,6 +51,9 @@ module.exports = function loadDev(app, server, cb) {
 							"\n", chalk.bold.bgRed.underline("Error MSG:"), err.error.formatted,
 							"\n", chalk.bold.bgRed.underline("line:"), err.error.line);
 					}
+				} else {
+					// Uglify returns errors as strings, not as objects
+					console.error(chalk.bold.bgRed(err));
 				}
 			}
 		}
@@ -67,7 +70,10 @@ module.exports = function loadDev(app, server, cb) {
 	app.use(webpackDevMiddlewareInstance);
 
 	require("../hotreloadmiddleware/middleware").webpackSocketHotMiddleware(compiler, { sockets: true, server: server });
-
+	if (webpackArray.length === 0) {
+		console.log("Nothing in the webpack array. Returning.");
+		return cb(compiler);
+	}
 	webpackDevMiddlewareInstance.waitUntilValid(function () {//When build is complete we call the callback.
 		//The compiler is sent through so that hot reload can pick it up
 		allBuilt = true;

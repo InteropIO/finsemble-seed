@@ -24,6 +24,7 @@ function setupHttpReload(compiler, opts) {
 	var latestStats = null;
 	compiler.plugin("compile", function () {
 		latestStats = null;
+
 		if (opts.log) { opts.log("webpack building..."); }
 		eventStream.publish({ action: "building" });
 	});
@@ -56,6 +57,7 @@ function setupSocketReload(compiler, opts) {
 	});
 	compiler.plugin("done", function (statsResult) {
 		// Keep hold of latest stats so they can be propagated to new clients
+		console.log("Webpack built, socket reload");
 		latestStats = statsResult;
 		publishStats("built", latestStats, eventStream, opts.log);
 	});
@@ -111,16 +113,18 @@ function createSocketStream(opts) {
 			fn(clients[id]);
 		});
 	}
-	var io = require('socket.io')(opts.server);
+	if (opts.socketServer) {
+		var io = opts.socketServer;
+	} else {
+		var io = require('socket.io').listen(opts.server);
+	}
 	io.on('connection', function (socket) {
-		console.log("client connected");
 		var id = clientId++;
 		socket.on('disconnect', function () {
 			delete clients[id];
 		});
 		clients[clientId] = socket;
 	});
-
 
 
 	setInterval(function heartbeatTick() {
@@ -137,8 +141,6 @@ function createSocketStream(opts) {
 		}
 	};
 }
-
-
 
 function publishStats(action, statsResult, eventStream, log) {
 	// For multi-compiler, stats will be an object with a 'children' array of stats
