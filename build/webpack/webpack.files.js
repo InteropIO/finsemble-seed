@@ -88,8 +88,6 @@ webpackConfigs[0].plugins.push(new CopyWebpackPlugin([
 	}
 ], { ignore: componentIgnores }));
 
-);
-
 module.exports = webpackConfigs;
 
 
