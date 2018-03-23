@@ -66,5 +66,9 @@
     "iframeTest": {
         "output": "components\\iframeTest\\iframeTest",
         "entry": ".\\src\\components\\iframeTest\\iframeTest.js"
+    },
+    "localStorageAdapter": {
+        "output": "adapters/LocalStorageAdapter",
+        "entry": "./src/adapters/LocalStorageAdapter.js"
     }
 }
