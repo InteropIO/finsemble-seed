@@ -145,6 +145,7 @@
 		clean: () => {
 			del(distPath, { force: true });
 			del(".babel_cache", { force: true })
+			del(path.join(__dirname, "build/webpack/vendor-manifest.json"), { force: true })
 			return del(".webpack-file-cache", { force: true })
 		},
 
