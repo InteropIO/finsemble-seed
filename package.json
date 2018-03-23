@@ -5,11 +5,13 @@
   "main": "index.js",
   "scripts": {
     "dev": "set NODE_ENV=development&&gulp --gulpfile=./gulpfile.js",
+    "dev-fresh": "set NODE_ENV=development&&gulp --gulpfile=./gulpfile.js dev:run-fresh",
     "prod": "set NODE_ENV=production&&gulp prod --gulpfile=./gulpfile.js",
     "prod:run": "set NODE_ENV=production&&gulp prod:run --gulpfile=./gulpfile.js",
     "build": "set NODE_ENV=development&&gulp build --gulpfile=./gulpfile.js",
     "build:prod": "set NODE_ENV=production&&gulp build --gulpfile=./gulpfile.js",
     "build:vendor-manifest": "webpack --config=./build/webpack/webpack.vendor.config.js",
+    "rebuild": "set NODE_ENV=development&&gulp build --gulpfile=./gulpfile.js rebuild",
     "clean": "gulp clean --gulpfile=./gulpfile.js",
     "update-finsemble": "npm update @chartiq/finsemble && npm update -g @chartiq/finsemble-cli"
   },

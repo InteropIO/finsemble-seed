@@ -19,6 +19,7 @@
 
 	// local
 	const extensions = fs.existsSync("./gulpfile-extensions.js") ? require("./gulpfile-extensions.js") : undefined;
+	const webpackVendorConfig = require("./build/webpack/webpack.vendor.config.js")
 	const webpackFilesConfig = require("./build/webpack/webpack.files.js")
 	const webpackServicesConfig = require("./build/webpack/webpack.services.js")
 	// #endregion
@@ -108,30 +109,31 @@
 				.pipe(sass().on("error", sass.logError))
 				.pipe(gulp.dest(path.join(distPath, "components")));
 		},
-
 		/**
 		 * Builds files using webpack.
 		 */
 		buildWebpack: done => {
-			webpack(webpackFilesConfig, (err, stats) => {
-				if (!err) {
-					console.log(`[${new Date().toLocaleTimeString()}] Finished Webpack build.`);
-				} else {
-					console.error("Webpack Error.", err);
-				}
-				if (webpackServicesConfig) {
-					// Webpack config for services exists. Build it
-					webpack(webpackServicesConfig, (err, stats) => {
-						if (!err) {
-							console.log(`[${new Date().toLocaleTimeString()}] Finished Webpack build.`);
-						} else {
-							console.error("Webpack Error. Services", err);
-						}
+			webpack(webpackVendorConfig, (err, stats) => {
+				webpack(webpackFilesConfig, (err, stats) => {
+					if (!err) {
+						console.log(`[${new Date().toLocaleTimeString()}] Finished Webpack build.`);
+					} else {
+						console.error("Webpack Error.", err);
+					}
+					if (webpackServicesConfig) {
+						// Webpack config for services exists. Build it
+						webpack(webpackServicesConfig, (err, stats) => {
+							if (!err) {
+								console.log(`[${new Date().toLocaleTimeString()}] Finished Webpack build.`);
+							} else {
+								console.error("Webpack Error. Services", err);
+							}
+							done();
+						});
+					} else {
 						done();
-					});
-				} else {
-					done();
-				}
+					}
+				});
 			});
 		},
 
@@ -139,7 +141,9 @@
 		 * Cleans the project folder of generated files.
 		 */
 		clean: () => {
-			return del(distPath, { force: true });
+			del(distPath, { force: true });
+			del(".babel_cache", { force: true })
+			return del(".webpack-file-cache", { force: true })
 		},
 
 		/**
@@ -312,6 +316,11 @@
 				taskMethods.buildAngular));
 
 		/**
+		 * Wipes the babel cache and webpack cache, clears dist, rebuilds the application.
+		 */
+		gulp.task("rebuild", gulp.series("clean", "build"));
+
+		/**
 		 * Builds the application and starts the server to host it.
 		 */
 		gulp.task("prod", gulp.series("build", taskMethods.buildWebpack, taskMethods.startServer));
@@ -325,6 +334,12 @@
 		 * Builds the application, starts the server, launches the Finsemble application and watches for file changes.
 		 */
 		gulp.task("dev:run", gulp.series("build", taskMethods.startServer, taskMethods.launchApplication));
+
+		/**
+		 * Wipes the babel cache and webpack cache, clears dist, rebuilds the application, and starts the server.
+		 */
+		gulp.task("dev:run-fresh", gulp.series("rebuild", taskMethods.startServer, taskMethods.launchApplication));
+
 
 		/**
 		 * Specifies the default task to run if no task is passed in.

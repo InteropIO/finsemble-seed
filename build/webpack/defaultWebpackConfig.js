@@ -29,6 +29,7 @@ if (env === "production") {
 			files: ['package-lock.json'],
 		}
 	}));
+
 	try {
 		const VENDOR_MANIFEST = require('./vendor-manifest.json');
 		plugins.push(new DllReferencePlugin({
