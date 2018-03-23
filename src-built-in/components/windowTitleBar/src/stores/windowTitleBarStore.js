@@ -79,6 +79,9 @@ var Actions = {
 		 * @param {*} response
 		 */
 		var onDockingGroupUpdate = function (err, response) {
+			if (err || !response.data || !response.data.groupData) {
+				return;
+			}
 			let groupNames = Object.keys(response.data.groupData);
 			let movableGroups = groupNames
 				.filter(groupName => response.data.groupData[groupName].isMovable)
