@@ -1,6 +1,6 @@
 const path = require('path');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const { DefinePlugin } = require("webpack");
+const { DllReferencePlugin, DefinePlugin } = require("webpack");
 const hardSource = require("hard-source-webpack-plugin");
 
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
@@ -29,6 +29,16 @@ if (env === "production") {
 			files: ['package-lock.json'],
 		}
 	}));
+	try {
+		const VENDOR_MANIFEST = require('./vendor-manifest.json');
+		plugins.push(new DllReferencePlugin({
+			manifest: VENDOR_MANIFEST
+		}));
+	} catch (e) {
+		console.error(`[WEBPACK ERROR:] You have not generated a vendor-manifest for your webpack configuration. This is an important optimization that reduces build times by 30-40%. Please run "npm run build:vendor-manifest", and then run "npm run dev" once more. You are only required to build the vendor manifest when your node modules update, or when you update the Finsemble Seed project.`);
+		process.exit(1);
+	}
+
 }
 
 module.exports = function () {
