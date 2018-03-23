@@ -19,9 +19,7 @@
 
 	// local
 	const extensions = fs.existsSync("./gulpfile-extensions.js") ? require("./gulpfile-extensions.js") : undefined;
-	const webpackVendorConfig = require("./build/webpack/webpack.vendor.config.js")
-	const webpackFilesConfig = require("./build/webpack/webpack.files.js")
-	const webpackServicesConfig = require("./build/webpack/webpack.services.js")
+
 	// #endregion
 
 	// #region Constants
@@ -113,7 +111,11 @@
 		 * Builds files using webpack.
 		 */
 		buildWebpack: done => {
+			//Requires are done in the function in this way because webpack.files.js will error out if there's no vendor-manifest. The first webpack function generates the vendor manifest.
+			const webpackVendorConfig = require("./build/webpack/webpack.vendor.config.js")
 			webpack(webpackVendorConfig, (err, stats) => {
+				const webpackFilesConfig = require("./build/webpack/webpack.files.js")
+				const webpackServicesConfig = require("./build/webpack/webpack.services.js")
 				webpack(webpackFilesConfig, (err, stats) => {
 					if (!err) {
 						console.log(`[${new Date().toLocaleTimeString()}] Finished Webpack build.`);
