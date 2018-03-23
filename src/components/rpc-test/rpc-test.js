@@ -55,10 +55,9 @@ function logmein() {
 }
 
 function showWindow() {
-	FSBL.Clients.LauncherClient.spawn("chart", {top:0,left:0,width:200,height:200}, function (err, obj) {
-		setTimeout(function () {
-			FSBL.Clients.LauncherClient.showWindow(obj.windowIdentifier, { left:"adjacent", top:"adjacent", width:"25%", height:"25%"});
-		},5000)
+	FSBL.Clients.LauncherClient.spawn("chart", { top: 0, left: 0, width: 200, height: 200 }, function (err, obj) {
+		var o = FSBL.Clients.LauncherClient.getRawWindow(obj.windowIdentifier);
+		console.log(o);
 	});
 }
 
