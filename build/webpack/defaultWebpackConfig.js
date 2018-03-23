@@ -1,6 +1,6 @@
 const path = require('path');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const { DefinePlugin } = require("webpack");
+const { DllReferencePlugin, DefinePlugin } = require("webpack");
 const hardSource = require("hard-source-webpack-plugin");
 
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
@@ -29,15 +29,24 @@ if (env === "production") {
 			files: ['package-lock.json'],
 		}
 	}));
+
+	try {
+		const VENDOR_MANIFEST = require('./vendor-manifest.json');
+		plugins.push(new DllReferencePlugin({
+			manifest: VENDOR_MANIFEST
+		}));
+	} catch (e) {
+		console.error(`[WEBPACK ERROR:] You have not generated a vendor-manifest for your webpack configuration. This is an important optimization that reduces build times by 30-40%. Please run "npm run build:vendor-manifest", and then run "npm run dev" once more. You are required to build the vendor manifest when you delete your dist folder, when your node modules update, or when you update the Finsemble Seed project.`);
+		process.exit(1);
+	}
+
 }
 
 module.exports = function () {
 	return {
 		devtool: 'source-map',
 		entry: {},
-		stats: {
-			warnings: true
-		},
+		stats: "minimal",
 		module: {
 			rules: [
 				{
@@ -81,6 +90,7 @@ module.exports = function () {
 					exclude: [/node_modules/, "/chartiq/"],
 					loader: 'babel-loader',
 					options: {
+						cacheDirectory: './.babel_cache/',
 						presets: ['react', 'stage-1']
 					}
 				}
@@ -93,7 +103,7 @@ module.exports = function () {
 			path: path.resolve(__dirname, '../../dist/'),
 			publicPath: 'http://localhost:3375/'
 		},
-		watch: false,
+		watch: true,
 		resolve: {
 			extensions: ['.js', '.jsx', '.json', 'scss', 'html'],
 			modules: [
