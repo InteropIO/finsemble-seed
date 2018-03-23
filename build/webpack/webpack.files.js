@@ -6,7 +6,7 @@ const componentsToBuild = require('./webpack.files.entries.json');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const defaultConfig = require("./defaultWebpackConfig");
 
-let enableHMR = true,//Enable Hot Reload
+let enableHMR = false,//Enable Hot Reload
 	HMRBlacklist = ["testComponent"],//Components to explude
 	HMRWhitelist = [],//Only reload these components
 	componentIgnores = [],
@@ -87,6 +87,8 @@ webpackConfigs[0].plugins.push(new CopyWebpackPlugin([
 		ignore: ["*.js"]
 	}
 ], { ignore: componentIgnores }));
+
+);
 
 module.exports = webpackConfigs;
 
