@@ -32,7 +32,7 @@ module.exports = function(hash, moduleMap, options) {
     var cb = function(err, updatedModules) {
       if (err) return handleError(err);
 
-      if(!updatedModules) {
+      if(!updatedModules || updatedModules.length === 0) {
         return null;
       }
       var applyCallback = function(applyErr, renewedModules) {

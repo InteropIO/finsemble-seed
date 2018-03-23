@@ -8,7 +8,8 @@ var chalk = require('chalk');
  *
  */
 var glob_entries = require('webpack-glob-entries');
-module.exports = function loadDev(app, server, cb) {
+module.exports = function loadDev(params, cb) {
+	let { app, server } = params;
 	var webPackFiles = glob_entries(path.join(__dirname, "../../", "/build/webpack/webpack*.js"));//get all build files
 	var webpackArray = [];
 
@@ -24,7 +25,6 @@ module.exports = function loadDev(app, server, cb) {
 
 	var allBuilt = false;
 	var compiler = webpack(webpackArray);
-	if (webpackArray.length === 0) return cb(compiler);
 	var webpackDevMiddlewareInstance = require("webpack-dev-middleware")(compiler, {//build the webpack files and store them in memory
 		noInfo: true, publicPath: "http://localhost:3375/", error: handleWebpackError, reporter: webpackReporter
 	});
@@ -70,7 +70,10 @@ module.exports = function loadDev(app, server, cb) {
 	app.use(webpackDevMiddlewareInstance);
 
 	require("../hotreloadmiddleware/middleware").webpackSocketHotMiddleware(compiler, { sockets: true, server: server });
-
+	if (webpackArray.length === 0) {
+		console.log("Nothing in the webpack array. Returning.");
+		return cb(compiler);
+	}
 	webpackDevMiddlewareInstance.waitUntilValid(function () {//When build is complete we call the callback.
 		//The compiler is sent through so that hot reload can pick it up
 		allBuilt = true;

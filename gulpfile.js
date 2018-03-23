@@ -19,8 +19,7 @@
 
 	// local
 	const extensions = fs.existsSync("./gulpfile-extensions.js") ? require("./gulpfile-extensions.js") : undefined;
-	const webpackFilesConfig = require("./build/webpack/webpack.files.js")
-	const webpackServicesConfig = require("./build/webpack/webpack.services.js")
+
 	// #endregion
 
 	// #region Constants
@@ -61,8 +60,8 @@
 	// #endregion
 
 	// #region Task Methods
-	/** 
-	 * Object containing all of the methods used by the gulp tasks. 
+	/**
+	 * Object containing all of the methods used by the gulp tasks.
 	 */
 	const taskMethods = {
 		buildAngular: done => {
@@ -93,8 +92,8 @@
 			done();
 		},
 
-		/** 
-		 * Builds the SASS files for the project. 
+		/**
+		 * Builds the SASS files for the project.
 		 */
 		buildSass: () => {
 			const source = [path.join(srcPath, "components", "**", "*.scss")];
@@ -111,18 +110,35 @@
 				.pipe(sass().on("error", sass.logError))
 				.pipe(gulp.dest(path.join(distPath, "components")));
 		},
-
 		/**
 		 * Builds files using webpack.
 		 */
 		buildWebpack: done => {
-			webpack(webpackFilesConfig, () => {
-				if (webpackServicesConfig) {
-					// Webpack config for services exists. Build it
-					webpack(webpackServicesConfig, done);
-				} else {
-					done();
-				}
+			//Requires are done in the function in this way because webpack.files.js will error out if there's no vendor-manifest. The first webpack function generates the vendor manifest.
+			const webpackVendorConfig = require("./build/webpack/webpack.vendor.config.js")
+			webpack(webpackVendorConfig, (err, stats) => {
+				const webpackFilesConfig = require("./build/webpack/webpack.files.js")
+				const webpackServicesConfig = require("./build/webpack/webpack.services.js")
+				webpack(webpackFilesConfig, (err, stats) => {
+					if (!err) {
+						console.log(`[${new Date().toLocaleTimeString()}] Finished Webpack build.`);
+					} else {
+						console.error("Webpack Error.", err);
+					}
+					if (webpackServicesConfig) {
+						// Webpack config for services exists. Build it
+						webpack(webpackServicesConfig, (err, stats) => {
+							if (!err) {
+								console.log(`[${new Date().toLocaleTimeString()}] Finished Webpack build.`);
+							} else {
+								console.error("Webpack Error. Services", err);
+							}
+							done();
+						});
+					} else {
+						done();
+					}
+				});
 			});
 		},
 
@@ -130,10 +146,13 @@
 		 * Cleans the project folder of generated files.
 		 */
 		clean: () => {
-			return del(distPath, { force: true });
+			del(distPath, { force: true });
+			del(".babel_cache", { force: true })
+			del(path.join(__dirname, "build/webpack/vendor-manifest.json"), { force: true })
+			return del(".webpack-file-cache", { force: true })
 		},
 
-		/** 
+		/**
 		 * Copies static files to the output directory.
 		 */
 		copyStaticFiles: () => {
@@ -205,21 +224,21 @@
 
 		/**
 		 * Method called after tasks are defined.
-		 * @param done Callback function used to signal function completion to support asynchronous execution. Can 
+		 * @param done Callback function used to signal function completion to support asynchronous execution. Can
 		 * optionally return an error, if one occurs.
 		 */
 		post: done => { done(); },
 
 		/**
 		 * Method called before tasks are defined.
-		 * @param done Callback function used to signal function completion to support asynchronous execution. Can 
+		 * @param done Callback function used to signal function completion to support asynchronous execution. Can
 		 * optionally return an error, if one occurs.
 		 */
 		pre: done => { done(); },
 
 		/**
 		 * Starts the server.
-		 * 
+		 *
 		 * @param {function} done Function called when execution has completed.
 		 */
 		startServer: done => {
@@ -260,7 +279,7 @@
 			serverExec.stderr.on("data", data => { console.error(errorOutColor(`ERROR: ${data}`)); });
 		},
 
-		/** 
+		/**
 		 * Watches files for changes to fire off copies and builds.
 		 */
 		watchFiles: done => {
@@ -299,16 +318,19 @@
 		gulp.task(
 			"build",
 			gulp.series(
-				"clean",
-				taskMethods.copyStaticFiles,
 				taskMethods.buildWebpack,
 				taskMethods.buildSass,
 				taskMethods.buildAngular));
 
 		/**
+		 * Wipes the babel cache and webpack cache, clears dist, rebuilds the application.
+		 */
+		gulp.task("rebuild", gulp.series("clean", "build"));
+
+		/**
 		 * Builds the application and starts the server to host it.
 		 */
-		gulp.task("prod", gulp.series("build", taskMethods.startServer));
+		gulp.task("prod", gulp.series("build", taskMethods.buildWebpack, taskMethods.startServer));
 
 		/**
 		 * Builds the application, starts the server and launches the Finsemble application.
@@ -318,7 +340,13 @@
 		/**
 		 * Builds the application, starts the server, launches the Finsemble application and watches for file changes.
 		 */
-		gulp.task("dev:run", gulp.series("prod:run", taskMethods.watchFiles));
+		gulp.task("dev:run", gulp.series("build", taskMethods.startServer, taskMethods.launchApplication));
+
+		/**
+		 * Wipes the babel cache and webpack cache, clears dist, rebuilds the application, and starts the server.
+		 */
+		gulp.task("dev:run-fresh", gulp.series("rebuild", taskMethods.startServer, taskMethods.launchApplication));
+
 
 		/**
 		 * Specifies the default task to run if no task is passed in.
