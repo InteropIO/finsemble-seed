@@ -54,6 +54,14 @@ function logmein() {
 	sendRPCMessage("AuthenticationClient.publishAuthorization", ["test","test"]);
 }
 
+function showWindow() {
+	FSBL.Clients.LauncherClient.spawn("chart", {top:0,left:0,width:200,height:200}, function (err, obj) {
+		setTimeout(function () {
+			FSBL.Clients.LauncherClient.showWindow(obj.windowIdentifier, { left:"adjacent", top:"adjacent", width:"25%", height:"25%"});
+		},5000)
+	});
+}
+
 fin.desktop.main(function () {
 	// Set up the openfin channel for receiving responses
 	fin.desktop.InterApplicationBus.subscribe("*", myChannel, function (message, uuid, name) {
@@ -69,4 +77,5 @@ fin.desktop.main(function () {
 	document.querySelector("linkme").onclick = linkme;
 	document.querySelector("launchme").onclick = launchme;
 	document.querySelector("logmein").onclick = logmein;
+	document.querySelector("showWindow").onclick = showWindow;
 });
