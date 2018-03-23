@@ -35,7 +35,7 @@ if (env === "production") {
 			manifest: VENDOR_MANIFEST
 		}));
 	} catch (e) {
-		console.error(`[WEBPACK ERROR:] You have not generated a vendor-manifest for your webpack configuration. This is an important optimization that reduces build times by 30-40%. Please run "npm run build:vendor-manifest", and then run "npm run dev" once more. You are only required to build the vendor manifest when your node modules update, or when you update the Finsemble Seed project.`);
+		console.error(`[WEBPACK ERROR:] You have not generated a vendor-manifest for your webpack configuration. This is an important optimization that reduces build times by 30-40%. Please run "npm run build:vendor-manifest", and then run "npm run dev" once more. You are required to build the vendor manifest when you delete your dist folder, when your node modules update, or when you update the Finsemble Seed project.`);
 		process.exit(1);
 	}
 
