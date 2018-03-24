@@ -18,7 +18,6 @@
 	const path = require("path");
 
 	// Local
-	const hotReload = require("./dev/hotreload");
 	const extensions = fs.existsSync(path.join(__dirname, "server-extensions.js")) ?
 		require("./server-extensions") :
 		{
@@ -152,7 +151,6 @@
 					if (process.env.NODE_ENV === "development") {
 						// Setup hot reload in the dev environment
 						console.log(outputColor("start hot reload"));
-						// hotReload({ app, server }, done);
 						done();
 					} else if (process.send) {
 						done();
