@@ -12,7 +12,6 @@
 	const sass = require("gulp-sass");
 	const watch = require("gulp-watch");
 	const shell = require("shelljs");
-	const merge = require("merge-stream");
 	const launcher = require("openfin-launcher");
 	const path = require("path");
 	const webpack = require("webpack");
@@ -150,45 +149,6 @@
 			del(".babel_cache", { force: true })
 			del(path.join(__dirname, "build/webpack/vendor-manifest.json"), { force: true })
 			return del(".webpack-file-cache", { force: true })
-		},
-
-		/**
-		 * Copies static files to the output directory.
-		 */
-		copyStaticFiles: () => {
-			const source = [
-				path.join(srcBuiltInPath, "components", "**", "*"),
-				path.join(srcPath, "components", "**", "*"),
-				"!" + path.join(srcPath, "components", "**", "*.jsx")];
-
-			// Don't copy files that we build
-			for (const key in componentsToBuild) {
-				source.push("!" + path.join(__dirname, componentsToBuild[key].entry));
-			}
-
-			// // Dont copy files built by angular
-			// if (angularComponents) {
-			// 	angularComponents.forEach(comp => {
-			// 		source.push("!" + path.join(__dirname, comp.source, '**'));
-			// 	});
-			// }
-
-			return merge(
-				gulp
-					.src(source)
-					.pipe(gulp.dest(path.join(distPath, "components"))),
-				gulp
-					.src([path.join(__dirname, "configs", "**", "*")])
-					.pipe(gulp.dest(path.join(distPath, "configs"))),
-				gulp
-					.src([
-						path.join(srcPath, "services", "**", "*.html"),
-						"!" + path.join(srcPath, "services", "**", "*.js")])
-					.pipe(gulp.dest(path.join(distPath, "services"))),
-				gulp
-					.src([path.join(__dirname, "node_modules", "@chartiq", "finsemble", "dist", "**", "*")])
-					.pipe(gulp.dest(path.join(distPath, "finsemble")))
-			);
 		},
 
 		/**
