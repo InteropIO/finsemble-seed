@@ -80,7 +80,13 @@
 
 	console.log(outputColor(`Server serving from ${rootDir} with caching maxAge = ${cacheAge} ms.`));
 
-	const options = { maxAge: cacheAge };
+	let options = { maxAge: cacheAge };
+	//This will prevent config files from being cached by the server, allowing an application restart instead of a rebuild.
+	if (cacheAge === 0) {
+		options.setHeaders = function (res, path, stat) {
+			res.set("cache-control", "no-cache")
+		}
+	}
 
 	console.log(outputColor("Starting Server"));
 
@@ -144,7 +150,7 @@
 					if (process.env.NODE_ENV === "development") {
 						// Setup hot reload in the dev environment
 						console.log(outputColor("start hot reload"));
-						hotReload(app, server, done);
+						hotReload({ app, server }, done);
 					} else if (process.send) {
 						done();
 					}

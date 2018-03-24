@@ -58,8 +58,8 @@
 	// #endregion
 
 	// #region Task Methods
-	/** 
-	 * Object containing all of the methods used by the gulp tasks. 
+	/**
+	 * Object containing all of the methods used by the gulp tasks.
 	 */
 	const taskMethods = {
 		buildAngular: done => {
@@ -90,8 +90,8 @@
 			done();
 		},
 
-		/** 
-		 * Builds the SASS files for the project. 
+		/**
+		 * Builds the SASS files for the project.
 		 */
 		buildSass: () => {
 			const source = [path.join(srcPath, "components", "**", "*.scss")];
@@ -130,7 +130,7 @@
 			return del(distPath, { force: true });
 		},
 
-		/** 
+		/**
 		 * Copies static files to the output directory.
 		 */
 		copyStaticFiles: () => {
@@ -201,21 +201,21 @@
 
 		/**
 		 * Method called after tasks are defined.
-		 * @param done Callback function used to signal function completion to support asynchronous execution. Can 
+		 * @param done Callback function used to signal function completion to support asynchronous execution. Can
 		 * optionally return an error, if one occurs.
 		 */
 		post: done => { done(); },
 
 		/**
 		 * Method called before tasks are defined.
-		 * @param done Callback function used to signal function completion to support asynchronous execution. Can 
+		 * @param done Callback function used to signal function completion to support asynchronous execution. Can
 		 * optionally return an error, if one occurs.
 		 */
 		pre: done => { done(); },
 
 		/**
 		 * Starts the server.
-		 * 
+		 *
 		 * @param {function} done Function called when execution has completed.
 		 */
 		startServer: done => {
@@ -256,7 +256,7 @@
 			serverExec.stderr.on("data", data => { console.error(errorOutColor(`ERROR: ${data}`)); });
 		},
 
-		/** 
+		/**
 		 * Watches files for changes to fire off copies and builds.
 		 */
 		watchFiles: done => {
@@ -297,14 +297,13 @@
 			gulp.series(
 				"clean",
 				taskMethods.copyStaticFiles,
-				taskMethods.buildWebpack,
 				taskMethods.buildSass,
 				taskMethods.buildAngular));
 
 		/**
 		 * Builds the application and starts the server to host it.
 		 */
-		gulp.task("prod", gulp.series("build", taskMethods.startServer));
+		gulp.task("prod", gulp.series("build", taskMethods.buildWebpack, taskMethods.startServer));
 
 		/**
 		 * Builds the application, starts the server and launches the Finsemble application.
@@ -314,7 +313,7 @@
 		/**
 		 * Builds the application, starts the server, launches the Finsemble application and watches for file changes.
 		 */
-		gulp.task("dev:run", gulp.series("prod:run", taskMethods.watchFiles));
+		gulp.task("dev:run", gulp.series("build", taskMethods.startServer, taskMethods.launchApplication, taskMethods.watchFiles));
 
 		/**
 		 * Specifies the default task to run if no task is passed in.
