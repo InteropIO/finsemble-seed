@@ -68,7 +68,7 @@ function copyNodeModules(done) {
 function updatePackageFile(done) {
     let existingPackagePath = path.join(PROJECT_ROOT, "package.json")
     let existingPackage = require(existingPackagePath);
-    let newPackage = require("./package.json");
+    let newPackage = require("../package.json");
 
     let oldScripts = Object.keys(existingPackage.scripts);
     let newScripts = Object.keys(newPackage.scripts);
@@ -92,11 +92,12 @@ function updatePackageFile(done) {
     existingPackage.devDependencies = Object.assign(existingPackage.devDependencies, newPackages);
     const content = JSON.stringify(existingPackage, null, '\t');
     fs.writeFileSync(existingPackagePath, content, 'utf8');
+    done();
 }
 
 
 function addVendorBundle(cb) {
-    const COMPONENTS_DIRECTORY = path.join(__dirname, '../../src/components/');
+    const COMPONENTS_DIRECTORY = path.join(PROJECT_ROOT, 'src/components/');
     //There's probably a better globber out there, this is the one I know.
     const HTMLFiles = glob_entries(path.join(COMPONENTS_DIRECTORY, '**/*.html'));
     let files = [];

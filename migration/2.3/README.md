@@ -33,3 +33,8 @@ node migration/2.3/migrationScripts/migrate.js
 4. Check out `master` from github (finsemble-seed).
 5. `rm -rf node_modules && npm install`. This will clear your node modules and install them fresh, as though master was what you've been running forever.
 6. Run through the client steps.
+
+Helpful script, after running the migration in master
+```bash
+rm -rf *-original && rm -rf src-built-in/ && rm -rf build/webpack/*vendor* && rm -rf build/webpack/webpack.default.files.entries.json  && rm -rf .*cache && rm gulpfile.js.original rm -rf migration/
+```
