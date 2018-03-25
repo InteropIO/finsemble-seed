@@ -1,0 +1,13 @@
+node_modules
+perf/versions
+nyc_output
+.nyc_output
+coverage
+*.log
+.DS_Store
+npm-debug.log
+tmp
+build
+build-es
+.idea
+docs
