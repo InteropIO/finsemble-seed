@@ -1,6 +1,6 @@
-const async = require('../modules_for_update_script/async');
-const glob_entries = require('../modules_for_update_script/webpack-glob-entries');
-const shelljs = require('../modules_for_update_script/shelljs');
+const async = require('async');
+const glob_entries = require('webpack-glob-entries');
+const shelljs = require('shelljs');
 const path = require('path');
 const fs = require('fs');
 const { copy, log, PROJECT_ROOT } = require("./common");

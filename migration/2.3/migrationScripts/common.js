@@ -1,4 +1,4 @@
-const shelljs = require("../modules_for_update_script/shelljs");
+const shelljs = require("shelljs");
 const path = require("path");
 
 
