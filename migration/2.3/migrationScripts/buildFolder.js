@@ -14,7 +14,7 @@ function getFiles(cb) {
     })
     async.eachSeries(files, copy, () => {
         //Not needed for the migration to work.
-        shelljs.rm('-rf', path.join(__dirname, "./build/webpack/vendor-manifest.json"));
+        shelljs.rm('-rf', path.join(__dirname, "../build/webpack/vendor-manifest.json"));
         cb();
     });
 }
