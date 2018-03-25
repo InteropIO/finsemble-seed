@@ -1,7 +1,7 @@
 # Instructions
 
 ## ChartIQ
-1. First, we need to build the migration folder that will be sent to the client. Make sure you're on the 2.3 tag in the seed. Then, run the following command from the root of the finsemble-seed.
+1. First, we need to build the migration folder that will be sent to the client. Make sure you're on the 2.3 tag in the seed. Then, run the following command from the root of the finsemble-seed. This will take 5+ minutes (copying node_modules is slow).
 
 ```javascript
 node migration/2.3/migrationScripts/buildFolder.js
