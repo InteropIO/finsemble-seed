@@ -4,7 +4,7 @@
 1. First, we need to build the migration folder that will be sent to the client. Make sure you're on the 2.3 tag in the seed. Then, run the following command from the root of the finsemble-seed. This will take 5+ minutes (copying node_modules is slow).
 
 ```javascript
-node migration/2.3/migrationScripts/buildFolder.js
+rm -rf node_modules && npm install && node migration/2.3/migrationScripts/buildFolder.js
 ```
 
 2. Next, zip the entire migration folder, and send to the client.
@@ -28,7 +28,7 @@ node migration/2.3/migrationScripts/migrate.js
 
 # ChartIQ Testing
 1. Pull down the `reorg2` branch from github (finsemble-seed).
-2. `npm install`.
+2. `rm -rf node_modules && npm install`.
 3. Run through the "ChartIQ steps, above.
 4. Check out `master` from github (finsemble-seed).
 5. `rm -rf node_modules && npm install`. This will clear your node modules and install them fresh, as though master was what you've been running forever.
