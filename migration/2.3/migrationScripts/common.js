@@ -10,7 +10,7 @@ module.exports.copy = function copy(params, cb) {
     module.exports.log(`Copying "${oldPath}" to "${newPath}"`);
 
     if (COPYING_NODE_MODULES) {
-        module.exports.log("Copying node modules. This may take several minutes. The operation is blocking, so we cannot periodically let you know that the script is still working. This will likely take more than 5 minutes.");
+        module.exports.log("Copying node modules. The operation is blocking, so we cannot periodically let you know that the script is still working. This will likely take more than 5 minutes.");
     }
     //Copy the folder so we have a backup.
     shelljs.cp('-R', oldPath, newPath);

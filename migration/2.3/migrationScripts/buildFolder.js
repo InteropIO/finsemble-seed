@@ -13,7 +13,6 @@ function getFiles(cb) {
             messageOnComplete: `Copied ${file} into migration directory.`
         })
     })
-    console.log(files);
     async.eachSeries(files, copy, () => {
         //Not needed for the migration to work.
         shelljs.rm('-rf', path.join(__dirname, "../build/webpack/vendor-manifest.json"));
