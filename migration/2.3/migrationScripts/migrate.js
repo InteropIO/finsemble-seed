@@ -59,12 +59,16 @@ function copyFoldersAndFiles(cb) {
 }
 
 function copyNodeModules(done) {
+    //If we don't remove node_modules, some folders are not copied over correctly, and the project ends up with multiple versions of react, causing the toolbar to break.
+    log("Removing existing node modules folder.");
+    shelljs.rm('-rf', path.join(__dirname, "../node_modules/"))
     copy({
         oldPath: path.join(__dirname, "../node_modules/"),
         newPath: path.join(PROJECT_ROOT, "node_modules/"),
         messageOnComplete: "Copied new node modules in."
     }, done);
 }
+
 function updatePackageFile(done) {
     let existingPackagePath = path.join(PROJECT_ROOT, "package.json")
     let existingPackage = require(existingPackagePath);
