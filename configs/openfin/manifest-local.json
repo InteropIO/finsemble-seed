@@ -21,8 +21,8 @@
         "alwaysOnTop": false
     },
     "runtime": {
-        "arguments": "--noerrdialogs  --v=4 --no-sandbox  --enable-crash-reporting",
-        "version": "8.56.28.34"
+        "arguments": "--noerrdialogs  --v=4 --no-sandbox  --enable-crash-reporting --framestrategy=frames",
+        "version": "8.56.28.36"
     },
     "shortcut": {
         "company": "ChartIQ",
