@@ -1,6 +1,13 @@
-
 body {
 	margin: 0px;
+	font-family: Roboto Condensed, sans-serif;
+	font-weight: 300;
+	font-size: 14px;
+	text-transform: uppercase;
+	letter-spacing: .1em;
+	margin: 0px;
+	background: #18252e;
+	color: #FFFFFF
 }
 
 section {
