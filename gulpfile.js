@@ -146,8 +146,8 @@
 					packFiles(webpackVendorConfig, "vendor bundle", cb);
 				},
 				(cb) => {
-					const webpackFilesConfig = require("./build/webpack/webpack.components.js")
-					packFiles(webpackFilesConfig, "component/adapter bundle", cb);
+					const webpackComponentsConfig = require("./build/webpack/webpack.components.js")
+					packFiles(webpackComponentsConfig, "component/adapter bundle", cb);
 				},
 				(cb) => {
 					const webpackServicesConfig = require("./build/webpack/webpack.services.js")
