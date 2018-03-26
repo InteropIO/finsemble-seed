@@ -15,22 +15,27 @@
 	const launcher = require("openfin-launcher");
 	const path = require("path");
 	const webpack = require("webpack");
-
 	// local
 	const extensions = fs.existsSync("./gulpfile-extensions.js") ? require("./gulpfile-extensions.js") : undefined;
-
+	const async = require("async");
 	// #endregion
-
+	const allowedColors = ["green", "cyan", "red", "yellow"];
+	const logToTerminal = (color, msg) => {
+		if (!allowedColors.includes(color)) {
+			msg = color;
+			color = "white";
+		}
+		console.log(`[${new Date().toLocaleTimeString()}] ${chalk[color](msg)}.`);
+	}
 	// #region Constants
-	const componentsToBuild = Object.assign(
-		require('./build/webpack/webpack.finsemble-built-in.entries.json'),
-		require('./build/webpack/webpack.files.entries.json'));
 	const startupConfig = require("./configs/other/server-environment-startup");
+	//Force colors on terminals.
+	chalk.enabled = true;
 	let angularComponents;
 	try {
 		angularComponents = require("./build/angular-components.json");
 	} catch (ex) {
-		console.log("No Angular component configuration found");
+		logToTerminal("yellow", "No Angular component configuration found");
 		angularComponents = null;
 	}
 
@@ -43,7 +48,6 @@
 	let srcPath = path.join(__dirname, "src");
 	let srcBuiltInPath = path.join(__dirname, "src-built-in");
 	let watchClose;
-
 	// If you specify environment variables to child_process, it overwrites all environment variables, including
 	// PATH. So, copy based on our existing env variables.
 	const env = process.env;
@@ -64,6 +68,7 @@
 	 */
 	const taskMethods = {
 		buildAngular: done => {
+			if (!angularComponents) return done();
 			let processRow = row => {
 				const compName = row.source.split("/").pop();
 				const cwd = path.join(__dirname, row.source);
@@ -73,10 +78,10 @@
 				// switch to components folder
 				const dir = shell.pwd();
 				shell.cd(cwd);
-				console.log(`Executing: ${command}\nin directory: ${cwd}`);
+				logToTerminal(`Executing: ${command}\nin directory: ${cwd}`);
 
 				const output = shell.exec(command);
-				console.log(`Built Angular Component, exit code = ${output.code}`);
+				logToTerminal("green", `Built Angular Component, exit code = ${output.code}`);
 				shell.cd(dir);
 			};
 
@@ -85,7 +90,7 @@
 					processRow(comp);
 				});
 			} else {
-				console.log("No Angular components found to build");
+				logToTerminal("yellow", "No Angular components found to build");
 			}
 
 			done();
@@ -113,32 +118,38 @@
 		 * Builds files using webpack.
 		 */
 		buildWebpack: done => {
-			//Requires are done in the function in this way because webpack.files.js will error out if there's no vendor-manifest. The first webpack function generates the vendor manifest.
-			const webpackVendorConfig = require("./build/webpack/webpack.vendor.config.js")
-			webpack(webpackVendorConfig, (err, stats) => {
-				const webpackFilesConfig = require("./build/webpack/webpack.files.js")
-				const webpackServicesConfig = require("./build/webpack/webpack.services.js")
-				webpack(webpackFilesConfig, (err, stats) => {
+			//Helper function that builds webpack, logs errors, and notifies user of start/finish of the webpack task.
+			function packFiles(config, bundleName, callback) {
+				logToTerminal(`Starting to build ${bundleName}`);
+				webpack(config, (err, stats) => {
 					if (!err) {
-						console.log(`[${new Date().toLocaleTimeString()}] Finished Webpack build.`);
+						logToTerminal("cyan", `Finished building ${bundleName}`)
 					} else {
-						console.error("Webpack Error.", err);
+						console.error(errorOutColor("Webpack Error.", err));
 					}
-					if (webpackServicesConfig) {
-						// Webpack config for services exists. Build it
-						webpack(webpackServicesConfig, (err, stats) => {
-							if (!err) {
-								console.log(`[${new Date().toLocaleTimeString()}] Finished Webpack build.`);
-							} else {
-								console.error("Webpack Error. Services", err);
-							}
-							done();
-						});
-					} else {
-						done();
-					}
+					callback();
 				});
-			});
+			}
+			//Requires are done in the function because webpack.files.js will error out if there's no vendor-manifest. The first webpack function generates the vendor manifest.
+			return async.series([
+				(cb) => {
+					const webpackVendorConfig = require("./build/webpack/webpack.vendor.config.js")
+					packFiles(webpackVendorConfig, "vendor bundle", cb);
+				},
+				(cb) => {
+					const webpackFilesConfig = require("./build/webpack/webpack.files.js")
+					packFiles(webpackFilesConfig, "component/adapter bundle", cb);
+				},
+				(cb) => {
+					const webpackServicesConfig = require("./build/webpack/webpack.services.js")
+					if (webpackServicesConfig) {
+						packFiles(webpackServicesConfig, "services bundle", cb);
+					} else {
+						cb();
+					}
+				}],
+				done);
+
 		},
 
 		/**
@@ -233,7 +244,7 @@
 					}
 				});
 
-			serverExec.on("exit", code => console.log(`Server closed: exit code ${code}`));
+			serverExec.on("exit", code => logToTerminal("red", `Server closed: exit code ${code}`));
 
 			// Prints server errors to your terminal.
 			serverExec.stderr.on("data", data => { console.error(errorOutColor(`ERROR: ${data}`)); });
@@ -263,7 +274,7 @@
 	// #region Task definitions
 	const defineTasks = err => {
 		if (err) {
-			console.error(err);
+			console.error(errorOutColor(err));
 			process.exit(1);
 		}
 
@@ -315,7 +326,7 @@
 
 		taskMethods.post(err => {
 			if (err) {
-				console.error(err);
+				console.error(errorOutColor(err));
 				process.exit(1);
 			}
 		});

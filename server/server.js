@@ -13,6 +13,7 @@
 	// #region Imports
 	// NPM
 	const chalk = require("chalk");
+	chalk.enabled = true;
 	const express = require("express");
 	const fs = require("fs");
 	const path = require("path");
@@ -89,11 +90,14 @@
 	const rootDir = path.join(__dirname, "..", "dist");
 	const moduleDirectory = path.join(__dirname, "..", "Finsemble");
 	const cacheAge = 0;
-	const outputColor = chalk.yellow;
+	const outputColor = chalk.white;
 	const PORT = process.env.PORT || 3375;
 	// #endregion
+	const logToTerminal = (msg) => {
+		console.log(`[${new Date().toLocaleTimeString()}] ${msg}.`);
+	}
 
-	console.log(outputColor(`Server serving from ${rootDir} with caching maxAge = ${cacheAge} ms.`));
+	logToTerminal(outputColor(`Server serving from ${rootDir} with caching maxAge = ${cacheAge} ms.`));
 
 	let options = { maxAge: cacheAge };
 	//This will prevent config files from being cached by the server, allowing an application restart instead of a rebuild.
@@ -103,7 +107,7 @@
 		}
 	}
 
-	console.log(outputColor("Starting Server"));
+	logToTerminal(outputColor("Starting Server"));
 
 	/**
 	 * Builds the server.
@@ -132,13 +136,13 @@
 				e => {
 					handleError(e);
 
-					console.log(chalk.green(`Listening on port ${PORT}`));
+					logToTerminal(outputColor(`Listening on port ${PORT}`));
 
 					global.host = server.address().address;
 					global.port = server.address().port;
 
 					const done = () => {
-						console.log(outputColor("Server started"));
+						logToTerminal(chalk.green("Server started"));
 						extensions.post(err => {
 							if (err) {
 								handleError(err);
@@ -147,14 +151,7 @@
 							}
 						});
 					};
-
-					if (process.env.NODE_ENV === "development") {
-						// Setup hot reload in the dev environment
-						console.log(outputColor("start hot reload"));
-						done();
-					} else if (process.send) {
-						done();
-					}
+					done();
 				});
 		});
 	}
