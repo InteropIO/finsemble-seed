@@ -88,7 +88,7 @@
 	const rootDir = path.join(__dirname, "..", "dist");
 	const moduleDirectory = path.join(__dirname, "..", "Finsemble");
 	const ONE_DAY = 24 * 3600 * 1000;
-	const cacheAge = process.env.NODE_ENV === "development" ? 0 : ONE_DAY;
+	const cacheAge = process.env.NODE_ENV !== "production" ? 0 : ONE_DAY;
 	const outputColor = chalk.white;
 	const PORT = process.env.PORT || 3375;
 	// #endregion
