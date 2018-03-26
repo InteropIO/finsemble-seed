@@ -2,9 +2,6 @@
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
-
-//This file is referenced in the environment switching tutorial
-
 import React from "react";
 import { Actions as FileMenuActions } from "./stores/fileMenuStore";
 import { FinsembleMenu, FinsembleMenuItem, FinsembleMenuSection, FinsembleMenuSectionLabel } from "@chartiq/finsemble-react-controls";
@@ -24,6 +21,7 @@ class FileMenu extends React.Component {
 				</FinsembleMenuSectionLabel>
 			{/*Options in the file menu.*/}
 			<FinsembleMenuSection className='menu-primary'>
+				<FinsembleMenuItem label="About" onClick={FileMenuActions.spawnAbout} />
 				<FinsembleMenuItem label="Preferences" onClick={FileMenuActions.spawnPreferences} />
 				<FinsembleMenuItem label="Central Logger" onClick={FileMenuActions.showCentralConsole} />
 				<FinsembleMenuItem label="Documentation" onClick={FileMenuActions.spawnDocs} />
@@ -42,11 +40,9 @@ class FileMenu extends React.Component {
 }
 
 
-fin.desktop.main(function () {
-	FSBL.addEventListener("onReady", function () {
-		ReactDOM.render(
-			<FileMenu />
-			, document.getElementById("FileMenu-component-wrapper"));
+FSBL.addEventListener("onReady", function () {
+	ReactDOM.render(
+		<FileMenu />
+		, document.getElementById("FileMenu-component-wrapper"));
 
-	});
 });

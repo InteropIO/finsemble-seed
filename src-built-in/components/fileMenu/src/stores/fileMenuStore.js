@@ -2,9 +2,6 @@
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
-
-//This file is referenced in the environment switching tutorial
-
 import { EventEmitter } from "events";
 
 const constants = {
@@ -24,7 +21,7 @@ var FileMenuStore = Object.assign({}, EventEmitter.prototype, {
 			self.finWindow = fin.desktop.Window.getCurrent();
 			self.emit("initialized");
 
-			FSBL.Clients.ConfigClient.get({ field: "finsemble" }, function (err, config) {
+			FSBL.Clients.ConfigClient.getValue({ field: "finsemble" }, function (err, config) {
 				self.finsembleConfig = config;
 			});
 		});
@@ -193,10 +190,11 @@ var Actions = {
 			});
 	},
 	spawnDocs() {
-		fin.desktop.System.openUrlWithBrowser(
-			"https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html",
-			() => { console.log("Successfully launched documentation"); },
-			err => { console.error(`Failed to launch documentation:\n\terr`); });
+		fin.desktop.System.openUrlWithBrowser("https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html", function () {
+			console.log("successfully launched docs");
+		},function (err) {
+			console.log("failed to launch docs");
+		});
 	}
 };
 

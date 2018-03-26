@@ -140,7 +140,7 @@ var Actions = {
 		 * If docking is disabled, don't show buttons on snaps.
 		 * @todo remove once docking is out of beta.
 		 */
-		FSBL.Clients.ConfigClient.get({ field: "finsemble" }, function (err, finsembleConfig) {
+		FSBL.Clients.ConfigClient.getValue({ field: "finsemble" }, function (err, finsembleConfig) {
 			windowTitleBarStore.setValues([{ field: "Main.dockingEnabled", value: finsembleConfig.betaFeatures.docking.enabled }]);
 		});
 	},

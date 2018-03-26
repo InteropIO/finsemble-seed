@@ -38,7 +38,7 @@ var Actions = {
 		menuStore.setValue({ field: "list", value: list })
 	},
 	listItemClick(provider, item, action) {
-		FSBL.Clients.SearchClient.resultClick(provider, item, action)
+		FSBL.Clients.SearchClient.invokeItemAction(provider, item, action)
 		finWindow.hide();
 		menuStore.setValue({ field: "list", value: [] })
 	},

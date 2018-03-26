@@ -59,7 +59,6 @@ export default class ShareButton extends React.Component {
      */
 	componentWillMount() {
 		windowTitleBarStore.addListener({ field: "Sharer.emitterEnabled" }, this.onEmitterChanged);
-		windowTitleBarStore.addListener({ field: "Sharer.receiverEnabled" }, this.onReceiverChanged);
 		windowTitleBarStore.addListener({ field: "Sharer.receiverHandler" }, this.onReceiverhandler);
 	}
     /**
@@ -69,7 +68,6 @@ export default class ShareButton extends React.Component {
      */
 	componentWillUnmount() {
 		windowTitleBarStore.removeListener({ field: "Sharer.emitterEnabled" }, this.onEmitterChanged);
-		windowTitleBarStore.removeListener({ field: "Sharer.receiverEnabled" }, this.onReceiverChanged);
 		windowTitleBarStore.removeListener({ field: "Sharer.receiverHandler" }, this.onReceiverhandler);
 	}
 

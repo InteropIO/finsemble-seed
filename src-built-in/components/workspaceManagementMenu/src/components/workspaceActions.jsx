@@ -28,12 +28,6 @@ export default class WorkspaceActions extends React.Component {
 				label: "Save As",
 				iconClass: "ff-saveas-1",
 				id: "SaveWorkspaceAs"
-			},
-			{
-				method: this.showPreferences,
-				label: "Preferences",
-				iconClass: "ff-settings",
-				id: "Settings"
 			}];
 	}
 

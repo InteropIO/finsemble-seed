@@ -19,7 +19,7 @@ export default class LeftNav extends React.Component {
         }
     }
     componentDidMount() {
-        FSBL.Clients.ConfigClient.get("finsemble", (err, config) => {
+        FSBL.Clients.ConfigClient.getValues(null, (err, config) => {
             if (config.startup_app && config.startup_app.applicationIcon) {
                 this.setState({
                     headerImgUrl: config.startup_app.applicationIcon

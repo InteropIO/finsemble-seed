@@ -29,7 +29,7 @@ export default class AppContent extends React.Component {
 
     itemClick() {
         console.log("this.props click", this.props)
-        FSBL.Clients.SearchClient.resultClick(this.props.app, this.props.app.actions[0]);//make this only use spawn for now
+        FSBL.Clients.SearchClient.invokeItemAction(this.props.app, this.props.app.actions[0]);//make this only use spawn for now
     }
 
     componentWillMount() {

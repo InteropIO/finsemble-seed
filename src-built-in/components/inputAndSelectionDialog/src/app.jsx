@@ -141,7 +141,7 @@ class InputAndSelectionDialog extends React.Component {
 		this.setState({
 			hideModalOnClose: typeof data.hideModalOnClose === "undefined" ? true : data.hideModalOnClose,
 			inputLabel: data.inputLabel,
-			templateDefinitions: data.templateDefinitions || this.setState.templateDefinitions,
+			templateDefinitions: data.templateDefinitions || this.state.templateDefinitions,
 			showCancelButton: typeof data.showCancelButton === "undefined" ? false : data.showCancelButton
 		}, this.fitAndShow);
 	}

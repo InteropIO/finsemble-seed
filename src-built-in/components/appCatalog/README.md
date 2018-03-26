@@ -1,4 +1,4 @@
-## App Catalog
+## AppLauncher
 
 ### Overview
 This is a menu that will launch components. It filters components based on a "mode" property in the component's config. This may be revisted in the future.
