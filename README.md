@@ -1,11 +1,11 @@
-For everything you need to know about the seed project, including a step-by-step process, check out the documentation on our [website](https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html).
+For everything you need to know about Finsemble, including a step-by-step process for setting up the seed project, check out the documentation on our [website](https://documentation.chartiq.com/finsemble/tutorial-IntroductionToFinsemble.html).
 
 <!-- TODO: Update tutorials to point to _tutorials_ folder at the top level -->
 <!-- TODO: Move creating of components to tutorials and have URL to point to CSS -->
 
 # Finsemble Seed Project
 
-This article lists the contents of the Finsemble seed project, how the seed project can be extended, and some information about upgrading from the previous seed project structure.
+This article lists the **contents** of the Finsemble seed project, how the seed project can be **extended**, and information about **upgrading** from the previous seed project structure.
 
 - [Project structure](#project-structure)
 - [Extending gulpfile](#extending-gulpfile)
@@ -14,9 +14,9 @@ This article lists the contents of the Finsemble seed project, how the seed proj
 
 ## Project structure
 
-The Finsemble seed project provides a basic structure to help developers get up and running as quickly as possible. The seed project provides the basic skeleton for a Finsemble application that can be extended to suit your organization's needs. It also includes some functionality to make development faster and easier, like a basic build process and hot reload.
+The Finsemble seed project provides a basic structure to help developers get up and running as quickly as possible. The seed project provides the skeleton of a Finsemble application that can be extended to suit your organization's needs. It also includes some functionality to make development faster and easier, like a basic build process.
 
-- _gulpfile.js_ - The main gulpfile for the project that includes the basic tasks used to build and run a Finsemble application for development.
+- _gulpfile.js_ - The main gulpfile for the project which includes the basic tasks used to build and run a Finsemble application for development.
 - _gulpfile-extension.js_ (optional) - File that can be used to add/modify the functionality of the gulpfile. This file isn't included in the base seed project to prevent conflicts when upgrading the base project. See [Extending Gulpfile](#extending-gulpfile) for more information.
 - _build/webpack_ - Includes all of the files used by the seed project to build the application.
     - _webpack.finsemble-built-in.entries.json_ - This specifies the entry and output files for the files built for a default Finsemble application.
@@ -24,13 +24,13 @@ The Finsemble seed project provides a basic structure to help developers get up 
 - _configs/application_ - This folder contains all of the base configuration for the Finsemble application. _component.json_, _config.json_ and _services.json_ are empty and developer-added configuration should go here. The files in this folder are merged together to build the application configuration. This configuration can be changed at run time using [Dynamic Configuration](https://documentation.chartiq.com/finsemble/tutorial-dynamicConfiguration.html).
 - _configs/openfin_ - Contains the [OpenFin application config](https://openfin.co/documentation/application-config/) (also known as the application manifest) used to start up the Finsemble application. The default manifest for development is included, and additional configurations can be placed in this folder.
 - _configs/other/server-environment-startup.json_ - Used to define the development and production server configurations used by the Finsemble application.
-- _server_ - Contains the server that hosts the built _dist_ folder for development purposes and includes hot reload in the development environment.
-    - _server/server-extensions.js_ - Optional file that can be used to add functionality to the development server. See (Extending server functionality)[#extending-server-functionality].
+- _server_ - Contains the server that hosts the built _dist_ folder for development purposes.
+    - _server/server-extensions.js_ - Optional file that can be used to add functionality to the development server. See (Extending Server Functionality)[#extending-server-functionality].
 - _src_ - The folder where your Finsemble components should be placed for the Finsemble build process.
 - _src-built-in_ - Includes the source for the default presentation components included with the Finsemble seed project. These files can be extended as desired, but, if you do extend these components, we recommend you copy the folder to the _src_ directory to prevent merge conflicts when upgrading the seed project.
     - _src-built-in/adapters_ - Contains an example Storage Adapter that saves data to local storage.
     - _src-built-in/components/assets_ - Contains the SASS, CSS and images used to create Finsemble's look and feel.
-- _tutorials_ - Contains the source for the components used by our [Getting started](https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html) tutorial.
+- _tutorials_ - Contains the source for the components used by our [seed project tutorial](https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html).
 
 Project structure:
 ```
@@ -112,7 +112,7 @@ FINSEMBLE-SEED
 
 ## Extending gulpfile
 
-It is often necessary to modify and extend the functionality provided by the gulpfile in the seed project. This can be done by editing the gulpfile directly but, doing this, complicates the upgrade path because modifications would need to be merged into the updated gulpfile. If you need to modify or extend the functionality provided by the gulpfile, please create a _gulpfile-extensions.js_ file at the same level as the _gulpfile.js_. This file should define a function that takes in the object containing all of the methods called by the gulpfile, including `pre` and `post` methods that can be used to redefine variables and add additional tasks.
+You can modify and extend the gulpfile's functionality by creating a _gulpfile-extensions.js_ file at the same level as the _gulpfile.js_. This method avoids complications introduced from modifying the gulpfile directly and needing to merge upgrades into the updated gulpfile. The _gulpfile-extensions.js_ file should define a function that takes in the object containing all of the methods called by the gulpfile, including `pre` and `post` methods that can be used to redefine variables and add additional tasks.
 
 These are the methods defined in the `taskMethods` object:
 - `buildSass` - Builds the SASS for the application.
@@ -133,17 +133,7 @@ These are the tasks defined in _gulpfile.js_:
 - `dev:run` - Builds the application, starts the server, launches the Finsemble application, and watches for file changes (calls "prod:run" task then the `watchFiles` function).
 - `default` - Specifies the default task to run if no task is passed in (calls the "dev:run" task).
 
-If you wish to add additional task or function calls to the existing tasks, they can be redefined in the `post` method call.
-
-Below is code that can be used as a template for _gulpfile-extensions.js_:
-
-```js
-module.exports = taskMethods => {
-    // Place your code here
-}
-```
-
-If the _gulpfile-extensions.js_ file exists, it's contents are called as a method passing an object with the default task functions in. These methods can be overwritten or extended as needed. The `pre` and `post` methods pass in a callback function that must be called to signal that the gulpfile can continue executing. The other functions defined in `taskMethods` should be specified like a [gulp task function](https://github.com/gulpjs/gulp/blob/master/docs/API.md#gulptaskname-fn).
+If you wish to add additional task or function calls to the existing tasks, they can be redefined in the `post` method call. If the _gulpfile-extensions.js_ file exists, it's contents are called as a method passing an object with the default task functions in. These methods can be overwritten or extended as needed. The `pre` and `post` methods pass in a callback function that must be called to signal that the gulpfile can continue executing. The other functions defined in `taskMethods` should be specified like a [gulp task function](https://github.com/gulpjs/gulp/blob/master/docs/API.md#gulptaskname-fn).
 
 Example _gulpfile-extensions.js_:
 ```js
@@ -236,10 +226,10 @@ module.exports = taskMethods => {
 
 ## Extending server functionality
 
-Sometimes during development, it is necessary to create new Web API (e.g. REST API) for your application to use. The Finsemble seed project already includes a server to host files locally for development, so it makes sense to use this server to design the new Web API. To allow for the extension of the server provided in the Finsemble seed project without breaking the upgrade path, the server attempts to import the _server-extensions.js_ file from the _server_ directory of the project. If _server-extensions.js_ exists, it's methods are called by the server to provide additional functionality. The _server-extensions.js_ file should return an object that contains the following functions:
-- `pre` - called before _server.js_ starts defining the default server functionality
-- `post` - called after the server is up and running
-- `updateServer` - called after the default server functionality has been defined, but before the server is started
+Sometimes during development, it is necessary to create new Web API (e.g., REST API) for your application to use. The Finsemble seed project already includes a server to host files locally for development, so it makes sense to use this server to design the new Web API. To allow for the extension of the server provided in the Finsemble seed project without breaking the upgrade path, the server attempts to import the _server-extensions.js_ file from the _server_ directory of the project. If _server-extensions.js_ exists, it's methods are called by the server to provide additional functionality. The _server-extensions.js_ file should return an object that contains the following functions:
+- `pre` - Called before _server.js_ starts defining the default server functionality
+- `post` - Called after the server is up and running
+- `updateServer` - Called after the default server functionality has been defined, but before the server is started
 
 The `pre` and `post` functions do not take any arguments. The `updateServer` function takes two arguments: the first is an instance of the [Express server](https://www.npmjs.com/package/express) that can be used to add functionality, and the second is a callback that takes no arguments, but must be called when the server is ready to be started. Please see the sample _server-extensions.js_ below:
 ```javascript
@@ -288,4 +278,4 @@ The `pre` and `post` functions do not take any arguments. The `updateServer` fun
 
 ## Upgrade instructions
 
-Upgrading the seed project should be straightforward. If you have made changes to _gulpfile.js_ or to _server/server.js_, you will need to move your changes to the appropriate extensions file. Aside from that, you can copy your _src_ folder, _webpack.files.entries.json_, and the contents of _configs/application_ to the new seed structure. It is recommended to remove the folders from _src/components_ you did not create or extend in order to use the latest presentation components. You should also remove the components provided with Finsemble from _build/webpack/webpack.files.entries.json_ and _configs/application/components.json_.
+Upgrading the seed project should be straightforward. If you have made changes to _gulpfile.js_ or to _server/server.js_, you will need to move your changes to the appropriate extensions file. Aside from that, you can copy your _src_ folder, _webpack.files.entries.json_, and the contents of _configs/application_ to the new seed structure. It is recommended that you remove the folders from _src/components_ you did not create or extend in order to use the latest presentation components. You should also remove the components provided with Finsemble from _build/webpack/webpack.files.entries.json_ and _configs/application/components.json_.
