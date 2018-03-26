@@ -128,10 +128,12 @@ These are the methods defined in the `taskMethods` object:
 These are the tasks defined in _gulpfile.js_:
 - `clean` - Cleans the project directory (calls the `clean` method).
 - `build` - Builds the application in the distribution directory (calls "clean" task and, `copyStaticFiles`, `buildWebpack`, and `buildSASS` functions).
+- `rebuild` - Calls the `clean` task then the `build` task..
 - `prod` - Builds the application and starts the server to host it (calls the "build" task then the `startServer` function).
 - `prod:run` - Builds the application, starts the server, and launches the Finsemble application (calls the "prod" task then `launchApplication`).
 - `dev:run` - Builds the application, starts the server, launches the Finsemble application, and watches for file changes (calls "prod:run" task then the `watchFiles` function).
-- `default` - Specifies the default task to run if no task is passed in (calls the "dev:run" task).
+- `dev:run-fresh` - Rebuilds the application, starts the server and the application.
+- `default` - Specifies the default task to run if no task is passed in (calls the `dev:run` task).
 
 If you wish to add additional task or function calls to the existing tasks, they can be redefined in the `post` method call. If the _gulpfile-extensions.js_ file exists, it's contents are called as a method passing an object with the default task functions in. These methods can be overwritten or extended as needed. The `pre` and `post` methods pass in a callback function that must be called to signal that the gulpfile can continue executing. The other functions defined in `taskMethods` should be specified like a [gulp task function](https://github.com/gulpjs/gulp/blob/master/docs/API.md#gulptaskname-fn).
 
