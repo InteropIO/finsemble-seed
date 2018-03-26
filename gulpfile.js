@@ -118,6 +118,7 @@
 		 * Builds files using webpack.
 		 */
 		buildWebpack: done => {
+			logToTerminal(`Starting webpack. Environment:"${process.env.NODE_ENV}"`)
 			//Helper function that builds webpack, logs errors, and notifies user of start/finish of the webpack task.
 			function packFiles(config, bundleName, callback) {
 				logToTerminal(`Starting to build ${bundleName}`);
@@ -253,7 +254,14 @@
 			// Prints server errors to your terminal.
 			serverExec.stderr.on("data", data => { console.error(errorOutColor(`ERROR: ${data}`)); });
 		},
-
+		setDevEnvironment: done => {
+			process.env.NODE_ENV = "development";
+			done();
+		},
+		setProdEnvironment: done => {
+			process.env.NODE_ENV = "production";
+			done();
+		},
 		/**
 		 * Watches files for changes to fire off copies and builds.
 		 */
@@ -305,22 +313,22 @@
 		/**
 		 * Builds the application and starts the server to host it.
 		 */
-		gulp.task("prod", gulp.series("build", taskMethods.buildWebpack, taskMethods.startServer));
+		gulp.task("prod", gulp.series(taskMethods.setProdEnvironment, "build", taskMethods.buildWebpack, taskMethods.startServer));
 
 		/**
 		 * Builds the application, starts the server and launches the Finsemble application.
 		 */
-		gulp.task("prod:run", gulp.series("prod", taskMethods.launchApplication));
+		gulp.task("prod:run", gulp.series(taskMethods.setProdEnvironment, "prod", taskMethods.launchApplication));
 
 		/**
 		 * Builds the application, starts the server, launches the Finsemble application and watches for file changes.
 		 */
-		gulp.task("dev:run", gulp.series("build", taskMethods.startServer, taskMethods.launchApplication));
+		gulp.task("dev:run", gulp.series(taskMethods.setDevEnvironment, "build", taskMethods.startServer, taskMethods.launchApplication));
 
 		/**
 		 * Wipes the babel cache and webpack cache, clears dist, rebuilds the application, and starts the server.
 		 */
-		gulp.task("dev:run-fresh", gulp.series("rebuild", taskMethods.startServer, taskMethods.launchApplication));
+		gulp.task("dev:run-fresh", gulp.series(taskMethods.setDevEnvironment, "rebuild", taskMethods.startServer, taskMethods.launchApplication));
 
 
 		/**
