@@ -67,9 +67,6 @@
 	 * Object containing all of the methods used by the gulp tasks.
 	 */
 	const taskMethods = {
-		/**
-		 * Builds the angular components for the project.
-		 */
 		buildAngular: done => {
 			if (!angularComponents) return done();
 			let processRow = row => {
@@ -117,7 +114,6 @@
 				.pipe(sass().on("error", sass.logError))
 				.pipe(gulp.dest(path.join(distPath, "components")));
 		},
-
 		/**
 		 * Builds files using webpack.
 		 */
@@ -302,37 +298,43 @@
 		/**
 		 * Builds the application in the distribution directory.
 		 */
-		gulp.task("build:cached", gulp.series(taskMethods.setProdEnvironment, taskMethods.buildWebpack, taskMethods.buildAngular, taskMethods.buildSass));
+		gulp.task(
+			"build",
+			gulp.series(
+				taskMethods.buildWebpack,
+				taskMethods.buildSass,
+				taskMethods.buildAngular));
 
 		/**
 		 * Wipes the babel cache and webpack cache, clears dist, rebuilds the application.
 		 */
-		gulp.task("build:clean", gulp.series(taskMethods.setProdEnvironment, "clean", "build:dev"));
+		gulp.task("rebuild", gulp.series("clean", "build"));
 
 		/**
 		 * Builds the application and starts the server to host it.
 		 */
-		gulp.task("start:clean", gulp.series("build:clean", taskMethods.startServer));
+		gulp.task("prod", gulp.series(taskMethods.setProdEnvironment, "build", taskMethods.buildWebpack, taskMethods.startServer));
 
-		/**
-		 * Builds the application and starts the server to host it.
-		 */
-		gulp.task("start:cached", gulp.series("build:cached", taskMethods.startServer));
-		
 		/**
 		 * Builds the application, starts the server and launches the Finsemble application.
 		 */
-		gulp.task("run:clean", gulp.series("prod", taskMethods.launchApplication));
+		gulp.task("prod:run", gulp.series(taskMethods.setProdEnvironment, "prod", taskMethods.launchApplication));
 
 		/**
 		 * Builds the application, starts the server, launches the Finsemble application and watches for file changes.
 		 */
-		gulp.task("run:cached", gulp.series("build:dev", taskMethods.startServer, taskMethods.launchApplication));
+		gulp.task("dev:run", gulp.series(taskMethods.setDevEnvironment, "build", taskMethods.startServer, taskMethods.launchApplication));
+
+		/**
+		 * Wipes the babel cache and webpack cache, clears dist, rebuilds the application, and starts the server.
+		 */
+		gulp.task("dev:run-fresh", gulp.series(taskMethods.setDevEnvironment, "rebuild", taskMethods.startServer, taskMethods.launchApplication));
+
 
 		/**
 		 * Specifies the default task to run if no task is passed in.
 		 */
-		gulp.task("default", gulp.series("run:cached"));
+		gulp.task("default", gulp.series("dev:run"));
 
 		taskMethods.post(err => {
 			if (err) {
