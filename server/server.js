@@ -17,7 +17,7 @@
 	const express = require("express");
 	const fs = require("fs");
 	const path = require("path");
-
+	const compression = require("compression");
 	// Local
 	const extensions = fs.existsSync(path.join(__dirname, "server-extensions.js")) ?
 		require("./server-extensions") :
@@ -66,6 +66,7 @@
 			 *  }
 			 * }*/
 			updateServer: (app, cb) => {
+				app.use(compression());
 				// Sample server root set to "/" -- must align with paths throughout
 				app.use("/", express.static(rootDir, options));
 				// Open up the Finsemble Components,services, and clients
@@ -73,12 +74,9 @@
 				// For Assimilation
 				app.use("/hosted", express.static(path.join(__dirname, "..", "hosted"), options));
 
-
 				// configs/openfin/manifest-local.json and configs/other/server-environment-startup.json
-
 				// Make the config public
 				app.use("/configs", express.static("./configs", options));
-
 
 				cb();
 			}
@@ -89,7 +87,8 @@
 	const app = express();
 	const rootDir = path.join(__dirname, "..", "dist");
 	const moduleDirectory = path.join(__dirname, "..", "Finsemble");
-	const cacheAge = 0;
+	const ONE_DAY = 24 * 3600 * 1000;
+	const cacheAge = process.env.NODE_ENV === "development" ? 0 : ONE_DAY;
 	const outputColor = chalk.white;
 	const PORT = process.env.PORT || 3375;
 	// #endregion
