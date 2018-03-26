@@ -104,7 +104,7 @@ module.exports = function () {
 			path: path.resolve(__dirname, '../../dist/'),
 			publicPath: 'http://localhost:3375/'
 		},
-		watch: process.env.NODE_ENV !== "production",
+		watch: process.env.NODE_ENV === "development",
 		resolve: {
 			extensions: ['.js', '.jsx', '.json', 'scss', 'html'],
 			modules: [
