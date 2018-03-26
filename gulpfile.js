@@ -23,7 +23,7 @@
 
 	// #region Constants
 	const componentsToBuild = Object.assign(
-		require('./build/webpack/webpack.default.files.entries.json'),
+		require('./build/webpack/webpack.finsemble-built-in.entries.json'),
 		require('./build/webpack/webpack.files.entries.json'));
 	const startupConfig = require("./configs/other/server-environment-startup");
 	let angularComponents;

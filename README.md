@@ -19,12 +19,12 @@ The Finsemble seed project provides a basic structure to help developers get up 
 - _gulpfile.js_ - The main gulpfile for the project that includes the basic tasks used to build and run a Finsemble application for development.
 - _gulpfile-extension.js_ (optional) - File that can be used to add/modify the functionality of the gulpfile. This file isn't included in the base seed project to prevent conflicts when upgrading the base project. See [Extending Gulpfile](#extending-gulpfile) for more information.
 - _build/webpack_ - Includes all of the files used by the seed project to build the application.
-    - _webpack.default.files.entries.json_ - This specifies the entry and output files for the files built for a default Finsemble application.
+    - _webpack.finsemble-built-in.entries.json_ - This specifies the entry and output files for the files built for a default Finsemble application.
     - _webpack.files.entries.json_ - This file is where developer-added files should be listed. This file is empty in the base Finsemble seed project to prevent merge conflicts when updating the seed project.
 - _configs/application_ - This folder contains all of the base configuration for the Finsemble application. _component.json_, _config.json_ and _services.json_ are empty and developer-added configuration should go here. The files in this folder are merged together to build the application configuration. This configuration can be changed at run time using [Dynamic Configuration](https://documentation.chartiq.com/finsemble/tutorial-dynamicConfiguration.html).
 - _configs/openfin_ - Contains the [OpenFin application config](https://openfin.co/documentation/application-config/) (also known as the application manifest) used to start up the Finsemble application. The default manifest for development is included, and additional configurations can be placed in this folder.
 - _configs/other/server-environment-startup.json_ - Used to define the development and production server configurations used by the Finsemble application.
-- _server_ - Contains the server that hosts the built _dist_ folder for development purposes and includes hot reload in the development environment. 
+- _server_ - Contains the server that hosts the built _dist_ folder for development purposes and includes hot reload in the development environment.
     - _server/server-extensions.js_ - Optional file that can be used to add functionality to the development server. See (Extending server functionality)[#extending-server-functionality].
 - _src_ - The folder where your Finsemble components should be placed for the Finsemble build process.
 - _src-built-in_ - Includes the source for the default presentation components included with the Finsemble seed project. These files can be extended as desired, but, if you do extend these components, we recommend you copy the folder to the _src_ directory to prevent merge conflicts when upgrading the seed project.
@@ -40,40 +40,40 @@ FINSEMBLE-SEED
 │   gulpfile.js
 │   package.json
 │   README.md
-│   
+│
 ├───build
 │   └───webpack
 │           defaultWebpackConfig.js
-│           webpack.default.files.entries.json
+│           webpack.finsemble-built-in.entries.json
 │           webpack.files.entries.json
 │           webpack.files.js
 │           webpack.services.js
-│           
+│
 ├───configs
 │   ├───application
 │   │   │   components.json
 │   │   │   config.json
 │   │   │   services.json
-│   │   │   
+│   │   │
 │   │   └───default
 │   │           components.json
 │   │           config.json
 │   │           presentationComponents.json
 │   │           workspaces.json
 │   │           workspaceTemplates.json
-│   │           
+│   │
 │   ├───openfin
 │   │       manifest-local.json
-│   │       
+│   │
 │   └───other
 │           server-environment-startup.json
-│           
+│
 ├───server
 │   │   server.js
-│   │   
+│   │
 │   ├───dev
 │   │       hotreload.js
-│   │       
+│   │
 │   └───hotreloadmiddleware
 │           client-overlay.js
 │           client.js
@@ -82,31 +82,31 @@ FINSEMBLE-SEED
 │           package.json
 │           process-update.js
 │           README.md
-│           
+│
 ├───src
 │   ├───adapters
 │   │       .gitignore
-│   │       
+│   │
 │   ├───clients
 │   │       .gitignore
-│   │       
+│   │
 │   ├───components
 │   │       .gitignore
-│   │       
+│   │
 │   ├───services
 │   │       .gitignore
-│   │       
+│   │
 │   └───thirdParty
 │           .gitignore
-│           
+│
 ├───src-built-in
 │   ├───adapters
 │   │       localStorageAdapter.js
-│   │       
+│   │
 │   └───components
-│       │               
+│       │
 │       ├───assets
-│                   
+│
 └───tutorials
 ```
 
@@ -152,8 +152,8 @@ module.exports = taskMethods => {
 
     const gulp = require("gulp");
 
-    // Extension of pre method. Get a reference to the original function to be called later. 
-    let preOriginal = taskMethods.pre 
+    // Extension of pre method. Get a reference to the original function to be called later.
+    let preOriginal = taskMethods.pre
     taskMethods.pre = (cb) => {
         // Add extension code.
         console.log("PRE: pre");
@@ -169,7 +169,7 @@ module.exports = taskMethods => {
     };
 
     // Extension of copyStaticFiles
-    let copyStaticFilesOriginal = taskMethods.copyStaticFiles 
+    let copyStaticFilesOriginal = taskMethods.copyStaticFiles
     taskMethods.copyStaticFiles = (cb) => {
         // Execute code that should be called before the original function.
         console.log("PRE: copyStaticFiles");
@@ -177,9 +177,9 @@ module.exports = taskMethods => {
         // Execute the original function, which, in this case, returns a stream.
         copyStaticFilesOriginal()
             .on(
-                "end", 
+                "end",
                 () => {
-                    // Wait for stream completion before executing additional cod. 
+                    // Wait for stream completion before executing additional cod.
                     console.log("POST: copyStaticFiles");
 
                     // Execute callback to signal completion.
@@ -192,8 +192,8 @@ module.exports = taskMethods => {
 
         /**
          * Function used as part of newTask.
-         */ 
-        const newFunction = () => { 
+         */
+        const newFunction = () => {
             console.log("Do some other stuff here");
         };
 
@@ -203,16 +203,16 @@ module.exports = taskMethods => {
          * Definition of function called at the beginning of the build task.
          */
         const preBuildFunction = (cb) => {
-             console.log("pre-build task"); 
-             cb(); 
+             console.log("pre-build task");
+             cb();
         };
 
         /**
          * Definition of function called at the end of the build task.
          */
-        const postBuildFunction = (cb) => { 
-            console.log("post-build task"); 
-            cb(); 
+        const postBuildFunction = (cb) => {
+            console.log("post-build task");
+            cb();
         };
 
         /**
@@ -245,12 +245,12 @@ The `pre` and `post` functions do not take any arguments. The `updateServer` fun
 ```javascript
 (module => {
     "use strict";
-    
+
     module.exports = {
         /**
          * Method called before starting the server.
-         * 
-         * @param done Function used to signal when pre function has finished. Can optionally pass an error message if 
+         *
+         * @param done Function used to signal when pre function has finished. Can optionally pass an error message if
          * one occurs.
          */
         pre(done) {
@@ -260,8 +260,8 @@ The `pre` and `post` functions do not take any arguments. The `updateServer` fun
 
         /**
          * Method called after the server has started.
-         * 
-         * @param done Function used to signal when pre function has finished. Can optionally pass an error message if 
+         *
+         * @param done Function used to signal when pre function has finished. Can optionally pass an error message if
          * one occurs.
          */
         post(done) {
@@ -271,9 +271,9 @@ The `pre` and `post` functions do not take any arguments. The `updateServer` fun
 
         /**
          * Method called to update the server.
-         * 
+         *
          * @param {express} app The express server.
-         * @param {function} cb The function to call once you're finished adding functionality to the server. Can optionally 
+         * @param {function} cb The function to call once you're finished adding functionality to the server. Can optionally
          * pass an error message if one occurs.
          */
         updateServer(app, cb) {
@@ -288,4 +288,4 @@ The `pre` and `post` functions do not take any arguments. The `updateServer` fun
 
 ## Upgrade instructions
 
-Upgrading the seed project should be straightforward. If you have made changes to _gulpfile.js_ or to _server/server.js_, you will need to move your changes to the appropriate extensions file. Aside from that, you can copy your _src_ folder, _webpack.files.entries.json_, and the contents of _configs/application_ to the new seed structure. It is recommended to remove the folders from _src/components_ you did not create or extend in order to use the latest presentation components. You should also remove the components provided with Finsemble from _build/webpack/webpack.files.entries.json_ and _configs/application/components.json_. 
+Upgrading the seed project should be straightforward. If you have made changes to _gulpfile.js_ or to _server/server.js_, you will need to move your changes to the appropriate extensions file. Aside from that, you can copy your _src_ folder, _webpack.files.entries.json_, and the contents of _configs/application_ to the new seed structure. It is recommended to remove the folders from _src/components_ you did not create or extend in order to use the latest presentation components. You should also remove the components provided with Finsemble from _build/webpack/webpack.files.entries.json_ and _configs/application/components.json_.

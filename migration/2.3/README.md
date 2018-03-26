@@ -36,5 +36,5 @@ node migration/2.3/migrationScripts/migrate.js
 
 Helpful script, after running the migration in master
 ```bash
-rm -rf *-original && rm -rf src-built-in/ && rm -rf build/webpack/*vendor* && rm -rf build/webpack/webpack.default.files.entries.json  && rm -rf .*cache && rm gulpfile.js.original rm -rf migration/
+rm -rf *-original && rm -rf src-built-in/ && rm -rf build/webpack/*vendor* && rm -rf build/webpack/webpack.finsemble-built-in.entries.json  && rm -rf .*cache && rm gulpfile.js.original rm -rf migration/
 ```

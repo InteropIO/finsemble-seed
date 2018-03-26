@@ -3,7 +3,7 @@ const path = require('path');
 const glob_entries = require('webpack-glob-entries');
 const webpack = require("webpack")
 const componentsToBuild = Object.assign(
-	require('./webpack.default.files.entries.json'),
+	require('./webpack.finsemble-built-in.entries.json'),
 	require('./webpack.files.entries.json'));
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const defaultConfig = require("./defaultWebpackConfig");
@@ -26,21 +26,6 @@ for (let key in componentsToBuild) {
 }
 webpackConfig = new defaults();
 
-// console.log(webpackConfig.entry);
-
-// webpackConfig.plugins.push(new webpack.optimize.CommonsChunkPlugin({
-// 	name: "vendor",
-// 	// filename: "vendor.js"
-// 	// (Give the chunk a different name)
-
-// 	minChunks: Infinity,
-// 	// (with more entries, this ensures that no other module
-// 	//  goes into the vendor chunk)
-// }));
-// webpackConfig.plugins.push(new webpack.optimize.CommonsChunkPlugin({
-// 	name: 'manifest',
-// 	chunks: ['vendor']
-// }));
 webpackConfig.plugins.push(new CopyWebpackPlugin([
 	{
 		from: './src/components/',
