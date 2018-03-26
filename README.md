@@ -126,12 +126,14 @@ These are the methods defined in the `taskMethods` object:
 - `watchFiles` - Watches files for changes to kick off `buildSASS` or `buildWebpack`.
 
 These are the tasks defined in _gulpfile.js_:
-- `clean` - Cleans the project directory (calls the `clean` method).
-- `build` - Builds the application in the distribution directory (calls "clean" task and, `copyStaticFiles`, `buildWebpack`, and `buildSASS` functions).
-- `prod` - Builds the application and starts the server to host it (calls the "build" task then the `startServer` function).
-- `prod:run` - Builds the application, starts the server, and launches the Finsemble application (calls the "prod" task then `launchApplication`).
-- `dev:run` - Builds the application, starts the server, launches the Finsemble application, and watches for file changes (calls "prod:run" task then the `watchFiles` function).
-- `default` - Specifies the default task to run if no task is passed in (calls the "dev:run" task).
+- `clean` - Cleans the project directory and deletes the project build cache.
+- `build:clean` - Calls the `clean` task, then builds the application.
+- `build:cached` - Builds only the parts of the the application that have been changed.
+- `start:clean` - Calls the `build:clean` task then starts the server.
+- `start:cached` - Calls the `build:cached` task then starts the server.
+- `run:cached` - Calls the `start:cached` then launches the application.
+- `run:clean` - Calls the `start:clean` then launches the application.
+- `default` - Specifies the default task to run if no task is passed in (calls the `run:cached` task).
 
 If you wish to add additional task or function calls to the existing tasks, they can be redefined in the `post` method call. If the _gulpfile-extensions.js_ file exists, it's contents are called as a method passing an object with the default task functions in. These methods can be overwritten or extended as needed. The `pre` and `post` methods pass in a callback function that must be called to signal that the gulpfile can continue executing. The other functions defined in `taskMethods` should be specified like a [gulp task function](https://github.com/gulpjs/gulp/blob/master/docs/API.md#gulptaskname-fn).
 
