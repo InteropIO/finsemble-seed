@@ -20,7 +20,7 @@ The Finsemble seed project provides a basic structure to help developers get up 
 - _gulpfile-extension.js_ (optional) - File that can be used to add/modify the functionality of the gulpfile. This file isn't included in the base seed project to prevent conflicts when upgrading the base project. See [Extending Gulpfile](#extending-gulpfile) for more information.
 - _build/webpack_ - Includes all of the files used by the seed project to build the application.
     - _webpack.finsemble-built-in.entries.json_ - This specifies the entry and output files for the files built for a default Finsemble application.
-    - _webpack.files.entries.json_ - This file is where developer-added files should be listed. This file is empty in the base Finsemble seed project to prevent merge conflicts when updating the seed project.
+    - _webpack.components.entries.json_ - This file is where developer-added files should be listed. This file is empty in the base Finsemble seed project to prevent merge conflicts when updating the seed project.
 - _configs/application_ - This folder contains all of the base configuration for the Finsemble application. _component.json_, _config.json_ and _services.json_ are empty and developer-added configuration should go here. The files in this folder are merged together to build the application configuration. This configuration can be changed at run time using [Dynamic Configuration](https://documentation.chartiq.com/finsemble/tutorial-dynamicConfiguration.html).
 - _configs/openfin_ - Contains the [OpenFin application config](https://openfin.co/documentation/application-config/) (also known as the application manifest) used to start up the Finsemble application. The default manifest for development is included, and additional configurations can be placed in this folder.
 - _configs/other/server-environment-startup.json_ - Used to define the development and production server configurations used by the Finsemble application.
@@ -45,8 +45,8 @@ FINSEMBLE-SEED
 │   └───webpack
 │           defaultWebpackConfig.js
 │           webpack.finsemble-built-in.entries.json
-│           webpack.files.entries.json
-│           webpack.files.js
+│           webpack.components.entries.json
+│           webpack.components.js
 │           webpack.services.js
 │
 ├───configs
@@ -280,4 +280,4 @@ The `pre` and `post` functions do not take any arguments. The `updateServer` fun
 
 ## Upgrade instructions
 
-Upgrading the seed project should be straightforward. If you have made changes to _gulpfile.js_ or to _server/server.js_, you will need to move your changes to the appropriate extensions file. Aside from that, you can copy your _src_ folder, _webpack.files.entries.json_, and the contents of _configs/application_ to the new seed structure. It is recommended that you remove the folders from _src/components_ you did not create or extend in order to use the latest presentation components. You should also remove the components provided with Finsemble from _build/webpack/webpack.files.entries.json_ and _configs/application/components.json_.
+Upgrading the seed project should be straightforward. If you have made changes to _gulpfile.js_ or to _server/server.js_, you will need to move your changes to the appropriate extensions file. Aside from that, you can copy your _src_ folder, _webpack.components.entries.json_, and the contents of _configs/application_ to the new seed structure. It is recommended that you remove the folders from _src/components_ you did not create or extend in order to use the latest presentation components. You should also remove the components provided with Finsemble from _build/webpack/webpack.components.entries.json_ and _configs/application/components.json_.
