@@ -127,7 +127,11 @@
 					} else {
 						console.error(errorOutColor("Webpack Error.", err));
 					}
-					callback();
+					//Webpack invokes this function (basically, an onComplete) each time the bundle is built. We only want to invoke the async callback the first time.
+					if (callback) {
+						callback();
+						callback = undefined;
+					}
 				});
 			}
 			//Requires are done in the function because webpack.files.js will error out if there's no vendor-manifest. The first webpack function generates the vendor manifest.
