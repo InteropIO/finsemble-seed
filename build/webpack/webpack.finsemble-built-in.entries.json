@@ -58,5 +58,9 @@
 	"localStorageAdapter": {
 		"output": "adapters/LocalStorageAdapter",
 		"entry":"././src-built-in/adapters/LocalStorageAdapter.js"
+	},
+	"welcome": {
+		"output": "components/welcome/welcome",
+		"entry": "./src-built-in/components/welcome/welcome.js"
 	}
 }
