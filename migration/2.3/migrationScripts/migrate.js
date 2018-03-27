@@ -53,6 +53,30 @@ function copyFoldersAndFiles(cb) {
         cb);
 }
 
+function moveAdapters(done) {
+    const componentsEntry = path.join(THIS_PROJECT_ROOT, "build/webpack/webpack.components.entries.json");
+    const adapterEntry = path.join(THIS_PROJECT_ROOT, "build/webpack/webpack.adapters.entries.json");
+    let componentsConfig = require(componentsEntry);
+    let components = Object.keys(componentsConfig);
+    let adaptersConfig = require(adapterEntry);
+
+    components.forEach(cmp => {
+        if (cmp.toLowerCase().includes("adapter")) {
+            log(`Removing adapter ${cmp} from webpack.components.entries.json`)
+            let clone = JSON.parse(JSON.stringify(componentsConfig[cmp]));
+            delete componentsConfig[cmp];
+            log(`Adding adapter ${cmp} to webpack.adapters.entries.json`)
+            adaptersConfig[cmp] = clone;
+        }
+    });
+
+    const newComponentsConfig = JSON.stringify(componentsConfig, null, '\t');
+    fs.writeFileSync(componentsEntry, newComponentsConfig, 'utf8');
+
+    const newAdapterConfig = JSON.stringify(adaptersConfig, null, '\t');
+    fs.writeFileSync(adapterEntry, newAdapterConfig, 'utf8');
+    done();
+}
 function updatePackageFile(done) {
     const oldPackagePath = path.join(OLD_PROJECT_ROOT, "package.json")
     const newPackagePath = path.join(THIS_PROJECT_ROOT, "package.json");
@@ -128,7 +152,8 @@ function addVendorBundle(cb) {
 
 async.series([
     copyFoldersAndFiles,
-    addVendorBundle
+    addVendorBundle,
+    moveAdapters
 ], () => {
     log("Migration complete. Inspect webpack.components.entries.json, and remove any presentation components that you have not modified. You will also want to delete the corresponding folders from your src directory.");
 });
