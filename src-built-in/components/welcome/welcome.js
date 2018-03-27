@@ -1,4 +1,4 @@
-function launchTutorial() {
+window.launchTutorial = function launchTutorial() {
 	fin.desktop.System.openUrlWithBrowser("https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html", function () {
 		console.log("successfully launched docs");
 	},function (err) {
@@ -6,7 +6,7 @@ function launchTutorial() {
 	});
 }
 
-function quitFinsemble() {
+window.quitFinsemble = function quitFinsemble() {
 	console.log("Quit button successfully triggered");
 	FSBL.shutdownApplication();
 }

@@ -22,8 +22,10 @@ export default class ContentSection extends React.Component {
 		let Component = content[this.props.activeSection];
 		return (<div className="complex-menu-content-row">
 			<div className="complex-menu-header">
+				<div className="content-section-header">
+					{this.props.activeSection.charAt(0).toUpperCase() + this.props.activeSection.slice(1, this.props.activeSection.length)}
+				</div>
 				<div onClick={this.hideWindow} className="ff-close complex-menu-close">
-
 				</div>
 			</div>
 			<Component />

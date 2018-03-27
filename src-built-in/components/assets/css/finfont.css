@@ -290,3 +290,12 @@
 .ff-minimize-all:before {
   content: "\3f";
 }
+.ff-list:before {
+  content: "\5b";
+}
+.ff-export:before {
+  content: "\5d";
+}
+.ff-import:before {
+  content: "\5e";
+}

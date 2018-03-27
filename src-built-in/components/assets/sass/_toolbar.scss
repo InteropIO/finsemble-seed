@@ -177,33 +177,33 @@
 }
 @media screen and (max-device-width: 1400px) {
 	.finsemble-toolbar-workspace-button-label > .finsemble-toolbar-button-label{
-		width: 115px;
+		width: 85px;
 	}
 }
 //Change the size of the workspace button label on higher-res monitors to give it more room.
 @media screen and (min-device-width: 1400px) {
 	.finsemble-toolbar-workspace-button-label > .finsemble-toolbar-button-label{
-		width: 130px;
+		width: 100px;
 	}
 }
 .finsemble-toolbar-workspace-button-label > .finsemble-toolbar-button-label {
-	border: 1px solid #1D4970;
-	border-radius: 3px;
+	//border: 1px solid #1D4970;
+	//border-radius: 3px;
 	overflow: hidden;
 	text-align: center;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	display:block;
 	margin-top: 8px;
-	padding: 3px 6px;
+	//padding: 3px 6px;
 }
 
-.finsemble-toolbar-workspace-button-label > .finsemble-toolbar-button-label:hover {
-	border: 1px solid $primary-accent-color;
-}
+// .finsemble-toolbar-workspace-button-label > .finsemble-toolbar-button-label:hover {
+// 	border: 1px solid $primary-accent-color;
+// }
 
 .finsemble-toolbar-workspace-button-label.finsemble-toolbar-button:hover {
-	background: none;
+	background: #133F7C;
 	border: 1px solid transparent;
 	cursor: pointer;
 }
@@ -285,4 +285,8 @@ img.pinned-icon {
 
 .ff-company {
 	padding-bottom: 2px;
+}
+
+.ff-minimize-all {
+	padding-top: 4px;
 }

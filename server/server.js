@@ -13,12 +13,12 @@
 	// #region Imports
 	// NPM
 	const chalk = require("chalk");
+	chalk.enabled = true;
 	const express = require("express");
 	const fs = require("fs");
 	const path = require("path");
-
+	const compression = require("compression");
 	// Local
-	const hotReload = require("./dev/hotreload");
 	const extensions = fs.existsSync(path.join(__dirname, "server-extensions.js")) ?
 		require("./server-extensions") :
 		{
@@ -66,7 +66,17 @@
 			 *  }
 			 * }*/
 			updateServer: (app, cb) => {
+				app.use(compression());
+				// Sample server root set to "/" -- must align with paths throughout
 				app.use("/", express.static(rootDir, options));
+				// Open up the Finsemble Components,services, and clients
+				app.use("/Finsemble", express.static(moduleDirectory, options));
+				// For Assimilation
+				app.use("/hosted", express.static(path.join(__dirname, "..", "hosted"), options));
+
+				// configs/openfin/manifest-local.json and configs/other/server-environment-startup.json
+				// Make the config public
+				app.use("/configs", express.static("./configs", options));
 
 				cb();
 			}
@@ -76,17 +86,27 @@
 	// #region Constants
 	const app = express();
 	const rootDir = path.join(__dirname, "..", "dist");
-	const moduleDirectory = path.join(__dirname, "..", "finsemble");
-	const cacheAge = 0;
-	const outputColor = chalk.yellow;
+	const moduleDirectory = path.join(__dirname, "..", "Finsemble");
+	const ONE_DAY = 24 * 3600 * 1000;
+	const cacheAge = process.env.NODE_ENV === "development" ? 0 : ONE_DAY;
+	const outputColor = chalk.white;
 	const PORT = process.env.PORT || 3375;
 	// #endregion
+	const logToTerminal = (msg) => {
+		console.log(`[${new Date().toLocaleTimeString()}] ${msg}.`);
+	}
 
-	console.log(outputColor(`Server serving from ${rootDir} with caching maxAge = ${cacheAge} ms.`));
+	logToTerminal(outputColor(`Server serving from ${rootDir} with caching maxAge = ${cacheAge} ms.`));
 
-	const options = { maxAge: cacheAge };
+	let options = { maxAge: cacheAge };
+	//This will prevent config files from being cached by the server, allowing an application restart instead of a rebuild.
+	if (cacheAge === 0) {
+		options.setHeaders = function (res, path, stat) {
+			res.set("cache-control", "no-cache")
+		}
+	}
 
-	console.log(outputColor("Starting Server"));
+	logToTerminal(outputColor("Starting Server"));
 
 	/**
 	 * Builds the server.
@@ -115,13 +135,13 @@
 				e => {
 					handleError(e);
 
-					console.log(chalk.green(`Listening on port ${PORT}`));
+					logToTerminal(outputColor(`Listening on port ${PORT}`));
 
 					global.host = server.address().address;
 					global.port = server.address().port;
 
 					const done = () => {
-						console.log(outputColor("Server started"));
+						logToTerminal(chalk.green("Server started"));
 						extensions.post(err => {
 							if (err) {
 								handleError(err);
@@ -130,14 +150,7 @@
 							}
 						});
 					};
-
-					if (process.env.NODE_ENV === "development") {
-						// Setup hot reload in the dev environment
-						console.log(outputColor("start hot reload"));
-						hotReload(app, server, done);
-					} else if (process.send) {
-						done();
-					}
+					done();
 				});
 		});
 	}

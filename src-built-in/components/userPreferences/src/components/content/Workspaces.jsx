@@ -72,7 +72,8 @@ export default class Workspaces extends React.Component {
 			//todo, get the workspaceToLoadOnStart from preferences.
 			workspaceToLoadOnStart: null,
 			templateName: '',
-			workspaceBeingEdited: ''
+			workspaceBeingEdited: '',
+			focusedWorkspaceComponentList: []
 		}
 		this.bindCorrectContext();
 		this.addListeners();
@@ -87,7 +88,7 @@ export default class Workspaces extends React.Component {
 		});
 	}
 	bindCorrectContext() {
-		let methods = ["deleteWorkspace", "addListeners", "setWorkspaceList", "onDragEnd", "startAddingWorkspace", "startEditingWorkspace", "addWorkspace", "renameWorkspace", "cancelEdit", "setWorkspaceToLoadOnStart", "setPreferences", "exportWorkspace", "handleButtonClicks"];
+		let methods = ["deleteWorkspace", "addListeners", "setWorkspaceList", "onDragEnd", "startEditingWorkspace", "renameWorkspace", "cancelEdit", "setWorkspaceToLoadOnStart", "setPreferences", "exportWorkspace", "handleButtonClicks", "getFocusedWorkspaceComponentList"];
 		methods.forEach((method) => {
 			this[method] = this[method].bind(this);
 		});
@@ -117,12 +118,48 @@ export default class Workspaces extends React.Component {
 		})
 		WorkspaceManagementMenuStore.Dispatcher.dispatch({ actionType: "reorderWorkspace", data: changeEvent });
 	}
+	// returns all the component types of a template definition to display to user for additional info. If multiple components with same type, then instead of listing each
+	// individually, only one entry will be returned with the count in parentheses.
+	getComponentTypes(templateObject) {
+		FSBL.Clients.Logger.system.debug("getComponentTypes templateObject", templateObject);
+		var componentType;
+		var componentMap = {};
+		var annotatedComponentList = [];
+		for (let i = 0; i < templateObject.windows.length; i++) {
+			let windowData = templateObject.windowData[i];
+			FSBL.Clients.Logger.system.debug("getComponentTypes loop", windowData);
+			componentType = "Unknown Component";
+			if (windowData) { // current assimulation doesn't fill in windowData, so in this case use "Unknown Component" for component type
+				componentType = windowData.customData.component.type;
+			} else {
+				componentType = "Unknown Component";
+			}
+			if (!componentMap[componentType]) {
+				componentMap[componentType] = 1;
+			} else {
+				componentMap[componentType]++;
+			}
+		}
 
+		var componentTypes = Object.keys(componentMap);
+		for (let i = 0; i < componentTypes.length; i++) {
+			let annotatedName = componentTypes[i];
+			let identicalCount = componentMap[componentTypes[i]];
+			if (identicalCount > 1) {
+				annotatedName = annotatedName + ` (${identicalCount})`;
+			}
+			annotatedComponentList.push(annotatedName)
+		}
+		FSBL.Clients.Logger.system.debug("getComponentTypes", annotatedComponentList);
+		return annotatedComponentList;
+	}
 
 	setFocusedWorkspace(workspace) {
 		this.setState({
 			focusedWorkspace: workspace
-		})
+		}, () => {
+			this.getFocusedWorkspaceComponentList();
+		});
 	}
 
 	cancelEdit() {
@@ -178,36 +215,10 @@ export default class Workspaces extends React.Component {
 		}
 	}
 
-	addWorkspace(workspace) {
-
-		if (workspace === "") {
-			console.info("No workspace name given. Not creating workspace");
-			return this.cancelEdit();
-		}
-		FSBL.Clients.WorkspaceClient.createNewWorkspace(workspace, {
-			switchAfterCreation: false,
-		}, this.cancelEdit)
-	}
-
-	startEditingWorkspace() {
+	startEditingWorkspace(workspaceName = this.state.focusedWorkspace) {
 		this.setState({
 			editing: true,
-			workspaceBeingEdited: this.state.focusedWorkspace
-		});
-	}
-
-	startAddingWorkspace() {
-		console.log("ON ADD", performance.now());
-
-		let workspaceList = this.state.workspaceList;
-		workspaceList.push({ name: "" });
-		this.setFocusedWorkspace("");
-		this.setState({
-			adding: true,
-			workspaceList: workspaceList,
-		}, () => {
-			//Scroll to the bottom of the list..
-			this.refs.WorkspaceList.scrollTop = 500000;
+			workspaceBeingEdited: workspaceName
 		});
 	}
 
@@ -229,8 +240,8 @@ export default class Workspaces extends React.Component {
 		})
 	}
 
-	deleteWorkspace() {
-		let workspaceToRemove = this.state.focusedWorkspace;
+	deleteWorkspace(workspaceName = this.state.focusedWorkspace) {
+		let workspaceToRemove = workspaceName;
 		this.resetState();
 
 		WorkspaceManagementMenuStore.Dispatcher.dispatch({
@@ -266,22 +277,21 @@ export default class Workspaces extends React.Component {
 	setWorkspaceToLoadOnStart(cb = Function.prototype) {
 		let self = this;
 		function setPreference() {
-			FSBL.Clients.ConfigClient.setPreference({ field: "finsemble.initialWorkspace", value: self.state.focusedWorkspace }, (err, data) => {
+			FSBL.Clients.ConfigClient.setPreference({ field: "finsemble.initialWorkspace", value: self.state.workspaceToLoadOnStart }, (err, data) => {
 				if (err) {
 					console.error(err);
 				}
-				cb();
-				console.log("preference set successfully.");
-
-			})
+				if (typeof cb === "function") {
+					cb();
+				}
+			});
 		}
 		if (this.state.focusedWorkspace === this.state.workspaceToLoadOnStart) {
 			this.setState({ workspaceToLoadOnStart: null }, setPreference);
 		} else {
-			setPreference();
 			self.setState({
 				workspaceToLoadOnStart: self.state.focusedWorkspace
-			});
+			}, setPreference);
 		}
 	}
 
@@ -306,12 +316,13 @@ export default class Workspaces extends React.Component {
 				fileName = fileName[fileName.length - 1].replace(".json", "");
 				let workspaceTemplateDefinition = JSON.parse(e.target.result);
 				let templateName = Object.keys(workspaceTemplateDefinition.workspaceTemplates)[0];
-				//We want the file name to overwrite the name of the workspace that was saved as the template..
-				workspaceTemplateDefinition.workspaceTemplates[fileName] = workspaceTemplateDefinition.workspaceTemplates[templateName];
-				delete workspaceTemplateDefinition.workspaceTemplates[templateName];
+				if (fileName !== templateName) {
+					//We want the file name to overwrite the name of the workspace that was saved as the template..
+					workspaceTemplateDefinition.workspaceTemplates[fileName] = workspaceTemplateDefinition.workspaceTemplates[templateName];
+					delete workspaceTemplateDefinition.workspaceTemplates[templateName];
+				}
 				workspaceTemplateDefinition.workspaceTemplates[fileName].name = fileName;
-
-				FSBL.Clients.WorkspaceClient.addWorkspaceTemplateDefinition({ workspaceTemplateDefinition, force: true }, function (err) {
+				FSBL.Clients.WorkspaceClient.addWorkspaceDefinition({ workspaceJSONDefinition: workspaceTemplateDefinition.workspaceTemplates, force: true }, function (err) {
 					if (err) {
 						FSBL.Clients.Logger.info("addWorkspaceTemplateDefinition error", err);
 					}
@@ -327,14 +338,6 @@ export default class Workspaces extends React.Component {
 			//Clear out files. so if the user imports the same  file back-to-back, the event will fire.
 			inputElement.value = "";
 			FSBL.Clients.Logger.info("Workspaces imported");
-			this.refs.WorkspaceList.scrollTop = 500000;
-			FSBL.Clients.DialogManager.open("yesNo", {
-				question: "Your template is now available when creating New Workspaces.",
-				showCancelButton: false,
-				showNegativeButton: false,
-				affirmativeResponseLabel: "Okay",
-				hideModalOnClose: false
-			}, Function.prototype);
 		});
 	}
 	exportWorkspace() {
@@ -343,11 +346,8 @@ export default class Workspaces extends React.Component {
 			if (err) {
 				FSBL.Clients.Logger.error("getWorkspaceDefinition error", err);
 			} else {
-				var newTemplateName = this.state.focusedWorkspace + "-template"; // note the template name has to be different or it won't work
-				FSBL.Clients.Logger.debug("exportWorkspace", newTemplateName, workspaceDefinition);
-				var workspaceTemplateDefinition = FSBL.Clients.WorkspaceClient.convertWorkspaceDefinitionToTemplate({ newTemplateName, workspaceDefinition });
-				FSBL.Clients.Logger.debug("exportWorkspace workspaceTemplateDefinition", newTemplateName, workspaceDefinition, workspaceTemplateDefinition);
-				FSBL.Clients.WorkspaceClient.saveWorkspaceTemplateToConfigFile({ workspaceTemplateDefinition });
+				//We're saving using a routine initially created for templates. The outcome is the same and it probably should have just been "Save to file". This bool is to allow it to save.
+				FSBL.ConfigUtils.promptAndSaveJSONToLocalFile(this.state.focusedWorkspace, { workspaceTemplates: workspaceDefinition });
 				//FSBL.ConfigUtils.promptAndSaveJSONToLocalFile(this.state.focusedWorkspace, workspaceDefinition);
 			}
 		})
@@ -357,10 +357,23 @@ export default class Workspaces extends React.Component {
 			e.preventDefault();
 		}
 	}
+
+	getFocusedWorkspaceComponentList() {
+		let { workspaceList, focusedWorkspace } = this.state;
+		if (focusedWorkspace === "") return [];
+		let workspace = workspaceList.filter(wSpace => wSpace.name === focusedWorkspace)[0];
+
+		FSBL.Clients.WorkspaceClient.getWorkspaceDefinition({ workspaceName: focusedWorkspace }, (err, workspaceDefinition) => {
+			let componentTypes = this.getComponentTypes(workspaceDefinition[focusedWorkspace]);
+			this.setState({
+				focusedWorkspaceComponentList: componentTypes
+			});
+		});
+	}
 	render() {
-		let deleteButtonClasses = "negative-action-button workspace-action-button",
+		let deleteButtonClasses = "individual-workspace-action delete-workspace",
 			exportButtonClasses = "action-button workspace-action-button",
-			renameButtonClasses = "positive-action-button action-button workspace-action-button",
+			renameButtonClasses = "individual-workspace-action",
 			addButtonClasses = "positive-action-button action-button workspace-action-button",
 			importButtonClasses = "action-button workspace-action-button",
 			allowAdd = true,
@@ -368,19 +381,19 @@ export default class Workspaces extends React.Component {
 			allowExport = true,
 			allowRename = true,
 			allowImport = true,
-			deleteTooltip = "Delete the selected workspace.";
+			deleteTooltip = "Delete";
 
 		if (this.state.focusedWorkspace === FSBL.Clients.WorkspaceClient.activeWorkspace.name) {
-			deleteButtonClasses += " disabled-button";
+			deleteButtonClasses += " disabled-individual-workspace-action";
 			allowDelete = false;
-			deleteTooltip = "Cannot delete the active workspace.";
+			deleteTooltip = "Cannot delete the active workspace";
 		}
 
 		if (this.state.focusedWorkspace === '') {
 			exportButtonClasses += " disabled-button";
-			renameButtonClasses += " disabled-button";
-			deleteButtonClasses += " disabled-button";
-			deleteTooltip = "No workspace selected.";
+			renameButtonClasses += " disabled-individual-workspace-action";
+			deleteButtonClasses += " disabled-individual-workspace-action";
+			deleteTooltip = "No workspace selected";
 			allowRename = false;
 			allowExport = false;
 			allowDelete = false;
@@ -400,17 +413,17 @@ export default class Workspaces extends React.Component {
 		}
 
 		let addTooltip = "Add new workspace",
-			importTooltip = "Import template from file",
-			exportTooltip = allowExport ? "Export selected workspace as a template." : "No workspace selected.",
-			renameTooltip = allowRename ? "Rename selected workspace." : "No workspace selected.";
+			importTooltip = "Import workspace from file",
+			exportTooltip = allowExport ? "Export selected workspace" : "No workspace selected",
+			renameTooltip = allowRename ? "Rename" : "No workspace selected";
 
 		return <div>
 			<input style={{ display: 'none' }} type="file" id="file-input" />
 			<div className="complex-menu-content-row">
 				<div className="workspace-list-header-row">
-					<div className="content-section-header workspace-list-header">Workspaces
+					<div className="content-section-header workspace-list-header">
 					<div className="content-section-info">
-							<i className="ff-info"></i> Drag to reorder workspaces.
+							Drag to reorder
 					</div>
 					</div>
 
@@ -439,7 +452,7 @@ export default class Workspaces extends React.Component {
 										if (this.state.editing || this.state.adding) {
 											classNames += " workspace-item-editing";
 											return (<div key={i} className={classNames}>
-												<WorkspaceEditor value={workspace.name}
+												<WorkspaceEditor alue={workspace.name}
 													saveHandler={this.state.editing ? this.renameWorkspace : this.addWorkspace}
 													cancelHandler={this.cancelEdit}
 												/>
@@ -448,40 +461,48 @@ export default class Workspaces extends React.Component {
 									}
 									return (
 										<FinsembleDraggable onClick={() => this.setFocusedWorkspace(workspace.name)} wrapperClass={classNames} draggableId={workspace.name} key={i} index={i}>
-											{workspace.name}
+											<div className="workspace-name">
+												{workspace.name}
+											</div>
+											<div className="individual-workspace-actions">
+												<div title={renameTooltip} className={renameButtonClasses} onMouseDown={this.handleButtonClicks} onClick={
+													allowRename ? () => { this.startEditingWorkspace(workspace.name) } : Function.prototype}><i className="ff-edit"></i></div>
+												{workspace.name !== FSBL.Clients.WorkspaceClient.activeWorkspace.name &&
+													<div title={deleteTooltip} className={deleteButtonClasses} onMouseDown={this.handleButtonClicks} onClick={
+														allowDelete ? () => { this.deleteWorkspace(workspace.name); } : Function.prototype}><i className="ff-delete"></i></div>}
+											</div>
 										</FinsembleDraggable>
 									)
 								})}
 							</FinsembleDroppable>
 						</FinsembleDnDContext>
 					</div>
-					<div className="workspace-action-buttons">
-						<div title={addTooltip} className={addButtonClasses} onMouseDown={this.handleButtonClicks} onClick={allowAdd ? this.startAddingWorkspace : Function.prototype}>Add</div>
-						<div title={renameTooltip} className={renameButtonClasses} onMouseDown={this.handleButtonClicks} onClick={allowRename ? this.startEditingWorkspace : Function.prototype}>Rename</div>
-						<div title={exportTooltip} className={exportButtonClasses} onMouseDown={this.handleButtonClicks} onClick={allowExport ? this.exportWorkspace : Function.prototype}>Save Template</div>
-						<div title={deleteTooltip} className={deleteButtonClasses} onMouseDown={this.handleButtonClicks} onClick={allowDelete ? this.deleteWorkspace : Function.prototype}>Delete</div>
+					<div className="workspace-extras">
+						<div className="workspace-component-list">
+							{this.state.focusedWorkspaceComponentList.length > 0 &&
+								this.state.focusedWorkspaceComponentList.map((cmp, i) => {
+									return <div key={i} className="workspace-component">{cmp}</div>
+								})}
+							{this.state.focusedWorkspaceComponentList.length === 0 &&
+								"No components."}
+						</div>
+						<div className="workspace-action-buttons">
+							<div title={importTooltip} className={importButtonClasses} onMouseDown={this.handleButtonClicks} onClick={allowImport ? this.openFileDialog : Function.prototype}>
+								<i className="workspace-action-button-icon ff-import"></i>
+								<div>Import</div>
+							</div>
+							<div title={exportTooltip} className={exportButtonClasses} onMouseDown={this.handleButtonClicks} onClick={allowExport ? this.exportWorkspace : Function.prototype}>
+								<i className="workspace-action-button-icon ff-export"></i>
+								<div>Export</div>
+							</div>
+
+						</div>
 					</div>
 				</div>
-			</div>
-			<div className="complex-menu-content-row">
-				<div className="content-section-header">Preferences</div>
-				<div className="content-section-wrapper">
-					<Checkbox
-						onClick={this.setWorkspaceToLoadOnStart}
-						checked={this.state.focusedWorkspace === this.state.workspaceToLoadOnStart}
-						label="Load this workspace on startup." />
-				</div>
-			</div>
-			<div className="complex-menu-content-row">
-				<div className="complex-menu-header-wrapper">
-					<div className="content-section-header">Templates</div>
-					<div className="content-section-info">
-						<i className="ff-info"></i> Templates are available when creating new workspaces.
-					</div>
-				</div>
-				<div className="content-section-wrapper">
-					<div title={importTooltip} className={importButtonClasses} onMouseDown={this.handleButtonClicks} onClick={allowImport ? this.openFileDialog : Function.prototype}>Import</div>
-				</div>
+				<Checkbox
+					onClick={this.setWorkspaceToLoadOnStart}
+					checked={this.state.focusedWorkspace === this.state.workspaceToLoadOnStart}
+					label="Load this workspace on startup." />
 			</div>
 		</div>
 

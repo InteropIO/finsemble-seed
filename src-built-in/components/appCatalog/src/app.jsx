@@ -26,7 +26,7 @@ class AppCatalog extends React.Component {
 		this.state = { loaded: false }
 	}
 	componentWillMount() {
-		FSBL.Clients.ConfigClient.get("finsemble", (err, config) => {
+		FSBL.Clients.ConfigClient.getValue({ field: "finsemble" }, (err, config) => {
 			if (config.startup_app && config.startup_app.applicationIcon) {
 				console.log("config.startup_app.applicationIcon", config.startup_app.applicationIcon)
 				this.setState({

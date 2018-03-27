@@ -421,18 +421,14 @@ Actions = {
 			}
 		}
 
-		FSBL.Clients.WorkspaceClient.getTemplates(function (templateDefinitions) {
-			Logger.system.log("getTemplates", templateDefinitions);
-			let dialogParams = {
-				inputLabel: "",
-				templateDefinitions: templateDefinitions,
-				affirmativeButtonLabel: "Continue",
-				showCancelButton: false,
-				showNegativeButton: false
-			};
+		let dialogParams = {
+			inputLabel: "Enter a name for your workspace.",
+			affirmativeButtonLabel: "okay",
+			showCancelButton: false,
+			showNegativeButton: false
+		};
 
-			Actions.spawnDialog("inputAndSelection", dialogParams, onUserInput);
-		});
+		Actions.spawnDialog("singleInput", dialogParams, onUserInput);
 	},
 	/**
 	 * Asks the user if they'd like to save their workspace if it's different from what's in storage. If the workspace is clean, we just invoke the callback.

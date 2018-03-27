@@ -38,7 +38,6 @@ export default class AppList extends React.Component {
 
 	}
 	appListUpdated(err, list) {
-		console.log("new list", list)
 		this.setState({ appList: list.value || [] })
 
 	}
@@ -53,7 +52,6 @@ export default class AppList extends React.Component {
 
 	render() {
 		var self = this;
-		console.log("State", this.state)
 		if (!this.state.loaded) return null;
 		return <div>
 			<div className="ListHeader">
