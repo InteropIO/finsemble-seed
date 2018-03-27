@@ -50,7 +50,7 @@ function copyFoldersAndFiles(cb) {
         },
         {
             oldPath: path.join(PROJECT_ROOT, "build-original/webpack/webpack.files.entries.json"),
-            newPath: path.join(PROJECT_ROOT, "build/webpack/webpack.components.entries.json"),
+            newPath: path.join(PROJECT_ROOT, "build/webpack/webpack.files.entries.json"),
             messageOnComplete: "Copied old webpack entries file into the new build directory.",
         }
     ],
@@ -138,5 +138,5 @@ async.series([
     addVendorBundle,
     copyNodeModules
 ], () => {
-    log("Migration complete. Inspect webpack.components.entries.json, and remove any presentation components that you have not modified. You will also want to delete that folder from your src directory.");
+    log("Migration complete. Inspect webpack.files.entries.json, and remove any presentation components that you have not modified. You will also want to delete that folder from your src directory.");
 });

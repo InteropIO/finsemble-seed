@@ -135,7 +135,7 @@
 					}
 				});
 			}
-			//Requires are done in the function because webpack.components.js will error out if there's no vendor-manifest. The first webpack function generates the vendor manifest.
+			//Requires are done in the function because webpack.files.js will error out if there's no vendor-manifest. The first webpack function generates the vendor manifest.
 			return async.series([
 				(cb) => {
 					const webpackAdaptersConfig = require("./build/webpack/webpack.adapters");
@@ -146,7 +146,7 @@
 					packFiles(webpackVendorConfig, "vendor bundle", cb);
 				},
 				(cb) => {
-					const webpackComponentsConfig = require("./build/webpack/webpack.components.js")
+					const webpackComponentsConfig = require("./build/webpack/webpack.files.js")
 					packFiles(webpackComponentsConfig, "component/adapter bundle", cb);
 				},
 				(cb) => {
