@@ -6,7 +6,7 @@ function setCustomer(cust) {
 	$("input[name=name]").val(customer.name);
 	$("input[name=phone]").val(customer.phone);
 	FSBL.Clients.WindowClient.setWindowTitle(customer.acc);
-	FSBL.Clients.LinkerClient.publish({ dataType: "account", data: customer.acc }); // STEP 8
+	FSBL.Clients.LinkerClient.publish({ dataType: "account", data: customer.acc });
 	setState();
 }
 
