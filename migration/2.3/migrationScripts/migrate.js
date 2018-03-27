@@ -127,7 +127,7 @@ function updateApplicationConfigs(cb) {
     log("Updating your local manifest");
     const MANIFEST_PATH = path.join(THIS_PROJECT_ROOT, "configs/openfin/manifest-local.json");
     const manifest = require(MANIFEST_PATH);
-    let runtimeArgs = manifest.arguments.split("--").map(arg=>arg.trim());
+    let runtimeArgs = manifest.runtime.arguments.split("--").map(arg=>arg.trim());
     let addFrameStrategy = true;
     runtimeArgs = runtimeArgs.map((arg) => {
         if (arg.includes("v=")) {
@@ -139,7 +139,7 @@ function updateApplicationConfigs(cb) {
     if (addFrameStrategy) {
         runtimeArgs+= " --framestrategy=frames"
     }
-    manifest.arguments = runtimeArgs;
+    manifest.runtime.arguments = runtimeArgs;
     const content = JSON.stringify(manifest, null, '\t');
     fs.writeFileSync(MANIFEST_PATH, content, 'utf8');
     cb();
