@@ -13,7 +13,8 @@
     "rebuild": "gulp build --gulpfile=./gulpfile.js rebuild",
     "clean": "gulp clean --gulpfile=./gulpfile.js",
     "update-finsemble": "npm update @chartiq/finsemble && npm update -g @chartiq/finsemble-cli",
-    "finsemble-cli": "finsemble-cli"
+    "finsemble-cli": "finsemble-cli",
+    "migrate": "node migration/2.3/migrationScripts/migrate.js"
   },
   "author": "",
   "license": "ISC",
