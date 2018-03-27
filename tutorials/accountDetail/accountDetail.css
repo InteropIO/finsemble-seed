@@ -1,5 +1,13 @@
 body {
 	margin: 0px;
+	font-family: Roboto Condensed, sans-serif;
+	font-weight: 300;
+	font-size: 14px;
+	text-transform: uppercase;
+	letter-spacing: .1em;
+	margin: 0px;
+	background: #18252e;
+	color: #FFFFFF
 }
 
 section {
@@ -13,9 +21,10 @@ section > field {
 }
 section > input {
 	display: inline-block;
-	padding: 0 10px;
-	border-bottom: solid gray 1px;
-	margin: 0 10px;
+	padding: 5px;
+	border: 2px solid #4a6877;
+	background-color: #cad5dd;
+	margin: 0 5px;
 	width: 70%;
 }
 
@@ -28,14 +37,22 @@ input:hover {
 	background-color: #ddd;
 }
 
-save, next {
-	text-align:center;
-	background-color: #eee;
-	border: solid #888 1px;
-	cursor: pointer;
-	padding: 3px 10px;
+ next:hover, prev:hover {
+	background-color: #2cabff;
 }
 
-save:hover, next:hover {
-	background-color: #ddd;
+next, prev {
+	text-align: center;
+	background-color: #eee;
+	cursor: pointer;
+	margin: 5px;
+	padding: 10px;
+	background-color: #068de6;
+	color: #ffffff;
+	font-family: Roboto Condensed, sans-serif;
+	font-weight: 300;
+	font-size: 12px;
+	text-transform: uppercase;
+	letter-spacing: .1em;
+	transition: background-color .4s ease-out;
 }
