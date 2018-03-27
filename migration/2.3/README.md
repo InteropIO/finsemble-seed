@@ -2,7 +2,7 @@
 To migrate to the latest version of the Finsemble seed project, follow these steps:
 1. Clone the finsemble seed from master; put this into the same parent folder as your existing project.
 2. run `npm install`. If you do not have npm access, contact your sales-engineer and we will provide a zip of all of the modules.
-3. Modify migration/2.3/migrationScripts/config.js so that `OLD_PROJECT_ROOT` points to your existing project.
+3. Modify migration/2.3/migrationScripts/config.js so that the value of `OLD_PROJECT_ROOT` points to your existing project's folder.
 4. Run `npm run migrate`.
 5. Remove any components from src/components (and webpack.components.js) that you have not modified. By removing these components, the components inside of `src-built-in` will be what's loaded in your application.
 6. When everything works well, you can copy everything from the 2.3 seed back into your existing project's root directory.
