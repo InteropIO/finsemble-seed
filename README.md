@@ -1,3 +1,6 @@
+## If you are moving from an older version of the finsemble-seed project to the latest (2.3), please see the [instructions here](migration/2.3/README.MD).
+
+
 For everything you need to know about Finsemble, including a step-by-step process for setting up the seed project, check out the documentation on our [website](https://documentation.chartiq.com/finsemble/tutorial-IntroductionToFinsemble.html).
 
 <!-- TODO: Update tutorials to point to _tutorials_ folder at the top level -->
@@ -277,7 +280,3 @@ The `pre` and `post` functions do not take any arguments. The `updateServer` fun
     }
 })(module);
 ```
-
-## Upgrade instructions
-
-Upgrading the seed project should be straightforward. If you have made changes to _gulpfile.js_ or to _server/server.js_, you will need to move your changes to the appropriate extensions file. Aside from that, you can copy your _src_ folder, _webpack.components.entries.json_, and the contents of _configs/application_ to the new seed structure. It is recommended that you remove the folders from _src/components_ you did not create or extend in order to use the latest presentation components. You should also remove the components provided with Finsemble from _build/webpack/webpack.components.entries.json_ and _configs/application/components.json_.
