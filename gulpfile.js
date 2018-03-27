@@ -147,7 +147,11 @@
 				},
 				(cb) => {
 					const webpackComponentsConfig = require("./build/webpack/webpack.components.js")
-					packFiles(webpackComponentsConfig, "component/adapter bundle", cb);
+					packFiles(webpackComponentsConfig, "component bundle", cb);
+				},
+				(cb) => {
+					const webpackHeaderConfig = require("./build/webpack/webpack.titleBar.js")
+					packFiles(webpackHeaderConfig, "header bundle", cb);
 				},
 				(cb) => {
 					const webpackServicesConfig = require("./build/webpack/webpack.services.js")

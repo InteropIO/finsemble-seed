@@ -15,10 +15,6 @@
 		"output": "components/linker/linker",
 		"entry": "./src-built-in/components/linker/src/linker.jsx"
 	},
-	"windowTitleBar": {
-		"output": "components/windowTitleBar/windowTitleBar",
-		"entry": "./src-built-in/components/windowTitleBar/src/windowTitleBar.jsx"
-	},
 	"workspaceManagementMenu": {
 		"output": "components/workspaceManagementMenu/workspaceManagementMenu",
 		"entry": "./src-built-in/components/workspaceManagementMenu/src/app.jsx"
@@ -55,7 +51,6 @@
         "output": "components/searchMenu/searchMenu",
         "entry": "./src-built-in/components/searchMenu/src/app.jsx"
     },
-
 	"welcome": {
 		"output": "components/welcome/welcome",
 		"entry": "./src-built-in/components/welcome/welcome.js"
