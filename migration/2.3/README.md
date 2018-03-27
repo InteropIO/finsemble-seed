@@ -7,11 +7,11 @@ Follow these steps to migrate to version 2.3 of the Finsemble seed project. Afte
 4. Run `>npm run migrate`.
 5. Finsemble's built-in components (the ones that came with the seed) are now located in the folder *finsemble-seed/src-built-in*. Delete all components from the *finsemble-seed/src* directory **except** for any component that you created **or** any built-in components that you have modified, such as the toolbar.
 6. Go to the folder *finsemble-seed/build/webpack* and open *webpack.components.entries.json* in an editor. Remove the entries for all components that you have not created or modified. **Be careful not to delete presentation components/assets if you have modified built-in components, such as the toolbar**
-7. Run `npm run dev` in your new directory. Make sure everything works as expected! 
-
 
 * If you have made changes to _gulpfile.js_ or to _server/server.js_, you will need to manually move your changes to the appropriate extensions file. ([see here for more](../../README.md)).
 
 * If you've created new OpenFin manifests for other environments you should manually modify them to match the updated *config/openfin/manifest.local.json*. Notably, `--framestrategy=frames` was added to the runtime arguments. 
 
-You now should have a fully functional application that includes any components and customizations from your old projet. **Once you've confirmed that everything is working as expected** you can copy this new directory over your original project's root directory and continue developing as normal.
+7. Run `npm run dev` in your new directory. Make sure everything works as expected! 
+
+You now should have a fully functional application that includes any components and customizations from your old project. **Once you've confirmed that everything is working as expected** you can copy this new directory over your original project's root directory and continue developing as normal.
