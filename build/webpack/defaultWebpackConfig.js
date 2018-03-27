@@ -1,15 +1,14 @@
 const path = require('path');
+
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const { DllReferencePlugin, DefinePlugin } = require("webpack");
+const { DllReferencePlugin, EnvironmentPlugin } = require("webpack");
 const hardSource = require("hard-source-webpack-plugin");
 
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 
 let plugins =
 	[
-		new DefinePlugin({
-			"process.env.NODE_ENV": JSON.stringify(env)
-		})
+		new EnvironmentPlugin(['NODE_ENV'])
 	]
 
 if (env === "production") {
