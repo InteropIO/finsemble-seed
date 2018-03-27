@@ -40,7 +40,7 @@ function copyFoldersAndFiles(cb) {
     async.eachSeries([
         {
             oldPath: path.join(OLD_PROJECT_ROOT, "src"),
-            newPath: path.join(THIS_PROJECT_ROOT, "src"),
+            newPath: path.join(THIS_PROJECT_ROOT),
             messageOnComplete: "Copied existing src directory.",
         },
         {
