@@ -49,7 +49,7 @@ function copyFoldersAndFiles(cb) {
             messageOnComplete: "Copied new gulpfile.",
         },
         {
-            oldPath: path.join(PROJECT_ROOT, "build-original/webpack/webpack.components.entries.json"),
+            oldPath: path.join(PROJECT_ROOT, "build-original/webpack/webpack.files.entries.json"),
             newPath: path.join(PROJECT_ROOT, "build/webpack/webpack.components.entries.json"),
             messageOnComplete: "Copied old webpack entries file into the new build directory.",
         }
