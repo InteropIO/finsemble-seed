@@ -155,5 +155,5 @@ async.series([
     addVendorBundle,
     moveAdapters
 ], () => {
-    log("Migration complete. Inspect webpack.components.entries.json, and remove any presentation components that you have not modified. You will also want to delete the corresponding folders from your src directory.");
+    log("Migration complete. Inspect /build/webpack/webpack.components.entries.json, and remove any presentation components that you have not modified. You will also want to delete the corresponding folders from your src directory.");
 });
