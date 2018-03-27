@@ -1,13 +1,9 @@
 # Instructions
 To migrate to the latest version of the Finsemble seed project, follow these steps:
-1. Unzip the migration folder provided by ChartIQ into the root of your finsemble project.
-2. From the root of that project, run the following command:
-```javascript
-node migration/2.3/migrationScripts/migrate.js
-```
-3. This may take several minutes, mostly because we will have to copy the node_modules into your project. While it's running, feel free to read the notes below.
+1. Clone the finsemble seed from master; put this into the same parent folder as your existing project.
+2. Modify migration/2.3/migrationScripts/config.js so that `OLD_PROJECT_ROOT` points to your existing project.
+3. Run `npm run migrate`.
+4. Remove any components from src/components (and webpack.components.js) that you have not modified. By removing these components, the components inside of `src-built-in` will be what's loaded in your application.
+5. When everything works well, everything from the 2.3 seed that you cloned back into your existing project.
 
-## Post-script Steps
-1. Comb through your `src/components` directory, and remove any presentation component that you have not modified. Also remove this from `build/webpack/webpack.components.entries.json`.
-2. Enjoy the powahhhhh and speeeeeed.
-
+**Note** Any server or gulpfile modifications that you may have made will need to be manually merged in. See the README in the root of the 2.3 seed for an explanation of the new `extensions` files.
