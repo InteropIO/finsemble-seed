@@ -44,6 +44,11 @@ function copyFoldersAndFiles(cb) {
             messageOnComplete: "Copied existing src directory.",
         },
         {
+            oldPath: path.join(OLD_PROJECT_ROOT, "configs"),
+            newPath: path.join(THIS_PROJECT_ROOT),
+            messageOnComplete: "Copied existing configs directory.",
+        },
+        {
             oldPath: path.join(OLD_PROJECT_ROOT, "build/webpack/webpack.files.entries.json"),
             newPath: path.join(THIS_PROJECT_ROOT, "build/webpack/webpack.components.entries.json"),
             messageOnComplete: "Copied old webpack entries file into the new build directory.",
@@ -77,6 +82,7 @@ function moveAdapters(done) {
     fs.writeFileSync(adapterEntry, newAdapterConfig, 'utf8');
     done();
 }
+
 function updatePackageFile(done) {
     const oldPackagePath = path.join(OLD_PROJECT_ROOT, "package.json")
     const newPackagePath = path.join(THIS_PROJECT_ROOT, "package.json");
@@ -117,6 +123,27 @@ function updatePackageFile(done) {
     done();
 }
 
+function updateApplicationConfigs(cb) {
+    log("Updating your local manifest");
+    const MANIFEST_PATH = path.join(THIS_PROJECT_ROOT, "configs/openfin/manifest-local.json");
+    const manifest = require(MANIFEST_PATH);
+    let runtimeArgs = manifest.arguments.split("--").map(arg=>arg.trim());
+    let addFrameStrategy = true;
+    runtimeArgs = runtimeArgs.map((arg) => {
+        if (arg.includes("v=")) {
+            arg = "v=4"
+        }
+        if (arg === "framestrategy=frames") addFrameStrategy = false;
+        return arg;
+    }).join(" --");
+    if (addFrameStrategy) {
+        runtimeArgs+= " --framestrategy=frames"
+    }
+    manifest.arguments = runtimeArgs;
+    const content = JSON.stringify(manifest, null, '\t');
+    fs.writeFileSync(MANIFEST_PATH, content, 'utf8');
+    cb();
+}
 
 function addVendorBundle(cb) {
     const COMPONENTS_DIRECTORY = path.join(THIS_PROJECT_ROOT, 'src/components/');
@@ -153,7 +180,8 @@ function addVendorBundle(cb) {
 async.series([
     copyFoldersAndFiles,
     addVendorBundle,
-    moveAdapters
+    moveAdapters,
+    updateApplicationConfigs
 ], () => {
     log("Migration complete. Inspect webpack.components.entries.json, and remove any presentation components that you have not modified. You will also want to delete the corresponding folders from your src directory.");
 });
