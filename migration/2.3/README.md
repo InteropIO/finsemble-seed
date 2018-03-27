@@ -1,4 +1,4 @@
-# Instructions
+# Migration Instructions For Version 2.3
 Follow these steps to migrate to version 2.3 of the Finsemble seed project. After following these steps, you will have a new project directory that is side-by-side with your original project's root directory (i.e. finsemble-seed). Nothing here will touch your existing application:
 1. Clone the finsemble seed from master (put this into the same *parent* folder as your existing project).
 2. In your new directory, run `npm install`. (Skip this step if you received a zip directly from ChartIQ. That zip will already contain node_modules.)
