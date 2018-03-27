@@ -6,5 +6,5 @@ To migrate to the latest version of the Finsemble seed project, follow these ste
 4. Run `npm run migrate`.
 
 When everything works well, you can copy everything from the 2.3 seed back into your existing project's root directory.
-Upgrading the seed project should be straightforward. If you have made changes to _gulpfile.js_ or to _server/server.js_, you will need to move your changes to the appropriate extensions file ([see here for more](../../README.md)). It is recommended that you remove the folders from _src/components_ you did not create or extend in order to use the latest presentation components. If you have not modified the components provided from finsemble, you should remove them from _build/webpack/webpack.components.entries.json_ and _configs/application/components.json_.
+Upgrading the seed project should be straightforward. If you have made changes to _gulpfile.js_ or to _server/server.js_, you will need to move your changes to the appropriate extensions file. ([see here for more](../../README.md)) It is recommended that you remove the folders from _src/components_ you did not create or extend in order to use the latest presentation components. If you have not modified the components provided from finsemble, you should remove them from _build/webpack/webpack.components.entries.json_ and _configs/application/components.json_.
 
