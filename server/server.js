@@ -9,7 +9,7 @@
 
 (() => {
 	"use strict";
-
+	if (!process.send) process.send = console.log;
 	// #region Imports
 	// NPM
 	const chalk = require("chalk");
