@@ -33,7 +33,7 @@ The Finsemble seed project provides a basic structure to help developers get up 
 - _src-built-in_ - Includes the source for the default presentation components included with the Finsemble seed project. These files can be extended as desired, but, if you do extend these components, we recommend you copy the folder to the _src_ directory to prevent merge conflicts when upgrading the seed project.
     - _src-built-in/adapters_ - Contains an example Storage Adapter that saves data to local storage.
     - _src-built-in/components/assets_ - Contains the SASS, CSS and images used to create Finsemble's look and feel.
-- _tutorials_ - Contains the source for the components used by our [seed project tutorial](https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html).
+- _tutorials_ - Contains the source for the components used by our [seed project tutorial](https://www.chartiq.com/tutorials/?slug=finsemble-seed-project).
 
 Project structure:
 ```
