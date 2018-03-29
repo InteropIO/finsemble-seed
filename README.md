@@ -131,6 +131,7 @@ These are the methods defined in the `taskMethods` object:
 These are the tasks defined in _gulpfile.js_:
 
 - `npm run dev` - This is what you should use the most when developing. Fast build, runs a local node-server, launches Finsemble.
+- `npm run dev:fresh` - Same as above except that it cleans out any cached files. This is like a rebuild all.
 - `npm run build:dev` - Just fast build. No server, no launch.
 - `npm run dev:nolaunch` - Fast build, run the server. Don't launch.
 - `npm run server:dev` - Just run the server. No build. No launch.
