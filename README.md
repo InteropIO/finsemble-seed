@@ -33,7 +33,7 @@ The Finsemble seed project provides a basic structure to help developers get up 
 - _src-built-in_ - Includes the source for the default presentation components included with the Finsemble seed project. These files can be extended as desired, but, if you do extend these components, we recommend you copy the folder to the _src_ directory to prevent merge conflicts when upgrading the seed project.
     - _src-built-in/adapters_ - Contains an example Storage Adapter that saves data to local storage.
     - _src-built-in/components/assets_ - Contains the SASS, CSS and images used to create Finsemble's look and feel.
-- _tutorials_ - Contains the source for the components used by our [seed project tutorial](https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html).
+- _tutorials_ - Contains the source for the components used by our [seed project tutorial](https://www.chartiq.com/tutorials/?slug=finsemble-seed-project).
 
 Project structure:
 ```
@@ -129,14 +129,17 @@ These are the methods defined in the `taskMethods` object:
 - `watchFiles` - Watches files for changes to kick off `buildSASS` or `buildWebpack`.
 
 These are the tasks defined in _gulpfile.js_:
-- `clean` - Cleans the project directory (calls the `clean` method).
-- `build` - Builds the application in the distribution directory (calls "clean" task and, `copyStaticFiles`, `buildWebpack`, and `buildSASS` functions).
-- `rebuild` - Calls the `clean` task then the `build` task..
-- `prod` - Builds the application and starts the server to host it (calls the "build" task then the `startServer` function).
-- `prod:run` - Builds the application, starts the server, and launches the Finsemble application (calls the "prod" task then `launchApplication`).
-- `dev:run` - Builds the application, starts the server, launches the Finsemble application, and watches for file changes (calls "prod:run" task then the `watchFiles` function).
-- `dev:run-fresh` - Rebuilds the application, starts the server and the application.
-- `default` - Specifies the default task to run if no task is passed in (calls the `dev:run` task).
+
+- `npm run dev` - This is what you should use the most when developing. Fast build, runs a local node-server, launches Finsemble.
+- `npm run dev:fresh` - Same as above except that it cleans out any cached files. This is like a rebuild all.
+- `npm run build:dev` - Just fast build. No server, no launch.
+- `npm run dev:nolaunch` - Fast build, run the server. Don't launch.
+- `npm run server:dev` - Just run the server. No build. No launch.
+- `npm run prod` - Build for production. This is a full rebuild with minification. It will take a while. Then run server and launch Finsemble. This is the prod equivalent of npm run dev. Use this to test production mode on your local machine.
+- `npm run build:prod` - Build for production but don't run anything. Use this to create a production build for depoyment.
+- `npm run prod:nolaunch` - Build for production and run the node-server.
+- `npm run server:prod` - Just run the server in production mode. No build or launch.
+
 
 If you wish to add additional task or function calls to the existing tasks, they can be redefined in the `post` method call. If the _gulpfile-extensions.js_ file exists, it's contents are called as a method passing an object with the default task functions in. These methods can be overwritten or extended as needed. The `pre` and `post` methods pass in a callback function that must be called to signal that the gulpfile can continue executing. The other functions defined in `taskMethods` should be specified like a [gulp task function](https://github.com/gulpjs/gulp/blob/master/docs/API.md#gulptaskname-fn).
 

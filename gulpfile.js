@@ -304,7 +304,7 @@
 		gulp.task("clean", taskMethods.clean);
 
 		/**
-		 * Builds the application in the distribution directory.
+		 * Builds the application in the distribution directory. Internal only, don't use because no environment is set!!!!
 		 */
 		gulp.task(
 			"build",
@@ -319,30 +319,55 @@
 		gulp.task("rebuild", gulp.series("clean", "build"));
 
 		/**
-		 * Builds the application and starts the server to host it.
+		 * Builds the application, starts the server, launches the Finsemble application and watches for file changes.
 		 */
-		gulp.task("prod", gulp.series(taskMethods.setProdEnvironment, "build", taskMethods.buildWebpack, taskMethods.startServer));
-
-		/**
-		 * Builds the application, starts the server and launches the Finsemble application.
-		 */
-		gulp.task("prod:run", gulp.series(taskMethods.setProdEnvironment, "prod", taskMethods.launchApplication));
+		gulp.task("build:dev", gulp.series(taskMethods.setDevEnvironment, "build"));
 
 		/**
 		 * Builds the application, starts the server, launches the Finsemble application and watches for file changes.
 		 */
-		gulp.task("dev:run", gulp.series(taskMethods.setDevEnvironment, "build", taskMethods.startServer, taskMethods.launchApplication));
+		gulp.task("dev", gulp.series("build:dev", taskMethods.startServer, taskMethods.launchApplication));
 
 		/**
 		 * Wipes the babel cache and webpack cache, clears dist, rebuilds the application, and starts the server.
 		 */
-		gulp.task("dev:run-fresh", gulp.series(taskMethods.setDevEnvironment, "rebuild", taskMethods.startServer, taskMethods.launchApplication));
+		gulp.task("dev:fresh", gulp.series(taskMethods.setDevEnvironment, "rebuild", taskMethods.startServer, taskMethods.launchApplication));
+
+		/**
+		 * Builds the application and runs the server *without* launching openfin.
+		 */
+		gulp.task("dev:nolaunch", gulp.series("build:dev", taskMethods.startServer));
+
+		/**
+		 * Builds the application in production mode (minimized). It does not start the server or openfin.
+		 */
+		gulp.task("build:prod", gulp.series(taskMethods.setProdEnvironment, "rebuild"));
+
+		/**
+		 * Builds the application, starts the server and launches openfin. Use this to test production mode on your local machine.
+		 */
+		gulp.task("prod", gulp.series("build:prod", taskMethods.startServer, taskMethods.launchApplication));
+
+		/**
+		 * Builds the application in production mode and starts the server without launching openfin.
+		 */
+		gulp.task("prod:nolaunch", gulp.series("build:prod", taskMethods.startServer));
+
+		/**
+		 * Launches the server in dev environment. No build, no openfin launch.
+		 */
+		gulp.task("server", gulp.series(taskMethods.setDevEnvironment, taskMethods.startServer));
+
+		/**
+		 * Launches the server in prod environment. No build, no openfin launch.
+		 */
+		gulp.task("server:prod", gulp.series(taskMethods.setProdEnvironment, taskMethods.startServer));
 
 
 		/**
 		 * Specifies the default task to run if no task is passed in.
 		 */
-		gulp.task("default", gulp.series("dev:run"));
+		gulp.task("default", gulp.series("dev"));
 
 		taskMethods.post(err => {
 			if (err) {
