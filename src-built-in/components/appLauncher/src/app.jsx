@@ -73,12 +73,11 @@ class AppLauncher extends React.Component {
 		var self = this;
 		return (<FinsembleMenu>
 			<FinsembleMenuSection className="menu-secondary">
-				<FinsembleMenuItem>
+				{/* <FinsembleMenuItem>
 					<FinsembleMenuItemLabel onClick={this.openAdHoc}>
 						<i className="ff-new-workspace"></i> New App
 					</FinsembleMenuItemLabel>
-
-				</FinsembleMenuItem>
+				</FinsembleMenuItem> */}
 				<FinsembleMenuItem>
 					<FinsembleMenuItemLabel onClick={this.openAppCatalog}>
 						<i className="ff-list"></i> App Catalog
