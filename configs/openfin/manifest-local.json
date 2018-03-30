@@ -56,12 +56,22 @@
             "version": "1.0.92",
             "alias": "assimilation",
             "target": "assimilationMain.exe"
+        },
+        {
+            "src": "http://localhost:3375/finsemble/hosted/FinsembleRouter.zip",
+            "version": "1.0.0",
+            "alias": "FinsembleRouter",
+            "target": "FinsembleRouter.exe"
         }
     ],
     "finsemble": {
         "applicationRoot": "http://localhost:3375/",
         "moduleRoot": "http://localhost:3375/finsemble",
         "servicesRoot": "http://localhost:3375/finsemble/services",
+        "router" : {
+            "sameDomainTransport": "SharedWorker",
+            "crossDomainTransport": "OpenFinBus"
+        },
         "importConfig": [
             "$applicationRoot/configs/application/config.json"
         ]
