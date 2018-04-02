@@ -19,3 +19,4 @@ finsemble/
 .webpack-file-cache
 .babel_cache
 build/webpack/vendor-manifest.json
+server/stats.json

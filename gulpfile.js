@@ -19,13 +19,19 @@
 	const extensions = fs.existsSync("./gulpfile-extensions.js") ? require("./gulpfile-extensions.js") : undefined;
 	const async = require("async");
 	// #endregion
-	const allowedColors = ["green", "cyan", "red", "yellow"];
+	const allowedColors = ["green", "cyan", "red", "yellow", "magenta", "white", "bgCyan"];
 	const logToTerminal = (color, msg) => {
+		let bg = "bgBlack";
 		if (!allowedColors.includes(color)) {
 			msg = color;
 			color = "white";
 		}
-		console.log(`[${new Date().toLocaleTimeString()}] ${chalk[color](msg)}.`);
+		if (color === "bgCyan") {
+			color = "black";
+			bg = "bgCyan";
+		}
+		console.log(`[${new Date().toLocaleTimeString()}] ${chalk[color][bg](msg)}.`);
+
 	}
 	// #region Constants
 	const startupConfig = require("./configs/other/server-environment-startup");
@@ -174,6 +180,42 @@
 			del(path.join(__dirname, "build/webpack/vendor-manifest.json"), { force: true })
 			return del(".webpack-file-cache", { force: true })
 		},
+		checkSymbolicLinks: done => {
+			const FINSEMBLE_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble");
+			const CLI_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-cli");
+			const CONTROLS_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-react-controls");
+
+			function checkLink(params, cb) {
+				let { path, name } = params;
+				fs.readlink(path,
+					(err, str) => {
+						if (str) {
+							logToTerminal("magenta", `LINK DETECTED: ${name}. Path: ${str}`)
+						}
+						cb();
+					});
+			};
+			async.parallel([
+				(cb) => {
+					checkLink({
+						path: FINSEMBLE_PATH,
+						name: "Finsemble"
+					}, cb)
+				},
+				(cb) => {
+					checkLink({
+						path: CLI_PATH,
+						name: "Finsemble"
+					}, cb)
+				},
+				(cb) => {
+					checkLink({
+						path: CONTROLS_PATH,
+						name: "Finsemble"
+					}, cb)
+				},
+			], done)
+		},
 
 		/**
 		 * Launches the application.
@@ -192,7 +234,12 @@
 					process.exit();
 				});
 			});
+			logToTerminal("bgCyan", "Launching Finsemble");
+			//Wipe old stats.
+			fs.writeFileSync(path.join(__dirname, "server", "stats.json"), JSON.stringify({}), "utf-8");
 
+			let startTime = Date.now();
+			fs.writeFileSync(path.join(__dirname, "server", "stats.json"), JSON.stringify({ startTime }), "utf-8");
 			launcher
 				.launchOpenFin({
 					configPath: startupConfig[env.NODE_ENV].serverConfig
@@ -321,7 +368,7 @@
 		/**
 		 * Builds the application, starts the server, launches the Finsemble application and watches for file changes.
 		 */
-		gulp.task("build:dev", gulp.series(taskMethods.setDevEnvironment, "build"));
+		gulp.task("build:dev", gulp.series(taskMethods.setDevEnvironment, "build", taskMethods.checkSymbolicLinks));
 
 		/**
 		 * Builds the application, starts the server, launches the Finsemble application and watches for file changes.

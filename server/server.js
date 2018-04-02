@@ -105,9 +105,42 @@
 			res.set("cache-control", "no-cache")
 		}
 	}
-
 	logToTerminal(outputColor("Starting Server"));
+	if (process.env.NODE_ENV === "development") {
+		//JSON file that has start times and retrieval times for the manifest and startup_app.
+		const STATS_PATH = path.join(__dirname, "./stats.json");
+		//Listens for the first time that the config and the serviceManager are retrieved, and logs output to the console.
+		let notified_config = false, notified_sm = false;
+		app.get("/configs/openfin/manifest-local.json", (req, res, next) => {
+			if (!notified_config) {
+				let stats = require(STATS_PATH);
+				const now = Date.now();
+				const launchDuration = (now - stats.startTime) / 1000;
+				stats.manifest_retrieval = now;
+				stats.manifest_retrieval_diff_in_s = launchDuration;
+				fs.writeFileSync(STATS_PATH, JSON.stringify(stats), "utf-8");
 
+				logToTerminal(outputColor(`Application manifest retrieved ${launchDuration}s after launch`));
+				notified_config = true;
+			}
+			next();
+		});
+
+		app.get("/Finsemble/components/system/serviceManager/serviceManager.html", (req, res, next) => {
+			if (!notified_sm) {
+				const stats = require(STATS_PATH);
+				const now = Date.now();
+				const launchDuration = (now - stats.startTime) / 1000;
+				stats.sm_retrieval = now;
+				stats.sm_retrieval_diff_in_s = launchDuration;
+				fs.writeFileSync(STATS_PATH, JSON.stringify(stats), "utf-8");
+
+				logToTerminal(outputColor(`Application started ${launchDuration}s after launch`));
+				notified_sm = true;
+			}
+			next();
+		});
+	}
 	/**
 	 * Builds the server.
 	 *
