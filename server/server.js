@@ -1,4 +1,4 @@
-#!/usr/bin / env node
+#!/usr/bin/env node
 
 /*!
 * Copyright 2017 by ChartIQ, Inc.
@@ -14,6 +14,8 @@
 	// NPM
 	const chalk = require("chalk");
 	chalk.enabled = true;
+	//force color output
+	chalk.level = 1;
 	const express = require("express");
 	const fs = require("fs");
 	const path = require("path");
