@@ -4,6 +4,9 @@
 	// #region Imports
 	// NPM
 	const chalk = require("chalk");
+	chalk.enabled = true;
+	//setting the level to 1 will force color output.
+	chalk.level = 1;
 	const { exec, spawn } = require("child_process");
 	const ON_DEATH = require("death")({ debug: false });
 	const del = require("del");
@@ -36,7 +39,6 @@
 	// #region Constants
 	const startupConfig = require("./configs/other/server-environment-startup");
 	//Force colors on terminals.
-	chalk.enabled = true;
 	let angularComponents;
 	try {
 		angularComponents = require("./build/angular-components.json");
@@ -45,7 +47,6 @@
 		angularComponents = null;
 	}
 
-	chalk.enabled = true;
 	const errorOutColor = chalk.red;
 	// #endregion
 
