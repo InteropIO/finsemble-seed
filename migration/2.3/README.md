@@ -10,8 +10,9 @@ Follow these steps to migrate to version 2.3 of the Finsemble seed project. Afte
 
 * If you have made changes to _gulpfile.js_ or to _server/server.js_, you will need to manually move your changes to the appropriate extensions file. ([See here for more info](../../README.md)).
 
-* If you've created new OpenFin manifests for other environments you should manually modify them to match the updated *config/openfin/manifest.local.json*. Notably, `--framestrategy=frames` was added to the runtime arguments. 
+* If you've created new OpenFin manifests for other environments you should manually modify them to match the updated *config/openfin/manifest.local.json*. Notably, `--framestrategy=frames` was added to the runtime arguments.
 
-7. Use a command prompt to run `>npm run dev` in your new directory. Make sure everything works as expected! 
+7. Do a diff of package.json from the new seed to your old seed. Any npm packages that you added will need to be moved over to your new project.
+8. Use a command prompt to run `>npm run dev` in your new directory. Make sure everything works as expected!
 
 You now should have a fully functional application that includes any components and customizations from your old project. **Once you've confirmed that everything is working as expected** you can copy this new directory over your original project's root directory and continue developing as normal.
