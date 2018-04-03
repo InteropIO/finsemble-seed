@@ -56,60 +56,29 @@
 				]
 			},
 			{
+				"agentLabel": "Tier2",
+				"services": [
+					"launcherService",
+					"authenticationService",
+					"workspaceService",
+					"storageService",
+					"searchService"
+				]
+			},
+			{
 				"agentLabel": "dockingService",
 				"services": [
 					"dockingService"
-				]
-			},
-			{
-				"agentLabel": "loggerService",
-				"services": [
-					"loggerService"
-				]
-			},
-			{
-				"agentLabel": "launcherService",
-				"services": [
-					"launcherService"
-				]
-			},
-			{
-				"agentLabel": "storageService",
-				"services": [
-					"storageService"
-				]
-			},
-			{
-				"agentLabel": "workspaceService",
-				"services": [
-					"workspaceService"
-				]
-			},
-			{
-				"agentLabel": "linkerService",
-				"services": [
-					"linkerService"
-				]
-			},
-			{
-				"agentLabel": "RPCService",
-				"services": [
-					"RPCService"
-				]
-			},
-			{
-				"agentLabel": "authenticationService",
-				"services": [
-					"authenticationService"
 				]
 			}
 		]
 	},
 	"importConfig": [
+		"$applicationRoot/configs/application/presentationComponents.json",
 		"$applicationRoot/configs/application/components.json",
-		"$applicationRoot/components/sampleComponents.json",
-		"$applicationRoot/configs/other/defaultWorkspaces.json",
-		"$applicationRoot/configs/other/defaultWorkspaceTemplates.json",
-		"$applicationRoot/configs/application/services.json"
+		"$applicationRoot/configs/application/workspaces.json",
+		"$applicationRoot/configs/application/workspaceTemplates.json",
+		"$applicationRoot/configs/application/services.json",
+		"$applicationRoot/configs/application/components.json"
 	]
 }

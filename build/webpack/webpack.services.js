@@ -2,7 +2,6 @@ var path = require('path');
 var fs = require("fs");
 var glob = require("glob");
 var glob_entries = require('webpack-glob-entries');
-
 //not used?
 function getDirectories(srcpath) {
 	return fs.readdirSync(srcpath).filter(function (file) {
@@ -12,7 +11,6 @@ function getDirectories(srcpath) {
 
 var services = glob_entries(path.join(__dirname, '../../', "/src/services/**/*.js"));
 var clients = glob_entries(path.join(__dirname, '../../', "/src/clients/**/*.js"));
-console.log('services', services);
 
 var entry = {};
 
@@ -40,4 +38,5 @@ let defaults = require('./defaultWebpackConfig');
 let config = new defaults();
 config.watch = false;
 config.entry = entry;
+
 module.exports = config;
