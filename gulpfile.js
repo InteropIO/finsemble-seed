@@ -107,8 +107,10 @@
 		 * Builds the SASS files for the project.
 		 */
 		buildSass: () => {
-			const source = [path.join(srcPath, "components", "**", "*.scss")];
-
+			const source = [
+				path.join(srcPath, "components", "**", "*.scss"),
+				path.join(__dirname, "src-built-in", "components", "**", "*.scss"),
+			];
 			// // Don't build files built by angular
 			// if (angularComponents) {
 			// 	angularComponents.forEach(comp => {
