@@ -181,7 +181,8 @@ async.series([
     copyFoldersAndFiles,
     addVendorBundle,
     moveAdapters,
-    updateApplicationConfigs
+    updateApplicationConfigs,
+    updatePackageFile
 ], () => {
     log("Migration complete. Inspect /build/webpack/webpack.components.entries.json, and remove any presentation components that you have not modified. You will also want to delete the corresponding folders from your src directory.");
 });
