@@ -47,7 +47,10 @@ class WorkspaceEditor extends React.Component {
 			this.props.saveHandler(val);
 		}
 		//binding so we don't lose the event inside of react's crazy callback structure. Finished is set so that the component doesn't call the saveHandler again on unMount
-		this.setState({ finished: true }, finish.bind(this, this.state.value));
+		// this.setState({ finished: true }, finish.bind(this, this.state.value));
+		this.setState({ finished: true }, () => {
+			this.props.cancelHandler();
+		});
 	}
 
 	componentWillUnmount() {
@@ -184,7 +187,9 @@ export default class Workspaces extends React.Component {
 			return this.cancelEdit();
 		}
 
-		if (newName === oldName) return this.cancelEdit();
+		if (newName === oldName) {
+			return this.cancelEdit();
+		}
 		let updatedWorkspaceList = this.state.workspaceList;
 		let index = updatedWorkspaceList.findIndex((el) => el.name === oldName);
 		//Set state locally so that the text doesn't change when the input field unmounts.
