@@ -106,10 +106,7 @@ module.exports = function () {
 		resolve: {
 			extensions: ['.js', '.jsx', '.json', 'scss', 'html'],
 			modules: [
-				'./node_modules',
-				'./src/components',
-				'./src/clients',
-				'./src/services'
+				'./node_modules'
 			],
 		},
 	};
