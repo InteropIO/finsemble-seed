@@ -27,48 +27,6 @@ for (let key in componentsToBuild) {
 }
 webpackConfig = new defaults();
 
-webpackConfig.plugins.push(new CopyWebpackPlugin([
-	{
-		from: './src/components/',
-		to: './components/',
-		force: false,
-		ignore: ["*.js", "*.jsx"]
-	},
-	{
-		from: './src-built-in/components/',
-		to: './components/',
-		force: false,
-		ignore: ["*.js", "*.jsx"]
-	},
-	{
-		from: './configs/',
-		to: './configs/',
-		force: true
-	},
-	{
-		from: './src/services/',
-		to: './services/',
-		force: true,
-		ignore: ["*.js"]
-	},
-	{
-		from: './src/clients/',
-		to: './clients/',
-		force: true,
-		ignore: ["*.js"]
-	},
-	{
-		from: './src/thirdParty/',
-		to: './thirdParty/',
-		force: false,
-		ignore: ["*.js"]
-	},
-	{
-		from: './node_modules/@chartiq/finsemble/dist',
-		to: path.join(__dirname, "../../Finsemble/"),
-		force: true
-	}
-], { ignore: componentIgnores }));
 webpackConfig.entry = entries;
 
 module.exports = webpackConfig;
