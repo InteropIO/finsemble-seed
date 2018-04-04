@@ -186,6 +186,29 @@
 			del(path.join(__dirname, "build/webpack/vendor-manifest.json"), { force: true })
 			return del(".webpack-file-cache", { force: true })
 		},
+		/**
+		 * Checks to see if the user is on MacOS and has assimilation turned on. If so, it'll exit the build.
+		 */
+		checkAssimilation: done => {
+			const isWin = process.platform === "win32";
+			const config = require(path.join(__dirname, "configs", "application", "config.json"));
+			let assimilationIsActive = true;
+			try {
+				assimilationIsActive = config.betaFeatures.assimilation.enabled;
+			} catch (e) {
+				logToTerminal("red", "Unable to locate assimilation config.");
+			}
+
+			if (!isWin && assimilationIsActive) {
+				logToTerminal("red", `We have detected that you are not on Windows and you have assimilation turned on. This will cause a C++ application to be launched, and finsemble will fail. Please open "configs/application/configs.json" and set "betaFeatures.assimilation.enabled" to false. Then restart your build`);
+				process.exit(1);
+			} else {
+				done();
+			}
+		},
+		/**
+		 * Checks to see if the user is symbolically linked to any finsemble node module and prints a note.
+		 */
 		checkSymbolicLinks: done => {
 			const FINSEMBLE_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble");
 			const CLI_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-cli");
@@ -374,7 +397,7 @@
 		/**
 		 * Builds the application, starts the server, launches the Finsemble application and watches for file changes.
 		 */
-		gulp.task("build:dev", gulp.series(taskMethods.setDevEnvironment, "build", taskMethods.checkSymbolicLinks));
+		gulp.task("build:dev", gulp.series(taskMethods.checkAssimilation, taskMethods.setDevEnvironment, "build", taskMethods.checkSymbolicLinks));
 
 		/**
 		 * Builds the application, starts the server, launches the Finsemble application and watches for file changes.
