@@ -147,7 +147,7 @@
 						console.error(errorOutColor("Webpack Error.", err));
 					}
 					if (stats.hasErrors()) {
-						console.error(errorOutColor(stats));
+						console.error(errorOutColor(stats.toJson().errors));
 					}
 					//Webpack invokes this function (basically, an onComplete) each time the bundle is built. We only want to invoke the async callback the first time.
 					if (callback) {
