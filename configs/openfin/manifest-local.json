@@ -67,7 +67,7 @@
     "finsemble": {
         "applicationRoot": "http://localhost:3375",
         "cssOverridePath": "$applicationRoot/components/assets/css/finsemble-overrides.css",
-        "moduleRoot": "https://localhost:3375/finsemble/",
+        "moduleRoot": "https://localhost:3375/finsemble",
         "router": {
             "sameDomainTransport": "SharedWorker",
             "crossDomainTransport": "FinsembleTransport",
