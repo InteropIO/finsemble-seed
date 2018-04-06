@@ -110,6 +110,7 @@
 				 * This proxy further uses the referer http header to redirect assets from within the component.
 				 */
 				let ProxyMap = [
+				/* Examples
 					{
 						root: "connect4",
 						proxyTarget: "http://connect4.chartiq.com",
@@ -125,6 +126,7 @@
 						proxyTarget: "http://connect2.chartiq.com",
 						host: "connect2.chartiq.com"
 					}
+				*/
 				];
 
 				if (ProxyMap.length) {
