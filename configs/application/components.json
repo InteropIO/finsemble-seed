@@ -172,7 +172,7 @@
         "chartiq": {
             "window": {
                 "url2": "http://www.chartiq.com",
-                "url": "$applicationRoot/wta/wta.html",
+                "url": "$applicationRoot/connect2/wta.html",
                 "frame": false,
                 "resizable": true,
                 "autoShow": true,
