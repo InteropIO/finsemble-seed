@@ -13,6 +13,8 @@
 	// #region Imports
 	// NPM
 	const chalk = require("chalk");
+	const errorColor = chalk.red;
+	const outputColor = chalk.white;
 	chalk.enabled = true;
 	//force color output
 	chalk.level = 1;
@@ -91,7 +93,6 @@
 	const moduleDirectory = path.join(__dirname, "..", "Finsemble");
 	const ONE_DAY = 24 * 3600 * 1000;
 	const cacheAge = process.env.NODE_ENV === "development" ? 0 : ONE_DAY;
-	const outputColor = chalk.white;
 	const PORT = process.env.PORT || 3375;
 	// #endregion
 	const logToTerminal = (msg) => {
@@ -113,6 +114,7 @@
 		const STATS_PATH = path.join(__dirname, "./stats.json");
 		//Listens for the first time that the config and the serviceManager are retrieved, and logs output to the console.
 		let notified_config = false, notified_sm = false;
+		let serviceManagerRetrievedTimeout;
 		app.get("/configs/openfin/manifest-local.json", (req, res, next) => {
 			if (!notified_config) {
 				let stats = require(STATS_PATH);
@@ -124,12 +126,16 @@
 
 				logToTerminal(outputColor(`Application manifest retrieved ${launchDuration}s after launch`));
 				notified_config = true;
+				serviceManagerRetrievedTimeout = setTimeout(() => {
+					logToTerminal(errorColor(`ERROR: Finsemble application manifest has been retrieved from the server, but the Finsemble Service Manager has not. This can be caused by a slow internet connection (e.g., downloading assets). This can also be a symptom that you have a hanging openfin process. Please inspect your task manager to ensure that there are no lingering processes. Alternatively, run 'finsemble-cli kill'`))
+				}, 10000);
 			}
 			next();
 		});
 
 		app.get("/Finsemble/components/system/serviceManager/serviceManager.html", (req, res, next) => {
 			if (!notified_sm) {
+				clearTimeout(serviceManagerRetrievedTimeout);
 				const stats = require(STATS_PATH);
 				const now = Date.now();
 				const launchDuration = (now - stats.startTime) / 1000;

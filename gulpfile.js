@@ -252,8 +252,12 @@
 				})
 				.then(() => {
 					// OpenFin has closed so exit gulpfile
+					logToTerminal("yellow", "Openfin has closed.");
 					if (watchClose) watchClose();
 					process.exit();
+				})
+				.catch(e => {
+					logToTerminal("red", `Openfin error:${JSON.stringify(e)}`)
 				});
 
 			done();
