@@ -13,6 +13,8 @@
 	// #region Imports
 	// NPM
 	const chalk = require("chalk");
+	const errorColor = chalk.red;
+	const outputColor = chalk.white;
 	chalk.enabled = true;
 	//force color output
 	chalk.level = 1;
