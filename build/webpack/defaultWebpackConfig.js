@@ -13,7 +13,18 @@ module.exports = function () {
 		[
 			new EnvironmentPlugin(['NODE_ENV'])
 		]
-
+	
+	try {
+		const VENDOR_MANIFEST = require('./vendor-manifest.json');
+		plugins.push(new DllReferencePlugin({
+			manifest: VENDOR_MANIFEST
+		}));
+	} catch (e) {
+		//This should never happen. Vendor-manifest is built prior to files being built. But it's here just in case.
+		console.error(`[WEBPACK ERROR:] You have not generated a vendor-manifest for your webpack configuration. This is an important optimization that reduces build times by 30-40%. Please run "npm run build:vendor-manifest", and then run "npm run dev" once more. You are required to build the vendor manifest when you delete your dist folder, when your node modules update, or when you update the Finsemble Seed project.`);
+		process.exit(1);
+	}
+	
 	if (env === "production") {
 		// When building the production environment, minify the code.
 		plugins.push(new UglifyJsPlugin());
@@ -29,18 +40,6 @@ module.exports = function () {
 				files: ['package-lock.json'],
 			}
 		}));
-
-		try {
-			const VENDOR_MANIFEST = require('./vendor-manifest.json');
-			plugins.push(new DllReferencePlugin({
-				manifest: VENDOR_MANIFEST
-			}));
-		} catch (e) {
-			//This should never happen. Vendor-manifest is built prior to files being built. But it's here just in case.
-			console.error(`[WEBPACK ERROR:] You have not generated a vendor-manifest for your webpack configuration. This is an important optimization that reduces build times by 30-40%. Please run "npm run build:vendor-manifest", and then run "npm run dev" once more. You are required to build the vendor manifest when you delete your dist folder, when your node modules update, or when you update the Finsemble Seed project.`);
-			process.exit(1);
-		}
-
 	}
 	return {
 		devtool: 'source-map',
