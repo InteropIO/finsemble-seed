@@ -56,30 +56,12 @@
             "version": "1.9.4",
             "alias": "assimilation",
             "target": "assimilationMain.exe"
-        },
-        {
-            "src": "http://connect2.chartiq.com/finsemble/FinsembleRouter_1_0.zip",
-            "version": "1.0.0",
-            "alias": "FinsembleRouter",
-            "target": "FinsembleRouter.exe"
         }
     ],
     "finsemble": {
         "applicationRoot": "http://localhost:3375",
         "cssOverridePath": "$applicationRoot/components/assets/css/finsemble-overrides.css",
         "moduleRoot": "http://localhost:3375/finsemble",
-        "router": {
-            "sameDomainTransport": "SharedWorker",
-            "crossDomainTransport": "FinsembleTransport",
-            "transportSettings": {
-                "SharedWorker": {},
-                "OpenFinBus": {},
-                "FinsembleTransport": {
-                    "serverAddress": "wss://localhost.chartiq.com:3376"
-
-                }
-            }
-        },
         "importConfig": [
             "$applicationRoot/configs/application/config.json"
         ]
