@@ -5,7 +5,6 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const { DefinePlugin, EnvironmentPlugin, DllPlugin } = require("webpack");
 const hardSource = require("hard-source-webpack-plugin");
 
-console.log("ENVIRONMENT", env);
 let plugins = [
     new DllPlugin({
         name: 'vendor_lib',
