@@ -107,7 +107,10 @@
 		 * Builds the SASS files for the project.
 		 */
 		buildSass: () => {
-			const source = [path.join(srcPath, "components", "**", "*.scss")];
+			const source = [
+				path.join(srcPath, "components", "**", "*.scss"),
+				path.join(__dirname, "src-built-in", "components", "**", "*.scss"),
+			];
 
 			// // Don't build files built by angular
 			// if (angularComponents) {
@@ -136,7 +139,7 @@
 						console.error(errorOutColor("Webpack Error.", err));
 					}
 					if (stats.hasErrors()) {
-						console.error(errorOutColor(stats));
+						console.error(errorOutColor(stats.toJson()));
 					}
 					//Webpack invokes this function (basically, an onComplete) each time the bundle is built. We only want to invoke the async callback the first time.
 					if (callback) {
@@ -250,8 +253,12 @@
 				})
 				.then(() => {
 					// OpenFin has closed so exit gulpfile
+					logToTerminal("yellow", "Openfin has closed.");
 					if (watchClose) watchClose();
 					process.exit();
+				})
+				.catch(e => {
+					logToTerminal("red", `Openfin error:${JSON.stringify(e)}`)
 				});
 
 			done();
