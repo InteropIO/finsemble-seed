@@ -56,7 +56,7 @@ webpackConfig.plugins.push(new CopyWebpackPlugin([
 	},
 	{
 		from: './node_modules/@chartiq/finsemble/dist',
-		to: path.join(__dirname, "../../Finsemble/"),
+		to: path.join(__dirname, "../../finsemble/"),
 		force: true
 	}
 ]));
