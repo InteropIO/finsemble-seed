@@ -6,9 +6,8 @@ const hardSource = require("hard-source-webpack-plugin");
 
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 
-
-module.exports = function () {
-
+module.exports = class WebpackDefaults {
+	constructor() {
 	let plugins =
 		[
 			new EnvironmentPlugin(['NODE_ENV'])
