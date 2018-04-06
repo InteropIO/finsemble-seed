@@ -172,12 +172,13 @@
 	const moduleDirectory = path.join(__dirname, "..", "Finsemble");
 	const ONE_DAY = 24 * 3600 * 1000;
 	const cacheAge = process.env.NODE_ENV === "development" ? 0 : ONE_DAY;
-	const outputColor = chalk.white;
 	const PORT = process.env.PORT || 3375;
 
 	// #endregion
-	const logToTerminal = (msg) => {
-		console.log(`[${new Date().toLocaleTimeString()}] ${msg}.`);
+	const logToTerminal = (msg, color = "white", bgcolor = "bgBlack") => {
+		if (!chalk[color]) color = "white";
+		if (!chalk[color][bgcolor]) bg = "black";
+		console.log(`[${new Date().toLocaleTimeString()}] ${chalk[color][bgcolor](msg)}.`);
 	}
 
 	logToTerminal(outputColor(`Server serving from ${rootDir} with caching maxAge = ${cacheAge} ms.`));
