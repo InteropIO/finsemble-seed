@@ -2,7 +2,7 @@
     "devtools_port": 9090,
     "startup_app": {
         "name": "ChartIQ Local",
-        "url": "http://localhost:3375/Finsemble/components/system/serviceManager/serviceManager.html",
+        "url": "http://localhost:3375/finsemble/components/system/serviceManager/serviceManager.html",
         "uuid": "Finsemble",
         "applicationIcon": "http://localhost:3375/components/assets/img/Finsemble_Taskbar_Icon.png",
         "defaultTop": 0,
@@ -21,13 +21,13 @@
         "alwaysOnTop": false
     },
     "runtime": {
-        "arguments": "--noerrdialogs  --v=1 --no-sandbox  --enable-crash-reporting --framestrategy=frames",
+        "arguments": "--noerrdialogs  --v=4 --no-sandbox  --enable-crash-reporting --framestrategy=frames",
         "version": "8.56.28.36"
     },
     "shortcut": {
         "company": "ChartIQ",
         "description": "ChartIQ Local",
-        "icon": "http://localhost:3375/components/assets/img/Finsemble_Taskbar_Icon.ico",
+        "icon": "https://localhost:3375/components/assets/img/Finsemble_System_Tray_Icon.ico",
         "name": "ChartIQ - LOCAL",
         "target": [
             "desktop",
@@ -66,7 +66,8 @@
     ],
     "finsemble": {
         "applicationRoot": "http://localhost:3375",
-        "moduleRoot": "http://localhost:3375/finsemble",
+        "cssOverridePath": "$applicationRoot/components/assets/css/finsemble-overrides.css",
+        "moduleRoot": "https://localhost:3375/finsemble/",
         "router": {
             "sameDomainTransport": "SharedWorker",
             "crossDomainTransport": "FinsembleTransport",
@@ -78,7 +79,7 @@
 
                 }
             }
-        },        "servicesRoot": "http://localhost:3375/finsemble/services",
+        },
         "importConfig": [
             "$applicationRoot/configs/application/config.json"
         ]
