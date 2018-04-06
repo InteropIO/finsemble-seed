@@ -8,7 +8,7 @@ const myComponents = fs.existsSync(path.join(__dirname, 'webpack.components.entr
 const componentsToBuild = Object.assign(builtInComponents, myComponents);
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const defaultConfig = require("./defaultWebpackConfig");
-let webpackConfig = null;//Our list of webpack configs list
+let webpackConfig = null; //Our list of webpack configs list
 
 let entries = {};
 
@@ -18,7 +18,7 @@ for (let key in componentsToBuild) {
 }
 webpackConfig = new defaultConfig();
 webpackConfig.plugins.push(new CopyWebpackPlugin([
-	//This copies everything except javascript and react files.
+	//This copies everything that *isn't* built. Everything except javascript and react files.
 	{
 		from: './src/components/',
 		to: './components/',
