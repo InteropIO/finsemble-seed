@@ -22,19 +22,10 @@
 	const extensions = fs.existsSync("./gulpfile-extensions.js") ? require("./gulpfile-extensions.js") : undefined;
 	const async = require("async");
 	// #endregion
-	const allowedColors = ["green", "cyan", "red", "yellow", "magenta", "white", "bgCyan"];
-	const logToTerminal = (color, msg) => {
-		let bg = "bgBlack";
-		if (!allowedColors.includes(color)) {
-			msg = color;
-			color = "white";
-		}
-		if (color === "bgCyan") {
-			color = "black";
-			bg = "bgCyan";
-		}
-		console.log(`[${new Date().toLocaleTimeString()}] ${chalk[color][bg](msg)}.`);
-
+	const logToTerminal = (msg, color = "white", bgcolor = "bgBlack") => {
+		if (!chalk[color]) color = "white";
+		if (!chalk[color][bgcolor]) bg = "black";
+		console.log(`[${new Date().toLocaleTimeString()}] ${chalk[color][bgcolor](msg)}.`);
 	}
 	// #region Constants
 	const startupConfig = require("./configs/other/server-environment-startup");
@@ -43,7 +34,7 @@
 	try {
 		angularComponents = require("./build/angular-components.json");
 	} catch (ex) {
-		logToTerminal("yellow", "No Angular component configuration found");
+		logToTerminal("No Angular component configuration found", "yellow");
 		angularComponents = null;
 	}
 
@@ -88,7 +79,7 @@
 				logToTerminal(`Executing: ${command}\nin directory: ${cwd}`);
 
 				const output = shell.exec(command);
-				logToTerminal("green", `Built Angular Component, exit code = ${output.code}`);
+				logToTerminal(`Built Angular Component, exit code = ${output.code}`, "green");
 				shell.cd(dir);
 			};
 
@@ -97,7 +88,7 @@
 					processRow(comp);
 				});
 			} else {
-				logToTerminal("yellow", "No Angular components found to build");
+				logToTerminal("No Angular components found to build", "yellow");
 			}
 
 			done();
@@ -134,13 +125,13 @@
 				logToTerminal(`Starting to build ${bundleName}`);
 				webpack(config, (err, stats) => {
 					if (!err) {
-						logToTerminal("cyan", `Finished building ${bundleName}`)
+						logToTerminal(`Finished building ${bundleName}`, "cyan")
 					} else {
 						console.error(errorOutColor("Webpack Error.", err));
 					}
-					if (stats.hasErrors()) {
-						console.error(errorOutColor(stats.toJson()));
-					}
+					/*if (stats.hasErrors()) {
+						console.error("STATS ERROR", errorOutColor(stats.toJson()));
+					}*/
 					//Webpack invokes this function (basically, an onComplete) each time the bundle is built. We only want to invoke the async callback the first time.
 					if (callback) {
 						callback();
@@ -194,31 +185,38 @@
 
 			function checkLink(params, cb) {
 				let { path, name } = params;
-				fs.readlink(path,
-					(err, str) => {
-						if (str) {
-							logToTerminal("magenta", `LINK DETECTED: ${name}. Path: ${str}`)
-						}
-						cb();
+				if (fs.existsSync(path)) {
+					fs.readlink(path,
+						(err, str) => {
+							if (str) {
+								logToTerminal(`LINK DETECTED: ${name}. Path: ${str}`, "yellow")
+							} else {
+								logToTerminal(`Using: @chartiq/${name}`, "magenta")
+							}
+							cb();
 					});
+				} else {
+					logToTerminal(`MISSING FINSEMBLE DEPENDENCY!: ${name}.\nPath: ${path}`, "red")
+					process.exit(1);
+				}
 			};
 			async.parallel([
 				(cb) => {
 					checkLink({
 						path: FINSEMBLE_PATH,
-						name: "Finsemble"
+						name: "finsemble"
 					}, cb)
 				},
 				(cb) => {
 					checkLink({
 						path: CLI_PATH,
-						name: "Finsemble"
+						name: "finsemble-cli"
 					}, cb)
 				},
 				(cb) => {
 					checkLink({
 						path: CONTROLS_PATH,
-						name: "Finsemble"
+						name: "finsemble-react-controls"
 					}, cb)
 				},
 			], done)
@@ -241,7 +239,7 @@
 					process.exit();
 				});
 			});
-			logToTerminal("bgCyan", "Launching Finsemble");
+			logToTerminal("Launching Finsemble", "black", "bgCyan");
 			//Wipe old stats.
 			fs.writeFileSync(path.join(__dirname, "server", "stats.json"), JSON.stringify({}), "utf-8");
 
@@ -253,12 +251,12 @@
 				})
 				.then(() => {
 					// OpenFin has closed so exit gulpfile
-					logToTerminal("yellow", "Openfin has closed.");
+					logToTerminal("Openfin has closed.", "yellow");
 					if (watchClose) watchClose();
 					process.exit();
 				})
 				.catch(e => {
-					logToTerminal("red", `Openfin error:${JSON.stringify(e)}`)
+					logToTerminal(`Openfin error:${JSON.stringify(e)}`, "red")
 				});
 
 			done();
@@ -276,7 +274,10 @@
 		 * @param done Callback function used to signal function completion to support asynchronous execution. Can
 		 * optionally return an error, if one occurs.
 		 */
-		pre: done => { done(); },
+		pre: done => {
+			taskMethods.checkSymbolicLinks();
+			done();
+		},
 
 		/**
 		 * Starts the server.
@@ -315,7 +316,7 @@
 					}
 				});
 
-			serverExec.on("exit", code => logToTerminal("red", `Server closed: exit code ${code}`));
+			serverExec.on("exit", code => logToTerminal(`Server closed: exit code ${code}`, "red"));
 
 			// Prints server errors to your terminal.
 			serverExec.stderr.on("data", data => { console.error(errorOutColor(`ERROR: ${data}`)); });
@@ -379,7 +380,7 @@
 		/**
 		 * Builds the application, starts the server, launches the Finsemble application and watches for file changes.
 		 */
-		gulp.task("build:dev", gulp.series(taskMethods.setDevEnvironment, "build", taskMethods.checkSymbolicLinks));
+		gulp.task("build:dev", gulp.series(taskMethods.setDevEnvironment, "build"));
 
 		/**
 		 * Builds the application, starts the server, launches the Finsemble application and watches for file changes.
