@@ -8,26 +8,17 @@ const myComponents = fs.existsSync(path.join(__dirname, 'webpack.components.entr
 const componentsToBuild = Object.assign(builtInComponents, myComponents);
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const defaultConfig = require("./defaultWebpackConfig");
-let enableHMR = false,//Enable Hot Reload
-	HMRBlacklist = ["testComponent"],//Components to explude
-	HMRWhitelist = [],//Only reload these components
-	componentIgnores = [],
-	webpackConfig = null;//Our list of webpack configs list
+let webpackConfig = null;//Our list of webpack configs list
 
-
-// Our default entry
-function defaults() {
-	return new defaultConfig();
-}
 let entries = {};
 
 for (let key in componentsToBuild) {
 	let component = componentsToBuild[key];
 	entries[component.output] = component.entry;
 }
-webpackConfig = new defaults();
-
+webpackConfig = new defaultConfig();
 webpackConfig.plugins.push(new CopyWebpackPlugin([
+	//This copies everything except javascript and react files.
 	{
 		from: './src/components/',
 		to: './components/',
@@ -68,7 +59,7 @@ webpackConfig.plugins.push(new CopyWebpackPlugin([
 		to: path.join(__dirname, "../../Finsemble/"),
 		force: true
 	}
-], { ignore: componentIgnores }));
+]));
 webpackConfig.entry = entries;
 
 module.exports = webpackConfig;
