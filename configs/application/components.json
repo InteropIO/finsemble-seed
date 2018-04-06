@@ -29,7 +29,8 @@
                     },
                     "Window Manager": {
                         "FSBLHeader": true,
-                        "persistWindowState": true
+                        "persistWindowState": true,
+                        "title": "Welcome To Finsemble!"
                     },
                     "Toolbar": {
                         "iconClass": "welcome"
