@@ -35,9 +35,12 @@ var Actions = {
 				{ field: "Close.hide", value: FSBLHeader.hideClose ? true : false },
 			]);
 
-			if (FSBL.Clients.WindowClient.title) {
+			// Set by calling WindowClient.setTitle() || from config "foreign.components.Window Manager.title"
+			var title = FSBL.Clients.WindowClient.title || windowTitleBarConfig.title;
+
+			if (title) {
 				windowTitleBarStore.setValue({
-					field: "Main.windowTitle", value: FSBL.Clients.WindowClient.title
+					field: "Main.windowTitle", value: title
 				});
 			}
 		}
