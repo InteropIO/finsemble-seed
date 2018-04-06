@@ -4,9 +4,6 @@
         "Welcome Component": {
             "window": {
                 "url": "$applicationRoot/components/welcome/welcome.html",
-                "frame": false,
-                "resizable": true,
-                "autoShow": true,
                 "top": "center",
                 "left": "center",
                 "width": 400,
