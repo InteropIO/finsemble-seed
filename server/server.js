@@ -20,6 +20,7 @@
 	const fs = require("fs");
 	const path = require("path");
 	const compression = require("compression");
+	const httpProxy = require("http-proxy");
 	// Local
 	const extensions = fs.existsSync(path.join(__dirname, "server-extensions.js")) ?
 		require("./server-extensions") :
@@ -80,6 +81,66 @@
 				// Make the config public
 				app.use("/configs", express.static("./configs", options));
 
+				// proxy.on("proxyReq", function (proxyReq, req, res, options) {
+				// 	console.log("*************proxyReq");
+				// 	console.log(req.path);
+				// });
+
+				const ProxyMap = [
+					{
+						root: "nyc",
+						proxyTarget: "http://www.nyc.com",
+						host: "www.nyc.com"
+					},
+					{
+						root: "jpm",
+						proxyTarget: "http://www.jpm.com",
+						host: "www.jpm.com"
+					},
+					{
+						root: "wta",
+						proxyTarget: "http://connect2.chartiq.com",
+						host: "connect2.chartiq.com"
+					}
+				];
+
+				proxy.on("proxyRes", function (proxyRes, req, res, options) {
+					console.log(proxyRes.headers);
+					delete (proxyRes.headers["connection"]);
+					console.log("Request proxied", req.originalUrl);
+				});
+
+				const { URL } = require("url");
+
+				ProxyMap.forEach((config) => {
+					console.log("Setting up proxy for", config.host);
+
+					app.use("/" + config.root, function (req, res) {
+						console.log("Proxying", req.originalUrl, "to", config.host);
+						proxy.web(req, res, {
+							target: config.proxyTarget,
+							changeOrigin: true,
+							xfwd: true
+						});
+					});
+				});
+
+				app.use("*", (req, res, next) => {
+					console.log(req.originalUrl);
+					let referrer = req.get("referrer");
+					if (referrer) {
+						referrer = new URL(referrer);
+						//Check to see if the referrer matches any of the hosts we're trying to proxy. If so, redirect the request.
+						let proxyConfig = ProxyMap.filter((config) => referrer.pathname.includes(config.root))[0];
+						if (proxyConfig) {
+							console.log("Referrer found for " + proxyConfig.root + " redirecting to ", "/" + proxyConfig.root + req.originalUrl);
+							res.redirect("/" + proxyConfig.root + req.originalUrl);
+						} else {
+							//console.log("Request with referrer did not match any proxied hosts.", "Request originalUrl", req.originalUrl);
+							next();
+						}
+					}
+				});
 				cb();
 			}
 		};
@@ -93,6 +154,8 @@
 	const cacheAge = process.env.NODE_ENV === "development" ? 0 : ONE_DAY;
 	const outputColor = chalk.white;
 	const PORT = process.env.PORT || 3375;
+	const proxy = httpProxy.createProxyServer({ secure: false });
+
 	// #endregion
 	const logToTerminal = (msg) => {
 		console.log(`[${new Date().toLocaleTimeString()}] ${msg}.`);
