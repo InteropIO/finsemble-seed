@@ -22,6 +22,15 @@
 	const compression = require("compression");
 	const httpProxy = require("http-proxy-middleware");
 	// Local
+
+	const handleError = e => {
+		if (e) {
+			console.error(e);
+			process.send("serverFailed");
+			process.exit(1);
+		}
+	}
+
 	const extensions = fs.existsSync(path.join(__dirname, "server-extensions.js")) ?
 		require("./server-extensions") :
 		{
@@ -69,16 +78,16 @@
 			 *  }
 			 * }*/
 			updateServer: (app, cb) => {
-			const server = app.listen(
-				PORT,
-				e => {
-					handleError(e);
+				const server = app.listen(
+					PORT,
+					e => {
+						handleError(e);
 
-					logToTerminal(outputColor(`Listening on port ${ PORT } `));
+						logToTerminal(outputColor(`Listening on port ${ PORT } `));
 
-					global.host = server.address().address;
-					global.port = server.address().port;
-});
+						global.host = server.address().address;
+						global.port = server.address().port;
+				});
 
 				app.use(compression());
 				// Sample server root set to "/" -- must align with paths throughout
@@ -92,60 +101,64 @@
 				// Make the config public
 				app.use("/configs", express.static("./configs", options));
 
-				// proxy.on("proxyReq", function (proxyReq, req, res, options) {
-				// 	console.log("*************proxyReq");
-				// 	console.log(req.path);
-				// });
-
+				/**
+				 * Fill in the ProxyMap with entries in order to proxy remote components.
+				 * For instance /connect4/blah/mycomponent.html would be proxied to http://connect4.chartiq.com/blah/mycomponent.html
+				 * 
+				 * This proxy further uses the referer http header to redirect assets from within the component.
+				 */
 				let ProxyMap = [
 					{
-						root: "nyc",
-						proxyTarget: "http://www.nyc.com",
-						host: "www.nyc.com"
+						root: "connect4",
+						proxyTarget: "http://connect4.chartiq.com",
+						host: "connect4.chartiq.com"
 					},
 					{
-						root: "jpm",
-						proxyTarget: "http://www.jpm.com",
-						host: "www.jpm.com"
+						root: "connect3",
+						proxyTarget: "http://connect3.chartiq.com",
+						host: "connect3.chartiq.com"
 					},
 					{
-						root: "wta",
+						root: "connect2",
 						proxyTarget: "http://connect2.chartiq.com",
 						host: "connect2.chartiq.com"
 					}
 				];
 
+				if (ProxyMap.length) {
 
-				const { URL } = require("url");
-				ProxyMap.forEach((config) => {
-					console.log("Setting up proxy for", config.host);
-					const proxy = httpProxy({
-						target: config.proxyTarget,
-						changeOrigin: true,
-						//Removes the root in the path of the original request, so that the resulting request goes to target/path (without the proxy root)
-						pathRewrite: {
-							[`${config.root}`] : '/'
-						}
+					const { URL } = require("url");
+					ProxyMap.forEach((config) => {
+						console.log("Setting up proxy for", config.host);
+						const proxy = httpProxy({
+							target: config.proxyTarget,
+							changeOrigin: true,
+							//Removes the root in the path of the original request, so that the resulting request goes to target/path (without the proxy root)
+							pathRewrite: {
+								[`${config.root}`]: '/'
+							}
+						});
+						config.proxy = proxy;
+						app.use("/" + config.root, proxy);
 					});
-					config.proxy = proxy;
-					app.use("/" + config.root, proxy);
-				});
 
-				app.use("*", (req, res, next) => {
-					let referrer = req.get("referrer");
-					if (referrer) {
-						referrer = new URL(referrer);
-						//Check to see the referrer matches any of the hosts we're trying to proxy. If so, redirect the request.
-						let proxyConfig = ProxyMap.filter((config) => referrer.pathname.includes(config.root))[0];
-						if (proxyConfig) {
-							console.log("Proxying because of referrer", req.path, req.originalUrl, "to", proxyConfig.host);
-							return proxyConfig.proxy(req, res, next);
-						} else {
-							console.log("Request with referrer did not match any proxied hosts.", "Request originalUrl", req.originalUrl);
+					app.use("*", (req, res, next) => {
+						let referer = req.get("referer");
+						if (referer) {
+							referer = new URL(referer);
+							//Check to see the referer matches any of the hosts we're trying to proxy. If so, redirect the request.
+							let proxyConfig = ProxyMap.filter((config) => referer.pathname.includes(config.root))[0];
+							if (proxyConfig) {
+								console.log("Proxying because of referer", req.path, req.originalUrl, "to", proxyConfig.host);
+								return proxyConfig.proxy(req, res, next);
+							} else {
+								//console.log("Request with referer did not match any proxied hosts.", "Request originalUrl", req.originalUrl);
+							}
 						}
-					}
-					next();
-				});
+						next();
+					});
+				
+				}
 				cb();
 			}
 		};
@@ -226,28 +239,20 @@
 			return;
 		}
 
-		const handleError = e => {
-			if (e) {
-				console.error(e);
-				process.send("serverFailed");
-				process.exit(1);
-			}
-		}
-
 		extensions.updateServer(app, err => {
 			handleError(err);
-					const done = () => {
-						logToTerminal(chalk.green("Server started"));
-						extensions.post(err => {
-							if (err) {
-								handleError(err);
-							} else {
-								process.send("serverStarted");
-							}
-						});
-					};
-					done();
+			const done = () => {
+				logToTerminal(chalk.green("Server started"));
+				extensions.post(err => {
+					if (err) {
+						handleError(err);
+					} else {
+						process.send("serverStarted");
+					}
 				});
+			};
+			done();
+		});
 	}
 
 	extensions.pre(buildServer);
