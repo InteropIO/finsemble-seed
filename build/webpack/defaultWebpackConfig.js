@@ -97,8 +97,7 @@ module.exports = class WebpackDefaults {
 			output: {
 				filename: "[name].js",
 				sourceMapFilename: "[name].map.js",
-				path: path.resolve(__dirname, '../../dist/'),
-				publicPath: 'http://localhost:3375/'
+				path: path.resolve(__dirname, '../../dist/')
 			},
 			watch: process.env.NODE_ENV === "development",
 			resolve: {
