@@ -1,8 +1,4 @@
 {
-	"aboutFinsemble": {
-		"output": "components/system/aboutFinsemble/aboutFinsemble",
-		"entry": "./src-built-in/components/system/aboutFinsemble/src/aboutFinsemble.jsx"
-	},
 	"appLauncher": {
 		"output": "components/appLauncher/appLauncher",
 		"entry": "./src-built-in/components/appLauncher/src/app.jsx"

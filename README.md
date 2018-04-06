@@ -1,4 +1,4 @@
-## If you are moving from an older version of the finsemble-seed project to the latest (2.3), please see the [instructions here](migration/2.3/README.MD).
+## If you are moving from an older version of the finsemble-seed project to the latest (2.3), please see the [instructions here](https://github.com/ChartIQ/finsemble-seed/tree/master/migration/2.3).
 
 
 For everything you need to know about Finsemble, including a step-by-step process for setting up the seed project, check out the documentation on our [website](https://documentation.chartiq.com/finsemble/tutorial-IntroductionToFinsemble.html).
