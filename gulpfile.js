@@ -26,7 +26,7 @@
 	// #endregion
 	const allowedColors = ["green", "cyan", "red", "yellow", "magenta", "white", "bgCyan"];
 	const logToTerminal = (color, msg) => {
-		let bg = "bgBlack";
+		let bg = null;
 		if (!allowedColors.includes(color)) {
 			msg = color;
 			color = "white";
@@ -35,9 +35,33 @@
 			color = "black";
 			bg = "bgCyan";
 		}
-		console.log(`[${new Date().toLocaleTimeString()}] ${chalk[color][bg](msg)}.`);
+		let message = chalk[color];
+		if (bg) {
+			message = message[bg](msg);
+		} else {
+			message = message(msg);
+		}
+		console.log(`[${new Date().toLocaleTimeString()}] ${message}.`);
 
 	}
+	const staticDirectories = [
+		{
+			src: ['src/**/*', '!src/**/*.js*', '!src/**/*.scss*'],
+			dest: 'components/',
+		},
+		{
+			src: ['src-built-in/components/**/*', '!src-built-in/components/**/*.js*', '!src-built-in/components/**/*.scss*'],
+			dest: 'components/'
+		},
+		{
+			src: ['configs/**/*'],
+			dest: 'configs/',
+		},
+		{
+			src: ['node_modules/@chartiq/finsemble/dist/**/*'],
+			dest: path.join(__dirname, "Finsemble/")
+		}
+	];
 	// #region Constants
 	const startupConfig = require("./configs/other/server-environment-startup");
 	//Force colors on terminals.
@@ -253,24 +277,7 @@
 		},
 		copyStatic: () => {
 			const srcDir = path.join(__dirname)
-			let directories = [
-				{
-					src: ['src/**/*', '!src/**/*.js*'],
-					dest: 'components/',
-				},
-				{
-					src: ['src-built-in/components/**/*', '!src-built-in/components/**/*.js*'],
-					dest: 'components/'
-				},
-				{
-					src: ['configs/**/*'],
-					dest: 'configs/',
-				},
-				{
-					src: ['node_modules/@chartiq/finsemble/dist/**/*'],
-					dest: path.join(__dirname, "Finsemble/")
-				}
-			];
+			let directories = staticDirectories;
 			let stream = mergeStream();
 			let streams = directories.forEach((config) => {
 				let src = config.src.map(src => {
@@ -289,7 +296,6 @@
 				stream.add(thisStream);
 			});
 			return stream
-
 		},
 		/**
 		 * Launches the application.
@@ -394,16 +400,44 @@
 		/**
 		 * Watches files for changes to fire off copies and builds.
 		 */
-		watchFiles: done => {
-			watchClose = done;
-			return merge(
-				watch(path.join(srcPath, "components", "assets", "**", "*"), {}, this.buildSass),
-				watch(path.join(srcPath, "**", "*.css"), { ignoreInitial: true })
-					.pipe(gulp.dest(distPath)),
-				watch(path.join(srcPath, "**", "*.html"), { ignoreInitial: true })
-					.pipe(gulp.dest(distPath))
-			);
-		}
+		watchStatic: (done) => {
+			const srcDir = path.join(__dirname)
+			let directories = staticDirectories;
+			directories.forEach((config) => {
+				let src = config.src.map(src => {
+					let pth = path.join(srcDir, src);
+					if (pth.includes("!")) {
+						pth = "!" + pth.replace(/\!/g, "");
+					}
+					return pth;
+				});
+
+				let dest = config.dest.includes("Finsemble") ? config.dest : path.join(__dirname, "dist", config.dest);
+				logToTerminal("white", `Watching "${chalk.yellow(src)}" for changes`)
+				watch(src, { ignoreInitial: true }, (events, done) => {
+					let str = `"${chalk.yellow(events.path)}" changed. Copying to dist`;
+					logToTerminal(str);
+				})
+					.pipe(gulp.dest(dest))
+			});
+			done();
+		},
+		/**
+		 * Watches sass files and rebuilds/copies to dist.
+		 */
+		watchSass: (done) => {
+			const source = [
+				path.join(srcPath, "components", "**", "*.scss"),
+				path.join(__dirname, "src-built-in", "components", "**", "*.scss"),
+			];
+			logToTerminal("white", "Watching sass files for changes");
+			watch(source, { ignoreInitial: true }, (events, done) => {
+				let str = `"${chalk.yellow(events.path)}" changed. Bulding sass`;
+				logToTerminal(str);
+				taskMethods.buildSass();
+			});
+			done();
+		},
 	};
 	// #endregion
 
@@ -443,7 +477,7 @@
 		/**
 		 * Builds the application, starts the server, launches the Finsemble application and watches for file changes.
 		 */
-		gulp.task("build:dev", gulp.series(taskMethods.setDevEnvironment, "build", taskMethods.checkSymbolicLinks));
+		gulp.task("build:dev", gulp.series(taskMethods.setDevEnvironment, "build", taskMethods.watchSass, taskMethods.watchStatic, taskMethods.checkSymbolicLinks));
 
 		/**
 		 * Builds the application, starts the server, launches the Finsemble application and watches for file changes.
