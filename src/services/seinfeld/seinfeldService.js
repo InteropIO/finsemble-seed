@@ -49,12 +49,7 @@ function seinfeldService() {
 		SearchClient.register({
 			name: "Seinfeld Search Provider",
 			searchCallback: onSearchRequested,
-			itemActionCallback: onSearchResultClicked,
-			providerActionTitle: "Seinfeld Episodes",
-			providerActionCallback: function () {
-				debugger;
-				console.log("ACTION CALLBACK", arguments);
-			}
+			itemActionCallback: onSearchResultClicked
 		}, () => {
 			console.log("Registered Search", arguments);
 		})
