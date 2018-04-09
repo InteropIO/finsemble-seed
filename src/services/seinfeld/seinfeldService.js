@@ -1,26 +1,24 @@
 //replace with import when ready
-var Finsemble = require("@chartiq/finsemble");
+const Finsemble = require("@chartiq/finsemble");
 const SearchClient = Finsemble.Clients.SearchClient;
+const RouterClient = Finsemble.Clients.RouterClient;
+const baseService = Finsemble.baseService;
+const Logger = Finsemble.Clients.Logger;
+Logger.start();
 SearchClient.initialize();
-var RouterClient = Finsemble.Clients.RouterClient;
-var baseService = Finsemble.baseService;
-var util = Finsemble.Util;
-//[ 'episode_num', 'air_date', 'text', 'title' ]
 let scripts = require("./scripts.json");
+//[ 'episode_num', 'air_date', 'text', 'title' ]
 /**
- * The seinfeld Service receives calls from the seinfeldClient.
+ * The seinfeld Service houses the seinfeld search provider.
  * @constructor
  */
 function seinfeldService() {
 
 	var self = this;
-	/**
-	 * Creates router endpoints for all of our client APIs. Add servers or listeners for requests coming from your clients.
-	 * @private
-	 */
-	this.createRouterEndpoints = function () {
 
-	};
+	/**
+	 * Search provider for seinfeld episodes. Searches through scripts for text in the search box.
+	 */
 	this.createSearchProvider = function () {
 		var onSearchRequested = (params, callback) => {
 			let resultItems = scripts.filter((script) => script.text.toLowerCase().includes(params.text.toLowerCase()))
@@ -39,13 +37,22 @@ function seinfeldService() {
 			})
 			callback(null, results); // The first argument is an error;
 		};
+
 		var onSearchResultClicked = (params) => {
 			let url = "http://www.seinfeldscripts.com/";
 			let { item } = params;
 			let episodeTitle = item.title.replace(/\s/g, "").replace("Script", "").trim();
 			url += episodeTitle + ".htm";
-			fin.desktop.System.openUrlWithBrowser(url);
-		}
+			//This website has funky URLs. Some are htm, some are html. Episodes with "Part" in the name are a crapshoot too. This is the best way to get most of them. The catch just adds "l" so it looks for an html file.
+			fetch(url)
+				.then(response => {
+					fin.desktop.System.openUrlWithBrowser(url);
+				})
+				.catch(e => {
+					fin.desktop.System.openUrlWithBrowser(url + "l");
+				})
+		};
+
 		SearchClient.register({
 			name: "Seinfeld Search Provider",
 			searchCallback: onSearchRequested,
@@ -62,13 +69,10 @@ seinfeldService.prototype = new baseService({
 	}
 });
 var serviceInstance = new seinfeldService('seinfeldService');
-const Logger = Finsemble.Clients.Logger;
-Logger.start();
+
 serviceInstance.onBaseServiceReady(function (callback) {
 	console.debug("onConnectionCompleteCalled");
-	serviceInstance.createRouterEndpoints();
 	serviceInstance.createSearchProvider();
-
 	callback();
 });
 
