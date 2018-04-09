@@ -31,7 +31,6 @@ export default class ProviderList extends React.Component {
 			<div className="provider">
 				<div className="searchHeader">
 					{providerInfo.provider.displayName}
-
 				</div>
 
 				{(providerInfo.provider.providerActionCallback && providerInfo.provider.providerActionTitle ? <div className="providerAction" >
