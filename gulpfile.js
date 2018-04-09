@@ -487,7 +487,7 @@
 		/**
 		 * Wipes the babel cache and webpack cache, clears dist, rebuilds the application, and starts the server.
 		 */
-		gulp.task("dev:fresh", gulp.series(gulp.parallel(taskMethods.setDevEnvironment, "rebuild", taskMethods.startServer), taskMethods.launchApplication));
+		gulp.task("dev:fresh", gulp.series(gulp.parallel(taskMethods.setDevEnvironment, "rebuild", taskMethods.startServer), taskMethods.watchSass, taskMethods.watchStatic, taskMethods.launchApplication));
 
 		/**
 		 * Builds the application and runs the server *without* launching openfin.
