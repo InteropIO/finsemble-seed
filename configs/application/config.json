@@ -32,7 +32,7 @@
 			"blacklist": [],
 			"whitelist": [],
 			"onlySpawned": true,
-			"throttle": 10
+			"throttle": 20
 		}
 	},
 	"splinteringConfig": {
