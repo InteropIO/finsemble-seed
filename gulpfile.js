@@ -29,7 +29,7 @@
 		if (!chalk[color]) color = "white";
 		if (!chalk[color][bgcolor]) bg = "black";
 		console.log(`[${new Date().toLocaleTimeString()}] ${chalk[color][bgcolor](msg)}.`);
-
+	};
 
 	const staticDirectories = [
 		{
@@ -154,7 +154,7 @@
 							let end = process.hrtime(startTime);
 							msg += ` after ${chalk.magenta(prettyHrtime(end))}`
 						}
-						logToTerminal(msg, "cyan:)
+						logToTerminal(msg, "cyan");
 					} else {
 						console.error(errorOutColor("Webpack Error.", err));
 					}
@@ -197,11 +197,9 @@
 								cb();
 							}
 						}
-					], done)
+					], done);
 				}
-			],
-				finished);
-
+			], finished);
 		},
 		/**
 		 * Cleans the project folder of generated files.
@@ -249,6 +247,7 @@
 					process.exit(1);
 				}
 			};
+
 			async.parallel([
 				(cb) => {
 					checkLink({
@@ -268,7 +267,7 @@
 						name: "finsemble-react-controls"
 					}, cb)
 				},
-			], done)
+			], done);
 		},
 		copyStatic: () => {
 			const srcDir = path.join(__dirname)
@@ -290,7 +289,7 @@
 
 				stream.add(thisStream);
 			});
-			return stream
+			return stream;
 		},
 		/**
 		 * Launches the application.
@@ -326,7 +325,7 @@
 					process.exit();
 				})
 				.catch(e => {
-					logToTerminal(`Openfin error:${JSON.stringify(e)}`, "red")
+					logToTerminal(`Openfin error:${JSON.stringify(e)}`, "red");
 				});
 
 			done();
@@ -439,7 +438,7 @@
 				taskMethods.buildSass();
 			});
 			done();
-		},
+		}
 	};
 	// #endregion
 
@@ -469,7 +468,9 @@
 				taskMethods.copyStatic,
 				taskMethods.buildWebpack,
 				taskMethods.buildSass,
-				taskMethods.buildAngular));
+				taskMethods.buildAngular
+			)
+		);
 
 		/**
 		 * Wipes the babel cache and webpack cache, clears dist, rebuilds the application.
