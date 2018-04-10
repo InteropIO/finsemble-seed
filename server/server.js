@@ -21,68 +21,71 @@
 	const path = require("path");
 	const compression = require("compression");
 	// Local
-	const extensions = fs.existsSync(path.join(__dirname, "server-extensions.js")) ?
-		require("./server-extensions") :
-		{
-			/**
-			 * Method called before starting the server.
-			 *
-			 * @param {function} done Function can take one argument; an error message if one occurred.
-			 			 * @example
-			 * const pre => {
-			 * 	try {
-			 * 		// do something that could throw an error
-			 *  } catch(e) {
-			 *		done(e);
-			 *  }
-			 * }*/
-			pre: done => { done(); },
+	const defaultExtensions = {
+		/**
+		 * Method called before starting the server.
+		 *
+		 * @param {function} done Function can take one argument; an error message if one occurred.
+		 * @example
+		 * const pre => {
+		 * 	try {
+		 * 		// do something that could throw an error
+		 *  } catch(e) {
+		 *		done(e);
+		 *  }
+		 * }*/
+		pre: done => { done(); },
 
-			/**
-			 * Method called after the server has started.
-			 *
-			 * @param {function} done Function can take one argument; an error message if one occurred.
-			 *
-			 * @example
-			 * const post => {
-			 * 	try {
-			 * 		// do something that could throw an error
-			 *  } catch(e) {
-			 *		done(e);
-			 *  }
-			 * }
-			 */
-			post: done => { done(); },
+		/**
+		 * Method called after the server has started.
+		 *
+		 * @param {function} done Function can take one argument; an error message if one occurred.
+		 * @example
+		 * const post => {
+		 * 	try {
+		 * 		// do something that could throw an error
+		 *  } catch(e) {
+		 *		done(e);
+		 *  }
+		 * }
+		 */
+		post: done => { done(); },
 
-			/**
-			 * Method called to update the server.
-			 *
-			 * @param {express} app The express server.
-			 * @param {function} cb The function to call once finished adding functionality to the server.
-			 * @example
-			 * const cb => {
-			 * 	try {
-			 * 		// do something that could throw an error
-			 *  } catch(e) {
-			 *		done(e);
-			 *  }
-			 * }*/
-			updateServer: (app, cb) => {
-				app.use(compression());
-				// Sample server root set to "/" -- must align with paths throughout
-				app.use("/", express.static(rootDir, options));
-				// Open up the Finsemble Components,services, and clients
-				app.use("/Finsemble", express.static(moduleDirectory, options));
-				// For Assimilation
-				app.use("/hosted", express.static(path.join(__dirname, "..", "hosted"), options));
+		/**
+		 * Method called to update the server.
+		 *
+		 * @param {express} app The express server.
+		 * @param {function} cb The function to call once finished adding functionality to the server.
+		 * @example
+		 * const cb => {
+		 * 	try {
+		 * 		// do something that could throw an error
+		 *  } catch(e) {
+		 *		done(e);
+			*  }
+			* }*/
+		updateServer: (app, cb) => {
+			app.use(compression());
+			// Sample server root set to "/" -- must align with paths throughout
+			app.use("/", express.static(rootDir, options));
+			// Open up the Finsemble Components,services, and clients
+			app.use("/Finsemble", express.static(moduleDirectory, options));
+			// For Assimilation
+			app.use("/hosted", express.static(path.join(__dirname, "..", "hosted"), options));
 
-				// configs/openfin/manifest-local.json and configs/other/server-environment-startup.json
-				// Make the config public
-				app.use("/configs", express.static("./configs", options));
+			// configs/openfin/manifest-local.json and configs/other/server-environment-startup.json
+			// Make the config public
+			app.use("/configs", express.static("./configs", options));
 
-				cb();
-			}
-		};
+			cb();
+		}
+	};
+
+	// Merge loaded extensions, if any exist, into default extensions.
+	const extensions =
+		Object.assign(
+			defaultExtensions,
+			fs.existsSync(path.join(__dirname, "server-extensions.js")) ? require("./server-extensions") : {});
 	// #endregion
 
 	// #region Constants
