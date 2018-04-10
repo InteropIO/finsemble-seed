@@ -10,7 +10,3 @@ window.quitFinsemble = function quitFinsemble() {
 	console.log("Quit button successfully triggered");
 	FSBL.shutdownApplication();
 }
-
-FSBL.addEventListener('onReady', function () {
-	FSBL.Clients.WindowClient.setWindowTitle("Welcome to Finsemble!");
-});

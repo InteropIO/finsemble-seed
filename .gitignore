@@ -17,6 +17,8 @@ debug.log
 built
 finsemble/
 .webpack-file-cache
+webpack_cache
 .babel_cache
 build/webpack/vendor-manifest.json
 server/stats.json
+package-lock.json

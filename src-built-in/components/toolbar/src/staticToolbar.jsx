@@ -16,10 +16,6 @@ import MinimizeAll from "../components/MinimizeAll";
 import BringToFront from "../components/BringToFront";
 import WorkspaceLauncherButton from "../components/WorkspaceLauncherButton";
 import WorkspaceMenuOpener from "../components/WorkspaceMenuOpener"
-// Styles
-import "../../assets/css/finsemble.scss";
-import "../../assets/css/finfont.css";
-import "../toolbar.scss";
 
 var pinnableItems = {
 	"componentLauncher": FinsembleButton,
@@ -38,7 +34,7 @@ export default class Toolbar extends React.Component {
 	render() {
 		return (<FinsembleToolbar>
 			<FinsembleToolbarSection name="left" className="left">
-				<FinsembleButton preSpawn={true} buttonType={["MenuLauncher", "Toolbar"]} iconClasses="finsemble-toolbar-brand-logo" icon="https://finsemble.chartiq.com/components/assets/img/Finsemble_Taskbar_Icon.png" menuType="File Menu" />
+				<FinsembleButton preSpawn={true} buttonType={["MenuLauncher", "Toolbar"]} iconClasses="finsemble-toolbar-brand-logo" icon="/components/assets/img/Finsemble_Taskbar_Icon.png" menuType="File Menu" />
 				<WorkspaceMenuOpener  />
 				<FinsembleButton preSpawn={true} buttonType={["MenuLauncher", "Toolbar"]} label="Apps" menuType="App Launcher" />
 				<FinsembleToolbarSeparator />

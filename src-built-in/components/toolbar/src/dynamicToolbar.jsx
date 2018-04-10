@@ -26,11 +26,6 @@ customComponents["MinimizeAll"] = MinimizeAll;
 customComponents["WorkspaceMenuOpener"] = WorkspaceMenuOpener;
 customComponents["Search"] = Search;
 
-// Styles
-import "../../assets/css/finsemble.scss";
-import "../../assets/css/finfont.css";
-import "../toolbar.scss";
-
 var pinnableItems = {
 	"componentLauncher": FinsembleButton,
 	"workspaceSwitcher": WorkspaceLauncherButton

@@ -43,11 +43,14 @@ class WorkspaceEditor extends React.Component {
 
 	onBlur() {
 		console.log("ON BLUR", performance.now());
+		const self = this;
 		function finish(val) {
-			this.props.saveHandler(val);
+			self.props.saveHandler(val);
 		}
 		//binding so we don't lose the event inside of react's crazy callback structure. Finished is set so that the component doesn't call the saveHandler again on unMount
-		this.setState({ finished: true }, finish.bind(this, this.state.value));
+		this.setState({ finished: true }, () => {
+			finish(this.state.value)
+		});
 	}
 
 	componentWillUnmount() {

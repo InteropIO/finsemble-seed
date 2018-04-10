@@ -1,7 +1,5 @@
 {
 	"comment": "Top-level application config for development, adding on top of the core config",
-	"mode": "",
-	"isAuthEnabled": false,
 	"storage": {
 		"topicToDataStoreAdapters" : {
 			"finsemble" : "LocalStorageAdapter",
@@ -9,7 +7,7 @@
 			"finsemble.workspace.cache" : "LocalStorageAdapter"
 		},
 		"dataStoreAdapters" : {
-			"LocalStorageAdapter": "$applicationRoot/adapters/LocalStorageAdapter.js"
+			"LocalStorageAdapter": "/adapters/LocalStorageAdapter.js"
 		}
 	},
 	"servicesConfig": {
@@ -20,9 +18,8 @@
 			}
 		}
 	},
-	"systemTrayIcon": "$applicationRoot/components/assets/img/Finsemble_Taskbar_Icon.png",
+	"systemTrayIcon": "/components/assets/img/Finsemble_Taskbar_Icon.png",
 	"systemTrayComponent": "File Menu",
-	"debugServiceDelay": 0,
 	"betaFeatures": {
 		"docking": {
 			"enabled": true
@@ -78,7 +75,6 @@
 		"$applicationRoot/configs/application/components.json",
 		"$applicationRoot/configs/application/workspaces.json",
 		"$applicationRoot/configs/application/workspaceTemplates.json",
-		"$applicationRoot/configs/application/services.json",
-		"$applicationRoot/configs/application/components.json"
+		"$applicationRoot/configs/application/services.json"
 	]
 }

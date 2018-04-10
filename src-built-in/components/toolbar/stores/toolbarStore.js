@@ -85,7 +85,7 @@ class _ToolbarStore {
 				FSBL.Clients.ConfigClient.setValue({ field: "finsemble.menus", value: menuConfig });
 			}
 		} else {
-			FSBL.Clients.ConfigClient.get({ field: "finsemble.menus" }, function (err, menus) {
+			FSBL.Clients.ConfigClient.getValue({ field: "finsemble.menus" }, function (err, menus) {
 				self.Store.setValue({
 					field: "menus",
 					value: menus
@@ -166,7 +166,9 @@ class _ToolbarStore {
 					self.addListeners(done, self);
 				},
 				function (done) {
+					FSBL.Clients.HotkeyClient.onReady(() => {
 					self.setupHotkeys(done);
+					});
 				},
 				function (done) {
 					self.listenForWorkspaceUpdates();
