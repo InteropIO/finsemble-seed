@@ -8,7 +8,6 @@ const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 
 
 module.exports = function () {
-
 	let plugins =
 		[
 			new EnvironmentPlugin(['NODE_ENV'])
@@ -35,9 +34,9 @@ module.exports = function () {
 			// Either an absolute path or relative to webpack's options.context.
 			// Sets webpack's recordsPath if not already set.
 			environmentHash: {
-				root: process.cwd(),
+				root: path.join(__dirname, "..", ".."),
 				directories: [],
-				files: ['package-lock.json'],
+				files: ['package.json'],
 			}
 		}));
 	}
