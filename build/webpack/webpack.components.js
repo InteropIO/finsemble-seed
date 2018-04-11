@@ -64,6 +64,11 @@ webpackConfig.plugins.push(new CopyWebpackPlugin([
 		ignore: ["*.js"]
 	},
 	{
+		from: './src/common/',
+		to: './common/',
+		force: false
+	},
+	{
 		from: './node_modules/@chartiq/finsemble/dist',
 		to: path.join(__dirname, "../../Finsemble/"),
 		force: true
