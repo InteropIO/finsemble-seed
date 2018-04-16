@@ -1,5 +1,5 @@
 @import './variables';
-@import url(https://fonts.googleapis.com/css?family=Roboto);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
 
 .hidden {
     display: none !important;
@@ -8,7 +8,7 @@
 .fsbl-button  {
     margin: 0 auto;
     text-align: center;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Open Sans', sans-serif;
     background: $dialog-button-background-color;
     border:$dialog-button-border;
     color: #000;

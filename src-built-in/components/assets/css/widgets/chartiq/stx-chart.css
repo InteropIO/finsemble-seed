@@ -8,7 +8,7 @@ html,body{
 
 .chartContainer, #chartContainer { /* DIV that the canvas expands to. #chartContainer is only for backward compatibility with older libraries. */
 	display: block;
-	font-family: Roboto, Helvetica, sans-serif;
+	font-family: Open Sans, Helvetica, sans-serif;
 	font-size: 12px;
 	position:relative; /* chart container must be relative for internal DOM elements to be correct */
 }
