@@ -71,3 +71,116 @@ $workspace-icon-color: #FFD803; /* This controls workspace icon color when pinne
 /* Other Icons: */
 /* Component and App Icons are either designated SVG's or will have the $pimary-accent-color variable applied by default */
 /* If you wish to change this, please see _toolbar.scss line 100 */
+
+/* JPM Full Color Pallete */
+
+$blue50: #95D4EB;
+$blue100: #83DCE8;
+$blue200: #6EC5E4;
+$blue300: #5ABDE1;
+$blue400: #3DB1DB;
+$blue500: #23A7D7;
+$blue600: #22A0CE;
+$blue700: #1E92BC;
+$blue800: #1A7DA1;
+$blue900: #135D78;
+
+$mint50: #A8E9E0;
+$mint100: #90E3D7;
+$mint200: #7CDDD0;
+$mint300: #58D4C3;
+$mint400: #42CEBA;
+$mint500: #21C6AF;
+$mint600: #20B5A0;
+$mint700: #1AA390;
+$mint800: #158374;
+$mint900: #116E62;
+
+$green50: #84D9BA;
+$green100: #73D4B1;
+$green200: #5BCCA3;
+$green300: #45C697;
+$green400: #26BC85;
+$green500: #08B375;
+$green600: #0BA16B;
+$green700: #0E8F61;
+$green800: #147351;
+$green900: #036441;
+
+$teal50: #ACE1E0;
+$teal100: #95D8D7;
+$teal200: #82D0D0;
+$teal300: #60C3C3;
+$teal400: #44B9B8;
+$teal500: #2BB0AF;
+$teal600: #28A4A4;
+$teal700: #208383;
+$teal800: #1D7070;
+$teal900: #176262;
+
+$orange50: #F5C684;
+$orange100: #F4BD6F;
+$orange200: #F3B45C;
+$orange300: #F1A840;
+$orange400: #EF9C26;
+$orange500: #ED8B00;
+$orange600: #E58000;
+$orange700: #E07800;
+$orange800: #EA6B01;
+$orange900: #FA6400;
+
+$red50: #FF856A;
+$red100: #FF7556;
+$red200: #FF5E39;
+$red300: #FF471E;
+$red400: #F13919;
+$red500: #E32B16;
+$red600: #C72513;
+$red700: #AA2010;
+$red800: #951C0E;
+$red900: #7F170B;
+
+$brown50: #F7F4F1;
+$brown100: #F3EEE8;
+$brown200: #E3DED7;
+$brown300: #D9D3CC;
+$brown400: #ADA296;
+$brown500: #7D6C5A;
+$brown600: #614E37;
+$brown700: #513C24;
+$brown800: #3A2206;
+$brown900: #2B1904;
+
+$grey50: #F6F6F6;
+$grey100: #EEEEEE;
+$grey200: #D5D5D5;
+$grey300: #CCCCCC;
+$grey400: #969696;
+$grey500: #737373;
+$grey600: #565656;
+$grey700: #434343;
+$grey800: #2E2E2E;
+$grey900: #161616;
+
+$coolGrey50: #92959B;
+$coolGrey100: #84878E;
+$coolGrey200: #74777F;
+$coolGrey300: #61656E;
+$coolGrey400: #4C505B;
+$coolGrey500: #44484F;
+$coolGrey600: #3B3F46;
+$coolGrey700: #2F3136;
+$coolGrey800: #2A2C2F;
+$coolGrey900: #242526;
+
+/* JPM Main Colors */
+
+$blue: $blue500; 
+$mint: $mint500;
+$green: $green500;
+$teal: $teal500;
+$orange: $orange500;
+$red: $red500;
+$brown: $brown500;
+$grey: $grey500;
+$coolGrey: $coolGrey500;
