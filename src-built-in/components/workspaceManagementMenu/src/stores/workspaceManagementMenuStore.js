@@ -138,6 +138,7 @@ Actions = {
 					cb(null, newWorkspaceName);
 				}
 			});
+
 		}
 
 		if (!newWorkspaceDialogIsActive) {

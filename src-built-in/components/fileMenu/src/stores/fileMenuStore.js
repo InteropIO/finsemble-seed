@@ -119,25 +119,12 @@ var Actions = {
 	saveWorkspace() {
 		return new Promise(function (resolve, reject) {
 			var self = this;
-			if (FSBL.Clients.WorkspaceClient.activeWorkspace.isDirty) {
-				FSBL.Clients.DialogManager.open("yesNo",
-					{
-						question: "Your workspace \"" + FSBL.Clients.WorkspaceClient.activeWorkspace.name + "\" has unsaved changes, would you like to save?"
-					}, function (err, response) {
-						if (response.choice === "affirmative") {
-							FSBL.Clients.WorkspaceClient.saveAs({
-								force: true,
-								name: FSBL.Clients.WorkspaceClient.activeWorkspace.name
-							}, function (err1, response1) {
-								resolve(response.choice);
-							});
-						} else {
-							resolve(response.choice);
-						}
-					});
-			} else {
-				resolve();
-			}
+			FSBL.Clients.WorkspaceClient.saveAs({
+				force: true,
+				name: FSBL.Clients.WorkspaceClient.activeWorkspace.name
+			}, function (err1, response1) {
+				resolve(response.choice);
+			});
 		});
 	},
 	/**
@@ -192,7 +179,7 @@ var Actions = {
 	spawnDocs() {
 		fin.desktop.System.openUrlWithBrowser("https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html", function () {
 			console.log("successfully launched docs");
-		},function (err) {
+		}, function (err) {
 			console.log("failed to launch docs");
 		});
 	}
