@@ -5,7 +5,7 @@ body.dialog {
     overflow: hidden;
     font-family: 'Open Sans', sans-serif;
     font-size: 12pt;
-    font-weight:300;
+    font-weight:500;
 
 html:before,html:after,body:before,body:after{
     content:"";
@@ -25,7 +25,7 @@ html:before,html:after,body:before,body:after{
     }
     h3 {
 	    font-family: 'Open Sans', sans-serif;
-	    font-weight: 300;
+	    font-weight: 500;
 	    color: #000;
         text-align: center;
 	    font-size: 15pt;
@@ -36,17 +36,32 @@ html:before,html:after,body:before,body:after{
     }
     .dialog {
         //margin: 40px 20px;
-        background-color: #FFF;
-	    padding: 20px;
+        background-color: $grey900;
+	    padding: 23px 16px;
     }
     .dialog-question {
-        font-weight: 300;
-        color: #000;
-        font-size: 15pt;
+        width:469px;
+        font-weight: 500;
+        color: $grey400;
+        font-size: 14px;
         margin-bottom:35px;
-        text-align:center;
+        text-align:left;
         word-wrap: break-word;
     }
+    .dialog-title {
+        width: 469px;
+        height: 30px;
+        font-size: 22px;
+        text-align: left;
+        color: $grey400;
+        padding-bottom: 10px;
+    }
+
+    .button-wrapper {
+        display: flex;
+        justify-content: flex-start;
+    }
+
 
     /* Always Show Number Input Arrows, Give A Bit Of Space */
     input[type=number]::-webkit-inner-spin-button,
@@ -67,7 +82,7 @@ html:before,html:after,body:before,body:after{
         color: #000;
         text-align: left;
         font-size: 12pt;
-        font-weight: 300;
+        font-weight: 500;
         vertical-align: middle;
         background-color: #FFF;
         // -webkit-border-radius: 4px;

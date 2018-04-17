@@ -303,8 +303,8 @@
 		"yesNo": {
 			"window": {
 				"url": "$applicationRoot/components/yesNoDialog/YesNoDialog.html",
-				"width": 350,
-				"height": 175,
+				"width": 500,
+				"height": 223,
 				"position": "absolute",
 				"top": "center",
 				"left": "center",

@@ -132,21 +132,24 @@ class YesNoDialog extends React.Component {
 			behaviorOnResponse="hide"
 			onShowRequested={this.onShowRequested}
 			isModal={true}>
+			<div className="dialog-title">Congratulations! You have created a Dialog.
+			</div>
 			<FinsembleDialogQuestion>
 				{this.state.question}
 			</FinsembleDialogQuestion>
-
-			<FinsembleDialogButton show={this.state.showAffirmativeButton} buttonSize="md" onClick={this.sendAffirmativeResponse}>
+			<div className="button-wrapper">
+			<FinsembleDialogButton show={this.state.showAffirmativeButton} buttonSize="md-positive" onClick={this.sendAffirmativeResponse}>
 				{this.state.affirmativeResponseLabel}
 			</FinsembleDialogButton>
 
-			<FinsembleDialogButton show={this.state.showNegativeButton} buttonSize="md" onClick={this.sendNegativeResponse}>
+			<FinsembleDialogButton show={this.state.showNegativeButton} buttonSize="md-neutral" onClick={this.sendNegativeResponse}>
 				{this.state.negativeResponseLabel}
 			</FinsembleDialogButton>
 
-			<FinsembleDialogButton show={this.state.showCancelButton} buttonSize="md" onClick={this.sendCancelResponse}>
+			<FinsembleDialogButton show={this.state.showCancelButton} buttonSize="md-neutral" onClick={this.sendCancelResponse}>
 				{this.state.cancelResponseLabel}
 			</FinsembleDialogButton>
+			</div>
 		</FinsembleDialog>);
 
 

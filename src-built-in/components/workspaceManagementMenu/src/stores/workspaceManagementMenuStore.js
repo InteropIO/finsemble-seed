@@ -437,7 +437,7 @@ Actions = {
 		let activeWorkspace = WorkspaceManagementStore.getValue("activeWorkspace");
 		if (activeWorkspace.isDirty) {
 			Logger.system.log("NewWorkspace.spawnDialog start.");
-			let dialogParams = { question: `Your workspace "${activeWorkspace.name}" has unsaved changes, would you like to save?` };
+			let dialogParams = { question: `Your workspace "${activeWorkspace.name}" has unsaved changes. Would you like to save?` };
 			function onUserInput(err, response) {
 				Logger.system.log("Spawn Dialog callback.");
 				callback(null, response);
