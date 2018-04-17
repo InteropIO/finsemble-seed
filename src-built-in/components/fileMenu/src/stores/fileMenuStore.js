@@ -123,7 +123,7 @@ var Actions = {
 				force: true,
 				name: FSBL.Clients.WorkspaceClient.activeWorkspace.name
 			}, function (err1, response1) {
-				resolve(response.choice);
+				resolve("affirmative");
 			});
 		});
 	},
