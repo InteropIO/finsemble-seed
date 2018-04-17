@@ -84,9 +84,6 @@ export default class WorkspaceManagementList extends React.Component {
 		return (
 			<FinsembleDnDContext onDragStart={(changeEvent) => { console.log("DRAGSTART", changeEvent); }} onDragEnd={this.onDragEnd}>
 				<FinsembleMenuSection className='menu-primary'>
-					<FinsembleMenuSectionLabel>
-						Workspaces
-					</FinsembleMenuSectionLabel>
 					<FinsembleDroppable direction="vertical" droppableId="workspaceList">
 						{workspaces}
 					</FinsembleDroppable>
