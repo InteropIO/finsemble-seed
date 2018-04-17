@@ -104,7 +104,7 @@
 	background: $toolbar-background-color;
 	color: $toolbar-primary-font-color;
 	align-content: center;
-	height: 39px;
+	height: 30px;
 }
 
 //for the DnD wrapper
@@ -160,7 +160,7 @@
 
 .finsemble-toolbar-button-label {
     font-size: .95em;
-    font-weight: 300;
+    font-weight: 500;
     /*font-variant: small-caps;*/
     text-align:left;
     letter-spacing:.25px;
@@ -192,7 +192,7 @@
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	display:block;
-	margin-top: 8px;
+	margin-top: 5px;
 }
 
 // .finsemble-toolbar-workspace-button-label > .finsemble-toolbar-button-label:hover {
@@ -232,7 +232,7 @@
 }
 
 img.pinned-icon {
-	padding-top: 12px;
+	padding-top: 6px;
 	max-width: 17px;
 }
 
@@ -253,7 +253,7 @@ img.pinned-icon {
 }
 
 .finsemble-button-label {
-	padding-top: 4px;
+	padding-top: 2px;
 	overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
