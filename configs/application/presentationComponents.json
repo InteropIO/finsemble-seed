@@ -343,8 +343,8 @@
 		"singleInput": {
 			"window": {
 				"url": "$applicationRoot/components/singleInputDialog/singleInputDialog.html",
-				"width": 350,
-				"height": 175,
+				"width": 480,
+				"height": 154,
 				"position": "absolute",
 				"top": "center",
 				"left": "center",

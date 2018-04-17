@@ -423,7 +423,7 @@ Actions = {
 
 		let dialogParams = {
 			inputLabel: "Enter a name for your workspace.",
-			affirmativeButtonLabel: "okay",
+			affirmativeButtonLabel: "Confirm",
 			showCancelButton: false,
 			showNegativeButton: false
 		};

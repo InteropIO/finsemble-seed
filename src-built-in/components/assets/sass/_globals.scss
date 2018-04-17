@@ -73,7 +73,7 @@ body.dialog input:focus {
 
 /* Buttons */
 .fsbl-button  {
-    margin: 0 auto;
+    margin: 0 4px;
     text-align: center;
     font-family: 'Open Sans', sans-serif;
     background: $dialog-button-background-color;
@@ -107,7 +107,7 @@ body.dialog input:focus {
     letter-spacing: 1.6px;
     line-height: 38px;
     padding: 11px 32px;
-    margin: 15px auto;
+//    margin: 15px auto;
 }
 
 .fsbl-button-lg-neutral {
@@ -117,7 +117,7 @@ body.dialog input:focus {
     letter-spacing: 1.6px;
     line-height: 38px;
     padding: 11px 32px;
-    margin: 15px auto;
+//    margin: 15px auto;
 }
 
 .fsbl-button-md-positive {
@@ -128,7 +128,7 @@ body.dialog input:focus {
     font-size: 13px;
     letter-spacing: 0.4px;
     line-height: 33px;
-    margin: 10px auto;
+//    margin: 10px auto;
 }
 
 .fsbl-button-md-neutral {
@@ -137,7 +137,7 @@ body.dialog input:focus {
     font-size: 13px;
     letter-spacing: 0.4px;
     line-height: 34px;
-    margin: 10px auto;
+//    margin: 10px auto;
 }
 
 .fsbl-button-sm-positive {
@@ -149,7 +149,7 @@ body.dialog input:focus {
     letter-spacing: 1px;
     line-height: 20px;
     padding: 3px 11px;
-    margin: 5px auto;
+//    margin: 5px auto;
 }
 
 .fsbl-button-sm-neutral {
@@ -159,5 +159,5 @@ body.dialog input:focus {
     padding: 3px 11px;
     letter-spacing: 1px;
     line-height: 20px;
-    margin: 5px auto;
+//    margin: 5px auto;
 }
