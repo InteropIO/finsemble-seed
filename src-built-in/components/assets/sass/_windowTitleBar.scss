@@ -105,8 +105,8 @@ $breakpoint-very-small-window: 175px;
 .fsbl-icon {
   position: relative;
   color: $header-text-color;
-  font-size:15px;
-  width:21px;
+  font-size: 15px;
+  width: 18px;
   padding: 0px 6px;
   height: 100%;
   display: flex;
@@ -151,7 +151,7 @@ $breakpoint-very-small-window: 175px;
 }
 
 .fsbl-minimize  {
-  align-items:flex-end;
+//  align-items:flex-end;
 }
 
 .fsbl-ejector {
@@ -172,7 +172,7 @@ $breakpoint-very-small-window: 175px;
     align-items: center;
 }
 .linker-group {
-   width: 7px;
+   width: 5px;
    height:18px;
    margin-left: 4px;
    border-radius: 4px;

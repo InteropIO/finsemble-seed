@@ -53,7 +53,7 @@ export default class CloseButton extends React.Component{
 	render() {
 		return (<div onClick={this.onClick} className="fsbl-icon fsbl-close cq-no-drag" data-hover={this.state.hoverState} title="Close" id="fsbl-window-close">
 			<HoverDetector edge="right" hoverAction={this.hoverAction} />
-			<i className="ff-close"></i>
+			<i className="jpmuitk-icon-close"></i>
 		</div>);
 	}
 }
