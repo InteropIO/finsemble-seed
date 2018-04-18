@@ -4,7 +4,8 @@
 body.menu {
 	margin:0px;
 	font-family: 'Open Sans';
-	font-weight:300;
+	font-size: 14px;
+	font-weight: 300;
 	overflow-y:hidden;
 	overflow-x:hidden;
 	height:100%;
@@ -18,10 +19,10 @@ body.menu {
 }
 .menu-section-label {
 	padding:10px 0px 10px 20px;
-	color:$primary-accent-color;
+	color: $primary-accent-color;
 	text-transform: uppercase;
 	font-weight: 700;
-	font-family: Open Sans Condensed;
+	font-family: Open Sans;
 	width:100%;
 }
 
@@ -41,8 +42,7 @@ body.menu {
 }
 .menu-secondary {
 	background: $menu-secondary-background-color;
-	padding-bottom:10px;
-	padding-top: 10px;
+	padding: 5px 0px;
 }
 
 .menu-primary .menu-item:hover {
@@ -97,17 +97,23 @@ body.menu {
 	border: 1px solid transparent;
   }
 
+  .ff-delete:hover {
+	color: white;
+	background-color: $red200;
+	border-radius: 4px;
+}
+
 .ff-pin:hover {
-	color:black;
+	color:$grey100;
 	width: 25px;
-	border: 1px solid $primary-accent-color;
+	border: 1px solid $grey;
 	border-radius: 4px;
 }
 
 .finsemble-item-pinned {
 	color: white;
 	width: 25px;
-	background-color: $primary-accent-color;
+	background-color: $grey;
 //	border: 1px solid transparent;
 	border-radius: 4px;
 }
@@ -115,14 +121,8 @@ body.menu {
 .finsemble-item-pinned:hover {
 	color: white;
 	width:25px;
-	background-color: $grey;
+	background-color: $grey400;
 //	border: 1px solid transparent;
-	border-radius: 4px;
-}
-
-.ff-delete:hover {
-	color: white;
-	background-color: #EE5C5C;
 	border-radius: 4px;
 }
 

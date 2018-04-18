@@ -26,10 +26,10 @@ body {
 .searchHeader{
 	height: 21px;
 	display: flex;
-	font-family: Open Sans Condensed;
-	font-weight: bold;
-	text-transform: uppercase;
-	color: #039bff;
+	font-family: Open Sans;
+	font-weight: 600;
+//	text-transform: uppercase;
+	color: $blue;
 	padding-left: 14px;
 	padding-top: 6px;
 }
@@ -50,7 +50,7 @@ body {
 	height:24px;
 	font-weight: 300;
 	text-align: left;
-	color: #000000;
+	color: #FFF;
 	padding: 4px 28px 4px 14px;
 	display: flex;
 	align-items: center;
@@ -61,7 +61,7 @@ body {
 }
 
 .resultItem.active {
-	background-color: #ecf0f1;
+	background-color: $coolGrey800;
 }
 .resultItem .resultName{
 	flex:1;

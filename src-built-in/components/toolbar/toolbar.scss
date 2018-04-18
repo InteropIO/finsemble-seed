@@ -38,7 +38,7 @@
   position: relative;
   max-width:107px;
   overflow: visible;
-  max-height: 40px;
+  max-height: 30px;
   width:30px;
 }
 .left.finsemble-toolbar-section{
@@ -54,8 +54,8 @@
   display:inline;
   text-indent: 8px;
   width:107px;
-  height: 40px;
-  line-height: 40px;
+  height: 30px;
+  line-height: 32px;
   background-color: transparent;
   border-color:transparent;
   z-index: 2;
@@ -121,8 +121,8 @@ img {
 .searchInput::after{
   position: absolute;
   font-family: finfont;
-  right:10px;
-  bottom: 5px;
+  right:11px;
+  bottom: -1px;
   content: "\2c";
 }
 
