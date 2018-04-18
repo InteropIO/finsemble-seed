@@ -25,8 +25,8 @@ $breakpoint-very-small-window: 175px;
     z-index: 2147483641;
     top:0;
     font-family: 'Open Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 300;
+    font-size: 12px;
+    font-weight: 700;
     color: $header-text-color;
     html.desktop-active & {
       background: $active-header-background-color;
@@ -68,6 +68,7 @@ $breakpoint-very-small-window: 175px;
   white-space: nowrap;
   overflow:hidden;
   -webkit-user-select: none;
+  padding-bottom: 3px;
 }
 
 .fsbl-header-right {
@@ -119,7 +120,7 @@ $breakpoint-very-small-window: 175px;
   &[data-hover=true]{
     background-color: $inactive-header-button-hover;
     html.desktop-active & {
-      background: $primary-accent-color;
+      background: $grey;
       transition: background .2s ease;
     }
   }
@@ -145,7 +146,7 @@ $breakpoint-very-small-window: 175px;
   background-color: $highlighted-inactive-window-button;
   color: #FFF;
   html.desktop-active & {
-    background-color: $primary-accent-color;
+    background-color: $grey;
   }
 }
 

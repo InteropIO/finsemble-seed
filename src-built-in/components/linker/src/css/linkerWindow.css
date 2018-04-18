@@ -4,7 +4,8 @@
 */
 
 #main {
-    padding: 4px 0px 4px 0px;
+   padding: 4px 0px 4px 0px;
+   background: #434343;
 }
 .linkerGroup{
     height: 20px;

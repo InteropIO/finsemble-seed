@@ -137,11 +137,11 @@ $active-header-text-color: #fff;
 
 $primary-accent-color: $grey400; /* The Primary-Accent-Color controls button colors on hover, the border of toolbar buttons on hover, and menu header text color. It also controls the icon color for buttons and apps. */
 
-$scrim-overlay: rgba(32,104,195, .93); /* Scrim Overlay is used as for the background in the drag-to-share overlay. */
+$secondary-accent-color: $coolGrey; /* Secondary-Accent-Color is used for toolbar buttons and the component overlay when resizing grouped windows. */
 
-$scrim-negative-overlay: rgba(150,10,5, .93); /* Scrim Negative Overlay is used as for the background in the "unavailable" drag-to-share overlay. */
+$scrim-overlay: rgba(35,167,195, .93); /* Scrim Overlay is used as for the background in the drag-to-share overlay. */
 
-$secondary-accent-color: $grey600; /* Secondary-Accent-Color is used for toolbar buttons and the component overlay when resizing grouped windows. */
+$scrim-negative-overlay: rgba(227,42,22, .93); /* Scrim Negative Overlay is used as for the background in the "unavailable" drag-to-share overlay. */
 
 
 
@@ -151,21 +151,19 @@ $toolbar-primary-font-color: #FFF; /* Main toolbar text color. Default is white 
 
 
 
-$active-header-background-color: $secondary-accent-color; /* This effects the active component header background and border colors. */
+$active-header-background-color: $coolGrey400; /* This effects the active component header background and border colors. */
 
-$window-header-background-color: #233958; /* This effects the default component header background colors. */
+$window-header-background-color: $coolGrey600; /* This effects the default component header background colors. */
 
 $window-frame-inactive-color: $secondary-accent-color; /* This effects the dialog background color as well as the border for inactive windows. */
 
 
 
-$light-hover-accent: #184C7A; /* This effects the active component header button on hover. */
-
 $inactive-header-button-hover: $secondary-accent-color; /* This effects the inactive component header button on hover. */
 
 $negative-action-color: $red; /* This effects the component header's close button on hover. */
 
-$highlighted-inactive-window-button: #115FCC; /* This effects a highlighted icon background within inactive window headers. Most common case is the highlighted docking confirmation. */
+$highlighted-inactive-window-button: $coolGrey300; /* This effects a highlighted icon background within inactive window headers. Most common case is the highlighted docking confirmation. */
 
 
 /* General Typography  */
