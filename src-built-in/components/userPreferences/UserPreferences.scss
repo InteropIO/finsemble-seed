@@ -19,7 +19,7 @@ $section-toggle-hover-background-color: $left-nav-header-background-color;
 $scrollbar-color: $blue;
 $auto-load-workspace-pill-color: $scrollbar-color;
 $header-font-color: $scrollbar-color;
-$focused-workspace-background-color: rgba(238, 238, 238, 0.97);
+$focused-workspace-background-color: $coolGrey300;
 $focused-workspace-border-color: $scrollbar-color;
 
 $list-border-color: $grey;
@@ -235,7 +235,7 @@ img {
 }
 .ff-delete:hover {
 	background-color: transparent;
-	color:black;
+	color: #FFFFFF;
 }
 .individual-workspace-action:hover {
 	border: 1px solid $action-button-hover-border-color;
@@ -323,6 +323,7 @@ img {
 .workspace-item-editing {
 	border-top: 1px solid $focused-workspace-border-color;
 	border-bottom: 1px solid $focused-workspace-border-color;
+	color: $grey100;
 }
 .workspace-editor {
 	border:0;
@@ -332,10 +333,11 @@ img {
 	width: 100%;
 	font-size: 16px;
 	outline-color: transparent;
+	color: $grey100;
 }
 
 .workspace-editor::selection {
-	background-color: #9ad9fd;
+	background-color: $blue400;
 }
 .no-top-border {
 	border-top: 1px solid transparent;
@@ -385,7 +387,7 @@ img {
 	background-color: $scrollbar-color;
 	border: 1px solid $scrollbar-color;
 	font-size:8px;
-	color: black;
+	color: #000000;
 }
 
 .ff-check-mark {
