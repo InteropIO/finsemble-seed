@@ -568,35 +568,42 @@
 					}
 				}
 			}
-		}
-	},
-	"Docking Move Mask": {
-		"window": {
-			"url": "$applicationRoot/components/dockingGroupMask/dockingGroupMask.html",
-			"frame": false,
-			"resizable": false,
-			"showTaskbarIcon": false,
-			"options": {
-				"opacity": 0.7,
-				"autoShow": false
-			}
 		},
-		"component": {
-			"category": "system"
-		},
-		"foreign": {
-			"services": {
-				"dockingService": {
-					"isArrangable": false
+		"App Catalog": {
+			"window": {
+				"url": "$applicationRoot/components/appCatalog/appCatalog.html",
+				"frame": false,
+				"top": "center",
+				"left": "center",
+				"width": 800,
+				"height": 600,
+				"options": {
+					"autoShow": true,
+					"resizable": false,
+					"alwaysOnTop": true
 				}
 			},
-			"components": {
-				"App Launcher": {
-					"launchableByUser": false
+			"component": {
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"canGroup": false,
+						"isArrangable": false
+					}
 				},
-				"Window Manager": {
-					"FSBLHeader": false,
-					"persistWindowState": false
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"FSBLHeader": false,
+						"persistWindowState": false
+					},
+					"Toolbar": {
+						"iconClass": "UserPreferences"
+					}
 				}
 			}
 		}
