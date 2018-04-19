@@ -137,6 +137,27 @@ body.menu {
 	margin-top: 2px;
 }
 
-.jpmuitk-icon-document, .jpmuitk-icon-save, .jpmuitk-icon-save-solid {
+.jpmuitk-icon-document, .jpmuitk-icon-save, .jpmuitk-icon-save-solid, .jpmuitk-icon-report-builder {
 	padding-right: 7px;
+}
+
+.jpmuitk-icon-pin, .jpmuitk-icon-delete {
+	margin-top: 1px;
+	padding-top: 5px;
+	width: 25px;
+	text-align: center;
+	border: 1px solid transparent;
+  }
+
+  .jpmuitk-icon-delete:hover {
+	color: white;
+	background-color: $red200;
+	border-radius: 4px;
+}
+
+.jpmuitk-icon-:hover {
+	color:$grey100;
+	width: 25px;
+	border: 1px solid $grey;
+	border-radius: 4px;
 }
