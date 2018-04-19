@@ -237,8 +237,8 @@ img.pinned-icon {
 }
 
 .pinned-icon {
-	color: #4495d1;
-	font-size:26px;
+	color: $grey300;
+	font-size:22px;
 	padding-right: .25em;
 }
 
@@ -286,4 +286,8 @@ img.pinned-icon {
 
 .ff-minimize-all {
 	padding-top: 4px;
+}
+
+.jpmuitk-icon-document {
+	font-size: 17px;
 }

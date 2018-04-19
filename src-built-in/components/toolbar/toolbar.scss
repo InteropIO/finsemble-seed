@@ -28,7 +28,7 @@
 
   .icon-only > i {
     height:22px;
-    font-size:22px;
+    font-size:19px;
     width:auto;
   }
   .pinned-icon {
@@ -124,10 +124,10 @@ img {
 
 .searchInput::after{
   position: absolute;
-  font-family: finfont;
+  font-family: jpmuitk-icons;
   right:11px;
   bottom: -1px;
-  content: "\2c";
+  content: "\e954";
 }
 
 div {
