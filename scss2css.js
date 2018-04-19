@@ -8,6 +8,7 @@ const sassExtract = require("sass-extract");
 const glob = require("glob");
 const shell = require("shelljs");
 const async = require("async");
+const beautify = require("beautify");
 if (fs.existsSync("./src-built-in/assets/css/perfect-scrollbar.css")) {
 	//the dash breaks the sass parsers for some stupid reason.
 	shell.mv("./src-built-in/assets/css/perfect-scrollbar.css", "./src-built-in/assets/css/perfectScrollbar.css")
@@ -40,7 +41,7 @@ function mapFileReferencesToCSS(finished) {
 			fileContents = fileContents.replace("_windowFrame'", "_windowFrame.css'");
 			fileContents = fileContents.replace("_windowTitleBar'", "_windowTitleBar.css'");
 			fileContents = fileContents.replace("_workspaceManagement'", "_workspaceManagement.css'");
-			fs.writeFileSync(filename, fileContents, 'utf-8');
+			fs.writeFileSync(filename, beautify(fileContents, { format: "jsx" }), 'utf-8');
 		})
 		finished();
 	});
@@ -88,7 +89,7 @@ function convertSassToCss(finished) {
 			//This abomination looks for any _value_ that's specified using a variable. It replaces $variableName with var(--variableName), which is CSS-syntax.
 			fileContents = fileContents.replace(/(\:)(.*)(\$)(.*)(\;)/g, `: $2 var(--\$4);`);
 
-			fs.writeFileSync(filename, fileContents, 'utf-8');
+			fs.writeFileSync(filename, beautify(fileContents, { format: "css" }), 'utf-8');
 		});
 		function extractVars(filename, done) {
 			sassExtract.render({
@@ -179,7 +180,7 @@ function convertSassToCss(finished) {
 				//Removes the comment on the roboto import.
 				out = out.replace('//*@import url("https://fonts.googleapis.com/css?family=Roboto)";*/', '@import url("https://fonts.googleapis.com/css?family=Roboto)"');
 				let newFilename = filename.replace("scss", "css");
-				fs.writeFileSync(newFilename, out, "utf-8");
+				fs.writeFileSync(newFilename, beautify(out, { format: "css" }), "utf-8");
 
 				//Uncomment to delete the old sass files.
 				shell.rm('-f', filename);
