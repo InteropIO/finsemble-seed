@@ -74,7 +74,7 @@ html:before,html:after,body:before,body:after{
 
     input:focus {
         box-shadow: 0 0 5px rgba (81,203, 238, 1);
-        border: 1px solid #039BFF;
+        border-bottom: 1px solid $blue;
         outline: none;
     }
 
@@ -85,12 +85,12 @@ html:before,html:after,body:before,body:after{
 
     input {
         -webkit-appearance: none;
-        color: #000;
+        color: #FFF;
         text-align: left;
         font-size: 12pt;
         font-weight: 500;
         vertical-align: middle;
-        background-color: #FFF;
+        //background-color: #FFF;
         // -webkit-border-radius: 4px;
         // -moz-border-radius: 4px;
         // border-radius: 4px;
@@ -102,6 +102,10 @@ html:before,html:after,body:before,body:after{
         border: 1px solid #bdd9ff;
         box-sizing: border-box;
         transition: .2s ease-in;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        border-bottom: 1px solid $blue;
     }
 
 }

@@ -68,7 +68,7 @@ i, i:before, i:after, .fsbl-window-manager-icon {
 }
 
 body.dialog input:focus {
-    border: 1px solid $primary-accent-color;
+    border-bottom: 1px solid $blue;
 }
 
 /* Buttons */
