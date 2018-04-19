@@ -1,5 +1,12 @@
 const fs = require("fs");
 const path = require("path");
+const chalk = require("chalk");
+chalk.enabled = true;
+chalk.level = 1;
+const logToTerminal = (msg) => {
+	console.log(`[${new Date().toLocaleTimeString()}] ${msg}.`);
+}
+
 const scrollbar = path.join(__dirname, "./src-built-in/components/assets/css/perfect-scrollbar.css");
 //Have to monkeypatch the stupid sass importer so scrollbars don't throw it off. It couldn't resolve the file because we were requiring a relative file that was importing a relative file. It just bombed. Our overwrite just hardcodes the path to src-built-in/assets/css/perfect-scrollbar.css
 fs.writeFileSync("./node_modules/sass-extract/lib/importer.js", fs.readFileSync("./node-sass-importer-overwrite.js", "utf-8"), "utf-8");
@@ -51,7 +58,7 @@ function convertSassToCss(finished) {
 	glob("src-built-in/**/*.scss", {}, (err, files) => {
 		files.forEach(filename => {
 			let fileContents = fs.readFileSync(filename, 'utf-8');
-			console.log("Find/replace inside of ", filename);
+			logToTerminal("Find/replace inside of ", filename);
 
 			//Part of this process is generating css files from the scss files. Most of our imports didn't have a file extension. Without the file extension, node-sass bombs out.
 			fileContents = fileContents.replace("_colorPalette'", "_colorPalette.scss'");
@@ -107,7 +114,7 @@ function convertSassToCss(finished) {
 					return url;
 				}
 			}).then((rendered) => {
-				console.log("Extracting variables from", filename);
+				logToTerminal("Extracting variables from", filename);
 
 				//Store the rendered CSS and variables on a global object that can be retrieved later.
 				if (!vars[filename]) {
@@ -120,7 +127,7 @@ function convertSassToCss(finished) {
 				//If the variable was defined inside of this file, store it on the global object.
 				for (let varName in rendered.vars.global) {
 					let vari = rendered.vars.global[varName];
-					// console.log(vari.sources);
+					// logToTerminal(vari.sources);
 					if (vari.sources.some(fname => fname.includes(filename))) {
 
 						vars[filename].vars[varName] = vari;
@@ -137,8 +144,8 @@ function convertSassToCss(finished) {
 		//For every file, extract the global variables that were stored.
 		async.each(files, extractVars, () => {
 			files.forEach(filename => {
-				console.log(filename);
-				// console.log(rendered.css.toString());
+				logToTerminal(filename);
+				// logToTerminal(rendered.css.toString());
 				let content = vars[filename];
 				let variableDefs = content.vars;
 				let out = "";
@@ -220,4 +227,27 @@ function processVariable(variableContent) {
 	return val;
 }
 
-async.series([convertSassToCss, mapFileReferencesToCSS])
+function removeDependencies(finished) {
+	let packageJSON = require("./package.json");
+	Object.keys(packageJSON.dependencies).forEach(dep => {
+		if (dep.includes("sass")) {
+			logToTerminal("Removing dependency", dep);
+			delete packageJSON.dependencies[dep];
+		}
+	});
+	Object.keys(packageJSON.dependencies).forEach(dep => {
+		if (dep.includes("sass")) {
+			logToTerminal("Removing devDependency", dep);
+			delete packageJSON.dependencies[dep];
+		}
+	});
+	fs.writeFileSync("./package.json", beautify(JSON.stringify(packageJSON), { format: "json" }), "utf-8");
+	finished();
+}
+
+function logNotice(finished) {
+	logToTerminal(chalk.yellow("NOTE: Go into build/defaultWebpackConfig and manually remove the sass-loader starting on line 53."));
+}
+
+
+async.series([convertSassToCss, mapFileReferencesToCSS, removeDependencies, logNotice])
