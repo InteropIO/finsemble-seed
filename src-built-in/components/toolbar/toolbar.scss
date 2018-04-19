@@ -34,6 +34,10 @@
   .pinned-icon {
     color: #4495d1;
   }
+
+.highlighted {
+  background-color: $primary-accent-color;
+}
 .searchSection{
   position: relative;
   max-width:107px;

@@ -29,8 +29,12 @@ export default class AutoArrange extends React.Component {
 
 	render() {
 		let tooltip = this.state.isAutoArranged ? "Restore" : "Auto Arrange";
-		let buttonClass = this.state.isAutoArranged ? "finsemble-toolbar-button-icon ff-ungrid" : "finsemble-toolbar-button-icon ff-grid";
-		return (<FinsembleButton className={this.props.classes + " icon-only"} buttonType={["Toolbar"]} title={tooltip} onClick={this.autoArrange}>
+		let wrapperClasses = this.props.classes + " icon-only";
+		if (this.state.isAutoArranged) {
+			wrapperClasses += " highlighted";
+		}
+		let buttonClass = "finsemble-toolbar-button-icon ff-grid";
+		return (<FinsembleButton className={wrapperClasses} buttonType={["Toolbar"]} title={tooltip} onClick={this.autoArrange}>
 			<i className={buttonClass}></i>
 		</FinsembleButton>);
 	}
