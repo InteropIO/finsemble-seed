@@ -41,7 +41,7 @@ function mapFileReferencesToCSS(finished) {
 			fileContents = fileContents.replace("_windowFrame'", "_windowFrame.css'");
 			fileContents = fileContents.replace("_windowTitleBar'", "_windowTitleBar.css'");
 			fileContents = fileContents.replace("_workspaceManagement'", "_workspaceManagement.css'");
-			fs.writeFileSync(filename, beautify(fileContents, { format: "jsx" }), 'utf-8');
+			fs.writeFileSync(filename, fileContents, 'utf-8');
 		})
 		finished();
 	});
@@ -89,7 +89,7 @@ function convertSassToCss(finished) {
 			//This abomination looks for any _value_ that's specified using a variable. It replaces $variableName with var(--variableName), which is CSS-syntax.
 			fileContents = fileContents.replace(/(\:)(.*)(\$)(.*)(\;)/g, `: $2 var(--\$4);`);
 
-			fs.writeFileSync(filename, beautify(fileContents, { format: "css" }), 'utf-8');
+			fs.writeFileSync(filename, fileContents, 'utf-8');
 		});
 		function extractVars(filename, done) {
 			sassExtract.render({
