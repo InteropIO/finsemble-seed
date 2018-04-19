@@ -47,11 +47,11 @@ function mapFileReferencesToCSS(finished) {
 let vars = {};
 function convertSassToCss(finished) {
 	glob("src-built-in/**/*.scss", {}, (err, files) => {
-		console.log(files)
 		files.forEach(filename => {
-			// shell.rm('f', filename);
 			let fileContents = fs.readFileSync(filename, 'utf-8');
-			console.log(filename);
+			console.log("Find/replace inside of ", filename);
+
+			//Part of this process is generating css files from the scss files. Most of our imports didn't have a file extension. Without the file extension, node-sass bombs out.
 			fileContents = fileContents.replace("_colorPalette'", "_colorPalette.scss'");
 			fileContents = fileContents.replace("_dialogs'", "_dialogs.scss'");
 			fileContents = fileContents.replace("_formElements'", "_formElements.scss'");
@@ -74,11 +74,14 @@ function convertSassToCss(finished) {
 			// fileContents = fileContents.replace(/(\s.*)(http.*)(\;)/g, '$1"$2"');
 
 
-			//Comment out the import.
+			//Comment out the import so that sass doesn't replace it with the value of the imported file.
 			fileContents = fileContents.replace(/(\@import.*\;)/g, "\/\*\$1\*\/");
+
+			//replace imports with the new css files we'll be generating.
 			fileContents = fileContents.replace(/scss/g, "css");
 
 
+			//This abomination looks for any _value_ that's specified using a variable. It replaces $variableName with var(--variableName), which is CSS-syntax.
 			fileContents = fileContents.replace(/(\:)(.*)(\$)(.*)(\;)/g, `: $2 var(--\$4);`);
 
 			fs.writeFileSync(filename, fileContents, 'utf-8');
@@ -99,13 +102,17 @@ function convertSassToCss(finished) {
 					return url;
 				}
 			}).then((rendered) => {
-				console.log("Extracting", filename, Object.keys(rendered.vars.global).length);
+				console.log("Extracting variables from", filename);
+
+				//Store the rendered CSS and variables on a global object that can be retrieved later.
 				if (!vars[filename]) {
 					vars[filename] = {
 						vars: {},
 						css: rendered.css.toString()
 					}
 				}
+
+				//If the variable was defined inside of this file, store it on the global object.
 				for (let varName in rendered.vars.global) {
 					let vari = rendered.vars.global[varName];
 					// console.log(vari.sources);
@@ -117,10 +124,12 @@ function convertSassToCss(finished) {
 				done();
 			})
 				.catch(e => {
-					console.error('==========================errrr', filename, e);
+					console.error('==========================error', filename, e);
 					done();
 				});
 		}
+
+		//For every file, extract the global variables that were stored.
 		async.each(files, extractVars, () => {
 			files.forEach(filename => {
 				console.log(filename);
@@ -133,52 +142,49 @@ function convertSassToCss(finished) {
 				if (variableDefs) {
 					let variableNames = Object.keys(variableDefs);
 					if (variableNames.length) {
+						//For every variable that was defined in this file, put it under ":root" so that it's available in any css file.
 						out = `:root {
 							`;
-						console.log(variableNames);
-						//SassColor, SassList, SassNumber,SassString
 						for (let i = 0; i < variableNames.length; i++) {
 							let name = variableNames[i];
 							const variableContent = variableDefs[name];
 							name = name.replace("$", "");
 							let val = processVariable(variableContent);
+
+							//takes $variableName: 1px solid #eee; and replaces it with --variableName: 1px solid #eee;
 							out += `--${name}: ${val};
 							`;
-							//swap out variables for their proper names.
 						}
 						out += `}
-
 						`;
+
+						//Regex replaces color: $variableName with var(--variableName)
+						//swap out variables for their proper names.
 						css = css.replace(/(\$)(.*)(\b)/g, `var(--\$2)`);
-						// function onlyUnique(value, index, self) {
-						//     return self.indexOf(value) === index;
-						// }
-						// console.log(variableNames.map(name => variableDefs[name].type).filter(onlyUnique))
 					}
 				} else {
 					css = css.replace(/(\$)(.*)(\b)/g, `var(--\$2)`);
 				}
 				out += css;
-				function replacer(match, p1, p2, p3, offset, string) {
-					// p1 is nondigits, p2 digits, and p3 non-alphanumerics
-					return [p1, p2, p3].join(' - ');
-				}
 				out = out.replace(/(\/\*)(\@import )(.*)(\;)(\*\/)/g, "$2 url($3);");
 
-				//next two are to handle the roboto import
+				//next two are to handle the roboto import. It's a strange import and rather than handle it elegantly, I do this.
 				out = out.replace("url(url(", 'url("');
 				out = out.replace("))", '")');
 
-				out = out.replace('//*@import url("https://fonts.googleapis.com/css?family=Roboto)";*/', '@import url("https://fonts.googleapis.com/css?family=Roboto)"')
+				//Removes the comment on the roboto import.
+				out = out.replace('//*@import url("https://fonts.googleapis.com/css?family=Roboto)";*/', '@import url("https://fonts.googleapis.com/css?family=Roboto)"');
 				fs.writeFileSync(filename.replace("scss", "css"), out, "utf-8");
 
-
+				//Uncomment to delete the old sass files.
+				// shell.rm('f', filename);
 			});
 			finished();
 		});
 	});
 }
 
+//Given a Sass variable object, it parses and retrieves the value.
 function processVariable(variableContent) {
 
 	switch (variableContent.type) {
@@ -196,7 +202,7 @@ function processVariable(variableContent) {
 			val = variableContent.value.hex;
 			break;
 		case "SassList":
-			console.log("LIST", variableContent);
+			//Lists are strange objects, but the "expression" is what we want here.
 			val = variableContent.declarations[0].expression;
 			break;
 		case "default":
