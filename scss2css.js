@@ -48,6 +48,8 @@ function mapFileReferencesToCSS(finished) {
 			fileContents = fileContents.replace("_windowFrame'", "_windowFrame.css'");
 			fileContents = fileContents.replace("_windowTitleBar'", "_windowTitleBar.css'");
 			fileContents = fileContents.replace("_workspaceManagement'", "_workspaceManagement.css'");
+			fileContents = fileContents.replace("_fontIcon'", "_fontIcon.css'");
+
 			fs.writeFileSync(filename, fileContents, 'utf-8');
 		})
 		finished();
@@ -79,6 +81,7 @@ function convertSassToCss(finished) {
 			fileContents = fileContents.replace("_windowFrame'", "_windowFrame.scss'");
 			fileContents = fileContents.replace("_windowTitleBar'", "_windowTitleBar.scss'");
 			fileContents = fileContents.replace("_workspaceManagement'", "_workspaceManagement.scss'");
+			fileContents = fileContents.replace("_fontIcon'", "_fontIcon.scss'");
 			fileContents = fileContents.replace("perfect-scrollbar'", "perfect-scrollbar.css'");
 			fileContents = fileContents.replace(/sass/g, "css");
 			fileContents = fileContents.replace(new RegExp("\'\.\.\/sass\/", "g"), "'./");
@@ -144,7 +147,7 @@ function convertSassToCss(finished) {
 		//For every file, extract the global variables that were stored.
 		async.each(files, extractVars, () => {
 			files.forEach(filename => {
-				logToTerminal(filename);
+				logToTerminal(`Replacing sass-style variables with css-style variables in ${filename}`);
 				// logToTerminal(rendered.css.toString());
 				let content = vars[filename];
 				let variableDefs = content.vars;
@@ -172,6 +175,7 @@ function convertSassToCss(finished) {
 
 						//Regex replaces color: $variableName with var(--variableName)
 						//swap out variables for their proper names.
+						//My regex was wrong and put --var(--blahblah !important) instead of --var(--blahblah) !important;
 						css = css.replace(/(\$)(.*)(\b)/g, `var(--\$2)`);
 					}
 				} else {
@@ -179,6 +183,9 @@ function convertSassToCss(finished) {
 				}
 				out += css;
 				out = out.replace(/(\/\*)(\@import )(.*)(\;)(\*\/)/g, "$2 url($3);");
+
+				//My regex was wrong and put --var(--blahblah !important) instead of --var(--blahblah) !important;
+				out = out.replace(/\!important\)/g, ") !important")
 
 				//next two are to handle the roboto import. It's a strange import and rather than handle it elegantly, I do this.
 				out = out.replace("url(url(", 'url("');
@@ -203,6 +210,7 @@ function processVariable(variableContent) {
 
 	switch (variableContent.type) {
 		case "SassString":
+
 			if (variableContent.value.includes("var(")) {
 				val = variableContent.value;
 			} else {
@@ -218,6 +226,7 @@ function processVariable(variableContent) {
 		case "SassList":
 			//Lists are strange objects, but the "expression" is what we want here.
 			val = variableContent.declarations[0].expression;
+
 			break;
 		case "default":
 			console.error("UNEXPECTED TYPE", variableContent.type);
@@ -229,16 +238,13 @@ function processVariable(variableContent) {
 
 function removeDependencies(finished) {
 	let packageJSON = require("./package.json");
-	console.log(packageJSON)
 	Object.keys(packageJSON.dependencies).forEach(dep => {
-		console.log(dep);
 		if (dep.includes("sass")) {
 			logToTerminal(`Removing dependency ${dep}`);
 			delete packageJSON.dependencies[dep];
 		}
 	});
 	Object.keys(packageJSON.devDependencies).forEach(dep => {
-		console.log(dep);
 		if (dep.includes("sass")) {
 			logToTerminal(`Removing devDependency ${dep}`);
 			delete packageJSON.devDependencies[dep];
