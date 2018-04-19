@@ -488,11 +488,11 @@ export default class Workspaces extends React.Component {
 						</div>
 						<div className="workspace-action-buttons">
 							<div title={importTooltip} className={importButtonClasses} onMouseDown={this.handleButtonClicks} onClick={allowImport ? this.openFileDialog : Function.prototype}>
-								<i className="workspace-action-button-icon ff-import"></i>
+								<i className="workspace-action-button-icon jpmuitk-icon-import"></i>
 								<div>Import</div>
 							</div>
 							<div title={exportTooltip} className={exportButtonClasses} onMouseDown={this.handleButtonClicks} onClick={allowExport ? this.exportWorkspace : Function.prototype}>
-								<i className="workspace-action-button-icon ff-export"></i>
+								<i className="workspace-action-button-icon jpmuitk-icon-export"></i>
 								<div>Export</div>
 							</div>
 
