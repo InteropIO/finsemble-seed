@@ -3,7 +3,7 @@ const path = require("path");
 //Have to monkeypatch this stupid sass importer so scrollbars don't throw it off...
 const scrollbar = path.join(__dirname, "./src-built-in/components/assets/css/perfect-scrollbar.css");
 //@TODO THIS NEEDS TO WORK FOR THE WHOLE THING TO WORK.
-fs.writeFileSync("./node_modules/sass-extract/lib/importer.js", fs.readFileSync("./node-sass-importer-overwrite.js", "utf-8"))
+fs.writeFileSync("./node_modules/sass-extract/lib/importer.js", fs.readFileSync("./node-sass-importer-overwrite.js", "utf-8"), "utf-8");
 
 const sassExtract = require("sass-extract");
 const glob = require("glob");
@@ -23,6 +23,22 @@ function mapFileReferencesToCSS(finished) {
 		files.forEach((filename) => {
 			let fileContents = fs.readFileSync(filename, 'utf-8');
 			fileContents = fileContents.replace(/scss/g, "css");
+			fileContents = fileContents.replace("_colorPalette'", "_colorPalette.css'");
+			fileContents = fileContents.replace("_dialogs'", "_dialogs.css'");
+			fileContents = fileContents.replace("_formElements'", "_formElements.css'");
+			fileContents = fileContents.replace("_globals'", "_globals.css'");
+			fileContents = fileContents.replace("_menus'", "_menus.css'");
+			fileContents = fileContents.replace("_scrollbars'", "_scrollbars.css'");
+			fileContents = fileContents.replace("_toolbar'", "_toolbar.css'");
+			fileContents = fileContents.replace("variables'", "variables.css'");
+			fileContents = fileContents.replace("_variablesDialogs'", "_variablesDialogs.css'");
+			fileContents = fileContents.replace("_variablesMenus'", "_variablesMenus.css'");
+			fileContents = fileContents.replace("_variablesToolbar'", "_variablesToolbar.css'");
+			fileContents = fileContents.replace("_variablesWindowFrame'", "_variablesWindowFrame.css'");
+			fileContents = fileContents.replace("_variablesWindowTitleBar'", "_variablesWindowTitleBar.css'");
+			fileContents = fileContents.replace("_windowFrame'", "_windowFrame.css'");
+			fileContents = fileContents.replace("_windowTitleBar'", "_windowTitleBar.css'");
+			fileContents = fileContents.replace("_workspaceManagement'", "_workspaceManagement.css'");
 			fs.writeFileSync(filename, fileContents, 'utf-8');
 		})
 		finished();
@@ -36,15 +52,16 @@ function convertSassToCss(finished) {
 			// shell.rm('f', filename);
 			let fileContents = fs.readFileSync(filename, 'utf-8');
 			console.log(filename);
-			fileContents = fileContents.replace('@import url(https://fonts.googleapis.com/css?family=Roboto)', '//@import url(https://fonts.googleapis.com/css?family=Roboto)"');
 			fileContents = fileContents.replace("_colorPalette'", "_colorPalette.scss'");
 			fileContents = fileContents.replace("_dialogs'", "_dialogs.scss'");
 			fileContents = fileContents.replace("_formElements'", "_formElements.scss'");
 			fileContents = fileContents.replace("_globals'", "_globals.scss'");
+			fileContents = fileContents.replace("/globals'", "/_globals.scss'");
+			fileContents = fileContents.replace("/menus'", "/_menus.scss'");
 			fileContents = fileContents.replace("_menus'", "_menus.scss'");
 			fileContents = fileContents.replace("_scrollbars'", "_scrollbars.scss'");
 			fileContents = fileContents.replace("_toolbar'", "_toolbar.scss'");
-			fileContents = fileContents.replace("variables'", "variables.scss'");
+			fileContents = fileContents.replace("variables'", "_variables.scss'");
 			fileContents = fileContents.replace("_variablesDialogs'", "_variablesDialogs.scss'");
 			fileContents = fileContents.replace("_variablesMenus'", "_variablesMenus.scss'");
 			fileContents = fileContents.replace("_variablesToolbar'", "_variablesToolbar.scss'");
@@ -53,12 +70,16 @@ function convertSassToCss(finished) {
 			fileContents = fileContents.replace("_windowFrame'", "_windowFrame.scss'");
 			fileContents = fileContents.replace("_windowTitleBar'", "_windowTitleBar.scss'");
 			fileContents = fileContents.replace("_workspaceManagement'", "_workspaceManagement.scss'");
+			fileContents = fileContents.replace("perfect-scrollbar'", "perfect-scrollbar.css'");
+			// fileContents = fileContents.replace(/(\s.*)(http.*)(\;)/g, '$1"$2"');
+
+
 			//Comment out the import.
 			fileContents = fileContents.replace(/(\@import.*\;)/g, "\/\*\$1\*\/");
 			fileContents = fileContents.replace(/scss/g, "css");
 
 
-			fileContents = fileContents.replace(/(\:)(.*)(\$)(.*)(\;)/g, `: var(--\$4);`);
+			fileContents = fileContents.replace(/(\:)(.*)(\$)(.*)(\;)/g, `: $2 var(--\$4);`);
 
 			fs.writeFileSync(filename, fileContents, 'utf-8');
 		});
@@ -138,8 +159,17 @@ function convertSassToCss(finished) {
 					css = css.replace(/(\$)(.*)(\b)/g, `var(--\$2)`);
 				}
 				out += css;
+				function replacer(match, p1, p2, p3, offset, string) {
+					// p1 is nondigits, p2 digits, and p3 non-alphanumerics
+					return [p1, p2, p3].join(' - ');
+				}
 				out = out.replace(/(\/\*)(\@import )(.*)(\;)(\*\/)/g, "$2 url($3);");
 
+				//next two are to handle the roboto import
+				out = out.replace("url(url(", 'url("');
+				out = out.replace("))", '")');
+
+				out = out.replace('//*@import url("https://fonts.googleapis.com/css?family=Roboto)";*/', '@import url("https://fonts.googleapis.com/css?family=Roboto)"')
 				fs.writeFileSync(filename.replace("scss", "css"), out, "utf-8");
 
 
@@ -150,9 +180,14 @@ function convertSassToCss(finished) {
 }
 
 function processVariable(variableContent) {
+
 	switch (variableContent.type) {
 		case "SassString":
-			val = variableContent.value
+			if (variableContent.value.includes("var(")) {
+				val = variableContent.value;
+			} else {
+				val = `"${variableContent.value}"`
+			}
 			break;
 		case "SassNumber":
 			val = variableContent.value + variableContent.unit;
@@ -161,7 +196,8 @@ function processVariable(variableContent) {
 			val = variableContent.value.hex;
 			break;
 		case "SassList":
-			val = processVariable(variableContent.value)
+			console.log("LIST", variableContent);
+			val = variableContent.declarations[0].expression;
 			break;
 		case "default":
 			console.error("UNEXPECTED TYPE", variableContent.type);
@@ -171,4 +207,4 @@ function processVariable(variableContent) {
 	return val;
 }
 
-async.series(convertSassToCss, mapFileReferencesToCSS)
+async.series([convertSassToCss, mapFileReferencesToCSS])
