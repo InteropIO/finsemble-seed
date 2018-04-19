@@ -11,7 +11,7 @@ export default class MinimizeAll extends React.Component {
 	render() {
 		//console.log('rendero')
 		let tooltip = "Minimize Workspace";
-		let buttonClass = "ff-minimize-all finsemble-toolbar-button-icon";
+		let buttonClass = "jpmuitk-icon-right-expand finsemble-toolbar-button-icon";
 		return (<FinsembleButton className={this.props.classes + " icon-only"} buttonType={["Toolbar"]} title={tooltip} onClick={this.MinimizeAll}>
 			<i className={buttonClass}></i>
 		</FinsembleButton>);

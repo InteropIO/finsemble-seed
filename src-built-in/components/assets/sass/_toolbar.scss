@@ -288,6 +288,13 @@ img.pinned-icon {
 	padding-top: 4px;
 }
 
+/* Tweaks for JPM icons */
+
+
 .jpmuitk-icon-document {
 	font-size: 17px;
+}
+
+.jpmuitk-icon-right-expand {
+	transform: rotate(90deg);
 }
