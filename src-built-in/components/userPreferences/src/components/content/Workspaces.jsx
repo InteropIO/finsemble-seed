@@ -466,10 +466,10 @@ export default class Workspaces extends React.Component {
 											</div>
 											<div className="individual-workspace-actions">
 												<div title={renameTooltip} className={renameButtonClasses} onMouseDown={this.handleButtonClicks} onClick={
-													allowRename ? () => { this.startEditingWorkspace(workspace.name) } : Function.prototype}><i className="ff-edit"></i></div>
+													allowRename ? () => { this.startEditingWorkspace(workspace.name) } : Function.prototype}><i className="jpmuitk-icon-edit"></i></div>
 												{workspace.name !== FSBL.Clients.WorkspaceClient.activeWorkspace.name &&
 													<div title={deleteTooltip} className={deleteButtonClasses} onMouseDown={this.handleButtonClicks} onClick={
-														allowDelete ? () => { this.deleteWorkspace(workspace.name); } : Function.prototype}><i className="ff-delete"></i></div>}
+														allowDelete ? () => { this.deleteWorkspace(workspace.name); } : Function.prototype}><i className="jpmuitk-icon-delete"></i></div>}
 											</div>
 										</FinsembleDraggable>
 									)
