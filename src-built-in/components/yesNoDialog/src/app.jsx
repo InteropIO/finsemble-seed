@@ -6,8 +6,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "../../assets/css/finsemble.scss";
 import { FinsembleDialog, FinsembleDialogQuestion, FinsembleDialogButton } from "@chartiq/finsemble-react-controls";
-
+const DEFAULT_TITLE = ""
 const DEFAULT_COMPONENT_STATE = {
+	title: DEFAULT_TITLE,
 	question: "No question.",
 	negativeResponseLabel: "No",
 	affirmativeResponseLabel: "Yes",
@@ -67,6 +68,7 @@ class YesNoDialog extends React.Component {
 	onShowRequested(err, response) {
 		let data = response.data;
 		this.setState({
+			title: typeof data.title === "undefined" ? DEFAULT_TITLE : data.title,
 			hideModalOnClose: typeof data.hideModalOnClose === "undefined" ? true : data.hideModalOnClose,
 			question: data.question,
 			negativeResponseLabel: data.negativeResponseLabel || "No",
@@ -132,8 +134,7 @@ class YesNoDialog extends React.Component {
 			behaviorOnResponse="hide"
 			onShowRequested={this.onShowRequested}
 			isModal={true}>
-			<div className="dialog-title">Congratulations! You have created a Dialog.
-			</div>
+			<div className="dialog-title">{this.state.title}</div>
 			<FinsembleDialogQuestion>
 				{this.state.question}
 			</FinsembleDialogQuestion>
