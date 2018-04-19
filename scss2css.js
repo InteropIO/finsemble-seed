@@ -1,8 +1,7 @@
 const fs = require("fs");
 const path = require("path");
-//Have to monkeypatch this stupid sass importer so scrollbars don't throw it off...
 const scrollbar = path.join(__dirname, "./src-built-in/components/assets/css/perfect-scrollbar.css");
-//@TODO THIS NEEDS TO WORK FOR THE WHOLE THING TO WORK.
+//Have to monkeypatch the stupid sass importer so scrollbars don't throw it off. It couldn't resolve the file because we were requiring a relative file that was importing a relative file. It just bombed. Our overwrite just hardcodes the path to src-built-in/assets/css/perfect-scrollbar.css
 fs.writeFileSync("./node_modules/sass-extract/lib/importer.js", fs.readFileSync("./node-sass-importer-overwrite.js", "utf-8"), "utf-8");
 
 const sassExtract = require("sass-extract");
@@ -18,11 +17,13 @@ function reEscape(s) {
 	return s.replace(/([.*+?^$|(){}\[\]])/mg, "\\$1");
 }
 
+//Go through all js/jsx files and change the imports from sscss to css
 function mapFileReferencesToCSS(finished) {
 	glob("src-built-in/**/*.js*", {}, (err, files) => {
 		files.forEach((filename) => {
 			let fileContents = fs.readFileSync(filename, 'utf-8');
 			fileContents = fileContents.replace(/scss/g, "css");
+			fileContents = fileContents.replace(/sass/g, "css");
 			fileContents = fileContents.replace("_colorPalette'", "_colorPalette.css'");
 			fileContents = fileContents.replace("_dialogs'", "_dialogs.css'");
 			fileContents = fileContents.replace("_formElements'", "_formElements.css'");
@@ -71,6 +72,9 @@ function convertSassToCss(finished) {
 			fileContents = fileContents.replace("_windowTitleBar'", "_windowTitleBar.scss'");
 			fileContents = fileContents.replace("_workspaceManagement'", "_workspaceManagement.scss'");
 			fileContents = fileContents.replace("perfect-scrollbar'", "perfect-scrollbar.css'");
+			fileContents = fileContents.replace(/sass/g, "css");
+			fileContents = fileContents.replace(new RegExp("\'\.\.\/sass\/", "g"), "'./");
+
 			// fileContents = fileContents.replace(/(\s.*)(http.*)(\;)/g, '$1"$2"');
 
 
@@ -174,10 +178,12 @@ function convertSassToCss(finished) {
 
 				//Removes the comment on the roboto import.
 				out = out.replace('//*@import url("https://fonts.googleapis.com/css?family=Roboto)";*/', '@import url("https://fonts.googleapis.com/css?family=Roboto)"');
-				fs.writeFileSync(filename.replace("scss", "css"), out, "utf-8");
+				let newFilename = filename.replace("scss", "css");
+				fs.writeFileSync(newFilename, out, "utf-8");
 
 				//Uncomment to delete the old sass files.
-				// shell.rm('f', filename);
+				shell.rm('-f', filename);
+				shell.mv(newFilename, newFilename.replace("/sass/", "/css/"))
 			});
 			finished();
 		});
