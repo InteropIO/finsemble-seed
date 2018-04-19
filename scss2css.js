@@ -58,7 +58,7 @@ function convertSassToCss(finished) {
 	glob("src-built-in/**/*.scss", {}, (err, files) => {
 		files.forEach(filename => {
 			let fileContents = fs.readFileSync(filename, 'utf-8');
-			logToTerminal("Find/replace inside of ", filename);
+			logToTerminal(`Find/replace inside of ${filename}`);
 
 			//Part of this process is generating css files from the scss files. Most of our imports didn't have a file extension. Without the file extension, node-sass bombs out.
 			fileContents = fileContents.replace("_colorPalette'", "_colorPalette.scss'");
@@ -114,7 +114,7 @@ function convertSassToCss(finished) {
 					return url;
 				}
 			}).then((rendered) => {
-				logToTerminal("Extracting variables from", filename);
+				logToTerminal(`Extracting variables from ${filename}`);
 
 				//Store the rendered CSS and variables on a global object that can be retrieved later.
 				if (!vars[filename]) {
@@ -229,16 +229,18 @@ function processVariable(variableContent) {
 
 function removeDependencies(finished) {
 	let packageJSON = require("./package.json");
+	console.log(packageJSON)
 	Object.keys(packageJSON.dependencies).forEach(dep => {
+		console.log(dep);
 		if (dep.includes("sass")) {
-			logToTerminal("Removing dependency", dep);
+			logToTerminal(`Removing dependency ${dep}`);
 			delete packageJSON.dependencies[dep];
 		}
 	});
 	Object.keys(packageJSON.dependencies).forEach(dep => {
 		if (dep.includes("sass")) {
-			logToTerminal("Removing devDependency", dep);
-			delete packageJSON.dependencies[dep];
+			logToTerminal(`Removing devDependency ${dep}`);
+			delete packageJSON.devDependencies[dep];
 		}
 	});
 	fs.writeFileSync("./package.json", beautify(JSON.stringify(packageJSON), { format: "json" }), "utf-8");
@@ -246,7 +248,7 @@ function removeDependencies(finished) {
 }
 
 function logNotice(finished) {
-	logToTerminal(chalk.yellow("NOTE: Go into build/defaultWebpackConfig and manually remove the sass-loader starting on line 53."));
+	logToTerminal(chalk.yellow("NOTE: Go into build/defaultWebpackConfig and manually remove the sass-loader starting on line 53"));
 }
 
 
