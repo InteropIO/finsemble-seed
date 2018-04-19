@@ -14,7 +14,7 @@ export default class WorkspaceActions extends React.Component {
 			{
 				method: this.createWorkspace,
 				label: "New Workspace",
-				iconClass: "jpmuitk-icon-document",
+				iconClass: "jpmuitk-icon-document-add",
 				id: "NewWorkspace"
 			},
 			{
