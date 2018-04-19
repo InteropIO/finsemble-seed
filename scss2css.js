@@ -237,7 +237,8 @@ function removeDependencies(finished) {
 			delete packageJSON.dependencies[dep];
 		}
 	});
-	Object.keys(packageJSON.dependencies).forEach(dep => {
+	Object.keys(packageJSON.devDependencies).forEach(dep => {
+		console.log(dep);
 		if (dep.includes("sass")) {
 			logToTerminal(`Removing devDependency ${dep}`);
 			delete packageJSON.devDependencies[dep];
