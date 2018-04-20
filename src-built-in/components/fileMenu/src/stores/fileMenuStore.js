@@ -23,7 +23,12 @@ var FileMenuStore = Object.assign({}, EventEmitter.prototype, {
 
 			FSBL.Clients.ConfigClient.getValue({ field: "finsemble" }, function (err, config) {
 				self.finsembleConfig = config;
-				let prompt = config.preferences.workspaceService.promptUserOnDirtyWorkspace;
+				let prompt;
+				try {
+					prompt = config.preferences.workspaceService.promptUserOnDirtyWorkspace;
+				} catch (e) {
+					prompt = false;
+				}
 				//Default to false.
 				PROMPT_ON_DIRTY = typeof prompt === null ? PROMPT_ON_DIRTY : prompt;
 			});
@@ -194,7 +199,7 @@ var Actions = {
 			});
 	},
 	spawnDocs() {
-		fin.desktop.System.openUrlWithBrowser("https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html", function () {
+		fin.desktop.System.openUrlWithBrowser("https://documentation.chartiq.com/finsemble/", function () {
 			console.log("successfully launched docs");
 		}, function (err) {
 			console.log("failed to launch docs");
