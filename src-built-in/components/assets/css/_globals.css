@@ -1,30 +1,33 @@
-@import './variables';
-@import url(https://fonts.googleapis.com/css?family=Roboto);
+@import  url('./_variables.css');
+
+@import  url("https://fonts.googleapis.com/css?family=Roboto");
 
 .hidden {
     display: none !important;
 }
 
-.fsbl-button  {
+.fsbl-button {
     margin: 0 auto;
     text-align: center;
     font-family: 'Roboto', sans-serif;
-    background: $dialog-button-background-color;
-    border:$dialog-button-border;
+    background: var(--dialog-button-background-color);
+    border: var(--dialog-button-border);
     color: #000;
     transition: .2s ease;
- }
- .fsbl-button i {
-     vertical-align: middle;
-     margin: 0 6px;
- }
+}
+
+.fsbl-button i {
+    vertical-align: middle;
+    margin: 0 6px;
+}
+
 .fsbl-share-scrim {
     position: fixed;
     display: flex;
     height: 100%;
     width: 100%;
     z-index: 1000000;
-    /*background-color: purple;*/
+  /*background-color: purple;*/
     top: 0;
     left: 0;
     justify-content: center;
@@ -44,15 +47,16 @@
     justify-content: center;
     align-items: center;
     padding: 1em;
-    background-color:$scrim-negative-overlay;
+    background-color: var(--scrim-negative-overlay);
 }
+
 .fsbl-share-scrim i {
     position: fixed;
     display: flex;
     height: 100%;
     width: 100%;
     z-index: 1000000;
-    background-color: $scrim-overlay;
+    background-color: var(--scrim-overlay);
     top: 0;
     left: 0;
     justify-content: center;
@@ -62,16 +66,18 @@
     color: #FFF !important;
     align-items: center;
 }
+
 .fsbl-share-scrim i.no {
-    background-color:$scrim-negative-overlay;
+    background-color: var(--scrim-negative-overlay);
 }
 
 .fsbl-button:hover {
-    background: $primary-accent-color;
-    border:1px solid $primary-accent-color;
+    background: var(--primary-accent-color);
+    border: 1px solid var(--primary-accent-color);
     transition: 0.2s ease-in;
     cursor: pointer;
 }
+
 .fsbl-button:hover {
     color: #FFF;
     transition: 0.2s ease-out;
@@ -87,19 +93,19 @@
 .fsbl-button-md {
     width: 210px;
     font-size: 13pt;
-    padding:9px 0px;
+    padding: 9px 0px;
     margin: 10px auto;
 }
 
 .fsbl-button-sm {
     width: 70px;
-    padding:5px 0px;
-    margin:5px auto;
+    padding: 5px 0px;
+    margin: 5px auto;
 }
 
 /*widgets*/
 .ciq--div {
-  padding:.25em;
+    padding: .25em;
 }
 
 .flex-start {
@@ -112,5 +118,5 @@ i, i:before, i:after, .fsbl-window-manager-icon {
 }
 
 body.dialog input:focus {
-    border: 1px solid $primary-accent-color;
+    border: 1px solid var(--primary-accent-color);
 }

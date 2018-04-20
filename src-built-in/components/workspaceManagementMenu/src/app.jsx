@@ -12,8 +12,8 @@ import WorkspaceList from "./components/workspaceList";
 import { FinsembleMenu } from "@chartiq/finsemble-react-controls";
 
 import "../../assets/css/finfont.css";
-import "../../assets/css/finsemble.scss";
-import "../workspaceManagementMenu.scss";
+import "../../assets/css/finsemble.css";
+import "../workspaceManagementMenu.css";
 let WorkspaceManagementMenuStore;
 // var Test = require('./test');
 
