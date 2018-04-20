@@ -22,7 +22,7 @@
     },
     "runtime": {
         "arguments": "--noerrdialogs  --v=4 --no-sandbox  --enable-crash-reporting --framestrategy=frames",
-        "version": "8.56.28.36"
+        "version": "alpha"
     },
     "shortcut": {
         "company": "ChartIQ",
