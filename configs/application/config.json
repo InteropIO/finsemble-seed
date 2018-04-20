@@ -32,7 +32,9 @@
 			"blacklist": [],
 			"whitelist": [],
 			"onlySpawned": true,
-			"throttle": 20
+			"throttle": 20,
+			"focusDelay": 30,
+			"eventIgnore": 50
 		}
 	},
 	"splinteringConfig": {

@@ -9,11 +9,16 @@ export default class AutoArrange extends React.Component {
 		};
 		this.bindCorrectContext();
 		let self = this;
-		FSBL.Clients.RouterClient.subscribe('DockingService.AutoarrangeStatus', function (err, response) {
-			self.setState({
-				isAutoArranged: response.data.isAutoArranged
+		FSBL.Clients.LauncherClient.getMonitorInfo({
+			windowIdentifier: FSBL.Clients.LauncherClient.windowIdentifier
+		}, (err, monitorInfo) => {
+			FSBL.Clients.RouterClient.subscribe('DockingService.AutoarrangeStatus', function (err, response) {
+				self.setState({
+					isAutoArranged: response.data.isAutoArranged[monitorInfo.name]
+				});
 			});
-		});
+		})
+
 	}
 
 	bindCorrectContext(){
