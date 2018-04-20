@@ -124,7 +124,7 @@ img {
     width: 36px;
     min-width: 36px;
     height: 36px;
-    background-color: #0b408f;
+    background-color: var(--coolGrey600);
     display: flex;
     align-items: center;
 }
@@ -195,8 +195,8 @@ img {
 .footerRight .openButton {
     cursor: pointer;
     align-self: flex-end;
-    background-color: #2068c3;
-    border: solid 1px #91c5ff;
+    background-color: var(--coolGrey600);
+    border: solid 1px var(--coolGrey400);
     font-size: 12px;
     color: #ffffff;
     text-align: center;
@@ -261,8 +261,8 @@ img {
     text-align: center;
     align-self: center;
     border: solid 1px #dddddd;
-    background-color: #2068c3;
-    border: solid 1px #91c5ff;
+    background-color: var(--coolGrey600);
+    border: solid 1px var(--coolGrey400);
 }
 
 ::-webkit-scrollbar-track {

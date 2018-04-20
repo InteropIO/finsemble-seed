@@ -39,13 +39,16 @@ export default class ComplexMenu extends React.Component {
 		var self = this;
 		let navEntries = this.props.navOptions;
 		var activeContent = [];
-		console.log("self.props.headerImgUrl", self.props.headerImgUrl)
+		console.log("self.props.headerImgUrl", self.props.headerImgUrl);
+		let headerImgStyle = {
+			paddingLeft: self.props.headerImgUrl === "" ? "10px" : "0px"
+		};
 		return (<div className="user-preferences" >
 			<div className="complex-menu-wrapper">
 				<div className="container">
 					<div className="complex-menu-left-nav">
-						<div className="complex-menu-left-nav-header">
-							<img className="complex-menu-left-nav-header-img" src={self.props.headerImgUrl} /> {this.props.title}
+						<div className="complex-menu-left-nav-header" style={headerImgStyle}>
+							{self.props.headerImgUrl !== "" && <img className="complex-menu-left-nav-header-img" src={self.props.headerImgUrl} />} {this.props.title}
 						</div>
 						{
 							navEntries.map((el, i) => {
