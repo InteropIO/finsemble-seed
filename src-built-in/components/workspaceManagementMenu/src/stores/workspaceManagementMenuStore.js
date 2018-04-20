@@ -146,15 +146,8 @@ Actions = {
 		Actions.blurWindow();
 
 		async.waterfall([
-			(done) => {
-				//Save active workspace, then get a name, etc.
-				FSBL.Clients.WorkspaceClient.saveAs({
-					name: FSBL.Clients.WorkspaceClient.activeWorkspace.name,
-					force: true
-				}, () => {
-					done();
-				});
-			},
+			Actions.askIfUserWantsToSave,
+			Actions.handleSaveDialogResponse,
 			Actions.spawnWorkspaceInputField,
 			Actions.validateWorkspaceInput,
 			Actions.checkIfWorkspaceAlreadyExists,
@@ -313,15 +306,43 @@ Actions = {
 	switchToWorkspace: function (data) {
 		Actions.blurWindow();
 		let name = data.name;
-		//Persist active workspace, then switch.
-		FSBL.Clients.WorkspaceClient.saveAs({
-			name: FSBL.Clients.WorkspaceClient.activeWorkspace.name,
-			force: true
-		}, () => {
+		let activeWorkspace = WorkspaceManagementStore.getValue("activeWorkspace");
+		/**
+		 * Actually perform the switch. Happens after we ask the user what they want.
+		 *
+		 */
+		function switchIt() {
 			FSBL.Clients.WorkspaceClient.switchTo({
 				name: name
 			});
-		});
+		}
+		/**
+		 * Make sure the user wants to do what they say that they want to do.
+		 * @param {any} callback
+		 */
+		function askAboutReload(callback) {
+			Actions.spawnDialog("yesNo", {
+				question: "You are about to reload this workspace. Do you wish to save your changes?"
+			}, callback);
+		}
+
+		/**
+		 * If the workspace is dirty, we need to do more than if it's clean. We don't want users to lose unsaved work.
+		 */
+		if (activeWorkspace.isDirty) {
+			//We want to ask the user to save. But if they're trying to reload the workspace, the mssage needs to be different. The first if block just switches that method.
+			let firstMethod = Actions.askIfUserWantsToSave;
+			if (name === FSBL.Clients.WorkspaceClient.activeWorkspace.name) {
+				firstMethod = askAboutReload;
+			}
+			async.waterfall([
+				firstMethod,
+				Actions.handleSaveDialogResponse,
+				switchIt
+			], Actions.onAsyncComplete);
+		} else {
+			switchIt();
+		}
 	},
 
 	/*********************************************************************************************
