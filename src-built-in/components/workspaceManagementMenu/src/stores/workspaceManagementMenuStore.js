@@ -6,6 +6,7 @@
 import async from "async";
 //When a user cancels the save workspace dialog, we throw an error, which short-circuits the async call.
 const SAVE_DIALOG_CANCEL_ERROR = "Cancel";
+let PROMPT_ON_SAVE = false;
 let WorkspaceManagementStore, Actions, WindowClient, StoreClient, Logger, ToolbarStore, WorkspaceManagementGlobalStore;
 //Initial data for the store.
 let defaultData = {
@@ -70,10 +71,8 @@ Actions = {
 						Actions.renameWorkspace(action.data);
 						break;
 				}
-
 			});
-		})
-
+		});
 	},
 
 	/*********************************************************************************************
@@ -144,17 +143,21 @@ Actions = {
 			WorkspaceManagementStore.setValue({ field: "newWorkspaceDialogIsActive", value: true });
 		}
 		Actions.blurWindow();
-
-		async.waterfall([
-			Actions.askIfUserWantsToSave,
-			Actions.handleSaveDialogResponse,
+		let tasks = [
 			Actions.spawnWorkspaceInputField,
 			Actions.validateWorkspaceInput,
 			Actions.checkIfWorkspaceAlreadyExists,
 			Actions.askIfUserWantsNewWorkspace,
 			createIt,
 			Actions.notifyUserOfNewWorkspace
-		], Actions.onAsyncComplete);
+		];
+		if (PROMPT_ON_SAVE) {
+			tasks = [
+				Actions.askIfUserWantsToSave,
+				Actions.handleSaveDialogResponse
+			].concat(tasks);
+		}
+		async.waterfall(tasks, Actions.onAsyncComplete);
 
 	},
 	/**
@@ -326,20 +329,43 @@ Actions = {
 			}, callback);
 		}
 
+		function autoSave(callback) {
+			let activeName = FSBL.Clients.WorkspaceClient.activeWorkspace.name;
+			FSBL.Clients.WorkspaceClient.saveAs({
+				name: activeName,
+				force: true
+			}, (err, response) => {
+				callback(err, null);
+			});
+		}
 		/**
 		 * If the workspace is dirty, we need to do more than if it's clean. We don't want users to lose unsaved work.
 		 */
+		let tasks = [];
 		if (activeWorkspace.isDirty) {
-			//We want to ask the user to save. But if they're trying to reload the workspace, the mssage needs to be different. The first if block just switches that method.
-			let firstMethod = Actions.askIfUserWantsToSave;
-			if (name === FSBL.Clients.WorkspaceClient.activeWorkspace.name) {
-				firstMethod = askAboutReload;
+			let firstMethod = autoSave,
+				secondMethod = null;
+			if (PROMPT_ON_SAVE === true) {
+				//We want to ask the user to save. But if they're trying to reload the workspace, the mssage needs to be different. The first if block just switches that method.
+				firstMethod = Actions.askIfUserWantsToSave;
+				if (name === FSBL.Clients.WorkspaceClient.activeWorkspace.name) {
+					firstMethod = askAboutReload;
+				}
+				//If we are not autosaving, we need to process the dialog input.
+				secondMethod = Actions.handleSaveDialogResponse;
 			}
-			async.waterfall([
-				firstMethod,
-				Actions.handleSaveDialogResponse,
-				switchIt
-			], Actions.onAsyncComplete);
+
+			//Build the task list.
+			tasks = [firstMethod];
+
+			if (secondMethod) {
+				tasks.push(secondMethod);
+			}
+
+			//Switch is the last thing we do.
+			tasks.push(switchIt);
+
+			async.waterfall(tasks, Actions.onAsyncComplete);
 		} else {
 			switchIt();
 		}
@@ -643,6 +669,15 @@ function getToolbarStore(done) {
 	}, done);
 }
 
+function getPreferences(done) {
+	FSBL.Clients.ConfigClient.getValue({ field: "finsemble.preferences.workspaceService.promptUserOnDirtyWorkspace" }, (err, data) => {
+		let prompt = data;
+		//default to false.
+		PROMPT_ON_SAVE = prompt === null ? PROMPT_ON_SAVE : prompt;
+		done();
+	});
+}
+
 /**
  * Initializes the store for the Workspace Management Menu.
  *
@@ -653,7 +688,7 @@ function initialize(cb) {
 	StoreClient = FSBL.Clients.DistributedStoreClient;
 	Logger = FSBL.Clients.Logger;
 	async.parallel(
-		[createGlobalStore, createLocalStore, getToolbarStore],
+		[createGlobalStore, createLocalStore, getToolbarStore, getPreferences],
 		function () {
 			Actions.initialize();
 			cb(WorkspaceManagementStore);
