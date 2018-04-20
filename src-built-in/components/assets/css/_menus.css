@@ -1,0 +1,172 @@
+@import  url('_globals.css');
+
+@import  url('_scrollbars.css');
+
+@import  url('_variablesMenus.css');
+
+body.menu {
+    margin: 0px;
+    font-family: 'Open Sans';
+    font-size: 14px;
+    font-weight: 300;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    height: 100%;
+    -webkit-user-select: none;
+    background-color: var(--menu-background-color);
+}
+
+.menu-header {
+    display: flex;
+    flex-direction: row;
+}
+
+.menu-section-label {
+    padding: 10px 0px 10px 20px;
+    color: var(--primary-accent-color);
+    text-transform: uppercase;
+    font-weight: 700;
+    font-family: Open Sans;
+    width: 100%;
+}
+
+.menu {
+    background: var(--menu-primary-background-color);
+    color: var(--menu-primary-font-color);
+}
+
+.menu .menu-section {
+    overflow-x: hidden;
+    overflow-y: auto;
+    list-style-type: none;
+    width: 100%;
+    padding-left: 0;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.menu-secondary {
+    background: var(--menu-secondary-background-color);
+    padding: 5px 0px;
+}
+
+.menu-primary .menu-item:hover {
+    background: var(--menu-primary-hover-color);
+}
+
+.menu-secondary .menu-item:hover {
+    background: var(--menu-secondary-hover-color);
+}
+
+.menu-item {
+    display: flex;
+    flex-direction: row;
+    padding-left: 20px;
+    padding-right: 10px;
+    cursor: pointer;
+}
+
+.menu-item-function {
+    padding: 6px 0px 6px 20px;
+}
+
+.menu-item-label {
+    align-self: flex-start;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 8px 0px;
+    height: 100%;
+    flex: .75;
+}
+
+.menu-item-label-fullwidth {
+    flex: 1;
+}
+
+.menu-item-actions {
+    align-self: center;
+    display: flex;
+    justify-content: flex-end;
+    flex: .25;
+}
+
+.menu-item-action {
+    display: flex;
+    padding: 0em .15em;
+}
+
+.ff-pin, .ff-delete {
+    margin-top: 1px;
+    padding-top: 5px;
+    width: 25px;
+    text-align: center;
+    border: 1px solid transparent;
+}
+
+.ff-delete:hover {
+    color: white;
+    background-color: var(--red200);
+    border-radius: 4px;
+}
+
+.ff-pin:hover {
+    color: var(--grey100);
+    width: 25px;
+    border: 1px solid var(--grey);
+    border-radius: 4px;
+}
+
+.finsemble-item-pinned {
+    color: white;
+    width: 25px;
+    background-color: var(--grey);
+    border-radius: 4px;
+}
+
+.finsemble-item-pinned:hover {
+    color: white;
+    width: 25px;
+    background-color: var(--grey400);
+    border-radius: 4px;
+}
+
+/*
+.app-launcher-pinned:hover {
+	color:   var(--menu-primary-font-color);
+}
+*/
+.ff-new-workspace, .ff-save-1, .ff-saveas-1, .ff-settings, .ff-list {
+    padding-right: 7px;
+    margin-top: 2px;
+}
+
+.jpmuitk-icon-document-add, .jpmuitk-icon-save, .jpmuitk-icon-save-solid, .jpmuitk-icon-report-builder {
+    padding-right: 7px;
+}
+
+.jpmuitk-icon-report-builder {
+    margin-top: 3px;
+}
+
+.jpmuitk-icon-pin, .jpmuitk-icon-delete {
+    margin-top: 1px;
+    padding-top: 5px;
+    width: 25px;
+    height: 19px;
+    text-align: center;
+    border: 1px solid transparent;
+}
+
+.jpmuitk-icon-delete:hover {
+    color: white;
+    background-color: var(--red200);
+    border-radius: 4px;
+}
+
+.jpmuitk-icon-:hover {
+    color: var(--grey100);
+    width: 25px;
+    border: 1px solid var(--grey);
+    border-radius: 4px;
+}

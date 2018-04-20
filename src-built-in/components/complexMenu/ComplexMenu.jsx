@@ -4,8 +4,8 @@
 */
 import React from "react";
 import "../assets/css/finfont.css";
-import "../assets/css/finsemble.scss";
-import "./menu.scss";
+import "../assets/css/finsemble.css";
+import "./menu.css";
 
 
 

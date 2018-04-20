@@ -1,5 +1,6 @@
-@import './variables';
-@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+@import  url('./_variables.css');
+
+@import  url("https://fonts.googleapis.com/css?family=Open+Sans");
 
 .hidden {
     display: none !important;
@@ -11,7 +12,7 @@
     height: 100%;
     width: 100%;
     z-index: 1000000;
-    /*background-color: purple;*/
+  /*background-color: purple;*/
     top: 0;
     left: 0;
     justify-content: center;
@@ -31,15 +32,16 @@
     justify-content: center;
     align-items: center;
     padding: 1em;
-    background-color:$scrim-negative-overlay;
+    background-color: var(--scrim-negative-overlay);
 }
+
 .fsbl-share-scrim i {
     position: fixed;
     display: flex;
     height: 100%;
     width: 100%;
     z-index: 1000000;
-    background-color: $scrim-overlay;
+    background-color: var(--scrim-overlay);
     top: 0;
     left: 0;
     justify-content: center;
@@ -49,13 +51,14 @@
     color: #FFF !important;
     align-items: center;
 }
+
 .fsbl-share-scrim i.no {
-    background-color:$scrim-negative-overlay;
+    background-color: var(--scrim-negative-overlay);
 }
 
 /*widgets*/
 .ciq--div {
-  padding:.25em;
+    padding: .25em;
 }
 
 .flex-start {
@@ -68,46 +71,37 @@ i, i:before, i:after, .fsbl-window-manager-icon {
 }
 
 body.dialog input:focus {
-    border-bottom: 1px solid $blue;
+    border-bottom: 1px solid var(--blue);
 }
 
 /* Buttons */
-.fsbl-button  {
+.fsbl-button {
     margin: 0 4px;
     text-align: center;
     font-family: 'Open Sans', sans-serif;
-    background: $dialog-button-background-color;
-    color: $grey200;
+    background: var(--dialog-button-background-color);
+    color: var(--grey200);
     transition: .2s ease;
     text-transform: uppercase;
     font-stretch: normal;
     line-height: normal;
     cursor: pointer;
- }
+}
 
- .fsbl-button i {
-     vertical-align: middle;
-     margin: 0 6px;
- }
-
-// .fsbl-button:hover {
-//     background: $primary-accent-color;
-//     border:1px solid $primary-accent-color;
-//     transition: 0.2s ease-out;
-//     cursor: pointer;
-//     color: #FFF;
-// }
+.fsbl-button i {
+    vertical-align: middle;
+    margin: 0 6px;
+}
 
 .fsbl-button-lg-positive {
     width: 223px;
     height: 40px;
-    border:$dialog-button-border;
+    border: var(--dialog-button-border);
     font-weight: bold;
     font-size: 13px;
     letter-spacing: 1.6px;
     line-height: 38px;
     padding: 11px 32px;
-//    margin: 15px auto;
 }
 
 .fsbl-button-lg-neutral {
@@ -117,18 +111,16 @@ body.dialog input:focus {
     letter-spacing: 1.6px;
     line-height: 38px;
     padding: 11px 32px;
-//    margin: 15px auto;
 }
 
 .fsbl-button-md-positive {
     width: 147px;
     height: 32px;
-    border:$dialog-button-border;
+    border: var(--dialog-button-border);
     font-weight: bold;
     font-size: 13px;
     letter-spacing: 0.4px;
     line-height: 33px;
-//    margin: 10px auto;
 }
 
 .fsbl-button-md-neutral {
@@ -137,19 +129,17 @@ body.dialog input:focus {
     font-size: 13px;
     letter-spacing: 0.4px;
     line-height: 34px;
-//    margin: 10px auto;
 }
 
 .fsbl-button-sm-positive {
     width: 110px;
     height: 20px;
-    border:$dialog-button-border;
+    border: var(--dialog-button-border);
     font-weight: bold;
     font-size: 10px;
     letter-spacing: 1px;
     line-height: 20px;
     padding: 3px 11px;
-//    margin: 5px auto;
 }
 
 .fsbl-button-sm-neutral {
@@ -159,5 +149,4 @@ body.dialog input:focus {
     padding: 3px 11px;
     letter-spacing: 1px;
     line-height: 20px;
-//    margin: 5px auto;
 }

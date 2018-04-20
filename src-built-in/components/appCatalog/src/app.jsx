@@ -7,8 +7,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 //Finsemble font-icons, general styling, and specific styling.
 import "../../assets/css/finfont.css";
-import "../../assets/css/finsemble.scss";
-import "../appCatalog.scss";
+import "../../assets/css/finsemble.css";
+import "../appCatalog.css";
 import ComplexMenu from "../../complexMenu/ComplexMenu";
 import AppContent from "./components/AppContent";
 
