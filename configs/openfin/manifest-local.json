@@ -65,9 +65,9 @@
         "importConfig": [
             "$applicationRoot/configs/application/config.json"
         ],
-        "windowOverrides": {
-            "open": true,
-            "alert": true
+        "monkeyPatch": {
+            "window-open": true,
+            "window-alert": true
         }
     }
 }
