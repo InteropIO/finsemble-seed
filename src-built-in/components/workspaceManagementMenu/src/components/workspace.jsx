@@ -42,7 +42,7 @@ export default class Workspace extends React.Component {
 		let { workspace, itemActions } = this.props;
 		//Remove trashcan for activeWorkspace. Prevents it from being deleted and causing issues.
 		if (this.props.isActiveWorkspace) {
-			let index = itemActions.findIndex(el => el.iconClass.includes('ff-delete'));
+			let index = itemActions.findIndex(el => el.iconClass.includes('jpmuitk-icon-delete'));
 			itemActions.splice(index, 1);
 		}
 		return itemActions.map(function (action, index) {

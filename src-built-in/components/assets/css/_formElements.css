@@ -1,0 +1,8 @@
+.form-group label {
+    padding-top: 7px;
+    flex: .4;
+}
+
+.form-group input, .form-group select {
+    flex: .65;
+}

@@ -56,7 +56,7 @@ export default class MinimizeButton extends React.Component {
 	render() {
 		return (<div className="fsbl-icon fsbl-minimize cq-no-drag" id="fsbl-window-minimize" data-hover={this.state.hoverState} title="Minimize" onClick={this.onClick}>
 			<HoverDetector edge="top" hoverAction={this.hoverAction} />
-			<i className="ff-minimize"></i>
+			<i className="jpmuitk-icon-remove"></i>
 		</div>);
 	}
 }

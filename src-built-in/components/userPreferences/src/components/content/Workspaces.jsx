@@ -466,10 +466,10 @@ export default class Workspaces extends React.Component {
 											</div>
 											<div className="individual-workspace-actions">
 												<div title={renameTooltip} className={renameButtonClasses} onMouseDown={this.handleButtonClicks} onClick={
-													allowRename ? () => { this.startEditingWorkspace(workspace.name) } : Function.prototype}><i className="ff-edit"></i></div>
+													allowRename ? () => { this.startEditingWorkspace(workspace.name) } : Function.prototype}><i className="jpmuitk-icon-edit"></i></div>
 												{workspace.name !== FSBL.Clients.WorkspaceClient.activeWorkspace.name &&
 													<div title={deleteTooltip} className={deleteButtonClasses} onMouseDown={this.handleButtonClicks} onClick={
-														allowDelete ? () => { this.deleteWorkspace(workspace.name); } : Function.prototype}><i className="ff-delete"></i></div>}
+														allowDelete ? () => { this.deleteWorkspace(workspace.name); } : Function.prototype}><i className="jpmuitk-icon-delete"></i></div>}
 											</div>
 										</FinsembleDraggable>
 									)
@@ -488,11 +488,11 @@ export default class Workspaces extends React.Component {
 						</div>
 						<div className="workspace-action-buttons">
 							<div title={importTooltip} className={importButtonClasses} onMouseDown={this.handleButtonClicks} onClick={allowImport ? this.openFileDialog : Function.prototype}>
-								<i className="workspace-action-button-icon ff-import"></i>
+								<i className="workspace-action-button-icon jpmuitk-icon-import"></i>
 								<div>Import</div>
 							</div>
 							<div title={exportTooltip} className={exportButtonClasses} onMouseDown={this.handleButtonClicks} onClick={allowExport ? this.exportWorkspace : Function.prototype}>
-								<i className="workspace-action-button-icon ff-export"></i>
+								<i className="workspace-action-button-icon jpmuitk-icon-export"></i>
 								<div>Export</div>
 							</div>
 

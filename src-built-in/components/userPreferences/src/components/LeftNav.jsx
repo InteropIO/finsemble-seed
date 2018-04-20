@@ -32,7 +32,7 @@ export default class LeftNav extends React.Component {
 
         return <div className="complex-menu-left-nav">
             <div className="complex-menu-left-nav-header">
-                <img className="complex-menu-left-nav-header-img" src={this.state.headerImgUrl} /> Preferences
+                Preferences
             </div>
             {
                 navEntries.map((el, i) => {

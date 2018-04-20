@@ -111,7 +111,7 @@ define(['https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.16/
 		baseJsUrl: "https://widgetcdn.chartiq.com/v2/2.1.0/js/",
 		themeCSS: "../../assets/css/widgets/",
 		darkLogos: true,
-		webFonts: ['Roboto:200,300,300i,400,700']
+		webFonts: ['Open Sans:200,300,300i,400,700']
 	};
 
 	if (portalSettings.darkLogos) {

@@ -7,7 +7,7 @@
   float: left;
 }
 .ciq-Quote h2, .ciq-Quote h2 span {
-  font-family: "Roboto Condensed";
+  font-family: "Open Sans Condensed";
   font-weight: 500;
   font-size: 1.3em !important;
   border-bottom: 0px transparent !important;
@@ -76,3 +76,4 @@
 }
 .ciq-Quote .ciq-sym-change {
   font-size: .75em;
+}

@@ -4,7 +4,7 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
-import "../../assets/css/finsemble.scss";
+import "../../assets/css/finsemble.css";
 
 import { FinsembleDialog, FinsembleDialogQuestion, FinsembleDialogTextInput, FinsembleDialogButton } from "@chartiq/finsemble-react-controls";
 /**
@@ -111,18 +111,20 @@ class SingleInputDialog extends React.Component {
 			onShowRequested={this.onShowRequested}
 			isModal={true}>
 			<FinsembleDialogQuestion question={this.state.inputLabel} />
-			<FinsembleDialogTextInput maxLength="40" onInputChange={this.setInputValue} />
-			<FinsembleDialogButton buttonSize="md" onClick={() => { this.sendResponse("affirmative"); }}>
-				{this.state.affirmativeResponseLabel}
-			</FinsembleDialogButton>
-			{
-				this.state.showCancelButton &&
-				<FinsembleDialogButton buttonSize="md" onClick={() => {
-					this.sendResponse("cancel");
-				}}>
-					{this.state.cancelResponseLabel}
+			<div className="button-wrapper">
+				<FinsembleDialogTextInput maxLength="40" onInputChange={this.setInputValue} placeholder="Enter Name" autofocus />
+				<FinsembleDialogButton buttonSize="md-positive" onClick={() => { this.sendResponse("affirmative"); }}>
+					{this.state.affirmativeResponseLabel}
 				</FinsembleDialogButton>
-			}
+				{
+					this.state.showCancelButton &&
+					<FinsembleDialogButton buttonSize="md-neutral" onClick={() => {
+						this.sendResponse("cancel");
+					}}>
+						{this.state.cancelResponseLabel}
+					</FinsembleDialogButton>
+				}
+			</div>
 		</FinsembleDialog>);
 	}
 }

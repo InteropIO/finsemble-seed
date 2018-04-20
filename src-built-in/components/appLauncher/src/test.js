@@ -55,7 +55,7 @@ function unpinAllComponents() {
 		try {
 			let components = Array.from(document.querySelectorAll(".ComponentList > ul > .menu-item"));
 			for (var i = 0; i < components.length; i++) {
-				var component = components[i].getElementsByClassName("ff-pin")[0];
+				var component = components[i].getElementsByClassName("jpmuitk-icon-pin")[0];
 				if (component.className.includes("pinned")) {
 					component.click();
 				}
@@ -78,7 +78,7 @@ function pinAllComponents() {
 		try {
 			let components = Array.from(document.querySelectorAll(".ComponentList > ul > .menu-item"));
 			for (var i = 0; i < components.length; i++) {
-				var component = components[i].getElementsByClassName("ff-pin")[0];
+				var component = components[i].getElementsByClassName("jpmuitk-icon-pin")[0];
 				if (!component.className.includes("pinned")) {
 					component.click();
 				}

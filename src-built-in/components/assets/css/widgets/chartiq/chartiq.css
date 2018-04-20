@@ -20,7 +20,7 @@ for building additional themes.
 
  */
 /* TODO: deal with translations on all :after and :before content */
-@import url("https://fonts.googleapis.com/css?family=Roboto:400,700,500,100,300,400italic|Roboto+Condensed:400,700,300");
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,700,500,100,300,400italic|Open+Sans+Condensed:400,700,300");
 /* Default (Light) Theme */
 /* --------------------------------------------------------- FIELDS, SELECTS, INPUTS --------------------------------------------------------- */
 /* Inputs */
@@ -584,7 +584,7 @@ cq-heading {
   line-height: 18px;
   color: #398dff;
   font-weight: 400;
-  font-family: "Roboto Condensed", sans-serif; }
+  font-family: "Open Sans Condensed", sans-serif; }
 
 cq-item .ciq-radio,
 cq-item .ciq-checkbox {
@@ -981,7 +981,7 @@ cq-lookup-filters cq-filter {
   text-transform: uppercase;
   color: #999;
   font-weight: 700;
-  font-family: "Roboto Condensed", sans-serif;
+  font-family: "Open Sans Condensed", sans-serif;
   cursor: pointer;
   transition: color .20s .0s; }
   cq-lookup-filters cq-filter.true, .no-touch cq-lookup-filters cq-filter.true:hover, cq-lookup-filters cq-filter.true:active {
@@ -1251,7 +1251,7 @@ cq-toolbar .ciq-heading {
   line-height: 27px;
   font-size: 11px;
   text-transform: uppercase;
-  font-family: "Roboto Condensed", sans-serif;
+  font-family: "Open Sans Condensed", sans-serif;
   color: #999999; }
 
 cq-toolbar .ciq-select {
@@ -1415,7 +1415,7 @@ cq-hu-dynamic {
   height: 140px;
   color: #4ea1fe;
   font-weight: 500;
-  font-family: "Roboto Condensed", sans-serif;
+  font-family: "Open Sans Condensed", sans-serif;
   left: 200px;
   top: 0px;
   z-index: 31;
@@ -1471,7 +1471,7 @@ cq-hu-dynamic cq-hu-col1 {
   width: 90px; }
 
 cq-hu-dynamic cq-hu-date {
-  font-family: "Roboto", sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 10px;
   color: #666;
   font-weight: 300; }
@@ -1557,7 +1557,7 @@ cq-hu-static {
   left: 250px;
   display: none;
   font-weight: 500;
-  font-family: "Roboto Condensed", sans-serif;
+  font-family: "Open Sans Condensed", sans-serif;
   background: #fff;
   padding-left: 15px; }
   .break-md cq-hu-static, .break-lg cq-hu-static {
@@ -1618,7 +1618,7 @@ cq-hu-static {
     content: "V:"; }
 
 #mSticky {
-  font-family: "Roboto Condensed", sans-serif;
+  font-family: "Open Sans Condensed", sans-serif;
   font-size: 13px;
   font-weight: bold;
   border-radius: 0;
@@ -1633,7 +1633,7 @@ cq-hu-static {
 
 #mouseDeleteInstructions {
   text-align: center;
-  font-family: "Roboto", sans-serif;
+  font-family: "Open Sans", sans-serif;
   padding: 5px 0 0 0; }
 
 /* --------------------------------------------------------- FOOTER --------------------------------------------------------- */
@@ -2099,7 +2099,7 @@ cq-chart-title {
   display: none;
   position: relative;
   background: #fff;
-  font-family: "Roboto Condensed", sans-serif;
+  font-family: "Open Sans Condensed", sans-serif;
   font-weight: 700;
   float: none;
   margin: 10px 10px;
@@ -2116,7 +2116,7 @@ cq-chart-title cq-symbol {
   font-size: 28px; }
 
 cq-chart-title cq-chart-price {
-  font-family: "Roboto", sans-serif;
+  font-family: "Open Sans", sans-serif;
   display: inline-block;
   line-height: 13px;
   font-size: 11px;
@@ -2433,7 +2433,7 @@ cq-theme-piece {
   color: transparent; }
 
 .stx_xaxis, .stx_yaxis {
-  font-family: "Roboto", sans-serif; }
+  font-family: "Open Sans", sans-serif; }
 
 .stx_line_chart {
   width: 2px; }
@@ -3106,7 +3106,7 @@ cq-timezone-dialog .instruct {
   line-height: 25px;
   color: #999;
   font-weight: 400;
-  font-family: "Roboto Condensed", sans-serif;
+  font-family: "Open Sans Condensed", sans-serif;
   border: none; }
 
 #themeDialog li div.stx-data {

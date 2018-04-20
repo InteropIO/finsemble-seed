@@ -4,10 +4,11 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
-import "../../assets/css/finsemble.scss";
+import "../../assets/css/finsemble.css";
 import { FinsembleDialog, FinsembleDialogQuestion, FinsembleDialogButton } from "@chartiq/finsemble-react-controls";
-
+const DEFAULT_TITLE = ""
 const DEFAULT_COMPONENT_STATE = {
+	title: DEFAULT_TITLE,
 	question: "No question.",
 	negativeResponseLabel: "No",
 	affirmativeResponseLabel: "Yes",
@@ -67,6 +68,7 @@ class YesNoDialog extends React.Component {
 	onShowRequested(err, response) {
 		let data = response.data;
 		this.setState({
+			title: typeof data.title === "undefined" ? DEFAULT_TITLE : data.title,
 			hideModalOnClose: typeof data.hideModalOnClose === "undefined" ? true : data.hideModalOnClose,
 			question: data.question,
 			negativeResponseLabel: data.negativeResponseLabel || "No",
@@ -132,21 +134,23 @@ class YesNoDialog extends React.Component {
 			behaviorOnResponse="hide"
 			onShowRequested={this.onShowRequested}
 			isModal={true}>
+			<div className="dialog-title">{this.state.title}</div>
 			<FinsembleDialogQuestion>
 				{this.state.question}
 			</FinsembleDialogQuestion>
-
-			<FinsembleDialogButton show={this.state.showAffirmativeButton} buttonSize="md" onClick={this.sendAffirmativeResponse}>
+			<div className="button-wrapper">
+			<FinsembleDialogButton show={this.state.showAffirmativeButton} buttonSize="md-positive" onClick={this.sendAffirmativeResponse}>
 				{this.state.affirmativeResponseLabel}
 			</FinsembleDialogButton>
 
-			<FinsembleDialogButton show={this.state.showNegativeButton} buttonSize="md" onClick={this.sendNegativeResponse}>
+			<FinsembleDialogButton show={this.state.showNegativeButton} buttonSize="md-neutral" onClick={this.sendNegativeResponse}>
 				{this.state.negativeResponseLabel}
 			</FinsembleDialogButton>
 
-			<FinsembleDialogButton show={this.state.showCancelButton} buttonSize="md" onClick={this.sendCancelResponse}>
+			<FinsembleDialogButton show={this.state.showCancelButton} buttonSize="md-neutral" onClick={this.sendCancelResponse}>
 				{this.state.cancelResponseLabel}
 			</FinsembleDialogButton>
+			</div>
 		</FinsembleDialog>);
 
 

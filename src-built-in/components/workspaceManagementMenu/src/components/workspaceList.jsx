@@ -55,11 +55,11 @@ export default class WorkspaceManagementList extends React.Component {
 			//Separate array for each workspace. This way, the activeWorkspace can be rendered without a trashcan.
 			let workspaceActions = [
 				{
-					iconClass: "ff-delete",
+					iconClass: "jpmuitk-icon-delete",
 					method: self.removeWorkspace
 				},
 				{
-					iconClass: "ff-pin",
+					iconClass: "jpmuitk-icon-pin",
 					method: self.togglePin
 				}
 			];
@@ -84,9 +84,6 @@ export default class WorkspaceManagementList extends React.Component {
 		return (
 			<FinsembleDnDContext onDragStart={(changeEvent) => { console.log("DRAGSTART", changeEvent); }} onDragEnd={this.onDragEnd}>
 				<FinsembleMenuSection className='menu-primary'>
-					<FinsembleMenuSectionLabel>
-						Workspaces
-					</FinsembleMenuSectionLabel>
 					<FinsembleDroppable direction="vertical" droppableId="workspaceList">
 						{workspaces}
 					</FinsembleDroppable>

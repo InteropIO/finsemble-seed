@@ -28,7 +28,9 @@
 						"launchableByUser": true
 					},
 					"Window Manager": {
-						"FSBLHeader": true,
+						"FSBLHeader": {
+							"bodyMarginTop": "25px"
+						},
 						"persistWindowState": true
 					},
 					"Toolbar": {
