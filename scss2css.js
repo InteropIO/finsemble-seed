@@ -256,7 +256,7 @@ function removeDependencies(finished) {
 
 function logNotice(finished) {
 	logToTerminal(chalk.yellow(`NOTE: Go into build/defaultWebpackConfig and manually remove the sass-loader starting on line 53.
-	Also remove all references to sass inside of gulpfile.js, or your build will fail.`));
+	Also remove all references to sass inside of gulpfile.js, or your build will fail`));
 }
 
 
