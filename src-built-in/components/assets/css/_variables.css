@@ -11,6 +11,8 @@
     --menu-secondary-hover-color: #dadfe1;
     --menu-background-color: #ffffff;
 
+    --scrollbar-color: #039bff;
+
     /** Toolbar */
     --component-font-color: var(--primary-accent-color);
     --brand-logo-width: 28px;
