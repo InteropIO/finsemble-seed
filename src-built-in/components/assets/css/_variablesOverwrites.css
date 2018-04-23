@@ -124,14 +124,16 @@
     --brand-logo-url: "http://vignette2.wikia.nocookie.net/logopedia/images/6/6f/McDonalds.png/revision/latest?cb=20161217022233";
 
     --app-catalog-icon-container-background-color: var(--coolGrey600);
-    --app-catalog-button-background-color: var(--coolGrey600O);
+    --app-catalog-button-background-color: var(--coolGrey600);
     --app-catalog-button-border: 1px solid var(--coolGrey600);
+    --app-catalog-app-item-background-color: var(--grey200);
     --finsemble-item-pinned-hover-background-color: transparent;
 
     --dialog-font-weight: 500;
+    --dialog-font-color: var(--grey100);
     --dialog-body-padding: 23px 16px;
     --dialog-button-background-color: var(--grey900);
-    --dialog-button-border: 1px solid  var(grey300);
+    --dialog-button-border: 1px solid var(--grey300);
 
     --menu-font-size: 14px;
     --ff-pin-font-color: var(--grey100);
@@ -158,9 +160,29 @@
     --toolbar-font-weight: 500;
     --toolbar-font-icon-font-size: 19px;
     --search-section-max-height: 30px;
-
+    --left-nav-background-color: var(--coolGrey600);
+    --left-nav-header-background-color: var(--coolGrey400);
+    --left-nav-font-color: #ffffff;
+    --section-toggle-background-color: var(--left-nav-background-color);
+    --section-toggle-font-color: #ffffff;
+    --active-section-toggle-background: var(--coolGrey300);
+    --section-toggle-hover-background-color: var(--left-nav-header-background-color);
+    --scrollbar-color: var(--blue);
+    --auto-load-workspace-pill-color: var(--scrollbar-color);
+    --header-font-color: var(--scrollbar-color);
+    --focused-workspace-background-color: var(--coolGrey300);
+    --focused-workspace-border-color: var(--scrollbar-color);
+    --list-border-color: var(--grey);
+    --action-button-border-color: var(--grey);
+    --action-button-hover-border-color: var(--grey);
+    --component-list-border-color: var(--action-button-border-color);
+    --positive-action-button-border-color: var(--list-border-color);
+    --positive-action-button-hover-border-color: #319bfb;
+    --negative-action-button-hover-border-color: var(--negative-action-color);
+    --negative-action-button-border-color: var(--negative-action-color);
+    --content-section-background-color: var(--coolGrey800);
+    --left-nav-padding-left: 0px;
     --left-nav-padding-left: 28px;
-
     --individual-workspace-action-padding: 0px 3px 3px 3px;
     --user-preferences-ff-delete-hover-color: #fff;
 
