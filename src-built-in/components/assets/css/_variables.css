@@ -1,16 +1,3 @@
-@import  url('_colorPalette.css');
-
-@import  url('_variablesToolbar.css');
-
-@import  url('_variablesMenus.css');
-
-@import  url('_variablesDialogs.css');
-
-@import  url('_variablesWindowTitleBar.css');
-
-@import  url('_variablesWindowFrame.css');
-
-
 :root {
     /** Dialogs **/
     --dialog-button-background-color: #fafafa;
@@ -31,10 +18,35 @@
     --brand-logo-margin: 4px 4px;
     --brand-logo-url: "http://vignette2.wikia.nocookie.net/logopedia/images/6/6f/McDonalds.png/revision/latest?cb=20161217022233";
 
+    --toolbar-background-color: #1c2a36;
+    --toolbar-primary-font-color: #ffffff;
+    --light-hover-accent: #184c7a;
+    --component-font-color: #ff8c00;
+    --workspace-icon-color: #ffd803;
+    --primary-hover-font-color: #ffffff;
+    --secondary-hover-font-color: #ffffff;
+
     /* Window Frame*/
     --window-frame-inactive-color: #1d4970;
 
-    /** Title bar */
+
+    /** Window Title bar */
+    --primary-accent-color: #039bff;
+    --secondary-accent-color: #133f7c;
+    --window-header-background-color: #233958;
     --window-header-color: #151f28;
+    --window-frame-inactive-color: var(--window-header-background-color);
+    --active-header-text-color: #ffffff;
+    --active-header-background-color: #133f7c;
+    --header-text-color: #ffffff;
+    --header-colorbutton-hover-icon: #ffffff;
+    --highlighted-inactive-window-button: #115fcc;
+    --inactive-header-button-hover: #133f7c;
+    --negative-action-color: #ef1436;
+
+
+    /* Window styles*/
+    --scrim-overlay: #2068c3;
+    --scrim-negative-overlay: #960a05;
 
 }

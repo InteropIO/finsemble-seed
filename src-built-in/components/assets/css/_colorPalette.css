@@ -1,24 +1,5 @@
 :root {
-    --active-header-text-color: #ffffff;
-    --primary-accent-color: #039bff;
-    --scrim-overlay: #2068c3;
-    --scrim-negative-overlay: #960a05;
-    --secondary-accent-color: #133f7c;
-    --toolbar-background-color: #1c2a36;
-    --toolbar-primary-font-color: #ffffff;
-    --active-header-background-color: #133f7c;
-    --window-header-background-color: #233958;
-    --window-frame-inactive-color: var(--window-header-background-color);
-    --light-hover-accent: #184c7a;
-    --inactive-header-button-hover: #133f7c;
-    --negative-action-color: #ef1436;
-    --highlighted-inactive-window-button: #115fcc;
-    --primary-hover-font-color: #ffffff;
-    --secondary-hover-font-color: #ffffff;
-    --header-text-color: #ffffff;
-    --header-colorbutton-hover-icon: #ffffff;
-    --component-font-color: #ff8c00;
-    --workspace-icon-color: #ffd803;
+
 }
 						/* The Finsemble _colorPalette controls your primary theming options throughout the application. */
 /* Within this document, you can modify each of these SASS variables, which are distributed throughout the subsequent .css files */
