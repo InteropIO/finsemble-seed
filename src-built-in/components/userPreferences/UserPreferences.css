@@ -49,6 +49,7 @@ img {
     font-weight: 500;
     font-size: 21px;
     margin-bottom: 30px;
+    padding-left: var(--left-nav-padding-left);
     height: 49px;
     display: flex;
     align-items: center;
@@ -85,7 +86,7 @@ img {
 }
 
 .content-section-info > .ff-info {
-    color: var(--scrollbar-color);
+    color: var(--primary-accent-color);
     margin-right: 4px;
 }
 
@@ -205,7 +206,8 @@ img {
 
 .individual-workspace-action {
     margin-left: 1px;
-    cursor: pointer;#9ad9fd
+    cursor: pointer;
+    padding: var(--individual-workspace-action-padding);
     height: 17px;
     border: 1px solid transparent;
     font-weight: 100 !important;
@@ -217,7 +219,7 @@ img {
 
 .ff-delete:hover {
     background-color: transparent;
-    color: black;
+    color:var(--user-preferences-ff-delete-hover-color);
 }
 
 .individual-workspace-action:hover {
@@ -350,7 +352,7 @@ img {
 ::-webkit-scrollbar-thumb {
     cursor: pointer;
     border-radius: 9px;
-    background-color: var(--scrollbar-color);
+    background-color: var(--primary-accent-color);
 }
 
 .complex-menu-checkbox-wrapper {
@@ -376,10 +378,10 @@ img {
 }
 
 .complex-menu-checkbox.checked {
-    background-color: var(--scrollbar-color);
-    border: 1px solid var(--scrollbar-color);
+    background-color: var(--primary-accent-color);
+    border: 1px solid var(--primary-accent-color);
     font-size: 8px;
-    color: white;
+    color: var(--complex-menu-checkbox-checked-color);
 }
 
 .ff-check-mark {
@@ -394,7 +396,7 @@ img {
     height: 104px;
     overflow-y: auto;
     user-select: none;
-    color: #5a5a5a;
+    color: var(--workspace-component-list-font-color);
 }
 
 .workspace-component {

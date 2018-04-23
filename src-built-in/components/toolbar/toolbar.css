@@ -9,11 +9,11 @@
 body, html {
     height: 100%;
     margin: 0px;
-    font-family: "Roboto";
-    font-weight: 300;
+    font-family: var(--font-family);
+    font-weight: var(--toolbar-font-weight);
     font-size: 1em;
     color: var(--toolbar-primary-font-color);
-    line-height: 1em;
+    line-height: var(--toolbar-line-height);
     vertical-align: middle;
     -webkit-user-select: none;
     overflow: hidden;
@@ -29,7 +29,7 @@ body, html {
 
 .icon-only > i {
     height: 22px;
-    font-size: 22px;
+    font-size: var(--toolbar-font-icon-font-size);
     width: auto;
 }
 
@@ -41,7 +41,7 @@ body, html {
     position: relative;
     max-width: 107px;
     overflow: visible;
-    max-height: 40px;
+    max-height: var(--toolbar-height);
     width: 30px;
 }
 
@@ -59,8 +59,8 @@ body, html {
     display: inline;
     text-indent: 8px;
     width: 107px;
-    height: 40px;
-    line-height: 40px;
+    height: var(--search-input-height);
+    line-height:var(--search-input-line-height);
     background-color: transparent;
     border-color: transparent;
     z-index: 2;

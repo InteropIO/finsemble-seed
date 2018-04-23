@@ -140,6 +140,11 @@
 					packFiles(webpackComponentsConfig, "component bundle", cb);
 				},
 				(cb) => {
+					const webpackPreloadsConfig = require("./build/webpack/webpack.preloads.js")
+					//packFiles(webpackPreloadsConfig, "preload bundle", cb);
+					cb();
+				},
+				(cb) => {
 					const webpackHeaderConfig = require("./build/webpack/webpack.titleBar.js")
 					packFiles(webpackHeaderConfig, "header bundle", cb);
 				},

@@ -1,0 +1,91 @@
+/* To change what icons we use, put in your font-family and the content for the font-icon that you'd like to overwrite. The classes below represent
+icons used in our presentation components.
+*/
+@import "./_jpmFontIcons.css";
+/* toolbar */
+.ff-workspace:before {
+    font-family: "jpmuitk-icons";
+    content: "\e913";
+}
+
+/* workspace-menu */
+
+.ff-new-workspace:before {
+    font-family: "jpmuitk-icons";
+    content: "\e914";
+}
+.ff-save-1:before {
+    font-family: "jpmuitk-icons";
+    content: "\e953";
+
+}
+.ff-saveas-1:before {
+    font-family: "jpmuitk-icons";
+    content: "\e952";
+}
+
+/* user preferences */
+/*
+.ff-import:before {
+    font-family: "jpmuitk-icons";
+}
+.ff-export:before {
+    font-family: "jpmuitk-icons";
+}
+
+*/
+
+/* window title bar*/
+.ff-linker:before {
+    font-family: "jpmuitk-icons";
+    content: "\e935";
+}
+/*
+.ff-share:before {
+    font-family: "jpmuitk-icons";
+}
+*/
+
+
+.ff-minimize:before {
+    font-family: "jpmuitk-icons";
+    content: "\e94e";
+}
+.ff-restore:before {
+    font-family: "jpmuitk-icons";
+    content: "\e93d";
+}
+.ff-maximize:before {
+    font-family: "jpmuitk-icons";
+    content: "\e939";
+}
+.ff-close:before {
+    font-family: "jpmuitk-icons";
+    content: "\e90e";
+}
+
+
+/* App launcher */
+
+/* ff-list is the icon for the app-catalog. */
+.ff-list:before {
+    font-family: "jpmuitk-icons";
+    content: "\e94f";
+}
+.ff-pin:before {
+    font-family: "jpmuitk-icons";
+    content: "\e944";
+}
+
+.ff-delete:before {
+    font-family: "jpmuitk-icons";
+    content: "\e912";
+}
+
+.searchInput::after {
+    position: absolute;
+    font-family: "jpmuitk-icons" !important;
+    right: 11px !important;
+    bottom: -1px !important;
+    content: "\e954" !important;
+}

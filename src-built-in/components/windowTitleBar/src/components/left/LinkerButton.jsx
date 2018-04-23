@@ -38,6 +38,7 @@ export default class LinkerButton extends React.Component {
         this.onAllChannelsChange = this.onAllChannelsChange.bind(this);
         this.onShowLinkerButton = this.onShowLinkerButton.bind(this);
         this.hoverAction = this.hoverAction.bind(this);
+        this.showLinkerWindow = this.showLinkerWindow.bind(this);
     }
     /**
      * When the user selects/deselects a channel in the linkerWindow, this event listener is invoked.
@@ -94,6 +95,7 @@ export default class LinkerButton extends React.Component {
             channels: FSBL.Clients.LinkerClient.getState().channels,
             windowIdentifier: FSBL.Clients.WindowClient.getWindowIdentifier()
         };
+        let self = this;
         FSBL.Clients.RouterClient.query("Finsemble.LinkerWindow.SetActiveChannels", payload, function () {
             let wi = {
                 componentType: "linkerWindow"
@@ -103,7 +105,7 @@ export default class LinkerButton extends React.Component {
             let params = {
                 position: 'relative',
                 left: 0,
-                top: 30,
+                top: self.refs.LinkerButton.offsetHeight,
                 forceOntoMonitor: true,
                 spawnIfNotFound: false
             };
@@ -150,7 +152,7 @@ export default class LinkerButton extends React.Component {
      * @memberof LinkerButton
      */
     render() {
-        return (<div title="Link Data" className="linkerSection">
+        return (<div ref="LinkerButton" title="Link Data" className="linkerSection">
             <div className="fsbl-icon fsbl-linker cq-no-drag ff-linker" data-hover={this.state.hoverState} onClick={this.showLinkerWindow} >
                 <HoverDetector edge="left" hoverAction={this.hoverAction} />
             </div>
