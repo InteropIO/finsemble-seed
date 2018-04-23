@@ -23,7 +23,7 @@ body {
 }
 
 html.desktop-active:before {
-    background: var(--active-header-background-color);
+    background: var(--window-frame-active-color);
 }
 
 /* Create a series of empty pseudo-elements... */

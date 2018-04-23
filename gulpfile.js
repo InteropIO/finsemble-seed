@@ -101,7 +101,6 @@
 
 			done();
 		},
-
 		/**
 		 * Builds files using webpack.
 		 */

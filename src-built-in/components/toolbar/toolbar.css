@@ -9,11 +9,11 @@
 body, html {
     height: 100%;
     margin: 0px;
-    font-family: "Open Sans";
-    font-weight: 500;
-    font-size: 14px;
+    font-family: var(--font-family);
+    font-weight: var(--toolbar-font-weight);
+    font-size: 1em;
     color: var(--toolbar-primary-font-color);
-    line-height: 16px;
+    line-height: var(--toolbar-line-height);
     vertical-align: middle;
     -webkit-user-select: none;
     overflow: hidden;
@@ -29,7 +29,7 @@ body, html {
 
 .icon-only > i {
     height: 22px;
-    font-size: 19px;
+    font-size: var(--toolbar-font-icon-font-size);
     width: auto;
 }
 
@@ -37,15 +37,11 @@ body, html {
     color: #4495d1;
 }
 
-.highlighted {
-    background-color: var(--primary-accent-color);
-}
-
 .searchSection {
     position: relative;
     max-width: 107px;
     overflow: visible;
-    max-height: 30px;
+    max-height: var(--finsemble-toolbar-height);
     width: 30px;
 }
 
@@ -63,8 +59,8 @@ body, html {
     display: inline;
     text-indent: 8px;
     width: 107px;
-    height: 30px;
-    line-height: 32px;
+    height: var(--search-input-height);
+    line-height:var(--search-input-line-height);
     background-color: transparent;
     border-color: transparent;
     z-index: 2;
@@ -131,10 +127,9 @@ img {
 
 .searchInput::after {
     position: absolute;
-    font-family: jpmuitk-icons;
-    right: 11px;
-    bottom: -1px;
-    content: "\e954";
+    font-family: finfont;
+    right: 10px;
+    content: "\2c";
 }
 
 div {

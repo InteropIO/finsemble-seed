@@ -1,30 +1,9 @@
-:root {
-    --column-border-color: #91c5ff;
-    --left-nav-background-color: #0c3860;
-    --left-nav-header-background-color: #30507c;
-    --left-nav-font-color: #ffffff;
-    --section-toggle-background-color: var(--left-nav-background-color);
-    --section-toggle-font-color: #ffffff;
-    --active-section-toggle-background: #2068c3;
-    --affirmative-button-background: var(--active-section-toggle-background);
-    --section-toggle-hover-background-color: var(--left-nav-header-background-color);
-    --scrollbar-color: #039bff;
-    --auto-load-workspace-pill-color: var(--scrollbar-color);
-    --header-font-color: var(--scrollbar-color);
-    --active-workspace-background-color: #eeeeee;
-    --active-workspace-border-color: var(--scrollbar-color);
-    --list-border-color: #91c5ff;
-    --action-button-border-color: #dddddd;
-    --action-button-hover-border-color: #aaaaaa;
-    --positive-action-button-border-color: var(--list-border-color);
-    --positive-action-button-hover-border-color: #319bfb;
-    --negative-action-button-hover-border-color: #d0021b;
-    --negative-action-button-border-color: #ee5c5c;
-}
+@import '../assets/_variables.css';
+@import '../assets/_variablesOverwrites.css';
 
 body {
     margin: 0px;
-    font-family: Open Sans;
+    font-family: var(--font-family);
 }
 
 .inputAndSelectionDialog-component-class {
@@ -83,7 +62,6 @@ body {
     color: var(--header-font-color);
     margin-bottom: 8px;
     flex-direction: column;
-    font-family: Open Sans;
     font-size: 16px;
     font-weight: bold;
     font-style: normal;
@@ -104,7 +82,6 @@ body {
     flex-direction: row;
     justify-content: space-between;
     margin-bottom: 10px;
-    font-family: Open Sans;
     font-size: 15px;
     font-weight: normal;
     font-style: normal;
@@ -118,7 +95,6 @@ body {
 .content-section-description-wrapper {
     display: inline;
     margin-bottom: 10px;
-    font-family: Open Sans;
     font-size: 12px;
     font-weight: normal;
     font-style: normal;
@@ -147,7 +123,6 @@ body {
     flex-direction: column;
     justify-content: flex-start;
     margin-bottom: 10px;
-    font-family: Open Sans;
     font-size: 12px;
     font-weight: normal;
     font-style: normal;
@@ -161,7 +136,6 @@ body {
 .content-section-components-name {
     justify-content: space-between;
     margin-bottom: 3px;
-    font-family: Open Sans;
     font-size: 12px;
     font-weight: normal;
     font-style: normal;

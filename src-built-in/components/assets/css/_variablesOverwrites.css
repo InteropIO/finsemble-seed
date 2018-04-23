@@ -1,0 +1,244 @@
+:root {
+    --blue50: #95d4eb;
+    --blue100: #83dce8;
+    --blue200: #6ec5e4;
+    --blue300: #5abde1;
+    --blue400: #3db1db;
+    --blue500: #23a7d7;
+    --blue600: #22a0ce;
+    --blue700: #1e92bc;
+    --blue800: #1a7da1;
+    --blue900: #135d78;
+    --mint50: #a8e9e0;
+    --mint100: #90e3d7;
+    --mint200: #7cddd0;
+    --mint300: #58d4c3;
+    --mint400: #42ceba;
+    --mint500: #21c6af;
+    --mint600: #20b5a0;
+    --mint700: #1aa390;
+    --mint800: #158374;
+    --mint900: #116e62;
+    --green50: #84d9ba;
+    --green100: #73d4b1;
+    --green200: #5bcca3;
+    --green300: #45c697;
+    --green400: #26bc85;
+    --green500: #08b375;
+    --green600: #0ba16b;
+    --green700: #0e8f61;
+    --green800: #147351;
+    --green900: #036441;
+    --teal50: #ace1e0;
+    --teal100: #95d8d7;
+    --teal200: #82d0d0;
+    --teal300: #60c3c3;
+    --teal400: #44b9b8;
+    --teal500: #2bb0af;
+    --teal600: #28a4a4;
+    --teal700: #208383;
+    --teal800: #1d7070;
+    --teal900: #176262;
+    --orange50: #f5c684;
+    --orange100: #f4bd6f;
+    --orange200: #f3b45c;
+    --orange300: #f1a840;
+    --orange400: #ef9c26;
+    --orange500: #ed8b00;
+    --orange600: #e58000;
+    --orange700: #e07800;
+    --orange800: #ea6b01;
+    --orange900: #fa6400;
+    --red50: #ff856a;
+    --red100: #ff7556;
+    --red200: #ff5e39;
+    --red300: #ff471e;
+    --red400: #f13919;
+    --red500: #e32b16;
+    --red600: #c72513;
+    --red700: #aa2010;
+    --red800: #951c0e;
+    --red900: #7f170b;
+    --brown50: #f7f4f1;
+    --brown100: #f3eee8;
+    --brown200: #e3ded7;
+    --brown300: #d9d3cc;
+    --brown400: #ada296;
+    --brown500: #7d6c5a;
+    --brown600: #614e37;
+    --brown700: #513c24;
+    --brown800: #3a2206;
+    --brown900: #2b1904;
+    --grey50: #f6f6f6;
+    --grey100: #eeeeee;
+    --grey200: #d5d5d5;
+    --grey300: #cccccc;
+    --grey400: #969696;
+    --grey500: #737373;
+    --grey600: #565656;
+    --grey700: #434343;
+    --grey800: #2e2e2e;
+    --grey900: #161616;
+    --coolGrey50: #92959b;
+    --coolGrey100: #84878e;
+    --coolGrey200: #74777f;
+    --coolGrey300: #61656e;
+    --coolGrey400: #4c505b;
+    --coolGrey500: #44484f;
+    --coolGrey600: #3b3f46;
+    --coolGrey700: #2f3136;
+    --coolGrey800: #2a2c2f;
+    --coolGrey900: #242526;
+    --blue: var(--blue500);
+    --mint: var(--mint500);
+    --green: var(--green500);
+    --teal: var(--teal500);
+    --orange: var(--orange500);
+    --red: var(--red500);
+    --brown: var(--brown500);
+    --grey: var(--grey500);
+    --coolGrey: var(--coolGrey500);
+
+    --app-catalog-icon-container-background-color: var(--coolGrey600);
+    --app-catalog-button-background-color: var(--coolGrey600O);
+    --app-catalog-button-border: 1px solid var(--coolGrey600);
+
+
+    --dialog-font-weight: 500;
+    --dialog-body-padding: 23px 16px;
+
+    --menu-font-size: 14px;
+    --ff-pin-font-color: var(--grey100);
+    --finsemble-toolbar-height: 30px;
+    --finsemble-toolbar-button-label-font-weight: 500;
+    --finsemble-toolbar-button-label-margin: 5px;
+    --pinned-icon-padding-top: 6px;
+    --pinned-icon-font-color: var(--grey300);
+    --pinned-icon-font-size: 22px;
+
+    --finsemble-button-label-padding-top: 2px;
+    --window-header-height: 25px;
+    --window-header-font-weight: 700;
+    --window-header-font-size: 12px;
+    --fsbl-header-center-padding-bottom: 3px;
+    --fsbl-icon-width: 18px;
+    --linker-group-width: 5px;
+
+    --search-result-item-color: #fff;
+    --search-result-active-item-color: var(--coolGrey800);
+
+    --toolbar-line-height: 16px;
+    --toolbar-font-weight: 500;
+    --toolbar-font-icon-font-size: 19px;
+    --search-section-max-height: 30px;
+    --toolbar-height: 39px;
+
+    --left-nav-padding-left: 28px;
+
+    --individual-workspace-action-padding: 0px 3px 3px 3px;
+    --user-preferences-ff-delete-hover-color: #fff;
+
+    --complex-menu-checkbox-checked-color: #000;
+    --workspace-component-list-font-color: var(--grey400);
+}
+
+body.dialog input {
+    -webkit-appearance: none;
+    color: #000;
+    text-align: left;
+    font-size: 12pt;
+    font-weight: 300;
+    vertical-align: middle;
+    background-color: #FFF;
+    padding-left: 15px;
+    width: 100%;
+    height: 33px;
+    max-width: 100%;
+    padding: 3px 10px;
+    border: 1px solid #bdd9ff;
+    box-sizing: border-box;
+    transition: .2s ease-in;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    border-bottom: 1px solid var(--primary-accent-color);
+}
+
+
+.menu-secondary {
+    background: var(--menu-secondary-background-color);
+    padding: 5px 0px;
+}
+
+.finsemble-item-pinned:hover {
+    border-radius: 0px;
+}
+
+.jpmuitk-icon-document-add, .jpmuitk-icon-save, .jpmuitk-icon-save-solid, .jpmuitk-icon-report-builder {
+    padding-right: 7px;
+}
+
+.jpmuitk-icon-report-builder {
+    margin-top: 3px;
+}
+
+.jpmuitk-icon-pin, .jpmuitk-icon-delete {
+    margin-top: 1px;
+    padding-top: 5px;
+    width: 25px;
+    height: 19px;
+    text-align: center;
+    border: 1px solid transparent;
+}
+
+.jpmuitk-icon-delete:hover {
+    color: white;
+    background-color: var(--red200);
+    border-radius: 4px;
+}
+
+.jpmuitk-icon-:hover {
+    color: var(--grey100);
+    width: 25px;
+    border: 1px solid var(--grey);
+    border-radius: 4px;
+}
+
+/* Tweaks for JPM icons */
+.jpmuitk-icon-document {
+    font-size: 17px;
+}
+
+.jpmuitk-icon-right-expand {
+    transform: rotate(90deg);
+}
+
+.jpmuitk-icon-remove {
+    padding-top: 2px;
+}
+
+.highlighted {
+    background-color: var(--primary-accent-color);
+}
+
+.searchInput::after {
+    position: absolute;
+    font-family: jpmuitk-icons;
+    right: 11px;
+    bottom: -1px;
+    content: "\e954";
+}
+
+
+.jpmuitk-icon-import, .jpmuitk-icon-export {
+    padding-bottom: 3px;
+}
+
+.jpmuitk-icon-delete:hover {
+    background-color: transparent;
+    color: #FFFFFF;
+}
+
+.jpmuitk-icon-edit {
+    align-self: flex-start;
+}

@@ -1,8 +1,6 @@
-:root {
-    --breakpoint-small-window: 299px;
-    --breakpoint-very-small-window: 175px;
-}
-						/*Symphony is 300 px.*/
+@import "./_variables.css";
+@import "./_variablesOverwrites.css";
+
 .cq-drag {
     cursor: -webkit-grab;
     -webkit-app-region: drag;
@@ -15,7 +13,7 @@
 .fsbl-header {
     text-align: center;
     display: flex;
-    height: 25px;
+    height: var(--window-header-height);
     position: fixed;
     align-items: flex-end;
     flex-direction: row;
@@ -25,9 +23,8 @@
     left: 0;
     z-index: 2147483641;
     top: 0;
-    font-family: 'Open Sans', sans-serif;
-    font-size: 12px;
-    font-weight: 700;
+    font-size: var(--window-header-font-size);
+    font-weight: var(--window-header-font-weight);
     color: var(--header-text-color);
 }
 
@@ -57,8 +54,8 @@ html.desktop-active .fsbl-header {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    -webkit-user-select: none;
-    padding-bottom: 3px;
+    --webkit-user-select: none;
+    padding-bottom: var(--fsbl-header-center-padding-bottom);
 }
 
 .fsbl-header-right {
@@ -98,7 +95,7 @@ html.desktop-active .fsbl-header {
     position: relative;
     color: var(--header-text-color);
     font-size: 15px;
-    width: 18px;
+    width: var(--fsbl-icon-width);
     padding: 0px 6px;
     height: 100%;
     display: flex;
@@ -118,7 +115,7 @@ html.desktop-active .fsbl-icon {
 }
 
 html.desktop-active .fsbl-icon[data-hover=true] {
-    background: var(--grey);
+    background: var(--primary-accent-color);
     transition: background .2s ease;
 }
 
@@ -145,7 +142,11 @@ html.desktop-active .fsbl-icon.fsbl-close[data-hover=true] {
 }
 
 html.desktop-active .fsbl-icon-highlighted {
-    background-color: var(--grey);
+    background-color: var(--primary-accent-color);
+}
+
+.fsbl-minimize {
+    align-items: flex-end;
 }
 
 .fsbl-ejector {
@@ -168,7 +169,7 @@ html.desktop-active .fsbl-icon-highlighted {
 }
 
 .linker-group {
-    width: 5px;
+    width: var(--linker-group-width);
     height: 18px;
     margin-left: 4px;
     border-radius: 4px;
@@ -226,9 +227,5 @@ html.desktop-active .fsbl-linker[hover=true] {
 }
 
 .ff-maximize, .ff-close, .ff-detached, .ff-attached {
-    padding-top: 2px;
-}
-
-.jpmuitk-icon-remove {
     padding-top: 2px;
 }

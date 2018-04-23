@@ -102,7 +102,7 @@
     background: var(--toolbar-background-color);
     color: var(--toolbar-primary-font-color);
     align-content: center;
-    height: 30px;
+    height: var(--finsemble-toolbar-height);
 }
 
 .fullHeightFlex {
@@ -151,14 +151,14 @@
 
 .finsemble-toolbar-button {
     display: table;
-    padding: 0 .4em;
+    padding: var(--finsemble-toolbar-button-padding);
     height: 100%;
     border: 1px solid var(--toolbar-background-color);
 }
 
 .finsemble-toolbar-button-label {
     font-size: .95em;
-    font-weight: 500;
+    font-weight: var(--finsemble-toolbar-button-label-font-weight);
   /*font-variant: small-caps;*/
     text-align: left;
     letter-spacing: .25px;
@@ -192,7 +192,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     display: block;
-    margin-top: 5px;
+    margin-top: var(--finsemble-toolbar-button-label-margin);
 }
 
 .finsemble-toolbar-workspace-button-label.finsemble-toolbar-button:hover {
@@ -229,13 +229,13 @@
 }
 
 img.pinned-icon {
-    padding-top: 6px;
+    padding-top: var(--pinned-icon-padding-top);
     max-width: 17px;
 }
 
 .pinned-icon {
-    color: var(--grey300);
-    font-size: 22px;
+    color: var(--pinned-icon-font-color);
+    font-size: var(--pinned-icon-font-size);
     padding-right: .25em;
 }
 
@@ -252,7 +252,7 @@ img.pinned-icon {
 }
 
 .finsemble-button-label {
-    padding-top: 2px;
+    padding-top: var(--finsemble-button-label-padding-top);
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -284,13 +284,4 @@ img.pinned-icon {
 
 .ff-minimize-all {
     padding-top: 4px;
-}
-
-/* Tweaks for JPM icons */
-.jpmuitk-icon-document {
-    font-size: 17px;
-}
-
-.jpmuitk-icon-right-expand {
-    transform: rotate(90deg);
 }

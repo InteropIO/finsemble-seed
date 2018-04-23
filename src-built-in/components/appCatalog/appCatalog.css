@@ -1,7 +1,4 @@
-:root {
-    --scrollbar-color: #039bff;
-}
-						/*!
+/*!
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
@@ -39,6 +36,7 @@ html:after {
 body {
     margin-left: 0px !important;
     margin-right: 0px !important;
+    font-family: var(--font-family);
 }
 
 .content {
@@ -124,7 +122,7 @@ img {
     width: 36px;
     min-width: 36px;
     height: 36px;
-    background-color: var(--coolGrey600);
+    background-color: var(--app-catalog-icon-container-background-color);
     display: flex;
     align-items: center;
 }
@@ -149,7 +147,6 @@ img {
 .titleContainer .title {
     width: 100%;
     max-height: 14px;
-    font-family: Open Sans;
     font-size: 14px;
     font-weight: 500;
     font-stretch: normal;
@@ -164,7 +161,6 @@ img {
 .titleContainer .vendor {
     width: 39px;
     height: 16px;
-    font-family: Open Sans;
     font-size: 12px;
     font-weight: 300;
     font-style: italic;
@@ -195,15 +191,14 @@ img {
 .footerRight .openButton {
     cursor: pointer;
     align-self: flex-end;
-    background-color: var(--coolGrey600);
-    border: solid 1px var(--coolGrey400);
+    background-color: var(--app-catalog-button-background-color);
+    border: var(--app-catalog-button-border);
     font-size: 12px;
     color: #ffffff;
     text-align: center;
     padding: 5px 10px 5px 10px;
     width: 49px;
     height: 16px;
-    font-family: Open Sans;
     font-size: 12px;
     font-weight: normal;
     font-style: normal;
@@ -248,7 +243,6 @@ img {
 
 .detailsHeader .button {
     cursor: pointer;
-    font-family: Open Sans;
     font-size: 12px;
     font-weight: normal;
     font-style: normal;
@@ -260,9 +254,8 @@ img {
     padding: 5px 17px 5px 17px;
     text-align: center;
     align-self: center;
-    border: solid 1px #dddddd;
-    background-color: var(--coolGrey600);
-    border: solid 1px var(--coolGrey400);
+    background-color: var(--app-catalog-button-background-color);
+    border: var(--app-catalog-button-border);
 }
 
 ::-webkit-scrollbar-track {

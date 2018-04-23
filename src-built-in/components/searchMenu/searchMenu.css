@@ -20,6 +20,7 @@ body {
     margin-right: 0px !important;
     font-size: 1em;
     max-height: 500px;
+    font-family: var(--font-family);
     overflow-y: auto !important;
 }
 
@@ -30,9 +31,8 @@ body {
 .searchHeader {
     height: 21px;
     display: flex;
-    font-family: Open Sans;
     font-weight: 600;
-    color: var(--blue);
+    color: var(--primary-accent-color);
     padding-left: 14px;
     padding-top: 6px;
 }
@@ -55,7 +55,7 @@ body {
     height: 24px;
     font-weight: 300;
     text-align: left;
-    color: #FFF;
+    color: var(--search-result-item-color);
     padding: 4px 28px 4px 14px;
     display: flex;
     align-items: center;

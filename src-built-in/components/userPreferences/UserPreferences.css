@@ -1,34 +1,10 @@
-:root {
-    --left-nav-background-color: var(--coolGrey600);
-    --left-nav-header-background-color: var(--coolGrey400);
-    --left-nav-font-color: #ffffff;
-    --section-toggle-background-color: var(--left-nav-background-color);
-    --section-toggle-font-color: #ffffff;
-    --active-section-toggle-background: var(--coolGrey300);
-    --section-toggle-hover-background-color: var(--left-nav-header-background-color);
-    --scrollbar-color: var(--coolGrey100);
-    --auto-load-workspace-pill-color: var(--scrollbar-color);
-    --header-font-color: var(--scrollbar-color);
-    --focused-workspace-background-color: var(--coolGrey300);
-    --focused-workspace-border-color: var(--scrollbar-color);
-    --list-border-color: var(--grey);
-    --action-button-border-color: var(--grey);
-    --action-button-hover-border-color: var(--grey);
-    --component-list-border-color: var(--action-button-border-color);
-    --positive-action-button-border-color: var(--list-border-color);
-    --positive-action-button-hover-border-color: var(--coolGrey400);
-    --negative-action-button-hover-border-color: var(--negative-action-color);
-    --negative-action-button-border-color: var(--negative-action-color);
-}
-
-@import  url('../assets/css/_globals.css');
-
-@import  url('../assets/css/_menus.css');
+@import '../assets/css/_globals.css';
+@import '../assets/css/_menus.css';
 
 body {
     margin: 0px;
-    font-family: Open Sans;
-    color: var(--grey100);
+    font-family: var(--font-family);
+    color: var(--dialog-font-color);
 }
 
 img {
@@ -73,7 +49,7 @@ img {
     font-weight: 500;
     font-size: 21px;
     margin-bottom: 30px;
-    padding-left: 28px;
+    padding-left: var(--left-nav-padding-left);
     height: 49px;
     display: flex;
     align-items: center;
@@ -96,7 +72,7 @@ img {
 }
 
 .content-section-info {
-    color: var(--grey400);
+    color: var(--content-section-info-font-color);
     font-weight: 300;
     font-size: 12px;
     align-items: center;
@@ -110,7 +86,7 @@ img {
 }
 
 .content-section-info > .ff-info {
-    color: var(--scrollbar-color);
+    color: var(--primary-accent-color);
     margin-right: 4px;
 }
 
@@ -165,7 +141,7 @@ img {
     flex: 1;
     padding: .75em;
     align-content: flex-start;
-    background: var(--coolGrey800);
+    background-color: var(--content-section-background-color);
 }
 
 .workspace-list-header-row {
@@ -231,7 +207,7 @@ img {
 .individual-workspace-action {
     margin-left: 1px;
     cursor: pointer;
-    padding: 0px 3px 3px 3px;
+    padding: var(--individual-workspace-action-padding);
     height: 17px;
     border: 1px solid transparent;
     font-weight: 100 !important;
@@ -243,7 +219,7 @@ img {
 
 .ff-delete:hover {
     background-color: transparent;
-    color: #FFFFFF;
+    color:var(--user-preferences-ff-delete-hover-color);
 }
 
 .individual-workspace-action:hover {
@@ -340,7 +316,7 @@ img {
 .workspace-item-editing {
     border-top: 1px solid var(--focused-workspace-border-color);
     border-bottom: 1px solid var(--focused-workspace-border-color);
-    color: var(--grey100);
+    color: var(--workspace-item-editing-font-color);
 }
 
 .workspace-editor {
@@ -351,11 +327,11 @@ img {
     width: 100%;
     font-size: 16px;
     outline-color: transparent;
-    color: var(--grey100);
+    color: var(--workspace-editor-font-color);
 }
 
 .workspace-editor::selection {
-    background-color: var(--blue400);
+    background-color: var(--workspace-editor-selected-text-background-color);
 }
 
 .no-top-border {
@@ -376,7 +352,7 @@ img {
 ::-webkit-scrollbar-thumb {
     cursor: pointer;
     border-radius: 9px;
-    background-color: var(--scrollbar-color);
+    background-color: var(--primary-accent-color);
 }
 
 .complex-menu-checkbox-wrapper {
@@ -402,10 +378,10 @@ img {
 }
 
 .complex-menu-checkbox.checked {
-    background-color: var(--scrollbar-color);
-    border: 1px solid var(--scrollbar-color);
+    background-color: var(--primary-accent-color);
+    border: 1px solid var(--primary-accent-color);
     font-size: 8px;
-    color: #000000;
+    color: var(--complex-menu-checkbox-checked-color);
 }
 
 .ff-check-mark {
@@ -420,7 +396,7 @@ img {
     height: 104px;
     overflow-y: auto;
     user-select: none;
-    color: var(--grey400);
+    color: var(--workspace-component-list-font-color);
 }
 
 .workspace-component {
@@ -429,18 +405,5 @@ img {
 }
 
 .ff-edit {
-    align-self: flex-start;
-}
-
-.jpmuitk-icon-import, .jpmuitk-icon-export {
-    padding-bottom: 3px;
-}
-
-.jpmuitk-icon-delete:hover {
-    background-color: transparent;
-    color: #FFFFFF;
-}
-
-.jpmuitk-icon-edit {
     align-self: flex-start;
 }

@@ -2,12 +2,10 @@
 
 @import  url('_scrollbars.css');
 
-@import  url('_variablesMenus.css');
-
 body.menu {
     margin: 0px;
-    font-family: 'Open Sans';
-    font-size: 14px;
+    font-family: var(--font-family);
+    font-size: var(--menu-font-size);
     font-weight: 300;
     overflow-y: hidden;
     overflow-x: hidden;
@@ -26,7 +24,7 @@ body.menu {
     color: var(--primary-accent-color);
     text-transform: uppercase;
     font-weight: 700;
-    font-family: Open Sans;
+    font-family: var(--font-family);
     width: 100%;
 }
 
@@ -47,7 +45,8 @@ body.menu {
 
 .menu-secondary {
     background: var(--menu-secondary-background-color);
-    padding: 5px 0px;
+    padding-bottom: 10px;
+    padding-top: 10px;
 }
 
 .menu-primary .menu-item:hover {
@@ -111,23 +110,29 @@ body.menu {
 }
 
 .ff-pin:hover {
-    color: var(--grey100);
+    color: var(--ff-pin-font-color);
     width: 25px;
-    border: 1px solid var(--grey);
+    border: 1px solid var(--ff-pin-border-hover-color);
     border-radius: 4px;
 }
 
 .finsemble-item-pinned {
     color: white;
     width: 25px;
-    background-color: var(--grey);
+    background-color: var(--primary-accent-color);
     border-radius: 4px;
 }
 
 .finsemble-item-pinned:hover {
     color: white;
     width: 25px;
-    background-color: var(--grey400);
+    background-color: var(--finsemble-item-pinned-hover-background-color);
+    border-radius: 4px;
+}
+
+.ff-delete:hover {
+    color: white;
+    background-color: var(--ff-delete-hover-color);
     border-radius: 4px;
 }
 
@@ -141,32 +146,6 @@ body.menu {
     margin-top: 2px;
 }
 
-.jpmuitk-icon-document-add, .jpmuitk-icon-save, .jpmuitk-icon-save-solid, .jpmuitk-icon-report-builder {
-    padding-right: 7px;
-}
-
-.jpmuitk-icon-report-builder {
-    margin-top: 3px;
-}
-
-.jpmuitk-icon-pin, .jpmuitk-icon-delete {
-    margin-top: 1px;
-    padding-top: 5px;
-    width: 25px;
-    height: 19px;
-    text-align: center;
-    border: 1px solid transparent;
-}
-
-.jpmuitk-icon-delete:hover {
-    color: white;
-    background-color: var(--red200);
-    border-radius: 4px;
-}
-
-.jpmuitk-icon-:hover {
-    color: var(--grey100);
-    width: 25px;
-    border: 1px solid var(--grey);
-    border-radius: 4px;
+.ff-share {
+    cursor: -webkit-grab;
 }
