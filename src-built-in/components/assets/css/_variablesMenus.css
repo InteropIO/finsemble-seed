@@ -1,8 +1,0 @@
-:root {
-    --menu-primary-font-color: #ffffff;
-    --menu-primary-background-color: var(--coolGrey800);
-    --menu-primary-hover-color: var(--coolGrey300);
-    --menu-secondary-background-color: var(--coolGrey);
-    --menu-secondary-hover-color: var(--coolGrey300);
-    --menu-background-color: var(--coolGrey800);
-}
