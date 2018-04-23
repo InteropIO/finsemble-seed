@@ -103,11 +103,6 @@
     margin: 5px auto;
 }
 
-/*widgets*/
-.ciq--div {
-    padding: .25em;
-}
-
 .flex-start {
     align-self: flex-start;
 }
