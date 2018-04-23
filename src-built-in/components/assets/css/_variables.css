@@ -29,7 +29,7 @@
     --left-nav-background-color: #0c3860;
     --left-nav-header-background-color: #30507c;
     --left-nav-font-color: var(--font-color);
-    --left-nav-padding-left: 0px;
+    --left-nav-padding-left: 30px;
     --section-toggle-background-color: var(--left-nav-background-color);
     --section-toggle-font-color: var(--font-color);
     --active-section-toggle-background: #2068c3;
