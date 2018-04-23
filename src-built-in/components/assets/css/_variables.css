@@ -1,31 +1,35 @@
 :root {
     --negative-action-color: #ef1436;
     --font-family: 'Roboto', sans-serif;
+    --font-color: #ffffff;
+    --primary-accent-color: #039bff;
+    --secondary-accent-color: #133f7c;
+
     /** Dialogs **/
     --dialog-button-background-color: #fafafa;
     --dialog-button-border: 1px solid #EEEEEE;
 
     /** Menus */
+    --menu-background-color: #ffffff;
     --menu-primary-font-color: #000000;
-    --menu-primary-background-color: #ffffff;
+    --menu-primary-background-color: var(--menu-background-color);
     --menu-primary-hover-color: #ecf0f1;
     --menu-secondary-background-color: #ecf0f1;
     --menu-secondary-hover-color: #dadfe1;
-    --menu-background-color: #ffffff;
 
     /* Complex menus (e.g., ones with a left side-bar) */
-    --scrollbar-color: #039bff;
+    --scrollbar-color: var(--primary-accent-color);
     --left-nav-background-color: #0c3860;
     --left-nav-header-background-color: #30507c;
-    --left-nav-font-color: #ffffff;
+    --left-nav-font-color: var(--font-color);
     --section-toggle-background-color: var(--left-nav-background-color);
-    --section-toggle-font-color: #ffffff;
+    --section-toggle-font-color: var(--font-color);
     --active-section-toggle-background: #2068c3;
     --section-toggle-hover-background-color: var(--left-nav-header-background-color);
-    --auto-load-workspace-pill-color: var(--scrollbar-color);
-    --header-font-color: var(--scrollbar-color);
+    --auto-load-workspace-pill-color: var(--primary-accent-color);
+    --header-font-color: var(--primary-accent-color);
     --focused-workspace-background-color: #eeeeee;
-    --focused-workspace-border-color: var(--scrollbar-color);
+    --focused-workspace-border-color: var(--primary-accent-color);
     --list-border-color: #91c5ff;
     --action-button-border-color: #dddddd;
     --action-button-hover-border-color: #aaaaaa;
@@ -43,30 +47,30 @@
     --brand-logo-url: "http://vignette2.wikia.nocookie.net/logopedia/images/6/6f/McDonalds.png/revision/latest?cb=20161217022233";
 
     --toolbar-background-color: #1c2a36;
-    --toolbar-primary-font-color: #ffffff;
+    --toolbar-primary-font-color: var(--font-color);
     --light-hover-accent: #184c7a;
     --component-font-color: #ff8c00;
     --workspace-icon-color: #ffd803;
-    --primary-hover-font-color: #ffffff;
-    --secondary-hover-font-color: #ffffff;
+    --primary-hover-font-color: var(--font-color);
+    --secondary-hover-font-color: var(--font-color);
 
-    /* Window Frame*/
-    --window-frame-inactive-color: #1d4970;
 
 
     /** Window Title bar */
-    --primary-accent-color: #039bff;
-    --secondary-accent-color: #133f7c;
+
     --window-header-background-color: #233958;
     --window-header-color: #151f28;
     --window-frame-inactive-color: var(--window-header-background-color);
-    --active-header-text-color: #ffffff;
-    --active-header-background-color: #133f7c;
-    --header-text-color: #ffffff;
-    --header-colorbutton-hover-icon: #ffffff;
+    --active-header-text-color: var(--font-color);
+    --active-header-background-color: var(--secondary-accent-color);
+    --header-text-color: var(--font-color);
+    --header-colorbutton-hover-icon: var(--font-color);
     --highlighted-inactive-window-button: #115fcc;
-    --inactive-header-button-hover: #133f7c;
+    --inactive-header-button-hover: var(--secondary-accent-color);
 
+    /* Window Frame*/
+    --window-frame-inactive-color: #1d4970;
+    --window-frame-active-color: var(--active-header-background-color);
 
     /* Window styles*/
     --scrim-overlay: #2068c3;
