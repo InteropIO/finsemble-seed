@@ -14,7 +14,6 @@
 			},
 			"component": {
 				"inject": false,
-				"preload": "$applicationRoot/preloads/monkeyPatches.js",
 				"spawnOnStartup": false
 			},
 			"foreign": {
@@ -29,9 +28,7 @@
 						"launchableByUser": true
 					},
 					"Window Manager": {
-						"FSBLHeader": {
-							"bodyMarginTop": "25px"
-						},
+						"FSBLHeader": true,
 						"persistWindowState": true
 					},
 					"Toolbar": {
