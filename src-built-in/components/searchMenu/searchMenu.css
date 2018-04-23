@@ -22,6 +22,7 @@ body {
     max-height: 500px;
     font-family: var(--font-family);
     overflow-y: auto !important;
+    background-color: var(--menu-background-color);
 }
 
 .provider, .bestMatch {
@@ -67,7 +68,7 @@ body {
 }
 
 .resultItem.active {
-    background-color: var(--coolGrey800);
+    background-color: var(--search-result-active-item-color);
 }
 
 .resultItem .resultName {

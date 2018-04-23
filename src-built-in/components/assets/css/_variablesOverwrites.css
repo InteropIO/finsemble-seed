@@ -118,7 +118,7 @@
     --component-font-color: #ff8c00;
     --workspace-icon-color: var(--orange);
     --component-font-color: var(--primary-accent-color);
-     --brand-logo-width: 70px;
+    --brand-logo-width: 70px;
     --brand-logo-height: 15px;
     --brand-logo-margin: 7px 4px 4px 4px;
     --brand-logo-url: "http://vignette2.wikia.nocookie.net/logopedia/images/6/6f/McDonalds.png/revision/latest?cb=20161217022233";
@@ -173,6 +173,7 @@
     --menu-secondary-background-color: var(--coolGrey);
     --menu-secondary-hover-color: var(--coolGrey300);
     --menu-background-color: var(--coolGrey800);
+    --scrollbar-color: var(--primary-accent-color);
 }
 
 body.dialog input {
