@@ -54,9 +54,5 @@
 	"welcome": {
 		"output": "components/welcome/welcome",
 		"entry": "./src-built-in/components/welcome/welcome.js"
-	},
-	"preload": {
-		"output": "components/preload/monkeyPatches",
-		"entry": "./src-built-in/components/preload/monkeyPatches.js"
 	}
 }

@@ -14,7 +14,7 @@
 			},
 			"component": {
 				"inject": false,
-				"preload": "$applicationRoot/components/preload/monkeyPatches.js",
+				"preload": "$applicationRoot/preloads/monkeyPatches.js",
 				"spawnOnStartup": false
 			},
 			"foreign": {
