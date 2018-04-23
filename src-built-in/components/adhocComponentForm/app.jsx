@@ -8,8 +8,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 //Finsemble font-icons, general styling, and specific styling.
 import "../assets/css/finfont.css";
-import "../assets/css/finsemble.scss";
-import "./adhoc.scss";
+import "../assets/css/finsemble.css";
+import "./adhoc.css";
 
 // const Test = require('./test');
 

@@ -12,7 +12,6 @@
 	const del = require("del");
 	const fs = require("fs");
 	const gulp = require("gulp");
-	const sass = require("gulp-sass");
 	const watch = require("gulp-watch");
 	const shell = require("shelljs");
 	const launcher = require("openfin-launcher");
@@ -102,27 +101,6 @@
 
 			done();
 		},
-
-		/**
-		 * Builds the SASS files for the project.
-		 */
-		buildSass: () => {
-			const source = [
-				path.join(srcPath, "components", "**", "*.scss"),
-				path.join(__dirname, "src-built-in", "components", "**", "*.scss"),
-			];
-			// // Don't build files built by angular
-			// if (angularComponents) {
-			// 	angularComponents.forEach(comp => {
-			// 		source.push(path.join('!' + __dirname, comp.source, '**'));
-			// 	});
-			// }
-
-			return gulp
-				.src(source)
-				.pipe(sass().on("error", sass.logError))
-				.pipe(gulp.dest(path.join(distPath, "components")));
-		},
 		/**
 		 * Builds files using webpack.
 		 */
@@ -160,6 +138,11 @@
 				(cb) => {
 					const webpackComponentsConfig = require("./build/webpack/webpack.components.js")
 					packFiles(webpackComponentsConfig, "component bundle", cb);
+				},
+				(cb) => {
+					const webpackPreloadsConfig = require("./build/webpack/webpack.preloads.js")
+					//packFiles(webpackPreloadsConfig, "preload bundle", cb);
+					cb();
 				},
 				(cb) => {
 					const webpackHeaderConfig = require("./build/webpack/webpack.titleBar.js")
@@ -329,7 +312,6 @@
 		watchFiles: done => {
 			watchClose = done;
 			return merge(
-				watch(path.join(srcPath, "components", "assets", "**", "*"), {}, this.buildSass),
 				watch(path.join(srcPath, "**", "*.css"), { ignoreInitial: true })
 					.pipe(gulp.dest(distPath)),
 				watch(path.join(srcPath, "**", "*.html"), { ignoreInitial: true })
@@ -363,7 +345,6 @@
 			"build",
 			gulp.series(
 				taskMethods.buildWebpack,
-				taskMethods.buildSass,
 				taskMethods.buildAngular));
 
 		/**

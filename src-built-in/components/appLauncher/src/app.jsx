@@ -7,8 +7,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 //Finsemble font-icons, general styling, and specific styling.
 import "../../assets/css/finfont.css";
-import "../../assets/css/finsemble.scss";
-import "../appLauncher.scss";
+import "../../assets/css/finsemble.css";
+import "../appLauncher.css";
 import ComponentList from "./components/componentList";
 import * as storeExports from "./stores/appLauncherStore";
 import { Actions as appLauncherActions } from "./stores/appLauncherStore";
@@ -84,9 +84,6 @@ class AppLauncher extends React.Component {
 					</FinsembleMenuItemLabel>
 				</FinsembleMenuItem>
 			</FinsembleMenuSection>
-			<FinsembleMenuSectionLabel>
-				Applications
-			</FinsembleMenuSectionLabel>
 			<ComponentList />
 		</FinsembleMenu>);
 	}
