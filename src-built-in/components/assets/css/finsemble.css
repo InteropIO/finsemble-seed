@@ -1,5 +1,5 @@
 @import url('./_variables.css');
-@import url('./_variablesOverwrites.css');
+@import url('./_variablesWhitelabel.css');
 @import url("https://fonts.googleapis.com/css?family=Roboto");
 @import url('./_fontIcons.css');
 @import  url('./_windowFrame.css');
@@ -185,4 +185,4 @@ body.dialog input:focus {
     border: 1px solid var(--primary-accent-color);
 }
 
-@import url('./_styleOverwrites.css');
+@import url('./_styleWhitelabel.css');

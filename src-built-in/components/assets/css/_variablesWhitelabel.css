@@ -98,6 +98,7 @@
     --brown: var(--brown500);
     --grey: var(--grey500);
     --coolGrey: var(--coolGrey500);
+
     --active-header-text-color: #ffffff;
     --primary-accent-color: var(--grey400);
     --secondary-accent-color: var(--coolGrey);

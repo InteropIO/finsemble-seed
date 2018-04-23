@@ -1,5 +1,5 @@
 @import "./_variables.css";
-@import "./_variablesOverwrites.css";
+@import "./_variablesWhitelabel.css";
 
 .cq-drag {
     cursor: -webkit-grab;
