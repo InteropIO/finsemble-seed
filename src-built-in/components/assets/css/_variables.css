@@ -8,6 +8,8 @@
     /** Dialogs **/
     --dialog-button-background-color: #fafafa;
     --dialog-button-border: 1px solid #EEEEEE;
+    --dialog-background-color: #ffffff;
+    --dialog-font-color: #000;
 
     /** Menus */
     --menu-background-color: #ffffff;

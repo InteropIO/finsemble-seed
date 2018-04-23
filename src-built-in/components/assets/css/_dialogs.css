@@ -40,13 +40,13 @@ body.dialog p {
 }
 
 body.dialog .dialog {
-    background-color: #FFF;
+    background-color: var(--dialog-background-color);
     padding: 20px;
 }
 
 body.dialog .dialog-question {
     font-weight: 300;
-    color: #000;
+    color: var(--dialog-font-color);
     font-size: 15pt;
     margin-bottom: 35px;
     text-align: center;
@@ -65,7 +65,7 @@ body.dialog input::-webkit-outer-spin-button,
 
 body.dialog input:focus {
     box-shadow: 0 0 5px rgba 81, 203, 238, 1;
-    border: 1px solid #039BFF;
+    border: 1px solid var(--primary-accent-color);
     outline: none;
 }
 
