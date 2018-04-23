@@ -87,7 +87,7 @@ body.dialog input:focus {
 
 body.dialog input {
     -webkit-appearance: none;
-    color: #000;
+    color: var(--dialog-font-color);
     text-align: left;
     font-size: 12pt;
     font-weight: 300;
