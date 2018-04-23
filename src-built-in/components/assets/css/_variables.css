@@ -1,7 +1,6 @@
 :root {
     --negative-action-color: #ef1436;
     --font-family: 'Roboto', sans-serif;
-
     /** Dialogs **/
     --dialog-button-background-color: #fafafa;
     --dialog-button-border: 1px solid #EEEEEE;
