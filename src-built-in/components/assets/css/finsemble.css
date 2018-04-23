@@ -19,7 +19,6 @@
     text-align: center;
     font-family: var(--font-family);
     background: var(--dialog-button-background-color);
-    border: var(--dialog-button-border);
     color: var(--fsbl-button-font-color);
     transition: .2s ease;
     display:flex;

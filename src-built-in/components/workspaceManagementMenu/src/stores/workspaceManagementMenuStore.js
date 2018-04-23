@@ -6,7 +6,7 @@
 import async from "async";
 //When a user cancels the save workspace dialog, we throw an error, which short-circuits the async call.
 const SAVE_DIALOG_CANCEL_ERROR = "Cancel";
-let PROMPT_ON_SAVE = false;
+let PROMPT_ON_SAVE = true;
 let WorkspaceManagementStore, Actions, WindowClient, StoreClient, Logger, ToolbarStore, WorkspaceManagementGlobalStore;
 //Initial data for the store.
 let defaultData = {

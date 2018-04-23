@@ -132,9 +132,9 @@
     --dialog-font-weight: 500;
     --dialog-font-color: var(--grey100);
     --dialog-body-padding: 23px 16px;
-    --dialog-button-background-color: var(--grey900);
-    --dialog-button-border: 1px solid var(--grey300);
-    --dialog-background-color: var(--grey900);
+    --dialog-button-background-color: var(--grey800);
+    --dialog-button-border: 1px solid var(--grey200);
+    --dialog-background-color: var(--grey800);
 
 
     --menu-font-size: 14px;
