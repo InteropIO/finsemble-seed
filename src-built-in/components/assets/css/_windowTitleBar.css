@@ -1,8 +1,6 @@
-:root {
-    --breakpoint-small-window: 299px;
-    --breakpoint-very-small-window: 175px;
-}
-						/*Symphony is 300 px.*/
+@import "./_variables.css";
+@import "./_variablesOverwrites.css";
+
 .cq-drag {
     cursor: -webkit-grab;
     -webkit-app-region: drag;

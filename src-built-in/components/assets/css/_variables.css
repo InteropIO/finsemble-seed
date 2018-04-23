@@ -35,13 +35,13 @@
     --focused-workspace-background-color: #eeeeee;
     --focused-workspace-border-color: var(--primary-accent-color);
     --list-border-color: #91c5ff;
-    --action-button-border-color: #dddddd;
-    --action-button-hover-border-color: #aaaaaa;
-    --component-list-border-color: var(--action-button-border-color);
-    --positive-action-button-border-color: var(--list-border-color);
+
     --positive-action-button-hover-border-color: #319bfb;
     --negative-action-button-hover-border-color: #d0021b;
     --negative-action-button-border-color: #ee5c5c;
+    --content-section-info-font-color: #666666;
+    /* content-section is the right side of a complex menu.*/
+    --content-section-background-color: #fff;
 
     /** Toolbar */
     --component-font-color: var(--primary-accent-color);
@@ -71,6 +71,8 @@
     --header-colorbutton-hover-icon: var(--font-color);
     --highlighted-inactive-window-button: #115fcc;
     --inactive-header-button-hover: var(--secondary-accent-color);
+    --breakpoint-small-window: 299px;
+    --breakpoint-very-small-window: 175px;
 
     /* Window Frame*/
     --window-frame-inactive-color: #1d4970;
@@ -89,4 +91,14 @@
     --app-catalog-icon-container-background-color: #0b408f;
     --app-catalog-button-background-color: #2068c3;
     --app-catalog-button-border:  1px solid #91c5ff;
+
+    /* User prefs*/
+    --workspace-item-editing-font-color: var(--font-color);
+    --workspace-editor-font-color: var(--font-color);
+    --workspace-editor-selected-text-background-color: #9ad9fd;
+    --action-button-border-color: #dddddd;
+    --action-button-hover-border-color: #aaaaaa;
+    --component-list-border-color: var(--action-button-border-color);
+    --positive-action-button-border-color: var(--list-border-color);
+
 }

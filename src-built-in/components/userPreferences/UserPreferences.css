@@ -3,7 +3,8 @@
 
 body {
     margin: 0px;
-    font-family: Roboto;
+    font-family: var(--font-family);
+    color: var(--dialog-font-color);
 }
 
 img {
@@ -70,7 +71,7 @@ img {
 }
 
 .content-section-info {
-    color: #666666;
+    color: var(--content-section-info-font-color);
     font-weight: 300;
     font-size: 12px;
     align-items: center;
@@ -139,6 +140,7 @@ img {
     flex: 1;
     padding: .75em;
     align-content: flex-start;
+    background-color: var(--content-section-background-color);
 }
 
 .workspace-list-header-row {
@@ -203,8 +205,7 @@ img {
 
 .individual-workspace-action {
     margin-left: 1px;
-    cursor: pointer;
-    padding: 2px;
+    cursor: pointer;#9ad9fd
     height: 17px;
     border: 1px solid transparent;
     font-weight: 100 !important;
@@ -313,6 +314,7 @@ img {
 .workspace-item-editing {
     border-top: 1px solid var(--focused-workspace-border-color);
     border-bottom: 1px solid var(--focused-workspace-border-color);
+    color: var(--workspace-item-editing-font-color);
 }
 
 .workspace-editor {
@@ -323,10 +325,11 @@ img {
     width: 100%;
     font-size: 16px;
     outline-color: transparent;
+    color: var(--workspace-editor-font-color);
 }
 
 .workspace-editor::selection {
-    background-color: #9ad9fd;
+    background-color: var(--workspace-editor-selected-text-background-color);
 }
 
 .no-top-border {
