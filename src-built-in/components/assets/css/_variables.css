@@ -77,6 +77,8 @@
     --toolbar-font-weight: 300;
     --toolbar-font-icon-font-size: 22px;
 
+    --toolbar-separator: 1px solid rgba(255, 255, 255, 0.3);
+
 
     /** Window Title bar */
 
@@ -94,7 +96,7 @@
     --window-header-height: 32px;
     --window-header-font-weight: 300;
     --window-header-font-size: 14px;
-    --fsbl-header-center-padding-bottom: 0px;
+    --fsbl-header-center-padding-bottom: 2px;
     --fsbl-icon-width: 21px;
     --linker-group-width: 7px;
 

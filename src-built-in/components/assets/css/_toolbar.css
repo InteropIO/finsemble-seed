@@ -63,12 +63,11 @@
 .finsemble-toolbar-button-label {
     font-size: .95em;
     font-weight: var(--toolbar-button-label-font-weight);
-  /*font-variant: small-caps;*/
     text-align: left;
     letter-spacing: .25px;
-    display: table-cell;
-    vertical-align: middle;
     align-content: center;
+    display: block;
+    margin-top: var(--toolbar-button-label-margin);    
 }
 
 .finsemble-toolbar-button:hover {
@@ -86,7 +85,7 @@
 
 @media screen and (min-device-width: 1400px) {
     .finsemble-toolbar-workspace-button-label > .finsemble-toolbar-button-label {
-        width: 100px;
+        width: 150px;
     }
 }
 
@@ -95,8 +94,7 @@
     text-align: center;
     text-overflow: ellipsis;
     white-space: nowrap;
-    display: block;
-    margin-top: var(--toolbar-button-label-margin);
+    border-right: var(--toolbar-separator);
 }
 
 .finsemble-toolbar-workspace-button-label.finsemble-toolbar-button:hover {
@@ -127,7 +125,7 @@
 
 .divider:before {
     height: 20px;
-    border-right: 1px solid rgba(255, 255, 255, 0.3);
+    border-right: var(--toolbar-separator);
     content: '';
     margin: 0 .25em 0 .25em;
 }
