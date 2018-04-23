@@ -59,7 +59,7 @@ class WindowTitleBar extends React.Component {
 			{ field: "Main.dockingIcon", listener: this.onToggleDockingIcon },
 			{ field: "Main.dockingEnabled", listener: this.onDocking },
 			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton },
-			{ field: "isTopRight", listener: this.isTopRight},
+			{ field: "isTopRight", listener: this.isTopRight },
 		]);
 	}
 
@@ -70,8 +70,14 @@ class WindowTitleBar extends React.Component {
 			{ field: "Main.dockingIcon", listener: this.onToggleDockingIcon },
 			{ field: "Main.dockingEnabled", listener: this.onDocking },
 			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton },
-			{ field: "isTopRight", listener: this.isTopRight},
+			{ field: "isTopRight", listener: this.isTopRight },
 		]);
+	}
+
+	componentDidMount() {
+		let header = document.getElementsByClassName("fsbl-header")[0];
+		let headerHeight = window.getComputedStyle(header, null).getPropertyValue("height");
+		document.body.style.marginTop = headerHeight;
 	}
 
 	showLinkerButton(err, response) {
@@ -118,7 +124,7 @@ class WindowTitleBar extends React.Component {
 			</div>
 			<div onMouseDown={this.startLongHoldTimer} className="fsbl-header-center cq-drag">{self.state.windowTitle}</div>
 			<div onMouseDown={this.startLongHoldTimer} className="fsbl-header-right">
-				<BringSuiteToFront/>
+				<BringSuiteToFront />
 				{this.state.minButton && showMinimizeIcon ? <Minimize /> : null}
 				{showDockingIcon ? <DockingButton /> : null}
 				{this.state.maxButton ? <Maximize /> : null}
