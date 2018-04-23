@@ -5,11 +5,13 @@
     --primary-accent-color: #039bff;
     --secondary-accent-color: #133f7c;
 
+
     /** Dialogs **/
     --dialog-button-background-color: #fafafa;
     --dialog-button-border: 1px solid #EEEEEE;
     --dialog-background-color: #ffffff;
     --dialog-font-color: #000;
+    --fsbl-button-font-color: var(--dialog-font-color);
 
     /** Menus */
     --menu-background-color: #ffffff;
