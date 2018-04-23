@@ -2,8 +2,6 @@
 
 @import  url('_scrollbars.css');
 
-@import  url('_variablesMenus.css');
-
 body.menu {
     margin: 0px;
     font-family: 'Roboto';
