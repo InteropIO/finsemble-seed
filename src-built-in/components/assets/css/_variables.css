@@ -135,5 +135,3 @@
     --search-input-height:var(--toolbar-height);
     --search-input-line-height: var(--toolbar-height);
 }
-
-@import url('./_variablesOverwrites.css');

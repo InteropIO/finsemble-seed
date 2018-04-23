@@ -3,63 +3,63 @@ icons used in our presentation components.
 */
 @import "./_jpmFontIcons.css";
 /* toolbar */
-.ff-workspace {
+.ff-workspace:before {
     font-family: "jpmuitk-icons";
     content: "\e913";
 }
 
 /* workspace-menu */
 
-.ff-new-workspace {
+.ff-new-workspace:before {
     font-family: "jpmuitk-icons";
     content: "\e914";
 }
-.ff-save-1 {
+.ff-save-1:before {
     font-family: "jpmuitk-icons";
     content: "\e953";
 
 }
-.ff-saveas-1 {
+.ff-saveas-1:before {
     font-family: "jpmuitk-icons";
     content: "\e952";
 }
 
 /* user preferences */
 /*
-.ff-import {
+.ff-import:before {
     font-family: "jpmuitk-icons";
 }
-.ff-export {
+.ff-export:before {
     font-family: "jpmuitk-icons";
 }
 
 */
 
 /* window title bar*/
-.ff-linker {
+.ff-linker:before {
     font-family: "jpmuitk-icons";
     content: "\e935";
 }
 /*
-.ff-share {
+.ff-share:before {
     font-family: "jpmuitk-icons";
 }
 */
 
 
-.ff-minimize {
+.ff-minimize:before {
     font-family: "jpmuitk-icons";
     content: "\e94e";
 }
-.ff-restore {
+.ff-restore:before {
     font-family: "jpmuitk-icons";
     content: "\e93d";
 }
-.ff-maximize {
+.ff-maximize:before {
     font-family: "jpmuitk-icons";
     content: "\e939";
 }
-.ff-close {
+.ff-close:before {
     font-family: "jpmuitk-icons";
     content: "\e90e";
 }
@@ -68,16 +68,16 @@ icons used in our presentation components.
 /* App launcher */
 
 /* ff-list is the icon for the app-catalog. */
-.ff-list {
+.ff-list:before {
     font-family: "jpmuitk-icons";
     content: "\e94f";
 }
-.ff-pin {
+.ff-pin:before {
     font-family: "jpmuitk-icons";
     content: "\e944";
 }
 
-.ff-delete {
+.ff-delete:before {
     font-family: "jpmuitk-icons";
     content: "\e912";
 }
