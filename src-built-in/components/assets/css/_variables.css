@@ -1,0 +1,104 @@
+:root {
+    --negative-action-color: #ef1436;
+    --font-family: 'Roboto', sans-serif;
+    --font-color: #ffffff;
+    --primary-accent-color: #039bff;
+    --secondary-accent-color: #133f7c;
+
+
+    /** Dialogs **/
+    --dialog-button-background-color: #fafafa;
+    --dialog-button-border: 1px solid #EEEEEE;
+    --dialog-background-color: #ffffff;
+    --dialog-font-color: #000;
+    --fsbl-button-font-color: var(--dialog-font-color);
+
+    /** Menus */
+    --menu-background-color: #ffffff;
+    --menu-primary-font-color: #000000;
+    --menu-primary-background-color: var(--menu-background-color);
+    --menu-primary-hover-color: #ecf0f1;
+    --menu-secondary-background-color: #ecf0f1;
+    --menu-secondary-hover-color: #dadfe1;
+
+    /* Complex menus (e.g., ones with a left side-bar) */
+    --scrollbar-color: var(--primary-accent-color);
+    --left-nav-background-color: #0c3860;
+    --left-nav-header-background-color: #30507c;
+    --left-nav-font-color: var(--font-color);
+    --section-toggle-background-color: var(--left-nav-background-color);
+    --section-toggle-font-color: var(--font-color);
+    --active-section-toggle-background: #2068c3;
+    --section-toggle-hover-background-color: var(--left-nav-header-background-color);
+    --auto-load-workspace-pill-color: var(--primary-accent-color);
+    --header-font-color: var(--primary-accent-color);
+    --focused-workspace-background-color: #eeeeee;
+    --focused-workspace-border-color: var(--primary-accent-color);
+    --list-border-color: #91c5ff;
+
+    --positive-action-button-hover-border-color: #319bfb;
+    --negative-action-button-hover-border-color: #d0021b;
+    --negative-action-button-border-color: #ee5c5c;
+    --content-section-info-font-color: #666666;
+    /* content-section is the right side of a complex menu.*/
+    --content-section-background-color: #fff;
+
+    /** Toolbar */
+    --component-font-color: var(--primary-accent-color);
+    --brand-logo-width: 28px;
+    --brand-logo-height: 25px;
+    --brand-logo-margin: 4px 4px;
+    --brand-logo-url: "http://vignette2.wikia.nocookie.net/logopedia/images/6/6f/McDonalds.png/revision/latest?cb=20161217022233";
+
+    --toolbar-background-color: #1c2a36;
+    --toolbar-primary-font-color: var(--font-color);
+    --light-hover-accent: #184c7a;
+    --component-font-color: #ff8c00;
+    --workspace-icon-color: #ffd803;
+    --primary-hover-font-color: var(--font-color);
+    --secondary-hover-font-color: var(--font-color);
+
+
+
+    /** Window Title bar */
+
+    --window-header-background-color: #233958;
+    --window-header-color: #151f28;
+    --window-frame-inactive-color: var(--window-header-background-color);
+    --active-header-text-color: var(--font-color);
+    --active-header-background-color: var(--secondary-accent-color);
+    --header-text-color: var(--font-color);
+    --header-colorbutton-hover-icon: var(--font-color);
+    --highlighted-inactive-window-button: #115fcc;
+    --inactive-header-button-hover: var(--secondary-accent-color);
+    --breakpoint-small-window: 299px;
+    --breakpoint-very-small-window: 175px;
+
+    /* Window Frame*/
+    --window-frame-inactive-color: #1d4970;
+    --window-frame-active-color: var(--active-header-background-color);
+
+    /* Window styles*/
+    --scrim-overlay: #2068c3;
+    --scrim-negative-overlay: #960a05;
+
+    /* App Launcher */
+    --ff-delete-hover-color: var(--negative-action-button-border-color);
+    --ff-pin-border-hover-color: var(--primary-accent-color);
+    --finsemble-item-pinned-hover-background-color: #0287DE;
+
+    /* App Catalog */
+    --app-catalog-icon-container-background-color: #0b408f;
+    --app-catalog-button-background-color: #2068c3;
+    --app-catalog-button-border:  1px solid #91c5ff;
+
+    /* User prefs*/
+    --workspace-item-editing-font-color: var(--font-color);
+    --workspace-editor-font-color: var(--font-color);
+    --workspace-editor-selected-text-background-color: #9ad9fd;
+    --action-button-border-color: #dddddd;
+    --action-button-hover-border-color: #aaaaaa;
+    --component-list-border-color: var(--action-button-border-color);
+    --positive-action-button-border-color: var(--list-border-color);
+
+}

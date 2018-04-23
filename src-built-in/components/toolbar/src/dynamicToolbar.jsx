@@ -27,9 +27,9 @@ customComponents["WorkspaceMenuOpener"] = WorkspaceMenuOpener;
 customComponents["Search"] = Search;
 
 // Styles
-import "../../assets/css/finsemble.scss";
+import "../../assets/css/finsemble.css";
 import "../../assets/css/finfont.css";
-import "../toolbar.scss";
+import "../toolbar.css";
 
 var pinnableItems = {
 	"componentLauncher": FinsembleButton,

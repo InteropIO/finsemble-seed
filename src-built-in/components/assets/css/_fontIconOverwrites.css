@@ -1,0 +1,47 @@
+/* To change what icons we use, put in your font-family and the content for the font-icon that you'd like to overwrite. The classes below represent
+icons used in our presentation components.
+*/
+
+/* toolbar */
+/*
+.ff-workspace {}
+*/
+
+
+/* workspace-menu */
+/*
+.ff-new-workspace {}
+.ff-save-1 {}
+.ff-saveas-1 {}
+*/
+
+/* user preferences */
+/*
+.ff-delete-1 {}
+.ff-edit-1 {}
+.ff-import {}
+.ff-export {}
+
+*/
+
+/* window title bar*/
+/*
+.ff-linker {}
+.ff-share {}
+
+
+.ff-minimize {}
+.ff-restore {}
+.ff-maximize {}
+.ff-close {}
+
+*/
+
+/* App launcher */
+
+/* ff-list is the icon for the app-catalog. */
+/*
+.ff-list {}
+.ff-pin {}
+
+*/

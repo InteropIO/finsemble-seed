@@ -3,7 +3,7 @@
 * All rights reserved.
 */
 import { EventEmitter } from "events";
-
+let PROMPT_ON_DIRTY = false;
 const constants = {
 	METHOD: "METHOD",
 	GET_FIN_WINDOW: "getFinWindow",
@@ -23,6 +23,9 @@ var FileMenuStore = Object.assign({}, EventEmitter.prototype, {
 
 			FSBL.Clients.ConfigClient.getValue({ field: "finsemble" }, function (err, config) {
 				self.finsembleConfig = config;
+				let prompt = config.preferences.workspaceService.promptUserOnDirtyWorkspace;
+				//Default to false.
+				PROMPT_ON_DIRTY = typeof prompt === null ? PROMPT_ON_DIRTY : prompt;
 			});
 		});
 	},
@@ -119,7 +122,7 @@ var Actions = {
 	saveWorkspace() {
 		return new Promise(function (resolve, reject) {
 			var self = this;
-			if (FSBL.Clients.WorkspaceClient.activeWorkspace.isDirty) {
+			if (PROMPT_ON_DIRTY && FSBL.Clients.WorkspaceClient.activeWorkspace.isDirty) {
 				FSBL.Clients.DialogManager.open("yesNo",
 					{
 						question: "Your workspace \"" + FSBL.Clients.WorkspaceClient.activeWorkspace.name + "\" has unsaved changes, would you like to save?"
@@ -136,6 +139,7 @@ var Actions = {
 						}
 					});
 			} else {
+				//If no prompt, just resolve - activeworkspace is saved after every state change or window move, no need to do it again.
 				resolve();
 			}
 		});
@@ -192,7 +196,7 @@ var Actions = {
 	spawnDocs() {
 		fin.desktop.System.openUrlWithBrowser("https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html", function () {
 			console.log("successfully launched docs");
-		},function (err) {
+		}, function (err) {
 			console.log("failed to launch docs");
 		});
 	}
