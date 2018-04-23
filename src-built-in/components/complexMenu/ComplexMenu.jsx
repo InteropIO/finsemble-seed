@@ -39,7 +39,6 @@ export default class ComplexMenu extends React.Component {
 		var self = this;
 		let navEntries = this.props.navOptions;
 		var activeContent = [];
-		console.log("self.props.headerImgUrl", self.props.headerImgUrl);
 		let headerImgStyle = {
 			paddingLeft: self.props.headerImgUrl === "" ? "10px" : "0px"
 		};

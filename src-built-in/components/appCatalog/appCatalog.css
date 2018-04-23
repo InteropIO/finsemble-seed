@@ -37,7 +37,7 @@ body {
     margin-left: 0px !important;
     margin-right: 0px !important;
     font-family: var(--font-family);
-    color: var()
+    color: var(--dialog-font-color)
 }
 
 .content {
