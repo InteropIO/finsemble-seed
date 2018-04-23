@@ -13,7 +13,7 @@
 }
 
 [data-icon]:before {
-  font-family: "finfont" !important;
+  font-family: "finfont" ;
   content: attr(data-icon);
   font-style: normal !important;
   font-weight: normal !important;
@@ -27,7 +27,7 @@
 
 [class^="ff-"]:before,
 [class*=" ff-"]:before {
-  font-family: "finfont" !important;
+  font-family: "finfont" ;
   font-style: normal !important;
   font-weight: normal !important;
   font-variant: normal !important;

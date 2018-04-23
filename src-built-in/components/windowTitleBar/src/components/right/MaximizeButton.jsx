@@ -92,7 +92,7 @@ export default class MaximizeButton extends React.Component {
 		let tooltip = this.state.maximized ? "Restore" : "Maximize";
 
 		//Classes for the maximize button.
-		iconClasses += this.state.maximized ? "jpmuitk-icon-minimise" : "jpmuitk-icon-maximise";
+		iconClasses += this.state.maximized ? "ff-restore" : "ff-maximize";
 		//Classes for the wrap
 		wrapClasses += this.state.maximized ? "window-restore" : "window-max";
 

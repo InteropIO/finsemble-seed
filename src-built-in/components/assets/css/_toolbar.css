@@ -102,7 +102,7 @@
     background: var(--toolbar-background-color);
     color: var(--toolbar-primary-font-color);
     align-content: center;
-    height: var(--finsemble-toolbar-height);
+    height: var(--toolbar-height);
 }
 
 .fullHeightFlex {
@@ -151,14 +151,14 @@
 
 .finsemble-toolbar-button {
     display: table;
-    padding: var(--finsemble-toolbar-button-padding);
+    padding: var(--toolbar-button-padding);
     height: 100%;
     border: 1px solid var(--toolbar-background-color);
 }
 
 .finsemble-toolbar-button-label {
     font-size: .95em;
-    font-weight: var(--finsemble-toolbar-button-label-font-weight);
+    font-weight: var(--toolbar-button-label-font-weight);
   /*font-variant: small-caps;*/
     text-align: left;
     letter-spacing: .25px;
@@ -192,7 +192,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     display: block;
-    margin-top: var(--finsemble-toolbar-button-label-margin);
+    margin-top: var(--toolbar-button-label-margin);
 }
 
 .finsemble-toolbar-workspace-button-label.finsemble-toolbar-button:hover {

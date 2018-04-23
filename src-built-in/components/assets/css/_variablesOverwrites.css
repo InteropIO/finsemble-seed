@@ -98,6 +98,25 @@
     --brown: var(--brown500);
     --grey: var(--grey500);
     --coolGrey: var(--coolGrey500);
+    --active-header-text-color: #ffffff;
+    --primary-accent-color: var(--grey400);
+    --secondary-accent-color: var(--coolGrey);
+    --scrim-overlay: #23a7c3;
+    --scrim-negative-overlay: #e32a16;
+    --toolbar-background-color: var(--coolGrey700);
+    --toolbar-primary-font-color: #ffffff;
+    --active-header-background-color: var(--coolGrey400);
+    --window-header-background-color: var(--coolGrey600);
+    --window-frame-inactive-color: var(--secondary-accent-color);
+    --inactive-header-button-hover: var(--secondary-accent-color);
+    --negative-action-color: var(--red);
+    --highlighted-inactive-window-button: var(--coolGrey300);
+    --primary-hover-font-color: #ffffff;
+    --secondary-hover-font-color: #ffffff;
+    --header-text-color: #ffffff;
+    --header-colorbutton-hover-icon: #ffffff;
+    --component-font-color: #ff8c00;
+    --workspace-icon-color: var(--orange);
 
     --app-catalog-icon-container-background-color: var(--coolGrey600);
     --app-catalog-button-background-color: var(--coolGrey600O);
@@ -109,9 +128,9 @@
 
     --menu-font-size: 14px;
     --ff-pin-font-color: var(--grey100);
-    --finsemble-toolbar-height: 30px;
-    --finsemble-toolbar-button-label-font-weight: 500;
-    --finsemble-toolbar-button-label-margin: 5px;
+    --toolbar-height: 30px;
+    --toolbar-button-label-font-weight: 500;
+    --toolbar-button-label-margin: 5px;
     --pinned-icon-padding-top: 6px;
     --pinned-icon-font-color: var(--grey300);
     --pinned-icon-font-size: 22px;

@@ -70,7 +70,7 @@ export default class ComplexMenu extends React.Component {
 
 					<div className="content">
 						<div className="complex-menu-header">
-							<div onClick={this.hideWindow} className="jpmuitk-icon-close complex-menu-close"></div>
+							<div onClick={this.hideWindow} className="ff-close complex-menu-close"></div>
 						</div>
 						{activeContent}
 					</div>

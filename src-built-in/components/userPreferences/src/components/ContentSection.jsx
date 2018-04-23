@@ -25,7 +25,7 @@ export default class ContentSection extends React.Component {
 				<div className="content-section-header">
 					{this.props.activeSection.charAt(0).toUpperCase() + this.props.activeSection.slice(1, this.props.activeSection.length)}
 				</div>
-				<div onClick={this.hideWindow} className="jpmuitk-icon-close complex-menu-close">
+				<div onClick={this.hideWindow} className="ff-close complex-menu-close">
 				</div>
 			</div>
 			<Component />

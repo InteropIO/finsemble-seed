@@ -55,11 +55,11 @@ export default class WorkspaceManagementList extends React.Component {
 			//Separate array for each workspace. This way, the activeWorkspace can be rendered without a trashcan.
 			let workspaceActions = [
 				{
-					iconClass: "jpmuitk-icon-delete",
+					iconClass: "ff-delete",
 					method: self.removeWorkspace
 				},
 				{
-					iconClass: "jpmuitk-icon-pin",
+					iconClass: "ff-pin",
 					method: self.togglePin
 				}
 			];

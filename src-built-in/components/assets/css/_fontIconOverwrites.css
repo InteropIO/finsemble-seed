@@ -1,47 +1,83 @@
 /* To change what icons we use, put in your font-family and the content for the font-icon that you'd like to overwrite. The classes below represent
 icons used in our presentation components.
 */
-
+@import "./_jpmFontIcons.css";
 /* toolbar */
-/*
-.ff-workspace {}
-*/
-
+.ff-workspace {
+    font-family: "jpmuitk-icons";
+    content: "\e913";
+}
 
 /* workspace-menu */
-/*
-.ff-new-workspace {}
-.ff-save-1 {}
-.ff-saveas-1 {}
-*/
+
+.ff-new-workspace {
+    font-family: "jpmuitk-icons";
+    content: "\e914";
+}
+.ff-save-1 {
+    font-family: "jpmuitk-icons";
+    content: "\e953";
+
+}
+.ff-saveas-1 {
+    font-family: "jpmuitk-icons";
+    content: "\e952";
+}
 
 /* user preferences */
 /*
-.ff-delete-1 {}
-.ff-edit-1 {}
-.ff-import {}
-.ff-export {}
+.ff-import {
+    font-family: "jpmuitk-icons";
+}
+.ff-export {
+    font-family: "jpmuitk-icons";
+}
 
 */
 
 /* window title bar*/
+.ff-linker {
+    font-family: "jpmuitk-icons";
+    content: "\e935";
+}
 /*
-.ff-linker {}
-.ff-share {}
-
-
-.ff-minimize {}
-.ff-restore {}
-.ff-maximize {}
-.ff-close {}
-
+.ff-share {
+    font-family: "jpmuitk-icons";
+}
 */
+
+
+.ff-minimize {
+    font-family: "jpmuitk-icons";
+    content: "\e94e";
+}
+.ff-restore {
+    font-family: "jpmuitk-icons";
+    content: "\e93d";
+}
+.ff-maximize {
+    font-family: "jpmuitk-icons";
+    content: "\e939";
+}
+.ff-close {
+    font-family: "jpmuitk-icons";
+    content: "\e90e";
+}
+
 
 /* App launcher */
 
 /* ff-list is the icon for the app-catalog. */
-/*
-.ff-list {}
-.ff-pin {}
+.ff-list {
+    font-family: "jpmuitk-icons";
+    content: "\e94f";
+}
+.ff-pin {
+    font-family: "jpmuitk-icons";
+    content: "\e944";
+}
 
-*/
+.ff-delete {
+    font-family: "jpmuitk-icons";
+    content: "\e912";
+}

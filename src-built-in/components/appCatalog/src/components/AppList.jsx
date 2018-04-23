@@ -56,7 +56,7 @@ export default class AppList extends React.Component {
 		return <div>
 			<div className="ListHeader">
 				<input className="filterInput" onChange={this.onChange} placeholder="Filter Apps" />
-				<div className="jpmuitk-icon-search" />
+				<div className="ff-search" />
 			</div>
 			<div className="appContainer">
 				{(this.state.appList.map(function (app, index) {

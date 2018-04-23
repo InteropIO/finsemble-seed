@@ -1,5 +1,5 @@
-@import '../assets/_variables.css';
-@import '../assets/_variablesOverwrites.css';
+@import '../assets/css/_variables.css';
+@import '../assets/css/_variablesOverwrites.css';
 
 body {
     margin: 0px;

@@ -41,7 +41,7 @@ body, html {
     position: relative;
     max-width: 107px;
     overflow: visible;
-    max-height: var(--finsemble-toolbar-height);
+    max-height: var(--toolbar-height);
     width: 30px;
 }
 

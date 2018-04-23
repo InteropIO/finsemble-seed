@@ -29,12 +29,12 @@ export default class componentItem extends React.Component {
 
 		var name = this.props.name;
 		var delItemClassList = "empty-delete";
-		var actionItemClasses = "jpmuitk-icon-pin";
+		var actionItemClasses = "ff-pin";
 		var pinClassList = this.props.isPinned ? actionItemClasses + " app-launcher-pinned" : actionItemClasses + " app-launcher-component-pinner";
 
 		if (this.props.custom) {
 			pinClassList += " deleteItem";
-			delItemClassList = "app-launcher-delete jpmuitk-icon-delete";
+			delItemClassList = "app-launcher-delete ff-delete";
 		}
 
 		var delItem = (<FinsembleMenuItemAction onClick={this.deleteItem} className={delItemClassList}></FinsembleMenuItemAction>);
@@ -47,7 +47,7 @@ export default class componentItem extends React.Component {
 			isDeletable={this.props.isUserDefined}
 			deleteAction={this.deleteItem}
 			isPinnable={true}
-			pinIcon={'jpmuitk-icon-pin'}
+			pinIcon={'ff-pin'}
 			activePinModifier={'finsemble-item-pinned'}
 			isPinned={this.props.isPinned}
 			pinAction={function () {

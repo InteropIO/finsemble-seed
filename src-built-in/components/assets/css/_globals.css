@@ -1,7 +1,6 @@
 @import url('./_variables.css');
-@import url('./_variablesOverwrites.css');
 @import url("https://fonts.googleapis.com/css?family=Roboto");
-
+@import url('./_fontIcons.css');
 .hidden {
     display: none !important;
 }
