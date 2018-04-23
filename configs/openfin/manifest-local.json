@@ -64,10 +64,6 @@
         "servicesRoot": "http://localhost:3375/finsemble/services",
         "importConfig": [
             "$applicationRoot/configs/application/config.json"
-        ],
-        "windowOverrides": {
-            "open": true,
-            "alert": true
-        }
+        ]
     }
 }

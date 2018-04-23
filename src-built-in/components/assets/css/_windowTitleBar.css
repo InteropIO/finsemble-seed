@@ -1,5 +1,5 @@
 @import "./_variables.css";
-@import "./_variablesOverwrites.css";
+@import "./_variablesWhitelabel.css";
 
 .cq-drag {
     cursor: -webkit-grab;
@@ -11,20 +11,21 @@
 }
 
 .fsbl-header {
+    font-family: var(--font-family);
     text-align: center;
     display: flex;
-    height: 32px;
+    height: var(--window-header-height);
     position: fixed;
     align-items: flex-end;
     flex-direction: row;
     justify-content: center;
     background: var(--window-header-background-color);
     width: 100%;
+    left: 0;
     z-index: 2147483641;
     top: 0;
-    font-family: var(--font-family);
-    font-size: 14px;
-    font-weight: 300;
+    font-size: var(--window-header-font-size);
+    font-weight: var(--window-header-font-weight);
     color: var(--header-text-color);
 }
 
@@ -54,7 +55,8 @@ html.desktop-active .fsbl-header {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    -webkit-user-select: none;
+    --webkit-user-select: none;
+    padding-bottom: var(--fsbl-header-center-padding-bottom);
 }
 
 .fsbl-header-right {
@@ -94,7 +96,7 @@ html.desktop-active .fsbl-header {
     position: relative;
     color: var(--header-text-color);
     font-size: 15px;
-    width: 21px;
+    width: var(--fsbl-icon-width);
     padding: 0px 6px;
     height: 100%;
     display: flex;
@@ -168,7 +170,7 @@ html.desktop-active .fsbl-icon-highlighted {
 }
 
 .linker-group {
-    width: 7px;
+    width: var(--linker-group-width);
     height: 18px;
     margin-left: 4px;
     border-radius: 4px;

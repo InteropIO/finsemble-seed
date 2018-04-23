@@ -1,0 +1,6 @@
+{
+	"preload": {
+		"output": "preloads/monkeyPatches",
+		"entry": "./src-built-in/preloads/monkeyPatches.js"
+	}
+}

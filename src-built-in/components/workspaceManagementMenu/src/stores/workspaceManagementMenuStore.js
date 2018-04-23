@@ -181,6 +181,7 @@ Actions = {
 		}
 
 		let dialogParams = {
+			title: "Delete this workspace?",
 			question: "Are you sure you want to delete the workspace \"" + workspaceName + "\"?",
 			showCancelButton: false,
 			hideModalOnClose: data.hideModalOnClose
@@ -422,6 +423,7 @@ Actions = {
 			}
 		}
 		let dialogParams = {
+			title: "Save your workspace",
 			inputLabel: "Enter a name for your new workspace.",
 			affirmativeButtonLabel: "Continue",
 			showCancelButton: false,
@@ -448,8 +450,9 @@ Actions = {
 		}
 
 		let dialogParams = {
+			title: "Save your workspace",
 			inputLabel: "Enter a name for your workspace.",
-			affirmativeButtonLabel: "okay",
+			affirmativeButtonLabel: "Confirm",
 			showCancelButton: false,
 			showNegativeButton: false
 		};
@@ -463,7 +466,10 @@ Actions = {
 		let activeWorkspace = WorkspaceManagementStore.getValue("activeWorkspace");
 		if (activeWorkspace.isDirty) {
 			Logger.system.log("NewWorkspace.spawnDialog start.");
-			let dialogParams = { question: `Your workspace "${activeWorkspace.name}" has unsaved changes, would you like to save?` };
+			let dialogParams = {
+				title: "Save your workspace?",
+				question: `Your workspace "${activeWorkspace.name}" has unsaved changes. Would you like to save?`
+			};
 			function onUserInput(err, response) {
 				Logger.system.log("Spawn Dialog callback.");
 				callback(null, response);
@@ -520,6 +526,7 @@ Actions = {
 	askAboutOverwrite(params, callback) {
 		let { workspaceExists, workspaceName } = params;
 		let dialogParams = {
+			title: "Overwrite Workspace?",
 			question: "This will overwrite the saved data for  \"" + workspaceName + "\". Would you like to proceed?",
 			affirmativeResponseLabel: "Yes, overwrite",
 			showCancelButton: false
@@ -541,6 +548,7 @@ Actions = {
 		let { workspaceExists, workspaceName, template } = params;
 
 		let dialogParams = {
+			title: "Overwrite Workspace?",
 			question: "The workspace \"" + workspaceName + "\" already exists. A new workspace will be created.",
 			affirmativeResponseLabel: "Okay",
 			showNegativeButton: false

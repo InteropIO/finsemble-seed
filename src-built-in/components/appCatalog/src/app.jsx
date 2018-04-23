@@ -23,16 +23,19 @@ class AppCatalog extends React.Component {
 	constructor(props) {
 		super(props);
 		this.finWindow = fin.desktop.Window.getCurrent();
-		this.state = { loaded: false }
+		this.state = {
+			loaded: false,
+			headerImgUrl: ""
+		};
 	}
 	componentWillMount() {
-		FSBL.Clients.ConfigClient.getValue({ field: "finsemble" }, (err, config) => {
+		FSBL.Clients.ConfigClient.getValues(null, (err, config) => {
 			if (config.startup_app && config.startup_app.applicationIcon) {
 				console.log("config.startup_app.applicationIcon", config.startup_app.applicationIcon)
 				this.setState({
 					loaded: true,
-					headerImgUrl: config.startup_app.applicationIcon
-				})
+					// headerImgUrl: config.startup_app.applicationIcon
+				});
 			}
 		})
 		this.setState({ activeSection: this.props && this.props.activeSection ? this.props.activeSection : '' })//Props did not exist in the contructor

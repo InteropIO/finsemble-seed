@@ -16,9 +16,6 @@ class FileMenu extends React.Component {
 			width: 40
 		};
 		return (<FinsembleMenu padding={padding}>
-			<FinsembleMenuSectionLabel>
-				Finsemble
-				</FinsembleMenuSectionLabel>
 			{/*Options in the file menu.*/}
 			<FinsembleMenuSection className='menu-primary'>
 				<FinsembleMenuItem label="Preferences" onClick={FileMenuActions.spawnPreferences} />

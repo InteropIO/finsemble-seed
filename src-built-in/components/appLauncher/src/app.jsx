@@ -84,9 +84,6 @@ class AppLauncher extends React.Component {
 					</FinsembleMenuItemLabel>
 				</FinsembleMenuItem>
 			</FinsembleMenuSection>
-			<FinsembleMenuSectionLabel>
-				Applications
-			</FinsembleMenuSectionLabel>
 			<ComponentList />
 		</FinsembleMenu>);
 	}

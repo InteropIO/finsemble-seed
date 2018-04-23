@@ -5,6 +5,7 @@
 body.menu {
     margin: 0px;
     font-family: var(--font-family);
+    font-size: var(--menu-font-size);
     font-weight: 300;
     overflow-y: hidden;
     overflow-x: hidden;
@@ -102,8 +103,14 @@ body.menu {
     border: 1px solid transparent;
 }
 
+.ff-delete:hover {
+    color: white;
+    background-color: var(--ff-delete-hover-color);
+    border-radius: 4px;
+}
+
 .ff-pin:hover {
-    color: black;
+    color: var(--ff-pin-font-color);
     width: 25px;
     border: 1px solid var(--ff-pin-border-hover-color);
     border-radius: 4px;
