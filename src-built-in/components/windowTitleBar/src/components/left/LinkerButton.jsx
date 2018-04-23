@@ -102,7 +102,6 @@ export default class LinkerButton extends React.Component {
             };
             // @todo, these positions should be relative to the actual element clicked rather
             // than hard coded to the left edge of the screen
-            debugger;
             let params = {
                 position: 'relative',
                 left: 0,

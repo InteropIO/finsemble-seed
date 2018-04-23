@@ -11,6 +11,7 @@
 }
 
 .fsbl-header {
+    font-family: var(--font-family);
     text-align: center;
     display: flex;
     height: var(--window-header-height);

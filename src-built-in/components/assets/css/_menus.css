@@ -105,7 +105,7 @@ body.menu {
 
 .ff-delete:hover {
     color: white;
-    background-color: var(--red200);
+    background-color: var(--ff-delete-hover-color);
     border-radius: 4px;
 }
 
