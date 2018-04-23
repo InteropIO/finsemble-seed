@@ -24,7 +24,7 @@
     width: 100%;
     z-index: 2147483641;
     top: 0;
-    font-family: 'Roboto', sans-serif;
+    font-family: var(--font-family);
     font-size: 14px;
     font-weight: 300;
     color: var(--header-text-color);

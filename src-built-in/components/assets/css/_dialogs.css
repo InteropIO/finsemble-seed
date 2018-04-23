@@ -5,7 +5,7 @@
 body.dialog {
     -webkit-appearance: none;
     overflow: hidden;
-    font-family: 'Roboto', sans-serif;
+    font-family: var(--font-family);
     font-size: 12pt;
     font-weight: 300;
   /* Styling for General Typography */
@@ -21,7 +21,6 @@ body.dialog html:before, body.dialog html:after, body.dialog body:before, body.d
 }
 
 body.dialog h2 {
-    font-family: 'Roboto', sans-serif;
     font-weight: 100;
     color: #000;
     font-size: 18pt;
@@ -29,7 +28,6 @@ body.dialog h2 {
 }
 
 body.dialog h3 {
-    font-family: 'Roboto', sans-serif;
     font-weight: 300;
     color: #000;
     text-align: center;

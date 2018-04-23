@@ -10,7 +10,7 @@
 .fsbl-button {
     margin: 0 auto;
     text-align: center;
-    font-family: 'Roboto', sans-serif;
+    font-family: var(--font-family);
     background: var(--dialog-button-background-color);
     border: var(--dialog-button-border);
     color: #000;

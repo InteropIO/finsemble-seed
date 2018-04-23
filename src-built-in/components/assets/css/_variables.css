@@ -1,6 +1,6 @@
 :root {
     --negative-action-color: #ef1436;
-
+    --font-family: 'Roboto', sans-serif;
 
     /** Dialogs **/
     --dialog-button-background-color: #fafafa;
@@ -23,7 +23,6 @@
     --section-toggle-font-color: #ffffff;
     --active-section-toggle-background: #2068c3;
     --section-toggle-hover-background-color: var(--left-nav-header-background-color);
-    --scrollbar-color: #039bff;
     --auto-load-workspace-pill-color: var(--scrollbar-color);
     --header-font-color: var(--scrollbar-color);
     --focused-workspace-background-color: #eeeeee;
@@ -36,7 +35,6 @@
     --positive-action-button-hover-border-color: #319bfb;
     --negative-action-button-hover-border-color: #d0021b;
     --negative-action-button-border-color: #ee5c5c;
-
 
     /** Toolbar */
     --component-font-color: var(--primary-accent-color);

@@ -4,7 +4,7 @@
 
 body.menu {
     margin: 0px;
-    font-family: 'Roboto';
+    font-family: var(--font-family);
     font-weight: 300;
     overflow-y: hidden;
     overflow-x: hidden;
@@ -23,7 +23,7 @@ body.menu {
     color: var(--primary-accent-color);
     text-transform: uppercase;
     font-weight: 700;
-    font-family: Roboto Condensed;
+    font-family: var(--font-family);
     width: 100%;
 }
 
