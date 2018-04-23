@@ -121,7 +121,7 @@ img {
     width: 36px;
     min-width: 36px;
     height: 36px;
-    background-color: #0b408f;
+    background-color: var(--app-catalog-icon-container-background-color);
     display: flex;
     align-items: center;
 }
@@ -192,8 +192,8 @@ img {
 .footerRight .openButton {
     cursor: pointer;
     align-self: flex-end;
-    background-color: #2068c3;
-    border: solid 1px #91c5ff;
+    background-color: var(--app-catalog-button-background-color);
+    border: var(--app-catalog-button-border);
     font-size: 12px;
     color: #ffffff;
     text-align: center;
@@ -257,9 +257,8 @@ img {
     padding: 5px 17px 5px 17px;
     text-align: center;
     align-self: center;
-    border: solid 1px #dddddd;
-    background-color: #2068c3;
-    border: solid 1px #91c5ff;
+    background-color: var(--app-catalog-button-background-color);
+    border: var(--app-catalog-button-border);
 }
 
 ::-webkit-scrollbar-track {

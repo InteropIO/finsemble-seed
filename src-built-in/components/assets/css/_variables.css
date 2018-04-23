@@ -84,4 +84,9 @@
     --ff-delete-hover-color: var(--negative-action-button-border-color);
     --ff-pin-border-hover-color: var(--primary-accent-color);
     --finsemble-item-pinned-hover-background-color: #0287DE;
+
+    /* App Catalog */
+    --app-catalog-icon-container-background-color: #0b408f;
+    --app-catalog-button-background-color: #2068c3;
+    --app-catalog-button-border:  1px solid #91c5ff;
 }
