@@ -81,3 +81,11 @@ icons used in our presentation components.
     font-family: "jpmuitk-icons";
     content: "\e912";
 }
+
+.searchInput::after {
+    position: absolute;
+    font-family: "jpmuitk-icons" !important;
+    right: 11px !important;
+    bottom: -1px !important;
+    content: "\e954" !important;
+}

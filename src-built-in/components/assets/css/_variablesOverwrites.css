@@ -117,6 +117,11 @@
     --header-colorbutton-hover-icon: #ffffff;
     --component-font-color: #ff8c00;
     --workspace-icon-color: var(--orange);
+    --component-font-color: var(--primary-accent-color);
+     --brand-logo-width: 70px;
+    --brand-logo-height: 15px;
+    --brand-logo-margin: 7px 4px 4px 4px;
+    --brand-logo-url: "http://vignette2.wikia.nocookie.net/logopedia/images/6/6f/McDonalds.png/revision/latest?cb=20161217022233";
 
     --app-catalog-icon-container-background-color: var(--coolGrey600);
     --app-catalog-button-background-color: var(--coolGrey600O);
@@ -125,6 +130,8 @@
 
     --dialog-font-weight: 500;
     --dialog-body-padding: 23px 16px;
+    --dialog-button-background-color: var(--grey900);
+    --dialog-button-border: 1px solid  var(grey300);
 
     --menu-font-size: 14px;
     --ff-pin-font-color: var(--grey100);
@@ -145,12 +152,12 @@
 
     --search-result-item-color: #fff;
     --search-result-active-item-color: var(--coolGrey800);
+    --search-input-line-height: 32px;
 
     --toolbar-line-height: 16px;
     --toolbar-font-weight: 500;
     --toolbar-font-icon-font-size: 19px;
     --search-section-max-height: 30px;
-    --toolbar-height: 39px;
 
     --left-nav-padding-left: 28px;
 
@@ -247,13 +254,6 @@ body.dialog input {
     background-color: var(--primary-accent-color);
 }
 
-.searchInput::after {
-    position: absolute;
-    font-family: jpmuitk-icons;
-    right: 11px;
-    bottom: -1px;
-    content: "\e954";
-}
 
 
 .jpmuitk-icon-import, .jpmuitk-icon-export {
