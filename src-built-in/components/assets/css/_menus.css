@@ -140,3 +140,7 @@ body.menu {
     padding-right: 7px;
     margin-top: 2px;
 }
+
+.ff-share {
+    cursor: -webkit-grab;
+}
