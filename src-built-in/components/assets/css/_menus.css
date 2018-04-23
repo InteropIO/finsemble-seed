@@ -105,7 +105,7 @@ body.menu {
 .ff-pin:hover {
     color: black;
     width: 25px;
-    border: 1px solid var(--primary-accent-color);
+    border: 1px solid var(--ff-pin-border-hover-color);
     border-radius: 4px;
 }
 
@@ -119,13 +119,13 @@ body.menu {
 .finsemble-item-pinned:hover {
     color: white;
     width: 25px;
-    background-color: #0287DE;
+    background-color: var(--finsemble-item-pinned-hover-background-color);
     border-radius: 4px;
 }
 
 .ff-delete:hover {
     color: white;
-    background-color: #EE5C5C;
+    background-color: var(--ff-delete-hover-color);
     border-radius: 4px;
 }
 

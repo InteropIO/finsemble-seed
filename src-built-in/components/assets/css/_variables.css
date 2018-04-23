@@ -80,4 +80,8 @@
     --scrim-overlay: #2068c3;
     --scrim-negative-overlay: #960a05;
 
+    /* App Launcher */
+    --ff-delete-hover-color: var(--negative-action-button-border-color);
+    --ff-pin-border-hover-color: var(--primary-accent-color);
+    --finsemble-item-pinned-hover-background-color: #0287DE;
 }
