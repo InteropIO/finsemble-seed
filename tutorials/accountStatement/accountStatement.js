@@ -29,8 +29,8 @@ function displayAccount(accountNumber) {
 }
 
 function createLinkage() {
-	FSBL.Clients.LinkerClient.subscribe("account", function (obj) {
-		displayAccount(obj);
+	FSBL.Clients.LinkerClient.subscribe("account", function (err, response) {
+		displayAccount(response.data);
 	});
 }
 
