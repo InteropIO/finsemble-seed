@@ -7,6 +7,8 @@ for (let key in preloadFilesToBuild) {
 	entries[component.output] = component.entry;
 }
 
+console.log(entries);
+
 module.exports = {
     devtool: 'source-map',
     entry: entries,
