@@ -1,0 +1,13 @@
+.pin-workspace:hover {
+    color: var(--primary-accent-color);
+}
+
+.pinned-workspace-pin {
+    color: var(--primary-accent-color);
+}
+
+/* Excluded so that activated pins don't appear inactive
+.pinned-workspace-pin:hover {
+	color:   var(--menu-primary-font-color);
+}
+*/

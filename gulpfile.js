@@ -12,7 +12,6 @@
 	const del = require("del");
 	const fs = require("fs");
 	const gulp = require("gulp");
-	const sass = require("gulp-sass");
 	const watch = require("gulp-watch");
 	const shell = require("shelljs");
 	const launcher = require("openfin-launcher");
@@ -102,27 +101,6 @@
 
 			done();
 		},
-
-		/**
-		 * Builds the SASS files for the project.
-		 */
-		buildSass: () => {
-			const source = [
-				path.join(srcPath, "components", "**", "*.scss"),
-				path.join(__dirname, "src-built-in", "components", "**", "*.scss"),
-			];
-			// // Don't build files built by angular
-			// if (angularComponents) {
-			// 	angularComponents.forEach(comp => {
-			// 		source.push(path.join('!' + __dirname, comp.source, '**'));
-			// 	});
-			// }
-
-			return gulp
-				.src(source)
-				.pipe(sass().on("error", sass.logError))
-				.pipe(gulp.dest(path.join(distPath, "components")));
-		},
 		/**
 		 * Builds files using webpack.
 		 */
@@ -160,6 +138,24 @@
 				(cb) => {
 					const webpackComponentsConfig = require("./build/webpack/webpack.components.js")
 					packFiles(webpackComponentsConfig, "component bundle", cb);
+				},
+				(cb) => {
+					const webpackPreloadsConfig = require("./build/webpack/webpack.preloads.js")
+					webpack(webpackPreloadsConfig, (err, stats) => {
+						if (!err) {
+							logToTerminal("cyan", `Finished building preloads`)
+						} else {
+							console.error(errorOutColor("Webpack Error.", err));
+						}
+						if (stats.hasErrors()) {
+							console.error(errorOutColor(stats));
+						}
+						//Webpack invokes this function (basically, an onComplete) each time the bundle is built. We only want to invoke the async callback the first time.
+						if (cb) {
+							cb();
+							cb = undefined;
+						}
+					});
 				},
 				(cb) => {
 					const webpackHeaderConfig = require("./build/webpack/webpack.titleBar.js")
@@ -329,7 +325,6 @@
 		watchFiles: done => {
 			watchClose = done;
 			return merge(
-				watch(path.join(srcPath, "components", "assets", "**", "*"), {}, this.buildSass),
 				watch(path.join(srcPath, "**", "*.css"), { ignoreInitial: true })
 					.pipe(gulp.dest(distPath)),
 				watch(path.join(srcPath, "**", "*.html"), { ignoreInitial: true })
@@ -363,7 +358,6 @@
 			"build",
 			gulp.series(
 				taskMethods.buildWebpack,
-				taskMethods.buildSass,
 				taskMethods.buildAngular));
 
 		/**

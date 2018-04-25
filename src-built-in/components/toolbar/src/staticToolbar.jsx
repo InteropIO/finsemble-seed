@@ -17,9 +17,9 @@ import BringToFront from "../components/BringToFront";
 import WorkspaceLauncherButton from "../components/WorkspaceLauncherButton";
 import WorkspaceMenuOpener from "../components/WorkspaceMenuOpener"
 // Styles
-import "../../assets/css/finsemble.scss";
+import "../toolbar.css";
 import "../../assets/css/finfont.css";
-import "../toolbar.scss";
+import "../../assets/css/finsemble.css";
 
 var pinnableItems = {
 	"componentLauncher": FinsembleButton,

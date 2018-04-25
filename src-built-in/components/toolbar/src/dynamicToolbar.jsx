@@ -27,9 +27,9 @@ customComponents["WorkspaceMenuOpener"] = WorkspaceMenuOpener;
 customComponents["Search"] = Search;
 
 // Styles
-import "../../assets/css/finsemble.scss";
+import "../toolbar.css";
 import "../../assets/css/finfont.css";
-import "../toolbar.scss";
+import "../../assets/css/finsemble.css";
 
 var pinnableItems = {
 	"componentLauncher": FinsembleButton,
@@ -139,14 +139,13 @@ export default class Toolbar extends React.Component {
 						break;
 				}
 				buttons.push(buttonComponent);
-
 			}
 
 			// Add separators to the end for left and the begining for right sections:
 			if (sectionPosition == "right") {
 				buttons.splice(0, 0, <FinsembleToolbarSeparator key={sectionPosition} />);
 			} else if (sectionPosition == "left") {
-				buttons.push(<FinsembleToolbarSeparator key={sectionPosition} />);
+				//buttons.push(<FinsembleToolbarSeparator key={sectionPosition} />);
 			}
 
 			var sectionComponent = (<FinsembleToolbarSection

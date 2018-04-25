@@ -1,0 +1,232 @@
+@import "./_variables.css";
+@import "./_variablesWhitelabel.css";
+
+.cq-drag {
+    cursor: -webkit-grab;
+    -webkit-app-region: drag;
+}
+
+.cq-drag-area:active {
+    cursor: -webkit-grabbing;
+}
+
+.fsbl-header {
+    font-family: var(--font-family);
+    text-align: center;
+    display: flex;
+    height: var(--window-header-height);
+    position: fixed;
+    align-items: flex-end;
+    flex-direction: row;
+    justify-content: center;
+    background: var(--window-header-background-color);
+    width: 100%;
+    left: 0;
+    z-index: 2147483641;
+    top: 0;
+    font-size: var(--window-header-font-size);
+    font-weight: var(--window-header-font-weight);
+    color: var(--header-text-color);
+}
+
+html.desktop-active .fsbl-header {
+    background: var(--active-header-background-color);
+    color: var(--active-header-text-color);
+}
+
+.fsbl-header-left {
+    height: 100%;
+    margin-left: 2px;
+    left: 0px;
+    align-content: center;
+    align-items: center;
+    justify-content: flex-start;
+    display: flex;
+}
+
+.fsbl-header-center {
+    height: calc(100% - 5px);
+    align-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    --webkit-user-select: none;
+    padding-bottom: var(--fsbl-header-center-padding-bottom);
+}
+
+.fsbl-header-right {
+    margin-right: 2px;
+    height: 100%;
+    align-content: center;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* This div captures the hover event for it's parent. It doesn't stretch to the border, so that mouseout is properly detected. */
+.fsbl-hover-detector-right {
+    position: absolute;
+    width: 75%;
+    height: 75%;
+    left: 0px;
+    bottom: 0px;
+}
+
+.fsbl-hover-detector-left {
+    position: absolute;
+    width: 75%;
+    height: 75%;
+    right: 0px;
+    bottom: 0px;
+}
+
+.fsbl-hover-detector-top {
+    position: absolute;
+    width: 100%;
+    height: 75%;
+    right: 0px;
+    bottom: 0px;
+}
+
+.fsbl-icon {
+    position: relative;
+    color: var(--header-text-color);
+    font-size: 15px;
+    width: var(--fsbl-icon-width);
+    padding: 0px 6px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .2s ease;
+    cursor: pointer;
+    box-sizing: content-box !important;
+}
+
+html.desktop-active .fsbl-icon {
+    color: #FFF;
+}
+
+.fsbl-icon[data-hover=true] {
+    background-color: var(--inactive-header-button-hover);
+}
+
+html.desktop-active .fsbl-icon[data-hover=true] {
+    background: var(--primary-accent-color);
+    transition: background .2s ease;
+}
+
+/* So it sits over the border*/
+.fsbl-icon.fsbl-close {
+    margin-right: -1px;
+}
+
+.fsbl-icon.fsbl-close[data-hover=true] {
+    background: var(--negative-action-color);
+    color: #FFF;
+}
+
+html.desktop-active .fsbl-icon.fsbl-close[data-hover=true] {
+    background: var(--negative-action-color);
+    color: #FFF;
+}
+
+.fsbl-icon-highlighted {
+    -webkit-transition: background-color 300ms ease-in-out;
+    transition: background-color 300ms ease-in-out;
+    background-color: var(--highlighted-inactive-window-button);
+    color: #FFF;
+}
+
+html.desktop-active .fsbl-icon-highlighted {
+    background-color: var(--primary-accent-color);
+}
+
+.fsbl-minimize {
+    align-items: flex-end;
+}
+
+.fsbl-ejector {
+    -webkit-transition: background-color 300ms ease-in-out;
+    transition: background-color 300ms ease-in-out;
+    color: white;
+    background-color: var(--primary-accent-color);
+}
+
+.linkerSection {
+    display: flex;
+    height: 100%;
+}
+
+.linker-groups {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.linker-group {
+    width: var(--linker-group-width);
+    height: 18px;
+    margin-left: 4px;
+    border-radius: 4px;
+    border: 1px solid var(--window-header-background-color);
+}
+
+html.desktop-active .linker-group {
+    border: 1px solid var(--active-header-background-color);
+}
+
+.linker-group:hover {
+    cursor: pointer;
+    border: 1px solid var(--primary-accent-color ) !important;
+}
+
+.linker-group:nth-last-child(1) {
+    margin-right: 5px;
+}
+
+.seperator {
+    width: 1px;
+    background-color: var(--header-text-color);
+    height: 58%;
+}
+
+.seperator html.desktop-active {
+    background-color: var(--active-header-text-color);
+}
+
+.fsbl-linker {
+    cursor: pointer;
+    display: flex;
+    height: 100%;
+  /* So it sits over the border*/
+    margin-left: -1px;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    transition: background .3s ease;
+    position: relative;
+}
+
+.fsbl-linker[hover=true] {
+    background: var(--inactive-header-button-hover);
+    color: #000;
+}
+
+html.desktop-active .fsbl-linker[hover=true] {
+    background: var(--primary-accent-color);
+    color: var(--header-colorbutton-hover-icon);
+}
+
+.ff-minimize {
+    padding-bottom: 5px;
+}
+
+.ff-maximize, .ff-close, .ff-detached, .ff-attached {
+    padding-top: 2px;
+}

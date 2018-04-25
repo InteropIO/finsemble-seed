@@ -2,14 +2,15 @@
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
-
+@import '../../../assets/css/_globals.css';
 #main {
     padding: 4px 0px 4px 0px;
+    background-color: var(--menu-background-color);
 }
 .linkerGroup{
     height: 20px;
     margin: 4px 8px 4px 8px;
-    cursor: pointer;     
+    cursor: pointer;
     border-radius: 2px;
 }
 .linkerGroup:hover{
@@ -58,8 +59,8 @@
     background-color: grey;
     opacity: .5;
 }
-.active-linker-group{   
-    margin-left: auto;    
+.active-linker-group{
+    margin-left: auto;
     height: 100%;
     display: flex;
     empty-cells: auto;
@@ -88,7 +89,7 @@
 }
 .advancedOptions .option{
     font-size:14px;
-   
+
     border: 1px solid transparent
 
 }
@@ -163,7 +164,7 @@
       width:25%;
 }
 .col{
-   margin:5px;  
+   margin:5px;
 }
 .newGroup{
       width: 100%;
@@ -177,7 +178,7 @@
     font-weight:bold;
     font-size: 18px;
     cursor:pointer;
-    
+
 }
 .xMark:hover{
     background-color: grey;

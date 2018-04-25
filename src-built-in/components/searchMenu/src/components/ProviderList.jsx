@@ -34,10 +34,6 @@ export default class ProviderList extends React.Component {
 
 				</div>
 
-				{(providerInfo.provider.providerActionCallback && providerInfo.provider.providerActionTitle ? <div className="providerAction" >
-					<div onClick={this.itemClick} className="actionTitle">{(providerInfo.provider.providerActionCallback ? providerInfo.provider.providerActionTitle : null)}</div>
-					<div className="ff-arrow-right arrow_right_grey" ></div>
-				</div> : null)}
 			</div>
 			{this.props.children}
 		</div >

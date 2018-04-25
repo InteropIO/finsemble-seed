@@ -303,8 +303,8 @@
 		"yesNo": {
 			"window": {
 				"url": "$applicationRoot/components/yesNoDialog/YesNoDialog.html",
-				"width": 350,
-				"height": 175,
+				"width": 500,
+				"height": 223,
 				"position": "absolute",
 				"top": "center",
 				"left": "center",
@@ -343,8 +343,8 @@
 		"singleInput": {
 			"window": {
 				"url": "$applicationRoot/components/singleInputDialog/singleInputDialog.html",
-				"width": 350,
-				"height": 175,
+				"width": 480,
+				"height": 154,
 				"position": "absolute",
 				"top": "center",
 				"left": "center",
@@ -474,7 +474,8 @@
 					"resizeRegion": {
 						"bottomRightCorner": 0,
 						"size": 0
-					}
+					},
+					"smallWindow": true
 				}
 			},
 			"component": {
@@ -567,35 +568,42 @@
 					}
 				}
 			}
-		}
-	},
-	"Docking Move Mask": {
-		"window": {
-			"url": "$applicationRoot/components/dockingGroupMask/dockingGroupMask.html",
-			"frame": false,
-			"resizable": false,
-			"showTaskbarIcon": false,
-			"options": {
-				"opacity": 0.7,
-				"autoShow": false
-			}
 		},
-		"component": {
-			"category": "system"
-		},
-		"foreign": {
-			"services": {
-				"dockingService": {
-					"isArrangable": false
+		"App Catalog": {
+			"window": {
+				"url": "$applicationRoot/components/appCatalog/appCatalog.html",
+				"frame": false,
+				"top": "center",
+				"left": "center",
+				"width": 800,
+				"height": 600,
+				"options": {
+					"autoShow": true,
+					"resizable": false,
+					"alwaysOnTop": true
 				}
 			},
-			"components": {
-				"App Launcher": {
-					"launchableByUser": false
+			"component": {
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"canGroup": false,
+						"isArrangable": false
+					}
 				},
-				"Window Manager": {
-					"FSBLHeader": false,
-					"persistWindowState": false
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"FSBLHeader": false,
+						"persistWindowState": false
+					},
+					"Toolbar": {
+						"iconClass": "UserPreferences"
+					}
 				}
 			}
 		}

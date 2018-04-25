@@ -39,13 +39,16 @@ export default class componentItem extends React.Component {
 
 		var delItem = (<FinsembleMenuItemAction onClick={this.deleteItem} className={delItemClassList}></FinsembleMenuItemAction>);
 
-		return (<FinsembleMenuItem label={this.props.name}
+		return (<FinsembleMenuItem
+			label={this.props.name}
 			onLabelClick={function () {
 				itemAction(component, {});
 			}}
 			isDeletable={this.props.isUserDefined}
 			deleteAction={this.deleteItem}
 			isPinnable={true}
+			pinIcon={'ff-pin'}
+			activePinModifier={'finsemble-item-pinned'}
 			isPinned={this.props.isPinned}
 			pinAction={function () {
 				togglePin(component);

@@ -1,0 +1,16 @@
+@import  url('../assets/css/_dialogs.css');
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 1.5em;
+}
+
+.formGroup .label {
+    flex-grow: 1;
+}
+
+.formGroup .label input {
+    float: right;
+}
