@@ -2414,6 +2414,10 @@
                     "claimMonitorSpace": true,
                     "addToWorkspace": false,
                     "options": {
+                        "cornerRounding": {
+                            "height": 20,
+                            "width": 20
+                        },
                         "contextMenu": false,
                         "resizable": false,
                         "showTaskbarIcon": false,
