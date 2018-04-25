@@ -76,7 +76,7 @@
 		},
 		"Getting Started Tutorial": {
 			"window": {
-				"url": "https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html",
+				"url": "https://www.chartiq.com/tutorials/?slug=finsemble-seed-project",
 				"height": 800,
 				"width": 1000
 			},
