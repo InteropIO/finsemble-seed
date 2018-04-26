@@ -49,7 +49,7 @@ body, html {
     overflow: visible;
 }
 
-.container {
+.searchContainer {
     display: flex;
     margin-right: 15px;
 }

@@ -130,7 +130,7 @@ export default class Search extends React.Component {
 		}
 	}
 	render() {
-		return <div id="inputContainer" className="container">
+		return <div id="inputContainer" className="searchContainer">
 			<div className="searchSection  finsemble-toolbar-button">
 				<div ref="Search" id="searchInput" contentEditable className={"searchInput " + (this.state.active ? "active" : "compact")} placeholder="Search" onKeyDown={this.keyPress}
 					onFocus={this.focused}

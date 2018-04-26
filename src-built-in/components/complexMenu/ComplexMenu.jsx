@@ -44,7 +44,7 @@ export default class ComplexMenu extends React.Component {
 		};
 		return (<div className="user-preferences" >
 			<div className="complex-menu-wrapper">
-				<div className="container">
+				<div className="complex-menu-container">
 					<div className="complex-menu-left-nav">
 						<div className="complex-menu-left-nav-header" style={headerImgStyle}>
 							{self.props.headerImgUrl !== "" && <img className="complex-menu-left-nav-header-img" src={self.props.headerImgUrl} />} {this.props.title}
@@ -54,9 +54,9 @@ export default class ComplexMenu extends React.Component {
 								let sectionToggleClasses = "complex-menu-section-toggle";
 								if (el.label === this.state.activeSection) {
 									sectionToggleClasses += " active-section-toggle";
-									activeContent.push(<div className="conatinerItem active">{el.content}</div>);
+									activeContent.push(<div className="containerItem active">{el.content}</div>);
 								} else {
-									activeContent.push(<div className="conatinerItem">{el.content}</div>);
+									activeContent.push(<div className="containerItem">{el.content}</div>);
 								}
 								return <div className={sectionToggleClasses} key={i} onClick={() => {
 									self.setActiveSection(el.label);

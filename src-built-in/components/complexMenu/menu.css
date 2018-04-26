@@ -17,16 +17,16 @@ body {
     justify-content: flex-start;
 }
 
-.container {
+.complex-menu-container {
     display: flex;
     flex: 1;
 }
 
-.container .conatinerItem {
+.complex-menu-container .containerItem {
     display: none;
 }
 
-.container .conatinerItem.active {
+.complex-menu-container .containerItem.active {
     display: inline-block;
     overflow-y: auto;
     overflow-x: hidden;
