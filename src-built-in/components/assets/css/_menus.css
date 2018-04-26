@@ -95,9 +95,19 @@ body.menu {
     padding: 0em .15em;
 }
 
-.ff-pin, .ff-delete {
-    margin-top: 1px;
-    padding-top: 5px;
+.menu-item .menu-item-action {
+    align-self: center;
+}
+
+.ff-pin {
+    padding: 2px;
+    width: 25px;
+    text-align: center;
+    border: 1px solid transparent;
+} 
+
+.ff-delete {
+    padding: 2px 2px 2px 0px;
     width: 25px;
     text-align: center;
     border: 1px solid transparent;
