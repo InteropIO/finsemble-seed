@@ -37,7 +37,7 @@
 	}
 	// #region Constants
 	const startupConfig = require("./configs/other/server-environment-startup");
-	//Force colors on terminals.
+
 	let angularComponents;
 	try {
 		angularComponents = require("./build/angular-components.json");
@@ -46,7 +46,9 @@
 		angularComponents = null;
 	}
 
+	//Force colors on terminals.
 	const errorOutColor = chalk.red;
+
 	// #endregion
 
 	// #region Script variables
@@ -100,6 +102,12 @@
 			}
 
 			done();
+		},
+		/**
+		 * Stub for building sass files. Add this with gulp-extensions.js if your project uses sass
+		 */
+		buildSass: done => {
+			return done();
 		},
 		/**
 		 * Builds files using webpack.
@@ -325,6 +333,7 @@
 		watchFiles: done => {
 			watchClose = done;
 			return merge(
+				watch(path.join(srcPath, "components", "assets", "**", "*"), {}, this.buildSass),
 				watch(path.join(srcPath, "**", "*.css"), { ignoreInitial: true })
 					.pipe(gulp.dest(distPath)),
 				watch(path.join(srcPath, "**", "*.html"), { ignoreInitial: true })
@@ -354,11 +363,11 @@
 		/**
 		 * Builds the application in the distribution directory. Internal only, don't use because no environment is set!!!!
 		 */
-		gulp.task(
-			"build",
-			gulp.series(
-				taskMethods.buildWebpack,
-				taskMethods.buildAngular));
+		gulp.task("build", gulp.series(
+			taskMethods.buildWebpack,
+			taskMethods.buildSass,
+			taskMethods.buildAngular
+		));
 
 		/**
 		 * Wipes the babel cache and webpack cache, clears dist, rebuilds the application.
@@ -425,5 +434,6 @@
 	}
 	// #endregion
 
+	// Run anything that we need to do before the gulp task is run
 	taskMethods.pre(defineTasks);
 })();
