@@ -52,7 +52,7 @@ class AppLauncher extends React.Component {
 	}
 
 	openAdHoc() {
-		FSBL.Clients.LauncherClient.spawn("AdhocComponentForm", { monitor: "mine" });
+		FSBL.Clients.DialogManager.open("AdhocComponentForm", {}, () => { });
 	}
 
 	openAppCatalog() {
