@@ -7,8 +7,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 //Finsemble font-icons, general styling, and specific styling.
-import "../assets/css/finfont.css";
+//import "../assets/css/finfont.css";
 import "../assets/css/finsemble.css";
+import { FinsembleDialog, FinsembleDialogTextInput, FinsembleDialogQuestion, FinsembleDialogButton } from "@chartiq/finsemble-react-controls";
 import "./adhoc.css";
 
 // const Test = require('./test');
@@ -20,6 +21,8 @@ class AdHocComponentForm extends React.Component {
 	constructor(props) {
 		super(props);
 		this.save = this.save.bind(this);
+		this.setName = this.setName.bind(this);
+		this.setURL = this.setURL.bind(this);
 	}
 	/**
 	 * Adds eventListeners on keydown, sets the height of the component.
@@ -55,10 +58,10 @@ class AdHocComponentForm extends React.Component {
 	 * @memberof AdHoc
 	 */
 	save() {
-		this.hideWindow();
-		let name = this.refs.name.value;
-		let url = this.refs.url.value;
-		if (!name || !url) return;
+		if (!this.state) return FSBL.Clients.DialogManager.respondToOpener({});
+		let name = this.state.name;
+		let url = this.state.url;
+		if (!name || !url) return FSBL.Clients.DialogManager.respondToOpener({});
 		let validUrl;
 		//Checks to see if what the user has passed in is a genuine URL. This is so that stuff like 'about:blank' is accepted, but wigglesWorth-4343,com is not.
 		try {
@@ -68,7 +71,9 @@ class AdHocComponentForm extends React.Component {
 				validUrl = new URL("http://" + url);
 			} catch (e) {
 				console.error("Invalid URL");
-				return FSBL.Clients.WindowClient.close(false);
+				return FSBL.Clients.DialogManager.respondToOpener({
+					error: "Invalid URL"
+				});
 			}
 		}
 		url = validUrl.href;
@@ -79,7 +84,13 @@ class AdHocComponentForm extends React.Component {
 			if (err) {
 				console.error(err);
 			}
-			FSBL.Clients.WindowClient.close(false);
+			//FSBL.Clients.WindowClient.close(false);
+			FSBL.Clients.DialogManager.respondToOpener({});
+		});
+		Array.from(document.querySelectorAll("input")).forEach((el) => el.value = "");
+		this.setState({
+			name: "",
+			url: ""
 		});
 	}
 	/**
@@ -88,31 +99,50 @@ class AdHocComponentForm extends React.Component {
 	 * @memberof AdHoc
 	 */
 	cancel() {
-		FSBL.Clients.WindowClient.close(false);
+		//FSBL.Clients.WindowClient.close(false);
+		FSBL.Clients.DialogManager.respondToOpener({});
 	}
+
+	setName(e) {
+		this.setState({name: e.target.value});
+	}
+
+	setURL(e) {
+		this.setState({ url: e.target.value });
+	}
+
 	render() {
 		var self = this;
-		return (<div id="dialog" className="dialog">
-			<h3>
+		return (<FinsembleDialog
+			behaviorOnResponse="hide"
+			onShowRequested={() => {
+				FSBL.Clients.WindowClient.fitToDOM(null, function () {
+					FSBL.Clients.DialogManager.showDialog();
+				});
+			}}
+			isModal={true}>
+			<div className="dialog-title">New App</div>
+			<FinsembleDialogQuestion>
 				Input a name and URL for your new app.
-			</h3>
-			{/*Name of the new component.*/}
-			<div className="form-group">
-				<label>Name: </label>
-				<input id="Name" ref="name" autoFocus />
+			</FinsembleDialogQuestion>
+			<div className="button-wrapper">
+			<FinsembleDialogTextInput maxLength="40" onInputChange={this.setName} placeholder="Name" autofocus />
+			<FinsembleDialogTextInput maxLength="40" onInputChange={this.setURL} placeholder="URL" />
+
+
+				<FinsembleDialogButton show={true} buttonSize="md-positive" onClick={this.save}>
+					Save
+				</FinsembleDialogButton>
+				<FinsembleDialogButton show={true} buttonSize="md-neutral" onClick={this.cancel}>
+					Cancel
+			</FinsembleDialogButton>
 			</div>
-			{/*URL for the new component.*/}
-			<div className="form-group">
-				<label>URL: </label>
-				<input id="Url" ref="url" />
-			</div>
-			<div className="fsbl-buttonGroup">
-				<div id="SaveButton"
-					className="fsbl-button fsbl-button-md" onClick={this.save}><i className="ff-check-circle"></i>Save</div>
-				<div id="CancelButton"
-					className="fsbl-button fsbl-button-md" onClick={this.cancel}>Cancel</div>
-			</div>
-		</div>);
+		</FinsembleDialog>
+
+
+
+
+		);
 	}
 }
 

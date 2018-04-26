@@ -240,7 +240,7 @@
 		"AdhocComponentForm": {
 			"window": {
 				"url": "$applicationRoot/components/adhocComponentForm/adhocComponentForm.html",
-				"width": 350,
+				"width": 550,
 				"height": 175,
 				"position": "absolute",
 				"top": "center",
