@@ -58,7 +58,7 @@ class AdHocComponentForm extends React.Component {
 	 * @memberof AdHoc
 	 */
 	save() {
-		this.hideWindow();
+		if (!this.state) return FSBL.Clients.DialogManager.respondToOpener({});
 		let name = this.state.name;
 		let url = this.state.url;
 		if (!name || !url) return FSBL.Clients.DialogManager.respondToOpener({});
@@ -71,10 +71,9 @@ class AdHocComponentForm extends React.Component {
 				validUrl = new URL("http://" + url);
 			} catch (e) {
 				console.error("Invalid URL");
-				FSBL.Clients.DialogManager.respondToOpener({
+				return FSBL.Clients.DialogManager.respondToOpener({
 					error: "Invalid URL"
 				});
-				return; //FSBL.Clients.WindowClient.close(false);
 			}
 		}
 		url = validUrl.href;
@@ -128,8 +127,6 @@ class AdHocComponentForm extends React.Component {
 			</FinsembleDialogQuestion>
 			<div className="button-wrapper">
 				<FinsembleDialogTextInput maxLength="40" onInputChange={this.setName} placeholder="Name" autofocus />
-			</div>
-			<div className="button-wrapper">
 			<FinsembleDialogTextInput maxLength="40" onInputChange={this.setURL} placeholder="URL" />
 			</div>
 			<div className="button-wrapper">
