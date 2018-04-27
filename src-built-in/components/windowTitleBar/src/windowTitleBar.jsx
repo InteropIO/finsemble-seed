@@ -20,6 +20,7 @@ import DockingButton from "./components/right/DockingButton.jsx";
 import Maximize from "./components/right/MaximizeButton.jsx";
 import Close from "./components/right/CloseButton.jsx";
 import BringSuiteToFront from "./components/right/BringSuiteToFront.jsx";
+import AlwaysOnTop from "./components/right/AlwaysOnTop.jsx";
 import "../../assets/css/finsemble.css";
 
 /**
@@ -124,6 +125,7 @@ class WindowTitleBar extends React.Component {
 			</div>
 			<div onMouseDown={this.startLongHoldTimer} className="fsbl-header-center cq-drag">{self.state.windowTitle}</div>
 			<div onMouseDown={this.startLongHoldTimer} className="fsbl-header-right">
+				<AlwaysOnTop />
 				<BringSuiteToFront />
 				{this.state.minButton && showMinimizeIcon ? <Minimize /> : null}
 				{showDockingIcon ? <DockingButton /> : null}
