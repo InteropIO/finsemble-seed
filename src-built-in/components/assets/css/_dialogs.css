@@ -66,7 +66,7 @@ body.dialog .dialog-question {
 
 body.dialog .button-wrapper {
     display: flex;
-    justify-content: flex-start;
+    justify-content: flex-end;
 }
 
 body.dialog input[type=number]::-webkit-inner-spin-button,
