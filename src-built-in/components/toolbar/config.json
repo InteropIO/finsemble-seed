@@ -20,6 +20,11 @@
     {
         "align": "right",
         "type": "reactComponent",
+        "reactComponent": "AlwaysOnTop"
+    },
+    {
+        "align": "right",
+        "type": "reactComponent",
         "reactComponent": "AutoArrange"
     },
     {
