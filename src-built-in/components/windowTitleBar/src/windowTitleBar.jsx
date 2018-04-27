@@ -126,7 +126,7 @@ class WindowTitleBar extends React.Component {
 			</div>
 			<div onMouseDown={this.startLongHoldTimer} className="fsbl-header-center cq-drag">{self.state.windowTitle}</div>
 			<div onMouseDown={this.startLongHoldTimer} className="fsbl-header-right">
-				{this.state.alwaysOnTopButton ? <AlwaysOnTop /> : null}
+				{this.state.alwaysOnTopButton && showMinimizeIcon ? <AlwaysOnTop /> : null}
 				<BringSuiteToFront />
 				{this.state.minButton && showMinimizeIcon ? <Minimize /> : null}
 				{showDockingIcon ? <DockingButton /> : null}
