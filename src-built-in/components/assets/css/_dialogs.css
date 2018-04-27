@@ -58,7 +58,7 @@ body.dialog .dialog-question {
     font-weight: 500;
     color:  var(--dialog-font-color);
     font-size: 14px;
-    margin-bottom: 25px;
+    margin-bottom: 16px;
     padding-left: 4px;
     text-align: left;
     word-wrap: break-word;
