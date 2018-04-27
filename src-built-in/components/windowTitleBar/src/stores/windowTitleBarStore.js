@@ -29,10 +29,12 @@ var Actions = {
 		 */
 		if (FSBLHeader) {
 			var max = FSBLHeader.hideMaximize ? true : false;
+			var alwaysOnTop = FSBLHeader.hideAlwaysOnTop ? true : false;
 			windowTitleBarStore.setValues([
 				{ field: "Maximize.hide", value: max },
 				{ field: "Minimize.hide", value: FSBLHeader.hideMinimize ? true : false },
 				{ field: "Close.hide", value: FSBLHeader.hideClose ? true : false },
+				{ field: "AlwaysOnTop.hide", value: alwaysOnTop },
 			]);
 
 			// Set by calling WindowClient.setTitle() || from config "foreign.components.Window Manager.title"

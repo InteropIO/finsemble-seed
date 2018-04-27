@@ -38,6 +38,7 @@ class WindowTitleBar extends React.Component {
 			closeButton: !windowTitleBarStore.getValue({ field: "Close.hide" }),
 			showLinkerButton: windowTitleBarStore.getValue({ field: "Linker.showLinkerButton" }),
 			isTopRight: windowTitleBarStore.getValue({ field: "isTopRight" }),
+			alwaysOnTopButton: !windowTitleBarStore.getValue({field: "AlwaysOnTop.hide"})
 		};
 	}
 	/**
@@ -125,7 +126,7 @@ class WindowTitleBar extends React.Component {
 			</div>
 			<div onMouseDown={this.startLongHoldTimer} className="fsbl-header-center cq-drag">{self.state.windowTitle}</div>
 			<div onMouseDown={this.startLongHoldTimer} className="fsbl-header-right">
-				<AlwaysOnTop />
+				{this.state.alwaysOnTopButton ? <AlwaysOnTop /> : null}
 				<BringSuiteToFront />
 				{this.state.minButton && showMinimizeIcon ? <Minimize /> : null}
 				{showDockingIcon ? <DockingButton /> : null}
