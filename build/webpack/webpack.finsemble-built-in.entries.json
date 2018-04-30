@@ -36,7 +36,7 @@
 		"entry": "./src-built-in/components/singleInputDialog/src/app.jsx"
 	},
 	"UserPreferences": {
-        "output": "components/userPreferences/UserPreferences",
+        "output": "components/userPreferences/userPreferences",
         "entry": "./src-built-in/components/userPreferences/src/app.jsx"
     },
     "appCatalog": {
