@@ -5,9 +5,9 @@
 import React from "react";
 import { Actions as FileMenuActions } from "./stores/fileMenuStore";
 import { FinsembleMenu, FinsembleMenuItem, FinsembleMenuSection, FinsembleMenuSectionLabel } from "@chartiq/finsemble-react-controls";
+import "../fileMenu.css";
 import "../../assets/css/finfont.css";
 import "../../assets/css/finsemble.css";
-import "../fileMenu.css";
 
 class FileMenu extends React.Component {
 	render() {
