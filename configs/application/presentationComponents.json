@@ -606,6 +606,33 @@
 					}
 				}
 			}
-		}
+		},
+		"Process Monitor": {
+			"window": {
+				"url": "$applicationRoot/components/processMonitor/processMonitor.html",
+				"width": 600,
+				"height": 400
+			},
+			"component": {
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"persistWindowState": true,
+						"title": "Process Monitor"
+					}
+				}
+			}
+		}		
 	}
 }
