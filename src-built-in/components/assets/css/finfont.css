@@ -299,6 +299,6 @@
 .ff-import:before {
   content: "\5e";
 }
-.ff-ff-anchor:before {
+.ff-anchor:before {
   content: "\5f";
 }
