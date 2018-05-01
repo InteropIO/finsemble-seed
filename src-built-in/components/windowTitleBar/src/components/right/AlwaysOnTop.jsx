@@ -29,7 +29,7 @@ export default class AlwaysOnTop extends React.Component {
 
 	changeAlwaysOnTop() {
 		let newState = !this.state.alwaysOnTop;
-		FSBL.Clients.WindowClient.finsembleWindow.updateOptions({ alwaysOnTop: newState }, () => {
+		FSBL.Clients.WindowClient.setAlwaysOnTop(newState, () => {
 			this.setState({
 				alwaysOnTop: newState
 			})
@@ -56,7 +56,7 @@ export default class AlwaysOnTop extends React.Component {
 	render() {
 		let iconClasses = "icon-ciq ff-pin ";
 		let wrapClasses = "fsbl-icon cq-no-drag ";
-		if (this.state.alwaysOnTop) wrapClasses += "fsbl-icon-highlighted ";
+		if (this.state && this.state.alwaysOnTop) wrapClasses += "fsbl-icon-highlighted ";
 		let tooltip = "Always on Top";
 
 		return (<div className={wrapClasses} id="fsbl-window-restore" title={tooltip} data-hover={this.state.hoverState} onClick={this.changeAlwaysOnTop}>
