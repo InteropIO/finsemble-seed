@@ -30,7 +30,7 @@ export default class AlwaysOnTop extends React.Component {
 	render() {
 		//console.log('rendero')
 		let tooltip = "Always on Top";
-		let buttonClass = "ff-pin finsemble-toolbar-button-icon";
+		let buttonClass = "ff-always-on-top finsemble-toolbar-button-icon";
 		return (<FinsembleButton className={this.props.classes + " icon-only" + (this.state.alwaysOnTop ? " fsbl-icon-highlighted" : "")} buttonType={["Toolbar"]} title={tooltip} onClick={this.changeAlwaysOnTop}>
 			<i className={buttonClass}></i>
 		</FinsembleButton>);
