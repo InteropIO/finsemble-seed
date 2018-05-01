@@ -302,3 +302,9 @@
 .ff-anchor:before {
   content: "\5f";
 }
+.ff-copy:before {
+  content: "\60";
+}
+.ff-always-on-top:before {
+  content: "\7b";
+}
