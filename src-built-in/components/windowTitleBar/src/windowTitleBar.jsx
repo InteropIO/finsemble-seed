@@ -125,7 +125,7 @@ class WindowTitleBar extends React.Component {
 		let showDockingIcon = !self.state.dockingEnabled ? false : self.state.dockingIcon;
 		let isGrouped = (self.state.dockingIcon == "ejector");
 		let showMinimizeIcon = (isGrouped && self.state.isTopRight) || !isGrouped; //If not in a group or if topright in a group
-		return (<div className="fsbl-header" onMouseEnter={this.toggleDrag} onMouseLeave={this.toggleDrag}>
+		return (<div className={this.state.titleBarIsHoveredOver? "fsbl-header cq-drag" : "fsbl-header"} onMouseEnter={this.toggleDrag} onMouseLeave={this.toggleDrag}>
 			<div className="fsbl-header-left">
 				{self.state.showLinkerButton ? <Linker /> : null}
 				<Sharer />
