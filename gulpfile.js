@@ -278,6 +278,14 @@
 		pre: done => { done(); },
 
 		/**
+		 * Sets flag to not watch for changes so build will exit.
+		 */
+		setNoWatch: done => {
+			process.env.NO_WATCH = true;
+			done();
+		},
+
+		/**
 		 * Starts the server.
 		 *
 		 * @param {function} done Function called when execution has completed.
@@ -377,7 +385,7 @@
 		/**
 		 * Builds the application, starts the server, launches the Finsemble application and watches for file changes.
 		 */
-		gulp.task("build:dev", gulp.series(taskMethods.setDevEnvironment, "build", taskMethods.checkSymbolicLinks));
+		gulp.task("build:dev", gulp.series(taskMethods.setNoWatch, taskMethods.setDevEnvironment, "build", taskMethods.checkSymbolicLinks));
 
 		/**
 		 * Builds the application, starts the server, launches the Finsemble application and watches for file changes.

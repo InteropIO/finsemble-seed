@@ -96,7 +96,7 @@ module.exports = {
         path: path.resolve(__dirname, '../../dist/'),
         publicPath: 'http://localhost:3375/'
     },
-    watch: process.env.NODE_ENV === "development",
+    watch: (!process.env.NO_WATCH && (process.env.NODE_ENV !== "production")),
     resolve: {
         extensions: ['.js', '.jsx', '.json', 'scss', 'html'],
         modules: [
