@@ -37,6 +37,7 @@ class WindowTitleBar extends React.Component {
 			closeButton: !windowTitleBarStore.getValue({ field: "Close.hide" }),
 			showLinkerButton: windowTitleBarStore.getValue({ field: "Linker.showLinkerButton" }),
 			isTopRight: windowTitleBarStore.getValue({ field: "isTopRight" }),
+			titleBarIsHoveredOver: windowTitleBarStore.getValue({field:"titleBarIsHoveredOver"}),
 		};
 	}
 	/**
@@ -51,6 +52,7 @@ class WindowTitleBar extends React.Component {
 		this.onDocking = this.onDocking.bind(this);
 		this.showLinkerButton = this.showLinkerButton.bind(this);
 		this.isTopRight = this.isTopRight.bind(this);
+		this.toggleDrag = this.toggleDrag.bind(this);
 	}
 	componentWillMount() {
 		windowTitleBarStore.addListeners([
@@ -110,6 +112,12 @@ class WindowTitleBar extends React.Component {
 	onStoreChanged(newState) {
 		this.setState(newState);
 	}
+	toggleDrag(){
+		let newState=!this.state.titleBarIsHoveredOver;
+		this.setState({
+			titleBarIsHoveredOver:newState
+		});
+	}
 	render() {
 		var self = this;
 		//console.log("showLinkerButton--2", this.state)
@@ -117,12 +125,12 @@ class WindowTitleBar extends React.Component {
 		let showDockingIcon = !self.state.dockingEnabled ? false : self.state.dockingIcon;
 		let isGrouped = (self.state.dockingIcon == "ejector");
 		let showMinimizeIcon = (isGrouped && self.state.isTopRight) || !isGrouped; //If not in a group or if topright in a group
-		return (<div className="fsbl-header">
+		return (<div className="fsbl-header" onMouseEnter={this.toggleDrag} onMouseLeave={this.toggleDrag}>
 			<div className="fsbl-header-left">
 				{self.state.showLinkerButton ? <Linker /> : null}
 				<Sharer />
 			</div>
-			<div onMouseDown={this.startLongHoldTimer} className="fsbl-header-center cq-drag">{self.state.windowTitle}</div>
+			<div onMouseDown={this.startLongHoldTimer} className={this.state.titleBarIsHoveredOver? "fsbl-header-center" : "fsbl-header-center cq-drag"}>{self.state.windowTitle}</div>
 			<div onMouseDown={this.startLongHoldTimer} className="fsbl-header-right">
 				<BringSuiteToFront />
 				{this.state.minButton && showMinimizeIcon ? <Minimize /> : null}
@@ -134,6 +142,16 @@ class WindowTitleBar extends React.Component {
 		</div>);
 	}
 }
+
+// let titleBars=$('.fsbl-header-center');
+// for(var i=0; i<titleBars.length; i++){
+// 	titleBars[i].addEventListener('onMouseOver', function(){
+// 		titleBars[i].className="fsbl-header-center"
+// 	});
+// 	titleBars[i].addEventListener('onMouseOut', function(){
+// 		titleBars[i].className="fsbl-header-center cq-drag"
+// 	});
+// }
 
 
 FSBL.addEventListener("onReady", function () {

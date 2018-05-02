@@ -230,3 +230,17 @@ html.desktop-active .fsbl-linker[hover=true] {
 .ff-maximize, .ff-close, .ff-detached, .ff-attached {
     padding-top: 2px;
 }
+
+.fsbl-header-center{
+    transition-property: border, border-bottom-color, margin-right, border-top-left-radius, border-top-right-radius, height;
+    transition-duration: 1s;
+}
+
+.fsbl-header-center:hover{
+    border: 1px solid hotpink;
+    border-bottom-color: #233958;
+    margin-right: 20%;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    height: calc(100% - 7px);
+}
