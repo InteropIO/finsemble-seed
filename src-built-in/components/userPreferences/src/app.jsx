@@ -4,7 +4,7 @@
 */
 import React from "react";
 import { initialize as UserPreferencesStoreInitialize, Store as UserPreferencesStore, Actions as UserPreferencesActions } from "./stores/UserPreferencesStore";
-import "../../assets/css/finfont.css";
+import "../../assets/css/font-finance.css";
 import "../../assets/css/finsemble.css";
 import "../UserPreferences.css";
 

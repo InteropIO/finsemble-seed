@@ -3,7 +3,7 @@
 * All rights reserved.
 */
 import React from "react";
-import "../assets/css/finfont.css";
+import "../assets/css/font-finance.css";
 import "../assets/css/finsemble.css";
 import "./menu.css";
 

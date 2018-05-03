@@ -4,7 +4,7 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
-import "../../assets/css/finfont.css";
+import "../../assets/css/font-finance.css";
 import "../../assets/css/finsemble.css";
 import "../../assets/css/CIQ_Seed.css";
 import "./css/linkerWindow.css";

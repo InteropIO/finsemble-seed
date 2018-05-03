@@ -1,8 +1,8 @@
-@import './finfont.css';
+@import './font-finance.css';
 @import './_fontIconWhitelabel.css';
 
 [class*="ff-"] {
-    font-family: "finfont" !important;
+    font-family: "font-finance" !important;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-style: normal;
@@ -12,8 +12,8 @@
     speak: none;
    }
    
-.finfont {
-    font-family: "finfont" !important;
+.font-finance {
+    font-family: "font-finance" !important;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-style: normal;
