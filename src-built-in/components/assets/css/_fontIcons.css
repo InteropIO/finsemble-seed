@@ -1,2 +1,24 @@
 @import './finfont.css';
 @import './_fontIconWhitelabel.css';
+
+[class*="ff-"] {
+    font-family: "finfont" !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    speak: none;
+   }
+   
+.finfont {
+    font-family: "finfont" !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    speak: none;
+}
