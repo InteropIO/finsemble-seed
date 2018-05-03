@@ -136,13 +136,13 @@ img.pinned-icon {
 }
 
 .pinned-icon {
-    color: var(--toolbar-icon-font-color);
+    color: var(--toolbar-icon-app-color);
     font-size: var(--toolbar-icon-font-size);
     padding-right: .25em;
 }
 
 .pinned-workspace-icon {
-    color: var(--toolbar-workspace-icon-color ) !important;
+    color: var(--toolbar-icon-workspace-color ) !important;
 }
 
 .toolbar-button-label-left {
@@ -189,6 +189,6 @@ img.pinned-icon {
 }
 
 .ff-component {
-    font-size: 22px;
+    font-size: 20px;
     padding-top: 5px;
 }
