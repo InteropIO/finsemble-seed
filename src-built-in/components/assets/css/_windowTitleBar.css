@@ -126,12 +126,12 @@ html.desktop-active .fsbl-icon[data-hover=true] {
 }
 
 .fsbl-icon.fsbl-close[data-hover=true] {
-    background: var(--negative-action-color);
+    background: var(--negative-accent-color);
     color: #FFF;
 }
 
 html.desktop-active .fsbl-icon.fsbl-close[data-hover=true] {
-    background: var(--negative-action-color);
+    background: var(--negative-accent-color);
     color: #FFF;
 }
 

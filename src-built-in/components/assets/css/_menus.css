@@ -1,5 +1,4 @@
 @import  url('_globals.css');
-
 @import  url('_scrollbars.css');
 
 body.menu {
@@ -115,34 +114,34 @@ body.menu {
 
 .ff-delete:hover {
     color: white;
-    background-color: var(--ff-delete-hover-color);
+    background-color: var(--menu-delete-background-color);
     border-radius: 4px;
 }
 
 .ff-pin:hover {
     color: var(--ff-pin-font-color);
     width: 25px;
-    border: 1px solid var(--ff-pin-border-hover-color);
+    border: 1px solid var(--menu-pin-border-color);
     border-radius: 4px;
 }
 
 .finsemble-item-pinned {
     color: white;
     width: 25px;
-    background-color: var(--primary-accent-color);
+    background-color: var(--menu-pin-background-color);
     border-radius: 4px;
 }
 
 .finsemble-item-pinned:hover {
     color: white;
     width: 25px;
-    background-color: var(--finsemble-item-pinned-hover-background-color);
+    background-color: var(--menu-pin-background-hover-color);
     border-radius: 4px;
 }
 
 .ff-delete:hover {
     color: white;
-    background-color: var(--ff-delete-hover-color);
+    background-color: var(--menu-delete-background-color);
     border-radius: 4px;
 }
 
