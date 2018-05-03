@@ -90,7 +90,7 @@ body {
 }
 
 .actionButton {
-    border: 1px solid #039bff;
+    border: 1px solid var(--blue3);
     padding: 3px;
     display: inline-block;
     text-align: center;
@@ -100,7 +100,7 @@ body {
 
 .providerAction {
     height: 16px;
-    border: solid 1px #dddddd;
+    border: solid 1px var(--gray2);
     display: flex;
     justify-content: center;
     text-align: center;

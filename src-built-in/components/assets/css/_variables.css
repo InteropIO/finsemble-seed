@@ -57,27 +57,25 @@
 
     /** Toolbar */
     
-    --toolbar-height: 39px;
-    --brand-logo-width: 25px;
-    --brand-logo-height: 25px;
-    --brand-logo-margin: 4px 4px;
-    --brand-logo-url: "http://vignette2.wikia.nocookie.net/logopedia/images/6/6f/McDonalds.png/revision/latest?cb=20161217022233";
+    --toolbar-height: 29px;
+    --brand-logo-width: 20px;
+    --brand-logo-height: 20px;
+    --brand-logo-margin: 2px 2px;
+    /* --brand-logo-url: "http://vignette2.wikia.nocookie.net/logopedia/images/6/6f/McDonalds.png/revision/latest?cb=20161217022233"; */
 
     --toolbar-background-color: var(--coolGray7);
     --toolbar-primary-font-color: var(--font-color);
-    --toolbar-workspace-icon-color: var(--yellow);
+    --toolbar-icon-workspace-color: var(--yellow);
+    --toolbar-icon-app-color: var(--blue3);
 
     --toolbar-button-padding: 0 .4em;
     --toolbar-button-label-font-weight: 300;
-    --toolbar-button-label-margin: 8px;
-    --toolbar-button-label-padding-top: 4px;
-
-    --toolbar-icon-font-color: var(--blue3);
-    --toolbar-icon-font-size: 26px;
+    --toolbar-button-label-margin-top: 6px;
+    --toolbar-button-label-padding-top: 1px;
 
     --toolbar-line-height: 1em;
     --toolbar-font-weight: 300;
-    --toolbar-font-icon-font-size: 22px;
+    --toolbar-icon-font-size: 22px;
 
     --toolbar-separator: 1px solid rgba(255, 255, 255, 0.3);
 
@@ -126,7 +124,7 @@
 
     /* Search Menu */
     --search-result-active-item-color: var(--coolGray3);
-    --search-section-max-height: 40px;
+    --search-section-max-height: 30px;
     --search-input-height:var(--toolbar-height);
     --search-input-line-height: var(--toolbar-height);
 

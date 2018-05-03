@@ -68,7 +68,7 @@
     letter-spacing: .25px;
     align-content: center;
     display: block;
-    margin-top: var(--toolbar-button-label-margin);    
+    margin-top: var(--toolbar-button-label-margin-top);    
 }
 
 .finsemble-toolbar-button:hover {
@@ -94,7 +94,6 @@
     text-align: center;
     text-overflow: ellipsis;
     white-space: nowrap;
-    border-right: var(--toolbar-separator);
 }
 
 .finsemble-toolbar-workspace-button-label.finsemble-toolbar-button:hover {
@@ -105,7 +104,6 @@
 
 .finsemble-toolbar-button-icon {
     height: 100%;
-    padding-top: 2px;
     display: table-cell;
     vertical-align: middle;
 }
@@ -131,7 +129,7 @@
 }
 
 img.pinned-icon {
-    padding-top: 12px;
+    padding-top: 6px;
     max-width: 17px;
 }
 
@@ -189,6 +187,10 @@ img.pinned-icon {
 }
 
 .ff-component {
-    font-size: 20px;
-    padding-top: 5px;
+    font-size: 18px;
+    padding-top: 3px;
+}
+
+.ff-workspace {
+    padding-bottom: 2px;
 }
