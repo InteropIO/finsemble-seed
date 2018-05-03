@@ -99,15 +99,15 @@ body.menu {
 }
 
 .ff-pin {
-    padding: 2px;
-    width: 25px;
+    padding: 4px 1px;
+    width: 22px;
     text-align: center;
     border: 1px solid transparent;
 } 
 
 .ff-delete {
-    padding: 2px 2px 2px 0px;
-    width: 25px;
+    padding: 4px 2px 4px 0px;
+    width: 22px;
     text-align: center;
     border: 1px solid transparent;
 }
@@ -120,21 +120,21 @@ body.menu {
 
 .ff-pin:hover {
     color: var(--ff-pin-font-color);
-    width: 25px;
+    width: 22px;
     border: 1px solid var(--menu-pin-border-color);
     border-radius: 4px;
 }
 
 .finsemble-item-pinned {
     color: white;
-    width: 25px;
+    width: 22px;
     background-color: var(--menu-pin-background-color);
     border-radius: 4px;
 }
 
 .finsemble-item-pinned:hover {
     color: white;
-    width: 25px;
+    width: 22px;
     background-color: var(--menu-pin-background-hover-color);
     border-radius: 4px;
 }
