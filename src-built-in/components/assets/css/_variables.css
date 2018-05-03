@@ -93,7 +93,7 @@
     --inactive-header-button-hover: var(--secondary-accent-color);
     --breakpoint-small-window: 299px;
     --breakpoint-very-small-window: 175px;
-    --window-header-height: 32px;
+    --window-header-height: 25px;
     --window-header-font-weight: 300;
     --window-header-font-size: 14px;
     --fsbl-header-center-padding-bottom: 2px;

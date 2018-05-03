@@ -20,7 +20,7 @@
     flex-direction: row;
     justify-content: center;
     background: var(--window-header-background-color);
-    width: 100%;
+    width: 100vw;
     left: 0;
     z-index: 2147483641;
     top: 0;
