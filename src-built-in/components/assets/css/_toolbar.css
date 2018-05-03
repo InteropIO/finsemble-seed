@@ -62,7 +62,7 @@
 }
 
 .finsemble-toolbar-button-label {
-    font-size: .95em;
+    font-size: var(--toolbar-button-label-font-size);
     font-weight: var(--toolbar-button-label-font-weight);
     text-align: left;
     letter-spacing: .25px;
@@ -183,7 +183,7 @@ img.pinned-icon {
 }
 
 .ff-minimize-all {
-    padding-top: 4px;
+    padding-top: 2px;
 }
 
 .ff-component {
