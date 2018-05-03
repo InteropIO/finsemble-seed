@@ -81,24 +81,27 @@
     --toolbar-separator: 1px solid rgba(255, 255, 255, 0.3);
 
     /* Window Title bar */
-
-    --window-header-background-color: #233958;
-    --window-header-color: #151f28;
-    --window-frame-inactive-color: var(--window-header-background-color);
-    --active-header-text-color: var(--font-color);
-    --active-header-background-color: var(--secondary-accent-color);
-    --header-text-color: var(--font-color);
-    --header-colorbutton-hover-icon: var(--font-color);
-    --highlighted-inactive-window-button: #115fcc;
-    --inactive-header-button-hover: var(--secondary-accent-color);
+    --titleBar-height: 25px;
     --breakpoint-small-window: 299px;
     --breakpoint-very-small-window: 175px;
-    --window-header-height: 25px;
-    --window-header-font-weight: 300;
-    --window-header-font-size: 14px;
     --fsbl-header-center-padding-bottom: 2px;
     --fsbl-icon-width: 21px;
-    --linker-group-width: 7px;
+    --linker-group-width: 3px;
+
+    --titleBar-background-color: var(--coolGray6);
+    --titleBar-background-active-color: var(--coolGray);
+    --titlebar-background-inactive-color: var(--coolGray6);
+    --titleBar-button-hover-active-color: var(--blue6);
+    --titleBar-button-hover-inactive-color: var(--blue7);
+    --titleBar-button-highlight-active-color: var(--blue6);
+    --titleBar-button-highlight-inactive-color: var(--blue7);
+    --titleBar-button-hover-linker-group: var(--gray3);
+
+    --titleBar-text-color: var(--font-color);
+    --titlebar-text-active-color: var(--font-color);
+    --titleBar-text-inactive-color: var(--font-color);
+    --titleBar-font-weight: 300;
+    --titleBar-font-size: 14px;
 
     /* Dialogs */
     --dialog-button-background-color: #fafafa;
@@ -130,7 +133,7 @@
     --search-input-line-height: var(--toolbar-height);
 
     /* Window Frame*/
-    --window-frame-inactive-color: #1d4970;
+    --window-frame-inactive-color: var(--coolGray);
     --window-frame-active-color: var(--active-header-background-color);
 
     /* Window styles*/
