@@ -73,15 +73,11 @@ i, i:before, i:after, .fsbl-window-manager-icon {
     box-sizing: content-box;
 }
 
-body.dialog input:focus {
-    border: 1px solid var(--primary-accent-color);
-}
-
 /* Buttons */
 
 .fsbl-button {
     margin: 0px 6px;
-    width: 145px;
+    width: 124px;
     height: 35px;
     text-align: center;
     font-family: var(--font-family);

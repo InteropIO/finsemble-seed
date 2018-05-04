@@ -104,7 +104,7 @@ class AdHocComponentForm extends React.Component {
 	}
 
 	setName(e) {
-		this.setState({name: e.target.value});
+		this.setState({ name: e.target.value });
 	}
 
 	setURL(e) {
@@ -126,16 +126,14 @@ class AdHocComponentForm extends React.Component {
 				Input a name and URL for your new app.
 			</FinsembleDialogQuestion>
 			<div className="button-wrapper">
-			<FinsembleDialogTextInput maxLength="40" onInputChange={this.setName} placeholder="Name" autofocus />
-			<FinsembleDialogTextInput maxLength="40" onInputChange={this.setURL} placeholder="URL" />
-
-
-				<FinsembleDialogButton show={true} buttonSize="md-positive" onClick={this.save}>
-					Save
-				</FinsembleDialogButton>
-				<FinsembleDialogButton show={true} buttonSize="md-neutral" onClick={this.cancel}>
+				<FinsembleDialogTextInput maxLength="40" onInputChange={this.setName} placeholder="Name" autofocus />
+				<FinsembleDialogTextInput maxLength="40" onInputChange={this.setURL} placeholder="URL" />
+				<FinsembleDialogButton show={true} buttonSize="neutral" onClick={this.cancel}>
 					Cancel
 			</FinsembleDialogButton>
+				<FinsembleDialogButton show={true} buttonSize="affirmative" onClick={this.save}>
+					Save
+				</FinsembleDialogButton>
 			</div>
 		</FinsembleDialog>
 

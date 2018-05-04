@@ -107,7 +107,10 @@
     --dialog-background-color: var(--coolGray7);
     --dialog-font-color: #FFFFFF;
     --dialog-font-weight: 300;
-    --dialog-body-padding: 20px;
+    --dialog-body-padding: 32px;
+    --dialog-input-background-color: var(--coolGray7);
+    --dialog-input-border-color: var(--gray6);
+    --dialog-input-border-focus-color: var(--gray);
 
     /* Buttons */
     --button-affirmative-fill: var(--blue6);
