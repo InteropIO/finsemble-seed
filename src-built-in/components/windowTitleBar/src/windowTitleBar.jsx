@@ -130,7 +130,7 @@ class WindowTitleBar extends React.Component {
 				{self.state.showLinkerButton ? <Linker /> : null}
 				<Sharer />
 			</div>
-			<div onMouseDown={this.startLongHoldTimer} className="fsbl-header-center cq-drag"><div className="header-title cq-no-drag">{self.state.windowTitle}</div></div>
+			<div onMouseDown={this.startLongHoldTimer} className="fsbl-header-center cq-drag"><div className={this.state.titleBarIsHoveredOver?"header-title cq-no-drag header-title-hover":"header-title cq-no-drag"}>{self.state.windowTitle}</div></div>
 			<div onMouseDown={this.startLongHoldTimer} className="fsbl-header-right">
 				<BringSuiteToFront />
 				{this.state.minButton && showMinimizeIcon ? <Minimize /> : null}
@@ -169,7 +169,6 @@ function dragElement(elmnts) {
 	if(elmnts[0].style.left <= "0px"){
 		// emit the tear out event
 	}
-	console.log(elmnts[0].style.right);
   }
 
   function closeDragElement() {

@@ -241,7 +241,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     transition-duration: 1s;
 }
 
-.fsbl-header:hover .header-title{
+.header-title-hover{
     border: solid 1px #67829a;
     transform: perspective(100px) rotateX(20deg);
     background-color: #617383;
