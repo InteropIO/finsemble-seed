@@ -68,7 +68,17 @@
 		env.PORT = startupConfig[env.NODE_ENV].serverPort;
 	}
 
-	let doWatch = true;
+	const checkWatch = args => {
+		let result = true;
+		args.forEach(item => {
+			if (item === "build:dev") {
+				result = false;
+			}
+		})
+
+		return result;
+	}
+	const doWatch = checkWatch(process.argv);
 	// #endregion
 
 	// #region Task Methods
@@ -335,13 +345,6 @@
 			done();
 		},
 		/**
-		 * Tells the build to not watch for changes.
-		 */
-		setNoWatch: done => {
-			doWatch = false;
-			done();
-		},
-		/**
 		 * Watches files for changes to fire off copies and builds.
 		 */
 		watchFiles: done => {
@@ -391,7 +394,7 @@
 		/**
 		 * Builds the application, starts the server, launches the Finsemble application and watches for file changes.
 		 */
-		gulp.task("build:dev", gulp.series(taskMethods.setNoWatch, taskMethods.setDevEnvironment, "build", taskMethods.checkSymbolicLinks));
+		gulp.task("build:dev", gulp.series(taskMethods.setDevEnvironment, "build", taskMethods.checkSymbolicLinks));
 
 		/**
 		 * Builds the application, starts the server, launches the Finsemble application and watches for file changes.
