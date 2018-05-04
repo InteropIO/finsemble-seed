@@ -143,21 +143,47 @@ class WindowTitleBar extends React.Component {
 	}
 }
 
-// let titleBars=$('.fsbl-header-center');
-// for(var i=0; i<titleBars.length; i++){
-// 	titleBars[i].addEventListener('onMouseOver', function(){
-// 		titleBars[i].className="fsbl-header-center"
-// 	});
-// 	titleBars[i].addEventListener('onMouseOut', function(){
-// 		titleBars[i].className="fsbl-header-center cq-drag"
-// 	});
-// }
 
+function dragElement(elmnts) {
+  let pos1 = 0, pos2 = 0;
+  for(let i=0;i<elmnts.length;i++){
+	elmnts[i].onmousedown = dragMouseDown;
+  }
+
+  function dragMouseDown(e) {
+    e = e || window.event;
+    // get the mouse cursor position at startup:
+    pos2 = e.clientX;
+    document.onmouseup = closeDragElement;
+    // call a function whenever the cursor moves:
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+    e = e || window.event;
+    // calculate the new cursor position:
+    pos1 = pos2 - e.clientX;
+    pos2 = e.clientX;
+    // set the element's new position:
+	elmnts[0].style.left = (elmnts[0].offsetLeft - pos1) + "px";
+	if(elmnts[0].style.left <= "0px"){
+		// emit the tear out event
+	}
+	console.log(elmnts[0].style.right);
+  }
+
+  function closeDragElement() {
+    /* stop moving when mouse button is released:*/
+    document.onmouseup = null;
+    document.onmousemove = null;
+  }
+}
 
 FSBL.addEventListener("onReady", function () {
 	storeExports.initialize(function () {
 		HeaderActions = storeExports.Actions;
 		windowTitleBarStore = storeExports.getStore();
 		ReactDOM.render(<WindowTitleBar />, document.getElementById("FSBLHeader"));
+		dragElement(document.getElementsByClassName(("header-title")));
 	});
 });

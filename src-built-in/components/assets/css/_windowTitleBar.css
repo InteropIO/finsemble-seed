@@ -10,6 +10,11 @@
     cursor: -webkit-grabbing;
 }
 
+.cq-no-drag {
+    -webkit-app-region: no-drag !important;
+    position: absolute;
+}
+
 .fsbl-header {
     font-family: var(--font-family);
     text-align: center;
