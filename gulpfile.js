@@ -67,6 +67,9 @@
 	if (!env.PORT) {
 		env.PORT = startupConfig[env.NODE_ENV].serverPort;
 	}
+
+	const isRunningDevTask = process.argv[2].startsWith("dev");
+
 	// #endregion
 
 	// #region Task Methods
@@ -144,9 +147,7 @@
 				},
 				(cb) => {
 					const webpackComponentsConfig = require("./build/webpack/webpack.components.js")
-					if (!doWatch) {
-						webpackComponentsConfig.watch = false;
-					}
+					webpackComponentsConfig.watch = isRunningDevTask;
 					packFiles(webpackComponentsConfig, "component bundle", cb);
 				},
 				(cb) => {
@@ -169,9 +170,7 @@
 				},
 				(cb) => {
 					const webpackHeaderConfig = require("./build/webpack/webpack.titleBar.js")
-					if (!doWatch) {
-						webpackHeaderConfig.watch = false;
-					}
+					webpackHeaderConfig.watch = isRunningDevTask;
 					packFiles(webpackHeaderConfig, "header bundle", cb);
 				},
 				(cb) => {
@@ -185,21 +184,7 @@
 				done);
 
 		},
-		/**
-		 * Checks whether watch should be performed.
-		 * 
-		 * @returns True if watch should be performed, otherwise false.
-		 */
-		checkWatch: () => {
-			let result = true;
-			process.argv.forEach(item => {
-				if (item === "build:dev") {
-					result = false;
-				}
-			})
 
-			return result;
-		},
 		/**
 		 * Cleans the project folder of generated files.
 		 */
@@ -367,7 +352,6 @@
 		extensions(taskMethods);
 	}
 
-	const doWatch = taskMethods.checkWatch(process.argv);
 
 	// #region Task definitions
 	const defineTasks = err => {
