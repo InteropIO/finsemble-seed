@@ -29,8 +29,13 @@ body, html {
 
 .icon-only > i {
     height: 22px;
+    padding-top: 2px;
     font-size: var(--toolbar-font-icon-font-size);
     width: auto;
+}
+
+.icon-only .ff-minimize-all {
+    padding-top: 3px;
 }
 
 .searchSection {

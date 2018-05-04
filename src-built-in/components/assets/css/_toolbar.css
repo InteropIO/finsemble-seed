@@ -55,7 +55,7 @@
 }
 
 .finsemble-toolbar-button {
-    display: table;
+    display: -webkit-box;
     padding: var(--toolbar-button-padding);
     height: 100%;
     border: 1px solid var(--toolbar-background-color);
@@ -136,6 +136,7 @@ img.pinned-icon {
 .pinned-icon {
     color: var(--toolbar-icon-app-color);
     font-size: var(--toolbar-icon-font-size);
+    padding-top: 3px;
     padding-right: .25em;
 }
 
@@ -183,12 +184,12 @@ img.pinned-icon {
 }
 
 .ff-minimize-all {
-    padding-top: 2px;
+    padding-top: 4px;
 }
 
 .ff-component {
     font-size: 18px;
-    padding-top: 3px;
+    padding-top: 6px;
 }
 
 .ff-workspace {
