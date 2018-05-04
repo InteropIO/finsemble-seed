@@ -55,7 +55,7 @@ body.dialog .dialog-title {
 
 body.dialog .dialog-question {
     width: 469px;
-    font-weight: 500;
+    font-weight: 300;
     color:  var(--dialog-font-color);
     font-size: 14px;
     margin-bottom: 25px;
@@ -66,7 +66,7 @@ body.dialog .dialog-question {
 
 body.dialog .button-wrapper {
     display: flex;
-    justify-content: flex-start;
+    justify-content: flex-end;
 }
 
 body.dialog input[type=number]::-webkit-inner-spin-button,

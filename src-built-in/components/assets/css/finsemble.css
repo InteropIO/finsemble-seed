@@ -80,43 +80,35 @@ body.dialog input:focus {
 /* Buttons */
 
 .fsbl-button {
-    margin: 0 auto;
+    margin: 0px 6px;
+    width: 145px;
+    height: 35px;
     text-align: center;
     font-family: var(--font-family);
-    background: var(--dialog-button-background-color);
+    /* background: var(--dialog-button-background-color); */
+    border: 1px solid transparent;
     color: var(--button-solid-text);
     transition: .2s ease;
     display:flex;
     flex-direction: column;
     justify-content: center;
     align-self: center;
-}
-
-.fsbl-button i {
-    vertical-align: middle;
-    margin: 0 6px;
+    font-size: 15px;
+    letter-spacing: 0.4px;
+    line-height: 34px;
 }
 
 .fsbl-button:hover {
-    background: var(--primary-accent-color);
-    border: 1px solid var(--primary-accent-color);
+    /* background: var(--primary-accent-color);
+    border: 1px solid var(--primary-accent-color); */
     transition: 0.2s ease-in;
     cursor: pointer;
+    color: #FFFFFF;
 }
 
 .fsbl-button:hover {
     color: #FFF;
     transition: 0.2s ease-out;
-}
-
-.fsbl-button-md {
-    width: 145px;
-    height: 32px;
-    font-size: 13px;
-    padding: 9px 0px;
-    margin: 10px auto;
-    letter-spacing: 0.4px;
-    line-height: 34px;
 }
 
 /* .fsbl-button-md-positive {
@@ -138,31 +130,31 @@ body.dialog input:focus {
 } */
 
 .fsbl-button-affirmative {
-    border: var(--button-affirmative-border);
+    border: 1px solid var(--button-affirmative-border);
     background-color: var(--button-affirmative-fill);
 }
 
 .fsbl-button-affirmative:hover {
-    border: var(--button-affirmative-border-hover);
+    border: 1px solid var(--button-affirmative-border-hover);
 }
 
 .fsbl-button-neutral {
     /* color: var(--neutral-solid-text); */
-    border: var(--button-neutral-border);
+    border: 1px solid var(--button-neutral-border);
     /* background-color: var(--button-neutral-fill); */
 }
 
 .fsbl-button-neutral:hover {
-    border: var(--button-neutral-border-hover);
+    border: 1px solid var(--button-neutral-border-hover);
 }
 
 .fsbl-button-negative {
-    border: var(--button-negative-border);
+    border: 1px solid var(--button-negative-border);
     /* background-color: var(--button-negative-fill); */
 }
 
 .fsbl-button-negative:hover {
-    border: var(--button-negative-border-hover);
+    border: 1px solid var(--button-negative-border-hover);
 }
 
 
