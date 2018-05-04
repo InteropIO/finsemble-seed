@@ -84,12 +84,12 @@
     --titleBar-height: 25px;
     --breakpoint-small-window: 299px;
     --breakpoint-very-small-window: 175px;
-    --fsbl-header-center-padding-bottom: 2px;
-    --fsbl-icon-width: 21px;
-    --linker-group-width: 3px;
+    --titleBar-center-padding-bottom: 2px;
+    --titleBar-icon-width: 21px;
+    --titleBar-linker-group-width: 3px;
 
     --titleBar-background-color: var(--coolGray6);
-    --titleBar-background-active-color: var(--coolGray);
+    --titleBar-background-active-color: var(--coolGray5);
     --titlebar-background-inactive-color: var(--coolGray6);
     --titleBar-button-hover-active-color: var(--blue6);
     --titleBar-button-hover-inactive-color: var(--blue7);
@@ -99,9 +99,9 @@
 
     --titleBar-text-color: var(--font-color);
     --titlebar-text-active-color: var(--font-color);
-    --titleBar-text-inactive-color: var(--font-color);
+    --titleBar-text-inactive-color: var(--gray3);
     --titleBar-font-weight: 300;
-    --titleBar-font-size: 14px;
+    --titleBar-font-size: 12px;
 
     /* Dialogs */
     --dialog-button-background-color: #fafafa;

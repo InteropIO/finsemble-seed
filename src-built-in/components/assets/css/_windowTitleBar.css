@@ -26,7 +26,7 @@
     top: 0;
     font-size: var(--titleBar-font-size);
     font-weight: var(--titleBar-font-weight);
-    color: var(--titleBar-text-color);
+    color: var(--titleBar-text-inactive-color);
 }
 
 html.desktop-active .fsbl-header {
@@ -56,7 +56,7 @@ html.desktop-active .fsbl-header {
     white-space: nowrap;
     overflow: hidden;
     --webkit-user-select: none;
-    padding-bottom: var(--fsbl-header-center-padding-bottom);
+    padding-bottom: var(--titleBar-center-padding-bottom);
 }
 
 .fsbl-header-right {
@@ -94,10 +94,10 @@ html.desktop-active .fsbl-header {
 
 .fsbl-icon {
     position: relative;
-    color: var(--header-text-color);
-    font-size: 15px;
-    width: var(--fsbl-icon-width);
-    padding: 0px 6px;
+    color: var(--titleBar-text-color);
+    font-size: 13px;
+    width: var(--titleBar-icon-width);
+    padding: 0px 4px;
     height: 100%;
     display: flex;
     align-items: center;
@@ -170,7 +170,7 @@ html.desktop-active .fsbl-icon-highlighted {
 }
 
 .linker-group {
-    width: var(--linker-group-width);
+    width: var(--titleBar-linker-group-width);
     height: 15px;
     margin-left: 4px;
     border-radius: 4px;
@@ -228,5 +228,5 @@ html.desktop-active .fsbl-linker[hover=true] {
 }
 
 .ff-maximize, .ff-close, .ff-detached, .ff-attached {
-    padding-top: 2px;
+    padding-top: 0px;
 }
