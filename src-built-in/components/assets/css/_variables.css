@@ -148,11 +148,11 @@
 
     /* Window Frame*/
     --window-frame-inactive-color: var(--coolGray);
-    --window-frame-active-color: var(--active-header-background-color);
+    /* --window-frame-active-color: var(--window-frame-inactive-color); */
 
     /* Window styles*/
-    --scrim-overlay: #2068c3;
-    --scrim-negative-overlay: #960a05;
+    --scrim-overlay: var(--blue7);
+    --scrim-negative-overlay: var(--red7);
     
     /* App Catalog */
     --app-catalog-icon-container-background-color: #0b408f;
