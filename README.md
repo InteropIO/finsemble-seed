@@ -120,7 +120,6 @@ You can modify and extend the gulpfile's functionality by creating a _gulpfile-e
 These are the methods defined in the `taskMethods` object:
 - `buildSass` - Builds the SASS for the application.
 - `buildWebpack` - Performs the webpack build for the application.
-- `checkWatch` - Checks whether watch should be performed. By default, watch is disabled for the `build:dev` task.
 - `clean` - Cleans the project folder (deletes _dist_).
 - `copyStaticFiles` - Copies static files to the _dist_ folder.
 - `launchApplication` - Launches the Finsemble application.
