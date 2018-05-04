@@ -139,17 +139,17 @@ class YesNoDialog extends React.Component {
 				{this.state.question}
 			</FinsembleDialogQuestion>
 			<div className="button-wrapper">
-			<FinsembleDialogButton show={this.state.showAffirmativeButton} buttonSize="md-positive" onClick={this.sendAffirmativeResponse}>
-				{this.state.affirmativeResponseLabel}
-			</FinsembleDialogButton>
+				<FinsembleDialogButton show={this.state.showCancelButton} buttonSize="neutral" onClick={this.sendCancelResponse}>
+					{this.state.cancelResponseLabel}
+				</FinsembleDialogButton>
 
-			<FinsembleDialogButton show={this.state.showNegativeButton} buttonSize="md-neutral" onClick={this.sendNegativeResponse}>
-				{this.state.negativeResponseLabel}
-			</FinsembleDialogButton>
+				<FinsembleDialogButton show={this.state.showNegativeButton} buttonSize="neutral" onClick={this.sendNegativeResponse}>
+					{this.state.negativeResponseLabel}
+				</FinsembleDialogButton>
 
-			<FinsembleDialogButton show={this.state.showCancelButton} buttonSize="md-neutral" onClick={this.sendCancelResponse}>
-				{this.state.cancelResponseLabel}
-			</FinsembleDialogButton>
+				<FinsembleDialogButton show={this.state.showAffirmativeButton} buttonSize="affirmative" onClick={this.sendAffirmativeResponse}>
+					{this.state.affirmativeResponseLabel}
+				</FinsembleDialogButton>
 			</div>
 		</FinsembleDialog>);
 
@@ -166,6 +166,6 @@ FSBL.addEventListener("onReady", function () {
 			<YesNoDialog />
 			, document.getElementById("YesNoDialog-component-wrapper")
 		);
-	}	
-		
+	}
+
 });

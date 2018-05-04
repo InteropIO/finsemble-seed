@@ -85,8 +85,6 @@ body.dialog input:focus {
     height: 35px;
     text-align: center;
     font-family: var(--font-family);
-    /* background: var(--dialog-button-background-color); */
-    border: 1px solid transparent;
     color: var(--button-solid-text);
     transition: .2s ease;
     display:flex;
@@ -101,33 +99,10 @@ body.dialog input:focus {
 .fsbl-button:hover {
     /* background: var(--primary-accent-color);
     border: 1px solid var(--primary-accent-color); */
-    transition: 0.2s ease-in;
+    transition: 0.2s ease-out;
     cursor: pointer;
     color: #FFFFFF;
 }
-
-.fsbl-button:hover {
-    color: #FFF;
-    transition: 0.2s ease-out;
-}
-
-/* .fsbl-button-md-positive {
-    width: 147px;
-    height: 32px;
-    border: var(--dialog-button-border);
-    font-weight: bold;
-    font-size: 13px;
-    letter-spacing: 0.4px;
-    line-height: 33px;
-} */
-
-/* .fsbl-button-md-neutral {
-    width: 147px;
-    height: 32px;
-    font-size: 13px;
-    letter-spacing: 0.4px;
-    line-height: 34px;
-} */
 
 .fsbl-button-affirmative {
     border: 1px solid var(--button-affirmative-border);

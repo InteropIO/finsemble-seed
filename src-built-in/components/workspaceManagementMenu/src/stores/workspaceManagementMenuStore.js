@@ -181,8 +181,9 @@ Actions = {
 		}
 
 		let dialogParams = {
-			title: "Delete this workspace?",
+			title: "Delete this Workspace?",
 			question: "Are you sure you want to delete the workspace \"" + workspaceName + "\"?",
+			negativeResponseLabel: "Cancel",
 			showCancelButton: false,
 			hideModalOnClose: data.hideModalOnClose
 		};

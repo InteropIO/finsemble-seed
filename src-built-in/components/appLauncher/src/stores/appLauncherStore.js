@@ -259,7 +259,10 @@ var Actions = {
 	handleRemoveCustomComponent(componentName) {
 		var self = this;
 		FSBL.Clients.DialogManager.open("yesNo", {
+			title: "Delete this App?",
 			question: "Are you sure you would like to delete \"" + componentName + "\"?",
+			negativeResponseLabel: "Cancel",
+			showCancelButton: false,
 		}, function (err, response) {
 			if (response.choice === "affirmative") {
 				self.removeCustomComponent(componentName);
