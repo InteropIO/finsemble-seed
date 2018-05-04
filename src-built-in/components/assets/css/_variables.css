@@ -104,13 +104,26 @@
     --titleBar-font-size: 12px;
 
     /* Dialogs */
-    --dialog-button-background-color: #fafafa;
-    --dialog-button-border: 1px solid #EEEEEE;
-    --dialog-background-color: #FFFFFF;
+    --dialog-button-background-color: var(--gray);
+    --dialog-background-color: var(--coolGray7);
     --dialog-font-color: #FFFFFF;
     --dialog-font-weight: 300;
     --dialog-body-padding: 20px;
-    --fsbl-button-font-color: var(--dialog-font-color);
+    --dialog-button-border: 1px solid #EEEEEE;
+
+    /* Buttons */
+    --button-affiramtive-fill: var(--blue6);
+    --button-affirmative-border: var(--blue5);
+    --button-affirmative-border-hover: var(--blue3);
+    --button-neutral-fill: var(--gray2);
+    --button-neutral-border: var(--gray6);
+    --button-neutral-border-hover: var(--gray2);
+    --button-negative-fill: var(--red5);
+    --button-negative-border: var(--red3);
+    --button-negative-border-hover: var(--red1);
+
+    --button-neutral-solid-text: #000000;
+    --button-solid-text: #FFFFFF;
 
     /* Menus */
     --menu-font-size: 14px;
