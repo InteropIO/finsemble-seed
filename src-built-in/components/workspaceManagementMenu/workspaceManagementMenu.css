@@ -10,17 +10,6 @@ html {
     width: 382px;
 }
 
-.appLauncher {
-    max-height: 500px;
-}
-
-.addComponent {
-    font-size: .8em;
-    align-self: flex-end;
-    cursor: pointer;
-    padding-right: 1.3em;
-}
-
 .empty-delete {
     width: 1em;
 }
