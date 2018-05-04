@@ -67,18 +67,6 @@
 	if (!env.PORT) {
 		env.PORT = startupConfig[env.NODE_ENV].serverPort;
 	}
-
-	const checkWatch = args => {
-		let result = true;
-		args.forEach(item => {
-			if (item === "build:dev") {
-				result = false;
-			}
-		})
-
-		return result;
-	}
-	const doWatch = checkWatch(process.argv);
 	// #endregion
 
 	// #region Task Methods
@@ -197,7 +185,21 @@
 				done);
 
 		},
+		/**
+		 * Checks whether watch should be performed.
+		 * 
+		 * @returns True if watch should be performed, otherwise false.
+		 */
+		checkWatch: () => {
+			let result = true;
+			process.argv.forEach(item => {
+				if (item === "build:dev") {
+					result = false;
+				}
+			})
 
+			return result;
+		},
 		/**
 		 * Cleans the project folder of generated files.
 		 */
@@ -364,6 +366,8 @@
 	if (extensions) {
 		extensions(taskMethods);
 	}
+
+	const doWatch = taskMethods.checkWatch(process.argv);
 
 	// #region Task definitions
 	const defineTasks = err => {
