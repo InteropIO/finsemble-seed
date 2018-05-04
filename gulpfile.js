@@ -68,6 +68,7 @@
 		env.PORT = startupConfig[env.NODE_ENV].serverPort;
 	}
 
+	let doWatch = true;
 	// #endregion
 
 	// #region Task Methods
@@ -145,6 +146,9 @@
 				},
 				(cb) => {
 					const webpackComponentsConfig = require("./build/webpack/webpack.components.js")
+					if (!doWatch) {
+						webpackComponentsConfig.watch = false;
+					}
 					packFiles(webpackComponentsConfig, "component bundle", cb);
 				},
 				(cb) => {
@@ -167,6 +171,9 @@
 				},
 				(cb) => {
 					const webpackHeaderConfig = require("./build/webpack/webpack.titleBar.js")
+					if (!doWatch) {
+						webpackHeaderConfig.watch = false;
+					}
 					packFiles(webpackHeaderConfig, "header bundle", cb);
 				},
 				(cb) => {
@@ -278,14 +285,6 @@
 		pre: done => { done(); },
 
 		/**
-		 * Sets flag to not watch for changes so build will exit.
-		 */
-		setNoWatch: done => {
-			process.env.NO_WATCH = true;
-			done();
-		},
-
-		/**
 		 * Starts the server.
 		 *
 		 * @param {function} done Function called when execution has completed.
@@ -333,6 +332,13 @@
 		},
 		setProdEnvironment: done => {
 			process.env.NODE_ENV = "production";
+			done();
+		},
+		/**
+		 * Tells the build to not watch for changes.
+		 */
+		setNoWatch: done => {
+			doWatch = false;
 			done();
 		},
 		/**
