@@ -112,7 +112,7 @@
     --dialog-button-border: 1px solid #EEEEEE;
 
     /* Buttons */
-    --button-affiramtive-fill: var(--blue6);
+    --button-affirmative-fill: var(--blue6);
     --button-affirmative-border: var(--blue5);
     --button-affirmative-border-hover: var(--blue3);
     --button-neutral-fill: var(--gray2);
