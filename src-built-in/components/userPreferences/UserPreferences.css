@@ -40,16 +40,16 @@ img {
     width: 212px;
     font-size: 16px;
     flex-direction: column;
-    color: var(--left-nav-font-color);
-    background-color: var(--left-nav-background-color);
+    color: var(--complex-nav-font-color);
+    background-color: var(--complex-nav-background-color);
 }
 
 .complex-menu-left-nav-header {
-    background-color: var(--left-nav-header-background-color);
+    background-color: var(--complex-nav-header-background-color);
     font-weight: 500;
     font-size: 21px;
     margin-bottom: 30px;
-    padding-left: var(--left-nav-padding-left);
+    padding-left: var(--complex-nav-padding-left);
     height: 49px;
     display: flex;
     align-items: center;
@@ -67,12 +67,12 @@ img {
     align-self: flex-start;
     font-size: 18px;
     font-weight: bold;
-    color: var(--header-font-color);
+    color: var(--complex-content-header-font-color);
     margin-bottom: 4px;
 }
 
 .content-section-info {
-    color: var(--content-section-info-font-color);
+    color: var(--complex-content-hint-font-color);
     font-weight: 300;
     font-size: 12px;
     align-items: center;
@@ -130,18 +130,18 @@ img {
 
 .complex-menu-section-toggle:hover {
     cursor: pointer;
-    background-color: var(--section-toggle-hover-background-color);
+    background-color: var(--complex-nav-active-item-hover);
 }
 
 .active-section-toggle {
-    background-color: var(--active-section-toggle-background);
+    background-color: var(--complex-nav-active-item);
 }
 
 .complex-menu-content-row {
     flex: 1;
     padding: .75em;
     align-content: flex-start;
-    background-color: var(--content-section-background-color);
+    background-color: var(--complex-content-background-color);
 }
 
 .workspace-list-header-row {
@@ -164,7 +164,7 @@ img {
 }
 
 .workspace-list {
-    border: 1px solid var(--list-border-color);
+    border: 1px solid var(--complex-content-list-border-color);
     width: 100%;
     height: 210px;
     overflow-y: auto;
@@ -207,7 +207,7 @@ img {
 .individual-workspace-action {
     margin-left: 1px;
     cursor: pointer;
-    padding: var(--individual-workspace-action-padding);
+    padding: var(--complex-content-list-button-padding);
     height: 17px;
     border: 1px solid transparent;
     font-weight: 100 !important;
@@ -219,17 +219,16 @@ img {
 
 .ff-delete:hover {
     background-color: transparent;
-    color:var(--user-preferences-ff-delete-hover-color);
 }
 
 .individual-workspace-action:hover {
-    border: 1px solid var(--action-button-hover-border-color);
+    border: 1px solid var(--complex-content-button-neutral-border-hover-color);
     border-radius: 4px;
     height: 17px;
 }
 
 .delete-workspace:hover {
-    border: 1px solid var(--negative-action-button-border-color);
+    border: 1px solid var(--complex-content-button-negative-border-hover-color);
 }
 
 .active-workspace {
@@ -237,7 +236,7 @@ img {
 }
 
 .focused-workspace-item {
-    background-color: var(--focused-workspace-background-color);
+    background-color: var(--complex-content-list-highlighter);
 }
 
 .auto-start-workspace-item:before {
@@ -248,7 +247,7 @@ img {
     border-radius: 50%;
     margin-left: -15px;
     margin-right: 10px;
-    background-color: var(--auto-load-workspace-pill-color);
+    background-color: var(--complex-content-workspace-toLoad-color);
 }
 
 .negative-action-button, .action-button {
@@ -261,34 +260,17 @@ img {
 }
 
 .action-button {
-    border: 1px solid var(--action-button-border-color);
+    border: 1px solid var(--complex-content-button-border-color);
 }
 
 .action-button:hover {
     cursor: pointer;
-    border: solid 1px var(--action-button-hover-border-color);
-}
-
-.positive-action-button {
-    border: 1px solid var(--positive-action-button-border-color);
-}
-
-.positive-action-button:hover {
-    border: 1px solid var(--positive-action-button-hover-border-color);
-}
-
-.negative-action-button {
-    border: 1px solid var(--negative-action-button-border-color);
-}
-
-.negative-action-button:hover {
-    cursor: pointer;
-    border: 1px solid var(--negative-action-button-hover-border-color);
+    border: solid 1px var(--complex-content-button-border-hover-color);
 }
 
 .disabled-button, .disabled-button:hover {
-    border: 1px solid var(--action-button-border-color);
-    color: var(--action-button-border-color);
+    border: 1px solid var(--complex-content-button-disabled-border-color);
+    color: var(--complex-content-button-disabled-border-color);
     cursor: not-allowed;
 }
 
@@ -381,7 +363,7 @@ img {
     background-color: var(--primary-accent-color);
     border: 1px solid var(--primary-accent-color);
     font-size: 8px;
-    color: var(--complex-menu-checkbox-checked-color);
+    color: var(--complex-content-checkbox-check-color);
 }
 
 .ff-check-mark {
@@ -389,14 +371,14 @@ img {
 }
 
 .workspace-component-list {
-    border: solid 1px var(--component-list-border-color);
+    border: solid 1px var(--complex-content-list-border-color);
     padding: 7px;
     font-size: 12px;
     width: 140px;
     height: 104px;
     overflow-y: auto;
     user-select: none;
-    color: var(--workspace-component-list-font-color);
+    color: var(--complex-content-font-color);
 }
 
 .workspace-component {
