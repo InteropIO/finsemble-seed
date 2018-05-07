@@ -12,7 +12,7 @@
 -->
 
 <head>
-    <script src="/vendor.bundle.js"></script>
+	<script src="/vendor.bundle.js"></script>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<title>Default Authentification</title>
@@ -29,12 +29,15 @@
 			padding-top: 20px;
 		}
 
-		.fsbl-button-md {
-			width: 65%;
-		}
-
 		.fsbl-button-wrapper {
 			padding-top: 10px;
+			display:flex;
+			justify-content: center;
+			flex-direction: column;
+		}
+
+		.fsbl-button {
+			margin-top: 6px;
 		}
 
 		.fsbl-auth-top {
@@ -51,22 +54,27 @@
 			justify-content: flex-end;
 			align-items: flex-start;
 			flex-direction: column;
+			color: white;
 			height: 100%;
+		}
+
+		.ff-close:hover {
+			color: var(--red2);
 		}
 
 		.fsbl-auth-input {
 			width: 65%;
-			padding: 9px 0px;
+			padding: 6px 0px;
 			margin: 0px auto;
 		}
 
 		.fsbl-input-error input {
-			border: #EF1436 1px solid !important;
+			border: var(--negative-action-color) 1px solid !important;
 		}
 
 		.fsbl-input-error-message {
 			display: none;
-			color: #EF1436;
+			color: var(--negative-action-color);
 			font-size: small;
 		}
 
@@ -75,7 +83,7 @@
 		}
 
 		body {
-			background: white;
+			background: var(--dialog-background-color);
 			max-height: 442px;
 			max-width: 342px;
 		}
@@ -88,13 +96,13 @@
 
 <body class="dialog">
 	<div class="fsbl-auth-top">
-		<img class="fsbl-logo" src="../assets/img/ciq-banner-black-100x25.png" width="100" height="25">
+		<img class="fsbl-logo" src="../assets/img/ciq-banner-100x25.png" width="100" height="25">
 		<div class="fsbl-close" id="FSBL-close" onclick="quit()">
-			<i class="ff-close" style=color:#666></i>
+			<i class="ff-close"></i>
 		</div>
 	</div>
 	<div class="form-wrapper">
-		<img src="../assets/img/finsembleLightBG_Solo@1.5x.png" alt="Finsemble Sign On" width="154" height="173">
+		<img src="../assets/img/finsembleDarkBG_Solo@1.5x.png" alt="Finsemble Sign On" width="154" height="173">
 		<div class="fsbl-button-wrapper">
 			<div class="fsbl-input-error-message">
 				Incorrect username or password
@@ -107,8 +115,8 @@
 				<input type="password" id="password" placeholder="Password" type="submit">
 				<br>
 			</div>
-			<div class="fsbl-button fsbl-button-md" id="submitButton" onclick="processAuthInput()">
-				<i class="ff-check-circle"></i>Login</div>
+			<div class="fsbl-button fsbl-button-affirmative" id="submitButton" onclick="processAuthInput()">
+				Login</div>
 		</div>
 		<!-- <div><a id="authAction" class="link">Sign up</a></div> -->
 	</div>
@@ -156,7 +164,7 @@
 			})
 			.then((res) => {
 				if (res.status !== 200) {
-					console.warn("Auth failed",res);
+					console.warn("Auth failed", res);
 				}
 				return res.json();
 			}).then(data => {
@@ -187,7 +195,7 @@
 	//Tell authenitcation we're all good
 	function acceptCredentials(user) {
 		FSBL.Clients.AuthenticationClient.publishAuthorization(user.username, user);
-		FSBL.Clients.WindowClient.close( { removeFromWorkspace: false, closeWindow: true });
+		FSBL.Clients.WindowClient.close({ removeFromWorkspace: false, closeWindow: true });
 	}
 
 	$('#password').keypress(function (e) {
@@ -264,7 +272,7 @@
 			quit();
 		}
 	}
-	FSBL.Clients.RouterClient.onReady(()=>{
+	FSBL.Clients.RouterClient.onReady(() => {
 		checkSession();
 	});
 
