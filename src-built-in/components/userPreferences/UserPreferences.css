@@ -247,7 +247,7 @@ img {
     border-radius: 50%;
     margin-left: -15px;
     margin-right: 10px;
-    background-color: var(--complex-content-workspace-toLoad-color);
+    background-color: var(--complex-content-list-item-flagged-color);
 }
 
 .negative-action-button, .action-button {
@@ -296,9 +296,9 @@ img {
 }
 
 .workspace-item-editing {
-    border-top: 1px solid var(--focused-workspace-border-color);
-    border-bottom: 1px solid var(--focused-workspace-border-color);
-    color: var(--workspace-item-editing-font-color);
+    border-top: 1px solid var(--complex-content-list-editor-border-color);
+    border-bottom: 1px solid var(--complex-content-list-editor-border-color);
+    color: var(--complex-content-list-editor-font-color);
 }
 
 .workspace-editor {
@@ -309,11 +309,11 @@ img {
     width: 100%;
     font-size: 16px;
     outline-color: transparent;
-    color: var(--workspace-editor-font-color);
+    color: var(--complex-content-list-editor-font-color);
 }
 
 .workspace-editor::selection {
-    background-color: var(--workspace-editor-selected-text-background-color);
+    background-color: var(--complex-content-list-editor-highlighted-text);
 }
 
 .no-top-border {
@@ -334,7 +334,8 @@ img {
 ::-webkit-scrollbar-thumb {
     cursor: pointer;
     border-radius: 9px;
-    background-color: var(--primary-accent-color);
+    margin-right: 2px;
+    background-color: var(--scrollbar-color);
 }
 
 .complex-menu-checkbox-wrapper {
@@ -355,13 +356,17 @@ img {
     align-items: center;
 }
 
+.complex-menu-checkbox:hover {
+    border: 1px solid var(--gray2);
+}
+
 .complex-menu-checkbox-label {
     display: inline-block;
 }
 
 .complex-menu-checkbox.checked {
-    background-color: var(--primary-accent-color);
-    border: 1px solid var(--primary-accent-color);
+    background-color: var(--complex-content-checkbox-background-color);
+    border: 1px solid var(--complex-content-checkbox-background-color);
     font-size: 8px;
     color: var(--complex-content-checkbox-check-color);
 }

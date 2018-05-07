@@ -156,12 +156,6 @@
     --scrim-overlay: var(--blue7);
     --scrim-negative-overlay: var(--red7);
     
-    /* App Catalog */
-    --app-catalog-icon-container-background-color: #0b408f;
-    --app-catalog-button-background-color: #2068c3;
-    --app-catalog-button-border: 1px solid #91c5ff;
-    --app-catalog-app-item-background-color: #f9f9f9;
-
     /* Complex menus (e.g., Preferences and App Catalog) */
     /* Nav section is the left side of a complex menu */
     --complex-nav-header-background-color: var(--coolGray);
@@ -176,25 +170,27 @@
     --complex-content-font-color: var(--font-color);
     --complex-content-hint-font-color: var(--gray);
     --complex-content-header-font-color: var(--blue1);
+
     --complex-content-list-border-color: var(--gray6);
     --complex-content-list-highlighter: var(--coolGray3);
     --complex-content-list-button-padding: 2px;
-    
+    --complex-content-list-item-flagged-color: var(--blue1);
+    --complex-content-list-editor-font-color: var(--font-color);
+    --complex-content-list-editor-border-color: var(--gray);
+    --complex-content-list-editor-highlighted-text: var(--blue1);
+
     --complex-content-button-border-color: var(--gray6);
     --complex-content-button-border-hover-color: var(--gray2);
     --complex-content-button-disabled-border-color: var(--gray7);
     --complex-content-button-neutral-border-hover-color: var(--gray);
     --complex-content-button-negative-border-hover-color: var(--red1);
 
-    --complex-content-checkbox-check-color: white;
-    --complex-content-workspace-toLoad-color: var(--blue1);
-    
-    --focused-workspace-border-color: var(--primary-accent-color);
-    
-    /* User Preferences*/
-    --workspace-item-editing-font-color: var(--font-color);
-    --workspace-editor-font-color: var(--font-color);
-    --workspace-editor-selected-text-background-color: #9ad9fd;
-    --complex-menu-checkbox-checked-color: white;
+    --complex-content-checkbox-check-color: #FFFFFF;
+    --complex-content-checkbox-background-color: var(--blue);
 
+     /* App Catalog */
+     --app-catalog-icon-container-background-color: #0b408f;
+     --app-catalog-button-background-color: #2068c3;
+     --app-catalog-button-border: 1px solid #91c5ff;
+     --app-catalog-app-item-background-color: #f9f9f9; 
 }
