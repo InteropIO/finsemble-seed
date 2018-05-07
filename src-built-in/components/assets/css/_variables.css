@@ -179,7 +179,8 @@
     --complex-content-list-editor-border-color: var(--gray);
     --complex-content-list-editor-highlighted-text: var(--blue1);
 
-    --complex-content-button-border-color: var(--gray6);
+    --complex-content-button-fill-color: var(--gray7);
+    --complex-content-button-border-color: var(--gray5);
     --complex-content-button-border-hover-color: var(--gray2);
     --complex-content-button-disabled-border-color: var(--gray7);
     --complex-content-button-neutral-border-hover-color: var(--gray);
@@ -188,9 +189,6 @@
     --complex-content-checkbox-check-color: #FFFFFF;
     --complex-content-checkbox-background-color: var(--blue);
 
-     /* App Catalog */
-     --app-catalog-icon-container-background-color: #0b408f;
-     --app-catalog-button-background-color: #2068c3;
-     --app-catalog-button-border: 1px solid #91c5ff;
-     --app-catalog-app-item-background-color: #f9f9f9; 
+     --complex-content-card-background-color: var(--coolGray4);
+     --complex-content-card-logo-background-color: var(--blue7);
 }

@@ -59,8 +59,9 @@ body {
 .complex-menu-left-nav-header {
     background-color: var(--complex-nav-header-background-color);
     font-weight: 500;
-    font-size: 20px;
+    font-size: 21px;
     margin-bottom: 30px;
+    padding-left: var(--complex-nav-padding-left);
     height: 49px;
     display: flex;
     align-items: center;
@@ -104,10 +105,11 @@ body {
 
 .ff-close {
     cursor: pointer;
+    transition: .2s ease;
 }
 
 .ff-close:hover {
-    text-shadow: 1px 1px #d8d8d8;
+    color: var(--red2);
 }
 
 .complex-menu-section-toggle {

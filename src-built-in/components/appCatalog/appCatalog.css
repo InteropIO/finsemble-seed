@@ -108,8 +108,7 @@ img {
     margin: 8px;
     width: 170px;
     height: 104px;
-    background-color: var(--app-catalog-app-item-background-color);
-    box-shadow: 0 1px 4px 0 rgba(136, 136, 136, 0.5);
+    background-color: var(--complex-content-card-background-color);
 }
 
 .appHeader {
@@ -135,7 +134,7 @@ img {
     width: 36px;
     min-width: 36px;
     height: 36px;
-    background-color: var(--app-catalog-icon-container-background-color);
+    background-color: var(--complex-content-card-logo-background-color);
     display: flex;
     align-items: center;
 }
@@ -165,7 +164,7 @@ img {
     font-stretch: normal;
     letter-spacing: normal;
     text-align: left;
-    color: #000000;
+    color: var(--complex-content-font-color);
     word-break: break-word;
     padding-right: 7px;
     line-height: 1;
@@ -204,8 +203,8 @@ img {
 .footerRight .openButton {
     cursor: pointer;
     align-self: flex-end;
-    background-color: var(--app-catalog-button-background-color);
-    border: var(--app-catalog-button-border);
+    background-color: transparent;
+    border: 1px solid var(--complex-content-button-border-color);
     font-size: 12px;
     color: #ffffff;
     text-align: center;
@@ -220,6 +219,10 @@ img {
     letter-spacing: normal;
     text-align: center;
     color: #ffffff;
+}
+
+.openButton:hover {
+    border: 1px solid var(--complex-content-button-border-hover-color);
 }
 
 .containerItem {

@@ -120,7 +120,8 @@ img {
 }
 
 .ff-close:hover {
-    text-shadow: 1px 1px #d8d8d8;
+    color: var(--red2);
+    transition: .2s ease;
 }
 
 .complex-menu-section-toggle {
