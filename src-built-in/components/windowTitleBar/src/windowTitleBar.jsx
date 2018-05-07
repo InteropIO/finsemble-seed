@@ -130,7 +130,7 @@ class WindowTitleBar extends React.Component {
 				{self.state.showLinkerButton ? <Linker /> : null}
 				<Sharer />
 			</div>
-			<div onMouseDown={this.startLongHoldTimer} className="fsbl-header-center cq-drag"><div className={this.state.titleBarIsHoveredOver?"header-title cq-no-drag header-title-hover":"header-title cq-no-drag"}>{self.state.windowTitle}</div></div>
+			<div className="fsbl-header-center cq-drag"><div className={this.state.titleBarIsHoveredOver?"header-title cq-no-drag header-title-hover":"header-title cq-no-drag"}>{self.state.windowTitle}</div></div>
 			<div onMouseDown={this.startLongHoldTimer} className="fsbl-header-right">
 				<BringSuiteToFront />
 				{this.state.minButton && showMinimizeIcon ? <Minimize /> : null}
@@ -151,9 +151,11 @@ function dragElement(elmnts) {
   }
 
   function dragMouseDown(e) {
-    e = e || window.event;
+	e = e || window.event;
     // get the mouse cursor position at startup:
-    pos2 = e.clientX;
+	pos2 = e.clientX;
+	var clonedTab = e.target.cloneNode(true);
+	e.target.parentNode.insertBefore(clonedTab, null);
     document.onmouseup = closeDragElement;
     // call a function whenever the cursor moves:
     document.onmousemove = elementDrag;
@@ -165,14 +167,15 @@ function dragElement(elmnts) {
     pos1 = pos2 - e.clientX;
     pos2 = e.clientX;
     // set the element's new position:
-	elmnts[0].style.left = (elmnts[0].offsetLeft - pos1) + "px";
-	if(elmnts[0].style.left <= "0px"){
+	e.target.style.left = (e.target.offsetLeft - pos1) + "px";
+	if(e.target.style.left <= "0px"){
 		// emit the tear out event
 	}
   }
 
-  function closeDragElement() {
-    /* stop moving when mouse button is released:*/
+  function closeDragElement(e) {
+	/* stop moving when mouse button is released:*/
+	e.target.remove();
     document.onmouseup = null;
     document.onmousemove = null;
   }
@@ -183,6 +186,6 @@ FSBL.addEventListener("onReady", function () {
 		HeaderActions = storeExports.Actions;
 		windowTitleBarStore = storeExports.getStore();
 		ReactDOM.render(<WindowTitleBar />, document.getElementById("FSBLHeader"));
-		dragElement(document.getElementsByClassName(("header-title")));
+		dragElement(document.getElementsByClassName("header-title"));
 	});
 });
