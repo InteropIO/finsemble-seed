@@ -302,7 +302,7 @@
 		},
 		"yesNo": {
 			"window": {
-				"url": "$applicationRoot/components/yesNoDialog/YesNoDialog.html",
+				"url": "$applicationRoot/components/yesNoDialog/yesNoDialog.html",
 				"width": 500,
 				"height": 223,
 				"position": "absolute",
@@ -532,7 +532,7 @@
 		},
 		"UserPreferences": {
 			"window": {
-				"url": "$applicationRoot/components/userPreferences/UserPreferences.html",
+				"url": "$applicationRoot/components/userPreferences/userPreferences.html",
 				"frame": false,
 				"top": "center",
 				"left": "center",
