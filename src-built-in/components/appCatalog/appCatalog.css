@@ -3,7 +3,7 @@
 * All rights reserved.
 */
 @import  url('../assets/css/_globals.css');
-
+@import  url('../assets/css/_dialogs.css');
 @import  url('../assets/css/_menus.css');
 
 img {
@@ -43,21 +43,30 @@ body {
 .content {
     width: calc(100% - 17px);
     padding: .75em;
-    background-color: var(--content-section-background-color);
+    background-color: var(--complex-content-background-color);
 }
 
 .ListHeader {
     display: flex;
-    margin-left: 6px;
+    margin-left: 8px;
+    margin-bottom: 3px;
 }
 
 .filterInput {
-    width: 163px;
-    height: 24px;
-    border-color: #dddddd;
-    border-width: 1px 1px 1px 1px;
-    border-style: solid;
+    width: 170px;
+    height: 30px;
+    -webkit-appearance: none;
+    color: #FFFFFF;
+    text-align: left;
+    font-size: 10pt;
+    font-family: Roboto;
+    font-weight: 300;
+    vertical-align: middle;
+    background-color: transparent;
     padding-left: 10px;
+    border: 1px solid var(--dialog-input-border-color);
+    box-sizing: border-box;
+    transition: .2s ease-in;
 }
 
 input {
@@ -65,7 +74,7 @@ input {
 }
 
 .filterInput:focus {
-    border: 1px solid var(--scrollbar-color);
+    border: 1px solid var(--dialog-input-border-focus-color);
 }
 
 .ff-search {
@@ -75,6 +84,8 @@ input {
     right: 21px;
     width: 15px;
     height: 15px;
+    color: var(--gray2);
+    padding-bottom: 2px;
 }
 
 .appContainer {

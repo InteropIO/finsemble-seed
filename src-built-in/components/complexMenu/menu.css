@@ -52,12 +52,12 @@ body {
     width: 182px;
     font-size: 16px;
     flex-direction: column;
-    color: var(--left-nav-font-color);
-    background-color: var(--left-nav-background-color);
+    color: var(--complex-nav-font-color);
+    background-color: var(--complex-nav-background-color);
 }
 
 .complex-menu-left-nav-header {
-    background-color: var(--left-nav-header-background-color);
+    background-color: var(--complex-nav-header-background-color);
     font-weight: 500;
     font-size: 20px;
     margin-bottom: 30px;
@@ -117,11 +117,11 @@ body {
 
 .complex-menu-section-toggle:hover {
     cursor: pointer;
-    background-color: var(--section-toggle-hover-background-color);
+    background-color: var(--complex-nav-active-item-hover);
 }
 
 .active-section-toggle {
-    background-color: var(--active-section-toggle-background);
+    background-color: var(--complex-nav-active-item);
 }
 
 .complex-menu-content-row {
