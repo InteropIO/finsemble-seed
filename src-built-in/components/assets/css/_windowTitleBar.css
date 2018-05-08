@@ -237,6 +237,16 @@ html.desktop-active .fsbl-linker[hover=true] {
 }
 
 .header-title.hide{
+    transition-property: visibility;
+    transition-duration: 1s;
+}
+
+.header-title-hover{
+    transition-property: border, height, background-color, margin-bottom;
+    transition-duration: 1s;
+}
+
+.header-title.hide{
     visibility: hidden;
 }
 
