@@ -138,7 +138,7 @@ class WindowTitleBar extends React.Component {
 			document.getElementsByClassName('fsbl-header-center')[0].parentElement.insertAfter(clonedTab, null);
 		} else if(isHovered=="false") {
 			document.getElementsByClassName('header-title')[0].classList.remove("hide");
-			document.getElementsByClassName('fsbl-header-center')[0].remove();
+			clonedTab.remove();
 		}
 	}
 	cancelDrag() {
