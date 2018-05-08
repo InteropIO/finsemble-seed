@@ -29,13 +29,13 @@ webpackConfig = new defaults();
 
 webpackConfig.plugins.push(new CopyWebpackPlugin([
 	{
-		from: './src/components/',
+		from: './src-built-in/components/',
 		to: './components/',
 		force: false,
-		ignore: ["*.js", "*.jsx"]
+		ignore: ["*.jsx"]
 	},
 	{
-		from: './src-built-in/components/',
+		from: './src/components/',
 		to: './components/',
 		force: false,
 		ignore: ["*.js", "*.jsx"]

@@ -1,7 +1,5 @@
 {
 	"comment": "Top-level application config for development, adding on top of the core config",
-	"mode": "",
-	"isAuthEnabled": false,
 	"storage": {
 		"topicToDataStoreAdapters" : {
 			"finsemble" : "LocalStorageAdapter",
@@ -73,6 +71,13 @@
 					"dockingService"
 				]
 			}
+		]
+	},
+	"globalHotkeys": {
+		"BRING_ALL_TO_FRONT": [
+			"ctrl",
+			"shift",
+			"b"
 		]
 	},
 	"importConfig": [
