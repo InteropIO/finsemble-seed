@@ -10,6 +10,8 @@ import ReactDOM from "react-dom";
 import * as storeExports from "./stores/windowTitleBarStore";
 let HeaderData, HeaderActions, windowTitleBarStore;
 
+import HoverDetector from "./components/HoverDetector.jsx";
+
 //Parts that make up the windowTitleBar.
 //Left side
 import Linker from "./components/left/LinkerButton";
@@ -37,7 +39,7 @@ class WindowTitleBar extends React.Component {
 			closeButton: !windowTitleBarStore.getValue({ field: "Close.hide" }),
 			showLinkerButton: windowTitleBarStore.getValue({ field: "Linker.showLinkerButton" }),
 			isTopRight: windowTitleBarStore.getValue({ field: "isTopRight" }),
-			titleBarIsHoveredOver: windowTitleBarStore.getValue({field:"titleBarIsHoveredOver"}),
+			titleBarIsHoveredOver: windowTitleBarStore.getValue({ field: "titleBarIsHoveredOver" }),
 		};
 	}
 	/**
@@ -112,10 +114,10 @@ class WindowTitleBar extends React.Component {
 	onStoreChanged(newState) {
 		this.setState(newState);
 	}
-	toggleDrag(){
-		let newState=!this.state.titleBarIsHoveredOver;
+	toggleDrag() {
+		let newState = !this.state.titleBarIsHoveredOver;
 		this.setState({
-			titleBarIsHoveredOver:newState
+			titleBarIsHoveredOver: newState
 		});
 	}
 	render() {
@@ -125,12 +127,13 @@ class WindowTitleBar extends React.Component {
 		let showDockingIcon = !self.state.dockingEnabled ? false : self.state.dockingIcon;
 		let isGrouped = (self.state.dockingIcon == "ejector");
 		let showMinimizeIcon = (isGrouped && self.state.isTopRight) || !isGrouped; //If not in a group or if topright in a group
-		return (<div className="fsbl-header" onMouseEnter={this.toggleDrag} onMouseLeave={this.toggleDrag}>
+		return (<div className="fsbl-header">
+			<HoverDetector hoverAction={this.toggleDrag} />
 			<div className="fsbl-header-left">
 				{self.state.showLinkerButton ? <Linker /> : null}
 				<Sharer />
 			</div>
-			<div className="fsbl-header-center cq-drag"><div className={this.state.titleBarIsHoveredOver?"header-title cq-no-drag header-title-hover":"header-title cq-no-drag"}>{self.state.windowTitle}</div></div>
+			<div className="fsbl-header-center cq-drag"><div className={this.state.titleBarIsHoveredOver ? "header-title cq-no-drag header-title-hover" : "header-title cq-no-drag"}>{self.state.windowTitle}</div></div>
 			<div onMouseDown={this.startLongHoldTimer} className="fsbl-header-right">
 				<BringSuiteToFront />
 				{this.state.minButton && showMinimizeIcon ? <Minimize /> : null}
@@ -145,40 +148,40 @@ class WindowTitleBar extends React.Component {
 
 
 function dragElement(elmnts) {
-  let pos1 = 0, pos2 = 0;
-  for(let i=0;i<elmnts.length;i++){
-	elmnts[i].onmousedown = dragMouseDown;
-  }
-
-  function dragMouseDown(e) {
-	e = e || window.event;
-    // get the mouse cursor position at startup:
-	pos2 = e.clientX;
-	var clonedTab = e.target.cloneNode(true);
-	e.target.parentNode.insertBefore(clonedTab, null);
-    document.onmouseup = closeDragElement;
-    // call a function whenever the cursor moves:
-    document.onmousemove = elementDrag;
-  }
-
-  function elementDrag(e) {
-    e = e || window.event;
-    // calculate the new cursor position:
-    pos1 = pos2 - e.clientX;
-    pos2 = e.clientX;
-    // set the element's new position:
-	e.target.style.left = (e.target.offsetLeft - pos1) + "px";
-	if(e.target.style.left <= "0px"){
-		// emit the tear out event
+	let pos1 = 0, pos2 = 0;
+	for (let i = 0; i < elmnts.length; i++) {
+		elmnts[i].onmousedown = dragMouseDown;
 	}
-  }
 
-  function closeDragElement(e) {
-	/* stop moving when mouse button is released:*/
-	e.target.remove();
-    document.onmouseup = null;
-    document.onmousemove = null;
-  }
+	function dragMouseDown(e) {
+		e = e || window.event;
+		// get the mouse cursor position at startup:
+		pos2 = e.clientX;
+		var clonedTab = e.target.cloneNode(true);
+		e.target.parentNode.insertBefore(clonedTab, null);
+		document.onmouseup = closeDragElement;
+		// call a function whenever the cursor moves:
+		document.onmousemove = elementDrag;
+	}
+
+	function elementDrag(e) {
+		e = e || window.event;
+		// calculate the new cursor position:
+		pos1 = pos2 - e.clientX;
+		pos2 = e.clientX;
+		// set the element's new position:
+		e.target.style.left = (e.target.offsetLeft - pos1) + "px";
+		if (e.target.style.left <= "0px") {
+			// emit the tear out event
+		}
+	}
+
+	function closeDragElement(e) {
+		/* stop moving when mouse button is released:*/
+		e.target.remove();
+		document.onmouseup = null;
+		document.onmousemove = null;
+	}
 }
 
 FSBL.addEventListener("onReady", function () {
