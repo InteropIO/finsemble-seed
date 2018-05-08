@@ -30,6 +30,7 @@ import "../../assets/css/finsemble.css";
 class WindowTitleBar extends React.Component {
 	constructor() {
 		super();
+<<<<<<< HEAD
 		this.grabbedTab = null;
 
 		this.setTabRef = function(element) {
@@ -40,6 +41,8 @@ class WindowTitleBar extends React.Component {
 			this.grabbedTab = null;
 		}.bind(this);
 
+=======
+>>>>>>> ba378e237f7b8c692f6d48d9dc86f9600d7055fd
 		this.bindCorrectContext();
 		windowTitleBarStore.getValue({ field: "Maximize.hide" });
 		this.state = {
@@ -65,7 +68,7 @@ class WindowTitleBar extends React.Component {
 		this.showLinkerButton = this.showLinkerButton.bind(this);
 		this.isTopRight = this.isTopRight.bind(this);
 		this.toggleDrag = this.toggleDrag.bind(this);
-		this.mouseLeftTitleBar = this.mouseLeftTitleBar.bind(this);
+		this.startDrag = this.startDrag.bind(this);
 		this.cancelDrag = this.cancelDrag.bind(this);
 		this.stopDrag = this.stopDrag.bind(this);
 	}
@@ -141,30 +144,19 @@ class WindowTitleBar extends React.Component {
 		}
 	}
 	cancelDrag() {
-		if (this.grabbedTab) {
-			console.log('cancelled drag')
-			this.setState({
-				titleBarIsHoveredOver: false
-			}, function() {
-				this.resetTabRef();
-			});
-		}
+		console.log('cancelled drag')
+		this.setState({
+			titleBarIsHoveredOver: false
+		});
 	}
-	mouseLeftTitleBar() {
-		if (this.grabbedTab) {
-			FSBL.Clients.WindowClient.startTilingOrTabbing({windowIdentifier: FSBL.Clients.WindowClient.getWindowIdentifier()});
-		}
+	startDrag() {
+		FSBL.Clients.WindowClient.startTilingOrTabbing({windowIdentifier: FSBL.Clients.WindowClient.getWindowIdentifier()});
 	}
-	stopDrag() {
-		if (this.grabbedTab) {
-			console.log('stopping tiling or tabbing');
-			FSBL.Clients.WindowClient.stopTilingOrTabbing();
-			// this.resetTabRef();
-		}
+	stopDrag(e) {
+		FSBL.Clients.WindowClient.stopTilingOrTabbing();
 	}
 	render() {
 		var self = this;
-		//console.log("showLinkerButton--2", this.state)
 
 		let showDockingIcon = !self.state.dockingEnabled ? false : self.state.dockingIcon;
 		let isGrouped = (self.state.dockingIcon == "ejector");
@@ -176,7 +168,7 @@ class WindowTitleBar extends React.Component {
 					{self.state.showLinkerButton ? <Linker /> : null}
 					<Sharer />
 				</div>
-				<div className="fsbl-header-center cq-drag"><div onMouseDown={this.setTabRef} onDrag={this.mouseLeftTitleBar} onDragEnd={this.stopDrag} onDragExit={this.cancelDrag} onMouseUp={this.resetTabRef} onMouseOver={this.toggleDrag.bind(this, "true")} onMouseOut={this.toggleDrag.bind(this, "false")} className={this.state.titleBarIsHoveredOver==="true" ? "header-title cq-no-drag header-title-hover" : "header-title cq-no-drag"}>{self.state.windowTitle}</div></div>
+				<div className="fsbl-header-center cq-drag"><div draggable={true} onDragStart={this.startDrag} onDragEnd={this.stopDrag} onDragExit={this.cancelDrag} onMouseOver={this.toggleDrag.bind(this, "true")} onMouseOut={this.toggleDrag.bind(this, "false")} className={this.state.titleBarIsHoveredOver==="true" ? "header-title cq-no-drag header-title-hover" : "header-title cq-no-drag"}>{self.state.windowTitle}</div></div>
 				<div className="fsbl-header-right">
 					<BringSuiteToFront />
 					{this.state.minButton && showMinimizeIcon ? <Minimize /> : null}
