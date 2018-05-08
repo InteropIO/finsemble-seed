@@ -195,3 +195,7 @@ img.pinned-icon {
 .ff-workspace {
     padding-bottom: 2px;
 }
+
+.ff-caret-down {
+    padding-top: 3px;
+}
