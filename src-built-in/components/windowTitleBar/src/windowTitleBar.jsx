@@ -33,12 +33,10 @@ class WindowTitleBar extends React.Component {
 		this.grabbedTab = null;
 
 		this.setTabRef = function(element) {
-			console.log('setting element')
 			this.grabbedTab = element;
 		}.bind(this);
 
 		this.resetTabRef = function() {
-			console.log('clearing element')
 			this.grabbedTab = null;
 		}.bind(this);
 
@@ -133,6 +131,14 @@ class WindowTitleBar extends React.Component {
 		this.setState({
 			titleBarIsHoveredOver: isHovered
 		});
+		console.log(isHovered);
+		if(isHovered=="true"){
+			console.log("adding hide class");
+			document.getElementsByClassName('fsbl-header-center')[0].classList.add("hide");
+		} else if(isHovered=="false") {
+			console.log("removing hide class");
+			document.getElementsByClassName('fsbl-header-center')[0].classList.remove("hide");
+		}
 	}
 	cancelDrag() {
 		if (this.grabbedTab) {

@@ -236,19 +236,18 @@ html.desktop-active .fsbl-linker[hover=true] {
     padding-top: 2px;
 }
 
-.header-title{
-    transition-property: border, background-color, margin-right, border-top-left-radius, border-top-right-radius, height;
-    transition-duration: 1s;
+.fsbl-header-center.hide{
+    display:none;
 }
 
 .header-title-hover{
     border: solid 1px #67829a;
     transform: perspective(100px) rotateX(20deg);
     background-color: #617383;
-    margin-right: 35%;
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
     height: 20px;
     margin-bottom: -8px;
     padding: 5px;
+    margin-left:-15%;
 }
