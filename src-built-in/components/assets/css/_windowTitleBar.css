@@ -30,7 +30,7 @@
 }
 
 html.desktop-active .fsbl-header {
-    background: var(--titleBar-background-active-color);
+    background: var(--titleBar-background-focus-color);
     color: var(--titlebar-text-active-color);
 }
 

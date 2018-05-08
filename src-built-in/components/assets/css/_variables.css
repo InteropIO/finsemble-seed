@@ -89,8 +89,15 @@
     --titleBar-linker-group-width: 3px;
 
     --titleBar-background-color: var(--coolGray6);
-    --titleBar-background-active-color: var(--coolGray5);
-    --titlebar-background-inactive-color: var(--coolGray6);
+    --titleBar-background-focus-color: var(--coolGray5);
+
+    --titlebar-tab-windowFocused-active-background-color: var(--coolGray3); /* Specifies the background color of the active tab in the active window. */
+    --titlebar-tab-windowFocused-active-border-color: var(--coolGray2); 
+    --titlebar-tab-active-background-color: var(--coolGray4); /* Specifies the background color of the active tab in an inactive window. */
+    --titlebar-tab-active-border-color: var(--coolGray3);
+    --titlebar-tab-inactive-background-color: var(--coolGray7); /* Inactive tabs are the same color for active and inactive windows. */
+    --titlebar-tab-inactive-border-color: var(--coolGray3);
+
     --titleBar-button-hover-active-color: var(--blue6);
     --titleBar-button-hover-inactive-color: var(--blue7);
     --titleBar-button-highlight-active-color: var(--blue6);
@@ -102,6 +109,8 @@
     --titleBar-text-inactive-color: var(--gray3);
     --titleBar-font-weight: 300;
     --titleBar-font-size: 12px;
+
+
 
     /* Dialogs */
     --dialog-background-color: var(--coolGray7);
@@ -189,6 +198,6 @@
     --complex-content-checkbox-check-color: #FFFFFF;
     --complex-content-checkbox-background-color: var(--blue);
 
-     --complex-content-card-background-color: var(--coolGray4);
-     --complex-content-card-logo-background-color: var(--blue7);
+    --complex-content-card-background-color: var(--coolGray4);
+    --complex-content-card-logo-background-color: var(--blue7);
 }
