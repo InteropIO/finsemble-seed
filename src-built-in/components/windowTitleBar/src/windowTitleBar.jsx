@@ -54,7 +54,7 @@ class WindowTitleBar extends React.Component {
 		this.onDocking = this.onDocking.bind(this);
 		this.showLinkerButton = this.showLinkerButton.bind(this);
 		this.isTopRight = this.isTopRight.bind(this);
-		this.toggleToTab = this.toggleToTab.bind(this);
+		this.toggleDrag = this.toggleDrag.bind(this);
 	}
 	componentWillMount() {
 		windowTitleBarStore.addListeners([
@@ -114,10 +114,9 @@ class WindowTitleBar extends React.Component {
 	onStoreChanged(newState) {
 		this.setState(newState);
 	}
-	toggleDrag() {
-		let newState = !this.state.titleBarIsHoveredOver;
+	toggleDrag(isHovered) {
 		this.setState({
-			titleBarIsHoveredOver: newState
+			titleBarIsHoveredOver: isHovered
 		});
 	}
 	render() {
@@ -127,22 +126,24 @@ class WindowTitleBar extends React.Component {
 		let showDockingIcon = !self.state.dockingEnabled ? false : self.state.dockingIcon;
 		let isGrouped = (self.state.dockingIcon == "ejector");
 		let showMinimizeIcon = (isGrouped && self.state.isTopRight) || !isGrouped; //If not in a group or if topright in a group
-		return (<div className="fsbl-header">
-			<HoverDetector hoverAction={this.toggleDrag} />
-			<div className="fsbl-header-left">
-				{self.state.showLinkerButton ? <Linker /> : null}
-				<Sharer />
-			</div>
-			<div className="fsbl-header-center cq-drag"><div className={this.state.titleBarIsHoveredOver ? "header-title cq-no-drag header-title-hover" : "header-title cq-no-drag"}>{self.state.windowTitle}</div></div>
-			<div onMouseDown={this.startLongHoldTimer} className="fsbl-header-right">
-				<BringSuiteToFront />
-				{this.state.minButton && showMinimizeIcon ? <Minimize /> : null}
-				{showDockingIcon ? <DockingButton /> : null}
-				{this.state.maxButton ? <Maximize /> : null}
-				{this.state.closeButton ? <Close /> : null}
+		return (
+			<div className="fsbl-header">
+				<HoverDetector hoverAction={this.toggleDrag} />
+				<div className="fsbl-header-left">
+					{self.state.showLinkerButton ? <Linker /> : null}
+					<Sharer />
+				</div>
+				<div className="fsbl-header-center cq-drag"><div onMouseOver={this.toggleDrag.bind(this, "true")} onMouseOut={this.toggleDrag.bind(this, "false")} className={this.state.titleBarIsHoveredOver==="true" ? "header-title cq-no-drag header-title-hover" : "header-title cq-no-drag"}>{self.state.windowTitle}</div></div>
+				<div onMouseDown={this.startLongHoldTimer} className="fsbl-header-right">
+					<BringSuiteToFront />
+					{this.state.minButton && showMinimizeIcon ? <Minimize /> : null}
+					{showDockingIcon ? <DockingButton /> : null}
+					{this.state.maxButton ? <Maximize /> : null}
+					{this.state.closeButton ? <Close /> : null}
 
+				</div>
 			</div>
-		</div>);
+		);
 	}
 }
 
