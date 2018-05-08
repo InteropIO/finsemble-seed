@@ -181,8 +181,9 @@ Actions = {
 		}
 
 		let dialogParams = {
-			title: "Delete this workspace?",
+			title: "Delete this Workspace?",
 			question: "Are you sure you want to delete the workspace \"" + workspaceName + "\"?",
+			negativeResponseLabel: "Cancel",
 			showCancelButton: false,
 			hideModalOnClose: data.hideModalOnClose
 		};
@@ -511,7 +512,8 @@ Actions = {
 		//@todo, look in to using async.retry - we could throw an error and start the whole process over again.
 		if (response.choice !== "cancel" && (!response.value || response.value === "")) {
 			let dialogParams = {
-				question: "Invalid workspace name. Please try again.",
+				title: "Invalid workspace name",
+				question: "Please try again.",
 				affirmativeResponseLabel: "OK",
 				showNegativeButton: false,
 				showCancelButton: false
@@ -548,9 +550,9 @@ Actions = {
 		let { workspaceExists, workspaceName, template } = params;
 
 		let dialogParams = {
-			title: "Overwrite Workspace?",
+			title: "New Workspace",
 			question: "The workspace \"" + workspaceName + "\" already exists. A new workspace will be created.",
-			affirmativeResponseLabel: "Okay",
+			affirmativeResponseLabel: "OK",
 			showNegativeButton: false
 		};
 

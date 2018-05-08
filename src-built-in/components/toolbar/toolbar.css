@@ -29,12 +29,13 @@ body, html {
 
 .icon-only > i {
     height: 22px;
+    padding-top: 2px;
     font-size: var(--toolbar-font-icon-font-size);
     width: auto;
 }
 
-.pinned-icon {
-    color: #4495d1;
+.icon-only .ff-minimize-all {
+    padding-top: 3px;
 }
 
 .searchSection {
@@ -127,7 +128,7 @@ img {
 
 .searchInput::after {
     position: absolute;
-    font-family: finfont;
+    font-family: font-finance;
     right: 10px;
     content: "\2c";
 }

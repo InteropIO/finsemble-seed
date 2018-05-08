@@ -3,7 +3,7 @@
 * All rights reserved.
 */
 @import  url('../assets/css/_globals.css');
-
+@import  url('../assets/css/_dialogs.css');
 @import  url('../assets/css/_menus.css');
 
 img {
@@ -43,21 +43,30 @@ body {
 .content {
     width: calc(100% - 17px);
     padding: .75em;
-    background-color: var(--content-section-background-color);
+    background-color: var(--complex-content-background-color);
 }
 
 .ListHeader {
     display: flex;
-    margin-left: 6px;
+    margin-left: 8px;
+    margin-bottom: 3px;
 }
 
 .filterInput {
-    width: 163px;
-    height: 24px;
-    border-color: #dddddd;
-    border-width: 1px 1px 1px 1px;
-    border-style: solid;
+    width: 170px;
+    height: 30px;
+    -webkit-appearance: none;
+    color: #FFFFFF;
+    text-align: left;
+    font-size: 10pt;
+    font-family: Roboto;
+    font-weight: 300;
+    vertical-align: middle;
+    background-color: transparent;
     padding-left: 10px;
+    border: 1px solid var(--dialog-input-border-color);
+    box-sizing: border-box;
+    transition: .2s ease-in;
 }
 
 input {
@@ -65,7 +74,7 @@ input {
 }
 
 .filterInput:focus {
-    border: 1px solid var(--scrollbar-color);
+    border: 1px solid var(--dialog-input-border-focus-color);
 }
 
 .ff-search {
@@ -75,6 +84,8 @@ input {
     right: 21px;
     width: 15px;
     height: 15px;
+    color: var(--gray2);
+    padding-bottom: 2px;
 }
 
 .appContainer {
@@ -97,8 +108,7 @@ img {
     margin: 8px;
     width: 170px;
     height: 104px;
-    background-color: var(--app-catalog-app-item-background-color);
-    box-shadow: 0 1px 4px 0 rgba(136, 136, 136, 0.5);
+    background-color: var(--complex-content-card-background-color);
 }
 
 .appHeader {
@@ -124,7 +134,7 @@ img {
     width: 36px;
     min-width: 36px;
     height: 36px;
-    background-color: var(--app-catalog-icon-container-background-color);
+    background-color: var(--complex-content-card-logo-background-color);
     display: flex;
     align-items: center;
 }
@@ -154,10 +164,15 @@ img {
     font-stretch: normal;
     letter-spacing: normal;
     text-align: left;
-    color: #000000;
+    color: var(--complex-content-font-color);
     word-break: break-word;
     padding-right: 7px;
     line-height: 1;
+}
+
+.titleDisplay {
+    font-size: 16px;
+
 }
 
 .titleContainer .vendor {
@@ -190,11 +205,11 @@ img {
     margin-right: 15px;
 }
 
-.footerRight .openButton {
+.openButton {
     cursor: pointer;
     align-self: flex-end;
-    background-color: var(--app-catalog-button-background-color);
-    border: var(--app-catalog-button-border);
+    background-color: transparent;
+    border: 1px solid var(--complex-content-button-border-color);
     font-size: 12px;
     color: #ffffff;
     text-align: center;
@@ -211,6 +226,10 @@ img {
     color: #ffffff;
 }
 
+.openButton:hover {
+    border: 1px solid var(--complex-content-button-border-hover-color);
+}
+
 .containerItem {
     flex: 1;
     width: 100%;
@@ -225,11 +244,20 @@ img {
 
 .ff-arrow-back {
     cursor: pointer;
-    font-size: 10px;
+    font-size: 15px;
     font-weight: 300;
     text-align: left;
-    color: #000000;
+    color: #FFFFFF;
     margin-bottom: 21px;
+}
+
+.back-wrapper {
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.ff-arrow-back {
+    padding-right: 10px;
 }
 
 .detailsHeader {
@@ -245,7 +273,7 @@ img {
 
 .detailsHeader .button {
     cursor: pointer;
-    font-size: 12px;
+    font-size: 15px;
     font-weight: normal;
     font-style: normal;
     font-stretch: normal;

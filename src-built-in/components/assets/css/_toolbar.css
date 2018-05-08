@@ -1,4 +1,5 @@
-/* New Toolbar Starts Here*/
+@import  url('_globals.css');
+
 .finsemble-toolbar {
     display: flex;
     align-items: stretch;
@@ -54,25 +55,24 @@
 }
 
 .finsemble-toolbar-button {
-    display: table;
+    display: -webkit-box;
     padding: var(--toolbar-button-padding);
     height: 100%;
     border: 1px solid var(--toolbar-background-color);
 }
 
 .finsemble-toolbar-button-label {
-    font-size: .95em;
+    font-size: var(--toolbar-button-label-font-size);
     font-weight: var(--toolbar-button-label-font-weight);
     text-align: left;
     letter-spacing: .25px;
     align-content: center;
     display: block;
-    margin-top: var(--toolbar-button-label-margin);    
+    margin-top: var(--toolbar-button-label-margin-top);    
 }
 
 .finsemble-toolbar-button:hover {
     background: var(--secondary-accent-color);
-    color: var(--secondary-hover-font-color);
     border: 1px solid transparent;
     cursor: pointer;
 }
@@ -94,7 +94,6 @@
     text-align: center;
     text-overflow: ellipsis;
     white-space: nowrap;
-    border-right: var(--toolbar-separator);
 }
 
 .finsemble-toolbar-workspace-button-label.finsemble-toolbar-button:hover {
@@ -105,7 +104,6 @@
 
 .finsemble-toolbar-button-icon {
     height: 100%;
-    padding-top: 2px;
     display: table-cell;
     vertical-align: middle;
 }
@@ -131,18 +129,19 @@
 }
 
 img.pinned-icon {
-    padding-top: var(--pinned-icon-padding-top);
+    padding-top: 6px;
     max-width: 17px;
 }
 
 .pinned-icon {
-    color: var(--pinned-icon-font-color);
-    font-size: var(--pinned-icon-font-size);
+    color: var(--toolbar-icon-app-color);
+    font-size: var(--toolbar-icon-font-size);
+    padding-top: 3px;
     padding-right: .25em;
 }
 
 .pinned-workspace-icon {
-    color: var(--workspace-icon-color ) !important;
+    color: var(--toolbar-icon-workspace-color ) !important;
 }
 
 .toolbar-button-label-left {
@@ -154,7 +153,7 @@ img.pinned-icon {
 }
 
 .finsemble-button-label {
-    padding-top: var(--finsemble-button-label-padding-top);
+    padding-top: var(--toolbar-button-label-padding-top);
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -186,4 +185,13 @@ img.pinned-icon {
 
 .ff-minimize-all {
     padding-top: 4px;
+}
+
+.ff-component {
+    font-size: 18px;
+    padding-top: 6px;
+}
+
+.ff-workspace {
+    padding-bottom: 2px;
 }

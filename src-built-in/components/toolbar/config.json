@@ -18,6 +18,10 @@
         "type": "reactComponent"
     },
     {
+        "align":"left",
+        "type": "seperator"
+    },
+    {
         "align": "right",
         "type": "reactComponent",
         "reactComponent": "AutoArrange"
@@ -36,5 +40,9 @@
         "align": "left",
         "label": "Apps",
         "menuType": "App Launcher"
+    },
+    {
+        "align":"left",
+        "type": "seperator"
     }
 ]

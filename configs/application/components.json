@@ -32,7 +32,7 @@
 						"persistWindowState": true
 					},
 					"Toolbar": {
-						"iconClass": "welcome"
+						"iconClass": "ff-component"
 					}
 				}
 			}

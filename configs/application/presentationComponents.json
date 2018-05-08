@@ -460,7 +460,7 @@
 			"window": {
 				"id": "launcher",
 				"url": "$applicationRoot/components/toolbar/toolbar.html",
-				"height": 40,
+				"height": 30,
 				"top": 0,
 				"left": 0,
 				"right": 0,
