@@ -170,6 +170,11 @@ img {
     line-height: 1;
 }
 
+.titleDisplay {
+    font-size: 16px;
+
+}
+
 .titleContainer .vendor {
     width: 39px;
     height: 16px;
@@ -200,7 +205,7 @@ img {
     margin-right: 15px;
 }
 
-.footerRight .openButton {
+.openButton {
     cursor: pointer;
     align-self: flex-end;
     background-color: transparent;
@@ -239,11 +244,20 @@ img {
 
 .ff-arrow-back {
     cursor: pointer;
-    font-size: 10px;
+    font-size: 15px;
     font-weight: 300;
     text-align: left;
-    color: #000000;
+    color: #FFFFFF;
     margin-bottom: 21px;
+}
+
+.back-wrapper {
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.ff-arrow-back {
+    padding-right: 10px;
 }
 
 .detailsHeader {
@@ -259,7 +273,7 @@ img {
 
 .detailsHeader .button {
     cursor: pointer;
-    font-size: 12px;
+    font-size: 15px;
     font-weight: normal;
     font-style: normal;
     font-stretch: normal;
