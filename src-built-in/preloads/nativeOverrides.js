@@ -8,11 +8,14 @@
 			"component": {
 				...
 				"inject": false,
-				"preload": "/components/preloads/nativeOverrides.js"
+				"preload": "$applicationRoot/preloads/nativeOverrides.js"
 				...
 			}
 			...
 		}
+
+	IMPORTANT NOTE: If you set that path incorrectly it will cause Finsemble to stop working in that component.
+	Check your component's chrome console for the existence of FSBL. If it doesn't exist then check your path.
  */
 
 /**
