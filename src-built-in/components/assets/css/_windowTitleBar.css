@@ -236,8 +236,8 @@ html.desktop-active .fsbl-linker[hover=true] {
     padding-top: 2px;
 }
 
-.fsbl-header-center.hide{
-    display:none;
+.header-title.hide{
+    visibility: hidden;
 }
 
 .header-title-hover{

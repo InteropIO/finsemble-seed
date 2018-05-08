@@ -30,7 +30,6 @@ import "../../assets/css/finsemble.css";
 class WindowTitleBar extends React.Component {
 	constructor() {
 		super();
-<<<<<<< HEAD
 		this.grabbedTab = null;
 
 		this.setTabRef = function(element) {
@@ -41,8 +40,6 @@ class WindowTitleBar extends React.Component {
 			this.grabbedTab = null;
 		}.bind(this);
 
-=======
->>>>>>> ba378e237f7b8c692f6d48d9dc86f9600d7055fd
 		this.bindCorrectContext();
 		windowTitleBarStore.getValue({ field: "Maximize.hide" });
 		this.state = {
@@ -134,13 +131,14 @@ class WindowTitleBar extends React.Component {
 		this.setState({
 			titleBarIsHoveredOver: isHovered
 		});
-		console.log(isHovered);
+		var clonedTab = document.getElementsByClassName('header-title')[0].cloneNode(true);
+		// isHovered is a string so a boolean check doesn't work
 		if(isHovered=="true"){
-			console.log("adding hide class");
-			document.getElementsByClassName('fsbl-header-center')[0].classList.add("hide");
+			document.getElementsByClassName('header-title')[0].classList.add("hide");
+			document.getElementsByClassName('fsbl-header-center')[0].parentElement.insertAfter(clonedTab, null);
 		} else if(isHovered=="false") {
-			console.log("removing hide class");
-			document.getElementsByClassName('fsbl-header-center')[0].classList.remove("hide");
+			document.getElementsByClassName('header-title')[0].classList.remove("hide");
+			document.getElementsByClassName('fsbl-header-center')[0].remove();
 		}
 	}
 	cancelDrag() {
@@ -193,8 +191,6 @@ function dragElement(elmnts) {
 		e = e || window.event;
 		// get the mouse cursor position at startup:
 		pos2 = e.clientX;
-		var clonedTab = e.target.cloneNode(true);
-		e.target.parentNode.insertBefore(clonedTab, null);
 		document.onmouseup = closeDragElement;
 		// call a function whenever the cursor moves:
 		document.onmousemove = elementDrag;
@@ -214,7 +210,6 @@ function dragElement(elmnts) {
 
 	function closeDragElement(e) {
 		/* stop moving when mouse button is released:*/
-		e.target.remove();
 		document.onmouseup = null;
 		document.onmousemove = null;
 	}
