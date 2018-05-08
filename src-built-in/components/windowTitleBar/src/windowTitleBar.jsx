@@ -54,7 +54,7 @@ class WindowTitleBar extends React.Component {
 		this.onDocking = this.onDocking.bind(this);
 		this.showLinkerButton = this.showLinkerButton.bind(this);
 		this.isTopRight = this.isTopRight.bind(this);
-		this.toggleDrag = this.toggleDrag.bind(this);
+		this.toggleToTab = this.toggleToTab.bind(this);
 	}
 	componentWillMount() {
 		windowTitleBarStore.addListeners([
@@ -189,6 +189,5 @@ FSBL.addEventListener("onReady", function () {
 		HeaderActions = storeExports.Actions;
 		windowTitleBarStore = storeExports.getStore();
 		ReactDOM.render(<WindowTitleBar />, document.getElementById("FSBLHeader"));
-		dragElement(document.getElementsByClassName("header-title"));
 	});
 });
