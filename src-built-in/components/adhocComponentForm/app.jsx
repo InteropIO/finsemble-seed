@@ -8,14 +8,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 //Finsemble font-icons, general styling, and specific styling.
 //import "../assets/css/finfont.css";
+import "./adhoc.css";
 import "../assets/css/finsemble.css";
 import { FinsembleDialog, FinsembleDialogTextInput, FinsembleDialogQuestion, FinsembleDialogButton } from "@chartiq/finsemble-react-controls";
-import "./adhoc.css";
-
-// const Test = require('./test');
-
-
-
 
 class AdHocComponentForm extends React.Component {
 	constructor(props) {

@@ -1,6 +1,6 @@
 {
 	"preload": {
-		"output": "preloads/monkeyPatches",
-		"entry": "./src-built-in/preloads/monkeyPatches.js"
+		"output": "preloads/nativeOverrides",
+		"entry": "./src-built-in/preloads/nativeOverrides.js"
 	}
 }

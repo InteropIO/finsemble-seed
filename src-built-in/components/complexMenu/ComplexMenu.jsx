@@ -3,11 +3,9 @@
 * All rights reserved.
 */
 import React from "react";
+import "./menu.css";
 import "../assets/css/finfont.css";
 import "../assets/css/finsemble.css";
-import "./menu.css";
-
-
 
 export default class ComplexMenu extends React.Component {
 	constructor() {
