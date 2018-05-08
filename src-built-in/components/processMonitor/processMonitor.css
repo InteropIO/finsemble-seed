@@ -155,3 +155,8 @@ body {
 .ReactTable .rt-tbody .rt-tr-group {
 	border-bottom: 0px;
 }
+
+/* Prevents the table from taking up all of the space in the page height.*/
+.ReactTable .rt-tr-group, .ReactTable .rt-tr {
+	flex: 0 0 auto;
+}
