@@ -1,5 +1,5 @@
 @import './font-finance.css';
-@import './_fontIconWhitelabel.css';
+@import './_fontIconWhiteLabel.css';
 
 [class*="ff-"] {
     font-family: "font-finance" !important;

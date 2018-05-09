@@ -1,5 +1,5 @@
 @import url('./_variables.css');
-@import url('./_variablesWhitelabel.css');
+@import url('./_variablesWhiteLabel.css');
 @import url("https://fonts.googleapis.com/css?family=Roboto");
 @import url('./_fontIcons.css');
 @import  url('./_windowFrame.css');
@@ -129,4 +129,4 @@ i, i:before, i:after, .fsbl-window-manager-icon {
 }
 
 
-@import url('./_styleWhitelabel.css');
+@import url('./_styleWhiteLabel.css');
