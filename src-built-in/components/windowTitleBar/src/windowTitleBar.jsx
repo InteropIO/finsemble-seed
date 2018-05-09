@@ -129,16 +129,17 @@ class WindowTitleBar extends React.Component {
 		this.setState(newState);
 	}
 	toggleDrag(isHovered) {
-		this.setState({
-			titleBarIsHoveredOver: isHovered
-		});
 		var clonedTab = document.getElementsByClassName('header-title')[0].cloneNode(true);
 		// isHovered is a string so a boolean check doesn't work
 		if(isHovered=="true"){
-			document.getElementsByClassName('header-title')[0].classList.add("hide");
+			this.setState({
+				titleBarIsHoveredOver: true
+			});
 			document.getElementsByClassName('fsbl-header-center')[0].parentElement.insertAfter(clonedTab, null);
 		} else if(isHovered=="false") {
-			document.getElementsByClassName('header-title')[0].classList.remove("hide");
+			this.setState({
+				titleBarIsHoveredOver: false
+			});
 			clonedTab.remove();
 		}
 	}
@@ -167,7 +168,7 @@ class WindowTitleBar extends React.Component {
 					{self.state.showLinkerButton ? <Linker /> : null}
 					<Sharer />
 				</div>
-				<div className="fsbl-header-center cq-drag"><div draggable={true} onDragStart={this.startDrag} onDragEnd={this.stopDrag} onDragExit={this.cancelDrag} onMouseOver={this.toggleDrag.bind(this, "true")} onMouseOut={this.toggleDrag.bind(this, "false")} className={this.state.titleBarIsHoveredOver==="true" ? "header-title cq-no-drag header-title-hover" : "header-title cq-no-drag"}>{self.state.windowTitle}</div></div>
+				<div className="fsbl-header-center cq-drag"><div draggable={true} onDragStart={this.startDrag} onDragEnd={this.stopDrag} onDragExit={this.cancelDrag} onMouseOver={this.toggleDrag.bind(this, "true")} onMouseOut={this.toggleDrag.bind(this, "false")} className={this.state.titleBarIsHoveredOver ? "header-title cq-no-drag header-title-hover hidden" : "header-title cq-no-drag"}>{self.state.windowTitle}</div></div>
 				<Tab title={self.state.windowTitle} showTabs={self.state.titleBarIsHoveredOver} />
 				<div className="fsbl-header-right">
 					<BringSuiteToFront />

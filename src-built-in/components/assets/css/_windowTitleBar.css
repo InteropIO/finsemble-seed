@@ -236,7 +236,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     padding-top: 2px;
 }
 
-.tab.hidden{
+.hidden{
     visibility: hidden;
 }
 
