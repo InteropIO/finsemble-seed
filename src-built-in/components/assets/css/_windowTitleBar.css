@@ -236,28 +236,20 @@ html.desktop-active .fsbl-linker[hover=true] {
     padding-top: 2px;
 }
 
-.header-title.hide{
-    transition-property: visibility;
-    transition-duration: 1s;
-}
-
-.header-title-hover{
-    transition-property: border, height, background-color, margin-bottom;
-    transition-duration: 1s;
-}
-
-.header-title.hide{
+.tab.hidden{
     visibility: hidden;
 }
 
-.header-title-hover{
-    border: solid 1px #67829a;
-    transform: perspective(100px) rotateX(20deg);
-    background-color: #617383;
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-    height: 20px;
-    margin-bottom: -8px;
-    padding: 5px;
-    margin-left:-15%;
+.tab .style{
+    position: absolute;
+    top: 12px;
+    left:0;
+    width:175px;
+}
+
+.tab .title{
+    position: absolute;
+    top:12px;
+    left:16px;
+    overflow: ellipsis;
 }
