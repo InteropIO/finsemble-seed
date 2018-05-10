@@ -127,23 +127,12 @@ class WindowTitleBar extends React.Component {
 	 * Handles mouseover of title bar. This turns the regular title to a tab on windows that aren't already tabbing.
 	 * This function is used as a prop on HoverDetector
 	 *
-	 * @param isHovered A string containing a boolean value (this is how HoverDetector chooses to send these values)
 	 * @memberof windowTitleBar
 	 */
-	toggleDrag(isHovered) {
-		// var clonedTab = document.getElementsByClassName('header-title')[0].cloneNode(true);
-		// isHovered is a string so a boolean check doesn't work
-		if(isHovered=="true"){
-			this.setState({
-				titleBarIsHoveredOver: true
-			});
-			// document.getElementsByClassName('fsbl-header-center')[0].parentElement.insertAfter(clonedTab, null);
-		} else if(isHovered=="false") {
-			this.setState({
-				titleBarIsHoveredOver: false
-			});
-			// clonedTab.remove();
-		}
+	toggleDrag() {
+		this.setState({
+			titleBarIsHoveredOver: !this.state.titleBarIsHoveredOver
+		});
 	}
 
 	/**
@@ -206,14 +195,15 @@ class WindowTitleBar extends React.Component {
 		let showMinimizeIcon = (isGrouped && self.state.isTopRight) || !isGrouped; //If not in a group or if topright in a group
 		return (
 			<div className="fsbl-header">
-				<HoverDetector hoverAction={this.toggleDrag} />
 				<div className="fsbl-header-left">
 					{self.state.showLinkerButton ? <Linker /> : null}
 					<Sharer />
 				</div>
-				<div className="fsbl-header-center cq-drag"><div className={this.state.titleBarIsHoveredOver ? "header-title hidden" : "header-title"}>{self.state.windowTitle}</div></div>
-				<div className="tab-area" draggable={true} onMouseDown={this.startDrag} onDragEnd={this.stopDrag} onDrop={this.drop}>
-					<Tab title={self.state.windowTitle} showTabs={self.state.titleBarIsHoveredOver} />
+				<div className="fsbl-header-center cq-drag" onMouseOut={this.toggleDrag} onMouseOver={this.toggleDrag}>
+					<div className={this.state.titleBarIsHoveredOver ? "header-title hidden" : "header-title"}>{self.state.windowTitle}</div>
+					<div className={this.state.titleBarIsHoveredOver?"tab-area":"tab-area hidden"} draggable={true} onMouseDown={this.startDrag} onDragEnd={this.stopDrag} onDrop={this.drop}>
+						<Tab title={self.state.windowTitle} />
+					</div>
 				</div>
 				<div className="fsbl-header-right">
 					<BringSuiteToFront />

@@ -236,21 +236,27 @@ html.desktop-active .fsbl-linker[hover=true] {
     padding-top: 2px;
 }
 
+.fsbl-header-center:hover .tab-area {
+    opacity: 1;
+    transition: opacity .25s ease-in-out;
+}
+
 .hidden{
-    visibility: hidden;
+    opacity: 0;
 }
 
 .tab-area{
     position: absolute;
     top: 12px;
-    left:8%;
     width:175px;
     height:inherit;
 }
 
 .tab .title{
     position: absolute;
-    top: 3px;
-    left: 12px;
+    width: inherit;
+    height: inherit;
     overflow: ellipsis;
+    margin-top: -21px;
+    left: 7%;
 }
