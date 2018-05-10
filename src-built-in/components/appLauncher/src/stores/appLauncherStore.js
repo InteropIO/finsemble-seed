@@ -20,7 +20,8 @@ var Actions = {
 		async.parallel([
 			Actions.initializeComponentList,
 			Actions.getUserDefinedComponentList,
-			setupHotkeys
+			setupHotkeys,
+			Actions.getBlacklistedComponentsFromStorage,
 		], function (err) {
 			if (err) {
 				console.error(err);
@@ -170,8 +171,10 @@ var Actions = {
 		}
 
 		self.componentList = {}
+		let blacklist = Actions.getBlacklistedComponents();
 		// deal with groups
 		for (let componentType in componentList) {
+			if (blacklist.includes(componentType)) continue;
 			let config = components[componentType];
 			let componentGroups = (config.component && config.component.launchGroups) ? config.component.launchGroups : false;
 			if (componentGroups) {
@@ -195,9 +198,19 @@ var Actions = {
 			self.componentList[componentType] = componentList[componentType];
 		}
 
+
 		FSBL.Clients.Logger.debug("appLauncher filterComponents", self.componentList, "settings", settings, "customData", FSBL.Clients.WindowClient.options.customData);
 		appLauncherStore.setValue({ field: "componentList", value: self.componentList });
 		self.saveCustomComponents();
+	},
+	getBlacklistedComponentsFromStorage(cb) {
+		FSBL.Clients.StorageClient.get({ topic: "finsemble", key: "blacklistedComponents" }, (err, data) => {
+			appLauncherStore.setValue({ field: "blacklistedComponents", value: data || [] });
+			cb();
+		})
+	},
+	getBlacklistedComponents() {
+		return appLauncherStore.getValue({ field: "blacklistedComponents" });
 	},
 	//toggles the pinned state of the component. This change will be broadcast to all toolbars so that the state changes in each component.
 	togglePin(componentToToggle) {
@@ -266,6 +279,18 @@ var Actions = {
 				self.removeCustomComponent(componentName);
 			}
 		});
+	},
+	uninstallComponent(componentName) {
+		let component = Actions.componentList[componentName];
+		if (component.isUserDefined) {
+			this.removeCustomComponent(componentName);
+		} else {
+			let blacklist = Actions.getBlacklistedComponents();
+			blacklist.push(componentName);
+			appLauncherStore.setValue({ field: "blacklistedComponents", value: blacklist });
+			FSBL.Clients.StorageClient.save({ topic: "finsemble", key: "blacklistedComponents", value: blacklist });
+		}
+		Actions.filterComponents(Actions.componentList);
 	},
 	//Remove the component, notify others.
 	removeCustomComponent(componentName) {
