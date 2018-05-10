@@ -155,7 +155,7 @@ class WindowTitleBar extends React.Component {
 					{self.state.showLinkerButton ? <Linker /> : null}
 					<Sharer />
 				</div>
-				<div className="fsbl-header-center cq-drag"><div className={this.state.titleBarIsHoveredOver ? "header-title cq-no-drag hidden" : "header-title cq-no-drag"}>{self.state.windowTitle}</div></div>
+				<div className="fsbl-header-center cq-drag"><div className={this.state.titleBarIsHoveredOver ? "header-title hidden" : "header-title"}>{self.state.windowTitle}</div></div>
 				<Tab title={self.state.windowTitle} showTabs={self.state.titleBarIsHoveredOver} />
 				<div className="fsbl-header-right">
 					<BringSuiteToFront />

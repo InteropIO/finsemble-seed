@@ -25,6 +25,7 @@ export default class Tab extends React.Component{
 	 * @memberof windowTitleBar
 	 */
 	startDrag(e) {
+		console.log("starting the drag");
 		FSBL.Clients.WindowClient.startTilingOrTabbing({windowIdentifier: FSBL.Clients.WindowClient.getWindowIdentifier()});
 	}
 
@@ -71,13 +72,13 @@ export default class Tab extends React.Component{
 
     render(){
 		return (
-			<div draggable={true} onDragStart={this.startDrag} onDragEnd={this.stopDrag} onDrop={this.drop} className={this.props.showTabs?"tab":"tab hidden"}>
+			<div className={this.props.showTabs?"tab":"tab hidden"}>
 				<div className="style">
 					<svg id='Layer_1' data-name='Layer 1' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 176.49 20'>
 						<polygon points='8.57 0.5 167.93 0.5 175.75 19.5 0.75 19.5 8.57 0.5' fill='#617383' stroke='#67829a' strokeMiterlimit='10' />
 					</svg>
 				</div>
-				<div className="title">{this.props.title}</div>
+				<div className="title" draggable={true} onMouseDown={this.startDrag} onDragEnd={this.stopDrag} onDrop={this.drop}>{this.props.title}</div>
         	</div>
 		);
     }

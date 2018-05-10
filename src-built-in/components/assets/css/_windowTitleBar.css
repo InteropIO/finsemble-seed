@@ -240,7 +240,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     visibility: hidden;
 }
 
-.tab .style{
+.tab{
     position: absolute;
     top: 12px;
     left:0;
@@ -248,8 +248,5 @@ html.desktop-active .fsbl-linker[hover=true] {
 }
 
 .tab .title{
-    position: absolute;
-    top:12px;
-    left:16px;
     overflow: ellipsis;
 }
