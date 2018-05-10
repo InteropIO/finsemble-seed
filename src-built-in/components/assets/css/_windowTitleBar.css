@@ -240,11 +240,12 @@ html.desktop-active .fsbl-linker[hover=true] {
     visibility: hidden;
 }
 
-.tab{
+.tab-area{
     position: absolute;
     top: 12px;
-    left:0;
+    left:8%;
     width:175px;
+    height:inherit;
 }
 
 .tab .title{

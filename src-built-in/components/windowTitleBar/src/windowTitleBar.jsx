@@ -57,6 +57,10 @@ class WindowTitleBar extends React.Component {
 		this.showLinkerButton = this.showLinkerButton.bind(this);
 		this.isTopRight = this.isTopRight.bind(this);
 		this.toggleDrag = this.toggleDrag.bind(this);
+		this.startDrag = this.startDrag.bind(this);
+		this.drop = this.drop.bind(this);
+		this.stopDrag = this.stopDrag.bind(this);
+		this.cancelTabbing = this.cancelTabbing.bind(this);
 	}
 	componentWillMount() {
 		windowTitleBarStore.addListeners([
@@ -142,6 +146,58 @@ class WindowTitleBar extends React.Component {
 		}
 	}
 
+	/**
+	 * Function that's called when this component fires the onDragStart event, this will start the tiling or tabbing process
+	 *
+	 * @param e The SyntheticEvent created by React when the startdrag event is called
+	 * @memberof windowTitleBar
+	 */
+	startDrag(e) {
+		console.log("starting the drag");
+		FSBL.Clients.WindowClient.startTilingOrTabbing({windowIdentifier: FSBL.Clients.WindowClient.getWindowIdentifier()});
+	}
+
+	/**
+	 * Function to catch the drop event. This is called (along with dragEnd when the esc key is pressed)
+	 * 
+	 * @param {Object} e The SyntheticEvent created by React when the drop event is called 
+	 */
+	drop(e) {
+		e.preventDefault();
+		this.setState({
+			dragEnded: true
+		});
+	}
+
+	/**
+	 * Called when the react component detects a drop (or stop drag, which is equivalent)
+	 *
+	 * @param e The SyntheticEvent created by React when the stopdrag event is called
+	 * @memberof windowTitleBar
+	 */
+	stopDrag(e) {
+		if (this.state.dragEnded != true) {
+			//Esc was pressed
+			this.setState({
+				dragEnded: false
+			}, () => {
+				FSBL.Clients.WindowClient.cancelTilingOrTabbing();
+			})
+		}
+		var timeout=setTimeout(this.cancelTiling, 6000);
+		FSBL.Clients.RouterClient.transmit('tabbingDragEnd', {windowIdentifier: FSBL.Clients.WindowClient.getWindowIdentifier(), timeout: timeout});
+	}
+
+	/**
+	 * Set to a timeout. An event is sent to the RouterClient which will be handled by the drop handler on the window.
+	 * In the event that a drop handler never fires to stop tiling or tabbing, this will take care of it.
+	 *
+	 * @memberof windowTitleBar
+	 */
+	cancelTabbing() {
+		FSBL.Clients.WindowClient.stopTilingOrTabbing();
+	}
+
 	render() {
 		var self = this;
 
@@ -156,7 +212,9 @@ class WindowTitleBar extends React.Component {
 					<Sharer />
 				</div>
 				<div className="fsbl-header-center cq-drag"><div className={this.state.titleBarIsHoveredOver ? "header-title hidden" : "header-title"}>{self.state.windowTitle}</div></div>
-				<Tab title={self.state.windowTitle} showTabs={self.state.titleBarIsHoveredOver} />
+				<div className="tab-area" draggable={true} onMouseDown={this.startDrag} onDragEnd={this.stopDrag} onDrop={this.drop}>
+					<Tab title={self.state.windowTitle} showTabs={self.state.titleBarIsHoveredOver} />
+				</div>
 				<div className="fsbl-header-right">
 					<BringSuiteToFront />
 					{this.state.minButton && showMinimizeIcon ? <Minimize /> : null}
