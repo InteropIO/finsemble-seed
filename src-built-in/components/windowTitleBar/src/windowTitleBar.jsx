@@ -31,16 +31,6 @@ import "../../assets/css/finsemble.css";
 class WindowTitleBar extends React.Component {
 	constructor() {
 		super();
-		this.grabbedTab = null;
-
-		this.setTabRef = function(element) {
-			this.grabbedTab = element;
-		}.bind(this);
-
-		this.resetTabRef = function() {
-			this.grabbedTab = null;
-		}.bind(this);
-
 		this.bindCorrectContext();
 		windowTitleBarStore.getValue({ field: "Maximize.hide" });
 		this.state = {
@@ -50,7 +40,8 @@ class WindowTitleBar extends React.Component {
 			closeButton: !windowTitleBarStore.getValue({ field: "Close.hide" }),
 			showLinkerButton: windowTitleBarStore.getValue({ field: "Linker.showLinkerButton" }),
 			isTopRight: windowTitleBarStore.getValue({ field: "isTopRight" }),
-			titleBarIsHoveredOver: windowTitleBarStore.getValue({ field: "titleBarIsHoveredOver" })
+			titleBarIsHoveredOver: windowTitleBarStore.getValue({ field: "titleBarIsHoveredOver" }),
+			dragEnded: false
 		};
 	}
 	/**
@@ -66,9 +57,6 @@ class WindowTitleBar extends React.Component {
 		this.showLinkerButton = this.showLinkerButton.bind(this);
 		this.isTopRight = this.isTopRight.bind(this);
 		this.toggleDrag = this.toggleDrag.bind(this);
-		this.startDrag = this.startDrag.bind(this);
-		this.cancelDrag = this.cancelDrag.bind(this);
-		this.stopDrag = this.stopDrag.bind(this);
 	}
 	componentWillMount() {
 		windowTitleBarStore.addListeners([
@@ -82,6 +70,7 @@ class WindowTitleBar extends React.Component {
 	}
 
 	componentWillUnmount() {
+		// window.removeEventListener('keyup', this.pressedKey, false);
 		windowTitleBarStore.removeListeners([
 			{ field: "Main.windowTitle", listener: this.onTitleChange },
 			{ field: "Main.showDockingTooltip", listener: this.onShowDockingToolTip },
@@ -96,6 +85,7 @@ class WindowTitleBar extends React.Component {
 		let header = document.getElementsByClassName("fsbl-header")[0];
 		let headerHeight = window.getComputedStyle(header, null).getPropertyValue("height");
 		document.body.style.marginTop = headerHeight;
+		// window.addEventListener('keydown', this.pressedKey, false);
 	}
 
 	showLinkerButton(err, response) {
@@ -128,33 +118,30 @@ class WindowTitleBar extends React.Component {
 	onStoreChanged(newState) {
 		this.setState(newState);
 	}
+
+	/**
+	 * Handles mouseover of title bar. This turns the regular title to a tab on windows that aren't already tabbing.
+	 * This function is used as a prop on HoverDetector
+	 *
+	 * @param isHovered A string containing a boolean value (this is how HoverDetector chooses to send these values)
+	 * @memberof windowTitleBar
+	 */
 	toggleDrag(isHovered) {
-		var clonedTab = document.getElementsByClassName('header-title')[0].cloneNode(true);
+		// var clonedTab = document.getElementsByClassName('header-title')[0].cloneNode(true);
 		// isHovered is a string so a boolean check doesn't work
 		if(isHovered=="true"){
 			this.setState({
 				titleBarIsHoveredOver: true
 			});
-			document.getElementsByClassName('fsbl-header-center')[0].parentElement.insertAfter(clonedTab, null);
+			// document.getElementsByClassName('fsbl-header-center')[0].parentElement.insertAfter(clonedTab, null);
 		} else if(isHovered=="false") {
 			this.setState({
 				titleBarIsHoveredOver: false
 			});
-			clonedTab.remove();
+			// clonedTab.remove();
 		}
 	}
-	cancelDrag() {
-		console.log('cancelled drag')
-		this.setState({
-			titleBarIsHoveredOver: false
-		});
-	}
-	startDrag() {
-		FSBL.Clients.WindowClient.startTilingOrTabbing({windowIdentifier: FSBL.Clients.WindowClient.getWindowIdentifier()});
-	}
-	stopDrag(e) {
-		FSBL.Clients.WindowClient.stopTilingOrTabbing();
-	}
+
 	render() {
 		var self = this;
 
@@ -168,7 +155,7 @@ class WindowTitleBar extends React.Component {
 					{self.state.showLinkerButton ? <Linker /> : null}
 					<Sharer />
 				</div>
-				<div className="fsbl-header-center cq-drag"><div draggable={true} onDragStart={this.startDrag} onDragEnd={this.stopDrag} onDragExit={this.cancelDrag} onMouseOver={this.toggleDrag.bind(this, "true")} onMouseOut={this.toggleDrag.bind(this, "false")} className={this.state.titleBarIsHoveredOver ? "header-title cq-no-drag header-title-hover hidden" : "header-title cq-no-drag"}>{self.state.windowTitle}</div></div>
+				<div className="fsbl-header-center cq-drag"><div className={this.state.titleBarIsHoveredOver ? "header-title cq-no-drag hidden" : "header-title cq-no-drag"}>{self.state.windowTitle}</div></div>
 				<Tab title={self.state.windowTitle} showTabs={self.state.titleBarIsHoveredOver} />
 				<div className="fsbl-header-right">
 					<BringSuiteToFront />
