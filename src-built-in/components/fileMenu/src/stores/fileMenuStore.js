@@ -4,7 +4,7 @@
 */
 import { EventEmitter } from "events";
 let PROMPT_ON_DIRTY = false;
-const RESTART_TIMEOUT = 10000;
+const RESTART_TIMEOUT = 30000;
 const constants = {
 	METHOD: "METHOD",
 	GET_FIN_WINDOW: "getFinWindow",
@@ -90,6 +90,7 @@ var Actions = {
 	hideWindow() {
 		FileMenuStore.finWindow.hide();
 	},
+	//If a scheduled restart is invoked, we will open a dialog that gives the user a chance to cancel the restart.
 	listenForScheduledRestart() {
 		FSBL.Clients.RouterClient.addListener("Finsemble.Shutdown.ScheduledRestart", () => {
 
@@ -110,9 +111,9 @@ var Actions = {
 							FSBL.Clients.ConfigClient.setPreference({ field: "finsemble.scheduledRestart", value: val })
 						});
 					} else {
+						//If we get here, they clicked "Restart Now", so we obey the user.
 						Actions.restart();
 					}
-
 				});
 		});
 	},
@@ -135,6 +136,9 @@ var Actions = {
 		fin.desktop.Window.getCurrent().hide();
 		FSBL.Clients.RouterClient.transmit("CentralConsole-Show", true);
 	},
+	/**
+	 * Spanws the preferences menu.
+	 */
 	spawnPreferences() {
 		fin.desktop.Window.getCurrent().hide();
 		FSBL.Clients.LauncherClient.showWindow({
