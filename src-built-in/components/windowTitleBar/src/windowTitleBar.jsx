@@ -81,7 +81,6 @@ class WindowTitleBar extends React.Component {
 			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton },
 			{ field: "isTopRight", listener: this.isTopRight },
 		]);
-		FSBL.Clients.WindowClient.finsembleWindow.addEventListener("bounds-changed", this.onWindowResize);
 	}
 
 	componentWillUnmount() {
@@ -94,14 +93,14 @@ class WindowTitleBar extends React.Component {
 			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton },
 			{ field: "isTopRight", listener: this.isTopRight },
 		]);
-		FSBL.Clients.WindowClient.finsembleWindow.removeEventListener("bounds-changed", this.onWindowResize);
+		window.removeEventListener('resize', this.onWindowResize);
 	}
 
 	componentDidMount() {
 		let header = document.getElementsByClassName("fsbl-header")[0];
 		let headerHeight = window.getComputedStyle(header, null).getPropertyValue("height");
 		document.body.style.marginTop = headerHeight;
-		// window.addEventListener('keydown', this.pressedKey, false);
+		window.addEventListener('resize', this.onWindowResize);
 	}
 
 	showLinkerButton(err, response) {
@@ -188,13 +187,11 @@ class WindowTitleBar extends React.Component {
 
 	onWindowResize(){
 		let bounds = this.tabBar.getBoundingClientRect();
-		let newWidth = (this.state.tabs.length*this.state.tabWidth)-((this.state.tabs.length)*10);
-		console.log(newWidth);
-		if (bounds.width <= this.state.tabWidth + 20) {
-			this.setState({
-				tabWidth:newWidth
-			})
-		}
+		let newWidth = bounds.width <= this.state.tabWidth + 20 ? ((bounds.width-10)/this.state.tabs.length)+10 : 175;
+		if (newWidth >= 175) newWidth = 175;
+		this.setState({
+			tabWidth: newWidth
+		})
 	}
 
 	render() {
