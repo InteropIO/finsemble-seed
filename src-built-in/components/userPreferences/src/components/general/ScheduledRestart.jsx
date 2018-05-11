@@ -33,6 +33,7 @@ export default class ScheduledRestart extends React.Component {
         this.setHour = this.setHour.bind(this);
         this.setMinute = this.setMinute.bind(this);
         this.setMeridiem = this.setMeridiem.bind(this);
+        this.getDisplayHour = this.getDisplayHour.bind(this);
     }
 
     /**
@@ -124,7 +125,16 @@ export default class ScheduledRestart extends React.Component {
             })
         })
     }
-
+    getDisplayHour() {
+        let { scheduledRestart } = this.state;
+        if (scheduledRestart.meridiem === "AM" && scheduledRestart.hour === 0) {
+            return 12;
+        } else if (scheduledRestart.meridiem === "PM" && scheduledRestart.hour > 12) {
+            return scheduledRestart.hour - 12;
+        } else {
+            return scheduledRestart.hour;
+        }
+    }
     /**
      * Add listener on the store. When the preferences field changes, we change our local state.
      * Also, get the intiial state from the store.
@@ -163,7 +173,7 @@ export default class ScheduledRestart extends React.Component {
                     Time:
                 </span>
                 {/* HOURS */}
-                <select disabled={!enabled} onChange={this.setHour} value={scheduledRestart.meridiem === "PM" && scheduledRestart.hour > 12 ? scheduledRestart.hour - 12 : scheduledRestart.hour}>
+                <select disabled={!enabled} onChange={this.setHour} value={this.getDisplayHour()}>
                     {HOURS.map((hour, i) => {
                         return <option key={i} value={hour}>{hour}</option>
                     })}
