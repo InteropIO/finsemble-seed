@@ -178,8 +178,8 @@ export default class ScheduledRestart extends React.Component {
                 &nbsp;
                 {/* MERIDIEM */}
                 <select disabled={!enabled} onChange={this.setMeridiem} value={scheduledRestart.meridiem}>
-                    <option value={"PM"}>PM</option>
                     <option value={"AM"}>AM</option>
+                    <option value={"PM"}>PM</option>
                 </select>
             </div>
         </div>

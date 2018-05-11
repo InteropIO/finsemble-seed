@@ -436,3 +436,8 @@ img {
 .disabled-restart {
     color: darkgray !important;
 }
+
+select:focus, option:focus {
+    outline: none;
+    background-color: transparent;
+}
