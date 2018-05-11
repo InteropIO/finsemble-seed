@@ -12,5 +12,33 @@ window.quitFinsemble = function quitFinsemble() {
 }
 
 FSBL.addEventListener('onReady', function () {
-	FSBL.Clients.WindowClient.setWindowTitle("Welcome to Finsemble!");
+	FSBL.Clients.WindowClient.setWindowTitle(fin.desktop.Window.getCurrent().name);
+
+	function cleanupBoundsText(bounds) {
+		bounds.bottom = bounds.top + bounds.height;
+		bounds.right = bounds.left + bounds.width;
+		return 'Top: ' + bounds.top + "<br>" +
+			"Left: " + bounds.left + "<br>" +
+			"Height: " + bounds.height + "<br>" +
+			"Width: " + bounds.width + "<br>" +
+			"Bottom: " + bounds.bottom + "<br>" +
+			"Right: " + bounds.right + "<br>";
+	}
+
+	fin.desktop.Window.getCurrent().getBounds(function (bounds) {
+		document.getElementById('bounds').innerHTML = cleanupBoundsText(bounds);
+	});
+
+	fin.desktop.Window.getCurrent().addEventListener('disabled-frame-bounds-changing', function (bounds) {
+		document.getElementById('bounds').innerHTML = cleanupBoundsText(bounds);
+	});
+	fin.desktop.Window.getCurrent().addEventListener('disabled-frame-bounds-changed', function (bounds) {
+		document.getElementById('bounds').innerHTML = cleanupBoundsText(bounds);
+	});
+	fin.desktop.Window.getCurrent().addEventListener('bounds-changing', function (bounds) {
+		document.getElementById('bounds').innerHTML = cleanupBoundsText(bounds);
+	});
+	fin.desktop.Window.getCurrent().addEventListener('bounds-changed', function (bounds) {
+		document.getElementById('bounds').innerHTML = cleanupBoundsText(bounds);
+	});
 });
