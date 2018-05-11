@@ -41,7 +41,9 @@ class WindowTitleBar extends React.Component {
 			showLinkerButton: windowTitleBarStore.getValue({ field: "Linker.showLinkerButton" }),
 			isTopRight: windowTitleBarStore.getValue({ field: "isTopRight" }),
 			titleBarIsHoveredOver: windowTitleBarStore.getValue({ field: "titleBarIsHoveredOver" }),
-			dragEnded: false
+			dragEnded: false,
+			tabWidth: 175,
+			tabs:[{title:windowTitleBarStore.getValue({ field: "Main.windowTitle" })}], //array of tabs for this window
 		};
 	}
 	/**
@@ -61,6 +63,7 @@ class WindowTitleBar extends React.Component {
 		this.drop = this.drop.bind(this);
 		this.stopDrag = this.stopDrag.bind(this);
 		this.cancelTabbing = this.cancelTabbing.bind(this);
+		this.onWindowResize = this.onWindowResize.bind(this);
 	}
 	componentWillMount() {
 		windowTitleBarStore.addListeners([
@@ -71,6 +74,7 @@ class WindowTitleBar extends React.Component {
 			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton },
 			{ field: "isTopRight", listener: this.isTopRight },
 		]);
+		FSBL.Clients.WindowClient.finsembleWindow.addEventListener("bounds-changed", this.onWindowResize);
 	}
 
 	componentWillUnmount() {
@@ -83,6 +87,7 @@ class WindowTitleBar extends React.Component {
 			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton },
 			{ field: "isTopRight", listener: this.isTopRight },
 		]);
+		FSBL.Clients.WindowClient.finsembleWindow.removeEventListener("bounds-changed", this.onWindowResize);
 	}
 
 	componentDidMount() {
@@ -142,7 +147,6 @@ class WindowTitleBar extends React.Component {
 	 * @memberof windowTitleBar
 	 */
 	startDrag(e) {
-		console.log("starting the drag");
 		FSBL.Clients.WindowClient.startTilingOrTabbing({ windowIdentifier: FSBL.Clients.WindowClient.getWindowIdentifier() });
 	}
 
@@ -187,6 +191,15 @@ class WindowTitleBar extends React.Component {
 		FSBL.Clients.WindowClient.stopTilingOrTabbing();
 	}
 
+	onWindowResize(){
+		let bounds = this.refs.titleBarCenterRef.getBoundingClientRect();
+		let newWidth = (this.state.tabs.length*this.state.tabWidth)-((this.state.tabs.length-1)*10);
+		console.log(newWidth);
+		this.setState({
+			tabWidth:newWidth
+		})
+	}
+
 	render() {
 		var self = this;
 
@@ -194,8 +207,7 @@ class WindowTitleBar extends React.Component {
 		let isGrouped = (self.state.dockingIcon == "ejector");
 		let showMinimizeIcon = (isGrouped && self.state.isTopRight) || !isGrouped; //If not in a group or if topright in a group
 		let titleWrapperClasses = "fsbl-header-center cq-drag";
-		//We shiykd
-		if (true || this.state.titleBarIsHoveredOver) {
+		if (true || this.state.titleBarIsHoveredOver) { // always show tabs (for now)
 			titleWrapperClasses += " tab-visible";
 		}
 		return (
@@ -204,10 +216,12 @@ class WindowTitleBar extends React.Component {
 					{self.state.showLinkerButton ? <Linker /> : null}
 					<Sharer />
 				</div>
-				<div className={titleWrapperClasses} onMouseEnter={this.toggleDrag} onMouseLeave={this.toggleDrag}>
+				<div className={titleWrapperClasses} onMouseEnter={this.toggleDrag} onMouseLeave={this.toggleDrag} ref="titleBarCenterRef">
 					<div className={"header-title"}>{self.state.windowTitle}</div>
-					<div className={"tab-area cq-no-drag"} draggable="true" onDragStart={this.startDrag} onDragEnd={this.stopDrag} onDrop={this.drop}>
-						<Tab title={self.state.windowTitle} />
+					<div className={"tab-area cq-no-drag"} draggable="true" onDragStart={this.startDrag} onDragEnd={this.stopDrag} onDrop={this.drop} ref="tabArea">
+						{self.state.tabs.map((tab,i) => {
+							return <Tab key={i} tabWidth={self.state.tabWidth} title={tab.title} />
+						})}
 					</div>
 				</div>
 				<div className="fsbl-header-right">

@@ -8,7 +8,7 @@ export default class Tab extends React.Component{
 
     render(){
 		return (
-			<div className="tab">
+			<div className="tab" style={{width:this.props.tabWidth + 'px'}}>
 				<div className="style">
 					<svg id='Layer_1' data-name='Layer 1' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 176.49 20'>
 						<polygon points='8.57 0.5 167.93 0.5 175.75 19.5 0.75 19.5 8.57 0.5' fill='#617383' stroke='#67829a' strokeMiterlimit='10' />
