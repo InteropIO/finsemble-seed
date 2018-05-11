@@ -19,6 +19,7 @@ export default class Timer extends React.Component {
 			}
 		}, 1000)
 	}
+	//Countdown clock.
     render() {
 		return (<div>
 			Time Remaining: {this.state.timerDuration / 1000}

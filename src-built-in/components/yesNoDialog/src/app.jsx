@@ -57,6 +57,7 @@ class YesNoDialog extends React.Component {
 		this.sendAffirmativeResponse = this.sendAffirmativeResponse.bind(this);
 		this.sendCancelResponse = this.sendCancelResponse.bind(this);
 		this.sendNegativeResponse = this.sendNegativeResponse.bind(this);
+		this.sendExpiredResponse = this.sendExpiredResponse.bind(this);
 		this.sendResponse = this.sendResponse.bind(this);
 	}
 	/**
@@ -130,6 +131,15 @@ class YesNoDialog extends React.Component {
 		this.sendResponse("cancel");
 	}
 
+	/**
+	 * Sends an expired response to the opener.
+	 *
+	 * @memberof YesNoDialog
+	 */
+	sendExpiredResponse() {
+		this.sendResponse("expired");
+	}
+
 	render() {
 		var self = this;
 		return (<FinsembleDialog
@@ -141,7 +151,7 @@ class YesNoDialog extends React.Component {
 			<FinsembleDialogQuestion>
 				{this.state.question}
 				{this.state.showTimer &&
-					<Timer onTimerExpiration={this.sendAffirmativeResponse} timerDuration={this.state.timerDuration}/>}
+					<Timer onTimerExpiration={this.sendExpiredResponse} timerDuration={this.state.timerDuration}/>}
 			</FinsembleDialogQuestion>
 			<div className="button-wrapper">
 			<FinsembleDialogButton show={this.state.showAffirmativeButton} buttonSize="md-positive" onClick={this.sendAffirmativeResponse}>
