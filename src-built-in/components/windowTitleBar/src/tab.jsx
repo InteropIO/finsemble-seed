@@ -7,6 +7,7 @@ export default class Tab extends React.Component{
 	}
 
     render(){
+		let titleWidth=this.props.tabWidth-20;
 		return (
 			<div className="tab" style={{width:this.props.tabWidth + 'px'}}>
 				<div className="style">
@@ -14,7 +15,7 @@ export default class Tab extends React.Component{
 						<polygon points='8.57 0.5 167.93 0.5 175.75 19.5 0.75 19.5 8.57 0.5' fill='#617383' stroke='#67829a' strokeMiterlimit='10' />
 					</svg>
 				</div>
-				<div className="title">{this.props.title}</div>
+				<div className="title" style={{width:titleWidth}}>{this.props.title}</div>
         	</div>
 		);
     }

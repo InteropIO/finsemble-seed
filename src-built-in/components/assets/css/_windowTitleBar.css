@@ -272,4 +272,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     overflow: ellipsis;
     margin-top: -21px;
     left: 7%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
