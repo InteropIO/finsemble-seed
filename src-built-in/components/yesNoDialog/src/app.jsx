@@ -105,6 +105,10 @@ class YesNoDialog extends React.Component {
 			choice: response,
 			hideModalOnClose: this.state.hideModalOnClose
 		});
+		//This will detach the timer component from the dom. Next time the component comes up, it'll have a fresh timer.
+		this.setState({
+			showTimer: false
+		})
 	}
 	/**
 	 * Sends an affirmative response to the opener.
