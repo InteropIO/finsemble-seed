@@ -206,7 +206,7 @@ class WindowTitleBar extends React.Component {
 				</div>
 				<div className={titleWrapperClasses} onMouseEnter={this.toggleDrag} onMouseLeave={this.toggleDrag}>
 					<div className={"header-title"}>{self.state.windowTitle}</div>
-					<div className={"tab-area cq-no-drag"} draggable="draggable" onDragStart={this.startDrag} onDragEnd={this.stopDrag} onDrop={this.drop}>
+					<div className={"tab-area cq-no-drag"} draggable="true" onDragStart={this.startDrag} onDragEnd={this.stopDrag} onDrop={this.drop}>
 						<Tab title={self.state.windowTitle} />
 					</div>
 				</div>
