@@ -41,12 +41,16 @@ var Actions = {
             console.log("addWorkspaceTemplateDefinition result", err);
         });
 	},
+	/**
+	 * By making the value of `finsembke.scheduledRestart` falsy, the application will remove any existing restart timers.
+	 */
 	disableScheduledRestart: () => {
 		FSBL.Clients.ConfigClient.setPreference({
 			field: "finsemble.scheduledRestart",
 			value: false
 		});
 	},
+	/** Finsemble listens for this piece of config. When it changes, it will schedule a daily restart at that time. */
 	setScheduledRestart: (val) => {
 		FSBL.Clients.ConfigClient.setPreference({
 			field: "finsemble.scheduledRestart",
