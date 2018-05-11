@@ -49,6 +49,7 @@ html.desktop-active .fsbl-header {
     display: flex;
 }
 
+
 .fsbl-header-center {
     height: calc(100% - 5px);
     align-content: center;
@@ -63,7 +64,21 @@ html.desktop-active .fsbl-header {
     --webkit-user-select: none;
     padding-bottom: var(--fsbl-header-center-padding-bottom);
 }
+.fsbl-header-center .tab-area {
+    visibility: hidden;
+}
 
+.fsbl-header-center.tab-visible {
+    justify-content: flex-start;
+}
+
+.fsbl-header-center.tab-visible .tab-area {
+    visibility: visible;
+}
+
+.tab-visible .header-title {
+    visibility: hidden;
+}
 .fsbl-header-right {
     margin-right: 2px;
     height: 100%;

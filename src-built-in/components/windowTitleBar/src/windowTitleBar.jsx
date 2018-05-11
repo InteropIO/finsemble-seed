@@ -143,13 +143,13 @@ class WindowTitleBar extends React.Component {
 	 */
 	startDrag(e) {
 		console.log("starting the drag");
-		FSBL.Clients.WindowClient.startTilingOrTabbing({windowIdentifier: FSBL.Clients.WindowClient.getWindowIdentifier()});
+		FSBL.Clients.WindowClient.startTilingOrTabbing({ windowIdentifier: FSBL.Clients.WindowClient.getWindowIdentifier() });
 	}
 
 	/**
 	 * Function to catch the drop event. This is called (along with dragEnd when the esc key is pressed)
-	 * 
-	 * @param {Object} e The SyntheticEvent created by React when the drop event is called 
+	 *
+	 * @param {Object} e The SyntheticEvent created by React when the drop event is called
 	 */
 	drop(e) {
 		e.preventDefault();
@@ -173,8 +173,8 @@ class WindowTitleBar extends React.Component {
 				FSBL.Clients.WindowClient.cancelTilingOrTabbing();
 			})
 		}
-		var timeout=setTimeout(this.cancelTiling, 6000);
-		FSBL.Clients.RouterClient.transmit('tabbingDragEnd', {windowIdentifier: FSBL.Clients.WindowClient.getWindowIdentifier(), timeout: timeout});
+		var timeout = setTimeout(this.cancelTiling, 6000);
+		FSBL.Clients.RouterClient.transmit('tabbingDragEnd', { windowIdentifier: FSBL.Clients.WindowClient.getWindowIdentifier(), timeout: timeout });
 	}
 
 	/**
@@ -193,15 +193,20 @@ class WindowTitleBar extends React.Component {
 		let showDockingIcon = !self.state.dockingEnabled ? false : self.state.dockingIcon;
 		let isGrouped = (self.state.dockingIcon == "ejector");
 		let showMinimizeIcon = (isGrouped && self.state.isTopRight) || !isGrouped; //If not in a group or if topright in a group
+		let titleWrapperClasses = "fsbl-header-center cq-drag";
+		//We shiykd
+		if (true || this.state.titleBarIsHoveredOver) {
+			titleWrapperClasses += " tab-visible";
+		}
 		return (
 			<div className="fsbl-header">
 				<div className="fsbl-header-left">
 					{self.state.showLinkerButton ? <Linker /> : null}
 					<Sharer />
 				</div>
-				<div className="fsbl-header-center cq-drag" onMouseOut={this.toggleDrag} onMouseOver={this.toggleDrag}>
-					<div className={this.state.titleBarIsHoveredOver ? "header-title hidden" : "header-title"}>{self.state.windowTitle}</div>
-					<div className={this.state.titleBarIsHoveredOver?"tab-area":"tab-area hidden"} draggable={true} onMouseDown={this.startDrag} onDragEnd={this.stopDrag} onDrop={this.drop}>
+				<div className={titleWrapperClasses} onMouseEnter={this.toggleDrag} onMouseLeave={this.toggleDrag}>
+					<div className={"header-title"}>{self.state.windowTitle}</div>
+					<div className={"tab-area cq-no-drag"} draggable="draggable" onDragStart={this.startDrag} onDragEnd={this.stopDrag} onDrop={this.drop}>
 						<Tab title={self.state.windowTitle} />
 					</div>
 				</div>
