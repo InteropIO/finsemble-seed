@@ -33,6 +33,7 @@ class WindowTitleBar extends React.Component {
 		super();
 		this.bindCorrectContext();
 		windowTitleBarStore.getValue({ field: "Maximize.hide" });
+		this.dragEndTimeout = null;
 		this.state = {
 			windowTitle: windowTitleBarStore.getValue({ field: "Main.windowTitle" }),
 			minButton: !windowTitleBarStore.getValue({ field: "Minimize.hide" }),
@@ -58,39 +59,11 @@ class WindowTitleBar extends React.Component {
 		this.isTopRight = this.isTopRight.bind(this);
 		this.toggleDrag = this.toggleDrag.bind(this);
 		this.startDrag = this.startDrag.bind(this);
-		this.drop = this.drop.bind(this);
 		this.stopDrag = this.stopDrag.bind(this);
 		this.cancelTabbing = this.cancelTabbing.bind(this);
-	}
-	componentWillMount() {
-		windowTitleBarStore.addListeners([
-			{ field: "Main.windowTitle", listener: this.onTitleChange },
-			{ field: "Main.showDockingTooltip", listener: this.onShowDockingToolTip },
-			{ field: "Main.dockingIcon", listener: this.onToggleDockingIcon },
-			{ field: "Main.dockingEnabled", listener: this.onDocking },
-			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton },
-			{ field: "isTopRight", listener: this.isTopRight },
-		]);
+		this.clearDragEndTimeout = this.clearDragEndTimeout.bind(this);
 	}
 
-	componentWillUnmount() {
-		// window.removeEventListener('keyup', this.pressedKey, false);
-		windowTitleBarStore.removeListeners([
-			{ field: "Main.windowTitle", listener: this.onTitleChange },
-			{ field: "Main.showDockingTooltip", listener: this.onShowDockingToolTip },
-			{ field: "Main.dockingIcon", listener: this.onToggleDockingIcon },
-			{ field: "Main.dockingEnabled", listener: this.onDocking },
-			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton },
-			{ field: "isTopRight", listener: this.isTopRight },
-		]);
-	}
-
-	componentDidMount() {
-		let header = document.getElementsByClassName("fsbl-header")[0];
-		let headerHeight = window.getComputedStyle(header, null).getPropertyValue("height");
-		document.body.style.marginTop = headerHeight;
-		// window.addEventListener('keydown', this.pressedKey, false);
-	}
 
 	showLinkerButton(err, response) {
 		//console.log("showLinkerButton--", response)
@@ -147,36 +120,24 @@ class WindowTitleBar extends React.Component {
 	}
 
 	/**
-	 * Function to catch the drop event. This is called (along with dragEnd when the esc key is pressed)
-	 *
-	 * @param {Object} e The SyntheticEvent created by React when the drop event is called
-	 */
-	drop(e) {
-		e.preventDefault();
-		this.setState({
-			dragEnded: true
-		});
-	}
-
-	/**
 	 * Called when the react component detects a drop (or stop drag, which is equivalent)
 	 *
 	 * @param e The SyntheticEvent created by React when the stopdrag event is called
 	 * @memberof windowTitleBar
 	 */
 	stopDrag(e) {
-		if (this.state.dragEnded != true) {
-			//Esc was pressed
-			this.setState({
-				dragEnded: false
-			}, () => {
-				FSBL.Clients.WindowClient.cancelTilingOrTabbing();
-			})
-		}
-		var timeout = setTimeout(this.cancelTiling, 6000);
-		FSBL.Clients.RouterClient.transmit('tabbingDragEnd', { windowIdentifier: FSBL.Clients.WindowClient.getWindowIdentifier(), timeout: timeout });
+		FSBL.Clients.RouterClient.addListener('tabbingDragEnd', this.clearDragEndTimeout);
+		this.dragEndTimeout = setTimeout(this.clearDragEndTimeout, 300);
 	}
 
+	clearDragEndTimeout(setDragEnded) {
+		clearTimeout(this.dragEndTimeout);
+		FSBL.Clients.WindowClient.stopTilingOrTabbing();
+		FSBL.Clients.RouterClient.removeListener('tabbingDragEnd', this.clearDragEndTimeout);
+		this.setState({
+			dragEnded: setDragEnded
+		});
+	}
 	/**
 	 * Set to a timeout. An event is sent to the RouterClient which will be handled by the drop handler on the window.
 	 * In the event that a drop handler never fires to stop tiling or tabbing, this will take care of it.
@@ -185,6 +146,34 @@ class WindowTitleBar extends React.Component {
 	 */
 	cancelTabbing() {
 		FSBL.Clients.WindowClient.stopTilingOrTabbing();
+	}
+
+	componentWillMount() {
+		windowTitleBarStore.addListeners([
+			{ field: "Main.windowTitle", listener: this.onTitleChange },
+			{ field: "Main.showDockingTooltip", listener: this.onShowDockingToolTip },
+			{ field: "Main.dockingIcon", listener: this.onToggleDockingIcon },
+			{ field: "Main.dockingEnabled", listener: this.onDocking },
+			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton },
+			{ field: "isTopRight", listener: this.isTopRight },
+		]);
+	}
+
+	componentWillUnmount() {
+		windowTitleBarStore.removeListeners([
+			{ field: "Main.windowTitle", listener: this.onTitleChange },
+			{ field: "Main.showDockingTooltip", listener: this.onShowDockingToolTip },
+			{ field: "Main.dockingIcon", listener: this.onToggleDockingIcon },
+			{ field: "Main.dockingEnabled", listener: this.onDocking },
+			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton },
+			{ field: "isTopRight", listener: this.isTopRight },
+		]);
+	}
+
+	componentDidMount() {
+		let header = document.getElementsByClassName("fsbl-header")[0];
+		let headerHeight = window.getComputedStyle(header, null).getPropertyValue("height");
+		document.body.style.marginTop = headerHeight;
 	}
 
 	render() {
@@ -206,7 +195,7 @@ class WindowTitleBar extends React.Component {
 				</div>
 				<div className={titleWrapperClasses} onMouseEnter={this.toggleDrag} onMouseLeave={this.toggleDrag}>
 					<div className={"header-title"}>{self.state.windowTitle}</div>
-					<div className={"tab-area cq-no-drag"} draggable="true" onDragStart={this.startDrag} onDragEnd={this.stopDrag} onDrop={this.drop}>
+					<div className={"tab-area cq-no-drag"} draggable="true" onDragStart={this.startDrag} onDragEnd={this.stopDrag}>
 						<Tab title={self.state.windowTitle} />
 					</div>
 				</div>
