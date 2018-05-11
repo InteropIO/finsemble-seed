@@ -188,9 +188,9 @@ class WindowTitleBar extends React.Component {
 
 	onWindowResize(){
 		let bounds = this.tabBar.getBoundingClientRect();
-		let newWidth = (this.state.tabs.length*this.state.tabWidth)-((this.state.tabs.length)*10);
-		console.log(newWidth);
-		if (bounds.width <= this.state.tabWidth + 20) {
+		let newWidth = ((bounds.width-10)/this.state.tabs.length)+10;
+		if (bounds.width <= this.state.tabWidth + 20 || newWidth <= 175) {
+			console.log(newWidth);
 			this.setState({
 				tabWidth:newWidth
 			})
