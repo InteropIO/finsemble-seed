@@ -31,6 +31,13 @@ import "../../assets/css/finsemble.css";
 class WindowTitleBar extends React.Component {
 	constructor() {
 		super();
+
+		this.tabBar = null;
+
+		this.setTabBarRef = element => {
+			this.tabBar = element;
+		}
+
 		this.bindCorrectContext();
 		windowTitleBarStore.getValue({ field: "Maximize.hide" });
 		this.dragEndTimeout = null;
@@ -63,7 +70,6 @@ class WindowTitleBar extends React.Component {
 		this.startDrag = this.startDrag.bind(this);
 		this.stopDrag = this.stopDrag.bind(this);
 		this.cancelTabbing = this.cancelTabbing.bind(this);
-<<<<<<< HEAD
 		this.onWindowResize = this.onWindowResize.bind(this);
 	}
 	componentWillMount() {
@@ -97,11 +103,6 @@ class WindowTitleBar extends React.Component {
 		document.body.style.marginTop = headerHeight;
 		// window.addEventListener('keydown', this.pressedKey, false);
 	}
-=======
-		this.clearDragEndTimeout = this.clearDragEndTimeout.bind(this);
-	}
-
->>>>>>> 90ebede098d086c0e130b9a08d6047c19a13ba64
 
 	showLinkerButton(err, response) {
 		//console.log("showLinkerButton--", response)
@@ -185,42 +186,15 @@ class WindowTitleBar extends React.Component {
 		FSBL.Clients.WindowClient.stopTilingOrTabbing();
 	}
 
-<<<<<<< HEAD
 	onWindowResize(){
-		let bounds = this.refs.titleBarCenterRef.getBoundingClientRect();
-		let newWidth = (this.state.tabs.length*this.state.tabWidth)-((this.state.tabs.length-1)*10);
+		let bounds = this.tabBar.getBoundingClientRect();
+		let newWidth = (this.state.tabs.length*this.state.tabWidth)-((this.state.tabs.length)*10);
 		console.log(newWidth);
-		this.setState({
-			tabWidth:newWidth
-		})
-=======
-	componentWillMount() {
-		windowTitleBarStore.addListeners([
-			{ field: "Main.windowTitle", listener: this.onTitleChange },
-			{ field: "Main.showDockingTooltip", listener: this.onShowDockingToolTip },
-			{ field: "Main.dockingIcon", listener: this.onToggleDockingIcon },
-			{ field: "Main.dockingEnabled", listener: this.onDocking },
-			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton },
-			{ field: "isTopRight", listener: this.isTopRight },
-		]);
-	}
-
-	componentWillUnmount() {
-		windowTitleBarStore.removeListeners([
-			{ field: "Main.windowTitle", listener: this.onTitleChange },
-			{ field: "Main.showDockingTooltip", listener: this.onShowDockingToolTip },
-			{ field: "Main.dockingIcon", listener: this.onToggleDockingIcon },
-			{ field: "Main.dockingEnabled", listener: this.onDocking },
-			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton },
-			{ field: "isTopRight", listener: this.isTopRight },
-		]);
-	}
-
-	componentDidMount() {
-		let header = document.getElementsByClassName("fsbl-header")[0];
-		let headerHeight = window.getComputedStyle(header, null).getPropertyValue("height");
-		document.body.style.marginTop = headerHeight;
->>>>>>> 90ebede098d086c0e130b9a08d6047c19a13ba64
+		if (bounds.width <= this.state.tabWidth + 20) {
+			this.setState({
+				tabWidth:newWidth
+			})
+		}
 	}
 
 	render() {
@@ -239,17 +213,12 @@ class WindowTitleBar extends React.Component {
 					{self.state.showLinkerButton ? <Linker /> : null}
 					<Sharer />
 				</div>
-				<div className={titleWrapperClasses} onMouseEnter={this.toggleDrag} onMouseLeave={this.toggleDrag} ref="titleBarCenterRef">
+				<div className={titleWrapperClasses} onMouseEnter={this.toggleDrag} onMouseLeave={this.toggleDrag} ref={this.setTabBarRef}>
 					<div className={"header-title"}>{self.state.windowTitle}</div>
-<<<<<<< HEAD
 					<div className={"tab-area cq-no-drag"} draggable="true" onDragStart={this.startDrag} onDragEnd={this.stopDrag} onDrop={this.drop} ref="tabArea">
-						{self.state.tabs.map((tab,i) => {
-							return <Tab key={i} tabWidth={self.state.tabWidth} title={tab.title} />
+						{this.state.tabs.map((tab,i) => {
+							return <Tab key={i} tabWidth={this.state.tabWidth} title={tab.title} />
 						})}
-=======
-					<div className={"tab-area cq-no-drag"} draggable="true" onDragStart={this.startDrag} onDragEnd={this.stopDrag}>
-						<Tab title={self.state.windowTitle} />
->>>>>>> 90ebede098d086c0e130b9a08d6047c19a13ba64
 					</div>
 				</div>
 				<div className="fsbl-header-right">
