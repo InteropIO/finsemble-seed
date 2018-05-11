@@ -44,7 +44,7 @@ export default class ScheduledRestart extends React.Component {
         if (!data && !data.value) return;
         let scheduledRestart = data.value['finsemble.scheduledRestart'];
         //If scheduledRestart is falsy, set "enabled" to false. I probably could've done !scheduledRestart. Oh well.
-        let enabled = typeof scheduledRetart !== "undefined" && scheduledRestart !== null && scheduledRestart !== false;
+        let enabled = typeof scheduledRestart === "object";
         if (enabled) {
             //This is purely for display. I found that military time forced a scrollbar onto the dropdown that looked bad.
             scheduledRestart.meridiem = scheduledRestart.hour > 11 ? "PM" : "AM";
