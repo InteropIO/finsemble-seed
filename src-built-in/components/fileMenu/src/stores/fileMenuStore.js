@@ -4,7 +4,7 @@
 */
 import { EventEmitter } from "events";
 let PROMPT_ON_DIRTY = false;
-const RESTART_TIMEOUT = 30000;
+const RESTART_TIMEOUT = 60000;
 const constants = {
 	METHOD: "METHOD",
 	GET_FIN_WINDOW: "getFinWindow",
@@ -97,7 +97,7 @@ var Actions = {
 			let restartTimeout = setTimeout(this.restart, RESTART_TIMEOUT);
 			FSBL.Clients.DialogManager.open("yesNo",
 				{
-					question: "The application is scheduled for a restart. ?",
+					question: `The application will restart in one minute. Your workspace will be saved.`,
 					showTimer: true,
 					timerDuration: RESTART_TIMEOUT,
 					showNegativeButton: false,
