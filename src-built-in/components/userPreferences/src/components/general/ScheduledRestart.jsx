@@ -16,11 +16,11 @@ for (var i = 1; i < 13; i++) {
 }
 
 //FOR TESTING
-// let MINUTES = [];
-// for (var i = 1; i <= 60; i++){
-//     MINUTES.push(i);
-// }
-const MINUTES = ["00", 15, 30, 45];
+let MINUTES = [];
+for (var i = 1; i <= 60; i++){
+    MINUTES.push(i);
+}
+// const MINUTES = ["00", 15, 30, 45];
 export default class ScheduledRestart extends React.Component {
     constructor(props) {
         super(props);
@@ -48,6 +48,8 @@ export default class ScheduledRestart extends React.Component {
         if (enabled) {
             //This is purely for display. I found that military time forced a scrollbar onto the dropdown that looked bad.
             scheduledRestart.meridiem = scheduledRestart.hour > 11 ? "PM" : "AM";
+        } else {
+            scheduledRestart = DEFAULT_RESTART;
         }
         this.setState({ scheduledRestart, enabled });
     }
