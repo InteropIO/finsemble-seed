@@ -79,12 +79,18 @@ html.desktop-active .fsbl-header {
 .tab-visible .header-title {
     visibility: hidden;
 }
+
+html.desktop-active .fsbl-header-right {
+    background: var(--active-header-background-color);
+}
 .fsbl-header-right {
     margin-right: 2px;
     height: 100%;
     align-content: center;
     display: flex;
     justify-content: flex-end;
+    z-index: 5;
+    background-color: var(--window-header-background-color);
 }
 
 /* This div captures the hover event for it's parent. It doesn't stretch to the border, so that mouseout is properly detected. */
@@ -258,6 +264,10 @@ html.desktop-active .fsbl-linker[hover=true] {
 
 .hidden{
     opacity: 0;
+}
+
+.tab{
+    min-width: 35px;
 }
 
 .tab-area{
