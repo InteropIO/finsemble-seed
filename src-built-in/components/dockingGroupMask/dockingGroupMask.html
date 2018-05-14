@@ -8,11 +8,8 @@
     <body>
         <script type='text/javascript'>
             var drop = function(e) {
-                FSBL.Clients.RouterClient.addListener('tabbingDragEnd', function(err, response) {
-                    clearTimeout(response.data.timeout);
-                    FSBL.Clients.WindowClient.stopTilingOrTabbing();
-                    FSBL.Clients.RouterClient.removeListener('tabbingDragEnd');
-                });
+                FSBL.Clients.RouterClient.transmit('tabbingDragEnd', {gotDrop: true});
+                FSBL.Clients.WindowClient.stopTilingOrTabbing();
             };
 
             var dragOver = function(e) {

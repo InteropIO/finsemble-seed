@@ -155,6 +155,7 @@ class WindowTitleBar extends React.Component {
 	 */
 	startDrag(e) {
 		FSBL.Clients.WindowClient.startTilingOrTabbing({ windowIdentifier: FSBL.Clients.WindowClient.getWindowIdentifier() });
+
 	}
 
 	/**
@@ -164,13 +165,15 @@ class WindowTitleBar extends React.Component {
 	 * @memberof windowTitleBar
 	 */
 	stopDrag(e) {
-		FSBL.Clients.RouterClient.addListener('tabbingDragEnd', this.clearDragEndTimeout);
 		this.dragEndTimeout = setTimeout(this.clearDragEndTimeout, 300);
+		FSBL.Clients.RouterClient.addListener('tabbingDragEnd', this.clearDragEndTimeout);
 	}
 
-	clearDragEndTimeout(setDragEnded) {
+	clearDragEndTimeout(err, response) {
 		clearTimeout(this.dragEndTimeout);
-		FSBL.Clients.WindowClient.stopTilingOrTabbing();
+		if (!response) {
+			FSBL.Clients.WindowClient.stopTilingOrTabbing();
+		}
 		FSBL.Clients.RouterClient.removeListener('tabbingDragEnd', this.clearDragEndTimeout);
 		this.setState({
 			dragEnded: setDragEnded
