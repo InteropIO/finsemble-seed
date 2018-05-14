@@ -54,7 +54,6 @@ class WindowTitleBar extends React.Component {
 			showLinkerButton: windowTitleBarStore.getValue({ field: "Linker.showLinkerButton" }),
 			isTopRight: windowTitleBarStore.getValue({ field: "isTopRight" }),
 			titleBarIsHoveredOver: windowTitleBarStore.getValue({ field: "titleBarIsHoveredOver" }),
-			dragEnded: false,
 			tabWidth: 175,
 			tabs:[{title:windowTitleBarStore.getValue({ field: "Main.windowTitle" })}], //array of tabs for this window
 			showTabs: true
@@ -181,9 +180,6 @@ class WindowTitleBar extends React.Component {
 			FSBL.Clients.WindowClient.stopTilingOrTabbing();
 		}
 		FSBL.Clients.RouterClient.removeListener('tabbingDragEnd', this.clearDragEndTimeout);
-		this.setState({
-			dragEnded: setDragEnded
-		});
 	}
 	/**
 	 * Set to a timeout. An event is sent to the RouterClient which will be handled by the drop handler on the window.
