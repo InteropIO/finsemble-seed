@@ -71,6 +71,7 @@ class WindowTitleBar extends React.Component {
 		this.stopDrag = this.stopDrag.bind(this);
 		this.cancelTabbing = this.cancelTabbing.bind(this);
 		this.onWindowResize = this.onWindowResize.bind(this);
+		this.clearDragEndTimeout = this.clearDragEndTimeout.bind(this);
 	}
 	componentWillMount() {
 		windowTitleBarStore.addListeners([
