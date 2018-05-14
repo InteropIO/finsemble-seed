@@ -23,8 +23,14 @@
  * This ensures that the Finsemble workspace manager is aware of newly opened windows, that they can participate in
  * the on screen workspace management, and that they can be restored with workspaces.
  */
+
+var originalWindowOpen = window.open;
 window.open = function (URL, name, specs, replace) {
-	console.log(URL, name, specs, replace);
+	// For some strange reason, openfin notifications use window.open. So we make an exception for that one case.
+	if (name.indexOf("openfin-child-window") != -1) {
+		originalWindowOpen.call(window, URL, name, specs, replace);
+		return;
+	}
 	var params = {};
 	if (specs) {
 		let paramList = specs.split(",");
@@ -73,5 +79,6 @@ window.alert = function (message) {
 		"",
 		"ALWAYS",
 		message,
-		{});
+		{}
+	);
 }

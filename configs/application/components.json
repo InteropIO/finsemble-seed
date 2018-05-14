@@ -182,7 +182,7 @@
             },
             "component": {
                 "inject": false,
-                "preloada": "$applicationRoot/preloads/nativeOverrides.js"
+                "preload": "$applicationRoot/preloads/nativeOverrides.js"
             },
             "foreign": {
                 "services": {
