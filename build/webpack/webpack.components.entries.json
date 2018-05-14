@@ -1,1 +1,6 @@
-{}
+{
+    "test": {
+        "output": "components\\test\\test",
+        "entry": ".\\src\\components\\test\\test.js"
+    }
+}
