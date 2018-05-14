@@ -33,9 +33,14 @@ class WindowTitleBar extends React.Component {
 		super();
 
 		this.tabBar = null;
+		this.toolbarRight = null;
 
 		this.setTabBarRef = element => {
 			this.tabBar = element;
+		}
+
+		this.setToolbarRight = element => {
+			this.toolbarRight = element;
 		}
 
 		this.bindCorrectContext();
@@ -52,6 +57,7 @@ class WindowTitleBar extends React.Component {
 			dragEnded: false,
 			tabWidth: 175,
 			tabs:[{title:windowTitleBarStore.getValue({ field: "Main.windowTitle" })}], //array of tabs for this window
+			showTabs: true
 		};
 	}
 	/**
@@ -191,7 +197,8 @@ class WindowTitleBar extends React.Component {
 
 	onWindowResize(){
 		let bounds = this.tabBar.getBoundingClientRect();
-		let newWidth = bounds.width <= this.state.tabWidth + 20 ? ((bounds.width-10)/this.state.tabs.length)+10 : 175;
+		let toolbarRightBounds = this.toolbarRight.getBoundingClientRect();
+		let newWidth = bounds.width <= this.state.tabWidth + toolbarRightBounds.width ? ((bounds.width-10)/this.state.tabs.length)+10 : 175;
 		if (newWidth >= 175) newWidth = 175;
 		this.setState({
 			tabWidth: newWidth
@@ -205,7 +212,7 @@ class WindowTitleBar extends React.Component {
 		let isGrouped = (self.state.dockingIcon == "ejector");
 		let showMinimizeIcon = (isGrouped && self.state.isTopRight) || !isGrouped; //If not in a group or if topright in a group
 		let titleWrapperClasses = "fsbl-header-center cq-drag";
-		if (true || this.state.titleBarIsHoveredOver) { // always show tabs (for now)
+		if (this.state.showTabs || this.state.titleBarIsHoveredOver) { // always show tabs (for now)
 			titleWrapperClasses += " tab-visible";
 		}
 		return (
@@ -217,12 +224,14 @@ class WindowTitleBar extends React.Component {
 				<div className={titleWrapperClasses} onMouseEnter={this.toggleDrag} onMouseLeave={this.toggleDrag} ref={this.setTabBarRef}>
 					<div className={"header-title"}>{self.state.windowTitle}</div>
 					<div className={"tab-area cq-no-drag"} draggable="true" onDragStart={this.startDrag} onDragEnd={this.stopDrag} onDrop={this.drop} ref="tabArea">
-						{this.state.tabs.map((tab,i) => {
+						{this.state.tabWidth >= 55 ?
+						this.state.tabs.map((tab,i) => {
 							return <Tab key={i} tabWidth={this.state.tabWidth} title={tab.title} />
-						})}
+						}) :
+						null}
 					</div>
 				</div>
-				<div className="fsbl-header-right">
+				<div className="fsbl-header-right" ref={this.setToolbarRight}>
 					<BringSuiteToFront />
 					{this.state.minButton && showMinimizeIcon ? <Minimize /> : null}
 					{showDockingIcon ? <DockingButton /> : null}
