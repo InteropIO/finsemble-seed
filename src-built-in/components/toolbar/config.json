@@ -18,7 +18,8 @@
         "type": "reactComponent"
     },
     {
-        "align": "right",
+        "comment": "Change align to add AlwaysOnTop capability",
+        "align": "none",
         "type": "reactComponent",
         "reactComponent": "AlwaysOnTop"
     },

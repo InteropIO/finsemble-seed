@@ -38,7 +38,7 @@ class WindowTitleBar extends React.Component {
 			closeButton: !windowTitleBarStore.getValue({ field: "Close.hide" }),
 			showLinkerButton: windowTitleBarStore.getValue({ field: "Linker.showLinkerButton" }),
 			isTopRight: windowTitleBarStore.getValue({ field: "isTopRight" }),
-			alwaysOnTopButton: !windowTitleBarStore.getValue({field: "AlwaysOnTop.hide"})
+			alwaysOnTopButton: windowTitleBarStore.getValue({field: "AlwaysOnTop.show"})
 		};
 	}
 	/**
@@ -51,6 +51,7 @@ class WindowTitleBar extends React.Component {
 		this.onShowDockingToolTip = this.onShowDockingToolTip.bind(this);
 		this.onToggleDockingIcon = this.onToggleDockingIcon.bind(this);
 		this.onDocking = this.onDocking.bind(this);
+		this.onAlwaysOnTop = this.onAlwaysOnTop.bind(this);
 		this.showLinkerButton = this.showLinkerButton.bind(this);
 		this.isTopRight = this.isTopRight.bind(this);
 	}
@@ -60,6 +61,7 @@ class WindowTitleBar extends React.Component {
 			{ field: "Main.showDockingTooltip", listener: this.onShowDockingToolTip },
 			{ field: "Main.dockingIcon", listener: this.onToggleDockingIcon },
 			{ field: "Main.dockingEnabled", listener: this.onDocking },
+			{ field: "AlwaysOnTop.show", listener: this.onAlwaysOnTop },
 			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton },
 			{ field: "isTopRight", listener: this.isTopRight },
 		]);
@@ -71,6 +73,7 @@ class WindowTitleBar extends React.Component {
 			{ field: "Main.showDockingTooltip", listener: this.onShowDockingToolTip },
 			{ field: "Main.dockingIcon", listener: this.onToggleDockingIcon },
 			{ field: "Main.dockingEnabled", listener: this.onDocking },
+			{ field: "AlwaysOnTop.show", listener: this.onAlwaysOnTop },
 			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton },
 			{ field: "isTopRight", listener: this.isTopRight },
 		]);
@@ -108,6 +111,9 @@ class WindowTitleBar extends React.Component {
 
 	onDocking(err, response) {
 		this.setState({ dockingEnabled: response.value });
+	}
+	onAlwaysOnTop(err, response) {
+		this.setState({ alwaysOnTopButton: response.value });
 	}
 	onStoreChanged(newState) {
 		this.setState(newState);

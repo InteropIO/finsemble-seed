@@ -13,6 +13,7 @@ var Actions = {
 	initialize: function () {
 		// This ensures that our config is correct, even if the developer missed some entries
 		var options = FSBL.Clients.WindowClient.options;
+		// TODO, this should come from config server (probably via a WindowsClient.getConfig() command), so that live components always have the latest config. Currently this config gets saved with the component via workspace customData.
 		var windowTitleBarConfig = options.customData.foreign.components["Window Manager"];
 		var FSBLHeader = windowTitleBarConfig.FSBLHeader;
 		var self = this;
@@ -29,12 +30,12 @@ var Actions = {
 		 */
 		if (FSBLHeader) {
 			var max = FSBLHeader.hideMaximize ? true : false;
-			var alwaysOnTop = FSBLHeader.hideAlwaysOnTop ? true : false;
+
 			windowTitleBarStore.setValues([
 				{ field: "Maximize.hide", value: max },
 				{ field: "Minimize.hide", value: FSBLHeader.hideMinimize ? true : false },
 				{ field: "Close.hide", value: FSBLHeader.hideClose ? true : false },
-				{ field: "AlwaysOnTop.hide", value: alwaysOnTop },
+				{ field: "AlwaysOnTop.show", value: false },
 			]);
 
 			// Set by calling WindowClient.setTitle() || from config "foreign.components.Window Manager.title"
@@ -146,7 +147,17 @@ var Actions = {
 		 * @todo remove once docking is out of beta.
 		 */
 		FSBL.Clients.ConfigClient.getValue({ field: "finsemble" }, function (err, finsembleConfig) {
+			let globalWindowManagerConfig = finsembleConfig["Window Manager"] || { alwaysOnTop: false }; // Override defaults if finsemble.Window Manager exists.
+
 			windowTitleBarStore.setValues([{ field: "Main.dockingEnabled", value: finsembleConfig.betaFeatures.docking.enabled }]);
+
+			// Whether the alwaysOnTop pin shows or not depends first on the global setting (finsemble["Window Manager"].alwaysOnTop) and then
+			// on the specific setting for this component (foreigh.components["Widow Manager"].alwaysOnTop)
+			let alwaysOnTop = globalWindowManagerConfig.alwaysOnTop;
+			if (windowTitleBarConfig.alwaysOnTop === false || windowTitleBarConfig.alwaysOnTop === true)
+				alwaysOnTop = windowTitleBarConfig.alwaysOnTop;
+
+			windowTitleBarStore.setValues([{ field: "AlwaysOnTop.show", value: alwaysOnTop }]);
 		});
 	},
 	/**
