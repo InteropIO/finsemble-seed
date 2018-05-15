@@ -18,7 +18,6 @@ var FileMenuStore = Object.assign({}, EventEmitter.prototype, {
 	 */
 	initialize: function () {
 		var self = this;
-		Actions.listenForScheduledRestart();
 		FSBL.addEventListener("onReady", function () {
 			self.finWindow = fin.desktop.Window.getCurrent();
 			self.emit("initialized");
@@ -89,33 +88,6 @@ function setupHotKeys() {
 var Actions = {
 	hideWindow() {
 		FileMenuStore.finWindow.hide();
-	},
-	//If a scheduled restart is invoked, we will open a dialog that gives the user a chance to cancel the restart.
-	listenForScheduledRestart() {
-		FSBL.Clients.RouterClient.addListener("Finsemble.Shutdown.ScheduledRestart", () => {
-
-			let restartTimeout = setTimeout(this.restart, RESTART_TIMEOUT);
-			FSBL.Clients.DialogManager.open("yesNo",
-				{
-					question: `The application will restart in one minute. Your workspace will be saved.`,
-					showTimer: true,
-					timerDuration: RESTART_TIMEOUT,
-					showNegativeButton: false,
-					affirmativeResponseLabel: "Restart Now"
-				}, function (err, response) {
-					if (response.choice === "cancel") {
-						clearTimeout(restartTimeout);
-						//This code will set the scheduled restart to what it's currently set in.
-						//When the scheduled restart is set to a time that's in the past, the application will schedule the restart for the next day.
-						FSBL.Clients.ConfigClient.getValue({ field: "finsemble.scheduledRestart" }, (err, val) => {
-							FSBL.Clients.ConfigClient.setPreference({ field: "finsemble.scheduledRestart", value: val })
-						});
-					} else {
-						//If we get here, they clicked "Restart Now", so we obey the user.
-						Actions.restart();
-					}
-				});
-		});
 	},
 	/**
 	 * Hides the window and fires off a message shutting down the application.
