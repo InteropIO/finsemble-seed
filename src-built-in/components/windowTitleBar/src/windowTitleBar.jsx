@@ -10,6 +10,8 @@ import ReactDOM from "react-dom";
 import * as storeExports from "./stores/windowTitleBarStore";
 let HeaderData, HeaderActions, windowTitleBarStore;
 
+import HoverDetector from "./components/HoverDetector.jsx";
+
 //Parts that make up the windowTitleBar.
 //Left side
 import Linker from "./components/left/LinkerButton";
@@ -21,6 +23,7 @@ import Maximize from "./components/right/MaximizeButton.jsx";
 import Close from "./components/right/CloseButton.jsx";
 import BringSuiteToFront from "./components/right/BringSuiteToFront.jsx";
 import AlwaysOnTop from "./components/right/AlwaysOnTop.jsx";
+import Tab from './tab.jsx'
 import "../../assets/css/finsemble.css";
 
 /**
@@ -29,8 +32,21 @@ import "../../assets/css/finsemble.css";
 class WindowTitleBar extends React.Component {
 	constructor() {
 		super();
+
+		this.tabBar = null;
+		this.toolbarRight = null;
+
+		this.setTabBarRef = element => {
+			this.tabBar = element;
+		}
+
+		this.setToolbarRight = element => {
+			this.toolbarRight = element;
+		}
+
 		this.bindCorrectContext();
 		windowTitleBarStore.getValue({ field: "Maximize.hide" });
+		this.dragEndTimeout = null;
 		this.state = {
 			windowTitle: windowTitleBarStore.getValue({ field: "Main.windowTitle" }),
 			minButton: !windowTitleBarStore.getValue({ field: "Minimize.hide" }),
@@ -38,7 +54,11 @@ class WindowTitleBar extends React.Component {
 			closeButton: !windowTitleBarStore.getValue({ field: "Close.hide" }),
 			showLinkerButton: windowTitleBarStore.getValue({ field: "Linker.showLinkerButton" }),
 			isTopRight: windowTitleBarStore.getValue({ field: "isTopRight" }),
-			alwaysOnTopButton: !windowTitleBarStore.getValue({field: "AlwaysOnTop.hide"})
+			alwaysOnTopButton: !windowTitleBarStore.getValue({field: "AlwaysOnTop.hide"}),
+			titleBarIsHoveredOver: windowTitleBarStore.getValue({ field: "titleBarIsHoveredOver" }),
+			tabWidth: 175,
+			tabs:[{title:windowTitleBarStore.getValue({ field: "Main.windowTitle" })}], //array of tabs for this window
+			showTabs: true
 		};
 	}
 	/**
@@ -53,6 +73,12 @@ class WindowTitleBar extends React.Component {
 		this.onDocking = this.onDocking.bind(this);
 		this.showLinkerButton = this.showLinkerButton.bind(this);
 		this.isTopRight = this.isTopRight.bind(this);
+		this.toggleDrag = this.toggleDrag.bind(this);
+		this.startDrag = this.startDrag.bind(this);
+		this.stopDrag = this.stopDrag.bind(this);
+		this.cancelTabbing = this.cancelTabbing.bind(this);
+		this.onWindowResize = this.onWindowResize.bind(this);
+		this.clearDragEndTimeout = this.clearDragEndTimeout.bind(this);
 	}
 	componentWillMount() {
 		windowTitleBarStore.addListeners([
@@ -66,6 +92,7 @@ class WindowTitleBar extends React.Component {
 	}
 
 	componentWillUnmount() {
+		// window.removeEventListener('keyup', this.pressedKey, false);
 		windowTitleBarStore.removeListeners([
 			{ field: "Main.windowTitle", listener: this.onTitleChange },
 			{ field: "Main.showDockingTooltip", listener: this.onShowDockingToolTip },
@@ -74,12 +101,14 @@ class WindowTitleBar extends React.Component {
 			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton },
 			{ field: "isTopRight", listener: this.isTopRight },
 		]);
+		window.removeEventListener('resize', this.onWindowResize);
 	}
 
 	componentDidMount() {
 		let header = document.getElementsByClassName("fsbl-header")[0];
 		let headerHeight = window.getComputedStyle(header, null).getPropertyValue("height");
 		document.body.style.marginTop = headerHeight;
+		window.addEventListener('resize', this.onWindowResize);
 	}
 
 	showLinkerButton(err, response) {
@@ -112,32 +141,110 @@ class WindowTitleBar extends React.Component {
 	onStoreChanged(newState) {
 		this.setState(newState);
 	}
+
+	/**
+	 * Handles mouseover of title bar. This turns the regular title to a tab on windows that aren't already tabbing.
+	 * This function is used as a prop on HoverDetector
+	 *
+	 * @memberof windowTitleBar
+	 */
+	toggleDrag() {
+		this.setState({
+			titleBarIsHoveredOver: !this.state.titleBarIsHoveredOver
+		});
+	}
+
+	/**
+	 * Function that's called when this component fires the onDragStart event, this will start the tiling or tabbing process
+	 *
+	 * @param e The SyntheticEvent created by React when the startdrag event is called
+	 * @memberof windowTitleBar
+	 */
+	startDrag(e) {
+		FSBL.Clients.WindowClient.startTilingOrTabbing({ windowIdentifier: FSBL.Clients.WindowClient.getWindowIdentifier() });
+
+	}
+
+	/**
+	 * Called when the react component detects a drop (or stop drag, which is equivalent)
+	 *
+	 * @param e The SyntheticEvent created by React when the stopdrag event is called
+	 * @memberof windowTitleBar
+	 */
+	stopDrag(e) {
+		this.mousePositionOnDragEnd = {
+			x: e.nativeEvent.screenX,
+			y: e.nativeEvent.screenY
+		}
+		this.dragEndTimeout = setTimeout(this.clearDragEndTimeout, 300);
+		FSBL.Clients.RouterClient.addListener('tabbingDragEnd', this.clearDragEndTimeout);
+	}
+
+	clearDragEndTimeout(err, response) {
+		clearTimeout(this.dragEndTimeout);
+		if (!response) {
+			FSBL.Clients.WindowClient.stopTilingOrTabbing({mousePosition: this.mousePositionOnDragEnd});
+		}
+		FSBL.Clients.RouterClient.removeListener('tabbingDragEnd', this.clearDragEndTimeout);
+	}
+	/**
+	 * Set to a timeout. An event is sent to the RouterClient which will be handled by the drop handler on the window.
+	 * In the event that a drop handler never fires to stop tiling or tabbing, this will take care of it.
+	 *
+	 * @memberof windowTitleBar
+	 */
+	cancelTabbing() {
+		FSBL.Clients.WindowClient.stopTilingOrTabbing();
+	}
+
+	onWindowResize(){
+		let bounds = this.tabBar.getBoundingClientRect();
+		let toolbarRightBounds = this.toolbarRight.getBoundingClientRect();
+		let newWidth = bounds.width <= this.state.tabWidth + toolbarRightBounds.width ? ((bounds.width-10)/this.state.tabs.length)+10 : 175;
+		if (newWidth >= 175) newWidth = 175;
+		this.setState({
+			tabWidth: newWidth
+		})
+	}
+
 	render() {
 		var self = this;
-		//console.log("showLinkerButton--2", this.state)
 
 		let showDockingIcon = !self.state.dockingEnabled ? false : self.state.dockingIcon;
 		let isGrouped = (self.state.dockingIcon == "ejector");
 		let showMinimizeIcon = (isGrouped && self.state.isTopRight) || !isGrouped; //If not in a group or if topright in a group
-		return (<div className="fsbl-header">
-			<div className="fsbl-header-left">
-				{self.state.showLinkerButton ? <Linker /> : null}
-				<Sharer />
+		let titleWrapperClasses = "fsbl-header-center cq-drag";
+		if (this.state.showTabs || this.state.titleBarIsHoveredOver) { // always show tabs (for now)
+			titleWrapperClasses += " tab-visible";
+		}
+		return (
+			<div className="fsbl-header">
+				<div className="fsbl-header-left">
+					{self.state.showLinkerButton ? <Linker /> : null}
+					<Sharer />
+				</div>
+				<div className={titleWrapperClasses} onMouseEnter={this.toggleDrag} onMouseLeave={this.toggleDrag} ref={this.setTabBarRef}>
+					<div className={"header-title"}>{self.state.windowTitle}</div>
+					<div className={"tab-area cq-no-drag"} draggable="true" onDragStart={this.startDrag} onDragEnd={this.stopDrag} onDrop={this.drop} ref="tabArea">
+						{this.state.tabWidth >= 55 ?
+						this.state.tabs.map((tab,i) => {
+							return <Tab key={i} tabWidth={this.state.tabWidth} title={tab.title} />
+						}) :
+						null}
+					</div>
+				</div>
+				<div className="fsbl-header-right" ref={this.setToolbarRight}>
+					{this.state.alwaysOnTopButton && showMinimizeIcon ? <AlwaysOnTop /> : null}
+					<BringSuiteToFront />
+					{this.state.minButton && showMinimizeIcon ? <Minimize /> : null}
+					{showDockingIcon ? <DockingButton /> : null}
+					{this.state.maxButton ? <Maximize /> : null}
+					{this.state.closeButton ? <Close /> : null}
+				</div>
 			</div>
-			<div onMouseDown={this.startLongHoldTimer} className="fsbl-header-center cq-drag">{self.state.windowTitle}</div>
-			<div onMouseDown={this.startLongHoldTimer} className="fsbl-header-right">
-				{this.state.alwaysOnTopButton && showMinimizeIcon ? <AlwaysOnTop /> : null}
-				<BringSuiteToFront />
-				{this.state.minButton && showMinimizeIcon ? <Minimize /> : null}
-				{showDockingIcon ? <DockingButton /> : null}
-				{this.state.maxButton ? <Maximize /> : null}
-				{this.state.closeButton ? <Close /> : null}
-
-			</div>
-		</div>);
+		);
 	}
 }
-
 
 FSBL.addEventListener("onReady", function () {
 	storeExports.initialize(function () {

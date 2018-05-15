@@ -146,7 +146,7 @@ var Actions = {
 		 * @todo remove once docking is out of beta.
 		 */
 		FSBL.Clients.ConfigClient.getValue({ field: "finsemble" }, function (err, finsembleConfig) {
-			windowTitleBarStore.setValues([{ field: "Main.dockingEnabled", value: finsembleConfig.betaFeatures.docking.enabled }]);
+			windowTitleBarStore.setValues([{ field: "Main.dockingEnabled", value: finsembleConfig.docking.enabled }]);
 		});
 	},
 	/**

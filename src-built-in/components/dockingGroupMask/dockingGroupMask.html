@@ -6,5 +6,19 @@
         <link rel="stylesheet" type="text/css" href="../assets/css/finfont.css?{cachebuster}">
     </head>
     <body>
+        <script type='text/javascript'>
+            var drop = function(e) {
+                FSBL.Clients.RouterClient.transmit('tabbingDragEnd', {gotDrop: true});
+                FSBL.Clients.WindowClient.stopTilingOrTabbing();
+            };
+
+            var dragOver = function(e) {
+                e.preventDefault();
+                return false;
+            };
+
+            document.addEventListener('drop', drop);
+            document.addEventListener('dragover', dragOver);
+        </script>
     </body>
 </html>
