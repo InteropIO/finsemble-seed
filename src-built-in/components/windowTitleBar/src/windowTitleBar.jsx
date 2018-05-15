@@ -170,6 +170,10 @@ class WindowTitleBar extends React.Component {
 	 * @memberof windowTitleBar
 	 */
 	stopDrag(e) {
+		this.mousePositionOnDragEnd = {
+			x: e.nativeEvent.screenX,
+			y: e.nativeEvent.screenY
+		}
 		this.dragEndTimeout = setTimeout(this.clearDragEndTimeout, 300);
 		FSBL.Clients.RouterClient.addListener('tabbingDragEnd', this.clearDragEndTimeout);
 	}
@@ -177,7 +181,7 @@ class WindowTitleBar extends React.Component {
 	clearDragEndTimeout(err, response) {
 		clearTimeout(this.dragEndTimeout);
 		if (!response) {
-			FSBL.Clients.WindowClient.stopTilingOrTabbing();
+			FSBL.Clients.WindowClient.stopTilingOrTabbing({mousePosition: this.mousePositionOnDragEnd});
 		}
 		FSBL.Clients.RouterClient.removeListener('tabbingDragEnd', this.clearDragEndTimeout);
 	}
