@@ -4,9 +4,9 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
-import "../../assets/css/finsemble.css";
 import "../inputAndSelectionDialog.css";
 import "../../assets/css/finfont.css";
+import "../../assets/css/finsemble.css";
 import { FinsembleDialog, FinsembleDialogQuestion, FinsembleDialogTextInput, FinsembleDialogButton } from "@chartiq/finsemble-react-controls";
 import { FinsembleDnDContext, FinsembleDraggable, FinsembleDroppable } from '@chartiq/finsemble-react-controls';
 

@@ -6,9 +6,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 //Finsemble font-icons, general styling, and specific styling.
+import "../appLauncher.css";
 import "../../assets/css/finfont.css";
 import "../../assets/css/finsemble.css";
-import "../appLauncher.css";
 import ComponentList from "./components/componentList";
 import * as storeExports from "./stores/appLauncherStore";
 import { Actions as appLauncherActions } from "./stores/appLauncherStore";

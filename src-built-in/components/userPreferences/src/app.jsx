@@ -4,9 +4,10 @@
 */
 import React from "react";
 import { initialize as UserPreferencesStoreInitialize, Store as UserPreferencesStore, Actions as UserPreferencesActions } from "./stores/UserPreferencesStore";
+import "../userPreferences.css";
 import "../../assets/css/finfont.css";
 import "../../assets/css/finsemble.css";
-import "../UserPreferences.css";
+
 
 import ReactDOM from "react-dom"
 import LeftNav from './components/LeftNav';

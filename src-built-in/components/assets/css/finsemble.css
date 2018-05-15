@@ -15,10 +15,11 @@
 }
 
 .fsbl-button {
-    margin: 0 auto;
+    /* margin: 0 auto; */
     text-align: center;
     font-family: var(--font-family);
     background: var(--dialog-button-background-color);
+    border: 1px solid transparent;
     color: var(--fsbl-button-font-color);
     transition: .2s ease;
     display:flex;

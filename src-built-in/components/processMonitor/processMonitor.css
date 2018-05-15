@@ -1,0 +1,162 @@
+body {
+	margin: 0px;
+	overflow: hidden;
+}
+
+.high-usage {
+	background-color: red;
+	color: white;
+}
+
+.moderate-usage {
+	background-color:orange;
+	color: white;
+}
+
+.app-details {
+	display: flex;
+	flex-direction: column;
+	margin:6px;
+}
+
+.app-actions {
+	display: flex;
+	justify-content: flex-start;
+	margin-right: 1em;
+}
+
+.app-window {
+	display:flex;
+	flex-direction: row;
+	margin-left: 2em;
+	align-items: center;
+}
+.app-windows {
+	margin-top: 1em;
+}
+.app-action {
+	background-color: #e2e2e2;
+	border: 1px solid darkgray;
+	padding:2px;
+	cursor: pointer;
+	padding:2px 6px;
+	color:black;
+}
+
+.app-action:hover {
+	background-color: darkslategray;
+	color: white;
+}
+.terminate {
+	background-color: #dc3545;
+	border: 1px solid #d23544;
+	color: #fff;
+	margin-left: auto;
+}
+
+.terminate:hover {
+	background-color: red;
+}
+.ReactTable .rt-th, .ReactTable .rt-td {
+	padding: 3px;
+}
+
+.rt-tr-group {
+	max-height: 25px;
+}
+
+.rt-tr-group.expanded {
+	max-height:5000000px;
+}
+.app-list {
+	height: calc(100vh - 170px);
+	overflow: auto;
+	margin:14px;
+	font-size:12px;
+}
+
+.value-cell {
+	display:flex;
+	justify-content: flex-end;
+}
+
+
+.ReactTable .rt-tbody .rt-td {
+	border-right: 0px;
+}
+
+.window-list-label{
+	margin-left:2em;
+	font-weight: bold;
+}
+
+.ReactTable .rt-tbody .rt-tr-group {
+	min-height: 25px;
+}
+
+
+.toast {
+	position: relative;
+	float: right;
+	right: 15px;
+	bottom: 60px;
+    width: 200px;
+    border: 1px solid black;
+    padding: 7px;
+}
+
+.toast-header {
+	display:flex;
+	justify-content: flex-end;
+	font-size:8px;
+}
+
+.toast-success {
+	background-color: #37cc37;
+	color: white;
+	border: 1px solid green;
+}
+.rt-td {
+	flex-direction: column;
+	align-content: center;
+	height:25px;
+}
+.ReactTable .rt-th, .ReactTable .rt-td {
+	padding: 5px 7px;
+}
+
+.ReactTable .rt-thead .rt-th.-cursor-pointer, .ReactTable .rt-thead .rt-td.-cursor-pointer {
+	outline: none;
+}
+
+.totals {
+	display: flex;
+	justify-content: space-between;
+	align-content: flex-end;
+}
+
+.totals-wrapper {
+	margin:14px;
+	font-size: 11px;
+}
+
+.totals-label {
+	font-weight: bold;
+	font-size:14px;
+}
+
+.visiblity-toggle {
+	width: 140px;
+	padding: 2px 0px;
+	margin: 5px 14px !important;
+	float: left;
+}
+
+.ReactTable .rt-tbody .rt-tr-group {
+	border-bottom: 0px;
+}
+
+/* Prevents the table from taking up all of the space in the page height.*/
+.ReactTable .rt-tr-group, .ReactTable .rt-tr {
+	flex: 0 0 auto;
+}

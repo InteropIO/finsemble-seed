@@ -1,8 +1,8 @@
 .form-group {
-    display: flex;
+    /* display: flex; */
     flex-direction: row;
-    margin: 25px 0;
-    padding: 0px 20px;
+    margin: 16px 0;
+    padding-right: 12px;
     justify-content: center;
 }
 

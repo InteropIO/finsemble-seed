@@ -50,7 +50,7 @@ html.desktop-active .fsbl-header {
 }
 
 .fsbl-header-center {
-    height: 100%;
+    height: calc(100% - 10px);
     align-content: center;
     display: flex;
     align-items: center;
@@ -62,22 +62,24 @@ html.desktop-active .fsbl-header {
     overflow: hidden;
     --webkit-user-select: none;
     position: relative;
+    padding-bottom: 3px; /* This needs to be half of the thing subtracted from the height. e.g. height = 100% - 6px, then this is 3px) */
 }
-.fsbl-header-center .tab-area {
+.fsbl-header-center .fsbl-tab-area {
     transition: opacity .5s ease-in-out;
     opacity: 0;
 }
 
-.fsbl-header-center .header-title {
+.fsbl-header-center .fsbl-header-title {
     transition: opacity .5s ease-in-out;
     opacity: 1;
+    margin-top: -1px
 }
 
-.fsbl-header-center:hover .tab-area {
+.fsbl-header-center:hover .fsbl-tab-area {
     opacity: 1;
 }
 
-.fsbl-header-center:hover .header-title {
+.fsbl-header-center:hover .fsbl-header-title {
     opacity: 0;
 }
 /*
@@ -268,7 +270,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     font-size: 16px;
 }
 
-.fsbl-header-center:hover .tab-area {
+.fsbl-header-center:hover .fsbl-tab-area {
     opacity: 1;
     transition: opacity .25s ease-in-out;
 }
@@ -277,30 +279,30 @@ html.desktop-active .fsbl-linker[hover=true] {
     opacity: 0;
 }
 
-.tab{
+.fsbl-tab{
     min-width: 35px;
     height: 100%;
 }
 
-.tab-area{
+.fsbl-tab-area{
     position: absolute;
     bottom: 0px;
-    height: calc(100% - 10px);
+    height: 100%;
     left: 0px;
 }
 
-.tab .title{
+.fsbl-tab .fsbl-title{
     position: absolute;
     height: inherit;
     overflow: ellipsis;
-    margin-top: -21px;
+    margin-top: -19px;
     left: 7%;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
 
-.tab .tab-style {
+.fsbl-tab .fsbl-tab-style {
     position: relative;
     height: 100%;
     left: 0px;

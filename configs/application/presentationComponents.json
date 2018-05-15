@@ -302,7 +302,7 @@
 		},
 		"yesNo": {
 			"window": {
-				"url": "$applicationRoot/components/yesNoDialog/YesNoDialog.html",
+				"url": "$applicationRoot/components/yesNoDialog/yesNoDialog.html",
 				"width": 500,
 				"height": 223,
 				"position": "absolute",
@@ -532,7 +532,7 @@
 		},
 		"UserPreferences": {
 			"window": {
-				"url": "$applicationRoot/components/userPreferences/UserPreferences.html",
+				"url": "$applicationRoot/components/userPreferences/userPreferences.html",
 				"frame": false,
 				"top": "center",
 				"left": "center",
@@ -606,6 +606,33 @@
 					}
 				}
 			}
-		}
+		},
+		"Process Monitor": {
+			"window": {
+				"url": "$applicationRoot/components/processMonitor/processMonitor.html",
+				"width": 600,
+				"height": 400
+			},
+			"component": {
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"persistWindowState": true,
+						"title": "Process Monitor"
+					}
+				}
+			}
+		}		
 	}
 }
