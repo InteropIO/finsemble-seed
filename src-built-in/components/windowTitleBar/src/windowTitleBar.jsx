@@ -54,7 +54,7 @@ class WindowTitleBar extends React.Component {
 			closeButton: !windowTitleBarStore.getValue({ field: "Close.hide" }),
 			showLinkerButton: windowTitleBarStore.getValue({ field: "Linker.showLinkerButton" }),
 			isTopRight: windowTitleBarStore.getValue({ field: "isTopRight" }),
-			alwaysOnTopButton: !windowTitleBarStore.getValue({field: "AlwaysOnTop.show"}),
+			alwaysOnTopButton: windowTitleBarStore.getValue({field: "AlwaysOnTop.show"}),
 			titleBarIsHoveredOver: windowTitleBarStore.getValue({ field: "titleBarIsHoveredOver" }),
 			tabWidth: 175,
 			tabs:[{title:windowTitleBarStore.getValue({ field: "Main.windowTitle" })}], //array of tabs for this window
