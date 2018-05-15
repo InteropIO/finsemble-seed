@@ -270,7 +270,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     font-size: 16px;
 }
 
-.fsbl-header-center:hover .tab-area {
+.fsbl-header-center:hover .fsbl-tab-area {
     opacity: 1;
     transition: opacity .25s ease-in-out;
 }
