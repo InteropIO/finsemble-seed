@@ -35,7 +35,7 @@ var Actions = {
 				{ field: "Maximize.hide", value: max },
 				{ field: "Minimize.hide", value: FSBLHeader.hideMinimize ? true : false },
 				{ field: "Close.hide", value: FSBLHeader.hideClose ? true : false },
-				{ field: "AlwaysOnTop.show", value: false },
+				{ field: "AlwaysOnTop.show", value: FSBLHeader.alwaysOnTop ? true: false  },
 			]);
 
 			// Set by calling WindowClient.setTitle() || from config "foreign.components.Window Manager.title"
