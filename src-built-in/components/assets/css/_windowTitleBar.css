@@ -50,7 +50,7 @@ html.desktop-active .fsbl-header {
 }
 
 .fsbl-header-center {
-    height: calc(100% - 6px);
+    height: calc(100% - 10px);
     align-content: center;
     display: flex;
     align-items: center;
@@ -72,6 +72,7 @@ html.desktop-active .fsbl-header {
 .fsbl-header-center .fsbl-header-title {
     transition: opacity .5s ease-in-out;
     opacity: 1;
+    margin-top: -1px
 }
 
 .fsbl-header-center:hover .fsbl-tab-area {
@@ -281,7 +282,7 @@ html.desktop-active .fsbl-linker[hover=true] {
 .fsbl-tab-area{
     position: absolute;
     bottom: 0px;
-    height: calc(100% - 10px);
+    height: 100%;
     left: 0px;
 }
 
