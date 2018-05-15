@@ -222,8 +222,8 @@ class WindowTitleBar extends React.Component {
 					<Sharer />
 				</div>
 				<div className={titleWrapperClasses} onMouseEnter={this.toggleDrag} onMouseLeave={this.toggleDrag} ref={this.setTabBarRef}>
-					<div className={"header-title"}>{self.state.windowTitle}</div>
-					<div className={"tab-area cq-no-drag"} draggable="true" onDragStart={this.startDrag} onDragEnd={this.stopDrag} onDrop={this.drop} ref="tabArea">
+					<div className={"fsbl-header-title"}>{self.state.windowTitle}</div>
+					<div className={"fsbl-tab-area cq-no-drag"} draggable="true" onDragStart={this.startDrag} onDragEnd={this.stopDrag} onDrop={this.drop} ref="tabArea">
 						{this.state.tabWidth >= 55 ?
 						this.state.tabs.map((tab,i) => {
 							return <Tab key={i} tabWidth={this.state.tabWidth} title={tab.title} />
