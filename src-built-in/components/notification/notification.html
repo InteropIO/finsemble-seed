@@ -80,7 +80,7 @@
     <div class="notification-header" id="closer">
         <div class="notification-title-wrapper">
             <div class="notification-logo">
-                    <img src="finsemble_logo_white.svg" />
+                    <img src="/components/assets/img/Finsemble_Taskbar_Icon.png" />
             </div>
             <div class="notification-title">Finsemble Notification</div>
         </div>
@@ -113,12 +113,10 @@
     }
 
     var init = function () {
-        fin.desktop.main(function () {
-            document.querySelector("#closer").addEventListener('click', function () {
-                var notification = fin.desktop.Notification.getCurrent();
-                notification.close();
-            });
-        })
+        document.querySelector("#closer").addEventListener('click', function () {
+            var notification = fin.desktop.Notification.getCurrent();
+            notification.close();
+        });
     };
 
     document.addEventListener('DOMContentLoaded', function () {
