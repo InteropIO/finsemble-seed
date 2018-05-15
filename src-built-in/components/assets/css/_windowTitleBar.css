@@ -79,7 +79,7 @@ html.desktop-active .fsbl-header {
     opacity: 1;
 }
 
-.fsbl-header-center:hover .fsbl-header-title {
+.fsbl-header-center.fsbl-tabs-enabled:hover .fsbl-header-title {
     opacity: 0;
 }
 /*

@@ -38,6 +38,5 @@ export default {
 	},
 	isSnapped: false,
 	isGrouped: false,
-	isTopRight: false,
-	titleBarIsHoveredOver:false
+	isTopRight: false
 };
