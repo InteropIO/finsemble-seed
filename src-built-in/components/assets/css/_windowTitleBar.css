@@ -50,7 +50,7 @@ html.desktop-active .fsbl-header {
 }
 
 .fsbl-header-center {
-    height: calc(100% - 10px);
+    height: 100%;
     align-content: center;
     display: flex;
     align-items: center;
@@ -61,7 +61,6 @@ html.desktop-active .fsbl-header {
     white-space: nowrap;
     overflow: hidden;
     --webkit-user-select: none;
-    padding-bottom: var(--fsbl-header-center-padding-bottom);
     position: relative;
 }
 .fsbl-header-center .tab-area {
@@ -72,7 +71,6 @@ html.desktop-active .fsbl-header {
 .fsbl-header-center .header-title {
     transition: opacity .5s ease-in-out;
     opacity: 1;
-    margin-top: -7px;
 }
 
 .fsbl-header-center:hover .tab-area {
@@ -282,7 +280,7 @@ html.desktop-active .fsbl-linker[hover=true] {
 .tab-area{
     position: absolute;
     bottom: 0px;
-    height: 100%;
+    height: calc(100% - 10px);
     left: 0px;
 }
 
