@@ -116,9 +116,6 @@
 .ff-crosshair:before {
   content: "\41";
 }
-.ff-delete:before {
-  content: "\42";
-}
 .ff-delete-box:before {
   content: "\43";
 }
@@ -310,4 +307,7 @@
 }
 .ff-close-2:before {
   content: "\7c";
+}
+.ff-delete:before {
+  content: "\42";
 }
