@@ -1,6 +1,10 @@
 {
     "Entries": [
         {
+            "name": "general",
+            "label": "General"
+        },
+        {
             "name": "workspaces",
             "label": "Workspaces"
         }

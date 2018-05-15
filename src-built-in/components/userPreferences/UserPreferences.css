@@ -407,3 +407,37 @@ img {
 .ff-edit {
     align-self: flex-start;
 }
+
+
+::-webkit-scrollbar-track {
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar {
+    width: 9px;
+    background-color: #f7f7f7;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+    cursor: pointer;
+    border-radius: inherit;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.scheduled-restart {
+    margin-top: .5em;
+}
+.scheduled-restart-select-label {
+    margin-left: 4em;
+    margin-right:.5em;
+}
+
+.disabled-restart {
+    color: darkgray !important;
+}
+
+select:focus, option:focus {
+    outline: none;
+    background-color: transparent;
+}
