@@ -13,8 +13,8 @@
             FSBL.Clients.RouterClient.transmit('tabbingDragEnd', { gotDrop: true });
             FSBL.Clients.WindowClient.stopTilingOrTabbing({
                 mousePosition: {
-                    x: e.nativeEvent.screenX,
-                    y: e.nativeEvent.screenY
+                    x: e.screenX,
+                    y: e.screenY
                 }
             });
         };
