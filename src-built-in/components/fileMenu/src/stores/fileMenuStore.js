@@ -4,7 +4,6 @@
 */
 import { EventEmitter } from "events";
 let PROMPT_ON_DIRTY = false;
-const RESTART_TIMEOUT = 60000;
 const constants = {
 	METHOD: "METHOD",
 	GET_FIN_WINDOW: "getFinWindow",
@@ -109,18 +108,17 @@ var Actions = {
 		FSBL.Clients.RouterClient.transmit("CentralConsole-Show", true);
 	},
 	/**
-	 * Spanws the preferences menu.
+	 * Spawns the preferences menu.
 	 */
 	spawnPreferences() {
 		fin.desktop.Window.getCurrent().hide();
 		FSBL.Clients.LauncherClient.showWindow({
 			componentType: "UserPreferences"
-		},
-			{
-				monitor: "mine",
-				left: "center",
-				top: "center"
-			});
+		},{
+			monitor: "mine",
+			left: "center",
+			top: "center"
+		});
 	},
 	/**
 	 * Called on shutdown (if the workspace is dirty).
