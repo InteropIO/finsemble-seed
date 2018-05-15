@@ -149,8 +149,12 @@ var Actions = {
 		FSBL.Clients.ConfigClient.getValue({ field: "finsemble" }, function (err, finsembleConfig) {
 			let globalWindowManagerConfig = finsembleConfig["Window Manager"] || { alwaysOnTopIcon: false }; // Override defaults if finsemble.Window Manager exists.
 
-			windowTitleBarStore.setValues([{ field: "Main.dockingEnabled", value: finsembleConfig.docking.enabled }]);
+			// Look to see if docking is enabled. Cascade through backward compatibility with old "betaFeatures" and then a default if no config is found at all.
+			let dockingConfig = finsembleConfig.docking;
+			if (!dockingConfig && finsembleConfig.betaFeatures) dockingConfig = finsembleConfig.betaFeatures.docking;
+			if (!dockingConfig) dockingConfig = {enabled: true};
 
+			windowTitleBarStore.setValues([{ field: "Main.dockingEnabled", value: dockingConfig.enabled }]);
 			// Whether the alwaysOnTop pin shows or not depends first on the global setting (finsemble["Window Manager"].alwaysOnTop) and then
 			// on the specific setting for this component (foreigh.components["Widow Manager"].alwaysOnTop)
 			let alwaysOnTopIcon = globalWindowManagerConfig.alwaysOnTopIcon;
