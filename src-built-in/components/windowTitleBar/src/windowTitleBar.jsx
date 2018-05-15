@@ -124,7 +124,10 @@ class WindowTitleBar extends React.Component {
 	}
 
 	onTitleChange(err, response) {
-		this.setState({ windowTitle: response.value });
+		this.setState({ 
+			windowTitle: response.value,
+			tabs: [{title:windowTitleBarStore.getValue({ field: "Main.windowTitle" })}]
+		});
 	}
 
 	onShowDockingToolTip(err, response) {
