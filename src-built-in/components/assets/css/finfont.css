@@ -13,7 +13,7 @@
 }
 
 [data-icon]:before {
-  font-family: "finfont" ;
+  font-family: "finfont" !important;
   content: attr(data-icon);
   font-style: normal !important;
   font-weight: normal !important;
@@ -27,7 +27,7 @@
 
 [class^="ff-"]:before,
 [class*=" ff-"]:before {
-  font-family: "finfont" ;
+  font-family: "finfont" !important;
   font-style: normal !important;
   font-weight: normal !important;
   font-variant: normal !important;
@@ -115,9 +115,6 @@
 }
 .ff-crosshair:before {
   content: "\41";
-}
-.ff-delete:before {
-  content: "\42";
 }
 .ff-delete-box:before {
   content: "\43";
@@ -298,4 +295,19 @@
 }
 .ff-import:before {
   content: "\5e";
+}
+.ff-anchor:before {
+  content: "\5f";
+}
+.ff-copy:before {
+  content: "\60";
+}
+.ff-always-on-top:before {
+  content: "\7b";
+}
+.ff-close-2:before {
+  content: "\7c";
+}
+.ff-delete:before {
+  content: "\42";
 }

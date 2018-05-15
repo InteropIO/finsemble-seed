@@ -18,6 +18,12 @@
         "type": "reactComponent"
     },
     {
+        "comment": "Change align to add AlwaysOnTop capability",
+        "align": "none",
+        "type": "reactComponent",
+        "reactComponent": "AlwaysOnTop"
+    },
+    {
         "align": "right",
         "type": "reactComponent",
         "reactComponent": "AutoArrange"
