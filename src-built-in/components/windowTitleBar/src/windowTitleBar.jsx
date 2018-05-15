@@ -54,11 +54,10 @@ class WindowTitleBar extends React.Component {
 			closeButton: !windowTitleBarStore.getValue({ field: "Close.hide" }),
 			showLinkerButton: windowTitleBarStore.getValue({ field: "Linker.showLinkerButton" }),
 			isTopRight: windowTitleBarStore.getValue({ field: "isTopRight" }),
-			alwaysOnTopButton: windowTitleBarStore.getValue({field: "AlwaysOnTop.show"}),
-			titleBarIsHoveredOver: windowTitleBarStore.getValue({ field: "titleBarIsHoveredOver" }),
+			alwaysOnTopButton: windowTitleBarStore.getValue({ field: "AlwaysOnTop.show" }),
 			tabWidth: 175,
-			tabs:[{title:windowTitleBarStore.getValue({ field: "Main.windowTitle" })}], //array of tabs for this window
-			showTabs: true
+			tabs: [{ title: windowTitleBarStore.getValue({ field: "Main.windowTitle" }) }], //array of tabs for this window
+			showTabs: false
 		};
 	}
 	/**
@@ -91,6 +90,13 @@ class WindowTitleBar extends React.Component {
 			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton },
 			{ field: "isTopRight", listener: this.isTopRight },
 		]);
+
+		FSBL.Clients.ConfigClient.getValue({ field: "finsemble" }, (err, config) => {
+			let windowManager = config['Window Manager'];
+			this.setState({
+				showTabs: typeof config['Window Manager'] !== undefined ? config['Window Manager'].showTabs : false
+			});
+		})
 	}
 
 	componentWillUnmount() {
@@ -124,9 +130,9 @@ class WindowTitleBar extends React.Component {
 	}
 
 	onTitleChange(err, response) {
-		this.setState({ 
+		this.setState({
 			windowTitle: response.value,
-			tabs: [{title:windowTitleBarStore.getValue({ field: "Main.windowTitle" })}]
+			tabs: [{ title: windowTitleBarStore.getValue({ field: "Main.windowTitle" }) }]
 		});
 	}
 
@@ -158,9 +164,6 @@ class WindowTitleBar extends React.Component {
 	 * @memberof windowTitleBar
 	 */
 	toggleDrag() {
-		this.setState({
-			titleBarIsHoveredOver: !this.state.titleBarIsHoveredOver
-		});
 	}
 
 	/**
@@ -192,7 +195,7 @@ class WindowTitleBar extends React.Component {
 	clearDragEndTimeout(err, response) {
 		clearTimeout(this.dragEndTimeout);
 		if (!response) {
-			FSBL.Clients.WindowClient.stopTilingOrTabbing({mousePosition: this.mousePositionOnDragEnd});
+			FSBL.Clients.WindowClient.stopTilingOrTabbing({ mousePosition: this.mousePositionOnDragEnd });
 			this.onWindowResize();
 		}
 		FSBL.Clients.RouterClient.removeListener('tabbingDragEnd', this.clearDragEndTimeout);
@@ -208,11 +211,11 @@ class WindowTitleBar extends React.Component {
 		this.onWindowResize();
 	}
 
-	onWindowResize(){
+	onWindowResize() {
 		this.resize = null;
 		let bounds = this.tabBar.getBoundingClientRect();
 		let toolbarRightBounds = this.toolbarRight.getBoundingClientRect();
-		let newWidth = bounds.width <= this.state.tabWidth + toolbarRightBounds.width ? ((bounds.width-10)/this.state.tabs.length)+10 : 175;
+		let newWidth = bounds.width <= this.state.tabWidth + toolbarRightBounds.width ? ((bounds.width - 10) / this.state.tabs.length) + 10 : 175;
 		if (newWidth >= 175) newWidth = 175;
 		this.setState({
 			tabWidth: newWidth
@@ -226,9 +229,10 @@ class WindowTitleBar extends React.Component {
 		let isGrouped = (self.state.dockingIcon == "ejector");
 		let showMinimizeIcon = (isGrouped && self.state.isTopRight) || !isGrouped; //If not in a group or if topright in a group
 		let titleWrapperClasses = "fsbl-header-center cq-drag";
-		if (this.state.showTabs || this.state.titleBarIsHoveredOver) { // always show tabs (for now)
-			titleWrapperClasses += " tab-visible";
+		if (this.state.showTabs) {
+			titleWrapperClasses += " fsbl-tabs-enabled";
 		}
+
 		return (
 			<div className="fsbl-header">
 				<div className="fsbl-header-left">
@@ -237,31 +241,34 @@ class WindowTitleBar extends React.Component {
 				</div>
 				<div className={titleWrapperClasses} onMouseEnter={this.toggleDrag} onMouseLeave={this.toggleDrag} ref={this.setTabBarRef}>
 					<div className={"fsbl-header-title"}>{self.state.windowTitle}</div>
-					<div className={"fsbl-tab-area cq-no-drag"} draggable="true" onDragStart={this.startDrag} onDragEnd={this.stopDrag} onDrop={this.drop} ref="tabArea">
-						{this.state.tabWidth >= 55 ?
-						this.state.tabs.map((tab,i) => {
-							return <Tab key={i} tabWidth={this.state.tabWidth} title={tab.title} />
-						}) :
-						null}
-					</div>
+
+					{this.state.showTabs &&
+						<div className={"fsbl-tab-area cq-no-drag"} draggable="true" onDragStart={this.startDrag} onDragEnd={this.stopDrag} onDrop={this.drop} ref="tabArea">
+							{this.state.tabWidth >= 55 ?
+								this.state.tabs.map((tab, i) => {
+									return <Tab key={i} tabWidth={this.state.tabWidth} title={tab.title} />
+								}) :
+								null}
+						</div>
+					}
 				</div>
 				<div className="fsbl-header-right" ref={this.setToolbarRight}>
-					{this.state.alwaysOnTopButton && showMinimizeIcon ? <AlwaysOnTop /> : null}
-					<BringSuiteToFront />
-					{this.state.minButton && showMinimizeIcon ? <Minimize /> : null}
-					{showDockingIcon ? <DockingButton /> : null}
-					{this.state.maxButton ? <Maximize /> : null}
-					{this.state.closeButton ? <Close /> : null}
+						{this.state.alwaysOnTopButton && showMinimizeIcon ? <AlwaysOnTop /> : null}
+						<BringSuiteToFront />
+						{this.state.minButton && showMinimizeIcon ? <Minimize /> : null}
+						{showDockingIcon ? <DockingButton /> : null}
+						{this.state.maxButton ? <Maximize /> : null}
+						{this.state.closeButton ? <Close /> : null}
+					</div>
 				</div>
-			</div>
-		);
-	}
-}
-
+				);
+			}
+		}
+		
 FSBL.addEventListener("onReady", function () {
-	storeExports.initialize(function () {
-		HeaderActions = storeExports.Actions;
-		windowTitleBarStore = storeExports.getStore();
-		ReactDOM.render(<WindowTitleBar />, document.getElementById("FSBLHeader"));
-	});
-});
+					storeExports.initialize(function () {
+						HeaderActions = storeExports.Actions;
+						windowTitleBarStore = storeExports.getStore();
+						ReactDOM.render(<WindowTitleBar />, document.getElementById("FSBLHeader"));
+					});
+				});
