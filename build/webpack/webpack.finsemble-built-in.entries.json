@@ -36,7 +36,7 @@
 		"entry": "./src-built-in/components/singleInputDialog/src/app.jsx"
 	},
 	"UserPreferences": {
-        "output": "components/userPreferences/UserPreferences",
+        "output": "components/userPreferences/userPreferences",
         "entry": "./src-built-in/components/userPreferences/src/app.jsx"
     },
     "appCatalog": {
@@ -54,5 +54,9 @@
 	"welcome": {
 		"output": "components/welcome/welcome",
 		"entry": "./src-built-in/components/welcome/welcome.js"
+	},
+	"processMonitor": {
+		"output": "components/processMonitor/processMonitor",
+		"entry": "./src-built-in/components/processMonitor/src/app.jsx"
 	}
 }

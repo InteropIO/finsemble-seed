@@ -68,6 +68,8 @@
 		env.PORT = startupConfig[env.NODE_ENV].serverPort;
 	}
 
+	const isRunningDevTask = process.argv[2].startsWith("dev");
+
 	// #endregion
 
 	// #region Task Methods
@@ -145,6 +147,7 @@
 				},
 				(cb) => {
 					const webpackComponentsConfig = require("./build/webpack/webpack.components.js")
+					webpackComponentsConfig.watch = isRunningDevTask;
 					packFiles(webpackComponentsConfig, "component bundle", cb);
 				},
 				(cb) => {
@@ -167,6 +170,7 @@
 				},
 				(cb) => {
 					const webpackHeaderConfig = require("./build/webpack/webpack.titleBar.js")
+					webpackHeaderConfig.watch = isRunningDevTask;
 					packFiles(webpackHeaderConfig, "header bundle", cb);
 				},
 				(cb) => {
@@ -347,6 +351,7 @@
 	if (extensions) {
 		extensions(taskMethods);
 	}
+
 
 	// #region Task definitions
 	const defineTasks = err => {

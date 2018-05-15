@@ -4,10 +4,10 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
+import "./css/linkerWindow.css";
 import "../../assets/css/finfont.css";
 import "../../assets/css/finsemble.css";
 import "../../assets/css/CIQ_Seed.css";
-import "./css/linkerWindow.css";
 import * as storeExports from "./stores/linkerStore";
 let LinkerStore = storeExports.Store;
 let LinkerActions = storeExports.Actions;
