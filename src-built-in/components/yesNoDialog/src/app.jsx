@@ -6,6 +6,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "../../assets/css/finsemble.css";
 import { FinsembleDialog, FinsembleDialogQuestion, FinsembleDialogButton } from "@chartiq/finsemble-react-controls";
+import Timer from "./timer";
 const DEFAULT_TITLE = ""
 const DEFAULT_COMPONENT_STATE = {
 	title: DEFAULT_TITLE,
@@ -56,6 +57,7 @@ class YesNoDialog extends React.Component {
 		this.sendAffirmativeResponse = this.sendAffirmativeResponse.bind(this);
 		this.sendCancelResponse = this.sendCancelResponse.bind(this);
 		this.sendNegativeResponse = this.sendNegativeResponse.bind(this);
+		this.sendExpiredResponse = this.sendExpiredResponse.bind(this);
 		this.sendResponse = this.sendResponse.bind(this);
 	}
 	/**
@@ -77,6 +79,8 @@ class YesNoDialog extends React.Component {
 			showNegativeButton: typeof data.showNegativeButton === "undefined" ? true : data.showNegativeButton,
 			showAffirmativeButton: typeof data.showAffirmativeButton === "undefined" ? true : data.showAffirmativeButton,
 			showCancelButton: typeof data.showCancelButton === "undefined" ? true : data.showCancelButton,
+			showTimer: typeof data.showTimer === "undefined" ? false : data.showTimer,
+			timerDuration: typeof data.timerDuration === "undefined" ? null : data.timerDuration
 		}, this.fitAndShow);
 	}
 
@@ -101,6 +105,10 @@ class YesNoDialog extends React.Component {
 			choice: response,
 			hideModalOnClose: this.state.hideModalOnClose
 		});
+		//This will detach the timer component from the dom. Next time the component comes up, it'll have a fresh timer.
+		this.setState({
+			showTimer: false
+		})
 	}
 	/**
 	 * Sends an affirmative response to the opener.
@@ -127,6 +135,15 @@ class YesNoDialog extends React.Component {
 		this.sendResponse("cancel");
 	}
 
+	/**
+	 * Sends an expired response to the opener.
+	 *
+	 * @memberof YesNoDialog
+	 */
+	sendExpiredResponse() {
+		this.sendResponse("expired");
+	}
+
 	render() {
 		var self = this;
 		return (<FinsembleDialog
@@ -137,6 +154,8 @@ class YesNoDialog extends React.Component {
 			<div className="dialog-title">{this.state.title}</div>
 			<FinsembleDialogQuestion>
 				{this.state.question}
+				{this.state.showTimer &&
+					<Timer ontimerDurationExpiration={this.sendExpiredResponse} timerDuration={this.state.timerDuration}/>}
 			</FinsembleDialogQuestion>
 			<div className="button-wrapper">
 			<FinsembleDialogButton show={this.state.showAffirmativeButton} buttonSize="md-positive" onClick={this.sendAffirmativeResponse}>
@@ -166,6 +185,6 @@ FSBL.addEventListener("onReady", function () {
 			<YesNoDialog />
 			, document.getElementById("YesNoDialog-component-wrapper")
 		);
-	}	
-		
+	}
+
 });

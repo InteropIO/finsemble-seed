@@ -20,8 +20,8 @@ class UserPreferences extends React.Component {
 		this.bindCorrectContext();
 		this.addListeners();
 		this.state = {
-			activeSection: 'workspaces'
-		}
+			activeSection: 'general'
+		};
 	}
 	bindCorrectContext() {
 		this.addListeners = this.addListeners.bind(this);
