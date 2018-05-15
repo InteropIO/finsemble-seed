@@ -261,8 +261,13 @@ html.desktop-active .fsbl-linker[hover=true] {
     padding-bottom: 5px;
 }
 
-.ff-maximize, .ff-close, .ff-detached, .ff-attached {
+.ff-maximize, .ff-close, .ff-detached, .ff-attached{
     padding-top: 2px;
+}
+
+.ff-always-on-top {
+    padding-top: 3px;
+    font-size: 16px;
 }
 
 .fsbl-header-center:hover .fsbl-tab-area {
