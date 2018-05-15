@@ -49,9 +49,8 @@ html.desktop-active .fsbl-header {
     display: flex;
 }
 
-
 .fsbl-header-center {
-    height: calc(100% - 5px);
+    height: calc(100% - 10px);
     align-content: center;
     display: flex;
     align-items: center;
@@ -63,22 +62,31 @@ html.desktop-active .fsbl-header {
     overflow: hidden;
     --webkit-user-select: none;
     padding-bottom: var(--fsbl-header-center-padding-bottom);
+    position: relative;
 }
 .fsbl-header-center .tab-area {
-    visibility: hidden;
+    transition: opacity .5s ease-in-out;
+    opacity: 0;
 }
 
-.fsbl-header-center.tab-visible {
+.fsbl-header-center .header-title {
+    transition: opacity .5s ease-in-out;
+    opacity: 1;
+    margin-top: -7px;
+}
+
+.fsbl-header-center:hover .tab-area {
+    opacity: 1;
+}
+
+.fsbl-header-center:hover .header-title {
+    opacity: 0;
+}
+/*
+.fsbl-header-center:hover {
     justify-content: flex-start;
 }
-
-.fsbl-header-center.tab-visible .tab-area {
-    visibility: visible;
-}
-
-.tab-visible .header-title {
-    visibility: hidden;
-}
+*/
 
 html.desktop-active .fsbl-header-right {
     background: var(--active-header-background-color);
@@ -268,12 +276,14 @@ html.desktop-active .fsbl-linker[hover=true] {
 
 .tab{
     min-width: 35px;
+    height: 100%;
 }
 
 .tab-area{
     position: absolute;
-    top: 12px;
-    height:inherit;
+    bottom: 0px;
+    height: 100%;
+    left: 0px;
 }
 
 .tab .title{
@@ -285,4 +295,10 @@ html.desktop-active .fsbl-linker[hover=true] {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+}
+
+.tab .tab-style {
+    position: relative;
+    height: 100%;
+    left: 0px;
 }
