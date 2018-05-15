@@ -168,42 +168,6 @@
                     }
                 }
             }
-        },
-        "test": {
-            "window": {
-                "url": "$applicationRoot/components/test/test.html",
-                "frame": false,
-                "resizable": true,
-                "autoShow": true,
-                "top": "center",
-                "left": "center",
-                "width": 800,
-                "height": 600
-            },
-            "component": {
-                "inject": false,
-                "preload": "$applicationRoot/preloads/nativeOverrides.js"
-            },
-            "foreign": {
-                "services": {
-                    "dockingService": {
-                        "canGroup": true,
-                        "isArrangable": true
-                    }
-                },
-                "components": {
-                    "App Launcher": {
-                        "launchableByUser": true
-                    },
-                    "Window Manager": {
-                        "FSBLHeader": true,
-                        "persistWindowState": true
-                    },
-                    "Toolbar": {
-                        "iconClass": "test"
-                    }
-                }
-            }
         }
     }
 }
