@@ -82,11 +82,6 @@ html.desktop-active .fsbl-header {
 .fsbl-header-center.fsbl-tabs-enabled:hover .fsbl-header-title {
     opacity: 0;
 }
-/*
-.fsbl-header-center:hover {
-    justify-content: flex-start;
-}
-*/
 
 html.desktop-active .fsbl-header-right {
     background: var(--active-header-background-color);

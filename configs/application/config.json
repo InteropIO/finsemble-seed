@@ -22,7 +22,7 @@
 	"systemTrayComponent": "File Menu",
 	"debugServiceDelay": 0,
 	"Window Manager": {
-		"alwaysOnTop": true,
+		"alwaysOnTopIcon": false,
 		"showTabs": false
 	},
 	"docking": {
