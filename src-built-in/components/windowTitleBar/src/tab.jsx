@@ -9,13 +9,13 @@ export default class Tab extends React.Component{
     render(){
 		let titleWidth=this.props.tabWidth-20;
 		return (
-			<div className="fsbl-tab" style={{width:this.props.tabWidth + 'px'}}>
-				<div className="fsbl-tab-style">
-					<svg id='Layer_1' data-name='Layer 1' xmlns='http://www.w3.org/2000/svg' width="100%" height="100%" preserveAspectRatio="none">
+			<div className="fsbl-tab">
+				<div className="fsbl-tab-style" style={{width:(this.props.tabWidth-25) + 'px'}}>
+					<svg id='Layer_1' data-name='Layer 1' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 175 25' width="100%" height="100%" preserveAspectRatio="none">
 						<polygon points='8.57,0.5 165.5,0.5 174.5,23.5 0.25,23.5 8.57,0.5' fill='#617383' stroke='#67829a' strokeMiterlimit='10' />
 					</svg>
 				</div>
-				<div className="fsbl-title" style={{width:titleWidth}}>{this.props.title}</div>
+				<div className="fsbl-title" style={{width:titleWidth-20 + 'px'}}>{this.props.title}</div>
         	</div>
 		);
     }
