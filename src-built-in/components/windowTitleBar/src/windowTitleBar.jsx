@@ -94,7 +94,6 @@ class WindowTitleBar extends React.Component {
 	}
 
 	componentWillUnmount() {
-		// window.removeEventListener('keyup', this.pressedKey, false);
 		windowTitleBarStore.removeListeners([
 			{ field: "Main.windowTitle", listener: this.onTitleChange },
 			{ field: "Main.showDockingTooltip", listener: this.onShowDockingToolTip },
@@ -111,6 +110,7 @@ class WindowTitleBar extends React.Component {
 		let header = document.getElementsByClassName("fsbl-header")[0];
 		let headerHeight = window.getComputedStyle(header, null).getPropertyValue("height");
 		document.body.style.marginTop = headerHeight;
+		this.resize = setTimeout(this.onWindowResize, 300);
 		window.addEventListener('resize', this.onWindowResize);
 	}
 
@@ -209,6 +209,7 @@ class WindowTitleBar extends React.Component {
 	}
 
 	onWindowResize(){
+		this.resize = null;
 		let bounds = this.tabBar.getBoundingClientRect();
 		let toolbarRightBounds = this.toolbarRight.getBoundingClientRect();
 		let newWidth = bounds.width <= this.state.tabWidth + toolbarRightBounds.width ? ((bounds.width-10)/this.state.tabs.length)+10 : 175;
