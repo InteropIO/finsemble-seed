@@ -195,6 +195,7 @@ class _ToolbarStore {
 			for (var i in menus) {
 				var menu = menus[i];
 				menu.align = menu.align || "left";
+				if (menu.align == "none") continue;
 				if (!sections[menu.align]) { sections[menu.align] = []; }
 				sections[menu.align].push(menu);
 			}
