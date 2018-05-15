@@ -25,7 +25,7 @@
     "dependencies": {
         "@chartiq/finsemble": "latest",
         "@chartiq/finsemble-cli": "2.*",
-        "@chartiq/finsemble-react-controls": "1.1",
+        "@chartiq/finsemble-react-controls": "1.*",
         "async": "^2.6.0",
         "babel-minify-webpack-plugin": "^0.3.0",
         "compression": "^1.7.2",
