@@ -61,12 +61,12 @@
     width: 14px;
 }
 
-.ff-close {
+.notification-close .ff-close {
     font-size: 10px;
     padding-top: 2px;
     color: #FFFFFF
 }
 
-.ff-close:hover {
+.notification-close .ff-close:hover {
     color: #EE5C5C;
 }
