@@ -291,10 +291,9 @@ html.desktop-active .fsbl-linker[hover=true] {
 }
 
 .fsbl-tab-area{
-    position: absolute;
-    bottom: 0px;
     height: 100%;
-    left: 0px;
+    display:flex;
+    width: 100%;
 }
 
 .fsbl-tab .fsbl-tab-title{
@@ -314,3 +313,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     left: 0px;
 }
 
+.ghost-tab {
+    border: 4px solid white;
+    background: blue;
+}

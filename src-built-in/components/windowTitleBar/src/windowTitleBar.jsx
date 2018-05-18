@@ -57,7 +57,8 @@ class WindowTitleBar extends React.Component {
 			alwaysOnTopButton: windowTitleBarStore.getValue({ field: "AlwaysOnTop.show" }),
 			tabWidth: 175,
 			tabs: [{ title: windowTitleBarStore.getValue({ field: "Main.windowTitle" }) }], //array of tabs for this window
-			showTabs: false
+			showTabs: false,
+			allowDragOnCenterRegion: true
 		};
 	}
 	/**
@@ -74,6 +75,8 @@ class WindowTitleBar extends React.Component {
 		this.showLinkerButton = this.showLinkerButton.bind(this);
 		this.isTopRight = this.isTopRight.bind(this);
 		this.onWindowResize = this.onWindowResize.bind(this);
+		this.allowDragOnCenterDregion = this.allowDragOnCenterDregion.bind(this);
+		this.disallowDragOnCenterRegion = this.disallowDragOnCenterRegion.bind(this);
 
 	}
 	componentWillMount() {
@@ -95,7 +98,8 @@ class WindowTitleBar extends React.Component {
 			});
 		})
 		this.getFakeTabs();
-
+		FSBL.Clients.RouterClient.addListener("DockingService.startTilingOrTabbing", this.disallowDragOnCenterRegion);
+		FSBL.Clients.RouterClient.addListener("DockingService.stopTilingOrTabbing", this.allowDragOnCenterDregion);
 	}
 
 	componentWillUnmount() {
@@ -109,24 +113,39 @@ class WindowTitleBar extends React.Component {
 			{ field: "isTopRight", listener: this.isTopRight },
 		]);
 		window.removeEventListener('resize', this.onWindowResize);
+		FSBL.Clients.RouterClient.removeListener("DockingService.startTilingOrTabbing", this.disallowDragOnCenterRegion);
+		FSBL.Clients.RouterClient.removeListener("DockingService.stopTilingOrTabbing", this.allowDragOnCenterDregion);
+	}
+
+	allowDragOnCenterDregion() {
+		this.setState({
+			allowDragOnCenterRegion: true
+		});
+	}
+
+	disallowDragOnCenterRegion() {
+		this.setState({
+			allowDragOnCenterRegion: false
+		});
 	}
 
 	getFakeTabs() {
 		FSBL.Clients.LauncherClient.getActiveDescriptors((err, response) => {
 			//Only keep welcomeComponents. Return an array of window identifiers.
-			let welcomeComponents = Object.keys(response).map(name => {
-				return response[name];
-			}).filter(descriptor => {
-				return descriptor.customData.component.type === "Welcome Component"
-			}).map(descriptor => {
-				return {
-					windowName: descriptor.name,
-					componentType: descriptor.customData.component.type,
-					uuid: descriptor.uuid
-				}
-			});
+			// let welcomeComponents = Object.keys(response).map(name => {
+			// 	return response[name];
+			// }).filter(descriptor => {
+			// 	return descriptor.customData.component.type === "Welcome Component"
+			// }).map(descriptor => {
+			// 	return {
+			// 		windowName: descriptor.name,
+			// 		componentType: descriptor.customData.component.type,
+			// 		uuid: descriptor.uuid
+			// 	}
+			// });
+
 			this.setState({
-				tabs: welcomeComponents
+				tabs: [FSBL.Clients.WindowClient.getWindowIdentifier()]
 			});
 		});
 	}
@@ -137,6 +156,7 @@ class WindowTitleBar extends React.Component {
 		document.body.style.marginTop = headerHeight;
 		this.resize = setTimeout(this.onWindowResize, 300);
 		window.addEventListener('resize', this.onWindowResize);
+
 	}
 
 	showLinkerButton(err, response) {
@@ -201,7 +221,9 @@ class WindowTitleBar extends React.Component {
 		if (this.state.showTabs) {
 			titleWrapperClasses += " fsbl-tabs-enabled";
 			rightWrapperClasses += " fsbl-tabs-enabled";
-		} else if (this.state.tabs.length === 0) {
+		}
+
+		if (this.state.allowDragOnCenterRegion) {
 			titleWrapperClasses += " cq-drag";
 		}
 
