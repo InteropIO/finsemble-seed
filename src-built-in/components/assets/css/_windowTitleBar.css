@@ -97,7 +97,9 @@ html.desktop-active .fsbl-header-right {
     z-index: 5;
     background-color: var(--window-header-background-color);
 }
-
+.fsbl-header-right.fsbl-tabs-enabled {
+    padding-left: 30px;
+}
 /* This div captures the hover event for it's parent. It doesn't stretch to the border, so that mouseout is properly detected. */
 .fsbl-hover-detector-right {
     position: absolute;
@@ -294,17 +296,20 @@ html.desktop-active .fsbl-linker[hover=true] {
     left: 0px;
 }
 
-.fsbl-tab .fsbl-title{
-    display:flex;
+.fsbl-tab .fsbl-tab-title{
+    display:block;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    margin-left:27px;
     margin-right: 17px;
 }
-
+.fsbl-tab-logo {
+    margin: 0 7px;
+    width: 15px;
+}
 .fsbl-tab .fsbl-tab-style {
     position: relative;
     height: 100%;
     left: 0px;
 }
+

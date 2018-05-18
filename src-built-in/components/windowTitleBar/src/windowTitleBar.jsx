@@ -254,8 +254,11 @@ class WindowTitleBar extends React.Component {
 		let isGrouped = (self.state.dockingIcon == "ejector");
 		let showMinimizeIcon = (isGrouped && self.state.isTopRight) || !isGrouped; //If not in a group or if topright in a group
 		let titleWrapperClasses = "fsbl-header-center cq-drag";
+		let rightWrapperClasses = "fsbl-header-right cq-drag";
+
 		if (this.state.showTabs) {
 			titleWrapperClasses += " fsbl-tabs-enabled";
+			rightWrapperClasses += " fsbl-tabs-enabled";
 		}
 
 		return (
@@ -278,7 +281,7 @@ class WindowTitleBar extends React.Component {
 						</div>
 					}
 				</div>
-				<div className="fsbl-header-right" ref={this.setToolbarRight}>
+				<div className={rightWrapperClasses} ref={this.setToolbarRight}>
 					{this.state.alwaysOnTopButton && showMinimizeIcon ? <AlwaysOnTop /> : null}
 					<BringSuiteToFront />
 					{this.state.minButton && showMinimizeIcon ? <Minimize /> : null}
