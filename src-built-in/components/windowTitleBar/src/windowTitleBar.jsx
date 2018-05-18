@@ -94,9 +94,12 @@ class WindowTitleBar extends React.Component {
 		FSBL.Clients.ConfigClient.getValue({ field: "finsemble" }, (err, config) => {
 			let windowManager = config['Window Manager'];
 			this.setState({
-				showTabs: typeof config['Window Manager'] !== undefined ? config['Window Manager'].showTabs : false
+				// showTabs: typeof config['Window Manager'] !== undefined ? config['Window Manager'].showTabs : false
+				showTabs: true
 			});
 		})
+		this.getFakeTabs();
+
 	}
 
 	componentWillUnmount() {
@@ -110,6 +113,27 @@ class WindowTitleBar extends React.Component {
 			{ field: "isTopRight", listener: this.isTopRight },
 		]);
 		window.removeEventListener('resize', this.onWindowResize);
+	}
+
+	getFakeTabs() {
+		FSBL.Clients.LauncherClient.getActiveDescriptors((err, response) => {
+			//Only keep welcomeComponents. Return an array of window identifiers.
+			let welcomeComponents = Object.keys(response).map(name => {
+				return response[name];
+			}).filter(descriptor => {
+				return descriptor.customData.component.type === "Welcome Component"
+			}).map(descriptor => {
+				return {
+					windowName: descriptor.name,
+					componentType: descriptor.customData.component.type,
+					uuid: descriptor.uuid
+				}
+			});
+			debugger
+			this.setState({
+				tabs: welcomeComponents
+			});
+		});
 	}
 
 	componentDidMount() {
@@ -130,10 +154,11 @@ class WindowTitleBar extends React.Component {
 	}
 
 	onTitleChange(err, response) {
-		this.setState({
-			windowTitle: response.value,
-			tabs: [{ title: windowTitleBarStore.getValue({ field: "Main.windowTitle" }) }]
-		});
+		FSBL.Clients.LauncherClient.
+			this.setState({
+				windowTitle: response.value,
+				tabs: [{ title: windowTitleBarStore.getValue({ field: "Main.windowTitle" }) }]
+			});
 	}
 
 	onShowDockingToolTip(err, response) {
@@ -240,35 +265,36 @@ class WindowTitleBar extends React.Component {
 					<Sharer />
 				</div>
 				<div className={titleWrapperClasses} onMouseEnter={this.toggleDrag} onMouseLeave={this.toggleDrag} ref={this.setTabBarRef}>
-					<div className={"fsbl-header-title"}>{self.state.windowTitle}</div>
+					{this.state.tabs.length == 0 &&
+						<div className={"fsbl-header-title"}> {self.state.windowTitle}</div>}
 
 					{this.state.showTabs &&
 						<div className={"fsbl-tab-area cq-no-drag"} draggable="true" onDragStart={this.startDrag} onDragEnd={this.stopDrag} onDrop={this.drop} ref="tabArea">
 							{this.state.tabWidth >= 55 ?
 								this.state.tabs.map((tab, i) => {
-									return <Tab key={i} tabWidth={this.state.tabWidth} title={tab.title} />
+									return <Tab key={i} tabWidth={this.state.tabWidth} title={tab.windowName} />
 								}) :
 								null}
 						</div>
 					}
 				</div>
 				<div className="fsbl-header-right" ref={this.setToolbarRight}>
-						{this.state.alwaysOnTopButton && showMinimizeIcon ? <AlwaysOnTop /> : null}
-						<BringSuiteToFront />
-						{this.state.minButton && showMinimizeIcon ? <Minimize /> : null}
-						{showDockingIcon ? <DockingButton /> : null}
-						{this.state.maxButton ? <Maximize /> : null}
-						{this.state.closeButton ? <Close /> : null}
-					</div>
+					{this.state.alwaysOnTopButton && showMinimizeIcon ? <AlwaysOnTop /> : null}
+					<BringSuiteToFront />
+					{this.state.minButton && showMinimizeIcon ? <Minimize /> : null}
+					{showDockingIcon ? <DockingButton /> : null}
+					{this.state.maxButton ? <Maximize /> : null}
+					{this.state.closeButton ? <Close /> : null}
 				</div>
-				);
-			}
-		}
-		
+			</div>
+		);
+	}
+}
+
 FSBL.addEventListener("onReady", function () {
-					storeExports.initialize(function () {
-						HeaderActions = storeExports.Actions;
-						windowTitleBarStore = storeExports.getStore();
-						ReactDOM.render(<WindowTitleBar />, document.getElementById("FSBLHeader"));
-					});
-				});
+	storeExports.initialize(function () {
+		HeaderActions = storeExports.Actions;
+		windowTitleBarStore = storeExports.getStore();
+		ReactDOM.render(<WindowTitleBar />, document.getElementById("FSBLHeader"));
+	});
+});

@@ -64,7 +64,8 @@ html.desktop-active .fsbl-header {
     position: relative;
     padding-bottom: 3px; /* This needs to be half of the thing subtracted from the height. e.g. height = 100% - 6px, then this is 3px) */
 }
-.fsbl-header-center .fsbl-tab-area {
+
+/* .fsbl-header-center .fsbl-tab-area {
     transition: opacity .5s ease-in-out;
     opacity: 0;
 }
@@ -81,11 +82,12 @@ html.desktop-active .fsbl-header {
 
 .fsbl-header-center.fsbl-tabs-enabled:hover .fsbl-header-title {
     opacity: 0;
-}
+} */
 
 html.desktop-active .fsbl-header-right {
     background: var(--active-header-background-color);
 }
+
 .fsbl-header-right {
     margin-right: 2px;
     height: 100%;
@@ -274,9 +276,15 @@ html.desktop-active .fsbl-linker[hover=true] {
     opacity: 0;
 }
 
-.fsbl-tab{
+.fsbl-tab {
     min-width: 35px;
     height: 100%;
+    position: relative;
+    display: inline-flex;
+    align-content: center;
+    align-items: center;
+    background-color: #617383;
+    border: 1px dashed black;
 }
 
 .fsbl-tab-area{
@@ -287,14 +295,12 @@ html.desktop-active .fsbl-linker[hover=true] {
 }
 
 .fsbl-tab .fsbl-title{
-    position: absolute;
-    height: inherit;
-    overflow: ellipsis;
-    margin-top: -19px;
-    left: 7%;
+    display:flex;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    margin-left:27px;
+    margin-right: 17px;
 }
 
 .fsbl-tab .fsbl-tab-style {
