@@ -287,6 +287,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     align-items: center;
     background-color: #617383;
     border: 1px dashed black;
+    user-select: none;
 }
 
 .fsbl-tab-area{

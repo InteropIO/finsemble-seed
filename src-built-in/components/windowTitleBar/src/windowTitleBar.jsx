@@ -23,7 +23,7 @@ import Maximize from "./components/right/MaximizeButton.jsx";
 import Close from "./components/right/CloseButton.jsx";
 import BringSuiteToFront from "./components/right/BringSuiteToFront.jsx";
 import AlwaysOnTop from "./components/right/AlwaysOnTop.jsx";
-import Tab from './tab.jsx'
+import TabRegion from './components/center/TabRegion'
 import "../../assets/css/finsemble.css";
 
 /**
@@ -73,12 +73,8 @@ class WindowTitleBar extends React.Component {
 		this.onAlwaysOnTop = this.onAlwaysOnTop.bind(this);
 		this.showLinkerButton = this.showLinkerButton.bind(this);
 		this.isTopRight = this.isTopRight.bind(this);
-		this.toggleDrag = this.toggleDrag.bind(this);
-		this.startDrag = this.startDrag.bind(this);
-		this.stopDrag = this.stopDrag.bind(this);
-		this.cancelTabbing = this.cancelTabbing.bind(this);
 		this.onWindowResize = this.onWindowResize.bind(this);
-		this.clearDragEndTimeout = this.clearDragEndTimeout.bind(this);
+
 	}
 	componentWillMount() {
 		windowTitleBarStore.addListeners([
@@ -129,7 +125,6 @@ class WindowTitleBar extends React.Component {
 					uuid: descriptor.uuid
 				}
 			});
-			debugger
 			this.setState({
 				tabs: welcomeComponents
 			});
@@ -182,59 +177,6 @@ class WindowTitleBar extends React.Component {
 		this.setState(newState);
 	}
 
-	/**
-	 * Handles mouseover of title bar. This turns the regular title to a tab on windows that aren't already tabbing.
-	 * This function is used as a prop on HoverDetector
-	 *
-	 * @memberof windowTitleBar
-	 */
-	toggleDrag() {
-	}
-
-	/**
-	 * Function that's called when this component fires the onDragStart event, this will start the tiling or tabbing process
-	 *
-	 * @param e The SyntheticEvent created by React when the startdrag event is called
-	 * @memberof windowTitleBar
-	 */
-	startDrag(e) {
-		FSBL.Clients.WindowClient.startTilingOrTabbing({ windowIdentifier: FSBL.Clients.WindowClient.getWindowIdentifier() });
-
-	}
-
-	/**
-	 * Called when the react component detects a drop (or stop drag, which is equivalent)
-	 *
-	 * @param e The SyntheticEvent created by React when the stopdrag event is called
-	 * @memberof windowTitleBar
-	 */
-	stopDrag(e) {
-		this.mousePositionOnDragEnd = {
-			x: e.nativeEvent.screenX,
-			y: e.nativeEvent.screenY
-		}
-		this.dragEndTimeout = setTimeout(this.clearDragEndTimeout, 300);
-		FSBL.Clients.RouterClient.addListener('tabbingDragEnd', this.clearDragEndTimeout);
-	}
-
-	clearDragEndTimeout(err, response) {
-		clearTimeout(this.dragEndTimeout);
-		if (!response) {
-			FSBL.Clients.WindowClient.stopTilingOrTabbing({ mousePosition: this.mousePositionOnDragEnd });
-			this.onWindowResize();
-		}
-		FSBL.Clients.RouterClient.removeListener('tabbingDragEnd', this.clearDragEndTimeout);
-	}
-	/**
-	 * Set to a timeout. An event is sent to the RouterClient which will be handled by the drop handler on the window.
-	 * In the event that a drop handler never fires to stop tiling or tabbing, this will take care of it.
-	 *
-	 * @memberof windowTitleBar
-	 */
-	cancelTabbing() {
-		FSBL.Clients.WindowClient.stopTilingOrTabbing();
-		this.onWindowResize();
-	}
 
 	onWindowResize() {
 		this.resize = null;
@@ -253,12 +195,14 @@ class WindowTitleBar extends React.Component {
 		let showDockingIcon = !self.state.dockingEnabled ? false : self.state.dockingIcon;
 		let isGrouped = (self.state.dockingIcon == "ejector");
 		let showMinimizeIcon = (isGrouped && self.state.isTopRight) || !isGrouped; //If not in a group or if topright in a group
-		let titleWrapperClasses = "fsbl-header-center cq-drag";
+		let titleWrapperClasses = "fsbl-header-center";
 		let rightWrapperClasses = "fsbl-header-right cq-drag";
 
 		if (this.state.showTabs) {
 			titleWrapperClasses += " fsbl-tabs-enabled";
 			rightWrapperClasses += " fsbl-tabs-enabled";
+		} else if (this.state.tabs.length === 0) {
+			titleWrapperClasses += " cq-drag";
 		}
 
 		return (
@@ -271,15 +215,8 @@ class WindowTitleBar extends React.Component {
 					{this.state.tabs.length == 0 &&
 						<div className={"fsbl-header-title"}> {self.state.windowTitle}</div>}
 
-					{this.state.showTabs &&
-						<div className={"fsbl-tab-area cq-no-drag"} draggable="true" onDragStart={this.startDrag} onDragEnd={this.stopDrag} onDrop={this.drop} ref="tabArea">
-							{this.state.tabWidth >= 55 ?
-								this.state.tabs.map((tab, i) => {
-									return <Tab key={i} tabWidth={this.state.tabWidth} title={tab.windowName} />
-								}) :
-								null}
-						</div>
-					}
+					{this.state.showTabs && this.state.tabWidth >= 55 && <TabRegion ref="tabArea" tabWidth={this.state.tabWidth} tabs={this.state.tabs} />}
+
 				</div>
 				<div className={rightWrapperClasses} ref={this.setToolbarRight}>
 					{this.state.alwaysOnTopButton && showMinimizeIcon ? <AlwaysOnTop /> : null}
