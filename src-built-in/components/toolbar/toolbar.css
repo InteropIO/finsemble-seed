@@ -94,7 +94,7 @@ body, html {
     width: 23px;
     color: white;
     cursor: pointer;
-    background-color: #1c2a36;
+    background-color: var(--coolGray7);
     transition: width .5s,background-color 0s .5s;
 }
 
