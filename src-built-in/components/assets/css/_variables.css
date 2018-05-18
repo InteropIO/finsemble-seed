@@ -138,4 +138,8 @@
     --search-section-max-height: 40px;
     --search-input-height:var(--toolbar-height);
     --search-input-line-height: var(--toolbar-height);
+
+    --tab-border: 1px solid #979797;
+    --tab-active-background-color: #1c2a36;
+    --tab-inactive-background-color: transparent;
 }

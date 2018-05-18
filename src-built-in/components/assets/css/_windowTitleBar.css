@@ -87,7 +87,11 @@ html.desktop-active .fsbl-header {
 html.desktop-active .fsbl-header-right {
     background: var(--active-header-background-color);
 }
-
+.fsbl-header-center.fsbl-tabs-enabled {
+    height: 100%;
+    width: 100%;
+    padding-bottom:0px;
+}
 .fsbl-header-right {
     margin-right: 2px;
     height: 100%;
@@ -285,9 +289,15 @@ html.desktop-active .fsbl-linker[hover=true] {
     display: inline-flex;
     align-content: center;
     align-items: center;
-    background-color: #617383;
-    border: 1px dashed black;
+    background-color: var(--tab-inactive-background-color);
+    border: var(--tab-border);
     user-select: none;
+    z-index:2147483644;
+    box-sizing: border-box;
+}
+
+.fsbl-active-tab {
+    background-color: var(--tab-active-background-color);
 }
 
 .fsbl-tab-area{
@@ -301,7 +311,22 @@ html.desktop-active .fsbl-linker[hover=true] {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    margin-right: 17px;
+}
+.fsbl-tab-close {
+    font-size: 8px;
+    padding-left: 7px;
+    padding-right:7px;
+    visibility:hidden;
+    cursor: pointer;
+    width:8px;
+    height:100%;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.fsbl-tab:hover > .fsbl-tab-close{
+    visibility: visible;
 }
 .fsbl-tab-logo {
     margin: 0 7px;
@@ -314,6 +339,8 @@ html.desktop-active .fsbl-linker[hover=true] {
 }
 
 .ghost-tab {
-    border: 4px solid white;
-    background: blue;
+    background-color: var(--secondary-accent-color);
+    border: 5px solid var(--primary-accent-color);
+    width: 135px;
+    opacity: 0.4;
 }

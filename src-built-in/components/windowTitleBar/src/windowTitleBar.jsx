@@ -58,8 +58,10 @@ class WindowTitleBar extends React.Component {
 			tabWidth: 175,
 			tabs: [{ title: windowTitleBarStore.getValue({ field: "Main.windowTitle" }) }], //array of tabs for this window
 			showTabs: false,
-			allowDragOnCenterRegion: true
+			allowDragOnCenterRegion: true,
+			activeTab: null
 		};
+
 	}
 	/**
      * This is necessary to make sure that the `this` inside of the callback is correct.
@@ -75,9 +77,9 @@ class WindowTitleBar extends React.Component {
 		this.showLinkerButton = this.showLinkerButton.bind(this);
 		this.isTopRight = this.isTopRight.bind(this);
 		this.onWindowResize = this.onWindowResize.bind(this);
-		this.allowDragOnCenterDregion = this.allowDragOnCenterDregion.bind(this);
+		this.allowDragOnCenterRegion = this.allowDragOnCenterRegion.bind(this);
 		this.disallowDragOnCenterRegion = this.disallowDragOnCenterRegion.bind(this);
-
+		this.setActiveTab = this.setActiveTab.bind(this);
 	}
 	componentWillMount() {
 		windowTitleBarStore.addListeners([
@@ -99,7 +101,7 @@ class WindowTitleBar extends React.Component {
 		})
 		this.getFakeTabs();
 		FSBL.Clients.RouterClient.addListener("DockingService.startTilingOrTabbing", this.disallowDragOnCenterRegion);
-		FSBL.Clients.RouterClient.addListener("DockingService.stopTilingOrTabbing", this.allowDragOnCenterDregion);
+		FSBL.Clients.RouterClient.addListener("DockingService.stopTilingOrTabbing", this.allowDragOnCenterRegion);
 	}
 
 	componentWillUnmount() {
@@ -114,10 +116,10 @@ class WindowTitleBar extends React.Component {
 		]);
 		window.removeEventListener('resize', this.onWindowResize);
 		FSBL.Clients.RouterClient.removeListener("DockingService.startTilingOrTabbing", this.disallowDragOnCenterRegion);
-		FSBL.Clients.RouterClient.removeListener("DockingService.stopTilingOrTabbing", this.allowDragOnCenterDregion);
+		FSBL.Clients.RouterClient.removeListener("DockingService.stopTilingOrTabbing", this.allowDragOnCenterRegion);
 	}
 
-	allowDragOnCenterDregion() {
+	allowDragOnCenterRegion() {
 		this.setState({
 			allowDragOnCenterRegion: true
 		});
@@ -209,6 +211,10 @@ class WindowTitleBar extends React.Component {
 		})
 	}
 
+	setActiveTab(tab) {
+		this.setState({ activeTab: tab })
+	}
+
 	render() {
 		var self = this;
 
@@ -217,7 +223,7 @@ class WindowTitleBar extends React.Component {
 		let showMinimizeIcon = (isGrouped && self.state.isTopRight) || !isGrouped; //If not in a group or if topright in a group
 		let titleWrapperClasses = "fsbl-header-center";
 		let rightWrapperClasses = "fsbl-header-right cq-drag";
-
+		let tabRegionClasses = "fsbl-tab-area";
 		if (this.state.showTabs) {
 			titleWrapperClasses += " fsbl-tabs-enabled";
 			rightWrapperClasses += " fsbl-tabs-enabled";
@@ -225,6 +231,7 @@ class WindowTitleBar extends React.Component {
 
 		if (this.state.allowDragOnCenterRegion) {
 			titleWrapperClasses += " cq-drag";
+			tabRegionClasses += " cq-drag";
 		}
 
 		return (
@@ -237,7 +244,16 @@ class WindowTitleBar extends React.Component {
 					{this.state.tabs.length == 0 &&
 						<div className={"fsbl-header-title"}> {self.state.windowTitle}</div>}
 
-					{this.state.showTabs && this.state.tabWidth >= 55 && <TabRegion ref="tabArea" tabWidth={this.state.tabWidth} tabs={this.state.tabs} />}
+					{this.state.showTabs && this.state.tabWidth >= 55 &&
+						<TabRegion
+							listenForDragOver={!this.state.allowDragOnCenterRegion}
+							className={tabRegionClasses}
+							onWindowResize={this.onWindowResize}
+							setActiveTab={this.setActiveTab}
+							activeTab={this.state.activeTab}
+							ref="tabArea"
+							tabWidth={this.state.tabWidth}
+							tabs={this.state.tabs} />}
 
 				</div>
 				<div className={rightWrapperClasses} ref={this.setToolbarRight}>

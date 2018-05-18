@@ -9,11 +9,20 @@ export default class Tab extends React.Component {
 	render() {
 		let titleWidth = this.props.tabWidth - 20;
 		return (
-			<div onDragStart={this.props.onDragStart}
+			<div
+				onClick={this.props.onClick}
+				onDragStart={this.props.onDragStart}
 				onDragEnd={this.props.onDragEnd}
-				draggable={true} draggableId={this.props.windowIdentifier} className="cq-no-drag fsbl-tab">
+				draggable={true}
+				draggableId={this.props.windowIdentifier} className={this.props.className}>
 				<div className="fsbl-tab-logo"><i className="ff-grid"></i></div>
 				<div className="fsbl-tab-title" style={{ width: titleWidth - 20 + 'px' }}>{this.props.title}</div>
+				<div className="fsbl-tab-close" onClick={(e) => {
+					e.preventDefault();
+					this.props.onTabClose(e);
+				}}>
+					<i className="ff-close"></i>
+				</div>
 			</div>
 		);
 	}

@@ -9,7 +9,8 @@ export default class TabRegion extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            tabs: props.tabs
+            tabs: props.tabs,
+            listenForDragOver: false
         }
         this.toggleDrag = this.toggleDrag.bind(this);
         this.startDrag = this.startDrag.bind(this);
@@ -67,7 +68,7 @@ export default class TabRegion extends React.Component {
         clearTimeout(this.dragEndTimeout);
         if (!response) {
             FSBL.Clients.WindowClient.stopTilingOrTabbing({ mousePosition: this.mousePositionOnDragEnd });
-            this.onWindowResize();
+            this.props.onWindowResize();
         }
         FSBL.Clients.RouterClient.removeListener('tabbingDragEnd', this.clearDragEndTimeout);
     }
@@ -83,8 +84,10 @@ export default class TabRegion extends React.Component {
         })
     }
     componentWillReceiveProps(props) {
+        console.log("GOT PROPS", props);
         this.setState({
-            tabs: props.tabs
+            tabs: props.tabs,
+            listenForDragOver: props.listenForDragOver
         })
     }
     //Replace with API call.
@@ -111,13 +114,15 @@ export default class TabRegion extends React.Component {
     }
 
     dragOver(e) {
+        console.log("DRAG OVER!!")
         e.preventDefault();
         this.setState({
             renderGhost: true
         });
     }
+
     dragLeave(e) {
-        let boundingRect =this.refs.tabArea.getBoundingClientRect()
+        let boundingRect = this.refs.tabArea.getBoundingClientRect()
         if (!FSBL.Clients.WindowClient.isPointInBox({ x: e.screenX, y: e.screenY }, boundingRect)) {
             this.setState({
                 renderGhost: false
@@ -133,21 +138,46 @@ export default class TabRegion extends React.Component {
 	 */
     cancelTabbing() {
         FSBL.Clients.WindowClient.stopTilingOrTabbing();
-        this.onWindowResize();
+        this.props.onWindowResize();
+    }
+    getTabClasses(tab) {
+        let classes= "fsbl-tab cq-no-drag"
+        if (this.props.activeTab && tab.windowName === this.props.activeTab.windowName) {
+            classes += " fsbl-active-tab";
+        } else {
+            if (tab.windowName === FSBL.Clients.WindowClient.windowName) {
+                classes += " fsbl-active-tab";
+            }
+        }
+        return classes;
     }
     render() {
         let titleWidth = this.props.tabWidth - 20;
+        console.log("RENDERING", this.state);
         return (
-            <div ref="tabArea" onDragLeave={this.dragLeave} onDragOver={this.dragOver} onDrop={this.drop} className={"fsbl-tab-area"} >
+            <div ref="tabArea"
+                onDragLeave={this.dragLeave}
+                /**onDragover is this way because I had to trick react into re-rendering. Otherwise the dragOver wasn't firing (because cq-drag was on the component when it first rendered) */
+                onDragOver={this.dragOver}
+                onDrop={this.drop}
+                className={this.props.className}>
                 {this.state.tabs.map((tab, i) => {
-                    return <Tab key={i} draggable="true" onDragStart={(e) => {
-                        this.startDrag(e, tab);
-                    }}
+                    return <Tab
+                        onClick={() => {
+                            this.props.setActiveTab(tab);
+                        }}
+                        draggable="true"
+                        key={i}
+                        className={this.getTabClasses(tab)}
+                        onDragStart={(e) => {
+                            this.startDrag(e, tab);
+                        }}
                         onDragEnd={this.stopDrag}
-                        tabWidth={this.props.tabWidth} title={tab.windowName}
                         onTabClose={() => {
                             this.removeTab(tab);
                         }}
+                        tabWidth={this.props.tabWidth}
+                        title={tab.windowName}
                         windowIdentifier={JSON.stringify(tab)} />
                 })}
                 {this.state.renderGhost &&

@@ -32,7 +32,7 @@ html:before, html:after, body:before, body:after {
     background: var(--window-frame-inactive-color);
     position: fixed;
     display: block;
-    z-index: 2147483645;
+    z-index: 2147483640;
 }
 
 /* ...and position them! */
