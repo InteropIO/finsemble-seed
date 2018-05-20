@@ -647,7 +647,7 @@ require(['lodash', 'jquery', 'hi-base64'], function () {
 				window.cssUrl = portalSettings.themeCSS;
 			}
 
-			if (!window.cssUrl) window.cssUrl = (hostname != "127.0.0.1" && hostname != "localhost") ? 'https://widgetcdn.chartiq.com/v2/css/' : 'css/';
+			if (!window.cssUrl) window.cssUrl = 'css/';
 
 			PortalCore.addStyleSheet(cssUrl + 'normalize.css');
 			PortalCore.addStyleSheet(cssUrl + 'portalcore.css');
@@ -1040,7 +1040,7 @@ require(['lodash', 'jquery', 'hi-base64'], function () {
 							require([dataSource, modulePath], function () {
 								setTimeout(key.toLowerCase() + "('" + JSON.stringify(value) + "')", 0);
 							});
-							PortalCore.addStyleSheet(cssUrl + 'modules/' + module + '.css');
+							PortalCore.addStyleSheet(cssUrl + module + '.css');
 
 							break;
 					}

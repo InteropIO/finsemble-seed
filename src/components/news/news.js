@@ -38,7 +38,7 @@ var defaultSettings = {
 
 FSBL.addEventListener('onReady', function () {
 	finWindow = fin.desktop.Window.getCurrent();
-	requirejs(['../../assets/js/widgetBase']);
+	requirejs(['./widgetBase']);
 
 	FSBL.Clients.DataTransferClient.addReceivers({
 		receivers: [

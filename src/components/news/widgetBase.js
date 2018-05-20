@@ -50,7 +50,7 @@ define(['https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.16/
 			'recommendations': true,
 			'bidask': true,
 			'blotter': true,
-			'finsemble': true,
+			'finsemble': true
 		},
 
 		'data': {
@@ -108,8 +108,8 @@ define(['https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.16/
 			useDevServices: true,
 			BATS: false
 		},
-		baseJsUrl: "../src/components/premium/news/",
-		themeCSS: "../../assets/css/widgets/",
+		baseJsUrl: "./",
+		themeCSS: "./css/",
 		darkLogos: true,
 		webFonts: ['Roboto:200,300,300i,400,700']
 	};
@@ -137,7 +137,7 @@ define(['https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.16/
 		} else {
 			FSBL.Clients.WindowClient.setWindowTitle(defaultSettings.mainWidget);
 		}
-		require(['../src/components/premium/news/modules/portalcore.js'], function () {
+		require(['./modules/portalcore.js'], function () {
 			var linkerMethod = FSBL.Clients.LinkerClient.registerListener ? FSBL.Clients.LinkerClient.registerListener : FSBL.Clients.LinkerClient.subscribe;
 			linkerMethod("symbol", function (symbol) {
 				FSBL.Clients.WindowClient.setComponentState({
