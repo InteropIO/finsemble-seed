@@ -12,8 +12,7 @@
 .ciq-date {
 	font-size: 11px;
 	text-transform: uppercase;
-	color: #333333;
-	color: rgba(51, 51, 51, 0.4);
+	color: #888;
 	width: 55px;
 }
 
@@ -33,7 +32,7 @@
 .ciq-news-head a,
 .ciq-news-head a:hover,
 .ciq-news-head a:active {
-	color: #333333;
+	color: #323F48;
 }
 
 
@@ -90,23 +89,23 @@
 }*/
 
 .ciq-news li:nth-child(odd) {
-	background: #fff
+	background: #18252e
 }
 
 .ciq-news li:nth-child(even) {
-	background: #f3f3f3
+	background: #25323B
 }
 
 .ciq-news ul {
-	border-bottom: 2px solid #b3d3eb;
-	border-top: 2px solid #b3d3eb;
+	border-bottom: 2px solid #65727B;
+	border-top: 2px solid #65727B;
 }
 
 /* line 493, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
 
 .ciq-news li:hover 
 {
-	background: #ddd 
+	background: #323F48 
 }
 
 .ciq-news-DISABLE li:active,
@@ -321,7 +320,7 @@
 .active .ciq-news-content h4 {
 	font-family: "Roboto";
 	font-size: 16pt;
-	color: black;
+	color: #fff;
 	font-weight: 500;
 }
 
@@ -368,7 +367,7 @@
 /* line 598, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
 
 .active .ciq-news-head a {
-	color: #333333;
+	color: #888;
 }
 
 
@@ -418,7 +417,7 @@
 .active .ciq-news-source,
 .active .ciq-date {
 	font-size: 9pt;
-	color: #444;
+	color: #888;
 	font-weight: 100;
 }
 
