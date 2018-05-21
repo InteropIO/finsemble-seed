@@ -25,7 +25,8 @@ import BringSuiteToFront from "./components/right/BringSuiteToFront.jsx";
 import AlwaysOnTop from "./components/right/AlwaysOnTop.jsx";
 import TabRegion from './components/center/TabRegion'
 import "../../assets/css/finsemble.css";
-const MINIMUM_TAB_WIDTH = 175;
+const TAB_WIDTH = 175;
+const MINIMUM_TAB_SIZE = 55;
 /**
  * This is the main window manager component. It's the custom window frame that we add to each window that has useFSBLHeader set to true in its windowDescriptor.
  */
@@ -56,7 +57,7 @@ class WindowTitleBar extends React.Component {
 			showShareButton: windowTitleBarStore.getValue({ field: "Sharer.emitterEnabled" }),
 			isTopRight: windowTitleBarStore.getValue({ field: "isTopRight" }),
 			alwaysOnTopButton: windowTitleBarStore.getValue({ field: "AlwaysOnTop.show" }),
-			tabWidth: MINIMUM_TAB_WIDTH,
+			tabWidth: TAB_WIDTH,
 			tabs: [{ title: windowTitleBarStore.getValue({ field: "Main.windowTitle" }) }], //array of tabs for this window
 			showTabs: false,
 			allowDragOnCenterRegion: true,
@@ -74,8 +75,8 @@ class WindowTitleBar extends React.Component {
 		this.onTitleChange = this.onTitleChange.bind(this);
 		this.onShowDockingToolTip = this.onShowDockingToolTip.bind(this);
 		this.onToggleDockingIcon = this.onToggleDockingIcon.bind(this);
-		this.onDocking = this.onDocking.bind(this);
-		this.onAlwaysOnTop = this.onAlwaysOnTop.bind(this);
+		this.onDockingEnabledChanged = this.onDockingEnabledChanged.bind(this);
+		this.onAlwaysOnTopChanged = this.onAlwaysOnTopChanged.bind(this);
 		this.showLinkerButton = this.showLinkerButton.bind(this);
 		this.isTopRight = this.isTopRight.bind(this);
 		this.onWindowResize = this.onWindowResize.bind(this);
@@ -85,17 +86,17 @@ class WindowTitleBar extends React.Component {
 		this.setActiveTab = this.setActiveTab.bind(this);
 		this.onTabAdded = this.onTabAdded.bind(this);
 		this.onTabClosed = this.onTabClosed.bind(this);
-		this.onEmitterChanged = this.onEmitterChanged.bind(this);
+		this.onShareEmitterChanged = this.onShareEmitterChanged.bind(this);
 	}
 	componentWillMount() {
 		windowTitleBarStore.addListeners([
 			{ field: "Main.windowTitle", listener: this.onTitleChange },
 			{ field: "Main.showDockingTooltip", listener: this.onShowDockingToolTip },
 			{ field: "Main.dockingIcon", listener: this.onToggleDockingIcon },
-			{ field: "Main.dockingEnabled", listener: this.onDocking },
-			{ field: "AlwaysOnTop.show", listener: this.onAlwaysOnTop },
+			{ field: "Main.dockingEnabled", listener: this.onDockingEnabledChanged },
+			{ field: "AlwaysOnTop.show", listener: this.onAlwaysOnTopChanged },
 			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton },
-			{ field: "Sharer.emitterEnabled", listener: this.onEmitterChanged },
+			{ field: "Sharer.emitterEnabled", listener: this.onShareEmitterChanged },
 			{ field: "isTopRight", listener: this.isTopRight },
 		]);
 
@@ -125,10 +126,10 @@ class WindowTitleBar extends React.Component {
 			{ field: "Main.windowTitle", listener: this.onTitleChange },
 			{ field: "Main.showDockingTooltip", listener: this.onShowDockingToolTip },
 			{ field: "Main.dockingIcon", listener: this.onToggleDockingIcon },
-			{ field: "Main.dockingEnabled", listener: this.onDocking },
-			{ field: "AlwaysOnTop.show", listener: this.onAlwaysOnTop },
+			{ field: "Main.dockingEnabled", listener: this.onDockingEnabledChanged },
+			{ field: "AlwaysOnTop.show", listener: this.onAlwaysOnTopChanged },
 			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton },
-			{ field: "Sharer.emitterEnabled", listener: this.onEmitterChanged },
+			{ field: "Sharer.emitterEnabled", listener: this.onShareEmitterChanged },
 			{ field: "isTopRight", listener: this.isTopRight },
 		]);
 		window.removeEventListener('resize', this.onWindowResize);
@@ -142,87 +143,119 @@ class WindowTitleBar extends React.Component {
 		}
 		this.disallowDragOnCenterRegion();
 	}
-
+	/**
+	 * When we are not tiling/tabbing, we want to allow the user to drag the window around via any available space in the tab-region. This function allows that.
+	 */
 	allowDragOnCenterRegion() {
 		this.setState({
 			allowDragOnCenterRegion: true
 		});
 	}
-
+	/**
+	 * When we are tiling/tabbing, we do not want to allow any window to be dragged around and moved.
+	 */
 	disallowDragOnCenterRegion() {
 		this.setState({
 			allowDragOnCenterRegion: false
 		});
 	}
-
+	/**
+	 * @PLACEHOLDER. Will be replaced with tabbing API calls.
+	 */
 	getTabList() {
 		this.setState({
 			tabs: [FSBL.Clients.WindowClient.getWindowIdentifier()]
 		});
 	}
-
-
+	/**
+	 * Whether the component's config allows for the linker.
+	 * @param {} err
+	 * @param {*} response
+	 */
 	showLinkerButton(err, response) {
 		//console.log("showLinkerButton--", response)
 		this.setState({ showLinkerButton: response.value });
 	}
-
+	/**
+	 * Whether the window is the top-right-most window in a group of windows. If so, it renders a minimize icon for the whole group.
+	 * @param {} err
+	 * @param {*} response
+	 */
 	isTopRight(err, response) {
 		this.setState({ isTopRight: response.value });
 	}
-
+	/**
+	 * @todo generalize. We'll need to capture title changes from every window in our stack.
+	 * @param {*} err
+	 * @param {*} response
+	 */
 	onTitleChange(err, response) {
-		FSBL.Clients.LauncherClient.
-			this.setState({
-				windowTitle: response.value,
-				tabs: [{ title: windowTitleBarStore.getValue({ field: "Main.windowTitle" }) }]
-			});
+		let { tabs } = this.state;
+		let myIdentifier = FSBL.Clients.WindowClient.getWindowIdentifier();
+		let myIndex = -1;
+		let myTab = tabs.filter((el, i) => {
+			if (el.name === myIdentifier.name && el.uuid === myIdentifier.uuid) {
+				myIndex = i;
+				return true;
+			}
+			return false;
+		});
+		myTab.title = response.value;
+		tabs.splice(myIndex, 1, myTab);
+
+		this.setState({
+			windowTitle: response.value,
+			tabs: tabs
+		});
 	}
 
+	/**
+	 * The next few methods are store change handlers that sync local state with the store's state.
+	 */
 	onShowDockingToolTip(err, response) {
 		this.setState({ showDockingTooltip: response.value });
 	}
-
 	onToggleDockingIcon(err, response) {
-		// console.log("ws docking icon change")
 		this.setState({
 			dockingIcon: response.value
 		});
 	}
-
-	onDocking(err, response) {
+	onDockingEnabledChanged(err, response) {
 		this.setState({ dockingEnabled: response.value });
 	}
-	onAlwaysOnTop(err, response) {
+	onAlwaysOnTopChanged(err, response) {
 		this.setState({ alwaysOnTopButton: response.value });
 	}
 	onStoreChanged(newState) {
 		this.setState(newState);
 	}
-	/**
-	  *
-	  *
-	  * @param {any} err
-	  * @param {any} response
-	  * @memberof ShareButton
-	  */
-	 onEmitterChanged(err, response) {
+	onShareEmitterChanged(err, response) {
 		this.setState({ emitterEnabled: response.value });
 	}
-
+	/**
+	 * Resize handler. Calculates the space that the center-region is taking up. May be used to scale tabs proportionally.
+	 */
 	onWindowResize() {
+		clearTimeout(this.resize);
 		this.resize = null;
 		let bounds = this.tabBar.getBoundingClientRect();
-		let toolbarRightBounds = this.toolbarRight.getBoundingClientRect();
 		this.setState({
 			tabBarBoundingBox: bounds
 		})
 	}
-
+	/**
+	 * OnClick handler for individual tabs.
+	 * @PLACEHOLDER will interact with tabbing API
+	 * @param {*} tab
+	 */
 	setActiveTab(tab) {
 		this.setState({ activeTab: tab })
 	}
-
+	/**
+	 * drop handler for the tab region.
+	 * @PLACEHOLDER will interact with tabbing API
+	 * @param {*} tab
+	 */
 	onTabAdded(identifier) {
 		let { tabs } = this.state;
 		tabs.push(identifier);
@@ -231,7 +264,11 @@ class WindowTitleBar extends React.Component {
 			this.refs.tabArea.scrollToActiveTab();
 		});
 	}
-
+	/**
+	 * OnClick handler for the close button on individual tabs.
+	 * @PLACEHOLDER will interact with tabbing API
+	 * @param {*} tab
+	 */
 	onTabClosed(identifier) {
 		let i = this.state.tabs.findIndex(el => el.name === identifier && el.uuid === identifier);
 		let { tabs } = this.state;
@@ -248,44 +285,45 @@ class WindowTitleBar extends React.Component {
 		let titleWrapperClasses = "fsbl-header-center";
 		let rightWrapperClasses = "fsbl-header-right cq-drag";
 		let tabRegionClasses = "fsbl-tab-area";
+
+		//If we're showing tabs, we throw these classes on to modify styles.
 		if (this.state.showTabs) {
 			titleWrapperClasses += " fsbl-tabs-enabled";
 			rightWrapperClasses += " fsbl-tabs-enabled";
 		}
-
+		//See this.allowDragOnCenterRegion for more explanation.
 		if (this.state.allowDragOnCenterRegion) {
 			titleWrapperClasses += " cq-drag";
 			tabRegionClasses += " cq-drag";
 		}
-		if (this.state.tabs.length > 1) {
-			tabRegionClasses += " tabs-active";
-		}
 
 		return (
 			<div className="fsbl-header">
-
+				{/* Only render the left section if something is inside of it. The left section has a right-border that we don't want showing willy-nilly. */}
 				{RENDER_LEFT_SECTION &&
 					<div className="fsbl-header-left">
 						{self.state.showLinkerButton ? <Linker /> : null}
 						{self.state.showShareButton ? <Sharer /> : null}
 					</div>
 				}
-				<div className={titleWrapperClasses} onMouseEnter={this.toggleDrag} onMouseLeave={this.toggleDrag} ref={this.setTabBarRef}>
-					{this.state.showTabs && this.state.tabWidth >= 55 &&
+				{/* center section of the titlebar */}
+				<div className={titleWrapperClasses}
+					ref={this.setTabBarRef}>
+					{/* If we're suppsoed to show tabs and the window isn't babySized */}
+					{this.state.showTabs && this.state.tabWidth >= MINIMUM_TAB_SIZE &&
 						<TabRegion
+							className={tabRegionClasses}
 							thisWindowsTitle={this.state.windowTitle}
 							boundingBox={this.state.tabBarBoundingBox}
 							listenForDragOver={!this.state.allowDragOnCenterRegion}
-							className={tabRegionClasses}
-							onWindowResize={this.onWindowResize}
-							setActiveTab={this.setActiveTab}
 							activeTab={this.state.activeTab}
+							setActiveTab={this.setActiveTab}
 							onTabAdded={this.onTabAdded}
 							onTabClosed={this.onTabClosed}
-							ref="tabArea"
 							tabs={this.state.tabs}
-							tabWidth={this.state.tabWidth} />}
-
+							tabWidth={this.state.tabWidth}
+							ref="tabArea"
+						/>}
 				</div>
 				<div className={rightWrapperClasses} ref={this.setToolbarRight}>
 					{this.state.alwaysOnTopButton && showMinimizeIcon ? <AlwaysOnTop /> : null}
