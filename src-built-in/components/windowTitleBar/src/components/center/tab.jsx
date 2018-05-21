@@ -1,6 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { FinsembleDraggable } from "@chartiq/finsemble-react-controls";
+/**
+ * This component is pretty basic. It just takes a bunch of props and renders them.
+ */
 export default class Tab extends React.Component {
 	constructor(props) {
 		super(props);
@@ -8,17 +11,18 @@ export default class Tab extends React.Component {
 
 	render() {
 		let titleWidth = this.props.tabWidth - 20;
-		console.log("TAB WIDTH", this.props.tabWidth);
 		let style = {
 			width: this.props.tabWidth
 		}
 		return (
 			<div
 				onClick={this.props.onClick}
-				onDragStart={this.props.onDragStart}
+				onDragStart={(e) => {
+					this.props.onDragStart(e, this.props.windowIdentifier)
+				}}
 				onDragEnd={this.props.onDragEnd}
 				draggable={true}
-				draggableId={this.props.windowIdentifier} className={this.props.className}
+				className={this.props.className}
 				style={style}
 				title={this.props.title}>
 				<div className="fsbl-tab-logo"><i className="ff-grid"></i></div>

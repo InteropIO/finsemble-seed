@@ -88,11 +88,11 @@ export default class TabRegion extends React.Component {
             if (typeof identifier.windowName !== "undefined") {
                 return identifier;
             } else {
-                Logger.system.error("Malformed drop object detected in windowTitleBar. Check tab droppping code. Expected windowIdentifier, got ", identifier);
+                FSBL.Clients.Logger.system.error("Malformed drop object detected in windowTitleBar. Check tab droppping code. Expected windowIdentifier, got ", identifier);
                 return null;
             }
         } catch (e) {
-            Logger.system.error("Error in 'extractWindowIdentifier'. Check TabRegion.jsx. Either there was no data in the event, or it was a circular object that caused JSON.parse to fail.", identifier);
+            FSBL.Clients.Logger.system.error("Error in 'extractWindowIdentifier'. Check TabRegion.jsx. Either there was no data in the event, or it was a circular object that caused JSON.parse to fail. Javascript Error:", e);
             return null;
         }
     }
@@ -110,7 +110,7 @@ export default class TabRegion extends React.Component {
             //Calls a method defined inside of windowTitleBar.jsx.
             this.props.onTabAdded(identifier);
         } else {
-            Logger.system.error("Unexpected drop event on window title bar. Check the 'drop' method on TabRegion.jsx.");
+            FSBL.Clients.Logger.system.error("Unexpected drop event on window title bar. Check the 'drop' method on TabRegion.jsx.");
         }
 
     }
@@ -285,11 +285,10 @@ export default class TabRegion extends React.Component {
  * Function to render the title. Helps keep the render code clean.
  */
 function renderTitle(props) {
-    let identifier = FSBL.Clients.WindowClient.getWindowIdentifier();
     return (<div
         draggable="true"
         onDragStart={(e) => {
-            this.startDrag(e, identifier);
+            this.startDrag(e, FSBL.Clients.WindowClient.getWindowIdentifier());
         }}
         onDragEnd={this.stopDrag}
         className={"fsbl-header-title cq-no-drag"}>
@@ -311,8 +310,8 @@ function renderTabs(props) {
             draggable="true"
             key={i}
             className={this.getTabClasses(tab)}
-            onDragStart={(e) => {
-                this.startDrag(e, tab);
+            onDragStart={(e, identifier) => {
+                this.startDrag(e, identifier);
             }}
             onDragEnd={this.stopDrag}
             onTabClose={() => {
@@ -320,6 +319,6 @@ function renderTabs(props) {
             }}
             tabWidth={this.props.tabWidth}
             title={tab.windowName}
-            windowIdentifier={JSON.stringify(tab)} />
+            windowIdentifier={tab} />
     });
 }
