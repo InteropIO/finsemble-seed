@@ -141,7 +141,7 @@ export default class TabRegion extends React.Component {
         this.props.onWindowResize();
     }
     getTabClasses(tab) {
-        let classes= "fsbl-tab cq-no-drag"
+        let classes = "fsbl-tab cq-no-drag"
         if (this.props.activeTab && tab.windowName === this.props.activeTab.windowName) {
             classes += " fsbl-active-tab";
         } else {
@@ -158,9 +158,12 @@ export default class TabRegion extends React.Component {
             <div ref="tabArea"
                 onDragLeave={this.dragLeave}
                 /**onDragover is this way because I had to trick react into re-rendering. Otherwise the dragOver wasn't firing (because cq-drag was on the component when it first rendered) */
-                onDragOver={this.dragOver}
                 onDrop={this.drop}
                 className={this.props.className}>
+                {this.props.listenForDragOver &&
+                    <div className="tab-drop-region"
+                        onDragOver={this.dragOver}
+                    ></div>}
                 {this.state.tabs.map((tab, i) => {
                     return <Tab
                         onClick={() => {

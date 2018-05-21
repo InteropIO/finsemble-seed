@@ -128,7 +128,11 @@ html.desktop-active .fsbl-header-right {
     right: 0px;
     bottom: 0px;
 }
-
+.tab-drop-region {
+    width: 100%;
+    height:100%;
+    position: absolute;
+}
 .fsbl-icon {
     position: relative;
     color: var(--header-text-color);
