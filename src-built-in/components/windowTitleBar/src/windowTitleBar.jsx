@@ -85,6 +85,7 @@ class WindowTitleBar extends React.Component {
 		this.setActiveTab = this.setActiveTab.bind(this);
 		this.onTabAdded = this.onTabAdded.bind(this);
 		this.onTabClosed = this.onTabClosed.bind(this);
+		this.onEmitterChanged = this.onEmitterChanged.bind(this);
 	}
 	componentWillMount() {
 		windowTitleBarStore.addListeners([
