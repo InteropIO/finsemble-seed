@@ -73,35 +73,85 @@ export default class TabRegion extends React.Component {
         let identifier = this.extractWindowIdentifier(e);
         this.setState({
             renderGhost: false
-        })
-        this.props.onTabAdded(identifier)
-
+        });
+        this.props.onTabAdded(identifier);
     }
+
+    onMouseWheel(e) {
+        e.preventDefault();
+        let numTabs = this.props.tabs.length;
+        let translateX = 0;
+        if (numTabs > 1) {
+            let currentX = this.state.translateX;
+            let { boundingBox } = this.props;
+            //Figure out position of first tab and last tab.
+
+            let firstTab = {
+                left: 0,
+            };
+            let lastTab = {
+                right: numTabs * this.props.tabWidth
+            };
+            //If the content is overflowing, correct the translation (if necessary)..
+            if (lastTab.right > boundingBox.right) {
+                translateX = e.nativeEvent.deltaY + currentX;
+                let maxRight = boundingBox.right - this.props.tabWidth;
+                let newRightForLastTab = lastTab.right + translateX;
+                let newLeftForFirstTab = firstTab.left + translateX;
+                //Do not let the left of the first tab move off of the left edge of the bounding box.
+                if (newLeftForFirstTab >= boundingBox.left) {
+                    return this.scrollToFirstTab();
+                } else if (newRightForLastTab <= boundingBox.right) {
+                    //Do not let the right edge of the last tab move off of the boundingBox's right edge
+                    return this.scrollToLastTab();
+                }
+            }
+             //Else, the translation is okay. We're in the middle of our list.
+            this.setState({ translateX });
+
+        }
+
+        console.log("TRANSLATION", translateX);
+    }
+    scrollToActiveTab() {
+        this.scrollToTab(this.props.activeTab);
+    }
+    scrollToFirstTab() {
+        let lastTab = this.props.tabs[0];
+        this.scrollToTab(lastTab);
+    }
+    scrollToTab(tab) {
+        let boundingBox = this.props.boundingBox;
+        let index = this.props.tabs.findIndex(el => {
+            return el.windowName === tab.windowName && el.uuid === tab.uuid
+        });
+        if (index > -1) {
+            let leftEdgeOfTab = index * this.props.tabWidth;
+            let rightEdgeOfTab = leftEdgeOfTab + this.props.tabWidth;
+            //Our translation is  this: Take the  right edge of the bounding box, and subract the left edge. This gives us the 0 point for the box. Then, we subtract the right edge of the tab. The result is a number that we use to shift the entire element and align the right edge of the tab with the right edge of the bounding box.
+            let translateX = boundingBox.right - boundingBox.left - rightEdgeOfTab;
+
+            //If there's no overflow, we don't scroll.
+            if (rightEdgeOfTab < boundingBox.right) {
+                translateX = 0;
+            }
+            this.setState({ translateX });
+        }
+    }
+
+    scrollToLastTab() {
+        let lastTab = this.props.tabs[this.props.tabs.length - 1];
+        this.scrollToTab(lastTab);
+    }
+
     componentWillReceiveProps(props) {
-        console.log("GOT PROPS", props);
         this.setState({
             tabs: props.tabs,
             listenForDragOver: props.listenForDragOver
-        })
+        });
     }
-    //Replace with API call.
-    addTab(identifier) {
-        let exists = false;
-        for (let i = 0; i < this.props.tabs.length; i++) {
-            let tab = this.props.tabs[i];
-            if (tab.windowName === identifier.windowName && tab.uuid === identifier.uuid) {
-                exists = true;
-            }
-        }
-        if (!exists) {
-            let { tabs } = this.state;
-            this.props.onTabAdded(identifier);
-        }
-    }
-
 
     dragOver(e) {
-        console.log("DRAG OVER!!")
         e.preventDefault();
         this.setState({
             renderGhost: true
@@ -127,64 +177,25 @@ export default class TabRegion extends React.Component {
         FSBL.Clients.WindowClient.stopTilingOrTabbing();
         this.props.onWindowResize();
     }
+
     getTabClasses(tab) {
         let classes = "fsbl-tab cq-no-drag"
         if (this.props.activeTab && tab.windowName === this.props.activeTab.windowName) {
             classes += " fsbl-active-tab";
-        } else {
-            if (tab.windowName === FSBL.Clients.WindowClient.windowName) {
-                classes += " fsbl-active-tab";
-            }
         }
         return classes;
     }
-    onMouseWheel(e) {
-        e.preventDefault();
-        let numTabs = this.props.tabs.length;
-        let translateX = 0;
-        if (numTabs > 1) {
-            let currentX = this.state.translateX;
-            let { boundingBox } = this.props;
-            //Figure out position of first tab and last tab.
 
-            let firstTab = {
-                left: 0,
-            };
-            let lastTab = {
-                right: numTabs * this.props.tabWidth
-            };
-            //If the content is overflowing, correct the translation (if necessary)..
-            if (lastTab.right > boundingBox.right) {
-                translateX = e.nativeEvent.deltaY + currentX;
-                let maxRight = boundingBox.right - this.props.tabWidth;
-                let newRightForLastTab = lastTab.right + translateX;
-                let newLeftForFirstTab = firstTab.left + translateX;
-                //Do not let the left of the first tab move off of the left edge of the bounding box.
-                if (newLeftForFirstTab >= boundingBox.left) {
-                    translateX = 0;
-                } else if (newRightForLastTab <= boundingBox.right) {
-                    //Do not let the right edge of the last tab move off of the boundingBox's right edge
-                    //Calculate the containerWidth, and subtract it from the right edge of the bounding box. Add a pixel for each tab to account for the right borders.
-                    let containerWidth = numTabs * this.props.tabWidth + (numTabs);
-                    translateX = boundingBox.right - containerWidth;
-                }
-                //Else, the translation is okay. We're in the middle of our list.
-            }
-
-        }
-
-        console.log("TRANSLATION", translateX);
-        this.setState({ translateX });
-    }
     render() {
         let { translateX } = this.state;
-        let componentToRender = (!this.props.listenForDragOver &&this.props.tabs.length === 1) ? "title" : "tabs";
+        let componentToRender = (!this.props.listenForDragOver && this.props.tabs.length === 1) ? "title" : "tabs";
         if (componentToRender === "title") {
             translateX = 0;
         }
         let style = {
             marginLeft: `${translateX}px`
         }
+
         return (
             <div ref="tabArea"
                 onDragLeave={this.dragLeave}
@@ -220,7 +231,7 @@ function renderTitle(props) {
         }}
         onDragEnd={this.stopDrag}
         className={"fsbl-header-title cq-no-drag"}>
-       	<div className="fsbl-tab-logo"><i className="ff-grid"></i></div>
+        <div className="fsbl-tab-logo"><i className="ff-grid"></i></div>
         {props.thisWindowsTitle}
     </div>);
 }

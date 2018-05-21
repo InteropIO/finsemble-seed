@@ -59,7 +59,7 @@ class WindowTitleBar extends React.Component {
 			tabs: [{ title: windowTitleBarStore.getValue({ field: "Main.windowTitle" }) }], //array of tabs for this window
 			showTabs: false,
 			allowDragOnCenterRegion: true,
-			activeTab: null,
+			activeTab: FSBL.Clients.WindowClient.getWindowIdentifier(),
 			tabBarBoundingBox: {}
 		};
 
@@ -223,7 +223,9 @@ class WindowTitleBar extends React.Component {
 		let { tabs } = this.state;
 		tabs.push(identifier);
 		//Once we have more than one tab, we enforce a fixed tab width.
-		this.setState({ tabs });
+		this.setState({ tabs, activeTab: identifier }, () => {
+			this.refs.tabArea.scrollToActiveTab();
+		});
 	}
 
 	onTabClosed(identifier) {

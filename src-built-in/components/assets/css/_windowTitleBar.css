@@ -59,6 +59,7 @@ html.desktop-active .fsbl-header {
     align-items: center;
     justify-content: flex-start;
     display: flex;
+    border-right: var(--tab-border);
 }
 
 .fsbl-header-center {
@@ -95,6 +96,7 @@ html.desktop-active .fsbl-header-right {
     z-index: 5;
     background-color: var(--window-header-background-color);
 }
+
 .fsbl-header-right.fsbl-tabs-enabled {
     padding-left: 30px;
 }
@@ -318,6 +320,10 @@ html.desktop-active .fsbl-linker[hover=true] {
     justify-content: center;
 }
 
+.fsbl-tab-close:hover {
+    -webkit-text-stroke: 1px;
+}
+
 .fsbl-tab:hover > .fsbl-tab-close{
     visibility: visible;
 }
@@ -325,6 +331,7 @@ html.desktop-active .fsbl-linker[hover=true] {
 .fsbl-tab-logo {
     margin: 0 7px;
     width: 15px;
+    padding-top: 2px;
 }
 
 .fsbl-tab .fsbl-tab-style {

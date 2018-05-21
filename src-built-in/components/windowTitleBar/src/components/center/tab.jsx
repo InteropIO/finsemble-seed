@@ -19,7 +19,8 @@ export default class Tab extends React.Component {
 				onDragEnd={this.props.onDragEnd}
 				draggable={true}
 				draggableId={this.props.windowIdentifier} className={this.props.className}
-				style={style}>
+				style={style}
+				title={this.props.title}>
 				<div className="fsbl-tab-logo"><i className="ff-grid"></i></div>
 				<div className="fsbl-tab-title">{this.props.title}</div>
 				<div className="fsbl-tab-close" onClick={(e) => {
