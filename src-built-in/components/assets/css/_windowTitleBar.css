@@ -39,6 +39,12 @@ html.desktop-active .fsbl-header {
     color: var(--active-header-text-color);
 }
 
+.fsbl-header-title {
+    height: 100%;
+    align-items: center;
+    display:flex;
+}
+
 .fsbl-header-left {
     height: 100%;
     margin-left: 2px;
@@ -65,28 +71,10 @@ html.desktop-active .fsbl-header {
     padding-bottom: 3px; /* This needs to be half of the thing subtracted from the height. e.g. height = 100% - 6px, then this is 3px) */
 }
 
-/* .fsbl-header-center .fsbl-tab-area {
-    transition: opacity .5s ease-in-out;
-    opacity: 0;
-}
-
-.fsbl-header-center .fsbl-header-title {
-    transition: opacity .5s ease-in-out;
-    opacity: 1;
-    margin-top: -1px
-}
-
-.fsbl-header-center:hover .fsbl-tab-area {
-    opacity: 1;
-}
-
-.fsbl-header-center.fsbl-tabs-enabled:hover .fsbl-header-title {
-    opacity: 0;
-} */
-
 html.desktop-active .fsbl-header-right {
     background: var(--active-header-background-color);
 }
+
 .fsbl-header-center.fsbl-tabs-enabled {
     height: 100%;
     width: 100%;
@@ -278,15 +266,6 @@ html.desktop-active .fsbl-linker[hover=true] {
     font-size: 16px;
 }
 
-.fsbl-header-center:hover .fsbl-tab-area {
-    opacity: 1;
-    transition: opacity .25s ease-in-out;
-}
-
-.hidden{
-    opacity: 0;
-}
-
 .fsbl-tab {
     height: 100%;
     position: relative;
@@ -305,10 +284,12 @@ html.desktop-active .fsbl-linker[hover=true] {
     background-color: var(--tab-active-background-color);
 }
 
-.fsbl-tab-area{
+.fsbl-tab-area {
     height: 100%;
     display:flex;
     width: 100%;
+    position: absolute;
+    left:0;
 }
 
 .fsbl-tab .fsbl-tab-title {
@@ -333,19 +314,29 @@ html.desktop-active .fsbl-linker[hover=true] {
 .fsbl-tab:hover > .fsbl-tab-close{
     visibility: visible;
 }
+
 .fsbl-tab-logo {
     margin: 0 7px;
     width: 15px;
 }
+
 .fsbl-tab .fsbl-tab-style {
     position: relative;
     height: 100%;
     left: 0px;
 }
-
+/* Without content, the ghost-tab caused really strange sizing behaviors. */
+.ghost-tab:before {
+    content: 'a';
+    visibility: hidden;
+}
 .ghost-tab {
     background-color: var(--secondary-accent-color);
-    border: 5px solid var(--primary-accent-color);
-    width: 135px;
-    opacity: 0.4;
+    border-right: 1px solid var(--primary-accent-color);
+    border-top:1px solid var(--primary-accent-color);
+    width: 175px;
+    opacity: 0.7;
+    position: relative;
+    height: 100%;
+    left: 0px;
 }

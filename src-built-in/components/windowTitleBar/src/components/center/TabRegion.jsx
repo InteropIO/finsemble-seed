@@ -12,8 +12,7 @@ export default class TabRegion extends React.Component {
             listenForDragOver: false,
             translateX: 0,
             renderGhost: false
-        }
-        this.toggleDrag = this.toggleDrag.bind(this);
+        };
         this.startDrag = this.startDrag.bind(this);
         this.stopDrag = this.stopDrag.bind(this);
         this.cancelTabbing = this.cancelTabbing.bind(this);
@@ -22,16 +21,8 @@ export default class TabRegion extends React.Component {
         this.dragOver = this.dragOver.bind(this);
         this.dragLeave = this.dragLeave.bind(this);
         this.onMouseWheel = this.onMouseWheel.bind(this);
-
-    }
-
-	/**
-	 * Handles mouseover of title bar. This turns the regular title to a tab on windows that aren't already tabbing.
-	 * This function is used as a prop on HoverDetector
-	 *
-	 * @memberof windowTitleBar
-	 */
-    toggleDrag() {
+        renderTitle = renderTitle.bind(this);
+        renderTabs = renderTabs.bind(this);
     }
 
 	/**
@@ -186,9 +177,13 @@ export default class TabRegion extends React.Component {
         this.setState({ translateX });
     }
     render() {
-        console.log("RENDERING", this.state);
+        let { translateX } = this.state;
+        let componentToRender = (!this.props.listenForDragOver &&this.props.tabs.length === 1) ? "title" : "tabs";
+        if (componentToRender === "title") {
+            translateX = 0;
+        }
         let style = {
-            marginLeft: `${this.state.translateX}px`
+            marginLeft: `${translateX}px`
         }
         return (
             <div ref="tabArea"
@@ -205,30 +200,46 @@ export default class TabRegion extends React.Component {
                             onDrop={this.drop}
                             onDragOver={this.dragOver}
                         ></div>}
-                    {this.props.tabs.map((tab, i) => {
-                        return <Tab
-                            onClick={() => {
-                                this.props.setActiveTab(tab);
-                            }}
-                            draggable="true"
-                            key={i}
-                            className={this.getTabClasses(tab)}
-                            onDragStart={(e) => {
-                                this.startDrag(e, tab);
-                            }}
-                            onDragEnd={this.stopDrag}
-                            onTabClose={() => {
-                                this.props.onTabClosed(tab)
-                            }}
-                            tabWidth={this.props.tabWidth}
-                            title={tab.windowName}
-                            windowIdentifier={JSON.stringify(tab)} />
-                    })}
+                    {componentToRender === "title" && renderTitle(this.props)}
+                    {componentToRender === "tabs" && renderTabs(this.props)}
                     {this.state.renderGhost &&
-                        <div draggable={true} className="fsbl-tab ghost-tab"></div>}
+                        <div className="fsbl-tab ghost-tab"></div>}
                 </div>
 
             </div>
         );
     }
+}
+
+function renderTitle(props) {
+    let identifier = FSBL.Clients.WindowClient.getWindowIdentifier();
+    return (<div
+        draggable="true"
+        onDragStart={(e) => {
+            this.startDrag(e, identifier);
+        }}
+        onDragEnd={this.stopDrag}
+        className={"fsbl-header-title cq-no-drag"}> {props.thisWindowsTitle}</div>);
+}
+
+function renderTabs(props) {
+    return props.tabs.map((tab, i) => {
+        return <Tab
+            onClick={() => {
+                this.props.setActiveTab(tab);
+            }}
+            draggable="true"
+            key={i}
+            className={this.getTabClasses(tab)}
+            onDragStart={(e) => {
+                this.startDrag(e, tab);
+            }}
+            onDragEnd={this.stopDrag}
+            onTabClose={() => {
+                this.props.onTabClosed(tab)
+            }}
+            tabWidth={this.props.tabWidth}
+            title={tab.windowName}
+            windowIdentifier={JSON.stringify(tab)} />
+    })
 }
