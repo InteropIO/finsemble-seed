@@ -106,7 +106,7 @@ export default class TabRegion extends React.Component {
                     return this.scrollToLastTab();
                 }
             }
-             //Else, the translation is okay. We're in the middle of our list.
+            //Else, the translation is okay. We're in the middle of our list.
             this.setState({ translateX });
 
         }
@@ -204,7 +204,7 @@ export default class TabRegion extends React.Component {
         if (componentToRender === "title") {
             translateX = 0;
         }
-        let style = {
+        let tabRegionStyle = {
             marginLeft: `${translateX}px`
         }
 
@@ -215,14 +215,14 @@ export default class TabRegion extends React.Component {
                 className={this.props.className}
                 onWheel={this.onMouseWheel}
             >
+                {this.props.listenForDragOver &&
+                    <div className="tab-drop-region"
+                        onDrop={this.drop}
+                        onDragOver={this.dragOver}
+                    ></div>}
                 <div className="tab-region-wrapper"
-                    style={style}
+                    style={tabRegionStyle}
                 >
-                    {this.props.listenForDragOver &&
-                        <div className="tab-drop-region"
-                            onDrop={this.drop}
-                            onDragOver={this.dragOver}
-                        ></div>}
                     {componentToRender === "title" && renderTitle(this.props)}
                     {componentToRender === "tabs" && renderTabs(this.props)}
                     {this.state.renderGhost &&
