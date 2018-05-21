@@ -43,8 +43,14 @@ html.desktop-active .fsbl-header {
     height: 100%;
     align-items: center;
     display:flex;
+    padding-right: 14px;
+    border-top: 1px solid transparent;
+    border-right: 1px solid transparent;
 }
-
+.fsbl-header-title:hover {
+    border-right: var(--tab-border);
+    border-top: var(--tab-border);
+}
 .fsbl-header-left {
     height: 100%;
     margin-left: 2px;
@@ -298,6 +304,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
 .fsbl-tab-close {
     font-size: 8px;
     padding-left: 7px;

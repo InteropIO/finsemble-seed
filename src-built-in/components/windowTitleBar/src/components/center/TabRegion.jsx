@@ -219,7 +219,10 @@ function renderTitle(props) {
             this.startDrag(e, identifier);
         }}
         onDragEnd={this.stopDrag}
-        className={"fsbl-header-title cq-no-drag"}> {props.thisWindowsTitle}</div>);
+        className={"fsbl-header-title cq-no-drag"}>
+       	<div className="fsbl-tab-logo"><i className="ff-grid"></i></div>
+        {props.thisWindowsTitle}
+    </div>);
 }
 
 function renderTabs(props) {
