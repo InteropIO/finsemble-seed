@@ -38,7 +38,7 @@ webpackConfig.plugins.push(new CopyWebpackPlugin([
 		from: './src/components/',
 		to: './components/',
 		force: false,
-		ignore: ["*.jsx"]
+		ignore: ["**/*/node_modules/**/*", "*.jsx"]
 	},
 	{
 		from: './configs/',
