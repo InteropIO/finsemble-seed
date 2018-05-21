@@ -113,13 +113,30 @@ export default class TabRegion extends React.Component {
 
         console.log("TRANSLATION", translateX);
     }
+    /**
+     * Scrolls to our active tab.
+     */
     scrollToActiveTab() {
         this.scrollToTab(this.props.activeTab);
     }
+    /**
+     * Scrolls to the first tab in our list of tabs.
+     */
     scrollToFirstTab() {
         let lastTab = this.props.tabs[0];
         this.scrollToTab(lastTab);
     }
+    /**
+     * Scrolls to the last tab in our list of tabs
+     */
+    scrollToLastTab() {
+        let lastTab = this.props.tabs[this.props.tabs.length - 1];
+        this.scrollToTab(lastTab);
+    }
+    /**
+     * Function that will scroll the tab region so that the right edge of the tab lines up with the right edge of the tab region.
+     * @param {} tab
+     */
     scrollToTab(tab) {
         let boundingBox = this.props.boundingBox;
         let index = this.props.tabs.findIndex(el => {
@@ -137,11 +154,6 @@ export default class TabRegion extends React.Component {
             }
             this.setState({ translateX });
         }
-    }
-
-    scrollToLastTab() {
-        let lastTab = this.props.tabs[this.props.tabs.length - 1];
-        this.scrollToTab(lastTab);
     }
 
     componentWillReceiveProps(props) {

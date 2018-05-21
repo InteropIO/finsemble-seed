@@ -53,6 +53,7 @@ class WindowTitleBar extends React.Component {
 			maxButton: !windowTitleBarStore.getValue({ field: "Maximize.hide" }),
 			closeButton: !windowTitleBarStore.getValue({ field: "Close.hide" }),
 			showLinkerButton: windowTitleBarStore.getValue({ field: "Linker.showLinkerButton" }),
+			showShareButton: windowTitleBarStore.getValue({ field: "Sharer.emitterEnabled" }),
 			isTopRight: windowTitleBarStore.getValue({ field: "isTopRight" }),
 			alwaysOnTopButton: windowTitleBarStore.getValue({ field: "AlwaysOnTop.show" }),
 			tabWidth: MINIMUM_TAB_WIDTH,
@@ -60,7 +61,7 @@ class WindowTitleBar extends React.Component {
 			showTabs: false,
 			allowDragOnCenterRegion: true,
 			activeTab: FSBL.Clients.WindowClient.getWindowIdentifier(),
-			tabBarBoundingBox: {}
+			tabBarBoundingBox: {},
 		};
 
 	}
@@ -93,6 +94,7 @@ class WindowTitleBar extends React.Component {
 			{ field: "Main.dockingEnabled", listener: this.onDocking },
 			{ field: "AlwaysOnTop.show", listener: this.onAlwaysOnTop },
 			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton },
+			{ field: "Sharer.emitterEnabled", listener: this.onEmitterChanged },
 			{ field: "isTopRight", listener: this.isTopRight },
 		]);
 
@@ -102,16 +104,21 @@ class WindowTitleBar extends React.Component {
 				showTabs: typeof config['Window Manager'] !== undefined ? config['Window Manager'].showTabs : false
 			});
 		})
-		this.getFakeTabs();
+		this.getTabList();
+
 		FSBL.Clients.RouterClient.addListener("DockingService.startTilingOrTabbing", this.handleStartTilingOrTabbing);
 		FSBL.Clients.RouterClient.addListener("DockingService.stopTilingOrTabbing", this.allowDragOnCenterRegion);
 	}
-	handleStartTilingOrTabbing(err, response) {
-		if (response.originatedHere()) {
-			return;
-		}
-		this.disallowDragOnCenterRegion();
+
+	componentDidMount() {
+		let header = document.getElementsByClassName("fsbl-header")[0];
+		let headerHeight = window.getComputedStyle(header, null).getPropertyValue("height");
+		document.body.style.marginTop = headerHeight;
+		this.resize = setTimeout(this.onWindowResize, 300);
+		window.addEventListener('resize', this.onWindowResize);
+
 	}
+
 	componentWillUnmount() {
 		windowTitleBarStore.removeListeners([
 			{ field: "Main.windowTitle", listener: this.onTitleChange },
@@ -120,11 +127,19 @@ class WindowTitleBar extends React.Component {
 			{ field: "Main.dockingEnabled", listener: this.onDocking },
 			{ field: "AlwaysOnTop.show", listener: this.onAlwaysOnTop },
 			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton },
+			{ field: "Sharer.emitterEnabled", listener: this.onEmitterChanged },
 			{ field: "isTopRight", listener: this.isTopRight },
 		]);
 		window.removeEventListener('resize', this.onWindowResize);
 		FSBL.Clients.RouterClient.removeListener("DockingService.startTilingOrTabbing", this.disallowDragOnCenterRegion);
 		FSBL.Clients.RouterClient.removeListener("DockingService.stopTilingOrTabbing", this.allowDragOnCenterRegion);
+	}
+
+	handleStartTilingOrTabbing(err, response) {
+		if (response.originatedHere()) {
+			return;
+		}
+		this.disallowDragOnCenterRegion();
 	}
 
 	allowDragOnCenterRegion() {
@@ -139,35 +154,12 @@ class WindowTitleBar extends React.Component {
 		});
 	}
 
-	getFakeTabs() {
-		FSBL.Clients.LauncherClient.getActiveDescriptors((err, response) => {
-			//Only keep welcomeComponents. Return an array of window identifiers.
-			// let welcomeComponents = Object.keys(response).map(name => {
-			// 	return response[name];
-			// }).filter(descriptor => {
-			// 	return descriptor.customData.component.type === "Welcome Component"
-			// }).map(descriptor => {
-			// 	return {
-			// 		windowName: descriptor.name,
-			// 		componentType: descriptor.customData.component.type,
-			// 		uuid: descriptor.uuid
-			// 	}
-			// });
-
-			this.setState({
-				tabs: [FSBL.Clients.WindowClient.getWindowIdentifier()]
-			});
+	getTabList() {
+		this.setState({
+			tabs: [FSBL.Clients.WindowClient.getWindowIdentifier()]
 		});
 	}
 
-	componentDidMount() {
-		let header = document.getElementsByClassName("fsbl-header")[0];
-		let headerHeight = window.getComputedStyle(header, null).getPropertyValue("height");
-		document.body.style.marginTop = headerHeight;
-		this.resize = setTimeout(this.onWindowResize, 300);
-		window.addEventListener('resize', this.onWindowResize);
-
-	}
 
 	showLinkerButton(err, response) {
 		//console.log("showLinkerButton--", response)
@@ -206,6 +198,16 @@ class WindowTitleBar extends React.Component {
 	onStoreChanged(newState) {
 		this.setState(newState);
 	}
+	/**
+	  *
+	  *
+	  * @param {any} err
+	  * @param {any} response
+	  * @memberof ShareButton
+	  */
+	 onEmitterChanged(err, response) {
+		this.setState({ emitterEnabled: response.value });
+	}
 
 	onWindowResize() {
 		this.resize = null;
@@ -219,6 +221,7 @@ class WindowTitleBar extends React.Component {
 	setActiveTab(tab) {
 		this.setState({ activeTab: tab })
 	}
+
 	onTabAdded(identifier) {
 		let { tabs } = this.state;
 		tabs.push(identifier);
@@ -237,7 +240,7 @@ class WindowTitleBar extends React.Component {
 
 	render() {
 		var self = this;
-
+		const RENDER_LEFT_SECTION = this.state.showLinkerButton || this.state.showShareButton;
 		let showDockingIcon = !self.state.dockingEnabled ? false : self.state.dockingIcon;
 		let isGrouped = (self.state.dockingIcon == "ejector");
 		let showMinimizeIcon = (isGrouped && self.state.isTopRight) || !isGrouped; //If not in a group or if topright in a group
@@ -259,25 +262,28 @@ class WindowTitleBar extends React.Component {
 
 		return (
 			<div className="fsbl-header">
-				<div className="fsbl-header-left">
-					{self.state.showLinkerButton ? <Linker /> : null}
-					<Sharer />
-				</div>
+
+				{RENDER_LEFT_SECTION &&
+					<div className="fsbl-header-left">
+						{self.state.showLinkerButton ? <Linker /> : null}
+						{self.state.showShareButton ? <Sharer /> : null}
+					</div>
+				}
 				<div className={titleWrapperClasses} onMouseEnter={this.toggleDrag} onMouseLeave={this.toggleDrag} ref={this.setTabBarRef}>
 					{this.state.showTabs && this.state.tabWidth >= 55 &&
 						<TabRegion
-						thisWindowsTitle={this.state.windowTitle}
-						boundingBox={this.state.tabBarBoundingBox}
-						listenForDragOver={!this.state.allowDragOnCenterRegion}
-						className={tabRegionClasses}
-						onWindowResize={this.onWindowResize}
-						setActiveTab={this.setActiveTab}
-						activeTab={this.state.activeTab}
-						onTabAdded={this.onTabAdded}
-						onTabClosed={this.onTabClosed}
-						ref="tabArea"
-						tabs={this.state.tabs}
-						tabWidth={this.state.tabWidth}/>}
+							thisWindowsTitle={this.state.windowTitle}
+							boundingBox={this.state.tabBarBoundingBox}
+							listenForDragOver={!this.state.allowDragOnCenterRegion}
+							className={tabRegionClasses}
+							onWindowResize={this.onWindowResize}
+							setActiveTab={this.setActiveTab}
+							activeTab={this.state.activeTab}
+							onTabAdded={this.onTabAdded}
+							onTabClosed={this.onTabClosed}
+							ref="tabArea"
+							tabs={this.state.tabs}
+							tabWidth={this.state.tabWidth} />}
 
 				</div>
 				<div className={rightWrapperClasses} ref={this.setToolbarRight}>
