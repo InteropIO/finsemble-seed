@@ -13,6 +13,13 @@ export default class TabRegion extends React.Component {
             translateX: 0,
             renderGhost: false
         };
+        this.bindCorrectContext();
+    }
+
+    /**
+     * Make sure that _this_ is correct inside of our event handlers.
+     */
+    bindCorrectContext() {
         this.startDrag = this.startDrag.bind(this);
         this.stopDrag = this.stopDrag.bind(this);
         this.cancelTabbing = this.cancelTabbing.bind(this);
@@ -24,14 +31,15 @@ export default class TabRegion extends React.Component {
         renderTitle = renderTitle.bind(this);
         renderTabs = renderTabs.bind(this);
     }
-
 	/**
+     *
 	 * Function that's called when this component fires the onDragStart event, this will start the tiling or tabbing process
 	 *
 	 * @param e The SyntheticEvent created by React when the startdrag event is called
 	 * @memberof windowTitleBar
 	 */
     startDrag(e, windowIdentifier) {
+        //Other windows will be able to call _getData_ and find out where it came from.
         e.dataTransfer.setData("text/json", JSON.stringify(windowIdentifier));
         FSBL.Clients.WindowClient.startTilingOrTabbing({
             windowIdentifier: windowIdentifier
@@ -45,18 +53,21 @@ export default class TabRegion extends React.Component {
 	 * @memberof windowTitleBar
 	 */
     stopDrag(e) {
+
+        //@sidd can you document this?
         this.mousePositionOnDragEnd = {
             x: e.nativeEvent.screenX,
             y: e.nativeEvent.screenY
-        }
-        let isInWindow = FSBL.Clients.WindowClient.isPointInBox(this.mousePositionOnDragEnd, FSBL.Clients.WindowClient.options);
-        if (!isInWindow) {
-            // this.removeTab(this.extractWindowIdentifier(e));
         }
         this.dragEndTimeout = setTimeout(this.clearDragEndTimeout, 300);
         FSBL.Clients.RouterClient.addListener('tabbingDragEnd', this.clearDragEndTimeout);
     }
 
+    /**
+     * @todo @sidd, can you document this?
+     * @param {event} err
+     * @param {*} response
+     */
     clearDragEndTimeout(err, response) {
         clearTimeout(this.dragEndTimeout);
         if (!response) {
@@ -65,39 +76,71 @@ export default class TabRegion extends React.Component {
         }
         FSBL.Clients.RouterClient.removeListener('tabbingDragEnd', this.clearDragEndTimeout);
     }
+
+    /**
+     * Helper function that will pull data from a drop event, parse it, and return it.
+     * @param {event} e
+     */
     extractWindowIdentifier(e) {
-        return JSON.parse(e.dataTransfer.getData('text/json'));
+        try {
+            let identifier = JSON.parse(e.dataTransfer.getData('text/json'));
+            //If the "identifier" is formed properly, it'll have this properly. Otherwise, it's something else (e.g., share data, image, etc).
+            if (typeof identifier.windowName !== "undefined") {
+                return identifier;
+            } else {
+                Logger.system.error("Malformed drop object detected in windowTitleBar. Check tab droppping code. Expected windowIdentifier, got ", identifier);
+                return null;
+            }
+        } catch (e) {
+            Logger.system.error("Error in 'extractWindowIdentifier'. Check TabRegion.jsx. Either there was no data in the event, or it was a circular object that caused JSON.parse to fail.", identifier);
+            return null;
+        }
     }
-    //Someone drops on our area.
+    /**
+     * Called when a drop event occurs on the tab region. We (hope) that this came from a tab. Could be a share icon, an image, something else - that's why we check to see if the identifier exists before doing anything.
+     * @param {event} e
+     */
     drop(e) {
         let identifier = this.extractWindowIdentifier(e);
-        this.setState({
-            renderGhost: false
-        });
-        this.props.onTabAdded(identifier);
-    }
+        if (identifier) {
+            //On drop, we hide our placeholder tab.
+            this.setState({
+                renderGhost: false
+            });
+            //Calls a method defined inside of windowTitleBar.jsx.
+            this.props.onTabAdded(identifier);
+        } else {
+            Logger.system.error("Unexpected drop event on window title bar. Check the 'drop' method on TabRegion.jsx.");
+        }
 
+    }
+    /**
+     * Event handler for when a user wheels inside of the tab region. We translate the deltaY that the event provides into horizontal movement. The translateX value that we return will be used in the render method below.
+     * @param {event} e
+     */
     onMouseWheel(e) {
         e.preventDefault();
         let numTabs = this.props.tabs.length;
         let translateX = 0;
+        //If there's more than one tab, do some calculations, otherwise we aren't going to scroll this region, no matter how much the user wants us to.
         if (numTabs > 1) {
             let currentX = this.state.translateX;
             let { boundingBox } = this.props;
             //Figure out position of first tab and last tab.
-
             let firstTab = {
                 left: 0,
             };
             let lastTab = {
                 right: numTabs * this.props.tabWidth
             };
+
             //If the content is overflowing, correct the translation (if necessary)..
             if (lastTab.right > boundingBox.right) {
                 translateX = e.nativeEvent.deltaY + currentX;
                 let maxRight = boundingBox.right - this.props.tabWidth;
                 let newRightForLastTab = lastTab.right + translateX;
                 let newLeftForFirstTab = firstTab.left + translateX;
+
                 //Do not let the left of the first tab move off of the left edge of the bounding box.
                 if (newLeftForFirstTab >= boundingBox.left) {
                     return this.scrollToFirstTab();
@@ -106,12 +149,9 @@ export default class TabRegion extends React.Component {
                     return this.scrollToLastTab();
                 }
             }
-            //Else, the translation is okay. We're in the middle of our list.
+            //Else, the translation is okay. We're in the middle of our list and the first and last tabs aren't being rendered improperly.
             this.setState({ translateX });
-
         }
-
-        console.log("TRANSLATION", translateX);
     }
     /**
      * Scrolls to our active tab.
@@ -123,8 +163,8 @@ export default class TabRegion extends React.Component {
      * Scrolls to the first tab in our list of tabs.
      */
     scrollToFirstTab() {
-        let lastTab = this.props.tabs[0];
-        this.scrollToTab(lastTab);
+        let firstTab = this.props.tabs[0];
+        this.scrollToTab(firstTab);
     }
     /**
      * Scrolls to the last tab in our list of tabs
@@ -134,16 +174,18 @@ export default class TabRegion extends React.Component {
         this.scrollToTab(lastTab);
     }
     /**
-     * Function that will scroll the tab region so that the right edge of the tab lines up with the right edge of the tab region.
+     * Function that will horiztonally scroll the tab region so that the right edge of the tab lines up with the right edge of the tab region.
      * @param {} tab
      */
     scrollToTab(tab) {
+        //'BoundingBox' is just the boundingClientRect of the tab region. It is, in essence, the center part of the windowTitleBar.
         let boundingBox = this.props.boundingBox;
-        let index = this.props.tabs.findIndex(el => {
+
+        let tabIndex = this.props.tabs.findIndex(el => {
             return el.windowName === tab.windowName && el.uuid === tab.uuid
         });
-        if (index > -1) {
-            let leftEdgeOfTab = index * this.props.tabWidth;
+        if (tabIndex > -1) {
+            let leftEdgeOfTab = tabIndex * this.props.tabWidth;
             let rightEdgeOfTab = leftEdgeOfTab + this.props.tabWidth;
             //Our translation is  this: Take the  right edge of the bounding box, and subract the left edge. This gives us the 0 point for the box. Then, we subtract the right edge of the tab. The result is a number that we use to shift the entire element and align the right edge of the tab with the right edge of the bounding box.
             let translateX = boundingBox.right - boundingBox.left - rightEdgeOfTab;
@@ -155,23 +197,22 @@ export default class TabRegion extends React.Component {
             this.setState({ translateX });
         }
     }
-
-    componentWillReceiveProps(props) {
-        this.setState({
-            tabs: props.tabs,
-            listenForDragOver: props.listenForDragOver
-        });
-    }
-
+    /**
+     * Someone is dragging _something_ over the tab region. We respond by rendering the ghost tab.
+     * @param {event} e
+     */
     dragOver(e) {
         e.preventDefault();
         this.setState({
             renderGhost: true
         });
     }
-
+    /**
+     * Triggered when the user moves their mouse out of the tabRegion after a dragOver event happens. When they leave, we hide our placeholder tab.
+     * @param {event} e
+     */
     dragLeave(e) {
-        let boundingRect = this.refs.tabArea.getBoundingClientRect()
+        let boundingRect = this.props.boundingBox;
         if (!FSBL.Clients.WindowClient.isPointInBox({ x: e.screenX, y: e.screenY }, boundingRect)) {
             this.setState({
                 renderGhost: false
@@ -189,7 +230,10 @@ export default class TabRegion extends React.Component {
         FSBL.Clients.WindowClient.stopTilingOrTabbing();
         this.props.onWindowResize();
     }
-
+    /**
+     * Basically exists just to keep the render method clean. Gives conditional classes to the active tab.
+     * @param {tab} tab
+     */
     getTabClasses(tab) {
         let classes = "fsbl-tab cq-no-drag"
         if (this.props.activeTab && tab.windowName === this.props.activeTab.windowName) {
@@ -200,21 +244,24 @@ export default class TabRegion extends React.Component {
 
     render() {
         let { translateX } = this.state;
+        //If we have just 1 tab, we render the title. Unless someone is dragging a tab around - in that case, we will render the tab view, even though we only have 1.
         let componentToRender = (!this.props.listenForDragOver && this.props.tabs.length === 1) ? "title" : "tabs";
+        //Cleanup in case we were translated before closing the second to last tab. This left-aligns the title.
         if (componentToRender === "title") {
             translateX = 0;
         }
+        //How far left or right to shift the tabRegion
         let tabRegionStyle = {
             marginLeft: `${translateX}px`
         }
 
         return (
-            <div ref="tabArea"
+            <div
                 onDragLeave={this.dragLeave}
-                /**onDragover is this way because I had to trick react into re-rendering. Otherwise the dragOver wasn't firing (because cq-drag was on the component when it first rendered) */
                 className={this.props.className}
                 onWheel={this.onMouseWheel}
             >
+                {/**This exists because I couldn't capture dragOver when simply changing the className on the tab-region wrapper. So instead, we render this div that sits absolutely positioned on top of the tabRegion.*/}
                 {this.props.listenForDragOver &&
                     <div className="tab-drop-region"
                         onDrop={this.drop}
@@ -234,6 +281,9 @@ export default class TabRegion extends React.Component {
     }
 }
 
+/**
+ * Function to render the title. Helps keep the render code clean.
+ */
 function renderTitle(props) {
     let identifier = FSBL.Clients.WindowClient.getWindowIdentifier();
     return (<div
@@ -248,6 +298,10 @@ function renderTitle(props) {
     </div>);
 }
 
+/**
+ * Renders the array of tabs.
+ * @param {*} props
+ */
 function renderTabs(props) {
     return props.tabs.map((tab, i) => {
         return <Tab
@@ -267,5 +321,5 @@ function renderTabs(props) {
             tabWidth={this.props.tabWidth}
             title={tab.windowName}
             windowIdentifier={JSON.stringify(tab)} />
-    })
+    });
 }
