@@ -156,12 +156,12 @@ export default class TabRegion extends React.Component {
         console.log("RENDERING", this.state);
         return (
             <div ref="tabArea"
-                onDragLeave={this.dragLeave}
                 /**onDragover is this way because I had to trick react into re-rendering. Otherwise the dragOver wasn't firing (because cq-drag was on the component when it first rendered) */
-                onDrop={this.drop}
                 className={this.props.className}>
                 {this.props.listenForDragOver &&
                     <div className="tab-drop-region"
+                        onDrop={this.drop}
+                        onDragLeave={this.dragLeave}
                         onDragOver={this.dragOver}
                     ></div>}
                 {this.state.tabs.map((tab, i) => {
