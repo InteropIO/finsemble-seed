@@ -9,9 +9,9 @@ export default class TabRegion extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            tabs: props.tabs,
             listenForDragOver: false,
-            translateX: 0
+            translateX: 0,
+            renderGhost: false
         }
         this.toggleDrag = this.toggleDrag.bind(this);
         this.startDrag = this.startDrag.bind(this);
@@ -75,15 +75,16 @@ export default class TabRegion extends React.Component {
         FSBL.Clients.RouterClient.removeListener('tabbingDragEnd', this.clearDragEndTimeout);
     }
     extractWindowIdentifier(e) {
-        return e.dataTransfer.getData('text/json');
+        return JSON.parse(e.dataTransfer.getData('text/json'));
     }
     //Someone drops on our area.
     drop(e) {
         let identifier = this.extractWindowIdentifier(e);
-        this.addTab(JSON.parse(identifier));
         this.setState({
             renderGhost: false
         })
+        this.props.onTabAdded(identifier)
+
     }
     componentWillReceiveProps(props) {
         console.log("GOT PROPS", props);
@@ -95,25 +96,18 @@ export default class TabRegion extends React.Component {
     //Replace with API call.
     addTab(identifier) {
         let exists = false;
-        for (let i = 0; i < this.state.tabs.length; i++) {
-            let tab = this.state.tabs[i];
+        for (let i = 0; i < this.props.tabs.length; i++) {
+            let tab = this.props.tabs[i];
             if (tab.windowName === identifier.windowName && tab.uuid === identifier.uuid) {
                 exists = true;
             }
         }
         if (!exists) {
             let { tabs } = this.state;
-            tabs.push(identifier);
-            this.setState({ tabs })
+            this.props.onTabAdded(identifier);
         }
     }
-    //Dummy code.
-    removeTab(identifier) {
-        let i = this.state.tabs.findIndex(el => el.name === identifier && el.uuid === identifier);
-        let { tabs } = this.state;
-        tabs.splice(i, 1);
-        this.setState({ tabs });
-    }
+
 
     dragOver(e) {
         console.log("DRAG OVER!!")
@@ -155,11 +149,10 @@ export default class TabRegion extends React.Component {
     }
     onMouseWheel(e) {
         e.preventDefault();
-        let numTabs = this.state.tabs.length;
+        let numTabs = this.props.tabs.length;
         let translateX = 0;
         if (numTabs > 1) {
             let currentX = this.state.translateX;
-            translateX = e.nativeEvent.deltaY + currentX;
             let { boundingBox } = this.props;
             //Figure out position of first tab and last tab.
 
@@ -171,7 +164,7 @@ export default class TabRegion extends React.Component {
             };
             //If the content is overflowing, correct the translation (if necessary)..
             if (lastTab.right > boundingBox.right) {
-
+                translateX = e.nativeEvent.deltaY + currentX;
                 let maxRight = boundingBox.right - this.props.tabWidth;
                 let newRightForLastTab = lastTab.right + translateX;
                 let newLeftForFirstTab = firstTab.left + translateX;
@@ -212,7 +205,7 @@ export default class TabRegion extends React.Component {
                             onDrop={this.drop}
                             onDragOver={this.dragOver}
                         ></div>}
-                    {this.state.tabs.map((tab, i) => {
+                    {this.props.tabs.map((tab, i) => {
                         return <Tab
                             onClick={() => {
                                 this.props.setActiveTab(tab);
@@ -225,7 +218,7 @@ export default class TabRegion extends React.Component {
                             }}
                             onDragEnd={this.stopDrag}
                             onTabClose={() => {
-                                this.removeTab(tab);
+                                this.props.onTabClosed(tab)
                             }}
                             tabWidth={this.props.tabWidth}
                             title={tab.windowName}

@@ -81,6 +81,8 @@ class WindowTitleBar extends React.Component {
 		this.allowDragOnCenterRegion = this.allowDragOnCenterRegion.bind(this);
 		this.disallowDragOnCenterRegion = this.disallowDragOnCenterRegion.bind(this);
 		this.setActiveTab = this.setActiveTab.bind(this);
+		this.onTabAdded = this.onTabAdded.bind(this);
+		this.onTabClosed = this.onTabClosed.bind(this);
 	}
 	componentWillMount() {
 		windowTitleBarStore.addListeners([
@@ -218,6 +220,20 @@ class WindowTitleBar extends React.Component {
 	setActiveTab(tab) {
 		this.setState({ activeTab: tab })
 	}
+	onTabAdded(identifier) {
+		let { tabs } = this.state;
+		tabs.push(identifier);
+		//Once we have more than one tab, we enforce a fixed tab width.
+		let tabWidth = MINIMUM_TAB_WIDTH;
+		this.setState({ tabs, tabWidth });
+	}
+
+	onTabClosed(identifier) {
+		let i = this.state.tabs.findIndex(el => el.name === identifier && el.uuid === identifier);
+		let { tabs } = this.state;
+		tabs.splice(i, 1);
+		this.setState({ tabs });
+	}
 
 	render() {
 		var self = this;
@@ -250,15 +266,17 @@ class WindowTitleBar extends React.Component {
 
 					{this.state.showTabs && this.state.tabWidth >= 55 &&
 						<TabRegion
-							boundingBox={this.state.tabBarBoundingBox}
-							listenForDragOver={!this.state.allowDragOnCenterRegion}
-							className={tabRegionClasses}
-							onWindowResize={this.onWindowResize}
-							setActiveTab={this.setActiveTab}
-							activeTab={this.state.activeTab}
-							ref="tabArea"
-							tabWidth={this.state.tabWidth}
-							tabs={this.state.tabs} />}
+						boundingBox={this.state.tabBarBoundingBox}
+						listenForDragOver={!this.state.allowDragOnCenterRegion}
+						className={tabRegionClasses}
+						onWindowResize={this.onWindowResize}
+						setActiveTab={this.setActiveTab}
+						activeTab={this.state.activeTab}
+						onTabAdded={this.onTabAdded}
+						onTabClosed={this.onTabClosed}
+						ref="tabArea"
+						tabs={this.state.tabs}
+						tabWidth={this.state.tabWidth}/>}
 
 				</div>
 				<div className={rightWrapperClasses} ref={this.setToolbarRight}>
