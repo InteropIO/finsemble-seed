@@ -10,7 +10,8 @@ export default class TabRegion extends React.Component {
         super(props);
         this.state = {
             tabs: props.tabs,
-            listenForDragOver: false
+            listenForDragOver: false,
+            translateX: 0
         }
         this.toggleDrag = this.toggleDrag.bind(this);
         this.startDrag = this.startDrag.bind(this);
@@ -20,6 +21,7 @@ export default class TabRegion extends React.Component {
         this.drop = this.drop.bind(this);
         this.dragOver = this.dragOver.bind(this);
         this.dragLeave = this.dragLeave.bind(this);
+        this.onMouseWheel = this.onMouseWheel.bind(this);
 
     }
 
@@ -58,7 +60,7 @@ export default class TabRegion extends React.Component {
         }
         let isInWindow = FSBL.Clients.WindowClient.isPointInBox(this.mousePositionOnDragEnd, FSBL.Clients.WindowClient.options);
         if (!isInWindow) {
-            this.removeTab(this.extractWindowIdentifier(e));
+            // this.removeTab(this.extractWindowIdentifier(e));
         }
         this.dragEndTimeout = setTimeout(this.clearDragEndTimeout, 300);
         FSBL.Clients.RouterClient.addListener('tabbingDragEnd', this.clearDragEndTimeout);
@@ -151,40 +153,88 @@ export default class TabRegion extends React.Component {
         }
         return classes;
     }
+    onMouseWheel(e) {
+        e.preventDefault();
+        let numTabs = this.state.tabs.length;
+        let translateX = 0;
+        if (numTabs > 1) {
+            let currentX = this.state.translateX;
+            translateX = e.nativeEvent.deltaY + currentX;
+            let { boundingBox } = this.props;
+            //Figure out position of first tab and last tab.
+
+            let firstTab = {
+                left: 0,
+            };
+            let lastTab = {
+                right: numTabs * this.props.tabWidth
+            };
+            //If the content is overflowing, correct the translation (if necessary)..
+            if (lastTab.right > boundingBox.right) {
+
+                let maxRight = boundingBox.right - this.props.tabWidth;
+                let newRightForLastTab = lastTab.right + translateX;
+                let newLeftForFirstTab = firstTab.left + translateX;
+                //Do not let the left of the first tab move off of the left edge of the bounding box.
+                if (newLeftForFirstTab >= boundingBox.left) {
+                    translateX = 0;
+                } else if (newRightForLastTab <= boundingBox.right) {
+                    //Do not let the right edge of the last tab move off of the boundingBox's right edge
+                    //Calculate the containerWidth, and subtract it from the right edge of the bounding box. Add a pixel for each tab to account for the right borders.
+                    let containerWidth = numTabs * this.props.tabWidth + (numTabs);
+                    translateX = boundingBox.right - containerWidth;
+                }
+                //Else, the translation is okay. We're in the middle of our list.
+            }
+
+        }
+
+        console.log("TRANSLATION", translateX);
+        this.setState({ translateX });
+    }
     render() {
-        let titleWidth = this.props.tabWidth - 20;
         console.log("RENDERING", this.state);
+        let style = {
+            marginLeft: `${this.state.translateX}px`
+        }
         return (
             <div ref="tabArea"
                 onDragLeave={this.dragLeave}
                 /**onDragover is this way because I had to trick react into re-rendering. Otherwise the dragOver wasn't firing (because cq-drag was on the component when it first rendered) */
-                className={this.props.className}>
-                {this.props.listenForDragOver &&
-                    <div className="tab-drop-region"
-                        onDrop={this.drop}
-                        onDragOver={this.dragOver}
-                    ></div>}
-                {this.state.tabs.map((tab, i) => {
-                    return <Tab
-                        onClick={() => {
-                            this.props.setActiveTab(tab);
-                        }}
-                        draggable="true"
-                        key={i}
-                        className={this.getTabClasses(tab)}
-                        onDragStart={(e) => {
-                            this.startDrag(e, tab);
-                        }}
-                        onDragEnd={this.stopDrag}
-                        onTabClose={() => {
-                            this.removeTab(tab);
-                        }}
-                        tabWidth={this.props.tabWidth}
-                        title={tab.windowName}
-                        windowIdentifier={JSON.stringify(tab)} />
-                })}
-                {this.state.renderGhost &&
-                    <div draggable={true} className="fsbl-tab ghost-tab"></div>}
+                className={this.props.className}
+                onWheel={this.onMouseWheel}
+            >
+                <div className="tab-region-wrapper"
+                    style={style}
+                >
+                    {this.props.listenForDragOver &&
+                        <div className="tab-drop-region"
+                            onDrop={this.drop}
+                            onDragOver={this.dragOver}
+                        ></div>}
+                    {this.state.tabs.map((tab, i) => {
+                        return <Tab
+                            onClick={() => {
+                                this.props.setActiveTab(tab);
+                            }}
+                            draggable="true"
+                            key={i}
+                            className={this.getTabClasses(tab)}
+                            onDragStart={(e) => {
+                                this.startDrag(e, tab);
+                            }}
+                            onDragEnd={this.stopDrag}
+                            onTabClose={() => {
+                                this.removeTab(tab);
+                            }}
+                            tabWidth={this.props.tabWidth}
+                            title={tab.windowName}
+                            windowIdentifier={JSON.stringify(tab)} />
+                    })}
+                    {this.state.renderGhost &&
+                        <div draggable={true} className="fsbl-tab ghost-tab"></div>}
+                </div>
+
             </div>
         );
     }

@@ -25,7 +25,7 @@ import BringSuiteToFront from "./components/right/BringSuiteToFront.jsx";
 import AlwaysOnTop from "./components/right/AlwaysOnTop.jsx";
 import TabRegion from './components/center/TabRegion'
 import "../../assets/css/finsemble.css";
-
+const MINIMUM_TAB_WIDTH = 175;
 /**
  * This is the main window manager component. It's the custom window frame that we add to each window that has useFSBLHeader set to true in its windowDescriptor.
  */
@@ -55,11 +55,12 @@ class WindowTitleBar extends React.Component {
 			showLinkerButton: windowTitleBarStore.getValue({ field: "Linker.showLinkerButton" }),
 			isTopRight: windowTitleBarStore.getValue({ field: "isTopRight" }),
 			alwaysOnTopButton: windowTitleBarStore.getValue({ field: "AlwaysOnTop.show" }),
-			tabWidth: 175,
+			tabWidth: MINIMUM_TAB_WIDTH,
 			tabs: [{ title: windowTitleBarStore.getValue({ field: "Main.windowTitle" }) }], //array of tabs for this window
 			showTabs: false,
 			allowDragOnCenterRegion: true,
-			activeTab: null
+			activeTab: null,
+			tabBarBoundingBox: {}
 		};
 
 	}
@@ -199,15 +200,18 @@ class WindowTitleBar extends React.Component {
 		this.setState(newState);
 	}
 
-
 	onWindowResize() {
 		this.resize = null;
 		let bounds = this.tabBar.getBoundingClientRect();
 		let toolbarRightBounds = this.toolbarRight.getBoundingClientRect();
-		let newWidth = bounds.width <= this.state.tabWidth + toolbarRightBounds.width ? ((bounds.width - 10) / this.state.tabs.length) + 10 : 175;
-		if (newWidth >= 175) newWidth = 175;
+		let newWidth = bounds.width - 30;
+		if (this.state.tabs.length > 1) {
+			newWidth = MINIMUM_TAB_WIDTH;
+		}
+
 		this.setState({
-			tabWidth: newWidth
+			tabWidth: newWidth,
+			tabBarBoundingBox: bounds
 		})
 	}
 
@@ -246,6 +250,7 @@ class WindowTitleBar extends React.Component {
 
 					{this.state.showTabs && this.state.tabWidth >= 55 &&
 						<TabRegion
+							boundingBox={this.state.tabBarBoundingBox}
 							listenForDragOver={!this.state.allowDragOnCenterRegion}
 							className={tabRegionClasses}
 							onWindowResize={this.onWindowResize}

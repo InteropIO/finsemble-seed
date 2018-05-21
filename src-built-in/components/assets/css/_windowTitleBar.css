@@ -288,16 +288,17 @@ html.desktop-active .fsbl-linker[hover=true] {
 }
 
 .fsbl-tab {
-    min-width: 35px;
     height: 100%;
     position: relative;
     display: inline-flex;
     align-content: center;
     align-items: center;
     background-color: var(--tab-inactive-background-color);
-    border: var(--tab-border);
+    border-right: var(--tab-border);
+    border-top: var(--tab-border);
     user-select: none;
     box-sizing: border-box;
+    justify-content: flex-start;
 }
 
 .fsbl-active-tab {
@@ -310,8 +311,8 @@ html.desktop-active .fsbl-linker[hover=true] {
     width: 100%;
 }
 
-.fsbl-tab .fsbl-tab-title{
-    display:block;
+.fsbl-tab .fsbl-tab-title {
+    display:flex;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
