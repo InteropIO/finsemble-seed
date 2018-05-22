@@ -223,7 +223,7 @@ export default class TabRegion extends React.Component {
             let leftEdgeOfTab = tabIndex * this.props.tabWidth;
             let rightEdgeOfTab = leftEdgeOfTab + this.props.tabWidth;
             //Our translation is  this: Take the  right edge of the bounding box, and subract the left edge. This gives us the 0 point for the box. Then, we subtract the right edge of the tab. The result is a number that we use to shift the entire element and align the right edge of the tab with the right edge of the bounding box. We also account for the 30 px region on the right.
-            let translateX = boundingBox.right - boundingBox.left - 30 - rightEdgeOfTab;
+            let translateX = boundingBox.right - boundingBox.left - rightEdgeOfTab;
 
             //If there's no overflow, we don't scroll.
             if (rightEdgeOfTab < boundingBox.right) {

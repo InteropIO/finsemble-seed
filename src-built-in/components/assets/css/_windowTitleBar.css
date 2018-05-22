@@ -95,27 +95,24 @@ html.desktop-active .fsbl-header-right {
     justify-content: flex-end;
     z-index: 5;
     background-color: var(--window-header-background-color);
+    padding-left: 30px;
 }
 
-
-
-html.desktop-active .fsbl-tab-region-drag-area.gradient {
-    background: linear-gradient(to right, rgba(0,0,0,0) 0%, var(--active-header-background-color) 100%);
-}
 
 .fsbl-tab-region-drag-area.gradient {
-    background: linear-gradient(to right, rgba(0,0,0,0) 0%, var(--window-header-background-color) 100%);
+    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 100%);
+    display: block;
+
 }
-html.desktop-active .fsbl-tab-region-drag-area {
-    background: var(--active-header-background-color);
-}
+
 .fsbl-tab-region-drag-area {
     background: var(--window-header-background-color);
+    display: none;
     position: absolute;
     right:0;
     top:0;
     bottom:0;
-    width:30px;
+    width:10px;
     z-index: 2147483641;
     cursor: pointer;
 }
