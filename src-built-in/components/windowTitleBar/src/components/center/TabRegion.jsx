@@ -163,7 +163,7 @@ export default class TabRegion extends React.Component {
             let { boundingBox } = this.props;
             //Figure out position of first tab and last tab.
             let firstTab = {
-                left: 0,
+                left: 0 + boundingBox.left,
             };
             let lastTab = {
                 right: numTabs * this.props.tabWidth
@@ -175,12 +175,11 @@ export default class TabRegion extends React.Component {
                 let maxRight = boundingBox.right - this.props.tabWidth;
                 let newRightForLastTab = lastTab.right + translateX;
                 let newLeftForFirstTab = firstTab.left + translateX;
-
-                //Do not let the left of the first tab move off of the left edge of the bounding box.
+                //Do not let the left of the first tab move to the right of the left edge of the bounding box.
                 if (newLeftForFirstTab >= boundingBox.left) {
                     return this.scrollToFirstTab();
-                } else if (newRightForLastTab <= boundingBox.right) {
-                    //Do not let the right edge of the last tab move off of the boundingBox's right edge
+                } else if (e.nativeEvent.deltaY < 0 &&  newRightForLastTab <= boundingBox.right) {
+                    //ONLY IF the user is scrolling from right-to-left (deltaY will be negative). IF they try to do that, do not allow the right edge of the last tab to detach.
                     return this.scrollToLastTab();
                 }
             }
