@@ -75,7 +75,7 @@ class _ToolbarStore {
 	 * @memberof _ToolbarStore
 	 */
 	loadMenusFromConfig(done, self) {
-		FSBL.Clients.ConfigClient.get({ field: "finsemble.menus" }, function (err, menus) {
+		FSBL.Clients.ConfigClient.get({ field: "finsemble.components.Toolbar.component.layout" }, function (err, menus) {
 			if(menus && menus.length){
 				self.Store.setValue({
 					field: "menus",
@@ -89,7 +89,7 @@ class _ToolbarStore {
 				});
 				done();
 				if (FSBL.Clients.ConfigClient.setValue) {
-					FSBL.Clients.ConfigClient.setValue({ field: "finsemble.menus", value: menuConfig });
+					FSBL.Clients.ConfigClient.setValue({ field: "finsemble.components.Toolbar.component.layout", value: menuConfig });
 				}
 			}
 		});
@@ -204,6 +204,7 @@ class _ToolbarStore {
 		this.Store.setValue({ field: "sections", value: sections });
 		return sections;
 	}
+
 
 	/**
 	 * Shortcut to get values from the local store.

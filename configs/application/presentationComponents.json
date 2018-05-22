@@ -482,7 +482,53 @@
 				"category": "system",
 				"spawnOnStartup": true,
 				"spawnOnAllMonitors": true,
-				"canMinimize": false
+				"canMinimize": false,
+				"layout": [
+					{
+						"align": "left",
+						"iconClasses": "finsemble-toolbar-brand-logo",
+						"icon": "/components/assets/img/Finsemble_Taskbar_Icon.png",
+						"menuType": "File Menu"
+					},
+					{
+						"align": "left",
+						"type": "reactComponent",
+						"reactComponent": "Search"
+					},
+					{
+						"align": "left",
+						"label": "Workspaces",
+						"menuType": "Workspace Management Menu",
+						"reactComponent": "WorkspaceMenuOpener",
+						"type": "reactComponent"
+					},
+					{
+						"comment": "Change align to add AlwaysOnTop capability",
+						"align": "none",
+						"type": "reactComponent",
+						"reactComponent": "AlwaysOnTop"
+					},
+					{
+						"align": "right",
+						"type": "reactComponent",
+						"reactComponent": "AutoArrange"
+					},
+					{
+						"align": "right",
+						"type": "reactComponent",
+						"reactComponent": "MinimizeAll"
+					},
+					{
+						"align": "right",
+						"type": "reactComponent",
+						"reactComponent": "BringToFront"
+					},
+					{
+						"align": "left",
+						"label": "Apps",
+						"menuType": "App Launcher"
+					}
+				]
 			},
 			"foreign": {
 				"services": {
