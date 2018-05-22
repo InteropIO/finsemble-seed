@@ -27,7 +27,7 @@
     background: var(--window-header-background-color);
     width: 100%;
     left: 0;
-    z-index: 2147483641;
+    z-index: 2147483640;
     top: 0;
     font-size: var(--window-header-font-size);
     font-weight: var(--window-header-font-weight);
@@ -72,7 +72,6 @@ html.desktop-active .fsbl-header {
     width: 100%;
     text-overflow: ellipsis;
     white-space: nowrap;
-    overflow: hidden;
     --webkit-user-select: none;
     position: relative;
     padding-bottom: 3px; /* This needs to be half of the thing subtracted from the height. e.g. height = 100% - 6px, then this is 3px) */
@@ -94,12 +93,31 @@ html.desktop-active .fsbl-header-right {
     display: flex;
     justify-content: flex-end;
     z-index: 5;
-    background-color: var(--window-header-background-color);
+    /* background-color: ; */
+    background: var(--window-header-background-color);
+
+}
+html.desktop-active .fsbl-tab-region-drag-area.gradient {
+    background: linear-gradient(to right, rgba(0,0,0,0) 0%, var(--active-header-background-color) 100%);
 }
 
-.fsbl-header-right.fsbl-tabs-enabled {
-    padding-left: 30px;
+.fsbl-tab-region-drag-area.gradient {
+    background: linear-gradient(to right, rgba(0,0,0,0) 0%, var(--window-header-background-color) 100%);
 }
+html.desktop-active .fsbl-tab-region-drag-area {
+    background: var(--active-header-background-color);
+}
+.fsbl-tab-region-drag-area {
+    background: var(--window-header-background-color);
+    position: absolute;
+    right:0;
+    top:0;
+    bottom:0;
+    width:30px;
+    z-index: 2147483641;
+    cursor: pointer;
+}
+
 /* This div captures the hover event for it's parent. It doesn't stretch to the border, so that mouseout is properly detected. */
 .fsbl-hover-detector-right {
     position: absolute;
@@ -298,8 +316,12 @@ html.desktop-active .fsbl-linker[hover=true] {
     width: 100%;
     position: absolute;
     left:0;
-}
+    overflow-x: scroll;
 
+}
+.fsbl-tab-area::-webkit-scrollbar  {
+    display: none;
+}
 .fsbl-tab .fsbl-tab-title {
     min-width: 0;
     overflow: hidden;
@@ -338,6 +360,10 @@ html.desktop-active .fsbl-linker[hover=true] {
     position: relative;
     height: 100%;
     left: 0px;
+}
+.fsbl-tab-region-drag-area:before {
+    content: 'a';
+    visibility: hidden;
 }
 /* Without content, the ghost-tab caused really strange sizing behaviors. */
 .ghost-tab:before {

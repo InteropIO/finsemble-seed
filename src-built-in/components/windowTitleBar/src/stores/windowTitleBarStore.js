@@ -381,6 +381,7 @@ var Actions = {
 		let tabs = Actions.getTabs();
 		let { currentIndex } = Actions.findTab(tab);
 		if (currentIndex === -1) {
+			debugger
 			return Actions.addTab(tab, newIndex);
 		}
 		tabs.splice(currentIndex, 1);

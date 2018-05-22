@@ -45,6 +45,7 @@ export default class TabRegion extends React.Component {
         this.onActiveTabChanged = this.onActiveTabChanged.bind(this);
         this.onTabsChanged = this.onTabsChanged.bind(this);
         this.onTabDraggedOver = this.onTabDraggedOver.bind(this);
+        this.isTabRegionOverflowing = this.isTabRegionOverflowing.bind(this);
 
     }
     findTabIndex(tab) {
@@ -140,6 +141,14 @@ export default class TabRegion extends React.Component {
         }
         FSBL.Clients.RouterClient.transmit("tabbingDragEnd", { success: true });
         this.props.onTabDropped();
+    }
+
+    isTabRegionOverflowing() {
+        let lastTab = {
+            right: this.state.tabs.length * this.props.tabWidth
+        };
+
+        return lastTab.right > (this.props.boundingBox.right - this.props.boundingBox.left);
     }
     /**
      * Event handler for when a user wheels inside of the tab region. We translate the deltaY that the event provides into horizontal movement. The translateX value that we return will be used in the render method below.
@@ -348,6 +357,10 @@ export default class TabRegion extends React.Component {
         }
         let tabRegionDropZoneStyle = { left: this.state.tabs.length * this.props.tabWidth + "px" }
 
+        let moveAreaClasses = "cq-drag fsbl-tab-region-drag-area";
+        if (this.isTabRegionOverflowing()) {
+            moveAreaClasses += " gradient"
+        }
         return (
             <div
                 onDragLeave={this.dragLeave}
@@ -367,6 +380,7 @@ export default class TabRegion extends React.Component {
                 >
                     {componentToRender === "title" && renderTitle()}
                     {componentToRender === "tabs" && renderTabs()}
+                    <div className={moveAreaClasses}></div>
                 </div>
 
             </div>
