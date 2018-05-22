@@ -95,15 +95,15 @@ html.desktop-active .fsbl-header-right {
     z-index: 5;
     /* background-color: ; */
     background: var(--window-header-background-color);
+    padding-left: 30px;
 
-}
-html.desktop-active .fsbl-tab-region-drag-area.gradient {
-    background: linear-gradient(to right, rgba(0,0,0,0) 0%, var(--active-header-background-color) 100%);
 }
 
 .fsbl-tab-region-drag-area.gradient {
-    background: linear-gradient(to right, rgba(0,0,0,0) 0%, var(--window-header-background-color) 100%);
+    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 100%);
+    border-right: var(--tab-border);
 }
+
 html.desktop-active .fsbl-tab-region-drag-area {
     background: var(--active-header-background-color);
 }
@@ -113,7 +113,7 @@ html.desktop-active .fsbl-tab-region-drag-area {
     right:0;
     top:0;
     bottom:0;
-    width:30px;
+    width:10px;
     z-index: 2147483641;
     cursor: pointer;
 }
@@ -340,6 +340,8 @@ html.desktop-active .fsbl-linker[hover=true] {
     display:flex;
     flex-direction: column;
     justify-content: center;
+    position: absolute;
+    right: 0;
 }
 
 .fsbl-tab-close:hover {
