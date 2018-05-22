@@ -141,6 +141,14 @@ export default class TabRegion extends React.Component {
         FSBL.Clients.RouterClient.transmit("tabbingDragEnd", { success: true });
         this.props.onTabDropped();
     }
+
+    isTabRegionOverflowing() {
+        let lastTab = {
+            right: this.state.tabs.length * this.props.tabWidth
+        };
+        return lastTab.right + this.state.translateX > (this.props.boundingBox.right - this.props.boundingBox.left);
+    }
+
     /**
      * Event handler for when a user wheels inside of the tab region. We translate the deltaY that the event provides into horizontal movement. The translateX value that we return will be used in the render method below.
      * @param {event} e
@@ -214,8 +222,8 @@ export default class TabRegion extends React.Component {
         if (tabIndex > -1) {
             let leftEdgeOfTab = tabIndex * this.props.tabWidth;
             let rightEdgeOfTab = leftEdgeOfTab + this.props.tabWidth;
-            //Our translation is  this: Take the  right edge of the bounding box, and subract the left edge. This gives us the 0 point for the box. Then, we subtract the right edge of the tab. The result is a number that we use to shift the entire element and align the right edge of the tab with the right edge of the bounding box.
-            let translateX = boundingBox.right - boundingBox.left - rightEdgeOfTab;
+            //Our translation is  this: Take the  right edge of the bounding box, and subract the left edge. This gives us the 0 point for the box. Then, we subtract the right edge of the tab. The result is a number that we use to shift the entire element and align the right edge of the tab with the right edge of the bounding box. We also account for the 30 px region on the right.
+            let translateX = boundingBox.right - boundingBox.left - 30 - rightEdgeOfTab;
 
             //If there's no overflow, we don't scroll.
             if (rightEdgeOfTab < boundingBox.right) {
@@ -348,6 +356,12 @@ export default class TabRegion extends React.Component {
         }
         let tabRegionDropZoneStyle = { left: this.state.tabs.length * this.props.tabWidth + "px" }
 
+
+        let moveAreaClasses = "cq-drag fsbl-tab-region-drag-area";
+        if (this.isTabRegionOverflowing()) {
+            moveAreaClasses += " gradient"
+        }
+
         return (
             <div
                 onDragLeave={this.dragLeave}
@@ -367,6 +381,7 @@ export default class TabRegion extends React.Component {
                 >
                     {componentToRender === "title" && renderTitle()}
                     {componentToRender === "tabs" && renderTabs()}
+                    <div className={moveAreaClasses}></div>
                 </div>
 
             </div>
