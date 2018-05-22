@@ -361,6 +361,7 @@ export default class TabRegion extends React.Component {
         if (this.isTabRegionOverflowing()) {
             moveAreaClasses += " gradient"
         }
+
         return (
             <div
                 onDragLeave={this.dragLeave}

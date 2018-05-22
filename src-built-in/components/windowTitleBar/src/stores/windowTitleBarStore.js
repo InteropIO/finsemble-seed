@@ -330,6 +330,8 @@ var Actions = {
 				Actions.parentWrapper = FSBL.Clients.WindowClient.finsembleWindow.getParent();
 				cb();
 			})
+		} else {
+			cb();
 		}
 	},
 	getTabs() {
@@ -367,6 +369,7 @@ var Actions = {
 		Actions._setTabs(tabs)
 	},
 	addTab: function (windowIdentifier, i) {
+		debugger
 		if (!Actions.parentWrapper) {
 			return Actions.createParentWrapper(() => {
 				Actions.parentWrapper.addWindow({ windowIdentifier, position: i });
