@@ -35,7 +35,7 @@ var Actions = {
 				{ field: "Maximize.hide", value: max },
 				{ field: "Minimize.hide", value: FSBLHeader.hideMinimize ? true : false },
 				{ field: "Close.hide", value: FSBLHeader.hideClose ? true : false },
-				{ field: "AlwaysOnTop.show", value: FSBLHeader.alwaysOnTop ? true: false  },
+				{ field: "AlwaysOnTop.show", value: FSBLHeader.alwaysOnTop ? true : false },
 			]);
 
 			// Set by calling WindowClient.setTitle() || from config "foreign.components.Window Manager.title"
@@ -152,7 +152,7 @@ var Actions = {
 			// Look to see if docking is enabled. Cascade through backward compatibility with old "betaFeatures" and then a default if no config is found at all.
 			let dockingConfig = finsembleConfig.docking;
 			if (!dockingConfig && finsembleConfig.betaFeatures) dockingConfig = finsembleConfig.betaFeatures.docking;
-			if (!dockingConfig) dockingConfig = {enabled: true};
+			if (!dockingConfig) dockingConfig = { enabled: true };
 
 			windowTitleBarStore.setValues([{ field: "Main.dockingEnabled", value: dockingConfig.enabled }]);
 
@@ -164,6 +164,13 @@ var Actions = {
 
 			windowTitleBarStore.setValues([{ field: "AlwaysOnTop.show", value: alwaysOnTopIcon }]);
 		});
+
+		Actions.getInitialTabList((err, values) => {
+			if (err) {
+				return FSBL.Clients.Logger.error("Error in getInitialTabList.", err);
+			}
+			Actions._setTabs(values);
+		})
 	},
 	/**
 	 * Helper function to sift through all of the data coming from the dockingService. Outputs an array of groups that the window belongs to.
@@ -316,7 +323,66 @@ var Actions = {
 		FSBL.Clients.WindowClient.maximize(() => {
 			windowTitleBarStore.setValue({ field: "Maximize.maximized", value: true });
 		});
+	},
+	getTabs() {
+		return windowTitleBarStore.getValue({ field: "tabs" });
+	},
+	_setTabs(tabs) {
+		return windowTitleBarStore.setValue({ field: "tabs", value: tabs })
+	},
+	addTab: function (windowIdentifier, i) {
+		let tabs = Actions.getTabs();
+		if (typeof i === "undefined") {
+			i = tabs.length + 1;
+		}
+		tabs.splice(i, 0, windowIdentifier);
+		Actions._setTabs(tabs);
+	},
+	removeTab: function (windowIdentifier) {
+		let tabs = Actions.getTabs();
+		let i = tabs.findIndex(el => el.name === windowIdentifier.name && el.uuid === windowIdentifier.uuid);
+		tabs.splice(i, 1);
+		Actions._setTabs(tabs);
+	},
+	reorderTab: function (tab, newIndex) {
+		let tabs = Actions.getTabs();
+		let { currentIndex } = Actions.findTab(tab);
+		if (currentIndex === -1) {
+			return Actions.addTab(tab, newIndex);
+		}
+		console.log("REORDERING", tab.windowName, currentIndex, newIndex)
+		tabs.splice(currentIndex, 1);
+		console.log("After remove", JSON.parse(JSON.stringify(tabs)));
+		tabs.splice(newIndex, 0, tab);
+		console.log("After reinsert", JSON.parse(JSON.stringify(tabs)));
 
+		Actions._setTabs(tabs)
+	},
+	setActiveTab: function (windowIdentifier) {
+		return windowTitleBarStore.setValue({ field: "activeTab", value: windowIdentifier });
+	},
+	findTab: function (tab) {
+		let tabs = this.getTabs();
+		let currentIndex = tabs.findIndex(el => {
+            return tab.windowName === el.windowName && tab.uuid === el.uuid;
+        });
+		return { tab, currentIndex }
+	},
+	getInitialTabList: function (cb) {
+		function getRandomInt(min, max) {
+			return Math.floor(Math.random() * (max - min + 1)) + min;
+		}
+		let min = getRandomInt(0, 100);
+		let max = min + 4;
+		let identifier = FSBL.Clients.WindowClient.getWindowIdentifier();
+		let tabs = [];
+		for (let i = min; i < max; i++){
+			let newIdentifier = JSON.parse(JSON.stringify(identifier));
+			newIdentifier.windowName = `Tab ${i}`
+			tabs.push(newIdentifier);
+		}
+
+		cb(null, tabs)
 	}
 };
 

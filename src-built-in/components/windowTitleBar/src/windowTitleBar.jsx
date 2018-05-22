@@ -82,10 +82,7 @@ class WindowTitleBar extends React.Component {
 		this.onWindowResize = this.onWindowResize.bind(this);
 		this.allowDragOnCenterRegion = this.allowDragOnCenterRegion.bind(this);
 		this.disallowDragOnCenterRegion = this.disallowDragOnCenterRegion.bind(this);
-		this.handleStartTilingOrTabbing = this.handleStartTilingOrTabbing.bind(this);
-		this.setActiveTab = this.setActiveTab.bind(this);
-		this.onTabAdded = this.onTabAdded.bind(this);
-		this.onTabClosed = this.onTabClosed.bind(this);
+
 		this.onShareEmitterChanged = this.onShareEmitterChanged.bind(this);
 	}
 	componentWillMount() {
@@ -106,9 +103,8 @@ class WindowTitleBar extends React.Component {
 				showTabs: typeof config['Window Manager'] !== undefined ? config['Window Manager'].showTabs : false
 			});
 		})
-		this.getTabList();
 
-		FSBL.Clients.RouterClient.addListener("DockingService.startTilingOrTabbing", this.handleStartTilingOrTabbing);
+		FSBL.Clients.RouterClient.addListener("DockingService.startTilingOrTabbing", this.disallowDragOnCenterRegion);
 		FSBL.Clients.RouterClient.addListener("DockingService.stopTilingOrTabbing", this.allowDragOnCenterRegion);
 	}
 
@@ -137,16 +133,11 @@ class WindowTitleBar extends React.Component {
 		FSBL.Clients.RouterClient.removeListener("DockingService.stopTilingOrTabbing", this.allowDragOnCenterRegion);
 	}
 
-	handleStartTilingOrTabbing(err, response) {
-		if (response.originatedHere()) {
-			return;
-		}
-		this.disallowDragOnCenterRegion();
-	}
 	/**
 	 * When we are not tiling/tabbing, we want to allow the user to drag the window around via any available space in the tab-region. This function allows that.
 	 */
 	allowDragOnCenterRegion() {
+		console.log("In stopTilingOrTabbing")
 		this.setState({
 			allowDragOnCenterRegion: true
 		});
@@ -155,18 +146,12 @@ class WindowTitleBar extends React.Component {
 	 * When we are tiling/tabbing, we do not want to allow any window to be dragged around and moved.
 	 */
 	disallowDragOnCenterRegion() {
+		console.log("No longer allowing drag.")
 		this.setState({
 			allowDragOnCenterRegion: false
 		});
 	}
-	/**
-	 * @PLACEHOLDER. Will be replaced with tabbing API calls.
-	 */
-	getTabList() {
-		this.setState({
-			tabs: [FSBL.Clients.WindowClient.getWindowIdentifier()]
-		});
-	}
+
 	/**
 	 * Whether the component's config allows for the linker.
 	 * @param {} err
@@ -243,38 +228,6 @@ class WindowTitleBar extends React.Component {
 			tabBarBoundingBox: bounds
 		})
 	}
-	/**
-	 * OnClick handler for individual tabs.
-	 * @PLACEHOLDER will interact with tabbing API
-	 * @param {*} tab
-	 */
-	setActiveTab(tab) {
-		this.setState({ activeTab: tab })
-	}
-	/**
-	 * drop handler for the tab region.
-	 * @PLACEHOLDER will interact with tabbing API
-	 * @param {*} tab
-	 */
-	onTabAdded(identifier) {
-		let { tabs } = this.state;
-		tabs.push(identifier);
-		//Once we have more than one tab, we enforce a fixed tab width.
-		this.setState({ tabs, activeTab: identifier }, () => {
-			this.refs.tabArea.scrollToActiveTab();
-		});
-	}
-	/**
-	 * OnClick handler for the close button on individual tabs.
-	 * @PLACEHOLDER will interact with tabbing API
-	 * @param {*} tab
-	 */
-	onTabClosed(identifier) {
-		let i = this.state.tabs.findIndex(el => el.name === identifier && el.uuid === identifier);
-		let { tabs } = this.state;
-		tabs.splice(i, 1);
-		this.setState({ tabs });
-	}
 
 	render() {
 		var self = this;
@@ -312,17 +265,15 @@ class WindowTitleBar extends React.Component {
 					{/* If we're suppsoed to show tabs and the window isn't babySized */}
 					{this.state.showTabs && this.state.tabWidth >= MINIMUM_TAB_SIZE &&
 						<TabRegion
+							onTabDropped={this.allowDragOnCenterRegion}
 							className={tabRegionClasses}
 							thisWindowsTitle={this.state.windowTitle}
 							boundingBox={this.state.tabBarBoundingBox}
 							listenForDragOver={!this.state.allowDragOnCenterRegion}
-							activeTab={this.state.activeTab}
-							setActiveTab={this.setActiveTab}
-							onTabAdded={this.onTabAdded}
-							onTabClosed={this.onTabClosed}
 							tabs={this.state.tabs}
 							tabWidth={this.state.tabWidth}
 							ref="tabArea"
+							onWindowResize={this.onWindowResize}
 						/>}
 				</div>
 				<div className={rightWrapperClasses} ref={this.setToolbarRight}>
