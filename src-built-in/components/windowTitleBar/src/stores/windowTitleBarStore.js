@@ -324,13 +324,21 @@ var Actions = {
 			windowTitleBarStore.setValue({ field: "Maximize.maximized", value: true });
 		});
 	},
+	createParentWrapper(cb) {
+		if (!Actions.parentWrapper) {
+			FSBL.Clients.WindowClient.getStackedWindow({ create: true }, (err, response) => {
+				Actions.parentWrapper = FSBL.Clients.WindowClient.finsembleWindow.getParent();
+				cb();
+			})
+		}
+	},
 	getTabs() {
 		return windowTitleBarStore.getValue({ field: "tabs" });
 	},
 	_setTabs(tabs) {
 		return windowTitleBarStore.setValue({ field: "tabs", value: tabs })
 	},
-	addTab: function (windowIdentifier, i) {
+	addTabLocally: function (windowIdentifier, i) {
 		let tabs = Actions.getTabs();
 		if (typeof i === "undefined") {
 			i = tabs.length + 1;
@@ -338,17 +346,17 @@ var Actions = {
 		tabs.splice(i, 0, windowIdentifier);
 		Actions._setTabs(tabs);
 	},
-	removeTab: function (windowIdentifier) {
+	removeTabLocally: function (windowIdentifier) {
 		let tabs = Actions.getTabs();
 		let i = tabs.findIndex(el => el.name === windowIdentifier.name && el.uuid === windowIdentifier.uuid);
 		tabs.splice(i, 1);
 		Actions._setTabs(tabs);
 	},
-	reorderTab: function (tab, newIndex) {
+	reorderTabLocally: function (tab, newIndex) {
 		let tabs = Actions.getTabs();
 		let { currentIndex } = Actions.findTab(tab);
 		if (currentIndex === -1) {
-			return Actions.addTab(tab, newIndex);
+			return Actions.addTabLocally(tab, newIndex);
 		}
 		console.log("REORDERING", tab.windowName, currentIndex, newIndex)
 		tabs.splice(currentIndex, 1);
@@ -358,31 +366,66 @@ var Actions = {
 
 		Actions._setTabs(tabs)
 	},
-	setActiveTab: function (windowIdentifier) {
-		return windowTitleBarStore.setValue({ field: "activeTab", value: windowIdentifier });
+	addTab: function (windowIdentifier, i) {
+		if (!Actions.parentWrapper) {
+			return Actions.createParentWrapper(() => {
+				Actions.parentWrapper.addWindow({ windowIdentifier, position: i });
+			})
+		}
+		return Actions.parentWrapper.addWindow({ windowIdentifier, position: i });
+	},
+	removeTab: function (windowIdentifier) {
+		return Actions.parentWrapper.removeWindow({ windowIdentifier, position: i });
+	},
+	reorderTab: function (tab, newIndex) {
+		let tabs = Actions.getTabs();
+		let { currentIndex } = Actions.findTab(tab);
+		if (currentIndex === -1) {
+			return Actions.addTab(tab, newIndex);
+		}
+		tabs.splice(currentIndex, 1);
+		tabs.splice(newIndex, 0, tab);
+		Actions.parentWrapper.reorder({ windowIdentifiers: tabs })
+
 	},
 	findTab: function (tab) {
 		let tabs = this.getTabs();
 		let currentIndex = tabs.findIndex(el => {
-            return tab.windowName === el.windowName && tab.uuid === el.uuid;
-        });
+			return tab.windowName === el.windowName && tab.uuid === el.uuid;
+		});
 		return { tab, currentIndex }
 	},
+	setActiveTab: function (windowIdentifier) {
+		return Actions.parentWrapper.setVisibleWindow({ windowIdentifier });
+	},
+	parentWrapper: null,
+	onTabListChanged: function (err, response) {
+		return Actions._setTabs(response.value);
+	},
+	onVisibleWindowChanged: function (err, response) {
+		return windowTitleBarStore.setValue({ field: "activeTab", value: response.value });
+	},
+	listenOnParentWrapper: function () {
+		Actions.parentWrapper.addListener({ field: "childWindowIdentifiers" }, Actions.onTabListChanged);
+		Actions.parentWrapper.addListener({ field: "visibleWindowIdentifier" }, Actions.onVisibleWindowChanged);
+	},
 	getInitialTabList: function (cb) {
-		function getRandomInt(min, max) {
-			return Math.floor(Math.random() * (max - min + 1)) + min;
-		}
-		let min = getRandomInt(0, 100);
-		let max = min + 4;
-		let identifier = FSBL.Clients.WindowClient.getWindowIdentifier();
-		let tabs = [];
-		for (let i = min; i < max; i++){
-			let newIdentifier = JSON.parse(JSON.stringify(identifier));
-			newIdentifier.windowName = `Tab ${i}`
-			tabs.push(newIdentifier);
-		}
+		FSBL.Clients.WindowClient.getStackedWindow((err, parentWrapper) => {
+			Actions.parentWrapper = parentWrapper;
+			if (Actions.parentWrapper) {
+				Actions.listenOnParentWrapper();
+				Actions.parentWrapperStore = Actions.parentWrapper.getStore();
+				Actions.parentWrapperStore.getValues(["childWindowIdentifiers", "visibleWindowIdentifier"], (err, response) => {
+					let tabs = response.value.childWindowIdentifiers;
+					Actions.onVisibleWindowChanged(null, { value: response.value.visibleWindowIdentifier })
+					cb(err, tabs);
+				})
+			} else {
+				let tabs = [FSBL.Clients.WindowClient.getWindowIdentifier()];
+				cb(null, tabs)
+			}
+		})
 
-		cb(null, tabs)
 	}
 };
 

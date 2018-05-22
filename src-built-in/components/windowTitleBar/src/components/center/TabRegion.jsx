@@ -237,7 +237,7 @@ export default class TabRegion extends React.Component {
         // }
         console.log("Drag over the tab region");
         e.preventDefault();
-        Actions.reorderTab(PLACEHOLDER_TAB, this.state.tabs.length);
+        Actions.reorderTabLocally(PLACEHOLDER_TAB, this.state.tabs.length);
     }
     /**
      * Triggered when the user moves their mouse out of the tabRegion after a dragOver event happens. When they leave, we hide our placeholder tab.
@@ -246,7 +246,7 @@ export default class TabRegion extends React.Component {
     dragLeave(e) {
         let boundingRect = this.props.boundingBox;
         if (!FSBL.Clients.WindowClient.isPointInBox({ x: e.screenX, y: e.screenY }, boundingRect)) {
-            Actions.removeTab(PLACEHOLDER_TAB);
+            Actions.removeTabLocally(PLACEHOLDER_TAB);
         }
 
     }
@@ -281,7 +281,7 @@ export default class TabRegion extends React.Component {
         let tabIndex = this.findTabIndex(tabDraggedOver);
         console.log("Drag over a tab. new Index", tabIndex, tabDraggedOver.windowName);
 
-        Actions.reorderTab(PLACEHOLDER_TAB, tabIndex);
+        Actions.reorderTabLocally(PLACEHOLDER_TAB, tabIndex);
     }
     /**
 	 * OnClick handler for the close button on individual tabs.
@@ -298,7 +298,7 @@ export default class TabRegion extends React.Component {
     onTabAdded(identifier) {
         let newIndex = this.findTabIndex(PLACEHOLDER_TAB);
         //On drop, we hide our placeholder tab.
-        Actions.removeTab(PLACEHOLDER_TAB);
+        Actions.removeTabLocally(PLACEHOLDER_TAB);
         //reorder will add if it doesn't exist.
         Actions.reorderTab(identifier, newIndex);
     }
