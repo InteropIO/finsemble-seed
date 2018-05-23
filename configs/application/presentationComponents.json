@@ -612,9 +612,6 @@
 				"url": "$applicationRoot/components/processMonitor/processMonitor.html",
 				"width": 600,
 				"height": 400,
-				"options": {
-					"customData": {}
-				}
 			},
 			"component": {
 				"category": "system",
