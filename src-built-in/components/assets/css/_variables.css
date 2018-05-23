@@ -2,21 +2,12 @@
 @import url('_theme.css');
 
 :root {
-    /* Reoccuring Accents */
-
-    --font-family: 'Roboto', sans-serif;
-    --font-color: #ffffff;
-    --primary-accent-color: var(--blue6);
-    --secondary-accent-color: var(--blue7);
-    --negative-accent-color: var(--red);
-
     /** Toolbar */
     
     --toolbar-height: 29px;
     --brand-logo-width: 20px;
     --brand-logo-height: 20px;
     --brand-logo-margin: 2px 2px;
-    /* --brand-logo-url: "http://vignette2.wikia.nocookie.net/logopedia/images/6/6f/McDonalds.png/revision/latest?cb=20161217022233"; */
 
     --toolbar-background-color: var(--coolGray7);
     --toolbar-primary-font-color: var(--font-color);

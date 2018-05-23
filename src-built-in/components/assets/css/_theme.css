@@ -2,5 +2,25 @@
 @import url('_colorPalette.css');
 
 :root {
+    /* Font Settings */
+    --font-family: 'Roboto', sans-serif;
+    --font-color: #ffffff;
+    --primary-font-weight: 300;
+    --secondary-font-weight: 500;
+    --tertiary-font-weight: bold;
+
+
+    /* Color Theme */
+    --primary-accent-color: var(--blue6);
+    --secondary-accent-color: var(--blue7);
+    /* --tertiary-accent-color: var(--blue5); */
+
+    --primary-negative-color: var(--red);
+    --secondary-negative-color: var(--red1);
+    --tertiary-negative-color: var(--red2);
+
+    --primary-background-color: var(--coolGray7);
+    --secondary--background-color: var(--coolGray6);
+    --tertiary--background-color: var(--coolGray5);
 
 }
