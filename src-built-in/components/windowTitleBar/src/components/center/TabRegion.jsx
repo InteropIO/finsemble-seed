@@ -10,6 +10,9 @@ const PLACEHOLDER_TAB = {
     uuid: "",
     componentType: "placeholder-tab"
 };
+let TAB_WIDTH = 300;
+const MINIMUM_TAB_SIZE = 60;
+
 export default class TabRegion extends React.Component {
     constructor(props) {
         super(props);
@@ -17,7 +20,8 @@ export default class TabRegion extends React.Component {
         this.state = {
             translateX: 0,
             tabs: initialState.tabs,
-            activeTab: initialState.activeTab || FSBL.Clients.WindowClient.getWindowIdentifier()
+            activeTab: initialState.activeTab || FSBL.Clients.WindowClient.getWindowIdentifier(),
+            boundingBox: {}
         };
         this.bindCorrectContext();
     }
@@ -46,7 +50,34 @@ export default class TabRegion extends React.Component {
         this.onTabsChanged = this.onTabsChanged.bind(this);
         this.onTabDraggedOver = this.onTabDraggedOver.bind(this);
         this.isTabRegionOverflowing = this.isTabRegionOverflowing.bind(this);
+        this.onWindowResize = this.onWindowResize.bind(this);
+        this.getTabWidth = this.getTabWidth.bind(this);
 
+    }
+    getTabWidth(params = {}) {
+        let { boundingBox, tabList } = params;
+        if (typeof (tabList) === "undefined") {
+            tabList = this.state.tabs;
+        }
+        if (typeof (boundingBox) === "undefined") {
+            boundingBox = this.state.boundingBox;
+        }
+        if (typeof (boundingBox.right) === "undefined") {
+            return TAB_WIDTH;
+        }
+        let containerWidth = boundingBox.right - boundingBox.left;
+        let newTabWidth = (containerWidth / tabList.length) - 15;
+        return newTabWidth < MINIMUM_TAB_SIZE ? MINIMUM_TAB_SIZE : newTabWidth;
+    }
+    /**
+ * Resize handler. Calculates the space that the center-region is taking up. May be used to scale tabs proportionally.
+ */
+    onWindowResize() {
+        let bounds = this.refs.Me.getBoundingClientRect();
+        this.setState({
+            boundingBox: bounds,
+            tabWidth: this.getTabWidth()
+        })
     }
     findTabIndex(tab) {
         return this.state.tabs.findIndex(el => {
@@ -98,7 +129,7 @@ export default class TabRegion extends React.Component {
         if (!response) {
             console.log("DRAG END TIMEOUT NO RESPONSE")
             FSBL.Clients.WindowClient.stopTilingOrTabbing({ mousePosition: this.mousePositionOnDragEnd });
-            this.props.onWindowResize();
+            this.onWindowResize();
         } else {
             console.log("DRAG END TIMEOUT GOT RESPONSE")
 
@@ -146,7 +177,7 @@ export default class TabRegion extends React.Component {
 
     isTabRegionOverflowing() {
         let lastTab = {
-            right: this.state.tabs.length * this.props.tabWidth
+            right: this.state.tabs.length * this.state.tabWidth
         };
         return lastTab.right + this.state.translateX > (this.props.boundingBox.right - this.props.boundingBox.left);
     }
@@ -168,19 +199,19 @@ export default class TabRegion extends React.Component {
                 left: 0 + boundingBox.left,
             };
             let lastTab = {
-                right: numTabs * this.props.tabWidth
+                right: numTabs * this.state.tabWidth
             };
 
             //If the content is overflowing, correct the translation (if necessary)..
             if (lastTab.right > boundingBox.right) {
                 translateX = e.nativeEvent.deltaY + currentX;
-                let maxRight = boundingBox.right - this.props.tabWidth;
+                let maxRight = boundingBox.right - this.state.tabWidth;
                 let newRightForLastTab = lastTab.right + translateX;
                 let newLeftForFirstTab = firstTab.left + translateX;
                 //Do not let the left of the first tab move to the right of the left edge of the bounding box.
                 if (newLeftForFirstTab >= boundingBox.left) {
                     return this.scrollToFirstTab();
-                } else if (e.nativeEvent.deltaY < 0 &&  newRightForLastTab <= boundingBox.right) {
+                } else if (e.nativeEvent.deltaY < 0 && newRightForLastTab <= boundingBox.right) {
                     //ONLY IF the user is scrolling from right-to-left (deltaY will be negative). IF they try to do that, do not allow the right edge of the last tab to detach.
                     return this.scrollToLastTab();
                 }
@@ -221,8 +252,8 @@ export default class TabRegion extends React.Component {
             return el.windowName === tab.windowName && el.uuid === tab.uuid
         });
         if (tabIndex > -1) {
-            let leftEdgeOfTab = tabIndex * this.props.tabWidth;
-            let rightEdgeOfTab = leftEdgeOfTab + this.props.tabWidth;
+            let leftEdgeOfTab = tabIndex * this.state.tabWidth;
+            let rightEdgeOfTab = leftEdgeOfTab + this.state.tabWidth;
             //Our translation is  this: Take the  right edge of the bounding box, and subract the left edge. This gives us the 0 point for the box. Then, we subtract the right edge of the tab. The result is a number that we use to shift the entire element and align the right edge of the tab with the right edge of the bounding box. We also account for the 30 px region on the right.
             let translateX = boundingBox.right - boundingBox.left - 30 - rightEdgeOfTab;
 
@@ -267,7 +298,7 @@ export default class TabRegion extends React.Component {
 	 */
     cancelTabbing() {
         FSBL.Clients.WindowClient.stopTilingOrTabbing();
-        this.props.onWindowResize();
+        this.onWindowResize();
     }
     /**
      * Basically exists just to keep the render method clean. Gives conditional classes to the active tab.
@@ -333,6 +364,10 @@ export default class TabRegion extends React.Component {
     }
     onTabsChanged(err, response) {
         let { value } = response;
+        this.setState({
+            tabs: value,
+            tabWidth: this.getTabWidth({ tabList: value })
+        })
         this.onStoreChanged("tabs", value);
     }
 
@@ -340,9 +375,21 @@ export default class TabRegion extends React.Component {
         Store.addListener({ field: "activeTab" }, this.onActiveTabChanged);
         Store.addListener({ field: "tabs" }, this.onTabsChanged);
     }
+
+    componentDidMount() {
+        window.addEventListener('resize', this.onWindowResize);
+        let boundingBox = this.refs.Me.getBoundingClientRect();
+        this.setState({
+            boundingBox: boundingBox,
+            tabWidth: this.getTabWidth({ boundingBox })
+        })
+    }
+
     componentWillUnmount() {
         Store.removeListener({ field: "activeTab" }, this.onActiveTabChanged);
         Store.removeListener({ field: "tabs" }, this.onTabsChanged);
+        window.removeEventListener('resize', this.onWindowResize);
+
     }
     render() {
         let { translateX } = this.state;
@@ -356,7 +403,7 @@ export default class TabRegion extends React.Component {
         let tabRegionStyle = {
             marginLeft: `${translateX}px`
         }
-        let tabRegionDropZoneStyle = { left: this.state.tabs.length * this.props.tabWidth + "px" }
+        let tabRegionDropZoneStyle = { left: this.state.tabs.length * this.state.tabWidth + "px" }
 
         let moveAreaClasses = "cq-drag fsbl-tab-region-drag-area";
         if (this.isTabRegionOverflowing()) {
@@ -365,6 +412,7 @@ export default class TabRegion extends React.Component {
 
         return (
             <div
+                ref="Me"
                 onDragLeave={this.dragLeave}
                 className={this.props.className}
                 onWheel={this.onMouseWheel}
@@ -428,7 +476,7 @@ function renderTabs() {
             }}
             onTabDraggedOver={this.onTabDraggedOver}
             listenForDragOver={this.props.listenForDragOver}
-            tabWidth={this.props.tabWidth}
+            tabWidth={this.state.tabWidth}
             title={tab.windowName}
             windowIdentifier={tab} />
     });

@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { FinsembleDraggable } from "@chartiq/finsemble-react-controls";
+const ICON_AREA = 29;
+const CLOSE_BUTTON_MARGIN = 22;
 /**
  * This component is pretty basic. It just takes a bunch of props and renders them.
  */
@@ -19,7 +21,7 @@ export default class Tab extends React.Component {
 		return FSBL.Clients.WindowClient.isPointInBox({ x: e.nativeEvent.screenX, y: e.nativeEvent.screenY }, box);
 	}
 	render() {
-		let titleWidth = this.props.tabWidth - 20;
+		let titleWidth = this.props.tabWidth - ICON_AREA - CLOSE_BUTTON_MARGIN;
 		let style = {
 			width: this.props.tabWidth
 		}
@@ -43,7 +45,7 @@ export default class Tab extends React.Component {
 					></div>
 				}
 				<div className="fsbl-tab-logo"><i className="ff-grid"></i></div>
-				<div className="fsbl-tab-title">{this.props.title}</div>
+				<div className="fsbl-tab-title" style={{width: titleWidth}}>{this.props.title}</div>
 				<div className="fsbl-tab-close" onClick={(e) => {
 					e.preventDefault();
 					this.props.onTabClose(e);

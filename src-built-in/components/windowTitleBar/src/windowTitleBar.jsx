@@ -25,8 +25,7 @@ import BringSuiteToFront from "./components/right/BringSuiteToFront.jsx";
 import AlwaysOnTop from "./components/right/AlwaysOnTop.jsx";
 import TabRegion from './components/center/TabRegion'
 import "../../assets/css/finsemble.css";
-const TAB_WIDTH = 175;
-const MINIMUM_TAB_SIZE = 55;
+
 /**
  * This is the main window manager component. It's the custom window frame that we add to each window that has useFSBLHeader set to true in its windowDescriptor.
  */
@@ -57,7 +56,6 @@ class WindowTitleBar extends React.Component {
 			showShareButton: windowTitleBarStore.getValue({ field: "Sharer.emitterEnabled" }),
 			isTopRight: windowTitleBarStore.getValue({ field: "isTopRight" }),
 			alwaysOnTopButton: windowTitleBarStore.getValue({ field: "AlwaysOnTop.show" }),
-			tabWidth: TAB_WIDTH,
 			tabs: [{ title: windowTitleBarStore.getValue({ field: "Main.windowTitle" }) }], //array of tabs for this window
 			showTabs: false,
 			allowDragOnCenterRegion: true,
@@ -79,7 +77,6 @@ class WindowTitleBar extends React.Component {
 		this.onAlwaysOnTopChanged = this.onAlwaysOnTopChanged.bind(this);
 		this.showLinkerButton = this.showLinkerButton.bind(this);
 		this.isTopRight = this.isTopRight.bind(this);
-		this.onWindowResize = this.onWindowResize.bind(this);
 		this.allowDragOnCenterRegion = this.allowDragOnCenterRegion.bind(this);
 		this.disallowDragOnCenterRegion = this.disallowDragOnCenterRegion.bind(this);
 
@@ -112,8 +109,7 @@ class WindowTitleBar extends React.Component {
 		let header = document.getElementsByClassName("fsbl-header")[0];
 		let headerHeight = window.getComputedStyle(header, null).getPropertyValue("height");
 		document.body.style.marginTop = headerHeight;
-		this.resize = setTimeout(this.onWindowResize, 300);
-		window.addEventListener('resize', this.onWindowResize);
+
 
 	}
 
@@ -128,7 +124,6 @@ class WindowTitleBar extends React.Component {
 			{ field: "Sharer.emitterEnabled", listener: this.onShareEmitterChanged },
 			{ field: "isTopRight", listener: this.isTopRight },
 		]);
-		window.removeEventListener('resize', this.onWindowResize);
 		FSBL.Clients.RouterClient.removeListener("DockingService.startTilingOrTabbing", this.disallowDragOnCenterRegion);
 		FSBL.Clients.RouterClient.removeListener("DockingService.stopTilingOrTabbing", this.allowDragOnCenterRegion);
 	}
@@ -217,17 +212,7 @@ class WindowTitleBar extends React.Component {
 	onShareEmitterChanged(err, response) {
 		this.setState({ emitterEnabled: response.value });
 	}
-	/**
-	 * Resize handler. Calculates the space that the center-region is taking up. May be used to scale tabs proportionally.
-	 */
-	onWindowResize() {
-		clearTimeout(this.resize);
-		this.resize = null;
-		let bounds = this.tabBar.getBoundingClientRect();
-		this.setState({
-			tabBarBoundingBox: bounds
-		})
-	}
+
 
 	render() {
 		var self = this;
@@ -263,7 +248,7 @@ class WindowTitleBar extends React.Component {
 				<div className={titleWrapperClasses}
 					ref={this.setTabBarRef}>
 					{/* If we're suppsoed to show tabs and the window isn't babySized */}
-					{this.state.showTabs && this.state.tabWidth >= MINIMUM_TAB_SIZE &&
+					{this.state.showTabs &&
 						<TabRegion
 							onTabDropped={this.allowDragOnCenterRegion}
 							className={tabRegionClasses}
@@ -271,9 +256,7 @@ class WindowTitleBar extends React.Component {
 							boundingBox={this.state.tabBarBoundingBox}
 							listenForDragOver={!this.state.allowDragOnCenterRegion}
 							tabs={this.state.tabs}
-							tabWidth={this.state.tabWidth}
 							ref="tabArea"
-							onWindowResize={this.onWindowResize}
 						/>}
 				</div>
 				<div className={rightWrapperClasses} ref={this.setToolbarRight}>
