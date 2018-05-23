@@ -140,6 +140,7 @@ export default class TabRegion extends React.Component {
             FSBL.Clients.Logger.system.error("Unexpected drop event on window title bar. Check the 'drop' method on TabRegion.jsx.");
         }
         FSBL.Clients.RouterClient.transmit("tabbingDragEnd", { success: true });
+        FSBL.Clients.WindowClient.stopTilingOrTabbing();
         this.props.onTabDropped();
     }
 
@@ -297,7 +298,8 @@ export default class TabRegion extends React.Component {
 	 * @param {*} tab
 	 */
     onTabClosed(identifier) {
-        Actions.removeTab(identifier);
+
+        Actions.removeTab(identifier, this.findTabIndex(identifier));
     }
     /**
 	 * drop handler for the tab region.
