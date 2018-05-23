@@ -1,6 +1,15 @@
 const timesSeries = require("async/timesSeries");
 let ProcessMonitorStore;
+let DEFAULT_STORE_DATA = {
+	childWindows: [],
+	uuid: '',
+	applicationList: [],
+	systemComponents: []
+}
 var Actions = {
+	getSystemComponentList: function () {
+		return DEFAULT_STORE_DATA.systemComponents
+	},
 	identifyWindow: function (winID) {
 		const OPACITY_ANIMATION_DURATION = 200;
 		let win = fin.desktop.Window.wrap(winID.uuid, winID.name);
@@ -66,7 +75,7 @@ var Actions = {
 		}
 		if (prompt && confirm(PROMPT)) {
 			doTerminate();
-		} else if(!prompt) {
+		} else if (!prompt) {
 			doTerminate();
 		}
 	},
@@ -95,26 +104,27 @@ var Actions = {
 	}
 };
 
-const DEFAULT_STORE_DATA = {
-	childWindows: [],
-	uuid: '',
-	applicationList: []
-}
+
 function createLocalStore(done) {
-	FSBL.Clients.DistributedStoreClient.createStore({
-		store: "Finsemble-ProcessMonitor-Local-Store",
-		values: DEFAULT_STORE_DATA
-	}, function (err, store) {
-		ProcessMonitorStore = store;
-		module.exports.Store = store;
-		done();
+	FSBL.Clients.WindowClient.finsembleWindow.getOptions((err, descriptor) => {
+		DEFAULT_STORE_DATA.systemComponents = descriptor.customData.component.systemComponents;// get our list of components
+		FSBL.Clients.DistributedStoreClient.createStore({
+			store: "Finsemble-ProcessMonitor-Local-Store",
+			values: DEFAULT_STORE_DATA
+		}, function (err, store) {
+			ProcessMonitorStore = store;
+			module.exports.Store = store;
+			done();
+		});
 	});
 }
+
 function initialize(cb) {
 	createLocalStore(() => {
 		cb();
 	});
 }
+
 module.exports.initialize = initialize;
 module.exports.Store = ProcessMonitorStore;
 module.exports.Actions = Actions;

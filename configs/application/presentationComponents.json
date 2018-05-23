@@ -611,10 +611,44 @@
 			"window": {
 				"url": "$applicationRoot/components/processMonitor/processMonitor.html",
 				"width": 600,
-				"height": 400
+				"height": 400,
+				"options": {
+					"customData": {}
+				}
 			},
 			"component": {
-				"category": "system"
+				"category": "system",
+				"systemComponents": [
+					"Toolbar",
+					"UserPreferences",
+					"dialogModal",
+					"routerService",
+					"dataStoreService",
+					"configService",
+					"loggerService",
+					"launcherService",
+					"workspaceService",
+					"storageService",
+					"searchService",
+					"authenticationService",
+					"dockingService",
+					"linkerService",
+					"assimilationService",
+					"finsembleNativeService",
+					"hotkeyService",
+					"RPCService",
+					"Process Monitor",
+					"File Menu",
+					"Docking Move Mask",
+					"yesNo",
+					"singleInput",
+					"inputAndSelection",
+					"Window Context Menu",
+					"searchMenu",
+					"App Launcher",
+					"linkerWindow",
+					"Workspace Management Menu"
+				]
 			},
 			"foreign": {
 				"services": {
@@ -633,6 +667,6 @@
 					}
 				}
 			}
-		}		
+		}
 	}
 }
