@@ -125,23 +125,9 @@ html.desktop-active .fsbl-header-right {
 
 }
 
-.fsbl-tab-region-drag-area.gradient {
-    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 100%);
-    border-right: var(--tab-border);
-}
 
 html.desktop-active .fsbl-tab-region-drag-area {
     background: var(--active-header-background-color);
-}
-.fsbl-tab-region-drag-area {
-    background: var(--window-header-background-color);
-    position: absolute;
-    right:0;
-    top:0;
-    bottom:0;
-    width:10px;
-    z-index: 2147483641;
-    cursor: pointer;
 }
 
 /* This div captures the hover event for it's parent. It doesn't stretch to the border, so that mouseout is properly detected. */

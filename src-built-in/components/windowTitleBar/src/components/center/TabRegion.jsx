@@ -382,7 +382,6 @@ export default class TabRegion extends React.Component {
                 >
                     {componentToRender === "title" && renderTitle()}
                     {componentToRender === "tabs" && renderTabs()}
-                    <div className={moveAreaClasses}></div>
                 </div>
 
             </div>
