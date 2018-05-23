@@ -14,7 +14,33 @@
     -webkit-app-region: no-drag !important;
     position: absolute;
 }
+@media screen and (min-width: 0px) and (max-width: 275px){
+    .fsbl-icon.ff-share {
+        display: none !important;
+    }
+}
 
+@media screen and (min-width: 0px) and (max-width: 250px){
+    .fsbl-header-left {
+        display: none !important;
+    }
+}
+
+@media screen and (min-width: 0px) and (max-width: 225px){
+    .fsbl-icon.ff-detached, .fsbl-icon.ff-attached {
+        display: none !important;
+    }
+}
+@media screen and (min-width: 0px) and (max-width: 200px){
+    .fsbl-icon.fsbl-maximize {
+        display: none !important;
+    }
+}
+@media screen and (min-width: 0px) and (max-width: 175px){
+    .fsbl-icon.fsbl-minimize {
+        display: none !important;
+    }
+}
 .fsbl-header {
     font-family: var(--font-family);
     text-align: center;
