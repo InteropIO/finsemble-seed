@@ -180,7 +180,7 @@ export default class TabRegion extends React.Component {
             FSBL.Clients.Logger.system.error("Unexpected drop event on window title bar. Check the 'drop' method on TabRegion.jsx.");
         }
         FSBL.Clients.RouterClient.transmit("tabbingDragEnd", { success: true });
-        FSBL.Clients.WindowClient.stopTilingOrTabbing({ allowDropOnSelf: true });
+        FSBL.Clients.WindowClient.stopTilingOrTabbing({ allowDropOnSelf: true, action: "tabbing" });
         this.props.onTabDropped();
     }
 
