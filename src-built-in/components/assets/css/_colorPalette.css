@@ -1,11 +1,11 @@
 :root {
-    --coolGray1: #7B98B3;
-    --coolGray2: #67829A;
-    --coolGray3: #617383;
-    --coolGray4: #495A69;
-    --coolGray5: #3C4C58;
-    --coolGray6: #303D47;
-    --coolGray7: #1C2A36;
+    --slate1: #7B98B3;
+    --slate2: #67829A;
+    --slate3: #617383;
+    --slate4: #495A69;
+    --slate5: #3C4C58;
+    --slate6: #303D47;
+    --slate7: #1C2A36;
 
     --gray1: #EEE;
     --gray2: #DDD;
@@ -39,7 +39,7 @@
     --red6: #B70C06;
     --red7: #960A05;
 
-    --coolGray: var(--coolGray4);
+    --slate: var(--slate4);
     --gray: var(--gray4);
     --blue: var(--blue4);
     --yellow: var(--yellow4);
