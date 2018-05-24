@@ -333,7 +333,7 @@ export default class TabRegion extends React.Component {
 	 */
     onTabClosed(identifier) {
 
-        Actions.removeTab(identifier, this.findTabIndex(identifier));
+        Actions.closeTab(identifier);
     }
     /**
 	 * drop handler for the tab region.

@@ -182,7 +182,7 @@ var Actions = {
 				return FSBL.Clients.Logger.error("Error in getInitialTabList.", err);
 			}
 
-			if(values) Actions._setTabs(values);
+			if (values) Actions._setTabs(values);
 		})
 	},
 	/**
@@ -378,7 +378,7 @@ var Actions = {
 	},
 	addTab: function (windowIdentifier, i) {
 		let callback = () => {
-			Actions.parentWrapper.setVisibleWindow({windowIdentifier})
+			Actions.parentWrapper.setVisibleWindow({ windowIdentifier })
 		};
 
 		if (!Actions.parentWrapper) {
@@ -390,6 +390,9 @@ var Actions = {
 	},
 	removeTab: function (windowIdentifier, i) {
 		return Actions.parentWrapper.removeWindow({ windowIdentifier, position: i });
+	},
+	closeTab: function (windowIdentifier) {
+		return Actions.parentWrapper.deleteWindow({ windowIdentifier })
 	},
 	reorderTab: function (tab, newIndex) {
 		let tabs = Actions.getTabs();
