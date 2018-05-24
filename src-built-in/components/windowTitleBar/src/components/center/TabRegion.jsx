@@ -96,7 +96,9 @@ export default class TabRegion extends React.Component {
 	 */
     startDrag(e, windowIdentifier) {
         console.log("start drag", windowIdentifier.windowName);
-
+        this.setState({
+            iAmDragging: true
+        });
         e.dataTransfer.setData("text/json", JSON.stringify(windowIdentifier));
         FSBL.Clients.WindowClient.startTilingOrTabbing({
             windowIdentifier: windowIdentifier
@@ -111,7 +113,7 @@ export default class TabRegion extends React.Component {
 	 * @memberof windowTitleBar
 	 */
     stopDrag(e) {
-
+        debugger
         //@sidd can you document this?
         this.mousePositionOnDragEnd = {
             x: e.nativeEvent.screenX,
@@ -138,6 +140,9 @@ export default class TabRegion extends React.Component {
 
         }
         FSBL.Clients.RouterClient.removeListener('tabbingDragEnd', this.clearDragEndTimeout);
+        this.setState({
+            iAmDragging: false
+        });
     }
 
     /**
@@ -288,7 +293,7 @@ export default class TabRegion extends React.Component {
      */
     dragLeave(e) {
         let boundingRect = this.state.boundingBox;
-        if (!FSBL.Clients.WindowClient.isPointInBox({ x: e.screenX, y: e.screenY }, boundingRect)) {
+        if (this.state.tabs.length > 1 && !FSBL.Clients.WindowClient.isPointInBox({ x: e.screenX, y: e.screenY }, boundingRect)) {
             Actions.removeTabLocally(PLACEHOLDER_TAB);
         }
 
@@ -397,7 +402,10 @@ export default class TabRegion extends React.Component {
     render() {
         let { translateX } = this.state;
         //If we have just 1 tab, we render the title. Unless someone is dragging a tab around - in that case, we will render the tab view, even though we only have 1.
-        let componentToRender = (!this.props.listenForDragOver && this.state.tabs.length === 1) ? "title" : "tabs";
+        let componentToRender = "tabs";
+        if (this.state.tabs.length === 1 || (this.state.iAmDragging && this.state.tabs.length === 1)) {
+            componentToRender = "title";
+        }
         //Cleanup in case we were translated before closing the second to last tab. This left-aligns the title.
         if (componentToRender === "title") {
             translateX = 0;
