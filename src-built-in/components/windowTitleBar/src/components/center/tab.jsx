@@ -48,6 +48,7 @@ export default class Tab extends React.Component {
 				<div className="fsbl-tab-title" style={{width: titleWidth}}>{this.props.title}</div>
 				<div className="fsbl-tab-close" onClick={(e) => {
 					e.preventDefault();
+					e.stopPropagation();
 					this.props.onTabClose(e);
 				}}>
 					<i className="ff-close"></i>
