@@ -22,7 +22,8 @@ export default class TabRegion extends React.Component {
             translateX: 0,
             tabs: initialState.tabs,
             activeTab: initialState.activeTab || FSBL.Clients.WindowClient.getWindowIdentifier(),
-            boundingBox: {}
+            boundingBox: {},
+            iAmDragging: false
         };
         this.bindCorrectContext();
     }
@@ -293,7 +294,7 @@ export default class TabRegion extends React.Component {
      */
     dragLeave(e) {
         let boundingRect = this.state.boundingBox;
-        if (this.state.tabs.length > 1 && !FSBL.Clients.WindowClient.isPointInBox({ x: e.screenX, y: e.screenY }, boundingRect)) {
+        if (!FSBL.Clients.WindowClient.isPointInBox({ x: e.screenX, y: e.screenY }, boundingRect)) {
             Actions.removeTabLocally(PLACEHOLDER_TAB);
         }
 
@@ -402,9 +403,15 @@ export default class TabRegion extends React.Component {
     render() {
         let { translateX } = this.state;
         //If we have just 1 tab, we render the title. Unless someone is dragging a tab around - in that case, we will render the tab view, even though we only have 1.
-        let componentToRender = "tabs";
-        if (this.state.tabs.length === 1 || (this.state.iAmDragging && this.state.tabs.length === 1)) {
-            componentToRender = "title";
+
+        let componentToRender = "title";
+        if (this.state.tabs.length === 1) {
+            if (this.props.listenForDragOver && !this.state.iAmDragging) {
+                componentToRender = "tabs";
+            }
+        }
+        if (this.state.tabs.length > 1) {
+            componentToRender = "tabs";
         }
         //Cleanup in case we were translated before closing the second to last tab. This left-aligns the title.
         if (componentToRender === "title") {
