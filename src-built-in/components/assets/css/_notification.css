@@ -1,15 +1,13 @@
-/* body {
-
-} */
+@import  url('_globals.css');
 
 .notification-wrapper {
     display: flex;
     flex-direction: column;
     overflow-y: hidden;
-    background-color: #1C2A36;
-    color: white;
+    background-color: var(--notification-body-background-color);
+    color: var(--notification-body-font-color);
     margin: 6px;
-    font-family: 'Roboto';
+    font-family: var(--notification-body-font-family);
     cursor: pointer;
     user-select: none;
 }
@@ -34,7 +32,7 @@
 .notification-content {
     display: flex;
     flex-direction: column;
-    font-size: 13px;
+    font-size: var(--notification-description-font-size);
 }
 
 .notification-title-wrapper {
@@ -43,10 +41,10 @@
 }
 
 .notification-title {
-    font-weight: bold;
+    font-weight: var(--notification-title-font-weight);
     align-self: flex-start;
     display: flex;
-    font-size: 13px;
+    font-size: var(--notification-title-font-size);
     margin-top: 1px;
 }
 
@@ -55,18 +53,19 @@
 }
 
 .notification-logo {
-    background: url("../img/Finsemble_Taskbar_Icon.png") #1C2A36 no-repeat;
+    background: url("../img/Finsemble_Taskbar_Icon.png") no-repeat;
+    background-color: var(--notification-body-background-color);
     background-size: contain;
     margin-right: 6px;
-    width: 14px;
+    width: var(--notification-logo-width);
 }
 
 .notification-close .ff-close {
     font-size: 10px;
     padding-top: 2px;
-    color: #FFFFFF
+    color: var(--notification-body-font-color);
 }
 
 .notification-close .ff-close:hover {
-    color: #EE5C5C;
+    color: var(--notification-close-icon-hover-color);
 }
