@@ -1,13 +1,13 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto");
 
 :root {
-    --coolGray1: #7B98B3;
-    --coolGray2: #67829A;
-    --coolGray3: #617383;
-    --coolGray4: #495A69;
-    --coolGray5: #3C4C58;
-    --coolGray6: #303D47;
-    --coolGray7: #1C2A36;
+    --slate1: #7B98B3;
+    --slate2: #67829A;
+    --slate3: #617383;
+    --slate4: #495A69;
+    --slate5: #3C4C58;
+    --slate6: #303D47;
+    --slate7: #1C2A36;
 
     --gray1: #EEE;
     --gray2: #DDD;
@@ -41,7 +41,7 @@
     --red6: #B70C06;
     --red7: #960A05;
 
-    --coolGray: var(--coolGray4);
+    --slate: var(--slate4);
     --gray: var(--gray4);
     --blue: var(--blue4);
     --yellow: var(--yellow4);
@@ -63,7 +63,7 @@
     --brand-logo-margin: 2px 2px;
     /* --brand-logo-url: "http://vignette2.wikia.nocookie.net/logopedia/images/6/6f/McDonalds.png/revision/latest?cb=20161217022233"; */
 
-    --toolbar-background-color: var(--coolGray7);
+    --toolbar-background-color: var(--slate7);
     --toolbar-primary-font-color: var(--font-color);
     --toolbar-icon-workspace-color: var(--yellow);
     --toolbar-icon-app-color: var(--blue3);
@@ -88,15 +88,15 @@
     --titleBar-icon-width: 21px;
     --titleBar-linker-group-width: 3px;
 
-    --titleBar-background-color: var(--coolGray6);
-    --titleBar-background-focus-color: var(--coolGray5);
+    --titleBar-background-color: var(--slate6);
+    --titleBar-background-focus-color: var(--slate5);
 
-    --titlebar-tab-windowFocused-active-background-color: var(--coolGray3); /* Specifies the background color of the active tab in the active window. */
-    --titlebar-tab-windowFocused-active-border-color: var(--coolGray2); 
-    --titlebar-tab-active-background-color: var(--coolGray4); /* Specifies the background color of the active tab in an inactive window. */
-    --titlebar-tab-active-border-color: var(--coolGray3);
-    --titlebar-tab-inactive-background-color: var(--coolGray7); /* Inactive tabs are the same color for active and inactive windows. */
-    --titlebar-tab-inactive-border-color: var(--coolGray3);
+    --titlebar-tab-windowFocused-active-background-color: var(--slate3); /* Specifies the background color of the active tab in the active window. */
+    --titlebar-tab-windowFocused-active-border-color: var(--slate2); 
+    --titlebar-tab-active-background-color: var(--slate4); /* Specifies the background color of the active tab in an inactive window. */
+    --titlebar-tab-active-border-color: var(--slate3);
+    --titlebar-tab-inactive-background-color: var(--slate7); /* Inactive tabs are the same color for active and inactive windows. */
+    --titlebar-tab-inactive-border-color: var(--slate3);
 
     --titleBar-button-hover-active-color: var(--blue6);
     --titleBar-button-hover-inactive-color: var(--blue7);
@@ -113,11 +113,11 @@
 
 
     /* Dialogs */
-    --dialog-background-color: var(--coolGray7);
+    --dialog-background-color: var(--slate7);
     --dialog-font-color: #FFFFFF;
     --dialog-font-weight: 300;
     --dialog-body-padding: 32px;
-    --dialog-input-background-color: var(--coolGray7);
+    --dialog-input-background-color: var(--slate7);
     --dialog-input-border-color: var(--gray6);
     --dialog-input-border-focus-color: var(--gray);
 
@@ -137,28 +137,28 @@
 
     /* Menus */
     --menu-font-size: 14px;
-    --menu-background-color: var(--coolGray6);
+    --menu-background-color: var(--slate6);
     --menu-primary-font-color: #FFFFFF;
-    --menu-primary-background-color: var(--coolGray6);
-    --menu-primary-hover-color: var(--coolGray3);
-    --menu-secondary-background-color: var(--coolGray4);
-    --menu-secondary-hover-color: var(--coolGray3);
+    --menu-primary-background-color: var(--slate6);
+    --menu-primary-hover-color: var(--slate3);
+    --menu-secondary-background-color: var(--slate4);
+    --menu-secondary-hover-color: var(--slate3);
 
-    --menu-pin-background-color: var(--coolGray1);
-    --menu-pin-background-hover-color: var(--coolGray2);
-    --menu-pin-border-color: var(--coolGray1);
+    --menu-pin-background-color: var(--slate1);
+    --menu-pin-background-hover-color: var(--slate2);
+    --menu-pin-border-color: var(--slate1);
     --menu-delete-background-color: var(--red1);
 
-    --scrollbar-color: var(--coolGray1);
+    --scrollbar-color: var(--slate1);
 
     /* Search Menu */
-    --search-result-active-item-color: var(--coolGray3);
+    --search-result-active-item-color: var(--slate3);
     --search-section-max-height: 30px;
     --search-input-height:var(--toolbar-height);
     --search-input-line-height: var(--toolbar-height);
 
     /* Window Frame*/
-    --window-frame-inactive-color: var(--coolGray);
+    --window-frame-inactive-color: var(--slate);
     /* --window-frame-active-color: var(--window-frame-inactive-color); */
 
     /* Window styles*/
@@ -167,21 +167,21 @@
     
     /* Complex menus (e.g., Preferences and App Catalog) */
     /* Nav section is the left side of a complex menu */
-    --complex-nav-header-background-color: var(--coolGray);
-    --complex-nav-background-color: var(--coolGray5);
-    --complex-nav-active-item: var(--coolGray3);
-    --complex-nav-active-item-hover: var(--coolGray2);
+    --complex-nav-header-background-color: var(--slate);
+    --complex-nav-background-color: var(--slate5);
+    --complex-nav-active-item: var(--slate3);
+    --complex-nav-active-item-hover: var(--slate2);
     --complex-nav-font-color: var(--font-color);
     --complex-nav-padding-left: 30px;
     
     /* Content-section is the right side of a complex menu.*/
-    --complex-content-background-color: var(--coolGray6);
+    --complex-content-background-color: var(--slate6);
     --complex-content-font-color: var(--font-color);
     --complex-content-hint-font-color: var(--gray);
     --complex-content-header-font-color: var(--blue1);
 
     --complex-content-list-border-color: var(--gray6);
-    --complex-content-list-highlighter: var(--coolGray3);
+    --complex-content-list-highlighter: var(--slate3);
     --complex-content-list-button-padding: 2px;
     --complex-content-list-item-flagged-color: var(--blue1);
     --complex-content-list-editor-font-color: var(--font-color);
@@ -198,6 +198,6 @@
     --complex-content-checkbox-check-color: #FFFFFF;
     --complex-content-checkbox-background-color: var(--blue);
 
-    --complex-content-card-background-color: var(--coolGray4);
+    --complex-content-card-background-color: var(--slate4);
     --complex-content-card-logo-background-color: var(--blue7);
 }
