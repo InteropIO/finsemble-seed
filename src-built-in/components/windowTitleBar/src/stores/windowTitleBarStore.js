@@ -346,14 +346,17 @@ var Actions = {
 		Actions._setTabs(tabs);
 	},
 	removeTabLocally: function (windowIdentifier) {
+		console.log("Removing tab", windowIdentifier.name);
 		let tabs = Actions.getTabs();
 		let i = tabs.findIndex(el => el.name === windowIdentifier.name && el.uuid === windowIdentifier.uuid);
 		tabs.splice(i, 1);
+		console.log("Number of Tabs left", tabs.length);
 		Actions._setTabs(tabs);
 	},
 	reorderTabLocally: function (tab, newIndex) {
 		let tabs = Actions.getTabs();
 		let { currentIndex } = Actions.findTab(tab);
+		if (currentIndex === newIndex) return;
 		if (currentIndex === -1) {
 			return Actions.addTabLocally(tab, newIndex);
 		}
@@ -412,13 +415,11 @@ var Actions = {
 		Actions.parentWrapperStore.addListener({ field: constants.VISIBLE_WINDOW_FIELD }, Actions.onVisibleWindowChanged);
 	},
 	setupStore: function (cb = Function.prototype) {
-		debugger
 		Actions.parentWrapper.getStore((store) => {
 			Actions.parentWrapperStore = store;
 			constants.CHILD_WINDOW_FIELD = `${Actions.parentWrapper.identifier.windowName}.childWindowIdentifiers`;
 			constants.VISIBLE_WINDOW_FIELD = `${Actions.parentWrapper.identifier.windowName}.visibleWindowIdentifier`;
 			Actions.listenOnParentWrapper();
-			debugger
 			store.getValues([
 				constants.CHILD_WINDOW_FIELD, constants.VISIBLE_WINDOW_FIELD
 			], (err, values) => {

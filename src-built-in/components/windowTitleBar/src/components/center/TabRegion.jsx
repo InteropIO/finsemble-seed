@@ -5,6 +5,7 @@ import ReactDOM from "react-dom";
 import Tab from "./tab";
 import { FinsembleDnDContext, FinsembleDroppable } from '@chartiq/finsemble-react-controls';
 import { Store, Actions } from "../../stores/windowTitleBarStore";
+import { debug } from "util";
 const PLACEHOLDER_TAB = {
     windowName: "",
     uuid: "",
@@ -55,6 +56,8 @@ export default class TabRegion extends React.Component {
 
     }
     getTabWidth(params = {}) {
+        if (this.props.listenForDragOver) return TAB_WIDTH;
+
         let { boundingBox, tabList } = params;
         if (typeof (tabList) === "undefined") {
             tabList = this.state.tabs;
@@ -284,7 +287,7 @@ export default class TabRegion extends React.Component {
      * @param {event} e
      */
     dragLeave(e) {
-        let boundingRect = this.props.boundingBox;
+        let boundingRect = this.state.boundingBox;
         if (!FSBL.Clients.WindowClient.isPointInBox({ x: e.screenX, y: e.screenY }, boundingRect)) {
             Actions.removeTabLocally(PLACEHOLDER_TAB);
         }
@@ -416,6 +419,7 @@ export default class TabRegion extends React.Component {
                 onDragLeave={this.dragLeave}
                 className={this.props.className}
                 onWheel={this.onMouseWheel}
+                onScroll={(e) => { e.preventDefault();}}
             >
                 {/**This exists because I couldn't capture dragOver when simply changing the className on the tab-region wrapper. So instead, we render this div that sits absolutely positioned on top of the tabRegion.*/}
                 {this.props.listenForDragOver &&
