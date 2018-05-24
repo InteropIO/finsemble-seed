@@ -102,6 +102,7 @@ class WindowTitleBar extends React.Component {
 		})
 
 		FSBL.Clients.RouterClient.addListener("DockingService.startTilingOrTabbing", this.disallowDragOnCenterRegion);
+		console.log("Adding listener for stopTilingOrTabbing.");
 		FSBL.Clients.RouterClient.addListener("DockingService.stopTilingOrTabbing", this.allowDragOnCenterRegion);
 	}
 
@@ -109,8 +110,6 @@ class WindowTitleBar extends React.Component {
 		let header = document.getElementsByClassName("fsbl-header")[0];
 		let headerHeight = window.getComputedStyle(header, null).getPropertyValue("height");
 		document.body.style.marginTop = headerHeight;
-
-
 	}
 
 	componentWillUnmount() {
@@ -124,6 +123,7 @@ class WindowTitleBar extends React.Component {
 			{ field: "Sharer.emitterEnabled", listener: this.onShareEmitterChanged },
 			{ field: "isTopRight", listener: this.isTopRight },
 		]);
+		console.log("Removing listener from the router.");
 		FSBL.Clients.RouterClient.removeListener("DockingService.startTilingOrTabbing", this.disallowDragOnCenterRegion);
 		FSBL.Clients.RouterClient.removeListener("DockingService.stopTilingOrTabbing", this.allowDragOnCenterRegion);
 	}

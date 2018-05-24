@@ -174,7 +174,7 @@ export default class TabRegion extends React.Component {
             FSBL.Clients.Logger.system.error("Unexpected drop event on window title bar. Check the 'drop' method on TabRegion.jsx.");
         }
         FSBL.Clients.RouterClient.transmit("tabbingDragEnd", { success: true });
-        FSBL.Clients.WindowClient.stopTilingOrTabbing();
+        FSBL.Clients.WindowClient.stopTilingOrTabbing({ allowDropOnSelf: true });
         this.props.onTabDropped();
     }
 
@@ -300,7 +300,7 @@ export default class TabRegion extends React.Component {
 	 * @memberof windowTitleBar
 	 */
     cancelTabbing() {
-        FSBL.Clients.WindowClient.stopTilingOrTabbing();
+        FSBL.Clients.WindowClient.stopTilingOrTabbing({ allowDropOnSelf: true });
         this.onWindowResize();
     }
     /**
@@ -372,6 +372,7 @@ export default class TabRegion extends React.Component {
             tabWidth: this.getTabWidth({ tabList: value })
         })
         this.onStoreChanged("tabs", value);
+
     }
 
     componentWillMount() {
@@ -419,7 +420,7 @@ export default class TabRegion extends React.Component {
                 onDragLeave={this.dragLeave}
                 className={this.props.className}
                 onWheel={this.onMouseWheel}
-                onScroll={(e) => { e.preventDefault();}}
+                onScroll={this.onMouseWheel}
             >
                 {/**This exists because I couldn't capture dragOver when simply changing the className on the tab-region wrapper. So instead, we render this div that sits absolutely positioned on top of the tabRegion.*/}
                 {this.props.listenForDragOver &&
