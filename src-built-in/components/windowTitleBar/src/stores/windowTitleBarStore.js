@@ -103,11 +103,12 @@ var Actions = {
 			let isSnapped = false;
 			let isInMovableGroup = false;
 			let isTopRight = false;
+			let windowName = FSBL.Clients.WindowClient.getWindowNameForDocking();
 			for (let i = 0; i < myGroups.length; i++) {
 				let myGroup = myGroups[i];
 				if (myGroup.isMovable) {
 					isInMovableGroup = true;
-					if (FSBL.Clients.WindowClient.windowName == myGroup.topRightWindow) {
+					if (windowName == myGroup.topRightWindow) {
 						isTopRight = true;
 					}
 				} else {
@@ -184,7 +185,7 @@ var Actions = {
 	 */
 	getMyDockingGroups: function (groupData) {
 		let myGroups = [];
-		let windowName = FSBL.Clients.WindowClient.windowName;
+		let windowName = FSBL.Clients.WindowClient.getWindowNameForDocking();
 		if (groupData) {
 			for (var groupName in groupData) {
 				groupData[groupName].groupName = groupName;
@@ -274,7 +275,7 @@ var Actions = {
 		}
 	},
 	hyperfocusDockingGroup: function () {
-		FSBL.Clients.RouterClient.transmit("DockingService.hyperfocusGroup", { windowName: FSBL.Clients.WindowClient.windowName });
+		FSBL.Clients.RouterClient.transmit("DockingService.hyperfocusGroup", { windowName: FSBL.Clients.WindowClient.getWindowNameForDocking() });
 	},
 	/**
 	 * Handles messages coming from the windowCclient.
@@ -405,6 +406,7 @@ var Actions = {
 	},
 	parentWrapper: null,
 	onTabListChanged: function (err, response) {
+		debugger
 		return Actions._setTabs(response.value);
 	},
 	onVisibleWindowChanged: function (err, response) {
@@ -447,6 +449,7 @@ var Actions = {
 			cb();
 		} else {
 			FSBL.Clients.WindowClient.getStackedWindow({ create: true }, (err, response) => {
+				debugger
 				Actions.parentWrapper = FSBL.Clients.WindowClient.finsembleWindow.getParent();
 				Actions.setupStore(cb);
 			})
