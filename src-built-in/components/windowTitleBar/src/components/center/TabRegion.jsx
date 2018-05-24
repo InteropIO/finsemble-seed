@@ -367,12 +367,11 @@ export default class TabRegion extends React.Component {
     }
     onTabsChanged(err, response) {
         let { value } = response;
+        console.log("Tablist changed", value);
         this.setState({
             tabs: value,
             tabWidth: this.getTabWidth({ tabList: value })
         })
-        this.onStoreChanged("tabs", value);
-
     }
 
     componentWillMount() {

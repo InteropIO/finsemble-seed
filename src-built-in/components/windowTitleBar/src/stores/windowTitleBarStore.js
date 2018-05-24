@@ -170,13 +170,15 @@ var Actions = {
 
 		Actions.getInitialTabList((err, values) => {
 			FSBL.Clients.WindowClient.finsembleWindow.addListener("setParent", () => {
+				debugger
 				Actions.parentWrapper = null;
 				Actions.getInitialTabList();
 			});
 			if (err) {
 				return FSBL.Clients.Logger.error("Error in getInitialTabList.", err);
 			}
-			Actions._setTabs(values);
+
+			if(values) Actions._setTabs(values);
 		})
 	},
 	/**
@@ -336,6 +338,7 @@ var Actions = {
 		return windowTitleBarStore.getValue({ field: "tabs" });
 	},
 	_setTabs(tabs) {
+		console.log("SET TABS", console.trace(), tabs);
 		return windowTitleBarStore.setValue({ field: "tabs", value: tabs })
 	},
 	addTabLocally: function (windowIdentifier, i) {
@@ -406,7 +409,6 @@ var Actions = {
 	},
 	parentWrapper: null,
 	onTabListChanged: function (err, response) {
-		debugger
 		return Actions._setTabs(response.value);
 	},
 	onVisibleWindowChanged: function (err, response) {
@@ -427,7 +429,7 @@ var Actions = {
 			], (err, values) => {
 				Actions._setTabs(values[constants.CHILD_WINDOW_FIELD]);
 				Actions.onVisibleWindowChanged(null, { value: values[constants.VISIBLE_WINDOW_FIELD] })
-				cb();
+				cb(null, null);
 			});
 		});
 	},
@@ -449,7 +451,6 @@ var Actions = {
 			cb();
 		} else {
 			FSBL.Clients.WindowClient.getStackedWindow({ create: true }, (err, response) => {
-				debugger
 				Actions.parentWrapper = FSBL.Clients.WindowClient.finsembleWindow.getParent();
 				Actions.setupStore(cb);
 			})
