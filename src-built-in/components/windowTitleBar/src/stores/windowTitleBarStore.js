@@ -307,7 +307,8 @@ var Actions = {
 	 */
 	clickClose: function () {
 		FSBL.Clients.WindowClient.close({
-			removeFromWorkspace: true
+			removeFromWorkspace: true,
+			userInitiated: true
 		});
 	},
 	/**
