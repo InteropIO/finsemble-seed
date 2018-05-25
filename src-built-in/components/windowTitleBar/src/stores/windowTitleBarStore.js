@@ -429,8 +429,8 @@ var Actions = {
 	setupStore: function (cb = Function.prototype) {
 		Actions.parentWrapper.getStore((store) => {
 			Actions.parentWrapperStore = store;
-			constants.CHILD_WINDOW_FIELD = `${Actions.parentWrapper.identifier.windowName}.childWindowIdentifiers`;
-			constants.VISIBLE_WINDOW_FIELD = `${Actions.parentWrapper.identifier.windowName}.visibleWindowIdentifier`;
+			constants.CHILD_WINDOW_FIELD = `${Actions.parentWrapper.identifier.windowName}.descriptor.childWindowIdentifiers`;
+			constants.VISIBLE_WINDOW_FIELD = `${Actions.parentWrapper.identifier.windowName}.descriptor.visibleWindowIdentifier`;
 			Actions.listenOnParentWrapper();
 			store.getValues([
 				constants.CHILD_WINDOW_FIELD, constants.VISIBLE_WINDOW_FIELD
