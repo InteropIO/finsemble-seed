@@ -4,7 +4,9 @@
 :root {
     /* Font Settings */
     --font-family: 'Roboto', sans-serif;
-    --font-color: #ffffff;
+    --primary-font-color: #ffffff;
+    --secondary-font-color: #000000;
+    
     --primary-font-weight: 300;
     --secondary-font-weight: 500;
     --tertiary-font-weight: bold;
@@ -13,7 +15,7 @@
     /* Color Theme */
     --primary-accent-color: var(--blue6);
     --secondary-accent-color: var(--blue7);
-    /* --tertiary-accent-color: var(--blue5); */
+    --tertiary-accent-color: var(--blue1);
 
     --primary-negative-color: var(--red);
     --secondary-negative-color: var(--red1);
