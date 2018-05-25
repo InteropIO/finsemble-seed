@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Roboto");
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700");
 @import url('_colorPalette.css');
 
 :root {
@@ -9,7 +9,7 @@
     --secondary-font-weight: 500;
     --tertiary-font-weight: bold;
 
-    
+
     /* Color Theme */
     --primary-accent-color: var(--blue6);
     --secondary-accent-color: var(--blue7);
@@ -20,7 +20,7 @@
     --tertiary-negative-color: var(--red2);
 
     --primary-background-color: var(--slate7);
-    --secondary--background-color: var(--slate6);
+    --secondary-background-color: var(--slate6);
     --tertiary--background-color: var(--slate5);
 
 }

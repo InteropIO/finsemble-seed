@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Roboto");
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700");
 @import url('_theme.css');
 
 :root {
@@ -7,21 +7,21 @@
     --toolbar-height: 29px;
     --brand-logo-width: 20px;
     --brand-logo-height: 20px;
-    --brand-logo-margin: 2px 2px;
+    --brand-logo-margin: 2px 2px;  
 
-    --toolbar-background-color: var(--slate7);
+    --toolbar-background-color: var(--primary-background-color);
     --toolbar-primary-font-color: var(--font-color);
     --toolbar-icon-workspace-color: var(--yellow);
     --toolbar-icon-app-color: var(--blue3);
 
     --toolbar-button-padding: 0 .4em;
-    --toolbar-button-label-font-weight: 300;
+    --toolbar-button-label-font-weight: var(--primary-font-weight);
     --toolbar-button-label-font-size: .75em;
     --toolbar-button-label-margin-top: 6px;
     --toolbar-button-label-padding-top: 1px;
 
     --toolbar-line-height: 1em;
-    --toolbar-font-weight: 300;
+    --toolbar-font-weight: var(--primary-font-weight);
     --toolbar-icon-font-size: 22px;
 
     --toolbar-separator: 1px solid rgba(255, 255, 255, 0.3);
@@ -34,14 +34,14 @@
     --titleBar-icon-width: 21px;
     --titleBar-linker-group-width: 3px;
 
-    --titleBar-background-color: var(--slate6);
-    --titleBar-background-focus-color: var(--slate5);
+    --titleBar-background-color: var(--secondary-background-color);
+    --titleBar-background-focus-color: var(--tertiary-background-color);
 
     --titlebar-tab-windowFocused-active-background-color: var(--slate3); /* Specifies the background color of the active tab in the active window. */
     --titlebar-tab-windowFocused-active-border-color: var(--slate2); 
     --titlebar-tab-active-background-color: var(--slate4); /* Specifies the background color of the active tab in an inactive window. */
     --titlebar-tab-active-border-color: var(--slate3);
-    --titlebar-tab-inactive-background-color: var(--slate7); /* Inactive tabs are the same color for active and inactive windows. */
+    --titlebar-tab-inactive-background-color: var(--primary-background-color); /* Inactive tabs are the same color for active and inactive windows. */
     --titlebar-tab-inactive-border-color: var(--slate3);
 
     --titleBar-button-hover-active-color: var(--blue6);
@@ -53,17 +53,17 @@
     --titleBar-text-color: var(--font-color);
     --titlebar-text-active-color: var(--font-color);
     --titleBar-text-inactive-color: var(--gray3);
-    --titleBar-font-weight: 300;
+    --titleBar-font-weight: var(--primary-font-weight);
     --titleBar-font-size: 12px;
 
 
 
     /* Dialogs */
-    --dialog-background-color: var(--slate7);
+    --dialog-background-color: var(--primary-background-color);
     --dialog-font-color: #FFFFFF;
-    --dialog-font-weight: 300;
+    --dialog-font-weight: var(--primary-font-weight);
     --dialog-body-padding: 32px;
-    --dialog-input-background-color: var(--slate7);
+    --dialog-input-background-color: var(--primary-background-color);
     --dialog-input-border-color: var(--gray6);
     --dialog-input-border-focus-color: var(--gray);
 
@@ -83,9 +83,9 @@
 
     /* Menus */
     --menu-font-size: 14px;
-    --menu-background-color: var(--slate6);
+    --menu-background-color: var(--secondary-background-color);
     --menu-primary-font-color: #FFFFFF;
-    --menu-primary-background-color: var(--slate6);
+    --menu-primary-background-color: var(--secondary-background-color);
     --menu-primary-hover-color: var(--slate3);
     --menu-secondary-background-color: var(--slate4);
     --menu-secondary-hover-color: var(--slate3);
@@ -114,14 +114,14 @@
     /* Complex menus (e.g., Preferences and App Catalog) */
     /* Nav section is the left side of a complex menu */
     --complex-nav-header-background-color: var(--slate);
-    --complex-nav-background-color: var(--slate5);
+    --complex-nav-background-color: var(--tertiary-background-color);
     --complex-nav-active-item: var(--slate3);
     --complex-nav-active-item-hover: var(--slate2);
     --complex-nav-font-color: var(--font-color);
     --complex-nav-padding-left: 30px;
     
     /* Content-section is the right side of a complex menu.*/
-    --complex-content-background-color: var(--slate6);
+    --complex-content-background-color: var(--secondary-background-color);
     --complex-content-font-color: var(--font-color);
     --complex-content-hint-font-color: var(--gray);
     --complex-content-header-font-color: var(--blue1);
