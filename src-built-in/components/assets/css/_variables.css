@@ -142,4 +142,5 @@
     --tab-border: 1px solid #979797;
     --tab-inactive-background-color: #1c2a36;
     --tab-active-background-color: transparent;
+    --tab-logo-color: var(--primary-accent-color);
 }
