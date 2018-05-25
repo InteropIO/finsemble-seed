@@ -170,7 +170,6 @@ var Actions = {
 
 		Actions.getInitialTabList((err, values) => {
 			FSBL.Clients.WindowClient.finsembleWindow.addListener("setParent", () => {
-				debugger
 				Actions.parentWrapper = null;
 				Actions.getInitialTabList();
 			});
@@ -344,7 +343,8 @@ var Actions = {
 	},
 	_setTabs(tabs) {
 		console.log("SET TABS", console.trace(), tabs);
-		return windowTitleBarStore.setValue({ field: "tabs", value: tabs })
+
+		return windowTitleBarStore.setValue({ field: "tabs", value: tabs || [FSBL.Clients.WindowClient.getWindowIdentifier()] })
 	},
 	addTabLocally: function (windowIdentifier, i) {
 		let tabs = Actions.getTabs();
