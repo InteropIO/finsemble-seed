@@ -175,7 +175,9 @@ var Actions = {
 			});
 			FSBL.Clients.WindowClient.finsembleWindow.addListener("clearParent", () => {
 				Actions.parentWrapper = null;
-				Actions.getInitialTabList();
+				Actions.getInitialTabList((err, tabs) => {
+					Actions._setTabs(tabs);
+				});
 			});
 			if (err) {
 				return FSBL.Clients.Logger.error("Error in getInitialTabList.", err);
