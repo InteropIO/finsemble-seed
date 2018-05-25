@@ -21,7 +21,7 @@ export default class TabRegion extends React.Component {
         this.state = {
             translateX: 0,
             tabs: initialState.tabs,
-            activeTab: initialState.activeTab || FSBL.Clients.WindowClient.getWindowIdentifier(),
+            activeTab: FSBL.Clients.WindowClient.getWindowIdentifier(),
             boundingBox: {},
             iAmDragging: false
         };
@@ -48,7 +48,7 @@ export default class TabRegion extends React.Component {
         this.onTabClosed = this.onTabClosed.bind(this);
         this.setActiveTab = this.setActiveTab.bind(this);
         this.onStoreChanged = this.onStoreChanged.bind(this);
-        this.onActiveTabChanged = this.onActiveTabChanged.bind(this);
+        // this.onActiveTabChanged = this.onActiveTabChanged.bind(this);
         this.onTabsChanged = this.onTabsChanged.bind(this);
         this.onTabDraggedOver = this.onTabDraggedOver.bind(this);
         this.isTabRegionOverflowing = this.isTabRegionOverflowing.bind(this);
@@ -139,7 +139,6 @@ export default class TabRegion extends React.Component {
             this.onWindowResize();
         } else {
             console.log("DRAG END TIMEOUT GOT RESPONSE")
-
         }
         FSBL.Clients.RouterClient.removeListener('tabbingDragEnd', this.clearDragEndTimeout);
         this.setState({
@@ -368,10 +367,10 @@ export default class TabRegion extends React.Component {
         });
     }
 
-    onActiveTabChanged(err, response) {
-        let { value } = response;
-        this.onStoreChanged("activeTab", value);
-    }
+    // onActiveTabChanged(err, response) {
+    //     let { value } = response;
+    //     this.onStoreChanged("activeTab", value);
+    // }
     onTabsChanged(err, response) {
         let { value } = response;
         console.log("Tablist changed", value);
@@ -382,7 +381,7 @@ export default class TabRegion extends React.Component {
     }
 
     componentWillMount() {
-        Store.addListener({ field: "activeTab" }, this.onActiveTabChanged);
+        // Store.addListener({ field: "activeTab" }, this.onActiveTabChanged);
         Store.addListener({ field: "tabs" }, this.onTabsChanged);
     }
 
@@ -396,7 +395,7 @@ export default class TabRegion extends React.Component {
     }
 
     componentWillUnmount() {
-        Store.removeListener({ field: "activeTab" }, this.onActiveTabChanged);
+        // Store.removeListener({ field: "activeTab" }, this.onActiveTabChanged);
         Store.removeListener({ field: "tabs" }, this.onTabsChanged);
         window.removeEventListener('resize', this.onWindowResize);
 

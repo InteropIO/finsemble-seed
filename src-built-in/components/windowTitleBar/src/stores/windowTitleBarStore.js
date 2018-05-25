@@ -169,16 +169,19 @@ var Actions = {
 		});
 
 		Actions.getInitialTabList((err, values) => {
-			FSBL.Clients.WindowClient.finsembleWindow.addListener("setParent", () => {
+			var onParentSet = () => {
 				Actions.parentWrapper = null;
 				Actions.getInitialTabList();
-			});
-			FSBL.Clients.WindowClient.finsembleWindow.addListener("clearParent", () => {
+			};
+			var onParentCleared = () => {
 				Actions.parentWrapper = null;
 				Actions.getInitialTabList((err, tabs) => {
 					Actions._setTabs(tabs);
 				});
-			});
+			};
+
+			FSBL.Clients.WindowClient.finsembleWindow.addListener("setParent", onParentSet);
+			FSBL.Clients.WindowClient.finsembleWindow.addListener("clearParent", onParentCleared);
 			if (err) {
 				return FSBL.Clients.Logger.error("Error in getInitialTabList.", err);
 			}
