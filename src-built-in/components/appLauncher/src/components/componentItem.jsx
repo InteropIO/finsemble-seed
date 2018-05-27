@@ -19,7 +19,7 @@ export default class componentItem extends React.Component {
 		this.deleteItem = this.deleteItem.bind(this);
 	}
 	deleteItem() {
-		appLauncherActions.handleRemoveCustomComponent(this.props.name);
+		appLauncherActions.uninstallComponent(this.props.name);
 	}
 	render() {
 		var self = this;
@@ -44,7 +44,7 @@ export default class componentItem extends React.Component {
 			onLabelClick={function () {
 				itemAction(component, {});
 			}}
-			isDeletable={this.props.isUserDefined}
+			isDeletable={true}
 			deleteAction={this.deleteItem}
 			isPinnable={true}
 			pinIcon={'ff-pin'}
@@ -52,6 +52,6 @@ export default class componentItem extends React.Component {
 			isPinned={this.props.isPinned}
 			pinAction={function () {
 				togglePin(component);
-			}}/>);
+			}} />);
 	}
 }
