@@ -118,9 +118,11 @@ export default class Toolbar extends React.Component {
 		for (var sectionPosition in this.state.sections) {
 			var section = this.state.sections[sectionPosition];
 			var buttons = [];
+			console.log("section", section, section.length);
 			for (var i = 0; i < section.length; i++) {
 				var button = section[i];
 				if (!button.type) button.type = "menuLauncher";
+				console.log("button",button);
 				var buttonComponent;
 				switch (button.type) {
 					case "seperator":
