@@ -475,7 +475,7 @@ function renderTitle() {
     return (<div
         draggable="true"
         onDragStart={(e) => {
-            FSBL.Clients.Logger.system.log("Tab drag start - TITLE", windowIdentifier.windowName);
+            FSBL.Clients.Logger.system.log("Tab drag start - TITLE");
             this.startDrag(e, FSBL.Clients.WindowClient.getWindowIdentifier());
         }}
         onDragEnd={this.stopDrag}
@@ -501,7 +501,7 @@ function renderTabs() {
             key={i}
             className={this.getTabClasses(tab)}
             onDragStart={(e, identifier) => {
-                FSBL.Clients.Logger.system.log("Tab drag - TAB", windowIdentifier.windowName);
+                FSBL.Clients.Logger.system.log("Tab drag - TAB", identifier.windowName);
                 this.startDrag(e, identifier);
             }}
             onDrop={this.drop}
