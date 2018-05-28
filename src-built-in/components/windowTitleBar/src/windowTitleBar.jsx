@@ -240,13 +240,13 @@ class WindowTitleBar extends React.Component {
 		if (this.state.showTabs) {
 			headerClasses += " fsbl-tabs-enabled";
 		}
+		if (this.state.tabs.length > 1) {
+			headerClasses += " fsbl-tabs-multiple";
+		}
 		//See this.allowDragOnCenterRegion for more explanation.
 		if (this.state.allowDragOnCenterRegion) {
 			titleWrapperClasses += " cq-drag";
 			tabRegionClasses += " cq-drag";
-		}
-		if (this.state.tabs.length > 1) {
-			titleWrapperClasses += " terry-class";
 		}
 		return (
 			<div className={headerClasses}>

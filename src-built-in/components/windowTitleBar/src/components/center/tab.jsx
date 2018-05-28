@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import HoverDetector from "../HoverDetector.jsx";
 import { FinsembleDraggable } from "@chartiq/finsemble-react-controls";
 const ICON_AREA = 29;
 const CLOSE_BUTTON_MARGIN = 22;
@@ -10,6 +11,10 @@ export default class Tab extends React.Component {
 	constructor(props) {
 		super(props);
 		this.onDragOver = this.onDragOver.bind(this);
+
+		this.state = {
+			hoverState: "false"
+		};
 	}
 	onDragOver(e) {
 		let boundingBox = this.refs.Me.getBoundingClientRect();
@@ -19,6 +24,9 @@ export default class Tab extends React.Component {
 	}
 	crossedMidline(e, box) {
 		return FSBL.Clients.WindowClient.isPointInBox({ x: e.nativeEvent.screenX, y: e.nativeEvent.screenY }, box);
+	}
+	hoverAction(newHoverState) {
+		this.setState({ hoverState: newHoverState });
 	}
 	render() {
 		let titleWidth = this.props.tabWidth - ICON_AREA - CLOSE_BUTTON_MARGIN;
@@ -37,6 +45,7 @@ export default class Tab extends React.Component {
 				onDragEnd={this.props.onDragEnd}
 				draggable={true}
 				className={this.props.className}
+				data-hover={this.state.hoverState}
 				style={style}
 				title={this.props.title}>
 				{this.props.listenForDragOver &&
@@ -44,6 +53,7 @@ export default class Tab extends React.Component {
 					onDragOver={this.onDragOver}
 					></div>
 				}
+				<HoverDetector edge="top" hoverAction = {this.hoverAction.bind(this)} />
 				<div className="fsbl-tab-logo"><i className="ff-grid"></i></div>
 				<div className="fsbl-tab-title" style={{width: titleWidth}}>{this.props.title}</div>
 				<div className="fsbl-tab-close" onClick={(e) => {
