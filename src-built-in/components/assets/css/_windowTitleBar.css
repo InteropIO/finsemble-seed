@@ -72,11 +72,12 @@ html.desktop-active .fsbl-header {
     padding-right: 14px;
     border-top: 1px solid transparent;
     border-right: 1px solid transparent;
+    transition: background-color 0.2s ease;
 }
 
-.fsbl-header-title:hover {
-/*    background-color: var(--tab-active-background-color);
-    color: var(--tab-active-color); */
+.fsbl-header-title[data-hover=true] {
+    background-color: var(--tab-active-background-color);
+    color: var(--tab-active-color);
     border-right: var(--tab-border);
     /* border-top: var(--tab-border); */
 }
@@ -107,15 +108,20 @@ html.desktop-active .fsbl-header {
     padding-bottom: 3px; /* This needs to be half of the thing subtracted from the height. e.g. height = 100% - 6px, then this is 3px) */
 }
 
-html.desktop-active .fsbl-header-right {
-    background: var(--active-header-background-color);
-}
-
 .fsbl-tabs-enabled .fsbl-header-center {
     height: 100%;
     width: 100%;
     padding-bottom:0px;
 }
+
+.fsbl-tabs-multiple .fsbl-header-center {
+    border-right: var(--tab-border);
+}
+
+html.desktop-active .fsbl-header-right {
+    background: var(--active-header-background-color);
+}
+
 .fsbl-header-right {
     margin-right: 2px;
     height: calc(100% - 5px); /* leave some space for the resize cursor */
@@ -332,9 +338,14 @@ html.desktop-active .fsbl-linker[hover=true] {
     transition: color 0.2s ease;
 }
 
-.fsbl-tab[data-hover="true"], .fsbl-active-tab {
+.fsbl-tab[data-hover=true], .fsbl-active-tab {
     background-color: var(--tab-active-background-color);
     color: var(--tab-active-color);
+}
+
+/* When there are multiple tabs, no border for the last tab on the right side. */
+.fsbl-tabs-multiple .tab-region-wrapper:last-child {
+    border-right: none;
 }
 
 .fsbl-tab-area {

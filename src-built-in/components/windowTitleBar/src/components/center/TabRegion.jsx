@@ -3,6 +3,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Tab from "./tab";
+import HoverDetector from "../HoverDetector.jsx";
 import { FinsembleDnDContext, FinsembleDroppable } from '@chartiq/finsemble-react-controls';
 import { Store, Actions } from "../../stores/windowTitleBarStore";
 import { debug } from "util";
@@ -23,7 +24,8 @@ export default class TabRegion extends React.Component {
             tabs: initialState.tabs,
             activeTab: FSBL.Clients.WindowClient.getWindowIdentifier(),
             boundingBox: {},
-            iAmDragging: false
+            iAmDragging: false,
+            hoverState: false
         };
         this.bindCorrectContext();
     }
@@ -407,6 +409,10 @@ export default class TabRegion extends React.Component {
         window.removeEventListener('resize', this.onWindowResize);
 
     }
+	hoverAction(newHoverState) {
+		this.setState({ hoverState: newHoverState });
+	}
+
     render() {
         let { translateX } = this.state;
         //If we have just 1 tab, we render the title. Unless someone is dragging a tab around - in that case, we will render the tab view, even though we only have 1.
@@ -473,7 +479,9 @@ function renderTitle() {
             this.startDrag(e, FSBL.Clients.WindowClient.getWindowIdentifier());
         }}
         onDragEnd={this.stopDrag}
+        data-hover={this.state.hoverState}
         className={"fsbl-header-title cq-no-drag"}>
+        <HoverDetector edge="top" hoverAction = {this.hoverAction.bind(this)} />
         <div className="fsbl-tab-logo"><i className="ff-grid"></i></div>
         {this.props.thisWindowsTitle}
     </div>);

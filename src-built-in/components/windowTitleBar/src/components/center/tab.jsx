@@ -27,7 +27,7 @@ export default class Tab extends React.Component {
 	}
 	hoverAction(newHoverState) {
 		this.setState({ hoverState: newHoverState });
-	}	
+	}
 	render() {
 		let titleWidth = this.props.tabWidth - ICON_AREA - CLOSE_BUTTON_MARGIN;
 		let style = {
