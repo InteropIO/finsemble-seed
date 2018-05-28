@@ -67,6 +67,8 @@ html.desktop-active .fsbl-header {
 
 .fsbl-header-title {
     height: 100%;
+    max-width: 60%; /* make sure there's always some space to grab and move the window */
+    overflow: hidden;
     align-items: center;
     display:flex;
     padding-right: 14px;
@@ -343,8 +345,11 @@ html.desktop-active .fsbl-linker[hover=true] {
     color: var(--tab-active-color);
 }
 
+.tab-region-wrapper {
+    width: 100%;
+}
 /* When there are multiple tabs, no border for the last tab on the right side. */
-.fsbl-tabs-multiple .tab-region-wrapper:last-child {
+.fsbl-tabs-multiple .tab-region-wrapper > div:last-child {
     border-right: none;
 }
 
