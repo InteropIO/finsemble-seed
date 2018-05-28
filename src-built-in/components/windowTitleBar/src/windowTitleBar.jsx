@@ -223,11 +223,11 @@ class WindowTitleBar extends React.Component {
 		let titleWrapperClasses = "fsbl-header-center";
 		let rightWrapperClasses = "fsbl-header-right cq-drag";
 		let tabRegionClasses = "fsbl-tab-area";
+		let headerClasses = "fsbl-header";
 
 		//If we're showing tabs, we throw these classes on to modify styles.
 		if (this.state.showTabs) {
-			titleWrapperClasses += " fsbl-tabs-enabled";
-			rightWrapperClasses += " fsbl-tabs-enabled";
+			headerClasses += " fsbl-tabs-enabled";
 		}
 		//See this.allowDragOnCenterRegion for more explanation.
 		if (this.state.allowDragOnCenterRegion) {
@@ -236,7 +236,7 @@ class WindowTitleBar extends React.Component {
 		}
 
 		return (
-			<div className="fsbl-header">
+			<div className={headerClasses}>
 				{/* Only render the left section if something is inside of it. The left section has a right-border that we don't want showing willy-nilly. */}
 				{RENDER_LEFT_SECTION &&
 					<div className="fsbl-header-left">

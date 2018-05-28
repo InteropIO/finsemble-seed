@@ -107,22 +107,27 @@ html.desktop-active .fsbl-header-right {
     background: var(--active-header-background-color);
 }
 
-.fsbl-header-center.fsbl-tabs-enabled {
+.fsbl-tabs-enabled .fsbl-header-center {
     height: 100%;
     width: 100%;
     padding-bottom:0px;
 }
 .fsbl-header-right {
     margin-right: 2px;
-    height: 100%;
+    height: calc(100% - 5px); /* leave some space for the resize cursor */
     align-content: center;
     display: flex;
     justify-content: flex-end;
     z-index: 5;
     /* background-color: ; */
     background: var(--window-header-background-color);
-    padding-left: 30px;
+    padding-left: 80px; /* leave some space for a user to grab */
 
+}
+
+/* Offset the contents back up, to make up for half the resize cursor offset */
+.fsbl-header-right > * {
+    margin-top: -2px;
 }
 
 
@@ -311,15 +316,18 @@ html.desktop-active .fsbl-linker[hover=true] {
     align-content: center;
     align-items: center;
     background-color: var(--tab-inactive-background-color);
+    color: var(--tab-inactive-color);
     border-right: var(--tab-border);
-    border-top: var(--tab-border);
+    /* border-top: var(--tab-border); */
     user-select: none;
     box-sizing: border-box;
     justify-content: flex-start;
+    transition: color 0.2s ease;
 }
 
-.fsbl-active-tab {
+.fsbl-tab:hover, .fsbl-active-tab {
     background-color: var(--tab-active-background-color);
+    color: var(--tab-active-color);
 }
 
 .fsbl-tab-area {

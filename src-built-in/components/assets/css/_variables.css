@@ -140,7 +140,9 @@
     --search-input-line-height: var(--toolbar-height);
 
     --tab-border: 1px solid #979797;
-    --tab-inactive-background-color: #1c2a36;
-    --tab-active-background-color: transparent;
+    --tab-inactive-background-color: transparent;
+    --tab-active-background-color: rgba(32, 104, 195, 0.23);
+    --tab-active-color: #ffffff;
+    --tab-inactive-color: #bbbbbb;
     --tab-logo-color: var(--primary-accent-color);
 }
