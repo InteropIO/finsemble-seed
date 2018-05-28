@@ -73,10 +73,14 @@ html.desktop-active .fsbl-header {
     border-top: 1px solid transparent;
     border-right: 1px solid transparent;
 }
+
 .fsbl-header-title:hover {
+/*    background-color: var(--tab-active-background-color);
+    color: var(--tab-active-color); */
     border-right: var(--tab-border);
-    border-top: var(--tab-border);
+    /* border-top: var(--tab-border); */
 }
+
 .fsbl-header-left {
     height: 100%;
     margin-left: 2px;
@@ -121,9 +125,12 @@ html.desktop-active .fsbl-header-right {
     z-index: 5;
     /* background-color: ; */
     background: var(--window-header-background-color);
-    padding-left: 80px; /* leave some space for a user to grab */
-
 }
+
+.fsbl-tabs-multiple .fsbl-header-right {
+    padding-left: 80px; /* leave some space for a user to grab */
+}
+
 
 /* Offset the contents back up, to make up for half the resize cursor offset */
 .fsbl-header-right > * {
@@ -325,7 +332,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     transition: color 0.2s ease;
 }
 
-.fsbl-tab:hover, .fsbl-active-tab {
+.fsbl-tab[data-hover="true"], .fsbl-active-tab {
     background-color: var(--tab-active-background-color);
     color: var(--tab-active-color);
 }
