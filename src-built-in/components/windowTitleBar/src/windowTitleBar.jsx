@@ -81,6 +81,8 @@ class WindowTitleBar extends React.Component {
 		this.disallowDragOnCenterRegion = this.disallowDragOnCenterRegion.bind(this);
 
 		this.onShareEmitterChanged = this.onShareEmitterChanged.bind(this);
+		this.onTabsChanged = this.onTabsChanged.bind(this);
+
 	}
 	componentWillMount() {
 		windowTitleBarStore.addListeners([
@@ -92,6 +94,7 @@ class WindowTitleBar extends React.Component {
 			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton },
 			{ field: "Sharer.emitterEnabled", listener: this.onShareEmitterChanged },
 			{ field: "isTopRight", listener: this.isTopRight },
+			{ field: "tabs", listener: this.onTabsChanged }
 		]);
 
 		FSBL.Clients.ConfigClient.getValue({ field: "finsemble" }, (err, config) => {
@@ -122,6 +125,7 @@ class WindowTitleBar extends React.Component {
 			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton },
 			{ field: "Sharer.emitterEnabled", listener: this.onShareEmitterChanged },
 			{ field: "isTopRight", listener: this.isTopRight },
+			{ field: "tabs", listener: this.onTabsChanged }
 		]);
 		console.log("Removing listener from the router.");
 		FSBL.Clients.RouterClient.removeListener("DockingService.startTilingOrTabbing", this.disallowDragOnCenterRegion);
@@ -213,6 +217,11 @@ class WindowTitleBar extends React.Component {
 		this.setState({ emitterEnabled: response.value });
 	}
 
+	onTabsChanged(err, response) {
+		this.setState({
+			tabs: response.value
+		})
+	}
 
 	render() {
 		var self = this;
@@ -234,7 +243,9 @@ class WindowTitleBar extends React.Component {
 			titleWrapperClasses += " cq-drag";
 			tabRegionClasses += " cq-drag";
 		}
-
+		if (this.state.tabs.length > 1) {
+			titleWrapperClasses += " terry-class";
+		}
 		return (
 			<div className={headerClasses}>
 				{/* Only render the left section if something is inside of it. The left section has a right-border that we don't want showing willy-nilly. */}
