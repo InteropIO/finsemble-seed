@@ -183,6 +183,7 @@ var Actions = {
 				});
 			};
 			var onParentCleared = () => {
+				Actions.parentWrapper = null;
 				FSBL.Clients.Logger.system.debug("ClearParent, setting tabs to null");
 				Actions.stopListeningOnParentWrapper(() => {
 					Actions.parentWrapperStore = null;
