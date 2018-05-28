@@ -69,7 +69,7 @@ export default class TabRegion extends React.Component {
             return TAB_WIDTH;
         }
         let containerWidth = boundingBox.right - boundingBox.left;
-        let newTabWidth = (containerWidth / tabList.length) - 15;
+        let newTabWidth = (containerWidth / tabList.length);
         //Don't let them stay super big when dragging around.
         if (this.props.listenForDragOver && newTabWidth > TAB_WIDTH) return TAB_WIDTH;
 

@@ -444,6 +444,7 @@ var Actions = {
 		Actions.parentSubscriptions.forEach(sub => {
 			FSBL.Clients.RouterClient.unsubscribe(sub);
 		});
+		cb();
 	},
 	listenOnParentWrapper: function () {
 		let TABLIST_SUBSCRIPTION = FSBL.Clients.RouterClient.subscribe(constants.PARENT_WRAPPER_UPDATES, Actions.onTabListChanged);
