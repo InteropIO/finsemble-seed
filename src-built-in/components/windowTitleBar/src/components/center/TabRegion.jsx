@@ -492,6 +492,7 @@ function renderTitle() {
  * @param {*} props
  */
 function renderTabs() {
+    FSBL.Clients.Logger.system.log("Render tabs. tab drag.", identifier.windowName);
     return this.state.tabs.map((tab, i) => {
         return <Tab
             onClick={() => {
