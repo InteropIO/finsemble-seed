@@ -94,7 +94,10 @@ var Actions = {
 			let movableGroups = groupNames
 				.filter(groupName => response.data.groupData[groupName].isMovable)
 				.map(groupName => response.data.groupData[groupName]);
-			windowTitleBarStore.setValue({ field: "Main.allMovableDockingGroups", value: movableGroups });
+			windowTitleBarStore.setValue({
+				field: "Main.allMovableDockingGroups", value
+					: movableGroups
+			});
 			let myGroups = self.getMyDockingGroups(response.data.groupData);
 			windowTitleBarStore.setValue({ field: "Main.dockingGroups", value: myGroups });
 			/**
@@ -171,12 +174,19 @@ var Actions = {
 		Actions.getInitialTabList((err, values) => {
 			var onParentSet = () => {
 				Actions.parentWrapper = null;
-				Actions.getInitialTabList();
+				Actions.getInitialTabList(() => {
+					onDockingGroupUpdate(null, {
+						data: {
+							groupData: windowTitleBarStore.getValue({ field: "Main.allMovableDockingGroups" })
+						}
+					})
+				});
 			};
 			var onParentCleared = () => {
-				Actions.parentWrapper = null;
-				Actions.getInitialTabList((err, tabs) => {
-					Actions._setTabs(tabs);
+				FSBL.Clients.Logger.system.debug("ClearParent, setting tabs to null");
+				Actions.stopListeningOnParentWrapper(() => {
+					Actions.parentWrapperStore = null;
+					Actions._setTabs(null);
 				});
 			};
 
@@ -347,8 +357,8 @@ var Actions = {
 		return windowTitleBarStore.getValue({ field: "tabs" });
 	},
 	_setTabs(tabs) {
-		console.log("SET TABS", console.trace(), tabs);
-
+		console.log("SET TABS", tabs);
+		FSBL.Clients.Logger.system.debug("Set tabs", tabs);
 		return windowTitleBarStore.setValue({ field: "tabs", value: tabs || [FSBL.Clients.WindowClient.getWindowIdentifier()] })
 	},
 	addTabLocally: function (windowIdentifier, i) {
@@ -418,38 +428,37 @@ var Actions = {
 		return { tab, currentIndex }
 	},
 	setActiveTab: function (windowIdentifier) {
+		FSBL.Clients.Logger.system.debug("setActiveTab.visibleWindow");
 		return Actions.parentWrapper.setVisibleWindow({ windowIdentifier });
 	},
 	parentWrapper: null,
 	onTabListChanged: function (err, response) {
-		return Actions._setTabs(response.value);
+		FSBL.Clients.Logger.system.debug("OnTabListChanged");
+		if (!response.data) return;
+		return Actions._setTabs(response.data[constants.CHILD_WINDOW_FIELD]);
 	},
-	onVisibleWindowChanged: function (err, response) {
-		return windowTitleBarStore.setValue({ field: "activeTab", value: response.value });
+	parentSubscriptions: [],
+	stopListeningOnParentWrapper: function (cb) {
+		Actions.parentSubscriptions.forEach(sub => {
+			FSBL.Clients.RouterClient.unsubscribe(sub);
+		});
 	},
 	listenOnParentWrapper: function () {
-		Actions.parentWrapperStore.addListener({ field: constants.CHILD_WINDOW_FIELD }, Actions.onTabListChanged);
-		Actions.parentWrapperStore.addListener({ field: constants.VISIBLE_WINDOW_FIELD }, Actions.onVisibleWindowChanged);
+		let TABLIST_SUBSCRIPTION = FSBL.Clients.RouterClient.subscribe(constants.PARENT_WRAPPER_UPDATES, Actions.onTabListChanged);
+		Actions.parentSubscriptions.push(TABLIST_SUBSCRIPTION)
 	},
 	setupStore: function (cb = Function.prototype) {
-		Actions.parentWrapper.getStore((store) => {
-			Actions.parentWrapperStore = store;
-			constants.CHILD_WINDOW_FIELD = `${Actions.parentWrapper.identifier.windowName}.descriptor.childWindowIdentifiers`;
-			constants.VISIBLE_WINDOW_FIELD = `${Actions.parentWrapper.identifier.windowName}.descriptor.visibleWindowIdentifier`;
-			Actions.listenOnParentWrapper();
-			store.getValues([
-				constants.CHILD_WINDOW_FIELD, constants.VISIBLE_WINDOW_FIELD
-			], (err, values) => {
-				Actions._setTabs(values[constants.CHILD_WINDOW_FIELD]);
-				Actions.onVisibleWindowChanged(null, { value: values[constants.VISIBLE_WINDOW_FIELD] })
-				cb(null, null);
-			});
-		});
+		constants.PARENT_WRAPPER_UPDATES = `Finsemble.StackedWindow.${Actions.parentWrapper.identifier.windowName}`;
+		constants.CHILD_WINDOW_FIELD = `childWindowIdentifiers`;
+		constants.VISIBLE_WINDOW_FIELD = `visibleWindowIdentifier`;
+		Actions.listenOnParentWrapper();
+		cb();
 	},
 	getInitialTabList: function (cb = Function.prototype) {
 		FSBL.Clients.WindowClient.getStackedWindow((err, parentWrapper) => {
 			Actions.parentWrapper = parentWrapper;
 			if (Actions.parentWrapper) {
+				FSBL.Clients.Logger.debug("GetInitialTabList, parent exists")
 				Actions.setupStore(cb);
 			} else {
 				let tabs = [FSBL.Clients.WindowClient.getWindowIdentifier()];
@@ -464,6 +473,7 @@ var Actions = {
 			cb();
 		} else {
 			FSBL.Clients.WindowClient.getStackedWindow({ create: true }, (err, response) => {
+				debugger
 				Actions.parentWrapper = FSBL.Clients.WindowClient.finsembleWindow.getParent();
 				Actions.setupStore(cb);
 			})

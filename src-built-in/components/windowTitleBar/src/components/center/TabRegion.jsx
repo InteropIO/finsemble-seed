@@ -98,6 +98,8 @@ export default class TabRegion extends React.Component {
 	 * @memberof windowTitleBar
 	 */
     startDrag(e, windowIdentifier) {
+        FSBL.Clients.Logger.system.debug("Tab drag start", windowIdentifier.windowName);
+
         console.log("start drag", windowIdentifier.windowName);
         this.setState({
             iAmDragging: true
@@ -116,6 +118,7 @@ export default class TabRegion extends React.Component {
 	 * @memberof windowTitleBar
 	 */
     stopDrag(e) {
+        FSBL.Clients.Logger.system.debug("Tab drag stop");
         //@sidd can you document this?
         this.mousePositionOnDragEnd = {
             x: e.nativeEvent.screenX,
@@ -132,8 +135,11 @@ export default class TabRegion extends React.Component {
      * @param {*} response
      */
     clearDragEndTimeout(err, response) {
+        FSBL.Clients.Logger.system.debug("Clear Drag end timeout.");
+
         clearTimeout(this.dragEndTimeout);
         if (!response) {
+            FSBL.Clients.Logger.system.debug("Clear Drag end timeout. Stopping tiling.");
             console.log("DRAG END TIMEOUT NO RESPONSE")
             FSBL.Clients.WindowClient.stopTilingOrTabbing({ mousePosition: this.mousePositionOnDragEnd });
             this.onWindowResize();
@@ -170,7 +176,8 @@ export default class TabRegion extends React.Component {
      * @param {event} e
      */
     drop(e) {
-        console.log("DROP EVENT");
+
+        FSBL.Clients.Logger.system.debug("Tab drag drop.");
         let identifier = this.extractWindowIdentifier(e);
         if (identifier) {
             console.log("DROP", identifier);
