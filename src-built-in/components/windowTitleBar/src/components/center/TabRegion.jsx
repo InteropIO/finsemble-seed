@@ -99,7 +99,6 @@ export default class TabRegion extends React.Component {
 	 */
     startDrag(e, windowIdentifier) {
         FSBL.Clients.Logger.system.debug("Tab drag start", windowIdentifier.windowName);
-
         console.log("start drag", windowIdentifier.windowName);
         this.setState({
             iAmDragging: true

@@ -107,6 +107,8 @@ class WindowTitleBar extends React.Component {
 		FSBL.Clients.RouterClient.addListener("DockingService.startTilingOrTabbing", this.disallowDragOnCenterRegion);
 		console.log("Adding listener for stopTilingOrTabbing.");
 		FSBL.Clients.RouterClient.addListener("DockingService.stopTilingOrTabbing", this.allowDragOnCenterRegion);
+		FSBL.Clients.RouterClient.addListener("DockingService.cancelTilingOrTabbing", this.allowDragOnCenterRegion);
+
 	}
 
 	componentDidMount() {
