@@ -398,9 +398,10 @@ var Actions = {
 		};
 
 		if (!Actions.parentWrapper) {
-			return Actions.createParentWrapper(() => {
-				Actions.parentWrapper.addWindow({ windowIdentifier, position: i }, callback)
-			});
+			return Actions.createParentWrapper({
+				windowIdentifiers: [windowIdentifier],
+				create: true
+			}, callback);
 		}
 		return Actions.parentWrapper.addWindow({ windowIdentifier, position: i }, callback);
 	},
@@ -466,14 +467,13 @@ var Actions = {
 			}
 		})
 	},
-	createParentWrapper(cb) {
+	createParentWrapper(params, cb) {
 		console.log("In parentWrapper begin");
 		window.Actions = Actions;
 		if (Actions.parentWrapper) {
 			cb();
 		} else {
-			FSBL.Clients.WindowClient.getStackedWindow({ create: true }, (err, response) => {
-				debugger
+			FSBL.Clients.WindowClient.getStackedWindow(params, (err, response) => {
 				Actions.parentWrapper = FSBL.Clients.WindowClient.finsembleWindow.getParent();
 				Actions.setupStore(cb);
 			})
