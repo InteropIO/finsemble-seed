@@ -32,7 +32,7 @@
 	},
 	"betaFeatures": {
 		"assimilation": {
-			"enabled": false,
+			"enabled": true,
 			"blacklist": [],
 			"whitelist": [],
 			"onlySpawned": true,
