@@ -370,6 +370,9 @@ var Actions = {
 		tabs.splice(i, 0, windowIdentifier);
 		Actions._setTabs(tabs);
 	},
+	removeTabsLocally: function () {
+		Actions._setTabs(null);
+	},
 	removeTabLocally: function (windowIdentifier) {
 		console.log("Removing tab", windowIdentifier.name);
 		let tabs = Actions.getTabs();

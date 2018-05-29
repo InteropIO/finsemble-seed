@@ -59,7 +59,6 @@ export default class TabRegion extends React.Component {
 
     }
     getTabWidth(params = {}) {
-
         let { boundingBox, tabList } = params;
         if (typeof (tabList) === "undefined") {
             tabList = this.state.tabs;
@@ -139,6 +138,7 @@ export default class TabRegion extends React.Component {
         clearTimeout(this.dragEndTimeout);
         if (!response) {
             FSBL.Clients.Logger.system.log("StopTilingOrTabbing: TabRegion timer fired simulating response.", this.mousePositionOnDragEnd);
+            Actions.removeTabsLocally();
             FSBL.Clients.WindowClient.stopTilingOrTabbing({ action: "detaching", mousePosition: this.mousePositionOnDragEnd });
             this.onWindowResize();
         } else {
