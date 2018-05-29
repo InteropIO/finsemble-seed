@@ -366,6 +366,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     display: none;
 }
 .fsbl-tab .fsbl-tab-title {
+    text-align: left;
     min-width: 0;
     overflow: hidden;
     white-space: nowrap;
@@ -399,6 +400,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     margin: 0 7px;
     width: 15px;
     padding-top: 2px;
+    color: var(--tab-logo-color);
 }
 
 .fsbl-tab .fsbl-tab-style {
