@@ -244,9 +244,10 @@ class WindowTitleBar extends React.Component {
 			headerClasses += " fsbl-tabs-multiple";
 		}
 		//See this.allowDragOnCenterRegion for more explanation.
-		if (this.state.allowDragOnCenterRegion) {
+		// When using tabs, we'll rely on fsbl-drag-region instead of adding cq-drag directly
+		if (this.state.allowDragOnCenterRegion && !this.state.showTabs) {
 			titleWrapperClasses += " cq-drag";
-			tabRegionClasses += " cq-drag";
+			//tabRegionClasses += " cq-drag";
 		}
 		return (
 			<div className={headerClasses}>
@@ -261,6 +262,7 @@ class WindowTitleBar extends React.Component {
 				<div className={titleWrapperClasses}
 					ref={this.setTabBarRef}>
 					{/* If we're suppsoed to show tabs and the window isn't babySized */}
+					{this.state.showTabs && <div className="fsbl-drag-region"></div>}
 					{this.state.showTabs &&
 						<TabRegion
 							onTabDropped={this.allowDragOnCenterRegion}
@@ -271,6 +273,7 @@ class WindowTitleBar extends React.Component {
 							tabs={this.state.tabs}
 							ref="tabArea"
 						/>}
+					
 				</div>
 				<div className={rightWrapperClasses} ref={this.setToolbarRight}>
 					{this.state.alwaysOnTopButton && showMinimizeIcon ? <AlwaysOnTop /> : null}
