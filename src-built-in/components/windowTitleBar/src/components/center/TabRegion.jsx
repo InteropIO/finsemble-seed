@@ -64,7 +64,7 @@ export default class TabRegion extends React.Component {
             tabList = this.state.tabs;
         }
         if (typeof (boundingBox) === "undefined") {
-            boundingBox = this.state.boundingBox;
+            boundingBox = this.refs.Me.getBoundingClientRect();
         }
         if (typeof (boundingBox.right) === "undefined") {
             return TAB_WIDTH;
@@ -361,7 +361,10 @@ export default class TabRegion extends React.Component {
         if (newIndex === -1) {
             newIndex = undefined;
         }
-        Actions.reorderTab(identifier, newIndex);
+        let myIdentifier = FSBL.Clients.WindowClient.getWindowIdentifier();
+        if (identifier.windowName !== myIdentifier.windowName) {
+            Actions.reorderTab(identifier, newIndex);
+        }
         this.setState({
             hoveredTabIndex: undefined
         })
@@ -400,7 +403,7 @@ export default class TabRegion extends React.Component {
     }
 
     componentDidMount() {
-        window.addEventListener('resize', this.onWindowResize);
+        FSBL.Clients.WindowClient.finsembleWindow.addListener('bounds-set', this.onWindowResize);
         let boundingBox = this.refs.Me.getBoundingClientRect();
         this.setState({
             boundingBox: boundingBox,
@@ -411,12 +414,12 @@ export default class TabRegion extends React.Component {
     componentWillUnmount() {
         // Store.removeListener({ field: "activeTab" }, this.onActiveTabChanged);
         Store.removeListener({ field: "tabs" }, this.onTabsChanged);
-        window.removeEventListener('resize', this.onWindowResize);
+        FSBL.Clients.WindowClient.finsembleWindow.removeListener('bounds-set', this.onWindowResize);
 
     }
-	hoverAction(newHoverState) {
-		this.setState({ hoverState: newHoverState });
-	}
+    hoverAction(newHoverState) {
+        this.setState({ hoverState: newHoverState });
+    }
 
     render() {
         let { translateX } = this.state;
@@ -480,7 +483,7 @@ function renderTitle() {
         onDragEnd={this.stopDrag}
         data-hover={this.state.hoverState}
         className={"fsbl-header-title cq-no-drag"}>
-        <HoverDetector edge="top" hoverAction = {this.hoverAction.bind(this)} />
+        <HoverDetector edge="top" hoverAction={this.hoverAction.bind(this)} />
         <div className="fsbl-tab-logo"><i className="ff-grid"></i></div>
         {this.props.thisWindowsTitle}
     </div>);
