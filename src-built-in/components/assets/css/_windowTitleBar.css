@@ -84,6 +84,15 @@ html.desktop-active .fsbl-header {
     /* border-top: var(--tab-border); */
 }
 
+.fsbl-drag-region {
+    position: absolute;
+    width: 100%;
+    height: calc(100% - 5px);
+    bottom: 0px;
+    left: 0px;
+    -webkit-app-region: drag;
+}
+
 .fsbl-header-left {
     height: 100%;
     margin-left: 2px;
@@ -346,6 +355,7 @@ html.desktop-active .fsbl-linker[hover=true] {
 }
 
 .tab-region-wrapper {
+    /*width: 100%;*/
 }
 /* When there are multiple tabs, no border for the last tab on the right side. */
 .fsbl-tabs-multiple .tab-region-wrapper > div:last-child {
