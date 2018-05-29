@@ -71,8 +71,6 @@ export default class TabRegion extends React.Component {
         }
         let containerWidth = boundingBox.right - boundingBox.left;
         let newTabWidth = (containerWidth / tabList.length);
-        //Don't let them stay super big when dragging around.
-        if (this.props.listenForDragOver && newTabWidth > TAB_WIDTH) return TAB_WIDTH;
 
         return newTabWidth < MINIMUM_TAB_SIZE ? MINIMUM_TAB_SIZE : newTabWidth;
     }
@@ -138,7 +136,6 @@ export default class TabRegion extends React.Component {
         clearTimeout(this.dragEndTimeout);
         if (!response) {
             FSBL.Clients.Logger.system.log("StopTilingOrTabbing: TabRegion timer fired simulating response.", this.mousePositionOnDragEnd);
-            Actions.removeTabsLocally();
             FSBL.Clients.WindowClient.stopTilingOrTabbing({ action: "detaching", mousePosition: this.mousePositionOnDragEnd });
             this.onWindowResize();
         } else {
@@ -364,7 +361,6 @@ export default class TabRegion extends React.Component {
         if (newIndex === -1) {
             newIndex = undefined;
         }
-        Actions.reorderTabLocally(identifier, newIndex);
         Actions.reorderTab(identifier, newIndex);
         this.setState({
             hoveredTabIndex: undefined

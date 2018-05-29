@@ -363,7 +363,7 @@ var Actions = {
 		return windowTitleBarStore.setValue({ field: "tabs", value: tabs || [FSBL.Clients.WindowClient.getWindowIdentifier()] })
 	},
 	addTabLocally: function (windowIdentifier, i) {
-		let tabs = Actions.getTabs();``
+		let tabs = Actions.getTabs();
 		if (typeof i === "undefined") {
 			i = tabs.length + 1;
 		}
@@ -371,6 +371,7 @@ var Actions = {
 		Actions._setTabs(tabs);
 	},
 	removeTabsLocally: function () {
+		console.log("REMOVE TABS LOCALLY");
 		Actions._setTabs(null);
 	},
 	removeTabLocally: function (windowIdentifier) {
@@ -397,6 +398,10 @@ var Actions = {
 		Actions._setTabs(tabs)
 	},
 	addTab: function (windowIdentifier, i) {
+		let tabs = Actions.getTabs();
+		tabs.push(windowIdentifier);
+		//quick UI update
+		Actions._setTabs(tabs);
 		let callback = () => {
 			Actions.parentWrapper.setVisibleWindow({ windowIdentifier })
 		};
@@ -416,6 +421,7 @@ var Actions = {
 		return Actions.parentWrapper.deleteWindow({ windowIdentifier })
 	},
 	reorderTab: function (tab, newIndex) {
+
 		let tabs = Actions.getTabs();
 		let { currentIndex } = Actions.findTab(tab);
 		if (currentIndex === -1 || !Actions.parentWrapper) {
@@ -423,6 +429,9 @@ var Actions = {
 		}
 		tabs.splice(currentIndex, 1);
 		tabs.splice(newIndex, 0, tab);
+		//Local change, quickly updates the dom.
+		console.log("Tab list changing", tabs);
+		Actions._setTabs(tabs);
 		Actions.parentWrapper.reorder({ windowIdentifiers: tabs })
 	},
 	findTab: function (tab) {
