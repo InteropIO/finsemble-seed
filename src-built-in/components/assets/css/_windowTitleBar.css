@@ -374,7 +374,7 @@ html.desktop-active .fsbl-linker[hover=true] {
 .fsbl-tab-area::-webkit-scrollbar  {
     display: none;
 }
-.fsbl-tab .fsbl-tab-title {
+.fsbl-tab-title {
     text-align: left;
     min-width: 0;
     overflow: hidden;
