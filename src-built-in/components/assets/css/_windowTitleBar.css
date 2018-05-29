@@ -346,7 +346,6 @@ html.desktop-active .fsbl-linker[hover=true] {
 }
 
 .tab-region-wrapper {
-    width: 100%;
 }
 /* When there are multiple tabs, no border for the last tab on the right side. */
 .fsbl-tabs-multiple .tab-region-wrapper > div:last-child {

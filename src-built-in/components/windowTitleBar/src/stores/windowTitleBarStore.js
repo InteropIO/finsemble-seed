@@ -363,7 +363,7 @@ var Actions = {
 		return windowTitleBarStore.setValue({ field: "tabs", value: tabs || [FSBL.Clients.WindowClient.getWindowIdentifier()] })
 	},
 	addTabLocally: function (windowIdentifier, i) {
-		let tabs = Actions.getTabs();
+		let tabs = Actions.getTabs();``
 		if (typeof i === "undefined") {
 			i = tabs.length + 1;
 		}
@@ -381,11 +381,11 @@ var Actions = {
 	reorderTabLocally: function (tab, newIndex) {
 		let tabs = Actions.getTabs();
 		let { currentIndex } = Actions.findTab(tab);
+		console.log("tab list, reorderTabLocally", tab.windowName, currentIndex, newIndex)
 		if (currentIndex === newIndex) return;
 		if (currentIndex === -1) {
 			return Actions.addTabLocally(tab, newIndex);
 		}
-		console.log("REORDERING", tab.windowName, currentIndex, newIndex)
 		tabs.splice(currentIndex, 1);
 		console.log("After remove", JSON.parse(JSON.stringify(tabs)));
 		tabs.splice(newIndex, 0, tab);
@@ -415,7 +415,7 @@ var Actions = {
 	reorderTab: function (tab, newIndex) {
 		let tabs = Actions.getTabs();
 		let { currentIndex } = Actions.findTab(tab);
-		if (currentIndex === -1) {
+		if (currentIndex === -1 || !Actions.parentWrapper) {
 			return Actions.addTab(tab, newIndex);
 		}
 		tabs.splice(currentIndex, 1);

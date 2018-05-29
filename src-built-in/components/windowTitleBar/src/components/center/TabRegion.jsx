@@ -174,13 +174,13 @@ export default class TabRegion extends React.Component {
      * @param {event} e
      */
     drop(e) {
-
+        e.stopPropagation();
         FSBL.Clients.Logger.system.log("Tab drag drop.");
         let identifier = this.extractWindowIdentifier(e);
         if (identifier) {
             console.log("DROP", identifier);
             //Calls a method defined inside of windowTitleBar.jsx.
-            this.onTabAdded(identifier);
+            this.onTabAdded(identifier, this.state.hoveredTabIndex);
         } else {
             FSBL.Clients.Logger.system.error("Unexpected drop event on window title bar. Check the 'drop' method on TabRegion.jsx.");
         }
@@ -291,7 +291,7 @@ export default class TabRegion extends React.Component {
         // }
         console.log("Drag over the tab region");
         e.preventDefault();
-        Actions.reorderTabLocally(PLACEHOLDER_TAB, this.state.tabs.length);
+        // Actions.reorderTabLocally(PLACEHOLDER_TAB, this.state.tabs.length);
     }
     /**
      * Triggered when the user moves their mouse out of the tabRegion after a dragOver event happens. When they leave, we hide our placeholder tab.
@@ -300,7 +300,10 @@ export default class TabRegion extends React.Component {
     dragLeave(e) {
         let boundingRect = this.state.boundingBox;
         if (!FSBL.Clients.WindowClient.isPointInBox({ x: e.screenX, y: e.screenY }, boundingRect)) {
-            Actions.removeTabLocally(PLACEHOLDER_TAB);
+            this.setState({
+                hoveredTabIndex: undefined
+            })
+            // Actions.removeTabLocally(PLACEHOLDER_TAB);
         }
 
     }
@@ -312,7 +315,7 @@ export default class TabRegion extends React.Component {
 	 */
     cancelTabbing() {
         FSBL.Clients.WindowClient.stopTilingOrTabbing({ allowDropOnSelf: true });
-        Actions.removeTabLocally(PLACEHOLDER_TAB);
+        // Actions.removeTabLocally(PLACEHOLDER_TAB);
         this.onWindowResize();
     }
     /**
@@ -320,12 +323,11 @@ export default class TabRegion extends React.Component {
      * @param {tab} tab
      */
     getTabClasses(tab) {
-        let classes = "fsbl-tab cq-no-drag"
+        let classes = "fsbl-tab cq-no-drag";
+        let tabIndex = this.findTabIndex(tab);
+        if (tabIndex === this.state.hoveredTabIndex) classes += " ghost-tab";
         if (this.state.activeTab && tab.windowName === this.state.activeTab.windowName) {
             classes += " fsbl-active-tab";
-        }
-        if (tab.componentType === PLACEHOLDER_TAB.componentType) {
-            classes += " ghost-tab";
         }
         return classes;
     }
@@ -335,8 +337,11 @@ export default class TabRegion extends React.Component {
         //Find index of tab.
         let tabIndex = this.findTabIndex(tabDraggedOver);
         console.log("Drag over a tab. new Index", tabIndex, tabDraggedOver.windowName);
+        this.setState({
+            hoveredTabIndex: tabIndex
+        })
 
-        Actions.reorderTabLocally(PLACEHOLDER_TAB, tabIndex);
+        // Actions.reorderTabLocally(PLACEHOLDER_TAB, tabIndex);
     }
     /**
 	 * OnClick handler for the close button on individual tabs.
@@ -351,12 +356,19 @@ export default class TabRegion extends React.Component {
 	 * drop handler for the tab region.
 	 * @param {*} tab
 	 */
-    onTabAdded(identifier) {
-        let newIndex = this.findTabIndex(PLACEHOLDER_TAB);
+    onTabAdded(identifier, newIndex) {
         //On drop, we hide our placeholder tab.
-        Actions.removeTabLocally(PLACEHOLDER_TAB);
+        //Actions.removeTabLocally(PLACEHOLDER_TAB);
         //reorder will add if it doesn't exist.
+        //reorder will add if it doesn't exist.
+        if (newIndex === -1) {
+            newIndex = undefined;
+        }
+        Actions.reorderTabLocally(identifier, newIndex);
         Actions.reorderTab(identifier, newIndex);
+        this.setState({
+            hoveredTabIndex: undefined
+        })
     }
     /**
 	 * OnClick handler for individual tabs.
@@ -432,7 +444,7 @@ export default class TabRegion extends React.Component {
             marginLeft: `${translateX}px`
         }
         let tabRegionDropZoneStyle = { left: this.state.tabs.length * this.state.tabWidth + "px" }
-
+        console.log("TAB DROP REGION", tabRegionDropZoneStyle);
         let moveAreaClasses = "cq-drag fsbl-tab-region-drag-area";
         if (this.isTabRegionOverflowing()) {
             moveAreaClasses += " gradient"
@@ -445,22 +457,15 @@ export default class TabRegion extends React.Component {
                 className={this.props.className}
                 onWheel={this.onMouseWheel}
                 onScroll={this.onMouseWheel}
+                onDrop={this.drop}
+                onDragOver={this.dragOver}
             >
-                {/**This exists because I couldn't capture dragOver when simply changing the className on the tab-region wrapper. So instead, we render this div that sits absolutely positioned on top of the tabRegion.*/}
-                {this.props.listenForDragOver &&
-                    <div
-                        style={tabRegionDropZoneStyle}
-                        className="tab-drop-region"
-                        onDrop={this.drop}
-                        onDragOver={this.dragOver}
-                    ></div>}
                 <div className="tab-region-wrapper"
                     style={tabRegionStyle}
                 >
                     {componentToRender === "title" && renderTitle()}
                     {componentToRender === "tabs" && renderTabs()}
                 </div>
-
             </div>
         );
     }
