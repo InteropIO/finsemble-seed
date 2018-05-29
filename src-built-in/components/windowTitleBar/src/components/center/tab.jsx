@@ -47,7 +47,7 @@ export default class Tab extends React.Component {
 				className={this.props.className}
 				data-hover={this.state.hoverState}
 				style={style}
-				title={this.props.title}>
+				>
 				{this.props.listenForDragOver &&
 					<div className="tab-drop-region"
 					onDragOver={this.onDragOver}
