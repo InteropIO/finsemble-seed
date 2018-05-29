@@ -126,7 +126,6 @@ export default class TabRegion extends React.Component {
         }
         this.dragEndTimeout = setTimeout(this.clearDragEndTimeout, 300);
         FSBL.Clients.RouterClient.addListener('tabbingDragEnd', this.clearDragEndTimeout);
-
     }
 
     /**
@@ -140,7 +139,7 @@ export default class TabRegion extends React.Component {
         clearTimeout(this.dragEndTimeout);
         if (!response) {
             FSBL.Clients.Logger.system.log("StopTilingOrTabbing: TabRegion timer fired simulating response.", this.mousePositionOnDragEnd);
-            FSBL.Clients.WindowClient.stopTilingOrTabbing({ mousePosition: this.mousePositionOnDragEnd });
+            FSBL.Clients.WindowClient.stopTilingOrTabbing({ action: "detaching", mousePosition: this.mousePositionOnDragEnd });
             this.onWindowResize();
         } else {
             FSBL.Clients.Logger.system.log("StopTilingOrTabbing: TabRegion timer cleared/skipped because of response. Stop dragging.", response);
