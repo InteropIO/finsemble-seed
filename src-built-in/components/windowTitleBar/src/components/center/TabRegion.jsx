@@ -482,7 +482,7 @@ function renderTitle() {
         className={"fsbl-header-title cq-no-drag"}>
         <HoverDetector edge="top" hoverAction = {this.hoverAction.bind(this)} />
         <div className="fsbl-tab-logo"><i className="ff-grid"></i></div>
-        {this.props.thisWindowsTitle}
+        <div className="fsbl-tab-title">{this.props.thisWindowsTitle}</div>
     </div>);
 }
 
