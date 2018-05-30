@@ -167,7 +167,7 @@ function addVendorBundle(cb) {
         if (head.stdout.includes("head")) {
             shelljs.cat(filename)
                 .sed('-i', "<head>", `<head>
-    <script src="/vendor.bundle.js"></script>`)
+    <script src="../../vendor.bundle.js"></script>`)
                 .to(filename);
         } else {
             console.error("ERROR: Could not find <HEAD> tag in ", filename);
