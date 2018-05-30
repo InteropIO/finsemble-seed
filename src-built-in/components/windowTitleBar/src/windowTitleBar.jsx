@@ -262,7 +262,8 @@ class WindowTitleBar extends React.Component {
 				<div className={titleWrapperClasses}
 					ref={this.setTabBarRef}>
 					{/* If we're suppsoed to show tabs and the window isn't babySized */}
-					{!this.state.showTabs && <div className="fsbl-drag-region">{this.state.windowTitle}</div>}
+					{!this.state.showTabs && <div className='fsbl-header-center cq-drag'>{this.state.windowTitle}</div>}
+					{this.state.showTabs && <div className="fsbl-drag-region"></div>}
 					{this.state.showTabs &&
 						<TabRegion
 							onTabDropped={this.allowDragOnCenterRegion}
