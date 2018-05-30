@@ -129,10 +129,10 @@ class _ToolbarStore {
 		var self = this;
 		if (storeOwner) {
 			let keys = FSBL.Clients.HotkeyClient.keyMap;
-			FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.shift, keys.up], () => {
+			FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.alt, keys.up], () => {
 				FSBL.Clients.LauncherClient.bringWindowsToFront()
 			});
-			FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.shift, keys.down], () => {
+			FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.alt, keys.down], () => {
 				FSBL.Clients.WorkspaceClient.minimizeAll()
 			});
 			FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.shift, keys.f], () => {

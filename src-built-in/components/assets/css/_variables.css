@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Roboto");
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700');
 
 :root {
     --negative-action-color: #ef1436;
@@ -81,7 +81,6 @@
 
 
     /** Window Title bar */
-
     --window-header-background-color: #233958;
     --window-header-color: #151f28;
     --window-frame-inactive-color: var(--window-header-background-color);
@@ -131,11 +130,20 @@
     --complex-menu-checkbox-checked-color: white;
     --workspace-component-list-font-color: #5a5a5a;
 
-
-    /* search */
+    /* Search */
     --search-result-item-color: #000;
     --search-result-active-item-color: #ecf0f1;
     --search-section-max-height: 40px;
-    --search-input-height:var(--toolbar-height);
+    --search-input-height: var(--toolbar-height);
     --search-input-line-height: var(--toolbar-height);
+
+    /* Notifications */
+    --notification-body-background-color: var(--toolbar-background-color);
+    --notification-body-font-color: var(--font-color);
+    --notification-body-font-family: var(--font-family);
+    --notification-logo-width: 14px;
+    --notification-title-font-size: 13px;
+    --notification-title-font-weight: bold;
+    --notification-close-icon-hover-color: #EE5C5C;
+    --notification-description-font-size: 13px;
 }

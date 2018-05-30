@@ -7,84 +7,17 @@
     <title>Logger</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="../assets/css/finfont.css">
-    <link rel="stylesheet" type="text/css" href="../assets/css/finsemble.css">
-    <style>
-        body {
-            overflow-y: hidden;
-            background-color: #1C2A36;
-            color: white;
-            margin: 6px;
-            font-family: 'Roboto';
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .notification-wrapper {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .notification-header {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            margin: 0px 8px;
-        }
-
-        .notification-close {
-            align-self: flex-end;
-            display: flex;
-        }
-
-        .notification-body {
-            display: flex;
-            flex-direction: row;
-        }
-
-        .notification-close img {
-            cursor: pointer;
-            width: 10px;
-        }
-
-        .notification-content {
-            display: flex;
-            flex-direction: column;
-            font-size: 13px;
-        }
-
-        .notification-title-wrapper {
-            display: flex;
-            flex-direction: row;
-        }
-
-        .notification-title {
-            font-weight: bold;
-            align-self: flex-start;
-            display: flex;
-            font-size: 13px;
-        }
-
-        .notification-description {
-            margin: 0px 10px;
-        }
-
-        .notification-logo img {
-            margin-right: 6px;
-            width: 14px;
-        }
-    </style>
+    <link rel="stylesheet" href="../../components/assets/css/_notification.css">
+    <link rel="stylesheet" href="../../components/assets/css/_fontIcons.css">    
 </head>
 
 <body class="notification-wrapper">
     <div class="notification-header" id="closer">
         <div class="notification-title-wrapper">
-            <div class="notification-logo">
-                    <img src="/components/assets/img/Finsemble_Taskbar_Icon.png" />
-            </div>
+            <div class="notification-logo"></div>
             <div class="notification-title">Finsemble Notification</div>
         </div>
-        <div class="notification-close"><img src="ff-close.svg" /></div>
+        <div class="notification-close"><i class="ff-close"></i></div>
     </div>
     <div class="notification-body">
         <div class="notification-content">
