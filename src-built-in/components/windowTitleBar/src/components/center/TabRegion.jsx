@@ -37,7 +37,6 @@ export default class TabRegion extends React.Component {
         this.startDrag = this.startDrag.bind(this);
         this.stopDrag = this.stopDrag.bind(this);
         this.cancelTabbing = this.cancelTabbing.bind(this);
-        this.clearDragEndTimeout = this.clearDragEndTimeout.bind(this);
         this.drop = this.drop.bind(this);
         this.dragOver = this.dragOver.bind(this);
         this.dragLeave = this.dragLeave.bind(this);
@@ -121,30 +120,14 @@ export default class TabRegion extends React.Component {
             x: e.nativeEvent.screenX,
             y: e.nativeEvent.screenY
         }
-        this.dragEndTimeout = setTimeout(this.clearDragEndTimeout, 300);
-        FSBL.Clients.RouterClient.addListener('tabbingDragEnd', this.clearDragEndTimeout);
-    }
-
-    /**
-     * @todo @sidd, can you document this?
-     * @param {event} err
-     * @param {*} response
-     */
-    clearDragEndTimeout(err, response) {
-        FSBL.Clients.Logger.system.debug("Clear Drag end timeout.");
-
-        clearTimeout(this.dragEndTimeout);
-        if (!response) {
-            FSBL.Clients.Logger.system.log("StopTilingOrTabbing: TabRegion timer fired simulating response.", this.mousePositionOnDragEnd);
-            FSBL.Clients.WindowClient.stopTilingOrTabbing({ action: "detaching", mousePosition: this.mousePositionOnDragEnd });
+        let boundingRect = this.state.boundingBox;
+        if (!FSBL.Clients.WindowClient.isPointInBox(this.mousePositionOnDragEnd, FSBL.Clients.WindowClient.options)) {
+            FSBL.Clients.WindowClient.stopTilingOrTabbing({ mousePosition: this.mousePositionOnDragEnd });
+            this.setState({
+                iAmDragging: false
+            });
             this.onWindowResize();
-        } else {
-            FSBL.Clients.Logger.system.log("StopTilingOrTabbing: TabRegion timer cleared/skipped because of response. Stop dragging.", response);
         }
-        FSBL.Clients.RouterClient.removeListener('tabbingDragEnd', this.clearDragEndTimeout);
-        this.setState({
-            iAmDragging: false
-        });
     }
 
     /**
@@ -494,7 +477,6 @@ function renderTitle() {
  * @param {*} props
  */
 function renderTabs() {
-    FSBL.Clients.Logger.system.log("Render tabs. tab drag.");
     return this.state.tabs.map((tab, i) => {
         return <Tab
             onClick={() => {
