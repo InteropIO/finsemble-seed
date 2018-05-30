@@ -114,7 +114,7 @@ export default class TabRegion extends React.Component {
 	 * @memberof windowTitleBar
 	 */
     stopDrag(e) {
-        FSBL.Clients.Logger.system.log("Tab drag stop");
+        FSBL.Clients.Logger.system.debug("Tab drag stop");
         //@sidd can you document this?
         this.mousePositionOnDragEnd = {
             x: e.nativeEvent.screenX,
@@ -155,7 +155,7 @@ export default class TabRegion extends React.Component {
      */
     drop(e) {
         e.stopPropagation();
-        FSBL.Clients.Logger.system.log("Tab drag drop.");
+        FSBL.Clients.Logger.system.debug("Tab drag drop.");
         let identifier = this.extractWindowIdentifier(e);
         if (identifier) {
             console.log("DROP", identifier);
@@ -460,7 +460,7 @@ function renderTitle() {
     return (<div
         draggable="true"
         onDragStart={(e) => {
-            FSBL.Clients.Logger.system.log("Tab drag start - TITLE");
+            FSBL.Clients.Logger.system.debug("Tab drag start - TITLE");
             this.startDrag(e, FSBL.Clients.WindowClient.getWindowIdentifier());
         }}
         onDragEnd={this.stopDrag}
@@ -486,7 +486,7 @@ function renderTabs() {
             key={i}
             className={this.getTabClasses(tab)}
             onDragStart={(e, identifier) => {
-                FSBL.Clients.Logger.system.log("Tab drag - TAB", identifier.windowName);
+                FSBL.Clients.Logger.system.debug("Tab drag - TAB", identifier.windowName);
                 this.startDrag(e, identifier);
             }}
             onDrop={this.drop}
