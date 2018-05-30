@@ -488,8 +488,14 @@ var Actions = {
 			cb();
 		} else {
 			FSBL.Clients.WindowClient.getStackedWindow(params, (err, response) => {
-				Actions.parentWrapper = FSBL.Clients.WindowClient.finsembleWindow.getParent();
-				Actions.setupStore(cb);
+				debugger
+				if (err) {
+					Actions.parentWrapper = null;
+					Actions._setTabs(null)
+				} else {
+					Actions.parentWrapper = FSBL.Clients.WindowClient.finsembleWindow.getParent();
+					Actions.setupStore(cb);
+				}
 			})
 		}
 	}
