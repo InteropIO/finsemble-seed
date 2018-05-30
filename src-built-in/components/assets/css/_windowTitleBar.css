@@ -19,7 +19,7 @@
     padding-left: 80px; /* leave some space for a user to grab */
 }
 
-@media screen and (min-width: 0px) and (max-width: 275px){
+@media screen and (min-width: 0px) and (max-width: 345px){
     .fsbl-icon.ff-share {
         display: none !important;
     }
@@ -29,7 +29,7 @@
 
 }
 
-@media screen and (min-width: 0px) and (max-width: 250px){
+@media screen and (min-width: 0px) and (max-width: 310px){
     .fsbl-header-left {
         display: none !important;
     }
@@ -38,7 +38,7 @@
     }
 }
 
-@media screen and (min-width: 0px) and (max-width: 225px){
+@media screen and (min-width: 0px) and (max-width: 280px){
     .fsbl-icon.ff-detached, .fsbl-icon.ff-attached {
         display: none !important;
     }
@@ -46,7 +46,7 @@
         padding-left: 50px; /* leave some space for a user to grab */
     }
 }
-@media screen and (min-width: 0px) and (max-width: 200px){
+@media screen and (min-width: 0px) and (max-width: 245px){
     .fsbl-icon.fsbl-maximize {
         display: none !important;
     }
@@ -54,7 +54,7 @@
         padding-left: 40px; /* leave some space for a user to grab */
     }
 }
-@media screen and (min-width: 0px) and (max-width: 175px){
+@media screen and (min-width: 0px) and (max-width: 210px){
     .fsbl-icon.fsbl-minimize {
         display: none !important;
     }

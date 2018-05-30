@@ -28,7 +28,8 @@
 	"docking": {
 		"enabled": true,
 		"groupTileBuffer": 30,
-		"headerHeight": 32
+		"headerHeight": 32,
+		"MINIMUM_WIDTH": 175
 	},
 	"betaFeatures": {
 		"assimilation": {
