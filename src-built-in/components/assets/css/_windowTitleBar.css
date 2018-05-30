@@ -14,15 +14,27 @@
     -webkit-app-region: no-drag !important;
     position: absolute;
 }
+
+.fsbl-tabs-multiple .fsbl-header-right {
+    padding-left: 80px; /* leave some space for a user to grab */
+}
+
 @media screen and (min-width: 0px) and (max-width: 275px){
     .fsbl-icon.ff-share {
         display: none !important;
     }
+    .fsbl-tabs-multiple .fsbl-header-right {
+        padding-left: 70px; /* leave some space for a user to grab */
+    }
+
 }
 
 @media screen and (min-width: 0px) and (max-width: 250px){
     .fsbl-header-left {
         display: none !important;
+    }
+    .fsbl-tabs-multiple .fsbl-header-right {
+        padding-left: 60px; /* leave some space for a user to grab */
     }
 }
 
@@ -30,15 +42,24 @@
     .fsbl-icon.ff-detached, .fsbl-icon.ff-attached {
         display: none !important;
     }
+    .fsbl-tabs-multiple .fsbl-header-right {
+        padding-left: 50px; /* leave some space for a user to grab */
+    }
 }
 @media screen and (min-width: 0px) and (max-width: 200px){
     .fsbl-icon.fsbl-maximize {
         display: none !important;
     }
+    .fsbl-tabs-multiple .fsbl-header-right {
+        padding-left: 40px; /* leave some space for a user to grab */
+    }
 }
 @media screen and (min-width: 0px) and (max-width: 175px){
     .fsbl-icon.fsbl-minimize {
         display: none !important;
+    }
+    .fsbl-tabs-multiple .fsbl-header-right {
+        padding-left: 30px; /* leave some space for a user to grab */
     }
 }
 .fsbl-header {
@@ -142,10 +163,6 @@ html.desktop-active .fsbl-header-right {
     z-index: 5;
     /* background-color: ; */
     background: var(--window-header-background-color);
-}
-
-.fsbl-tabs-multiple .fsbl-header-right {
-    padding-left: 80px; /* leave some space for a user to grab */
 }
 
 
