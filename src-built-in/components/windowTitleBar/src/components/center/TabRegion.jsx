@@ -345,9 +345,7 @@ export default class TabRegion extends React.Component {
             newIndex = undefined;
         }
         let myIdentifier = FSBL.Clients.WindowClient.getWindowIdentifier();
-        if (identifier.windowName !== myIdentifier.windowName) {
-            Actions.reorderTab(identifier, newIndex);
-        }
+        Actions.reorderTab(identifier, newIndex);
         this.setState({
             hoveredTabIndex: undefined
         })
