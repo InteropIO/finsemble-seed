@@ -2,14 +2,6 @@
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
-.icon-fsbl-chat.badge:after {
-    position: relative;
-    height: 0.625rem;
-    width: 0.625rem;
-    top: -0.625rem;
-    right: 0.325rem;
-    color: var(--workspace-icon-color);
-}
 
 body {
     padding: 0px !important;

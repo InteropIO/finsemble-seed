@@ -4,7 +4,7 @@
     align-items: stretch;
     width: 100%;
     background: var(--toolbar-background-color);
-    color: var(--toolbar-primary-font-color);
+    color: var(--toolbar-font-color);
     align-content: center;
     height: var(--toolbar-height);
 }
@@ -55,24 +55,23 @@
 
 .finsemble-toolbar-button {
     display: table;
-    padding: var(--toolbar-button-padding);
+    padding: 0 .4em;
     height: 100%;
     border: 1px solid var(--toolbar-background-color);
 }
 
 .finsemble-toolbar-button-label {
     font-size: .95em;
-    font-weight: var(--toolbar-button-label-font-weight);
+    font-weight: var(--toolbar-font-weight);
     text-align: left;
     letter-spacing: .25px;
     align-content: center;
     display: block;
-    margin-top: var(--toolbar-button-label-margin);    
+    margin-top: 6px;    
 }
 
 .finsemble-toolbar-button:hover {
     background: var(--secondary-accent-color);
-    color: var(--secondary-hover-font-color);
     border: 1px solid transparent;
     cursor: pointer;
 }
@@ -131,18 +130,18 @@
 }
 
 img.pinned-icon {
-    padding-top: var(--pinned-icon-padding-top);
+    padding-top: 12px;
     max-width: 17px;
 }
 
 .pinned-icon {
-    color: var(--pinned-icon-font-color);
-    font-size: var(--pinned-icon-font-size);
+    color: var(--toolbar-icon-app-color);
+    font-size: var(--toolbar-button-label-font-size);
     padding-right: .25em;
 }
 
 .pinned-workspace-icon {
-    color: var(--workspace-icon-color ) !important;
+    color: var(--toolbar-icon-workspace-color) !important;
 }
 
 .toolbar-button-label-left {
@@ -154,7 +153,7 @@ img.pinned-icon {
 }
 
 .finsemble-button-label {
-    padding-top: var(--finsemble-button-label-padding-top);
+    padding-top: 1px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -163,7 +162,7 @@ img.pinned-icon {
 .finsemble-toolbar-brand-logo {
     width: var(--brand-logo-width);
     height: var(--brand-logo-height);
-    margin: var(--brand-logo-margin);
+    margin: 2px 2px;
     padding: 2px 0px 0px 0px !important;
 }
 

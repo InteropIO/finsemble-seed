@@ -12,7 +12,7 @@ body, html {
     font-family: var(--font-family);
     font-weight: var(--toolbar-font-weight);
     font-size: 1em;
-    color: var(--toolbar-primary-font-color);
+    color: var(--toolbar-font-color);
     line-height: var(--toolbar-line-height);
     vertical-align: middle;
     -webkit-user-select: none;
@@ -29,7 +29,7 @@ body, html {
 
 .icon-only > i {
     height: 22px;
-    font-size: var(--toolbar-font-icon-font-size);
+    font-size: var(--toolbar-icon-font-size);
     width: auto;
 }
 
