@@ -31,7 +31,7 @@
 
     /** Toolbar */
     
-    --toolbar-height: 29px;
+    --toolbar-height: 39px;
     --brand-logo-width: 20px;
     --brand-logo-height: 20px;
     --brand-logo-margin: 2px 2px;  
@@ -54,7 +54,7 @@
     --toolbar-separator: 1px solid rgba(255, 255, 255, 0.3);
 
     /* Window Title bar */
-    --titleBar-height: 25px;
+    --titleBar-height: 30px;
     --breakpoint-small-window: 299px;
     --breakpoint-very-small-window: 175px;
     --titleBar-center-padding-bottom: 2px;

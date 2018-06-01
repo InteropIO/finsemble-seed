@@ -10,6 +10,7 @@
 @import  url('./_workspaceManagement.css');
 @import  url('./_dialogs.css');
 @import  url('./_menus.css');
+@import  url('./_notification.css');
 .hidden {
     display: none !important;
 }
