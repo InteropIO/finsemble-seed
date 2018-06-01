@@ -55,7 +55,7 @@
 
 .finsemble-toolbar-button {
     display: -webkit-box;
-    padding: 6px;
+    padding: 5px 6px;
     height: 100%;
     border: 1px solid var(--toolbar-background-color);
 }
@@ -93,7 +93,6 @@
     text-align: center;
     text-overflow: ellipsis;
     white-space: nowrap;
-    border-right: var(--toolbar-separator);
 }
 
 .finsemble-toolbar-workspace-button-label.finsemble-toolbar-button:hover {
@@ -123,10 +122,10 @@
 }
 
 .divider:before {
-    height: 20px;
+    height: 24px;
     border-right: var(--toolbar-separator);
     content: '';
-    margin: 0 .25em 0 .25em;
+    margin: 0 .25em;
 }
 
 img.pinned-icon {
