@@ -43,6 +43,7 @@ body, html {
     overflow: visible;
     max-height: var(--toolbar-height);
     width: 30px;
+    padding-top: 1px;
 }
 
 .left.finsemble-toolbar-section {
