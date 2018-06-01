@@ -27,23 +27,29 @@
     --secondary-background-color: var(--slate6);
     --tertiary--background-color: var(--slate5);
 
+    /* @TODO Tenative hover colors
+    --primary-hover-color: var(--secondary-accent-color);
+    --secondary-hover-color: var(--);
+    */
+
     /* Component Variables:  Use these variables to make small changes to colors and general appearance. */ 
 
     /** Toolbar */
     
     --toolbar-height: 39px;
-    --brand-logo-width: 20px;
-    --brand-logo-height: 20px;
-
+    --toolbar-brand-logo-width: 20px;
+    --toolbar-brand-logo-height: 20px;
     --toolbar-background-color: var(--primary-background-color);
-    --toolbar-font-color: var(--primary-font-color);
+
+    --toolbar-button-hover-color: var(--secondary-accent-color);
     --toolbar-icon-workspace-color: var(--yellow);
     --toolbar-icon-app-color: var(--blue3);
+    --toolbar-icon-font-size: 22px;
 
-    --toolbar-button-label-font-size: .75em;
+    --toolbar-font-color: var(--primary-font-color);
     --toolbar-line-height: 1em;
     --toolbar-font-weight: var(--primary-font-weight);
-    --toolbar-icon-font-size: 22px;
+    
 
     --toolbar-separator: 1px solid rgba(255, 255, 255, 0.3);
 
