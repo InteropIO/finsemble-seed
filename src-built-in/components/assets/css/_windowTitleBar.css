@@ -31,12 +31,12 @@
     top: 0;
     font-size: var(--titleBar-font-size);
     font-weight: var(--titleBar-font-weight);
-    color: var(--titleBar-font-color);
+    color: var(--titleBar-inactive-font-color);
 }
 
 html.desktop-active .fsbl-header {
     background: var(--titleBar-background-active-color);
-    color: var(--titleBar-font-color);
+    color: var(--titleBar-active-font-color);
 }
 
 .fsbl-header-left {
@@ -123,7 +123,7 @@ html.desktop-active .fsbl-header-right {
 
 .fsbl-icon {
     position: relative;
-    color: var(--titleBar-font-color);
+    color: var(--titleBar-inactive-font-color);
     font-size: 15px;
     width: var(--titleBar-icon-width);
     padding: 0px 6px;
@@ -137,7 +137,7 @@ html.desktop-active .fsbl-header-right {
 }
 
 html.desktop-active .fsbl-icon {
-    color: #FFF;
+    color: var(--titleBar-active-font-color);
 }
 
 .fsbl-icon[data-hover=true] {
@@ -145,7 +145,7 @@ html.desktop-active .fsbl-icon {
 }
 
 html.desktop-active .fsbl-icon[data-hover=true] {
-    background: var(--primary-accent-color);
+    background: var(--titleBar-button-hover-active-color);
     transition: background .2s ease;
 }
 
@@ -155,13 +155,13 @@ html.desktop-active .fsbl-icon[data-hover=true] {
 }
 
 .fsbl-icon.fsbl-close[data-hover=true] {
-    background: var(--negative-action-color);
-    color: #FFF;
+    background: var(--titleBar-button-hover-negative-color);
+    color: var(--titleBar-active-font-color);
 }
 
 html.desktop-active .fsbl-icon.fsbl-close[data-hover=true] {
-    background: var(--negative-action-color);
-    color: #FFF;
+    background: var(--titleBar-button-hover-negative-color);
+    color: var(--titleBar-active-font-color);
 }
 
 .fsbl-icon-highlighted {
@@ -183,7 +183,7 @@ html.desktop-active .fsbl-icon-highlighted {
     -webkit-transition: background-color 300ms ease-in-out;
     transition: background-color 300ms ease-in-out;
     color: white;
-    background-color: var(--primary-accent-color);
+    background-color: var(--titleBar-button-highlight-active-color);
 }
 
 .linkerSection {
@@ -212,22 +212,11 @@ html.desktop-active .linker-group {
 
 .linker-group:hover {
     cursor: pointer;
-    border: 1px solid var(--primary-accent-color ) !important;
+    border: 1px solid var(--titleBar-button-hover-inactive-color) !important;
 }
 
 .linker-group:nth-last-child(1) {
     margin-right: 5px;
-}
-
-.seperator {
-    width: 1px;
-    background-color: var(--titleBar-font-color);
-    height: 58%;
-}
-
-.seperator html.desktop-active {
-    background-color: var(--titleBar-font-color);
-
 }
 
 .fsbl-linker {
@@ -249,7 +238,7 @@ html.desktop-active .linker-group {
 }
 
 html.desktop-active .fsbl-linker[hover=true] {
-    background: var(--primary-accent-color);
+    background: var(--titleBar-button-hover-active-color);
     color: var(--titleBar-button-hover-linker-group);
 }
 

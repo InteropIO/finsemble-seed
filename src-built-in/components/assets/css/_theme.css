@@ -21,11 +21,11 @@
 
     --primary-negative-color: var(--red);
     --secondary-negative-color: var(--red1);
-    --tertiary-negative-color: var(--red2);
+    --tertiary-negative-color: var(--red7);
 
     --primary-background-color: var(--slate7);
     --secondary-background-color: var(--slate6);
-    --tertiary--background-color: var(--slate5);
+    --tertiary-background-color: var(--slate5);
 
     /* @TODO Tenative hover colors
     --primary-hover-color: var(--secondary-accent-color);
@@ -81,6 +81,7 @@
     --titleBar-button-hover-inactive-color: var(--secondary-accent-color);
     --titleBar-button-highlight-active-color: var(--primary-accent-color);
     --titleBar-button-highlight-inactive-color: var(--secondary-accent-color);
+    --titleBar-button-hover-negative-color: var(--tertiary-negative-color);
     --titleBar-button-hover-linker-group: var(--gray3);
 
     /* Dialogs */
