@@ -41,28 +41,34 @@
     --toolbar-brand-logo-height: 20px;
     --toolbar-background-color: var(--primary-background-color);
 
+    --toolbar-font-color: var(--primary-font-color);
+    --toolbar-line-height: 1em;
+    --toolbar-font-weight: var(--primary-font-weight);
+
     --toolbar-button-hover-color: var(--secondary-accent-color);
     --toolbar-icon-workspace-color: var(--yellow);
     --toolbar-icon-app-color: var(--blue3);
     --toolbar-icon-font-size: 22px;
-
-    --toolbar-font-color: var(--primary-font-color);
-    --toolbar-line-height: 1em;
-    --toolbar-font-weight: var(--primary-font-weight);
     
-
     --toolbar-separator: 1px solid rgba(255, 255, 255, 0.3);
 
     /* Window Title bar */
-    --titleBar-height: 30px;
+    --titleBar-height: 32px;
+    --titleBar-icon-width: 21px;
+    --titleBar-font-weight: var(--primary-font-weight);
+    --titleBar-font-size: 14px;
+    --titleBar-active-font-color: var(--primary-font-color);
+    --titleBar-inactive-font-color: var(--gray3);
+
     --breakpoint-small-window: 299px;
     --breakpoint-very-small-window: 175px;
+
     --titleBar-center-padding-bottom: 2px;
-    --titleBar-icon-width: 21px;
+
     --titleBar-linker-group-width: 3px;
 
-    --titleBar-background-color: var(--secondary-background-color);
-    --titleBar-background-focus-color: var(--tertiary-background-color);
+    --titleBar-background-inactive-color: var(--secondary-background-color);
+    --titleBar-background-active-color: var(--tertiary-background-color);
 
     --titlebar-tab-windowFocused-active-background-color: var(--slate3); /* Specifies the background color of the active tab in the active window. */
     --titlebar-tab-windowFocused-active-border-color: var(--slate2); 
@@ -76,14 +82,6 @@
     --titleBar-button-highlight-active-color: var(--primary-accent-color);
     --titleBar-button-highlight-inactive-color: var(--secondary-accent-color);
     --titleBar-button-hover-linker-group: var(--gray3);
-
-    --titleBar-text-color: var(--primary-font-color);
-    --titlebar-text-active-color: var(--primary-font-color);
-    --titleBar-text-inactive-color: var(--gray3);
-    --titleBar-font-weight: var(--primary-font-weight);
-    --titleBar-font-size: 12px;
-
-
 
     /* Dialogs */
     --dialog-background-color: var(--primary-background-color);

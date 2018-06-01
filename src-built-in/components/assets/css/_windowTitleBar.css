@@ -1,4 +1,4 @@
-@import "./_variables.css";
+@import "./_theme.css";
 @import "./_variablesWhitelabel.css";
 
 .cq-drag {
@@ -16,27 +16,27 @@
 }
 
 .fsbl-header {
-    font-family: var(--font-family);
+    font-family: var(--font-family); /* REMOVE THS?? */
     text-align: center;
     display: flex;
-    height: var(--window-header-height);
+    height: var(--titleBar-height);
     position: fixed;
     align-items: flex-end;
     flex-direction: row;
     justify-content: center;
-    background: var(--window-header-background-color);
+    background: var(--titleBar-background-inactive-color);
     width: 100%;
     left: 0;
     z-index: 2147483641;
     top: 0;
-    font-size: var(--window-header-font-size);
-    font-weight: var(--window-header-font-weight);
-    color: var(--header-text-color);
+    font-size: var(--titleBar-font-size);
+    font-weight: var(--titleBar-font-weight);
+    color: var(--titleBar-font-color);
 }
 
 html.desktop-active .fsbl-header {
-    background: var(--active-header-background-color);
-    color: var(--active-header-text-color);
+    background: var(--titleBar-background-active-color);
+    color: var(--titleBar-font-color);
 }
 
 .fsbl-header-left {
@@ -84,7 +84,7 @@ html.desktop-active .fsbl-header {
 }
 
 html.desktop-active .fsbl-header-right {
-    background: var(--active-header-background-color);
+    background: var(--titleBar-background-active-color);
 }
 .fsbl-header-right {
     margin-right: 2px;
@@ -93,7 +93,7 @@ html.desktop-active .fsbl-header-right {
     display: flex;
     justify-content: flex-end;
     z-index: 5;
-    background-color: var(--window-header-background-color);
+    background-color: var(--titleBar-background-inactive-color);
 }
 
 /* This div captures the hover event for it's parent. It doesn't stretch to the border, so that mouseout is properly detected. */
@@ -123,9 +123,9 @@ html.desktop-active .fsbl-header-right {
 
 .fsbl-icon {
     position: relative;
-    color: var(--header-text-color);
+    color: var(--titleBar-font-color);
     font-size: 15px;
-    width: var(--fsbl-icon-width);
+    width: var(--titleBar-icon-width);
     padding: 0px 6px;
     height: 100%;
     display: flex;
@@ -141,7 +141,7 @@ html.desktop-active .fsbl-icon {
 }
 
 .fsbl-icon[data-hover=true] {
-    background-color: var(--inactive-header-button-hover);
+    background-color: var(--titleBar-button-hover-inactive-color);
 }
 
 html.desktop-active .fsbl-icon[data-hover=true] {
@@ -167,12 +167,12 @@ html.desktop-active .fsbl-icon.fsbl-close[data-hover=true] {
 .fsbl-icon-highlighted {
     -webkit-transition: background-color 300ms ease-in-out;
     transition: background-color 300ms ease-in-out;
-    background-color: var(--highlighted-inactive-window-button);
+    background-color: var(--titleBar-button-highlight-inactive-color);
     color: #FFF;
 }
 
 html.desktop-active .fsbl-icon-highlighted {
-    background-color: var(--primary-accent-color);
+    background-color: var(--titleBar-button-highlight-active-color);
 }
 
 .fsbl-minimize {
@@ -199,15 +199,15 @@ html.desktop-active .fsbl-icon-highlighted {
 }
 
 .linker-group {
-    width: var(--linker-group-width);
+    width: 7px;
     height: 18px;
     margin-left: 4px;
     border-radius: 4px;
-    border: 1px solid var(--window-header-background-color);
+    border: 1px solid var(--titleBar-background-inactive-color);
 }
 
 html.desktop-active .linker-group {
-    border: 1px solid var(--active-header-background-color);
+    border: 1px solid var(--titleBar-background-active-color);
 }
 
 .linker-group:hover {
@@ -221,12 +221,13 @@ html.desktop-active .linker-group {
 
 .seperator {
     width: 1px;
-    background-color: var(--header-text-color);
+    background-color: var(--titleBar-font-color);
     height: 58%;
 }
 
 .seperator html.desktop-active {
-    background-color: var(--active-header-text-color);
+    background-color: var(--titleBar-font-color);
+
 }
 
 .fsbl-linker {
@@ -243,13 +244,13 @@ html.desktop-active .linker-group {
 }
 
 .fsbl-linker[hover=true] {
-    background: var(--inactive-header-button-hover);
+    background: var(--titleBar-button-hover-inactive-color);
     color: #000;
 }
 
 html.desktop-active .fsbl-linker[hover=true] {
     background: var(--primary-accent-color);
-    color: var(--header-colorbutton-hover-icon);
+    color: var(--titleBar-button-hover-linker-group);
 }
 
 .ff-minimize {
