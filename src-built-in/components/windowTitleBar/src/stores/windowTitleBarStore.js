@@ -409,8 +409,9 @@ var Actions = {
 		if (!Actions.parentWrapper) {
 			return Actions.createParentWrapper({
 				windowIdentifiers: [windowIdentifier],
+				visibleWindowIdentifier: windowIdentifier,
 				create: true
-			}, callback);
+			});
 		}
 		return Actions.parentWrapper.addWindow({ windowIdentifier, position: i }, callback);
 	},
@@ -488,7 +489,6 @@ var Actions = {
 			cb();
 		} else {
 			FSBL.Clients.WindowClient.getStackedWindow(params, (err, response) => {
-				debugger
 				if (err) {
 					Actions.parentWrapper = null;
 					Actions._setTabs(null)
