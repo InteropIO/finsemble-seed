@@ -147,10 +147,10 @@
     --notification-close-icon-hover-color: #EE5C5C;
     --notification-description-font-size: 13px;
 
-    --tab-section-separator: 1px solid #d0d0d0;
-    --tab-separator: 1px solid #777;
-    --tab-inactive-background-color: transparent;
-    --tab-active-background-color: rgba(32, 104, 195, 0.23);
+    --tab-section-separator: 1px solid #999;
+    --tab-separator: 1px solid #555;
+    --tab-inactive-background-color: var(--toolbar-background-color);
+    --tab-active-background-color: #495a69;
     --tab-active-color: #ffffff;
     --tab-inactive-color: #bbbbbb;
     --tab-logo-color: var(--primary-accent-color);
