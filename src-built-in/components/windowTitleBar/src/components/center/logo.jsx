@@ -6,7 +6,7 @@ export default class Logo extends React.Component {
       tabLogo: {}
     }
   }
-  componentWillReceiveProps() {
+  componentDidMount() {
     let wrap = FSBL.FinsembleWindow.wrap(this.props.windowIdentifier, (err, wrapper) => {
       wrapper.getOptions((err, opts) => {
         let fontIcon;
