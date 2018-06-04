@@ -1,0 +1,13 @@
+
+#header { display: none !important }
+
+body > div.tether-element.tether-element-attached-top.tether-element-attached-left.tether-target-attached-bottom.tether-target-attached-center.arrow-top-left.tether-enabled {
+  top: 0px;
+  left: 0px;
+  position: absolute;
+  transform: translateX(150px) translateY(55px) translateZ(0px) !important;
+}
+
+.modal-box {
+  width:100% !important;
+}

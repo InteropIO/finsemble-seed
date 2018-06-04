@@ -1,0 +1,67 @@
+
+.simple_grid_main_container {
+  top: 0px !important;
+  left: 0px !important;
+}
+[data-tooltip]:hover:before, [data-tooltip]:hover:after, [data-tooltip]:focus:before, [data-tooltip]:focus:after, .fsbl-tooltip:hover:before, .fsbl-tooltip:hover:after, .fsbl-tooltip:focus:before, .fsbl-tooltip:focus:after, .fsbl-tooltip-top:hover:before, .fsbl-tooltip-top:hover:after, .fsbl-tooltip-top:focus:before, .fsbl-tooltip-top:focus:after {
+  transform:translateY(4px) !important;
+}
+
+/* symphony defaults to zero, which causes issues with fsbl header */
+#FSBLHeader * {
+  min-width: auto;
+  min-height: auto;
+}
+
+#header { display: none !important }
+#applications { display: none !important }
+
+
+body > div.tether-element.tether-element-attached-top.tether-element-attached-left.tether-target-attached-bottom.tether-target-attached-center.arrow-top-left.tether-enabled {
+  top: 0px;
+  left: 0px;
+  position: absolute;
+  transform: translateX(150px) translateY(55px) translateZ(0px) !important;
+  min-width: auto;
+}
+
+.modal-box {
+  width:100% !important;
+}
+
+#grid_modal, #simple_grid { display: none !important}
+#nav, .navigation-main, .navbar {width: 100vw !important;}
+#nav {top:32px !important; position: fixed !important;}
+.navigation-category__title-wrapper {display: none;}
+#primaryCreateButton {display: none;}
+
+body.light #nav{
+  background-color: #fff !important;
+}
+body.light .navigation-category-children {
+  background: #fff !important;
+}
+.light .navigation-item-name {
+  color: #222;
+}
+.light .avatar-wrap img {
+  border: 1px solid #333;
+}
+.light #nav-profile span, .light #nav-profile span:hover {
+  color: #222;
+}
+
+body.light #nav-profile .presence-dot-host {
+  background: none;
+}
+.light .leftnav-qf-autosuggest__container:before,
+.light .leftnav-qf-autosuggest__input {
+  color: #222;
+}
+
+.light .leftnav-qf-autosuggest__input {
+  border-bottom:1px solid #ddd;
+}
+input::-webkit-input-placeholder {
+color: #999 !important;
+}
