@@ -23,19 +23,6 @@ export default class Logo extends React.Component {
           imageIcon = "";
         }
         if (fontIcon && fontIcon != "") {
-          //We'll randomize the default logo to test looks.
-          if (fontIcon === "component") {
-            let logos = [
-              "component",
-              "chat-group",
-              "layout",
-              "table",
-              "list"
-            ]
-
-            fontIcon = logos[Math.floor(Math.random() * logos.length)];
-
-          }
           this.setState({
             tabLogo: {
               type: "icon",
