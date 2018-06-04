@@ -14,7 +14,7 @@
 	const gulp = require("gulp");
 	const watch = require("gulp-watch");
 	const shell = require("shelljs");
-	const launcher = require("openfin-launcher");
+	const { launch, connect } = require("hadouken-js-adapter");
 	const path = require("path");
 	const webpack = require("webpack");
 	// local
@@ -37,6 +37,9 @@
 	}
 	// #region Constants
 	const startupConfig = require("./configs/other/server-environment-startup");
+
+	// Local manifest is used to read the UUID for launching Finsemble application.
+	const manifestLocal = require("./configs/openfin/manifest-local");
 
 	let angularComponents;
 	try {
@@ -245,6 +248,10 @@
 					}
 
 					if (watchClose) watchClose();
+
+					// Signal task completion
+					done();
+
 					process.exit();
 				});
 			});
@@ -254,17 +261,44 @@
 
 			let startTime = Date.now();
 			fs.writeFileSync(path.join(__dirname, "server", "stats.json"), JSON.stringify({ startTime }), "utf-8");
-			launcher
-				.launchOpenFin({
-					configPath: startupConfig[env.NODE_ENV].serverConfig
-				})
-				.then(() => {
+
+			async function launchAndConnect(manifestUrl, uuid) {
+				// launching an application returns the port number used, this port number will be used to connect to the runtime
+				const port = await launch({ manifestUrl });
+			
+				// address to connect to the runtime using the port
+				const address = `ws://localhost:${port}`;
+			
+				// unique UUID used to launch an application, this must be different from the uuid the application uses
+				const launchUUID = `${uuid}-${Math.floor(1000 * Math.random())}`;
+				
+				// use the websocket address and uuid to connect to the runtime
+				const fin = await connect({ address, uuid: launchUUID });
+			
+				// get an instance of the application using wrap and the UUID set in the config file
+				const app = await fin.Application.wrap({ uuid });
+			
+				// listen to the closed event on the application to run code when it closes
+				app.on("closed", () => {
+					logToTerminal("bgCyan", "Finsemble application terminated");
+			
 					// OpenFin has closed so exit gulpfile
 					if (watchClose) watchClose();
+
+					// Signal task completion
+					done();
+
 					process.exit();
 				});
+			}
 
-			done();
+			const manifestUrl = startupConfig[env.NODE_ENV].serverConfig;
+
+			// Get the UUID from the manifest file. Assumes that the UUID from the server config is the same as in the 
+			// local manifest.
+			const uuid = manifestLocal.startup_app.uuid
+
+			launchAndConnect(manifestUrl, uuid);
 		},
 
 		/**
