@@ -81,7 +81,6 @@
 
 
     /** Window Title bar */
-
     --window-header-background-color: #303D47;
     --window-header-color: #151f28;
     --window-frame-inactive-color: var(--window-header-background-color);
@@ -131,15 +130,24 @@
     --complex-menu-checkbox-checked-color: white;
     --workspace-component-list-font-color: #5a5a5a;
 
-
-    /* search */
+    /* Search */
     --search-result-item-color: #000;
     --search-result-active-item-color: #ecf0f1;
     --search-section-max-height: 40px;
-    --search-input-height:var(--toolbar-height);
+    --search-input-height: var(--toolbar-height);
     --search-input-line-height: var(--toolbar-height);
 
-    --tab-border: 1px solid #979797;
+    /* Notifications */
+    --notification-body-background-color: var(--toolbar-background-color);
+    --notification-body-font-color: var(--font-color);
+    --notification-body-font-family: var(--font-family);
+    --notification-logo-width: 14px;
+    --notification-title-font-size: 13px;
+    --notification-title-font-weight: bold;
+    --notification-close-icon-hover-color: #EE5C5C;
+    --notification-description-font-size: 13px;
+
+      --tab-border: 1px solid #979797;
     --tab-inactive-background-color: transparent;
     --tab-active-background-color: rgba(32, 104, 195, 0.23);
     --tab-active-color: #ffffff;
