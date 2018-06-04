@@ -196,8 +196,11 @@ export default class TabRegion extends React.Component {
             let lastTab = {
                 right: numTabs * this.state.tabWidth
             };
-            let deltaX = e.nativeEvent.deltaY;
-
+            let deltaX = this.state.tabWidth/3;
+            if (e.nativeEvent.deltaY < 0) {
+                let isNegative = true;
+                deltaX = 0 - deltaX;
+            }
             //Mouses with high sensitivity will cause massive scroll amounts. We don't want to scroll more than one tab's width in a single mouse wheel, otherwise you risk missing a tab.
             if (Math.abs(deltaX) > this.state.tabWidth) {
                 let isNegative = false;
