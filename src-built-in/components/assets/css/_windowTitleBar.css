@@ -169,7 +169,6 @@ html.desktop-active .fsbl-icon.fsbl-close[data-hover=true] {
     -webkit-transition: background-color 300ms ease-in-out;
     transition: background-color 300ms ease-in-out;
     background-color: var(--titleBar-button-highlight-inactive-color);
-    color: var(--primary-font-color);
 }
 
 html.desktop-active .fsbl-icon-highlighted {
@@ -183,7 +182,6 @@ html.desktop-active .fsbl-icon-highlighted {
 .fsbl-ejector {
     -webkit-transition: background-color 300ms ease-in-out;
     transition: background-color 300ms ease-in-out;
-    color: var(--primary-font-color);
     background-color: var(--titleBar-button-highlight-active-color);
 }
 
