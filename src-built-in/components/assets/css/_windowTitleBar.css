@@ -169,7 +169,7 @@ html.desktop-active .fsbl-icon.fsbl-close[data-hover=true] {
     -webkit-transition: background-color 300ms ease-in-out;
     transition: background-color 300ms ease-in-out;
     background-color: var(--titleBar-button-highlight-inactive-color);
-    color: #FFF;
+    color: var(--primary-font-color);
 }
 
 html.desktop-active .fsbl-icon-highlighted {
@@ -183,7 +183,7 @@ html.desktop-active .fsbl-icon-highlighted {
 .fsbl-ejector {
     -webkit-transition: background-color 300ms ease-in-out;
     transition: background-color 300ms ease-in-out;
-    color: white;
+    color: var(--primary-font-color);
     background-color: var(--titleBar-button-highlight-active-color);
 }
 
@@ -235,7 +235,7 @@ html.desktop-active .linker-group {
 
 .fsbl-linker[hover=true] {
     background: var(--titleBar-button-hover-inactive-color);
-    color: #000;
+    color: var(--secondary-font-color);
 }
 
 html.desktop-active .fsbl-linker[hover=true] {
