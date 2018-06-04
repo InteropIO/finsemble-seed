@@ -57,6 +57,8 @@ export default class TabRegion extends React.Component {
         this.isTabRegionOverflowing = this.isTabRegionOverflowing.bind(this);
         this.onWindowResize = this.onWindowResize.bind(this);
         this.getTabWidth = this.getTabWidth.bind(this);
+        this.setTabListTranslateX = this.setTabListTranslateX.bind(this);
+        this.onTabListTranslateChanged = this.onTabListTranslateChanged.bind(this);
 
     }
     getTabWidth(params = {}) {
@@ -197,7 +199,7 @@ export default class TabRegion extends React.Component {
             let lastTab = {
                 right: numTabs * this.state.tabWidth
             };
-            let deltaX = this.state.tabWidth/3;
+            let deltaX = this.state.tabWidth / 3;
             if (e.nativeEvent.deltaY < 0) {
                 let isNegative = true;
                 deltaX = 0 - deltaX;
@@ -227,7 +229,7 @@ export default class TabRegion extends React.Component {
             }
 
             //Else, the translation is okay. We're in the middle of our list and the first and last tabs aren't being rendered improperly.
-            this.setState({ translateX });
+            this.setTabListTranslateX(translateX);
         }
     }
     /**
@@ -282,8 +284,11 @@ export default class TabRegion extends React.Component {
             }
 
 
-            this.setState({ translateX });
+            this.setTabListTranslateX(translateX);
         }
+    }
+    setTabListTranslateX(translateX) {
+        Actions.setTabListScrollPosition(translateX);
     }
     /**
      * Someone is dragging _something_ over the tab region. We respond by rendering the ghost tab.
@@ -396,10 +401,6 @@ export default class TabRegion extends React.Component {
         });
     }
 
-    // onActiveTabChanged(err, response) {
-    //     let { value } = response;
-    //     this.onStoreChanged("activeTab", value);
-    // }
     onTabsChanged(err, response) {
         let { value } = response;
         console.log("Tablist changed", value);
@@ -408,10 +409,16 @@ export default class TabRegion extends React.Component {
             tabWidth: this.getTabWidth({ tabList: value })
         })
     }
-
+    onTabListTranslateChanged(err, response) {
+        let { value } = response;
+        this.setState({
+            translateX: value
+        })
+    }
     componentWillMount() {
         // Store.addListener({ field: "activeTab" }, this.onActiveTabChanged);
         Store.addListener({ field: "tabs" }, this.onTabsChanged);
+        Store.addListener({ field: "tabListTranslateX" }, this.onTabListTranslateChanged)
     }
 
     componentDidMount() {
@@ -426,6 +433,7 @@ export default class TabRegion extends React.Component {
     componentWillUnmount() {
         // Store.removeListener({ field: "activeTab" }, this.onActiveTabChanged);
         Store.removeListener({ field: "tabs" }, this.onTabsChanged);
+        Store.removeListener({ field: "tabListTranslateX" }, this.onTabListTranslateChanged)
         FSBL.Clients.WindowClient.finsembleWindow.removeListener('bounds-set', this.onWindowResize);
 
     }
@@ -496,7 +504,7 @@ function renderTitle() {
         data-hover={this.state.hoverState}
         className={"fsbl-header-title cq-no-drag"}>
         <HoverDetector edge="top" hoverAction={this.hoverAction.bind(this)} />
-        <Logo windowIdentifier={FSBL.Clients.WindowClient.getWindowIdentifier()}/>
+        <Logo windowIdentifier={FSBL.Clients.WindowClient.getWindowIdentifier()} />
         <div className="fsbl-tab-title">{this.props.thisWindowsTitle}</div>
     </div>);
 }
