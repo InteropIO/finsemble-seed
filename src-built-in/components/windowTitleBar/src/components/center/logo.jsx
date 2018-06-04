@@ -9,7 +9,6 @@ export default class Logo extends React.Component {
   componentWillReceiveProps() {
     let wrap = FSBL.FinsembleWindow.wrap(this.props.windowIdentifier, (err, wrapper) => {
       wrapper.getOptions((err, opts) => {
-        debugger
         let fontIcon;
         try {
           fontIcon = opts.customData.foreign.components.Toolbar.iconClass;
@@ -24,6 +23,19 @@ export default class Logo extends React.Component {
           imageIcon = "";
         }
         if (fontIcon && fontIcon != "") {
+          //We'll randomize the default logo to test looks.
+          if (fontIcon === "component") {
+            let logos = [
+              "component",
+              "chat-group",
+              "layout",
+              "table",
+              "list"
+            ]
+
+            fontIcon = logos[Math.floor(Math.random() * logos.length)];
+
+          }
           this.setState({
             tabLogo: {
               type: "icon",
