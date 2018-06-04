@@ -499,7 +499,7 @@ function renderTabs() {
             onTabDraggedOver={this.onTabDraggedOver}
             listenForDragOver={this.props.listenForDragOver}
             tabWidth={this.state.tabWidth}
-            title={tab.windowName}
+            title={tab.title || tab.windowName}
             windowIdentifier={tab} />
     });
 }
