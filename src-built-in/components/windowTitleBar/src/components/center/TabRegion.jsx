@@ -496,7 +496,6 @@ function renderTitle() {
         data-hover={this.state.hoverState}
         className={"fsbl-header-title cq-no-drag"}>
         <HoverDetector edge="top" hoverAction={this.hoverAction.bind(this)} />
-        <div className="fsbl-tab-logo"><i className="ff-grid"></i></div>
         <Logo windowIdentifier={FSBL.Clients.WindowClient.getWindowIdentifier()}/>
         <div className="fsbl-tab-title">{this.props.thisWindowsTitle}</div>
     </div>);
