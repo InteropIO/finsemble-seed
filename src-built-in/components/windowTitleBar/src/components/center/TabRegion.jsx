@@ -25,7 +25,8 @@ export default class TabRegion extends React.Component {
             activeTab: FSBL.Clients.WindowClient.getWindowIdentifier(),
             boundingBox: {},
             iAmDragging: false,
-            hoverState: false
+            hoverState: false,
+            tabWidth: TAB_WIDTH
         };
         this.bindCorrectContext();
     }
@@ -195,21 +196,32 @@ export default class TabRegion extends React.Component {
             let lastTab = {
                 right: numTabs * this.state.tabWidth
             };
+            let deltaX = e.nativeEvent.deltaY;
+
+            //Mouses with high sensitivity will cause massive scroll amounts. We don't want to scroll more than one tab's width in a single mouse wheel, otherwise you risk missing a tab.
+            if (Math.abs(deltaX) > this.state.tabWidth) {
+                let isNegative = false;
+                if (deltaX < 0) {
+                    isNegative = true;
+                }
+                deltaX = isNegative ? 0 - this.state.tabWidth : this.state.tabWidth;
+            }
 
             //If the content is overflowing, correct the translation (if necessary)..
             if (lastTab.right > boundingBox.right) {
-                translateX = e.nativeEvent.deltaY + currentX;
+                translateX = deltaX + currentX;
                 let maxRight = boundingBox.right - this.state.tabWidth;
                 let newRightForLastTab = lastTab.right + translateX;
                 let newLeftForFirstTab = firstTab.left + translateX;
                 //Do not let the left of the first tab move to the right of the left edge of the bounding box.
                 if (newLeftForFirstTab >= boundingBox.left) {
                     return this.scrollToFirstTab();
-                } else if (e.nativeEvent.deltaY < 0 && newRightForLastTab <= boundingBox.right) {
-                    //ONLY IF the user is scrolling from right-to-left (deltaY will be negative). IF they try to do that, do not allow the right edge of the last tab to detach.
+                } else if (deltaX < 0 && newRightForLastTab <= boundingBox.right) {
+                    //ONLY IF the user is scrolling from right-to-left (deltaX will be negative). IF they try to do that, do not allow the right edge of the last tab to detach.
                     return this.scrollToLastTab();
                 }
             }
+
             //Else, the translation is okay. We're in the middle of our list and the first and last tabs aren't being rendered improperly.
             this.setState({ translateX });
         }
@@ -245,16 +257,27 @@ export default class TabRegion extends React.Component {
         let tabIndex = this.state.tabs.findIndex(el => {
             return el.windowName === tab.windowName && el.uuid === tab.uuid
         });
+        let translateX;
         if (tabIndex > -1) {
-            let leftEdgeOfTab = tabIndex * this.state.tabWidth;
-            let rightEdgeOfTab = leftEdgeOfTab + this.state.tabWidth;
-            //Our translation is  this: Take the  right edge of the bounding box, and subract the left edge. This gives us the 0 point for the box. Then, we subtract the right edge of the tab. The result is a number that we use to shift the entire element and align the right edge of the tab with the right edge of the bounding box. We also account for the 30 px region on the right.
-            let translateX = boundingBox.right - boundingBox.left - rightEdgeOfTab;
-
-            //If there's no overflow, we don't scroll.
-            if (rightEdgeOfTab < boundingBox.right) {
+            //The last tab is simple. Just translate until the right edge of the tab matches the right edge of the bounding box.
+            if (tabIndex === this.state.tabs.length) {
+                translateX = 0 - boundingBox.right;
+            } else if (tabIndex === 0) {
+                //The first tab needs no translation.
                 translateX = 0;
+            } else {
+                //Other tabs are less simple.
+                let leftEdgeOfTab = tabIndex * this.state.tabWidth;
+                let rightEdgeOfTab = leftEdgeOfTab + this.state.tabWidth;
+                //Our translation is  this: Take the  right edge of the bounding box, and subract the left edge. This gives us the 0 point for the box. Then, we subtract the right edge of the tab. The result is a number that we use to shift the entire element and align the right edge of the tab with the right edge of the bounding box.
+                translateX = boundingBox.right - boundingBox.left - rightEdgeOfTab;
+                //If there's no overflow, we don't scroll.
+                if (rightEdgeOfTab < boundingBox.right) {
+                    translateX = 0;
+                }
             }
+
+
             this.setState({ translateX });
         }
     }
