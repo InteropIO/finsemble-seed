@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700');
+@import url("https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700");
 
 :root {
     --negative-action-color: #ef1436;
@@ -81,15 +81,15 @@
 
 
     /** Window Title bar */
-    --window-header-background-color: #233958;
+    --window-header-background-color: #303D47;
     --window-header-color: #151f28;
     --window-frame-inactive-color: var(--window-header-background-color);
     --active-header-text-color: var(--font-color);
-    --active-header-background-color: var(--secondary-accent-color);
+    --active-header-background-color: #3C4C58;
     --header-text-color: var(--font-color);
     --header-colorbutton-hover-icon: var(--font-color);
-    --highlighted-inactive-window-button: #115fcc;
-    --inactive-header-button-hover: var(--secondary-accent-color);
+    --highlighted-inactive-window-button: #117DE9;
+    --inactive-header-button-hover: #004BA3;
     --breakpoint-small-window: 299px;
     --breakpoint-very-small-window: 175px;
     --window-header-height: 32px;
@@ -146,4 +146,11 @@
     --notification-title-font-weight: bold;
     --notification-close-icon-hover-color: #EE5C5C;
     --notification-description-font-size: 13px;
+
+      --tab-border: 1px solid #979797;
+    --tab-inactive-background-color: transparent;
+    --tab-active-background-color: rgba(32, 104, 195, 0.23);
+    --tab-active-color: #ffffff;
+    --tab-inactive-color: #bbbbbb;
+    --tab-logo-color: var(--primary-accent-color);
 }
