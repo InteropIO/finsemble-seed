@@ -296,6 +296,7 @@
 
 			// Get the UUID from the manifest file. Assumes that the UUID from the server config is the same as in the 
 			// local manifest.
+			// TODO: read UUID from manifest at URL
 			const uuid = manifestLocal.startup_app.uuid
 
 			launchAndConnect(manifestUrl, uuid);
