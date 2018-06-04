@@ -16,7 +16,7 @@
 }
 
 .fsbl-header {
-    font-family: var(--font-family); /* REMOVE THS?? */
+    font-family: var(--font-family);
     text-align: center;
     display: flex;
     height: var(--titleBar-height);
@@ -72,7 +72,8 @@ html.desktop-active .fsbl-header {
 .fsbl-header-center .fsbl-header-title {
     transition: opacity .5s ease-in-out;
     opacity: 1;
-    margin-top: -1px
+    margin-top: -1px;
+    user-select: none;
 }
 
 .fsbl-header-center:hover .fsbl-tab-area {
