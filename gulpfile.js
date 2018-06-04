@@ -38,7 +38,7 @@
 	// #region Constants
 	const startupConfig = require("./configs/other/server-environment-startup");
 
-	// Local manifest is used to read the UUID for launching Finsemble application.
+	// Local manifest is used to read the UUID for launching the Finsemble application.
 	const manifestLocal = require("./configs/openfin/manifest-local");
 
 	let angularComponents;
@@ -296,6 +296,7 @@
 
 			// Get the UUID from the manifest file. Assumes that the UUID from the server config is the same as in the 
 			// local manifest.
+			// TODO: read UUID from manifest at URL
 			const uuid = manifestLocal.startup_app.uuid
 
 			launchAndConnect(manifestUrl, uuid);
