@@ -31,6 +31,7 @@
     /* Component Variables:  Use these variables to make small changes to colors and general appearance. */ 
 
     /** Toolbar */
+    --toolbar-font-size: 16px;
     --toolbar-font-color: var(--primary-font-color);
     --toolbar-line-height: 1em;
     --toolbar-font-weight: var(--primary-font-weight);
@@ -131,6 +132,9 @@
     --scrollbar-color: var(--slate1);
 
     /* Search Menu */
+    --search-input-font-color: var(--secondary-font-color);
+    --search-input-background-color: white;
+    
     --search-header-font-color: var(--blue3);
     --search-header-font-weight: var(--tertiary-font-weight);
     
