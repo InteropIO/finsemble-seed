@@ -6,8 +6,8 @@
     
     /* Font Settings */
     --font-family: 'Roboto', sans-serif;
-    --primary-font-color: #ffffff;
-    --secondary-font-color: #000000;
+    --primary-font-color: white;
+    --secondary-font-color: black;
     
     --primary-font-weight: 300;
     --secondary-font-weight: 500;
@@ -27,23 +27,18 @@
     --secondary-background-color: var(--slate6);
     --tertiary-background-color: var(--slate5);
 
-    /* @TODO Tenative hover colors
-    --primary-hover-color: var(--secondary-accent-color);
-    --secondary-hover-color: var(--);
-    */
 
     /* Component Variables:  Use these variables to make small changes to colors and general appearance. */ 
 
     /** Toolbar */
-    
+    --toolbar-font-color: var(--primary-font-color);
+    --toolbar-line-height: 1em;
+    --toolbar-font-weight: var(--primary-font-weight);
+
     --toolbar-height: 39px;
     --toolbar-brand-logo-width: 20px;
     --toolbar-brand-logo-height: 20px;
     --toolbar-background-color: var(--primary-background-color);
-
-    --toolbar-font-color: var(--primary-font-color);
-    --toolbar-line-height: 1em;
-    --toolbar-font-weight: var(--primary-font-weight);
 
     --toolbar-button-hover-color: var(--secondary-accent-color);
     --toolbar-icon-workspace-color: var(--yellow);
@@ -53,19 +48,13 @@
     --toolbar-separator: 1px solid rgba(255, 255, 255, 0.3);
 
     /* Window Title bar */
+    --titleBar-active-font-color: var(--primary-font-color);
+    --titleBar-inactive-font-color: var(--gray3); 
+    --titleBar-font-size: 14px;
+    --titleBar-font-weight: var(--primary-font-weight);
+
     --titleBar-height: 32px;
     --titleBar-icon-width: 21px;
-    --titleBar-font-weight: var(--primary-font-weight);
-    --titleBar-font-size: 14px;
-    --titleBar-active-font-color: var(--primary-font-color);
-    --titleBar-inactive-font-color: var(--gray3);
-
-    --breakpoint-small-window: 299px;
-    --breakpoint-very-small-window: 175px;
-
-    --titleBar-center-padding-bottom: 2px;
-
-    --titleBar-linker-group-width: 3px;
 
     --titleBar-background-inactive-color: var(--secondary-background-color);
     --titleBar-background-active-color: var(--tertiary-background-color);
@@ -85,18 +74,18 @@
     --titleBar-button-hover-linker-group: var(--gray3);
 
     /* Dialogs */
-    --dialog-font-weight: var(--primary-font-weight);
+    --dialog-font-color: var(--primary-font-color);
     --dialog-title-font-size: 20px;
-    --dialog-title-font-weight: var(--primary-font-weight);
     --dialog-question-font-size: 14px;
+    --dialog-font-weight: var(--primary-font-weight);
+    --dialog-title-font-weight: var(--primary-font-weight);
     --dialog-question-font-weight: var(--secondary-font-weight);
 
     --dialog-background-color: var(--primary-background-color);
-    --dialog-font-color: var(--primary-font-color);
-
+    
+    --dialog-input-font-size: 16px;
     --dialog-input-font-color: var(--secondary-font-color);
     --dialog-input-font-weight: var(--primary-font-weight);
-    --dialog-input-font-size: 16px;
     --dialog-input-background-color: var(--primary-background-color);
     --dialog-input-border-color: var(--gray6);
     --dialog-input-border-focus-color: var(--gray);
@@ -123,8 +112,9 @@
     
     /* Menus */
     --menu-font-size: 14px;
-    --menu-background-color: var(--secondary-background-color);
     --menu-primary-font-color: var(--primary-font-color);
+
+    --menu-background-color: var(--secondary-background-color);
     --menu-primary-background-color: var(--secondary-background-color);
     --menu-primary-hover-color: var(--slate3);
     --menu-secondary-background-color: var(--slate4);
