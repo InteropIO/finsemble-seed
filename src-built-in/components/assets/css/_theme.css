@@ -123,10 +123,10 @@
     --menu-content-background-color: var(--secondary-background-color);
     --menu-content-hover-color: var(--slate3);
 
-    --menu-pin-border-color: var(--slate1);
-    --menu-pin-background-color: var(--slate1);
-    --menu-pin-background-hover-color: var(--slate2);
-    --menu-delete-background-hover-color: var(--red1);
+    --menu-pin-border-color: var(--secondary-accent-color);
+    --menu-pin-background-color: var(--primary-accent-color);
+    --menu-pin-background-hover-color: var(--secondary-accent-color);
+    --menu-delete-background-hover-color: var(--secondary-negative-color);
 
     --scrollbar-color: var(--slate1);
 
