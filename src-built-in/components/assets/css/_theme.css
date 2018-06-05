@@ -117,10 +117,8 @@
     --menu-font-color: var(--primary-font-color);
 
     --menu-background-color: var(--secondary-background-color);
-
     --menu-actions-background-color: var(--slate4);
     --menu-actions-hover-color: var(--slate3);
-
     --menu-content-background-color: var(--secondary-background-color);
     --menu-content-hover-color: var(--slate3);
 
@@ -154,15 +152,16 @@
     --scrim-negative-overlay: var(--red7);
     
     /* Complex menus (e.g., Preferences and App Catalog) */
-    /* Nav section is the left side of a complex menu */
+        /* Nav section is the left side of a complex menu */
+    --complex-nav-header-font-size: 21px;
+    --complex-nav-header-font-weight: var(--secondary-font-weight);
     --complex-nav-header-background-color: var(--slate);
     --complex-nav-background-color: var(--tertiary-background-color);
     --complex-nav-active-item: var(--slate3);
     --complex-nav-active-item-hover: var(--slate2);
     --complex-nav-font-color: var(--primary-font-color);
-    --complex-nav-padding-left: 30px;
     
-    /* Content section is the right side of a complex menu.*/
+        /* Content section is the right side of a complex menu.*/
     --complex-content-background-color: var(--secondary-background-color);
     --complex-content-font-color: var(--primary-font-color);
     --complex-content-hint-font-color: var(--gray);

@@ -40,16 +40,16 @@ img {
     width: 212px;
     font-size: 16px;
     flex-direction: column;
-    color: var(--left-nav-font-color);
-    background-color: var(--left-nav-background-color);
+    color: var(--complex-nav-font-color);
+    background-color: var(--complex-nav-background-color);
 }
 
 .complex-menu-left-nav-header {
-    background-color: var(--left-nav-header-background-color);
-    font-weight: 500;
-    font-size: 21px;
+    background-color: var(--complex-nav-header-background-color);
+    font-weight: var(--complex-nav-header-font-weight);
+    font-size: var(--complex-nav-header-font-size);
     margin-bottom: 30px;
-    padding-left: var(--left-nav-padding-left);
+    padding-left: 30px;
     height: 49px;
     display: flex;
     align-items: center;
@@ -67,7 +67,7 @@ img {
     align-self: flex-start;
     font-size: 18px;
     font-weight: bold;
-    color: var(--header-font-color);
+    color: var(--complex-content-header-font-color);
     margin-bottom: 4px;
 }
 
@@ -141,7 +141,7 @@ img {
     flex: 1;
     padding: .75em;
     align-content: flex-start;
-    background-color: var(--content-section-background-color);
+    background-color: var(--complex-content-background-color);
 }
 
 .workspace-list-header-row {
