@@ -6,8 +6,7 @@ body.dialog {
     -webkit-appearance: none;
     overflow: hidden;
     font-family: var(--font-family);
-    font-size: 12pt;
-    font-weight: var(--dialog-font-weight);
+    color: var(--dialog-font-color);
   /* Styling for General Typography */
   /* Always Show Number Input Arrows, Give A Bit Of Space */;
 }
@@ -20,34 +19,20 @@ body.dialog html:before, body.dialog html:after, body.dialog body:before, body.d
     z-index: 2147483647;
 }
 
-body.dialog h2 {
-    font-weight: 100;
-    color: #000;
-    font-size: 18pt;
-    margin: -5px 0px 20px 0px;
-}
-
-body.dialog h3 {
-    font-weight: var(--dialog-font-weight);
-    color: #000;
-    text-align: center;
-    font-size: 15pt;
-    margin: 35px 0px;
-}
-
 body.dialog p {
     margin: 8px 0px;
 }
 
 body.dialog .dialog {
     background-color: var(--dialog-background-color);
-    padding: var(--dialog-body-padding);
+    padding: 32px;
 }
 
 body.dialog .dialog-title {
     width: 469px;
     height: 30px;
-    font-size: 20px;
+    font-weight: var(--dialog-title-font-weight);
+    font-size: var(--dialog-title-font-size);
     text-align: left;
     color:  var(--dialog-font-color);
     padding: 0px 0px 4px 4px;
@@ -57,7 +42,7 @@ body.dialog .dialog-question {
     width: 469px;
     font-weight: 500;
     color:  var(--dialog-font-color);
-    font-size: 14px;
+    font-size: var(--dialog-question-font-size);
     margin-bottom: 16px;
     padding-left: 4px;
     text-align: left;
@@ -81,24 +66,24 @@ body.dialog input::-webkit-outer-spin-button,
 
 body.dialog input:focus {
     box-shadow: 0 0 5px rgba 81, 203, 238, 1;
-    border: 1px solid var(--primary-accent-color);
+    border: 1px solid var(--dialog-input-border-focus-color);
     outline: none;
 }
 
 body.dialog input {
     -webkit-appearance: none;
-    color: var(--dialog-font-color);
+    font-family: var(--font-family);
+    color: var(--dialog-input-font-color);
     text-align: left;
-    font-size: 12pt;
-    font-weight: 300;
+    font-size: var(--dialog-input-font-size);
+    font-weight: var(--dialog-input-font-weight);
     vertical-align: middle;
-    background-color: #FFF;
-    padding-left: 15px;
+    background-color: var(--dialog-input-background-color);
     width: 100%;
     height: 33px;
     max-width: 100%;
-    padding: 3px 10px;
-    border: 1px solid #bdd9ff;
+    padding: 3px 10px 3px 15px;
+    border: 1px solid var(--dialog-input-border-color);
     box-sizing: border-box;
     transition: .2s ease-in;
 }

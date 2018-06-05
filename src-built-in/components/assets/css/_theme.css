@@ -85,10 +85,18 @@
     --titleBar-button-hover-linker-group: var(--gray3);
 
     /* Dialogs */
+    --dialog-font-weight: var(--primary-font-weight);
+    --dialog-title-font-size: 20px;
+    --dialog-title-font-weight: var(--primary-font-weight);
+    --dialog-question-font-size: 14px;
+    --dialog-question-font-weight: var(--secondary-font-weight);
+
     --dialog-background-color: var(--primary-background-color);
     --dialog-font-color: var(--primary-font-color);
-    --dialog-font-weight: var(--primary-font-weight);
-    --dialog-body-padding: 32px;
+
+    --dialog-input-font-color: var(--secondary-font-color);
+    --dialog-input-font-weight: var(--primary-font-weight);
+    --dialog-input-font-size: 16px;
     --dialog-input-background-color: var(--primary-background-color);
     --dialog-input-border-color: var(--gray6);
     --dialog-input-border-focus-color: var(--gray);
