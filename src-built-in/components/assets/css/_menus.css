@@ -133,7 +133,7 @@ body.menu {
 
 .ff-delete:hover {
     color: var(--menu-font-color);
-    background-color: var(--delete-background-hover-color);
+    background-color: var(--menu-delete-background-hover-color);
     border-radius: 4px;
 }
 
