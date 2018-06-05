@@ -112,18 +112,21 @@
     
     /* Menus */
     --menu-font-size: 14px;
-    --menu-primary-font-color: var(--primary-font-color);
+    --menu-font-weight: var(--primary-font-weight);
+    --menu-font-color: var(--primary-font-color);
 
     --menu-background-color: var(--secondary-background-color);
-    --menu-primary-background-color: var(--secondary-background-color);
-    --menu-primary-hover-color: var(--slate3);
-    --menu-secondary-background-color: var(--slate4);
-    --menu-secondary-hover-color: var(--slate3);
 
+    --menu-actions-background-color: var(--slate4);
+    --menu-actions-hover-color: var(--slate3);
+
+    --menu-content-background-color: var(--secondary-background-color);
+    --menu-content-hover-color: var(--slate3);
+
+    --menu-pin-border-color: var(--slate1);
     --menu-pin-background-color: var(--slate1);
     --menu-pin-background-hover-color: var(--slate2);
-    --menu-pin-border-color: var(--slate1);
-    --menu-delete-background-color: var(--red1);
+    --menu-delete-background-hover-color: var(--red1);
 
     --scrollbar-color: var(--slate1);
 
