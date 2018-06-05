@@ -131,10 +131,13 @@
     --scrollbar-color: var(--slate1);
 
     /* Search Menu */
-    --search-result-active-item-color: var(--slate3);
-    --search-section-max-height: 30px;
-    --search-input-height:var(--toolbar-height);
-    --search-input-line-height: var(--toolbar-height);
+    --search-header-font-color: var(--blue3);
+    --search-header-font-weight: var(--tertiary-font-weight);
+    
+    --search-result-font-color: var(--primary-font-color);
+    --search-result-font-weight: var(--primary-font-weight);
+    
+    --search-result-active-background-color: var(--slate3);
 
     /* Window Frame*/
     --window-frame-inactive-color: var(--slate);

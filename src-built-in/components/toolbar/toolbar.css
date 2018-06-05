@@ -56,8 +56,8 @@ body, html {
     display: inline;
     text-indent: 8px;
     width: 107px;
-    height: var(--search-input-height);
-    line-height:var(--search-input-line-height);
+    height: var(--toolbar-height);
+    line-height:var(--toolbar-line-height);
     background-color: transparent;
     border-color: transparent;
     z-index: 2;
