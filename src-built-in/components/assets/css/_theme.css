@@ -137,7 +137,9 @@
     --window-frame-inactive-color: var(--slate);
     /* --window-frame-active-color: var(--window-frame-inactive-color); */
 
-    /* Window styles*/
+    /* Window Scrim*/
+    --scrim-font-icon-color: var(--primary-font-color);
+    --scrim-font-icon-size: 100px;
     --scrim-overlay: var(--secondary-accent-color);
     --scrim-negative-overlay: var(--red7);
     
