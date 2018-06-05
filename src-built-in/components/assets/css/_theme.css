@@ -84,7 +84,7 @@
     --dialog-background-color: var(--primary-background-color);
     
     --dialog-input-font-size: 16px;
-    --dialog-input-font-color: var(--secondary-font-color);
+    --dialog-input-font-color: var(--primary-font-color);
     --dialog-input-font-weight: var(--primary-font-weight);
     --dialog-input-background-color: var(--primary-background-color);
     --dialog-input-border-color: var(--gray6);
