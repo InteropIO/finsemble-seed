@@ -85,15 +85,11 @@
 }
 
 .fsbl-button:hover {
-    background: var(--primary-accent-color);
-    border: 1px solid var(--primary-accent-color);
-    transition: 0.2s ease-in;
-    cursor: pointer;
-}
-
-.fsbl-button:hover {
-    color: #FFF;
+    background: var(--button-positive-background-color);
+    border: 1px solid var(--button-positive-border-hover-color);
     transition: 0.2s ease-out;
+    cursor: pointer;
+    color: var(--button-solid-font-color);
 }
 
 .fsbl-button-lg {
@@ -119,9 +115,9 @@
 .fsbl-button-lg-positive {
     width: 223px;
     height: 40px;
-    border: var(--dialog-button-border);
-    font-weight: bold;
-    font-size: 13px;
+    border: var(--button-positive-border-color);
+    font-weight: var(--button-positive-font-weight);
+    font-size: var(--button-font-size);
     letter-spacing: 1.6px;
     line-height: 38px;
     padding: 11px 32px;
@@ -130,7 +126,7 @@
 .fsbl-button-lg-neutral {
     width: 223px;
     height: 40px;
-    font-size: 13px;
+    font-size: var(--button-font-size);
     letter-spacing: 1.6px;
     line-height: 38px;
     padding: 11px 32px;
@@ -139,9 +135,9 @@
 .fsbl-button-md-positive {
     width: 147px;
     height: 32px;
-    border: var(--dialog-button-border);
-    font-weight: bold;
-    font-size: 13px;
+    border: var(--button-positive-border-color);
+    font-weight: var(--button-positive-font-weight);
+    font-size: var(--button-font-size);
     letter-spacing: 0.4px;
     line-height: 33px;
 }
@@ -149,7 +145,7 @@
 .fsbl-button-md-neutral {
     width: 147px;
     height: 32px;
-    font-size: 13px;
+    font-size: var(--button-font-size);
     letter-spacing: 0.4px;
     line-height: 34px;
 }
@@ -157,9 +153,9 @@
 .fsbl-button-sm-positive {
     width: 110px;
     height: 20px;
-    border: var(--dialog-button-border);
-    font-weight: bold;
-    font-size: 10px;
+    border: var(--button-positive-border-color);
+    font-weight: var(--button-positive-font-weight);
+    font-size: var(--button-small-font-size);
     letter-spacing: 1px;
     line-height: 20px;
     padding: 3px 11px;
@@ -168,7 +164,7 @@
 .fsbl-button-sm-neutral {
     width: 110px;
     height: 20px;
-    font-size: 10px;
+    font-size: var(--button-small-font-size);
     padding: 3px 11px;
     letter-spacing: 1px;
     line-height: 20px;
