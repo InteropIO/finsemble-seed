@@ -57,7 +57,7 @@ body, html {
     text-indent: 8px;
     width: 107px;
     height: var(--toolbar-height);
-    line-height:var(--toolbar-line-height);
+    line-height:var(--toolbar-height);
     background-color: transparent;
     border-color: transparent;
     z-index: 2;
