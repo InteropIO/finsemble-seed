@@ -1,6 +1,6 @@
 @import url('./_theme.css');
 @import url('./_variablesWhitelabel.css');
-@import url("https://fonts.googleapis.com/css?family=Roboto");
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,500,700");
 @import url('./_fontIcons.css');
 @import  url('./_windowFrame.css');
 @import  url('./_windowTitleBar.css');
@@ -176,10 +176,6 @@
 /* Gives the control icons the proper width on websites using bootstrap. */
 i, i:before, i:after, .fsbl-window-manager-icon {
     box-sizing: content-box;
-}
-
-body.dialog input:focus {
-    border: 1px solid var(--primary-accent-color);
 }
 
 @import url('./_styleWhitelabel.css');
