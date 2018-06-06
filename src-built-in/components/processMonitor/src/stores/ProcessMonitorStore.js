@@ -13,11 +13,41 @@ var Actions = {
 	getInitialData: function () {
 		System.getProcessList(Actions.extractData);
 		setInterval(() => {
+			// console.log("Process List update");
 			System.getProcessList(Actions.extractData);
 		}, 1000);
 	},
-	extractData: function (processes) {
+	setSort: function (field) {
+		// console.log("setSort called");
 
+		let currentSort = ProcessMonitorStore.getValue({ field: "sort" });
+		let procs = ProcessMonitorStore.getValue({ field: "processList" });
+		let newSort;
+		if (currentSort.field === field) {
+			newSort = currentSort;
+			if (currentSort.direction == "ascending") {
+				newSort.direction = "descending";
+			} else {
+				newSort.direction = "ascending";
+			}
+		} else {
+			newSort = {
+				field,
+				direction: "ascending"
+			}
+		}
+		// console.log("Setting sort value", newSort.field, newSort.direction);
+
+		ProcessMonitorStore.setValue({ field: "sort", value: newSort }, () => {
+			// When changing sort we'll re-render the UI immediately insteade of waiting for the processlist to update. could take a while and look laggy.
+			// console.log("setSort sort value set, sorting the processes");
+			procs = Actions.sortProcesses(procs);
+			// console.log("setSort sort value set, setting the process list");
+			ProcessMonitorStore.setValue({ field: "processList", value: procs })
+		});
+
+	},
+	extractData: function (processes) {
 		Actions.createDataModel(processes, (procs) => {
 			//set store.
 			ProcessMonitorStore.setValue({ field: "processList", value: procs })
@@ -27,8 +57,9 @@ var Actions = {
 		let procs = [];
 		//potential optimization: get child windows once, and listen on a close/create event.
 		//For now, this seems okay.
-
+		let mode = ProcessMonitorStore.getValue({ field: "viewMode" });
 		function getChildWindows(proc, done) {
+			if (mode === "simple" && proc.name.toLowerCase().includes("service")) return done();
 			fin.desktop.Application.wrap(proc.uuid).getChildWindows(cws => {
 				let childWindows = [];
 				cws.forEach(cw => {
@@ -46,6 +77,8 @@ var Actions = {
 						return 1;
 					return 0;
 				});
+				//Don't want any service windows.
+				if (mode === "simple" && childWindows.some(cw => cw.name.toLowerCase().includes("service"))) return done();
 				procs.push({
 					statistics: proc,
 					childWindows
@@ -53,11 +86,41 @@ var Actions = {
 				done();
 			});
 		}
-		function filter() {
-			//todo, filter out service agents based on standard/advanced mode.
+		function sort() {
+			procs = Actions.sortProcesses(procs);
 			cb(procs);
 		}
-		asyncEach(processes, getChildWindows, filter);
+		asyncEach(processes, getChildWindows, sort);
+	},
+	sortProcesses: function (procs) {
+		let currentSort = ProcessMonitorStore.getValue({ field: "sort" });
+		console.log("Sorting processes", currentSort.field, currentSort.direction);
+		let sortFN = (a, b) => {
+			let aValue = a.statistics[currentSort.field];
+			//Comparing upper and lowercase names makes the sort look wrong. we equalize all strings here.
+			if (aValue.toLowerCase) {
+				aValue = aValue.toLowerCase();
+			}
+
+			let bValue = b.statistics[currentSort.field];
+			if (aValue.toLowerCase) {
+				bValue = bValue.toLowerCase();
+			}
+			if (currentSort.direction === "ascending") {
+				if (aValue < bValue)
+					return -1;
+				if (aValue > bValue)
+					return 1;
+				return 0;
+			}
+
+			if (aValue > bValue)
+				return -1;
+			if (aValue < bValue)
+				return 1;
+			return 0;
+		}
+		return procs.sort(sortFN);
 	},
 	identifyWindow: function (winID) {
 		const OPACITY_ANIMATION_DURATION = 200;
@@ -93,17 +156,6 @@ var Actions = {
 				})
 			})
 		})
-	},
-	pruneProcessList: function (list) {
-		let filteredList = list;
-		debugger;
-		return filteredList.filter(proc => !proc.name.toLowerCase().includes("service") && !proc.name.toLowerCase().includes("finsemble"));
-	},
-	setProcessList: function (list) {
-		this.processList = list;
-	},
-	getProcessList: function () {
-		return this.processList;
 	},
 	terminateProcess: function (AppIdentifier, force = false, prompt = true) {
 		const PROMPT = "Are you sure you want to terminate this process? This will close all child windows as well. This is not reversible."
@@ -165,9 +217,11 @@ var Actions = {
 };
 
 const DEFAULT_STORE_DATA = {
-	childWindows: [],
-	uuid: '',
-	applicationList: []
+	viewMode: "simple",
+	sort: {
+		field: "name",
+		direction: "ascending"
+	}
 }
 function createLocalStore(done) {
 	FSBL.Clients.DistributedStoreClient.createStore({

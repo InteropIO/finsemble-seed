@@ -21,6 +21,7 @@ export default class ProcessMonitor extends React.Component {
 
 	}
 	onProcessListChanged(err, response) {
+		console.log("onProcessListChanged");
 		let { value } = response;
 		this.setState({
 			processList: value
@@ -37,6 +38,8 @@ export default class ProcessMonitor extends React.Component {
 		//Advanced mode: add more.
 		//Use helpers.bytesToSize.
 		//Array of process components.
+		console.log("Rendering");
+
 		let totals = this.state.processList.length ? this.state.processList.reduce(statReducer) : EMPTY_TOTALS;
 		return (
 			<div>
