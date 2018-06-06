@@ -246,6 +246,11 @@ img {
 
 .action-button {
     border: 1px solid var(--button-neutral-border-color);
+    padding: .25em 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 16px 0 6px 0;
 }
 
 .action-button:hover {
