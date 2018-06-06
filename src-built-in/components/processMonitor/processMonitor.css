@@ -78,6 +78,7 @@ body {
 .value-cell {
 	display:flex;
 	justify-content: flex-end;
+	width: 20%;
 }
 
 
@@ -152,11 +153,44 @@ body {
 	float: left;
 }
 
-.ReactTable .rt-tbody .rt-tr-group {
-	border-bottom: 0px;
+.process-list-wrapper {
+	margin:1em;
+	border:1px solid gray;
+}
+.process-list {
+	height: calc(100vh - 300px);
+	overflow-y: auto;
+}
+.process-row, .list-header {
+	display:flex;
+	flex-direction: row;
+}
+.process-row {
+	margin-bottom: .3em;
+}
+.process {
+	padding: 1em;
+}
+.list-header {
+	border: 1px solid gray;
+}
+.process-name, .list-header-name {
+	width: 40%;
+}
+.process-name {
+	font-weight: bold;
+}
+.process-statistics, .list-header-statistic-labels {
+	width: 60%;
+	display:flex;
+	justify-content: space-around;
 }
 
-/* Prevents the table from taking up all of the space in the page height.*/
-.ReactTable .rt-tr-group, .ReactTable .rt-tr {
-	flex: 0 0 auto;
+.list-header-statistic-label {
+	flex: 1;
+	border-left: 1px solid gray;
+	border-right: 1px solid gray;
+	padding:.5em;
+	display:inline-flex;
+	justify-content: center;
 }
