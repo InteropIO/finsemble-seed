@@ -152,12 +152,8 @@ var Actions = {
 		//default title.
 		windowTitleBarStore.setValue({ field: "Main.windowTitle ", value: FSBL.Clients.WindowClient.getWindowTitle() });
 
-		/**
-		 * If docking is disabled, don't show buttons on snaps.
-		 * @todo remove once docking is out of beta.
-		 */
 		FSBL.Clients.ConfigClient.getValue({ field: "finsemble" }, function (err, finsembleConfig) {
-			let globalWindowManagerConfig = finsembleConfig["Window Manager"] || { alwaysOnTopIcon: false }; // Override defaults if finsemble.Window Manager exists.
+			let globalWindowManagerConfig = finsembleConfig["Window Manager"] || { alwaysOnTopIcon: false, showTabs: false }; // Override defaults if finsemble.Window Manager exists.
 
 			// Look to see if docking is enabled. Cascade through backward compatibility with old "betaFeatures" and then a default if no config is found at all.
 			let dockingConfig = finsembleConfig.docking;
@@ -173,6 +169,11 @@ var Actions = {
 				alwaysOnTopIcon = windowTitleBarConfig.alwaysOnTopIcon;
 
 			windowTitleBarStore.setValues([{ field: "AlwaysOnTop.show", value: alwaysOnTopIcon }]);
+
+			debugger;
+			if (typeof windowTitleBarConfig.showTabs !== 'boolean') {
+				windowTitleBarStore.setValue({ field: "showTabs", value: globalWindowManagerConfig.showTabs });
+			}
 		});
 
 		Actions.getInitialTabList((err, values) => {

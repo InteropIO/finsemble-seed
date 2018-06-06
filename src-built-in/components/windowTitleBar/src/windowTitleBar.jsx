@@ -82,6 +82,7 @@ class WindowTitleBar extends React.Component {
 
 		this.onShareEmitterChanged = this.onShareEmitterChanged.bind(this);
 		this.onTabsChanged = this.onTabsChanged.bind(this);
+		this.onShowTabsChanged = this.onShowTabsChanged.bind(this);
 
 	}
 	componentWillMount() {
@@ -94,16 +95,9 @@ class WindowTitleBar extends React.Component {
 			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton },
 			{ field: "Sharer.emitterEnabled", listener: this.onShareEmitterChanged },
 			{ field: "isTopRight", listener: this.isTopRight },
-			{ field: "tabs", listener: this.onTabsChanged }
+			{ field: "tabs", listener: this.onTabsChanged },
+			{ field: "showTabs", listener: this.onShowTabsChanged },
 		]);
-
-		if (typeof this.state.showTabs !== 'boolean') {
-			FSBL.Clients.ConfigClient.getValue({ field: "finsemble.Window Manager.showTabs" }, (err, showTabs) => {
-				this.setState({
-					showTabs: showTabs ? true : false
-				});
-			});
-		}
 
 		FSBL.Clients.RouterClient.addListener("DockingService.startTilingOrTabbing", this.disallowDragOnCenterRegion);
 		console.log("Adding listener for stopTilingOrTabbing.");
@@ -128,7 +122,8 @@ class WindowTitleBar extends React.Component {
 			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton },
 			{ field: "Sharer.emitterEnabled", listener: this.onShareEmitterChanged },
 			{ field: "isTopRight", listener: this.isTopRight },
-			{ field: "tabs", listener: this.onTabsChanged }
+			{ field: "tabs", listener: this.onTabsChanged },
+			{ field: "showTabs", listener: this.onShowTabsChanged },
 		]);
 		console.log("Removing listener from the router.");
 		FSBL.Clients.RouterClient.removeListener("DockingService.startTilingOrTabbing", this.disallowDragOnCenterRegion);
@@ -223,6 +218,13 @@ class WindowTitleBar extends React.Component {
 	onTabsChanged(err, response) {
 		this.setState({
 			tabs: response.value
+		})
+	}
+
+	onShowTabsChanged(err, response) {
+		debugger;
+		this.setState({
+			showTabs: response.value
 		})
 	}
 
