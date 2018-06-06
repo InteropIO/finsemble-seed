@@ -66,7 +66,7 @@ export default class ProcessMonitor extends React.Component {
 									}
 									groupModifier={i}
 									stats={proc.statistics} />
-								<ChildWindows childWindows={proc.childWindows} />
+								<ChildWindows viewMode={this.state.viewMode} childWindows={proc.childWindows} />
 							</div>)
 						})}
 					</div>

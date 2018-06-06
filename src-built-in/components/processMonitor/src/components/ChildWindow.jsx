@@ -6,15 +6,19 @@ export default class ChildWindow extends React.Component {
         super(props);
     }
     render() {
+        let cwClickHandler = this.props.viewMode === "simple" ? Function.prototype : () => { Actions.identifyWindow(this.props.cw);}
+        let childWindowClasses = `child-window ${this.props.viewMode}`
         return (
-            <div className="child-window">
+            <div className={childWindowClasses}>
                 <div className="child-window-actions">
                     <i className="close-window ff-close" onClick={() => {
                         Actions.closeWindow(this.props.cw);
                     }}
                     ></i>
                 </div>
-                {this.props.cw.name}
+                <div className="child-window-name" onClick={cwClickHandler}>
+                    {this.props.cw.name}
+                </div>
             </div >
         )
     }

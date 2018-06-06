@@ -109,7 +109,9 @@ body.menu {
 	align-content: center;
 	line-height: 24px;
 }
-
+.advanced .child-window-name {
+	cursor: pointer;
+}
 .child-window-actions {
 	display: inline-flex;
 	align-content: center;
