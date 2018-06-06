@@ -49,9 +49,9 @@
     --toolbar-separator: 1px solid rgba(255, 255, 255, 0.3);
 
     /* Window Title bar */
+    --titleBar-font-size: 14px;
     --titleBar-active-font-color: var(--primary-font-color);
     --titleBar-inactive-font-color: var(--gray3); 
-    --titleBar-font-size: 14px;
     --titleBar-font-weight: var(--primary-font-weight);
 
     --titleBar-height: 32px;
@@ -74,10 +74,10 @@
     --titleBar-button-hover-negative-color: var(--tertiary-negative-color);
     --titleBar-button-hover-linker-group: var(--gray3);
 
-    /* Dialogs */
-    --dialog-font-color: var(--primary-font-color);
+    /* Dialogs (e.g., singleInput and yesNo) */
     --dialog-title-font-size: 20px;
     --dialog-question-font-size: 14px;
+    --dialog-font-color: var(--primary-font-color);
     --dialog-font-weight: var(--primary-font-weight);
     --dialog-title-font-weight: var(--primary-font-weight);
     --dialog-question-font-weight: var(--secondary-font-weight);
@@ -93,8 +93,8 @@
 
     /* Buttons */
 
-    --button-solid-font-color: var(--primary-font-color);
     --button-font-size: 13px;
+    --button-solid-font-color: var(--primary-font-color);
     --button-small-font-size: 10px;
 
     --button-positive-background-color: var(--primary-accent-color);
@@ -139,7 +139,7 @@
     --search-result-font-color: var(--primary-font-color);
     --search-result-font-weight: var(--primary-font-weight);
     
-    --search-result-active-background-color: var(--slate3);
+    --search-result-highlighter-color: var(--slate3);
 
     /* Window Frame*/
     --window-frame-inactive-color: var(--slate);
@@ -151,42 +151,44 @@
     --scrim-overlay: var(--secondary-accent-color);
     --scrim-negative-overlay: var(--red7);
     
-    /* Complex menus (e.g., Preferences and App Catalog) */
-        /* Nav section is the left side of a complex menu */
-    --complex-nav-header-font-size: 21px;
-    --complex-nav-header-font-weight: var(--secondary-font-weight);
-    --complex-nav-header-background-color: var(--slate);
-    --complex-nav-background-color: var(--tertiary-background-color);
-    --complex-nav-active-item: var(--slate3);
-    --complex-nav-active-item-hover: var(--slate2);
-    --complex-nav-font-color: var(--primary-font-color);
+    /* Content Dialog (e.g., userPreferences and appCatalog) */
+    --content-font-size: 16px;
+    --content-header-font-size: 18px;
+    --content-header-font-color: var(--blue3);
+    --content-font-color: var(--primary-font-color);
+    --content-font-weight: var(--primary-font-weight);
     
-        /* Content section is the right side of a complex menu.*/
-    --complex-content-background-color: var(--secondary-background-color);
-    --complex-content-font-color: var(--primary-font-color);
-    --complex-content-hint-font-color: var(--gray);
-    --complex-content-header-font-color: var(--tertiary-accent-color);
+    --content-nav-header-font-size: 21px;
+    --content-nav-header-font-weight: var(--secondary-font-weight);
+    --content-nav-header-background-color: var(--slate);
+    --content-nav-background-color: var(--tertiary-background-color);
+    --content-nav-highlighter: var(--slate3);
+    --content-nav-highlighter-hover: var(--slate2);
+    
+    --content-background-color: var(--secondary-background-color);
+    --content-hint-font-color: var(--gray);
 
-    --complex-content-list-border-color: var(--gray6);
-    --complex-content-list-highlighter: var(--slate3);
-    --complex-content-list-button-padding: 2px;
-    --complex-content-list-item-flagged-color: var(--tertiary-accent-color);
-    --complex-content-list-editor-font-color: var(--primary-font-color);
-    --complex-content-list-editor-border-color: var(--gray);
-    --complex-content-list-editor-highlighted-text: var(--tertiary-accent-color);
+    --content-component-list-font-size: 12px;
+    --content-list-border-color: var(--gray6);
+    --content-list-highlighter: var(--slate3);
+    --content-list-item-flagged-color: var(--tertiary-accent-color);
+    --content-list-editor-font-color: var(--primary-font-color);
+    --content-list-editor-border-color: var(--gray);
+    --content-list-editor-highlighted-text: var(--tertiary-accent-color);
 
-    --complex-content-button-fill-color: var(--gray7);
-    --complex-content-button-border-color: var(--gray5);
-    --complex-content-button-border-hover-color: var(--gray2);
-    --complex-content-button-disabled-border-color: var(--gray7);
-    --complex-content-button-neutral-border-hover-color: var(--gray);
-    --complex-content-button-negative-border-hover-color: var(--red1);
+    --content-button-label-font-size: 11px;
+    --content-button-disabled-border-color: var(--gray7);
+    --content-button-neutral-border-hover-color: var(--gray);
+    --content-button-negative-border-hover-color: var(--red1);
 
-    --complex-content-checkbox-check-color: var(--primary-font-color);
-    --complex-content-checkbox-background-color: var(--blue);
+    --content-checkbox-check-color: var(--primary-font-color);
+    --content-checkbox-background-color: var(--blue);
+    --content-checkbox-unchecked-border-color: var(--gray4);
 
-    --complex-content-card-background-color: var(--slate4);
-    --complex-content-card-logo-background-color: var(--secondary-accent-color);
+    --content-card-background-color: var(--slate4);
+    --content-card-logo-background-color: var(--secondary-accent-color);
+
+    --complex-close-hover-color: var(--red2);
 
     /* Notifications */
     --notification-body-background-color: var(--toolbar-background-color);
