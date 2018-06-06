@@ -40,6 +40,10 @@ var Actions = {
 				{ field: "AlwaysOnTop.show", value: FSBLHeader.alwaysOnTop ? true : false },
 			]);
 
+			if (windowTitleBarConfig.showTabs || windowTitleBarConfig.showTabs === false) {
+				windowTitleBarStore.setValue({ field: "showTabs", value: windowTitleBarConfig.showTabs });
+			}
+
 			// Set by calling WindowClient.setTitle() || from config "foreign.components.Window Manager.title"
 			var title = FSBL.Clients.WindowClient.title || windowTitleBarConfig.title;
 

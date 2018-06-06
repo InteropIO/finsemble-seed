@@ -57,7 +57,7 @@ class WindowTitleBar extends React.Component {
 			isTopRight: windowTitleBarStore.getValue({ field: "isTopRight" }),
 			alwaysOnTopButton: windowTitleBarStore.getValue({ field: "AlwaysOnTop.show" }),
 			tabs: [{ title: windowTitleBarStore.getValue({ field: "Main.windowTitle" }) }], //array of tabs for this window
-			showTabs: false,
+			showTabs: windowTitleBarStore.getValue({field: "showTabs"}),
 			allowDragOnCenterRegion: true,
 			activeTab: FSBL.Clients.WindowClient.getWindowIdentifier(),
 			tabBarBoundingBox: {},
@@ -97,12 +97,13 @@ class WindowTitleBar extends React.Component {
 			{ field: "tabs", listener: this.onTabsChanged }
 		]);
 
-		FSBL.Clients.ConfigClient.getValue({ field: "finsemble" }, (err, config) => {
-			let windowManager = config['Window Manager'];
-			this.setState({
-				showTabs: typeof config['Window Manager'] !== undefined ? config['Window Manager'].showTabs : false
+		if (typeof this.state.showTabs !== 'boolean') {
+			FSBL.Clients.ConfigClient.getValue({ field: "finsemble.Window Manager.showTabs" }, (err, showTabs) => {
+				this.setState({
+					showTabs: showTabs ? true : false
+				});
 			});
-		})
+		}
 
 		FSBL.Clients.RouterClient.addListener("DockingService.startTilingOrTabbing", this.disallowDragOnCenterRegion);
 		console.log("Adding listener for stopTilingOrTabbing.");
@@ -274,7 +275,7 @@ class WindowTitleBar extends React.Component {
 							tabs={this.state.tabs}
 							ref="tabArea"
 						/>}
-					
+
 				</div>
 				<div className={rightWrapperClasses} ref={this.setToolbarRight}>
 					{this.state.alwaysOnTopButton && showMinimizeIcon ? <AlwaysOnTop /> : null}
