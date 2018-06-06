@@ -29,20 +29,22 @@ export default class componentItem extends React.Component {
 		this.guidBeingDragged = guid;
 
 		this.props.itemAction(component, { options: { autoShow: false } }, (identifier) => {
-			this.guidIdentifierMap[guid] = identifier;
+			FSBL.FinsembleWindow.wrap(identifier, (err, wrappedWindow) => {
+				this.guidIdentifierMap[guid] = wrappedWindow;
+			});
 		});
 	}
 	stopDrag(event) {
 		let moveWindow = (top, left, guid) => {
 			if (this.guidIdentifierMap[guid]) {
-				FSBL.FinsembleWindow.wrap(this.guidIdentifierMap[guid], (err, wrappedWindow) => {
-					wrappedWindow.getBounds((err, bounds) => {
-						bounds.top = top;
-						bounds.left = left;
-						wrappedWindow.setBounds(bounds);
-					});
-
+				let wrappedWindow = this.guidIdentifierMap[guid];
+				wrappedWindow.getBounds((err, bounds) => {
+					bounds.top = top;
+					bounds.left = left;
+					wrappedWindow.setBounds(bounds);
+					wrappedWindow.show();
 				});
+				delete this.guidIdentifierMap[guid];
 			} else { //wait for spawn to finish
 				setTimeout(() => {
 					moveWindow(top, left, guid);
