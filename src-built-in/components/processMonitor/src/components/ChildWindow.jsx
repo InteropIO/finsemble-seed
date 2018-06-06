@@ -9,10 +9,13 @@ export default class ChildWindow extends React.Component {
         return (
             <div className="child-window">
                 <div className="child-window-actions">
-                    <i className="ff-close"></i>
+                    <i className="close-window ff-close" onClick={() => {
+                        Actions.closeWindow(this.props.cw);
+                    }}
+                    ></i>
                 </div>
                 {this.props.cw.name}
-            </div>
+            </div >
         )
     }
 }

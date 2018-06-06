@@ -22,8 +22,11 @@ export default class ProcessStatistics extends React.Component {
                         {statistic(this.props.stats[field.value], field.label)}
                     </div>)
                 })}
-                <div className="statistic">
-                        terminate
+                <div className="statistic process-actions">
+                        <div className="terminate process-action" onClick={() => {
+                            Actions.terminateProcess(this.props.stats)
+                        }}>
+                    Terminate</div>
                 </div>
             </div>
         </div>

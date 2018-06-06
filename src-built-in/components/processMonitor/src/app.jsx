@@ -6,7 +6,7 @@ import ProcessStatistics from "./components/ProcessStatistics";
 import ChildWindows from "./components/ChildWindows";
 import "../processMonitor.css";
 import { EMPTY_TOTALS, SIMPLE_MODE_STATISTICS } from "./constants";
-import { statReducer } from "./helpers"
+import { statReducer, round, bytesToSize } from "./helpers"
 //Not used right now. Currently using alerts. This is for the future.
 export default class ProcessMonitor extends React.Component {
 	constructor(props) {
@@ -57,27 +57,30 @@ export default class ProcessMonitor extends React.Component {
 						})}
 					</div>
 				</div>
-				<div className="summary-statistics-header">
-					Totals
-				</div>
+
 				<div className="summary-statistics-wrapper">
-					<div className="summary-statistic-labels">
-						<div className="summary-statistic-label">
-							CPU
-						</div>
-						<div className="summary-statistic-label">
-							Memory
-						</div>
+					<div className="summary-statistics-header">
+						Totals
 					</div>
 					<div className="summary-statistics">
 						{typeof totals.statistics.cpuUsage !== "undefined" &&
 							<div className="summary-statistic">
-								{totals.statistics.cpuUsage}
+								<div className="summary-statistic-label">
+									CPU
+								</div>
+								<div className="summary-statistic-number">
+									{round(totals.statistics.cpuUsage, 2) + "%"}
+								</div>
 							</div>
 						}
 						{typeof totals.statistics.workingSetSize !== "undefined" &&
 							<div className="summary-statistic">
-								{totals.statistics.workingSetSize}
+								<div className="summary-statistic-label">
+									Memory
+								</div>
+								<div className="summary-statistic-number">
+									{bytesToSize(totals.statistics.workingSetSize)}
+								</div>
 							</div>
 						}
 					</div>
