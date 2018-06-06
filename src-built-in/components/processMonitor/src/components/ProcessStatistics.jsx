@@ -22,6 +22,9 @@ export default class ProcessStatistics extends React.Component {
                         {statistic(this.props.stats[field.value], field.label)}
                     </div>)
                 })}
+                <div className="statistic">
+                        terminate
+                </div>
             </div>
         </div>
     }
@@ -30,7 +33,7 @@ export default class ProcessStatistics extends React.Component {
 function statistic(number, statType) {
     if (statType === "CPU") {
         //make it a percent.
-        return round(number / 100, 2) + "%";
+        return round(number, 2) + "%";
     }
     return bytesToSize(number);
 }

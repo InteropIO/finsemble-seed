@@ -1,8 +1,8 @@
 import React from "react";
 import CellRenderer from "./CellRenderer";
 import { toProperCase, bytesToSize, round } from "../helpers";
-import { statsWeCareAbout, NOT_A_METRIC } from "../constants";
-const VALUES = statsWeCareAbout.filter(stat => !NOT_A_METRIC.includes(stat.toLowerCase()));
+import { SIMPLE_MODE_STATISTICS, NOT_A_METRIC } from "../constants";
+const VALUES = SIMPLE_MODE_STATISTICS.filter(stat => !NOT_A_METRIC.includes(stat.toLowerCase()));
 export default function Totals(props) {
     let { data } = props;
     let formattedData = VALUES.map(stat => {

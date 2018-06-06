@@ -18,6 +18,7 @@ export default class ListHeader extends React.Component {
                         {field.label}
                     </div>)
                 })}
+                <div className="list-header-statistic-label"></div>
             </div>
         </div>
     }

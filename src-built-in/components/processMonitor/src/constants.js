@@ -27,3 +27,9 @@ export const HIGH_MEMORY_USAGE = 400;
 
 //so the constants above can be in MB. This is just a multiplier.
 export const TO_MB = 1000000;
+
+let emptyTotals = { statistics: {}};
+SIMPLE_MODE_STATISTICS.forEach(stat => {
+	emptyTotals.statistics[stat.value] = 0;
+});
+export const EMPTY_TOTALS = emptyTotals;

@@ -8,6 +8,9 @@ export default class ChildWindow extends React.Component {
     render() {
         return (
             <div className="child-window">
+                <div className="child-window-actions">
+                    <i className="ff-close"></i>
+                </div>
                 {this.props.cw.name}
             </div>
         )

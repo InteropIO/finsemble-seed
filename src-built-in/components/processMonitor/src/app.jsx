@@ -5,8 +5,8 @@ import ListHeader from "./components/ListHeader";
 import ProcessStatistics from "./components/ProcessStatistics";
 import ChildWindows from "./components/ChildWindows";
 import "../processMonitor.css";
-import { SIMPLE_MODE_STATISTICS } from "./constants";
-
+import { EMPTY_TOTALS, SIMPLE_MODE_STATISTICS } from "./constants";
+import { statReducer } from "./helpers"
 //Not used right now. Currently using alerts. This is for the future.
 export default class ProcessMonitor extends React.Component {
 	constructor(props) {
@@ -37,11 +37,12 @@ export default class ProcessMonitor extends React.Component {
 		//Advanced mode: add more.
 		//Use helpers.bytesToSize.
 		//Array of process components.
+		let totals = this.state.processList.length ? this.state.processList.reduce(statReducer) : EMPTY_TOTALS;
 		return (
 			<div>
 				<div className="process-list-wrapper">
 					<ListHeader fields={SIMPLE_MODE_STATISTICS
-					}/>
+					} />
 					<div className="process-list">
 						{this.state.processList.map((proc, i) => {
 							return (<div className="process">
@@ -56,8 +57,30 @@ export default class ProcessMonitor extends React.Component {
 						})}
 					</div>
 				</div>
-				<div className="summary-statistics">
-					summary
+				<div className="summary-statistics-header">
+					Totals
+				</div>
+				<div className="summary-statistics-wrapper">
+					<div className="summary-statistic-labels">
+						<div className="summary-statistic-label">
+							CPU
+						</div>
+						<div className="summary-statistic-label">
+							Memory
+						</div>
+					</div>
+					<div className="summary-statistics">
+						{typeof totals.statistics.cpuUsage !== "undefined" &&
+							<div className="summary-statistic">
+								{totals.statistics.cpuUsage}
+							</div>
+						}
+						{typeof totals.statistics.workingSetSize !== "undefined" &&
+							<div className="summary-statistic">
+								{totals.statistics.workingSetSize}
+							</div>
+						}
+					</div>
 				</div>
 			</div>
 		)

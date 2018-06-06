@@ -12,27 +12,26 @@ export function bytesToSize(bytes) {
     return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
 };
 
-import { NOT_A_METRIC, statsWeCareAbout } from "./constants";
+import {  SIMPLE_MODE_STATISTICS } from "./constants";
 export function statReducer(prev, curr) {
     let ret = {
         name: "Totals",
-        uuid: "Totals"
+        uuid: "Totals",
+        statistics: {}
     };
-    statsWeCareAbout.forEach(stat => {
-        if (!NOT_A_METRIC.includes(stat)) {
-            ret[stat] = prev[stat] + curr[stat];
-        }
+    SIMPLE_MODE_STATISTICS.forEach(stat => {
+        ret.statistics[stat.value] = prev.statistics[stat.value] + curr.statistics[stat.value];
     });
     return ret;
 }
 
 export function round(number, precision) {
     var shift = function (number, precision, reverseShift) {
-      if (reverseShift) {
-        precision = -precision;
-      }
-      var numArray = ("" + number).split("e");
-      return +(numArray[0] + "e" + (numArray[1] ? (+numArray[1] + precision) : precision));
+        if (reverseShift) {
+            precision = -precision;
+        }
+        var numArray = ("" + number).split("e");
+        return +(numArray[0] + "e" + (numArray[1] ? (+numArray[1] + precision) : precision));
     };
     return shift(Math.round(shift(number, precision, false)), precision, true);
-  }
+}

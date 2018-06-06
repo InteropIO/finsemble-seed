@@ -158,7 +158,7 @@ body {
 	border:1px solid gray;
 }
 .process-list {
-	height: calc(100vh - 300px);
+	height: calc(100vh - 200px);
 	overflow-y: auto;
 }
 .process-row, .list-header {
@@ -169,14 +169,17 @@ body {
 	margin-bottom: .3em;
 }
 .process {
-	padding: 1em;
+	padding-left: 1em;
+	padding-top: 1em;
 }
 .list-header {
-	border: 1px solid gray;
+	border-bottom: 1px solid gray;
+	padding-right: 15px; /*Account for scrollbar.*/
 }
 .process-name, .list-header-name {
 	width: 40%;
 }
+
 .process-name {
 	font-weight: bold;
 }
@@ -189,8 +192,37 @@ body {
 .list-header-statistic-label {
 	flex: 1;
 	border-left: 1px solid gray;
-	border-right: 1px solid gray;
 	padding:.5em;
 	display:inline-flex;
 	justify-content: center;
+}
+.list-header-name {
+	border-left:0px;
+}
+.statistic {
+	display: inline-flex;
+	justify-content: center;
+	align-content: center;
+	flex: 1;
+}
+.child-window {
+	display:flex;
+	align-content: center;
+}
+.child-window-actions {
+	display:inline-flex;
+	align-content: center;
+	margin-right: .5em;
+}
+
+.summary-statistics-header {
+	font-weight: bolder;
+}
+
+.summary-statistics-wrapper, .summary-statistics, .summary-statistics-labels {
+	display:flex;
+}
+
+.summary-statistic, .summary-statistic-label {
+width: 20%;
 }
