@@ -55,27 +55,30 @@ export default class ProcessMonitor extends React.Component {
 		return (
 			<div>
 				<div className="process-list-wrapper">
-					<ListHeader fields={this.state.viewMode === "simple" ? SIMPLE_MODE_STATISTICS: ADVANCED_MODE_STATISTICS
+					<ListHeader fields={this.state.viewMode === "simple" ? SIMPLE_MODE_STATISTICS : ADVANCED_MODE_STATISTICS
 					} />
 					<div className="process-list">
-						{this.state.processList.map((proc, i) => {
-							return (<div className="process">
-								<ProcessStatistics
-									mode={this.state.viewMode}
-									fields={this.state.viewMode === "simple" ? SIMPLE_MODE_STATISTICS: ADVANCED_MODE_STATISTICS
-									}
-									groupModifier={i}
-									stats={proc.statistics} />
-								<ChildWindows viewMode={this.state.viewMode} childWindows={proc.childWindows} />
-							</div>)
-						})}
+						{/* Remove the hidden processes. then render each one in turn */}
+						{this.state.processList
+							.filter(proc => proc.visible)
+							.map((proc, i) => {
+								return (<div className="process">
+									<ProcessStatistics
+										mode={this.state.viewMode}
+										fields={this.state.viewMode === "simple" ? SIMPLE_MODE_STATISTICS : ADVANCED_MODE_STATISTICS
+										}
+										groupModifier={i}
+										stats={proc.statistics} />
+									<ChildWindows viewMode={this.state.viewMode} childWindows={proc.childWindows} />
+								</div>)
+							})}
 					</div>
 				</div>
 
 				<div className="bottom-section">
 					<div className="summary-statistics-wrapper">
 						<div className="summary-statistics-header">
-							Totals
+							Finsemble Total Usage
 					</div>
 						<div className="summary-statistics">
 							{typeof totals.statistics.cpuUsage !== "undefined" &&

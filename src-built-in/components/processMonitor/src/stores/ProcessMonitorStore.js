@@ -59,7 +59,13 @@ var Actions = {
 		//For now, this seems okay.
 		let mode = ProcessMonitorStore.getValue({ field: "viewMode" });
 		function getChildWindows(proc, done) {
-			if (mode === "simple" && (proc.name.toLowerCase().includes("service") || proc.name.toLowerCase().includes("system"))) return done();
+			if (mode === "simple" && (proc.name.toLowerCase().includes("service") || proc.name.toLowerCase().includes("system"))) {
+				procs.push({
+					statistics: proc,
+					visible: false
+				});
+				return done();
+			}
 			fin.desktop.Application.wrap(proc.uuid).getChildWindows(cws => {
 				let childWindows = [];
 				cws.forEach(cw => {
@@ -81,7 +87,8 @@ var Actions = {
 				if (mode === "simple" && childWindows.some(cw => cw.name.toLowerCase().includes("service") || cw.name.toLowerCase().includes("system"))) return done();
 				procs.push({
 					statistics: proc,
-					childWindows
+					childWindows,
+					visible: true
 				});
 				done();
 			});
@@ -180,14 +187,11 @@ var Actions = {
 
 			var onCloseFailure = () => {
 				if (force) {
-					alert("Force close failed. Trying a force-terminate.");
 					app.terminate(true, onCloseSuccess, () => {
 						alert("Failed to terminate the process. Please contact support.");
 					});
 				} else {
-					if (confirm(`Failed to close process ${AppIdentifier.name}. Try to force close?`)) {
-						Actions.terminateProcess(AppIdentifier, true, false);
-					}
+					Actions.terminateProcess(AppIdentifier, true, false);
 				}
 			};
 
@@ -211,11 +215,15 @@ var Actions = {
 
 		var onCloseFailure = () => {
 			if (force) {
-				alert("Force close failed. Please try to terminate the parent process.");
+				FSBL.Clients.DialogManagerClient.open("yesNo", {
+					title: "Error",
+					question: "The window is unresponsive. Please try terminating the parent process.",
+					affirmativeButtonLabel: "Okay",
+					showCancelButton: false,
+					showNegativeButton: false
+				}, Function.prototype);
 			} else {
-				if (confirm(`Failed to close window ${winID.name}. Try to force close?`)) {
-					Actions.closeWindow(winId, true);
-				}
+				Actions.closeWindow(winId, true);
 			}
 		};
 
