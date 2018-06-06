@@ -28,32 +28,19 @@ export default class componentItem extends React.Component {
 		let guid = Date.now() + '_' + Math.random();
 		this.guidBeingDragged = guid;
 
+		FSBL.Clients.WindowClient.startTilingOrTabbing({ waitForIdentifier: true });
+
 		this.props.itemAction(component, { options: { autoShow: false } }, (identifier) => {
-			FSBL.FinsembleWindow.wrap(identifier, (err, wrappedWindow) => {
-				this.guidIdentifierMap[guid] = wrappedWindow;
-			});
+			FSBL.Clients.WindowClient.sendIdentifierForTilingOrTabbing({ windowIdentifier: identifier });
 		});
 	}
 	stopDrag(event) {
-		let moveWindow = (top, left, guid) => {
-			if (this.guidIdentifierMap[guid]) {
-				let wrappedWindow = this.guidIdentifierMap[guid];
-				wrappedWindow.getBounds((err, bounds) => {
-					bounds.top = top;
-					bounds.left = left;
-					wrappedWindow.setBounds(bounds);
-					wrappedWindow.show();
-				});
-				delete this.guidIdentifierMap[guid];
-			} else { //wait for spawn to finish
-				setTimeout(() => {
-					moveWindow(top, left, guid);
-				}, 100);
+		FSBL.Clients.WindowClient.stopTilingOrTabbing({
+			allowDropOnSelf: true, mousePosition: {
+				x: event.nativeEvent.screenX,
+				y: event.nativeEvent.screenY
 			}
-		}
-		let top = event.nativeEvent.screenY;
-		let left = event.nativeEvent.screenX;
-		moveWindow(top, left, this.guidBeingDragged);
+		});
 	}
 	render() {
 		var self = this;
