@@ -31,7 +31,7 @@ export default class ListHeader extends React.Component {
                 Name
                 {/* If this field is the one being sorted, render the direction of the sort. Otherwise return null. */}
                 {this.state.sort.field === "name" ?
-                    this.state.sort.direction === "ascending" ? <i className="ff-arrow-up"></i> : <i className="ff-arrow-down"></i> :
+                    this.state.sort.direction === "ascending" ? <i className="sort-direction ff-arrow-up"></i> : <i className="sort-direction ff-arrow-down"></i> :
                     null
                 }
             </div>
@@ -43,7 +43,7 @@ export default class ListHeader extends React.Component {
                         {field.label}
                         {/* If this field is the one being sorted, render the direction of the sort. Otherwise return null. */}
                         {this.state.sort.field === field.value ?
-                            this.state.sort.direction === "ascending" ? <i className="ff-arrow-up"></i> : <i className="ff-arrow-down"></i> :
+                            this.state.sort.direction === "ascending" ? <i className="sort-direction ff-arrow-up"></i> : <i className="sort-direction ff-arrow-down"></i> :
                             null
                         }
                     </div>)

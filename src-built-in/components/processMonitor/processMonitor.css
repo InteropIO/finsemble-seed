@@ -13,40 +13,6 @@ body {
 	color: white;
 }
 
-.app-details {
-	display: flex;
-	flex-direction: column;
-	margin:6px;
-}
-
-.app-actions {
-	display: flex;
-	justify-content: flex-start;
-	margin-right: 1em;
-}
-
-.app-window {
-	display:flex;
-	flex-direction: row;
-	margin-left: 2em;
-	align-items: center;
-}
-.app-windows {
-	margin-top: 1em;
-}
-.app-action {
-	background-color: #e2e2e2;
-	border: 1px solid darkgray;
-	padding:2px;
-	cursor: pointer;
-	padding:2px 6px;
-	color:black;
-}
-
-.app-action:hover {
-	background-color: darkslategray;
-	color: white;
-}
 .terminate {
   font-size: 12px;
   font-weight: 300;
@@ -146,7 +112,7 @@ body {
 
 .process-list-wrapper {
 	margin:1em;
-	border:1px solid gray;
+	border:1px solid #e9e9e9;;
 }
 .process-list {
 	height: calc(100vh - 165px);
@@ -160,11 +126,11 @@ body {
 	margin-bottom: .3em;
 }
 .process {
-	padding-left: 1em;
-	padding-top: 1em;
+	padding-top: 8px;
+	padding-bottom:8px;
 }
 .list-header {
-	border-bottom: 1px solid gray;
+	border-bottom: 1px solid #e9e9e9;;
 	padding-right: 15px; /*Account for scrollbar.*/
 }
 .process-name, .list-header-name {
@@ -173,6 +139,7 @@ body {
 
 .process-name {
 	font-weight: bold;
+	padding-left:23px;
 }
 .process-statistics, .list-header-statistic-labels {
 	width: 60%;
@@ -182,7 +149,7 @@ body {
 
 .list-header-statistic-label {
 	flex: 1;
-	border-left: 1px solid gray;
+	border-left: 1px solid #e9e9e9;;
 	padding:.5em;
 	display:inline-flex;
 	justify-content: center;
@@ -199,6 +166,7 @@ body {
 .child-window {
 	display:flex;
 	align-content: center;
+	line-height: 24px;
 }
 .child-window-actions {
 	display:inline-flex;
@@ -228,8 +196,18 @@ body {
 
 .close-window {
 	margin-left: 5px;
-	margin-right:10px;
+	margin-right:17px;
 	height: 8px;
 	width: 7px;
 	font-size: 12px;
+}
+.close-window:hover {
+	cursor: pointer;
+	color: #F64352;
+}
+.sort-direction {
+	font-size: 8px;
+	margin-left: 5px;
+	display: flex;
+	align-items: center;
 }

@@ -167,7 +167,6 @@ var Actions = {
 
 			var onCloseSuccess = () => {
 				clearTimeout(closeTimeout);
-				alert(`Closed Process: ${AppIdentifier.name}`);
 			};
 
 			var onCloseFailure = () => {
@@ -199,7 +198,6 @@ var Actions = {
 
 		var onCloseSuccess = () => {
 			clearTimeout(closeTimeout);
-			alert(`Closed window: ${winID.name}`);
 		};
 
 		var onCloseFailure = () => {
