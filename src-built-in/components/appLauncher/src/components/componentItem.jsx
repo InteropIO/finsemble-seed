@@ -14,12 +14,44 @@ export default class componentItem extends React.Component {
 	constructor() {
 		super();
 		this.bindCorrectContext();
+		this.guidIdentifierMap = {};
 	}
 	bindCorrectContext() {
 		this.deleteItem = this.deleteItem.bind(this);
+		this.startDrag = this.startDrag.bind(this);
+		this.stopDrag = this.stopDrag.bind(this);
 	}
 	deleteItem() {
 		appLauncherActions.handleRemoveCustomComponent(this.props.name);
+	}
+	startDrag(event, component) {
+		let guid = Date.now() + '_' + Math.random();
+		this.guidBeingDragged = guid;
+
+		this.props.itemAction(component, { options: { autoShow: false } }, (identifier) => {
+			this.guidIdentifierMap[guid] = identifier;
+		});
+	}
+	stopDrag(event) {
+		let moveWindow = (top, left, guid) => {
+			if (this.guidIdentifierMap[guid]) {
+				FSBL.FinsembleWindow.wrap(this.guidIdentifierMap[guid], (err, wrappedWindow) => {
+					wrappedWindow.getBounds((err, bounds) => {
+						bounds.top = top;
+						bounds.left = left;
+						wrappedWindow.setBounds(bounds);
+					});
+
+				});
+			} else { //wait for spawn to finish
+				setTimeout(() => {
+					moveWindow(top, left, guid);
+				}, 100);
+			}
+		}
+		let top = event.nativeEvent.screenY;
+		let left = event.nativeEvent.screenX;
+		moveWindow(top, left, this.guidBeingDragged);
 	}
 	render() {
 		var self = this;
@@ -46,6 +78,17 @@ export default class componentItem extends React.Component {
 			}}
 			isDeletable={this.props.isUserDefined}
 			deleteAction={this.deleteItem}
+			draggable={true}
+			onDragStart={(e) => {
+                console.log("Menu Item drag - TAB");
+                this.startDrag(e, component);
+			}}
+			onDragEnd={
+				(e) => {
+					console.log("Menu Item drag - TAB");
+					this.stopDrag(e, component);
+				}
+			}
 			isPinnable={true}
 			pinIcon={'ff-pin'}
 			activePinModifier={'finsemble-item-pinned'}
