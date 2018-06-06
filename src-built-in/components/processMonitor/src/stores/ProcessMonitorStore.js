@@ -59,7 +59,7 @@ var Actions = {
 		//For now, this seems okay.
 		let mode = ProcessMonitorStore.getValue({ field: "viewMode" });
 		function getChildWindows(proc, done) {
-			if (mode === "simple" && proc.name.toLowerCase().includes("service")) return done();
+			if (mode === "simple" && (proc.name.toLowerCase().includes("service") || proc.name.toLowerCase().includes("system"))) return done();
 			fin.desktop.Application.wrap(proc.uuid).getChildWindows(cws => {
 				let childWindows = [];
 				cws.forEach(cw => {
@@ -78,7 +78,7 @@ var Actions = {
 					return 0;
 				});
 				//Don't want any service windows.
-				if (mode === "simple" && childWindows.some(cw => cw.name.toLowerCase().includes("service"))) return done();
+				if (mode === "simple" && childWindows.some(cw => cw.name.toLowerCase().includes("service") || cw.name.toLowerCase().includes("system"))) return done();
 				procs.push({
 					statistics: proc,
 					childWindows
@@ -121,6 +121,15 @@ var Actions = {
 			return 0;
 		}
 		return procs.sort(sortFN);
+	},
+	toggleViewMode: function () {
+		let mode = ProcessMonitorStore.getValue({ field: "viewMode" });
+		if (mode === "advanced") {
+			mode = "simple"
+		} else {
+			mode = "advanced";
+		}
+		ProcessMonitorStore.setValue({ field: "viewMode", value: mode });
 	},
 	identifyWindow: function (winID) {
 		const OPACITY_ANIMATION_DURATION = 200;
