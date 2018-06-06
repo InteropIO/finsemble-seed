@@ -19,7 +19,7 @@
     --secondary-accent-color: var(--blue7);
     --tertiary-accent-color: var(--blue1);
 
-    --primary-negative-color: var(--red);
+    --primary-negative-color: var(--red5);
     --secondary-negative-color: var(--red1);
     --tertiary-negative-color: var(--red7);
 
@@ -71,7 +71,7 @@
     --titleBar-button-hover-inactive-color: var(--secondary-accent-color);
     --titleBar-button-highlight-active-color: var(--primary-accent-color);
     --titleBar-button-highlight-inactive-color: var(--secondary-accent-color);
-    --titleBar-button-hover-negative-color: var(--tertiary-negative-color);
+    --titleBar-button-hover-negative-color: var(--primary-negative-color);
     --titleBar-button-hover-linker-group: var(--gray3);
 
     /* Dialogs (e.g., singleInput and yesNo) */

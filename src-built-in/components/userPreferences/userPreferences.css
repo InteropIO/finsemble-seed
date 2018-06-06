@@ -293,6 +293,7 @@ img {
 
 .workspace-editor {
     border: 0;
+    font-family: var(--font-family);
     background-color: transparent;
     padding-left: 20px;
     height: 100%;
