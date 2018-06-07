@@ -41,7 +41,6 @@ function getClassesForStat(number, statType) {
         high_comparison = HIGH_CPU,
         moderate_comparison = MODERATE_CPU_USAGE;
     }
-    debugger
     if (number > high_comparison) {
         classes += " high-usage"
     } else if (number > moderate_comparison) {
