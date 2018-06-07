@@ -31,7 +31,7 @@
     /* Component Variables:  Use these variables to make small changes to colors and general appearance. */ 
 
     /** Toolbar */
-    --toolbar-font-size: 16px;
+    --toolbar-font-size: 15px;
     --toolbar-font-color: var(--primary-font-color);
     --toolbar-line-height: 1em;
     --toolbar-font-weight: var(--primary-font-weight);
@@ -50,12 +50,12 @@
 
     /* Window Title bar */
     --titleBar-font-size: 14px;
+    --titleBar-icon-font-size: 15px;
     --titleBar-active-font-color: var(--primary-font-color);
     --titleBar-inactive-font-color: var(--gray3); 
     --titleBar-font-weight: var(--primary-font-weight);
 
     --titleBar-height: 32px;
-    --titleBar-icon-width: 21px;
 
     --titleBar-background-inactive-color: var(--secondary-background-color);
     --titleBar-background-active-color: var(--tertiary-background-color);
@@ -141,15 +141,18 @@
     
     --search-result-highlighter-color: var(--slate3);
 
-    /* Window Frame*/
+    /* Window Frame */
     --window-frame-inactive-color: var(--slate);
-    /* --window-frame-active-color: var(--window-frame-inactive-color); */
+    --window-frame-active-color: var(--window-frame-inactive-color);
 
-    /* Window Scrim*/
-    --scrim-font-icon-color: var(--primary-font-color);
-    --scrim-font-icon-size: 100px;
-    --scrim-overlay: var(--secondary-accent-color);
-    --scrim-negative-overlay: var(--red7);
+    /* Window Scrims and Masks */
+    --groupMask-background-color: var(--secondary-accent-color);
+    --groupMask-border-color: var(--primary-accent-color);
+    
+    --scrim-icon-font-color: var(--primary-font-color);
+    --scrim-icon-font-size: 100px;
+    --scrim-positive-background-color: var(--secondary-accent-color);
+    --scrim-negative-background-color: var(--red7);
     
     /* Content Dialog (e.g., userPreferences and appCatalog) */
     --content-font-size: 16px;
@@ -192,8 +195,6 @@
     --content-card-title-font-size: 14px;
     
     --content-details-font-size: 12px;
-    --content-details-header-background-color: var(--blue1);
-    --content-details-header-border-color: var(--blue1);
 
     --content-back-font-size: 15px;
     --content-close-hover-color: var(--red2);

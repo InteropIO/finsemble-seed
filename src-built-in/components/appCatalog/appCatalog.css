@@ -59,7 +59,7 @@ body {
     font-size: var(--dialog-input-font-size);
     font-weight: var(--dialog-input-font-weight);
     vertical-align: middle;
-    background-color: var(--dialog-input-background-color);
+    background-color: transparent;
     width: 163px;
     height: 33px;
     max-width: 100%;
@@ -201,8 +201,8 @@ img {
 .footerRight .openButton {
     cursor: pointer;
     align-self: flex-end;
-    background-color: var(--button-neutral-background-color);
-    border: var(--button-neutral-border-color);
+    background-color: transparent;
+    border: 1px solid var(--button-neutral-border-color);
     font-size: 12px;
     color: var(--content-font-color);
     text-align: center;
@@ -250,18 +250,20 @@ img {
 
 .detailsHeader .button {
     cursor: pointer;
-    font-size: var(--content-details-font-size);
-    font-weight: var(--content-font-weight);
+    align-self: flex-end;
+    background-color: transparent;
+    border: 1px solid var(--button-neutral-border-color);
+    font-size: 12px;
+    color: var(--content-font-color);
+    text-align: center;
+    padding: 5px 10px 5px 10px;
+    width: 49px;
+    height: 16px;
+    font-weight: normal;
     font-style: normal;
     font-stretch: normal;
     line-height: normal;
     letter-spacing: normal;
-    text-align: center;
-    color: var(--content-font-color);
-    padding: 5px 17px 5px 17px;
-    align-self: center;
-    background-color: var(--content-details-header-background-color);
-    border: var(--content-details-header-border-color);
 }
 
 ::-webkit-scrollbar-track {

@@ -90,8 +90,8 @@ html.groupMask {
 }
 
 html.groupMask body {
-    background-color: var(--secondary-accent-color);
-    border: 5px solid var(--primary-accent-color);
+    background-color: var(--groupMask-background-color);
+    border: 5px solid var(--groupMask-border-color);
     margin: 0px;
 }
 

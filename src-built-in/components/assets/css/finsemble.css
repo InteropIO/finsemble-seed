@@ -15,6 +15,55 @@
     display: none !important;
 }
 
+.fsbl-share-scrim {
+    position: fixed;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    z-index: 1000000;
+    top: 0;
+    left: 0;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    align-items: center;
+    transition: all .3s ease;
+    opacity: 0.85;
+    font-size: var(--scrim-icon-font-size);
+    color: var(--scrim-icon-font-color);
+}
+
+.fsbl-share-scrim .error-message {
+    display: flex;
+    height: 100%;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    padding: 1em;
+    background-color: var(--scrim-negative-background-color);
+}
+
+.fsbl-share-scrim i {
+    position: fixed;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    z-index: 1000000;
+    top: 0;
+    left: 0;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--scrim-positive-background-color);
+    font-size: var(--scrim-font-icon-size);
+    color: var(--scrim-font-icon-color) !important;
+}
+
+.fsbl-share-scrim i.no {
+    background-color: var(--scrim-negative-background-color);
+}
+
 .fsbl-button {
     /* margin: 0 auto; */
     text-align: center;
@@ -32,55 +81,6 @@
 .fsbl-button i {
     vertical-align: middle;
     margin: 0 6px;
-}
-
-.fsbl-share-scrim {
-    position: fixed;
-    display: flex;
-    height: 100%;
-    width: 100%;
-    z-index: 1000000;
-    top: 0;
-    left: 0;
-    justify-content: center;
-    align-content: center;
-    flex-direction: column;
-    align-items: center;
-    transition: all .3s ease;
-    opacity: 0.85;
-    font-size: var(--scrim-font-icon-size);
-    color: var(--scrim-font-icon-color);
-}
-
-.fsbl-share-scrim .error-message {
-    display: flex;
-    height: 100%;
-    align-content: center;
-    justify-content: center;
-    align-items: center;
-    padding: 1em;
-    background-color: var(--scrim-negative-overlay);
-}
-
-.fsbl-share-scrim i {
-    position: fixed;
-    display: flex;
-    height: 100%;
-    width: 100%;
-    z-index: 1000000;
-    top: 0;
-    left: 0;
-    justify-content: center;
-    align-content: center;
-    flex-direction: column;
-    align-items: center;
-    background-color: var(--scrim-overlay);
-    font-size: var(--scrim-font-icon-size);
-    color: var(--scrim-font-icon-color) !important;
-}
-
-.fsbl-share-scrim i.no {
-    background-color: var(--scrim-negative-overlay);
 }
 
 .fsbl-button:hover {

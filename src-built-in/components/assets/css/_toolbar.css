@@ -61,7 +61,7 @@
 }
 
 .finsemble-toolbar-button-label {
-    font-size: .95em;
+    font-size: var(--toolbar-font-size);
     font-weight: var(--toolbar-font-weight);
     text-align: left;
     letter-spacing: .25px;

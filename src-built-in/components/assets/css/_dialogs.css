@@ -40,7 +40,7 @@ body.dialog .dialog-title {
 
 body.dialog .dialog-question {
     width: 469px;
-    font-weight: 500;
+    font-weight: var(--dialog-question-font-weight);
     color:  var(--dialog-font-color);
     font-size: var(--dialog-question-font-size);
     margin-bottom: 16px;
