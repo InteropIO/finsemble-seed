@@ -174,37 +174,7 @@ var Actions = {
 		})
 	},
 	terminateProcess: function (AppIdentifier, force = false, prompt = true) {
-		const PROMPT = "Are you sure you want to terminate this process? This will close all child windows as well. This is not reversible."
-		var doTerminate = function () {
-			let app = fin.desktop.Application.wrap(AppIdentifier.uuid, AppIdentifier.name);
-			let closeTimeout = setTimeout(() => {
-				onCloseFailure();
-			}, 4000);
-
-			var onCloseSuccess = () => {
-				clearTimeout(closeTimeout);
-			};
-
-			var onCloseFailure = () => {
-				if (force) {
-					app.terminate(true, onCloseSuccess, () => {
-						alert("Failed to terminate the process. Please contact support.");
-					});
-				} else {
-					Actions.terminateProcess(AppIdentifier, true, false);
-				}
-			};
-
-			app.close(force, onCloseSuccess, onCloseFailure)
-		}
-		if (prompt && confirm(PROMPT)) {
-			doTerminate();
-		} else if (!prompt) {
-			doTerminate();
-		}
-	},
-	closeWindow: function (winID, force = false) {
-		let win = fin.desktop.Window.wrap(winID.uuid, winID.name);
+		let app = fin.desktop.Application.wrap(AppIdentifier.uuid, AppIdentifier.name);
 		let closeTimeout = setTimeout(() => {
 			onCloseFailure();
 		}, 4000);
@@ -215,18 +185,49 @@ var Actions = {
 
 		var onCloseFailure = () => {
 			if (force) {
-				FSBL.Clients.DialogManagerClient.open("yesNo", {
-					title: "Error",
-					question: "The window is unresponsive. Please try terminating the parent process.",
-					affirmativeButtonLabel: "Okay",
-					showCancelButton: false,
-					showNegativeButton: false
-				}, Function.prototype);
+				//Should never get into here, but just in case the process is hung, we'll show an error message to the user.
+				app.terminate(true, onCloseSuccess, () => {
+					FSBL.Clients.DialogManager.open("yesNo", {
+						title: "Error",
+						question: "The process that you are attempting to close is unresponsive. Please contact support.",
+						affirmativeButtonLabel: "Okay",
+						showCancelButton: false,
+						showNegativeButton: false
+					}, Function.prototype);
+				});
 			} else {
-				Actions.closeWindow(winId, true);
+				Actions.terminateProcess(AppIdentifier, true, false);
 			}
 		};
+		app.close(force, onCloseSuccess, onCloseFailure)
+	},
+	closeWindow: function (winID, force = false) {
+		let win = fin.desktop.Window.wrap(winID.uuid, winID.name);
+		let parentApp = win.getParentApplication();
+		let closeTimeout = setTimeout(() => {
+			onCloseFailure();
+		}, 4000);
 
+		var onCloseSuccess = () => {
+			clearTimeout(closeTimeout);
+		};
+
+		var onCloseFailure = () => {
+			if (force) {
+				FSBL.Clients.DialogManager.open("yesNo", {
+					title: "Terminate Process?",
+					question: "The app that you are attempting to close is unresponsive. Would you like to terminate the process? Terminating the process may close other apps.",
+					showCancelButton: false,
+					showNegativeButton: true
+				}, (err, response) => {
+					if (response.choice === "affirmative") {
+						return Actions.terminateProcess(parentApp, true)
+					}
+				});
+			} else {
+				Actions.closeWindow(winID, true);
+			}
+		};
 		win.close(force, onCloseSuccess, onCloseFailure)
 	}
 };
