@@ -1,19 +1,19 @@
 @charset "UTF-8";
 
 @font-face {
-  font-family: "font-finance";
-  src:url("fonts/font-finance.eot");
-  src:url("fonts/font-finance.eot?#iefix") format("embedded-opentype"),
-    url("fonts/font-finance.woff") format("woff"),
-    url("fonts/font-finance.ttf") format("truetype"),
-    url("fonts/font-finance.svg#font-finance") format("svg");
+  font-family: "finfont";
+  src:url("fonts/finfont.eot");
+  src:url("fonts/finfont.eot?#iefix") format("embedded-opentype"),
+    url("fonts/finfont.woff") format("woff"),
+    url("fonts/finfont.ttf") format("truetype"),
+    url("fonts/finfont.svg#finfont") format("svg");
   font-weight: normal;
   font-style: normal;
 
 }
 
 [data-icon]:before {
-  font-family: "font-finance" !important;
+  font-family: "finfont" !important;
   content: attr(data-icon);
   font-style: normal !important;
   font-weight: normal !important;
@@ -27,7 +27,7 @@
 
 [class^="ff-"]:before,
 [class*=" ff-"]:before {
-  font-family: "font-finance" !important;
+  font-family: "finfont" !important;
   font-style: normal !important;
   font-weight: normal !important;
   font-variant: normal !important;
