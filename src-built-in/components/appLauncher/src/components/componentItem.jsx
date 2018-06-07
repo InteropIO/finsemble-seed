@@ -20,6 +20,8 @@ export default class componentItem extends React.Component {
 		this.deleteItem = this.deleteItem.bind(this);
 		this.startDrag = this.startDrag.bind(this);
 		this.stopDrag = this.stopDrag.bind(this);
+		this.dragImage = document.createElement("img");
+		this.dragImage.src = "http://www.manolith.com/wp-content/uploads//2012/05/shark-with-frickin-laser-beam.png";
 	}
 	deleteItem() {
 		appLauncherActions.handleRemoveCustomComponent(this.props.name);
@@ -27,14 +29,22 @@ export default class componentItem extends React.Component {
 	startDrag(event, component) {
 		let guid = Date.now() + '_' + Math.random();
 		this.guidBeingDragged = guid;
+		event.dataTransfer.setDragImage(this.dragImage, 0, 0);
 
+		console.log("starting drag. called starttiling");
 		FSBL.Clients.WindowClient.startTilingOrTabbing({ waitForIdentifier: true });
 
 		this.props.itemAction(component, { options: { autoShow: false } }, (identifier) => {
+			console.log("starting drag. called sendidentifier");
 			FSBL.Clients.WindowClient.sendIdentifierForTilingOrTabbing({ windowIdentifier: identifier });
+			this.guidIdentifierMap[guid] = identifier;
 		});
 	}
 	stopDrag(event) {
+		console.log("stopping drag. called stoptiling.");
+		console.log(this.guidBeingDragged, this.guidIdentifierMap[this.guidBeingDragged]);
+		delete this.guidIdentifierMap[this.guidBeingDragged];
+		delete this.guidBeingDragged;
 		FSBL.Clients.WindowClient.stopTilingOrTabbing({
 			allowDropOnSelf: true, mousePosition: {
 				x: event.nativeEvent.screenX,
