@@ -382,8 +382,8 @@ img {
 }
 
 ::-webkit-scrollbar {
-    width: 9px;
-    background-color: #f7f7f7;
+    width: 5px;
+    background-color: var(--scrollbar-color);
     border-radius: 3px;
 }
 

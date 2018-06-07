@@ -127,7 +127,7 @@
     --menu-pin-background-hover-color: var(--secondary-accent-color);
     --menu-delete-background-hover-color: var(--secondary-negative-color);
 
-    --scrollbar-color: var(--slate1);
+    --scrollbar-color: var(--gray);
 
     /* Search Menu */
     --search-input-font-color: var(--secondary-font-color);
