@@ -101,7 +101,7 @@ var Actions = {
 	},
 	sortProcesses: function (procs) {
 		let currentSort = ProcessMonitorStore.getValue({ field: "sort" });
-		console.log("Sorting processes", currentSort.field, currentSort.direction);
+		// console.log("Sorting processes", currentSort.field, currentSort.direction);
 		let sortFN = (a, b) => {
 			let aValue = a.statistics[currentSort.field];
 			//Comparing upper and lowercase names makes the sort look wrong. we equalize all strings here.
@@ -201,9 +201,24 @@ var Actions = {
 		};
 		app.close(force, onCloseSuccess, onCloseFailure)
 	},
+	removeWindowLocally: function (winID) {
+		let win = fin.desktop.Window.wrap(winID.uuid, winID.name);
+		let parentApp = win.getParentApplication();
+		let procs = ProcessMonitorStore.getValue({ field: "processList" });
+		procs = procs.map(proc => {
+			if (proc.statistics.uuid === parentApp.uuid) {
+				let cwIndex = proc.childWindows.findIndex(cw => cw.name === winID.name);
+				proc.childWindows.splice(cwIndex, 1)
+			}
+			return proc;
+		})
+		ProcessMonitorStore.setValue({ field: "processList", value: procs });
+	},
 	closeWindow: function (winID, force = false) {
 		let win = fin.desktop.Window.wrap(winID.uuid, winID.name);
 		let parentApp = win.getParentApplication();
+
+		Actions.removeWindowLocally(winID);
 		let closeTimeout = setTimeout(() => {
 			onCloseFailure();
 		}, 4000);

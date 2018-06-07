@@ -28,6 +28,7 @@ body.menu {
 	padding: 3px 2px;
 	background-color: #d30e2d;
 	border: solid 1px #ff2445;
+	cursor: pointer;
 }
 
 .terminate:hover {
