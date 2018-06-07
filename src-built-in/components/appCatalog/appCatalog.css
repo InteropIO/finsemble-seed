@@ -37,13 +37,13 @@ body {
     margin-left: 0px !important;
     margin-right: 0px !important;
     font-family: var(--font-family);
-    color: var(--dialog-font-color)
+    color: var(--content-font-color)
 }
 
 .content {
     width: calc(100% - 17px);
     padding: .75em;
-    background-color: var(--content-section-background-color);
+    background-color: var(--content-background-color);
 }
 
 .ListHeader {

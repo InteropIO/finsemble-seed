@@ -115,7 +115,7 @@ img {
 }
 
 .ff-close:hover {
-    color: var(--complex-close-hover-color);
+    color: var(--content-close-hover-color);
 }
 
 .complex-menu-section-toggle {
@@ -317,7 +317,7 @@ img {
 }
 
 ::-webkit-scrollbar {
-    width: 6px;
+    width: 5px;
     background-color: transparent;
     border-radius: 3px;
 }
@@ -362,13 +362,14 @@ img {
 }
 
 .workspace-component-list {
-    font-size: var(--content-component-list-font-size);
     border: solid 1px var(--content-list-border-color);
     padding: 7px;
+    font-size: var(--content-component-list-font-size);
     width: 140px;
     height: 104px;
     overflow-y: auto;
     user-select: none;
+    color: var(--workspace-component-list-font-color);
 }
 
 .ff-edit {
