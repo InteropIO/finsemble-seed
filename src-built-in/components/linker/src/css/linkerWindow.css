@@ -3,10 +3,16 @@
 * All rights reserved.
 */
 @import '../../../assets/css/_globals.css';
+body {
+    margin:0;
+	border:0;
+}
+
 #main {
     padding: 4px 0px 4px 0px;
     background-color: var(--menu-background-color);
 }
+
 .linkerGroup{
     height: 20px;
     margin: 4px 8px 4px 8px;
