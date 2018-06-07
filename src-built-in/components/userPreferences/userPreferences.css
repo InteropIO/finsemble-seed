@@ -362,14 +362,13 @@ img {
 }
 
 .workspace-component-list {
+    font-size: var(--content-component-list-font-size);
     border: solid 1px var(--content-list-border-color);
     padding: 7px;
-    font-size: var(--content-component-list-font-size);
     width: 140px;
     height: 104px;
     overflow-y: auto;
     user-select: none;
-    color: var(--workspace-component-list-font-color);
 }
 
 .ff-edit {
