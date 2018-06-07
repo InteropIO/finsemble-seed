@@ -21,7 +21,7 @@ export default class componentItem extends React.Component {
 		this.startDrag = this.startDrag.bind(this);
 		this.stopDrag = this.stopDrag.bind(this);
 		this.dragImage = document.createElement("img");
-		this.dragImage.src = "http://www.manolith.com/wp-content/uploads//2012/05/shark-with-frickin-laser-beam.png";
+		this.dragImage.src = '../assets/img/drag-image.png';
 	}
 	deleteItem() {
 		appLauncherActions.handleRemoveCustomComponent(this.props.name);
