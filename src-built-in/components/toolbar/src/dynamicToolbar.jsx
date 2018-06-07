@@ -46,6 +46,7 @@ export default class Toolbar extends React.Component {
 			finWindow: fin.desktop.Window.getCurrent()
 		};
 		this.bindCorrectContext();
+		this.isDragging = false;
 	}
 
 	bindCorrectContext() {
@@ -83,7 +84,7 @@ export default class Toolbar extends React.Component {
 
 	onDragStart(changeEvent) {
 		let pins = this.refs.pinSection.state.pins;
-		if (pins[changeEvent.source.index].type == "componentLauncher") {
+		if (pins[changeEvent.source.index].type == "componentLauncher" & !this.isDragging) {
 			FSBL.Clients.WindowClient.startTilingOrTabbing({ waitForIdentifier: true });
 		}
 	}
@@ -96,9 +97,11 @@ export default class Toolbar extends React.Component {
 			FSBL.System.getMousePosition((err, pos) => {
 				FSBL.Clients.LauncherClient.spawn(pin.component, { options: { autoShow: false } }, (err, response) => {
 					FSBL.Clients.WindowClient.sendIdentifierForTilingOrTabbing({ windowIdentifier: response.windowIdentifier });
+					this.isDragging = false;
 				});
 			});
 		} else if (pin.type == "componentLauncher") {
+			this.isDragging = false;
 			FSBL.Clients.WindowClient.cancelTilingOrTabbing();
 		}
 
