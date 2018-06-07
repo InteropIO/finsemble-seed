@@ -175,13 +175,7 @@ var Actions = {
 	},
 	terminateProcess: function (AppIdentifier, force = false, prompt = true) {
 		let app = fin.desktop.Application.wrap(AppIdentifier.uuid, AppIdentifier.name);
-		let closeTimeout = setTimeout(() => {
-			onCloseFailure();
-		}, 4000);
 
-		var onCloseSuccess = () => {
-			clearTimeout(closeTimeout);
-		};
 
 		var onCloseFailure = () => {
 			if (force) {
@@ -199,7 +193,24 @@ var Actions = {
 				Actions.terminateProcess(AppIdentifier, true, false);
 			}
 		};
-		app.close(force, onCloseSuccess, onCloseFailure)
+
+		FSBL.Clients.DialogManager.open("yesNo", {
+			title: "Terminate Process?",
+			question: "Terminating the process may close other apps. Are you sure you want to continue?",
+			showCancelButton: false,
+			showNegativeButton: true
+		}, (err, response) => {
+			if (response.choice === "affirmative") {
+				let closeTimeout = setTimeout(() => {
+					onCloseFailure();
+				}, 4000);
+
+				var onCloseSuccess = () => {
+					clearTimeout(closeTimeout);
+				};
+				app.close(force, onCloseSuccess, onCloseFailure)
+			}
+		});
 	},
 	removeWindowLocally: function (winID) {
 		let win = fin.desktop.Window.wrap(winID.uuid, winID.name);
@@ -220,7 +231,7 @@ var Actions = {
 
 		Actions.removeWindowLocally(winID);
 		let closeTimeout = setTimeout(() => {
-			onCloseFailure();
+			onCloseFailure(true);
 		}, 4000);
 
 		var onCloseSuccess = () => {
