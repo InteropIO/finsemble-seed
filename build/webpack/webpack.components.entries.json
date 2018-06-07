@@ -1,1 +1,10 @@
-{}
+{
+  "symphony": {
+    "output": "components/symphony/symphony",
+    "entry": "./src/components/symphony/symphony.js"
+  },
+  "symphonyembeddedchat": {
+      "output": "components/symphony/symphonyembeddedchat",
+      "entry": "./src/components/symphony/symphonyembeddedchat.js"
+  }
+}
