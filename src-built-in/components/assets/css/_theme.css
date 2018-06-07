@@ -186,8 +186,16 @@
     --content-checkbox-unchecked-border-color: var(--gray4);
 
     --content-card-background-color: var(--slate4);
-    --content-card-logo-background-color: var(--secondary-accent-color);
+    --content-card-bestMatch-background-color: var(--gray1);
+    --content-card-icon-background-color: var(--secondary-accent-color);
+    --content-card-icon-font-size: 20px;
+    --content-card-title-font-size: 14px;
+    
+    --content-details-font-size: 12px;
+    --content-details-header-background-color: var(--blue1);
+    --content-details-header-border-color: var(--blue1);
 
+    --content-back-font-size: 15px;
     --content-close-hover-color: var(--red2);
 
     /* Notifications */

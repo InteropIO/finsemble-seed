@@ -48,8 +48,7 @@ body {
 }
 
 .complex-menu-left-nav {
-    min-width: 182px;
-    width: 182px;
+    width: 212px;
     font-size: var(--content-font-size);
     flex-direction: column;
     color: var(--content-font-color);
