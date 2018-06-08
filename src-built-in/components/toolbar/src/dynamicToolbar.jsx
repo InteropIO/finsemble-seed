@@ -1,3 +1,4 @@
+
 /*!
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
@@ -46,43 +47,10 @@ export default class Toolbar extends React.Component {
 			finWindow: fin.desktop.Window.getCurrent()
 		};
 		this.bindCorrectContext();
-		this.isDragging = false;
-		this.getDragMask();
-		this.getGroupMask();
-		this.configCache = {};
-		this.groupMaskShowing = false;
-	}
-
-	getDragMask() {
-		FSBL.Clients.LauncherClient.spawn("Docking Move Mask", { options: { autoShow: false}}, (err, response) => {
-			FSBL.FinsembleWindow.wrap({ name: response.windowIdentifier.windowName }, (err, wrappedWindow) => {
-				this.dragWindow = wrappedWindow;
-			});
-		});
-	}
-
-	getGroupMask() {
-		FSBL.FinsembleWindow.wrap({ name: "groupMask" }, (err, wrappedWindow) => {
-			if (!wrappedWindow) { //maybe toolbar spawns before groupMask.
-				setTimeout(() => {
-					this.getGroupMask();
-				}, 100);
-			} else {
-				this.groupMask = wrappedWindow;
-				this.groupMask.addEventListener("hidden", () => {
-					this.groupMaskShowing = false;
-				});
-				this.groupMask.addEventListener("shown", () => {
-					this.groupMaskShowing = true;
-				});
-			}
-		});
 	}
 
 	bindCorrectContext() {
 		this.onSectionsUpdate = this.onSectionsUpdate.bind(this);
-		this.onDragEnd = this.onDragEnd.bind(this);
-		this.onDragStart = this.onDragStart.bind(this);
 	}
 
 	// called when sections change in the toolbar store
@@ -112,105 +80,6 @@ export default class Toolbar extends React.Component {
 		ToolbarStore.Store.removeListener({ field: "sections" }, this.onSectionsUpdate);
 	}
 
-	startMouseTracking(pin) {
-		let configCache = this.configCache[pin.component];
-		if (this.groupMaskShowing) {
-			this.dragWindowVisible = false;
-			this.dragWindow.hide();
-			return setTimeout(() => { this.startMouseTracking(pin); }, 1);
-		}
-		if (this.mouseTracking) {
-			FSBL.System.getMousePosition((err, pos) => {
-				this.dragWindow.setBounds({
-					top: pos.y,
-					left: pos.x,
-					height: (configCache && configCache.height)? configCache.height: 600,
-					width: (configCache && configCache.width)? configCache.width: 800
-				}, () => {
-					if (!this.dragWindowVisible) {
-						this.dragWindowVisible = true;
-						this.dragWindow.show(() => {
-							console.log('showing window');
-							setTimeout(() => { this.startMouseTracking(pin); }, 1);
-						});
-					} else {
-						setTimeout(() => { this.startMouseTracking(pin); }, 1);
-					}
-					this.dragWindowLastY = pos.y;
-					this.dragWindowLastX = pos.x;
-				});
-			});
-
-		} else {
-			this.dragWindow.setBounds({
-				top: this.dragWindowLastY,
-				left: this.dragWindowLastX,
-				height: (configCache && configCache.height)? configCache.height: 600,
-				width: (configCache && configCache.width)? configCache.width: 800
-			});
-		}
-	}
-
-	onDragStart(changeEvent) {
-		let pins = this.refs.pinSection.state.pins;
-		let pin = pins[changeEvent.source.index];
-		if (pin.type == "componentLauncher" & !this.isDragging) {
-			if (!this.configCache[pin.component]) {
-				FSBL.Clients.ConfigClient.getValue({ field: 'finsemble.components.' + pin.component + ".window"}, (err, config) => {
-					this.configCache[pin.component] = config;
-				});
-			}
-			FSBL.Clients.WindowClient.startTilingOrTabbing({ waitForIdentifier: true });
-			this.isDragging = true;
-			this.mouseTracking = true;
-			this.startMouseTracking(pin);
-		}
-	}
-
-	onDragEnd(changeEvent) {
-		this.mouseTracking = false;
-		let pins = this.refs.pinSection.state.pins;
-		let pin = pins[changeEvent.source.index]
-		if (changeEvent.destination == null && pin.type == "componentLauncher") {
-			FSBL.Clients.WindowClient.stopTilingOrTabbing();
-			FSBL.System.getMousePosition((err, pos) => {
-				FSBL.Clients.LauncherClient.spawn(pin.component, { top: pos.y, left: pos.x }, (err, response) => {
-					FSBL.Clients.WindowClient.sendIdentifierForTilingOrTabbing({ windowIdentifier: response.windowIdentifier });
-					this.isDragging = false;
-					console.log('hiding window');
-					this.dragWindowVisible = false;
-					this.dragWindow.hide();
-				});
-			});
-		} else if (pin.type == "componentLauncher") {
-			this.isDragging = false;
-			console.log('hiding window');
-			this.dragWindowVisible = false;
-			this.dragWindow.hide();
-			FSBL.Clients.WindowClient.cancelTilingOrTabbing();
-		}
-
-		let newPins = JSON.parse(JSON.stringify(pins));
-		let { destination, source } = changeEvent;
-		//user dropped without reordering.
-		if (!destination) return;
-		let target = pins[source.index];
-		newPins.splice(source.index, 1);
-		newPins.splice(destination.index, 0, target);
-		function pinsToObj(arr) {
-			let obj = {};
-			arr.forEach((el, i) => {
-				if (el) {
-					let key = el.label;
-					obj[key] = el;
-					obj[key].index = i;
-				}
-			});
-			return obj;
-		}
-		this.refs.pinSection.setState({ pins: newPins });
-		ToolbarStore.GlobalStore.setValue({ field: 'pins', value: pinsToObj(newPins) });
-	}
 	/**
 	 * This a sample dynamic toolbar which builds a toolbar from config, dynamically updates and can render any react component as a toolbar item.
 	 * The "sections" are built by the toolbar store. getSections() takes the sections object and builds right/left/center sections using the FinsembleToolbarSection control.
@@ -257,8 +126,13 @@ export default class Toolbar extends React.Component {
 				//buttons.push(<FinsembleToolbarSeparator key={sectionPosition} />);
 			}
 
+
+			let dragImage = document.createElement("img");
+			dragImage.src = '../assets/img/drag-image.png';
+
 			var sectionComponent = (<FinsembleToolbarSection
-				arrangeable={sectionPosition === "center"}
+				arrangeable={sectionPosition === "center"} /* currently only works with pins */
+				dragImage={dragImage}
 				ref="pinSection"
 				name={sectionPosition}
 				pinnableItems={pinnableItems}
@@ -276,7 +150,7 @@ export default class Toolbar extends React.Component {
 	render() {
 		console.log("Toolbar Render ");
 		if (!this.state.sections) return;
-		return (<FinsembleToolbar onDragStart={this.onDragStart} onDragEnd={this.onDragEnd}>
+		return (<FinsembleToolbar>
 			{this.getSections()}
 		</FinsembleToolbar>);
 	}
@@ -289,4 +163,3 @@ FSBL.addEventListener("onReady", function () {
 			, document.getElementById("toolbar_parent"));
 	});
 });
-
