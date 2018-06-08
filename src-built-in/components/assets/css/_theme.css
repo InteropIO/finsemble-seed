@@ -27,6 +27,7 @@
     --secondary-background-color: var(--slate6);
     --tertiary-background-color: var(--slate5);
 
+    --scrollbar-color: var(--gray);
 
     /* Component Variables:  Use these variables to make small changes to colors and general appearance. */ 
 
@@ -49,13 +50,14 @@
     --toolbar-separator: 1px solid rgba(255, 255, 255, 0.3);
 
     /* Window Title bar */
+    --titleBar-height: 32px;
+    
     --titleBar-font-size: 14px;
     --titleBar-icon-font-size: 15px;
     --titleBar-active-font-color: var(--primary-font-color);
     --titleBar-inactive-font-color: var(--gray3); 
     --titleBar-font-weight: var(--primary-font-weight);
 
-    --titleBar-height: 32px;
 
     --titleBar-background-inactive-color: var(--secondary-background-color);
     --titleBar-background-active-color: var(--tertiary-background-color);
@@ -115,6 +117,7 @@
     --menu-font-size: 14px;
     --menu-font-weight: var(--primary-font-weight);
     --menu-font-color: var(--primary-font-color);
+    --menu-active-workspace-font-weight: var(--secondary-font-weight);
 
     --menu-background-color: var(--secondary-background-color);
     --menu-actions-background-color: var(--slate4);
@@ -127,7 +130,6 @@
     --menu-pin-background-hover-color: var(--secondary-accent-color);
     --menu-delete-background-hover-color: var(--secondary-negative-color);
 
-    --scrollbar-color: var(--gray);
 
     /* Search Menu */
     --search-input-font-color: var(--secondary-font-color);
