@@ -369,7 +369,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     margin: 0 7px;
     width: 15px;
     padding-top: 2px;
-    color: var(--tab-logo-color);
+    color: var(--titlebar-tab-icon-font-color);
 }
 
 .fsbl-tab .fsbl-tab-style {
