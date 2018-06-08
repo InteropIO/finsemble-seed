@@ -130,6 +130,9 @@
     --menu-pin-background-hover-color: var(--secondary-accent-color);
     --menu-delete-background-hover-color: var(--secondary-negative-color);
 
+    --menu-linker-selected-font-color: var(--primary-font-color);
+    --menu-linker-selected-font-size: 18px;
+
 
     /* Search Menu */
     --search-input-font-color: var(--secondary-font-color);
