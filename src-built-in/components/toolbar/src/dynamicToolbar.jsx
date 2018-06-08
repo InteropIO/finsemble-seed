@@ -1,3 +1,4 @@
+
 /*!
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
@@ -46,13 +47,11 @@ export default class Toolbar extends React.Component {
 			finWindow: fin.desktop.Window.getCurrent()
 		};
 		this.bindCorrectContext();
-		this.isDragging = false;
 	}
 
 	bindCorrectContext() {
 		this.onSectionsUpdate = this.onSectionsUpdate.bind(this);
-		this.onDragEnd = this.onDragEnd.bind(this);
-		this.onDragStart = this.onDragStart.bind(this);
+		this.onPinDrag = this.onPinDrag.bind(this);
 	}
 
 	// called when sections change in the toolbar store
@@ -82,29 +81,9 @@ export default class Toolbar extends React.Component {
 		ToolbarStore.Store.removeListener({ field: "sections" }, this.onSectionsUpdate);
 	}
 
-	onDragStart(changeEvent) {
-		let pins = this.refs.pinSection.state.pins;
-		if (pins[changeEvent.source.index].type == "componentLauncher" & !this.isDragging) {
-			FSBL.Clients.WindowClient.startTilingOrTabbing({ waitForIdentifier: true });
-		}
-	}
+	onPinDrag(changeEvent) {
 
-	onDragEnd(changeEvent) {
 		let pins = this.refs.pinSection.state.pins;
-		let pin = pins[changeEvent.source.index]
-		if (changeEvent.destination == null && pin.type == "componentLauncher") {
-			FSBL.Clients.WindowClient.stopTilingOrTabbing();
-			FSBL.System.getMousePosition((err, pos) => {
-				FSBL.Clients.LauncherClient.spawn(pin.component, { options: { autoShow: false } }, (err, response) => {
-					FSBL.Clients.WindowClient.sendIdentifierForTilingOrTabbing({ windowIdentifier: response.windowIdentifier });
-					this.isDragging = false;
-				});
-			});
-		} else if (pin.type == "componentLauncher") {
-			this.isDragging = false;
-			FSBL.Clients.WindowClient.cancelTilingOrTabbing();
-		}
-
 		let newPins = JSON.parse(JSON.stringify(pins));
 		let { destination, source } = changeEvent;
 		//user dropped without reordering.
@@ -191,7 +170,7 @@ export default class Toolbar extends React.Component {
 	render() {
 		console.log("Toolbar Render ");
 		if (!this.state.sections) return;
-		return (<FinsembleToolbar onDragStart={this.onDragStart} onDragEnd={this.onDragEnd}>
+		return (<FinsembleToolbar onDragEnd={this.onPinDrag}>
 			{this.getSections()}
 		</FinsembleToolbar>);
 	}
@@ -204,4 +183,3 @@ FSBL.addEventListener("onReady", function () {
 			, document.getElementById("toolbar_parent"));
 	});
 });
-
