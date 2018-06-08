@@ -58,17 +58,18 @@
     --titleBar-inactive-font-color: var(--gray3);
     --titleBar-font-weight: var(--primary-font-weight);
 
-
     --titleBar-background-inactive-color: var(--secondary-background-color);
     --titleBar-background-active-color: var(--tertiary-background-color);
 
     --titlebar-tab-icon-font-color: var(--tertiary-accent-color);
-    --titlebar-tab-windowFocused-active-background-color: var(--slate3); /* Specifies the background color of the active tab in the active window. */
-    --titlebar-tab-windowFocused-active-border-color: var(--slate2);
+    --titlebar-tab-active-font-color: var(--primary-font-color);
     --titlebar-tab-active-background-color: var(--slate4); /* Specifies the background color of the active tab in an inactive window. */
-    --titlebar-tab-active-border-color: var(--slate3);
+    --titlebar-tab-inactive-font-color: var(--gray);
     --titlebar-tab-inactive-background-color: var(--primary-background-color); /* Inactive tabs are the same color for active and inactive windows. */
-    --titlebar-tab-inactive-border-color: var(--slate3);
+    --titlebar-tab-ghost-background-color: var(--secondary-accent-color);
+    --titlebar-tab-ghost-border-color: var(--primary-accent-color);
+    --titlebar-tab-separator: 1px solid var(--gray7);
+    --titlebar-tab-section-separator: 1px solid var(--gray5);
 
     --titleBar-button-hover-active-color: var(--primary-accent-color);
     --titleBar-button-hover-inactive-color: var(--secondary-accent-color);
@@ -215,12 +216,6 @@
     --notification-close-icon-hover-color: var(--secondary-negative-color);
     --notification-description-font-size: 13px;
 
-    --tab-section-separator: 1px solid #999;
-    --tab-separator: 1px solid white;
-    --tab-inactive-background-color: var(--toolbar-background-color);
-    --tab-active-background-color: #495a69;
-    --tab-active-color: #ffffff;
-    --tab-inactive-color: #bbbbbb;
-    --tab-logo-color: var(--primary-accent-color);
+
 }
 

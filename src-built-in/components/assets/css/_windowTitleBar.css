@@ -56,9 +56,9 @@ html.desktop-active .fsbl-header {
 }
 
 .fsbl-header-title[data-hover=true] {
-    background-color: var(--tab-active-background-color);
-    color: var(--tab-active-color);
-    border-right: var(--tab-section-separator);
+    background-color: var(--titlebar-tab-active-background-color);
+    color: var(--titlebar-tab-active-font-color);
+    border-right: var(--titlebar-tab-section-separator);
 }
 
 .fsbl-drag-region {
@@ -78,7 +78,7 @@ html.desktop-active .fsbl-header {
     align-items: center;
     justify-content: flex-start;
     display: flex;
-    border-right: var(--tab-section-separator);
+    border-right: var(--titlebar-tab-section-separator);
 }
 
 .fsbl-header-center {
@@ -103,7 +103,7 @@ html.desktop-active .fsbl-header {
 }
 
 .fsbl-tabs-multiple .fsbl-header-center {
-    border-right: var(--tab-section-separator);
+    border-right: var(--titlebar-tab-section-separator);
 }
 
 html.desktop-active .fsbl-header-right {
@@ -117,8 +117,6 @@ html.desktop-active .fsbl-header-right {
     display: flex;
     justify-content: flex-end;
     z-index: 5;
-    /* background-color: ; */
-    background: var(--window-header-background-color);
 }
 
 
@@ -273,7 +271,7 @@ html.desktop-active .linker-group {
 
 .fsbl-linker[hover=true] {
     background: var(--titleBar-button-hover-inactive-color);
-    color: var(--secondary-font-color);
+    color: var(--titlebar-active-font-color);
 }
 
 html.desktop-active .fsbl-linker[hover=true] {
@@ -300,9 +298,9 @@ html.desktop-active .fsbl-linker[hover=true] {
     display: inline-flex;
     align-content: center;
     align-items: center;
-    background-color: var(--tab-inactive-background-color);
-    color: var(--tab-inactive-color);
-    border-right: var(--tab-separator);
+    background-color: var(--titlebar-tab-inactive-background-color);
+    color: var(--titlebar-tab-inactive-font-color);
+    border-right: var(--titlebar-tab-separator);
     user-select: none;
     box-sizing: border-box;
     justify-content: flex-start;
@@ -387,9 +385,9 @@ html.desktop-active .fsbl-linker[hover=true] {
     visibility: hidden;
 }
 .ghost-tab {
-    background-color: var(--secondary-accent-color);
-    border-right: 1px solid var(--primary-accent-color);
-    border-top:1px solid var(--primary-accent-color);
+    background-color: var(--titlebar-tab-ghost-background-color);
+    border-right: 1px solid var(--titlebar-tab-ghost-border-colorcolor);
+    border-top:1px solid var(--titlebar-tab-ghost-border-color);
     width: 175px;
     opacity: 0.7;
     position: relative;
