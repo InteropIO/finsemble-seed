@@ -47,6 +47,36 @@ export default class Toolbar extends React.Component {
 		};
 		this.bindCorrectContext();
 		this.isDragging = false;
+		this.getDragMask();
+		this.getGroupMask();
+		this.configCache = {};
+		this.groupMaskShowing = false;
+	}
+
+	getDragMask() {
+		FSBL.Clients.LauncherClient.spawn("Docking Move Mask", { options: { autoShow: false}}, (err, response) => {
+			FSBL.FinsembleWindow.wrap({ name: response.windowIdentifier.windowName }, (err, wrappedWindow) => {
+				this.dragWindow = wrappedWindow;
+			});
+		});
+	}
+
+	getGroupMask() {
+		FSBL.FinsembleWindow.wrap({ name: "groupMask" }, (err, wrappedWindow) => {
+			if (!wrappedWindow) { //maybe toolbar spawns before groupMask.
+				setTimeout(() => {
+					this.getGroupMask();
+				}, 100);
+			} else {
+				this.groupMask = wrappedWindow;
+				this.groupMask.addEventListener("hidden", () => {
+					this.groupMaskShowing = false;
+				});
+				this.groupMask.addEventListener("shown", () => {
+					this.groupMaskShowing = true;
+				});
+			}
+		});
 	}
 
 	bindCorrectContext() {
@@ -82,26 +112,81 @@ export default class Toolbar extends React.Component {
 		ToolbarStore.Store.removeListener({ field: "sections" }, this.onSectionsUpdate);
 	}
 
+	startMouseTracking(pin) {
+		let configCache = this.configCache[pin.component];
+		if (this.groupMaskShowing) {
+			this.dragWindowVisible = false;
+			this.dragWindow.hide();
+			return setTimeout(() => { this.startMouseTracking(pin); }, 1);
+		}
+		if (this.mouseTracking) {
+			FSBL.System.getMousePosition((err, pos) => {
+				this.dragWindow.setBounds({
+					top: pos.y,
+					left: pos.x,
+					height: (configCache && configCache.height)? configCache.height: 600,
+					width: (configCache && configCache.width)? configCache.width: 800
+				}, () => {
+					if (!this.dragWindowVisible) {
+						this.dragWindowVisible = true;
+						this.dragWindow.show(() => {
+							console.log('showing window');
+							setTimeout(() => { this.startMouseTracking(pin); }, 1);
+						});
+					} else {
+						setTimeout(() => { this.startMouseTracking(pin); }, 1);
+					}
+					this.dragWindowLastY = pos.y;
+					this.dragWindowLastX = pos.x;
+				});
+			});
+
+		} else {
+			this.dragWindow.setBounds({
+				top: this.dragWindowLastY,
+				left: this.dragWindowLastX,
+				height: (configCache && configCache.height)? configCache.height: 600,
+				width: (configCache && configCache.width)? configCache.width: 800
+			});
+		}
+	}
+
 	onDragStart(changeEvent) {
 		let pins = this.refs.pinSection.state.pins;
-		if (pins[changeEvent.source.index].type == "componentLauncher" & !this.isDragging) {
+		let pin = pins[changeEvent.source.index];
+		if (pin.type == "componentLauncher" & !this.isDragging) {
+			if (!this.configCache[pin.component]) {
+				FSBL.Clients.ConfigClient.getValue({ field: 'finsemble.components.' + pin.component + ".window"}, (err, config) => {
+					this.configCache[pin.component] = config;
+				});
+			}
 			FSBL.Clients.WindowClient.startTilingOrTabbing({ waitForIdentifier: true });
+			this.isDragging = true;
+			this.mouseTracking = true;
+			this.startMouseTracking(pin);
 		}
 	}
 
 	onDragEnd(changeEvent) {
+		this.mouseTracking = false;
 		let pins = this.refs.pinSection.state.pins;
 		let pin = pins[changeEvent.source.index]
 		if (changeEvent.destination == null && pin.type == "componentLauncher") {
 			FSBL.Clients.WindowClient.stopTilingOrTabbing();
 			FSBL.System.getMousePosition((err, pos) => {
-				FSBL.Clients.LauncherClient.spawn(pin.component, { options: { autoShow: false } }, (err, response) => {
+				FSBL.Clients.LauncherClient.spawn(pin.component, { top: pos.y, left: pos.x }, (err, response) => {
 					FSBL.Clients.WindowClient.sendIdentifierForTilingOrTabbing({ windowIdentifier: response.windowIdentifier });
 					this.isDragging = false;
+					console.log('hiding window');
+					this.dragWindowVisible = false;
+					this.dragWindow.hide();
 				});
 			});
 		} else if (pin.type == "componentLauncher") {
 			this.isDragging = false;
+			console.log('hiding window');
+			this.dragWindowVisible = false;
+			this.dragWindow.hide();
 			FSBL.Clients.WindowClient.cancelTilingOrTabbing();
 		}
 
