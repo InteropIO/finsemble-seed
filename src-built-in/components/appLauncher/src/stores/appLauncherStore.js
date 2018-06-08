@@ -303,7 +303,7 @@ var Actions = {
 	},
 	//Spawn a component.
 	launchComponent(config, params, cb) {
-		Actions.hideWindow();
+		//Actions.hideWindow();
 		let defaultParams = { addToWorkspace: true, monitor: "mine" };
 		params = Object.assign(defaultParams, params);
 		if (config.component.windowGroup) params.groupName = config.component.windowGroup;

@@ -84,7 +84,11 @@ export default class appLauncherContainer extends React.Component {
 		appLauncherStore.removeListener({ field: "pins" }, this.onPinsUpdate);
 	}
 	launchComponent(component, params, cb) {
-		FSBL.Clients.WindowClient.finWindow.hide();
+		if (component.dontHideSelf) {
+			delete component.dontHideSelf;
+		} else {
+			FSBL.Clients.WindowClient.finWindow.hide();
+		}
 		// If we are launching a group
 		if (component.group) {
 			for (let i of Object.keys(component.list)) {
