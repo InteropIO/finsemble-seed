@@ -1,6 +1,10 @@
 import React from "react";
 import { Store, Actions } from "../stores/ProcessMonitorStore";
-//Not used right now. Currently using alerts. This is for the future.
+/**
+ * This is the "table header" that shows which columns are visible.
+ * Since we aren't using an HTML table, this component exists.
+ * It handles column display and sorting.
+ **/
 export default class ListHeader extends React.Component {
     constructor(props) {
         super(props);
@@ -8,23 +12,27 @@ export default class ListHeader extends React.Component {
             sort: Store.getValue({ field: "sort" })
         }
         this.onSortChanged = this.onSortChanged.bind(this);
-
     }
+    //When the sort value changes in the store, change it locally, and re-render the direction arrow.
     onSortChanged(err, response) {
         let { value } = response;
         this.setState({
             sort: value
         })
     }
+
     componentWillMount() {
         Store.addListener({ field: "sort" }, this.onSortChanged);
     }
+
     componentWillUnmount() {
         Store.removeListener({ field: "sort" }, this.onSortChanged);
     }
+
     render() {
         //Just a list of the things beneath it. name, CPU, mem, etc. drive from store.
         return <div className="list-header">
+            {/* The name is separate because it isn't a statistic, per se. So I split it out. */}
             <div className="list-header-statistic-label list-header-name" onClick={() => {
                 Actions.setSort("name")
             }}>

@@ -7,7 +7,7 @@ import ChildWindows from "./components/ChildWindows";
 import "../processMonitor.css";
 import { EMPTY_TOTALS, SIMPLE_MODE_STATISTICS, ADVANCED_MODE_STATISTICS } from "./constants";
 import { statReducer, round, bytesToSize } from "./helpers"
-//Not used right now. Currently using alerts. This is for the future.
+
 export default class ProcessMonitor extends React.Component {
 	constructor(props) {
 		super(props);
@@ -20,21 +20,30 @@ export default class ProcessMonitor extends React.Component {
 	bindCorrectContext() {
 		this.onProcessListChanged = this.onProcessListChanged.bind(this);
 		this.onViewModeChanged = this.onViewModeChanged.bind(this);
-
 	}
+	/**
+	 * Handler for when we go from simple to advanced mode, or the opposite.
+	 * @param {} err
+	 * @param {*} response
+	 */
 	onViewModeChanged(err, response) {
 		let { value } = response;
 		this.setState({
 			viewMode: value
 		})
 	}
+	/**
+	 * Invoked at minimum, once per second. This listener handles updates that we recieve from the system.
+	 * @param {*} err
+	 * @param {*} response
+	 */
 	onProcessListChanged(err, response) {
-		// console.log("onProcessListChanged");
 		let { value } = response;
 		this.setState({
 			processList: value
 		})
 	}
+
 	componentDidMount() {
 		Store.addListener({ field: "processList" }, this.onProcessListChanged);
 		Store.addListener({ field: "viewMode" }, this.onViewModeChanged);
@@ -44,13 +53,13 @@ export default class ProcessMonitor extends React.Component {
 		Store.removeListener({ field: "processList" }, this.onProcessListChanged);
 		Store.removeListener({ field: "viewMode" }, this.onViewModeChanged);
 	}
+
 	render() {
 		//simple mode: CPU, memory
 		//Advanced mode: add more.
 		//Use helpers.bytesToSize.
 		//Array of process components.
-		// console.log("Rendering");
-
+		//statReducer is an array.reduce function that will sum all of the CPU/memory usage across the app.
 		let totals = this.state.processList.length ? this.state.processList.reduce(statReducer) : EMPTY_TOTALS;
 		return (
 			<div>
@@ -58,11 +67,12 @@ export default class ProcessMonitor extends React.Component {
 					<ListHeader fields={this.state.viewMode === "simple" ? SIMPLE_MODE_STATISTICS : ADVANCED_MODE_STATISTICS
 					} />
 					<div className="process-list">
-						{/* Remove the hidden processes. then render each one in turn */}
+						{/* Filter will remove the hidden processes. Afterwards, map will render the remanining processes in turn. */}
 						{this.state.processList
 							.filter(proc => proc.visible)
 							.map((proc, i) => {
 								return (<div className="process">
+									{/* Process statistics is the meat of this component. It's the statistics and the child windows. */}
 									<ProcessStatistics
 										mode={this.state.viewMode}
 										fields={this.state.viewMode === "simple" ? SIMPLE_MODE_STATISTICS : ADVANCED_MODE_STATISTICS

@@ -10,10 +10,10 @@ export default class ProcessStatistics extends React.Component {
 
     render() {
         //simple mode: CPU, memory
-        //Advanced mode: add more.
-        //Use helpers.bytesToSize.
+        //Advanced mode: add Peak Memory.
         return <div className="process-row">
             <div className="process-name">
+                {/* In simple mode, we print out "Group 1", "Group 2", etc. The belief is that end users don't care about our wonderful process names ("e.g., Default-Agent-62-4421). In advanced mode, you get the actual name of the process.  */}
                 {this.props.mode === "simple" ? `Group ${this.props.groupModifier + 1}` : this.props.stats.name}
             </div>
             <div className="process-statistics">
@@ -32,6 +32,11 @@ export default class ProcessStatistics extends React.Component {
     }
 }
 
+/**
+ * Given a number, will return modifier classes that change the background. High usage === red. Moderate === orange.
+ * @param {number} number
+ * @param {string} statType
+ */
 function getClassesForStat(number, statType) {
     let classes = "statistic",
         high_comparison = HIGH_MEMORY_USAGE * TO_MB,
@@ -48,6 +53,13 @@ function getClassesForStat(number, statType) {
     }
     return classes;
 }
+
+/**
+ * Outputs something nice,. 102423465243 outputs whatever that number is in KB/MB/GB.
+ * 0.035123 will output 0.35% for CPU.
+ * @param {number} number
+ * @param {string} statType
+ */
 function prettyPrint(number, statType) {
     if (statType === "CPU") {
         //make it a percent.
