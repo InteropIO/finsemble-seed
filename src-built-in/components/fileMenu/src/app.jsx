@@ -3,9 +3,9 @@
 * All rights reserved.
 */
 import React from "react";
+import ReactDOM from "react-dom";
 import { Actions as FileMenuActions } from "./stores/fileMenuStore";
 import { FinsembleMenu, FinsembleMenuItem, FinsembleMenuSection, FinsembleMenuSectionLabel } from "@chartiq/finsemble-react-controls";
-import "../fileMenu.css";
 import "../../assets/css/finfont.css";
 import "../../assets/css/finsemble.css";
 
