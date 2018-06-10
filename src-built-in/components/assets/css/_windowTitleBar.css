@@ -9,16 +9,14 @@
 .cq-drag-area:active {
     cursor: -webkit-grabbing;
 }
-.fsbl-header-floater {
+.fsbl-drag-handle {
     position: absolute;
     z-index: 2147483641;
-    height: 32px;
-    width:75%;
-    top:0px!important;
-    margin-top:-32px;
-    left:70px;
+    top: 0px!important;
+    background-color: red;
    -webkit-app-region: drag;
-  }
+}
+
 .cq-no-drag {
     -webkit-app-region: no-drag !important;
     position: absolute;
