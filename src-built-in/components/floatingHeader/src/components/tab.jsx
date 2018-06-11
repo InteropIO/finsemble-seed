@@ -18,7 +18,6 @@ export default class Tab extends React.Component {
 		};
 	}
 	onDragOver(e) {
-		console.log("on drag over in tab")
 		let boundingBox = this.refs.Me.getBoundingClientRect();
 		if (this.crossedMidline(e, boundingBox)) {
 			this.props.onTabDraggedOver(e, this.props.windowIdentifier);
@@ -31,7 +30,6 @@ export default class Tab extends React.Component {
 		this.setState({ hoverState: newHoverState });
 	}
 	componentWillUnmount() {
-		console.log("tab will unmount", this)
 	}
 	render() {
 		let titleWidth = this.props.tabWidth - ICON_AREA - CLOSE_BUTTON_MARGIN;

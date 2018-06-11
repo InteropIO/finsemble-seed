@@ -49,7 +49,6 @@ var Actions = {
 		return windowIdentifier;
 	},
 	_setTabs(tabs) {
-		console.log("set tabs", tabs)
 		FSBL.Clients.Logger.system.debug("Set tabs", tabs);
 		return tabbingRegionStore.setValue({ field: "tabs", value: tabs || [windowIdentifier] })
 	},
@@ -133,7 +132,6 @@ var Actions = {
 	},
 	parentWrapper: null,
 	onTabListChanged: function (err, response) {
-		console.log("tablist changed", response)
 		FSBL.Clients.Logger.system.debug("OnTabListChanged");
 		if (!response.data) return;
 		return Actions._setTabs(response.data[constants.CHILD_WINDOW_FIELD]);

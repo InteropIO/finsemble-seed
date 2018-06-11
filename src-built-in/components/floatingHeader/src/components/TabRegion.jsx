@@ -7,6 +7,8 @@ import { FinsembleDnDContext, FinsembleDroppable } from '@chartiq/finsemble-reac
 import HoverDetector from "./HoverDetector.jsx";
 
 import { Store, Actions } from "../stores/tabbingStore";
+import { Store as HeaderStore, Actions as HeaderActions } from "../stores/headerStore";
+
 import { debug } from "util";
 const PLACEHOLDER_TAB = {
     windowName: "",
@@ -21,6 +23,7 @@ export default class TabRegion extends React.Component {
         super(props);
         let initialState = Store.getValues(["activeTab", "tabs"]);
         this.state = {
+            loaded: false,
             translateX: 0,
             tabs: initialState.tabs,
             activeTab: Actions.getWindowIdentifier(),
@@ -56,9 +59,11 @@ export default class TabRegion extends React.Component {
         this.isTabRegionOverflowing = this.isTabRegionOverflowing.bind(this);
         this.onWindowResize = this.onWindowResize.bind(this);
         this.getTabWidth = this.getTabWidth.bind(this);
+        this.onTabRegionShow = this.onTabRegionShow.bind(this);
 
     }
     getTabWidth(params = {}) {
+
         let { boundingBox, tabList } = params;
         if (typeof (tabList) === "undefined") {
             tabList = this.state.tabs;
@@ -71,7 +76,6 @@ export default class TabRegion extends React.Component {
         }
         let containerWidth = boundingBox.right - boundingBox.left;
         let newTabWidth = (containerWidth / tabList.length);
-
         return newTabWidth < MINIMUM_TAB_SIZE ? MINIMUM_TAB_SIZE : newTabWidth;
     }
     /**
@@ -98,7 +102,6 @@ export default class TabRegion extends React.Component {
 	 * @memberof windowTitleBar
 	 */
     startDrag(e, windowIdentifier) {
-        console.log("this.isMounted", this.isMounted)
         this.setState({
             iAmDragging: true
         });
@@ -381,24 +384,32 @@ export default class TabRegion extends React.Component {
     }
 
     componentWillMount() {
-        console.log("tab region mount")
-        // Store.addListener({ field: "activeTab" }, this.onActiveTabChanged);
-        Store.addListener({ field: "tabs" }, this.onTabsChanged);
-    }
+        HeaderStore.addListener("tabRegionShow", this.onTabRegionShow)
 
-    componentDidMount() {
-        console.log("tab region did mount")
-        FSBL.Clients.WindowClient.finsembleWindow.addListener('bounds-set', this.onWindowResize);
+
+    }
+    onTabRegionShow() {
+
         let boundingBox = this.refs.Me.getBoundingClientRect();
         this.setState({
+            loaded: true,
+            boundingBox: boundingBox,
+            tabWidth: this.getTabWidth({ boundingBox })
+        })
+    }
+    componentDidMount() {
+        FSBL.Clients.WindowClient.finsembleWindow.addListener('bounds-set', this.onWindowResize);
+        let boundingBox = this.refs.Me.getBoundingClientRect();
+        Store.addListener({ field: "tabs" }, this.onTabsChanged);
+        this.setState({
+            loaded: true,
             boundingBox: boundingBox,
             tabWidth: this.getTabWidth({ boundingBox })
         })
     }
 
     componentWillUnmount() {
-        // Store.removeListener({ field: "activeTab" }, this.onActiveTabChanged);
-        console.log("unmount------------------")
+        HeaderStore.removeListener("tabRegionShow", this.onTabRegionShow)
         Store.removeListener({ field: "tabs" }, this.onTabsChanged);
         FSBL.Clients.WindowClient.finsembleWindow.removeListener('bounds-set', this.onWindowResize);
 
@@ -436,7 +447,6 @@ export default class TabRegion extends React.Component {
             draggable="true"
             onDragStart={(e) => {
                 FSBL.Clients.Logger.system.debug("Tab drag start - TITLE");
-                console.log(" Actions.getWindowIdentifier()", Actions.getWindowIdentifier())
                 this.startDrag(e, Actions.getWindowIdentifier());
             }}
             onDragEnd={this.stopDrag}
@@ -448,13 +458,13 @@ export default class TabRegion extends React.Component {
         </div>);
     }
     render() {
-        console.log("tabregion render")
+        // if (!this.state.loaded) return null;
         let { translateX } = this.state;
         //If we have just 1 tab, we render the title. Unless someone is dragging a tab around - in that case, we will render the tab view, even though we only have 1.
-        let componentToRender = "title";
+        var componentToRender = "title";
         if (this.state.tabs.length === 1) {
             if (this.props.listenForDragOver && !this.state.iAmDragging) {
-                componentToRender = "tabs";
+                componentToRender = "title";
             }
         }
         if (this.state.tabs.length > 1) {
@@ -473,7 +483,6 @@ export default class TabRegion extends React.Component {
         if (this.isTabRegionOverflowing()) {
             moveAreaClasses += " gradient"
         }
-
         return (
             <div
                 ref="Me"
