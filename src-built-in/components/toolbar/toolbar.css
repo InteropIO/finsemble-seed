@@ -123,7 +123,7 @@ img {
 
 .searchInput::after {
     position: absolute;
-    font-family: finfont;
+    font-family: font-finance;
     right: 10px;
     content: "\2c";
 }
