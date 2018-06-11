@@ -48,26 +48,7 @@ export default class Toolbar extends React.Component {
 			dragScrim: null,
 			groupMask: null
 		};
-		this.getGroupMask();
-		this.getDragScrim();
 		this.bindCorrectContext();
-	}
-
-	getGroupMask() {
-		FSBL.FinsembleWindow.wrap({ name: "groupMask" }, (err, wrappedWindow) => {
-			if (!wrappedWindow) {
-				return setTimeout(() => { this.getGroupMask() }, 100); //wait for group mask to be loaded
-			}
-			this.setState({ groupMask: wrappedWindow });
-		});
-	}
-
-	getDragScrim() {
-		FSBL.Clients.LauncherClient.spawn("Docking Move Mask", {options: {autoShow: false}}, (err, response) => {
-			FSBL.FinsembleWindow.wrap(response.windowIdentifier, (err, wrappedWindow) => {
-				this.setState({ dragScrim: wrappedWindow });
-			});
-		});
 	}
 
 	bindCorrectContext() {
@@ -153,9 +134,6 @@ export default class Toolbar extends React.Component {
 
 			var sectionComponent = (<FinsembleToolbarSection
 				arrangeable={sectionPosition === "center"} /* currently only works with pins */
-				dragImage={dragImage}
-				dragScrim={this.state.dragScrim}
-				groupMask={this.state.groupMask}
 				ref="pinSection"
 				name={sectionPosition}
 				pinnableItems={pinnableItems}
