@@ -34,7 +34,6 @@ export default class TabbingSection extends React.Component {
 
 			FSBL.Clients.ConfigClient.getValue({ field: "finsemble" }, (err, config) => {
 				let windowManager = config['Window Manager'];
-				console.log("showTabs", config['Window Manager'].showTabs)
 				self.setState({
 					loaded: true,
 					windowTitle: HeaderStore.getCompanionWindow().windowName,

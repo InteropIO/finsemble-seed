@@ -49,6 +49,7 @@ var Actions = {
 			wrappedWindow.addListener("shown", Actions.onCompanionShown);
 			wrappedWindow.getBounds({}, function (err, bounds) {
 				HeaderStore.setCompanionBounds(bounds);
+				console.log("bounds", bounds)
 				FSBL.Clients.WindowClient.finsembleWindow.setBounds({ left: bounds.left + (bounds.width / 2) - 86, width: 86, height: 10, top: bounds.top }, {}, function () {
 					cb();
 				})
@@ -56,17 +57,30 @@ var Actions = {
 		});
 	},
 	onBoundsChanged(bounds) {
+		console.log("set bounds", HeaderStore.getState())
 		HeaderStore.setCompanionBounds(bounds);
 		if (HeaderStore.getState() === "small") {
 			var mainWindow = fin.desktop.Window.getCurrent();
 			//	mainWindow.setBounds(bounds.left + (bounds.width / 2) - 43, bounds.top, 86, 10);
-			FSBL.Clients.WindowClient.finsembleWindow.setBounds({ left: bounds.left + (bounds.width / 2) - 43, width: 86, height: 10, top: bounds.top }, {}, function (err) {
+			FSBL.Clients.WindowClient.finsembleWindow.setBounds({ left: bounds.left + (bounds.width / 2) - 86, width: 86, height: 10, top: bounds.top }, {}, function (err) {
 				console.log("set bounds", err)
 			})
 		} else {
 			FSBL.Clients.WindowClient.finsembleWindow.setBounds({ left: bounds.left, width: bounds.width, height: 38, top: bounds.top }, {}, function () {
 			})
 		}
+	},
+	isMouseInHeader(cb) {
+		setTimeout(function () {
+			let finWindow = fin.desktop.Window.getCurrent();
+			fin.desktop.System.getMousePosition(function (mousePosition) {
+				finWindow.getBounds(function (bounds) {
+					let inBounds = FSBL.Clients.WindowClient.isPointInBox({ x: mousePosition.left, y: mousePosition.top }, bounds)
+					return cb(null, inBounds);
+				})
+			});
+		}, 100)
+
 	},
 	onCompanionClosed() {
 		FSBL.Clients.WindowClient.finsembleWindow.close({});
@@ -77,45 +91,58 @@ var Actions = {
 	onCompanionShown() {
 		FSBL.Clients.WindowClient.finsembleWindow.show();
 	},
-	updateWindowState(cb) {//expand/contract
+	expandWindow(cb) {
 		let finWindow = fin.desktop.Window.getCurrent();
 		let currentBound = HeaderStore.getCompanionBounds();
-		if (HeaderStore.getState() === "small") {
-			FSBL.Clients.WindowClient.finsembleWindow.updateOptions({
-				"cornerRounding": {
-					"height": 0,
-					"width": 0
-				}
-			});
-			finWindow.animate({ position: { duration: 0, left: currentBound.left }, size: { duration: 0, width: currentBound.width, height: 1 } },
-				function (err) { console.error(err) },
-				function (err) {
-					finWindow.animate({ size: { duration: 350, height: 38 } });
+		FSBL.Clients.WindowClient.finsembleWindow.updateOptions({
+			"cornerRounding": {
+				"height": 0,
+				"width": 0
+			}
+		});
+		finWindow.animate({ position: { duration: 0, left: currentBound.left }, size: { duration: 0, width: currentBound.width, height: 1 } },
+			function (err) { console.error(err) },
+			function (err) {
+				console.log("emit event");
+
+				finWindow.animate({ size: { duration: 350, height: 38 } }, function () { }, function () {
+					HeaderStore.emit("tabRegionShow")
+				});
+				HeaderStore.toggleState()
+				cb()
+				console.log("err", err)
+			})
+	},
+	contractWindow(cb) {
+		let finWindow = fin.desktop.Window.getCurrent();
+		let currentBound = HeaderStore.getCompanionBounds();
+		FSBL.Clients.WindowClient.finsembleWindow.updateOptions({
+			"cornerRounding": {
+				"height": 0,
+				"width": 0
+			}
+		});
+		finWindow.animate({ size: { duration: 350, height: 10 } },
+			function (err) { console.error(err) },
+			function () {
+				finWindow.animate({ position: { duration: 0, left: currentBound.left + (currentBound.width / 2) - 43, top: currentBound.top }, size: { duration: 0, width: 86 } }, function () { }, function () {
 					HeaderStore.toggleState()
 					cb()
-					console.log("err", err)
-				})
-		} else {
-			FSBL.Clients.WindowClient.finsembleWindow.updateOptions({
-				"cornerRounding": {
-					"height": 0,
-					"width": 0
-				}
-			});
-			finWindow.animate({ size: { duration: 350, height: 10 } },
-				function (err) { console.error(err) },
-				function () {
-					finWindow.animate({ position: { duration: 0, left: currentBound.left + (currentBound.width / 2) - 43, top: currentBound.top }, size: { duration: 0, width: 86 } }, function () { }, function () {
-						HeaderStore.toggleState()
-						cb()
-					});
-
 				});
+
+			});
+	},
+
+	updateWindowState(cb) {//expand/contract
+
+		if (HeaderStore.getState() === "small") {
+
+		} else {
+
+
 		}
-
 	}
-};
-
+}
 HeaderStore.initialize();
 
 export { HeaderStore as Store };

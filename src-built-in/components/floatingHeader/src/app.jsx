@@ -15,6 +15,8 @@ import * as storeExports from "./stores/tabbingStore";
 
 let dragFromActionBar = false;
 let isDragging = false;
+let lastDragEventLeave = false;
+let hover = false;
 /**
  * This is our application launcher. It is opened from a button in our sample toolbar, and it handles the launching of finsemble components.
  *
@@ -31,29 +33,54 @@ class FloatingHeader extends React.Component {
 			size: "small",
 			tabs: [],
 			openedByClick: false,
-			dragFromActionBar: false
+			dragFromActionBar: false,
+			expandedComplete: false,
+			hasTabs: storeExports.Actions.getTabs().length
 		};
 		this.onActionClick = this.onActionClick.bind(this);
 		this.onDragEnd = this.onDragEnd.bind(this);
 		this.onDragOver = this.onDragOver.bind(this);
 		this.onDragStart = this.onDragStart.bind(this);
+		this.onTabsUpdated = this.onTabsUpdated.bind(this);
+		this.contractWindow = this.contractWindow.bind(this);
+		this.expandWindow = this.expandWindow.bind(this);
+		this.onWindowUpdateExpandComplete = this.onWindowUpdateExpandComplete.bind(this);
 
 	}
 
 	componentWillMount() {
-
+		storeExports.Store.addListener({ field: "tabs" }, this.onTabsUpdated);
+		HeaderStore.addListener("tabRegionShow", this.onWindowUpdateExpandComplete)
 	}
 	componentWillunMount() {
+		storeExports.Store.removeListener({ field: "tabs" }, this.onTabsUpdated);
+		HeaderStore.removeListener("tabRegionShow", this.onWindowUpdateExpandComplete)
+	}
+	onWindowUpdateExpandComplete(data) {
+		console.log("onWindowUpdateExpandComplete", lastDragEventLeave, hover)
+		if (lastDragEventLeave && hover) {
 
+			console.log("set hover false1");
+
+			HeaderActions.isMouseInHeader(function (err, isInHeader) {
+				if (!isInHeader) {
+					hover = false;
+					lastDragEventLeave = false;
+					self.contractWindow();
+				}
+			})
+		}
+		this.setState({ expandedComplete: true })
 	}
 	onDragStart(e) {
 		isDragging = true;
 		console.log("drag start", storeExports)
+		dragFromActionBar = true;
 		e.dataTransfer.setData("text/json", JSON.stringify(storeExports.Actions.getWindowIdentifier()));
 		FSBL.Clients.WindowClient.startTilingOrTabbing({
 			windowIdentifier: storeExports.Actions.getWindowIdentifier()
 		});
-		dragFromActionBar = true;
+
 		//this.setState({ dragFromActionBar: true })
 	}
 	onDragEnd(e) {
@@ -75,10 +102,20 @@ class FloatingHeader extends React.Component {
 		}
 	}
 	onComponentDidMount() {
-		//document.getElementById("actionbutton").addEventListener("click", this.onActionClick, true)
+		console.log("onComponentDidMount")
+
 	}
 	onComponentDidUpdate() {
-		//document.getElementById("actionbutton").addEventListener("click", this.onActionClick, true)
+	}
+	onTabsUpdated() {
+
+		let tabs = storeExports.Actions.getTabs();
+		console.log("tabs updated", storeExports.Actions.getTabs())
+		if (tabs && tabs.length) {
+
+			return this.setState({ hasTabs: true })
+		}
+		this.setState({ hasTabs: false })
 	}
 	onMouseUp(e) {
 		console.log("onMouseUp")
@@ -87,32 +124,43 @@ class FloatingHeader extends React.Component {
 		//console.log("onMouseMove")
 	}
 	onDragOver(e) {
-		console.log("dragover")
+		console.log("dragover", this.state.size)
+		hover = true;
 		if (this.state.size === "small") {
-			this.onActionClick(false)
+			this.expandWindow()
+
 		}
 	}
+	onDrop(e) {
+		console.log("onDrop")
+	}
+	contractWindow() {
+		console.log("contractWindow");
+		var self = this;
+		HeaderActions.contractWindow(function () {
+			self.setState({ size: "small" })
+		})
+	}
+	expandWindow() {
+		console.log("expandWindow")
+		this.setState({ expandedComplete: false, size: "large" })
+		HeaderActions.expandWindow(function () {
+		})
+	}
 	onActionClick(event, openedByClick) {
-		console.log("onActionClick", event, openedByClick, isDragging);
+		console.log("hover", hover)
 		if (isDragging) return;
 		if (event) {
 			event.stopPropagation();
 			event.nativeEvent.stopImmediatePropagation();
-			console.log("stopPropagation", event.isPropagationStopped())
 		}
 
 		var self = this;
-		var wasSmall = this.state.size === "small" ? true : false;
-		if (wasSmall) {
-			self.setState({ size: this.state.size === "small" ? "large" : "small", openedByClick: openedByClick })
-		}
-		HeaderActions.updateWindowState(function () {
-			if (!wasSmall) self.setState({ size: self.state.size === "small" ? "large" : "small", openedByClick: openedByClick })
-		})
+		this.state.size === "small" ? this.expandWindow() : this.contractWindow();
+
 	}
 	render() {
 		let headerClasses = "fsbl-header fsbl-tabs-enabled";
-		console.log("render")
 		//If we're showing tabs, we throw these classes on to modify styles.
 		if (this.state.showTabs) {
 			headerClasses += " fsbl-tabs-enabled";
@@ -120,25 +168,41 @@ class FloatingHeader extends React.Component {
 		if (this.state.tabs.length > 1) {
 			headerClasses += " fsbl-tabs-multiple";
 		}
+		let actionClasses = "actionButton"
+		let title = storeExports.Actions.getWindowIdentifier().windowName
 		var self = this;
 		if (this.state.size === "small") {
-			return <div onClickCapture={(e) => { self.onActionClick(e, true) }} onDragOver={this.onDragOver} draggable="true" onDragEnd={this.onDragEnd} onDragStart={this.onDragStart} className="headerContainer" >
-				<div className="actionButton">{storeExports.Actions.getWindowIdentifier().windowName}</div>
+
+			if (this.state.hasTabs) {
+				actionClasses += " tabs-expand";
+				title = "";
+
+			}
+
+			return <div onClickCapture={(e) => { self.onActionClick(e, true) }}
+				onDragOver={this.onDragOver} onDropCapture={this.ondrop} draggable="true"
+				onDragEnd={this.onDragEnd} onDragStart={this.onDragStart} className="headerContainer" >
+				<div className={actionClasses}>{title}</div>
 			</div >
 		}
-		return <div className={headerClasses} onDragLeave={function (e) {
-			if (!dragFromActionBar) return;
-			let targetElement = e.currentTarget;
-			var screenX = e.screenX;
-			var screenY = e.screenY;
-			setTimeout(() => {
-				let boundingRect = targetElement.getBoundingClientRect();
-				if (!FSBL.Clients.WindowClient.isPointInBox({ x: screenX, y: screenY }, boundingRect)) {
-					self.onActionClick()
+
+		return <div className={headerClasses} onDragEnter={function () {
+			lastDragEventLeave = false;
+		}} onDragLeave={function (e) {
+			lastDragEventLeave = true;
+			if (!self.state.expandedComplete || !hover) return;
+
+
+
+			HeaderActions.isMouseInHeader(function (err, isInHeader) {
+				if (!isInHeader) {
+					hover = false;
+					lastDragEventLeave = false;
+					self.contractWindow();
 				}
-			}, 200);
+			})
 		}} >
-			<div id="actionbutton" onClickCapture={function (e) { self.onActionClick(e, false) }} className="actionButton"></div>
+			<div id="actionbutton" onClickCapture={function (e) { self.onActionClick(e, false) }} className="actionButton tabs-contract"></div>
 			<TabbingSection />
 
 		</div >
