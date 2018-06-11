@@ -26,15 +26,19 @@ body.menu {
 	line-height: normal;
 	letter-spacing: normal;
 	text-align: right;
-	color: #ffffff;
+	color: #999;
 	padding: 3px 2px;
-	background-color: #d30e2d;
-	border: solid 1px #ff2445;
+	background-color: #FFF;
+	border: solid 1px #DDD;
 	cursor: pointer;
+	transition: all .25s ease;
 }
 
 .terminate:hover {
+	border-color: red;
+	color: white;
 	background-color: red;
+	font-weight: bold;
 }
 
 .process-list-wrapper {
@@ -51,10 +55,6 @@ body.menu {
 .process-row, .list-header {
 	display: flex;
 	flex-direction: row;
-}
-
-.process-row {
-	margin-bottom: .3em;
 }
 
 .process {
@@ -78,6 +78,12 @@ body.menu {
 .process-name {
 	font-weight: bold;
 	padding-left: 23px;
+}
+
+.process-name {
+	font-weight: normal;
+	font-style: italic;
+	padding-left: 7px;
 }
 
 .process-statistics, .list-header-statistic-labels {
@@ -111,6 +117,11 @@ body.menu {
 	display: flex;
 	align-content: center;
 	line-height: 24px;
+}
+
+.child-window-name {
+	font-weight: 500;
+	color: #22175A;
 }
 .advanced .child-window-name {
 	cursor: pointer;
@@ -150,6 +161,7 @@ body.menu {
 	height: 8px;
 	width: 7px;
 	font-size: 12px;
+	color: #A5A5A5;
 }
 
 .close-window:hover {
