@@ -607,6 +607,90 @@
 				}
 			}
 		},
+		"Floating Header": {
+			"window": {
+				"url": "$applicationRoot/components/floatingHeader/floatingHeader.html",
+				"frame": false,
+				"top": "center",
+				"left": "center",
+				"width": 30,
+				"height": 30,
+				"options": {
+					"cornerRounding": {
+						"height": 0,
+						"width": 0
+					},
+					"autoShow": true,
+					"resizable": false,
+					"alwaysOnTop": true,
+					"smallWindow": true
+				}
+			},
+			"component": {
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"canGroup": true,
+						"isArrangable": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"FSBLHeader": false,
+						"persistWindowState": false
+					},
+					"Toolbar": {
+						"iconClass": "UserPreferences"
+					}
+				}
+			}
+		},
+		"WpfApp2": {
+			"window": {
+				"id": "WpfApp2",
+				"native": true,
+				"path": "C:/Users/Ryan/Downloads/WpfApp2.exe",
+				"url": "",
+				"defaultHeight": 600,
+				"autoShow": true,
+				"alwaysOnTop": false,
+				"resizable": true,
+				"showTaskbarIcon": false,
+				"contextMenu": true,
+				"addToWorkspace": true
+			},
+			"component": {
+				"spawnOnHotkey": [
+					"ctrl",
+					"alt",
+					"n"
+				]
+			},
+			"foreign": {
+				"services": {
+					"workspaceService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"persistWindowState": false,
+						"FSBLHeader": true
+					},
+					"Toolbar": {
+						"iconURL": "$applicationRoot/components/assets/img/notepad.png"
+					}
+				}
+			}
+		},
 		"Process Monitor": {
 			"window": {
 				"url": "$applicationRoot/components/processMonitor/processMonitor.html",
@@ -633,6 +717,6 @@
 					}
 				}
 			}
-		}		
+		}
 	}
 }
