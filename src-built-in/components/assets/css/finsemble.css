@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto:300,500,700");
 @import url('./_theme.css');
-@import url('./_themeWhitelabel.css');
 @import url('./_variablesWhitelabel.css');
+@import url('./_themeWhitelabel.css');
 @import url('./_fontIcons.css');
 @import  url('./_windowFrame.css');
 @import  url('./_windowTitleBar.css');
