@@ -102,6 +102,7 @@ export default class componentItem extends React.Component {
 		let guid = Date.now() + '_' + Math.random();
 		this.guidBeingDragged = guid;
 		event.dataTransfer.setDragImage(this.dragImage, 0, 0);
+		event.dataTransfer.setData('text/json', JSON.stringify({ waitForIdentifier: true, guid: guid }));
 
 		console.log("starting drag. called starttiling");
 		FSBL.Clients.WindowClient.startTilingOrTabbing({ waitForIdentifier: true });
@@ -111,6 +112,7 @@ export default class componentItem extends React.Component {
 		this.props.itemAction(component, { options: { autoShow: false } }, (identifier) => {
 			console.log("starting drag. called sendidentifier");
 			FSBL.Clients.WindowClient.sendIdentifierForTilingOrTabbing({ windowIdentifier: identifier });
+			FSBL.Clients.RouterClient.publish('Finsemble.' + guid, identifier);
 			this.guidIdentifierMap[guid] = identifier;
 		});
 		this.dragging = true;
