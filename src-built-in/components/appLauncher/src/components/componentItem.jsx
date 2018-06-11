@@ -118,6 +118,7 @@ export default class componentItem extends React.Component {
 		this.dragging = true;
 		this.state.groupMask.addEventListener("shown", this.groupMaskShown);
 		this.state.groupMask.addEventListener("hidden", this.groupMaskHidden);
+		//this.tabbingSubscriber = FSBL.Clients.RouterClient
 		this.startMouseTracking(component);
 	}
 
