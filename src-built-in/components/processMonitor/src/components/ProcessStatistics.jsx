@@ -14,7 +14,7 @@ export default class ProcessStatistics extends React.Component {
         return <div className="process-row">
             <div className="process-name">
                 {/* In simple mode, we print out "Group 1", "Group 2", etc. The belief is that end users don't care about our wonderful process names ("e.g., Default-Agent-62-4421). In advanced mode, you get the actual name of the process.  */}
-                {this.props.mode === "simple" ? `Group ${this.props.groupModifier + 1}` : this.props.stats.name}
+                {this.props.mode === "simple" ? "Process Group" : this.props.stats.name}
             </div>
             <div className="process-statistics">
                 {this.props.fields.map(field => {

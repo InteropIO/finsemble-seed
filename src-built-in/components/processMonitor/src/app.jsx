@@ -77,7 +77,6 @@ export default class ProcessMonitor extends React.Component {
 										mode={this.state.viewMode}
 										fields={this.state.viewMode === "simple" ? SIMPLE_MODE_STATISTICS : ADVANCED_MODE_STATISTICS
 										}
-										groupModifier={i}
 										stats={proc.statistics} />
 									<ChildWindows viewMode={this.state.viewMode} childWindows={proc.childWindows} />
 								</div>)
