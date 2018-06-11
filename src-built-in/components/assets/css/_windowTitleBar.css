@@ -1,5 +1,5 @@
-@import "./_theme.css";
 @import "./_variablesWhitelabel.css";
+@import url('./_themeWhitelabel.css');
 
 .cq-drag {
     cursor: -webkit-grab;
