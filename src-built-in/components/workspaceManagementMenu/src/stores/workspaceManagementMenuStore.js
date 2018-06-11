@@ -425,7 +425,7 @@ Actions = {
 		let dialogParams = {
 			title: "Save your workspace",
 			inputLabel: "Enter a name for your new workspace.",
-			affirmativeButtonLabel: "Continue",
+			affirmativeResponseLabel: "Continue",
 			showCancelButton: false,
 			showNegativeButton: false
 		};

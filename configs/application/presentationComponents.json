@@ -217,7 +217,7 @@
 				}
 			},
 			"component": {
-				"spawnOnStartup": true,
+				"spawnOnStartup": false,
 				"category": "system"
 			},
 			"foreign": {
@@ -396,7 +396,7 @@
 			},
 			"component": {
 				"category": "system",
-				"spawnOnStartup": true
+				"spawnOnStartup": false
 			},
 			"foreign": {
 				"clients": {
@@ -633,6 +633,6 @@
 					}
 				}
 			}
-		}		
+		}
 	}
 }
