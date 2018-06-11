@@ -47,10 +47,10 @@
         "output": "components/inputAndSelectionDialog/inputAndSelectionDialog",
         "entry": "./src-built-in/components/inputAndSelectionDialog/src/app.jsx"
 	},
-    "searchMenu": {
+	"searchMenu": {
         "output": "components/searchMenu/searchMenu",
         "entry": "./src-built-in/components/searchMenu/src/app.jsx"
-    },
+   },
 	"welcome": {
 		"output": "components/welcome/welcome",
 		"entry": "./src-built-in/components/welcome/welcome.js"
