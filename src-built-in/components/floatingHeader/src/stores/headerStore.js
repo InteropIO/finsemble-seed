@@ -43,6 +43,7 @@ var Actions = {
 		var spData = FSBL.Clients.WindowClient.getSpawnData();
 		FSBL.FinsembleWindow.wrap(spData.parent, function (err, wrappedWindow) {
 			HeaderStore.setCompanionWindow(wrappedWindow);
+			wrappedWindow.listenForBoundsSet();
 			wrappedWindow.addListener("bounds-set", Actions.onBoundsChanged);
 			wrappedWindow.addListener("closed", Actions.onCompanionClosed);
 			wrappedWindow.addListener("hidden", Actions.onCompanionHidden);
@@ -58,11 +59,12 @@ var Actions = {
 	},
 	onBoundsChanged(bounds) {
 		console.log("set bounds", HeaderStore.getState())
+		if (isNaN(bounds.bottom)) debugger;
 		HeaderStore.setCompanionBounds(bounds);
 		if (HeaderStore.getState() === "small") {
 			var mainWindow = fin.desktop.Window.getCurrent();
 			//	mainWindow.setBounds(bounds.left + (bounds.width / 2) - 43, bounds.top, 86, 10);
-			FSBL.Clients.WindowClient.finsembleWindow.setBounds({ left: bounds.left + (bounds.width / 2) - 86, width: 86, height: 10, top: bounds.top }, {}, function (err) {
+			FSBL.Clients.WindowClient.finsembleWindow.setBounds({ left: bounds.left + (bounds.width / 2) - 43, width: 86, height: 10, top: bounds.top }, {}, function (err) {
 				console.log("set bounds", err)
 			})
 		} else {

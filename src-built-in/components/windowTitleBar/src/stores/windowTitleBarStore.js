@@ -408,7 +408,7 @@ var Actions = {
 
 		if (!Actions.parentWrapper) {
 			return Actions.createParentWrapper({
-				windowIdentifiers: [windowIdentifier],
+				windowIdentifiers: [finsembleWindow.identifier, windowIdentifier],
 				visibleWindowIdentifier: windowIdentifier,
 				create: true
 			});
