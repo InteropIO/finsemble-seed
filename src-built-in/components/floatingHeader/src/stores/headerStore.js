@@ -38,9 +38,13 @@ var HeaderStore = Object.assign({}, EventEmitter.prototype, {
 	}
 });
 
+var visible = true;
+var timeout = null;
+
 var Actions = {
 	initialize(cb) {
 		var spData = FSBL.Clients.WindowClient.getSpawnData();
+		var self = this;
 		FSBL.FinsembleWindow.wrap(spData.parent, function (err, wrappedWindow) {
 			HeaderStore.setCompanionWindow(wrappedWindow);
 			wrappedWindow.addListener("bounds-set", Actions.onBoundsChanged);
@@ -60,9 +64,27 @@ var Actions = {
 			})
 		});
 	},
+
+	showMe() {
+		console.log("showMe");
+		timeout = null;
+		FSBL.Clients.WindowClient.finsembleWindow.show(null, function () {
+			console.log("btf");
+			FSBL.Clients.WindowClient.finsembleWindow.bringToFront();			
+		});
+	},
+
 	onBoundsChanged(bounds) {
 		HeaderStore.setCompanionBounds(bounds);
 		if (HeaderStore.getState() === "small") {
+			if (timeout) {
+				clearTimeout(timeout);
+			} else {
+				FSBL.Clients.WindowClient.finsembleWindow.hide();
+			}
+			timeout = setTimeout(function () {
+				Actions.showMe();
+			}, 50);
 			var mainWindow = fin.desktop.Window.getCurrent();
 			FSBL.Clients.WindowClient.finsembleWindow.setBounds({ left: bounds.left + (bounds.width / 2) - 86, width: 86, height: 10, top: bounds.top }, {}, function (err) {
 				Actions.updateWindowPosition();
@@ -93,10 +115,10 @@ var Actions = {
 				console.log("bounds update", bounds, bounds.left + (bounds.width / 2) - 86)
 
 				FSBL.Clients.WindowClient.finsembleWindow.setBounds({ left: bounds.left + (bounds.width / 2) - 43, width: 86, height: 10, top: bounds.top }, {}, function () {
-					setTimeout(function () {
+					/*setTimeout(function () {
 						console.log("bring to front time")
 						FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
-					}, 200)
+					}, 200)*/
 				})
 			})
 		}, 100)
