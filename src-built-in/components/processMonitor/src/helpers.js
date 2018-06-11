@@ -13,18 +13,6 @@ export function bytesToSize(bytes) {
 };
 
 import { NOT_A_METRIC, statsWeCareAbout } from "./constants";
-export function statReducer(prev, curr) {
-    let ret = {
-        name: "Totals",
-        uuid: "Totals"
-    };
-    statsWeCareAbout.forEach(stat => {
-        if (!NOT_A_METRIC.includes(stat)) {
-            ret[stat] = prev[stat] + curr[stat];
-        }
-    });
-    return ret;
-}
 
 export function round(number, precision) {
     var shift = function (number, precision, reverseShift) {
