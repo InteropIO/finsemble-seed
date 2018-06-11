@@ -19,11 +19,13 @@ let APP_UPDATE_INTERVAL,
 class AppTable extends React.Component {
 	constructor(props) {
 		super(props);
-		let DEFAULT_EXPAND = false;
+		let DEFAULT_EXPAND = true;
 		let expanded = [];
 		this.state = {
 			data: [],
+			showAll: false,
 			expanded: expanded,
+			systemComponents: Actions.getSystemComponentList(),
 			expandAll: DEFAULT_EXPAND,
 			toastMessage: null,
 			toastClasses: "toast"
@@ -33,6 +35,8 @@ class AppTable extends React.Component {
 
 
 		this.toggleDefaultExpansion = this.toggleDefaultExpansion.bind(this);
+		this.toggleShowAll = this.toggleShowAll.bind(this);
+
 		this.updateAppStats = this.updateAppStats.bind(this);
 		this.onExpandedChange = this.onExpandedChange.bind(this);
 		this.getTrGroupProps = this.getTrGroupProps.bind(this);
@@ -52,6 +56,14 @@ class AppTable extends React.Component {
 		this.setState({
 			expandAll: newExpandAll,
 			expanded: expanded
+		})
+	}
+	/**
+	 * Toggle for show all windows
+	 */
+	toggleShowAll() {
+		this.setState({
+			showAll: !this.state.showAll
 		})
 	}
 	/**
@@ -82,6 +94,9 @@ class AppTable extends React.Component {
 		fin.desktop.System.getProcessList(list => {
 			let oldExpanded = this.state.expanded;
 			let newExpanded = {};
+			if (!oldExpanded.length && this.state.expandAll) {//if we don't have our list yet and we should be expanded, create our list
+				this.state.data.forEach((d, i) => { oldExpanded.push(d.uuid) })
+			}
 			this.setState({
 				data: list,
 				expanded: Object.keys(newExpanded).length ? newExpanded : oldExpanded
@@ -165,7 +180,7 @@ class AppTable extends React.Component {
 	}
 	render() {
 		const { expanded, toastMessage, toastClasses } = this.state;
-		let data = JSON.parse(JSON.stringify(this.state.data));
+		let data = this.state.data;
 		let totals = data.length ? data.reduce(statReducer) : EMPTY_TOTALS;
 		let columns = this.columns;
 		// debugger;
@@ -185,7 +200,6 @@ class AppTable extends React.Component {
 				expandedObject[expandedViewIndex] = true;
 			});
 		}
-
 		return (
 			<div>
 				<ReactTable
@@ -207,10 +221,11 @@ class AppTable extends React.Component {
 					className={TABLE_CLASSES}
 					onExpandedChange={this.onExpandedChange}
 					onSortedChange={this.onSortedChange}
-					SubComponent={ExpandedApplication.bind(this)}
+					SubComponent={row => { return (<ExpandedApplication row={row} excludedWindows={this.state.systemComponents} showAll={this.state.showAll} />) }}
 				/>
-				<Totals data={totals}/>
+				<Totals data={totals} />
 				<div className="fsbl-button visiblity-toggle" onClick={this.toggleDefaultExpansion}>{this.state.expandAll ? "Collapse All" : "Expand all"}</div>
+				<div className="fsbl-button visiblity-toggle" onClick={this.toggleShowAll}>{!this.state.showAll ? "Show All" : "Hide System Windows"}</div>
 				<Toast className={toastClasses} message={toastMessage} />
 			</div>
 		);
