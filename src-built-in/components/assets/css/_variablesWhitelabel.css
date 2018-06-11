@@ -152,7 +152,7 @@
     --titleBar-font-size: 12px;
     --titleBar-icon-font-size: 15px;
     --titleBar-active-font-color: var(--primary-font-color);
-    --titleBar-inactive-font-color: var(--gray3);
+    --titleBar-inactive-font-color: var(--grey300);
     --titleBar-font-weight: var(--tertiary-font-weight);
 
     --titleBar-background-inactive-color: var(--secondary-background-color);
@@ -161,7 +161,7 @@
     --titlebar-tab-icon-font-color: var(--tertiary-accent-color);
     --titlebar-tab-active-font-color: var(--primary-font-color);
     --titlebar-tab-active-background-color: var(--slate4); /* Specifies the background color of the active tab in an inactive window. */
-    --titlebar-tab-inactive-font-color: var(--gray);
+    --titlebar-tab-inactive-font-color: var(--grey);
     --titlebar-tab-inactive-background-color: var(--primary-background-color); /* Inactive tabs are the same color for active and inactive windows. */
     --titlebar-tab-ghost-background-color: var(--secondary-accent-color);
     --titlebar-tab-ghost-border-color: var(--primary-accent-color);
@@ -188,9 +188,9 @@
     --dialog-input-font-size: 16px;
     --dialog-input-font-color: var(--primary-font-color);
     --dialog-input-font-weight: var(--primary-font-weight);
-    --dialog-input-background-color: var(--primary-background-color);
-    --dialog-input-border-color: var(--gray6);
-    --dialog-input-border-focus-color: var(--gray);
+    --dialog-input-background-color: transparent;
+    --dialog-input-border-color: var(--grey);
+    --dialog-input-border-focus-color: var(--grey400);
 
     /* Buttons */
 
@@ -224,10 +224,10 @@
     --menu-content-background-color: var(--secondary-background-color);
     --menu-content-hover-color: var(--coolGrey300);
 
-    --menu-pin-border-color: var(--grey100);
+    --menu-pin-border-color: var(--grey400);
     --menu-pin-background-color: var(--primary-accent-color);
     --menu-pin-background-hover-color: transparent;
-    --menu-delete-background-hover-color: var(--secondary-negative-color);
+    --menu-delete-background-hover-color: var(--primary-negative-color);
 
     --menu-linker-selected-font-color: var(--primary-font-color);
     --menu-linker-selected-font-size: 18px;
@@ -310,7 +310,7 @@
     --notification-logo-width: 14px;
     --notification-title-font-size: 13px;
     --notification-title-font-weight: bold;
-    --notification-close-icon-hover-color: var(--secondary-negative-color);
+    --notification-close-icon-hover-color: var(--primary-negative-color);
     --notification-description-font-size: 13px;
 
 }
