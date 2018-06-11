@@ -292,7 +292,7 @@
     --content-checkbox-background-color: var(--blue);
     --content-checkbox-unchecked-border-color: var(--grey400);
 
-    --content-card-background-color: var(--grey200);
+    --content-card-background-color: var(--grey600);
     --content-card-bestMatch-background-color: var(--grey200);
     --content-card-icon-background-color: var(--secondary-accent-color);
     --content-card-icon-font-size: 20px;
