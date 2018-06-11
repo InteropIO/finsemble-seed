@@ -119,6 +119,11 @@ var Actions = {
 				});
 				//Don't want any service windows or systemComponent windows.
 				if (mode === "simple" && childWindows.some(cw => cw.name.toLowerCase().includes("service") || cw.name.toLowerCase().includes("system"))) return done();
+				if (childWindows.length === 0) {
+					//Hack until we have a better abstraction
+					if (proc.name.toLowerCase().includes("agent")) return done();
+					childWindows = [{ uuid: proc.uuid, name: proc.name }]
+				}
 				procs.push({
 					statistics: proc,
 					childWindows,
