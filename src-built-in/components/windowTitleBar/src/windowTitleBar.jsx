@@ -222,7 +222,6 @@ class WindowTitleBar extends React.Component {
 	}
 
 	onShowTabsChanged(err, response) {
-		debugger;
 		this.setState({
 			showTabs: response.value
 		})

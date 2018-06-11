@@ -170,7 +170,6 @@ var Actions = {
 
 			windowTitleBarStore.setValues([{ field: "AlwaysOnTop.show", value: alwaysOnTopIcon }]);
 
-			debugger;
 			if (typeof windowTitleBarConfig.showTabs !== 'boolean') {
 				windowTitleBarStore.setValue({ field: "showTabs", value: globalWindowManagerConfig.showTabs });
 			}
