@@ -234,7 +234,7 @@
 
 
     /* Search Menu */
-    --search-input-font-color: var(--secondary-font-color);
+    --search-input-font-color: black;
     --search-input-background-color: white;
 
     --search-header-font-color: var(--tertiary-accent-color);
@@ -267,12 +267,12 @@
 
     --content-nav-header-font-size: 21px;
     --content-nav-header-font-weight: var(--primary-font-weight);
-    --content-nav-header-background-color: var(--slate);
-    --content-nav-background-color: var(--tertiary-background-color);
-    --content-nav-highlighter: var(--slate3);
-    --content-nav-highlighter-hover: var(--slate2);
+    --content-nav-header-background-color: var(--coolGrey400);
+    --content-nav-background-color: var(--coolGrey600);
+    --content-nav-highlighter: var(--coolGrey300);
+    --content-nav-highlighter-hover: var(--coolGrey400);
 
-    --content-background-color: var(--secondary-background-color);
+    --content-background-color: var(--coolGrey800);
     --content-hint-font-color: var(--gray);
 
     --content-component-list-font-size: 12px;
