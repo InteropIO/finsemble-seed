@@ -261,7 +261,7 @@
     /* Content Dialog (e.g., userPreferences and appCatalog) */
     --content-font-size: 16px;
     --content-header-font-size: 18px;
-    --content-header-font-color: var(--tertiary-accent-color);
+    --content-header-font-color: var(--grey400);
     --content-font-color: var(--primary-font-color);
     --content-font-weight: var(--primary-font-weight);
 
@@ -273,27 +273,27 @@
     --content-nav-highlighter-hover: var(--coolGrey400);
 
     --content-background-color: var(--coolGrey800);
-    --content-hint-font-color: var(--gray);
+    --content-hint-font-color: var(--grey400);
 
     --content-component-list-font-size: 12px;
-    --content-list-border-color: var(--gray6);
-    --content-list-highlighter: var(--slate3);
-    --content-list-item-flagged-color: var(--blue1);
+    --content-list-border-color: var(--grey);
+    --content-list-highlighter: var(--coolGrey300);
+    --content-list-item-flagged-color: var(--blue);
     --content-list-editor-font-color: var(--primary-font-color);
-    --content-list-editor-border-color: var(--gray);
-    --content-list-editor-highlighted-text: var(--blue1);
+    --content-list-editor-border-color: var(--grey);
+    --content-list-editor-highlighted-text: var(--blue);
 
     --content-button-label-font-size: 11px;
-    --content-button-disabled-border-color: var(--gray7);
-    --content-button-neutral-border-hover-color: var(--gray);
-    --content-button-negative-border-hover-color: var(--red1);
+    --content-button-disabled-border-color: var(--grey);
+    --content-button-neutral-border-hover-color: var(--grey);
+    --content-button-negative-border-hover-color: var(--primary-negative-color);
 
     --content-checkbox-check-color: var(--primary-font-color);
     --content-checkbox-background-color: var(--blue);
-    --content-checkbox-unchecked-border-color: var(--gray4);
+    --content-checkbox-unchecked-border-color: var(--grey400);
 
     --content-card-background-color: var(--grey200);
-    --content-card-bestMatch-background-color: var(--gray1);
+    --content-card-bestMatch-background-color: var(--grey200);
     --content-card-icon-background-color: var(--secondary-accent-color);
     --content-card-icon-font-size: 20px;
     --content-card-title-font-size: 14px;
@@ -301,7 +301,7 @@
     --content-details-font-size: 12px;
 
     --content-back-font-size: 15px;
-    --content-close-hover-color: var(--red2);
+    --content-close-hover-color: var(--primary-negative-color);
 
     /* Notifications */
     --notification-body-background-color: var(--toolbar-background-color);
