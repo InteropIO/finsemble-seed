@@ -191,7 +191,6 @@ class WindowTitleBar extends React.Component {
 		});
 		myTab.title = response.value;
 		tabs.splice(myIndex, 1, myTab);
-
 		this.setState({
 			windowTitle: response.value,
 			tabs: tabs

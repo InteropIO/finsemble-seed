@@ -44,9 +44,7 @@ var Actions = {
 			var title = FSBL.Clients.WindowClient.title || windowTitleBarConfig.title;
 
 			if (title) {
-				windowTitleBarStore.setValue({
-					field: "Main.windowTitle", value: title
-				});
+				FSBL.Clients.WindowClient.setWindowTitle(title)
 			}
 		}
 
