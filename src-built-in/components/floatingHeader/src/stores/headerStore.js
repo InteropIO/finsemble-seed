@@ -47,6 +47,10 @@ var Actions = {
 			wrappedWindow.addListener("closed", Actions.onCompanionClosed);
 			wrappedWindow.addListener("hidden", Actions.onCompanionHidden);
 			wrappedWindow.addListener("shown", Actions.onCompanionShown);
+			wrappedWindow.addListener("maximized", Actions.onCompanionMaximized);
+			wrappedWindow.addListener("restored", Actions.onCompanionRestored);
+			wrappedWindow.addListener("bringToFront", Actions.onCompanionBringToFront);
+			wrappedWindow.addListener("restored", Actions.onCompanionRestored);
 			wrappedWindow.getBounds({}, function (err, bounds) {
 				HeaderStore.setCompanionBounds(bounds);
 				console.log("bounds", bounds)
@@ -57,16 +61,15 @@ var Actions = {
 		});
 	},
 	onBoundsChanged(bounds) {
-		console.log("set bounds", HeaderStore.getState())
 		HeaderStore.setCompanionBounds(bounds);
 		if (HeaderStore.getState() === "small") {
 			var mainWindow = fin.desktop.Window.getCurrent();
-			//	mainWindow.setBounds(bounds.left + (bounds.width / 2) - 43, bounds.top, 86, 10);
 			FSBL.Clients.WindowClient.finsembleWindow.setBounds({ left: bounds.left + (bounds.width / 2) - 86, width: 86, height: 10, top: bounds.top }, {}, function (err) {
-				console.log("set bounds", err)
+				Actions.updateWindowPosition();
 			})
 		} else {
 			FSBL.Clients.WindowClient.finsembleWindow.setBounds({ left: bounds.left, width: bounds.width, height: 38, top: bounds.top }, {}, function () {
+
 			})
 		}
 	},
@@ -82,6 +85,22 @@ var Actions = {
 		}, 100)
 
 	},
+	updateWindowPosition() {
+		setTimeout(function () {
+			HeaderStore.getCompanionWindow().getBounds({}, function (err, bounds) {
+				HeaderStore.setCompanionBounds(bounds);
+				if (!bounds.width) bounds.width = bounds.right - bounds.left
+				console.log("bounds update", bounds, bounds.left + (bounds.width / 2) - 86)
+
+				FSBL.Clients.WindowClient.finsembleWindow.setBounds({ left: bounds.left + (bounds.width / 2) - 43, width: 86, height: 10, top: bounds.top }, {}, function () {
+					setTimeout(function () {
+						console.log("bring to front time")
+						FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
+					}, 200)
+				})
+			})
+		}, 100)
+	},
 	onCompanionClosed() {
 		FSBL.Clients.WindowClient.finsembleWindow.close({});
 	},
@@ -90,6 +109,17 @@ var Actions = {
 	},
 	onCompanionShown() {
 		FSBL.Clients.WindowClient.finsembleWindow.show();
+	},
+	onCompanionBringToFront() {
+		console.log("bringtofornt")
+		Actions.updateWindowPosition();
+	},
+	onCompanionMaximized() {
+		console.log("onCompanionMaximized")
+		Actions.updateWindowPosition();
+	},
+	onCompanionRestored() {
+		Actions.updateWindowPosition();
 	},
 	expandWindow(cb) {
 		let finWindow = fin.desktop.Window.getCurrent();
@@ -131,16 +161,6 @@ var Actions = {
 				});
 
 			});
-	},
-
-	updateWindowState(cb) {//expand/contract
-
-		if (HeaderStore.getState() === "small") {
-
-		} else {
-
-
-		}
 	}
 }
 HeaderStore.initialize();

@@ -622,7 +622,7 @@
 					},
 					"autoShow": true,
 					"resizable": false,
-					"alwaysOnTop": true,
+					"alwaysOnTop": false,
 					"smallWindow": true
 				}
 			},

@@ -66,7 +66,7 @@ class FloatingHeader extends React.Component {
 				if (!isInHeader) {
 					hover = false;
 					lastDragEventLeave = false;
-					self.contractWindow();
+					//	self.contractWindow();
 				}
 			})
 		}
@@ -108,9 +108,7 @@ class FloatingHeader extends React.Component {
 	onComponentDidUpdate() {
 	}
 	onTabsUpdated() {
-
 		let tabs = storeExports.Actions.getTabs();
-		console.log("tabs updated", storeExports.Actions.getTabs())
 		if (tabs && tabs.length) {
 
 			return this.setState({ hasTabs: true })
@@ -127,7 +125,7 @@ class FloatingHeader extends React.Component {
 		console.log("dragover", this.state.size)
 		hover = true;
 		if (this.state.size === "small") {
-			this.expandWindow()
+			//this.expandWindow()
 
 		}
 	}
@@ -198,7 +196,7 @@ class FloatingHeader extends React.Component {
 				if (!isInHeader) {
 					hover = false;
 					lastDragEventLeave = false;
-					self.contractWindow();
+					//	self.contractWindow();
 				}
 			})
 		}} >

@@ -88,7 +88,7 @@ var Actions = {
 		//quick UI update
 		Actions._setTabs(tabs);
 		let callback = () => {
-			Actions.parentWrapper.setVisibleWindow({ wi })
+			Actions.parentWrapper.setVisibleWindow({ windowIdentifier: wi })
 		};
 
 		if (!Actions.parentWrapper) {
@@ -98,13 +98,13 @@ var Actions = {
 				create: true
 			});
 		}
-		return Actions.parentWrapper.addWindow({ wi, position: i }, callback);
+		return Actions.parentWrapper.addWindow({ windowIdentifier: wi, position: i }, callback);
 	},
 	removeTab: function (wi, i) {
-		return Actions.parentWrapper.removeWindow({ wi, position: i });
+		return Actions.parentWrapper.removeWindow({ windowIdentifier: wi, position: i });
 	},
 	closeTab: function (wi) {
-		return Actions.parentWrapper.deleteWindow({ wi })
+		return Actions.parentWrapper.deleteWindow({ windowIdentifier: wi })
 	},
 	reorderTab: function (tab, newIndex) {
 
