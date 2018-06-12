@@ -23,7 +23,8 @@
 	"debugServiceDelay": 0,
 	"Window Manager": {
 		"alwaysOnTopIcon": false,
-		"showTabs": true
+		"showTabs": true,
+		"showNativeTabs": true
 	},
 	"docking": {
 		"enabled": true,
