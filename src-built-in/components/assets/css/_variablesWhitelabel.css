@@ -134,7 +134,7 @@
     --toolbar-line-height: 1em;
     --toolbar-font-weight: var(--primary-font-weight);
 
-    --toolbar-height: 39px;
+    --toolbar-height: 30px;
     --toolbar-brand-logo-width: 70px;
     --toolbar-brand-logo-height: 15px;
     --toolbar-background-color: var(--primary-background-color);
@@ -142,15 +142,15 @@
     --toolbar-button-hover-color: var(--secondary-accent-color);
     --toolbar-icon-workspace-color: var(--orange);
     --toolbar-icon-app-color: var(--grey300);
-    --toolbar-icon-font-size: 19px;
+    --toolbar-icon-font-size: 16px;
 
     --toolbar-separator: 1px solid rgba(255, 255, 255, 0.3);
 
     /* Window Title bar */
-    --titleBar-height: 32px;
+    --titleBar-height: 30px;
 
     --titleBar-font-size: 12px;
-    --titleBar-icon-font-size: 15px;
+    --titleBar-icon-font-size: 13px;
     --titleBar-active-font-color: var(--primary-font-color);
     --titleBar-inactive-font-color: var(--grey300);
     --titleBar-font-weight: var(--tertiary-font-weight);
