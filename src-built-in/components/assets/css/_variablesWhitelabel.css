@@ -218,7 +218,7 @@
     --menu-font-color: var(--primary-font-color);
     --menu-active-workspace-font-weight: var(--secondary-font-weight);
 
-    --menu-background-color: var(--coolGrey800);
+    --menu-background-color: var(--secondary-background-color);
     --menu-actions-background-color: var(--coolGrey);
     --menu-actions-hover-color: var(--coolGrey300);
     --menu-content-background-color: var(--secondary-background-color);
