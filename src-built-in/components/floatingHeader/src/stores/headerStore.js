@@ -152,7 +152,7 @@ var Actions = {
 			FSBL.Clients.WindowClient.finsembleWindow.setBounds({ left: bounds.left + (bounds.width / 2) - 38, width: 86, height: 10, top: bounds.top }, {}, function (err) {
 			})
 		} else {
-			FSBL.Clients.WindowClient.finsembleWindow.setBounds({ left: bounds.left, width: bounds.width, height: 38, top: bounds.top }, {}, function (err) {
+			FSBL.Clients.WindowClient.finsembleWindow.setBounds({ left: bounds.left, width: bounds.width, height: 32, top: bounds.top }, {}, function (err) {
 				FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
 			})
 		}
@@ -254,7 +254,7 @@ var Actions = {
 		finWindow.animate({ position: { duration: 0, left: currentBound.left }, size: { duration: 0, width: currentBound.width, height: 1 } },
 			function (err) { console.error(err) },
 			function (err) {
-				finWindow.animate({ size: { duration: 350, height: 38 } }, function () { }, function () {
+				finWindow.animate({ size: { duration: 350, height: 32 } }, function () { }, function () {
 					HeaderStore.emit("tabRegionShow")
 					animating = false
 					if (updateBoundsAfterAnimate) {
