@@ -237,13 +237,13 @@
     --search-input-font-color: black;
     --search-input-background-color: white;
 
-    --search-header-font-color: var(--tertiary-accent-color);
+    --search-header-font-color: var(--grey400);
     --search-header-font-weight: var(--tertiary-font-weight);
 
     --search-result-font-color: var(--primary-font-color);
     --search-result-font-weight: var(--primary-font-weight);
 
-    --search-result-highlighter-color: var(--coolGrey800);
+    --search-result-highlighter-color: var(--coolGrey300);
 
     /* Window Frame */
     --window-frame-inactive-color: var(--secondary-accent-color);
