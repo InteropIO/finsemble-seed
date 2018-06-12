@@ -1,0 +1,146 @@
+
+.menu-secondary {
+    background: var(--menu-actions-background-color);
+    padding: 5px 0px;
+}
+
+.finsemble-toolbar-button {
+    padding: 2px 6px;
+}
+
+.finsemble-toolbar-button-icon {
+    padding-top: 5px;
+}
+
+.finsemble-toolbar-brand-logo {
+    padding: 4px 0 0 0 !important;
+}
+
+.finsemble-item-pinned:hover {
+    border-radius: 0px;
+}
+
+.searchInput::after {
+    bottom: 2px !important;
+}
+
+.finsemble-toolbar-section.right .finsemble-toolbar-button-icon {
+    padding-top: 3px;
+}
+
+.jpmuitk-icon-document-add, .jpmuitk-icon-save, .jpmuitk-icon-save-solid, .jpmuitk-icon-report-builder {
+    padding-right: 7px;
+}
+
+.jpmuitk-icon-report-builder {
+    margin-top: 3px;
+}
+
+.jpmuitk-icon-pin, .jpmuitk-icon-delete {
+    margin-top: 1px;
+    padding-top: 5px;
+    width: 25px;
+    height: 19px;
+    text-align: center;
+    border: 1px solid transparent;
+}
+
+.jpmuitk-icon-delete:hover {
+    color: white;
+    background-color: var(--content-button-negative-border-hover-color);
+    border-radius: 4px;
+}
+
+/* Tweaks for JPM icons */
+.jpmuitk-icon-document {
+    font-size: 17px;
+}
+
+.jpmuitk-icon-right-expand {
+    transform: rotate(90deg);
+}
+
+.jpmuitk-icon-remove {
+    padding-top: 2px;
+}
+
+.highlighted {
+    background-color: var(--primary-accent-color);
+}
+
+
+
+.jpmuitk-icon-import, .jpmuitk-icon-export {
+    padding-bottom: 3px;
+}
+
+.jpmuitk-icon-delete:hover {
+    background-color: transparent;
+    color: #FFFFFF;
+}
+
+.jpmuitk-icon-edit {
+    align-self: flex-start;
+}
+
+.ff-minimize {
+    padding-bottom: 0px;
+}
+
+.fsbl-button {
+    margin: 0 4px;
+    text-align: center;
+    background: var(--dialog-button-background-color);
+    color: var(--grey200);
+    transition: .2s ease;
+    text-transform: uppercase;
+    font-stretch: normal;
+    line-height: normal;
+    cursor: pointer;
+}
+
+.fsbl-button-md-positive {
+    width: 147px;
+    height: 32px;
+    border: 1px solid var(--button-positive-border-color);
+    font-weight: var(--button-positive-font-weight);
+    font-size: var(--button-font-size);
+    letter-spacing: 0.4px;
+    line-height: 33px;
+}
+
+body.dialog .dialog-input {
+    padding-right: 12px;
+    padding-left: 4px;
+}
+
+body.dialog input {
+    -webkit-appearance: none;
+    color: #FFF;
+    text-align: left;
+    font-size: 12pt;
+    font-weight: 500;
+    vertical-align: middle;
+    padding-left: 15px;
+    width: 100%;
+    height: 33px;
+    max-width: 100%;
+    padding: 3px 10px;
+    border: 0px;
+    box-sizing: border-box;
+    transition: .2s ease-in;
+    outline: none;
+    background: transparent;
+    border-bottom: 1px solid var(--blue);
+}
+
+body.dialog input:focus {
+    box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+    border-bottom: 1px solid var(--blue);
+}
+
+.form-group {
+    margin: 0px;
+    padding: 0px;
+    display:inline-block;
+}
