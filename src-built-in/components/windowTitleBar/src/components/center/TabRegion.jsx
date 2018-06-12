@@ -19,10 +19,12 @@ export default class TabRegion extends React.Component {
     constructor(props) {
         super(props);
         let initialState = Store.getValues(["activeTab", "tabs"]);
+        let activeIdentifier = finsembleWindow.identifier;
+        activeIdentifier.title = finsembleWindow.windowOptions.title;
         this.state = {
             translateX: 0,
             tabs: initialState.tabs,
-            activeTab: FSBL.Clients.WindowClient.getWindowIdentifier(),
+            activeTab: activeIdentifier,
             boundingBox: {},
             iAmDragging: false,
             hoverState: false
@@ -345,7 +347,8 @@ export default class TabRegion extends React.Component {
             newIndex = undefined;
         }
 
-        let myIdentifier = FSBL.Clients.WindowClient.getWindowIdentifier();
+        let myIdentifier = finsembleWindow.identifier;
+        myIdentifier.title = finsembleWindow.windowOptions.title;
         if (this.state.tabs.length === 1 && identifier.windowName == myIdentifier.windowName) {
             return;
         }
@@ -433,7 +436,6 @@ export default class TabRegion extends React.Component {
         if (this.isTabRegionOverflowing()) {
             moveAreaClasses += " gradient"
         }
-
         return (
             <div
                 ref="Me"
@@ -463,7 +465,9 @@ function renderTitle() {
         draggable="true"
         onDragStart={(e) => {
             FSBL.Clients.Logger.system.debug("Tab drag start - TITLE");
-            this.startDrag(e, FSBL.Clients.WindowClient.getWindowIdentifier());
+            let activeIdentifier = finsembleWindow.identifier;
+            activeIdentifier.title = finsembleWindow.windowOptions.title;
+            this.startDrag(e, activeIdentifier);
         }}
         onDragEnd={this.stopDrag}
         data-hover={this.state.hoverState}
