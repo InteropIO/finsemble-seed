@@ -76,6 +76,7 @@ var Actions = {
 				HeaderStore.emit("expandWindow")
 			};
 			var onParentCleared = () => {
+				FSBL.Clients.WindowClient.finsembleWindow.show();
 				if (localParent) {
 					localParent.removeListener("startedMoving", Actions.onCompanionStartedMoving);
 					localParent.removeListener("stoppedMoving", Actions.onCompanionStoppedMoving);
@@ -128,6 +129,21 @@ var Actions = {
 
 		});
 	},
+	isWindowVisible(cb) {
+		if (wrappedWindow.parentWindow) {
+			wrappedWindow.parentWindow.getStore(function (store) {
+				store.getValues(function (err, response) {
+					if (response) {
+						if (response[wrappedWindow.parentWindow.windowName].descriptor.visibleWindowIdentifier.windowName !== wrappedWindow.windowName) {
+							return cb(null, true);
+						}
+						return cb(null, false);
+					}
+					console.log("wrappedWindow.response", err, response)
+				})
+			})
+		}
+	},
 	onBoundsChanged(bounds) {
 		HeaderStore.setCompanionBounds(bounds);
 		if (HeaderStore.getMoving()) return;
@@ -148,7 +164,18 @@ var Actions = {
 	onCompanionStoppedMoving() {
 		HeaderStore.setMoving(false);
 		Actions.updateWindowPosition(function () {
-			FSBL.Clients.WindowClient.finsembleWindow.show();
+			if (HeaderStore.getCompanionBounds().parentWindow) {
+				if (Actions.isWindowVisible(function (err, isVisible) {
+					if (isVisible) {
+						console.log("is visible-----")
+						FSBL.Clients.WindowClient.finsembleWindow.show();
+					}
+				}));
+			} else {
+				FSBL.Clients.WindowClient.finsembleWindow.show();
+			}
+
+
 		})
 	},
 	onCompanionFocused() {
@@ -180,13 +207,11 @@ var Actions = {
 
 			if (HeaderStore.getState() === "small") {
 				return FSBL.Clients.WindowClient.finsembleWindow.setBounds({ left: bounds.left + (bounds.width / 2) - 43, width: 86, height: 10, top: bounds.top }, {}, function (err) {
-					FSBL.Clients.WindowClient.finsembleWindow.show();
 					FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
 					cb();
 				})
 			}
 			return FSBL.Clients.WindowClient.finsembleWindow.setBounds({ left: bounds.left, width: bounds.width, height: 38, top: bounds.top }, {}, function (err) {
-				FSBL.Clients.WindowClient.finsembleWindow.show();
 				FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
 				cb();
 			})
@@ -200,6 +225,7 @@ var Actions = {
 		FSBL.Clients.WindowClient.finsembleWindow.hide();
 	},
 	onCompanionShown() {
+		console.warn("---------------------show")
 		FSBL.Clients.WindowClient.finsembleWindow.show();
 	},
 	onCompanionBringToFront() {

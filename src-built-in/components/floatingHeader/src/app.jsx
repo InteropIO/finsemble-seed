@@ -136,10 +136,8 @@ class FloatingHeader extends React.Component {
 	contractWindow() {
 		var self = this;
 		HeaderActions.contractWindow(function () {
-
+			self.setState({ size: "small" })
 		})
-
-		self.setState({ size: "small" })
 	}
 	expandWindow() {
 		var self = this;
@@ -174,16 +172,16 @@ class FloatingHeader extends React.Component {
 		var self = this;
 		if (this.state.size === "small") {
 
-			if (this.state.hasTabs) {
-				actionClasses += " tabs-expand";
-				title = "";
 
-			}
+			actionClasses += " tabs-expand";
+			title = "";
+
+
 
 			return <div onClickCapture={(e) => { self.onActionClick(e, true) }}
 				onDropCapture={this.ondrop} draggable="true"
-				onDragEnd={this.onDragEnd} onDragStart={this.onDragStart} className="headerContainer" >
-				<div className={actionClasses}>{title}</div>
+				onDragEnd={this.onDragEnd} onDragStart={this.onDragStart} className="headerContainer " >
+				<div className={actionClasses}></div>
 			</div >
 		}
 
@@ -192,16 +190,6 @@ class FloatingHeader extends React.Component {
 		}} onDragLeave={function (e) {
 			lastDragEventLeave = true;
 			if (!self.state.expandedComplete || !hover) return;
-
-
-
-			HeaderActions.isMouseInHeader(function (err, isInHeader) {
-				if (!isInHeader) {
-					hover = false;
-					lastDragEventLeave = false;
-					//	self.contractWindow();
-				}
-			})
 		}} >
 			<div id="actionbutton" onClickCapture={function (e) { self.onActionClick(e, false) }} className="actionButton tabs-contract"></div>
 			<TabbingSection />

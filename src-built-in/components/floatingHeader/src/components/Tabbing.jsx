@@ -22,26 +22,13 @@ export default class TabbingSection extends React.Component {
 			showTabs: true,
 			tabBarBoundingBox: {},
 			tabs: [],
-			windowTitle: "This window",
+			windowTitle: HeaderStore.getCompanionWindow().windowName,
 			loaded: true
 		};
 	}
 
 	componentWillMount() {
 		var self = this;
-
-		//storeExports.initialize(HeaderStore.getCompanionWindow(), function () {
-
-		/*FSBL.Clients.ConfigClient.getValue({ field: "finsemble" }, (err, config) => {
-			let windowManager = config['Window Manager'];
-			self.setState({
-				loaded: true,
-				windowTitle: HeaderStore.getCompanionWindow().windowName,
-				showTabs: typeof config['Window Manager'] !== undefined ? config['Window Manager'].showTabs : false
-			});
-		})*/
-		//})
-
 	}
 	componentWillunMount() {
 
