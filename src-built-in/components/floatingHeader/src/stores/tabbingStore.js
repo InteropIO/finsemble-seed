@@ -15,24 +15,23 @@ var windowIdentifier = FSBL.Clients.WindowClient.getWindowIdentifier();
 let constants = {};
 var Actions = {
 	initialize: function () {
+		var onParentSet = () => {
+			Actions.parentWrapper = null;
+			Actions.getInitialTabList(() => {
+
+			});
+		};
+		var onParentCleared = () => {
+			Actions.parentWrapper = null;
+			FSBL.Clients.Logger.system.debug("ClearParent, setting tabs to null");
+			Actions.stopListeningOnParentWrapper(() => {
+				Actions.parentWrapperStore = null;
+				Actions._setTabs(null);
+			});
+		};
+		attachedWindow.addListener("setParent", onParentSet);
+		attachedWindow.addListener("clearParent", onParentCleared)
 		Actions.getInitialTabList((err, values) => {
-			var onParentSet = () => {
-				Actions.parentWrapper = null;
-				Actions.getInitialTabList(() => {
-
-				});
-			};
-			var onParentCleared = () => {
-				Actions.parentWrapper = null;
-				FSBL.Clients.Logger.system.debug("ClearParent, setting tabs to null");
-				Actions.stopListeningOnParentWrapper(() => {
-					Actions.parentWrapperStore = null;
-					Actions._setTabs(null);
-				});
-			};
-
-			attachedWindow.addListener("setParent", onParentSet);
-			attachedWindow.addListener("clearParent", onParentCleared)
 
 		})
 	},
@@ -127,6 +126,7 @@ var Actions = {
 		return { tab, currentIndex }
 	},
 	setActiveTab: function (windowIdentifier) {
+
 		FSBL.Clients.Logger.system.debug("setActiveTab.visibleWindow");
 		return Actions.parentWrapper.setVisibleWindow({ windowIdentifier });
 	},

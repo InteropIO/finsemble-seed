@@ -443,6 +443,7 @@ var Actions = {
 		return { tab, currentIndex }
 	},
 	setActiveTab: function (windowIdentifier) {
+		console.log("setActiveTab", windowIdentifier)
 		FSBL.Clients.Logger.system.debug("setActiveTab.visibleWindow");
 		return Actions.parentWrapper.setVisibleWindow({ windowIdentifier });
 	},

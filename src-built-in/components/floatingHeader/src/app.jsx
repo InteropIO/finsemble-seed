@@ -35,6 +35,8 @@ class FloatingHeader extends React.Component {
 			openedByClick: false,
 			dragFromActionBar: false,
 			expandedComplete: false,
+			shouldContractOnStop: false,
+			hadTabs: false,
 			hasTabs: storeExports.Actions.getTabs().length
 		};
 		this.onActionClick = this.onActionClick.bind(this);
@@ -52,6 +54,7 @@ class FloatingHeader extends React.Component {
 	componentWillMount() {
 		storeExports.Store.addListener({ field: "tabs" }, this.onTabsUpdated);
 		HeaderStore.addListener("tabRegionShow", this.onWindowUpdateExpandComplete);
+		HeaderStore.addListener("expandWindow", this.expandWindow);
 		FSBL.Clients.RouterClient.addListener("DockingService.startTilingOrTabbing", this.onTilingStart);
 		FSBL.Clients.RouterClient.addListener("DockingService.stopTilingOrTabbing", this.onTilingStop);
 	}
@@ -62,11 +65,20 @@ class FloatingHeader extends React.Component {
 		FSBL.Clients.RouterClient.removeListener("DockingService.stopTilingOrTabbing", this.onTilingStop);
 
 	}
-	onTilingStart() {
-		this.expandWindow();
+	onTilingStart(err, response) {
+		console.log("Start tiling", this.state.size)
+		this.setState({ hadTabs: storeExports.Actions.getTabs().length, shouldContractOnStop: this.state.size === "small" && HeaderStore.getCompanionWindow().windowName !== response.data.windowIdentifier.windowName }, () => {
+			if (this.state.size === "small" && HeaderStore.getCompanionWindow().windowName !== response.data.windowIdentifier.windowName) this.expandWindow();
+		})
+
 	}
 	onTilingStop() {
-		this.contractWindow();
+		let shouldContractOnStop = this.state.shouldContractOnStop
+		var self = this;
+		this.setState({ shouldContractOnStop: false }, () => {
+			console.log("shouldContractOnStop", storeExports.Actions.getTabs())
+			if (shouldContractOnStop && self.state.hadTabs && storeExports.Actions.getTabs().length < 2) self.contractWindow();
+		});
 	}
 	onWindowUpdateExpandComplete(data) {
 		if (lastDragEventLeave && hover) {
@@ -91,7 +103,6 @@ class FloatingHeader extends React.Component {
 		//this.setState({ dragFromActionBar: true })
 	}
 	onDragEnd(e) {
-		console.log("on dragend")
 		dragFromActionBar = false;
 		isDragging = false;
 		FSBL.Clients.Logger.system.debug("Tab drag stop");
@@ -101,47 +112,55 @@ class FloatingHeader extends React.Component {
 			y: e.nativeEvent.screenY
 		}
 		let boundingRect = this.state.boundingBox;
-		//	if (!FSBL.Clients.WindowClient.isPointInBox(mousePositionOnDragEnd, FSBL.Clients.WindowClient.options)) {
-		FSBL.Clients.WindowClient.stopTilingOrTabbing({ mousePosition: mousePositionOnDragEnd });
+		if (!FSBL.Clients.WindowClient.isPointInBox(mousePositionOnDragEnd, FSBL.Clients.WindowClient.options)) {
+			FSBL.Clients.WindowClient.stopTilingOrTabbing({ mousePosition: mousePositionOnDragEnd });
 
-		//this.onWindowResize();
-		//}
+			//this.onWindowResize();
+		}
 	}
 	onComponentDidMount() {
 	}
 	onComponentDidUpdate() {
 	}
 	onTabsUpdated() {
+		console.log("tabs updated")
 		let tabs = storeExports.Actions.getTabs();
-		if (tabs && tabs.length) {
+		var self = this;
+		if (tabs && tabs.length && tabs.length > 1) {
 
 			return this.setState({ hasTabs: true })
 		}
-		this.setState({ hasTabs: false })
+		this.setState({ hasTabs: false }, function () {
+
+			if (this.state.size === "large") self.contractWindow();
+		})
 	}
 	onMouseUp(e) {
 	}
 	onMouseMove(e) {
 	}
 	onDragOver(e) {
-		hover = true;
-		if (this.state.size === "small") {
-			//this.expandWindow()
+		e.preventDefault();
 
-		}
 	}
 	onDrop(e) {
+		console.log("on drop")
 	}
 	contractWindow() {
 		var self = this;
 		HeaderActions.contractWindow(function () {
-			self.setState({ size: "small" })
+
 		})
+
+		self.setState({ size: "small" })
 	}
 	expandWindow() {
-		this.setState({ expandedComplete: false, size: "large" })
+		var self = this;
+
 		HeaderActions.expandWindow(function () {
+			self.setState({ expandedComplete: true, size: "large" })
 		})
+
 	}
 	onActionClick(event, openedByClick) {
 		if (isDragging) return;
@@ -174,14 +193,14 @@ class FloatingHeader extends React.Component {
 
 			}
 
-			return <div onClickCapture={(e) => { self.onActionClick(e, true) }}
-				onDragOver={this.onDragOver} onDropCapture={this.ondrop} draggable="true"
+			return <div onClickCapture={(e) => { if (this.state.hasTabs) self.onActionClick(e, true) }}
+				onDropCapture={this.ondrop} draggable="true"
 				onDragEnd={this.onDragEnd} onDragStart={this.onDragStart} className="headerContainer" >
 				<div className={actionClasses}>{title}</div>
 			</div >
 		}
 
-		return <div className={headerClasses} onDragEnd={this.onDragEnd} onDragEnter={function () {
+		return <div className={headerClasses} onDragOver={this.onDragOver} onDropCapture={this.ondrop} onDragEnd={this.onDragEnd} onDragEnter={function () {
 			lastDragEventLeave = false;
 		}} onDragLeave={function (e) {
 			lastDragEventLeave = true;
