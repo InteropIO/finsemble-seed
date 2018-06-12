@@ -129,7 +129,7 @@
     /* Component Variables:  Use these variables to make small changes to colors and general appearance. */
 
     /** Toolbar */
-    --toolbar-font-size: 15px;
+    --toolbar-font-size: 13px;
     --toolbar-font-color: var(--primary-font-color);
     --toolbar-line-height: 1em;
     --toolbar-font-weight: var(--primary-font-weight);

@@ -9,11 +9,15 @@
 }
 
 .finsemble-toolbar-button-icon {
-    padding-top: 5px;
+    padding-top: 4px;
 }
 
 .finsemble-toolbar-brand-logo {
     padding: 4px 0 0 0 !important;
+}
+
+.finsemble-button-label {
+    padding-top: 0px;
 }
 
 .finsemble-item-pinned:hover {
@@ -25,7 +29,7 @@
 }
 
 .finsemble-toolbar-section.right .finsemble-toolbar-button-icon {
-    padding-top: 3px;
+    padding-top: 2px;
 }
 
 .jpmuitk-icon-document-add, .jpmuitk-icon-save, .jpmuitk-icon-save-solid, .jpmuitk-icon-report-builder {
