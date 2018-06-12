@@ -327,7 +327,6 @@ html.desktop-active .linker-group {
 .fsbl-linker {
     cursor: pointer;
     display: flex;
-    height: 100%;
   /* So it sits over the border*/
     margin-left: -1px;
     align-items: center;
