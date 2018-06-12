@@ -21,7 +21,7 @@
 }
 
 .finsemble-item-pinned:hover {
-    border-radius: 0px;
+    border-radius: 4px;
 }
 
 .searchInput::after {
