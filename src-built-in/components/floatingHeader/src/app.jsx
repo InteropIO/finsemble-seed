@@ -41,7 +41,7 @@ class FloatingHeader extends React.Component {
 		};
 		this.onActionClick = this.onActionClick.bind(this);
 		this.onDragEnd = this.onDragEnd.bind(this);
-		this.onDragOver = this.onDragOver.bind(this);
+
 		this.onDragStart = this.onDragStart.bind(this);
 		this.onTabsUpdated = this.onTabsUpdated.bind(this);
 		this.contractWindow = this.contractWindow.bind(this);
@@ -66,7 +66,6 @@ class FloatingHeader extends React.Component {
 
 	}
 	onTilingStart(err, response) {
-		console.log("Start tiling", this.state.size)
 		this.setState({ hadTabs: storeExports.Actions.getTabs().length, shouldContractOnStop: this.state.size === "small" && HeaderStore.getCompanionWindow().windowName !== response.data.windowIdentifier.windowName }, () => {
 			if (this.state.size === "small" && HeaderStore.getCompanionWindow().windowName !== response.data.windowIdentifier.windowName) this.expandWindow();
 		})
@@ -76,7 +75,6 @@ class FloatingHeader extends React.Component {
 		let shouldContractOnStop = this.state.shouldContractOnStop
 		var self = this;
 		this.setState({ shouldContractOnStop: false }, () => {
-			console.log("shouldContractOnStop", storeExports.Actions.getTabs())
 			if (shouldContractOnStop && self.state.hadTabs && storeExports.Actions.getTabs().length < 2) self.contractWindow();
 		});
 	}
@@ -123,7 +121,6 @@ class FloatingHeader extends React.Component {
 	onComponentDidUpdate() {
 	}
 	onTabsUpdated() {
-		console.log("tabs updated")
 		let tabs = storeExports.Actions.getTabs();
 		var self = this;
 		if (tabs && tabs.length && tabs.length > 1) {
@@ -135,17 +132,7 @@ class FloatingHeader extends React.Component {
 			if (this.state.size === "large") self.contractWindow();
 		})
 	}
-	onMouseUp(e) {
-	}
-	onMouseMove(e) {
-	}
-	onDragOver(e) {
-		e.preventDefault();
 
-	}
-	onDrop(e) {
-		console.log("on drop")
-	}
 	contractWindow() {
 		var self = this;
 		HeaderActions.contractWindow(function () {
@@ -193,7 +180,7 @@ class FloatingHeader extends React.Component {
 
 			}
 
-			return <div onClickCapture={(e) => { if (this.state.hasTabs) self.onActionClick(e, true) }}
+			return <div onClickCapture={(e) => { self.onActionClick(e, true) }}
 				onDropCapture={this.ondrop} draggable="true"
 				onDragEnd={this.onDragEnd} onDragStart={this.onDragStart} className="headerContainer" >
 				<div className={actionClasses}>{title}</div>
@@ -223,15 +210,13 @@ class FloatingHeader extends React.Component {
 	}
 }
 
-fin.desktop.main(function () {
-	FSBL.addEventListener("onReady", function () {
-		HeaderActions.initialize(function () {
-			storeExports.initialize(HeaderStore.getCompanionWindow(), function () {
-				storeExports.Actions.setWindowIdentifier(HeaderStore.getCompanionWindow().identifier)
-				ReactDOM.render(
-					<FloatingHeader />
-					, document.getElementById("bodyHere"));
-			})
-		});
+FSBL.addEventListener("onReady", function () {
+	HeaderActions.initialize(function () {
+		storeExports.initialize(HeaderStore.getCompanionWindow(), function () {
+			storeExports.Actions.setWindowIdentifier(HeaderStore.getCompanionWindow().identifier)
+			ReactDOM.render(
+				<FloatingHeader />
+				, document.getElementById("bodyHere"));
+		})
 	});
 });

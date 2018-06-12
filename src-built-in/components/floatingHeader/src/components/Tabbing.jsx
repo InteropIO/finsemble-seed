@@ -19,28 +19,28 @@ export default class TabbingSection extends React.Component {
 		super(props);
 		this.finWindow = fin.desktop.Window.getCurrent();
 		this.state = {
-			showTabs: false,
+			showTabs: true,
 			tabBarBoundingBox: {},
 			tabs: [],
 			windowTitle: "This window",
-			loaded: false
+			loaded: true
 		};
 	}
 
 	componentWillMount() {
 		var self = this;
 
-		storeExports.initialize(HeaderStore.getCompanionWindow(), function () {
+		//storeExports.initialize(HeaderStore.getCompanionWindow(), function () {
 
-			FSBL.Clients.ConfigClient.getValue({ field: "finsemble" }, (err, config) => {
-				let windowManager = config['Window Manager'];
-				self.setState({
-					loaded: true,
-					windowTitle: HeaderStore.getCompanionWindow().windowName,
-					showTabs: typeof config['Window Manager'] !== undefined ? config['Window Manager'].showTabs : false
-				});
-			})
-		})
+		/*FSBL.Clients.ConfigClient.getValue({ field: "finsemble" }, (err, config) => {
+			let windowManager = config['Window Manager'];
+			self.setState({
+				loaded: true,
+				windowTitle: HeaderStore.getCompanionWindow().windowName,
+				showTabs: typeof config['Window Manager'] !== undefined ? config['Window Manager'].showTabs : false
+			});
+		})*/
+		//})
 
 	}
 	componentWillunMount() {
@@ -52,17 +52,15 @@ export default class TabbingSection extends React.Component {
 		let tabRegionClasses = "fsbl-tab-area";
 		if (!this.state.loaded) return null;
 		return <div className="fsbl-header-center">
-
-			{this.state.showTabs &&
-				<TabRegion
-					onTabDropped={() => { }}
-					className={tabRegionClasses}
-					thisWindowsTitle={this.state.windowTitle}
-					boundingBox={this.state.tabBarBoundingBox}
-					listenForDragOver={true}
-					tabs={this.state.tabs}
-					ref="tabArea"
-				/>}</div>
+			<TabRegion
+				onTabDropped={() => { }}
+				className={tabRegionClasses}
+				thisWindowsTitle={this.state.windowTitle}
+				boundingBox={this.state.tabBarBoundingBox}
+				listenForDragOver={true}
+				tabs={this.state.tabs}
+				ref="tabArea"
+			/></div>
 
 	}
 }

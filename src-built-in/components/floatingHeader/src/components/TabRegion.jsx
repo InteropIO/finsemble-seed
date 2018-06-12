@@ -458,7 +458,6 @@ export default class TabRegion extends React.Component {
         </div>);
     }
     render() {
-        // if (!this.state.loaded) return null;
         let { translateX } = this.state;
         //If we have just 1 tab, we render the title. Unless someone is dragging a tab around - in that case, we will render the tab view, even though we only have 1.
         var componentToRender = "title";
