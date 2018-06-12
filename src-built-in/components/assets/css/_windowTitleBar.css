@@ -166,7 +166,8 @@ html.desktop-active .fsbl-tab-region-drag-area {
     font-size: var(--titleBar-icon-font-size);
     width: 21px;
     padding: 0px 6px;
-    height: 100%;
+    height: calc(100% + 5px);
+    margin-top: -5px;
     display: flex;
     align-items: center;
     justify-content: center;
