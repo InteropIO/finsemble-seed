@@ -45,23 +45,31 @@ class FloatingHeader extends React.Component {
 		this.contractWindow = this.contractWindow.bind(this);
 		this.expandWindow = this.expandWindow.bind(this);
 		this.onWindowUpdateExpandComplete = this.onWindowUpdateExpandComplete.bind(this);
-
+		this.onTilingStart = this.onTilingStart.bind(this);
+		this.onTilingStop = this.onTilingStop.bind(this);
 	}
 
 	componentWillMount() {
 		storeExports.Store.addListener({ field: "tabs" }, this.onTabsUpdated);
-		HeaderStore.addListener("tabRegionShow", this.onWindowUpdateExpandComplete)
+		HeaderStore.addListener("tabRegionShow", this.onWindowUpdateExpandComplete);
+		FSBL.Clients.RouterClient.addListener("DockingService.startTilingOrTabbing", this.onTilingStart);
+		FSBL.Clients.RouterClient.addListener("DockingService.stopTilingOrTabbing", this.onTilingStop);
 	}
 	componentWillunMount() {
 		storeExports.Store.removeListener({ field: "tabs" }, this.onTabsUpdated);
 		HeaderStore.removeListener("tabRegionShow", this.onWindowUpdateExpandComplete)
+		FSBL.Clients.RouterClient.removeListener("DockingService.startTilingOrTabbing", this.onTilingStart);
+		FSBL.Clients.RouterClient.removeListener("DockingService.stopTilingOrTabbing", this.onTilingStop);
+
+	}
+	onTilingStart() {
+		this.expandWindow();
+	}
+	onTilingStop() {
+		this.contractWindow();
 	}
 	onWindowUpdateExpandComplete(data) {
-		console.log("onWindowUpdateExpandComplete", lastDragEventLeave, hover)
 		if (lastDragEventLeave && hover) {
-
-			console.log("set hover false1");
-
 			HeaderActions.isMouseInHeader(function (err, isInHeader) {
 				if (!isInHeader) {
 					hover = false;
@@ -74,7 +82,6 @@ class FloatingHeader extends React.Component {
 	}
 	onDragStart(e) {
 		isDragging = true;
-		console.log("drag start", storeExports)
 		dragFromActionBar = true;
 		e.dataTransfer.setData("text/json", JSON.stringify(storeExports.Actions.getWindowIdentifier()));
 		FSBL.Clients.WindowClient.startTilingOrTabbing({
@@ -84,7 +91,7 @@ class FloatingHeader extends React.Component {
 		//this.setState({ dragFromActionBar: true })
 	}
 	onDragEnd(e) {
-		console.log("onDragEnd")
+		console.log("on dragend")
 		dragFromActionBar = false;
 		isDragging = false;
 		FSBL.Clients.Logger.system.debug("Tab drag stop");
@@ -94,16 +101,13 @@ class FloatingHeader extends React.Component {
 			y: e.nativeEvent.screenY
 		}
 		let boundingRect = this.state.boundingBox;
-		if (!FSBL.Clients.WindowClient.isPointInBox(mousePositionOnDragEnd, FSBL.Clients.WindowClient.options)) {
-			console.log("stop tiling", mousePositionOnDragEnd)
-			FSBL.Clients.WindowClient.stopTilingOrTabbing({ mousePosition: mousePositionOnDragEnd });
+		//	if (!FSBL.Clients.WindowClient.isPointInBox(mousePositionOnDragEnd, FSBL.Clients.WindowClient.options)) {
+		FSBL.Clients.WindowClient.stopTilingOrTabbing({ mousePosition: mousePositionOnDragEnd });
 
-			//this.onWindowResize();
-		}
+		//this.onWindowResize();
+		//}
 	}
 	onComponentDidMount() {
-		console.log("onComponentDidMount")
-
 	}
 	onComponentDidUpdate() {
 	}
@@ -116,13 +120,10 @@ class FloatingHeader extends React.Component {
 		this.setState({ hasTabs: false })
 	}
 	onMouseUp(e) {
-		console.log("onMouseUp")
 	}
 	onMouseMove(e) {
-		//console.log("onMouseMove")
 	}
 	onDragOver(e) {
-		console.log("dragover", this.state.size)
 		hover = true;
 		if (this.state.size === "small") {
 			//this.expandWindow()
@@ -130,23 +131,19 @@ class FloatingHeader extends React.Component {
 		}
 	}
 	onDrop(e) {
-		console.log("onDrop")
 	}
 	contractWindow() {
-		console.log("contractWindow");
 		var self = this;
 		HeaderActions.contractWindow(function () {
 			self.setState({ size: "small" })
 		})
 	}
 	expandWindow() {
-		console.log("expandWindow")
 		this.setState({ expandedComplete: false, size: "large" })
 		HeaderActions.expandWindow(function () {
 		})
 	}
 	onActionClick(event, openedByClick) {
-		console.log("hover", hover)
 		if (isDragging) return;
 		if (event) {
 			event.stopPropagation();
@@ -184,7 +181,7 @@ class FloatingHeader extends React.Component {
 			</div >
 		}
 
-		return <div className={headerClasses} onDragEnter={function () {
+		return <div className={headerClasses} onDragEnd={this.onDragEnd} onDragEnter={function () {
 			lastDragEventLeave = false;
 		}} onDragLeave={function (e) {
 			lastDragEventLeave = true;
@@ -212,7 +209,6 @@ fin.desktop.main(function () {
 		HeaderActions.initialize(function () {
 			storeExports.initialize(HeaderStore.getCompanionWindow(), function () {
 				storeExports.Actions.setWindowIdentifier(HeaderStore.getCompanionWindow().identifier)
-				console.log("render time")
 				ReactDOM.render(
 					<FloatingHeader />
 					, document.getElementById("bodyHere"));
