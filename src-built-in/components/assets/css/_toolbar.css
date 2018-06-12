@@ -162,7 +162,7 @@ img.pinned-icon {
     width: var(--toolbar-brand-logo-width);
     height: var(--toolbar-brand-logo-height);
     margin: 2px 2px;
-    padding: 2px 0px 0px 0px !important;
+    padding: 2px 0px 0px 0px;
 }
 
 /* Special tweaks for pinned icons */
