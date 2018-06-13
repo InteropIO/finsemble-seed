@@ -204,7 +204,11 @@ var Actions = {
 		FSBL.Clients.WindowClient.finsembleWindow.show();
 	},
 	onCompanionBringToFront() {
-		FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
+		console.log("bring this window to front-----")
+		setTimeout(() => {
+			FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
+		}, 500);
+
 	},
 	onCompanionMaximized() {
 		Actions.updateWindowPosition();
