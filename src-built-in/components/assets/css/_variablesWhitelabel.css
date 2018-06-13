@@ -147,7 +147,7 @@
     --toolbar-separator: 1px solid rgba(255, 255, 255, 0.3);
 
     /* Window Title bar */
-    --titleBar-height: 30px;
+    --titleBar-height: 25px;
 
     --titleBar-font-size: 12px;
     --titleBar-icon-font-size: 13px;
