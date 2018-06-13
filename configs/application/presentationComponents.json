@@ -639,7 +639,7 @@
 				},
 				"components": {
 					"App Launcher": {
-						"launchableByUser": false,
+						"launchableByUser": false
 					},
 					"Window Manager": {
 						"FSBLHeader": false,
