@@ -71,7 +71,7 @@ export default class ProcessMonitor extends React.Component {
 						{this.state.processList
 							.filter(proc => proc.visible)
 							.map((proc, i) => {
-								return (<div className="process">
+								return (<div key={i} className="process">
 									{/* Process statistics is the meat of this component. It's the statistics and the child windows. */}
 									<ProcessStatistics
 										mode={this.state.viewMode}

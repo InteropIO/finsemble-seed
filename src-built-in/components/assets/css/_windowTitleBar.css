@@ -296,6 +296,10 @@ html.desktop-active .fsbl-linker[hover=true] {
     padding-top: 3px;
 }
 
+.ff-share:before {
+    padding-top: 3px;
+}
+
 .ff-maximize, .ff-close, .ff-detached, .ff-attached{
     padding-top: 2px;
 }
@@ -408,7 +412,8 @@ html.desktop-active .fsbl-linker[hover=true] {
     left: 0px;
 }
 
-
+/* Responsive Sizing */
+/* At 345px, the Drag-to-Share icon will be removed. */ 
 @media screen and (min-width: 0px) and (max-width: 345px){
     .fsbl-icon.ff-share {
         display: none !important;
@@ -421,6 +426,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     }
 }
 
+/* At 310px, the left section of the header will be removed. */ 
 @media screen and (min-width: 0px) and (max-width: 310px){
     .fsbl-header-left {
         display: none !important;
@@ -430,28 +436,33 @@ html.desktop-active .fsbl-linker[hover=true] {
     }
 }
 
+/* At 280px, the docking icon will be removed. */ 
 @media screen and (min-width: 0px) and (max-width: 280px){
     .fsbl-icon.ff-detached, .fsbl-icon.ff-attached {
         display: none !important;
     }
     .fsbl-tabs-multiple .fsbl-header-right {
-        padding-left: 50px; /* leave some space for a user to grab */
+        padding-left: 50px; /* this will leave some space for window dragging */
     }
 }
+
+/* At 245px, the maximize icon will be removed. */
 @media screen and (min-width: 0px) and (max-width: 245px){
     .fsbl-icon.fsbl-maximize {
         display: none !important;
     }
     .fsbl-tabs-multiple .fsbl-header-right {
-        padding-left: 40px; /* leave some space for a user to grab */
+        padding-left: 40px; /* this will leave some space for window dragging */
     }
 }
+
+/* At 210px, the minimize icon will be removed. */ 
 @media screen and (min-width: 0px) and (max-width: 210px){
     .fsbl-icon.fsbl-minimize {
         display: none !important;
     }
     .fsbl-tabs-multiple .fsbl-header-right {
-        padding-left: 30px; /* leave some space for a user to grab */
+        padding-left: 30px; /* this will leave some space for window dragging */
     }
     .fsbl-header-title {
         max-width:25%;

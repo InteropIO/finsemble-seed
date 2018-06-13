@@ -3,22 +3,22 @@
 body {
 	margin: 0px;
 	overflow: hidden;
-	font-size: 12px;
-	font-weight: var(--monitor-font-weight);
+	font-size: var(--procMonitor-font-size);
+	font-weight: var(--procMonitor-font-weight);
 	font-family: var(--font-family);
-	color: var(--monitor-font-color);
-	background-color: var(--monitor-background-color);
+	color: var(--procMonitor-font-color);
+	background-color: var(--procMonitor-background-color);
 }
 
 
 .high-usage {
-	background-color: var(--monitor-negative-background-color);
-	color: var(--monitor-font-color);
+	background-color: var(--procMonitor-negative-background-color);
+	color: var(--procMonitor-font-color);
 }
 
 .moderate-usage {
-	background-color: var(--monitor-warning-background-color);
-	color: var(--monitor-font-color);
+	background-color: var(--procMonitor-warning-background-color);
+	color: var(--procMonitor-font-color);
 }
 
 .terminate {
@@ -36,14 +36,14 @@ body {
 }
 
 .terminate:hover {
-	border-color: var(--monitor-negative-border-color);
-	background-color: var(--monitor-negative-background-color);
-	color: var(--monitor-font-color);
+	border-color: var(--procMonitor-negative-border-color);
+	background-color: var(--procMonitor-negative-background-color);
+	color: var(--procMonitor-font-color);
 }
 
 .process-list-wrapper {
 	margin: 1em;
-	border: 1px solid var(--monitor-list-border-color);
+	border: 1px solid var(--procMonitor-list-border-color);
 }
 
 .process-list {
@@ -59,11 +59,11 @@ body {
 .process {
 	padding-top: 8px;
 	padding-bottom: 8px;
-	border-bottom: 1px solid var(--monitor-list-border-color);
+	border-bottom: 1px solid var(--procMonitor-list-border-color);
 }
 
 .list-header {
-	border-bottom: 1px solid var(--monitor-list-border-color);
+	border-bottom: 1px solid var(--procMonitor-list-border-color);
 	padding-right: 15px;
 	align-items: center;
 	/*Account for scrollbar.*/
@@ -74,7 +74,7 @@ body {
 }
 
 .process-name {
-	font-weight: var(--monitor-process-name-font-weight);
+	font-weight: var(--procMonitor-process-name-font-weight);
 	font-style: italic;
 	padding-left: 7px;
 }
@@ -112,7 +112,7 @@ body {
 }
 
 .child-window-name {
-	font-weight: var(--monitor-component-name-font-weight);
+	font-weight: var(--procMonitor-component-name-font-weight);
 }
 .advanced .child-window-name {
 	cursor: pointer;
@@ -151,12 +151,12 @@ body {
 	margin-right: 17px;
 	height: 8px;
 	width: 7px;
-	color: var(--monitor-close-component-font-color);
+	color: var(--procMonitor-close-component-font-color);
 }
 
 .close-window:hover {
 	cursor: pointer;
-	color: var(--monitor-close-hover-color);
+	color: var(--procMonitor-close-hover-color);
 }
 
 .sort-direction {
