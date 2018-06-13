@@ -493,7 +493,6 @@ var Actions = {
 		if (Actions.parentWrapper) {
 			cb();
 		} else {
-			debugger;
 			FSBL.Clients.WindowClient.getStackedWindow(params, (err, response) => {
 				if (err) {
 					Actions.parentWrapper = null;

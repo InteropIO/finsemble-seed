@@ -482,7 +482,6 @@ function renderTabs() {
     return this.state.tabs.map((tab, i) => {
         return <Tab
             onClick={() => {
-                debugger;
                 this.setActiveTab(tab);
             }}
             draggable="true"
