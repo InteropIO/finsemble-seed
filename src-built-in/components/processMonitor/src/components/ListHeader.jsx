@@ -44,8 +44,8 @@ export default class ListHeader extends React.Component {
                 }
             </div>
             <div className="list-header-statistic-labels">
-                {this.props.fields.map(field => {
-                    return (<div className="list-header-statistic-label" onClick={() => {
+                {this.props.fields.map((field, i) => {
+                    return (<div key={i} className="list-header-statistic-label" onClick={() => {
                         Actions.setSort(field.value)
                     }}>
                         {field.label}

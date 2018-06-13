@@ -9,8 +9,8 @@ export default class ChildWindows extends React.Component {
     }
     render() {
         return <div>
-            {this.props.childWindows.map(cw => {
-                return (<ChildWindow viewMode={this.props.viewMode} cw={cw} />)
+            {this.props.childWindows.map((cw, i) => {
+                return (<ChildWindow key={i} viewMode={this.props.viewMode} cw={cw} />)
             })}
         </div>
     }
