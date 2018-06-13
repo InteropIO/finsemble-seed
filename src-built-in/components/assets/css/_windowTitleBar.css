@@ -308,8 +308,8 @@ html.desktop-active .fsbl-linker[hover=true] {
 }
 
 .fsbl-tab[data-hover=true], .fsbl-active-tab {
-    background-color: var(--tab-active-background-color);
-    color: var(--tab-active-color);
+    background-color: var(--titlebar-tab-active-background-color);
+    color: var(--titlebar-tab-active-font-color);
 }
 
 .tab-region-wrapper {
