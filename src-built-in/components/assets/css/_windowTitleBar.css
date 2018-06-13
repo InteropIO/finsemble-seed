@@ -385,8 +385,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     width: 100%;
     position: absolute;
     left:0;
-    overflow-x: scroll;
-
+    overflow: scroll;
 }
 .fsbl-tab-area::-webkit-scrollbar  {
     display: none;

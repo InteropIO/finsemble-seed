@@ -186,7 +186,7 @@ export default class TabRegion extends React.Component {
         let translateX = 0;
         //If there's more than one tab, do some calculations, otherwise we aren't going to scroll this region, no matter how much the user wants us to.
         if (numTabs > 1) {
-            let currentX = this.state.translateX;
+            let currentX = this.refs.Me.scrollLeft;
             let { boundingBox } = this.state;
             //Figure out position of first tab and last tab.
             let firstTab = {
@@ -196,21 +196,36 @@ export default class TabRegion extends React.Component {
                 right: numTabs * this.state.tabWidth
             };
 
-            //If the content is overflowing, correct the translation (if necessary)..
-            if (lastTab.right > boundingBox.right) {
-                translateX = e.nativeEvent.deltaY + currentX;
-                let maxRight = boundingBox.right - this.state.tabWidth;
-                let newRightForLastTab = lastTab.right + translateX;
-                let newLeftForFirstTab = firstTab.left + translateX;
-                //Do not let the left of the first tab move to the right of the left edge of the bounding box.
-                if (newLeftForFirstTab >= boundingBox.left) {
-                    return this.scrollToFirstTab();
-                } else if (e.nativeEvent.deltaY < 0 && newRightForLastTab <= boundingBox.right) {
-                    //ONLY IF the user is scrolling from right-to-left (deltaY will be negative). IF they try to do that, do not allow the right edge of the last tab to detach.
-                    return this.scrollToLastTab();
+            //when we set scrollLeft on the element, this event fires. But there's no actual event. so stop.
+            if (!e.nativeEvent.deltaY) {
+                console.log("No deltaY");
+                return;
+            };
+            let originalDeltaY = e.nativeEvent.deltaY;
+            let deltaY = originalDeltaY;
+            if (Math.abs(originalDeltaY) > (this.state.tabWidth / 3)) {
+                deltaY = this.state.tabWidth / 3;
+                if (originalDeltaY < 0) {
+                    deltaY = 0 - deltaY;
                 }
             }
+            translateX = deltaY + currentX;
+            let maxRight = boundingBox.right - this.state.tabWidth;
+            let newRightForLastTab = lastTab.right + translateX;
+            let newLeftForFirstTab = firstTab.left + translateX;
+            // console.log("translateX", translateX, "NewLeft", newRightForLastTab, "BBRight", boundingBox.right);
+            //Do not let the left of the first tab move to the right of the left edge of the bounding box.
+            if (newLeftForFirstTab < 0) {
+                // console.log("Scrolling to first tab");
+                return this.scrollToFirstTab();
+            } else if (e.nativeEvent.deltaY < 0 && newRightForLastTab <= boundingBox.right) {
+                //ONLY IF the user is scrolling from right-to-left (deltaY will be negative). IF they try to do that, do not allow the right edge of the last tab to detach.
+                // console.log("Scrolling to last tab");
+                return this.scrollToLastTab();
+            }
             //Else, the translation is okay. We're in the middle of our list and the first and last tabs aren't being rendered improperly.
+            // console.log("Setting TranslateX on mouseWheel", translateX);
+            translateX < 0 ? translateX = 0 : translateX;
             this.setState({ translateX });
         }
     }
@@ -224,6 +239,7 @@ export default class TabRegion extends React.Component {
      * Scrolls to the first tab in our list of tabs.
      */
     scrollToFirstTab() {
+        // console.log("Scroll to first tab");
         let firstTab = this.state.tabs[0];
         this.scrollToTab(firstTab);
     }
@@ -231,6 +247,7 @@ export default class TabRegion extends React.Component {
      * Scrolls to the last tab in our list of tabs
      */
     scrollToLastTab() {
+        // console.log("Scroll to last tab");
         let lastTab = this.state.tabs[this.state.tabs.length - 1];
         this.scrollToTab(lastTab);
     }
@@ -248,13 +265,14 @@ export default class TabRegion extends React.Component {
         if (tabIndex > -1) {
             let leftEdgeOfTab = tabIndex * this.state.tabWidth;
             let rightEdgeOfTab = leftEdgeOfTab + this.state.tabWidth;
+            let translateX = rightEdgeOfTab
             //Our translation is  this: Take the  right edge of the bounding box, and subract the left edge. This gives us the 0 point for the box. Then, we subtract the right edge of the tab. The result is a number that we use to shift the entire element and align the right edge of the tab with the right edge of the bounding box. We also account for the 30 px region on the right.
-            let translateX = boundingBox.right - boundingBox.left - rightEdgeOfTab;
 
             //If there's no overflow, we don't scroll.
             if (rightEdgeOfTab < boundingBox.right) {
                 translateX = 0;
             }
+            // console.log("TranslateX", translateX, "Right of box", boundingBox.right);
             this.setState({ translateX });
         }
     }
@@ -269,7 +287,7 @@ export default class TabRegion extends React.Component {
         //         tabBeingDragged: identifier
         //     });
         // }
-        console.log("Drag over the tab region");
+        // console.log("Drag over the tab region");
         e.preventDefault();
         // Actions.reorderTabLocally(PLACEHOLDER_TAB, this.state.tabs.length);
     }
@@ -316,7 +334,7 @@ export default class TabRegion extends React.Component {
         e.preventDefault();
         //Find index of tab.
         let tabIndex = this.findTabIndex(tabDraggedOver);
-        console.log("Drag over a tab. new Index", tabIndex, tabDraggedOver.windowName);
+        // console.log("Drag over a tab. new Index", tabIndex, tabDraggedOver.windowName);
         this.setState({
             hoveredTabIndex: tabIndex
         })
@@ -375,7 +393,7 @@ export default class TabRegion extends React.Component {
     // }
     onTabsChanged(err, response) {
         let { value } = response;
-        console.log("Tablist changed", value);
+        // console.log("Tablist changed", value);
         this.setState({
             tabs: value,
             tabWidth: this.getTabWidth({ tabList: value })
@@ -408,6 +426,7 @@ export default class TabRegion extends React.Component {
 
     render() {
         let { translateX } = this.state;
+        translateX = Math.abs(translateX);
         //If we have just 1 tab, we render the title. Unless someone is dragging a tab around - in that case, we will render the tab view, even though we only have 1.
 
         let componentToRender = "title";
@@ -423,17 +442,17 @@ export default class TabRegion extends React.Component {
         if (componentToRender === "title") {
             translateX = 0;
         }
-        //How far left or right to shift the tabRegion
-        let tabRegionStyle = {
-            marginLeft: `${translateX}px`
+
+        if (this.refs.Me) {
+            this.refs.Me.scrollLeft = translateX;
         }
+
         let tabRegionDropZoneStyle = { left: this.state.tabs.length * this.state.tabWidth + "px" }
-        console.log("TAB DROP REGION", tabRegionDropZoneStyle);
         let moveAreaClasses = "cq-drag fsbl-tab-region-drag-area";
         if (this.isTabRegionOverflowing()) {
             moveAreaClasses += " gradient"
         }
-
+        window.TABREGION = this;
         return (
             <div
                 ref="Me"
@@ -445,7 +464,7 @@ export default class TabRegion extends React.Component {
                 onDragOver={this.dragOver}
             >
                 <div className="tab-region-wrapper"
-                    style={tabRegionStyle}
+                // style={tabRegionStyle}
                 >
                     {componentToRender === "title" && renderTitle()}
                     {componentToRender === "tabs" && renderTabs()}

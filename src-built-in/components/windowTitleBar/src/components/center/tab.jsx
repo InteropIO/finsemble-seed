@@ -33,7 +33,7 @@ export default class Tab extends React.Component {
 		let style = {
 			width: this.props.tabWidth
 		}
-		console.log("Listen for drag", this.props.listenForDragOver)
+		window.REF = this;
 		return (
 			<div
 				ref="Me"
