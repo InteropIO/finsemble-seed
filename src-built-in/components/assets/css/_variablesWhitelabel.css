@@ -160,9 +160,9 @@
 
     --titlebar-tab-icon-font-color: var(--grey100);
     --titlebar-tab-active-font-color: var(--primary-font-color);
-    --titlebar-tab-active-background-color: var(--coolGrey400); /* Specifies the background color of the active tab in an inactive window. */
-    --titlebar-tab-inactive-font-color: var(--grey);
-    --titlebar-tab-inactive-background-color: var(--coolGrey900); /* Inactive tabs are the same color for active and inactive windows. */
+    --titlebar-tab-active-background-color: var(--coolGrey900); /* Specifies the background color of the active tab in an inactive window. */
+    --titlebar-tab-inactive-font-color: var(--grey400);
+    --titlebar-tab-inactive-background-color: var(--coolGrey400); /* Inactive tabs are the same color for active and inactive windows. */
     --titlebar-tab-ghost-background-color: var(--secondary-accent-color);
     --titlebar-tab-ghost-border-color: var(--primary-accent-color);
     --titlebar-tab-separator: 1px solid var(--grey);

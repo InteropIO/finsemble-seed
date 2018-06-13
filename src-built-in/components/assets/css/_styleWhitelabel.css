@@ -46,6 +46,11 @@
     right: 0;
 }
 
+.fsbl-tab[data-hover=true], .fsbl-active-tab {
+    background-color: var(--titlebar-tab-active-background-color);
+    color: var(--titlebar-tab-active-color);
+}
+
 .searchInput::after {
     bottom: 2px !important;
 }
