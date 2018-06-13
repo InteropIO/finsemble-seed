@@ -54,14 +54,21 @@
 					"Toolbar",
 					"App Launcher",
 					"Workspace Management Menu",
-					"Finsemble Linker Window",
+					"linkerWindow",
 					"defaultAuthentication",
 					"dialogSignOn",
 					"dialogTemplate",
 					"dialogTest",
 					"File Menu",
 					"AdhocComponentForm",
-					"Process Monitor"
+					"Process Monitor",
+					"Docking Move Mask",
+					"yesNo",
+					"singleInput",
+					"dialogModal",
+					"UserPreferences",
+					"App Catalog",
+					"searchMenu"
 				]
 			},
 			{
