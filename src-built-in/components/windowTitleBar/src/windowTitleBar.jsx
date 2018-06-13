@@ -47,6 +47,8 @@ class WindowTitleBar extends React.Component {
 		this.bindCorrectContext();
 		windowTitleBarStore.getValue({ field: "Maximize.hide" });
 		this.dragEndTimeout = null;
+		let activeIdentifier = finsembleWindow.identifier;
+        activeIdentifier.title = finsembleWindow.windowOptions.title;
 		this.state = {
 			windowTitle: windowTitleBarStore.getValue({ field: "Main.windowTitle" }),
 			minButton: !windowTitleBarStore.getValue({ field: "Minimize.hide" }),
@@ -57,9 +59,9 @@ class WindowTitleBar extends React.Component {
 			isTopRight: windowTitleBarStore.getValue({ field: "isTopRight" }),
 			alwaysOnTopButton: windowTitleBarStore.getValue({ field: "AlwaysOnTop.show" }),
 			tabs: [{ title: windowTitleBarStore.getValue({ field: "Main.windowTitle" }) }], //array of tabs for this window
-			showTabs: false,
+			showTabs: windowTitleBarStore.getValue({field: "showTabs"}),
 			allowDragOnCenterRegion: true,
-			activeTab: FSBL.Clients.WindowClient.getWindowIdentifier(),
+			activeTab: activeIdentifier,
 			tabBarBoundingBox: {},
 		};
 
@@ -82,6 +84,7 @@ class WindowTitleBar extends React.Component {
 
 		this.onShareEmitterChanged = this.onShareEmitterChanged.bind(this);
 		this.onTabsChanged = this.onTabsChanged.bind(this);
+		this.onShowTabsChanged = this.onShowTabsChanged.bind(this);
 
 	}
 	componentWillMount() {
@@ -94,15 +97,9 @@ class WindowTitleBar extends React.Component {
 			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton },
 			{ field: "Sharer.emitterEnabled", listener: this.onShareEmitterChanged },
 			{ field: "isTopRight", listener: this.isTopRight },
-			{ field: "tabs", listener: this.onTabsChanged }
+			{ field: "tabs", listener: this.onTabsChanged },
+			{ field: "showTabs", listener: this.onShowTabsChanged },
 		]);
-
-		FSBL.Clients.ConfigClient.getValue({ field: "finsemble" }, (err, config) => {
-			let windowManager = config['Window Manager'];
-			this.setState({
-				showTabs: typeof config['Window Manager'] !== undefined ? config['Window Manager'].showTabs : false
-			});
-		})
 
 		FSBL.Clients.RouterClient.addListener("DockingService.startTilingOrTabbing", this.disallowDragOnCenterRegion);
 		console.log("Adding listener for stopTilingOrTabbing.");
@@ -127,7 +124,8 @@ class WindowTitleBar extends React.Component {
 			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton },
 			{ field: "Sharer.emitterEnabled", listener: this.onShareEmitterChanged },
 			{ field: "isTopRight", listener: this.isTopRight },
-			{ field: "tabs", listener: this.onTabsChanged }
+			{ field: "tabs", listener: this.onTabsChanged },
+			{ field: "showTabs", listener: this.onShowTabsChanged },
 		]);
 		console.log("Removing listener from the router.");
 		FSBL.Clients.RouterClient.removeListener("DockingService.startTilingOrTabbing", this.disallowDragOnCenterRegion);
@@ -177,7 +175,8 @@ class WindowTitleBar extends React.Component {
 	 */
 	onTitleChange(err, response) {
 		let { tabs } = this.state;
-		let myIdentifier = FSBL.Clients.WindowClient.getWindowIdentifier();
+		let myIdentifier = finsembleWindow.identifier;
+        myIdentifier.title = finsembleWindow.windowOptions.title;
 		let myIndex = -1;
 		let myTab = tabs.filter((el, i) => {
 			if (el.name === myIdentifier.name && el.uuid === myIdentifier.uuid) {
@@ -188,7 +187,6 @@ class WindowTitleBar extends React.Component {
 		});
 		myTab.title = response.value;
 		tabs.splice(myIndex, 1, myTab);
-
 		this.setState({
 			windowTitle: response.value,
 			tabs: tabs
@@ -222,6 +220,12 @@ class WindowTitleBar extends React.Component {
 	onTabsChanged(err, response) {
 		this.setState({
 			tabs: response.value
+		})
+	}
+
+	onShowTabsChanged(err, response) {
+		this.setState({
+			showTabs: response.value
 		})
 	}
 
@@ -274,7 +278,6 @@ class WindowTitleBar extends React.Component {
 							tabs={this.state.tabs}
 							ref="tabArea"
 						/>}
-
 				</div>
 				<div className={rightWrapperClasses} ref={this.setToolbarRight}>
 					{this.state.alwaysOnTopButton && showMinimizeIcon ? <AlwaysOnTop /> : null}

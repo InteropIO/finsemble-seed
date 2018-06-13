@@ -292,8 +292,8 @@ html.desktop-active .fsbl-linker[hover=true] {
     padding-bottom: 5px;
 }
 
-.ff-linker {
-    padding-top: 2px;
+.ff-linker:before {
+    padding-top: 3px;
 }
 
 .ff-maximize, .ff-close, .ff-detached, .ff-attached{
@@ -339,8 +339,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     width: 100%;
     position: absolute;
     left:0;
-    overflow-x: scroll;
-
+    overflow: scroll;
 }
 .fsbl-tab-area::-webkit-scrollbar  {
     display: none;
@@ -365,6 +364,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     justify-content: center;
     position: absolute;
     right: 0;
+    z-index: 30001;
 }
 
 .fsbl-tab-close:hover {

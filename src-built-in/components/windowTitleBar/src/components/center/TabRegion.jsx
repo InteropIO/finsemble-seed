@@ -20,10 +20,12 @@ export default class TabRegion extends React.Component {
     constructor(props) {
         super(props);
         let initialState = Store.getValues(["activeTab", "tabs"]);
+        let activeIdentifier = finsembleWindow.identifier;
+        activeIdentifier.title = finsembleWindow.windowOptions.title;
         this.state = {
             translateX: 0,
             tabs: initialState.tabs,
-            activeTab: FSBL.Clients.WindowClient.getWindowIdentifier(),
+            activeTab: activeIdentifier,
             boundingBox: {},
             iAmDragging: false,
             hoverState: false,
@@ -201,7 +203,7 @@ export default class TabRegion extends React.Component {
         let translateX = 0;
         //If there's more than one tab, do some calculations, otherwise we aren't going to scroll this region, no matter how much the user wants us to.
         if (numTabs > 1) {
-            let currentX = this.state.translateX;
+            let currentX = this.refs.Me.scrollLeft;
             let { boundingBox } = this.state;
             //Figure out position of first tab and last tab.
             let firstTab = {
@@ -224,23 +226,37 @@ export default class TabRegion extends React.Component {
                 deltaX = isNegative ? 0 - this.state.tabWidth : this.state.tabWidth;
             }
 
-            //If the content is overflowing, correct the translation (if necessary)..
-            if (lastTab.right > boundingBox.right) {
-                translateX = deltaX + currentX;
-                let maxRight = boundingBox.right - this.state.tabWidth;
-                let newRightForLastTab = lastTab.right + translateX;
-                let newLeftForFirstTab = firstTab.left + translateX;
-                //Do not let the left of the first tab move to the right of the left edge of the bounding box.
-                if (newLeftForFirstTab >= boundingBox.left) {
-                    return this.scrollToFirstTab();
-                } else if (deltaX < 0 && newRightForLastTab <= boundingBox.right) {
-                    //ONLY IF the user is scrolling from right-to-left (deltaX will be negative). IF they try to do that, do not allow the right edge of the last tab to detach.
-                    return this.scrollToLastTab();
+            //when we set scrollLeft on the element, this event fires. But there's no actual event. so stop.
+            if (!e.nativeEvent.deltaY) {
+                console.log("No deltaY");
+                return;
+            };
+            let originalDeltaY = e.nativeEvent.deltaY;
+            let deltaY = originalDeltaY;
+            if (Math.abs(originalDeltaY) > (this.state.tabWidth / 3)) {
+                deltaY = this.state.tabWidth / 3;
+                if (originalDeltaY < 0) {
+                    deltaY = 0 - deltaY;
                 }
             }
-
+            translateX = deltaY + currentX;
+            let maxRight = boundingBox.right - this.state.tabWidth;
+            let newRightForLastTab = lastTab.right + translateX;
+            let newLeftForFirstTab = firstTab.left + translateX;
+            // console.log("translateX", translateX, "NewLeft", newRightForLastTab, "BBRight", boundingBox.right);
+            //Do not let the left of the first tab move to the right of the left edge of the bounding box.
+            if (newLeftForFirstTab < 0) {
+                // console.log("Scrolling to first tab");
+                return this.scrollToFirstTab();
+            } else if (e.nativeEvent.deltaY < 0 && newRightForLastTab <= boundingBox.right) {
+                //ONLY IF the user is scrolling from right-to-left (deltaY will be negative). IF they try to do that, do not allow the right edge of the last tab to detach.
+                // console.log("Scrolling to last tab");
+                return this.scrollToLastTab();
+            }
             //Else, the translation is okay. We're in the middle of our list and the first and last tabs aren't being rendered improperly.
-            this.setTabListTranslateX(translateX);
+            // console.log("Setting TranslateX on mouseWheel", translateX);
+            translateX < 0 ? translateX = 0 : translateX;
+            this.setState({ translateX });
         }
     }
     /**
@@ -252,17 +268,19 @@ export default class TabRegion extends React.Component {
     /**
      * Scrolls to the first tab in our list of tabs.
      */
-	scrollToFirstTab() {
-		let firstTab = this.state.tabs[0];
-		this.scrollToTab(firstTab);
-	}
+    scrollToFirstTab() {
+        // console.log("Scroll to first tab");
+        let firstTab = this.state.tabs[0];
+        this.scrollToTab(firstTab);
+    }
     /**
      * Scrolls to the last tab in our list of tabs
      */
-	scrollToLastTab() {
-		let lastTab = this.state.tabs[this.state.tabs.length - 1];
-		this.scrollToTab(lastTab);
-	}
+    scrollToLastTab() {
+        // console.log("Scroll to last tab");
+        let lastTab = this.state.tabs[this.state.tabs.length - 1];
+        this.scrollToTab(lastTab);
+    }
     /**
      * Function that will horiztonally scroll the tab region so that the right edge of the tab lines up with the right edge of the tab region.
      * @param {} tab
@@ -276,11 +294,13 @@ export default class TabRegion extends React.Component {
         });
         let translateX;
         if (tabIndex > -1) {
-            //The last tab is simple. Just translate until the right edge of the tab matches the right edge of the bounding box.
-            if (tabIndex === this.state.tabs.length) {
-                translateX = 0 - boundingBox.right;
-            } else if (tabIndex === 0) {
-                //The first tab needs no translation.
+            let leftEdgeOfTab = tabIndex * this.state.tabWidth;
+            let rightEdgeOfTab = leftEdgeOfTab + this.state.tabWidth;
+            let translateX = rightEdgeOfTab
+            //Our translation is  this: Take the  right edge of the bounding box, and subract the left edge. This gives us the 0 point for the box. Then, we subtract the right edge of the tab. The result is a number that we use to shift the entire element and align the right edge of the tab with the right edge of the bounding box. We also account for the 30 px region on the right.
+
+            //If there's no overflow, we don't scroll.
+            if (rightEdgeOfTab < boundingBox.right) {
                 translateX = 0;
             } else {
                 //Other tabs are less simple.
@@ -305,17 +325,17 @@ export default class TabRegion extends React.Component {
      * Someone is dragging _something_ over the tab region. We respond by rendering the ghost tab.
      * @param {event} e
      */
-	dragOver(e) {
-		// if (this.state.tabBeingDragged === null) {
-		//     let identifier = PLACEHOLDER_TAB;
-		//     this.setState({
-		//         tabBeingDragged: identifier
-		//     });
-		// }
-		console.log("Drag over the tab region");
-		e.preventDefault();
-		// Actions.reorderTabLocally(PLACEHOLDER_TAB, this.state.tabs.length);
-	}
+    dragOver(e) {
+        // if (this.state.tabBeingDragged === null) {
+        //     let identifier = PLACEHOLDER_TAB;
+        //     this.setState({
+        //         tabBeingDragged: identifier
+        //     });
+        // }
+        // console.log("Drag over the tab region");
+        e.preventDefault();
+        // Actions.reorderTabLocally(PLACEHOLDER_TAB, this.state.tabs.length);
+    }
     /**
      * Triggered when the user moves their mouse out of the tabRegion after a dragOver event happens. When they leave, we hide our placeholder tab.
      * @param {event} e
@@ -355,14 +375,14 @@ export default class TabRegion extends React.Component {
 		return classes;
 	}
 
-	onTabDraggedOver(e, tabDraggedOver) {
-		e.preventDefault();
-		//Find index of tab.
-		let tabIndex = this.findTabIndex(tabDraggedOver);
-		console.log("Drag over a tab. new Index", tabIndex, tabDraggedOver.windowName);
-		this.setState({
-			hoveredTabIndex: tabIndex
-		})
+    onTabDraggedOver(e, tabDraggedOver) {
+        e.preventDefault();
+        //Find index of tab.
+        let tabIndex = this.findTabIndex(tabDraggedOver);
+        // console.log("Drag over a tab. new Index", tabIndex, tabDraggedOver.windowName);
+        this.setState({
+            hoveredTabIndex: tabIndex
+        })
 
 		// Actions.reorderTabLocally(PLACEHOLDER_TAB, tabIndex);
 	}
@@ -388,15 +408,16 @@ export default class TabRegion extends React.Component {
 			newIndex = undefined;
 		}
 
-		let myIdentifier = FSBL.Clients.WindowClient.getWindowIdentifier();
-		if (this.state.tabs.length === 1 && identifier.windowName == myIdentifier.windowName) {
-			return;
-		}
-		Actions.reorderTab(identifier, newIndex);
-		this.setState({
-			hoveredTabIndex: undefined
-		})
-	}
+        let myIdentifier = finsembleWindow.identifier;
+        myIdentifier.title = finsembleWindow.windowOptions.title;
+        if (this.state.tabs.length === 1 && identifier.windowName == myIdentifier.windowName) {
+            return;
+        }
+        Actions.reorderTab(identifier, newIndex);
+        this.setState({
+            hoveredTabIndex: undefined
+        })
+    }
     /**
 	 * OnClick handler for individual tabs.
 	 * @PLACEHOLDER will interact with tabbing API
@@ -414,7 +435,7 @@ export default class TabRegion extends React.Component {
 
     onTabsChanged(err, response) {
         let { value } = response;
-        console.log("Tablist changed", value);
+        // console.log("Tablist changed", value);
         this.setState({
             tabs: value,
             tabWidth: this.getTabWidth({ tabList: value })
@@ -452,53 +473,52 @@ export default class TabRegion extends React.Component {
 		this.setState({ hoverState: newHoverState });
 	}
 
-	render() {
-		let { translateX } = this.state;
-		//If we have just 1 tab, we render the title. Unless someone is dragging a tab around - in that case, we will render the tab view, even though we only have 1.
+    render() {
+        let { translateX } = this.state;
+        translateX = Math.abs(translateX);
+        //If we have just 1 tab, we render the title. Unless someone is dragging a tab around - in that case, we will render the tab view, even though we only have 1.
 
-		let componentToRender = "title";
-		if (this.state.tabs.length === 1) {
-			if (this.props.listenForDragOver && !this.state.iAmDragging) {
-				componentToRender = "tabs";
-			}
-		}
-		if (this.state.tabs.length > 1) {
-			componentToRender = "tabs";
-		}
-		//Cleanup in case we were translated before closing the second to last tab. This left-aligns the title.
-		if (componentToRender === "title") {
-			translateX = 0;
-		}
-		//How far left or right to shift the tabRegion
-		let tabRegionStyle = {
-			marginLeft: `${translateX}px`
-		}
-		let tabRegionDropZoneStyle = { left: this.state.tabs.length * this.state.tabWidth + "px" }
-		console.log("TAB DROP REGION", tabRegionDropZoneStyle);
-		let moveAreaClasses = "cq-drag fsbl-tab-region-drag-area";
-		if (this.isTabRegionOverflowing()) {
-			moveAreaClasses += " gradient"
-		}
+        let componentToRender = "title";
+        if (this.state.tabs.length === 1) {
+            if (this.props.listenForDragOver && !this.state.iAmDragging) {
+                componentToRender = "tabs";
+            }
+        }
+        if (this.state.tabs.length > 1) {
+            componentToRender = "tabs";
+        }
+        //Cleanup in case we were translated before closing the second to last tab. This left-aligns the title.
+        if (componentToRender === "title") {
+            translateX = 0;
+        }
 
-		return (
-			<div
-				ref="Me"
-				onDragLeave={this.dragLeave}
-				className={this.props.className}
-				onWheel={this.onMouseWheel}
-				onScroll={this.onMouseWheel}
-				onDrop={this.drop}
-				onDragOver={this.dragOver}
-			>
-				<div className="tab-region-wrapper"
-					style={tabRegionStyle}
-				>
-					{componentToRender === "title" && renderTitle()}
-					{componentToRender === "tabs" && renderTabs()}
-				</div>
-			</div>
-		);
-	}
+        if (this.refs.Me) {
+            this.refs.Me.scrollLeft = translateX;
+        }
+
+        let tabRegionDropZoneStyle = { left: this.state.tabs.length * this.state.tabWidth + "px" }
+        let moveAreaClasses = "cq-drag fsbl-tab-region-drag-area";
+        if (this.isTabRegionOverflowing()) {
+            moveAreaClasses += " gradient"
+        }
+        return (
+            <div
+                ref="Me"
+                onDragLeave={this.dragLeave}
+                className={this.props.className}
+                onWheel={this.onMouseWheel}
+                onScroll={this.onMouseWheel}
+                onDrop={this.drop}
+                onDragOver={this.dragOver}
+            >
+                <div className="tab-region-wrapper"
+                >
+                    {componentToRender === "title" && renderTitle()}
+                    {componentToRender === "tabs" && renderTabs()}
+                </div>
+            </div>
+        );
+    }
 }
 
 /**
@@ -509,7 +529,9 @@ function renderTitle() {
         draggable="true"
         onDragStart={(e) => {
             FSBL.Clients.Logger.system.debug("Tab drag start - TITLE");
-            this.startDrag(e, FSBL.Clients.WindowClient.getWindowIdentifier());
+            let activeIdentifier = finsembleWindow.identifier;
+            activeIdentifier.title = finsembleWindow.windowOptions.title;
+            this.startDrag(e, activeIdentifier);
         }}
         onDragEnd={this.stopDrag}
         data-hover={this.state.hoverState}
