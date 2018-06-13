@@ -48,9 +48,7 @@ var Actions = {
 			var title = FSBL.Clients.WindowClient.title || windowTitleBarConfig.title;
 
 			if (title) {
-				windowTitleBarStore.setValue({
-					field: "Main.windowTitle", value: title
-				});
+				FSBL.Clients.WindowClient.setWindowTitle(title)
 			}
 		}
 
@@ -364,7 +362,9 @@ var Actions = {
 	_setTabs(tabs) {
 		console.log("SET TABS", tabs);
 		FSBL.Clients.Logger.system.debug("Set tabs", tabs);
-		return windowTitleBarStore.setValue({ field: "tabs", value: tabs || [FSBL.Clients.WindowClient.getWindowIdentifier()] })
+		let activeIdentifier = finsembleWindow.identifier;
+        activeIdentifier.title = finsembleWindow.windowOptions.title;
+		return windowTitleBarStore.setValue({ field: "tabs", value: tabs || [activeIdentifier] })
 	},
 	addTabLocally: function (windowIdentifier, i) {
 		let tabs = Actions.getTabs();
@@ -481,7 +481,9 @@ var Actions = {
 				FSBL.Clients.Logger.debug("GetInitialTabList, parent exists")
 				Actions.setupStore(cb);
 			} else {
-				let tabs = [FSBL.Clients.WindowClient.getWindowIdentifier()];
+				let activeIdentifier = finsembleWindow.identifier;
+        		activeIdentifier.title = finsembleWindow.windowOptions.title;
+				let tabs = [activeIdentifier];
 				cb(null, tabs)
 			}
 		})
