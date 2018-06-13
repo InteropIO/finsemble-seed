@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import HoverDetector from "../HoverDetector.jsx";
+import HoverDetector from "./HoverDetector.jsx";
+
 import { FinsembleDraggable } from "@chartiq/finsemble-react-controls";
 const ICON_AREA = 29;
 const CLOSE_BUTTON_MARGIN = 22;
@@ -28,33 +29,36 @@ export default class Tab extends React.Component {
 	hoverAction(newHoverState) {
 		this.setState({ hoverState: newHoverState });
 	}
+	componentWillUnmount() {
+	}
 	render() {
 		let titleWidth = this.props.tabWidth - ICON_AREA - CLOSE_BUTTON_MARGIN;
 		let style = {
 			width: this.props.tabWidth
 		}
+		let self = this;
 		return (
 			<div
 				ref="Me"
 				onDrop={this.props.onDrop}
 				onClick={this.props.onClick}
-				onDragStart={(e) => {
-					this.props.onDragStart(e, this.props.windowIdentifier)
+				onDragStart={function (e) {
+					self.props.onDragStart(e, self.props.windowIdentifier)
 				}}
 				onDragEnd={this.props.onDragEnd}
 				draggable={true}
 				className={this.props.className}
 				data-hover={this.state.hoverState}
 				style={style}
-				>
+			>
 				{this.props.listenForDragOver &&
 					<div className="tab-drop-region"
-					onDragOver={this.onDragOver}
+						onDragOver={this.onDragOver}
 					></div>
 				}
-				<HoverDetector edge="top" hoverAction = {this.hoverAction.bind(this)} />
+				<HoverDetector edge="top" hoverAction={this.hoverAction.bind(this)} />
 				<div className="fsbl-tab-logo"><i className="ff-grid"></i></div>
-				<div className="fsbl-tab-title" style={{width: titleWidth}}>{this.props.title}</div>
+				<div className="fsbl-tab-title" style={{ width: titleWidth }}>{this.props.title}</div>
 				<div className="fsbl-tab-close" onClick={(e) => {
 					e.preventDefault();
 					e.stopPropagation();

@@ -9,7 +9,16 @@
 .cq-drag-area:active {
     cursor: -webkit-grabbing;
 }
-
+.fsbl-header-floater {
+    position: absolute;
+    z-index: 2147483641;
+    height: 32px;
+    width:75%;
+    top:0px!important;
+    margin-top:-32px;
+    left:70px;
+   -webkit-app-region: drag;
+  }
 .cq-no-drag {
     -webkit-app-region: no-drag !important;
     position: absolute;
@@ -212,7 +221,8 @@ html.desktop-active .fsbl-tab-region-drag-area {
     font-size: 15px;
     width: var(--fsbl-icon-width);
     padding: 0px 6px;
-    height: 100%;
+    height: calc(100% + 5px);
+    margin-top: -5px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -317,7 +327,6 @@ html.desktop-active .linker-group {
 .fsbl-linker {
     cursor: pointer;
     display: flex;
-    height: 100%;
   /* So it sits over the border*/
     margin-left: -1px;
     align-items: center;
@@ -411,6 +420,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     justify-content: center;
     position: absolute;
     right: 0;
+    z-index: 30001;
 }
 
 .fsbl-tab-close:hover {
