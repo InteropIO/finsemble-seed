@@ -296,6 +296,10 @@ html.desktop-active .fsbl-linker[hover=true] {
     padding-top: 3px;
 }
 
+.ff-share:before {
+    padding-top: 3px;
+}
+
 .ff-maximize, .ff-close, .ff-detached, .ff-attached{
     padding-top: 2px;
 }
