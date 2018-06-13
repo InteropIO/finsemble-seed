@@ -4,7 +4,7 @@ body {
 	font-size: 12px;
 }
 body.menu {
-	color: #555;
+	color: white;
 	background-color: white;
 }
 
@@ -121,7 +121,6 @@ body.menu {
 
 .child-window-name {
 	font-weight: 500;
-	color: #22175A;
 }
 .advanced .child-window-name {
 	cursor: pointer;
