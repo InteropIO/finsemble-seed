@@ -276,11 +276,6 @@ class WindowTitleBar extends React.Component {
 							tabs={this.state.tabs}
 							ref="tabArea"
 						/>}
-<<<<<<< HEAD
-
-=======
-
->>>>>>> develop
 				</div>
 				<div className={rightWrapperClasses} ref={this.setToolbarRight}>
 					{this.state.alwaysOnTopButton && showMinimizeIcon ? <AlwaysOnTop /> : null}
