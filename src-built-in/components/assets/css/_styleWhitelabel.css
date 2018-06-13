@@ -27,7 +27,7 @@
 .fsbl-tab-logo {
     margin: 0 7px;
     width: 13px;
-    height: 12px;
+    height: 13px;
     padding-top: 2px;
     color: var(--titlebar-tab-icon-font-color);
 }
@@ -44,6 +44,27 @@
     justify-content: center;
     position: absolute;
     right: 0;
+}
+
+.fsbl-tab-title {
+    padding-bottom: 1px;
+    text-align: left;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.fsbl-header-title {
+    height: 100%;
+    max-width: 75%; /* make sure there's always some space to grab and move the window */
+    overflow: hidden;
+    align-items: center;
+    display:flex;
+    padding-right: 14px;
+    border-top: 0px solid transparent;
+    border-right: 1px solid transparent;
+    transition: background-color 0.2s ease;
 }
 
 .fsbl-tab[data-hover=true], .fsbl-active-tab {
