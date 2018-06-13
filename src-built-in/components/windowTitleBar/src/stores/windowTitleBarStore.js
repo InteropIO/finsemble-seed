@@ -85,7 +85,7 @@ var Actions = {
 			]);
 		});
 
-		/**
+		/**F
 		 * When a group update is publish, we sift through the data to see if this window is snapped or grouped with other windows. Then we publish that info, and the DockingButton renders the correct icon.
 		 * @param {*} err
 		 * @param {*} response
@@ -412,7 +412,7 @@ var Actions = {
 
 		if (!Actions.parentWrapper) {
 			return Actions.createParentWrapper({
-				windowIdentifiers: [windowIdentifier],
+				windowIdentifiers: [finsembleWindow.identifier, windowIdentifier],
 				visibleWindowIdentifier: windowIdentifier,
 				create: true
 			});
@@ -447,6 +447,7 @@ var Actions = {
 		return { tab, currentIndex }
 	},
 	setActiveTab: function (windowIdentifier) {
+		console.log("setActiveTab", windowIdentifier)
 		FSBL.Clients.Logger.system.debug("setActiveTab.visibleWindow");
 		return Actions.parentWrapper.setVisibleWindow({ windowIdentifier });
 	},
@@ -492,6 +493,7 @@ var Actions = {
 		if (Actions.parentWrapper) {
 			cb();
 		} else {
+			debugger;
 			FSBL.Clients.WindowClient.getStackedWindow(params, (err, response) => {
 				if (err) {
 					Actions.parentWrapper = null;
