@@ -134,6 +134,10 @@
     padding-top: 10px;
 }
 
+.ff-share:before {
+    padding-top: 2px;
+}
+
 .ff-linker:before {
     padding-top: 4px;
 }

@@ -69,9 +69,6 @@ export default class ShareButton extends React.Component {
 	}
 
 	render() {
-		if (!this.state.emitterEnabled) {
-			return null;
-		}
 		return (<div className="fsbl-icon cq-no-drag ff-share" title="Drag To Share" data-hover={this.state.hoverState} draggable="true" onDragStart={this.onDragStart}>
 			<HoverDetector edge="top" hoverAction = {this.hoverAction.bind(this)} />
         </div>);

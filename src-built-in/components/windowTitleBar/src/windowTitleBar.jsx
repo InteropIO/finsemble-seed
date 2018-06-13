@@ -216,7 +216,7 @@ class WindowTitleBar extends React.Component {
 		this.setState(newState);
 	}
 	onShareEmitterChanged(err, response) {
-		this.setState({ emitterEnabled: response.value });
+		this.setState({ showShareButton: response.value });
 	}
 
 	onTabsChanged(err, response) {
