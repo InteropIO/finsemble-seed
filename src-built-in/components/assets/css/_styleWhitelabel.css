@@ -51,6 +51,22 @@
     color: var(--titlebar-tab-active-color);
 }
 
+.fsbl-icon {
+    position: relative;
+    color: var(--titleBar-inactive-font-color);
+    font-size: var(--titleBar-icon-font-size);
+    width: 21px;
+    padding: 0px 6px;
+    height: calc(100% + 5px);
+    margin-top: -5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .2s ease;
+    cursor: pointer;
+    box-sizing: content-box !important;
+}
+
 .searchInput::after {
     bottom: 2px !important;
 }
@@ -115,7 +131,7 @@
 }
 
 .ff-minimize {
-    padding-bottom: 0px;
+    padding-top: 10px;
 }
 
 .fsbl-button {
