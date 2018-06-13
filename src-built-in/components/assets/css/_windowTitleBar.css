@@ -9,7 +9,16 @@
 .cq-drag-area:active {
     cursor: -webkit-grabbing;
 }
-
+.fsbl-header-floater {
+    position: absolute;
+    z-index: 2147483641;
+    height: 32px;
+    width:75%;
+    top:0px!important;
+    margin-top:-32px;
+    left:70px;
+   -webkit-app-region: drag;
+  }
 .cq-no-drag {
     -webkit-app-region: no-drag !important;
     position: absolute;
@@ -330,8 +339,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     width: 100%;
     position: absolute;
     left:0;
-    overflow-x: scroll;
-
+    overflow: scroll;
 }
 .fsbl-tab-area::-webkit-scrollbar  {
     display: none;
@@ -356,6 +364,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     justify-content: center;
     position: absolute;
     right: 0;
+    z-index: 30001;
 }
 
 .fsbl-tab-close:hover {

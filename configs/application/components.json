@@ -30,7 +30,8 @@
 					"Window Manager": {
 						"showLinker": true,
 						"FSBLHeader": true,
-						"persistWindowState": true
+						"persistWindowState": true,
+						"title": "Welcome"
 					},
 					"Toolbar": {
 						"iconClass": "component"

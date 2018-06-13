@@ -40,13 +40,15 @@ var Actions = {
 				{ field: "AlwaysOnTop.show", value: FSBLHeader.alwaysOnTop ? true : false },
 			]);
 
+			if (windowTitleBarConfig.showTabs || windowTitleBarConfig.showTabs === false) {
+				windowTitleBarStore.setValue({ field: "showTabs", value: windowTitleBarConfig.showTabs });
+			}
+
 			// Set by calling WindowClient.setTitle() || from config "foreign.components.Window Manager.title"
 			var title = FSBL.Clients.WindowClient.title || windowTitleBarConfig.title;
 
 			if (title) {
-				windowTitleBarStore.setValue({
-					field: "Main.windowTitle", value: title
-				});
+				FSBL.Clients.WindowClient.setWindowTitle(title)
 			}
 		}
 
@@ -81,7 +83,7 @@ var Actions = {
 			]);
 		});
 
-		/**
+		/**F
 		 * When a group update is publish, we sift through the data to see if this window is snapped or grouped with other windows. Then we publish that info, and the DockingButton renders the correct icon.
 		 * @param {*} err
 		 * @param {*} response
@@ -148,12 +150,8 @@ var Actions = {
 		//default title.
 		windowTitleBarStore.setValue({ field: "Main.windowTitle ", value: FSBL.Clients.WindowClient.getWindowTitle() });
 
-		/**
-		 * If docking is disabled, don't show buttons on snaps.
-		 * @todo remove once docking is out of beta.
-		 */
 		FSBL.Clients.ConfigClient.getValue({ field: "finsemble" }, function (err, finsembleConfig) {
-			let globalWindowManagerConfig = finsembleConfig["Window Manager"] || { alwaysOnTopIcon: false }; // Override defaults if finsemble.Window Manager exists.
+			let globalWindowManagerConfig = finsembleConfig["Window Manager"] || { alwaysOnTopIcon: false, showTabs: false }; // Override defaults if finsemble.Window Manager exists.
 
 			// Look to see if docking is enabled. Cascade through backward compatibility with old "betaFeatures" and then a default if no config is found at all.
 			let dockingConfig = finsembleConfig.docking;
@@ -169,6 +167,10 @@ var Actions = {
 				alwaysOnTopIcon = windowTitleBarConfig.alwaysOnTopIcon;
 
 			windowTitleBarStore.setValues([{ field: "AlwaysOnTop.show", value: alwaysOnTopIcon }]);
+
+			if (typeof windowTitleBarConfig.showTabs !== 'boolean') {
+				windowTitleBarStore.setValue({ field: "showTabs", value: globalWindowManagerConfig.showTabs });
+			}
 		});
 
 		Actions.getInitialTabList((err, values) => {
@@ -366,7 +368,9 @@ var Actions = {
 	_setTabs(tabs) {
 		console.log("SET TABS", tabs);
 		FSBL.Clients.Logger.system.debug("Set tabs", tabs);
-		return windowTitleBarStore.setValue({ field: "tabs", value: tabs || [FSBL.Clients.WindowClient.getWindowIdentifier()] })
+		let activeIdentifier = finsembleWindow.identifier;
+        activeIdentifier.title = finsembleWindow.windowOptions.title;
+		return windowTitleBarStore.setValue({ field: "tabs", value: tabs || [activeIdentifier] })
 	},
 	addTabLocally: function (windowIdentifier, i) {
 		let tabs = Actions.getTabs();
@@ -414,7 +418,7 @@ var Actions = {
 
 		if (!Actions.parentWrapper) {
 			return Actions.createParentWrapper({
-				windowIdentifiers: [windowIdentifier],
+				windowIdentifiers: [finsembleWindow.identifier, windowIdentifier],
 				visibleWindowIdentifier: windowIdentifier,
 				create: true
 			});
@@ -487,7 +491,9 @@ var Actions = {
 				FSBL.Clients.Logger.debug("GetInitialTabList, parent exists")
 				Actions.setupStore(cb);
 			} else {
-				let tabs = [FSBL.Clients.WindowClient.getWindowIdentifier()];
+				let activeIdentifier = finsembleWindow.identifier;
+        		activeIdentifier.title = finsembleWindow.windowOptions.title;
+				let tabs = [activeIdentifier];
 				cb(null, tabs)
 			}
 		})
