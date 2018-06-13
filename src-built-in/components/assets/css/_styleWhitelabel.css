@@ -134,6 +134,10 @@
     padding-top: 10px;
 }
 
+.ff-linker:before {
+    padding-top: 4px;
+}
+
 .fsbl-button {
     margin: 0 4px;
     text-align: center;
