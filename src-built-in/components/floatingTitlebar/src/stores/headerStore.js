@@ -56,47 +56,38 @@ var Actions = {
 		HeaderStore.initialize();
 		var spData = FSBL.Clients.WindowClient.getSpawnData();
 		FSBL.FinsembleWindow.wrap(spData.parent, function (err, wrappedWindow) {
+			HeaderStore.setCompanionWindow(wrappedWindow);
 			var onParentSet = () => {
 				wrappedWindow.parentWindow.addListener("startedMoving", Actions.onCompanionStartedMoving);
 				wrappedWindow.parentWindow.addListener("stoppedMoving", Actions.onCompanionStoppedMoving);
-				console.log("wrappedWindow.parentWindow", wrappedWindow.parentWindow)
-				wrappedWindow.parentWindow.getStore(function (store) {
-					store.getValues(function (err, response) {
-						if (response) {
-							if (response[wrappedWindow.parentWindow.windowName].descriptor.visibleWindowIdentifier.windowName !== wrappedWindow.windowName) {
-								console.log("wrappedWindow.response", err, response)
-								Actions.onCompanionHidden()
-							}
-						}
+				wrappedWindow.parentWindow.addListener("bringToFront", Actions.onCompanionBringToFront);
 
-					})
+				Actions.isWindowVisible((err, isVisible) => {
+					if (!isVisible) {
+						Actions.onCompanionHidden()
+					}
 				})
+
 				if (wrappedWindow.parentWindow)
 					localParent = wrappedWindow.parentWindow;
 				HeaderStore.emit("expandWindow")
 			};
 			var onParentCleared = () => {
 				FSBL.Clients.WindowClient.finsembleWindow.show();
+				FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
 				if (localParent) {
 					localParent.removeListener("startedMoving", Actions.onCompanionStartedMoving);
 					localParent.removeListener("stoppedMoving", Actions.onCompanionStoppedMoving);
+					localParent.removeListener("bringToFront", Actions.onCompanionBringToFront);
 				}
 
 			};
-			console.log("wrappedWindow.parentWindow1", wrappedWindow.parentWindow)
-			if (wrappedWindow.parentWindow) {
-				wrappedWindow.parentWindow.getStore(function (store) {
-					store.getValues(function (err, response) {
-						if (response) {
-							if (response[wrappedWindow.parentWindow.windowName].descriptor.visibleWindowIdentifier.windowName !== wrappedWindow.windowName) {
-								Actions.onCompanionHidden()
-							}
-						}
-						console.log("wrappedWindow.response", err, response)
-					})
-				})
-			}
-			HeaderStore.setCompanionWindow(wrappedWindow);
+			Actions.isWindowVisible((err, isVisible) => {// check on init. Mainly for workspace reload
+				if (!isVisible) {
+					Actions.onCompanionHidden()
+				}
+			})
+
 			wrappedWindow.addListener("setParent", onParentSet);
 			wrappedWindow.addListener("clearParent", onParentCleared)
 
@@ -112,7 +103,7 @@ var Actions = {
 			wrappedWindow.addListener("stoppedMoving", Actions.onCompanionStoppedMoving);
 			wrappedWindow.addListener("focused", Actions.onCompanionFocused);
 
-			wrappedWindow.getBounds({}, function (err, bounds) {
+			wrappedWindow.getBounds({}, function (err, bounds) {// set the bounds and then show the window
 				if (!bounds.width) bounds.width = bounds.right - bounds.left;
 				console.log("start bounds", bounds, { left: bounds.left + (bounds.width / 2) - 43, width: 86, height: 10, top: bounds.top })
 				HeaderStore.setCompanionBounds(bounds);
@@ -129,17 +120,18 @@ var Actions = {
 
 		});
 	},
+	//check to see if the current window is the visible window
 	isWindowVisible(cb) {
+		let wrappedWindow = HeaderStore.getCompanionWindow();
 		if (wrappedWindow.parentWindow) {
 			wrappedWindow.parentWindow.getStore(function (store) {
 				store.getValues(function (err, response) {
 					if (response) {
-						if (response[wrappedWindow.parentWindow.windowName].descriptor.visibleWindowIdentifier.windowName !== wrappedWindow.windowName) {
+						if (response[wrappedWindow.parentWindow.windowName].descriptor.visibleWindowIdentifier.windowName === wrappedWindow.windowName) {
 							return cb(null, true);
 						}
 						return cb(null, false);
 					}
-					console.log("wrappedWindow.response", err, response)
 				})
 			})
 		}
@@ -148,7 +140,6 @@ var Actions = {
 		HeaderStore.setCompanionBounds(bounds);
 		if (HeaderStore.getMoving()) return;
 		if (HeaderStore.getState() === "small") {
-			var mainWindow = fin.desktop.Window.getCurrent();
 			FSBL.Clients.WindowClient.finsembleWindow.setBounds({ left: bounds.left + (bounds.width / 2) - 38, width: 86, height: 10, top: bounds.top }, {}, function (err) {
 			})
 		} else {
@@ -157,51 +148,37 @@ var Actions = {
 			})
 		}
 	},
+	// hide the titlebar when the window is moving
 	onCompanionStartedMoving() {
 		HeaderStore.setMoving(true);
 		FSBL.Clients.WindowClient.finsembleWindow.hide();
 	},
+	// Show the titlebar when the window is moving
 	onCompanionStoppedMoving() {
 		HeaderStore.setMoving(false);
 		Actions.updateWindowPosition(function () {
-			if (HeaderStore.getCompanionBounds().parentWindow) {
+			if (HeaderStore.getCompanionWindow().parentWindow) {
 				if (Actions.isWindowVisible(function (err, isVisible) {
 					if (isVisible) {
-						console.log("is visible-----")
 						FSBL.Clients.WindowClient.finsembleWindow.show();
 					}
 				}));
 			} else {
 				FSBL.Clients.WindowClient.finsembleWindow.show();
 			}
-
-
 		})
 	},
 	onCompanionFocused() {
-
-		Actions.updateWindowPosition(function () {
-
-		})
+		FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
 	},
-	isMouseInHeader(cb) {
-		setTimeout(function () {
-			let finWindow = fin.desktop.Window.getCurrent();
-			fin.desktop.System.getMousePosition(function (mousePosition) {
-				finWindow.getBounds(function (bounds) {
-					let inBounds = FSBL.Clients.WindowClient.isPointInBox({ x: mousePosition.left, y: mousePosition.top }, bounds)
-					return cb(null, inBounds);
-				})
-			});
-		}, 100)
-
-	},
+	//Helper function to update the titlebar's position
 	updateWindowPosition(cb = Function.prototype) {
 		if (animating) {
 			updateBoundsAfterAnimate = true;
 			return;
 		}
 		HeaderStore.getCompanionWindow().getBounds({}, function (err, bounds) {
+			console.debug("updateWindowPosition", bounds)
 			HeaderStore.setCompanionBounds(bounds);
 			if (!bounds.width) bounds.width = bounds.right - bounds.left
 
@@ -221,15 +198,13 @@ var Actions = {
 		FSBL.Clients.WindowClient.finsembleWindow.close({});
 	},
 	onCompanionHidden() {
-		console.warn("---------------------hide")
 		FSBL.Clients.WindowClient.finsembleWindow.hide();
 	},
 	onCompanionShown() {
-		console.warn("---------------------show")
 		FSBL.Clients.WindowClient.finsembleWindow.show();
 	},
 	onCompanionBringToFront() {
-		Actions.updateWindowPosition();
+		FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
 	},
 	onCompanionMaximized() {
 		Actions.updateWindowPosition();
@@ -237,8 +212,8 @@ var Actions = {
 	onCompanionRestored() {
 		Actions.updateWindowPosition();
 	},
+	//Expand the window and set the animate flag. If trying to setbounds at the same time as animate, bounds gets messed up.
 	expandWindow(cb) {
-
 		animating = true;
 		if (HeaderStore.getState() === "large") return
 		HeaderStore.setState("large");
@@ -266,6 +241,7 @@ var Actions = {
 			})
 
 	},
+	//Contract the window and set the animate flag.
 	contractWindow(cb) {
 		HeaderStore.setState("small");
 		animating = true;

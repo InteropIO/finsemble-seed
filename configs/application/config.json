@@ -24,7 +24,8 @@
 	"Window Manager": {
 		"alwaysOnTopIcon": false,
 		"showTabs": true,
-		"showNativeTabs": true
+		"showNativeTabs": true,
+		"floatingTitlebarComponent": "Floating Titlebar"
 	},
 	"docking": {
 		"enabled": true,
