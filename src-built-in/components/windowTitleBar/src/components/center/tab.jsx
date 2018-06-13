@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import HoverDetector from "../HoverDetector.jsx";
 import { FinsembleDraggable } from "@chartiq/finsemble-react-controls";
+import Logo from "./logo";
 const ICON_AREA = 29;
 const CLOSE_BUTTON_MARGIN = 22;
 /**
@@ -14,7 +15,8 @@ export default class Tab extends React.Component {
 		this.onDragLeave = this.onDragLeave.bind(this);
 
 		this.state = {
-			hoverState: "false"
+			hoverState: "false",
+			tabLogo: {}
 		};
 		this.tabbingState = false;
 	}
@@ -62,16 +64,16 @@ export default class Tab extends React.Component {
 				className={this.props.className}
 				data-hover={this.state.hoverState}
 				style={style}
-				>
+			>
 				{this.props.listenForDragOver &&
 					<div className="tab-drop-region"
 					onDragOver={this.onDragOver}
 					onDragLeave={this.onDragLeave}
 					></div>
 				}
-				<HoverDetector edge="top" hoverAction = {this.hoverAction.bind(this)} />
-				<div className="fsbl-tab-logo"><i className="ff-grid"></i></div>
-				<div className="fsbl-tab-title" style={{width: titleWidth}}>{this.props.title}</div>
+				<HoverDetector edge="top" hoverAction={this.hoverAction.bind(this)} />
+				<Logo windowIdentifier={this.props.windowIdentifier}/>
+				<div className="fsbl-tab-title" style={{ width: titleWidth }}>{this.props.title}</div>
 				<div className="fsbl-tab-close" onClick={(e) => {
 					e.preventDefault();
 					e.stopPropagation();

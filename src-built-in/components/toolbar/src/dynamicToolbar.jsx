@@ -31,7 +31,7 @@ customComponents["Search"] = Search;
 
 // Styles
 import "../toolbar.css";
-import "../../assets/css/finfont.css";
+import "../../assets/css/font-finance.css";
 import "../../assets/css/finsemble.css";
 
 var pinnableItems = {

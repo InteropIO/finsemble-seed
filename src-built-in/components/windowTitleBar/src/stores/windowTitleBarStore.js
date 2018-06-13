@@ -295,6 +295,12 @@ var Actions = {
 			});
 		}
 	},
+	onTabListScrollPositionChanged: function (err, response) {
+		windowTitleBarStore.setValue({ field: "tabListTranslateX", value: response.data.translateX });
+	},
+	setTabListScrollPosition: function (translateX) {
+		FSBL.Clients.RouterClient.transmit(constants.TAB_SCROLL_POSITION_CHANGED, { translateX });
+	},
 	hyperfocusDockingGroup: function () {
 		FSBL.Clients.RouterClient.transmit("DockingService.hyperfocusGroup", { windowName: FSBL.Clients.WindowClient.getWindowNameForDocking() });
 	},
@@ -457,16 +463,20 @@ var Actions = {
 		Actions.parentSubscriptions.forEach(sub => {
 			FSBL.Clients.RouterClient.unsubscribe(sub);
 		});
+		//Syncs scroll state across all tabs in a stack.
+		FSBL.Clients.RouterClient.removeListener(constants.TAB_SCROLL_POSITION_CHANGED, Actions.onTabListScrollPositionChanged);
 		cb();
 	},
 	listenOnParentWrapper: function () {
 		let TABLIST_SUBSCRIPTION = FSBL.Clients.RouterClient.subscribe(constants.PARENT_WRAPPER_UPDATES, Actions.onTabListChanged);
+		FSBL.Clients.RouterClient.addListener(constants.TAB_SCROLL_POSITION_CHANGED, Actions.onTabListScrollPositionChanged);
 		Actions.parentSubscriptions.push(TABLIST_SUBSCRIPTION)
 	},
 	setupStore: function (cb = Function.prototype) {
 		constants.PARENT_WRAPPER_UPDATES = `Finsemble.StackedWindow.${Actions.parentWrapper.identifier.windowName}`;
 		constants.CHILD_WINDOW_FIELD = `childWindowIdentifiers`;
 		constants.VISIBLE_WINDOW_FIELD = `visibleWindowIdentifier`;
+		constants.TAB_SCROLL_POSITION_CHANGED = Actions.parentWrapper.name + ".tabListTabListScrollPositionChanged"
 		Actions.listenOnParentWrapper();
 		cb();
 	},
