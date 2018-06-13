@@ -61,7 +61,7 @@ class SingleInputDialog extends React.Component {
 			hideModalOnClose: typeof data.hideModalOnClose === "undefined" ? true : data.hideModalOnClose,
 			inputLabel: data.inputLabel,
 			affirmativeResponseLabel: data.affirmativeResponseLabel || "Okay",
-			cancelResponseLabel: data.affirmativeResponseLabel || "Cancel",
+			cancelResponseLabel: data.cancelResponseLabel || "Cancel",
 			showCancelButton: typeof data.showCancelButton === "undefined" ? false : data.showCancelButton,
 			renderInput: true,
 		}, this.fitAndShow);
