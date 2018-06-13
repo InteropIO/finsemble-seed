@@ -283,8 +283,8 @@ html.desktop-active .fsbl-linker[hover=true] {
     padding-bottom: 5px;
 }
 
-.ff-linker {
-    padding-top: 2px;
+.ff-linker:before {
+    padding-top: 3px;
 }
 
 .ff-maximize, .ff-close, .ff-detached, .ff-attached{
