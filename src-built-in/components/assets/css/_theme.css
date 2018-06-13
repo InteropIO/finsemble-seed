@@ -220,12 +220,12 @@
     --monitor-font-color: var(--primary-font-color);
     --monitor-font-weight: var(--primary-font-weight);
     --monitor-process-name-font-weight: var(--secondary-font-weight);
-    --monitor-component-name-font-weight: var(--secondary-font-weight);
+    --monitor-component-name-font-weight: var(--primary-font-weight);
     --monitor-background-color: var(--primary-background-color);
 
     --monitor-list-border-color: var(--gray6);
     --monitor-close-component-font-color: var(--gray5);
-    
+
     --monitor-warning-background-color: var(--yellow7);
     --monitor-negative-border-color: var(--tertiary-negative-color);
     --monitor-negative-background-color: var(--tertiary-negative-color);
