@@ -127,7 +127,40 @@
     background-color: var(--primary-accent-color);
 }
 
+.ff-pin {
+    padding: 3px 1px;
+    width: 22px;
+    text-align: center;
+    border: 1px solid transparent;
+} 
 
+.ff-pin:hover {
+    color: var(--menu-font-color);
+    width: 22px;
+    border: 1px solid var(--menu-pin-border-color);
+    border-radius: 4px;
+}
+
+.finsemble-item-pinned {
+    color: var(--menu-font-color);
+    width: 22px;
+    background-color: var(--menu-pin-background-color);
+    border-radius: 4px;
+}
+
+.finsemble-item-pinned:hover {
+    color: var(--menu-font-color);
+    width: 22px;
+    background-color: var(--menu-pin-background-hover-color);
+    border-radius: 4px;
+}
+
+.ff-delete {
+    padding: 3px 2px 3px 0px;
+    width: 22px;
+    text-align: center;
+    border: 1px solid transparent;
+}
 
 .jpmuitk-icon-import, .jpmuitk-icon-export {
     padding-bottom: 3px;
