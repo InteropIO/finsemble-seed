@@ -39,7 +39,7 @@ body, html {
     overflow: visible;
     max-height: var(--toolbar-height);
     width: 30px;
-    padding-top: 1px;
+    padding-top: 0px;
 }
 
 .left.finsemble-toolbar-section {
@@ -48,7 +48,7 @@ body, html {
 
 .searchContainer {
     display: flex;
-    margin-right: 15px;
+    margin: 0px 5px;
 }
 
 .searchInput {
