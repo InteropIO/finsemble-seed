@@ -244,3 +244,13 @@ body.dialog input:focus {
     padding: 0px;
     display:inline-block;
 }
+
+.notification-logo {
+    margin-bottom: -3px;
+}
+
+.notification-logo::after {
+    font-family: "jpmuitk-icons";
+    content: "\e931";
+    background-color: var(--notification-body-background-color);
+}

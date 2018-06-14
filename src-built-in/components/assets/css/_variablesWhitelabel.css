@@ -307,7 +307,7 @@
     --notification-body-background-color: var(--toolbar-background-color);
     --notification-body-font-color: var(--primary-font-color);
     --notification-body-font-family: var(--font-family);
-    --notification-logo-width: 14px;
+    --notification-logo-width: 16px;
     --notification-title-font-size: 13px;
     --notification-title-font-weight: bold;
     --notification-close-icon-hover-color: var(--primary-negative-color);
