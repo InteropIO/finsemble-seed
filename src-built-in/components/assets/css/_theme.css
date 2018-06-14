@@ -141,7 +141,7 @@
     --search-result-highlighter-color: var(--slate3);
     
     /* Window Frame */
-    --window-frame-inactive-color: var(--slate6);
+    --window-frame-inactive-color: var(--slate5);
     --window-frame-active-color: var(--window-frame-inactive-color);
     
     /* Window Scrims and Masks */
