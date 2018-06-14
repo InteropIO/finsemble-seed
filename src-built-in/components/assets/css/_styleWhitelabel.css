@@ -46,15 +46,6 @@
     right: 0;
 }
 
-.fsbl-tab-title {
-    padding-bottom: 1px;
-    text-align: left;
-    min-width: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-}
-
 .fsbl-header-title {
     height: 100%;
     max-width: 75%; /* make sure there's always some space to grab and move the window */
