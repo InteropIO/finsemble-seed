@@ -65,12 +65,11 @@
 }
 
 .fsbl-button {
-    /* margin: 0 auto; */
+    margin: 0px 6px;
     text-align: center;
     font-family: var(--font-family);
-    background: var(--dialog-button-background-color);
     border: 1px solid transparent;
-    color: var(--fsbl-button-font-color);
+    color: var(--button-solid-text);
     transition: .2s ease;
     display:flex;
     flex-direction: column;
@@ -137,6 +136,7 @@
     border: var(--button-positive-border-color);
     font-weight: var(--button-positive-font-weight);
     font-size: var(--button-font-size);
+    border: 1px solid transparent;
     letter-spacing: 0.4px;
     line-height: 33px;
 }
@@ -147,6 +147,7 @@
     font-size: var(--button-font-size);
     letter-spacing: 0.4px;
     line-height: 34px;
+    border: 1px solid transparent;
 }
 
 .fsbl-button-sm-positive {
