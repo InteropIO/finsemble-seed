@@ -71,9 +71,9 @@ class FloatingTitlebar extends React.Component {
 		let shouldContractOnStop = this.state.shouldContractOnStop
 		var self = this;
 		this.setState({ shouldContractOnStop: false }, () => {
-			if (shouldContractOnStop && self.state.hadTabs &&
+			if (self.state.hadTabs &&
 				storeExports.Actions.getTabs().length < 2) {
-				self.contractWindow();// contract the window if it wasn't expanded before and there are no tab
+				self.contractWindow();// contract the window if we have no more tabs.
 			}
 		});
 	}
@@ -102,13 +102,21 @@ class FloatingTitlebar extends React.Component {
 	}
 	onTabsUpdated() {
 		let tabs = storeExports.Actions.getTabs();
-		var self = this;
-		if (tabs && tabs.length && tabs.length > 1) {
+		let hasTabs = tabs && tabs.length > 1;
 
+		var self = this;
+		if (self.state.hadTabs && tabs.length < 2) {
+			// contract the window if we have no more tabs.
+			return self.contractWindow(() => {
+				this.setState({ hasTabs, hadTabs: false })
+			});
+		}
+
+		if (tabs && tabs.length && tabs.length > 1) {
 			return this.setState({ hasTabs: true })
 		}
-		this.setState({ hasTabs: false }, function () {
-		})
+
+		this.setState({ hasTabs: false })
 	}
 	contractWindow() {
 		var self = this;
@@ -158,7 +166,7 @@ class FloatingTitlebar extends React.Component {
 			lastDragEventLeave = false;
 		}}>
 			<div id="actionbutton" onClickCapture={function (e) { self.onActionClick(e) }} className="actionButton tabs-contract"></div>
-			<TabbingSection />
+			<TabbingSection onTabDropped={this.contractWindow} />
 		</div >
 	}
 }
