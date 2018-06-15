@@ -58,15 +58,18 @@ export default class Tab extends React.Component {
 				}
 				<HoverDetector edge="top" hoverAction={this.hoverAction.bind(this)} />
 				<div className="fsbl-tab-logo"><i className="ff-grid"></i></div>
-				<div className="fsbl-tab-title" style={{ width: titleWidth }}>{this.props.title}</div>
-				<div className="fsbl-tab-close" onClick={(e) => {
-					e.preventDefault();
-					e.stopPropagation();
-					this.props.onTabClose(e);
-				}}>
-					<i className="ff-close"></i>
-				</div>
+				<div className="fsbl-tab-title" style={{ width: titleWidth }}>
+					{/* @todo, figure out where we're setting the title to an empty object.... */}
+					{typeof (this.props.title) === "string" ? this.props.title : ''}</div>
 			</div>
+			<div className="fsbl-tab-close" onClick={(e) => {
+				e.preventDefault();
+				e.stopPropagation();
+				this.props.onTabClose(e);
+			}}>
+				<i className="ff-close"></i>
+			</div>
+			</div >
 		);
 	}
 }
