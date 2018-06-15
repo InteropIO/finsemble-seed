@@ -109,27 +109,22 @@ var Actions = {
 
 			wrappedWindow.getBounds({}, function (err, bounds) {// set the bounds and then show the window
 				if (!bounds.width) bounds.width = bounds.right - bounds.left;
-				console.log("start bounds", bounds, { left: Actions.getContactedLeft(bounds), width: COMPANION_CONTRACTED_WIDTH, height: COMPANION_CONTRACTED_HEIGHT, top: bounds.top })
+				console.log("start bounds", bounds, Actions.getContractedBounds(bounds));
 				HeaderStore.setCompanionBounds(bounds);
-				FSBL.Clients.WindowClient.finsembleWindow.setBounds({
-					top: bounds.top,
-					left: Actions.getContactedLeft(bounds),
-					width: COMPANION_CONTRACTED_WIDTH,
-					height: COMPANION_CONTRACTED_HEIGHT,
-				}, { persistBounds: false }, function (err) {
-					Actions.updateWindowPosition()//hack for small window
-					FSBL.Clients.WindowClient.finsembleWindow.show(false, function () {
-						FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
-					});
-					cb();
-				}, function () { });
+				FSBL.Clients.WindowClient.finsembleWindow.setBounds(
+					Actions.getContractedBounds(bounds),
+					{ persistBounds: false },
+					function (err) {
+						Actions.updateWindowPosition()//hack for small window
+						FSBL.Clients.WindowClient.finsembleWindow.show(false, function () {
+							FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
+						});
+						cb();
+					}, function () { });
 			})
 
 
 		});
-	},
-	getContactedLeft(bounds) {
-		return;
 	},
 	//check to see if the current window is the visible window
 	isWindowVisible(cb = Function.prototype) {
