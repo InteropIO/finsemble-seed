@@ -13,6 +13,3 @@ window.quitFinsemble = function quitFinsemble() {
 
 FSBL.addEventListener('onReady', function () {
 });
-setInterval(() => {
-	document.getElementById("title").innerHTML = FSBL.Clients.WindowClient.title;
-}, 250);
