@@ -18,7 +18,7 @@ let lastDragEventLeave = false;
 let hover = false;
 /**
  * This is our floating titlebar. .
- *
+ *sta
  * @class AppLauncher
  * @extends {React.Component}
  */
@@ -56,7 +56,7 @@ class FloatingTitlebar extends React.Component {
 	}
 	onTilingStart(err, response) {
 		this.setState({
-			hadTabs: storeExports.Actions.getTabs().length,
+			hadTabs: storeExports.Actions.getTabs().length > 1,
 			shouldContractOnStop: this.state.size === "small" &&
 				HeaderStore.getCompanionWindow().windowName !== response.data.windowIdentifier.windowName
 		}, () => {
@@ -71,8 +71,8 @@ class FloatingTitlebar extends React.Component {
 		let shouldContractOnStop = this.state.shouldContractOnStop
 		var self = this;
 		this.setState({ shouldContractOnStop: false }, () => {
-			if (self.state.hadTabs &&
-				storeExports.Actions.getTabs().length < 2) {
+			if (shouldContractOnStop || (self.state.hadTabs &&
+				storeExports.Actions.getTabs().length < 2)) {
 				self.contractWindow();// contract the window if we have no more tabs.
 			}
 		});
@@ -120,6 +120,7 @@ class FloatingTitlebar extends React.Component {
 	}
 	contractWindow() {
 		var self = this;
+
 		HeaderActions.contractWindow(function () {
 			self.setState({ size: "small" })
 		})
@@ -166,7 +167,7 @@ class FloatingTitlebar extends React.Component {
 			lastDragEventLeave = false;
 		}}>
 			<div id="actionbutton" onClickCapture={function (e) { self.onActionClick(e) }} className="actionButton tabs-contract"></div>
-			<TabbingSection onTabDropped={this.contractWindow} />
+			<TabbingSection />
 		</div >
 	}
 }
