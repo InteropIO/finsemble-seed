@@ -1,12 +1,12 @@
 {
 	"comment": "Top-level application config for development, adding on top of the core config",
 	"storage": {
-		"topicToDataStoreAdapters" : {
-			"finsemble" : "LocalStorageAdapter",
-			"finsemble.workspace" : "LocalStorageAdapter",
-			"finsemble.workspace.cache" : "LocalStorageAdapter"
+		"topicToDataStoreAdapters": {
+			"finsemble": "LocalStorageAdapter",
+			"finsemble.workspace": "LocalStorageAdapter",
+			"finsemble.workspace.cache": "LocalStorageAdapter"
 		},
-		"dataStoreAdapters" : {
+		"dataStoreAdapters": {
 			"LocalStorageAdapter": "$applicationRoot/adapters/LocalStorageAdapter.js"
 		}
 	},
@@ -23,7 +23,9 @@
 	"debugServiceDelay": 0,
 	"Window Manager": {
 		"alwaysOnTopIcon": false,
-		"showTabs": false
+		"showTabs": true,
+		"showNativeTabs": true,
+		"floatingTitlebarComponent": "Floating Titlebar"
 	},
 	"docking": {
 		"enabled": true,
@@ -52,14 +54,21 @@
 					"Toolbar",
 					"App Launcher",
 					"Workspace Management Menu",
-					"Finsemble Linker Window",
+					"linkerWindow",
 					"defaultAuthentication",
 					"dialogSignOn",
 					"dialogTemplate",
 					"dialogTest",
 					"File Menu",
 					"AdhocComponentForm",
-					"Process Monitor"
+					"Process Monitor",
+					"Docking Move Mask",
+					"yesNo",
+					"singleInput",
+					"dialogModal",
+					"UserPreferences",
+					"App Catalog",
+					"searchMenu"
 				]
 			},
 			{
