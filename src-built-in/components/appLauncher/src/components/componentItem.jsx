@@ -35,7 +35,7 @@ export default class componentItem extends React.Component {
 		let guid = Date.now() + '_' + Math.random();
 		this.guidBeingDragged = guid;
 		event.dataTransfer.setDragImage(this.dragImage, 0, 0);
-		event.dataTransfer.setData('text/json', JSON.stringify({ waitForIdentifier: true, guid: guid }));
+		event.dataTransfer.setData('text/plain', JSON.stringify({ waitForIdentifier: true, guid: guid }));
 
 		console.log("starting drag. called starttiling");
 		FSBL.Clients.WindowClient.startTilingOrTabbing({ waitForIdentifier: true, componentType: component.component.type });
