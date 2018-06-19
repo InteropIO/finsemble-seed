@@ -12,21 +12,35 @@ export default class Tab extends React.Component {
 	constructor(props) {
 		super(props);
 		this.onDragOver = this.onDragOver.bind(this);
+		this.onDragLeave = this.onDragLeave.bind(this);
 
 		this.state = {
 			hoverState: "false",
 			tabLogo: {}
 		};
+		this.tabbingState = false;
 	}
+
+	onDragLeave(e) {
+		this.tabbingState = false;
+		FSBL.Clients.RouterClient.publish('Finsemble.AmTabbing', false);
+	}
+
 	onDragOver(e) {
 		let boundingBox = this.refs.Me.getBoundingClientRect();
 		if (this.crossedMidline(e, boundingBox)) {
 			this.props.onTabDraggedOver(e, this.props.windowIdentifier);
 		}
+		if (!this.tabbingState) {
+			FSBL.Clients.RouterClient.publish('Finsemble.AmTabbing', true);
+			this.tabbingState = true;
+		}
 	}
+
 	crossedMidline(e, box) {
 		return FSBL.Clients.WindowClient.isPointInBox({ x: e.nativeEvent.screenX, y: e.nativeEvent.screenY }, box);
 	}
+
 	hoverAction(newHoverState) {
 		this.setState({ hoverState: newHoverState });
 	}
@@ -52,7 +66,8 @@ export default class Tab extends React.Component {
 			>
 				{this.props.listenForDragOver &&
 					<div className="tab-drop-region"
-						onDragOver={this.onDragOver}
+					onDragOver={this.onDragOver}
+					onDragLeave={this.onDragLeave}
 					></div>
 				}
 				<HoverDetector edge="top" hoverAction={this.hoverAction.bind(this)} />

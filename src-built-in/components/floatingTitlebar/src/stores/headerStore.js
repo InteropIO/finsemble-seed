@@ -233,7 +233,7 @@ var Actions = {
 		finWindow.animate({ position: { duration: 0, left: currentBound.left }, size: { duration: 0, width: currentBound.width, height: 1 } },
 			function (err) { console.error(err) },
 			function (err) {
-				finWindow.animate({ size: { duration: 350, height: 32 } }, function () { }, function () {
+				finWindow.animate({ size: { duration: 150, height: 32 } }, function () { }, function () {
 					HeaderStore.emit("tabRegionShow")
 					animating = false
 					if (updateBoundsAfterAnimate) {
@@ -257,7 +257,7 @@ var Actions = {
 				"width": 0
 			}
 		});
-		finWindow.animate({ size: { duration: 350, height: 10 } },
+		finWindow.animate({ size: { duration: 150, height: 10 } },
 			function (err) { console.error(err) },
 			function () {
 				finWindow.animate({ position: { duration: 0, left: currentBound.left + (currentBound.width / 2) - 43, top: currentBound.top }, size: { duration: 0, width: 86 } }, function () { }, function () {
