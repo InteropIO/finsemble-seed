@@ -63,7 +63,6 @@ export default class TabRegion extends React.Component {
 
     }
     getTabWidth(params = {}) {
-
         let { boundingBox, tabList } = params;
         if (typeof (tabList) === "undefined") {
             tabList = this.state.tabs;
@@ -79,8 +78,8 @@ export default class TabRegion extends React.Component {
         return newTabWidth < MINIMUM_TAB_SIZE ? MINIMUM_TAB_SIZE : newTabWidth;
     }
     /**
- * Resize handler. Calculates the space that the center-region is taking up. May be used to scale tabs proportionally.
- */
+     * Resize handler. Calculates the space that the center-region is taking up. May be used to scale tabs proportionally.
+     */
     onWindowResize() {
         if (!this.refs.Me) return;
         let bounds = this.refs.Me.getBoundingClientRect();

@@ -40,7 +40,7 @@ export default class TabbingSection extends React.Component {
 		if (!this.state.loaded) return null;
 		return <div className="fsbl-header-center">
 			<TabRegion
-				onTabDropped={() => { }}
+				onTabDropped={this.props.onTabDropped || Function.prototype}
 				className={tabRegionClasses}
 				thisWindowsTitle={this.state.windowTitle}
 				boundingBox={this.state.tabBarBoundingBox}
