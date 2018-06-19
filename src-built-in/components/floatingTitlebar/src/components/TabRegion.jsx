@@ -104,7 +104,7 @@ export default class TabRegion extends React.Component {
         this.setState({
             iAmDragging: true
         });
-        e.dataTransfer.setData("text/json", JSON.stringify(windowIdentifier));
+        e.dataTransfer.setData("text/plain", JSON.stringify(windowIdentifier));
         FSBL.Clients.WindowClient.startTilingOrTabbing({
             windowIdentifier: windowIdentifier
         });
@@ -140,18 +140,20 @@ export default class TabRegion extends React.Component {
      */
     extractWindowIdentifier(e) {
         try {
-            let identifier = JSON.parse(e.dataTransfer.getData('text/json'));
-            //If the "identifier" is formed properly, it'll have this properly. Otherwise, it's something else (e.g., share data, image, etc).
-            if (typeof identifier.windowName !== "undefined") {
-                return identifier;
-            } else {
-                FSBL.Clients.Logger.system.error("Malformed drop object detected in windowTitleBar. Check tab droppping code. Expected windowIdentifier, got ", identifier);
-                return null;
-            }
-        } catch (e) {
-            FSBL.Clients.Logger.system.error("Error in 'extractWindowIdentifier'. Check TabRegion.jsx. Either there was no data in the event, or it was a circular object that caused JSON.parse to fail. Javascript Error:", e);
-            return null;
-        }
+			let identifier = JSON.parse(e.dataTransfer.getData('text/plain'));
+			//If the "identifier" is formed properly, it'll have this properly. Otherwise, it's something else (e.g., share data, image, etc).
+			if (typeof identifier.windowName !== "undefined") {
+				return identifier;
+			} else if (identifier.waitForIdentifier) {
+				return identifier;
+			} else {
+				FSBL.Clients.Logger.system.error("Malformed drop object detected in windowTitleBar. Check tab droppping code. Expected windowIdentifier, got ", identifier);
+				return null;
+			}
+		} catch (e) {
+			FSBL.Clients.Logger.system.error("Error in 'extractWindowIdentifier'. Check TabRegion.jsx. Either there was no data in the event, or it was a circular object that caused JSON.parse to fail. Javascript Error:", e);
+			return null;
+		}
     }
     /**
      * Called when a drop event occurs on the tab region. We (hope) that this came from a tab. Could be a share icon, an image, something else - that's why we check to see if the identifier exists before doing anything.
@@ -159,17 +161,27 @@ export default class TabRegion extends React.Component {
      */
     drop(e) {
         e.stopPropagation();
-        FSBL.Clients.Logger.system.debug("Tab drag drop.");
-        let identifier = this.extractWindowIdentifier(e);
-        if (identifier) {
-            //Calls a method defined inside of windowTitleBar.jsx.
-            this.onTabAdded(identifier, this.state.hoveredTabIndex);
-        } else {
-            FSBL.Clients.Logger.system.error("Unexpected drop event on window title bar. Check the 'drop' method on TabRegion.jsx.");
-        }
-        FSBL.Clients.RouterClient.transmit("tabbingDragEnd", { success: true });
-        FSBL.Clients.WindowClient.stopTilingOrTabbing({ allowDropOnSelf: true, action: "tabbing" });
-        this.props.onTabDropped();
+		FSBL.Clients.Logger.system.debug("Tab drag drop.");
+		let identifier = this.extractWindowIdentifier(e);
+		if (identifier && identifier.windowName) {
+			console.log("DROP", identifier);
+			//Calls a method defined inside of windowTitleBar.jsx.
+			this.onTabAdded(identifier, this.state.hoveredTabIndex);
+		} else if (identifier && identifier.waitForIdentifier) {
+			let subscribeId;
+			let tabIdentifierSubscriber = (err, response) => {
+				if (!response.data.windowName) return;
+				FSBL.Clients.RouterClient.unsubscribe(subscribeId);
+				this.onTabAdded(response.data, this.state.hoveredTabIndex);
+			};
+			subscribeId = FSBL.Clients.RouterClient.subscribe('Finsemble.' + identifier.guid, tabIdentifierSubscriber);
+		} else {
+			FSBL.Clients.Logger.system.error("Unexpected drop event on window title bar. Check the 'drop' method on TabRegion.jsx.");
+		}
+
+		FSBL.Clients.RouterClient.transmit("tabbingDragEnd", { success: true });
+		FSBL.Clients.WindowClient.stopTilingOrTabbing({ allowDropOnSelf: true, action: "tabbing" });
+		this.props.onTabDropped();
     }
 
     isTabRegionOverflowing() {

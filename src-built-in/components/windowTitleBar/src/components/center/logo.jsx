@@ -8,7 +8,7 @@ export default class Logo extends React.Component {
 	}
 	componentWillReceiveProps(nextProps) {
 		//We only need to re-render the logo if the name of the component changes. Otherwise this sucker would fire umpteen times.
-		if (this.state.tabLogo.type && nextProps.windowIdentifier.name === this.props.windowIdentifier.name) return;
+		if (this.state.tabLogo.type && nextProps.windowIdentifier.windowName === this.props.windowIdentifier.name) return;
 		let wrap = FSBL.FinsembleWindow.wrap(nextProps.windowIdentifier, (err, wrapper) => {
 			if (!wrapper.getOptions) return;
 			wrapper.getOptions((err, opts) => {
