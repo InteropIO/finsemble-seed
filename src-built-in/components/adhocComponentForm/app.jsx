@@ -121,8 +121,8 @@ class AdHocComponentForm extends React.Component {
 				Input a name and URL for your new app.
 			</FinsembleDialogQuestion>
 			<div className="button-wrapper">
-			<FinsembleDialogTextInput maxLength="40" onInputChange={this.setName} placeholder="Name" autofocus />
-			<FinsembleDialogTextInput maxLength="40" onInputChange={this.setURL} placeholder="URL" />
+			<FinsembleDialogTextInput onInputChange={this.setName} placeholder="Name" autofocus />
+			<FinsembleDialogTextInput onInputChange={this.setURL} placeholder="URL" />
 
 
 				<FinsembleDialogButton show={true} buttonSize="md-positive" onClick={this.save}>

@@ -117,7 +117,7 @@ class SingleInputDialog extends React.Component {
 			<FinsembleDialogQuestion question={this.state.inputLabel} />
 			<div className="button-wrapper">
 				{this.state.renderInput &&
-					<FinsembleDialogTextInput maxLength="40" onInputChange={this.setInputValue} placeholder="Enter Name" autoFocus={true} />
+					<FinsembleDialogTextInput onInputChange={this.setInputValue} placeholder="Enter Name" autoFocus={true} />
 				}
 				<FinsembleDialogButton buttonSize="md-positive" onClick={() => { this.sendResponse("affirmative"); }}>
 					{this.state.affirmativeResponseLabel}
