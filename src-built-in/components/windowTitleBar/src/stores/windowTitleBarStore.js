@@ -147,6 +147,7 @@ var Actions = {
 		FSBL.Clients.WindowClient.finWindow.addEventListener("maximized", function () {
 			self.clickMaximize();
 		});
+
 		//default title.
 		windowTitleBarStore.setValue({ field: "Main.windowTitle ", value: FSBL.Clients.WindowClient.getWindowTitle() });
 
@@ -351,15 +352,16 @@ var Actions = {
 	 */
 	clickMaximize: function () {
 		var maxField = windowTitleBarStore.getValue({ field: "Maximize" });
-
-		if (maxField.maximized) {
-			return FSBL.Clients.WindowClient.restore(() => {
-				windowTitleBarStore.setValue({ field: "Maximize.maximized", value: false });
+		if (finsembleWindow.windowState !== finsembleWindow.WINDOWSTATE.MAXIMIZED)
+			return FSBL.Clients.WindowClient.maximize(() => {
+				windowTitleBarStore.setValue({ field: "Maximize.maximized", value: true });
 			});
-		}
-		FSBL.Clients.WindowClient.maximize(() => {
-			windowTitleBarStore.setValue({ field: "Maximize.maximized", value: true });
+
+		return FSBL.Clients.WindowClient.restore(() => {
+			windowTitleBarStore.setValue({ field: "Maximize.maximized", value: false });
 		});
+
+
 	},
 
 	getTabs() {
@@ -369,7 +371,7 @@ var Actions = {
 		console.log("SET TABS", tabs);
 		FSBL.Clients.Logger.system.debug("Set tabs", tabs);
 		let activeIdentifier = finsembleWindow.identifier;
-        activeIdentifier.title = finsembleWindow.windowOptions.title;
+		activeIdentifier.title = finsembleWindow.windowOptions.title;
 		return windowTitleBarStore.setValue({ field: "tabs", value: tabs || [activeIdentifier] })
 	},
 	addTabLocally: function (windowIdentifier, i) {
@@ -492,7 +494,7 @@ var Actions = {
 				Actions.setupStore(cb);
 			} else {
 				let activeIdentifier = finsembleWindow.identifier;
-        		activeIdentifier.title = finsembleWindow.windowOptions.title;
+				activeIdentifier.title = finsembleWindow.windowOptions.title;
 				let tabs = [activeIdentifier];
 				cb(null, tabs)
 			}
