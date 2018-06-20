@@ -367,15 +367,15 @@ export default class TabRegion extends React.Component {
      * Basically exists just to keep the render method clean. Gives conditional classes to the active tab.
      * @param {tab} tab
      */
-	getTabClasses(tab) {
-		let classes = "fsbl-tab cq-no-drag";
-		let tabIndex = this.findTabIndex(tab);
-		if (tabIndex === this.state.hoveredTabIndex) classes += " ghost-tab";
-		if (this.state.activeTab && tab.windowName === this.state.activeTab.windowName) {
-			classes += " fsbl-active-tab";
-		}
-		return classes;
-	}
+    getTabClasses(tab) {
+        let classes = "fsbl-tab";
+        let tabIndex = this.findTabIndex(tab);
+        if (tabIndex === this.state.hoveredTabIndex) classes += " ghost-tab";
+        if (this.state.activeTab && tab.windowName === this.state.activeTab.windowName) {
+            classes += " fsbl-active-tab";
+        }
+        return classes;
+    }
 
     onTabDraggedOver(e, tabDraggedOver) {
         e.preventDefault();
@@ -499,7 +499,12 @@ export default class TabRegion extends React.Component {
         }
 
         let tabRegionDropZoneStyle = { left: this.state.tabs.length * this.state.tabWidth + "px" }
+<<<<<<< HEAD
         let moveAreaClasses = "cq-drag fsbl-tab-region-drag-area";
+=======
+        console.log("TAB DROP REGION", tabRegionDropZoneStyle);
+        let moveAreaClasses = "fsbl-tab-region-drag-area";
+>>>>>>> 28a6d1f... 5996 Finishes extra tasks laid out in the comments
         if (this.isTabRegionOverflowing()) {
             moveAreaClasses += " gradient"
         }
@@ -537,7 +542,7 @@ function renderTitle() {
         }}
         onDragEnd={this.stopDrag}
         data-hover={this.state.hoverState}
-        className={"fsbl-header-title cq-no-drag"}>
+        className={"fsbl-header-title"}>
         <HoverDetector edge="top" hoverAction={this.hoverAction.bind(this)} />
         <Logo windowIdentifier={FSBL.Clients.WindowClient.getWindowIdentifier()} />
         <div className="fsbl-tab-title">{this.props.thisWindowsTitle}</div>
