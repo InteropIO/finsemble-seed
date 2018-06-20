@@ -250,7 +250,8 @@ var Actions = {
 		Actions.updateWindowPosition();
 	},
 	onCompanionMinimized() {
-		FSBL.Clients.WindowClient.finsembleWindow.show();
+		console.log("onCompanionMinimized")
+		FSBL.Clients.WindowClient.finsembleWindow.hide();
 	},
 	onCompanionRestored() {
 		FSBL.Clients.WindowClient.finsembleWindow.show();
