@@ -140,6 +140,8 @@ var Actions = {
 					}
 				})
 			})
+		} else {
+			return cb(null, true);
 		}
 	},
 	getContractedBounds(bounds) {
@@ -185,6 +187,7 @@ var Actions = {
 	},
 	// Show the titlebar when the window is moving
 	onCompanionStoppedMoving() {
+		console.log("companion stopped moving")
 		HeaderStore.setMoving(false);
 		Actions.updateWindowPosition(function () {
 			if (HeaderStore.getCompanionWindow().parentWindow) {
@@ -207,28 +210,31 @@ var Actions = {
 			updateBoundsAfterAnimate = true;
 			return;
 		}
-		HeaderStore.getCompanionWindow().getBounds({}, function (err, bounds) {
-			console.debug("updateWindowPosition", bounds)
-			HeaderStore.setCompanionBounds(bounds);
-			if (!bounds.width) bounds.width = bounds.right - bounds.left
-			FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
+		setTimeout(() => {
+			HeaderStore.getCompanionWindow().getBounds({}, function (err, bounds) {
+				console.debug("updateWindowPosition", bounds)
+				HeaderStore.setCompanionBounds(bounds);
+				if (!bounds.width) bounds.width = bounds.right - bounds.left
+				FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
 
-			let onBoundsSet = function (err) {
-				console.debug("updateWindowPosition.onBoundsSet", bounds)
-				if (err) {
-					FSBL.Clients.Logger.error(err);
+				let onBoundsSet = function (err) {
+					console.debug("updateWindowPosition.onBoundsSet", bounds)
+					if (err) {
+						FSBL.Clients.Logger.error(err);
+					}
+					cb();
 				}
-				cb();
-			}
 
-			if (HeaderStore.getState() === "small") {
-				let newBounds = Actions.getContractedBounds(bounds);
-				return FSBL.Clients.WindowClient.finsembleWindow.setBounds(newBounds, { persistBounds: false }, onBoundsSet)
-			}
+				if (HeaderStore.getState() === "small") {
+					let newBounds = Actions.getContractedBounds(bounds);
+					return FSBL.Clients.WindowClient.finsembleWindow.setBounds(newBounds, { persistBounds: false }, onBoundsSet)
+				}
 
-			let newBounds = Actions.getExpandedBounds(bounds);
-			return FSBL.Clients.WindowClient.finsembleWindow.setBounds(newBounds, { persistBounds: false }, onBoundsSet);
-		});
+				let newBounds = Actions.getExpandedBounds(bounds);
+				return FSBL.Clients.WindowClient.finsembleWindow.setBounds(newBounds, { persistBounds: false }, onBoundsSet);
+			});
+		}, 50);
+
 	},
 	onCompanionClosed() {
 		FSBL.Clients.WindowClient.finsembleWindow.close({});
@@ -247,14 +253,23 @@ var Actions = {
 
 	},
 	onCompanionMaximized() {
-		Actions.updateWindowPosition();
+		setTimeout(() => {
+			Actions.updateWindowPosition();
+		}, 500)
 	},
 	onCompanionMinimized() {
 		console.log("onCompanionMinimized")
 		FSBL.Clients.WindowClient.finsembleWindow.hide();
 	},
 	onCompanionRestored() {
-		FSBL.Clients.WindowClient.finsembleWindow.show();
+
+		Actions.isWindowVisible((err, isVisible) => {
+			if (isVisible) {
+				FSBL.Clients.WindowClient.finsembleWindow.show();
+				FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
+			}
+		})
+
 		Actions.updateWindowPosition();
 	},
 	//Expand the window and set the animate flag. If trying to setbounds at the same time as animate, bounds gets messed up.
