@@ -1,25 +1,16 @@
 @import "./_variables.css";
 @import "./_variablesWhitelabel.css";
 
-.cq-drag {
-    cursor: -webkit-grab;
-    -webkit-app-region: drag;
-}
-
-.cq-drag-area:active {
-    cursor: -webkit-grabbing;
-}
 .fsbl-drag-handle {
     position: absolute;
     z-index: 2147483641;
     top: 0px!important;
-    background-color: red;
+    /* background-color: red; */
    -webkit-app-region: drag;
 }
 
-.cq-no-drag {
-    -webkit-app-region: no-drag !important;
-    position: absolute;
+.fsbl-drag-handle.hidden {
+    display: none;
 }
 
 .fsbl-tabs-multiple .fsbl-header-right {
@@ -110,15 +101,6 @@ html.desktop-active .fsbl-header {
     color: var(--tab-active-color);
     border-right: var(--tab-border);
     /* border-top: var(--tab-border); */
-}
-
-.fsbl-drag-region {
-    position: absolute;
-    width: 100%;
-    height: calc(100% - 5px);
-    bottom: 0px;
-    left: 0px;
-    -webkit-app-region: drag;
 }
 
 .fsbl-header-left {

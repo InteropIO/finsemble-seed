@@ -98,7 +98,7 @@ export default class DockingButton extends React.Component {
      */
 	render() {
 		let iconClass = "ff-";
-		let wrapClasses = "fsbl-icon cq-no-drag fsbl-icon-bordered docking-control";
+		let wrapClasses = "fsbl-icon fsbl-icon-bordered docking-control";
 
 		iconClass += this.state.dockingIcon === "ejector" ? "attached" : "detached";
 		let toolTip = this.state.dockingIcon === "ejector" ? "Detach Window" : "Attach Windows";
