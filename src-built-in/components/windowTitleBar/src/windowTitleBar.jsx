@@ -175,8 +175,7 @@ class WindowTitleBar extends React.Component {
 	 */
 	onTitleChange(err, response) {
 		let { tabs } = this.state;
-		let myIdentifier = finsembleWindow.identifier;
-        myIdentifier.title = finsembleWindow.windowOptions.title;
+		let myIdentifier = FSBL.Clients.WindowClient.getWindowIdentifier();
 		let myIndex = -1;
 		let myTab = tabs.filter((el, i) => {
 			if (el.name === myIdentifier.name && el.uuid === myIdentifier.uuid) {
@@ -187,6 +186,7 @@ class WindowTitleBar extends React.Component {
 		});
 		myTab.title = response.value;
 		tabs.splice(myIndex, 1, myTab);
+
 		this.setState({
 			windowTitle: response.value,
 			tabs: tabs
@@ -278,6 +278,7 @@ class WindowTitleBar extends React.Component {
 							tabs={this.state.tabs}
 							ref="tabArea"
 						/>}
+
 				</div>
 				<div className={rightWrapperClasses} ref={this.setToolbarRight}>
 					{this.state.alwaysOnTopButton && showMinimizeIcon ? <AlwaysOnTop /> : null}
@@ -292,8 +293,13 @@ class WindowTitleBar extends React.Component {
 	}
 }
 
-window.addEventListener("FSBLReady", function () {
-	storeExports.initialize(function () {
+// This is how we used to do it, but this was causing timing problems in windows that
+// reload, such as Symphony. FSBL.addEventListener() is a better approach because
+// it is pub/sub, if the event had fired in the past then it will still be fired.
+// window.addEventListener("FSBLReady", function () {
+
+FSBL.addEventListener("onReady", function () {
+		storeExports.initialize(function () {
 		HeaderActions = storeExports.Actions;
 		windowTitleBarStore = storeExports.getStore();
 		ReactDOM.render(<WindowTitleBar />, document.getElementById("FSBLHeader"));

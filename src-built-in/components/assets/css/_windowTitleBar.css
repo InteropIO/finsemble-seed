@@ -315,6 +315,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     display: inline-flex;
     align-content: center;
     align-items: center;
+    vertical-align: top;
     background-color: var(--titlebar-tab-inactive-background-color);
     color: var(--titlebar-tab-inactive-font-color);
     border-right: var(--titlebar-tab-separator);
@@ -358,10 +359,9 @@ html.desktop-active .fsbl-linker[hover=true] {
 
 .fsbl-tab-close {
     font-size: 8px;
-    padding: 0px 7px;
+    padding: 0px 10px;
     visibility:hidden;
     cursor: pointer;
-    width:8px;
     height:100%;
     display:flex;
     flex-direction: column;
@@ -381,10 +381,14 @@ html.desktop-active .fsbl-linker[hover=true] {
 
 .fsbl-tab-logo {
     margin: 0 7px;
-    width: 15px;
-    height: 14px;
-    padding-top: 2px;
+    width: auto;
+    height: auto;
     color: var(--titlebar-tab-icon-font-color);
+}
+
+.fsbl-tab-logo img {
+    height: 22px;
+    width: 22px;
 }
 
 .fsbl-tab .fsbl-tab-style {
