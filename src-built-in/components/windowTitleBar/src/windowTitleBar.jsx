@@ -291,8 +291,13 @@ class WindowTitleBar extends React.Component {
 	}
 }
 
-window.addEventListener("FSBLReady", function () {
-	storeExports.initialize(function () {
+// This is how we used to do it, but this was causing timing problems in windows that
+// reload, such as Symphony. FSBL.addEventListener() is a better approach because
+// it is pub/sub, if the event had fired in the past then it will still be fired.
+// window.addEventListener("FSBLReady", function () {
+
+FSBL.addEventListener("onReady", function () {
+		storeExports.initialize(function () {
 		HeaderActions = storeExports.Actions;
 		windowTitleBarStore = storeExports.getStore();
 		ReactDOM.render(<WindowTitleBar />, document.getElementById("FSBLHeader"));
