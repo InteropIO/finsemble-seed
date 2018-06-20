@@ -1,5 +1,5 @@
-@import "./_variables.css";
 @import "./_variablesWhitelabel.css";
+@import url('./_themeWhitelabel.css');
 
 .fsbl-drag-handle {
     position: absolute;
@@ -17,76 +17,33 @@
     padding-left: 80px; /* leave some space for a user to grab */
 }
 
-@media screen and (min-width: 0px) and (max-width: 345px){
-    .fsbl-icon.ff-share {
-        display: none !important;
-    }
-    .fsbl-tabs-multiple .fsbl-header-right {
-        padding-left: 70px; /* leave some space for a user to grab */
-    }
-
-}
-
-@media screen and (min-width: 0px) and (max-width: 310px){
-    .fsbl-header-left {
-        display: none !important;
-    }
-    .fsbl-tabs-multiple .fsbl-header-right {
-        padding-left: 60px; /* leave some space for a user to grab */
-    }
-}
-
-@media screen and (min-width: 0px) and (max-width: 280px){
-    .fsbl-icon.ff-detached, .fsbl-icon.ff-attached {
-        display: none !important;
-    }
-    .fsbl-tabs-multiple .fsbl-header-right {
-        padding-left: 50px; /* leave some space for a user to grab */
-    }
-}
-@media screen and (min-width: 0px) and (max-width: 245px){
-    .fsbl-icon.fsbl-maximize {
-        display: none !important;
-    }
-    .fsbl-tabs-multiple .fsbl-header-right {
-        padding-left: 40px; /* leave some space for a user to grab */
-    }
-}
-@media screen and (min-width: 0px) and (max-width: 210px){
-    .fsbl-icon.fsbl-minimize {
-        display: none !important;
-    }
-    .fsbl-tabs-multiple .fsbl-header-right {
-        padding-left: 30px; /* leave some space for a user to grab */
-    }
-}
 .fsbl-header {
     font-family: var(--font-family);
     text-align: center;
     display: flex;
-    height: var(--window-header-height);
+    height: var(--titleBar-height);
     position: fixed;
     align-items: flex-end;
     flex-direction: row;
     justify-content: center;
-    background: var(--window-header-background-color);
+    background: var(--titleBar-background-inactive-color);
     width: 100%;
     left: 0;
     z-index: 2147483640;
     top: 0;
-    font-size: var(--window-header-font-size);
-    font-weight: var(--window-header-font-weight);
-    color: var(--header-text-color);
+    font-size: var(--titleBar-font-size);
+    font-weight: var(--titleBar-font-weight);
+    color: var(--titleBar-inactive-font-color);
 }
 
 html.desktop-active .fsbl-header {
-    background: var(--active-header-background-color);
-    color: var(--active-header-text-color);
+    background: var(--titleBar-background-active-color);
+    color: var(--titleBar-active-font-color);
 }
 
 .fsbl-header-title {
     height: 100%;
-    max-width: 60%; /* make sure there's always some space to grab and move the window */
+    max-width: 75%; /* make sure there's always some space to grab and move the window */
     overflow: hidden;
     align-items: center;
     display:flex;
@@ -97,10 +54,9 @@ html.desktop-active .fsbl-header {
 }
 
 .fsbl-header-title[data-hover=true] {
-    background-color: var(--tab-active-background-color);
-    color: var(--tab-active-color);
-    border-right: var(--tab-border);
-    /* border-top: var(--tab-border); */
+    background-color: var(--titlebar-tab-active-background-color);
+    color: var(--titlebar-tab-active-font-color);
+    border-right: var(--titlebar-tab-section-separator);
 }
 
 .fsbl-header-left {
@@ -111,7 +67,7 @@ html.desktop-active .fsbl-header {
     align-items: center;
     justify-content: flex-start;
     display: flex;
-    border-right: var(--tab-border);
+    border-right: var(--titlebar-tab-section-separator);
 }
 
 .fsbl-header-center {
@@ -136,11 +92,11 @@ html.desktop-active .fsbl-header {
 }
 
 .fsbl-tabs-multiple .fsbl-header-center {
-    border-right: var(--tab-border);
+    border-right: var(--titlebar-tab-section-separator);
 }
 
 html.desktop-active .fsbl-header-right {
-    background: var(--active-header-background-color);
+    background: var(--titleBar-background-active-color);
 }
 
 .fsbl-header-right {
@@ -150,8 +106,6 @@ html.desktop-active .fsbl-header-right {
     display: flex;
     justify-content: flex-end;
     z-index: 5;
-    /* background-color: ; */
-    background: var(--window-header-background-color);
 }
 
 
@@ -162,7 +116,7 @@ html.desktop-active .fsbl-header-right {
 
 
 html.desktop-active .fsbl-tab-region-drag-area {
-    background: var(--active-header-background-color);
+    background-color: var(--titleBar-background-inactive-color);
 }
 
 /* This div captures the hover event for it's parent. It doesn't stretch to the border, so that mouseout is properly detected. */
@@ -197,11 +151,12 @@ html.desktop-active .fsbl-tab-region-drag-area {
 }
 .fsbl-icon {
     position: relative;
-    color: var(--header-text-color);
-    font-size: 15px;
-    width: var(--fsbl-icon-width);
+    color: var(--titleBar-inactive-font-color);
+    font-size: var(--titleBar-icon-font-size);
+    width: 21px;
     padding: 0px 6px;
-    height: 100%;
+    height: calc(100% + 5px);
+    margin-top: -5px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -211,15 +166,15 @@ html.desktop-active .fsbl-tab-region-drag-area {
 }
 
 html.desktop-active .fsbl-icon {
-    color: #FFF;
+    color: var(--titleBar-active-font-color);
 }
 
 .fsbl-icon[data-hover=true] {
-    background-color: var(--inactive-header-button-hover);
+    background-color: var(--titleBar-button-hover-inactive-color);
 }
 
 html.desktop-active .fsbl-icon[data-hover=true] {
-    background: var(--primary-accent-color);
+    background: var(--titleBar-button-hover-active-color);
     transition: background .2s ease;
 }
 
@@ -229,24 +184,23 @@ html.desktop-active .fsbl-icon[data-hover=true] {
 }
 
 .fsbl-icon.fsbl-close[data-hover=true] {
-    background: var(--negative-action-color);
-    color: #FFF;
+    background: var(--titleBar-button-hover-negative-color);
+    color: var(--titleBar-active-font-color);
 }
 
 html.desktop-active .fsbl-icon.fsbl-close[data-hover=true] {
-    background: var(--negative-action-color);
-    color: #FFF;
+    background: var(--titleBar-button-hover-negative-color);
+    color: var(--titleBar-active-font-color);
 }
 
 .fsbl-icon-highlighted {
     -webkit-transition: background-color 300ms ease-in-out;
     transition: background-color 300ms ease-in-out;
-    background-color: var(--highlighted-inactive-window-button);
-    color: #FFF;
+    background-color: var(--titleBar-button-highlight-inactive-color);
 }
 
 html.desktop-active .fsbl-icon-highlighted {
-    background-color: var(--primary-accent-color);
+    background-color: var(--titleBar-button-highlight-active-color);
 }
 
 .fsbl-minimize {
@@ -256,8 +210,7 @@ html.desktop-active .fsbl-icon-highlighted {
 .fsbl-ejector {
     -webkit-transition: background-color 300ms ease-in-out;
     transition: background-color 300ms ease-in-out;
-    color: white;
-    background-color: var(--primary-accent-color);
+    background-color: var(--titleBar-button-highlight-active-color);
 }
 
 .linkerSection {
@@ -273,40 +226,29 @@ html.desktop-active .fsbl-icon-highlighted {
 }
 
 .linker-group {
-    width: var(--linker-group-width);
+    width: 7px;
     height: 18px;
     margin-left: 4px;
     border-radius: 4px;
-    border: 1px solid var(--window-header-background-color);
+    border: 1px solid var(--titleBar-background-inactive-color);
 }
 
 html.desktop-active .linker-group {
-    border: 1px solid var(--active-header-background-color);
+    border: 1px solid var(--titleBar-background-active-color);
 }
 
 .linker-group:hover {
     cursor: pointer;
-    border: 1px solid var(--primary-accent-color ) !important;
+    border: 1px solid var(--titleBar-button-hover-inactive-color) !important;
 }
 
 .linker-group:nth-last-child(1) {
     margin-right: 5px;
 }
 
-.seperator {
-    width: 1px;
-    background-color: var(--header-text-color);
-    height: 58%;
-}
-
-.seperator html.desktop-active {
-    background-color: var(--active-header-text-color);
-}
-
 .fsbl-linker {
     cursor: pointer;
     display: flex;
-    height: 100%;
   /* So it sits over the border*/
     margin-left: -1px;
     align-items: center;
@@ -317,17 +259,25 @@ html.desktop-active .linker-group {
 }
 
 .fsbl-linker[hover=true] {
-    background: var(--inactive-header-button-hover);
-    color: #000;
+    background: var(--titleBar-button-hover-inactive-color);
+    color: var(--titlebar-active-font-color);
 }
 
 html.desktop-active .fsbl-linker[hover=true] {
-    background: var(--primary-accent-color);
-    color: var(--header-colorbutton-hover-icon);
+    background: var(--titleBar-button-hover-active-color);
+    color: var(--titleBar-button-hover-linker-group);
 }
 
 .ff-minimize {
     padding-bottom: 5px;
+}
+
+.ff-linker:before {
+    padding-top: 3px;
+}
+
+.ff-share:before {
+    padding-top: 3px;
 }
 
 .ff-maximize, .ff-close, .ff-detached, .ff-attached{
@@ -345,10 +295,9 @@ html.desktop-active .fsbl-linker[hover=true] {
     display: inline-flex;
     align-content: center;
     align-items: center;
-    background-color: var(--tab-inactive-background-color);
-    color: var(--tab-inactive-color);
-    border-right: var(--tab-border);
-    /* border-top: var(--tab-border); */
+    background-color: var(--titlebar-tab-inactive-background-color);
+    color: var(--titlebar-tab-inactive-font-color);
+    border-right: var(--titlebar-tab-separator);
     user-select: none;
     box-sizing: border-box;
     justify-content: flex-start;
@@ -356,8 +305,8 @@ html.desktop-active .fsbl-linker[hover=true] {
 }
 
 .fsbl-tab[data-hover=true], .fsbl-active-tab {
-    background-color: var(--tab-active-background-color);
-    color: var(--tab-active-color);
+    background-color: var(--titlebar-tab-active-background-color);
+    color: var(--titlebar-tab-active-font-color);
 }
 
 .tab-region-wrapper {
@@ -374,8 +323,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     width: 100%;
     position: absolute;
     left:0;
-    overflow-x: scroll;
-
+    overflow: scroll;
 }
 .fsbl-tab-area::-webkit-scrollbar  {
     display: none;
@@ -390,8 +338,7 @@ html.desktop-active .fsbl-linker[hover=true] {
 
 .fsbl-tab-close {
     font-size: 8px;
-    padding-left: 7px;
-    padding-right:7px;
+    padding: 0px 7px;
     visibility:hidden;
     cursor: pointer;
     width:8px;
@@ -401,6 +348,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     justify-content: center;
     position: absolute;
     right: 0;
+    z-index: 30001;
 }
 
 .fsbl-tab-close:hover {
@@ -414,8 +362,9 @@ html.desktop-active .fsbl-linker[hover=true] {
 .fsbl-tab-logo {
     margin: 0 7px;
     width: 15px;
+    height: 14px;
     padding-top: 2px;
-    color: var(--tab-logo-color);
+    color: var(--titlebar-tab-icon-font-color);
 }
 
 .fsbl-tab .fsbl-tab-style {
@@ -433,12 +382,69 @@ html.desktop-active .fsbl-linker[hover=true] {
     visibility: hidden;
 }
 .ghost-tab {
-    background-color: var(--secondary-accent-color);
-    border-right: 1px solid var(--primary-accent-color);
-    border-top:1px solid var(--primary-accent-color);
+    background-color: var(--titlebar-tab-ghost-background-color);
+    border-right: 1px solid var(--titlebar-tab-ghost-border-colorcolor);
+    border-top:1px solid var(--titlebar-tab-ghost-border-color);
     width: 175px;
     opacity: 0.7;
     position: relative;
     height: 100%;
     left: 0px;
+}
+
+/* Responsive Sizing */
+/* At 345px, the Drag-to-Share icon will be removed. */ 
+@media screen and (min-width: 0px) and (max-width: 345px){
+    .fsbl-icon.ff-share {
+        display: none !important;
+    }
+    .fsbl-tabs-multiple .fsbl-header-right {
+        padding-left: 70px; /* leave some space for a user to grab */
+    }
+    .fsbl-header-title {
+        max-width:50%;
+    }
+}
+
+/* At 310px, the left section of the header will be removed. */ 
+@media screen and (min-width: 0px) and (max-width: 310px){
+    .fsbl-header-left {
+        display: none !important;
+    }
+    .fsbl-tabs-multiple .fsbl-header-right {
+        padding-left: 60px; /* leave some space for a user to grab */
+    }
+}
+
+/* At 280px, the docking icon will be removed. */ 
+@media screen and (min-width: 0px) and (max-width: 280px){
+    .fsbl-icon.ff-detached, .fsbl-icon.ff-attached {
+        display: none !important;
+    }
+    .fsbl-tabs-multiple .fsbl-header-right {
+        padding-left: 50px; /* this will leave some space for window dragging */
+    }
+}
+
+/* At 245px, the maximize icon will be removed. */
+@media screen and (min-width: 0px) and (max-width: 245px){
+    .fsbl-icon.fsbl-maximize {
+        display: none !important;
+    }
+    .fsbl-tabs-multiple .fsbl-header-right {
+        padding-left: 40px; /* this will leave some space for window dragging */
+    }
+}
+
+/* At 210px, the minimize icon will be removed. */ 
+@media screen and (min-width: 0px) and (max-width: 210px){
+    .fsbl-icon.fsbl-minimize {
+        display: none !important;
+    }
+    .fsbl-tabs-multiple .fsbl-header-right {
+        padding-left: 30px; /* this will leave some space for window dragging */
+    }
+    .fsbl-header-title {
+        max-width:25%;
+    }
 }

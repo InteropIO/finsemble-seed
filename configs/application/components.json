@@ -10,7 +10,7 @@
 				"top": "center",
 				"left": "center",
 				"width": 400,
-				"height": 370
+				"height": 432
 			},
 			"component": {
 				"inject": false,
@@ -34,7 +34,7 @@
 						"title": "Welcome"
 					},
 					"Toolbar": {
-						"iconClass": "welcome"
+						"iconClass": "component"
 					}
 				}
 			}

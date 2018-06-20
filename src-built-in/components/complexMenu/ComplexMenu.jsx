@@ -4,7 +4,7 @@
 */
 import React from "react";
 import "./menu.css";
-import "../assets/css/finfont.css";
+import "../assets/css/font-finance.css";
 import "../assets/css/finsemble.css";
 
 export default class ComplexMenu extends React.Component {
