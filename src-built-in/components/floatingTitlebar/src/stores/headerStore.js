@@ -102,7 +102,7 @@ var Actions = {
 			wrappedWindow.addListener("maximized", Actions.onCompanionMaximized);
 			wrappedWindow.addListener("restored", Actions.onCompanionRestored);
 			wrappedWindow.addListener("bringToFront", Actions.onCompanionBringToFront);
-			wrappedWindow.addListener("restored", Actions.onCompanionRestored);
+			wrappedWindow.addListener("minimized", Actions.onCompanionMinimized);
 			wrappedWindow.addListener("startedMoving", Actions.onCompanionStartedMoving);
 			wrappedWindow.addListener("stoppedMoving", Actions.onCompanionStoppedMoving);
 			wrappedWindow.addListener("focused", Actions.onCompanionFocused);
@@ -249,7 +249,11 @@ var Actions = {
 	onCompanionMaximized() {
 		Actions.updateWindowPosition();
 	},
+	onCompanionMinimized() {
+		FSBL.Clients.WindowClient.finsembleWindow.show();
+	},
 	onCompanionRestored() {
+		FSBL.Clients.WindowClient.finsembleWindow.show();
 		Actions.updateWindowPosition();
 	},
 	//Expand the window and set the animate flag. If trying to setbounds at the same time as animate, bounds gets messed up.
