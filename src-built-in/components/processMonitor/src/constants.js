@@ -7,7 +7,8 @@ export const SIMPLE_MODE_STATISTICS = [
 export const ADVANCED_MODE_STATISTICS = [
 	{ label: "CPU", value: "cpuUsage" },
 	{ label: "Memory", value: "workingSetSize" },
-	{ label: "Peak Memory", value: "peakWorkingSetSize" }
+	{ label: "Peak Memory", value: "peakWorkingSetSize" },
+	{ label: "PID", value: "processId" }
 
 ];
 //These are percentages
