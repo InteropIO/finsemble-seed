@@ -63,7 +63,6 @@ export default class TabRegion extends React.Component {
 
     }
     getTabWidth(params = {}) {
-
         let { boundingBox, tabList } = params;
         if (typeof (tabList) === "undefined") {
             tabList = this.state.tabs;
@@ -79,8 +78,8 @@ export default class TabRegion extends React.Component {
         return newTabWidth < MINIMUM_TAB_SIZE ? MINIMUM_TAB_SIZE : newTabWidth;
     }
     /**
- * Resize handler. Calculates the space that the center-region is taking up. May be used to scale tabs proportionally.
- */
+     * Resize handler. Calculates the space that the center-region is taking up. May be used to scale tabs proportionally.
+     */
     onWindowResize() {
         if (!this.refs.Me) return;
         let bounds = this.refs.Me.getBoundingClientRect();
@@ -105,7 +104,7 @@ export default class TabRegion extends React.Component {
         this.setState({
             iAmDragging: true
         });
-        e.dataTransfer.setData("text/json", JSON.stringify(windowIdentifier));
+        e.dataTransfer.setData("text/plain", JSON.stringify(windowIdentifier));
         FSBL.Clients.WindowClient.startTilingOrTabbing({
             windowIdentifier: windowIdentifier
         });
@@ -141,7 +140,7 @@ export default class TabRegion extends React.Component {
      */
     extractWindowIdentifier(e) {
         try {
-			let identifier = JSON.parse(e.dataTransfer.getData('text/json'));
+			let identifier = JSON.parse(e.dataTransfer.getData('text/plain'));
 			//If the "identifier" is formed properly, it'll have this properly. Otherwise, it's something else (e.g., share data, image, etc).
 			if (typeof identifier.windowName !== "undefined") {
 				return identifier;
