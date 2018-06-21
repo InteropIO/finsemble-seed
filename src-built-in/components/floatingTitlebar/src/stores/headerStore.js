@@ -15,7 +15,7 @@ let values = {
 const COMPANION_EXPANDED_HEIGHT = 32;
 const COMPANION_CONTRACTED_HEIGHT = 10;
 const COMPANION_CONTRACTED_WIDTH = 86;
-
+let Logger = FSBL.Clients.Logger;
 let animating = false;
 let updateBoundsAfterAnimate = false;
 var HeaderStore = Object.assign({}, EventEmitter.prototype, {
@@ -55,7 +55,7 @@ var HeaderStore = Object.assign({}, EventEmitter.prototype, {
 		return values.companionBounds;
 	}
 });
-let localParent = null
+let localParent = null;//
 var Actions = {
 	initialize(cb = Function.prototype) {
 		HeaderStore.initialize();
