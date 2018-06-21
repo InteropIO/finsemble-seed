@@ -248,7 +248,13 @@ var Actions = {
 	onCompanionBringToFront() {
 		console.log("bring this window to front-----")
 		setTimeout(() => {
-			FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
+			if (Actions.isWindowVisible(function (err, isVisible) {
+				if (isVisible) {
+					FSBL.Clients.WindowClient.finsembleWindow.show();
+				}
+				FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
+			}));
+
 		}, 500);
 
 	},
