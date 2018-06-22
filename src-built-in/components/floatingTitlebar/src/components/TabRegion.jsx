@@ -180,8 +180,9 @@ export default class TabRegion extends React.Component {
 		}
 
 		FSBL.Clients.RouterClient.transmit("tabbingDragEnd", { success: true });
-		FSBL.Clients.WindowClient.stopTilingOrTabbing({ allowDropOnSelf: true, action: "tabbing" });
-		this.props.onTabDropped();
+        FSBL.Clients.WindowClient.stopTilingOrTabbing({ allowDropOnSelf: true, action: "tabbing" }, () => {
+            this.props.onTabDropped();
+        });
     }
 
     isTabRegionOverflowing() {
