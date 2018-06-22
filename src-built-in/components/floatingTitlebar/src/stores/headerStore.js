@@ -15,7 +15,7 @@ let values = {
 const COMPANION_EXPANDED_HEIGHT = 32;
 const COMPANION_CONTRACTED_HEIGHT = 10;
 const COMPANION_CONTRACTED_WIDTH = 86;
-
+let Logger = FSBL.Clients.Logger;
 let animating = false;
 let updateBoundsAfterAnimate = false;
 var HeaderStore = Object.assign({}, EventEmitter.prototype, {
@@ -55,7 +55,7 @@ var HeaderStore = Object.assign({}, EventEmitter.prototype, {
 		return values.companionBounds;
 	}
 });
-let localParent = null
+let localParent = null;//
 var Actions = {
 	initialize(cb = Function.prototype) {
 		HeaderStore.initialize();
@@ -102,7 +102,7 @@ var Actions = {
 			wrappedWindow.addListener("maximized", Actions.onCompanionMaximized);
 			wrappedWindow.addListener("restored", Actions.onCompanionRestored);
 			wrappedWindow.addListener("bringToFront", Actions.onCompanionBringToFront);
-			wrappedWindow.addListener("restored", Actions.onCompanionRestored);
+			wrappedWindow.addListener("minimized", Actions.onCompanionMinimized);
 			wrappedWindow.addListener("startedMoving", Actions.onCompanionStartedMoving);
 			wrappedWindow.addListener("stoppedMoving", Actions.onCompanionStoppedMoving);
 			wrappedWindow.addListener("focused", Actions.onCompanionFocused);
@@ -140,6 +140,8 @@ var Actions = {
 					}
 				})
 			})
+		} else {
+			return cb(null, true);
 		}
 	},
 	getContractedBounds(bounds) {
@@ -180,11 +182,13 @@ var Actions = {
 	},
 	// hide the titlebar when the window is moving
 	onCompanionStartedMoving() {
+		Logger.system.debug("Companion window started moving");
 		HeaderStore.setMoving(true);
 		FSBL.Clients.WindowClient.finsembleWindow.hide();
 	},
 	// Show the titlebar when the window is moving
 	onCompanionStoppedMoving() {
+		Logger.system.debug("Companion window stopped moving");
 		HeaderStore.setMoving(false);
 		Actions.updateWindowPosition(function () {
 			if (HeaderStore.getCompanionWindow().parentWindow) {
@@ -199,6 +203,7 @@ var Actions = {
 		})
 	},
 	onCompanionFocused() {
+		Logger.system.debug("Companion window focused");
 		FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
 	},
 	//Helper function to update the titlebar's position
@@ -207,49 +212,72 @@ var Actions = {
 			updateBoundsAfterAnimate = true;
 			return;
 		}
-		HeaderStore.getCompanionWindow().getBounds({}, function (err, bounds) {
-			console.debug("updateWindowPosition", bounds)
-			HeaderStore.setCompanionBounds(bounds);
-			if (!bounds.width) bounds.width = bounds.right - bounds.left
-			FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
-
-			let onBoundsSet = function (err) {
-				console.debug("updateWindowPosition.onBoundsSet", bounds)
-				if (err) {
-					FSBL.Clients.Logger.error(err);
+		setTimeout(() => {
+			HeaderStore.getCompanionWindow().getBounds({}, function (err, bounds) {
+				HeaderStore.setCompanionBounds(bounds);
+				if (!bounds.width) bounds.width = bounds.right - bounds.left
+				FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
+				let onBoundsSet = function (err) {
+					if (err) {
+						FSBL.Clients.Logger.error(err);
+					}
+					cb();
 				}
-				cb();
-			}
 
-			if (HeaderStore.getState() === "small") {
-				let newBounds = Actions.getContractedBounds(bounds);
-				return FSBL.Clients.WindowClient.finsembleWindow.setBounds(newBounds, { persistBounds: false }, onBoundsSet)
-			}
+				if (HeaderStore.getState() === "small") {
+					let newBounds = Actions.getContractedBounds(bounds);
+					return FSBL.Clients.WindowClient.finsembleWindow.setBounds(newBounds, { persistBounds: false }, onBoundsSet)
+				}
 
-			let newBounds = Actions.getExpandedBounds(bounds);
-			return FSBL.Clients.WindowClient.finsembleWindow.setBounds(newBounds, { persistBounds: false }, onBoundsSet);
-		});
+				let newBounds = Actions.getExpandedBounds(bounds);
+				return FSBL.Clients.WindowClient.finsembleWindow.setBounds(newBounds, { persistBounds: false }, onBoundsSet);
+			});
+		}, 50);
+
 	},
 	onCompanionClosed() {
+		Logger.system.debug("Companion window closed");
 		FSBL.Clients.WindowClient.finsembleWindow.close({});
 	},
 	onCompanionHidden() {
+		Logger.system.debug("Companion window hidden");
 		FSBL.Clients.WindowClient.finsembleWindow.hide();
 	},
 	onCompanionShown() {
+		Logger.system.debug("Companion window shown");
 		FSBL.Clients.WindowClient.finsembleWindow.show();
 	},
 	onCompanionBringToFront() {
-		console.log("bring this window to front-----")
+		Logger.system.debug("Companion window BTF");
 		setTimeout(() => {
-			FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
+			if (Actions.isWindowVisible(function (err, isVisible) {
+				if (isVisible) {
+					FSBL.Clients.WindowClient.finsembleWindow.show();
+				}
+				FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
+			}));
 		}, 500);
 
 	},
 	onCompanionMaximized() {
-		Actions.updateWindowPosition();
+		Logger.system.debug("Companion window maximized");
+		setTimeout(() => {
+			Actions.updateWindowPosition();
+		}, 500)
+	},
+	onCompanionMinimized() {
+		Logger.system.debug("Companion window minimized");
+		FSBL.Clients.WindowClient.finsembleWindow.hide();
 	},
 	onCompanionRestored() {
+		Logger.system.debug("Companion window restored");
+		Actions.isWindowVisible((err, isVisible) => {
+			if (isVisible) {
+				FSBL.Clients.WindowClient.finsembleWindow.show();
+				FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
+			}
+		})
+
 		Actions.updateWindowPosition();
 	},
 	//Expand the window and set the animate flag. If trying to setbounds at the same time as animate, bounds gets messed up.
