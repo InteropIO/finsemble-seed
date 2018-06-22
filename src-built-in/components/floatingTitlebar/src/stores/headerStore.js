@@ -94,7 +94,7 @@ var Actions = {
 
 			wrappedWindow.addListener("setParent", onParentSet);
 			wrappedWindow.addListener("clearParent", onParentCleared)
-
+			wrappedWindow.listenForBoundsSet();
 			wrappedWindow.addListener("bounds-set", Actions.onBoundsChanged);
 			wrappedWindow.addListener("closed", Actions.onCompanionClosed);
 			wrappedWindow.addListener("hidden", Actions.onCompanionHidden);

@@ -29,7 +29,7 @@ export default class Logo extends React.Component {
 					this.setState({
 						tabLogo: {
 							type: "icon",
-							class: "ff-" + fontIcon
+							class: fontIcon
 						}
 					})
 				} else if (imageIcon && imageIcon !== "") {
