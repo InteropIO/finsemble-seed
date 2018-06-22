@@ -127,8 +127,10 @@ export default class TabRegion extends React.Component {
 			y: e.nativeEvent.screenY
 		}
 		let boundingRect = this.state.boundingBox;
-		if (!FSBL.Clients.WindowClient.isPointInBox(this.mousePositionOnDragEnd, FSBL.Clients.WindowClient.options)) {
-			FSBL.Clients.WindowClient.stopTilingOrTabbing({ mousePosition: this.mousePositionOnDragEnd });
+        if (!FSBL.Clients.WindowClient.isPointInBox(this.mousePositionOnDragEnd, FSBL.Clients.WindowClient.options)) {
+            setTimeout(() => {
+                FSBL.Clients.WindowClient.stopTilingOrTabbing({ mousePosition: this.mousePositionOnDragEnd });
+            }, 50);
 			this.setState({
 				iAmDragging: false
 			});
@@ -165,25 +167,25 @@ export default class TabRegion extends React.Component {
 		e.stopPropagation();
 		FSBL.Clients.Logger.system.debug("Tab drag drop.");
 		let identifier = this.extractWindowIdentifier(e);
-		if (identifier && identifier.windowName) {
-			console.log("DROP", identifier);
-			//Calls a method defined inside of windowTitleBar.jsx.
-			this.onTabAdded(identifier, this.state.hoveredTabIndex);
-		} else if (identifier && identifier.waitForIdentifier) {
-			let subscribeId;
-			let tabIdentifierSubscriber = (err, response) => {
-				if (!response.data.windowName) return;
-				FSBL.Clients.RouterClient.unsubscribe(subscribeId);
-				this.onTabAdded(response.data, this.state.hoveredTabIndex);
-			};
-			subscribeId = FSBL.Clients.RouterClient.subscribe('Finsemble.' + identifier.guid, tabIdentifierSubscriber);
-		} else {
-			FSBL.Clients.Logger.system.error("Unexpected drop event on window title bar. Check the 'drop' method on TabRegion.jsx.");
-		}
 
-		FSBL.Clients.RouterClient.transmit("tabbingDragEnd", { success: true });
-		FSBL.Clients.WindowClient.stopTilingOrTabbing({ allowDropOnSelf: true, action: "tabbing" });
-		this.props.onTabDropped();
+        FSBL.Clients.WindowClient.stopTilingOrTabbing({ allowDropOnSelf: true, action: "tabbing" }, () => {
+            FSBL.Clients.RouterClient.transmit("tabbingDragEnd", { success: true });
+            if (identifier && identifier.windowName) {
+                console.log("DROP", identifier);
+                //Calls a method defined inside of windowTitleBar.jsx.
+                this.onTabAdded(identifier, this.state.hoveredTabIndex);
+            } else if (identifier && identifier.waitForIdentifier) {
+                let subscribeId;
+                let tabIdentifierSubscriber = (err, response) => {
+                    if (!response.data.windowName) return;
+                    FSBL.Clients.RouterClient.unsubscribe(subscribeId);
+                    this.onTabAdded(response.data, this.state.hoveredTabIndex);
+                };
+                subscribeId = FSBL.Clients.RouterClient.subscribe('Finsemble.' + identifier.guid, tabIdentifierSubscriber);
+            } else {
+                FSBL.Clients.Logger.system.error("Unexpected drop event on window title bar. Check the 'drop' method on TabRegion.jsx.");
+            }
+        });
 	}
 
 	isTabRegionOverflowing() {
