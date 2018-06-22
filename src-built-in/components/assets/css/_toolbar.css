@@ -133,6 +133,7 @@
 img.pinned-icon {
     padding-top: var(--pinned-icon-padding-top);
     max-width: 17px;
+    float: left;
 }
 
 .pinned-icon {
