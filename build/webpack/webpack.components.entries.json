@@ -1,1 +1,6 @@
-{}
+{
+    "testFsblComponent": {
+        "output": "components/testFsblComponent/testFsblComponent",
+        "entry": "./src\\components\\testFsblComponent\\testFsblComponent.js"
+    }
+}
