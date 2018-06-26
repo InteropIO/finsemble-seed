@@ -12,5 +12,4 @@ window.quitFinsemble = function quitFinsemble() {
 }
 
 FSBL.addEventListener('onReady', function () {
-	FSBL.Clients.WindowClient.setWindowTitle(fin.desktop.Window.getCurrent().name);
 });

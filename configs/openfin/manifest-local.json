@@ -21,8 +21,12 @@
         "alwaysOnTop": false
     },
     "runtime": {
-        "arguments": "--noerrdialogs  --v=4 --no-sandbox  --enable-crash-reporting --framestrategy=frames",
-        "version": "8.56.28.36"
+        "arguments": "--noerrdialogs  --v=4 --no-sandbox  --enable-crash-reporting --framestrategy=frames --winhttp-proxy-resolver",
+        "version": "8.56.28.36",
+        "//": "Add these arguments when diagnosing issues",
+        "--diagnostics": "Adding this to the runtimeArguments activates verbose logging and crash reporting.",
+        "--disable-gpu": "This flag disables hardware acceleration. Try this if 'Blank Screen' issues are reported (sometimes on virtual desktops)",
+        "--winhttp-proxy-resolver": "Chromium v56 contains a bug that in some environments can create a memory leak. The bug is related to the way Chromium handles PAC files."
     },
     "shortcut": {
         "company": "ChartIQ",
@@ -52,8 +56,8 @@
     "fileName": "ChartIQ-local-installer",
     "appAssets": [
         {
-            "src": "http://connect2.chartiq.com/finsemble/Assimilation_1_9_5.zip",
-            "version": "1.9.5",
+            "src": "http://connect2.chartiq.com/finsemble/Assimilation_1_9_8.zip",
+            "version": "1.9.8",
             "alias": "assimilation",
             "target": "assimilationMain.exe"
         }

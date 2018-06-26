@@ -79,7 +79,7 @@ class _ToolbarStore {
 			if(menus && menus.length){
 				self.Store.setValue({
 					field: "menus",
-						value: menus
+					value: menus
 				});
 				done();
 			} else {
