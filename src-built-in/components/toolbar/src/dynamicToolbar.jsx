@@ -1,4 +1,3 @@
-
 /*!
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
@@ -44,15 +43,14 @@ export default class Toolbar extends React.Component {
 		super(props);
 		this.state = {
 			sections: ToolbarStore.getSectionsFromMenus(),
-			finWindow: fin.desktop.Window.getCurrent(),
-			dragScrim: null,
-			groupMask: null
+			finWindow: fin.desktop.Window.getCurrent()
 		};
 		this.bindCorrectContext();
 	}
 
 	bindCorrectContext() {
 		this.onSectionsUpdate = this.onSectionsUpdate.bind(this);
+		this.onPinDrag = this.onPinDrag.bind(this);
 	}
 
 	// called when sections change in the toolbar store
@@ -82,6 +80,30 @@ export default class Toolbar extends React.Component {
 		ToolbarStore.Store.removeListener({ field: "sections" }, this.onSectionsUpdate);
 	}
 
+	onPinDrag(changeEvent) {
+
+		let pins = this.refs.pinSection.state.pins;
+		let newPins = JSON.parse(JSON.stringify(pins));
+		let { destination, source } = changeEvent;
+		//user dropped without reordering.
+		if (!destination) return;
+		let target = pins[source.index];
+		newPins.splice(source.index, 1);
+		newPins.splice(destination.index, 0, target);
+		function pinsToObj(arr) {
+			let obj = {};
+			arr.forEach((el, i) => {
+				if (el) {
+					let key = el.label;
+					obj[key] = el;
+					obj[key].index = i;
+				}
+			});
+			return obj;
+		}
+		this.refs.pinSection.setState({ pins: newPins });
+		ToolbarStore.GlobalStore.setValue({ field: 'pins', value: pinsToObj(newPins) });
+	}
 	/**
 	 * This a sample dynamic toolbar which builds a toolbar from config, dynamically updates and can render any react component as a toolbar item.
 	 * The "sections" are built by the toolbar store. getSections() takes the sections object and builds right/left/center sections using the FinsembleToolbarSection control.
@@ -128,12 +150,8 @@ export default class Toolbar extends React.Component {
 				//buttons.push(<FinsembleToolbarSeparator key={sectionPosition} />);
 			}
 
-
-			let dragImage = document.createElement("img");
-			dragImage.src = '../assets/img/drag-image.png';
-
 			var sectionComponent = (<FinsembleToolbarSection
-				arrangeable={sectionPosition === "center"} /* currently only works with pins */
+				arrangeable={sectionPosition === "center"}
 				ref="pinSection"
 				name={sectionPosition}
 				pinnableItems={pinnableItems}
@@ -151,7 +169,7 @@ export default class Toolbar extends React.Component {
 	render() {
 	//console.log("Toolbar Render ");
 		if (!this.state.sections) return;
-		return (<FinsembleToolbar>
+		return (<FinsembleToolbar onDragEnd={this.onPinDrag}>
 			{this.getSections()}
 		</FinsembleToolbar>);
 	}
