@@ -32,12 +32,13 @@ export default class TabbingSection extends React.Component {
 		var self = this;
 		this.dontListenForDragOver = this.dontListenForDragOver.bind(this);
 		this.listenForDragOver = this.listenForDragOver.bind(this);
+	}
+	componentDidMount() {
 
 		FSBL.Clients.RouterClient.addListener("DockingService.startTilingOrTabbing", this.listenForDragOver);
 		//console.log("Adding listener for stopTilingOrTabbing.");
 		FSBL.Clients.RouterClient.addListener("DockingService.stopTilingOrTabbing", this.dontListenForDragOver);
 		FSBL.Clients.RouterClient.addListener("DockingService.cancelTilingOrTabbing", this.dontListenForDragOver);
-
 	}
 	componentWillunMount() {
 		//console.log("Removing listener from the router.");
