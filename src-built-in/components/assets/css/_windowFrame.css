@@ -2,14 +2,6 @@
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
-.icon-fsbl-chat.badge:after {
-    position: relative;
-    height: 0.625rem;
-    width: 0.625rem;
-    top: -0.625rem;
-    right: 0.325rem;
-    color: var(--workspace-icon-color);
-}
 
 body {
     padding: 0px !important;
@@ -32,7 +24,7 @@ html:before, html:after, body:before, body:after {
     background: var(--window-frame-inactive-color);
     position: fixed;
     display: block;
-    z-index: 2147483645;
+    z-index: 2147483640;
 }
 
 /* ...and position them! */
@@ -64,42 +56,13 @@ body:after {
     left: 0;
 }
 
-.menu-button {
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 1.5em;
-    background: #fff;
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: var(--primary-accent-color);
-    display: inline-block;
-    position: relative;
-    line-height: 27px;
-    height: 27px;
-    padding: 0 10px;
-    cursor: pointer;
-    border: none;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    transition: all .2s 0s, opacity .2s 0s;
-    -webkit-border-radius: 1px;
-    -moz-border-radius: 1px;
-    -ms-border-radius: 1px;
-    border-radius: 1px;
-    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-    -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-}
-
 html.groupMask {
   /* ...and position them! */;
 }
 
 html.groupMask body {
-    background-color: var(--secondary-accent-color);
-    border: 5px solid var(--primary-accent-color);
+    background-color: var(--groupMask-background-color);
+    border: 5px solid var(--groupMask-border-color);
     margin: 0px;
 }
 

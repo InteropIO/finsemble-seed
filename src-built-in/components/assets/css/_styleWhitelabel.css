@@ -1,0 +1,256 @@
+
+.menu-secondary {
+    background: var(--menu-actions-background-color);
+    padding: 5px 0px;
+}
+
+.finsemble-toolbar-button {
+    padding: 2px 6px;
+}
+
+.finsemble-toolbar-button-icon {
+    padding-top: 4px;
+}
+
+.finsemble-toolbar-brand-logo {
+    padding: 4px 0 0 0 !important;
+}
+
+.finsemble-button-label {
+    padding-top: 0px;
+}
+
+.finsemble-item-pinned:hover {
+    border-radius: 4px;
+}
+
+.fsbl-tab-logo {
+    margin: 0 7px;
+    width: 13px;
+    height: 13px;
+    padding-top: 2px;
+    color: var(--titlebar-tab-icon-font-color);
+}
+
+.fsbl-tab-close {
+    font-size: 8px;
+    padding: 0px 7px 1px 7px;
+    visibility:hidden;
+    cursor: pointer;
+    width:8px;
+    height:100%;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    position: absolute;
+    right: 0;
+}
+
+.fsbl-header-title {
+    height: 100%;
+    max-width: 75%; /* make sure there's always some space to grab and move the window */
+    overflow: hidden;
+    align-items: center;
+    display:flex;
+    padding-right: 14px;
+    border-top: 0px solid transparent;
+    border-right: 1px solid transparent;
+    transition: background-color 0.2s ease;
+}
+
+.fsbl-tab[data-hover=true], .fsbl-active-tab {
+    background-color: var(--titlebar-tab-active-background-color);
+    color: var(--titlebar-tab-active-color);
+}
+
+.fsbl-icon {
+    position: relative;
+    color: var(--titleBar-inactive-font-color);
+    font-size: var(--titleBar-icon-font-size);
+    width: 21px;
+    padding: 0px 6px;
+    height: calc(100% + 5px);
+    margin-top: -5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .2s ease;
+    cursor: pointer;
+    box-sizing: content-box !important;
+}
+
+.searchInput::after {
+    bottom: 2px !important;
+}
+
+.finsemble-toolbar-section.right .finsemble-toolbar-button-icon {
+    padding-top: 2px;
+}
+
+.jpmuitk-icon-document-add, .jpmuitk-icon-save, .jpmuitk-icon-save-solid, .jpmuitk-icon-report-builder {
+    padding-right: 7px;
+}
+
+.jpmuitk-icon-report-builder {
+    margin-top: 3px;
+}
+
+.jpmuitk-icon-pin, .jpmuitk-icon-delete {
+    margin-top: 1px;
+    padding-top: 5px;
+    width: 25px;
+    height: 19px;
+    text-align: center;
+    border: 1px solid transparent;
+}
+
+.jpmuitk-icon-delete:hover {
+    color: white;
+    background-color: var(--content-button-negative-border-hover-color);
+    border-radius: 4px;
+}
+
+/* Tweaks for JPM icons */
+.jpmuitk-icon-document {
+    font-size: 17px;
+}
+
+.jpmuitk-icon-right-expand {
+    transform: rotate(90deg);
+}
+
+.jpmuitk-icon-remove {
+    padding-top: 2px;
+}
+
+.highlighted {
+    background-color: var(--primary-accent-color);
+}
+
+.ff-pin {
+    padding: 3px 1px;
+    width: 22px;
+    text-align: center;
+    border: 1px solid transparent;
+} 
+
+.ff-pin:hover {
+    color: var(--menu-font-color);
+    width: 22px;
+    border: 1px solid var(--menu-pin-border-color);
+    border-radius: 4px;
+}
+
+.finsemble-item-pinned {
+    color: var(--menu-font-color);
+    width: 22px;
+    background-color: var(--menu-pin-background-color);
+    border-radius: 4px;
+}
+
+.finsemble-item-pinned:hover {
+    color: var(--menu-font-color);
+    width: 22px;
+    background-color: var(--menu-pin-background-hover-color);
+    border-radius: 4px;
+}
+
+.ff-delete {
+    padding: 3px 2px 3px 0px;
+    width: 22px;
+    text-align: center;
+    border: 1px solid transparent;
+}
+
+.jpmuitk-icon-import, .jpmuitk-icon-export {
+    padding-bottom: 3px;
+}
+
+.jpmuitk-icon-delete:hover {
+    background-color: transparent;
+    color: #FFFFFF;
+}
+
+.jpmuitk-icon-edit {
+    align-self: flex-start;
+}
+
+.ff-minimize {
+    padding-top: 10px;
+}
+
+.ff-share:before {
+    padding-top: 2px;
+}
+
+.ff-linker:before {
+    padding-top: 4px;
+}
+
+.fsbl-button {
+    margin: 0 4px;
+    text-align: center;
+    background: var(--dialog-button-background-color);
+    color: var(--grey200);
+    transition: .2s ease;
+    text-transform: uppercase;
+    font-stretch: normal;
+    line-height: normal;
+    cursor: pointer;
+}
+
+.fsbl-button-md-positive {
+    width: 147px;
+    height: 32px;
+    border: 1px solid var(--button-positive-border-color);
+    font-weight: var(--button-positive-font-weight);
+    font-size: var(--button-font-size);
+    letter-spacing: 0.4px;
+    line-height: 33px;
+}
+
+body.dialog .dialog-input {
+    padding-right: 12px;
+    padding-left: 4px;
+}
+
+body.dialog input {
+    -webkit-appearance: none;
+    color: #FFF;
+    text-align: left;
+    font-size: 12pt;
+    font-weight: 500;
+    vertical-align: middle;
+    padding-left: 15px;
+    width: 100%;
+    height: 33px;
+    max-width: 100%;
+    padding: 3px 10px;
+    border: 0px;
+    box-sizing: border-box;
+    transition: .2s ease-in;
+    outline: none;
+    background: transparent;
+    border-bottom: 1px solid var(--blue);
+}
+
+body.dialog input:focus {
+    box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+    border-bottom: 1px solid var(--blue);
+}
+
+.form-group {
+    margin: 0px;
+    padding: 0px;
+    display:inline-block;
+}
+
+.notification-logo {
+    margin-bottom: -3px;
+}
+
+.notification-logo::after {
+    font-family: "jpmuitk-icons";
+    content: "\e931";
+    background-color: var(--notification-body-background-color);
+}

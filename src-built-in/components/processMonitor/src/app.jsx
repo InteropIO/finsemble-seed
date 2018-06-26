@@ -9,7 +9,7 @@ import "react-table/react-table.css";
 import Toast from "./components/Toast";
 import { initialize as StoreInit, Actions } from "./stores/ProcessMonitorStore";
 import "../processMonitor.css";
-import "../../assets/css/finfont.css";
+import "../../assets/css/font-finance.css";
 import "../../assets/css/finsemble.css";
 import { SHOW_PAGINATION, COLLAPSE_ON_DATA_CHANGE, TABLE_CLASSES, statsWeCareAbout, EMPTY_TOTALS } from "./constants";
 let APP_UPDATE_INTERVAL,

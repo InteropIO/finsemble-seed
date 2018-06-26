@@ -28,12 +28,12 @@
 						"launchableByUser": true
 					},
 					"Window Manager": {
-						"showLinker": false,
+						"showLinker": true,
 						"FSBLHeader": true,
 						"persistWindowState": true
 					},
 					"Toolbar": {
-						"iconClass": "welcome"
+						"iconClass": "component"
 					}
 				}
 			}

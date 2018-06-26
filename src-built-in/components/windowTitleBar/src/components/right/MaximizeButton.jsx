@@ -88,7 +88,7 @@ export default class MaximizeButton extends React.Component {
 	 */
 	render() {
 		let iconClasses = "icon-ciq ";
-		let wrapClasses = "fsbl-icon cq-no-drag ";
+		let wrapClasses = "fsbl-icon fsbl-maximize cq-no-drag ";
 		let tooltip = this.state.maximized ? "Restore" : "Maximize";
 
 		//Classes for the maximize button.
