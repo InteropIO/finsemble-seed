@@ -1,5 +1,21 @@
 /* TODO: Use Finsemble CSS variables */
 
+.fsbl-logo {
+    content: url("../assets/img/ciq-banner-black-100x25.png");
+    width: 100px;
+    height: 25px;
+}
+
+.fsbl-login-logo {
+    content: url("../assets/img/finsembleLightBG_Solo@1.5x.png");
+    width: 154px;
+    height: 173px;
+}
+
+i.ff-close {
+    color: #666;;
+}
+
 .form-wrapper {
     width: 342px;
     text-align: center;
