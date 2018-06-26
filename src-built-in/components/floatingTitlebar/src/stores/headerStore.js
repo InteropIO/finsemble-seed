@@ -77,6 +77,7 @@ var Actions = {
 					localParent = wrappedWindow.parentWindow;
 			};
 			var onParentCleared = () => {
+				console.debug("Companion show onParentCleared.......",isVisible);
 				FSBL.Clients.WindowClient.finsembleWindow.show();
 				FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
 				if (localParent) {
@@ -116,9 +117,13 @@ var Actions = {
 					{ persistBounds: false },
 					function (err) {
 						Actions.updateWindowPosition()//hack for small window
-						FSBL.Clients.WindowClient.finsembleWindow.show(false, function () {
-							FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
-						});
+						Actions.isWindowVisible(function (err, isVisible) {
+							if(isVisible)
+							FSBL.Clients.WindowClient.finsembleWindow.show(false, function () {
+								FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
+							});
+						})
+
 						cb();
 					}, function () { });
 			})
@@ -195,11 +200,11 @@ var Actions = {
 		HeaderStore.setMoving(false);
 		Actions.updateWindowPosition(function () {
 			if (HeaderStore.getCompanionWindow().parentWindow) {
-				if (Actions.isWindowVisible(function (err, isVisible) {
+				Actions.isWindowVisible(function (err, isVisible) {
 					if (isVisible) {
 						FSBL.Clients.WindowClient.finsembleWindow.show();
 					}
-				}));
+			});
 			} else {
 				FSBL.Clients.WindowClient.finsembleWindow.show();
 			}
@@ -253,12 +258,14 @@ var Actions = {
 	onCompanionBringToFront() {
 		Logger.system.debug("Companion window BTF");
 		setTimeout(() => {
-			if (Actions.isWindowVisible(function (err, isVisible) {
+			Actions.isWindowVisible(function (err, isVisible) {
+				console.debug("Companion show.......",isVisible);
 				if (isVisible) {
+					console.debug("Companion show.......");
 					FSBL.Clients.WindowClient.finsembleWindow.show();
 				}
 				FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
-			}));
+			});
 		}, 500);
 
 	},
@@ -276,6 +283,7 @@ var Actions = {
 		Logger.system.debug("Companion window restored");
 		Actions.isWindowVisible((err, isVisible) => {
 			if (isVisible) {
+				console.debug("Companion show22.......",isVisible);
 				FSBL.Clients.WindowClient.finsembleWindow.show();
 				FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
 			}
