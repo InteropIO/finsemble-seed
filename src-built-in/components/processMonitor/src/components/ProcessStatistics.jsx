@@ -17,8 +17,8 @@ export default class ProcessStatistics extends React.Component {
                 {this.props.mode === "simple" ? "Process Group" : this.props.stats.name}
             </div>
             <div className="process-statistics">
-                {this.props.fields.map(field => {
-                    return (<div className={getClassesForStat(this.props.stats[field.value], field.label)}>
+                {this.props.fields.map((field, i) => {
+                    return (<div key={i} className={getClassesForStat(this.props.stats[field.value], field.label)}>
                         {prettyPrint(this.props.stats[field.value], field.label)}
                     </div>)
                 })}
@@ -44,7 +44,7 @@ function getClassesForStat(number, statType) {
 
     if (statType === "CPU") {
         high_comparison = HIGH_CPU,
-        moderate_comparison = MODERATE_CPU_USAGE;
+            moderate_comparison = MODERATE_CPU_USAGE;
     }
     if (number > high_comparison) {
         classes += " high-usage"
@@ -64,6 +64,9 @@ function prettyPrint(number, statType) {
     if (statType === "CPU") {
         //make it a percent.
         return round(number, 2) + "%";
+    } else if (statType !== "processId") {
+        return bytesToSize(number);
+    } else {
+        return number;
     }
-    return bytesToSize(number);
 }

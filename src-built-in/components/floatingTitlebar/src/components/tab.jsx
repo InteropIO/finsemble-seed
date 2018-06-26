@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import HoverDetector from "./HoverDetector.jsx";
-
+import Logo from "./logo";
 import { FinsembleDraggable } from "@chartiq/finsemble-react-controls";
 const ICON_AREA = 29;
 const CLOSE_BUTTON_MARGIN = 22;
@@ -57,8 +57,11 @@ export default class Tab extends React.Component {
 					></div>
 				}
 				<HoverDetector edge="top" hoverAction={this.hoverAction.bind(this)} />
-				<div className="fsbl-tab-logo"><i className="ff-grid"></i></div>
-				<div className="fsbl-tab-title" style={{ width: titleWidth }}>{this.props.title}</div>
+				<Logo windowIdentifier={this.props.windowIdentifier}/>
+				<div className="fsbl-tab-title" style={{ width: titleWidth }}>
+					{/* @todo, figure out where we're setting the title to an empty object.... */}
+					{typeof (this.props.title) === "string" ? this.props.title : ''}
+				</div>
 				<div className="fsbl-tab-close" onClick={(e) => {
 					e.preventDefault();
 					e.stopPropagation();
@@ -66,7 +69,7 @@ export default class Tab extends React.Component {
 				}}>
 					<i className="ff-close"></i>
 				</div>
-			</div>
+			</div >
 		);
 	}
 }

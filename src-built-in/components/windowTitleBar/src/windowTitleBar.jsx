@@ -47,6 +47,8 @@ class WindowTitleBar extends React.Component {
 		this.bindCorrectContext();
 		windowTitleBarStore.getValue({ field: "Maximize.hide" });
 		this.dragEndTimeout = null;
+		let activeIdentifier = finsembleWindow.identifier;
+        activeIdentifier.title = finsembleWindow.windowOptions.title;
 		this.state = {
 			windowTitle: windowTitleBarStore.getValue({ field: "Main.windowTitle" }),
 			minButton: !windowTitleBarStore.getValue({ field: "Minimize.hide" }),
@@ -59,7 +61,7 @@ class WindowTitleBar extends React.Component {
 			tabs: [{ title: windowTitleBarStore.getValue({ field: "Main.windowTitle" }) }], //array of tabs for this window
 			showTabs: windowTitleBarStore.getValue({field: "showTabs"}),
 			allowDragOnCenterRegion: true,
-			activeTab: FSBL.Clients.WindowClient.getWindowIdentifier(),
+			activeTab: activeIdentifier,
 			tabBarBoundingBox: {},
 		};
 
@@ -100,7 +102,7 @@ class WindowTitleBar extends React.Component {
 		]);
 
 		FSBL.Clients.RouterClient.addListener("DockingService.startTilingOrTabbing", this.disallowDragOnCenterRegion);
-		console.log("Adding listener for stopTilingOrTabbing.");
+	//console.log("Adding listener for stopTilingOrTabbing.");
 		FSBL.Clients.RouterClient.addListener("DockingService.stopTilingOrTabbing", this.allowDragOnCenterRegion);
 		FSBL.Clients.RouterClient.addListener("DockingService.cancelTilingOrTabbing", this.allowDragOnCenterRegion);
 
@@ -125,7 +127,7 @@ class WindowTitleBar extends React.Component {
 			{ field: "tabs", listener: this.onTabsChanged },
 			{ field: "showTabs", listener: this.onShowTabsChanged },
 		]);
-		console.log("Removing listener from the router.");
+	//console.log("Removing listener from the router.");
 		FSBL.Clients.RouterClient.removeListener("DockingService.startTilingOrTabbing", this.disallowDragOnCenterRegion);
 		FSBL.Clients.RouterClient.removeListener("DockingService.stopTilingOrTabbing", this.allowDragOnCenterRegion);
 	}
@@ -134,7 +136,7 @@ class WindowTitleBar extends React.Component {
 	 * When we are not tiling/tabbing, we want to allow the user to drag the window around via any available space in the tab-region. This function allows that.
 	 */
 	allowDragOnCenterRegion() {
-		console.log("In stopTilingOrTabbing")
+	//console.log("In stopTilingOrTabbing")
 		this.setState({
 			allowDragOnCenterRegion: true
 		});
@@ -143,7 +145,7 @@ class WindowTitleBar extends React.Component {
 	 * When we are tiling/tabbing, we do not want to allow any window to be dragged around and moved.
 	 */
 	disallowDragOnCenterRegion() {
-		console.log("No longer allowing drag.")
+	//console.log("No longer allowing drag.")
 		this.setState({
 			allowDragOnCenterRegion: false
 		});

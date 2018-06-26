@@ -48,9 +48,7 @@ var Actions = {
 			var title = FSBL.Clients.WindowClient.title || windowTitleBarConfig.title;
 
 			if (title) {
-				windowTitleBarStore.setValue({
-					field: "Main.windowTitle", value: title
-				});
+				FSBL.Clients.WindowClient.setWindowTitle(title)
 			}
 		}
 
@@ -149,6 +147,7 @@ var Actions = {
 		FSBL.Clients.WindowClient.finWindow.addEventListener("maximized", function () {
 			self.clickMaximize();
 		});
+
 		//default title.
 		windowTitleBarStore.setValue({ field: "Main.windowTitle ", value: FSBL.Clients.WindowClient.getWindowTitle() });
 
@@ -299,6 +298,12 @@ var Actions = {
 			});
 		}
 	},
+	onTabListScrollPositionChanged: function (err, response) {
+		windowTitleBarStore.setValue({ field: "tabListTranslateX", value: response.data.translateX });
+	},
+	setTabListScrollPosition: function (translateX) {
+		FSBL.Clients.RouterClient.transmit(constants.TAB_SCROLL_POSITION_CHANGED, { translateX });
+	},
 	hyperfocusDockingGroup: function () {
 		FSBL.Clients.RouterClient.transmit("DockingService.hyperfocusGroup", { windowName: FSBL.Clients.WindowClient.getWindowNameForDocking() });
 	},
@@ -347,24 +352,27 @@ var Actions = {
 	 */
 	clickMaximize: function () {
 		var maxField = windowTitleBarStore.getValue({ field: "Maximize" });
-
-		if (maxField.maximized) {
-			return FSBL.Clients.WindowClient.restore(() => {
-				windowTitleBarStore.setValue({ field: "Maximize.maximized", value: false });
+		if (finsembleWindow.windowState !== finsembleWindow.WINDOWSTATE.MAXIMIZED)
+			return FSBL.Clients.WindowClient.maximize(() => {
+				windowTitleBarStore.setValue({ field: "Maximize.maximized", value: true });
 			});
-		}
-		FSBL.Clients.WindowClient.maximize(() => {
-			windowTitleBarStore.setValue({ field: "Maximize.maximized", value: true });
+
+		return FSBL.Clients.WindowClient.restore(() => {
+			windowTitleBarStore.setValue({ field: "Maximize.maximized", value: false });
 		});
+
+
 	},
 
 	getTabs() {
 		return windowTitleBarStore.getValue({ field: "tabs" });
 	},
 	_setTabs(tabs) {
-		console.log("SET TABS", tabs);
+	//console.log("SET TABS", tabs);
 		FSBL.Clients.Logger.system.debug("Set tabs", tabs);
-		return windowTitleBarStore.setValue({ field: "tabs", value: tabs || [FSBL.Clients.WindowClient.getWindowIdentifier()] })
+		let activeIdentifier = finsembleWindow.identifier;
+		activeIdentifier.title = finsembleWindow.windowOptions.title;
+		return windowTitleBarStore.setValue({ field: "tabs", value: tabs || [activeIdentifier] })
 	},
 	addTabLocally: function (windowIdentifier, i) {
 		let tabs = Actions.getTabs();
@@ -375,29 +383,29 @@ var Actions = {
 		Actions._setTabs(tabs);
 	},
 	removeTabsLocally: function () {
-		console.log("REMOVE TABS LOCALLY");
+	//console.log("REMOVE TABS LOCALLY");
 		Actions._setTabs(null);
 	},
 	removeTabLocally: function (windowIdentifier) {
-		console.log("Removing tab", windowIdentifier.name);
+	//console.log("Removing tab", windowIdentifier.name);
 		let tabs = Actions.getTabs();
 		let i = tabs.findIndex(el => el.name === windowIdentifier.name && el.uuid === windowIdentifier.uuid);
 		tabs.splice(i, 1);
-		console.log("Number of Tabs left", tabs.length);
+	//console.log("Number of Tabs left", tabs.length);
 		Actions._setTabs(tabs);
 	},
 	reorderTabLocally: function (tab, newIndex) {
 		let tabs = Actions.getTabs();
 		let { currentIndex } = Actions.findTab(tab);
-		console.log("tab list, reorderTabLocally", tab.windowName, currentIndex, newIndex)
+	//console.log("tab list, reorderTabLocally", tab.windowName, currentIndex, newIndex)
 		if (currentIndex === newIndex) return;
 		if (currentIndex === -1) {
 			return Actions.addTabLocally(tab, newIndex);
 		}
 		tabs.splice(currentIndex, 1);
-		console.log("After remove", JSON.parse(JSON.stringify(tabs)));
+	//console.log("After remove", JSON.parse(JSON.stringify(tabs)));
 		tabs.splice(newIndex, 0, tab);
-		console.log("After reinsert", JSON.parse(JSON.stringify(tabs)));
+	//console.log("After reinsert", JSON.parse(JSON.stringify(tabs)));
 
 		Actions._setTabs(tabs)
 	},
@@ -435,7 +443,7 @@ var Actions = {
 		tabs.splice(currentIndex, 1);
 		tabs.splice(newIndex, 0, tab);
 		//Local change, quickly updates the dom.
-		console.log("Tab list changing", tabs);
+	//console.log("Tab list changing", tabs);
 		Actions._setTabs(tabs);
 		Actions.parentWrapper.reorder({ windowIdentifiers: tabs })
 	},
@@ -447,7 +455,6 @@ var Actions = {
 		return { tab, currentIndex }
 	},
 	setActiveTab: function (windowIdentifier) {
-		console.log("setActiveTab", windowIdentifier)
 		FSBL.Clients.Logger.system.debug("setActiveTab.visibleWindow");
 		return Actions.parentWrapper.setVisibleWindow({ windowIdentifier });
 	},
@@ -462,16 +469,20 @@ var Actions = {
 		Actions.parentSubscriptions.forEach(sub => {
 			FSBL.Clients.RouterClient.unsubscribe(sub);
 		});
+		//Syncs scroll state across all tabs in a stack.
+		FSBL.Clients.RouterClient.removeListener(constants.TAB_SCROLL_POSITION_CHANGED, Actions.onTabListScrollPositionChanged);
 		cb();
 	},
 	listenOnParentWrapper: function () {
 		let TABLIST_SUBSCRIPTION = FSBL.Clients.RouterClient.subscribe(constants.PARENT_WRAPPER_UPDATES, Actions.onTabListChanged);
+		FSBL.Clients.RouterClient.addListener(constants.TAB_SCROLL_POSITION_CHANGED, Actions.onTabListScrollPositionChanged);
 		Actions.parentSubscriptions.push(TABLIST_SUBSCRIPTION)
 	},
 	setupStore: function (cb = Function.prototype) {
 		constants.PARENT_WRAPPER_UPDATES = `Finsemble.StackedWindow.${Actions.parentWrapper.identifier.windowName}`;
 		constants.CHILD_WINDOW_FIELD = `childWindowIdentifiers`;
 		constants.VISIBLE_WINDOW_FIELD = `visibleWindowIdentifier`;
+		constants.TAB_SCROLL_POSITION_CHANGED = Actions.parentWrapper.name + ".tabListTabListScrollPositionChanged"
 		Actions.listenOnParentWrapper();
 		cb();
 	},
@@ -482,13 +493,15 @@ var Actions = {
 				FSBL.Clients.Logger.debug("GetInitialTabList, parent exists")
 				Actions.setupStore(cb);
 			} else {
-				let tabs = [FSBL.Clients.WindowClient.getWindowIdentifier()];
+				let activeIdentifier = finsembleWindow.identifier;
+				activeIdentifier.title = finsembleWindow.windowOptions.title;
+				let tabs = [activeIdentifier];
 				cb(null, tabs)
 			}
 		})
 	},
 	createParentWrapper(params, cb) {
-		console.log("In parentWrapper begin");
+	//console.log("In parentWrapper begin");
 		window.Actions = Actions;
 		if (Actions.parentWrapper) {
 			cb();

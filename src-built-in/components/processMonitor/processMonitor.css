@@ -1,50 +1,49 @@
+@import  url('../assets/css/_globals.css');
+
 body {
 	margin: 0px;
 	overflow: hidden;
-	font-size: 12px;
-}
-body.menu {
-	color: #555;
-	background-color: white;
+	font-size: var(--procMonitor-font-size);
+	font-weight: var(--procMonitor-font-weight);
+	font-family: var(--font-family);
+	color: var(--procMonitor-font-color);
+	background-color: var(--procMonitor-background-color);
 }
 
+
 .high-usage {
-	background-color: red;
-	color: white;
+	background-color: var(--procMonitor-negative-background-color);
+	color: var(--procMonitor-font-color);
 }
 
 .moderate-usage {
-	background-color: orange;
-	color: white;
+	background-color: var(--procMonitor-warning-background-color);
+	color: var(--procMonitor-font-color);
 }
 
 .terminate {
-	font-size: 12px;
-	font-weight: 300;
 	font-style: normal;
 	font-stretch: normal;
 	line-height: normal;
 	letter-spacing: normal;
 	text-align: right;
-	color: #999;
-	padding: 3px 2px;
-	background-color: #FFF;
-	border: solid 1px #DDD;
+	color: var(--button-neutral-solid-font-color);
+	padding: 3px 4px;
+	background-color: var(--button-neutral-background-color);
+	border: solid 1px var(--button-neutral-border-color);
 	cursor: pointer;
 	transition: all .25s ease;
 }
 
 .terminate:hover {
-	border-color: red;
-	color: white;
-	background-color: red;
-	font-weight: bold;
+	border-color: var(--procMonitor-negative-border-color);
+	background-color: var(--procMonitor-negative-background-color);
+	color: var(--procMonitor-font-color);
 }
 
 .process-list-wrapper {
 	margin: 1em;
-	border: 1px solid #e9e9e9;
-	;
+	border: 1px solid var(--procMonitor-list-border-color);
 }
 
 .process-list {
@@ -60,12 +59,11 @@ body.menu {
 .process {
 	padding-top: 8px;
 	padding-bottom: 8px;
-	border-bottom: 1px solid #e9e9e9;
+	border-bottom: 1px solid var(--procMonitor-list-border-color);
 }
 
 .list-header {
-	border-bottom: 1px solid #e9e9e9;
-	;
+	border-bottom: 1px solid var(--procMonitor-list-border-color);
 	padding-right: 15px;
 	align-items: center;
 	/*Account for scrollbar.*/
@@ -76,12 +74,7 @@ body.menu {
 }
 
 .process-name {
-	font-weight: bold;
-	padding-left: 23px;
-}
-
-.process-name {
-	font-weight: normal;
+	font-weight: var(--procMonitor-process-name-font-weight);
 	font-style: italic;
 	padding-left: 7px;
 }
@@ -95,7 +88,6 @@ body.menu {
 
 .list-header-statistic-label {
 	flex: 1;
-	;
 	padding: .5em;
 	display: inline-flex;
 	justify-content: center;
@@ -120,8 +112,7 @@ body.menu {
 }
 
 .child-window-name {
-	font-weight: 500;
-	color: #22175A;
+	font-weight: var(--procMonitor-component-name-font-weight);
 }
 .advanced .child-window-name {
 	cursor: pointer;
@@ -160,13 +151,12 @@ body.menu {
 	margin-right: 17px;
 	height: 8px;
 	width: 7px;
-	font-size: 12px;
-	color: #A5A5A5;
+	color: var(--procMonitor-close-component-font-color);
 }
 
 .close-window:hover {
 	cursor: pointer;
-	color: #F64352;
+	color: var(--procMonitor-close-hover-color);
 }
 
 .sort-direction {
@@ -185,9 +175,10 @@ body.menu {
 
 .advanced-button {
 	width: 110px;
-  height: 35px;
-  background-color: #ecf0f1;
-	border: solid 1px #dddddd;
+	height: 35px;
+	background-color: var(--button-neutral-background-color);
+	border: solid 1px var(--button-neutral-border-color);
+	color: var(--button-neutral-solid-font-color);
 	display:flex;
 	align-content: center;
 	justify-content: center;

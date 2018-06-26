@@ -38,7 +38,7 @@ var Actions = {
 	importTemplate: function () {
 		var newTemplateJSONDefinition; // ************* needs to be intialized from file input **********************
         FSBL.Clients.WorkspaceClient.addWorkspaceTemplateDefinition(newTemplateJSONDefinition, { force: true }, function (err) {
-            console.log("addWorkspaceTemplateDefinition result", err);
+           //console.log("addWorkspaceTemplateDefinition result", err);
         });
 	},
 	/**

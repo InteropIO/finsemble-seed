@@ -5,6 +5,7 @@ import ReactDOM from "react-dom";
 import Tab from "./tab";
 import { FinsembleDnDContext, FinsembleDroppable } from '@chartiq/finsemble-react-controls';
 import HoverDetector from "./HoverDetector.jsx";
+import Logo from "./logo";
 
 import { Store, Actions } from "../stores/tabbingStore";
 import { Store as HeaderStore, Actions as HeaderActions } from "../stores/headerStore";
@@ -63,7 +64,6 @@ export default class TabRegion extends React.Component {
 
     }
     getTabWidth(params = {}) {
-
         let { boundingBox, tabList } = params;
         if (typeof (tabList) === "undefined") {
             tabList = this.state.tabs;
@@ -79,8 +79,8 @@ export default class TabRegion extends React.Component {
         return newTabWidth < MINIMUM_TAB_SIZE ? MINIMUM_TAB_SIZE : newTabWidth;
     }
     /**
- * Resize handler. Calculates the space that the center-region is taking up. May be used to scale tabs proportionally.
- */
+     * Resize handler. Calculates the space that the center-region is taking up. May be used to scale tabs proportionally.
+     */
     onWindowResize() {
         if (!this.refs.Me) return;
         let bounds = this.refs.Me.getBoundingClientRect();
@@ -105,7 +105,7 @@ export default class TabRegion extends React.Component {
         this.setState({
             iAmDragging: true
         });
-        e.dataTransfer.setData("text/json", JSON.stringify(windowIdentifier));
+        e.dataTransfer.setData("text/plain", JSON.stringify(windowIdentifier));
         FSBL.Clients.WindowClient.startTilingOrTabbing({
             windowIdentifier: windowIdentifier
         });
@@ -127,7 +127,9 @@ export default class TabRegion extends React.Component {
         }
         let boundingRect = this.state.boundingBox;
         if (!FSBL.Clients.WindowClient.isPointInBox(this.mousePositionOnDragEnd, FSBL.Clients.WindowClient.options)) {
-            FSBL.Clients.WindowClient.stopTilingOrTabbing({ mousePosition: this.mousePositionOnDragEnd });
+            setTimeout(() => {
+                FSBL.Clients.WindowClient.stopTilingOrTabbing({ mousePosition: this.mousePositionOnDragEnd });
+            }, 50);
             this.setState({
                 iAmDragging: false
             });
@@ -141,9 +143,11 @@ export default class TabRegion extends React.Component {
      */
     extractWindowIdentifier(e) {
         try {
-            let identifier = JSON.parse(e.dataTransfer.getData('text/json'));
+            let identifier = JSON.parse(e.dataTransfer.getData('text/plain'));
             //If the "identifier" is formed properly, it'll have this properly. Otherwise, it's something else (e.g., share data, image, etc).
             if (typeof identifier.windowName !== "undefined") {
+                return identifier;
+            } else if (identifier.waitForIdentifier) {
                 return identifier;
             } else {
                 FSBL.Clients.Logger.system.error("Malformed drop object detected in windowTitleBar. Check tab droppping code. Expected windowIdentifier, got ", identifier);
@@ -160,17 +164,27 @@ export default class TabRegion extends React.Component {
      */
     drop(e) {
         e.stopPropagation();
+
         FSBL.Clients.Logger.system.debug("Tab drag drop.");
         let identifier = this.extractWindowIdentifier(e);
-        if (identifier) {
-            //Calls a method defined inside of windowTitleBar.jsx.
-            this.onTabAdded(identifier, this.state.hoveredTabIndex);
-        } else {
-            FSBL.Clients.Logger.system.error("Unexpected drop event on window title bar. Check the 'drop' method on TabRegion.jsx.");
-        }
-        FSBL.Clients.RouterClient.transmit("tabbingDragEnd", { success: true });
-        FSBL.Clients.WindowClient.stopTilingOrTabbing({ allowDropOnSelf: true, action: "tabbing" });
-        this.props.onTabDropped();
+        FSBL.Clients.WindowClient.stopTilingOrTabbing({ allowDropOnSelf: true, action: "tabbing" }, () => {
+            FSBL.Clients.RouterClient.transmit("tabbingDragEnd", { success: true });
+            if (identifier && identifier.windowName) {
+                //console.log("DROP", identifier);
+                //Calls a method defined inside of windowTitleBar.jsx.
+                this.onTabAdded(identifier, this.state.hoveredTabIndex);
+            } else if (identifier && identifier.waitForIdentifier) {
+                let subscribeId;
+                let tabIdentifierSubscriber = (err, response) => {
+                    if (!response.data.windowName) return;
+                    FSBL.Clients.RouterClient.unsubscribe(subscribeId);
+                    this.onTabAdded(response.data, this.state.hoveredTabIndex);
+                };
+                subscribeId = FSBL.Clients.RouterClient.subscribe('Finsemble.' + identifier.guid, tabIdentifierSubscriber);
+            } else {
+                FSBL.Clients.Logger.system.error("Unexpected drop event on window title bar. Check the 'drop' method on TabRegion.jsx.");
+            }
+        });
     }
 
     isTabRegionOverflowing() {
@@ -453,7 +467,7 @@ export default class TabRegion extends React.Component {
             data-hover={this.state.hoverState}
             className={"fsbl-header-title cq-no-drag"}>
             <HoverDetector edge="top" hoverAction={this.hoverAction.bind(this)} />
-            <div className="fsbl-tab-logo"><i className="ff-grid"></i></div>
+            <Logo windowIdentifier={ Actions.getWindowIdentifier()}/>
             <div className="fsbl-tab-title">{this.props.thisWindowsTitle}</div>
         </div>);
     }
@@ -463,7 +477,7 @@ export default class TabRegion extends React.Component {
         var componentToRender = "title";
         if (this.state.tabs.length === 1) {
             if (this.props.listenForDragOver && !this.state.iAmDragging) {
-                componentToRender = "title";
+                componentToRender = "tabs";
             }
         }
         if (this.state.tabs.length > 1) {

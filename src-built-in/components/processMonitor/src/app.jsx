@@ -71,7 +71,7 @@ export default class ProcessMonitor extends React.Component {
 						{this.state.processList
 							.filter(proc => proc.visible)
 							.map((proc, i) => {
-								return (<div className="process">
+								return (<div key={i} className="process">
 									{/* Process statistics is the meat of this component. It's the statistics and the child windows. */}
 									<ProcessStatistics
 										mode={this.state.viewMode}
@@ -124,7 +124,7 @@ export default class ProcessMonitor extends React.Component {
 
 FSBL.addEventListener("onReady", function () {
 	// var Test = require('./test');
-	console.log("appLauncher app onReady");
+//console.log("appLauncher app onReady");
 
 	Actions.initialize(function (store) {
 		ReactDOM.render(
