@@ -77,7 +77,6 @@ var Actions = {
 					localParent = wrappedWindow.parentWindow;
 			};
 			var onParentCleared = () => {
-				console.debug("Companion show onParentCleared.......",isVisible);
 				FSBL.Clients.WindowClient.finsembleWindow.show();
 				FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
 				if (localParent) {
