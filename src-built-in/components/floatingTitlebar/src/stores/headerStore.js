@@ -285,6 +285,7 @@ var Actions = {
 	},
 	//Expand the window and set the animate flag. If trying to setbounds at the same time as animate, bounds gets messed up.
 	expandWindow(cb = Function.prototype) {
+		if (animating) return cb();
 		animating = true;
 		if (HeaderStore.getState() === "large") return
 		HeaderStore.setState("large");
@@ -338,6 +339,7 @@ var Actions = {
 	contractWindow(cb = Function.prototype) {
 	//console.log("Contracting window");
 		HeaderStore.setState("small");
+		if (animating) return cb();
 		animating = true;
 		let finWindow = fin.desktop.Window.getCurrent();
 		let currentBound = HeaderStore.getCompanionBounds();

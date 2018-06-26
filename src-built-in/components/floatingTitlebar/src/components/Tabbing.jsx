@@ -26,14 +26,6 @@ export default class TabbingSection extends React.Component {
 			loaded: true
 		};
 	}
-
-	componentWillMount() {
-		var self = this;
-	}
-	componentWillunMount() {
-
-	}
-
 	render() {
 		var self = this;
 		let tabRegionClasses = "fsbl-tab-area";
@@ -44,7 +36,7 @@ export default class TabbingSection extends React.Component {
 				className={tabRegionClasses}
 				thisWindowsTitle={this.state.windowTitle}
 				boundingBox={this.state.tabBarBoundingBox}
-				listenForDragOver={true}
+				listenForDragOver={this.props.listenForDragOver}
 				tabs={this.state.tabs}
 				ref="tabArea"
 			/></div>
