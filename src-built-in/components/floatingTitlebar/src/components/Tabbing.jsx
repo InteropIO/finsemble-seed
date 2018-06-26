@@ -23,48 +23,9 @@ export default class TabbingSection extends React.Component {
 			tabBarBoundingBox: {},
 			tabs: [],
 			windowTitle: HeaderStore.getCompanionWindow().windowName,
-			loaded: true,
-			listenForDragOver: false
+			loaded: true
 		};
 	}
-
-	componentWillMount() {
-		var self = this;
-		this.dontListenForDragOver = this.dontListenForDragOver.bind(this);
-		this.listenForDragOver = this.listenForDragOver.bind(this);
-	}
-	componentDidMount() {
-
-		FSBL.Clients.RouterClient.addListener("DockingService.startTilingOrTabbing", this.listenForDragOver);
-		//console.log("Adding listener for stopTilingOrTabbing.");
-		FSBL.Clients.RouterClient.addListener("DockingService.stopTilingOrTabbing", this.dontListenForDragOver);
-		FSBL.Clients.RouterClient.addListener("DockingService.cancelTilingOrTabbing", this.dontListenForDragOver);
-	}
-	componentWillunMount() {
-		//console.log("Removing listener from the router.");
-		FSBL.Clients.RouterClient.removeListener("DockingService.startTilingOrTabbing", this.listenForDragOver);
-		FSBL.Clients.RouterClient.removeListener("DockingService.stopTilingOrTabbing", this.dontListenForDragOver);
-	}
-
-	/**
-	 * When we are not tiling/tabbing, we want to allow the user to drag the window around via any available space in the tab-region. This function allows that.
-	 */
-	dontListenForDragOver() {
-		//console.log("In stopTilingOrTabbing")
-		this.setState({
-			listenForDragOver: false
-		});
-	}
-	/**
-	 * When we are tiling/tabbing, we do not want to allow any window to be dragged around and moved.
-	 */
-	listenForDragOver() {
-		//console.log("No longer allowing drag.")
-		this.setState({
-			listenForDragOver: true
-		});
-	}
-
 	render() {
 		var self = this;
 		let tabRegionClasses = "fsbl-tab-area";
@@ -75,7 +36,7 @@ export default class TabbingSection extends React.Component {
 				className={tabRegionClasses}
 				thisWindowsTitle={this.state.windowTitle}
 				boundingBox={this.state.tabBarBoundingBox}
-				listenForDragOver={this.state.listenForDragOver}
+				listenForDragOver={this.props.listenForDragOver}
 				tabs={this.state.tabs}
 				ref="tabArea"
 			/></div>

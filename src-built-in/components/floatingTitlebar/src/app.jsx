@@ -57,6 +57,7 @@ class FloatingTitlebar extends React.Component {
 	onTilingStart(err, response) {
 		this.setState({
 			hadTabs: storeExports.Actions.getTabs().length > 1,
+			listenForDragOver: true,
 			shouldContractOnStop: this.state.size === "small" &&
 				HeaderStore.getCompanionWindow().windowName !== response.data.windowIdentifier.windowName
 		}, () => {
@@ -70,7 +71,10 @@ class FloatingTitlebar extends React.Component {
 	onTilingStop() {
 		let shouldContractOnStop = this.state.shouldContractOnStop
 		var self = this;
-		this.setState({ shouldContractOnStop: false }, () => {
+		this.setState({
+			shouldContractOnStop: false,
+			listenForDragOver: false,
+		}, () => {
 			if (shouldContractOnStop || (self.state.hadTabs &&
 				storeExports.Actions.getTabs().length < 2)) {
 				self.contractWindow();// contract the window if we have no more tabs.
@@ -167,7 +171,7 @@ class FloatingTitlebar extends React.Component {
 			lastDragEventLeave = false;
 		}}>
 			<div id="actionbutton" onClickCapture={function (e) { self.onActionClick(e) }} className="actionButton tabs-contract"></div>
-			<TabbingSection />
+			<TabbingSection listenForDragOver={this.state.listenForDragOver}/>
 		</div >
 	}
 }
