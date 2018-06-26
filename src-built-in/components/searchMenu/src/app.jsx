@@ -176,7 +176,7 @@ class SearchMenu extends React.Component {
 
 fin.desktop.main(function () {
 	FSBL.addEventListener("onReady", function () {
-		console.log("searchMenu app onReady");
+	//console.log("searchMenu app onReady");
 		storeExports.initialize(function (store) {
 			menuStore = store;
 			ReactDOM.render(

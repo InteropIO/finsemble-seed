@@ -124,7 +124,7 @@ export default class ProcessMonitor extends React.Component {
 
 FSBL.addEventListener("onReady", function () {
 	// var Test = require('./test');
-	console.log("appLauncher app onReady");
+//console.log("appLauncher app onReady");
 
 	Actions.initialize(function (store) {
 		ReactDOM.render(

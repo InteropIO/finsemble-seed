@@ -163,12 +163,13 @@ export default class TabRegion extends React.Component {
      */
     drop(e) {
         e.stopPropagation();
+
         FSBL.Clients.Logger.system.debug("Tab drag drop.");
         let identifier = this.extractWindowIdentifier(e);
         FSBL.Clients.WindowClient.stopTilingOrTabbing({ allowDropOnSelf: true, action: "tabbing" }, () => {
             FSBL.Clients.RouterClient.transmit("tabbingDragEnd", { success: true });
             if (identifier && identifier.windowName) {
-                console.log("DROP", identifier);
+                //console.log("DROP", identifier);
                 //Calls a method defined inside of windowTitleBar.jsx.
                 this.onTabAdded(identifier, this.state.hoveredTabIndex);
             } else if (identifier && identifier.waitForIdentifier) {

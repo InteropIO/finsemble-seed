@@ -89,7 +89,7 @@ class WorkspaceManagementMenu extends React.Component {
 
 fin.desktop.main(function () {
 	FSBL.addEventListener("onReady", function () {
-		console.log("WorkspaceManagementMenu onReady");
+	//console.log("WorkspaceManagementMenu onReady");
 		storeExports.initialize(function (store) {
 			WorkspaceManagementMenuStore = store;
 			ReactDOM.render(

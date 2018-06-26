@@ -22,7 +22,7 @@ export default class AppList extends React.Component {
     }
 
     itemClick() {
-        console.log("this.props click", this.props)
+       //console.log("this.props click", this.props)
         FSBL.Clients.SearchClient.invokeItemAction(this.props.item, this.props.item.actions[0]);//make this only use spawn for now
         setTimeout(() => {//we do this because the originating window doesn't exist in the launcher if we dont wait.
             FSBL.Clients.WindowClient.finsembleWindow.close();

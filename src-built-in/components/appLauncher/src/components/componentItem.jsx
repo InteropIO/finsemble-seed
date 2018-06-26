@@ -37,11 +37,11 @@ export default class componentItem extends React.Component {
 		event.dataTransfer.setDragImage(this.dragImage, 0, 0);
 		event.dataTransfer.setData('text/plain', JSON.stringify({ waitForIdentifier: true, guid: guid }));
 
-		console.log("starting drag. called starttiling");
+	//console.log("starting drag. called starttiling");
 		FSBL.Clients.WindowClient.startTilingOrTabbing({ waitForIdentifier: true, componentType: component.component.type });
 
 		this.props.itemAction(component, { options: { autoShow: false } }, (identifier) => {
-			console.log("starting drag. called sendidentifier");
+		//console.log("starting drag. called sendidentifier");
 			FSBL.Clients.WindowClient.sendIdentifierForTilingOrTabbing({ windowIdentifier: identifier });
 			FSBL.Clients.RouterClient.publish('Finsemble.' + guid, identifier);
 			this.guidIdentifierMap[guid] = identifier;
@@ -51,8 +51,8 @@ export default class componentItem extends React.Component {
 
 	stopDrag(event) {
 		this.dragging = false;
-		console.log("stopping drag. called stoptiling.");
-		console.log(this.guidBeingDragged, this.guidIdentifierMap[this.guidBeingDragged]);
+	//console.log("stopping drag. called stoptiling.");
+	//console.log(this.guidBeingDragged, this.guidIdentifierMap[this.guidBeingDragged]);
 		delete this.guidIdentifierMap[this.guidBeingDragged];
 		delete this.guidBeingDragged;
 		FSBL.Clients.WindowClient.stopTilingOrTabbing({
@@ -90,12 +90,12 @@ export default class componentItem extends React.Component {
 			deleteAction={this.deleteItem}
 			draggable={true}
 			onDragStart={(e) => {
-                console.log("Menu Item drag - TAB");
+               //console.log("Menu Item drag - TAB");
                 this.startDrag(e, component);
 			}}
 			onDragEnd={
 				(e) => {
-					console.log("Menu Item drag - TAB");
+				//console.log("Menu Item drag - TAB");
 					this.stopDrag(e, component);
 				}
 			}

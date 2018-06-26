@@ -42,7 +42,7 @@ class WorkspaceEditor extends React.Component {
 	}
 
 	onBlur() {
-		console.log("ON BLUR", performance.now());
+	//console.log("ON BLUR", performance.now());
 		function finish(val) {
 			this.props.saveHandler(val);
 		}
