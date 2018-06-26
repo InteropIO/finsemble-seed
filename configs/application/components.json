@@ -1,6 +1,32 @@
 {
 	"comment": "Sample component configuration",
 	"components": {
+		"Configure": {
+      "window": {
+        "url": "$applicationRoot/components/dynamic-config/index.html",
+        "resizable": true,
+        "addToWorkspace": true,
+        "top": "center",
+        "left": "center",
+        "width": 450,
+        "height": 600
+      },
+      "component": {
+        "inject": "$applicationRoot/components/dynamic-config/index.js"
+      },
+      "foreign": {
+        "components": {
+          "App Launcher": {
+            "launchableByUser": true
+          },
+          "Window Manager": {
+            "FSBLHeader": true,
+            "persistWindowState": true,
+            "showLinker": true
+          }
+        }
+      }
+    },
 		"Welcome Component": {
 			"window": {
 				"url": "$applicationRoot/components/welcome/welcome.html",
