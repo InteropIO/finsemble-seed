@@ -342,15 +342,35 @@ export default class Workspaces extends React.Component {
 	}
 	exportWorkspace() {
 		if (this.state.focusedWorkspace === '') return;
-		FSBL.Clients.WorkspaceClient.getWorkspaceDefinition({ workspaceName: this.state.focusedWorkspace }, (err, workspaceDefinition) => {
-			if (err) {
-				FSBL.Clients.Logger.error("getWorkspaceDefinition error", err);
-			} else {
-				//We're saving using a routine initially created for templates. The outcome is the same and it probably should have just been "Save to file". This bool is to allow it to save.
-				FSBL.ConfigUtils.promptAndSaveJSONToLocalFile(this.state.focusedWorkspace, { workspaceTemplates: workspaceDefinition });
-				//FSBL.ConfigUtils.promptAndSaveJSONToLocalFile(this.state.focusedWorkspace, workspaceDefinition);
+		var self = this;
+		function doExport() {
+			FSBL.Clients.WorkspaceClient.getWorkspaceDefinition({ workspaceName: self.state.focusedWorkspace }, (err, workspaceDefinition) => {
+				if (err) {
+					FSBL.Clients.Logger.error("getWorkspaceDefinition error", err);
+				} else {
+					//We're saving using a routine initially created for templates. The outcome is the same and it probably should have just been "Save to file". This bool is to allow it to save.
+					FSBL.ConfigUtils.promptAndSaveJSONToLocalFile(self.state.focusedWorkspace, { workspaceTemplates: workspaceDefinition });
+				}
+			});
+		}
+		//If we're autosaving, autosave, then export.
+		//@todo, put into store. consider moving autosave into workspaceClient.
+		FSBL.Clients.ConfigClient.getValue({ field: "finsemble.preferences.workspaceService.promptUserOnDirtyWorkspace" }, (err, data) => {
+			//default to false.
+			let PROMPT_ON_SAVE = data === null ? false : data;
+			if (!PROMPT_ON_SAVE) {
+				let activeName = FSBL.Clients.WorkspaceClient.activeWorkspace.name;
+				return FSBL.Clients.WorkspaceClient.saveAs({
+					name: activeName,
+					force: true
+				}, (err, response) => {
+					doExport();
+				});
 			}
-		})
+			doExport();
+		});
+
+
 	}
 	handleButtonClicks(e) {
 		if (this.state.adding || this.state.editing) {
@@ -422,7 +442,7 @@ export default class Workspaces extends React.Component {
 			<div className="complex-menu-content-row">
 				<div className="workspace-list-header-row">
 					<div className="content-section-header workspace-list-header">
-					<div className="content-section-info">
+						<div className="content-section-info">
 							Drag to reorder
 					</div>
 					</div>
