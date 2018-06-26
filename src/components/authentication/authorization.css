@@ -1,0 +1,62 @@
+/* TODO: Use Finsemble CSS variables */
+
+.form-wrapper {
+    width: 342px;
+    text-align: center;
+    padding-top: 20px;
+}
+
+.fsbl-button-md {
+    width: 65%;
+}
+
+.fsbl-button-wrapper {
+    padding-top: 10px;
+}
+
+.fsbl-auth-top {
+    display: flex;
+    justify-content: space-between;
+    height: 20px;
+    align-items: center;
+    padding: 10px 10px 5px 0px;
+}
+
+.fsbl-close {
+    cursor: pointer;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    flex-direction: column;
+    height: 100%;
+}
+
+.fsbl-auth-input {
+    width: 65%;
+    padding: 9px 0px;
+    margin: 0px auto;
+}
+
+.fsbl-input-error input {
+    border: #EF1436 1px solid !important;
+}
+
+.fsbl-input-error-message {
+    display: none;
+    color: #EF1436;
+    font-size: small;
+}
+
+.link {
+    cursor: pointer;
+}
+
+body {
+    background: white;
+    max-height: 442px;
+    max-width: 342px;
+}
+
+::-webkit-input-placeholder {
+    text-align: left;
+}
