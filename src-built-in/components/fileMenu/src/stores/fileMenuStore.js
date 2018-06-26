@@ -74,7 +74,7 @@ function setupHotKeys() {
 		if (!keys[response.data.key]) keys[response.data.key] = {};
 		keys[response.data.key] = true;
 		if (keys[162] && keys[81]) {
-			console.log("call---quit")
+		//console.log("call---quit")
 
 		}
 	});
@@ -202,9 +202,9 @@ var Actions = {
 	},
 	spawnDocs() {
 		fin.desktop.System.openUrlWithBrowser("https://www.chartiq.com/tutorials/?slug=finsemble-seed-project", function () {
-			console.log("successfully launched docs");
+		//console.log("successfully launched docs");
 		}, function (err) {
-			console.log("failed to launch docs");
+		//console.log("failed to launch docs");
 		});
 	}
 };

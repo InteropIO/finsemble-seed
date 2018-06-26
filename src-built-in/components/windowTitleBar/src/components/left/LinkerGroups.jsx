@@ -64,7 +64,7 @@ export default class LinkerGroups extends React.Component {
      * @memberof LinkerGroups
      */
     onStoreChanged(newState) {
-        console.log("store changed ", newState);
+       //console.log("store changed ", newState);
 		this.setState(newState);
     }
 

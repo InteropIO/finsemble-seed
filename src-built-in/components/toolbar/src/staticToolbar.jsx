@@ -18,7 +18,7 @@ import WorkspaceLauncherButton from "../components/WorkspaceLauncherButton";
 import WorkspaceMenuOpener from "../components/WorkspaceMenuOpener"
 // Styles
 import "../toolbar.css";
-import "../../assets/css/finfont.css";
+import "../../assets/css/font-finance.css";
 import "../../assets/css/finsemble.css";
 
 var pinnableItems = {

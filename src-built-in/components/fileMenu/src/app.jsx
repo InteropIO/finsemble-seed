@@ -6,7 +6,7 @@ import React from "react";
 import { Actions as FileMenuActions } from "./stores/fileMenuStore";
 import { FinsembleMenu, FinsembleMenuItem, FinsembleMenuSection, FinsembleMenuSectionLabel } from "@chartiq/finsemble-react-controls";
 import "../fileMenu.css";
-import "../../assets/css/finfont.css";
+import "../../assets/css/font-finance.css";
 import "../../assets/css/finsemble.css";
 
 class FileMenu extends React.Component {

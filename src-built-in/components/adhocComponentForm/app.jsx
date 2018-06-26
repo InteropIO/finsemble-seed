@@ -16,6 +16,7 @@ class AdHocComponentForm extends React.Component {
 	constructor(props) {
 		super(props);
 		this.save = this.save.bind(this);
+		this.cancel = this.cancel.bind(this);
 		this.setName = this.setName.bind(this);
 		this.setURL = this.setURL.bind(this);
 	}
@@ -94,8 +95,13 @@ class AdHocComponentForm extends React.Component {
 	 * @memberof AdHoc
 	 */
 	cancel() {
+		this.setState({
+			name: "",
+			url: ""
+		});
 		//FSBL.Clients.WindowClient.close(false);
 		FSBL.Clients.DialogManager.respondToOpener({});
+
 	}
 
 	setName(e) {
@@ -121,8 +127,9 @@ class AdHocComponentForm extends React.Component {
 				Input a name and URL for your new app.
 			</FinsembleDialogQuestion>
 			<div className="button-wrapper">
-			<FinsembleDialogTextInput maxLength="40" onInputChange={this.setName} placeholder="Name" autofocus />
-			<FinsembleDialogTextInput maxLength="256" onInputChange={this.setURL} placeholder="URL" />
+			<FinsembleDialogTextInput onInputChange={this.setName} placeholder="Name" autofocus value={this.name} />
+			<FinsembleDialogTextInput onInputChange={this.setURL} placeholder="URL" value={this.URL}/>
+
 
 
 				<FinsembleDialogButton show={true} buttonSize="md-positive" onClick={this.save}>

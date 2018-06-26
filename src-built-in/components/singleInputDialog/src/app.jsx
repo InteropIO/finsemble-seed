@@ -61,7 +61,7 @@ class SingleInputDialog extends React.Component {
 			hideModalOnClose: typeof data.hideModalOnClose === "undefined" ? true : data.hideModalOnClose,
 			inputLabel: data.inputLabel,
 			affirmativeResponseLabel: data.affirmativeResponseLabel || "Okay",
-			cancelResponseLabel: data.affirmativeResponseLabel || "Cancel",
+			cancelResponseLabel: data.cancelResponseLabel || "Cancel",
 			showCancelButton: typeof data.showCancelButton === "undefined" ? false : data.showCancelButton,
 			renderInput: true,
 		}, this.fitAndShow);
@@ -117,7 +117,7 @@ class SingleInputDialog extends React.Component {
 			<FinsembleDialogQuestion question={this.state.inputLabel} />
 			<div className="button-wrapper">
 				{this.state.renderInput &&
-					<FinsembleDialogTextInput maxLength="40" onInputChange={this.setInputValue} placeholder="Enter Name" autoFocus={true} />
+					<FinsembleDialogTextInput onInputChange={this.setInputValue} placeholder="Enter Name" autoFocus={true} />
 				}
 				<FinsembleDialogButton buttonSize="md-positive" onClick={() => { this.sendResponse("affirmative"); }}>
 					{this.state.affirmativeResponseLabel}
