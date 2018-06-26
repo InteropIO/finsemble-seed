@@ -353,6 +353,7 @@ export default class Workspaces extends React.Component {
 				}
 			});
 		}
+
 		//If we're autosaving, autosave, then export.
 		//@todo, put into store. consider moving autosave into workspaceClient.
 		FSBL.Clients.ConfigClient.getValue({ field: "finsemble.preferences.workspaceService.promptUserOnDirtyWorkspace" }, (err, data) => {
