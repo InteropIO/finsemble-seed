@@ -5,22 +5,34 @@ export default class Logo extends React.PureComponent {
 		this.state = {
 			tabLogo: {},
 			uuid: Math.random()
-		}
+		};
+		this.wrap = null;
+		this.getWrap = this.getWrap.bind(this);
 		this.handleComponentConfig = this.handleComponentConfig.bind(this);
 		console.log("constructor for", props.windowIdentifier.windowName, this.state.uuid);
 	}
-	componentDidMount() {
-		let wrap = FSBL.FinsembleWindow.wrap(this.props.windowIdentifier, (err, wrapper) => {
+	getWrap(cb = Function.prototype) {
+		if (this.wrap) return cb();
+		FSBL.FinsembleWindow.wrap(this.props.windowIdentifier, (err, wrapper) => {
+			cb(wrapper);
+		});
+	}
+	componentWillReceiveProps(nextProps) {
+		//We only need to re-render the logo if the name of the component changes. Otherwise this sucker would fire umpteen times.
+		this.getWrap((wrapper) => {
 			if (!wrapper.getOptions) {
 				return this.getIconFromConfig(this.props.windowIdentifier);
 			}
 			wrapper.getOptions(this.handleComponentConfig);
-		});
+		})
 	}
+
 	getIconFromConfig(wi) {
 		FSBL.Clients.LauncherClient.getComponentDefaultConfig(wi.componentType, (err, config) => {
 			//This is just to make sure the object is the same shape as what comes back from getOptions.
-			this.handleComponentConfig(err, { customData: config });
+			this.getWrap((wrapper) => {
+				this.handleComponentConfig(err, { customData: config });
+			})
 		})
 	}
 	handleComponentConfig(err, opts) {
@@ -63,7 +75,7 @@ export default class Logo extends React.PureComponent {
 	}
 
 	render() {
-		console.log("RENDER FOR", this.state.uuid, this.state.tabLogo);
+		console.log("RENDER LOGO FOR", this.state.uuid, this.state.tabLogo);
 		return <div className="fsbl-tab-logo">
 			{this.state.tabLogo.type === "icon" &&
 				<i className={this.state.tabLogo.class}></i>
