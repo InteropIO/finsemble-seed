@@ -1,60 +1,34 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Configure</title>
-    <style media="screen">
-      .container {
-        font-size: 1em;
-        padding: 20px;
-      }
-      label, .form-control {
-        display: block;
-        margin-bottom: 5px
-      }
-      .btn {
-        padding: 10px 20px;
-        color: #fff;
-        background: #006699;
-        margin-right: 5px;
-        display: inline-block;
-        border: 0;
-      }
-      .form-group {
-        margin-bottom: 10px
-      }
-      .form-control {
-        width: 90%;
-        padding: 10px;
-      }
-      input:invalid,textarea:invalid {
-        border: 1px solid red;
-      }
-      input:invalid, textarea:valid {
-        border: 1px solid #999;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <form name="configs" action="javascript:void(0)">
-        <div class="form-group">
-          <label for="comps">Components</label>
-          <textarea id="comps" class="form-control" rows="6" name="comps"></textarea>
-        </div>
-        <div class="form-group">
-          <label for="menus">Menu</label>
-          <textarea id="menus" class="form-control" rows="6" name="menus"></textarea>
-        </div>
-        <div class="form-group">
-          <label for="style">Style URL</label>
-          <input id="css" class="form-control" name="cssOverridePath" />
-        </div>
-        <div class="form-group">
-          <button class="btn" name="save" type="submit" id="submit">Save</button>
-          <button class="btn" name="clear" type="reset" id="clear">Clear</button>
-        </div>
-      </form>
-    </div>
-  </body>
+
+<head>
+  <meta charset="utf-8">
+  <title>Configure</title>
+  <link rel="stylesheet" type="text/css" href="dynamic-config.css" media="screen" />
+</head>
+
+<body>
+  <div class="container">
+    <form name="configs" action="javascript:void(0)">
+      <div class="form-group">
+        <label for="comps">Components</label>
+        <textarea id="comps" class="form-control" rows="6" name="comps"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="menus">Menu</label>
+        <textarea id="menus" class="form-control" rows="6" name="menus"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="style">Style URL</label>
+        <input id="css" class="form-control" name="cssOverridePath" />
+      </div>
+      <div class="form-group">
+        <button class="btn" name="save" type="submit" id="submit">Save</button>
+        <button class="btn" name="clear" type="reset" id="clear">Clear</button>
+      </div>
+    </form>
+  </div>
+</body>
+<script src="index.js" />
+
 </html>
