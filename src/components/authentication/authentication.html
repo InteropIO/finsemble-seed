@@ -21,74 +21,15 @@
 	<link rel="stylesheet" type="text/css" href="../assets/css/finsemble.css">
 	<link rel="stylesheet" type="text/css" href="../assets/css/finfont.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js" type="text/javascript"></script>
-	<style>
-		.form-wrapper {
-			width: 342px;
-			text-align: center;
-			padding-top: 20px;
-		}
-
-		.fsbl-button-md {
-			width: 65%;
-		}
-
-		.fsbl-button-wrapper {
-			padding-top: 10px;
-		}
-
-		.fsbl-auth-top {
-			display: flex;
-			justify-content: space-between;
-			height: 20px;
-			align-items: center;
-			padding: 10px 10px 5px 0px;
-		}
-
-		.fsbl-close {
-			cursor: pointer;
-			display: flex;
-			justify-content: flex-end;
-			align-items: flex-start;
-			flex-direction: column;
-			height: 100%;
-		}
-
-		.fsbl-auth-input {
-			width: 65%;
-			padding: 9px 0px;
-			margin: 0px auto;
-		}
-
-		.fsbl-input-error input {
-			border: #EF1436 1px solid !important;
-		}
-
-		.fsbl-input-error-message {
-			display: none;
-			color: #EF1436;
-			font-size: small;
-		}
-
-		.link {
-			cursor: pointer;
-		}
-
-		body {
-			background: white;
-			max-height: 442px;
-			max-width: 342px;
-		}
-
-		::-webkit-input-placeholder {
-			text-align: left;
-		}
+	<link rel="stylesheet" type="text/css" href="authorization.css">
+		
 	</style>
 </head>
 
 <body class="dialog">
 	<div class="fsbl-auth-top">
 		<img class="fsbl-logo" src="../assets/img/ciq-banner-black-100x25.png" width="100" height="25">
-		<div class="fsbl-close" id="FSBL-close" onclick="quit()">
+		<div class="fsbl-close" id="FSBL-close">
 			<i class="ff-close" style=color:#666></i>
 		</div>
 	</div>
@@ -106,7 +47,7 @@
 				<input type="password" id="password" placeholder="Password" type="submit">
 				<br>
 			</div>
-			<div class="fsbl-button fsbl-button-md" id="submitButton" onclick="processAuthInput()">
+			<div class="fsbl-button fsbl-button-md" id="submitButton" >
 				<i class="ff-check-circle"></i>Login</div>
 		</div>
 		<!-- <div><a id="authAction" class="link">Sign up</a></div> -->
