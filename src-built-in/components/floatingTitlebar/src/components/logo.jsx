@@ -1,16 +1,36 @@
 import React from "react";
-export default class Logo extends React.Component {
-	constructor() {
+export default class Logo extends React.PureComponent {
+	constructor(props) {
 		super();
 		this.state = {
 			tabLogo: {}
-		}
+		};
+		this.wrap = null;
+		this.getWrap = this.getWrap.bind(this);
 		this.handleComponentConfig = this.handleComponentConfig.bind(this);
 	}
+	getWrap(cb = Function.prototype) {
+		if (this.wrap) return cb();
+		FSBL.FinsembleWindow.wrap(this.props.windowIdentifier, (err, wrapper) => {
+			cb(wrapper);
+		});
+	}
+	componentWillReceiveProps(nextProps) {
+		//We only need to re-render the logo if the name of the component changes. Otherwise this sucker would fire umpteen times.
+		this.getWrap((wrapper) => {
+			if (!wrapper.getOptions) {
+				return this.getIconFromConfig(this.props.windowIdentifier);
+			}
+			wrapper.getOptions(this.handleComponentConfig);
+		})
+	}
+
 	getIconFromConfig(wi) {
 		FSBL.Clients.LauncherClient.getComponentDefaultConfig(wi.componentType, (err, config) => {
 			//This is just to make sure the object is the same shape as what comes back from getOptions.
-			this.handleComponentConfig(err, { customData: config });
+			this.getWrap((wrapper) => {
+				this.handleComponentConfig(err, { customData: config });
+			})
 		})
 	}
 	handleComponentConfig(err, opts) {
@@ -27,6 +47,7 @@ export default class Logo extends React.Component {
 		} catch (e) {
 			imageIcon = "";
 		}
+		// console.log("Setting state for", opts.name, this.state.uuid, fontIcon);
 		if (fontIcon && fontIcon != "") {
 			this.setState({
 				tabLogo: {
@@ -45,22 +66,14 @@ export default class Logo extends React.Component {
 			this.setState({
 				tabLogo: {
 					type: "icon",
-					url: "ff-grid"
+					class: "ff-grid"
 				}
 			})
 		}
 	}
-	componentWillReceiveProps(nextProps) {
-		//We only need to re-render the logo if the name of the component changes. Otherwise this sucker would fire umpteen times.
-		if (this.state.tabLogo.type && nextProps.windowIdentifier.windowName === this.props.windowIdentifier.name) return;
-		let wrap = FSBL.FinsembleWindow.wrap(nextProps.windowIdentifier, (err, wrapper) => {
-			if (!wrapper.getOptions) {
-				return this.getIconFromConfig(nextProps.windowIdentifier);
-			}
-			wrapper.getOptions(this.handleComponentConfig);
-		});
-	}
+
 	render() {
+		// console.log("RENDER LOGO FOR", this.state.uuid, this.state.tabLogo);
 		return <div className="fsbl-tab-logo">
 			{this.state.tabLogo.type === "icon" &&
 				<i className={this.state.tabLogo.class}></i>
