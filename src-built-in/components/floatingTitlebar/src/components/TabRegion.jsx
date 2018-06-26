@@ -5,6 +5,7 @@ import ReactDOM from "react-dom";
 import Tab from "./tab";
 import { FinsembleDnDContext, FinsembleDroppable } from '@chartiq/finsemble-react-controls';
 import HoverDetector from "./HoverDetector.jsx";
+import Logo from "./logo";
 
 import { Store, Actions } from "../stores/tabbingStore";
 import { Store as HeaderStore, Actions as HeaderActions } from "../stores/headerStore";
@@ -465,7 +466,7 @@ export default class TabRegion extends React.Component {
             data-hover={this.state.hoverState}
             className={"fsbl-header-title cq-no-drag"}>
             <HoverDetector edge="top" hoverAction={this.hoverAction.bind(this)} />
-            <div className="fsbl-tab-logo"><i className="ff-grid"></i></div>
+            <Logo windowIdentifier={ Actions.getWindowIdentifier()}/>
             <div className="fsbl-tab-title">{this.props.thisWindowsTitle}</div>
         </div>);
     }
