@@ -31,15 +31,16 @@ var Actions = {
 		};
 		attachedWindow.addListener("setParent", onParentSet);
 		attachedWindow.addListener("clearParent", onParentCleared)
-		Actions.getInitialTabList((err, values) => {
 
-		})
 	},
 	getTabs() {
 		return tabbingRegionStore.getValue({ field: "tabs" });
 	},
 	setWindowIdentifier(wi) {
 		windowIdentifier = wi
+		Actions.getInitialTabList((err, values) => {
+			if (values) Actions._setTabs(values);
+		});
 	},
 	setFinsembleWindow(fWindow) {
 		attachedWindow = fWindow;

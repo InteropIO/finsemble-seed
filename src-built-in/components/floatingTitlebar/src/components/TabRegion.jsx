@@ -475,7 +475,7 @@ export default class TabRegion extends React.Component {
         var componentToRender = "title";
         if (this.state.tabs.length === 1) {
             if (this.props.listenForDragOver && !this.state.iAmDragging) {
-                componentToRender = "title";
+                componentToRender = "tabs";
             }
         }
         if (this.state.tabs.length > 1) {
