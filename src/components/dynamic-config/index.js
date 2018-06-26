@@ -30,9 +30,11 @@ function initialize() {
   FSBL.Clients.StorageClient.get({
       topic: 'user',
       key: 'config'},
-      (error, data) => {
-        form.elements.comps.value = JSON.stringify(data.components) || ''
-        form.elements.menus.value = JSON.stringify(data.menus) || ''
-        form.elements.cssOverridePath.value = data.cssOverridePath || ''
+	  (error, data) => {
+		  if (data) {
+			  form.elements.comps.value = JSON.stringify(data.components) || ''
+			  form.elements.menus.value = JSON.stringify(data.menus) || ''
+			  form.elements.cssOverridePath.value = data.cssOverridePath || ''
+		  }
       })
 }
