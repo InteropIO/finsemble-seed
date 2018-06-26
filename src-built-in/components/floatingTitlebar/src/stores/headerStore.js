@@ -314,7 +314,7 @@ var Actions = {
 			}, done, done);
 		};
 		const expandCompanion = (done) => {
-			finWindow.animate({ size: { duration: 350, height: expandedBounds.height } }, done, done);
+			finWindow.animate({ size: { duration: 150, height: expandedBounds.height } }, done, done);
 		}
 		const onAnimationCompleted = (err) => {
 			logAnimationError(err);
@@ -353,7 +353,7 @@ var Actions = {
 			}
 		}
 		const shrinkCompanion = (done) => {
-			finWindow.animate({ size: { duration: 350, height: contractedBounds.height } }, done, done);
+			finWindow.animate({ size: { duration: 150, height: contractedBounds.height } }, done, done);
 		}
 
 		const centerCompanion = (done) => {
