@@ -1,0 +1,35 @@
+.container {
+    font-size: 1em;
+    padding: 20px;
+}
+
+label, .form-control {
+    display: block;
+    margin-bottom: 5px
+}
+
+.btn {
+    padding: 10px 20px;
+    color: #fff;
+    background: #006699;
+    margin-right: 5px;
+    display: inline-block;
+    border: 0;
+}
+
+.form-group {
+    margin-bottom: 10px
+}
+
+.form-control {
+    width: 90%;
+    padding: 10px;
+}
+
+input:invalid, textarea:invalid {
+    border: 1px solid red;
+}
+
+input:invalid, textarea:valid {
+    border: 1px solid #999;
+}
