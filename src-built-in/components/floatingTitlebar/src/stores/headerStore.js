@@ -133,6 +133,9 @@ var Actions = {
 			wrappedWindow.parentWindow.getStore(function (store) {
 				store.getValues(function (err, response) {
 					if (response) {
+						if(!wrappedWindow.parentWindow){
+							return cb(null, true);
+						}
 						if (response[wrappedWindow.parentWindow.windowName].descriptor.visibleWindowIdentifier.windowName === wrappedWindow.windowName) {
 							return cb(null, true);
 						}
