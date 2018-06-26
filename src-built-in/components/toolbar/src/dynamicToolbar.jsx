@@ -151,6 +151,7 @@ export default class Toolbar extends React.Component {
 			}
 
 			var sectionComponent = (<FinsembleToolbarSection
+				key={i}
 				arrangeable={sectionPosition === "center"}
 				ref="pinSection"
 				name={sectionPosition}

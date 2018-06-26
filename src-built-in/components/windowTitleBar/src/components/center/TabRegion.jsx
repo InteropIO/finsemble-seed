@@ -572,4 +572,5 @@ function renderTabs() {
 			title={tab.title || tab.windowName}
 			windowIdentifier={tab} />
 	});
+
 }
