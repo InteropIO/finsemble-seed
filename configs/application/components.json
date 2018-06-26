@@ -155,7 +155,7 @@
 				}
 			}
 		},
-		"defaultAuthentication": {
+		"authentication": {
 			"window": {
 				"url": "$applicationRoot/components/authentication/authentication.html",
 				"top": "center",
