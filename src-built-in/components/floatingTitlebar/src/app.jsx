@@ -93,7 +93,9 @@ class FloatingTitlebar extends React.Component {
 			y: e.nativeEvent.screenY
 		}
 		if (!FSBL.Clients.WindowClient.isPointInBox(mousePositionOnDragEnd, FSBL.Clients.WindowClient.options)) {
-			FSBL.Clients.WindowClient.stopTilingOrTabbing({ mousePosition: mousePositionOnDragEnd });
+			setTimeout(() => {
+				FSBL.Clients.WindowClient.stopTilingOrTabbing({ mousePosition: mousePositionOnDragEnd });
+			}, 50)
 		}
 	}
 	onComponentDidMount() {
