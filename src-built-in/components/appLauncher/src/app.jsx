@@ -93,7 +93,7 @@ class AppLauncher extends React.Component {
 fin.desktop.main(function () {
 	FSBL.addEventListener("onReady", function () {
 		// var Test = require('./test');
-	//console.log(("appLauncher app onReady");
+	//console.log("appLauncher app onReady");
 
 		storeExports.initialize(function (store) {
 			appLauncherStore = store;

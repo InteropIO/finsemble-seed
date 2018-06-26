@@ -164,7 +164,7 @@ export default class TabRegion extends React.Component {
 		FSBL.Clients.Logger.system.debug("Tab drag drop.");
 		let identifier = this.extractWindowIdentifier(e);
 		if (identifier && identifier.windowName) {
-		//console.log(("DROP", identifier);
+		//console.log("DROP", identifier);
 			//Calls a method defined inside of windowTitleBar.jsx.
 			this.onTabAdded(identifier, this.state.hoveredTabIndex);
 		} else if (identifier && identifier.waitForIdentifier) {
