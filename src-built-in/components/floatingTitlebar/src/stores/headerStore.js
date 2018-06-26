@@ -109,7 +109,7 @@ var Actions = {
 
 			wrappedWindow.getBounds({}, function (err, bounds) {// set the bounds and then show the window
 				if (!bounds.width) bounds.width = bounds.right - bounds.left;
-				console.log("start bounds", bounds, Actions.getContractedBounds(bounds));
+			//console.log(("start bounds", bounds, Actions.getContractedBounds(bounds));
 				HeaderStore.setCompanionBounds(bounds);
 				FSBL.Clients.WindowClient.finsembleWindow.setBounds(
 					Actions.getContractedBounds(bounds),
@@ -333,7 +333,7 @@ var Actions = {
 	},
 	//Contract the window and set the animate flag.
 	contractWindow(cb = Function.prototype) {
-		console.log("Contracting window");
+	//console.log(("Contracting window");
 		HeaderStore.setState("small");
 		animating = true;
 		let finWindow = fin.desktop.Window.getCurrent();
