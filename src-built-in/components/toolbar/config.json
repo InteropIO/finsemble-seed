@@ -2,7 +2,7 @@
     {
         "align": "left",
         "iconClasses": "finsemble-toolbar-brand-logo",
-        "icon": "/components/assets/img/Finsemble_Taskbar_Icon.png",
+        "icon": "../assets/img/Finsemble_Taskbar_Icon.png",
         "menuType": "File Menu"
     },
     {
@@ -16,6 +16,12 @@
         "menuType": "Workspace Management Menu",
         "reactComponent": "WorkspaceMenuOpener",
         "type": "reactComponent"
+    },
+    {
+        "comment": "Change align to add AlwaysOnTop capability",
+        "align": "none",
+        "type": "reactComponent",
+        "reactComponent": "AlwaysOnTop"
     },
     {
         "align": "right",

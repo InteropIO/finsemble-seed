@@ -21,10 +21,16 @@
 	"systemTrayIcon": "$applicationRoot/components/assets/img/Finsemble_Taskbar_Icon.png",
 	"systemTrayComponent": "File Menu",
 	"debugServiceDelay": 0,
+	"Window Manager": {
+		"alwaysOnTopIcon": false,
+		"showTabs": false
+	},
+	"docking": {
+		"enabled": true,
+		"groupTileBuffer": 30,
+		"headerHeight": 32
+	},
 	"betaFeatures": {
-		"docking": {
-			"enabled": true
-		},
 		"assimilation": {
 			"enabled": true,
 			"blacklist": [],

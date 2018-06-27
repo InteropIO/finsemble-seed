@@ -107,16 +107,18 @@ var Actions = {
 		fin.desktop.Window.getCurrent().hide();
 		FSBL.Clients.RouterClient.transmit("CentralConsole-Show", true);
 	},
+	/**
+	 * Spawns the preferences menu.
+	 */
 	spawnPreferences() {
 		fin.desktop.Window.getCurrent().hide();
 		FSBL.Clients.LauncherClient.showWindow({
 			componentType: "UserPreferences"
-		},
-			{
-				monitor: "mine",
-				left: "center",
-				top: "center"
-			});
+		},{
+			monitor: "mine",
+			left: "center",
+			top: "center"
+		});
 	},
 	/**
 	 * Called on shutdown (if the workspace is dirty).

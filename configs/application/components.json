@@ -28,6 +28,7 @@
 						"launchableByUser": true
 					},
 					"Window Manager": {
+						"showLinker": false,
 						"FSBLHeader": true,
 						"persistWindowState": true
 					},

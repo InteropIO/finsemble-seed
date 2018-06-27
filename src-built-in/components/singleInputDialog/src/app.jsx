@@ -19,7 +19,9 @@ class SingleInputDialog extends React.Component {
 		this.bindCorrectContext();
 		this.state = {
 			inputLabel: "No question.",
-			affirmativeResponseLabel: "Yes"
+			affirmativeResponseLabel: "Yes",
+			/** Our input uses the HTML autoFocus attribute. This only fires when the element is rendered for the 1st time. Since we re-use the dialogs, the 2nd time the dialog is shown, autoFocus will not trigger. To force it to trigger, we change this boolean when a response is sent back to the opener, which unmounts the element from the dom. The next time the dialog is used, we will render the element again, and autoFocus will trigger. */
+			renderInput: false
 		};
 		document.body.addEventListener("keydown", this.handleKeydownOnBody);
 	}
@@ -60,7 +62,8 @@ class SingleInputDialog extends React.Component {
 			inputLabel: data.inputLabel,
 			affirmativeResponseLabel: data.affirmativeResponseLabel || "Okay",
 			cancelResponseLabel: data.affirmativeResponseLabel || "Cancel",
-			showCancelButton: typeof data.showCancelButton === "undefined" ? false : data.showCancelButton
+			showCancelButton: typeof data.showCancelButton === "undefined" ? false : data.showCancelButton,
+			renderInput: true,
 		}, this.fitAndShow);
 	}
 	/**
@@ -87,7 +90,8 @@ class SingleInputDialog extends React.Component {
 		});
 
 		this.setState({
-			inputValue: null
+			inputValue: null,
+			renderInput: false
 		});
 		Array.from(document.querySelectorAll("input")).forEach((el) => el.value = "");
 	}
@@ -112,7 +116,9 @@ class SingleInputDialog extends React.Component {
 			isModal={true}>
 			<FinsembleDialogQuestion question={this.state.inputLabel} />
 			<div className="button-wrapper">
-				<FinsembleDialogTextInput maxLength="40" onInputChange={this.setInputValue} placeholder="Enter Name" autofocus />
+				{this.state.renderInput &&
+					<FinsembleDialogTextInput maxLength="40" onInputChange={this.setInputValue} placeholder="Enter Name" autoFocus={true} />
+				}
 				<FinsembleDialogButton buttonSize="md-positive" onClick={() => { this.sendResponse("affirmative"); }}>
 					{this.state.affirmativeResponseLabel}
 				</FinsembleDialogButton>

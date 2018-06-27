@@ -23,7 +23,14 @@
  * This ensures that the Finsemble workspace manager is aware of newly opened windows, that they can participate in
  * the on screen workspace management, and that they can be restored with workspaces.
  */
+
+var originalWindowOpen = window.open;
 window.open = function (URL, name, specs, replace) {
+	// For some strange reason, openfin notifications use window.open. So we make an exception for that one case.
+	if (name.indexOf("openfin-child-window") != -1) {
+		originalWindowOpen.call(window, URL, name, specs, replace);
+		return;
+	}
 	var params = {};
 	if (specs) {
 		let paramList = specs.split(",");
@@ -53,13 +60,25 @@ window.open = function (URL, name, specs, replace) {
 
 	var w;
 	FSBL.Clients.LauncherClient.spawn(null, params, function (err, response) {
-		w = response.finWindow;
+		if (err) {
+			console.error("nativeOverrides.js window.open patch error: " + err);
+		} else {
+			w = response.finWindow;
+		}
 	});
 	return w;
 }
 
 /**
  * Overrides the browser's built in alerting. Native alerts are synchronous. They cause the application to cease functioning
- * and they create an ugly pop up window. For now these alerts can be supressed. In the future they will be channeled to a specific notification channel.
+ * and they create an ugly pop up window. Instead, we funnel these alerts through notifications.
  */
-window.alert = window.console.log;
+window.alert = function (message) {
+	FSBL.UserNotification.alert(
+		"alert",
+		"",
+		"ALWAYS",
+		message,
+		{}
+	);
+}

@@ -10,6 +10,11 @@
     cursor: -webkit-grabbing;
 }
 
+.cq-no-drag {
+    -webkit-app-region: no-drag !important;
+    position: absolute;
+}
+
 .fsbl-header {
     font-family: var(--font-family);
     text-align: center;
@@ -45,7 +50,7 @@ html.desktop-active .fsbl-header {
 }
 
 .fsbl-header-center {
-    height: calc(100% - 5px);
+    height: calc(100% - 10px);
     align-content: center;
     display: flex;
     align-items: center;
@@ -56,15 +61,39 @@ html.desktop-active .fsbl-header {
     white-space: nowrap;
     overflow: hidden;
     --webkit-user-select: none;
-    padding-bottom: var(--fsbl-header-center-padding-bottom);
+    position: relative;
+    padding-bottom: 3px; /* This needs to be half of the thing subtracted from the height. e.g. height = 100% - 6px, then this is 3px) */
+}
+.fsbl-header-center .fsbl-tab-area {
+    transition: opacity .5s ease-in-out;
+    opacity: 0;
 }
 
+.fsbl-header-center .fsbl-header-title {
+    transition: opacity .5s ease-in-out;
+    opacity: 1;
+    margin-top: -1px
+}
+
+.fsbl-header-center:hover .fsbl-tab-area {
+    opacity: 1;
+}
+
+.fsbl-header-center.fsbl-tabs-enabled:hover .fsbl-header-title {
+    opacity: 0;
+}
+
+html.desktop-active .fsbl-header-right {
+    background: var(--active-header-background-color);
+}
 .fsbl-header-right {
     margin-right: 2px;
     height: 100%;
     align-content: center;
     display: flex;
     justify-content: flex-end;
+    z-index: 5;
+    background-color: var(--window-header-background-color);
 }
 
 /* This div captures the hover event for it's parent. It doesn't stretch to the border, so that mouseout is properly detected. */
@@ -227,6 +256,49 @@ html.desktop-active .fsbl-linker[hover=true] {
     padding-bottom: 5px;
 }
 
-.ff-maximize, .ff-close, .ff-detached, .ff-attached {
+.ff-maximize, .ff-close, .ff-detached, .ff-attached{
     padding-top: 2px;
+}
+
+.ff-always-on-top {
+    padding-top: 3px;
+    font-size: 16px;
+}
+
+.fsbl-header-center:hover .fsbl-tab-area {
+    opacity: 1;
+    transition: opacity .25s ease-in-out;
+}
+
+.hidden{
+    opacity: 0;
+}
+
+.fsbl-tab{
+    min-width: 35px;
+    height: 100%;
+}
+
+.fsbl-tab-area{
+    position: absolute;
+    bottom: 0px;
+    height: 100%;
+    left: 0px;
+}
+
+.fsbl-tab .fsbl-title{
+    position: absolute;
+    height: inherit;
+    overflow: ellipsis;
+    margin-top: -19px;
+    left: 7%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.fsbl-tab .fsbl-tab-style {
+    position: relative;
+    height: 100%;
+    left: 0px;
 }

@@ -52,8 +52,8 @@
     "fileName": "ChartIQ-local-installer",
     "appAssets": [
         {
-            "src": "http://connect2.chartiq.com/finsemble/Assimilation_1_9_4.zip",
-            "version": "1.9.4",
+            "src": "http://connect2.chartiq.com/finsemble/Assimilation_1_9_5.zip",
+            "version": "1.9.5",
             "alias": "assimilation",
             "target": "assimilationMain.exe"
         }
@@ -62,6 +62,7 @@
         "applicationRoot": "http://localhost:3375",
         "moduleRoot": "http://localhost:3375/finsemble",
         "servicesRoot": "http://localhost:3375/finsemble/services",
+        "notificationURL": "http://localhost:3375/components/notification/notification.html",
         "importConfig": [
             "$applicationRoot/configs/application/config.json"
         ]

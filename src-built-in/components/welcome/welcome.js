@@ -1,7 +1,7 @@
 window.launchTutorial = function launchTutorial() {
 	fin.desktop.System.openUrlWithBrowser("https://www.chartiq.com/tutorials/?slug=finsemble-seed-project", function () {
 		console.log("successfully launched docs");
-	},function (err) {
+	}, function (err) {
 		console.log("failed to launch docs");
 	});
 }
@@ -12,5 +12,5 @@ window.quitFinsemble = function quitFinsemble() {
 }
 
 FSBL.addEventListener('onReady', function () {
-	FSBL.Clients.WindowClient.setWindowTitle("Welcome to Finsemble!");
+	FSBL.Clients.WindowClient.setWindowTitle(fin.desktop.Window.getCurrent().name);
 });

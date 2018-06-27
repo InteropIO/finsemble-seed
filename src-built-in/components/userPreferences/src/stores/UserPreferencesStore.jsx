@@ -6,6 +6,7 @@ var Actions = {
 		FSBL.Clients.ConfigClient.getPreferences(function (err, data) {
 			UserPreferencesStore.setValue({ field:'preferences', value: data });
 		});
+
 		//Gets the workspace list and sets the value in the store.
 		FSBL.Clients.WorkspaceClient.getWorkspaces(function (err, workspaces) {
 			UserPreferencesStore.setValue({ field: "WorkspaceList", value: workspaces });
@@ -39,6 +40,22 @@ var Actions = {
         FSBL.Clients.WorkspaceClient.addWorkspaceTemplateDefinition(newTemplateJSONDefinition, { force: true }, function (err) {
             console.log("addWorkspaceTemplateDefinition result", err);
         });
+	},
+	/**
+	 * By making the value of `finsembke.scheduledRestart` falsy, the application will remove any existing restart timers.
+	 */
+	disableScheduledRestart: () => {
+		FSBL.Clients.ConfigClient.setPreference({
+			field: "finsemble.scheduledRestart",
+			value: false
+		});
+	},
+	/** Finsemble listens for this piece of config. When it changes, it will schedule a daily restart at that time. */
+	setScheduledRestart: (val) => {
+		FSBL.Clients.ConfigClient.setPreference({
+			field: "finsemble.scheduledRestart",
+			value: val
+		})
 	}
 };
 
