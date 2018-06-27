@@ -14,6 +14,7 @@ function saveHandler() {
 	try {
 		const components = formData.get('comps')
 		const menus = formData.get('menus')
+		const workspaces = formData.get('workspaces')
 		const cssOverridePath = formData.get('cssOverridePath')
 
 		if (components.length > 0) {
@@ -22,6 +23,10 @@ function saveHandler() {
 
 		if (menus.length > 0) {
 			configs.menus = JSON.parse(menus)
+		}
+
+		if (workspaces.length > 0) {
+			configs.workspaces = JSON.parse(workspaces)
 		}
 
 		if (cssOverridePath.length > 0) {
@@ -42,15 +47,18 @@ function saveHandler() {
 }
 
 function initialize() {
-	FSBL.Clients.StorageClient.get(
-		{
-			topic: 'user',
-			key: 'config'
-		},
+	FSBL.Clients.ConfigClient.getValue({field:'finsemble'},
 		(error, data) => {
+			debugger;
+			if (error) {
+				FSBL.Clients.Logger.error(error);
+				return;
+			}
+
 			if (data) {
-				form.elements.comps.value = JSON.stringify(data.components) || ''
-				form.elements.menus.value = JSON.stringify(data.menus) || ''
+				form.elements.comps.value = JSON.stringify({ components: data.components }, null, '\t') || ''
+				form.elements.menus.value = JSON.stringify({ menus: data.menus }, null, '\t') || ''
+				form.elements.workspaces.value = JSON.stringify({ workspaces: data.workspaces }, null, '\t') || ''
 				form.elements.cssOverridePath.value = data.cssOverridePath || ''
 			}
 		})
