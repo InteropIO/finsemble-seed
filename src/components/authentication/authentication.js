@@ -24,18 +24,26 @@
 		// The user is set by publishAuthorization, but, since we want to fetch the user's config before we call 
 		// publishAuthorization, we have to manually set the user. This step is only necessary if the StorageClient is
 		// used to store the user configuration.
-		FSBL.Clients.StorageClient.setUser(user.username, () => {
-			// Now that the user has been set, fetch the user configuration
-			FSBL.Clients.StorageClient.get({ topic: "user", key: "config" }, (err, data) => {
-				updateConfig(data, () => {
-					// Signal finsemble authorization has completed so it will continue to load.
-					FSBL.Clients.AuthenticationClient.publishAuthorization(user.username, user);
+		FSBL.Clients.StorageClient.setUser(
+			{
+				user: user.username
+			},
+			(err, data) => {
+				if (err) {
+					FSBL.Clients.Logger.error(err);
+				}
 
-					// Close the login dialog
-					FSBL.Clients.WindowClient.close({ removeFromWorkspace: false, closeWindow: true });
+				// Now that the user has been set, fetch the user configuration
+				FSBL.Clients.StorageClient.get({ topic: "user", key: "config" }, (err, data) => {
+					updateConfig(data, () => {
+						// Signal finsemble authorization has completed so it will continue to load.
+						FSBL.Clients.AuthenticationClient.publishAuthorization(user.username, user);
+
+						// Close the login dialog
+						FSBL.Clients.WindowClient.close({ removeFromWorkspace: false, closeWindow: true });
+					});
 				});
 			});
-		});
 	}
 
 	const updateConfig = (config, cb) => {
