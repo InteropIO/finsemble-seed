@@ -57,10 +57,10 @@
 		}
 
 		const configSet = {}
-		if (config.components) configSet["components"] = config.components;
-		if (config.menuItems) configSet["menus"] = config.menuItems;
-		if (config.defaultWorkspace) configSet["workspaces"] = config.defaultWorkspace.workspaces;
-		if (config.overrides) configSet["cssOverridePath"] = config.overrides;
+		if (config.components) configSet.components = config.components;
+		if (config.menus) configSet.menus = config.menus;
+		if (config.workspaces) configSet.workspaces = config.workspaces;
+		if (config.cssOverridePath) configSet.cssOverridePath = config.cssOverridePath;
 
 		FSBL.Clients.ConfigClient.processAndSet(
 			{
