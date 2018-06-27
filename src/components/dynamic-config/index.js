@@ -39,6 +39,7 @@ function saveHandler() {
 	}
 
 	// Apply configuration to Finsemble
+	// TODO: Should we have options for overwrite and replace?
 	FSBL.Clients.ConfigClient.processAndSet(
 		{
 			newConfig: newConfig,
@@ -66,7 +67,6 @@ function saveHandler() {
 				() => alert('Saved.'))
 		}
 	)
-
 }
 
 function initialize() {
