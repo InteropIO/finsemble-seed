@@ -60,16 +60,6 @@ var Actions = {
 			return menuWindow.isShowing(function (showing) {
 				if (showing) return;
 
-				// TODO: Should we keep this to use later, or remove it?
-				// let params = {
-				// 	monitor: 'mine',
-				// 	position: 'relative',
-				// 	left: target.getBoundingClientRect().left,
-				// 	forceOntoMonitor: true,
-				// 	top: 'adjacent',
-				// 	spawnIfNotFound: true
-				// };
-
 				var bounds = document.getElementById("inputContainer").getBoundingClientRect();
 				menuWindow.showAt(window.screenX + bounds.left, bounds.bottom + window.screenY, null, function (err, data) {
 
