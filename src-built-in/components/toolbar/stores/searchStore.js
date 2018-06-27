@@ -59,17 +59,19 @@ var Actions = {
 			if (!menuWindow) return;
 			return menuWindow.isShowing(function (showing) {
 				if (showing) return;
-				let params = {
-					monitor: 'mine',
-					position: 'relative',
-					left: target.getBoundingClientRect().left,
-					forceOntoMonitor: true,
-					top: 'adjacent',
-					spawnIfNotFound: true
-				};
+
+				// TODO: Should we keep this to use later, or remove it?
+				// let params = {
+				// 	monitor: 'mine',
+				// 	position: 'relative',
+				// 	left: target.getBoundingClientRect().left,
+				// 	forceOntoMonitor: true,
+				// 	top: 'adjacent',
+				// 	spawnIfNotFound: true
+				// };
 
 				var bounds = document.getElementById("inputContainer").getBoundingClientRect();
-				menuWindow.showAt(window.screenX + bounds.left, target.offsetHeight + window.screenY, null, function (err, data) {
+				menuWindow.showAt(window.screenX + bounds.left, bounds.bottom + window.screenY, null, function (err, data) {
 
 				});
 			});
