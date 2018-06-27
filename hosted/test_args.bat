@@ -1,0 +1,1 @@
+start "" /wait cmd /c "echo arguments: %*&echo(&pause"
