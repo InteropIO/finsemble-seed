@@ -28,13 +28,17 @@
 			{
 				user: user.username
 			},
-			(err, data) => {
+			(err) => {
 				if (err) {
 					FSBL.Clients.Logger.error(err);
 				}
 
 				// Now that the user has been set, fetch the user configuration
 				FSBL.Clients.StorageClient.get({ topic: "user", key: "config" }, (err, data) => {
+					if (err) {
+						FSBL.Clients.Logger.error(err);
+					}
+
 					updateConfig(data, () => {
 						// Signal finsemble authorization has completed so it will continue to load.
 						FSBL.Clients.AuthenticationClient.publishAuthorization(user.username, user);
