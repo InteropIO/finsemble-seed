@@ -57,13 +57,27 @@ var Actions = {
 				this.setupWindow()
 			}
 			if (!menuWindow) return;
-			return menuWindow.isShowing(function (showing) {
+			return menuWindow.isShowing((showing) => {
 				if (showing) return;
 
-				var bounds = document.getElementById("inputContainer").getBoundingClientRect();
-				menuWindow.showAt(window.screenX + bounds.left, bounds.bottom + window.screenY, null, function (err, data) {
+				const inputContainer = document.getElementById("inputContainer");
+				if (inputContainer) {
+					const bounds = inputContainer.getBoundingClientRect();
 
-				});
+					// Using showAt rather than WindowClient.showWindow because showWindow was causing auto-focus on the 
+					// searchMenu which caused an issue with the animations of the search button.
+					menuWindow.showAt(
+						window.screenX + bounds.left,
+						bounds.bottom + window.screenY,
+						null,
+						(err) => {
+							if (err) {
+								FSBL.Clients.Logger.error(err);
+							}
+						});
+				} else {
+					FSBL.Clients.Logger.error("No element with ID 'inputContainer' exists");
+				}
 			});
 
 		}
