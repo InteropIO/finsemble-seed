@@ -4,11 +4,11 @@
 		"Configure": {
 			"window": {
 				"url": "$applicationRoot/components/dynamic-config",
-				"resizable": true,
-				"addToWorkspace": true,
+				"resizable": false,
+				"addToWorkspace": false,
 				"top": "center",
 				"left": "center",
-				"width": 450,
+				"width": 575,
 				"height": 600
 			},
 			"component": {

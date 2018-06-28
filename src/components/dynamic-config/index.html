@@ -9,24 +9,35 @@
 
 <body>
   <div class="container">
-    <form name="configs" action="javascript:void(0)">
-      <div class="form-group">
+      <div id="top-buttons" class="form-group">
+          <button class="btn" id="componentsBtn">Components</button>
+          <button class="btn" id="menusBtn">Menu</button>
+          <button class="btn" id="workspacesBtn">Workspaces</button>
+          <button class="btn" id="stylesBtn">Style</button>
+          <button class="btn" id="servicesBtn">Services</button>
+      </div>
+      <form name="configs" action="javascript:void(0)">
+      <div id="componentsGroup" class="form-group">
         <label for="comps">Components</label>
-        <textarea id="comps" class="form-control" rows="6" name="comps"></textarea>
+        <textarea id="comps" class="form-control" rows="20" name="comps"></textarea>
       </div>
-      <div class="form-group">
+      <div id="menusGroup" class="form-group">
         <label for="menus">Menu</label>
-        <textarea id="menus" class="form-control" rows="6" name="menus"></textarea>
+        <textarea id="menus" class="form-control" rows="20" name="menus"></textarea>
       </div>
-      <div class="form-group">
-        <label for="menus">Workspaces</label>
-        <textarea id="workspaces" class="form-control" rows="6" name="workspaces"></textarea>
+      <div id="workspacesGroup" class="form-group">
+        <label for="workspaces">Workspaces</label>
+        <textarea id="workspaces" class="form-control" rows="20" name="workspaces"></textarea>
       </div>
-      <div class="form-group">
+      <div id="styleGroup" class="form-group">
         <label for="style">Style URL</label>
-        <input id="css" class="form-control" name="cssOverridePath" />
+        <input id="style" class="form-control" name="style" />
       </div>
-      <div class="form-group">
+      <div id="servicesGroup" class="form-group">
+        <label for="services">Services</label>
+        <textarea id="services" class="form-control" rows="20" name="services"></textarea>
+      </div>
+      <div id="bottom-buttons" class="form-group">
         <button class="btn" name="save" type="submit" id="submit">Save</button>
         <button class="btn" name="clear" type="reset" id="clear">Clear</button>
       </div>

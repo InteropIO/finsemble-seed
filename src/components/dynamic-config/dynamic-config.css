@@ -22,8 +22,9 @@ label, .form-control {
 }
 
 .form-control {
-    width: 90%;
+    width: calc(100% - 20px);
     padding: 10px;
+    height:100%;
 }
 
 input:invalid, textarea:invalid {
@@ -32,4 +33,9 @@ input:invalid, textarea:invalid {
 
 input:invalid, textarea:valid {
     border: 1px solid #999;
+}
+
+#bottom-buttons {
+    position: absolute;
+    bottom: 0px;
 }
