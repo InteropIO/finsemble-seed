@@ -46,7 +46,7 @@ document.getElementById("servicesBtn").onclick = () => {
 }
 
 FSBL.addEventListener('onReady', () => {
-	// Get the current configurations from localstorage
+	// Get the current configurations from local storage
 	initialize()
 
 	// Attach events
