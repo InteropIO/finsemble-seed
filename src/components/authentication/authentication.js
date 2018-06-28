@@ -68,7 +68,97 @@
 				overwrite: true,
 				replace: true
 			},
-			(err => cb(err)));
+			(err => {
+				if (err) {
+					cb(err)
+					return;
+				}
+
+				if (!config.services && typeof (config.services) !== "object") {
+					FSBL.Clients.Logger.warn("Custom services is either undefined or is not an object");
+					cb();
+					return;
+				}
+
+				debugger;
+				
+				startServices(config.services, cb);
+			}));
+	}
+
+	const startServices = (services, cb) => {
+		// if the configuration contains services, start them
+		// TODO: Sort the services into a start order based on dependencies. Current assumption is that services have not dependencies.
+		const keys = Object.keys(services);
+
+		// TODO: Refactor to make the startServices method smaller
+		const startService = (serviceName, cb) => {
+			const serviceConfig = services[serviceName];
+			if (!serviceConfig) {
+				FSBL.Clients.Logger.warn(`No object specified for service ${serviceName}`);
+				cb();
+			}
+
+			if ((typeof (serviceConfig.active) !== "undefined") && !serviceConfig.active) {
+				// If active is not defined, the default is active.
+				// Service is not active, move on to the next.
+				cb();
+			}
+
+			if (!serviceConfig.name) {
+				FSBL.Clients.Logger.warn(`No 'name' property specified for service ${serviceName}`);
+				cb();
+			}
+
+			if (!serviceConfig.html) {
+				FSBL.Clients.Logger.warn(`No 'html' property specified for service ${serviceName}`);
+				cb();
+			}
+
+			FSBL.Clients.LauncherClient.spawn(
+				null,
+				{
+					name: serviceConfig.name,
+					data: serviceConfig,
+					options: {
+						autoShow: serviceConfig.visible ? true : false
+					},
+					url: serviceConfig.html
+				},
+				() => {
+					if (serviceConfig.visible && serviceConfig.showDevConsoleOnVisible) {
+						fin.desktop.System.showDeveloperTools(
+							fin.desktop.Application.getCurrent().uuid,
+							fin.desktop.Window.getCurrent().name,
+							() => {
+								const timeoutDuration = self.customData.debugServiceDelay || 0;
+								if (timeoutDuration > 0) {
+									FSBL.Clients.Logger.log(`APPLICATION LIFECYCLE:STARTUP:SERVICE LIFECYCLE:========>DELAYING STARTUP BY ${timeoutDuration} Milliseconds<========`);
+									setTimeout(cb, timeoutDuration);
+								} else {
+									cb();
+								}
+							}
+						);
+					} else {
+						cb();
+					}
+				}
+			);
+		};
+
+		const startServiceCB = () => {
+			i += 1;
+			if (i < keys.length) {
+				serviceName = keys[i];
+				startService(serviceName, startServiceCB);
+			} else {
+				cb();
+			}
+		};
+
+		let i = -1;
+		startService(serviceName, startServiceCB);
 	}
 
 	const quit = () => {
