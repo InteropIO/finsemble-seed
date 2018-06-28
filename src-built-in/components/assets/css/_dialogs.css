@@ -29,22 +29,21 @@ body.dialog .dialog {
 }
 
 body.dialog .dialog-title {
-    width: 469px;
     height: 30px;
     font-weight: var(--dialog-title-font-weight);
     font-size: var(--dialog-title-font-size);
     text-align: left;
     color:  var(--dialog-font-color);
-    padding: 0px 0px 4px 4px;
+    padding: 0px 4px 4px 4px;
 }
 
 body.dialog .dialog-question {
-    width: 469px;
+    height: 45px;
     font-weight: var(--dialog-question-font-weight);
     color:  var(--dialog-font-color);
     font-size: var(--dialog-question-font-size);
-    margin-bottom: 16px;
-    padding-left: 4px;
+    padding: 0px 4px;
+    margin-bottom: 10px;
     text-align: left;
     word-wrap: break-word;
 }
