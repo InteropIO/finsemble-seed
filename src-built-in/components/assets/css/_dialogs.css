@@ -82,7 +82,7 @@ body.dialog input {
     width: 100%;
     height: 33px;
     max-width: 100%;
-    padding: 3px 10px 3px 15px;
+    padding: 3px 10px;
     border: 1px solid var(--dialog-input-border-color);
     box-sizing: border-box;
     transition: .2s ease-in;

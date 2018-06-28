@@ -431,9 +431,9 @@ Actions = {
 			}
 		}
 		let dialogParams = {
-			title: "Save your workspace",
+			title: "Enter a name for your new workspace.",
 			inputLabel: "Enter a name for your new workspace.",
-			affirmativeResponseLabel: "Continue",
+			affirmativeResponseLabel: "Confirm",
 			showCancelButton: false,
 			showNegativeButton: false
 		};
@@ -458,9 +458,9 @@ Actions = {
 		}
 
 		let dialogParams = {
-			title: "Save your workspace",
-			inputLabel: "Enter a name for your workspace.",
-			affirmativeButtonLabel: "Confirm",
+			title: "Enter a name for your new workspace.",
+			inputLabel: "Enter a name for your new workspace.",
+			affirmativeResponseLabel: "Confirm",
 			showCancelButton: false,
 			showNegativeButton: false
 		};
