@@ -113,7 +113,7 @@ export default class ProcessMonitor extends React.Component {
 						</div>
 					</div>
 					<div className="advanced-button-wrapper">
-						<div className="advanced-button" onClick={() => { Actions.toggleViewMode() }}>
+						<div className="fsbl-button advanced-button" onClick={() => { Actions.toggleViewMode() }}>
 							{this.state.viewMode === "advanced" ? "Simple" : "Advanced"}</div>
 					</div>
 				</div>

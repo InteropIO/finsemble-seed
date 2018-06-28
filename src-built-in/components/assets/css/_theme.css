@@ -106,10 +106,10 @@
     --button-neutral-border-hover-color: var(--gray6);
     --button-neutral-solid-font-color: var(--secondary-font-color);
  
-    --button-negative-background-color: var(--primary-negative-color);
-    --button-negative-border-color: var(--red3);
-    --button-negative-background-hover-color: var(--red6);
-    --button-negative-border-hover-color: var(--red4);
+    --button-negative-background-color: var(--red6);
+    --button-negative-border-color: var(--red4);
+    --button-negative-background-hover-color: var(--red7);
+    --button-negative-border-hover-color: var(--red5);
     
     /* Menus */
     --menu-font-size: 14px;
