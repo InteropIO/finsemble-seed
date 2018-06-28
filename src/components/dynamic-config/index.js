@@ -1,5 +1,50 @@
 const form = document.forms.configs
 
+document.getElementById("menusGroup").style = "display: none";
+document.getElementById("workspacesGroup").style = "display: none";
+document.getElementById("styleGroup").style = "display: none";
+document.getElementById("servicesGroup").style = "display: none";
+
+document.getElementById("componentsBtn").onclick =() => {
+	document.getElementById("componentsGroup").style = "display: block";
+	document.getElementById("menusGroup").style = "display: none";
+	document.getElementById("workspacesGroup").style = "display: none";
+	document.getElementById("styleGroup").style = "display: none";
+	document.getElementById("servicesGroup").style = "display: none";
+}
+
+document.getElementById("menusBtn").onclick =() => {
+	document.getElementById("componentsGroup").style = "display: none";
+	document.getElementById("menusGroup").style = "display: block";
+	document.getElementById("workspacesGroup").style = "display: none";
+	document.getElementById("styleGroup").style = "display: none";
+	document.getElementById("servicesGroup").style = "display: none";
+}
+
+document.getElementById("workspacesBtn").onclick = () => {
+	document.getElementById("componentsGroup").style = "display: none";
+	document.getElementById("menusGroup").style = "display: none";
+	document.getElementById("workspacesGroup").style = "display: block";
+	document.getElementById("styleGroup").style = "display: none";
+	document.getElementById("servicesGroup").style = "display: none";
+}
+
+document.getElementById("stylesBtn").onclick = () => {
+	document.getElementById("componentsGroup").style = "display: none";
+	document.getElementById("menusGroup").style = "display: none";
+	document.getElementById("workspacesGroup").style = "display: none";
+	document.getElementById("styleGroup").style = "display: block";
+	document.getElementById("servicesGroup").style = "display: none";
+}
+
+document.getElementById("servicesBtn").onclick = () => {
+	document.getElementById("componentsGroup").style = "display: none";
+	document.getElementById("menusGroup").style = "display: none";
+	document.getElementById("workspacesGroup").style = "display: none";
+	document.getElementById("styleGroup").style = "display: none";
+	document.getElementById("servicesGroup").style = "display: block";
+}
+
 FSBL.addEventListener('onReady', () => {
 	// Get the current configurations from localstorage
 	initialize()
@@ -16,10 +61,10 @@ function saveHandler() {
 		const components = formData.get('comps')
 		const menus = formData.get('menus')
 		const workspaces = formData.get('workspaces')
-		const cssOverridePath = formData.get('cssOverridePath')
+		const cssOverridePath = formData.get('style')
+		const services = formData.get('services')
 
-		if (components.length > 0) 
-		{
+		if (components.length > 0) {
 			newConfig.components = JSON.parse(components)
 		}
 
@@ -33,6 +78,10 @@ function saveHandler() {
 
 		if (cssOverridePath.length > 0) {
 			newConfig.cssOverridePath = cssOverridePath
+		}
+
+		if (services.length > 0) {
+			newConfig.services = JSON.parse(services)
 		}
 	} catch (e) {
 		alert('Invalid input.')
@@ -82,7 +131,7 @@ function initialize() {
 				form.elements.comps.value = JSON.stringify(data.components, null, '\t') || ''
 				form.elements.menus.value = JSON.stringify(data.menus, null, '\t') || ''
 				form.elements.workspaces.value = JSON.stringify(data.workspaces, null, '\t') || ''
-				form.elements.cssOverridePath.value = data.cssOverridePath || ''
+				form.elements.style.value = data.cssOverridePath || ''
 			}
 		})
 }
