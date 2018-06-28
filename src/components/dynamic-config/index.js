@@ -93,6 +93,21 @@ function getConfigFromForm() {
 	return newConfig;
 }
 
+function filterComponents(inputComponents) {
+	// Filter out system components. If a customer wants to override a presentation element with their own, they need to
+	// make sure not to set component.category === "system"
+	const components = {}
+	debugger;
+	Object.keys(inputComponents).forEach((componentName) => {
+		const component = inputComponents[componentName]
+		if (component && (!component.component || (component.component.category !== "system"))) {
+			components[componentName] = component
+		}
+	})
+
+	return components;
+}
+
 function saveHandler() {
 	// Apply configuration to Finsemble
 	const newConfig = getConfigFromForm();
@@ -113,13 +128,15 @@ function saveHandler() {
 				return;
 			}
 
+			const components = filterComponents(finsemble.components)
+
 			// Configuration successfully applied, save for user config.
 			FSBL.Clients.StorageClient.save(
 				{
 					topic: 'user',
 					key: 'config',
 					value: {
-						components: finsemble.components,
+						components: components,
 						menus: finsemble.menus,
 						workspaces: finsemble.workspaces,
 						cssOverridePath: finsemble.cssOverridePath,
@@ -140,7 +157,8 @@ function initialize() {
 			}
 
 			if (data) {
-				form.elements.components.value = JSON.stringify(data.components, null, '\t') || ''
+				const components = filterComponents(data.components)
+				form.elements.components.value = JSON.stringify(components, null, '\t') || ''
 				form.elements.menus.value = JSON.stringify(data.menus, null, '\t') || ''
 				form.elements.workspaces.value = JSON.stringify(data.workspaces, null, '\t') || ''
 				form.elements.style.value = data.cssOverridePath || ''
