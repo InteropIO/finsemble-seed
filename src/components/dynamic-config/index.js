@@ -5,7 +5,7 @@ document.getElementById("workspacesGroup").style = "display: none";
 document.getElementById("styleGroup").style = "display: none";
 document.getElementById("servicesGroup").style = "display: none";
 
-document.getElementById("componentsBtn").onclick =() => {
+document.getElementById("componentsBtn").onclick = () => {
 	document.getElementById("componentsGroup").style = "display: block";
 	document.getElementById("menusGroup").style = "display: none";
 	document.getElementById("workspacesGroup").style = "display: none";
@@ -13,7 +13,7 @@ document.getElementById("componentsBtn").onclick =() => {
 	document.getElementById("servicesGroup").style = "display: none";
 }
 
-document.getElementById("menusBtn").onclick =() => {
+document.getElementById("menusBtn").onclick = () => {
 	document.getElementById("componentsGroup").style = "display: none";
 	document.getElementById("menusGroup").style = "display: block";
 	document.getElementById("workspacesGroup").style = "display: none";
@@ -111,7 +111,8 @@ function saveHandler() {
 						components: finsemble.components,
 						menus: finsemble.menus,
 						workspaces: finsemble.workspaces,
-						cssOverridePath: finsemble.cssOverridePath
+						cssOverridePath: finsemble.cssOverridePath,
+						services: newConfig.services
 					}
 				},
 				() => alert('Saved.'))
@@ -133,5 +134,19 @@ function initialize() {
 				form.elements.workspaces.value = JSON.stringify(data.workspaces, null, '\t') || ''
 				form.elements.style.value = data.cssOverridePath || ''
 			}
+
+			FSBL.Clients.StorageClient.get(
+				{
+					topic: 'user',
+					key: 'config'
+				}, (err, userData) => {
+					debugger;
+					if (err) {
+						FSBL.Clients.Logger.error(err);
+						return;
+					}
+
+					form.elements.services.value = JSON.stringify(userData.services, null, '\t') || "{}"
+				})
 		})
 }
