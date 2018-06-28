@@ -122,13 +122,13 @@ class SingleInputDialog extends React.Component {
 			<div className="button-wrapper">
 				{
 					this.state.showCancelButton &&
-					<FinsembleDialogButton buttonSize="neutral" onClick={() => {
+					<FinsembleDialogButton className="fsbl-button-neutral" onClick={() => {
 						this.sendResponse("cancel");
 					}}>
 						{this.state.cancelResponseLabel}
 					</FinsembleDialogButton>
 				}
-				<FinsembleDialogButton buttonSize="affirmative" onClick={() => { this.sendResponse("affirmative"); }}>
+				<FinsembleDialogButton className="fsbl-button-affirmative" onClick={() => { this.sendResponse("affirmative"); }}>
 					{this.state.affirmativeResponseLabel}
 				</FinsembleDialogButton>
 			</div>

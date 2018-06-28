@@ -158,15 +158,15 @@ class YesNoDialog extends React.Component {
 					<Timer ontimerDurationExpiration={this.sendExpiredResponse} timerDuration={this.state.timerDuration}/>}
 			</FinsembleDialogQuestion>
 			<div className="button-wrapper">
-			<FinsembleDialogButton show={this.state.showNegativeButton} buttonSize="neutral" onClick={this.sendNegativeResponse}>
+			<FinsembleDialogButton show={this.state.showNegativeButton} className="fsbl-button-neutral" onClick={this.sendNegativeResponse}>
 				{this.state.negativeResponseLabel}
 			</FinsembleDialogButton>
 
-			<FinsembleDialogButton show={this.state.showCancelButton} buttonSize="neutral" onClick={this.sendCancelResponse}>
+			<FinsembleDialogButton show={this.state.showCancelButton} className="fsbl-button-neutral" onClick={this.sendCancelResponse}>
 				{this.state.cancelResponseLabel}
 			</FinsembleDialogButton>
 
-			<FinsembleDialogButton show={this.state.showAffirmativeButton} buttonSize="affirmative" onClick={this.sendAffirmativeResponse}>
+			<FinsembleDialogButton show={this.state.showAffirmativeButton} className="fsbl-button-affirmative" onClick={this.sendAffirmativeResponse}>
 				{this.state.affirmativeResponseLabel}
 			</FinsembleDialogButton>
 			</div>

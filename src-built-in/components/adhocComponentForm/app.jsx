@@ -127,11 +127,11 @@ class AdHocComponentForm extends React.Component {
 				<FinsembleDialogTextInput onInputChange={this.setURL} placeholder="URL" value={this.URL} />
 			<div className="button-wrapper">
 
-				<FinsembleDialogButton show={true} buttonSize="neutral" onClick={this.cancel}>
+				<FinsembleDialogButton show={true} className="fsbl-button-neutral" onClick={this.cancel}>
 					Cancel
 				</FinsembleDialogButton>
 
-				<FinsembleDialogButton show={true} buttonSize="affirmative" onClick={this.save}>
+				<FinsembleDialogButton show={true} className="fsbl-button-affirmative" onClick={this.save}>
 					Confirm
 				</FinsembleDialogButton>
 			</div>
