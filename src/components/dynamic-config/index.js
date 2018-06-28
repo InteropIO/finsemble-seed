@@ -53,9 +53,10 @@ FSBL.addEventListener('onReady', () => {
 	form.addEventListener('submit', saveHandler)
 	form.addEventListener('reset', initialize)
 	document.getElementById('import').onclick = importConfig
+	document.getElementById('export').onclick = exportConfig
 })
 
-function saveHandler() {
+function getConfigFromForm() {
 	const formData = new FormData(form)
 	const newConfig = {}
 	try {
@@ -89,7 +90,16 @@ function saveHandler() {
 		return
 	}
 
+	return newConfig;
+}
+
+function saveHandler() {
 	// Apply configuration to Finsemble
+	const newConfig = getConfigFromForm();
+
+	// There was an error, return
+	if (!newConfig) return;
+
 	// TODO: Should we have options for overwrite and replace?
 	FSBL.Clients.ConfigClient.processAndSet(
 		{
@@ -183,4 +193,25 @@ function importConfig() {
 			FSBL.Clients.Logger.error(err);
 			alert(`Error fetching config from ${importURL}`);
 		})
+}
+
+function download(filename, text) {
+	var element = document.createElement('a');
+	element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+	element.setAttribute('download', filename);
+
+	element.style.display = 'none';
+	document.body.appendChild(element);
+
+	element.click();
+
+	document.body.removeChild(element);
+}
+
+function exportConfig() {
+	const newConfig = getConfigFromForm();
+	const configStr = JSON.stringify(newConfig, null, '\t')
+
+	// Start file download.
+	download("userConfig.json", configStr);
 }
