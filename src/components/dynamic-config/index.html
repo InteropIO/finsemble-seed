@@ -18,16 +18,16 @@
       </div>
       <form name="configs" action="javascript:void(0)">
       <div id="componentsGroup" class="form-group">
-        <label for="comps">Components</label>
-        <textarea id="comps" class="form-control" rows="20" name="comps"></textarea>
+        <label for="components">Components</label>
+        <textarea id="components" class="form-control" rows="15" name="components"></textarea>
       </div>
       <div id="menusGroup" class="form-group">
         <label for="menus">Menu</label>
-        <textarea id="menus" class="form-control" rows="20" name="menus"></textarea>
+        <textarea id="menus" class="form-control" rows="15" name="menus"></textarea>
       </div>
       <div id="workspacesGroup" class="form-group">
         <label for="workspaces">Workspaces</label>
-        <textarea id="workspaces" class="form-control" rows="20" name="workspaces"></textarea>
+        <textarea id="workspaces" class="form-control" rows="15" name="workspaces"></textarea>
       </div>
       <div id="styleGroup" class="form-group">
         <label for="style">Style URL</label>
@@ -35,8 +35,14 @@
       </div>
       <div id="servicesGroup" class="form-group">
         <label for="services">Services</label>
-        <textarea id="services" class="form-control" rows="20" name="services"></textarea>
+        <textarea id="services" class="form-control" rows="15" name="services"></textarea>
       </div>
+      <!-- TODO: Get import button in line with import config field -->
+      <div id="importConfigGroup" class="form-group">
+          <label for="importConfig">Import Components/Services</label>
+          <input id="importConfig" class="form-control" name="importConfig" />
+          <button class="btn" name="import" type="button" id="import">Import</button>
+        </div>
       <div id="bottom-buttons" class="form-group">
         <button class="btn" name="save" type="submit" id="submit">Save</button>
         <button class="btn" name="clear" type="reset" id="clear">Clear</button>
