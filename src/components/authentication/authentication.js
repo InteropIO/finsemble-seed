@@ -157,7 +157,8 @@
 			}
 		};
 
-		let i = -1;
+		let i = 0;
+		let serviceName = keys[i];
 		startService(serviceName, startServiceCB);
 	}
 
