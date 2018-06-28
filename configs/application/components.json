@@ -4,12 +4,11 @@
 		"Configure": {
 			"window": {
 				"url": "$applicationRoot/components/dynamic-config",
-				"resizable": false,
-				"addToWorkspace": false,
 				"top": "center",
 				"left": "center",
 				"width": 575,
-				"height": 600
+				"height": 600,
+				"ephemeral": true
 			},
 			"component": {
 				"inject": false,
@@ -22,9 +21,11 @@
 					},
 					"Window Manager": {
 						"title": "Configuration Manager",
-						"FSBLHeader": true,
-						"persistWindowState": true,
-						"showLinker": true
+						"FSBLHeader": {
+							"hideMinimize": true,
+							"hideMaximize": true
+						},
+						"persistWindowState": false	
 					}
 				}
 			}
