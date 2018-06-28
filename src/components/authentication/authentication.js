@@ -115,6 +115,8 @@
 				cb();
 			}
 
+			// TODO: Do we need to check what services have already started and make sure there isn't collision?
+			// TODO: Need to make sure services don't cause issues on restart. Do we need to stop services on logout?
 			FSBL.Clients.LauncherClient.spawn(
 				null,
 				{
