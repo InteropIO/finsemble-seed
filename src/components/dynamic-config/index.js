@@ -6,6 +6,7 @@ FSBL.addEventListener('onReady', () => {
 
 	// Attach events
 	form.addEventListener('submit', saveHandler)
+	form.addEventListener('reset', initialize)
 })
 
 function saveHandler() {
