@@ -69,6 +69,7 @@
     text-align: center;
     font-family: var(--font-family);
     border: 1px solid transparent;
+    background: var(--button-neutral-background-color);
     color: var(--button-solid-text);
     transition: .2s ease;
     display:flex;

@@ -139,6 +139,7 @@
     --search-result-font-color: var(--primary-font-color);
     --search-result-font-weight: var(--primary-font-weight);
     --search-result-highlighter-color: var(--slate3);
+    --search-result-highlighter-background: var(--slate4);
     
     /* Window Frame */
     --window-frame-inactive-color: var(--slate5);
