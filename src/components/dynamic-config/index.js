@@ -52,13 +52,14 @@ FSBL.addEventListener('onReady', () => {
 	// Attach events
 	form.addEventListener('submit', saveHandler)
 	form.addEventListener('reset', initialize)
+	document.getElementById('import').onclick = importConfig
 })
 
 function saveHandler() {
 	const formData = new FormData(form)
 	const newConfig = {}
 	try {
-		const components = formData.get('comps')
+		const components = formData.get('components')
 		const menus = formData.get('menus')
 		const workspaces = formData.get('workspaces')
 		const cssOverridePath = formData.get('style')
@@ -129,7 +130,7 @@ function initialize() {
 			}
 
 			if (data) {
-				form.elements.comps.value = JSON.stringify(data.components, null, '\t') || ''
+				form.elements.components.value = JSON.stringify(data.components, null, '\t') || ''
 				form.elements.menus.value = JSON.stringify(data.menus, null, '\t') || ''
 				form.elements.workspaces.value = JSON.stringify(data.workspaces, null, '\t') || ''
 				form.elements.style.value = data.cssOverridePath || ''
@@ -140,7 +141,6 @@ function initialize() {
 					topic: 'user',
 					key: 'config'
 				}, (err, userData) => {
-					debugger;
 					if (err) {
 						FSBL.Clients.Logger.error(err);
 						return;
@@ -148,5 +148,39 @@ function initialize() {
 
 					form.elements.services.value = JSON.stringify(userData.services, null, '\t') || "{}"
 				})
+		})
+}
+
+function importConfig() {
+	const formData = new FormData(form)
+	const importURL = formData.get('importConfig')
+	fetch(importURL)
+		.then((res) => {
+			if (res.status !== 200) {
+				throw res;
+			}
+
+			return res.json()
+		})
+		.then((data) => {
+			// Import config
+			if (data.components && (typeof (data.components)) === "object") {
+				let components = JSON.parse(components)
+				components = Object.assign(components, data.components)
+				form.elements.components.value = components
+			}
+
+			if (data.services && (typeof (data.services)) === "object") {
+				let services = JSON.parse(form.elements.services.value)
+				services = Object.assign(services, data.services)
+				form.elements.services.value = JSON.stringify(services, null, '\t')
+			}
+		})
+		.then(() => {
+			form.elements.importConfig.value = ''
+		})
+		.catch((err) => {
+			FSBL.Clients.Logger.error(err);
+			alert(`Error fetching config from ${importURL}`);
 		})
 }
