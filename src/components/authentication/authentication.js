@@ -172,7 +172,7 @@
 	// know they don't need to enter a password. This should be removed in a production implementation.
 	$("#password")
 		.prop("disabled", true)
-		.prop("title", "The password, it does nothing");
+		.prop("placeholder", "Demo needs no password");
 
 	// TODO: Saving this for create user option. Delete if not used
 	// const inLogin = true;
