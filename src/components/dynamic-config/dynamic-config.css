@@ -39,3 +39,19 @@ input:invalid, textarea:valid {
     position: absolute;
     bottom: 0px;
 }
+
+#menusGroup {
+    display: none;
+}
+
+#workspacesGroup {
+    display: none
+}
+
+#styleGroup {
+    display: none
+}
+
+#servicesGroup {
+    display: none
+}

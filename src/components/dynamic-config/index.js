@@ -3,12 +3,6 @@
 
 	const form = document.forms.configs
 
-	// hide other tab content
-	document.getElementById("menusGroup").style = "display: none";
-	document.getElementById("workspacesGroup").style = "display: none";
-	document.getElementById("styleGroup").style = "display: none";
-	document.getElementById("servicesGroup").style = "display: none";
-
 	// Event handler for tab button clicks
 	const tabHandler = (e) => {
 		const id = e.target.id;
