@@ -14,12 +14,6 @@
 		document.getElementById("servicesGroup").style = `display: ${id === "servicesBtn" ? "block" : "none"}`;
 	}
 
-	document.getElementById("componentsBtn").onclick = tabHandler;
-	document.getElementById("menusBtn").onclick = tabHandler;
-	document.getElementById("workspacesBtn").onclick = tabHandler;
-	document.getElementById("stylesBtn").onclick = tabHandler
-	document.getElementById("servicesBtn").onclick = tabHandler
-
 	FSBL.addEventListener("onReady", () => {
 		// Get the current configurations from local storage
 		initialize();
@@ -27,9 +21,15 @@
 		// Attach events
 		form.addEventListener("submit", saveHandler);
 		form.addEventListener("reset", initialize);
+
 		document.getElementById("import").onclick = importConfig;
 		document.getElementById("export").onclick = exportConfig;
-	})
+		document.getElementById("componentsBtn").onclick = tabHandler;
+		document.getElementById("menusBtn").onclick = tabHandler;
+		document.getElementById("workspacesBtn").onclick = tabHandler;
+		document.getElementById("stylesBtn").onclick = tabHandler
+		document.getElementById("servicesBtn").onclick = tabHandler
+	});
 
 	const getConfigFromForm = () => {
 		const formData = new FormData(form);
