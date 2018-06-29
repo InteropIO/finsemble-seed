@@ -48,7 +48,7 @@ class WindowTitleBar extends React.Component {
 		windowTitleBarStore.getValue({ field: "Maximize.hide" });
 		this.dragEndTimeout = null;
 		let activeIdentifier = finsembleWindow.identifier;
-		activeIdentifier.title = finsembleWindow.windowOptions.title;
+		activeIdentifier.title = windowTitleBarStore.getValue({ field: "Main.windowTitle" });
 		this.state = {
 			windowTitle: windowTitleBarStore.getValue({ field: "Main.windowTitle" }),
 			minButton: !windowTitleBarStore.getValue({ field: "Minimize.hide" }),
@@ -58,7 +58,7 @@ class WindowTitleBar extends React.Component {
 			showShareButton: windowTitleBarStore.getValue({ field: "Sharer.emitterEnabled" }),
 			isTopRight: windowTitleBarStore.getValue({ field: "isTopRight" }),
 			alwaysOnTopButton: windowTitleBarStore.getValue({ field: "AlwaysOnTop.show" }),
-			tabs: [{ title: windowTitleBarStore.getValue({ field: "Main.windowTitle" }) }], //array of tabs for this window
+			tabs: [activeIdentifier], //array of tabs for this window
 			showTabs: windowTitleBarStore.getValue({ field: "showTabs" }),
 			allowDragOnCenterRegion: true,
 			activeTab: activeIdentifier,
@@ -178,6 +178,9 @@ class WindowTitleBar extends React.Component {
 		let myIdentifier = FSBL.Clients.WindowClient.getWindowIdentifier();
 		let myIndex = -1;
 		let myTab = tabs.filter((el, i) => {
+			if (!el.windowName && el.name) el.windowName = el.name;
+			if (!el.name && el.windowName) el.name = el.windowName;
+
 			if (el.name === myIdentifier.windowName) {
 				myIndex = i;
 				return true;
