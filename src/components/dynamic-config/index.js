@@ -1,235 +1,221 @@
-const form = document.forms.configs
+(() => {
+	"use strict";
 
-document.getElementById("menusGroup").style = "display: none";
-document.getElementById("workspacesGroup").style = "display: none";
-document.getElementById("styleGroup").style = "display: none";
-document.getElementById("servicesGroup").style = "display: none";
+	const form = document.forms.configs
 
-document.getElementById("componentsBtn").onclick = () => {
-	document.getElementById("componentsGroup").style = "display: block";
+	// hide other tab content
 	document.getElementById("menusGroup").style = "display: none";
 	document.getElementById("workspacesGroup").style = "display: none";
 	document.getElementById("styleGroup").style = "display: none";
 	document.getElementById("servicesGroup").style = "display: none";
-}
 
-document.getElementById("menusBtn").onclick = () => {
-	document.getElementById("componentsGroup").style = "display: none";
-	document.getElementById("menusGroup").style = "display: block";
-	document.getElementById("workspacesGroup").style = "display: none";
-	document.getElementById("styleGroup").style = "display: none";
-	document.getElementById("servicesGroup").style = "display: none";
-}
+	// Event handler for tab button clicks
+	const tabHandler = (e) => {
+		const id = e.target.id;
 
-document.getElementById("workspacesBtn").onclick = () => {
-	document.getElementById("componentsGroup").style = "display: none";
-	document.getElementById("menusGroup").style = "display: none";
-	document.getElementById("workspacesGroup").style = "display: block";
-	document.getElementById("styleGroup").style = "display: none";
-	document.getElementById("servicesGroup").style = "display: none";
-}
-
-document.getElementById("stylesBtn").onclick = () => {
-	document.getElementById("componentsGroup").style = "display: none";
-	document.getElementById("menusGroup").style = "display: none";
-	document.getElementById("workspacesGroup").style = "display: none";
-	document.getElementById("styleGroup").style = "display: block";
-	document.getElementById("servicesGroup").style = "display: none";
-}
-
-document.getElementById("servicesBtn").onclick = () => {
-	document.getElementById("componentsGroup").style = "display: none";
-	document.getElementById("menusGroup").style = "display: none";
-	document.getElementById("workspacesGroup").style = "display: none";
-	document.getElementById("styleGroup").style = "display: none";
-	document.getElementById("servicesGroup").style = "display: block";
-}
-
-FSBL.addEventListener('onReady', () => {
-	// Get the current configurations from local storage
-	initialize()
-
-	// Attach events
-	form.addEventListener('submit', saveHandler)
-	form.addEventListener('reset', initialize)
-	document.getElementById('import').onclick = importConfig
-	document.getElementById('export').onclick = exportConfig
-})
-
-function getConfigFromForm() {
-	const formData = new FormData(form)
-	const newConfig = {}
-	try {
-		const components = formData.get('components')
-		const menus = formData.get('menus')
-		const workspaces = formData.get('workspaces')
-		const cssOverridePath = formData.get('style')
-		const services = formData.get('services')
-
-		if (components.length > 0) {
-			newConfig.components = JSON.parse(components)
-		}
-
-		if (menus.length > 0) {
-			newConfig.menus = JSON.parse(menus)
-		}
-
-		if (workspaces.length > 0) {
-			newConfig.workspaces = JSON.parse(workspaces)
-		}
-
-		if (cssOverridePath.length > 0) {
-			newConfig.cssOverridePath = cssOverridePath
-		}
-
-		if (services.length > 0) {
-			newConfig.services = JSON.parse(services)
-		}
-	} catch (e) {
-		alert('Invalid input.')
-		return
+		document.getElementById("componentsGroup").style = `display: ${id === "componentsBtn" ? "block" : "none"}`;
+		document.getElementById("menusGroup").style = `display: ${id === "menusBtn" ? "block" : "none"}`;
+		document.getElementById("workspacesGroup").style = `display: ${id === "workspacesBtn" ? "block" : "none"}`;
+		document.getElementById("styleGroup").style = `display: ${id === "styleBtn" ? "block" : "none"}`;
+		document.getElementById("servicesGroup").style = `display: ${id === "servicesBtn" ? "block" : "none"}`;
 	}
 
-	return newConfig;
-}
+	document.getElementById("componentsBtn").onclick = tabHandler;
+	document.getElementById("menusBtn").onclick = tabHandler;
+	document.getElementById("workspacesBtn").onclick = tabHandler;
+	document.getElementById("stylesBtn").onclick = tabHandler
+	document.getElementById("servicesBtn").onclick = tabHandler
 
-function filterComponents(inputComponents) {
-	// Filter out system components. If a customer wants to override a presentation element with their own, they need to
-	// make sure not to set component.category === "system"
-	const components = {}
-	debugger;
-	Object.keys(inputComponents).forEach((componentName) => {
-		const component = inputComponents[componentName]
-		if (component && (!component.component || (component.component.category !== "system"))) {
-			components[componentName] = component
-		}
+	FSBL.addEventListener("onReady", () => {
+		// Get the current configurations from local storage
+		initialize();
+
+		// Attach events
+		form.addEventListener("submit", saveHandler);
+		form.addEventListener("reset", initialize);
+		document.getElementById("import").onclick = importConfig;
+		document.getElementById("export").onclick = exportConfig;
 	})
 
-	return components;
-}
+	const getConfigFromForm = () => {
+		const formData = new FormData(form);
+		const newConfig = {};
+		try {
+			const components = formData.get("components");
+			const menus = formData.get("menus");
+			const workspaces = formData.get("workspaces");
+			const cssOverridePath = formData.get("style");
+			const services = formData.get("services");
 
-function saveHandler() {
-	// Apply configuration to Finsemble
-	const newConfig = getConfigFromForm();
-
-	// There was an error, return
-	if (!newConfig) return;
-
-	// TODO: Should we have options for overwrite and replace?
-	FSBL.Clients.ConfigClient.processAndSet(
-		{
-			newConfig: newConfig,
-			overwrite: true,
-			replace: true
-		},
-		(err, finsemble) => {
-			if (err) {
-				alert(err);
-				return;
+			if (components.length > 0) {
+				newConfig.components = JSON.parse(components);
 			}
 
-			const components = filterComponents(finsemble.components)
+			if (menus.length > 0) {
+				newConfig.menus = JSON.parse(menus);
+			}
 
-			// Configuration successfully applied, save for user config.
-			FSBL.Clients.StorageClient.save(
-				{
-					topic: 'user',
-					key: 'config',
-					value: {
-						components: components,
-						menus: finsemble.menus,
-						workspaces: finsemble.workspaces,
-						cssOverridePath: finsemble.cssOverridePath,
-						services: newConfig.services
-					}
-				},
-				() => alert('Saved.'))
+			if (workspaces.length > 0) {
+				newConfig.workspaces = JSON.parse(workspaces);
+			}
+
+			if (cssOverridePath.length > 0) {
+				newConfig.cssOverridePath = cssOverridePath;
+			}
+
+			if (services.length > 0) {
+				newConfig.services = JSON.parse(services);
+			}
+		} catch (e) {
+			alert("Invalid input.");
+			return;
 		}
-	)
-}
 
-function initialize() {
-	FSBL.Clients.ConfigClient.getValue({ field: 'finsemble' },
-		(error, data) => {
-			if (error) {
-				FSBL.Clients.Logger.error(error);
-				return;
+		return newConfig;
+	}
+
+	const filterComponents = (inputComponents) => {
+		// Filter out system components. If a customer wants to override a presentation element with their own, they need to
+		// make sure not to set component.category === "system"
+		const components = {};
+		Object.keys(inputComponents).forEach((componentName) => {
+			const component = inputComponents[componentName];
+			if (component && (!component.component || (component.component.category !== "system"))) {
+				components[componentName] = component;
 			}
+		});
 
-			if (data) {
-				const components = filterComponents(data.components)
-				form.elements.components.value = JSON.stringify(components, null, '\t') || ''
-				form.elements.menus.value = JSON.stringify(data.menus, null, '\t') || ''
-				form.elements.workspaces.value = JSON.stringify(data.workspaces, null, '\t') || ''
-				form.elements.style.value = data.cssOverridePath || ''
+		return components;
+	}
+
+	const saveHandler = () => {
+		// Apply configuration to Finsemble
+		const newConfig = getConfigFromForm();
+
+		// There was an error, return
+		if (!newConfig) return;
+
+		// TODO: Should we have options for overwrite and replace?
+		FSBL.Clients.ConfigClient.processAndSet(
+			{
+				newConfig: newConfig,
+				overwrite: true,
+				replace: true
+			},
+			(err, finsemble) => {
+				if (err) {
+					alert(err);
+					return;
+				}
+
+				const components = filterComponents(finsemble.components);
+
+				// Configuration successfully applied, save for user config.
+				FSBL.Clients.StorageClient.save(
+					{
+						topic: "user",
+						key: "config",
+						value: {
+							components: components,
+							menus: finsemble.menus,
+							workspaces: finsemble.workspaces,
+							cssOverridePath: finsemble.cssOverridePath,
+							services: newConfig.services
+						}
+					},
+					() => alert("Saved."));
 			}
+		)
+	}
 
-			FSBL.Clients.StorageClient.get(
-				{
-					topic: 'user',
-					key: 'config'
-				}, (err, userData) => {
-					if (err) {
-						FSBL.Clients.Logger.error(err);
-						return;
-					}
+	const initialize = () => {
+		FSBL.Clients.ConfigClient.getValue(
+			{
+				field: "finsemble"
+			},
+			(error, data) => {
+				if (error) {
+					FSBL.Clients.Logger.error(error);
+					return;
+				}
 
-					form.elements.services.value = JSON.stringify(userData.services, null, '\t') || "{}"
-				})
-		})
-}
+				if (data) {
+					const components = filterComponents(data.components);
+					form.elements.components.value = JSON.stringify(components, null, "\t") || "";
+					form.elements.menus.value = JSON.stringify(data.menus, null, "\t") || "";
+					form.elements.workspaces.value = JSON.stringify(data.workspaces, null, "\t") || "";
+					form.elements.style.value = data.cssOverridePath || "";
+				}
 
-function importConfig() {
-	const formData = new FormData(form)
-	const importURL = formData.get('importConfig')
-	fetch(importURL)
-		.then((res) => {
-			if (res.status !== 200) {
-				throw res;
-			}
+				FSBL.Clients.StorageClient.get(
+					{
+						topic: "user",
+						key: "config"
+					}, (err, userData) => {
+						if (err) {
+							FSBL.Clients.Logger.error(err);
+							return;
+						}
 
-			return res.json()
-		})
-		.then((data) => {
-			// Import config
-			if (data.components && (typeof (data.components)) === "object") {
-				let components = JSON.parse(components)
-				components = Object.assign(components, data.components)
-				form.elements.components.value = components
-			}
+						form.elements.services.value =
+							userData && userData.services ? JSON.stringify(userData.services, null, "\t") : "{}";
+					});
+			});
+	}
 
-			if (data.services && (typeof (data.services)) === "object") {
-				let services = JSON.parse(form.elements.services.value)
-				services = Object.assign(services, data.services)
-				form.elements.services.value = JSON.stringify(services, null, '\t')
-			}
-		})
-		.then(() => {
-			form.elements.importConfig.value = ''
-		})
-		.catch((err) => {
-			FSBL.Clients.Logger.error(err);
-			alert(`Error fetching config from ${importURL}`);
-		})
-}
+	const importConfig = () => {
+		const formData = new FormData(form);
+		const importURL = formData.get("importConfig");
+		fetch(importURL)
+			.then((res) => {
+				if (res.status !== 200) {
+					throw res;
+				}
 
-function download(filename, text) {
-	var element = document.createElement('a');
-	element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-	element.setAttribute('download', filename);
+				return res.json();
+			})
+			.then((data) => {
+				// Import config
+				if (data.components && (typeof (data.components)) === "object") {
+					let components = JSON.parse(components);
+					components = Object.assign(components, data.components);
+					form.elements.components.value = components;
+				}
 
-	element.style.display = 'none';
-	document.body.appendChild(element);
+				if (data.services && (typeof (data.services)) === "object") {
+					let services = JSON.parse(form.elements.services.value);
+					services = Object.assign(services, data.services);
+					form.elements.services.value = JSON.stringify(services, null, "\t");
+				}
+			})
+			.then(() => {
+				form.elements.importConfig.value = "";
+			})
+			.catch((err) => {
+				FSBL.Clients.Logger.error(err);
+				alert(`Error fetching config from ${importURL}`);
+			});
+	}
 
-	element.click();
+	const download = (filename, text) => {
+		const element = document.createElement("a");
+		element.setAttribute("href", `data:text/plain;charset=utf-8,${encodeURIComponent(text)}`);
+		element.setAttribute("download", filename);
 
-	document.body.removeChild(element);
-}
+		element.style.display = "none";
 
-function exportConfig() {
-	const newConfig = getConfigFromForm();
-	const configStr = JSON.stringify(newConfig, null, '\t')
+		document.body.appendChild(element);
 
-	// Start file download.
-	download("userConfig.json", configStr);
-}
+		element.click();
+
+		document.body.removeChild(element);
+	}
+
+	const exportConfig = () => {
+		const newConfig = getConfigFromForm();
+		const configStr = JSON.stringify(newConfig, null, "\t")
+
+		// Start file download.
+		download("userConfig.json", configStr);
+	}
+})();
