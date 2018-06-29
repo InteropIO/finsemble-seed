@@ -89,8 +89,9 @@
     --dialog-input-background-color: var(--primary-background-color);
     --dialog-input-border-color: var(--gray6);
     --dialog-input-border-focus-color: var(--gray);
+    --dialog-input-border-error-color: var(--red2);
     
-    /* Buttons */
+    /* Buttons and Inputs */
     --button-font-size: 13px;
     --button-font-weight: var(--primary-font-weight);
     --button-solid-font-color: var(--primary-font-color);
@@ -110,6 +111,8 @@
     --button-negative-border-color: var(--red4);
     --button-negative-background-hover-color: var(--red7);
     --button-negative-border-hover-color: var(--red5);
+
+    --input-negative-border-color: var(--secondary-negative-color);
     
     /* Menus */
     --menu-font-size: 14px;
