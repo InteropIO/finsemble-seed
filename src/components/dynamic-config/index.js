@@ -160,6 +160,12 @@
 	const importConfig = () => {
 		const formData = new FormData(form);
 		const importURL = formData.get("importConfig");
+		
+		if (!importURL || (importURL.length === 0)) {
+			// No URL, return
+			return;
+		}
+
 		fetch(importURL)
 			.then((res) => {
 				if (res.status !== 200) {
