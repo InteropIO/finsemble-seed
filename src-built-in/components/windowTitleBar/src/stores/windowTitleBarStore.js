@@ -368,7 +368,6 @@ var Actions = {
 		return windowTitleBarStore.getValue({ field: "tabs" });
 	},
 	_setTabs(tabs) {
-	//console.log("SET TABS", tabs);
 		FSBL.Clients.Logger.system.debug("Set tabs", tabs);
 		let activeIdentifier = finsembleWindow.identifier;
 		activeIdentifier.title = finsembleWindow.windowOptions.title;
@@ -383,29 +382,29 @@ var Actions = {
 		Actions._setTabs(tabs);
 	},
 	removeTabsLocally: function () {
-	//console.log("REMOVE TABS LOCALLY");
+		//console.log("REMOVE TABS LOCALLY");
 		Actions._setTabs(null);
 	},
 	removeTabLocally: function (windowIdentifier) {
-	//console.log("Removing tab", windowIdentifier.name);
+		//console.log("Removing tab", windowIdentifier.name);
 		let tabs = Actions.getTabs();
 		let i = tabs.findIndex(el => el.name === windowIdentifier.name && el.uuid === windowIdentifier.uuid);
 		tabs.splice(i, 1);
-	//console.log("Number of Tabs left", tabs.length);
+		//console.log("Number of Tabs left", tabs.length);
 		Actions._setTabs(tabs);
 	},
 	reorderTabLocally: function (tab, newIndex) {
 		let tabs = Actions.getTabs();
 		let { currentIndex } = Actions.findTab(tab);
-	//console.log("tab list, reorderTabLocally", tab.windowName, currentIndex, newIndex)
+		//console.log("tab list, reorderTabLocally", tab.windowName, currentIndex, newIndex)
 		if (currentIndex === newIndex) return;
 		if (currentIndex === -1) {
 			return Actions.addTabLocally(tab, newIndex);
 		}
 		tabs.splice(currentIndex, 1);
-	//console.log("After remove", JSON.parse(JSON.stringify(tabs)));
+		//console.log("After remove", JSON.parse(JSON.stringify(tabs)));
 		tabs.splice(newIndex, 0, tab);
-	//console.log("After reinsert", JSON.parse(JSON.stringify(tabs)));
+		//console.log("After reinsert", JSON.parse(JSON.stringify(tabs)));
 
 		Actions._setTabs(tabs)
 	},
@@ -443,7 +442,7 @@ var Actions = {
 		tabs.splice(currentIndex, 1);
 		tabs.splice(newIndex, 0, tab);
 		//Local change, quickly updates the dom.
-	//console.log("Tab list changing", tabs);
+		//console.log("Tab list changing", tabs);
 		Actions._setTabs(tabs);
 		Actions.parentWrapper.reorder({ windowIdentifiers: tabs })
 	},
@@ -501,7 +500,7 @@ var Actions = {
 		})
 	},
 	createParentWrapper(params, cb) {
-	//console.log("In parentWrapper begin");
+		//console.log("In parentWrapper begin");
 		window.Actions = Actions;
 		if (Actions.parentWrapper) {
 			cb();

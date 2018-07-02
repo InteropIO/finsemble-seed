@@ -48,7 +48,7 @@ class WindowTitleBar extends React.Component {
 		windowTitleBarStore.getValue({ field: "Maximize.hide" });
 		this.dragEndTimeout = null;
 		let activeIdentifier = finsembleWindow.identifier;
-        activeIdentifier.title = finsembleWindow.windowOptions.title;
+		activeIdentifier.title = windowTitleBarStore.getValue({ field: "Main.windowTitle" });
 		this.state = {
 			windowTitle: windowTitleBarStore.getValue({ field: "Main.windowTitle" }),
 			minButton: !windowTitleBarStore.getValue({ field: "Minimize.hide" }),
@@ -58,8 +58,8 @@ class WindowTitleBar extends React.Component {
 			showShareButton: windowTitleBarStore.getValue({ field: "Sharer.emitterEnabled" }),
 			isTopRight: windowTitleBarStore.getValue({ field: "isTopRight" }),
 			alwaysOnTopButton: windowTitleBarStore.getValue({ field: "AlwaysOnTop.show" }),
-			tabs: [{ title: windowTitleBarStore.getValue({ field: "Main.windowTitle" }) }], //array of tabs for this window
-			showTabs: windowTitleBarStore.getValue({field: "showTabs"}),
+			tabs: [activeIdentifier], //array of tabs for this window
+			showTabs: windowTitleBarStore.getValue({ field: "showTabs" }),
 			allowDragOnCenterRegion: true,
 			activeTab: activeIdentifier,
 			tabBarBoundingBox: {},
@@ -102,7 +102,7 @@ class WindowTitleBar extends React.Component {
 		]);
 
 		FSBL.Clients.RouterClient.addListener("DockingService.startTilingOrTabbing", this.disallowDragOnCenterRegion);
-	//console.log("Adding listener for stopTilingOrTabbing.");
+		//console.log("Adding listener for stopTilingOrTabbing.");
 		FSBL.Clients.RouterClient.addListener("DockingService.stopTilingOrTabbing", this.allowDragOnCenterRegion);
 		FSBL.Clients.RouterClient.addListener("DockingService.cancelTilingOrTabbing", this.allowDragOnCenterRegion);
 
@@ -127,7 +127,7 @@ class WindowTitleBar extends React.Component {
 			{ field: "tabs", listener: this.onTabsChanged },
 			{ field: "showTabs", listener: this.onShowTabsChanged },
 		]);
-	//console.log("Removing listener from the router.");
+		//console.log("Removing listener from the router.");
 		FSBL.Clients.RouterClient.removeListener("DockingService.startTilingOrTabbing", this.disallowDragOnCenterRegion);
 		FSBL.Clients.RouterClient.removeListener("DockingService.stopTilingOrTabbing", this.allowDragOnCenterRegion);
 	}
@@ -136,7 +136,7 @@ class WindowTitleBar extends React.Component {
 	 * When we are not tiling/tabbing, we want to allow the user to drag the window around via any available space in the tab-region. This function allows that.
 	 */
 	allowDragOnCenterRegion() {
-	//console.log("In stopTilingOrTabbing")
+		//console.log("In stopTilingOrTabbing")
 		this.setState({
 			allowDragOnCenterRegion: true
 		});
@@ -145,7 +145,7 @@ class WindowTitleBar extends React.Component {
 	 * When we are tiling/tabbing, we do not want to allow any window to be dragged around and moved.
 	 */
 	disallowDragOnCenterRegion() {
-	//console.log("No longer allowing drag.")
+		//console.log("No longer allowing drag.")
 		this.setState({
 			allowDragOnCenterRegion: false
 		});
@@ -178,12 +178,15 @@ class WindowTitleBar extends React.Component {
 		let myIdentifier = FSBL.Clients.WindowClient.getWindowIdentifier();
 		let myIndex = -1;
 		let myTab = tabs.filter((el, i) => {
-			if (el.name === myIdentifier.name && el.uuid === myIdentifier.uuid) {
+			if (!el.windowName && el.name) el.windowName = el.name;
+			if (!el.name && el.windowName) el.name = el.windowName;
+
+			if (el.name === myIdentifier.windowName) {
 				myIndex = i;
 				return true;
 			}
 			return false;
-		});
+		})[0]
 		myTab.title = response.value;
 		tabs.splice(myIndex, 1, myTab);
 
@@ -299,7 +302,7 @@ class WindowTitleBar extends React.Component {
 // window.addEventListener("FSBLReady", function () {
 
 FSBL.addEventListener("onReady", function () {
-		storeExports.initialize(function () {
+	storeExports.initialize(function () {
 		HeaderActions = storeExports.Actions;
 		windowTitleBarStore = storeExports.getStore();
 		ReactDOM.render(<WindowTitleBar />, document.getElementById("FSBLHeader"));

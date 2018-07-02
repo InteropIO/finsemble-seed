@@ -9,7 +9,6 @@ export default class Logo extends React.PureComponent {
 		this.wrap = null;
 		this.getWrap = this.getWrap.bind(this);
 		this.handleComponentConfig = this.handleComponentConfig.bind(this);
-		console.log("constructor for", props.windowIdentifier.windowName, this.state.uuid);
 	}
 	getWrap(cb = Function.prototype) {
 		if (this.wrap) return cb();
@@ -49,7 +48,6 @@ export default class Logo extends React.PureComponent {
 		} catch (e) {
 			imageIcon = "";
 		}
-		console.log("Setting state for", opts.name, this.state.uuid, fontIcon);
 		if (fontIcon && fontIcon != "") {
 			this.setState({
 				tabLogo: {
@@ -75,7 +73,6 @@ export default class Logo extends React.PureComponent {
 	}
 
 	render() {
-		//console.log("RENDER LOGO FOR", this.state.uuid, this.state.tabLogo);
 		return <div className="fsbl-tab-logo">
 			{this.state.tabLogo.type === "icon" &&
 				<i className={this.state.tabLogo.class}></i>
