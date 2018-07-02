@@ -368,7 +368,6 @@ var Actions = {
 		return windowTitleBarStore.getValue({ field: "tabs" });
 	},
 	_setTabs(tabs) {
-		console.log("SET TABS", tabs);
 		FSBL.Clients.Logger.system.debug("Set tabs", tabs);
 		let activeIdentifier = finsembleWindow.identifier;
 		activeIdentifier.title = finsembleWindow.windowOptions.title;
@@ -462,7 +461,6 @@ var Actions = {
 	onTabListChanged: function (err, response) {
 		FSBL.Clients.Logger.system.debug("OnTabListChanged");
 		if (!response.data) return;
-		console.log("Store ontablistchanged", response.data);
 		return Actions._setTabs(response.data[constants.CHILD_WINDOW_FIELD]);
 	},
 	parentSubscriptions: [],
