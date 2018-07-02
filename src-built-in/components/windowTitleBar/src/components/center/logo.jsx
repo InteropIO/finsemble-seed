@@ -75,7 +75,7 @@ export default class Logo extends React.PureComponent {
 	}
 
 	render() {
-		console.log("RENDER LOGO FOR", this.state.uuid, this.state.tabLogo);
+		//console.log("RENDER LOGO FOR", this.state.uuid, this.state.tabLogo);
 		return <div className="fsbl-tab-logo">
 			{this.state.tabLogo.type === "icon" &&
 				<i className={this.state.tabLogo.class}></i>
