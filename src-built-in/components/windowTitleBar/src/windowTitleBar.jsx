@@ -85,6 +85,8 @@ class WindowTitleBar extends React.Component {
 		this.onShareEmitterChanged = this.onShareEmitterChanged.bind(this);
 		this.onTabsChanged = this.onTabsChanged.bind(this);
 		this.onShowTabsChanged = this.onShowTabsChanged.bind(this);
+		this.onTilingStop = this.onTilingStop.bind(this);
+		this.onTilingStart = this.onTilingStart.bind(this);
 
 	}
 	componentWillMount() {
@@ -112,6 +114,11 @@ class WindowTitleBar extends React.Component {
 		let header = document.getElementsByClassName("fsbl-header")[0];
 		let headerHeight = window.getComputedStyle(header, null).getPropertyValue("height");
 		document.body.style.marginTop = headerHeight;
+		this.resizeDragHandle();
+	}
+
+	componentDidUpdate() {
+		this.resizeDragHandle();
 	}
 
 	componentWillUnmount() {
@@ -149,6 +156,97 @@ class WindowTitleBar extends React.Component {
 		this.setState({
 			allowDragOnCenterRegion: false
 		});
+	}
+
+	/**
+	 * When tiling start, we want to find the dragHandler and hide it
+	 */
+	onTilingStart() {
+		let dragHandle = document.querySelector('.fsbl-drag-handle');
+		if (dragHandle) {
+			dragHandle.classList.add('hidden');
+		}
+	}
+
+	/**
+	 * When tiling stops, we want to find the dragHandler and reshow it
+	 */
+	onTilingStop() {
+		let dragHandle = document.querySelector('.fsbl-drag-handle.hidden');
+		if (dragHandle) {
+			dragHandle.classList.remove('hidden');
+		}
+	}
+
+	/**
+	 * The dragger is an absolutely positioned element that is superimposed on the actual area that we'd like to drag.
+	 * This is necessary due to a bug in Chromium. Effectively, we need the dragger to change its left position and width
+	 * to match the intended drag area. These dimensions can change whenever the header is re-rendered (for instance when
+	 * changing mode from tabbing to non-tabbing). Dimensions can also change when the window itself is resized (due to natural
+	 * css).
+	 * 
+	 * TODO, remove all of the cq-drag and cq-no-drag
+	 * Remove fsbl-drag-region, it is no longer needed
+	 * Hide the dragHandle during drop operations, so that it doesn't interfere
+	 */
+	resizeDragHandle() {
+		let dragHandle = document.querySelector(".fsbl-drag-handle");
+		// Create the dragger if it doesn't already exist
+		if (!dragHandle) {
+			dragHandle = document.createElement("div");
+			dragHandle.className = "fsbl-drag-handle";
+
+			document.body.insertBefore(dragHandle, document.body.firstChild);
+			var self = this;
+			window.addEventListener("resize", function () {
+				self.resizeDragHandle();
+			});
+		}
+
+		// Set the height of the dragHandle to match the height of the window title bar
+		// Do this every time through the render loop just in case a customer builds a
+		// header bar with dynamic height!
+		let bounds = document.querySelector(".fsbl-header").getBoundingClientRect();
+		dragHandle.style.height = (bounds.height-5) + "px"; // Subtract 5 pixels from height in order to make room for resize window cursor at top edge of window
+		dragHandle.style.marginTop = (-bounds.height+5) + "px"; // Negative margin pulls the drag handle up over the fixed header
+
+		// Start logic for determining where to place our dragHandle
+		if (this.state.showTabs) {
+			// If there is more than one tab, then the drag area is the padding-left of fsbl-header-right
+			// See .fsbl-tabs-multiple in the css
+			if (this.state.tabs.length > 1) {
+				let headerRight = document.querySelector(".fsbl-header-right");
+				let computedStyle = getComputedStyle(headerRight);
+				bounds = headerRight.getBoundingClientRect();
+				// override the bounds.width with the paddingLeft amount
+				bounds = {
+					left: bounds.left,
+					width: parseInt(computedStyle.paddingLeft, 10)
+				};
+			} else {
+				// If tabs are not enabled, then the remained of fsbl-header-center beyond the tabs
+				// is the draggable area. This assumes left aligned tabs.
+				let fsblHeaderCenter = document.querySelector(".fsbl-header-center");
+				bounds = fsblHeaderCenter.getBoundingClientRect();
+				let theTabBounds = fsblHeaderCenter.querySelector(".tab-region-wrapper div").getBoundingClientRect();
+				// Calculate the right portion
+				bounds = {
+					left: bounds.left + theTabBounds.width,
+					width: bounds.width - theTabBounds.width
+				};
+			}
+		} else {
+			// If tabs are not enabled, then the entire center is the drag area
+			bounds = document.querySelector(".fsbl-header-center").getBoundingClientRect();
+		}
+		dragHandle.style.left = bounds.left + "px";
+		dragHandle.style.width = bounds.width + "px";
+
+		//Add an event listener to hide the drag-handler when tiling is started
+		FSBL.Clients.RouterClient.addListener("DockingService.startTilingOrTabbing", this.onTilingStart);
+
+		//Add an event listener to show the drag-handler when tiling is stopped
+		FSBL.Clients.RouterClient.addListener("DockingService.stopTilingOrTabbing", this.onTilingStop);
 	}
 
 	/**
@@ -236,7 +334,7 @@ class WindowTitleBar extends React.Component {
 		let isGrouped = (self.state.dockingIcon == "ejector");
 		let showMinimizeIcon = (isGrouped && self.state.isTopRight) || !isGrouped; //If not in a group or if topright in a group
 		let titleWrapperClasses = "fsbl-header-center";
-		let rightWrapperClasses = "fsbl-header-right cq-drag";
+		let rightWrapperClasses = "fsbl-header-right";
 		let tabRegionClasses = "fsbl-tab-area";
 		let headerClasses = "fsbl-header";
 
@@ -248,11 +346,6 @@ class WindowTitleBar extends React.Component {
 			headerClasses += " fsbl-tabs-multiple";
 		}
 		//See this.allowDragOnCenterRegion for more explanation.
-		// When using tabs, we'll rely on fsbl-drag-region instead of adding cq-drag directly
-		if (this.state.allowDragOnCenterRegion && !this.state.showTabs) {
-			titleWrapperClasses += " cq-drag";
-			//tabRegionClasses += " cq-drag";
-		}
 		return (
 			<div className={headerClasses}>
 				{/* Only render the left section if something is inside of it. The left section has a right-border that we don't want showing willy-nilly. */}
@@ -265,9 +358,8 @@ class WindowTitleBar extends React.Component {
 				{/* center section of the titlebar */}
 				<div className={titleWrapperClasses}
 					ref={this.setTabBarRef}>
-					{/* If we're suppsoed to show tabs and the window isn't babySized */}
-					{!this.state.showTabs && <div className='fsbl-header-center cq-drag'>{this.state.windowTitle}</div>}
-					{this.state.showTabs && <div className="fsbl-drag-region"></div>}
+					{/* If we're supposed to show tabs and the window isn't babySized */}
+					{!this.state.showTabs && <div className='fsbl-header-center'>{this.state.windowTitle}</div>}
 					{this.state.showTabs &&
 						<TabRegion
 							onTabDropped={this.allowDragOnCenterRegion}
