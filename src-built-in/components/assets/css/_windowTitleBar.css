@@ -1,27 +1,16 @@
 @import "./_variablesWhitelabel.css";
 @import url('./_themeWhitelabel.css');
 
-.cq-drag {
-    cursor: -webkit-grab;
-    -webkit-app-region: drag;
-}
-
-.cq-drag-area:active {
-    cursor: -webkit-grabbing;
-}
-.fsbl-header-floater {
+.fsbl-drag-handle {
     position: absolute;
     z-index: 2147483641;
-    height: 32px;
-    width:75%;
-    top:0px!important;
-    margin-top:-32px;
-    left:70px;
+    top: 0px!important;
+    /* background-color: red; */
    -webkit-app-region: drag;
-  }
-.cq-no-drag {
-    -webkit-app-region: no-drag !important;
-    position: absolute;
+}
+
+.fsbl-drag-handle.hidden {
+    display: none;
 }
 
 .fsbl-tabs-multiple .fsbl-header-right {
@@ -68,15 +57,6 @@ html.desktop-active .fsbl-header {
     background-color: var(--titlebar-tab-active-background-color);
     color: var(--titlebar-tab-active-font-color);
     border-right: var(--titlebar-tab-section-separator);
-}
-
-.fsbl-drag-region {
-    position: absolute;
-    width: 100%;
-    height: calc(100% - 5px);
-    bottom: 0px;
-    left: 0px;
-    -webkit-app-region: drag;
 }
 
 .fsbl-header-left {
