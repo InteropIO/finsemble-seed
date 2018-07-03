@@ -177,9 +177,9 @@
 			.then((data) => {
 				// Import config
 				if (data.components && (typeof (data.components)) === "object") {
-					let components = JSON.parse(components);
+					let components = JSON.parse(form.elements.components.value);
 					components = Object.assign(components, data.components);
-					form.elements.components.value = components;
+					form.elements.components.value = JSON.stringify(components, null, "\t");
 				}
 
 				if (data.services && (typeof (data.services)) === "object") {
