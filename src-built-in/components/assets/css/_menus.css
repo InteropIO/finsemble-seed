@@ -6,7 +6,7 @@ body.menu {
     margin: 0px;
     font-family: var(--font-family);
     font-size: var(--menu-font-size);
-    font-weight: 300;
+    font-weight: var(--menu-font-weight);
     overflow-y: hidden;
     overflow-x: hidden;
     height: 100%;
@@ -19,18 +19,9 @@ body.menu {
     flex-direction: row;
 }
 
-.menu-section-label {
-    padding: 10px 0px 10px 20px;
-    color: var(--primary-accent-color);
-    text-transform: uppercase;
-    font-weight: 700;
-    font-family: var(--font-family);
-    width: 100%;
-}
-
 .menu {
-    background: var(--menu-primary-background-color);
-    color: var(--menu-primary-font-color);
+    background: var(--menu-content-background-color);
+    color: var(--menu-font-color);
 }
 
 .menu .menu-section {
@@ -44,17 +35,17 @@ body.menu {
 }
 
 .menu-secondary {
-    background: var(--menu-secondary-background-color);
+    background: var(--menu-actions-background-color);
     padding-bottom: 10px;
     padding-top: 10px;
 }
 
 .menu-primary .menu-item:hover {
-    background: var(--menu-primary-hover-color);
+    background: var(--menu-content-hover-color);
 }
 
 .menu-secondary .menu-item:hover {
-    background: var(--menu-secondary-hover-color);
+    background: var(--menu-actions-hover-color);
 }
 
 .menu-item {
@@ -100,49 +91,49 @@ body.menu {
 }
 
 .ff-pin {
-    padding: 2px;
-    width: 25px;
+    padding: 4px 2px 1px 1px;
+    width: 22px;
     text-align: center;
     border: 1px solid transparent;
 } 
 
 .ff-delete {
-    padding: 2px 2px 2px 0px;
-    width: 25px;
+    padding: 4px 2px 1px 0px;
+    width: 22px;
     text-align: center;
     border: 1px solid transparent;
 }
 
 .ff-delete:hover {
-    color: white;
-    background-color: var(--ff-delete-hover-color);
+    color: var(--menu-font-color);
+    background-color: var(--menu-delete-background-hover-color);
     border-radius: 4px;
 }
 
 .ff-pin:hover {
-    color: var(--ff-pin-font-color);
-    width: 25px;
-    border: 1px solid var(--ff-pin-border-hover-color);
+    color: var(--menu-font-color);
+    width: 22px;
+    border: 1px solid var(--menu-pin-border-color);
     border-radius: 4px;
 }
 
 .finsemble-item-pinned {
-    color: white;
-    width: 25px;
-    background-color: var(--primary-accent-color);
+    color: var(--menu-font-color);
+    width: 22px;
+    background-color: var(--menu-pin-background-color);
     border-radius: 4px;
 }
 
 .finsemble-item-pinned:hover {
-    color: white;
-    width: 25px;
-    background-color: var(--finsemble-item-pinned-hover-background-color);
+    color: var(--menu-font-color);
+    width: 22px;
+    background-color: var(--menu-pin-background-hover-color);
     border-radius: 4px;
 }
 
 .ff-delete:hover {
-    color: white;
-    background-color: var(--ff-delete-hover-color);
+    color: var(--menu-font-color);
+    background-color: var(--menu-delete-background-hover-color);
     border-radius: 4px;
 }
 

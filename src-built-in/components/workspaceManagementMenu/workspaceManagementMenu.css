@@ -31,7 +31,7 @@ html {
 
 ::-webkit-scrollbar {
     width: 9px;
-    background-color: #f7f7f7;
+    background-color: var(--scrollbar-color);
     border-radius: 3px;
 }
 
@@ -42,7 +42,7 @@ html {
 }
 
 .active-workspace > div {
-    font-weight: 500;
+    font-weight: var(--menu-active-workspace-font-weight);
 }
 
 body {

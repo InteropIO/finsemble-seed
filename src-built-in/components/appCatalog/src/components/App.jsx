@@ -22,7 +22,7 @@ export default class AppList extends React.Component {
 	}
 
 	itemClick() {
-		console.log("this.props click", this.props)
+	//console.log("this.props click", this.props)
 		FSBL.Clients.SearchClient.invokeItemAction(this.props.app, this.props.app.actions[0]);//make this only use spawn for now
 
 		setTimeout(() => {//we do this because the originating window doesn't exist in the launcher if we dont wait.
@@ -43,7 +43,7 @@ export default class AppList extends React.Component {
 			return <div className="iconContainer"><div className={"icon " + this.props.app.icon.path}></div></div>
 		}
 		if (this.props.app.icon.type === "url") {
-			console.log(" this.props.app.icon.path", this.props.app.icon.path)
+		//console.log(" this.props.app.icon.path", this.props.app.icon.path)
 			return <div style={{
 				backgroundImage: "url(" + this.props.app.icon.path + ")"
 			}} className="logo"></div>
@@ -52,7 +52,7 @@ export default class AppList extends React.Component {
 
 	render() {
 		var self = this;
-		console.log(this.props)
+	//console.log(this.props)
 		return <div className="appItem">
 			<div onClick={function () {
 				self.props.openDetails(self.props.app)
