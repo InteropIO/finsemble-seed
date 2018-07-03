@@ -89,25 +89,30 @@
     --dialog-input-background-color: var(--primary-background-color);
     --dialog-input-border-color: var(--gray6);
     --dialog-input-border-focus-color: var(--gray);
+    --dialog-input-border-error-color: var(--red2);
     
-    /* Buttons */
+    /* Buttons and Inputs */
     --button-font-size: 13px;
+    --button-font-weight: var(--primary-font-weight);
     --button-solid-font-color: var(--primary-font-color);
     --button-small-font-size: 10px;
  
-    --button-positive-background-color: var(--primary-accent-color);
-    --button-positive-border-color: var(--blue5);
-    --button-positive-border-hover-color: var(--blue2);
-    --button-positive-font-weight: var(--tertiary-font-weight);
+    --button-affirmative-background-color: var(--primary-accent-color);
+    --button-affirmative-border-color: var(--blue5);
+    --button-affirmative-background-hover-color: var(--secondary-accent-color);
+    --button-affirmative-border-hover-color: var(--blue6);
  
-    --button-neutral-background-color: var(--gray2);
-    --button-neutral-border-color: var( --gray6);
-    --button-neutral-border-hover-color: var(--gray2);
+    --button-neutral-background-color: transparent;
+    --button-neutral-border-color: transparent;
+    --button-neutral-border-hover-color: var(--gray6);
     --button-neutral-solid-font-color: var(--secondary-font-color);
  
-    --button-negative-background-color: var(--red5);
-    --button-negative-border-color: var(--red3);
-    --button-negative-border-hover-color: var(--red1);
+    --button-negative-background-color: var(--red6);
+    --button-negative-border-color: var(--red4);
+    --button-negative-background-hover-color: var(--red7);
+    --button-negative-border-hover-color: var(--red5);
+
+    --input-negative-border-color: var(--secondary-negative-color);
     
     /* Menus */
     --menu-font-size: 14px;

@@ -105,7 +105,7 @@ class AdHocComponentForm extends React.Component {
 	}
 
 	setName(e) {
-		this.setState({name: e.target.value});
+		this.setState({ name: e.target.value });
 	}
 
 	setURL(e) {
@@ -122,21 +122,18 @@ class AdHocComponentForm extends React.Component {
 				});
 			}}
 			isModal={true}>
-			<div className="dialog-title">New App</div>
-			<FinsembleDialogQuestion>
-				Input a name and URL for your new app.
-			</FinsembleDialogQuestion>
+			<div className="dialog-title">Enter a name and URL for your app.</div>
+				<FinsembleDialogTextInput onInputChange={this.setName} placeholder="Name" autofocus value={this.name} />
+				<FinsembleDialogTextInput onInputChange={this.setURL} placeholder="URL" value={this.URL} />
 			<div className="button-wrapper">
-			<FinsembleDialogTextInput onInputChange={this.setName} placeholder="Name" autofocus value={this.name} />
-			<FinsembleDialogTextInput onInputChange={this.setURL} placeholder="URL" value={this.URL}/>
 
-
-				<FinsembleDialogButton show={true} buttonSize="md-positive" onClick={this.save}>
-					Save
-				</FinsembleDialogButton>
-				<FinsembleDialogButton show={true} buttonSize="md-neutral" onClick={this.cancel}>
+				<FinsembleDialogButton show={true} className="fsbl-button-neutral" onClick={this.cancel}>
 					Cancel
-			</FinsembleDialogButton>
+				</FinsembleDialogButton>
+
+				<FinsembleDialogButton show={true} className="fsbl-button-affirmative" onClick={this.save}>
+					Confirm
+				</FinsembleDialogButton>
 			</div>
 		</FinsembleDialog>
 
