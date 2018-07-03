@@ -10,7 +10,7 @@
 				"top": "center",
 				"left": "center",
 				"width": 400,
-				"height": 370
+				"height": 432
 			},
 			"component": {
 				"inject": false,
@@ -28,12 +28,13 @@
 						"launchableByUser": true
 					},
 					"Window Manager": {
-						"showLinker": false,
+						"showLinker": true,
 						"FSBLHeader": true,
-						"persistWindowState": true
+						"persistWindowState": true,
+						"title": "Welcome"
 					},
 					"Toolbar": {
-						"iconClass": "welcome"
+						"iconClass": "ff-component"
 					}
 				}
 			}

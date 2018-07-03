@@ -100,11 +100,10 @@ export default class LinkerButton extends React.Component {
             let wi = {
                 componentType: "linkerWindow"
             };
-            // @todo, these positions should be relative to the actual element clicked rather
-            // than hard coded to the left edge of the screen
+
             let params = {
                 position: 'relative',
-                left: 0,
+                left: self.refs.LinkerButton.offsetLeft,
                 top: self.refs.LinkerButton.offsetHeight,
                 forceOntoMonitor: true,
                 spawnIfNotFound: false
@@ -129,7 +128,7 @@ export default class LinkerButton extends React.Component {
      */
     componentWillMount() {
 
-        // console.log("windowTitleBarStore--", windowTitleBarStore)
+        ////console.log("windowTitleBarStore--", windowTitleBarStore)
         windowTitleBarStore.addListener({ field: "Linker.channels" }, this.onChannelsChange);
         windowTitleBarStore.addListener({ field: "Linker.allChannels" }, this.onAllChannelsChange);
         windowTitleBarStore.addListener({ field: "Linker.showLinkerButton" }, this.onShowLinkerButton);

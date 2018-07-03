@@ -18,6 +18,10 @@
         "type": "reactComponent"
     },
     {
+        "align":"left",
+        "type":"seperator"
+    },
+    {
         "comment": "Change align to add AlwaysOnTop capability",
         "align": "none",
         "type": "reactComponent",
@@ -42,5 +46,9 @@
         "align": "left",
         "label": "Apps",
         "menuType": "App Launcher"
+    },
+    {
+        "align":"left",
+        "type":"seperator"
     }
 ]

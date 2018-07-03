@@ -4,7 +4,7 @@
     align-items: stretch;
     width: 100%;
     background: var(--toolbar-background-color);
-    color: var(--toolbar-primary-font-color);
+    color: var(--toolbar-font-color);
     align-content: center;
     height: var(--toolbar-height);
 }
@@ -54,25 +54,24 @@
 }
 
 .finsemble-toolbar-button {
-    display: table;
-    padding: var(--toolbar-button-padding);
+    display: -webkit-box;
+    padding: 5px 6px;
     height: 100%;
     border: 1px solid var(--toolbar-background-color);
 }
 
 .finsemble-toolbar-button-label {
-    font-size: .95em;
-    font-weight: var(--toolbar-button-label-font-weight);
+    font-size: var(--toolbar-font-size);
+    font-weight: var(--toolbar-font-weight);
     text-align: left;
     letter-spacing: .25px;
     align-content: center;
     display: block;
-    margin-top: var(--toolbar-button-label-margin);    
+    margin-top: 6px;    
 }
 
 .finsemble-toolbar-button:hover {
-    background: var(--secondary-accent-color);
-    color: var(--secondary-hover-font-color);
+    background: var(--toolbar-button-hover-color);
     border: 1px solid transparent;
     cursor: pointer;
 }
@@ -94,11 +93,10 @@
     text-align: center;
     text-overflow: ellipsis;
     white-space: nowrap;
-    border-right: var(--toolbar-separator);
 }
 
 .finsemble-toolbar-workspace-button-label.finsemble-toolbar-button:hover {
-    background: var(--secondary-accent-color);
+    background: var(--toolbar-button-hover-color);
     border: 1px solid transparent;
     cursor: pointer;
 }
@@ -124,25 +122,26 @@
 }
 
 .divider:before {
-    height: 20px;
+    height: 24px;
     border-right: var(--toolbar-separator);
     content: '';
-    margin: 0 .25em 0 .25em;
+    margin: 0 .25em;
 }
 
 img.pinned-icon {
-    padding-top: var(--pinned-icon-padding-top);
+    padding-top: 5px;
     max-width: 17px;
+    float: left;
 }
 
 .pinned-icon {
-    color: var(--pinned-icon-font-color);
-    font-size: var(--pinned-icon-font-size);
+    color: var(--toolbar-icon-app-color);
+    font-size: var(--toolbar-icon-font-size);
     padding-right: .25em;
 }
 
 .pinned-workspace-icon {
-    color: var(--workspace-icon-color ) !important;
+    color: var(--toolbar-icon-workspace-color) !important;
 }
 
 .toolbar-button-label-left {
@@ -154,17 +153,17 @@ img.pinned-icon {
 }
 
 .finsemble-button-label {
-    padding-top: var(--finsemble-button-label-padding-top);
+    padding-top: 1px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
 
 .finsemble-toolbar-brand-logo {
-    width: var(--brand-logo-width);
-    height: var(--brand-logo-height);
-    margin: var(--brand-logo-margin);
-    padding: 2px 0px 0px 0px !important;
+    width: var(--toolbar-brand-logo-width);
+    height: var(--toolbar-brand-logo-height);
+    margin: 2px 2px;
+    padding: 2px 0px 0px 0px;
 }
 
 /* Special tweaks for pinned icons */

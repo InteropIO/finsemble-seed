@@ -1,6 +1,6 @@
-@import url('./_variables.css');
+@import url('./_theme.css');
 @import url('./_variablesWhitelabel.css');
-@import url("https://fonts.googleapis.com/css?family=Roboto");
+@import url('./_themeWhitelabel.css');
 @import url('./_fontIcons.css');
 @import  url('./_windowFrame.css');
 @import  url('./_windowTitleBar.css');
@@ -15,13 +15,62 @@
     display: none !important;
 }
 
+.fsbl-share-scrim {
+    position: fixed;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    z-index: 1000000;
+    top: 0;
+    left: 0;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    align-items: center;
+    transition: all .3s ease;
+    opacity: 0.85;
+    font-size: var(--scrim-icon-font-size);
+    color: var(--scrim-icon-font-color);
+}
+
+.fsbl-share-scrim .error-message {
+    display: flex;
+    height: 100%;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    padding: 1em;
+    background-color: var(--scrim-negative-background-color);
+}
+
+.fsbl-share-scrim i {
+    position: fixed;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    z-index: 1000000;
+    top: 0;
+    left: 0;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--scrim-positive-background-color);
+    font-size: var(--scrim-font-icon-size);
+    color: var(--scrim-font-icon-color) !important;
+}
+
+.fsbl-share-scrim i.no {
+    background-color: var(--scrim-negative-background-color);
+}
+
 .fsbl-button {
-    /* margin: 0 auto; */
+    margin: 0px 6px;
     text-align: center;
     font-family: var(--font-family);
-    background: var(--dialog-button-background-color);
     border: 1px solid transparent;
-    color: var(--fsbl-button-font-color);
+    background: var(--button-neutral-background-color);
+    color: var(--button-solid-text);
     transition: .2s ease;
     display:flex;
     flex-direction: column;
@@ -34,66 +83,12 @@
     margin: 0 6px;
 }
 
-.fsbl-share-scrim {
-    position: fixed;
-    display: flex;
-    height: 100%;
-    width: 100%;
-    z-index: 1000000;
-  /*background-color: purple;*/
-    top: 0;
-    left: 0;
-    justify-content: center;
-    align-content: center;
-    font-size: 100px;
-    flex-direction: column;
-    align-items: center;
-    color: #fff;
-    transition: all .3s ease;
-    opacity: 0.85;
-}
-
-.fsbl-share-scrim .error-message {
-    display: flex;
-    height: 100%;
-    align-content: center;
-    justify-content: center;
-    align-items: center;
-    padding: 1em;
-    background-color: var(--scrim-negative-overlay);
-}
-
-.fsbl-share-scrim i {
-    position: fixed;
-    display: flex;
-    height: 100%;
-    width: 100%;
-    z-index: 1000000;
-    background-color: var(--scrim-overlay);
-    top: 0;
-    left: 0;
-    justify-content: center;
-    align-content: center;
-    font-size: 100px;
-    flex-direction: column;
-    color: #FFF !important;
-    align-items: center;
-}
-
-.fsbl-share-scrim i.no {
-    background-color: var(--scrim-negative-overlay);
-}
-
 .fsbl-button:hover {
-    background: var(--primary-accent-color);
-    border: 1px solid var(--primary-accent-color);
-    transition: 0.2s ease-in;
-    cursor: pointer;
-}
-
-.fsbl-button:hover {
-    color: #FFF;
+    background: var(--button-positive-background-color);
+    border: 1px solid var(--button-positive-border-hover-color);
     transition: 0.2s ease-out;
+    cursor: pointer;
+    color: var(--button-solid-font-color);
 }
 
 .fsbl-button-lg {
@@ -119,10 +114,9 @@
 .fsbl-button-lg-positive {
     width: 223px;
     height: 40px;
-    border: var(--dialog-button-border);
-    font-weight: bold;
-    font-size: 13px;
-    letter-spacing: 1.6px;
+    border: var(--button-positive-border-color);
+    font-weight: var(--button-positive-font-weight);
+    font-size: var(--button-font-size);
     line-height: 38px;
     padding: 11px 32px;
 }
@@ -130,8 +124,7 @@
 .fsbl-button-lg-neutral {
     width: 223px;
     height: 40px;
-    font-size: 13px;
-    letter-spacing: 1.6px;
+    font-size: var(--button-font-size);
     line-height: 38px;
     padding: 11px 32px;
 }
@@ -139,28 +132,27 @@
 .fsbl-button-md-positive {
     width: 147px;
     height: 32px;
-    border: var(--dialog-button-border);
-    font-weight: bold;
-    font-size: 13px;
-    letter-spacing: 0.4px;
+    border: var(--button-positive-border-color);
+    font-weight: var(--button-positive-font-weight);
+    font-size: var(--button-font-size);
+    border: 1px solid transparent;
     line-height: 33px;
 }
 
 .fsbl-button-md-neutral {
     width: 147px;
     height: 32px;
-    font-size: 13px;
-    letter-spacing: 0.4px;
+    font-size: var(--button-font-size);
     line-height: 34px;
+    border: 1px solid transparent;
 }
 
 .fsbl-button-sm-positive {
     width: 110px;
     height: 20px;
-    border: var(--dialog-button-border);
-    font-weight: bold;
-    font-size: 10px;
-    letter-spacing: 1px;
+    border: var(--button-positive-border-color);
+    font-weight: var(--button-positive-font-weight);
+    font-size: var(--button-small-font-size);
     line-height: 20px;
     padding: 3px 11px;
 }
@@ -168,9 +160,8 @@
 .fsbl-button-sm-neutral {
     width: 110px;
     height: 20px;
-    font-size: 10px;
+    font-size: var(--button-small-font-size);
     padding: 3px 11px;
-    letter-spacing: 1px;
     line-height: 20px;
 }
 
@@ -181,10 +172,6 @@
 /* Gives the control icons the proper width on websites using bootstrap. */
 i, i:before, i:after, .fsbl-window-manager-icon {
     box-sizing: content-box;
-}
-
-body.dialog input:focus {
-    border: 1px solid var(--primary-accent-color);
 }
 
 @import url('./_styleWhitelabel.css');

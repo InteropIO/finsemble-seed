@@ -16,7 +16,7 @@ export default class Chat extends React.Component {
 	componentWillMount(){
 		let self = this;
 		FSBL.Clients.RouterClient.subscribe("chatService-unreadCount", function (err, response) {
-			console.log("unread msgs", err, response);
+		//console.log("unread msgs", err, response);
 			self.setState({
 				unread: response.data.count
 			});
@@ -32,10 +32,10 @@ export default class Chat extends React.Component {
 		this.toggleChat = this.toggleChat.bind(this);
 	}
 	toggleChat(event) {
-		console.log("event", event.target);
-		console.log("event.target", event.target.clientHeight);
-		console.log("event.target.offsetLeft", event.target.offsetLeft);
-		console.log("screenX", event.screenX);
+	//console.log("event", event.target);
+	//console.log("event.target", event.target.clientHeight);
+	//console.log("event.target.offsetLeft", event.target.offsetLeft);
+	//console.log("screenX", event.screenX);
 		//clientX
 		//clientY
 		FSBL.Clients.LauncherClient.getMonitor(null, function(monitor){
@@ -43,7 +43,7 @@ export default class Chat extends React.Component {
 		});
 	}
 	render() {
-		console.log("rendero");
+	//console.log("rendero");
 		let tooltip = "Chat";
 		let buttonClass = "ff-chat" + (this.state.unread > 0 ? " badge" : "");
 		return (<FinsembleButton buttonType={["Toolbar"]} className={this.props.classes + " icon-only"} title={tooltip} onClick={this.toggleChat}>
