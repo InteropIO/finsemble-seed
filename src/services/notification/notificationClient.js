@@ -123,7 +123,7 @@ export function clearNotificationsHistory(cb) {
 // });
 
 // alternatively import the entire class of functions:
-// import * as serviceClient from '../../services/notification/notificationClient'
+// import * as serviceClient from '../../services/notification/notificationClient';
 // serviceClient.myFunction(function(err, response) {
 //     if (err) {
 //         Logger.error("Failed to call myFunction!", err);

@@ -224,6 +224,7 @@ function notificationService() {
 			LauncherClient.spawn("notification",
 				{
 					name: theNotification.id,
+					url: url,
 					monitor: 0, //TODO: just spawned on primary monitor, could be user preference controlled
 					right: 0,
 					bottom: 0,
