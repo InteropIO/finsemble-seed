@@ -1,7 +1,7 @@
+import * as notifier from '../../services/notification/notificationClient';
+
 FSBL.addEventListener('onReady', function () {
-	$('#notifyButton').click(
-		function (event) { 
-			spawnNotification("Test notification content - lets have more notifications", {componentType: "test-stack", params: {left: "center", top: "center"}} ); 
-		}
-	);
+	document.getElementById('notifyButton').addEventListener('click', function (event) { 
+		notifier.notify("Test-Notification", "ALWAYS", "TEST-1", "Test notification content - lets have more notifications", {});
+	}, false);
 });

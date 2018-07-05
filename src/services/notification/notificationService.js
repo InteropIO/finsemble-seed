@@ -88,7 +88,7 @@ function notificationService() {
 	 * (Pseudo) GUID generator for notification IDs
 	 * @private
 	 */
-	const guid = function() {
+	this.guid = function() {
 		function s4() {
 		  return Math.floor((1 + Math.random()) * 0x10000)
 			.toString(16)
@@ -119,19 +119,19 @@ function notificationService() {
 	 * 
 	 * 
 	 * @example
-	 *		UserNotification.alert("system", "ONCE-SINCE-STARTUP", "MANIFEST-Error", message);
-	 *		UserNotification.alert("dev", "ALWAYS", "Config-Error", message, { url: notificationURL, duration: 1000 * 5 });
-	 *		UserNotification.alert("dev", "MAX-COUNT", "Transport-Failure", message, { url: notificationURL, maxCount: 2 });
-	 *		UserNotification.alert("dev", "ALWAYS", "myComponent-Alert", message, { action: { type: "spawn", "myComponent", { left: "center", top: "center", addToWorkspace: true, data: {} } } });
+	 *		UserNotification.notify("system", "ONCE-SINCE-STARTUP", "MANIFEST-Error", message);
+	 *		UserNotification.notify("dev", "ALWAYS", "Config-Error", message, { url: notificationURL, duration: 1000 * 5 });
+	 *		UserNotification.notify("dev", "MAX-COUNT", "Transport-Failure", message, { url: notificationURL, maxCount: 2 });
+	 *		UserNotification.notify("dev", "ALWAYS", "myComponent-Alert", message, { action: { type: "spawn", "myComponent", { left: "center", top: "center", addToWorkspace: true, data: {} } } });
 	 */
-	this.alert = function (topic, frequency, identifier, message, params, cb) {
+	this.notify = function (topic, frequency, identifier, message, params, cb) {
 		const self = this;
 		// If the url for the template is passed in then don't bother fetching the config
 		if (params && params.url) {
-			this.alertInternal(topic, frequency, identifier, message, params, params.url, cb);
+			self.alertInternal(topic, frequency, identifier, message, params, params.url, cb);
 		} else {
 			// If no url, then we need to get the template from config
-			this.getDefaultTemplateURL(function (url) {
+			self.getDefaultTemplateURL(function (url) {
 				self.alertInternal(topic, frequency, identifier, message, params, url, cb);
 			});
 		}
@@ -146,7 +146,7 @@ function notificationService() {
 		const duration = params.duration || 1000 * 60 * 60 * 24;
 		//assign a unique id to each notification
 		const key = "alert." + identifier;
-		const guid = guid();
+		const guid = self.guid();
 		const id = `${key}.${guid}`;
 		
 		let alertUser = false;
@@ -190,7 +190,7 @@ function notificationService() {
 			//could still be displayed... if so dismiss it
 			for (let index = 0; index < notificationsDisplayed.length; index++) {
 				if (notificationsDisplayed[index].id === toDismiss.id) {
-					this.dismissNotification(toDismiss.id);
+					self.dismissNotification(toDismiss.id);
 					break;
 				}
 			}
@@ -218,7 +218,7 @@ function notificationService() {
 			if (len > maxNotificationsToShow) {
 				//TODO: for now this just dismisses the oldest notification, but might want to create a new status so that its redisplayed when others are dismissed...
 				let toDismiss = notificationsDisplayed[len-1];
-				this.dismissNotification(toDismiss.id);
+				self.dismissNotification(toDismiss.id);
 			}
 
 			//Display the new notification
@@ -235,7 +235,7 @@ function notificationService() {
 					data: {
 						id: id,
 						message: message,
-						action: action
+						action: params.action
 					}
 				}, function(err, response){
 					if (err) {
@@ -246,7 +246,7 @@ function notificationService() {
 			);
 
 			//setup a timer to auto-dismiss the notification
-			setTimeout(function( ) {this.dismissNotification(id); }, duration);
+			setTimeout(function( ) {self.dismissNotification(id); }, duration);
 
 		} else {
 			//just return the non-displayed notification
@@ -281,7 +281,7 @@ function notificationService() {
 			} //Anything other than a valid object, just dismiss it
 			
 			//dimiss the notification afterwards
-			dismissNotification(id, cb);
+			self.dismissNotification(id, cb);
 		} else {
 			let msg = `Notification id '${id} not found to performAction`;
 			Logger.warn(msg);
@@ -380,7 +380,7 @@ function notificationService() {
 	 */
 	this.dismissAllDisplayedNotifications = function(cb) {
 		for (let index = notificationsDisplayed.length; index > 0; index--) {
-			this.dismissNotification(notificationsDisplayed[index-1]);
+			self.dismissNotification(notificationsDisplayed[index-1]);
 		}
 		cb(null,{});
 	}
@@ -391,7 +391,7 @@ function notificationService() {
 	 * 
 	 */
 	this.clearNotificationsHistory = function(cb) {
-		dismissAllDisplayedNotifications(function() {
+		self.dismissAllDisplayedNotifications(function() {
 			notificationsHistory.length = 0;
 			idToNotification = {};
 			cb(null, {});
@@ -409,17 +409,17 @@ function notificationService() {
 			if (!error) {
 				Logger.log('notificationService Query: ' + JSON.stringify(queryMessage));
 
-				if (queryMessage.data.query === "alert") {
+				if (queryMessage.data.query === "notify") {
 					if (queryMessage.data.topic && queryMessage.data.frequency && queryMessage.data.identifier && queryMessage.data.message) {
-						this.alert(queryMessage.data.topic, queryMessage.data.frequency, queryMessage.data.identifier, queryMessage.data.message, queryMessage.data.params ? queryMessage.data.params : {}, queryMessage.sendQueryResponse);
+						self.notify(queryMessage.data.topic, queryMessage.data.frequency, queryMessage.data.identifier, queryMessage.data.message, queryMessage.data.params ? queryMessage.data.params : {}, queryMessage.sendQueryResponse);
 					} else {
-						let msg = "alert requested with insufficient data";
+						let msg = "notify requested with insufficient data";
 						Logger.error(msg, queryMessage);
 						queryMessage.sendQueryResponse(new Error(msg));
 					}
 				} else if (queryMessage.data.query === "dismissNotification") {
 					if (queryMessage.data.id){
-						this.dismissNotification(queryMessage.data.id,  queryMessage.sendQueryResponse);
+						self.dismissNotification(queryMessage.data.id,  queryMessage.sendQueryResponse);
 					} else {
 						let msg = "dismissNotification requested without an id";
 						Logger.error(msg, queryMessage);
@@ -427,7 +427,7 @@ function notificationService() {
 					}
 				} else if (queryMessage.data.query === "getNotification") {
 					if (queryMessage.data.id){
-						this.getNotification(queryMessage.data.id,  queryMessage.sendQueryResponse);
+						self.getNotification(queryMessage.data.id,  queryMessage.sendQueryResponse);
 					} else {
 						let msg = "getNotification requested without an id";
 						Logger.error(msg, queryMessage);
@@ -435,23 +435,23 @@ function notificationService() {
 					}
 				} else if (queryMessage.data.query === "performAction") {
 					if (queryMessage.data.id){
-						this.performAction(queryMessage.data.id,  queryMessage.data.params ? queryMessage.data.params : {}, queryMessage.sendQueryResponse);
+						self.performAction(queryMessage.data.id,  queryMessage.data.params ? queryMessage.data.params : {}, queryMessage.sendQueryResponse);
 					} else {
 						let msg = "performAction requested without an id";
 						Logger.error(msg, queryMessage);
 						queryMessage.sendQueryResponse(new Error(msg));
 					}
 				} else if (queryMessage.data.query === "getNotificationsHistory") {
-					this.getNotificationsHistory(queryMessage.sendQueryResponse);
+					self.getNotificationsHistory(queryMessage.sendQueryResponse);
 
 				}  else if (queryMessage.data.query === "getDisplayedNotifications") {
-					this.getDisplayedNotifications(queryMessage.sendQueryResponse);
+					self.getDisplayedNotifications(queryMessage.sendQueryResponse);
 
 				}  else if (queryMessage.data.query === "dismissAllDisplayedNotifications") {
-					this.dismissAllDisplayedNotifications(queryMessage.sendQueryResponse);
+					self.dismissAllDisplayedNotifications(queryMessage.sendQueryResponse);
 
 				}  else if (queryMessage.data.query === "clearNotificationsHistory") {
-					this.clearNotificationsHistory(queryMessage.sendQueryResponse);
+					self.clearNotificationsHistory(queryMessage.sendQueryResponse);
 
 				} else {
 					queryMessage.sendQueryResponse("Unknown query function: " + queryMessage, null);

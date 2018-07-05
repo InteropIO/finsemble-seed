@@ -1,10 +1,10 @@
-export function alert(topic, frequency, identifier, message, params, cb) {
-    FSBL.Clients.Logger.info("notificationClient: alert called");
-    FSBL.Clients.RouterClient.query("notification functions", { query: "alert", topic: topic, frequency: frequency, identifier: identifier, message: message, params: params}, function (err, response) {
+export function notify(topic, frequency, identifier, message, params, cb) {
+    FSBL.Clients.Logger.log("notificationClient: notify called");
+    FSBL.Clients.RouterClient.query("notification functions", { query: "notify", topic: topic, frequency: frequency, identifier: identifier, message: message, params: params}, function (err, response) {
         if (err) {
-            FSBL.Clients.Logger.error("Failed to alert", err);
+            FSBL.Clients.Logger.error("Failed to notify", err);
         } else {
-            FSBL.Clients.Logger.info("notificationClient: alert response: ", response);
+            FSBL.Clients.Logger.log("notificationClient: notify response: ", response);
         }
         if (cb){ 
             cb(err, response); 
@@ -13,12 +13,12 @@ export function alert(topic, frequency, identifier, message, params, cb) {
 }
 
 export function dismissNotification(id, cb) {
-    FSBL.Clients.Logger.info("notificationClient: dismissNotification called");
+    FSBL.Clients.Logger.log("notificationClient: dismissNotification called");
     FSBL.Clients.RouterClient.query("notification functions", { query: "dismissNotification", id: id}, function (err, response) {
         if (err) {
             FSBL.Clients.Logger.error("Failed to alert", err);
         } else {
-            FSBL.Clients.Logger.info("notificationClient: dismissNotification response: ", response);
+            FSBL.Clients.Logger.log("notificationClient: dismissNotification response: ", response);
         }
         if (cb){ 
             cb(err, response); 
@@ -27,12 +27,12 @@ export function dismissNotification(id, cb) {
 }
 
 export function getNotification(id, cb) {
-    FSBL.Clients.Logger.info("notificationClient: getNotification called");
+    FSBL.Clients.Logger.log("notificationClient: getNotification called");
     FSBL.Clients.RouterClient.query("notification functions", { query: "getNotification", id: id}, function (err, response) {
         if (err) {
             FSBL.Clients.Logger.error("Failed to getNotification", err);
         } else {
-            FSBL.Clients.Logger.info("notificationClient: getNotification response: ", response);
+            FSBL.Clients.Logger.log("notificationClient: getNotification response: ", response);
         }
         if (cb){ 
             cb(err, response); 
@@ -41,12 +41,12 @@ export function getNotification(id, cb) {
 }
 
 export function performAction(id, params, cb) {
-    FSBL.Clients.Logger.info("notificationClient: performAction called");
+    FSBL.Clients.Logger.log("notificationClient: performAction called");
     FSBL.Clients.RouterClient.query("notification functions", { query: "performAction", id: id, params: params}, function (err, response) {
         if (err) {
             FSBL.Clients.Logger.error("Failed to performAction", err);
         } else {
-            FSBL.Clients.Logger.info("notificationClient: performAction response: ", response);
+            FSBL.Clients.Logger.log("notificationClient: performAction response: ", response);
         }
         if (cb){ 
             cb(err, response); 
@@ -55,12 +55,12 @@ export function performAction(id, params, cb) {
 }
 
 export function getNotificationsHistory(cb) {
-    FSBL.Clients.Logger.info("notificationClient: getNotificationsHistory called");
+    FSBL.Clients.Logger.log("notificationClient: getNotificationsHistory called");
     FSBL.Clients.RouterClient.query("notification functions", { query: "getNotificationsHistory"}, function (err, response) {
         if (err) {
             FSBL.Clients.Logger.error("Failed to getNotificationsHistory", err);
         } else {
-            FSBL.Clients.Logger.info("notificationClient: getNotificationsHistory response: ", response);
+            FSBL.Clients.Logger.log("notificationClient: getNotificationsHistory response: ", response);
         } 
         if (cb){
             cb(err, response && response.data ? response.data : response); 
@@ -68,13 +68,13 @@ export function getNotificationsHistory(cb) {
     });
 }
 export function getDisplayedNotifications(cb) {
-    FSBL.Clients.Logger.info("notificationClient: getDisplayedNotifications called");
+    FSBL.Clients.Logger.log("notificationClient: getDisplayedNotifications called");
     FSBL.Clients.RouterClient.query("notification functions", { query: "getDisplayedNotifications"}, function (err, response) {
         FSBL.Clients.Logger.log("notificationClient: getDisplayedNotifications response: ", response);
         if (err) {
             FSBL.Clients.Logger.error("Failed to getDisplayedNotifications", err);
         } else {
-            FSBL.Clients.Logger.info("notificationClient: getDisplayedNotifications response: ", response);
+            FSBL.Clients.Logger.log("notificationClient: getDisplayedNotifications response: ", response);
         } 
         if (cb){
             cb(err, response && response.data ? response.data : response); 
@@ -83,7 +83,7 @@ export function getDisplayedNotifications(cb) {
 }
 
 export function dismissAllDisplayedNotifications(cb) {
-    FSBL.Clients.Logger.info("notificationClient: dismissAllDisplayedNotifications called");
+    FSBL.Clients.Logger.log("notificationClient: dismissAllDisplayedNotifications called");
     FSBL.Clients.RouterClient.query("notification functions", { query: "dismissAllDisplayedNotifications"}, function (err, response) {
         if (err) {
             FSBL.Clients.Logger.error("Failed to dismissAllDisplayedNotifications", err);
@@ -97,12 +97,12 @@ export function dismissAllDisplayedNotifications(cb) {
 }
 
 export function clearNotificationsHistory(cb) {
-    FSBL.Clients.Logger.info("notificationClient: clearNotificationsHistory called");
+    FSBL.Clients.Logger.log("notificationClient: clearNotificationsHistory called");
     FSBL.Clients.RouterClient.query("notification functions", { query: "clearNotificationsHistory"}, function (err, response) {
         if (err) {
             FSBL.Clients.Logger.error("Failed to clearNotificationsHistory", err);
         } else {
-            FSBL.Clients.Logger.info("notificationClient: clearNotificationsHistory response: ", response);
+            FSBL.Clients.Logger.log("notificationClient: clearNotificationsHistory response: ", response);
         } 
         if (cb){ 
             cb(null, response); 
