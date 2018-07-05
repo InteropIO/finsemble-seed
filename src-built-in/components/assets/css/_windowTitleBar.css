@@ -43,7 +43,6 @@ html.desktop-active .fsbl-header {
 
 .fsbl-header-title {
     height: 100%;
-    max-width: 75%; /* make sure there's always some space to grab and move the window */
     overflow: hidden;
     align-items: center;
     display:flex;
@@ -311,7 +310,7 @@ html.desktop-active .fsbl-linker[hover=true] {
 }
 
 .tab-region-wrapper {
-    /*width: 100%;*/
+    max-width: 75%; /* make sure there's always some space to grab and move the window */
 }
 /* When there are multiple tabs, no border for the last tab on the right side. */
 .fsbl-tabs-multiple .tab-region-wrapper > div:last-child {
@@ -406,7 +405,7 @@ html.desktop-active .fsbl-linker[hover=true] {
         padding-left: 70px; /* leave some space for a user to grab */
     }
     .fsbl-header-title {
-        max-width:50%;
+        /* max-width:50%; */
     }
 }
 
