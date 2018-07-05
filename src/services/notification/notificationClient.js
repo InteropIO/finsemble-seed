@@ -1,6 +1,6 @@
-export function alert(textContent, action, cb) {
+export function alert(topic, frequency, identifier, message, params, cb) {
     FSBL.Clients.Logger.info("notificationClient: alert called");
-    FSBL.Clients.RouterClient.query("notification functions", { query: "alert", textContent: textContent, action: action }, function (err, response) {
+    FSBL.Clients.RouterClient.query("notification functions", { query: "alert", topic: topic, frequency: frequency, identifier: identifier, message: message, params: params}, function (err, response) {
         if (err) {
             FSBL.Clients.Logger.error("Failed to alert", err);
         } else {

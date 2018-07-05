@@ -26,7 +26,7 @@ function notificationService() {
 	let historyIndex = 0;
 	let idToNotification = {};
 
-	//TODO: allow override of defaults via config/user preferences
+	//TODO: allow override of defaults via config/user preferences alongside default notification URL
 	let notificationHeight = DEFAULT_NOTIFICATION_HEIGHT;
 	let notificationGap = DEFAULT_NOTIFICATION_GAP;
 	let notificationWidth = DEFAULT_NOTIFICATION_WIDTH;
@@ -67,19 +67,6 @@ function notificationService() {
 	};	
 
 	/**
-	 * (Pseudo) GUID generator for notification IDs
-	 * @private
-	 */
-	const guid = function() {
-		function s4() {
-		  return Math.floor((1 + Math.random()) * 0x10000)
-			.toString(16)
-			.substring(1);
-		}
-		return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-	}
-
-	/**
 	 * Gets the default template URL from the manifest at finsemble->notificationURL. If that doesn't exist then it falls back to the system template location.
 	 * @private
 	 */
@@ -97,6 +84,20 @@ function notificationService() {
 		}	
 	};
 
+	/**
+	 * (Pseudo) GUID generator for notification IDs
+	 * @private
+	 */
+	const guid = function() {
+		function s4() {
+		  return Math.floor((1 + Math.random()) * 0x10000)
+			.toString(16)
+			.substring(1);
+		}
+		return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+	}
+
+	
 	//------------------------------------------------------
 
 
@@ -112,14 +113,17 @@ function notificationService() {
 	 * @param {number} params.duration time in milliseconds before auto-dismissing the notification (defaults to 24 hours)
 	 * @param {number} params.url url for notification HTML. If not provided then the system default will be used. This url should be coded as required for OpenFin notifications (see OpenFin Documentation). Defaults to Finsemble's built-in version at "/finsemble/components/system/notification/notification.html".
 	 * @param {object=} params.action specifies an action to perform when the notificaiton action button is clicked on. If not set then no action button should be shown.
-	 * 
+	 * @param {string} params.action.type The action type to perform, currently only supports the 'spawn' action.
+	 * @param {string} params.action.component Component type to spawn, if using the 'spawn' action.
+	 * @param {string} params.action.spawnParams Parameters to pass to `LauncherClient.spawn()`, if using the 'spawn' action.
 	 * 
 	 * 
 	 * @example
 	 *		UserNotification.alert("system", "ONCE-SINCE-STARTUP", "MANIFEST-Error", message);
-	*		UserNotification.alert("dev", "ALWAYS", "Config-Error", message, { url: notificationURL, duration: 1000 * 5 });
-	*		UserNotification.alert("dev", "MAX-COUNT", "Transport-Failure", message, { url: notificationURL, maxCount: 2 });
-	*/
+	 *		UserNotification.alert("dev", "ALWAYS", "Config-Error", message, { url: notificationURL, duration: 1000 * 5 });
+	 *		UserNotification.alert("dev", "MAX-COUNT", "Transport-Failure", message, { url: notificationURL, maxCount: 2 });
+	 *		UserNotification.alert("dev", "ALWAYS", "myComponent-Alert", message, { action: { type: "spawn", "myComponent", { left: "center", top: "center", addToWorkspace: true, data: {} } } });
+	 */
 	this.alert = function (topic, frequency, identifier, message, params, cb) {
 		const self = this;
 		// If the url for the template is passed in then don't bother fetching the config
@@ -140,7 +144,6 @@ function notificationService() {
 		params = params || {};
 		const timestamp = new Date();
 		const key = "alert." + identifier;
-		const action = params.action? params.action : "dismiss";
 		const guid = guid();
 		const duration = params.duration || 1000 * 60 * 60 * 24;
 		const id = `${key}.${guid}`;
@@ -212,7 +215,7 @@ function notificationService() {
 
 			//if too many notificatitons displayed, close the oldest
 			if (len > maxNotificationsToShow) {
-				//TODO: for now this just dismisses the oldest notification, but might want to create a new status so that its redisplayed when others are dismissed..
+				//TODO: for now this just dismisses the oldest notification, but might want to create a new status so that its redisplayed when others are dismissed...
 				let toDismiss = notificationsDisplayed[len-1];
 				this.dismissNotification(toDismiss.id);
 			}
@@ -221,7 +224,7 @@ function notificationService() {
 			LauncherClient.spawn("notification",
 				{
 					name: theNotification.id,
-					monitor: 0,
+					monitor: 0, //TODO: just spawned on primary monitor, could be user preference controlled
 					right: 0,
 					bottom: 0,
 					height: notificationHeight,
@@ -240,8 +243,8 @@ function notificationService() {
 				}
 			);
 
-			//setup a timer  to auto-dismiss the notification
-			setTimeout(function(){this.dismissNotification(id);}, duration);
+			//setup a timer to auto-dismiss the notification
+			setTimeout(function( ) {this.dismissNotification(id); }, duration);
 
 		} else {
 			//just return the non-displayed notification
@@ -252,26 +255,35 @@ function notificationService() {
 	/**
 	 * Perform the action and dismiss the notification if displayed.
 	 * @param {number} id The id of the notifictiton whose aciton should be performed
-	 * @param {object} params Not currently used but will eventually allow for notificaitons with user input values to be passed to the action
+	 * @param {object=} params Not currently used but will eventually allow for notifications with user input values to be passed to the action
+	 * 
 	 * @param {number} cb callback
 	 */
 	this.performAction = function(id, params, cb) {
 		let notification = idToNotification[id];
 		if (notification) {
+			if (notification.params && notification.params.action){
+				//TODO: merge parameter passed with the notifcation's action paramaters
 
-			//TODO: perform the action, with params if passed
+				if (typeof notification.params.action === 'object' && notification.params.action.type.toLowerCase() === 'spawn' && notification.params.action.component && notification.params.action.spawnParams) {
+					LauncherClient.spawn(notification.params.action.component, notification.params.action.spawnParams);
 
+					//TODO: add support for more action types to perform
+				} else {
+					let msg = `Notification id '${id} action not supported or  insufficient arguments`;
+					Logger.warn(msg, notification.params.actio);
+					console.warn(msg, notification.params.action);
+					cb(new Error(msg));
+				}
 
-
-
-
-
+			} //Anything other than a valid object, just dismiss it
+			
 			//dimiss the notification afterwards
 			dismissNotification(id, cb);
 		} else {
 			let msg = `Notification id '${id} not found to performAction`;
 			Logger.warn(msg);
-			console.log(msg);
+			console.warn(msg);
 			cb(new Error(msg));
 		}
 	};
@@ -396,11 +408,8 @@ function notificationService() {
 				Logger.log('notificationService Query: ' + JSON.stringify(queryMessage));
 
 				if (queryMessage.data.query === "alert") {
-					if (queryMessage.data.textContent && queryMessage.data.action){
-						
-
-						//TODO: update me
-						this.alert(queryMessage.data.textContent, queryMessage.data.action, queryMessage.sendQueryResponse);
+					if (queryMessage.data.topic && queryMessage.data.frequency && queryMessage.data.identifier && queryMessage.data.message) {
+						this.alert(queryMessage.data.topic, queryMessage.data.frequency, queryMessage.data.identifier, queryMessage.data.message, queryMessage.data.params ? queryMessage.data.params : {}, queryMessage.sendQueryResponse);
 					} else {
 						let msg = "alert requested with insufficient data";
 						Logger.error(msg, queryMessage);
@@ -457,9 +466,9 @@ function notificationService() {
 
 notificationService.prototype = new Finsemble.baseService({
 	startupDependencies: {
-		// add any services or clients that should be started before your service
+		// TODO: architectural review, are the notifications needed to highlight failures of any of these services and clients?
 		services: ["dockingService", "authenticationService", "routerService"],
-		clients: ["launcherClient", "configClient"]
+		clients: ["launcherClient", "configClient"] 
 	}
 });
 const serviceInstance = new notificationService('notificationService');
