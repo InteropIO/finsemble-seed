@@ -16,7 +16,7 @@
 				"title": "App Catalog",
 				"component": "App Catalog"
 			},
-			"staggerPixels": 100
+			"staggerPixels": 40
 		}
 	},
 	"systemTrayIcon": "$applicationRoot/components/assets/img/Finsemble_Taskbar_Icon.png",
