@@ -143,9 +143,10 @@ function notificationService() {
 	this.alertInternal = function (topic, frequency, identifier, message, params, url, cb) {
 		params = params || {};
 		const timestamp = new Date();
+		const duration = params.duration || 1000 * 60 * 60 * 24;
+		//assign a unique id to each notification
 		const key = "alert." + identifier;
 		const guid = guid();
-		const duration = params.duration || 1000 * 60 * 60 * 24;
 		const id = `${key}.${guid}`;
 		
 		let alertUser = false;
@@ -187,12 +188,12 @@ function notificationService() {
 			delete	idToNotification[toDismiss.id];
 
 			//could still be displayed... if so dismiss it
-			notificationsDisplayed.forEach(element => {
-				if (element.id === toDismiss.id) {
+			for (let index = 0; index < notificationsDisplayed.length; index++) {
+				if (notificationsDisplayed[index].id === toDismiss.id) {
 					this.dismissNotification(toDismiss.id);
 					break;
 				}
-			});
+			}
 		}
 
 		Logger.log("UserNotification.alert", id, topic, alertUser, frequency, identifier, message, params);
