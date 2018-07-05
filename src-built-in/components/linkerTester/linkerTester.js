@@ -45,16 +45,12 @@
 						return;
 					}
 
-					// If state exists, read it out.
-					if (state && state != null) {
-						if (state.dataType !== "undefined") {
-							dataType.value = state.dataType;
-						}
-
-						if (state.data !== "undefined") {
-							data.value = state.data;
-						}
+					if (!state || state === null) {
+						return;
 					}
+
+					dataType.value = state.dataType ? state.dataType : "symbol";
+					data.value = state.data ? state.data : "AAPL";
 				});
 
 			// Subscribe to default topic.
