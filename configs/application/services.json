@@ -1,4 +1,13 @@
 {
     "comment": "Houses config for any custom services that you'd like to import into Finsemble.",
-    "services": {}
+    "services": {
+        "notificationService": {
+            "useWindow": true,
+            "active": true,
+            "name": "notificationService",
+            "file": "notification/notificationService.js",
+            "visible": false,
+            "html": "/services/notification/notification.html"
+        }
+    }
 }

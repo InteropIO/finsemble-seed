@@ -1,1 +1,10 @@
-{}
+{
+    "notification": {
+        "output": "components/notification/notification",
+        "entry": "./src\\components\\notification\\notification.js"
+    },
+    "testNotifications": {
+        "output": "components/testNotifications/testNotifications",
+        "entry": "./src\\components\\testNotifications\\testNotifications.js"
+    }
+}
