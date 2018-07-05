@@ -23,7 +23,7 @@
 			titleDiv.appendChild(document.createTextNode(title));
 
 			const dataBody = document.createElement("pre");
-			dataBody.innerText = JSON.stringify(data, null, "&#9;").replace("\n", "<br/>");
+			dataBody.innerHTML = data;
 
 			received.appendChild(titleDiv);
 			received.appendChild(dataBody);
