@@ -167,7 +167,7 @@
                 }
             }
         },
-        "linkerTester": {
+        "Linker Tester": {
             "window": {
                 "url": "$applicationRoot/components//linkerTester/linkerTester.html",
                 "frame": false,
@@ -175,8 +175,8 @@
                 "autoShow": true,
                 "top": "center",
                 "left": "center",
-                "width": 800,
-                "height": 600
+                "width": 330,
+                "height": 520
             },
             "component": {
                 "inject": false
@@ -193,6 +193,8 @@
                         "launchableByUser": true
                     },
                     "Window Manager": {
+                        "title": "Linker Tester",
+                        "showLinker": true,
                         "FSBLHeader": true,
                         "persistWindowState": true
                     },
