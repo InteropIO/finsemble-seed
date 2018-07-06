@@ -1,94 +1,150 @@
 (() => {
 	"use strict";
 
-	document.addEventListener("DOMContentLoaded", () => {
-		// #region Elements
-		const dataType = document.getElementById("dataType");
-		const data = document.getElementById("data");
-		const sendButton = document.getElementById("send");
-		const received = document.getElementById("received");
-		// #endregion
+	/**
+	 * Used to keep track of the data type to determine whether a change needs to be published.
+	 */
+	let currentDataType;
 
-		let currentDataType = dataType.value;
+	/**
+	 * The dataType element
+	 */
+	let dataType;
 
-		/**
-		 * Function to handle data received over the linker.
-		 * 
-		 * @param {any} data 
-		 */
-		const printOutput = (title, data) => {
-			// Add received data to text field.
-			const titleDiv = document.createElement("div");
-			titleDiv.className = "title";
-			titleDiv.appendChild(document.createTextNode(title));
+	/**
+	 * The data element
+	 */
+	let data;
 
-			const dataBody = document.createElement("pre");
-			dataBody.innerHTML = data;
+	/**
+	 * The send button
+	 */
+	let sendButton;
 
-			received.appendChild(titleDiv);
-			received.appendChild(dataBody);
-		};
+	/**
+	 * The received element
+	 */
+	let received;
 
-		FSBL.addEventListener("onReady", () => {
-			// Read component state
-			FSBL.Clients.WindowClient.getComponentState(
-				{
-					fields: [
-						"dataType",
-						"data"
-					],
-				},
-				(err, state) => {
-					console.log(state);
-					if (err) {
-						FSBL.Clients.Logger.error(err);
-						return;
-					}
+	/**
+	 * Function to handle data received over the linker.
+	 * 
+	 * @param {any} data 
+	 */
+	const printOutput = (title, data) => {
+		// Add received data to text field.
+		const titleDiv = document.createElement("div");
+		titleDiv.className = "title";
+		titleDiv.appendChild(document.createTextNode(title));
 
-					if (!state || state === null) {
-						return;
-					}
+		const dataBody = document.createElement("pre");
+		dataBody.innerHTML = data;
 
-					dataType.value = state.dataType ? state.dataType : "symbol";
-					data.value = state.data ? state.data : "AAPL";
-				});
+		received.appendChild(titleDiv);
+		received.appendChild(dataBody);
+	};
 
-			// Subscribe to default topic.
-			FSBL.Clients.LinkerClient.subscribe(currentDataType, (data) => printOutput("Data received:", data));
+	/**
+	 * Initializes element variables when content is loaded.
+	 */
+	const contentLoadedHandler = () => {
+		dataType = document.getElementById("dataType");
+		data = document.getElementById("data");
+		sendButton = document.getElementById("send");
+		received = document.getElementById("received");
 
-			// Listen for data type changes
-			dataType.onblur = () => {
-				// Did dataType change?
-				if (currentDataType != dataType.value) {
-					// Unsubscribe from old dataType
-					FSBL.Clients.LinkerClient.unsubscribe(currentDataType);
+		// Set initial value from what is in the form
+		currentDataType = dataType.value;
+	};
 
-					// Update current data type and subscribe to it.
-					currentDataType = dataType.value;
-					FSBL.Clients.LinkerClient.subscribe(currentDataType, (data) => printOutput("Data received:", data));
+	/**
+	 * Handles the callback for getComponentState
+	 * @param {*} err 
+	 * @param {*} state 
+	 */
+	const componentStateHandler = (err, state) => {
+		return;
+		if (err) {
+			FSBL.Clients.Logger.error(err);
+			return;
+		}
 
-					FSBL.Clients.WindowClient.setComponentState({ field: "dataType", value: currentDataType });
-				}
-			};
+		if (!state || state === null) {
+			// State not defined, return.
+			return;
+		}
 
-			data.onblur = () => {
-				FSBL.Clients.WindowClient.setComponentState({ field: "data", value: data.value });
-			};
+		dataType.value = state.dataType ? state.dataType : "symbol";
+		data.value = state.data ? state.data : "AAPL";
+	};
 
-			// Listen for click event to end data
-			sendButton.onclick = () => {
-				// Build object to publish
-				const obj = {
-					dataType: dataType.value,
-					data: data.value
-				}
+	/**
+	 * Handles when data is received from the linker.
+	 * @param {*} data 
+	 */
+	const dataTypeReceivedHandler = (data) => {
+		printOutput("Data received:", data);
+	}
 
-				// Print it to the output
-				printOutput("Publishing", JSON.stringify(obj, null, "\t"));
+	/**
+	 * Handles when the data type changes.
+	 */
+	const dataTypeChangedHandler = () => {
+		// Did dataType change?
+		if (currentDataType != dataType.value) {
+			// Unsubscribe from old dataType
+			FSBL.Clients.LinkerClient.unsubscribe(currentDataType);
 
-				// Publish data to linker channel
-				FSBL.Clients.LinkerClient.publish(obj);
-			};
-		});
-	});
+			// Update current data type and subscribe to it.
+			currentDataType = dataType.value;
+			FSBL.Clients.LinkerClient.subscribe(currentDataType, dataTypeReceivedHandler);
+
+			// Update component state
+			FSBL.Clients.WindowClient.setComponentState({ field: "dataType", value: currentDataType });
+		}
+	};
+
+	/**
+	 * Handles when the data changes.
+	 */
+	const dataChangedHandler = () => {
+		FSBL.Clients.WindowClient.setComponentState({ field: "data", value: data.value });
+	};
+
+	const sendClickHandler = () => {
+		// Build object to publish
+		const obj = {
+			dataType: dataType.value,
+			data: data.value
+		}
+
+		// Print it to the output
+		printOutput("Publishing", JSON.stringify(obj, null, "\t"));
+
+		// Publish data to linker channel
+		FSBL.Clients.LinkerClient.publish(obj);
+	}
+
+	/**
+	 * Handles the Finsemble onReady event.
+	 */
+	const onReadyHandler = () => {
+		// Read component state
+		FSBL.Clients.WindowClient.getComponentState({ fields: ["dataType", "data"], }, componentStateHandler);
+
+		// Subscribe to default topic.
+		FSBL.Clients.LinkerClient.subscribe(currentDataType, dataTypeReceivedHandler);
+
+		// Listen for data type changes
+		dataType.onblur = dataTypeChangedHandler;
+
+		data.onblur = dataChangedHandler;
+
+		// Listen for click event to end data
+		sendButton.onclick = sendClickHandler;
+	};
+
+	document.addEventListener("DOMContentLoaded", contentLoadedHandler);
+
+	FSBL.addEventListener("onReady", onReadyHandler);
 })()
