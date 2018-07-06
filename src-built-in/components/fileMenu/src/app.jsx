@@ -12,7 +12,7 @@ import "../../assets/css/finsemble.css";
 class FileMenu extends React.Component {
 	render() {
 		let padding = {
-			height: 10,
+			height: 0,
 			width: 40
 		};
 		return (<FinsembleMenu padding={padding}>

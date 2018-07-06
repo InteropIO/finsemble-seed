@@ -12,10 +12,6 @@
 	},
 	"servicesConfig": {
 		"launcher": {
-			"searchProviderAction": {
-				"title": "App Catalog",
-				"component": "App Catalog"
-			},
 			"staggerPixels": 40
 		}
 	},

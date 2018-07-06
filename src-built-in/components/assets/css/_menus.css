@@ -36,8 +36,6 @@ body.menu {
 
 .menu-secondary {
     background: var(--menu-actions-background-color);
-    padding-bottom: 10px;
-    padding-top: 10px;
 }
 
 .menu-primary .menu-item:hover {
