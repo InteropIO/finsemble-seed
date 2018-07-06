@@ -184,20 +184,20 @@
                 "options": {
                     "alwaysOnTop": true,
                     "cornerRounding": {
-                        "height": 20,
-                        "width": 20
+                        "height": 10,
+                        "width": 10
                     },
-                    "opacity": 0.9,
+                    "opacity": 0.85,
                     "showTaskbarIcon": false
                 }
             },
             "component": {
-                "inject": false
+                "inject": false,
+                "category": "system"
             },
             "foreign": {
                 "services": {
                     "dockingService": {
-                        "canGroup": false,
                         "isArrangable": false
                     }
                 },

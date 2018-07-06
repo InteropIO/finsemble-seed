@@ -147,7 +147,7 @@ function notificationService() {
 		//assign a unique id to each notification
 		const key = "alert." + identifier;
 		const guid = self.guid();
-		const id = `${key}.${guid}`;
+		const id = `notification.${guid}`;
 		
 		let alertUser = false;
 		
@@ -223,6 +223,7 @@ function notificationService() {
 
 			//Display the new notification
 			LauncherClient.spawn("notification",
+				
 				{
 					name: theNotification.id,
 					url: url,
