@@ -63,7 +63,6 @@
 	 * @param {*} state 
 	 */
 	const componentStateHandler = (err, state) => {
-		return;
 		if (err) {
 			FSBL.Clients.Logger.error(err);
 			return;
