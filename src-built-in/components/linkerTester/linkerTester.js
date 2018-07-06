@@ -134,9 +134,8 @@
 		// Subscribe to default topic.
 		FSBL.Clients.LinkerClient.subscribe(currentDataType, dataTypeReceivedHandler);
 
-		// Listen for data type changes
+		// Listen for changes
 		dataType.onblur = dataTypeChangedHandler;
-
 		data.onblur = dataChangedHandler;
 
 		// Listen for click event to end data
