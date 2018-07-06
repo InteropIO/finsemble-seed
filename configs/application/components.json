@@ -169,7 +169,7 @@
         },
         "Linker Tester": {
             "window": {
-                "url": "$applicationRoot/components//linkerTester/linkerTester.html",
+                "url": "$applicationRoot/components/linkerTester/linkerTester.html",
                 "frame": false,
                 "resizable": true,
                 "autoShow": true,
