@@ -31,7 +31,13 @@
 		"enabled": true,
 		"groupTileBuffer": 30,
 		"headerHeight": 32,
-		"MINIMUM_WIDTH": 175
+		"MINIMUM_WIDTH": 175,
+		"tabbing": {
+			"enabled": true
+		},
+		"tiling": {
+			"enabled": false
+		}
 	},
 	"betaFeatures": {
 		"assimilation": {
