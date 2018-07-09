@@ -23,6 +23,7 @@
 		form.addEventListener("reset", initialize);
 
 		document.getElementById("import").onclick = importConfig;
+    document.getElementById("browse").addEventListener("change", browseFiles)
 		document.getElementById("export").onclick = exportConfig;
 		document.getElementById("componentsBtn").onclick = tabHandler;
 		document.getElementById("menusBtn").onclick = tabHandler;
@@ -157,10 +158,26 @@
 			});
 	}
 
+  const browseFiles = (event) => {
+    console.log('Importing file')
+    const element = event.srcElement
+    if (!element.files || !element.files.length) {
+      return
+    }
+    const reader = new FileReader()
+    reader.onload = function (event) {
+      const formData = new FormData(form)
+      const output = event.target.result
+      formData.set("components", output)
+      console.log(formData.get("components"))
+    }
+    reader.readAsText(element.files[0])
+  }
+
 	const importConfig = () => {
 		const formData = new FormData(form);
 		const importURL = formData.get("importConfig");
-		
+
 		if (!importURL || (importURL.length === 0)) {
 			// No URL, return
 			return;
@@ -218,4 +235,5 @@
 		// Start file download.
 		download("userConfig.json", configStr);
 	}
+
 })();
