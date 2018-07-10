@@ -10,7 +10,10 @@
 				"top": "center",
 				"left": "center",
 				"width": 400,
-				"height": 432
+				"height": 432,
+				"accelerator": {
+					"zoom": true
+				}
 			},
 			"component": {
 				"inject": false,
@@ -55,7 +58,11 @@
 				"addToWorkspace": true
 			},
 			"component": {
-				"spawnOnHotkey": ["ctrl", "alt", "n"]
+				"spawnOnHotkey": [
+					"ctrl",
+					"alt",
+					"n"
+				]
 			},
 			"foreign": {
 				"services": {
