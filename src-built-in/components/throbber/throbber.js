@@ -1,5 +1,8 @@
-document.addEventListener('DOMContentLoaded', function () {
-	console.log('adding scrim');
+console.log("PRELOAD: throbber.js");
+
+document.addEventListener('DOMContentLoaded', showThrobber);	
+
+function showThrobber() {
 	document.body.innerHTML += `<style>
 /* loading icons */
 svg {
@@ -507,8 +510,8 @@ svg {
   }
 
 </style>
-<div id="finsemble-throbber" class="fin-dots" style="background: black; position: fixed; top:-32px; left:0; height:calc(100vh + 32px); width:100vw; z-index: 2147483647; display: flex; align-items: center; justify-content: center;">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 101.1 19.19" style="height: 100px; margin -32px;">
+<div id="finsemble-throbber" class="fin-dots" style="background: black; position: fixed; top: 0px; left:0; height:calc(100vh); width:100vw; z-index: 2147483647; display: flex; align-items: center; justify-content: center;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 101.1 19.19" style="height: 100px; margin: 0px;">
   <g id="Layer_2" data-name="Layer 2">
 	<g id="Layer_1-2" data-name="Layer 1">
 	  <circle class="cls-2 circle1" cx="3.6" cy="9.59" r="3.6"/>
@@ -532,7 +535,9 @@ svg {
 `;
 
 
-	window.removeFinsembleThrobber = function () {
-		document.getElementById("finsemble-throbber").style.display = "none"
-	}
-})
+};
+
+window.removeFinsembleThrobber = function () {
+	var throbber = document.getElementById("finsemble-throbber");
+	if(throbber) throbber.style.display = "none"
+}
