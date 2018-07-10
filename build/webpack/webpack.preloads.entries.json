@@ -2,5 +2,9 @@
 	"preload": {
 		"output": "preloads/nativeOverrides",
 		"entry": "./src-built-in/preloads/nativeOverrides.js"
+	},
+	"zoom": {
+		"output": "preloads/zoom",
+		"entry": "./src-built-in/preloads/zoom.js"
 	}
 }
