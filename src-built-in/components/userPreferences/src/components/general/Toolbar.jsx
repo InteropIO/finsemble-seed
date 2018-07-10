@@ -11,7 +11,7 @@ export default class Toolbar extends React.Component {
 	}
 
     /**
-     * Sets the meridiem for the time (AM or PM). Afterwards, this calls setHour to handle any necessary conversions to military time.
+     * Sets the monitor by calling the setPreferences API. This will override the config for the component.
      * @param {event} e
      */
 	setMonitor(e) {
