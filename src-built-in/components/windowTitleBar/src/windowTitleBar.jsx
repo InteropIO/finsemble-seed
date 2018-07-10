@@ -60,11 +60,11 @@ class WindowTitleBar extends React.Component {
 			alwaysOnTopButton: windowTitleBarStore.getValue({ field: "AlwaysOnTop.show" }),
 			tabs: [activeIdentifier], //array of tabs for this window
 			showTabs: windowTitleBarStore.getValue({ field: "showTabs" }),
+			hackScrollbar: windowTitleBarStore.getValue({ field: "hackScrollbar" }),
 			allowDragOnCenterRegion: true,
 			activeTab: FSBL.Clients.WindowClient.getWindowIdentifier(),
 			tabBarBoundingBox: {}
 		};
-
 	}
 	/**
      * This is necessary to make sure that the `this` inside of the callback is correct.
@@ -85,6 +85,7 @@ class WindowTitleBar extends React.Component {
 		this.onShareEmitterChanged = this.onShareEmitterChanged.bind(this);
 		this.onTabsChanged = this.onTabsChanged.bind(this);
 		this.onShowTabsChanged = this.onShowTabsChanged.bind(this);
+		this.onHackScrollbarChanged = this.onHackScrollbarChanged.bind(this);
 		this.onTilingStop = this.onTilingStop.bind(this);
 		this.onTilingStart = this.onTilingStart.bind(this);
 
@@ -101,6 +102,7 @@ class WindowTitleBar extends React.Component {
 			{ field: "isTopRight", listener: this.isTopRight },
 			{ field: "tabs", listener: this.onTabsChanged },
 			{ field: "showTabs", listener: this.onShowTabsChanged },
+			{ field: "hackScrollbar", listener: this.onShowTabsChanged },
 		]);
 
 		FSBL.Clients.RouterClient.addListener("DockingService.startTilingOrTabbing", this.disallowDragOnCenterRegion);
@@ -115,6 +117,7 @@ class WindowTitleBar extends React.Component {
 		let headerHeight = window.getComputedStyle(header, null).getPropertyValue("height");
 		document.body.style.marginTop = headerHeight;
 		this.resizeDragHandle();
+		this.hackScrollbar();
 	}
 
 	componentDidUpdate() {
@@ -133,6 +136,7 @@ class WindowTitleBar extends React.Component {
 			{ field: "isTopRight", listener: this.isTopRight },
 			{ field: "tabs", listener: this.onTabsChanged },
 			{ field: "showTabs", listener: this.onShowTabsChanged },
+			{ field: "hackScrollbar", listener: this.onHackScrollbarChanged },
 		]);
 		//console.log("Removing listener from the router.");
 		FSBL.Clients.RouterClient.removeListener("DockingService.startTilingOrTabbing", this.disallowDragOnCenterRegion);
@@ -328,6 +332,22 @@ class WindowTitleBar extends React.Component {
 		this.setState({
 			showTabs: response.value
 		})
+	}
+
+	onHackScrollbarChanged(err, response) {
+		this.setState({
+			hackScrollbar: response.value
+		});
+		hackScrollbar();
+	}
+
+	// Hack the window's scrollbar so that it displays underneath the header. html.overflow: hidden body.overflow:auto
+	// This is turned on by default. Set "Window Manager.hackScrollbar: false" to turn it off
+	hackScrollbar() {
+		if (this.state.hackScrollbar) {
+			document.querySelector("html").style.overflowY = "hidden";
+			document.querySelector("body").style.overflowY = "auto";
+		}		
 	}
 
 	render() {
