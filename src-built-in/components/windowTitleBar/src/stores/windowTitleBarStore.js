@@ -44,6 +44,9 @@ var Actions = {
 				windowTitleBarStore.setValue({ field: "showTabs", value: windowTitleBarConfig.showTabs });
 			}
 
+			// By default, we hack the window's scrollbar so that it displays underneath the header. html.overflow: hidden body.overflow:auto
+			windowTitleBarStore.setValue({ field: "hackScrollbar", value: (windowTitleBarConfig.hackScrollbar !== false) });
+
 			// Set by calling WindowClient.setTitle() || from config "foreign.components.Window Manager.title"
 			var title = FSBL.Clients.WindowClient.title || windowTitleBarConfig.title;
 
