@@ -28,8 +28,8 @@ function zoomOut() {
 // Startup, attaches ctrl+ and ctrl- as hot keys
 // Checks for an existing zoom state and initializes the screen to that zoom level if set
 function runZoomHandler(){
-	FSBL.Clients.HotkeyClient.addLocalHotkey(["ctrl", "="], zoomIn);
-	FSBL.Clients.HotkeyClient.addLocalHotkey(["ctrl", "-"], zoomOut);
+	FSBL.Clients.HotkeyClient.addBrowserHotkey(["ctrl", "="], zoomIn);
+	FSBL.Clients.HotkeyClient.addBrowserHotkey(["ctrl", "-"], zoomOut);
 	FSBL.Clients.WindowClient.getComponentState({ field: "fsbl-zoom" }, function (err, state) {
 		if (state != null) {
 			window.fsblZoomLevel = state;
