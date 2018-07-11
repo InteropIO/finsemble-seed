@@ -5,11 +5,15 @@ window.fsblZoomLevel = 1;
 // Sets the zoom by setting the CSS "zoom" value on the body
 // It sets an opposing zoom on the Finsemble header in order that it maintains its size
 function setZoom(pct) {
-	document.body.style.zoom = pct;
+	document.querySelectorAll("body > *").forEach(function (el) {
+		el.style.zoom = pct;
+	});
+	//document.body.style.zoom = pct;
 	let FSBLHeader = document.querySelector("#FSBLHeader");
 	if (FSBLHeader) {
-		FSBLHeader.style.zoom = 1 / pct;
-	}
+		FSBLHeader.style.zoom = 1;
+	//document.body.style.zoom = 1/pct;
+}
 }
 
 // Zoom in. Zoom levels are saved as component state "fsbl-zoom"
