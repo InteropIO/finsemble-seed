@@ -16,12 +16,6 @@
 				"title": "App Catalog",
 				"component": "App Catalog"
 			}
-		},
-		"docking": {
-			"enabled": true,
-			"groupTileBuffer": 30,
-			"headerHeight": 32,
-			"MINIMUM_WIDTH": 175
 		}
 	},
 	"systemTrayIcon": "$applicationRoot/components/assets/img/Finsemble_Taskbar_Icon.png",
