@@ -246,9 +246,9 @@ html.desktop-active .fsbl-icon-highlighted {
 }
 
 .linker-group {
-    width: 7px;
-    height: 18px;
-    margin-left: 4px;
+    width: 5px;
+    height: 15px;
+    margin-left: 3px;
     border-radius: 4px;
     border: 1px solid var(--titleBar-background-inactive-color);
 }
