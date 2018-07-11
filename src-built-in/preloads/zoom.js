@@ -13,7 +13,7 @@ function setZoom(pct) {
 	if (FSBLHeader) {
 		FSBLHeader.style.zoom = 1;
 	//document.body.style.zoom = 1/pct;
-}
+	}
 }
 
 // Zoom in. Zoom levels are saved as component state "fsbl-zoom"
