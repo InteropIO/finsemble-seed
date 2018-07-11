@@ -385,7 +385,7 @@ html.desktop-active .fsbl-linker[hover=true] {
 
 .fsbl-tab-logo {
     margin: 0 7px;
-    padding-top: 3px;
+    padding-top: 1px;
     width: auto;
     height: auto;
     color: var(--titlebar-tab-icon-font-color);
