@@ -16,6 +16,9 @@
 				"title": "App Catalog",
 				"component": "App Catalog"
 			}
+		},
+		"logger": {
+			"showWarningForLogStates": ["Info", "Debug", "Verbose"]
 		}
 	},
 	"systemTrayIcon": "$applicationRoot/components/assets/img/Finsemble_Taskbar_Icon.png",
