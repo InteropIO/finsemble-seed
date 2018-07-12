@@ -161,7 +161,6 @@ var Actions = {
 			if (choice === 'cancel') {
 				return;
 			}
-			FSBL.Clients.RouterClient.transmit("Assimilation.closeOpenFinWindows");
 			FSBL.shutdownApplication();
 		});
 
