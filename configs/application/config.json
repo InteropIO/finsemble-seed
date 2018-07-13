@@ -16,6 +16,18 @@
 				"title": "App Catalog",
 				"component": "App Catalog"
 			}
+		},
+		"docking": {
+			"enabled": true,
+			"groupTileBuffer": 30,
+			"headerHeight": 32,
+			"MINIMUM_WIDTH": 175,
+			"tabbing": {
+				"enabled": false
+			},
+			"tiling": {
+				"enabled": false
+			}
 		}
 	},
 	"systemTrayIcon": "$applicationRoot/components/assets/img/Finsemble_Taskbar_Icon.png",
@@ -26,18 +38,6 @@
 		"showTabs": true,
 		"showNativeTabs": true,
 		"floatingTitlebarComponent": "Floating Titlebar"
-	},
-	"docking": {
-		"enabled": true,
-		"groupTileBuffer": 30,
-		"headerHeight": 32,
-		"MINIMUM_WIDTH": 175,
-		"tabbing": {
-			"enabled": true
-		},
-		"tiling": {
-			"enabled": true
-		}
 	},
 	"betaFeatures": {
 		"assimilation": {
