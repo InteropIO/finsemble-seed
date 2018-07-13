@@ -48,7 +48,7 @@
 			"enabled": true
 		},
 		"tiling": {
-			"enabled": false
+			"enabled": true
 		}
 	},
 	"betaFeatures": {
