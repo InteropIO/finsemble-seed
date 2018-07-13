@@ -23,10 +23,10 @@
 			"headerHeight": 32,
 			"MINIMUM_WIDTH": 175,
 			"tabbing": {
-				"enabled": false
+				"enabled": true
 			},
 			"tiling": {
-				"enabled": false
+				"enabled": true
 			}
 		}
 	},
