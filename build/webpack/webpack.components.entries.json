@@ -2,9 +2,5 @@
   "authentication": {
     "output": "components/authentication/authentication",
     "entry": "./src/components/authentication/authentication.js"
-  },
-  "dynamic-config": {
-    "output": "components/dynamic-config/index",
-    "entry": "./src/components/dynamic-config/index.js"
   }
 }

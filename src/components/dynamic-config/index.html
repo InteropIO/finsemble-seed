@@ -1,58 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 
-<head>
-  <meta charset="utf-8">
-  <title>Configure</title>
-  <link rel="stylesheet" type="text/css" href="dynamic-config.css" media="screen" />
-</head>
+  <head>
+    <meta charset="utf-8">
+    <title>Configure</title>
+    <link rel="stylesheet" type="text/css" href="dynamic-config.css" media="screen" />
+    <script src="vue.js"></script>
+    <script src="index.js"></script>
+  </head>
 
-<body>
-  <div class="container">
-      <div id="top-buttons" class="form-group">
-          <button class="btn" id="componentsBtn">Components</button>
-          <button class="btn" id="menusBtn">Menu</button>
-          <button class="btn" id="workspacesBtn">Workspaces</button>
-          <button class="btn" id="stylesBtn">Style</button>
-          <button class="btn" id="servicesBtn">Services</button>
-      </div>
-      <form name="configs" action="javascript:void(0)">
-      <div id="componentsGroup" class="form-group">
-        <label for="components">Components</label>
-        <textarea id="components" class="form-control" rows="15" name="components"></textarea>
-      </div>
-      <div id="menusGroup" class="form-group">
-        <label for="menus">Menu</label>
-        <textarea id="menus" class="form-control" rows="15" name="menus"></textarea>
-      </div>
-      <div id="workspacesGroup" class="form-group">
-        <label for="workspaces">Workspaces</label>
-        <textarea id="workspaces" class="form-control" rows="15" name="workspaces"></textarea>
-      </div>
-      <div id="styleGroup" class="form-group">
-        <label for="style">Style URL</label>
-        <input id="style" class="form-control" name="style" />
-      </div>
-      <div id="servicesGroup" class="form-group">
-        <label for="services">Services</label>
-        <textarea id="services" class="form-control" rows="15" name="services"></textarea>
-      </div>
-      <!-- TODO: Get import button in line with import config field -->
-      <div id="importConfigGroup" class="form-group">
-        <label for="importConfig">Import Components/Services</label>
-        <input id="importConfig" class="form-control" name="importConfig" />
-        <button class="btn" name="import" type="button" id="import">Import</button>
-        <input class="btn" name="browse" type="file" id="browse" />
-      </div>
-
-      <div id="bottom-buttons" class="form-group">
-        <button class="btn" name="save" type="submit" id="submit">Save</button>
-        <button class="btn" name="clear" type="reset" id="clear">Clear</button>
-        <button class="btn" name="export" type="button" id="export">Export</button>
-      </div>
-    </form>
-  </div>
-</body>
-<script src="index.js"></script>
+  <body>
+    <div id="app">
+      <cq-main></cq-main>
+    </div>
+  </body>
 
 </html>
