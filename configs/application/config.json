@@ -87,11 +87,6 @@
 		]
 	},
 	"globalHotkeys": {
-		"BRING_ALL_TO_FRONT": [
-			"ctrl",
-			"shift",
-			"b"
-		]
 	},
 	"importConfig": [
 		"$applicationRoot/configs/application/presentationComponents.json",

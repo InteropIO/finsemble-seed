@@ -46,7 +46,7 @@ export default class Toolbar extends React.Component {
 	render() {
 		return <div className="complex-menu-content-row">
 			<div>
-				<span>Toolbar Monitor (requires restart)</span>
+				<span>Display Toolbar on </span>
 				<select style={{ margin: "0px 10px" }} onChange={this.setMonitor} value={this.state.monitor}>
 					<option value={"all"}>All</option>
 					<option value={"0"}>Primary</option>
@@ -56,6 +56,7 @@ export default class Toolbar extends React.Component {
 					<option value={"4"}>5</option>
 					<option value={"5"}>6</option>
 				</select>
+				<span> Monitor(s) </span>
 				<button onClick={this.restartApplication}>Restart Application</button>
 			</div>
 		</div>

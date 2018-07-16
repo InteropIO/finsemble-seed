@@ -86,7 +86,7 @@ var Actions = {
 			]);
 		});
 
-		/**F
+		/**
 		 * When a group update is publish, we sift through the data to see if this window is snapped or grouped with other windows. Then we publish that info, and the DockingButton renders the correct icon.
 		 * @param {*} err
 		 * @param {*} response
