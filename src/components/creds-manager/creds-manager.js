@@ -16,15 +16,6 @@ FSBL.addEventListener('onReady', () => {
       })
     }
     // Create the vue app
-    createApp(components)
+    require('./vue-app')(components)
   })
 })
-
-function createApp(components) {
-  new Vue({
-    el: '#app',
-    data: {
-      compList: components
-    }
-  })
-}

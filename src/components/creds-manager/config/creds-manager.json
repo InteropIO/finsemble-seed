@@ -4,12 +4,12 @@
     "Creds Manager": {
       "window": {
         "url": "$applicationRoot/components/creds-manager/index.html",
-        "resizable": true,
+        "resizable": false,
         "addToWorkspace": true,
         "top": "center",
         "left": "center",
-        "width": 900,
-        "height": 800
+        "width": 650,
+        "height": 560
       },
       "foreign": {
         "services": {
