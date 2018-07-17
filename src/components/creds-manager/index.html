@@ -1,13 +1,56 @@
-<!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>Creds Manager</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+    <script src="creds-manager.js"></script>
+
+    </script>
+    <link rel="stylesheet" href="css/style.css">
   </head>
   <body>
-    <div id="app">
+    <div id="app" class="full-height">
+      <div class="full-height container-fluid">
+        <div class="row full-height">
+        <nav class="col-3 bg-light sidebar">
+          <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a @click="set(item)" class="nav-link" v-for="(item, index) in list">
+                  {{item.name}}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+        <main role="main" class="col-sm-9 ml-sm-auto">
+          <div class="info" v-if="!selected">
+            Choose a component from the left and click on it's name to store credentials for.
+          </div>
+          <form v-if="selected" v-on:submit.prevent="save">
+            <div class="form-group">
+              <label for="username">{{selected.name}} Username</label>
+              <input class="form-control" id="username" v-model="username" required>
+              <small class="form-text text-muted">Enter the username of your {{selected.name}} account</small>
+            </div>
+            <div class="form-group">
+              <label for="password">{{selected.name}} Password</label>
+              <input type="password" class="form-control" v-bind:class="{ invalid: passwordMismatch }"
+              id="password" v-model="password" required>
+              <small class="form-text text-muted">Enter the password of your {{selected.name}} account</small>
+            </div>
+            <div class="form-group" v-if="password">
+              <label for="confirmPassword">{{selected.name}} Password Confirm</label>
+              <input  type="password" v-bind:class="{ invalid: passwordMismatch }"
+              class="form-control" id="confirmPassword" v-model="confirmPassword" required>
+              <small class="form-text text-muted">Confirm your {{selected.name}} password</small>
+            </div>
+            <button class="btn btn-primary"> Save </button>
+          </form>
+        </main>
+      </div>
+      </div>
     </div>
   </body>
 </html>
