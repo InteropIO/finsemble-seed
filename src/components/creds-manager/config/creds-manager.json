@@ -1,0 +1,37 @@
+{
+  "comment": "Creds manager configs",
+  "components": {
+    "Creds Manager": {
+      "window": {
+        "url": "$applicationRoot/components/creds-manager/index.html",
+        "resizable": true,
+        "addToWorkspace": true,
+        "top": "center",
+        "left": "center",
+        "width": 900,
+        "height": 800
+      },
+      "foreign": {
+        "services": {
+          "dockingService": {
+            "canGroup": true,
+            "isArrangable": true
+          }
+        },
+        "components": {
+          "App Launcher": {
+            "launchableByUser": true
+          },
+          "Window Manager": {
+            "FSBLHeader": true,
+            "persistWindowState": true,
+            "showLinker": true
+          },
+          "Toolbar": {
+            "iconClass": "creds-manager"
+          }
+        }
+      }
+    }
+  }
+}

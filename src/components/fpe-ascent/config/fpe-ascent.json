@@ -1,0 +1,42 @@
+{
+  "comment": "fpe ascent configuration",
+  "components": {
+    "Ascent": {
+      "auth": {
+        "formName": "",
+        "userInput": "",
+        "passInput": ""
+      },
+      "window": {
+        "url": "https://app.ascentregtech.com/users/sign_in",
+        "resizable": true,
+        "addToWorkspace": true,
+        "top": "center",
+        "left": "center",
+        "width": 800,
+        "height": 600
+      },
+      "foreign": {
+        "services": {
+          "dockingService": {
+            "canGroup": true,
+            "isArrangable": true
+          }
+        },
+        "components": {
+          "App Launcher": {
+            "launchableByUser": true
+          },
+          "Window Manager": {
+            "FSBLHeader": true,
+            "persistWindowState": true,
+            "showLinker": true
+          },
+          "Toolbar": {
+            "iconClass": "fpe-ascent"
+          }
+        }
+      }
+    }
+  }
+}

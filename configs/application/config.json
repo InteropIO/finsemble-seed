@@ -32,7 +32,7 @@
 	},
 	"betaFeatures": {
 		"assimilation": {
-			"enabled": true,
+			"enabled": false,
 			"blacklist": [],
 			"whitelist": [],
 			"onlySpawned": true,
@@ -90,6 +90,8 @@
 		"$applicationRoot/configs/application/presentationComponents.json",
 		"$applicationRoot/configs/application/components.json",
 		"$applicationRoot/configs/application/workspaces.json",
+		"$applicationRoot/components/creds-manager/config/creds-manager.json",
+		"$applicationRoot/components/fpe-ascent/config/fpe-ascent.json",
 		"$applicationRoot/configs/application/workspaceTemplates.json",
 		"$applicationRoot/configs/application/services.json"
 	]

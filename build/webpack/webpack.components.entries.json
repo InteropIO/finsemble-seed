@@ -1,1 +1,6 @@
-{}
+{
+  "creds-manager": {
+    "output": "components/creds-manager/creds-manager",
+    "entry": "./src/components/creds-manager/creds-manager.js"
+  }
+}
