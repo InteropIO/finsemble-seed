@@ -40,9 +40,6 @@ var Actions = {
 				{ field: "AlwaysOnTop.show", value: FSBLHeader.alwaysOnTop ? true : false },
 			]);
 
-			if (windowTitleBarConfig.showTabs || windowTitleBarConfig.showTabs === false) {
-				windowTitleBarStore.setValue({ field: "showTabs", value: windowTitleBarConfig.showTabs });
-			}
 
 			// By default, we hack the window's scrollbar so that it displays underneath the header. html.overflow: hidden body.overflow:auto
 			windowTitleBarStore.setValue({ field: "hackScrollbar", value: (windowTitleBarConfig.hackScrollbar !== false) });
@@ -158,7 +155,8 @@ var Actions = {
 			let globalWindowManagerConfig = finsembleConfig["Window Manager"] || { alwaysOnTopIcon: false, showTabs: false }; // Override defaults if finsemble.Window Manager exists.
 
 			// Look to see if docking is enabled. Cascade through backward compatibility with old "betaFeatures" and then a default if no config is found at all.
-			let dockingConfig = finsembleConfig.docking;
+
+			let dockingConfig = finsembleConfig.servicesConfig.docking || finsembleConfig.docking;
 			if (!dockingConfig && finsembleConfig.betaFeatures) dockingConfig = finsembleConfig.betaFeatures.docking;
 			if (!dockingConfig) dockingConfig = { enabled: true };
 
@@ -172,8 +170,22 @@ var Actions = {
 
 			windowTitleBarStore.setValues([{ field: "AlwaysOnTop.show", value: alwaysOnTopIcon }]);
 
-			if (typeof windowTitleBarConfig.showTabs !== 'boolean') {
-				windowTitleBarStore.setValue({ field: "showTabs", value: globalWindowManagerConfig.showTabs });
+
+			//If tabbing is turned off, ignore global/local 'windowManager' config about whether to allow tabbing.
+			if (dockingConfig.tabbing.enabled === false) {
+				windowTitleBarStore.setValue({ field: "showTabs", value: dockingConfig.tabbing.enabled });
+			} else {
+				//If tabbing is enabled system-wide, look to the global config for its value. Then look to the local component's config.
+
+
+				//This is the global window manager config.
+				if (typeof windowTitleBarConfig.showTabs !== 'boolean') {
+					windowTitleBarStore.setValue({ field: "showTabs", value: globalWindowManagerConfig.showTabs });
+				}
+				//This is the component's config.
+				if (windowTitleBarConfig.showTabs || windowTitleBarConfig.showTabs === false) {
+					windowTitleBarStore.setValue({ field: "showTabs", value: windowTitleBarConfig.showTabs });
+				}
 			}
 		});
 
