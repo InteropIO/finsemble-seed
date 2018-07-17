@@ -156,9 +156,11 @@ var Actions = {
 
 			// Look to see if docking is enabled. Cascade through backward compatibility with old "betaFeatures" and then a default if no config is found at all.
 
+			if (!finsembleConfig.servicesConfig) finsembleConfig.servicesConfig = {};
 			let dockingConfig = finsembleConfig.servicesConfig.docking || finsembleConfig.docking;
 			if (!dockingConfig && finsembleConfig.betaFeatures) dockingConfig = finsembleConfig.betaFeatures.docking;
 			if (!dockingConfig) dockingConfig = { enabled: true };
+			if (!dockingConfig.tabbing) dockingConfig.tabbing = {};
 
 			windowTitleBarStore.setValues([{ field: "Main.dockingEnabled", value: dockingConfig.enabled }]);
 
