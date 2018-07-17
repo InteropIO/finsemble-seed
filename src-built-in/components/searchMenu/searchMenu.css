@@ -49,15 +49,19 @@ body {
 }
 
 .resultItem {
-    color: var(--search-result-item-color);
+    color: var(--search-result-font-color);
     font-weight: var(--search-result-font-weight);
-    height: 24px;
     text-align: left;
     padding: 4px 28px 4px 14px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
+
+.resultItem:hover {
+    background-color: var(--search-result-highlighter-color)
+}
+
 
 .providerContainer:last-child {
     margin-bottom: 0px;

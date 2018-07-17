@@ -295,7 +295,7 @@ var Actions = {
 			showCancelButton: false,
 			showNegativeButton: true
 		}, (err, response) => {
-			if (response.choice === "affirmative") {
+			if (err || response.choice === "affirmative") {
 				politeCloseProcess();
 			}
 		});
@@ -344,7 +344,7 @@ var Actions = {
 					showCancelButton: false,
 					showNegativeButton: true
 				}, (err, response) => {
-					if (response.choice === "affirmative") {
+					if (err || response.choice === "affirmative") {
 						return Actions.terminateProcess(parentApp, true)
 					}
 				});

@@ -12,11 +12,8 @@
 	},
 	"servicesConfig": {
 		"launcher": {
-			"searchProviderAction": {
-				"title": "App Catalog",
-				"component": "App Catalog"
-			}
-		},
+			"staggerPixels": 40
+    },
 		"docking": {
 			"enabled": true,
 			"groupTileBuffer": 30,
@@ -96,11 +93,6 @@
 		]
 	},
 	"globalHotkeys": {
-		"BRING_ALL_TO_FRONT": [
-			"ctrl",
-			"shift",
-			"b"
-		]
 	},
 	"importConfig": [
 		"$applicationRoot/configs/application/presentationComponents.json",

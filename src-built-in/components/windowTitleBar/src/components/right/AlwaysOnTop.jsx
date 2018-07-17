@@ -54,8 +54,8 @@ export default class AlwaysOnTop extends React.Component {
 	 * @memberof AlwaysOnTop
 	 */
 	render() {
-		let iconClasses = "icon-ciq ff-always-on-top ";
-		let wrapClasses = "fsbl-icon cq-no-drag ";
+		let iconClasses = "ff-always-on-top ";
+		let wrapClasses = "fsbl-icon ";
 		if (this.state && this.state.alwaysOnTop) wrapClasses += "fsbl-icon-highlighted ";
 		let tooltip = "Always on Top";
 
