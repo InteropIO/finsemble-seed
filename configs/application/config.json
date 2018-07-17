@@ -91,7 +91,7 @@
 		"$applicationRoot/configs/application/components.json",
 		"$applicationRoot/configs/application/workspaces.json",
 		"$applicationRoot/components/creds-manager/config/creds-manager.json",
-		"$applicationRoot/components/fpe-ascent/config/fpe-ascent.json",
+		"$applicationRoot/components/components-set/config/components-set.json",
 		"$applicationRoot/configs/application/workspaceTemplates.json",
 		"$applicationRoot/configs/application/services.json"
 	]
