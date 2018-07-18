@@ -17,7 +17,7 @@
           <div class="sidebar-sticky">
             <ul class="nav flex-column">
               <li class="nav-item">
-                <a @click="set(item)" class="nav-link" v-for="(item, index) in list">
+                <a @click="set(item)" class="nav-link" v-for="item in list">
                   {{item.name}}
                 </a>
               </li>
@@ -31,19 +31,19 @@
           <form v-if="selected" v-on:submit.prevent="save">
             <div class="form-group">
               <label for="username">{{selected.name}} Username</label>
-              <input class="form-control" id="username" v-model="username" required>
+              <input class="form-control" id="username" v-model="selected.username" required>
               <small class="form-text text-muted">Enter the username of your {{selected.name}} account</small>
             </div>
             <div class="form-group">
               <label for="password">{{selected.name}} Password</label>
-              <input type="password" class="form-control" v-bind:class="{ invalid: passwordMismatch }"
-              id="password" v-model="password" required>
+              <input type="password" class="form-control" v-bind:class="{ invalid: passMismatch }"
+              id="password" v-model="selected.password" required>
               <small class="form-text text-muted">Enter the password of your {{selected.name}} account</small>
             </div>
-            <div class="form-group" v-if="password">
+            <div class="form-group" v-if="selected.password">
               <label for="confirmPassword">{{selected.name}} Password Confirm</label>
-              <input  type="password" v-bind:class="{ invalid: passwordMismatch }"
-              class="form-control" id="confirmPassword" v-model="confirmPassword" required>
+              <input  type="password" v-bind:class="{ invalid: passMismatch }"
+              class="form-control" id="confirmPass" v-model="selected.confirmPass" required>
               <small class="form-text text-muted">Confirm your {{selected.name}} password</small>
             </div>
             <button class="btn btn-primary"> Save </button>
