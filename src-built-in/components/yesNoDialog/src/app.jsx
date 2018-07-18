@@ -4,7 +4,7 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
-import "../../assets/css/finsemble.css";
+import "../../../../assets/css/finsemble.css";
 import { FinsembleDialog, FinsembleDialogQuestion, FinsembleDialogButton } from "@chartiq/finsemble-react-controls";
 import Timer from "./timer";
 const DEFAULT_TITLE = ""

@@ -48,19 +48,103 @@ module.exports = taskMethods => {
 	*/
 	
 	// Add SASS compilation. You'll need to add gulp-sass and sass-loader to your package.json
-	/*
-	taskMethods.buildSass = () => {
-		if (!sass) sass = require("gulp-sass");
+/*
+	taskMethods.buildSass = done => {
+		console.log("Starting buildSass");
+		if (!global.sass) global.sass = require("gulp-sass");
+		if (!global.path) global.path = require("path");
+
 		const source = [
-			path.join(srcPath, "components", "**", "*.scss"),
+			path.join(taskMethods.srcPath, "components", "**", "*.scss"),
 			path.join(__dirname, "src-built-in", "components", "**", "*.scss"),
 		];
 
-		return gulp
+		var stream = gulp
 			.src(source)
 			.pipe(sass().on("error", sass.logError))
+			.pipe(gulp.dest(path.join(taskMethods.distPath, "components")));
+		
+		stream.on("end", function () {
+			console.log("Finished buildSass");
+			done();
+		});
+		stream.on("error", function (err) {
+			done(err);
+		});
 	};
-	*/
+*/
+
+
+	// This is a replacement launchApplication which uses the new Hadouken launcher instead of the older OpenFin launcher
+	// The OpenFin launcher has a known issue that it won't launch if there are multiple rvms running.
+	// However, detecting application closed is unreliable in the newer Hadouken launcher so this will remain optional until a fix is verified.
+/*
+	taskMethods.launchApplication = done => {
+		// Local manifest is used to read the UUID for launching the Finsemble application
+		const manifestLocal = require("./configs/openfin/manifest-local.json");
+		const { launch, connect } = require("hadouken-js-adapter");
+		const ON_DEATH = require("death")({ debug: false });
+		const fs = require("fs");
+		const path = require("path");
+		
+		ON_DEATH((signal, err) => {
+			exec("taskkill /F /IM openfin.* /T", (err, stdout, stderr) => {
+				// Only write the error to console if there is one and it is something other than process not found.
+				if (err && err !== 'The process "openfin.*" not found.') {
+					console.error(errorOutColor(err));
+				}
+
+				if (watchClose) watchClose();
+				done();
+				process.exit();
+			});
+		});
+		
+		taskMethods.logToTerminal("Launching Finsemble", "black", "bgCyan");
+		//Wipe old stats.
+		fs.writeFileSync(path.join(__dirname, "server", "stats.json"), JSON.stringify({}), "utf-8");
+
+		let startTime = Date.now();
+		fs.writeFileSync(path.join(__dirname, "server", "stats.json"), JSON.stringify({ startTime }), "utf-8");
+		async function launchAndConnect(manifestUrl, uuid) {
+			// launching an application returns the port number used, this port number will be used to connect to the runtime
+			const port = await launch({ manifestUrl });
+		
+			// address to connect to the runtime using the port
+			const address = `ws://localhost:${port}`;
+		
+			// unique UUID used to launch an application, this must be different from the uuid the application uses
+			const launchUUID = `${uuid}-${Math.floor(1000 * Math.random())}`;
+			
+			// use the websocket address and uuid to connect to the runtime
+			const fin = await connect({ address, uuid: launchUUID });
+		
+			// get an instance of the application using wrap and the UUID set in the config file
+			const app = await fin.Application.wrap({ uuid });
+		
+			// listen to the closed event on the application to run code when it closes
+			app.on("closed", () => {
+				taskMethods.logToTerminal("Finsemble application terminated", "black", "bgCyan");
+		
+				// OpenFin has closed so exit gulpfile
+				if (watchClose) watchClose();
+
+				// Signal task completion
+				done();
+
+				process.exit();
+			});
+		}
+
+		const manifestUrl = taskMethods.startupConfig[env.NODE_ENV].serverConfig;
+
+		// Get the UUID from the *manifestLocal* manifest file (./configs/openfin/manifest-local.json).
+		// If you're testing against any NODE_Env other than development, make sure the UUID in your manifest is the same as in manifest-local (i.e. "uuid": "Finsemble" )
+		const uuid = manifestLocal.startup_app.uuid;
+
+		launchAndConnect(manifestUrl, uuid);
+	},
+*/	
 
 	/** ---------------------------------------- TASKS ----------------------------------------------
 	 * Here is where you can override the actual gulp tasks. For instance, npm run dev, npm run build, etc.

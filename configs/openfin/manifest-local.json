@@ -4,7 +4,7 @@
         "name": "ChartIQ Local",
         "url": "http://localhost:3375/Finsemble/components/system/serviceManager/serviceManager.html",
         "uuid": "Finsemble",
-        "applicationIcon": "http://localhost:3375/components/assets/img/Finsemble_Taskbar_Icon.png",
+        "applicationIcon": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png",
         "defaultTop": 0,
         "defaultLeft": 0,
         "showTaskbarIcon": true,
@@ -31,7 +31,7 @@
     "shortcut": {
         "company": "ChartIQ",
         "description": "ChartIQ Local",
-        "icon": "http://localhost:3375/components/assets/img/Finsemble_Taskbar_Icon.ico",
+        "icon": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.ico",
         "name": "ChartIQ - LOCAL",
         "target": [
             "desktop",
@@ -41,7 +41,7 @@
         "startMenuRootFolder": "ChartIQ Local"
     },
     "dialogSettings": {
-        "logo": "http://localhost:3375/components/assets/img/ciq-banner-100x25.png",
+        "logo": "http://localhost:3375/assets/img/ciq-banner-100x25.png",
         "bgColor": 4280109424,
         "textColor": 4293521652,
         "progressBarBgColor": 4294967295,

@@ -1,6 +1,6 @@
-@import  url('../assets/css/_menus.css');
+@import  url('../../../assets/css/_menus.css');
 
-@import  url('../assets/css/_globals.css');
+@import  url('../../../assets/css/_globals.css');
 
 html {
     height: 100%;

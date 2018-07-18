@@ -2,9 +2,9 @@
   * Copyright 2017 by ChartIQ, Inc.
   * All rights reserved.
   */
-@import  url('../assets/css/_globals.css');
+@import  url('../../../assets/css/_globals.css');
 
-@import  url('../assets/css/_toolbar.css');
+@import  url('../../../assets/css/_toolbar.css');
 
 body, html {
     height: 100%;

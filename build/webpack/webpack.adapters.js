@@ -27,17 +27,9 @@ module.exports = {
     output: {
         filename: "[name].js",
         sourceMapFilename: "[name].map.js",
-        path: path.resolve(__dirname, '../../dist/'),
-        publicPath: 'http://localhost:3375/'
+        path: path.resolve(__dirname, '../../dist/')
     },
-    watch: false,
     resolve: {
-        extensions: ['.js', '.jsx', '.json', 'scss', 'html'],
-        modules: [
-            './node_modules',
-            './src/components',
-            './src/clients',
-            './src/services'
-        ],
+        extensions: ['.js', '.jsx', '.json', 'scss', 'html']
     },
 };

@@ -93,7 +93,7 @@ function getImportAbsolutePath(url, prev, includedFilesMap) {
 function getImportResult(extractions, url, prev, includedFilesMap, includedPaths) {
   var absolutePath = "";
   if (url.includes("perfect-scrollbar")) {
-    absolutePath = path.join("./src-built-in/components/assets/css/perfect-scrollbar.css")
+    absolutePath = path.join("./src-built-in/assets/css/perfect-scrollbar.css")
   } else {
     absolutePath = getImportAbsolutePath(url, prev, includedFilesMap, includedPaths);
   }

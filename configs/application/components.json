@@ -76,7 +76,7 @@
 						"FSBLHeader": true
 					},
 					"Toolbar": {
-						"iconURL": "$applicationRoot/components/assets/img/notepad.png"
+						"iconURL": "$applicationRoot/assets/img/notepad.png"
 					}
 				}
 			}

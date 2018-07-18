@@ -2,7 +2,7 @@ var webpack = require('webpack');
 const path = require('path');
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const { DefinePlugin, EnvironmentPlugin, DllPlugin } = require("webpack");
+const { DefinePlugin, EnvironmentPlugin, DllPlugin, ProgressPlugin } = require("webpack");
 const hardSource = require("hard-source-webpack-plugin");
 
 console.log("ENVIRONMENT", env);

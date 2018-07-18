@@ -27,7 +27,7 @@
 			}
 		}
 	},
-	"systemTrayIcon": "$applicationRoot/components/assets/img/Finsemble_Taskbar_Icon.png",
+	"systemTrayIcon": "$applicationRoot/assets/img/Finsemble_Taskbar_Icon.png",
 	"systemTrayComponent": "File Menu",
 	"debugServiceDelay": 0,
 	"Window Manager": {
