@@ -1,4 +1,5 @@
 (() => {
+	const util = window.util
 	const Vue = window.Vue
 
 	FSBL.addEventListener('onReady', initializeApp)
@@ -10,59 +11,69 @@
 			Vue.component('cq-main', {
 				data,
 				methods: {
+					loadFile,
 					exportConfig,
-					importConfig
+					importConfig,
+					removeRepo,
+					resetForm,
+					submitForm,
+					toggleComponent
 				},
 				mounted,
 				template: `
 					<div class="container">
 						<div id="top-buttons" class="form-group">
-							<button
-								class="btn"
-								id="componentsBtn"
-								v-on:click="tab = 'components'">
+							<button class="btn" v-on:click="tab = 'components'">
 								Components
 							</button>
-							<button
-								class="btn"
-								id="menusBtn"
-								v-on:click="tab = 'menus'">
+							<button class="btn" v-on:click="tab = 'menus'">
 								Menu
 							</button>
-							<button
-								class="btn"
-								id="workspacesBtn"
-								v-on:click="tab = 'workspaces'">
+							<button class="btn" v-on:click="tab = 'workspaces'">
 								Workspaces
 							</button>
-							<button
-								class="btn"
-								id="stylesBtn"
-								v-on:click="tab = 'styles'">
+							<button class="btn" v-on:click="tab = 'styles'">
 								Style
 							</button>
-							<button
-								class="btn"
-								id="servicesBtn"
-								v-on:click="tab = 'services'">
+							<button class="btn" v-on:click="tab = 'services'">
 								Services
 							</button>
 						</div>
-						<form name="configs" action="javascript:void(0)">
-							<div
-								class="form-group"
-								id="componentsGroup"
-								v-if="tab === 'components'">
-								<label for="components">Components</label>
-								<textarea id="components" class="form-control" rows="15" name="components"></textarea>
-							</div>
 
+						<div class="form-group" v-if="tab === 'components'">
+							<label>Components</label>
+							<hr />
+							<div v-for="repo in repos" :key="repo.id">
+								<span>{{ repo.name }}</span>
+								<button
+									class="btn btn-remove"
+									v-on:change="toggleComponent(component)"
+									v-on:click="removeRepo(repo.id)">
+									X
+								</button>
+								<ul class="component-checklist">
+									<li v-for="component in repo.components" :key="component.id">
+										<input v-model="component.enabled" type="checkbox" />
+										{{ component.name }}
+									</li>
+								</ul>
+								<hr/>
+							</div>
+						</div>
+
+						<form name="configs" action="javascript:void(0)" v-on:submit.prevent="submitForm">
 							<div
 								class="form-group"
 								id="menusGroup"
 								v-if="tab === 'menus'">
 								<label for="menus">Menu</label>
-								<textarea id="menus" class="form-control" rows="15" name="menus"></textarea>
+								<textarea
+									class="form-control"
+									id="menus"
+									name="menus"
+									rows="15"
+									v-model="form.menus">
+								</textarea>
 							</div>
 
 							<div
@@ -70,7 +81,13 @@
 								id="workspacesGroup"
 								v-if="tab === 'workspaces'">
 								<label for="workspaces">Workspaces</label>
-								<textarea id="workspaces" class="form-control" rows="15" name="workspaces"></textarea>
+								<textarea
+									id="workspaces"
+									class="form-control"
+									rows="15"
+									name="workspaces"
+									v-model="form.workspaces">
+								</textarea>
 							</div>
 
 							<div
@@ -78,7 +95,12 @@
 								id="styleGroup"
 								v-if="tab === 'styles'">
 								<label for="style">Style URL</label>
-								<input id="style" class="form-control" name="style" />
+								<input
+									class="form-control"
+									id="style"
+									name="style"
+									v-model="form.cssOverridePath"
+									/>
 							</div>
 
 							<div
@@ -86,50 +108,51 @@
 								id="servicesGroup"
 								v-if="tab === 'services'">
 								<label for="services">Services</label>
-								<textarea id="services" class="form-control" rows="15" name="services"></textarea>
+								<textarea
+									class="form-control"
+									id="services"
+									name="services"
+									rows="15"
+									v-model="form.services">
+								</textarea>
 							</div>
 
 							<!-- TODO: Get import button in line with import config field -->
 							<div id="importConfigGroup" class="form-group">
 								<label for="importConfig">Import Components/Services</label>
-								<input id="importConfig" class="form-control" name="importConfig" />
+								<input
+									class="form-control"
+									name="importConfig"
+									v-model="form.configImportUrl"
+									/>
 								<button
 									class="btn"
 									id="import"
 									name="import"
 									type="button"
-									v-on:click="importConfig">
+									v-on:click="importConfig()">
 									Import
 								</button>
 								<input
 									class="btn"
 									name="browse"
 									type="file"
-									id="browse"
+									v-on:change="loadFile($event)"
 									/>
 							</div>
 
 							<div id="bottom-buttons" class="form-group">
-								<button
-									class="btn"
-									name="save"
-									type="submit"
-									id="submit">
-									Save
+								<button class="btn" name="apply" type="submit">
+									Apply
 								</button>
-								<button
-									class="btn"
-									name="clear"
-									type="reset"
-									id="clear">
-									Clear
+								<button class="btn" name="clear" type="reset" v-on:click="resetForm()">
+									Reset
 								</button>
 								<button
 									class="btn"
 									id="export"
-									name="export"
 									type="button"
-									v-on:click="exportConfig">
+									v-on:click="exportConfig()">
 									Export
 								</button>
 							</div>
@@ -140,36 +163,34 @@
 
 			function data() {
 				return {
+					form: {
+						components: '',
+						menus: '',
+						services: '',
+						cssOverridePath: '',
+						workspaces: ''
+					},
+					// Repositories are objects containing an array of components that
+					// can be enabled or disabled. Each repository is generated from a
+					// component config and given a unique id.
+					repos: [],
 					tab: 'components'
 				}
 			}
 
 			function mounted() {
-
 				// Get the current configurations from local storage
-				initialize()
-
-				// Attach events
-				const form = document.forms.configs
-				form.addEventListener("submit", saveHandler)
-				form.addEventListener("reset", initialize)
-
-				//document.getElementById("import").onclick = importConfig
-				//document.getElementById("export").onclick = exportConfig
-				document.getElementById("browse").addEventListener("change", browseFiles)
-
+				this.resetForm()
 			}
 
 			function getConfigFromForm() {
-				const form = document.forms.configs
-				const formData = new FormData(form)
 				const newConfig = {}
 				try {
-					const components = formData.get("components")
-					const menus = formData.get("menus")
-					const workspaces = formData.get("workspaces")
-					const cssOverridePath = formData.get("style")
-					const services = formData.get("services")
+					const components = this.form.components
+					const menus = this.form.menus
+					const workspaces = this.form.workspaces
+					const cssOverridePath = this.form.cssOverridePath
+					const services = this.form.services
 
 					if (components.length > 0) {
 						newConfig.components = JSON.parse(components)
@@ -198,117 +219,52 @@
 				return newConfig
 			}
 
-			function filterComponents(inputComponents) {
-				// Filter out system components. If a customer wants to override a presentation element with their own, they need to
-				// make sure not to set component.category === "system"
-				const components = {}
-				Object.keys(inputComponents).forEach((componentName) => {
-					const component = inputComponents[componentName]
-					if (component && (!component.component || (component.component.category !== "system"))) {
-						components[componentName] = component
-					}
-				})
-
-				return components
-			}
-
-			function saveHandler() {
-				// Apply configuration to Finsemble
-				const newConfig = getConfigFromForm()
-
-				// There was an error, return
-				if (!newConfig) return
-
-				// TODO: Should we have options for overwrite and replace?
-				FSBL.Clients.ConfigClient.processAndSet(
-					{
-						newConfig: newConfig,
-						overwrite: true,
-						replace: true
-					},
-					(err, finsemble) => {
-						if (err) {
-							alert(err)
-							return
-						}
-
-						const components = filterComponents(finsemble.components)
-
-						// Configuration successfully applied, save for user config.
-						FSBL.Clients.StorageClient.save(
-							{
-								topic: "user",
-								key: "config",
-								value: {
-									components: components,
-									menus: finsemble.menus,
-									workspaces: finsemble.workspaces,
-									cssOverridePath: finsemble.cssOverridePath,
-									services: newConfig.services
-								}
-							},
-							() => alert("Saved."))
-					}
+			function submitForm() {
+				util.applyConfig(this.form).then(
+					() => alert('Settings applied'),
+					(err) => alert(err)
 				)
 			}
 
-			function initialize() {
-				const form = document.forms.configs
-				FSBL.Clients.ConfigClient.getValue(
-					{
-						field: "finsemble"
+			function resetForm() {
+				util.getConfig().then(
+					(formData) => {
+						this.form = {
+							components: data.components,
+							cssOverridePath: data.cssOverridePath,
+							menus: JSON.stringify(data.menus, null, 4),
+							services: JSON.stringify(data.services, null, 4),
+							workspaces: JSON.stringify(data.workspaces, null, 4)
+						}
+						this.repos = []
 					},
-					(error, data) => {
-						if (error) {
-							FSBL.Clients.Logger.error(error)
-							return
-						}
-
-						if (data) {
-							const components = filterComponents(data.components)
-							form.elements.components.value = JSON.stringify(components, null, "\t") || ""
-							form.elements.menus.value = JSON.stringify(data.menus, null, "\t") || ""
-							form.elements.workspaces.value = JSON.stringify(data.workspaces, null, "\t") || ""
-							form.elements.style.value = data.cssOverridePath || ""
-						}
-
-						FSBL.Clients.StorageClient.get(
-							{
-								topic: "user",
-								key: "config"
-							}, (err, userData) => {
-								if (err) {
-									FSBL.Clients.Logger.error(err)
-									return
-								}
-
-								form.elements.services.value =
-									userData && userData.services ? JSON.stringify(userData.services, null, "\t") : "{}"
-							})
-					})
+					(error) => FSBL.Clients.Logger.error(error)
+				)
 			}
 
-			function browseFiles(event) {
-				const form = document.forms.configs
+			function loadFile(event) {
 				console.log('Importing file')
 				const element = event.srcElement
 				if (!element.files || !element.files.length) {
 					return
 				}
 				const reader = new FileReader()
-				reader.onload = function onload(event) {
-					const formData = new FormData(form)
-					const output = event.target.result
-					formData.set("components", output)
-					console.log(formData.get("components"))
+				reader.onload = (event) => {
+					const configObject = JSON.parse(event.target.result)
+					console.log(configObject)
+					const [status, data] = util.generateRepo(configObject)
+					if (status === 'error') {
+						throw new Error(data.msg)
+					} else {
+						this.repos.push(data)
+					}
 				}
 				reader.readAsText(element.files[0])
 			}
 
 			function importConfig() {
-				const form = document.forms.configs
-				const formData = new FormData(form)
-				const importURL = formData.get("importConfig")
+				//const importURL = formData.get("importConfig")
+				const importURL = this.form.configImportUrl
 
 				if (!importURL || (importURL.length === 0)) {
 					// No URL, return
@@ -327,18 +283,17 @@
 						// Import config
 						if (data.components && (typeof (data.components)) === "object") {
 							let components = JSON.parse(components)
-							components = Object.assign(components, data.components)
-							form.elements.components.value = components
+							this.form.components = Object.assign(components, data.components)
 						}
 
 						if (data.services && (typeof (data.services)) === "object") {
-							let services = JSON.parse(form.elements.services.value)
+							let services = JSON.parse(this.form.services)
 							services = Object.assign(services, data.services)
-							form.elements.services.value = JSON.stringify(services, null, "\t")
+							this.form.services = JSON.stringify(services, null, "\t")
 						}
 					})
 					.then(() => {
-						form.elements.importConfig.value = ""
+						this.form.configImportUrl = ''
 					})
 					.catch((err) => {
 						FSBL.Clients.Logger.error(err)
@@ -368,6 +323,18 @@
 				download("userConfig.json", configStr)
 			}
 
+			function removeRepo(id) {
+				this.repos = this.repos.filter(el => el.id !== id)
+			}
+
+			function toggleComponent(component) {
+				component.enabled = !component.enabled
+				if (component.enabled) {
+					this.form.components[component.name] = component
+				} else {
+					delete this.form.components[component.name]
+				}
+			}
 
 		})() // main component iife
 

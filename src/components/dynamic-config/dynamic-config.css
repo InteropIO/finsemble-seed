@@ -17,6 +17,14 @@ label, .form-control {
     border: 0;
 }
 
+.component-checklist {
+  list-style-type: none;
+}
+
+.btn-remove {
+  padding: 4px 8px;
+}
+
 .form-group {
     margin-bottom: 10px
 }
