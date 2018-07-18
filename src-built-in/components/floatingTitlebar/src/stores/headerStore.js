@@ -60,7 +60,7 @@ var Actions = {
 	initialize(cb = Function.prototype) {
 		HeaderStore.initialize();
 		var spData = FSBL.Clients.WindowClient.getSpawnData();
-		FSBL.FinsembleWindow.wrap(spData.parent,  (err, wrappedWindow)=> {
+		FSBL.FinsembleWindow.wrap(spData.parent, function (err, wrappedWindow) {
 			HeaderStore.setCompanionWindow(wrappedWindow);
 			var onParentSet = () => {
 				wrappedWindow.parentWindow.addListener("startedMoving", Actions.onCompanionStartedMoving);
@@ -78,7 +78,7 @@ var Actions = {
 			};
 			var onParentCleared = () => {
 				Logger.system.debug("Companion window onParentCleared");
-				this.showTitleBar();
+				FSBL.Clients.WindowClient.finsembleWindow.show();
 				FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
 				if (localParent) {
 					localParent.removeListener("startedMoving", Actions.onCompanionStartedMoving);
@@ -246,18 +246,6 @@ var Actions = {
 		}, 50);
 
 	},
-	showTitleBar(){
-		Logger.system.debug("Floating Titlebar window show");
-		FSBL.Clients.WindowClient.finsembleWindow.show();
-	},
-	hideTitleBar(){
-		Logger.system.debug("Floating Titlebar window hide");
-		FSBL.Clients.WindowClient.finsembleWindow.hide();
-	},
-	closeTitleBar(){
-		Logger.system.debug("Floating Titlebar window close");
-		FSBL.Clients.WindowClient.finsembleWindow.close({});
-	},
 	onCompanionClosed() {
 		Logger.system.debug("Companion window closed");
 		FSBL.Clients.WindowClient.finsembleWindow.close({});
@@ -265,21 +253,20 @@ var Actions = {
 	onCompanionHidden() {
 
 		Logger.system.debug("Companion window hidden");
-		this.hideTitleBar();
-
+		FSBL.Clients.WindowClient.finsembleWindow.hide();
 	},
 	onCompanionShown() {
 		Logger.system.debug("Companion window shown");
-		this.showTitleBar();
+		FSBL.Clients.WindowClient.finsembleWindow.show();
 	},
 	onCompanionBringToFront() {
 		Logger.system.debug("Companion window BTF");
 		setTimeout(() => {
-			Actions.isWindowVisible( (err, isVisible)=> {
+			Actions.isWindowVisible(function (err, isVisible) {
 				console.debug("Companion show.......",isVisible);
 				if (isVisible) {
 					console.debug("Companion show.......");
-					this.showTitleBar();
+					FSBL.Clients.WindowClient.finsembleWindow.show();
 				}
 				FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
 			});
@@ -294,14 +281,14 @@ var Actions = {
 	},
 	onCompanionMinimized() {
 		Logger.system.debug("Companion window minimized");
-		this.hideTitleBar();
+		FSBL.Clients.WindowClient.finsembleWindow.hide();
 	},
 	onCompanionRestored() {
 		Logger.system.debug("Companion window restored");
 		Actions.isWindowVisible((err, isVisible) => {
 			if (isVisible) {
 				console.debug("Companion show22.......",isVisible);
-				this.showTitleBar();
+				FSBL.Clients.WindowClient.finsembleWindow.show();
 				FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
 			}
 		});
