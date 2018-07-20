@@ -63,13 +63,16 @@
 						<span>{{ repo.name }}</span>
 						<button
 							class="btn btn-remove"
-							v-on:change="toggleComponent(component)"
 							v-on:click="removeRepo(repo.id)">
 							X
 						</button>
 						<ul class="component-checklist">
 							<li v-for="component in repo.components" :key="component.id">
-								<input v-model="component.enabled" type="checkbox" />
+								<input
+									v-model="component.enabled"
+									v-on:change="toggleComponent(component)"
+									type="checkbox"
+									/>
 								{{ component.name }}
 							</li>
 						</ul>
@@ -299,7 +302,6 @@
 	function resetForm() {
 		util.getConfig().then(
 			(data) => {
-				console.log('RESET CONFIG:', data)
 				this.form = {
 					components: data.components,
 					cssOverridePath: data.cssOverridePath,
@@ -312,11 +314,9 @@
 		)
 		util.getRepos().then(
 			(repos) => {
-				console.log('RESET REPOS:', repos)
 				this.repos = repos
 			},
 			(error) => {
-				console.log('OOPS:', error)
 				FSBL.Clients.Logger.error(error)
 			}
 		)
@@ -334,7 +334,6 @@
 	}
 
 	function toggleComponent(component) {
-		component.enabled = !component.enabled
 		if (component.enabled) {
 			this.form.components[component.name] = component
 		} else {
