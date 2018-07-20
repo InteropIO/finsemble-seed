@@ -215,6 +215,7 @@ var Actions = {
 	},
 	onCompanionFocused() {
 		Logger.system.debug("Companion window focused");
+		if(HeaderStore.getMoving())return;
 		FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
 	},
 	//Helper function to update the titlebar's position
@@ -257,10 +258,12 @@ var Actions = {
 	},
 	onCompanionShown() {
 		Logger.system.debug("Companion window shown");
+		if(HeaderStore.getMoving())return;
 		FSBL.Clients.WindowClient.finsembleWindow.show();
 	},
 	onCompanionBringToFront() {
 		Logger.system.debug("Companion window BTF");
+		if(HeaderStore.getMoving())return;
 		setTimeout(() => {
 			Actions.isWindowVisible(function (err, isVisible) {
 				console.debug("Companion show.......",isVisible);
