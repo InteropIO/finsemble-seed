@@ -1,5 +1,7 @@
 {
 	"comment": "Sample component configuration",
+	"name": "Jay's crazy components depot unlimited",
+  "id": "797e8d82-922a-4f0b-a736-941c2fabd2e8",
 	"components": {
 		"Configure": {
 			"window": {
@@ -25,12 +27,12 @@
 							"hideMinimize": true,
 							"hideMaximize": true
 						},
-						"persistWindowState": false	
+						"persistWindowState": false
 					}
 				}
 			}
 		},
-		"Welcome Component": {
+		"My vendor component": {
 			"window": {
 				"url": "$applicationRoot/components/welcome/welcome.html",
 				"frame": false,
@@ -57,6 +59,7 @@
 						"launchableByUser": true
 					},
 					"Window Manager": {
+            "title": "My vendor component",
 						"showLinker": false,
 						"FSBLHeader": true,
 						"persistWindowState": true
@@ -67,11 +70,11 @@
 				}
 			}
 		},
-		"Notepad": {
+		"MS Paint": {
 			"window": {
-				"id": "Notepad",
+				"id": "MS Paint",
 				"native": true,
-				"path": "notepad.exe",
+				"path": "paint.exe",
 				"url": "",
 				"defaultHeight": 600,
 				"autoShow": true,
@@ -158,43 +161,6 @@
 						"persistWindowState": false,
 						"FSBLHeader": true,
 						"showLinker": false
-					}
-				}
-			}
-		},
-		"authentication": {
-			"window": {
-				"url": "$applicationRoot/components/authentication/authentication.html",
-				"top": "center",
-				"left": "center",
-				"width": 358,
-				"height": 458,
-				"ephemeral": true,
-				"options": {
-					"autoShow": false
-				}
-			},
-			"component": {
-				"neededClients": [
-					"LauncherClient",
-					"AuthenticationClient",
-					"StorageClient"
-				],
-				"category": "system"
-			},
-			"foreign": {
-				"services": {
-					"dockingService": {
-						"isArrangable": false
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"launchableByUser": false
-					},
-					"Window Manager": {
-						"FSBLHeader": false,
-						"persistWindowState": false
 					}
 				}
 			}
