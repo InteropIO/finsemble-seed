@@ -295,6 +295,9 @@
 				FSBL.Clients.Logger.error(data.msg)
 			} else {
 				data.components = checkmarkComponents(this.form, data.components)
+				// If this has the same id as a pre-existing repo then
+				// it needs to replace it and not create a duplicate.
+				this.repos = this.repos.filter(el => el.id !== data.id)
 				this.repos.push(data)
 			}
 		}
