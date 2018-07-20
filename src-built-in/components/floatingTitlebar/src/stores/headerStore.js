@@ -49,7 +49,7 @@ var HeaderStore = Object.assign({}, EventEmitter.prototype, {
 		values.state = values.state === "small" ? "large" : "small";
 	},
 	setCompanionBounds(bounds) {
-		values.companionBounds = bounds
+		values.companionBounds = bounds;
 	},
 	getCompanionBounds() {
 		return values.companionBounds;
@@ -69,14 +69,15 @@ var Actions = {
 
 				Actions.isWindowVisible((err, isVisible) => {
 					if (!isVisible) {
-						Actions.onCompanionHidden()
+						Actions.onCompanionHidden();
 					}
-				})
+				});
 
 				if (wrappedWindow.parentWindow)
 					localParent = wrappedWindow.parentWindow;
 			};
 			var onParentCleared = () => {
+				Logger.system.debug("Companion window onParentCleared");
 				FSBL.Clients.WindowClient.finsembleWindow.show();
 				FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
 				if (localParent) {
@@ -88,12 +89,12 @@ var Actions = {
 			};
 			Actions.isWindowVisible((err, isVisible) => {// check on init. Mainly for workspace reload
 				if (!isVisible) {
-					Actions.onCompanionHidden()
+					Actions.onCompanionHidden();
 				}
-			})
+			});
 
 			wrappedWindow.addListener("setParent", onParentSet);
-			wrappedWindow.addListener("clearParent", onParentCleared)
+			wrappedWindow.addListener("clearParent", onParentCleared);
 			wrappedWindow.listenForBoundsSet();
 			wrappedWindow.addListener("bounds-set", Actions.onBoundsChanged);
 			wrappedWindow.addListener("closed", Actions.onCompanionClosed);
@@ -109,23 +110,23 @@ var Actions = {
 
 			wrappedWindow.getBounds({}, function (err, bounds) {// set the bounds and then show the window
 				if (!bounds.width) bounds.width = bounds.right - bounds.left;
-			//console.log("start bounds", bounds, Actions.getContractedBounds(bounds));
+				//console.log("start bounds", bounds, Actions.getContractedBounds(bounds));
 				HeaderStore.setCompanionBounds(bounds);
 				FSBL.Clients.WindowClient.finsembleWindow.setBounds(
 					Actions.getContractedBounds(bounds),
 					{ persistBounds: false },
 					function (err) {
-						Actions.updateWindowPosition()//hack for small window
+						Actions.updateWindowPosition();//hack for small window
 						Actions.isWindowVisible(function (err, isVisible) {
 							if(isVisible)
-							FSBL.Clients.WindowClient.finsembleWindow.show(false, function () {
-								FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
-							});
-						})
+								FSBL.Clients.WindowClient.finsembleWindow.show(false, function () {
+									FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
+								});
+						});
 
 						cb();
 					}, function () { });
-			})
+			});
 
 
 		});
@@ -145,8 +146,8 @@ var Actions = {
 						}
 						return cb(null, false);
 					}
-				})
-			})
+				});
+			});
 		} else {
 			return cb(null, true);
 		}
@@ -157,7 +158,7 @@ var Actions = {
 			width: COMPANION_CONTRACTED_WIDTH,
 			height: COMPANION_CONTRACTED_HEIGHT,
 			top: bounds.top
-		}
+		};
 	},
 	getExpandedBounds(bounds) {
 		return {
@@ -165,7 +166,7 @@ var Actions = {
 			width: bounds.width,
 			height: COMPANION_EXPANDED_HEIGHT,
 			top: bounds.top
-		}
+		};
 	},
 	onBoundsChanged(bounds) {
 		HeaderStore.setCompanionBounds(bounds);
@@ -198,19 +199,23 @@ var Actions = {
 		Logger.system.debug("Companion window stopped moving");
 		HeaderStore.setMoving(false);
 		Actions.updateWindowPosition(function () {
+			if(HeaderStore.getMoving())return;
 			if (HeaderStore.getCompanionWindow().parentWindow) {
 				Actions.isWindowVisible(function (err, isVisible) {
 					if (isVisible) {
+						Logger.system.debug("Companion window show from stop");
 						FSBL.Clients.WindowClient.finsembleWindow.show();
 					}
-			});
+				});
 			} else {
+				Logger.system.debug("Companion window show from stop");
 				FSBL.Clients.WindowClient.finsembleWindow.show();
 			}
-		})
+		});
 	},
 	onCompanionFocused() {
 		Logger.system.debug("Companion window focused");
+		if(HeaderStore.getMoving())return;
 		FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
 	},
 	//Helper function to update the titlebar's position
@@ -222,18 +227,18 @@ var Actions = {
 		setTimeout(() => {
 			HeaderStore.getCompanionWindow().getBounds({}, function (err, bounds) {
 				HeaderStore.setCompanionBounds(bounds);
-				if (!bounds.width) bounds.width = bounds.right - bounds.left
+				if (!bounds.width) bounds.width = bounds.right - bounds.left;
 				FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
 				let onBoundsSet = function (err) {
 					if (err) {
 						FSBL.Clients.Logger.error(err);
 					}
 					cb();
-				}
+				};
 
 				if (HeaderStore.getState() === "small") {
 					let newBounds = Actions.getContractedBounds(bounds);
-					return FSBL.Clients.WindowClient.finsembleWindow.setBounds(newBounds, { persistBounds: false }, onBoundsSet)
+					return FSBL.Clients.WindowClient.finsembleWindow.setBounds(newBounds, { persistBounds: false }, onBoundsSet);
 				}
 
 				let newBounds = Actions.getExpandedBounds(bounds);
@@ -247,15 +252,18 @@ var Actions = {
 		FSBL.Clients.WindowClient.finsembleWindow.close({});
 	},
 	onCompanionHidden() {
+
 		Logger.system.debug("Companion window hidden");
 		FSBL.Clients.WindowClient.finsembleWindow.hide();
 	},
 	onCompanionShown() {
 		Logger.system.debug("Companion window shown");
+		if(HeaderStore.getMoving())return;
 		FSBL.Clients.WindowClient.finsembleWindow.show();
 	},
 	onCompanionBringToFront() {
 		Logger.system.debug("Companion window BTF");
+		if(HeaderStore.getMoving())return;
 		setTimeout(() => {
 			Actions.isWindowVisible(function (err, isVisible) {
 				console.debug("Companion show.......",isVisible);
@@ -272,7 +280,7 @@ var Actions = {
 		Logger.system.debug("Companion window maximized");
 		setTimeout(() => {
 			Actions.updateWindowPosition();
-		}, 500)
+		}, 500);
 	},
 	onCompanionMinimized() {
 		Logger.system.debug("Companion window minimized");
@@ -286,7 +294,7 @@ var Actions = {
 				FSBL.Clients.WindowClient.finsembleWindow.show();
 				FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
 			}
-		})
+		});
 
 		Actions.updateWindowPosition();
 	},
@@ -294,7 +302,7 @@ var Actions = {
 	expandWindow(cb = Function.prototype) {
 		if (animating) return cb();
 		animating = true;
-		if (HeaderStore.getState() === "large") return
+		if (HeaderStore.getState() === "large") return;
 		HeaderStore.setState("large");
 		let finWindow = fin.desktop.Window.getCurrent();
 		let currentBound = HeaderStore.getCompanionBounds();
@@ -308,9 +316,9 @@ var Actions = {
 
 		const logAnimationError = (err) => {
 			if (err) {
-				console.error("Erorr in size animation", err)
+				console.error("Erorr in size animation", err);
 			}
-		}
+		};
 		const widenCompanion = (done) => {
 			finWindow.animate({
 				position: {
@@ -326,17 +334,17 @@ var Actions = {
 		};
 		const expandCompanion = (done) => {
 			finWindow.animate({ size: { duration: 150, height: expandedBounds.height } }, done, done);
-		}
+		};
 		const onAnimationCompleted = (err) => {
 			logAnimationError(err);
-			HeaderStore.emit("tabRegionShow")
-			animating = false
+			HeaderStore.emit("tabRegionShow");
+			animating = false;
 			if (updateBoundsAfterAnimate) {
 				updateBoundsAfterAnimate = false;
 				Actions.updateWindowPosition();
 			}
-			cb()
-		}
+			cb();
+		};
 		series([
 			widenCompanion,
 			expandCompanion
@@ -361,12 +369,12 @@ var Actions = {
 
 		const logAnimationError = (err) => {
 			if (err) {
-				console.error("Erorr in size animation", err)
+				console.error("Erorr in size animation", err);
 			}
-		}
+		};
 		const shrinkCompanion = (done) => {
 			finWindow.animate({ size: { duration: 150, height: contractedBounds.height } }, done, done);
-		}
+		};
 
 		const centerCompanion = (done) => {
 			finWindow.animate({
@@ -383,13 +391,13 @@ var Actions = {
 		};
 
 		const onAnimationCompleted = (err) => {
-			animating = false
+			animating = false;
 			if (updateBoundsAfterAnimate) {
 				updateBoundsAfterAnimate = false;
 				Actions.updateWindowPosition();
 			}
 			logAnimationError(err);
-			cb()
+			cb();
 		};
 
 		series([
@@ -397,7 +405,7 @@ var Actions = {
 			centerCompanion
 		], onAnimationCompleted);
 	}
-}
+};
 
 
 export { HeaderStore as Store };
