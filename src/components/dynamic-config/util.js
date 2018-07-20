@@ -123,15 +123,15 @@
 		return new Promise((resolve, reject) => {
 			FSBL.Clients.StorageClient.get(
 				{
-					topic: "user",
-					key: "config"
+					topic: "finsemble",
+					key: "repos"
 				},
-				(error, configData) => {
+				(error, repos) => {
 					if (error) {
 						reject(error)
 						return
 					}
-					resolve(configData.repos || [])
+					resolve(repos || [])
 				}
 			)
 		})
@@ -165,7 +165,7 @@
 		return new Promise((resolve, reject) => {
 			FSBL.Clients.StorageClient.save(
 				{
-					topic: "user",
+					topic: "finsemble",
 					key: "repos",
 					value: repos
 				},
