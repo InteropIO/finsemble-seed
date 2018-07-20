@@ -17,6 +17,10 @@ label, .form-control {
     border: 0;
 }
 
+.btn.btn-active {
+  background: var(--active-header-background-color);
+}
+
 .component-checklist {
   list-style-type: none;
 }

@@ -11,16 +11,18 @@
 
 	// Wrapper for the Finsemble config client
 	function applyConfig(config) {
+		console.log('CONFIG: ', config)
+		console.log(JSON.stringify(config))
 		return new Promise((resolve, reject) => {
 			FSBL.Clients.ConfigClient.processAndSet(
 				{
 					newConfig: config,
 					overwrite: true,
-					replace: false
+					replace: true
 				},
-				(err, finsemble) => {
-					if (err) {
-						reject(err)
+				(error, finsemble) => {
+					if (error) {
+						reject(error)
 						return
 					}
 
@@ -33,10 +35,10 @@
 							key: "config",
 							value: {
 								components,
-								menus: finsemble.menus,
-								workspaces: finsemble.workspaces,
 								cssOverridePath: finsemble.cssOverridePath,
-								services: config.services
+								menus: finsemble.menus,
+								services: config.services,
+								workspaces: finsemble.workspaces
 							}
 						},
 						(error) => error ? reject(error) : resolve()
@@ -104,13 +106,13 @@
 
 					getServices().then(
 						(services) => {
-							resolve(Object.assign(data, {
+							resolve({
 								components: filterComponents(data.components),
 								cssOverridePath: data.cssOverridePath || '',
 								menus: data.menus || {},
 								services,
 								workspaces: data.workspaces || {}
-							}))
+							})
 						},
 						(error) => reject(error)
 					)

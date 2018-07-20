@@ -33,25 +33,25 @@
 			this.resetForm()
 			util.getRepos().then(
 				(repos) => this.repos = repos,
-				(error) => { throw new Error(error) }
+				(error) => FSBL.Clients.Logger.error(error)
 			)
 		},
 		template: `
 			<div class="container">
 				<div id="top-buttons" class="form-group">
-					<button class="btn" v-on:click="tab = 'components'">
+					<button class="btn" v-bind:class="{ 'btn-active': tab === 'components' }" v-on:click="tab = 'components'">
 						Components
 					</button>
-					<button class="btn" v-on:click="tab = 'menus'">
+					<button class="btn" v-bind:class="{ 'btn-active': tab === 'menus' }" v-on:click="tab = 'menus'">
 						Menu
 					</button>
-					<button class="btn" v-on:click="tab = 'workspaces'">
+					<button class="btn" v-bind:class="{ 'btn-active': tab === 'workspaces' }" v-on:click="tab = 'workspaces'">
 						Workspaces
 					</button>
-					<button class="btn" v-on:click="tab = 'styles'">
+					<button class="btn" v-bind:class="{ 'btn-active': tab === 'styles' }" v-on:click="tab = 'styles'">
 						Style
 					</button>
-					<button class="btn" v-on:click="tab = 'services'">
+					<button class="btn" v-bind:class="{ 'btn-active': tab === 'services' }" v-on:click="tab = 'services'">
 						Services
 					</button>
 				</div>
@@ -181,6 +181,20 @@
 	})
 
 
+	// Check mark the component if it's already enabled.
+	// This checks if based on the component's UUID, so
+	// if there is another component with the same name
+	// this won't necessarily get a checkmark.
+	function checkmarkComponents(form, components) {
+		return components.map((component) => {
+			const isEnabled = Object.keys(form.components).find((key) => {
+				return component.id === form.components[key].id
+			})
+			component.enabled = Boolean(isEnabled)
+			return component
+		})
+	}
+
 	function download(filename, text) {
 		const element = document.createElement("a")
 		element.setAttribute("href", `data:text/plain;charset=utf-8,${encodeURIComponent(text)}`)
@@ -196,34 +210,29 @@
 	}
 
 	function exportConfig() {
-		const newConfig = getConfigFromForm()
+		const newConfig = parseForm()
 		const configStr = JSON.stringify(newConfig, null, "\t")
 
 		// Start file download.
 		download("userConfig.json", configStr)
 	}
 
-	function getConfigFromForm() {
-		const newConfig = {}
+	function parseForm(form) {
+		const newConfig = {
+			components: form.components
+		}
 		try {
-			if (this.form.components.length > 0) {
-				newConfig.components = JSON.parse(this.form.components)
+			if (form.menus.length > 0) {
+				newConfig.menus = JSON.parse(form.menus)
 			}
-
-			if (this.form.menus.length > 0) {
-				newConfig.menus = JSON.parse(this.form.menus)
+			if (form.workspaces.length > 0) {
+				newConfig.workspaces = JSON.parse(form.workspaces)
 			}
-
-			if (this.form.workspaces.length > 0) {
-				newConfig.workspaces = JSON.parse(this.form.workspaces)
+			if (form.cssOverridePath.length > 0) {
+				newConfig.cssOverridePath = form.cssOverridePath
 			}
-
-			if (this.form.cssOverridePath.length > 0) {
-				newConfig.cssOverridePath = this.form.cssOverridePath
-			}
-
-			if (this.form.services.length > 0) {
-				newConfig.services = JSON.parse(this.form.services)
+			if (form.services.length > 0) {
+				newConfig.services = JSON.parse(form.services)
 			}
 		} catch (e) {
 			alert("Invalid input.")
@@ -245,9 +254,8 @@
 		fetch(importURL)
 			.then((res) => {
 				if (res.status !== 200) {
-					throw res
+					FSBL.Clients.Logger.error(res)
 				}
-
 				return res.json()
 			})
 			.then((data) => {
@@ -266,8 +274,8 @@
 			.then(() => {
 				this.form.configImportUrl = ''
 			})
-			.catch((err) => {
-				FSBL.Clients.Logger.error(err)
+			.catch((error) => {
+				FSBL.Clients.Logger.error(error)
 				alert(`Error fetching config from ${importURL}`)
 			})
 	}
@@ -284,8 +292,9 @@
 			console.log(configObject)
 			const [status, data] = util.generateRepo(configObject)
 			if (status === 'error') {
-				throw new Error(data.msg)
+				FSBL.Clients.Logger.error(data.msg)
 			} else {
+				data.components = checkmarkComponents(this.form, data.components)
 				this.repos.push(data)
 			}
 		}
@@ -314,22 +323,26 @@
 		)
 		util.getRepos().then(
 			(repos) => {
-				this.repos = repos
+				this.repos = repos.map((repo) => {
+					// Make sure components are checked and unchecked as necessary
+					repo.components = checkmarkComponents(this.form, repo.components)
+					return repo
+				})
 			},
-			(error) => {
-				FSBL.Clients.Logger.error(error)
-			}
+			(error) => FSBL.Clients.Logger.error(error)
 		)
 	}
 
 	function submitForm() {
-		util.applyConfig(this.form).then(
+		// Make sure any JSON data is parsed back into
+		// objects before sending to the config client.
+		util.applyConfig(parseForm(this.form)).then(
 			() => alert('Settings applied'),
-			(error) => { throw new Error(error) }
+			(error) => FSBL.Clients.Logger.error(error)
 		)
 		util.setRepos(this.repos).then(
 			() => {},
-			(error) => { throw new Error(error) }
+			(error) => FSBL.Clients.Logger.error(error)
 		)
 	}
 
