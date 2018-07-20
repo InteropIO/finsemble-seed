@@ -94,7 +94,7 @@ function notificationService() {
 			.toString(16)
 			.substring(1);
 		}
-		return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+		return s4() + s4() + '-' + s4();// + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
 	}
 
 	
@@ -184,14 +184,13 @@ function notificationService() {
 		notificationsHistory.unshift(theNotification);
 		//trim history to max length
 		if (notificationsHistory.length > maxNotificationsToRemember) { 
-			let toDismiss = notificationsHistory.splice(-1,1);
+			let toDismiss = notificationsHistory.splice(-1,1)[0];
 			delete	idToNotification[toDismiss.id];
 
 			//could still be displayed... if so dismiss it
 			for (let index = 0; index < notificationsDisplayed.length; index++) {
 				if (notificationsDisplayed[index].id === toDismiss.id) {
 					self.dismissNotification(toDismiss.id);
-					break;
 				}
 			}
 		}
@@ -204,26 +203,28 @@ function notificationService() {
 			let len = notificationsDisplayed.unshift(theNotification);
 
 			//move each other notification up
-			for (let index = 1; index < notificationsDisplayed.length; index++) {
-				let bottom = index * (notificationGap + notificationHeight);
+			for (let index = 1; index < len; index++) {
+				//theres still a bug in bottom right positioning in showWindow (spawn doesn't behave the same way), where toolbar height is added to windowHeight specified and deducted from the bottom
+				let hackedHeight = notificationHeight - 40;
+				let hackedbottom = index * (notificationGap + notificationHeight) + 40;
+				
 				const windowId = {
 					windowName: notificationsDisplayed[index].id,
 					componentType: "notification",
 					monitor: 0 //TODO: just spawned on primary monitor, could be user preference controlled
 				};
-				LauncherClient.showWindow(windowId, {right: 0, bottom: bottom, height: notificationHeight, width: notificationWidth});
+				LauncherClient.showWindow(windowId, {right: 0, bottom: hackedbottom, height: hackedHeight, width: notificationWidth});
 			}
 
-			//if too many notificatitons displayed, close the oldest
+			// //if too many notificatitons displayed, close the oldest
 			if (len > maxNotificationsToShow) {
 				//TODO: for now this just dismisses the oldest notification, but might want to create a new status so that its redisplayed when others are dismissed...
 				let toDismiss = notificationsDisplayed[len-1];
-				self.dismissNotification(toDismiss.id);
+				this.dismissNotification(toDismiss.id);
 			}
 
 			//Display the new notification
 			LauncherClient.spawn("notification",
-				
 				{
 					name: theNotification.id,
 					url: url,
@@ -234,7 +235,7 @@ function notificationService() {
 					width: notificationWidth,
 					addToWorkspace: false,
 					data: {
-						id: id,
+						notification_id: id,
 						message: message,
 						action: params.action
 					}
@@ -298,43 +299,60 @@ function notificationService() {
 	 * 
 	 */
 	this.dismissNotification = function(id, cb) {
+		Logger.info(`Dismissing notification id: ${id}`);
 		let toDismiss = idToNotification[id];
+		Logger.info('Notification being dismissed:', toDismiss);
+		Logger.info('Notifications displayed:', notificationsDisplayed);
 		let displayIndex = -1;
+
+		let numNotifications = notificationsDisplayed.length;
 		if (toDismiss) {
 			//mark it dismissed
 			toDismiss.dismissed = true;
 
 			//iterate notificationsDisplayed and find it
-			for (let index = 0; index < notificationsDisplayed.length; index++) {
-				if (notificationsDisplayed.id === id){
+			for (let index = 0; index < numNotifications; index++) {
+				if (notificationsDisplayed[index].id === id){
 					displayIndex = index;
-					break;
 				}
 			}
 			//if found close it
-			if (displayIndex) {
+			if (displayIndex > -1) {
+				Logger.info('displayIndex: ' + displayIndex);
 				notificationsDisplayed.splice(displayIndex, 1);
+
+				Logger.info('Notifications displayed post splice:', notificationsDisplayed);
 				
-				Finsemble.Util.getFinWindow(toDismiss.id, function(finWin) {
-					if (finWin) {
-						finWin.close();
-					} else {
-						Logger.warn("Fin window not found for displayed notification id: ", id);
-					}
-				});
+				//seems to close the notification service...
+				// Finsemble.Util.getFinWindow(toDismiss.id, function(finWin) {
+				// 	if (finWin) {
+				// 		finWin.close();
+				// 	} else {
+				// 		Logger.warn("Fin window not found for displayed notification id: ", id);
+				// 	}
+				// });
+				//use a router channel to have it close itself instead
+				RouterClient.transmit(toDismiss.id+".close", {});
 
 				//move any notifications above it down
-				for (let index = displayIndex; index < notificationsDisplayed.length; index++) {
-					let bottom = index * (notificationGap + notificationHeight);
-					LauncherClient.showWindow(notificationsDisplayed[index].id, {right: 0, bottom: bottom, height: notificationHeight, width: notificationWidth});
+				for (let index2 = displayIndex; index2 < numNotifications-1; index2++) {
+					let hackedHeight = notificationHeight - 40;
+					let hackedbottom = (index2 * (notificationGap + notificationHeight)) - 40;
+					const windowId = {
+						windowName: notificationsDisplayed[index2].id,
+						componentType: "notification",
+						monitor: 0 //TODO: just spawned on primary monitor, could be user preference controlled
+					};
+					LauncherClient.showWindow(windowId, {right: 0, bottom: hackedbottom, height: hackedHeight, width: notificationWidth});
 				}
+				
 			}
-			cb(null,{});
+			if (cb) { cb(null,{}); }
 		} else {
 			let msg = `Notification id '${id} not found to dismiss`;
-			Logger.info(msg);
-			console.info(msg);
-			cb(new Error(msg));
+			Logger.warn(msg);
+			console.warn(msg);
+			if (cb) { cb(new Error(msg)); }
 		}
 	}
 
