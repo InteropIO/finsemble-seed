@@ -1,6 +1,7 @@
 const FormConfig = require('./form-config')
 const Loader = require('./loader')
 const Router = FSBL.Clients.RouterClient
+const ManagerLauncher = require('./manager-launcher')
 
 /**
 * This client library could be used in any component
@@ -19,6 +20,19 @@ class CredsManager {
   }
 
   async login() {
+    const manager = new ManagerLauncher()
+    const managerRunning = await manager.isRunning().catch((error) => {
+      // Looks like isRunning wasn't able to get describtors
+      console.log(error)
+    })
+
+    if (!managerRunning) {
+      await manager.open().catch((error) => {
+        // couldn't spawn a new creds manager
+        console.log(error)
+      })
+    }
+
     this.fields = await this.formConfig.get()
     .catch((error) => {
       console.log(error)
