@@ -2,5 +2,13 @@
   "creds-manager": {
     "output": "components/creds-manager/creds-manager",
     "entry": "./src/components/creds-manager/creds-manager.js"
+  },
+  "components-set": {
+    "output": "components/components-set/ascent",
+    "entry": "./src/components/components-set/ascent.js"
+  },
+  "creds-manager-client": {
+    "output": "clients/credsmanager.js",
+    "entry": "./src/clients/credsmanager/index.js"
   }
 }

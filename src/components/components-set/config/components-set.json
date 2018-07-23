@@ -3,9 +3,12 @@
   "components": {
     "Ascent": {
       "auth": {
-        "formName": "",
-        "userInput": "",
-        "passInput": ""
+        "formIndex": 0,
+        "userInput": "user[email]",
+        "passInput": "user[password]"
+      },
+      "component": {
+        "inject": "$applicationRoot/components/components-set/ascent.js"
       },
       "window": {
         "url": "https://app.ascentregtech.com/users/sign_in",
