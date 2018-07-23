@@ -1,51 +1,73 @@
 const FormConfig = require('./form-config')
+const Loader = require('./loader')
 const Router = FSBL.Clients.RouterClient
 
 /**
- * This client library could be used
- * In any component with mind control
- * to retrieve creds from the creds manager
- * component and attemps a login
- */
+* This client library could be used in any component
+* in mind control to retrieve creds from the creds manager
+* component and auto fill credentials and attemp login
+*/
 class CredsManager {
 
   constructor(compName) {
     if (typeof compName !== 'string') {
       throw new Error('Please pass a valid name')
     }
-    this.formConfig = new FormConfig(compName)
     this.name = compName
+    this.formConfig = new FormConfig(compName)
+    this.loader = new Loader()
   }
 
   async login() {
-    const fields = await this.formConfig.get()
+    this.fields = await this.formConfig.get()
     .catch((error) => {
       console.log(error)
     })
 
     return new Promise((resolve, reject) => {
-      if (!fields) {
+      if (!this.fields) {
         reject(new Error('No auto login support'))
         return
       }
-      Router.query('creds', {name: this.name},
-      (error, res) => {
-        const data = res.data
+      // If already logged in
+      if (!this._elExists(this.fields.userInput)) {
+        resolve('Logged in')
+        return
+      }
+      // Show the loading layer
+      this.loader.show()
+      // Get credentials and attemp a login
+      Router.query('creds',
+      {name: this.name}, (error, res) => {
         if (!error) {
-          this._autoFill(fields.userInput, data.username)
-          this._autoFill(fields.passInput, data.password)
-          resolve(data)
-        } else {
-          reject(error)
+          this._login(res.data)
+          resolve()
+          return
         }
+        this.loader.hide()
+        reject(error)
       })
     })
+  }
+  // It does all stemps prior submission
+  _login(creds) {
+    this._autoFill(this.fields.userInput, creds.username)
+    this._autoFill(this.fields.passInput, creds.password)
+    this._submit()
   }
 
   _autoFill(name, val) {
     const input = document.getElementsByName(name)[0]
     input.setAttribute('value', val)
     return this
+  }
+
+  _elExists(name) {
+    return document.getElementsByName(name)[0]
+  }
+
+  _submit() {
+    document.forms[this.fields.formIndex].submit()
   }
 }
 
