@@ -1,6 +1,10 @@
 const Store = FSBL.Clients.StorageClient
 const Router = FSBL.Clients.RouterClient
 
+/**
+ * A little vue.js application to help with rendering
+ * and UI interactions
+ */
 module.exports = (components) => {
   return new Vue({
     el: '#app',
@@ -10,6 +14,10 @@ module.exports = (components) => {
       selected: null,
       allCreds: [],
     },
+    /**
+     * Once the vue instancer created, get creds from
+     * Storage using StorageClient and keep it in our memory
+     */
     created: function () {
       Store.get({topic: 'cmanager', key:'entries' },
       (error, data = []) => {
@@ -20,6 +28,10 @@ module.exports = (components) => {
       this._setup()
     },
     methods: {
+      /**
+       * Lets the vue app knows which entry are we adding
+       * for so that we could render the form accordinly
+       */
       set:  function (config) {
         Store.get({topic: 'cmanager', key:'entries' },
         (error, data = []) => {
@@ -34,6 +46,10 @@ module.exports = (components) => {
           })
         })
       },
+      /**
+       * Saves the updated creds in storage and
+       * updates the local copy
+       */
       save: function () {
         if (this.selected.password !== this.selected.confirmPass) {
           this.passMismatch = true
@@ -46,6 +62,10 @@ module.exports = (components) => {
           this.selected = null
         })
       },
+      /**
+       * Creates a Responder to queries sent from other components
+       * requesting access to credentials for the requesting component
+       */
       _setup: function() {
         Router.addResponder('creds', (error, query) => {
           if (error) throw new Error(error)
