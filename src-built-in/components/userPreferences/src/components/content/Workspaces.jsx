@@ -96,6 +96,7 @@ export default class Workspaces extends React.Component {
 	}
 
 	setWorkspaceList(err, data) {
+		console.log("Set workspacelist", data);
 		if (!data) return;
 		this.setState({
 			workspaceList: data.value
@@ -256,7 +257,8 @@ export default class Workspaces extends React.Component {
 		if (!data && !data.value) return;
 		console.log("Set preferences", data.value);
 		this.setState({
-			workspaceToLoadOnStart: data.value['finsemble.initialWorkspace']
+			workspaceToLoadOnStart: data.value['finsemble.initialWorkspace'],
+			focusedWorkspace: data.value['finsemble.initialWorkspace']
 		});
 	}
 

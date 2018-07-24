@@ -149,6 +149,8 @@ export default class ScheduledRestart extends React.Component {
                 let enabled = typeof scheduledRestart === "object";
                 if (enabled) {
                     scheduledRestart.meridiem = scheduledRestart.hour > 11 ? "PM" : "AM";
+                } else {
+                    scheduledRestart = DEFAULT_RESTART;
                 }
                 this.setState({ scheduledRestart, enabled });
             }
