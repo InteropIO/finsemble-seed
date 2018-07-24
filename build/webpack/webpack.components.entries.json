@@ -3,9 +3,13 @@
     "output": "components/creds-manager/creds-manager",
     "entry": "./src/components/creds-manager/creds-manager.js"
   },
-  "components-set": {
+  "components-set-ascent": {
     "output": "components/components-set/ascent",
     "entry": "./src/components/components-set/ascent.js"
+  },
+  "components-set-corlytics": {
+    "output": "components/components-set/corlytics",
+    "entry": "./src/components/components-set/corlytics.js"
   },
   "creds-manager-client": {
     "output": "clients/credsmanager.js",

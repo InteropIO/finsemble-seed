@@ -43,9 +43,12 @@
     },
     "Corlytics": {
       "auth": {
-        "formName": "",
-        "userInput": "",
-        "passInput": ""
+        "formIndex": 0,
+        "userInput": "UserName",
+        "passInput": "Password"
+      },
+      "component": {
+        "inject": "$applicationRoot/components/components-set/corlytics.js"
       },
       "window": {
         "url": "https://app.corlytics.com/account/login/",
