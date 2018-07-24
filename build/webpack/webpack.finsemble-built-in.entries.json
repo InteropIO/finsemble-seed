@@ -62,5 +62,9 @@
 	"processMonitor": {
 		"output": "components/processMonitor/processMonitor",
 		"entry": "./src-built-in/components/processMonitor/src/app.jsx"
-	}
+	},
+    "linkerTester": {
+        "output": "components/linkerTester/linkerTester",
+        "entry": "./src-built-in/components/linkerTester/linkerTester.js"
+    }
 }
