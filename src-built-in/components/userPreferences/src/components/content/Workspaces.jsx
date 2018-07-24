@@ -42,7 +42,7 @@ class WorkspaceEditor extends React.Component {
 	}
 
 	onBlur() {
-	//console.log("ON BLUR", performance.now());
+		//console.log("ON BLUR", performance.now());
 		function finish(val) {
 			this.props.saveHandler(val);
 		}
@@ -276,6 +276,7 @@ export default class Workspaces extends React.Component {
 
 	setWorkspaceToLoadOnStart(cb = Function.prototype) {
 		let self = this;
+		if (!this.state.focusedWorkspace) return;
 		function setPreference() {
 			FSBL.Clients.ConfigClient.setPreference({ field: "finsemble.initialWorkspace", value: self.state.workspaceToLoadOnStart }, (err, data) => {
 				if (err) {
@@ -521,6 +522,7 @@ export default class Workspaces extends React.Component {
 					</div>
 				</div>
 				<Checkbox
+					disabled={!this.state.focusedWorkspace}
 					onClick={this.setWorkspaceToLoadOnStart}
 					checked={this.state.focusedWorkspace === this.state.workspaceToLoadOnStart}
 					label="Load this workspace on startup." />
