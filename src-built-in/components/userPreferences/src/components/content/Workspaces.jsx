@@ -254,13 +254,17 @@ export default class Workspaces extends React.Component {
 	}
 	setPreferences(err, data) {
 		if (!data && !data.value) return;
+		console.log("Set preferences", data.value);
 		this.setState({
 			workspaceToLoadOnStart: data.value['finsemble.initialWorkspace']
 		});
 	}
 
 	componentDidMount() {
-		UserPreferencesStore.addListener({ field: 'preferences' }, this.setPreferences)
+		UserPreferencesStore.addListener({ field: 'preferences' }, this.setPreferences);
+		FSBL.Clients.ConfigClient.getPreferences((err, data) => {
+			this.setPreferences(err, { value: data })
+		});
 		UserPreferencesStore.getValue({ field: "WorkspaceList" }, (err, data) => {
 			if (data && data.length) {
 				this.setState({
