@@ -13,6 +13,8 @@
 	// #region Imports
 	// NPM
 	const chalk = require("chalk");
+	const errorColor = chalk.red;
+	const outputColor = chalk.white;
 	chalk.enabled = true;
 	//force color output
 	chalk.level = 1;
@@ -20,7 +22,17 @@
 	const fs = require("fs");
 	const path = require("path");
 	const compression = require("compression");
+	const httpProxy = require("http-proxy-middleware");
 	// Local
+
+	const handleError = e => {
+		if (e) {
+			console.error(e);
+			process.send("serverFailed");
+			process.exit(1);
+		}
+	}
+
 	const extensions = fs.existsSync(path.join(__dirname, "server-extensions.js")) ?
 		require("./server-extensions") :
 		{
