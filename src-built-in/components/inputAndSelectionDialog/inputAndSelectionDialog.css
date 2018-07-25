@@ -1,5 +1,5 @@
-@import '../assets/css/_variables.css';
-@import '../assets/css/_variablesWhitelabel.css';
+@import '../../..//assets/css/_variables.css';
+@import '../../../assets/css/_variablesWhitelabel.css';
 
 body {
     margin: 0px;

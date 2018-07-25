@@ -12,7 +12,7 @@ let values = {
 	companionWindow: null,
 	moving: false
 };
-const COMPANION_EXPANDED_HEIGHT = 32;
+const COMPANION_EXPANDED_HEIGHT = 25;
 const COMPANION_CONTRACTED_HEIGHT = 10;
 const COMPANION_CONTRACTED_WIDTH = 86;
 let Logger = FSBL.Clients.Logger;

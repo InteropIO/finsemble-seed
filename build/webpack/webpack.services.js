@@ -1,42 +1,39 @@
-var path = require('path');
-var fs = require("fs");
-var glob = require("glob");
-var glob_entries = require('webpack-glob-entries');
-//not used?
-function getDirectories(srcpath) {
-	return fs.readdirSync(srcpath).filter(function (file) {
-		return fs.statSync(path.join(srcpath, file)).isFile();
-	});
-}
-
-var services = glob_entries(path.join(__dirname, '../../', "/src/services/**/*.js"));
-var clients = glob_entries(path.join(__dirname, '../../', "/src/clients/**/*.js"));
-
-var entry = {};
+const path = require('path');
+const fs = require("fs");
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const glob_entries = require('webpack-glob-entries');
+const services = glob_entries(path.join(__dirname, '../../', "/src/services/**/*.js"));
+let entry = {};
 
 //process service files found
-for (var key in services) {
-	var currentPath = services[key];
+for (let key in services) {
+	let currentPath = services[key];
 	let splitPath = currentPath.split('/services/');
-	var folder = key.replace("Service", "");
-	var newKey = key.replace("Service", "");
-	//This object builds up an object where every key is the output directory of the file, and the value is the entry file. Typically we want to preserve the path. For services, we default to putting them in their named folder (below).
-	var entryKey = 'services/' + splitPath[1];
+	let folder = key.replace("Service", "");
+	//This loop builds up an object where every key is the output directory of the file, and the value is the entry file. Typically we want to preserve the path. For services, we default to putting them in their named folder (below).
+	let entryKey = 'services/' + splitPath[1];
 
 	if (key.includes('Service')) {
 		//for service files, we default to service/SERVICENAME/SERVICENAME
 		entryKey = 'services/' + folder + "/" + key;
 	}
-	entry[entryKey] = [currentPath];
+	entry[entryKey] = currentPath;
 }
 
 if (Object.keys(entry).length === 0) {
 	return module.exports = null;//If we don't have services there is no need to create an entry json
 };
 
-let defaults = require('./defaultWebpackConfig');
-let config = new defaults();
-config.watch = false;
+const defaultWebpackConfig = require('./defaultWebpackConfig');
+let config = new defaultWebpackConfig();
 config.entry = entry;
+config.plugins.push(new CopyWebpackPlugin(
+	[
+		{
+			from: './src/services/',
+			to: './services/'
+		}
+	]
+));
 
 module.exports = config;

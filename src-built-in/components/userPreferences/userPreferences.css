@@ -1,5 +1,5 @@
-@import '../assets/css/_globals.css';
-@import '../assets/css/_menus.css';
+@import '../../../assets/css/_globals.css';
+@import '../../../assets/css/_menus.css';
 
 body {
     margin: 0px;
@@ -246,7 +246,7 @@ img {
 }
 
 .action-button {
-    border: 1px solid var(--button-neutral-border-color);
+    border: 1px solid var(--button-neutral-border-hover-color);
     padding: .25em 0;
     display: flex;
     align-items: center;
@@ -256,7 +256,7 @@ img {
 
 .action-button:hover {
     cursor: pointer;
-    border: solid 1px var(--button-neutral-border-hover-color);
+    border: solid 1px var(--content-button-neutral-border-hover-color);
 }
 
 .disabled-button, .disabled-button:hover {

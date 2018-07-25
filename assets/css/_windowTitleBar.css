@@ -1,27 +1,16 @@
 @import "./_variablesWhitelabel.css";
 @import url('./_themeWhitelabel.css');
 
-.cq-drag {
-    cursor: -webkit-grab;
-    -webkit-app-region: drag;
-}
-
-.cq-drag-area:active {
-    cursor: -webkit-grabbing;
-}
-.fsbl-header-floater {
+.fsbl-drag-handle {
     position: absolute;
     z-index: 2147483641;
-    height: 32px;
-    width:75%;
-    top:0px!important;
-    margin-top:-32px;
-    left:70px;
+    top: 0px!important;
+    /* background-color: red; */
    -webkit-app-region: drag;
-  }
-.cq-no-drag {
-    -webkit-app-region: no-drag !important;
-    position: absolute;
+}
+
+.fsbl-drag-handle.hidden {
+    display: none;
 }
 
 .fsbl-tabs-multiple .fsbl-header-right {
@@ -54,7 +43,6 @@ html.desktop-active .fsbl-header {
 
 .fsbl-header-title {
     height: 100%;
-    max-width: 75%; /* make sure there's always some space to grab and move the window */
     overflow: hidden;
     align-items: center;
     display:flex;
@@ -68,15 +56,6 @@ html.desktop-active .fsbl-header {
     background-color: var(--titlebar-tab-active-background-color);
     color: var(--titlebar-tab-active-font-color);
     border-right: var(--titlebar-tab-section-separator);
-}
-
-.fsbl-drag-region {
-    position: absolute;
-    width: 100%;
-    height: calc(100% - 5px);
-    bottom: 0px;
-    left: 0px;
-    -webkit-app-region: drag;
 }
 
 .fsbl-header-left {
@@ -173,7 +152,7 @@ html.desktop-active .fsbl-tab-region-drag-area {
     position: relative;
     color: var(--titleBar-inactive-font-color);
     font-size: var(--titleBar-icon-font-size);
-    width: 21px;
+    width: 18px;
     padding: 0px 6px;
     height: calc(100% + 5px);
     margin-top: -5px;
@@ -246,11 +225,12 @@ html.desktop-active .fsbl-icon-highlighted {
 }
 
 .linker-group {
-    width: 7px;
-    height: 18px;
-    margin-left: 4px;
+    width: 5px;
+    height: 15px;
+    margin-left: 3px;
     border-radius: 4px;
     border: 1px solid var(--titleBar-background-inactive-color);
+    box-sizing: content-box; /* otherwise any box-sizing on the page can override how our linker appears */
 }
 
 html.desktop-active .linker-group {
@@ -289,7 +269,7 @@ html.desktop-active .fsbl-linker[hover=true] {
 }
 
 .ff-minimize {
-    padding-bottom: 5px;
+    padding-bottom: 3px;
 }
 
 .ff-linker:before {
@@ -307,6 +287,10 @@ html.desktop-active .fsbl-linker[hover=true] {
 .ff-always-on-top {
     padding-top: 3px;
     font-size: 16px;
+}
+
+.ff-restore {
+    padding-top: 4px;
 }
 
 .fsbl-tab {
@@ -331,7 +315,7 @@ html.desktop-active .fsbl-linker[hover=true] {
 }
 
 .tab-region-wrapper {
-    /*width: 100%;*/
+    max-width: 75%; /* make sure there's always some space to grab and move the window */
 }
 /* When there are multiple tabs, no border for the last tab on the right side. */
 .fsbl-tabs-multiple .tab-region-wrapper > div:last-child {
@@ -381,14 +365,19 @@ html.desktop-active .fsbl-linker[hover=true] {
 
 .fsbl-tab-logo {
     margin: 0 7px;
+    padding-top: 1px;
     width: auto;
     height: auto;
     color: var(--titlebar-tab-icon-font-color);
 }
 
+.fsbl-tab-logo i {
+    font-size: 14px;
+}
+
 .fsbl-tab-logo img {
-    height: 22px;
-    width: 22px;
+    height: 18px;
+    width: 18px;
 }
 
 .fsbl-tab .fsbl-tab-style {
@@ -426,7 +415,7 @@ html.desktop-active .fsbl-linker[hover=true] {
         padding-left: 70px; /* leave some space for a user to grab */
     }
     .fsbl-header-title {
-        max-width:50%;
+        /* max-width:50%; */
     }
 }
 

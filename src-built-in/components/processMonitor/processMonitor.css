@@ -1,4 +1,4 @@
-@import  url('../assets/css/_globals.css');
+@import  url('../../../assets/css/_globals.css');
 
 body {
 	margin: 0px;
@@ -27,10 +27,7 @@ body {
 	line-height: normal;
 	letter-spacing: normal;
 	text-align: right;
-	color: var(--button-neutral-solid-font-color);
 	padding: 3px 4px;
-	background-color: var(--button-neutral-background-color);
-	border: solid 1px var(--button-neutral-border-color);
 	cursor: pointer;
 	transition: all .25s ease;
 }
@@ -177,7 +174,7 @@ body {
 	width: 110px;
 	height: 35px;
 	background-color: var(--button-neutral-background-color);
-	border: solid 1px var(--button-neutral-border-color);
+	border: solid 1px var(--button-neutral-border-hover-color);
 	color: var(--button-neutral-solid-font-color);
 	display:flex;
 	align-content: center;

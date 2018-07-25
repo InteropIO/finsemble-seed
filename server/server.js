@@ -13,6 +13,8 @@
 	// #region Imports
 	// NPM
 	const chalk = require("chalk");
+	const errorColor = chalk.red;
+	const outputColor = chalk.white;
 	chalk.enabled = true;
 	//force color output
 	chalk.level = 1;
@@ -21,6 +23,15 @@
 	const path = require("path");
 	const compression = require("compression");
 	// Local
+
+	const handleError = e => {
+		if (e) {
+			console.error(e);
+			process.send("serverFailed");
+			process.exit(1);
+		}
+	}
+
 	const extensions = fs.existsSync(path.join(__dirname, "server-extensions.js")) ?
 		require("./server-extensions") :
 		{
@@ -68,11 +79,22 @@
 			 *  }
 			 * }*/
 			updateServer: (app, cb) => {
+				const server = app.listen(
+					PORT,
+					e => {
+						handleError(e);
+
+						logToTerminal(outputColor(`Listening on port ${ PORT } `));
+
+						global.host = server.address().address;
+						global.port = server.address().port;
+				});
+
 				app.use(compression());
 				// Sample server root set to "/" -- must align with paths throughout
 				app.use("/", express.static(rootDir, options));
 				// Open up the Finsemble Components,services, and clients
-				app.use("/Finsemble", express.static(moduleDirectory, options));
+				app.use("/finsemble", express.static(moduleDirectory, options));
 				// For Assimilation
 				app.use("/hosted", express.static(path.join(__dirname, "..", "hosted"), options));
 
@@ -88,14 +110,15 @@
 	// #region Constants
 	const app = express();
 	const rootDir = path.join(__dirname, "..", "dist");
-	const moduleDirectory = path.join(__dirname, "..", "Finsemble");
+	const moduleDirectory = path.join(__dirname, "..", "finsemble");
 	const ONE_DAY = 24 * 3600 * 1000;
 	const cacheAge = process.env.NODE_ENV === "development" ? 0 : ONE_DAY;
-	const outputColor = chalk.white;
 	const PORT = process.env.PORT || 3375;
 	// #endregion
-	const logToTerminal = (msg) => {
-		console.log(`[${new Date().toLocaleTimeString()}] ${msg}.`);
+	const logToTerminal = (msg, color = "white", bgcolor = "bgBlack") => {
+		if (!chalk[color]) color = "white";
+		if (!chalk[color][bgcolor]) bg = "black";
+		console.log(`[${new Date().toLocaleTimeString()}] ${chalk[color][bgcolor](msg)}.`);
 	}
 
 	logToTerminal(outputColor(`Server serving from ${rootDir} with caching maxAge = ${cacheAge} ms.`));
@@ -113,6 +136,7 @@
 		const STATS_PATH = path.join(__dirname, "./stats.json");
 		//Listens for the first time that the config and the serviceManager are retrieved, and logs output to the console.
 		let notified_config = false, notified_sm = false;
+		let serviceManagerRetrievedTimeout;
 		app.get("/configs/openfin/manifest-local.json", (req, res, next) => {
 			if (!notified_config) {
 				let stats = require(STATS_PATH);
@@ -124,12 +148,16 @@
 
 				logToTerminal(outputColor(`Application manifest retrieved ${launchDuration}s after launch`));
 				notified_config = true;
+				serviceManagerRetrievedTimeout = setTimeout(() => {
+					logToTerminal(errorColor(`ERROR: Finsemble application manifest has been retrieved from the server, but the Finsemble Service Manager has not. This can be caused by a slow internet connection (e.g., downloading assets). This can also be a symptom that you have a hanging openfin process. Please inspect your task manager to ensure that there are no lingering processes. Alternatively, run 'finsemble-cli kill'`))
+				}, 10000);
 			}
 			next();
 		});
 
-		app.get("/Finsemble/components/system/serviceManager/serviceManager.html", (req, res, next) => {
+		app.get("/finsemble/components/system/serviceManager/serviceManager.html", (req, res, next) => {
 			if (!notified_sm) {
+				clearTimeout(serviceManagerRetrievedTimeout);
 				const stats = require(STATS_PATH);
 				const now = Date.now();
 				const launchDuration = (now - stats.startTime) / 1000;
@@ -154,39 +182,19 @@
 			return;
 		}
 
-		const handleError = e => {
-			if (e) {
-				console.error(e);
-				process.send("serverFailed");
-				process.exit(1);
-			}
-		}
-
 		extensions.updateServer(app, err => {
 			handleError(err);
-
-			const server = app.listen(
-				PORT,
-				e => {
-					handleError(e);
-
-					logToTerminal(outputColor(`Listening on port ${PORT}`));
-
-					global.host = server.address().address;
-					global.port = server.address().port;
-
-					const done = () => {
-						logToTerminal(chalk.green("Server started"));
-						extensions.post(err => {
-							if (err) {
-								handleError(err);
-							} else {
-								process.send("serverStarted");
-							}
-						});
-					};
-					done();
+			const done = () => {
+				logToTerminal(chalk.green("Server started"));
+				extensions.post(err => {
+					if (err) {
+						handleError(err);
+					} else {
+						process.send("serverStarted");
+					}
 				});
+			};
+			done();
 		});
 	}
 

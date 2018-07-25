@@ -2,7 +2,7 @@
 const path = require('path');
 const fs = require("fs");
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const { DllReferencePlugin, DefinePlugin } = require("webpack");
+const { DllReferencePlugin, DefinePlugin, ProgressPlugin } = require("webpack");
 const hardSource = require("hard-source-webpack-plugin");
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 let plugins =
@@ -11,7 +11,8 @@ let plugins =
             "process.env": {
                 "NODE_ENV": JSON.stringify(env)
             }
-        })
+        }),
+        //new ProgressPlugin({ profile: false })
     ]
 
 if (env === "production") {
@@ -93,17 +94,9 @@ module.exports = {
     output: {
         filename: "[name].js",
         sourceMapFilename: "[name].map.js",
-        path: path.resolve(__dirname, '../../dist/'),
-        publicPath: 'http://localhost:3375/'
+        path: path.resolve(__dirname, '../../dist/')
     },
-    watch: process.env.NODE_ENV === "development",
     resolve: {
-        extensions: ['.js', '.jsx', '.json', 'scss', 'html'],
-        modules: [
-            './node_modules',
-            './src/components',
-            './src/clients',
-            './src/services'
-        ],
+        extensions: ['.js', '.jsx', '.json', 'scss', 'html']
     }
 }

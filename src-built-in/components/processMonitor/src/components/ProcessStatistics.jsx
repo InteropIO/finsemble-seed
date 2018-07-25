@@ -23,7 +23,7 @@ export default class ProcessStatistics extends React.Component {
                     </div>)
                 })}
                 <div className="statistic process-actions">
-                    <div className="terminate process-action" onClick={() => {
+                    <div className=" terminate fsbl-button-negative process-action" onClick={() => {
                         Actions.terminateProcess(this.props.stats)
                     }}>Terminate</div>
                 </div>
