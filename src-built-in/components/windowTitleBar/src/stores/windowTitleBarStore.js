@@ -92,10 +92,17 @@ var Actions = {
 			if (err || !response.data || !response.data.groupData) {
 				return;
 			}
+			FSBL.Clients.Logger.system.debug("On docking group update", response.data.groupData);
 			let groupNames = Object.keys(response.data.groupData);
 			let movableGroups = groupNames
 				.filter(groupName => response.data.groupData[groupName].isMovable)
 				.map(groupName => response.data.groupData[groupName]);
+			//This is all movable and snapped groups. It's used later to figure out the icon to display.
+			windowTitleBarStore.setValue({
+				field: "Main.allDockingGroups", value
+					: response.data.groupData
+			});
+
 			windowTitleBarStore.setValue({
 				field: "Main.allMovableDockingGroups", value
 					: movableGroups
@@ -195,9 +202,10 @@ var Actions = {
 			var onParentSet = () => {
 				Actions.parentWrapper = null;
 				Actions.getInitialTabList(() => {
+					FSBL.Clients.Logger.system.debug("docking group update after initial tab list");
 					onDockingGroupUpdate(null, {
 						data: {
-							groupData: windowTitleBarStore.getValue({ field: "Main.allMovableDockingGroups" })
+							groupData: windowTitleBarStore.getValue({ field: "Main.allDockingGroups" })
 						}
 					})
 				});
@@ -227,6 +235,7 @@ var Actions = {
 	getMyDockingGroups: function (groupData) {
 		let myGroups = [];
 		let windowName = FSBL.Clients.WindowClient.getWindowNameForDocking();
+		FSBL.Clients.Logger.system.debug("Getting docking groups for ", windowName, groupData);
 		if (groupData) {
 			for (var groupName in groupData) {
 				groupData[groupName].groupName = groupName;
