@@ -29,7 +29,6 @@
 	},
 	"systemTrayIcon": "$applicationRoot/assets/img/Finsemble_Taskbar_Icon.png",
 	"systemTrayComponent": "File Menu",
-	"debugServiceDelay": 0,
 	"Window Manager": {
 		"alwaysOnTopIcon": false,
 		"showTabs": true,
@@ -38,11 +37,12 @@
 	},
 	"betaFeatures": {
 		"assimilation": {
+			"useOpenFinSpawn": false,
 			"enabled": true,
 			"blacklist": [],
 			"whitelist": [],
 			"onlySpawned": true,
-			"throttle": 20,
+			"throttle": 10,
 			"focusDelay": 30,
 			"eventIgnore": 50
 		}
@@ -94,6 +94,7 @@
 	},
 	"globalHotkeys": {
 	},
+	"//": "importConfig contains components that are necessary to start Finsemble. All other components are loaded dynamically. See server/auth/test.json",
 	"importConfig": [
 		"$applicationRoot/configs/application/presentationComponents.json",
 		"$applicationRoot/configs/application/components.json",
