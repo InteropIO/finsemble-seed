@@ -188,7 +188,7 @@ class WindowTitleBar extends React.Component {
 	 * to match the intended drag area. These dimensions can change whenever the header is re-rendered (for instance when
 	 * changing mode from tabbing to non-tabbing). Dimensions can also change when the window itself is resized (due to natural
 	 * css).
-	 * 
+	 *
 	 * TODO, remove all of the cq-drag and cq-no-drag
 	 * Remove fsbl-drag-region, it is no longer needed
 	 * Hide the dragHandle during drop operations, so that it doesn't interfere
@@ -211,8 +211,8 @@ class WindowTitleBar extends React.Component {
 		// Do this every time through the render loop just in case a customer builds a
 		// header bar with dynamic height!
 		let bounds = document.querySelector(".fsbl-header").getBoundingClientRect();
-		dragHandle.style.height = (bounds.height-5) + "px"; // Subtract 5 pixels from height in order to make room for resize window cursor at top edge of window
-		dragHandle.style.marginTop = (-bounds.height+5) + "px"; // Negative margin pulls the drag handle up over the fixed header
+		dragHandle.style.height = (bounds.height - 5) + "px"; // Subtract 5 pixels from height in order to make room for resize window cursor at top edge of window
+		dragHandle.style.marginTop = (-bounds.height + 5) + "px"; // Negative margin pulls the drag handle up over the fixed header
 
 		// Start logic for determining where to place our dragHandle
 		if (this.state.showTabs) {
@@ -279,7 +279,7 @@ class WindowTitleBar extends React.Component {
 		let { tabs } = this.state;
 		let myIdentifier = FSBL.Clients.WindowClient.getWindowIdentifier();
 		let myIndex = -1;
-		let myTab = tabs.filter((el, i) => {
+		tabs = tabs.filter((el, i) => {
 			if (!el.windowName && el.name) el.windowName = el.name;
 			if (!el.name && el.windowName) el.name = el.windowName;
 
@@ -288,7 +288,8 @@ class WindowTitleBar extends React.Component {
 				return true;
 			}
 			return false;
-		})[0]
+		});
+		let myTab = tabs[0] || {};
 		myTab.title = response.value;
 		tabs.splice(myIndex, 1, myTab);
 
@@ -347,7 +348,7 @@ class WindowTitleBar extends React.Component {
 		if (this.state.hackScrollbar) {
 			document.querySelector("html").style.overflowY = "hidden";
 			document.querySelector("body").style.overflowY = "auto";
-		}		
+		}
 	}
 
 	render() {
