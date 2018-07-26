@@ -1,0 +1,53 @@
+.container {
+    font-size: 1em;
+    padding: 0px 20px 20px 20px;
+}
+
+label, .form-control {
+    display: block;
+    margin-bottom: 5px
+}
+
+.btn {
+    padding: 10px 20px;
+    color: #fff;
+    background: #006699;
+    margin-right: 5px;
+    display: inline-block;
+    border: 0;
+}
+
+.btn.btn-active {
+  background: var(--active-header-background-color);
+}
+
+.component-checklist {
+  list-style-type: none;
+}
+
+.btn-remove {
+  padding: 4px 8px;
+}
+
+.form-group {
+    margin-bottom: 10px
+}
+
+.form-control {
+    width: calc(100% - 20px);
+    padding: 10px;
+    height: 100%;
+}
+
+input:invalid, textarea:invalid {
+    border: 1px solid red;
+}
+
+input:invalid, textarea:valid {
+    border: 1px solid #999;
+}
+
+#bottom-buttons {
+    position: absolute;
+    bottom: 0px;
+}
