@@ -32,7 +32,7 @@
 	},
 	"betaFeatures": {
 		"assimilation": {
-			"enabled": true,
+			"enabled": false,
 			"blacklist": [],
 			"whitelist": [],
 			"onlySpawned": true,
@@ -86,6 +86,12 @@
 			"b"
 		]
 	},
+	"authentication": {
+		"startup": {
+			 "adapter":"PASSWORD",
+			 "component":"authentication"
+		 }
+	 },
 	"importConfig": [
 		"$applicationRoot/configs/application/presentationComponents.json",
 		"$applicationRoot/configs/application/components.json",

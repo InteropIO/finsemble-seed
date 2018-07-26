@@ -41,6 +41,12 @@ webpackConfig.plugins.push(new CopyWebpackPlugin([
 		ignore: ["**/*/node_modules/**/*", "*.js", "*.jsx"]
 	},
 	{
+		from: './src/components/dynamic-config/',
+		to: './components/dynamic-config/',
+		force: false,
+		ignore: ["**/*/node_modules/**/*"]
+	},
+	{
 		from: './configs/',
 		to: './configs/',
 		force: true

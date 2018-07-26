@@ -1,1 +1,6 @@
-{}
+{
+  "authentication": {
+    "output": "components/authentication/authentication",
+    "entry": "./src/components/authentication/authentication.js"
+  }
+}
