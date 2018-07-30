@@ -258,7 +258,7 @@
                 "left": "center",
                 "width": 800,
                 "height": 600,
-                "title": "notificationCenter"
+                "title": "Notification center"
             },
             "component": {
                 "inject": false
@@ -272,11 +272,11 @@
                 },
                 "components": {
                     "App Launcher": {
-                        "launchableByUser": true
+                        "launchableByUser": false
                     },
                     "Window Manager": {
                         "FSBLHeader": true,
-                        "persistWindowState": true
+                        "persistWindowState": false
                     },
                     "Toolbar": {
                         "iconClass": "notificationCenter"

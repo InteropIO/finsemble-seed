@@ -39,6 +39,11 @@
         "reactComponent": "BringToFront"
     },
     {
+        "align": "right",
+        "type": "reactComponent",
+        "reactComponent": "NotificationCount"
+    },
+    {
         "align": "left",
         "label": "Apps",
         "menuType": "App Launcher"
