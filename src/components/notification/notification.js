@@ -21,16 +21,25 @@ var init = function () {
 		document.querySelector(".notification-description").innerHTML = spawnData.message;
 	}
 
+	let windowName = FSBL.Clients.WindowClient.getWindowIdentifier().windowName;
+
 	FSBL.Clients.Logger.log("Setting up actions");
 	console.log("Setting up actions");
-	//TODO: handle action parameters and display action button 
+	//TODO: handle action parameters and display action buttons
+	let actionElement = document.querySelector("#notification-action");
 	if (spawnData.action && typeof spawnData.action === "object") {
-		//setup up the action button with call to performAction
+		//setup up the action buttons with call to performAction
+		if (spawnData.action.buttonText) {
+			actionElement.innerHTML = spawnData.action.buttonText;
+		}
+		actionElement.addEventListener("click", function(){ 
+			notifier.performAction(windowName);
+		});
+	
 	} else {
-		//hide action button as theres no action
+		//hide action buttons as theres no action
+		actionElement.parentNode.removeChild(actionElement);
 	}
-
-	let windowName = FSBL.Clients.WindowClient.getWindowIdentifier().windowName;
 
 	// //FIXME: temp code to just close the notification
 	// document.querySelector("#closer").addEventListener('click', function () {

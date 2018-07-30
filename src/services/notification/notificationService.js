@@ -15,6 +15,11 @@ const DEFAULT_NOTIFICATION_WIDTH = 350;
 const DEFAULT_NOTIFICATION_HISTORY_LENGTH = 250;
 const DEFAULT_MAX_NOTIFICATIONS_TO_SHOW = 5;
 
+const COUNTS_PUBSUB_TOPIC = "notificationCounts";
+const API_QUERY_RESPONDER_TOPIC = "notification functions";
+
+const WINDOWS_TASKBAR_HEIGHT = 45;
+
 /**
  * 
  * @constructor
@@ -32,12 +37,13 @@ function notificationService() {
 	let notificationWidth = DEFAULT_NOTIFICATION_WIDTH;
 	let maxNotificationsToRemember = DEFAULT_NOTIFICATION_HISTORY_LENGTH;
 	let maxNotificationsToShow = DEFAULT_MAX_NOTIFICATIONS_TO_SHOW;
+	//TODO: add a user preference setting and default for which monitor to show notifications on
 
+	const alertOnceSinceStartUp = {};
+	const alertCurrentCount = {};
+	let defaultTemplateURL = null;
 
-	var alertOnceSinceStartUp = {};
-	var alertCurrentCount = {};
-	var defaultTemplateURL = null;
-
+	
 	//------------------------------------------------------
 	//Util functions
 
@@ -100,7 +106,6 @@ function notificationService() {
 	
 	//------------------------------------------------------
 
-
 	/**
 	 * Conditionally alerts the end user using a desktop notification.
 	 *
@@ -113,9 +118,12 @@ function notificationService() {
 	 * @param {number} params.duration time in milliseconds before auto-dismissing the notification (defaults to 24 hours)
 	 * @param {number} params.url url for notification HTML. If not provided then the system default will be used. This url should be coded as required for OpenFin notifications (see OpenFin Documentation). Defaults to Finsemble's built-in version at "/finsemble/components/system/notification/notification.html".
 	 * @param {object=} params.action specifies an action to perform when the notificaiton action button is clicked on. If not set then no action button should be shown.
+	 * @param {string} params.action.buttonText The text to display on the aciton button.
 	 * @param {string} params.action.type The action type to perform, currently only supports the 'spawn' action.
 	 * @param {string} params.action.component Component type to spawn, if using the 'spawn' action.
-	 * @param {string} params.action.spawnParams Parameters to pass to `LauncherClient.spawn()`, if using the 'spawn' action.
+	 * @param {string} params.action.windowIdentifier windowIdentifier type to use with the showWindow action.
+	 * @param {string} params.action.topic topic  to use with the transmit or publish actions.
+	 * @param {string} params.action.params Parameters to be pass to the action.
 	 * 
 	 * 
 	 * @example
@@ -182,6 +190,7 @@ function notificationService() {
 
 		//add to notification history
 		notificationsHistory.unshift(theNotification);
+
 		//trim history to max length
 		if (notificationsHistory.length > maxNotificationsToRemember) { 
 			let toDismiss = notificationsHistory.splice(-1,1)[0];
@@ -199,14 +208,14 @@ function notificationService() {
 		console.log("UserNotification.alert", id, topic, alertUser, frequency, identifier, message, params);
 
 		if (alertUser) {
-			//add notification to array of displayed notificaitons
+			//add notification to array of displayed notifications
 			let len = notificationsDisplayed.unshift(theNotification);
 
 			//move each other notification up
 			for (let index = 1; index < len; index++) {
 				//theres still a bug in bottom right positioning in showWindow (spawn doesn't behave the same way), where toolbar height is added to windowHeight specified and deducted from the bottom
-				let hackedHeight = notificationHeight - 40;
-				let hackedbottom = index * (notificationGap + notificationHeight) + 40;
+				let hackedHeight = notificationHeight - WINDOWS_TASKBAR_HEIGHT;
+				let hackedbottom = index * (notificationGap + notificationHeight) + WINDOWS_TASKBAR_HEIGHT;
 				
 				const windowId = {
 					windowName: notificationsDisplayed[index].id,
@@ -216,9 +225,10 @@ function notificationService() {
 				LauncherClient.showWindow(windowId, {right: 0, bottom: hackedbottom, height: hackedHeight, width: notificationWidth});
 			}
 
-			// //if too many notificatitons displayed, close the oldest
+			// //if too many notifications displayed, close the oldest
 			if (len > maxNotificationsToShow) {
 				//TODO: for now this just dismisses the oldest notification, but might want to create a new status so that its redisplayed when others are dismissed...
+				//  would also mean count can keep growing...
 				let toDismiss = notificationsDisplayed[len-1];
 				this.dismissNotification(toDismiss.id);
 			}
@@ -250,6 +260,9 @@ function notificationService() {
 			//setup a timer to auto-dismiss the notification
 			setTimeout(function( ) {self.dismissNotification(id); }, duration);
 
+			//update pub/sub for notification counts
+			RouterClient.publish(COUNTS_PUBSUB_TOPIC, this.getNotificationCounts());
+
 		} else {
 			//just return the non-displayed notification
 			cb (null, theNotification);
@@ -258,25 +271,41 @@ function notificationService() {
 
 	/**
 	 * Perform the action and dismiss the notification if displayed.
-	 * @param {number} id The id of the notifictiton whose aciton should be performed
+	 * @param {number} id The id of the notification whose action should be performed
 	 * @param {object=} params Not currently used but will eventually allow for notifications with user input values to be passed to the action
 	 * 
-	 * @param {number} cb callback
+	 * @param {function} cb callback
 	 */
 	this.performAction = function(id, params, cb) {
 		let notification = idToNotification[id];
 		if (notification) {
 			if (notification.params && notification.params.action){
-				//TODO: merge parameter passed with the notifcation's action paramaters
+				//TODO: merge parameter passed with the notification's action paramaters
 
-				if (typeof notification.params.action === 'object' && notification.params.action.type.toLowerCase() === 'spawn' && notification.params.action.component && notification.params.action.spawnParams) {
-					LauncherClient.spawn(notification.params.action.component, notification.params.action.spawnParams);
+				if (typeof notification.params.action === 'object') { 
 
-					//TODO: add support for more action types to perform
+					if (notification.params.action.type.toLowerCase() === 'spawn' && notification.params.action.component && notification.params.action.params) {
+						LauncherClient.spawn(notification.params.action.component, notification.params.action.params);
+
+					} else if (notification.params.action.type.toLowerCase() === 'showwindow' && notification.params.action.windowIdentifier && notification.params.action.params) {
+						LauncherClient.showWindow(notification.params.action.windowIdentifier, notification.params.action.params);
+				
+					} else if (notification.params.action.type.toLowerCase() === 'transmit' && notification.params.action.topic && notification.params.action.params) {
+						RouterClient.transmit(notification.params.action.topic, notification.params.action.params);
+				
+					} else if (notification.params.action.type.toLowerCase() === 'publish' && notification.params.action.topic && notification.params.action.params) {
+						RouterClient.publish(notification.params.action.topic, notification.params.action.params);
+				
+					} else {
+						let msg = `Notification id '${id} action not supported or insufficient parameters!`;
+						Logger.error(msg, notification.params.action);
+						console.error(msg, notification.params.action);
+						cb(new Error(msg));
+					}
 				} else {
-					let msg = `Notification id '${id} action not supported or  insufficient arguments`;
-					Logger.warn(msg, notification.params.actio);
-					console.warn(msg, notification.params.action);
+					let msg = `Notification id '${id} has no associated action`;
+					Logger.error(msg, notification.params.action);
+					console.error(msg, notification.params.action);
 					cb(new Error(msg));
 				}
 
@@ -295,7 +324,7 @@ function notificationService() {
 	/**
 	 * Dismiss the notification, closing it if displayed.
 	 * @param {number} id The id of the notification that should be dismissed
-	 * @param {number} cb callback
+	 * @param {function} cb callback
 	 * 
 	 */
 	this.dismissNotification = function(id, cb) {
@@ -336,8 +365,8 @@ function notificationService() {
 
 				//move any notifications above it down
 				for (let index2 = displayIndex; index2 < numNotifications-1; index2++) {
-					let hackedHeight = notificationHeight - 40;
-					let hackedbottom = (index2 * (notificationGap + notificationHeight)) - 40;
+					let hackedHeight = notificationHeight - WINDOWS_TASKBAR_HEIGHT;
+					let hackedbottom = index2 * (notificationGap + notificationHeight) + WINDOWS_TASKBAR_HEIGHT;
 					const windowId = {
 						windowName: notificationsDisplayed[index2].id,
 						componentType: "notification",
@@ -347,6 +376,8 @@ function notificationService() {
 				}
 				
 			}
+			//Update counts pubsub topic
+			RouterClient.publish(COUNTS_PUBSUB_TOPIC, this.getNotificationCounts());
 			if (cb) { cb(null,{}); }
 		} else {
 			let msg = `Notification id '${id} not found to dismiss`;
@@ -357,9 +388,9 @@ function notificationService() {
 	}
 
 	/**
-	 * Return a notificaiton by id, if still held in the history, otherwise an error is returned.
+	 * Return a notification by id, if still held in the history, otherwise an error is returned.
 	 * @param {number} id The id of the notification that should be returned
-	 * @param {number} cb callback (err, notification)
+	 * @param {function} cb callback (err, notification)
 	 * 
 	 */
 	this.getNotification = function(id, cb) {
@@ -376,7 +407,7 @@ function notificationService() {
 	
 	/**
 	 * Return all notifications currently in the history array.
-	 * @param {number} cb callback (err, notificationsHistory)
+	 * @param {function} cb callback (err, notificationsHistory)
 	 * 
 	 */
 	this.getNotificationsHistory = function(cb) {
@@ -385,7 +416,7 @@ function notificationService() {
 
 	/**
 	 * Return the array of currently displayed notifications.
-	 * @param {number} cb callback (err, notificationsDisplayed)
+	 * @param {function} cb callback (err, notificationsDisplayed)
 	 * 
 	 */
 	this.getDisplayedNotifications = function(cb) {
@@ -393,8 +424,31 @@ function notificationService() {
 	}
 
 	/**
+	 * Return and object containing counts of displayed, total undismissed and dismissed notifications in the notification history.
+	 * @param {function} cb (potional) callback (err, counts)
+	 * 
+	 */
+	this.getNotificationCounts = function(cb) {
+		let dismissed = 0;
+		for (let n=0; n<notificationsHistory.length; n++) {
+			if(notificationsHistory[n].dismissed) { dismissed++; }
+		}
+		let counts = {
+			displayed: notificationsDisplayed.length, 
+			total_undissmissed: (notificationsHistory.length - dismissed), 
+			dismissed: dismissed
+		};
+
+		if (cb) {
+			cb(null, counts);
+		} else {
+			return counts;
+		}
+	}
+
+	/**
 	 * Dismiss all currently displayed notifications
-	 * @param {number} cb callback
+	 * @param {function} cb callback
 	 * 
 	 */
 	this.dismissAllDisplayedNotifications = function(cb) {
@@ -406,7 +460,7 @@ function notificationService() {
 
 	/**
 	 * Dismiss all currently displayed notifications
-	 * @param {number} cb callback
+	 * @param {function} cb callback
 	 * 
 	 */
 	this.clearNotificationsHistory = function(cb) {
@@ -423,8 +477,13 @@ function notificationService() {
 	 * @private
 	 */
 	this.createRouterEndpoints = function () {
-		//Example router integration which uses a single query responder to expose multiple functions
-		RouterClient.addResponder("notification functions", function(error, queryMessage) {
+
+		//setup pub/sub topic for displayed notification count
+		RouterClient.addPubSubResponder(COUNTS_PUBSUB_TOPIC, { displayed:0, total_undissmissed: 0, dismissed: 0 });
+
+
+		//create query responder for API functions
+		RouterClient.addResponder(API_QUERY_RESPONDER_TOPIC, function(error, queryMessage) {
 			if (!error) {
 				Logger.log('notificationService Query: ' + JSON.stringify(queryMessage));
 
@@ -465,6 +524,9 @@ function notificationService() {
 
 				}  else if (queryMessage.data.query === "getDisplayedNotifications") {
 					self.getDisplayedNotifications(queryMessage.sendQueryResponse);
+
+				}   else if (queryMessage.data.query === "getNotificationCounts") {
+					self.getNotificationCounts(queryMessage.sendQueryResponse);
 
 				}  else if (queryMessage.data.query === "dismissAllDisplayedNotifications") {
 					self.dismissAllDisplayedNotifications(queryMessage.sendQueryResponse);
