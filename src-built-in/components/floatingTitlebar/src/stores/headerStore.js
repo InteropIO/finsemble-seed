@@ -12,7 +12,7 @@ let values = {
 	companionWindow: null,
 	moving: false
 };
-const COMPANION_EXPANDED_HEIGHT = 32;
+const COMPANION_EXPANDED_HEIGHT = 25;
 const COMPANION_CONTRACTED_HEIGHT = 10;
 const COMPANION_CONTRACTED_WIDTH = 86;
 let Logger = FSBL.Clients.Logger;
@@ -77,6 +77,7 @@ var Actions = {
 					localParent = wrappedWindow.parentWindow;
 			};
 			var onParentCleared = () => {
+				Logger.system.debug("Companion window onParentCleared");
 				FSBL.Clients.WindowClient.finsembleWindow.show();
 				FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
 				if (localParent) {
@@ -203,19 +204,23 @@ var Actions = {
 		Logger.system.debug("Companion window stopped moving");
 		HeaderStore.setMoving(false);
 		Actions.updateWindowPosition(function () {
+			if(HeaderStore.getMoving())return;
 			if (HeaderStore.getCompanionWindow().parentWindow) {
 				Actions.isWindowVisible(function (err, isVisible) {
 					if (isVisible) {
+						Logger.system.debug("Companion window show from stop");
 						FSBL.Clients.WindowClient.finsembleWindow.show();
 					}
 				});
 			} else {
+				Logger.system.debug("Companion window show from stop");
 				FSBL.Clients.WindowClient.finsembleWindow.show();
 			}
 		});
 	},
 	onCompanionFocused() {
 		Logger.system.debug("Companion window focused");
+		if(HeaderStore.getMoving())return;
 		FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
 	},
 	//Helper function to update the titlebar's position
@@ -252,15 +257,18 @@ var Actions = {
 		FSBL.Clients.WindowClient.finsembleWindow.close({});
 	},
 	onCompanionHidden() {
+
 		Logger.system.debug("Companion window hidden");
 		FSBL.Clients.WindowClient.finsembleWindow.hide();
 	},
 	onCompanionShown() {
 		Logger.system.debug("Companion window shown");
+		if(HeaderStore.getMoving())return;
 		FSBL.Clients.WindowClient.finsembleWindow.show();
 	},
 	onCompanionBringToFront() {
 		Logger.system.debug("Companion window BTF");
+		if(HeaderStore.getMoving())return;
 		setTimeout(() => {
 			Actions.isWindowVisible(function (err, isVisible) {
 				console.debug("Companion show.......",isVisible);

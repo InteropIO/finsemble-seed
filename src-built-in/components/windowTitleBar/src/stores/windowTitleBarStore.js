@@ -40,9 +40,9 @@ var Actions = {
 				{ field: "AlwaysOnTop.show", value: FSBLHeader.alwaysOnTop ? true : false },
 			]);
 
-			if (windowTitleBarConfig.showTabs || windowTitleBarConfig.showTabs === false) {
-				windowTitleBarStore.setValue({ field: "showTabs", value: windowTitleBarConfig.showTabs });
-			}
+
+			// By default, we hack the window's scrollbar so that it displays underneath the header. html.overflow: hidden body.overflow:auto
+			windowTitleBarStore.setValue({ field: "hackScrollbar", value: (windowTitleBarConfig.hackScrollbar !== false) });
 
 			// Set by calling WindowClient.setTitle() || from config "foreign.components.Window Manager.title"
 			var title = FSBL.Clients.WindowClient.title || windowTitleBarConfig.title;
@@ -83,7 +83,7 @@ var Actions = {
 			]);
 		});
 
-		/**F
+		/**
 		 * When a group update is publish, we sift through the data to see if this window is snapped or grouped with other windows. Then we publish that info, and the DockingButton renders the correct icon.
 		 * @param {*} err
 		 * @param {*} response
@@ -92,10 +92,17 @@ var Actions = {
 			if (err || !response.data || !response.data.groupData) {
 				return;
 			}
+			FSBL.Clients.Logger.system.debug("On docking group update", response.data.groupData);
 			let groupNames = Object.keys(response.data.groupData);
 			let movableGroups = groupNames
 				.filter(groupName => response.data.groupData[groupName].isMovable)
 				.map(groupName => response.data.groupData[groupName]);
+			//This is all movable and snapped groups. It's used later to figure out the icon to display.
+			windowTitleBarStore.setValue({
+				field: "Main.allDockingGroups", value
+					: response.data.groupData
+			});
+
 			windowTitleBarStore.setValue({
 				field: "Main.allMovableDockingGroups", value
 					: movableGroups
@@ -155,9 +162,12 @@ var Actions = {
 			let globalWindowManagerConfig = finsembleConfig["Window Manager"] || { alwaysOnTopIcon: false, showTabs: false }; // Override defaults if finsemble.Window Manager exists.
 
 			// Look to see if docking is enabled. Cascade through backward compatibility with old "betaFeatures" and then a default if no config is found at all.
-			let dockingConfig = finsembleConfig.docking;
+
+			if (!finsembleConfig.servicesConfig) finsembleConfig.servicesConfig = {};
+			let dockingConfig = finsembleConfig.servicesConfig.docking || finsembleConfig.docking;
 			if (!dockingConfig && finsembleConfig.betaFeatures) dockingConfig = finsembleConfig.betaFeatures.docking;
 			if (!dockingConfig) dockingConfig = { enabled: true };
+			if (!dockingConfig.tabbing) dockingConfig.tabbing = {};
 
 			windowTitleBarStore.setValues([{ field: "Main.dockingEnabled", value: dockingConfig.enabled }]);
 
@@ -169,8 +179,22 @@ var Actions = {
 
 			windowTitleBarStore.setValues([{ field: "AlwaysOnTop.show", value: alwaysOnTopIcon }]);
 
-			if (typeof windowTitleBarConfig.showTabs !== 'boolean') {
-				windowTitleBarStore.setValue({ field: "showTabs", value: globalWindowManagerConfig.showTabs });
+
+			//If tabbing is turned off, ignore global/local 'windowManager' config about whether to allow tabbing.
+			if (dockingConfig.tabbing.enabled === false) {
+				windowTitleBarStore.setValue({ field: "showTabs", value: dockingConfig.tabbing.enabled });
+			} else {
+				//If tabbing is enabled system-wide, look to the global config for its value. Then look to the local component's config.
+
+
+				//This is the global window manager config.
+				if (typeof windowTitleBarConfig.showTabs !== 'boolean') {
+					windowTitleBarStore.setValue({ field: "showTabs", value: globalWindowManagerConfig.showTabs });
+				}
+				//This is the component's config.
+				if (windowTitleBarConfig.showTabs || windowTitleBarConfig.showTabs === false) {
+					windowTitleBarStore.setValue({ field: "showTabs", value: windowTitleBarConfig.showTabs });
+				}
 			}
 		});
 
@@ -178,9 +202,10 @@ var Actions = {
 			var onParentSet = () => {
 				Actions.parentWrapper = null;
 				Actions.getInitialTabList(() => {
+					FSBL.Clients.Logger.system.debug("docking group update after initial tab list");
 					onDockingGroupUpdate(null, {
 						data: {
-							groupData: windowTitleBarStore.getValue({ field: "Main.allMovableDockingGroups" })
+							groupData: windowTitleBarStore.getValue({ field: "Main.allDockingGroups" })
 						}
 					})
 				});
@@ -210,6 +235,7 @@ var Actions = {
 	getMyDockingGroups: function (groupData) {
 		let myGroups = [];
 		let windowName = FSBL.Clients.WindowClient.getWindowNameForDocking();
+		FSBL.Clients.Logger.system.debug("Getting docking groups for ", windowName, groupData);
 		if (groupData) {
 			for (var groupName in groupData) {
 				groupData[groupName].groupName = groupName;

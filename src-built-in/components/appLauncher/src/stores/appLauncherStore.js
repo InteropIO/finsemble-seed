@@ -262,7 +262,9 @@ var Actions = {
 			title: "Delete this App?",
 			question: "Are you sure you would like to delete \"" + componentName + "\"?",
 		}, function (err, response) {
-			if (response.choice === "affirmative") {
+			// If the user chooses "affirmative" then delete the component.
+			// We should never get an error, but if we do then go ahead and delete the component too.
+			if (err || response.choice === "affirmative") {
 				self.removeCustomComponent(componentName);
 			}
 		});

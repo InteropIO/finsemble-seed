@@ -62,5 +62,9 @@
 	"processMonitor": {
 		"output": "components/processMonitor/processMonitor",
 		"entry": "./src-built-in/components/processMonitor/src/app.jsx"
+	},
+	"throbber": {
+		"output": "components/throbber/throbber",
+		"entry": "./src-built-in/components/throbber/throbber.js"
 	}
 }

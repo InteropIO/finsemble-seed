@@ -42,14 +42,14 @@ var Actions = {
 	},
 	providerItemClick(provider) {
 		FSBL.Clients.SearchClient.invokeProviderAction(provider);
-		menuStore.Dispatcher.dispatch({ actionType: "clear", data: "" });
-		menuStore.setValue({ field: "list", value: [] })
+		//menuStore.Dispatcher.dispatch({ actionType: "clear", data: "" });
+		//menuStore.setValue({ field: "list", value: [] })
 		return finWindow.hide();
 	},
 	listItemClick(item, action) {
 		FSBL.Clients.SearchClient.invokeItemAction(item, action)
-		menuStore.Dispatcher.dispatch({ actionType: "clear", data: "" });
-		menuStore.setValue({ field: "list", value: [] })
+		//menuStore.Dispatcher.dispatch({ actionType: "clear", data: "" });
+		//menuStore.setValue({ field: "list", value: [] })
 		return finWindow.hide();
 	},
 	actionPress(err, msg) {

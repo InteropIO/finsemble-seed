@@ -134,7 +134,7 @@ var Actions = {
 					{
 						question: "Your workspace \"" + FSBL.Clients.WorkspaceClient.activeWorkspace.name + "\" has unsaved changes, would you like to save?"
 					}, function (err, response) {
-						if (response.choice === "affirmative") {
+						if (err || response.choice === "affirmative") {
 							FSBL.Clients.WorkspaceClient.saveAs({
 								force: true,
 								name: FSBL.Clients.WorkspaceClient.activeWorkspace.name
@@ -161,7 +161,6 @@ var Actions = {
 			if (choice === 'cancel') {
 				return;
 			}
-			FSBL.Clients.RouterClient.transmit("Assimilation.closeOpenFinWindows");
 			FSBL.shutdownApplication();
 		});
 

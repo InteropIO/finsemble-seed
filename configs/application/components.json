@@ -14,7 +14,8 @@
 			},
 			"component": {
 				"inject": false,
-				"spawnOnStartup": false
+				"spawnOnStartup": false,
+				"preload": "$applicationRoot/preloads/zoom.js"
 			},
 			"foreign": {
 				"services": {
@@ -54,7 +55,11 @@
 				"addToWorkspace": true
 			},
 			"component": {
-				"spawnOnHotkey": ["ctrl", "alt", "n"]
+				"spawnOnHotkey": [
+					"ctrl",
+					"alt",
+					"n"
+				]
 			},
 			"foreign": {
 				"services": {
@@ -71,7 +76,7 @@
 						"FSBLHeader": true
 					},
 					"Toolbar": {
-						"iconURL": "$applicationRoot/components/assets/img/notepad.png"
+						"iconURL": "$applicationRoot/assets/img/notepad.png"
 					}
 				}
 			}

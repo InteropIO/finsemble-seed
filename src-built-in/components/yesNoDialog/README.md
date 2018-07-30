@@ -44,7 +44,7 @@ The controls used in this component are documented over in our Finsemble React C
     };
     FSBL.Clients.DialogManager.open('yesNo', dialogParams , function (err, response) {
         //choice can be `'affirmative'`, `'negative'`, or `'cancel'`.
-        if (response.choice === 'affirmative') {
+        if (err || response.choice === 'affirmative') {
             overwrite();
         }
     });
