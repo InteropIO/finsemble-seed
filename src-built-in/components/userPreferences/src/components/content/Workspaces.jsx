@@ -185,7 +185,7 @@ export default class Workspaces extends React.Component {
 			return this.cancelEdit();
 		}
 
-		if (newName === oldName) return this.cancelEdit();
+		if (newName === oldName || newName.trim() === "") return this.cancelEdit();
 		let updatedWorkspaceList = this.state.workspaceList;
 		let index = updatedWorkspaceList.findIndex((el) => el.name === oldName);
 		//Set state locally so that the text doesn't change when the input field unmounts.
