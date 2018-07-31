@@ -378,7 +378,7 @@ var Actions = {
 	 */
 	clickMaximize: function () {
 		var maxField = windowTitleBarStore.getValue({ field: "Maximize" });
-		if (finsembleWindow.windowState !== finsembleWindow.WINDOWSTATE.MAXIMIZED)
+		if (!maxField.maximized)
 			return FSBL.Clients.WindowClient.maximize(() => {
 				windowTitleBarStore.setValue({ field: "Maximize.maximized", value: true });
 			});
