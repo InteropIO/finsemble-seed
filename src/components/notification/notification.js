@@ -60,7 +60,6 @@ var init = function () {
 		}
 	});
 
-
 	FSBL.Clients.Logger.log("Set up complete");
 	console.log("Set up complete");
 };

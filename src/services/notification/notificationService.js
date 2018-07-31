@@ -15,8 +15,9 @@ const DEFAULT_NOTIFICATION_WIDTH = 350;
 const DEFAULT_NOTIFICATION_HISTORY_LENGTH = 250;
 const DEFAULT_MAX_NOTIFICATIONS_TO_SHOW = 5;
 
-const COUNTS_PUBSUB_TOPIC = "notificationCounts";
+const COUNTS_PUBSUB_TOPIC = "notification counts";
 const API_QUERY_RESPONDER_TOPIC = "notification functions";
+const UPDATES_ROUTER_TOPIC = "notification update";
 
 const WINDOWS_TASKBAR_HEIGHT = 45;
 
@@ -183,7 +184,7 @@ function notificationService() {
 				alertUser = true;
 		}
 
-		const theNotification = { id: id, timestamp: timestamp, topic: topic, alertUser: alertUser, dismissed: false, frequency: frequency, identifier: identifier, message: message, params: params };
+		const theNotification = { id: id, timestamp: timestamp, topic: topic, url: url, alertUser: alertUser, dismissed: false, frequency: frequency, identifier: identifier, message: message, params: params };
 		
 		//add to the id-based index
 		idToNotification[id] = theNotification;
@@ -208,11 +209,29 @@ function notificationService() {
 		console.log("UserNotification.alert", id, topic, alertUser, frequency, identifier, message, params);
 
 		if (alertUser) {
+			//TODO: need some form of queue to ensure previous display ops are complete before moving onto next notificaiton display
+			//  currently if two notifications fire quickly, the showWindow calls sent to move the notificaitons around can arrive out of order (I think)
+			//  resulting in two notifications on top of each other
+
 			//add notification to array of displayed notifications
 			let len = notificationsDisplayed.unshift(theNotification);
 
+			//close any notification that fell off end of display list
+			if(len > maxNotificationsToShow) {
+				RouterClient.transmit(notificationsDisplayed[maxNotificationsToShow].id+".close", {});
+
+				//TODO: display a +N more marker above the notifications stack
+			}
+			// //if too many notifications displayed, dismiss the oldest
+			// if (len > maxNotificationsToShow) {
+			// 	//TODO: for now this just dismisses the oldest notification, but might want to create a new status so that its redisplayed when others are dismissed...
+			// 	//  would also mean count can keep growing...
+			// 	let toDismiss = notificationsDisplayed[len-1];
+			// 	this.dismissNotification(toDismiss.id);
+			// }
+
 			//move each other notification up
-			for (let index = 1; index < len; index++) {
+			for (let index = 1; index < Math.min(len,maxNotificationsToShow); index++) {
 				//theres still a bug in bottom right positioning in showWindow (spawn doesn't behave the same way), where toolbar height is added to windowHeight specified and deducted from the bottom
 				let hackedHeight = notificationHeight - WINDOWS_TASKBAR_HEIGHT;
 				let hackedbottom = index * (notificationGap + notificationHeight) + WINDOWS_TASKBAR_HEIGHT;
@@ -223,14 +242,6 @@ function notificationService() {
 					monitor: 0 //TODO: just spawned on primary monitor, could be user preference controlled
 				};
 				LauncherClient.showWindow(windowId, {right: 0, bottom: hackedbottom, height: hackedHeight, width: notificationWidth});
-			}
-
-			// //if too many notifications displayed, close the oldest
-			if (len > maxNotificationsToShow) {
-				//TODO: for now this just dismisses the oldest notification, but might want to create a new status so that its redisplayed when others are dismissed...
-				//  would also mean count can keep growing...
-				let toDismiss = notificationsDisplayed[len-1];
-				this.dismissNotification(toDismiss.id);
 			}
 
 			//Display the new notification
@@ -262,6 +273,9 @@ function notificationService() {
 
 			//update pub/sub for notification counts
 			RouterClient.publish(COUNTS_PUBSUB_TOPIC, this.getNotificationCounts());
+
+			//announce update (only when one is displayed)
+			RouterClient.transmit(UPDATES_ROUTER_TOPIC, this.getDisplayedNotifications());
 
 		} else {
 			//just return the non-displayed notification
@@ -347,6 +361,8 @@ function notificationService() {
 			}
 			//if found close it
 			if (displayIndex > -1) {
+				let redisplay = displayIndex < maxNotificationsToShow && numNotifications > maxNotificationsToShow;
+		
 				Logger.info('displayIndex: ' + displayIndex);
 				notificationsDisplayed.splice(displayIndex, 1);
 
@@ -364,7 +380,7 @@ function notificationService() {
 				RouterClient.transmit(toDismiss.id+".close", {});
 
 				//move any notifications above it down
-				for (let index2 = displayIndex; index2 < numNotifications-1; index2++) {
+				for (let index2 = displayIndex; index2 < Math.min(numNotifications-1,maxNotificationsToShow); index2++) {
 					let hackedHeight = notificationHeight - WINDOWS_TASKBAR_HEIGHT;
 					let hackedbottom = index2 * (notificationGap + notificationHeight) + WINDOWS_TASKBAR_HEIGHT;
 					const windowId = {
@@ -374,10 +390,43 @@ function notificationService() {
 					};
 					LauncherClient.showWindow(windowId, {right: 0, bottom: hackedbottom, height: hackedHeight, width: notificationWidth});
 				}
-				
+
+				//redisplay anything off top of display list that is coming back
+				if (redisplay){
+					let hackedHeight = notificationHeight - WINDOWS_TASKBAR_HEIGHT;
+					//let hackedbottom = (maxNotificationsToShow-1) * (notificationGap + notificationHeight) + WINDOWS_TASKBAR_HEIGHT;
+					let bottom = (maxNotificationsToShow-1) * (notificationGap + notificationHeight);
+					let toRedisplay = notificationsDisplayed[maxNotificationsToShow-1];
+					LauncherClient.spawn("notification",
+					{
+						name: toRedisplay.id,
+						url: toRedisplay.url,
+						monitor: 0, //TODO: just spawned on primary monitor, could be user preference controlled
+						right: 0,
+						bottom: bottom,
+						height: notificationHeight,
+						width: notificationWidth,
+						addToWorkspace: false,
+						data: {
+							notification_id: toRedisplay.id,
+							message: toRedisplay.message,
+							action: toRedisplay.params.action
+						}
+					}, function(err, response){
+						if (err) {
+							logger.error(`Failed to spawn notification, err: ${JSON.stringify(err, undefined, 2)}`);
+						} 
+						cb(err, theNotification);
+					});
+
+					//TODO: hide any +X more marker on the notification stack
+				}
 			}
 			//Update counts pubsub topic
 			RouterClient.publish(COUNTS_PUBSUB_TOPIC, this.getNotificationCounts());
+
+			//transmit updated data
+			RouterClient.transmit(UPDATES_ROUTER_TOPIC, this.getDisplayedNotifications());
 			if (cb) { cb(null,{}); }
 		} else {
 			let msg = `Notification id '${id} not found to dismiss`;
@@ -407,20 +456,28 @@ function notificationService() {
 	
 	/**
 	 * Return all notifications currently in the history array.
-	 * @param {function} cb callback (err, notificationsHistory)
+	 * @param {function} cb (optional) callback (err, notificationsHistory)
 	 * 
 	 */
 	this.getNotificationsHistory = function(cb) {
-		cb(null, notificationsHistory);
+		if (cb) {
+			cb(null, notificationsHistory);
+		} else {
+			return notificationsHistory;
+		}
 	}
 
 	/**
 	 * Return the array of currently displayed notifications.
-	 * @param {function} cb callback (err, notificationsDisplayed)
+	 * @param {function} cb (optional) callback (err, notificationsDisplayed)
 	 * 
 	 */
 	this.getDisplayedNotifications = function(cb) {
-		cb(null, notificationsDisplayed);
+		if (cb) {
+			cb(null, notificationsDisplayed);
+		} else {
+			return notificationsDisplayed;
+		}
 	}
 
 	/**
@@ -480,7 +537,6 @@ function notificationService() {
 
 		//setup pub/sub topic for displayed notification count
 		RouterClient.addPubSubResponder(COUNTS_PUBSUB_TOPIC, { displayed:0, total_undissmissed: 0, dismissed: 0 });
-
 
 		//create query responder for API functions
 		RouterClient.addResponder(API_QUERY_RESPONDER_TOPIC, function(error, queryMessage) {

@@ -1,7 +1,7 @@
 import React from "react";
 import { FinsembleButton } from "@chartiq/finsemble-react-controls";
 
-const COUNTS_PUBSUB_TOPIC = "notificationCounts";
+const COUNTS_PUBSUB_TOPIC = "notification counts";
 let subscribeId = -1;
 
 export default class NotificationCount extends React.Component {
@@ -37,14 +37,17 @@ export default class NotificationCount extends React.Component {
     }
 	
 	openNotificationCenter() {
-		let windowIdentifier = {componentType: "notificationCenter", windowName: "notificationCenter"};
-		FSBL.Clients.LauncherClient.showWindow(windowIdentifier, {
-			spawnIfNotFound: true,
-			top: "center",
-			left: "center",
-			width: 800,
-			height: 600
-		});
+		// let windowIdentifier = {componentType: "notificationCenter", windowName: "notificationCenter"};
+		// FSBL.Clients.LauncherClient.showWindow(windowIdentifier, {
+		// 	spawnIfNotFound: true,
+		// 	top: "center",
+		// 	left: "center",
+		// 	width: 800,
+		// 	height: 600
+		// });
+
+		//assume its already open and toogle-able
+		FSBL.Clients.RouterClient.transmit("notificationCenter.toggle",{}); 
 	}
 	render() {
 		//console.log('rendero')

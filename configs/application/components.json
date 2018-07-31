@@ -251,23 +251,28 @@
         "notificationCenter": {
             "window": {
                 "url": "$applicationRoot/components/notificationCenter/notificationCenter.html",
+                "name": "notificationCenter",
                 "frame": false,
                 "resizable": true,
-                "autoShow": true,
                 "top": "center",
                 "left": "center",
                 "width": 800,
                 "height": 600,
-                "title": "Notification center"
+                "title": "Notification center",
+                "options": {
+                    "autoShow": false,
+                    "alwaysOnTop": true
+                }
             },
             "component": {
-                "inject": false
+                "inject": false,
+                "spawnOnStartup": true
             },
             "foreign": {
                 "services": {
                     "dockingService": {
-                        "canGroup": true,
-                        "isArrangable": true
+                        "canGroup": false,
+                        "isArrangable": false
                     }
                 },
                 "components": {
@@ -275,7 +280,7 @@
                         "launchableByUser": false
                     },
                     "Window Manager": {
-                        "FSBLHeader": true,
+                        "FSBLHeader": false,
                         "persistWindowState": false
                     },
                     "Toolbar": {
