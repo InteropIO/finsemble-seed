@@ -183,6 +183,7 @@
                 "title": "Finsemble Notification",
                 "options": {
                     "alwaysOnTop": true,
+                    "autoShow": false,
                     "cornerRounding": {
                         "height": 10,
                         "width": 10
@@ -248,17 +249,16 @@
                 }
             }
         },
-        "notificationCenter": {
+        "NotificationsCenter": {
             "window": {
-                "url": "$applicationRoot/components/notificationCenter/notificationCenter.html",
-                "name": "notificationCenter",
+                "url": "$applicationRoot/components/NotificationsCenter/NotificationsCenter.html",
                 "frame": false,
                 "resizable": true,
                 "top": "center",
                 "left": "center",
                 "width": 800,
                 "height": 600,
-                "title": "Notification center",
+                "title": "Notification Center",
                 "options": {
                     "autoShow": false,
                     "alwaysOnTop": true
@@ -284,7 +284,7 @@
                         "persistWindowState": false
                     },
                     "Toolbar": {
-                        "iconClass": "notificationCenter"
+                        "iconClass": "NotificationsCenter"
                     }
                 }
             }

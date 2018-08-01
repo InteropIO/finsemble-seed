@@ -23,9 +23,9 @@ var init = function () {
 
 	let windowName = FSBL.Clients.WindowClient.getWindowIdentifier().windowName;
 
+	// display action buttons
 	FSBL.Clients.Logger.log("Setting up actions");
 	console.log("Setting up actions");
-	//TODO: handle action parameters and display action buttons
 	let actionElement = document.querySelector("#notification-action");
 	if (spawnData.action && typeof spawnData.action === "object") {
 		//setup up the action buttons with call to performAction
@@ -40,11 +40,6 @@ var init = function () {
 		//hide action buttons as theres no action
 		actionElement.parentNode.removeChild(actionElement);
 	}
-
-	// //FIXME: temp code to just close the notification
-	// document.querySelector("#closer").addEventListener('click', function () {
-	// 	notifier.dismissNotification(windowName);
-	// });
 
 	//setup close button in header
 	document.querySelector(".notification-close").addEventListener('click', function () {
@@ -64,10 +59,9 @@ var init = function () {
 	console.log("Set up complete");
 };
 
-
 FSBL.addEventListener('onReady', function () {
 	//grab spawn data and populate the notification
 	init();
-
-	//TODO: consider hiding notification while setup and then showing it here
+	//don't show the notificiton until its initialised so it appears more nicely
+	FSBL.Clients.WindowClient.getCurrentWindow().show();
 });

@@ -7,8 +7,8 @@
         "output": "components/testNotifications/testNotifications",
         "entry": "./src\\components\\testNotifications\\testNotifications.js"
     },
-    "notificationCenter": {
-        "output": "components/notificationCenter/notificationCenter",
-        "entry": "./src\\components\\notificationCenter\\notificationCenter.js"
+    "NotificationsCenter": {
+        "output": "components/NotificationsCenter/NotificationsCenter",
+        "entry": "./src\\components\\notificationsCenter\\src\\app.jsx"
     }
 }

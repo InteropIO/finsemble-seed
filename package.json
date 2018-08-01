@@ -23,7 +23,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@chartiq/finsemble": "latest",
+        "@chartiq/finsemble": "^2.5.11",
         "@chartiq/finsemble-cli": "2.*",
         "@chartiq/finsemble-react-controls": "1.*",
         "async": "^2.6.0",
@@ -34,9 +34,11 @@
         "lodash.debounce": "^4.0.8",
         "lodash.throttle": "^4.1.1",
         "nocache": "^2.0.0",
-        "openfin-launcher": "^1.3.11"
+        "openfin-launcher": "^1.3.11",
+        "superagent": "^3.8.3"
     },
     "devDependencies": {
+        "@material-ui/core": "^1.4.2",
         "ansi-html": "0.0.7",
         "babel-core": "^6.24.0",
         "babel-loader": "^7.1.2",
