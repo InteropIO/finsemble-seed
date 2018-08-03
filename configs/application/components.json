@@ -251,14 +251,14 @@
         },
         "NotificationsCenter": {
             "window": {
-                "url": "$applicationRoot/components/NotificationsCenter/NotificationsCenter.html",
+                "url": "$applicationRoot/components/notificationsCenter/notificationsCenter.html",
                 "frame": false,
                 "resizable": true,
                 "top": "center",
                 "left": "center",
                 "width": 800,
                 "height": 600,
-                "title": "Notification Center",
+				"title": "Notification Center",
                 "options": {
                     "autoShow": false,
                     "alwaysOnTop": true

@@ -5,7 +5,7 @@
 */
 
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "../../../../../../../AppData/Local/Microsoft/TypeScript/2.9/node_modules/@types/react-dom";
 //Finsemble font-icons, general styling, and specific styling.
 //import "../assets/css/finfont.css";
 import "./adhoc.css";
