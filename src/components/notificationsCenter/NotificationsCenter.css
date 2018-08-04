@@ -92,59 +92,59 @@ img {
     flex-direction: column;
 }
 
+.complex-menu-container .containerItem.active {
+    display: block !important;
+}
+
 .notifications-container .notification-item {
     display: flex;
     flex-direction: row;
     margin: 8px;
-    width: 100%;
     background-color: var(--content-card-background-color);
     box-shadow: 0 1px 4px 0 rgba(136, 136, 136, 0.5);
-}
-
-
-.notification-item {
     flex: 1;
-    width: 100%;
     overflow-y: auto;
-    display: flex;
-    flex-direction: row;
     padding: 5px;
 }
 
 .notification-icon {
+    display: block;
+    height: 100%;
     margin-right: 6px;
     width: var(--notification-logo-width);
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: var(--notification-logo-width);
+    align-self: flex-start;
 }
 
 .notification-icon img {
     width: 100%;
+    vertical-align: middle;
 }
 
 .notification-message {
     font-size: var(--notification-description-font-size);
     font-family: var(--notification-body-font-family);
-    display: flex;
-    flex-direction: row;
+    flex: 1;
     margin-right: 6px;
+    align-self: flex-end;
 }
 
 .notification-action {
     align-self: flex-end;
-    display: flex;
     margin-right: 6px;
+    flex: 0;
 }
 
 .notification-dismiss {
     align-self: flex-end;
-    display: flex;
+    flex: 0;
 }
 
 .hide {
     display: none;
 }
-
-
-
 
 ::-webkit-scrollbar-track {
     border-radius: 3px;

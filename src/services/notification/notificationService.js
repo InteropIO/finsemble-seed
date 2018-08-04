@@ -20,7 +20,7 @@ const COUNTS_PUBSUB_TOPIC = "notification counts";
 const API_QUERY_RESPONDER_TOPIC = "notification functions";
 const UPDATES_ROUTER_TOPIC = "notification update";
 
-const WINDOWS_TASKBAR_HEIGHT = 39;
+const WINDOWS_TASKBAR_HEIGHT = 45;
 
 /**
  * 

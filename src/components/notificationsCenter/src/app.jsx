@@ -56,9 +56,9 @@ class NotificationsCenter extends React.Component {
 		var self = this;
 		if (!this.state.loaded) return null;
 		return (
-			<PersistentMenu key={"theMenu"} headerImgUrl={this.state.headerImgUrl} title="Notifications" activeSection="All" navOptions={[{
-				label: "All",
-				content: <NotificationsContent installed={true} key={"All"} />
+			<PersistentMenu key={"theMenu"} headerImgUrl={this.state.headerImgUrl} title="Notifications" activeSection="Displayed" navOptions={[{
+				label: "Displayed",
+				content: <NotificationsContent key={"Displayed"} />
 			}]} />
 		);
 	}
