@@ -18,8 +18,8 @@ export default class Search extends React.Component {
 		let self = this;
 	}
 	onStateUpdate(err, data) {
-		this.setState({ focus: data.value, saveText: document.getElementById("searchInput").textContent })
-		if (!data.value) document.getElementById("searchInput").innerHTML = ""
+		//this.setState({ focus: data.value, saveText: document.getElementById("searchInput").textContent })
+		//if (!data.value) document.getElementById("searchInput").innerHTML = ""
 	}
 	componentWillMount() {
 		var self = this;
@@ -83,10 +83,10 @@ export default class Search extends React.Component {
 			});
 
 		}
-		if (!this.state.focus) return;
+		/*if (!this.state.focus) return;
 		setTimeout(() => {///doing this instantly caused the cursor to be at the state
 			//this.placeCursorOnEnd()// This is causing a focus issue.
-		}, 100);
+		}, 100);*/
 	}
 	bindCorrectContext() {
 		this.onStateUpdate = this.onStateUpdate.bind(this);
@@ -109,23 +109,37 @@ export default class Search extends React.Component {
 		this.setState({ active: true, hotketSet: true })
 	}
 	focused(e) {
+		function selectElementContents(el) {
+			var range = document.createRange();
+			range.selectNodeContents(el);
+			var sel = window.getSelection();
+			sel.removeAllRanges();
+			sel.addRange(range);
+		}
 		if (this.state.hotketSet) {
 			storeExports.Actions.setFocus(true, e.target)
 			return this.setState({ focus: true, hotketSet: false })
-
 		}
-		this.setState({ focus: true });
+		//this.setState({ focus: true });
 		storeExports.Actions.setFocus(true, e.target)
+
+		setTimeout(function () {
+			
+			// select the old search text, so the user can edit it or type over it
+			// Do this in a timeout to give some time for the animation to work
+			var element = document.getElementById("searchInput");
+			selectElementContents(element);
+		}, 100);
 	}
 	blurred() {
-		this.setState({ focus: false, saveText: document.getElementById("searchInput").textContent });
-		document.getElementById("searchInput").innerHTML = "";
+		//this.setState({ focus: false, saveText: document.getElementById("searchInput").textContent });
+		//document.getElementById("searchInput").innerHTML = ""; // Don't clear out the old search text
 		storeExports.Actions.setFocus(false)
 	}
 	keyPress(event) {
 		var events = ["ArrowUp", "ArrowDown", "Enter"]
 		if (events.includes(event.key)) {
-			if (event.key === "Enter") document.getElementById("searchInput").innerHTML = "";
+			//if (event.key === "Enter") document.getElementById("searchInput").innerHTML = ""; // Don't clear out the old search text
 			storeExports.Actions.actionPress(event.key)
 		}
 	}
@@ -134,7 +148,8 @@ export default class Search extends React.Component {
 			<div className="searchSection  finsemble-toolbar-button">
 				<div ref="Search" id="searchInput" contentEditable className={"searchInput " + (this.state.active ? "active" : "compact")} placeholder="Search" onKeyDown={this.keyPress}
 					onFocus={this.focused}
-					onInput={this.textChange} onBlur={this.blurred} onChange={this.textChange} dangerouslySetInnerHTML={{ __html: (this.state.focus ? this.state.saveText : "") }} />
+					/*onInput={this.textChange} onBlur={this.blurred} onChange={this.textChange} dangerouslySetInnerHTML={{ __html: (this.state.focus ? this.state.saveText : "") }} />*/
+					onInput={this.textChange} onBlur={this.blurred} onChange={this.textChange} />
 			</div>
 		</div>
 	}

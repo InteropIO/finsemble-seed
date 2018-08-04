@@ -1,9 +1,10 @@
-@import '../assets/css/_globals.css';
-@import '../assets/css/_menus.css';
+@import '../../../assets/css/_globals.css';
+@import '../../../assets/css/_menus.css';
 
 body {
     margin: 0px;
-    font-family: Roboto;
+    font-family: var(--font-family);
+    font-weight: var(--content-font-weight);
 }
 
 #bodyHere {
@@ -48,18 +49,17 @@ body {
 }
 
 .complex-menu-left-nav {
-    min-width: 182px;
-    width: 182px;
-    font-size: 16px;
+    width: 212px;
+    font-size: var(--content-font-size);
     flex-direction: column;
-    color: var(--left-nav-font-color);
-    background-color: var(--left-nav-background-color);
+    color: var(--content-font-color);
+    background-color: var(--content-nav-background-color);
 }
 
 .complex-menu-left-nav-header {
-    background-color: var(--left-nav-header-background-color);
-    font-weight: 500;
-    font-size: 20px;
+    background-color: var(--content-nav-header-background-color);
+    font-weight: var(--content-nav-header-font-weight);
+    font-size: var(--content-header-font-size);
     margin-bottom: 30px;
     height: 49px;
     display: flex;
@@ -71,9 +71,9 @@ body {
     display: flex;
     flex-direction: row;
     width: 100%;
-    font-size: 18px;
-    font-weight: bold;
-    color: var(--header-font-color);
+    font-size: var(--content-header-font-size);
+    font-weight: var(--content-header-font-weight);
+    color: var(--content-header-font-color);
     margin-bottom: 8px;
 }
 
@@ -99,7 +99,7 @@ body {
     display: flex;
     justify-content: flex-end;
     padding: 6px 6px 0px 0px;
-    font-size: 18px;
+    font-size: var(--content-header-font-size);
 }
 
 .ff-close {
@@ -107,7 +107,7 @@ body {
 }
 
 .ff-close:hover {
-    text-shadow: 1px 1px #d8d8d8;
+    color: var(--content-close-hover-color);
 }
 
 .complex-menu-section-toggle {
@@ -117,18 +117,18 @@ body {
 
 .complex-menu-section-toggle:hover {
     cursor: pointer;
-    background-color: var(--section-toggle-hover-background-color);
+    background-color: var(--content-nav-highlighter-hover);
 }
 
 .active-section-toggle {
-    background-color: var(--active-section-toggle-background);
+    background-color: var(--content-nav-highlighter);
 }
 
 .complex-menu-content-row {
     flex: 1;
     padding: .75em;
     align-content: flex-start;
-    background-color: var(--content-section-background-color);
+    background-color: var(--content-background-color);
 }
 
 #UserPreferences-component-wrapper {
@@ -141,39 +141,18 @@ body {
     flex-direction: row;
 }
 
-.negative-action-button, .action-button {
+.action-button {
+    border: 1px solid var(--button-neutral-border-color);
     padding: .25em 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: .5em;
-    font-size: 15px;
-}
-
-.action-button {
-    border: 1px solid var(--action-button-border-color);
+    margin: 16px 0 6px 0;
 }
 
 .action-button:hover {
     cursor: pointer;
-    border: solid 1px var(--action-button-hover-border-color);
-}
-
-.positive-action-button {
-    border: 1px solid var(--positive-action-button-border-color);
-}
-
-.positive-action-button:hover {
-    border: 1px solid var(--positive-action-button-hover-border-color);
-}
-
-.negative-action-button {
-    border: 1px solid var(--negative-action-button-border-color);
-}
-
-.negative-action-button:hover {
-    cursor: pointer;
-    border: 1px solid var(--negative-action-button-hover-border-color);
+    border: solid 1px var(--button-neutral-border-hover-color);
 }
 
 .no-top-border {
@@ -186,7 +165,7 @@ body {
 }
 
 ::-webkit-scrollbar {
-    width: 9px;
+    width: 5px;
     background-color: transparent;
     border-radius: 3px;
 }

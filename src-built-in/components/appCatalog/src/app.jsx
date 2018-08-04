@@ -6,8 +6,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 //Finsemble font-icons, general styling, and specific styling.
-import "../../assets/css/finfont.css";
-import "../../assets/css/finsemble.css";
+import "../../../../assets/css/font-finance.css";
+import "../../../../assets/css/finsemble.css";
 import "../appCatalog.css";
 import ComplexMenu from "../../complexMenu/ComplexMenu";
 import AppContent from "./components/AppContent";
@@ -31,7 +31,7 @@ class AppCatalog extends React.Component {
 	componentWillMount() {
 		FSBL.Clients.ConfigClient.getValues(null, (err, config) => {
 			if (config.startup_app && config.startup_app.applicationIcon) {
-				console.log("config.startup_app.applicationIcon", config.startup_app.applicationIcon)
+			//console.log("config.startup_app.applicationIcon", config.startup_app.applicationIcon)
 				this.setState({
 					loaded: true,
 					// headerImgUrl: config.startup_app.applicationIcon
@@ -54,7 +54,7 @@ class AppCatalog extends React.Component {
 
 fin.desktop.main(function () {
 	FSBL.addEventListener("onReady", function () {
-		console.log("App Catalog app onReady");
+	//console.log("App Catalog app onReady");
 		FSBL.Clients.WindowClient.finsembleWindow.updateOptions({ alwaysOnTop: true });
 		FSBL.Clients.DialogManager.showModal();
 		//FSBL.Clients.WindowClient.finsembleWindow.addEventListener("shown", FSBL.Clients.DialogManager.showModal);

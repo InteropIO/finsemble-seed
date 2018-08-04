@@ -4,7 +4,7 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
-import "../../assets/css/finsemble.css";
+import "../../../../assets/css/finsemble.css";
 
 import { FinsembleDialog, FinsembleDialogQuestion, FinsembleDialogTextInput, FinsembleDialogButton } from "@chartiq/finsemble-react-controls";
 /**
@@ -57,11 +57,12 @@ class SingleInputDialog extends React.Component {
 	onShowRequested(err, response) {
 		let data = response.data;
 		this.setState({
+			title:data.title || "Title",
 			inputValue: null,
 			hideModalOnClose: typeof data.hideModalOnClose === "undefined" ? true : data.hideModalOnClose,
 			inputLabel: data.inputLabel,
-			affirmativeResponseLabel: data.affirmativeResponseLabel || "Okay",
-			cancelResponseLabel: data.affirmativeResponseLabel || "Cancel",
+			affirmativeResponseLabel: data.affirmativeResponseLabel || "OK",
+			cancelResponseLabel: data.cancelResponseLabel || "Cancel",
 			showCancelButton: typeof data.showCancelButton === "undefined" ? false : data.showCancelButton,
 			renderInput: true,
 		}, this.fitAndShow);
@@ -114,22 +115,22 @@ class SingleInputDialog extends React.Component {
 			behaviorOnResponse="hide"
 			onShowRequested={this.onShowRequested}
 			isModal={true}>
-			<FinsembleDialogQuestion question={this.state.inputLabel} />
+			<div className="dialog-title">{this.state.title}</div>
+			{this.state.renderInput &&
+				<FinsembleDialogTextInput onInputChange={this.setInputValue} placeholder="New Workspace" autoFocus={true} />
+			}
 			<div className="button-wrapper">
-				{this.state.renderInput &&
-					<FinsembleDialogTextInput maxLength="40" onInputChange={this.setInputValue} placeholder="Enter Name" autoFocus={true} />
-				}
-				<FinsembleDialogButton buttonSize="md-positive" onClick={() => { this.sendResponse("affirmative"); }}>
-					{this.state.affirmativeResponseLabel}
-				</FinsembleDialogButton>
 				{
 					this.state.showCancelButton &&
-					<FinsembleDialogButton buttonSize="md-neutral" onClick={() => {
+					<FinsembleDialogButton className="fsbl-button-neutral" onClick={() => {
 						this.sendResponse("cancel");
 					}}>
 						{this.state.cancelResponseLabel}
 					</FinsembleDialogButton>
 				}
+				<FinsembleDialogButton className="fsbl-button-affirmative" onClick={() => { this.sendResponse("affirmative"); }}>
+					{this.state.affirmativeResponseLabel}
+				</FinsembleDialogButton>
 			</div>
 		</FinsembleDialog>);
 	}

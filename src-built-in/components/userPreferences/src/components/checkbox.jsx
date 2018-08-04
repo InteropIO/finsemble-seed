@@ -8,7 +8,15 @@ export default class Checkbox extends React.Component {
         if (this.props.checked) {
             checkboxClasses += " checked";
         }
-        return <div className="complex-menu-checkbox-wrapper" onClick={this.props.onClick}>
+        let style = {};
+        if (this.props.disabled) {
+            style = {
+                cursor: "not-allowed"
+            }
+        }
+        return <div
+            style={style}
+            className="complex-menu-checkbox-wrapper" onClick={this.props.onClick}>
             <div className={checkboxClasses}>
                 {this.props.checked &&
                     <i className="ff-check-mark"></i>

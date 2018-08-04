@@ -8,8 +8,9 @@ Logger.log("notification Service starting up");
 LauncherClient.initialize();
 ConfigClient.initialize();
 
+const FILTER_TYPES = ["displayed","dismissed","all"];
 
-const DEFAULT_NOTIFICATION_HEIGHT = 100;
+const DEFAULT_NOTIFICATION_HEIGHT = 85;
 const DEFAULT_NOTIFICATION_GAP = 5;
 const DEFAULT_NOTIFICATION_WIDTH = 350;
 const DEFAULT_NOTIFICATION_HISTORY_LENGTH = 250;
@@ -19,7 +20,7 @@ const COUNTS_PUBSUB_TOPIC = "notification counts";
 const API_QUERY_RESPONDER_TOPIC = "notification functions";
 const UPDATES_ROUTER_TOPIC = "notification update";
 
-const WINDOWS_TASKBAR_HEIGHT = 45;
+const WINDOWS_TASKBAR_HEIGHT = 39;
 
 /**
  * 
@@ -42,7 +43,7 @@ function notificationService() {
 
 	const alertOnceSinceStartUp = {};
 	const alertCurrentCount = {};
-	let defaultTemplateURL = null;
+	let defaultIconURL = null;
 
 	
 	//------------------------------------------------------
@@ -77,16 +78,15 @@ function notificationService() {
 	 * Gets the default template URL from the manifest at finsemble->notificationURL. If that doesn't exist then it falls back to the system template location.
 	 * @private
 	 */
-	this.getDefaultTemplateURL = function (cb) {
-		if (defaultTemplateURL) {
+	this.getDefaultIconURL = function (cb) {
+		if (defaultIconURL) {
 			setTimeout(function () {
-				cb(defaultTemplateURL);
+				cb(defaultIconURL);
 			}, 0);
 		} else {
 			ConfigClient.get({ field: "finsemble" }, function (err, finConfig) {
-				//defaultTemplateURL = ConfigUtil.getDefault(finConfig, "finsemble.notificationURL", finConfig.moduleRoot + "/components/system/notification/notification.html");
-				defaultTemplateURL = getDefault(finConfig, "finsemble.notificationURL", finConfig.moduleRoot + "/components/system/notification/notification.html");
-				cb(defaultTemplateURL);
+				defaultIconURL = getDefault(finConfig, "finsemble.systemTrayIcon", finConfig.applicationRoot + "/assets/img/Finsemble_Taskbar_Icon.png");
+				cb(defaultIconURL);
 			});
 		}	
 	};
@@ -113,11 +113,12 @@ function notificationService() {
 	 * @param {string} topic specifies a category for the notification. Any topic string can be specified; however "system" is the recommended topic for system notifications applicable both to end uses and to developers. "dev" is the recommended topic for notifications applicable only during development (e.g. a notification that config.json has an illegal value).
 	 * @param {string} frequency Either "ALWAYS", "ONCE-SINCE-STARTUP", or "MAX-COUNT" to determine if alert should be displayed. Note, the frequencies are based on the number of notifications emitted from a window (as opposed to system wide.)
 	 * @param {string} identifier uniquely identifies this specific notification message. Used when "frequency" is set to "ONCE-SINCE-STARTUP" or "MAX-COUNT"
-	 * @param {any} message message to display in the notification. Typically a string. Finsemble's built in templating accepts and object. See src-built-in/components/notification/notification.html.
+	 * @param {string} message Notification message content
 	 * @param {object=} params
+	 * @param {number} params.iconURL URL for the icon iuamge to display on the notification
 	 * @param {number} params.maxCount specifies the max number of notifications to display for specified identifier when frequency="MAX-COUNT" (default is 1)
 	 * @param {number} params.duration time in milliseconds before auto-dismissing the notification (defaults to 24 hours)
-	 * @param {number} params.url url for notification HTML. If not provided then the system default will be used. This url should be coded as required for OpenFin notifications (see OpenFin Documentation). Defaults to Finsemble's built-in version at "/finsemble/components/system/notification/notification.html".
+	 * @param {object} params.templateOptions Any additional options that should be passed to the template for this notification - the default tempalte has no options.
 	 * @param {object=} params.action specifies an action to perform when the notificaiton action button is clicked on. If not set then no action button should be shown.
 	 * @param {string} params.action.buttonText The text to display on the aciton button.
 	 * @param {string} params.action.type The action type to perform, currently only supports the 'spawn' action.
@@ -135,21 +136,19 @@ function notificationService() {
 	 */
 	this.notify = function (topic, frequency, identifier, message, params, cb) {
 		const self = this;
-		// If the url for the template is passed in then don't bother fetching the config
-		if (params && params.url) {
-			self.alertInternal(topic, frequency, identifier, message, params, params.url, cb);
+		if(!params.iconURL){
+			self.getDefaultIconURL(function (iconURL) {
+				self.alertInternal(topic, frequency, identifier, message, iconURL, params, cb);
+			}); 
 		} else {
-			// If no url, then we need to get the template from config
-			self.getDefaultTemplateURL(function (url) {
-				self.alertInternal(topic, frequency, identifier, message, params, url, cb);
-			});
-		}
+			self.alertInternal(topic, frequency, identifier, message, params.iconURL, params, cb);
+		}; 
 	};
 
 	/**
 	 * @private
 	 */
-	this.alertInternal = function (topic, frequency, identifier, message, params, url, cb) {
+	this.alertInternal = function (topic, frequency, identifier, message, iconURL, params, cb) {
 		params = params || {};
 		const timestamp = new Date();
 		const duration = params.duration || 1000 * 60 * 60 * 24;
@@ -184,7 +183,18 @@ function notificationService() {
 				alertUser = true;
 		}
 
-		const theNotification = { id: id, timestamp: timestamp, topic: topic, url: url, alertUser: alertUser, dismissed: false, frequency: frequency, identifier: identifier, message: message, params: params };
+		const theNotification = {
+			id: id, 
+			timestamp: timestamp,
+			topic: topic,
+			alertUser: alertUser,
+			dismissed: false, 
+			frequency: frequency, 
+			identifier: identifier, 
+			message: message, 
+			iconURL: iconURL,
+			params: params 
+		};
 		
 		//add to the id-based index
 		idToNotification[id] = theNotification;
@@ -216,19 +226,12 @@ function notificationService() {
 			//add notification to array of displayed notifications
 			let len = notificationsDisplayed.unshift(theNotification);
 
-			//close any notification that fell off end of display list
+			//close any notification that will fall off end of display list
 			if(len > maxNotificationsToShow) {
 				RouterClient.transmit(notificationsDisplayed[maxNotificationsToShow].id+".close", {});
 
 				//TODO: display a +N more marker above the notifications stack
 			}
-			// //if too many notifications displayed, dismiss the oldest
-			// if (len > maxNotificationsToShow) {
-			// 	//TODO: for now this just dismisses the oldest notification, but might want to create a new status so that its redisplayed when others are dismissed...
-			// 	//  would also mean count can keep growing...
-			// 	let toDismiss = notificationsDisplayed[len-1];
-			// 	this.dismissNotification(toDismiss.id);
-			// }
 
 			//move each other notification up
 			for (let index = 1; index < Math.min(len,maxNotificationsToShow); index++) {
@@ -248,7 +251,6 @@ function notificationService() {
 			LauncherClient.spawn("notification",
 				{
 					name: theNotification.id,
-					url: url,
 					monitor: 0, //TODO: just spawned on primary monitor, could be user preference controlled
 					right: 0,
 					bottom: 0,
@@ -258,7 +260,8 @@ function notificationService() {
 					data: {
 						notification_id: id,
 						message: message,
-						action: params.action
+						iconURL: iconURL,
+						params: params
 					}
 				}, function(err, response){
 					if (err) {
@@ -274,13 +277,18 @@ function notificationService() {
 			//update pub/sub for notification counts
 			RouterClient.publish(COUNTS_PUBSUB_TOPIC, this.getNotificationCounts());
 
-			//announce update (only when one is displayed)
-			RouterClient.transmit(UPDATES_ROUTER_TOPIC, this.getDisplayedNotifications());
-
 		} else {
 			//just return the non-displayed notification
 			cb (null, theNotification);
 		}
+
+		//announce update (always), with types of filter affected specified
+		let updateTypes = {
+			all: true,
+			displayed: alertUser,
+			dismissed: false
+		};
+		RouterClient.transmit(UPDATES_ROUTER_TOPIC, updateTypes);
 	};
 
 	/**
@@ -347,6 +355,7 @@ function notificationService() {
 		Logger.info('Notification being dismissed:', toDismiss);
 		Logger.info('Notifications displayed:', notificationsDisplayed);
 		let displayIndex = -1;
+		let wasDisplayed = false;
 
 		let numNotifications = notificationsDisplayed.length;
 		if (toDismiss) {
@@ -361,6 +370,7 @@ function notificationService() {
 			}
 			//if found close it
 			if (displayIndex > -1) {
+				wasDisplayed = true;
 				let redisplay = displayIndex < maxNotificationsToShow && numNotifications > maxNotificationsToShow;
 		
 				Logger.info('displayIndex: ' + displayIndex);
@@ -400,7 +410,6 @@ function notificationService() {
 					LauncherClient.spawn("notification",
 					{
 						name: toRedisplay.id,
-						url: toRedisplay.url,
 						monitor: 0, //TODO: just spawned on primary monitor, could be user preference controlled
 						right: 0,
 						bottom: bottom,
@@ -410,7 +419,8 @@ function notificationService() {
 						data: {
 							notification_id: toRedisplay.id,
 							message: toRedisplay.message,
-							action: toRedisplay.params.action
+							iconURL: toRedisplay.iconURL,
+							params: toRedisplay.params
 						}
 					}, function(err, response){
 						if (err) {
@@ -426,7 +436,13 @@ function notificationService() {
 			RouterClient.publish(COUNTS_PUBSUB_TOPIC, this.getNotificationCounts());
 
 			//transmit updated data
-			RouterClient.transmit(UPDATES_ROUTER_TOPIC, this.getDisplayedNotifications());
+			let updateTypes = {
+				all: true,
+				displayed: wasDisplayed,
+				dismissed: true
+			};
+			RouterClient.transmit(UPDATES_ROUTER_TOPIC, updateTypes);
+
 			if (cb) { cb(null,{}); }
 		} else {
 			let msg = `Notification id '${id} not found to dismiss`;
@@ -456,27 +472,25 @@ function notificationService() {
 	
 	/**
 	 * Return all notifications currently in the history array.
+	 * @param {string} type (optional) Filter the list of notifications. Supports values 'all' (default), 'displayed' and 'dismissed'
 	 * @param {function} cb (optional) callback (err, notificationsHistory)
 	 * 
 	 */
-	this.getNotificationsHistory = function(cb) {
-		if (cb) {
-			cb(null, notificationsHistory);
-		} else {
-			return notificationsHistory;
+	this.getNotificationsHistory = function(type, cb) {
+		let filter = FILTER_TYPES.indexOf(type) >= 0  ? type : "all";
+		let out = [];
+		if (filter === "all") {
+			out = notificationsHistory;
+		} else if (filter === "displayed") {
+			out = notificationsDisplayed;
+		} else if (filter === "dismissed") {
+			//filter
+			out = notificationsHistory.filter(notification => notification.dismissed == true);
 		}
-	}
-
-	/**
-	 * Return the array of currently displayed notifications.
-	 * @param {function} cb (optional) callback (err, notificationsDisplayed)
-	 * 
-	 */
-	this.getDisplayedNotifications = function(cb) {
 		if (cb) {
-			cb(null, notificationsDisplayed);
+			cb(null, out);
 		} else {
-			return notificationsDisplayed;
+			return out;
 		}
 	}
 
@@ -576,12 +590,9 @@ function notificationService() {
 						queryMessage.sendQueryResponse(new Error(msg));
 					}
 				} else if (queryMessage.data.query === "getNotificationsHistory") {
-					self.getNotificationsHistory(queryMessage.sendQueryResponse);
+					self.getNotificationsHistory(queryMessage.data.type, queryMessage.sendQueryResponse);
 
-				}  else if (queryMessage.data.query === "getDisplayedNotifications") {
-					self.getDisplayedNotifications(queryMessage.sendQueryResponse);
-
-				}   else if (queryMessage.data.query === "getNotificationCounts") {
+				}  else if (queryMessage.data.query === "getNotificationCounts") {
 					self.getNotificationCounts(queryMessage.sendQueryResponse);
 
 				}  else if (queryMessage.data.query === "dismissAllDisplayedNotifications") {

@@ -6,12 +6,23 @@
 import React from "react";
 import ReactDOM from "react-dom";
 //Finsemble font-icons, general styling, and specific styling.
-import "../../assets/css/finfont.css";
-import "../../assets/css/finsemble.css";
+import "../../../../assets/css/font-finance.css";
+import "../../../../assets/css/finsemble.css";
 import "../notificationsCenter.css";
-import ComplexMenu from "../../complexMenu/ComplexMenu";
-import AppContent from "./components/NotificationsContent";
+import ComplexMenu from "../../../../src-built-in/components/complexMenu/ComplexMenu";
+import NotificationsContent from "./components/NotificationsContent";
 
+//override complex menu's hideWindow to make it use the toggle instead of closing
+class PersistentMenu extends ComplexMenu{
+	constructor(props){
+		super(props);
+		this.className = this.className + ' persistent-menu';
+		this.hideWindow = function() {
+			FSBL.Clients.WindowClient.getCurrentWindow().hide();
+			FSBL.Clients.DialogManager.hideModal();
+		};
+	}
+}
 
 /**
  * 
@@ -28,6 +39,7 @@ class NotificationsCenter extends React.Component {
 			headerImgUrl: ""
 		};
 	}
+
 	componentWillMount() {
 		FSBL.Clients.ConfigClient.getValues(null, (err, config) => {
 			if (config.startup_app && config.startup_app.applicationIcon) {
@@ -44,9 +56,9 @@ class NotificationsCenter extends React.Component {
 		var self = this;
 		if (!this.state.loaded) return null;
 		return (
-			<ComplexMenu headerImgUrl={this.state.headerImgUrl} title="App Catalog" activeSection="Apps" navOptions={[{
-				label: "Apps",
-				content: <AppContent installed={true} />
+			<PersistentMenu key={"theMenu"} headerImgUrl={this.state.headerImgUrl} title="Notifications" activeSection="All" navOptions={[{
+				label: "All",
+				content: <NotificationsContent installed={true} key={"All"} />
 			}]} />
 		);
 	}
@@ -55,13 +67,12 @@ class NotificationsCenter extends React.Component {
 fin.desktop.main(function () {
 	FSBL.addEventListener("onReady", function () {
 		console.log("Notification center onReady");
-		FSBL.Clients.WindowClient.finsembleWindow.updateOptions({ alwaysOnTop: true });
-		FSBL.Clients.DialogManager.showModal();
 		
 		ReactDOM.render(
 			<NotificationsCenter />
 			, document.getElementById("bodyHere"));
 		
+		//Notificaition center persists so show/hide on a router channel 
 		FSBL.Clients.RouterClient.addListener("notificationCenter.toggle", function (error, response) {
 			if (error) {
 				Logger.system.log('notificationCenter toggle error: ' + JSON.stringify(error));
@@ -72,6 +83,7 @@ fin.desktop.main(function () {
 						window.hide();
 					} else {
 						window.show(); //assumes window is already positioned correctly, if not then use LauncherClient.showWindow instead
+						FSBL.Clients.DialogManager.showModal();
 					}
 				});
 			}

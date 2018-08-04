@@ -36,21 +36,25 @@
 		"entry": "./src-built-in/components/singleInputDialog/src/app.jsx"
 	},
 	"UserPreferences": {
-        "output": "components/userPreferences/userPreferences",
-        "entry": "./src-built-in/components/userPreferences/src/app.jsx"
-    },
-    "appCatalog": {
-        "output": "components/appCatalog/appCatalog",
-        "entry": "./src-built-in/components/appCatalog/src/app.jsx"
+		"output": "components/userPreferences/userPreferences",
+		"entry": "./src-built-in/components/userPreferences/src/app.jsx"
 	},
-    "inputAndSelectionDialog": {
-        "output": "components/inputAndSelectionDialog/inputAndSelectionDialog",
-        "entry": "./src-built-in/components/inputAndSelectionDialog/src/app.jsx"
+	"appCatalog": {
+		"output": "components/appCatalog/appCatalog",
+		"entry": "./src-built-in/components/appCatalog/src/app.jsx"
 	},
-    "searchMenu": {
-        "output": "components/searchMenu/searchMenu",
-        "entry": "./src-built-in/components/searchMenu/src/app.jsx"
-    },
+	"floatingTitlebar": {
+		"output": "components/floatingTitlebar/floatingTitlebar",
+		"entry": "./src-built-in/components/floatingTitlebar/src/app.jsx"
+	},
+	"inputAndSelectionDialog": {
+		"output": "components/inputAndSelectionDialog/inputAndSelectionDialog",
+		"entry": "./src-built-in/components/inputAndSelectionDialog/src/app.jsx"
+	},
+	"searchMenu": {
+		"output": "components/searchMenu/searchMenu",
+		"entry": "./src-built-in/components/searchMenu/src/app.jsx"
+	},
 	"welcome": {
 		"output": "components/welcome/welcome",
 		"entry": "./src-built-in/components/welcome/welcome.js"
@@ -58,5 +62,9 @@
 	"processMonitor": {
 		"output": "components/processMonitor/processMonitor",
 		"entry": "./src-built-in/components/processMonitor/src/app.jsx"
+	},
+	"throbber": {
+		"output": "components/throbber/throbber",
+		"entry": "./src-built-in/components/throbber/throbber.js"
 	}
 }

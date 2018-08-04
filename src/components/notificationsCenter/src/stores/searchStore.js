@@ -5,7 +5,8 @@
 
 let menuStore;
 import async from "async";
-let finWindow = fin.desktop.Window.getCurrent();
+
+
 var values = {
 	focus: false,
 	list: [],
@@ -38,8 +39,6 @@ var Actions = {
 		menuStore.setValue({ field: "list", value: list })
 	},
 	listItemClick(provider, item, action) {
-		FSBL.Clients.SearchClient.invokeItemAction(provider, item, action)
-		finWindow.hide();
 		menuStore.setValue({ field: "list", value: [] })
 	},
 	actionPress(err, msg) {
@@ -48,19 +47,19 @@ var Actions = {
 	setActionPress(func) {
 		actionPress = func;
 	},
-	search(text) {
-		if (text === "" || !text) text = "c";
+	// search(text) {
+	// 	if (text === "" || !text) text = "c";
 
-		FSBL.Clients.SearchClient.search({ text: text, filter: { resultType: "application" } }, function (err, response) {
-			var updatedResults = [].concat.apply([], response)
-			var parsedList = [];
-			console.log("updatedResults", updatedResults)
-			updatedResults.map(function (resultList, index) {
-				parsedList = parsedList.concat(resultList.data.filter((result) => result.type === "Application"))
-			})
-			Actions.setList(parsedList);
-		})
-	},
+	// 	FSBL.Clients.SearchClient.search({ text: text, filter: { resultType: "application" } }, function (err, response) {
+	// 		var updatedResults = [].concat.apply([], response)
+	// 		var parsedList = [];
+	// 		console.log("updatedResults", updatedResults)
+	// 		updatedResults.map(function (resultList, index) {
+	// 			parsedList = parsedList.concat(resultList.data.filter((result) => result.type === "Application"))
+	// 		})
+	// 		Actions.setList(parsedList);
+	// 	})
+	// },
 };
 
 
@@ -71,9 +70,9 @@ function createStore(done) {
 		owner: finWindow.name
 	};
 
-	finWindow.addEventListener("reloaded", function () {
-		menuStore.removeListener({ field: "list" }, Actions.listChange);
-	})
+	// finWindow.addEventListener("reloaded", function () {
+	// 	menuStore.removeListener({ field: "list" }, Actions.listChange);
+	// })
 
 	FSBL.Clients.DistributedStoreClient.createStore({ store: "AppCatalog-Store" + finWindow.name, values: defaultData, global: false },
 		function (err, store) {

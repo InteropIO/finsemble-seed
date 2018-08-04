@@ -2,9 +2,9 @@
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
-@import  url('../assets/css/_globals.css');
+@import  url('../../../assets/css/_globals.css');
 
-@import  url('../assets/css/_menus.css');
+@import  url('../../../assets/css/_menus.css');
 
 img {
     user-drag: none;
@@ -43,7 +43,7 @@ body {
 .content {
     width: calc(100% - 17px);
     padding: .75em;
-    background-color: var(--content-section-background-color);
+    background-color: var(--content-background-color);
 }
 
 .ListHeader {
@@ -77,11 +77,6 @@ input {
     height: 15px;
 }
 
-.appContainer {
-    display: flex;
-    flex-wrap: wrap;
-}
-
 img {
     user-drag: none;
     user-select: none;
@@ -91,174 +86,65 @@ img {
     -ms-user-select: none;
 }
 
-.appContainer .appItem {
+.notifications-container {
     display: flex;
+    flex-wrap: wrap;
     flex-direction: column;
+}
+
+.notifications-container .notification-item {
+    display: flex;
+    flex-direction: row;
     margin: 8px;
-    width: 170px;
-    height: 104px;
-    background-color: var(--app-catalog-app-item-background-color);
+    width: 100%;
+    background-color: var(--content-card-background-color);
     box-shadow: 0 1px 4px 0 rgba(136, 136, 136, 0.5);
 }
 
-.appHeader {
-    margin-top: 9px;
-    display: flex;
+
+.notification-item {
     flex: 1;
-    cursor: pointer;
-}
-
-.logo {
-    margin-right: 11px;
-    margin-left: 11px;
-    width: 36px;
-    width: 36px;
-    height: 36px;
-    background-color: white;
-    background-size: 36px 36px;
-}
-
-.iconContainer {
-    margin-right: 11px;
-    margin-left: 11px;
-    width: 36px;
-    min-width: 36px;
-    height: 36px;
-    background-color: var(--app-catalog-icon-container-background-color);
-    display: flex;
-    align-items: center;
-}
-
-.icon {
-    font-size: 20px;
     width: 100%;
-    color: white;
-    font-weight: 200;
-    text-align: center;
-    vertical-align: middle;
-    align-self: center;
-    padding-top: 3px;
-}
-
-.titleContainer {
+    overflow-y: auto;
     display: flex;
-    flex: 1;
-    flex-direction: column;
+    flex-direction: row;
+    padding: 5px;
 }
 
-.titleContainer .title {
+.notification-icon {
+    margin-right: 6px;
+    width: var(--notification-logo-width);
+}
+
+.notification-icon img {
     width: 100%;
-    max-height: 14px;
-    font-size: 14px;
-    font-weight: 500;
-    font-stretch: normal;
-    letter-spacing: normal;
-    text-align: left;
-    color: #000000;
-    word-break: break-word;
-    padding-right: 7px;
-    line-height: 1;
 }
 
-.titleContainer .vendor {
-    width: 39px;
-    height: 16px;
-    font-size: 12px;
-    font-weight: 300;
-    font-style: italic;
-    font-stretch: normal;
-    line-height: normal;
-    letter-spacing: normal;
-    text-align: left;
-    color: #555555;
-}
-
-.appItem .containerFooter {
+.notification-message {
+    font-size: var(--notification-description-font-size);
+    font-family: var(--notification-body-font-family);
     display: flex;
-    margin-bottom: 5px;
+    flex-direction: row;
+    margin-right: 6px;
+}
+
+.notification-action {
+    align-self: flex-end;
+    display: flex;
+    margin-right: 6px;
+}
+
+.notification-dismiss {
+    align-self: flex-end;
+    display: flex;
 }
 
 .hide {
     display: none;
 }
 
-.containerFooter .footerLeft {
-    flex: 1;
-}
 
-.containerFooter .footerRight {
-    margin-right: 15px;
-}
 
-.footerRight .openButton {
-    cursor: pointer;
-    align-self: flex-end;
-    background-color: var(--app-catalog-button-background-color);
-    border: var(--app-catalog-button-border);
-    font-size: 12px;
-    color: #ffffff;
-    text-align: center;
-    padding: 5px 10px 5px 10px;
-    width: 49px;
-    height: 16px;
-    font-size: 12px;
-    font-weight: normal;
-    font-style: normal;
-    font-stretch: normal;
-    line-height: normal;
-    letter-spacing: normal;
-    text-align: center;
-    color: #ffffff;
-}
-
-.containerItem {
-    flex: 1;
-    width: 100%;
-    overflow-y: auto;
-}
-
-.AppDetailsContainer {
-    margin-top: 19px;
-    margin-left: 28px;
-    margin-right: 28px;
-}
-
-.ff-arrow-back {
-    cursor: pointer;
-    font-size: 10px;
-    font-weight: 300;
-    text-align: left;
-    color: #000000;
-    margin-bottom: 21px;
-}
-
-.detailsHeader {
-    display: flex;
-    flex-direction: row;
-}
-
-.detailsHeader .image {
-    width: 36px;
-    height: 36px;
-    margin-right: 13px;
-}
-
-.detailsHeader .button {
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: normal;
-    font-style: normal;
-    font-stretch: normal;
-    line-height: normal;
-    letter-spacing: normal;
-    text-align: center;
-    color: #ffffff;
-    padding: 5px 17px 5px 17px;
-    text-align: center;
-    align-self: center;
-    background-color: var(--app-catalog-button-background-color);
-    border: var(--app-catalog-button-border);
-}
 
 ::-webkit-scrollbar-track {
     border-radius: 3px;
@@ -275,14 +161,4 @@ img {
     cursor: pointer;
     border-radius: 9px;
     background-color: var(--scrollbar-color);
-}
-
-/* Special tweaks for uncentered icons */
-.ff-chart-pie {
-    font-size: 22px;
-    padding-top: 5px;
-}
-
-.ff-chart-simple, .ff-chart-advanced, .ff-chart-alt-1, .ff-chart-alt-2, .ff-insiders-2, .ff-document-2 {
-    padding-top: 4px;
 }

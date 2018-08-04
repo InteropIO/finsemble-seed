@@ -12,8 +12,8 @@ import WorkspaceList from "./components/workspaceList";
 import { FinsembleMenu } from "@chartiq/finsemble-react-controls";
 
 import "../workspaceManagementMenu.css";
-import "../../assets/css/finfont.css";
-import "../../assets/css/finsemble.css";
+import "../../../../assets/css/font-finance.css";
+import "../../../../assets/css/finsemble.css";
 let WorkspaceManagementMenuStore;
 // var Test = require('./test');
 
@@ -89,7 +89,7 @@ class WorkspaceManagementMenu extends React.Component {
 
 fin.desktop.main(function () {
 	FSBL.addEventListener("onReady", function () {
-		console.log("WorkspaceManagementMenu onReady");
+	//console.log("WorkspaceManagementMenu onReady");
 		storeExports.initialize(function (store) {
 			WorkspaceManagementMenuStore = store;
 			ReactDOM.render(

@@ -32,8 +32,8 @@ customComponents["Search"] = Search;
 
 // Styles
 import "../toolbar.css";
-import "../../assets/css/finfont.css";
-import "../../assets/css/finsemble.css";
+import "../../../../assets/css/font-finance.css";
+import "../../../../assets/css/finsemble.css";
 
 var pinnableItems = {
 	"componentLauncher": FinsembleButton,
@@ -61,14 +61,14 @@ export default class Toolbar extends React.Component {
 	}
 
 	componentDidMount() {
-		console.log("this", this)
+	//console.log("this", this)
 		this.state.finWindow.bringToFront();
 	}
 
 	componentWillMount() {
 		var self = this;
 		ToolbarStore.setupPinnedHotKeys(function (err, data) {
-			console.log("data---", data);
+		//console.log("data---", data);
 			let pin = self.refs.pinSection.element.childNodes[data - 1];
 			//Goes and finds the toolbar button and clicks it.
 			if (pin.childNodes[0] && pin.childNodes[0].children[0]) {
@@ -153,6 +153,7 @@ export default class Toolbar extends React.Component {
 			}
 
 			var sectionComponent = (<FinsembleToolbarSection
+				key={i}
 				arrangeable={sectionPosition === "center"}
 				ref="pinSection"
 				name={sectionPosition}
@@ -169,7 +170,7 @@ export default class Toolbar extends React.Component {
 	}
 
 	render() {
-		console.log("Toolbar Render ");
+	//console.log("Toolbar Render ");
 		if (!this.state.sections) return;
 		return (<FinsembleToolbar onDragEnd={this.onPinDrag}>
 			{this.getSections()}
@@ -184,4 +185,3 @@ FSBL.addEventListener("onReady", function () {
 			, document.getElementById("toolbar_parent"));
 	});
 });
-

@@ -83,8 +83,12 @@ export default class appLauncherContainer extends React.Component {
 		appLauncherStore.removeListener({ field: "componentList" }, this.onComponentListUpdate);
 		appLauncherStore.removeListener({ field: "pins" }, this.onPinsUpdate);
 	}
-	launchComponent(component, params) {
-		FSBL.Clients.WindowClient.finWindow.hide();
+	launchComponent(component, params, cb) {
+		if (component.dontHideSelf) {
+			delete component.dontHideSelf;
+		} else {
+			FSBL.Clients.WindowClient.finWindow.hide();
+		}
 		// If we are launching a group
 		if (component.group) {
 			for (let i of Object.keys(component.list)) {
@@ -93,13 +97,13 @@ export default class appLauncherContainer extends React.Component {
 				if (c.component.windowGroup) {
 					cloneParams.groupName = c.component.windowGroup;
 				}
-				appLauncherActions.launchComponent(component.list[i], params);
+				appLauncherActions.launchComponent(component.list[i], params, cb);
 			}
 		} else {
 			if (component.component.windowGroup) {
 				params.groupName = component.component.windowGroup
 			}
-			appLauncherActions.launchComponent(component, params);
+			appLauncherActions.launchComponent(component, params, cb);
 		}
 
 

@@ -262,7 +262,9 @@ var Actions = {
 			title: "Delete this App?",
 			question: "Are you sure you would like to delete \"" + componentName + "\"?",
 		}, function (err, response) {
-			if (response.choice === "affirmative") {
+			// If the user chooses "affirmative" then delete the component.
+			// We should never get an error, but if we do then go ahead and delete the component too.
+			if (err || response.choice === "affirmative") {
 				self.removeCustomComponent(componentName);
 			}
 		});
@@ -302,9 +304,10 @@ var Actions = {
 		fin.desktop.Window.getCurrent().hide();
 	},
 	//Spawn a component.
-	launchComponent(config, data, cb) {
-		Actions.hideWindow();
-		let params = { addToWorkspace: true, monitor: "mine" };
+	launchComponent(config, params, cb) {
+		//Actions.hideWindow();
+		let defaultParams = { addToWorkspace: true, monitor: "mine" };
+		params = Object.assign(defaultParams, params);
 		if (config.component.windowGroup) params.groupName = config.component.windowGroup;
 		FSBL.Clients.LauncherClient.spawn(config.component.type, params, function (err, windowInfo) {
 			if (cb) {

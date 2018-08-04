@@ -42,7 +42,7 @@ class WorkspaceEditor extends React.Component {
 	}
 
 	onBlur() {
-		console.log("ON BLUR", performance.now());
+		//console.log("ON BLUR", performance.now());
 		function finish(val) {
 			this.props.saveHandler(val);
 		}
@@ -96,6 +96,7 @@ export default class Workspaces extends React.Component {
 	}
 
 	setWorkspaceList(err, data) {
+		console.log("Set workspacelist", data);
 		if (!data) return;
 		this.setState({
 			workspaceList: data.value
@@ -184,7 +185,7 @@ export default class Workspaces extends React.Component {
 			return this.cancelEdit();
 		}
 
-		if (newName === oldName) return this.cancelEdit();
+		if (newName === oldName || newName.trim() === "") return this.cancelEdit();
 		let updatedWorkspaceList = this.state.workspaceList;
 		let index = updatedWorkspaceList.findIndex((el) => el.name === oldName);
 		//Set state locally so that the text doesn't change when the input field unmounts.
@@ -254,13 +255,18 @@ export default class Workspaces extends React.Component {
 	}
 	setPreferences(err, data) {
 		if (!data && !data.value) return;
+		console.log("Set preferences", data.value);
 		this.setState({
-			workspaceToLoadOnStart: data.value['finsemble.initialWorkspace']
+			workspaceToLoadOnStart: data.value['finsemble.initialWorkspace'],
+			focusedWorkspace: data.value['finsemble.initialWorkspace']
 		});
 	}
 
 	componentDidMount() {
-		UserPreferencesStore.addListener({ field: 'preferences' }, this.setPreferences)
+		UserPreferencesStore.addListener({ field: 'preferences' }, this.setPreferences);
+		FSBL.Clients.ConfigClient.getPreferences((err, data) => {
+			this.setPreferences(err, { value: data })
+		});
 		UserPreferencesStore.getValue({ field: "WorkspaceList" }, (err, data) => {
 			if (data && data.length) {
 				this.setState({
@@ -276,6 +282,7 @@ export default class Workspaces extends React.Component {
 
 	setWorkspaceToLoadOnStart(cb = Function.prototype) {
 		let self = this;
+		if (!this.state.focusedWorkspace) return;
 		function setPreference() {
 			FSBL.Clients.ConfigClient.setPreference({ field: "finsemble.initialWorkspace", value: self.state.workspaceToLoadOnStart }, (err, data) => {
 				if (err) {
@@ -342,15 +349,36 @@ export default class Workspaces extends React.Component {
 	}
 	exportWorkspace() {
 		if (this.state.focusedWorkspace === '') return;
-		FSBL.Clients.WorkspaceClient.getWorkspaceDefinition({ workspaceName: this.state.focusedWorkspace }, (err, workspaceDefinition) => {
-			if (err) {
-				FSBL.Clients.Logger.error("getWorkspaceDefinition error", err);
-			} else {
-				//We're saving using a routine initially created for templates. The outcome is the same and it probably should have just been "Save to file". This bool is to allow it to save.
-				FSBL.ConfigUtils.promptAndSaveJSONToLocalFile(this.state.focusedWorkspace, { workspaceTemplates: workspaceDefinition });
-				//FSBL.ConfigUtils.promptAndSaveJSONToLocalFile(this.state.focusedWorkspace, workspaceDefinition);
+		var self = this;
+		function doExport() {
+			FSBL.Clients.WorkspaceClient.getWorkspaceDefinition({ workspaceName: self.state.focusedWorkspace }, (err, workspaceDefinition) => {
+				if (err) {
+					FSBL.Clients.Logger.error("getWorkspaceDefinition error", err);
+				} else {
+					//We're saving using a routine initially created for templates. The outcome is the same and it probably should have just been "Save to file". This bool is to allow it to save.
+					FSBL.ConfigUtils.promptAndSaveJSONToLocalFile(self.state.focusedWorkspace, { workspaceTemplates: workspaceDefinition });
+				}
+			});
+		}
+
+		//If we're autosaving, autosave, then export.
+		//@todo, put into store. consider moving autosave into workspaceClient.
+		FSBL.Clients.ConfigClient.getValue({ field: "finsemble.preferences.workspaceService.promptUserOnDirtyWorkspace" }, (err, data) => {
+			//default to false.
+			let PROMPT_ON_SAVE = data === null ? false : data;
+			if (!PROMPT_ON_SAVE) {
+				let activeName = FSBL.Clients.WorkspaceClient.activeWorkspace.name;
+				return FSBL.Clients.WorkspaceClient.saveAs({
+					name: activeName,
+					force: true
+				}, (err, response) => {
+					doExport();
+				});
 			}
-		})
+			doExport();
+		});
+
+
 	}
 	handleButtonClicks(e) {
 		if (this.state.adding || this.state.editing) {
@@ -422,7 +450,7 @@ export default class Workspaces extends React.Component {
 			<div className="complex-menu-content-row">
 				<div className="workspace-list-header-row">
 					<div className="content-section-header workspace-list-header">
-					<div className="content-section-info">
+						<div className="content-section-info">
 							Drag to reorder
 					</div>
 					</div>
@@ -500,6 +528,7 @@ export default class Workspaces extends React.Component {
 					</div>
 				</div>
 				<Checkbox
+					disabled={!this.state.focusedWorkspace}
 					onClick={this.setWorkspaceToLoadOnStart}
 					checked={this.state.focusedWorkspace === this.state.workspaceToLoadOnStart}
 					label="Load this workspace on startup." />

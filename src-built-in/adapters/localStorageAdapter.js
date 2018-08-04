@@ -101,11 +101,11 @@ var LocalStorageAdapter = function (uuid) {
 	 * This method should be used very, very judiciously. It's essentially a method designed to wipe the database for a particular user.
 	 */
 	this.clearCache = function (params, cb) {
-		console.log("clear local cache");
+	//console.log("clear local cache");
 		var arr = []; // Array to hold the keys
 		// Iterate over localStorage and insert data related to the user into an array.
 		for (var i = 0; i < localStorage.length; i++) {
-			console.log("localStorage.key(i):::", localStorage.key(i).substring(0, (this.baseName + ":" + this.userName).length));
+		//console.log("localStorage.key(i):::", localStorage.key(i).substring(0, (this.baseName + ":" + this.userName).length));
 			if (localStorage.key(i).substring(0, (this.baseName + ":" + this.userName).length) === this.baseName + ":" + this.userName) {
 				arr.push(localStorage.key(i));
 			}
@@ -113,7 +113,7 @@ var LocalStorageAdapter = function (uuid) {
 
 		// Iterate over arr and remove the items by key
 		for (var i = 0; i < arr.length; i++) {
-			console.log("remove Iem", arr[i]);
+		//console.log("remove Iem", arr[i]);
 			localStorage.removeItem(arr[i]);
 		}
 		return cb();
