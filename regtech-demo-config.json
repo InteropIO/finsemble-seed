@@ -109,13 +109,19 @@
     },
     "REGnosys": {
       "window": {
+        "id": "REGnosys",
         "url": "http://rosetta-programmatic-compliance-demo.k8.regnosys.com",
+        "frame": false,
         "resizable": true,
+        "autoShow": false,
         "addToWorkspace": true,
         "top": "center",
         "left": "center",
         "width": 800,
         "height": 600
+      },
+      "component": {
+        "singleton": true
       },
       "foreign": {
         "services": {
@@ -134,20 +140,26 @@
             "showLinker": true
           },
           "Toolbar": {
-            "iconClass": "fpe-REGnosys"
+            "iconClass": "fpe-regnosys"
           }
         }
       }
     },
     "Steeleye": {
       "window": {
+        "id": "Steeleye",
         "url": "https://pinafore.preview.steeleye.co/",
+        "frame": false,
         "resizable": true,
+        "autoShow": false,
         "addToWorkspace": true,
         "top": "center",
         "left": "center",
         "width": 800,
         "height": 600
+      },
+      "component": {
+        "singleton": true
       },
       "foreign": {
         "services": {
