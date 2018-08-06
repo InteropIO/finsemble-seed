@@ -1,0 +1,175 @@
+{
+  "comment": "Sample component configuration",
+  "name": "Regtech components",
+  "id": "797e8d82-922a-4f0b-a736-941c2fabd2e1",
+  "components": {
+    "EnforcdViewer": {
+      "window": {
+        "id": "EnforcdViewer",
+        "frame": false,
+        "resizable": true,
+        "autoShow": true,
+        "top": "center",
+        "left": "center",
+        "width": 800,
+        "height": 600
+      },
+      "component": {},
+      "foreign": {
+        "services": {
+          "dockingService": {
+            "canGroup": true,
+            "isArrangable": true
+          }
+        },
+        "components": {
+          "App Launcher": {
+            "launchableByUser": false
+          },
+          "Window Manager": {
+            "FSBLHeader": true,
+            "persistWindowState": true
+          },
+          "Toolbar": {
+            "iconClass": "EnforcdViewer"
+          }
+        }
+      }
+    },
+    "EnforcdSettings": {
+      "window": {
+        "id": "EnforcdSettings",
+        "frame": false,
+        "resizable": true,
+        "autoShow": true,
+        "top": "center",
+        "left": "center",
+        "width": 800,
+        "height": 600
+      },
+      "component": {
+        "singleton": true
+      },
+      "foreign": {
+        "services": {
+          "dockingService": {
+            "canGroup": true,
+            "isArrangable": true
+          }
+        },
+        "components": {
+          "App Launcher": {
+            "launchableByUser": false
+          },
+          "Window Manager": {
+            "FSBLHeader": true,
+            "persistWindowState": true
+          },
+          "Toolbar": {
+            "iconClass": "EnforcdSettings"
+          }
+        }
+      }
+    },
+    "EnforcdEDB": {
+      "window": {
+        "id": "EnforcdEDB",
+        "url": "https://edb.enforcd.com/app/EnforcdFinsemble",
+        "frame": false,
+        "resizable": true,
+        "autoShow": true,
+        "top": "center",
+        "left": "center",
+        "width": 450,
+        "height": 800
+      },
+      "component": {
+        "singleton": true
+      },
+      "foreign": {
+        "services": {
+          "dockingService": {
+            "canGroup": true,
+            "isArrangable": true
+          }
+        },
+        "components": {
+          "App Launcher": {
+            "launchableByUser": true
+          },
+          "Window Manager": {
+            "FSBLHeader": true,
+            "persistWindowState": true
+          },
+          "Toolbar": {
+            "iconClass": "EnforcdEDB"
+          }
+        }
+      }
+    },
+    "REGnosys": {
+      "window": {
+        "url": "http://rosetta-programmatic-compliance-demo.k8.regnosys.com",
+        "resizable": true,
+        "addToWorkspace": true,
+        "top": "center",
+        "left": "center",
+        "width": 800,
+        "height": 600
+      },
+      "foreign": {
+        "services": {
+          "dockingService": {
+            "canGroup": true,
+            "isArrangable": true
+          }
+        },
+        "components": {
+          "App Launcher": {
+            "launchableByUser": true
+          },
+          "Window Manager": {
+            "FSBLHeader": true,
+            "persistWindowState": true,
+            "showLinker": true
+          },
+          "Toolbar": {
+            "iconClass": "fpe-REGnosys"
+          }
+        }
+      }
+    },
+    "Steeleye": {
+      "window": {
+        "url": "https://pinafore.preview.steeleye.co/",
+        "resizable": true,
+        "addToWorkspace": true,
+        "top": "center",
+        "left": "center",
+        "width": 800,
+        "height": 600
+      },
+      "foreign": {
+        "services": {
+          "dockingService": {
+            "canGroup": true,
+            "isArrangable": true
+          }
+        },
+        "components": {
+          "App Launcher": {
+            "launchableByUser": true
+          },
+          "Window Manager": {
+            "FSBLHeader": true,
+            "persistWindowState": true,
+            "showLinker": true
+          },
+          "Toolbar": {
+            "iconClass": "fpe-steeleye"
+          }
+        }
+      }
+    }
+  }
+}
