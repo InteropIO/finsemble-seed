@@ -357,7 +357,7 @@ var Actions = {
 	 */
 	clickClose: function () {
 		FSBL.Clients.WindowClient.close({
-			removeFromWorkspace: true,
+			removeFromWorkspace: true, // this will cause the entire stack to close. Using this instead of a new parameter to ensure backwards compatibility
 			userInitiated: true
 		});
 	},
@@ -456,7 +456,7 @@ var Actions = {
 		return Actions.parentWrapper.removeWindow({ windowIdentifier, position: i });
 	},
 	closeTab: function (windowIdentifier) {
-		return Actions.parentWrapper.deleteWindow({ windowIdentifier })
+		return Actions.parentWrapper.deleteWindow({ windowIdentifier }) // this will cause the window to be closed but keep the stack intact
 	},
 	reorderTab: function (tab, newIndex) {
 
