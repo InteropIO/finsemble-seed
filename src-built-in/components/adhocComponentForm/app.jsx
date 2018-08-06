@@ -122,7 +122,7 @@ class AdHocComponentForm extends React.Component {
 			</FinsembleDialogQuestion>
 			<div className="button-wrapper">
 			<FinsembleDialogTextInput maxLength="40" onInputChange={this.setName} placeholder="Name" autofocus />
-			<FinsembleDialogTextInput maxLength="40" onInputChange={this.setURL} placeholder="URL" />
+			<FinsembleDialogTextInput maxLength="256" onInputChange={this.setURL} placeholder="URL" />
 
 
 				<FinsembleDialogButton show={true} buttonSize="md-positive" onClick={this.save}>
