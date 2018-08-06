@@ -481,7 +481,7 @@ var Actions = {
 	},
 	setActiveTab: function (windowIdentifier) {
 		FSBL.Clients.Logger.system.debug("setActiveTab.visibleWindow");
-		return Actions.parentWrapper.setVisibleWindow({ windowIdentifier });
+		return finsembleWindow.parentWindow.setVisibleWindow({ windowIdentifier });
 	},
 	parentWrapper: null,
 	onTabListChanged: function (err, response) {
@@ -513,7 +513,7 @@ var Actions = {
 	},
 	getInitialTabList: function (cb = Function.prototype) {
 		FSBL.Clients.WindowClient.getStackedWindow((err, parentWrapper) => {
-			Actions.parentWrapper = parentWrapper;
+			Actions.parentWrapper = FSBL.Clients.WindowClient.finsembleWindow.getParent();
 			if (Actions.parentWrapper) {
 				FSBL.Clients.Logger.debug("GetInitialTabList, parent exists")
 				Actions.setupStore(cb);
