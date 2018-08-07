@@ -64,20 +64,23 @@ var Actions = {
 			HeaderStore.setCompanionWindow(wrappedWindow);
 			var onParentSet = async (e) => {
 				let { data } = e;
-				if (!localParent) {
-					let { wrap } = await FSBL.FinsembleWindow.wrap(data);
+				console.log(data);
+				if (!localParent && data.parentName) {
+					let { wrap } = await FSBL.FinsembleWindow.wrap({name: data.parentName});
 					localParent = wrap;
+
+					localParent.addListener("startedMoving", Actions.onCompanionStartedMoving);
+					localParent.addListener("stoppedMoving", Actions.onCompanionStoppedMoving);
+					localParent.addListener("bringToFront", Actions.onCompanionBringToFront);
+
+					Actions.isWindowVisible((err, isVisible) => {
+						if (!isVisible) {
+							Actions.onCompanionHidden();
+						}
+					});
+
 				}
 
-				localParent.addListener("startedMoving", Actions.onCompanionStartedMoving);
-				localParent.addListener("stoppedMoving", Actions.onCompanionStoppedMoving);
-				localParent.addListener("bringToFront", Actions.onCompanionBringToFront);
-
-				Actions.isWindowVisible((err, isVisible) => {
-					if (!isVisible) {
-						Actions.onCompanionHidden();
-					}
-				});
 
 			};
 			var onParentCleared = () => {
@@ -88,6 +91,7 @@ var Actions = {
 					localParent.removeListener("startedMoving", Actions.onCompanionStartedMoving);
 					localParent.removeListener("stoppedMoving", Actions.onCompanionStoppedMoving);
 					localParent.removeListener("bringToFront", Actions.onCompanionBringToFront);
+					localParent = null;
 				}
 
 			};
