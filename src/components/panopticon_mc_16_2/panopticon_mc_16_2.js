@@ -51,46 +51,47 @@ function listenForParameterChanges() {
 }
 
 function setState() {
-	let state = {
-		workbook: null,
-		dashboard: null,
-		parameters: null
-	};
-	function save(state) {
-		console.log("saving state: ", state);
-		FSBL.Clients.WindowClient.setComponentState({ field: 'state', value: state });
-	};
-	DatawatchAPI.getSelectedWorkbook(function(workbookName) {
-		if (dashboardName) {
-			state.dashboard = workbookName;
-			DatawatchAPI.getSelectedDashboard(function(dashboardName) {
-				if (dashboardName) {
-					state.dashboard = dashboardName;
-					DatawatchAPI.getDashboardParameters(function(dashParams) {
-						if (dashboardName) {
-							state.parameters = dashParams;
-						} 
-						save(state);
-					});
-				} else {
-					save(state);				}
-			});
-		} else {
-			save(state);
-		}
-	});
+	// let state = {
+	// 	workbook: null,
+	// 	dashboard: null,
+	// 	parameters: null
+	// };
+	// function save(state) {
+	// 	console.log("saving state: ", state);
+	// 	FSBL.Clients.WindowClient.setComponentState({ field: 'state', value: state });
+	// };
+	// DatawatchAPI.getSelectedWorkbook(function(workbookName) {
+	// 	if (dashboardName) {
+	// 		state.dashboard = workbookName;
+	// 		DatawatchAPI.getSelectedDashboard(function(dashboardName) {
+	// 			if (dashboardName) {
+	// 				state.dashboard = dashboardName;
+	// 				DatawatchAPI.getDashboardParameters(function(dashParams) {
+	// 					if (dashboardName) {
+	// 						state.parameters = dashParams;
+	// 					} 
+	// 					save(state);
+	// 				});
+	// 			} else {
+	// 				save(state);				}
+	// 		});
+	// 	} else {
+	// 		save(state);
+	// 	}
+	// });
 }
 
 function getState(cb) {
-	FSBL.Clients.WindowClient.getComponentState({
-		field: 'state',
-	}, function (err, state) {
-		if (state === null) {
-			cb();
-		}
-		console.log("got state: ", state);
-		DatawatchApi.navigate(state, cb);
-	});
+	// FSBL.Clients.WindowClient.getComponentState({
+	// 	field: 'state',
+	// }, function (err, state) {
+	// 	if (state === null) {
+	// 		cb();
+	// 	}
+	// 	console.log("got state: ", state);
+	// 	DatawatchApi.navigate(state, cb);
+	// });
+	cb();
 }
 
 function doSetup() {
