@@ -1,1 +1,10 @@
-{}
+{
+    "panopticon_mc_16_2": {
+        "output": "components/mindcontrol/panopticon_mc_16_2",
+        "entry": "./src\\components\\panopticon_mc_16_2\\panopticon_mc_16_2.js"
+    },
+    "param_tester": {
+        "output": "components/param_tester/param_tester",
+        "entry": "./src\\components\\param_tester\\param_tester.js"
+    }
+}
