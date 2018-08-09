@@ -40,6 +40,7 @@ module.exports = class WebpackDefaults {
 			}));
 		}
 		return {
+			devtool: "source-map",
 			entry: {},
 			stats: "minimal",
 			module: {

@@ -31,6 +31,7 @@ if (env !== "production") {
 
 
 module.exports = {
+    devtool: "source-map",
     entry: {
         vendor: [path.join(__dirname, './vendor')],
     },

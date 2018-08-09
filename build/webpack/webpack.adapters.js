@@ -11,6 +11,7 @@ const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 let mode = (env == "production") ? "production" : "development";
 
 module.exports = {
+    devtool: "source-map",
     entry: entries,
     stats: "minimal",
     module: {
