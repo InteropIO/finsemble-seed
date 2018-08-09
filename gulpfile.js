@@ -146,6 +146,14 @@
 				taskMethods.build
 			], done);
 		},
+		
+		"build:prod": done => {
+			async.series([
+				taskMethods.setProdEnvironment,
+				taskMethods.build
+			], done);
+		},
+
 		/**
 		 * Builds the SASS files for the project.
 		 */
