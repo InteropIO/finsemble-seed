@@ -1,4 +1,4 @@
-[
+let menuConfig = [
     {
         "align": "left",
         "iconClasses": "finsemble-toolbar-brand-logo",
@@ -18,8 +18,8 @@
         "type": "reactComponent"
     },
     {
-        "align":"left",
-        "type":"seperator"
+        "align": "left",
+        "type": "seperator"
     },
     {
         "comment": "Change align to add AlwaysOnTop capability",
@@ -48,7 +48,9 @@
         "menuType": "App Launcher"
     },
     {
-        "align":"left",
-        "type":"seperator"
+        "align": "left",
+        "type": "seperator"
     }
-]
+];
+
+export { menuConfig };

@@ -3,7 +3,7 @@
 * All rights reserved.
 */
 import async from "async";
-import * as menuConfig from '../config.json';
+import { menuConfig } from '../config.js';
 var keys = {};
 var storeOwner = false;
 /**
