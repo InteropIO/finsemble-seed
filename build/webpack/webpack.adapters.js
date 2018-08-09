@@ -7,8 +7,10 @@ for (let key in adaptersToBuild) {
 	entries[component.output] = component.entry;
 }
 
+const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
+let mode = (env == "production") ? "production" : "development";
+
 module.exports = {
-    devtool: 'source-map',
     entry: entries,
     stats: "minimal",
     module: {
@@ -19,11 +21,12 @@ module.exports = {
                 loader: 'babel-loader',
                 options: {
                     cacheDirectory: './.babel_cache/',
-                    presets: ['react', 'stage-1']
+                    presets: ['@babel/react']
                 }
             }
         ]
     },
+    mode: mode,
     output: {
         filename: "[name].js",
         sourceMapFilename: "[name].map.js",

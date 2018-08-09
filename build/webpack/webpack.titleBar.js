@@ -13,12 +13,11 @@ let plugins =
             }
         }),
         //new ProgressPlugin({ profile: false })
-    ]
+    ];
 
-if (env === "production") {
-    // When building the production environment, minify the code.
-    plugins.push(new UglifyJsPlugin());
-} else {
+let mode = (env == "production") ? "production" : "development";
+
+if (env !== "production") {
     plugins.push(new hardSource({
         //root dir here is "dist". Back out so we dump this file into the root.
         cacheDirectory: '../.webpack-file-cache/[confighash]',
@@ -36,10 +35,10 @@ var builtInTitleBarPath = "./src-built-in/components/windowTitleBar/src/windowTi
 var customTitleBarPath = "./src/components/windowTitleBar/src/windowTitleBar.jsx";
 var titleBarPath = fs.existsSync(customTitleBarPath) ? customTitleBarPath : builtInTitleBarPath;
 module.exports = {
-    devtool: 'source-map',
     entry: {
         "components/windowTitleBar/windowTitleBar": titleBarPath
     },
+    mode: mode,
     stats: "minimal",
     module: {
         rules: [
@@ -85,7 +84,7 @@ module.exports = {
                 loader: 'babel-loader',
                 options: {
                     cacheDirectory: './.babel_cache/',
-                    presets: ['react', 'stage-1']
+                    presets: ['@babel/react']
                 }
             }
         ]

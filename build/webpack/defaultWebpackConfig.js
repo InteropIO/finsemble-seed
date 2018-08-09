@@ -4,16 +4,17 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const { DllReferencePlugin, EnvironmentPlugin, ProgressPlugin } = require("webpack");
 const hardSource = require("hard-source-webpack-plugin");
 
-const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
-
 module.exports = class WebpackDefaults {
 	constructor() {
 		let plugins =
 			[
 				new EnvironmentPlugin(['NODE_ENV']),
 				new ProgressPlugin({ profile: false })
-			]
-	
+			];
+		
+		const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
+		let mode = (env == "production") ? "production" : "development";
+				
 		try {
 			const VENDOR_MANIFEST = require('./vendor-manifest.json');
 			plugins.push(new DllReferencePlugin({
@@ -25,10 +26,7 @@ module.exports = class WebpackDefaults {
 			process.exit(1);
 		}
 	
-		if (env === "production") {
-			// When building the production environment, minify the code.
-			plugins.push(new UglifyJsPlugin());
-		} else {
+		if (env !== "production") {
 			plugins.push(new hardSource({
 				//root dir here is "dist". Back out so we dump this file into the root.
 				cacheDirectory: '../.webpack-file-cache/[confighash]',
@@ -42,7 +40,6 @@ module.exports = class WebpackDefaults {
 			}));
 		}
 		return {
-			devtool: 'source-map',
 			entry: {},
 			stats: "minimal",
 			module: {
@@ -89,11 +86,12 @@ module.exports = class WebpackDefaults {
 						loader: 'babel-loader',
 						options: {
 							cacheDirectory: './.babel_cache/',
-							presets: ['react', 'stage-1']
+							presets: ['@babel/react']
 						}
 					}
 				]
 			},
+			mode: mode,
 			plugins: plugins,
 			output: {
 				filename: "[name].js",

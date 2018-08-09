@@ -5,19 +5,17 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const { DefinePlugin, EnvironmentPlugin, DllPlugin, ProgressPlugin } = require("webpack");
 const hardSource = require("hard-source-webpack-plugin");
 
-console.log("ENVIRONMENT", env);
 let plugins = [
     new DllPlugin({
         name: 'vendor_lib',
         path: 'build/webpack/vendor-manifest.json',
     }),
     new EnvironmentPlugin(['NODE_ENV'])
-]
+];
 
-if (env === "production") {
-    // When building the production environment, minify the code.
-    plugins.push(new UglifyJsPlugin());
-} else {
+let mode = (env == "production") ? "production" : "development";
+
+if (env !== "production") {
     plugins.push(new hardSource({
         //root dir here is "dist". Back out so we dump this file into the root.
         cacheDirectory: '../.webpack-file-cache/[confighash]',
@@ -36,6 +34,7 @@ module.exports = {
     entry: {
         vendor: [path.join(__dirname, './vendor')],
     },
+    mode: mode,
     output: {
         filename: 'vendor.bundle.js',
         path: path.join(__dirname, "../../dist"),

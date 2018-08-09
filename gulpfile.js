@@ -62,6 +62,30 @@
 
 	const isRunningDevTask = process.argv[2].startsWith("dev");
 
+	/**
+	 * Process any "include" arguments. "Includes" allow the build process to incorporate files from outside of the repo.
+	 * For example, `npx gulp dev --include:../my-other-repo` will include files from the sibling directory my-other-repo.
+	 * The build process will process src, config, assets [and other] folders in the included directory. Duplicated files
+	 * will override those in this repo.
+	 * 
+	 * Why would you do this? This allows you to maintain your own repo without modifying this seed project. You will be able
+	 * to safely upgrade your seed project without potentially overwriting any of your own files. The include capability also
+	 * allows you to easily run different configurations. For instance, you can create a directoy that has test components and
+	 * run with those components simply by changing the arguments to your build process.
+	 * 
+	 * Note, for convenience, --include:my-other-repo will be treated as --include:../my-other-repo.
+	 */
+	let includes = (() => {
+		let arr = [];
+		process.argv.forEach(arg => {
+			if (!arg.startsWith("--include:")) return;
+			let include = arg.split("--include:")[1];
+			if (!include.startsWith(".") && !include.startsWith("/")) include = "../" + include;
+			arr.push(include);
+		});
+		return arr;
+	})();
+
 	// #endregion
 
 	// #region Task Methods
@@ -75,6 +99,7 @@
 		distPath : path.join(__dirname, "dist"),
 		srcPath: path.join(__dirname, "src"),
 		startupConfig: startupConfig,
+		includes: includes,
 		
 		/**
 		 * Builds the application in the distribution directory. Internal only, don't use because no environment is set!!!!
@@ -190,8 +215,8 @@
 					}
 				},
 				(cb) => {
-					const webpackComponentsConfig = require("./build/webpack/webpack.components.js")
-					packFiles(webpackComponentsConfig, "component bundle", cb);
+					let webpackComponentsConfig = require("./build/webpack/webpack.components.js");
+					packFiles(webpackComponentsConfig.makeConfig({ includes: taskMethods.includes }), "component bundle", cb);
 				}
 			],
 				done
