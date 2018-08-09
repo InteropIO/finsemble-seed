@@ -456,7 +456,10 @@ var Actions = {
 		return Actions.parentWrapper.removeWindow({ windowIdentifier, position: i });
 	},
 	closeTab: function (windowIdentifier) {
-		return Actions.parentWrapper.deleteWindow({ windowIdentifier }) // this will cause the window to be closed but keep the stack intact
+		//return Actions.parentWrapper.deleteWindow({ windowIdentifier }) // this will cause the window to be closed but keep the stack intact
+		FSBL.FinsembleWindow.wrap(windowIdentifier, (err, wrap) => {
+			wrap.close();
+		});
 	},
 	reorderTab: function (tab, newIndex) {
 
