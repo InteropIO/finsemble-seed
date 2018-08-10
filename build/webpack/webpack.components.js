@@ -106,7 +106,7 @@ class ConfigMaker {
 	 * This function iterates through src-built-in, src and included repos, building a list of all the directories but eliminating duplicates.
 	 * In other words, this allows src/components folders to *override* (replace) folders in src-built-in.
 	 */
-	collapseFolders(params) {
+	collapseSrc(params) {
 		var combinedList = {}; // contains the final compressed list
 
 		// First put all the built in items into our combined list
@@ -120,6 +120,7 @@ class ConfigMaker {
 
 		return combinedList;
 	}
+	
 
 	/**
 	 * Creates the copy-webpack-plugin config.
@@ -131,10 +132,6 @@ class ConfigMaker {
 	createCopyWebpackConfig(params) {
 		// Copy configs, clients and finsemble library
 		var config = [
-			{
-				from: './configs/',
-				to: './configs/'
-			},
 			{
 				from: './src/clients/',
 				to: './clients/'
@@ -154,12 +151,36 @@ class ConfigMaker {
 			}
 		];
 
-		// Create a copy entry for each folder in our collapsed list
-		// ignore node_modules/* and */node_modules/*
-		var folders = this.collapseFolders(params);
-		for (let name in folders) {
+		// Copy relevant folders from includes. Since these are later in the copyplugin array, they will copy over the folders from the src directory.
+		// Any duplicated files will come from the include directory, thus overriding the defaults. Any non-duplicated file will just be added in.
+		params.includes.forEach(folder => {
 			config.push({
-				from: folders[name],
+				from: path.join(folder, "configs"),
+				to: "./configs/",
+			});
+			config.push({
+				from: path.join(folder, "assets"),
+				to: "./assets/",
+			});
+			config.push({
+				from: path.join(folder, "src/adapters"),
+				to: "./adapters/",
+			});
+			config.push({
+				from: path.join(folder, "src/clients"),
+				to: "./clients/",
+			});
+			config.push({
+				from: path.join(folder, "src/services"),
+				to: "./services/",
+			});
+		});
+		
+		// Create a copy entry for all src files. This also checks src-built-in
+		let srcCopy = this.collapseSrc(params);
+		for (let name in srcCopy) {
+			config.push({
+				from: srcCopy[name],
 				to: "./components/" + name,
 				ignore: ["node_modules/**/*", "**/*/node_modules/**/*"]
 			});
