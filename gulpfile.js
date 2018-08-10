@@ -114,10 +114,15 @@
 
 			done();
 		},
-
 		"build:dev": done => {
 			async.series([
 				taskMethods.setDevEnvironment,
+				taskMethods.build
+			], done);
+		},
+		"build:prod": done => {
+			async.series([
+				taskMethods.setProdEnvironment,
 				taskMethods.build
 			], done);
 		},
