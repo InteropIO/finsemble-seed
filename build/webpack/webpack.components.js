@@ -143,10 +143,11 @@ class ConfigMaker {
 				from: './assets/',
 				to: './assets/'
 			},
+/*			This causes an annoying image to show up in openfin localhost:9090
 			{
 				from: './assets/img/favicon.ico',
 				to: './favicon.ico'
-			},
+			},*/
 			{
 				from: './node_modules/@chartiq/finsemble/dist',
 				to: path.join(__dirname, "../../finsemble/")
