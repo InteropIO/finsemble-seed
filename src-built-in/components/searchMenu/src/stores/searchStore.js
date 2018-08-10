@@ -17,14 +17,14 @@ var Actions = {
 	initialize: function (cb) {
 		cb();
 		finWindow.addEventListener("shown", () => {
-			console.log("shown", performance.now());
+		//console.log("shown", performance.now());
 		})
 	},
 	getList() {
 		return values.list;
 	},
 	listChange(err, data) {
-		console.log("list", data)
+	//console.log("list", data)
 		if (!data.value) {
 			values.list = [];
 
@@ -42,14 +42,14 @@ var Actions = {
 	},
 	providerItemClick(provider) {
 		FSBL.Clients.SearchClient.invokeProviderAction(provider);
-		menuStore.Dispatcher.dispatch({ actionType: "clear", data: "" });
-		menuStore.setValue({ field: "list", value: [] })
+		//menuStore.Dispatcher.dispatch({ actionType: "clear", data: "" });
+		//menuStore.setValue({ field: "list", value: [] })
 		return finWindow.hide();
 	},
 	listItemClick(item, action) {
 		FSBL.Clients.SearchClient.invokeItemAction(item, action)
-		menuStore.Dispatcher.dispatch({ actionType: "clear", data: "" });
-		menuStore.setValue({ field: "list", value: [] })
+		//menuStore.Dispatcher.dispatch({ actionType: "clear", data: "" });
+		//menuStore.setValue({ field: "list", value: [] })
 		return finWindow.hide();
 	},
 	actionPress(err, msg) {
@@ -67,14 +67,14 @@ function createStore(done) {
 		list: [],
 		owner: finWindow.name
 	};
-	console.log("add listeners")
+//console.log("add listeners")
 	FSBL.Clients.RouterClient.addListener("SearchMenu." + finWindow.name + ".actionpress", Actions.actionPress);
 	finWindow.addEventListener("blurred", Actions.onBlur);
 	finWindow.addEventListener("reloaded", function () {
 		finWindow.removeEventListener("blurred", Actions.onBlur);
 		menuStore.removeListener({ field: "list" }, Actions.listChange);
 	})
-	console.log("CreateStore", "Finsemble-SearchStore." + FSBL.Clients.WindowClient.options.customData.spawnData.owner)
+//console.log("CreateStore", "Finsemble-SearchStore." + FSBL.Clients.WindowClient.options.customData.spawnData.owner)
 
 	FSBL.Clients.DistributedStoreClient.createStore({ store: "Finsemble-SearchStore-" + FSBL.Clients.WindowClient.options.customData.spawnData.owner, values: defaultData, global: true },
 		function (err, store) {
@@ -87,7 +87,7 @@ function createStore(done) {
 
 
 function initialize(cb) {
-	console.log("init store", FSBL.Clients.WindowClient.options.customData.spawnData.owner)
+//console.log("init store", FSBL.Clients.WindowClient.options.customData.spawnData.owner)
 	async.parallel([
 		createStore,
 	], function (err) {

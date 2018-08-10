@@ -74,7 +74,7 @@ function setupHotKeys() {
 		if (!keys[response.data.key]) keys[response.data.key] = {};
 		keys[response.data.key] = true;
 		if (keys[162] && keys[81]) {
-			console.log("call---quit")
+		//console.log("call---quit")
 
 		}
 	});
@@ -134,7 +134,7 @@ var Actions = {
 					{
 						question: "Your workspace \"" + FSBL.Clients.WorkspaceClient.activeWorkspace.name + "\" has unsaved changes, would you like to save?"
 					}, function (err, response) {
-						if (response.choice === "affirmative") {
+						if (err || response.choice === "affirmative") {
 							FSBL.Clients.WorkspaceClient.saveAs({
 								force: true,
 								name: FSBL.Clients.WorkspaceClient.activeWorkspace.name
@@ -201,9 +201,9 @@ var Actions = {
 	},
 	spawnDocs() {
 		fin.desktop.System.openUrlWithBrowser("https://www.chartiq.com/tutorials/?slug=finsemble-seed-project", function () {
-			console.log("successfully launched docs");
+		//console.log("successfully launched docs");
 		}, function (err) {
-			console.log("failed to launch docs");
+		//console.log("failed to launch docs");
 		});
 	}
 };

@@ -57,21 +57,27 @@ var Actions = {
 				this.setupWindow()
 			}
 			if (!menuWindow) return;
-			return menuWindow.isShowing(function (showing) {
+			return menuWindow.isShowing((showing) => {
 				if (showing) return;
-				let params = {
-					monitor: 'mine',
-					position: 'relative',
-					left: target.getBoundingClientRect().left,
-					forceOntoMonitor: true,
-					top: 'adjacent',
-					spawnIfNotFound: true
-				};
 
-				var bounds = document.getElementById("inputContainer").getBoundingClientRect();
-				menuWindow.showAt(window.screenX + bounds.left, target.offsetHeight + window.screenY, null, function (err, data) {
+				const inputContainer = document.getElementById("inputContainer");
+				if (inputContainer) {
+					const bounds = inputContainer.getBoundingClientRect();
 
-				});
+					// Using showAt rather than WindowClient.showWindow because showWindow was causing auto-focus on the 
+					// searchMenu which caused an issue with the animations of the search button.
+					menuWindow.showAt(
+						window.screenX + bounds.left,
+						bounds.bottom + window.screenY,
+						null,
+						(err) => {
+							if (err) {
+								FSBL.Clients.Logger.error(err);
+							}
+						});
+				} else {
+					FSBL.Clients.Logger.error("No element with ID 'inputContainer' exists");
+				}
 			});
 
 		}
@@ -80,7 +86,7 @@ var Actions = {
 			return Actions.handleClose();
 		}
 		menuWindow.isShowing(function (showing) {
-			//if (!showing) return console.log("not showing")
+			//if (!showing) return//console.log("not showing")
 			mouseInWindow(menuWindow, function (err, inBounds) {
 
 				if (!inBounds) {
@@ -92,7 +98,7 @@ var Actions = {
 
 	},
 	handleClose() {
-		console.log("close a window")
+	//console.log("close a window")
 		window.getSelection().removeAllRanges();
 		document.getElementById("searchInput").blur();
 		menuStore.setValue({ field: "active", value: false })
@@ -140,11 +146,11 @@ var Actions = {
 	}
 };
 function searchTest(params, cb) {
-	console.log("params", params)
+//console.log("params", params)
 	fetch('/search?text=' + params.text).then(function (response) {
 		return response.json();
 	}).then(function (json) {
-		console.log("json", cb);
+	//console.log("json", cb);
 		return cb(null, json);
 
 	});
@@ -160,7 +166,7 @@ function createStore(done) {
 		activeSearchBar: null,
 		menuIdentifier: null
 	};
-	console.log("CreateStore", "Finsemble-SearchStore-" + finWindow.name)
+//console.log("CreateStore", "Finsemble-SearchStore-" + finWindow.name)
 	FSBL.Clients.DistributedStoreClient.createStore({ store: "Finsemble-SearchStore-" + finWindow.name, values: defaultData, global: true }, function (err, store) {
 		menuStore = store;
 
@@ -168,7 +174,7 @@ function createStore(done) {
 			store.addListener({ field: "menuIdentifier" }, Actions.updateMenuReference);
 			if (!data.menuSpawned) {
 				FSBL.Clients.LauncherClient.spawn("searchMenu", { name: "searchMenu." + finWindow.name, data: { owner: finWindow.name } }, function (err, data) {
-					console.log("Err", err, data)
+				//console.log("Err", err, data)
 					menuStore.setValue({ field: "menuIdentifier", value: data })
 					menuWindow = fin.desktop.Window.wrap(data.finWindow.app_uuid, data.finWindow.name);
 					menuStore.setValue({ field: "menuSpawned", value: true })
@@ -194,12 +200,12 @@ function createStore(done) {
 		Actions.setFocus(false);
 	}, function () {
 	}, function (reason) {
-		console.log("failure:" + reason);
+	//console.log("failure:" + reason);
 	});
 }
 
 function initialize(cb) {
-	console.log("init store")
+//console.log("init store")
 	async.parallel([
 		createStore,
 	], function (err) {

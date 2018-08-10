@@ -17,7 +17,6 @@ export default class ShareButton extends React.Component {
 		windowTitleBarStore = getStore();
 
 		this.state = {
-			emitterEnabled: windowTitleBarStore.getValue({ field: "Sharer.emitterEnabled" }),
 			hoverState: "false"
 		};
 	}
@@ -27,20 +26,10 @@ export default class ShareButton extends React.Component {
      * @memberof ShareButton
      */
 	bindCorrectContext() {
-		this.onEmitterChanged = this.onEmitterChanged.bind(this);
 		this.hoverAction = this.hoverAction.bind(this);
 	}
 
-    /**
-     *
-     *
-     * @param {any} err
-     * @param {any} response
-     * @memberof ShareButton
-     */
-	onEmitterChanged(err, response) {
-		this.setState({ emitterEnabled: response.value });
-	}
+
 
     /**
      * When the user starts to drag the share button, let the DragAndDropClient know.
@@ -58,7 +47,6 @@ export default class ShareButton extends React.Component {
      * @memberof ShareButton
      */
 	componentWillMount() {
-		windowTitleBarStore.addListener({ field: "Sharer.emitterEnabled" }, this.onEmitterChanged);
 		windowTitleBarStore.addListener({ field: "Sharer.receiverHandler" }, this.onReceiverhandler);
 	}
     /**
@@ -67,7 +55,6 @@ export default class ShareButton extends React.Component {
      * @memberof ShareButton
      */
 	componentWillUnmount() {
-		windowTitleBarStore.removeListener({ field: "Sharer.emitterEnabled" }, this.onEmitterChanged);
 		windowTitleBarStore.removeListener({ field: "Sharer.receiverHandler" }, this.onReceiverhandler);
 	}
 
@@ -82,10 +69,12 @@ export default class ShareButton extends React.Component {
 	}
 
 	render() {
+		/* [Terry] was causing Sharer to never show. Deprecated?
 		if (!this.state.emitterEnabled) {
 			return null;
 		}
-		return (<div className="fsbl-icon cq-no-drag ff-share" title="Drag To Share" data-hover={this.state.hoverState} draggable="true" onDragStart={this.onDragStart}>
+		*/
+		return (<div className="fsbl-icon ff-share" title="Drag To Share" data-hover={this.state.hoverState} draggable="true" onDragStart={this.onDragStart}>
 			<HoverDetector edge="top" hoverAction = {this.hoverAction.bind(this)} />
         </div>);
 	}

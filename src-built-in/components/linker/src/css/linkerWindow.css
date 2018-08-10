@@ -2,19 +2,22 @@
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
-@import '../../../assets/css/_globals.css';
+@import '../../../../../assets/css/_globals.css';
+body {
+    margin:0;
+	border:0;
+}
+
 #main {
-    padding: 4px 0px 4px 0px;
+    padding: 4px 0px;
     background-color: var(--menu-background-color);
 }
+
 .linkerGroup{
     height: 20px;
-    margin: 4px 8px 4px 8px;
+    margin: 4px 8px;
     cursor: pointer;
     border-radius: 2px;
-}
-.linkerGroup:hover{
-    background-color:#eeeeee;
 }
 
 .linkerContainer{
@@ -22,43 +25,7 @@
     display: flex;
     flex-direction:column;
 }
-.commandGroup{
-    display: flex;
-    align-items: center ;
-    justify-content: center ;
-    flex-direction:row;
-    align-self:center;
-    width:100%;
 
-}
-.groupItem{
-    flex:1;
-    align-self:center;
-    cursor: pointer;
-     text-align: center;
-
-}
-.groupItem:hover{
-    background-color: red;
-    opacity: .5;
-}
-.divider{
-    	border-top: 1px solid #8c8b8b;
-}
-.partialDivider{
-    	border-top: 2px solid #d1d3d6;
-        width:75%
-}
-.xMark{
-    color: #8c8b8b;
-    font-weight:bold;
-    font-size: 18px;
-    cursor:pointer;
-}
-.xMark:hover{
-    background-color: grey;
-    opacity: .5;
-}
 .active-linker-group{
     margin-left: auto;
     height: 100%;
@@ -68,137 +35,6 @@
     justify-content: center;
     align-items: center;
     flex-direction: row;
-    color: white;
-    font-size: 1.3em;
-}
-.advancedContainer{
-    width: 100%;
-     display: flex;
-    flex-direction:column;
-     flex-basis: 0;
-     padding:5px
-}
-.advancedOptions{
-     display: flex;
-    align-items: center ;
-    justify-content: center ;
-    flex-direction:row;
-    align-self:center;
-    width:100%;
-    font-size:14px;
-}
-.advancedOptions .option{
-    font-size:14px;
-
-    border: 1px solid transparent
-
-}
-.transfer{
-     flex-grow:2;
-}
-.colCenter{
-     align-self:center;
-         justify-content: center ;
-
-}
-.transfer:hover{
- border: 1px solid black;
-
-}
-.groupName{
-    flex-grow:1;
-}
-.groupName:hover{
- border: 1px solid black;
-
-}
-.advancedColor{
-        min-width:20px;
-     min-height:20px;
-    max-width:20px;
-     max-height:20px;
-      cursor: pointer;
-}
-.header-Large{
-    font-size:21px;
-    font-weight:bold;
-}
-.header-Small{
-    font-size:14px;
-    font-weight:bold;
-}
-.advancedHeader{
-  align-self:center;
-}
-.center{
-    text-align:center;
-}
-.col1{
-    width:35%;
-     margin:5px;
-}
-.col2{
-    width:10%;
-     margin:5px;
-}
-.col3{
-    width:45%;
-     margin:5px;
-}
-.col4{
-    width:10%;
-     margin:5px;
-}
-.row{
-      width: 100%;
-     display: flex;
-    flex-direction:row;
-}
-.col11{
-      width:8.33%;
-}
-.col22{
-      width:16.66%;
-}
-.col33{
-      width:25%;
-}
-.col{
-   margin:5px;
-}
-.newGroup{
-      width: 100%;
-     display: flex;
-    flex-direction:row;
-     margin:5px;
-      align-self:center;
-}
-.xMark{
-    color: #d1d3d6;
-    font-weight:bold;
-    font-size: 18px;
-    cursor:pointer;
-
-}
-.xMark:hover{
-    background-color: grey;
-    opacity: .5;
-}
-.doneButton{
-     align-self:center;
-}
-.add{
-    color: blue;
-    font-weight:bold;
-    font-size: 24px;
-    cursor:pointer;
-    line-height: 24px;
-}
-fsbl-button{
-     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2), 0 4px 4px 0 rgba(0, 0, 0, 0.19);
-     padding:7px;
-     color:#4277f4;
-     cursor:pointer;
-     font-weight:bold;
-     margin:10px;
+    color: var(--menu-linker-selected-font-color);
+    font-size: var(--menu-linker-selected-font-size);
 }

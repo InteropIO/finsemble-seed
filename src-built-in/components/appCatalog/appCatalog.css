@@ -2,9 +2,9 @@
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
-@import  url('../assets/css/_globals.css');
+@import  url('../../../assets/css/_globals.css');
 
-@import  url('../assets/css/_menus.css');
+@import  url('../../../assets/css/_menus.css');
 
 img {
     user-drag: none;
@@ -30,20 +30,21 @@ html:after {
 }
 
 .bestmatch {
-    background-color: #ecf0f1;
+    background-color: var(--content-card-bestMatch-background-color);
 }
 
 body {
     margin-left: 0px !important;
     margin-right: 0px !important;
     font-family: var(--font-family);
-    color: var(--dialog-font-color)
+    font-weight: var(--content-font-weight);
+    color: var(--content-font-color)
 }
 
 .content {
     width: calc(100% - 17px);
     padding: .75em;
-    background-color: var(--content-section-background-color);
+    background-color: var(--content-background-color);
 }
 
 .ListHeader {
@@ -52,12 +53,21 @@ body {
 }
 
 .filterInput {
+    font-family: var(--font-family);
+    -webkit-appearance: none;
+    color: var(--dialog-input-font-color);
+    text-align: left;
+    font-size: var(--dialog-input-font-size);
+    font-weight: var(--dialog-input-font-weight);
+    vertical-align: middle;
+    background-color: transparent;
     width: 163px;
-    height: 24px;
-    border-color: #dddddd;
-    border-width: 1px 1px 1px 1px;
-    border-style: solid;
-    padding-left: 10px;
+    height: 33px;
+    max-width: 100%;
+    padding: 3px 10px 3px 15px;
+    border: 1px solid var(--dialog-input-border-color);
+    box-sizing: border-box;
+    transition: .2s ease-in;
 }
 
 input {
@@ -65,7 +75,9 @@ input {
 }
 
 .filterInput:focus {
-    border: 1px solid var(--scrollbar-color);
+    box-shadow: 0 0 5px rgba 81, 203, 238, 1;
+    border: 1px solid var(--dialog-input-border-focus-color);
+    outline: none;
 }
 
 .ff-search {
@@ -97,7 +109,7 @@ img {
     margin: 8px;
     width: 170px;
     height: 104px;
-    background-color: var(--app-catalog-app-item-background-color);
+    background-color: var(--content-card-background-color);
     box-shadow: 0 1px 4px 0 rgba(136, 136, 136, 0.5);
 }
 
@@ -112,9 +124,7 @@ img {
     margin-right: 11px;
     margin-left: 11px;
     width: 36px;
-    width: 36px;
     height: 36px;
-    background-color: white;
     background-size: 36px 36px;
 }
 
@@ -124,16 +134,15 @@ img {
     width: 36px;
     min-width: 36px;
     height: 36px;
-    background-color: var(--app-catalog-icon-container-background-color);
+    background-color: var(--content-card-icon-background-color);
     display: flex;
     align-items: center;
 }
 
 .icon {
-    font-size: 20px;
+    font-size: var(--content-card-icon-font-size);
     width: 100%;
-    color: white;
-    font-weight: 200;
+    color: var(--content-font-color);
     text-align: center;
     vertical-align: middle;
     align-self: center;
@@ -149,12 +158,12 @@ img {
 .titleContainer .title {
     width: 100%;
     max-height: 14px;
-    font-size: 14px;
-    font-weight: 500;
+    font-size: var(--content-card-title-font-size);
+    font-weight: var(--content-nav-header-font-weight);
     font-stretch: normal;
     letter-spacing: normal;
     text-align: left;
-    color: #000000;
+    color: var(--content-font-color);
     word-break: break-word;
     padding-right: 7px;
     line-height: 1;
@@ -163,14 +172,14 @@ img {
 .titleContainer .vendor {
     width: 39px;
     height: 16px;
-    font-size: 12px;
-    font-weight: 300;
+    font-size: var(--content-component-list-font-size);
+    font-weight: var(--content-font-weight);
     font-style: italic;
     font-stretch: normal;
     line-height: normal;
     letter-spacing: normal;
     text-align: left;
-    color: #555555;
+    color: var(--content-font-color);
 }
 
 .appItem .containerFooter {
@@ -193,22 +202,19 @@ img {
 .footerRight .openButton {
     cursor: pointer;
     align-self: flex-end;
-    background-color: var(--app-catalog-button-background-color);
-    border: var(--app-catalog-button-border);
+    background-color: transparent;
+    border: 1px solid var(--button-neutral-border-color);
     font-size: 12px;
-    color: #ffffff;
+    color: var(--content-font-color);
     text-align: center;
     padding: 5px 10px 5px 10px;
     width: 49px;
     height: 16px;
-    font-size: 12px;
     font-weight: normal;
     font-style: normal;
     font-stretch: normal;
     line-height: normal;
     letter-spacing: normal;
-    text-align: center;
-    color: #ffffff;
 }
 
 .containerItem {
@@ -225,10 +231,10 @@ img {
 
 .ff-arrow-back {
     cursor: pointer;
-    font-size: 10px;
-    font-weight: 300;
+    font-size: var(--content-back-font-size);
+    font-weight: var(--content-font-weight);
     text-align: left;
-    color: #000000;
+    color: var(--content-font-color);
     margin-bottom: 21px;
 }
 
@@ -245,19 +251,20 @@ img {
 
 .detailsHeader .button {
     cursor: pointer;
+    align-self: flex-end;
+    background-color: transparent;
+    border: 1px solid var(--button-neutral-border-color);
     font-size: 12px;
+    color: var(--content-font-color);
+    text-align: center;
+    padding: 5px 10px 5px 10px;
+    width: 49px;
+    height: 16px;
     font-weight: normal;
     font-style: normal;
     font-stretch: normal;
     line-height: normal;
     letter-spacing: normal;
-    text-align: center;
-    color: #ffffff;
-    padding: 5px 17px 5px 17px;
-    text-align: center;
-    align-self: center;
-    background-color: var(--app-catalog-button-background-color);
-    border: var(--app-catalog-button-border);
 }
 
 ::-webkit-scrollbar-track {

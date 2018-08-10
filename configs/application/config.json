@@ -1,42 +1,48 @@
 {
 	"comment": "Top-level application config for development, adding on top of the core config",
 	"storage": {
-		"topicToDataStoreAdapters" : {
-			"finsemble" : "LocalStorageAdapter",
-			"finsemble.workspace" : "LocalStorageAdapter",
-			"finsemble.workspace.cache" : "LocalStorageAdapter"
+		"topicToDataStoreAdapters": {
+			"finsemble": "LocalStorageAdapter",
+			"finsemble.workspace": "LocalStorageAdapter",
+			"finsemble.workspace.cache": "LocalStorageAdapter"
 		},
-		"dataStoreAdapters" : {
+		"dataStoreAdapters": {
 			"LocalStorageAdapter": "$applicationRoot/adapters/LocalStorageAdapter.js"
 		}
 	},
 	"servicesConfig": {
 		"launcher": {
-			"searchProviderAction": {
-				"title": "App Catalog",
-				"component": "App Catalog"
+			"staggerPixels": 40
+    },
+		"docking": {
+			"enabled": true,
+			"groupTileBuffer": 30,
+			"headerHeight": 32,
+			"MINIMUM_WIDTH": 175,
+			"tabbing": {
+				"enabled": true
+			},
+			"tiling": {
+				"enabled": true
 			}
 		}
 	},
-	"systemTrayIcon": "$applicationRoot/components/assets/img/Finsemble_Taskbar_Icon.png",
+	"systemTrayIcon": "$applicationRoot/assets/img/Finsemble_Taskbar_Icon.png",
 	"systemTrayComponent": "File Menu",
-	"debugServiceDelay": 0,
 	"Window Manager": {
 		"alwaysOnTopIcon": false,
-		"showTabs": false
-	},
-	"docking": {
-		"enabled": true,
-		"groupTileBuffer": 30,
-		"headerHeight": 32
+		"showTabs": true,
+		"showNativeTabs": true,
+		"floatingTitlebarComponent": "Floating Titlebar"
 	},
 	"betaFeatures": {
 		"assimilation": {
+			"useOpenFinSpawn": false,
 			"enabled": true,
 			"blacklist": [],
 			"whitelist": [],
 			"onlySpawned": true,
-			"throttle": 20,
+			"throttle": 10,
 			"focusDelay": 30,
 			"eventIgnore": 50
 		}
@@ -51,14 +57,21 @@
 					"Toolbar",
 					"App Launcher",
 					"Workspace Management Menu",
-					"Finsemble Linker Window",
+					"linkerWindow",
 					"defaultAuthentication",
 					"dialogSignOn",
 					"dialogTemplate",
 					"dialogTest",
 					"File Menu",
 					"AdhocComponentForm",
-					"Process Monitor"
+					"Process Monitor",
+					"Docking Move Mask",
+					"yesNo",
+					"singleInput",
+					"dialogModal",
+					"UserPreferences",
+					"App Catalog",
+					"searchMenu"
 				]
 			},
 			{
@@ -80,12 +93,8 @@
 		]
 	},
 	"globalHotkeys": {
-		"BRING_ALL_TO_FRONT": [
-			"ctrl",
-			"shift",
-			"b"
-		]
 	},
+	"//": "importConfig contains components that are necessary to start Finsemble. All other components are loaded dynamically. See server/auth/test.json",
 	"importConfig": [
 		"$applicationRoot/configs/application/presentationComponents.json",
 		"$applicationRoot/configs/application/components.json",

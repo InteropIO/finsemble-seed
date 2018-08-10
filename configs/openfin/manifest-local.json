@@ -4,7 +4,7 @@
         "name": "ChartIQ Local",
         "url": "http://localhost:3375/Finsemble/components/system/serviceManager/serviceManager.html",
         "uuid": "Finsemble",
-        "applicationIcon": "http://localhost:3375/components/assets/img/Finsemble_Taskbar_Icon.png",
+        "applicationIcon": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png",
         "defaultTop": 0,
         "defaultLeft": 0,
         "showTaskbarIcon": true,
@@ -21,13 +21,17 @@
         "alwaysOnTop": false
     },
     "runtime": {
-        "arguments": "--noerrdialogs  --v=4 --no-sandbox  --enable-crash-reporting --framestrategy=frames",
-        "version": "8.56.28.36"
+        "arguments": "--noerrdialogs  --v=4 --no-sandbox  --enable-crash-reporting --framestrategy=frames --winhttp-proxy-resolver",
+        "version": "8.56.28.36",
+        "//": "Add these arguments when diagnosing issues",
+        "--diagnostics": "Adding this to the runtimeArguments activates verbose logging and crash reporting.",
+        "--disable-gpu": "This flag disables hardware acceleration. Try this if 'Blank Screen' issues are reported (sometimes on virtual desktops)",
+        "--winhttp-proxy-resolver": "Chromium v56 contains a bug that in some environments can create a memory leak. The bug is related to the way Chromium handles PAC files."
     },
     "shortcut": {
         "company": "ChartIQ",
         "description": "ChartIQ Local",
-        "icon": "http://localhost:3375/components/assets/img/Finsemble_Taskbar_Icon.ico",
+        "icon": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.ico",
         "name": "ChartIQ - LOCAL",
         "target": [
             "desktop",
@@ -37,7 +41,7 @@
         "startMenuRootFolder": "ChartIQ Local"
     },
     "dialogSettings": {
-        "logo": "http://localhost:3375/components/assets/img/ciq-banner-100x25.png",
+        "logo": "http://localhost:3375/assets/img/ciq-banner-100x25.png",
         "bgColor": 4280109424,
         "textColor": 4293521652,
         "progressBarBgColor": 4294967295,
@@ -52,8 +56,8 @@
     "fileName": "ChartIQ-local-installer",
     "appAssets": [
         {
-            "src": "http://connect2.chartiq.com/finsemble/Assimilation_1_9_5.zip",
-            "version": "1.9.5",
+            "src": "https://connect2.chartiq.com/finsemble/Assimilation_2_0_1.zip",
+            "version": "2.0.1",
             "alias": "assimilation",
             "target": "assimilationMain.exe"
         }

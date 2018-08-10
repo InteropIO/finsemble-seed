@@ -4,7 +4,7 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
-import "../../assets/css/finsemble.css";
+import "../../../../assets/css/finsemble.css";
 
 import { FinsembleOverflowMenu } from "@chartiq/finsemble-react-controls";
 

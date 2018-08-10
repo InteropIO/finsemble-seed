@@ -7,8 +7,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 //Finsemble font-icons, general styling, and specific styling.
 import "../appLauncher.css";
-import "../../assets/css/finfont.css";
-import "../../assets/css/finsemble.css";
+import "../../../../assets/css/font-finance.css";
+import "../../../../assets/css/finsemble.css";
 import ComponentList from "./components/componentList";
 import * as storeExports from "./stores/appLauncherStore";
 import { Actions as appLauncherActions } from "./stores/appLauncherStore";
@@ -93,7 +93,7 @@ class AppLauncher extends React.Component {
 fin.desktop.main(function () {
 	FSBL.addEventListener("onReady", function () {
 		// var Test = require('./test');
-		console.log("appLauncher app onReady");
+	//console.log("appLauncher app onReady");
 
 		storeExports.initialize(function (store) {
 			appLauncherStore = store;

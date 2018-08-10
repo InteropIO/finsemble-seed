@@ -7,7 +7,7 @@ const logToTerminal = (msg) => {
 	console.log(`[${new Date().toLocaleTimeString()}] ${msg}.`);
 }
 
-const scrollbar = path.join(__dirname, "./src-built-in/components/assets/css/perfect-scrollbar.css");
+const scrollbar = path.join(__dirname, "./src-built-in/assets/css/perfect-scrollbar.css");
 //Have to monkeypatch the stupid sass importer so scrollbars don't throw it off. It couldn't resolve the file because we were requiring a relative file that was importing a relative file. It just bombed. Our overwrite just hardcodes the path to src-built-in/assets/css/perfect-scrollbar.css
 fs.writeFileSync("./node_modules/sass-extract/lib/importer.js", fs.readFileSync("./node-sass-importer-overwrite.js", "utf-8"), "utf-8");
 
