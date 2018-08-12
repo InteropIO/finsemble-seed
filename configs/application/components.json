@@ -185,13 +185,16 @@
                 "title": "Panopticon"
             },
             "component": {
-                "inject": "panopticon_mc_16_2.js"
+                "preload": "panopticon_mc_16_2.js"
             },
             "foreign": {
                 "services": {
                     "dockingService": {
                         "canGroup": true,
                         "isArrangable": true
+                    },
+                    "workspace": {
+                        "persistURL": true
                     }
                 },
                 "components": {
