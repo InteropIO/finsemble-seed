@@ -1,6 +1,6 @@
 {
     "name": "FinsembleSeed",
-    "version": "2.5.3",
+    "version": "2.6.11",
     "description": "",
     "main": "index.js",
     "scripts": {
@@ -23,8 +23,8 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@chartiq/finsemble": "^2.6.0-11",
-        "@chartiq/finsemble-cli": "^2.0.4",
+        "@chartiq/finsemble": "alpha",
+        "@chartiq/finsemble-cli": "2.*",
         "@chartiq/finsemble-react-controls": "1.*",
         "async": "^2.6.0",
         "babel-minify-webpack-plugin": "^0.3.0",
