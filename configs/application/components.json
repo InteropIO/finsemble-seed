@@ -270,6 +270,9 @@
                     "dockingService": {
                         "canGroup": true,
                         "isArrangable": true
+                    },
+                    "workspace": {
+                        "persistURL": true
                     }
                 },
                 "components": {
