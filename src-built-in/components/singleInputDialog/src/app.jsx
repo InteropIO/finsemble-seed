@@ -137,7 +137,7 @@ class SingleInputDialog extends React.Component {
 }
 
 //render component when FSBL is ready.
-FSBL.addEventListener("onReady", function () {
+window.addEventListener("FSBLReady", function () {
 	ReactDOM.render(
 		<SingleInputDialog />
 		, document.getElementById("singleInputDialog-component-wrapper"));

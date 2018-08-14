@@ -49,7 +49,7 @@ class UserPreferences extends React.Component {
 
 
 fin.desktop.main(function () {
-	FSBL.addEventListener("onReady", function () {
+	window.addEventListener("FSBLReady", function () {
 		FSBL.Clients.WindowClient.finsembleWindow.updateOptions({ alwaysOnTop: true });
 		FSBL.Clients.WindowClient.finsembleWindow.addEventListener("shown", FSBL.Clients.DialogManager.showModal);
 

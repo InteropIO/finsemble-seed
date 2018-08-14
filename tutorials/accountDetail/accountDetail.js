@@ -54,7 +54,7 @@ function communicateBetweenComponents() {
 	// 		}
 	// 	});
 	// }
-	
+
 	// $("next").click(function() {console.log("NEXT"); traversalFn("next")});
 	// $("prev").click(function() {console.log("PREV"); traversalFn("prev")});
 }
@@ -62,7 +62,7 @@ function communicateBetweenComponents() {
 /**
  * Everything needs to happen after Finsemble is ready
  */
-FSBL.addEventListener("onReady", function () {
+window.addEventListener("FSBLReady", function () {
 	getInitialCustomer();
 	getState();
 	listenForCustomer();

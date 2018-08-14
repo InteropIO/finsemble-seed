@@ -176,7 +176,7 @@ export default class Toolbar extends React.Component {
 	}
 
 }
-FSBL.addEventListener("onReady", function () {
+window.addEventListener("FSBLReady", function () {
 	ToolbarStore.initialize(function () {
 		ReactDOM.render(
 			<Toolbar />

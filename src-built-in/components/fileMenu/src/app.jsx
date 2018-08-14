@@ -36,7 +36,7 @@ class FileMenu extends React.Component {
 }
 
 
-FSBL.addEventListener("onReady", function () {
+window.addEventListener("FSBLReady", function () {
 	ReactDOM.render(
 		<FileMenu />
 		, document.getElementById("FileMenu-component-wrapper"));

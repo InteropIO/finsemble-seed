@@ -91,7 +91,7 @@ class AppLauncher extends React.Component {
 }
 
 fin.desktop.main(function () {
-	FSBL.addEventListener("onReady", function () {
+	window.addEventListener("FSBLReady", function () {
 		// var Test = require('./test');
 	//console.log("appLauncher app onReady");
 

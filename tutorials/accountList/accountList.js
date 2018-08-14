@@ -136,7 +136,7 @@ function communicateBetweenComponents() {
 	// });
 }
 
-FSBL.addEventListener("onReady", function () {
+window.addEventListener("FSBLReady", function () {
 	//alert(FSBL.Clients.WindowClient.options.customData.component["account-type"]); // --> Step 1.4
 
 	FSBL.Clients.WindowClient.setWindowTitle("Account List");

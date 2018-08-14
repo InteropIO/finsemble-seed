@@ -178,7 +178,7 @@ class YesNoDialog extends React.Component {
 
 window.yesNoDone = false;
 //render component when FSBL is ready.
-FSBL.addEventListener("onReady", function () {
+window.addEventListener("FSBLReady", function () {
 	if (!window.yesNoDone) {
 		window.yesNoDone = true;
 		ReactDOM.render(

@@ -18,7 +18,7 @@
 
 </body>
 <script>
-    FSBL.addEventListener('onReady', function(){
+    window.addEventListener("FSBLReady", function(){
         document.body.addEventListener('keydown', function(e){
             if(e.code === 'Escape'){
                 FSBL.Clients.DialogManager.hideModal();

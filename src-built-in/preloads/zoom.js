@@ -46,7 +46,7 @@ function runZoomHandler(){
 
 // Startup pattern for preload. Preloads can come in any order, so we need to wait on either the window event or the FSBL event
 if (FSBL && FSBL.addEventListener) {
-	FSBL.addEventListener("onReady", runZoomHandler);
+	window.addEventListener("FSBLReady", runZoomHandler);
 } else {
 	window.addEventListener("FSBLReady", runZoomHandler);
 }

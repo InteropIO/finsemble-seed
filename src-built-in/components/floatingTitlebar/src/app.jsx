@@ -178,7 +178,7 @@ class FloatingTitlebar extends React.Component {
 	}
 }
 
-FSBL.addEventListener("onReady", function () {
+window.addEventListener("FSBLReady", function () {
 	HeaderActions.initialize(function () {
 		storeExports.initialize(HeaderStore.getCompanionWindow(), function () {
 			storeExports.Actions.setWindowIdentifier(HeaderStore.getCompanionWindow().identifier)

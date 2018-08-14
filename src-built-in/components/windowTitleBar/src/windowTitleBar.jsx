@@ -414,7 +414,7 @@ class WindowTitleBar extends React.Component {
 // it is pub/sub, if the event had fired in the past then it will still be fired.
 // window.addEventListener("FSBLReady", function () {
 
-FSBL.addEventListener("onReady", function () {
+window.addEventListener("FSBLReady", function () {
 	storeExports.initialize(function () {
 		HeaderActions = storeExports.Actions;
 		windowTitleBarStore = storeExports.getStore();

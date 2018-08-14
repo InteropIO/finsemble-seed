@@ -11,5 +11,5 @@ window.quitFinsemble = function quitFinsemble() {
 	FSBL.shutdownApplication();
 }
 
-FSBL.addEventListener('onReady', function () {
+window.addEventListener("FSBLReady", function () {
 });

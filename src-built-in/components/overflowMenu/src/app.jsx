@@ -23,7 +23,7 @@ class OverflowMenu extends React.Component {
 
 }
 
-FSBL.addEventListener("onReady", function () {
+window.addEventListener("FSBLReady", function () {
 	ReactDOM.render(
 		<OverflowMenu overflowMenuStore="OverflowMenuStore"/>
 		, document.getElementById("bodyHere"));

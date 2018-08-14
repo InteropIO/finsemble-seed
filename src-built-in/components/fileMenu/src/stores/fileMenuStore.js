@@ -17,7 +17,7 @@ var FileMenuStore = Object.assign({}, EventEmitter.prototype, {
 	 */
 	initialize: function () {
 		var self = this;
-		FSBL.addEventListener("onReady", function () {
+		window.addEventListener("FSBLReady", function () {
 			self.finWindow = fin.desktop.Window.getCurrent();
 			self.emit("initialized");
 
