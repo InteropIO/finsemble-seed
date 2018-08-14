@@ -56,7 +56,15 @@ function quit() {
     FSBL.shutdownApplication();
 }
 
+// Add events to HTML elements
+$("#submitButton").click(processAuthInput);
+$("#FSBL-close").click(quit);
 
+// For this example, the password doesn't do anything, so we are disabling it and setting a tooltip to let the user
+// know they don't need to enter a password. This should be removed in a production implementation.
+$("#password")
+    .prop("disabled", true)
+    .prop("placeholder", "Demo needs no password");
 
 
 
