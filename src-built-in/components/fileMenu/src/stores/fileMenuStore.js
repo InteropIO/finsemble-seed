@@ -18,7 +18,7 @@ var FileMenuStore = Object.assign({}, EventEmitter.prototype, {
 	initialize: function () {
 		var self = this;
 		window.addEventListener("FSBLReady", function () {
-			self.finWindow = fin.desktop.Window.getCurrent();
+			self.finWindow = finsembleWindow;
 			self.emit("initialized");
 
 			FSBL.Clients.ConfigClient.getValue({ field: "finsemble" }, function (err, config) {
@@ -92,7 +92,7 @@ var Actions = {
 	 * Hides the window and fires off a message shutting down the application.
 	 */
 	restart() {
-		fin.desktop.Window.getCurrent().hide();
+		finsembleWindow.hide();
 		Actions.saveWorkspace().then(function (choice) {
 			if (choice !== "cancel") {
 				FSBL.restartApplication();
@@ -104,14 +104,14 @@ var Actions = {
 	 *
 	 */
 	showCentralConsole() {
-		fin.desktop.Window.getCurrent().hide();
+		finsembleWindow.hide();
 		FSBL.Clients.RouterClient.transmit("CentralConsole-Show", true);
 	},
 	/**
 	 * Spawns the preferences menu.
 	 */
 	spawnPreferences() {
-		fin.desktop.Window.getCurrent().hide();
+		finsembleWindow.hide();
 		FSBL.Clients.LauncherClient.showWindow({
 			componentType: "UserPreferences"
 		},{

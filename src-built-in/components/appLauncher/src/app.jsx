@@ -35,7 +35,7 @@ import {
 class AppLauncher extends React.Component {
 	constructor(props) {
 		super(props);
-		this.finWindow = fin.desktop.Window.getCurrent();
+		this.finWindow = finsembleWindow;
 
 		this.state = {
 			dimensions: {},
@@ -90,16 +90,15 @@ class AppLauncher extends React.Component {
 	}
 }
 
-fin.desktop.main(function () {
-	window.addEventListener("FSBLReady", function () {
-		// var Test = require('./test');
-	//console.log("appLauncher app onReady");
 
-		storeExports.initialize(function (store) {
-			appLauncherStore = store;
-			ReactDOM.render(
-				<AppLauncher />
-				, document.getElementById("bodyHere"));
-		});
+window.addEventListener("FSBLReady", function () {
+	// var Test = require('./test');
+//console.log("appLauncher app onReady");
+
+	storeExports.initialize(function (store) {
+		appLauncherStore = store;
+		ReactDOM.render(
+			<AppLauncher />
+			, document.getElementById("bodyHere"));
 	});
 });

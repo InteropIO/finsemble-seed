@@ -87,14 +87,13 @@ class WorkspaceManagementMenu extends React.Component {
 	}
 }
 
-fin.desktop.main(function () {
-	window.addEventListener("FSBLReady", function () {
-	//console.log("WorkspaceManagementMenu onReady");
-		storeExports.initialize(function (store) {
-			WorkspaceManagementMenuStore = store;
-			ReactDOM.render(
-				<WorkspaceManagementMenu />
-				, document.getElementById("workspaceManagementMenu-component-wrapper"));
-		});
+
+window.addEventListener("FSBLReady", function () {
+//console.log("WorkspaceManagementMenu onReady");
+	storeExports.initialize(function (store) {
+		WorkspaceManagementMenuStore = store;
+		ReactDOM.render(
+			<WorkspaceManagementMenu />
+			, document.getElementById("workspaceManagementMenu-component-wrapper"));
 	});
 });

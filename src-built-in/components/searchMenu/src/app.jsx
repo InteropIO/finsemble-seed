@@ -174,14 +174,12 @@ class SearchMenu extends React.Component {
 	}
 }
 
-fin.desktop.main(function () {
-	window.addEventListener("FSBLReady", function () {
-	//console.log("searchMenu app onReady");
-		storeExports.initialize(function (store) {
-			menuStore = store;
-			ReactDOM.render(
-				<SearchMenu />
-				, document.getElementById("bodyHere"));
-		});
+window.addEventListener("FSBLReady", function () {
+//console.log("searchMenu app onReady");
+	storeExports.initialize(function (store) {
+		menuStore = store;
+		ReactDOM.render(
+			<SearchMenu />
+			, document.getElementById("bodyHere"));
 	});
 });

@@ -7,11 +7,11 @@
 import Toolbar from "./dynamicToolbar";
 // import Toolbar from "./staticToolbar";
 //Band-aid. Openfin not respecting small bounds on startup.
-fin.desktop.main(() => {
+/*fin.desktop.main(() => {
   let finWindow = fin.desktop.Window.getCurrent();
   finWindow.getOptions((opts) => {
     if (opts.smallWindow) {
       finWindow.setBounds(opts.defaultLeft, opts.defaultTop, opts.defaultWidth, opts.defaultHeight);
     }
   })
-})
+})*/

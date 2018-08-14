@@ -48,19 +48,17 @@ class UserPreferences extends React.Component {
 }
 
 
-fin.desktop.main(function () {
-	window.addEventListener("FSBLReady", function () {
-		FSBL.Clients.WindowClient.finsembleWindow.updateOptions({ alwaysOnTop: true });
-		FSBL.Clients.WindowClient.finsembleWindow.addEventListener("shown", FSBL.Clients.DialogManager.showModal);
+window.addEventListener("FSBLReady", function () {
+	FSBL.Clients.WindowClient.finsembleWindow.updateOptions({ alwaysOnTop: true });
+	FSBL.Clients.WindowClient.finsembleWindow.addEventListener("shown", FSBL.Clients.DialogManager.showModal);
 
-		storeExports.initialize(() => {
-			WorkspaceManagementMenuGlobalStore = storeExports.GlobalStore;
-			UserPreferencesStoreInitialize(WorkspaceManagementMenuGlobalStore, (store) => {
-				ReactDOM.render(
-					<UserPreferences />
-					, document.getElementById("UserPreferences-component-wrapper"));
+	storeExports.initialize(() => {
+		WorkspaceManagementMenuGlobalStore = storeExports.GlobalStore;
+		UserPreferencesStoreInitialize(WorkspaceManagementMenuGlobalStore, (store) => {
+			ReactDOM.render(
+				<UserPreferences />
+				, document.getElementById("UserPreferences-component-wrapper"));
 
-			})
-		});
+		})
 	});
 });

@@ -52,15 +52,13 @@ class AppCatalog extends React.Component {
 	}
 }
 
-fin.desktop.main(function () {
-	window.addEventListener("FSBLReady", function () {
-	//console.log("App Catalog app onReady");
-		FSBL.Clients.WindowClient.finsembleWindow.updateOptions({ alwaysOnTop: true });
-		FSBL.Clients.DialogManager.showModal();
-		//FSBL.Clients.WindowClient.finsembleWindow.addEventListener("shown", FSBL.Clients.DialogManager.showModal);
+window.addEventListener("FSBLReady", function () {
+//console.log("App Catalog app onReady");
+	FSBL.Clients.WindowClient.finsembleWindow.updateOptions({ alwaysOnTop: true });
+	FSBL.Clients.DialogManager.showModal();
+	//FSBL.Clients.WindowClient.finsembleWindow.addEventListener("shown", FSBL.Clients.DialogManager.showModal);
 
-		ReactDOM.render(
-			<AppCatalog />
-			, document.getElementById("bodyHere"));
-	});
+	ReactDOM.render(
+		<AppCatalog />
+		, document.getElementById("bodyHere"));
 });

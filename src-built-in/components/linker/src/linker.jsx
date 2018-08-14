@@ -109,9 +109,7 @@ class Linker extends React.Component {
 	}
 }
 
-fin.desktop.main(function () {
-	window.addEventListener("FSBLReady", function () {
-		LinkerStore.initialize();
-		ReactDOM.render(<Linker />, document.getElementById("main"));
-	});
+window.addEventListener("FSBLReady", function () {
+	LinkerStore.initialize();
+	ReactDOM.render(<Linker />, document.getElementById("main"));
 });
