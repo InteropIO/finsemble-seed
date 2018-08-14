@@ -10,6 +10,7 @@
 			"LocalStorageAdapter": "$applicationRoot/adapters/LocalStorageAdapter.js"
 		}
 	},
+	"isAuthEnabled": true,
 	"servicesConfig": {
 		"launcher": {
 			"staggerPixels": 40
