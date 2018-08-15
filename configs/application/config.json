@@ -10,13 +10,6 @@
 			"LocalStorageAdapter": "$applicationRoot/adapters/LocalStorageAdapter.js"
 		}
 	},
-	"isAuthEnabled": true,
-	"authentication": {
-        "startup": {
-             "adapter": "PASSWORD",
-             "component": "defaultAuthentication"
-         }
-     },
 	"servicesConfig": {
 		"launcher": {
 			"staggerPixels": 40
