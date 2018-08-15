@@ -20,7 +20,7 @@ const COUNTS_PUBSUB_TOPIC = "notification counts";
 const API_QUERY_RESPONDER_TOPIC = "notification functions";
 const UPDATES_ROUTER_TOPIC = "notification update";
 
-const WINDOWS_TASKBAR_HEIGHT = 45;
+const WINDOWS_TASKBAR_HEIGHT = 40;
 
 /**
  * 
@@ -119,13 +119,13 @@ function notificationService() {
 	 * @param {number} params.maxCount specifies the max number of notifications to display for specified identifier when frequency="MAX-COUNT" (default is 1)
 	 * @param {number} params.duration time in milliseconds before auto-dismissing the notification (defaults to 24 hours)
 	 * @param {object} params.templateOptions Any additional options that should be passed to the template for this notification - the default tempalte has no options.
-	 * @param {object=} params.action specifies an action to perform when the notificaiton action button is clicked on. If not set then no action button should be shown.
-	 * @param {string} params.action.buttonText The text to display on the aciton button.
-	 * @param {string} params.action.type The action type to perform, currently only supports the 'spawn' action.
-	 * @param {string} params.action.component Component type to spawn, if using the 'spawn' action.
-	 * @param {string} params.action.windowIdentifier windowIdentifier type to use with the showWindow action.
-	 * @param {string} params.action.topic topic  to use with the transmit or publish actions.
-	 * @param {string} params.action.params Parameters to be pass to the action.
+	 * @param {object[]} params.actions specifies actions that may be performed when the notification's action button is clicked on. If not set then no action button should be shown.
+	 * @param {string} params.actions[].buttonText The text to display on the aciton button.
+	 * @param {string} params.actions[].type The action type to perform, currently only supports the 'spawn' action.
+	 * @param {string} params.actions[].component Component type to spawn, if using the 'spawn' action.
+	 * @param {string} params.actions[].windowIdentifier windowIdentifier type to use with the showWindow action.
+	 * @param {string} params.actions[].topic topic  to use with the transmit or publish actions.
+	 * @param {string} params.actions[].params Parameters to be pass to the action.
 	 * 
 	 * 
 	 * @example
@@ -226,28 +226,7 @@ function notificationService() {
 			//add notification to array of displayed notifications
 			let len = notificationsDisplayed.unshift(theNotification);
 
-			//close any notification that will fall off end of display list
-			if(len > maxNotificationsToShow) {
-				RouterClient.transmit(notificationsDisplayed[maxNotificationsToShow].id+".close", {});
-
-				//TODO: display a +N more marker above the notifications stack
-			}
-
-			//move each other notification up
-			for (let index = 1; index < Math.min(len,maxNotificationsToShow); index++) {
-				//theres still a bug in bottom right positioning in showWindow (spawn doesn't behave the same way), where toolbar height is added to windowHeight specified and deducted from the bottom
-				let hackedHeight = notificationHeight - WINDOWS_TASKBAR_HEIGHT;
-				let hackedbottom = index * (notificationGap + notificationHeight) + WINDOWS_TASKBAR_HEIGHT;
-				
-				const windowId = {
-					windowName: notificationsDisplayed[index].id,
-					componentType: "notification",
-					monitor: 0 //TODO: just spawned on primary monitor, could be user preference controlled
-				};
-				LauncherClient.showWindow(windowId, {right: 0, bottom: hackedbottom, height: hackedHeight, width: notificationWidth});
-			}
-
-			//Display the new notification
+			//Do this first as the notification takes a few secs to show up (stays hidden until rendered)
 			LauncherClient.spawn("notification",
 				{
 					name: theNotification.id,
@@ -271,6 +250,33 @@ function notificationService() {
 				}
 			);
 
+			//close any notification that will fall off end of display list
+			if(len > maxNotificationsToShow) {
+				RouterClient.transmit(notificationsDisplayed[maxNotificationsToShow].id+".close", {});
+
+				//TODO: display a +N more marker above the notifications stack
+			}
+
+			//move each other notification up
+			//TODO: consider moving this either into worker (along with spawning) or into the notification component itself
+			//      as at present notificaitons firing too fast can cause them to display on top of each other as
+			//      the showWindow call might not work on the new notification if its yet to spawn
+			//      showWindow calls seem to happen faster than spawn calls
+			for (let index = 1; index < Math.min(len,maxNotificationsToShow); index++) {
+				//theres still a bug in bottom right positioning in showWindow (spawn doesn't behave the same way), where toolbar height is added to windowHeight specified and deducted from the bottom
+				let hackedHeight = notificationHeight - WINDOWS_TASKBAR_HEIGHT;
+				let hackedbottom = index * (notificationGap + notificationHeight) + WINDOWS_TASKBAR_HEIGHT;
+				
+				const windowId = {
+					windowName: notificationsDisplayed[index].id,
+					componentType: "notification",
+					monitor: 0 //TODO: just spawned on primary monitor, could be user preference controlled
+				};
+				LauncherClient.showWindow(windowId, {right: 0, bottom: hackedbottom, height: hackedHeight, width: notificationWidth});
+			}
+
+			
+
 			//setup a timer to auto-dismiss the notification
 			setTimeout(function( ) {self.dismissNotification(id); }, duration);
 
@@ -293,48 +299,51 @@ function notificationService() {
 
 	/**
 	 * Perform the action and dismiss the notification if displayed.
-	 * @param {number} id The id of the notification whose action should be performed
+	 * @param {number} notification_id The id of the notification whose action should be performed
+	 * @param {number} action_index The (zero-based) index into the actions array of the action to be performed.
 	 * @param {object=} params Not currently used but will eventually allow for notifications with user input values to be passed to the action
 	 * 
 	 * @param {function} cb callback
 	 */
-	this.performAction = function(id, params, cb) {
-		let notification = idToNotification[id];
+	this.performAction = function(notification_id, action_index, params, cb) {
+		let notification = idToNotification[notification_id];
 		if (notification) {
-			if (notification.params && notification.params.action){
+			if (notification.params && 
+				notification.params.actions && 
+				notification.params.actions.length > action_index &&
+				typeof notification.params.actions[action_index] === 'object'
+			){
+				let action = notification.params.actions[action_index];
+
 				//TODO: merge parameter passed with the notification's action paramaters
+				if (action.type.toLowerCase() === 'spawn' && action.component && action.params) {
+					LauncherClient.spawn(action.component,action.params);
 
-				if (typeof notification.params.action === 'object') { 
-
-					if (notification.params.action.type.toLowerCase() === 'spawn' && notification.params.action.component && notification.params.action.params) {
-						LauncherClient.spawn(notification.params.action.component, notification.params.action.params);
-
-					} else if (notification.params.action.type.toLowerCase() === 'showwindow' && notification.params.action.windowIdentifier && notification.params.action.params) {
-						LauncherClient.showWindow(notification.params.action.windowIdentifier, notification.params.action.params);
-				
-					} else if (notification.params.action.type.toLowerCase() === 'transmit' && notification.params.action.topic && notification.params.action.params) {
-						RouterClient.transmit(notification.params.action.topic, notification.params.action.params);
-				
-					} else if (notification.params.action.type.toLowerCase() === 'publish' && notification.params.action.topic && notification.params.action.params) {
-						RouterClient.publish(notification.params.action.topic, notification.params.action.params);
-				
-					} else {
-						let msg = `Notification id '${id} action not supported or insufficient parameters!`;
-						Logger.error(msg, notification.params.action);
-						console.error(msg, notification.params.action);
-						cb(new Error(msg));
-					}
+				} else if (action.type.toLowerCase() === 'showwindow' && action.windowIdentifier && action.params) {
+					LauncherClient.showWindow(action.windowIdentifier, action.params);
+			
+				} else if (action.type.toLowerCase() === 'transmit' && action.topic && action.params) {
+					RouterClient.transmit(action.topic, action.params);
+			
+				} else if (action.type.toLowerCase() === 'publish' && action.topic && action.params) {
+					RouterClient.publish(action.topic, action.params);
+			
 				} else {
-					let msg = `Notification id '${id} has no associated action`;
-					Logger.error(msg, notification.params.action);
-					console.error(msg, notification.params.action);
+					let msg = `Notification id '${id} action not supported or insufficient parameters!`;
+					Logger.error(msg, action);
+					console.error(msg, action);
 					cb(new Error(msg));
 				}
+			} else {
+				let msg = `Notification id '${notification_id} has no associated action or its not a valid object`;
+				Logger.error(msg, action);
+				console.error(msg, action);
+				cb(new Error(msg));
+				 //Anything other than a valid object, just dismiss it
+			}
 
-			} //Anything other than a valid object, just dismiss it
-			
 			//dimiss the notification afterwards
-			self.dismissNotification(id, cb);
+			self.dismissNotification(notification_id, cb);
 		} else {
 			let msg = `Notification id '${id} not found to performAction`;
 			Logger.warn(msg);
