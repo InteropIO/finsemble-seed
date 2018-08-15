@@ -187,8 +187,8 @@
                     "alwaysOnTop": true,
                     "autoShow": false,
                     "cornerRounding": {
-                        "height": 10,
-                        "width": 10
+                        "height": 8,
+                        "width": 8
                     },
                     "opacity": 0.85,
                     "showTaskbarIcon": false

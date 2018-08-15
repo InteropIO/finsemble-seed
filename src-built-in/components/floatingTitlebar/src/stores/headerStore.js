@@ -117,13 +117,18 @@ var Actions = {
 					{ persistBounds: false },
 					function (err) {
 						Actions.updateWindowPosition();//hack for small window
-						Actions.isWindowVisible(function (err, isVisible) {
-							if(isVisible)
-								FSBL.Clients.WindowClient.finsembleWindow.show(false, function () {
-									FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
-								});
-						});
-
+						if(spData.showOnSpawn && !wrappedWindow.parentWindow){
+							FSBL.Clients.WindowClient.finsembleWindow.show(false, function () {
+								FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
+							});
+						}else{
+							Actions.isWindowVisible(function (err, isVisible) {
+								if(isVisible)
+									FSBL.Clients.WindowClient.finsembleWindow.show(false, function () {
+										FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
+									});
+							});
+						}
 						cb();
 					}, function () { });
 			});
