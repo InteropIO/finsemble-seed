@@ -24,27 +24,28 @@ var init = function () {
 
 	document.querySelector(".notification-logo").innerHTML = "<img src='" + spawnData.iconURL + "' width='100%' />";
 
-	//TODO: override icon URL
-	// document.querySelector(".notification-description").innerHTML = spawnData.message;
-
 	let windowName = FSBL.Clients.WindowClient.getWindowIdentifier().windowName;
 
 	// display action buttons
 	FSBL.Clients.Logger.log("Setting up actions");
 	console.log("Setting up actions");
-	let actionElement = document.querySelector("#notification-action");
-	if (spawnData.params && spawnData.params.action && typeof spawnData.params.action === "object") {
+	let actionElement = document.querySelector("#notification-actions");
+	if (spawnData.params && spawnData.params.actions && spawnData.params.actions.length) {
+		//TODO: update to setup primary button and then populate a dropdown with the other actions
 		//setup up the action buttons with call to performAction
-		if (spawnData.params.action.buttonText) {
-			actionElement.innerHTML = spawnData.params.action.buttonText;
+		for (let a = 0; a < spawnData.params.actions.length; a++) {
+			let action_index = a;
+			var buttonnode = document.createElement('button');
+			buttonnode.innerHTML = spawnData.params.actions[a].buttonText;
+			buttonnode.setAttribute('id','notification-action-' + action_index);
+			buttonnode.setAttribute('class','notification-action');
+			actionElement.appendChild(buttonnode);
+			buttonnode.addEventListener("click", function(){ 
+				notifier.performAction(windowName, action_index);
+			});
 		}
-		actionElement.addEventListener("click", function(){ 
-			notifier.performAction(windowName);
-		});
-	
-	} else {
-		//hide action buttons as theres no action
-		actionElement.parentNode.removeChild(actionElement);
+	} else { //no actions
+		actionElement.parentNode.removeChild(actionElement); 
 	}
 
 	//setup close button in header

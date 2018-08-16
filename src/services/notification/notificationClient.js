@@ -120,14 +120,15 @@ export function getNotification(id, cb) {
 
 /**
  * Perform the action and dismiss the notification if displayed.
- * @param {number} id The id of the notification whose action should be performed
+ * @param {number} notification_id The id of the notification whose action should be performed
+ * @param {number} action_index The (zero-based) index into the actions array of the action to be performed.
  * @param {object=} params Not currently used but will eventually allow for notifications with user input values to be passed to the action
  * 
  * @param {function} cb callback
  */
-export function performAction(id, params, cb) {
+export function performAction(notification_id, action_index, params, cb) {
     FSBL.Clients.Logger.log("notificationClient: performAction called");
-    FSBL.Clients.RouterClient.query("notification functions", { query: "performAction", id: id, params: params}, function (err, response) {
+    FSBL.Clients.RouterClient.query("notification functions", { query: "performAction", id: notification_id, action_index: action_index, params: params}, function (err, response) {
         if (err) {
             FSBL.Clients.Logger.error("Failed to performAction", err);
         } else {

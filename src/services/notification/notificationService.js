@@ -132,7 +132,7 @@ function notificationService() {
 	 *		UserNotification.notify("system", "ONCE-SINCE-STARTUP", "MANIFEST-Error", message);
 	 *		UserNotification.notify("dev", "ALWAYS", "Config-Error", message, { url: notificationURL, duration: 1000 * 5 });
 	 *		UserNotification.notify("dev", "MAX-COUNT", "Transport-Failure", message, { url: notificationURL, maxCount: 2 });
-	 *		UserNotification.notify("dev", "ALWAYS", "myComponent-Alert", message, { action: { type: "spawn", "myComponent", { left: "center", top: "center", addToWorkspace: true, data: {} } } });
+	 *		UserNotification.notify("dev", "ALWAYS", "myComponent-Alert", message, { actions: [{ type: "spawn", "myComponent", { left: "center", top: "center", addToWorkspace: true, data: {} } }] });
 	 */
 	this.notify = function (topic, frequency, identifier, message, params, cb) {
 		const self = this;
@@ -328,6 +328,8 @@ function notificationService() {
 				} else if (action.type.toLowerCase() === 'publish' && action.topic && action.params) {
 					RouterClient.publish(action.topic, action.params);
 			
+				//TODO: add snooze action
+
 				} else {
 					let msg = `Notification id '${id} action not supported or insufficient parameters!`;
 					Logger.error(msg, action);
@@ -480,7 +482,7 @@ function notificationService() {
 	}
 	
 	/**
-	 * Return all notifications currently in the history array.
+	 * Return all notifications currently in the history array, filtered by a particular type.
 	 * @param {string} type (optional) Filter the list of notifications. Supports values 'all' (default), 'displayed' and 'dismissed'
 	 * @param {function} cb (optional) callback (err, notificationsHistory)
 	 * 
@@ -591,10 +593,10 @@ function notificationService() {
 						queryMessage.sendQueryResponse(new Error(msg));
 					}
 				} else if (queryMessage.data.query === "performAction") {
-					if (queryMessage.data.id){
-						self.performAction(queryMessage.data.id,  queryMessage.data.params ? queryMessage.data.params : {}, queryMessage.sendQueryResponse);
+					if (queryMessage.data.id && typeof queryMessage.data.action_index == "number"){
+						self.performAction(queryMessage.data.id,  queryMessage.data.action_index, queryMessage.data.params ? queryMessage.data.params : {}, queryMessage.sendQueryResponse);
 					} else {
-						let msg = "performAction requested without an id";
+						let msg = "performAction requested without a valid ID and action_index";
 						Logger.error(msg, queryMessage);
 						queryMessage.sendQueryResponse(new Error(msg));
 					}
