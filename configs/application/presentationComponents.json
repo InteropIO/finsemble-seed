@@ -475,14 +475,22 @@
 						"bottomRightCorner": 0,
 						"size": 0
 					},
-					"smallWindow": true
+					"smallWindow": true,
+					"dockable": true,
+					"undockedParams": {
+						"width": 300,
+						"height": 30,
+						"left": 0,
+						"right": 0
+					}
 				}
 			},
 			"component": {
 				"category": "system",
 				"spawnOnStartup": true,
 				"spawnOnAllMonitors": true,
-				"canMinimize": false
+				"canMinimize": false,
+				"startsDocked": true
 			},
 			"foreign": {
 				"services": {

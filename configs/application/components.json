@@ -10,7 +10,16 @@
 				"top": "center",
 				"left": "center",
 				"width": 400,
-				"height": 432
+				"height": 432,
+				"options": {
+					"dockable": true,
+					"undockedParams": {
+						"width": 300,
+						"height": 30,
+						"left": 0,
+						"right": 0
+					}
+				}
 			},
 			"component": {
 				"inject": false,

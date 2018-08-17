@@ -80,6 +80,10 @@ export default class Toolbar extends React.Component {
 		ToolbarStore.Store.removeListener({ field: "sections" }, this.onSectionsUpdate);
 	}
 
+	moveToolbar(e) {
+
+	}
+
 	onPinDrag(changeEvent) {
 
 		let pins = this.refs.pinSection.state.pins;
@@ -170,7 +174,7 @@ export default class Toolbar extends React.Component {
 	render() {
 	//console.log("Toolbar Render ");
 		if (!this.state.sections) return;
-		return (<FinsembleToolbar onDragEnd={this.onPinDrag}>
+		return (<FinsembleToolbar onDragStart={this.moveToolbar} onDragEnd={this.onPinDrag}>
 			{this.getSections()}
 		</FinsembleToolbar>);
 	}
