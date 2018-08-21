@@ -60,6 +60,7 @@ var Actions = {
 	initialize(cb = Function.prototype) {
 		HeaderStore.initialize();
 		var spData = FSBL.Clients.WindowClient.getSpawnData();
+		//'parent' here refers to the native window that we've befriended.
 		FSBL.FinsembleWindow.wrap(spData.parent, function (err, wrappedWindow) {
 			HeaderStore.setCompanionWindow(wrappedWindow);
 			var onParentSet = async (e) => {
@@ -72,7 +73,15 @@ var Actions = {
 					localParent.addListener("startedMoving", Actions.onCompanionStartedMoving);
 					localParent.addListener("stoppedMoving", Actions.onCompanionStoppedMoving);
 					localParent.addListener("bringToFront", Actions.onCompanionBringToFront);
+					localParent.addListener("bounds-set", Actions.onBoundsChanged);
 
+					wrappedWindow.getBounds((err, bounds) => {
+						Actions.onBoundsChanged({
+							data: {
+								bounds: bounds
+							}
+						})
+					})
 					Actions.isWindowVisible((err, isVisible) => {
 						if (!isVisible) {
 							Actions.onCompanionHidden();
@@ -182,7 +191,7 @@ var Actions = {
 		};
 	},
 	onBoundsChanged(params) {
-		let { bounds } = params.data;
+		let bounds = params.data;
 		HeaderStore.setCompanionBounds(bounds);
 		if (HeaderStore.getMoving()) return;
 		if (HeaderStore.getState() === "small") {
