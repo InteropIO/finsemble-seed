@@ -1,0 +1,43 @@
+{
+	"components": {
+		"Advanced Chart": {
+			"window": {
+				"url": "$applicationRoot/components/reactChart/index.html",
+				"width": 500,
+				"height": 410,
+				"options": {
+					"minWidth": 75
+				}
+			},
+			"component": {
+				"mode": "premium",
+				"advertiseReceivers": [
+					"chartiq.chart",
+					"symbol"
+				],
+				"spawnOnHotkey": ["ctrl", "alt", "a"],
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Toolbar": {
+						"iconClass": "ff-chart-advanced"
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": true,
+						"persistWindowState": true
+					}
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,174 @@
+@charset "UTF-8";
+$DARK: ciq-night !default;
+
+/* -------- ScriptIQ UI -------- */
+cq-scriptiq-editor {
+	position: absolute;
+	bottom: 45px;
+	height: 21%;
+	min-height: 118px;
+	left: 0px;
+	right: 28px;
+	display: none;
+	border-right: solid 1px;
+	border-right-color: rgba(0, 0, 0, 0.1);
+	padding: 0;
+	margin: 0;
+
+	&[cq-active] {
+		display: block;
+	}
+
+	& .ie-message {
+		display: none;
+	}
+
+	&[is_ie] .ie-message {
+		display: inline;
+		padding-left: 10px;
+	}
+
+	& .stx-ico-handle.stx-grab {
+		height: 4px;
+		z-index: 0;
+	}
+}
+
+.scriptiq-toolbar {
+	border-color: rgba(0,0,0,.1);
+	background-color: rgba(0,0,0,.05);
+	padding: 5px 0px 0px;
+	height: 30px;
+
+	& .stx-btn.stx-ico {
+		position: absolute;
+		top: 4px;
+		right: -5px;
+	}
+
+	& .stx-btn.stx-ico .stx-ico-close {
+		background-color: rgba(255, 255, 255, 0.1);
+		border: 1px solid rgba(0, 0, 0, 0);
+		opacity: 0.8;
+		background-position: -254px -25px;
+	}
+}
+
+.scriptiq-textarea {
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	top: 35px;
+	bottom: 24px;
+	font-size: 12px;
+	font-family: Arial, Helvetica, sans-serif;
+	color: #000000;
+	background: #fff;
+	outline: none;
+	resize: none;
+	overflow: hidden;
+	padding-bottom: 5px;
+
+	& textarea {
+		height: 100%;
+		width: 100%;
+		resize: none;
+	}
+}
+
+.scriptiq-status {
+	position: absolute;
+	height: 22px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	font-size: 12px;
+	font-family: Arial, Helvetica, sans-serif;
+	color: #000000;
+	background: #fff;
+	outline: none;
+	resize: none;
+	overflow: hidden;
+
+	& input {
+		height: 16px;
+		width: 100%;
+	}
+}
+
+.#{$DARK} cq-scriptiq-editor {
+	position: absolute;
+	bottom: 36px;
+	height: 22%;
+	min-height: 118px;
+	left: 0px;
+	right: 28px;
+	display: none;
+	border-right: solid 1px;
+	border-right-color: rgba(255, 255, 255, 0.05);
+	padding: 0;
+	margin: 0;
+
+	&[cq-active] {
+		display: block;
+	}
+}
+
+.#{$DARK} .scriptiq-toolbar {
+	border-color: rgba(255,255,255,.05);
+	background-color: rgba( 54, 63, 68, .3 );
+
+	& .stx-btn.stx-ico:hover > span {
+		background-position: -254px -53px;
+	}
+
+	& .stx-btn.stx-ico .stx-ico-close {
+		background-color: rgba(255, 255, 255, 0.1);
+		border: 1px solid rgba(0, 0, 0, 0);
+		opacity: 0.8;
+		background-position: -254px -53px;
+		top: 4px;
+	}
+}
+
+.#{$DARK} .scriptiq-textarea {
+	background: #151f28;
+	border-color: #151f28;
+
+	& textarea {
+		height: 100%;
+		width: 100%;
+		resize: none;
+		background-color: #151f28;
+		border-color: #151f28;
+		color: white;
+	}
+}
+
+.#{$DARK} .scriptiq-status {
+	position: absolute;
+	height: 22px;
+	left: 0px;
+	right: 0px;
+	bottom: 9px;
+	font-size: 12px;
+	font-family: Arial, Helvetica, sans-serif;
+	color: #000000;
+	background: #fff;
+	outline: none;
+	resize: none;
+	overflow: hidden;
+
+	& input {
+		height: 16px;
+		width: 100%;
+		background-color: #151f28;
+		color: white;
+		border-color: #151f28;
+	}
+}
+
+/* -------- ScriptIQ Menu -------- */
+cq-scriptiq-menu cq-scriptiq-content div {
+	float: right;
+}

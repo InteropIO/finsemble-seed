@@ -1,0 +1,288 @@
+.stx-tradingcentral span {
+	background: url(img/logo.jpg) no-repeat;
+	background-size: 27px 27px;
+	background-position: 0px 0px;
+}
+
+cq-tradingcentral {
+	display: block;
+	margin: 15px 15px 10px 15px;
+}
+
+cq-tradingcentral[disabled] {
+	display: none;
+}
+
+cq-details {
+	display: block;
+}
+
+/* Use :before because of float ordering. */
+cq-details > cq-summary:before {
+	content: '';
+	height: 16px;
+	width: 16px;
+	float: right;
+	background: url('img/cq-details-toggle-night.png') no-repeat 0px 0px;
+	cursor: pointer;
+}
+
+.ciq-day cq-details > cq-summary:before {
+	background-image: url('img/cq-details-toggle-day.png');
+}
+
+cq-details[open] > cq-summary:before {
+	transform: rotate(-90deg);
+}
+
+cq-details > * {
+	height: 0px;
+	overflow: hidden;
+}
+
+cq-details[open] > * {
+	height: auto;
+}
+
+cq-details > cq-summary {
+	display: block;
+	margin-bottom: 10px;
+	height: auto;
+	overflow: visible;
+}
+
+cq-details > cq-summary:focus {
+	outline: none;
+}
+
+cq-tc-left {
+	display: inline-block;
+}
+
+cq-tc-right {
+	float: right;
+	display: inline-block;
+}
+
+cq-tc-icon-chart,
+cq-tc-symbol,
+cq-tc-story,
+cq-tc-alt-story {
+	display: inline-block;
+}
+
+cq-tc-symbol {
+	font-size: 14px;
+	margin-right: 10px;
+	font-weight: 600;
+}
+
+cq-tc-story {
+	font-size: 14px;
+	margin-left: 10px;
+	margin-right: 10px;
+	font-weight: 500;
+}
+
+cq-tc-story.bullish {
+	color: #b7ff11;
+}
+
+.ciq-day cq-tc-story.bullish {
+	color: #30aa0b;
+}
+
+cq-tc-story.bearish {
+	color: #ff7474;
+}
+
+.ciq-day cq-tc-story.bearish {
+	color: #ff2f22;
+}
+
+cq-tc-term-button {
+	font-family: "Roboto", sans-serif;
+	display: inline-block;
+	align-items: flex-start;
+	text-align: center;
+	font-weight: 400;
+	cursor: pointer;
+	color: #bbb;
+	background-color: #111A22;
+	box-sizing: border-box;
+	padding: 3px 7px 3px;
+	margin-left: 5px;
+	margin-right: 5px;
+	border: 1px solid;
+	border-radius: 3px;
+	border-color: #2F4869;
+}
+
+cq-tc-term-button:hover {
+	color: #fff;
+	border-color: #5381A6;
+	-webkit-transition: 0.15s ease-out;
+	-moz-transition: 0.15s ease-out;
+	-o-transition: 0.15s ease-out;
+	transition: 0.15s ease-out;
+}
+
+.ciq-day cq-tc-term-button {
+	color: #666;
+	border: 0px;
+	box-sizing: border-box;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	background:#fafafa;
+	-webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, .2);
+	-moz-box-shadow: 0px 1px 2px rgba(0, 0, 0, .2);
+	box-shadow: 0px 1px 1px rgba(0, 0, 0, .2);
+
+}
+
+.ciq-day cq-tc-term-button:hover {
+	color: #000;
+	background-color: #f5f5f5;
+	-webkit-box-shadow: 0px 1px 2px rgba(83, 129, 16, .8);
+	-moz-box-shadow: 0px 1px 2px rgba(83, 129, 16, .8);
+	box-shadow: 0px 1px 1px rgba(83, 129, 16, .8);
+	-webkit-transition: 0.15s ease-out;
+	-moz-transition: 0.15s ease-out;
+	-o-transition: 0.15s ease-out;
+	transition: 0.15s ease-out;
+}
+
+cq-tc-term-button[selected] {
+	background-color: #233542;
+	border-color: #436D91;
+	color: #fff;
+}
+
+.ciq-day cq-tc-term-button[selected] {
+	background-color: #67A4D4;
+	border:none;
+	color:#fff;
+	box-shadow: none;
+}
+
+
+cq-tc-term-button[cq-marker] {
+	position: absolute;
+	bottom: 29px;
+	right: 45px;
+	opacity: 0.85;
+}
+
+cq-tc-section {
+	display: inline-block;
+	margin-right: 20px;
+	vertical-align: top;
+	max-width: 255px;
+}
+
+tc-method {
+	display: inline-block;
+	width: 255px;
+}
+
+tc-brand {
+	display: inline-block;
+	position: relative;
+	top: 2px;
+	/* this plus the width of the details icon is the same width as "tc-method" */
+	width: 239px;
+}
+
+cq-tc-number {
+	color: #ffffff;
+	font-weight: 500;
+}
+
+.ciq-day cq-tc-number {
+	color: #000000;
+}
+
+cq-tc-title {
+	display: block;
+	color: #61d9ff;
+	text-transform: uppercase;
+	font-size: 1.03em;
+	font-family: Veranda, Arial;
+	font-weight: normal;
+}
+
+.ciq-day cq-tc-title {
+	color: #008bb7;
+}
+
+cq-details p {
+	color: #e2e2e2;
+	margin-top: 5px;
+	margin-bottom: 7px;
+}
+
+.ciq-day cq-details p {
+	color: #777777;
+}
+
+cq-tc-indicator-toggle {
+	color: #777777;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+img.tc-arrow {
+	/* too small, but the images need to change as well */
+	width: 14px;
+	height: 14px;
+}
+
+tc-line-info {
+	position: absolute;
+	text-align: center;
+	display: inline-block;
+	max-width: 175px;
+	right: 35px;
+	bottom: -1000px; /* done to avoid "blinking" at the top of the chart */
+	border-radius: 5px;
+	color: #ffffff;
+	padding: 3px 5px 3px 5px;
+	cursor: default;
+}
+
+/* the following background colors are to match the color of the lines
+ * Names are verbose intentionally, to allow for easy inspection */
+tc-line-info.resistance3,
+tc-line-info.resistance2,
+tc-line-info.resistance1 {
+	background-color: #30aa0b;
+}
+
+tc-line-info.pivot {
+	background-color: #4169e1;
+}
+
+tc-line-info.support1,
+tc-line-info.support2,
+tc-line-info.support3 {
+	background-color: #ff2f22;
+}
+
+cq-tc-number-line-selector {
+	position: absolute;
+	display: block;
+	text-align: center;
+	width: 100%;
+	left: 0px;
+	bottom: -1000px; /* done to avoid "blinking" at the top of the chart */
+	/* translate the whole element down to line up perfectly with the line labels */
+	-ms-transform: translateY(1.5px);
+	-webkit-transform: translateY(1.5px);
+	transform: translateY(1.5px);
+	border: 1px solid #ffffff;
+}
+
+.ciq-day cq-tc-number-line-selector {
+	border-color: #000000;
+}
