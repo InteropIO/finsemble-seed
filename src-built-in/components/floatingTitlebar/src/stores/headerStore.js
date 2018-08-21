@@ -77,9 +77,7 @@ var Actions = {
 
 					wrappedWindow.getBounds((err, bounds) => {
 						Actions.onBoundsChanged({
-							data: {
-								bounds: bounds
-							}
+							data: bounds
 						})
 					})
 					Actions.isWindowVisible((err, isVisible) => {
@@ -101,6 +99,7 @@ var Actions = {
 					localParent.removeListener("stoppedMoving", Actions.onCompanionStoppedMoving);
 					localParent.removeListener("bringToFront", Actions.onCompanionBringToFront);
 					localParent = null;
+					wrappedWindow.show();
 				}
 
 			};
@@ -113,7 +112,9 @@ var Actions = {
 			wrappedWindow.addListener("setParent", onParentSet);
 			wrappedWindow.addListener("clearParent", onParentCleared);
 			wrappedWindow.listenForBoundsSet();
-			wrappedWindow.addListener("bounds-set", Actions.onBoundsChanged);
+			//@note this is so that all kinds of bounds-changes will be caught, and the companion will be in the right place.
+			//Reevaluate if performance is a concern.
+			wrappedWindow.addListener("bounds-changing", Actions.onBoundsChanged);
 			wrappedWindow.addListener("closed", Actions.onCompanionClosed);
 			wrappedWindow.addListener("hidden", Actions.onCompanionHidden);
 			wrappedWindow.addListener("shown", Actions.onCompanionShown);
@@ -303,7 +304,8 @@ var Actions = {
 				}
 				FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
 			});
-		}, 500);
+			//@note this was 500, it was lowered to 50 after improvements were made to the eventing system.
+		}, 50);
 
 	},
 	onCompanionMinimized() {
