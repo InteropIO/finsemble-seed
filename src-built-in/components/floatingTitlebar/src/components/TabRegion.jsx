@@ -163,6 +163,7 @@ export default class TabRegion extends React.Component {
      * @param {event} e
      */
     drop(e) {
+        e.preventDefault();
         e.stopPropagation();
 
         FSBL.Clients.Logger.system.debug("Tab drag drop.");
@@ -467,7 +468,7 @@ export default class TabRegion extends React.Component {
             data-hover={this.state.hoverState}
             className={"fsbl-header-title cq-no-drag"}>
             <HoverDetector edge="top" hoverAction={this.hoverAction.bind(this)} />
-            <Logo windowIdentifier={ Actions.getWindowIdentifier()}/>
+            <Logo windowIdentifier={Actions.getWindowIdentifier()} />
             <div className="fsbl-tab-title">{this.props.thisWindowsTitle}</div>
         </div>);
     }

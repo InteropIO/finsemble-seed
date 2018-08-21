@@ -9,9 +9,9 @@ import { FinsembleDnDContext, FinsembleDroppable } from '@chartiq/finsemble-reac
 import { Store, Actions } from "../../stores/windowTitleBarStore";
 import { debug } from "util";
 const PLACEHOLDER_TAB = {
-	windowName: "",
-	uuid: "",
-	componentType: "placeholder-tab"
+    windowName: "",
+    uuid: "",
+    componentType: "placeholder-tab"
 };
 let TAB_WIDTH = 300;
 const MINIMUM_TAB_SIZE = 100;
@@ -62,38 +62,38 @@ export default class TabRegion extends React.Component {
         this.setTabListTranslateX = this.setTabListTranslateX.bind(this);
         this.onTabListTranslateChanged = this.onTabListTranslateChanged.bind(this);
 
-	}
-	getTabWidth(params = {}) {
-		let { boundingBox, tabList } = params;
-		if (typeof (tabList) === "undefined") {
-			tabList = this.state.tabs;
-		}
-		if (typeof (boundingBox) === "undefined") {
-			boundingBox = this.refs.Me.getBoundingClientRect();
-		}
-		if (typeof (boundingBox.right) === "undefined") {
-			return TAB_WIDTH;
-		}
-		let containerWidth = boundingBox.right - boundingBox.left;
-		let newTabWidth = (containerWidth / tabList.length);
+    }
+    getTabWidth(params = {}) {
+        let { boundingBox, tabList } = params;
+        if (typeof (tabList) === "undefined") {
+            tabList = this.state.tabs;
+        }
+        if (typeof (boundingBox) === "undefined") {
+            boundingBox = this.refs.Me.getBoundingClientRect();
+        }
+        if (typeof (boundingBox.right) === "undefined") {
+            return TAB_WIDTH;
+        }
+        let containerWidth = boundingBox.right - boundingBox.left;
+        let newTabWidth = (containerWidth / tabList.length);
 
-		return newTabWidth < MINIMUM_TAB_SIZE ? MINIMUM_TAB_SIZE : newTabWidth;
-	}
+        return newTabWidth < MINIMUM_TAB_SIZE ? MINIMUM_TAB_SIZE : newTabWidth;
+    }
     /**
  * Resize handler. Calculates the space that the center-region is taking up. May be used to scale tabs proportionally.
  */
-	onWindowResize() {
-		let bounds = this.refs.Me.getBoundingClientRect();
-		this.setState({
-			boundingBox: bounds,
-			tabWidth: this.getTabWidth()
-		})
-	}
-	findTabIndex(tab) {
-		return this.state.tabs.findIndex(el => {
-			return tab.windowName === el.windowName && tab.uuid === el.uuid;
-		});
-	}
+    onWindowResize() {
+        let bounds = this.refs.Me.getBoundingClientRect();
+        this.setState({
+            boundingBox: bounds,
+            tabWidth: this.getTabWidth()
+        })
+    }
+    findTabIndex(tab) {
+        return this.state.tabs.findIndex(el => {
+            return tab.windowName === el.windowName && tab.uuid === el.uuid;
+        });
+    }
 	/**
      *
 	 * Function that's called when this component fires the onDragStart event, this will start the tiling or tabbing process
@@ -101,17 +101,17 @@ export default class TabRegion extends React.Component {
 	 * @param e The SyntheticEvent created by React when the startdrag event is called
 	 * @memberof windowTitleBar
 	 */
-	startDrag(e, windowIdentifier) {
-	//console.log("start drag", windowIdentifier.windowName);
-		this.setState({
-			iAmDragging: true
-		});
-		e.dataTransfer.setData("text/plain", JSON.stringify(windowIdentifier));
-		FSBL.Clients.WindowClient.startTilingOrTabbing({
-			windowIdentifier: windowIdentifier
-		});
-		// Actions.removeTab(windowIdentifier);
-	}
+    startDrag(e, windowIdentifier) {
+        //console.log("start drag", windowIdentifier.windowName);
+        this.setState({
+            iAmDragging: true
+        });
+        e.dataTransfer.setData("text/plain", JSON.stringify(windowIdentifier));
+        FSBL.Clients.WindowClient.startTilingOrTabbing({
+            windowIdentifier: windowIdentifier
+        });
+        // Actions.removeTab(windowIdentifier);
+    }
 
 	/**
 	 * Called when the react component detects a drop (or stop drag, which is equivalent)
@@ -119,59 +119,60 @@ export default class TabRegion extends React.Component {
 	 * @param e The SyntheticEvent created by React when the stopdrag event is called
 	 * @memberof windowTitleBar
 	 */
-	stopDrag(e) {
-		FSBL.Clients.Logger.system.debug("Tab drag stop");
-		//@sidd can you document this?
-		this.mousePositionOnDragEnd = {
-			x: e.nativeEvent.screenX,
-			y: e.nativeEvent.screenY
-		}
-		let boundingRect = this.state.boundingBox;
+    stopDrag(e) {
+        FSBL.Clients.Logger.system.debug("Tab drag stop");
+        //@sidd can you document this?
+        this.mousePositionOnDragEnd = {
+            x: e.nativeEvent.screenX,
+            y: e.nativeEvent.screenY
+        }
+        let boundingRect = this.state.boundingBox;
         if (!FSBL.Clients.WindowClient.isPointInBox(this.mousePositionOnDragEnd, FSBL.Clients.WindowClient.options)) {
             setTimeout(() => {
                 FSBL.Clients.WindowClient.stopTilingOrTabbing({ mousePosition: this.mousePositionOnDragEnd });
             }, 50);
-			this.setState({
-				iAmDragging: false
-			});
-			this.onWindowResize();
-		}
-	}
+            this.setState({
+                iAmDragging: false
+            });
+            this.onWindowResize();
+        }
+    }
 
     /**
      * Helper function that will pull data from a drop event, parse it, and return it.
      * @param {event} e
      */
-	extractWindowIdentifier(e) {
-		try {
-			let identifier = JSON.parse(e.dataTransfer.getData('text/plain'));
-			//If the "identifier" is formed properly, it'll have this properly. Otherwise, it's something else (e.g., share data, image, etc).
-			if (typeof identifier.windowName !== "undefined") {
-				return identifier;
-			} else if (identifier.waitForIdentifier) {
-				return identifier;
-			} else {
-				FSBL.Clients.Logger.system.error("Malformed drop object detected in windowTitleBar. Check tab droppping code. Expected windowIdentifier, got ", identifier);
-				return null;
-			}
-		} catch (e) {
-			FSBL.Clients.Logger.system.error("Error in 'extractWindowIdentifier'. Check TabRegion.jsx. Either there was no data in the event, or it was a circular object that caused JSON.parse to fail. Javascript Error:", e);
-			return null;
-		}
-	}
+    extractWindowIdentifier(e) {
+        try {
+            let identifier = JSON.parse(e.dataTransfer.getData('text/plain'));
+            //If the "identifier" is formed properly, it'll have this properly. Otherwise, it's something else (e.g., share data, image, etc).
+            if (typeof identifier.windowName !== "undefined") {
+                return identifier;
+            } else if (identifier.waitForIdentifier) {
+                return identifier;
+            } else {
+                FSBL.Clients.Logger.system.error("Malformed drop object detected in windowTitleBar. Check tab droppping code. Expected windowIdentifier, got ", identifier);
+                return null;
+            }
+        } catch (e) {
+            FSBL.Clients.Logger.system.error("Error in 'extractWindowIdentifier'. Check TabRegion.jsx. Either there was no data in the event, or it was a circular object that caused JSON.parse to fail. Javascript Error:", e);
+            return null;
+        }
+    }
     /**
      * Called when a drop event occurs on the tab region. We (hope) that this came from a tab. Could be a share icon, an image, something else - that's why we check to see if the identifier exists before doing anything.
      * @param {event} e
      */
-	drop(e) {
-		e.stopPropagation();
-		FSBL.Clients.Logger.system.debug("Tab drag drop.");
+    drop(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        FSBL.Clients.Logger.system.debug("Tab drag drop.");
         let identifier = this.extractWindowIdentifier(e);
-        if (this.state.tabs.length === 1 && identifier.windowName === finsembleWindow.name) return  FSBL.Clients.WindowClient.cancelTilingOrTabbing();
+        if (this.state.tabs.length === 1 && identifier.windowName === finsembleWindow.name) return FSBL.Clients.WindowClient.cancelTilingOrTabbing();
         FSBL.Clients.WindowClient.stopTilingOrTabbing({ allowDropOnSelf: true, action: "tabbing" }, () => {
             FSBL.Clients.RouterClient.transmit("tabbingDragEnd", { success: true });
             if (identifier && identifier.windowName) {
-               //console.log("DROP", identifier);
+                //console.log("DROP", identifier);
                 //Calls a method defined inside of windowTitleBar.jsx.
                 this.onTabAdded(identifier, this.state.hoveredTabIndex);
             } else if (identifier && identifier.waitForIdentifier) {
@@ -186,14 +187,14 @@ export default class TabRegion extends React.Component {
                 FSBL.Clients.Logger.system.error("Unexpected drop event on window title bar. Check the 'drop' method on TabRegion.jsx.");
             }
         });
-	}
+    }
 
-	isTabRegionOverflowing() {
-		let lastTab = {
-			right: this.state.tabs.length * this.state.tabWidth
-		};
-		return lastTab.right + this.state.translateX > (this.state.boundingBox.right - this.state.boundingBox.left);
-	}
+    isTabRegionOverflowing() {
+        let lastTab = {
+            right: this.state.tabs.length * this.state.tabWidth
+        };
+        return lastTab.right + this.state.translateX > (this.state.boundingBox.right - this.state.boundingBox.left);
+    }
 
     /**
      * Event handler for when a user wheels inside of the tab region. We translate the deltaY that the event provides into horizontal movement. The translateX value that we return will be used in the render method below.
@@ -230,7 +231,7 @@ export default class TabRegion extends React.Component {
 
             //when we set scrollLeft on the element, this event fires. But there's no actual event. so stop.
             if (!e.nativeEvent.deltaY) {
-               //console.log("No deltaY");
+                //console.log("No deltaY");
                 return;
             };
             let originalDeltaY = e.nativeEvent.deltaY;
@@ -264,9 +265,9 @@ export default class TabRegion extends React.Component {
     /**
      * Scrolls to our active tab.
      */
-	scrollToActiveTab() {
-		this.scrollToTab(this.state.activeTab);
-	}
+    scrollToActiveTab() {
+        this.scrollToTab(this.state.activeTab);
+    }
     /**
      * Scrolls to the first tab in our list of tabs.
      */
@@ -287,9 +288,9 @@ export default class TabRegion extends React.Component {
      * Function that will horiztonally scroll the tab region so that the right edge of the tab lines up with the right edge of the tab region.
      * @param {} tab
      */
-	scrollToTab(tab) {
-		//'BoundingBox' is just the boundingClientRect of the tab region. It is, in essence, the center part of the windowTitleBar.
-		let boundingBox = this.state.boundingBox;
+    scrollToTab(tab) {
+        //'BoundingBox' is just the boundingClientRect of the tab region. It is, in essence, the center part of the windowTitleBar.
+        let boundingBox = this.state.boundingBox;
 
         let tabIndex = this.state.tabs.findIndex(el => {
             return el.windowName === tab.windowName && el.uuid === tab.uuid
@@ -342,27 +343,27 @@ export default class TabRegion extends React.Component {
      * Triggered when the user moves their mouse out of the tabRegion after a dragOver event happens. When they leave, we hide our placeholder tab.
      * @param {event} e
      */
-	dragLeave(e) {
-		let boundingRect = this.state.boundingBox;
-		if (!FSBL.Clients.WindowClient.isPointInBox({ x: e.screenX, y: e.screenY }, boundingRect)) {
-			this.setState({
-				hoveredTabIndex: undefined
-			})
-			// Actions.removeTabLocally(PLACEHOLDER_TAB);
-		}
+    dragLeave(e) {
+        let boundingRect = this.state.boundingBox;
+        if (!FSBL.Clients.WindowClient.isPointInBox({ x: e.screenX, y: e.screenY }, boundingRect)) {
+            this.setState({
+                hoveredTabIndex: undefined
+            })
+            // Actions.removeTabLocally(PLACEHOLDER_TAB);
+        }
 
-	}
+    }
 	/**
 	 * Set to a timeout. An event is sent to the RouterClient which will be handled by the drop handler on the window.
 	 * In the event that a drop handler never fires to stop tiling or tabbing, this will take care of it.
 	 *
 	 * @memberof windowTitleBar
 	 */
-	cancelTabbing() {
-		FSBL.Clients.WindowClient.stopTilingOrTabbing({ allowDropOnSelf: true });
-		// Actions.removeTabLocally(PLACEHOLDER_TAB);
-		this.onWindowResize();
-	}
+    cancelTabbing() {
+        FSBL.Clients.WindowClient.stopTilingOrTabbing({ allowDropOnSelf: true });
+        // Actions.removeTabLocally(PLACEHOLDER_TAB);
+        this.onWindowResize();
+    }
     /**
      * Basically exists just to keep the render method clean. Gives conditional classes to the active tab.
      * @param {tab} tab
@@ -386,29 +387,29 @@ export default class TabRegion extends React.Component {
             hoveredTabIndex: tabIndex
         })
 
-		// Actions.reorderTabLocally(PLACEHOLDER_TAB, tabIndex);
-	}
+        // Actions.reorderTabLocally(PLACEHOLDER_TAB, tabIndex);
+    }
     /**
 	 * OnClick handler for the close button on individual tabs.
 	 * @PLACEHOLDER will interact with tabbing API
 	 * @param {*} tab
 	 */
-	onTabClosed(identifier) {
+    onTabClosed(identifier) {
 
-		Actions.closeTab(identifier);
-	}
+        Actions.closeTab(identifier);
+    }
     /**
 	 * drop handler for the tab region.
 	 * @param {*} tab
 	 */
-	onTabAdded(identifier, newIndex) {
-		//On drop, we hide our placeholder tab.
-		//Actions.removeTabLocally(PLACEHOLDER_TAB);
-		//reorder will add if it doesn't exist.
-		//reorder will add if it doesn't exist.
-		if (newIndex === -1) {
-			newIndex = undefined;
-		}
+    onTabAdded(identifier, newIndex) {
+        //On drop, we hide our placeholder tab.
+        //Actions.removeTabLocally(PLACEHOLDER_TAB);
+        //reorder will add if it doesn't exist.
+        //reorder will add if it doesn't exist.
+        if (newIndex === -1) {
+            newIndex = undefined;
+        }
 
         let myIdentifier = finsembleWindow.identifier;
         myIdentifier.title = finsembleWindow.windowOptions.title;
@@ -425,15 +426,15 @@ export default class TabRegion extends React.Component {
 	 * @PLACEHOLDER will interact with tabbing API
 	 * @param {*} tab
 	 */
-	setActiveTab(tab) {
-		Actions.setActiveTab(tab);
-	}
+    setActiveTab(tab) {
+        Actions.setActiveTab(tab);
+    }
 
-	onStoreChanged(prop, value) {
-		this.setState({
-			[prop]: value
-		});
-	}
+    onStoreChanged(prop, value) {
+        this.setState({
+            [prop]: value
+        });
+    }
 
     onTabsChanged(err, response) {
         let { value } = response;
@@ -455,14 +456,14 @@ export default class TabRegion extends React.Component {
         Store.addListener({ field: "tabListTranslateX" }, this.onTabListTranslateChanged)
     }
 
-	componentDidMount() {
-		FSBL.Clients.WindowClient.finsembleWindow.addListener('bounds-set', this.onWindowResize);
-		let boundingBox = this.refs.Me.getBoundingClientRect();
-		this.setState({
-			boundingBox: boundingBox,
-			tabWidth: this.getTabWidth({ boundingBox })
-		})
-	}
+    componentDidMount() {
+        FSBL.Clients.WindowClient.finsembleWindow.addListener('bounds-set', this.onWindowResize);
+        let boundingBox = this.refs.Me.getBoundingClientRect();
+        this.setState({
+            boundingBox: boundingBox,
+            tabWidth: this.getTabWidth({ boundingBox })
+        })
+    }
 
     componentWillUnmount() {
         // Store.removeListener({ field: "activeTab" }, this.onActiveTabChanged);
@@ -470,10 +471,10 @@ export default class TabRegion extends React.Component {
         Store.removeListener({ field: "tabListTranslateX" }, this.onTabListTranslateChanged)
         FSBL.Clients.WindowClient.finsembleWindow.removeListener('bounds-set', this.onWindowResize);
 
-	}
-	hoverAction(newHoverState) {
-		this.setState({ hoverState: newHoverState });
-	}
+    }
+    hoverAction(newHoverState) {
+        this.setState({ hoverState: newHoverState });
+    }
 
     render() {
         let { translateX } = this.state;
@@ -550,28 +551,28 @@ function renderTitle() {
  * @param {*} props
  */
 function renderTabs() {
-	return this.state.tabs.map((tab, i) => {
-		return <Tab
-			onClick={() => {
-				this.setActiveTab(tab);
-			}}
-			draggable="true"
-			key={i}
-			className={this.getTabClasses(tab)}
-			onDragStart={(e, identifier) => {
-				FSBL.Clients.Logger.system.debug("Tab drag - TAB", identifier.windowName);
-				this.startDrag(e, identifier);
-			}}
-			onDrop={this.drop}
-			onDragEnd={this.stopDrag}
-			onTabClose={() => {
-				this.onTabClosed(tab)
-			}}
-			onTabDraggedOver={this.onTabDraggedOver}
-			listenForDragOver={this.props.listenForDragOver}
-			tabWidth={this.state.tabWidth}
-			title={tab.title || tab.windowName}
-			windowIdentifier={tab} />
-	});
+    return this.state.tabs.map((tab, i) => {
+        return <Tab
+            onClick={() => {
+                this.setActiveTab(tab);
+            }}
+            draggable="true"
+            key={i}
+            className={this.getTabClasses(tab)}
+            onDragStart={(e, identifier) => {
+                FSBL.Clients.Logger.system.debug("Tab drag - TAB", identifier.windowName);
+                this.startDrag(e, identifier);
+            }}
+            onDrop={this.drop}
+            onDragEnd={this.stopDrag}
+            onTabClose={() => {
+                this.onTabClosed(tab)
+            }}
+            onTabDraggedOver={this.onTabDraggedOver}
+            listenForDragOver={this.props.listenForDragOver}
+            tabWidth={this.state.tabWidth}
+            title={tab.title || tab.windowName}
+            windowIdentifier={tab} />
+    });
 
 }
