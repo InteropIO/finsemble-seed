@@ -67,7 +67,7 @@
     letter-spacing: .25px;
     align-content: center;
     display: block;
-    margin-top: 6px;    
+    margin-top: 6px;
 }
 
 .finsemble-toolbar-button:hover {
@@ -99,6 +99,16 @@
     background: var(--toolbar-button-hover-color);
     border: 1px solid transparent;
     cursor: pointer;
+}
+
+.finsemble-toolbar-button-mover {
+    height: 100%;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.toolbar-mover {
+    -webkit-app-region: drag;
 }
 
 .finsemble-toolbar-button-icon {

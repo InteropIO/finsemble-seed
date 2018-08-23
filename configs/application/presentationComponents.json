@@ -479,10 +479,11 @@
 					"dockable": true,
 					"undockedParams": {
 						"width": 300,
-						"height": 30,
+						"height": 39,
 						"left": 0,
 						"right": 0
-					}
+					},
+					"startsDocked": true
 				}
 			},
 			"component": {

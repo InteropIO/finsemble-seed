@@ -108,6 +108,7 @@ export default class Toolbar extends React.Component {
 		this.refs.pinSection.setState({ pins: newPins });
 		ToolbarStore.GlobalStore.setValue({ field: 'pins', value: pinsToObj(newPins) });
 	}
+
 	/**
 	 * This a sample dynamic toolbar which builds a toolbar from config, dynamically updates and can render any react component as a toolbar item.
 	 * The "sections" are built by the toolbar store. getSections() takes the sections object and builds right/left/center sections using the FinsembleToolbarSection control.
@@ -175,6 +176,9 @@ export default class Toolbar extends React.Component {
 	//console.log("Toolbar Render ");
 		if (!this.state.sections) return;
 		return (<FinsembleToolbar onDragStart={this.moveToolbar} onDragEnd={this.onPinDrag}>
+			<span className='cq-drag toolbar-mover' style={{ width: "25px", height: "100%"}}>
+				<i className='finsemble-toolbar-button-mover ff-dots-vert-mover'></i>
+			</span>
 			{this.getSections()}
 		</FinsembleToolbar>);
 	}
