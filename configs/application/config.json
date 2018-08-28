@@ -7,7 +7,7 @@
 			"finsemble.workspace.cache": "LocalStorageAdapter"
 		},
 		"dataStoreAdapters": {
-			"LocalStorageAdapter": "$applicationRoot/adapters/LocalStorageAdapter.js"
+			"LocalStorageAdapter": "$applicationRoot/adapters/localStorageAdapter.js"
 		}
 	},
 	"servicesConfig": {
