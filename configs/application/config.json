@@ -13,12 +13,14 @@
 	"servicesConfig": {
 		"launcher": {
 			"staggerPixels": 40
-    },
+    	},
 		"docking": {
 			"enabled": true,
 			"groupTileBuffer": 30,
 			"headerHeight": 32,
 			"MINIMUM_WIDTH": 175,
+			"defaultHeight": 39,
+			"defaultWidth": 600,
 			"tabbing": {
 				"enabled": true
 			},

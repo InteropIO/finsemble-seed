@@ -467,29 +467,18 @@
 				"position": "available",
 				"claimMonitorSpace": true,
 				"addToWorkspace": false,
+				"dockable": ["top", "bottom", "blurp"],
+				"docked": "top",
 				"options": {
 					"contextMenu": false,
-					"resizable": false,
 					"showTaskbarIcon": false,
-					"resizeRegion": {
-						"bottomRightCorner": 0,
-						"size": 0
-					},
-					"smallWindow": true,
-					"dockable": true,
-					"undockedParams": {
-						"width": 300,
-						"height": 39,
-						"left": 0,
-						"right": 0
-					},
-					"startsDocked": true
+					"smallWindow": true
 				}
 			},
 			"component": {
 				"category": "system",
 				"spawnOnStartup": true,
-				"spawnOnAllMonitors": true,
+				"spawnOnAllMonitors": false,
 				"canMinimize": false,
 				"startsDocked": true
 			},
