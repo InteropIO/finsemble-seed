@@ -357,7 +357,7 @@ var Actions = {
 	 */
 	clickClose: function () {
 		FSBL.Clients.WindowClient.close({
-			removeFromWorkspace: true,
+			removeFromWorkspace: true, // this will cause the entire stack to close. Using this instead of a new parameter to ensure backwards compatibility
 			userInitiated: true
 		});
 	},
@@ -378,7 +378,7 @@ var Actions = {
 	 */
 	clickMaximize: function () {
 		var maxField = windowTitleBarStore.getValue({ field: "Maximize" });
-		if (finsembleWindow.windowState !== finsembleWindow.WINDOWSTATE.MAXIMIZED)
+		if (!maxField.maximized)
 			return FSBL.Clients.WindowClient.maximize(() => {
 				windowTitleBarStore.setValue({ field: "Maximize.maximized", value: true });
 			});
@@ -456,7 +456,10 @@ var Actions = {
 		return Actions.parentWrapper.removeWindow({ windowIdentifier, position: i });
 	},
 	closeTab: function (windowIdentifier) {
-		return Actions.parentWrapper.deleteWindow({ windowIdentifier })
+		//return Actions.parentWrapper.deleteWindow({ windowIdentifier }) // this will cause the window to be closed but keep the stack intact
+		FSBL.FinsembleWindow.wrap(windowIdentifier, (err, wrap) => {
+			wrap.close();
+		});
 	},
 	reorderTab: function (tab, newIndex) {
 
@@ -481,7 +484,7 @@ var Actions = {
 	},
 	setActiveTab: function (windowIdentifier) {
 		FSBL.Clients.Logger.system.debug("setActiveTab.visibleWindow");
-		return Actions.parentWrapper.setVisibleWindow({ windowIdentifier });
+		return finsembleWindow.parentWindow.setVisibleWindow({ windowIdentifier });
 	},
 	parentWrapper: null,
 	onTabListChanged: function (err, response) {
@@ -513,7 +516,7 @@ var Actions = {
 	},
 	getInitialTabList: function (cb = Function.prototype) {
 		FSBL.Clients.WindowClient.getStackedWindow((err, parentWrapper) => {
-			Actions.parentWrapper = parentWrapper;
+			Actions.parentWrapper = FSBL.Clients.WindowClient.finsembleWindow.getParent();
 			if (Actions.parentWrapper) {
 				FSBL.Clients.Logger.debug("GetInitialTabList, parent exists")
 				Actions.setupStore(cb);
