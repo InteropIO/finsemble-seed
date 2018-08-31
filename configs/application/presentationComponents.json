@@ -465,7 +465,6 @@
 				"left": 0,
 				"right": 0,
 				"position": "available",
-				"claimMonitorSpace": true,
 				"addToWorkspace": false,
 				"dockable": ["top", "bottom", "blurp"],
 				"docked": "top",
@@ -479,8 +478,7 @@
 				"category": "system",
 				"spawnOnStartup": true,
 				"spawnOnAllMonitors": false,
-				"canMinimize": false,
-				"startsDocked": true
+				"canMinimize": false
 			},
 			"foreign": {
 				"services": {
