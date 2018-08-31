@@ -467,12 +467,18 @@
 				"position": "available",
 				"claimMonitorSpace": true,
 				"addToWorkspace": false,
-				"dockable": ["top", "bottom", "blurp"],
+				"dockable": [
+					"top",
+					"bottom",
+					"blurp"
+				],
 				"docked": "top",
 				"options": {
 					"contextMenu": false,
 					"showTaskbarIcon": false,
-					"smallWindow": true
+					"smallWindow": true,
+					"maxHeight": 39,
+					"minHeight": 39
 				}
 			},
 			"component": {
