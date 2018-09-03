@@ -60,7 +60,7 @@
 		env.PORT = startupConfig[env.NODE_ENV].serverPort;
 	}
 
-	const isRunningDevTask = process.argv[2].startsWith("dev");
+	const isRunningDevTask = process.argv[2].startsWith("dev") || process.argv[2].endsWith("dev");
 
 	// #endregion
 
