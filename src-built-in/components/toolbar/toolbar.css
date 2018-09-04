@@ -133,3 +133,10 @@ img {
 div {
     outline-color: transparent;
 }
+
+.toolbar-drag-handle {
+    padding-left:5px;
+    padding-right:5px;
+    padding-top: 6px;
+    cursor: hand;
+}

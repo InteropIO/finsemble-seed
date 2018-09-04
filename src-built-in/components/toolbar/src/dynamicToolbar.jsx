@@ -18,6 +18,7 @@ import MinimizeAll from "../components/MinimizeAll";
 import WorkspaceLauncherButton from "../components/WorkspaceLauncherButton";
 import WorkspaceMenuOpener from "../components/WorkspaceMenuOpener"
 import Search from "../components/Search"
+import DragHandle from "../components/DragHandle"
 
 // Support Dynamically Loading External Components
 var customComponents = [];
@@ -59,14 +60,14 @@ export default class Toolbar extends React.Component {
 	}
 
 	componentDidMount() {
-	//console.log("this", this)
+		//console.log("this", this)
 		this.state.finWindow.bringToFront();
 	}
 
 	componentWillMount() {
 		var self = this;
 		ToolbarStore.setupPinnedHotKeys(function (err, data) {
-		//console.log("data---", data);
+			//console.log("data---", data);
 			let pin = self.refs.pinSection.element.childNodes[data - 1];
 			//Goes and finds the toolbar button and clicks it.
 			if (pin.childNodes[0] && pin.childNodes[0].children[0]) {
@@ -173,12 +174,10 @@ export default class Toolbar extends React.Component {
 	}
 
 	render() {
-	//console.log("Toolbar Render ");
+		//console.log("Toolbar Render ");
 		if (!this.state.sections) return;
 		return (<FinsembleToolbar onDragStart={this.moveToolbar} onDragEnd={this.onPinDrag}>
-			<span className='cq-drag toolbar-mover' style={{ width: "25px", height: "100%"}}>
-				<i className='finsemble-toolbar-button-mover ff-dots-vert-mover'></i>
-			</span>
+			<DragHandle />
 			{this.getSections()}
 		</FinsembleToolbar>);
 	}
