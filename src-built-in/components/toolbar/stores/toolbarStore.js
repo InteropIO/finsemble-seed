@@ -121,6 +121,9 @@ class _ToolbarStore {
 		let onBoundsSet = (bounds) => {
 			self.Store.setValue({ field: "window-bounds", value: bounds });
 		}
+		FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", "t"], () => {
+			finsembleWindow.bringToFront();
+		});
 
 		FSBL.Clients.WindowClient.finsembleWindow.addListener("bounds-set", onBoundsSet)
 	}

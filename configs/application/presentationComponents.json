@@ -486,8 +486,9 @@
 				],
 				"maxHeight": 39,
 				"minHeight": 39,
-				"minWidth": 150,
+				"minWidth": 99,
 				"docked": "top",
+				"canGroup": false,
 				"options": {
 					"contextMenu": false,
 					"showTaskbarIcon": false,
