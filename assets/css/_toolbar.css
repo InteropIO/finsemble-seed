@@ -76,13 +76,33 @@
     cursor: pointer;
 }
 
-@media screen and (max-device-width: 1400px) {
+@media screen and (max-width: 155px) {
+    /* hide apps */
+    }
+
+@media screen and (max-width: 270px) {
+/* hide buttons on right. show overflow. */
+}
+
+@media screen and (max-width: 390px) {
+    .workspace-menu-button {
+        display: none !important;
+    }
+    .finsemble-toolbar-section.center {
+        display: none;
+    }
+    .finsemble-toolbar-section.right .divider {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 1400px) {
     .finsemble-toolbar-workspace-button-label > .finsemble-toolbar-button-label {
         width: 85px;
     }
 }
 
-@media screen and (min-device-width: 1400px) {
+@media screen and (min-width: 1400px) {
     .finsemble-toolbar-workspace-button-label > .finsemble-toolbar-button-label {
         width: 150px;
     }
@@ -105,10 +125,6 @@
     height: 100%;
     display: table-cell;
     vertical-align: middle;
-}
-
-.toolbar-mover {
-    -webkit-app-region: drag;
 }
 
 .finsemble-toolbar-button-icon {
@@ -194,4 +210,12 @@ img.pinned-icon {
 
 .ff-minimize-all {
     padding-top: 4px;
+}
+
+
+.finsemble-toolbar-drag-handle {
+    padding-left:5px;
+    padding-right:5px;
+    padding-top: 6px;
+    -webkit-app-region: drag;
 }

@@ -55,7 +55,7 @@ class _ToolbarStore {
 	 */
 	setupPinnedHotKeys(cb) {//return the number of the F key that is pressed
 		if (storeOwner) {
-		//console.log("is store owner----")
+			//console.log("is store owner----")
 			//when ctrl+shift+3 is typed, we invoke the callback saying "3" was pressed, which spawns the 3rd component.
 			for (let i = 0; i < 10; i++) {
 				FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", `${i}`], () => {
@@ -76,7 +76,7 @@ class _ToolbarStore {
 	 */
 	loadMenusFromConfig(done, self) {
 		FSBL.Clients.ConfigClient.get({ field: "finsemble.menus" }, function (err, menus) {
-			if(menus && menus.length){
+			if (menus && menus.length) {
 				self.Store.setValue({
 					field: "menus",
 					value: menus
@@ -117,6 +117,12 @@ class _ToolbarStore {
 			}
 			done();
 		});
+		FSBL.Clients.WindowClient.finsembleWindow.listenForBoundsSet();
+		let onBoundsSet = (bounds) => {
+			self.Store.setValue({ field: "window-bounds", value: bounds });
+		}
+
+		FSBL.Clients.WindowClient.finsembleWindow.addListener("bounds-set", onBoundsSet)
 	}
 
 	/**
@@ -136,7 +142,7 @@ class _ToolbarStore {
 				FSBL.Clients.WorkspaceClient.minimizeAll()
 			});
 			FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.shift, keys.f], () => {
-			//console.log("hot key")
+				//console.log("hot key")
 				self.Store.setValue({ field: "searchActive", value: true });
 			});
 		}
