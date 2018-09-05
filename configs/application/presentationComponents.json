@@ -436,8 +436,7 @@
 				}
 			},
 			"component": {
-				"category": "system",
-				"spawnOnStartup": true
+				"category": "system"
 			},
 			"foreign": {
 				"services": {
