@@ -53,8 +53,8 @@ var Actions = {
 		if (bool) {
 			if (window.outerWidth < 400) {
 				finsembleWindow.getBounds((err, bounds) => {
-					finsembleWindow.animate({ transitions: { size: { duration: 150, width: 400 } } }, {}, Function.prototype);
-
+					cachedBounds = bounds;
+					finsembleWindow.animate({ transitions: { size: { duration: 400, width: 400 } } }, {}, Function.prototype);
 				})
 			}
 			menuStore.setValue({ field: "active", value: true })
@@ -104,9 +104,11 @@ var Actions = {
 
 	},
 	handleClose() {
-		//console.log("close a window")
+		console.log("close a window")
 		if (cachedBounds) {
-			finsembleWindow.animate({ transitions: { size: { duration: 150, width: cachedBounds.width } } }, {}, Function.prototype);
+			finsembleWindow.animate({ transitions: { size: { duration: 400, width: cachedBounds.width } } }, {}, () => {
+				cachedBounds = null;
+			});
 		}
 		window.getSelection().removeAllRanges();
 		document.getElementById("searchInput").blur();
