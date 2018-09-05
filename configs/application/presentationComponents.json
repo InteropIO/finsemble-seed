@@ -481,8 +481,7 @@
 				"addToWorkspace": false,
 				"dockable": [
 					"top",
-					"bottom",
-					"blurp"
+					"bottom"
 				],
 				"maxHeight": 39,
 				"minHeight": 39,
