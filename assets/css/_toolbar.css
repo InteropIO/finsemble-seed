@@ -76,21 +76,39 @@
     cursor: pointer;
 }
 
-@media screen and (max-width: 155px) {
-    /* hide apps */
-    }
-
-@media screen and (max-width: 270px) {
-/* hide buttons on right. show overflow. */
-}
-
-@media screen and (max-width: 390px) {
+@media screen and (max-width: 170px) {
+    /* remove */
     .workspace-menu-button {
         display: none !important;
     }
+}
+
+@media screen and (max-width: 270px) {
+    #app-launcher {
+        display: none !important;
+    }
+
+    .finsemble-toolbar-section.left .divider {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 385px) {
+    .finsemble-toolbar-section.right {
+        display: none;
+    }
+
+    .finsemble-toolbar-section.left .divider:last-of-type {
+        display: none;
+    }
+
+}
+@media screen and (max-width: 390px) {
+    /* hide buttons on right. show overflow. */
     .finsemble-toolbar-section.center {
         display: none;
     }
+
     .finsemble-toolbar-section.right .divider {
         display: none;
     }

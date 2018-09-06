@@ -54,7 +54,7 @@ var Actions = {
 			if (window.outerWidth < 400) {
 				finsembleWindow.getBounds((err, bounds) => {
 					cachedBounds = bounds;
-					finsembleWindow.animate({ transitions: { size: { duration: 400, width: 400 } } }, {}, Function.prototype);
+					finsembleWindow.animate({ transitions: { size: { duration: 150, width: 400 } } }, {}, Function.prototype);
 				})
 			}
 			menuStore.setValue({ field: "active", value: true })
@@ -69,18 +69,16 @@ var Actions = {
 				const inputContainer = document.getElementById("inputContainer");
 				if (inputContainer) {
 					const bounds = inputContainer.getBoundingClientRect();
+					let showParams = {
+						monitor: 'mine',
+						position: 'relative',
+						left: bounds.left,
+						forceOntoMonitor: true,
+						top: 'adjacent',
+						autoFocus: false
+					}
+					FSBL.Clients.LauncherClient.showWindow({ windowName: menuWindow.name }, showParams);
 
-					// Using showAt rather than WindowClient.showWindow because showWindow was causing auto-focus on the
-					// searchMenu which caused an issue with the animations of the search button.
-					menuWindow.showAt(
-						window.screenX + bounds.left,
-						bounds.bottom + window.screenY,
-						null,
-						(err) => {
-							if (err) {
-								FSBL.Clients.Logger.error(err);
-							}
-						});
 				} else {
 					FSBL.Clients.Logger.error("No element with ID 'inputContainer' exists");
 				}
@@ -106,7 +104,7 @@ var Actions = {
 	handleClose() {
 		console.log("close a window")
 		if (cachedBounds) {
-			finsembleWindow.animate({ transitions: { size: { duration: 400, width: cachedBounds.width } } }, {}, () => {
+			finsembleWindow.animate({ transitions: { size: { duration: 150, width: cachedBounds.width } } }, {}, () => {
 				cachedBounds = null;
 			});
 		}
