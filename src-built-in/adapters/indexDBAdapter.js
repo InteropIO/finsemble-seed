@@ -1,43 +1,37 @@
 /**
  * IndexDB Storage Adapter.
+ * 
+ * We have a baseStorage model that provides some methods, such as `getCombinedKey`, which will return a nice key to 
+ * save our value under. Example: `Finsemble:defaultUser:finsemble:activeWorkspace`. That key would hold the value of 
+ * our activeWorkspace.
  */
-
-/**
- * We have a baseStorage model that provides some methods, such as `getCombinedKey`, which will return a nice key to save our value under. Example: `Finsemble:defaultUser:finsemble:activeWorkspace`. That key would hold the value of our activeWorkspace.
- */
-// var BaseStorage = require("@chartiq/finsemble").models.baseStorage;
-// var Logger = require("@chartiq/finsemble").Clients.Logger;
-// var Dexie = require('dexie');
-
 import finsemble from "@chartiq/finsemble";
-import Dexie from 'dexie';
-var BaseStorage = finsemble.models.baseStorage;
-var Logger = finsemble.Clients.Logger;
+import dexie from "dexie";
 
+const BaseStorage = finsemble.models.baseStorage;
+const Logger = finsemble.Clients.Logger;
 
-// var BaseStorage = require("@chartiq/finsemble").models.baseStorage;
-// var Logger = require("@chartiq/finsemble").Clients.Logger;
-// var Dexie = require('dexie');
-
-
-//Because calls to this storage adapter will likely come from many different windows, we will log successes and failures in the central logger.
+// Because calls to this storage adapter will likely come from many different windows, we will log successes and 
+// failures in the central logger.
 Logger.start();
 
-Logger.system.debug("IndexDBAdapter", Dexie);
-console.debug("IndexDBAdapter", Dexie);
+Logger.system.debug("IndexDBAdapter", dexie);
+console.debug("IndexDBAdapter", dexie);
 
-var IndexDBAdapter = function (uuid) {
+const IndexDBAdapter = function (uuid) {
 	BaseStorage.call(this, arguments);
 
-	var db = new Dexie('finsemble');
+	const db = new dexie("finsemble");
 	db.version(1).stores({
-		fsbl: `key` //only index the storage keys
+		fsbl: "key" //only index the storage keys
 	});
 
 	Logger.system.debug("IndexDBAdapter init");
 	console.debug("IndexDBAdapter init");
+
 	/**
 	 * Save method.
+	 * 
 	 * @param {object} params
 	 * @param {string} params.topic A topic under which the data should be stored.
 	 * @param {string} params.key The key whose value is being set.
@@ -48,7 +42,7 @@ var IndexDBAdapter = function (uuid) {
 		Logger.system.debug("saving", params);
 		const combinedKey = this.getCombinedKey(this, params);
 		
-		Dexie.spawn(function*() {
+		dexie.spawn(function*() {
 			yield db.fsbl.put({key: combinedKey, value: params.value});
 		}).then(function() {
 		   // spawn() returns a promise that completes when all is done.
@@ -62,6 +56,7 @@ var IndexDBAdapter = function (uuid) {
 
 	/**
 	 * Get method.
+	 * 
 	 * @param {object} params
 	 * @param {string} params.topic A topic under which the data should be stored.
 	 * @param {string} params.key The key whose value is being set.
@@ -74,9 +69,9 @@ var IndexDBAdapter = function (uuid) {
 
 		const combinedKey = this.getCombinedKey(this, params);
 	
-		Dexie.spawn(function*() {
+		dexie.spawn(function*() {
 			let val = yield db.fsbl
-				.where('key').equals(combinedKey).first();
+				.where("key").equals(combinedKey).first();
 			Logger.system.debug("Storage.getItem for key=" + combinedKey + " raw val=" + val);
 			console.debug("Storage.getItem for key=" + combinedKey + " val=", val);
 			let data = {};
@@ -99,11 +94,13 @@ var IndexDBAdapter = function (uuid) {
 		if ("keyPrefix" in params) {
 			preface = preface + params.keyPrefix;
 		}
+
 		return preface;
 	};
 
 	/**
 	 * Returns all keys stored in localstorage.
+	 * 
 	 * @param {*} params
 	 * @param {*} cb
 	 */
@@ -111,8 +108,8 @@ var IndexDBAdapter = function (uuid) {
 		let keys = [];
 		const keyPreface = this.getKeyPreface(this, params);
 		
-		Dexie.spawn(function*() {
-			keys = yield db.fsbl.where('key').startsWith(keyPreface).primaryKeys();
+		dexie.spawn(function*() {
+			keys = yield db.fsbl.where("key").startsWith(keyPreface).primaryKeys();
 			Logger.system.debug("Storage.keys for keyPreface=" + keyPreface + " with keys=" + keys);
 			cb(null, keys);
 		}).catch(function(err) {
@@ -133,7 +130,7 @@ var IndexDBAdapter = function (uuid) {
 	this.delete = function (params, cb) {
 		const combinedKey = this.getCombinedKey(this, params);
 		Logger.system.debug("Storage.delete for key=" + combinedKey);
-		Dexie.spawn(function*() {
+		dexie.spawn(function*() {
 			yield db.fsbl.delete(combinedKey);
 			cb(null, { status: "success" });
 		}).catch(function(err) {
@@ -148,10 +145,10 @@ var IndexDBAdapter = function (uuid) {
 	 * This method should be used very, very judiciously. It's essentially a method designed to wipe the database for a particular user.
 	 */
 	this.clearCache = function (params, cb) {
-		const preface = self.baseName + ":" + self.userName;
+		const keyPreface = self.baseName + ":" + self.userName;
 
-		Dexie.spawn(function*() {
-			yield db.fsbl.where('key').startsWith(keyPreface).delete();
+		dexie.spawn(function*() {
+			yield db.fsbl.where("key").startsWith(keyPreface).delete();
 			Logger.system.debug("Storage.clearCache for keyPreface=" + keyPreface);
 			cb();
 		}).catch(function(err) {
@@ -167,7 +164,7 @@ var IndexDBAdapter = function (uuid) {
 	 * @param {function} cb
 	 */
 	this.empty = function (cb) {
-		Dexie.spawn(function*() {
+		dexie.spawn(function*() {
 			yield db.fsbl.clear();
 			Logger.system.debug("Storage.empty");
 			cb(null, { status: "success" });
