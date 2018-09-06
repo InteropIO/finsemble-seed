@@ -20,6 +20,7 @@
         },
         "alwaysOnTop": false
     },
+    "splashScreenImage": "http://localhost:3375/assets/img/FinsembleSplash.png",
     "runtime": {
         "arguments": "--noerrdialogs  --v=4 --no-sandbox  --enable-crash-reporting --framestrategy=frames --winhttp-proxy-resolver",
         "version": "8.56.28.36",
