@@ -43,12 +43,12 @@ body{
     background-color: #3c4c58;
 }
 .actionButton.tabs-contract{
-    background-image: url("/assets/img/triangle-arrow-up.svg");
+    background-image: url("../../../assets/img/triangle-arrow-up.svg");
     background-repeat: no-repeat;
     background-position: center;
 }
 .actionButton.tabs-expand{
-    background-image: url("/assets/img/triangle-arrow-down.svg");
+    background-image: url("../../../assets/img/triangle-arrow-down.svg");
     background-repeat: no-repeat;
     background-position: center;
 }
