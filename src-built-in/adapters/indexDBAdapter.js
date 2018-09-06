@@ -18,7 +18,7 @@ Logger.start();
 Logger.system.debug("IndexDBAdapter", dexie);
 console.debug("IndexDBAdapter", dexie);
 
-const IndexDBAdapter = function (uuid) {
+const IndexDBAdapter = function () {
 	BaseStorage.call(this, arguments);
 
 	const db = new dexie("finsemble");
@@ -38,16 +38,16 @@ const IndexDBAdapter = function (uuid) {
 	 * @param {any} params.value The value being saved.
 	 * @param {function} cb callback to be invoked upon save completion
 	 */
-	this.save = function (params, cb) {
+	this.save = (params, cb) => {
 		Logger.system.debug("saving", params);
 		const combinedKey = this.getCombinedKey(this, params);
 		
 		dexie.spawn(function*() {
 			yield db.fsbl.put({key: combinedKey, value: params.value});
-		}).then(function() {
+		}).then(() => {
 		   // spawn() returns a promise that completes when all is done.
 		   return cb(null, { status: "success" });
-		}).catch(function(err) {
+		}).catch((err) => {
 		   console.error("Failed: " + err);
 		   return cb(err, { status: "failed" });
 		});
@@ -61,7 +61,7 @@ const IndexDBAdapter = function (uuid) {
 	 * @param {string} params.key The key whose value is being set.
 	 * @param {function} cb callback to be invoked upon completion
 	 */
-	this.get = function (params, cb) {
+	this.get = (params, cb) => {
 
 		Logger.system.debug("IndexDBAdapter.get, params: ", params);
 		console.debug("IndexDBAdapter.get, params: ", params);
@@ -79,14 +79,14 @@ const IndexDBAdapter = function (uuid) {
 			 }
 			// Logger.system.debug("Storage.getItem for key=" + combinedKey + " with data=" + data);
 			cb(null, data);
-		}).catch(function(err) {
+		}).catch((err) => {
 			Logger.system.error("Storage.getItem Error", err, "key=" + combinedKey);
 			return cb(err, { status: "failed" });
 		});
 	};
 
 	// return prefix used to filter keys
-	this.getKeyPreface = function (self, params) {
+	this.getKeyPreface = (self, params) => {
 		let preface = self.baseName + ":" + self.userName + ":" + params.topic + ":";
 		if ("keyPrefix" in params) {
 			preface = preface + params.keyPrefix;
@@ -96,12 +96,12 @@ const IndexDBAdapter = function (uuid) {
 	};
 
 	/**
-	 * Returns all keys stored in localstorage.
+	 * Returns all keys stored in IndexDB.
 	 * 
 	 * @param {*} params
 	 * @param {*} cb
 	 */
-	this.keys = function (params, cb) {
+	this.keys = (params, cb) => {
 		let keys = [];
 		const keyPreface = this.getKeyPreface(this, params);
 		
@@ -109,7 +109,7 @@ const IndexDBAdapter = function (uuid) {
 			keys = yield db.fsbl.where("key").startsWith(keyPreface).primaryKeys();
 			Logger.system.debug("Storage.keys for keyPreface=" + keyPreface + " with keys=" + keys);
 			cb(null, keys);
-		}).catch(function(err) {
+		}).catch((err) => {
 			Logger.system.error("Failed to retrieve Storage.keys Error", err, "key=" + combinedKey);
 			return cb(err, { status: "failed" });
 		});
@@ -122,29 +122,30 @@ const IndexDBAdapter = function (uuid) {
 	 * @param {string} params.key The key whose value is being deleted.
 	 * @param {function} cb callback to be invoked upon completion
 	 */
-	this.delete = function (params, cb) {
+	this.delete = (params, cb) => {
 		const combinedKey = this.getCombinedKey(this, params);
 		Logger.system.debug("Storage.delete for key=" + combinedKey);
 		dexie.spawn(function*() {
 			yield db.fsbl.delete(combinedKey);
 			cb(null, { status: "success" });
-		}).catch(function(err) {
+		}).catch((err) => {
 			Logger.system.error("Storage.delete failed Error", err, "key=" + combinedKey);
 			cb(err, { status: "failed" });
 		});
 	};
 
 	/**
-	 * This method should be used very, very judiciously. It's essentially a method designed to wipe the database for a particular user.
+	 * This method should be used very, very judiciously. It's essentially a method designed to wipe the database for a 
+	 * particular user.
 	 */
-	this.clearCache = function (params, cb) {
+	this.clearCache = (params, cb) => {
 		const keyPreface = self.baseName + ":" + self.userName;
 
 		dexie.spawn(function*() {
 			yield db.fsbl.where("key").startsWith(keyPreface).delete();
 			Logger.system.debug("Storage.clearCache for keyPreface=" + keyPreface);
 			cb();
-		}).catch(function(err) {
+		}).catch((err) => {
 			Logger.system.debug("Storage.clearCache failed Error", err, "keyPreface=" + keyPreface);
 			cb(err, { status: "failed" });
 		});
@@ -154,18 +155,17 @@ const IndexDBAdapter = function (uuid) {
 	 * Wipes the storage container.
 	 * @param {function} cb
 	 */
-	this.empty = function (cb) {
+	this.empty = (cb) => {
 		dexie.spawn(function*() {
 			yield db.fsbl.clear();
 			Logger.system.debug("Storage.empty");
 			cb(null, { status: "success" });
-		}).catch(function(err) {
+		}).catch((err) => {
 			Logger.system.debug("Storage.empty failed Error", err);
 			cb(err, { status: "failed" });
 		});
 	};
 };
-
 
 IndexDBAdapter.prototype = new BaseStorage();
 new IndexDBAdapter("IndexDBAdapter");
