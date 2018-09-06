@@ -5,20 +5,37 @@
 /**
  * We have a baseStorage model that provides some methods, such as `getCombinedKey`, which will return a nice key to save our value under. Example: `Finsemble:defaultUser:finsemble:activeWorkspace`. That key would hold the value of our activeWorkspace.
  */
-var BaseStorage = require("@chartiq/finsemble").models.baseStorage;
-var Logger = require("@chartiq/finsemble").Clients.Logger;
+// var BaseStorage = require("@chartiq/finsemble").models.baseStorage;
+// var Logger = require("@chartiq/finsemble").Clients.Logger;
+// var Dexie = require('dexie');
+
+import finsemble from "@chartiq/finsemble";
+import Dexie from 'dexie';
+var BaseStorage = finsemble.models.baseStorage;
+var Logger = finsemble.Clients.Logger;
+
+
+// var BaseStorage = require("@chartiq/finsemble").models.baseStorage;
+// var Logger = require("@chartiq/finsemble").Clients.Logger;
+// var Dexie = require('dexie');
+
+
 //Because calls to this storage adapter will likely come from many different windows, we will log successes and failures in the central logger.
 Logger.start();
 
-//setup Dexie
-import Dexie from 'dexie';
-const db = new Dexie('finsemble');
-db.version(1).stores({
-    fsbl: `key` //only index the storage keys
-});
+Logger.system.debug("IndexDBAdapter", Dexie);
+console.debug("IndexDBAdapter", Dexie);
 
 var IndexDBAdapter = function (uuid) {
 	BaseStorage.call(this, arguments);
+
+	var db = new Dexie('finsemble');
+	db.version(1).stores({
+		fsbl: `key` //only index the storage keys
+	});
+
+	Logger.system.debug("IndexDBAdapter init");
+	console.debug("IndexDBAdapter init");
 	/**
 	 * Save method.
 	 * @param {object} params
@@ -32,7 +49,7 @@ var IndexDBAdapter = function (uuid) {
 		const combinedKey = this.getCombinedKey(this, params);
 		
 		Dexie.spawn(function*() {
-			yield db.fsbl.put({key: combinedKey, value: JSON.stringify(params.value)});
+			yield db.fsbl.put({key: combinedKey, value: params.value});
 		}).then(function() {
 		   // spawn() returns a promise that completes when all is done.
 		   return cb(null, { status: "success" });
@@ -51,18 +68,23 @@ var IndexDBAdapter = function (uuid) {
 	 * @param {function} cb callback to be invoked upon completion
 	 */
 	this.get = function (params, cb) {
+
+		Logger.system.debug("IndexDBAdapter.get, params: ", params);
+		console.debug("IndexDBAdapter.get, params: ", params);
+
 		const combinedKey = this.getCombinedKey(this, params);
 	
 		Dexie.spawn(function*() {
 			let val = yield db.fsbl
-				.where('key').equals(combinedKey);
+				.where('key').equals(combinedKey).first();
 			Logger.system.debug("Storage.getItem for key=" + combinedKey + " raw val=" + val);
-			let data = null;
-			if (val) {
-				data = JSON.parse(val);
-			}
-			Logger.system.debug("Storage.getItem for key=" + combinedKey + " with data=" + data);
-			return cb(null, data);
+			console.debug("Storage.getItem for key=" + combinedKey + " val=", val);
+			let data = {};
+			if (val && val.value) {
+			 	data = val.value;
+			 }
+			// Logger.system.debug("Storage.getItem for key=" + combinedKey + " with data=" + data);
+			cb(null, data);
 		}).catch(function(err) {
 			Logger.system.error("Storage.getItem Error", err, "key=" + combinedKey);
 			return cb(null, {});
@@ -163,4 +185,4 @@ var IndexDBAdapter = function (uuid) {
 IndexDBAdapter.prototype = new BaseStorage();
 new IndexDBAdapter("IndexDBAdapter");
 
-module.exports = IndexDBAdapter;//Allows us to get access to the unintialized object
+//module.exports = IndexDBAdapter;//Allows us to get access to the unintialized object
