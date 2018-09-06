@@ -47,10 +47,9 @@ const IndexDBAdapter = function (uuid) {
 		}).then(function() {
 		   // spawn() returns a promise that completes when all is done.
 		   return cb(null, { status: "success" });
-		}).catch(function(e) {
-		   console.error("Failed: " + e);
-		   //TODO: can't help think this should be (but localstorage adapter doesn't return errors...)
-		   //return cb({ status: "failed" }, null);
+		}).catch(function(err) {
+		   console.error("Failed: " + err);
+		   return cb(err, { status: "failed" });
 		});
 	};
 
@@ -82,9 +81,7 @@ const IndexDBAdapter = function (uuid) {
 			cb(null, data);
 		}).catch(function(err) {
 			Logger.system.error("Storage.getItem Error", err, "key=" + combinedKey);
-			return cb(null, {});
-			//TODO: can't help think this should be (but localstorage adapter doesn't return errors...)
-			//return cb({ status: "failed" }, null);
+			return cb(err, { status: "failed" });
 		});
 	};
 
@@ -114,9 +111,7 @@ const IndexDBAdapter = function (uuid) {
 			cb(null, keys);
 		}).catch(function(err) {
 			Logger.system.error("Failed to retrieve Storage.keys Error", err, "key=" + combinedKey);
-			return cb(null, []);
-			//TODO: can't help think this should be (but localstorage adapter doesn't return errors...)
-			//return cb({ status: "failed" }, null);
+			return cb(err, { status: "failed" });
 		});
 	};
 
@@ -135,9 +130,7 @@ const IndexDBAdapter = function (uuid) {
 			cb(null, { status: "success" });
 		}).catch(function(err) {
 			Logger.system.error("Storage.delete failed Error", err, "key=" + combinedKey);
-			cb(null, { status: "success" });
-			//TODO: can't help think this should be (but localstorage adapter doesn't return errors...)
-			//return cb({ status: "failed" }, null);
+			cb(err, { status: "failed" });
 		});
 	};
 
@@ -153,9 +146,7 @@ const IndexDBAdapter = function (uuid) {
 			cb();
 		}).catch(function(err) {
 			Logger.system.debug("Storage.clearCache failed Error", err, "keyPreface=" + keyPreface);
-			cb();
-			//TODO: can't help think this should be (but localstorage adapter doesn't return errors...)
-			//return cb({ status: "failed" }, null);
+			cb(err, { status: "failed" });
 		});
 	};
 
@@ -170,12 +161,9 @@ const IndexDBAdapter = function (uuid) {
 			cb(null, { status: "success" });
 		}).catch(function(err) {
 			Logger.system.debug("Storage.empty failed Error", err);
-			cb(null, { status: "success" });
-			//TODO: can't help think this should be (but localstorage adapter doesn't return errors...)
-			//return cb({ status: "failed" }, null);
+			cb(err, { status: "failed" });
 		});
 	};
-
 };
 
 
