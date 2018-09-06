@@ -66,22 +66,7 @@ var Actions = {
 			return menuWindow.isShowing((showing) => {
 				if (showing) return;
 
-				const inputContainer = document.getElementById("inputContainer");
-				if (inputContainer) {
-					const bounds = inputContainer.getBoundingClientRect();
-					let showParams = {
-						monitor: 'mine',
-						position: 'relative',
-						left: bounds.left,
-						forceOntoMonitor: true,
-						top: 'adjacent',
-						autoFocus: false
-					}
-					FSBL.Clients.LauncherClient.showWindow({ windowName: menuWindow.name }, showParams);
-
-				} else {
-					FSBL.Clients.Logger.error("No element with ID 'inputContainer' exists");
-				}
+				Actions.positionSearchResults();
 			});
 
 		}
@@ -98,21 +83,42 @@ var Actions = {
 				}
 			})
 		})
+	},
+	positionSearchResults() {
+		const inputContainer = document.getElementById("inputContainer");
+		if (inputContainer) {
+			const bounds = inputContainer.getBoundingClientRect();
+			let showParams = {
+				monitor: 'mine',
+				position: 'relative',
+				left: bounds.left,
+				forceOntoMonitor: true,
+				top: 'adjacent',
+				autoFocus: false
+			}
+			FSBL.Clients.LauncherClient.showWindow({ windowName: menuWindow.name }, showParams);
 
-
+		} else {
+			FSBL.Clients.Logger.error("No element with ID 'inputContainer' exists");
+		}
 	},
 	handleClose() {
-		console.log("close a window")
-		if (cachedBounds) {
-			finsembleWindow.animate({ transitions: { size: { duration: 150, width: cachedBounds.width } } }, {}, () => {
-				cachedBounds = null;
-			});
-		}
-		window.getSelection().removeAllRanges();
-		document.getElementById("searchInput").blur();
-		menuStore.setValue({ field: "active", value: false })
-		if (!menuWindow) return;
-		menuWindow.hide();
+		menuWindow.isShowing(function (showing) {
+			if (showing) {
+				console.log("close a window")
+				if (cachedBounds) {
+					finsembleWindow.animate({ transitions: { size: { duration: 150, width: cachedBounds.width } } }, {}, () => {
+						cachedBounds = null;
+					});
+				}
+				window.getSelection().removeAllRanges();
+				document.getElementById("searchInput").blur();
+				menuStore.setValue({ field: "active", value: false })
+				if (!menuWindow) return;
+				menuWindow.hide();
+			}
+		});
+
 	},
 	setupWindow() {
 		if (!menuReference.finWindow) return;
@@ -144,6 +150,9 @@ var Actions = {
 		FSBL.Clients.SearchClient.search({ text: text }, function (err, response) {
 			var updatedResults = [].concat.apply([], response)
 			Actions.setList(updatedResults);
+			setTimeout(() => {
+				Actions.positionSearchResults();
+			}, 100);
 		})
 	},
 	menuBlur() {
@@ -205,7 +214,10 @@ function createStore(done) {
 		})
 		done();
 	});
-	finWindow.addEventListener("blurred", function (event) {
+
+	finsembleWindow.listenForBoundsSet();
+	finsembleWindow.addListener("bounds-set", Actions.handleClose);
+	finsembleWindow.addListener("blurred", function (event) {
 		Actions.setFocus(false);
 	}, function () {
 	}, function (reason) {
