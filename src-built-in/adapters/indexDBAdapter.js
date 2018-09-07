@@ -99,6 +99,16 @@ const IndexDBAdapter = function () {
 	};
 
 	/**
+	 * return prefix used to filter keys
+	 * @param {*} self 
+	 * @param {*} params 
+	 */
+	this.getUserPreface = (self) => {
+		const preface = `${self.baseName}:${self.userName}`;
+		return preface;
+	};
+
+	/**
 	 * Returns all keys stored in IndexDB.
 	 * 
 	 * @param {*} params
@@ -149,18 +159,18 @@ const IndexDBAdapter = function () {
 	 * particular user.
 	 */
 	this.clearCache = (params, cb) => {
-		const keyPreface = self.baseName + ":" + self.userName;
+		const userPreface = this.getUserPreface(this);
 
 		dexie
 			.spawn(function* () {
-				yield db.fsbl.where("key").startsWith(keyPreface).delete();
-				Logger.system.debug("IndexDBAdapter.clearCache for keyPreface=" + keyPreface);
-				console.debug("IndexDBAdapter.clearCache for keyPreface=" + keyPreface);
+				Logger.system.debug("IndexDBAdapter.clearCache for userPreface=" + userPreface);
+				console.debug("IndexDBAdapter.clearCache for userPreface=" + userPreface);
+				yield db.fsbl.where("key").startsWith(userPreface).delete();
 				cb();
 			})
 			.catch((err) => {
-				Logger.system.debug("IndexDBAdapter.clearCache failed Error", err, "keyPreface=" + keyPreface);
-				console.debug("IndexDBAdapter.clearCache failed Error", err, "keyPreface=" + keyPreface);
+				Logger.system.debug("IndexDBAdapter.clearCache failed Error", err, "userPreface=" + userPreface);
+				console.debug("IndexDBAdapter.clearCache failed Error", err, "userPreface=" + userPreface);
 				cb(err, { status: "failed" });
 			});
 	};
