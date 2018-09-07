@@ -15,9 +15,6 @@ const Logger = finsemble.Clients.Logger;
 // failures in the central logger.
 Logger.start();
 
-Logger.system.debug("IndexDBAdapter", dexie);
-console.debug("IndexDBAdapter", dexie);
-
 const IndexDBAdapter = function () {
 	BaseStorage.call(this, arguments);
 
@@ -39,7 +36,8 @@ const IndexDBAdapter = function () {
 	 * @param {function} cb callback to be invoked upon save completion
 	 */
 	this.save = (params, cb) => {
-		Logger.system.debug("saving", params);
+		Logger.system.debug("IndexDBAdapter.save, params: ", params);
+		console.debug("IndexDBAdapter.save, params: ", params);
 		const combinedKey = this.getCombinedKey(this, params);
 
 		dexie
@@ -76,15 +74,13 @@ const IndexDBAdapter = function () {
 					.where("key")
 					.equals(combinedKey)
 					.first();
-				Logger.system.debug("Storage.getItem for key=" + combinedKey + " raw val=" + val);
-				console.debug("Storage.getItem for key=" + combinedKey + " val=", val);
+				Logger.system.debug("Storage.get for key=" + combinedKey + " raw val=" + val);
+				console.debug("Storage.get for key=" + combinedKey + " val=", val);
 				const data = val && val.value ? val.value : {};
-
-				Logger.system.debug("Storage.getItem for key=" + combinedKey + " with data=" + data);
 				cb(null, data);
 			})
 			.catch((err) => {
-				Logger.system.error("Storage.getItem Error", err, "key=" + combinedKey);
+				Logger.system.error("Storage.get Error", err, "key=" + combinedKey);
 				return cb(err, { status: "failed" });
 			});
 	};
@@ -114,11 +110,13 @@ const IndexDBAdapter = function () {
 		dexie
 			.spawn(function* () {
 				keys = yield db.fsbl.where("key").startsWith(keyPreface).primaryKeys();
-				Logger.system.debug("Storage.keys for keyPreface=" + keyPreface + " with keys=" + keys);
+				Logger.system.debug("Storage.keys for keyPreface=" + keyPreface + " with keys=", keys);
+				console.debug("Storage.keys for keyPreface=" + keyPreface + " with keys=", keys);
 				cb(null, keys);
 			})
 			.catch((err) => {
 				Logger.system.error("Failed to retrieve Storage.keys Error", err, "key=" + combinedKey);
+				console.error("Failed to retrieve Storage.keys Error", err, "key=" + combinedKey);
 				return cb(err, { status: "failed" });
 			});
 	};
@@ -133,13 +131,14 @@ const IndexDBAdapter = function () {
 	this.delete = (params, cb) => {
 		const combinedKey = this.getCombinedKey(this, params);
 		Logger.system.debug("Storage.delete for key=" + combinedKey);
+		console.debug("Storage.delete for key=" + combinedKey);
 		dexie
 			.spawn(function* () {
 				yield db.fsbl.delete(combinedKey);
 				cb(null, { status: "success" });
 			})
 			.catch((err) => {
-				Logger.system.error("Storage.delete failed Error", err, "key=" + combinedKey);
+				Logger.system.error("Storage.delete Error", err, "key=" + combinedKey);
 				cb(err, { status: "failed" });
 			});
 	};
@@ -155,10 +154,12 @@ const IndexDBAdapter = function () {
 			.spawn(function* () {
 				yield db.fsbl.where("key").startsWith(keyPreface).delete();
 				Logger.system.debug("Storage.clearCache for keyPreface=" + keyPreface);
+				console.debug("Storage.clearCache for keyPreface=" + keyPreface);
 				cb();
 			})
 			.catch((err) => {
 				Logger.system.debug("Storage.clearCache failed Error", err, "keyPreface=" + keyPreface);
+				console.debug("Storage.clearCache failed Error", err, "keyPreface=" + keyPreface);
 				cb(err, { status: "failed" });
 			});
 	};
@@ -172,10 +173,12 @@ const IndexDBAdapter = function () {
 			.spawn(function* () {
 				yield db.fsbl.clear();
 				Logger.system.debug("Storage.empty");
+				console.debug("Storage.empty");
 				cb(null, { status: "success" });
 			})
 			.catch((err) => {
 				Logger.system.debug("Storage.empty failed Error", err);
+				console.debug("Storage.empty failed Error", err);
 				cb(err, { status: "failed" });
 			});
 	};
@@ -183,5 +186,3 @@ const IndexDBAdapter = function () {
 
 IndexDBAdapter.prototype = new BaseStorage();
 new IndexDBAdapter("IndexDBAdapter");
-
-//module.exports = IndexDBAdapter;//Allows us to get access to the uninitialized object
