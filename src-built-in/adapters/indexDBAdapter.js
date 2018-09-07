@@ -87,7 +87,7 @@ const IndexDBAdapter = function () {
 	};
 
 	/**
-	 * return prefix used to filter keys
+	 * return prefix used to filter keys for particular topics and key prefixes.
 	 * @param {*} self 
 	 * @param {*} params 
 	 */
@@ -99,7 +99,7 @@ const IndexDBAdapter = function () {
 	};
 
 	/**
-	 * return prefix used to filter keys
+	 * return prefix for all the users stored data.
 	 * @param {*} self 
 	 * @param {*} params 
 	 */
