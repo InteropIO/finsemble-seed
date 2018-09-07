@@ -74,13 +74,13 @@ const IndexDBAdapter = function () {
 					.where("key")
 					.equals(combinedKey)
 					.first();
-				Logger.system.debug("Storage.get for key=" + combinedKey + " raw val=" + val);
-				console.debug("Storage.get for key=" + combinedKey + " val=", val);
+				Logger.system.debug("IndexDBAdapter.get for key=" + combinedKey + " raw val=" + val);
+				console.debug("IndexDBAdapter.get for key=" + combinedKey + " val=", val);
 				const data = val && val.value ? val.value : {};
 				cb(null, data);
 			})
 			.catch((err) => {
-				Logger.system.error("Storage.get Error", err, "key=" + combinedKey);
+				Logger.system.error("IndexDBAdapter.get Error", err, "key=" + combinedKey);
 				return cb(err, { status: "failed" });
 			});
 	};
@@ -110,13 +110,13 @@ const IndexDBAdapter = function () {
 		dexie
 			.spawn(function* () {
 				keys = yield db.fsbl.where("key").startsWith(keyPreface).primaryKeys();
-				Logger.system.debug("Storage.keys for keyPreface=" + keyPreface + " with keys=", keys);
-				console.debug("Storage.keys for keyPreface=" + keyPreface + " with keys=", keys);
+				Logger.system.debug("IndexDBAdapter.keys for keyPreface=" + keyPreface + " with keys=", keys);
+				console.debug("IndexDBAdapter.keys for keyPreface=" + keyPreface + " with keys=", keys);
 				cb(null, keys);
 			})
 			.catch((err) => {
-				Logger.system.error("Failed to retrieve Storage.keys Error", err, "key=" + combinedKey);
-				console.error("Failed to retrieve Storage.keys Error", err, "key=" + combinedKey);
+				Logger.system.error("Failed to retrieve IndexDBAdapter.keys Error", err, "key=" + combinedKey);
+				console.error("Failed to retrieve IndexDBAdapter.keys Error", err, "key=" + combinedKey);
 				return cb(err, { status: "failed" });
 			});
 	};
@@ -130,15 +130,15 @@ const IndexDBAdapter = function () {
 	 */
 	this.delete = (params, cb) => {
 		const combinedKey = this.getCombinedKey(this, params);
-		Logger.system.debug("Storage.delete for key=" + combinedKey);
-		console.debug("Storage.delete for key=" + combinedKey);
+		Logger.system.debug("IndexDBAdapter.delete for key=" + combinedKey);
+		console.debug("IndexDBAdapter.delete for key=" + combinedKey);
 		dexie
 			.spawn(function* () {
 				yield db.fsbl.delete(combinedKey);
 				cb(null, { status: "success" });
 			})
 			.catch((err) => {
-				Logger.system.error("Storage.delete Error", err, "key=" + combinedKey);
+				Logger.system.error("IndexDBAdapter.delete Error", err, "key=" + combinedKey);
 				cb(err, { status: "failed" });
 			});
 	};
@@ -153,13 +153,13 @@ const IndexDBAdapter = function () {
 		dexie
 			.spawn(function* () {
 				yield db.fsbl.where("key").startsWith(keyPreface).delete();
-				Logger.system.debug("Storage.clearCache for keyPreface=" + keyPreface);
-				console.debug("Storage.clearCache for keyPreface=" + keyPreface);
+				Logger.system.debug("IndexDBAdapter.clearCache for keyPreface=" + keyPreface);
+				console.debug("IndexDBAdapter.clearCache for keyPreface=" + keyPreface);
 				cb();
 			})
 			.catch((err) => {
-				Logger.system.debug("Storage.clearCache failed Error", err, "keyPreface=" + keyPreface);
-				console.debug("Storage.clearCache failed Error", err, "keyPreface=" + keyPreface);
+				Logger.system.debug("IndexDBAdapter.clearCache failed Error", err, "keyPreface=" + keyPreface);
+				console.debug("IndexDBAdapter.clearCache failed Error", err, "keyPreface=" + keyPreface);
 				cb(err, { status: "failed" });
 			});
 	};
@@ -172,13 +172,13 @@ const IndexDBAdapter = function () {
 		dexie
 			.spawn(function* () {
 				yield db.fsbl.clear();
-				Logger.system.debug("Storage.empty");
-				console.debug("Storage.empty");
+				Logger.system.debug("IndexDBAdapter.empty");
+				console.debug("IndexDBAdapter.empty");
 				cb(null, { status: "success" });
 			})
 			.catch((err) => {
-				Logger.system.debug("Storage.empty failed Error", err);
-				console.debug("Storage.empty failed Error", err);
+				Logger.system.debug("IndexDBAdapter.empty failed Error", err);
+				console.debug("IndexDBAdapter.empty failed Error", err);
 				cb(err, { status: "failed" });
 			});
 	};
