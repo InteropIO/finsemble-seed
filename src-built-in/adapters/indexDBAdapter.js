@@ -1,126 +1,125 @@
 /**
  * IndexDB Storage Adapter.
+ * 
+ * We have a baseStorage model that provides some methods, such as `getCombinedKey`, which will return a nice key to 
+ * save our value under. Example: `Finsemble:defaultUser:finsemble:activeWorkspace`. That key would hold the value of 
+ * our activeWorkspace.
  */
-
-/**
- * We have a baseStorage model that provides some methods, such as `getCombinedKey`, which will return a nice key to save our value under. Example: `Finsemble:defaultUser:finsemble:activeWorkspace`. That key would hold the value of our activeWorkspace.
- */
-// var BaseStorage = require("@chartiq/finsemble").models.baseStorage;
-// var Logger = require("@chartiq/finsemble").Clients.Logger;
-// var Dexie = require('dexie');
-
 import finsemble from "@chartiq/finsemble";
-import Dexie from 'dexie';
-var BaseStorage = finsemble.models.baseStorage;
-var Logger = finsemble.Clients.Logger;
+import dexie from "dexie";
 
+const BaseStorage = finsemble.models.baseStorage;
+const Logger = finsemble.Clients.Logger;
 
-// var BaseStorage = require("@chartiq/finsemble").models.baseStorage;
-// var Logger = require("@chartiq/finsemble").Clients.Logger;
-// var Dexie = require('dexie');
-
-
-//Because calls to this storage adapter will likely come from many different windows, we will log successes and failures in the central logger.
+// Because calls to this storage adapter will likely come from many different windows, we will log successes and 
+// failures in the central logger.
 Logger.start();
 
-Logger.system.debug("IndexDBAdapter", Dexie);
-console.debug("IndexDBAdapter", Dexie);
-
-var IndexDBAdapter = function (uuid) {
+const IndexDBAdapter = function () {
 	BaseStorage.call(this, arguments);
 
-	var db = new Dexie('finsemble');
+	const db = new dexie("finsemble");
 	db.version(1).stores({
-		fsbl: `key` //only index the storage keys
+		fsbl: "key" //only index the storage keys
 	});
 
 	Logger.system.debug("IndexDBAdapter init");
 	console.debug("IndexDBAdapter init");
+
 	/**
 	 * Save method.
+	 * 
 	 * @param {object} params
 	 * @param {string} params.topic A topic under which the data should be stored.
 	 * @param {string} params.key The key whose value is being set.
 	 * @param {any} params.value The value being saved.
 	 * @param {function} cb callback to be invoked upon save completion
 	 */
-	this.save = function (params, cb) {
-		Logger.system.debug("saving", params);
+	this.save = (params, cb) => {
+		Logger.system.debug("IndexDBAdapter.save, params: ", params);
+		console.debug("IndexDBAdapter.save, params: ", params);
 		const combinedKey = this.getCombinedKey(this, params);
-		
-		Dexie.spawn(function*() {
-			yield db.fsbl.put({key: combinedKey, value: params.value});
-		}).then(function() {
-		   // spawn() returns a promise that completes when all is done.
-		   return cb(null, { status: "success" });
-		}).catch(function(e) {
-		   console.error("Failed: " + e);
-		   //TODO: can't help think this should be (but localstorage adapter doesn't return errors...)
-		   //return cb({ status: "failed" }, null);
-		});
+
+		dexie
+			.spawn(function* () {
+				yield db.fsbl.put({ key: combinedKey, value: params.value });
+			})
+			.then(() => {
+				// spawn() returns a promise that completes when all is done.
+				return cb(null, { status: "success" });
+			})
+			.catch((err) => {
+				console.error("Failed: " + JSON.stringify(err, null, "\t"));
+				return cb(err, { status: "failed" });
+			});
 	};
 
 	/**
 	 * Get method.
+	 * 
 	 * @param {object} params
 	 * @param {string} params.topic A topic under which the data should be stored.
 	 * @param {string} params.key The key whose value is being set.
 	 * @param {function} cb callback to be invoked upon completion
 	 */
-	this.get = function (params, cb) {
-
+	this.get = (params, cb) => {
 		Logger.system.debug("IndexDBAdapter.get, params: ", params);
 		console.debug("IndexDBAdapter.get, params: ", params);
 
 		const combinedKey = this.getCombinedKey(this, params);
-	
-		Dexie.spawn(function*() {
-			let val = yield db.fsbl
-				.where('key').equals(combinedKey).first();
-			Logger.system.debug("Storage.getItem for key=" + combinedKey + " raw val=" + val);
-			console.debug("Storage.getItem for key=" + combinedKey + " val=", val);
-			let data = {};
-			if (val && val.value) {
-			 	data = val.value;
-			 }
-			// Logger.system.debug("Storage.getItem for key=" + combinedKey + " with data=" + data);
-			cb(null, data);
-		}).catch(function(err) {
-			Logger.system.error("Storage.getItem Error", err, "key=" + combinedKey);
-			return cb(null, {});
-			//TODO: can't help think this should be (but localstorage adapter doesn't return errors...)
-			//return cb({ status: "failed" }, null);
-		});
+
+		dexie
+			.spawn(function* () {
+				const val = yield db.fsbl
+					.where("key")
+					.equals(combinedKey)
+					.first();
+				
+				const data = val && val.value ? val.value : {};
+				Logger.system.debug("IndexDBAdapter.get for key=" + combinedKey + " data=", data);
+				console.debug("IndexDBAdapter.get for key=" + combinedKey + " data=", data);
+				cb(null, data);
+			})
+			.catch((err) => {
+				Logger.system.error("IndexDBAdapter.get Error", err, "key=" + combinedKey);
+				return cb(err, { status: "failed" });
+			});
 	};
 
-	// return prefix used to filter keys
-	this.getKeyPreface = function (self, params) {
-		let preface = self.baseName + ":" + self.userName + ":" + params.topic + ":";
-		if ("keyPrefix" in params) {
-			preface = preface + params.keyPrefix;
-		}
+	/**
+	 * return prefix used to filter keys
+	 * @param {*} self 
+	 * @param {*} params 
+	 */
+	this.getKeyPreface = (self, params) => {
+		const keyPrefix = "keyPrefix" in params ? params.keyPrefix : "";
+		const preface = `${self.baseName}:${self.userName}:${params.topic}:${keyPrefix}`;
+
 		return preface;
 	};
 
 	/**
-	 * Returns all keys stored in localstorage.
+	 * Returns all keys stored in IndexDB.
+	 * 
 	 * @param {*} params
 	 * @param {*} cb
 	 */
-	this.keys = function (params, cb) {
+	this.keys = (params, cb) => {
 		let keys = [];
 		const keyPreface = this.getKeyPreface(this, params);
-		
-		Dexie.spawn(function*() {
-			keys = yield db.fsbl.where('key').startsWith(keyPreface).primaryKeys();
-			Logger.system.debug("Storage.keys for keyPreface=" + keyPreface + " with keys=" + keys);
-			cb(null, keys);
-		}).catch(function(err) {
-			Logger.system.error("Failed to retrieve Storage.keys Error", err, "key=" + combinedKey);
-			return cb(null, []);
-			//TODO: can't help think this should be (but localstorage adapter doesn't return errors...)
-			//return cb({ status: "failed" }, null);
-		});
+
+		dexie
+			.spawn(function* () {
+				keys = yield db.fsbl.where("key").startsWith(keyPreface).primaryKeys();
+				Logger.system.debug("IndexDBAdapter.keys for keyPreface=" + keyPreface + " with keys=", keys);
+				console.debug("IndexDBAdapter.keys for keyPreface=" + keyPreface + " with keys=", keys);
+				cb(null, keys);
+			})
+			.catch((err) => {
+				Logger.system.error("Failed to retrieve IndexDBAdapter.keys Error", err, "key=" + combinedKey);
+				console.error("Failed to retrieve IndexDBAdapter.keys Error", err, "key=" + combinedKey);
+				return cb(err, { status: "failed" });
+			});
 	};
 
 	/**
@@ -130,59 +129,61 @@ var IndexDBAdapter = function (uuid) {
 	 * @param {string} params.key The key whose value is being deleted.
 	 * @param {function} cb callback to be invoked upon completion
 	 */
-	this.delete = function (params, cb) {
+	this.delete = (params, cb) => {
 		const combinedKey = this.getCombinedKey(this, params);
-		Logger.system.debug("Storage.delete for key=" + combinedKey);
-		Dexie.spawn(function*() {
-			yield db.fsbl.delete(combinedKey);
-			cb(null, { status: "success" });
-		}).catch(function(err) {
-			Logger.system.error("Storage.delete failed Error", err, "key=" + combinedKey);
-			cb(null, { status: "success" });
-			//TODO: can't help think this should be (but localstorage adapter doesn't return errors...)
-			//return cb({ status: "failed" }, null);
-		});
+		Logger.system.debug("IndexDBAdapter.delete for key=" + combinedKey);
+		console.debug("IndexDBAdapter.delete for key=" + combinedKey);
+		dexie
+			.spawn(function* () {
+				yield db.fsbl.delete(combinedKey);
+				cb(null, { status: "success" });
+			})
+			.catch((err) => {
+				Logger.system.error("IndexDBAdapter.delete Error", err, "key=" + combinedKey);
+				cb(err, { status: "failed" });
+			});
 	};
 
 	/**
-	 * This method should be used very, very judiciously. It's essentially a method designed to wipe the database for a particular user.
+	 * This method should be used very, very judiciously. It's essentially a method designed to wipe the database for a 
+	 * particular user.
 	 */
-	this.clearCache = function (params, cb) {
-		const preface = self.baseName + ":" + self.userName;
+	this.clearCache = (params, cb) => {
+		const keyPreface = self.baseName + ":" + self.userName;
 
-		Dexie.spawn(function*() {
-			yield db.fsbl.where('key').startsWith(keyPreface).delete();
-			Logger.system.debug("Storage.clearCache for keyPreface=" + keyPreface);
-			cb();
-		}).catch(function(err) {
-			Logger.system.debug("Storage.clearCache failed Error", err, "keyPreface=" + keyPreface);
-			cb();
-			//TODO: can't help think this should be (but localstorage adapter doesn't return errors...)
-			//return cb({ status: "failed" }, null);
-		});
+		dexie
+			.spawn(function* () {
+				yield db.fsbl.where("key").startsWith(keyPreface).delete();
+				Logger.system.debug("IndexDBAdapter.clearCache for keyPreface=" + keyPreface);
+				console.debug("IndexDBAdapter.clearCache for keyPreface=" + keyPreface);
+				cb();
+			})
+			.catch((err) => {
+				Logger.system.debug("IndexDBAdapter.clearCache failed Error", err, "keyPreface=" + keyPreface);
+				console.debug("IndexDBAdapter.clearCache failed Error", err, "keyPreface=" + keyPreface);
+				cb(err, { status: "failed" });
+			});
 	};
 
 	/**
 	 * Wipes the storage container.
 	 * @param {function} cb
 	 */
-	this.empty = function (cb) {
-		Dexie.spawn(function*() {
-			yield db.fsbl.clear();
-			Logger.system.debug("Storage.empty");
-			cb(null, { status: "success" });
-		}).catch(function(err) {
-			Logger.system.debug("Storage.empty failed Error", err);
-			cb(null, { status: "success" });
-			//TODO: can't help think this should be (but localstorage adapter doesn't return errors...)
-			//return cb({ status: "failed" }, null);
-		});
+	this.empty = (cb) => {
+		dexie
+			.spawn(function* () {
+				yield db.fsbl.clear();
+				Logger.system.debug("IndexDBAdapter.empty");
+				console.debug("IndexDBAdapter.empty");
+				cb(null, { status: "success" });
+			})
+			.catch((err) => {
+				Logger.system.debug("IndexDBAdapter.empty failed Error", err);
+				console.debug("IndexDBAdapter.empty failed Error", err);
+				cb(err, { status: "failed" });
+			});
 	};
-
 };
-
 
 IndexDBAdapter.prototype = new BaseStorage();
 new IndexDBAdapter("IndexDBAdapter");
-
-//module.exports = IndexDBAdapter;//Allows us to get access to the unintialized object
