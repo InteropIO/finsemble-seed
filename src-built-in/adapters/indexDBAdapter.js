@@ -74,9 +74,10 @@ const IndexDBAdapter = function () {
 					.where("key")
 					.equals(combinedKey)
 					.first();
-				Logger.system.debug("IndexDBAdapter.get for key=" + combinedKey + " raw val=" + val);
-				console.debug("IndexDBAdapter.get for key=" + combinedKey + " val=", val);
+				
 				const data = val && val.value ? val.value : {};
+				Logger.system.debug("IndexDBAdapter.get for key=" + combinedKey + " data=", data);
+				console.debug("IndexDBAdapter.get for key=" + combinedKey + " data=", data);
 				cb(null, data);
 			})
 			.catch((err) => {

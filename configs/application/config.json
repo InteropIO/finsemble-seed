@@ -1,5 +1,6 @@
 {
 	"comment": "Top-level application config for development, adding on top of the core config",
+	"defaultStorage": "IndexDBAdapter",
 	"storage": {
 		"topicToDataStoreAdapters": {
 			"finsemble": "IndexDBAdapter",
