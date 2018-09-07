@@ -2,7 +2,7 @@
     "devtools_port": 9090,
     "startup_app": {
         "name": "ChartIQ Local",
-        "url": "http://localhost:3375/Finsemble/components/system/serviceManager/serviceManager.html",
+        "url": "http://localhost:3375/finsemble/components/system/serviceManager/serviceManager.html",
         "uuid": "Finsemble",
         "applicationIcon": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png",
         "defaultTop": 0,
@@ -20,6 +20,7 @@
         },
         "alwaysOnTop": false
     },
+    "splashScreenImage": "http://localhost:3375/assets/img/FinsembleSplash.png",
     "runtime": {
         "arguments": "--noerrdialogs  --v=4 --no-sandbox  --enable-crash-reporting --framestrategy=frames --winhttp-proxy-resolver",
         "version": "8.56.28.36",

@@ -135,7 +135,7 @@ class _ToolbarStore {
 			FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.alt, keys.down], () => {
 				FSBL.Clients.WorkspaceClient.minimizeAll()
 			});
-			FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.shift, keys.f], () => {
+			FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.alt, keys.f], () => {
 			//console.log("hot key")
 				self.Store.setValue({ field: "searchActive", value: true });
 			});
