@@ -4,7 +4,7 @@
 		"entry":"./src-built-in/adapters/localStorageAdapter.js"
 	},
 	"indexDBAdapter": {
-		"output": "adapters/indexDBAdapter",
-		"entry":"./src-built-in/adapters/indexDBAdapter.js"
+		"output": "adapters/indexedDBAdapter",
+		"entry":"./src-built-in/adapters/indexedDBAdapter.js"
 	}
 }

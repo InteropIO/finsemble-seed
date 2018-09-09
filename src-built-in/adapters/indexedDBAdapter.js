@@ -16,12 +16,12 @@ const Logger = finsemble.Clients.Logger;
 // failures in the central logger.
 Logger.start();
 
-const IndexDBAdapter = function () {
+const IndexedDBAdapter = function () {
 	BaseStorage.call(this, arguments);
 	let db;
 
-	Logger.system.debug("IndexDBAdapter init");
-	console.debug("IndexDBAdapter init");
+	Logger.system.debug("IndexedDBAdapter init");
+	console.debug("IndexedDBAdapter init");
 
 	//open the IndexedDB connection
 	let request = window.indexedDB.open("finsemble", SCHEMA_VERSION);
@@ -39,8 +39,8 @@ const IndexDBAdapter = function () {
 		// Use transaction oncomplete to make sure the objectStore creation is 
 		// finished before adding data into it.
 		objectStore.transaction.oncomplete = function(event) {
-			Logger.system.debug("IndexDBAdapter object store created");
-			console.debug("IndexDBAdapter object store created");
+			Logger.system.debug("IndexedDBAdapter object store created");
+			console.debug("IndexedDBAdapter object store created");
 			
 			// // Store values in the newly created objectStore.
 			// var customerObjectStore = db.transaction("customers", "readwrite").objectStore("customers");
@@ -51,13 +51,13 @@ const IndexDBAdapter = function () {
 
 	};
 	request.onerror = function(event) {
-		Logger.system.error("IndexDBAdapter DB connection initialisation failed, Error: ", event);
-		console.error("IndexDBAdapter DB connection initialisation failed, Error: ", event);
+		Logger.system.error("IndexedDBAdapter DB connection initialisation failed, Error: ", event);
+		console.error("IndexedDBAdapter DB connection initialisation failed, Error: ", event);
 	};
 	request.onsuccess = function(event) {
 		db = event.target.result;
-		Logger.system.debug("IndexDBAdapter initialised successfully");
-		console.debug("IndexDBAdapter initialised successfully");
+		Logger.system.debug("IndexedDBAdapter initialised successfully");
+		console.debug("IndexedDBAdapter initialised successfully");
 	};
 
 	//PolyFill IDBKeyRange for a key prefix search
@@ -91,8 +91,8 @@ const IndexDBAdapter = function () {
 	 * @param {function} cb callback to be invoked upon save completion
 	 */
 	this.save = (params, cb) => {
-		Logger.system.debug("IndexDBAdapter.save, params: ", params);
-		console.debug("IndexDBAdapter.save, params: ", params);
+		Logger.system.debug("IndexedDBAdapter.save, params: ", params);
+		console.debug("IndexedDBAdapter.save, params: ", params);
 		const combinedKey = this.getCombinedKey(this, params);
 		
 		var objectStore = db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
@@ -101,7 +101,7 @@ const IndexDBAdapter = function () {
 			return cb(null, { status: "success" });
 		};
 		request.onerror = function(event) {
-			console.error("IndexDBAdapter.save Request Failed: " + JSON.stringify(err, null, "\t"));
+			console.error("IndexedDBAdapter.save Request Failed: " + JSON.stringify(err, null, "\t"));
 			return cb(err, { status: "failed" });
 		};
 		
@@ -116,16 +116,16 @@ const IndexDBAdapter = function () {
 	 * @param {function} cb callback to be invoked upon completion
 	 */
 	this.get = (params, cb) => {
-		Logger.system.debug("IndexDBAdapter.get, params: ", params);
-		console.debug("IndexDBAdapter.get, params: ", params);
+		Logger.system.debug("IndexedDBAdapter.get, params: ", params);
+		console.debug("IndexedDBAdapter.get, params: ", params);
 
 		const combinedKey = this.getCombinedKey(this, params);
 
 		var objectStore = db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
 		var request = objectStore.get(combinedKey);
 		request.onerror = function(event) {
-			Logger.system.error("IndexDBAdapter.get key=" + combinedKey + ", Error", event);
-			console.error("IndexDBAdapter.get key=" + combinedKey + ", Error", event);
+			Logger.system.error("IndexedDBAdapter.get key=" + combinedKey + ", Error", event);
+			console.error("IndexedDBAdapter.get key=" + combinedKey + ", Error", event);
 			return cb(err, { status: "failed" });
 		};
 		request.onsuccess = function(event) {
@@ -133,8 +133,8 @@ const IndexDBAdapter = function () {
 			if ( event.target.result && event.target.result.value) {
 				data = event.target.result.value;
 			}
-			Logger.system.debug("IndexDBAdapter.get for key=" + combinedKey + " data=", data);
-			console.debug("IndexDBAdapter.get for key=" + combinedKey + " data=", data);
+			Logger.system.debug("IndexedDBAdapter.get for key=" + combinedKey + " data=", data);
+			console.debug("IndexedDBAdapter.get for key=" + combinedKey + " data=", data);
 			cb(null, data);
 		};
 	};
@@ -174,8 +174,8 @@ const IndexDBAdapter = function () {
 		var objectStore = db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
 		var request = objectStore.getAllKeys(keyRange);
 		request.onerror = function(event) {
-			Logger.system.error("Failed to retrieve IndexDBAdapter.keys keyPreface=" + keyPreface + ", Error", event);
-			console.error("Failed to retrieve IndexDBAdapter.keys keyPreface=" + keyPreface + ", Error", event);
+			Logger.system.error("Failed to retrieve IndexedDBAdapter.keys keyPreface=" + keyPreface + ", Error", event);
+			console.error("Failed to retrieve IndexedDBAdapter.keys keyPreface=" + keyPreface + ", Error", event);
 			return cb(err, { status: "failed" });
 		};
 		request.onsuccess = function(event) {
@@ -183,8 +183,8 @@ const IndexDBAdapter = function () {
 			if ( event.target.result && event.target.result.value) {
 				data = event.target.result;
 			}
-			Logger.system.debug("IndexDBAdapter.keys for keyPreface=" + keyPreface + " keys=", data);
-			console.debug("IndexDBAdapter.get keys keyPreface=" + keyPreface + " keys=", data);
+			Logger.system.debug("IndexedDBAdapter.keys for keyPreface=" + keyPreface + " keys=", data);
+			console.debug("IndexedDBAdapter.get keys keyPreface=" + keyPreface + " keys=", data);
 			cb(null, data);
 		};
 	};
@@ -198,14 +198,14 @@ const IndexDBAdapter = function () {
 	 */
 	this.delete = (params, cb) => {
 		const combinedKey = this.getCombinedKey(this, params);
-		Logger.system.debug("IndexDBAdapter.delete for key=" + combinedKey);
-		console.debug("IndexDBAdapter.delete for key=" + combinedKey);
+		Logger.system.debug("IndexedDBAdapter.delete for key=" + combinedKey);
+		console.debug("IndexedDBAdapter.delete for key=" + combinedKey);
 
 		var objectStore = db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
 		var request = objectStore.delete(combinedKey);
 		request.onerror = function(event) {
-			Logger.system.error("IndexDBAdapter.delete key=" + combinedKey + ", Error", event);
-			console.error("IndexDBAdapter.delete key=" + combinedKey + ", Error", event);
+			Logger.system.error("IndexedDBAdapter.delete key=" + combinedKey + ", Error", event);
+			console.error("IndexedDBAdapter.delete key=" + combinedKey + ", Error", event);
 			return cb(event, { status: "failed" });
 		};
 		request.onsuccess = function(event) {
@@ -219,15 +219,15 @@ const IndexDBAdapter = function () {
 	 */
 	this.clearCache = (params, cb) => {
 		const userPreface = this.getUserPreface(this);
-		Logger.system.debug("IndexDBAdapter.clearCache for userPreface=" + userPreface);
-		console.debug("IndexDBAdapter.clearCache for userPreface=" + userPreface);
+		Logger.system.debug("IndexedDBAdapter.clearCache for userPreface=" + userPreface);
+		console.debug("IndexedDBAdapter.clearCache for userPreface=" + userPreface);
 				
 		let keyRange = IDBKeyRange.forPrefix(userPreface);
 		var objectStore = db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
 		var request = objectStore.delete(keyRange);
 		request.onerror = function(event) {
-			Logger.system.debug("IndexDBAdapter.clearCache failed Error", event, "userPreface=" + userPreface);
-			console.debug("IndexDBAdapter.clearCache failed Error", event, "userPreface=" + userPreface);
+			Logger.system.debug("IndexedDBAdapter.clearCache failed Error", event, "userPreface=" + userPreface);
+			console.debug("IndexedDBAdapter.clearCache failed Error", event, "userPreface=" + userPreface);
 			return cb(event, { status: "failed" });
 		};
 		request.onsuccess = function(event) {
@@ -240,13 +240,13 @@ const IndexDBAdapter = function () {
 	 * @param {function} cb
 	 */
 	this.empty = (cb) => {
-		Logger.system.debug("IndexDBAdapter.empty");
-		console.debug("IndexDBAdapter.empty");
+		Logger.system.debug("IndexedDBAdapter.empty");
+		console.debug("IndexedDBAdapter.empty");
 		var objectStore = db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
 		var request = objectStore.clear();
 		request.onerror = function(event) {
-			Logger.system.debug("IndexDBAdapter.empty failed Error", event);
-			console.debug("IndexDBAdapter.empty failed Error", event);
+			Logger.system.debug("IndexedDBAdapter.empty failed Error", event);
+			console.debug("IndexedDBAdapter.empty failed Error", event);
 			return cb(event, { status: "failed" });
 		};
 		request.onsuccess = function(event) {
@@ -255,5 +255,5 @@ const IndexDBAdapter = function () {
 	};
 };
 
-IndexDBAdapter.prototype = new BaseStorage();
-new IndexDBAdapter("IndexDBAdapter");
+IndexedDBAdapter.prototype = new BaseStorage();
+new IndexedDBAdapter("IndexedDBAdapter");

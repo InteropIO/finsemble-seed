@@ -1,15 +1,15 @@
 {
 	"comment": "Top-level application config for development, adding on top of the core config",
-	"defaultStorage": "IndexDBAdapter",
+	"defaultStorage": "IndexedDBAdapter",
 	"storage": {
 		"topicToDataStoreAdapters": {
-			"finsemble": "IndexDBAdapter",
-			"finsemble.workspace": "IndexDBAdapter",
-			"finsemble.workspace.cache": "IndexDBAdapter"
+			"finsemble": "IndexedDBAdapter",
+			"finsemble.workspace": "IndexedDBAdapter",
+			"finsemble.workspace.cache": "IndexedDBAdapter"
 		},
 		"dataStoreAdapters": {
 			"LocalStorageAdapter": "$applicationRoot/adapters/LocalStorageAdapter.js",
-			"IndexDBAdapter": "$applicationRoot/adapters/indexDBAdapter.js"
+			"IndexedDBAdapter": "$applicationRoot/adapters/indexedDBAdapter.js"
 		}
 	},
 	"servicesConfig": {
