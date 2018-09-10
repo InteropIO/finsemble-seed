@@ -7,8 +7,6 @@
  */
 import finsemble from "@chartiq/finsemble";
 
-const SCHEMA_VERSION = 1;
-
 const BaseStorage = finsemble.models.baseStorage;
 const Logger = finsemble.Clients.Logger;
 
@@ -24,7 +22,7 @@ const IndexedDBAdapter = function () {
 	console.debug("IndexedDBAdapter init");
 
 	//open the IndexedDB connection
-	let request = window.indexedDB.open("finsemble", SCHEMA_VERSION);
+	let request = window.indexedDB.open("finsemble");
 	// Create the object store if necessary 
 	request.onupgradeneeded = function(event) { 
 		// Save the IDBDatabase interface 
