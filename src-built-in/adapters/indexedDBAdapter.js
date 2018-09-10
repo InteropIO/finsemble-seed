@@ -7,6 +7,34 @@ const Logger = finsemble.Clients.Logger;
 // failures in the central logger.
 Logger.start();
 
+// #region PolyFill IDBKeyRange for a key prefix search
+IDBKeyRange.forPrefix = (prefix) => {
+	const successor = (key) => {
+		let len = key.length;
+		while (len > 0) {
+			const head = key.substring(0, len - 1);
+			const tail = key.charCodeAt(len - 1);
+
+			if (tail !== 0xFFFF) {
+				return head + String.fromCharCode(tail + 1);
+			}
+
+			key = head;
+			--len;
+		}
+
+		return UPPER_BOUND.STRING;
+	}
+
+	const upperKey = successor(prefix);
+	if (upperKey) {
+		return IDBKeyRange.lowerBound(prefix);
+	}
+
+	return IDBKeyRange.bound(prefix, upperKey, false, true);
+};
+// #endregion
+
 /**
  * IndexDB Storage Adapter.
  * 
@@ -52,33 +80,6 @@ const IndexedDBAdapter = function () {
 		Logger.system.error("IndexedDBAdapter DB connection initialization failed, Error: ", err);
 		console.error("IndexedDBAdapter DB connection initialization failed, Error: ", err);
 	};
-	
-	// PolyFill IDBKeyRange for a key prefix search
-	IDBKeyRange.forPrefix = (prefix) => {
-		const successor = (key) => {
-			let len = key.length;
-			while (len > 0) {
-				const head = key.substring(0, len - 1);
-				const tail = key.charCodeAt(len - 1);
-
-				if (tail !== 0xFFFF) {
-					return head + String.fromCharCode(tail + 1);
-				}
-
-				key = head;
-				--len;
-			}
-
-			return UPPER_BOUND.STRING;
-		}
-
-		const upperKey = successor(prefix);
-		if (upperKey) {
-			return IDBKeyRange.lowerBound(prefix);
-		}
-
-		return IDBKeyRange.bound(prefix, upperKey, false, true);
-	};
 
 	/**
 	 * Save method.
@@ -100,14 +101,14 @@ const IndexedDBAdapter = function () {
 		request.onsuccess = () => {
 			Logger.system.debug("IndexedDBAdapter.save Request Succeeded");
 			console.debug("IndexedDBAdapter.save Request Succeeded");
-			
+
 			cb(null, { status: "success" });
 		};
 
 		request.onerror = (err) => {
 			Logger.system.error("IndexedDBAdapter.save Request Failed: ", err);
 			console.error("IndexedDBAdapter.save Request Failed: ", err);
-			
+
 			cb(err, { status: "failed" });
 		};
 	};
@@ -133,14 +134,14 @@ const IndexedDBAdapter = function () {
 
 			Logger.system.debug("IndexedDBAdapter.get for key=" + combinedKey + " data=", data);
 			console.debug("IndexedDBAdapter.get for key=" + combinedKey + " data=", data);
-			
+
 			cb(null, data);
 		};
 
 		request.onerror = (err) => {
 			Logger.system.error("IndexedDBAdapter.get key=" + combinedKey + ", Error", err);
 			console.error("IndexedDBAdapter.get key=" + combinedKey + ", Error", err);
-			
+
 			cb(err, { status: "failed" });
 		};
 	};
@@ -184,14 +185,14 @@ const IndexedDBAdapter = function () {
 
 			Logger.system.debug("IndexedDBAdapter.keys for keyPreface=" + keyPreface + " keys=", data);
 			console.debug("IndexedDBAdapter.get keys keyPreface=" + keyPreface + " keys=", data);
-			
+
 			cb(null, data);
 		};
 
 		request.onerror = (err) => {
 			Logger.system.error("Failed to retrieve IndexedDBAdapter.keys keyPreface=" + keyPreface + ", Error", err);
 			console.error("Failed to retrieve IndexedDBAdapter.keys keyPreface=" + keyPreface + ", Error", err);
-			
+
 			return cb(err, { status: "failed" });
 		};
 	};
@@ -216,7 +217,7 @@ const IndexedDBAdapter = function () {
 		request.onsuccess = () => {
 			Logger.system.debug("IndexedDBAdapter.delete key=" + combinedKey + ", Success");
 			console.debug("IndexedDBAdapter.delete key=" + combinedKey + ", Success");
-			
+
 			cb(null, { status: "success" });
 		};
 
@@ -245,7 +246,7 @@ const IndexedDBAdapter = function () {
 		request.onsuccess = () => {
 			Logger.system.debug("IndexedDBAdapter.clearCache Success: userPreface=" + userPreface);
 			console.debug("IndexedDBAdapter.clearCache Success: userPreface=" + userPreface);
-			
+
 			cb();
 		};
 
