@@ -17,7 +17,8 @@ var FileMenuStore = Object.assign({}, EventEmitter.prototype, {
 	 */
 	initialize: function () {
 		var self = this;
-		FSBL.addEventListener("onReady", function () {
+		if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLready", FSBLReady) }
+		function FSBLReady() {
 			self.finWindow = fin.desktop.Window.getCurrent();
 			self.emit("initialized");
 
@@ -32,7 +33,7 @@ var FileMenuStore = Object.assign({}, EventEmitter.prototype, {
 				//Default to false.
 				PROMPT_ON_DIRTY = typeof prompt === null ? PROMPT_ON_DIRTY : prompt;
 			});
-		});
+		}
 	},
 	finsembleConfig: null,
 	getFinWindow: function () {

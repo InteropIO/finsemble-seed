@@ -53,7 +53,8 @@ class AppCatalog extends React.Component {
 }
 
 fin.desktop.main(function () {
-	FSBL.addEventListener("onReady", function () {
+	if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLready", FSBLReady) }
+	function FSBLReady() {
 	//console.log("App Catalog app onReady");
 		FSBL.Clients.WindowClient.finsembleWindow.updateOptions({ alwaysOnTop: true });
 		FSBL.Clients.DialogManager.showModal();
@@ -62,5 +63,5 @@ fin.desktop.main(function () {
 		ReactDOM.render(
 			<AppCatalog />
 			, document.getElementById("bodyHere"));
-	});
+	}
 });

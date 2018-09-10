@@ -176,10 +176,12 @@ export default class Toolbar extends React.Component {
 	}
 
 }
-FSBL.addEventListener("onReady", function () {
+if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLready", FSBLReady) }
+function FSBLReady() {
+	debugger;
 	ToolbarStore.initialize(function () {
 		ReactDOM.render(
 			<Toolbar />
 			, document.getElementById("toolbar_parent"));
 	});
-});
+}
