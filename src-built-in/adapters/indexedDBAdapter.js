@@ -7,6 +7,12 @@ const Logger = finsemble.Clients.Logger;
 // failures in the central logger.
 Logger.start();
 
+/**
+ * The schema version for the IndexedDB. Changing this signals onupgradeneeded so the existing database can be upgraded
+ * to the new schema.
+ */
+const SCHEMA_VERSION = 1;
+
 // #region PolyFill IDBKeyRange for a key prefix search
 IDBKeyRange.forPrefix = (prefix) => {
 	const successor = (key) => {
@@ -45,6 +51,10 @@ IDBKeyRange.forPrefix = (prefix) => {
 const IndexedDBAdapter = function () {
 	// #region Initializes a new instance of the IndexedDBAdapter.
 	BaseStorage.call(this, arguments);
+
+	/**
+	 * The IndexedDB instance.
+	 */
 	this.db;
 
 	Logger.system.debug("IndexedDBAdapter init");
@@ -52,7 +62,7 @@ const IndexedDBAdapter = function () {
 
 	// #region Initialize IndexedDB connection.
 	// Open the IndexedDB connection
-	const request = window.indexedDB.open("finsemble");
+	const request = window.indexedDB.open("finsemble", SCHEMA_VERSION);
 
 	// Create the object store if necessary 
 	request.onupgradeneeded = (event) => {
