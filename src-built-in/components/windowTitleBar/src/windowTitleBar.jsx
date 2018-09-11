@@ -24,7 +24,6 @@ import Close from "./components/right/CloseButton.jsx";
 import BringSuiteToFront from "./components/right/BringSuiteToFront.jsx";
 import AlwaysOnTop from "./components/right/AlwaysOnTop.jsx";
 import TabRegion from './components/center/TabRegion'
-import "../../../../assets/css/finsemble.css";
 
 /**
  * This is the main window manager component. It's the custom window frame that we add to each window that has useFSBLHeader set to true in its windowDescriptor.
@@ -414,10 +413,22 @@ class WindowTitleBar extends React.Component {
 // it is pub/sub, if the event had fired in the past then it will still be fired.
 // window.addEventListener("FSBLReady", function () {
 
-FSBL.addEventListener("onReady", function () {
+if (FSBL) { 
+	FSBL.addEventListener("onReady", init)
+} else {
+	window.addEventListener("FSBLReady", init)
+}
+
+function init () {
+	// The following line fixes the CSS issues, weird..
+	const css = require("../../../../assets/css/finsemble.css");
+	// Create the header element
+	const template = document.createElement("div");
+	template.innerHTML = '<div id="FSBLHeader" style="height:20px"></div>';
+	document.body.insertBefore(template.firstChild, document.body.firstChild);
 	storeExports.initialize(function () {
 		HeaderActions = storeExports.Actions;
 		windowTitleBarStore = storeExports.getStore();
 		ReactDOM.render(<WindowTitleBar />, document.getElementById("FSBLHeader"));
 	});
-});
+}

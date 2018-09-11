@@ -26,6 +26,8 @@ export default class CloseButton extends React.Component{
 	 */
 	bindCorrectContext() {
 		this.hoverAction = this.hoverAction.bind(this);
+		this.onClick = this.onClick.bind(this);
+
 	}
 	/**
 	 * Listener invoked when the user clicks the close button.
