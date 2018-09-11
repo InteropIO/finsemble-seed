@@ -81,10 +81,6 @@ export default class Toolbar extends React.Component {
 		ToolbarStore.Store.removeListener({ field: "sections" }, this.onSectionsUpdate);
 	}
 
-	moveToolbar(e) {
-
-	}
-
 	onPinDrag(changeEvent) {
 
 		let pins = this.refs.pinSection.state.pins;

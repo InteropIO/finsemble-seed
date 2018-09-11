@@ -51,6 +51,32 @@ class _ToolbarStore {
 		return storeOwner;
 	}
 	/**
+	 * Retrieves options about self from storage, where applicable
+	 * @param {Function} cb The callback
+	 */
+	retrieveSelfFromStorage(cb) {
+
+		let hasRightProps = () => {
+			return (finsembleWindow.hasOwnProperty('windowOptions') && finsembleWindow.windowOptions.hasOwnProperty('customData') && finsembleWindow.windowOptions.customData.hasOwnProperty('foreign') && finsembleWindow.windowOptions.customData.foreign.hasOwnProperty('services') && finsembleWindow.windowOptions.customData.foreign.services.hasOwnProperty('workspaceService') && finsembleWindow.windowOptions.customData.foreign.services.workspaceService.hasOwnProperty('global'));
+		}
+
+		let isGloballyDocked = hasRightProps() ? finsembleWindow.windowOptions.customData.foreign.services.workspaceService.global : false;
+
+		finsembleWindow.getFSBLState({
+			stateVar: "componentState"
+		}, (err, result) => {
+			let bounds = result.hasOwnProperty('window-bounds') ? result["window-bounds"] : null;
+			if (bounds && isGloballyDocked) {
+				this.Store.setValue({
+					field: 'window-bounds',
+					value: bounds
+				});
+				finsembleWindow.setBounds(bounds);
+			}
+			cb(null, result);
+		});
+	}
+	/**
 	 * Set up our hotkeys
 	 */
 	setupPinnedHotKeys(cb) {//return the number of the F key that is pressed
@@ -120,6 +146,10 @@ class _ToolbarStore {
 		FSBL.Clients.WindowClient.finsembleWindow.listenForBoundsSet();
 		let onBoundsSet = (bounds) => {
 			self.Store.setValue({ field: "window-bounds", value: bounds });
+			FSBL.Clients.WindowClient.setComponentState({
+				field: 'window-bounds',
+				value: bounds
+			}, Function.prototype);
 		}
 		FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", "t"], () => {
 			finsembleWindow.bringToFront();
@@ -180,7 +210,10 @@ class _ToolbarStore {
 				function (done) {
 					self.listenForWorkspaceUpdates();
 					done();
-				}
+				},
+				function (done) {
+					self.retrieveSelfFromStorage(done);
+				},
 			],
 			cb
 		);

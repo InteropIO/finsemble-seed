@@ -478,7 +478,7 @@
 				"left": 0,
 				"right": 0,
 				"position": "available",
-				"addToWorkspace": false,
+				"autoShow": true,
 				"dockable": [
 					"top",
 					"bottom"
@@ -504,6 +504,9 @@
 				"services": {
 					"dockingService": {
 						"isArrangable": false
+					},
+					"workspaceService": {
+						"global": true
 					}
 				},
 				"components": {
