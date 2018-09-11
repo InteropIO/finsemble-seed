@@ -1,6 +1,6 @@
 {
 	"localStorageAdapter": {
-		"output": "adapters/LocalStorageAdapter",
+		"output": "adapters/localStorageAdapter",
 		"entry":"./src-built-in/adapters/localStorageAdapter.js"
 	}
 }
