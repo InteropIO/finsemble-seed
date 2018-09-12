@@ -503,7 +503,8 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false
+						"isArrangable": false,
+						"shouldRegister": true
 					}
 				},
 				"components": {
