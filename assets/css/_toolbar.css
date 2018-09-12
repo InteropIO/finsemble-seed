@@ -111,12 +111,6 @@
 
 }
 
-@media screen and (min-width: 1400px) {
-    .finsemble-toolbar-workspace-button-label > .finsemble-toolbar-button-label {
-        width: 150px;
-    }
-}
-
 .finsemble-toolbar-workspace-button-label > .finsemble-toolbar-button-label {
     overflow: hidden;
     text-align: center;

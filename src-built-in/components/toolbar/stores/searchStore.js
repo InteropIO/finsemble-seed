@@ -102,11 +102,12 @@ var Actions = {
 			FSBL.Clients.Logger.error("No element with ID 'inputContainer' exists");
 		}
 	},
-	handleClose() {
+	//handleClose gets called for several reasons. One of those is when the window starts moving. If it starts moving, an event is passed in. If the event is passed in, we don't want to animate the window. If it's just a blur, we'll animate the change in size.
+	handleClose(e) {
 		menuWindow.isShowing(function (showing) {
 			if (showing) {
 				console.log("close a window")
-				if (cachedBounds) {
+				if (!e && cachedBounds) {
 					finsembleWindow.animate({ transitions: { size: { duration: 150, width: cachedBounds.width } } }, {}, () => {
 						cachedBounds = null;
 					});
@@ -216,7 +217,7 @@ function createStore(done) {
 	});
 
 	finsembleWindow.listenForBoundsSet();
-	finsembleWindow.addListener("bounds-set", Actions.handleClose);
+	finsembleWindow.addListener("startedMoving", Actions.handleClose);
 	finsembleWindow.addListener("blurred", function (event) {
 		Actions.setFocus(false);
 	}, function () {
