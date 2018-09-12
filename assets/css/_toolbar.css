@@ -111,12 +111,6 @@
 
 }
 
-@media screen and (max-width: 1400px) {
-    .finsemble-toolbar-workspace-button-label > .finsemble-toolbar-button-label {
-        width: 85px;
-    }
-}
-
 @media screen and (min-width: 1400px) {
     .finsemble-toolbar-workspace-button-label > .finsemble-toolbar-button-label {
         width: 150px;
