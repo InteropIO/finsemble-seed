@@ -49,7 +49,7 @@ IDBKeyRange.forPrefix = (prefix) => {
 	}
 
 	const upperKey = successor(prefix);
-	if (upperKey) {
+	if (upperKey === undefined) {
 		return IDBKeyRange.lowerBound(prefix);
 	}
 
