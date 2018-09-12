@@ -49,10 +49,6 @@
     flex: 1 1 auto;
 }
 
-.finsemble-toolbar-section.center.overflow {
-    justify-content: space-between;
-}
-
 .finsemble-toolbar-button {
     display: -webkit-box;
     padding: 5px 6px;
