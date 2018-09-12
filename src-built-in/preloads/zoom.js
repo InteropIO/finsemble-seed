@@ -45,8 +45,9 @@ function runZoomHandler(){
 // TODO, catch and recall scroll position
 
 // Startup pattern for preload. Preloads can come in any order, so we need to wait on either the window event or the FSBL event
-if (FSBL && FSBL.addEventListener) {
+if (window.FSBL && window.FSBL.addEventListener) {
 	FSBL.addEventListener("onReady", runZoomHandler);
 } else {
+	console.log("WAIT FOR FSBLREADY");
 	window.addEventListener("FSBLReady", runZoomHandler);
 }

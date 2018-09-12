@@ -30,7 +30,7 @@
 			process.send("serverFailed");
 			process.exit(1);
 		}
-	}
+	};
 
 	const extensions = fs.existsSync(path.join(__dirname, "server-extensions.js")) ?
 		require("./server-extensions") :
@@ -88,11 +88,17 @@
 
 						global.host = server.address().address;
 						global.port = server.address().port;
-				});
+					});
 
 				app.use(compression());
+				app.use((req,res,next)=>{
+					console.log(req.originalUrl);
+					next();
+				});
 				// Sample server root set to "/" -- must align with paths throughout
 				app.use("/", express.static(rootDir, options));
+				app.use("/installers", express.static("./installers"));
+				app.use("/installers", express.static(path.join(__dirname, "../../finsemble-electron/packages/windows-installer"), options));
 				// Open up the Finsemble Components,services, and clients
 				app.use("/finsemble", express.static(moduleDirectory, options));
 				// For Assimilation
@@ -119,7 +125,7 @@
 		if (!chalk[color]) color = "white";
 		if (!chalk[color][bgcolor]) bg = "black";
 		console.log(`[${new Date().toLocaleTimeString()}] ${chalk[color][bgcolor](msg)}.`);
-	}
+	};
 
 	logToTerminal(outputColor(`Server serving from ${rootDir} with caching maxAge = ${cacheAge} ms.`));
 
@@ -127,8 +133,8 @@
 	//This will prevent config files from being cached by the server, allowing an application restart instead of a rebuild.
 	if (cacheAge === 0) {
 		options.setHeaders = function (res, path, stat) {
-			res.set("cache-control", "no-cache")
-		}
+			res.set("cache-control", "no-cache");
+		};
 	}
 	logToTerminal(outputColor("Starting Server"));
 	if (process.env.NODE_ENV === "development") {
@@ -149,7 +155,7 @@
 				logToTerminal(outputColor(`Application manifest retrieved ${launchDuration}s after launch`));
 				notified_config = true;
 				serviceManagerRetrievedTimeout = setTimeout(() => {
-					logToTerminal(errorColor(`ERROR: Finsemble application manifest has been retrieved from the server, but the Finsemble Service Manager has not. This can be caused by a slow internet connection (e.g., downloading assets). This can also be a symptom that you have a hanging openfin process. Please inspect your task manager to ensure that there are no lingering processes. Alternatively, run 'finsemble-cli kill'`))
+					logToTerminal(errorColor("ERROR: Finsemble application manifest has been retrieved from the server, but the Finsemble Service Manager has not. This can be caused by a slow internet connection (e.g., downloading assets). This can also be a symptom that you have a hanging openfin process. Please inspect your task manager to ensure that there are no lingering processes. Alternatively, run 'finsemble-cli kill'"));
 				}, 10000);
 			}
 			next();
@@ -196,7 +202,7 @@
 			};
 			done();
 		});
-	}
+	};
 
 	extensions.pre(buildServer);
 })();

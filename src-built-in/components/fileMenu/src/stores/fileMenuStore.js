@@ -17,7 +17,7 @@ var FileMenuStore = Object.assign({}, EventEmitter.prototype, {
 	 */
 	initialize: function () {
 		var self = this;
-		FSBL.addEventListener("onReady", function () {
+		window.addEventListener("FSBLReady", function () {
 			self.finWindow = fin.desktop.Window.getCurrent();
 			self.emit("initialized");
 
@@ -158,7 +158,7 @@ var Actions = {
 		fin.desktop.Window.getCurrent().blur();
 		//FSBL.shutdownApplication();
 		Actions.saveWorkspace().then((choice) => {
-			if (choice === 'cancel') {
+			if (choice === "cancel") {
 				return;
 			}
 			FSBL.shutdownApplication();
@@ -193,11 +193,11 @@ var Actions = {
 		FSBL.Clients.LauncherClient.showWindow({
 			componentType: "About Finsemble"
 		},
-			{
-				monitor: "mine",
-				left: "center",
-				top: "center"
-			});
+		{
+			monitor: "mine",
+			left: "center",
+			top: "center"
+		});
 	},
 	spawnDocs() {
 		fin.desktop.System.openUrlWithBrowser("https://www.chartiq.com/tutorials/?slug=finsemble-seed-project", function () {

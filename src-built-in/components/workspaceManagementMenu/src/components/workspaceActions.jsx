@@ -47,6 +47,7 @@ export default class WorkspaceActions extends React.Component {
 	 * @memberof WorkspaceActions
 	 */
 	saveWorkspace() {
+		console.log("saveWorkspace");
 		WorkspaceManagementMenuActions.blurWindow();
 		WorkspaceManagementMenuActions.saveWorkspace();
 	}

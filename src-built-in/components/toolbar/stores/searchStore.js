@@ -17,14 +17,14 @@ var control = null;
 function mouseInElement(element, cb) {
 	var elementBounds = element.getBoundingClientRect();
 	window.screenX;
-	window.screenY
+	window.screenY;
 	var bounds = {
 		top: window.screenY + elementBounds.top,
 		left: window.screenX + elementBounds.left,
 		bottom: element.offsetHeight + window.screenY,
 		right: elementBounds.right + window.screenX + elementBounds.left
-	}
-	mouseInBounds(bounds, cb)
+	};
+	mouseInBounds(bounds, cb);
 }
 function mouseInBounds(bounds, cb) {
 	fin.desktop.System.getMousePosition(function (mousePosition) {
@@ -39,8 +39,8 @@ function mouseInBounds(bounds, cb) {
 }
 function mouseInWindow(window, cb) {
 	window.getBounds(function (bounds) {
-		mouseInBounds(bounds, cb)
-	})
+		mouseInBounds(bounds, cb);
+	});
 }
 
 
@@ -51,10 +51,10 @@ var Actions = {
 	setFocus(bool, target) {
 		focus = bool;
 		if (bool) {
-			menuStore.setValue({ field: "active", value: true })
+			menuStore.setValue({ field: "active", value: true });
 			activeSearchBar = true;
 			if (!menuWindow) {
-				this.setupWindow()
+				this.setupWindow();
 			}
 			if (!menuWindow) return;
 			return menuWindow.isShowing((showing) => {
@@ -64,7 +64,7 @@ var Actions = {
 				if (inputContainer) {
 					const bounds = inputContainer.getBoundingClientRect();
 
-					// Using showAt rather than WindowClient.showWindow because showWindow was causing auto-focus on the 
+					// Using showAt rather than WindowClient.showWindow because showWindow was causing auto-focus on the
 					// searchMenu which caused an issue with the animations of the search button.
 					menuWindow.showAt(
 						window.screenX + bounds.left,
@@ -92,8 +92,8 @@ var Actions = {
 				if (!inBounds) {
 					Actions.handleClose();
 				}
-			})
-		})
+			});
+		});
 
 
 	},
@@ -101,9 +101,12 @@ var Actions = {
 	//console.log("close a window")
 		window.getSelection().removeAllRanges();
 		document.getElementById("searchInput").blur();
-		menuStore.setValue({ field: "active", value: false })
+		menuStore.setValue({ field: "active", value: false });
 		if (!menuWindow) return;
-		menuWindow.hide();
+		menuWindow.isShowing( (showing)=> {
+			if(showing)menuWindow.hide();
+		});
+
 	},
 	setupWindow() {
 		if (!menuReference.finWindow) return;
@@ -118,36 +121,36 @@ var Actions = {
 			if (list.length > 1) {
 				FSBL.Clients.RouterClient.transmit("SearchMenu." + menuWindow.name + ".actionpress", action);
 			}
-		})
+		});
 	},
 	setList(list) {
-		menuStore.setValue({ field: "list", value: list })
+		menuStore.setValue({ field: "list", value: list });
 	},
 	updateMenuReference(err, data) {
 
 		menuReference = data.value;
 		if (!menuWindow) {
-			Actions.setupWindow()
+			Actions.setupWindow();
 		}
 	},
 	search(text) {
 		if (text === "" || !text) return Actions.setList([]);
 		FSBL.Clients.SearchClient.search({ text: text }, function (err, response) {
-			var updatedResults = [].concat.apply([], response)
+			var updatedResults = [].concat.apply([], response);
 			Actions.setList(updatedResults);
-		})
+		});
 	},
 	menuBlur() {
 		mouseInElement(document.getElementById("searchInput"), function (err, inBounds) {
 			if (!inBounds) {
 				Actions.handleClose();
 			}
-		})
+		});
 	}
 };
 function searchTest(params, cb) {
 //console.log("params", params)
-	fetch('/search?text=' + params.text).then(function (response) {
+	fetch("/search?text=" + params.text).then(function (response) {
 		return response.json();
 	}).then(function (json) {
 	//console.log("json", cb);
@@ -166,7 +169,7 @@ function createStore(done) {
 		activeSearchBar: null,
 		menuIdentifier: null
 	};
-//console.log("CreateStore", "Finsemble-SearchStore-" + finWindow.name)
+	//console.log("CreateStore", "Finsemble-SearchStore-" + finWindow.name)
 	FSBL.Clients.DistributedStoreClient.createStore({ store: "Finsemble-SearchStore-" + finWindow.name, values: defaultData, global: true }, function (err, store) {
 		menuStore = store;
 
@@ -175,15 +178,15 @@ function createStore(done) {
 			if (!data.menuSpawned) {
 				FSBL.Clients.LauncherClient.spawn("searchMenu", { name: "searchMenu." + finWindow.name, data: { owner: finWindow.name } }, function (err, data) {
 				//console.log("Err", err, data)
-					menuStore.setValue({ field: "menuIdentifier", value: data })
+					menuStore.setValue({ field: "menuIdentifier", value: data });
 					menuWindow = fin.desktop.Window.wrap(data.finWindow.app_uuid, data.finWindow.name);
-					menuStore.setValue({ field: "menuSpawned", value: true })
+					menuStore.setValue({ field: "menuSpawned", value: true });
 				});
 			} else {
 				menuStore.getValue("menuIdentifier", function (err, menuIdentifier) {
 					menuReference = menuIdentifier;
 					Actions.setupWindow();
-				})
+				});
 
 			}
 			menuStore.Dispatcher.register(function (action) {
@@ -193,7 +196,7 @@ function createStore(done) {
 					Actions.handleClose();
 				}
 			});
-		})
+		});
 		done();
 	});
 	finWindow.addEventListener("blurred", function (event) {

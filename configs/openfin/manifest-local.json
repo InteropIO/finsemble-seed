@@ -56,8 +56,8 @@
     "fileName": "ChartIQ-local-installer",
     "appAssets": [
         {
-            "src": "https://connect2.chartiq.com/finsemble/Assimilation_2_0_0.zip",
-            "version": "2.0.0",
+            "src": "https://connect2.chartiq.com/finsemble/Assimilationtest.zip",
+            "version": "2.3.0",
             "alias": "assimilation",
             "target": "assimilationMain.exe"
         }
@@ -67,6 +67,17 @@
         "moduleRoot": "http://localhost:3375/finsemble",
         "servicesRoot": "http://localhost:3375/finsemble/services",
         "notificationURL": "http://localhost:3375/components/notification/notification.html",
+        "router": {
+            "sameDomainTransport": "SharedWorker",
+            "crossDomainTransport": "OpenFinBus",
+            "transportSettings": {
+                "SharedWorker": {},
+                "OpenFinBus": {},
+                "FinsembleTransport": {
+                    "serverAddress": "wss://localhost.chartiq.com:3376"
+                }
+            }
+        },
         "importConfig": [
             "$applicationRoot/configs/application/config.json"
         ]
