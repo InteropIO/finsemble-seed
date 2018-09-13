@@ -478,6 +478,7 @@
 				"left": 0,
 				"right": 0,
 				"position": "available",
+				"autoShow": true,
 				"dockable": [
 					"top",
 					"bottom"
@@ -507,7 +508,8 @@
 						"shouldRegister": true
 					},
 					"workspaceService": {
-						"global": true
+						"global": true,
+						"ignoreTilingAndTabbingRequests": true
 					}
 				},
 				"components": {
