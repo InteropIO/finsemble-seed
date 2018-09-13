@@ -8,7 +8,7 @@
 			"finsemble.workspace.cache": "IndexedDBAdapter"
 		},
 		"dataStoreAdapters": {
-			"LocalStorageAdapter": "$applicationRoot/adapters/LocalStorageAdapter.js",
+			"LocalStorageAdapter": "$applicationRoot/adapters/localStorageAdapter.js",
 			"IndexedDBAdapter": "$applicationRoot/adapters/indexedDBAdapter.js"
 		}
 	},

@@ -17,9 +17,9 @@ const SCHEMA_VERSION = 1;
 /** 
  * PolyFill IDBKeyRange for a key prefix search. 
  * 
- * In IndexedDB, Primary keys are ordered, and a key range is used is used to selectively retrieve them without having 
- * to iterate the whole set and test each. We use string keys build up with various prefixes. This polyfill makes it 
- * possible to retrieve all keys with a specified prefix easily.
+ * In IndexedDB, Primary keys are ordered, and a key range is used to selectively retrieve them without having 
+ * to iterate the whole set and test each. We use string keys built up with various prefixes. This polyfill makes it 
+ * possible to easily retrieve all keys with a specified prefix.
  * 
  * @param prefix The string by which to filter the primary keys.
  */
