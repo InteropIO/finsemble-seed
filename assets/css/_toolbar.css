@@ -34,7 +34,7 @@
     justify-content: flex-end;
     order: 2;
     flex: 1;
-    flex: 0 0 auto;
+    flex: auto;
 }
 
 .finsemble-toolbar-section.left {
@@ -47,10 +47,6 @@
     justify-content: flex-start;
     order: 1;
     flex: 1 1 auto;
-}
-
-.finsemble-toolbar-section.center.overflow {
-    justify-content: space-between;
 }
 
 .finsemble-toolbar-button {
@@ -112,18 +108,7 @@
     .finsemble-toolbar-section.right .divider {
         display: none;
     }
-}
 
-@media screen and (max-width: 1400px) {
-    .finsemble-toolbar-workspace-button-label > .finsemble-toolbar-button-label {
-        width: 85px;
-    }
-}
-
-@media screen and (min-width: 1400px) {
-    .finsemble-toolbar-workspace-button-label > .finsemble-toolbar-button-label {
-        width: 150px;
-    }
 }
 
 .finsemble-toolbar-workspace-button-label > .finsemble-toolbar-button-label {
