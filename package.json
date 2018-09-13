@@ -34,7 +34,8 @@
         "lodash.debounce": "^4.0.8",
         "lodash.throttle": "^4.1.1",
         "nocache": "^2.0.0",
-        "openfin-launcher": "^1.3.11"
+        "openfin-launcher": "^1.3.11",
+        "react-shadow-dom-retarget-events": "^1.0.8"
     },
     "devDependencies": {
         "ansi-html": "0.0.7",
