@@ -504,10 +504,11 @@
 				"services": {
 					"dockingService": {
 						"isArrangable": false,
-						"shouldRegister": true
+						"shouldRegister": true,
+						"ignoreTilingAndTabbingRequests": true
 					},
 					"workspaceService": {
-						"global": true
+						"global": false
 					}
 				},
 				"components": {
