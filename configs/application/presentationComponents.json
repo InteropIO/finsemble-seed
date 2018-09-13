@@ -478,7 +478,6 @@
 				"left": 0,
 				"right": 0,
 				"position": "available",
-				"addToWorkspace": false,
 				"dockable": [
 					"top",
 					"bottom"
@@ -489,6 +488,7 @@
 				"docked": "top",
 				"canGroup": false,
 				"options": {
+					"autoShow": false,
 					"contextMenu": false,
 					"showTaskbarIcon": false,
 					"smallWindow": true
@@ -505,6 +505,9 @@
 					"dockingService": {
 						"isArrangable": false,
 						"shouldRegister": true
+					},
+					"workspaceService": {
+						"global": true
 					}
 				},
 				"components": {
