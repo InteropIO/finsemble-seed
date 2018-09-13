@@ -1,19 +1,21 @@
 {
 	"comment": "Top-level application config for development, adding on top of the core config",
+	"defaultStorage": "IndexedDBAdapter",
 	"storage": {
 		"topicToDataStoreAdapters": {
-			"finsemble": "LocalStorageAdapter",
-			"finsemble.workspace": "LocalStorageAdapter",
-			"finsemble.workspace.cache": "LocalStorageAdapter"
+			"finsemble": "IndexedDBAdapter",
+			"finsemble.workspace": "IndexedDBAdapter",
+			"finsemble.workspace.cache": "IndexedDBAdapter"
 		},
 		"dataStoreAdapters": {
-			"LocalStorageAdapter": "$applicationRoot/adapters/localStorageAdapter.js"
+			"LocalStorageAdapter": "$applicationRoot/adapters/localStorageAdapter.js",
+			"IndexedDBAdapter": "$applicationRoot/adapters/indexedDBAdapter.js"
 		}
 	},
 	"servicesConfig": {
 		"launcher": {
 			"staggerPixels": 40
-    },
+		},
 		"docking": {
 			"enabled": true,
 			"groupTileBuffer": 30,
@@ -92,8 +94,7 @@
 			}
 		]
 	},
-	"globalHotkeys": {
-	},
+	"globalHotkeys": {},
 	"//": "importConfig contains components that are necessary to start Finsemble. All other components are loaded dynamically. See server/auth/test.json",
 	"importConfig": [
 		"$applicationRoot/configs/application/presentationComponents.json",
