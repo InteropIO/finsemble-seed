@@ -1,3 +1,4 @@
+import retargetEvents from 'react-shadow-dom-retarget-events';
 
 /*!
 * Copyright 2017 by ChartIQ, Inc.
@@ -424,11 +425,17 @@ function init () {
 	const css = require("../../../../assets/css/finsemble.css");
 	// Create the header element
 	const template = document.createElement("div");
-	template.innerHTML = '<div id="FSBLHeader" style="height:20px"></div>';
+	const FSBLHeader = document.createElement('div')
+		  FSBLHeader.setAttribute('style', 'height: 20px')
+		  FSBLHeader.setAttribute('id', 'FSBLHeader')
+	template.appendChild(FSBLHeader)
 	document.body.insertBefore(template.firstChild, document.body.firstChild);
 	storeExports.initialize(function () {
 		HeaderActions = storeExports.Actions;
 		windowTitleBarStore = storeExports.getStore();
-		ReactDOM.render(<WindowTitleBar />, document.getElementById("FSBLHeader"));
+		ReactDOM.render(<WindowTitleBar />, FSBLHeader);
+		retargetEvents(FSBLHeader);
+		// Register with docking manager
+		FSBL.Clients.WindowClient.registerWithDockingManager();
 	});
 }
