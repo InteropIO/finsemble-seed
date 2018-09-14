@@ -37,8 +37,8 @@ function mouseInBounds(bounds, cb) {
 	});
 
 }
-function mouseInWindow(window, cb) {
-	window.getBounds(function (bounds) {
+function mouseInWindow(win, cb) {
+	win.getBounds(function (err, bounds) {
 		mouseInBounds(bounds, cb)
 	})
 }
@@ -54,7 +54,9 @@ var Actions = {
 			menuStore.setValue({ field: "active", value: true })
 			activeSearchBar = true;
 			if (!menuWindow) {
-				this.setupWindow()
+				return this.setupWindow(() => {
+					this.setFocus(bool, target);
+				})
 			}
 			if (!menuWindow) return;
 			return menuWindow.isShowing((showing) => {
@@ -64,21 +66,21 @@ var Actions = {
 				if (inputContainer) {
 					const bounds = inputContainer.getBoundingClientRect();
 
-					// Using showAt rather than WindowClient.showWindow because showWindow was causing auto-focus on the 
+					// Using showAt rather than WindowClient.showWindow because showWindow was causing auto-focus on the
 					// searchMenu which caused an issue with the animations of the search button.
-					menuWindow.showAt(
-						window.screenX + bounds.left,
-						bounds.bottom + window.screenY,
-						null,
-						(err) => {
-							if (err) {
-								FSBL.Clients.Logger.error(err);
-							}
-						});
+					menuWindow.showAt({
+						left: window.screenX + bounds.left,
+						top: bounds.bottom + window.screenY,
+					},
+					(err) => {
+						if (err) {
+							FSBL.Clients.Logger.error(err);
+						}
+					});
 				} else {
 					FSBL.Clients.Logger.error("No element with ID 'inputContainer' exists");
 				}
-			});
+			}, () => { debugger; });
 
 		}
 		activeSearchBar = false;
@@ -105,9 +107,14 @@ var Actions = {
 		if (!menuWindow) return;
 		menuWindow.hide();
 	},
-	setupWindow() {
-		if (!menuReference.finWindow) return;
-		menuWindow = fin.desktop.Window.wrap(menuReference.finWindow.app_uuid, menuReference.finWindow.name);
+
+	setupWindow(cb = Function.prototype) {
+		if (!menuReference.finWindow) return cb();
+		//menuWindow = fin.desktop.Window.wrap(menuReference.finWindow.app_uuid, menuReference.finWindow.name);
+		FSBL.FinsembleWindow.wrap({ windowName: menuReference.finWindow.name }, (err, wrap) => {
+			menuWindow = wrap;
+			cb();
+		});
 	},
 	getComponentList(cb) {
 
@@ -176,7 +183,7 @@ function createStore(done) {
 				FSBL.Clients.LauncherClient.spawn("searchMenu", { name: "searchMenu." + finWindow.name, data: { owner: finWindow.name } }, function (err, data) {
 				//console.log("Err", err, data)
 					menuStore.setValue({ field: "menuIdentifier", value: data })
-					menuWindow = fin.desktop.Window.wrap(data.finWindow.app_uuid, data.finWindow.name);
+					Actions.setupWindow();
 					menuStore.setValue({ field: "menuSpawned", value: true })
 				});
 			} else {
