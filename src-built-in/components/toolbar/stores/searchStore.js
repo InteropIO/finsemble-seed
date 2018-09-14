@@ -59,7 +59,7 @@ var Actions = {
 				})
 			}
 			if (!menuWindow) return;
-			return menuWindow.isShowing((showing) => {
+			return menuWindow.isShowing((err, showing) => {
 				if (showing) return;
 
 				const inputContainer = document.getElementById("inputContainer");
@@ -80,7 +80,7 @@ var Actions = {
 				} else {
 					FSBL.Clients.Logger.error("No element with ID 'inputContainer' exists");
 				}
-			}, () => { debugger; });
+			});
 
 		}
 		activeSearchBar = false;
