@@ -9,10 +9,12 @@ var WindowClient;
 let constants = {};
 
 import * as async from "async";
-var finWindow = fin.desktop.Window.getCurrent();
-var attachedWindow = finWindow;
+//var finWindow = fin.desktop.Window.getCurrent();
+var attachedWindow; // = finWindow;
 //theses are constants that are set inside of setupStore. so they're declared as vars and not constantsa.
-var windowIdentifier;
+
+var windowIdentifier; // = FSBL.Clients.WindowClient.getWindowIdentifier(); <- no idea why this was here. attempts to use FSBL before it is ready.
+let constants = {};
 var Actions = {
 	initialize: function () {
 		var onParentSet = () => {
