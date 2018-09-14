@@ -539,8 +539,7 @@
 				"height": 600,
 				"options": {
 					"autoShow": false,
-					"resizable": false,
-					"alwaysOnTop": true
+					"resizable": false
 				}
 			},
 			"component": {
