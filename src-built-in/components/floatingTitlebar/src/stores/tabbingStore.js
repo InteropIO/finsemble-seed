@@ -6,13 +6,13 @@
 var StoreClient;
 var tabbingRegionStore;
 var WindowClient;
+let constants = {};
 
 import * as async from "async";
 var finWindow = fin.desktop.Window.getCurrent();
 var attachedWindow = finWindow;
 //theses are constants that are set inside of setupStore. so they're declared as vars and not constantsa.
-var windowIdentifier = FSBL.Clients.WindowClient.getWindowIdentifier();
-let constants = {};
+var windowIdentifier;
 var Actions = {
 	initialize: function () {
 		var onParentSet = () => {
@@ -191,6 +191,7 @@ var Actions = {
  * @param {any} cb
  */
 function initialize(windowWithTabs, cb) {
+	FSBL.Clients.WindowClient.getWindowIdentifier();
 	if (windowWithTabs) attachedWindow = windowWithTabs;
 	WindowClient = FSBL.Clients.WindowClient;
 	StoreClient = FSBL.Clients.DistributedStoreClient;
