@@ -214,6 +214,7 @@ class _ToolbarStore {
 						this.Store.setValue({ field: 'searchActive', value: true })
 					});
 				} else {
+					store.Store.setValue({ field: 'searchActive', value: false });
 					finsembleWindow.setComponentState({
 						field: 'visible',
 						value: false

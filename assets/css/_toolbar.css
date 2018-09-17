@@ -72,6 +72,14 @@
     cursor: pointer;
 }
 
+.finsemble-toolbar .resize-area {
+    height: 100%;
+    width: 10px;
+    max-width: 10px;
+    background-color: darkgray;
+    float: right;
+}
+
 @media screen and (max-width: 170px) {
     /* remove */
     .workspace-menu-button {

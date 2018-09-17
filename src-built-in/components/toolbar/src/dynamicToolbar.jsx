@@ -163,6 +163,7 @@ export default class Toolbar extends React.Component {
 				handleOverflow={sectionPosition === "center"}
 				handlePins={sectionPosition === "center"}>
 				{buttons}
+				{sectionPosition === 'right' ? <div className='resize-area' /> : null}
 			</FinsembleToolbarSection>);
 			sections.push(sectionComponent);
 		}
