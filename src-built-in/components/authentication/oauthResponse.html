@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<!--
+    /*!
+    * Copyright 2017 by ChartIQ, Inc.
+    * All rights reserved.
+    */
+	OAUTH Authentication example. This example uses Google as a OpenID Provider (OP). This is the response file.
+	After authenticating, your identify provider will redirect to this page. In this page you will complete the
+	OAUTH login by creating a backchannel endpoint.
+
+-->
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title>Oauth Authentification</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script>
+		var search=new URLSearchParams(location.search);
+		var state=search.get("state");
+		var code=search.get("code");
+		// This is provided by your OP
+		var client_id="<your client id>";
+		// This is provided by your OP. Only put your client secret in the JavaScript code during development! In production, your backchannel_endpoint server process should attach this parameter.
+		var client_secret="<your client secret>";
+		// This should always be "authorization_code"
+		var grant_type="authorization_code";
+		// This should match the redirect_uri that you set in oauthAuthentication.html
+		var redirect_uri="http://localhost:3375/components/authentication/oauthResponse.html";
+
+		// This is for development only. Point this to your actual backchannel_endpoing server. That server process should then add client_secret and act as a proxy for your OP's endpoint.
+		var backchannel_endpoint="https://www.googleapis.com/oauth2/v4/token";
+
+		function parseJwt(token) {
+			var base64Url = token.split('.')[1];
+			var base64 = base64Url.replace('-', '+').replace('_', '/');
+			return JSON.parse(window.atob(base64));
+		};
+		  
+		function runBusinessLogic(credentials, cb){
+			/************ Run any business logic here that needs to occur before Finsemble starts. For instance, loading dynamic configs/entitlements. **************/
+			cb();
+		}
+
+		function completeOauth(response){
+			try{
+				// Credentials should contain access_token, id_token, expires_in, token_type
+				var credentials=JSON.parse(response);
+
+				// If we got an id_token back, then parse it and add those items to the credentials
+				if(credentials.id_token) moreCredentials=parseJwt(credentials.id_token);
+				for(var field in moreCredentials){
+					credentials[field]=moreCredentials[field];
+				}
+				// "sub" is the user ID provided by the OP. Not all OP's support this. If not supported, then we just set the user to the access token.
+				var user=credentials.sub;
+				if(!user) user=credentials.access_token;
+
+				runBusinessLogic(credentials, function(){
+					// Finish the authentication process and close the window
+					FSBL.Clients.AuthenticationClient.publishAuthorization(user, credentials);
+					fin.desktop.Window.getCurrent().close(true);
+				});
+
+			}catch(e){
+				showError(e.message);
+			}
+		}
+
+		function requestOauthToken(){
+			var payload="code=" + code + "&client_id=" + client_id + "&client_secret=" + client_secret + "&redirect_uri=" + redirect_uri + "&grant_type=" + grant_type;
+
+			var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+			xhr.open('POST', backchannel_endpoint);
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState>3){
+					if(xhr.status==200) completeOauth(xhr.responseText);
+					else showError("Google response=" + xhr.status);
+				}
+			};
+			xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+			xhr.send(payload);
+		}
+
+		function showError(reason){
+			alert("Oauth Failed: " + reason);
+		}
+
+		// Retrieve the state
+		var value=localStorage.getItem(state);
+		if(value) requestOauthToken();
+		else showError("Cannot find state token " + state);
+		localStorage.removeItem(state);
+	</script>
+</html>
