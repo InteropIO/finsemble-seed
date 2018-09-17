@@ -10,10 +10,10 @@ export default class Toolbar extends React.Component {
 		this.restartApplication = this.restartApplication.bind(this);
 	}
 
-    /**
-     * Sets the monitor by calling the setPreferences API. This will override the config for the component.
-     * @param {event} e
-     */
+	/**
+	 * Sets the monitor by calling the setPreferences API. This will override the config for the component.
+	 * @param {event} e
+	 */
 	setMonitor(e) {
 		let monitor = e.target.value;
 		this.setState({
@@ -27,10 +27,10 @@ export default class Toolbar extends React.Component {
 		FSBL.restartApplication();
 	}
 
-    /**
-     * Add listener on the store. When the preferences field changes, we change our local state.
-     * Also, get the intiial state from the store.
-     */
+	/**
+	 * Add listener on the store. When the preferences field changes, we change our local state.
+	 * Also, get the intiial state from the store.
+	 */
 	componentDidMount() {
 		FSBL.Clients.ConfigClient.getValue("finsemble.components.Toolbar.window.monitor", (err, value) => {
 			if (!value) value = "all";
