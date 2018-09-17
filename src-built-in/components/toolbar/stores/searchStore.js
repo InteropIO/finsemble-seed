@@ -59,6 +59,7 @@ var Actions = {
 				})
 			}
 			if (!menuWindow) return;
+			debugger
 			return menuWindow.isShowing((err, showing) => {
 				if (showing) return;
 
@@ -72,11 +73,11 @@ var Actions = {
 						left: window.screenX + bounds.left,
 						top: bounds.bottom + window.screenY,
 					},
-					(err) => {
-						if (err) {
-							FSBL.Clients.Logger.error(err);
-						}
-					});
+						(err) => {
+							if (err) {
+								FSBL.Clients.Logger.error(err);
+							}
+						});
 				} else {
 					FSBL.Clients.Logger.error("No element with ID 'inputContainer' exists");
 				}
@@ -100,7 +101,7 @@ var Actions = {
 
 	},
 	handleClose() {
-	//console.log("close a window")
+		//console.log("close a window")
 		window.getSelection().removeAllRanges();
 		document.getElementById("searchInput").blur();
 		menuStore.setValue({ field: "active", value: false })
@@ -109,9 +110,9 @@ var Actions = {
 	},
 
 	setupWindow(cb = Function.prototype) {
-		if (!menuReference.finWindow) return cb();
+		console.log("SETUP WINDOW!", menuReference.name);
 		//menuWindow = fin.desktop.Window.wrap(menuReference.finWindow.app_uuid, menuReference.finWindow.name);
-		FSBL.FinsembleWindow.wrap({ windowName: menuReference.finWindow.name }, (err, wrap) => {
+		FSBL.FinsembleWindow.wrap({ windowName: menuReference.name }, (err, wrap) => {
 			menuWindow = wrap;
 			cb();
 		});
@@ -131,7 +132,6 @@ var Actions = {
 		menuStore.setValue({ field: "list", value: list })
 	},
 	updateMenuReference(err, data) {
-
 		menuReference = data.value;
 		if (!menuWindow) {
 			Actions.setupWindow()
@@ -153,11 +153,11 @@ var Actions = {
 	}
 };
 function searchTest(params, cb) {
-//console.log("params", params)
+	//console.log("params", params)
 	fetch('/search?text=' + params.text).then(function (response) {
 		return response.json();
 	}).then(function (json) {
-	//console.log("json", cb);
+		//console.log("json", cb);
 		return cb(null, json);
 
 	});
@@ -173,7 +173,7 @@ function createStore(done) {
 		activeSearchBar: null,
 		menuIdentifier: null
 	};
-//console.log("CreateStore", "Finsemble-SearchStore-" + finWindow.name)
+	//console.log("CreateStore", "Finsemble-SearchStore-" + finWindow.name)
 	FSBL.Clients.DistributedStoreClient.createStore({ store: "Finsemble-SearchStore-" + finWindow.name, values: defaultData, global: true }, function (err, store) {
 		menuStore = store;
 
@@ -181,12 +181,16 @@ function createStore(done) {
 			store.addListener({ field: "menuIdentifier" }, Actions.updateMenuReference);
 			if (!data.menuSpawned) {
 				FSBL.Clients.LauncherClient.spawn("searchMenu", { name: "searchMenu." + finWindow.name, data: { owner: finWindow.name } }, function (err, data) {
-				//console.log("Err", err, data)
-					menuStore.setValue({ field: "menuIdentifier", value: data })
+					debugger
+					console.log("SPAWN SEARCH!", data);
+					//console.log("Err", err, data)
+					menuStore.setValue({ field: "menuIdentifier", value: data.windowIdentifier })
 					Actions.setupWindow();
 					menuStore.setValue({ field: "menuSpawned", value: true })
 				});
 			} else {
+				debugger
+
 				menuStore.getValue("menuIdentifier", function (err, menuIdentifier) {
 					menuReference = menuIdentifier;
 					Actions.setupWindow();
@@ -207,12 +211,12 @@ function createStore(done) {
 		Actions.setFocus(false);
 	}, function () {
 	}, function (reason) {
-	//console.log("failure:" + reason);
+		//console.log("failure:" + reason);
 	});
 }
 
 function initialize(cb) {
-//console.log("init store")
+	//console.log("init store")
 	async.parallel([
 		createStore,
 	], function (err) {
