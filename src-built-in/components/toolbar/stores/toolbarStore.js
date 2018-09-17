@@ -65,20 +65,33 @@ class _ToolbarStore {
 		finsembleWindow.getFSBLState({
 			stateVar: "componentState"
 		}, (err, result) => {
-			let bounds = result.hasOwnProperty('window-bounds') ? result["window-bounds"] : null;
+			let bounds = result.hasOwnProperty('window-bounds') && result["window-bounds"] !== null ? result["window-bounds"] : null;
+			let visible = result.hasOwnProperty('visible') ? result.visible : true;
 			if (bounds && isGloballyDocked) {
 				this.Store.setValue({
 					field: 'window-bounds',
 					value: bounds
 				});
 				finsembleWindow.setBounds(bounds, () => {
-					finsembleWindow.show();
+					if (visible) {
+						finsembleWindow.show();
+					}
 				});
 			} else {
 				finsembleWindow.show();
 			}
 			cb(null, result);
 		});
+	}
+	/**
+	 * Sets the toolbars visibility in memory
+	 */
+	setToolbarVisibilityInMemory(cb = Function.prototype) {
+		console.log('setting visibility state');
+		FSBL.Clients.WindowClient.setComponentState({
+			field: 'visible',
+			value: true
+		}, cb);
 	}
 	/**
 	 * Set up our hotkeys
@@ -156,10 +169,88 @@ class _ToolbarStore {
 			}, Function.prototype);
 		}
 		FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", "t"], () => {
-			finsembleWindow.bringToFront();
+			self.toggleToolbarVisibility();
 		});
 
 		FSBL.Clients.WindowClient.finsembleWindow.addListener("bounds-set", onBoundsSet)
+	}
+
+	/**
+	 * Function to handle maximize click
+	 * @memberof _ToolbarStore
+	 */
+	clickMaximize() {
+		var self = this;
+		FSBL.Clients.WindowClient.restore(Function.prototype);
+	}
+
+	/**
+	 * Function to bring toolbar to front (since dockable toolbar can be hidden)
+	 * @memberof _ToolbarStore
+	 */
+	bringToolbarToFront() {
+		finsembleWindow.bringToFront();
+	}
+
+	/**
+	 * Function to hide/show the toolbar
+	 * @memberof _ToolbarStore
+	 */
+	toggleToolbarVisibility(cb = Function.prototype) {
+		finsembleWindow.getFSBLState({
+			stateVar: "componentState"
+		}, (err, response) => {
+			let blurred = response && response.hasOwnProperty('blurred') ? response.blurred : false;
+			let visible = response && response.hasOwnProperty('visible') ? response.visible : true;
+
+			if (visible) {
+				if (blurred) {
+					finsembleWindow.setComponentState({
+						field: 'blurred',
+						value: false
+					}, () => {
+						finsembleWindow.bringToFront();
+						finsembleWindow.focus();
+						this.Store.setValue({ field: 'searchActive', value: true })
+					});
+				} else {
+					finsembleWindow.setComponentState({
+						field: 'visible',
+						value: false
+					}, () => {
+						finsembleWindow.hide();
+					});
+				}
+			} else {
+				finsembleWindow.setComponentState({
+					field: "visible",
+					value: true
+				}, () => {
+					finsembleWindow.show();
+					finsembleWindow.bringToFront();
+					finsembleWindow.focus();
+					this.Store.setValue({ field: 'searchActive', value: true });
+				});
+			}
+		});
+	}
+
+	/**
+	 * onBlur
+	 * @memberof _ToolbarStore
+	 */
+	onBlur() {
+		finsembleWindow.setComponentState({
+			field: 'blurred',
+			value: true
+		});
+	}
+
+	onFocus() {
+		finsembleWindow.setComponentState({
+			field: 'blurred',
+			value: false
+		});
 	}
 
 	/**
@@ -179,7 +270,6 @@ class _ToolbarStore {
 				FSBL.Clients.WorkspaceClient.minimizeAll()
 			});
 			FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.alt, keys.f], () => {
-				//console.log("hot key")
 				self.Store.setValue({ field: "searchActive", value: true });
 			});
 		}
@@ -218,6 +308,21 @@ class _ToolbarStore {
 				function (done) {
 					self.retrieveSelfFromStorage(done);
 				},
+				function (done) {
+					FSBL.Clients.WindowClient.finWindow.addEventListener("maximized", function () {
+						self.clickMaximize();
+					});
+					FSBL.Clients.WindowClient.finWindow.addEventListener('focused', function () {
+						self.onFocus();
+					});
+					FSBL.Clients.WindowClient.finWindow.addEventListener('blurred', function () {
+						self.onBlur();
+					});
+					done();
+				},
+				function (done) {
+					self.setToolbarVisibilityInMemory(done);
+				}
 			],
 			cb
 		);

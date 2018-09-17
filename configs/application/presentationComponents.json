@@ -505,7 +505,8 @@
 				"services": {
 					"dockingService": {
 						"isArrangable": false,
-						"shouldRegister": true
+						"shouldRegister": true,
+						"ignoreSnappingRequests": true
 					},
 					"workspaceService": {
 						"global": true,
