@@ -16,8 +16,7 @@
 				"inject": false,
 				"spawnOnStartup": false,
 				"preload": [
-					"$applicationRoot/preloads/zoom.js",
-					"$applicationRoot/components/windowTitleBar/windowTitleBar.js"
+					"$applicationRoot/preloads/zoom.js"
 				]
 			},
 			"foreign": {
@@ -33,7 +32,7 @@
 					},
 					"Window Manager": {
 						"showLinker": true,
-						"FSBLHeader": false,
+						"FSBLHeader": true,
 						"persistWindowState": true,
 						"title": "Welcome"
 					},
