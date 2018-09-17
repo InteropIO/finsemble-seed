@@ -181,16 +181,12 @@ function createStore(done) {
 			store.addListener({ field: "menuIdentifier" }, Actions.updateMenuReference);
 			if (!data.menuSpawned) {
 				FSBL.Clients.LauncherClient.spawn("searchMenu", { name: "searchMenu." + finWindow.name, data: { owner: finWindow.name } }, function (err, data) {
-					debugger
-					console.log("SPAWN SEARCH!", data);
 					//console.log("Err", err, data)
 					menuStore.setValue({ field: "menuIdentifier", value: data.windowIdentifier })
 					Actions.setupWindow();
 					menuStore.setValue({ field: "menuSpawned", value: true })
 				});
 			} else {
-				debugger
-
 				menuStore.getValue("menuIdentifier", function (err, menuIdentifier) {
 					menuReference = menuIdentifier;
 					Actions.setupWindow();
