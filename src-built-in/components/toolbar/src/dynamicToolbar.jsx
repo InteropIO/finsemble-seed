@@ -163,7 +163,6 @@ export default class Toolbar extends React.Component {
 				handleOverflow={sectionPosition === "center"}
 				handlePins={sectionPosition === "center"}>
 				{buttons}
-				{sectionPosition === 'right' ? <div className='resize-area' /> : null}
 			</FinsembleToolbarSection>);
 			sections.push(sectionComponent);
 		}
@@ -176,6 +175,7 @@ export default class Toolbar extends React.Component {
 		return (<FinsembleToolbar onDragStart={this.moveToolbar} onDragEnd={this.onPinDrag}>
 			<DragHandle />
 			{this.getSections()}
+			<div className='resize-area' />
 		</FinsembleToolbar>);
 	}
 
