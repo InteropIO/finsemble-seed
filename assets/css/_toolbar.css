@@ -74,10 +74,10 @@
 
 .finsemble-toolbar .resize-area {
     height: 100%;
-    width: 10px;
-    max-width: 10px;
-    min-width: 10px;
-    background-color: darkgray;
+    width: 6px;
+    max-width: 6px;
+    min-width: 6px;
+    background-color: var(--toolbar-resize-area-color);
     justify-content: flex-end;
     order: 3;
     flex: 0 0 auto;
