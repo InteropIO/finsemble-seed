@@ -25,7 +25,6 @@ let menuStore;
 class SearchMenu extends React.Component {
 	constructor(props) {
 		super(props);
-		this.finWindow = fin.desktop.Window.getCurrent();
 		this.buildList = this.buildList.bind(this);
 
 		this.keyPress = this.keyPress.bind(this);
