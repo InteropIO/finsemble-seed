@@ -19,7 +19,7 @@ var FileMenuStore = Object.assign({}, EventEmitter.prototype, {
 		if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
 		function FSBLReady() {
 			self.emit("initialized");
-
+			FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "shift", "alt", "r"], FSBL.restartApplication);
 			FSBL.Clients.ConfigClient.getValue({ field: "finsemble" }, function (err, config) {
 				self.finsembleConfig = config;
 				let prompt;

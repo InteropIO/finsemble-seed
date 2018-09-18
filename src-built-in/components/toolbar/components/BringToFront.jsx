@@ -1,12 +1,17 @@
 import React from "react";
 import { FinsembleButton } from "@chartiq/finsemble-react-controls";
 
+// Store
+import ToolbarStore from "../stores/toolbarStore";
+
 export default class BringToFront extends React.Component {
 	constructor(props) {
 		super(props);
 	}
 	bringToFront() {
-		FSBL.Clients.LauncherClient.bringWindowsToFront();
+		FSBL.Clients.LauncherClient.bringWindowsToFront({}, () => {
+			ToolbarStore.bringToolbarToFront();
+		});
 	}
 	render() {
 		//console.log('rendero')
