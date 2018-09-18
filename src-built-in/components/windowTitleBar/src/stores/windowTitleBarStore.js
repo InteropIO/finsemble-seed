@@ -457,7 +457,7 @@ var Actions = {
 	},
 	closeTab: function (windowIdentifier) {
 		//return Actions.parentWrapper.deleteWindow({ windowIdentifier }) // this will cause the window to be closed but keep the stack intact
-		FSBL.FinsembleWindow.getWindow(windowIdentifier, (err, wrap) => {
+		FSBL.FinsembleWindow.getInstance(windowIdentifier, (err, wrap) => {
 			wrap.close();
 		});
 	},

@@ -100,7 +100,7 @@ var Actions = {
 				});
 				return done();
 			}
-			fin.desktop.Application.getWindow(proc.uuid).getChildWindows(cws => {
+			fin.desktop.Application.getInstance(proc.uuid).getChildWindows(cws => {
 				let childWindows = [];
 				cws.forEach(cw => {
 					//create a simple object so the actual childWindow class isn't stored in the distributed store.
@@ -190,7 +190,7 @@ var Actions = {
 	 */
 	identifyWindow: function (winID) {
 		const OPACITY_ANIMATION_DURATION = 200;
-		let win = fin.desktop.Window.getWindow(winID.uuid, winID.name);
+		let win = fin.desktop.Window.getInstance(winID.uuid, winID.name);
 		let windowState = "hidden";
 		function flash(n, done) {
 			win.animate({
@@ -228,7 +228,7 @@ var Actions = {
 	 * Terminates a process. Prompts first. If it fails to terminate the process, displays an error message.
 	 */
 	terminateProcess: function (AppIdentifier, force = false, prompt = true) {
-		let app = fin.desktop.Application.getWindow(AppIdentifier.uuid, AppIdentifier.name);
+		let app = fin.desktop.Application.getInstance(AppIdentifier.uuid, AppIdentifier.name);
 		/**
 		 * This whole routine is a little hectic because of all of the closures - but there's a method to the madness. Here's the logic.
 		 *
@@ -304,7 +304,7 @@ var Actions = {
 	 * This function exists to make the UI feel snappy. May take a second or so for the window to close properly and for the change to flow to system.getProcessList. To make that lag go away, we immediately render the change.
 	 */
 	removeWindowLocally: function (winID) {
-		let win = fin.desktop.Window.getWindow(winID.uuid, winID.name);
+		let win = fin.desktop.Window.getInstance(winID.uuid, winID.name);
 		let parentApp = win.getParentApplication();
 		let procs = ProcessMonitorStore.getValue({ field: "processList" });
 		procs = procs.map(proc => {
@@ -320,7 +320,7 @@ var Actions = {
 	 * Try to close the window. If that fails, try to force close the window. If that fails, ask if they'd like to terminate the parent process.
 	 */
 	closeWindow: function (winID, force = false) {
-		let win = fin.desktop.Window.getWindow(winID.uuid, winID.name);
+		let win = fin.desktop.Window.getInstance(winID.uuid, winID.name);
 		let parentApp = win.getParentApplication();
 
 		//Make the UI feel snappy.

@@ -111,8 +111,8 @@ var Actions = {
 
 	setupWindow(cb = Function.prototype) {
 		console.log("SETUP WINDOW!", menuReference.name);
-		//menuWindow = fin.desktop.Window.getWindow(menuReference.finWindow.app_uuid, menuReference.finWindow.name);
-		FSBL.FinsembleWindow.getWindow({ windowName: menuReference.name }, (err, wrap) => {
+		//menuWindow = fin.desktop.Window.getInstance(menuReference.finWindow.app_uuid, menuReference.finWindow.name);
+		FSBL.FinsembleWindow.getInstance({ windowName: menuReference.name }, (err, wrap) => {
 			menuWindow = wrap;
 			cb();
 		});

@@ -11,7 +11,7 @@ function FSBLReady() {
 		var data = windowDescriptor.customData;
 		if (data) {
 			if (data.window) {
-				parentWindow = fin.desktop.Window.getWindow(data.uuid, data.window);
+				parentWindow = fin.desktop.Window.getInstance(data.uuid, data.window);
 				TESTRUNNER_CHANNEL_NAME = `TestRunner.${parentWindow.name}.Linker`;
 				function chooseColor(color) {
 					return new Promise(function (resolve, reject) {

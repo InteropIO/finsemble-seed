@@ -11,7 +11,7 @@ export default class Logo extends React.PureComponent {
 	}
 	getWrap(cb = Function.prototype) {
 		if (this.wrap) return cb();
-		FSBL.FinsembleWindow.getWindow(this.props.windowIdentifier, (err, wrapper) => {
+		FSBL.FinsembleWindow.getInstance(this.props.windowIdentifier, (err, wrapper) => {
 			cb(wrapper);
 		});
 	}
