@@ -61,13 +61,13 @@ var Actions = {
 		HeaderStore.initialize();
 		var spData = FSBL.Clients.WindowClient.getSpawnData();
 		//'parent' here refers to the native window that we've befriended.
-		FSBL.FinsembleWindow.wrap(spData.parent, function (err, wrappedWindow) {
+		FSBL.FinsembleWindow.getWindow(spData.parent, function (err, wrappedWindow) {
 			HeaderStore.setCompanionWindow(wrappedWindow);
 			var onParentSet = async (e) => {
 				let { data } = e;
 				console.log(data);
 				if (!localParent && data.parentName) {
-					let { wrap } = await FSBL.FinsembleWindow.wrap({ name: data.parentName });
+					let { wrap } = await FSBL.FinsembleWindow.getWindow({ name: data.parentName });
 					localParent = wrap;
 
 					localParent.addListener("startedMoving", Actions.onCompanionStartedMoving);
