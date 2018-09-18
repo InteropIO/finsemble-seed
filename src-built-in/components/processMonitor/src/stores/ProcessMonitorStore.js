@@ -100,7 +100,7 @@ var Actions = {
 				});
 				return done();
 			}
-			fin.desktop.Application.getInstance(proc.uuid).getChildWindows(cws => {
+			fin.desktop.Application.wrap(proc.uuid).getChildWindows(cws => {
 				let childWindows = [];
 				cws.forEach(cw => {
 					//create a simple object so the actual childWindow class isn't stored in the distributed store.
@@ -228,7 +228,7 @@ var Actions = {
 	 * Terminates a process. Prompts first. If it fails to terminate the process, displays an error message.
 	 */
 	terminateProcess: function (AppIdentifier, force = false, prompt = true) {
-		let app = fin.desktop.Application.getInstance(AppIdentifier.uuid, AppIdentifier.name);
+		let app = fin.desktop.Application.wrap(AppIdentifier.uuid, AppIdentifier.name);
 		/**
 		 * This whole routine is a little hectic because of all of the closures - but there's a method to the madness. Here's the logic.
 		 *
