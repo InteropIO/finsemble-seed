@@ -87,7 +87,7 @@ export default class appLauncherContainer extends React.Component {
 		if (component.dontHideSelf) {
 			delete component.dontHideSelf;
 		} else {
-			FSBL.Clients.WindowClient.finWindow.hide();
+			finsembleWindow.hide();
 		}
 		// If we are launching a group
 		if (component.group) {

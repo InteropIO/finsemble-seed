@@ -6,7 +6,6 @@ import { EventEmitter } from "events";
 let PROMPT_ON_DIRTY = false;
 const constants = {
 	METHOD: "METHOD",
-	GET_FIN_WINDOW: "getFinWindow",
 	SHUTDOWN_APPLICATION: "shutdownApplication",
 };
 
@@ -19,7 +18,6 @@ var FileMenuStore = Object.assign({}, EventEmitter.prototype, {
 		var self = this;
 		if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
 		function FSBLReady() {
-			self.finWindow = fin.desktop.Window.getCurrent();
 			self.emit("initialized");
 
 			FSBL.Clients.ConfigClient.getValue({ field: "finsemble" }, function (err, config) {
@@ -36,10 +34,6 @@ var FileMenuStore = Object.assign({}, EventEmitter.prototype, {
 		}
 	},
 	finsembleConfig: null,
-	getFinWindow: function () {
-		return this.finWindow;
-	},
-	finWindow: {},
 	activeWorkspace: {},
 	monitorDimensions: {},
 	initializeActiveWorkspace() {
@@ -65,8 +59,7 @@ var FileMenuStore = Object.assign({}, EventEmitter.prototype, {
 		this.monitorDimensions = dimensions;
 	},
 	hideWindow() {
-		var finWindow = this.finWindow;
-		finWindow.hide();
+		finsembleWindow.hide();
 	}
 });
 var keys = {};
@@ -87,13 +80,13 @@ function setupHotKeys() {
 };
 var Actions = {
 	hideWindow() {
-		FileMenuStore.finWindow.hide();
+		finsembleWindow.hide();
 	},
 	/**
 	 * Hides the window and fires off a message shutting down the application.
 	 */
 	restart() {
-		fin.desktop.Window.getCurrent().hide();
+		finsembleWindow.hide();
 		Actions.saveWorkspace().then(function (choice) {
 			if (choice !== "cancel") {
 				FSBL.restartApplication();
@@ -105,14 +98,14 @@ var Actions = {
 	 *
 	 */
 	showCentralConsole() {
-		fin.desktop.Window.getCurrent().hide();
+		finsembleWindow.hide();
 		FSBL.Clients.RouterClient.transmit("CentralConsole-Show", true);
 	},
 	/**
 	 * Spawns the preferences menu.
 	 */
 	spawnPreferences() {
-		fin.desktop.Window.getCurrent().hide();
+		finsembleWindow.hide();
 		FSBL.Clients.LauncherClient.showWindow({
 			componentType: "UserPreferences"
 		}, {
@@ -156,7 +149,7 @@ var Actions = {
 	 * Hides the window and fires off a message shutting down the application.
 	 */
 	shutdownApplication() {
-		fin.desktop.Window.getCurrent().blur();
+		finsembleWindow.hide();
 		//FSBL.shutdownApplication();
 		Actions.saveWorkspace().then((choice) => {
 			if (choice === 'cancel') {
@@ -171,7 +164,7 @@ var Actions = {
 	 *
 	 */
 	logout() {
-		fin.desktop.Window.getCurrent().hide();
+		finsembleWindow.hide();
 		fetch("/logout", {//Sends our logout message
 			method: "POST",
 			credentials: "include"

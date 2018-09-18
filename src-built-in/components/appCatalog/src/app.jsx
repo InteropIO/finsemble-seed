@@ -22,7 +22,6 @@ import AppContent from "./components/AppContent";
 class AppCatalog extends React.Component {
 	constructor(props) {
 		super(props);
-		this.finWindow = fin.desktop.Window.getCurrent();
 		this.state = {
 			loaded: false,
 			headerImgUrl: ""

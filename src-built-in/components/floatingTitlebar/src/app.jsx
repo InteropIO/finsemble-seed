@@ -25,7 +25,6 @@ let hover = false;
 class FloatingTitlebar extends React.Component {
 	constructor(props) {
 		super(props);
-		this.finWindow = fin.desktop.Window.getCurrent();
 		this.state = {
 			size: "small",
 			tabs: [],
