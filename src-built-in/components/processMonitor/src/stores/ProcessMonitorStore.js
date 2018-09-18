@@ -190,7 +190,7 @@ var Actions = {
 	 */
 	identifyWindow: function (winID) {
 		const OPACITY_ANIMATION_DURATION = 200;
-		let win = fin.desktop.Window.getInstance(winID.uuid, winID.name);
+		let win = fin.desktop.Window.wrap(winID.uuid, winID.name);
 		let windowState = "hidden";
 		function flash(n, done) {
 			win.animate({
@@ -304,7 +304,7 @@ var Actions = {
 	 * This function exists to make the UI feel snappy. May take a second or so for the window to close properly and for the change to flow to system.getProcessList. To make that lag go away, we immediately render the change.
 	 */
 	removeWindowLocally: function (winID) {
-		let win = fin.desktop.Window.getInstance(winID.uuid, winID.name);
+		let win = fin.desktop.Window.wrap(winID.uuid, winID.name);
 		let parentApp = win.getParentApplication();
 		let procs = ProcessMonitorStore.getValue({ field: "processList" });
 		procs = procs.map(proc => {
@@ -320,7 +320,7 @@ var Actions = {
 	 * Try to close the window. If that fails, try to force close the window. If that fails, ask if they'd like to terminate the parent process.
 	 */
 	closeWindow: function (winID, force = false) {
-		let win = fin.desktop.Window.getInstance(winID.uuid, winID.name);
+		let win = fin.desktop.Window.wrap(winID.uuid, winID.name);
 		let parentApp = win.getParentApplication();
 
 		//Make the UI feel snappy.

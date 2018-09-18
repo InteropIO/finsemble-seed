@@ -41,7 +41,7 @@ class Linker extends React.Component {
 	 */
 	channelClicked(channel, active) {
 		var attachedWindowIdentifier = LinkerStore.getAttachedWindowIdentifier();
-		var attachedWindow = fin.desktop.Window.getInstance(attachedWindowIdentifier.uuid, attachedWindowIdentifier.windowName);
+		var attachedWindow = fin.desktop.Window.wrap(attachedWindowIdentifier.uuid, attachedWindowIdentifier.windowName);
 		attachedWindow.focus();
 
 		if (!active) return LinkerActions.linkToChannel(channel.name);
