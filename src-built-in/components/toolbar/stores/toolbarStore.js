@@ -65,8 +65,12 @@ class _ToolbarStore {
 		finsembleWindow.getFSBLState({
 			stateVar: "componentState"
 		}, (err, result) => {
+			if (err) {
+				finsembleWindow.show();
+				cb();
+			}
 			let bounds = result && result.hasOwnProperty('window-bounds') && result["window-bounds"] !== null ? result["window-bounds"] : null;
-			let visible = result.hasOwnProperty('visible') ? result.visible : true;
+			let visible = result && result.hasOwnProperty('visible') ? result.visible : true;
 			if (!err && bounds && isGloballyDocked) {
 				this.Store.setValue({
 					field: 'window-bounds',
@@ -199,6 +203,11 @@ class _ToolbarStore {
 		finsembleWindow.getFSBLState({
 			stateVar: "componentState"
 		}, (err, response) => {
+			if (err) {
+				Logger.system.error("Error retrieving dockable component state");
+				return;
+			}
+
 			let blurred = response && response.hasOwnProperty('blurred') ? response.blurred : false;
 			let visible = response && response.hasOwnProperty('visible') ? response.visible : true;
 
@@ -213,7 +222,7 @@ class _ToolbarStore {
 						this.Store.setValue({ field: 'searchActive', value: true })
 					});
 				} else {
-					store.Store.setValue({ field: 'searchActive', value: false });
+					this.Store.setValue({ field: 'searchActive', value: false });
 					finsembleWindow.setComponentState({
 						field: 'visible',
 						value: false
