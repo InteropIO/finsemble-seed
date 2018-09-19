@@ -77,7 +77,7 @@ var Actions = {
 		if (!menuWindow) {
 			return Actions.handleClose();
 		}
-		menuWindow.isShowing(function (showing) {
+		menuWindow.isShowing(function (err, showing) {
 			//if (!showing) return//console.log("not showing")
 			mouseInWindow(menuWindow, function (err, inBounds) {
 
@@ -107,7 +107,7 @@ var Actions = {
 	},
 	//handleClose gets called for several reasons. One of those is when the window starts moving. If it starts moving, an event is passed in. If the event is passed in, we don't want to animate the window. If it's just a blur, we'll animate the change in size.
 	handleClose(e) {
-		menuWindow.isShowing(function (showing) {
+		menuWindow.isShowing(function (err, showing) {
 			if (showing) {
 				console.log("close a window")
 				if (!e && cachedBounds) {

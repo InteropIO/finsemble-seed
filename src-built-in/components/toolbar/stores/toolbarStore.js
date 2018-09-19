@@ -204,7 +204,8 @@ class _ToolbarStore {
 			stateVar: "componentState"
 		}, (err, response) => {
 			if (err) {
-				Logger.system.error("Error retrieving dockable component state");
+				FSBL.Clients.Logger.system.error("Error retrieving dockable component state");
+				cb();
 				return;
 			}
 
@@ -227,6 +228,7 @@ class _ToolbarStore {
 						field: 'visible',
 						value: false
 					}, () => {
+						finsembleWindow.blur();
 						finsembleWindow.hide();
 					});
 				}
