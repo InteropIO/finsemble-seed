@@ -2,9 +2,9 @@
     "devtools_port": 9090,
     "startup_app": {
         "name": "ChartIQ Local",
-        "url": "https:/dev.finsemble.com/Finsemble/components/system/serviceManager/serviceManager.html",
+        "url": "https://dev.finsemble.com/Finsemble/components/system/serviceManager/serviceManager.html",
         "uuid": "Finsemble",
-        "applicationIcon": "https:/dev.finsemble.com/assets/img/Finsemble_Taskbar_Icon.png",
+        "applicationIcon": "https://dev.finsemble.com/assets/img/Finsemble_Taskbar_Icon.png",
         "defaultTop": 0,
         "defaultLeft": 0,
         "showTaskbarIcon": true,
@@ -31,7 +31,7 @@
     "shortcut": {
         "company": "ChartIQ",
         "description": "ChartIQ Local",
-        "icon": "https:/dev.finsemble.com/assets/img/Finsemble_Taskbar_Icon.ico",
+        "icon": "https://dev.finsemble.com/assets/img/Finsemble_Taskbar_Icon.ico",
         "name": "ChartIQ - LOCAL",
         "target": [
             "desktop",
@@ -41,7 +41,7 @@
         "startMenuRootFolder": "ChartIQ Local"
     },
     "dialogSettings": {
-        "logo": "https:/dev.finsemble.com/assets/img/ciq-banner-100x25.png",
+        "logo": "https://dev.finsemble.com/assets/img/ciq-banner-100x25.png",
         "bgColor": 4280109424,
         "textColor": 4293521652,
         "progressBarBgColor": 4294967295,
@@ -63,10 +63,10 @@
         }
     ],
     "finsemble": {
-        "applicationRoot": "https:/dev.finsemble.com",
-        "moduleRoot": "https:/dev.finsemble.com/finsemble",
-        "servicesRoot": "https:/dev.finsemble.com/finsemble/services",
-        "notificationURL": "https:/dev.finsemble.com/components/notification/notification.html",
+        "applicationRoot": "https://dev.finsemble.com",
+        "moduleRoot": "https://dev.finsemble.com/finsemble",
+        "servicesRoot": "https://dev.finsemble.com/finsemble/services",
+        "notificationURL": "https://dev.finsemble.com/components/notification/notification.html",
         "router": {
             "sameDomainTransport": "SharedWorker",
             "crossDomainTransport": "OpenFinBus",
