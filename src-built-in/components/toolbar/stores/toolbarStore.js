@@ -66,7 +66,7 @@ class _ToolbarStore {
 			stateVar: "componentState"
 		}, (err, result) => {
 			let bounds = result && result.hasOwnProperty('window-bounds') && result["window-bounds"] !== null ? result["window-bounds"] : null;
-			let visible = result.hasOwnProperty('visible') ? result.visible : true;
+			let visible = result && result.hasOwnProperty('visible') ? result.visible : true;
 			if (!err && bounds && isGloballyDocked) {
 				this.Store.setValue({
 					field: 'window-bounds',
@@ -213,7 +213,7 @@ class _ToolbarStore {
 						this.Store.setValue({ field: 'searchActive', value: true })
 					});
 				} else {
-					store.Store.setValue({ field: 'searchActive', value: false });
+					this.Store.setValue({ field: 'searchActive', value: false });
 					finsembleWindow.setComponentState({
 						field: 'visible',
 						value: false
