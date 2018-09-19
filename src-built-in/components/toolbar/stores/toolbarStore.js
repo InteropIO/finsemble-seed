@@ -65,9 +65,9 @@ class _ToolbarStore {
 		finsembleWindow.getFSBLState({
 			stateVar: "componentState"
 		}, (err, result) => {
-			let bounds = result.hasOwnProperty('window-bounds') && result["window-bounds"] !== null ? result["window-bounds"] : null;
+			let bounds = result && result.hasOwnProperty('window-bounds') && result["window-bounds"] !== null ? result["window-bounds"] : null;
 			let visible = result.hasOwnProperty('visible') ? result.visible : true;
-			if (bounds && isGloballyDocked) {
+			if (!err && bounds && isGloballyDocked) {
 				this.Store.setValue({
 					field: 'window-bounds',
 					value: bounds
@@ -87,7 +87,6 @@ class _ToolbarStore {
 	 * Sets the toolbars visibility in memory
 	 */
 	setToolbarVisibilityInMemory(cb = Function.prototype) {
-		console.log('setting visibility state');
 		FSBL.Clients.WindowClient.setComponentState({
 			field: 'visible',
 			value: true
