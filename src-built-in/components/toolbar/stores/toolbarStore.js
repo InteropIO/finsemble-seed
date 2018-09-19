@@ -65,6 +65,10 @@ class _ToolbarStore {
 		finsembleWindow.getFSBLState({
 			stateVar: "componentState"
 		}, (err, result) => {
+			if (err) {
+				finsembleWindow.show();
+				cb();
+			}
 			let bounds = result && result.hasOwnProperty('window-bounds') && result["window-bounds"] !== null ? result["window-bounds"] : null;
 			let visible = result && result.hasOwnProperty('visible') ? result.visible : true;
 			if (!err && bounds && isGloballyDocked) {
@@ -199,6 +203,11 @@ class _ToolbarStore {
 		finsembleWindow.getFSBLState({
 			stateVar: "componentState"
 		}, (err, response) => {
+			if (err) {
+				Logger.system.error("Error retrieving dockable component state");
+				return;
+			}
+
 			let blurred = response && response.hasOwnProperty('blurred') ? response.blurred : false;
 			let visible = response && response.hasOwnProperty('visible') ? response.visible : true;
 
