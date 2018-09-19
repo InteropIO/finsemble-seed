@@ -8,5 +8,10 @@
         "serverPort": 3375,
         "serverConfig": "http://localhost:3375/configs/openfin/manifest-local.json",
         "clientRoute": "http://localhost:3375/"
+    },
+    "local-dev":{
+        "serverPort": 3375,
+        "serverConfig": "https://zypzen.fwd.wf/configs/openfin/manifest-local-dev.json",
+        "clientRoute": "https://zypzen.fwd.wf/"
     }
 }

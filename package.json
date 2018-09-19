@@ -7,6 +7,7 @@
         "build:dev": "gulp build:dev --gulpfile=./gulpfile.js",
         "build": "gulp build:dev --gulpfile=./gulpfile.js",
         "dev": "gulp dev --gulpfile=./gulpfile.js",
+        "dev-local": "gulp dev-local --gulpfile=./gulpfile.js",
         "dev-fresh": "gulp dev:fresh --gulpfile=./gulpfile.js",
         "dev:fresh": "gulp dev:fresh --gulpfile=./gulpfile.js",
         "dev:nolaunch": "gulp dev:noLaunch --gulpfile=./gulpfile.js",

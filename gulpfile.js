@@ -14,7 +14,7 @@
 	const gulp = require("gulp");
 	const prettyHrtime = require("pretty-hrtime");
 	const watch = require("gulp-watch");
-	const launcher = require("openfin-launcher");	
+	const launcher = require("openfin-launcher");
 	const shell = require("shelljs");
 	const path = require("path");
 	const webpack = require("webpack");
@@ -27,7 +27,7 @@
 		if (!chalk[color]) color = "white";
 		if (!chalk[color][bgcolor]) bgcolor = "bgBlack";
 		console.log(`[${new Date().toLocaleTimeString()}] ${chalk[color][bgcolor](msg)}.`);
-	}
+	};
 
 	let angularComponents;
 	try {
@@ -75,7 +75,7 @@
 		distPath : path.join(__dirname, "dist"),
 		srcPath: path.join(__dirname, "src"),
 		startupConfig: startupConfig,
-		
+
 		/**
 		 * Builds the application in the distribution directory. Internal only, don't use because no environment is set!!!!
 		 */
@@ -114,7 +114,12 @@
 
 			done();
 		},
-
+		"build:dev-local": done => {
+			async.series([
+				taskMethods.setDevEnvironmentLocal,
+				taskMethods.build
+			], done);
+		},
 		"build:dev": done => {
 			async.series([
 				taskMethods.setDevEnvironment,
@@ -131,7 +136,7 @@
 		 * Builds files using webpack.
 		 */
 		buildWebpack: done => {
-			logToTerminal(`Starting webpack. Environment:"${process.env.NODE_ENV}"`)
+			logToTerminal(`Starting webpack. Environment:"${process.env.NODE_ENV}"`);
 			//Helper function that builds webpack, logs errors, and notifies user of start/finish of the webpack task.
 			function packFiles(config, bundleName, callback) {
 				logToTerminal(`Starting to build ${bundleName}`);
@@ -162,7 +167,7 @@
 					}
 				});
 			}
-	
+
 			//Requires are done in the function because webpack.components.js will error out if there's no vendor-manifest. The first webpack function generates the vendor manifest.
 			async.series([
 				(cb) => {
@@ -170,19 +175,19 @@
 					packFiles(webpackAdaptersConfig, "adapters bundle", cb);
 				},
 				(cb) => {
-					const webpackVendorConfig = require("./build/webpack/webpack.vendor.js")
+					const webpackVendorConfig = require("./build/webpack/webpack.vendor.js");
 					packFiles(webpackVendorConfig, "vendor bundle", cb);
 				},
 				(cb) => {
-					const webpackPreloadsConfig = require("./build/webpack/webpack.preloads.js")
+					const webpackPreloadsConfig = require("./build/webpack/webpack.preloads.js");
 					packFiles(webpackPreloadsConfig, "preload bundle", cb);
 				},
 				(cb) => {
-					const webpackTitleBarConfig = require("./build/webpack/webpack.titleBar.js")
+					const webpackTitleBarConfig = require("./build/webpack/webpack.titleBar.js");
 					packFiles(webpackTitleBarConfig, "titlebar bundle", cb);
 				},
 				(cb) => {
-					const webpackServicesConfig = require("./build/webpack/webpack.services.js")
+					const webpackServicesConfig = require("./build/webpack/webpack.services.js");
 					if (webpackServicesConfig) {
 						packFiles(webpackServicesConfig, "services bundle", cb);
 					} else {
@@ -190,11 +195,11 @@
 					}
 				},
 				(cb) => {
-					const webpackComponentsConfig = require("./build/webpack/webpack.components.js")
+					const webpackComponentsConfig = require("./build/webpack/webpack.components.js");
 					packFiles(webpackComponentsConfig, "component bundle", cb);
 				}
 			],
-				done
+			done
 			);
 		},
 
@@ -234,21 +239,21 @@
 					checkLink({
 						path: FINSEMBLE_PATH,
 						name: "finsemble"
-					}, cb)
+					}, cb);
 				},
 				(cb) => {
 					checkLink({
 						path: CLI_PATH,
 						name: "finsemble-cli"
-					}, cb)
+					}, cb);
 				},
 				(cb) => {
 					checkLink({
 						path: CONTROLS_PATH,
 						name: "finsemble-react-controls"
-					}, cb)
+					}, cb);
 				},
-			], done)
+			], done);
 		},
 
 		/**
@@ -257,6 +262,13 @@
 		"dev": done => {
 			async.series([
 				taskMethods["build:dev"],
+				taskMethods.startServer,
+				taskMethods.launchApplication
+			], done);
+		},
+		"dev-local": done => {
+			async.series([
+				taskMethods["build:dev-local"],
 				taskMethods.startServer,
 				taskMethods.launchApplication
 			], done);
@@ -281,11 +293,17 @@
 				taskMethods.startServer
 			], done);
 		},
+		"devLocal:noLaunch": done => {
+			async.series([
+				taskMethods["build:dev-local"],
+				taskMethods.startServer
+			], done);
+		},
 		launchApplication: done => {
 			ON_DEATH((signal, err) => {
 				exec("taskkill /F /IM openfin.* /T", (err, stdout, stderr) => {
 					// Only write the error to console if there is one and it is something other than process not found.
-					if (err && err !== 'The process "openfin.*" not found.') {
+					if (err && err !== "The process \"openfin.*\" not found.") {
 						console.error(errorOutColor(err));
 					}
 
@@ -422,7 +440,10 @@
 			process.env.NODE_ENV = "development";
 			done();
 		},
-
+		setDevEnvironmentLocal: done => {
+			process.env.NODE_ENV = "local-dev";
+			done();
+		},
 		setProdEnvironment: done => {
 			process.env.NODE_ENV = "production";
 			done();
@@ -457,7 +478,7 @@
 				process.exit(1);
 			}
 		});
-	}
+	};
 	// #endregion
 
 	// Run anything that we need to do before the gulp task is run
