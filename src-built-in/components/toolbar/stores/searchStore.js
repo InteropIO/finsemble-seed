@@ -198,20 +198,6 @@ function createStore(done) {
 
 		store.getValues(["owner", "menuSpawned"], function (err, data) {
 			store.addListener({ field: "menuIdentifier" }, Actions.updateMenuReference);
-			if (!data.menuSpawned) {
-				FSBL.Clients.LauncherClient.spawn("searchMenu", { name: "searchMenu." + finWindow.name, data: { owner: finWindow.name } }, function (err, data) {
-					//console.log("Err", err, data)
-					menuStore.setValue({ field: "menuIdentifier", value: data.windowIdentifier })
-					Actions.setupWindow();
-					menuStore.setValue({ field: "menuSpawned", value: true })
-				});
-			} else {
-				menuStore.getValue("menuIdentifier", function (err, menuIdentifier) {
-					menuReference = menuIdentifier;
-					Actions.setupWindow();
-				})
-
-			}
 			menuStore.Dispatcher.register(function (action) {
 				if (action.actionType === "menuBlur") {
 					Actions.menuBlur();
@@ -219,8 +205,23 @@ function createStore(done) {
 					Actions.handleClose();
 				}
 			});
+
+			if (!data.menuSpawned) {
+				FSBL.Clients.LauncherClient.spawn("searchMenu", { name: "searchMenu." + finWindow.name, data: { owner: finWindow.name } }, function (err, data) {
+					//console.log("Err", err, data)
+					menuStore.setValue({ field: "menuIdentifier", value: data.windowIdentifier })
+					Actions.setupWindow(() => {
+						menuStore.setValue({ field: "menuSpawned", value: true })
+						done();
+					});
+				});
+			} else {
+				menuStore.getValue("menuIdentifier", function (err, menuIdentifier) {
+					menuReference = menuIdentifier;
+					Actions.setupWindow(done);
+				})
+			}
 		})
-		done();
 	});
 
 	finsembleWindow.listenForBoundsSet();
