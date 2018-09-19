@@ -62,20 +62,15 @@ class _ToolbarStore {
 
 		let isGloballyDocked = hasRightProps() ? finsembleWindow.windowOptions.customData.foreign.services.workspaceService.global : false;
 
-		finsembleWindow.getFSBLState({
-			stateVar: "componentState"
-		}, (err, result) => {
+		finsembleWindow.getComponentState({}, (err, result) => {
 			if (err) {
 				finsembleWindow.show();
 				cb();
+				return;
 			}
-			let bounds = result && result.hasOwnProperty('window-bounds') && result["window-bounds"] !== null ? result["window-bounds"] : null;
-			let visible = result && result.hasOwnProperty('visible') ? result.visible : true;
-			if (!err && bounds && isGloballyDocked) {
-				this.Store.setValue({
-					field: 'window-bounds',
-					value: bounds
-				});
+			let bounds = result.hasOwnProperty('window-bounds') && result["window-bounds"] !== null ? result["window-bounds"] : null;
+			let visible = result.hasOwnProperty('visible') ? result.visible : true;
+			if (bounds && isGloballyDocked) {
 				finsembleWindow.setBounds(bounds, () => {
 					if (visible) {
 						finsembleWindow.show();
@@ -165,7 +160,6 @@ class _ToolbarStore {
 		});
 		FSBL.Clients.WindowClient.finsembleWindow.listenForBoundsSet();
 		let onBoundsSet = (bounds) => {
-			self.Store.setValue({ field: "window-bounds", value: bounds });
 			FSBL.Clients.WindowClient.setComponentState({
 				field: 'window-bounds',
 				value: bounds
@@ -200,47 +194,43 @@ class _ToolbarStore {
 	 * @memberof _ToolbarStore
 	 */
 	toggleToolbarVisibility(cb = Function.prototype) {
-		finsembleWindow.getFSBLState({
-			stateVar: "componentState"
-		}, (err, response) => {
+		finsembleWindow.getComponentState({}, (err, response) => {
 			if (err) {
-				Logger.system.error("Error retrieving dockable component state");
+				FSBL.Clients.Logger.system.error("Error retrieving dockable component state");
+				cb();
 				return;
 			}
 
-			let blurred = response && response.hasOwnProperty('blurred') ? response.blurred : false;
-			let visible = response && response.hasOwnProperty('visible') ? response.visible : true;
+			let blurred = response.hasOwnProperty('blurred') ? response.blurred : false;
+			let visible = response.hasOwnProperty('visible') ? response.visible : true;
 
 			if (visible) {
 				if (blurred) {
-					finsembleWindow.setComponentState({
-						field: 'blurred',
-						value: false
-					}, () => {
-						finsembleWindow.bringToFront();
-						finsembleWindow.focus();
-						this.Store.setValue({ field: 'searchActive', value: true })
-					});
+					finsembleWindow.bringToFront();
+					finsembleWindow.focus();
+					this.Store.setValue({ field: "searchActive", value: true });
 				} else {
-					this.Store.setValue({ field: 'searchActive', value: false });
 					finsembleWindow.setComponentState({
 						field: 'visible',
 						value: false
 					}, () => {
+						this.Store.setValue({ field: "searchActive", value: false });
+						finsembleWindow.blur();
 						finsembleWindow.hide();
 					});
 				}
 			} else {
 				finsembleWindow.setComponentState({
-					field: "visible",
+					field: 'visible',
 					value: true
 				}, () => {
 					finsembleWindow.show();
 					finsembleWindow.bringToFront();
 					finsembleWindow.focus();
-					this.Store.setValue({ field: 'searchActive', value: true });
+					this.Store.setValue({ field: "searchActive", value: true });
 				});
 			}
+			cb(null, "success");
 		});
 	}
 
@@ -248,18 +238,18 @@ class _ToolbarStore {
 	 * onBlur
 	 * @memberof _ToolbarStore
 	 */
-	onBlur() {
+	onBlur(cb = Function.prototype) {
 		finsembleWindow.setComponentState({
 			field: 'blurred',
 			value: true
-		});
+		}, cb);
 	}
 
-	onFocus() {
+	onFocus(cb = Function.prototype) {
 		finsembleWindow.setComponentState({
 			field: 'blurred',
 			value: false
-		});
+		}, cb);
 	}
 
 	/**
