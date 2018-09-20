@@ -47,6 +47,7 @@ html.desktop-active .fsbl-header {
 }
 
 .fsbl-header-title {
+    position: relative;
     height: 100%;
     overflow: hidden;
     align-items: center;
