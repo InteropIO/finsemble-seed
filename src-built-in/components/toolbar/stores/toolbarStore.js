@@ -198,6 +198,7 @@ class _ToolbarStore {
 	 */
 	toggleToolbarVisibility(cb = Function.prototype) {
 		finsembleWindow.getComponentState({}, (err, response) => {
+			//'Not found' is a custom error thrown by getComponentState that just means the state is empty. This isn't an error we're too concerned about because we have default options to use. This is _most likely_ due to a reset, where the state variables for toolbar no longer exist
 			if (err && err !== "Not found") {
 				FSBL.Clients.Logger.system.error("Error retrieving dockable component state");
 				cb();
