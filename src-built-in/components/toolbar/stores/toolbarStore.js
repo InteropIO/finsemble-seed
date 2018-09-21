@@ -160,10 +160,13 @@ class _ToolbarStore {
 		});
 		FSBL.Clients.WindowClient.finsembleWindow.listenForBoundsSet();
 		let onBoundsSet = (bounds) => {
-			FSBL.Clients.WindowClient.setComponentState({
+			console.log("CHANGING BOUNDS AND SETTING THEM");
+			finsembleWindow.setComponentState({
 				field: 'window-bounds',
 				value: bounds
-			}, Function.prototype);
+			}, () => {
+				console.log("BOUNDS SET");
+			});
 		}
 		FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", "t"], () => {
 			self.toggleToolbarVisibility();
@@ -195,14 +198,14 @@ class _ToolbarStore {
 	 */
 	toggleToolbarVisibility(cb = Function.prototype) {
 		finsembleWindow.getComponentState({}, (err, response) => {
-			if (err) {
+			if (err && err !== "Not found") {
 				FSBL.Clients.Logger.system.error("Error retrieving dockable component state");
 				cb();
 				return;
 			}
 
-			let blurred = response.hasOwnProperty('blurred') ? response.blurred : false;
-			let visible = response.hasOwnProperty('visible') ? response.visible : true;
+			let blurred = response && response.hasOwnProperty('blurred') ? response.blurred : false;
+			let visible = response && response.hasOwnProperty('visible') ? response.visible : true;
 
 			if (visible) {
 				if (blurred) {
