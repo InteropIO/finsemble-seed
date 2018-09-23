@@ -13,8 +13,8 @@ const PLACEHOLDER_TAB = {
     uuid: "",
     componentType: "placeholder-tab"
 };
-let TAB_WIDTH = 300;
-const MINIMUM_TAB_SIZE = 100;
+let TAB_WIDTH = 150;
+const MINIMUM_TAB_SIZE = 75;
 
 export default class TabRegion extends React.Component {
     constructor(props) {

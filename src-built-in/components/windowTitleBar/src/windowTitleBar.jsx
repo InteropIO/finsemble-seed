@@ -215,33 +215,33 @@ class WindowTitleBar extends React.Component {
 		dragHandle.style.marginTop = (-bounds.height + 5) + "px"; // Negative margin pulls the drag handle up over the fixed header
 
 		// Start logic for determining where to place our dragHandle
+		let firstRightComponent = document.querySelector(".fsbl-header-right div");
+		let firstRightComponentBounds = firstRightComponent.getBoundingClientRect();
+				
 		if (this.state.showTabs) {
-			// If there is more than one tab, then the drag area is the padding-left of fsbl-header-right
-			// See .fsbl-tabs-multiple in the css
-			if (this.state.tabs.length > 1) {
-				let headerRight = document.querySelector(".fsbl-header-right");
-				let computedStyle = getComputedStyle(headerRight);
-				bounds = headerRight.getBoundingClientRect();
-				// override the bounds.width with the paddingLeft amount
+			if (this.state.tabs.length > 1) { // multiple tabs
+				//override the bounds using the right edge of the tab area and left edge of the controls
+				let fsblHeaderCenterRect = document.querySelector(".fsbl-header-center").getBoundingClientRect();
 				bounds = {
-					left: bounds.left,
-					width: parseInt(computedStyle.paddingLeft, 10)
+					left: fsblHeaderCenterRect.right,
+					width: firstRightComponentBounds.left - fsblHeaderCenterRect.right
 				};
-			} else {
-				// If tabs are not enabled, then the remained of fsbl-header-center beyond the tabs
-				// is the draggable area. This assumes left aligned tabs.
-				let fsblHeaderCenter = document.querySelector(".fsbl-header-center");
-				bounds = fsblHeaderCenter.getBoundingClientRect();
-				let theTabBounds = fsblHeaderCenter.querySelector(".tab-region-wrapper div").getBoundingClientRect();
-				// Calculate the right portion
+			} else { //only one tab
+				// override the bounds using the right edge of the tab and left edge of the controls
+				let tabRegionRect = document.querySelector(".tab-region-wrapper").getBoundingClientRect();
 				bounds = {
-					left: bounds.left + theTabBounds.width,
-					width: bounds.width - theTabBounds.width
+					left: tabRegionRect.right,
+					width: firstRightComponentBounds.left - tabRegionRect.right
 				};
 			}
 		} else {
 			// If tabs are not enabled, then the entire center is the drag area
-			bounds = document.querySelector(".fsbl-header-center").getBoundingClientRect();
+			let theFirstTabDiv = document.querySelector(".fsbl-header-center div");
+
+			bounds = {
+				left: theFirstTabDiv.right,
+				width: firstRightComponentBounds.left - theFirstTabDiv.right
+			};
 		}
 		dragHandle.style.left = bounds.left + "px";
 		dragHandle.style.width = bounds.width + "px";
