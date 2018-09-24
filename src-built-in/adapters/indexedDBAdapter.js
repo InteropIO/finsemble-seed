@@ -72,6 +72,7 @@ const IndexedDBAdapter = function () {
 	 * The IndexedDB instance.
 	 */
 	this.db;
+	this.queue = [];
 
 	Logger.system.debug("IndexedDBAdapter init");
 	console.debug("IndexedDBAdapter init");
@@ -93,6 +94,7 @@ const IndexedDBAdapter = function () {
 		objectStore.transaction.oncomplete = () => {
 			Logger.system.debug("IndexedDBAdapter object store created");
 			console.debug("IndexedDBAdapter object store created");
+			this.releaseQueue();
 		};
 	};
 
@@ -101,6 +103,7 @@ const IndexedDBAdapter = function () {
 		console.debug("IndexedDBAdapter initialized successfully");
 
 		this.db = event.target.result;
+		this.releaseQueue();
 	};
 
 	request.onerror = (err) => {
@@ -134,6 +137,15 @@ const IndexedDBAdapter = function () {
 		return preface;
 	}
 
+	this.releaseQueue = () => {
+		if (this.queue.length) {
+			Logger.system.debug("IndexedDBAdapter.releaseQueue");
+		}	
+		while (this.queue.length) {
+			let action = this.queue.shift();
+			this[action.method].apply(this, action.args);
+		}
+	}
 	// #region Interface Methods
 	/**
 	 * This method should be used very, very judiciously. It's essentially a method designed to wipe the database for a 
@@ -178,6 +190,11 @@ const IndexedDBAdapter = function () {
 		Logger.system.debug("IndexedDBAdapter.delete for key=" + combinedKey);
 		console.debug("IndexedDBAdapter.delete for key=" + combinedKey);
 
+		if (!this.db) {
+			this.queue.push({ method: "delete", args: [params, cb] });
+			return;
+		}
+		
 		const objectStore = this.db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
 		const request = objectStore.delete(combinedKey);
 
@@ -203,6 +220,11 @@ const IndexedDBAdapter = function () {
 	this.empty = (cb) => {
 		Logger.system.debug("IndexedDBAdapter.empty");
 		console.debug("IndexedDBAdapter.empty");
+
+		if (!this.db) {
+			this.queue.push({ method: "empty", args: [cb] });
+			return;
+		}
 
 		const objectStore = this.db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
 		const request = objectStore.clear();
@@ -232,7 +254,13 @@ const IndexedDBAdapter = function () {
 	 */
 	this.get = (params, cb) => {
 		Logger.system.debug("IndexedDBAdapter.get, params: ", params);
-		console.debug("IndexedDBAdapter.get, params: ", params);
+		console.debug("IndexedDBAdapter.get, params: ", params, cb);
+
+		if (!this.db) {
+			console.debug("queuing", "get", [params, cb]);
+			this.queue.push({ method: "get", args: [params, cb] });
+			return;
+		}
 
 		const combinedKey = this.getCombinedKey(this, params);
 		const objectStore = this.db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
@@ -262,6 +290,13 @@ const IndexedDBAdapter = function () {
 	 * @param {function} cb
 	 */
 	this.keys = (params, cb) => {
+
+		if (!this.db) {
+			this.queue.push({ method: "keys", args: [params,cb] });
+			return;
+		}
+
+
 		const keyPreface = this.getKeyPreface(params);
 		const keyRange = IDBKeyRange.forPrefix(keyPreface);
 		const objectStore = this.db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
@@ -296,6 +331,12 @@ const IndexedDBAdapter = function () {
 	this.save = (params, cb) => {
 		Logger.system.debug("IndexedDBAdapter.save, params: ", params);
 		console.debug("IndexedDBAdapter.save, params: ", params);
+
+		if (!this.db) {
+			console.debug("queuing", "save", [params, cb]);
+			this.queue.push({ method: "save", args: [params, cb] });
+			return;
+		}		
 
 		const combinedKey = this.getCombinedKey(this, params);
 		const objectStore = this.db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
