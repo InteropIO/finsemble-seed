@@ -72,6 +72,11 @@ const IndexedDBAdapter = function () {
 	 * The IndexedDB instance.
 	 */
 	this.db;
+
+	/**
+	 * Array of commands received before the IndexedDB is initialized. These commands are executed once the connection
+	 * has been established.
+	 */
 	this.queue = [];
 
 	Logger.system.debug("IndexedDBAdapter init");
@@ -137,12 +142,16 @@ const IndexedDBAdapter = function () {
 		return preface;
 	}
 
+	/**
+	 * Process the commands queued for execution after the IndexedDB connection is established.
+	 * @private
+	 */
 	this.releaseQueue = () => {
-		if (this.queue.length) {
-			Logger.system.debug("IndexedDBAdapter.releaseQueue");
-		}	
+		Logger.system.debug(`IndexedDBAdapter.releaseQueue: ${this.queue.length} commands`);
+		console.debug(`IndexedDBAdapter.releaseQueue: ${this.queue.length} commands`);
+
 		while (this.queue.length) {
-			let action = this.queue.shift();
+			const action = this.queue.shift();
 			this[action.method].apply(this, action.args);
 		}
 	}
@@ -152,6 +161,13 @@ const IndexedDBAdapter = function () {
 	 * particular user.
 	 */
 	this.clearCache = (params, cb) => {
+		if (!this.db) {
+			Logger.system.debug("queuing", "clearCache", [params, cb]);
+			console.debug("queuing", "clearCache", [params, cb]);
+			this.queue.push({ method: "clearCache", args: [params, cb] });
+			return;
+		}
+
 		const userPreface = this.getUserPreface(this);
 
 		Logger.system.debug("IndexedDBAdapter.clearCache for userPreface=" + userPreface);
@@ -185,16 +201,18 @@ const IndexedDBAdapter = function () {
 	 * @param {function} cb callback to be invoked upon completion
 	 */
 	this.delete = (params, cb) => {
+		if (!this.db) {
+			Logger.system.debug("queuing", "delete", [params, cb]);
+			console.debug("queuing", "delete", [params, cb]);
+			this.queue.push({ method: "delete", args: [params, cb] });
+			return;
+		}
+
 		const combinedKey = this.getCombinedKey(this, params);
 
 		Logger.system.debug("IndexedDBAdapter.delete for key=" + combinedKey);
 		console.debug("IndexedDBAdapter.delete for key=" + combinedKey);
 
-		if (!this.db) {
-			this.queue.push({ method: "delete", args: [params, cb] });
-			return;
-		}
-		
 		const objectStore = this.db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
 		const request = objectStore.delete(combinedKey);
 
@@ -218,13 +236,15 @@ const IndexedDBAdapter = function () {
 	 * @param {function} cb
 	 */
 	this.empty = (cb) => {
-		Logger.system.debug("IndexedDBAdapter.empty");
-		console.debug("IndexedDBAdapter.empty");
-
 		if (!this.db) {
+			Logger.system.debug("queuing", "empty", [cb]);
+			console.debug("queuing", "empty", [cb]);
 			this.queue.push({ method: "empty", args: [cb] });
 			return;
 		}
+
+		Logger.system.debug("IndexedDBAdapter.empty");
+		console.debug("IndexedDBAdapter.empty");
 
 		const objectStore = this.db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
 		const request = objectStore.clear();
@@ -253,14 +273,15 @@ const IndexedDBAdapter = function () {
 	 * @param {function} cb callback to be invoked upon completion
 	 */
 	this.get = (params, cb) => {
-		Logger.system.debug("IndexedDBAdapter.get, params: ", params);
-		console.debug("IndexedDBAdapter.get, params: ", params, cb);
-
 		if (!this.db) {
+			Logger.system.debug("queuing", "get", [params, cb]);
 			console.debug("queuing", "get", [params, cb]);
 			this.queue.push({ method: "get", args: [params, cb] });
 			return;
 		}
+
+		Logger.system.debug("IndexedDBAdapter.get, params: ", params);
+		console.debug("IndexedDBAdapter.get, params: ", params, cb);
 
 		const combinedKey = this.getCombinedKey(this, params);
 		const objectStore = this.db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
@@ -290,12 +311,12 @@ const IndexedDBAdapter = function () {
 	 * @param {function} cb
 	 */
 	this.keys = (params, cb) => {
-
 		if (!this.db) {
-			this.queue.push({ method: "keys", args: [params,cb] });
+			Logger.system.debug("queuing", "keys", [params, cb]);
+			console.debug("queuing", "keys", [params, cb]);
+			this.queue.push({ method: "keys", args: [params, cb] });
 			return;
 		}
-
 
 		const keyPreface = this.getKeyPreface(params);
 		const keyRange = IDBKeyRange.forPrefix(keyPreface);
@@ -329,14 +350,15 @@ const IndexedDBAdapter = function () {
 	 * @param {function} cb callback to be invoked upon save completion
 	 */
 	this.save = (params, cb) => {
-		Logger.system.debug("IndexedDBAdapter.save, params: ", params);
-		console.debug("IndexedDBAdapter.save, params: ", params);
-
 		if (!this.db) {
+			Logger.system.debug("queuing", "save", [params, cb]);
 			console.debug("queuing", "save", [params, cb]);
 			this.queue.push({ method: "save", args: [params, cb] });
 			return;
-		}		
+		}
+
+		Logger.system.debug("IndexedDBAdapter.save, params: ", params);
+		console.debug("IndexedDBAdapter.save, params: ", params);
 
 		const combinedKey = this.getCombinedKey(this, params);
 		const objectStore = this.db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
