@@ -69,6 +69,7 @@ export default class Workspaces extends React.Component {
 			editing: false,
 			workspaceList: [],
 			focusedWorkspace: '',
+			saveWorkspacePrompt: false,
 			//todo, get the workspaceToLoadOnStart from preferences.
 			workspaceToLoadOnStart: null,
 			templateName: '',
@@ -88,7 +89,7 @@ export default class Workspaces extends React.Component {
 		});
 	}
 	bindCorrectContext() {
-		let methods = ["deleteWorkspace", "addListeners", "setWorkspaceList", "onDragEnd", "startEditingWorkspace", "renameWorkspace", "cancelEdit", "setWorkspaceToLoadOnStart", "setPreferences", "exportWorkspace", "handleButtonClicks", "getFocusedWorkspaceComponentList"];
+		let methods = ["deleteWorkspace", "addListeners", "setWorkspaceList", "onDragEnd", "startEditingWorkspace", "renameWorkspace", "cancelEdit", "setWorkspaceToLoadOnStart", "setPreferences", "exportWorkspace", "handleButtonClicks", "getFocusedWorkspaceComponentList", "toggleSavingPrompt"];
 		methods.forEach((method) => {
 			this[method] = this[method].bind(this);
 		});
@@ -153,6 +154,19 @@ export default class Workspaces extends React.Component {
 		}
 		FSBL.Clients.Logger.system.debug("getComponentTypes", annotatedComponentList);
 		return annotatedComponentList;
+	}
+
+	toggleSavingPrompt() {
+		this.setState({
+			saveWorkspacePrompt: !this.state.saveWorkspacePrompt
+		}, () => {
+		FSBL.Clients.ConfigClient
+			.setPreference({ 
+				field: "finsemble.saveWorkspacePrompt", 
+				value: this.state.saveWorkspacePrompt }, (err, data) => {
+				if (err) console.error(err)
+			})
+		})
 	}
 
 	setFocusedWorkspace(workspace) {
@@ -257,6 +271,7 @@ export default class Workspaces extends React.Component {
 		if (!data && !data.value) return;
 		console.log("Set preferences", data.value);
 		this.setState({
+			saveWorkspacePrompt: data.value['finsemble.saveWorkspacePrompt'],
 			workspaceToLoadOnStart: data.value['finsemble.initialWorkspace'],
 			focusedWorkspace: data.value['finsemble.initialWorkspace']
 		});
@@ -532,7 +547,17 @@ export default class Workspaces extends React.Component {
 					onClick={this.setWorkspaceToLoadOnStart}
 					checked={this.state.focusedWorkspace === this.state.workspaceToLoadOnStart}
 					label="Load this workspace on startup." />
-			</div>
+
+				</div>
+				<div className="complex-menu-header">
+					<div className="content-section-header">Preferences</div>
+				</div>
+				<div className="complex-menu-content-row">
+					<Checkbox onClick={this.toggleSavingPrompt}
+						checked={this.state.saveWorkspacePrompt}
+						label="Prompt me before saving changes to my workspace." />
+				</div>
+
 		</div>
 
 	}
