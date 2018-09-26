@@ -18,6 +18,7 @@ let defaultData = {
 };
 let switching = false;
 
+
 function uuidv4() {
 	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
 		var r = Math.random() * 16 | 0,
@@ -41,6 +42,14 @@ Actions = {
 		}
 	},
 	initialize: function () {
+		// Subscribe to preference changes regarding workspace prompt on save.
+		FSBL.Clients.ConfigClient.addListener({
+		field:'finsemble.preferences.workspaceService.promptUserOnDirtyWorkspace'}, (error, data) => {
+			if (!error) {
+				PROMPT_ON_SAVE = data.value
+			}
+		})
+
 		//Gets the workspace list and sets the value in the store.
 		FSBL.Clients.WorkspaceClient.getWorkspaces(function (err, workspaces) {
 			Logger.system.debug("WorkspaceManagementStore init getWorkspaces", workspaces);
@@ -715,8 +724,6 @@ function initialize(cb) {
 			cb(WorkspaceManagementStore);
 		}
 	);
-
-
 }
 
 let getStore = () => {
