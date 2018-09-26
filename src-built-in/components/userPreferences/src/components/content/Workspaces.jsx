@@ -162,7 +162,7 @@ export default class Workspaces extends React.Component {
 		}, () => {
 		FSBL.Clients.ConfigClient
 			.setPreference({ 
-				field: "finsemble.saveWorkspacePrompt", 
+				field: "finsemble.preferences.workspaceService.promptUserOnDirtyWorkspace", 
 				value: this.state.saveWorkspacePrompt }, (err, data) => {
 				if (err) console.error(err)
 			})
@@ -271,7 +271,7 @@ export default class Workspaces extends React.Component {
 		if (!data && !data.value) return;
 		console.log("Set preferences", data.value);
 		this.setState({
-			saveWorkspacePrompt: data.value['finsemble.saveWorkspacePrompt'],
+			saveWorkspacePrompt: data.value['finsemble.preferences.workspaceService.promptUserOnDirtyWorkspace'],
 			workspaceToLoadOnStart: data.value['finsemble.initialWorkspace'],
 			focusedWorkspace: data.value['finsemble.initialWorkspace']
 		});
