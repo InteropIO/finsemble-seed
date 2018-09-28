@@ -34,14 +34,16 @@
 	const printOutput = (title, data) => {
 		// Add received data to text field.
 		const titleDiv = document.createElement("div");
-		titleDiv.className = "title";
-		titleDiv.appendChild(document.createTextNode(title));
-
-		const dataBody = document.createElement("pre");
-		dataBody.innerHTML = data;
-
-		received.appendChild(titleDiv);
-		received.appendChild(dataBody);
+		if(title) {
+			titleDiv.className = "title";
+			titleDiv.appendChild(document.createTextNode(title));
+			received.appendChild(titleDiv);
+		}
+		if(data){
+			const dataBody = document.createElement("pre");
+			dataBody.innerHTML = data;
+			received.appendChild(dataBody);
+		}
 	};
 
 	/**
@@ -121,7 +123,7 @@
 		try {
 			obj.data = JSON.parse(data.value);
 		} catch (err) {
-			printOutput("Failed to parse data entered as JSON, err", JSON.stringify(err, null, "\t"));
+			printOutput(null,"Failed to parse data entered as JSON, transmitting as a String");
 		}
 
 		// Print it to the output
