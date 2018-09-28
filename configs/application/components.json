@@ -290,6 +290,43 @@
                     }
                 }
             }
-        }
+        },
+        "Linker Tester": {
+			"window": {
+				 "url": "$applicationRoot/components/linkerTester/linkerTester.html",
+				 "frame": false,
+				 "resizable": true,
+				 "autoShow": true,
+				 "top": "center",
+				 "left": "center",
+				 "width": 330,
+				 "height": 520
+			},
+			"component": {
+				 "inject": false
+			},
+			"foreign": {
+				 "services": {
+					  "dockingService": {
+							"canGroup": true,
+							"isArrangable": true
+					  }
+				 },
+				 "components": {
+					  "App Launcher": {
+							"launchableByUser": true
+					  },
+					  "Window Manager": {
+							"title": "Linker Tester",
+							"showLinker": true,
+							"FSBLHeader": true,
+							"persistWindowState": true
+					  },
+					  "Toolbar": {
+							"iconClass": "linkerTester"
+					  }
+				 }
+			}
+	    }
     }
 }

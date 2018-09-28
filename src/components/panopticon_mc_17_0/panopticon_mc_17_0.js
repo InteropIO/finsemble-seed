@@ -5,6 +5,8 @@ let state = {
 	dashboardName: null,
 	parameters: null
 };
+//Array to hold default parameter settings from page load
+let defaultParams = [];
 let subscriptions = {};
 let dragAndDropSubscriptions = {};
 let setup = false;
@@ -38,6 +40,8 @@ function loadStateFromPage(cb) {
 		if (dashboard) {
 			state.dashboardName = dashboard.dashboardName
 			if (dashboard.parameters && dashboard.parameters.length) {
+				//store a copy of the parameter to use for linker and drag and drop registrations
+				defaultParams = dashboard.parameters;
 				let stateParams = {};
 				for (let p=0; p < dashboard.parameters.length; p++) {
 					stateParams[dashboard.parameters[p].name] = {
@@ -59,7 +63,7 @@ function loadStateFromPage(cb) {
 }
 
 function setState(cb) {
-	Logger.log("saving state: ", state);
+	Logger.log("saving state: ", JSON.stringify(state));
 	FSBL.Clients.WindowClient.setComponentState({ field: 'state', value: state });
 	if(cb) { cb(); }
 }
@@ -74,7 +78,7 @@ function getState(cb) {
 			Logger.log("No saved state returned: ", savedState);
 			cb(didUpdate);
 		} else {
-			Logger.log("got saved state: ", savedState);
+			Logger.log("got saved state: ", JSON.stringify(savedState));
 			if (state.workbook != savedState.workbookName) { state.workbookName = savedState.workbookName; didUpdate = true; };
 			if (state.dashboard != savedState.dashboardName) { state.dashboardName = savedState.dashboardName; didUpdate = true; };
 			//if we haven't got parameters but savedState does
@@ -82,6 +86,7 @@ function getState(cb) {
 				state.parameters = savedState.parameters; didUpdate = true; 
 			} //if both we and saved state have parameters
 			else if (state.parameters && typeof state.parameters === 'object' && savedState.parameters && typeof savedState.parameters === 'object'){ 
+				
 				//remove any values not in saved state
 				for (var key of Object.keys(state.parameters)) {
 					// let value = state.parameters[key];
@@ -90,20 +95,21 @@ function getState(cb) {
 						didUpdate = true;
 					}
 				}
+
 				//set any new values
 				for (var key of Object.keys(savedState.parameters)) {
 					let savedParam = savedState.parameters[key];
 					if (!state.parameters.hasOwnProperty(key) || (state.parameters.hasOwnProperty(key) && state.parameters[key].value != savedParam.value)) {
-						state.parameters[key] = value;
+						state.parameters[key] = savedParam;
 						didUpdate = true;
 					}
 				}	
 			}
 			//report back on whether we changed anything
 			if (didUpdate) {
-				Logger.log("Updated internal state: ", state);
+				Logger.log("Updated internal state: ", JSON.stringify(state));
 			} else {
-				Logger.log("Internal state not updated: ", state);
+				Logger.log("Internal state not updated: ", JSON.stringify(state));
 			}
 			cb(didUpdate);
 		}
@@ -113,36 +119,52 @@ function getState(cb) {
 function dragAndDropHandler(err, response) {
 	if (!err && response.data) {
 		for ([key, value] of response.data) {
-			state.parameters[key] = value;
+			state.parameters[key].value = value;
 		}
-		panopticonApi.setDashboardParameters(state.parameters);
-		setState();
+
+		let navOptions = {
+			workbookName: state.workbookName,
+			dashboardName: state.dashboardName,
+			parameters: Object.values(state.parameters)
+		}
+		panopticonApi.navigate(navOptions, function() {
+			setState();
+		});
 	};
 }
 
-function linkerHandler(data){
+function linkerHandler(paramName, data){
 	Logger.log("New parameter received (type=" + paramName + "): " + data);
-	state.parameters[paramName] = data;
-	panopticonApi.setDashboardParameters(state.parameters);
-	setState();
-}
+	state.parameters[paramName].value = data;
 
+	
+	let navOptions = {
+		workbookName: state.workbookName,
+		dashboardName: state.dashboardName,
+		parameters: Object.values(state.parameters)
+	}
+
+	Logger.log("navOptions: " + JSON.stringify(navOptions) + "\nstate: " + JSON.stringify(state));
+
+	panopticonApi.navigate(navOptions, function() {
+		setState();
+	});
+}
 
 function listenForLinkedOrDroppedParameters() {
 	let newSubscriptions = {};
-	if (state.parameters && Object.keys(state.parameters).length) {
+	if (defaultParams && defaultParams.length) {
 		Logger.log("Doing linker and drag and drop subscriptions");
 		let receivers = [];
-		let paramKeys = Object.keys(state.parameters);
-		for (let i = 0; i < paramKeys.length; i++) {
-			let paramName = paramKeys[i];
+		for (let i = 0; i < defaultParams.length; i++) {
+			let paramName = defaultParams[i].name;
 			
 			if (subscriptions[paramName]){
 				Logger.log("Already subscribed to Linker parameter: " + paramName);
 			} else {
 				Logger.log("Subscribing to Linker parameter: " + paramName);
 				//linker subscribe
-				FSBL.Clients.LinkerClient.subscribe(paramName, linkerHandler);
+				FSBL.Clients.LinkerClient.subscribe(paramName, function(data) {linkerHandler(paramName,data);});
 				subscriptions[paramName] = true;
 			}
 
@@ -187,25 +209,21 @@ function listenForLinkedOrDroppedParameters() {
 
 function listenForParameterChanges() {
 	panopticonApi.addParameterListener(function(event) {
-		console.log("Dashboard parameters changed: ", event.parameters);
-		let stateParams = {};
+		Logger.log("Dashboard parameters changed: ", event.parameters);
 		for (let p=0; p < event.parameters.length; p++) {
-			stateParams[event.parameters[p].Name] = event.parameters[p].Value;
+			state.parameters[event.parameters[p].name].value = event.parameters[p].value;
 		}
-		state.parameters = stateParams;
 		setState();
 	});
 }
 
 function listenForDashboardChanges() {
 	function onDashboardChange(event){
-		console.log("Dashboard changed: ", event.dashboardName, event.parameters);
+		Logger.log("Dashboard changed: ", event.dashboardName, event.parameters);
 		state.dashboardName = event.dashboardName;
-		let stateParams = {};
 		for (let p=0; p < event.parameters.length; p++) {
-			stateParams[event.parameters[p].Name] = event.parameters[p].Value;
+			state.parameters[event.parameters[p].name].value = event.parameters[p].value;
 		}
-		state.parameters = stateParams;
 		setState();
 		setTitle();
 		listenForLinkedOrDroppedParameters();
@@ -236,10 +254,7 @@ function doSetup() {
 						let navOptions = {
 							workbookName: state.workbookName,
 							dashboardName: state.dashboardName,
-							parameters: []
-						}
-						if (state.parameters && Object.keys(state.parameters).length) {
-							navOptions.parameters = Object.values(state.parameters);
+							parameters: Object.values(state.parameters)
 						}
 						panopticonApi.navigate(navOptions, function() {
 							completeSetup();

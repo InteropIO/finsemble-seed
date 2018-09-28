@@ -10,5 +10,9 @@
     "panopticon_mc_17_0": {
         "output": "components/mindcontrol/panopticon_mc_17_0",
         "entry": "./src\\components\\panopticon_mc_17_0\\panopticon_mc_17_0.js"
+    },
+    "linkerTester": {
+        "output": "components/linkerTester/linkerTester",
+        "entry": "./src\\components\\linkerTester\\linkerTester.js"
     }
 }
