@@ -2,11 +2,16 @@
 @import url('./_themeWhitelabel.css');
 
 .fsbl-drag-handle {
-    position: absolute;
+    -webkit-app-region: drag;
     z-index: 2147483641;
-    top: 0px!important;
+    /* use below with window scrollbar hack */
+    position: fixed;
+    top: 5px!important;
+    margin-top: 0px!important;
+    /* use below without window scrollbar hack */
+    /* position: absolute; */
+    /* top: 0px!important; */
     /* background-color: red; */
-   -webkit-app-region: drag;
 }
 
 .fsbl-drag-handle.hidden {
@@ -42,6 +47,7 @@ html.desktop-active .fsbl-header {
 }
 
 .fsbl-header-title {
+    position: relative;
     height: 100%;
     overflow: hidden;
     align-items: center;

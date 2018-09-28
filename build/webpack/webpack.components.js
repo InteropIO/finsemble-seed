@@ -84,7 +84,12 @@ function collapseBuiltInFiles() {
 	var srcItems = fs.readdirSync(srcPath);
 	for (let i = 0; i < srcItems.length; i++) {
 		let folder = srcItems[i];
-		combinedList[folder] = path.join(srcPath,folder);
+		if (folder === ".gitignore") {
+			// Don't copy a .gitignore folder.
+			continue;
+		}
+
+		combinedList[folder] = path.join(srcPath, folder);
 		//combinedList[folder] = "./src/components/" + folder + "/";
 	}
 	return combinedList;
