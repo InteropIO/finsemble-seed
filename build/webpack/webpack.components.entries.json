@@ -1,18 +1,18 @@
 {
     "panopticon_mc_16_2": {
         "output": "components/mindcontrol/panopticon_mc_16_2",
-        "entry": "./src\\components\\panopticon_mc_16_2\\panopticon_mc_16_2.js"
+        "entry": "./src/components/panopticon_mc_16_2/panopticon_mc_16_2.js"
     },
     "param_tester": {
         "output": "components/param_tester/param_tester",
-        "entry": "./src\\components\\param_tester\\param_tester.js"
+        "entry": "./src/components/param_tester/param_tester.js"
     },
     "panopticon_mc_17_0": {
         "output": "components/mindcontrol/panopticon_mc_17_0",
-        "entry": "./src\\components\\panopticon_mc_17_0\\panopticon_mc_17_0.js"
+        "entry": "./src/components/panopticon_mc_17_0/panopticon_mc_17_0.js"
     },
     "linkerTester": {
         "output": "components/linkerTester/linkerTester",
-        "entry": "./src\\components\\linkerTester\\linkerTester.js"
+        "entry": "./src/components/linkerTester/linkerTester.js"
     }
 }
