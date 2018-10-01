@@ -160,8 +160,8 @@ class _ToolbarStore {
 			}
 			done();
 		});
-		FSBL.Clients.WindowClient.finsembleWindow.listenForBoundsSet();
 		let onBoundsSet = (bounds) => {
+			bounds = bounds.data ? bounds.data : bounds;
 			self.Store.setValue({ field: "window-bounds", value: bounds });
 			FSBL.Clients.WindowClient.setComponentState({
 				field: 'window-bounds',
@@ -172,7 +172,7 @@ class _ToolbarStore {
 			self.toggleToolbarVisibility();
 		});
 
-		FSBL.Clients.WindowClient.finsembleWindow.addListener("bounds-set", onBoundsSet)
+		FSBL.Clients.WindowClient.finsembleWindow.addListener("bounds-change-end", onBoundsSet)
 	}
 
 	/**
