@@ -6,8 +6,8 @@ export default class WorkspaceMenuOpener extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            workspaceMenuWindowName: null,
-            activeWorkspaceName: null
+            workspaceMenuWindowName: ToolbarStore.Store.getValue("workspaceMenuWindowName"),
+            activeWorkspaceName: ToolbarStore.Store.getValue("activeWorkspaceName")
         };
         this.bindCorrectContext();
     }
