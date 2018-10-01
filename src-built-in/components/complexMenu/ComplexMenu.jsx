@@ -52,9 +52,9 @@ export default class ComplexMenu extends React.Component {
 								let sectionToggleClasses = "complex-menu-section-toggle";
 								if (el.label === this.state.activeSection) {
 									sectionToggleClasses += " active-section-toggle";
-									activeContent.push(<div className="containerItem active">{el.content}</div>);
+									activeContent.push(<div key={"entry" +i} className="containerItem active">{el.content}</div>);
 								} else {
-									activeContent.push(<div className="containerItem">{el.content}</div>);
+									activeContent.push(<div key={"entry" +i} className="containerItem">{el.content}</div>);
 								}
 								return <div className={sectionToggleClasses} key={i} onClick={() => {
 									self.setActiveSection(el.label);
