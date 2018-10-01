@@ -65,7 +65,6 @@ var Actions = {
 				})
 			}
 			if (!menuWindow) return;
-			debugger
 			return menuWindow.isShowing((err, showing) => {
 				if (showing) return;
 
