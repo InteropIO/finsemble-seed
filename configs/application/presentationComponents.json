@@ -472,9 +472,9 @@
 			"window": {
 				"id": "launcher",
 				"url": "$applicationRoot/components/toolbar/toolbar.html",
-				"height": 300,
+				"height": 39,
 				"width": 400,
-				"defaultHeight": 100,
+				"defaultHeight": 39,
 				"position": "available",
 				"autoShow": true,
 				"dockable": [
