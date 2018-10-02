@@ -76,6 +76,7 @@ var LocalStorageAdapter = function (uuid) {
 
 		for (let i = 0, len = localStorage.length; i < len; ++i) {
 			const oneKey = localStorage.key(i);
+			
 			// if key is for this topic then save it
 			if (keysRegExp.test(oneKey)) {
 				// Remove keyPreface from the keys returned. Finsemble storage adapter methods add the preface back in.
@@ -84,7 +85,7 @@ var LocalStorageAdapter = function (uuid) {
 			}
 		}
 
-		Logger.system.debug("Storage.keys for keyPreface=" + keyPreface + " with keys=" + keys);
+		Logger.system.debug(`Storage.keys for keyPreface=${keyPreface} with keys=`, keys);
 		return cb(null, keys);
 	};
 
