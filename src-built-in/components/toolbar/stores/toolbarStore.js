@@ -198,9 +198,7 @@ class _ToolbarStore {
 	 */
 	toggleToolbarVisibility(cb = Function.prototype) {
 		console.log("show 8");
-		finsembleWindow.getFSBLState({
-			stateVar: "componentState"
-		}, (err, response) => {
+		finsembleWindow.getComponentState(null, (err, response) => {
 			console.log("show 9");
 			if (err) {
 				FSBL.Clients.Logger.system.error("Error retrieving dockable component state");
