@@ -49,7 +49,7 @@ var Actions = {
 		actionPress = func;
 	},
 	search(text) {
-		if (text === "" || !text) text = "c";
+		if (text === "" || !text) text = "";
 
 		FSBL.Clients.SearchClient.search({ text: text, filter: { resultType: "application" } }, function (err, response) {
 			var updatedResults = [].concat.apply([], response)
@@ -78,7 +78,7 @@ function createStore(done) {
 	FSBL.Clients.DistributedStoreClient.createStore({ store: "AppCatalog-Store" + finWindow.name, values: defaultData, global: false },
 		function (err, store) {
 			menuStore = store;
-			FSBL.Clients.SearchClient.search({ text: "c", filter: { resultType: "application" } }, function (err, response) {
+			FSBL.Clients.SearchClient.search({ text: "", filter: { resultType: "application" } }, function (err, response) {
 			//console.log("results", response)
 				var updatedResults = [].concat.apply([], response)
 				var parsedList = [];
