@@ -122,7 +122,7 @@ Actions = {
 	 * Sets the height of the menu.
 	 */
 	setHeight: function () {
-		FSBL.Clients.WindowClient.fitToDOM();
+		// FSBL.Clients.WindowClient.fitToDOM();
 	},
 	/*********************************************************************************************
 	 *
