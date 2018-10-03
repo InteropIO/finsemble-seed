@@ -27,6 +27,9 @@
 			"tiling": {
 				"enabled": true
 			}
+		},
+		"logger": {
+			"hotkeyShowCentralLogger": ["ctrl","`"]
 		}
 	},
 	"systemTrayIcon": "$applicationRoot/assets/img/Finsemble_Taskbar_Icon.png",
