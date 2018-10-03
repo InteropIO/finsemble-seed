@@ -473,9 +473,8 @@
 				"id": "launcher",
 				"url": "$applicationRoot/components/toolbar/toolbar.html",
 				"height": 39,
-				"top": 0,
-				"left": 0,
-				"right": 0,
+				"width": 400,
+				"defaultHeight": 39,
 				"position": "available",
 				"autoShow": true,
 				"dockable": [
@@ -504,7 +503,6 @@
 				"services": {
 					"dockingService": {
 						"isArrangable": false,
-						"shouldRegister": true,
 						"ignoreSnappingRequests": true
 					},
 					"workspaceService": {

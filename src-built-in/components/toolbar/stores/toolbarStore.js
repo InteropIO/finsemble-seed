@@ -61,16 +61,13 @@ class _ToolbarStore {
 		}
 
 		let isGloballyDocked = hasRightProps() ? finsembleWindow.windowOptions.customData.foreign.services.workspaceService.global : false;
-
-		finsembleWindow.getFSBLState({
-			stateVar: "componentState"
-		}, (err, result) => {
+		finsembleWindow.getComponentState(null, (err, result) => {
 			if (err) {
 				finsembleWindow.show();
-				cb();
+				return cb();
 			}
-			let bounds = result && result.hasOwnProperty('window-bounds') && result["window-bounds"] !== null ? result["window-bounds"] : null;
-			let visible = result && result.hasOwnProperty('visible') ? result.visible : true;
+			let bounds = (result && result.hasOwnProperty('window-bounds') && result["window-bounds"] !== null) ? result["window-bounds"] : null;
+			let visible = (result && result.hasOwnProperty('visible')) ? result.visible : true;
 			if (!err && bounds && isGloballyDocked) {
 				this.Store.setValue({
 					field: 'window-bounds',
@@ -163,8 +160,8 @@ class _ToolbarStore {
 			}
 			done();
 		});
-		FSBL.Clients.WindowClient.finsembleWindow.listenForBoundsSet();
 		let onBoundsSet = (bounds) => {
+			bounds = bounds.data ? bounds.data : bounds;
 			self.Store.setValue({ field: "window-bounds", value: bounds });
 			FSBL.Clients.WindowClient.setComponentState({
 				field: 'window-bounds',
@@ -175,7 +172,7 @@ class _ToolbarStore {
 			self.toggleToolbarVisibility();
 		});
 
-		FSBL.Clients.WindowClient.finsembleWindow.addListener("bounds-set", onBoundsSet)
+		FSBL.Clients.WindowClient.finsembleWindow.addListener("bounds-change-end", onBoundsSet)
 	}
 
 	/**
@@ -200,9 +197,11 @@ class _ToolbarStore {
 	 * @memberof _ToolbarStore
 	 */
 	toggleToolbarVisibility(cb = Function.prototype) {
+		console.log("show 8");
 		finsembleWindow.getFSBLState({
 			stateVar: "componentState"
 		}, (err, response) => {
+			console.log("show 9");
 			if (err) {
 				FSBL.Clients.Logger.system.error("Error retrieving dockable component state");
 				cb();
@@ -213,6 +212,7 @@ class _ToolbarStore {
 			let visible = response && response.hasOwnProperty('visible') ? response.visible : true;
 
 			if (visible) {
+				console.log("show 10");
 				if (blurred) {
 					finsembleWindow.setComponentState({
 						field: 'blurred',
@@ -233,10 +233,12 @@ class _ToolbarStore {
 					});
 				}
 			} else {
+				console.log("show 11");
 				finsembleWindow.setComponentState({
 					field: "visible",
 					value: true
 				}, () => {
+					console.log("show 12");
 					finsembleWindow.show();
 					finsembleWindow.bringToFront();
 					finsembleWindow.focus();
