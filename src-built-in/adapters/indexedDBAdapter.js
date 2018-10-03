@@ -324,12 +324,17 @@ const IndexedDBAdapter = function () {
 		const request = objectStore.getAllKeys(keyRange);
 
 		request.onsuccess = (event) => {
-			const data = event.target.result && event.target.result.value ? event.target.result : [];
+			// Get results, if defined, otherwise default to an empty array
+			const data = event.target.result ? event.target.result : [];
 
-			Logger.system.debug("IndexedDBAdapter.keys for keyPreface=" + keyPreface + " keys=", data);
-			console.debug("IndexedDBAdapter.get keys keyPreface=" + keyPreface + " keys=", data);
+			// Remove the keyPreface from the key, the methods add the key preface back in.
+			const keys = data
+				.map(key => key.replace(keyPreface, ""));
 
-			cb(null, data);
+			Logger.system.debug(`IndexedDBAdapter.keys for keyPreface=${keyPreface} keys=`, keys);
+			console.debug(`IndexedDBAdapter.get keys keyPreface=${keyPreface} keys=`, keys);
+
+			cb(null, keys);
 		};
 
 		request.onerror = (err) => {
