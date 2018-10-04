@@ -21,6 +21,8 @@ const SCHEMA_VERSION = 1;
  * to iterate the whole set and test each. We use string keys built up with various prefixes. This polyfill makes it 
  * possible to easily retrieve all keys with a specified prefix.
  * 
+ * Based on: https://gist.github.com/inexorabletash/5462871
+ * 
  * @param prefix The string by which to filter the primary keys.
  */
 IDBKeyRange.forPrefix = (prefix) => {
@@ -32,6 +34,10 @@ IDBKeyRange.forPrefix = (prefix) => {
 	 * @param key 
 	 */
 	const successor = (key) => {
+		const UPPER_BOUND = {
+			STRING: [],
+		};
+
 		let len = key.length;
 		while (len > 0) {
 			const head = key.substring(0, len - 1);
