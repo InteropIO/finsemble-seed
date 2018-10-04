@@ -4,6 +4,9 @@
 */
 import async from "async";
 import * as menuConfig from '../config.json';
+
+import { Actions as SearchActions } from "./searchStore"
+
 var keys = {};
 var storeOwner = false;
 /**
@@ -214,6 +217,7 @@ class _ToolbarStore {
 					FSBL.Clients.WindowClient.showAtMousePosition();
 					finsembleWindow.bringToFront(null, () => {
 						finsembleWindow.focus();
+						SearchActions.positionSearchResults();
 					});
 					this.Store.setValue({ field: "searchActive", value: true });
 				} else {
@@ -222,7 +226,8 @@ class _ToolbarStore {
 						field: 'visible',
 						value: false
 					}, () => {
-						finsembleWindow.hide(null);
+						SearchActions.handleClose();
+						finsembleWindow.hide();
 						finsembleWindow.blur();
 					});
 				}
@@ -234,6 +239,7 @@ class _ToolbarStore {
 					FSBL.Clients.WindowClient.showAtMousePosition();
 					finsembleWindow.bringToFront(() => {
 						finsembleWindow.focus();
+						SearchActions.setFocus(true);
 					});
 					this.Store.setValue({ field: "searchActive", value: true });
 				});
