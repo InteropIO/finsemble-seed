@@ -104,9 +104,9 @@ var Actions = {
 	},
 	//handleClose gets called for several reasons. One of those is when the window starts moving. If it starts moving, an event is passed in. If the event is passed in, we don't want to animate the window. If it's just a blur, we'll animate the change in size.
 	handleClose(e) {
+		if (!menuWindow) return;
 		menuWindow.isShowing(function (showing) {
 			if (showing) {
-				console.log("close a window")
 				if (!e && cachedBounds) {
 					finsembleWindow.animate({ transitions: { size: { duration: 150, width: cachedBounds.width } } }, {}, () => {
 						cachedBounds = null;
@@ -218,11 +218,18 @@ function createStore(done) {
 
 	finsembleWindow.listenForBoundsSet();
 	finsembleWindow.addListener("startedMoving", Actions.handleClose);
+	finsembleWindow.addListener("focused", () => {
+		console.log("window Focused");
+		Actions.setFocus(true);
+	})
 	finsembleWindow.addListener("blurred", function (event) {
 		Actions.setFocus(false);
 	}, function () {
 	}, function (reason) {
 		//console.log("failure:" + reason);
+	});
+	finsembleWindow.addListener("hidden", () => {
+		Actions.handleClose();
 	});
 }
 

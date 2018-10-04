@@ -209,11 +209,12 @@ class _ToolbarStore {
 
 			let blurred = response && response.hasOwnProperty('blurred') ? response.blurred : false;
 			let visible = response && response.hasOwnProperty('visible') ? response.visible : true;
-
 			if (visible) {
 				if (blurred) {
-					finsembleWindow.bringToFront();
-					finsembleWindow.focus();
+					FSBL.Clients.WindowClient.showAtMousePosition();
+					finsembleWindow.bringToFront(null, () => {
+						finsembleWindow.focus();
+					});
 					this.Store.setValue({ field: "searchActive", value: true });
 				} else {
 					this.Store.setValue({ field: "searchActive", value: false });
@@ -221,8 +222,8 @@ class _ToolbarStore {
 						field: 'visible',
 						value: false
 					}, () => {
+						finsembleWindow.hide(null);
 						finsembleWindow.blur();
-						finsembleWindow.hide();
 					});
 				}
 			} else {
@@ -230,9 +231,10 @@ class _ToolbarStore {
 					field: 'visible',
 					value: true
 				}, () => {
-					finsembleWindow.show();
-					finsembleWindow.bringToFront();
-					finsembleWindow.focus();
+					FSBL.Clients.WindowClient.showAtMousePosition();
+					finsembleWindow.bringToFront(() => {
+						finsembleWindow.focus();
+					});
 					this.Store.setValue({ field: "searchActive", value: true });
 				});
 			}
