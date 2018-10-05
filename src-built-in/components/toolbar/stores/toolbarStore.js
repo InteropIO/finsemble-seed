@@ -197,11 +197,7 @@ class _ToolbarStore {
 	 * @memberof _ToolbarStore
 	 */
 	toggleToolbarVisibility(cb = Function.prototype) {
-		console.log("show 8");
-		finsembleWindow.getFSBLState({
-			stateVar: "componentState"
-		}, (err, response) => {
-			console.log("show 9");
+		finsembleWindow.getComponentState(null, (err, response) => {
 			if (err) {
 				FSBL.Clients.Logger.system.error("Error retrieving dockable component state");
 				cb();
@@ -212,7 +208,6 @@ class _ToolbarStore {
 			let visible = response && response.hasOwnProperty('visible') ? response.visible : true;
 
 			if (visible) {
-				console.log("show 10");
 				if (blurred) {
 					finsembleWindow.setComponentState({
 						field: 'blurred',
@@ -233,12 +228,10 @@ class _ToolbarStore {
 					});
 				}
 			} else {
-				console.log("show 11");
 				finsembleWindow.setComponentState({
 					field: "visible",
 					value: true
 				}, () => {
-					console.log("show 12");
 					finsembleWindow.show();
 					finsembleWindow.bringToFront();
 					finsembleWindow.focus();
