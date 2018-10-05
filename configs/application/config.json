@@ -29,7 +29,7 @@
 			}
 		},
 		"logger": {
-			"hotkeyShowCentralLogger": ["ctrl","`"]
+			"hotkeyShowCentralLogger": ["ctrl","shift","L"]
 		}
 	},
 	"systemTrayIcon": "$applicationRoot/assets/img/Finsemble_Taskbar_Icon.png",
