@@ -40,6 +40,39 @@
 				}
 			}
 		},
+		"WPF1": {
+			"window": {
+				"id": "WPF1",
+				"windowType": "native",
+				"path": "C:\\Users\\Sidd\\Documents\\GitHub\\finsemble-dotnet-internal\\WPFExample\\bin\\Debug/WPFExample.exe",
+				"url": "",
+				"defaultHeight": 600,
+				"autoShow": true,
+				"alwaysOnTop": false,
+				"resizable": true,
+				"showTaskbarIcon": false,
+				"contextMenu": true,
+				"addToWorkspace": true
+			},
+			"foreign": {
+				"services": {
+					"workspaceService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"showLinker": true
+					},
+					"Toolbar": {
+						"iconURL": "$applicationRoot/components/assets/img/notepad.png"
+					}
+				}
+			}
+		},
 		"Notepad": {
 			"window": {
 				"id": "Notepad",

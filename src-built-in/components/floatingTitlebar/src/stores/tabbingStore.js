@@ -156,8 +156,10 @@ var Actions = {
 		cb();
 	},
 	getInitialTabList: function (cb = Function.prototype) {
-		FSBL.Clients.WindowClient.getStackedWindow((err, parentWrapper) => {
-			Actions.parentWrapper = attachedWindow.getParent();
+		//FSBL.Clients.WindowClient.getStackedWindow((err, parentWrapper) => {
+
+		attachedWindow.getParent((err, parentWrapper) => {
+			Actions.parentWrapper = parentWrapper;
 			if (Actions.parentWrapper) {
 				FSBL.Clients.Logger.debug("GetInitialTabList, parent exists")
 				Actions.setupStore(cb);
@@ -165,7 +167,9 @@ var Actions = {
 				let tabs = [windowIdentifier];
 				cb(null, tabs)
 			}
-		})
+		});
+
+		//})
 	},
 	createParentWrapper(params, cb) {
 		window.Actions = Actions;
