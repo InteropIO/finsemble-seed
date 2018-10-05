@@ -386,6 +386,9 @@ class _ToolbarStore {
 		FSBL.Clients.RouterClient.subscribe("Finsemble.WorkspaceService.update", (err, response) => {
 			this.setWorkspaceMenuWindowName(response.data.activeWorkspace.name);
 			this.Store.setValue({ field: "activeWorkspaceName", value: response.data.activeWorkspace.name });
+			if (response.data.reason && response.data.reason === "workspace:load:finished") {
+				this.bringToolbarToFront();
+			}
 		})
 	}
 
