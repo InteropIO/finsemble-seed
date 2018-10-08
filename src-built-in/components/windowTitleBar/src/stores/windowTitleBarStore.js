@@ -216,6 +216,11 @@ var Actions = {
 				Actions.stopListeningOnParentWrapper(() => {
 					Actions.parentWrapperStore = null;
 					Actions._setTabs(null);
+					onDockingGroupUpdate(null, {
+						data: {
+							groupData: windowTitleBarStore.getValue({ field: "Main.allDockingGroups" })
+						}
+					});
 				});
 			};
 
