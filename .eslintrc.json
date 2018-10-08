@@ -44,5 +44,10 @@
     "globals": {
         "FSBL": true,
         "fin": true
+    },
+    "settings": {
+        "react": {
+            "version": "15.0"
+        }
     }
 }
