@@ -3,6 +3,10 @@
 		"output": "components/appLauncher/appLauncher",
 		"entry": "./src-built-in/components/appLauncher/src/app.jsx"
 	},
+	"appLauncher2": {
+		"output": "components/appLauncher2/index",
+		"entry": "./src-built-in/components/appLauncher2/src/index.jsx"
+	},
 	"authentication": {
 		"output": "components/authentication/authentication",
 		"entry": "./src-built-in/components/authentication/authentication.js"

@@ -32,6 +32,37 @@
 				}
 			}
 		},
+		"App Launcher 2": {
+			"window": {
+				"url": "$applicationRoot/components/appLauncher2/index.html",
+				"top": "center",
+				"left": "center",
+				"width": 600,
+				"height": 700,
+				"ephemeral": false,
+				"options": {
+					"autoShow": true
+				}
+			},
+			"component": {
+				"allowAdhoc": "@TODO",
+				"spawnOnStartup": true,
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": false
+					}
+				},
+				"components": {
+					"Window Manager": {
+						"persistWindowState": false,
+						"FSBLHeader": false
+					}
+				}
+			}
+		},
 		"searchMenu": {
 			"window": {
 				"url": "$applicationRoot/components/searchMenu/searchMenu.html",
@@ -63,6 +94,7 @@
 				}
 			}
 		},
+
 		"Overflow Menu": {
 			"window": {
 				"url": "$applicationRoot/components/overflowMenu/overflowMenu.html",
