@@ -8,7 +8,7 @@ var windowTitleBarStore;
 var WindowClient;
 import windowTitleBarStoreDefaults from "./windowTitleBarStoreDefaults";
 import * as async from "async";
-var finWindow = fin.desktop.Window.getCurrent();
+var finsembleWindow = fin.desktop.Window.getCurrent();
 //theses are constants that are set inside of setupStore. so they're declared as vars and not constantsa.
 let constants = {};
 var Actions = {
