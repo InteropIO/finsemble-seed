@@ -261,6 +261,15 @@ var Actions = {
 		}
 
 		let terminateProcess = () => {
+			//If the process fails to close in 4 seconds, we will call this method again, but try to force close it.
+			const closeTimeout = setTimeout(() => {
+				onCloseFailure();
+			}, 4000);
+
+			const onCloseSuccess = () => {
+				clearTimeout(closeTimeout);
+			};
+
 			//Should never get into here, but just in case the process is hung, we'll show an error message to the user.
 			app.terminate(true, onCloseSuccess, () => {
 				FSBL.Clients.DialogManager.open("yesNo", {
