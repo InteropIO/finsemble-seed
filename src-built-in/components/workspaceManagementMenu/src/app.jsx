@@ -88,7 +88,8 @@ class WorkspaceManagementMenu extends React.Component {
 }
 
 fin.desktop.main(function () {
-	FSBL.addEventListener("onReady", function () {
+	if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
+	function FSBLReady() {
 	//console.log("WorkspaceManagementMenu onReady");
 		storeExports.initialize(function (store) {
 			WorkspaceManagementMenuStore = store;
@@ -96,5 +97,5 @@ fin.desktop.main(function () {
 				<WorkspaceManagementMenu />
 				, document.getElementById("workspaceManagementMenu-component-wrapper"));
 		});
-	});
+	}
 });

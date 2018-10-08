@@ -21,7 +21,8 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false
+						"isArrangable": false,
+						"shouldRegister": false
 					}
 				},
 				"components": {
@@ -52,7 +53,8 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false
+						"isArrangable": false,
+						"shouldRegister": false
 					}
 				},
 				"components": {
@@ -83,7 +85,8 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false
+						"isArrangable": false,
+						"shouldRegister": false
 					}
 				},
 				"components": {
@@ -113,7 +116,8 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false
+						"isArrangable": false,
+						"shouldRegister": false
 					}
 				},
 				"components": {
@@ -145,7 +149,8 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false
+						"isArrangable": false,
+						"shouldRegister": false
 					}
 				},
 				"components": {
@@ -190,7 +195,8 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false
+						"isArrangable": false,
+						"shouldRegister": false
 					}
 				},
 				"components": {
@@ -223,7 +229,8 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false
+						"isArrangable": false,
+						"shouldRegister": false
 					}
 				},
 				"components": {
@@ -255,7 +262,8 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false
+						"isArrangable": false,
+						"shouldRegister": false
 					}
 				},
 				"components": {
@@ -286,7 +294,8 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false
+						"isArrangable": false,
+						"shouldRegister": false
 					}
 				},
 				"components": {
@@ -326,7 +335,8 @@
 				},
 				"services": {
 					"dockingService": {
-						"isArrangable": false
+						"isArrangable": false,
+						"shouldRegister": false
 					}
 				},
 				"components": {
@@ -366,7 +376,8 @@
 				},
 				"services": {
 					"dockingService": {
-						"isArrangable": false
+						"isArrangable": false,
+						"shouldRegister": false
 					}
 				},
 				"components": {
@@ -406,7 +417,8 @@
 				},
 				"services": {
 					"dockingService": {
-						"isArrangable": false
+						"isArrangable": false,
+						"shouldRegister": false
 					}
 				},
 				"components": {
@@ -436,13 +448,13 @@
 				}
 			},
 			"component": {
-				"category": "system",
-				"spawnOnStartup": true
+				"category": "system"
 			},
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false
+						"isArrangable": false,
+						"shouldRegister": false
 					}
 				},
 				"components": {
@@ -461,33 +473,41 @@
 				"id": "launcher",
 				"url": "$applicationRoot/components/toolbar/toolbar.html",
 				"height": 39,
-				"top": 0,
-				"left": 0,
-				"right": 0,
+				"width": 400,
+				"defaultHeight": 39,
 				"position": "available",
-				"claimMonitorSpace": true,
-				"addToWorkspace": false,
+				"autoShow": true,
+				"dockable": [
+					"top",
+					"bottom"
+				],
+				"maxHeight": 39,
+				"minHeight": 39,
+				"minWidth": 99,
+				"docked": "top",
+				"canGroup": false,
 				"options": {
+					"autoShow": false,
 					"contextMenu": false,
-					"resizable": false,
 					"showTaskbarIcon": false,
-					"resizeRegion": {
-						"bottomRightCorner": 0,
-						"size": 0
-					},
 					"smallWindow": true
 				}
 			},
 			"component": {
 				"category": "system",
 				"spawnOnStartup": true,
-				"spawnOnAllMonitors": true,
+				"spawnOnAllMonitors": false,
 				"canMinimize": false
 			},
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false
+						"isArrangable": false,
+						"ignoreSnappingRequests": true
+					},
+					"workspaceService": {
+						"global": true,
+						"ignoreTilingAndTabbingRequests": true
 					}
 				},
 				"components": {
@@ -540,8 +560,7 @@
 				"height": 600,
 				"options": {
 					"autoShow": false,
-					"resizable": false,
-					"alwaysOnTop": true
+					"resizable": false
 				}
 			},
 			"component": {
@@ -552,7 +571,8 @@
 				"services": {
 					"dockingService": {
 						"canGroup": false,
-						"isArrangable": false
+						"isArrangable": false,
+						"shouldRegister": false
 					}
 				},
 				"components": {
@@ -590,7 +610,8 @@
 				"services": {
 					"dockingService": {
 						"canGroup": false,
-						"isArrangable": false
+						"isArrangable": false,
+						"shouldRegister": false
 					}
 				},
 				"components": {
@@ -634,7 +655,8 @@
 				"services": {
 					"dockingService": {
 						"canGroup": true,
-						"isArrangable": false
+						"isArrangable": false,
+						"shouldRegister": false
 					}
 				},
 				"components": {

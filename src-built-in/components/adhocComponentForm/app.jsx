@@ -144,9 +144,10 @@ class AdHocComponentForm extends React.Component {
 }
 
 
-FSBL.addEventListener("onReady", function () {
+if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
+function FSBLReady() {
 	console.debug("AdhocComponentForm onready");
 	ReactDOM.render(
 		<AdHocComponentForm />
 		, document.getElementById("bodyHere"));
-});
+}

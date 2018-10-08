@@ -10,10 +10,10 @@ export default class Toolbar extends React.Component {
 		this.restartApplication = this.restartApplication.bind(this);
 	}
 
-    /**
-     * Sets the monitor by calling the setPreferences API. This will override the config for the component.
-     * @param {event} e
-     */
+	/**
+	 * Sets the monitor by calling the setPreferences API. This will override the config for the component.
+	 * @param {event} e
+	 */
 	setMonitor(e) {
 		let monitor = e.target.value;
 		this.setState({
@@ -27,10 +27,10 @@ export default class Toolbar extends React.Component {
 		FSBL.restartApplication();
 	}
 
-    /**
-     * Add listener on the store. When the preferences field changes, we change our local state.
-     * Also, get the intiial state from the store.
-     */
+	/**
+	 * Add listener on the store. When the preferences field changes, we change our local state.
+	 * Also, get the intiial state from the store.
+	 */
 	componentDidMount() {
 		FSBL.Clients.ConfigClient.getValue("finsemble.components.Toolbar.window.monitor", (err, value) => {
 			if (!value) value = "all";
@@ -46,7 +46,7 @@ export default class Toolbar extends React.Component {
 	render() {
 		return <div className="complex-menu-content-row">
 			<div>
-				<span>Display Toolbar on </span>
+				<span>Display toolbar on monitor</span>
 				<select style={{ margin: "0px 10px" }} onChange={this.setMonitor} value={this.state.monitor}>
 					<option value={"all"}>All</option>
 					<option value={"0"}>Primary</option>
@@ -56,7 +56,7 @@ export default class Toolbar extends React.Component {
 					<option value={"4"}>5</option>
 					<option value={"5"}>6</option>
 				</select>
-				<span> Monitor(s) </span>
+				<span> </span>
 				<button onClick={this.restartApplication}>Restart Application</button>
 			</div>
 		</div>

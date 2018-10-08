@@ -1,6 +1,9 @@
 import React from "react";
 import { FinsembleButton } from "@chartiq/finsemble-react-controls";
 
+// Store
+import ToolbarStore from "../stores/toolbarStore";
+
 export default class AutoArrange extends React.Component {
 	constructor(props) {
 		super(props);
@@ -14,7 +17,7 @@ export default class AutoArrange extends React.Component {
 		}, (err, monitorInfo) => {
 			FSBL.Clients.RouterClient.subscribe('DockingService.AutoarrangeStatus', function (err, response) {
 				self.setState({
-					isAutoArranged: response.data.isAutoArranged[monitorInfo.name]
+					isAutoArranged: response.data.isAutoArranged && response.data.isAutoArranged[monitorInfo.name]
 				});
 			});
 		})
@@ -29,7 +32,9 @@ export default class AutoArrange extends React.Component {
 		this.setState({
 			isAutoArranged: !this.state.isAutoArranged
 		});
-		FSBL.Clients.WorkspaceClient.autoArrange();
+		FSBL.Clients.WorkspaceClient.autoArrange({}, () => {
+			ToolbarStore.bringToolbarToFront();
+		});
 	}
 
 	render() {

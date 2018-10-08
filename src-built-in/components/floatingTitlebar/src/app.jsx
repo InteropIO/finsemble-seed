@@ -25,7 +25,6 @@ let hover = false;
 class FloatingTitlebar extends React.Component {
 	constructor(props) {
 		super(props);
-		this.finWindow = fin.desktop.Window.getCurrent();
 		this.state = {
 			size: "small",
 			tabs: [],
@@ -178,7 +177,8 @@ class FloatingTitlebar extends React.Component {
 	}
 }
 
-FSBL.addEventListener("onReady", function () {
+if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
+function FSBLReady() {
 	HeaderActions.initialize(function () {
 		storeExports.initialize(HeaderStore.getCompanionWindow(), function () {
 			storeExports.Actions.setWindowIdentifier(HeaderStore.getCompanionWindow().identifier)
@@ -187,4 +187,4 @@ FSBL.addEventListener("onReady", function () {
 				, document.getElementById("bodyHere"));
 		})
 	});
-});
+}

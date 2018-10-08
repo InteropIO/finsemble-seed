@@ -60,6 +60,9 @@
 		env.PORT = startupConfig[env.NODE_ENV].serverPort;
 	}
 
+	// This variable controls whether the build should watch files for changes. This `startsWith` catches all of the
+	// tasks that are dev * (dev, dev: fresh, dev: nolaunch), but excludes build:dev because it is intended to only
+	// build for a development environment and not watch for changes.
 	const isRunningDevTask = process.argv[2].startsWith("dev");
 
 	// #endregion
@@ -114,15 +117,15 @@
 
 			done();
 		},
-		"build:dev-local": done => {
-			async.series([
-				taskMethods.setDevEnvironmentLocal,
-				taskMethods.build
-			], done);
-		},
 		"build:dev": done => {
 			async.series([
 				taskMethods.setDevEnvironment,
+				taskMethods.build
+			], done);
+		},
+		"build:prod": done => {
+			async.series([
+				taskMethods.setProdEnvironment,
 				taskMethods.build
 			], done);
 		},

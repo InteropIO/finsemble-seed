@@ -60,19 +60,26 @@ var Actions = {
 	initialize(cb = Function.prototype) {
 		HeaderStore.initialize();
 		var spData = FSBL.Clients.WindowClient.getSpawnData();
-		FSBL.FinsembleWindow.wrap(spData.parent, function (err, wrappedWindow) {
+		//'parent' here refers to the native window that we've befriended.
+		FSBL.FinsembleWindow.getInstance(spData.parent, function (err, wrappedWindow) {
 			HeaderStore.setCompanionWindow(wrappedWindow);
 			var onParentSet = async (e) => {
 				let { data } = e;
 				console.log(data);
 				if (!localParent && data.parentName) {
-					let { wrap } = await FSBL.FinsembleWindow.wrap({name: data.parentName});
+					let { wrap } = await FSBL.FinsembleWindow.getInstance({ name: data.parentName });
 					localParent = wrap;
 
 					localParent.addListener("startedMoving", Actions.onCompanionStartedMoving);
 					localParent.addListener("stoppedMoving", Actions.onCompanionStoppedMoving);
 					localParent.addListener("bringToFront", Actions.onCompanionBringToFront);
+					localParent.addListener("bounds-set", Actions.onBoundsChanged);
 
+					wrappedWindow.getBounds((err, bounds) => {
+						Actions.onBoundsChanged({
+							data: bounds
+						})
+					})
 					Actions.isWindowVisible((err, isVisible) => {
 						if (!isVisible) {
 							Actions.onCompanionHidden();
@@ -92,6 +99,7 @@ var Actions = {
 					localParent.removeListener("stoppedMoving", Actions.onCompanionStoppedMoving);
 					localParent.removeListener("bringToFront", Actions.onCompanionBringToFront);
 					localParent = null;
+					wrappedWindow.show();
 				}
 
 			};
@@ -104,7 +112,9 @@ var Actions = {
 			wrappedWindow.addListener("setParent", onParentSet);
 			wrappedWindow.addListener("clearParent", onParentCleared);
 			wrappedWindow.listenForBoundsSet();
-			wrappedWindow.addListener("bounds-set", Actions.onBoundsChanged);
+			//@note this is so that all kinds of bounds-changes will be caught, and the companion will be in the right place.
+			//Reevaluate if performance is a concern.
+			wrappedWindow.addListener("bounds-changing", Actions.onBoundsChanged);
 			wrappedWindow.addListener("closed", Actions.onCompanionClosed);
 			wrappedWindow.addListener("hidden", Actions.onCompanionHidden);
 			wrappedWindow.addListener("shown", Actions.onCompanionShown);
@@ -125,13 +135,18 @@ var Actions = {
 					newBounds,
 					function (err) {
 						Actions.updateWindowPosition();//hack for small window
-						Actions.isWindowVisible(function (err, isVisible) {
-							if (isVisible)
-								FSBL.Clients.WindowClient.finsembleWindow.show(false, function () {
-									FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
-								});
-						});
-
+						if (spData.showOnSpawn && !wrappedWindow.parentWindow) {
+							FSBL.Clients.WindowClient.finsembleWindow.show(false, function () {
+								FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
+							});
+						} else {
+							Actions.isWindowVisible(function (err, isVisible) {
+								if (isVisible)
+									FSBL.Clients.WindowClient.finsembleWindow.show(false, function () {
+										FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
+									});
+							});
+						}
 						cb();
 					}, function () { });
 			});
@@ -177,7 +192,7 @@ var Actions = {
 		};
 	},
 	onBoundsChanged(params) {
-		let { bounds } = params.data;
+		let bounds = params.data;
 		HeaderStore.setCompanionBounds(bounds);
 		if (HeaderStore.getMoving()) return;
 		if (HeaderStore.getState() === "small") {
@@ -289,7 +304,8 @@ var Actions = {
 				}
 				FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
 			});
-		}, 500);
+			//@note this was 500, it was lowered to 50 after improvements were made to the eventing system.
+		}, 50);
 
 	},
 	onCompanionMinimized() {

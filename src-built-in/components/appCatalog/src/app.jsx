@@ -22,7 +22,6 @@ import AppContent from "./components/AppContent";
 class AppCatalog extends React.Component {
 	constructor(props) {
 		super(props);
-		this.finWindow = fin.desktop.Window.getCurrent();
 		this.state = {
 			loaded: false,
 			headerImgUrl: ""
@@ -53,7 +52,8 @@ class AppCatalog extends React.Component {
 }
 
 fin.desktop.main(function () {
-	FSBL.addEventListener("onReady", function () {
+	if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
+	function FSBLReady() {
 	//console.log("App Catalog app onReady");
 		FSBL.Clients.WindowClient.finsembleWindow.updateOptions({ alwaysOnTop: true });
 		FSBL.Clients.DialogManager.showModal();
@@ -62,5 +62,5 @@ fin.desktop.main(function () {
 		ReactDOM.render(
 			<AppCatalog />
 			, document.getElementById("bodyHere"));
-	});
+	}
 });
