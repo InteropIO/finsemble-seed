@@ -29,8 +29,9 @@ var FileMenuStore = Object.assign({}, EventEmitter.prototype, {
 				} catch (e) {
 					prompt = false;
 				}
-				//Default to false.
-				PROMPT_ON_DIRTY = typeof prompt === null ? PROMPT_ON_DIRTY : prompt;
+
+				// If prompt is a boolean, use it, otherwise default to PROMPT_ON_DIRTY
+				PROMPT_ON_DIRTY = typeof(prompt) === "boolean" ? prompt: PROMPT_ON_DIRTY;
 			});
 		});
 	},
