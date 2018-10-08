@@ -19,7 +19,7 @@
         "update-finsemble": "npm update @chartiq/finsemble && npm update -g @chartiq/finsemble-cli",
         "finsemble-cli": "finsemble-cli",
         "migrate": "node migration/2.3/migrationScripts/migrate.js",
-        "eslint": "eslint ./src-built-in/&& eslint ./src/",
+        "eslint": "eslint ./src-built-in",
         "htmlhint": "htmlhint {src,src-built-in}/**/*.html"
     },
     "author": "",
