@@ -19,6 +19,13 @@ img {
 #wrapper {
     height: 100%;
 }
+.top {
+    margin-top: 30px;
+}
+.bottom {
+    position: absolute;
+    bottom: 12px;
+}
 
 .complex-menu-wrapper {
     display: flex;

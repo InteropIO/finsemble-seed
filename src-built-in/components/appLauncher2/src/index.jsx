@@ -8,18 +8,32 @@ import ReactDOM from  'react-dom'
 import LeftNav from './components/LeftNav'
 import Content from './components/Content'
 
+const appFolders = require('./folders').appFolders
+
 class AppLauncher extends React.Component {
 
 	constructor() {
 		super()
+		this.state = {
+			folders: appFolders.folders,
+			activeFolder: appFolders.folders[0]
+		}
+
+		this.onFolderClicked = this.onFolderClicked.bind(this)
+	}
+
+	onFolderClicked(folder) {
+		this.setState({
+			activeFolder: folder
+		})
 	}
 
 	render() {
 		return (
 			<div className="user-preferences">
 				<div className="complex-menu-wrapper">
-				<LeftNav />
-					<Content />
+					<LeftNav onFolderClicked={this.onFolderClicked} folders={this.state.folders} />
+					<Content activeFolder={this.state.activeFolder} />
 				</div>
 			</div>
 		)
