@@ -7,7 +7,8 @@ import React from "react";
 /**
  * This detects mouseover and mouseout and reacts by setting the hover attribute of the parent. We use this because the :hover pseudo-class doesn't detect
  * when the mouse leaves if it is on the edge of a finsemble window. This class requires the property "hoverAction" which should point back to a function
- * in the parent class to call to toggle the hover state.
+ * in the parent class to call to toggle the hover state. Also requires the property "edge" which can be "right","left","top","bottom" or a combination (separated by whitespace).
+ * The hover detector will set its positioning within the parent element depending on which edges are enabled.
  * 
  * The parent element must have position: relative or position: absolute!
  * 
@@ -18,10 +19,6 @@ export default class HoverDetector extends React.Component{
 	constructor(props) {
 		super(props);
 		this.bindCorrectContext();
-		this.ref = null;
-		this.setRef = element => {
-			this.ref = element;
-		}
 	}
 	/**
 	 * This is necessary to make sure that the `this` inside of the callback is correct.
@@ -38,7 +35,7 @@ export default class HoverDetector extends React.Component{
 	 * @memberof HoverDetector
 	 */
 	onMouseEnter() {
-		if(this.props.hoverAction) this.props.hoverAction("true");
+		this.props.hoverAction("true");
 	}
 	/**
 	 * When the mouse enters the hoverDetector, we fire off the action that's passed in from the parent.
@@ -46,42 +43,26 @@ export default class HoverDetector extends React.Component{
 	 * @memberof HoverDetector
 	 */
 	onMouseLeave() {
-		if(this.props.hoverAction) this.props.hoverAction("false");
-	}
-
-	/**
-	 * After the component is mounted, we use a DOM ref to determine how to position the HoverDetector. We want there to always be at least 5 pixels of space
-	 * between the HoverDetector and any window edge. So we do some math to figure out the pixel coordinates of our parent node and then from there we figure
-	 * out how many pixels of edge we need to create on our HoverDetector.
-	 */
-	componentDidMount() {
-		let hoverDetector = this.ref;
-		let parentNode = hoverDetector.parentNode;
-		let rect = parentNode.getBoundingClientRect();
-		let left = rect.left, top = rect.top, right = window.innerWidth - rect.right, bottom = window.innerHeight - rect.bottom;
-
-		// Deal with components that are technically off the edge of the window. This can happen due to idiosyncracies with margin
-		left = left > 0 ? left : 0;
-		top = top > 0 ? top : 0;
-		right = right > 0 ? right : 0;
-		bottom = bottom > 0 ? bottom : 0;
-		
-		// Set the styles to position the HoverDetector
-		hoverDetector.style.left = (left < 5 ? (5 - left) : 0) + "px";
-		hoverDetector.style.top = (top < 5 ? (5 - top) : 0) + "px";
-		hoverDetector.style.right = (right < 5 ? (5 - right) : 0) + "px";
-		hoverDetector.style.bottom = (bottom < 5 ? (5 - bottom) : 0) + "px";
+		this.props.hoverAction("false");
 	}
 	/**
-	 * Render method.
+	 * Render method. A HoverDetector can take one or more "edges". An edge can be "top","bottom","right","left".
 	 *
 	 * @returns
 	 * @memberof HoverDetector
 	 */
 	render() {
-		return (<div ref={this.setRef} onMouseEnter={this.onMouseEnter}
+		let edge = this.props.edge || "top";
+		edge = edge.split(/[ ,]+/); // split by whitespace or commas
+		let top = 0, bottom = 0, left = 0, right = 0;
+		if (edge.indexOf("top") != -1) top = 5;
+		if (edge.indexOf("bottom") != -1) bottom = 5;
+		if (edge.indexOf("left") != -1) left = 5;
+		if (edge.indexOf("right") != -1) right = 5;
+
+		return (<div onMouseEnter={this.onMouseEnter}
 			onMouseLeave={this.onMouseLeave}
-			style={{position: "absolute"}}
+			style={{position: "absolute", left: left, right: right, top: top, bottom: bottom}}
 		></div>);
 	}
 }

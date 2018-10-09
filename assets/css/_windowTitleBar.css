@@ -65,7 +65,7 @@ html.desktop-active .fsbl-header {
 }
 
 .fsbl-header-left {
-    height: 100%;
+    height: calc(100% - 5px); /* leave some space for the resize cursor */
     margin-left: 2px;
     left: 0px;
     align-content: center;
@@ -122,39 +122,6 @@ html.desktop-active .fsbl-header-right {
 
 html.desktop-active .fsbl-tab-region-drag-area {
     background-color: var(--titleBar-background-inactive-color);
-}
-
-/* This div captures the hover event for it's parent. It doesn't stretch to the border, so that mouseout is properly detected. */
-.fsbl-hover-detector-right {
-    position: absolute;
-    width: 75%;
-    height: 75%;
-    left: 0px;
-    bottom: 0px;
-}
-
-.fsbl-hover-detector-left {
-    position: absolute;
-    width: 75%;
-    height: 75%;
-    right: 0px;
-    bottom: 0px;
-}
-
-.fsbl-hover-detector-top {
-    position: absolute;
-    width: 100%;
-    height: 75%;
-    right: 0px;
-    bottom: 0px;
-}
-
-.fsbl-hover-detector-bottom {
-    position: absolute;
-    width: 100%;
-    height: 75%;
-    left: 0px;
-    top: 0px;
 }
 
 .tab-drop-region {
