@@ -1,0 +1,12 @@
+.filter-sort {
+	width: 100%;
+	margin-bottom: 10px;
+}
+.filter-sort input {
+	color: #fff;
+	width: 393px;
+	height: 17px;
+	background: none;
+	border: 0;
+	border-bottom: solid 1px #0a8cf4;
+}
