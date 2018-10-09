@@ -32,7 +32,7 @@ var LocalStorageAdapter = function (uuid) {
 			Logger.system.error("Storage.saving Error", err, "key=" + combinedKey, "value=", params.value);
 		}
 		console.log("save---",combinedKey,params);
-		fin.desktop.System.flushStorage();
+		if(	fin.desktop.System.flushStorage)fin.desktop.System.flushStorage();
 		Logger.system.debug("Storage.save for key=" + combinedKey + " with data=" + params.value);
 		return cb(null, { status: "success" });
 	};
