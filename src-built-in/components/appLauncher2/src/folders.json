@@ -1,0 +1,68 @@
+{
+	"appFolders": {
+		"folders": [
+			{
+				"name": "My Apps",
+				"type": "folder",
+				"disableUserRemove": true,
+				"appDefinitions": [
+					{
+						"name": "Welcome",
+						"type": "component",
+						"tags": [
+							"newrelease"
+						],
+						"friendlyName": "The Welcome Component"
+					},
+					{
+						"name": "Getting Started Tutorial",
+						"type": "component",
+						"tags": [
+							"newrelease"
+						],
+						"friendlyName": "Learn finsemble!"
+					},
+					{
+						"name": "Process Monitor",
+						"type": "component",
+						"tags": [
+							"bad information", "don't click here"
+						],
+						"friendlyName": "Process Monitor"
+					},
+					{
+						"name": "Notepad",
+						"type": "component",
+						"tags": [
+							"assimilation",
+							"wizardry",
+							"TESLA"
+						],
+						"friendlyName": "Notepad!!!"
+					}
+				]
+			},
+			{
+				"name": "Favorites",
+				"type": "folder",
+				"disableUserRemove": true,
+				"appDefinitions": [
+					{
+						"name": "Process Monitor",
+						"type": "component",
+						"tags": [
+							"bad information", "don't click here"
+						],
+						"friendlyName": "Process Monitor"
+					}
+				]
+			},
+			{
+				"name": "Dashboards",
+				"type": "folder",
+				"disableUserRemove": true,
+				"appDefinitions": []
+			}
+		]
+	}
+}
