@@ -38,7 +38,7 @@
 				"top": "center",
 				"left": "center",
 				"width": 600,
-				"height": 700,
+				"height": 400,
 				"ephemeral": false,
 				"options": {
 					"autoShow": true

@@ -19,7 +19,7 @@ export default class LeftNav extends React.Component {
 
 	render() {
 		return (
-			<div>
+			<div className="complex-menu-left-nav">
 			  <h1>LeftNav Component </h1>
 			  <div className="top">
 				  <button>My apps</button>

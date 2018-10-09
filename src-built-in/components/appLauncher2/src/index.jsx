@@ -1,5 +1,10 @@
+import "../style.css"
+import "../../../../assets/css/font-finance.css"
+import "../../../../assets/css/finsemble.css"
+// Import js modules
 import React from  'react'
 import ReactDOM from  'react-dom'
+// Import React components
 import LeftNav from './components/LeftNav'
 import Content from './components/Content'
 
@@ -11,9 +16,11 @@ class AppLauncher extends React.Component {
 
 	render() {
 		return (
-			<div>
+			<div className="user-preferences">
+				<div className="complex-menu-wrapper">
 				<LeftNav />
-				<Content />
+					<Content />
+				</div>
 			</div>
 		)
 	}
@@ -23,5 +30,5 @@ class AppLauncher extends React.Component {
 FSBL.addEventListener("onReady", function () {
 	ReactDOM.render(
 	<AppLauncher />
-	, document.getElementById("bodyHere"))
+	, document.getElementById("wrapper"))
 });
