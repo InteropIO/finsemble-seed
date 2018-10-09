@@ -4,6 +4,13 @@ body {
     font-weight: var(--content-font-weight);
     font-family: var(--font-family);
     color: var(--content-font-color);
+    font-family: Roboto;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #ffffff;
 }
 
 
@@ -14,6 +21,9 @@ img {
     -webkit-user-drag: none;
     -webkit-user-select: none;
     -ms-user-select: none;
+}
+.pointer {
+    cursor: pointer;
 }
 
 #wrapper {
