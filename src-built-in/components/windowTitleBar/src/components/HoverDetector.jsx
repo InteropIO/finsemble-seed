@@ -38,7 +38,7 @@ export default class HoverDetector extends React.Component{
 	 * @memberof HoverDetector
 	 */
 	onMouseEnter() {
-		this.props.hoverAction("true");
+		if(this.props.hoverAction) this.props.hoverAction("true");
 	}
 	/**
 	 * When the mouse enters the hoverDetector, we fire off the action that's passed in from the parent.
@@ -46,7 +46,7 @@ export default class HoverDetector extends React.Component{
 	 * @memberof HoverDetector
 	 */
 	onMouseLeave() {
-		this.props.hoverAction("false");
+		if(this.props.hoverAction) this.props.hoverAction("false");
 	}
 
 	/**
