@@ -4,7 +4,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import Tab from "./tab";
 import Logo from "./logo";
-import HoverDetector from "../HoverDetector.jsx";
+import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
 import { FinsembleDnDContext, FinsembleDroppable } from '@chartiq/finsemble-react-controls';
 import { Store, Actions } from "../../stores/windowTitleBarStore";
 import { debug } from "util";
@@ -540,7 +540,7 @@ function renderTitle() {
         onDragEnd={this.stopDrag}
         data-hover={this.state.hoverState}
         className={"fsbl-header-title"}>
-        <HoverDetector edge="top" hoverAction={this.hoverAction.bind(this)} />
+        <FinsembleHoverDetector edge="top" hoverAction={this.hoverAction.bind(this)} />
         <Logo windowIdentifier={FSBL.Clients.WindowClient.getWindowIdentifier()} />
         <div className="fsbl-tab-title">{this.props.thisWindowsTitle}</div>
     </div>);

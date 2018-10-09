@@ -10,7 +10,7 @@ import ReactDOM from "react-dom";
 import * as storeExports from "./stores/windowTitleBarStore";
 let HeaderData, HeaderActions, windowTitleBarStore;
 
-import HoverDetector from "./components/HoverDetector.jsx";
+import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
 
 //Parts that make up the windowTitleBar.
 //Left side

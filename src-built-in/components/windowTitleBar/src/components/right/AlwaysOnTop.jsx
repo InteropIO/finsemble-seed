@@ -3,7 +3,7 @@
 * All rights reserved.
 */
 import React from "react";
-import HoverDetector from "../HoverDetector.jsx";
+import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
 import { getStore, Actions as HeaderActions } from "../../stores/windowTitleBarStore";
 let windowTitleBarStore;
 /**
@@ -60,7 +60,7 @@ export default class AlwaysOnTop extends React.Component {
 		let tooltip = "Always on Top";
 
 		return (<div className={wrapClasses} id="fsbl-window-restore" title={tooltip} data-hover={this.state.hoverState} onClick={this.changeAlwaysOnTop}>
-				<HoverDetector edge="top" hoverAction={this.hoverAction} />
+				<FinsembleHoverDetector edge="top" hoverAction={this.hoverAction} />
 			<i className={iconClasses}></i>
 		</div>);
 	}
