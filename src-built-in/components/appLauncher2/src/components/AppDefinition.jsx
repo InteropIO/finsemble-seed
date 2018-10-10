@@ -16,7 +16,9 @@ export default class AppDefinition extends React.Component {
 					<div className="app-item-tags">
 						{
 							app.tags.map((tag, index) => {
-								return <span key={index}>{tag}, </span>
+								return <span key={index}>
+									{app.tags[index+1] ? `${tag}, ` : `${tag}`}
+								</span>
 							})
 						}
 					</div>
