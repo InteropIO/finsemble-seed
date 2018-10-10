@@ -4,7 +4,7 @@ import FoldersList from  './FoldersList'
 const bottomEntries = [
 	'New folder',
 	'New dashboard',
-	'App catalogue'
+	'App catalog'
 ]
 
 export default class LeftNav extends React.Component {
