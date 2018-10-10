@@ -1,5 +1,6 @@
 import React from  'react'
 import FoldersList from  './FoldersList'
+import LeftNavBottomLinks from  './LeftNavBottomLinks'
 
 const bottomEntries = [
 	'New folder',
@@ -12,11 +13,9 @@ export default class LeftNav extends React.Component {
 	constructor(props) {
 		super(props)
 	}
-
-	render() {
+	renderFoldersList() {
 		return (
-			<div className="complex-menu-left-nav">
-			  <div className="top">
+				<div className="top">
 				  {
 				  	this.props.folders.map((folder, index) => {
 				  		let className = 'complex-menu-section-toggle'
@@ -29,18 +28,13 @@ export default class LeftNav extends React.Component {
 				  	})
 				  }
 			  </div>
-			  <div className="bottom">
-				  {
-				  	bottomEntries.map((entry, index) => {
-				  		let className = 'complex-menu-section-toggle'
-				  		return (
-				  			<div className={className} key={index}>
-				  				{entry}
-				  			</div>
-				  			)
-				  	})
-				  }
-			  </div>
+			  )
+	}
+	render() {
+		return (
+			<div className="complex-menu-left-nav">
+			  {this.renderFoldersList()}
+			  <LeftNavBottomLinks />
 			 </div>
 
 		)
