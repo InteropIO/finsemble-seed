@@ -1,0 +1,34 @@
+.tags-menu-wrapper {
+	height: 17px;
+	border-radius: 2px;
+	background: #67829a;
+	color: #fff;
+	padding: 0 5px;
+	display: table;
+	position: relative;
+}
+.tags-menu-wrapper span {
+	line-height: 17px;
+	font-size: 10px;
+	cursor: pointer;
+}
+.tags-menu {
+    left: 0;
+    top: 22px;
+	position: absolute;
+	width: 132px;
+	border-radius: 3px;
+  	background-color: var(--slate2);
+  	color: #495a69;
+}
+.tags-menu ul {
+	padding: 0;
+}
+.tags-menu li {
+	cursor: pointer;
+	padding: 0 17px 0 17px;
+	line-height: 19px;
+	font-size: 11px;
+	list-style: none;
+	color: #fff;
+}
