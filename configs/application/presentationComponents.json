@@ -680,7 +680,7 @@
 			"window": {
 				"url": "$applicationRoot/components/processMonitor/processMonitor.html",
 				"width": 600,
-				"height": 400
+				"height": 700
 			},
 			"component": {
 				"category": "system"
@@ -699,6 +699,37 @@
 						"FSBLHeader": true,
 						"persistWindowState": true,
 						"title": "Process Monitor"
+					}
+				}
+			}
+		},
+		"AppCatalog2": {
+			"window": {
+				"url": "$applicationRoot/components/appCatalog2/appCatalog2.html",
+				"width": 700,
+				"height": 800,
+				"options": {
+					"autoShow": true,
+					"resizable": false
+				}
+			},
+			"component": {
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangeable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"persistWindowState": true,
+						"title": "App Catalog"
 					}
 				}
 			}

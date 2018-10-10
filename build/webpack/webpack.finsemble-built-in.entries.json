@@ -63,6 +63,10 @@
 		"output": "components/welcome/welcome",
 		"entry": "./src-built-in/components/welcome/welcome.js"
 	},
+	"appCatalog2": {
+		"output": "components/appCatalog2/appCatalog2",
+		"entry": "./src-built-in/components/appCatalog2/src/app.jsx"
+	},
 	"processMonitor": {
 		"output": "components/processMonitor/processMonitor",
 		"entry": "./src-built-in/components/processMonitor/src/app.jsx"
