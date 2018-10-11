@@ -118,7 +118,7 @@ class _ToolbarStore {
 	 * @memberof _ToolbarStore
 	 */
 	loadMenusFromConfig(done, self) {
-		FSBL.Clients.ConfigClient.get({ field: "finsemble.menus" }, function (err, menus) {
+		FSBL.Clients.ConfigClient.getValue({ field: "finsemble.menus" }, function (err, menus) {
 			if (menus && menus.length) {
 				self.Store.setValue({
 					field: "menus",
