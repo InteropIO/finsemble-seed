@@ -475,7 +475,7 @@
 				"url": "$applicationRoot/components/toolbar/toolbar.html",
 				"width": 300,
 				"height": 100,
-				"defaultHeight": 39,
+				"dockedHeight": 39,
 				"top": 0,
 				"left": 0,
 				"right": 0,
