@@ -65,7 +65,7 @@ html.desktop-active .fsbl-header {
 }
 
 .fsbl-header-left {
-    height: 100%;
+    height: calc(100% - 5px); /* leave some space for the resize cursor */
     margin-left: 2px;
     left: 0px;
     align-content: center;
@@ -124,30 +124,6 @@ html.desktop-active .fsbl-tab-region-drag-area {
     background-color: var(--titleBar-background-inactive-color);
 }
 
-/* This div captures the hover event for it's parent. It doesn't stretch to the border, so that mouseout is properly detected. */
-.fsbl-hover-detector-right {
-    position: absolute;
-    width: 75%;
-    height: 75%;
-    left: 0px;
-    bottom: 0px;
-}
-
-.fsbl-hover-detector-left {
-    position: absolute;
-    width: 75%;
-    height: 75%;
-    right: 0px;
-    bottom: 0px;
-}
-
-.fsbl-hover-detector-top {
-    position: absolute;
-    width: 100%;
-    height: 75%;
-    right: 0px;
-    bottom: 0px;
-}
 .tab-drop-region {
     width: 100%;
     height:100%;
@@ -412,7 +388,7 @@ html.desktop-active .fsbl-linker[hover=true] {
 }
 
 /* Responsive Sizing */
-/* At 345px, the Drag-to-Share icon will be removed. */ 
+/* At 345px, the Drag-to-Share icon will be removed. */
 @media screen and (min-width: 0px) and (max-width: 345px){
     .fsbl-icon.ff-share {
         display: none !important;
@@ -425,7 +401,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     }
 }
 
-/* At 310px, the left section of the header will be removed. */ 
+/* At 310px, the left section of the header will be removed. */
 @media screen and (min-width: 0px) and (max-width: 310px){
     .fsbl-header-left {
         display: none !important;
@@ -435,7 +411,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     }
 }
 
-/* At 280px, the docking icon will be removed. */ 
+/* At 280px, the docking icon will be removed. */
 @media screen and (min-width: 0px) and (max-width: 280px){
     .fsbl-icon.ff-detached, .fsbl-icon.ff-attached {
         display: none !important;
@@ -455,7 +431,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     }
 }
 
-/* At 210px, the minimize icon will be removed. */ 
+/* At 210px, the minimize icon will be removed. */
 @media screen and (min-width: 0px) and (max-width: 210px){
     .fsbl-icon.fsbl-minimize {
         display: none !important;

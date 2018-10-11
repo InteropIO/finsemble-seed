@@ -18,6 +18,7 @@ import MinimizeAll from "../components/MinimizeAll";
 import WorkspaceLauncherButton from "../components/WorkspaceLauncherButton";
 import WorkspaceMenuOpener from "../components/WorkspaceMenuOpener"
 import Search from "../components/Search"
+import DragHandle from "../components/DragHandle"
 
 // Support Dynamically Loading External Components
 var customComponents = [];
@@ -59,14 +60,14 @@ export default class Toolbar extends React.Component {
 	}
 
 	componentDidMount() {
-	//console.log("this", this)
+		//console.log("this", this)
 		this.state.finWindow.bringToFront();
 	}
 
 	componentWillMount() {
 		var self = this;
 		ToolbarStore.setupPinnedHotKeys(function (err, data) {
-		//console.log("data---", data);
+			//console.log("data---", data);
 			let pin = self.refs.pinSection.element.childNodes[data - 1];
 			//Goes and finds the toolbar button and clicks it.
 			if (pin.childNodes[0] && pin.childNodes[0].children[0]) {
@@ -104,6 +105,7 @@ export default class Toolbar extends React.Component {
 		this.refs.pinSection.setState({ pins: newPins });
 		ToolbarStore.GlobalStore.setValue({ field: 'pins', value: pinsToObj(newPins) });
 	}
+
 	/**
 	 * This a sample dynamic toolbar which builds a toolbar from config, dynamically updates and can render any react component as a toolbar item.
 	 * The "sections" are built by the toolbar store. getSections() takes the sections object and builds right/left/center sections using the FinsembleToolbarSection control.
@@ -134,10 +136,10 @@ export default class Toolbar extends React.Component {
 						buttonComponent = <WorkspaceLauncherButton key={i} {...button}></WorkspaceLauncherButton>;
 						break;
 					case "componentLauncher":
-						buttonComponent = <FinsembleButton iconClasses="pinned-icon" buttonType={["AppLauncher", "Toolbar"]} key={i} {...button}></FinsembleButton>;
+						buttonComponent = <FinsembleButton id={button.id} iconClasses="pinned-icon" buttonType={["AppLauncher", "Toolbar"]} dockedTop={true} key={i} {...button}></FinsembleButton>;
 						break;
 					case "menuLauncher":
-						buttonComponent = <FinsembleButton preSpawn={true} buttonType={["MenuLauncher", "Toolbar"]} key={i} {...button}></FinsembleButton>;
+						buttonComponent = <FinsembleButton preSpawn={true} buttonType={["MenuLauncher", "Toolbar"]} dockedTop={true} key={i} {...button}></FinsembleButton>;
 						break;
 				}
 				buttons.push(buttonComponent);
@@ -168,10 +170,12 @@ export default class Toolbar extends React.Component {
 	}
 
 	render() {
-	//console.log("Toolbar Render ");
+		//console.log("Toolbar Render ");
 		if (!this.state.sections) return;
-		return (<FinsembleToolbar onDragEnd={this.onPinDrag}>
+		return (<FinsembleToolbar onDragStart={this.moveToolbar} onDragEnd={this.onPinDrag}>
+			<DragHandle />
 			{this.getSections()}
+			<div className='resize-area' />
 		</FinsembleToolbar>);
 	}
 

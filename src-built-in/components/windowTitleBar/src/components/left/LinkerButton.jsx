@@ -5,7 +5,7 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
-import HoverDetector from "../HoverDetector.jsx";
+import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
 import LinkerGroups from "./LinkerGroups";
 import { getStore, Actions as HeaderActions } from "../../stores/windowTitleBarStore";
 let windowTitleBarStore;
@@ -153,7 +153,7 @@ export default class LinkerButton extends React.Component {
     render() {
         return (<div ref="LinkerButton" title="Link Data" className="linkerSection">
             <div className="fsbl-icon fsbl-linker ff-linker" data-hover={this.state.hoverState} onClick={this.showLinkerWindow} >
-                <HoverDetector edge="left" hoverAction={this.hoverAction} />
+                <FinsembleHoverDetector edge="top left" hoverAction={this.hoverAction} />
             </div>
             <LinkerGroups />
         </div>);
