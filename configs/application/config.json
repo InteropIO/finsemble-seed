@@ -101,6 +101,10 @@
 		"$applicationRoot/configs/application/components.json",
 		"$applicationRoot/configs/application/workspaces.json",
 		"$applicationRoot/configs/application/workspaceTemplates.json",
-		"$applicationRoot/configs/application/services.json"
+		"$applicationRoot/configs/application/services.json",
+		"$applicationRoot/components/news/news.json",
+		"$applicationRoot/components/chart/chart.json",
+		"$applicationRoot/components/marketearlybird/fpe-marketearlybird.json"
+
 	]
 }

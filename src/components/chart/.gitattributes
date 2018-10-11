@@ -1,0 +1,4 @@
+*.map binary
+*.min.js binary
+*.min.css binary
+require.js binary

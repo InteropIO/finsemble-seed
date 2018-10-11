@@ -1,0 +1,38 @@
+<!--
+This file provides an example of how to use ChartIQ's "instant-chart" web component.
+An instant-chart is a fully functional chart, with user interface, that can be dropped onto a web page with a single tag.
+
+instant-chart supports the same interface as ChartEngine (stxx), so you can call any method as you would directly on an stxx object.
+
+Web-Components polyfill is required to use this
+-->
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" type="text/css" href="css/normalize.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="css/page-defaults.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="css/stx-chart.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="css/chartiq.css" media="screen" />
+
+<script src="js/thirdparty/object-observe.js"></script>
+<script src="js/thirdparty/webcomponents-lite.min.js"></script>
+<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'></script>
+<script src="js/chartiq.js"></script>
+<script src='js/quoteFeedSimulator.js'></script>
+<link rel="import" href="instant-chart.html">
+</head>
+<body>
+<cq-instant-chart symbol="AAPL" style="width:600px;height:480px;position:relative;display:block;"></cq-instant-chart>
+<script>
+
+// Wait for the web components to be ready. Then you can attach your data feeds.
+window.addEventListener('WebComponentsReady', function(e) {
+	// Set your lookup driver
+	$("cq-instant-chart")[0].setLookupDriver(new CIQ.UI.Lookup.Driver.ChartIQ());
+	// Set your quoteFeed
+	$("cq-instant-chart")[0].attachQuoteFeed(quoteFeedSimulator);
+});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!--
+This file provides an example of how to use ChartIQ's "instant-chart" web component in a multi-chart environment.
+An instant-chart is a fully functional chart, with user interface, that can be dropped onto a web page with a single tag.
+
+instant-chart supports the same interface as ChartEngine (stxx), so you can call any method as you would directly on an stxx object.
+
+Web-Components polyfill is required to use this
+-->
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" type="text/css" href="css/normalize.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="css/page-defaults.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="css/stx-chart.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="css/chartiq.css" media="screen" />
+
+<script src="js/thirdparty/object-observe.js"></script>
+<script src="js/thirdparty/webcomponents-lite.min.js"></script>
+<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'></script>
+<script src="js/chartiq.js"></script>
+<script src='js/quoteFeedSimulator.js'></script>
+<script src="js/thirdparty/iscroll.js"></script>
+<script src="js/plugin.js"></script>
+<script src="js/translations.js"></script>
+<script src="js/addOns.js"></script>
+<link rel="import" href="instant-chart.html">
+</head>
+<body>
+
+<div style="height: 75%;width: 50%;position:absolute">
+<cq-instant-chart id="chart1" symbol="AAPL" style=";height:480px;position:relative;display:block;"></cq-instant-chart>
+</div>
+<div style="left:50%;height: 75%;width: 50%;position:absolute">
+<cq-instant-chart id="chart2" symbol="IBM" style=";height:480px;position:relative;display:block;"></cq-instant-chart>
+</div>
+
+<script>
+
+// Wait for the web components to be ready. Then you can attach your data feeds.
+window.addEventListener('WebComponentsReady', function(e) {
+	// Set your lookup driver
+	$("#chart1")[0].setLookupDriver(new CIQ.UI.Lookup.Driver.ChartIQ());
+	// Set your quoteFeed
+	$("#chart1")[0].attachQuoteFeed(quoteFeedSimulator);
+
+	$("#chart2")[0].setLookupDriver(new CIQ.UI.Lookup.Driver.ChartIQ());
+	// Set your quoteFeed
+	$("#chart2")[0].attachQuoteFeed(quoteFeedSimulator);
+
+	CIQ.UI.begin(advancedFunctionality);
+});
+
+
+
+
+// Once the chart components have been initialized, you can interact
+// with their stx members to manipulate the charting library
+function advancedFunctionality(){
+	$("cq-instant-chart").each(function(){
+		var stx=this.stx;
+		var id=this.id;
+		stx.setMarketFactory(CIQ.Market.Symbology.factory);
+		new CIQ.ExtendedHours({stx:stx, filter:true});
+		new CIQ.RangeSlider({stx:stx});
+
+		// Save chart layouts & preferences using the "id" for the cq-instance-chart
+		stx.addEventListener("layout", function(obj){
+			var s=JSON.stringify(obj.stx.exportLayout(true));
+			CIQ.localStorageSetItem("layout-" + id, s);
+		});
+		stx.addEventListener("symbolChange", function(obj){
+			var s=JSON.stringify(obj.stx.exportLayout(true));
+			CIQ.localStorageSetItem("layout-" + id, s);
+			restoreDrawings(obj.stx, obj.stx.chart.symbol);
+		});
+		stx.addEventListener("preferences", function(obj){
+			CIQ.localStorageSetItem("preferences-" + id,JSON.stringify(obj.stx.exportPreferences()));
+		});
+		stx.addEventListener("drawing", function(obj){
+			var tmp=obj.stx.exportDrawings();
+			if(tmp.length===0){
+				CIQ.localStorage.removeItem(obj.symbol);
+			}else{
+				CIQ.localStorageSetItem(obj.symbol, JSON.stringify(tmp));
+			}
+		});
+
+		restorePreferences(stx, id);
+		restoreLayout(stx, id);
+	});
+}
+
+// A few helper functions for saving and restoring chart data
+function restoreDrawings(stx, symbol){
+	var memory=CIQ.localStorage.getItem(symbol);
+	if(memory!==null){
+		var parsed=JSON.parse(memory);
+		if(parsed){
+			stx.importDrawings(parsed);
+			stx.draw();
+		}
+	}
+}
+
+function restorePreferences(stx, id){
+	var pref=CIQ.localStorage.getItem("preferences-" + id);
+	if (pref) stx.importPreferences(JSON.parse(pref));
+}
+
+function restoreLayout(stx, id, cb){
+	var datum=CIQ.localStorage.getItem("layout-" + id);
+	if(datum===null) return;
+	function closure(){
+		restoreDrawings(stx, stx.chart.symbol);
+		if(cb) cb();
+	}
+	stx.importLayout(JSON.parse(datum), {managePeriodicity:true, cb: closure});
+}
+
+</script>
+</body>
+</html>

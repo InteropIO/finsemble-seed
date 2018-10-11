@@ -1,0 +1,42 @@
+{
+	"comment": "Premium component config.",
+	"components": {
+		"Advanced Chart": {
+			"window": {
+				"url": "$applicationRoot/components/chart/index.html",
+				"width": 500,
+				"height": 410,
+				"options": {
+					"minWidth": 75
+				}
+			},
+			"component": {
+				"advertiseReceivers": [
+					"chartiq.chart",
+					"symbol"
+				],
+				"spawnOnHotkey": ["ctrl", "alt", "a"]
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Toolbar": {
+						"iconClass": "ff-chart-advanced"
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": true,
+						"persistWindowState": true
+					}
+				}
+			}
+		}
+	}
+}

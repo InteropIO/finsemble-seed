@@ -1,0 +1,34 @@
+{
+	"comment": "Premium component config.",
+	"components": {		"News": {
+			"window": {
+				"listName": "News",
+				"url": "$applicationRoot/components/news/news.html",
+				"width": 350,
+				"height": 600
+			},
+			"component": {
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Toolbar": {
+						"iconClass": "ff-news"
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": true,
+						"persistWindowState": true
+					}
+				}
+			}
+		}
+	}
+}
