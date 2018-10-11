@@ -460,8 +460,8 @@
 			"window": {
 				"id": "launcher",
 				"url": "$applicationRoot/components/toolbar/toolbar.html",
-				"width": 300,
-				"height": 100,
+				"width": 600,
+				"height": 39,
 				"dockedHeight": 39,
 				"top": 0,
 				"left": 0,
@@ -474,7 +474,7 @@
 				],
 				"maxHeight": 39,
 				"minHeight": 39,
-				"minWidth": 99,
+				"minWidth": 300,
 				"docked": "top",
 				"canGroup": false,
 				"options": {
