@@ -42,7 +42,6 @@ class WorkspaceManagementMenu extends React.Component {
 	}
 
 	onStoreChange() {
-		FSBL.Clients.Logger.perf.log("OnStoreChange.");
 		this.setState({
 			WorkspaceList: WorkspaceManagementMenuActions.getWorkspaceList(),
 			activeWorkspace: WorkspaceManagementMenuActions.getActiveWorkspace()
@@ -52,7 +51,6 @@ class WorkspaceManagementMenu extends React.Component {
 	}
 
 	onPinChange() {
-		FSBL.Clients.Logger.perf.log("OnPinChange.");
 		this.setState({
 			pinnedWorkspaces: this.convertPinnedWorkspacesToArray()
 		});
@@ -90,7 +88,7 @@ class WorkspaceManagementMenu extends React.Component {
 fin.desktop.main(function () {
 	if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
 	function FSBLReady() {
-	//console.log("WorkspaceManagementMenu onReady");
+		//console.log("WorkspaceManagementMenu onReady");
 		storeExports.initialize(function (store) {
 			WorkspaceManagementMenuStore = store;
 			ReactDOM.render(
