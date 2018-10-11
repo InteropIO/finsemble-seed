@@ -251,7 +251,7 @@
                 }
             }
         },
-        "panopticon_mc_17_0": {
+        "Panopticon": {
             "window": {
                 "url": "http://127.0.0.1:8080/panopticon/#/workbooks/",
                 "frame": false,
@@ -290,7 +290,167 @@
                     }
                 }
             }
-        },
+		},
+        "panopticon: Live tabular": {
+            "window": {
+                "url": "http://127.0.0.1:8080/panopticon/workbook/#/realtimepnl-live_tabular",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 800,
+                "height": 600
+            },
+            "component": {
+                "inject": "panopticon_mc_17_0.js"
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+                    },
+                    "workspace": {
+                        "persistURL": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "title": "Panopticon",
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "showLinker": true
+                    },
+                    "Toolbar": {
+                        "iconURL": "$applicationRoot/components/panopticon_mc_17_0/datawatch_logo.jpg"
+                    }
+                }
+            }
+		},
+        "panopticon: Live visual": {
+            "window": {
+                "url": "http://127.0.0.1:8080/panopticon/workbook/#/realtimepnl-live_visual",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 800,
+                "height": 600
+            },
+            "component": {
+                "inject": "panopticon_mc_17_0.js"
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+                    },
+                    "workspace": {
+                        "persistURL": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "title": "Panopticon",
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "showLinker": true
+                    },
+                    "Toolbar": {
+                        "iconURL": "$applicationRoot/components/panopticon_mc_17_0/datawatch_logo.jpg"
+                    }
+                }
+            }
+		},
+        "panopticon: Playback": {
+            "window": {
+                "url": "http://127.0.0.1:8080/panopticon/workbook/#/realtimepnl-playback",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 900,
+                "height": 830
+            },
+            "component": {
+                "inject": "panopticon_mc_17_0.js"
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+                    },
+                    "workspace": {
+                        "persistURL": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "title": "Panopticon",
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "showLinker": true
+                    },
+                    "Toolbar": {
+                        "iconURL": "$applicationRoot/components/panopticon_mc_17_0/datawatch_logo.jpg"
+                    }
+                }
+            }
+		},
+        "panopticon: Position history": {
+            "window": {
+                "url": "http://127.0.0.1:8080/panopticon/workbook/#/realtimepnl-history",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 800,
+                "height": 600
+            },
+            "component": {
+                "inject": "panopticon_mc_17_0.js"
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+                    },
+                    "workspace": {
+                        "persistURL": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "title": "Panopticon",
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "showLinker": true
+                    },
+                    "Toolbar": {
+                        "iconURL": "$applicationRoot/components/panopticon_mc_17_0/datawatch_logo.jpg"
+                    }
+                }
+            }
+		},
         "Linker Tester": {
 			"window": {
 				 "url": "$applicationRoot/components/linkerTester/linkerTester.html",
