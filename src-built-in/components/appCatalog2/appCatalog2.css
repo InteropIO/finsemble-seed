@@ -1,18 +1,19 @@
-.appCatalog {
+.appCatalog2 {
 	background-image: linear-gradient(to bottom, #3c4c58, #303d47);
-	color: white;
+	/* background-color: black; */
+	height: 100%;
 }
 
 .hero-main {
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
-	width: 100%;
+	width: 90%;
 	height: 100%;
 }
 
 .selected-content-title {
-	width: 166px;
+	width: 100%;
 	height: 26px;
 	font-family: Roboto;
 	font-size: 20px;
@@ -36,7 +37,26 @@
 	letter-spacing: normal;
 	color: #ffffff;
 	text-overflow: ellipsis;
-  }
+}
+
+.paginator {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+.pagination-oval {
+	width: 6px;
+	height: 6px;
+	border: solid 1px #dddddd;
+}
+
+.pagination-oval.active {
+	width: 6px;
+	height: 6px;
+	border: solid 1px #dddddd;
+	background-color: #dddddd;
+}
 
 .hero_selected_content {
 	width: 506px;
@@ -45,9 +65,80 @@
 	background-color: #1c2a36;
 }
 
-.carat_down_white {
-	width: 29px;
-	height: 12px;
+.paginate_carat_left {
+	width: 50px;
+	height: 100px;
 	object-fit: contain;
-	transform: rotate(90deg);
-  }
+	background-image: url("./src/assets/chevron-left.svg");
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: auto;
+}
+
+.paginate_carat_right {
+	width: 50px;
+	height: 100px;
+	object-fit: contain;
+	background-image: url("./src/assets/chevron-right.svg");
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: auto;
+}
+
+.app-card {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	width: 120px;
+	height: 180px;
+	box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.25);
+	background-color: #495a69;
+}
+
+.app-card .app-image {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	width: 100px;
+	height: 69px;
+}
+
+.app-card .app-title {
+	width: 100%;
+	height: 19px;
+	font-family: Roboto;
+	font-size: 14px;
+	font-weight: 300;
+	font-style: normal;
+	font-stretch: normal;
+	line-height: normal;
+	letter-spacing: normal;
+	color: #ffffff;
+	text-overflow: clip;
+}
+
+.app-card .app-tags {
+	display: flex;
+	width: 89px;
+	height: 26px;
+	font-family: Roboto;
+	font-size: 10px;
+	font-weight: normal;
+	font-style: normal;
+	font-stretch: normal;
+	line-height: normal;
+	letter-spacing: normal;
+	color: #ffffff;
+}
+
+.carousel-main {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.carousel-main .carousel-content {
+	display: flex !important;
+	flex-direction: row !important;
+	justify-content: space-between !important;
+}

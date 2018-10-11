@@ -20,6 +20,7 @@ export default class Hero extends Component {
 		this.changePage = this.changePage.bind(this);
 	}
 	changePage(action) {
+		let { cards } = this.props;
 		let newActive = this.state.active;
 
 		if (typeof action === "number") {
@@ -27,10 +28,10 @@ export default class Hero extends Component {
 		} else {
 			switch (action) {
 				case "page_down":
-					newActive--;
+					newActive = (newActive - 1 < 0) ? cards.length-1 : newActive - 1;
 					break;
 				case "page_up":
-					newActive++;
+					newActive = (newActive + 1 > cards.length - 1) ? 0 : newActive + 1;
 					break;
 				default:
 					break;
@@ -45,28 +46,30 @@ export default class Hero extends Component {
 
 		let { active } = this.state;
 		let { cards } = this.props;
-		let contentTitle = cards[active].title;
-		let contentMsg = cards[active].message;
+		let contentTitle = cards[active].title === undefined ? cards[active].name : cards[active].title
+		let contentMsg = cards[active].description;
 
 		return (
-			<div className='hero_main'>
-				<img src='../assets/chevron-left.svg' className='carat_down_white' onClick={this.changePage.bind(this, 'page_down')} />
-				<div className='hero_selected_content'>
-					<div className='selected-content-title'>
-						<h4>{contentTitle}</h4>
+			<div>
+				<div className='hero-main'>
+					<div className='paginate_carat_left' onClick={this.changePage.bind(this, 'page_down')} />
+					<div className='hero_selected_content'>
+						<div className='selected-content-title'>
+							<h4>{contentTitle}</h4>
+						</div>
+						<div className='selected-content-message'>
+							<p>{contentMsg}</p>
+						</div>
 					</div>
-					<div className='selected-content-message'>
-						<p>{contentMsg}</p>
-					</div>
+					<div className='paginate_carat_right' onClick={this.changePage.bind(this, 'page_up')} />
 				</div>
-				<img src='../assets/chevron-right.svg' className='carat_down_white' onClick={this.changePage.bind(this, 'page_up')} />
-				{/* <div className="paginator">
+				<div className="paginator">
 					{cards.map((card, i) => {
 						let classes = 'pagination-oval';
 						if (i === active) classes += " active";
-						return (<div className={classes} onClick={this.changePage.bind(this, i)} />);
+						return (<div key={i} className={classes} onClick={this.changePage.bind(this, i)} />);
 					})}
-				</div> */}
+				</div>
  			</div>
 		);
 	}
