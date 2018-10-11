@@ -5,6 +5,7 @@ let state = {
 	dashboardName: null,
 	parameters: null
 };
+
 //Array to hold default parameter settings from page load
 let defaultParams = [];
 let subscriptions = {};
@@ -135,6 +136,7 @@ function dragAndDropHandler(err, response) {
 
 function linkerHandler(paramName, data){
 	Logger.log("New parameter received (type=" + paramName + "): " + data);
+
 	state.parameters[paramName].value = data;
 
 	
@@ -178,6 +180,19 @@ function listenForLinkedOrDroppedParameters() {
 			}
 
 			newSubscriptions[paramName] = true;
+		}
+
+		//add an extra subscription for symbol if sym was present (to translate it for the finsemble sales demo)
+		if (subscriptions["sym"] && !subscriptions["symbol"]){
+			Logger.log("Subscribing to Linker parameter: symbol (to set sym parameter)");
+			//linker subscribe
+			FSBL.Clients.LinkerClient.subscribe("symbol", function(data) {linkerHandler("sym",data);});
+			subscriptions[paramName] = true;
+
+			//subscribe for drag and drop
+			Logger.log("Subscribing to Drag & Drop parameter: symbol (to set sym parameter)");
+			dragAndDropSubscriptions["symbol"] = true;
+			receivers.push({type: "sym", handler: dragAndDropHandler});
 		}
 
 		if(receivers.length > 0) {
