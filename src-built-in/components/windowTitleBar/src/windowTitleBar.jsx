@@ -10,7 +10,7 @@ import ReactDOM from "react-dom";
 import * as storeExports from "./stores/windowTitleBarStore";
 let HeaderData, HeaderActions, windowTitleBarStore;
 
-import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
+import HoverDetector from "./components/HoverDetector.jsx";
 
 //Parts that make up the windowTitleBar.
 //Left side
@@ -194,19 +194,13 @@ class WindowTitleBar extends React.Component {
 	 * Hide the dragHandle during drop operations, so that it doesn't interfere
 	 */
 	resizeDragHandle() {
-		const fsblHeader = document.querySelector(".fsbl-header");
-		if (!fsblHeader) {
-			// If there isn't an FSBLHeader then there doesn't need to be a drag handle.
-			return;
-		}
-
-		// Create the dragger if it doesn't already exist
 		let dragHandle = document.querySelector(".fsbl-drag-handle");
+		// Create the dragger if it doesn't already exist
 		if (!dragHandle) {
 			dragHandle = document.createElement("div");
 			dragHandle.className = "fsbl-drag-handle";
 
-			fsblHeader.insertBefore(dragHandle, fsblHeader.firstChild);
+			document.body.insertBefore(dragHandle, document.body.firstChild);
 			var self = this;
 			window.addEventListener("resize", function () {
 				self.resizeDragHandle();
@@ -216,7 +210,7 @@ class WindowTitleBar extends React.Component {
 		// Set the height of the dragHandle to match the height of the window title bar
 		// Do this every time through the render loop just in case a customer builds a
 		// header bar with dynamic height!
-		let bounds = fsblHeader.getBoundingClientRect();
+		let bounds = document.querySelector(".fsbl-header").getBoundingClientRect();
 		dragHandle.style.height = (bounds.height - 5) + "px"; // Subtract 5 pixels from height in order to make room for resize window cursor at top edge of window
 		dragHandle.style.marginTop = (-bounds.height + 5) + "px"; // Negative margin pulls the drag handle up over the fixed header
 

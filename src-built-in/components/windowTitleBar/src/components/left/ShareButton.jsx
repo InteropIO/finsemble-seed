@@ -4,7 +4,7 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
-import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
+import HoverDetector from "../HoverDetector.jsx";
 import { getStore, Actions as HeaderActions } from "../../stores/windowTitleBarStore";
 let windowTitleBarStore;
 export default class ShareButton extends React.Component {
@@ -75,7 +75,7 @@ export default class ShareButton extends React.Component {
 		}
 		*/
 		return (<div className="fsbl-icon ff-share" title="Drag To Share" data-hover={this.state.hoverState} draggable="true" onDragStart={this.onDragStart}>
-			<FinsembleHoverDetector edge="top" hoverAction = {this.hoverAction.bind(this)} />
+			<HoverDetector edge="top" hoverAction = {this.hoverAction.bind(this)} />
         </div>);
 	}
 }

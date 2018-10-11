@@ -18,13 +18,13 @@ function setZoom(pct) {
 
 // Zoom in. Zoom levels are saved as component state "fsbl-zoom"
 function zoomIn() {
-	window.fsblZoomLevel += 0.1;
+	window.fsblZoomLevel *= 1.1;
 	setZoom(window.fsblZoomLevel);
 	FSBL.Clients.WindowClient.setComponentState({ field: "fsbl-zoom", value: window.fsblZoomLevel });
 }
 
 function zoomOut() {
-	window.fsblZoomLevel -= 0.1;
+	window.fsblZoomLevel *= .9;
 	setZoom(window.fsblZoomLevel);
 	FSBL.Clients.WindowClient.setComponentState({ field: "fsbl-zoom", value: window.fsblZoomLevel });
 }

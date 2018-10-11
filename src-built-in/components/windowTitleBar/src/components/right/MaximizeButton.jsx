@@ -3,7 +3,7 @@
 * All rights reserved.
 */
 import React from "react";
-import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
+import HoverDetector from "../HoverDetector.jsx";
 import { getStore, Actions as HeaderActions } from "../../stores/windowTitleBarStore";
 let windowTitleBarStore;
 /**
@@ -109,7 +109,7 @@ export default class MaximizeButton extends React.Component {
 		wrapClasses += this.state.maximized ? "window-restore" : "window-max";
 
 		return (<div className={wrapClasses} id="fsbl-window-restore" title={tooltip} data-hover={this.state.hoverState} onClick={this.onClick}>
-			<FinsembleHoverDetector edge="top" hoverAction={this.hoverAction} />
+			<HoverDetector edge="top" hoverAction={this.hoverAction} />
 			<i className={iconClasses}></i>
 		</div>);
 	}

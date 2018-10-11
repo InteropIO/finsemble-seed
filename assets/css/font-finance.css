@@ -134,9 +134,6 @@
 .ff-dots-vert:before {
   content: "\48";
 }
-.ff-dots-vert-mover:before {
-  content: "\48\48";
-}
 .ff-edit:before {
   content: "\49";
 }

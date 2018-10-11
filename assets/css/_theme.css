@@ -40,7 +40,6 @@
     --toolbar-brand-logo-height: 20px;
     --toolbar-background-color: var(--primary-background-color);
     --toolbar-button-hover-color: var(--secondary-accent-color);
-    --toolbar-resize-area-color: var(--slate5);
    
     --toolbar-icon-workspace-color: var(--yellow);
     --toolbar-icon-app-color: var(--tertiary-accent-color);
