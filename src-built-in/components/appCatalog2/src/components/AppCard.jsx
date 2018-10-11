@@ -25,7 +25,7 @@ const AppCard = props => {
 					}
 
 					return (
-						<h4>
+						<h4 key={i}>
 							{newTag}
 						</h4>
 					);

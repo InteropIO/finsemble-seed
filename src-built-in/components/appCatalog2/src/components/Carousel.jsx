@@ -42,9 +42,9 @@ export default class Carousel extends Component {
 		let { cards } = this.props;
 		let firstCard = this.state.firstIndex;
 
-		let displayCards = [cards[firstCard]];
-		for (let i = 0; i < 3; i++) {
-			if (firstCard + 1 > cards.length - 1) {
+		let displayCards = [];
+		for (let i = 0; i < 4; i++) {
+			if (firstCard > cards.length) {
 				displayCards.push(cards[0]);
 				firstCard = 0;
 			} else {
