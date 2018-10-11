@@ -50,10 +50,9 @@
 }
 
 .finsemble-toolbar-button {
-    display: -webkit-box;
     padding: 5px 6px;
-    height: 100%;
     border: 1px solid var(--toolbar-background-color);
+    position: relative;
 }
 
 .finsemble-toolbar-button-label {
@@ -66,7 +65,7 @@
     margin-top: 6px;
 }
 
-.finsemble-toolbar-button:hover {
+.finsemble-toolbar-button[data-hover=true] {
     background: var(--toolbar-button-hover-color);
     border: 1px solid transparent;
     cursor: pointer;
@@ -129,7 +128,7 @@
     white-space: nowrap;
 }
 
-.finsemble-toolbar-workspace-button-label.finsemble-toolbar-button:hover {
+.finsemble-toolbar-workspace-button-label.finsemble-toolbar-button[data-hover=true] {
     background: var(--toolbar-button-hover-color);
     border: 1px solid transparent;
     cursor: pointer;
