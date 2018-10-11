@@ -200,15 +200,15 @@ var Actions = {
 
 		Actions.getInitialTabList((err, values) => {
 			var onParentSet = () => {
-				Actions.parentWrapper = null;
-				Actions.getInitialTabList(() => {
-					FSBL.Clients.Logger.system.debug("docking group update after initial tab list");
-					onDockingGroupUpdate(null, {
-						data: {
-							groupData: windowTitleBarStore.getValue({ field: "Main.allDockingGroups" })
-						}
-					})
-				});
+					Actions.parentWrapper = null;
+					Actions.getInitialTabList(() => {
+						FSBL.Clients.Logger.system.debug("docking group update after initial tab list");
+						onDockingGroupUpdate(null, {
+							data: {
+								groupData: windowTitleBarStore.getValue({ field: "Main.allDockingGroups" })
+							}
+						})
+					});
 			};
 			var onParentCleared = () => {
 				Actions.parentWrapper = null;
@@ -240,6 +240,9 @@ var Actions = {
 	getMyDockingGroups: function (groupData) {
 		let myGroups = [];
 		let windowName = FSBL.Clients.WindowClient.getWindowNameForDocking();
+		if(FSBL.Clients.WindowClient.finsembleWindow.parentWindow){
+			windowName = FSBL.Clients.WindowClient.finsembleWindow.parentWindow.name
+		}
 		FSBL.Clients.Logger.system.debug("Getting docking groups for ", windowName, groupData);
 		if (groupData) {
 			for (var groupName in groupData) {

@@ -500,7 +500,6 @@ export default class TabRegion extends React.Component {
         }
 
         let tabRegionDropZoneStyle = { left: this.state.tabs.length * this.state.tabWidth + "px" }
-        console.log("TAB DROP REGION", tabRegionDropZoneStyle);
         let moveAreaClasses = "fsbl-tab-region-drag-area";
         if (this.isTabRegionOverflowing()) {
             moveAreaClasses += " gradient"
