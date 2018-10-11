@@ -12,11 +12,15 @@
 	font-size: 10px;
 	cursor: pointer;
 }
+.tags-menu-wrapper span i {
+	margin-right: 5px;
+}
 .tags-menu {
-    left: 0;
     top: 22px;
 	position: absolute;
 	width: 132px;
+	max-height: 214px;
+	overflow-y: auto;
 	border-radius: 3px;
   	background-color: var(--slate2);
   	color: #495a69;
