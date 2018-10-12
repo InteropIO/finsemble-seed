@@ -240,6 +240,9 @@ var Actions = {
 	getMyDockingGroups: function (groupData) {
 		let myGroups = [];
 		let windowName = FSBL.Clients.WindowClient.getWindowNameForDocking();
+		if(FSBL.Clients.WindowClient.finsembleWindow.parentWindow){
+			windowName = FSBL.Clients.WindowClient.finsembleWindow.parentWindow.name
+		}
 		FSBL.Clients.Logger.system.debug("Getting docking groups for ", windowName, groupData);
 		if (groupData) {
 			for (var groupName in groupData) {
