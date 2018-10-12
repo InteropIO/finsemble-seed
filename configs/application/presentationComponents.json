@@ -460,13 +460,23 @@
 			"window": {
 				"id": "launcher",
 				"url": "$applicationRoot/components/toolbar/toolbar.html",
+				"width": 600,
 				"height": 39,
+				"dockedHeight": 39,
 				"top": 0,
 				"left": 0,
 				"right": 0,
 				"position": "available",
-				"claimMonitorSpace": true,
-				"addToWorkspace": false,
+				"autoShow": true,
+				"dockable": [
+					"top",
+					"bottom"
+				],
+				"maxHeight": 39,
+				"minHeight": 39,
+				"minWidth": 300,
+				"docked": "top",
+				"canGroup": false,
 				"options": {
 					"contextMenu": false,
 					"resizable": false,
