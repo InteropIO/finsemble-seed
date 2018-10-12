@@ -4,36 +4,23 @@ import "../../../../assets/css/finsemble.css"
 // Import js modules
 import React from  'react'
 import ReactDOM from  'react-dom'
+import {createStore, getStore} from './stores/LauncherStore'
 // Import React components
 import LeftNav from './components/LeftNav'
 import Content from './components/Content'
-
-const appFolders = require('./folders').appFolders
 
 class AppLauncher extends React.Component {
 
 	constructor() {
 		super()
-		this.state = {
-			folders: appFolders.folders,
-			activeFolder: appFolders.folders[0]
-		}
-
-		this.onFolderClicked = this.onFolderClicked.bind(this)
-	}
-
-	onFolderClicked(folder) {
-		this.setState({
-			activeFolder: folder
-		})
 	}
 
 	render() {
 		return (
 			<div className="user-preferences">
 				<div className="complex-menu-wrapper">
-					<LeftNav onFolderClicked={this.onFolderClicked} folders={this.state.folders} />
-					<Content activeFolder={this.state.activeFolder} />
+					<LeftNav />
+					<Content />
 				</div>
 			</div>
 		)
@@ -42,7 +29,9 @@ class AppLauncher extends React.Component {
 
 
 FSBL.addEventListener("onReady", function () {
-	ReactDOM.render(
-	<AppLauncher />
-	, document.getElementById("wrapper"))
+	createStore((store) => {
+		ReactDOM.render(
+			<AppLauncher />
+		, document.getElementById("wrapper"))
+		})
 });
