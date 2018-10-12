@@ -200,15 +200,15 @@ var Actions = {
 
 		Actions.getInitialTabList((err, values) => {
 			var onParentSet = () => {
-					Actions.parentWrapper = null;
-					Actions.getInitialTabList(() => {
-						FSBL.Clients.Logger.system.debug("docking group update after initial tab list");
-						onDockingGroupUpdate(null, {
-							data: {
-								groupData: windowTitleBarStore.getValue({ field: "Main.allDockingGroups" })
-							}
-						})
-					});
+				Actions.parentWrapper = null;
+				Actions.getInitialTabList(() => {
+					FSBL.Clients.Logger.system.debug("docking group update after initial tab list");
+					onDockingGroupUpdate(null, {
+						data: {
+							groupData: windowTitleBarStore.getValue({ field: "Main.allDockingGroups" })
+						}
+					})
+				});
 			};
 			var onParentCleared = () => {
 				Actions.parentWrapper = null;
