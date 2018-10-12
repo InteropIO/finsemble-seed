@@ -73,6 +73,12 @@ const IndexedDBAdapter = function () {
 	 */
 	this.db;
 
+	/**
+	 * Array of commands received before the IndexedDB is initialized. These commands are executed once the connection
+	 * has been established.
+	 */
+	this.queue = [];
+
 	Logger.system.debug("IndexedDBAdapter init");
 	console.debug("IndexedDBAdapter init");
 
@@ -93,6 +99,7 @@ const IndexedDBAdapter = function () {
 		objectStore.transaction.oncomplete = () => {
 			Logger.system.debug("IndexedDBAdapter object store created");
 			console.debug("IndexedDBAdapter object store created");
+			this.releaseQueue();
 		};
 	};
 
@@ -101,6 +108,7 @@ const IndexedDBAdapter = function () {
 		console.debug("IndexedDBAdapter initialized successfully");
 
 		this.db = event.target.result;
+		this.releaseQueue();
 	};
 
 	request.onerror = (err) => {
@@ -134,12 +142,32 @@ const IndexedDBAdapter = function () {
 		return preface;
 	}
 
+	/**
+	 * Process the commands queued for execution after the IndexedDB connection is established.
+	 * @private
+	 */
+	this.releaseQueue = () => {
+		Logger.system.debug(`IndexedDBAdapter.releaseQueue: ${this.queue.length} commands`);
+		console.debug(`IndexedDBAdapter.releaseQueue: ${this.queue.length} commands`);
+
+		while (this.queue.length) {
+			const action = this.queue.shift();
+			this[action.method].apply(this, action.args);
+		}
+	}
 	// #region Interface Methods
 	/**
 	 * This method should be used very, very judiciously. It's essentially a method designed to wipe the database for a 
 	 * particular user.
 	 */
 	this.clearCache = (params, cb) => {
+		if (!this.db) {
+			Logger.system.debug("queuing", "clearCache", [params, cb]);
+			console.debug("queuing", "clearCache", [params, cb]);
+			this.queue.push({ method: "clearCache", args: [params, cb] });
+			return;
+		}
+
 		const userPreface = this.getUserPreface(this);
 
 		Logger.system.debug("IndexedDBAdapter.clearCache for userPreface=" + userPreface);
@@ -173,6 +201,13 @@ const IndexedDBAdapter = function () {
 	 * @param {function} cb callback to be invoked upon completion
 	 */
 	this.delete = (params, cb) => {
+		if (!this.db) {
+			Logger.system.debug("queuing", "delete", [params, cb]);
+			console.debug("queuing", "delete", [params, cb]);
+			this.queue.push({ method: "delete", args: [params, cb] });
+			return;
+		}
+
 		const combinedKey = this.getCombinedKey(this, params);
 
 		Logger.system.debug("IndexedDBAdapter.delete for key=" + combinedKey);
@@ -201,6 +236,13 @@ const IndexedDBAdapter = function () {
 	 * @param {function} cb
 	 */
 	this.empty = (cb) => {
+		if (!this.db) {
+			Logger.system.debug("queuing", "empty", [cb]);
+			console.debug("queuing", "empty", [cb]);
+			this.queue.push({ method: "empty", args: [cb] });
+			return;
+		}
+
 		Logger.system.debug("IndexedDBAdapter.empty");
 		console.debug("IndexedDBAdapter.empty");
 
@@ -231,8 +273,15 @@ const IndexedDBAdapter = function () {
 	 * @param {function} cb callback to be invoked upon completion
 	 */
 	this.get = (params, cb) => {
+		if (!this.db) {
+			Logger.system.debug("queuing", "get", [params, cb]);
+			console.debug("queuing", "get", [params, cb]);
+			this.queue.push({ method: "get", args: [params, cb] });
+			return;
+		}
+
 		Logger.system.debug("IndexedDBAdapter.get, params: ", params);
-		console.debug("IndexedDBAdapter.get, params: ", params);
+		console.debug("IndexedDBAdapter.get, params: ", params, cb);
 
 		const combinedKey = this.getCombinedKey(this, params);
 		const objectStore = this.db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
@@ -262,18 +311,30 @@ const IndexedDBAdapter = function () {
 	 * @param {function} cb
 	 */
 	this.keys = (params, cb) => {
+		if (!this.db) {
+			Logger.system.debug("queuing", "keys", [params, cb]);
+			console.debug("queuing", "keys", [params, cb]);
+			this.queue.push({ method: "keys", args: [params, cb] });
+			return;
+		}
+
 		const keyPreface = this.getKeyPreface(params);
 		const keyRange = IDBKeyRange.forPrefix(keyPreface);
 		const objectStore = this.db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
 		const request = objectStore.getAllKeys(keyRange);
 
 		request.onsuccess = (event) => {
-			const data = event.target.result && event.target.result.value ? event.target.result : [];
+			// Get results, if defined, otherwise default to an empty array
+			const data = event.target.result ? event.target.result : [];
 
-			Logger.system.debug("IndexedDBAdapter.keys for keyPreface=" + keyPreface + " keys=", data);
-			console.debug("IndexedDBAdapter.get keys keyPreface=" + keyPreface + " keys=", data);
+			// Remove the keyPreface from the key, the methods add the key preface back in.
+			const keys = data
+				.map(key => key.replace(keyPreface, ""));
 
-			cb(null, data);
+			Logger.system.debug(`IndexedDBAdapter.keys for keyPreface=${keyPreface} keys=`, keys);
+			console.debug(`IndexedDBAdapter.get keys keyPreface=${keyPreface} keys=`, keys);
+
+			cb(null, keys);
 		};
 
 		request.onerror = (err) => {
@@ -294,6 +355,13 @@ const IndexedDBAdapter = function () {
 	 * @param {function} cb callback to be invoked upon save completion
 	 */
 	this.save = (params, cb) => {
+		if (!this.db) {
+			Logger.system.debug("queuing", "save", [params, cb]);
+			console.debug("queuing", "save", [params, cb]);
+			this.queue.push({ method: "save", args: [params, cb] });
+			return;
+		}
+
 		Logger.system.debug("IndexedDBAdapter.save, params: ", params);
 		console.debug("IndexedDBAdapter.save, params: ", params);
 

@@ -52,6 +52,7 @@ body.menu {
     padding-left: 20px;
     padding-right: 10px;
     cursor: pointer;
+    position:relative;
 }
 
 .menu-item-function {

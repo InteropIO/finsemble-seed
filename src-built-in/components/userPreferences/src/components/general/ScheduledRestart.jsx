@@ -69,6 +69,7 @@ export default class ScheduledRestart extends React.Component {
             Actions.disableScheduledRestart();
         } else {
             this.setState({ enabled })
+            Actions.setScheduledRestart(scheduledRestart);
         }
     }
 
