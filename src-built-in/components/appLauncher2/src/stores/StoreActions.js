@@ -1,6 +1,11 @@
 import {getStore} from './LauncherStore'
 
 const actions = {
+	getFolders: () => {
+		return getStore().getValue({
+			field: 'appFolders'
+		}).folders
+	},
 	getActiveFolder: () => {
 		return getStore().getValue({
 			field: 'appFolders'
