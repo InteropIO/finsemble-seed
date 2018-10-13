@@ -110,6 +110,5 @@
 		"$applicationRoot/components/news/news.json",
 		"$applicationRoot/components/chart/chart.json",
 		"$applicationRoot/components/marketearlybird/fpe-marketearlybird.json"
-
 	]
 }
