@@ -1,15 +1,31 @@
 import './FilterSort.css'
 import React from  'react'
+import SearchBox from './SearchBox'
 import TagsMenu from './TagsMenu'
+import {getStore} from '../stores/LauncherStore'
 
 export default class FilterSort extends React.Component {
 
 	constructor(props) {
 		super(props)
+		this.state = {
+			search: ''
+		}
+		this.onSearch = this.onSearch.bind(this)
+	}
+	onSearch(event) {
+		this.setState({
+			search: event.target.value
+		}, () => {
+			getStore().setValue({
+				field: 'filterText', 
+				value: this.state.search
+			})
+		})
 	}
 
 	onItemClick(item) {
-		console.log(item)
+
 	}
 
 	render() {
@@ -17,9 +33,7 @@ export default class FilterSort extends React.Component {
 		const list = ['one', 'two', 'three']
 		return (
 			<div className="filter-sort">
-				<div className="search-box"> 
-					<input type="text" placeholder="Search.." />
-				</div>
+				<SearchBox />
 				<div className="sort"> 
 					Sort by: 
 					<span className="first active sort-option pointer">Alphabetical</span>

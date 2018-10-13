@@ -1,0 +1,11 @@
+.search-box {
+	margin-bottom: 10px;
+}
+.search-box input {
+	color: #fff;
+	width: 393px;
+	height: 17px;
+	background: none;
+	border: 0;
+	border-bottom: solid 1px #0a8cf4;
+}
