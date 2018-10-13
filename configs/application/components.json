@@ -213,6 +213,46 @@
                 }
             }
         },
+        "Panopticon (web)": {
+            "window": {
+                "url": "http://54.186.20.225:8080/panopticon/#/workbooks/",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 800,
+                "height": 600
+            },
+            "component": {
+                "inject": "panopticon_mc_17_0.js"
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+                    },
+                    "workspace": {
+                        "persistURL": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "title": "Panopticon (web)",
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "showLinker": true
+                    },
+                    "Toolbar": {
+                        "iconURL": "$applicationRoot/components/panopticon_mc_17_0/datawatch_logo.jpg"
+                    }
+                }
+            }
+        },
         "Panopticon": {
             "window": {
                 "url": "http://127.0.0.1:8080/panopticon/#/workbooks/",
@@ -462,7 +502,7 @@
                 "height": 600
             },
             "component": {
-				"preload": "zoom.js" 
+				"preload": "$applicationRoot/preloads/zoom.js" 
             },
             "foreign": {
                 "services": {
@@ -476,7 +516,7 @@
                         "launchableByUser": true
                     },
                     "Window Manager": {
-                        "title": "bbcnews",
+                        "title": "BBC News",
                         "FSBLHeader": true,
                         "persistWindowState": true
                     },
