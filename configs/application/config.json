@@ -109,6 +109,7 @@
 		"$applicationRoot/configs/application/services.json",
 		"$applicationRoot/components/news/news.json",
 		"$applicationRoot/components/chart/chart.json",
-		"$applicationRoot/components/marketearlybird/fpe-marketearlybird.json"
+		"$applicationRoot/components/marketearlybird/fpe-marketearlybird.json",
+		"$applicationRoot/components/bbcNews/bbc-news.json"
 	]
 }

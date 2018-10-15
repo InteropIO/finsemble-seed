@@ -1,0 +1,44 @@
+{
+    "comment": "BBC News component configuration",
+    "components": {
+		"bbcnews": {
+			"window": {
+				"url": "https://www.bbc.co.uk/news/business",
+				"frame": false,
+				"resizable": true,
+				"autoShow": true,
+				"top": "center",
+				"left": "center",
+				"width": 800,
+				"height": 600
+			},
+			"component": {
+				"preload": "$applicationRoot/preloads/zoom.js" 
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"canGroup": true,
+						"isArrangable": true
+					},
+					"workspace": {
+						"persistURL": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"title": "BBC News",
+						"FSBLHeader": true,
+						"persistWindowState": true
+					},
+					"Toolbar": {
+						"iconURL": "$applicationRoot/components/bbcNews/bbc-news-icon.png"
+					}
+				}
+			}
+		}
+	}
+}

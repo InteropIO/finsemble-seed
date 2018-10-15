@@ -490,41 +490,44 @@
                 }
             }
         },
-        "bbcnews": {
-            "window": {
-                "url": "https://www.bbc.co.uk/news/video_and_audio/headlines/10318089/bbc-news-channel",
-                "frame": false,
-                "resizable": true,
-                "autoShow": true,
-                "top": "center",
-                "left": "center",
-                "width": 800,
-                "height": 600
-            },
-            "component": {
-				"preload": "$applicationRoot/preloads/zoom.js" 
-            },
-            "foreign": {
-                "services": {
-                    "dockingService": {
-                        "canGroup": true,
-                        "isArrangable": true
-                    }
-                },
-                "components": {
-                    "App Launcher": {
-                        "launchableByUser": true
-                    },
-                    "Window Manager": {
-                        "title": "BBC News",
-                        "FSBLHeader": true,
-                        "persistWindowState": true
-                    },
-                    "Toolbar": {
-                        "iconURL": "https://m.files.bbci.co.uk/modules/bbc-morph-news-waf-page-meta/2.2.2/windows-eight-icon-144x144.png"
-                    }
-                }
-            }
-        }
+        "Elastic Advanced Chart": {
+			"window": {
+				"url": "https://fpe.finsemble.com/elasticSearchChart/index.html",
+				"width": 500,
+				"height": 410,
+				"options": {
+					"minWidth": 75
+				}
+			},
+			"component": {
+				"preload": "https://fpe.finsemble.com/elasticSearchChart/finsemble-functionality.js",
+				"advertiseReceivers": [
+					"chartiq.chart",
+					"symbol"
+				],
+				"spawnOnHotkey": ["ctrl", "alt", "a"]
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Toolbar": {
+						"iconClass": "ff-chart-advanced"
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": true,
+						"persistWindowState": true,
+						"title": "ChartIQ Chart with ElasticSearch data"
+					}
+				}
+			}
+		}
     }
 }
