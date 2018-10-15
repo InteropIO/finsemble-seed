@@ -22,6 +22,7 @@ export default class Content extends React.Component {
 		this.onTagsUpdate = this.onTagsUpdate.bind(this)
 		this.onActiveFolderChanged = this.onActiveFolderChanged.bind(this)
 		store = getStore()
+		window.storeActions = storeActions
 	}
 
 	filterApps() {

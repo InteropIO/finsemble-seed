@@ -44,19 +44,22 @@ export default class FilterSort extends React.Component {
 		let tags = []
 		storeActions.getActiveFolder()
 		.appDefinitions.forEach((app) => {
-			tags = tags.concat(app.tags)
+			app.tags.forEach((tag) => {
+				// Make sure we have a unique tags list
+				tags.indexOf(tag) < 0 && tags.push(tag)
+			})
 		})
 		return tags
 	}
 
 	render() {
-		const tags = this.extractTags()	
 		return (
 			<div className="filter-sort">
 				<SearchBox />
 				<TagsList />
 				<SortBy />
-				<TagsMenu label="Tags" align="right" list={tags} onItemClick={this.onTagClick}/>		
+				<TagsMenu label="Tags" align="right" 
+				list={this.extractTags()} onItemClick={this.onTagClick}/>		
 			</div>
 			)
 	}
