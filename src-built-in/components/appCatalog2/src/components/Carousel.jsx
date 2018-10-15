@@ -63,7 +63,7 @@ export default class Carousel extends Component {
 					<div className="paginate_carat_left" onClick={this.pageDown} />
 					{displayCards.map((card, i) => {
 						return (
-							<AppCard key={i} {...card} />
+							<AppCard key={i} {...card} openAppShowcase={this.props.openAppShowcase} />
 						);
 					})}
 					<div className="paginate_carat_right" onClick={this.pageUp} />

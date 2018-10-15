@@ -11,7 +11,10 @@ import ReactDOM from 'react-dom';
 import * as storeExports from "./stores/appCatalogStore";
 
 //components
+import SearchBar from './components/SearchBar';
 import Home from './components/Home';
+import AppResults from './components/AppResults';
+import AppShowcase from './components/AppShowcase';
 
 //style
 import '../appCatalog2.css';
@@ -20,7 +23,7 @@ export default class AppCatalog extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			actualCards: [
+			apps: [
 				{
 					"name": "Welcome Component",
 					"type": "component",
@@ -214,27 +217,149 @@ export default class AppCatalog extends React.Component {
 					"friendlyName": "Dashboard of death"
 				}
 			],
-			activePage: "home"
+			filteredCards: [],
+			activePage: "home",
+			activeTags: [],
+			activeApp: null
 		};
 		this.bindCorrectContext();
 	}
 	bindCorrectContext() {
-		this.navigateToShowcase = this.navigateToShowcase.bind(this);
+		this.goHome = this.goHome.bind(this);
+		this.addTag = this.addTag.bind(this);
+		this.removeTag = this.removeTag.bind(this);
+		this.changeSearch = this.changeSearch.bind(this);
+		this.openAppShowcase = this.openAppShowcase.bind(this);
+		this.addApp = this.addApp.bind(this);
 	}
-	navigateToShowcase() {
+	addTag(tag) {
+		let tags = this.state.activeTags;
+		tags.push(tag);
 
+		let page = this.state.activePage;
+
+
+		if (tags.length === 1) {
+			page = "appShowcase";
+		}
+
+		this.setState({
+			activePage: page,
+			activeTags: tags
+		});
+	}
+	removeTag(tagName) {
+		let tags = this.state.activeTags.filter((tag) => {
+			return tag !== tagName;
+		});
+
+		let page = this.state.activePage;
+
+		if (tags.length === 0) {
+			page = "home";
+		}
+
+		this.setState({
+			activePage: page,
+			activeTags: tags
+		});
+	}
+	goHome() {
+		this.setState({
+			activePage: "home",
+			activeTags: [],
+			activeApp: null
+		});
+	}
+	changeSearch(search) {
+		if (search !== "") {
+			let apps = this.state.apps.filter((app) => {
+				let appName = app.title !== undefined ? app.title : app.name;
+
+				if (appName.toLowerCase().indexOf(search.toLowerCase()) > -1) {
+					return true;
+				} else {
+					return false;
+				}
+			});
+
+			this.setState({
+				activePage: "appShowcase",
+				filteredCards: apps
+			});
+		} else {
+			this.setState({
+				activePage: this.state.activeTags.length === 0 ? "home" : this.state.activePage,
+				filteredCards: []
+			});
+		}
+	}
+	addApp(appName) {
+		//TODO: This won't work when this comes from a db
+		let newApps = this.state.apps.map((app) => {
+			let appTitle = app.title !== undefined ? app.title : app.name;
+
+			if (appTitle === appName) {
+				app.installed = true;
+			}
+		});
+
+		this.setState({
+			apps: newApps
+		});
+	}
+	openAppShowcase(appName) {
+		let app;
+		for (let i = 0; i < this.state.apps.length; i++) {
+			let thisApp = this.state.apps[i];
+			let thisAppName = thisApp.title !== undefined ? thisApp.title : thisApp.name;
+
+			if (appName === thisAppName) {
+				app = thisApp;
+				break;
+			}
+		}
+
+		if (app) {
+			this.setState({
+				activeApp: app,
+				activePage: "showcase"
+			});
+		}
 	}
 	render() {
 
-		if (this.state.activePage === "home") {
-			return (
-				<Home cards={this.state.actualCards} />
-			);
-		} else {
-			return (
-				<div></div>
-			);
+		let tags = [];
+		for (let i = 0; i < this.state.apps.length; i++) {
+			let app = this.state.apps[i];
+			for (let j = 0; j < app.tags.length; j++) {
+				let tag = app.tags[j];
+
+				if (!tags.includes(tag)) {
+					tags.push(tag);
+				}
+			}
 		}
+
+		let pageContents;
+
+		if (this.state.activePage === "home") {
+			pageContents = <Home cards={this.state.apps} openAppShowcase={this.openAppShowcase} />;
+		} else if (this.state.activePage === "appShowcase") {
+			let apps = this.state.filteredCards.length > 0 ? this.state.filteredCards : this.state.apps;
+			pageContents = <AppResults cards={apps} tags={this.state.activeTags} addApp={this.addApp} openAppShowcase={this.openAppShowcase} />;
+		} else if (this.state.activePage === "showcase") {
+			pageContents = <AppShowcase app={this.state.activeApp} />;
+		} else {
+			pageContents = <div></div>;
+		}
+
+		return (
+			<div>
+				<SearchBar tags={tags} activeTags={this.state.activeTags} tagSelected={this.addTag} removeTag={this.removeTag} goHome={this.goHome} changeSearch={this.changeSearch} />
+				{pageContents}
+			</div>
+		);
 	}
 }
 

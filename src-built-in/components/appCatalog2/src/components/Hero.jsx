@@ -18,6 +18,7 @@ export default class Hero extends Component {
 	}
 	bindCorrectContext() {
 		this.changePage = this.changePage.bind(this);
+		this.openApp = this.openApp.bind(this);
 	}
 	changePage(action) {
 		let { cards } = this.props;
@@ -42,6 +43,10 @@ export default class Hero extends Component {
 			active: newActive
 		});
 	}
+	openApp() {
+		let name = this.props.cards[this.state.active].title !== undefined ? this.props.cards[this.state.active].title : this.props.cards[this.state.active].name;
+		this.props.openAppShowcase(name);
+	}
 	render() {
 
 		let { active } = this.state;
@@ -53,7 +58,7 @@ export default class Hero extends Component {
 			<div>
 				<div className='hero-main'>
 					<div className='paginate_carat_left' onClick={this.changePage.bind(this, 'page_down')} />
-					<div className='hero_selected_content'>
+					<div className='hero_selected_content' onClick={this.openApp}>
 						<div className='selected-content-title'>
 							<h4>{contentTitle}</h4>
 						</div>
