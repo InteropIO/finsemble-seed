@@ -168,8 +168,9 @@
 }
 
 img.pinned-icon {
-    padding-top: 5px;
-    max-width: 17px;
+    padding-top: 1px;
+    width: 22px;
+    height: 22px;
 }
 
 .pinned-icon {
