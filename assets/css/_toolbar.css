@@ -52,6 +52,7 @@
 .finsemble-toolbar-button {
     padding: 5px 6px;
     border: 1px solid var(--toolbar-background-color);
+    display: inline-flex;
 }
 
 .finsemble-toolbar-button-label {
