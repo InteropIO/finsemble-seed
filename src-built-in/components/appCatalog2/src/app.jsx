@@ -11,8 +11,7 @@ import ReactDOM from 'react-dom';
 import * as storeExports from "./stores/appCatalogStore";
 
 //components
-import Hero from './components/Hero';
-import Carousel from './components/Carousel';
+import Home from './components/Home';
 
 //style
 import '../appCatalog2.css';
@@ -215,182 +214,27 @@ export default class AppCatalog extends React.Component {
 					"friendlyName": "Dashboard of death"
 				}
 			],
-			carousel2: [
-				{
-					"name": "Welcome Component",
-					"type": "component",
-					"description": "This is the component that welcomes you to finsemble. It also links you to the documentation. This documentation is really well written and is worth reading!!!!",
-					"appId": "This is part of the FDC3 standard but we don't know what this value will be.",
-					"manifest": "This is part of the FDC3 standard but we don't know what this value will be.",
-					"manifestType": "This is part of the FDC3 standard but we don't know what this value will be.",
-					"version": "3.0.1",
-					"releaseNotes": "This version is so much more welcoming. You have no idea. I wonder what happens when I put a link in the release notes. https://documentation.chartiq.com/finsemble/changelog.html",
-					"tooltip": "Welcome component",
-					"images": [
-						{
-							"id": "4",
-							"url": "http://sugardale.com/sites/default/files/stuffed%20crust%20pizza.jpg",
-							"tooltip": "Pizza!!!"
-						}
-					],
-					"tags": [
-						"newrelease",
-						"Pizza"
-					],
-					"contactEmail": "jim@chartiq.com",
-					"supportEmail": "dnicolai@chartiq.com",
-					"publisher": "ChartIQ",
-					"icons": [
-						{
-							"id": "2321",
-							"url": "https://previews.123rf.com/images/maxborovkov/maxborovkov1507/maxborovkov150700243/42795794-white-welcome-sign-over-confetti-background-vector-holiday-illustration-.jpg",
-							"type": "primary"
-						}
-					],
-					"friendlyName": "The Welcome Component"
-				},
-				{
-					"name": "Notepad",
-					"entitled": true,
-					"type": "component",
-					"description": "The notepad that you know and hate, but in FINSEMBLE! It comes with a mandatory little window that follows it around nicely or very slowly, depending on which branch you're working on.",
-					"appId": "This is part of the FDC3 standard but we don't know what this value will be.",
-					"manifest": "This is part of the FDC3 standard but we don't know what this value will be.",
-					"manifestType": "This is part of the FDC3 standard but we don't know what this value will be.",
-					"version": "12",
-					"releaseNotes": "Check out the companion window. It's real sweet now. Going to try to put HTML in here <a href=\"https://documentation.chartiq.com/finsemble/changelog.html\">CHANGELOG!!</a>",
-					"title": "Notepad",
-					"tooltip": "Notepad",
-					"images": [
-						{
-							"id": 1,
-							"url": "https://m.riflepaperco.com/media/catalog/product/cache/1/thumbnail/1170x1248/fb193eecb19491ee2d70d1d38e002e96/n/p/npm017-rose-lines-01.jpg",
-							"tooltip": "Notepad"
-						},
-						{
-							"id": "2",
-							"url": "https://www.howtogeek.com/wp-content/uploads/2018/07/img_5b48157fc1e63.png",
-							"tooltip": "Notepad"
-						},
-						{
-							"id": "3",
-							"url": "https://cdn2.bigcommerce.com/n-zfvgw8/a8bv6/products/418/images/627/Notepad_Pen__81380.1416860234.375.513.jpg?c=2",
-							"tooltip": "Notepad"
-						}
-					],
-					"tags": [
-						"Notepad",
-						"productivity",
-						"Pizza"
-					],
-					"contactEmail": "jim@chartiq.com",
-					"supportEmail": "dnicolai@chartiq.com",
-					"publisher": "ChartIQ",
-					"icons": [
-						{
-							"id": 3811341,
-							"url": "https://is5-ssl.mzstatic.com/image/thumb/Purple128/v4/4c/f5/97/4cf597ef-aa83-01f6-0aaf-c6a61a5e686b/AppIcon-1x_U007emarketing-85-220-3.png/246x0w.jpg",
-							"type": "primary"
-						}
-					],
-					"friendlyName": "Notepad"
-				}
-			],
-			carousel1: [
-				{
-					"name": "Welcome Component",
-					"type": "component",
-					"description": "This is the component that welcomes you to finsemble. It also links you to the documentation. This documentation is really well written and is worth reading!!!!",
-					"appId": "This is part of the FDC3 standard but we don't know what this value will be.",
-					"manifest": "This is part of the FDC3 standard but we don't know what this value will be.",
-					"manifestType": "This is part of the FDC3 standard but we don't know what this value will be.",
-					"version": "3.0.1",
-					"releaseNotes": "This version is so much more welcoming. You have no idea. I wonder what happens when I put a link in the release notes. https://documentation.chartiq.com/finsemble/changelog.html",
-					"tooltip": "Welcome component",
-					"images": [
-						{
-							"id": "4",
-							"url": "http://sugardale.com/sites/default/files/stuffed%20crust%20pizza.jpg",
-							"tooltip": "Pizza!!!"
-						}
-					],
-					"tags": [
-						"newrelease",
-						"Pizza"
-					],
-					"contactEmail": "jim@chartiq.com",
-					"supportEmail": "dnicolai@chartiq.com",
-					"publisher": "ChartIQ",
-					"icons": [
-						{
-							"id": "2321",
-							"url": "https://previews.123rf.com/images/maxborovkov/maxborovkov1507/maxborovkov150700243/42795794-white-welcome-sign-over-confetti-background-vector-holiday-illustration-.jpg",
-							"type": "primary"
-						}
-					],
-					"friendlyName": "The Welcome Component"
-				},
-				{
-					"name": "Notepad",
-					"entitled": true,
-					"type": "component",
-					"description": "The notepad that you know and hate, but in FINSEMBLE! It comes with a mandatory little window that follows it around nicely or very slowly, depending on which branch you're working on.",
-					"appId": "This is part of the FDC3 standard but we don't know what this value will be.",
-					"manifest": "This is part of the FDC3 standard but we don't know what this value will be.",
-					"manifestType": "This is part of the FDC3 standard but we don't know what this value will be.",
-					"version": "12",
-					"releaseNotes": "Check out the companion window. It's real sweet now. Going to try to put HTML in here <a href=\"https://documentation.chartiq.com/finsemble/changelog.html\">CHANGELOG!!</a>",
-					"title": "Notepad",
-					"tooltip": "Notepad",
-					"images": [
-						{
-							"id": 1,
-							"url": "https://m.riflepaperco.com/media/catalog/product/cache/1/thumbnail/1170x1248/fb193eecb19491ee2d70d1d38e002e96/n/p/npm017-rose-lines-01.jpg",
-							"tooltip": "Notepad"
-						},
-						{
-							"id": "2",
-							"url": "https://www.howtogeek.com/wp-content/uploads/2018/07/img_5b48157fc1e63.png",
-							"tooltip": "Notepad"
-						},
-						{
-							"id": "3",
-							"url": "https://cdn2.bigcommerce.com/n-zfvgw8/a8bv6/products/418/images/627/Notepad_Pen__81380.1416860234.375.513.jpg?c=2",
-							"tooltip": "Notepad"
-						}
-					],
-					"tags": [
-						"Notepad",
-						"productivity",
-						"newrelease",
-						"Pizza"
-					],
-					"contactEmail": "jim@chartiq.com",
-					"supportEmail": "dnicolai@chartiq.com",
-					"publisher": "ChartIQ",
-					"icons": [
-						{
-							"id": 3811341,
-							"url": "https://is5-ssl.mzstatic.com/image/thumb/Purple128/v4/4c/f5/97/4cf597ef-aa83-01f6-0aaf-c6a61a5e686b/AppIcon-1x_U007emarketing-85-220-3.png/246x0w.jpg",
-							"type": "primary"
-						}
-					],
-					"friendlyName": "Notepad"
-				}
-			]
+			activePage: "home"
 		};
+		this.bindCorrectContext();
 	}
 	bindCorrectContext() {
+		this.navigateToShowcase = this.navigateToShowcase.bind(this);
+	}
+	navigateToShowcase() {
 
 	}
 	render() {
-		return (
-			<div>
-				<Hero cards={this.state.actualCards} />
-				<Carousel tag="Pizza" cards={this.state.carousel1} />
-				<Carousel tag="New Releases" cards={this.state.carousel2} />
-			</div>
-		);
+
+		if (this.state.activePage === "home") {
+			return (
+				<Home cards={this.state.actualCards} />
+			);
+		} else {
+			return (
+				<div></div>
+			);
+		}
 	}
 }
 

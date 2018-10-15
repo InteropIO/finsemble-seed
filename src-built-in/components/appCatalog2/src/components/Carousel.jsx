@@ -44,7 +44,7 @@ export default class Carousel extends Component {
 
 		let displayCards = [];
 		for (let i = 0; i < 4; i++) {
-			if (firstCard > cards.length) {
+			if (firstCard > cards.length - 1) {
 				displayCards.push(cards[0]);
 				firstCard = 0;
 			} else {
@@ -55,7 +55,10 @@ export default class Carousel extends Component {
 
 		return (
 			<div className="carousel-main">
-				<div className="carousel-title">{this.props.tag}</div>
+				<div className="carousel-header">
+					<div className="carousel-title">{this.props.tag}</div>
+					<button className="see-more">See More</button>
+				</div>
 				<div className="carousel-content">
 					<div className="paginate_carat_left" onClick={this.pageDown} />
 					{displayCards.map((card, i) => {

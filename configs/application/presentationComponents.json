@@ -473,10 +473,12 @@
 			"window": {
 				"id": "launcher",
 				"url": "$applicationRoot/components/toolbar/toolbar.html",
-				"height": 39,
 				"top": 0,
 				"left": 0,
 				"right": 0,
+				"height": 39,
+				"width": 600,
+				"dockedHeight": 39,
 				"position": "available",
 				"autoShow": true,
 				"dockable": [
@@ -714,7 +716,8 @@
 				}
 			},
 			"component": {
-				"category": "system"
+				"category": "system",
+				"spawnOnStartup": true
 			},
 			"foreign": {
 				"services": {

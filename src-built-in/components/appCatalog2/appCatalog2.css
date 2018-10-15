@@ -142,3 +142,17 @@
 	flex-direction: row !important;
 	justify-content: space-between !important;
 }
+
+.carousel-header {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.carousel-header .see-more {
+	float: right;
+}
+
+.carousel-header .carousel-title {
+	float: left;
+}
