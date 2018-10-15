@@ -3,7 +3,7 @@
 }
 .search-box input {
 	color: #fff;
-	width: 393px;
+	width: calc(100% - 51px);
 	height: 17px;
 	background: none;
 	border: 0;
