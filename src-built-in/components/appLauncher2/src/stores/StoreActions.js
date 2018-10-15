@@ -40,7 +40,7 @@ function addTag(tag) {
 	// Get current list of tags
 	const tags = getTags()
 	// Push new tag to list
-	tags.push(tag)
+	tags.indexOf(tag) < 0 && tags.push(tag)
 	// Update tags in store
 	return getStore().setValue({field: 'tags', value: tags})
 }
