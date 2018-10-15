@@ -2,6 +2,7 @@ import './FilterSort.css'
 import React from  'react'
 import SearchBox from './SearchBox'
 import TagsMenu from './TagsMenu'
+import SortBy from './SortBy'
 import {getStore} from '../stores/LauncherStore'
 
 export default class FilterSort extends React.Component {
@@ -34,12 +35,7 @@ export default class FilterSort extends React.Component {
 		return (
 			<div className="filter-sort">
 				<SearchBox />
-				<div className="sort"> 
-					Sort by: 
-					<span className="first active sort-option pointer">Alphabetical</span>
-					<span className="sort-option pointer">Recent</span>
-					<span className="sort-option pointer">Favorites</span>
-				</div>	
+				<SortBy />	
 				<TagsMenu label="Tags" align="right" list={list} onItemClick={this.onItemClick}/>		
 			</div>
 			)

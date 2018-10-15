@@ -15,6 +15,9 @@ const actions = {
 	},
 	getSearchText: () => {
 		return getStore().getValue({field: 'filterText'})
+	},
+	getSortBy: () => {
+		return getStore().getValue({field: 'sortBy'})
 	}
 }
 
