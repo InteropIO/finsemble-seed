@@ -3,7 +3,9 @@ import React from  'react'
 import SearchBox from './SearchBox'
 import TagsMenu from './TagsMenu'
 import SortBy from './SortBy'
+import TagsList from './TagsList'
 import {getStore} from '../stores/LauncherStore'
+import storeActions from '../stores/StoreActions'
 
 export default class FilterSort extends React.Component {
 
@@ -14,6 +16,7 @@ export default class FilterSort extends React.Component {
 		}
 		this.onSearch = this.onSearch.bind(this)
 	}
+
 	onSearch(event) {
 		this.setState({
 			search: event.target.value
@@ -25,18 +28,35 @@ export default class FilterSort extends React.Component {
 		})
 	}
 
-	onItemClick(item) {
+	/**
+	* Add tag to list in local store
+	* so that other components get notified
+	**/
+	onTagClick(tag) {
+		storeActions.addTag(tag)
+	}
 
+	/**
+	* Extract a list of tags from all the app
+	* within the active folder.
+	**/
+	extractTags() {
+		let tags = []
+		storeActions.getActiveFolder()
+		.appDefinitions.forEach((app) => {
+			tags = tags.concat(app.tags)
+		})
+		return tags
 	}
 
 	render() {
-		const app = this.props.app
-		const list = ['one', 'two', 'three']
+		const tags = this.extractTags()	
 		return (
 			<div className="filter-sort">
 				<SearchBox />
-				<SortBy />	
-				<TagsMenu label="Tags" align="right" list={list} onItemClick={this.onItemClick}/>		
+				<TagsList />
+				<SortBy />
+				<TagsMenu label="Tags" align="right" list={tags} onItemClick={this.onTagClick}/>		
 			</div>
 			)
 	}
