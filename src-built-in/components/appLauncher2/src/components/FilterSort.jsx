@@ -58,8 +58,11 @@ export default class FilterSort extends React.Component {
 				<SearchBox />
 				<TagsList />
 				<SortBy />
-				<TagsMenu label="Tags" align="right" 
-				list={this.extractTags()} onItemClick={this.onTagClick}/>		
+				<TagsMenu 
+					label="Tags" 
+					align="right" 
+					list={this.extractTags()} 
+					onItemClick={this.onTagClick}/>		
 			</div>
 			)
 	}
