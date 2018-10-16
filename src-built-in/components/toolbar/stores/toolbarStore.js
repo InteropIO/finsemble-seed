@@ -4,6 +4,9 @@
 */
 import async from "async";
 import * as menuConfig from '../config.json';
+
+import { Actions as SearchActions } from "./searchStore"
+
 var keys = {};
 var storeOwner = false;
 /**
@@ -168,11 +171,19 @@ class _ToolbarStore {
 				value: bounds
 			}, Function.prototype);
 		}
-		FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", "t"], () => {
-			self.toggleToolbarVisibility();
-		});
 
 		FSBL.Clients.WindowClient.finsembleWindow.addListener("bounds-change-end", onBoundsSet)
+
+		FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", "t"], () => {
+			self.showToolbarAtFront();
+		});
+
+		FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", "h"], () => {
+			self.hideToolbar();
+		});
+
+		//This is a hack until we have proper events in finsemble. We need to notify windows that aren't part of the workspace so that they can save their bounds.
+		FSBL.Clients.RouterClient.addListener(finsembleWindow.name + ".bounds-change-end", onBoundsChanged)
 	}
 
 	/**
@@ -186,77 +197,53 @@ class _ToolbarStore {
 
 	/**
 	 * Function to bring toolbar to front (since dockable toolbar can be hidden)
+	 * @param {boolean} focus If true, will also focus the toolbar
 	 * @memberof _ToolbarStore
 	 */
-	bringToolbarToFront() {
-		finsembleWindow.bringToFront();
+	bringToolbarToFront(focus) {
+		var self = this;
+		finsembleWindow.bringToFront(null, () => {
+			if (focus) {
+				finsembleWindow.focus();
+				self.Store.setValue({ field: "searchActive", value: false });
+			}
+		});
 	}
 
 	/**
-	 * Function to hide/show the toolbar
+	 * Unhides/brings to front the toolbar
 	 * @memberof _ToolbarStore
 	 */
-	toggleToolbarVisibility(cb = Function.prototype) {
-		finsembleWindow.getComponentState(null, (err, response) => {
-			if (err) {
-				FSBL.Clients.Logger.system.error("Error retrieving dockable component state");
-				cb();
-				return;
-			}
+	showToolbarAtFront() {
+		FSBL.Clients.WindowClient.showAtMousePosition();
+		this.bringToolbarToFront(true);
+	}
 
-			let blurred = response && response.hasOwnProperty('blurred') ? response.blurred : false;
-			let visible = response && response.hasOwnProperty('visible') ? response.visible : true;
-
-			if (visible) {
-				if (blurred) {
-					finsembleWindow.setComponentState({
-						field: 'blurred',
-						value: false
-					}, () => {
-						finsembleWindow.bringToFront();
-						finsembleWindow.focus();
-						this.Store.setValue({ field: 'searchActive', value: true })
-					});
-				} else {
-					this.Store.setValue({ field: 'searchActive', value: false });
-					finsembleWindow.setComponentState({
-						field: 'visible',
-						value: false
-					}, () => {
-						finsembleWindow.blur();
-						finsembleWindow.hide();
-					});
-				}
-			} else {
-				finsembleWindow.setComponentState({
-					field: "visible",
-					value: true
-				}, () => {
-					finsembleWindow.show();
-					finsembleWindow.bringToFront();
-					finsembleWindow.focus();
-					this.Store.setValue({ field: 'searchActive', value: true });
-				});
-			}
-		});
+	/**
+	 * Hides the toolbar
+	 * @memberof _ToolbarStore
+	 */
+	hideToolbar() {
+		finsembleWindow.blur();
+		finsembleWindow.hide();
 	}
 
 	/**
 	 * onBlur
 	 * @memberof _ToolbarStore
 	 */
-	onBlur() {
+	onBlur(cb = Function.prototype) {
 		finsembleWindow.setComponentState({
 			field: 'blurred',
 			value: true
-		});
+		}, cb);
 	}
 
-	onFocus() {
+	onFocus(cb = Function.prototype) {
 		finsembleWindow.setComponentState({
 			field: 'blurred',
 			value: false
-		});
+		}, cb);
 	}
 
 	/**
@@ -379,6 +366,9 @@ class _ToolbarStore {
 		FSBL.Clients.RouterClient.subscribe("Finsemble.WorkspaceService.update", (err, response) => {
 			this.setWorkspaceMenuWindowName(response.data.activeWorkspace.name);
 			this.Store.setValue({ field: "activeWorkspaceName", value: response.data.activeWorkspace.name });
+			if (response.data.reason && response.data.reason === "workspace:load:finished") {
+				this.bringToolbarToFront();
+			}
 		})
 	}
 

@@ -172,7 +172,7 @@ class FloatingTitlebar extends React.Component {
 			lastDragEventLeave = false;
 		}}>
 			<div id="actionbutton" onClickCapture={function (e) { self.onActionClick(e) }} className="actionButton tabs-contract"></div>
-			<TabbingSection listenForDragOver={this.state.listenForDragOver}/>
+			<TabbingSection listenForDragOver={this.state.listenForDragOver} />
 		</div >
 	}
 }

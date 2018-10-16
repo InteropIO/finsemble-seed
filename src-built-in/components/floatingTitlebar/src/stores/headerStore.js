@@ -112,12 +112,11 @@ var Actions = {
 			wrappedWindow.addListener("setParent", onParentSet);
 			wrappedWindow.addListener("clearParent", onParentCleared);
 			wrappedWindow.listenForBoundsSet();
-			//@note this is so that all kinds of bounds-changes will be caught, and the companion will be in the right place.
-			//Reevaluate if performance is a concern.
-			wrappedWindow.addListener("bounds-changing", Actions.onBoundsChanged);
+			wrappedWindow.addListener("bounds-set", Actions.onBoundsChanged);
 			wrappedWindow.addListener("closed", Actions.onCompanionClosed);
 			wrappedWindow.addListener("hidden", Actions.onCompanionHidden);
 			wrappedWindow.addListener("shown", Actions.onCompanionShown);
+			wrappedWindow.addListener("maximized", Actions.onCompanionMaximized);
 			wrappedWindow.addListener("restored", Actions.onCompanionRestored);
 			wrappedWindow.addListener("bringToFront", Actions.onCompanionBringToFront);
 			wrappedWindow.addListener("minimized", Actions.onCompanionMinimized);
@@ -307,6 +306,12 @@ var Actions = {
 			//@note this was 500, it was lowered to 50 after improvements were made to the eventing system.
 		}, 50);
 
+	},
+	onCompanionMaximized() {
+		Logger.system.debug("Companion window maximized");
+		setTimeout(() => {
+			Actions.updateWindowPosition();
+		}, 500);
 	},
 	onCompanionMinimized() {
 		Logger.system.debug("Companion window minimized");

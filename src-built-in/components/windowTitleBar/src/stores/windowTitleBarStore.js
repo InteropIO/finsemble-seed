@@ -240,7 +240,7 @@ var Actions = {
 	getMyDockingGroups: function (groupData) {
 		let myGroups = [];
 		let windowName = FSBL.Clients.WindowClient.getWindowNameForDocking();
-		if(FSBL.Clients.WindowClient.finsembleWindow.parentWindow){
+		if (FSBL.Clients.WindowClient.finsembleWindow.parentWindow) {
 			windowName = FSBL.Clients.WindowClient.finsembleWindow.parentWindow.name
 		}
 		FSBL.Clients.Logger.system.debug("Getting docking groups for ", windowName, groupData);
@@ -386,7 +386,7 @@ var Actions = {
 	 */
 	clickMaximize: function () {
 		var maxField = windowTitleBarStore.getValue({ field: "Maximize" });
-		if (!maxField.maximized)
+		if (finsembleWindow.windowState !== finsembleWindow.WINDOWSTATE.MAXIMIZED)
 			return FSBL.Clients.WindowClient.maximize(() => {
 				windowTitleBarStore.setValue({ field: "Maximize.maximized", value: true });
 			});

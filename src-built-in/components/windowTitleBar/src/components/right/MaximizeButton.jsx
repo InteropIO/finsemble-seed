@@ -3,7 +3,7 @@
 * All rights reserved.
 */
 import React from "react";
-import HoverDetector from "../HoverDetector.jsx";
+import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
 import { getStore, Actions as HeaderActions } from "../../stores/windowTitleBarStore";
 let windowTitleBarStore;
 /**
@@ -41,11 +41,11 @@ export default class MaximizeButton extends React.Component {
 	 * @memberof MaximizeButton
 	 */
 	onRestored(err, response) {
-	//console.log("onRestored")
+		//console.log("onRestored")
 		this.setState({ maximized: false });
 	}
 	onMaximized() {
-	//console.log("onMaximized")
+		//console.log("onMaximized")
 		this.setState({ maximized: true });
 	}
 	/**
@@ -63,7 +63,7 @@ export default class MaximizeButton extends React.Component {
 	 * @memberof MaximizeButton
 	 */
 	componentWillMount() {
-	//console.log("componentWillMount")
+		//console.log("componentWillMount")
 		FSBL.Clients.WindowClient.finsembleWindow.addListener("maximized", this.onMaximized)
 		FSBL.Clients.WindowClient.finsembleWindow.addListener("restored", this.onRestored);
 
@@ -76,7 +76,7 @@ export default class MaximizeButton extends React.Component {
 	 * @memberof MaximizeButton
 	 */
 	componentWillUnmount() {
-	//console.log("unmount this")
+		//console.log("unmount this")
 		FSBL.Clients.WindowClient.finsembleWindow.removeListener("maximized", this.onMaximized)
 		FSBL.Clients.WindowClient.finsembleWindow.removeListener("restored", this.onRestored)
 		//windowTitleBarStore.removeListener({ field: "Maximize.maximized" }, this.onMaxChange);
@@ -109,7 +109,7 @@ export default class MaximizeButton extends React.Component {
 		wrapClasses += this.state.maximized ? "window-restore" : "window-max";
 
 		return (<div className={wrapClasses} id="fsbl-window-restore" title={tooltip} data-hover={this.state.hoverState} onClick={this.onClick}>
-			<HoverDetector edge="top" hoverAction={this.hoverAction} />
+			<FinsembleHoverDetector edge="top" hoverAction={this.hoverAction} />
 			<i className={iconClasses}></i>
 		</div>);
 	}
