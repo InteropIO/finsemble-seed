@@ -225,10 +225,6 @@ function createStore(done) {
 
 	finsembleWindow.listenForBoundsSet();
 	finsembleWindow.addListener("startedMoving", Actions.handleClose);
-	finsembleWindow.addListener("focused", () => {
-		console.log("window Focused");
-		Actions.setFocus(true);
-	})
 	finsembleWindow.addListener("blurred", function (event) {
 		Actions.setFocus(false);
 	}, function () {
