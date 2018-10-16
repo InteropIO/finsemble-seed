@@ -30,14 +30,7 @@ class AppLauncher extends React.Component {
 
 FSBL.addEventListener("onReady", function () {
 	createStore((store) => {
-		// This was the only way to catch exception
-		// Thrown in react components, something else is swallowing them.
-		try {
-			ReactDOM.render(
-				<AppLauncher />
-				, document.getElementById("wrapper"))
-		} catch(error) {
-			console.error(error)
-		}
+		ReactDOM.render(<AppLauncher />, 
+			document.getElementById("wrapper"))
 	})
 })
