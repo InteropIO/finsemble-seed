@@ -2,13 +2,6 @@
 @import url('./_themeWhitelabel.css');
 
 .fsbl-drag-handle {
-<<<<<<< HEAD
-    position: absolute;
-    z-index: 2147483641;
-    top: 0px!important;
-    /* background-color: red; */
-   -webkit-app-region: drag;
-=======
     -webkit-app-region: drag;
     z-index: 2147483641;
     /* use below with window scrollbar hack */
@@ -19,7 +12,6 @@
     /* position: absolute; */
     /* top: 0px!important; */
     /* background-color: red; */
->>>>>>> origin/master
 }
 
 .fsbl-drag-handle.hidden {
@@ -55,10 +47,7 @@ html.desktop-active .fsbl-header {
 }
 
 .fsbl-header-title {
-<<<<<<< HEAD
-=======
     position: relative;
->>>>>>> origin/master
     height: 100%;
     overflow: hidden;
     align-items: center;
@@ -76,11 +65,7 @@ html.desktop-active .fsbl-header {
 }
 
 .fsbl-header-left {
-<<<<<<< HEAD
-    height: 100%;
-=======
     height: calc(100% - 5px); /* leave some space for the resize cursor */
->>>>>>> origin/master
     margin-left: 2px;
     left: 0px;
     align-content: center;
@@ -139,33 +124,6 @@ html.desktop-active .fsbl-tab-region-drag-area {
     background-color: var(--titleBar-background-inactive-color);
 }
 
-<<<<<<< HEAD
-/* This div captures the hover event for it's parent. It doesn't stretch to the border, so that mouseout is properly detected. */
-.fsbl-hover-detector-right {
-    position: absolute;
-    width: 75%;
-    height: 75%;
-    left: 0px;
-    bottom: 0px;
-}
-
-.fsbl-hover-detector-left {
-    position: absolute;
-    width: 75%;
-    height: 75%;
-    right: 0px;
-    bottom: 0px;
-}
-
-.fsbl-hover-detector-top {
-    position: absolute;
-    width: 100%;
-    height: 75%;
-    right: 0px;
-    bottom: 0px;
-}
-=======
->>>>>>> origin/master
 .tab-drop-region {
     width: 100%;
     height:100%;
@@ -430,11 +388,7 @@ html.desktop-active .fsbl-linker[hover=true] {
 }
 
 /* Responsive Sizing */
-<<<<<<< HEAD
-/* At 345px, the Drag-to-Share icon will be removed. */ 
-=======
 /* At 345px, the Drag-to-Share icon will be removed. */
->>>>>>> origin/master
 @media screen and (min-width: 0px) and (max-width: 345px){
     .fsbl-icon.ff-share {
         display: none !important;
@@ -447,11 +401,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     }
 }
 
-<<<<<<< HEAD
-/* At 310px, the left section of the header will be removed. */ 
-=======
 /* At 310px, the left section of the header will be removed. */
->>>>>>> origin/master
 @media screen and (min-width: 0px) and (max-width: 310px){
     .fsbl-header-left {
         display: none !important;
@@ -461,11 +411,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     }
 }
 
-<<<<<<< HEAD
-/* At 280px, the docking icon will be removed. */ 
-=======
 /* At 280px, the docking icon will be removed. */
->>>>>>> origin/master
 @media screen and (min-width: 0px) and (max-width: 280px){
     .fsbl-icon.ff-detached, .fsbl-icon.ff-attached {
         display: none !important;
@@ -485,11 +431,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     }
 }
 
-<<<<<<< HEAD
-/* At 210px, the minimize icon will be removed. */ 
-=======
 /* At 210px, the minimize icon will be removed. */
->>>>>>> origin/master
 @media screen and (min-width: 0px) and (max-width: 210px){
     .fsbl-icon.fsbl-minimize {
         display: none !important;
