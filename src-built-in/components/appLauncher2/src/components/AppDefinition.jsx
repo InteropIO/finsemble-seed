@@ -1,6 +1,7 @@
 import './AppDefinition.css'
 
 import React from  'react'
+import AppActionsMenu from './AppActionsMenu'
 
 export default class AppDefinition extends React.Component {
 
@@ -22,6 +23,7 @@ export default class AppDefinition extends React.Component {
 					})
 				}
 				</div>
+				<AppActionsMenu />
 			</div>
 			)
 	}

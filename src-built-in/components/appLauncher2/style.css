@@ -157,7 +157,7 @@ img {
     flex: 1;
     padding: .75em;
     align-content: flex-start;
-    background-color: var(--content-background-color);
+    background-color: #495a69;
 }
 
 .workspace-list-header-row {
