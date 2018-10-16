@@ -133,9 +133,9 @@ function elasticsearchService() {
 	}
 
 	this.searchResultActionCallback = function(params) {
-		console.log("SPawning chart with params: ", params);
+		console.log("Spawning chart with params: ", params);
 		if (params.item.symbol) {
-			LauncherClient.spawn("Elastic Advanced Chart", {data: {symbol: params.item.symbol}});
+			LauncherClient.spawn("Advanced Chart", {data: {symbol: params.item.symbol}});
 		} else {
 			LauncherClient.spawn("blank", {data: {url: params.item.source}});
 		}
