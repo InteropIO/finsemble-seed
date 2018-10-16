@@ -1,4 +1,13 @@
 {
     "comment": "Houses config for any custom services that you'd like to import into Finsemble.",
-    "services": {}
+    "services": {
+        "elasticsearchService": {
+            "useWindow": true,
+            "active": true,
+            "name": "elasticsearchService",
+            "file": "elasticsearch/elasticsearchService.js",
+            "visible": false,
+            "html": "/services/elasticsearch/elasticsearch.html"
+        }
+    }
 }

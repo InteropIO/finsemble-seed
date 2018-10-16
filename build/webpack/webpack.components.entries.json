@@ -10,5 +10,9 @@
     "linkerTester": {
         "output": "components/linkerTester/linkerTester",
         "entry": "./src/components/linkerTester/linkerTester.js"
+    },
+    "blank": {
+        "output": "components/blank/blank",
+        "entry": "./src\\components\\blank\\blank.js"
     }
 }

@@ -491,43 +491,86 @@
             }
         },
         "Elastic Advanced Chart": {
-			"window": {
-				"url": "https://fpe.finsemble.com/elasticSearchChart/index.html",
-				"width": 500,
-				"height": 410,
-				"options": {
-					"minWidth": 75
-				}
-			},
-			"component": {
-				"preload": "https://fpe.finsemble.com/elasticSearchChart/finsemble-functionality.js",
-				"advertiseReceivers": [
-					"chartiq.chart",
-					"symbol"
-				],
-				"spawnOnHotkey": ["ctrl", "alt", "a"]
-			},
-			"foreign": {
-				"services": {
-					"dockingService": {
-						"isArrangable": true
+            "window": {
+                "url": "https://fpe.finsemble.com/elasticSearchChart/index.html",
+                "width": 500,
+                "height": 410,
+                "options": {
+                    "minWidth": 75
+                }
+            },
+            "component": {
+                "preload": "https://fpe.finsemble.com/elasticSearchChart/finsemble-functionality.js",
+                "advertiseReceivers": [
+                    "chartiq.chart",
+                    "symbol"
+                ],
+                "spawnOnHotkey": [
+                    "ctrl",
+                    "alt",
+                    "a"
+                ]
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "isArrangable": true
+                    },
+					"workspace": {
+						"persistURL": true
 					}
-				},
-				"components": {
-					"App Launcher": {
-						"launchableByUser": true
-					},
-					"Toolbar": {
-						"iconClass": "ff-chart-advanced"
-					},
-					"Window Manager": {
-						"FSBLHeader": true,
-						"showLinker": true,
-						"persistWindowState": true,
-						"title": "ChartIQ Chart with ElasticSearch data"
-					}
-				}
-			}
-		}
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Toolbar": {
+                        "iconClass": "ff-chart-advanced"
+                    },
+                    "Window Manager": {
+                        "FSBLHeader": true,
+                        "showLinker": true,
+                        "persistWindowState": true,
+                        "title": "ChartIQ Chart with ElasticSearch data"
+                    }
+                }
+            }
+        },
+        "blank": {
+            "window": {
+                "url": "$applicationRoot/components/blank/blank.html",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 800,
+                "height": 600
+            },
+            "component": {
+                "preload": "$applicationRoot/preloads/zoom.js" 
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": false
+                    },
+                    "Window Manager": {
+                        "title": "blank",
+                        "FSBLHeader": true,
+                        "persistWindowState": true
+                    },
+                    "Toolbar": {
+                        "iconClass": "blank"
+                    }
+                }
+            }
+        }
     }
 }
