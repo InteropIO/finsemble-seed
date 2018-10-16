@@ -506,11 +506,11 @@
 				"services": {
 					"dockingService": {
 						"isArrangable": false,
-						"ignoreSnappingRequests": true
+						"ignoreSnappingRequests": true,
+						"ignoreTilingAndTabbingRequests": true
 					},
 					"workspaceService": {
-						"global": true,
-						"ignoreTilingAndTabbingRequests": true
+						"global": true
 					}
 				},
 				"components": {
