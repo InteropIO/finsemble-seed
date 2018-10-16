@@ -59,33 +59,40 @@ class _ToolbarStore {
 	 */
 	retrieveSelfFromStorage(cb) {
 
-		let hasRightProps = () => {
-			return (finsembleWindow.hasOwnProperty('windowOptions') && finsembleWindow.windowOptions.hasOwnProperty('customData') && finsembleWindow.windowOptions.customData.hasOwnProperty('foreign') && finsembleWindow.windowOptions.customData.foreign.hasOwnProperty('services') && finsembleWindow.windowOptions.customData.foreign.services.hasOwnProperty('workspaceService') && finsembleWindow.windowOptions.customData.foreign.services.workspaceService.hasOwnProperty('global'));
-		}
+		finsembleWindow.getOptions((err, opts) => {
+			let hasRightProps = () => {
+				return (opts.hasOwnProperty('customData') &&
+					opts.customData.hasOwnProperty('foreign') &&
+					opts.customData.foreign.hasOwnProperty('services') &&
+					opts.customData.foreign.services.hasOwnProperty('workspaceService') && opts.customData.foreign.services.workspaceService.hasOwnProperty('global'));
+			}
+			var isGloballyDocked = hasRightProps() ? opts.customData.foreign.services.workspaceService.global : false;
 
-		let isGloballyDocked = hasRightProps() ? finsembleWindow.windowOptions.customData.foreign.services.workspaceService.global : false;
-		finsembleWindow.getComponentState(null, (err, result) => {
-			if (err) {
-				finsembleWindow.show();
-				return cb();
-			}
-			let bounds = (result && result.hasOwnProperty('window-bounds') && result["window-bounds"] !== null) ? result["window-bounds"] : null;
-			let visible = (result && result.hasOwnProperty('visible')) ? result.visible : true;
-			if (!err && bounds && isGloballyDocked) {
-				this.Store.setValue({
-					field: 'window-bounds',
-					value: bounds
-				});
-				finsembleWindow.setBounds(bounds, () => {
-					if (visible) {
-						finsembleWindow.show();
-					}
-				});
-			} else {
-				finsembleWindow.show();
-			}
-			cb(null, result);
-		});
+			finsembleWindow.getComponentState(null, (err, result) => {
+				if (err) {
+					finsembleWindow.show();
+					return cb();
+				}
+
+				let bounds = (result && result.hasOwnProperty('window-bounds') && result["window-bounds"] !== null) ? result["window-bounds"] : null;
+				let visible = (result && result.hasOwnProperty('visible')) ? result.visible : true;
+				if (!err && bounds && isGloballyDocked) {
+					this.Store.setValue({
+						field: 'window-bounds',
+						value: bounds
+					});
+					finsembleWindow.setBounds(bounds, () => {
+						if (visible) {
+							finsembleWindow.show();
+						}
+					});
+				} else {
+					finsembleWindow.show();
+				}
+				cb(null, result);
+			});
+		})
+
 	}
 	/**
 	 * Sets the toolbars visibility in memory
@@ -164,6 +171,7 @@ class _ToolbarStore {
 			done();
 		});
 		let onBoundsSet = (bounds) => {
+			debugger
 			bounds = bounds.data ? bounds.data : bounds;
 			self.Store.setValue({ field: "window-bounds", value: bounds });
 			FSBL.Clients.WindowClient.setComponentState({
