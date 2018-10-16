@@ -13,6 +13,6 @@
     },
     "blank": {
         "output": "components/blank/blank",
-        "entry": "./src\\components\\blank\\blank.js"
+        "entry": "./src/components/blank/blank.js"
     }
 }
