@@ -181,9 +181,6 @@ class _ToolbarStore {
 		FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", "h"], () => {
 			self.hideToolbar();
 		});
-
-		//This is a hack until we have proper events in finsemble. We need to notify windows that aren't part of the workspace so that they can save their bounds.
-		FSBL.Clients.RouterClient.addListener(finsembleWindow.name + ".bounds-change-end", onBoundsChanged)
 	}
 
 	/**
