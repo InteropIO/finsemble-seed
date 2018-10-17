@@ -6,6 +6,7 @@ export default {
 	getSearchText,
 	getSortBy,
 	getTags,
+	reorderFolders,
 	deleteTag,
 	addTag
 }
@@ -14,6 +15,23 @@ function getFolders(){
 	return getStore().getValue({
 		field: 'appFolders'
 	}).folders
+}
+
+function reorderFolders(destIndex, srcIndex) {
+	const store = getStore()
+	const folders = store.getValue({field: 'appFolders.folders'})
+	// Swap array elements
+	const temp = folders[srcIndex]
+	folders[srcIndex] = folders[destIndex]
+	folders[destIndex] = temp
+	store.setValue({
+		field: 'appFolders.folders', 
+		value: folders
+	}, (error, data) => {
+		if (error) {
+			console.log('Failed to save modified folder list.')
+		}
+	})
 }
 
 function getActiveFolder() {
