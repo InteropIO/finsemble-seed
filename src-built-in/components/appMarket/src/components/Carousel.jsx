@@ -24,7 +24,7 @@ export default class Carousel extends Component {
 		this.pageDown = this.pageDown.bind(this);
 	}
 	pageUp() {
-		let newFirstIndex = (this.state.firstIndex + 1 > this.props.cards.length - 1) ? props.cards.length - 1 : this.state.firstIndex + 1;
+		let newFirstIndex = (this.state.firstIndex + 1 > this.props.cards.length - 1) ? 0 : this.state.firstIndex + 1;
 
 		this.setState({
 			firstIndex: newFirstIndex
@@ -45,11 +45,10 @@ export default class Carousel extends Component {
 		let displayCards = [];
 		for (let i = 0; i < 4; i++) {
 			if (firstCard > cards.length - 1) {
-				displayCards.push(cards[0]);
 				firstCard = 0;
-			} else {
-				displayCards.push(cards[firstCard]);
 			}
+
+			displayCards.push(cards[firstCard]);
 			firstCard++;
 		}
 
@@ -57,7 +56,7 @@ export default class Carousel extends Component {
 			<div className="carousel-main">
 				<div className="carousel-header">
 					<div className="carousel-title">{this.props.tag}</div>
-					<button className="see-more">See More</button>
+					<button className="see-more" onClick={this.props.seeMore.bind(this,this.props.tag)}><span className='button-label'>See More</span></button>
 				</div>
 				<div className="carousel-content">
 					<div className="paginate_carat_left" onClick={this.pageDown} />

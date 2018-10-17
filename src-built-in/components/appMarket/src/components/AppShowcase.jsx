@@ -8,40 +8,8 @@
  */
 import React, { Component } from "react";
 
-// const AppShowcase = props => {
-// 	let iconUrl = props.app.icons[0].url !== undefined ? props.app.icons[0].url : "../assets/placeholder.svg";
-
-// 	let name = props.app.title !== undefined ? props.app.title : props.app.name;
-
-// 	let installed = props.app.installed !== undefined ? props.app.installed : false;
-
-// 	let images = [];
-
-
-// 	return (
-// 		<div className="app-showcase">
-// 			<div className="header">
-// 				<img className="header-icon" src={iconUrl} />
-// 				<h3 className="appName">{name}</h3>
-// 				<button className="action-button">
-// 					{installed ? (
-// 						<span className="action-button-label">Open</span>
-// 					) : (
-// 						<span className="action-button-label">
-// 							<i className="ff-plus"></i>
-// 							"My Apps"
-// 						</span>
-// 					)}
-// 				</button>
-// 			</div>
-// 			<div className="image-carousel">
-// 				<div className="paginate_carat_left" onClick={} />
-
-// 				<div className="paginate_carat_right" onClick={} />
-// 			</div>
-// 		</div>
-// 	);
-// }
+//components
+import Modal from './Modal';
 
 class AppShowcase extends Component {
 	constructor(props) {
@@ -50,7 +18,9 @@ class AppShowcase extends Component {
 			name: this.props.app.title !== undefined ? this.props.app.title : this.props.app.name,
 			installed: this.props.app.installed !== undefined ? this.props.app.installed : false,
 			iconUrl: this.props.app.icons !== undefined && this.props.app.icons[0].url !== undefined ? this.props.app.icons[0].url : "../assets/placeholder.svg",
-			imageIndex: 0
+			imageIndex: 0,
+			imageModalOpen: false,
+			modalImage: null
 		};
 		this.bindCorrectContext();
 	}
@@ -58,27 +28,18 @@ class AppShowcase extends Component {
 		this.nextImage = this.nextImage.bind(this);
 		this.previousImage = this.previousImage.bind(this);
 		this.openSite = this.openSite.bind(this);
+		this.openModal = this.openModal.bind(this);
+		this.closeModal = this.closeModal.bind(this);
 	}
 	nextImage() {
-		let index = this.state.imageIndex;
-		if (index + 1 > this.props.app.images.length - 1) {
-			index = 0;
-		} else {
-			index++;
-		}
+		let index = this.state.imageIndex + 1 > this.props.app.images.length - 1 ? 0 : this.state.imageIndex + 1;
 
 		this.setState({
 			imageIndex: index
 		});
 	}
 	previousImage() {
-		let index = this.state.imageIndex;
-
-		if (index - 1 < 0) {
-			index = this.props.app.images.length;
-		} else {
-			index--;
-		}
+		let index = this.state.imageIndex - 1 < 0 ? this.props.app.images.length - 1 : this.state.imageIndex - 1;
 
 		this.setState({
 			imageIndex: index
@@ -87,22 +48,38 @@ class AppShowcase extends Component {
 	openSite() {
 		console.log('open the developers site');
 	}
+	openModal(url) {
+		this.setState({
+			modalImage: url,
+			imageModalOpen: true
+		});
+	}
+	closeModal() {
+		this.setState({
+			imageModalOpen: false,
+			modalImage: null
+		});
+	}
 	render() {
 		let { name, installed, iconUrl, imageIndex:index } = this.state;
 
-		let images = [this.props.app.images[index].url];
-		for (let i = 0; i < 3; i++) {
-			let newIndex = index + i;
+		let images = [];
+		for (let i = 0; i < 4; i++) {
 
-			if (newIndex > this.props.app.images.length - 1) {
-				images.push(this.props.app.images[i].url !== undefined ? this.props.app.images[i].url : "../assets/placeholder.svg");
-			} else {
-				images.push(this.props.app.images[newIndex].url !== undefined ? this.props.app.images[newIndex].url : "../assets/placeholder.svg");
+			if (index > this.props.app.images.length - 1) {
+				index = 0;
 			}
+
+			let imageUrl = this.props.app.images[index].url !== undefined ? this.props.app.images[index].url : "../assets/placeholder.svg";
+			images.push(imageUrl);
+			index++;
 		}
 
 		return (
 			<div className="app-showcase">
+				<Modal open={this.state.imageModalOpen} closeModal={this.closeModal}>
+					<img src={this.state.modalImage} className="modal-image" />
+				</Modal>
 				<div className="header">
 					<img className="header-icon" src={iconUrl} />
 					<h3 className="appName">{name}</h3>
@@ -118,15 +95,15 @@ class AppShowcase extends Component {
 					</button>
 				</div>
 				<div className="image-carousel-container">
-					<div className="paginate_carat_left" onClick={this.previousImage} />
+					<div className="paginate_carat_left" onClick={this.nextImage} />
 					<div className="image-carousel">
-						{images.map((imageUrl) => {
+						{images.map((imageUrl, i) => {
 							return (
-								<img className='image-carousel-image' src={imageUrl} />
+								<img key={"showcase-image-" + i} className='image-carousel-image' src={imageUrl} onClick={this.openModal.bind(this, imageUrl)} />
 							);
 						})}
 					</div>
-					<div className="paginate_carat_right" onClick={this.nextImage} />
+					<div className="paginate_carat_right" onClick={this.previousImage} />
 				</div>
 				<div className="app-notes description">
 					<span className="showcase-label">Description</span>
@@ -170,11 +147,11 @@ class AppShowcase extends Component {
 					<div className="tags-content">
 						<span className="showcase-label">Tags</span>
 						<div className="tags">
-							{this.props.app.tags.map((tag) => {
+							{this.props.app.tags.map((tag, i) => {
 								let tagName = tag[0].toUpperCase() + tag.substring(1);
 
 								return (
-									<div className="tag-label">
+									<div key={"showcase-tag-label-" + i} className="tag-label">
 										<span className="label-content">{tagName}</span>
 									</div>
 								);

@@ -705,9 +705,9 @@
 				}
 			}
 		},
-		"AppCatalog2": {
+		"AppMarket": {
 			"window": {
-				"url": "$applicationRoot/components/appCatalog2/appCatalog2.html",
+				"url": "$applicationRoot/components/appMarket/appMarket.html",
 				"width": 700,
 				"height": 800,
 				"options": {
@@ -732,7 +732,7 @@
 					"Window Manager": {
 						"FSBLHeader": true,
 						"persistWindowState": true,
-						"title": "App Catalog"
+						"title": "App Market"
 					}
 				}
 			}

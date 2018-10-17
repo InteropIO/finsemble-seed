@@ -16,13 +16,14 @@ class SearchBar extends Component {
 		super(props);
 		this.state = {
 			searchValue: "",
-			selectedTag: ""
+			selectedTag: "Tags"
 		};
 		this.bindCorrectContext();
 	}
 	bindCorrectContext() {
 		this.changeSearch = this.changeSearch.bind(this);
 		this.changeTag = this.changeTag.bind(this);
+		this.removeTag = this.removeTag.bind(this);
 	}
 	componentDidMount() {
 		this.setState({
@@ -36,18 +37,26 @@ class SearchBar extends Component {
 		this.props.changeSearch(e.target.value);
 	}
 	changeTag(e) {
-		this.props.tagSelected(e.target.value);
+		if (e.target.value === "Tags") return;
+		this.setState({
+			selectedTag: "Tags"
+		}, this.props.tagSelected(e.target.value));
+	}
+	removeTag(tag) {
+		this.setState({
+			selectedTag: "Tags"
+		}, this.props.removeTag(tag));
 	}
 	render() {
 		return (
 			<div className='search-main'>
-				<button onClick={this.props.goHome}>
+				<button className='search-back' onClick={this.props.goHome}>
 					<i className='ff-arrow-back'></i>
-				    Back
+				    <span className='button-label'>Back</span>
 				</button>
 				<i className='ff-search'></i>
 				<input className='search-input' type="text" value={this.state.searchValue} onChange={this.changeSearch} />
-				<select onChange={this.changeTag}>
+				<select value={this.state.selectedTag} onChange={this.changeTag}>
 					<option key={-1} value={"Tags"}>Tags</option>
 					{this.props.tags.map((tag, i) => {
 						return (
@@ -58,7 +67,7 @@ class SearchBar extends Component {
 				<div className='label-bar'>
 					{this.props.activeTags.map((tag, i) => {
 						return (
-							<Tag key={tag} name={tag} removeTag={this.props.removeTag} />
+							<Tag key={tag} name={tag} removeTag={this.removeTag} />
 						);
 					})}
 				</div>
