@@ -27,6 +27,7 @@
 }
 .actions-menu ul {
 	padding: 0;
+	margin: 4px 0;
 }
 .actions-menu li {
 	font-size: 11px;

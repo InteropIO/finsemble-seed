@@ -6,6 +6,9 @@
 
 .app-item, .app-item-title, .app-item-tags {
     display: block;
+    font-weight: 300;
+    font-size: 11px;
+    margin-bottom: 6px;
 }
 
 .app-item-title {

@@ -1,16 +1,22 @@
+.sort {
+  font-size: 11px;
+}
+
 .sort-option.first {
 	margin-left: 10px;
 }
+
 .sort-option {
   font-size: 11px;
   border-radius: 2px;
   border: solid 1px var(--gray5);
   height: 16px;
   line-height: 16px;
-  padding: 0 5px;
+  padding: 2px 5px 1px 5px;
   display: inline-block;
-  margin-right: 10px;
+  margin: 0 5px;
 }
+
 .sort-option.active {
 	border: 1px solid #005bc5;
 	background-color: #005bc5;
