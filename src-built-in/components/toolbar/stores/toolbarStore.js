@@ -34,7 +34,7 @@ class _ToolbarStore {
 			}
 			function createStore(err, result) {
 				let values = {};
-				if (monitors.mine.deviceId === monitors.primary.deviceId) {
+				if (monitors.mine && monitors.primary && monitors.mine.deviceId === monitors.primary.deviceId) {
 					values = { mainToolbar: fin.desktop.Window.getCurrent().name };
 					storeOwner = true;//until we put creator in by default
 				}
