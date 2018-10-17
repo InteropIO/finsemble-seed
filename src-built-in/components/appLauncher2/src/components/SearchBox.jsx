@@ -25,8 +25,9 @@ export default class SearchBox extends React.Component {
 	render() {
 		return (
 			<div className="search-box"> 
+				<i className="ff-search" />
 				<input value={this.state.search}  
-				type="text" placeholder="Search.." 
+				type="text" placeholder="Search" 
 				onChange={this.onSearch} />
 			</div>	
 			)
