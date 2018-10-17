@@ -30,7 +30,7 @@ img {
     height: 100%;
 }
 .top {
-    margin-top: 30px;
+    margin-top: 10px;
 }
 .bottom {
     position: absolute;
@@ -58,8 +58,8 @@ img {
 }
 
 .complex-menu-left-nav {
-    width: 212px;
-    font-size: var(--content-font-size);
+    width: 125px;
+    font-size: 12px;
     flex-direction: column;
     color: var(--content-font-color);
     background-color: var(--content-nav-background-color);
@@ -140,7 +140,7 @@ img {
 }
 
 .complex-menu-section-toggle {
-    padding: 4px 30px 4px 0px;
+    padding: 5px 12px 5px 0px;
     padding-left: 30px;
 }
 
