@@ -21,8 +21,7 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false,
-						"shouldRegister": false
+						"isArrangable": false
 					}
 				},
 				"components": {
@@ -53,8 +52,7 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false,
-						"shouldRegister": false
+						"isArrangable": false
 					}
 				},
 				"components": {
@@ -85,8 +83,7 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false,
-						"shouldRegister": false
+						"isArrangable": false
 					}
 				},
 				"components": {
@@ -116,8 +113,7 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false,
-						"shouldRegister": false
+						"isArrangable": false
 					}
 				},
 				"components": {
@@ -149,8 +145,7 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false,
-						"shouldRegister": false
+						"isArrangable": false
 					}
 				},
 				"components": {
@@ -195,8 +190,7 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false,
-						"shouldRegister": false
+						"isArrangable": false
 					}
 				},
 				"components": {
@@ -229,8 +223,7 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false,
-						"shouldRegister": false
+						"isArrangable": false
 					}
 				},
 				"components": {
@@ -262,8 +255,7 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false,
-						"shouldRegister": false
+						"isArrangable": false
 					}
 				},
 				"components": {
@@ -294,8 +286,7 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false,
-						"shouldRegister": false
+						"isArrangable": false
 					}
 				},
 				"components": {
@@ -335,8 +326,7 @@
 				},
 				"services": {
 					"dockingService": {
-						"isArrangable": false,
-						"shouldRegister": false
+						"isArrangable": false
 					}
 				},
 				"components": {
@@ -376,8 +366,7 @@
 				},
 				"services": {
 					"dockingService": {
-						"isArrangable": false,
-						"shouldRegister": false
+						"isArrangable": false
 					}
 				},
 				"components": {
@@ -417,8 +406,7 @@
 				},
 				"services": {
 					"dockingService": {
-						"isArrangable": false,
-						"shouldRegister": false
+						"isArrangable": false
 					}
 				},
 				"components": {
@@ -454,8 +442,7 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false,
-						"shouldRegister": false
+						"isArrangable": false
 					}
 				},
 				"components": {
@@ -576,8 +563,7 @@
 				"services": {
 					"dockingService": {
 						"canGroup": false,
-						"isArrangable": false,
-						"shouldRegister": false
+						"isArrangable": false
 					}
 				},
 				"components": {
@@ -615,8 +601,7 @@
 				"services": {
 					"dockingService": {
 						"canGroup": false,
-						"isArrangable": false,
-						"shouldRegister": false
+						"isArrangable": false
 					}
 				},
 				"components": {
@@ -660,8 +645,7 @@
 				"services": {
 					"dockingService": {
 						"canGroup": true,
-						"isArrangable": false,
-						"shouldRegister": false
+						"isArrangable": false
 					}
 				},
 				"components": {

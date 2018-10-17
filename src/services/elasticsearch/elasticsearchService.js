@@ -135,9 +135,9 @@ function elasticsearchService() {
 	this.searchResultActionCallback = function(params) {
 		console.log("Spawning chart with params: ", params);
 		if (params.item.symbol) {
-			LauncherClient.spawn("Advanced Chart", {data: {symbol: params.item.symbol}});
+			LauncherClient.spawn("Advanced Chart", {data: {symbol: params.item.symbol}, addToWorkspace: true});
 		} else {
-			LauncherClient.spawn("blank", {data: {url: params.item.source}});
+			LauncherClient.spawn("blank", {data: {url: params.item.source}, addToWorkspace: true});
 		}
 	}
 
