@@ -27,7 +27,7 @@ const Home = props => {
 		<div>
 			<Hero cards={props.cards} openAppShowcase={props.openAppShowcase} />
 			<Carousel tag="Pizza" cards={carousel1} openAppShowcase={props.openAppShowcase} seeMore={props.seeMore} />
-			<Carousel tag="New Releases" cards={carousel2} openAppShowcase={props.openAppShowcase} seeMore={props.seeMore} />
+			<Carousel tag="newrelease" cards={carousel2} openAppShowcase={props.openAppShowcase} seeMore={props.seeMore} />
 		</div>
 	);
 }

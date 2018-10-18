@@ -10,13 +10,15 @@ import React from "react";
 
 const Tag = props => {
 	const remove = () => {
-		console.log('removing tag');
 		props.removeTag(props.name);
 	}
+
 	return (
 		<div className='app-tag'>
-			<div className='tag-name'>{props.name}</div>
-			<div className='tag-delete' onClick={remove}>X</div>
+			<div className='tag-content'>
+				<div className='tag-name'>{props.name}</div>
+				<div className='tag-delete' onClick={remove}>x</div>
+			</div>
 		</div>
 	);
 }

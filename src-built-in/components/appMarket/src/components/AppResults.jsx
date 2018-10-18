@@ -30,21 +30,21 @@ const AppResults = props => {
 
 	let cardRows = [];
 	let cardsInRow = [];
-	let index = 0;
 	for (let i = 0; i < cardsForShowcase.length; i++) {
 		let card = cardsForShowcase[i];
 
+		if (cardsInRow.length === 4) {
+			cardRows.push(cardsInRow);
+			cardsInRow = [];
+		}
+
 		cardsInRow.push(
-			<td key={"row-" + i + "-card-" + index}>
+			<td key={"row-" + cardRows.length + "-card-" + i}>
 				<AppCard {...card} openAppShowcase={props.openAppShowcase} />
 			</td>
 		);
-		if (index < 4) {
-			index++;
-		} else {
-			index = 0;
-			cardsInRow = [];
-		}
+	}
+	if (cardRows.length === 0) {
 		cardRows.push(cardsInRow);
 	}
 

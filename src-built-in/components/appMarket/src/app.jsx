@@ -134,7 +134,7 @@ export default class AppMarket extends React.Component {
 			pageContents = <Home cards={apps} openAppShowcase={this.openAppShowcase} seeMore={this.addTag} />;
 		} else if (this.state.activePage === "appSearch") {
 			let results = filteredApps.length > 0 ? filteredApps : apps;
-			pageContents = <AppResults cards={results} tags={this.state.activeTags} addApp={this.addApp} openAppShowcase={this.openAppShowcase} />;
+			pageContents = <AppResults cards={results} tags={activeTags} addApp={this.addApp} openAppShowcase={this.openAppShowcase} />;
 		} else if (this.state.activePage === "showcase") {
 			pageContents = <AppShowcase app={this.state.activeApp} />;
 		} else {
@@ -143,7 +143,7 @@ export default class AppMarket extends React.Component {
 
 		return (
 			<div>
-				<SearchBar tags={tags} activeTags={activeTags} tagSelected={this.addTag} removeTag={this.removeTag} goHome={this.goHome} changeSearch={this.changeSearch} />
+				<SearchBar backButton={this.state.activePage !== "home"} tags={tags} activeTags={activeTags} tagSelected={this.addTag} removeTag={this.removeTag} goHome={this.goHome} changeSearch={this.changeSearch} />
 				{pageContents}
 			</div>
 		);

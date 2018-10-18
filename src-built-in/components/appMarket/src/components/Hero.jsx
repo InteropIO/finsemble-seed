@@ -60,7 +60,7 @@ export default class Hero extends Component {
 					<div className='paginate_carat_left' onClick={this.changePage.bind(this, 'page_down')} />
 					<div className='hero_selected_content' onClick={this.openApp}>
 						<div className='selected-content-title'>
-							<h4>{contentTitle}</h4>
+							{contentTitle}
 						</div>
 						<div className='selected-content-message'>
 							<p>{contentMsg}</p>

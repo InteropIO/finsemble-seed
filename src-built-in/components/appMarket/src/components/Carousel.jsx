@@ -55,7 +55,7 @@ export default class Carousel extends Component {
 		return (
 			<div className="carousel-main">
 				<div className="carousel-header">
-					<div className="carousel-title">{this.props.tag}</div>
+					<div className="carousel-title">{this.props.tag[0].toUpperCase() + this.props.tag.substring(1)}</div>
 					<button className="see-more" onClick={this.props.seeMore.bind(this,this.props.tag)}><span className='button-label'>See More</span></button>
 				</div>
 				<div className="carousel-content">
