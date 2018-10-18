@@ -1,14 +1,17 @@
 .app-item {
   border-bottom: solid 1px rgba(98, 116, 132, 0.4);
-  margin-bottom: 12px;
   position: relative;
+  padding: 6px .75em;
 }
 
 .app-item, .app-item-title, .app-item-tags {
-    display: block;
-    font-weight: 300;
-    font-size: 11px;
-    margin-bottom: 6px;
+  display: block;
+  font-weight: 300;
+  font-size: 11px;
+}
+
+.app-item:hover {
+  background-color: var(--slate3);
 }
 
 .app-item-title {

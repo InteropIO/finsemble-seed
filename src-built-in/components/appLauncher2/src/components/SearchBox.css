@@ -1,5 +1,6 @@
 .search-box {
 	margin-bottom: 10px;
+	padding-left: .75em;
 }
 .search-box input {
 	color: #fff;

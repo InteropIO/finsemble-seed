@@ -155,7 +155,7 @@ img {
 
 .complex-menu-content-row {
     flex: 1;
-    padding: .75em;
+    padding: .75em .75em .75em 0;
     align-content: flex-start;
     background-color: #495a69;
 }
