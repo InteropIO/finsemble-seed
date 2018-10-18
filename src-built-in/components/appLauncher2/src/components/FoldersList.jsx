@@ -17,6 +17,10 @@ export default class FoldersList extends React.Component {
 	onAppDrop(event, folder) {
 		event.preventDefault()
 		const app = JSON.parse(event.dataTransfer.getData('app'))
+		//TODO: When adding to favorite do more stuff?
+		if (folder.name === 'Favorites') {
+			console.info('Dropped app in favorites.')
+		}
 		// Make sure app is not in folder already
 		// Before attemping to add it
 		folder.appDefinitions.findIndex((item) => {
