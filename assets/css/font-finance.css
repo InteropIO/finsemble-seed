@@ -317,3 +317,9 @@
 .ff-folder:before {
   content: "\7e";
 }
+.ff-chevron-left:before {
+  content: "\5c";
+}
+.ff-chevron-right:before {
+  content: "\e000";
+}
