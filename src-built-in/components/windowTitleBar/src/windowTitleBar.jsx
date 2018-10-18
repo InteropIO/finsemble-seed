@@ -422,6 +422,8 @@ class WindowTitleBar extends React.Component {
 
 if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
 function FSBLReady() {
+	if (FSBL.titleBarInserted) return;
+	FSBL.titleBarInserted = true;
 	storeExports.initialize(function () {
 		HeaderActions = storeExports.Actions;
 		windowTitleBarStore = storeExports.getStore();
