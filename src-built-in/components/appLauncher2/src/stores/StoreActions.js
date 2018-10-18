@@ -6,9 +6,21 @@ export default {
 	getSearchText,
 	getSortBy,
 	getTags,
+	addAppToFolder,
 	reorderFolders,
 	deleteTag,
 	addTag
+}
+
+function _setFolders(folders) {
+	getStore().setValue({
+		field: 'appFolders.folders', 
+		value: folders
+	}, (error, data) => {
+		if (error) {
+			console.log('Failed to save modified folder list.')
+		}
+	})
 }
 
 function getFolders(){
@@ -24,15 +36,22 @@ function reorderFolders(destIndex, srcIndex) {
 	const temp = folders[srcIndex]
 	folders[srcIndex] = folders[destIndex]
 	folders[destIndex] = temp
-	store.setValue({
-		field: 'appFolders.folders', 
-		value: folders
-	}, (error, data) => {
-		if (error) {
-			console.log('Failed to save modified folder list.')
-		}
-	})
+	_setFolders(folders)
 }
+
+
+function addAppToFolder(folder, app) {
+	const store = getStore()
+	const folders = store.getValue({field: 'appFolders.folders'})
+	const index = folders.findIndex((item) => {
+		return item.name === folder.name
+	})
+	// Add app to folder
+	folders[index].appDefinitions.push(app)
+	// Update folders in store
+	_setFolders(folders)
+}
+
 
 function getActiveFolder() {
 	return getStore().getValue({
