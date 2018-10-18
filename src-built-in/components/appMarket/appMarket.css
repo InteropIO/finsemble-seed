@@ -224,6 +224,9 @@
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 6px;
+	padding: 0px 43px;
 }
 
 .carousel-header .see-more {
