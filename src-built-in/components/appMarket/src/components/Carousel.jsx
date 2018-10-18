@@ -59,13 +59,13 @@ export default class Carousel extends Component {
 					<button className="see-more" onClick={this.props.seeMore.bind(this,this.props.tag)}><span className='button-label'>See More</span></button>
 				</div>
 				<div className="carousel-content">
-					<div className="paginate_carat_left" onClick={this.pageDown} />
+					<i className="ff-chevron-left" onClick={this.pageDown} />
 					{displayCards.map((card, i) => {
 						return (
 							<AppCard key={i} {...card} openAppShowcase={this.props.openAppShowcase} />
 						);
 					})}
-					<div className="paginate_carat_right" onClick={this.pageUp} />
+					<i className="ff-chevron-right" onClick={this.pageUp} />
 				</div>
 			</div>
 		);

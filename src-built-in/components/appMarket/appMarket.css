@@ -69,28 +69,20 @@
 	background-color: #1c2a36;
 }
 
-.paginate_carat_left {
-	width: 50px;
-	height: 100px;
-	object-fit: contain;
-	background-image: url("./src/assets/chevron-left.svg");
-	background-position: center;
-	background-repeat: no-repeat;
-	background-size: auto;
+.ff-chevron-right, .ff-chevron-left {
+	color: white;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	font-size: 36px;
 }
 
-#carat_down_right {
-	background-color: white;
+.ff-chevron-left {
+	margin: 0 -35px 0 5px;
 }
 
-.paginate_carat_right {
-	width: 50px;
-	height: 100px;
-	object-fit: contain;
-	background-image: url("./src/assets/chevron-right.svg");
-	background-position: center;
-	background-repeat: no-repeat;
-	background-size: auto;
+.ff-chevron-right {
+	margin: 0 5px 0 -35px;
 }
 
 .app-card {
