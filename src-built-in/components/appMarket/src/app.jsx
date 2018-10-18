@@ -102,6 +102,9 @@ export default class AppMarket extends React.Component {
 		});
 	}
 	openAppShowcase(appName) {
+		//clear tags
+		appCatalogStore.Actions.clearTags();
+
 		let app;
 		let apps = appCatalogStore.Actions.getApps();
 		for (let i = 0; i < apps.length; i++) {

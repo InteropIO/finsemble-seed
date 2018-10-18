@@ -18,6 +18,7 @@ class AppShowcase extends Component {
 			name: this.props.app.title !== undefined ? this.props.app.title : this.props.app.name,
 			installed: this.props.app.installed !== undefined ? this.props.app.installed : false,
 			iconUrl: this.props.app.icons !== undefined && this.props.app.icons[0].url !== undefined ? this.props.app.icons[0].url : "../assets/placeholder.svg",
+			entitled: this.props.app.entitled ? this.props.app.entitled : false,
 			imageIndex: 0,
 			imageModalOpen: false,
 			modalImage: null
@@ -80,10 +81,20 @@ class AppShowcase extends Component {
 				<Modal open={this.state.imageModalOpen} closeModal={this.closeModal}>
 					<img src={this.state.modalImage} className="modal-image" />
 				</Modal>
+				{this.state.entitled ? (
+					<div className="app-warning">
+						<span>
+							<i className='ff-info'></i>
+							<span className='app-warning-text'>
+								You don't have permission to add this App. <a href='#'>Contact your administrator</a> to request permission.
+							</span>
+						</span>
+					</div>
+				) : null}
 				<div className="header">
 					<img className="header-icon" src={iconUrl} />
 					<h3 className="appName">{name}</h3>
-					<button className="action-button">
+					<button className={this.state.entitled ? "action-button disabled" : "action-button"} disabled={this.state.entitled}>
 						{installed ? (
 							<span className="action-button-label">Open</span>
 						) : (

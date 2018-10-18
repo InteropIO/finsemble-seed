@@ -13,7 +13,8 @@ class AppCard extends Component {
 		super(props);
 		this.state = {
 			highlighted: false,
-			appName: this.props.title !== undefined ? this.props.title : this.props.name
+			appName: this.props.title !== undefined ? this.props.title : this.props.name,
+			entitled: this.props.entitled ? this.props.entitled : false
 		};
 		this.bindCorrectContext();
 	}
@@ -46,15 +47,17 @@ class AppCard extends Component {
 		if (this.state.highlighted) imageIconClasses += " highlighted"
 		else imageIconClasses += " faded";
 
+		let entitled = this.state.entitled ? " entitled" : "";
+
 		return (
 			<div className='app-card' onClick={this.openAppShowcase}>
 				<div className="app-image-container">
 					<i className={imageIconClasses}></i>
-					<img className='app-image' src={imageUrl} onMouseEnter={this.toggleHighlight} onMouseLeave={this.toggleHighlight} onClick={this.addApp} />
+					<img className={'app-image' + entitled} src={imageUrl} onMouseEnter={this.toggleHighlight} onMouseLeave={this.toggleHighlight} onClick={this.addApp} />
 				</div>
-				<h4 className='app-title'>{title}</h4>
+				<h4 className={'app-title' + entitled}>{title}</h4>
 				<div className='footer'>
-					<span className="app-tags">
+					<span className={"app-tags" + entitled}>
 						<i className="ff-tag"></i>
 						<span className='tag-names'>
 							{appTags.join(", ")}

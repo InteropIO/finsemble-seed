@@ -111,6 +111,10 @@
 	height: 69px;
 }
 
+.app-card .app-images.entitled {
+	opacity: 0.4;
+}
+
 .app-card .app-title {
 	width: 100%;
 	height: 19px;
@@ -125,6 +129,10 @@
 	text-overflow: clip;
 }
 
+.app-card .app-title.entitled {
+	opacity: 0.4;
+}
+
 .app-card .footer {
 	width: 89px;
 	height: 26px;
@@ -137,6 +145,10 @@
 	letter-spacing: normal;
 	color: #ffffff;
 	padding-left: 5px;
+}
+
+.app-card .footer .app-tags.entitled {
+	opacity: 0.4;
 }
 
 .app-card .footer .app-tags .tag-names {
@@ -347,6 +359,25 @@
 	justify-content: center;
 }
 
+.app-showcase .app-warning {
+	display: flex;
+	align-self: center;
+	width: 502px;
+	height: 16px;
+	font-family: Roboto;
+	font-size: 12px;
+	font-weight: bold;
+	font-style: normal;
+	font-stretch: normal;
+	line-height: normal;
+	letter-spacing: normal;
+	color: #ee5c5c;
+}
+
+.app-showcase .app-warning .app-warning-text {
+	padding: 0 5px;
+}
+
 .app-showcase .header {
 	display: flex;
 	flex-direction: row;
@@ -374,9 +405,13 @@
 }
 
 .app-showcase .header .action-button {
-	background-color: blue;
 	width: 83px;
-  	height: 30px;
+	height: 30px;
+	background-color: blue;
+}
+
+.app-showcase .header .action-button.disabled {
+	background-color: #999999;
 }
 
 .app-showcase .header .action-button-label {
