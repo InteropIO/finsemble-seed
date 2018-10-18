@@ -14,6 +14,17 @@ export default class FoldersList extends React.Component {
 
 	}
 	
+	onAppDrop(event, folder) {
+		event.preventDefault()
+		const app = JSON.parse(event.dataTransfer.getData('app'))
+		// Make sure app is not in folder already
+		// Before attemping to add it
+		folder.appDefinitions.findIndex((item) => {
+			return item.name === app.name
+		}) && storeActions.addAppToFolder(folder, app)
+	}
+
+
 	onAppFoldersUpdate() {
 		this.setState({
 			folders: storeActions.getFolders()
@@ -46,10 +57,11 @@ export default class FoldersList extends React.Component {
 			if (this.state.activeFolder === folder.name) {
 				className += ' active-section-toggle'
 			}
-			return <FinsembleDraggable 
+			return <FinsembleDraggable
 			draggableId={folder.name} 
 			key={index} index={index}>
 				<div onClick={() => this.onFolderClicked(folder)} 
+				onDrop={(event) => this.onAppDrop(event, folder)} 
 				className={className} key={index}>{folder.name}</div>
 			</FinsembleDraggable>
 		})
