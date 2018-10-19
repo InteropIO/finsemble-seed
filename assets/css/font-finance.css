@@ -13,7 +13,7 @@
 }
 
 [data-icon]:before {
-  font-family: "font-finance";
+  font-family: "font-finance" !important;
   content: attr(data-icon);
   font-style: normal !important;
   font-weight: normal !important;
@@ -27,7 +27,7 @@
 
 [class^="ff-"]:before,
 [class*=" ff-"]:before {
-  font-family: "font-finance";
+  font-family: "font-finance" !important;
   font-style: normal !important;
   font-weight: normal !important;
   font-variant: normal !important;
@@ -230,9 +230,6 @@
 .ff-user:before {
   content: "\26";
 }
-.ff-ungrid:before {
-  content: "\5a";
-}
 .ff-table:before {
   content: "\28";
 }
@@ -310,4 +307,19 @@
 }
 .ff-delete:before {
   content: "\42";
+}
+.ff-ungrid:before {
+  content: "\7d";
+}
+.ff-tag:before {
+  content: "\5a";
+}
+.ff-folder:before {
+  content: "\7e";
+}
+.ff-chevron-left:before {
+  content: "\5c";
+}
+.ff-chevron-right:before {
+  content: "\e000";
 }
