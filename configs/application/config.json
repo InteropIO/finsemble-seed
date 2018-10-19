@@ -13,6 +13,25 @@
 		}
 	},
 	"servicesConfig": {
+		"distributedStore": {
+			"initialStores": [
+				{
+					"name": "App Folder",
+					"foundation": {
+						"testAddFromFoundation": "add",
+						"startItem": {
+							"item2": "merged in"
+						}
+					},
+					"default": {
+						"startItem": {
+							"item1": 1
+						}
+					},
+					"security": {}
+				}
+			]
+		},
 		"launcher": {
 			"staggerPixels": 40
 		},
