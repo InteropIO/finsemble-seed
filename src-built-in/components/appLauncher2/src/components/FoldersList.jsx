@@ -1,7 +1,7 @@
-import React from  'react'
+import React from 'react'
 import storeActions from '../stores/StoreActions'
-import {getStore} from '../stores/LauncherStore'
-import {FinsembleDraggable} from '@chartiq/finsemble-react-controls'
+import { getStore } from '../stores/LauncherStore'
+import { FinsembleDraggable } from '@chartiq/finsemble-react-controls'
 
 export default class FoldersList extends React.Component {
 
@@ -13,7 +13,7 @@ export default class FoldersList extends React.Component {
 		}
 
 	}
-	
+
 	onAppDrop(event, folder) {
 		event.preventDefault()
 		const app = JSON.parse(event.dataTransfer.getData('app'))
@@ -37,7 +37,7 @@ export default class FoldersList extends React.Component {
 
 	onFolderClicked(folder) {
 		getStore().setValue({
-			field: 'activeFolder', 
+			field: 'activeFolder',
 			value: folder.name
 		}, () => {
 			this.setState({
@@ -47,26 +47,26 @@ export default class FoldersList extends React.Component {
 	}
 
 	componentWillMount() {
-		getStore().addListener({field: 'appFolders'}, this.onAppFoldersUpdate.bind(this))
+		getStore().addListener({ field: 'appFolders' }, this.onAppFoldersUpdate.bind(this))
 	}
 
 	componentWillUnmount() {
-		getStore().removeListener({field: 'appFolders'}, this.onAppFoldersUpdate.bind(this))
+		getStore().removeListener({ field: 'appFolders' }, this.onAppFoldersUpdate.bind(this))
 	}
 
 	renderFoldersList() {
-		return 	this.state.folders.map((folder, index) => {
+		return this.state.folders.map((folder, index) => {
 
 			let className = 'complex-menu-section-toggle'
 			if (this.state.activeFolder === folder.name) {
 				className += ' active-section-toggle'
 			}
 			return <FinsembleDraggable
-			draggableId={folder.name} 
-			key={index} index={index}>
-				<div onClick={() => this.onFolderClicked(folder)} 
-				onDrop={(event) => this.onAppDrop(event, folder)} 
-				className={className} key={index}>{folder.name}</div>
+				draggableId={folder.name}
+				key={index} index={index}>
+				<div onClick={() => this.onFolderClicked(folder)}
+					onDrop={(event) => this.onAppDrop(event, folder)}
+					className={className} key={index}>{folder.name}</div>
 			</FinsembleDraggable>
 		})
 	}
@@ -76,6 +76,6 @@ export default class FoldersList extends React.Component {
 			<div className="top">
 				{this.renderFoldersList()}
 			</div>
-			)
+		)
 	}
 }
