@@ -32,6 +32,11 @@ img {
 .top {
     margin-top: 10px;
 }
+.folder-list {
+    margin-top: 10px;
+    max-height: 245px;
+    overflow: auto;
+}
 .bottom {
     position: absolute;
     bottom: 12px;
@@ -429,4 +434,12 @@ img {
 select:focus, option:focus {
     outline: none;
     background-color: transparent;
+}
+
+.add-new-folder {
+    padding: 10px 0 0 15px;
+}
+
+.add-new-folder i{
+    font-size: 12px;
 }

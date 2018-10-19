@@ -1,4 +1,5 @@
 import React from 'react'
+import AddNewFolder from './AddNewFolder'
 import storeActions from '../stores/StoreActions'
 import { getStore } from '../stores/LauncherStore'
 import { FinsembleDraggable } from '@chartiq/finsemble-react-controls'
@@ -74,7 +75,10 @@ export default class FoldersList extends React.Component {
 	render() {
 		return (
 			<div className="top">
-				{this.renderFoldersList()}
+				<div className='folder-list'>
+					{this.renderFoldersList()}
+				</div>
+				<AddNewFolder />
 			</div>
 		)
 	}
