@@ -9,6 +9,7 @@
 				"name": "My Apps",
 				"type": "folder",
 				"disableUserRemove": true,
+				"icon": "ff-component",
 				"appDefinitions": [
 					{
 						"name": "Welcome",
@@ -16,7 +17,8 @@
 						"tags": [
 							"newrelease"
 						],
-						"friendlyName": "The Welcome Component"
+						"friendlyName": "The Welcome Component",
+						"icon": "ff-home-2"
 					},
 					{
 						"name": "Getting Started Tutorial",
@@ -24,7 +26,8 @@
 						"tags": [
 							"newrelease"
 						],
-						"friendlyName": "Learn finsemble!"
+						"friendlyName": "Learn finsemble!",
+						"icon": "ff-component"
 					},
 					{
 						"name": "Process Monitor",
@@ -32,7 +35,8 @@
 						"tags": [
 							"bad information", "don't click here"
 						],
-						"friendlyName": "Process Monitor"
+						"friendlyName": "Process Monitor",
+						"icon": "ff-chart-alt-1"
 					},
 					{
 						"name": "Notepad",
@@ -42,7 +46,8 @@
 							"wizardry",
 							"TESLA"
 						],
-						"friendlyName": "Notepad!!!"
+						"friendlyName": "Notepad!!!",
+						"icon": "saveas-2"
 					}
 				]
 			},
@@ -50,6 +55,7 @@
 				"name": "Favorites",
 				"type": "folder",
 				"disableUserRemove": true,
+				"icon": "ff-favorite",
 				"appDefinitions": [
 					{
 						"name": "Process Monitor",
@@ -65,6 +71,7 @@
 				"name": "Dashboards",
 				"type": "folder",
 				"disableUserRemove": true,
+				"icon": "ff-dashboard",
 				"appDefinitions": []
 			}
 		]

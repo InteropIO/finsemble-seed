@@ -50,6 +50,7 @@ function addNewFolder(name) {
 		name: name || `New folder ${newFolders.length+1}`,
 		type: 'folder',
 		disableUserRemove: true,
+		icon: "ff-folder",
 		appDefinitions: []
 	}
 	folders.push(newFolder)

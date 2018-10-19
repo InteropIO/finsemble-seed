@@ -41,7 +41,10 @@ export default class AppDefinition extends React.Component {
 		const app = this.props.app
 		return (
 			<div onDoubleClick={() => this.onDoubleClick(app)} className="app-item" draggable="true" onDragStart={this.onDragToFolder}>
-				<div className="app-item-title">{app.friendlyName}</div>
+				<span className="app-item-title">
+					{app.icon !== undefined ? <i className={app.icon}></i> : null}
+					{app.friendlyName}
+				</span>
 				<AppTagsList tags={app.tags} />
 				<AppActionsMenu />
 			</div>

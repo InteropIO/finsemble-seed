@@ -1,9 +1,9 @@
 import React from 'react'
 
 const bottomEntries = [
-	'New App',
-	'New Dashboard',
-	'App Catalog'
+	{ name: 'New App', icon: 'ff-new-workspace' },
+	{ name: 'New Dashboard', icon: 'ff-new-dashboard' },
+	{ name: 'App Catalog', icon: 'ff-list' }
 ]
 
 export default class LeftNavBottomLinks extends React.Component {
@@ -20,7 +20,8 @@ export default class LeftNavBottomLinks extends React.Component {
 						let className = 'complex-menu-section-toggle'
 						return (
 							<div className={className} key={index}>
-								{entry}
+								{entry.icon !== undefined ? <i className={entry.icon}></i> : null}
+								{entry.name}
 							</div>
 						)
 					})

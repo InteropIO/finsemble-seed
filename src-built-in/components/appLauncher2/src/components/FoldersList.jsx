@@ -67,7 +67,12 @@ export default class FoldersList extends React.Component {
 				key={index} index={index}>
 				<div onClick={() => this.onFolderClicked(folder)}
 					onDrop={(event) => this.onAppDrop(event, folder)}
-					className={className} key={index}>{folder.name}</div>
+					className={className} key={index}>
+					<span className='left-nav-label'>
+						{folder.icon !== undefined ? <i className={folder.icon}></i> : null}
+						{folder.name}
+					</span>
+				</div>
 			</FinsembleDraggable>
 		})
 	}
