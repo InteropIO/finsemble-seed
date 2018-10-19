@@ -31,7 +31,9 @@ class AppCard extends Component {
 	openAppShowcase() {
 		this.props.openAppShowcase(this.state.appName);
 	}
-	addApp() {
+	addApp(e) {
+		e.preventDefault();
+		e.stopPropagation();
 		this.props.addApp(this.state.appName)
 	}
 	render() {
@@ -44,16 +46,16 @@ class AppCard extends Component {
 		});
 
 		let imageIconClasses = "ff-check-circle";
-		if (this.state.highlighted) imageIconClasses += " highlighted"
+		if (this.state.highlighted || this.props.installed) imageIconClasses += " highlighted"
 		else imageIconClasses += " faded";
 
 		let entitled = this.state.entitled ? " entitled" : "";
 
 		return (
 			<div className='app-card' onClick={this.openAppShowcase}>
-				<div className="app-image-container">
+				<div className="app-image-container" onClick={this.addApp}>
 					<i className={imageIconClasses}></i>
-					<img className={'app-image' + entitled} src={imageUrl} onMouseEnter={this.toggleHighlight} onMouseLeave={this.toggleHighlight} onClick={this.addApp} />
+					<img className={'app-image' + entitled} src={imageUrl} onMouseEnter={this.toggleHighlight} onMouseLeave={this.toggleHighlight} />
 				</div>
 				<h4 className={'app-title' + entitled}>{title}</h4>
 				<div className='footer'>

@@ -40,7 +40,7 @@ const AppResults = props => {
 
 		cardsInRow.push(
 			<td key={"row-" + cardRows.length + "-card-" + i}>
-				<AppCard {...card} openAppShowcase={props.openAppShowcase} />
+				<AppCard {...card} openAppShowcase={props.openAppShowcase} addApp={this.props.addApp} />
 			</td>
 		);
 	}

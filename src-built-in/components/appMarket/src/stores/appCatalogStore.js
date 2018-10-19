@@ -99,6 +99,7 @@ var Actions = {
 			if (appTitle === appName) {
 				app.installed = true;
 			}
+			return app;
 		});
 		values.apps = newApps;
 	},
