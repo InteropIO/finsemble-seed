@@ -170,8 +170,8 @@ class _ToolbarStore {
 			}
 			done();
 		});
+
 		let onBoundsSet = (bounds) => {
-			debugger
 			bounds = bounds.data ? bounds.data : bounds;
 			self.Store.setValue({ field: "window-bounds", value: bounds });
 			FSBL.Clients.WindowClient.setComponentState({
