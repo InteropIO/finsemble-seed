@@ -128,9 +128,6 @@
 .ff-document-2:before {
   content: "\46";
 }
-.ff-dots-horz:before {
-  content: "\47";
-}
 .ff-dots-vert:before {
   content: "\48";
 }
@@ -322,4 +319,10 @@
 }
 .ff-chevron-right:before {
   content: "\e000";
+}
+.ff-dots-horz:before {
+  content: "\47";
+}
+.ff-alert:before {
+  content: "\e001";
 }
