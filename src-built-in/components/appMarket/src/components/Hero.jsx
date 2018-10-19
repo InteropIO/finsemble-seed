@@ -57,7 +57,7 @@ export default class Hero extends Component {
 		return (
 			<div>
 				<div className='hero-main'>
-					<div className='paginate_carat_left' onClick={this.changePage.bind(this, 'page_down')} />
+					<i className='ff-chevron-left' onClick={this.changePage.bind(this, 'page_down')} />
 					<div className='hero_selected_content' onClick={this.openApp}>
 						<div className='selected-content-title'>
 							{contentTitle}
@@ -66,7 +66,7 @@ export default class Hero extends Component {
 							<p>{contentMsg}</p>
 						</div>
 					</div>
-					<div className='paginate_carat_right' onClick={this.changePage.bind(this, 'page_up')} />
+					<i className='ff-chevron-right' onClick={this.changePage.bind(this, 'page_up')} />
 				</div>
 				<div className="paginator">
 					{cards.map((card, i) => {
