@@ -1,5 +1,6 @@
 import React from  'react'
 import AppDefinition from './AppDefinition'
+import NoAppsFound from './NoAppsFound'
 import FilterSort from './FilterSort'
 import {getStore} from '../stores/LauncherStore'
 import storeActions from '../stores/StoreActions'
@@ -94,10 +95,11 @@ export default class Content extends React.Component {
 		})
 	}
 	render() {
+		const apps = this.renderAppList()
 		return (
 			<div className="complex-menu-content-row">
 				<FilterSort></FilterSort>
-				{this.renderAppList()}
+				{apps.length ? apps : <NoAppsFound />}
 			</div>
 		)
 	}
