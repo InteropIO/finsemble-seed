@@ -25,7 +25,7 @@ export default class FoldersList extends React.Component {
 		// Before attemping to add it
 		folder.appDefinitions.findIndex((item) => {
 			return item.name === app.name
-		}) && storeActions.addAppToFolder(folder, app)
+		}) < 0 && storeActions.addAppToFolder(folder, app)
 	}
 
 
