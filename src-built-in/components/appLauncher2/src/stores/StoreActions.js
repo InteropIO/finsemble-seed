@@ -1,20 +1,21 @@
-import {getStore} from './LauncherStore'
+import { getStore } from './LauncherStore'
 
 export default {
+	addNewFolder,
+	addAppToFolder,
+	addTag,
+	deleteTag,
+	reorderFolders,
 	getFolders,
 	getActiveFolder,
 	getSearchText,
 	getSortBy,
-	getTags,
-	addAppToFolder,
-	reorderFolders,
-	deleteTag,
-	addTag
+	getTags
 }
 
 function _setFolders(folders) {
 	getStore().setValue({
-		field: 'appFolders.folders', 
+		field: 'appFolders.folders',
 		value: folders
 	}, (error, data) => {
 		if (error) {
@@ -23,7 +24,7 @@ function _setFolders(folders) {
 	})
 }
 
-function getFolders(){
+function getFolders() {
 	return getStore().getValue({
 		field: 'appFolders'
 	}).folders
@@ -31,7 +32,7 @@ function getFolders(){
 
 function reorderFolders(destIndex, srcIndex) {
 	const store = getStore()
-	const folders = store.getValue({field: 'appFolders.folders'})
+	const folders = store.getValue({ field: 'appFolders.folders' })
 	// Swap array elements
 	const temp = folders[srcIndex]
 	folders[srcIndex] = folders[destIndex]
@@ -39,10 +40,26 @@ function reorderFolders(destIndex, srcIndex) {
 	_setFolders(folders)
 }
 
+function addNewFolder(name) {
+	// Find folders that have a name of "New folder" or "New folder #"
+	const folders = getFolders()
+	const newFolders = folders.filter((folder) => {
+		return folder.name.toLowerCase().indexOf('new folder') > -1
+	})
+	const newFolder = {
+		name: name || `New folder ${newFolders.length+1}`,
+		type: 'folder',
+		disableUserRemove: true,
+		appDefinitions: []
+	}
+	folders.push(newFolder)
+	_setFolders(folders)
+	return newFolder
+}
 
 function addAppToFolder(folder, app) {
 	const store = getStore()
-	const folders = store.getValue({field: 'appFolders.folders'})
+	const folders = store.getValue({ field: 'appFolders.folders' })
 	const index = folders.findIndex((item) => {
 		return item.name === folder.name
 	})
@@ -57,20 +74,20 @@ function getActiveFolder() {
 	return getStore().getValue({
 		field: 'appFolders'
 	}).folders.filter((folder) => {
-		return folder.name == getStore().getValue({field: 'activeFolder'})
+		return folder.name == getStore().getValue({ field: 'activeFolder' })
 	})[0]
 }
 
 function getSearchText() {
-	return getStore().getValue({field: 'filterText'})
+	return getStore().getValue({ field: 'filterText' })
 }
 
 function getSortBy() {
-	return getStore().getValue({field: 'sortBy'})
+	return getStore().getValue({ field: 'sortBy' })
 }
 
 function getTags() {
-	return getStore().getValue({field: 'tags'}) || []
+	return getStore().getValue({ field: 'tags' }) || []
 }
 
 function addTag(tag) {
@@ -79,7 +96,7 @@ function addTag(tag) {
 	// Push new tag to list
 	tags.indexOf(tag) < 0 && tags.push(tag)
 	// Update tags in store
-	return getStore().setValue({field: 'tags', value: tags})
+	return getStore().setValue({ field: 'tags', value: tags })
 }
 
 function deleteTag(tag) {
@@ -88,5 +105,5 @@ function deleteTag(tag) {
 	// Push new tag to list
 	tags.splice(tags.indexOf(tag), 1)
 	// Update tags in store
-	return getStore().setValue({field: 'tags', value: tags})
+	return getStore().setValue({ field: 'tags', value: tags })
 }
