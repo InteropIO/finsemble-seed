@@ -708,7 +708,7 @@
 		"AppMarket": {
 			"window": {
 				"url": "$applicationRoot/components/appMarket/appMarket.html",
-				"width": 800,
+				"width": 600,
 				"height": 700,
 				"options": {
 					"autoShow": true,
