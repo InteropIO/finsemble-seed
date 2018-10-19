@@ -179,7 +179,7 @@
 .ff-fundamentals:before {
   content: "\27";
 }
-.ff-layout:before {
+.ff-dashboard:before {
   content: "\30";
 }
 .ff-linker:before {
@@ -325,4 +325,10 @@
 }
 .ff-alert:before {
   content: "\e001";
+}
+.ff-new-dashboard:before {
+  content: "\e002";
+}
+.ff-favorite:before {
+  content: "\e003";
 }
