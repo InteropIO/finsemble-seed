@@ -5,6 +5,7 @@ import {getStore} from '../stores/LauncherStore'
 import storeActions from '../stores/StoreActions'
 import sortFunctions from '../utils/sort-functions'
 
+// To be assigned a value later in the constructor
 let store
 
 export default class Content extends React.Component {
@@ -22,7 +23,6 @@ export default class Content extends React.Component {
 		this.onTagsUpdate = this.onTagsUpdate.bind(this)
 		this.onActiveFolderChanged = this.onActiveFolderChanged.bind(this)
 		store = getStore()
-		window.storeActions = storeActions
 	}
 
 	filterApps() {
@@ -32,8 +32,8 @@ export default class Content extends React.Component {
 			return apps
 		}
 		return apps.filter((app) => {
-			return app.name.indexOf(this.state.filterText) !== -1 || 
-			app.friendlyName.indexOf(this.state.filterText) !== -1
+			return app.name.toLowerCase().indexOf(this.state.filterText) !== -1 || 
+			app.friendlyName.toLowerCase().indexOf(this.state.filterText) !== -1
 		})
 	}
 

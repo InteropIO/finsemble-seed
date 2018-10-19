@@ -17,7 +17,7 @@ export default class SearchBox extends React.Component {
 		}, () => {
 			getStore().setValue({
 				field: 'filterText', 
-				value: this.state.search
+				value: this.state.search.toLowerCase()
 			})
 		})
 	}
