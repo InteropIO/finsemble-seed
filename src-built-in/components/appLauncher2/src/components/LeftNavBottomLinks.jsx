@@ -1,9 +1,9 @@
-import React from  'react'
+import React from 'react'
 
 const bottomEntries = [
-'New folder',
-'New dashboard',
-'App catalog'
+	'New App',
+	'New Dashboard',
+	'App Catalog'
 ]
 
 export default class LeftNavBottomLinks extends React.Component {
@@ -15,17 +15,17 @@ export default class LeftNavBottomLinks extends React.Component {
 	render() {
 		return (
 			<div className="bottom">
-			{
-				bottomEntries.map((entry, index) => {
-					let className = 'complex-menu-section-toggle'
-					return (
-						<div className={className} key={index}>
-						{entry}
-						</div>
+				{
+					bottomEntries.map((entry, index) => {
+						let className = 'complex-menu-section-toggle'
+						return (
+							<div className={className} key={index}>
+								{entry}
+							</div>
 						)
-				})
-			}
+					})
+				}
 			</div>
-			)
+		)
 	}
 }
