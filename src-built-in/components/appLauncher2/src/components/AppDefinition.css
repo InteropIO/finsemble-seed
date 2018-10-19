@@ -10,6 +10,15 @@
   font-size: 11px;
 }
 
+.app-item-tags {
+  display: flex;
+  align-items: center;
+}
+
+.app-item-tags i {
+  padding-right: 6px;
+}
+
 .app-item:hover {
   background-color: var(--slate3);
 }

@@ -58,7 +58,7 @@ export default class TagsMenu extends React.Component {
 	render() {
 		return (
 			<div className="tags-menu-wrapper" onClick={this.toggleMenu}>
-				<span><i className="ff-ungrid" />{this.props.label}</span>
+				<span><i className="ff-tag" />{this.props.label}</span>
 				{this.state.isVisible && this.renderList()} 
 			</div>
 			)
