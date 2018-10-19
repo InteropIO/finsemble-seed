@@ -708,8 +708,8 @@
 		"AppMarket": {
 			"window": {
 				"url": "$applicationRoot/components/appMarket/appMarket.html",
-				"width": 700,
-				"height": 800,
+				"width": 800,
+				"height": 700,
 				"options": {
 					"autoShow": true,
 					"resizable": false

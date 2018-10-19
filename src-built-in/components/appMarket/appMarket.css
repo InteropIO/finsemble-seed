@@ -4,6 +4,10 @@
 	height: 100%;
 }
 
+.appMarket .market-content {
+	position: relative;
+}
+
 .hero-main {
 	display: flex;
 	flex-direction: row;
@@ -283,7 +287,6 @@
 	line-height: normal;
 	letter-spacing: normal;
 	color: #ffffff;
-	padding: 2px;
 }
 
 .search-main .tag-selector .tag-selector-label .ff-tag {
@@ -300,7 +303,6 @@
 .search-main .tag-selector .tag-selector-content {
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
 	width: 132px;
 	height: 214px;
 	border-radius: 3px;
@@ -308,14 +310,15 @@
 	text-overflow: ellipsis;
 	overflow-y: auto;
 	z-index: 1;
+	position: absolute;
 }
 
 .search-main .tag-selector .tag-selector-content .tag-selector-item {
-	padding: 2px 0;
 	width: 103px;
 	height: 19px;
 	font-size: 11px;
 	color: #ffffff;
+	align-self: center;
 }
 
 .search-main .tag-selector .tag-selector-content.hidden {

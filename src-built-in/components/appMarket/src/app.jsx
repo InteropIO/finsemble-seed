@@ -147,7 +147,9 @@ export default class AppMarket extends React.Component {
 		return (
 			<div>
 				<SearchBar backButton={this.state.activePage !== "home"} tags={tags} activeTags={activeTags} tagSelected={this.addTag} removeTag={this.removeTag} goHome={this.goHome} changeSearch={this.changeSearch} />
-				{pageContents}
+				<div className="market_content">
+					{pageContents}
+				</div>
 			</div>
 		);
 	}
