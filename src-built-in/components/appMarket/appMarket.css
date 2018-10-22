@@ -551,6 +551,7 @@
   	line-height: normal;
 	letter-spacing: normal;
 	padding: 5px 0;
+	margin: 0 28px;
 }
 
 .app-notes p {
@@ -569,7 +570,8 @@
 	height: 15px;
 	font-weight: bold;
 	font-size: 14px;
-  	color: #00adff;
+	color: #00adff;
+	padding-bottom: 4px;
 }
 
 .app-showcase .description-content {
@@ -599,10 +601,11 @@
   	line-height: normal;
 	letter-spacing: normal;
 	padding: 5px 0;
+	margin: 0 150px 0 28px;
 }
 
 .app-showcase .version {
-	width: 46px;
+	width: 80px;
   	height: 15px;
 }
 
@@ -626,7 +629,8 @@
 	width: auto;
   	height: auto;
   	border-radius: 2px;
-  	background-color: #67829a;
+	background-color: #67829a;
+	margin-right: 8px;
 }
 
 .app-showcase .tag-label .label-content {
