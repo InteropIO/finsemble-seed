@@ -4,6 +4,7 @@
 	height: 100%;
 	margin-left: 0;
 	margin-right: 0;
+	overflow-y: hidden !important;
 }
 
 .appMarket .market-content {
@@ -223,6 +224,7 @@
 	width: 67px;
   	height: 23px;
 	background-color: #005bc5;
+	border: none;
 	font-family: Roboto;
 	font-size: 10px;
 	font-weight: normal;
@@ -553,6 +555,7 @@
 .app-showcase .app-notes .developer-content {
 	align-self: flex-start;
 	padding: 5px 0;
+	color: white;
 }
 
 .app-showcase .showcase-label {
@@ -566,12 +569,18 @@
 
 .app-showcase .description-content {
 	width: 534px;
-  	height: 32px;
+	height: 32px;
+	color: white;
 }
 
 .app-showcase .release-notes-content {
 	width: 540px;
-  	height: auto;
+	height: auto;
+	color: white;
+}
+
+.app-showcase .version-content {
+	color: white;
 }
 
 .app-showcase .dev-notes {
@@ -588,7 +597,12 @@
 
 .app-showcase .updated {
 	width: 115px;
-  	height: 15px;
+	height: 15px;
+	color: white;
+}
+
+.app-showcase .support-content .support {
+	color: white;
 }
 
 .app-showcase .tags {

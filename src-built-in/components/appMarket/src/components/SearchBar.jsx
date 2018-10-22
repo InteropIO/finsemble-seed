@@ -26,6 +26,13 @@ class SearchBar extends Component {
 		this.selectTag = this.selectTag.bind(this);
 		this.removeTag = this.removeTag.bind(this);
 	}
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.activeTags.length === 0 && !nextProps.backButton) {
+			this.setState({
+				searchValue: ""
+			});
+		}
+	}
 	changeSearch(e) {
 		this.setState({
 			searchValue: e.target.value
@@ -47,7 +54,7 @@ class SearchBar extends Component {
 			this.props.removeTag(tag);
 		}
 
-		if (this.props.activeTags.length === 1) {
+		if (this.props.activeTags.length <= 1) {
 			this.setState({
 				searchValue: ""
 			}, callParent);

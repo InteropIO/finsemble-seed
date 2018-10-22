@@ -81,6 +81,8 @@ class AppShowcase extends Component {
 			index++;
 		}
 
+		let addApp = this.props.app.installed ? Function.prototype : this.addApp;
+
 		return (
 			<div className="app-showcase">
 				<Modal open={this.state.imageModalOpen} closeModal={this.closeModal}>
@@ -101,7 +103,7 @@ class AppShowcase extends Component {
 						<img className="header-icon" src={iconUrl} />
 						<h3 className="appName">{name}</h3>
 					</div>
-					<button className={this.state.entitled ? "action-button disabled" : "action-button"} disabled={this.state.entitled} onClick={this.addApp}>
+					<button className={this.state.entitled ? "action-button disabled" : "action-button"} disabled={this.state.entitled} onClick={addApp}>
 						{this.props.app.installed ? (
 							<span className="action-button-label">Open</span>
 						) : (

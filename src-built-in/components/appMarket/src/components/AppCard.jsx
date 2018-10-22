@@ -57,9 +57,11 @@ class AppCard extends Component {
 
 		let entitled = this.state.entitled ? " entitled" : "";
 
+		let addApp = this.props.installed ? Function.prototype : this.addApp;
+
 		return (
 			<div className='app-card' onClick={this.openAppShowcase}>
-				<div className="app-image-container" onClick={this.addApp}>
+				<div className="app-image-container" onClick={addApp}>
 					<i className={imageIconClasses}></i>
 					<img className={'app-image' + entitled} src={imageUrl} onMouseEnter={this.toggleHighlight} onMouseLeave={this.toggleHighlight} />
 				</div>
