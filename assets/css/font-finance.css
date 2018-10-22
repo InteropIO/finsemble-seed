@@ -179,9 +179,6 @@
 .ff-fundamentals:before {
   content: "\27";
 }
-.ff-dashboard:before {
-  content: "\30";
-}
 .ff-linker:before {
   content: "\31";
 }
@@ -326,9 +323,12 @@
 .ff-alert:before {
   content: "\e001";
 }
-.ff-new-dashboard:before {
-  content: "\e002";
-}
 .ff-favorite:before {
   content: "\e003";
+}
+.ff-dashboard:before {
+  content: "\e004";
+}
+.ff-dashboard-new:before {
+  content: "\e005";
 }

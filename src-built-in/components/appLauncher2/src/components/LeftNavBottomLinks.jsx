@@ -2,7 +2,7 @@ import React from 'react'
 
 const bottomEntries = [
 	{ name: 'New App', icon: 'ff-new-workspace' },
-	{ name: 'New Dashboard', icon: 'ff-new-dashboard' },
+	{ name: 'New Dashboard', icon: 'ff-dashboard-new' },
 	{ name: 'App Catalog', icon: 'ff-list' }
 ]
 
