@@ -3,13 +3,14 @@ import { getStore } from './LauncherStore'
 export default {
 	addNewFolder,
 	addAppToFolder,
-	addTag,
+	removeAppFromFolder,
 	deleteTag,
 	reorderFolders,
 	getFolders,
 	getActiveFolder,
 	getSearchText,
 	getSortBy,
+	addTag,
 	getTags
 }
 
@@ -31,8 +32,7 @@ function getFolders() {
 }
 
 function reorderFolders(destIndex, srcIndex) {
-	const store = getStore()
-	const folders = store.getValue({ field: 'appFolders.folders' })
+	const folders = getFolders()
 	// Swap array elements
 	const temp = folders[srcIndex]
 	folders[srcIndex] = folders[destIndex]
@@ -47,7 +47,7 @@ function addNewFolder(name) {
 		return folder.name.toLowerCase().indexOf('new folder') > -1
 	})
 	const newFolder = {
-		name: name || `New folder ${newFolders.length+1}`,
+		name: name || `New folder ${newFolders.length + 1}`,
 		type: 'folder',
 		disableUserRemove: true,
 		icon: "ff-folder",
@@ -59,24 +59,39 @@ function addNewFolder(name) {
 }
 
 function addAppToFolder(folder, app) {
-	const store = getStore()
-	const folders = store.getValue({ field: 'appFolders.folders' })
+	const folders = getFolders()
 	const index = folders.findIndex((item) => {
 		return item.name === folder.name
 	})
-	// Add app to folder
-	folders[index].appDefinitions.push(app)
-	// Update folders in store
-	_setFolders(folders)
+	// Add app to folder & make sure its added once
+	const apps = folders[index].appDefinitions
+	const foundApp = apps.find((item) => {
+		return item.name === app.name
+	})
+
+	if (!foundApp) {
+		apps.push(app)
+		_setFolders(folders)
+	}
 }
 
+function removeAppFromFolder(folder, app) {
+	const folders = getFolders()
+	const folderIndex = folders.findIndex((item) => {
+		return item.name === folder.name
+	})
+	const apps = folders[folderIndex].appDefinitions
+	const appIndex = apps.findIndex((item) => {
+		return item.name === app.name
+	})
+	// Remove app from apps in folder & Update folders
+	apps.splice(appIndex, 1) && _setFolders(folders)
+}
 
 function getActiveFolder() {
-	return getStore().getValue({
-		field: 'appFolders'
-	}).folders.filter((folder) => {
+	return getFolders().find((folder) => {
 		return folder.name == getStore().getValue({ field: 'activeFolder' })
-	})[0]
+	})
 }
 
 function getSearchText() {
