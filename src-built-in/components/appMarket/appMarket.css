@@ -360,6 +360,7 @@
 
 .search-main .search-back {
 	border: none;
+	color: #FFFFFF;
 	background-color: inherit;
 	cursor: pointer;
 }
