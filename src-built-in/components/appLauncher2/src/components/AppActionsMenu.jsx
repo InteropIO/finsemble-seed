@@ -6,9 +6,9 @@
 
 import "../../../../../assets/css/font-finance.css";
 import './AppActionsMenu.css'
-import React from  'react'
+import React from 'react'
 import storeActions from '../stores/StoreActions'
-import {getStore} from '../stores/LauncherStore'
+import { getStore } from '../stores/LauncherStore'
 
 
 export default class AppActionsMenu extends React.Component {
@@ -33,6 +33,10 @@ export default class AppActionsMenu extends React.Component {
 
 	//TODO: Implement handlers
 	onAddToFavorite() {
+		const favorite = storeActions.getFolders().find((folder) => {
+			return folder.name === 'Favorites'
+		})
+		storeActions.addAppToFolder(favorite, this.props.app)
 		this.toggleMenu()
 	}
 
@@ -41,29 +45,31 @@ export default class AppActionsMenu extends React.Component {
 	}
 
 	onRemove() {
+		storeActions.removeAppFromFolder(
+			storeActions.getActiveFolder(),
+			this.props.app)
 		this.toggleMenu()
 	}
 
 	renderList() {
 		const folder = storeActions.getActiveFolder()
-		const styles = {right: 0}
 		return (
-		<div onMouseLeave={this.state.isVisible ? this.toggleMenu : null} 
-			className="actions-menu" style={styles}>
-			<ul>
-				<li onClick={this.onAddToFavorite} >Add Favorite</li>
-				<li onClick={this.onViewInfo}>View Info</li>
-				<li onClick={this.onRemove}>Remove from {folder.name}</li>
-			</ul>
-		</div>
+			<div onMouseLeave={this.state.isVisible ? this.toggleMenu : null}
+				className="actions-menu" style={{ right: 0 }}>
+				<ul>
+					<li onClick={this.onAddToFavorite} >Add Favorite</li>
+					<li onClick={this.onViewInfo}>View Info</li>
+					<li onClick={this.onRemove}>Remove from {folder.name}</li>
+				</ul>
+			</div>
 		)
 	}
 	render() {
 		return (
 			<div className="actions-menu-wrapper" onClick={this.toggleMenu}>
 				<span><i className="ff-dots-vert" /></span>
-				{this.state.isVisible && this.renderList()} 
+				{this.state.isVisible && this.renderList()}
 			</div>
-			)
+		)
 	}
 }

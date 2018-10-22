@@ -46,7 +46,7 @@ export default class AppDefinition extends React.Component {
 					{app.friendlyName}
 				</span>
 				<AppTagsList tags={app.tags} />
-				<AppActionsMenu />
+				<AppActionsMenu app={app}/>
 			</div>
 		)
 	}
