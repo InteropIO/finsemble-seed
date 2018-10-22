@@ -109,6 +109,7 @@
 	height: 180px;
 	box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.25);
 	background-color: #495a69;
+	padding: 5px;
 }
 
 .app-card .app-image {
@@ -247,7 +248,7 @@
 	justify-content: space-between;
 	align-items: center;
 	margin-bottom: 6px;
-	padding: 0px 36px;
+	padding: 0px 32px;
 }
 
 .carousel-header .see-more {
@@ -364,6 +365,7 @@
 
 .search-main .search-back {
 	border: none;
+	color: #FFFFFF;
 	background-color: inherit;
 	cursor: pointer;
 }
@@ -572,7 +574,6 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	align-items: center;
 	font-family: Roboto;
   	font-size: 11px;
   	font-style: normal;
@@ -580,6 +581,15 @@
   	line-height: normal;
 	letter-spacing: normal;
 	padding: 5px 0;
+	margin: 0 28px;
+}
+
+.app-notes p {
+	margin: 0;
+}
+
+.app-notes a {
+	color: var(--blue2);
 }
 
 .app-showcase .app-notes .developer-content {
@@ -594,7 +604,8 @@
 	height: 15px;
 	font-weight: bold;
 	font-size: 14px;
-  	color: #00adff;
+	color: #00adff;
+	padding-bottom: 4px;
 }
 
 .app-showcase .description-content {
@@ -617,11 +628,18 @@
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
+	font-family: Roboto;
+  	font-size: 11px;
+  	font-style: normal;
+  	font-stretch: normal;
+  	line-height: normal;
+	letter-spacing: normal;
 	padding: 5px 0;
+	margin: 0 150px 0 28px;
 }
 
 .app-showcase .version {
-	width: 46px;
+	width: 80px;
   	height: 15px;
 }
 
@@ -645,7 +663,8 @@
 	width: auto;
   	height: auto;
   	border-radius: 2px;
-  	background-color: #67829a;
+	background-color: #67829a;
+	margin-right: 8px;
 }
 
 .app-showcase .tag-label .label-content {
