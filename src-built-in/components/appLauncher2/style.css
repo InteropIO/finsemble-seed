@@ -156,9 +156,14 @@ img {
     align-items: center;
 }
 
+.left-nav-label .ff-favorite {
+    color: var(--yellow3);
+}
+
 .complex-menu-section-toggle i {
     padding-right: 4px;
     font-size: 13px;
+    color: var(--blue3);
 }
 
 .complex-menu-section-toggle:hover {
