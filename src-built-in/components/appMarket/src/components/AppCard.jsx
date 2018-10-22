@@ -22,6 +22,7 @@ class AppCard extends Component {
 		this.toggleHighlight = this.toggleHighlight.bind(this);
 		this.openAppShowcase = this.openAppShowcase.bind(this);
 		this.addApp = this.addApp.bind(this);
+		this.removeApp = this.removeApp.bind(this);
 		this.addTag = this.addTag.bind(this);
 	}
 	toggleHighlight() {
@@ -37,6 +38,11 @@ class AppCard extends Component {
 		e.stopPropagation();
 		this.props.addApp(this.state.appName)
 	}
+	removeApp(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		this.props.removeApp(this.state.appName);
+	}
 	addTag(name, e) {
 		e.preventDefault();
 		e.stopPropagation();
@@ -47,17 +53,13 @@ class AppCard extends Component {
 
 		let { appName: title } = this.state;
 
-		// let appTags = this.props.tags.map((tag, i) => {
-		// 	return tag[0].toUpperCase() + tag.substring(1);
-		// });
-
 		let imageIconClasses = "ff-check-circle";
 		if (this.state.highlighted || this.props.installed) imageIconClasses += " highlighted"
 		else imageIconClasses += " faded";
 
 		let entitled = this.state.entitled ? " entitled" : "";
 
-		let addApp = this.props.installed ? Function.prototype : this.addApp;
+		let addApp = this.props.installed ? this.removeApp : this.addApp;
 
 		return (
 			<div className='app-card' onClick={this.openAppShowcase}>

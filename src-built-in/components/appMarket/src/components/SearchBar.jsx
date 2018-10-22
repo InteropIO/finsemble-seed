@@ -67,19 +67,40 @@ class SearchBar extends Component {
 			tagListClass += " hidden";
 		}
 
-		let toastClass = "success-toast";
-		if (!this.props.installedApp) {
+		let toastClass = "toast-content";
+		let toast = null;
+		if (this.props.installationActionTaken !== null) {
+			switch (this.props.installationActionTaken) {
+				case "add":
+					toast = (
+						<div className={toastClass}>
+							<span className='toast'>
+								<i className='ff-check-mark'></i>
+								&nbsp;&nbsp;Added to My Apps
+							</span>
+						</div>
+					);
+					break;
+				case "remove":
+					toast = (
+						<div className={toastClass}>
+							<span className='toast'>
+								<i className='ff-close'></i>
+								&nbsp;&nbsp;Removed from My Apps
+							</span>
+						</div>
+					);
+					break;
+				default:
+					break;
+			}
+		} else {
 			toastClass += " not-shown";
 		}
 
 		return (
 			<div className='search-main'>
-				{this.props.installedApp !== null ? <div className={toastClass}>
-					<span className='toast'>
-						<i className='ff-check-mark'></i>
-						&nbsp;&nbsp;Added to My Apps
-					</span>
-				</div> : null}
+				{toast}
 				<div className="search-action-items">
 					{this.props.backButton ?
 						<button className='search-back' onClick={this.props.goHome}>

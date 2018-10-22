@@ -81,7 +81,7 @@ class AppShowcase extends Component {
 			index++;
 		}
 
-		let addApp = this.props.app.installed ? Function.prototype : this.addApp;
+		let addApp = this.props.app.installed ? this.removeApp : this.addApp;
 
 		return (
 			<div className="app-showcase">
@@ -103,16 +103,22 @@ class AppShowcase extends Component {
 						<img className="header-icon" src={iconUrl} />
 						<h3 className="appName">{name}</h3>
 					</div>
-					<button className={this.state.entitled ? "action-button disabled" : "action-button"} disabled={this.state.entitled} onClick={addApp}>
-						{this.props.app.installed ? (
-							<span className="action-button-label">Open</span>
-						) : (
-							<span className="action-button-label">
-								<i className="ff-plus"></i>
-								&nbsp;My Apps
-							</span>
-						)}
-					</button>
+					<div className='action-button-container'>
+						<button className={this.state.entitled ? "action-button disabled" : "action-button"} disabled={this.state.entitled} onClick={addApp}>
+							{this.props.app.installed ? (
+								<span className="action-button-label">Open</span>
+							) : (
+								<span className="action-button-label">
+									<i className="ff-plus"></i>
+									&nbsp;My Apps
+								</span>
+							)}
+						</button>
+						{this.props.app.installed ? <div className='remove-button'>
+							<i className='ff-close'></i>
+							&nbsp;Remove App
+						</div> : null}
+					</div>
 				</div>
 				<div className="image-carousel-container">
 					{/* <div className="paginate_carat_left" onClick={this.nextImage} /> */}

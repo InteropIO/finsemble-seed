@@ -172,6 +172,7 @@
 .app-card .ff-check-circle {
 	position: absolute;
 	z-index: 1;
+	cursor: pointer;
 }
 
 .app-card .ff-check-circle.faded {
@@ -306,7 +307,7 @@
 	100% {opacity: 1;}
 }
 
-.search-main .success-toast {
+.search-main .toast-content {
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
@@ -335,21 +336,25 @@
 	pointer-events: none;
 }
 
-.search-main .success-toast.not-shown {
+.search-main .toast-content.not-shown {
 	opacity: 0;
 	animation-name: fadeOut;
 	animation-duration: 2s;
 }
 
-.search-main .success-toast .toast {
+.search-main .toast-content .toast {
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
 }
 
-.search-main .success-toast .ff-check-mark {
+.search-main .toast-content .ff-check-mark {
 	color: #27cc8d;
+}
+
+.search-main .toast-content .ff-close {
+	color: #ee5c5c;
 }
 
 .search-main .search-input:focus {
@@ -498,6 +503,31 @@
   	line-height: normal;
   	letter-spacing: normal;
 	color: #ffffff;
+}
+
+.app-showcase .header .action-button-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	font-family: Roboto;
+	font-size: 12px;
+	font-weight: normal;
+	font-style: normal;
+	font-stretch: normal;
+	line-height: normal;
+	letter-spacing: normal;
+	color: #ffffff;
+}
+
+.app-showcase .header .action-button-container .remove-button {
+	height: 16px;
+	padding: 5px 0;
+	cursor: pointer;
+}
+
+.app-showcase .header .action-button-container .remove-button .ff-close {
+	color: red;
+	padding-right: 5px;
 }
 
 .app-showcase .header .action-button {

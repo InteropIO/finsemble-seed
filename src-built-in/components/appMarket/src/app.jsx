@@ -28,7 +28,7 @@ export default class AppMarket extends React.Component {
 		this.state = {
 			activePage: "home",
 			activeApp: null,
-			installedApp: null
+			installationActionTaken: null
 		};
 		appCatalogStore.initialize();
 		appCatalogStore.Actions.setTags();
@@ -41,6 +41,7 @@ export default class AppMarket extends React.Component {
 		this.changeSearch = this.changeSearch.bind(this);
 		this.openAppShowcase = this.openAppShowcase.bind(this);
 		this.addApp = this.addApp.bind(this);
+		this.removeApp = this.removeApp.bind(this);
 		this.stopShowingInstalledNotification = this.stopShowingInstalledNotification.bind(this);
 	}
 	addTag(tag) {
@@ -102,14 +103,23 @@ export default class AppMarket extends React.Component {
 
 		this.setState({
 			apps: appCatalogStore.Actions.getApps(),
-			installedApp: true
+			installationActionTaken: "add"
 		}, () => {
 			setTimeout(this.stopShowingInstalledNotification, 2000);
 		});
 	}
+	removeApp(appName) {
+		//TODO: This won't work when this comes from a db
+		appCatalogStore.Actions.removeApp(appName);
+
+		this.setState({
+			apps: appCatalogStore.Actions.getApps(),
+			installationActionTaken: "remove"
+		})
+	}
 	stopShowingInstalledNotification() {
 		this.setState({
-			installedApp: false
+			installationActionTaken: null
 		});
 	}
 	openAppShowcase(appName) {
@@ -145,10 +155,10 @@ export default class AppMarket extends React.Component {
 		let pageContents;
 
 		if (this.state.activePage === "home") {
-			pageContents = <Home cards={apps} openAppShowcase={this.openAppShowcase} seeMore={this.addTag} addApp={this.addApp} addTag={this.addTag} />;
+			pageContents = <Home cards={apps} openAppShowcase={this.openAppShowcase} seeMore={this.addTag} addApp={this.addApp} removeApp={this.removeApp} addTag={this.addTag} />;
 		} else if (this.state.activePage === "appSearch") {
 			let results = filteredApps.length > 0 ? filteredApps : apps;
-			pageContents = <AppResults cards={results} tags={activeTags} addApp={this.addApp} openAppShowcase={this.openAppShowcase} addTag={this.addTag} />;
+			pageContents = <AppResults cards={results} tags={activeTags} addApp={this.addApp} removeApp={this.removeApp} openAppShowcase={this.openAppShowcase} addTag={this.addTag} />;
 		} else if (this.state.activePage === "showcase") {
 			pageContents = <AppShowcase app={this.state.activeApp} addApp={this.addApp} />;
 		} else {
@@ -157,7 +167,7 @@ export default class AppMarket extends React.Component {
 
 		return (
 			<div>
-				<SearchBar backButton={this.state.activePage !== "home"} tags={tags} activeTags={activeTags} tagSelected={this.addTag} removeTag={this.removeTag} goHome={this.goHome} changeSearch={this.changeSearch} installedApp={this.state.installedApp} />
+				<SearchBar backButton={this.state.activePage !== "home"} tags={tags} activeTags={activeTags} tagSelected={this.addTag} removeTag={this.removeTag} goHome={this.goHome} changeSearch={this.changeSearch} installationActionTaken={this.state.installationActionTaken} />
 				<div className="market_content">
 					{pageContents}
 				</div>
