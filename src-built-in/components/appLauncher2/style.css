@@ -70,6 +70,11 @@ img {
     background-color: var(--content-nav-background-color);
 }
 
+.left-nav-label {
+    display: flex;
+    align-items: flex-start;
+}
+
 .complex-menu-left-nav-header {
     background-color: var(--content-nav-header-background-color);
     font-weight: var(--content-nav-header-font-weight);
@@ -146,7 +151,14 @@ img {
 
 .complex-menu-section-toggle {
     padding: 5px 12px 5px 0px;
-    padding-left: 30px;
+    padding-left: 18px;
+    display: flex;
+    align-items: center;
+}
+
+.complex-menu-section-toggle i {
+    padding-right: 4px;
+    font-size: 13px;
 }
 
 .complex-menu-section-toggle:hover {
@@ -549,7 +561,9 @@ select:focus, option:focus {
   
 .search-box {
 	margin-bottom: 10px;
-	padding-left: .75em;
+    padding-left: .75em;
+    display: flex;
+    align-items: flex-start; 
 }
 .search-box input {
 	color: #fff;
