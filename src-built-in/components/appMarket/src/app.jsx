@@ -74,6 +74,7 @@ export default class AppMarket extends React.Component {
 	}
 	goHome() {
 		appCatalogStore.Actions.clearTags();
+		appCatalogStore.Actions.clearSearchResults();
 		this.setState({
 			activePage: "home",
 			activeApp: null
@@ -144,10 +145,10 @@ export default class AppMarket extends React.Component {
 		let pageContents;
 
 		if (this.state.activePage === "home") {
-			pageContents = <Home cards={apps} openAppShowcase={this.openAppShowcase} seeMore={this.addTag} addApp={this.addApp} />;
+			pageContents = <Home cards={apps} openAppShowcase={this.openAppShowcase} seeMore={this.addTag} addApp={this.addApp} addTag={this.addTag} />;
 		} else if (this.state.activePage === "appSearch") {
 			let results = filteredApps.length > 0 ? filteredApps : apps;
-			pageContents = <AppResults cards={results} tags={activeTags} addApp={this.addApp} openAppShowcase={this.openAppShowcase} />;
+			pageContents = <AppResults cards={results} tags={activeTags} addApp={this.addApp} openAppShowcase={this.openAppShowcase} addTag={this.addTag} />;
 		} else if (this.state.activePage === "showcase") {
 			pageContents = <AppShowcase app={this.state.activeApp} addApp={this.addApp} />;
 		} else {

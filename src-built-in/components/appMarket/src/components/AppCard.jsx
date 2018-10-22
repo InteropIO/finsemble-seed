@@ -22,6 +22,7 @@ class AppCard extends Component {
 		this.toggleHighlight = this.toggleHighlight.bind(this);
 		this.openAppShowcase = this.openAppShowcase.bind(this);
 		this.addApp = this.addApp.bind(this);
+		this.addTag = this.addTag.bind(this);
 	}
 	toggleHighlight() {
 		this.setState({
@@ -36,14 +37,19 @@ class AppCard extends Component {
 		e.stopPropagation();
 		this.props.addApp(this.state.appName)
 	}
+	addTag(name, e) {
+		e.preventDefault();
+		e.stopPropagation();
+		this.props.addTag(name);
+	}
 	render() {
 		let imageUrl = this.props.images !== undefined ? this.props.images[0].url : "../assets/placeholder.svg";
 
 		let { appName: title } = this.state;
 
-		let appTags = this.props.tags.map((tag, i) => {
-			return tag[0].toUpperCase() + tag.substring(1);
-		});
+		// let appTags = this.props.tags.map((tag, i) => {
+		// 	return tag[0].toUpperCase() + tag.substring(1);
+		// });
 
 		let imageIconClasses = "ff-check-circle";
 		if (this.state.highlighted || this.props.installed) imageIconClasses += " highlighted"
@@ -62,7 +68,13 @@ class AppCard extends Component {
 					<span className={"app-tags" + entitled}>
 						<i className="ff-tag"></i>
 						<span className='tag-names'>
-							{appTags.join(", ")}
+							{this.props.tags.map((tag, i) => {
+								return (
+									<span key={i} className='tag-name' onClick={this.addTag.bind(this, tag)}>
+										{tag[0].toUpperCase() + tag.substring(1)}{i !== this.props.tags.length - 1 ? ", " : null}
+									</span>
+								);
+							})}
 						</span>
 					</span>
 				</div>

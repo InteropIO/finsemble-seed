@@ -97,21 +97,24 @@ class AppShowcase extends Component {
 					</div>
 				) : null}
 				<div className="header">
-					<img className="header-icon" src={iconUrl} />
-					<h3 className="appName">{name}</h3>
+					<div className='icon-title-container'>
+						<img className="header-icon" src={iconUrl} />
+						<h3 className="appName">{name}</h3>
+					</div>
 					<button className={this.state.entitled ? "action-button disabled" : "action-button"} disabled={this.state.entitled} onClick={this.addApp}>
 						{this.props.app.installed ? (
 							<span className="action-button-label">Open</span>
 						) : (
 							<span className="action-button-label">
 								<i className="ff-plus"></i>
-								"My Apps"
+								&nbsp;My Apps
 							</span>
 						)}
 					</button>
 				</div>
 				<div className="image-carousel-container">
-					<div className="paginate_carat_left" onClick={this.nextImage} />
+					{/* <div className="paginate_carat_left" onClick={this.nextImage} /> */}
+					<i className='ff-chevron-left' onClick={this.nextImage}></i>
 					<div className="image-carousel">
 						{images.map((imageUrl, i) => {
 							return (
@@ -119,7 +122,8 @@ class AppShowcase extends Component {
 							);
 						})}
 					</div>
-					<div className="paginate_carat_right" onClick={this.previousImage} />
+					{/* <div className="paginate_carat_right" onClick={this.previousImage} /> */}
+					<i className='ff-chevron-right' onClick={this.previousImage}></i>
 				</div>
 				<div className="app-notes description">
 					<span className="showcase-label">Description</span>

@@ -96,6 +96,10 @@
 	margin: 0;
 }
 
+.app-showcase .image-carousel-container .ff-chevron-left, .app-showcase .image-carousel-container .ff-chevron-right {
+	margin: 0;
+}
+
 .app-card {
 	display: flex;
 	flex-direction: column;
@@ -157,6 +161,11 @@
 .app-card .footer .app-tags .tag-names {
 	text-overflow: ellipsis;
 	padding-left: 5px;
+}
+
+.app-card .footer .app-tags .tag-name:hover {
+	cursor: pointer;
+	text-decoration: underline;
 }
 
 .app-card .ff-check-circle {
@@ -269,7 +278,7 @@
 }
 
 .search-main .search-input {
-	width: 488px;
+	width: 462px;
 	color: #fff;
 	height: 17px;
 	background: none;
@@ -411,10 +420,6 @@
 	display: none;
 }
 
-.app-showcase {
-	overflow: scroll;
-}
-
 .app-showcase .app-showcase-no-results {
 	width: 264px;
 	height: 21px;
@@ -463,13 +468,20 @@
 .app-showcase .header {
 	display: flex;
 	flex-direction: row;
-	justify-content: space-between;
 	padding: 5px 0;
 }
 
+.app-showcase .header .icon-title-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: flex-start;
+	margin-left: 30px;
+}
+
 .app-showcase .header .header-icon {
-	width: 29px;
-  	height: 29px;
+	width: 31px;
+  	height: 31px;
   	border: solid 1px #3c4c58;
 }
 
@@ -490,6 +502,7 @@
 	width: 83px;
 	height: 30px;
 	background-color: blue;
+	border: none;
 }
 
 .app-showcase .header .action-button.disabled {
@@ -497,13 +510,16 @@
 }
 
 .app-showcase .header .action-button-label {
+	width: 48px;
+	height: 16px;
 	font-family: Roboto;
   	font-size: 14px;
   	font-weight: 300;
   	font-style: normal;
   	font-stretch: normal;
   	line-height: normal;
-  	letter-spacing: normal;
+	letter-spacing: normal;
+	text-align: center;
   	color: #ffffff;
 }
 

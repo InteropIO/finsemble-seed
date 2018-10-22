@@ -26,8 +26,8 @@ const Home = props => {
 	return (
 		<div>
 			<Hero cards={props.cards} openAppShowcase={props.openAppShowcase} />
-			<Carousel tag="Pizza" cards={carousel1} openAppShowcase={props.openAppShowcase} seeMore={props.seeMore} addApp={props.addApp} />
-			<Carousel tag="newrelease" cards={carousel2} openAppShowcase={props.openAppShowcase} seeMore={props.seeMore} addApp={props.addApp} />
+			<Carousel tag="Pizza" cards={carousel1} openAppShowcase={props.openAppShowcase} seeMore={props.seeMore} addApp={props.addApp} addTag={props.addTag} />
+			<Carousel tag="newrelease" cards={carousel2} openAppShowcase={props.openAppShowcase} seeMore={props.seeMore} addApp={props.addApp} addTag={props.addTag} />
 		</div>
 	);
 }

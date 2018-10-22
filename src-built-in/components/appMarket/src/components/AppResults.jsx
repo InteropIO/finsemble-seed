@@ -27,20 +27,26 @@ const AppResults = props => {
 		cardsForShowcase = props.cards;
 	}
 
+	console.log('cardsForShowcase: ', cardsForShowcase);
+
 
 	let cardRows = [];
 	let cardsInRow = [];
 	for (let i = 0; i < cardsForShowcase.length; i++) {
 		let card = cardsForShowcase[i];
+		let name = card.title !== undefined ? card.title : card.name;
 
 		if (cardsInRow.length === 4) {
 			cardRows.push(cardsInRow);
 			cardsInRow = [];
 		}
 
+		let key = "card-" + i + "-" + name.toLowerCase();
+		console.log('key: ', key);
+
 		cardsInRow.push(
-			<td key={"row-" + cardRows.length + "-card-" + i}>
-				<AppCard {...card} openAppShowcase={props.openAppShowcase} addApp={props.addApp} />
+			<td key={key}>
+				<AppCard {...card} openAppShowcase={props.openAppShowcase} addApp={props.addApp} addTag={props.addTag} />
 			</td>
 		);
 	}
