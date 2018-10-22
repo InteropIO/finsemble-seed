@@ -193,7 +193,6 @@ var Actions = {
 	onBoundsChanged(params) {
 		let bounds = params.data;
 		HeaderStore.setCompanionBounds(bounds);
-		if (HeaderStore.getMoving()) return;
 		if (HeaderStore.getState() === "small") {
 			let newBounds = Actions.getContractedBounds(bounds);
 			newBounds.persistBounds = false;
@@ -306,12 +305,6 @@ var Actions = {
 			//@note this was 500, it was lowered to 50 after improvements were made to the eventing system.
 		}, 50);
 
-	},
-	onCompanionMaximized() {
-		Logger.system.debug("Companion window maximized");
-		setTimeout(() => {
-			Actions.updateWindowPosition();
-		}, 500);
 	},
 	onCompanionMinimized() {
 		Logger.system.debug("Companion window minimized");

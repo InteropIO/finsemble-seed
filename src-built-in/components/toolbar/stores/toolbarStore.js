@@ -170,6 +170,7 @@ class _ToolbarStore {
 			}
 			done();
 		});
+
 		let onBoundsSet = (bounds) => {
 			bounds = bounds.data ? bounds.data : bounds;
 			self.Store.setValue({ field: "window-bounds", value: bounds });
