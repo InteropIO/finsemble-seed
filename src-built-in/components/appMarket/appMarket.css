@@ -2,6 +2,7 @@
 	background-color: #3c4c58;
 	background-image: linear-gradient(to top, rgb(60, 76, 88), rgb(48, 61, 71));
 	height: 100%;
+	margin: 0 !important;
 }
 
 .appMarket .market-content {
