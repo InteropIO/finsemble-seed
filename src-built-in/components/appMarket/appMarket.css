@@ -558,6 +558,10 @@
 	margin: 0;
 }
 
+.app-notes a {
+	color: var(--blue2);
+}
+
 .app-showcase .app-notes .developer-content {
 	align-self: flex-start;
 	padding: 5px 0;
