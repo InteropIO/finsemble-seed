@@ -448,14 +448,6 @@ select:focus, option:focus {
     background-color: transparent;
 }
 
-.add-new-folder {
-    padding: 10px 0 0 15px;
-}
-
-.add-new-folder i{
-    font-size: 12px;
-}
-
 .actions-menu-wrapper {
 	height: 17px;
 	color: #fff;
