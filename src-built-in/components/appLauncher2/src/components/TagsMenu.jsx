@@ -6,7 +6,7 @@
 
 import "../../../../../assets/css/font-finance.css";
 import './TagsMenu.css'
-import React from  'react'
+import React from 'react'
 
 /**
 * A reusable flyout component for tags and any other lists
@@ -41,26 +41,27 @@ export default class TagsMenu extends React.Component {
 
 	renderList() {
 		const items = this.props.list
-		const styles = this.props.align === 'right' ? {right: 0} : {left: 0}
+		const styles = this.props.align === 'right' ? { right: 0 } : { left: 0 }
 		return (
-		<div className="tags-menu" style={styles}>
-			<ul> {
-				items.map((item, index) => {
-					return <li key={index} 
-						onClick={() => this.onItemClick(item)}>
-						{item}
-					</li>
-				})
-			} </ul>
+			<div onMouseLeave={this.state.isVisible ? this.toggleMenu : null}
+				className="tags-menu" style={styles}>
+				<ul> {
+					items.map((item, index) => {
+						return <li key={index}
+							onClick={() => this.onItemClick(item)}>
+							{item}
+						</li>
+					})
+				} </ul>
 			</div>
-			)
+		)
 	}
 	render() {
 		return (
 			<div className="tags-menu-wrapper" onClick={this.toggleMenu}>
 				<span><i className="ff-tag" />{this.props.label}</span>
-				{this.state.isVisible && this.renderList()} 
+				{this.state.isVisible && this.renderList()}
 			</div>
-			)
+		)
 	}
 }
