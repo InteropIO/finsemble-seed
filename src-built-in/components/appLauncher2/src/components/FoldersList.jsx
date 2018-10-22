@@ -22,11 +22,7 @@ export default class FoldersList extends React.Component {
 		if (folder.name === 'Favorites') {
 			console.info('Dropped app in favorites.')
 		}
-		// Make sure app is not in folder already
-		// Before attemping to add it
-		folder.appDefinitions.findIndex((item) => {
-			return item.name === app.name
-		}) < 0 && storeActions.addAppToFolder(folder, app)
+		storeActions.addAppToFolder(folder, app)
 	}
 
 
