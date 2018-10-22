@@ -179,7 +179,6 @@ class _ToolbarStore {
 			}, Function.prototype);
 		}
 		let restoreWindow = (e) => {
-			e.cancel();
 			finsembleWindow.restore();
 		}
 		//Immediately restore on maximize.
@@ -193,15 +192,6 @@ class _ToolbarStore {
 		FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", "h"], () => {
 			self.hideToolbar();
 		});
-	}
-
-	/**
-	 * Function to handle maximize click
-	 * @memberof _ToolbarStore
-	 */
-	clickMaximize() {
-		var self = this;
-		FSBL.Clients.WindowClient.restore(Function.prototype);
 	}
 
 	/**
@@ -311,13 +301,10 @@ class _ToolbarStore {
 					self.retrieveSelfFromStorage(done);
 				},
 				function (done) {
-					FSBL.Clients.WindowClient.finWindow.addEventListener("maximized", function () {
-						self.clickMaximize();
-					});
-					FSBL.Clients.WindowClient.finWindow.addEventListener('focused', function () {
+					finsembleWindow.addEventListener('focused', function () {
 						self.onFocus();
 					});
-					FSBL.Clients.WindowClient.finWindow.addEventListener('blurred', function () {
+					finsembleWindow.addEventListener('blurred', function () {
 						self.onBlur();
 					});
 					done();
