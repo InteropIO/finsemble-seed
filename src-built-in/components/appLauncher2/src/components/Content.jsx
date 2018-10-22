@@ -23,6 +23,7 @@ export default class Content extends React.Component {
 		this.onSearch = this.onSearch.bind(this)
 		this.onTagsUpdate = this.onTagsUpdate.bind(this)
 		this.onActiveFolderChanged = this.onActiveFolderChanged.bind(this)
+		this.onAppListUpdate = this.onAppListUpdate.bind(this)
 		store = getStore()
 	}
 
@@ -72,13 +73,26 @@ export default class Content extends React.Component {
 			tags: data.value
 		})
 	}
+	/**
+	 * Mainly used to know when a user remove an app from a folder
+	 * Because there is no way to subscribe to 
+	 * folders[index].appDefinitions updates.
+	 */
+	onAppListUpdate() {
+		this.setState({
+			folder: storeActions.getActiveFolder()
+		})
+	}
 
 	componentWillMount() {
 		store.addListener({field: 'activeFolder'}, this.onActiveFolderChanged)
 		store.addListener({field: 'filterText'}, this.onSearch)
 		store.addListener({field: 'sortBy'}, this.onSort)
 		store.addListener({field: 'tags'}, this.onTagsUpdate)
-
+		// We can't subscribe to folders[index].appDefinitions
+		// So we are looking at appFolders.folders update 
+		// Since that update is done After removing an app of definitions
+		store.addListener({field: 'appFolders.folders'}, this.onAppListUpdate)
 	}
 
 	componentWillUnmount() {
@@ -86,7 +100,7 @@ export default class Content extends React.Component {
 		store.removeListener({field: 'filterText'}, this.onSearch)
 		store.removeListener({field: 'sortBy'}, this.onSort)
 		store.removeListener({field: 'tags'}, this.onTagsUpdate)
-
+		store.removeListener({field: 'appFolders.folders'}, this.onAppListUpdate)
 	}
 
 	renderAppList() {
