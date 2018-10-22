@@ -4,8 +4,6 @@
 * 
 */
 
-import "../../../../../assets/css/font-finance.css";
-import './TagsMenu.css'
 import React from 'react'
 
 /**

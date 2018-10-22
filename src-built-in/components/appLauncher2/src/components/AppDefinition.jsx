@@ -1,5 +1,3 @@
-import './AppDefinition.css'
-
 import React from 'react'
 import AppActionsMenu from './AppActionsMenu'
 import AppTagsList from './AppTagsList'

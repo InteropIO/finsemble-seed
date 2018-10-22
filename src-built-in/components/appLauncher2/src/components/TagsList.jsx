@@ -1,4 +1,3 @@
-import './TagsList.css'
 import React from  'react'
 import storeActions from '../stores/StoreActions'
 import {getStore} from '../stores/LauncherStore'

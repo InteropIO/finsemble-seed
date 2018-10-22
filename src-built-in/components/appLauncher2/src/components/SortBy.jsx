@@ -1,4 +1,3 @@
-import './SortBy.css'
 import React from  'react'
 import {getStore} from '../stores/LauncherStore'
 import storeActions from '../stores/StoreActions'

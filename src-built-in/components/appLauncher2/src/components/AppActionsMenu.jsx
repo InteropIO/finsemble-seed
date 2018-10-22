@@ -4,8 +4,6 @@
 * 
 */
 
-import "../../../../../assets/css/font-finance.css";
-import './AppActionsMenu.css'
 import React from 'react'
 import storeActions from '../stores/StoreActions'
 import { getStore } from '../stores/LauncherStore'

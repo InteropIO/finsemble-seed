@@ -1,4 +1,3 @@
-import './FilterSort.css'
 import React from  'react'
 import SearchBox from './SearchBox'
 import TagsMenu from './TagsMenu'

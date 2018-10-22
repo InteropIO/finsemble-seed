@@ -1,4 +1,3 @@
-import './SearchBox.css'
 import React from  'react'
 import {getStore} from '../stores/LauncherStore'
 
