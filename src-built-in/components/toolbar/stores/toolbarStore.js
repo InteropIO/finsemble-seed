@@ -171,7 +171,6 @@ class _ToolbarStore {
 			done();
 		});
 		let onBoundsSet = (bounds) => {
-			debugger
 			bounds = bounds.data ? bounds.data : bounds;
 			self.Store.setValue({ field: "window-bounds", value: bounds });
 			FSBL.Clients.WindowClient.setComponentState({
@@ -179,8 +178,13 @@ class _ToolbarStore {
 				value: bounds
 			}, Function.prototype);
 		}
-
-		FSBL.Clients.WindowClient.finsembleWindow.addListener("bounds-change-end", onBoundsSet)
+		let restoreWindow = (e) => {
+			e.cancel();
+			finsembleWindow.restore();
+		}
+		//Immediately restore on maximize.
+		finsembleWindow.addListener("maximized", restoreWindow);
+		finsembleWindow.addListener("bounds-change-end", onBoundsSet)
 
 		FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", "t"], () => {
 			self.showToolbarAtFront();
