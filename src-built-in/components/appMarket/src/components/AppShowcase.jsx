@@ -16,7 +16,6 @@ class AppShowcase extends Component {
 		super(props);
 		this.state = {
 			name: this.props.app.title !== undefined ? this.props.app.title : this.props.app.name,
-			installed: this.props.app.installed !== undefined ? this.props.app.installed : false,
 			iconUrl: this.props.app.icons !== undefined && this.props.app.icons[0].url !== undefined ? this.props.app.icons[0].url : "../assets/placeholder.svg",
 			entitled: this.props.app.entitled ? this.props.app.entitled : false,
 			imageIndex: 0,
@@ -31,6 +30,7 @@ class AppShowcase extends Component {
 		this.openSite = this.openSite.bind(this);
 		this.openModal = this.openModal.bind(this);
 		this.closeModal = this.closeModal.bind(this);
+		this.addApp = this.addApp.bind(this);
 	}
 	nextImage() {
 		let index = this.state.imageIndex + 1 > this.props.app.images.length - 1 ? 0 : this.state.imageIndex + 1;
@@ -60,6 +60,11 @@ class AppShowcase extends Component {
 			imageModalOpen: false,
 			modalImage: null
 		});
+	}
+	addApp(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		this.props.addApp(this.state.name);
 	}
 	render() {
 		let { name, installed, iconUrl, imageIndex:index } = this.state;
@@ -94,8 +99,8 @@ class AppShowcase extends Component {
 				<div className="header">
 					<img className="header-icon" src={iconUrl} />
 					<h3 className="appName">{name}</h3>
-					<button className={this.state.entitled ? "action-button disabled" : "action-button"} disabled={this.state.entitled}>
-						{installed ? (
+					<button className={this.state.entitled ? "action-button disabled" : "action-button"} disabled={this.state.entitled} onClick={this.addApp}>
+						{this.props.app.installed ? (
 							<span className="action-button-label">Open</span>
 						) : (
 							<span className="action-button-label">

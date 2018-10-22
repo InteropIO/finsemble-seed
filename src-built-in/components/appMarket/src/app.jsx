@@ -27,7 +27,8 @@ export default class AppMarket extends React.Component {
 		super(props);
 		this.state = {
 			activePage: "home",
-			activeApp: null
+			activeApp: null,
+			installedApp: null
 		};
 		appCatalogStore.initialize();
 		appCatalogStore.Actions.setTags();
@@ -40,6 +41,7 @@ export default class AppMarket extends React.Component {
 		this.changeSearch = this.changeSearch.bind(this);
 		this.openAppShowcase = this.openAppShowcase.bind(this);
 		this.addApp = this.addApp.bind(this);
+		this.stopShowingInstalledNotification = this.stopShowingInstalledNotification.bind(this);
 	}
 	addTag(tag) {
 		appCatalogStore.Actions.addTag(tag);
@@ -98,7 +100,15 @@ export default class AppMarket extends React.Component {
 		appCatalogStore.Actions.addApp(appName);
 
 		this.setState({
-			apps: appCatalogStore.Actions.getApps()
+			apps: appCatalogStore.Actions.getApps(),
+			installedApp: true
+		}, () => {
+			setTimeout(this.stopShowingInstalledNotification, 2000);
+		});
+	}
+	stopShowingInstalledNotification() {
+		this.setState({
+			installedApp: false
 		});
 	}
 	openAppShowcase(appName) {
@@ -139,14 +149,14 @@ export default class AppMarket extends React.Component {
 			let results = filteredApps.length > 0 ? filteredApps : apps;
 			pageContents = <AppResults cards={results} tags={activeTags} addApp={this.addApp} openAppShowcase={this.openAppShowcase} />;
 		} else if (this.state.activePage === "showcase") {
-			pageContents = <AppShowcase app={this.state.activeApp} />;
+			pageContents = <AppShowcase app={this.state.activeApp} addApp={this.addApp} />;
 		} else {
 			pageContents = <div></div>;
 		}
 
 		return (
 			<div>
-				<SearchBar backButton={this.state.activePage !== "home"} tags={tags} activeTags={activeTags} tagSelected={this.addTag} removeTag={this.removeTag} goHome={this.goHome} changeSearch={this.changeSearch} />
+				<SearchBar backButton={this.state.activePage !== "home"} tags={tags} activeTags={activeTags} tagSelected={this.addTag} removeTag={this.removeTag} goHome={this.goHome} changeSearch={this.changeSearch} installedApp={this.state.installedApp} />
 				<div className="market_content">
 					{pageContents}
 				</div>

@@ -1,8 +1,9 @@
 .appMarket {
 	background-color: #3c4c58;
-	background-image: linear-gradient(to top, rgb(60, 76, 88), rgb(48, 61, 71));
+	/* background-image: linear-gradient(to top, rgb(60, 76, 88), rgb(48, 61, 71)); */
 	height: 100%;
-	margin: 0 !important;
+	margin-left: 0;
+	margin-right: 0;
 }
 
 .appMarket .market-content {
@@ -276,6 +277,68 @@
 	border-bottom: solid 1px #0a8cf4;
 	font-size: 14px;
 	transition: .2s ease-in;
+}
+
+@keyframes fadeOut {
+	0% {opacity: 0.9;}
+	25% {opacity: 0.7;}
+	50% {opacity: 0.5;}
+	75% {opacity: 0.2;}
+	100% {opacity: 0; visibility: hidden;}
+}
+
+@keyframes fadeIn {
+	0% {opacity: 0.2;}
+	25% {opacity: 0.3;}
+	50% {opacity: 0.5;}
+	75% {opacity: 0.7;}
+	100% {opacity: 1;}
+}
+
+.search-main .success-toast {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	visibility: visible;
+	width: 166px;
+	height: 25px;
+	font-family: Roboto;
+	font-size: 12px;
+	font-weight: normal;
+	font-style: normal;
+	font-stretch: normal;
+	line-height: normal;
+	letter-spacing: normal;
+	text-align: center;
+	color: #ffffff;
+	border: 3px solid #27cc8d;
+	background-color: rgba(60, 76, 88, 1.0);
+	z-index: 99;
+	left: 0;
+	right: 0;
+	margin: auto;
+	position: absolute;
+	animation-name: fadeIn;
+	animation-duration: 0.5s;
+	cursor: default;
+	pointer-events: none;
+}
+
+.search-main .success-toast.not-shown {
+	opacity: 0;
+	animation-name: fadeOut;
+	animation-duration: 2s;
+}
+
+.search-main .success-toast .toast {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+.search-main .success-toast .ff-check-mark {
+	color: #27cc8d;
 }
 
 .search-main .search-input:focus {

@@ -96,7 +96,7 @@ var Actions = {
 		let newApps = values.apps.map((app) => {
 			let appTitle = app.title !== undefined ? app.title : app.name;
 
-			if (appTitle === appName) {
+			if (appTitle === appName && (app.installed === undefined || app.installed === false)) {
 				app.installed = true;
 			}
 			return app;
