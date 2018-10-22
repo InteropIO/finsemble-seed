@@ -85,11 +85,11 @@
 }
 
 .ff-chevron-left {
-	margin: 0 -35px 0 5px;
+	margin-right: -10px;
 }
 
 .ff-chevron-right {
-	margin: 0 5px 0 -35px;
+	margin-left: -10px;
 }
 
 .hero-main .ff-chevron-left, .hero-main .ff-chevron-right {
@@ -244,7 +244,7 @@
 	justify-content: space-between;
 	align-items: center;
 	margin-bottom: 6px;
-	padding: 0px 43px;
+	padding: 0px 36px;
 }
 
 .carousel-header .see-more {
