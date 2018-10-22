@@ -512,6 +512,8 @@ select:focus, option:focus {
   }
   
   .app-item-title {
+    display: flex;
+    align-items: center;
     font-family: Roboto;
     font-size: 13px;
     font-weight: 300;
@@ -522,6 +524,11 @@ select:focus, option:focus {
     letter-spacing: normal;
     color: #ffffff;
   }
+
+  .app-item-title i {
+    padding-right: 4px;
+  }
+
   .filter-sort {
 	width: 100%;
 	margin-bottom: 10px;
