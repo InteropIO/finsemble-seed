@@ -459,7 +459,8 @@
 .label-bar {
 	display: flex;
 	flex-direction: row;
-	justify-content: space-evenly;
+	justify-content: flex-start;
+	margin-top: 10px;
 }
 
 .app-results {
@@ -777,19 +778,18 @@
 }
 
 .app-tag {
-	width: 75px;
 	height: 17px;
 	border-radius: 2px;
 	background-color: #67829a;
 	user-select: none;
+	margin: 0 4px;
+	padding: 2px 5px 0 5px;
 }
 
 .app-tag .tag-content {
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
-	width: 65px;
-	height: 12px;
 	font-family: Roboto;
 	font-size: 10px;
 	font-weight: normal;
@@ -798,4 +798,14 @@
 	line-height: normal;
 	letter-spacing: normal;
 	color: #ffffff;
+	cursor: default;
+}
+
+.tag-delete {
+	cursor: pointer;
+	padding: 0 2px;
+}
+
+.tag-name {
+	margin-right: 6px;
 }
