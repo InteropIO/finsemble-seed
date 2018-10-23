@@ -101,7 +101,7 @@ class AppShowcase extends Component {
 				<div className="header">
 					<div className='icon-title-container'>
 						<img className="header-icon" src={iconUrl} />
-						<h3 className="appName">{name}</h3>
+						<span className="appName">{name}</span>
 					</div>
 					<div className='action-button-container'>
 						<button className={this.state.entitled ? "action-button disabled" : "action-button"} disabled={this.state.entitled} onClick={addApp}>
