@@ -120,12 +120,12 @@ class AppShowcase extends Component {
 								</span>
 							)}
 						</button>
-						{this.props.app.installed ? <div className='remove-button' onClick={this.removeApp}>
-							<i className='ff-close'></i>
-							&nbsp;Remove App
-						</div> : null}
 					</div>
 				</div>
+				{this.props.app.installed ? <div className='remove-button' onClick={this.removeApp}>
+							<i className='ff-close-2'></i>
+							&nbsp;Remove App
+						</div> : null}
 				<div className="image-carousel-container">
 					{/* <div className="paginate_carat_left" onClick={this.nextImage} /> */}
 					<i className='ff-chevron-left' onClick={this.nextImage}></i>
