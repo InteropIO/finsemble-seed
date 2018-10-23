@@ -181,7 +181,7 @@
 }
 
 .app-card .ff-check-circle.highlighted {
-	color: green;
+	color: #27cc8d;
 }
 
 .app-catalog {
@@ -235,6 +235,7 @@
 	line-height: normal;
 	letter-spacing: normal;
 	color: #ffffff;
+	user-select: none;
 }
 
 .carousel-main .carousel-header .see-more .button-label {
@@ -263,6 +264,7 @@
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
+	align-items: center;
 }
 
 .search-main .button-label {
@@ -270,19 +272,24 @@
 }
 
 .ff-search {
-	padding: 0 9px;
+    padding: 0 10px 0 5px;
 }
 
 .search-main {
-	margin-top: 10px;
+	margin: 10px;
 }
 
 .search-main .ff-search {
 	color: white;
 }
 
+.search-input-container {
+	display: flex;
+    width: 100%;
+}
+
 .search-main .search-input {
-	width: 462px;
+	width: 100%;
 	color: #fff;
 	height: 17px;
 	background: none;
@@ -368,10 +375,15 @@
 	color: #FFFFFF;
 	background-color: inherit;
 	cursor: pointer;
+	font-size: 12px;
+	font-family: Roboto;
+	font-weight: 300;
+	user-select: none;
 }
 
 .search-main .tag-selector {
 	padding: 5px;
+	user-select: none;
 }
 
 .search-main .tag-selector .tag-selector-label {
@@ -490,7 +502,8 @@
 .app-showcase .header .header-icon {
 	width: 31px;
 	height: 31px;
-	margin-right: 8px;  
+	margin-right: 8px;
+	user-select: none;
 }
 
 .app-showcase .header .appName {
@@ -536,10 +549,41 @@
 	height: 30px;
 	background-color: var(--blue6);
 	border: none;
+	display: flex;
+	flex-direction: column;
+    justify-content: center;
+	align-items: center;
+	user-select: none;
+}
+
+.action-button .ff-plus {
+	margin-top: 3px;
+    padding-right: 2px;
 }
 
 .app-showcase .header .action-button.disabled {
 	background-color: #999999;
+}
+
+.remove-button {
+	margin: 0 28px;
+  	font-family: Roboto;
+  	font-size: 12px;
+  	font-weight: 300;
+  	font-style: normal;
+  	font-stretch: normal;
+  	line-height: normal;
+  	letter-spacing: normal;
+	color: #ffffff;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+.remove-button .ff-close-2 {
+	color: var(--red1);
+	font-size: 9px;
+    padding-right: 3px;
 }
 
 .app-showcase .header .action-button-label {
@@ -564,6 +608,7 @@
 	flex-direction: row;
 	justify-content: center;
 	padding: 5px 0;
+	user-select: none;
 }
 
 .app-showcase .image-carousel-image {
@@ -596,7 +641,6 @@
 
 .app-showcase .app-notes .developer-content {
 	align-self: flex-start;
-	padding: 5px 0;
 	color: white;
 }
 
@@ -668,6 +712,7 @@
 
 .app-showcase .support-content .support {
 	color: white;
+	padding-right: 8px;
 }
 
 .app-showcase .tags {
@@ -683,6 +728,7 @@
 	padding: 3px 5px;
 	background-color: var(--slate2);
 	margin-right: 8px;
+	user-select: none;
 }
 
 .app-showcase .tag-label .label-content {

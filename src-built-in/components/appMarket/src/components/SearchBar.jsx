@@ -103,10 +103,10 @@ class SearchBar extends Component {
 				{toast}
 				<div className="search-action-items">
 					{this.props.backButton ?
-						<button className='search-back' onClick={this.props.goHome}>
+						<div className='search-back' onClick={this.props.goHome}>
 							<i className='ff-arrow-back'></i>
 							<span className='button-label'>Back</span>
-						</button> : null}
+						</div> : null}
 					<div className="search-input-container">
 						<i className='ff-search'></i>
 						<input className='search-input' type="text" value={this.state.searchValue} onChange={this.changeSearch} />
