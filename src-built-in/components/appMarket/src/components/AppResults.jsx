@@ -56,7 +56,7 @@ const AppResults = props => {
 
 
 	return (
-		<div className='app-showcase'>
+		<div className='app-results'>
 			{cardsForShowcase.length === 0 ? (
 				<h3 className="app-showcase-no-results">
 					No results found. Please try again.
@@ -64,7 +64,7 @@ const AppResults = props => {
 			)
 				:
 			(
-				<table>
+				<table className='app-results-table'>
 					<tbody>
 						{cardRows.map((row, i) => {
 							return (
