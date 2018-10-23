@@ -34,6 +34,11 @@
 			"hotkeyShowCentralLogger": ["ctrl","shift","L"]
 		}
 	},
+	"preferences": {
+		"workspaceService": {
+			"promptUserOnDirtyWorkspace": false
+		}
+	},
 	"systemTrayIcon": "$applicationRoot/assets/img/Finsemble_Taskbar_Icon.png",
 	"systemTrayComponent": "File Menu",
 	"Window Manager": {
