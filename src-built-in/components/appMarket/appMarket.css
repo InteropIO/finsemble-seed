@@ -277,7 +277,7 @@
 }
 
 .search-main {
-	margin: 10px;
+	margin: 10px 15px;
 }
 
 .search-main .ff-search {
@@ -383,7 +383,7 @@
 }
 
 .search-main .tag-selector {
-	padding: 5px;
+	padding-left: 5px;
 	user-select: none;
 }
 
