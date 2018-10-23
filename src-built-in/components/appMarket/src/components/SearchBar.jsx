@@ -9,6 +9,7 @@
 import React, { Component } from "react";
 
 //components
+import Toast from './Toast';
 import Tag from './Tag';
 
 class SearchBar extends Component {
@@ -67,40 +68,9 @@ class SearchBar extends Component {
 			tagListClass += " hidden";
 		}
 
-		let toastClass = "toast-content";
-		let toast = null;
-		if (this.props.installationActionTaken !== null) {
-			switch (this.props.installationActionTaken) {
-				case "add":
-					toast = (
-						<div className={toastClass}>
-							<span className='toast'>
-								<i className='ff-check-mark'></i>
-								&nbsp;&nbsp;Added to My Apps
-							</span>
-						</div>
-					);
-					break;
-				case "remove":
-					toast = (
-						<div className={toastClass}>
-							<span className='toast'>
-								<i className='ff-close'></i>
-								&nbsp;&nbsp;Removed from My Apps
-							</span>
-						</div>
-					);
-					break;
-				default:
-					break;
-			}
-		} else {
-			toastClass += " not-shown";
-		}
-
 		return (
 			<div className='search-main'>
-				{toast}
+				<Toast installationActionTaken={this.props.installationActionTaken} />
 				<div className="search-action-items">
 					{this.props.backButton ?
 						<div className='search-back' onClick={this.props.goHome}>

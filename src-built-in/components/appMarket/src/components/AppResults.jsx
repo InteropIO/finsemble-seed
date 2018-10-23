@@ -15,20 +15,19 @@ const AppResults = props => {
 
 	//Filter cards by tags
 	let cardsForShowcase = [];
+	console.log('activeTags: ', props.tags);
 	if (props.tags && Array.isArray(props.tags) && props.tags.length > 0) {
 		cardsForShowcase = props.cards.filter((card) => {
 			for (let i = 0; i < props.tags.length; i++) {
 				let tagToSearchFor = props.tags[i];
+				console.log('tagToSearchFor: ', tagToSearchFor);
+				console.log('cards tags: ', card.tags);
 				if (card.tags.includes(tagToSearchFor)) return true;
-				else return false;
 			}
 		});
 	} else {
 		cardsForShowcase = props.cards;
 	}
-
-	console.log('cardsForShowcase: ', cardsForShowcase);
-
 
 	let cardRows = [];
 	let cardsInRow = [];
@@ -42,11 +41,10 @@ const AppResults = props => {
 		}
 
 		let key = "card-" + i + "-" + name.toLowerCase();
-		console.log('key: ', key);
 
 		cardsInRow.push(
 			<td key={key}>
-				<AppCard {...card} openAppShowcase={props.openAppShowcase} addApp={props.addApp} addTag={props.addTag} />
+				<AppCard {...card} openAppShowcase={props.openAppShowcase} addApp={props.addApp} removeApp={props.removeApp} addTag={props.addTag} />
 			</td>
 		);
 	}

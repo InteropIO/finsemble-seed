@@ -16,8 +16,8 @@ const Tag = props => {
 	return (
 		<div className='app-tag'>
 			<div className='tag-content'>
-				<div className='tag-name'>{props.name}</div>
-				<div className='tag-delete' onClick={remove}>x</div>
+				<div className='tag-name'>{props.name}</div>&nbsp;&nbsp;
+				<i className='ff-close tag-delete' onClick={remove}></i>
 			</div>
 		</div>
 	);
