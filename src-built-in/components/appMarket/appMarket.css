@@ -263,6 +263,7 @@
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
+	align-items: center;
 }
 
 .search-main .button-label {
@@ -270,19 +271,24 @@
 }
 
 .ff-search {
-	padding: 0 9px;
+    padding: 0 10px 0 5px;
 }
 
 .search-main {
-	margin-top: 10px;
+	margin: 10px;
 }
 
 .search-main .ff-search {
 	color: white;
 }
 
+.search-input-container {
+	display: flex;
+    width: 100%;
+}
+
 .search-main .search-input {
-	width: 462px;
+	width: 100%;
 	color: #fff;
 	height: 17px;
 	background: none;
@@ -368,6 +374,9 @@
 	color: #FFFFFF;
 	background-color: inherit;
 	cursor: pointer;
+	font-size: 12px;
+	font-family: Roboto;
+	font-weight: 300;
 }
 
 .search-main .tag-selector {
