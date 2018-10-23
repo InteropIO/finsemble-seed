@@ -536,6 +536,15 @@
 	height: 30px;
 	background-color: var(--blue6);
 	border: none;
+	display: flex;
+	flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.action-button .ff-plus {
+	margin-top: 3px;
+    padding-right: 2px;
 }
 
 .app-showcase .header .action-button.disabled {
