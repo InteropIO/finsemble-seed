@@ -60,6 +60,7 @@ class _ToolbarStore {
 	retrieveSelfFromStorage(cb) {
 
 		finsembleWindow.getOptions((err, opts) => {
+			console.info("get options", opts);
 			let hasRightProps = () => {
 				return (opts.hasOwnProperty('customData') &&
 					opts.customData.hasOwnProperty('foreign') &&
@@ -74,21 +75,23 @@ class _ToolbarStore {
 					return cb();
 				}
 
-				let bounds = (result && result.hasOwnProperty('window-bounds') && result["window-bounds"] !== null) ? result["window-bounds"] : null;
 				let visible = (result && result.hasOwnProperty('visible')) ? result.visible : true;
-				if (!err && bounds && isGloballyDocked) {
-					this.Store.setValue({
-						field: 'window-bounds',
-						value: bounds
-					});
-					finsembleWindow.setBounds(bounds, () => {
-						if (visible) {
-							finsembleWindow.show();
-						}
-					});
-				} else {
-					finsembleWindow.show();
-				}
+				finsembleWindow.getBounds(null, (err, bounds) => {
+					if (!err && bounds && isGloballyDocked) {
+						this.Store.setValue({
+							field: 'window-bounds',
+							value: bounds
+						});
+						finsembleWindow.setBounds(bounds, () => {
+							if (visible) {
+								finsembleWindow.show();
+							}
+						});
+					} else {
+						finsembleWindow.show();
+					}
+					cb(null, result);
+				})
 				cb(null, result);
 			});
 		})
