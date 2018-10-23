@@ -118,6 +118,7 @@
 	justify-content: center;
 	width: 100px;
 	height: 69px;
+	user-select: none;
 }
 
 .app-card .app-images.entitled {
@@ -729,6 +730,7 @@
 	background-color: var(--slate2);
 	margin-right: 8px;
 	user-select: none;
+	cursor: pointer;
 }
 
 .app-showcase .tag-label .label-content {
@@ -775,6 +777,7 @@
 	height: 17px;
 	border-radius: 2px;
 	background-color: #67829a;
+	user-select: none;
 }
 
 .app-tag .tag-content {
