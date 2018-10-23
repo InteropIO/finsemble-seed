@@ -7,13 +7,16 @@ import Logo from "./logo";
 import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
 import { FinsembleDnDContext, FinsembleDroppable } from '@chartiq/finsemble-react-controls';
 import { Store, Actions } from "../../stores/windowTitleBarStore";
-import { debug } from "util";
+import Title from "../../../../common/windowTitle";
 const PLACEHOLDER_TAB = {
     windowName: "",
     uuid: "",
     componentType: "placeholder-tab"
 };
 let TAB_WIDTH = 300;
+//Next two items are for calculating how large the title should be within a tab.
+const ICON_AREA = 29;
+const CLOSE_BUTTON_MARGIN = 22;
 const MINIMUM_TAB_SIZE = 100;
 
 export default class TabRegion extends React.Component {
@@ -528,6 +531,8 @@ export default class TabRegion extends React.Component {
  * Function to render the title. Helps keep the render code clean.
  */
 function renderTitle() {
+    let titleWidth = this.state.tabWidth - ICON_AREA - CLOSE_BUTTON_MARGIN;
+
     return (<div
         draggable="true"
         onDragStart={(e) => {
@@ -541,7 +546,7 @@ function renderTitle() {
         className={"fsbl-header-title"}>
         <FinsembleHoverDetector edge="top" hoverAction={this.hoverAction.bind(this)} />
         <Logo windowIdentifier={FSBL.Clients.WindowClient.getWindowIdentifier()} />
-        <div className="fsbl-tab-title">{this.props.thisWindowsTitle}</div>
+        <Title titleWidth={titleWidth} windowIdentifier={FSBL.Clients.WindowClient.getWindowIdentifier()}></Title>
     </div>);
 }
 
@@ -550,6 +555,7 @@ function renderTitle() {
  * @param {*} props
  */
 function renderTabs() {
+    let titleWidth = this.state.tabWidth - ICON_AREA - CLOSE_BUTTON_MARGIN;
     return this.state.tabs.map((tab, i) => {
         return <Tab
             onClick={() => {
@@ -570,7 +576,7 @@ function renderTabs() {
             onTabDraggedOver={this.onTabDraggedOver}
             listenForDragOver={this.props.listenForDragOver}
             tabWidth={this.state.tabWidth}
-            title={tab.title || tab.windowName}
+            titleWidth={titleWidth}
             windowIdentifier={tab} />
     });
 
