@@ -7,7 +7,7 @@ import Logo from "./logo";
 import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
 import { FinsembleDnDContext, FinsembleDroppable } from '@chartiq/finsemble-react-controls';
 import { Store, Actions } from "../../stores/windowTitleBarStore";
-import Title from "./title";
+import Title from "../../../../common/windowTitle";
 const PLACEHOLDER_TAB = {
     windowName: "",
     uuid: "",

@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
 import { FinsembleDraggable } from "@chartiq/finsemble-react-controls";
 import Logo from "./logo";
-import Title from "./title"
+import Title from "../../../../common/windowTitle"
 /**
  * This component is pretty basic. It just takes a bunch of props and renders them.
  */

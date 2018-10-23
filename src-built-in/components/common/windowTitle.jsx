@@ -12,7 +12,7 @@ class title extends Component {
 		let { wrap: win } = await FSBL.FinsembleWindow.getInstance(identifier)
 
 		win.getOptions((err, data) => {
-			this.setState({ title: data.title || finsembleWindow.name });
+			this.setState({ title: data.title || win.name });
 		})
 	}
 	componentDidMount() {
