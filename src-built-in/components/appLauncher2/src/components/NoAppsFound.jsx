@@ -1,21 +1,24 @@
 import React from  'react'
 
-const styles = {
-	textAlign: 'center'
-}
-
 export default class NoAppsFound extends React.Component {
 
-	constructor() {
-		super()
+	static defaultProps = {
+		styles: {
+			lineHeight: '16px',
+			marginTop: '30px',
+			textAlign: 'center'
+		}
+	}
+
+	constructor(props) {
+		super(props)
 	}
 
 	render() {
 		return (
-			<div style={styles} className="no-results"> 
-				<p>There’s nothing here!</p>
-				<p>Add apps and Dashboards to Favorites to view them here.</p>
+			<div style={this.props.styles} className="no-results"> 
+				{this.props.message}
 			</div>	
-			)
+		)
 	}
 }
