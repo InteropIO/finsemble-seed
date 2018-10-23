@@ -469,7 +469,7 @@ export default class TabRegion extends React.Component {
             className={"fsbl-header-title cq-no-drag"}>
             <FinsembleHoverDetector edge="top" hoverAction={this.hoverAction.bind(this)} />
             <Logo windowIdentifier={Actions.getWindowIdentifier()} />
-            <Title titleWidth={titleWidth} windowIdentifier={FSBL.Clients.WindowClient.getWindowIdentifier()}></Title>
+            <Title titleWidth={titleWidth} windowIdentifier={Actions.getWindowIdentifier()}></Title>
         </div>);
     }
     render() {
