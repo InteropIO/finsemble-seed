@@ -462,6 +462,10 @@
 	justify-content: space-evenly;
 }
 
+.app-results {
+	padding: 0 32px;
+}
+
 .app-showcase {
 	display: flex;
 	flex-direction: column;
