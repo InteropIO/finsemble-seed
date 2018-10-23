@@ -31,6 +31,7 @@ class AppShowcase extends Component {
 		this.openModal = this.openModal.bind(this);
 		this.closeModal = this.closeModal.bind(this);
 		this.addApp = this.addApp.bind(this);
+		this.removeApp = this.removeApp.bind(this);
 	}
 	nextImage() {
 		let index = this.state.imageIndex + 1 > this.props.app.images.length - 1 ? 0 : this.state.imageIndex + 1;
@@ -65,6 +66,11 @@ class AppShowcase extends Component {
 		e.preventDefault();
 		e.stopPropagation();
 		this.props.addApp(this.state.name);
+	}
+	removeApp(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		this.props.removeApp(this.state.name);
 	}
 	render() {
 		let { name, installed, iconUrl, imageIndex:index } = this.state;
@@ -114,7 +120,7 @@ class AppShowcase extends Component {
 								</span>
 							)}
 						</button>
-						{this.props.app.installed ? <div className='remove-button'>
+						{this.props.app.installed ? <div className='remove-button' onClick={this.removeApp}>
 							<i className='ff-close'></i>
 							&nbsp;Remove App
 						</div> : null}

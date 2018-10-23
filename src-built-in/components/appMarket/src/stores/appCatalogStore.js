@@ -93,6 +93,7 @@ var Actions = {
 		values.activeTags = [];
 	},
 	addApp(appName) {
+		console.log('adding app: ', appName);
 		let newApps = values.apps.map((app) => {
 			let appTitle = app.title !== undefined ? app.title : app.name;
 
@@ -106,12 +107,14 @@ var Actions = {
 		values.apps = newApps;
 	},
 	removeApp(appName) {
+		console.log('remove app: ', appName);
 		let newApps = values.apps.map((app) => {
 			let appTitle = app.title !== undefined ? app.title : app.name;
 
 			if (appTitle === appName && app.installed) {
 				delete app.installed;
 			}
+			return app;
 		});
 		values.apps = newApps;
 	},
