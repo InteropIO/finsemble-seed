@@ -55,7 +55,9 @@ export default class AppActionsMenu extends React.Component {
 			<div onMouseLeave={this.state.isVisible ? this.toggleMenu : null}
 				className="actions-menu" style={{ right: 0 }}>
 				<ul>
-					<li onClick={this.onAddToFavorite} >Add Favorite</li>
+					{folder.name !== 'Favorites' &&
+						<li onClick={this.onAddToFavorite} >Add Favorite</li>
+					}
 					<li onClick={this.onViewInfo}>View Info</li>
 					<li onClick={this.onRemove}>Remove from {folder.name}</li>
 				</ul>
