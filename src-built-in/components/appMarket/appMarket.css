@@ -626,7 +626,6 @@
 
 .app-showcase .app-notes .developer-content {
 	align-self: flex-start;
-	padding: 5px 0;
 	color: white;
 }
 
@@ -698,6 +697,7 @@
 
 .app-showcase .support-content .support {
 	color: white;
+	padding-right: 8px;
 }
 
 .app-showcase .tags {
