@@ -20,8 +20,6 @@ const AppResults = props => {
 		cardsForShowcase = props.cards.filter((card) => {
 			for (let i = 0; i < props.tags.length; i++) {
 				let tagToSearchFor = props.tags[i];
-				console.log('tagToSearchFor: ', tagToSearchFor);
-				console.log('cards tags: ', card.tags);
 				if (card.tags.includes(tagToSearchFor)) return true;
 			}
 		});
