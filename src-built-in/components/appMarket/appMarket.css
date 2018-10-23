@@ -535,7 +535,7 @@
 .app-showcase .header .action-button {
 	width: 83px;
 	height: 30px;
-	background-color: blue;
+	background-color: var(--blue6);
 	border: none;
 }
 
@@ -581,7 +581,7 @@
   	line-height: normal;
 	letter-spacing: normal;
 	padding: 5px 0;
-	margin: 0 28px;
+	margin: 0 28px 10px 28px;
 }
 
 .app-notes p {
@@ -605,7 +605,7 @@
 	font-weight: bold;
 	font-size: 14px;
 	color: #00adff;
-	padding-bottom: 4px;
+	padding-bottom: 3px;
 }
 
 .app-showcase .description-content {
@@ -622,6 +622,21 @@
 
 .app-showcase .version-content {
 	color: white;
+	width: 50%;
+}
+
+.app-showcase .updated-content {
+	color: white;
+	width: 50%;
+}
+
+.app-showcase .support-content {
+	color: white;
+	width: 50%;
+}
+
+.app-showcase .tags-content {
+	width: 50%;
 }
 
 .app-showcase .dev-notes {
@@ -635,7 +650,7 @@
   	line-height: normal;
 	letter-spacing: normal;
 	padding: 5px 0;
-	margin: 0 150px 0 28px;
+	margin-left: 28px;
 }
 
 .app-showcase .version {
@@ -662,8 +677,9 @@
 .app-showcase .tag-label {
 	width: auto;
   	height: auto;
-  	border-radius: 2px;
-	background-color: #67829a;
+	border-radius: 2px;
+	padding: 3px 5px;
+	background-color: var(--slate2);
 	margin-right: 8px;
 }
 
