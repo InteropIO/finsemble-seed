@@ -8,6 +8,7 @@ export default {
 	reorderFolders,
 	getFolders,
 	getActiveFolder,
+	getFavoriteFolder,
 	getSearchText,
 	getSortBy,
 	addTag,
@@ -29,6 +30,10 @@ function getFolders() {
 	return getStore().getValue({
 		field: 'appFolders'
 	}).folders
+}
+
+function getFavoriteFolder() {
+	return getFolders().find(folder => folder.name === 'Favorites')
 }
 
 function reorderFolders(destIndex, srcIndex) {

@@ -1,6 +1,7 @@
 import React from 'react'
 import AppActionsMenu from './AppActionsMenu'
 import AppTagsList from './AppTagsList'
+import storeActions from '../stores/StoreActions'
 
 /**
  * Used to make sure that a user is not waiting for component
@@ -35,13 +36,19 @@ export default class AppDefinition extends React.Component {
 		})
 	}
 
+	isFavorite() {
+		return storeActions
+		.getFavoriteFolder().appDefinitions
+		.find(app => app.name === this.props.app.name)
+	}
+
 	render() {
 		const app = this.props.app
 		return (
 			<div onDoubleClick={() => this.onDoubleClick(app)} className="app-item" draggable="true" onDragStart={this.onDragToFolder}>
 				<span className="app-item-title">
 					{app.icon !== undefined ? <i className={app.icon}></i> : null}
-					{app.friendlyName}
+					{app.friendlyName} {this.isFavorite() && <i className='ff-favorite'></i>}
 				</span>
 				<AppTagsList tags={app.tags} />
 				<AppActionsMenu app={app}/>

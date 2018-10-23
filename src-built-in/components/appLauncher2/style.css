@@ -502,7 +502,11 @@ select:focus, option:focus {
     font-weight: 300;
     font-size: 11px;
   }
-  
+
+  .app-item-title .ff-favorite{
+    margin-left: 6px;
+    color: var(--yellow3)
+  }  
   .app-item-tags {
     display: flex;
     align-items: center;
