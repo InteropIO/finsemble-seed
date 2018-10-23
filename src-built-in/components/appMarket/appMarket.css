@@ -542,6 +542,27 @@
 	background-color: #999999;
 }
 
+.remove-button {
+	margin: 0 28px;
+  	font-family: Roboto;
+  	font-size: 12px;
+  	font-weight: 300;
+  	font-style: normal;
+  	font-stretch: normal;
+  	line-height: normal;
+  	letter-spacing: normal;
+	color: #ffffff;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+.remove-button .ff-close-2 {
+	color: var(--red1);
+	font-size: 9px;
+    padding-right: 3px;
+}
+
 .app-showcase .header .action-button-label {
 	display: flex;
 	align-items: center;
