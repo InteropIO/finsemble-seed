@@ -359,6 +359,10 @@ img {
     background-color: transparent;
 }
 
+::-webkit-scrollbar-track-piece {
+    display: none;
+}
+
 ::-webkit-scrollbar {
     width: 5px;
     background-color: transparent;
@@ -424,16 +428,16 @@ img {
     border-radius: 3px;
 }
 
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
     width: 5px;
     background-color: var(--scrollbar-color);
     border-radius: 3px;
-}
+} */
 
 ::-webkit-scrollbar-thumb {
     cursor: pointer;
-    border-radius: inherit;
-    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+    background-color: var(--slate1);
 }
 
 .scheduled-restart {
