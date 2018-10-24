@@ -44,7 +44,7 @@ export default class Hero extends Component {
 		});
 	}
 	openApp() {
-		let name = this.props.cards[this.state.active].title !== undefined ? this.props.cards[this.state.active].title : this.props.cards[this.state.active].name;
+		let name = this.props.cards[this.state.active].title || this.props.cards[this.state.active].name;
 		this.props.openAppShowcase(name);
 	}
 	render() {

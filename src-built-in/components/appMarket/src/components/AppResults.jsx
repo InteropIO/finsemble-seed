@@ -9,13 +9,14 @@
 import React from "react";
 
 //components
+// import NoResults from './NoResults';
+import EmptyResults from './EmptyResults';
 import AppCard from './AppCard';
 
 const AppResults = props => {
 
 	//Filter cards by tags
 	let cardsForShowcase = [];
-	console.log('activeTags: ', props.tags);
 	if (props.tags && Array.isArray(props.tags) && props.tags.length > 0) {
 		cardsForShowcase = props.cards.filter((card) => {
 			for (let i = 0; i < props.tags.length; i++) {
@@ -31,7 +32,7 @@ const AppResults = props => {
 	let cardsInRow = [];
 	for (let i = 0; i < cardsForShowcase.length; i++) {
 		let card = cardsForShowcase[i];
-		let name = card.title !== undefined ? card.title : card.name;
+		let name = card.title || card.name;
 
 		if (cardsInRow.length === 4) {
 			cardRows.push(cardsInRow);
@@ -50,16 +51,10 @@ const AppResults = props => {
 		cardRows.push(cardsInRow);
 	}
 
-
-	return (
-		<div className='app-results'>
-			{cardsForShowcase.length === 0 ? (
-				<h3 className="app-showcase-no-results">
-					No results found. Please try again.
-				</h3>
-			)
-				:
-			(
+	if (cardsForShowcase.length === 0) return (<EmptyResults />);
+	else {
+		return (
+			<div className='app-results'>
 				<table className='app-results-table'>
 					<tbody>
 						{cardRows.map((row, i) => {
@@ -71,9 +66,9 @@ const AppResults = props => {
 						})}
 					</tbody>
 				</table>
-			)}
-		</div>
-	);
+			</div>
+		);
+	}
 }
 
 export default AppResults;

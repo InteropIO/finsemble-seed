@@ -14,7 +14,7 @@ import * as storeExports from "./stores/appCatalogStore";
 import SearchBar from './components/SearchBar';
 import Home from './components/Home';
 import AppResults from './components/AppResults';
-import AppShowcase from './components/AppShowcase';
+import AppShowcase from './components/Showcase/AppShowcase';
 
 //data
 import * as appCatalogStore from './stores/appCatalogStore.js';
@@ -83,7 +83,7 @@ export default class AppMarket extends React.Component {
 	}
 	changeSearch(search) {
 
-		if (search !== "") {
+		if (search) {
 			appCatalogStore.Actions.searchApps(search);
 
 			this.setState({
@@ -132,7 +132,7 @@ export default class AppMarket extends React.Component {
 		let apps = appCatalogStore.Actions.getApps();
 		for (let i = 0; i < apps.length; i++) {
 			let thisApp = apps[i];
-			let thisAppName = thisApp.title !== undefined ? thisApp.title : thisApp.name;
+			let thisAppName = thisApp.title || thisApp.name;
 
 			if (appName === thisAppName) {
 				app = thisApp;

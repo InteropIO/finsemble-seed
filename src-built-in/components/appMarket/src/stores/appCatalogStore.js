@@ -38,7 +38,7 @@ var Actions = {
 		let tags = values.activeTags;
 
 		let newApps = values.apps.filter((app) => {
-			let appName = app.title !== undefined ? app.title : app.name;
+			let appName = app.title || app.name;
 
 			if (appName.toLowerCase().indexOf(searchTerms.toLowerCase()) > -1) {
 				if (tags.length > 0) {
@@ -93,9 +93,8 @@ var Actions = {
 		values.activeTags = [];
 	},
 	addApp(appName) {
-		console.log('adding app: ', appName);
 		let newApps = values.apps.map((app) => {
-			let appTitle = app.title !== undefined ? app.title : app.name;
+			let appTitle = app.title || app.name;
 
 			if (appTitle === appName) {
 				app.installed = true;
@@ -105,9 +104,8 @@ var Actions = {
 		values.apps = newApps;
 	},
 	removeApp(appName) {
-		console.log('remove app: ', appName);
 		let newApps = values.apps.map((app) => {
-			let appTitle = app.title !== undefined ? app.title : app.name;
+			let appTitle = app.title || app.name;
 
 			if (appTitle === appName && app.installed) {
 				delete app.installed;

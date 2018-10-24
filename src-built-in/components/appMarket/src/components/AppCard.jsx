@@ -13,7 +13,7 @@ class AppCard extends Component {
 		super(props);
 		this.state = {
 			highlighted: false,
-			appName: this.props.title !== undefined ? this.props.title : this.props.name,
+			appName: this.props.title || this.props.name,
 			entitled: this.props.entitled ? this.props.entitled : false
 		};
 		this.bindCorrectContext();
