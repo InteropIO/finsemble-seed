@@ -500,7 +500,7 @@ select:focus, option:focus {
     position: relative;
     padding: 6px .75em;
   }
-  
+
   .app-item, .app-item-title, .app-item-tags {
     display: block;
     font-weight: 300;
@@ -510,20 +510,20 @@ select:focus, option:focus {
   .app-item-title .ff-favorite{
     margin-left: 6px;
     color: var(--yellow3)
-  }  
+  }
   .app-item-tags {
     display: flex;
     align-items: center;
   }
-  
+
   .app-item-tags i {
     padding-right: 6px;
   }
-  
+
   .app-item:hover {
     background-color: var(--slate3);
   }
-  
+
   .app-item-title {
     display: flex;
     align-items: center;
@@ -551,11 +551,11 @@ select:focus, option:focus {
     font-size: 11px;
     padding-left: .75em;
   }
-  
+
   .sort-option.first {
       margin-left: 10px;
   }
-  
+
   .sort-option {
     font-size: 11px;
     border-radius: 2px;
@@ -566,17 +566,17 @@ select:focus, option:focus {
     display: inline-block;
     margin: 0 5px;
   }
-  
+
   .sort-option.active {
       border: 1px solid #005bc5;
       background-color: #005bc5;
   }
-  
+
 .search-box {
 	margin-bottom: 6px;
     padding-left: .75em;
     display: flex;
-    align-items: flex-start; 
+    align-items: flex-start;
 }
 .search-box input {
 	color: #fff;
@@ -598,6 +598,9 @@ select:focus, option:focus {
 	padding-right: 5px;
 }
 .tags-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
 	padding-left: .55em;
 }
 .tag-item {

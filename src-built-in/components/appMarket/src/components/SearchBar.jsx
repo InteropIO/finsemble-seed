@@ -10,7 +10,8 @@ import React, { Component } from "react";
 
 //components
 import Toast from './Toast';
-import Tag from './Tag';
+// import Tag from './Tag';
+import Tag from '../../../shared/Tag';
 import TagsMenu from '../../../shared/TagsMenu';
 
 class SearchBar extends Component {

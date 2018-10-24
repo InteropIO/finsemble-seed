@@ -1,4 +1,5 @@
-import React from  'react'
+import React from 'react'
+import Tag from '../../../shared/Tag';
 import storeActions from '../stores/StoreActions'
 import {getStore} from '../stores/LauncherStore'
 
@@ -31,9 +32,9 @@ export default class TagsList extends React.Component {
 
 	renderTagsList() {
 		return 	this.state.tags.map((tag, index) => {
-			return <span key={index} className="tag-item">
-			{tag} <i className="ff-close" onClick={this.onTagDelete}/>
-			</span>
+			return (
+				<Tag key={index} name={tag} removeTag={this.onTagDelete} />
+			);
 		})
 	}
 

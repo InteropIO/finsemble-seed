@@ -115,7 +115,7 @@ class AppShowcase extends Component {
 						</span>
 					</div>
 				) : null}
-				<Header iconUrl={iconUrl} name={name} entitled={this.state.entitled} appAction={appAction} removeApp={this.removeApp} />
+				<Header iconUrl={iconUrl} name={name} entitled={this.state.entitled} installed={this.props.app.installed} appAction={appAction} removeApp={this.removeApp} />
 
 				<ImageCarousel nextImage={this.nextImage} previousImage={this.previousImage} openModal={this.openModal} images={images} />
 

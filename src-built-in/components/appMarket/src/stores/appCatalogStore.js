@@ -35,6 +35,7 @@ var Actions = {
 		return values.apps;
 	},
 	searchApps(searchTerms) {
+		console.log('searchTerms: ', searchTerms);
 		let tags = values.activeTags;
 
 		let newApps = values.apps.filter((app) => {
@@ -48,12 +49,10 @@ var Actions = {
 							return true;
 						}
 					}
-					return false;
 				} else {
 					return true;
 				}
 			}
-			return false;
 		});
 
 		values.filteredCards = newApps;
