@@ -653,3 +653,9 @@ select:focus, option:focus {
 	list-style: none;
 	color: #fff;
 }
+
+.no-results {
+    line-height: 22px;
+    margin-top: 20px;
+    text-align: center;
+}
