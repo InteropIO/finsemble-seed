@@ -54,10 +54,12 @@
 	line-height: normal;
 	letter-spacing: normal;
 	color: #ffffff;
+	padding: 0 5px;
 }
 
 .selected-content-message {
-	width: 506px;
+	width: 477px;
+	height: 64px;
 	font-family: Roboto;
 	font-size: 14px;
 	font-weight: 300;
@@ -67,6 +69,7 @@
 	letter-spacing: normal;
 	color: #ffffff;
 	text-overflow: ellipsis;
+	padding: 0 5px;
 }
 
 .paginator {
@@ -94,7 +97,7 @@
 	border: solid 1px #3c4c58;
 	background-color: #1c2a36;
 	cursor: pointer;
-	padding: 15px;
+	padding: 10px;
 }
 
 .ff-chevron-right, .ff-chevron-left {
