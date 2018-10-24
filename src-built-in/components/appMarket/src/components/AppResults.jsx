@@ -9,7 +9,6 @@
 import React from "react";
 
 //components
-// import NoResults from './NoResults';
 import EmptyResults from './EmptyResults';
 import AppCard from './AppCard';
 

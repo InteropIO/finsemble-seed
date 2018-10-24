@@ -1,6 +1,7 @@
 import React from  'react'
 import SearchBox from './SearchBox'
-import TagsMenu from './TagsMenu'
+// import TagsMenu from './TagsMenu'
+import TagsMenu from '../../../shared/TagsMenu';
 import SortBy from './SortBy'
 import TagsList from './TagsList'
 import {getStore} from '../stores/LauncherStore'
@@ -21,7 +22,7 @@ export default class FilterSort extends React.Component {
 			search: event.target.value
 		}, () => {
 			getStore().setValue({
-				field: 'filterText', 
+				field: 'filterText',
 				value: this.state.search
 			})
 		})
@@ -57,11 +58,11 @@ export default class FilterSort extends React.Component {
 				<SearchBox />
 				<TagsList />
 				<SortBy />
-				<TagsMenu 
-					label="Tags" 
-					align="right" 
-					list={this.extractTags()} 
-					onItemClick={this.onTagClick}/>		
+				<TagsMenu
+					label="Tags"
+					align="right"
+					list={this.extractTags()}
+					onItemClick={this.onTagClick}/>
 			</div>
 			)
 	}

@@ -11,6 +11,7 @@ import React, { Component } from "react";
 //components
 import Toast from './Toast';
 import Tag from './Tag';
+import TagsMenu from '../../../shared/TagsMenu';
 
 class SearchBar extends Component {
 	constructor(props) {
@@ -81,21 +82,7 @@ class SearchBar extends Component {
 						<i className='ff-search'></i>
 						<input className='search-input' type="text" value={this.state.searchValue} onChange={this.changeSearch} />
 					</div>
-					<div className="tag-selector">
-						<span className='tag-selector-label' onClick={this.toggleTagSelector}>
-							<i className='ff-tag'></i>
-							<span className='label-text'>Tags</span>
-						</span>
-						<div className={tagListClass}>
-							{this.props.tags.map((tag, i) => {
-								return (
-									<div key={i} className='tag-selector-item' onClick={this.selectTag.bind(this, tag)}>
-										{tag}
-									</div>
-								);
-							})}
-						</div>
-					</div>
+					<TagsMenu list={this.props.tags} onItemClick={this.selectTag} label={"Tags"} align='right' />
 				</div>
 				<div className='label-bar'>
 					{this.props.activeTags.map((tag, i) => {

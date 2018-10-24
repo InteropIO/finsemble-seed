@@ -112,11 +112,17 @@ class AppShowcase extends Component {
 					</div>
 				) : null}
 				<Header iconUrl={iconUrl} name={name} entitled={this.state.entitled} appAction={appAction} removeApp={this.removeApp} />
+
 				<ImageCarousel nextImage={this.nextImage} previousImage={this.previousImage} openModal={this.openModal} images={images} />
+
 				<AppDescription description={this.props.app.description} />
+
 				<ReleaseNotes releaseNotes={this.props.app.releaseNotes} />
+
 				<AppDevNotes email={this.props.app.contactEmail} publisher={this.props.app.publisher} />
+
 				<VersionNotes version={this.props.app.version} />
+
 				<SupportNotes email={this.props.app.supportEmail} tags={this.props.app.tags} />
 			</div>
 		);
