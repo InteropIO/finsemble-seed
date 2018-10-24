@@ -35,7 +35,6 @@ var Actions = {
 		return values.apps;
 	},
 	searchApps(searchTerms) {
-		console.log('searchTerms: ', searchTerms);
 		let tags = values.activeTags;
 
 		let newApps = values.apps.filter((app) => {
