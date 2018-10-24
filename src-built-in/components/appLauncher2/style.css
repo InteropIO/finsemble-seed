@@ -635,28 +635,6 @@ select:focus, option:focus {
 .tags-menu-wrapper span i {
 	margin-right: 5px;
 }
-.tags-menu {
-	z-index: 11;
-    top: 22px;
-	position: absolute;
-	width: 132px;
-	max-height: 214px;
-	overflow-y: auto;
-	border-radius: 3px;
-  	background-color: var(--slate2);
-  	color: #495a69;
-}
-.tags-menu ul {
-	padding: 0;
-}
-.tags-menu li {
-	cursor: pointer;
-	padding: 0 17px 0 17px;
-	line-height: 19px;
-	font-size: 11px;
-	list-style: none;
-	color: #fff;
-}
 
 .no-results {
     line-height: 22px;
