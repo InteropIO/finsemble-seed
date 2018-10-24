@@ -16,10 +16,12 @@ const Toast = props => {
 		case "add":
 			icon = 'ff-check-mark';
 			messageContent = "Added to My Apps";
+			classes += " success";
 			break;
 		case "remove":
 			icon = 'ff-close';
 			messageContent = "Removed from My Apps";
+			classes += " error";
 			break;
 		default:
 			classes += " not-shown";

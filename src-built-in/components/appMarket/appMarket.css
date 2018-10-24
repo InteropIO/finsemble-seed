@@ -4,7 +4,6 @@
 	height: 100%;
 	margin-left: 0;
 	margin-right: 0;
-	overflow-y: hidden !important;
 }
 
 .appMarket .market-content {
@@ -330,7 +329,6 @@
 	letter-spacing: normal;
 	text-align: center;
 	color: #ffffff;
-	border: 3px solid #27cc8d;
 	background-color: rgba(60, 76, 88, 1.0);
 	z-index: 99;
 	left: 0;
@@ -341,6 +339,14 @@
 	animation-duration: 0.5s;
 	cursor: default;
 	pointer-events: none;
+}
+
+.search-main .toast-content.success {
+	border: 3px solid #27cc8d;
+}
+
+.search-main .toast-content.error {
+	border: 3px solid #ee5c5c;
 }
 
 .search-main .toast-content.not-shown {

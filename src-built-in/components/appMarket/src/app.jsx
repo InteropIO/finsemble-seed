@@ -105,7 +105,7 @@ export default class AppMarket extends React.Component {
 			apps: appCatalogStore.Actions.getApps(),
 			installationActionTaken: "add"
 		}, () => {
-			setTimeout(this.stopShowingInstalledNotification, 2000);
+			setTimeout(this.stopShowingInstalledNotification, 1000);
 		});
 	}
 	removeApp(appName) {
@@ -116,7 +116,7 @@ export default class AppMarket extends React.Component {
 			apps: appCatalogStore.Actions.getApps(),
 			installationActionTaken: "remove"
 		}, () => {
-			setTimeout(this.stopShowingInstalledNotification, 2000);
+			setTimeout(this.stopShowingInstalledNotification, 1000);
 		})
 	}
 	stopShowingInstalledNotification() {
