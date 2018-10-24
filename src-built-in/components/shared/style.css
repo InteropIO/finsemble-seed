@@ -8,6 +8,10 @@
 	position: absolute;
 	top: 10px;
 	right: 10px;
+	user-select: none;
+	font-family: var(--font-family);
+	font-size: var(--menu-font-size);
+    font-weight: var(--menu-font-weight);
 }
 .tags-menu-wrapper span {
 	line-height: 17px;
