@@ -21,6 +21,8 @@
 			"groupTileBuffer": 30,
 			"headerHeight": 32,
 			"MINIMUM_WIDTH": 175,
+			"defaultHeight": 39,
+			"defaultWidth": 600,
 			"tabbing": {
 				"enabled": true
 			},
@@ -29,7 +31,7 @@
 			}
 		},
 		"logger": {
-			"hotkeyShowCentralLogger": ["ctrl","`"]
+			"hotkeyShowCentralLogger": ["ctrl","shift","L"]
 		}
 	},
 	"systemTrayIcon": "$applicationRoot/assets/img/Finsemble_Taskbar_Icon.png",

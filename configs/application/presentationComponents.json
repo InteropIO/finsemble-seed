@@ -21,7 +21,8 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false
+						"isArrangable": false,
+						"shouldRegister": false
 					}
 				},
 				"components": {
@@ -83,7 +84,8 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false
+						"isArrangable": false,
+						"shouldRegister": false
 					}
 				},
 				"components": {
@@ -115,7 +117,8 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false
+						"isArrangable": false,
+						"shouldRegister": false
 					}
 				},
 				"components": {
@@ -145,7 +148,8 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false
+						"isArrangable": false,
+						"shouldRegister": false
 					}
 				},
 				"components": {
@@ -177,7 +181,8 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false
+						"isArrangable": false,
+						"shouldRegister": false
 					}
 				},
 				"components": {
@@ -222,7 +227,8 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false
+						"isArrangable": false,
+						"shouldRegister": false
 					}
 				},
 				"components": {
@@ -255,7 +261,8 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false
+						"isArrangable": false,
+						"shouldRegister": false
 					}
 				},
 				"components": {
@@ -287,7 +294,8 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false
+						"isArrangable": false,
+						"shouldRegister": false
 					}
 				},
 				"components": {
@@ -318,7 +326,8 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false
+						"isArrangable": false,
+						"shouldRegister": false
 					}
 				},
 				"components": {
@@ -358,7 +367,8 @@
 				},
 				"services": {
 					"dockingService": {
-						"isArrangable": false
+						"isArrangable": false,
+						"shouldRegister": false
 					}
 				},
 				"components": {
@@ -398,7 +408,8 @@
 				},
 				"services": {
 					"dockingService": {
-						"isArrangable": false
+						"isArrangable": false,
+						"shouldRegister": false
 					}
 				},
 				"components": {
@@ -438,7 +449,8 @@
 				},
 				"services": {
 					"dockingService": {
-						"isArrangable": false
+						"isArrangable": false,
+						"shouldRegister": false
 					}
 				},
 				"components": {
@@ -474,7 +486,8 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false
+						"isArrangable": false,
+						"shouldRegister": false
 					}
 				},
 				"components": {
@@ -492,34 +505,45 @@
 			"window": {
 				"id": "launcher",
 				"url": "$applicationRoot/components/toolbar/toolbar.html",
-				"height": 39,
 				"top": 0,
 				"left": 0,
 				"right": 0,
+				"height": 39,
+				"width": 600,
+				"dockedHeight": 39,
 				"position": "available",
-				"claimMonitorSpace": true,
-				"addToWorkspace": false,
+				"autoShow": true,
+				"dockable": [
+					"top",
+					"bottom"
+				],
+				"maxHeight": 39,
+				"minHeight": 39,
+				"minWidth": 99,
+				"docked": "top",
+				"canGroup": false,
 				"options": {
+					"autoShow": false,
 					"contextMenu": false,
-					"resizable": false,
 					"showTaskbarIcon": false,
-					"resizeRegion": {
-						"bottomRightCorner": 0,
-						"size": 0
-					},
 					"smallWindow": true
 				}
 			},
 			"component": {
 				"category": "system",
 				"spawnOnStartup": true,
-				"spawnOnAllMonitors": true,
+				"spawnOnAllMonitors": false,
 				"canMinimize": false
 			},
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false
+						"isArrangable": false,
+						"ignoreSnappingRequests": true
+					},
+					"workspaceService": {
+						"global": true,
+						"ignoreTilingAndTabbingRequests": true
 					}
 				},
 				"components": {
@@ -584,7 +608,8 @@
 				"services": {
 					"dockingService": {
 						"canGroup": false,
-						"isArrangable": false
+						"isArrangable": false,
+						"shouldRegister": false
 					}
 				},
 				"components": {
@@ -622,7 +647,53 @@
 				"services": {
 					"dockingService": {
 						"canGroup": false,
-						"isArrangable": false
+						"isArrangable": false,
+						"shouldRegister": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"FSBLHeader": false,
+						"persistWindowState": false
+					},
+					"Toolbar": {
+						"iconClass": "UserPreferences"
+					}
+				}
+			}
+		},
+		"Floating Titlebar": {
+			"window": {
+				"url": "$applicationRoot/components/floatingTitlebar/floatingTitlebar.html",
+				"frame": false,
+				"top": "center",
+				"left": "center",
+				"width": 30,
+				"height": 30,
+				"options": {
+					"cornerRounding": {
+						"height": 0,
+						"width": 0
+					},
+					"showTaskbarIcon": false,
+					"autoShow": false,
+					"resizable": false,
+					"alwaysOnTop": false,
+					"smallWindow": true
+				}
+			},
+			"component": {
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"canGroup": true,
+						"isArrangable": false,
+						"shouldRegister": false
 					}
 				},
 				"components": {
@@ -687,7 +758,7 @@
 			"window": {
 				"url": "$applicationRoot/components/processMonitor/processMonitor.html",
 				"width": 600,
-				"height": 400
+				"height": 700
 			},
 			"component": {
 				"category": "system"
@@ -706,6 +777,38 @@
 						"FSBLHeader": true,
 						"persistWindowState": true,
 						"title": "Process Monitor"
+					}
+				}
+			}
+		},
+		"AppMarket": {
+			"window": {
+				"url": "$applicationRoot/components/appMarket/appMarket.html",
+				"width": 600,
+				"height": 700,
+				"options": {
+					"autoShow": true,
+					"resizable": false
+				}
+			},
+			"component": {
+				"category": "system",
+				"spawnOnStartup": true
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangeable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"persistWindowState": true,
+						"title": "App Market"
 					}
 				}
 			}

@@ -43,7 +43,7 @@ function mouseInWindow(window, cb) {
 	})
 }
 
-
+let cachedBounds = null;
 var Actions = {
 	initialize: function (cb) {
 		cb();
@@ -51,6 +51,12 @@ var Actions = {
 	setFocus(bool, target) {
 		focus = bool;
 		if (bool) {
+			if (window.outerWidth < 400) {
+				finsembleWindow.getBounds((err, bounds) => {
+					cachedBounds = bounds;
+					finsembleWindow.animate({ transitions: { size: { duration: 150, width: 400 } } }, {}, Function.prototype);
+				})
+			}
 			menuStore.setValue({ field: "active", value: true })
 			activeSearchBar = true;
 			if (!menuWindow) {
@@ -60,24 +66,7 @@ var Actions = {
 			return menuWindow.isShowing((showing) => {
 				if (showing) return;
 
-				const inputContainer = document.getElementById("inputContainer");
-				if (inputContainer) {
-					const bounds = inputContainer.getBoundingClientRect();
-
-					// Using showAt rather than WindowClient.showWindow because showWindow was causing auto-focus on the 
-					// searchMenu which caused an issue with the animations of the search button.
-					menuWindow.showAt(
-						window.screenX + bounds.left,
-						bounds.bottom + window.screenY,
-						null,
-						(err) => {
-							if (err) {
-								FSBL.Clients.Logger.error(err);
-							}
-						});
-				} else {
-					FSBL.Clients.Logger.error("No element with ID 'inputContainer' exists");
-				}
+				Actions.positionSearchResults();
 			});
 
 		}
@@ -94,16 +83,51 @@ var Actions = {
 				}
 			})
 		})
-
-
 	},
+	positionSearchResults() {
+		const inputContainer = document.getElementById("inputContainer");
+		if (inputContainer) {
+			const bounds = inputContainer.getBoundingClientRect();
+			let showParams = {
+				monitor: 'mine',
+				position: 'relative',
+				left: bounds.left,
+				forceOntoMonitor: true,
+				top: 'adjacent',
+				autoFocus: false
+			}
+			FSBL.Clients.LauncherClient.showWindow({ windowName: menuWindow.name }, showParams);
+
+		} else {
+			FSBL.Clients.Logger.error("No element with ID 'inputContainer' exists");
+		}
+	},
+<<<<<<< HEAD
 	handleClose() {
 	//console.log("close a window")
 		window.getSelection().removeAllRanges();
 		document.getElementById("searchInput").blur();
 		menuStore.setValue({ field: "active", value: false })
+=======
+	//handleClose gets called for several reasons. One of those is when the window starts moving. If it starts moving, an event is passed in. If the event is passed in, we don't want to animate the window. If it's just a blur, we'll animate the change in size.
+	handleClose(e) {
+>>>>>>> 9684_new_app_catalog_components
 		if (!menuWindow) return;
-		menuWindow.hide();
+		menuWindow.isShowing(function (showing) {
+			if (showing) {
+				if (!e && cachedBounds) {
+					finsembleWindow.animate({ transitions: { size: { duration: 150, width: cachedBounds.width } } }, {}, () => {
+						cachedBounds = null;
+					});
+				}
+				window.getSelection().removeAllRanges();
+				document.getElementById("searchInput").blur();
+				menuStore.setValue({ field: "active", value: false })
+				if (!menuWindow) return;
+				menuWindow.hide();
+			}
+		});
+
 	},
 	setupWindow() {
 		if (!menuReference.finWindow) return;
@@ -135,6 +159,9 @@ var Actions = {
 		FSBL.Clients.SearchClient.search({ text: text }, function (err, response) {
 			var updatedResults = [].concat.apply([], response)
 			Actions.setList(updatedResults);
+			setTimeout(() => {
+				Actions.positionSearchResults();
+			}, 100);
 		})
 	},
 	menuBlur() {
@@ -146,11 +173,19 @@ var Actions = {
 	}
 };
 function searchTest(params, cb) {
+<<<<<<< HEAD
 //console.log("params", params)
 	fetch('/search?text=' + params.text).then(function (response) {
 		return response.json();
 	}).then(function (json) {
 	//console.log("json", cb);
+=======
+	//console.log("params", params)
+	fetch('/search?text=' + params.text).then(function (response) {
+		return response.json();
+	}).then(function (json) {
+		//console.log("json", cb);
+>>>>>>> 9684_new_app_catalog_components
 		return cb(null, json);
 
 	});
@@ -166,7 +201,11 @@ function createStore(done) {
 		activeSearchBar: null,
 		menuIdentifier: null
 	};
+<<<<<<< HEAD
 //console.log("CreateStore", "Finsemble-SearchStore-" + finWindow.name)
+=======
+	//console.log("CreateStore", "Finsemble-SearchStore-" + finWindow.name)
+>>>>>>> 9684_new_app_catalog_components
 	FSBL.Clients.DistributedStoreClient.createStore({ store: "Finsemble-SearchStore-" + finWindow.name, values: defaultData, global: true }, function (err, store) {
 		menuStore = store;
 
@@ -174,7 +213,11 @@ function createStore(done) {
 			store.addListener({ field: "menuIdentifier" }, Actions.updateMenuReference);
 			if (!data.menuSpawned) {
 				FSBL.Clients.LauncherClient.spawn("searchMenu", { name: "searchMenu." + finWindow.name, data: { owner: finWindow.name } }, function (err, data) {
+<<<<<<< HEAD
 				//console.log("Err", err, data)
+=======
+					//console.log("Err", err, data)
+>>>>>>> 9684_new_app_catalog_components
 					menuStore.setValue({ field: "menuIdentifier", value: data })
 					menuWindow = fin.desktop.Window.wrap(data.finWindow.app_uuid, data.finWindow.name);
 					menuStore.setValue({ field: "menuSpawned", value: true })
@@ -196,16 +239,34 @@ function createStore(done) {
 		})
 		done();
 	});
-	finWindow.addEventListener("blurred", function (event) {
+
+	finsembleWindow.listenForBoundsSet();
+	finsembleWindow.addListener("startedMoving", Actions.handleClose);
+	finsembleWindow.addListener("focused", () => {
+		console.log("window Focused");
+		Actions.setFocus(true);
+	})
+	finsembleWindow.addListener("blurred", function (event) {
 		Actions.setFocus(false);
 	}, function () {
 	}, function (reason) {
+<<<<<<< HEAD
 	//console.log("failure:" + reason);
+=======
+		//console.log("failure:" + reason);
+	});
+	finsembleWindow.addListener("hidden", () => {
+		Actions.handleClose();
+>>>>>>> 9684_new_app_catalog_components
 	});
 }
 
 function initialize(cb) {
+<<<<<<< HEAD
 //console.log("init store")
+=======
+	//console.log("init store")
+>>>>>>> 9684_new_app_catalog_components
 	async.parallel([
 		createStore,
 	], function (err) {

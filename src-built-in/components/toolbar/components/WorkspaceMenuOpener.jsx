@@ -6,8 +6,8 @@ export default class WorkspaceMenuOpener extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            workspaceMenuWindowName: null,
-            activeWorkspaceName: null
+            workspaceMenuWindowName: ToolbarStore.Store.getValue("workspaceMenuWindowName"),
+            activeWorkspaceName: ToolbarStore.Store.getValue("activeWorkspaceName")
         };
         this.bindCorrectContext();
     }
@@ -44,6 +44,6 @@ export default class WorkspaceMenuOpener extends React.Component {
     }
     render() {
         if (this.state.activeWorkspaceName === null) return null;
-        return <FinsembleButton menuWindowName={"Workspace Management Menu"} preSpawn={true} buttonType={["MenuLauncher", "Toolbar"]} className={"finsemble-toolbar-workspace-button-label"} label={this.state.activeWorkspaceName} menuType="Workspace Management Menu" />
+        return <FinsembleButton menuWindowName={"Workspace Management Menu"} preSpawn={true} buttonType={["MenuLauncher", "Toolbar"]} className={"finsemble-toolbar-workspace-button-label workspace-menu-button"} label={this.state.activeWorkspaceName} menuType="Workspace Management Menu" />
     }
 }
