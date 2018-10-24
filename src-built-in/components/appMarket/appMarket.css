@@ -10,6 +10,32 @@
 	position: relative;
 }
 
+::-webkit-scrollbar-track {
+    border-radius: 3px;
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-track-piece {
+    display: none;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    background-color: transparent;
+	border-radius: 3px;
+	display: none;
+}
+
+::-webkit-scrollbar-thumb {
+    cursor: pointer;
+    border-radius: 9px;
+    background-color: var(--scrollbar-color);
+}
+
+.market_content {
+	padding-bottom: 25px;
+}
+
 .hero-main {
 	display: flex;
 	flex-direction: row;
