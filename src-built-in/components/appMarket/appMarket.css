@@ -402,6 +402,7 @@
 	line-height: normal;
 	letter-spacing: normal;
 	color: #ffffff;
+	cursor: pointer;
 }
 
 .search-main .tag-selector .tag-selector-label .ff-tag {
