@@ -395,11 +395,6 @@ export default class TabRegion extends React.Component {
         })
     }
 
-    componentWillMount() {
-        HeaderStore.addListener("tabRegionShow", this.onTabRegionShow)
-
-
-    }
     onTabRegionShow() {
 
         let boundingBox = this.refs.Me.getBoundingClientRect();
@@ -410,7 +405,6 @@ export default class TabRegion extends React.Component {
         })
     }
     componentDidMount() {
-        FSBL.Clients.WindowClient.finsembleWindow.addListener('bounds-set', this.onWindowResize);
         let boundingBox = this.refs.Me.getBoundingClientRect();
         Store.addListener({ field: "tabs" }, this.onTabsChanged);
         this.setState({
@@ -419,12 +413,14 @@ export default class TabRegion extends React.Component {
             tabWidth: this.getTabWidth({ boundingBox })
         })
     }
-
+    componentWillMount() {
+        HeaderStore.addListener("tabRegionShow", this.onTabRegionShow)
+        FSBL.Clients.WindowClient.finsembleWindow.addListener('bounds-set', this.onWindowResize);
+    }
     componentWillUnmount() {
         HeaderStore.removeListener("tabRegionShow", this.onTabRegionShow)
         Store.removeListener({ field: "tabs" }, this.onTabsChanged);
         FSBL.Clients.WindowClient.finsembleWindow.removeListener('bounds-set', this.onWindowResize);
-
     }
     hoverAction(newHoverState) {
         this.setState({ hoverState: newHoverState });

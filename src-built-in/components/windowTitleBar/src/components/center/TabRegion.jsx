@@ -457,10 +457,11 @@ export default class TabRegion extends React.Component {
         // Store.addListener({ field: "activeTab" }, this.onActiveTabChanged);
         Store.addListener({ field: "tabs" }, this.onTabsChanged);
         Store.addListener({ field: "tabListTranslateX" }, this.onTabListTranslateChanged)
+        FSBL.Clients.WindowClient.finsembleWindow.addListener('bounds-set', this.onWindowResize);
     }
 
     componentDidMount() {
-        FSBL.Clients.WindowClient.finsembleWindow.addListener('bounds-set', this.onWindowResize);
+
         let boundingBox = this.refs.Me.getBoundingClientRect();
         this.setState({
             boundingBox: boundingBox,
