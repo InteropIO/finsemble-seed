@@ -102,16 +102,11 @@ var Actions = {
 			FSBL.Clients.Logger.error("No element with ID 'inputContainer' exists");
 		}
 	},
-<<<<<<< HEAD
 	handleClose() {
 	//console.log("close a window")
 		window.getSelection().removeAllRanges();
 		document.getElementById("searchInput").blur();
 		menuStore.setValue({ field: "active", value: false })
-=======
-	//handleClose gets called for several reasons. One of those is when the window starts moving. If it starts moving, an event is passed in. If the event is passed in, we don't want to animate the window. If it's just a blur, we'll animate the change in size.
-	handleClose(e) {
->>>>>>> 9684_new_app_catalog_components
 		if (!menuWindow) return;
 		menuWindow.isShowing(function (showing) {
 			if (showing) {
@@ -173,19 +168,11 @@ var Actions = {
 	}
 };
 function searchTest(params, cb) {
-<<<<<<< HEAD
 //console.log("params", params)
 	fetch('/search?text=' + params.text).then(function (response) {
 		return response.json();
 	}).then(function (json) {
 	//console.log("json", cb);
-=======
-	//console.log("params", params)
-	fetch('/search?text=' + params.text).then(function (response) {
-		return response.json();
-	}).then(function (json) {
-		//console.log("json", cb);
->>>>>>> 9684_new_app_catalog_components
 		return cb(null, json);
 
 	});
@@ -201,11 +188,7 @@ function createStore(done) {
 		activeSearchBar: null,
 		menuIdentifier: null
 	};
-<<<<<<< HEAD
 //console.log("CreateStore", "Finsemble-SearchStore-" + finWindow.name)
-=======
-	//console.log("CreateStore", "Finsemble-SearchStore-" + finWindow.name)
->>>>>>> 9684_new_app_catalog_components
 	FSBL.Clients.DistributedStoreClient.createStore({ store: "Finsemble-SearchStore-" + finWindow.name, values: defaultData, global: true }, function (err, store) {
 		menuStore = store;
 
@@ -213,11 +196,7 @@ function createStore(done) {
 			store.addListener({ field: "menuIdentifier" }, Actions.updateMenuReference);
 			if (!data.menuSpawned) {
 				FSBL.Clients.LauncherClient.spawn("searchMenu", { name: "searchMenu." + finWindow.name, data: { owner: finWindow.name } }, function (err, data) {
-<<<<<<< HEAD
 				//console.log("Err", err, data)
-=======
-					//console.log("Err", err, data)
->>>>>>> 9684_new_app_catalog_components
 					menuStore.setValue({ field: "menuIdentifier", value: data })
 					menuWindow = fin.desktop.Window.wrap(data.finWindow.app_uuid, data.finWindow.name);
 					menuStore.setValue({ field: "menuSpawned", value: true })
@@ -250,23 +229,12 @@ function createStore(done) {
 		Actions.setFocus(false);
 	}, function () {
 	}, function (reason) {
-<<<<<<< HEAD
 	//console.log("failure:" + reason);
-=======
-		//console.log("failure:" + reason);
-	});
-	finsembleWindow.addListener("hidden", () => {
-		Actions.handleClose();
->>>>>>> 9684_new_app_catalog_components
 	});
 }
 
 function initialize(cb) {
-<<<<<<< HEAD
 //console.log("init store")
-=======
-	//console.log("init store")
->>>>>>> 9684_new_app_catalog_components
 	async.parallel([
 		createStore,
 	], function (err) {
