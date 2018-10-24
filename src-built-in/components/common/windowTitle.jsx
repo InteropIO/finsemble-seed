@@ -41,10 +41,11 @@ class title extends Component {
 
 	render() {
 		let titleWidth = this.props.titleWidth;
+		let style = titleWidth ? {
+			width: titleWidth
+		} : {};
 		return (
-			<div className="fsbl-tab-title" style={{
-				width: titleWidth
-			}}>
+			<div className="fsbl-tab-title" style={style}>
 				{/* @todo, figure out where we're setting the title to an empty object.... */}
 				{this.state.title}</div>
 		);

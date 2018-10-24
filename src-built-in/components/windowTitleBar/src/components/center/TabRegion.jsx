@@ -531,8 +531,6 @@ export default class TabRegion extends React.Component {
  * Function to render the title. Helps keep the render code clean.
  */
 function renderTitle() {
-    let titleWidth = this.state.tabWidth - ICON_AREA - CLOSE_BUTTON_MARGIN;
-
     return (<div
         draggable="true"
         onDragStart={(e) => {
@@ -546,7 +544,7 @@ function renderTitle() {
         className={"fsbl-header-title"}>
         <FinsembleHoverDetector edge="top" hoverAction={this.hoverAction.bind(this)} />
         <Logo windowIdentifier={FSBL.Clients.WindowClient.getWindowIdentifier()} />
-        <Title titleWidth={titleWidth} windowIdentifier={FSBL.Clients.WindowClient.getWindowIdentifier()}></Title>
+        <Title windowIdentifier={FSBL.Clients.WindowClient.getWindowIdentifier()}></Title>
     </div>);
 }
 
