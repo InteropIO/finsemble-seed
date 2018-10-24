@@ -162,7 +162,7 @@ export default class AppMarket extends React.Component {
 			let results = filteredApps.length > 0 ? filteredApps : apps;
 			pageContents = <AppResults cards={results} tags={activeTags} addApp={this.addApp} removeApp={this.removeApp} openAppShowcase={this.openAppShowcase} addTag={this.addTag} />;
 		} else if (this.state.activePage === "showcase") {
-			pageContents = <AppShowcase app={this.state.activeApp} addApp={this.addApp} removeApp={this.removeApp} />;
+			pageContents = <AppShowcase app={this.state.activeApp} addApp={this.addApp} removeApp={this.removeApp} addTag={this.addTag} />;
 		} else {
 			pageContents = <div></div>;
 		}

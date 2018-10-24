@@ -24,7 +24,7 @@ const SupportNotes = props => {
 						let tagName = tag[0].toUpperCase() + tag.substring(1);
 
 						return (
-							<div key={"showcase-tag-label-" + i} className="tag-label">
+							<div key={"showcase-tag-label-" + i} className="tag-label" onClick={props.addTag.bind(this, tag)}>
 								<span className="label-content">{tagName}</span>
 							</div>
 						);

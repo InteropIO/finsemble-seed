@@ -37,6 +37,7 @@ class AppShowcase extends Component {
 		this.openSite = this.openSite.bind(this);
 		this.openModal = this.openModal.bind(this);
 		this.closeModal = this.closeModal.bind(this);
+		this.addTag = this.addTag.bind(this);
 		this.addApp = this.addApp.bind(this);
 		this.removeApp = this.removeApp.bind(this);
 	}
@@ -79,8 +80,11 @@ class AppShowcase extends Component {
 		e.stopPropagation();
 		this.props.removeApp(this.state.name);
 	}
+	addTag(name) {
+		this.props.addTag(name);
+	}
 	render() {
-		let { name, installed, iconUrl, imageIndex:index } = this.state;
+		let { name, iconUrl, imageIndex:index } = this.state;
 
 		let images = [];
 		for (let i = 0; i < 4; i++) {
@@ -123,7 +127,7 @@ class AppShowcase extends Component {
 
 				<VersionNotes version={this.props.app.version} />
 
-				<SupportNotes email={this.props.app.supportEmail} tags={this.props.app.tags} />
+				<SupportNotes email={this.props.app.supportEmail} tags={this.props.app.tags} addTag={this.addTag} />
 			</div>
 		);
 	}
