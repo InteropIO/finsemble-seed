@@ -22,7 +22,8 @@ export default class FoldersList extends React.Component {
 		if (folder.name === 'Favorites') {
 			console.info('Dropped app in favorites.')
 		}
-		storeActions.addAppToFolder(folder, app)
+		// Do not do anything if its my apps folder
+		folder.name !== 'My Apps' && storeActions.addAppToFolder(folder, app)
 	}
 
 
