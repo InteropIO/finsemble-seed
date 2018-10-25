@@ -22,6 +22,11 @@ img {
     -webkit-user-select: none;
     -ms-user-select: none;
 }
+
+.app-launcher-menu {
+    height: 100%;
+}
+
 .pointer {
     cursor: pointer;
 }

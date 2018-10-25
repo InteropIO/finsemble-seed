@@ -42,7 +42,7 @@ class AppLauncher extends React.Component {
 
 	render() {
 		return (
-			<FinsembleMenu className='menu-secondary'>
+			<FinsembleMenu className="app-launcher-menu">
 				<div className="user-preferences">
 					<div className="complex-menu-wrapper">
 						<LeftNav openAppMarket={this.openAppMarket} />
