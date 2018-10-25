@@ -92,7 +92,6 @@ class _ToolbarStore {
 					}
 					cb(null, result);
 				})
-				cb(null, result);
 			});
 		})
 
