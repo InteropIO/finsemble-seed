@@ -88,6 +88,7 @@ class WindowTitleBar extends React.Component {
 		this.onHackScrollbarChanged = this.onHackScrollbarChanged.bind(this);
 		this.onTilingStop = this.onTilingStop.bind(this);
 		this.onTilingStart = this.onTilingStart.bind(this);
+		this.resizeDragHandle = this.resizeDragHandle.bind(this);
 
 	}
 	componentWillMount() {
@@ -399,6 +400,7 @@ class WindowTitleBar extends React.Component {
 							listenForDragOver={!this.state.allowDragOnCenterRegion}
 							tabs={this.state.tabs}
 							ref="tabArea"
+							onTitleUpdated={this.resizeDragHandle}
 						/>}
 
 				</div>
