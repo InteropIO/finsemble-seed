@@ -456,8 +456,6 @@ export default class TabRegion extends React.Component {
         });
     }
     renderTitle() {
-        let titleWidth = this.state.tabWidth - ICON_AREA - CLOSE_BUTTON_MARGIN;
-
         return (<div
             draggable="true"
             onDragStart={(e) => {
@@ -469,7 +467,7 @@ export default class TabRegion extends React.Component {
             className={"fsbl-header-title cq-no-drag"}>
             <FinsembleHoverDetector edge="top" hoverAction={this.hoverAction.bind(this)} />
             <Logo windowIdentifier={Actions.getWindowIdentifier()} />
-            <Title titleWidth={titleWidth} windowIdentifier={Actions.getWindowIdentifier()}></Title>
+            <Title windowIdentifier={Actions.getWindowIdentifier()}></Title>
         </div>);
     }
     render() {
