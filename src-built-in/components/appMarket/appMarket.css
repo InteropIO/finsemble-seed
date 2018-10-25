@@ -511,7 +511,6 @@
 .app-showcase .app-warning {
 	display: flex;
 	align-self: center;
-	width: 502px;
 	height: 16px;
 	font-family: Roboto;
 	font-size: 12px;
@@ -521,6 +520,17 @@
 	line-height: normal;
 	letter-spacing: normal;
 	color: #ee5c5c;
+	margin-bottom: 8px
+}
+
+.app-showcase .ff-alert {
+	font-size: 14px;
+	display: flex;
+}
+
+.app-showcase .app-warning-wrapper {
+	display: flex;
+	align-items: center;
 }
 
 .app-showcase .app-warning .app-warning-text {
@@ -676,8 +686,12 @@
 	margin: 0;
 }
 
-.app-notes a {
+.app-showcase a {
 	color: var(--blue2);
+}
+
+.app-showcase a:visited {
+	color: var(--blue5);
 }
 
 .app-showcase .app-notes .developer-content {
