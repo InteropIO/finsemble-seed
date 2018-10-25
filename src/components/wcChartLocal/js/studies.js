@@ -16,7 +16,20 @@
 
 	/**
 	 * @typedef {object} studyDescriptor
-	 * @property {string} name The study's id
+	 * @property {string} name The study's id.
+			     * 
+			     * ** Please note: ** To facilitate study name translations, study names use zero-width non-joiner (unprintable) characters to delimit the general study name from the specific study parameters. 
+			     * Example: "\u200c"+Aroon+"\u200c"+(14). 
+			     * At translation time, the library will split the text into pieces using the ZWNJ characters, parentheses and commas to just translate the required part of a study name. 
+			     * For more information on ZWNJ characters see: [Zero-width_non-joiner](https://en.wikipedia.org/wiki/Zero-width_non-joiner). 
+			     * Please be aware of these ZWNJ characters, which will now be present in all study names and corresponding panel names; including the `layout.studies` study keys. 
+			     * Affected fields in the study descriptors could be `id	`, `display`, `name` and `panel`. 
+			     * <br>To prevent issues, always use the names returned in the **study descriptor**. This will ensure compatibility between versions.
+			     * >Example:
+			     * ><br>Correct reference: 
+			     * ><br>	`stxx.layout.studies["\u200c"+Aroon+"\u200c"+(14)];`
+			     * ><br>Incorrect reference:
+			     * ><br>	`stxx.layout.studies["Aroon (14)"];`
 	 * @property {object} inputs Keys for each possible study input with descriptors for the set and default values
 	 * @property {number} min The minimum data point
 	 * @property {number} max The maximum data point
@@ -29,6 +42,9 @@
 	//
 	// (end definitions)
 	//
+
+	// initialization for server-side studies
+	if(!_exports.CIQ) _exports.CIQ = {};
 
 	var CIQ=_exports.CIQ;
 
@@ -76,6 +92,7 @@
 	 * @param {object} outputs	Names and values (colors) of outputs
 	 * @param {object} parameters Additional parameters that are unique to the particular study
 	 * @memberOf CIQ.Studies
+	 * @private
 	 */
 	CIQ.Studies.StudyDescriptor=function(name, type, panel, inputs, outputs, parameters){
 		this.name=name;
@@ -115,12 +132,12 @@
 	 */
 	CIQ.Studies.generateID=function(stx, studyName, inputs, replaceID, customName){
 		var libraryEntry=CIQ.Studies.studyLibrary[studyName];
-		if(libraryEntry){
-			// only one instance can exist at a time if custom removal, so return study name
-			if(libraryEntry.customRemoval) return (customName||studyName);
-		}
 		var translationPiece="\u200c"+(customName||studyName)+"\u200c";  // zero-width non-joiner (unprintable) to delimit translatable phrase
 		var id=translationPiece;
+		if(libraryEntry){
+			// only one instance can exist at a time if custom removal, so return study name
+			if(libraryEntry.customRemoval) return id;
+		}
 		if(!CIQ.isEmpty(inputs)){
 			id+=" (";
 			var first=false;
@@ -167,13 +184,10 @@
 	 * @param  {string} [params.name] The libraryEntry key for the study to add.
 	 * The [libraryEntry]{@link CIQ.Studies.studyLibrary} is the object that defines the prototype for a study.
 	 * May contain attributes which are used to help construct the input fields of the study dialog.
-	 * See documentation of {@link CIQ.Studies.studyLibrary} and [DialogHelper Object](tutorial-Using and Customizing Studies.html#DialogHelper).
+	 * See documentation of {@link CIQ.Studies.studyLibrary} and [DialogHelper Object](tutorial-Using and Customizing Studies - Advanced.html#DialogHelper).
 	 * Not needed if `params.sd` is present.
-	 * @param  {CIQ.Studies.StudyDescriptor} [params.sd] A study descriptor when modifying an existing study. If present, takes precedence over `params.name`
+	 * @param  {studyDescriptor} [params.sd] A study descriptor; when requesting values for an existing study. If present, takes precedence over `params.name`. You may set the 'panelName' parameter to "panel" (sd.parameters.panelName), and this method will provide in the parameters object an array of valid panels, which you can present to the user as options to move the study to a different panel.
 	 * @param  {CIQ.CIQ.ChartEngine} params.stx A chart object
-	 * @param  {Object} [params.inputs] Existing input parameters for the study (if modifying)
-	 * @param  {Object} [params.outputs] Existing output parameters for the study (if modifying)
-	 * @param  {Object} [params.parameters] Existing additional parameters for the study (if modifying)
 	 * @name  CIQ.Studies.DialogHelper
 	 * @constructor
 	 * @example
@@ -181,6 +195,12 @@
 	 * console.log('Inputs:',JSON.stringify(helper.inputs));
 	 * console.log('Outputs:',JSON.stringify(helper.outputs));
 	 * console.log('Parameters:',JSON.stringify(helper.parameters));
+	 * @example
+	 * // how to set 'panelName' to get a list of all available panels as part of the parameters object
+	 * var sd = CIQ.Studies.addStudy(stxx, "Aroon");
+	 * sd.parameters.panelName='panel';
+	 * var dialogHelper = new CIQ.Studies.DialogHelper({"stx":stxx,"sd":sd});
+	 * console.log('Parameters:',JSON.stringify(dialogHelper.parameters));
 	 */
 	CIQ.Studies.DialogHelper=function(params){
 		var stx=this.stx=params.stx;
@@ -282,7 +302,7 @@
 		Outputs are much simpler than inputs. Outputs are simply a list of available outputs and the selected color for that output. So here
 		we print a line item in the dialog for each output and attach a color picker to it. The color picker is obtained from the Context.
 		 */
-		
+
 		for(i in libraryEntry.outputs){
 			var output={
 				name:i,
@@ -306,7 +326,7 @@
 			var panelParameters={
 				"Panel Name":{panelName: parameters.panelName, value: (sd.overlay||sd.underlay)?sd.panel:"Own panel"},
 				"Underlay":{underlay: parameters.underlayEnabled, value: sd.underlay},
-				"Y-Axis":{yaxisDisplay: parameters.yaxisDisplay, value: (myAxis&&myAxis.position)||((sd.overlay||sd.underlay)?"shared":(panel.yAxis.position||panel.chart.yAxis.position||"right")), color:myAxis&&myAxis.textStyle?myAxis.textStyle:null}
+				"Y-Axis":{yaxisDisplay: parameters.yaxisDisplay, value: (myAxis&&myAxis.position)||((sd.overlay||sd.underlay)?"shared":(panel.yAxis.position||"default")), color:myAxis&&myAxis.textStyle?myAxis.textStyle:null}
 			};
 			for(var label in panelParameters){
 				for(var name in panelParameters[label]){
@@ -352,6 +372,7 @@
 		if(libraryEntry.parameters){
 			var init=libraryEntry.parameters.init;
 			if(init){
+				var libParameters=[];
 				if(libraryEntry.parameters.template=="studyOverZones"){
 					obj={name:"studyOverZones", heading:stx.translateIf("Show Zones"),
 						defaultValue:init.studyOverZonesEnabled, value:init.studyOverZonesEnabled};
@@ -359,7 +380,7 @@
 						obj.value=parameters.studyOverZonesEnabled;
 					}
 					obj.type='checkbox';
-					this.parameters.push(obj);
+					libParameters.push(obj);
 
 					obj={name:"studyOverBought", heading:stx.translateIf("OverBought"),
 						defaultValue:init.studyOverBoughtValue, value:init.studyOverBoughtValue,
@@ -368,7 +389,7 @@
 					if(parameters && parameters.studyOverBoughtColor) obj.color=parameters.studyOverBoughtColor;
 					if(obj.color=="auto") obj.color=stx.defaultColor;
 					obj.type='text';
-					this.parameters.push(obj);
+					libParameters.push(obj);
 
 					obj={name:"studyOverSold", heading:stx.translateIf("OverSold"),
 						defaultValue:init.studyOverSoldValue, value:init.studyOverSoldValue,
@@ -377,10 +398,12 @@
 					if(parameters && parameters.studyOverSoldColor) obj.color=parameters.studyOverSoldColor;
 					if(obj.color=="auto") obj.color=stx.defaultColor;
 					obj.type='text';
-					this.parameters.push(obj);
+					libParameters.push(obj);
 
 					if(!this.attributes.studyOverBoughtValue) this.attributes.studyOverBoughtValue={};
 					if(!this.attributes.studyOverSoldValue) this.attributes.studyOverSoldValue={};
+					
+					this.parameters=libParameters.concat(this.parameters);  // lib parameters come first
 				}
 			}
 		}
@@ -388,11 +411,29 @@
 
 	/**
 	 * Update (or add) the study attached to the DialogHelper.
+	 * 
+	 * Once added or modified, the new study descriptor will be stored in the `sd` object of the DialogHelper.
+	 * 
 	 * @param  {Object} updates If updating, it should contain an object with updates to the `inputs`, `outputs` and `parameters` object used in {@link CIQ.Studies.addStudy}.  A new study ID will be created using the default format or parameters.replaceID, if provided.
 	 * @memberOf CIQ.Studies.DialogHelper
 	 * @example
 	 * var helper=new CIQ.Studies.DialogHelper({sd:sd, stx:stx});
 	 * helper.updateStudy({inputs:{Period:60}});
+	 * var updatedStudy = helper.sd;
+	 * @example
+	 * // add the study
+	 * var initialStudy = CIQ.Studies.addStudy(stxx, "Aroon");
+	 * 
+	 * // move it to the primary (chart) panel
+	 * var dialogHelper = new CIQ.Studies.DialogHelper({"stx":stxx,"sd": initialStudy});
+	 * dialogHelper.updateStudy({"parameters":{"panelName":"chart"}});
+	 * 
+	 * // capture the updated study descriptor for future use ( the initialStudy can not be used any more as the actual study has changed when it was moved )
+	 * var updatedStudy = dialogHelper.sd;
+	 * 
+	 * // move the updated study back to its own panel
+	 * var dialogHelper = new CIQ.Studies.DialogHelper({"stx":stxx,"sd":updatedStudy});
+	 * dialogHelper.updateStudy({"parameters":{"panelName":"Own panel"}});
 	 */
 	CIQ.Studies.DialogHelper.prototype.updateStudy=function(updates){
 		var newParams={};
@@ -422,7 +463,9 @@
 	 * @param  {studyDescriptor} sd The study descriptor being prepared
 	 * @param  {object} [parameters] Object containing any of the following options:
 	 * @param  {boolean} [parameters.replaceID] Remove any overlays that relies on the old panel ID name
+	 * @param  {boolean} [parameters.calculateOnly] If true, do not draw the study, just calculate its values
 	 * @memberOf CIQ.Studies
+	 * @since 6.2.0 added calculateOnly parameter
 	 */
 	CIQ.Studies.prepareStudy=function(stx, study, sd, parameters){
 		if(typeof(study.calculateFN)=="undefined") study.useRawValues=true;
@@ -448,9 +491,7 @@
 		if(sd.overlay || sd.underlay){
 			stx.addOverlay(sd);
 		}
-		if(study.feed ){
-			stx.attachTagAlongQuoteFeed(study.feed);
-		}else if(!stx.currentlyImporting) { // silent mode while importing
+		if(!stx.currentlyImporting && !(parameters && parameters.calculateOnly)) { // silent mode while importing
 			if(sd.chart.dataSet) stx.createDataSet();
 			stx.draw();
 		}
@@ -546,16 +587,13 @@
 
 	/**
 	 * Adds or replace a study on the chart. A layout change event is triggered when this occurs. See {@tutorial Using and Customizing Studies} for more details.
-	 * <P>Example: <iframe width="800" height="500" scrolling="no" seamless="seamless" align="top" style="float:top" src="http://jsfiddle.net/chartiq/5y4a0kry/embedded/result,js,html,css/" allowfullscreen="allowfullscreen" frameborder="1"></iframe>
+	 * <P>Example: <iframe width="800" height="500" scrolling="no" seamless="seamless" align="top" style="float:top" src="https://jsfiddle.net/chartiq/5y4a0kry/embedded/result,js,html,css/" allowfullscreen="allowfullscreen" frameborder="1"></iframe>
 	 *
-	 * Optionally you can assign the edit callback to a function that can handle initialization of a dialog box for editing studies.
-	 * If the callback is not assigned a function, the edit study buttons/functionality will not appear.
+	 * Optionally you can define an event listener to call a custom function that can handle initialization of a dialog box for editing studies.
+	 * If there is no listener set, the edit study buttons/functionality will not appear.
 	 * The 'Study Edit' feature is standard functionality in the advanced package.
-	 *
-	 * Prior to version 2015-07-01, all edit functionality was handled by `stx.editCallback` and was limited to panel studies.
-	 * Starting on version 2015-07-01, edit functionality is handled by `stxx.callbacks.studyPanelEdit` and `stxx.callbacks.studyOverlayEdit`; and it is available on both panel studies and overly studies.
 	 * See Examples for exact function parameters and return value requirements.
-	 * Please note that these callbacks must be set **before** you call importLayout. Otherwise your imported studies will not have an edit capability.
+	 * Please note that these listeners must be set **before** you call importLayout. Otherwise your imported studies will not have an edit capability.
 	 *
 	 * @param {CIQ.ChartEngine} stx		The chart object
 	 * @param {string} type	   The name of the study (object key on the {@link CIQ.Studies.studyLibrary})
@@ -566,32 +604,39 @@
 	 * @param {object} [parameters] Additional custom parameters for this study if supported or required by that study. Default is those defined in the {@link CIQ.Studies.studyLibrary}.
 	 * @param {object} [parameters.replaceID] If `inputs.id` is specified, this value can be used to set the new ID for the modified study( will display as the study name on the study panel). If omitted the existing ID will be preserved.
 	 * @param {object} [parameters.display] If this is supplied, use it to form the full study name. Otherwise `studyName` will be used. Is both `inputs.display` and `parameters.display` are set, `inputs.display` will always take precedence.<br>ie: if custom name is 'SAMPLE', the unique name returned would resemble "SAMPLE(param1,param2,param3,...)-X".
-	 * @param {string} [panelName] Optionally specify the panel. The relationship between studies and their panels is kept in {@link CIQ.Studies.studyPanelMap}. If not specified then an attempt will be made to locate a panel based on the input id or otherwise created if required. Multiple studies can be overlayed on any panel.
+	 * @param {object} [parameters.calculateOnly] Only setup the study for calculations and not display.  If this is supplied, UI elements will not be added.
+	 * @param {string} [panelName] Optionally specify the panel. The relationship between studies and their panels is kept in {@link CIQ.Studies.studyPanelMap}. If not specified then an attempt will be made to locate a panel based on the input id or otherwise created if required. Multiple studies can be overlaid on any panel.
 	 * @param {object} [study] Optionally supply a study definition, overriding what may be found in the study library
-	 * @return {object} A study descriptor which can be used to remove or modify the study.
+	 * @return {studyDescriptor} A study descriptor which can be used to remove or modify the study.
 	 * @since
 	 * <br>&bull; 3.0.0 added study argument
 	 * <br>&bull; 5.1.1 `parameters.display` added. If this is supplied, use it to form the full study name.
-	 * <br>&bull; 5.2.0 multiple studies can be overlayed on any panel using the `panelName` parameter.
+	 * <br>&bull; 5.2.0 multiple studies can be overlaid on any panel using the `panelName` parameter.
 	 * @memberOf CIQ.Studies
-	 * @example
+	 * @example <caption>Add a volume underlay study with custom colors:</caption>
 	 * CIQ.Studies.addStudy(stxx, "vol undr", {}, {"Up Volume":"#8cc176","Down Volume":"#b82c0c"});
-	 * @example
-	 * // this is an example of  the expected stxx.editCallback function for version prior to version 2015-07-01
+	 * @example <caption>This is an example of the expected stxx.editCallback function for version prior to version 2015-07-01:</caption>
 	 * stxx.editCallback=function(stx, sd){
 	 *	// your code here
 	 *	return $$("studyDialog"); // This is a reference to the actual HTML dialog container that can be filled by studyDialog.
 	 * };
-	 * @example
+	 * @example <caption>Define the edit function for study Panels:</caption>
 	 * var params={stx:stx,sd:sd,inputs:inputs,outputs:outputs, parameters:parameters};
-	 * stxx.callbacks.studyPanelEdit=function(params){
+	 * stxx.addEventListener("studyOverlayEdit", function(studyData){
 	 *		// your code here
-	 * };
-	 * @example
-	 * var params={stx:stx,sd:sd,inputs:inputs,outputs:outputs, parameters:parameters};
-	 * stxx.callbacks.studyOverlayEdit=function(params){
-	 *		// your code here
-	 * };
+	 * });
+	 * @example <caption>Define the edit function for study overlays:</caption>
+	 * stxx.addEventListener("studyOverlayEdit", function(studyData){
+	 *	  CIQ.alert(studyData.sd.name);
+	 *	  var helper=new CIQ.Studies.DialogHelper({name:studyData.sd.type,stx:studyData.stx});
+	 *	  console.log('Inputs:',JSON.stringify(helper.inputs));
+	 *	  console.log('Outputs:',JSON.stringify(helper.outputs));
+	 *	  console.log('Parameters:',JSON.stringify(helper.parameters));
+	 *	  // call your menu here with the  data returned in helper
+	 *	  // modify parameters as needed and call addStudy or replaceStudy 
+	 * });
+	 * @example <caption>Add an Aroon study with a custom display name:</caption>
+	 * CIQ.Studies.addStudy(stxx, "Aroon",null,null,{display:'Custom Name'});
 	*/
 	CIQ.Studies.addStudy=function(stx, type, inputs, outputs, parameters, panelName, study){
 		var libraryEntry=study?study:CIQ.Studies.studyLibrary[type];
@@ -730,7 +775,7 @@
 				}
 			}
 		}
-		stx.draw();  // we put this extra draw here in case of study parameters which affect the appearance of the y-axis, since adding a y-axis calls draw() but before the layout has changed.
+		if(!parameters.calculateOnly) stx.draw();  // we put this extra draw here in case of study parameters which affect the appearance of the y-axis, since adding a y-axis calls draw() but before the layout has changed.
 		return sd;
 	};
 
@@ -787,12 +832,12 @@
 				if(!permanentPanel[panel.name]){
 					var permanent=sd.permanent || !stx.manageTouchAndMouse;
 					if(panel.closeX){
-						panel.closeX.style.display=permanent?"none":"";
+						if(permanent) panel.closeX.style.display="none";
 					}else if(panel.close){
-						panel.close.style.display=permanent?"none":"";
+						if(permanent) panel.close.style.display="none";
 					}
 					if(panel.edit){
-						panel.edit.style.display=permanent?"none":"";
+						if(permanent) panel.edit.style.display="none";
 					}
 					permanentPanel[panel.name]=permanent;
 				}
@@ -1215,7 +1260,9 @@
 	};
 
 	/**
-	 * A sample of a custom display function. This function creates the yAxis, draws **a single** histogram and then plots the series.
+	 * Study display function used to show a histogram with overlaid series, such as on the "MACD" or "Klinger Volume Oscillator". 
+	 * 
+	 * This function creates the yAxis, draws **a single** histogram and then plots the series.
 	 * Note that to differentiate between a regular series and the histogram series there is a convention to use sd.name+"_hist" for histogram values on a study</b> See {@link CIQ.Studies.createHistogram} for details</p>
 	 * @param  {CIQ.ChartEngine} stx	  The chart object
 	 * @param  {studyDescriptor} sd	   The study descriptor
@@ -1260,7 +1307,13 @@
 		if(stx.axisBorders===false) drawBorders=false;
 		if(stx.axisBorders===true) drawBorders=true;
 		if(yAxis.width===0) drawBorders=false;
-		var leftAxis=yAxis.position=="left", rightJustify=yAxis.justifyRight;
+		var yaxisPosition=stx.getYAxisCurrentPosition(yAxis,panel);
+		var leftAxis=yaxisPosition=="left", rightJustify=yAxis.justifyRight;
+		if(!rightJustify && rightJustify!==false){
+			if(stx.chart.yAxis.justifyRight || stx.chart.yAxis.justifyRight===false) {
+				rightJustify=stx.chart.yAxis.justifyRight;
+			}else rightJustify=leftAxis;
+		}
 		var borderEdge=Math.round(yAxis.left+(leftAxis?yAxis.width:0))+0.5;
 		var tickWidth=drawBorders?3:0; // pixel width of tick off edge of border
 
@@ -1428,7 +1481,7 @@
 	 * };
 	 * CIQ.Studies.volumeChart(stx, sd, colorMap, borderMap);
 	 * @memberOf CIQ.Studies
-	 * @deprecated since 6.0.0 Use {@link CIQ.ChartEngine#drawHistogram} instead. 
+	 * @deprecated since 6.0.0 Use {@link CIQ.ChartEngine#drawHistogram} instead.
 	 */
 	CIQ.Studies.volumeChart=function(stx, sd, colorMap, borderMap){
 		// Determine min max
@@ -1582,7 +1635,7 @@
 	 * @param  {object} [parameters] Optional parameters if required or supported by this study
 	 * @param {string} [panelName] Optional panel. If not provided then the panel will be determined dynamically.
 	 * @param {object} [study]	Optionally supply a study definition to use in lieu of the study library entry
-	 * @return {object}			The newly initialized study descriptor
+	 * @return {studyDescriptor}		The newly initialized study descriptor
 	 * @since 3.0.0 added study argument
 	 * @memberOf CIQ.Studies
 	 */
@@ -1627,7 +1680,10 @@
 		}
 
 		var oldStudy=parameters.replaceID?stx.layout.studies[parameters.replaceID]:null;
-		if(oldStudy && (stx.panelExists(parameters.replaceID) || isOverlay || isUnderlay)){
+		if(parameters.calculateOnly){
+			// don't setup panel, return now
+			return sd;
+		} else if(oldStudy && (stx.panelExists(parameters.replaceID) || isOverlay || isUnderlay)){
 			if(isOverlay || isUnderlay){
 				if (parameters.replaceID != sd.inputs.id) {	// delete the old study if using a different id (not modifying the same study )
 					delete stx.layout.studies[parameters.replaceID];
@@ -1702,7 +1758,7 @@
 			else syAxis=parameters.yAxis;
 			if(isOverlay || isUnderlay){
 				if((syAxis || parameters.yaxisDisplayValue) && parameters.yaxisDisplayValue!="shared"){
-					var yAxisParams={name:sd.name, position:parameters.yaxisDisplayValue};
+					var yAxisParams={name:sd.name, position:parameters.yaxisDisplayValue=="default"?"":parameters.yaxisDisplayValue};
 					if(syAxis) yAxisParams=CIQ.extend(syAxis,yAxisParams);
 					var proposedYAxis=new CIQ.ChartEngine.YAxis(yAxisParams);
 					if(proposedYAxis.position=="none") proposedYAxis.width=0;  // nasty trick to bind study to a hidden axis
@@ -1730,7 +1786,7 @@
 				}
 				if(parameters.yaxisDisplayValue &&
 					parameters.yaxisDisplayValue!="shared"){
-					panel.yAxis.position=parameters.yaxisDisplayValue;
+					panel.yAxis.position=parameters.yaxisDisplayValue=="default"?"":parameters.yaxisDisplayValue;
 					panel.yAxis.width=parameters.yaxisDisplayValue=="none"?0:CIQ.ChartEngine.YAxis.prototype.width;
 					panel.yAxis.justifyRight=null;
 					if(!parameters.yaxisDisplayColor || parameters.yaxisDisplayColor=="auto") delete panel.yAxis.textStyle;
@@ -1754,12 +1810,11 @@
 	CIQ.Studies.overZones=CIQ.Studies.drawZones;
 
 	/**
-	 * A sample display function for an overlay. An overlay displays in the chart area.
-	 *
-	 * Also note the use of clipping to ensure that the overlay doesn't print outside of the panel
-	 *
-	 * Finally note that when color=="auto" you can use stx.defaultColor which will automatically adjust based on the background color. This
-	 * is the default for studies that use the color picker for user selection of output colors.
+	 * Default display function used on 'ATR Trailing Stop' and 'Parabolic SAR' studies to display a series of 'dots' at the required price-date coordinates.
+	 * 
+	 * Visual Reference:<br>
+	 * ![displayPSAR2](img-displayPSAR2.png "displayPSAR2")
+	 * 
 	 * @param {CIQ.ChartEngine} stx A chart engine instance
 	 * @param {studyDescriptor} sd
 	 * @param {array} quotes Array of quotes
@@ -1816,8 +1871,10 @@
 	};
 
 	/**
-	 * A sample of a custom initialization function. It is rare that one would be required. In this case we simply customize the input display
-	 * but otherwise call the default.
+	 * Default initialization function for the 'Stochastics' study. 
+	 * 
+	 * In this case we simply customize the input display
+	 * but otherwise call the default {@link CIQ.Studies.initializeFN}
 	 * @param {CIQ.ChartEngine} stx A chart engine instance
 	 * @param {*} type Type to pass to initialization function
 	 * @param {object} inputs Study inputs
@@ -1831,19 +1888,15 @@
 	};
 
 	/**
-	 * A simple calculation function. Volume is already obtained, so all that is done here is setting colors.
+	 * Default Volume calculation function.
+ 
+	 * Volume is already obtained, so all that is done here is setting colors.
 	 * @param {CIQ.ChartEngine} stx A chart engine instance
 	 * @param {studyDescriptor} sd Study to calculate volume for
 	 * @memberOf CIQ.Studies
 	 */
 	CIQ.Studies.calculateVolume=function(stx, sd){
-		var outputs=sd.outputs;
-		var colorUp = CIQ.Studies.determineColor(outputs["Up Volume"]);
-		var colorDown = CIQ.Studies.determineColor(outputs["Down Volume"]);
-		if(sd.type!="vol undr"){
-			stx.setStyle("stx_volume_up", "color", colorUp);
-			stx.setStyle("stx_volume_down", "color", colorDown);
-		}else{
+		if(sd.type=="vol undr"){
 			if(!stx || !stx.chart.dataSet) return;
 			var layout=stx.layout;
 			var remove=sd.parameters.removeStudy;
@@ -1853,12 +1906,6 @@
 				stx.changeOccurred("layout");
 			if(remove){
 				CIQ.Studies.removeStudy(stx, sd);
-			}else{
-				stx.setStyle("stx_volume_underlay_up", "color", colorUp);
-				stx.setStyle("stx_volume_underlay_down", "color", colorDown);
-				// use css for border so it can be configured.
-				//if(colorUp) stx.setStyle("stx_volume_underlay_up", "border-left-color", colorUp);
-				//if(colorDown) stx.setStyle("stx_volume_underlay_down", "border-left-color", colorDown);
 			}
 		}
 	};
@@ -2006,7 +2053,12 @@
 	CIQ.Studies.createVolumeChart=function(stx, sd, quotes){
 		var panel=sd.panel, inputs=sd.inputs, underlay=sd.underlay,overlay=sd.overlay;
 		var inAnotherPanel = underlay || overlay;
+		var colorUp = CIQ.Studies.determineColor(sd.outputs["Up Volume"]);
+		var colorDown = CIQ.Studies.determineColor(sd.outputs["Down Volume"]);
 		var style=underlay?"stx_volume_underlay":"stx_volume";
+		stx.setStyle(style+"_up", "color", colorUp);
+		stx.setStyle(style+"_down", "color", colorDown);
+
 		var seriesParam=[{
 			field:				"Volume",
 			fill_color_up:		stx.canvasStyle(style+"_up").color,
@@ -2055,8 +2107,10 @@
 	};
 
 	/**
-	 * A sample study calculation function. Note how sd.chart.scrubbed is used instead of dataSet. Also note the naming convention
-	 * for the outputs.
+	 * Default study calculation function for RSI study. 
+	 * 
+	 * Note how sd.chart.scrubbed is used instead of dataSet. 
+	 * Also note the naming convention for the outputs.
 	 * @param {CIQ.ChartEngine} stx A chart engine instance
 	 * @param {studyDescriptor} sd A study descriptor
 	 * @memberOf CIQ.Studies
@@ -4371,7 +4425,7 @@
 
 		return output;
 	};
-	
+
 	// object to keep track of the custom scripts
 	CIQ.Studies.studyScriptLibrary={};
 
@@ -4539,7 +4593,7 @@
 		"Pos Vol": {
 			"name": "Positive Volume Index",
 			"calculateFN": CIQ.Studies.calculateVolumeIndex,
-			"inputs": {"Period":255,"Field":"field","Moving Average Type":"ma",},
+			"inputs": {"Period":255,"Field":"field","Moving Average Type":"ma"},
 			"outputs": {"Index":"auto","MA":"#FF0000"}
 		},
 		"Neg Vol": {

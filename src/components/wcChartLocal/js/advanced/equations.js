@@ -1182,7 +1182,7 @@
 	 * Valid examples: 3*IBM, 4+(IBM*2), (IBM-GM)/2
 	 * If the equation cannot be resolved an exception is thrown.
 	 * @param {string} equation The equation to compute.
-	 * @param  {Object} map An map of symbols to data
+	 * @param  {Object} map A map of symbols to data
 	 * @return {Array}     A consolidated array of equation results
 	 * @memberOf CIQ
 	 * @version ChartIQ Advanced Package

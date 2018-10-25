@@ -1,56 +1,56 @@
-$base-font:			'Roboto', sans-serif;
-$heading-font:		'Roboto Condensed', sans-serif;
+$base-font:			'Roboto', sans-serif !default;
+$heading-font:		'Roboto Condensed', sans-serif !default;
 
-$red:				#ff002a;
-$green:				#85c730;
-$accent: 			#398dff;
+$red:				#ff002a !default;
+$green:				#85c730 !default;
+$accent: 			#398dff !default;
 
-$bg1:				#fff;
-$bg2:				#f3f3f3;
+$bg1:				#fff !default;
+$bg2:				#f3f3f3 !default;
 
-$font-xs:			9px;
-$font-s:			11px;
-$font-m:			12px;
-$font-l:			14px;
+$font-xs:			9px !default;
+$font-s:			11px !default;
+$font-m:			12px !default;
+$font-l:			14px !default;
 
-$soft-corners: 1px;
+$soft-corners: 1px !default;
 
 /* Basic Text */
 
-$text-subtle:		#999;
-$text-medium:		#666;
-$text-strong:		#000;
+$text-subtle:		#999 !default;
+$text-medium:		#666 !default;
+$text-strong:		#000 !default;
 
 
 /* Borders */
 
-$border-subtle:		#ddd;
-$border-medium:		#ccc;
-$border-strong:		#999;
+$border-subtle:		#ddd !default;
+$border-medium:		#ccc !default;
+$border-strong:		#999 !default;
 
 
 /* Light Theme */
 
-$theme1-bg:			#f8f8f8;
-$theme1-main:		#fff;
-$theme1-hu-bg:		#ffffff;
-$theme1-hu-bg-dynamic: #ffffff;
-$theme1-text:		#000;
+$theme1-bg:			#f8f8f8 !default;
+$theme1-main:		#fff !default;
+$theme1-hu-bg:		#ffffff !default;
+$theme1-hu-bg-dynamic: #ffffff !default;
+$theme1-text:		#000 !default;
 
 
 /* ciq-night Theme */
 
-$theme2-bg:			#151f28;
-$theme2-main:		#1c2a35;
-$theme2-hu-bg: 		#1C2A35;
-$theme2-hu-bg-dynamic: #2a51d0;
-$theme2-text:		#fff;
+$theme2-bg:			#151f28 !default;
+$theme2-main:		#1c2a35 !default;
+$theme2-hu-bg: 		#1C2A35 !default;
+$theme2-hu-bg-dynamic: #2a51d0 !default;
+$theme2-text:		#fff !default;
 
 
 /* Layout */
 
-$nav-height: 45px;
-$footer-height: 45px;
+$nav-height: 45px !default;
+$footer-height: 45px !default;
 
 
 //@mixin box-layer {
@@ -128,7 +128,6 @@ cq-timezone-dialog h4 {
 cq-timezone-dialog p {
   text-align: center;
   font-weight: 400;
-  width:375px;
 }
 
 cq-timezone-dialog ul {
@@ -538,7 +537,7 @@ body .stx-trade-panel ul.stx-account li {
 	padding: 0px;
 }
 .stx-btn.stx-ico > span, .stx-btn.stx-ico:hover > span, .stx-btn.stx-ico:active > span { /* Styling of visible area and text hiding */
-	display:initial;
+	display:block;
 	position: absolute;
 	left: 0;
 	background-image: url(img/stx-sprite-panels.svg);
@@ -586,8 +585,15 @@ body .stx-trade-panel ul.stx-account li {
 
 /* ------------------------------------------------------- CHART OVERLAY ELEMENTS ------------------------------------------------------ */
 
-.rightclick_study .mouseManageText { display:inline; }
-.rightclick_study .mouseDeleteText { display:none; }
+.rightclick_drawing .mouseManageText,
+.rightclick_study .mouseManageText {
+	display:inline;
+}
+.rightclick_drawing .mouseDeleteText,
+.rightclick_study .mouseDeleteText {
+	display:none;
+}
+.rightclick_drawing .overlayEdit,
 .rightclick_study .overlayEdit {
 	margin-top: -4px;
 	margin-left: 5px;
@@ -603,6 +609,7 @@ body .stx-trade-panel ul.stx-account li {
 		}
 	}
 }
+.rightclick_drawing .overlayTrashCan,
 .rightclick_study .overlayTrashCan {
 	margin-top: -4px;
 	margin-left: 34px;

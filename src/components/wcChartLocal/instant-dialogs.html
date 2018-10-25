@@ -69,6 +69,13 @@ This file will be loaded dynamically by instant-chart.html
 	</cq-aggregation-dialog>
 </cq-dialog>
 
+<cq-dialog>
+	<cq-drawing-context>
+		<div stxtap="DrawingEdit.edit()">Edit Settings</div>
+		<div stxtap="DrawingEdit.clone()">Clone Drawing</div>
+		<div stxtap="DrawingEdit.remove()">Delete Drawing</div>
+	</cq-drawing-context>
+</cq-dialog>
 
 <cq-dialog>
 	<cq-study-context>
@@ -166,7 +173,8 @@ This file will be loaded dynamically by instant-chart.html
 				</cq-placeholder>
 				<cq-separator></cq-separator>
 				<cq-placeholder>Mountain Color
-					<cq-theme-piece cq-piece="mc"><cq-swatch></cq-swatch></cq-theme-piece>
+				 <cq-theme-piece cq-piece="mb"><cq-swatch></cq-swatch></cq-theme-piece>
+				 <cq-theme-piece cq-piece="mc"><cq-swatch></cq-swatch></cq-theme-piece>
 				</cq-placeholder>
 			</cq-section>
 			<cq-section>

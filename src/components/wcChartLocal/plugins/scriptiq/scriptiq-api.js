@@ -4,6 +4,7 @@
 //-------------------------------------------------------------------------------------------
 // @jscrambler DEFINE
 
+/*jshint esversion: 6 */ 
 (function(_exports) {
 	var CIQ = _exports.CIQ;
 
@@ -547,6 +548,15 @@
 	};
 
 	/**
+	 * CIQ.Scripting.State properties that must be handled manually because they
+	 * should *not* be cloned
+	 * @type {string[]}
+	 * @private
+	 * @since 6.2.0
+	 */
+	var DEFAULT_STATE_PROPERTIES = ['context', 'children', 'parent'];
+
+	/**
 	 * State class for convenience methods and getters
 	 * @memberof CIQ.Scripting
 	 * @alias State	 
@@ -598,6 +608,53 @@
 
 				return child;
 			}
+		},
+		/**
+		 * Clone the current state, including children, using only custom properties.
+		 * <br>Note that `null` represents a state with no custom properties.
+		 *
+		 * @returns {Object} partial shallow clone of the current state
+		 * @private
+		 * @since 6.2.0
+		 */
+		'cloneCustomProperties': {
+			value: function() {
+				var clone = {};
+				var empty = true;
+				var value;
+				var childClone;
+
+				for (var key in this) {
+					if (DEFAULT_STATE_PROPERTIES.indexOf(key) > -1) continue;
+					if (!Object.prototype.hasOwnProperty.call(this, key)) continue;
+					if (typeof this[key] === 'function') continue;
+
+					empty = false;
+					value = this[key];
+					clone[key] = typeof value === 'object' && value !== null ? CIQ.shallowClone(value) : value;
+				}
+
+				for (var cKey in this.children) {
+					childClone = this.children[cKey].cloneCustomProperties();
+
+					if (childClone !== null) {
+						if (!clone.children) {
+							// non-enumerable because children should be handled manually, not by CIQ.clone()
+							Object.defineProperty(clone, 'children', {
+								configurable: true,
+								enumerable: false,
+								value: {},
+								writable: true
+							});
+						}
+
+						empty = false;
+						clone.children[cKey] = childClone;
+					}
+				}
+
+				return empty ? null : clone;
+			}
 		}
 	});
 
@@ -612,29 +669,90 @@
 	/**
 	 * Creates an array of states for a given study **instance**. The array is stored globally.
 	 * If the state array already exists for the instance then it is retrieved instead of created.
-	 * If context.index===0 then a new state instance is always created
+	 * If sd.startFrom===0 then a new state instance is always created
 	 *
-	 * @param  {object} context          A context object from a study script
-	 * @param  {number} length 			 Number of state objects to create
-	 * @return {array}                   An array of state objects
+	 * @param  {object} sd      The study descriptor for the script
+	 * @param  {number} length  Number of state objects to create
+	 * @return {array}          An array of state objects
 	 * @memberof CIQ.Scripting
 	 * @private
+	 * @since 6.2.0 accepts the study descriptor instead of the context object. Now creates the context object and assigns it as the "context" property on the return value.
 	 */
-	CIQ.Scripting.createStates=function(context, length){
-		var arr=CIQ.Scripting.states[context.sd.id];
-		if(!arr || context.index===0){
-			arr=CIQ.Scripting.states[context.sd.id]=new Array(length);
-			for(var i=0;i<arr.length;i++){
-				arr[i] = new CIQ.Scripting.State(context);
+	CIQ.Scripting.createStates=function(sd, length){
+		var context = {
+			sd: sd,
+			index: sd.startFrom
+		};
+		var states = CIQ.Scripting.states[sd.name];
+		var newState = function() {
+			return new CIQ.Scripting.State(context);
+		};
+		var i;
+		var prev;
+		var pState;
+		var children;
+
+		if (!states || sd.startFrom === 0) {
+			states = CIQ.Scripting.states[sd.name] = [];
+			states.history = [];
+
+			for (i = 0; i < length; i++) {
+				states.push(newState());
+			}
+		} else {
+			prev = states.history[sd.startFrom - 1];
+			context.update = true; // debugging flag
+
+			for (i = 0; i < length; i++) {
+				children = states[i].children;
+				pState = prev && prev[i] && CIQ.clone(prev[i], newState());
+
+				Object.assign(states[i], pState, {
+					context: context
+				});
+
+				for (var key in children) {
+					states[i].spawn(key);
+					pState = prev && prev[i] && prev[i].children[key] && CIQ.clone(prev[i].children[key], newState());
+
+					if (pState) {
+						Object.assign(states[i].children[key], pState);
+					}
+				}
 			}
 		}
-		return arr;
+
+		states.context = context;
+
+		return states;
+	};
+
+	/**
+	 * Used by the script template code (`wrapper`) to create a state history.
+	 *
+	 * @param {CIQ.Scripting.State[]} states current state of any number of builtins
+	 * @param {number} index relative to the scrubbed index
+	 * @private
+	 * @since 6.2.0
+	 */
+	CIQ.Scripting.cloneCustomStates=function(states, index) {
+		var clones = [];
+
+		for (var i = 0; i < states.length; i++) {
+			clones[i] = states[i].cloneCustomProperties();
+		}
+
+		if (index === states.history.length) {
+			states.history.push(clones);
+		} else {
+			states.history[index] = clones;
+		}
 	};
 
 	/**
 	 * Adds a **processed** script to the [studyLibrary]{@link CIQ.Studies.studyLibrary}. 
 	 * The study can then be created like any other one on the chart by simply calling {@link CIQ.Studies.addStudy}.
-	 * @param {string} script       Source code for the script ** in javaScript**, as returned by {@link CIQ.Scripting.processCoffee}
+	 * @param {string} script       Source code for the script **in javaScript**, as returned by {@link CIQ.Scripting.processCoffee}
 	 * @param {studyDescriptor} sd The study descriptor generated by {@link CIQ.Scripting.processCoffee}. This will replace any existing studies in the library with the same name.
 	 * @memberof CIQ.Scripting
 	 */
@@ -651,7 +769,35 @@
 		sd.calculateFN=scriptingCalculateProxy;
 
 		CIQ.Studies.studyLibrary[sd.name]=sd;
-		if(sd.siqList) CIQ.Studies.studyScriptLibrary[sd.name]=sd;
+		CIQ.Studies.studyScriptLibrary[sd.name]=sd;
+	};
+
+	/**
+	 * Adds an **unprocessed** script to the [studyLibrary]{@link CIQ.Studies.studyLibrary}. 
+	 * The study can then be created like any other one on the chart by simply calling {@link CIQ.Studies.addStudy}.
+	 * @param {string} script       Source code for the script **in CoffeeScript**, as provided by end user
+	 * @return {object}        An object containing \{ast, javaScript, studyScript, sd\} or error. See {@link CIQ.Scripting.processJavaScript}
+	 * @memberof CIQ.Scripting
+	 * @since 6.2.0
+	 */
+	CIQ.Scripting.addCoffeeScriptStudyToLibrary=function(script){
+		var compiledScript=CIQ.Scripting.processCoffee(script);
+		if(!compiledScript) {
+			return {error:"Unknown error compiling script."};
+		}else if(compiledScript.error) {
+			return compiledScript;
+		}
+		var studyLibrary = CIQ.Studies.studyLibrary;
+		var sd=compiledScript.sd;
+		var scriptName = sd.name;
+		if(studyLibrary && studyLibrary[scriptName] && !studyLibrary[scriptName].source){
+			compiledScript.error="Indicator '" + sd.name + "' cannot be overwritten. Please pick another name.";
+			return;
+		} 
+		sd.source=script;
+		if(studyLibrary[scriptName]) delete studyLibrary[scriptName]; // already exists, delete old version
+		CIQ.Scripting.addStudyToLibrary(compiledScript.studyScript, sd);
+		return compiledScript;
 	};
 
 	/**
@@ -813,17 +959,14 @@
 
 			// Next create the wrapper function. We start from this template. ES6 literals (backticks)
 			var wrapper=`CIQ.Scripting.Scripts["replaceme"]=function(sd){
-			   var context={
-			      sd: sd,
-			      index:0
-			   };
-			   var state=CIQ.Scripting.createStates(context, numberOfBuiltins);
-			   function inner(){
-			   }
-			   for(var i=sd.startFrom;i<sd.chart.scrubbed.length;i++){
-			      context.index=i;
-			      inner();
-			   }
+				var state=CIQ.Scripting.createStates(sd,numberOfBuiltins);
+				var context=state.context;
+				function inner(){}
+				for(var i=sd.startFrom;i<sd.chart.scrubbed.length;i++){
+					context.index=i;
+					inner();
+					CIQ.Scripting.cloneCustomStates(state, i);
+				}
 			};
 			`;
 

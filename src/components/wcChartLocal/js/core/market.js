@@ -1225,7 +1225,7 @@
 
 	/**
 	 * Checks if the market is currently open.
-	 * @return {boolean} `true` if the market is open right now.
+	 * @return {object} An object with the open market session's details, if the market is open right now. Or `null` if no sessions are currently open.
 	 * @memberof CIQ.Market
 	 * @since 04-2016-08
 	 */
@@ -1239,7 +1239,7 @@
 
 	/**
 	 * Checks if today it is a market day.
-	 * @return {boolean} `true` if it is a market day.
+	 * @return {object} An object with the open market session's details, if it is a market day. Or `null` if it is not a market day.
 	 * @memberof CIQ.Market
 	 * @since 04-2016-08
 	 */
@@ -1254,7 +1254,7 @@
 	/**
 	 * Checks if a supplied date is a market day.  Only the date is examined; hours, minutes, seconds are ignored
 	 * @param {date} date A date
-	 * @return {boolean} `true` if it is a market day.
+	 * @return {object} An object with the open market session's details, if it is a market day. Or `null` if it is not a market day.
 	 * @memberof CIQ.Market
 	 * @since 04-2016-08
 	 */
@@ -1337,8 +1337,11 @@
 	    		_interval = parms.timeUnit;
 	    	} else if (parms.timeUnit === "second") {
 	    		_interval = parms.timeUnit;
+	    	} else if (parms.timeUnit === "tick") {
+	    		_interval = "second";
 	    	}
 	    }
+		if(_interval=="tick") _interval="second";
 		parms.interval = _interval;
 		parms.multiple = _multiple;
 		parms.market = this;
@@ -1770,7 +1773,7 @@
 	 * @memberOf  CIQ.Market
 	 */
 	CIQ.Market.prototype._convertToMarketTZ = function(dt, tz){
-		if(!this.market_tz) return dt;
+		//if(!this.market_tz) return dt;
 		var tzdt;
 		if(tz){
 			tzdt=new this.tz_lib(dt.getFullYear(), dt.getMonth(), dt.getDate(), dt.getHours(), dt.getMinutes(), dt.getSeconds(), dt.getMilliseconds(), tz);
@@ -1790,7 +1793,7 @@
 	 * @memberOf  CIQ.Market
 	 */
 	CIQ.Market.prototype._convertFromMarketTZ = function(dt, tz){
-		if(!this.market_tz) return dt;
+		//if(!this.market_tz) return dt;
 		var tzdt=new this.tz_lib(dt.getFullYear(), dt.getMonth(), dt.getDate(), dt.getHours(), dt.getMinutes(), dt.getSeconds(), dt.getMilliseconds(), this.market_tz);
 		if(tz){
 			if(tzdt.setTimezone) tzdt.setTimezone(tz);
@@ -1954,7 +1957,7 @@
 
 	/**
 	 * Check and see if this Market is open now.
-	 * @return {boolean} true or false
+	 * @return {object} An object with the open market session's details, if the market is open right now. Or `null` if no sessions are currently open.
 	 * @memberof CIQ.Market.Iterator
 	 * @since 04-2016-08
 	 */

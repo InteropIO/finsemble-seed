@@ -150,9 +150,10 @@
 			menu.find("cq-studies-content").append(menuItem);
 		}
 
-		function studyDialog(params) {
+		function studyDialog(params, addWhenDone) {
 			params.context=self.context;
 			$("cq-study-dialog").each(function(){
+				this.addWhenDone=addWhenDone;
 				this.open(params);
 			});
 		}
@@ -160,21 +161,21 @@
 		function pickStudy(node, studyName) {
 			var stx=self.context.stx;
 
-			function handleSpecialCase(flag, params){
+			function handleSpecialCase(flag, params, addWhenDone){
 				if(flag===true){
-					studyDialog(params);
+					studyDialog(params,addWhenDone);
 					return true;
 				}else if(typeof flag==="object"){
 					for(var i in flag){
 						if(i==studyName && flag[i]){
-							studyDialog(params);
+							studyDialog(params, addWhenDone);
 							return true;
 						}
 					}
 				}
 			}
 
-			if(handleSpecialCase(self.params.dialogBeforeAddingStudy, {stx: stx, name: studyName})) return;
+			if(handleSpecialCase(self.params.dialogBeforeAddingStudy, {stx: stx, name: studyName}, true)) return;
 			var sd=CIQ.Studies.addStudy(stx, studyName);
 			handleSpecialCase(self.alwaysDisplayDialog, {sd: sd, stx: stx});
 		}

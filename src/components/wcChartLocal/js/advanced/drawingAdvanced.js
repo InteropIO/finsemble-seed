@@ -64,13 +64,14 @@
 		return false;
 	};
 
-	CIQ.Drawing.channel.prototype.boxIntersection=function(tick, value){
-		if(!this.p0 || !this.p1 || !this.p2) return false;
-		if(tick>Math.max(this.p0[0], this.p1[0]) || tick<Math.min(this.p0[0], this.p1[0])) return false;
+	CIQ.Drawing.channel.prototype.boxIntersection=function(tick, value, box){
+		var p0=this.p0, p1=this.p1, p2=this.p2;
+		if(!p0 || !p1 || !p2) return false;
+		if(box.x0>Math.max(p0[0], p1[0]) || box.x1<Math.min(p0[0], p1[0])) return false;
 
 		// http://stackoverflow.com/questions/1560492/how-to-tell-whether-a-point-is-to-the-right-or-left-side-of-a-line
-		var s1 = ( (this.p1[0]-this.p0[0])*(value-this.p0[1]) - (this.p1[1]-this.p0[1])*(tick-this.p0[0]) );
-		var s2 = ( (this.p2[0]-this.p0[0])*(value-(this.p0[1]+this.p2[1]-this.p1[1])) - (this.p1[1]-this.p0[1])*(tick-this.p0[0]) );
+		var s1 = ( (p1[0]-p0[0])*((p2[1]<p0[1]?box.y1:box.y0)-p0[1]) - (p1[1]-p0[1])*(tick-p0[0]) );
+		var s2 = ( (p2[0]-p0[0])*((p2[1]>p0[1]?box.y1:box.y0)-(p0[1]+p2[1]-p1[1])) - (p1[1]-p0[1])*(tick-p0[0]) );
 		return (s1*s2<0);
 	};
 
@@ -86,7 +87,7 @@
 				};	
 			}
 		}
-		if(this.boxIntersection(tick, value)){
+		if(this.boxIntersection(tick, value, box)){
 			this.highlighted=true;
 			// This object will be used for repositioning
 			return {
@@ -552,16 +553,16 @@
 		return false;
 	};
 
-	CIQ.Drawing.gartley.prototype.boxIntersection=function(tick, value){
+	CIQ.Drawing.gartley.prototype.boxIntersection=function(tick, value, box){
 		if(!this.p0 || !this.p1) return false;
-		if(tick>Math.max(this.p0[0], this.p1[0]) || tick<Math.min(this.p0[0], this.p1[0])) return false;
+		if(box.x0>Math.max(this.p0[0], this.p1[0]) || box.x1<Math.min(this.p0[0], this.p1[0])) return false;
 		var lowPoint=Math.min(this.p0[1],this.p1[1]);
 		var highPoint=Math.max(this.p0[1],this.p1[1]);
 		for(var pt=0;pt<this.points.length;pt++){
 			lowPoint=Math.min(lowPoint,this.points[pt][1]);
 			highPoint=Math.max(highPoint,this.points[pt][1]);
 		}
-		if(value>highPoint || value<lowPoint) return false;
+		if(box.y1>highPoint || box.y0<lowPoint) return false;
 		return true;
 	};
 
@@ -704,8 +705,8 @@
 	CIQ.Drawing.freeform.prototype.measure=function(){};
 
 	CIQ.Drawing.freeform.prototype.intersected=function(tick, value, box){
-		if(tick>this.hiX || tick<this.lowX) return null;
-		if(value>this.hiY || value<this.lowY) return null;
+		if(box.x0>this.hiX || box.x1<this.lowX) return null;
+		if(box.y1>this.hiY || box.y0<this.lowY) return null;
 		this.highlighted=true;
 		// This object will be used for repositioning
 		return {
@@ -1244,7 +1245,7 @@
 		}
 		var x=this.stx.pixelFromTick(tick, panel.chart);
 		var y=this.stx.pixelFromValueAdjusted(panel, tick, value);
-		if(x>=x0 && x<=x1 && y>=y0 && y<=y1) {
+		if(x+box.r>=x0 && x-box.r<=x1 && y+box.r>=y0 && y-box.r<=y1) {
 			this.highlighted=true;
 			return {
 				p0: CIQ.clone(this.p0),
@@ -1554,11 +1555,11 @@
 		};
 		var x=this.stx.pixelFromTick(tick, panel.chart);
 		var y=this.stx.pixelFromValueAdjusted(panel, tick, value);
-
-		if(x<pixelArea.x1-extend.x || x>pixelArea.x1+extend.x) return null;
-		if(y<pixelArea.y1-extend.y || y>pixelArea.y1+extend.y) return null;
-		if(pixelArea.y0<pixelArea.y1 && y>pixelArea.y1) return null;
-		if(pixelArea.y0>pixelArea.y1 && y<pixelArea.y1) return null;
+		
+		if(x+box.r<pixelArea.x1-extend.x || x-box.r>pixelArea.x1+extend.x) return null;
+		if(y+box.r<pixelArea.y1-extend.y || y-box.r>pixelArea.y1+extend.y) return null;
+		if(pixelArea.y0<pixelArea.y1 && y-box.r>pixelArea.y1) return null;
+		if(pixelArea.y0>pixelArea.y1 && y+box.r<pixelArea.y1) return null;
 		this.highlighted=true;
 		return {
 			action: "move",
@@ -2128,17 +2129,19 @@
 		var scaleProximity=scaledCircleR2-(Math.pow(x1-this.dimension[0]/2,2)+Math.pow(y1-this.dimension[1]/2,2));
 		var rotateProximity=scaledCircleR2-(Math.pow(x1-this.dimension[0]/2,2)+Math.pow(y1,2));
 		//console.log("s:"+scaleProximity+" r:"+rotateProximity+" m:"+moveProximity);
-		if(scaleProximity>0 && scaleProximity>=rotateProximity && scaleProximity>=moveProximity){
-			this.highlighted="p1";
-			return {
-				action: "scale"
-			};
-		}else if(rotateProximity>0 && rotateProximity>=scaleProximity && rotateProximity>=moveProximity){
-			this.highlighted="p2";
-			return {
-				action: "rotate"
-			};
-		}else if(moveProximity>0 && moveProximity>=scaleProximity && moveProximity>=rotateProximity){
+		if(overShape){
+			if(scaleProximity>=rotateProximity && scaleProximity>=moveProximity){
+				this.highlighted="p1";
+				return {
+					action: "scale"
+				};
+			}else if(rotateProximity>=scaleProximity && rotateProximity>=moveProximity){
+				this.highlighted="p2";
+				return {
+					action: "rotate"
+				};
+			}
+
 			this.highlighted="p0";
 			return {
 				action: "move",
@@ -2146,9 +2149,6 @@
 				tick: tick,
 				value: value
 			};
-		}else if(overShape){
-			this.highlighted=true;
-			return {};
 		}
 		return null;
 	};
@@ -3235,9 +3235,9 @@
 		copyConfig: function(withPreferences) {
 			CIQ.Drawing.copyConfig(this,withPreferences);
 			var cvp = this.stx.currentVectorParameters;
-			this.deviation1 = !!cvp.active1;
-			this.deviation2 = !!cvp.active2;
-			this.deviation3 = !!cvp.active3;
+			this.active1 = !!cvp.active1;
+			this.active2 = !!cvp.active2;
+			this.active3 = !!cvp.active3;
 			this.color1 = cvp.color1 || "auto";
 			this.color2 = cvp.color2 || "auto";
 			this.color3 = cvp.color3 || "auto";
@@ -3257,9 +3257,9 @@
 			if (this.p0 && this.p1) {
 				this.stx.setMeasure(this.p0[1], false, this.p0[0], this.p1[0], true, this.name);
 				var txt = [];
-				if (this.deviation1) txt.push("1");
-				if (this.deviation2) txt.push("2");
-				if (this.deviation3) txt.push("3");
+				if (this.active1) txt.push("1");
+				if (this.active2) txt.push("2");
+				if (this.active3) txt.push("3");
 				if (txt.length === 0) return;
 				var html = "&ensp;" + txt.join(", ") + " &sigma;";
 				var mMeasure = $$$(".mMeasure", this.stx.chart.drawingContainer);
@@ -3316,7 +3316,7 @@
 			var lines = {};
 			var color, label;
 
-			if (this.deviation1) {
+			if (this.active1) {
 				color = this.setLineColor(this.color1);
 				label = "1\u03c3";
 				lines.deviation1p = {
@@ -3338,7 +3338,7 @@
 					}
 				};
 			}
-			if (this.deviation2) {
+			if (this.active2) {
 				color = this.setLineColor(this.color2);
 				label = "2\u03c3";
 				lines.deviation2p = {
@@ -3360,7 +3360,7 @@
 					}
 				};
 			}
-			if (this.deviation3) {
+			if (this.active3) {
 				color = this.setLineColor(this.color3);
 				label = "3\u03c3";
 				lines.deviation3p = {
@@ -3449,9 +3449,9 @@
 		reconstruct: function(stx, obj){
 			this.stx=stx;
 			this.panelName=obj.pnl;
-			this.deviation1=obj.dev1;
-			this.deviation2=obj.dev2;
-			this.deviation3=obj.dev3;
+			this.active1=obj.dev1;
+			this.active2=obj.dev2;
+			this.active3=obj.dev3;
 			this.color=obj.col;
 			this.color1=obj.col1;
 			this.color2=obj.col2;
@@ -3477,9 +3477,9 @@
 			var obj={
 				name:this.name,
 				pnl: this.panelName,
-				dev1:this.deviation1,
-				dev2:this.deviation2,
-				dev3:this.deviation3,
+				dev1:this.active1,
+				dev2:this.active2,
+				dev3:this.active3,
 				col:this.color,
 				col1:this.color1,
 				col2:this.color2,
@@ -3562,6 +3562,8 @@
 			if(!this.p1) return;
 			var x0=this.stx.pixelFromTick(this.p0[0], panel.chart);
 			var x1=this.stx.pixelFromTick(this.p1[0], panel.chart);
+			if(x0<panel.left && x1<panel.left) return;
+			if(x0>panel.right && x1>panel.right) return;
 
 			var highest=null, lowest=null;
 		    for(var i=Math.min(this.p1[0],this.p0[0]);i<=Math.max(this.p1[0],this.p0[0]);i++){
@@ -3627,11 +3629,11 @@
 				this.littleCircle(context, x1, y50, p1Fill);
 			}
 		},
-		boxIntersection: function(tick, value){
+		boxIntersection: function(tick, value, box){
 			var p0=this.p0, p1=this.p1;
 			if(!p0 || !p1) return false;
-			if(tick>Math.max(p0[0], p1[0]) || tick<Math.min(p0[0], p1[0])) return false;
-			if(!this.stx.repositioningDrawing && (value>this.highest || value<this.lowest)) return false;
+			if(box.x0>Math.max(p0[0], p1[0]) || box.x1<Math.min(p0[0], p1[0])) return false;
+			if(!this.stx.repositioningDrawing && (box.y1>this.highest || box.y0<this.lowest)) return false;
 			return true;
 		},
 		intersected: function(tick, value, box){
@@ -3647,7 +3649,7 @@
 					};	
 				}
 			}
-			if(this.boxIntersection(tick, value)){
+			if(this.boxIntersection(tick, value, box)){
 				this.highlighted=true;
 				return {
 					action: "move",

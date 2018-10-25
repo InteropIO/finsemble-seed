@@ -32,9 +32,9 @@
 	 * All possible market sessions needed to be shaded at any given time should be enabled at once with this method.
 	 *
 	 * Your fetch should load the required data based on the `params.stx.layout.extended` and `params.stx.layout.marketSessions` settings.
-	 * 
+	 *
 	 * Remember that when `params.filter` is set to true, this module performs a filter of already loaded masterData when {@link CIQ.ExtendedHours.set} is invoked,
-	 * rather than calling {@link CIQ.ChartEngine#newChart} to reload the data from the server every time you enable or disable this feature. 
+	 * rather than calling {@link CIQ.ChartEngine#newChart} to reload the data from the server every time you enable or disable this feature.
 	 * So you must always return all requested sessions on your fetch responses if this flag is set.
 	 *
 	 *CSS info:
@@ -43,7 +43,7 @@
 	 *
 	 * ** Important:** This module must be initialized before {@link CIQ.ChartEngine#importLayout} or the sessions will not be able to be restored.
 	 *
-	 * Example <iframe width="800" height="500" scrolling="no" seamless="seamless" align="top" style="float:top" src="http://jsfiddle.net/chartiq/g2vvww67/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="1"></iframe>
+	 * Example <iframe width="800" height="500" scrolling="no" seamless="seamless" align="top" style="float:top" src="https://jsfiddle.net/chartiq/g2vvww67/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="1"></iframe>
 	 *
 	 * @param {object} params The constructor parameters
 	 * @param {CIQ.ChartEngine} [params.stx] The chart object
@@ -106,7 +106,14 @@
 			}
 		});
 
-        /**
+		stx.addEventListener("symbolChange", function(tObject){
+			// check if extended hours exists for this security
+			if(tObject.action=="master" && stx.layout.extended && !(stx.chart.market.market_def && stx.chart.market.sessions.length)) {
+				CIQ.alert('There are no Extended Hours for this instrument.');
+			}
+		});
+
+       /**
          * Prepares the extended hours settings and classes for the session names enumerated in the arguments without actually displaying or loading the data.
          *
          * This method can be used to force a particular session to load by default by calling it before {@link CIQ.ChartEngine#newChart}.
@@ -410,13 +417,13 @@
 				}
 
 				if(
-					(stx.controls.crossX && stx.controls.crossX.style.display=="none") ||
-					(stx.controls.crossY && stx.controls.crossY.style.display=="none") ||
+				//	(stx.controls.crossX && stx.controls.crossX.style.display=="none") ||
+				//	(stx.controls.crossY && stx.controls.crossY.style.display=="none") ||
 					!(CIQ.ChartEngine.insideChart &&
 						stx.layout.crosshair &&
 						stx.displayCrosshairs &&
-						!stx.overXAxis &&
-						!stx.overYAxis &&
+				//		!stx.overXAxis &&
+				//		!stx.overYAxis &&
 						!stx.openDialog &&
 						!stx.activeDrawing &&
 						!stx.grabbingScreen &&
@@ -440,7 +447,13 @@
 				}
 				marker.node.style.top=Math.round(CIQ.ChartEngine.crosshairY-stx.top-parseInt(getComputedStyle(marker.node).height,10)/2)+"px";
 			}
+			// temporarily disable overXAxis, overYAxis so the crosshairs don't hide if touch device and over Y axis (this can happen
+			// due to the offset which we apply)
+			var overXAxis=stx.overXAxis, overYAxis=stx.overYAxis;
+			stx.overXAxis=stx.overYAxis=false;
 			stx.doDisplayCrosshairs();
+			stx.overXAxis=overXAxis;
+			stx.overYAxis=overYAxis;
 		};
 
 		function renderFunction(){
@@ -697,16 +710,19 @@
 	 *
 	 * The following chart types are supported: line, mountain, baseline_delta.
 	 * 
-	 * Chart aggregations such as Kagi, Renko, Range Bats, etc. are not supported. 
+	 * Chart aggregations such as Kagi, Renko, Range Bars, etc. are not supported. 
+	 * 
+	 * **Animation displays more gracefully when updates are sent into the chart one at a time using {@link CIQ.ChartEngine#updateChartData} 
+	 * instead of in batches using a [QuoteFeed]{@link CIQ.ChartEngine#attachQuoteFeed}. Sending data in batches will produce a ‘jumping’ effect.** 
 	 * 
 	 * By default there will be a flashing beacon created using a canvas circles. If instead you want to use a custom animation beacon, you will be able to extend the functionality yourself as follows:
-	 * - In js/addOns.js, at the bottom of the CIQ.Animation function, there is an stx.append("draw") function. 
+	 * - In js/addOns.js, at the bottom of the CIQ.Animation function, there is an stx.append("draw") function.
 	 * - Make a copy of this function so you can override the behavior.
-	 * - In there you will see it determine var x and y, which are the coordinates for the center of the beacon.  
-	 * - At the bottom of this append function, where we draw the beacon by using the Canvas arc() function to draw a circle and then fill() to make the circle solid. 
+	 * - In there you will see it determine var x and y, which are the coordinates for the center of the beacon.
+	 * - At the bottom of this append function, where we draw the beacon by using the Canvas arc() function to draw a circle and then fill() to make the circle solid.
 	 * - You can replace this circle and fill instructions with an image using [CanvasRenderingContext2D.drawImage()](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D#Drawing_images) .
 	 *
-	 * Animation Example <iframe width="800" height="500" scrolling="no" seamless="seamless" align="top" style="float:top" src="http://jsfiddle.net/chartiq/6fqw652z/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="1"></iframe>
+	 * Animation Example <iframe width="800" height="500" scrolling="no" seamless="seamless" align="top" style="float:top" src="https://jsfiddle.net/chartiq/6fqw652z/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="1"></iframe>
 	 *
 	 * @param {CIQ.ChartEngine} stx The chart object
 	 * @param {object} animationParameters Configuration parameters
@@ -753,6 +769,14 @@
 			initMarketSessionFlags();
 		});
 
+		stx.prepend("updateCurrentMarketData", function(data, chart, symbol, params) {
+			if(!chart) chart=this.chart;
+			if(params && params.fromTrade && chart.closePendingAnimation){
+				chart.currentMarketData.animatedLast={DT:data.DT,Price:data.Close,Size:data.LastSize,Timestamp:data.LastTime};
+				chart.currentMarketData.Last={DT:data.DT,Price:chart.closePendingAnimation,Size:data.LastSize,Timestamp:data.LastTime};
+			}
+		});
+
 		stx.prepend("updateChartData", function(appendQuotes, chart, params) {
 		    var self=this;
 		    if (!chart) {
@@ -760,13 +784,19 @@
 		    }
 			if (!chart || !chart.defaultChartStyleConfig || chart.defaultChartStyleConfig=="none") return;
 
-			if (params !== undefined && params.animationEntry) return;
+			if (params !== undefined){
+				if(params.animationEntry || params.secondarySeries) return;
+			}
 
-			function completeLastBar(value){
+			function completeLastBar(record){
 				for(var md=chart.masterData.length-1;md>=0;md--){
 					var bar=chart.masterData[md];
 					if(bar.Close || bar.Close===0){
-						bar.Close = value;
+						bar.Close = record.Close;
+						if(record.LastSize) bar.LastSize = record.LastSize;
+						if(record.LastTime) bar.LastTime = record.LastTime;
+						self.updateCurrentMarketData({Close:bar.Close, DT:bar.DT, LastSize:bar.LastSize, LastTime:bar.LastTime});
+						self.createDataSet(null,null,{appending:true});
 						return;
 					}
 				}
@@ -778,8 +808,10 @@
 					chart.lastTickOffset = 0;
 				}
 				if (chart.closePendingAnimation!==null) {
-					completeLastBar(chart.closePendingAnimation);
+					delete chart.currentMarketData.animatedLast;
+					var close=chart.closePendingAnimation;
 					chart.closePendingAnimation = null;
+					completeLastBar({Close:close});
 				}
 			}
 			var tickAnimator = self.tickAnimator;
@@ -787,7 +819,7 @@
 			var supportedChartType=this.mainSeriesRenderer && this.mainSeriesRenderer.supportsAnimation;
 			if(supportedChartType){
 				if (!tickAnimator) {
-					alert('Animation plug-in can not run because the tickAnimator has not been declared. See instructions in animation.js');
+					console.warn('Animation plug-in can not run because the tickAnimator has not been declared. See instructions in animation.js');
 					return;
 				}
 
@@ -841,7 +873,9 @@
 					}
 					newParams.updateDataSegmentInPlace = !tickAnimator.hasCompleted;
 					//console.log("animating: Old",symbol,' New : ',chart.symbol);
-					self.updateChartData([q], chart, newParams);
+					var updateQuotes=[q];
+					if(chartJustAdvanced) updateQuotes.unshift(prevQuote);
+					self.updateChartData(updateQuotes, chart, newParams);
 					newParams.firstLoop = false;
 					if (tickAnimator.hasCompleted) {
 						//console.log( 'animator has completed') ;
@@ -865,8 +899,7 @@
 				var chartJustAdvanced = false; // When advancing, we need special logic to deal with the open
 				if (period == 1 && appendQuotes.length == 2) {  // Don't do this if consolidating
 					this.prevQuote = appendQuotes[0];
-					completeLastBar(this.prevQuote.Close);
-					appendQuotes.splice(1, 1);
+					completeLastBar(this.prevQuote);
 				}
 				if (!quote || !quote.Close || !this.prevQuote || !this.prevQuote.Close) return false;
 
@@ -938,7 +971,7 @@
 		});
 
 		stx.prepend("renderYAxis", function(chart){
-			if(this.grabbingScreen) return;
+			if(this.grabbingScreen || !this.isHome()) return;
 
 			var panel = chart.panel;
 			var yAxis=panel.yAxis;
@@ -969,6 +1002,7 @@
     			return;
     		}
     		if(scrollAnimator.running) scrollAnimator.stop();
+    		if(!chart.lowValue && !chart.highValue) return;  // chart just reset, don't animate yet
     		var prevLow=chart.prevLowValue, prevHigh=chart.prevHighValue;
     		chart.prevLowValue=chart.lowValue;
     		chart.prevHighValue=chart.highValue;
@@ -1064,9 +1098,19 @@
 		var self=this.slider=new CIQ.ChartEngine({container:sliderContainer[0], preferences:{labels:false, whitespace:0}});
 		self.xaxisHeight=30;
 		self.manageTouchAndMouse=false;
+		self.minimumCandleWidth=0;
 		self.container.style.cursor="ew-resize";
-		self.chart.panel.yAxis.drawCurrentPriceLabel=false;
-		CIQ.extend(self.chart.panel.yAxis, params.yAxis);
+		var yAxis=self.chart.panel.yAxis;
+		yAxis.drawCurrentPriceLabel=false;
+		Object.defineProperty(yAxis, 'position', {
+			get: function() { return stx.slider.yAxisPosition || stx.chart.panel.yAxis.position; },
+			set: function(position) {  stx.slider.yAxisPosition=position; }
+		});
+		Object.defineProperty(yAxis, 'width', {
+			get: function() { if(stx.slider.yAxisWidth===0) return 0; return stx.slider.yAxisWidth || stx.chart.panel.yAxis.width; },
+			set: function(width) { stx.slider.yAxisWidth=width; }
+		});
+		CIQ.extend(yAxis, params.yAxis);
 		self.chart.baseline.userLevel=false;
 		if(self.controls.home) self.controls.home.style.width=0;
 		self.initializeChart();
@@ -1076,6 +1120,7 @@
 		this.display=function(on){
 			ciqSlider[on?"show":"hide"]();
 			stx.resizeChart();
+			$(window).resize();
 			if(!on) return;
 			self.resizeChart();
 			self.initializeChart();
@@ -1114,6 +1159,7 @@
 		this.adjustRange=function(chart){
 			if(!chart.dataSet) return;
 			var myChart=self.chart;
+			if(!myChart.width) return;
 			var scrollOffset=0, ticksOffset=0;
 			if(stx.quoteDriver && stx.quoteDriver.behavior && stx.quoteDriver.behavior.bufferSize){
 				if(chart.moreAvailable) scrollOffset=stx.quoteDriver.behavior.bufferSize;
@@ -1122,7 +1168,7 @@
 			myChart.baseline.defaultLevel=chart.baseline.actualLevel;
 			myChart.scroll=Math.max(0,chart.dataSet.length-stx.tickFromDate(chart.endPoints.begin)-scrollOffset)+1;
 			myChart.maxTicks=myChart.scroll-ticksOffset+1;
-			self.layout.candleWidth=chart.width/myChart.maxTicks;
+			self.layout.candleWidth=myChart.width/myChart.maxTicks;
 		};
 		this.copyData=function(chart){
 			if(!chart.dataSet) return;
@@ -1133,6 +1179,12 @@
 			self.draw();
 			this.drawSlider();
 		};
+		this.calculateYAxisPosition=function(){
+			var panel=self.chart.panel;
+			var currentPosition=self.getYAxisCurrentPosition(panel.yAxis,panel);
+			if(currentPosition!=panel.yAxis.position)
+				self.calculateYAxisPositions();
+		};
 		this.drawSlider=function(){
 			if(!ciqSlider.is(":visible")) return;
 			if(!stx.chart.dataSet || !stx.chart.dataSet.length) return;
@@ -1141,12 +1193,13 @@
 			var right=self.tickRight=Math.min(stx.tickFromPixel(chartPanel.right-halfCandle),stx.chart.dataSet.length-1);
 			var pLeft=self.pixelLeft=self.pixelFromTick(left)-(segmentImage[left]?segmentImage[left].candleWidth/2:halfCandle);
 			var pRight=self.pixelRight=self.pixelFromTick(right)+(segmentImage[right]?segmentImage[right].candleWidth/2:halfCandle);
+			var leftBoundary=subholder.offsetLeft, rightBoundary=leftBoundary+subholder.offsetWidth;
 			ctx.save();
 			ctx.beginPath();
 			ctx.fillStyle=style.backgroundColor;
-			ctx.fillRect(subholder.offsetLeft, subholder.offsetTop, pLeft-subholder.offsetLeft, subholder.offsetHeight);
-			ctx.fillRect(subholder.offsetWidth, subholder.offsetTop, pRight-subholder.offsetWidth, subholder.offsetHeight);
-			ctx.strokeStyle=style.borderColor;
+			ctx.fillRect(leftBoundary, subholder.offsetTop, pLeft-leftBoundary, subholder.offsetHeight);
+			ctx.fillRect(rightBoundary, subholder.offsetTop, pRight-rightBoundary, subholder.offsetHeight);
+			ctx.strokeStyle=style.borderTopColor;
 			ctx.lineWidth=parseInt(style.borderWidth,10);
 			ctx.moveTo(pLeft,subholder.offsetTop);
 			ctx.lineTo(pLeft,subholder.offsetTop+subholder.offsetHeight);
@@ -1197,6 +1250,7 @@
 			if(!ciqSlider.is(":visible")) return;
 			if(!self.chart.dataSet) return;
 			this.slider.adjustRange(this.chart);
+			this.slider.calculateYAxisPosition();
 			self.draw();
 			this.slider.drawSlider();
 		});
@@ -1220,13 +1274,15 @@
 			}
 		});
 		$(subholder).on("mousedown touchstart pointerdown", function(e){
-			var start=e.offsetX || e.originalEvent.layerX;
+			var start=e.offsetX;
+			if(!start && start!==0) start=e.originalEvent.layerX;
 			if(!start && start!==0) return; // wrong event
 			var s=$(self);
 			s.prop("startDrag",start)
 			 .prop("startPixelLeft",self.pixelLeft)
 			 .prop("startPixelRight",self.pixelRight);
 			var bw=parseInt(style.borderLeftWidth,10);
+			start+=this.offsetLeft;
 			if(start<self.pixelRight-bw) s.prop("needsLeft",true);
 			if(start>self.pixelLeft+bw) s.prop("needsRight",true);
 			if(CIQ.touchDevice) return;
@@ -1245,7 +1301,7 @@
 			var startDrag=s.prop("startDrag");
 			if(!startDrag && startDrag!==0) return;
 			var touches=e.originalEvent.touches;
-			var movement=(touches && touches.length) ? touches[0].pageX - e.target.offsetLeft : e.offsetX;
+			var movement=(touches && touches.length) ? self.backOutX(touches[0].pageX) - e.target.offsetLeft : e.offsetX;
 			if(!movement && movement!==0) return;  // wrong event
 			self.container.style.cursor="grab";
 			movement-=startDrag;
@@ -1253,9 +1309,9 @@
 			var startPixelLeft=s.prop("startPixelLeft"), startPixelRight=s.prop("startPixelRight");
 			var needsLeft=s.prop("needsLeft"), needsRight=s.prop("needsRight");
 			if(needsLeft){
-				if(startPixelLeft+movement<0) movement=-startPixelLeft;
-				if(needsRight && startPixelRight+movement>=stx.chart.width) {
-					movement=self.chart.dataSegment.length*self.layout.candleWidth-startPixelRight;
+				if(startPixelLeft+movement<self.chart.left) movement=self.chart.left-startPixelLeft;
+				if(needsRight && startPixelRight+movement>=self.chart.right) {
+					movement=self.chart.right-startPixelRight;
 					if(!self.isHome()) movement+=self.layout.candleWidth/2;  // force a right scroll
 				}
 				tickLeft=self.tickFromPixel(startPixelLeft+movement);

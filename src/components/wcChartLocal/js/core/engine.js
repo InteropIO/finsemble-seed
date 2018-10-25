@@ -38,10 +38,11 @@
 		 * <br>&bull; m-2016-12-01 deprecated renamed `CIQ.ChartEngine` from `STXChart`
 		 */
 		CIQ.ChartEngine=function(config){
-			if(!config) config={
-				container: null
-			};
-			if(config.constructor==HTMLDivElement){ // legacy versions accepted the chart container as the first parameters rather than a config object
+			if(!config){
+				config={
+					container: null
+				};
+			}else if(config.constructor==HTMLDivElement){ // legacy versions accepted the chart container as the first parameters rather than a config object
 				var newConfig={
 					container: config
 				};
@@ -76,7 +77,10 @@
 		     */
 		    this.charts={};
 		    /**
-		     * READ ONLY. Array of event listeners. These listeners will be killed when {@link CIQ.ChartEngine#destroy} is called.
+		     * READ ONLY. Array of event listeners currently attached to the engine.
+		     * These listeners will be killed when {@link CIQ.ChartEngine#destroy} is called.
+		     *
+		     * See {@link CIQ.ChartEngine#addEventListener} and {@link CIQ.ChartEngine#removeEventListener}
 		     * @type array
 		     * @alias eventListeners
 		     * @memberof CIQ.ChartEngine.prototype
@@ -106,12 +110,12 @@
 			 * @example
 			 * // using event listener
 			 * stxx.addEventListener("callbackNameHere", function(callBackParametersHere){
-			 * 	alert('triggered!');
+			 * 	CIQ.alert('triggered!');
 			 * });
 			 * @example
 			 * // using callback function
 			 * stxx.callbacks.callbackNameHere=function(callBackPatamerersHere){
-			 * 	alert('triggered!');
+			 * 	CIQ.alert('triggered!');
 			 * };
 			 * @deprecated 4.0.0
 			 */
@@ -166,7 +170,7 @@
 				 * @example
 				 * // using event listener
 				 * stxx.addEventListener("tap", function(tapObject){
-				 * 	alert('tap event at x: ' + tapObject.x + ' y: '+ tapObject.y);
+				 * 	CIQ.alert('tap event at x: ' + tapObject.x + ' y: '+ tapObject.y);
 				 * });
 				 * @example
 				 * // using callback
@@ -212,13 +216,13 @@
 				 * // using event listener
 				 * stxx.longHoldTime=... // Optionally override default value of 1000ms
 				 * stxx.addEventListener("longhold", function(lhObject){
-				 * 	alert('longhold event at x: ' + lhObject.x + ' y: '+ lhObject.y);
+				 * 	CIQ.alert('longhold event at x: ' + lhObject.x + ' y: '+ lhObject.y);
 				 * });
 				 * @example
 				 * // using callback function
 				 * stxx.longHoldTime=... // Optionally override default value of 1000ms
 				 * stxx.callbacks.longhold=function(lhObject){
-				 * 	alert('longhold event at x: ' + lhObject.x + ' y: '+ lhObject.y);
+				 * 	CIQ.alert('longhold event at x: ' + lhObject.x + ' y: '+ lhObject.y);
 				 * });
 				 * @memberof! CIQ.ChartEngine#
 				 * @since 2016-06-22
@@ -257,6 +261,18 @@
 				 * @memberof! CIQ.ChartEngine#
 				 */
 				drawing: null,
+				/**
+				 * Called when a right-click id detected on a highlighted drawing.
+				 *
+				 * Format:<br>
+				 * callback({stx:CIQ.ChartEngine, drawing:CIQ.Drawing})
+				 * @type function
+				 * @alias callbacks[`drawingEdit`]
+				 * @memberof! CIQ.ChartEngine#
+				 * @since 6.2.0
+				 * @private
+				 */
+				drawingEdit: null,
 				/**
 				 * Called when preferences are changed
 				 * calback({stx:CIQ.ChartEngine})
@@ -360,7 +376,7 @@
 			/**
 			 * Number of bars to always keep in view when the user pans forwards or backwards.
 			 * If this is set to less than 1, it will be possible to have a blank chart.
-			 * 
+			 *
 			 * See {@link CIQ.ChartEngine.Chart#allowScrollPast} and {@link CIQ.ChartEngine.Chart#allowScrollFuture} for instructions on how to prevent users from scrolling past the last bar on the chart in either direction; which may supersede this setting.
 			 * @type number
 			 * @default
@@ -573,7 +589,7 @@
 			 * @memberOf  CIQ.ChartEngine.prototype
 			 * @since  4.0.0
 			 */
-			this.disableBackingStoreDuringTouch=CIQ.isMobile;
+			this.disableBackingStoreDuringTouch=CIQ.isMobile || (CIQ.isSurface && CIQ.isFF);
 		    /**
 		     * If true when the chart initially is rendered, then the CIQ.ChartEngine object will register to listen and manage touch and mouse browser events within then canvas by attaching them to the container div.
 		     *
@@ -668,6 +684,7 @@
 			this.moveA=-1;									// Used internally for touch
 			this.moveB=-1;									// "
 			this.touchStartTime=-1;							// "
+			this.touchPointerType="";						// "
 			this.gestureStartDistance=-1; 					// "
 			this.grabStartPeriodicity=1; 					// "
 			this.grabEndPeriodicity=-1; 					// "
@@ -834,7 +851,7 @@
 				 */
 				timeUnit: null,
 			    /**
-			     * READ ONLY. Candle Width In pixels ( see {@tutorial Managing Chart Zoom and Range} )
+			     * READ ONLY. Candle Width In pixels ( see {@tutorial Understanding Chart Range} )
 			     * @type number
 			     * @default
 			     * @alias layout[`candleWidth`]
@@ -863,7 +880,7 @@
 			     * // add this if you want the crosshair to display right away instead of when the user starts moving the mouse over the chart
 			     * stx.doDisplayCrosshairs();
 			     * // add this if you want to trigger a layout change event; maybe to save the layout.
-			     * stx.changeOccurred("layout");
+			     * stx.dispatch("layout", {stx:stx, symbol: stx.chart.symbol, symbolObject:stx.chart.symbolObject, layout:stx.layout, drawings:stx.drawingObjects});
 			     *
 			     * @type boolean
 			     * @default
@@ -985,6 +1002,29 @@
 			     * @memberof! CIQ.ChartEngine#
 			     */
 				chartScale:  "linear",
+			    /**
+			     * READ ONLY. List of [study descriptors]{@link studyDescriptor} for the active studies on the chart.
+			     *
+			     * ** Please note: ** To facilitate study name translations, study names use zero-width non-joiner (unprintable) characters to delimit the general study name from the specific study parameters.
+			     * Example: "\u200c"+Aroon+"\u200c"+(14).
+			     * At translation time, the library will split the text into pieces using the ZWNJ characters, parentheses and commas to just translate the required part of a study name.
+			     * For more information on ZWNJ characters see: [Zero-width_non-joiner](https://en.wikipedia.org/wiki/Zero-width_non-joiner).
+			     * Please be aware of these ZWNJ characters, which will now be present in all study names and corresponding panel names; including the `layout.studies` study keys.
+			     * Affected fields in the study descriptors could be `id	`, `display`, `name` and `panel`.
+			     * <br>To prevent issues, always use the names returned in the **study descriptor**. This will ensure compatibility between versions.
+			     * >Example:
+			     * ><br>Correct reference:
+			     * ><br>	`stxx.layout.studies["\u200c"+Aroon+"\u200c"+(14)];`
+			     * ><br>Incorrect reference:
+			     * ><br>	`stxx.layout.studies["Aroon (14)"];`
+			     *
+			     * See {@link CIQ.Studies.addStudy} for more details
+			     *
+			     * @type object
+			     * @default
+			     * @alias layout[`studies`]
+			     * @memberof! CIQ.ChartEngine#
+			     */
 				studies: {},
 				panels: {},
 				setSpan: {}
@@ -1003,7 +1043,7 @@
 			this.preferences={
 				/**
 				* Pixel radius for the invisible intersection box around the cursor used to determine if it has intersected with an element to be highlighted.
-				* Used on items removed with a right click such as series and drawings.
+				* This value is used primarily for non-touch cursor events (mouse, touchpad).  Used on items removed with a right click such as series and drawings.
 				*
 				* Only applicable if the user has **not** tapped on the screen to set the location of the cross-hair.
 				*
@@ -1015,10 +1055,11 @@
 				*/
 				highlightsRadius: 10,
 				/**
-				* Pixel radius for the invisible intersection box around the cursor used to determine if it has intersected with an element to be highlighted.
-				* Used on items removed with a right click such as series and drawings.
+				* For touch events on the chart canvas.  Pixel radius for the invisible intersection box around the cursor used to determine if it has intersected
+				* with an element to be highlighted. The larger highlight radius is more suitable for the less precise input from touch events.  Used on
+				* items removed with a right click such as series and drawings.
 				*
-				* ** Only applicable if the user has tapped on the screen to set the location of the cross-hair. **
+				* ** Only applicable for touch events while the cursor is not controlling the crosshair tool. Otherwise, highlightsRadius is used. **
 				*
 				* @type number
 				* @default
@@ -1145,7 +1186,7 @@
 			     * @alias preferences[`zoomInSpeed`]
 			     * @memberof! CIQ.ChartEngine#
 			     * @example
-			     * stxx.preferences.zoomInSpeed=.98;
+			     * stxx.preferences.zoomInSpeed=.91;
 			     * @example
 			     * var stxx=new CIQ.ChartEngine({container:$$$(".chartContainer"), preferences:{"zoomInSpeed": .98}});
 			     * @since 07/01/2015
@@ -1160,7 +1201,7 @@
 			     * @alias preferences[`zoomOutSpeed`]
 			     * @memberof! CIQ.ChartEngine#
 			     * @example
-			     * stxx.preferences.zoomOutSpeed=1;
+			     * stxx.preferences.zoomOutSpeed=1.1;
 			     * @example
 			     * var stxx=new CIQ.ChartEngine({container:$$$(".chartContainer"), preferences:{"zoomOutSpeed": 1}});
 			     * @since 07/01/2015
@@ -1821,7 +1862,7 @@
 	     * @memberof CIQ.ChartEngine
 	     */
 		CIQ.ChartEngine.resizingPanel=null;
-		CIQ.ChartEngine.vectorType="";		// @deprecated The type of drawing currently enabled "segment", "line", "ray", etc. See sample.html menu
+		CIQ.ChartEngine.vectorType="";		// @deprecated
 	    /**
 	     * READ ONLY. Current X screen coordinate of the crosshair.
 	     * @type number
@@ -2299,7 +2340,8 @@
 		CIQ.ChartEngine.YAxis.prototype.displayGridLines= true;
 
 		/**
-		 * Set to `true` to hide the yaxis
+		 * Switch to 'temporarily' hide the y-axis. Set to `true' to activate. 
+		 * Will not modify the location of the axis; to do that use {@link CIQ.ChartEngine#setYAxisPosition} instead.
 		 * @type boolean
 		 * @default
 		 * @memberof CIQ.ChartEngine.YAxis
@@ -2381,12 +2423,17 @@
 
 		/**
 		 * Set to `true` to right justify the yaxis labels
+		 * Set to `false` to force-left justify the labels, even when the axis is on the left.
+		 * Set to null to have the justification automatically adjusted based on the axis position. Right axis will justify left, and left axis will justify right.
+
 		 *
 		 * This setting does not control the floating last price. See {@link CIQ.ChartEngine.AdvancedInjectable#drawCurrentHR} and {@link CIQ.ChartEngine#createYAxisLabel}
 		 * @type boolean
 		 * @default
 		 * @memberof CIQ.ChartEngine.YAxis
-		 * @since  15-07-01
+		 * @since  
+		 * <br>&bull; 15-07-01
+		 * <br>&bull; 6.2.0 Formalized distinction between null and false values
 		 */
 		CIQ.ChartEngine.YAxis.prototype.justifyRight=null;
 
@@ -2420,7 +2467,7 @@
 		 *
 		 * @type function
 		 * @example
-		 * stxx.chart.panel.yAxis.priceFormatter=function(stx, panel, price, decimalPlaces){
+		 * stxx.chart.yAxis.priceFormatter=function(stx, panel, price, decimalPlaces){
 		 * 	var convertedPrice;
 		 * 	  // add our logic here to convert 'price' to 'convertedPrice'
 		 *    return convertedPrice; // string
@@ -2604,21 +2651,21 @@
 		CIQ.ChartEngine.YAxis.prototype.textStyle = null;
 
 		/**
-		 * Set to "left" for the y-axis to draw on the left side of the screen.
-		 *
-		 * The main chart axis will default to "right", but an set  or reset at any time as outlined on the examples.
-		 *
-		 * The main access for any study panel will follow the main chart axis as long as this is set to null. Note that this only applies to chart panels.
+		 * Set to "left" or "right" to **initialize** the y-axis location. 
+		 * 
+		 * By default y-axis are drawn on the right side of the chart.
+		 * The main y-axis for any study panel will follow the main chart axis as long as this is set to null.
+		 * 
+		 * Do not use this method to change the location of an existing y-axis.
+		 * Once initialized, y axis location can be changed at any time by calling {@link CIQ.ChartEngine#setYAxisPosition}
+		 * 
 		 * @type string
 		 * @default
 		 * @memberof CIQ.ChartEngine.YAxis
 		 * @example  <caption>Pre-set the main y-axis for the chart on the left; **before it is initially rendered**.</caption>
 		 * stxx.chart.yAxis.position = 'left';
 		 * @example  <caption>Re-set the main y-axis for the chart on the right; **after it is initially rendered**.</caption>
-		 * stxx.chart.yAxis.position = 'right';
-		 * //must call the following 2 lines to activate if the axis is already drawn.
-		 * stxx.calculateYAxisPositions();
-		 * stxx.draw();
+		 * stxx.setYAxisPosition(stxx.chart.yAxis,'right');
 		 * @since  15-07-01
 		 */
 		CIQ.ChartEngine.YAxis.prototype.position = null;
@@ -2689,7 +2736,7 @@
 		 *
 		 * This can be overridden, however, by setting{@link CIQ.ChartEngine.YAxis#decimalPlaces}.
 		 * If you wish to further configure the current price label floating over the y axis to display less decimal places than the axis labels, set {@link CIQ.ChartEngine.YAxis#maxDecimalPlaces}.
-		 * Also see {@link CIQ.ChartEngine.Chart#dynamicYAxis} to allow the y axis to automatically determine it's width based on the text length of quotes in a dataSet.
+		 * Also see {@link CIQ.ChartEngine.Chart#dynamicYAxis} to allow the y axis to automatically determine its width based on the text length of quotes in a dataSet.
 		 *
 		 * @type array
 		 * @memberof CIQ.ChartEngine.YAxis
@@ -2823,7 +2870,7 @@
 		     */
 			displayGridLines: true,
 		    /**
-		     * Set to false to suppress entire axis
+		     * Switch to temporarily hide the x-axis. Set to `true' to activate.
 		     * @type boolean
 		     * @default
 		     * @memberof CIQ.ChartEngine.XAxis#
@@ -2912,7 +2959,7 @@
 			     * Setting to zero would theoretically cause the chart to be scrolled completely to the left showing an empty canvas.
 			     * Setting to 10 would display the last 10 candles on the chart.
 			     * Setting to `maxTicks` would display a full screen on the chart (assuming enough data is available).
-			     * 
+			     *
 			     * To immediately activate, call [draw()]{@link CIQ.ChartEngine#draw}
 			     * @type number
 			     * @default
@@ -2923,7 +2970,23 @@
 			     * stxx.chart.scroll=stxx.chart.dataSet.length;
 			     */
 				scroll: 0,
-				standStill: 0,							// Used internally
+				isComparison: false,					// Used internally, indicates if chart is in comparison mode
+			    /**
+			     * If true, [comparisons]{@link CIQ.ChartEngine#addSeries} force a 'percent' chart scale every time a new series is added, 
+			     * and once the last comparison series is removed, the chart will be forced to 'linear' scale. 
+			     * In between adding series, the scale can be changed at any time by programmatically calling calling {@link CIQ.ChartEngine#setChartScale}
+			     * 
+			     * If false, the chart will not change scale when a comparison series is added or removed and {@link CIQ.ChartEngine#setChartScale} must be explicitly called to set the desired scale. 
+			     * This allows for more flexibility in case 'linear' and 'percent' are not the preferred default scales, or the UI is requires to manage the scale separately. 
+				 *
+			     * Note this will only take effect on the main chart panel's main axis.
+			     * 
+			     * @type boolean
+			     * @default
+			     * @memberof CIQ.ChartEngine.Chart#
+			     * @since 6.2.0
+			     */
+				forcePercentComparison: true,
 				/**
 				 * Will contain the maximum number of bars that can be displayed on the chart.
 				 * This number is auto-computed by the ChartEngine when the user zooms or the size of the chart changes.
@@ -2941,18 +3004,18 @@
 			     */
 				tension: null,
 			    /**
-			     * READ ONLY. A "snapshot" of the market for the active instrument. 
-			     * This data is ephemeral in nature and not used to produce a time series chart. 
+			     * READ ONLY. A "snapshot" of the market for the active instrument.
+			     * This data is ephemeral in nature and not used to produce a time series chart.
 			     * But rather used on our peripheral plugins that require more details on the current market, such as [TFC]{@link CIQ.TFC} and [cryptoIQ]{@link CIQ.MarketDepth}.
 			     * This data is programmatically collated from the incoming data and is updated with the most recent information so it should not be altered manually.
-			     * 
-			     * The `currentMarketData` object contains the following information: 
+			     *
+			     * The `currentMarketData` object contains the following information:
 			     *  - Last Bid
 			     *  - Last Ask
 			     *  - Last Price
 			     *  - Last Size
 			     *  - Lastest Level 2 information
-			     *  
+			     *
 			     * For more details see {@link CIQ.ChartEngine#updateCurrentMarketData}
 			     * @type object
 			     * @memberof CIQ.ChartEngine.Chart#
@@ -3076,13 +3139,90 @@
 			    /**
 			     * Function used to render the Legend when multiple series are being displayed on the main chart panel.
 			     * Update your prototype or a specific chart instance, if you want to use a different rendering method for legend.
-			     * See {@link CIQ.drawLegend} for details and function signature.
-			     * <P>
-			     * Defaults to {@link CIQ.drawLegend}
+			     * 
+			     * To activate the legend, you must first define the location in `stx.chart.legend`. 
+			     * This is done by providing the x and y coordinates for the first element in the legend as follows:
+			     * ```
+			     * stxx.chart.legend={
+			     * 		x: yourXlocation,
+			     * 		y: yourYlocation
+			     * };
+			     * ```
+			     * 
+			     * Once set, a legend item for each series you add will be added as defined by this function.
+			     * 
+			     * Defaults to {@link CIQ.drawLegend}, which uses {@link CIQ.drawLegendItem}
 			     * @type function
 			     * @default
 			     * @memberof CIQ.ChartEngine.Chart#
-			     * @example stxx.chart.legendRenderer = yourFunction; // must follow the function signature of {@link CIQ.drawLegend};
+			     * @example 
+			     * // define yuur legend renderer
+			     * stxx.chart.legendRenderer = yourFunction; // must follow the function signature of {@link CIQ.drawLegend};
+			     * // actiate the legend
+			     * stxx.chart.legend={
+			     * 		x: 50,
+			     * 		y: 50
+			     * };
+			     * @example
+			     * // sample series legend function
+				 	stxx.chart.legendRenderer = function(stx, params){
+						var coordinates=params.coordinates;
+						var context=stx.chart.context;
+						context.textBaseline="top";
+						var rememberFont=context.font;
+						stx.canvasFont("stx-legend",context);
+	
+						var chart=params.chart;
+						if(!coordinates) coordinates=chart.legend;
+						var xy=[coordinates.x, coordinates.y];
+						var lineColor=stx.defaultColor;
+	
+						for(var i=0;i<2;i++){ // loop twice, first for the base then again for the series
+							for(var field in params.legendColorMap){
+								var legendItem=params.legendColorMap[field];
+								if(legendItem.isBase && (i || params.noBase)) continue;
+								if(!legendItem.isBase && !i) continue;
+								var c;
+								if(legendItem.color instanceof Array){
+									var colors=legendItem.color;
+									for(c=colors.length-1;c>=0;c--){
+										if(CIQ.isTransparent(colors[c])) colors.splice(c,1);
+									}
+									if(colors.length>1){
+										var grd=context.createLinearGradient(xy[0],xy[1],xy[0]+10,xy[1]);
+										for(c=0;c<colors.length;c++){
+											grd.addColorStop(c/(colors.length-1),colors[c]);
+										}
+										lineColor=grd;
+									}else if(colors.length>0){
+										lineColor=colors[0];
+									}else{
+										lineColor=stx.getCanvasColor("stx_line_chart");
+									}
+								}else{
+									lineColor=null;
+								}
+								if(lineColor) {
+									var display = field;
+									if (legendItem.display){
+										display = legendItem.display;
+									}
+									if(!display){
+										if(chart.symbolDisplay){
+											display=chart.symbolDisplay;
+										}else{
+											display=chart.symbol;
+										}
+									}
+									if(xy[0]+context.measureText(display).width>chart.panel.right){
+										xy=[coordinates.x, coordinates.y+context.measureText("M").width+6];  // M is squarish, with width roughly equaling height: https://stackoverflow.com/questions/1134586/how-can-you-find-the-height-of-text-on-an-html-canvas
+									}
+									xy=CIQ.drawLegendItem(stx, xy, display, lineColor, legendItem.opacity);
+								}
+							}
+						}
+						context.font=rememberFont;
+					};			          
 			     * @since 07/01/2015
 			     */
 				legendRenderer: CIQ.drawLegend,
@@ -3182,6 +3322,7 @@
 			     * @type boolean
 			     * @default
 				 * @memberof CIQ.ChartEngine.Chart#
+				 * @since 6.1.0 Also respects studies that render into the future, such as the Ichimoku cloud.
 			     */
 				allowScrollFuture:true,
 			    /**
@@ -3245,8 +3386,9 @@
 				 */
 				includeOverlaysInMinMax:true,
 				/**
-				 * READ ONLY. Gap filling style for the chart (line/mountain chart types only).
-				 * Set by using {@link CIQ.ChartEngine#setGapLines}.
+				 * READ ONLY. Gap filling style for the primary chart (line/mountain chart types only).
+				 * By default gaps on lines and mountain charts will not be connected.
+				 * Modify by using {@link CIQ.ChartEngine#setGapLines}.
 				 * @type {object}
 				 * @default
 				 * @memberof CIQ.ChartEngine.Chart#
@@ -3316,8 +3458,8 @@
 		CIQ.ChartEngine.prototype.setDrawingContainer=function(htmlElement){
 			this.drawingContainer=htmlElement;
 		};
-		
-		
+
+
 		/**
 		 * Based on the standardMarketIterator and the last entry of masterData, determines whether the chart contains data up till the current iterators next tick.
 		 *
@@ -3337,7 +3479,7 @@
 				var lastDate = this.getFirstLastDataRecord(masterData, "DT", true);
 				var iter = this.standardMarketIterator(lastDate.DT);
 				historic = iter.next() <= dateNow;
-				
+
 				// special case: daily chart, market has not opened yet today
 				// historic would always be set even though we have all the data
 				if(historic && CIQ.ChartEngine.isDailyInterval(iter.interval)){
@@ -3607,8 +3749,13 @@
 			}
 		};
 		/**
-		 * Removes custom developer functionality from an internal chart member. Will remove any and all appends or prepends.
-		 * @param  {string} o Signature of member
+		 * Removes any and all prepend and append injections from a specified CIQ.ChartEngine function.
+		 * If called as an instance method, will remove the instance injections.
+		 * If called as a prototype method, will remove the prototype injections.
+		 * @example
+		 * stxx.remove("displayChart");  // removes instance injections
+		 * CIQ.ChartEngine.prototpye.remove("displayChart");  // removes prototype injections
+		 * @param  {string} o Signature of function which has injections to remove
 		 * @memberof CIQ.ChartEngine
 		 */
 		CIQ.ChartEngine.prototype.remove=function(o){
@@ -3825,8 +3972,8 @@
 			var zoomIn=$$$(".stx-zoom-in", chartControls);
 			var zoomOut=$$$(".stx-zoom-out", chartControls);
 
-			CIQ.safeClickTouch(zoomIn,(function(self){return function(e){ self.zoomIn(e); e.stopPropagation(); };})(this));
-			CIQ.safeClickTouch(zoomOut,(function(self){return function(e){ self.zoomOut(e); e.stopPropagation(); };})(this));
+			CIQ.safeClickTouch(zoomIn,(function(self){return function(e){ if(self.allowZoom) self.zoomIn(e); e.stopPropagation(); };})(this));
+			CIQ.safeClickTouch(zoomOut,(function(self){return function(e){ if(self.allowZoom) self.zoomOut(e); e.stopPropagation(); };})(this));
 			if(!CIQ.touchDevice){
 				this.makeModal(zoomIn);
 				this.makeModal(zoomOut);
@@ -3854,7 +4001,7 @@
 	};
 
 	/**
-	 * Convience function to attach a model on mouse events
+	 * Convenience function to attach a modal on mouse events
 	 * @param {HTMLElement} Element to attach the modal to
 	 * @private
 	 * @memberof CIQ.ChartEngine
@@ -4048,7 +4195,7 @@
 
 	/**
 	 * **Deprecated.**  Use {@link CIQ.ChartEngine.XAxis#noDraw} and {@link CIQ.ChartEngine.YAxis#noDraw} instead.
-	 * 
+	 *
 	 * Override this function to hide the date which floats along the X axis when crosshairs are enabled. Return `true` to hide the date or `false` to display.
 	 * @memberof CIQ.ChartEngine
 	 * @deprecated as of 6.0.0 no longer used in library.
@@ -4129,10 +4276,13 @@
 	};
 
 	/**
-	 * This is called whenever a change to layout, drawings or theme occurs. But can be used to trigger any event. If {@link CIQ.ChartEngine#changeCallback} has a function registered, then
-	 * that function will be called with the type of change. The change itself is not passed in. The layout or drawings can be inspected to find the change but
-	 * typically the entire set of drawings or entire layout is desired and it is mostly just necessary to know that they have changed so that they
-	 * can be saved.
+	 * Legacy method used to internally dispatch a registered event whenever a change to layout, drawings or theme occurs.
+	 * Events must be registered using {@link CIQ.ChartEngine#addDomEventListener} for "layout", "drawing", "theme" and "preferences".
+	 *
+	 * This is simply a proxy method that calls the corresponding {@link CIQ.ChartEngine#dispatch} method.
+	 *
+	 * Developers creating their own custom functionality should call {@link CIQ.ChartEngine#dispatch} instead.
+	 *
 	 * @param  {string} change Type of change that occurred. Any string that {@link CIQ.ChartEngine#changeCallback} has been programmed to handle is valid.
 	 * @memberof CIQ.ChartEngine
 	 */
@@ -4219,11 +4369,7 @@
 		if(needsTransform[chartScale]){
 			this.setComparison(chartScale, chart, CIQ.Comparison.initialPrice);
 		}else if(needsTransform[this.layout.chartScale]){
-			var comparing=false;
-			for(var s in chart.series){
-				if(chart.series[s].parameters.isComparison) comparing=true;
-			}
-			if(!comparing) this.setComparison(false, chart);
+			this.setComparison(false, chart);
 		}
 		this.layout.chartScale=chartScale;
 		if(chart.canvas) this.draw();
@@ -4539,9 +4685,6 @@
 	 */
 	CIQ.ChartEngine.prototype.home=function(params){
 		this.swipe.amplitude=0;
-		// from git isue #533, seems no longer necessary
-		//this.grabbingScreen= false; //in case they were grabbing the screen and let go on top of the home button.
-		//if(CIQ.ChartEngine.insideChart) CIQ.unappendClassName(this.container, "stx-drag-chart"); //in case they were grabbing the screen and let go on top of the home button.
 		var layout=this.layout;
 		if(typeof params != "object"){
 			// backward compatibility
@@ -4625,8 +4768,10 @@
 	};
 
 	/**
-	 * Returns the tick (position in dataSet) given the requested date. The date does not need to match exactly.
-	 * If the date lies between ticks then the earlier will be returned by default.
+	 * Returns the tick (position in dataSet) given the requested date.
+	 *
+	 * The date does not need to match exactly. If the date lies between ticks then the earlier will be returned by default.
+	 *
 	 * @param  {string} dt	  Date in string format
 	 * @param  {CIQ.ChartEngine.Chart} [chart] Chart object
 	 * @param  {number} [adj] Timezone adjustment in minutes to apply to date before getting tick
@@ -4698,7 +4843,7 @@
 	 * This is the object stored in CIQ.ChartEngine.chart.xaxis array which contains information regarding an x-axis tick.
 	 * See {@link CIQ.ChartEngine.AdvancedInjectable#createXAxis} for more detail.
 	 * @constructor
-	 * @param {number} hz Horizontal position of center of label in pixels
+	 * @param {number} hz Horizontal position of center of label in pixels. Any elements with negative positions will be off the edge of the screen, and are only maintained to help produce a more predictable display as the chart is zoomed and paned.
 	 * @param {string} grid Either "line" or "boundary" depending on whether the label should be a date/time boundary or just a grid line
 	 * @param {string} text The text to display in the label
 	 * @memberof CIQ.ChartEngine
@@ -4735,7 +4880,7 @@
 		var axisRepresentation=this.runPrepend("createXAxis", arguments$);
 		if(axisRepresentation) return axisRepresentation;
 		if(this.mainSeriesRenderer && this.mainSeriesRenderer.createXAxis){
-			axisRepresentation = this.mainSeriesRenderer.createXAxis(chart);			
+			axisRepresentation = this.mainSeriesRenderer.createXAxis(chart);
 		}else{
 			axisRepresentation = this.createTickXAxisWithDates(chart);
 		}
@@ -4844,21 +4989,26 @@
 	 */
 	CIQ.ChartEngine.prototype.plotYAxisText=function(panel){
 		if(this.runPrepend("plotYAxisText", arguments)) return;
-		var arr=panel.yaxisLHS.concat(panel.yaxisRHS);
-		for(var i=0;i<arr.length;i++){
-			var yAxis=arr[i];
-			if(!yAxis.yAxisPlotter) continue;
-			if(yAxis.noDraw || !yAxis.width) continue;
-			this.canvasFont("stx_yaxis");
-			this.canvasColor("stx_yaxis");
-			var context=this.chart.context;
-			context.textBaseline="middle";
+		this.canvasFont("stx_yaxis");
+		this.canvasColor("stx_yaxis");
+		var context=this.chart.context;
+		context.textBaseline="middle";
+		function drawText(yAxis){
+			if(!yAxis.yAxisPlotter) return;
+			if(yAxis.noDraw || !yAxis.width) return;
 			if(yAxis.justifyRight) context.textAlign="right";
-			else context.textAlign="left";
+			else if(yAxis.justifyRight===false) context.textAlign="left";
 			yAxis.yAxisPlotter.draw(context, "text");
 			context.textBaseline="alphabetic";
 			context.textAlign="left";
 		}
+		var arr=panel.yaxisLHS, i;
+		context.textAlign="right";
+		for(i=0;i<arr.length;i++) drawText(arr[i]);
+		arr=panel.yaxisRHS;
+		context.textAlign="left";
+		for(i=0;i<arr.length;i++) drawText(arr[i]);
+
 		this.runAppend("plotYAxisText", arguments);
 	};
 
@@ -4890,13 +5040,15 @@
 	 * @param  {CIQ.ChartEngine.Panel} panel The panel for the y-axis.
 	 * @param {number} [requestedDecimalPlaces] Number of decimal places, otherwise it will be determined by the yaxis setting, or if not set, determined automatically
 	 * @param {CIQ.ChartEngine.YAxis} [yAxis] yAxis. If not present, the panel's y-axis will be used.
+	 * @param  {boolean} internationalize Normally this function will return an internationalized result.  Set this param to false to bypass.
 	 * @return {number}		  The formatted price
 	 * @memberof CIQ.ChartEngine
 	 * @since
-	 * <br>&bull; 4.0.0 condenseInt will be called only if equal or over 1000 rather than 100.
-	 * <br>&bull; 5.2.0 all axes will be condensed to some degree to allow for more uniform decimal precision
+	 * <br>&bull; 4.0.0 CondenseInt will be called only if equal or over 1000 rather than 100.
+	 * <br>&bull; 5.2.0 All axes will be condensed to some degree to allow for more uniform decimal precision
+	 * <br>&bull; 6.1.0 Added internationalize argument
 	 */
-	CIQ.ChartEngine.prototype.formatYAxisPrice=function(price, panel, requestedDecimalPlaces, yAxis){
+	CIQ.ChartEngine.prototype.formatYAxisPrice=function(price, panel, requestedDecimalPlaces, yAxis, internationalize){
 		if(price===null || typeof price=="undefined" || isNaN(price) ) return "";
 		var yax=yAxis?yAxis:panel.yAxis;
 		var decimalPlaces=requestedDecimalPlaces;
@@ -4910,7 +5062,7 @@
 		}
 
 		var internationalizer=this.internationalizer;
-		if(internationalizer){
+		if(internationalizer && internationalize!==false){
 			var l=internationalizer.priceFormatters.length;
 			if(decimalPlaces>=l) decimalPlaces=l-1;
 			price=internationalizer.priceFormatters[decimalPlaces].format(price);
@@ -4966,20 +5118,21 @@
 	 * This method *does not* condense prices.
 	 * @param  {number} price The price to be formatted
 	 * @param  {CIQ.ChartEngine.Panel} panel The panel to use to determine the number of decimal places.
-	 * @return {number}		  The formatted price
+	 * @return {string}		  The formatted price
 	 * @memberof CIQ.ChartEngine
+	 * @since 6.2.0 Return value will always be a string
 	 */
 	CIQ.ChartEngine.prototype.formatPrice=function(price, panel){
 		if(price!==0 && (!price || typeof price=="undefined")) return "";
 		if(!panel) panel=this.currentPanel;
 		if(!panel) panel=this.chart.panel;
-		if(!panel) return price;
+		if(!panel) return price.toString();
 		var decimalPlaces=panel.decimalPlaces;
 		if(!decimalPlaces && decimalPlaces!==0){
 			decimalPlaces=panel.chart.decimalPlaces;
 		}
 		if(!decimalPlaces && decimalPlaces!==0){
-			return price;
+			return price.toString();
 		}
 		var internationalizer=this.internationalizer;
 		if(internationalizer){
@@ -5046,7 +5199,6 @@
 		var isTransform=false;
 		var l=quotes.length;
 		if(length) l=length;
-		//var leftmostQuoteExists, rightmostQuoteExists;   // Removing this logic fixes KB 5395, but it will include the offscreen coords in the y-axis range even if it's connected by a gap and the gap is not drawn
 
 		for(var i=0;i<=l+1;i++){
 			var quote;
@@ -5241,7 +5393,9 @@
 				else baseFields=[chart.defaultPlotField || "Close"];
 				for(var id2=0; id2<renderer.seriesParams.length; id2++){	// Find any series that share the Y axis
 					var seriesParams=renderer.seriesParams[id2];
-					if(seriesParams.symbol){
+					if(seriesParams.subField){
+						fields=fields.concat(CIQ.createObjectChainNames(seriesParams.symbol,[seriesParams.subField])).concat(seriesParams.symbol);
+					}else if(seriesParams.symbol){
 						fields=fields.concat(CIQ.createObjectChainNames(seriesParams.symbol,baseFields)).concat(seriesParams.symbol);
 					}else if(seriesParams.field){
 						fields.push(seriesParams.field);
@@ -5255,6 +5409,7 @@
 				for(var overlay in self.overlays){
 					var o=self.overlays[overlay];
 					if(o.panel!=panel.name) continue;
+					if(o.name==yAxis.name) continue; // don't loop thru the same axis twice and create duplicates
 					var oAxis=self.getYAxisByName(o.panel, o.name) || panel.yAxis;
 					if(oAxis!=yAxis) continue;
 					setYAxisFields({name:o.name});
@@ -5280,11 +5435,11 @@
 				var doTransform=chart.transformFunc && yAxis==chart.panel.yAxis;
 				setYAxisFields(yAxis, myPanel);
 				if(this.mainSeriesRenderer && this.mainSeriesRenderer.determineMax){
-					minMax=this.mainSeriesRenderer.determineMax(chart.dataSegment, fields, null, !doTransform, length);	
+					minMax=this.mainSeriesRenderer.determineMax(chart.dataSegment, fields, null, !doTransform, length);
 				}else{
 					minMax=this.determineMinMax(chart.dataSegment, fields, null, !doTransform, length);
 				}
-				if(this.mainSeriesRenderer){
+				if(this.mainSeriesRenderer && chart.yAxis==yAxis){
 					if(!this.mainSeriesRenderer.highLowBars || !this.highLowBars[this.layout.chartType]){	// line charts shouldn't take into account high and low values, just close
 						var mainSeriesRenderer=this.mainSeriesRenderer || {};
 						if(chart.panel==myPanel && mainSeriesRenderer.params && mainSeriesRenderer.params.baseline && mainSeriesRenderer.params.type!="mountain"){
@@ -5345,9 +5500,9 @@
 	 * Adds a series renderer to the chart, or updates it.	A series renderer manages a group of series which are rendered on the chart
 	 * in the same manner. For instance, several series which are part of the same stacked histogram.
 	 *
-	 * Example 1 <iframe width="100%" height="500" scrolling="no" seamless="seamless" align="top" style="float:top" src="http://jsfiddle.net/chartiq/b6pkzrad/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="1"></iframe>
+	 * Example 1 <iframe width="100%" height="500" scrolling="no" seamless="seamless" align="top" style="float:top" src="https://jsfiddle.net/chartiq/b6pkzrad/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="1"></iframe>
 	 *
-	 * Example 2 <iframe width="100%" height="500" scrolling="no" seamless="seamless" align="top" style="float:top" src="http://jsfiddle.net/chartiq/rb423n71/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="1"></iframe>
+	 * Example 2 <iframe width="100%" height="500" scrolling="no" seamless="seamless" align="top" style="float:top" src="https://jsfiddle.net/chartiq/rb423n71/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="1"></iframe>
 	 *
 	 * You must manage the persistency of a renderer, and remove individual series ({@link CIQ.Renderer#removeSeries} ) , remove all series ({@link CIQ.Renderer#removeAllSeries}) or even delete the renderer ({@link CIQ.ChartEngine#removeSeriesRenderer}) as needed by your application
 	 *
@@ -5422,7 +5577,7 @@
 	 * Once set, the definition will not change until it is explicitly set to something else by calling this method again.
 	 *
 	 * A new definition for a chart should only be set once, right before a new instrument is loaded with the {@link CIQ.ChartEngine#newChart} call.
-	 * Loading or modifying a market definition after a chart has loaded it's data will result in unpredictable results.
+	 * Loading or modifying a market definition after a chart has loaded its data will result in unpredictable results.
 	 *
 	 * If a dynamic model is desired, where a new definition is loaded as different instruments are activated, see {@link CIQ.ChartEngine#setMarketFactory}.
 	 *
@@ -5436,7 +5591,17 @@
 	 * @memberof CIQ.ChartEngine
 	 * @since 04-2016-08
 	 * @example
-	 * stxx.setMarket(marketDefinition);
+	 * stxx.setMarket({
+	 *   name: 'My_Market',
+	 *   market_tz: 'My_Timezone', // Note you must specify the time zone for the market!
+	 *   rules: [
+	 *     { 'dayofweek': 1, 'open': '08:00', 'close': '14:30' },
+	 *     { 'dayofweek': 2, 'open': '08:00', 'close': '14:30' },
+	 *     { 'dayofweek': 3, 'open': '08:00', 'close': '14:30' },
+	 *     { 'dayofweek': 4, 'open': '08:00', 'close': '14:30' },
+	 *     { 'dayofweek': 5, 'open': '08:00', 'close': '14:30' },
+	 *   ],
+	 * });
 	 */
 	CIQ.ChartEngine.prototype.setMarket=function(marketDefinition, chart) {
 		if(!chart) chart=this.chart;
@@ -5451,7 +5616,7 @@
 	 * Once linked, the market factory it will be used by the chart to ensure the market always matches the active instrument.
 	 * This is only required if your chart will need to know the operating hours for the different exchanges.
 	 * If using a 24x7 chart, a market factory does not need to be set.
-	 * 
+	 *
 	 * Please note that if using the default sample templates, this method is set to use the {@link CIQ.Market.Symbology} functions, which must be reviewed and adjust to comply with your quote feed and symbology format before they can be used.
 	 * @param {function} factory A function that takes a symbolObject and returns a market definition. See {@link CIQ.Market} for instruction on how to create a market definition. See {@link CIQ.Market.Symbology.factory} for working example of a factory function.
 	 * @memberof CIQ.ChartEngine
@@ -5466,7 +5631,7 @@
 	 *		if( isType3(symbol) ) return type3DefinitionObject;
 	 *		return defaultDefinitionObject;
 	 * };
-	 * 
+	 *
 	 * var stxx=new CIQ.ChartEngine({container:$("#chartContainer")[0], preferences:{labels:false, currentPriceLine:true, whitespace:0}});
 	 * stxx.setMarketFactory(sampleFactory);
 	 */
@@ -5590,6 +5755,7 @@
 	 * @memberof CIQ.ChartEngine
 	 * @since 4.0.0
 	 * @example
+	 * // shorthand if just setting the color for the main chart
 	 * stxx.setGapLines("blue");
 	 * @example
 	 * // the following will set stxx.chart.gaplines
@@ -5860,7 +6026,7 @@
 	 *
 	 * You can override the {@link CIQ.ChartEngine#hideDates} method to decide if/when you want to hide the floating date.
 	 *
-	 * It uses {@link CIQ.displayableDate} to format the floating label over the x axis, which can be overitten as needed to achieve the desired results.
+	 * It uses {@link CIQ.displayableDate} to format the floating label over the x axis, which can be overwritten as needed to achieve the desired results.
 	 *
 	 * @memberof CIQ.ChartEngine.AdvancedInjectable#
 	 * @alias headsUpHR
@@ -6250,7 +6416,8 @@
 				x0:this.tickFromPixel(cx - radius, chart),
 				x1:this.tickFromPixel(cx + radius, chart),
 				y0:this.valueFromPixel(cy - radius, this.currentPanel),
-				y1:this.valueFromPixel(cy + radius, this.currentPanel)
+				y1:this.valueFromPixel(cy + radius, this.currentPanel),
+				r:radius
 		};
 		if(this.repositioningDrawing && box.x1-box.x0<2){
 			box.x1++;
@@ -6266,32 +6433,35 @@
 		this.chart.canvas.context.strokeStyle="blue";
 		this.chart.canvas.context.strokeRect(cx-radius,cy-radius,2*radius,2*radius);
 		  end test code */
-		for(var i=this.drawingObjects.length-1;i>=0;i--){
-			var drawing=this.drawingObjects[i];
-			if(!this.panels[drawing.panelName]) continue;
-			if(this.repositioningDrawing && this.repositioningDrawing!=drawing) continue;
 
-			var prevHighlight=drawing.highlighted;
-			var highlightMe=(drawing.panelName==this.currentPanel.name);
-			drawing.repositioner=drawing.intersected(this.crosshairTick, this.crosshairValue, box);
-			highlightMe=highlightMe && drawing.repositioner;
+		if (!chart.hideDrawings) {
+			for(var i=this.drawingObjects.length-1;i>=0;i--){
+				var drawing=this.drawingObjects[i];
+				if(!this.panels[drawing.panelName]) continue;
+				if(this.repositioningDrawing && this.repositioningDrawing!=drawing) continue;
 
-			if(!clearOnly && highlightMe){
-				if(prevHighlight){
-					drawingToMeasure=drawing;
-					if(this.anyHighlighted && this.singleDrawingHighlight) drawing.highlighted=false;
-				}else if(prevHighlight!=drawing.highlight(true)){
-					if(!drawingToMeasure) drawingToMeasure=drawing;
-					if(this.anyHighlighted && this.singleDrawingHighlight) drawing.highlighted=false;
-					somethingChanged=true;
+				var prevHighlight=drawing.highlighted;
+				var highlightMe=(drawing.panelName==this.currentPanel.name);
+				drawing.repositioner=drawing.intersected(this.crosshairTick, this.crosshairValue, box);
+				highlightMe=highlightMe && drawing.repositioner;
+
+				if(!clearOnly && highlightMe){
+					if(prevHighlight){
+						drawingToMeasure=drawing;
+						if(this.anyHighlighted && this.singleDrawingHighlight) drawing.highlighted=false;
+					}else if(prevHighlight!=drawing.highlight(true)){
+						if(!drawingToMeasure) drawingToMeasure=drawing;
+						if(this.anyHighlighted && this.singleDrawingHighlight) drawing.highlighted=false;
+						somethingChanged=true;
+					}
+					this.anyHighlighted=true;
+				}else{
+					if(prevHighlight!=drawing.highlight(false)){
+						somethingChanged=true;
+					}
 				}
-				this.anyHighlighted=true;
-			}else{
-				if(prevHighlight!=drawing.highlight(false)){
-					somethingChanged=true;
-				}
+				if(drawing.highlighted) stickyArgs.noDelete=drawing.permanent;
 			}
-			if(drawing.highlighted) stickyArgs.noDelete=drawing.permanent;
 		}
 
 		var n,o,series;
@@ -6610,6 +6780,7 @@
 				if(overlayTrashCan) overlayTrashCan.style.display="inline-block";
 				if(overlayEdit) overlayEdit.style.display="inline-block";
 				if(mouseDeleteInstructions) mouseDeleteInstructions.style.display="none";
+				CIQ[(message===""?"":"un")+"appendClassName"](m, "hide");
 			}else{
 				if(mouseDeleteInstructions) mouseDeleteInstructions.style.display="block";
 			}
@@ -6744,6 +6915,7 @@
 				if(price1){
 					mStickyInterior.innerHTML=message;
 				}
+				CIQ[(message===""?"":"un")+"appendClassName"](m, "hide");
 				this.positionSticky(m);
 			}else{
 				m.style.display="none";
@@ -6898,7 +7070,12 @@
 	};
 
 	/**
-	 * Returns the X pixel position for a given date. Warning: this can be an expensive operation if the date is not in the dataSet.
+	 * Returns the X pixel position for a tick of a given date.
+	 *
+	 * The date does not need to match exactly. If the date lies between ticks then the earlier will be returned.
+	 *
+	 * **Warning: this can be an expensive operation if the date is not in the dataSet.**
+	 *
 	 * @param  {string} date  String form date
 	 * @param  {CIQ.ChartEngine.Chart} chart The chart to look in
 	 * @param  {number} [adj] Timezone adjustment in minutes to apply to date before getting tick
@@ -6925,14 +7102,13 @@
 		if(!panel) panel=this.chart.panel;
 		var yax=yAxis?yAxis:panel.yAxis;
 		y=yax.bottom-y;
-		if( !yax.multiplier ) return null;
-		var price=yax.low+(y/yax.multiplier);
-		/*var roundit=chart.roundit;
-		if(panel.roundit) roundit=panel.roundit;
-		price=Math.round(price*roundit)/roundit;*/
+		var price;
 		if(yax.semiLog){
-			var logPrice=yax.logLow+(y*yax.logShadow/yax.height);
+			var logPrice=yax.logLow+y*yax.logShadow/yax.height;
 			price=Math.pow(10,logPrice);
+		}else{
+			if( !yax.multiplier ) return null;
+			price=yax.low+(y/yax.multiplier);
 		}
 
 		return price;
@@ -7759,6 +7935,40 @@
 	};
 
 	/**
+	 * Dispatch a {@link drawingEditEventListener} event if there are any listeners. Otherwise, remove the given drawing.
+	 *
+	 * @param {CIQ.Drawing} drawing The vector instance to edit, normally provided by deleteHighlighted.
+	 * @param {boolean} forceEdit skip the context menu and begin editing. Used on touch devices.
+	 * @memberof CIQ.ChartEngine.AdvancedInjectable#
+	 * @alias rightClickDrawing
+	 * @since 6.2.0
+	 */
+	CIQ.ChartEngine.prototype.rightClickDrawing=function(drawing, forceEdit) {
+		if (this.runPrepend("rightClickDrawing", arguments)) return;
+		if (drawing.permanent) return;
+
+		if (typeof this.callbacks.drawingEdit === 'function' || this.callbackListeners.drawingEdit.length) {
+			this.dispatch('drawingEdit', {
+				stx: this,
+				drawing: drawing,
+				forceEdit: forceEdit
+			});
+		} else {
+			var dontDeleteMe = drawing.abort();
+
+			if (!dontDeleteMe) {
+				var before = CIQ.shallowClone(this.drawingObjects);
+				this.removeDrawing(drawing);
+				this.undoStamp(before, CIQ.shallowClone(this.drawingObjects));
+			}
+
+			this.changeOccurred("vector");
+		}
+
+		this.runAppend("rightClickDrawing", arguments);
+	};
+
+	/**
 	 * <span class="injection">INJECTABLE</span>
 	 * This function is called when a highlighted study overly is right clicked. If the overlay has an edit function (as many studies do), it will be called. Otherwise it will remove the overlay
 	 * @param  {string} name The name (id) of the overlay
@@ -7851,26 +8061,29 @@
 	 * ```
 	 * stxx.addSeries("IBM", {color:"blue"});
 	 * ```
+	 * 
+	 * Example 1 - manually add data to a chart and a series<iframe width="100%" height="500" scrolling="no" seamless="seamless" align="top" style="float:top" src="https://jsfiddle.net/chartiq/avem0zcx/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="1"></iframe>
 	 *
 	 * That example adds a series as an overlay, but more often you'll want to display series as comparisons.
 	 * Comparisons are special because they change the chart from a price chart to a percentage chart.
 	 * All series on the chart then begin at "zero", on the left side of the chart.
-	 * Set isComparison=true when adding a series to make it a comparison chart.
+	 * Set isComparison=true when adding a series to make it a comparison chart.  As long as a comparison series is on a chart, the chart will display its y-axis in percent scale
+	 * provided {@link CIQ.ChartEngine.Chart#forcePercentComparison} is true.
 	 * ```
 	 * stxx.addSeries("IBM", {color:"blue", isComparison:true});
 	 * ```
 	 *
-	 * Example 1 <iframe width="100%" height="500" scrolling="no" seamless="seamless" align="top" style="float:top" src="http://jsfiddle.net/chartiq/b6pkzrad/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="1"></iframe>
-	 *
 	 * ** Complex Visualizations **
+	 * 
+	 * Example 2 - use a custom renderer to display a series<iframe width="100%" height="500" scrolling="no" seamless="seamless" align="top" style="float:top" src="https://jsfiddle.net/chartiq/b6pkzrad/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="1"></iframe>
+	 *
 	 *
 	 * Behind the scenes, series are displayed by [renderers]{@link CIQ.Renderer}.
 	 * Renderers can plot lines, mountains, bars, candles, and other types of visualizations.
 	 * When adding a series, you can specify which renderer to use and set parameters to control your visual.
-	 * For instance, this will display a series as a bar chart on it's own left axis:
+	 * For instance, this will display a series as a bar chart on its own left axis:
 	 * ```
 	 * stxx.addSeries("SNE", {display:"Sony",renderer:"Bars",name:"test", yAxis:new CIQ.ChartEngine.YAxis({position:"left", textStyle:"#FFBE00"})});
-
 	 * ```
 	 * Which is the same as explicitly declaring a renderer and then attaching it to the series:
 	 * ```
@@ -7885,8 +8098,6 @@
 	 * 	renderer.attachSeries("SNE").ready();
 	 * });
 	 * ```
-	 *
-	 * Example 2 <iframe width="100%" height="500" scrolling="no" seamless="seamless" align="top" style="float:top" src="http://jsfiddle.net/chartiq/rb423n71/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="1"></iframe>
 	 *
 	 * ** Using a Symbol Object **
 	 *
@@ -7910,6 +8121,8 @@
 	 * stxx.addSeries("^NIOAFN", {}, function() {myRenderer.attachSeries("^NIOAFN","#95B7F6").ready();});
 	 * stxx.addSeries("^NIOAMD", {}, function() {myRenderer.attachSeries("^NIOAMD","#B9D0F5").ready();});
 	 * ```
+	 * 
+	 * Example 3 - advanced stacked histogram renderer<iframe width="100%" height="500" scrolling="no" seamless="seamless" align="top" style="float:top" src="https://jsfiddle.net/chartiq/rb423n71/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="1"></iframe>
 	 *
 	 * ** Setting a Left YAxis **
 	 *
@@ -7940,14 +8153,14 @@
 	 * @param {string} [parameters.baseColor] <span class="injection">Rendering</span> Color for the base of a mountain series. Defaults to `parameters.color`.
 	 * @param {array|string} [parameters.pattern] <span class="injection">Rendering</span> Pattern to draw line, array elements are pixels on and off, or a string e.g. "solid", "dotted", "dashed"
 	 * @param {boolean|string} [parameters.fillGaps] <span class="injection">Data Loading</span> If {@link CIQ.ChartEngine#cleanupGaps} is enabled to clean gaps (not 'false'), you can use this parameter to override the global setting for this series.
-	 * - If `fillGap` not present
+	 * - If `fillGaps` not present
 	 *  - No gaps will be filled for the series.
-	 * - If `fillGap` is set to 'false'
+	 * - If `fillGaps` is set to 'false'
 	 *  - No gaps will be filled for the series.
-	 * - If `fillGap` is set to 'true',
+	 * - If `fillGaps` is set to 'true',
 	 *  - Gap filling will match {@link CIQ.ChartEngine#cleanupGaps}.
-	 * - If `fillGap` is set to  'carry' or 'gaps'
-	 *  - Will use that filling method even if `cleanupGap` is set differently.
+	 * - If `fillGaps` is set to  'carry' or 'gaps'
+	 *  - Will use that filling method even if `cleanupGaps` is set differently.
 	 * @param {object} [parameters.gapDisplayStyle] <span class="injection">Rendering</span> Defines how to **render** (style) gaps in the data (missing data points).  If undefined, and the series is a comparison, the gaps will be rendered transparent.
 	 *                                   	Set to `true` to use the same color and pattern as the main line, or define a color-pattern object if different.
 	 * @param {string} [parameters.gapDisplayStyle.color] Color to draw line where data points are missing
@@ -7956,7 +8169,7 @@
 	 * @param {boolean} [parameters.permanent] <span class="injection">Rendering</span> Set to `true` to activate. Makes series unremoveable by a user **when attached to the default renderer**. If explicitly linked to a renderer, see {@link CIQ.Renderer#attachSeries} for details on how to prevent an attached series from being removed by a user.
 	 * @param {object} [parameters.data] <span class="injection">Data Loading</span> Data source for the series.
 	 * <P>&bull; If this field is omitted, the library will connect to the QuoteFeed (if available) to fetch initial data ( unless `parameters.loadData` is set to `false`), and manage pagination and updates.
-	 * <P>&bull; If data is sent in this field, it will be loaded into the masterData, but series will **not** be managed by the QuoteFeed (if available) for pagination or updates. 
+	 * <P>&bull; If data is sent in this field, it will be loaded into the masterData, but series will **not** be managed by the QuoteFeed (if available) for pagination or updates.
 	 * <P>&bull; Items in this array *must* be ordered from earliest to latest date.<br>
 	 * <P>&bull; Accepted formats:
 	 * <br><br><br>**Full OHLC:**<br>
@@ -8031,7 +8244,7 @@
 	 *	// add a series with a color to immediately render. It also calls callbackFunct after the data is returned from the fetch.
 	 *	function callbackFunct(field){
 	 *		 return function(err) {
-	 *			alert(field);
+	 *			CIQ.alert(field);
 	 *		}
 	 *	}
 	 *
@@ -8073,7 +8286,7 @@
 	 *
 	 * @example
 	 *	// add multiple series and attach to a custom y-axis on the left.
-	 *	// See this example working here : http://jsfiddle.net/chartiq/b6pkzrad
+	 *	// See this example working here : https://jsfiddle.net/chartiq/b6pkzrad
 	 *
 	 *	// note how the addSeries callback is used to ensure the data is present before the series is displayed
 	 *
@@ -8146,6 +8359,7 @@
 	 * <br>&bull; 5.1.1 `parameters.chartType`, originally used to draw "mountain" series, has been deprecated in favor of the more flexible 'renderer' parameter. It is being maintained for backwards compatibility
 	 * <br>&bull; 5.2.0 `parameters.gaps` has been deprecated (but maintained for backwards compatibility) and replaced with `parameters.gapDisplayStyle`
 	 * <br>&bull; 6.0.0 `parameters.fillGaps` is now a string type and can accept either "carry" or "gap".  Setting to true will use the value of stxx.cleanupGaps.
+	 * <br>&bull; 6.2.0 No longer force 'percent'/'linear', when adding/removing comparison series, respectively, unless {@link CIQ.ChartEngine.Chart#forcePercentComparison} is true. This allows for backwards compatibility with previous UI modules.
 	 */
 	CIQ.ChartEngine.prototype.addSeries=function(id, parameters, cb){
 		var injectionResult=this.runPrepend("addSeries", arguments);
@@ -8158,7 +8372,7 @@
 			yValueCache: [],
 			display: display,
 			id: id,
-			loading: true
+			loading: parameters ? parameters.loadData!==false : true
 		 };
 		parameters=obj.parameters;
 		if(parameters.symbol) symbol=parameters.symbol;
@@ -8231,8 +8445,9 @@
 			};
 		}
 
-		if(parameters.isComparison) this.setComparison(true, chart);
-
+		if(parameters.isComparison && chart.forcePercentComparison && parameters.panel==chart.panel.name && (!parameters.yAxis || parameters.yAxis==chart.yAxis))
+			this.setChartScale("percent");
+		
 		var masterData=chart.masterData;
 		if(!masterData) masterData=chart.masterData=this.masterData=[];
 		var masterLength=masterData.length;
@@ -8285,7 +8500,7 @@
 	 * @param {string} [params.symbol] Filter for only series that contain this symbol
 	 * @param {object} [params.symbolObject] Filter for only series that contain this symbolObject
 	 * @param {boolean} [params.includeMaster] If true then the masterSymbol will be checked for a match too. A blank object will be returned. You should only use this if you're just using this to look for yes/no dependency on a symbol.
-	 * @param {CIQ.ChartEngine.Chart} [params.chart] Chart object to targer
+	 * @param {CIQ.ChartEngine.Chart} [params.chart] Chart object to target
 	 * @return {array}        Array of series descriptors
 	 * @memberOf  CIQ.ChartEngine
 	 * @since 4.0.0
@@ -8425,7 +8640,7 @@
 	/**
 	 * <span class="injection">INJECTABLE</span>
 	 * Removes series data from masterData and unregisters the series from `chart.series` without removing it from any associated renderers.
-	 * Also [resets comparisons]{@link CIQ.ChartEngine#setComparison} and updates the [quoteFeed subscriptions]{@lunk quotefeed.unsubscribe}.
+	 * Also updates the [quoteFeed subscriptions]{@link quotefeed.unsubscribe}.
 	 * **Not recommended to be called directly.**
 	 * Instead use {@link CIQ.ChartEngine#removeSeries} to remove a series from all associated renderers,
 	 * or {@link CIQ.Renderer#removeSeries} to remove a series from a specific renderer.
@@ -8462,13 +8677,6 @@
 		if(loadedData===false) dependencies.push(toRemove);
 		if(!dependencies.length) this.cleanMasterData(symbolObject, chart);
 
-		if(this.layout.chartScale!="percent"){
-			var comparing=false;
-			for(var s in chart.series){
-				if(chart.series[s].parameters.isComparison) comparing=true;
-			}
-			if(!comparing) this.setComparison(false, chart);
-		}
 		this.createDataSet();
 		if(!dependencies.length) this.dispatch((this.currentlyImporting?"symbolImport":"symbolChange"), {stx:this, symbol:symbolObject.symbol, symbolObject:symbolObject, action:action});
 		if(this.quoteDriver) this.quoteDriver.updateSubscriptions();
@@ -9074,7 +9282,7 @@
 					if(baseline.actualLevel===null && i>=0){
 						if(prevField && prevField!="Close"){
 							var q1=dataSet[position-1];
-							if(q1[prevField] || q1[prevField]===0)
+							if(q1 && (q1[prevField] || q1[prevField]===0))
 								baseline.actualLevel=q1[prevField];
 						}else{
 							if(quote.iqPrevClose || quote.iqPrevClose===0)
@@ -9247,12 +9455,14 @@
 		}catch(e){ width=yax.width;} // Firefox doesn't like this in hidden iframe
 
 		var x=yax.left-margin + 3;
+		if( yax.width < 0 ) x+=(yax.width-width);
 		var textx=x+margin+tickWidth;
 		var radius=3;
 		var position=(yax.position===null?panel.chart.yAxis.position:yax.position);
 		if(position==="left"){
 			x=yax.left + yax.width + margin - 3;
 			width=width*-1;
+			if( yax.width < 0 ) x-=(yax.width+width);
 			textx=x-margin-tickWidth;
 			radius=-3;
 			context.textAlign="right";
@@ -9634,7 +9844,9 @@
 		this.drawCurrentHR();
 		this.displayInitialized=true;
 		if(this.controls.home){
-			this.controls.home.style.display=this.isHome() ? "none" : "block";
+			this.controls.home.style.display="none";
+			if(this.manageTouchAndMouse && !this.isHome())
+				this.controls.home.style.display="block";
 		}
 		this.positionMarkers();
 		for(chartName in this.charts){
@@ -9673,8 +9885,7 @@
 			this.devicePixelRatio=this.adjustedDisplayPixelRatio=1;
 			return;
 		}
-
-		if (!CIQ.isAndroid || CIQ.is_chrome) {
+		if (!CIQ.isAndroid || CIQ.is_chrome || CIQ.isFF) {
 			var oldWidth = canvas.width;
 			var oldHeight = canvas.height;
 
@@ -9852,7 +10063,7 @@
 	 * 													<br>To allow equations to be used on a chart, the {@link CIQ.ChartEngine#allowEquations} parameter must be set to `true` and the equation needs to be preceded by an equals sign (=) in order for it to be parsed as an equation.
 	 * 													<br>See {@link CIQ.formatEquation} and {@link CIQ.computeEquationChart} for more details on allowed equations syntax.
 	 * @param  {array}					[masterData]	An array of [properly formated OHLC objects](index.html#data-format) to create a chart. Each element should at a minimum contain a "Close" field (capitalized).
-	 *													If the charting engine has been configured to use a QuoteFeed (@link CIQ.ChartEngine#attachQuoteFeed)
+	 *													If the charting engine has been configured to use a [QuoteFeed]{@link CIQ.ChartEngine#attachQuoteFeed}
 	 *													then masterData does not need to be passed in. The quote feed will be queried instead.
 	 * @param  {CIQ.ChartEngine.Chart}	chart]			Which chart to create. Defaults to the default chart.
 	 * @param {function}				[cb]			Callback when newChart is loaded. See {@tutorial Adding additional content on chart} for a tutorial on how to use this callback function.
@@ -10040,6 +10251,16 @@
 		}
 	};
 
+	/**
+	 * Removes any studies from the chart, and hides the chart controls.
+	 * The chart becomes uninitialized, disabling any interaction with it.
+	 * The canvas is not cleared; {@link CIQ.clearCanvas} can do that.
+	 * 
+	 * Useful when a chart is loaded with no data due to a quoteFeed error. Automatically called by {@link CIQ.ChartEngine#newChart}
+	 * 
+	 * @memberof CIQ.ChartEngine
+	 * @since 2016-12-01
+	 */
 	CIQ.ChartEngine.prototype.clear=function() {
 		this.displayInitialized = false;
 
@@ -10127,7 +10348,7 @@
 			//}
 			if(masterData.length-i<50){
 				// only check last 50 records
-				this.updateCurrentMarketData(quotes, chart);
+				this.updateCurrentMarketData(quotes, chart, null, {fromTrade:true});
 			}
 		}
 		chart.decimalPlaces=this.callbacks.calculateTradingDecimalPlaces({
@@ -10189,10 +10410,12 @@
 	 * @param {object} params Control parameters
 	 * @param {boolean} [params.include-parameters] Set to true to put the series parameters in the return object
 	 * @param {boolean} [params.exclude-studies] Set to true to not include study symbols
+	 * @param {boolean} [params.breakout-equations] Set to true to return component symbols of equations
 	 *
 	 * @return {array} The array of symbol objects required
 	 * @memberof CIQ.ChartEngine
 	 * @since  2016-03-11
+	 * @since 6.2.0 params.breakout-equations added
 	 */
 	CIQ.ChartEngine.prototype.getSymbols=function(params){
 		if(!params) params={};
@@ -10223,18 +10446,25 @@
 				a.push(obj);
 			}
 		}
-		for(var s=a.length-1;s>=0;s--){
-			symbol=a[s].symbol;
-			if(this.isEquationChart(symbol)){
-				var res=CIQ.formatEquation(symbol);
-				if(res){
-					for(var sym=0;sym<res.symbols.length;sym++){
-						obj=makeObj(res.symbols[sym], a[s].symbolObject, a[s]);
-						a.push(obj);
+		if(params["breakout-equations"]){
+			// replace the equations with their component symbols
+			var components={};  // use to eliminate duplicates
+			for(var s=0;s<a.length;s++){
+				symbol=a[s].symbol;
+				if(this.isEquationChart(symbol)){
+					var res=CIQ.formatEquation(symbol);
+					if(res){
+						var symbols=res.symbols;
+						for(var sym=0;sym<symbols.length;sym++){
+							components[symbols[sym]]=makeObj(symbols[sym], a[s].symbolObject, a[s]);
+						}
 					}
-					a.splice(s,1);
+				}else{
+					components[symbol]=makeObj(symbol, a[s].symbolObject, a[s]);
 				}
 			}
+			a=[];
+			for(var component in components) a.push(components[component]);
 		}
 		return a;
 	};
@@ -10363,8 +10593,8 @@
 	};
 
 	/**
-	 * As of version 5.1, his method has been **deprecated** in favor of {@link CIQ.ChartEngine#updateChartData} which provides improved functionality. 
-	 * 
+	 * As of version 5.1, his method has been **deprecated** in favor of {@link CIQ.ChartEngine#updateChartData} which provides improved functionality.
+	 *
 	 * The following parameters are only applicable for legacy versions (pre 5.1):
 	 * @deprecated Please use {@link CIQ.ChartEngine#updateChartData}
 	 * @param  {array/object} appendQuotes		An array of properly formatted OHLC quote object(s). [See Data Format]{@tutorial InputDataFormat} and {@link CIQ.ChartEngine#setMasterData}.<br>
@@ -10384,7 +10614,7 @@
 	 * @param {boolean} [params.noCreateDataSet] If true then do not create the data set automatically, just add the data to the masterData
 	 * @param {boolean} [params.allowReplaceOHL] Set to true to bypass internal logic that maintains OHL
 	 * @param {boolean} [params.bypassGovernor] If true then masterdata will be immediately updated regardless of {@link CIQ.ChartEngine#streamParameters}
-	 * @param {boolean} [params.fillGaps] If true then {@link CIQ.ChartEngine#doCleanupGaps} is called using the {@link CIQ.ChartEngine#cleanupGaps} setting. This will ensure gaps will be filled in the master data from the last tick in the chart to the date of the trade.<BR> Reminder: `tick` does not fill any gaps as it is not a predictable interval.	 
+	 * @param {boolean} [params.fillGaps] If true then {@link CIQ.ChartEngine#doCleanupGaps} is called using the {@link CIQ.ChartEngine#cleanupGaps} setting. This will ensure gaps will be filled in the master data from the last tick in the chart to the date of the trade.<BR> Reminder: `tick` does not fill any gaps as it is not a predictable interval.
 	 * @param {boolean} [params.secondarySeries] Set to the name of the element ( valid comparison symbol, for example) to load data as a secondary series.
 	 * @param {boolean} [params.useAsLastSale] If not using a 'last sale' formatted object in `appendQuotes`,
 	 * you can simply set this parameter to `true` to force the data as a last sale price; or further define it by creating an object including other settings as needed.
@@ -10393,7 +10623,7 @@
 	 * By definition a 'last' sale can only be a single record indicating the very 'last' sale price. As such, even if multiple records are sent in the `appendQuotes` array when this flag is enabled,
 	 * only the last record's data will be used. Specifically the 'Close' and 'Volume' fields will be streamed.
 	 * @param {boolean} [params.useAsLastSale.aggregatedVolume] If your last sale updates send current volume for the bar instead of just the trade volume, set this parameter to 'true' in the `params.useAsLastSale` object. The sent in volume will be used as is instead of being added to the existing bar's volume.
-	 * 
+	 *
 	 * @memberof CIQ.ChartEngine
 	 * @since
 	 * <br>&bull; 2015-11-1 params.bypassGovernor added, allowReplaceOHL added
@@ -10428,7 +10658,7 @@
 	 *
 	 * ** Performance: **
 	 *
-	 * - To maintain system performance you can throttle inbound ticks. See {@link CIQ.ChartEngine#streamParameters } and [Streaming tutorial](tutorial-Data%20Loading.html#Streaming) for more details.
+	 * - To maintain system performance you can throttle inbound ticks. See {@link CIQ.ChartEngine#streamParameters } and [Streaming tutorial](@tutorial DataIntegrationStreaming) for more details.
 	 * - It is important to note that although the data will always be added to masterData, `createDataSet()` and `draw()` will **not** be called if data is received quicker than the throttle (governor) wait periods. As such, you will not see any changes until the throttle wait periods are met.
 	 *
 	 * ** Additional Notes: **
@@ -10448,10 +10678,10 @@
 	 * @param  {number}	[appendQuotes.Volume]	Trade volume (used on primary series only)
 	 * @param  {number}	[appendQuotes.Bid] 		Bid price (used on primary series only)
 	 * @param  {number}	[appendQuotes.Ask] 		Offer/Ask price (used on primary series only)
-	 * @param  {array}	[appendQuotes.BidL2]	Level 2 Bid, expressed as an array of price/size pairs.  For example, BidL2: [[10.05,15],[10.06,10],...]
-	 * @param  {array}	[appendQuotes.AskL2]	Level 2 Offer/Ask expressed as an array of price/size pairs.  For example, AskL2: [[11.05,12],[11.06,8],...]
+	 * @param  {array}	[appendQuotes.BidL2]	Level 2 Bid, expressed as an array of [price,size] pairs.  For example, BidL2: [[10.05,15],[10.06,10],...]
+	 * @param  {array}	[appendQuotes.AskL2]	Level 2 Offer/Ask expressed as an array of [price,size] pairs.  For example, AskL2: [[11.05,12],[11.06,8],...]
 	 * @param  {number}	[appendQuotes.DT] 		Date of trade. It must be a java script date [new Date()]. If omitted, defaults to "right now".
-	 * If you are using the 'Date' string field with a `dataZone` for your historical data and wish to also use it for streaming updates, 
+	 * If you are using the 'Date' string field with a `dataZone` for your historical data and wish to also use it for streaming updates,
 	 * you must instead submit a properly formatted OHLC array. For example:
 	 * ```
 	 * stxx.updateChartData(
@@ -10469,7 +10699,7 @@
 	 * @param {boolean} [params.allowReplaceOHL] Set to true to bypass internal logic that maintains OHL so they are instead replaced with the new data instead of updated.
 	 * @param {boolean} [params.bypassGovernor] If true then masterdata will be immediately updated regardless of {@link CIQ.ChartEngine#streamParameters}. Not applicable if `noCreateDataSet` is true.
 	 * @param {boolean} [params.fillGaps] If true and {@link CIQ.ChartEngine#cleanupGaps} is also set, {@link CIQ.ChartEngine#doCleanupGaps} will be called to fill gaps for any newly added bars past the currently existing bar. It will not fill gaps for bars added to the middle of the masterData, or created by deleting a bar. <BR> Reminder: `tick` does not fill any gaps as it is not a predictable interval.
-	 * @param {boolean} [params.secondarySeries] Set to the name of the element (valid comparison symbol, for example) to load data as a secondary series. When left out, the data will be automatically added to the primary series. <Br>**Note:** You should never set `secondarySeries` to the primary symbol. If you are unsure of what the current primary series is, you can always query the chart engine by checking `stxx.chart.symbol`.	 
+	 * @param {boolean} [params.secondarySeries] Set to the name of the element (valid comparison symbol, for example) to load data as a secondary series. When left out, the data will be automatically added to the primary series. <Br>**Note:** You should never set `secondarySeries` to the primary symbol. If you are unsure of what the current primary series is, you can always query the chart engine by checking `stxx.chart.symbol`.
 	 * @param {boolean} [params.deleteItems] Set to true to completely delete the masterData records matching the dates in appendQuotes.
 	 * @param {boolean} [params.useAsLastSale] Set to true if not using a 'last sale' formatted object in `appendQuotes`.
 	 * This option is available in cases when a feed may always return OHLC formatted objects or a 'Close' field instead of a 'Last' field,
@@ -10534,7 +10764,7 @@
 		var self=this, secondary=params.secondarySeries, field, symbol;
 
 		// If we are not a tick interval, we want to adjust the DT property of the appendQuotes so it matches the periodicity/interval of the existing chart data.
-		function adjustDatesToInterval(){	
+		function adjustDatesToInterval(){
 			// On intraday intervals we use a 24 hour market because we don't want our bars to artificially stop
 			// at the end of a market session. If we get extended hours, or bad ticks we still
 			// want to print them on the chart. Trust the data.
@@ -10542,14 +10772,14 @@
 				"market_tz": chart.market.market_def.market_tz || null
 			};
 			var mktInterval = layout.interval;
-			
+
 			if(mktInterval=="month" || mktInterval=="week"){
 				// if we are rolling day bars into week or month we have to iterate day by day to find the right bar.
 				if(!self.dontRoll) mktInterval="day";
 				// on week and month we need to know when the week/month starts to find the right day for the candles.
 				marketDef= self.chart.market.market_def;
 			}
-			
+
 			var theMarket=new CIQ.Market(marketDef);
 			var iter_parms = {
 				'begin': (masterData && masterData.length)?masterData[masterData.length-1].DT:appendQuotes.DT,
@@ -10602,7 +10832,7 @@
 				var lastBar = appendQuotes[appendQuotes.length-1];
 				appendQuotes = {};
 
-				// doCleanupDates will make sure this has a valid 'DT' field in the right timeZone, 
+				// doCleanupDates will make sure this has a valid 'DT' field in the right timeZone,
 				// no need to check or convert from 'Date'
 				appendQuotes.DT=lastBar.DT;
 
@@ -10628,22 +10858,29 @@
 			appendQuotes.High=appendQuotes.Close;
 			appendQuotes.Low=appendQuotes.Close;
 		}
-		
+
 		// Fills the gaps from the most recent master data record to the new data
 		function fillGapsFromMasterDataHead(){
-			var stop=new Date(0);
 			var lastRecordForThis=self.getFirstLastDataRecord(masterData, secondary || chart.defaultPlotField, true);
-			if(lastRecordForThis) stop=lastRecordForThis.DT;
-			for(var fg=appendQuotes.length-1;fg>=0;fg--){
-				if(appendQuotes[fg].DT<=stop) {
-					fg++; break;
+			var fg=0;  // this is used to store the index of the first record in appendQuotes we should be using to fill gaps.
+						// we'll adjust this below by looking for the starting point from masterData
+			if(lastRecordForThis){
+				if(appendQuotes[appendQuotes.length-1].DT<=lastRecordForThis.DT) return;  // no gap to fill
+				for(;fg<appendQuotes.length;fg++){
+					if(+appendQuotes[fg].DT==+lastRecordForThis.DT) {
+						// if the appendQuote is the same as the lastRecordForThis, check to see which is the "correct" record
+						if(self.getFirstLastDataRecord([appendQuotes[fg]], secondary || chart.defaultPlotField))
+							lastRecordForThis=null;  // use appendQuote record
+						break;
+					}
+					else if(appendQuotes[fg].DT>lastRecordForThis.DT) break;
 				}
 			}
 			// now fg represents the index of the first element in appendQuotes which appears after the last current element for that security.
 			var gapQuotes=appendQuotes.slice(fg);
-			gapQuotes.unshift(secondary?lastRecordForThis[secondary]:lastRecordForThis);    // add previous bar so we can close gaps
+			if(lastRecordForThis) gapQuotes.unshift(secondary?lastRecordForThis[secondary]:lastRecordForThis);    // add previous bar so we can close gaps
 			gapQuotes=self.doCleanupGaps(gapQuotes, chart);
-			gapQuotes.shift();                	// remove previous bar
+			if(lastRecordForThis) gapQuotes.shift();    // remove previous bar
 			appendQuotes=appendQuotes.slice(0,fg).concat(gapQuotes);
 		}
 
@@ -10684,7 +10921,7 @@
 				}
 			}
 		}
-		
+
 		// Takes a quote q and merges it into masterData at index i
 		function mergeNewDataIntoMasterData(i, q){
 			// If we're replacing the last bar then we want to save any series and study data, otherwise comparisons will [briefly] disappear during refreshes
@@ -10749,7 +10986,7 @@
 
 		if(!params.noCleanupDates) this.doCleanupDates(appendQuotes,layout.interval);
 
-		if( params.useAsLastSale || 
+		if( params.useAsLastSale ||
 			(appendQuotes.constructor==Object && (appendQuotes.Last || appendQuotes.Last===0 ))){
 			formatFromLastSaleData();
 		}
@@ -10762,10 +10999,11 @@
 		if(!masterData) masterData=[];
 
 		var i=masterData.length-1, placedFirstQuote=false;
-		
+
 		// fill gaps only if there is master data already
 		// we only fill from the end of the current data, not before
 		if(params.fillGaps && masterData.length) fillGapsFromMasterDataHead();
+		if(!appendQuotes.length) return;  // can happen within fillGapsFromMasterDataHead
 
 		for(var j=0;j<appendQuotes.length;j++){
 			var quote=appendQuotes[j];
@@ -10810,12 +11048,12 @@
 						if(quote.Volume && !CIQ.isValidNumber(quote.Volume)) quote.Volume=parseInt(quote.Volume,10);
 						this.setDisplayDate(quote);
 						i+=plusOne;
-						
+
 						// Insert into masterData here
 						if(secondary){
 							if(appendQuotes.length-j<50){
 								// only check last 50 records
-								this.updateCurrentMarketData(quote, chart, secondary);
+								this.updateCurrentMarketData(quote, chart, secondary, {fromTrade:true});
 							}
 							if(layout.interval!="tick" || quote.Close!==undefined){
 								if(plusOne) masterData.splice(i,0,{DT:quote.DT});
@@ -10824,7 +11062,7 @@
 						}else{
 							if(appendQuotes.length-j<50){
 								// only check last 50 records
-								this.updateCurrentMarketData(quote, chart);
+								this.updateCurrentMarketData(quote, chart, null, {fromTrade:true});
 							}
 							if(layout.interval!="tick" || quote.Close!==undefined) masterData.splice(i,plusOne?0:1,quote); //inserting into masterData happens here
 						}
@@ -10837,13 +11075,13 @@
 				// we have at least one point which needs to be prepended to masterData
 				// this code will prepend the first of these points, then everything else will fall in line
 				if(secondary){
-					this.updateCurrentMarketData(quote, chart, secondary);
+					this.updateCurrentMarketData(quote, chart, secondary, {fromTrade:true});
 					if(layout.interval!="tick" || quote.Close!==undefined){
 						masterData.splice(0,0,{DT:quote.DT});
 						masterData[0][secondary]=quote;
 					}
 				}else{
-					this.updateCurrentMarketData(quote, chart);
+					this.updateCurrentMarketData(quote, chart, null, {fromTrade:true});
 					if(layout.interval!="tick" || quote.Close!==undefined) masterData.splice(0,0,quote);
 				}
 				placedFirstQuote=true;
@@ -10895,70 +11133,124 @@
 
 	/**
 	 * <span class="injection">INJECTABLE</span>
-	 * Extracts the necessary information form the `data` provided and loads/updates the [chart.currentMarketData]{@link CIQ.ChartEngine.Chart#currentMarketData} object, or an equally laid out object for a secondary series, if one provided.
-	 * 
-	 * The data extracted is limited to DT, Bid, Ask, Last, BidSize, AskSize, LastSize, as well as BidL2 and AskL2 Price_Size arrays, and not all fields are required. Any values not provided will simply be skipped and not updated on the object.
-	 * 
-	 * This method is automatically called every time new time-series data is load into the chart, and only needs to be explicitly called when also needing to update the L2 'snapshot', such as for the [cryptoIQ]{@link CIQ.MarketDepth} plugin.
-	 * 
-	 * Example format:
+	 * Loads or updates detailed current market information, such as L2 data, into the [chart.currentMarketData]{@link CIQ.ChartEngine.Chart#currentMarketData} object
+	 * or an equally laid out object for a secondary series (symbol), if one provided.
+	 *
+	 * **[draw()]{@link CIQ.ChartEngine#draw} must be called immediately after this method to see the updates.**
+	 *
+	 * A single ‘snapshot’ object per symbol is loaded and only the most current updates maintained.
+	 * This method is not intended to track historical or time-series information.
+	 *
+	 * This market ‘snapshot’ information can then be used to render specialty charts such as {@link CIQ.MarketDepth}, which is not a time series chart.
+	 *
+	 * When using as part of a chart engine that also display a time-series chart, this method is automatically called with that same time-series data every time new data is load into the chart, thereby maintaing all charts in sync.
+	 * And only needs to be explicitly called when needing to update the L2 'snapshot' at a faster refresh rate than the rest of the time-series data, or if the time-series data does not provide this information.
+	 * <br>If using the {@link CIQ.MarketDepth} standalone, without a standard time series chart, you must call this method explicitly to load and refresh the data.
+	 *
+	 * Data Format:
+	 *
+	 * | Field | Required | Type | Description | Used for cryptoIQ | Used for TFC |
+	 * | ----------- | -------- | ---------------------------------------- |
+	 * | DT | Yes | A JavaScript Date() object | Timestamp for the data update provided | Yes | Yes |
+	 * | Bid | Maybe | number | The current bid price.<br>Required unless already loaded as part of time-series update  | No | Yes |
+	 * | Ask | Maybe | number | The current ask price.<br>Required unless already loaded as part of time-series update | No | Yes |
+	 * | Last | Maybe | number | The last (current) price.<br>Required unless already loaded as part of time-series update | Yes | Yes |
+	 * | BidSize | No | number | The bid size  | No | No |
+	 * | AskSize | No | number | The ask size | No | No |
+	 * | LastSize | No | number | The last (current) price size. | No | No |
+	 * | BidL2 | No | array | Level 2 Bid, expressed as an array of [price,size] pairs.<br>For example, BidL2: [[10.05,15],[10.06,10],...] | Yes | No |
+	 * | AskL2 | No | array | Level 2 Ask, expressed as an array of [price,size] pairs.<br>For example, AskL2: [[10.05,15],[10.06,10],...] | Yes | No |
+	 *
+	 * Since not all of the data will need to be updated at the same time, this method allows you to send only the data that needs to be changed. Any values not provided will simply be skipped and not updated on the object.
+	 *
+	 * Example data format for a marketDepth chart:
 	 * ```
-	 * BidL2: { 
-	 *	DT: [date object],
-	 *	Price_Size: [
-	 *		[24.12, 3], [24.13, 2], [24.14, 4], [24.15, 2], 
-	 *		[24.16, 1], [24.17, 4], [24.18, 3], [24.19, 1], 
-	 * 		[24.21, 2], [24.22, 1], [24.23, 1], [24.25, 1]
-	 *	],
-	 * },	
-	 * AskL2: {
-	 *	DT: [date object],
-	 *	Price_Size: [
-	 *		[24.27, 1], [24.28, 1], [24.29, 3], [24.30, 3], 
-	 *		[24.31, 3], [24.32, 2], [24.33, 3], [24.34, 3], 
-	 *		[24.35, 2], [24.36, 3], [24.37, 2]
-	 *	]
+	 * {
+	 * 	DT:new Date("2018-07-30T04:00:00.000Z"),
+	 * 	Last:24.2589,
+	 * 	BidL2:
+	 * 	[
+	 * 		[93.54,5],[93.65,2],[93.95,7],[95.36,2],
+	 * 		[95.97,9],[96.58,1], [96.68, 8], [96.98, 4],
+	 * 		[97.08, 5], [97.18, 5], [97.28, 3], [97.38, 5],
+	 * 		[97.48, 6], [97.69, 26], [98.29, 5], [98.39, 33],
+	 * 		[98.49, 13], [98.6, 42], [98.8, 13], [98.9, 1]
+	 * 	],
+	 *
+	 * 	AskL2:
+	 * 	[
+	 * 		[101.22,226],[101.32,31],[101.42,13],[101.53,188],
+	 * 		[101.63,8],[101.73,5],[101.83,16],[101.93,130],
+	 * 		[102.03,9],[102.13,122],[102.23,5],[102.33,5],
+	 * 		[102.43,7],[102.54,9],[102.84,3],[102.94,92],
+	 * 		[103.04,7],[103.24,4],[103.34,7],[103.44,6]
+	 * 	]
 	 * }
 	 * ```
-	 * @param {object} data Data to extract from
+	 *
+	 * @param {object} data Data to load as per required format.
 	 * @param  {CIQ.ChartEngine.Chart} chart The chart whose market data to update. Defaults to the instance chart.
 	 * @param {string} symbol Symbol if passing secondary series information
+	 * @param {object} params  Additional parameters
+	 * @param {boolean} [params.fromTrade] This function can be called directly or as a result of a trade update, such as from {@link CIQ.ChartEngine.Chart#updateChartData}.
+	 * 										Set this param to `true` to indicate the incoming data is a master data record.
+	 * 										Otherwise the function will attempt to adjust the record date to align with the last bar.
 	 * @memberof CIQ.ChartEngine
-	 * @since 6.1.0
+	 * @since 
+	 * <br>&bull; 6.1.0
+	 * <br>&bull; 6.1.1 Added params.fromTrade
 	*/
-	CIQ.ChartEngine.prototype.updateCurrentMarketData=function(data, chart, symbol){
+	CIQ.ChartEngine.prototype.updateCurrentMarketData=function(data, chart, symbol, params){
 		if(!data || !data.DT) return;
-		if(this.runPrepend("updateCurrentMarketData", arguments)) return;
 		if(!chart) chart=this.chart;
-		var sq=chart.currentMarketData;
+		var calledFromTrade=params && params.fromTrade;
+		// find the right bar for the data, if not found already
+		var timestamp=data.DT;
+		if(!calledFromTrade && this.layout.interval!="tick"){
+			if(chart.market.market_def &&  chart.market.getSession(data.DT)===null) return;   // outside of market hours, disregard
+			var smi=this.standardMarketIterator(data.DT);
+			if(this.extendedHours && this.extendedHours.filter) smi.market.enableAllAvailableSessions();
+			smi.next();
+			data.DT=smi.previous();
+		}
+
+		if(this.runPrepend("updateCurrentMarketData", arguments)) return;
+		var currentMarketData=chart.currentMarketData;
 		if(symbol){
-			if(!sq[symbol]) sq[symbol]={};
-			sq=sq[symbol];
+			if(!currentMarketData[symbol]) currentMarketData[symbol]={};
+			currentMarketData=currentMarketData[symbol];
 		}
 		["Last","Bid","Ask"].forEach(function(i){
 			if(data[i] && typeof(data[i])=="number"){
-				if(!sq[i] || !sq[i].DT || sq[i].DT<=data.DT){
-					sq[i]={DT:data.DT, Price:data[i], Size:data[i+"Size"]};
+				if(!currentMarketData[i] || !currentMarketData[i].DT || currentMarketData[i].DT<=data.DT){
+					currentMarketData[i]={DT:data.DT, Price:data[i], Size:data[i+"Size"], Timestamp:timestamp};
 				}
 			}
-			delete data[i];
-			delete data[i+"Size"];
 		});
 		["BidL2","AskL2"].forEach(function(i){
 			if(data[i] && (data[i] instanceof Array)){
-				if(!sq[i] || !sq[i].DT || sq[i].DT<=data.DT){
-					sq[i]={DT:data.DT, Price_Size:data[i]};
+				if(!currentMarketData[i] || !currentMarketData[i].DT || currentMarketData[i].DT<=data.DT){
+					currentMarketData[i]={DT:data.DT, Price_Size:data[i], Timestamp:timestamp};
 				}
 			}
-			delete data[i];
 		});
-		if(data.Close && (!sq.Last || sq.Last.DT<=data.DT)){
-			sq.Last={DT:data.DT, Price:data.Close};
+		if(data.Close && (!currentMarketData.Last || currentMarketData.Last.DT<=data.DT)){
+			if(!currentMarketData.animatedLast) {  // if this is set elsewhere (animation) then don't worry, Last is also set
+				currentMarketData.Last={};
+				currentMarketData.Last.DT=data.DT;
+				currentMarketData.Last.Price=data.Close;
+				currentMarketData.Last.Size=data.LastSize;
+				if(data.LastSize===undefined && this.layout.interval=="tick") currentMarketData.Last.Size=data.Volume;
+				currentMarketData.Last.Timestamp=data.LastTime || timestamp;
+			}
 		}
-		sq.touched=new Date();  // so we can observe it
+		currentMarketData.touched=new Date();  // so we can observe it
+
+		if(!calledFromTrade) delete data.Last;  //  can cause problems in injections if left
+
 		this.runAppend("updateCurrentMarketData", arguments);
 	};
-	
+
 	/**
 	 * <span class="injection">INJECTABLE</span>
 	 * Clears the [chart.currentMarketData]{@link CIQ.ChartEngine.Chart#currentMarketData} object or the one linked to a secondary series, if one provided.
@@ -10990,7 +11282,7 @@
 		}
 		this.runAppend("clearCurrentMarketData", arguments);
 	};
-	
+
 	/**
 	 * Sets the maximimum number of ticks to the requested number. This is effected by changing the candleWidth.
 	 * See also {@link CIQ.ChartEngine#setCandleWidth}.
@@ -11037,18 +11329,19 @@
 		if(this.controls.home) this.chart.panel.subholder.appendChild(this.controls.home);
 		this.callbackListeners={
 			/**
-			* Called when a user doubletaps a touchscreen device
-			* @callback doubleTapEventListener
-			* @param {object} data
-			* @param {CIQ.ChartEngine} data.stx
-			* @param {number} data.finger Which finger double tapped
-			* @param {number} data.x The crosshair x position
-			* @param {number} data.y The crosshair y position
-			* @since 4.0.0
-			*/
+			 * Called on {@link CIQ.ChartEngine.AdvancedInjectable#touchDoubleClick} when the chart is quickly tapped twice.
+			 * @callback doubleTapEventListener
+			 * @param {object} data Data relevant to the "tap" event
+			 * @param {CIQ.ChartEngine} data.stx The chart engine instance
+			 * @param {number} data.finger Which finger double tapped
+			 * @param {number} data.x The crosshair x position
+			 * @param {number} data.y The crosshair y position
+			 * @since 4.0.0
+			 */
 			doubleTap: [],
 			/**
-			 * Called when a change occurs in the chart layout.
+			 * Called when a drawing is added, removed or modified.
+			 * Such as calling {@link CIQ.ChartEngine#clearDrawings}, {@link CIQ.ChartEngine#removeDrawing}, {@link CIQ.ChartEngine#undoLast}, {@link CIQ.ChartEngine#drawingClick}
 			 * @callback drawingEventListener
 			 * @param {object} data Data relevant to the "drawing" event
 			 * @param {CIQ.ChartEngine} data.stx The chart engine instance
@@ -11059,7 +11352,27 @@
 			 */
 			drawing: [],
 			/**
+			 * A right-click on a highlighted drawing.
+			 *
+			 * @callback drawingEditEventListener
+			 * @param {object} data Data relevant to the "drawingEdit" event
+			 * @param {CIQ.ChartEngine} data.stx The chart engine instance
+			 * @param {CIQ.Drawing} data.drawing The highlighted drawing instance
+			 */
+			drawingEdit: [],
+			/**
 			 * Called when a change occurs in the chart layout.
+			 * Such as calling {@link CIQ.ChartEngine#setChartType}, {@link CIQ.ChartEngine#setAggregationType}, {@link CIQ.ChartEngine#setChartScale}, {@link CIQ.ChartEngine#setAdjusted},
+			 * {@link WebComponents.cq-toggle}, using the {@link WebComponents.cq-toolbar} to disable the current active drawing tool or toggling the crosshair,
+			 * using the {@link WebComponents.cq-views} to activate a serialized layout, [modifying a series]{@link CIQ.ChartEngine#modifySeries},
+			 * setting a new [periodicity]{@link CIQ.ChartEngine#setPeriodicity}, adding or removing a [study overlay]{@link CIQ.ChartEngine.AdvancedInjectable#removeOverlay},
+			 * adding or removing any new panels (and they corresponding studies), [zooming in]{@link CIQ.ChartEngine#zoomIn} or [zooming out]{@link CIQ.ChartEngine#zoomOut},
+			 * setting ranges with {@link CIQ.ChartEngine#setSpan} or {@link CIQ.ChartEngine#setRange}, nullifying a programmatically set Span or Range by user panning,
+			 * enabling or disabling [Extended Hours]{@linkCIQ.ExtendedHours} or toggling the [range slider]{@link CIQ.RangeSlider}.
+			 *
+			 * **Note that scrolling and panning changes are not considered a layout change but rather a shift of the view window in the same layout.
+			 * To detect those you can register to listen for [`move` events]{@link moveEventListener} **
+			 *
 			 * @callback layoutEventListener
 			 * @param {object} data Data relevant to the "layout" event
 			 * @param {CIQ.ChartEngine} data.stx The chart engine instance
@@ -11080,18 +11393,18 @@
 			 */
 			longhold: [],
 			/**
-			 * Called when the crosshair moves.
+			 * Called when the mouse is moved inside the chart; without scrolling.
 			 * @callback moveEventListener
 			 * @param {object} data Data relevant to the "move" event
 			 * @param {CIQ.ChartEngine} data.stx The chart engine instance
-			 * @param {string} data.panel The panel being moved
+			 * @param {string} data.panel The panel where the mouse is active
 			 * @param {number} data.x The crosshair x position
 			 * @param {number} data.y The crosshair y position
 			 * @param {boolean} data.grabbingScreen True if the screen is being touched or clicked
 			 */
 			move: [],
 			/**
-			 * Called when the quoteFeed fetches a new series.
+			 * Called when the quoteFeed fetches a new primary series (symbol change).
 			 * @callback newChartEventListener
 			 * @param {object} data Data relevant to the "newChart" event
 			 * @param {CIQ.ChartEngine} data.stx The chart engine instance
@@ -11102,9 +11415,10 @@
 			 */
 			newChart: [],
 			/**
-			 * Called when preferences are changed.
+			 * Called when preferences are changed. Such as {@link CIQ.ChartEngine#setTimeZone}, {@link CIQ.ChartEngine#importPreferences},
+			 * {@link CIQ.Drawing.saveConfig}, {@link CIQ.Drawing.restoreDefaultConfig} or language changes using the {@link WebComponents.cq-language-dialog}.
 			 * @callback preferencesEventListener
-			 * @param {object} data Data relevent to the "preferences" event
+			 * @param {object} data Data relevant to the "preferences" event
 			 * @param {CIQ.ChartEngine} data.stx The chart engine instance
 			 * @param {string} data.symbol The current chart symbol
 			 * @param {object} data.symbolObject The symbol's value and display label (CIQ.ChartEngine.chart.symbolObject)
@@ -11123,7 +11437,7 @@
 			 */
 			rightClick: [],
 			/**
-			 * Called when an overlay-type study is edited
+			 * Called when an overlay-type study is right clicked.
 			 * @callback studyOverlayEditEventListener
 			 * @param {object} data Data relevant to the "studyOverlayEdit" event
 			 * @param {CIQ.ChartEngine} data.stx The chart engine instance
@@ -11131,6 +11445,16 @@
 			 * @param {object} data.inputs The inputs from the studyDescriptor
 			 * @param {object} data.outputs The outputs from the studyDescriptor
 			 * @param {object} data.parameters The parameters from the studyDescriptor
+			 * @example
+			 * stxx.addEventListener("studyOverlayEdit", function(studyData){
+			 *	  CIQ.alert(studyData.sd.name);
+			 *	  var helper=new CIQ.Studies.DialogHelper({name:studyData.sd.type,stx:studyData.stx});
+			 *	  console.log('Inputs:',JSON.stringify(helper.inputs));
+			 *	  console.log('Outputs:',JSON.stringify(helper.outputs));
+			 *	  console.log('Parameters:',JSON.stringify(helper.parameters));
+			 *	  // call your menu here with the  data returned in helper
+			 *	  // modify parameters as needed and call addStudy or replaceStudy
+			 * });
 			 */
 			studyOverlayEdit: [],
 			/**
@@ -11145,7 +11469,7 @@
 			 */
 			studyPanelEdit: [],
 			/**
-			 * Called when the chart's symbol changes.
+			 * Called when the chart's symbols change. Including secondary series and underlying symbols for studies ( ie. price relative study)
 			 * @callback symbolChangeEventListener
 			 * @param {object} data Data relevant to the "symbolChange" event
 			 * @param {CIQ.ChartEngine} data.stx The chart engine instance
@@ -11158,8 +11482,9 @@
 			 */
 			symbolChange: [],
 			/**
-			 * Called when a symbol is imported into the layout.
-			 * It is not called by other types of symbol changes
+			 * Called when a symbol is imported into the layout. Including secondary series and underlying symbols for studies ( ie. price relative study)
+			 * It is not called by other types of symbol changes.
+			 * See {@link CIQ.Drawing#importLayout}
 			 * @callback symbolImportEventListener
 			 * @param {object} data Data relevant to the "symbolImport" event
 			 * @param {CIQ.ChartEngine} data.stx The chart engine instance
@@ -11172,7 +11497,7 @@
 			 */
 			symbolImport: [],
 			/**
-			 * Called when the chart is tapped.
+			 * Called on ["mouseup"]{@link CIQ.ChartEngine#touchSingleClick} when the chart is tapped.
 			 * @callback tapEventListener
 			 * @param {object} data Data relevant to the "tap" event
 			 * @param {CIQ.ChartEngine} data.stx The chart engine instance
@@ -11182,7 +11507,7 @@
 			 */
 			tap: [],
 			/**
-			 * Called when a change occurs in the chart layout.
+			 * Called when a new theme is activated on the chart. Such as theme changes using the {@link WebComponents.cq-theme-dialog} or {@link WebComponents.cq-themes} initialization.
 			 * @callback themeEventListener
 			 * @param {object} data Data relevant to the "theme" event
 			 * @param {CIQ.ChartEngine} data.stx The chart engine instance
@@ -11193,7 +11518,7 @@
 			 */
 			theme: [],
 			/**
-			 * Called when an undo stamp is created for drawing events.
+			 * Called when an undo stamp is created for drawing events. See {@link CIQ.ChartEngine#undoStamp}
 			 * @callback undoStampEventListener
 			 * @param {object} data Data relevant to the "undoStamp" event
 			 * @param {CIQ.ChartEngine} data.stx The chart engine instance
@@ -11257,7 +11582,7 @@
 	 * @example
 	 * stxx.longHoldTime=... // Optionally override default value of 1000ms
 	 * stxx.addEventListener("longhold", function(lhObject){
-	 * 	alert('longhold event at x: ' + lhObject.x + ' y: '+ lhObject.y);
+	 * 	CIQ.alert('longhold event at x: ' + lhObject.x + ' y: '+ lhObject.y);
 	 * });
 	 */
 	CIQ.ChartEngine.prototype.addEventListener=function(type, callback){
@@ -11381,8 +11706,7 @@
 	 * @since 07/01/2015
 	 */
 	CIQ.ChartEngine.prototype.deleteYAxisIfUnused=function(panel, yAxis){
-		if(!yAxis) return;
-		if(yAxis.name===panel.yAxis.name) return;
+		if(!yAxis || yAxis.name===panel.yAxis.name) return;
 		for(var r in this.chart.seriesRenderers){
 			var renderer=this.chart.seriesRenderers[r];
 			if(renderer.params.yAxis && renderer.params.yAxis.name===yAxis.name){
@@ -11451,7 +11775,7 @@
 	/**
 	 * This method calculates the left and width members of each y-axis.
 	 *
-	 * When modifying a y-axis placement setting (widht, margins, position left/right, etc) after the axis has been rendered, you will need to call
+	 * When modifying a y-axis placement setting (width, margins, position left/right, etc) after the axis has been rendered, you will need to call
 	 * {@link CIQ.ChartEngine#calculateYAxisMargins} or this function, followed by {@link CIQ.ChartEngine#draw} to activate the change.
 	 * @memberof CIQ.ChartEngine
 	 */
@@ -11490,7 +11814,7 @@
 					panel.yaxisRHS.splice(i,1); break;
 				}
 			}
-			if(panel.yAxis.position=="left"){
+			if(position=="left"){
 				panel.yaxisLHS.push(panel.yAxis);
 			}else{
 				panel.yaxisRHS.unshift(panel.yAxis);
@@ -11504,13 +11828,9 @@
 			for(i=0;i<arr.length;i++){
 				yaxis=arr[i];
 				if(yaxis.noDraw || !yaxis.width) continue;
-				if(yaxis.position=="left"){
+				if(yaxis.position=="left" || (position=="left" && !yaxis.position)){
 					panel.yaxisTotalWidthLeft+=yaxis.width;
-					var justifyRightIsNull=!yaxis.justifyRight && yaxis.justifyRight!==false;
-					yaxis.justifyRight=justifyRightIsNull?panel.chart.yAxis.justifyRight:yaxis.justifyRight;
-					// justifyRight will default to whatever is set in the chart panel's yAxis. If that is null (usually), then yes, justifyRight
-					if(justifyRightIsNull) yaxis.justifyRight=true;
-				} else{
+				}else{
 					panel.yaxisTotalWidthRight+=yaxis.width;
 				}
 			}
@@ -11567,12 +11887,48 @@
 		}
 		//for more reliability, in case the y axis margins have changed.
 		this.setCandleWidth(this.layout.candleWidth);
+		this.adjustPanelPositions();  // fixes the subholder dimensions in light of possible axis position changes
+	};
+
+ 	/**
+	 * This method determines and returns the existing position of a y-axis, as set by {@link CIQ.ChartEngine.YAxis#position} or {@link CIQ.ChartEngine#setYAxisPosition}.
+	 * 
+	 * @param {CIQ.ChartEngine.YAxis} yAxis The YAxis whose position is to be found
+	 * @param  {CIQ.ChartEngine.Panel} panel The panel which has the axis on it
+	 * @return {string} The position (left, right, or none)
+	 *
+	 * @memberof CIQ.ChartEngine
+	 * @since 6.2.0
+	 */
+	CIQ.ChartEngine.prototype.getYAxisCurrentPosition=function(yAxis, panel){
+		if(!yAxis.width) return "none";
+		var arr=panel.yaxisLHS;
+		for(var i=0;i<arr.length;i++){
+			if(arr[i].name==yAxis.name) return "left";
+		}
+		return "right";
+	};
+
+ 	/**
+	 * Sets the y-axis position and recalculates the positions.
+	 * 
+	 * Always use this method on existent y-axis rather than changing {@link CIQ.ChartEngine.YAxis#position}
+	 * @param {CIQ.ChartEngine.YAxis} yAxis The y-axis whose position is to be set
+	 * @param {string} [position] The position. Valid options:"left", "right", "none", or null. 
+	 * @memberof CIQ.ChartEngine
+	 * @since 6.2.0
+	 */
+	CIQ.ChartEngine.prototype.setYAxisPosition=function(yAxis, position){
+		yAxis.position=position;
+		yAxis.width=position=="none"?0:CIQ.ChartEngine.YAxis.prototype.width;
+		this.calculateYAxisPositions();
+		this.draw();
 	};
 
 	/**
 	 * <span class="injection">INJECTABLE</span>
 	 * This method initializes the chart container events, such as window `resize` events,
-	 * and the [resizeTimer]{@link CIQ.ChartEngine#setResizeTimer} to ensure the chart adjusts as it's container size changes.
+	 * and the [resizeTimer]{@link CIQ.ChartEngine#setResizeTimer} to ensure the chart adjusts as its container size changes.
 	 * It also initializes various internal variables, the canvas and creates the chart panel.
 	 *
 	 * This is called by {@link CIQ.ChartEngine#newChart} and should rarely be called directly.
@@ -11600,17 +11956,6 @@
 		if(!container.CIQRegistered){
 			container.CIQRegistered=true;
 			CIQ.ChartEngine.registeredContainers.push(container);
-		}
-		if(CIQ.isSurface){
-			if(!this.gesture){
-				this.gesture=new MSGesture();
-				if(this.manageTouchAndMouse){
-					this.gesture.target=container;
-				}else{
-					this.gesture.target=document.body;
-				}
-				this.gesturePointerId=null;
-			}
 		}
 		this.registerHTMLElements();			// Sets all of the internal HTML elements to those in the container
 		var canvas=this.chart.canvas, tempCanvas=this.chart.tempCanvas, floatCanvas=this.floatCanvas;
@@ -11776,6 +12121,15 @@
 	 *
 	 * This method should only be used when you no longer need the chart engine and **never** be used in between {@link CIQ.ChartEngine#newChart} calls to load or change symbols.
 	 * @memberof CIQ.ChartEngine
+	 * @example
+	 * // create
+	 * var stxx=new CIQ.ChartEngine({container: $$$(".chartContainer")});
+	 * 
+	 * //destroy
+	 * stxx.destroy();
+	 *
+	 * //remove
+	 * stxx = null;
 	 */
 	CIQ.ChartEngine.prototype.destroy=function(){
 		this.setResizeTimer(0);
@@ -11856,28 +12210,16 @@
 			addListener("mouseup", function(e){self.mouseup(e);});
 		}else{
 			if(CIQ.isSurface){
-				addListener("mousemove", function(e){self.msMouseMoveProxy(e);});
+				addListener("mousemove", function(e){ self.msMouseMoveProxy(e);});
 				addListener("mouseenter", function(e){ self.msMouseMoveProxy(e); });
-				addListener("mousedown", function(e){self.msMouseDownProxy(e);});
-				addListener("mouseup", function(e){self.msMouseUpProxy(e);});
+				addListener("mousedown", function(e){ self.msMouseDownProxy(e);});
+				addListener("mouseup", function(e){ self.msMouseUpProxy(e);});
 
-				if(window.navigator.msPointerEnabled){
-					addListener("MSPointerDown", function(e){ return self.startProxy(e); });
-					addListener("MSGestureStart", function(e){ self.gestureInEffect=true; });
-					addListener("MSGestureChange", function(e){ return self.touchmove(e); });
-					addListener("MSGestureEnd", function(e){ self.gestureInEffect=false;return self.touchend(e); });
-					addListener("MSPointerMove", function(e){ self.moveProxy(e); });
-					addListener("MSPointerEnter", function(e){ return self.moveProxy(e); });
-					addListener("MSPointerUp", function(e){ return self.endProxy(e); });
-				}else{
-					addListener("pointerdown", function(e){ return self.startProxy(e); });
-					addListener("MSGestureStart", function(e){ self.gestureInEffect=true; });
-					addListener("MSGestureChange", function(e){ return self.touchmove(e); });
-					addListener("MSGestureEnd", function(e){ self.gestureInEffect=false;return self.touchend(e); });
-					addListener("pointermove",  function(e){ self.moveProxy(e); });
-					addListener("pointerenter", function(e){ return self.moveProxy(e); });
-					addListener("pointerup", function(e){ return self.endProxy(e); });
-				}
+				addListener("pointerdown", function(e){ return self.startProxy(e); });
+				addListener("pointermove",  function(e){ self.moveProxy(e); });
+				addListener("pointerenter", function(e){ return self.moveProxy(e); });
+				addListener("pointerup", function(e){ return self.endProxy(e); });
+
 			}else{
 				// We need mouse events for all-in-one computers that accept both mouse and touch commands
 				// Actually, only for Firefox and Chrome browsers. IE10 sends pointers which are managed by the isSurface section
@@ -11891,6 +12233,9 @@
 				addListener("touchstart", function(e){ self.touchstart(e); });
 				addListener("touchmove", function(e){ self.touchmove(e); });
 				addListener("touchend", function(e){ self.touchend(e); });
+
+				// capture a "pen" device, so we can treat it as a mouse
+				addListener("pointerdown", function(e){ self.touchPointerType=e.pointerType; });
 
 				if(zoomInEl){
 					zoomInEl.removeAttribute("onMouseOver");
@@ -11936,9 +12281,15 @@
 	/**
 	 * <span class="injection">INJECTABLE</span>
 	 * Removes any and all highlighted overlays, series or drawings.
+	 * @param {boolean} callRightClick when true, call the right click method for the given highlight
+	 * <br>&bull; drawing highlight calls {CIQ.ChartEngine#rightClickDrawing}
+	 * <br>&bull; overlay study highlight calls {CIQ.ChartEngine#rightClickOverlay}
+	 * @param {boolean} forceEdit skip the context menu and begin editing immediately, usually for touch devices
 	 * @memberof CIQ.ChartEngine.AdvancedInjectable#
 	 * @alias deleteHighlighted
-	 * @since 4.1.0 Removes a renderer from the chart if it has no series attached to it.
+	 * @since
+	 * <br>&bull; 4.1.0 Removes a renderer from the chart if it has no series attached to it.
+	 * <br>&bull; 6.2.0 Calls {CIQ.ChartEngine#rightClickDrawing} when a drawing is highlighted and the `callRightClick` argument is true.
 	 */
 	CIQ.ChartEngine.prototype.deleteHighlighted=function(callRightClick, forceEdit){
 		if(this.runPrepend("deleteHighlighted", arguments)) return;
@@ -11948,7 +12299,12 @@
 		if(canDeleteAll || !this.bypassRightClick.drawing) {
 			for(var i=this.drawingObjects.length-1;i>=0;i--){
 				var drawing=this.drawingObjects[i];
-				if(drawing.highlighted && !drawing.permanent){
+
+				if (!drawing.highlighted) continue;
+
+				if (callRightClick) {
+					this.rightClickDrawing(drawing, forceEdit);
+				} else if (!drawing.permanent) {
 					var dontDeleteMe=drawing.abort();
 					if(!dontDeleteMe){
 						var before=CIQ.shallowClone(this.drawingObjects);
@@ -12141,9 +12497,6 @@
 	 */
 	CIQ.ChartEngine.prototype.cleanupRemovedStudy=function(sd){
 		if(sd.study.removeFN) sd.study.removeFN(this,sd);
-		if(sd.study.feed){
-			this.detachTagAlongQuoteFeed(sd.study.feed);
-		}
 		// delete any plugins associated with this study
 		for(var p in this.plugins){
 			if(p.indexOf("{"+sd.id+"}")>-1) delete this.plugins[p];
@@ -12238,10 +12591,11 @@
 			this.createDataSet();
 			this.resetDynamicYAxis({noRecalculate: true});
 			this.calculateYAxisPositions();
-			this.adjustPanelPositions();
 			this.draw();
 			this.savePanels();
 		}
+		// IE11 on Win7 hack. We do this in case the mouseup is lost when we removed the panel.close from the DOM
+		this.userPointerDown=this.grabbingScreen=false;
 		if(this.openDialog) this.openDialog="";
 		this.runAppend("panelClose", arguments);
 	};
@@ -12374,7 +12728,6 @@
 		}
 		if(!this.soloPanelToFullScreen) this.chart.panel.hidden=false;
 		panel.hidden=false;
-		this.adjustPanelPositions();
 		this.resetDynamicYAxis({noRecalculate: true});
 		this.calculateYAxisPositions();
 		this.draw();
@@ -12480,36 +12833,40 @@
 				if(panel.up){
 					if(!first){
 						first=true;
-						panel.up.style.display="none";
+						CIQ.unappendClassName(panel.up, "stx-show");
 					}else{
-						if(this.displayIconsUpDown) panel.up.style.display="";
+						if(this.displayIconsUpDown) CIQ.appendClassName(panel.up, "stx-show");
 					}
 				}
 				if(panel.solo){
 					if(activeSolo){
 						if(panel.soloing){
-							if(this.displayIconsSolo) panel.solo.style.display="";
+							if(this.displayIconsSolo) CIQ.appendClassName(panel.solo, "stx-show");
 						}else{
-							panel.solo.style.display="none";
+							CIQ.unappendClassName(panel.solo, "stx-show");
 						}
 					}else if(n==1){
-						panel.solo.style.display="none";
+						CIQ.unappendClassName(panel.solo, "stx-show");
 					}else if(n==2 && !this.soloPanelToFullScreen){
-						panel.solo.style.display="none";
+						CIQ.unappendClassName(panel.solo, "stx-show");
 					}else{
-						if(this.displayIconsSolo) panel.solo.style.display="";
+						if(this.displayIconsSolo) CIQ.appendClassName(panel.solo, "stx-show");
 					}
 				}
 				if(panel.down){
 					if(n==1){
-						panel.down.style.display="none";
+						CIQ.unappendClassName(panel.down, "stx-show");
 					}else{
-						if(this.displayIconsUpDown) panel.down.style.display="";
+						if(this.displayIconsUpDown) CIQ.appendClassName(panel.down, "stx-show");
 					}
 				}
 				if(panel.edit){
-					if(panel.editFunction) panel.edit.style.display="";
-					else panel.edit.style.display="none";
+					if(panel.editFunction) CIQ.appendClassName(panel.edit, "stx-show");
+					else CIQ.unappendClassName(panel.edit, "stx-show");
+				}
+				if(panel.close){
+					if(this.displayIconsClose) CIQ.appendClassName(panel.close, "stx-show");
+					else CIQ.unappendClassName(panel.close, "stx-show");
 				}
 			}
 
@@ -12563,9 +12920,9 @@
 				if(panel.yAxis.height>=0) panel.subholder.style.height=panel.yAxis.height+"px";
 			}
 		}
-		if(x && this.panels[x].down) this.panels[x].down.style.display="none";
+		if(x && this.panels[x].down) CIQ.unappendClassName(this.panels[x].down,"stx-show");
 		if(this.manageTouchAndMouse && n==2 && !activeSolo && this.chart.panel.solo){
-			this.chart.panel.solo.style.display="";
+			CIQ.appendClassName(this.chart.panel.solo, "stx-show");
 		}
 		if(this.controls.chartControls && this.chart.panel){
 			var bottom;
@@ -12655,12 +13012,19 @@
 		if(panel.handle){
 			if(!CIQ.touchDevice || CIQ.isSurface) panel.handle.onmouseover=(function(self){ return function(){self.hideCrosshairs();};})(this);
 			if(!CIQ.touchDevice || CIQ.isSurface) panel.handle.onmouseout=(function(self){ return function(){self.showCrosshairs();};})(this);
-			if(CIQ.touchDevice){
-				panel.handle.ontouchstart=(function(stx,panel){return function(e){if(stx.resizingPanel) return; e.preventDefault(); stx.grabHandle(panel);};})(this, panel);
-				panel.handle.ontouchend=(function(stx){return function(e){e.preventDefault(); /*stx.releaseHandle();*/};})(this);
+			var panelGrab=function(stx,panel){
+				return function(e){
+					if(CIQ.ChartEngine.resizingPanel) return;
+					stx.grabHandle(panel);
+				};
+			};
+			// stxx.releaseHandle is called by the chart's touchend and mouseup handlers
+			if(CIQ.isSurface){
+				panel.handle.onpointerdown=panelGrab(this, panel);
+			}else{
+				panel.handle.onmousedown=panelGrab(this, panel);
 			}
-			panel.handle.onmousedown=(function(stx, panel){return function(e){if(!e) e=event; stx.grabHandle(panel);};})(this, panel);
-			panel.handle.onmouseup=(function(stx){return function(e){if(!e) e=event; /*stx.releaseHandle();*/};})(this);
+			if(CIQ.touchDevice) panel.handle.ontouchstart=panelGrab(this, panel);
 		}
 		if(panel.close) {
 			CIQ.safeClickTouch(panel.close,(function(stx, panel){return function(){ stx.panelClose(panel);};})(this, panel));
@@ -12762,12 +13126,12 @@
 				continue;
 			}else{
 				var manageTouchAndMouse=this.manageTouchAndMouse;
-				if((!this.displayIconsUpDown || !manageTouchAndMouse) && panel.up) panel.up.style.display="none";
-				if((!this.displayIconsUpDown || !manageTouchAndMouse) && panel.down) panel.down.style.display="none";
-				if((!this.displayIconsSolo || !manageTouchAndMouse) && panel.solo) panel.solo.style.display="none";
-				if((!this.displayIconsClose || !manageTouchAndMouse) && panel.close) panel.close.style.display="none";
+				if(panel.up) panel.up.style.display=(this.displayIconsUpDown && manageTouchAndMouse)?"":"none";
+				if(panel.down) panel.down.style.display=(this.displayIconsUpDown && manageTouchAndMouse)?"":"none";
+				if(panel.solo) panel.solo.style.display=(this.displayIconsSolo && manageTouchAndMouse)?"":"none";
+				if(panel.close) panel.close.style.display=(this.displayIconsClose && manageTouchAndMouse)?"":"none";
 
-				if((!panel.editFunction || !manageTouchAndMouse) && panel.edit) panel.edit.style.display="none";
+				if(panel.edit) panel.edit.style.display=(panel.editFunction && manageTouchAndMouse)?"":"none";
 				panel.holder.style.display="block";
 			}
 			if(!first){
@@ -12896,49 +13260,49 @@
 	// Proxy for handling MS pointer events, specifically to deal with all-in-one computers that
 	// support both mouse and touch
 	CIQ.ChartEngine.prototype.startProxy=function(e){
-		if(e.pointerType==4 || e.pointerType=="mouse"){
+		this.touchPointerType=e.pointerType;
+		if(this.touchPointerType!="touch"){
 			this.mouseMode=true;
-		}else{
-			this.mouseMode=false;
+			return;
 		}
-		if(this.mouseMode) return;
+		this.mouseMode=false;
 		this.touches[this.touches.length]={
 				pointerId:e.pointerId,
 				pageX:e.clientX,
-				pageY:e.clientY
+				pageY:e.clientY,
+				clientX:e.clientX,
+				clientY:e.clientY
 		};
 		this.changedTouches=[{
 				pointerId:e.pointerId,
 				pageX:e.clientX,
-				pageY:e.clientY
+				pageY:e.clientY,
+				clientX:e.clientX,
+				clientY:e.clientY
 		}];
-		if(!this.gestureInEffect && this.touches.length==1){
+		if(this.touches.length==1){
 			this.gesturePointerId=e.pointerId;
-			this.overrideGesture=false;
-			if(!this.gesture) return;
-			this.gesture.addPointer(e.pointerId);
-			this.touchstart(e);
-		}else{
-			this.gesture.stop();
-			this.touchstart(e);
 		}
+		this.touchstart(e);
 	};
 
 	// Proxy for dealing with MS pointer move events
 	CIQ.ChartEngine.prototype.moveProxy=function(e){
-		if(e.pointerType==4 || e.pointerType=="mouse"){
+		if(e.pointerType && e.pointerType!="touch"){
 			this.mouseMode=true;
-		}else{
-			this.mouseMode=false;
+			return;
 		}
-		if(this.mouseMode) return;
-		if(!this.gestureInEffect)
-			this.touchmove(e);
+		this.mouseMode=false;
+		this.touchmove(e);
 	};
 
 	// Proxy for dealing with MS pointer end events
 	CIQ.ChartEngine.prototype.endProxy=function(e){
-		if(this.mouseMode) return;
+		if(this.touchPointerType!="touch"){
+			this.mouseMode=true;
+			return;
+		}
+		this.mouseMode=false;
 		var hm=this.touches.length;
 		for(var i=0;i<this.touches.length;i++){
 			if(this.touches[i].pointerId==e.pointerId){
@@ -12955,11 +13319,11 @@
 		this.changedTouches=[{
 			pointerId:e.pointerId,
 			pageX:e.clientX,
-			pageY:e.clientY
+			pageY:e.clientY,
+			clientX:e.clientX,
+			clientY:e.clientY
 		}];
-		if(!this.gestureInEffect){
-			this.touchend(e);
-		}
+		this.touchend(e);
 	};
 
 	// Proxy for dealing with mousemove on MS devices
@@ -13161,7 +13525,7 @@
 		var cht=chart?chart: this.chart;
 		var iter_parms = {
 			'begin': begin,
-			'interval': this.layout.interval =='tick' ? 1:this.layout.interval,
+			'interval': this.layout.interval,
 			'periodicity': this.layout.interval =='tick' ? this.chart.xAxis.futureTicksInterval:this.layout.periodicity,
 			'timeUnit': this.layout.timeUnit,
 			'outZone': outZone
@@ -13227,9 +13591,6 @@
 	 */
 	CIQ.ChartEngine.prototype.zoomOut=function(e, pct){
 		if(this.runPrepend("zoomOut", arguments)) return;
-		// from git isue #533, seems no longer necessary
-		//this.grabbingScreen= false; //in case they were grabbing the screen and let go to zoom.
-		//if(CIQ.ChartEngine.insideChart) CIQ.unappendClassName(this.container, "stx-drag-chart"); //in case they were grabbing the screen and let go to zoom.
 		if ( this.preferences.zoomOutSpeed) pct= this.preferences.zoomOutSpeed;
 		else if(!pct) pct=1.3;
 		if(e && e.preventDefault) e.preventDefault();
@@ -13373,9 +13734,6 @@
 	 */
 	CIQ.ChartEngine.prototype.zoomIn=function(e, pct){
 		if(this.runPrepend("zoomIn", arguments)) return;
-		// from git isue #533, seems no longer necessary
-		//this.grabbingScreen= false; //in case they were grabbing the screen and let go to zoom.
-		//if(CIQ.ChartEngine.insideChart) CIQ.unappendClassName(this.container, "stx-drag-chart"); //in case they were grabbing the screen and let go to zoom.
 		if ( this.preferences.zoomInSpeed) pct= this.preferences.zoomInSpeed;
 		else if(!pct) pct=0.7;
 		if(e && e.preventDefault) e.preventDefault();
@@ -13431,7 +13789,7 @@
 	 * >**DO NOT** use this function to set the `dataZone` as it will result in a double conversion.
 	 *
 	 * - Once set, 'Date' fields containing a time portion, will be converted to the {@link CIQ.ChartEngine#dataZone}
-	 * (or the browser timezone if no dataZone is specified) before added into the `masterData`. It's corresponding 'DT' fields will be set to match.
+	 * (or the browser timezone if no dataZone is specified) before added into the `masterData`. Its corresponding 'DT' fields will be set to match.
 	 * The {@link CIQ.ChartEngine#displayZone} is then created and used to translate dates based on either the local browser's timezone,
 	 * or the timezone selected by the end user.
 	 *
@@ -13566,12 +13924,12 @@
 	 * 1. Preset the layout object in the chart instance, but do not load any data.
 	 *  - This is usually used to restore an initial 'symbol independent' general layout (chart type and studies mainly) that will then take effect when `newChart` is subsequently called.
 	 *  - In this case, exportedLayout should be called using 'withSymbols=false' and the importLayout should have 'noDataLoad=true'.
-	 * 2. Load an entire new chart and it's data, including primary symbol, additional series, studies, chart type, periodicity and range:
+	 * 2. Load an entire new chart and its data, including primary symbol, additional series, studies, chart type, periodicity and range:
 	 *  - In this case, you should not need call newChart, setPeriodicity setSpan or setRange, addStudy, etc. since it is all restored from the previously exported layout and loaded using the attached quoteFeed.
 	 *  - If you still wish to change periodicity, span or range, you must use the CB function to do so.
 	 *  - In this case, exportedLayout should be called  using 'withSymbols=true' and the importLayout should have 'noDataLoad=false' and 'managePeriodicity=true'.
 	 * 3. Reset layout on an already existing chart without changing the primary symbol or adding additional symbols:
-	 *  - This is used when restoring a 'view' on an already existing chart from a previous `newChart` call. The primary symbol remains the same, no additional series are added, but periodicity, range, studies nand chart type are restored from the previously serialized view.
+	 *  - This is used when restoring a 'view' on an already existing chart from a previous `newChart` call. The primary symbol remains the same, no additional series are added, but periodicity, range, studies and chart type are restored from the previously serialized view.
 	 *  - In this case, exportedLayout should be called  using 'withSymbols=false', and importLayout should have 'noDataLoad=false', managePeriodicity=true', and 'preserveTicksAndCandleWidth=true'.
 	 *
 	 * **Important Notes: **
@@ -13600,7 +13958,7 @@
 	 * See {@link CIQ.ChartEngine#setPeriodicity} for additional details
 	 * @param  {boolean} [params.preserveTicksAndCandleWidth] If true then the current candleWidth (horizontal zoom) and scroll (assuming same periodicity) will be maintained and any spans or ranges present in the config will be ignored. Otherwise candle width and span/ranges will be taken from the config and restored.
 	 * @param  {function} [params.cb] An optional callback function to be executed once the layout has been fully restored.
-	 * @param  {function} [params.seriesCB] An optional callback function to be executed once the layout is completely loaded.
+	 * @param  {function} [params.seriesCB] An optional callback function to be executed after each series is restored (to be aded to each {@link CIQ.ChartEngine#addSeries} call).
 	 * @memberof CIQ.ChartEngine
 	 * @since
 	 * <br>&bull; 05-2016-10 Symbols are also loaded if included on the serialization.
@@ -13667,9 +14025,6 @@
 		// Just make sure the candleWidth is sane so we end up with a reasonable number of maxticks to fetch.
 		if(layout.candleWidth<minimumCandleWidth) layout.candleWidth=minimumCandleWidth;
 		this.setCandleWidth(layout.candleWidth);
-
-		// set comparison mode if percent y-axis
-		if(layout.chartScale=="percent") this.setComparison(true);
 
 		var panels=view.panels;		// make a copy of the panels
 		var insertAt;
@@ -13788,6 +14143,8 @@
 							parameters.action=null; // prevent symbolChange event
 							self.addSeries(smbl.id, parameters, seriesCB);
 						}
+						if(view.chartScale) self.setComparison(view.chartScale);
+
 					}
 					postLayoutChange();
 					if(cb) cb.apply(null, arguments);
@@ -13847,6 +14204,10 @@
 	/**
 	 * Exports the current layout into a serialized form. The returned object can be passed into
 	 * {@link CIQ.ChartEngine#importLayout} to restore the layout at a future time.
+	 *
+	 * This methods will also save any programatically activated [range]{@link CIQ.ChartEngine#setRange} or [span]]{@link CIQ.ChartEngine#setSpan} setting that is still active. It is importantnot note, that a set range or span that is manually modfied by a usser when zoomngor panning will be nullified.
+	 * So if you wish to allways record the current range or a chanrt for future restiration, you must use a 'move' event listener to capture that interactin and then call setRange withthe current vue window.
+	 *
 	 * @param {boolean} withSymbols  If set to `true`, include the chart's current primary symbol and any secondary symbols from any {@link CIQ.ChartEngine#addSeries} operation; if using a quoteFeed. Studies will be excluded from this object. The resulting list will be in the `symbols` element of the serialized object.
 	 * @return {object} The serialized form of the layout.
 	 * @memberof CIQ.ChartEngine
@@ -14026,17 +14387,6 @@
 			while (+dt1 < +dt2){
 				var newQuote={DT: dt1};
 				if(paramField){
-					// Let's not insert a new master data record just to fill a secondary series gap KB5272
-					/*new_quotes.push(newQuote);
-					newQuote[paramField]={
-						DT: dt1,
-						Open: close,
-						High: close,
-						Low: close,
-						Close: close,
-						Volume: 0,
-						Adj_Close: adjClose							
-					};*/
 				}else{
 					new_quotes.push(newQuote);
 					CIQ.extend(newQuote,{
@@ -14362,7 +14712,7 @@
 	/**
 	 * Turns comparison charting on or off and sets the transform.
 	 *
-	 * Should not be called directly. Either use the {@link CIQ.ChartEngine#addSeries} `isComprison` parameter or use {@link CIQ.ChartEngine#setChartScale}
+	 * Should not be called directly. Either use the {@link CIQ.ChartEngine#addSeries} `isComparison` parameter or use {@link CIQ.ChartEngine#setChartScale}
 
 	 * @param {string|boolean} mode Type of comparison ("percent" or "relative").
 	 *  - Setting to true will enable "percent".
@@ -14448,3 +14798,4 @@
 
 	return _exports;
 })/* removeIf(umd) */(typeof window !== 'undefined' ? window : global)/* endRemoveIf(umd) */;
+

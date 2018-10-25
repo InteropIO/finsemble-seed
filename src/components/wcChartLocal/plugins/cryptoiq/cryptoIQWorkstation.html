@@ -1,8 +1,9 @@
 <!--
-This is a fully functional desktop-like example showing how to load a chart with a corresponding feature-rich user interface.
-It is intended mainly for larger screens and may not always render optimally and very small devices. 
+This this cryptoIQ Workstation front end page.
 
-Customize this sample template as needed to meet your use case and fit the screen size of your supported devices.
+**** Please manually move this file to the library root directory before using, or modify all paths accordingly. ****
+
+It is intended mainly for larger screens and may not always render optimally and very small devices. 
 -->
 
 <!doctype html>
@@ -67,6 +68,10 @@ Customize this sample template as needed to meet your use case and fit the scree
 					<cq-item stxtap="Layout.setPeriodicity(1,30,'minute')">30 Min</cq-item>
 					<cq-item stxtap="Layout.setPeriodicity(2,30,'minute')">1 Hour</cq-item>
 					<cq-item stxtap="Layout.setPeriodicity(8,30,'minute')">4 Hour</cq-item>
+					<cq-separator></cq-separator>
+					<cq-item stxtap="Layout.setPeriodicity(1,1,'second')">1 Sec</cq-item>
+					<cq-item stxtap="Layout.setPeriodicity(1,10,'second')">10 Sec</cq-item>
+					<cq-item stxtap="Layout.setPeriodicity(1,30,'second')">30 Sec</cq-item>
 				</cq-menu-dropdown>
 			</cq-menu>
 			<cq-menu class="ciq-menu ciq-views collapse">
@@ -147,9 +152,9 @@ Customize this sample template as needed to meet your use case and fit the scree
 					</cq-item>
 					<cq-item stxsetget="Layout.RangeSlider()">Range Selector<span class="ciq-checkbox ciq-active"><span></span></span>
 					</cq-item>
-					<!-- Uncomment this option for access to cryptoIQ Marketdepth/Orderbook functionality -->
-					<!--<cq-item stxsetget="Layout.MarketDepth()">Market Depth<span class="ciq-checkbox ciq-active"><span></span></span>
-					</cq-item>-->
+					<!-- Uncomment this option for access to L2 heatmap on the chart.  Must have cryptoIQ functionality and recording enabled in the plugin -->
+					<cq-item stxsetget="Layout.L2Heatmap()">L2 Heat Map<span class="ciq-checkbox ciq-active"><span></span></span>
+					</cq-item>
 					<cq-separator></cq-separator>
 					<cq-heading>Locale</cq-heading>
 						<cq-item><cq-clickable cq-selector="cq-timezone-dialog" cq-method="open">Change Timezone</cq-clickable></cq-item>
@@ -258,7 +263,7 @@ Customize this sample template as needed to meet your use case and fit the scree
 			<cq-toggle class="ciq-draw"><span></span><cq-tooltip>Draw</cq-tooltip></cq-toggle>
 
 			<!-- comment in the following line if you are using the TFC plug in -->
- 			<!-- <cq-toggle class="sidebar stx-trade"><span></span><cq-tooltip>Trade</cq-tooltip></cq-toggle> -->
+ 			<cq-toggle class="sidebar stx-trade"><span></span><cq-tooltip>Trade</cq-tooltip></cq-toggle>
 			<!-- comment in the following line if you are using the tradingcentral plug in -->
 			<!-- <cq-toggle class="stx-tradingcentral"><span></span><cq-tooltip>Analysis</cq-tooltip></cq-toggle> -->
 		</div>
@@ -266,13 +271,98 @@ Customize this sample template as needed to meet your use case and fit the scree
 </div>
 <!-- End Navbar -->
 
-<!-- comment in the following line if you have access to ScriptIQ -->
+<!-- ** comment in the following line if you have access to ScriptIQ -->
 <!-- <cq-scriptiq></cq-scriptiq> -->
 
-<!-- comment in the following line if you are using the tradingcentral plug in -->
+<!-- ** comment in the following line if you are using the tradingcentral plug in -->
 <!-- <cq-tradingcentral token="leWp5sKSbV7sENXba2EUXQ==" partner="647" disabled></cq-tradingcentral> -->
 
+<style>
+#flexContainer {
+	position:absolute;
+	top:0;
+	bottom:15px;
+	left:0;
+	right:0;
+	overflow:hidden;
+}
+#cryptoGroup1, #cryptoGroup2 {
+	float:left;
+	width:15%;
+	height:100%;
+	padding:5px 5px 10px;
+}
+#cryptoGroup2 {
+	width:25%;
+}
+#mainChartGroup {
+	display:flex;
+  flex-direction: column;
+	display:grid;  /* a better model, if browser supports */
+	height:100%;
+	padding:10px;
+}
+#marketDepthBookmark {
+	display:none;
+}
+#orderBookContainer, #tradeHistoryContainer {
+	width:100%;
+	padding-top:5px;
+}
+cq-orderbook, cq-tradehistory {
+	position:relative !important;
+}
+</style>
+
 <div class="ciq-chart-area">
+	<div id="flexContainer">
+				<div id="cryptoGroup1">
+			<div id="tradeHistoryContainer">
+				<cq-tradehistory cq-active>
+					<cq-tradehistory-table>
+						<cq-scroll cq-no-claim>
+							<cq-tradehistory-body maxrows=500></cq-tradehistory-body>
+						</cq-scroll>
+					</cq-tradehistory-table>
+					<template>
+						<cq-item>
+							<div col="time">Time</div>
+							<div col="qty">Qty</div>
+							<div col="price">Price</div>
+							<div col="amount">Amount</div>
+						</cq-item>
+					</template>
+				</cq-tradehistory>
+			</div>
+		</div>
+		<div id="cryptoGroup2">
+			<div id="marketDepthBookmark"></div>
+			<div id="orderBookContainer">
+				<cq-orderbook cq-active>
+					<cq-orderbook-table reverse>
+						<cq-scroll cq-no-claim>
+							<cq-orderbook-bids></cq-orderbook-bids>
+						</cq-scroll>
+					</cq-orderbook-table>
+					<cq-orderbook-table>
+						<cq-scroll cq-no-claim>
+							<cq-orderbook-asks></cq-orderbook-asks>
+						</cq-scroll>
+					</cq-orderbook-table>
+					<template>
+						<cq-item cq-size-shading>
+							<div col="price">Price</div>
+							<div col="size">Size</div>
+							<!--<div col="cum_size">Total Size</div>-->
+							<div col="amount">Amount</div>
+							<!--<div col="cum_amount">Total Amount</div>-->
+							<!--<div col="shading"></div>-->
+						</cq-item>
+					</template>
+				</cq-orderbook>
+			</div>
+		</div>
+		<div id="mainChartGroup">
 	<div class="ciq-chart">
 		<cq-toolbar cq-drawing-edit="none">
 			<cq-menu class="ciq-select">
@@ -376,7 +466,6 @@ Customize this sample template as needed to meet your use case and fit the scree
 						</cq-menu>
 					</cq-line-style>
 				</template>
-
 				<cq-axis-label cq-section>
 					<div class="ciq-heading">Axis Label:</div>
 					<span stxtap="toggleAxisLabel()" class="ciq-checkbox ciq-active"><span></span></span>
@@ -428,7 +517,6 @@ Customize this sample template as needed to meet your use case and fit the scree
 			</cq-undo-section>
 		</cq-toolbar>
 		<div class="chartContainer">
-
 			<stx-hu-tooltip>
 				<stx-hu-tooltip-field field="DT">
 					<stx-hu-tooltip-field-name>Date/Time</stx-hu-tooltip-field-name>
@@ -439,7 +527,6 @@ Customize this sample template as needed to meet your use case and fit the scree
 					<stx-hu-tooltip-field-value></stx-hu-tooltip-field-value>
 				</stx-hu-tooltip-field>
 			</stx-hu-tooltip>
-
 			<cq-chart-title cq-marker cq-browser-tab>
 				<cq-symbol></cq-symbol>
 				<cq-chart-price>
@@ -495,12 +582,6 @@ Customize this sample template as needed to meet your use case and fit the scree
 					</template>
 				</cq-comparison-key>
 			</cq-comparison>
-				<!--- Here is an example of how to create a study legend on the chart.
-					We use the cq-marker attribute to ensure that it floats inside the chart.
-					We set the optional cq-panel-only attribute so that only studies from
-					this panel are displayed.
-					-- Comment out if a legend on the chart window is not desired --
-				-->
 			<cq-study-legend cq-marker-label="Overlays" cq-overlays-only cq-marker cq-hovershow class="ciq-no-share">
 				<template>
 					<cq-item>
@@ -531,6 +612,8 @@ Customize this sample template as needed to meet your use case and fit the scree
 		<!-- End Chart Container -->
 	</div>
 	<!-- End Chart Box -->
+	</div>
+	</div>
 </div>
 <!-- End Chart Area -->
 
@@ -563,202 +646,6 @@ Customize this sample template as needed to meet your use case and fit the scree
 				<h4>This is a callout marker</h4>
 				<div class="stx-marker-expand">
 					<p>Like all ChartIQ markers, the object itself is managed by the chart, so when you scroll the chart the object moves with you. It is also destroyed automatically for you when the symbol is changed.</p>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- Abstract Markers. You can remove this unless you actually need a helicopter. Seriously though, markers can be anything you want them to be! -->
-	<div class="abstract">
-		<div class="stx-marker abstract">
-			<div class="stx-marker-content">
-				<style>
-				.stx-marker.abstract {
-					width: 0;
-					transition: all .2s;
-				}
-
-				.stx-marker-content .sample {
-					position: absolute;
-					bottom: 0;
-					margin-left: -67px;
-					width: 135px;
-					height: 135px;
-					background: rgba(255, 255, 255, .1);
-					text-align: left;
-					border-radius: 50%;
-					-webkit-transition: width 0.2s 0s, height 0.2s 0s, border-radius 0.2s 0s, margin 0.2s 0s, background 0.5s;
-					transition: width 0.2s 0s, height 0.2s 0s, border-radius 0.2s 0s, margin 0.2s 0s, background 0.5s;
-				}
-
-				.sample:hover {
-					width: 250px;
-					margin-left: -125px;
-					border-radius: 5px;
-					background: #fff;
-					-webkit-transition: width 0.2s .5s, height 0.2s .5s, border-radius 0.2s .5s, margin 0.2s .5s, background 1s;
-					transition: width 0.2s .5s, height 0.2s .5s, border-radius 0.2s .5s, margin 0.2s .5s, background 1s;
-				}
-
-				.sample .text {
-					position: absolute;
-					font-size: 11px;
-					left: 160px;
-					width: 80px;
-					bottom: 13px;
-					opacity: 0;
-					line-height: 13px;
-					-webkit-transition: opacity 0s 0s;
-					-moz-transition: opacity 0s 0s;
-					transition: opacity 0s 0s;
-				}
-
-				.sample:hover .text {
-					opacity: 1;
-					-webkit-transition: opacity 0.4s .7s;
-					-moz-transition: opacity 0.4s .7s;
-					transition: opacity 0.4s .7s;
-				}
-
-				#stage {
-					position: absolute;
-					left: 10px;
-					bottom: 10px;
-					width: 115px;
-					height: 115px;
-					background: #e8e8e8;
-					border-radius: 50%;
-					-webkit-transition: width 0.2s 0s, height 0.2s 0s, border-radius 0.2s 0s, margin 0.2s 0s, background 0.2s;
-					transition: width 0.2s 0s, height 0.2s 0s, border-radius 0.2s 0s, margin 0.2s 0s, background 0.2s;
-				}
-
-				.sample:hover #stage {
-					width: 135px;
-					border-radius: 5px;
-					background: #e8e8e8;
-					-webkit-transition: width 0.2s .5s, height 0.2s .5s, border-radius 0.2s .5s, margin 0.2s .5s, background 0.2s;
-					transition: width 0.2s .5s, height 0.2s .5s, border-radius 0.2s .5s, margin 0.2s .5s, background 0.2s;
-				}
-
-				@-webkit-keyframes heli-hover {
-					0% {
-						-webkit-transform: rotate(0deg) translateY(0px);
-					}
-					35% {
-						-webkit-transform: rotate(6deg) translateY(-70px);
-					}
-					80% {
-						-webkit-transform: rotate(-4deg) translateY(0px);
-					}
-					100% {
-						-webkit-transform: translateY(0px);
-					}
-				}
-
-				@keyframes heli-hover {
-					0% {
-						transform: rotate(0deg) translateY(0px);
-					}
-					35% {
-						transform: rotate(6deg) translateY(-70px);
-					}
-					80% {
-						transform: rotate(-4deg) translateY(0px);
-					}
-					100% {
-						transform: translateY(0px);
-					}
-				}
-
-				#helicopter {
-					position: absolute;
-					margin-left: -5px;
-					margin-bottom: 5px;
-					left: -10px;
-					bottom: 15px;
-					width: 145px;
-					height: 55px;
-					-webkit-transition: margin 0.75s;
-					transition: margin 0.75s;
-				}
-
-				.sample:hover #helicopter {
-					margin-left: 0px;
-					margin-bottom: 0;
-					-webkit-animation: heli-hover 6s ease-in-out infinite;
-					/* Chrome, Safari, Opera */
-					animation: heli-hover 6s ease-in-out infinite;
-					/* Standard syntax */
-				}
-
-				#propeller {
-					position: absolute;
-					top: 2px;
-					left: 30px;
-					width: 0px;
-					perspective: 500px;
-					-webkit-perspective: 500px;
-					z-index: 1;
-				}
-
-				@keyframes spinner {
-					from {
-						transform: rotateY(0deg);
-					}
-					to {
-						transform: rotateY(-360deg);
-					}
-				}
-
-				@-webkit-keyframes spinner {
-					from {
-						-webkit-transform: rotateY(0deg);
-					}
-					to {
-						-webkit-transform: rotateY(-360deg);
-					}
-				}
-
-				#spinner {
-					-webkit-animation: spinner 1s linear infinite;
-					/* Chrome, Safari, Opera */
-					animation: spinner 1s linear infinite;
-					/* Standard syntax */
-					-webkit-transform-style: preserve-3d;
-					transform-style: preserve-3d;
-				}
-
-				#spinner div {
-					position: absolute;
-					background: #999;
-					width: 80px;
-					height: 4px;
-				}
-
-				#heli-body {
-					position: absolute;
-					left: 0;
-					width: 145px;
-					height: 55px;
-					position: absolute;
-					background: url(css/img/helicopter.png) no-repeat center;
-					z-index: 2;
-				}
-				</style>
-				<div class="sample">
-					<div id="stage">
-						<div id="helicopter">
-							<div id="propeller" style="height: 160px;">
-								<div id="spinner" style="-webkit-transform-origin: 40px 0 0; transform-origin: 40px 0 0;">
-									<div style="-webkit-transform: rotateY(0deg) translateX(40px); transform: rotateY(0deg) translateX(40px);"></div>
-									<div style="-webkit-transform: rotateY(-90deg) translateX(40px); transform: rotateY(-90deg) translateX(40px);"></div>
-									<div style="-webkit-transform: rotateY(-180deg) translateX(40px); transform: rotateY(-180deg) translateX(40px);"></div>
-									<div style="-webkit-transform: rotateY(-270deg) translateX(40px); transform: rotateY(-270deg) translateX(40px);"></div>
-								</div>
-							</div>
-							<div id="heli-body"></div>
-						</div>
-					</div>
-					<div class="text">This is an example of a complex marker which can contain html, video, images, css, and animations.</div>
 				</div>
 			</div>
 		</div>
@@ -1094,28 +981,8 @@ Customize this sample template as needed to meet your use case and fit the scree
 <cq-side-panel></cq-side-panel>
 </cq-context>
 
-<!-- build:module -->
-<script src="js/core/utility.js"></script>
-<script src="js/core/timezone.js"></script>
-<script src="js/core/core.js"></script>
-<script src="js/core/market.js"></script>
-<script src="js/core/engine.js"></script>
-<script src="js/core/microkernel.js"></script>
-<script src="js/span.js"></script>
-<script src="js/quoteFeed.js"></script>
-<script src="js/studies.js"></script>
-<script src="js/drawing.js"></script>
-<script src="js/i18n.js"></script>
-<script src="js/customCharts.js"></script>
-<script src="js/markers.js"></script>
-<script src="js/advanced/aggregations.js"></script>
-<script src="js/advanced/drawingAdvanced.js"></script>
-<script src="js/advanced/equations.js"></script>
-<script src="js/advanced/renderersAdvanced.js"></script>
-<script src="js/advanced/studiesAdvanced.js"></script>
-<script src="js/advanced/share.js"></script>
-<!-- endbuild -->
-<!--<script src="js/thirdparty/splines.js"></script>-->
+<script src="js/chartiq.js"></script>
+<script src="js/thirdparty/splines.js"></script>
 <script src="js/symbolLookup.js"></script>
 <script src="js/quoteFeedSimulator.js"></script>
 <script src="js/translations.js"></script>
@@ -1125,54 +992,13 @@ Customize this sample template as needed to meet your use case and fit the scree
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="js/thirdparty/perfect-scrollbar.jquery.js"></script>
 <script src="js/componentUI.js"></script>
+<script src="js/components.js"></script>
 <script src="js/thirdparty/html2canvas.js"></script>
 <!-- comment in the following lines if you are using these plugins -->
 <!-- <script src="plugins/tradingcentral/components.js"></script> -->
-<!-- <script src="plugins/tfc/tfc-loader.js"></script> -->
+<script src="plugins/tfc/tfc-loader.js"></script>
 <!-- <script src="plugins/scriptiq/scriptiq.js"></script> -->
-<!-- <script src="plugins/cryptoiq/cryptoiq.js"></script> -->
-<!-- build:components -->
-<script src="js/components/dialog.js"></script>
-<script src="js/components/view-dialog.js"></script>
-<script src="js/components/scroll.js"></script>
-<script src="js/components/advertisement.js"></script>
-<script src="js/components/attribution.js"></script>
-<script src="js/components/chart-title.js"></script>
-<script src="js/components/clickable.js"></script>
-<script src="js/components/close.js"></script>
-<script src="js/components/comparison.js"></script>
-<script src="js/components/fib-settings-dialog.js"></script>
-<script src="js/components/language-dialog.js"></script>
-<script src="js/components/loader.js"></script>
-<script src="js/components/lookup.js"></script>
-<script src="js/components/undo.js"></script>
-<script src="js/components/redo.js"></script>
-<script src="js/components/show-range.js"></script>
-<script src="js/components/side-panel.js"></script>
-<script src="js/components/drawing-context.js"></script>
-<script src="js/components/study-context.js"></script>
-<script src="js/components/swatch.js"></script>
-<script src="js/components/theme-dialog.js"></script>
-<script src="js/components/theme-piece.js"></script>
-<script src="js/components/themes.js"></script>
-<script src="js/components/timezone-dialog.js"></script>
-<script src="js/components/toggle.js"></script>
-<script src="js/components/toolbar.js"></script>
-<script src="js/components/cvp-controller.js"></script>
-<script src="js/components/views.js"></script>
-<script src="js/components/studies.js"></script>
-<script src="js/components/menu.js"></script>
-<script src="js/components/menu-dropdown.js"></script>
-<script src="js/components/share-button.js"></script>
-<script src="js/components/share-dialog.js"></script>
-<script src="js/components/aggregation-dialog.js"></script>
-<script src="js/components/color-picker.js"></script>
-<script src="js/components/study/studyDialog.js"></script>
-<script src="js/components/study/studyInput.js"></script>
-<script src="js/components/study/studyLegend.js"></script>
-<script src="js/components/study/studyOutput.js"></script>
-<script src="js/components/study/studyParameter.js"></script>
-<!-- endbuild -->
+<script src="plugins/cryptoiq/cryptoiq.js"></script>
 
 <script>
 
@@ -1206,7 +1032,7 @@ function checkWidth() {
 
 function setHeight() {
 	var windowHeight=$(window).height();
-	var ciqHeight = $('.ciq-chart').height();
+	var ciqHeight = $(stxx.chart.container).parent('.ciq-chart').height();
 
 	if ($('body').hasClass("toolbar-on")) {
 		$(stxx.chart.container).height(ciqHeight - 45);
@@ -1218,7 +1044,7 @@ function setHeight() {
 	$('head').append('<style id="maxHeightCSS">cq-dialog { max-height: ' +  windowHeight + 'px }</style>');
 }
 
-
+//** remove if not using markers
 var circleEvent=$(".stx-markers cq-item.circle");
 circleEvent[0].selectFC=function(){
 	$(".stx-markers .ciq-radio").removeClass("ciq-active");
@@ -1227,6 +1053,7 @@ circleEvent[0].selectFC=function(){
 };
 circleEvent.stxtap(circleEvent[0].selectFC);
 
+//** remove if not using markers
 var squareEvent=$(".stx-markers cq-item.square");
 squareEvent[0].selectFC=function(){
 	$(".stx-markers .ciq-radio").removeClass("ciq-active");
@@ -1235,6 +1062,7 @@ squareEvent[0].selectFC=function(){
 };
 squareEvent.stxtap(squareEvent[0].selectFC);
 
+//** remove if not using markers
 var calloutEvent=$(".stx-markers cq-item.callout");
 calloutEvent[0].selectFC=function(){
 	$(".stx-markers .ciq-radio").removeClass("ciq-active");
@@ -1243,26 +1071,7 @@ calloutEvent[0].selectFC=function(){
 };
 calloutEvent.stxtap(calloutEvent[0].selectFC);
 
-var abstractEvent=$(".stx-markers cq-item.abstract");
-abstractEvent[0].selectFC=function(){
-	$(".stx-markers .ciq-radio").removeClass("ciq-active");
-	abstractEvent.find($(".ciq-radio")).addClass("ciq-active");
-	hideMarkers();
-	var helicopter=$(".stx-marker.abstract").clone();
-	helicopter.css({"z-index":"30","left":(0.4*stxx.chart.width).toString()+"px"});
-	var marker=new CIQ.Marker({
-		stx: stxx,
-		xPositioner:"none",
-		yPositioner:"above_candle",
-		label: "helicopter",
-		permanent: true,
-		chartContainer: true,
-		node: helicopter[0]
-	});
-	stxx.draw(); // call draw() when you're done adding markers. They will be positioned in batch.
-};
-abstractEvent.stxtap(abstractEvent[0].selectFC);
-
+//** remove if not using markers
 var noneEvent=$(".stx-markers cq-item.none");
 noneEvent[0].selectFC=function(){
 	$(".stx-markers .ciq-radio").removeClass("ciq-active");
@@ -1274,33 +1083,34 @@ noneEvent.stxtap(noneEvent[0].selectFC);
 var stxx=new CIQ.ChartEngine({container:$(".chartContainer")[0], preferences:{labels:false, currentPriceLine:true, whitespace:0}});
 stxx.setDrawingContainer($$$('cq-toolbar'));
 
-// Attach an automated quote feed to the chart to handle initial load, pagination and updates at preset intervals.
+// **Attach an automated quote feed to the chart to handle initial load, pagination and updates at preset intervals.
 stxx.attachQuoteFeed(quoteFeedSimulator,{refreshInterval:1,bufferSize:200});
 
-// Optionally set a market factory to the chart to make it market hours aware. Otherwise it will operate in 24x7 mode.
-// This is required for the simulator, or if you intend to also enable Extended hours trading zones.
-// Please note that, this method is set to use the CIQ.Market.Symbology functions by default, 
-// which must be reviewed and adjust to comply with your quote feed and symbology format before they can be used.
+// **Optionally set a market factory to the chart to make it market hours aware. Otherwise it will operate in 24x7 mode.
+// **This is required for the simulator, or if you intend to also enable Extended hours trading zones.
+// **Please note that, this method is set to use the CIQ.Market.Symbology functions by default, 
+// **which must be reviewed and adjust to comply with your quote feed and symbology format before they can be used.
 stxx.setMarketFactory(CIQ.Market.Symbology.factory);
 
 // Extended hours trading zones -- Make sure this is instantiated before calling startUI as a timing issue with may occur
 new CIQ.ExtendedHours({stx:stxx, filter:true});
 
-// Floating tooltip on mousehover
-// comment in the following line if you want a tooltip to display when the crosshair toggle is turned on
-// This should be used as an *alternative* to the HeadsUP (HUD).
+// **Floating tooltip on mousehover
+// **Comment in the following line if you want a tooltip to display when the crosshair toggle is turned on.
+// **This should be used as an *alternative* to the HeadsUP (HUD).
 //new CIQ.Tooltip({stx:stxx, ohl:true, volume:true, series:true, studies:true});
 
-// Inactivity timer
+// **Inactivity timer
 new CIQ.InactivityTimer({stx:stxx, minutes:30});
 
-// Animation (using tension requires splines.js)
-//new CIQ.Animation(stxx, {tension:0.3});
+// **Animation (using tension requires splines.js)
+new CIQ.Animation(stxx, {tension:0.3});
 
 function restoreLayout(stx, cb){
 	var datum=CIQ.localStorage.getItem("myChartLayout");
 	//if(datum===null) return;  //commented to make sure cb is called even when no layout found
 	function closure(){
+		enableMarketDepth(stx);
 		restoreDrawings(stx, stx.chart.symbol);
 		if(cb) cb();
 	}
@@ -1368,7 +1178,7 @@ function startUI(){
 			data.symbol=data.symbol.toUpperCase(); // set a pretty display version
 
 
-		// reset comparisons - remove this loop to transfer from symbol to symbol.
+		// **Reset comparisons - remove this loop to transfer from symbol to symbol.
 		for(var field in stx.chart.series) {
 			// keep studies
 			if (stxx.chart.series[field].parameters.bucket != "study" ) stx.removeSeries(field);
@@ -1377,7 +1187,6 @@ function startUI(){
 		var self=this;
 		stx.newChart(data, null, null, function(err){
 			if(err){
-				// add 'symbol not found error' here if one needed.
 				if(self.loader) self.loader.hide();
 				return;
 
@@ -1395,8 +1204,8 @@ function startUI(){
 		context.changeSymbol(data);
 	});
 
-	// KeystrokeHub is attached to the "body" to be able to just start typing anywhere on the page to activate the chart's symbol input box. 
-	// Change to a different div tag if this behavior is too broad for your particular implementation.
+	// **KeystrokeHub is attached to the "body" to be able to just start typing anywhere on the page to activate the chart's symbol input box. 
+	// **Change to a different div tag if this behavior is too broad for your particular implementation.
 	var KeystrokeHub=new CIQ.UI.KeystrokeHub($("body"), UIContext, {cb:CIQ.UI.KeystrokeHub.defaultHotKeys});
 
 	var UIDrawingEdit = new CIQ.UI.DrawingEdit(null, UIContext);
@@ -1466,8 +1275,6 @@ function startUI(){
 			this.node.addClass("active");
 		}else if(value==="dynamic"){
 			if(CIQ.isMobile || this.context.stx.layout.crosshair){
-				// The dynamic headsUp doesn't make any sense on mobile devices so we skip that toggle
-				// by manually setting the toggle to "static"
 				this.set("static");
 				UIHeadsUpDynamic.end();
 				UIHeadsUpStatic.begin();
@@ -1496,8 +1303,6 @@ function startUI(){
 		var stx=this.context.stx;
 		stx.resizeChart();
 
-		// a little code here to remember what the previous drawing tool was
-		// and to re-enable it when the toolbar is reopened
 		if(value){
 			stx.changeVectorType(this.priorVectorType);
 		}else{
@@ -1546,7 +1351,6 @@ function startUI(){
 			"vchart":true
 		},
 		alwaysDisplayDialog: {"ma":true,"AVWAP":true},
-		/*dialogBeforeAddingStudy: {"rsi": true} // here's how to always show a dialog before adding the study*/
 	};
 
 	$("cq-studies").each(function(){
@@ -1560,7 +1364,6 @@ function startUI(){
 		restoreLayout(stxx, function(){
 			if(UIContext.loader) UIContext.loader.hide();
 
-			// study legend needs the chart layout restored before rendering
 			var studyLegend=$('cq-study-legend');
 			if(studyLegend.length) {
 				for(var i=0; i<studyLegend.length; i++) {
@@ -1570,7 +1373,8 @@ function startUI(){
 		});
 
 		if(!stxx.chart.symbol){
-			UIContext.UISymbolLookup.selectItem({symbol:"AAPL"}); // load an initial symbol
+			// **Load an initial symbol. Change to none or one of your choice
+			UIContext.UISymbolLookup.selectItem({symbol:"AAPL"}); 
 		}
 
 		CIQ.UI.begin();
@@ -1578,13 +1382,15 @@ function startUI(){
 
 	loadTheChart();
 
-	//CIQ.I18N.setLanguage(stxx, "zh");		// Optionally set a language for the UI, after it has been initialized, and translate.
+	// **Optionally set a language for the UI, after it has been initialized, and translate.
+	// CIQ.I18N.setLanguage(stxx, "zh");		
 
-	//Trade From Chart (TFC) - comment in if using module
-	//set account key to your custom account class, or leave as null to automatically load the Demo class (CIQ.Account.Demo)
-	// new CIQ.TFC({stx:stxx, account: null, context:UIContext});
+	// **Trade From Chart (TFC) - comment in if using module
+	// **Set account key to your custom account class, or leave as null to automatically load the Demo class (CIQ.Account.Demo)
+	new CIQ.TFC({stx:stxx, account: null, context:UIContext});
 }
 
+//** remove if not using markers
 function hideMarkers(){
 	CIQ.Marker.removeByLabel(stxx, "circle");
 	CIQ.Marker.removeByLabel(stxx, "square");
@@ -1592,8 +1398,8 @@ function hideMarkers(){
 	CIQ.Marker.removeByLabel(stxx, "helicopter");
 }
 
+//** Sample markers code needs to be linked to your data before it can be used
 function showMarkers(standardType){
-	// Remove any existing markers
 	hideMarkers();
 	var l=stxx.masterData.length;
 	// An example of a data array to drive the marker creation
@@ -1625,15 +1431,20 @@ function showMarkers(standardType){
 	stxx.draw();
 }
 
-//Range Slider; needs to be created before startUI() is called for custom themes to apply
+// **Range Slider; needs to be created before startUI() is called for custom themes to apply
 new CIQ.RangeSlider({stx:stxx});
 
-// cryptoIQ 
-// Market Depth plugin must be instantiated before startUI() is called for custom themes to apply.
-// Uncomment the following line to enable the cryptoIQ Market Depth panel:
-// new CIQ.MarketDepth({stx:stxx, volume:true, mountain:true, step:true, height:"50%", orderbook:true});
-// Uncomment the following line to enable the simulated L2 data loader.
-// CIQ.loadScript("example-feeds/L2_simulator.js", function(stx){return function(){CIQ.simulateL2({stx:stx, onInterval:1000, onTrade:true});};}(stxx));
+// **cryptoIQ 
+// **Market Depth plugin must be instantiated before startUI() is called for custom themes to apply.
+// **Uncomment the following line to enable the cryptoIQ Market Depth panel:
+function enableMarketDepth(stx){
+	stx.layout.marketDepth=true;
+	stx.changeOccurred("layout");
+}
+enableMarketDepth(stxx);
+new CIQ.MarketDepth({stx:stxx, volume:true, mountain:true, step:true, height:"40%", record:true, precedingContainer:"#marketDepthBookmark"});
+// **Uncomment the following line to enable the simulated L2 data loader.
+CIQ.loadScript("example-feeds/L2_simulator.js", function(stx){return function(){CIQ.simulateL2({stx:stx, onInterval:1000, onTrade:true});};}(stxx));
 // **In your implementation, you must instead load L2 data using https://documentation.chartiq.com/CIQ.ChartEngine.html#updateCurrentMarketData**
 
 function webComponentSupport() {

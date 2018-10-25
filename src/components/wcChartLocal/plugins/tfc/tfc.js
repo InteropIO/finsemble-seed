@@ -454,8 +454,10 @@ CIQ.Account.prototype.tradability=function(symbol, cb){
  * @constructor
  * @param {object} config Configuration object
  * @param {object} config.stx     The chart object to enable TFC.
- * @param {object} config.account Valid CIQ.Account object for querying brokerage and placing trades
+ * @param {object} [config.account] Valid CIQ.Account object for querying brokerage and placing trades.  If omitted, will be CIQ.Account.Demo (Demo account)
  * @param {object} [config.chart]   The specific chart (panel) for trading componentry. Defaults to the default chart.
+ * @param {object} [config.context] UI context for interaction between TFC and the UI (for example, switching the chart's symbol)
+ * @since 6.2.0 Added context parameter
  */
 CIQ.TFC=function(config){
 	if(!config.chart) config.chart=config.stx.chart;
@@ -798,6 +800,7 @@ CIQ.TFC.prototype.enableBuy=function(params){
 	this.initializeOrderPrice(params);
 	this.positionAtPrice(this.centerPrice, ["limitOrder","dragLineCenter"]);
 	this.elements.dragLineCenterPrice.innerHTML=this.formatPrice(this.centerPrice);
+	this.elements.dragLineCenterPrice.innerValue=this.formatPrice(this.centerPrice, false);
 
 	if(this.account.config.pts) this.elements.limitShares.value=1;
 	if(params && params.openOrder){
@@ -847,6 +850,7 @@ CIQ.TFC.prototype.enableSell=function(params){
 	this.initializeOrderPrice(params);
 	this.positionAtPrice(this.centerPrice, ["limitOrder","dragLineCenter"]);
 	this.elements.dragLineCenterPrice.innerHTML=this.formatPrice(this.centerPrice);
+	this.elements.dragLineCenterPrice.innerValue=this.formatPrice(this.centerPrice, false);
 
 	if(this.account.config.pts) this.elements.limitShares.value=1;
 	if(params && params.openOrder){
@@ -881,6 +885,7 @@ CIQ.TFC.prototype.enableShort=function(params){
 	this.initializeOrderPrice(params);
 	this.positionAtPrice(this.centerPrice, ["limitOrder","dragLineCenter"]);
 	this.elements.dragLineCenterPrice.innerHTML=this.formatPrice(this.centerPrice);
+	this.elements.dragLineCenterPrice.innerValue=this.formatPrice(this.centerPrice, false);
 
 	if(this.account.config.pts) this.elements.limitShares.value=1;
 	if(params && params.openOrder){
@@ -924,6 +929,7 @@ CIQ.TFC.prototype.enableCover=function(params){
 	this.initializeOrderPrice(params);
 	this.positionAtPrice(this.centerPrice, ["limitOrder","dragLineCenter"]);
 	this.elements.dragLineCenterPrice.innerHTML=this.formatPrice(this.centerPrice);
+	this.elements.dragLineCenterPrice.innerValue=this.formatPrice(this.centerPrice, false);
 
 	if(this.account.config.pts) this.elements.limitShares.value=1;
 	if(params && params.openOrder){
@@ -1242,17 +1248,21 @@ CIQ.TFC.prototype.updateValues=function(){
 			this.positionCenterLine(price);
 		}
 		if(this.elements.dragLineCenterPrice.innerHTML!=="") price=this.quantityFromValue(this.elements.dragLineCenterPrice.innerHTML);
+		if(this.activeInput=="currency"){
+			if(this.elements.limitShares.disabled){
+				this.activeInput="shares";
+			}else{
+				amount=this.quantityFromValue(this.elements.limitCurrency.value);
+				quantity=Math.round(amount/price);
+				CIQ.setValueIfNotActive(this.elements.limitShares, quantity);
+			}
+		}
 		if(this.activeInput=="shares"){
 			quantity=this.quantityFromValue(this.elements.limitShares.value);
 			amount=quantity*price;
 			if(amount > 0) {
 				CIQ.setValueIfNotActive(this.elements.limitCurrency, amount.toFixed(0));
 			}
-		}else if(this.activeInput=="currency"){
-			amount=this.quantityFromValue(this.elements.limitCurrency.value);
-			quantity=Math.round(amount/price);
-			CIQ.setValueIfNotActive(this.elements.limitShares, quantity);
-
 		}
 
 		if(amount) CIQ.setValueIfNotActive(this.elements.limitCurrency, CIQ.commas(amount.toFixed(2)));
@@ -1435,6 +1445,7 @@ CIQ.TFC.prototype.positionCenterLine=function(price, keepOnChart){
 	this.centerPrice=price;
 	this.positionAtPrice(this.centerPrice, ["limitOrder","dragLineCenter"], "center", null, keepOnChart);
 	this.elements.dragLineCenterPrice.innerHTML=this.formatPrice(this.centerPrice);
+	this.elements.dragLineCenterPrice.innerValue=this.formatPrice(this.centerPrice, false);
 	this.positionBelowLine(Math.min(this.centerPrice, this.belowPrice));
 	this.positionAboveLine(Math.max(this.centerPrice, this.abovePrice));
 };
@@ -1451,7 +1462,7 @@ CIQ.TFC.prototype.positionAboveLine=function(price, keepOnChart){
 	if(this.abovePrice<this.centerPrice) this.abovePrice=this.centerPrice;
 	this.positionAtPrice(this.abovePrice, ["dragLineAbove"], "center", null, keepOnChart);
 	this.elements.dragLineAbovePrice.innerHTML=this.formatPrice(this.abovePrice);
-	this.elements.dragLineAbovePrice.innerValue=this.abovePrice.toString();
+	this.elements.dragLineAbovePrice.innerValue=this.formatPrice(this.abovePrice, false);
 	if(this.activeTrade=="short" || this.activeTrade=="buy"){
 		this.positionAtPrice(this.abovePrice, ["otoAbove"], "bottom", ["limitOrder"], keepOnChart);
 	}else if(this.activeTrade=="strangle" || this.activeTrade=="straddle"){
@@ -1475,7 +1486,7 @@ CIQ.TFC.prototype.positionBelowLine=function(price, keepOnChart){
 	if(this.belowPrice>this.centerPrice) this.belowPrice=this.centerPrice;
 	this.positionAtPrice(this.belowPrice, ["dragLineBelow"], "center", null, keepOnChart);
 	this.elements.dragLineBelowPrice.innerHTML=this.formatPrice(this.belowPrice);
-	this.elements.dragLineBelowPrice.innerValue=this.belowPrice.toString();
+	this.elements.dragLineBelowPrice.innerValue=this.formatPrice(this.belowPrice, false);
 	if(this.activeTrade=="buy" || this.activeTrade=="short"){
 		this.positionAtPrice(this.belowPrice, ["otoBelow"], "top", ["limitOrder"], keepOnChart);
 	}else if(this.activeTrade=="strangle" || this.activeTrade=="straddle"){
@@ -1785,7 +1796,7 @@ CIQ.TFC.prototype.renderTrades=function(){
 
 /**
 	Positions the open orders on the screen at the appropriate location. If they are off the y-axis then they will pile up at the top
-	or bottom of the screen. If a marker overlaps another then it's width is extended so that it can be visible.
+	or bottom of the screen. If a marker overlaps another then its width is extended so that it can be visible.
 */
 
 CIQ.TFC.prototype.renderOpenOrders=function(){
@@ -1868,8 +1879,10 @@ CIQ.TFC.prototype.createOpenOrderMarker=function(openOrder, baseOrderMarker){
 	}
 	// parent node is the arrow as a whole
 	CIQ.safeClickTouch(priceNode.parentNode, function(self, whichMarker){return function(){self.crosshairsOn();self.modifyOpenOrder(whichMarker);};}(this, whichMarker));
-	CIQ.safeMouseOver(openOrderMarker, function(self){ return function(e){self.crosshairsOff();};}(this));
-	CIQ.safeMouseOut(openOrderMarker, function(self){ return function(e){self.crosshairsOn();};}(this));
+	openOrderMarker.addEventListener("mouseenter",function(self){ return function(e){self.crosshairsOff();};}(this));
+	openOrderMarker.addEventListener("mouseleave",function(self){ return function(e){self.crosshairsOn();};}(this));
+	//CIQ.safeMouseOver(openOrderMarker, function(self){ return function(e){self.crosshairsOff();};}(this));
+	//CIQ.safeMouseOut(openOrderMarker, function(self){ return function(e){self.crosshairsOn();};}(this));
 
 	if(openOrder.oto){
 		for(var i=0;i<openOrder.oto.length;i++){
@@ -2041,7 +2054,7 @@ CIQ.TFC.prototype.updateData=function(){
 					}else{
 						CIQ.newChild(tr, "TD", null, openOrder.quantity<0?"@SL":"@TP");
 					}
-					CIQ.newChild(tr, "TD", null, self.printablePrice({limit:openOrder.limit}));
+					CIQ.newChild(tr, "TD", null, openOrder.limit);
 					price=openOrder.limit;
 				}else if(openOrder.stop){
 					if(!openOrder.oco || (lastWasOco && openOrder.action!=openOrders[i-1].action) || (!lastWasOco && openOrder.id!=openOrder.oco && openOrder.action!=openOrders[i+1].action)){
@@ -2049,7 +2062,7 @@ CIQ.TFC.prototype.updateData=function(){
 					}else{
 						CIQ.newChild(tr, "TD", null, openOrder.quantity<0?"@TP":"@SL");
 					}
-					CIQ.newChild(tr, "TD", null, self.printablePrice({stop:openOrder.stop}));
+					CIQ.newChild(tr, "TD", null, openOrder.stop);
 					price=openOrder.stop;
 				}else if(openOrder.marketIfTouched){
 					CIQ.newChild(tr, "TD", null, "@MIT");
@@ -2086,11 +2099,11 @@ CIQ.TFC.prototype.updateData=function(){
 						price=0;
 						if(openOrder.oto[oto].limit){
 							CIQ.newChild(tr, "TD", null, openOrder.quantity<0?"@SL":"@TP");
-							CIQ.newChild(tr, "TD", null, self.printablePrice({limit:openOrder.oto[oto].limit}));
+							CIQ.newChild(tr, "TD", null, openOrder.oto[oto].limit);
 							price=openOrder.oto[oto].limit;
 						}else if(openOrder.oto[oto].stop){
 							CIQ.newChild(tr, "TD", null, openOrder.quantity<0?"@TP":"@SL");
-							CIQ.newChild(tr, "TD", null, self.printablePrice({stop:openOrder.oto[oto].stop}));
+							CIQ.newChild(tr, "TD", null, openOrder.oto[oto].stop);
 							price=openOrder.oto[oto].stop;
 						}
 						CIQ.newChild(tr, "TD");
@@ -2971,7 +2984,7 @@ CIQ.TFC.prototype.createOrderFromGUI=function(action){
 		order.quantity=this.quantityFromValue(this.elements.limitShares.value);
 		order.tif=this.elements.limitTIF.value;
 		var currentPrice=this.getCurrentPriceForOrder(order.action);
-		var centerPrice=this.quantityFromValue(this.elements.dragLineCenterPrice.innerHTML);
+		var centerPrice=this.quantityFromValue(this.elements.dragLineCenterPrice.innerValue);
 		if(!this.limitFlippedToMarket){
 			if(order.action=="buy" || order.action=="cover"){
 				if(centerPrice<=currentPrice) order.limit=centerPrice;
@@ -3064,7 +3077,7 @@ CIQ.TFC.prototype.createReplaceFromGUI=function(){
 		order.marketIfTouched.old=this.modifyingOrder.marketIfTouched;
 	}
 	var currentPrice=this.getCurrentPriceForOrder(order.action);
-	var centerPrice=this.quantityFromValue(this.elements.dragLineCenterPrice.innerHTML);
+	var centerPrice=this.quantityFromValue(this.elements.dragLineCenterPrice.innerValue);
 
 	if(order.action=="buy" || order.action=="cover"){
 		if(centerPrice<=currentPrice) order.limit["new"]=centerPrice;
@@ -3469,8 +3482,10 @@ CIQ.TFC.prototype.confirmOrPlaceOrder=function(type, action){
  * this.tradability.maxDecimalPlaces
  * @param  {number} price The price to format
  * @return {string}       The price formatted as text, fixed to the appropriate number of decimal places
+ * @param  {boolean} internationalize Normally this function will return an internationalized result.  Set this param to false to bypass.
+ * @since 6.1.0 Added internationalize argument
  */
-CIQ.TFC.prototype.formatPrice=function(price){
+CIQ.TFC.prototype.formatPrice=function(price, internationalize){
 	var p=price.toString();
 	if(this.tradability && (this.tradability.maxDecimalPlaces || this.tradability.maxDecimalPlaces===0)){
 		p=price.toFixed(this.tradability.maxDecimalPlaces);
@@ -3479,7 +3494,7 @@ CIQ.TFC.prototype.formatPrice=function(price){
 			// use the formatter as long as it is not a comparison, otherwise it will have '%' signs
 			p=this.stx.chart.yAxis.priceFormatter(this.stx, this.chart.panel, price);
 		}else{
-			p=this.stx.formatYAxisPrice(price, this.chart.panel);
+			p=this.stx.formatYAxisPrice(price, this.chart.panel, null, null, internationalize);
 		}
 	}
 	return p;
@@ -3822,12 +3837,12 @@ CIQ.TFC.prototype.construct=function(config){
 	//this.holder.style.overflow="hidden";
 	//this.stx.chart.container.appendChild(this.holder);
 	this.adjustMarker();
-	CIQ.ChartEngine.prototype.append("adjustPanelPositions", function(self){
+	this.stx.append("adjustPanelPositions", function(self){
 		return function(){
 			self.adjustMarker();
 		};
 	}(this));
-	CIQ.ChartEngine.prototype.append("doDisplayCrosshairs", function(self){
+	this.stx.append("doDisplayCrosshairs", function(self){
 		return function(){
 			//self.crosshairsOriginallyOn=this.layout.crosshair;
 		};
@@ -3845,14 +3860,16 @@ CIQ.TFC.prototype.construct=function(config){
 	this.dom.shadeAbove=$$$(".tfc-shade", container).cloneNode(true);
 	this.dom.shadeBelow=$$$(".tfc-shade", container).cloneNode(true);
 
-	function mb(self){ return function(e){self.modalBegin();};}
-	function me(self){ return function(e){self.modalEnd();};}
+	function mb(self){ return function(e){if(e.relatedTarget) self.modalBegin();};}
+	function me(self){ return function(e){if(e.relatedTarget) self.modalEnd();};}
 	for(var componentName in this.dom){
 		var component=this.dom[componentName];
 		this.holder.appendChild(component);
 		if(!(componentName in {shadeAbove:true,shadeBelow:true})){
-			CIQ.safeMouseOver(component, mb(this));
-			CIQ.safeMouseOut(component, me(this));
+			component.addEventListener("mouseenter",mb(this));
+			component.addEventListener("mouseleave",me(this));
+			//CIQ.safeMouseOver(component, mb(this));
+			//CIQ.safeMouseOut(component, me(this));
 		}
 	}
 	this.elements.marketBuy=$$$(".tfc-market-buy-action", this.dom.marketOrder);
@@ -4010,7 +4027,7 @@ CIQ.TFC.prototype.construct=function(config){
 	CIQ.safeClickTouch(this.elements.addOTOLimit, function(self) { return function(e){ self.addOTOLimit();};}(this), sharedParams);
 	CIQ.safeClickTouch(this.elements.removeOTOBelow, function(self) { return function(e){ self.removeOTOBelow();};}(this));
 
-	CIQ.ChartEngine.prototype.append("draw", function(self) { return function(){ self.render();};}(this));
+	this.stx.append("draw", function(self) { return function(){ self.render();};}(this));
 
 	sharedParams={"absorbDownEvent": false};
 	// http://stackoverflow.com/questions/19335109/ios-7-safari-os-locks-up-for-4-seconds-when-clicking-focusing-on-a-html-input

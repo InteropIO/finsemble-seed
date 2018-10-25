@@ -12,15 +12,21 @@
 	 * @param {object} params Parameters to control the heatmap itself
 	 * @param {string} params.panel The name of the panel to put the heatmap on
 	 * @param {string} params.name="Data" Name of the heatmap.
-	 * @param {number} params.height Height of each cell, in yaxis units.
+	 * @param {number} params.height Height of each cell, in yaxis units.  If omitted, will use (10 ^ 1-yAxis.printDecimalPlaces)
 	 * @param {number} params.widthFactor Width of each call as a percentage of the candleWidth, valid values are 0.00-1.00.
+	 * @param {boolean} params.showSize If heatmap cells are presented in array format, set to true to display the size as text within the cell.
 	 * @param {array} seriesParams Parameters to control color and opacity of each cell. Each array element of seriesParams is an object having the following members:
-	 * @param {string} field Name of the field in the dataSet to use for the part in the stack
-	 * @param {string} border_color Color to use to draw the border (null to not draw)
-	 * @param {string} color Color to use to fill (null to not draw)
-	 * @param {number} opacity Opacity to use to fill (0.0-1.0) or use alpha from colors
+	 * @param {string} seriesParams.field Name of the field in the dataSet to use for the part in the stack
+	 * @param {string} seriesParams.border_color Color to use to draw the border (null to not draw)
+	 * @param {string} seriesParams.color Color to use to fill (null to not draw)
+	 * @param {number|object} seriesParams.opacity Opacity to use to fill (0.0-1.0) or use alpha from colors.  Set to an object of the form {min:x,max:y}
+	 * 							to set opacity for each cell proportionally within that range, based on its percentage.
+	 * 							min - lowest opacity to use
+	 * 							max - highest opacity to use
 	 * @memberOf CIQ.ChartEngine
-	 * @since 2015-11-1
+	 * @since 
+	 * * <br>&bull; 2015-11-1
+	 * * <br>&bull; 6.2.0 Enhanced to allow array data of [price,size,alpha] so opacity can be individually set per cell
 	 */
 	CIQ.ChartEngine.prototype.drawHeatmap=function(params,seriesParams){
 		if(!seriesParams || !seriesParams.length) return;
@@ -34,6 +40,7 @@
 		this.getDefaultColor();
 		if(!params.name) params.name="Data";
 		if(!params.widthFactor) params.widthFactor=1;
+		if(!params.height) params.height=Math.pow(10,1-(c.decimalPlaces||c.chart.decimalPlaces));
 
 		var offset=0.5;
 		if(c.chart.tmpWidth<=1) offset=0;
@@ -42,17 +49,24 @@
 		var lineWidth=null;
 		//var cellCache={};
 
-		function drawCells(field, color, isBorder, widthFactor, myoffset){
+		function drawCells(field, color, opacity, isBorder, widthFactor, myoffset){
 			context.beginPath();
 			context.fillStyle=color;
 			context.strokeStyle=color;
 			var myCandleWidth=self.layout.candleWidth*widthFactor;
 			var xc=Math.floor(self.pixelFromBar(0, c.chart)-self.layout.candleWidth);
 			var x0,x1;
+			var opacityBounds;
+			if(typeof(opacity)=="number") context.globalAlpha=params.opacity;
+			if(typeof(opacity)=="object"){
+				opacityBounds={
+					minOpacity:opacity.min || 0,
+					maxOpacity:opacity.max || 1
+				};
+			}
 			for(var x=0;x<quotes.length;x++){
 				var quote=quotes[x];
-				if(!quote) continue;
-				if(quote.candleWidth) {
+				if(quote && quote.candleWidth) {
 					if(x===0) {
 						xc+=self.layout.candleWidth;
 					}else{
@@ -66,49 +80,62 @@
 				x1=xc + myCandleWidth/2 - myoffset;
 
 				if(x1-x0<2) x1=x0+1;
-				if(self.chart.transformFunc && quote.transform) quote=quote.transform;
+				if(!quote) continue;
+				// Removed, we don't transform the array
+				//if(self.chart.transformFunc && quote.transform) quote=quote.transform;
 				var cellValues=quote[field];
 				if(!cellValues) continue;
 				if(typeof cellValues=="number") cellValues=[cellValues];
 				for(var i=0;i<cellValues.length;i++){
 					//var v=cellCache[cellValues[i]];
 					//if(!v && v!==0) {
-					var	v=self.pixelFromTransformedValue(cellValues[i], c, yAxis);
-					//	cellCache[cellValues[i]]=v;
+					var value=cellValues[i];
+					var size=0;
+					if(value instanceof Array) {
+						if(opacityBounds){
+							context.globalAlpha=value[2]*opacityBounds.maxOpacity+
+												(1-value[2])*opacityBounds.minOpacity;
+						}
+						size=value[1];
+						value=value[0];
+					}
+					var	v=self.pixelFromPrice(value, c, yAxis);
+					//	cellCache[value]=v;
 					//}
 					if(!lineWidth){
-						var v1=self.pixelFromTransformedValue(cellValues[i]-params.height, c, yAxis);
+						var v1=self.pixelFromPrice(value-params.height, c, yAxis);
 						context.lineWidth=1;
 						height=v1-v;
 						halfHeight=height/2;
 						lineWidth=context.lineWidth;
 					}
 					if(isBorder){
-						var tc=v+halfHeight;
-						var bc=v-halfHeight;
-						context.moveTo(x0, tc);
-						context.lineTo(x0, bc);
-						context.lineTo(x1, bc);
-						context.lineTo(x1, tc);
-						context.lineTo(x0, tc);
+						var tc=v-halfHeight;
+						var bc=v+halfHeight;
+						context.rect(x0,tc,x1-x0,bc-tc);
 					}else{
 						context.fillRect(x0,v-halfHeight,x1-x0,height);
 					}
+					if(params.showSize && size){
+						context.textAlign="center";
+						context.fillText(size,(x1+x0)/2,v);
+					}
+					if(opacityBounds && (value instanceof Array)) context.globalAlpha=0;
 				}
 			}
 			if(isBorder) context.stroke();
+			context.globalAlpha=1;
 			context.closePath();
 		}
 
 		this.startClip(panelName);
 		var context=this.chart.context;
-		context.globalAlpha=params.opacity;
 
 		for(var sp=0;sp<seriesParams.length;sp++){
 			var param=seriesParams[sp];
-			drawCells(param.field, param.color, null, params.widthFactor, param.border_color?offset:-offset/4);
+			drawCells(param.field, param.color, param.opacity, null, params.widthFactor, param.border_color?offset:-offset/4);
 			if(param.border_color && this.layout.candleWidth>=2){
-				drawCells(param.field, param.border_color, true, params.widthFactor, offset);
+				drawCells(param.field, param.border_color, param.opacity, true, params.widthFactor, offset);
 			}
 		}
 
@@ -658,18 +685,22 @@
 	 * @param {CIQ.ChartEngine.YAxis} [params.yAxis=panel.yAxis] Set to specify an alternate y-axis
 	 * @param  {string} [params.field] Set to override the field to be plotted.  Default is chart.defaultPlotField which defaults to "Close"
 	 * @param  {string} [params.color] Set to override the color of the plot.
+	 * @param  {string} [params.lineWidth=4] Line thickness in pixels
 	 * @return {object} Data generated by the plot, such as colors used if a colorFunction was passed, and the vertices of the line (points).
 	 * @memberOf CIQ.ChartEngine
 	 * @example
 	 *	// call it from the chart menu provided in the sample templates
 	 *	<li stxToggle="stxx.setChartType('scatterplot')">Scatter Plot</li>
-	 * @since 5.1.0 added params argument, return value
+	 * @since 
+	 * * <br>&bull; 5.1.0 added params argument, return value
+	 * * <br>&bull; 6.2.0 Added lineWidth param
 	 */
 	CIQ.ChartEngine.prototype.scatter=function(panel,params){
 		var chart=panel.chart;
 		var quotes=chart.dataSegment;
 		var yValueCache=new Array(quotes.length);
 		var context=this.chart.context;
+		this.canvasColor("stx_scatter_chart");
 		if(!params) params={};
 		var field=params.field || chart.defaultPlotField;
 		var yAxis=params.yAxis || panel.yAxis;
@@ -677,41 +708,56 @@
 		var defaultPlotField=params.subField || chart.defaultPlotField || "Close";
 		this.startClip(panel.name);
 		context.beginPath();
-		context.lineWidth=4;
+		context.lineWidth=params.lineWidth || 4;
 		if(params.highlight) context.lineWidth*=2;
+		if(params.color) context.strokeStyle=params.color;
 		var t=yAxis.top;
 		var b=yAxis.bottom;
-		var xbase=panel.left-0.5*this.layout.candleWidth+this.micropixels-1;
+		var candleWidth=this.layout.candleWidth;
+		var xbase=panel.left-0.5*candleWidth+this.micropixels-1;
 		for(var x=0;x<=quotes.length;x++){
-			xbase+=this.layout.candleWidth;
+			xbase+=candleWidth/2;  //complete previous candle
+			candleWidth=this.layout.candleWidth;
+			xbase+=candleWidth/2;  // go to center of new candle
 			var quote=quotes[x];
 			if(!quote) continue;
+			if(quote.candleWidth) {
+				xbase+=(quote.candleWidth-candleWidth)/2;
+				candleWidth=quote.candleWidth;
+			}
 			if(!quote.projection){
 				if(chart.transformFunc && yAxis==chart.panel.yAxis && quote.transform) quote=quote.transform;
 				var scatter=quote[field];
 				if(scatter && scatter[defaultPlotField]!==undefined) scatter=scatter[defaultPlotField];
-				scatter=[scatter];
+				if(!(scatter instanceof Array)) scatter=[scatter];
 				if("Scatter" in quote) scatter=quote.Scatter;
 				for(var i=0;i<scatter.length;i++){
 					if(!scatter[i] && scatter[i]!==0) continue;
+					var price=scatter[i],weight=0;
+					if(scatter[i] instanceof Array) {
+						price=scatter[i][0];
+						weight=scatter[i][2];
+					}
 					var top;
 					if(overlayScaling){
-						top=overlayScaling.bottom - ((scatter[i]-overlayScaling.min)*overlayScaling.multiplier);
+						top=overlayScaling.bottom - ((price-overlayScaling.min)*overlayScaling.multiplier);
 					}else{
 						top=(yAxis.semiLog ?
-								this.pixelFromTransformedValue(scatter[i],panel,yAxis) :
-								((yAxis.high-scatter[i])*yAxis.multiplier)+t); // inline version of pixelFromTransformedValue() for efficiency
+								this.pixelFromTransformedValue(price,panel,yAxis) :
+								((yAxis.high-price)*yAxis.multiplier)+t); // inline version of pixelFromTransformedValue() for efficiency
 					}
 					if(top<t) continue;
 					if(top>b) continue;
-					context.moveTo(xbase-2, top);
-					context.lineTo(xbase+2, top);
+					var halfWidth=2;
+					if(weight){
+						halfWidth=candleWidth*weight;
+					}
+					context.moveTo(xbase-halfWidth, top);
+					context.lineTo(xbase+halfWidth, top);
 					yValueCache[x]=top;
 				}
 			}
 		}
-		this.canvasColor("stx_scatter_chart");
-		if(params.color) context.strokeStyle=params.color;
 		context.stroke();
 		context.closePath();
 		var rc={

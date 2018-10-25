@@ -184,7 +184,17 @@
 	};
 
 	/**
-	 * Set to true when need to hold mouse down to draw; set to false for click on/off draw.
+	 * Used to set the user behavior for creating drawings.
+	 * 
+	 * By default, a drawing is created with this sequence:
+	 * <br>`move crosshair to staring point` → `click` → `move crosshair to ending point` → `click`. 
+	 * > On a touch device this would be: 
+	 * > <br>q`move crosshair to staring point` → `tap` → `move crosshair to ending point` → `tap`. 
+	 * 
+	 * Set dragToDraw to `true` to create the drawing with the following alternate sequence:
+	 * <br>`move crosshair to staring point` → `mousedown` → `drag` → `mouseup` 
+	 * > On a touch device this would be:
+	 * > <br>`move crosshair to staring point` → `press` → `drag` → `release`.
 	 * 
 	 * This parameter may be set for all drawings, for a specific drawing type, or for a specific drawing instance. See examples.
 	 * @memberOf CIQ.Drawing
@@ -257,7 +267,7 @@
 	 * Called to render the drawing
 	 * @memberOf CIQ.Drawing
 	 */
-	CIQ.Drawing.prototype.render=function(context)					{alert("must implement render function!");};
+	CIQ.Drawing.prototype.render=function(context)					{console.warn("must implement render function!");};
 
 	/**
 	 * Called when a user clicks while drawing.
@@ -267,13 +277,13 @@
 	 * @return {boolean}                       Return true if the drawing is complete. Otherwise the kernel will continue accepting clicks.
 	 * @memberOf CIQ.Drawing
 	 */
-	CIQ.Drawing.prototype.click=function(context, tick, value)		{alert("must implement click function!");};
+	CIQ.Drawing.prototype.click=function(context, tick, value)		{console.warn("must implement click function!");};
 
 	/**
 	 * Called when the user moves while creating a drawing.
 	 * @memberOf CIQ.Drawing
 	 */
-	CIQ.Drawing.prototype.move=function(context, tick, value)		{alert("must implement move function!");};
+	CIQ.Drawing.prototype.move=function(context, tick, value)		{console.warn("must implement move function!");};
 
 	/**
 	 * Called when the user attempts to reposition a drawing. The repositioner is the object provided by {@link CIQ.Drawing.intersected}
@@ -292,31 +302,31 @@
 	 * For line based drawings, box should be checked. For area drawings (rectangles, circles) the point should be checked
 	 * @param  {number} tick               The tick in the dataSet representing the cursor point
 	 * @param  {number} value              The value (price) representing the cursor point
-	 * @param  {object} box				   x0,y0,x1,y1 representing an area around the cursor
+	 * @param  {object} box				   x0,y0,x1,y1,r representing an area around the cursor and the radius
 	 * @return {object}                    An object that contains information about the intersection.
 	 *                                     This object is passed back to {@link CIQ.Drawing.reposition} when repositioning the drawing.
 	 *                                     Return false or null if not intersected. Simply returning true will highlight the drawing.
 	 * @memberOf CIQ.Drawing
 	 */
-	CIQ.Drawing.prototype.intersected=function(tick, value, box)	{alert("must implement intersected function!");};
+	CIQ.Drawing.prototype.intersected=function(tick, value, box)	{console.warn("must implement intersected function!");};
 
 	/**
 	 * Reconstruct this drawing type from a serialization object
 	 * @memberOf CIQ.Drawing
 	 */
-	CIQ.Drawing.prototype.reconstruct=function(stx, obj)				{alert("must implement reconstruct function!");};
+	CIQ.Drawing.prototype.reconstruct=function(stx, obj)				{console.warn("must implement reconstruct function!");};
 
 	/**
 	 * Serialize a drawing into an object.
 	 * @memberOf CIQ.Drawing
 	 */
-	CIQ.Drawing.prototype.serialize=function()						{alert("must implement serialize function!");};
+	CIQ.Drawing.prototype.serialize=function()						{console.warn("must implement serialize function!");};
 
 	/**
 	 * Called whenever periodicity changes so that drawings can adjust their rendering.
 	 * @memberOf CIQ.Drawing
 	 */
-	CIQ.Drawing.prototype.adjust=function()							{alert("must implement adjust function!");};
+	CIQ.Drawing.prototype.adjust=function()							{console.warn("must implement adjust function!");};
 
 	/**
 	 * Returns the highlighted state. Set this.highlighted to the highlight state.
@@ -546,10 +556,10 @@
 	 * Determine whether the tick/value lie within the theoretical box outlined by this drawing's two points
 	 * @memberOf CIQ.Drawing.BaseTwoPoint
 	 */
-	CIQ.Drawing.BaseTwoPoint.prototype.boxIntersection=function(tick, value){
+	CIQ.Drawing.BaseTwoPoint.prototype.boxIntersection=function(tick, value, box){
 		if(!this.p0 || !this.p1) return false;
-		if(tick>Math.max(this.p0[0], this.p1[0]) || tick<Math.min(this.p0[0], this.p1[0])) return false;
-		if(value>Math.max(this.p0[1], this.p1[1]) || value<Math.min(this.p0[1], this.p1[1])) return false;
+		if(box.x0>Math.max(this.p0[0], this.p1[0]) || box.x1<Math.min(this.p0[0], this.p1[0])) return false;
+		if(box.y1>Math.max(this.p0[1], this.p1[1]) || box.y0<Math.min(this.p0[1], this.p1[1])) return false;
 		return true;
 	};
 
@@ -941,7 +951,7 @@
 		}*/
 		this.ta.focus();
 
-		if(CIQ.isAndroid && !CIQ.is_chrome){
+		if(CIQ.isAndroid && !CIQ.is_chrome && !CIQ.isFF){
 			// Android soft keyboard will cover up the lower half of the browser so if our
 			// annotation is in that area we temporarily scroll the chart container upwards
 			// The style.bottom of the chart container is reset in abort()
@@ -994,7 +1004,7 @@
 		var x=this.stx.pixelFromTick(tick, panel.chart);
 		var y=this.stx.pixelFromValueAdjusted(panel, tick, value);
 
-		if(x>=x0 && x<=x1 && y>=y0 && y<=y1) {
+		if(x+box.r>=x0 && x-box.r<=x1 && y+box.r>=y0 && y-box.r<=y1) {
 			this.highlighted=true;
 			return {
 				p0: CIQ.clone(this.p0),
@@ -1003,7 +1013,6 @@
 			};
 		}
 		return false;
-		//return this.boxIntersection(tick, value);
 	};
 
 	CIQ.Drawing.annotation.prototype.abort=function(){
@@ -1017,7 +1026,7 @@
 		//document.body.style.cursor="crosshair"; //Was interfering with undisplayCrosshairs().
 		this.stx.editingAnnotation=false;
 		CIQ.clearCanvas(this.stx.chart.tempCanvas, this.stx);
-		if(CIQ.isAndroid && !CIQ.is_chrome){
+		if(CIQ.isAndroid && !CIQ.is_chrome && !CIQ.isFF){
 			this.stx.chart.container.style.bottom=this.priorBottom;
 		}
 		CIQ.fixScreen();
@@ -1730,7 +1739,7 @@
 				};	
 			}
 		}
-		if(this.boxIntersection(tick, value)){
+		if(this.boxIntersection(tick, value, box)){
 			this.highlighted=true;
 			return {
 				action: "move",
@@ -1877,8 +1886,8 @@
 		var bottom=this.p1[1];
 		var top=this.p0[1]-(this.p1[1]-this.p0[1]);
 
-		if(tick>Math.max(left, right) || tick<Math.min(left, right)) return false;
-		if(value>Math.max(top, bottom) || value<Math.min(top, bottom)) return false;
+		if(box.x0>Math.max(left, right) || box.x1<Math.min(left, right)) return false;
+		if(box.y1>Math.max(top, bottom) || box.y0<Math.min(top, bottom)) return false;
 		this.highlighted=true;
 		return {
 			action: "move",

@@ -39,7 +39,6 @@
 
 	Menu.prototype.createdCallback=function(){
 		this.node=$(this);
-		this.activeClassName="stxMenuActive";
 		this.active=false;
 	};
 
@@ -94,7 +93,7 @@
 	Menu.prototype.show=function(params){
 		if(this.active) return;
 		this.active=true;
-		this.node.addClass(this.activeClassName);
+		this.node.addClass("stxMenuActive");
 		this.lift();
 		// For good measure, call resize on any nested scrollables to give them
 		// a chance to change their height and scrollbars
@@ -107,7 +106,7 @@
 	Menu.prototype.hide=function(){
 		if(!this.active) return;
 		this.unlift();
-		this.node.removeClass(this.activeClassName);
+		this.node.removeClass("stxMenuActive");
 		this.active=false;
 		// blur any input boxes that are inside the menu we're closing, to get rid of soft keyboard
 		$(this).find("input").each(function(){

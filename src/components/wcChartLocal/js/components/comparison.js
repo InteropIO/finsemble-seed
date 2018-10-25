@@ -188,9 +188,10 @@
 					var oldPrice=parseFloat(price.text());
 					var symbol=stx.chart.series[s].parameters.symbol;
 					var newPrice=q[symbol];
-					if(newPrice && (newPrice.Close || newPrice.Close===0)) newPrice=newPrice.Close;
+					var field=stx.chart.series[s].parameters.field || "Close";
+					if(newPrice && (newPrice[field] || newPrice[field]===0)) newPrice=newPrice[field];
 					if (!newPrice && newPrice!==0 && stx.chart.series[s].lastQuote)
-						newPrice=stx.chart.series[s].lastQuote.Close;
+						newPrice=stx.chart.series[s].lastQuote[field];
 					price.text(stx.padOutPrice(historical?"":newPrice));
 					if(historical) return;
 					if(typeof(price.attr("cq-animate"))!="undefined")
@@ -314,12 +315,17 @@
 		// don't allow symbol if same as main chart, comparison already exists, or just white space
 		var exists=stx.getSeries({symbolObject: obj});
 		for(var i=0;i<exists.length;i++)
-			if(exists[i].parameters.isComparison) return;
+			if(exists[i].parameters.isComparison) {
+				this.loading[obj.symbol]=false;
+				return;
+			}
 
 		// don't allow symbol if same as main chart or just white space
 		if (context.stx.chart.symbol.toLowerCase() !== obj.symbol.toLowerCase() &&
 				obj.symbol.trim().length > 0) {
 			stx.addSeries(obj.symbol, params, cb);
+		}else{
+			this.loading[obj.symbol]=false;
 		}
 	};
 

@@ -36,6 +36,7 @@
 			 </cq-placeholder>
 			 <cq-separator></cq-separator>
 			 <cq-placeholder>Mountain Color
+				 <cq-theme-piece cq-piece="mb"><cq-swatch></cq-swatch></cq-theme-piece>
 				 <cq-theme-piece cq-piece="mc"><cq-swatch></cq-swatch></cq-theme-piece>
 			 </cq-placeholder>
 		 </cq-section>
@@ -77,6 +78,7 @@
 	/**
 	 * @alias setColor
 	 * @memberof WebComponents.cq-swatch
+	 * @since 6.2.0 Colors strip out the opacity so they are the rgb representation
 	 */
 	Swatch.prototype.setColor=function(color, percolate){
 		var node=$(this);
@@ -86,6 +88,8 @@
 		var fillColor=color;
 		if(color=="auto"){
 			fillColor=this.getDefaultColor();
+		}else if(color.indexOf("rgba(")===0){  // strip out the alpha component
+			fillColor=fillColor.split(",").slice(0,3).join(",")+")";
 		}
 		var hslf=CIQ.hsl(fillColor);
 		if((Math.abs(hslb[2] - hslf[2])<0.2) || CIQ.isTransparent(color)){

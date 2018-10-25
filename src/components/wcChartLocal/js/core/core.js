@@ -346,7 +346,7 @@
 			div.addEventListener(CIQ.safeClickTouchEvent, fc4);
 			eventHolder[CIQ.safeClickTouchEvent]=fc4;
 			safeClickTouchEvents.push(eventHolder);
-		}else if("onpointerup" in document){
+		}else if(("onpointerup" in document) && !CIQ.noPointerEvents){
 			// Internet Explorer can always use pointerup safely
 			div.addEventListener("pointerdown", isClick(movementWatcher, true));
 			div.addEventListener("pointermove", isClick(movementWatcher));
@@ -482,12 +482,6 @@
 		div.addEventListener("touchstart", closure("touchstart"));
 		return safety;
 	};
-
-	if(CIQ.isSurface){
-		CIQ.gesture=new MSGesture();
-		CIQ.gesture.target=document.body;
-		CIQ.gesturePointerId=null;
-	}
 
 	/**
 	 * Captures enter key events. Also clears the input box on escape key.
@@ -1373,7 +1367,7 @@
 		canvas.isDirty=false;
 		var ctx=canvas.context;
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		if(CIQ.isAndroid && !CIQ.is_chrome){	// Android browser last remaining
+		if(CIQ.isAndroid && !CIQ.is_chrome && !CIQ.isFF){	// Android browser last remaining
 												// one to need this clearing method
 			if(CIQ.ChartEngine.useOldAndroidClear && stx){
 				ctx.fillStyle=stx.containerColor;
@@ -1538,10 +1532,10 @@
 	 * Condenses a number into abbreviated form by adding "k","m","b" or "t".
 	 * This method is used in the y-axis for example with volume studies.
 	 * @param  {number} txt - A numerical value
-	 * @return {string}     Condensed version of the number if over 999, otherwise returnes `txt` untouched
+	 * @return {string}     Condensed version of the number if over 999, otherwise returns `txt` untouched
 	 * @example
 	 * // This will return 12m
-	 * condentInt(12000000);
+	 * condenseInt(12000000);
 	 * @memberof CIQ
 	 * @since 4.0.0 now returns `txt` untouched if under 1000. Previously was removing all decimal places.
 	 */
@@ -1737,6 +1731,7 @@
 	 * @param {boolean} [parameters.step] True for a step chart
 	 * @param {number} [parameters.tension] Tension for splining. Requires "js/thirdparty/splines.js"
 	 * @param {string} [parameters.color] The fill color
+	 * @param {boolean} [parameters.roundOffEdges] Round the first and last point's X value to the previous and next integer, respectively.
 	 * @param {CIQ.ChartEngine.YAxis} [parameters.yAxis] The y-axis for the band (will use default axis if not specified)
 	 * @memberof CIQ
 	 * @since
@@ -1765,6 +1760,10 @@
 		var points=[], length=rc.points.length;
 	    for(var i=0;i<length;i+=2){
 	    	var x=rc.points[i], y=rc.points[i+1], x1, y1;
+	    	if(parameters.roundOffEdges){  // round off to whole pixels so color interpolation does not occur when used with fillIntersection
+	    		if(i===0) x=Math.floor(x);	    		
+	    		else if(i+2==length) x=Math.ceil(x);
+	    	}
 	    	if(isNaN(y)) continue;
 	    	var limit=(y>yThresh && direction>0) || (y<yThresh && direction<0);
 	    	if(!limit) {
@@ -1922,7 +1921,8 @@
 			panelName: panel.name,
 			yAxis: parameters.topAxis,
 			skipTransform: parameters.skipTransform,
-			tension: parameters.tension
+			tension: parameters.tension,
+			roundOffEdges: true
 		};
 		CIQ.preparePeakValleyFill(stx, params);
 
@@ -1974,7 +1974,10 @@
 
 
 	/**
-	 * Draws a legend for the series that are displayed on the chart.
+	 * Default function to draw a legend for the series that are displayed on the chart.
+	 * 
+	 * See {@link CIQ.ChartEngine.Chart#legendRenderer} for activation and customization details.
+	 * 
 	 * @param {CIQ.ChartEngine} stx The chart object to draw
 	 * @param  {object} params parameters for drawing the legend
 	 * @param  {CIQ.ChartEngine.Chart} [params.chart] The chart object
@@ -2420,6 +2423,8 @@
 	 * console.log(helper.settings);
 	 * helper.settings.chart["Grid Lines"].color="rgba(255,0,0,.5)";
 	 * helper.update();
+	 * 
+	 * @since 6.2.0 Added support to control Mountain.basecolor.
 	 */
 	CIQ.ThemeHelper=function(params){
 		this.params=params;
@@ -2448,6 +2453,7 @@
 		this.settings.chartTypes.Line.color=CIQ.hexToRgba(stx.canvasStyle("stx_line_chart").color);
 
 		this.settings.chartTypes.Mountain.color=CIQ.hexToRgba(stx.canvasStyle("stx_mountain_chart").backgroundColor);
+		this.settings.chartTypes.Mountain.basecolor=CIQ.hexToRgba(stx.canvasStyle("stx_mountain_chart").color);
 	};
 
 	/**
@@ -2492,7 +2498,8 @@
 				"color":color11
 			},
 			"Mountain":{
-				"color":color12
+				"color":color12,
+				"basecolor":color13
 			}
 		}
 	 * @memberof CIQ.ThemeHelper
@@ -2535,7 +2542,8 @@
 				"color":null
 			},
 			"Mountain":{
-				"color":null
+				"color":null,
+				"basecolor":null
 			}
 		}
 	};
@@ -2550,6 +2558,7 @@
 	 * console.log(helper.settings);
 	 * helper.settings=NewSettings;
 	 * helper.update();
+	 * @since 6.2.0 Now setting basecolor and color of mountain chart with separate colors.
 
 	 */
 	CIQ.ThemeHelper.prototype.update=function(stx){
@@ -2602,9 +2611,9 @@
 
 		setStyle("stx_line_chart","color",this.settings.chartTypes.Line.color);
 
-		stx.setStyle("stx_mountain_chart","borderTopColor",this.settings.chartTypes.Mountain.color);
-		stx.setStyle("stx_mountain_chart","backgroundColor",CIQ.hexToRgba(this.settings.chartTypes.Mountain.color,0.8));
-		stx.setStyle("stx_mountain_chart","color",CIQ.hexToRgba(this.settings.chartTypes.Mountain.color,0.1));
+		stx.setStyle("stx_mountain_chart","borderTopColor",CIQ.hexToRgba(this.settings.chartTypes.Mountain.color,1));
+		stx.setStyle("stx_mountain_chart","backgroundColor",CIQ.hexToRgba(this.settings.chartTypes.Mountain.color,0.5));
+		stx.setStyle("stx_mountain_chart","color",CIQ.hexToRgba(this.settings.chartTypes.Mountain.basecolor,0.01));
 		stx.draw();
 	};
 
@@ -3119,20 +3128,29 @@
 	 * @memberof CIQ.Renderer
 	 * @since 5.2.0  `config.params.binding` parameter added.
 	 * @example
-		stxx.addSeries("NOK", {display:"NOK",width:4});
-		stxx.addSeries("SNE", {display:"Sony",width:4});
-
-		var axis=new CIQ.ChartEngine.YAxis();
-		axis.position="left";
-		axis.textStyle="#FFBE00";
-
-		var renderer=stxx.setSeriesRenderer(new CIQ.Renderer.Lines({params:{name:"lines", type:"mountain", yAxis:axis}}));
-
-		renderer.removeAllSeries()
-			.attachSeries("NOK", "#FFBE00")
-			.attachSeries("SNE", "#FF9300")
-			.ready();
-
+	 *	// add multiple series and attach to a custom y-axis on the left.
+	 *	// See this example working here : https://jsfiddle.net/chartiq/b6pkzrad
+	 *
+	 *	// note how the addSeries callback is used to ensure the data is present before the series is displayed
+	 *
+	 *	//create the custom axis
+	 *	var axis=new CIQ.ChartEngine.YAxis();
+	 *	axis.position="left";
+	 *	axis.textStyle="#FFBE00";
+	 *	axis.decimalPlaces=0;			// no decimal places on the axis labels
+	 *	axis.maxDecimalPlaces=0;		// no decimal places on the last price pointer
+	 *
+	 *	//create the renderer
+	 *	var renderer=stxx.setSeriesRenderer(new CIQ.Renderer.Lines({params:{name:"lines", type:"mountain", yAxis:axis}}));
+	 *
+	 *	// create your series and attach them to the chart when the data is loaded.
+	 *	stxx.addSeries("NOK", {display:"NOK",width:4},function(){
+	 *		renderer.attachSeries("NOK", "#FFBE00").ready();
+	 *	});
+	 *
+	 *	stxx.addSeries("SNE", {display:"Sony",width:4},function(){
+	 *		renderer.attachSeries("SNE", "#FF9300").ready();
+	 *	});
 	 */
 	CIQ.Renderer.prototype.construct=function(config){
 		if(!config) config={};
@@ -3176,19 +3194,29 @@
 	 * @since 5.1.0 added fillStyle, baseColor, bgColor parameters
 	 * @memberof CIQ.Renderer
 	 * @example
-		stxx.addSeries("NOK", {display:"NOK",width:4});
-
-		var axis=new CIQ.ChartEngine.YAxis();
-		axis.position="left";
-		axis.textStyle="#FFBE00";
-
-		var renderer=stxx.setSeriesRenderer(new CIQ.Renderer.Lines({params:{name:"lines", type:"mountain", yAxis:axis}}));
-
-		renderer.removeAllSeries()
-			.attachSeries("NOK", "#FFBE00")
-			.attachSeries("SNE", "#FF9300")
-			.ready();
-
+	 *	// add multiple series and attach to a custom y-axis on the left.
+	 *	// See this example working here : https://jsfiddle.net/chartiq/b6pkzrad
+	 *
+	 *	// note how the addSeries callback is used to ensure the data is present before the series is displayed
+	 *
+	 *	//create the custom axis
+	 *	var axis=new CIQ.ChartEngine.YAxis();
+	 *	axis.position="left";
+	 *	axis.textStyle="#FFBE00";
+	 *	axis.decimalPlaces=0;			// no decimal places on the axis labels
+	 *	axis.maxDecimalPlaces=0;		// no decimal places on the last price pointer
+	 *
+	 *	//create the renderer
+	 *	var renderer=stxx.setSeriesRenderer(new CIQ.Renderer.Lines({params:{name:"lines", type:"mountain", yAxis:axis}}));
+	 *
+	 *	// create your series and attach them to the chart when the data is loaded.
+	 *	stxx.addSeries("NOK", {display:"NOK",width:4},function(){
+	 *		renderer.attachSeries("NOK", "#FFBE00").ready();
+	 *	});
+	 *
+	 *	stxx.addSeries("SNE", {display:"Sony",width:4},function(){
+	 *		renderer.attachSeries("SNE", "#FF9300").ready();
+	 *	});
 	 */
 	CIQ.Renderer.prototype.attachSeries=function(id, parameters){
 		var stx=this.stx;
@@ -3230,7 +3258,7 @@
 			sp.subField=sp.field;
 			sp.field=sp.symbol;
 		}
-		if(!sp.symbol && !sp.field && !this.highLowBars) sp.field="Close";
+		//if(!sp.symbol && !sp.field && !this.highLowBars) sp.field="Close";
 		if(!sp.id) sp.id=CIQ.uniqueID();
 
 		var i = 0;
@@ -3258,6 +3286,7 @@
 	/**
 	 * Removes a series from the renderer. The yAxis and actual series data will also be removed if no longer used by any other renderers.
 	 * When the last series is removed from the renderer, the chart it is attached to will remove the renderer.
+	 * Will [reset comparisons]{@link CIQ.ChartEngine#setComparison} if there are no more comparisons on the chart if {@link CIQ.ChartEngine.Chart#forcePercentComparison} is true.
 	 * @param  {string} id          The field name of the series.
 	 * @param  {boolean} [preserveSeries=false] Set to true to keep the series data in the CIQ.ChartEngine object.
 	 * @return {CIQ.Renderer}                A copy of this for chaining
@@ -3266,14 +3295,20 @@
 	 * <br>&bull; 2015-07-01 'preserveSeries' is now available
 	 * <br>&bull; 3.0.0 series is now removed even if series parameter 'permanent' is set to true. The permanent parameter only prevents right click user interaction and not programmatically requested removals.
 	 * <br>&bull; 4.0.0 series data is now totally removed from masterData if no longer used by any other renderers.
+	 * <br>&bull; 6.2.0 No longer force 'percent'/'linear', when adding/removing comparison series, respectively, unless {@link CIQ.ChartEngine.Chart#forcePercentComparison} is true. This allows for backwards compatibility with previous UI modules.
 	 */
 	CIQ.Renderer.prototype.removeSeries=function(id, preserveSeries){
+		var spliceIndex=null,comparing=false;
 		for(var sp=0;sp<this.seriesParams.length;sp++){
-			if(this.seriesParams[sp].id==id){
-				this.seriesParams.splice(sp,1);
-				break;
-			}
+			var seriesParams=this.seriesParams[sp];
+			if(seriesParams.id==id) spliceIndex=sp;
+			else if(seriesParams.isComparison) comparing=true;
 		}
+		if(spliceIndex!==null) this.seriesParams.splice(spliceIndex,1);
+		var chart=this.stx.chart;
+		if(!comparing && chart.forcePercentComparison && this.params.panel==chart.panel.name && (!this.params.yAxis || this.params.yAxis==chart.yAxis))
+			this.stx.setChartScale();
+
 		delete this.colors[id+" up"];
 		delete this.colors[id+" dn"];
 		delete this.colors[id];
@@ -3281,8 +3316,8 @@
 		if(!preserveSeries){
 			//if(!this.stx.chart.series[id] || !this.stx.chart.series[id].parameters.permanent){
 				var seriesInUse=false;
-				for(var plot in this.stx.chart.seriesRenderers){
-					var myPlot=this.stx.chart.seriesRenderers[plot];
+				for(var plot in chart.seriesRenderers){
+					var myPlot=chart.seriesRenderers[plot];
 					for(var s=0;s<myPlot.seriesParams.length;s++){
 						if(myPlot.seriesParams[s].id==id) {
 							seriesInUse=true;
@@ -3372,24 +3407,29 @@
 	 * <br>&bull; 5.1.0 added highlightable, overChart, step, baseline, vertex, style, colored, and colorFunction parameters
 	 *
 	 * @example
-		// create series for the renderer
-		stxx.addSeries("NOK", {display:"NOK",width:4});
-		stxx.addSeries("SNE", {display:"Sony",width:4});
-
-		// create the y axis to assign to the renderer
-		var axis=new CIQ.ChartEngine.YAxis();
-		axis.position="left";
-		axis.textStyle="#FFBE00";
-
-		// create a renderer and associate it to the chart
-		var renderer=stxx.setSeriesRenderer(new CIQ.Renderer.Lines({params:{name:"lines", type:"mountain", yAxis:axis}}));
-
-		// remove all series form the renderer (not always needed) , attach new series, and render.
-		renderer.removeAllSeries()
-			.attachSeries("NOK", "#FFBE00")
-			.attachSeries("SNE", "#FF9300")
-			.ready();
-
+	 *	// add multiple series and attach to a custom y-axis on the left.
+	 *	// See this example working here : https://jsfiddle.net/chartiq/b6pkzrad
+	 *
+	 *	// note how the addSeries callback is used to ensure the data is present before the series is displayed
+	 *
+	 *	//create the custom axis
+	 *	var axis=new CIQ.ChartEngine.YAxis();
+	 *	axis.position="left";
+	 *	axis.textStyle="#FFBE00";
+	 *	axis.decimalPlaces=0;			// no decimal places on the axis labels
+	 *	axis.maxDecimalPlaces=0;		// no decimal places on the last price pointer
+	 *
+	 *	//create the renderer
+	 *	var renderer=stxx.setSeriesRenderer(new CIQ.Renderer.Lines({params:{name:"lines", type:"mountain", yAxis:axis}}));
+	 *
+	 *	// create your series and attach them to the chart when the data is loaded.
+	 *	stxx.addSeries("NOK", {display:"NOK",width:4},function(){
+	 *		renderer.attachSeries("NOK", "#FFBE00").ready();
+	 *	});
+	 *
+	 *	stxx.addSeries("SNE", {display:"Sony",width:4},function(){
+	 *		renderer.attachSeries("SNE", "#FF9300").ready();
+	 *	});
 	 *
 	 * @example
 		// This is an example on how completely remove a renderer and all associated data.

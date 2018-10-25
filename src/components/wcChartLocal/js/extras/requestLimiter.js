@@ -8,8 +8,8 @@
 	Including this file will allow you to limit the number of outbound requests to any specific domain.
 	Set CIQ.Extras.RequestLimiter.outboundAjaxLimit to a non-zero value to limit the requests per second to that value.
 	When a limit is exceeded, the callback function is passed an status=429,
-	Set CIQ.Extras.RequestLimiter.logToConsole to have the requests made that second output to the console.
-	Set CIQ.Extras.RequestLimiter.logToServer to a URL to have the requests made that second POSTed there.
+	Set CIQ.Extras.RequestLimiter.logToConsole to have the requests made that second, output to the console.
+	Set CIQ.Extras.RequestLimiter.logToServer to a URL to have the requests made that second, POSTed there.
 */
 
 (function (definition) {

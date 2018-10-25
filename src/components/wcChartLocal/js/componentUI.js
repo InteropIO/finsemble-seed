@@ -899,7 +899,7 @@
 		// web component ancestor to the actual binding.
 		for(var i=scheduledBindings.length-1;i>=0;i--){
 			var binding=scheduledBindings[i];
-			if(binding.node.ciqAlreadyBound) continue; // a node can only be bound once in it's lifetime
+			if(binding.node.ciqAlreadyBound) continue; // a node can only be bound once in its lifetime
 			binding.contextTag.bind.call(binding.contextTag, binding.node);
 			binding.node.ciqAlreadyBound=true;
 		}
@@ -1384,6 +1384,11 @@
 	 * @param {object} params
 	 */
 	CIQ.Marker.HeadsUp.placementFunction = function(params) {
+
+		function getBottomPixel(stx, panel, containerHeight, price) {
+			return Math.round(containerHeight - stx.pixelFromPrice(price, panel));
+		}
+
 		var panel = params.panel;
 		var chart = panel.chart;
 		var stx = params.stx;
@@ -1402,7 +1407,7 @@
 				node.removeClass(params.showClass);
 				return;
 			}
-			// always show the hud even if the crosshair toggle or a drawing tool is selected
+			// show the hud if on, except if the crosshair is on or a drawing tool is selected
 			if (stx.layout.crosshair || stx.currentVectorParameters.vectorType) {
 				node.removeClass(params.showClass);
 				return;
@@ -1410,6 +1415,11 @@
 			var quote = chart.dataSet[marker.params.x];
 			var x = stx.pixelFromTick(marker.params.x);
 			if (!quote || x<chart.left || x > chart.right) {
+				node.removeClass(params.showClass);
+				return;
+			}
+			// gap bar, hide HUD
+			if (!quote[stx.chart.defaultPlotField] && quote[stx.chart.defaultPlotField]!==0) {
 				node.removeClass(params.showClass);
 				return;
 			}
@@ -1459,10 +1469,6 @@
 		}
 	};
 
-
-	function getBottomPixel(stx, panel, containerHeight, price) {
-		return Math.round(containerHeight - stx.pixelFromPrice(price, panel));
-	}
 
 
 	/**
@@ -1604,31 +1610,39 @@
 
 		function printValues(){
 			self.timeout=null;
-			node.find("cq-hu-price").text("");
-			node.find("cq-hu-open").text("");
-			node.find("cq-hu-close").text("");
-			node.find("cq-hu-high").text("");
-			node.find("cq-hu-low").text("");
-			node.find("cq-hu-date").text("");
-			node.find("cq-hu-volume").text("");
+			node.find("cq-hu-price").text("N/A");
+			node.find("cq-hu-open").text("N/A");
+			node.find("cq-hu-close").text("N/A");
+			node.find("cq-hu-high").text("N/A");
+			node.find("cq-hu-low").text("N/A");
+			node.find("cq-hu-date").text("N/A");
+			node.find("cq-hu-volume").text("N/A");
 			node.find("cq-volume-rollup").text("");
+			function valOrNA(text){
+				return (CIQ.isValidNumber(parseFloat(text))?text:"N/A");
+			}
 			if(prices){
 				if(prices.data){
-					node.find("cq-hu-open").text(stx.formatPrice(prices.data.Open));
-					node.find("cq-hu-price").text(stx.formatPrice(prices.data[plotField]));
-					node.find("cq-hu-close").text(stx.formatPrice(prices.data.Close));
-					node.find("cq-hu-high").text(stx.formatPrice(prices.data.High));
-					node.find("cq-hu-low").text(stx.formatPrice(prices.data.Low));
+					var quote=CIQ.clone(prices.data);
+					if(quote.Open===undefined) quote.Open=quote.Close;
+					if(quote.High===undefined) quote.High=Math.max(quote.Open, quote.Close);
+					if(quote.Low===undefined) quote.Low=Math.min(quote.Open, quote.Close);
 
-					var volume=CIQ.condenseInt(prices.data.Volume);
+					node.find("cq-hu-open").text(valOrNA(stx.formatPrice(quote.Open)));
+					node.find("cq-hu-price").text(valOrNA(stx.formatPrice(quote[plotField])));
+					node.find("cq-hu-close").text(valOrNA(stx.formatPrice(quote.Close)));
+					node.find("cq-hu-high").text(valOrNA(stx.formatPrice(quote.High)));
+					node.find("cq-hu-low").text(valOrNA(stx.formatPrice(quote.Low)));
+
+					var volume=CIQ.condenseInt(quote.Volume);
 					var rollup=volume.charAt(volume.length-1);
 					if(rollup>'9'){
 						volume=volume.substring(0,volume.length-1);
 						node.find("cq-volume-rollup").text(rollup.toUpperCase());
 					}
 					node.find("cq-hu-volume").text(volume);
-					var tickDate = prices.data.displayDate;
-					if (!tickDate) tickDate = prices.data.DT;
+					var tickDate = quote.displayDate;
+					if (!tickDate) tickDate = quote.DT;
 					if(stx.internationalizer){
 						if (CIQ.ChartEngine.isDailyInterval(stx.layout.interval)){
 							node.find("cq-hu-date").text(stx.internationalizer.yearMonthDay.format(tickDate));
@@ -1645,12 +1659,12 @@
 					}
 					var visuals=node.find("cq-volume-visual");
 					if(visuals.length){
-						var relativeCandleSize=self.maxVolume.value?prices.data.Volume/self.maxVolume.value:0;
+						var relativeCandleSize=self.maxVolume.value?quote.Volume/self.maxVolume.value:0;
 						visuals.css({"width":Math.round(relativeCandleSize*100)+"%"});
 					}
 				}
 				if(currentQuote && currentQuote[plotField] && self.tick==stx.chart.dataSet.length-1){
-					node.find("cq-hu-price").text(stx.formatPrice(currentQuote[plotField]));
+					node.find("cq-hu-price").text(valOrNA(stx.formatPrice(currentQuote[plotField])));
 				}
 			}
 		}
@@ -1672,6 +1686,471 @@
 		self.marker.render();
 	};
 
+	CIQ.UI.DrawingEdit=DrawingEdit;
+
+	/**
+	 * UI Helper to allow drawings to be edited, cloned, or deleted with a context menu via <cq-drawing-context>.
+	 *
+	 * @name CIQ.UI.DrawingEdit
+	 * @param {HTMLElement} [node=context.topNode] Automatically attaches to the top node of the context
+	 * @param {CIQ.UI.Context} context The context for the chart
+	 * @constructor
+	 * @example <caption>Required DOM</caption>
+	 * <cq-dialog>
+	 * 	<cq-drawing-context>
+	 * 		<div stxtap="DrawingEdit.edit()">Edit</div>
+	 * 		<div stxtap="DrawingEdit.clone()">Clone</div>
+	 * 		<div stxtap="DrawingEdit.remove()">Delete</div>
+	 * 	</cq-drawing-context>
+	 * </cq-dialog>
+	 *
+	 * @example <caption>Edit state attribute, value is the tool name</caption>
+	 * <cq-toolbar cq-drawing-edit="none"></cq-toolbar>
+	 *
+	 * @since 6.2.0
+	 */
+	function DrawingEdit(node, context) {
+		var stx = context.stx;
+		var $node = $(node || context.topNode);
+
+		this.node = $node[0];
+		this.context = context;
+		this.callbacks = [];
+		this.editing = null;
+		this.drawingContext = $('cq-drawing-context');
+		this.cvpController = $node.find('cq-cvp-controller');
+		this.toolbar = $node.find('cq-toolbar');
+		this.toolbar.on('change', onToolbarChangeEditOrEnd(stx, this));
+		this.count = stx.drawingObjects.length;
+
+		context.advertiseAs(this, 'DrawingEdit');
+		stx.addEventListener('drawing', onDrawingEndEdit(this));
+		stx.addEventListener('drawingEdit', onDrawingEditShowContext(this));
+
+		$node.find('cq-toolbar .ciq-drawing-edit-only:has(.ciq-btn)')
+			.hover(onButtonHoverHighlightDrawing(stx, this));
+	}
+
+	DrawingEdit.ciqInheritsFrom(CIQ.UI.Helper);
+
+	/**
+	 * Listens for the "change" event from the <cq-toolbar> component.
+	 * Applies the new currentVectorParameters to the drawing in edit mode.
+	 * @param {CIQ.ChartEngine} stx
+	 * @param {CIQ.UI.DrawingEdit} self
+	 * @returns {Function}
+	 * @private
+	 */
+	function onToolbarChangeEditOrEnd(stx, self) {
+		return function /* onChange */() {
+			if (!self.editing) return;
+			if (self.editing.name !== stx.currentVectorParameters.vectorType) {
+				self.endEdit(null, 'tool');
+				return;
+			}
+			self.editing.copyConfig();
+			stx.draw();
+			stx.changeOccurred('vector');
+		};
+	}
+
+	/**
+	 * Listens for the "drawing" event from the CIQ.ChartEngine instance.
+	 * Ends the edit mode when a drawing is deleted.
+	 * @param {CIQ.UI.DrawingEdit} self
+	 * @returns {Function}
+	 * @private
+	 */
+	function onDrawingEndEdit(self) {
+		return function /* stx:onDrawing */(params) {
+			var count = params.drawings.length;
+
+			if (self.count !== count) {
+				self.endEdit(null, 'count');
+				self.count = count;
+			}
+		};
+	}
+
+	/**
+	 * Listens for the "drawingEdit" event from the CIQ.ChartEngine instance.
+	 * When forceEdit is true, then edit mode is entered immediately, usually for touch devices.
+	 * Otherwise, the context menu is shown by passing the event parameters directly to {CIQ.UI.DrawingEdit#showContext}.
+	 * @param {CIQ.UI.DrawingEdit} self
+	 * @returns {Function}
+	 * @private
+	 */
+	function onDrawingEditShowContext(self) {
+		return function /* stx:onDrawingEdit */(params) {
+			if (params.forceEdit === true) {
+				self.endEdit(null, 'edit');
+				self.showToolbar(params.drawing);
+				self.beginEdit(params.drawing);
+			} else {
+				self.showContext(params);
+			}
+		};
+	}
+
+	/**
+	 * Listens for the "mouseenter" & "mouseleave" events from the done editing button.
+	 * Causes the edited drawing to be highlighted on hover.
+	 * @param {CIQ.ChartEngine} stx
+	 * @param {CIQ.UI.DrawingEdit} self
+	 * @returns {Function}
+	 * @private
+	 */
+	function onButtonHoverHighlightDrawing(stx, self) {
+		return function /* onHover */(event) {
+			var enter = event.type === 'mouseenter';
+			if (self.editing && self.editing.highlighted !== enter) {
+				self.editing.highlighted = enter;
+				stx.draw();
+			}
+		};
+	}
+
+	/**
+	 * Show the drawing context menu at the current cursor position.
+	 * Used internally by the DrawingEdit instance.
+	 *
+	 * @memberof CIQ.UI.DrawingEdit
+	 * @param {Object} params Object directly from the "drawingEdit" event.
+	 * @param {CIQ.Drawing} params.drawing The drawing to show the dialog for.
+	 * @since 6.2.0
+	 */
+	DrawingEdit.prototype.showContext=function(params) {
+		params.context = this.context;
+		params.x = CIQ.ChartEngine.crosshairX;
+		params.y = CIQ.ChartEngine.crosshairY;
+		this.count = this.context.stx.drawingObjects.length; // update to avoid race conditions
+		this.drawingContext.each(function() {
+			this.open(params);
+		});
+	};
+
+	DrawingEdit.prototype.getToolActivator=function(tool) {
+		var menuitem = this.toolbar.find('cq-item[cq-tool="' + tool + '"]');
+		if (!menuitem.length) menuitem = this.toolbar.find('cq-item[stxtap="tool(\'' + tool + '\')"]');
+		return {
+			node: menuitem[0]
+		};
+	};
+
+	/**
+	 * Update all instances of <cq-toolbar> and dispatch a showToolbar event.
+	 * Used internally by the DrawingEdit instance.
+	 *
+	 * @memberof CIQ.UI.DrawingEdit
+	 * @param {CIQ.Drawing} drawing The vector instance to sync with the toolbar.
+	 * @since 6.2.0
+	 */
+	DrawingEdit.prototype.showToolbar=function(drawing) {
+		var self = this;
+		var activator = self.getToolActivator(drawing.name);
+		var node = self.node;
+
+		this.toolbar.each(function() {
+			var lineWidth = drawing.lineWidth;
+			var pattern = drawing.pattern;
+			var isFib = drawing.parameters && drawing instanceof CIQ.Drawing.fibonacci;
+
+			if (isFib) {
+				lineWidth = drawing.parameters.fibs[0].parameters.lineWidth;
+				pattern = drawing.parameters.fibs[0].parameters.pattern;
+			}
+
+			this.tool(activator, drawing.name);
+			this.sync({
+				lineWidth: lineWidth,
+				pattern: pattern,
+				annotation: {
+					font: drawing.font ? CIQ.clone(drawing.font) : {}
+				},
+				fillColor: drawing.fillColor,
+				currentColor: drawing.color,
+				axisLabel: drawing.axisLabel
+			});
+
+			self.cvpController.each(function() {
+				this.sync(drawing);
+			});
+
+			// tool called the drawing initializeParameters method, so we now need to override the defaults
+			if (isFib) {
+				this.context.stx.currentVectorParameters.fibonacci = CIQ.clone(drawing.parameters);
+			}
+		});
+	};
+
+	/**
+	 * Setup the given drawing for edit mode.
+	 * Used internally by the DrawingEdit instance.
+	 * @memberof CIQ.UI.DrawingEdit
+	 * @param {CIQ.Drawing} drawing The vector instance to synchronize with currentVectorParameters.
+	 * @fires CIQ.UI.DrawingEdit#drawing-edit-begin
+	 * @since 6.2.0
+	 * @example <caption>Hide elements during edit mode</caption>
+	 * <cq-toolbar cq-drawing-edit="segment">
+	 * 	<div class="ciq-drawing-edit-hidden">This element is hidden</div>
+	 * </cq-toolbar>
+	 */
+	DrawingEdit.prototype.beginEdit=function(drawing) {
+		// the property is enough, the editing is handled by <cq-toolbar>'s change event and the drawing copyConfig method
+		this.editing = drawing;
+		this.beforeEdit = CIQ.shallowClone(drawing);
+		this.toolbar.attr('cq-drawing-edit', drawing.name);
+
+		var beginEvent = null;
+		var detail = {
+			drawing: drawing,
+			tool: drawing.name
+		};
+
+		if (typeof CustomEvent === 'function') {
+			beginEvent = new CustomEvent('drawing-edit-begin', {
+				bubbles: true,
+				cancelable: true,
+				detail: detail
+			});
+		} else {
+			beginEvent = document.createEvent('CustomEvent');
+			beginEvent.initCustomEvent('drawing-edit-begin', true, true, detail);
+		}
+
+		/**
+		 * Drawing edit begin - the start of "edit mode" for a specific drawing.
+		 *
+		 * @event CIQ.UI.DrawingEdit#drawing-edit-begin
+		 * @type {CustomEvent}
+		 * @property {CIQ.Drawing} detail.drawing object to setup for editing
+		 * @property {string} detail.tool the vector type / tool name
+		 * @example <caption>Open the drawing toolbar</caption>
+		 * drawingEdit.node.addEventListener('drawing-edit-begin', function(event) {
+		 * 	if ($('body').hasClass('toolbar-on')) return;
+		 * 	$('.ciq-draw').each(function() {
+		 * 		this.priorVectorType = event.detail.tool;
+		 * 		this.set(true);
+		 * 	});
+		 * }, false);
+		 */
+		this.node.dispatchEvent(beginEvent);
+	};
+
+	/**
+	 * Teardown the current edit mode.
+	 * Used internally by the DrawingEdit instance. May also be used by the UI
+	 * to explicitly stop editing.
+	 *
+	 * @memberof CIQ.UI.DrawingEdit
+	 * @param {Object} activator not used, passed by stxtap binding
+	 * @param {string} action a friendly name that caused the edit mode to end
+	 * @fires CIQ.UI.DrawingEdit#drawing-edit-end
+	 * @example <caption>Button to manually end edit mode</caption>
+	 * <div class="ciq-drawing-edit-only" cq-section>
+	 * 	<div class="ciq-btn" stxtap="DrawingEdit.endEdit('close')">Done Editing</div>
+	 * </div>
+	 *
+	 * @since 6.2.0
+	 */
+	DrawingEdit.prototype.endEdit=function(activator, action) {
+		var stx = this.context.stx;
+		var endEvent = null;
+		var toolName = null;
+
+		if (this.editing) {
+			toolName = this.editing.name;
+
+			var detail = {
+				action: action,
+				drawing: this.editing,
+				tool: toolName
+			};
+
+			if (typeof CustomEvent === 'function') {
+				endEvent = new CustomEvent('drawing-edit-end', {
+					bubbles: true,
+					cancelable: true,
+					detail: detail
+				});
+			} else {
+				endEvent = document.createEvent('CustomEvent');
+				endEvent.initCustomEvent('drawing-edit-end', true, true, detail);
+			}
+
+			var index = stx.drawingObjects.indexOf(this.editing);
+			var before = stx.drawingObjects.slice();
+
+			if (index > -1 && this.beforeEdit) {
+				before[index] = this.beforeEdit;
+				stx.undoStamp(before, CIQ.shallowClone(stx.drawingObjects));
+			}
+
+			if (action === 'close' && this.editing.highlighted) {
+				this.editing.highlighted = false;
+				stx.draw();
+			}
+		}
+
+		this.editing = null;
+		this.beforeEdit = null;
+		this.toolbar.attr('cq-drawing-edit', 'none');
+
+		// display the saved parameters if they exist in localstorage
+		if (toolName && action === 'close') {
+			activator = this.getToolActivator(toolName);
+			this.toolbar.each(function() {
+				this.tool(activator, toolName);
+			});
+		}
+
+		if (endEvent) {
+			/**
+			 * Drawing edit end - signals the end of "edit mode" to allow for additional teardown.
+			 *
+			 * @event CIQ.UI.DrawingEdit#drawing-edit-end
+			 * @type {CustomEvent}
+			 * @property {string} detail.action value is the method or description that caused editing teardown
+			 * @property {CIQ.Drawing} detail.drawing object to teardown from editing
+			 * @property {string} detail.tool the vector type / tool name
+			 * @example <caption>Close the drawing toolbar</caption>
+			 * drawingEdit.node.addEventListener('drawing-edit-end', function(event) {
+			 * 	if (event.detail.action === 'close') {
+			 * 		$('.ciq-draw').each(function() {
+			 * 			this.set(false);
+			 * 		});
+			 * 	}
+			 * }, false);
+			 */
+			this.node.dispatchEvent(endEvent);
+		}
+	};
+
+	/**
+	 * Drawing context menu edit option.
+	 *
+	 * @memberof CIQ.UI.DrawingEdit
+	 * @since 6.2.0
+	 */
+	DrawingEdit.prototype.edit=function() {
+		var self = this;
+
+		this.drawingContext.each(function() {
+			this.close();
+
+			self.endEdit(null, 'edit');
+			self.showToolbar(this.drawing);
+			self.beginEdit(this.drawing);
+		});
+	};
+
+	/**
+	 * Drawing context menu clone option.
+	 *
+	 * @memberof CIQ.UI.DrawingEdit
+	 * @since 6.2.0
+	 */
+	DrawingEdit.prototype.clone=function() {
+		var self = this;
+		var stx = this.context.stx;
+
+		this.endEdit(null, 'clone');
+		this.drawingContext.each(function() {
+			this.close();
+
+			var clone = new CIQ.Drawing[this.drawing.name]();
+
+			for (var key in this.drawing) {
+				if (Object.prototype.hasOwnProperty.call(this.drawing, key)) {
+					clone[key] = this.drawing[key];
+				}
+			}
+
+			self.count += 1;
+			stx.addDrawing(clone);
+			stx.activateRepositioning(clone);
+		});
+	};
+
+	/**
+	 * Change the order of the drawingObjects array, which determines the layering of drawings.
+	 *
+	 * @param {Object} activator
+	 * @param {string} layer the action to apply to the current drawing. May be "up", "down", "top", or "bottom"
+	 * @since 6.2.0
+	 */
+	DrawingEdit.prototype.reorderLayer=function(activator, layer) {
+		var self = this;
+		var stx = this.context.stx;
+
+		this.endEdit(null, 'reorderLayer');
+		this.drawingContext.each(function() {
+			this.close();
+
+			var lastIndex = stx.drawingObjects.length - 1;
+			var removeIndex = stx.drawingObjects.indexOf(this.drawing);
+			var insertIndex = NaN;
+
+			if (removeIndex === -1) return;
+
+			switch (layer) {
+			case 'up':
+				if (removeIndex < lastIndex) {
+					insertIndex = removeIndex + 1;
+				}
+				break;
+			case 'down':
+				if (removeIndex > 0) {
+					insertIndex = removeIndex - 1;
+				}
+				break;
+			case 'top':
+				if (removeIndex < lastIndex) {
+					insertIndex = lastIndex;
+				}
+				break;
+			case 'bottom':
+				if (removeIndex > 0) {
+					insertIndex = 0;
+				}
+				break;
+			}
+
+			if (insertIndex!==insertIndex) return;  // NaN check
+
+			var before = CIQ.shallowClone(stx.drawingObjects);
+
+			stx.drawingObjects.splice(removeIndex, 1);
+			stx.drawingObjects.splice(insertIndex, 0, this.drawing);
+			stx.undoStamp(before, CIQ.shallowClone(stx.drawingObjects));
+			stx.draw();
+			stx.changeOccurred('vector');
+		});
+	};
+
+	/**
+	 * Drawing context menu remove/delete option.
+	 *
+	 * @memberof CIQ.UI.DrawingEdit
+	 * @since 6.2.0
+	 */
+	DrawingEdit.prototype.remove=function() {
+		var self = this;
+		var stx = this.context.stx;
+
+		this.endEdit(null, 'remove');
+		this.drawingContext.each(function() {
+			if (this.drawing.permanent) return;
+
+			var before = CIQ.shallowClone(stx.drawingObjects);
+
+			self.count -= 1;
+			stx.removeDrawing(this.drawing);
+			stx.undoStamp(before, CIQ.shallowClone(stx.drawingObjects));
+
+			this.close();
+		});
+	};
 
 	/**
 	 * UI Helper for managing study interaction, editing, deleting etc. It sets up
@@ -1897,7 +2376,11 @@
 		var stx=this.context.stx;
 		stx.layout.extended=!stx.layout.extended;
 		stx.changeOccurred("layout");
-
+		
+		// check if extended hours exists for this security
+		if(stx.layout.extended && !(stx.chart.market.market_def && stx.chart.market.sessions.length)) {
+			CIQ.alert('There are no Extended Hours for this instrument.');
+		}
 		if(stx.extendedHours){
 			var loader=this.context.loader;
 			if(loader) loader.show();
@@ -2377,11 +2860,11 @@
 		switch(key){
 			case "ArrowUp":
 			case "Up":
-				stx.zoomIn();
+				if(stx.allowZoom) stx.zoomIn();
 				break;
 			case "ArrowDown":
 			case "Down":
-				stx.zoomOut();
+				if(stx.allowZoom) stx.zoomOut();
 				break;
 			case "Home":
 				stx.home();
@@ -2395,7 +2878,7 @@
 			case "ArrowLeft":
 			case "Left":
 				if(stx.ctrl){
-					stx.zoomOut();
+					if(stx.allowZoom) stx.zoomOut();
 				}else{
 					push=1;
 					if(stx.shift || hub.capsLock) push=Math.max(5,5*(8-Math.round(stx.layout.candleWidth)));
@@ -2409,7 +2892,7 @@
 			case "ArrowRight":
 			case "Right":
 				if(stx.ctrl){
-					stx.zoomIn();
+					if(stx.allowZoom) stx.zoomIn();
 				}else{
 					push=1;
 					if(stx.shift || hub.capsLock) push=Math.max(5,5*(8-Math.round(stx.layout.candleWidth)));
@@ -2682,19 +3165,39 @@
 	/**
 	 * @memberof WebComponents.cq-ui-manager
 	 * @alias closeTopMenu
+	 * @example
+	 * <cq-dialog>
+	 * 	<cq-drawing-context>
+	 * 		<cq-menu cq-close-top="cq-dialog[cq-drawing-context]">
+	 * 			<div>This is a sub-menu</div>
+	 * 			<cq-menu-dropdown>
+	 * 				<cq-item>A stxtap event that bubbles to body will call UIManager#closeTopMenu</cq-item>
+	 * 				<cq-item>With the cq-close-top attribute above, the dialog will be closed as well</cq-item>
+	 * 			</cq-menu-dropdown>
+	 * 		</cq-menu>
+	 * 	</cq-drawing-context>
+	 * </cq-dialog>
+	 * 
+	 * @since 6.2.0 Added "cq-close-top" menu attribute to optionally close parent menus
 	 */
 	UIManager.prototype.closeTopMenu=function(){
 		var activeMenuStack=this.activeMenuStack;
 		if(!activeMenuStack.length) return;
 		var menu=activeMenuStack[activeMenuStack.length-1];
+		var self=this;
 		// If the top menu is a dialog, and isn't active yet then it has just been added, don't remove it
 		if(!menu.isDialog || menu.active){
 			activeMenuStack.pop();
 			menu.hide();
-			var self=this;
 			setTimeout(function(){
 				self.ifAllClosed(); // Put this in a timeout so that a click on the body doesn't start a drawing
 			},0);
+		}
+		var close = menu.getAttribute('cq-close-top');
+		if (close) {
+			$(menu).parents(close).each(function() {
+				self.closeMenu(this);
+			});
 		}
 	};
 

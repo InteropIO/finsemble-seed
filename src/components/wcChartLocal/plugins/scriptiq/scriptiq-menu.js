@@ -165,6 +165,7 @@
 		
 		for(var field in CIQ.Studies.studyScriptLibrary){
 			sd=CIQ.Studies.studyScriptLibrary[field];
+			if(!sd.siqList) continue;
 			if(!sd.name) sd.name=field; // Make sure there's always a name
 			alphabetizedCustom.push(field);
 		}

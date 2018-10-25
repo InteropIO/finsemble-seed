@@ -13,7 +13,7 @@
 	/**
 	 * Study parameters web component `<cq-study-parameter>`.
 	 * 
-	 * See example in {@link CIQ.WebComponents.cq-study-dialog}.
+	 * See example in {@link WebComponents.cq-study-dialog}.
 	 @namespace WebComponents.cq-study-parameter
 	 */
 	var StudyParameter = {

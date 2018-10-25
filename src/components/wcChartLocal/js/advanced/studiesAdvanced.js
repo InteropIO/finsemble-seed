@@ -233,6 +233,8 @@
 					sd.outputMap["Result " + series.display + " " +sd.name]="Result " + series.display;
 				}
 			}
+		}else{
+			sd.compare=[sd.compare];
 		}
 		if(!sd.compare.length) {
 			sd.error="Correlation Coefficient requires at least one comparison symbol";
@@ -728,6 +730,52 @@
 		}
 		if(!hasThereBeenVolume){
 			sd.error="VWAP Requires Volume";
+		}
+	};
+
+	/**
+	 * Calculates Anchored VWAP study
+	 *
+	 * @param {CIQ.ChartEngine} stx A chart engine instance
+	 * @param {studyDescriptor} sd A study descriptor
+	 * @memberof CIQ.Studies
+	 * @private
+	 * @since 6.2.0
+	 */
+	CIQ.Studies.calculateAnchoredVWAP=function(stx, sd){
+		var quotes=sd.chart.scrubbed;
+
+		var field=sd.inputs.Field;
+		if(!field || field=="field") {
+			field=sd.inputs.Field="hlc/3";
+			stx.changeOccurred("layout");
+		}
+		var volume=0;
+		var volume_price=0;
+		if(sd.startFrom>1){
+			volume=quotes[sd.startFrom-1]["_V "+sd.name];
+			volume_price=quotes[sd.startFrom-1]["_VxP "+sd.name];
+		}
+		var anchorDate=sd.inputs["Anchor Date"];
+		if(anchorDate.search(/^\d{8}$/)) anchorDate=CIQ.yyyymmdd(quotes[0].DT);
+		else{
+			var anchorTime=sd.inputs["Anchor Time"];
+			if(!anchorTime.search(/^\d{6}$/)) {
+				anchorDate+=anchorTime;
+			}
+		}
+		anchorDate=CIQ.strToDateTime(anchorDate.replace(/\D/g,""));
+		if(!sd.startFrom && anchorDate>=quotes[0].DT)
+			sd.startFrom=stx.tickFromDate(anchorDate, stx.chart, null, true);
+
+		for(var i=sd.startFrom;i<quotes.length;i++){
+			var price=quotes[i][field];
+			var thisVolume=quotes[i].Volume || 1;
+			volume+=thisVolume;
+			volume_price+=thisVolume*price;
+			quotes[i]["VWAP "+sd.name]=volume_price/volume;
+			quotes[i]["_V "+sd.name]=volume;
+			quotes[i]["_VxP "+sd.name]=volume_price;
 		}
 	};
 
@@ -1236,11 +1284,13 @@
 	};
 
 	/**
-	 * Ensures that symbols required by a study are loaded by the quotefeed.
+	 * Ensures that symbols required by a study are loaded and maintained by the quotefeed.
 	 * @param  {CIQ.ChartEngine} stx  The chart engine
 	 * @param  {object} sd   The study descriptor
-	 * @param  {array} syms An array of symbols required by the study
+	 * @param  {array} syms An array of 'symbol strings' or 'symbol objects' required by the study. If using symbol objets, in addition to our desired identifier elements, you must `always` include the `symbol` element in it (ie: `symbolObject[i]={ symbol : mySymbol , otherStuff1 : xx , moreStuff : yy}`.
 	 * @param {object} [params] Parameters to be sent to addSeries. See {@link CIQ.ChartEngine#addSeries}.
+	 * @memberOf CIQ.Studies
+	 * @version ChartIQ Advanced Package
 	 * @since  3.0.7 This was a previously private function.
 	 */
 	CIQ.Studies.fetchAdditionalInstruments=function(stx, sd, syms, params){
@@ -1315,8 +1365,8 @@
 		if(!cSym) cSym=sd.study.inputs["Comparison Symbol"];
 
 		var map={};
-		var mainSymbol=stx.chart.symbol.replace(/=/,"");
-		mainSymbol=mainSymbol.replace(/[+\-*\\%]/g,"");
+		var mainSymbol=stx.chart.symbol || "";
+		mainSymbol=mainSymbol.replace(/[=+\-*\\%]/g,"");
 		map[mainSymbol]=quotes.slice(sd.startFrom);
 		if(!map[mainSymbol].length) return;
 		if( mainSymbol != cSym ) map[cSym]=null;
@@ -1700,7 +1750,7 @@
 		}
 
 		var panel = stx.panels[sd.panel];
-		var xInit=stx.pixelFromBar(quotes.length-1, panel.chart);
+		var xInit=stx.pixelFromBar(quotes.length-1, panel.chart)+1;
 		var ayInit=stx.pixelFromPrice(quotes[quotes.length-1][topBand], panel, yAxis);
 		var byInit=stx.pixelFromPrice(quotes[quotes.length-1][bottomBand], panel, yAxis);
 		var cloud=[[xInit,byInit],[xInit,ayInit]], isUpCloud=null;
@@ -1709,13 +1759,13 @@
 		if(sd.chart.dataSegment.length>=sd.chart.scroll){
 			for(var i=0;futureA && i<futureA.length-1;i++){
 				if(futureA[i]===null || isNaN(futureA[i]) || futureB[i]===null || isNaN(futureB[i])) continue;
-				var x1=stx.pixelFromBar(quotes.length+i, panel.chart);
-				var x2=stx.pixelFromBar(quotes.length+i+1, panel.chart);
+				var x1=stx.pixelFromBar(quotes.length+i, panel.chart)+1;
+				var x2=stx.pixelFromBar(quotes.length+i+1, panel.chart)+1;
 				var ay1=stx.pixelFromPrice(futureA[i], panel, yAxis);
 				var ay2=stx.pixelFromPrice(futureA[i+1], panel, yAxis);
 				var by1=stx.pixelFromPrice(futureB[i], panel, yAxis);
 				var by2=stx.pixelFromPrice(futureB[i+1], panel, yAxis);
-				cloud.push([x1, ay1]);
+				cloud.push([x1,ay1]);
 				cloud.unshift([x1,by1]);
 				isUpCloud=ay1<by1;
 				if((isUpCloud && ay2>by2) || (!isUpCloud && ay2<by2)){
@@ -2086,6 +2136,7 @@
 
 	CIQ.Studies.initElderImpulse=function(stx, type, inputs, outputs, parameters, panel){
 		var sd=CIQ.Studies.initializeFN(stx, type, inputs, outputs, parameters, panel);
+		if(parameters.calculateOnly) return sd;
 		stx.chart.customChart={
 			chartType: "colored_bar",
 			colorFunction: function(stx, quote, mode){
@@ -2312,8 +2363,8 @@
 		var chartBottom = panel.yAxis.bottom;
 		var barBottom=Math.round(chart.width)-0.5;  //bottom x coordinate for the bar  -- remember bars are sideways so the bottom is on the x axis
 		var barMaxHeight=(chart.width)*widthPercentage;  // pixels for highest bar
-		var borderColor=stx.canvasStyle("stx_volume_profile").borderColor;
-		var bordersOn=(!CIQ.isTransparent(stx.canvasStyle("stx_volume_profile").borderColor)) && displayBorder;
+		var borderColor=stx.canvasStyle("stx_volume_profile").borderTopColor;
+		var bordersOn=(!CIQ.isTransparent(stx.canvasStyle("stx_volume_profile").borderTopColor)) && displayBorder;
 
 		var self=stx;
 
@@ -2555,6 +2606,17 @@
 			"calculateFN": CIQ.Studies.calculateVWAP,
 			"inputs": {},
 			"outputs": {"VWAP":"#FF0000"}
+		},
+		"AVWAP": {
+			"name": "Anchored VWAP",
+			"overlay": true,
+			"calculateFN": CIQ.Studies.calculateAnchoredVWAP,
+			"inputs": {"Field":"field", "Anchor Date":"", "Anchor Time":""},
+			"outputs": {"VWAP":"#FF0000"},
+			"attributes":{
+				"Anchor Date": {placeholder:"yyyymmdd"},
+				"Anchor Time": {placeholder:"hhmmss"}
+			}
 		},
 		"Alligator": {
 			"name": "Alligator",

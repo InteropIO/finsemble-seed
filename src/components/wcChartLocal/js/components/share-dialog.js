@@ -65,7 +65,7 @@
 		$("cq-share-dialog .share-link-div").html("");
 		// "hide" is a selector list, of DOM elements to be hidden while an image of the chart is created.  "cq-comparison-add-label" and ".chartSize" are hidden by default.
 		CIQ.UI.bypassBindings=true;
-		CIQ.Share.createImage(stx, {hide:[".stx_chart_controls"]}, function(data){
+		CIQ.Share.createImage(stx, {hide:[".stx_chart_controls", ".stx-btn-panel", ".stx_jump_today", ".stx-baseline-handle"]}, function(data){
 			CIQ.UI.bypassBindings=false;
 			var id=CIQ.uniqueID();
 			var host="https://share.chartiq.com";

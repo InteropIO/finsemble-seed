@@ -3,6 +3,8 @@ ChartIQ will update this file periodically but please check to make sure the hou
 are accurate for your exchange. If you find errors please let us know! dev@chartiq.com
 
 Since this is a large file we recommend that you cut and paste definitions into your own code.
+
+Remember that CIQ.Market.XSHG-USD is not valid in Typescript and change it to CIQ.Market["XSHG-USD"]
 */
 
 CIQ.Market.ALTX = {
@@ -13916,7 +13918,7 @@ CIQ.Market.XSHG = {
 	"hour_aligned": false
 }
 
-CIQ.Market.XSHG-USD = {
+CIQ.Market["XSHG-USD"] = {
 	"market_tz": "Asia/Hong_Kong",
 	"rules": [
 		{

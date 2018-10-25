@@ -16,7 +16,7 @@
 	/**
 	 * Close web component `<cq-close>`.
 	 *
-	 * cq-close web component will close it's containing (parent or up) component
+	 * cq-close web component will close its containing (parent or up) component
 	 * by calling its close() method
 	 * @namespace WebComponents.cq-close
 	 * @example

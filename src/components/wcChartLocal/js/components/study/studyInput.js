@@ -13,7 +13,7 @@
 	/**
 	 * Study input web component `<cq-study-input>`.
 	 *
-	 * See example in {@link CIQ.WebComponents.cq-study-dialog}.
+	 * See example in {@link WebComponents.cq-study-dialog}.
 	 * @namespace WebComponents.cq-study-input
 	 */
 	var StudyInput = {

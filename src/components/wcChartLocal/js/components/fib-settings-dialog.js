@@ -111,11 +111,14 @@
 	/**
 	 * Opens the cq-fib-settings-dialog
 	 * @param  {Object} params Parameters
+	 * @param {HTMLElement} params.caller used to fire a change event as the dialog closes
+	 * @param {CIQ.UI.Context} params.context sent to setContext web component method
 	 * @memberOf WebComponents.cq-fib-settings-dialog
 	 */
-	
 	FibSettingsDialog.prototype.open=function(params){
 		CIQ.UI.DialogContentTag.open.apply(this, arguments);
+		if(params) this.opener = params.caller;
+
 		var vectorParameters = this.context.stx.currentVectorParameters;
 		var vectorType = vectorParameters.vectorType;
 		var dialog=$(this);
@@ -156,6 +159,29 @@
 			parameters.emptyExceptTemplate();
 		}
 		$(this).find("[cq-custom-fibonacci-setting] input").val("");
+	};
+
+	/**
+	 * Fires a "change" event and closes the dialog.
+	 *
+	 * @memberOf WebComponents.cq-fib-settings-dialog
+	 * @since 6.2.0
+	 */
+	FibSettingsDialog.prototype.close=function() {
+		var event;
+
+		if (typeof Event === 'function') {
+			event = new Event('change', {
+				bubbles: true,
+				cancelable: true
+			});
+		} else {
+			event = document.createEvent('Event');
+			event.initEvent('change', true, true);
+		}
+
+		if(this.opener) this.opener.dispatchEvent(event);
+		CIQ.UI.DialogContentTag.close.call(this);
 	};
 
 	CIQ.UI.FibSettingsDialog=document.registerElement("cq-fib-settings-dialog", FibSettingsDialog);

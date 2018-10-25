@@ -14,9 +14,9 @@
 	/**
 	 * Study output web component `<cq-study-output>`.
 	 *
-	 * Set the color of study outputs in the {@link CIQ.WebComponents.cq-study-dialog}.
+	 * Set the color of study outputs in the {@link WebComponents.cq-study-dialog}.
 	 *
-	 * See example in {@link CIQ.WebComponents.cq-study-dialog}.
+	 * See example in {@link WebComponents.cq-study-dialog}.
 	 * @namespace WebComponents.cq-study-output
 	 */
 	var StudyOutput = {

@@ -186,7 +186,7 @@
 	DrawingToolbar.prototype.sync=function(cvp){
 		var stx=this.context.stx;
 		if(!cvp) cvp=stx.currentVectorParameters;
-		else stx.currentVectorParameters=cvp;
+		else stx.currentVectorParameters=CIQ.extend(stx.currentVectorParameters || {}, cvp);
 
 		this.setLine(null, cvp.lineWidth, cvp.pattern);
 
@@ -209,7 +209,9 @@
 		this.getFillColor({node:$(this.params.fillColor)});
 		this.getLineColor({node:$(this.params.lineColor)});
 		
-		this.getControllerSettings($(this.params.cvpControllers));
+		$(this.params.cvpControllers).each(function() {
+			this.sync(cvp);
+		});
 
 		this.node.find("*[cq-toolbar-dirty]").removeClass("ciq-active");
 	};
@@ -234,6 +236,7 @@
 			this.toggleMagnet(this);
 		}
 		$(this.params.toolSelection).text(this.noToolSelectedText);
+		$(this.params.toolSelection).attr('cq-current-tool', '');
 		this.node.find("*[cq-section]").removeClass("ciq-active");
 		this.emit();
 	};
@@ -284,10 +287,13 @@
 	};
 
 	DrawingToolbar.prototype.tool=function(activator, toolName){
+		if (!toolName) toolName = activator.node.getAttribute('cq-tool');
+		if (!toolName) return;
 		var stx=this.context.stx;
 		stx.clearMeasure();
 		stx.changeVectorType(toolName);
 		$(this.params.toolSelection).html($(activator.node).html());
+		$(this.params.toolSelection).attr('cq-current-tool', toolName);
 
 		this.node.find("*[cq-section]").removeClass("ciq-active");
 		var drawingParameters=CIQ.Drawing.getDrawingParameters(stx, toolName);
@@ -448,29 +454,6 @@
 		if(overrides) overrides=overrides.split(",");
 		colorPicker.display({node:node, overrides:overrides});
 	};
-
-	DrawingToolbar.prototype.getControllerSettings=function(controls){
-		var cvp=this.context.stx.currentVectorParameters;
-		for(var i=0; i<controls.length; i++){
-			var node=$(controls[i]), header=node.attr("cq-cvp-header");
-			if(cvp["active"+header]){
-				node.find(".ciq-checkbox").addClass("ciq-active");
-			}else{
-				node.find(".ciq-checkbox").removeClass("ciq-active");
-			}
-			var color=cvp["color"+header];
-			if(!color || color=="transparent" || color=="auto") color="";
-			node.find("cq-line-color").css({"background-color": color});
-
-			if(cvp["lineWidth"+header] && cvp["pattern"+header]){
-				var newClassName="ciq-"+cvp["pattern"+header]+"-"+cvp["lineWidth"+header];
-				node.find("[cq-cvp-line-style]").attr("class","ciq-line ciq-selected "+newClassName);
-			}else{
-				node[0].setContext();
-			}
-		}
-	};
-
 
 	CIQ.UI.DrawingToolbar=document.registerElement("cq-toolbar", DrawingToolbar);
 

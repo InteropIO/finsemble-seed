@@ -508,6 +508,9 @@ table.stx-current-orders tr td:nth-of-type(1) {
 table.stx-current-orders tr.tfc-symbol:hover {
   cursor: pointer; }
 
+.stx-current-orders .fa.fa-flip-vertical {
+  font-size: 8px; }
+
 .stx-trade-account tr td:nth-of-type(2) {
   text-align: right; }
 

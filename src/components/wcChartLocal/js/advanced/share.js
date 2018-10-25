@@ -78,19 +78,19 @@
 		h2canvas(stx.chart.container, {
 			allowTaint:false,
 			logging:false,
-			width:params.width?params.width:null,
-			height:params.height?params.height:null,
-			background:params.background?params.background:null,
+			width:params.width || null,
+			height:params.height || null,
+			backgroundColor:params.background || null,
 			useCORS:true
 		}).then(function(canvas){
 			if(cb) {
-				CIQ.unappendClassName(body, "sharing");
 				//return the full canvas if the data param is not true
-				if(!params.data){
-					return cb(null,canvas);
-				}
-				return cb(null,canvas.toDataURL('image/png'));
+				cb(null,params.data?canvas.toDataURL('image/png'):canvas);
 			}
+			CIQ.unappendClassName(body, "sharing");
+		}).catch(function(error){
+            if(cb) cb(error);
+            CIQ.unappendClassName(body, "sharing");
 		});
 	}
 
@@ -176,7 +176,7 @@
 	 * <br>&bull; 4.0.0 Addition of `parameters.hide`
 	 * @version ChartIQ Advanced Package plug-in
 	 */
-	//imageType is in it's location so developers don't need to change their current code.
+	//imageType is in its location so developers don't need to change their current code.
 	CIQ.Share.createImage=function(stx, params, cb){
 		var args = [].slice.call(arguments);
 		cb=args.pop();

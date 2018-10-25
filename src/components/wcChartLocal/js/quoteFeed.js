@@ -3,6 +3,8 @@
 // All rights reserved
 //-------------------------------------------------------------------------------------------
 (function(_exports){
+	if (!_exports.CIQ) _exports.CIQ = {};
+	if (!_exports.CIQ.ChartEngine) _exports.CIQ.ChartEngine = function(){};
 	var CIQ=_exports.CIQ;
 
 	/**
@@ -275,7 +277,7 @@
 	 */
 	CIQ.QuoteFeed.Subscriptions.prototype.checkSubscriptions=function(stx){
 		var sub, need;
-		var chartNeeds=stx.getSymbols();
+		var chartNeeds=stx.getSymbols({"breakout-equations":true});
 
 		// reset subscription match status
 		for(var s=0;s<this.subscriptions.length;s++){
@@ -408,7 +410,10 @@
 	 * @param  {object} [quoteFeed] your quoteFeed object.
 	 * @param  {object} [behavior] Optional behavior object to initialize quotefeed
 	 * @param {number} [behavior.refreshInterval] If non null, then sets the frequency for fetchUpdates (if null or zero then fetchUpdate will not be called)
-	 * @param {number} [behavior.bufferSize] Set to the minimum number of undisplayed historical ticks always buffered in the masterData. Useful to prevent temporary gaps on studies while paginating. This forces fetch requests to be triggered ahead of reaching the left-most corner of the chart (default) if the number of already loaded bars is less than the required buffer size. This parameter can be reset at any time by manipulating 'stxx.quoteDriver.behavior.bufferSize'; it will then become active on the very next loading check.
+	 * @param {number} [behavior.bufferSize] Set to the minimum number of undisplayed historical ticks always buffered in the masterData. Useful to prevent temporary gaps on studies while paginating. 
+	 * 							This forces pagination fetch requests to be triggered ahead of reaching the edge of the chart; if the number of already loaded bars is less than the required buffer size. 
+	 * 							This parameter can be reset at any time by manipulating 'stxx.quoteDriver.behavior.bufferSize'; it will then become active on the very next loading check.
+	 * 							It is used on both left and right side pagination requests.
 	 * @param {Function} [behavior.callback] Optional callback after any fetch to enhance functionality. It will be called with the params object used with the fetch call.
 	 * @param {number} [behavior.noLoadMore] If true, then the chart will not attempt to load any more data after the initial load.
 	 * @param {boolean} [behavior.loadMoreReplace] If true, then when paginating, the driver will replace the masterData instead of prepending. Set this if your feed can only provide a full data set of varying historical lengths.
@@ -475,49 +480,6 @@
 	};
 
 	/**
-	 * LEGACY INTERFACE
-	 * Attaches an additional {@link CIQ.QuoteFeed}. fetch() will be called on this quote feed after
-	 * every fetch on the primary quote feed. This allows additional content to be loaded (for instance a
-	 * custom study that fetches pre-computed data). See {@link CIQ.ChartEngine#detachTagAlongQuoteFeed}
-	 *
-	 * The data from a tagAlong will be added to the masterData in an object under the label name.
-	 *
-	 * @param  {object} feed Feed descriptor
-	 * @param {CIQ.QuoteFeed} feed.quoteFeed The quote feed object
-	 * @param {Object} [feed.behavior] Optional behavior object. This will behave like the primary behavior object except that the refreshInterval will not be respected.
-	 * @param {string} feed.label Multiple copies of the same physical QuoteFeed can be used with independent labels. If multiple copies are
-	 * attached with the same label then a count will be kept to prevent early detachment.
-	 * @memberOf CIQ.ChartEngine
-	 * @since  04-2015
-	 * @deprecated
-	 * @private
-	 */
-	CIQ.ChartEngine.prototype.attachTagAlongQuoteFeed=function(feed){
-		if(!feed.label){
-			console.log("Attempt to attachTagAlongQuoteFeed without assigning a label");
-			return;
-		}
-		this.quoteDriver.attachTagAlongQuoteFeed(feed);
-	};
-
-	/**
-	 * LEGACY INTERFACE
-	 * See {@link CIQ.ChartEngine#attachTagAlongQuoteFeed}
-	 * @param {object} feed
-	 * @memberOf CIQ.ChartEngine
-	 * @since  04-2015
-	 * @deprecated
-	 * @private
-	 */
-	CIQ.ChartEngine.prototype.detachTagAlongQuoteFeed=function(feed){
-		if(!feed.label){
-			console.log("Attempt to detachTagAlongQuoteFeed without assigning a label");
-			return;
-		}
-		this.quoteDriver.detachTagAlongQuoteFeed(feed);
-	};
-
-	/**
 	 * Drives the Chart's relationship with the quotefeed object provided to the chart
 	 * @param {CIQ.ChartEngine} stx A chart engine instance
 	 * @param {object} quoteFeed
@@ -533,7 +495,6 @@
 	 * @since 5.1.1 added maximumTicks to behavior
 	 */
 	CIQ.ChartEngine.Driver=function(stx, quoteFeed, behavior){
-		this.tagalongs={};
 		this.stx=stx;
 		this.quoteFeed=quoteFeed;
 		if(!behavior.maximumTicks) behavior.maximumTicks=quoteFeed.maxTicks?quoteFeed.maxTicks:20000; // Historically this is the safest limit of ticks to fetch for response time
@@ -541,14 +502,14 @@
 		behavior.bufferSize=Math.round(behavior.bufferSize);
 		this.behavior=behavior;
 		this.loadingNewChart=false;	// This gets set to true when loading a new chart in order to prevent refreshes while waiting for data back from the server
-		this.intervalTimer=null;	// This is the window.setInterval which can be cleared to stop the updating loop
+		this.intervalTimer=null;	// This is the _exports.setInterval which can be cleared to stop the updating loop
 		this.updatingChart=false;	// This gets set when the chart is being refreshed
 		this.updateChartLoop();
 	};
 
 	CIQ.ChartEngine.Driver.prototype.die=function(){
 		if(this.intervalTimer) {
-			window.clearInterval(this.intervalTimer);
+			_exports.clearInterval(this.intervalTimer);
 			this.intervalTimer=-1; // this means it was stopped by the die function and should not be started again in the event of an async call back from the fetch coming back after it was killed.
 		}
 	};
@@ -559,34 +520,6 @@
 	 */
 	CIQ.ChartEngine.Driver.prototype.updateSubscriptions=function(){
 		if(this.quoteFeed.checkSubscriptions) this.quoteFeed.checkSubscriptions(this.stx);
-	};
-
-	/**
-	 * @deprecated
-	 * @private
-	 */
-	CIQ.ChartEngine.Driver.prototype.attachTagAlongQuoteFeed=function(feed){
-		if (!feed.label) return;
-		if(!this.tagalongs[feed.label]){
-			this.tagalongs[feed.label]={
-				label: feed.label,
-				quoteFeed: feed.quoteFeed,
-				behavior: feed.behavior?feed.behavior:{},
-				count: 0
-			};
-		}
-		this.tagalongs[feed.label].count++;
-	};
-
-	/**
-	 * @deprecated
-	 * @private
-	 */
-	CIQ.ChartEngine.Driver.prototype.detachTagAlongQuoteFeed=function(feed){
-		if (!feed.label) return;
-		var tagalong=this.tagalongs[feed.label];
-		tagalong.count--;
-		if(!tagalong.count) this.tagalongs[feed.label]=null;
 	};
 
 	CIQ.ChartEngine.Driver.prototype.loadDependents=function(params, cb, fetchType){
@@ -730,41 +663,6 @@
 	};
 
 	/**
-	 * @deprecated
-	 * @private
-	 */
-	CIQ.ChartEngine.Driver.prototype.executeTagAlongs=function(params){
-		var count={
-			count: CIQ.objLength(this.taglongs)
-		};
-		var self=this;
-		function closure(qparams, tagalong, count){
-			return function(dataCallback){
-				count.count--;
-				if(!dataCallback.error){
-					var fields=qparams.fields;
-					if(!fields) fields=null;
-					CIQ.addMemberToMasterdata({stx: self.stx, label: tagalong.label, data: dataCallback.quotes, fields: fields, noCleanupDates: true});
-				}
-
-				if(count.count==-1) {
-					self.stx.createDataSet(null, null, {appending:qparams.originalState.update});
-					self.stx.draw();
-				}
-			};
-		}
-		for(var label in this.tagalongs){
-			var tagalong=this.tagalongs[label];
-
-			// behavior + params
-			var qparams=CIQ.shallowClone(tagalong.behavior);
-			CIQ.extend(qparams, params, true);
-
-			CIQ.ChartEngine.Driver.fetchData(null, tagalong.quoteFeed, qparams, closure(qparams, tagalong, count)); // only legacy quotefeed supported with tagalong
-		}
-	};
-
-	/**
 	 * Updates the chart as part of the chart loop
 	 * @memberOf CIQ.ChartEngine.Driver
 	 * @private
@@ -800,7 +698,6 @@
 				if(howManyReturned==howManyToGet){
 					self.updatingChart=false;
 				}
-				self.executeTagAlongs(params);
 				if(self.behavior.callback){
 					self.behavior.callback(params);
 				}
@@ -831,7 +728,7 @@
 
 	CIQ.ChartEngine.Driver.prototype.updateChartLoop=function(newInterval){
 		if( this.intervalTimer == -1 ) return; // the driver was killed. This was probably an async call from a feed response sent before it was killed.
-		if(this.intervalTimer) window.clearInterval(this.intervalTimer);  // stop the timer
+		if(this.intervalTimer) _exports.clearInterval(this.intervalTimer);  // stop the timer
 		if(this.behavior.noUpdate) return;
 		function closure(self){
 			return function(){
@@ -840,7 +737,7 @@
 			};
 		}
 		if(!newInterval && newInterval!==0) newInterval=this.behavior.refreshInterval;
-		if(newInterval) this.intervalTimer=window.setInterval(closure(this), newInterval*1000);
+		if(newInterval) this.intervalTimer=_exports.setInterval(closure(this), newInterval*1000);
 	};
 
 	/**
@@ -950,7 +847,7 @@
 				if(forwardFetchDoARetry && needsFrontFill(series)) seriesNeedsFrontFill=true;
 			}
 		}
-		
+
 		forwardFetchDoARetry=!chart.mostRecentForwardAttempt || chart.mostRecentForwardAttempt.getTime()+forwardPaginationRetryIntervalMS<Date.now();
 		// Now we determine which type of pagination we need
 		var mainPastFetch=(needsBackFill(chart) || forceLoadMore) && chart.moreAvailable!==false;
@@ -970,7 +867,7 @@
 						if(!dataCallback.quotes) dataCallback.quotes=[];
 						var quotes=dataCallback.quotes, masterData=chart.masterData;
 						quotes=self.cleanup(stx,null,quotes,CIQ.QuoteFeed.PAGINATION,params);
-						if(quotes.length && chart.masterData.length){  // remove possible dup with master data's first record
+						if(quotes.length && chart.masterData && chart.masterData.length){  // remove possible dup with master data's first record
 							if(params.future){
 								// remove possible dup with master data's first record
 								var firstQuote=quotes[0];
@@ -978,7 +875,7 @@
 							}else{
 								// remove possible dup with master data's last record
 								var lastQuote=quotes[quotes.length-1];
-								if(lastQuote.DT && +lastQuote.DT==+chart.masterData[0].DT) masterData.shift();
+								if(lastQuote.DT && +lastQuote.DT==+chart.masterData[0].DT) quotes.pop();
 							}
 						}
 
@@ -1011,7 +908,6 @@
 						stx.createDataSet(undefined, undefined, {appending: params.future});
 
 						if(!nodraw) stx.draw();
-						self.executeTagAlongs(params);
 						if(self.behavior.callback){
 							self.behavior.callback(params);
 						}
@@ -1132,7 +1028,7 @@
 	 * @since 6.0.0
 	 */
 	CIQ.ChartEngine.Driver.determineStartOrEndDate=function(params, iterator, ticks, isStart){
-		var interval=params.interval, period=params.stx.layout.periodicity,multiplier=CIQ.Market.Symbology.isForexSymbol?1.3:4;
+		var interval=params.interval, period=params.stx.layout.periodicity,multiplier=CIQ.Market.Symbology.isForexSymbol(params.symbol)?1.3:4;
 		var determinedDate, base;
 		if(interval==="millisecond" || interval==="second") base=CIQ.SECOND*period*multiplier;
 		else if(interval==="minute") base=CIQ.MINUTE*period*multiplier;
@@ -1264,7 +1160,6 @@
 					qparams.startDate=masterData[0].DT;
 					qparams.endDate=masterData[masterData.length-1].DT;
 				}
-				self.executeTagAlongs(qparams);
 				if(self.behavior.callback){
 					self.behavior.callback(qparams);
 				}
@@ -1361,7 +1256,7 @@
 			suggestedEndDate = params.endDate || new Date();
 			iterator_parms = {
 				"begin": suggestedEndDate,
-				"interval": params.interval =='tick' ? 1:params.interval,
+				"interval": params.interval,
 				"periodicity": params.interval =='tick' ? stx.chart.xAxis.futureTicksInterval:params.period,
 				"outZone": stx.dataZone
 			};
@@ -1375,7 +1270,7 @@
 		case CIQ.QuoteFeed.PAGINATION:
 			iterator_parms = {
 				"begin": params.endDate||params.startDate,
-				"interval": params.interval =='tick' ? 1:params.interval,
+				"interval": params.interval,
 				"periodicity": params.interval =='tick' ? stx.chart.xAxis.futureTicksInterval:params.period,
 				"outZone": stx.dataZone
 			};
@@ -1383,12 +1278,12 @@
 			var suggestedDate=CIQ.ChartEngine.Driver.determineStartOrEndDate(params, iterator, ticks, !params.future);
 			suggestedStartDate=params.startDate || suggestedDate;
 			suggestedEndDate=params.endDate || suggestedDate;
-			if (!params.startDate)params.stx.convertToDataZone(suggestedEndDate);
+			if (!params.startDate) params.stx.convertToDataZone(suggestedEndDate);
 			else params.stx.convertToDataZone(suggestedStartDate);
 
 			if (typeof quoteFeed.fetchPaginationData === "function"){
 				if (stx.maxMasterDataSize && stx.maxMasterDataSize <= stx.masterData.length) return;
-
+				if(suggestedEndDate>=Date.now()) this.isHistoricalModeSet=false;   // exit historical mode if we request (future) data up to present or beyond
 				quoteFeed.fetchPaginationData(params.symbol, suggestedStartDate, suggestedEndDate, params, cb);
 			}
 			break;
@@ -1399,4 +1294,6 @@
 	};
 
 	return _exports;
+
 })/* removeIf(umd) */(typeof window !== 'undefined' ? window : global)/* endRemoveIf(umd) */;
+

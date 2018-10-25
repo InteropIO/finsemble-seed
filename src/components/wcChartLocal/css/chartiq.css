@@ -419,6 +419,10 @@ cq-color-picker ul {
         border-color: #000; }
 
 /* --------------------------------------------------------- Layout --------------------------------------------------------- */
+/* MS Edge prevent native swipe actions */
+cq-context {
+  touch-action: none; }
+
 .ciq-nav,
 cq-toolbar,
 .ciq-chart-area,
@@ -547,6 +551,11 @@ cq-menu-dropdown {
     padding-bottom: 6px;
     padding-top: 10px; }
   cq-menu-dropdown[cq-lift] {
+    width: auto; }
+  cq-menu-dropdown.context-menu-right {
+    left: 100%;
+    margin-top: 0;
+    padding: 0;
     width: auto; }
 
 cq-separator {
@@ -1126,6 +1135,8 @@ cq-views {
       margin-left: 85px;
       margin-top: -2px;
       font-size: 13px; }
+  .break-sm cq-views {
+    width: inherit; }
 
 /* Themes in Display Menu */
 cq-themes cq-label {
@@ -1153,11 +1164,15 @@ cq-study-legend {
     white-space: nowrap;
     width: 105px;
     float: left; }
+  .break-sm cq-study-legend {
+    width: inherit; }
   cq-menu.ciq-studies cq-study-legend {
     margin: -10px 0 10px; }
 
 cq-study-legend cq-label.click-to-edit {
   width: 140px; }
+  .break-sm cq-study-legend cq-label.click-to-edit {
+    width: 190px; }
 
 cq-study-legend cq-section-dynamic {
   /* Current studies container - height is set based on the height of the current studies content */
@@ -1318,6 +1333,10 @@ cq-undo, cq-redo {
 
 cq-undo[cq-active], cq-redo[cq-active] {
   opacity: 1; }
+
+cq-toolbar:not([cq-drawing-edit="none"]) .ciq-drawing-edit-hidden,
+cq-toolbar[cq-drawing-edit="none"] .ciq-drawing-edit-only {
+  display: none; }
 
 cq-annotation .ciq-btn {
   /* Menu Triggers in toolbar */
@@ -1662,7 +1681,7 @@ cq-hu-static {
   .break-sm cq-hu-static div {
     width: 55px; }
   .break-sm cq-hu-static {
-    top: initial;
+    top: auto;
     bottom: 20px;
     left: 20px;
     display: block;
@@ -1789,6 +1808,9 @@ cq-dialog {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   z-index: 3; }
+
+.break-sm cq-dialog {
+  max-width: 320px; }
 
 cq-dialog[cq-active] {
   display: inline-block; }
@@ -1938,15 +1960,18 @@ cq-study-dialog #parameters input {
 cq-study-dialog #parameters cq-swatch {
   float: right; }
 
+cq-dialog[cq-drawing-context],
 cq-dialog[cq-study-context] {
   padding: 0px 0px;
   min-width: auto; }
 
 /* Context Dialog */
+cq-drawing-context,
 cq-study-context {
   min-width: 130px;
   padding: 0px;
   display: block; }
+  cq-drawing-context div,
   cq-study-context div {
     /* Menu Item */
     padding: 0px 20px;
@@ -1954,19 +1979,33 @@ cq-study-context {
     clear: both;
     line-height: 27px;
     color: #666; }
+  cq-drawing-context div:hover,
   cq-study-context div:hover {
     /* Menu item hover state */
     background: #efefef;
     color: #000; }
+  cq-drawing-context .ciq-btn,
   cq-study-context .ciq-btn {
     width: 65px; }
+    cq-drawing-context .ciq-btn:first-child,
     cq-study-context .ciq-btn:first-child {
       float: left;
       border-top-right-radius: 0;
       border-bottom-right-radius: 0; }
+    cq-drawing-context .ciq-btn:last-child,
     cq-study-context .ciq-btn:last-child {
       border-top-left-radius: 0;
       border-bottom-left-radius: 0; }
+  cq-drawing-context .context-button-right-arrow,
+  cq-study-context .context-button-right-arrow {
+    display: inline-block;
+    border-bottom: 0.35em solid transparent;
+    border-left: 0.35em solid black;
+    border-top: 0.35em solid transparent;
+    height: 0;
+    margin-left: 1em;
+    padding: 0;
+    width: 0; }
 
 cq-share-button {
   float: left;
@@ -2242,21 +2281,23 @@ cq-chart-title cq-chart-price {
   vertical-align: text-bottom; }
 
 cq-chart-title cq-chart-price > * {
-  position: relative; }
+  position: relative;
+  white-space: nowrap; }
 
-cq-chart-title cq-chart-price cq-change:after {
+cq-chart-title cq-chart-price cq-change .ico {
   /* Up/Down Arrow indicators */
   content: "";
   display: block;
   height: 12px;
   width: 12px;
-  float: left; }
+  float: left;
+  background-color: inherit; }
 
-cq-chart-title cq-chart-price.stx-up cq-change:after {
+cq-chart-title cq-chart-price.stx-up cq-change .ico {
   background-image: url(img/stx-sprite-ui.svg);
   background-position: -633px -31px; }
 
-cq-chart-title cq-chart-price.stx-down cq-change:after {
+cq-chart-title cq-chart-price.stx-down cq-change .ico {
   background-image: url(img/stx-sprite-ui.svg);
   background-position: -683px -31px; }
 
@@ -2469,10 +2510,10 @@ cq-theme-dialog {
     display: inline-block;
     vertical-align: top;
     margin-top: 15px; }
-    cq-theme-dialog cq-section:first-of-type {
+    body:not(.break-sm) cq-theme-dialog cq-section:first-of-type {
       border-right: dashed 1px rgba(0, 0, 0, 0.5);
       padding-right: 5px; }
-    cq-theme-dialog cq-section:last-of-type {
+    body:not(.break-sm) cq-theme-dialog cq-section:last-of-type {
       padding-left: 5px; }
   cq-theme-dialog cq-action {
     display: flex;
@@ -2483,8 +2524,9 @@ cq-theme-dialog {
       width: 200px;
       padding-left: 10px; }
     cq-theme-dialog cq-action div.ciq-btn {
-      position: absolute;
-      right: 40px; }
+      margin-left: 5px; }
+  .break-sm cq-theme-dialog :not(cq-close):not(input) {
+    text-align: center; }
 
 cq-theme-dialog cq-placeholder {
   width: 150px; }
@@ -3233,8 +3275,7 @@ cq-timezone-dialog h4 {
 
 cq-timezone-dialog p {
   text-align: center;
-  font-weight: 400;
-  width: 375px; }
+  font-weight: 400; }
 
 cq-timezone-dialog ul {
   padding-left: 20px;
@@ -3636,7 +3677,7 @@ body .stx-trade-panel ul.stx-account li {
 
 .stx-btn.stx-ico > span, .stx-btn.stx-ico:hover > span, .stx-btn.stx-ico:active > span {
   /* Styling of visible area and text hiding */
-  display: initial;
+  display: block;
   position: absolute;
   left: 0;
   background-image: url(img/stx-sprite-panels.svg);
@@ -3678,34 +3719,42 @@ body .stx-trade-panel ul.stx-account li {
   top: 0; }
 
 /* ------------------------------------------------------- CHART OVERLAY ELEMENTS ------------------------------------------------------ */
+.rightclick_drawing .mouseManageText,
 .rightclick_study .mouseManageText {
   display: inline; }
 
+.rightclick_drawing .mouseDeleteText,
 .rightclick_study .mouseDeleteText {
   display: none; }
 
+.rightclick_drawing .overlayEdit,
 .rightclick_study .overlayEdit {
   margin-top: -4px;
   margin-left: 5px;
   opacity: 1; }
+  .rightclick_drawing .overlayEdit.stx-btn span,
   .rightclick_study .overlayEdit.stx-btn span {
     background-color: #fff;
     border: none;
     background-position: -301px -26px;
     width: 23px; }
-    .ciq-night .rightclick_study .overlayEdit.stx-btn span {
+    .ciq-night .rightclick_drawing .overlayEdit.stx-btn span, .ciq-night
+    .rightclick_study .overlayEdit.stx-btn span {
       background-color: #1c2a35;
       background-position: -301px -52px; }
 
+.rightclick_drawing .overlayTrashCan,
 .rightclick_study .overlayTrashCan {
   margin-top: -4px;
   margin-left: 34px; }
+  .rightclick_drawing .overlayTrashCan.stx-btn span,
   .rightclick_study .overlayTrashCan.stx-btn span {
     background-color: #fff;
     border: none;
     background-position: -250px -26px;
     width: 24px; }
-    .ciq-night .rightclick_study .overlayTrashCan.stx-btn span {
+    .ciq-night .rightclick_drawing .overlayTrashCan.stx-btn span, .ciq-night
+    .rightclick_study .overlayTrashCan.stx-btn span {
       background-color: #1c2a35;
       background-position: -250px -52px; }
 

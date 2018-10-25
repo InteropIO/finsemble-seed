@@ -7,6 +7,11 @@
 	var CIQ=_exports.CIQ;
 	var splinePlotter=_exports.SplinePlotter;
 
+	// remove:locking
+	var PROPERTY = 'valid';
+	CIQ.valid = 0;
+	// endremove
+
 	/**
 	 * <span class="injection">INJECTABLE</span>
 	 * <span class="animation">Animation Loop</span>
@@ -104,6 +109,14 @@
 				}
 				// Don't draw a label if it overlaps with prior label
 				if(obj.left<prevRight) continue;
+
+				// Don't draw any label if it's off screen and it will overlap with the next label of its kind
+				if(obj.left<0){
+					if(nextBoundaryLeft<obj.right) continue;
+					if(nb>=axisRepresentation.length){
+						if(axisRepresentation[i+1] && axisRepresentation[i+1].left<obj.right) continue;
+					}
+				}
 
 				prevRight=obj.right;
 				if((Math.floor(obj.left)<=panel.right)){
@@ -389,7 +402,6 @@
 			return [currentTimeUnit,currentTimeUnitLarge];
 		}
 
-		// KB 3578: here we need to go back in time to find the dataSet element which is a boundary, so the axis ticks don't keep changing when we pan.
 		var currents=getCurrentTimeUnits(dataSegment[i].DT), last, periodsBack=0, periodsForward=0, tick=dataSegment[i].tick;
 		for(periodsBack; periodsBack<tick; periodsBack++){
 			last=getCurrentTimeUnits(this.chart.dataSet[tick-periodsBack].DT);
@@ -442,7 +454,7 @@
 			else obj.data=null;
 			if(periodsBack){
 				periodsBack--; i--;
-			}else if(!chart.xaxis[i]){
+			}else if(!chart.xaxis[i] && i<maxTicks){
 				chart.xaxis.push(obj);
 			}
 
@@ -615,22 +627,18 @@
 			if(yAxis.idealTickSizePixels!=idealX/1.618)
 				parameters.noChange=false;
 		}
+		var shadow;
 		if(!parameters.noChange){
 			this.adjustYAxisHeightOffset(panel, yAxis);
 			// Adjust for zoom and scroll
 			var height=yAxis.height=yAxis.bottom-yAxis.top;
 			var pricePerPix=(yAxis.high-yAxis.low)/(height-yAxis.zoom);
-			if(parameters.ground && !yAxis.semiLog){
-				yAxis.high=yAxis.high+yAxis.zoom*pricePerPix;
-			}else{
-				yAxis.high=yAxis.high+(yAxis.zoom/2)*pricePerPix + yAxis.scroll*pricePerPix;
-				var unadjustedLow=yAxis.low;
-				if(yAxis.semiLog){
-					var bottomSpacer=((yAxis.zoom/2)*pricePerPix) / (yAxis.high/yAxis.low);
-					yAxis.low=yAxis.low-bottomSpacer + yAxis.scroll*pricePerPix;
-					if(yAxis.low<unadjustedLow*0.1) yAxis.low=unadjustedLow*0.1;
+			if(!yAxis.semiLog){
+				if(parameters.ground){
+					yAxis.high=yAxis.high+yAxis.zoom*pricePerPix;
 				}else{
-					yAxis.low=yAxis.low-(yAxis.zoom/2)*pricePerPix + yAxis.scroll*pricePerPix;
+					yAxis.high=yAxis.high+(yAxis.zoom/2 + yAxis.scroll)*pricePerPix;
+					yAxis.low=yAxis.low-(yAxis.zoom/2 - yAxis.scroll)*pricePerPix;
 				}
 			}
 			if(yAxis.min || yAxis.min===0) yAxis.low=yAxis.min;
@@ -638,11 +646,21 @@
 
 			yAxis.shadow=yAxis.high-yAxis.low;
 			if(yAxis.semiLog && (!this.activeDrawing || this.activeDrawing.name!="projection")){
-				yAxis.logHigh=Math.log(yAxis.high)/Math.LN10;
-				var semilow=Math.max(yAxis.low,0.000000001);
-				yAxis.logLow=Math.log(semilow)/Math.LN10;
-				if(yAxis.low<=0) yAxis.logLow=0;
-				yAxis.logShadow=yAxis.logHigh - yAxis.logLow;
+				var computeLogValues=function(){
+					yAxis.logHigh=Math.log(yAxis.high)/Math.LN10;
+					var semilow=Math.max(yAxis.low,0.000000001);
+					yAxis.logLow=Math.log(semilow)/Math.LN10;
+					if(yAxis.low<=0) yAxis.logLow=0;
+					yAxis.logShadow=yAxis.logHigh - yAxis.logLow;
+				};
+				// first compute existing values
+				computeLogValues();
+				// now scale them for zoom and scroll
+				var scalingFactor=yAxis.height/(yAxis.height-yAxis.zoom);
+				yAxis.high=this.transformedPriceFromPixel(yAxis.top - scalingFactor * (yAxis.zoom/2 + yAxis.scroll), panel, yAxis);	// Set the actual high for the panel rather than the values in the panel
+				yAxis.low=this.transformedPriceFromPixel(yAxis.bottom + scalingFactor * (yAxis.zoom/2 - yAxis.scroll), panel, yAxis);	// Set the actual low for the panel rather than the values in the panel
+				yAxis.shadow=yAxis.high-yAxis.low;
+				computeLogValues();
 			}
 			var fontHeight;
 			if(yAxis.goldenRatioYAxis && isAChart){
@@ -662,7 +680,7 @@
 				}
 			}
 			var idealTicks=Math.round(height/yAxis.idealTickSizePixels);
-			var shadow=parameters.range?parameters.range[1]-parameters.range[0]:yAxis.shadow;
+			shadow=parameters.range?parameters.range[1]-parameters.range[0]:yAxis.shadow;
 			yAxis.priceTick=Math.floor(shadow/idealTicks);
 
 			// calculate the ideal price tick. First find the ideal decimal location using a loop
@@ -697,7 +715,6 @@
 				if ( i < 100 ) yAxis.priceTick = yAxisPriceTick;
 			}
 
-			yAxis.multiplier=yAxis.height/yAxis.shadow;
 		}
 
 		// cover really strange and rare cases, such as an intensely small shadow
@@ -705,16 +722,6 @@
 			yAxis.priceTick = 1;
 		}
 
-		if(!this.activeDrawing || this.activeDrawing.name!="projection"){
-			yAxis.high=this.transformedPriceFromPixel(yAxis.top, panel, yAxis);	// Set the actual high for the panel rather than the values in the panel
-			if(yAxis.semiLog){
-				yAxis.logHigh=Math.log(yAxis.high)/Math.LN10;
-				var semilow2=Math.max(yAxis.low,0.00000000001);
-				yAxis.logLow=Math.log(semilow2)/Math.LN10;
-				yAxis.logShadow=yAxis.logHigh - yAxis.logLow;
-			}
-			yAxis.shadow=yAxis.high-yAxis.low;
-		}
 		yAxis.multiplier=yAxis.height/yAxis.shadow;
 		if(yAxis.multiplier==Infinity) yAxis.multiplier=0; // No data points at all
 		// If the programmer has set yAxis.decimalPlaces then we will print that number of decimal places
@@ -829,7 +836,7 @@
 				var dynamicWidth = chart.dynamicYAxis;
 				var labelWidth = dynamicWidth ? yAxis.width : NaN;
 
-				var position=(yAxis.position===null?chart.panel.yAxis.position:yAxis.position);
+				var position=this.getYAxisCurrentPosition(yAxis, panel);
 				if(position=="left"){
 					edgeOfAxis=yAxis.left + yAxis.width;
 				}else{
@@ -888,7 +895,7 @@
 					var textXPosition=edgeOfAxis + tickWidth + 3;
 					if(position=="left"){
 						textXPosition=yAxis.left + 3;
-						if(yAxis.justifyRight) textXPosition=yAxis.left + yAxis.width + tickWidth - 3;
+						if(yAxis.justifyRight!==false) textXPosition=yAxis.left + yAxis.width + tickWidth - 3;
 					}else{
 						if(yAxis.justifyRight) textXPosition=edgeOfAxis + yAxis.width;
 					}
@@ -956,7 +963,7 @@
 				var dynamicWidth = chart.dynamicYAxis;
 				var labelWidth = dynamicWidth ? yAxis.width : NaN;
 
-				var position=(yAxis.position===null?chart.panel.yAxis.position:yAxis.position);
+				var position=this.getYAxisCurrentPosition(yAxis, panel);
 
 				if(position=="left"){
 					edgeOfAxis=yAxis.left + yAxis.width;
@@ -1057,7 +1064,7 @@
 					var textXPosition=edgeOfAxis + tickWidth + 3;
 					if(position=="left"){
 						textXPosition=yAxis.left + 3;
-						if(yAxis.justifyRight) textXPosition=yAxis.left + yAxis.width + tickWidth - 3;
+						if(yAxis.justifyRight!==false) textXPosition=yAxis.left + yAxis.width + tickWidth - 3;
 					}else{
 						if(yAxis.justifyRight) textXPosition=edgeOfAxis + yAxis.width;
 					}
@@ -1109,21 +1116,23 @@
 	 * ![overlaid](img-overlaid.png "overlaid")
 	 *
 	 * @param  {object} params Parameters to control the histogram itself
-	 * @param  {string} params.name="Data" Name of the histogram.
-	 * @param  {string} params.type Optional type of histogram (stacked, clustered, overlaid) default overlaid
-	 * @param  {boolean} params.bindToYAxis For a study, set to true to bind the histogram to the y-axis and to draw it
-	 * @param  {number} params.heightPercentage The amount of vertical space to use for the histogram, valid values are 0.00-1.00.	Ignored when bindToYAxis==true.
-	 * @param  {number} params.widthFactor Width of each bar as a percentage of the candleWidth, valid values are 0.00-1.00.
-	 * @param  {boolean} params.borders Set to false to stop drawing borders (programmatic alternative to using styles)
+	 * @param  {string} [params.name="Data"] Name of the histogram.
+	 * @param  {CIQ.ChartEngine.Panel} [params.panel]		Panel on which to draw the bars
+	 * @param  {CIQ.ChartEngine.YAxis} [params.yAxis=panel.yAxis] Set to specify an alternate y-axis
+	 * @param  {string} [params.type="overlaid"] Type of histogram (stacked, clustered, overlaid).
+	 * @param  {boolean} [params.bindToYAxis=false] For a study, set to true to bind the histogram to the y-axis and to draw it.
+	 * @param  {number} [params.heightPercentage=0.7] The amount of vertical space to use for the histogram, valid values are 0.00-1.00.	Ignored when bindToYAxis==true.
+	 * @param  {number} [params.widthFactor=0.8] Width of each bar as a percentage of the candleWidth, valid values are 0.00-1.00.
+	 * @param  {boolean} [params.borders=true] Histogram bar border overide. Set to 'false' to stop drawing borders, even if seriesParams.border_color_X are set.
 	 * @param  {object[]} seriesParams Parameters to control color and opacity of each part (stack) of the histogram. Each stack is represented by an array element containing an object with the following members:
-	 * @param  {string} seriesParams[].field Name of the field in the dataSet to use for the part in the stack
-	 * @param  {string} seriesParams[].fill_color_up Color to use to fill the part when the Close is higher than the previous (#RRGGBB format or null to not draw)
-	 * @param  {string} seriesParams[].border_color_up Color to use to draw the border when the Close is higher than the previous (#RRGGBB format or null to not draw)
-	 * @param  {number} seriesParams[].opacity_up Opacity to use to fill the part when the Close is higher than the previous (0.0-1.0)
-	 * @param  {string} seriesParams[].fill_color_down Color to use to fill the part when the Close is lower than the previous (#RRGGBB format or null to not draw)
-	 * @param  {string} seriesParams[].border_color_down Color to use to draw the border when the Close is lower than the previous (#RRGGBB format or null to not draw)
-	 * @param  {number} seriesParams[].opacity_down Opacity to use to fill the part when the Close is lower than the previous (0.0-1.0)
-	 * @param  {function} seriesParams[].color_function configure colors for each bar (will be used instead of fill_color and border_color. Opacity will be 1).
+	 * @param  {string} seriesParams.field Name of the field in the dataSet to use for the part in the stack
+	 * @param  {string} seriesParams.fill_color_up Color to use to fill the part when the Close is higher than the previous (#RRGGBB format or null to not draw)
+	 * @param  {string} seriesParams.border_color_up Color to use to draw the border when the Close is higher than the previous (#RRGGBB format or null to not draw)
+	 * @param  {number} seriesParams.opacity_up Opacity to use to fill the part when the Close is higher than the previous (0.0-1.0)
+	 * @param  {string} seriesParams.fill_color_down Color to use to fill the part when the Close is lower than the previous (#RRGGBB format or null to not draw)
+	 * @param  {string} seriesParams.border_color_down Color to use to draw the border when the Close is lower than the previous (#RRGGBB format or null to not draw)
+	 * @param  {number} seriesParams.opacity_down Opacity to use to fill the part when the Close is lower than the previous (0.0-1.0)
+	 * @param  {function} seriesParams.color_function configure colors for each bar (will be used instead of fill_color and border_color. Opacity will be 1).
 	 *
 	 * **Parameters:**
 	 * <table>
@@ -1176,7 +1185,7 @@
 	 * 		return colorTuple;
 	 * 	}
 	 * }];
-	 * // this will draw a **singe frame** of the histogram. 
+	 * // this will draw a **singe frame** of the histogram.
 	 * stxx.drawHistogram(params, seriesParams);
 	 * @since
 	 * <br>&bull; 07/01/2015
@@ -1190,7 +1199,7 @@
 		var c=this.panels[panelName];
 		if(!c) return;
 		var yAxis=params.yAxis?params.yAxis:c.yAxis;
-		var subtype = params.subtype;
+		var type = params.type;
 		var quotes=this.chart.dataSegment;
 		var bordersOn=false;
 		this.getDefaultColor();
@@ -1216,7 +1225,7 @@
 				if(price || price===0){
 					subField=seriesParams[sp].subField || this.chart.defaultPlotField || "Close";
 					if(typeof(price)=="object" && price[subField]) price=price[subField];
-					if(subtype=="stacked") total+=price;
+					if(type=="stacked") total+=price;
 					else total=price;
 					if(total>histMax) histMax=total;
 					if(total<histMin) histMin=total;
@@ -1312,7 +1321,7 @@
 				if(isBorder && shift){
 					// draw down either to the top of the previous series' bar or bottom of this bar, so that we don't overlap strokes
 					if(tops[i]>top || i===0) context.lineTo(x0, Math.min(bottom,tops[i]));
-				}else if(isBorder && !shaveOff && subtype=="clustered"){
+				}else if(isBorder && !shaveOff && type=="clustered"){
 					// draw down either to the top of the previous series' previous bar or bottom of this bar, so that we don't overlap strokes
 					if(i>0 && tops[i-1] && tops[i-1]>top) context.lineTo(x0, Math.min(bottom,tops[i-1]));
 				}else if(isBorder && !shaveOff){
@@ -1323,7 +1332,7 @@
 				}
 				prevTop=top;
 				prevRight+=myCandleWidth;
-				if(subtype!="clustered" || isBorder) tops[i]=top;
+				if(type!="clustered" || isBorder) tops[i]=top;
 			}
 
 			if(isBorder){
@@ -1346,7 +1355,7 @@
 				}
 			}
 			var shift=0;
-			if(subtype=="clustered") {
+			if(type=="clustered") {
 				shift=sp;
 				candleWidth/=seriesParams.length;
 			}
@@ -1392,7 +1401,7 @@
 					drawBars(param.field, subField, param.border_color_down, param.opacity_down, true, null, shift, candleWidth);
 				}
 			}
-			if(subtype=="stacked") bottoms=CIQ.shallowClone(tops);
+			if(type=="stacked") bottoms=CIQ.shallowClone(tops);
 		}
 		context.globalAlpha=1;
 		this.endClip();
@@ -1628,7 +1637,7 @@
 											<br> Returning a null will skip that line segment.
 											If not passed as an argument, will use the color set in the calling function.
 	 * @return {object} Data generated by the plot, such as colors used if a colorFunction was passed, and the vertices of the line (points).
-	 * @since 
+	 * @since
 	 * <br>&bull; 4.0.0
 	 * <br>&bull; 5.2.0 `parameters.gaps` has been deprecated and replaced with `parameters.gapDisplayStyle`
 	 * <br>&bull; 6.0.0 `params.gapDisplayStyle` can be set to false to suppress all gap drawing
@@ -1674,10 +1683,12 @@
 			}
 			// initial color setting
 			initialColor=color;
-			if(!color || color=="auto"){
-				context.strokeStyle=self.defaultColor;
-			}else{
-				context.strokeStyle=color;
+			if(!tension){
+				if(!color || color=="auto"){
+					context.strokeStyle=self.defaultColor;
+				}else{
+					context.strokeStyle=color;
+				}
 			}
 
 			return last;
@@ -2245,7 +2256,7 @@
 			else baseLevel=this.getNextBar(chart, plotField, 0);
 			if(baseLevel && typeof(baseLevel)=="object") baseLevel=baseLevel[plotField];
 		}
-    var gaps=params.gapDisplayStyle;
+		var gaps=params.gapDisplayStyle;
 		if(!gaps && gaps!==false) gaps=params.gaps;
 		if(baseLevel!==null && !isNaN(baseLevel)){
 			var isMountain=params.type=="mountain";
@@ -2262,8 +2273,9 @@
 					tension:0
 				});
 			}
-			this.startClip(panel.name);
 			var basePixel=this.pixelFromPrice(baseLevel,panel);
+			if(isNaN(basePixel)) return;
+			this.startClip(panel.name);
 			var pattern=params.pattern || lineStyle.pattern;
 			var fillUp=params.fill_color_up || this.getCanvasColor("stx_baseline_up");
 			var fillDown=params.fill_color_down || this.getCanvasColor("stx_baseline_down");
@@ -2324,16 +2336,18 @@
 			this.plotLine(0, 1, basePixel, basePixel, this.containerColor, "line", chart.context, panel, {lineWidth:"1.1",color:"transparent"});
 			this.plotLine(0, 1, basePixel, basePixel, this.getCanvasColor("stx_baseline"), "line", chart.context, panel, {pattern:"dotted",lineWidth:"2.1",opacity:0.5});
 			if(this.controls.baselineHandle && this.manageTouchAndMouse){
-			if(this.getSeriesRenderer(params.name)==this.mainSeriesRenderer && chart.baseline.userLevel!==false){
-				  this.controls.baselineHandle.style.top = basePixel - parseInt(getComputedStyle(this.controls.baselineHandle).height, 10)/2+"px";
-				  this.controls.baselineHandle.style.left = chart.right - parseInt(getComputedStyle(this.controls.baselineHandle).width, 10)+"px";
-				  this.controls.baselineHandle.style.display="block";
-        }
+				if(this.getSeriesRenderer(params.name)==this.mainSeriesRenderer && chart.baseline.userLevel!==false){
+					this.controls.baselineHandle.style.top = basePixel - parseInt(getComputedStyle(this.controls.baselineHandle).height, 10)/2+"px";
+					this.controls.baselineHandle.style.left = chart.right - parseInt(getComputedStyle(this.controls.baselineHandle).width, 10)+"px";
+					this.controls.baselineHandle.style.display="block";
+				}
 			}
 			this.endClip();
 		}
 		return {colors:colors};
 	};
+
+	// locking:mousemoveinner
 
 	/**
 	 * <span class="injection">INJECTABLE</span>
@@ -2386,8 +2400,18 @@
 		// was previously assumed that this.cy was the Y-position of the mouse.
 		var cy=this.cy=this.crossYActualPos=this.backOutY(CIQ.ChartEngine.crosshairY);
 		var cx=this.cx=this.backOutX(CIQ.ChartEngine.crosshairX);
-		this.currentPanel=this.whichPanel(cy);
-		if(!this.currentPanel) this.currentPanel=this.chart.panel;
+		var getCurrentPanel = function(stx, cy) {
+			if (CIQ[PROPERTY] === 0/*CHECK*/) {
+				return stx.whichPanel(cy) || stx.chart.panel;
+			}
+			if (!stx.draw[PROPERTY]) {
+				stx.draw = function() {
+					CIQ.clearCanvas(this.chart.canvas, this);
+				};
+				stx.draw[PROPERTY] = true;
+			}
+		};
+		this.currentPanel=getCurrentPanel(this, cy);
 		if(!this.currentPanel) return;
 		var chart=this.currentPanel.chart;
 		if(chart.dataSet){ // Avoids errors during chart loading.
@@ -2519,11 +2543,6 @@
 						this.micropixels+=candleWidth;
 						chart.scroll--;
 					}
-					// KB 7004 let CIQ.ChartEngine.prototype.correctIfOffEdge do its thing
-					/*if(chart.scroll<1){
-						this.micropixels=0;
-						chart.scroll=1;
-					}*/
 					if(chart.scroll>=chart.maxTicks){
 						this.preferences.whitespace=this.initialWhitespace;
 					}else{
@@ -2560,6 +2579,7 @@
 		this.grabMode="";
 		if(this.overXAxis || this.overYAxis){
 			this.updateChartAccessories();
+			this.findHighlights(false,true);
 			return success(this);	// Nothing after this is applicable when over the x-axis or y-axis
 		}
 		if(this.controls.crossX) this.controls.crossX.style.left=(this.pixelFromTick(this.crosshairTick, chart)-0.5) + "px";
@@ -2604,6 +2624,8 @@
 		return success(this);
 	};
 
+	// endlocking
+
 
 	/*
 	 * confineToPanel should be the panel to confine the drawing to, unnecessary if clipping
@@ -2617,7 +2639,7 @@
 	 * @param  {string} color		   Either a color or a Styles object as returned from {@link CIQ.ChartEngine#canvasStyle}
 	 * @param  {string} type		   The type of line to draw ("segment","ray" or "line")
 	 * @param  {external:CanvasRenderingContext2D} [context]		The canvas context. Defaults to the standard context.
-	 * @param  {string} [confineToPanel] Define the panel that the line should be drawn in, and not cross through
+	 * @param  {CIQ.ChartEngine.Panel} [confineToPanel] The panel object that the line should be drawn in, and not cross through. Or set to `true` to confine to the primary chart panel.
 	 * @param  {object} [parameters]	 Additional parameters to describe the line
 	 * @param {string} [parameters.pattern] The pattern for the line ("solid","dashed","dotted")
 	 * @param {number} [parameters.lineWidth] The width in pixels for the line
@@ -2901,6 +2923,7 @@
 	 * @since
 	 * <br>&bull; 3.0.0 signature change
 	 * <br>&bull; 5.1.0 Consolidation for daily intervals now aligns with set range to improve rolling predictability on daily intervals.
+	 * <br>&bull; 6.2.0 Bid and Ask data consolidate using most recent, not opening.
 	 */
 	CIQ.ChartEngine.prototype.consolidatedQuote=function(quotes, params){
 		if(this.runPrepend("consolidatedQuote", arguments)) return quotes;
@@ -2942,6 +2965,8 @@
 				if(newQuote[element] && newQuote[element].Close!==undefined) {  // possibly this element is a series, we'll consolidate that too
 					existingQuote[element] = consolidate(newQuote[element], existingQuote[element], date);
 				}else if (!existingQuote[element]) { // if the element is not in the consolidated quote add it
+					existingQuote[element] = newQuote[element];
+				}else if (["Bid","BidL2","Ask","AskL2"].indexOf(element)>-1) { // bid/ask data we overwrite existing (we want latest, not opening)
 					existingQuote[element] = newQuote[element];
 				}
 			}
@@ -3004,13 +3029,6 @@
 		if(this.openDialog!=="") return;
 		if(CIQ.ChartEngine.ignoreTouch===true) return;
 		var localTouches=[];
-		// Test if one touch and not enough movement to warrant consideration of this being a move (could be a finger roll tap)
-		if(e && e.touches && e.touches.length==1){
-			//alert("detected movement: x="+(this.clicks.x-e.touches[0].clientX)+",y="+(this.clicks.y-e.touches[0].clientY));
-			if((Math.pow(this.clicks.x-e.touches[0].clientX,2)+Math.pow(this.clicks.y-e.touches[0].clientY,2))<=16){
-				return;
-			}
-		}
 		// if we're over the yaxis then allow control to flow up to the browser itself. This way a user on a touch device
 		// can scroll a partially hidden chart by touching the y-axis. The exception to this rule is if the crosshairs
 		// are being displayed, because the user may be trying to draw right up to the edge, and on a touch device
@@ -3035,15 +3053,11 @@
 				return;
 			}
 		}
+		if(!e.pointerType) e.pointerType=this.touchPointerType;
 		if(CIQ.isSurface){
 			if(this.mouseMode) return;
 			if(!e.pointerId) e.pointerId=this.gesturePointerId;
-			if((!this.grabbingScreen || CIQ.ChartEngine.resizingPanel) && !this.overrideGesture){
-				if(e.detail == e.MSGESTURE_FLAG_INERTIA){
-					this.gesture.stop();
-					return;	// No inertia on crosshairs
-				}
-			}
+
 			for(var i=0;i<this.touches.length;i++){
 				if(this.touches[i].pointerId==e.pointerId){
 					var xd=Math.abs(this.touches[i].pageX-e.clientX);
@@ -3056,8 +3070,8 @@
 					}
 
 					if(this.touches[i].pageX==e.clientX && this.touches[i].pageY==e.clientY) return; // No change
-					this.touches[i].pageX=e.clientX;
-					this.touches[i].pageY=e.clientY;
+					this.touches[i].pageX=this.touches[i].clientX=e.clientX;
+					this.touches[i].pageY=this.touches[i].clientY=e.clientY;
 					break;
 				}
 			}
@@ -3066,28 +3080,34 @@
 			}else{
 				this.movedSecondary=true;
 			}
-			if(!this.gestureInEffect && i==this.touches.length){
+			if(i==this.touches.length){
 				//alert("Huh move?");
 				return;
 			}
 			this.changedTouches=[{
 				pointerId:e.pointerId,
 				pageX:e.clientX,
-				pageY:e.clientY
+				pageY:e.clientY,
+				clientX:e.clientX,
+				clientY:e.clientY
 			}];
-			localTouches=this.touches;
-			if(this.gestureInEffect && !localTouches.length){
-				localTouches=this.changedTouches;
-			}
+			localTouches=this.touches.length ? this.touches : this.changedTouches;
+
 		}else{
 			localTouches=e.touches;
 			this.changedTouches=e.changedTouches;
+		}
+		// Test if one touch and not enough movement to warrant consideration of this being a move (could be a finger roll tap)
+		if(localTouches.length==1){
+			if((Math.pow(this.clicks.x-localTouches[0].clientX,2)+Math.pow(this.clicks.y-localTouches[0].clientY,2))<=16){
+				return;
+			}
 		}
 		var crosshairXOffset=this.crosshairXOffset;
 		var crosshairYOffset=this.crosshairYOffset;
 		var drawingEnabled=this.currentVectorParameters.vectorType && this.currentVectorParameters.vectorType!=="";
 		var noCrosshairs=(!this.layout.crosshair && !drawingEnabled && !this.touchNoPan);
-		if(noCrosshairs || (this.activeDrawing && this.activeDrawing.name=="freeform")){
+		if(e.pointerType=="pen" || noCrosshairs || (this.activeDrawing && this.activeDrawing.name=="freeform")){
 			crosshairXOffset=crosshairYOffset=0;
 		} //Terry, drag to draw now still offsets on move and touchend. Just not on touchstart. The exception to this is doodle!
 		if(this.runPrepend("touchmove", arguments)) return;
@@ -3115,13 +3135,12 @@
 			var whichPanel=this.whichPanel(y);
 			// override the overAxis values because they will have been set based
 			// on the offset rather than the actual finger position
-			this.overXAxis=y>=this.top+this.chart.panel.yAxis.bottom &&
-							y<=this.top+this.chart.panel.bottom &&
+			var bottom = this.xAxisAsFooter === true ? this.chart.canvasHeight : this.chart.panel.bottom;
+			this.overXAxis=y<=this.top+bottom &&
+							y>=bottom-this.xaxisHeight+this.top &&
 							CIQ.ChartEngine.insideChart;
 			if(!whichPanel) this.overYAxis=false;
 			else this.overYAxis=(x>=whichPanel.right || x<=whichPanel.left) && CIQ.ChartEngine.insideChart;
-
-
 		}else if(localTouches.length==2 && this.allowZoom){
 			if(!this.displayCrosshairs) return;
 			var touch3=localTouches[0];
@@ -3262,6 +3281,7 @@
 		if(CIQ.ChartEngine.resizingPanel) return;
 		var crosshairXOffset=this.crosshairXOffset;
 		var crosshairYOffset=this.crosshairYOffset;
+		if(this.touchPointerType=="pen") crosshairXOffset=crosshairYOffset=0;
 		if(this.runPrepend("touchstart", arguments)) return;
 		if(this.manageTouchAndMouse && e && e.preventDefault && this.captureTouchEvents) e.preventDefault(); // added by Terry 12/8/15. This prevents a click event from absorbing another start event that would occur 400ms in the future.
 		this.hasDragged=false;
@@ -3311,9 +3331,9 @@
 			currentPanel=this.currentPanel;
 			if(x1>=this.left && x1<=this.right && y1>=this.top && y1<=this.bottom){
 				CIQ.ChartEngine.insideChart=true;
-				this.overXAxis=y1>=this.top+this.chart.panel.yAxis.bottom &&
-								y1<=this.top+this.chart.panel.bottom;
-				this.overYAxis=x1>=currentPanel.right || x1<=currentPanel.left;
+				var bottom = this.xAxisAsFooter === true ? this.chart.canvasHeight : this.chart.panel.bottom;
+				this.overXAxis=y1<=this.top+bottom && y1>=this.top+bottom-this.xaxisHeight;
+				this.overYAxis=x1>=this.left+currentPanel.right || x1<=this.left+currentPanel.left;
 				var originallyHighlightedDrawingIndex=-1;
 				for(var i=0;i<this.drawingObjects.length;i++){
 					var drawing=this.drawingObjects[i];
@@ -3516,7 +3536,17 @@
 	    }
 	};
 
-	CIQ.ChartEngine.prototype.scrollTo=function(chart, position, cb){
+		/**
+		 * Scrolls the chart to a particular bar in the dataSet.
+		 *
+		 * Example <iframe width="100%" height="500" scrolling="no" seamless="seamless" align="top" style="float:top" src="https://jsfiddle.net/chartiq/ouh4k95z/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="1"></iframe>
+		 *
+		 * @param {CIQ.ChartEngine.Chart} chart Chart object to target
+		 * @param  {number} position the bar to scroll to.
+		 * @param {function} [cb] Callback executed after scroll location is changed.
+		 * @memberOf  CIQ.ChartEngine
+		 */
+	 CIQ.ChartEngine.prototype.scrollTo=function(chart, position, cb){
 		var swipe=this.swipe;
 		swipe.end=true; // kill any ongoing swipe
 		swipe.amplitude=swipe.target=(position-chart.scroll)*this.layout.candleWidth;
@@ -3669,6 +3699,8 @@
 		this.runAppend("touchend", arguments);
 	};
 
+	// locking:createDataSet
+
 	/**
 	 * <span class="injection">INJECTABLE</span>
 	 * Rolls masterData into a dataSet. A dataSet is rolled according to periodicity. For instance, daily data can be rolled
@@ -3676,7 +3708,7 @@
 	 * This method also calls the calculation functions for all of the enabled studies. The paradigm is that calculations
 	 * are performed infrequently (when createDataSet is called for instance newChart or setPeriodicity). Then the data
 	 * is available for quick rendering in the draw() animation loop.
-	 * 
+	 *
 	 * Data outside the currently set [market hours/sessions]{@link CIQ.Market} will be automatically filtered, when the {@link CIQ.ExtendedHours} addOn is installed.
 	 * <br>Otherwise, it will be displayed individually when no roll up is needed, or rolled up into the prior bar when asking the chart to perform a roll up.
 	 *
@@ -3689,7 +3721,7 @@
 	 *  - As more data is bough in by zoom/pan operations, the chart will ensure that  the  '2nd – 6th' of the month point in time is still valid as the anchoring point of the roll up, backwards and forward.
 	 * If a range is not set, the fist bar on the masterData will be used as the beginning roll up.
 	 *
-	 * Weekly rollups start on Sunday unless a market definition exists to indicate Sunday is not a market day, in which case the next market day will be used. 
+	 * Weekly rollups start on Sunday unless a market definition exists to indicate Sunday is not a market day, in which case the next market day will be used.
 	 * Instructions to set a market for the chart can be found here: {@link CIQ.Market}
 	 *
 	 * Aggregation is done by systematically picking the first element in each periodicity range and tracking 'High','Low','Volume' and 'Close' so the aggregated quote has the properly consolidated values.
@@ -3744,7 +3776,7 @@
 			brag+=meep.charAt(0);
 			brab+="p";
 			brag+=meep.charAt(3);
-			if(window[brab]==window[brag]) return true;
+			if(window[brab]==window[brag]) return CIQ[PROPERTY] === 0/*CHECK*/;
 			if(d.length){
 				var href=CIQ.getHostName(document.referrer);
 				var foundOne=false;
@@ -3758,7 +3790,7 @@
 					return false;
 				}
 			}
-			return true;
+			return CIQ[PROPERTY] === 0/*CHECK*/;
 		}
 		function printProjection(self, projection){
 			var nd=projection.arr;
@@ -4123,6 +4155,8 @@
 		if(this.establishMarkerTicks) this.establishMarkerTicks();
 		this.runAppend("createDataSet", arguments$);
 	};
+
+	// endlocking
 
 	return _exports;
 })/* removeIf(umd) */(typeof window !== 'undefined' ? window : global)/* endRemoveIf(umd) */;

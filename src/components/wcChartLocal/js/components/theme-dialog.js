@@ -87,6 +87,7 @@
 	/**
 	 * @alias configure
 	 * @memberof WebComponents.cq-theme-dialog
+	 * @since 6.2.0 basecolor of mountain chart can be configured with "mb" piece
 	 */
 	ThemeDialog.prototype.open=function(params){
 		CIQ.UI.DialogContentTag.open.apply(this, arguments);
@@ -100,7 +101,7 @@
 		var self=this;
 		function configurePiece(name, obj, field, type){
 			var cu=self.node.find('cq-theme-piece[cq-piece="' + name + '"]');
-
+			if(!cu.length) return;
 			cu[0].piece={obj:obj, field:field};
 			if(type=="color"){
 				cu.find("cq-swatch")[0].setColor(obj[field], false);
@@ -114,6 +115,7 @@
 		configurePiece("bu", settings.chartTypes["Candle/Bar"].up, "border", "color");
 		configurePiece("bd", settings.chartTypes["Candle/Bar"].down, "border", "color");
 		configurePiece("lc", settings.chartTypes.Line, "color", "color");
+		configurePiece("mb", settings.chartTypes.Mountain, "basecolor", "color");
 		configurePiece("mc", settings.chartTypes.Mountain, "color", "color");
 		configurePiece("bg", settings.chart.Background, "color", "color");
 		configurePiece("gl", settings.chart["Grid Lines"], "color", "color");

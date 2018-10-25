@@ -326,7 +326,7 @@
 	 *
 	 * If markers must be part of an exported image generated using the {@link CIQ.Share} plug-in, you need to draw them on the actual canvas instead using [Canvas Markers](tutorial-Popular%20API%20Injections.html#marker).
 	 *
-	 * See {@tutorial Markers} tutorials for additional implementation instructions.
+	 * See the {@tutorial Markers} tutorials for additional implementation instruction, and details for managing  performance on deployments requiring a large number of markers.
 	 *
 	 * @name CIQ.Marker
 	 * @param {Object} params Parameters that describe the marker
@@ -404,7 +404,7 @@
 	/**
 	 * Normally the chart will take care of positioning the marker automatically but you can
 	 * force a marker to render itself by calling this method. This will cause the marker to
-	 * call it's placement function. You might want to do this for instance if your marker morphs
+	 * call its placement function. You might want to do this for instance if your marker morphs
 	 * or changes position outside of the animation loop.
 	 */
 	CIQ.Marker.prototype.render=function(){
@@ -499,15 +499,24 @@
 	 * @memberOf CIQ.ChartEngine
 	 * @param {Object} quote The bar's data.  This can come from the chart.dataSet
 	 * @return {Object}        The high and low for the marker
-	 * @since 3.0.0
+	 * @since 
+	 * <br>&bull; 3.0.0
+	 * <br>&bull; 6.2.0 Will consider `Open` and `Close` if `High` and/or `Low` are missing from quote
 	 */
 	CIQ.ChartEngine.prototype.getBarBounds=function(quote){
 		var type=this.layout.chartType, aggregation=this.layout.aggregationType;
 		var bounds;
 		if(aggregation=="pandf") bounds={high:Math.max(quote.pfOpen,quote.pfClose), low:Math.min(quote.pfOpen,quote.pfClose)};
 		else bounds={high:quote.High, low:quote.Low};
-		if(quote.markerHigh) bounds.high=markerHigh;
-		if(quote.markerLow) bounds.low=markerLow;
+		if(quote.markerHigh) bounds.high=quote.markerHigh;
+		if(quote.markerLow) bounds.low=quote.markerLow;
+		
+		var O,H,L;
+		if(quote.Open===undefined) O=quote.Close;
+		if(quote.High===undefined) H=Math.max(quote.Open || O, quote.Close);
+		if(quote.Low===undefined) L=Math.min(quote.Open || O, quote.Close);
+		if(!bounds.high && bounds.high!==0) bounds.high=H; 
+		if(!bounds.low && bounds.low!==0) bounds.low=L; 
 		return bounds;
 	};
 

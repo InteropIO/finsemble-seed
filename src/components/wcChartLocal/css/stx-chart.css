@@ -278,6 +278,14 @@ html,body{
 	display: inline-block;
 }
 
+.stx-panel-control.stx-show .stx-btn-panel {
+	display: none;
+}
+
+.stx-panel-control.stx-show .stx-btn-panel.stx-show {
+	display: inline;
+}
+
 .stx-panel-title {/* Panel/Chart Titles */
 	margin: 5px 10px;
 	float: left;
@@ -311,6 +319,10 @@ html,body{
 	/*text-transform: capitalize;*/
 	white-space: nowrap;
 	z-index: 40;
+}
+.mSticky.hide {
+	padding:0;
+	border:none;
 }
 .mSticky, .vectorTrashCan, .overlayTrashCan, .overlayEdit {
 	position: absolute;

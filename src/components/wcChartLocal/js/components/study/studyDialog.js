@@ -138,6 +138,10 @@
 
 	StudyDialog.prototype.updateStudy=function(updates){
 		if($(this).find(":invalid").length) return;
+		if(this.addWhenDone) {
+			CIQ.extend(this.queuedUpdates, updates);
+			return;
+		}
 		if(this.helper.libraryEntry.deferUpdate){
 			CIQ.extend(this.queuedUpdates, {inputs:updates.inputs});
 			this.helper.updateStudy({outputs:updates.outputs, parameters:updates.parameters});
@@ -183,7 +187,7 @@
 		}
 		if(this.hasAttribute("cq-study-axis")) {
 			if(!sd.parameters) sd.parameters={};
-			sd.parameters.yaxisDisplay=["right","left","none","shared"];
+			sd.parameters.yaxisDisplay=["default","right","left","none","shared"];
 		}
 	};
 
@@ -204,7 +208,7 @@
 			for(var field in fields){
 				var item=$("<cq-item></cq-item>");
 				item.text(fields[field]);
-				item.attr("stxtap","StudyDialog.setSelectOption('"+section+"')"); // must call StudyDialog because the item is "lifted" and so doesn't know it's parent
+				item.attr("stxtap","StudyDialog.setSelectOption('"+section+"')"); // must call StudyDialog because the item is "lifted" and so doesn't know its parent
 				cqMenu.append(item);
 				item[0].cqMenuWrapper=cqMenu.parents("cq-menu")[0];
 				item.attr("name", name);
@@ -336,6 +340,18 @@
 
 			if(attributes && attributes.hidden) newParam.hide();
 			newParam.find(".stx-data").append(paramInput);
+		}
+	};
+
+	StudyDialog.prototype.close=function(){
+		if(this.addWhenDone){
+			var helper=this.helper;
+			var sd=CIQ.Studies.addStudy(helper.stx, helper.name);
+			if(!CIQ.isEmpty(this.queuedUpdates)){
+				helper.sd=sd;
+				helper.updateStudy(this.queuedUpdates);
+				this.queuedUpdates={};
+			}
 		}
 	};
 

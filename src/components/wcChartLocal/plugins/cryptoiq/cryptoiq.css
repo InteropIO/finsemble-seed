@@ -86,7 +86,7 @@ cq-orderbook {
     cq-orderbook cq-orderbook-asks cq-item div[col="shading"] {
       background-color: rgba(184, 44, 12, 0.5); }
   cq-orderbook cq-item {
-    cursor: default;
+    cursor: pointer;
     display: table;
     font-size: 12px;
     height: 15px;
@@ -114,7 +114,8 @@ cq-orderbook {
     cq-orderbook cq-item:hover, cq-orderbook cq-item[cq-focused] {
       background-color: #efefef !important; }
       .ciq-night cq-orderbook cq-item:hover, .ciq-night cq-orderbook cq-item[cq-focused] {
-        background-color: #7c7c7c !important; }
+        background-color: #333 !important;
+        color: #fff; }
   cq-orderbook cq-orderbook-table[reverse] .ps-scrollbar-y-rail {
     /* scrollbar on left */
     left: 0px; }
@@ -162,5 +163,92 @@ cq-orderbook {
     left: -11px; }
   .cq-orderbook-toggle:hover, .cq-orderbook-toggle:active {
     opacity: 1; }
+
+/* --------------------------------------------------------- TRADE HISTORY --------------------------------------------------------- */
+cq-tradehistory {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.85);
+  padding: 0;
+  margin: 0;
+  display: none;
+  z-index: 35; }
+  .ciq-night cq-tradehistory {
+    background-color: rgba(28, 42, 53, 0.7); }
+  cq-tradehistory[cq-active] {
+    display: block; }
+  cq-tradehistory cq-tradehistory-table {
+    float: left;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    border-left: solid 1px rgba(28, 42, 53, 0.3); }
+    .ciq-night cq-tradehistory cq-tradehistory-table {
+      border-left: solid 1px rgba(255, 255, 255, 0.3); }
+    cq-tradehistory cq-tradehistory-table cq-item[cq-tradehistory-header] {
+      padding: inherit;
+      font-weight: bold;
+      background-color: rgba(239, 239, 239, 0.8);
+      color: #000; }
+      .ciq-night cq-tradehistory cq-tradehistory-table cq-item[cq-tradehistory-header] {
+        background-color: rgba(0, 0, 0, 0.8);
+        color: #fff; }
+    cq-tradehistory cq-tradehistory-table:first-of-type {
+      border: none; }
+  cq-tradehistory cq-item {
+    cursor: default;
+    display: table;
+    font-size: 12px;
+    height: 15px;
+    line-height: 15px;
+    padding: 0;
+    width: 100%; }
+    cq-tradehistory cq-item div {
+      display: table-cell;
+      border-bottom: solid 1px rgba(28, 42, 53, 0.3);
+      font-size: 10px;
+      padding-left: 2px;
+      padding-right: 2px; }
+      .ciq-night cq-tradehistory cq-item div {
+        border-bottom: solid 1px rgba(255, 255, 255, 0.3); }
+    cq-tradehistory cq-item:hover, cq-tradehistory cq-item[cq-focused] {
+      background-color: #efefef !important; }
+      .ciq-night cq-tradehistory cq-item:hover, .ciq-night cq-tradehistory cq-item[cq-focused] {
+        background-color: #333 !important;
+        color: #fff; }
+  cq-tradehistory cq-tradehistory-body {
+    display: table;
+    width: 100%;
+    padding: 0;
+    margin: 0; }
+    cq-tradehistory cq-tradehistory-body cq-item div[col="price"] {
+      font-weight: bold; }
+    cq-tradehistory cq-tradehistory-body cq-item[dir='up']:not([corrected]) {
+      animation: uptrade 3s linear -1s; }
+    cq-tradehistory cq-tradehistory-body cq-item[dir='up'] div[col="price"] {
+      color: #8cc176; }
+    cq-tradehistory cq-tradehistory-body cq-item[dir='down']:not([corrected]) {
+      animation: downtrade 3s linear -1s; }
+    cq-tradehistory cq-tradehistory-body cq-item[dir='down'] div[col="price"] {
+      color: #b82c0c; }
+    cq-tradehistory cq-tradehistory-body cq-item[dir='']:not([corrected]) {
+      animation: eventrade 3s linear -1s; }
+    cq-tradehistory cq-tradehistory-body cq-item[dir=''] div[col="price"] {
+      color: #7c7c7c; }
+
+@keyframes uptrade {
+  from {
+    background-color: #8cc176; } }
+
+@keyframes downtrade {
+  from {
+    background-color: #b82c0c; } }
+
+@keyframes eventrade {
+  from {
+    background-color: #7c7c7c; } }
 
 /*# sourceMappingURL=cryptoiq.css.map */

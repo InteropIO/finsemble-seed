@@ -410,6 +410,11 @@ cq-color-picker ul { /* The unordered list with all the swatches */
 
 /* --------------------------------------------------------- Layout --------------------------------------------------------- */
 
+/* MS Edge prevent native swipe actions */
+cq-context {
+	touch-action:none;
+}
+
 .ciq-nav,
 cq-toolbar,
 .ciq-chart-area,
@@ -549,6 +554,13 @@ cq-menu-dropdown {
 
 	&[cq-lift] {
 		width:auto;
+	}
+
+	&.context-menu-right {
+		left: 100%;
+		margin-top: 0;
+		padding: 0;
+		width: auto;
 	}
 }
 
@@ -1193,6 +1205,10 @@ cq-views {
 			font-size:13px;
 		}
 	}
+
+	.break-sm & {
+		width:inherit;
+	}
 }
 
 /* Themes in Display Menu */
@@ -1222,6 +1238,11 @@ cq-study-legend  {
 		width: 105px;
 		float: left;
 	}
+
+	.break-sm & {
+		width:inherit;
+	}
+
 	cq-menu.ciq-studies & {
 		margin:-10px 0 10px;
 	}
@@ -1229,6 +1250,9 @@ cq-study-legend  {
 
 cq-study-legend cq-label.click-to-edit {
 	width: 140px;
+	.break-sm & {
+		width:190px;
+	}
 }
 
 cq-study-legend cq-section-dynamic {/* Current studies container - height is set based on the height of the current studies content */
@@ -1407,6 +1431,11 @@ cq-undo, cq-redo {
 
 cq-undo[cq-active], cq-redo[cq-active]{
 	opacity: 1;
+}
+
+cq-toolbar:not([cq-drawing-edit="none"]) .ciq-drawing-edit-hidden,
+cq-toolbar[cq-drawing-edit="none"] .ciq-drawing-edit-only {
+	display: none;
 }
 
 cq-annotation .ciq-btn {/* Menu Triggers in toolbar */
@@ -1749,7 +1778,7 @@ cq-hu-static {
 	}
 
 	.break-sm & {
-	    top: initial;
+	    top: auto;
 	    bottom: 20px;
 	    left: 20px;
 	    display: block;
@@ -1902,6 +1931,10 @@ cq-dialog {
 	@include border-radius($soft-corners);
 	@include box-sizing(border-box);
 	z-index:3;
+}
+
+.break-sm cq-dialog {
+	max-width:320px;
 }
 
 cq-dialog[cq-active] {
@@ -2062,12 +2095,14 @@ cq-study-dialog #parameters cq-swatch {
 	float: right;
 }
 
+cq-dialog[cq-drawing-context],
 cq-dialog[cq-study-context] {
 	padding: 0px 0px;
 	min-width: auto;
 }
 
 /* Context Dialog */
+cq-drawing-context,
 cq-study-context {
 	min-width: 130px;
 	padding: 0px;
@@ -2085,7 +2120,6 @@ cq-study-context {
 		color:$DEFAULT-text-strong;
 	}
 
-
 	.ciq-btn {
 		width: 65px;
 
@@ -2098,6 +2132,17 @@ cq-study-context {
 			border-top-left-radius: 0;
 			border-bottom-left-radius: 0;
 		}
+	}
+
+	.context-button-right-arrow {
+		display: inline-block;
+		border-bottom: 0.35em solid transparent;
+		border-left: 0.35em solid black;
+		border-top: 0.35em solid transparent;
+		height: 0;
+		margin-left: 1em;
+		padding: 0;
+		width: 0;
 	}
 }
 
@@ -2380,19 +2425,23 @@ cq-chart-title cq-chart-price {
 	color:$DEFAULT-text-medium;
 	vertical-align:text-bottom;
 }
-cq-chart-title cq-chart-price > * {position:relative;}
-cq-chart-title cq-chart-price cq-change:after {/* Up/Down Arrow indicators */
+cq-chart-title cq-chart-price > * {
+	position:relative;
+	white-space:nowrap;
+}
+cq-chart-title cq-chart-price cq-change .ico {/* Up/Down Arrow indicators */
 	content:"";
     display: block;
     height: 12px;
     width: 12px;
 	float:left;
+	background-color:inherit;
 }
-cq-chart-title cq-chart-price.stx-up cq-change:after {
+cq-chart-title cq-chart-price.stx-up cq-change .ico {
     background-image: url(img/stx-sprite-ui.svg);
 	background-position: -633px -31px;
 }
-cq-chart-title cq-chart-price.stx-down cq-change:after {
+cq-chart-title cq-chart-price.stx-down cq-change .ico {
     background-image: url(img/stx-sprite-ui.svg);
 	background-position: -683px -31px;
 }
@@ -2633,11 +2682,11 @@ cq-theme-dialog  {
 		display:inline-block;
 		vertical-align:top;
 		margin-top: 15px;
-		&:first-of-type {
+		body:not(.break-sm) &:first-of-type {
 			border-right:dashed 1px rgba(0,0,0,.5);
 			padding-right: 5px;
 		}
-		&:last-of-type {
+		body:not(.break-sm) &:last-of-type {
 			padding-left: 5px;
 		}
 	}
@@ -2651,9 +2700,11 @@ cq-theme-dialog  {
 			padding-left:10px;
 		}
 		& div.ciq-btn {
-			position:absolute;
-			right:40px;
+			margin-left:5px;
 		}
+	}
+	.break-sm & :not(cq-close):not(input){
+		text-align:center;
 	}
 }
 

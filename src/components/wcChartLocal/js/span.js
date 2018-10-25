@@ -360,8 +360,6 @@
 					nodraw:true
 				};
 
-				this.isHistoricalModeSet=true;
-
 				if(this.layout.interval=="tick"){
 					// for 'tick' periodicity we have to request a specific range instead of # of ticks,
 					//since we can never be sure how many ticks will be in a particular range.
@@ -374,10 +372,12 @@
 				var minOffset=Math.max(this.quoteDriver.behavior.bufferSize+50,200); // ensure we have some data off page for continuity sake and ease of scrolling, while also accounting for about 50 possible gaps in the buffer zone.  Otherwise we end up paginating if there's a gap.
 				iter=this.standardMarketIterator(lt, null, chart);
 				qparams.startDate = new Date(iter.previous(minOffset).getTime());
-				if(this.isHistoricalModeSet) {
-					iter=this.standardMarketIterator(rt, null, chart);
-					qparams.endDate = new Date(iter.next(minOffset).getTime());
-				}
+
+				iter=this.standardMarketIterator(rt, null, chart);
+				qparams.endDate = new Date(iter.next(minOffset).getTime());
+				if(qparams.endDate<Date.now()) this.isHistoricalModeSet=true;
+				else qparams.endDate=rt;
+
 				this.clearCurrentMarketData(this.chart);
 				this.quoteDriver.newChart(qparams, loadTheRange);
 			}else{
@@ -421,11 +421,11 @@
      * });
      * </pre>
      *
-	 * Just keep in mind that if passing `periodicity.interval` and `periodicity.period` to be used in {@link CIQ.ChartEngine#setRange} , then **DO NOT** set `maintainPeriodicity`. Otherwise, the requested periodicity will be ignored.
+	 * Just keep in mind that if passing `periodicity.period` , `periodicity.timeUnit` and `periodicity.interval` to be used in {@link CIQ.ChartEngine#setRange} , then **DO NOT** set `maintainPeriodicity`. Otherwise, the requested periodicity will be ignored.
 	 *
 	 * If a quotefeed is attached to the chart (ver 04-2015 and up), setSpan will attempt to gather more data from the feed (IF NEEDED) to fulfill the requested range AND **may override the periodicity** to provide the most optimal chart display.
 	 * So depending on your UI, **you may need to use the callback to refresh the periodicity displayed on your menu**.
-	 * Please see {@link CIQ.ChartEngine#setRange}	 and {@link CIQ.ChartEngine#displayAll} for complete details on how the periodicity is calculated.
+	 * Please see {@link CIQ.ChartEngine#setRange} and {@link CIQ.ChartEngine#displayAll} for complete details on how the periodicity is calculated.
 	 * <br>If there is no quotefeed attached (or using a version prior to 04-2015), then setStan will use whatever data is available in the masterData. So you must ensure you have preloaded enough to display the requested range.
 	 *
 	 * Calling {@link CIQ.ChartEngine#setPeriodicity} immediately after setting a span may cause all of the data to be re-fetched at a different periodicity than the one used by the requested span. Once you have set your initial periodicity for the chart, there is no need to manually change it when setting a new span unless you are using the `params.maintainPeriodicity` flag; in which case you want to call `setPeriodicity` **before** you set the span, so the setSpan call will use the pre-set periodicity.

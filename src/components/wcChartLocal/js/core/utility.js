@@ -5,7 +5,9 @@
 // Be sure your webserver is set to deliver UTF-8 charset
 // For apache add "AddDefaultCharset UTF-8" to httpd.conf
 // otherwise use \u unicode escapes for non-ascii characters
+//-------------------------------------------------------------------------------------------
 (function(_exports) {
+
 	// Node.js compatibility
 	if(typeof global!=="undefined"){
 		if(typeof global.CanvasRenderingContext2D==="undefined") global.CanvasRenderingContext2D=function(){};
@@ -111,7 +113,7 @@
 			this.stxLine(fromX, fromY, toX, toY, this.strokeStyle, this.globalAlpha, this.lineWidth);
 			return;
 		}
-		
+
 		// can't dash if we do not have proper values
 		if (fromY === Infinity || fromX === Infinity || toY === Infinity || toX === Infinity ) return;
 
@@ -202,7 +204,7 @@
 		this.stroke();
 		this.closePath();
 	};
-	
+
 	/* Easing cubics from
 	http://gizma.com/easing/#expo1
 	t = current time (t should move from zero to d)
@@ -224,7 +226,7 @@
 		t -= 2;
 		return c/2*(t*t*t + 2) + b;
 	};
-	
+
 	Math.easeOutCubic = function (t, b, c, d) {
 		t /= d;
 		t--;
@@ -258,24 +260,6 @@
 	 * @type boolean
 	 */
 	CIQ.iphone = userAgent.indexOf("iPhone") != -1;
-	/**
-	 * READ ONLY. Will be 'true' if the chart is running on a MS Surface like device
-	 * @memberof CIQ
-	 * @type boolean
-	 */
-	CIQ.isSurface = nav.msMaxTouchPoints && nav.msMaxTouchPoints > 1;
-	/**
-	 * READ ONLY. Will be 'true' if the chart is running on a touch capable device
-	 * @memberof CIQ
-	 * @type boolean
-	 */
-	CIQ.touchDevice = typeof(doc.ontouchstart)!="undefined" || CIQ.isSurface;
-	/**
-	 * READ ONLY. Will be 'true' if the chart is running on a Chrome browser
-	 * @memberof CIQ
-	 * @type boolean
-	 */
-	CIQ.is_chrome = userAgent.toLowerCase().indexOf('chrome') > -1;
 	/**
 	 * READ ONLY. Will be 'true' if the chart is running on an Android OS device
 	 * @memberof CIQ
@@ -343,6 +327,30 @@
 	 */
 	CIQ.isMobile = CIQ.isAndroid || CIQ.ipad || CIQ.iphone;
 	/**
+	 * READ ONLY. Will be 'true' if the chart is running on a MS Surface like device
+	 * @memberof CIQ
+	 * @type boolean
+	 */
+	CIQ.isSurface = nav.maxTouchPoints && nav.maxTouchPoints > 1 && (CIQ.isEdge || CIQ.isIE);
+	/**
+	 * READ ONLY. Will be 'true' if the chart is running on a touch capable device
+	 * @memberof CIQ
+	 * @type boolean
+	 */
+	CIQ.touchDevice = typeof(doc.ontouchstart)!="undefined" || CIQ.isSurface;
+	/**
+	 * READ ONLY. Will be 'true' if the chart is running on a Chrome browser
+	 * @memberof CIQ
+	 * @type boolean
+	 */
+	CIQ.is_chrome = userAgent.toLowerCase().indexOf('chrome') > -1 && !CIQ.isEdge;
+	/**
+	 * READ ONLY. Will be 'true' if the chart is running on a Firefox browser
+	 * @memberof CIQ
+	 * @type boolean
+	 */
+	CIQ.isFF = userAgent.toLowerCase().indexOf('firefox') > -1;
+	/**
 	 * READ ONLY. Will be 'true' if the chart is running from a MS Surface application
 	 * @memberof CIQ
 	 * @type boolean
@@ -355,7 +363,7 @@
 	 * @type boolean
 	 * @since 6.1.0
 	 */
-	CIQ.isWebComponentsSupported = ('registerElement' in document &&
+	CIQ.isWebComponentsSupported = (typeof(document) !== "undefined" && 'registerElement' in document &&
 			'import' in document.createElement('link') &&
 			'content' in document.createElement('template'));
 	/**
@@ -364,10 +372,16 @@
 	 * @type boolean
 	 */
 	CIQ.noKeyboard = CIQ.ipad || CIQ.iphone || CIQ.isAndroid || CIQ.isSurfaceApp;
-	CIQ.wheelEvent = ("wheel" in document.createElement("div") || "onwheel" in document) ? "wheel" :
-			document.onmousewheel !== undefined ? "mousewheel" :
-			"DOMMouseScroll";
-	if(CIQ.isIE) CIQ.wheelEvent="wheel";
+
+	/**
+	 * READ ONLY.  String of appropriate wheel event based on browser features.
+	 */
+ 	CIQ.wheelEvent = (function(){
+ 		if(typeof(document) === "undefined") return undefined;
+		if(CIQ.isIE || "onwheel" in document.createElement("div")) return "wheel";
+		if (document.onmousewheel !== undefined) return "mousewheel";
+		return "DOMMouseScroll";
+ 	})();
 
 	/**
 	 * Returns the log base 10 of a value
@@ -663,7 +677,7 @@
 	/**
 	 * Create arrow notation strings (field-->property) of a given field and an array of properties
 	 * Used to create a set of object properties in string format for later use by CIQ.existsInObjectChain
-	 * It's main use is to pass field names into {@link CIQ.ChartEngine#determineMinMax}.
+	 * Its main use is to pass field names into {@link CIQ.ChartEngine#determineMinMax}.
 	 * @param  {string} field      Base object.
 	 * @param  {array} properties 	Array of strings representing properties
 	 * @return {array}           Array of object properties expressed in arrow notation (field-->property)
@@ -923,7 +937,7 @@
 	};
 
 	/**
-	 * Microsoft surface bug requires a timeout in oreder for the cursor to show up in a focused
+	 * Microsoft surface bug requires a timeout in order for the cursor to show up in a focused
 	 * text box. iPad also, sometimes, when embedded in an iframe, so set useTimeout if in an iframe!
 	 * @param  {object} node       A DOM element to focus
 	 * @param  {number} useTimeout Whether to apply a timeout or not. If number then the number of milliseconds.
@@ -1408,13 +1422,14 @@
 		if(!dt || dt.getFullYear) return dt;  //if passing in a JS date, return it.
 		var myDateArray=[];
 		var y,m,d,h,mn,sc,ms;
-		if(dt.length==12){	// yyyymmddhhmm
+		if(dt.length==12 || dt.length==14){	// yyyymmddhhmm[ss]
 			y=parseFloat(dt.substring(0,4));
 			m=parseFloat(dt.substring(4,6)) - 1;
 			d=parseFloat(dt.substring(6,8));
 			h=parseFloat(dt.substring(8,10));
 			mn=parseFloat(dt.substring(10,12));
-			return new Date(y, m, d, h, mn, 0, 0);
+			sc=parseFloat(dt.substring(12,14)) || 0;
+			return new Date(y, m, d, h, mn, sc, 0);
 		}else if(CIQ.yyyymmddhhmmssmmmrx.test(dt)){
 			y=parseFloat(dt.substring(0,4));
 			m=parseFloat(dt.substring(4,6)) - 1;
@@ -1639,13 +1654,13 @@
 		if(h<10) h="0" + h;
 		var mn=dt.getMinutes();
 		if(mn<10) mn="0" + mn;
-		if(h=="00" && mn=="00") return m + "-" + d + "-" + dt.getFullYear();
 		var s=dt.getSeconds();
 		if(s<10) s="0" + s;
-		if(s=="00") return m + "-" + d + " " + h + ":" + mn;
 		var ms=dt.getMilliseconds();
 		if(ms<10) ms="00" + ms;
 		else if(ms<100) ms="0" + ms;
+		if(h=="00" && mn=="00" && s=="00" && ms=="000") return m + "-" + d + "-" + dt.getFullYear();
+		if(s=="00" && ms=="000") return m + "-" + d + " " + h + ":" + mn;
 		if(ms=="000") return m + "-" + d + " " + h + ":" + mn + ":" + s;
 		return m + "-" + d + " " + h + ":" + mn + ":" + s + ":" + ms;
 	};
@@ -1726,11 +1741,12 @@
 			server = new XDomainRequest();
 			return server;
 		}
+
 		try{
 			//All modern browsers (IE7+, Firefox, Chrome, Safari, and Opera) have a built-in XMLHttpRequest object.
 			server = new XMLHttpRequest();
 		}catch(e){
-			alert("ajax not supported in browser");
+			console.warn("ajax not supported in browser");
 		}
 		return server;
 	};
@@ -1833,7 +1849,7 @@
 		var server=CIQ.getAjaxServer(url);
 		if(!server) return false;
 		if(!CIQ.ajaxes) CIQ.ajaxes=[];
-		CIQ.ajaxes.unshift(server);  // We need to do this maintenance stuff for old IE which may destroy the server before it's come back:
+		CIQ.ajaxes.unshift(server);  // We need to do this maintenance stuff for old IE which may destroy the server before it has come back:
 									 //  http://stackoverflow.com/questions/8058446/ie-xdomainrequest-not-always-work
 		var epoch=new Date();
 		if(!params.noEpoch){
@@ -1880,9 +1896,9 @@
 		}
 		return true;
 	};
-	
+
 	/**
-	 * Convenience function to convert API periodicity parameters to internal periodicity format. 
+	 * Convenience function to convert API periodicity parameters to internal periodicity format.
 	 * @param  {string} period The period value as required by {@link CIQ.ChartEngine#setPeriodicity}
 	 * @param  {string} [interval] The interval value as required by {@link CIQ.ChartEngine#setPeriodicity}
 	 * @param  {string} timeUnit The timeUnit value as required by {@link CIQ.ChartEngine#setPeriodicity}
@@ -1902,12 +1918,12 @@
 				timeUnit=null;
 			}
 		}
-		
+
 		// clean up timeUnit
 		//if(CIQ.ChartEngine.isDailyInterval(interval)) timeUnit=null; // redundant
 		else if(interval=="tick") timeUnit=null;
 		else if(!timeUnit && !isNaN(interval)) timeUnit="minute";
-		
+
 		// support year
 		if(interval=="year"){
 			interval = "month";
@@ -1919,7 +1935,7 @@
 	};
 
 	/**
-	 * Convenience function to determine if a value is a valid number. 
+	 * Convenience function to determine if a value is a valid number.
 	 * @param  {number} n The number to check
 	 * @return {boolean} True if n is a real finite number. NaN, Infinity, null, undefined, etc are not considered to be a valid number.
 	 * @memberof CIQ
@@ -1934,15 +1950,20 @@
 	 * @param  {number} n The number to check
 	 * @return  {number} Number of decimal places
 	 * @memberof CIQ
-	 * @since 6.1.0
+	 * @since 
+	 * <br>&bull; 6.1.0
+	 * <br>&bull;  6.2.0 Now handles scientific notation
 	 */
 	CIQ.countDecimals=function(n) {
 		if(typeof(n)!=="number" || isNaN(n)) return 0;
 	    if(Math.floor(n) === Number(n)) return 0;
-	    return n.toString().split(".")[1].length || 0; 
+	    var strN=n.toString().split("e-");
+	    if(strN.length>1) return CIQ.countDecimals(Number(strN[0]))+Number(strN[1]);
+	    if(strN[0].indexOf(".")>-1) return strN[0].split(".")[1].length; 
+	    return 0;
 	};
 
 
-	
+
 	return _exports;
 })/* removeIf(umd) */(typeof window !== 'undefined' ? window : global)/* endRemoveIf(umd) */;

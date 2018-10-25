@@ -1,9 +1,9 @@
 $DARK: ciq-night !default;
-$DARK-bg:					#151f28;
-$DARK-main:					#1c2a35;
-$DARK-hu-bg: 				#1C2A35;
-$DARK-hu-bg-dynamic: 		#2a51d0;
-$DARK-text:					#fff;
+$DARK-bg:					#151f28 !default;
+$DARK-main:					#1c2a35 !default;
+$DARK-hu-bg: 				#1C2A35 !default;
+$DARK-hu-bg-dynamic: 		#2a51d0 !default;
+$DARK-text:					#fff !default;
 
 .#{$DARK} {
 	background:$DARK-bg;

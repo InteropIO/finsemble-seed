@@ -4,7 +4,7 @@
 	} else if (typeof exports === 'object') {
 		module.exports = factory(require('./componentUI'));
 	} else {
-		factory(root, root);
+		factory(root);
 	}
 })(this, function(_exports) {
 	var CIQ = _exports.CIQ;
@@ -15,7 +15,7 @@
 	 *
 	 * Displays a table of Level 2 Bid/Ask information from {@link CIQ.ChartEngine.Chart#currentMarketData}.
 	 * 
-	 * **Requires [cryptoIQ]{@link CIQ.MarketDepth} pugin. See {@link CIQ.ChartEngine#updateCurrentMarketData} for data requirements**
+	 * **Requires [cryptoIQ]{@link CIQ.MarketDepth} plugin. See {@link CIQ.ChartEngine#updateCurrentMarketData} for data requirements**
 	 * 
 	 * This component will take up 100% of its parent element.
 	 * 
@@ -60,7 +60,7 @@
 		</div>
 		</cq-context>
 	 * @example
-	 * // once the component is added tot he HTML it can be activated and data loaded as follows:
+	 * // once the component is added to the HTML it can be activated and data loaded as follows:
 	 * var stxx=new CIQ.ChartEngine({container:$$$(".chartContainer")}); 
 	 * new CIQ.UI.Context(stxx, $("cq-context,[cq-context]"));
 	 * stxx.updateCurrentMarketData(yourL2Data); // call this every time you want refresh.
@@ -150,13 +150,25 @@
 		var self=this;
 		function setHtml(i){
 			return function(){
-				var me=$(this);
-				if(me.attr("col") && data[i][me.attr("col")]!==undefined){
-					var val=Number(data[i][me.attr("col")].toFixed(8)); // remove roundoff error
+				var myCol=$(this).attr("col");
+				if(myCol && data[i][myCol]!==undefined){
+					var val=Number(data[i][myCol].toFixed(8)); // remove roundoff error
 					var stx=self.context.stx;
 					if(stx.marketDepth) stx=stx.marketDepth.marketDepth;
 					val=stx.formatPrice(val, stx.chart.panel);
-					me.html(val);
+					$(this).html(val);
+				}
+			};
+		}
+		function order(selector){
+			return function(e){
+				var price=e.currentTarget.getAttribute("price");
+				if(!price && price!==0) return;
+				var tfc=self.context.stx.tfc;
+				if(tfc){
+					if(selector=="cq-orderbook-bids") tfc.newTrade("enableBuy");
+					else if(selector=="cq-orderbook-asks") tfc.newTrade("enableSell");
+					tfc.positionCenterLine(Number(price));
 				}
 			};
 		}
@@ -179,9 +191,13 @@
 					var headers=this.node.find("[cq-orderbook-header]");
 					headers.children().not('[col="shading"]').css("width",headers.innerWidth()/childCount+"px");
 				}
+				row[0].selectFC=order(selector);
+				row.stxtap(row[0].selectFC);
 			}
 			children=row.children().not('[col="shading"]');
 			children.each(setHtml(d));
+			row.attr("price",data[d].price);
+
 			var percentSize=100*data[d].size/data[data.length-1].cum_size+"%";
 			// using linear-gradient is ideal, but it doesn't shade the row in IE Edge or Safari - the cells get the shading instead.  Too bad.
 			if(row.is("[cq-size-shading]")){

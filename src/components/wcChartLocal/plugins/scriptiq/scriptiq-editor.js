@@ -52,7 +52,7 @@
 	 * @example
 	 * 	//
 		<cq-scriptiq-editor>
-			<div class="stx-ico-handle stx-grab" onmouseover="stxx.modalBegin();" onmouseout="stxx.modalEnd();"><span class=""></span></div>
+			<div class="stx-ico-handle" onmouseover="stxx.modalBegin();" onmouseout="stxx.modalEnd();"><span class=""></span></div>
 			<div class="scriptiq-toolbar">
 	    		<div stxtap="addScript()" class="ciq-btn">Apply</div>
 	    		<div stxtap="clear()" class="ciq-btn">Clear</div>
@@ -162,8 +162,6 @@
 		var scriptText=scriptToAdd || node.find(".scriptiq-textarea textarea").val(); // if there is no ScriptIQ being passed along from storage then look at the scripting UI
 		if(!scriptText || scriptText.length <= 0) return;
 		var scriptStatus=node.find(".scriptiq-status input");
-		var compiledScript=CIQ.Scripting.processCoffee(scriptText);
-		var sd=compiledScript ? compiledScript.sd : null;
 		var stx=this.context ? this.context.stx : null;
 		var studyLibrary = CIQ.Studies.studyLibrary;
 		this.currentScripts=Object.keys(CIQ.Studies.studyScriptLibrary);
@@ -197,18 +195,15 @@
 			currentStudy[sd.name] = CIQ.Studies.addStudy(stx, sd.name, null, null, null, null, sd);
 		}
 
-		if(compiledScript.error) {
+		var compiledScript=CIQ.Scripting.addCoffeeScriptStudyToLibrary(scriptText);
+		if(compiledScript.error){
 			scriptStatus.val(compiledScript.error);
 			return;
-		} else if(studyLibrary && studyLibrary[sd.name] && !studyLibrary[sd.name].source){
-			scriptStatus.val("Indicator '" + sd.name + "' cannot be overwritten. Please pick another name.");
-			return;
-		} 
-
-		sd.source=scriptText; // needed for the study menu to edit original ScriptIQ
-		sd.siqList=listState ? true : false; // for initial startup we need to know if the script needs to be listed in the menu
+		}
+		
+		var sd=compiledScript.sd;
+		sd.siqList=!!listState; // for initial startup we need to know if the script needs to be listed in the menu
 		if(scriptToAdd) { // if scriptToAdd isn't null then the script came from storage
-			CIQ.Scripting.addStudyToLibrary(compiledScript.studyScript, sd);
 			// apply newly compiled library entry to the layout's studies
 			for(var name in stx.layout.studies) {
 				layoutStudy = stx.layout.studies[name];
@@ -223,9 +218,6 @@
 		}
 
 		// add the script from the scripting UI
-		var scriptName = sd.name;
-		if(studyLibrary[scriptName]) delete studyLibrary[scriptName]; // already exists, delete old version
-		CIQ.Scripting.addStudyToLibrary(compiledScript.studyScript, sd);
 		displayStudy(sd);
 
 		var saveObj = {
@@ -235,11 +227,11 @@
 		this.nameValueStore.get(this.constants.storageKey, function(err,scripts){
 			if(!err) {
 				if(!scripts) scripts={};
-				scripts[scriptName]=saveObj;
+				scripts[sd.name]=saveObj;
 				self.nameValueStore.set(self.constants.storageKey,scripts);
 			}
 		});
-		scriptStatus.val(scriptName + " indicator successfully added");
+		scriptStatus.val(sd.name + " indicator successfully added");
 	};
 
 	/**
@@ -312,6 +304,7 @@
 
 	ScriptIQEditor.prototype.drag=function(e){
 		var self=this;
+		CIQ.appendClassName($$$(".stx-ico-handle",this.node[0]),"stx-grab");
 		function doResize(){
 			self.node[0].style.height=self.height+"px";
 
@@ -331,7 +324,7 @@
 	ScriptIQEditor.prototype.endDrag=function(e){
 		//this.stx.modalEnd();
 		CIQ.unappendClassName(document.body,"resizing");
-
+		CIQ.unappendClassName($$$(".stx-ico-handle",this.node[0]),"stx-grab");
 		//possibly vendor styles do not propagate?
 		CIQ.unappendClassName(this.node[0],"resizing");
 		var els=this.node[0].getElementsByTagName("*");

@@ -3101,9 +3101,12 @@ CanvasRenderer.prototype.renderBackgroundGradient = function(gradientImage, boun
 
 CanvasRenderer.prototype.resizeImage = function(imageContainer, size) {
     var image = imageContainer.image;
-    if(image.width === size.width && image.height === size.height) {
+    
+    // Safari does not support SVG pattern fills.  So we'll skip this optimization
+    // KB 2815
+    /*if(image.width === size.width && image.height === size.height) {
         return image;
-    }
+    }*/
 
     var ctx, canvas = document.createElement('canvas');
     canvas.width = size.width;

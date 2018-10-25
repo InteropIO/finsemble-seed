@@ -321,6 +321,8 @@
 	 * This method is used inside {@link CIQ.ChartEngine#createDataSet} to determine the data aggregation logic and should not be called directly.
 	 * Use {@link CIQ.ChartEngine#setAggregationType} instead.
 	 * 
+	 * Kagi uses Close method only, not High/Low or ATR
+	 * 
 	 * See the [Chart types](tutorial-Chart Styles and Types.html#OverridingDefaults) tutorial for details on how to override aggregation type defaults.
 	 * 
 	 * @param {CIQ.ChartEngine} stx   The chart object

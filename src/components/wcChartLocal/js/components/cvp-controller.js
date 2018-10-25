@@ -15,7 +15,7 @@
 	 * Ideal for use as a drawing toolbar extension.
 	 *
 	 * @example
-	 * <cq-cvp-controller cq-section cq-cvp-scope="1">
+	 * <cq-cvp-controller cq-section cq-cvp-header="1">
 	 * 	<div cq-section>
 	 * 		<div class="ciq-heading">Dev 1</div>
 	 * 		<span stxtap="toggleActive()" class="ciq-checkbox">
@@ -93,20 +93,51 @@
 	};
 
 	CVPController.prototype.setContext = function(context) {
-		this.setStyle(null, 1, 'dotted');
+		this.setStyle();
 	};
 
 	CVPController.prototype.emit = function(eventName, value) {
 		if(this.toolbar) {
 			this.toolbar.emit(eventName, value);
 		}else if (typeof CustomEvent === 'function') {
-			this.dispatchEvent(new CustomEvent(eventName, {detail: value}));
+			this.dispatchEvent(new CustomEvent(eventName, {
+				bubbles: true,
+				cancelable: true,
+				detail: value
+			}));
 		}else{
 			// IE11 typeof above returned 'object' instead of 'function'
 			var event = document.createEvent('CustomEvent');
 			event.initCustomEvent(eventName, true, true, value);
 			this.dispatchEvent(event);
 		}
+	};
+
+	/**
+	 * Update the component state with configuration. May be a drawing instance or
+	 * currentVectorParameters.
+	 *
+	 * @param {Object} config drawing instance or currentVectorParameters
+	 */
+	CVPController.prototype.sync = function(config) {
+		var active = config['active' + this._scope];
+		var color = config['color' + this._scope];
+		var lineWidth = config['lineWidth' + this._scope];
+		var pattern = config['pattern' + this._scope];
+
+		var className = 'ciq-active';
+		var checkbox = $(this).find('.ciq-checkbox');
+
+		if (active) {
+			checkbox.addClass(className);
+		} else {
+			checkbox.removeClass(className);
+		}
+
+		this.active = !!active;
+		this.color = color || '';
+		this.getColor({});
+		this.setStyle(null, lineWidth, pattern);
 	};
 
 	CVPController.prototype.toggleActive = function(activator) {
@@ -127,6 +158,9 @@
 	};
 
 	CVPController.prototype.setStyle = function(activator, width, pattern) {
+		width = width || '1';
+		pattern = pattern || 'dotted';
+
 		this.lineWidth = parseInt(width, 10);
 		this.pattern = pattern;
 
@@ -165,8 +199,10 @@
 	CVPController.prototype.pickColor = function(activator) {
 		var colorPicker = $('cq-color-picker')[0];
 		var cvpController = this;
+		var overrides = $(activator.node).attr('cq-overrides');
 
 		if (!colorPicker) return console.error('CVPController.prototype.pickColor: no <cq-color-picker> available');
+		if (overrides) activator.overrides = overrides.split(',');
 
 		colorPicker.callback = function(color) {
 			cvpController.color = color;

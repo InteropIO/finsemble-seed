@@ -125,9 +125,26 @@
 		var ch=this.node.outerHeight();
 		var left=this.params.x;
 		var top=this.params.y;
+		var saveAdjustedPosition = false;
+
+		this.node.find('cq-menu.stxMenuActive:has(.context-menu-right)').each(function() {
+			var menu = $(this);
+			var contextMenuRight = menu.find('.context-menu-right');
+			var overlapItemCount = menu.nextAll().length + 1;
+
+			cw += contextMenuRight.outerWidth();
+			ch += contextMenuRight.outerHeight() - menu.outerHeight() * overlapItemCount;
+			saveAdjustedPosition = true;
+		});
+
 		if(left+cw>w) left=w-cw;
-		if(top+ch>h) top=top-ch;
+		if(top+ch>h) top=h-ch;
 		if(top<0) top=0;
+		if (saveAdjustedPosition) {
+			this.params.x = left;
+			this.params.y = top;
+		}
+
 		this.node.css({"top":top+"px", "left": left + "px"});
 	};
 
