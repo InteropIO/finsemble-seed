@@ -28,11 +28,6 @@ const Header = props => {
 						</span>
 					)}
 				</button>
-				{props.installed ?
-					<div className='remove-button' onClick={props.removeApp}>
-						<i className='ff-close-2'></i>
-						&nbsp;Remove App
-					</div> : null}
 			</div>
 		</div>
 	);
