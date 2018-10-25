@@ -50,6 +50,7 @@ class UserPreferences extends React.Component {
 
 if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
 function FSBLReady() {
+	FSBL.Clients.WindowClient.finsembleWindow.updateOptions({ alwaysOnTop: true });
 	FSBL.Clients.WindowClient.finsembleWindow.addEventListener("shown", () => {
 		finsembleWindow.bringToFront();
 		FSBL.Clients.DialogManager.showModal();
