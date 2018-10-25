@@ -14,20 +14,36 @@ class AppLauncher extends React.Component {
 	constructor(props) {
 		super(props);
 		this.finWindow = fin.desktop.Window.getCurrent();
+		this.openAppMarket = this.openAppMarket.bind(this);
 	}
 
 	componentWillMount() {
 		this.finWindow.addEventListener('shown', () => {
-			console.log('focusing');
 			this.finWindow.focus();
 		});
+	}
+
+	openAppMarket() {
+		console.log('attempting to open app market');
+		FSBL.Clients.LauncherClient.showWindow(
+			{
+				componentType: "App Market"
+			},
+			{
+				monitor: "mine",
+				staggerPixels: 0,
+				spawnIfNotFound: true,
+				left: "center",
+				top: "center"
+			}
+		)
 	}
 
 	render() {
 		return (
 			<div className="user-preferences">
 				<div className="complex-menu-wrapper">
-					<LeftNav />
+					<LeftNav openAppMarket={this.openAppMarket} />
 					<Content />
 				</div>
 			</div>

@@ -4,9 +4,9 @@ import LeftNavBottomLinks from  './LeftNavBottomLinks'
 import {getStore} from '../stores/LauncherStore'
 import storeActions from '../stores/StoreActions'
 
-import { 
-	FinsembleDnDContext, 
-	FinsembleDroppable 
+import {
+	FinsembleDnDContext,
+	FinsembleDroppable
 } from '@chartiq/finsemble-react-controls'
 
 
@@ -24,10 +24,10 @@ export default class LeftNav extends React.Component {
 
 	onDragEnd(event) {
 		storeActions.reorderFolders(
-			event.destination.index, 
+			event.destination.index,
 			event.source.index)
 	}
-	
+
 	render() {
 		return (
 			<div className="complex-menu-left-nav">
@@ -36,7 +36,7 @@ export default class LeftNav extends React.Component {
 				  		<FoldersList />
 				  	</FinsembleDroppable>
 				</FinsembleDnDContext>
-				<LeftNavBottomLinks />
+				<LeftNavBottomLinks {...this.props} />
 			</div>
 
 		)
