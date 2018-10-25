@@ -3,11 +3,11 @@
 	"components": {
 		"App Launcher": {
 			"window": {
-				"url": "$applicationRoot/components/appLauncher/appLauncher.html",
-				"top": 32,
-				"left": 45,
-				"width": 350,
-				"height": 330,
+				"url": "$applicationRoot/components/appLauncher2/index.html",
+				"top": 0,
+				"left": 0,
+				"width": 600,
+				"height": 400,
 				"ephemeral": true,
 				"options": {
 					"autoShow": false
@@ -23,37 +23,6 @@
 					"dockingService": {
 						"isArrangable": false,
 						"shouldRegister": false
-					}
-				},
-				"components": {
-					"Window Manager": {
-						"persistWindowState": false,
-						"FSBLHeader": false
-					}
-				}
-			}
-		},
-		"App Launcher 2": {
-			"window": {
-				"url": "$applicationRoot/components/appLauncher2/index.html",
-				"top": "center",
-				"left": "center",
-				"width": 600,
-				"height": 400,
-				"ephemeral": false,
-				"options": {
-					"autoShow": true
-				}
-			},
-			"component": {
-				"allowAdhoc": "@TODO",
-				"spawnOnStartup": true,
-				"category": "system"
-			},
-			"foreign": {
-				"services": {
-					"dockingService": {
-						"isArrangable": false
 					}
 				},
 				"components": {

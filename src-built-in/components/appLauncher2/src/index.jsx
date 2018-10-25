@@ -11,8 +11,16 @@ import Content from './components/Content'
 
 class AppLauncher extends React.Component {
 
-	constructor() {
-		super()
+	constructor(props) {
+		super(props);
+		this.finWindow = fin.desktop.Window.getCurrent();
+	}
+
+	componentWillMount() {
+		this.finWindow.addEventListener('shown', () => {
+			console.log('focusing');
+			this.finWindow.focus();
+		});
 	}
 
 	render() {
@@ -28,9 +36,17 @@ class AppLauncher extends React.Component {
 }
 
 
-FSBL.addEventListener("onReady", function () {
-	createStore((store) => {
-		ReactDOM.render(<AppLauncher />, 
-			document.getElementById("wrapper"))
-	})
-})
+// FSBL.addEventListener("onReady", function () {
+// 	createStore((store) => {
+// 		ReactDOM.render(<AppLauncher />,
+// 			document.getElementById("wrapper"))
+// 	})
+// })
+
+fin.desktop.main(function () {
+	FSBL.addEventListener("onReady", function () {
+		createStore((store) => {
+			ReactDOM.render(<AppLauncher />, document.getElementById("wrapper"));
+		});
+	});
+});

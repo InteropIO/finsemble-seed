@@ -12,7 +12,8 @@ class AppCard extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			highlighted: false,
+			checkShown: false,
+			checkHighlighted: false,
 			appName: this.props.title || this.props.name,
 			entitled: this.props.entitled ? this.props.entitled : false
 		};
@@ -20,6 +21,8 @@ class AppCard extends Component {
 	}
 	bindCorrectContext() {
 		this.toggleHighlight = this.toggleHighlight.bind(this);
+		this.showCheck = this.showCheck.bind(this);
+		this.hideCheck = this.hideCheck.bind(this);
 		this.openAppShowcase = this.openAppShowcase.bind(this);
 		this.addApp = this.addApp.bind(this);
 		this.removeApp = this.removeApp.bind(this);
@@ -27,8 +30,18 @@ class AppCard extends Component {
 	}
 	toggleHighlight() {
 		this.setState({
-			highlighted: !this.state.highlighted
+			checkHighlighted: !this.state.checkHighlighted
 		})
+	}
+	showCheck() {
+		this.setState({
+			checkShown: true
+		});
+	}
+	hideCheck() {
+		this.setState({
+			checkShown: false
+		});
 	}
 	openAppShowcase() {
 		this.props.openAppShowcase(this.state.appName);
@@ -51,10 +64,10 @@ class AppCard extends Component {
 	render() {
 		let imageUrl = this.props.images !== undefined ? this.props.images[0].url : "../assets/placeholder.svg";
 
-		let { appName: title } = this.state;
+		let { appName: title, checkShown:showCheck } = this.state;
 
 		let imageIconClasses = "ff-check-circle";
-		if (this.state.highlighted || this.props.installed) imageIconClasses += " highlighted"
+		if (this.state.checkHighlighted || this.props.installed) imageIconClasses += " highlighted"
 		else imageIconClasses += " faded";
 
 		let entitled = this.state.entitled ? " entitled" : "";
@@ -64,8 +77,8 @@ class AppCard extends Component {
 		return (
 			<div className='app-card' onClick={this.openAppShowcase}>
 				<div className="app-image-container">
-					{entitled ? null : <i className={imageIconClasses} onMouseEnter={this.toggleHighlight} onMouseLeave={this.toggleHighlight} onClick={addApp}></i>}
-					<img className={'app-image' + entitled} src={imageUrl} />
+					{entitled || !showCheck ? null : <i className={imageIconClasses} onMouseEnter={this.toggleHighlight} onMouseLeave={this.toggleHighlight} onClick={addApp}></i>}
+					<img className={'app-image' + entitled} src={imageUrl} onMouseEnter={this.showCheck} onMouseLeave={this.hideCheck} />
 				</div>
 				<h4 className={'app-title' + entitled}>{title}</h4>
 				<div className='footer'>

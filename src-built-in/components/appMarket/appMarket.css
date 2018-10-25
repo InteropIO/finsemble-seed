@@ -195,16 +195,19 @@
 }
 
 .app-card .ff-check-circle {
+	display: none;
 	position: absolute;
 	z-index: 1;
 	cursor: pointer;
 }
 
 .app-card .ff-check-circle.faded {
+	display: block;
 	color: grey;
 }
 
 .app-card .ff-check-circle.highlighted {
+	display: block;
 	color: #27cc8d;
 }
 
