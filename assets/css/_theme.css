@@ -232,6 +232,17 @@
     /* App Catalog */
     --catalog-font-color: var(--primary-font-color);
     --catalog-background-color: var(--slate5);
+    --catalog-pagination-dots-color: var(--gray2);
+    --catalog-hero-border-color: var(--slate5);
+    --catalog-hero-background-color: var(--slate7);
+    --catalog-card-background-color: var(--slate);
+    --catalog-card-checkmark-unselected-color: var(--gray);
+    --catalog-card-checkmark-selected-color: #27cc8d;
+    --catalog-section-header-font-color: var(--blue2);
+    --catalog-search-border-color: var(--blue);
+    --catalog-search-active-border-color: var(--blue2);
+    --catalog-tag-backgrond-color: var(--slate2);
+    --catalog-disabled-button-background-color: var(--gray5);
     
 
 

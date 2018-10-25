@@ -79,21 +79,21 @@
 .pagination-oval {
 	width: 6px;
 	height: 6px;
-	border: solid 1px #dddddd;
+	border: solid 1px var(--catalog-pagination-dots-color);
 	padding: 1px;
 	margin: 3px;
 	border-radius: 5px;
 }
 
 .pagination-oval.active {
-	background-color: #dddddd;
+	background-color: var(--catalog-pagination-dots-color);
 }
 
 .hero_selected_content {
 	width: 506px;
 	height: 174px;
-	border: solid 1px #3c4c58;
-	background-color: #1c2a36;
+	border: solid 1px var(--catalog-hero-border-color);
+	background-color: var(--catalog-hero-background-color);
 	cursor: pointer;
 	padding: 10px;
 }
@@ -129,7 +129,7 @@
 	width: 120px;
 	height: 180px;
 	box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.25);
-	background-color: #495a69;
+	background-color: var(--catalog-card-background-color);
 	padding: 5px;
 }
 
@@ -191,12 +191,12 @@
 
 .app-card .ff-check-circle.faded {
 	display: block;
-	color: grey;
+	color: var(--catalog-card-checkmark-unselected-color);
 }
 
 .app-card .ff-check-circle.highlighted {
 	display: block;
-	color: #27cc8d;
+	color: var(--catalog-card-checkmark-selected-color);
 }
 
 .app-catalog {
@@ -223,7 +223,7 @@
 	height: 19px;
 	font-size: 14px;
 	font-weight: var(--tertiary-font-weight);
-	color: #00adff;
+	color: var(--catalog-section-header-font-color);
 }
 
 .carousel-main .carousel-content {
@@ -235,7 +235,7 @@
 .carousel-main .carousel-header .see-more {
 	width: 67px;
   	height: 23px;
-	background-color: #005bc5;
+	background-color: var(--button-affirmative-background-color);
 	border: none;
 	font-size: 10px;
 	font-weight: var(--secondary-font-weight);
@@ -296,11 +296,11 @@
 
 .search-main .search-input {
 	width: 100%;
-	color: #fff;
+	color: var(--catalog-font-color);
 	height: 17px;
 	background: none;
 	border: 0;
-	border-bottom: solid 1px #0a8cf4;
+	border-bottom: solid 1px var(--catalog-search-border-color);
 	font-size: 14px;
 	transition: .2s ease-in;
 }
@@ -345,11 +345,11 @@
 }
 
 .search-main .toast-content.success {
-	border: 3px solid #27cc8d;
+	border: 3px solid var(--catalog-card-checkmark-selected-color);
 }
 
 .search-main .toast-content.error {
-	border: 3px solid #ee5c5c;
+	border: 3px solid var(--secondary-negative-color);
 }
 
 .search-main .toast-content.not-shown {
@@ -366,15 +366,15 @@
 }
 
 .search-main .toast-content .ff-check-mark {
-	color: #27cc8d;
+	color: var(--catalog-card-checkmark-selected-color);
 }
 
 .search-main .toast-content .ff-close {
-	color: #ee5c5c;
+	color: var(--secondary-negative-color);
 }
 
 .search-main .search-input:focus {
-	border-bottom: 1px solid #3fb2fc;
+	border-bottom: 1px solid var(--catalog-search-active-border-color);
 	outline: none;
 }
 
@@ -401,7 +401,7 @@
 	width: 51px;
 	height: 17px;
 	border-radius: 2px;
-	background-color: #67829a;
+	background-color: var(--catalog-tag-backgrond-color);
 	font-size: 10px;
 	font-weight: var(--secondary-font-weight);
 	color: var(--catalog-font-color);
@@ -425,7 +425,7 @@
 	width: 132px;
 	height: 214px;
 	border-radius: 3px;
-	background-color: #67829a;
+	background-color: var(--catalog-tag-backgrond-color);
 	text-overflow: ellipsis;
 	overflow-y: auto;
 	z-index: 1;
@@ -478,7 +478,7 @@
 	font-size: 12px;
 	font-weight: var(--tertiary-font-weight);
 	letter-spacing: normal;
-	color: #ee5c5c;
+	color: var(--secondary-negative-color);
 	margin-bottom: 8px
 }
 
@@ -540,11 +540,6 @@
 	cursor: pointer;
 }
 
-.app-showcase .header .action-button-container .remove-button .ff-close {
-	color: red;
-	padding-right: 5px;
-}
-
 .app-showcase .header .action-button {
 	width: 83px;
 	height: 30px;
@@ -563,7 +558,7 @@
 }
 
 .app-showcase .header .action-button.disabled {
-	background-color: #999999;
+	background-color: var(--catalog-disabled-button-background-color);
 }
 
 .remove-button {
@@ -642,7 +637,7 @@
 	height: 15px;
 	font-weight: var(--tertiary-font-weight);
 	font-size: 14px;
-	color: #00adff;
+	color: var(--catalog-section-header-font-color);
 	padding-bottom: 3px;
 }
 
