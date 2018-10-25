@@ -8,6 +8,7 @@ import {createStore, getStore} from './stores/LauncherStore'
 // Import React components
 import LeftNav from './components/LeftNav'
 import Content from './components/Content'
+import { FinsembleMenu } from '@chartiq/finsemble-react-controls';
 
 class AppLauncher extends React.Component {
 
@@ -41,23 +42,17 @@ class AppLauncher extends React.Component {
 
 	render() {
 		return (
-			<div className="user-preferences">
-				<div className="complex-menu-wrapper">
-					<LeftNav openAppMarket={this.openAppMarket} />
-					<Content />
+			<FinsembleMenu className='menu-secondary'>
+				<div className="user-preferences">
+					<div className="complex-menu-wrapper">
+						<LeftNav openAppMarket={this.openAppMarket} />
+						<Content />
+					</div>
 				</div>
-			</div>
+			</FinsembleMenu>
 		)
 	}
 }
-
-
-// FSBL.addEventListener("onReady", function () {
-// 	createStore((store) => {
-// 		ReactDOM.render(<AppLauncher />,
-// 			document.getElementById("wrapper"))
-// 	})
-// })
 
 fin.desktop.main(function () {
 	FSBL.addEventListener("onReady", function () {
