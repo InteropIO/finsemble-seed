@@ -118,7 +118,7 @@ class AppShowcase extends Component {
 				<Header iconUrl={iconUrl} name={name} entitled={this.state.entitled} installed={this.props.app.installed} appAction={appAction} removeApp={this.removeApp} />
 
 				{this.props.app.installed ?
-				<div className='remove-button' onClick={this.props.removeApp}>
+				<div className='remove-button' onClick={this.removeApp}>
 					<i className='ff-close-2'></i>
 					&nbsp;Remove App
 				</div> : null}
