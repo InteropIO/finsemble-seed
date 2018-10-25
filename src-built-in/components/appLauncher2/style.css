@@ -644,3 +644,11 @@ select:focus, option:focus {
     margin-top: 20px;
     text-align: center;
 }
+
+.ff-favorite {
+    margin-top: -1px;
+}
+
+.ff-plus-circle, .ff-dashboard-new {
+    padding-top: 2px;
+}
