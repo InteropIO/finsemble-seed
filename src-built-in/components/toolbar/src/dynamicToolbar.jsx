@@ -136,10 +136,10 @@ export default class Toolbar extends React.Component {
 						buttonComponent = <WorkspaceLauncherButton key={i} {...button}></WorkspaceLauncherButton>;
 						break;
 					case "componentLauncher":
-						buttonComponent = <FinsembleButton id={button.id} iconClasses="pinned-icon" buttonType={["AppLauncher", "Toolbar"]} key={i} {...button}></FinsembleButton>;
+						buttonComponent = <FinsembleButton id={button.id} iconClasses="pinned-icon" buttonType={["AppLauncher", "Toolbar"]} dockedTop={true} key={i} {...button}></FinsembleButton>;
 						break;
 					case "menuLauncher":
-						buttonComponent = <FinsembleButton preSpawn={true} buttonType={["MenuLauncher", "Toolbar"]} key={i} {...button}></FinsembleButton>;
+						buttonComponent = <FinsembleButton preSpawn={true} buttonType={["MenuLauncher", "Toolbar"]} dockedTop={true} key={i} {...button}></FinsembleButton>;
 						break;
 				}
 				buttons.push(buttonComponent);
@@ -180,10 +180,16 @@ export default class Toolbar extends React.Component {
 	}
 
 }
-FSBL.addEventListener("onReady", function () {
+
+if (window.FSBL && FSBL.addEventListener) {
+	FSBL.addEventListener("onReady", FSBLReady);
+} else {
+	window.addEventListener("FSBLReady", FSBLReady);
+}
+function FSBLReady() {
 	ToolbarStore.initialize(function () {
 		ReactDOM.render(
 			<Toolbar />
 			, document.getElementById("toolbar_parent"));
 	});
-});
+}

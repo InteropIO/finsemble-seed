@@ -122,8 +122,8 @@ class AdHocComponentForm extends React.Component {
 			}}
 			isModal={true}>
 			<div className="dialog-title">Enter a name and URL for your app.</div>
-				<FinsembleDialogTextInput onInputChange={this.setName} placeholder="Name" autofocus value={this.name} />
-				<FinsembleDialogTextInput onInputChange={this.setURL} placeholder="URL" value={this.URL} />
+			<FinsembleDialogTextInput onInputChange={this.setName} placeholder="Name" autofocus value={this.name} />
+			<FinsembleDialogTextInput onInputChange={this.setURL} placeholder="URL" value={this.URL} />
 			<div className="button-wrapper">
 
 				<FinsembleDialogButton show={true} className="fsbl-button-neutral" onClick={this.cancel}>
@@ -144,9 +144,10 @@ class AdHocComponentForm extends React.Component {
 }
 
 
-FSBL.addEventListener("onReady", function () {
+if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
+function FSBLReady() {
 	console.debug("AdhocComponentForm onready");
 	ReactDOM.render(
 		<AdHocComponentForm />
 		, document.getElementById("bodyHere"));
-});
+}

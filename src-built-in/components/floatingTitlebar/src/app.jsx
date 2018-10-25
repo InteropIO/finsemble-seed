@@ -25,7 +25,6 @@ let hover = false;
 class FloatingTitlebar extends React.Component {
 	constructor(props) {
 		super(props);
-		this.finWindow = fin.desktop.Window.getCurrent();
 		this.state = {
 			size: "small",
 			tabs: [],
@@ -173,12 +172,13 @@ class FloatingTitlebar extends React.Component {
 			lastDragEventLeave = false;
 		}}>
 			<div id="actionbutton" onClickCapture={function (e) { self.onActionClick(e) }} className="actionButton tabs-contract"></div>
-			<TabbingSection listenForDragOver={this.state.listenForDragOver}/>
+			<TabbingSection listenForDragOver={this.state.listenForDragOver} />
 		</div >
 	}
 }
 
-FSBL.addEventListener("onReady", function () {
+if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
+function FSBLReady() {
 	HeaderActions.initialize(function () {
 		storeExports.initialize(HeaderStore.getCompanionWindow(), function () {
 			storeExports.Actions.setWindowIdentifier(HeaderStore.getCompanionWindow().identifier)
@@ -187,4 +187,4 @@ FSBL.addEventListener("onReady", function () {
 				, document.getElementById("bodyHere"));
 		})
 	});
-});
+}
