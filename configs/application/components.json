@@ -316,6 +316,42 @@
                 }
             }
         },
+        "wc1ChartLocal": {
+            "window": {
+                "url": "$applicationRoot/components/wc1ChartLocal/sample-template-advanced.html",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 800,
+                "height": 600
+            },
+            "component": {
+                "inject": false
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "title": "wc1ChartLocal",
+                        "FSBLHeader": true,
+                        "persistWindowState": true
+                    },
+                    "Toolbar": {
+                        "iconClass": "wc1ChartLocal"
+                    }
+                }
+            }
+        },
         "reactChart": {
             "window": {
                 "url": "$applicationRoot/components/reactChart/index.html",
