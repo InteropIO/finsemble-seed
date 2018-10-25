@@ -66,6 +66,7 @@ export default class TabRegion extends React.Component {
         this.onTabListTranslateChanged = this.onTabListTranslateChanged.bind(this);
 
     }
+
     getTabWidth(params = {}) {
         let { boundingBox, tabList } = params;
         if (typeof (tabList) === "undefined") {
@@ -453,6 +454,7 @@ export default class TabRegion extends React.Component {
             translateX: value
         })
     }
+
     componentWillMount() {
         // Store.addListener({ field: "activeTab" }, this.onActiveTabChanged);
         Store.addListener({ field: "tabs" }, this.onTabsChanged);
@@ -544,7 +546,7 @@ function renderTitle() {
         className={"fsbl-header-title"}>
         <FinsembleHoverDetector edge="top" hoverAction={this.hoverAction.bind(this)} />
         <Logo windowIdentifier={FSBL.Clients.WindowClient.getWindowIdentifier()} />
-        <Title windowIdentifier={FSBL.Clients.WindowClient.getWindowIdentifier()}></Title>
+        <Title onUpdate={this.props.onTitleUpdated} windowIdentifier={FSBL.Clients.WindowClient.getWindowIdentifier()}></Title>
     </div>);
 }
 

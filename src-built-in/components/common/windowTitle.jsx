@@ -18,12 +18,19 @@ class title extends Component {
 	componentDidMount() {
 		this.getTitle();
 	}
+
+	//Triggers a re-rendering of the drag handle in the title bar.
+	componentDidUpdate() {
+		if (typeof this.props.onUpdate === "function") {
+			this.props.onUpdate();
+		}
+	}
+
 	componentWillMount() {
 		//todo
 		FSBL.FinsembleWindow.getInstance(this.props.windowIdentifier, (e, win) => {
 			win.addEventListener("title-changed", this.getTitle)
-		})
-
+		});
 	}
 	componentWillUnmount() {
 		//todo
