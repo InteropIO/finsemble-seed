@@ -36,22 +36,6 @@ export default class FilterSort extends React.Component {
 		storeActions.addTag(tag)
 	}
 
-	/**
-	* Extract a list of tags from all the app
-	* within the active folder.
-	**/
-	extractTags() {
-		let tags = []
-		storeActions.getActiveFolder()
-		.appDefinitions.forEach((app) => {
-			app.tags.forEach((tag) => {
-				// Make sure we have a unique tags list
-				tags.indexOf(tag) < 0 && tags.push(tag)
-			})
-		})
-		return tags
-	}
-
 	render() {
 		return (
 			<div className="filter-sort">
@@ -61,7 +45,7 @@ export default class FilterSort extends React.Component {
 				<TagsMenu
 					label="Tags"
 					align="right"
-					list={this.extractTags()}
+					list={storeActions.getAllAppsTags()}
 					onItemClick={this.onTagClick}/>
 			</div>
 			)

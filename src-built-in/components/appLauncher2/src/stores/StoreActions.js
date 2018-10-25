@@ -9,6 +9,7 @@ export default {
 	getFolders,
 	getActiveFolder,
 	getFavoriteFolder,
+	getAllAppsTags,
 	getSearchText,
 	getSortBy,
 	addTag,
@@ -109,6 +110,19 @@ function getSortBy() {
 
 function getTags() {
 	return getStore().getValue({ field: 'tags' }) || []
+}
+
+function getAllAppsTags() {
+	let tags = []
+	getFolders().forEach((folder) => {
+		folder.appDefinitions.forEach((app) => {
+			tags = tags.concat(app.tags)
+		})
+	})
+	// return unique ones only
+	return tags.filter((tag, index) => {
+		return tags.indexOf(tag) === index
+	})
 }
 
 function addTag(tag) {
