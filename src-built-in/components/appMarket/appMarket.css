@@ -1,6 +1,12 @@
 .appMarket {
-	background-color: #3c4c58;
+	background-color: var(--catalog-background-color);
+	color: var(--catalog-font-color);
 	/* background-image: linear-gradient(to top, rgb(60, 76, 88), rgb(48, 61, 71)); */
+	font-family: Roboto;
+	font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
 	height: 100%;
 	margin-left: 0;
 	margin-right: 0;
@@ -46,28 +52,19 @@
 .selected-content-title {
 	width: 100%;
 	height: 26px;
-	font-family: Roboto;
 	font-size: 20px;
-	font-weight: 300;
-	font-style: normal;
-	font-stretch: normal;
-	line-height: normal;
-	letter-spacing: normal;
-	color: #ffffff;
+	font-weight: var(--primary-font-weight);
+	color: var(--catalog-font-color);
 	padding: 0 5px;
 }
 
 .selected-content-message {
 	width: 477px;
 	height: 64px;
-	font-family: Roboto;
+	
 	font-size: 14px;
-	font-weight: 300;
-	font-style: normal;
-	font-stretch: normal;
-	line-height: normal;
-	letter-spacing: normal;
-	color: #ffffff;
+	font-weight: var(--primary-font-weight);
+	color: var(--catalog-font-color);
 	text-overflow: ellipsis;
 	padding: 0 5px;
 }
@@ -101,7 +98,7 @@
 }
 
 .ff-chevron-right, .ff-chevron-left {
-	color: white;
+	color: var(--catalog-font-color);
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -151,14 +148,9 @@
 .app-card .app-title {
 	width: 100%;
 	height: 19px;
-	font-family: Roboto;
 	font-size: 14px;
-	font-weight: 300;
-	font-style: normal;
-	font-stretch: normal;
-	line-height: normal;
-	letter-spacing: normal;
-	color: #ffffff;
+	font-weight: var(--primary-font-weight);
+	color: var(--catalog-font-color);
 	text-overflow: clip;
 }
 
@@ -169,14 +161,9 @@
 .app-card .footer {
 	width: 89px;
 	height: 26px;
-	font-family: Roboto;
 	font-size: 10px;
-	font-weight: normal;
-	font-style: normal;
-	font-stretch: normal;
-	line-height: normal;
-	letter-spacing: normal;
-	color: #ffffff;
+	font-weight: var(--secondary-font-weight);
+	color: var(--catalog-font-color);
 	padding-left: 5px;
 }
 
@@ -233,13 +220,8 @@
 .carousel-main .carousel-header .carousel-title {
 	width: 90px;
 	height: 19px;
-	font-family: Roboto;
 	font-size: 14px;
-	font-weight: bold;
-	font-style: normal;
-	font-stretch: normal;
-	line-height: normal;
-	letter-spacing: normal;
+	font-weight: var(--tertiary-font-weight);
 	color: #00adff;
 }
 
@@ -254,14 +236,9 @@
   	height: 23px;
 	background-color: #005bc5;
 	border: none;
-	font-family: Roboto;
 	font-size: 10px;
-	font-weight: normal;
-	font-style: normal;
-	font-stretch: normal;
-	line-height: normal;
-	letter-spacing: normal;
-	color: #ffffff;
+	font-weight: var(--secondary-font-weight);
+	color: var(--catalog-font-color);
 	user-select: none;
 }
 
@@ -308,7 +285,7 @@
 }
 
 .search-main .ff-search {
-	color: white;
+	color: var(--catalog-font-color);
 }
 
 .search-input-container {
@@ -350,15 +327,10 @@
 	visibility: visible;
 	width: 166px;
 	height: 25px;
-	font-family: Roboto;
 	font-size: 12px;
-	font-weight: normal;
-	font-style: normal;
-	font-stretch: normal;
-	line-height: normal;
-	letter-spacing: normal;
+	font-weight: var(--secondary-font-weight);
 	text-align: center;
-	color: #ffffff;
+	color: var(--catalog-font-color);
 	background-color: rgba(60, 76, 88, 1.0);
 	z-index: 99;
 	left: 0;
@@ -407,12 +379,11 @@
 
 .search-main .search-back {
 	border: none;
-	color: #FFFFFF;
+	color: var(--catalog-font-color);
 	background-color: inherit;
 	cursor: pointer;
 	font-size: 12px;
-	font-family: Roboto;
-	font-weight: 300;
+	font-weight: var(--primary-font-weight);
 	user-select: none;
 }
 
@@ -430,14 +401,9 @@
 	height: 17px;
 	border-radius: 2px;
 	background-color: #67829a;
-	font-family: Roboto;
 	font-size: 10px;
-	font-weight: normal;
-	font-style: normal;
-	font-stretch: normal;
-	line-height: normal;
-	letter-spacing: normal;
-	color: #ffffff;
+	font-weight: var(--secondary-font-weight);
+	color: var(--catalog-font-color);
 	cursor: pointer;
 }
 
@@ -469,7 +435,7 @@
 	width: 103px;
 	height: 19px;
 	font-size: 11px;
-	color: #ffffff;
+	color: var(--catalog-font-color);
 	align-self: center;
 }
 
@@ -480,15 +446,10 @@
 .app-results .app-results-no-results {
 	width: 264px;
 	height: 21px;
-	font-family: Roboto;
 	font-size: 16px;
-	font-weight: 300;
-	font-style: normal;
-	font-stretch: normal;
-	line-height: normal;
-	letter-spacing: normal;
+	font-weight: var(--primary-font-weight);
 	text-align: center;
-	color: #ffffff;
+	color: var(--catalog-font-color);
 }
 
 .label-bar {
@@ -512,12 +473,8 @@
 	display: flex;
 	align-self: center;
 	height: 16px;
-	font-family: Roboto;
 	font-size: 12px;
-	font-weight: bold;
-	font-style: normal;
-	font-stretch: normal;
-	line-height: normal;
+	font-weight: var(--tertiary-font-weight);
 	letter-spacing: normal;
 	color: #ee5c5c;
 	margin-bottom: 8px
@@ -560,28 +517,19 @@
 .app-showcase .header .appName {
 	width: 410px;
 	padding-right: 12px;
-  	font-family: Roboto;
+  	
   	font-size: 14px;
-  	font-weight: 300;
-  	font-style: normal;
-  	font-stretch: normal;
-  	line-height: normal;
-  	letter-spacing: normal;
-	color: #ffffff;
+  	font-weight: var(--primary-font-weight);
+	color: var(--catalog-font-color);
 }
 
 .app-showcase .header .action-button-container {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	font-family: Roboto;
 	font-size: 12px;
-	font-weight: normal;
-	font-style: normal;
-	font-stretch: normal;
-	line-height: normal;
-	letter-spacing: normal;
-	color: #ffffff;
+	font-weight: var(--secondary-font-weight);
+	color: var(--catalog-font-color);
 }
 
 .app-showcase .header .action-button-container .remove-button {
@@ -618,14 +566,9 @@
 
 .remove-button {
 	margin: 0 28px;
-  	font-family: Roboto;
   	font-size: 12px;
-  	font-weight: 300;
-  	font-style: normal;
-  	font-stretch: normal;
-  	line-height: normal;
-  	letter-spacing: normal;
-	color: #ffffff;
+  	font-weight: var(--primary-font-weight);
+	color: var(--catalog-font-color);
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
@@ -642,15 +585,10 @@
 	align-items: center;
 	width: 100%;
 	height: 16px;
-	font-family: Roboto;
   	font-size: 12px;
-  	font-weight: 300;
-  	font-style: normal;
-  	font-stretch: normal;
-  	line-height: normal;
-	letter-spacing: normal;
+  	font-weight: var(--primary-font-weight);
 	text-align: center;
-	color: #ffffff;
+	color: var(--catalog-font-color);
 	padding-left: 5px;
 }
 
@@ -672,12 +610,7 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	font-family: Roboto;
   	font-size: 11px;
-  	font-style: normal;
-  	font-stretch: normal;
-  	line-height: normal;
-	letter-spacing: normal;
 	padding: 5px 0;
 	margin: 0 28px 10px 28px;
 }
@@ -696,14 +629,14 @@
 
 .app-showcase .app-notes .developer-content {
 	align-self: flex-start;
-	color: white;
+	color: var(--catalog-font-color);
 }
 
 .app-showcase .showcase-label {
 	display: flex;
 	width: 100%;
 	height: 15px;
-	font-weight: bold;
+	font-weight: var(--tertiary-font-weight);
 	font-size: 14px;
 	color: #00adff;
 	padding-bottom: 3px;
@@ -712,27 +645,27 @@
 .app-showcase .description-content {
 	width: 534px;
 	height: 32px;
-	color: white;
+	color: var(--catalog-font-color);
 }
 
 .app-showcase .release-notes-content {
 	width: 540px;
 	height: auto;
-	color: white;
+	color: var(--catalog-font-color);
 }
 
 .app-showcase .version-content {
-	color: white;
+	color: var(--catalog-font-color);
 	width: 50%;
 }
 
 .app-showcase .updated-content {
-	color: white;
+	color: var(--catalog-font-color);
 	width: 50%;
 }
 
 .app-showcase .support-content {
-	color: white;
+	color: var(--catalog-font-color);
 	width: 50%;
 }
 
@@ -744,12 +677,7 @@
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-	font-family: Roboto;
   	font-size: 11px;
-  	font-style: normal;
-  	font-stretch: normal;
-  	line-height: normal;
-	letter-spacing: normal;
 	padding: 5px 0;
 	margin-left: 28px;
 }
@@ -762,11 +690,11 @@
 .app-showcase .updated {
 	width: 115px;
 	height: 15px;
-	color: white;
+	color: var(--catalog-font-color);
 }
 
 .app-showcase .support-content .support {
-	color: white;
+	color: var(--catalog-font-color);
 	padding-right: 8px;
 }
 
@@ -790,7 +718,7 @@
 .app-showcase .tag-label .label-content {
 	font-size: 10px;
 	padding: 5px;
-	color: white;
+	color: var(--catalog-font-color);
 }
 
 .modal {
