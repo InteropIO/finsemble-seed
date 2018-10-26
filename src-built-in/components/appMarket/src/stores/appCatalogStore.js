@@ -2,12 +2,23 @@
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
+import AppDirectory from '../modules/AppDirectory'
+import FDC3 from '../modules/FDC3'
 import async from 'async';
+
+/**
+ * The appd instance is currently online used in Actions.initialize
+ * using ES6 await feature requires that await to be used within an async function
+ * This file could probably be structured differently to benefit from
+ * different ES6 features
+ */
+const FDC3Client = new FDC3({url: 'http://localhost:3030/v1'})
+const appd = new AppDirectory(FDC3Client)
 
 let appCatalogStore;
 let finWindow = fin.desktop.Window.getCurrent();
 var values = {
-	apps: require('../assets/apps.json'),
+	apps: [],
 	filteredCards: [],
 	activeTags: [],
 	allTags: [],
@@ -15,7 +26,16 @@ var values = {
 }
 
 var Actions = {
-	initialize: function (cb) {
+	initialize: async function (cb) {
+		try {
+			values.apps = await appd.getAll()
+		} catch (e) {
+			console.error(`Unable to connect to FDC3 web service.
+			You	probably don't have the web service running or 
+			provided the wrong URL. You can get the FDC3 App Directory
+			web service from https://github.com/ChartIQ/fdc-appd`)
+			return
+		}
 		cb();
 	},
 	setTags() {
