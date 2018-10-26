@@ -13,6 +13,11 @@ Logger.start();
  */
 const SCHEMA_VERSION = 1;
 
+/**
+ * Flag indicating that the IndexedDB connection is initialized. Will be set in releaseQueue after the connection has been created and any schema version changes applied.
+ */
+let initialized = false;
+
 // #region 
 /** 
  * PolyFill IDBKeyRange for a key prefix search. 
@@ -147,6 +152,7 @@ const IndexedDBAdapter = function () {
 	 * @private
 	 */
 	this.releaseQueue = () => {
+		initialized = true;
 		Logger.system.debug(`IndexedDBAdapter.releaseQueue: ${this.queue.length} commands`);
 		console.debug(`IndexedDBAdapter.releaseQueue: ${this.queue.length} commands`);
 
@@ -161,7 +167,7 @@ const IndexedDBAdapter = function () {
 	 * particular user.
 	 */
 	this.clearCache = (params, cb) => {
-		if (!this.db) {
+		if (!initialized) {
 			Logger.system.debug("queuing", "clearCache", [params, cb]);
 			console.debug("queuing", "clearCache", [params, cb]);
 			this.queue.push({ method: "clearCache", args: [params, cb] });
@@ -201,7 +207,7 @@ const IndexedDBAdapter = function () {
 	 * @param {function} cb callback to be invoked upon completion
 	 */
 	this.delete = (params, cb) => {
-		if (!this.db) {
+		if (!initialized) {
 			Logger.system.debug("queuing", "delete", [params, cb]);
 			console.debug("queuing", "delete", [params, cb]);
 			this.queue.push({ method: "delete", args: [params, cb] });
@@ -236,7 +242,7 @@ const IndexedDBAdapter = function () {
 	 * @param {function} cb
 	 */
 	this.empty = (cb) => {
-		if (!this.db) {
+		if (!initialized) {
 			Logger.system.debug("queuing", "empty", [cb]);
 			console.debug("queuing", "empty", [cb]);
 			this.queue.push({ method: "empty", args: [cb] });
@@ -273,7 +279,7 @@ const IndexedDBAdapter = function () {
 	 * @param {function} cb callback to be invoked upon completion
 	 */
 	this.get = (params, cb) => {
-		if (!this.db) {
+		if (!initialized) {
 			Logger.system.debug("queuing", "get", [params, cb]);
 			console.debug("queuing", "get", [params, cb]);
 			this.queue.push({ method: "get", args: [params, cb] });
@@ -311,7 +317,7 @@ const IndexedDBAdapter = function () {
 	 * @param {function} cb
 	 */
 	this.keys = (params, cb) => {
-		if (!this.db) {
+		if (!initialized) {
 			Logger.system.debug("queuing", "keys", [params, cb]);
 			console.debug("queuing", "keys", [params, cb]);
 			this.queue.push({ method: "keys", args: [params, cb] });
@@ -355,7 +361,7 @@ const IndexedDBAdapter = function () {
 	 * @param {function} cb callback to be invoked upon save completion
 	 */
 	this.save = (params, cb) => {
-		if (!this.db) {
+		if (!initialized) {
 			Logger.system.debug("queuing", "save", [params, cb]);
 			console.debug("queuing", "save", [params, cb]);
 			this.queue.push({ method: "save", args: [params, cb] });
