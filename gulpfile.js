@@ -51,7 +51,6 @@
 	// PATH. So, copy based on our existing env variables.
 	const env = process.env;
 
-
 	if (!env.NODE_ENV) {
 		env.NODE_ENV = "development";
 	}
@@ -64,6 +63,13 @@
 	// tasks that are dev * (dev, dev: fresh, dev: nolaunch), but excludes build:dev because it is intended to only
 	// build for a development environment and not watch for changes.
 	const isRunningDevTask = process.argv[2].startsWith("dev");
+
+	// This is a reference to the server process that is spawned. The server process is located in server/server.js
+	// and is an Express server that runs in its own node process (via spawn() command).
+	let serverProcess = null;
+
+	// This will get set when the container (Electron or Openfin) is launched. This is used to calculate how long it takes to start up the app.
+	let launchTimestamp = 0;
 
 	// #endregion
 
@@ -308,11 +314,8 @@
 				});
 			});
 			logToTerminal("Launching Finsemble", "black", "bgCyan");
-			//Wipe old stats.
-			fs.writeFileSync(path.join(__dirname, "server", "stats.json"), JSON.stringify({}), "utf-8");
 
-			let startTime = Date.now();
-			fs.writeFileSync(path.join(__dirname, "server", "stats.json"), JSON.stringify({ startTime }), "utf-8");
+			launchTimestamp = Date.now();
 			launcher
 				.launchOpenFin({
 					configPath: taskMethods.startupConfig[env.NODE_ENV].serverConfig
@@ -398,7 +401,7 @@
 		startServer: done => {
 			const serverPath = path.join(__dirname, "server", "server.js");
 
-			const serverExec = spawn(
+			serverProcess = spawn(
 				"node",
 				[
 					serverPath,
@@ -417,21 +420,30 @@
 				}
 			);
 
-			serverExec.on(
-				"message",
-				data => {
-					if (data === "serverStarted") {
-						done();
-					} else if (data === "serverFailed") {
-						process.exit(1);
-					}
-				});
+			serverProcess.on("message", data => {
+				if (!data || !data.action) {
+					console.log("Unproperly formatted message from server:", data);
+					return;
+				}
+				if (data.action === "serverStarted") {
+					done();
+				} else if (data.action === "serverFailed") {
+					process.exit(1);
+				} else if (data.action === "timestamp") {
+					// The server process can send timestamps back to us. We will output the results here.
+					let duration = (data.timestamp - launchTimestamp) / 1000;
+					logToTerminal(`${data.milestone} ${duration}s after launch`);
+				} else {
+					console.log("Unhandled message from server: ", data);
+				}
+			});
 
-			serverExec.on("exit", code => logToTerminal(`Server closed: exit code ${code}`, "magenta"));
+			serverProcess.on("exit", code => logToTerminal(`Server closed: exit code ${code}`, "magenta"));
 
 			// Prints server errors to your terminal.
-			serverExec.stderr.on("data", data => { console.error(errorOutColor(`ERROR: ${data}`)); });
+			serverProcess.stderr.on("data", data => { console.error(errorOutColor(`ERROR: ${data}`)); });
 		},
+
 		setDevEnvironment: done => {
 			process.env.NODE_ENV = "development";
 			done();
