@@ -83,7 +83,7 @@ export default class AppMarket extends React.Component {
 	}
 	changeSearch(search) {
 
-		if (search) {
+		if (search || appCatalogStore.Actions.getActiveTags().length > 0) {
 			appCatalogStore.Actions.searchApps(search);
 
 			this.setState({

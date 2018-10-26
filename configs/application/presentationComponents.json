@@ -713,8 +713,9 @@
 				"width": 600,
 				"height": 700,
 				"options": {
-					"autoShow": true,
-					"resizable": false
+					"autoShow": false,
+					"resizable": false,
+					"showTaskbarIcon": true
 				}
 			},
 			"component": {
