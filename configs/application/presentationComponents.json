@@ -732,7 +732,9 @@
 						"launchableByUser": true
 					},
 					"Window Manager": {
-						"FSBLHeader": true,
+						"FSBLHeader": {
+							"hideMaximize": true
+						},
 						"persistWindowState": true,
 						"title": "App Market"
 					}
