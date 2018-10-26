@@ -15,13 +15,16 @@ export default class Carousel extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			firstIndex: 0
+			firstIndex: 0,
+			titleHighlighted: false
 		}
 		this.bindCorrectContext();
 	}
 	bindCorrectContext() {
 		this.pageUp = this.pageUp.bind(this);
 		this.pageDown = this.pageDown.bind(this);
+		this.highlightTitle = this.highlightTitle.bind(this);
+		this.seeMore = this.seeMore.bind(this);
 	}
 	pageUp() {
 		let newFirstIndex = (this.state.firstIndex + 1 > this.props.cards.length - 1) ? 0 : this.state.firstIndex + 1;
@@ -36,6 +39,14 @@ export default class Carousel extends Component {
 		this.setState({
 			firstIndex: newFirstIndex
 		});
+	}
+	highlightTitle(highlight) {
+		this.setState({
+			titleHighlighted: highlight
+		});
+	}
+	seeMore() {
+		this.props.seeMore(this.props.tag);
 	}
 	render() {
 
@@ -52,11 +63,14 @@ export default class Carousel extends Component {
 			firstCard++;
 		}
 
+		let titleClass = "carousel-title";
+		if (this.state.titleHighlighted) titleClass += " highlight";
+
 		return (
 			<div className="carousel-main">
 				<div className="carousel-header">
-					<div className="carousel-title">{this.props.tag[0].toUpperCase() + this.props.tag.substring(1)}</div>
-					<button className="see-more" onClick={this.props.seeMore.bind(this,this.props.tag)}><span className='button-label'>See More</span></button>
+					<div className={titleClass} onClick={this.seeMore} onMouseEnter={this.highlightTitle.bind(this, true)} onMouseLeave={this.highlightTitle.bind(this, false)}>{this.props.tag[0].toUpperCase() + this.props.tag.substring(1)}</div>
+					<button className="see-more" onClick={this.seeMore}><span className='button-label'>See More</span></button>
 				</div>
 				<div className="carousel-content">
 					<i className="ff-chevron-left" onClick={this.pageDown} />

@@ -62,7 +62,7 @@
 .selected-content-message {
 	width: 477px;
 	height: 64px;
-	
+
 	font-size: 14px;
 	font-weight: var(--primary-font-weight);
 	color: var(--catalog-font-color);
@@ -224,6 +224,11 @@
 	font-size: 14px;
 	font-weight: var(--tertiary-font-weight);
 	color: var(--catalog-section-header-font-color);
+	cursor: pointer;
+}
+
+.carousel-main .carousel-header .carousel-title.highlight {
+	text-decoration: underline;
 }
 
 .carousel-main .carousel-content {
@@ -519,7 +524,7 @@
 .app-showcase .header .appName {
 	width: 410px;
 	padding-right: 12px;
-  	
+
   	font-size: 14px;
   	font-weight: var(--primary-font-weight);
 	color: var(--catalog-font-color);
@@ -583,7 +588,7 @@
 	align-items: center;
 	width: 100%;
 	height: 16px;
-	font-size: 12px;	
+	font-size: 12px;
 	font-weight: var(--primary-font-weight);
 	font-family: Roboto;
 	text-align: center;
