@@ -3,11 +3,11 @@
 	"components": {
 		"App Launcher": {
 			"window": {
-				"url": "$applicationRoot/components/appLauncher/appLauncher.html",
-				"top": 32,
-				"left": 45,
-				"width": 350,
-				"height": 330,
+				"url": "$applicationRoot/components/appLauncher2/index.html",
+				"top": 0,
+				"left": 0,
+				"width": 600,
+				"height": 400,
 				"ephemeral": true,
 				"options": {
 					"autoShow": false
@@ -65,6 +65,7 @@
 				}
 			}
 		},
+
 		"Overflow Menu": {
 			"window": {
 				"url": "$applicationRoot/components/overflowMenu/overflowMenu.html",
@@ -478,6 +479,9 @@
 				"top": 0,
 				"left": 0,
 				"right": 0,
+				"height": 39,
+				"width": 600,
+				"dockedHeight": 39,
 				"position": "available",
 				"autoShow": true,
 				"dockable": [
@@ -659,51 +663,6 @@
 				"services": {
 					"dockingService": {
 						"canGroup": true,
-						"isArrangable": false,
-						"shouldRegister": false
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"launchableByUser": false
-					},
-					"Window Manager": {
-						"FSBLHeader": false,
-						"persistWindowState": false
-					},
-					"Toolbar": {
-						"iconClass": "UserPreferences"
-					}
-				}
-			}
-		},
-		"Floating Titlebar": {
-			"window": {
-				"url": "$applicationRoot/components/floatingTitlebar/floatingTitlebar.html",
-				"frame": false,
-				"top": "center",
-				"left": "center",
-				"width": 30,
-				"height": 30,
-				"options": {
-					"cornerRounding": {
-						"height": 0,
-						"width": 0
-					},
-					"showTaskbarIcon": false,
-					"autoShow": false,
-					"resizable": false,
-					"alwaysOnTop": false,
-					"smallWindow": true
-				}
-			},
-			"component": {
-				"category": "system"
-			},
-			"foreign": {
-				"services": {
-					"dockingService": {
-						"canGroup": true,
 						"isArrangable": false
 					}
 				},
@@ -725,7 +684,7 @@
 			"window": {
 				"url": "$applicationRoot/components/processMonitor/processMonitor.html",
 				"width": 600,
-				"height": 400
+				"height": 700
 			},
 			"component": {
 				"category": "system"
@@ -744,6 +703,38 @@
 						"FSBLHeader": true,
 						"persistWindowState": true,
 						"title": "Process Monitor"
+					}
+				}
+			}
+		},
+		"App Market": {
+			"window": {
+				"url": "$applicationRoot/components/appMarket/appMarket.html",
+				"width": 600,
+				"height": 700,
+				"options": {
+					"autoShow": true,
+					"resizable": false
+				}
+			},
+			"component": {
+				"category": "system",
+				"spawnOnStartup": false
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangeable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"persistWindowState": true,
+						"title": "App Market"
 					}
 				}
 			}

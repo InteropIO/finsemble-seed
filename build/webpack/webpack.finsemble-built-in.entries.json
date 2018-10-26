@@ -3,6 +3,10 @@
 		"output": "components/appLauncher/appLauncher",
 		"entry": "./src-built-in/components/appLauncher/src/app.jsx"
 	},
+	"appLauncher2": {
+		"output": "components/appLauncher2/index",
+		"entry": "./src-built-in/components/appLauncher2/src/index.jsx"
+	},
 	"authentication": {
 		"output": "components/authentication/authentication",
 		"entry": "./src-built-in/components/authentication/authentication.js"
@@ -62,6 +66,10 @@
 	"welcome": {
 		"output": "components/welcome/welcome",
 		"entry": "./src-built-in/components/welcome/welcome.js"
+	},
+	"appMarket": {
+		"output": "components/appMarket/appMarket",
+		"entry": "./src-built-in/components/appMarket/src/app.jsx"
 	},
 	"processMonitor": {
 		"output": "components/processMonitor/processMonitor",
