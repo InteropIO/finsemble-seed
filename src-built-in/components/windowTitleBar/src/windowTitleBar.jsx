@@ -88,6 +88,7 @@ class WindowTitleBar extends React.Component {
 		this.onHackScrollbarChanged = this.onHackScrollbarChanged.bind(this);
 		this.onTilingStop = this.onTilingStop.bind(this);
 		this.onTilingStart = this.onTilingStart.bind(this);
+		this.resizeDragHandle = this.resizeDragHandle.bind(this);
 
 	}
 	componentWillMount() {
@@ -399,6 +400,7 @@ class WindowTitleBar extends React.Component {
 							listenForDragOver={!this.state.allowDragOnCenterRegion}
 							tabs={this.state.tabs}
 							ref="tabArea"
+							onTitleUpdated={this.resizeDragHandle}
 						/>}
 
 				</div>
@@ -420,10 +422,13 @@ class WindowTitleBar extends React.Component {
 // it is pub/sub, if the event had fired in the past then it will still be fired.
 // window.addEventListener("FSBLReady", function () {
 
-FSBL.addEventListener("onReady", function () {
+if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
+function FSBLReady() {
+	if (FSBL.titleBarInserted) return;
+	FSBL.titleBarInserted = true;
 	storeExports.initialize(function () {
 		HeaderActions = storeExports.Actions;
 		windowTitleBarStore = storeExports.getStore();
 		ReactDOM.render(<WindowTitleBar />, document.getElementById("FSBLHeader"));
 	});
-});
+}

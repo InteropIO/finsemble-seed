@@ -145,6 +145,7 @@ export default class ScheduledRestart extends React.Component {
     componentDidMount() {
         UserPreferencesStore.addListener({ field: 'preferences' }, this.setPreferences)
         UserPreferencesStore.getValue({ field: "preferences" }, (err, data) => {
+            console.log('response: ', data)
             if (data) {
                 let scheduledRestart = data['finsemble.scheduledRestart'];
                 let enabled = typeof scheduledRestart === "object";

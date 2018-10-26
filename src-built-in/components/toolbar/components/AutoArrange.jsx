@@ -17,7 +17,7 @@ export default class AutoArrange extends React.Component {
 		}, (err, monitorInfo) => {
 			FSBL.Clients.RouterClient.subscribe('DockingService.AutoarrangeStatus', function (err, response) {
 				self.setState({
-					isAutoArranged: response.data.isAutoArranged[monitorInfo.name]
+					isAutoArranged: response.data.isAutoArranged && response.data.isAutoArranged[monitorInfo.name]
 				});
 			});
 		})

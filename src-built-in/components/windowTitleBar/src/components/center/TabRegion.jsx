@@ -7,13 +7,16 @@ import Logo from "./logo";
 import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
 import { FinsembleDnDContext, FinsembleDroppable } from '@chartiq/finsemble-react-controls';
 import { Store, Actions } from "../../stores/windowTitleBarStore";
-import { debug } from "util";
+import Title from "../../../../common/windowTitle";
 const PLACEHOLDER_TAB = {
     windowName: "",
     uuid: "",
     componentType: "placeholder-tab"
 };
 let TAB_WIDTH = 300;
+//Next two items are for calculating how large the title should be within a tab.
+const ICON_AREA = 29;
+const CLOSE_BUTTON_MARGIN = 22;
 const MINIMUM_TAB_SIZE = 100;
 
 export default class TabRegion extends React.Component {
@@ -63,6 +66,7 @@ export default class TabRegion extends React.Component {
         this.onTabListTranslateChanged = this.onTabListTranslateChanged.bind(this);
 
     }
+
     getTabWidth(params = {}) {
         let { boundingBox, tabList } = params;
         if (typeof (tabList) === "undefined") {
@@ -450,6 +454,7 @@ export default class TabRegion extends React.Component {
             translateX: value
         })
     }
+
     componentWillMount() {
         // Store.addListener({ field: "activeTab" }, this.onActiveTabChanged);
         Store.addListener({ field: "tabs" }, this.onTabsChanged);
@@ -500,7 +505,6 @@ export default class TabRegion extends React.Component {
         }
 
         let tabRegionDropZoneStyle = { left: this.state.tabs.length * this.state.tabWidth + "px" }
-        console.log("TAB DROP REGION", tabRegionDropZoneStyle);
         let moveAreaClasses = "fsbl-tab-region-drag-area";
         if (this.isTabRegionOverflowing()) {
             moveAreaClasses += " gradient"
@@ -542,7 +546,7 @@ function renderTitle() {
         className={"fsbl-header-title"}>
         <FinsembleHoverDetector edge="top" hoverAction={this.hoverAction.bind(this)} />
         <Logo windowIdentifier={FSBL.Clients.WindowClient.getWindowIdentifier()} />
-        <div className="fsbl-tab-title">{this.props.thisWindowsTitle}</div>
+        <Title onUpdate={this.props.onTitleUpdated} windowIdentifier={FSBL.Clients.WindowClient.getWindowIdentifier()}></Title>
     </div>);
 }
 
@@ -551,6 +555,7 @@ function renderTitle() {
  * @param {*} props
  */
 function renderTabs() {
+    let titleWidth = this.state.tabWidth - ICON_AREA - CLOSE_BUTTON_MARGIN;
     return this.state.tabs.map((tab, i) => {
         return <Tab
             onClick={() => {
@@ -571,7 +576,7 @@ function renderTabs() {
             onTabDraggedOver={this.onTabDraggedOver}
             listenForDragOver={this.props.listenForDragOver}
             tabWidth={this.state.tabWidth}
-            title={tab.title || tab.windowName}
+            titleWidth={titleWidth}
             windowIdentifier={tab} />
     });
 

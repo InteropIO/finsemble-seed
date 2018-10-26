@@ -17,7 +17,6 @@ import { Store as HeaderStore, Actions as HeaderActions } from "../stores/header
 export default class TabbingSection extends React.Component {
 	constructor(props) {
 		super(props);
-		this.finWindow = fin.desktop.Window.getCurrent();
 		this.state = {
 			showTabs: true,
 			tabBarBoundingBox: {},

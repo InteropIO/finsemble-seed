@@ -16,6 +16,7 @@ let defaultData = {
 	WorkspaceList: [],
 	newWorkspaceDialogIsActive: false
 };
+let switching = false;
 
 function uuidv4() {
 	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -325,6 +326,8 @@ Actions = {
 	 * Asks the user if they'd like to save their data, then loads the requested workspace.
 	 */
 	switchToWorkspace: function (data) {
+		if (switching) return;
+		switching = true;
 		Actions.blurWindow();
 		let name = data.name;
 		let activeWorkspace = WorkspaceManagementStore.getValue("activeWorkspace");
@@ -335,6 +338,8 @@ Actions = {
 		function switchIt() {
 			FSBL.Clients.WorkspaceClient.switchTo({
 				name: name
+			}, () => {
+				switching = false;
 			});
 		}
 		/**

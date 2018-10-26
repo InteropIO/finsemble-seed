@@ -25,7 +25,6 @@ let menuStore;
 class SearchMenu extends React.Component {
 	constructor(props) {
 		super(props);
-		this.finWindow = fin.desktop.Window.getCurrent();
 		this.buildList = this.buildList.bind(this);
 
 		this.keyPress = this.keyPress.bind(this);
@@ -175,13 +174,14 @@ class SearchMenu extends React.Component {
 }
 
 fin.desktop.main(function () {
-	FSBL.addEventListener("onReady", function () {
-	//console.log("searchMenu app onReady");
+	if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
+	function FSBLReady() {
+		//console.log("searchMenu app onReady");
 		storeExports.initialize(function (store) {
 			menuStore = store;
 			ReactDOM.render(
 				<SearchMenu />
 				, document.getElementById("bodyHere"));
 		});
-	});
+	}
 });

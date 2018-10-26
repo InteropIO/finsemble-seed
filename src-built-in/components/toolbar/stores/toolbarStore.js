@@ -34,7 +34,7 @@ class _ToolbarStore {
 			}
 			function createStore(err, result) {
 				let values = {};
-				if (monitors.mine.deviceId === monitors.primary.deviceId) {
+				if (monitors.mine && monitors.primary && monitors.mine.deviceId === monitors.primary.deviceId) {
 					values = { mainToolbar: fin.desktop.Window.getCurrent().name };
 					storeOwner = true;//until we put creator in by default
 				}
@@ -59,31 +59,42 @@ class _ToolbarStore {
 	 */
 	retrieveSelfFromStorage(cb) {
 
-		let hasRightProps = () => {
-			return (finsembleWindow.hasOwnProperty('windowOptions') && finsembleWindow.windowOptions.hasOwnProperty('customData') && finsembleWindow.windowOptions.customData.hasOwnProperty('foreign') && finsembleWindow.windowOptions.customData.foreign.hasOwnProperty('services') && finsembleWindow.windowOptions.customData.foreign.services.hasOwnProperty('workspaceService') && finsembleWindow.windowOptions.customData.foreign.services.workspaceService.hasOwnProperty('global'));
-		}
-
-		let isGloballyDocked = hasRightProps() ? finsembleWindow.windowOptions.customData.foreign.services.workspaceService.global : false;
-
-		finsembleWindow.getComponentState({}, (err, result) => {
-			if (err) {
-				finsembleWindow.show();
-				cb();
-				return;
+		finsembleWindow.getOptions((err, opts) => {
+			console.info("get options", opts);
+			let hasRightProps = () => {
+				return (opts.hasOwnProperty('customData') &&
+					opts.customData.hasOwnProperty('foreign') &&
+					opts.customData.foreign.hasOwnProperty('services') &&
+					opts.customData.foreign.services.hasOwnProperty('workspaceService') && opts.customData.foreign.services.workspaceService.hasOwnProperty('global'));
 			}
-			let bounds = result.hasOwnProperty('window-bounds') && result["window-bounds"] !== null ? result["window-bounds"] : null;
-			let visible = result.hasOwnProperty('visible') ? result.visible : true;
-			if (bounds && isGloballyDocked) {
-				finsembleWindow.setBounds(bounds, () => {
-					if (visible) {
+			var isGloballyDocked = hasRightProps() ? opts.customData.foreign.services.workspaceService.global : false;
+
+			finsembleWindow.getComponentState(null, (err, result) => {
+				if (err) {
+					finsembleWindow.show();
+					return cb();
+				}
+
+				let visible = (result && result.hasOwnProperty('visible')) ? result.visible : true;
+				finsembleWindow.getBounds(null, (err, bounds) => {
+					if (!err && bounds && isGloballyDocked) {
+						this.Store.setValue({
+							field: 'window-bounds',
+							value: bounds
+						});
+						finsembleWindow.setBounds(bounds, () => {
+							if (visible) {
+								finsembleWindow.show();
+							}
+						});
+					} else {
 						finsembleWindow.show();
 					}
-				});
-			} else {
-				finsembleWindow.show();
-			}
-			cb(null, result);
-		});
+					cb(null, result);
+				})
+			});
+		})
+
 	}
 	/**
 	 * Sets the toolbars visibility in memory
@@ -119,7 +130,7 @@ class _ToolbarStore {
 	 * @memberof _ToolbarStore
 	 */
 	loadMenusFromConfig(done, self) {
-		FSBL.Clients.ConfigClient.get({ field: "finsemble.menus" }, function (err, menus) {
+		FSBL.Clients.ConfigClient.getValue({ field: "finsemble.menus" }, function (err, menus) {
 			if (menus && menus.length) {
 				self.Store.setValue({
 					field: "menus",
@@ -161,17 +172,21 @@ class _ToolbarStore {
 			}
 			done();
 		});
-		FSBL.Clients.WindowClient.finsembleWindow.listenForBoundsSet();
-		let onBoundsChanged = (err, response) => {
-			let bounds = response.data.bounds;
-			console.log("CHANGING BOUNDS AND SETTING THEM");
-			finsembleWindow.setComponentState({
+
+		let onBoundsSet = (bounds) => {
+			bounds = bounds.data ? bounds.data : bounds;
+			self.Store.setValue({ field: "window-bounds", value: bounds });
+			FSBL.Clients.WindowClient.setComponentState({
 				field: 'window-bounds',
 				value: bounds
-			}, () => {
-				console.log("BOUNDS SET");
-			});
+			}, Function.prototype);
 		}
+		let restoreWindow = (e) => {
+			finsembleWindow.restore();
+		}
+		//Immediately restore on maximize.
+		finsembleWindow.addListener("maximized", restoreWindow);
+		finsembleWindow.addListener("bounds-change-end", onBoundsSet)
 
 		FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", "t"], () => {
 			self.showToolbarAtFront();
@@ -180,18 +195,6 @@ class _ToolbarStore {
 		FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", "h"], () => {
 			self.hideToolbar();
 		});
-
-		//This is a hack until we have proper events in finsemble. We need to notify windows that aren't part of the workspace so that they can save their bounds.
-		FSBL.Clients.RouterClient.addListener(finsembleWindow.name + ".bounds-change-end", onBoundsChanged)
-	}
-
-	/**
-	 * Function to handle maximize click
-	 * @memberof _ToolbarStore
-	 */
-	clickMaximize() {
-		var self = this;
-		FSBL.Clients.WindowClient.restore(Function.prototype);
 	}
 
 	/**
@@ -301,13 +304,10 @@ class _ToolbarStore {
 					self.retrieveSelfFromStorage(done);
 				},
 				function (done) {
-					FSBL.Clients.WindowClient.finWindow.addEventListener("maximized", function () {
-						self.clickMaximize();
-					});
-					FSBL.Clients.WindowClient.finWindow.addEventListener('focused', function () {
+					finsembleWindow.addEventListener('focused', function () {
 						self.onFocus();
 					});
-					FSBL.Clients.WindowClient.finWindow.addEventListener('blurred', function () {
+					finsembleWindow.addEventListener('blurred', function () {
 						self.onBlur();
 					});
 					done();
