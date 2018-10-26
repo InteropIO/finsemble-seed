@@ -164,7 +164,7 @@ var Actions = {
 	 *
 	 */
 	logout() {
-		finsembleWindow.hide();
+		fin.desktop.Window.getCurrent().hide();
 		Actions.saveWorkspace().then(function (choice) {
 			if (choice !== "cancel") {
 
