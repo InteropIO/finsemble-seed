@@ -14,7 +14,7 @@
 	const gulp = require("gulp");
 	const prettyHrtime = require("pretty-hrtime");
 	const watch = require("gulp-watch");
-	const launcher = require("openfin-launcher");
+	const openfinLauncher = require("openfin-launcher");
 	const shell = require("shelljs");
 	const path = require("path");
 	const webpack = require("webpack");
@@ -63,6 +63,45 @@
 	// tasks that are dev * (dev, dev: fresh, dev: nolaunch), but excludes build:dev because it is intended to only
 	// build for a development environment and not watch for changes.
 	const isRunningDevTask = process.argv[2].startsWith("dev");
+
+	/**
+	 * Returns the value for the given name, looking in (1) environment variables, (2) command line args
+	 * and (3) startupConfig. For instance, `set DESKTOP_AGENT=electron` or `npx gulp dev --desktop_agent:electron`
+	 * This will search for both all caps, all lowercase and camelcase.
+	 * @param {string} name The name to look for in env variables and args
+	 * @param {string} defaultValue The default value to return if the name isn't found as an env variable or arg
+	 */
+	function envOrArg(name, defaultValue) {
+		let lc = name.toLowerCase();
+		let uc = name.toUpperCase();
+		let cc = name.replace(/(-|_)([a-z])/g, function (g) { return g[1].toUpperCase(); });
+
+		// Check environment variables
+		if (env[lc]) return env[lc];
+		if (env[uc]) return env[uc];
+
+		// Check command line arguments
+		lc = "--" + lc + ":";
+		uc = "--" + uc + ":";
+		let rc = null;
+		process.argv.forEach(arg => {
+			if (arg.startsWith(lc)) rc = arg.split(lc)[1];
+			if (arg.startsWith(uc)) rc = arg.split(uc)[1];
+		});
+
+		// Look in startupConfig
+		if (!rc) {
+			rc = startupConfig[env.NODE_ENV][cc] || startupConfig[env.NODE_ENV][lc] || startupConfig[env.NODE_ENV][uc];
+		}
+		rc = rc || defaultValue;
+		return rc;
+	}
+
+	// Currently supported desktop agents include "openfin" and "e2o". This can be set either
+	// with the environment variable DESKTOP_AGENT or by command line argument `npx gulp dev --desktop_agent:electron`
+	let desktopAgent = envOrArg("desktop_agent", "openfin");
+	desktopAgent = desktopAgent.toLowerCase();
+	if (desktopAgent === "electron") desktopAgent = "e2o";
 
 	// This is a reference to the server process that is spawned. The server process is located in server/server.js
 	// and is an Express server that runs in its own node process (via spawn() command).
@@ -301,7 +340,7 @@
 				taskMethods.startServer
 			], done);
 		},
-		launchApplication: done => {
+		launchOpenFin: done => {
 			ON_DEATH((signal, err) => {
 				exec("taskkill /F /IM openfin.* /T", (err, stdout, stderr) => {
 					// Only write the error to console if there is one and it is something other than process not found.
@@ -313,20 +352,73 @@
 					process.exit();
 				});
 			});
-			logToTerminal("Launching Finsemble", "black", "bgCyan");
+			
+			openfinLauncher.launchOpenFin({
+				configPath: taskMethods.startupConfig[env.NODE_ENV].serverConfig
+			}).then(() => {
+				// OpenFin has closed so exit gulpfile
+				if (watchClose) watchClose();
+				process.exit();
+			});
+			if (done) done();
+		},
+		launchE2O: done => {
+			let electronProcess = null;
+			let manifest = taskMethods.startupConfig[env.NODE_ENV].serverConfig;
+			process.env.ELECTRON_DEV = true;
 
-			launchTimestamp = Date.now();
-			launcher
-				.launchOpenFin({
-					configPath: taskMethods.startupConfig[env.NODE_ENV].serverConfig
-				})
-				.then(() => {
-					// OpenFin has closed so exit gulpfile
+			ON_DEATH((signal, err) => {
+				if (electronProcess) electronProcess.kill();
+			
+				exec("taskkill /F /IM electron.* /T", (err, stdout, stderr) => {
+					// Only write the error to console if there is one and it is something other than process not found.
+					if (err && err !== 'The process "electron.*" not found.') {
+						console.error(errorOutColor(err));
+					}
+			
 					if (watchClose) watchClose();
 					process.exit();
 				});
+			});
 
-			done();
+			let e2oLocation = "node_modules/@chartiq/e2o";
+			let electronPath = path.join(".", "/node_modules/electron/dist/electron.exe");
+			let command = "set ELECTRON_DEV=true && " + electronPath + " index.js --remote-debugging-port=9090 --manifest " + manifest;
+			console.log(command);
+			electronProcess = exec(command,
+				{
+					cwd: e2oLocation
+				}
+			);
+			
+			electronProcess.stdout.on("data", function (data) {
+				console.log(data.toString());
+			});
+		
+			electronProcess.stderr.on("data", function (data) {
+				console.error("stderr:", data.toString());
+			});
+		
+			electronProcess.on("close", function (code) {
+				console.log("child process exited with code " + code);
+				process.exit();
+			});
+
+			process.on('exit', function () {
+				electronProcess.kill();
+			});	
+			if (done) done();
+		},
+
+		launchApplication: done => {
+			logToTerminal("Launching Finsemble", "black", "bgCyan");
+
+			launchTimestamp = Date.now();
+			if (desktopAgent === "openfin") {
+				taskMethods.launchOpenFin(done);
+			} else {
+				taskMethods.launchE2O(done);
+			}	
 		},
 
 		logToTerminal: () => {
