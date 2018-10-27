@@ -21,7 +21,11 @@
         "migrate": "node migration/2.3/migrationScripts/migrate.js"
     },
     "author": "",
-    "license": "ISC",
+    "license": "",
+    "optionalDependencies": {
+        "openfin-launcher": "^1.3.11",
+        "@chartiq/e2o": "latest"
+    },
     "dependencies": {
         "@chartiq/finsemble": "latest",
         "@chartiq/finsemble-cli": "2.*",
@@ -33,8 +37,7 @@
         "lodash.clonedeep": "^4.5.0",
         "lodash.debounce": "^4.0.8",
         "lodash.throttle": "^4.1.1",
-        "nocache": "^2.0.0",
-        "openfin-launcher": "^1.3.11"
+        "nocache": "^2.0.0"
     },
     "devDependencies": {
         "ansi-html": "0.0.7",
