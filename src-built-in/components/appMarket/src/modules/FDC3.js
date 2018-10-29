@@ -111,6 +111,24 @@ export default class FDC3 {
         })
     }
     /**
+     * Returns unique tags
+     * @param {function} callback The optional callback function
+     */
+    getTags(callback) {
+        return new Promise((resolve, reject) => {
+            this._get('/tags/', (error, data) => {
+                if (error) {
+                    reject(error)
+                } else {
+                    resolve(data.tags)
+                }
+                if (callback) {
+                    callback(error, !error && data.tags)
+                }
+            })
+        })
+    }
+    /**
      * Returns a list of applications based on text and filter
      * @param {object} params The search criteria 
      * @param {function} callback The callback function
