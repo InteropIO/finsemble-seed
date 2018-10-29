@@ -8,7 +8,6 @@
  */
 import React from "react";
 import ReactDOM from 'react-dom';
-import * as storeExports from "./stores/appCatalogStore";
 
 //components
 import SearchBar from './components/SearchBar';
@@ -17,7 +16,8 @@ import AppResults from './components/AppResults';
 import AppShowcase from './components/Showcase/AppShowcase';
 
 //data
-import * as appCatalogStore from './stores/appCatalogStore.js';
+import { createStore, getStore } from './stores/appStore';
+import storeActions from './stores/storeActions';
 
 //style
 import '../appMarket.css';
@@ -26,15 +26,19 @@ export default class AppMarket extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			apps: [],
+			tags: [],
+			activeTags: [],
 			activePage: "home",
 			activeApp: null,
 			installationActionTaken: null
 		};
-		appCatalogStore.initialize();
-		appCatalogStore.Actions.setTags();
 		this.bindCorrectContext();
 	}
 	bindCorrectContext() {
+		this.loadedApps = this.loadedApps.bind(this);
+		this.loadedTags = this.loadedTags.bind(this);
+		this.tagsChanged = this.tagsChanged.bind(this);
 		this.goHome = this.goHome.bind(this);
 		this.addTag = this.addTag.bind(this);
 		this.removeTag = this.removeTag.bind(this);
@@ -44,80 +48,107 @@ export default class AppMarket extends React.Component {
 		this.removeApp = this.removeApp.bind(this);
 		this.stopShowingInstalledNotification = this.stopShowingInstalledNotification.bind(this);
 	}
-	addTag(tag) {
-		appCatalogStore.Actions.addTag(tag);
-		let tags = appCatalogStore.Actions.getActiveTags();
-
-		let page = this.state.activePage;
-
-		if (tags.length === 1) {
-			page = "appSearch";
-		}
-
+	componentDidMount() {
+		storeActions.fetchApps();
+		getStore().addListener({ field: 'apps' }, this.loadedApps);
+		getStore().addListener({ field: 'tags' }, this.loadedTags);
+		getStore().addListener({ field: 'activeTags' }, this.tagsChanged);
+	}
+	componentWillUnmount() {
+		getStore().removeListener({ field: 'apps' }, this.loadedApps);
+		getStore().removeListener({ field: 'tags' }, this.loadedTags);
+		getStore().removeListener({ field: 'activeTags' }, this.tagsChanged);
+	}
+	loadedApps() {
 		this.setState({
-			activePage: page
+			apps: storeActions.getApps()
 		});
+	}
+	loadedTags() {
+		this.setState({
+			tags: storeActions.getTags()
+		});
+	}
+	tagsChanged() {
+		this.setState({
+			activeTags: storeActions.getActiveTags()
+		});
+	}
+	addTag(tag) {
+		// appCatalogStore.Actions.addTag(tag);
+		// let tags = appCatalogStore.Actions.getActiveTags();
+
+		// let page = this.state.activePage;
+
+		// if (tags.length === 1) {
+		// 	page = "appSearch";
+		// }
+
+		// this.setState({
+		// 	activePage: page
+		// });
+		storeActions.addTag(tag);
 	}
 	removeTag(tagName) {
-		appCatalogStore.Actions.removeTag(tagName);
-		let tags = appCatalogStore.Actions.getActiveTags();
+		// appCatalogStore.Actions.removeTag(tagName);
+		// let tags = appCatalogStore.Actions.getActiveTags();
 
-		let page = this.state.activePage;
+		// let page = this.state.activePage;
 
-		if (tags.length === 0) {
-			page = "home";
-			appCatalogStore.Actions.clearSearchResults();
-		}
+		// if (tags.length === 0) {
+		// 	page = "home";
+		// 	appCatalogStore.Actions.clearSearchResults();
+		// }
 
-		this.setState({
-			activePage: page
-		});
+		// this.setState({
+		// 	activePage: page
+		// });
 	}
 	goHome() {
-		appCatalogStore.Actions.clearTags();
-		appCatalogStore.Actions.clearSearchResults();
-		this.setState({
-			activePage: "home",
-			activeApp: null
-		});
+		// appCatalogStore.Actions.clearTags();
+		// appCatalogStore.Actions.clearSearchResults();
+		// this.setState({
+		// 	activePage: "home",
+		// 	activeApp: null
+		// });
 	}
 	changeSearch(search) {
 
-		if (search || appCatalogStore.Actions.getActiveTags().length > 0) {
-			appCatalogStore.Actions.searchApps(search);
+		// if (search || appCatalogStore.Actions.getActiveTags().length > 0) {
+		// 	appCatalogStore.Actions.searchApps(search);
 
-			this.setState({
-				activePage: "appSearch"
-			});
-		} else {
-			appCatalogStore.Actions.clearSearchResults();
+		// 	this.setState({
+		// 		activePage: "appSearch"
+		// 	});
+		// } else {
+		// 	appCatalogStore.Actions.clearSearchResults();
 
-			this.setState({
-				activePage: appCatalogStore.Actions.getActiveTags().length === 0 ? "home" : this.state.activePage
-			});
-		}
+		// 	this.setState({
+		// 		activePage: appCatalogStore.Actions.getActiveTags().length === 0 ? "home" : this.state.activePage
+		// 	});
+		// }
 	}
 	addApp(appName) {
-		//TODO: This won't work when this comes from a db
-		appCatalogStore.Actions.addApp(appName);
+		// //TODO: This won't work when this comes from a db
+		// appCatalogStore.Actions.addApp(appName);
 
-		this.setState({
-			apps: appCatalogStore.Actions.getApps(),
-			installationActionTaken: "add"
-		}, () => {
-			setTimeout(this.stopShowingInstalledNotification, 1000);
-		});
+		// this.setState({
+		// 	apps: appCatalogStore.Actions.getApps(),
+		// 	installationActionTaken: "add"
+		// }, () => {
+		// 	setTimeout(this.stopShowingInstalledNotification, 1000);
+		// });
 	}
 	removeApp(appName) {
-		//TODO: This won't work when this comes from a db
-		appCatalogStore.Actions.removeApp(appName);
+		// //TODO: This won't work when this comes from a db
+		// appCatalogStore.Actions.removeApp(appName);
 
-		this.setState({
-			apps: appCatalogStore.Actions.getApps(),
-			installationActionTaken: "remove"
-		}, () => {
-			setTimeout(this.stopShowingInstalledNotification, 1000);
-		})
+		// this.setState({
+		// 	apps: appCatalogStore.Actions.getApps(),
+		// 	installationActionTaken: "remove"
+		// }, () => {
+		// 	setTimeout(this.stopShowingInstalledNotification, 1000);
+		// })
 	}
 	stopShowingInstalledNotification() {
 		this.setState({
@@ -126,44 +157,42 @@ export default class AppMarket extends React.Component {
 	}
 	openAppShowcase(appName) {
 		//clear tags
-		appCatalogStore.Actions.clearTags();
+		// appCatalogStore.Actions.clearTags();
 
-		let app;
-		let apps = appCatalogStore.Actions.getApps();
-		for (let i = 0; i < apps.length; i++) {
-			let thisApp = apps[i];
-			let thisAppName = thisApp.title || thisApp.name;
+		// let app;
+		// let apps = appCatalogStore.Actions.getApps();
+		// for (let i = 0; i < apps.length; i++) {
+		// 	let thisApp = apps[i];
+		// 	let thisAppName = thisApp.title || thisApp.name;
 
-			if (appName === thisAppName) {
-				app = thisApp;
-				break;
-			}
-		}
+		// 	if (appName === thisAppName) {
+		// 		app = thisApp;
+		// 		break;
+		// 	}
+		// }
 
-		if (app) {
-			this.setState({
-				activeApp: app,
-				activePage: "showcase"
-			});
-		}
+		// if (app) {
+		// 	this.setState({
+		// 		activeApp: app,
+		// 		activePage: "showcase"
+		// 	});
+		// }
 	}
 	render() {
 
-		let tags = appCatalogStore.Actions.getTags();
-		let apps = appCatalogStore.Actions.getApps();
-		let activeTags = appCatalogStore.Actions.getActiveTags();
-		let filteredApps = appCatalogStore.Actions.getFilteredApps();
+		let { apps, tags, activeTags, activePage } = this.state;
+		let filteredApps = [];
 
-		let pageContents;
+		let pageContents = <div></div>;
 
-		if (this.state.activePage === "home") {
-			pageContents = <Home cards={apps} openAppShowcase={this.openAppShowcase} seeMore={this.addTag} addApp={this.addApp} removeApp={this.removeApp} addTag={this.addTag} />;
-		} else if (this.state.activePage === "appSearch") {
-			pageContents = <AppResults cards={filteredApps} tags={activeTags} addApp={this.addApp} removeApp={this.removeApp} openAppShowcase={this.openAppShowcase} addTag={this.addTag} />;
-		} else if (this.state.activePage === "showcase") {
-			pageContents = <AppShowcase app={this.state.activeApp} addApp={this.addApp} removeApp={this.removeApp} addTag={this.addTag} />;
-		} else {
-			pageContents = <div></div>;
+		if (apps.length > 0) {
+			if (activePage === "home") {
+				pageContents = <Home cards={apps} openAppShowcase={this.openAppShowcase} seeMore={this.addTag} addApp={this.addApp} removeApp={this.removeApp} addTag={this.addTag} />;
+			} else if (activePage === "appSearch") {
+				pageContents = <AppResults cards={filteredApps} tags={activeTags} addApp={this.addApp} removeApp={this.removeApp} openAppShowcase={this.openAppShowcase} addTag={this.addTag} />;
+			} else if (activePage === "showcase") {
+				pageContents = <AppShowcase app={this.state.activeApp} addApp={this.addApp} removeApp={this.removeApp} addTag={this.addTag} />;
+			}
 		}
 
 		return (
@@ -177,11 +206,12 @@ export default class AppMarket extends React.Component {
 	}
 }
 
-FSBL.addEventListener("onReady", function () {
-
-	storeExports.Actions.initialize(function (store) {
-		ReactDOM.render(
-			<AppMarket />
-			, document.getElementById("bodyHere"));
+fin.desktop.main(function () {
+	FSBL.addEventListener('onReady', function () {
+		createStore((store) => {
+			ReactDOM.render(
+				<AppMarket />,
+				document.getElementById('bodyHere'));
+		});
 	});
 });
