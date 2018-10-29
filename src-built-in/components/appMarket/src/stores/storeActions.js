@@ -4,20 +4,17 @@
 */
 import AppDirectory from '../modules/AppDirectory'
 import FDC3 from '../modules/FDC3'
+import { getStore } from './appStore';
 
 export default {
-    setTags,
+    fetchApps,
     getApps,
     searchApps,
-    getFilteredApps,
-    clearSearchResults,
     getActiveTags,
     getTags,
     addTag,
     removeTag,
-    clearTags,
-    addApp,
-    removeApp,
+    clearTags
 }
 
 /**
@@ -26,12 +23,16 @@ export default {
  * Not sure if the localstore needs to be a persistent one at some point?
  */
 const FDC3Client = new FDC3({url: 'http://localhost:3030/v1'})
-const appd = new AppDirectory(FDC3Client)
+const appd = new AppDirectory(FDC3Client);
 
-function setTags() {
+function _setTags() {
+    let apps = getStore().getValue({
+        field: 'apps'
+    });
+
     let tags = []
-    for (let j = 0; j < values.apps.length; j++) {
-        let app = values.apps[j]
+    for (let j = 0; j < apps.length; j++) {
+        let app = apps[j]
         for (let i = 0; i < app.tags.length; i++) {
             let tag = app.tags[i]
             if (!tags.includes(tag)) {
@@ -39,73 +40,137 @@ function setTags() {
             }
         }
     }
-    values.allTags = tags
+
+    getStore().setValue({
+        field: 'tags',
+        value: tags
+    }, (err, data) => {
+        if (err) console.log('Failed to set tags list');
+    });
 }
-function getApps() {
-    return appd.getAll()
-}
-/**
- * 
- * @param {object} searchTerms The search params
- * @example searchApps({text: 'sometext', tag: 'sometag'})
- */
-function searchApps(searchTerms) {
-    return appd.search(searchTerms)
-}
-function getFilteredApps() {
-    return values.filteredCards
-}
-function getTags() {
-    return values.allTags
-}
-function getActiveTags() {
-    return values.activeTags
-}
-function addTag(tag) {
-    values.activeTags.push(tag)
-    let tags = values.activeTags
-    let newApps = values.apps.filter((app) => {
-        for (let i = 0; i < app.tags.length; i++) {
-            let tag = tags[i]
-            if (app.tags.includes(tag)) {
-                return true
-            }
-        }
-        return false;
+
+function _addActiveTag(tag) {
+    let activeTags = getStore().getValue({
+        field: 'activeTags'
     });
 
-    values.filteredCards = newApps;
-}
-function removeTag(tagName) {
-    let newTags = values.activeTags.filter((tag) => {
-        return tag !== tagName
-    })
-    values.activeTags = newTags
-}
-function clearTags() {
-    values.activeTags = []
-}
-function addApp(appName) {
-    let newApps = values.apps.map((app) => {
-        let appTitle = app.title || app.name
+    let apps = getStore().getValue({
+        field: 'apps'
+    });
 
-        if (appTitle === appName) {
-            app.installed = true
+    let newApps = apps.filter((app) => {
+        for (let i = 0; i < activeTags.length; i++) {
+            let tag = activeTags[i];
+            if (app.tags.includes(tag)) {
+                return true;
+            }
         }
-        return app
-    })
-    values.apps = newApps
+    });
+
+    getStore().setValue({
+        field: 'filteredApps',
+        value: newApps
+    });
 }
-function removeApp(appName) {
-    let newApps = values.apps.map((app) => {
-        let appTitle = app.title || app.name
-        if (appTitle === appName && app.installed) {
-            delete app.installed
-        }
-        return app
-    })
-    values.apps = newApps
+
+function _removeActiveTag(tag) {
+    let activeTags = getStore().getValue({
+        field: 'activeTags'
+    });
+
+    let newActiveTags = activeTags.filter((currentTag) => {
+        return currentTag !== tag;
+    });
+
+    getStore().setValue({
+        field: 'activeTags',
+        value: newActiveTags
+    });
 }
-function clearSearchResults() {
-    values.filteredCards = []
+
+function _clearActiveTags() {
+    getStore().setValue({
+        field: 'activeTags',
+        value: []
+    });
 }
+
+function getApps() {
+    return getStore().getValue({
+        field: 'apps'
+    });
+}
+
+function fetchApps() {
+    appd.getAll((err, apps) => {
+        if (err) console.log('Error loading apps');
+        getStore().setValue({
+            field: 'apps',
+            value: apps
+        }, (storeSetErr, data) => {
+            if (storeSetErr) console.log('Error setting apps');
+            _setTags();
+        })
+    });
+}
+
+function getTags() {
+    return getStore().getValue({
+        field: 'tags'
+    });
+}
+
+function getActiveTags() {
+    return getStore().getValue({
+        field: 'activeTags'
+    });
+}
+
+function addTag(tag) {
+    _addActiveTag(tag);
+}
+
+function removeTag(tag) {
+    _removeActiveTag(tag);
+}
+
+function clearTags() {
+    _clearActiveTags();
+}
+
+function searchApps(terms) {
+    let activeTags = getStore().getValue({
+        field: 'activeTags'
+    });
+
+    appd.search({ text: terms, tag: activeTags }, (err, data) => {
+        if (err) console.log("Failed to search apps");
+        return data;
+    });
+}
+
+
+// function addApp(appName) {
+//     let newApps = values.apps.map((app) => {
+//         let appTitle = app.title || app.name
+
+//         if (appTitle === appName) {
+//             app.installed = true
+//         }
+//         return app
+//     })
+//     values.apps = newApps
+// }
+// function removeApp(appName) {
+//     let newApps = values.apps.map((app) => {
+//         let appTitle = app.title || app.name
+//         if (appTitle === appName && app.installed) {
+//             delete app.installed
+//         }
+//         return app
+//     })
+//     values.apps = newApps
+// }
+// function clearSearchResults() {
+//     values.filteredCards = []
+// }
