@@ -479,9 +479,6 @@
 				"top": 0,
 				"left": 0,
 				"right": 0,
-				"height": 39,
-				"width": 600,
-				"dockedHeight": 39,
 				"position": "available",
 				"autoShow": true,
 				"dockable": [
@@ -713,7 +710,7 @@
 				"width": 600,
 				"height": 700,
 				"options": {
-					"autoShow": false,
+					"autoShow": true,
 					"resizable": false,
 					"showTaskbarIcon": true
 				}
@@ -725,7 +722,9 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangeable": true
+						"isArrangeable": false,
+						"ignoreTilingAndTabbingRequests": true,
+						"ignoreSnappingRequests": true
 					}
 				},
 				"components": {
