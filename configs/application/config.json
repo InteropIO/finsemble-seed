@@ -12,6 +12,11 @@
 			"IndexedDBAdapter": "$applicationRoot/adapters/indexedDBAdapter.js"
 		}
 	},
+	"preferences": {
+		"workspaceService": {
+			"promptUserOnDirtyWorkspace": true
+		}
+	},
 	"servicesConfig": {
 		"launcher": {
 			"staggerPixels": 40
