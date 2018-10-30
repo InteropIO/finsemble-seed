@@ -53,9 +53,12 @@ export default class AppMarket extends React.Component {
 	async componentDidMount() {
 		this.setState({
 			tags: await storeActions.getTags(),
-			apps: await storeActions.getApps(),
-			installed: await storeActions.fetchInstalledApps()
-		})
+			apps: await storeActions.getApps()
+		}, () => {
+			this.setState({
+				installed: [this.state.apps[0].appId]
+			});
+		});
 		getStore().addListener({ field: 'activeTags' }, this.tagsChanged);
 		getStore().addListener({ field: 'installed' }, this.stopShowingInstalledNotification);
 		getStore().addListener({ field: 'filteredApps' }, this.filteringApps);
@@ -66,8 +69,16 @@ export default class AppMarket extends React.Component {
 		getStore().removeListener({ field: 'installed' }, this.stopShowingInstalledNotification);
 	}
 	tagsChanged() {
+		let { activePage: page } = this.state;
+		let tags = storeActions.getActiveTags();
+
+		if (tags.length === 0) {
+			page = "home";
+		}
+
 		this.setState({
-			activeTags: storeActions.getActiveTags()
+			activeTags: tags,
+			activePage: page
 		});
 	}
 	filteringApps() {
@@ -111,6 +122,7 @@ export default class AppMarket extends React.Component {
 		});
 	}
 	changeSearch(search) {
+		storeActions.clearFilteredApps();
 		if (search !== "") {
 			storeActions.searchApps(search);
 			this.setState({
@@ -118,7 +130,6 @@ export default class AppMarket extends React.Component {
 			});
 		} else {
 			if (this.state.activeTags.length === 0) {
-				storeActions.clearFilteredApps();
 				this.setState({
 					activePage: 'home'
 				});
@@ -126,16 +137,26 @@ export default class AppMarket extends React.Component {
 		}
 	}
 	addApp(appName) {
-		// //TODO: This won't work when this comes from a db
+		// //TODO: This won't work when this comes from a dd
+		this.setState({
+			installationActionTaken: 'add'
+		});
 		storeActions.addApp(appName);
 	}
 	removeApp(appName) {
 		// //TODO: This won't work when this comes from a db
-		storeActions.removeApp(appName);
+		this.setState({
+			installationActionTaken: 'remove'
+		}, () => {
+			storeActions.removeApp(appName);
+		});
 	}
 	stopShowingInstalledNotification() {
+		let installed = storeActions.getInstalledApps();
+		console.log('installed: ', installed);
 		this.setState({
-			installationActionTaken: null
+			installationActionTaken: null,
+			installed
 		});
 	}
 	openAppShowcase(appName) {
@@ -160,8 +181,14 @@ export default class AppMarket extends React.Component {
 			});
 		}
 	}
-	compileInstalledInfo() {
-		let { apps, installed } = this.state;
+	compileInstalledInfo(filtered) {
+		let { installed } = this.state;
+		let apps;
+		if (filtered) {
+			apps = this.state.filteredApps;
+		} else {
+			apps = this.state.apps;
+		}
 
 		apps = apps.map((app) => {
 			for (let i = 0; i < installed.length; i++) {
@@ -176,10 +203,9 @@ export default class AppMarket extends React.Component {
 	}
 	render() {
 
-		let { tags, activeTags, activePage } = this.state;
-		let apps = this.compileInstalledInfo();
-
-		let filteredApps = this.state.filteredApps;
+		let { tags, activeTags, activePage, filteredApps } = this.state;
+		let apps = this.compileInstalledInfo((filteredApps.length > 0));
+		console.log('apps: ', apps);
 
 		let pageContents = <div></div>;
 
@@ -187,7 +213,7 @@ export default class AppMarket extends React.Component {
 			if (activePage === "home") {
 				pageContents = <Home cards={apps} openAppShowcase={this.openAppShowcase} seeMore={this.addTag} addApp={this.addApp} removeApp={this.removeApp} addTag={this.addTag} />;
 			} else if (activePage === "appSearch") {
-				pageContents = <AppResults cards={filteredApps} tags={activeTags} addApp={this.addApp} removeApp={this.removeApp} openAppShowcase={this.openAppShowcase} addTag={this.addTag} />;
+				pageContents = <AppResults cards={apps} tags={activeTags} addApp={this.addApp} removeApp={this.removeApp} openAppShowcase={this.openAppShowcase} addTag={this.addTag} />;
 			} else if (activePage === "showcase") {
 				pageContents = <AppShowcase app={this.state.activeApp} addApp={this.addApp} removeApp={this.removeApp} addTag={this.addTag} />;
 			}

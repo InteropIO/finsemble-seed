@@ -75,10 +75,10 @@ class AppCard extends Component {
 		let addApp = this.props.installed ? this.removeApp : this.addApp;
 
 		return (
-			<div className='app-card' onClick={this.openAppShowcase}>
+			<div className='app-card' onClick={this.openAppShowcase} onMouseEnter={this.showCheck} onMouseLeave={this.hideCheck}>
 				<div className="app-image-container">
 					{entitled || !showCheck ? null : <i className={imageIconClasses} onMouseEnter={this.toggleHighlight} onMouseLeave={this.toggleHighlight} onClick={addApp}></i>}
-					<img className={'app-image' + entitled} src={imageUrl} onMouseEnter={this.showCheck} onMouseLeave={this.hideCheck} />
+					<img className={'app-image' + entitled} src={imageUrl} />
 				</div>
 				<h4 className={'app-title' + entitled}>{title}</h4>
 				<div className='footer'>

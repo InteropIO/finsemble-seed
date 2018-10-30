@@ -100,6 +100,12 @@ function _clearActiveTags() {
  * Async function to fetch apps from the FDC3 api (appD)
  */
 function getApps() {
+    appd.getAll((err, apps) => {
+        getStore().setValue({
+            field: 'installed',
+            value: [apps[0].appId]
+        });
+    });
     return appd.getAll();
 }
 
@@ -258,7 +264,7 @@ function getInstalledApps() {
 /**
  * Async function to call the launcher client to get a list of added apps
  */
-async function fetchInstalledApps() {
+function fetchInstalledApps() {
     //NOTE: This is a WIP. This api may change so its commented out for now
     // FSBL.Clients.LauncherClient.getComponentList((err, apps) => {
     //     if (err) console.log("Error fetching list of added apps");
@@ -272,11 +278,11 @@ async function fetchInstalledApps() {
         field: 'apps'
     });
 
-    let installed = [apps[0].appId];
+    let installed = [];
+    if (apps.length > 0) installed.push([apps[0].appId]);
 
     getStore().setValue({
         field: 'installed',
         value: installed
     });
-    return installed;
 }
