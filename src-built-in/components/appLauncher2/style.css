@@ -154,6 +154,10 @@ img {
     color: var(--content-close-hover-color);
 }
 
+.tags-list .app-tag .ff-close {
+	margin-top: 3px;
+}
+
 .complex-menu-section-toggle {
     padding: 5px 14px 5px 0px;
     padding-left: 10px;
@@ -542,7 +546,7 @@ select:focus, option:focus {
 }
 .sort {
     font-size: 11px;
-    padding-left: .75em;
+    padding-left: 10px;
   }
 
   .sort-option.first {
