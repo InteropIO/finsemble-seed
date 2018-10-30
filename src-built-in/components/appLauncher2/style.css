@@ -10,7 +10,7 @@ body {
     font-stretch: normal;
     line-height: normal;
     letter-spacing: normal;
-    color: #ffffff;
+    color: var(--appMenu-font-color);
 }
 
 

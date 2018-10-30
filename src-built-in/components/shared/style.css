@@ -2,7 +2,7 @@
 	height: 17px;
 	border-radius: 2px;
 	background: #67829a;
-	color: #fff;
+	color: var(--appMenu-font-color);
 	padding: 0 5px;
 	display: table;
 	position: absolute;
