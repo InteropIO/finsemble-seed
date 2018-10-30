@@ -83,6 +83,7 @@
 	padding: 1px;
 	margin: 3px;
 	border-radius: 5px;
+	cursor: pointer;
 }
 
 .pagination-oval.active {
@@ -105,6 +106,7 @@
 	flex-direction: column;
 	justify-content: center;
 	font-size: 36px;
+	cursor: pointer;
 }
 
 .ff-chevron-left {
@@ -133,6 +135,7 @@
 	background-color: var(--catalog-card-background-color);
 	padding: 5px;
 	user-select:none;
+	cursor: pointer;
 }
 
 .app-card .app-image {
@@ -249,6 +252,7 @@
 	font-weight: var(--secondary-font-weight);
 	color: var(--catalog-font-color);
 	user-select: none;
+	outline:none;
 }
 
 .carousel-main .carousel-header .see-more .button-label {
@@ -561,6 +565,7 @@
     justify-content: center;
 	align-items: center;
 	user-select: none;
+	outline: none;
 }
 
 .action-button .ff-plus {
@@ -581,6 +586,7 @@
 	justify-content: flex-end;
 	align-items: center;
 	cursor: pointer;
+	outline: none;
 }
 
 .remove-button .ff-close-2 {
