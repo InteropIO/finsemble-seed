@@ -7,7 +7,6 @@ import FDC3 from '../modules/FDC3'
 import { getStore } from './appStore';
 
 export default {
-    fetchApps,
     getApps,
     searchApps,
     getActiveTags,
@@ -24,30 +23,6 @@ export default {
  */
 const FDC3Client = new FDC3({url: 'http://localhost:3030/v1'})
 const appd = new AppDirectory(FDC3Client);
-
-function _setTags() {
-    let apps = getStore().getValue({
-        field: 'apps'
-    });
-
-    let tags = []
-    for (let j = 0; j < apps.length; j++) {
-        let app = apps[j]
-        for (let i = 0; i < app.tags.length; i++) {
-            let tag = app.tags[i]
-            if (!tags.includes(tag)) {
-                tags.push(tag)
-            }
-        }
-    }
-
-    getStore().setValue({
-        field: 'tags',
-        value: tags
-    }, (err, data) => {
-        if (err) console.log('Failed to set tags list');
-    });
-}
 
 function _addActiveTag(tag) {
     let activeTags = getStore().getValue({
@@ -103,28 +78,11 @@ function _clearActiveTags() {
 }
 
 function getApps() {
-    return getStore().getValue({
-        field: 'apps'
-    });
-}
-
-function fetchApps() {
-    appd.getAll((err, apps) => {
-        if (err) console.log('Error loading apps');
-        getStore().setValue({
-            field: 'apps',
-            value: apps
-        }, (storeSetErr, data) => {
-            if (storeSetErr) console.log('Error setting apps');
-            _setTags();
-        })
-    });
+    return appd.getAll()
 }
 
 function getTags() {
-    return getStore().getValue({
-        field: 'tags'
-    });
+    return appd.getTags()
 }
 
 function getActiveTags() {

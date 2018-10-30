@@ -36,8 +36,6 @@ export default class AppMarket extends React.Component {
 		this.bindCorrectContext();
 	}
 	bindCorrectContext() {
-		this.loadedApps = this.loadedApps.bind(this);
-		this.loadedTags = this.loadedTags.bind(this);
 		this.tagsChanged = this.tagsChanged.bind(this);
 		this.goHome = this.goHome.bind(this);
 		this.addTag = this.addTag.bind(this);
@@ -48,26 +46,15 @@ export default class AppMarket extends React.Component {
 		this.removeApp = this.removeApp.bind(this);
 		this.stopShowingInstalledNotification = this.stopShowingInstalledNotification.bind(this);
 	}
-	componentDidMount() {
-		storeActions.fetchApps();
-		getStore().addListener({ field: 'apps' }, this.loadedApps);
-		getStore().addListener({ field: 'tags' }, this.loadedTags);
+	async componentDidMount() {
+		this.setState({
+			tags: await storeActions.getTags(),
+			apps: await storeActions.getApps()
+		})
 		getStore().addListener({ field: 'activeTags' }, this.tagsChanged);
 	}
 	componentWillUnmount() {
-		getStore().removeListener({ field: 'apps' }, this.loadedApps);
-		getStore().removeListener({ field: 'tags' }, this.loadedTags);
 		getStore().removeListener({ field: 'activeTags' }, this.tagsChanged);
-	}
-	loadedApps() {
-		this.setState({
-			apps: storeActions.getApps()
-		});
-	}
-	loadedTags() {
-		this.setState({
-			tags: storeActions.getTags()
-		});
 	}
 	tagsChanged() {
 		this.setState({
@@ -77,7 +64,6 @@ export default class AppMarket extends React.Component {
 	addTag(tag) {
 		storeActions.addTag(tag);
 		let tags = storeActions.getActiveTags();
-
 		let page = this.state.activePage;
 
 		if (tags.length === 1) {

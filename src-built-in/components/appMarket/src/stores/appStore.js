@@ -11,7 +11,6 @@ const defaultValues = {
 	apps: [],
 	filteredCards: [],
 	activeTags: [],
-	allTags: [],
 	activeApp: null
 }
 
