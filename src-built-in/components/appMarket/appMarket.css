@@ -252,6 +252,7 @@
 	font-weight: var(--secondary-font-weight);
 	color: var(--catalog-font-color);
 	user-select: none;
+	outline:none;
 }
 
 .carousel-main .carousel-header .see-more .button-label {
@@ -564,6 +565,7 @@
     justify-content: center;
 	align-items: center;
 	user-select: none;
+	outline: none;
 }
 
 .action-button .ff-plus {
@@ -584,6 +586,7 @@
 	justify-content: flex-end;
 	align-items: center;
 	cursor: pointer;
+	outline: none;
 }
 
 .remove-button .ff-close-2 {
