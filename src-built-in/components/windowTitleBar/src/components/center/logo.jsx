@@ -30,7 +30,6 @@ export default class Logo extends React.PureComponent {
 
 	getIconFromConfig(wi) {
 		FSBL.Clients.LauncherClient.getActiveDescriptors((err, descriptors) => {
-			debugger;
 			let componentConfig = descriptors[this.props.windowIdentifier.windowName];
 			if (componentConfig) {
 				this.handleComponentConfig(err, componentConfig);
@@ -40,15 +39,15 @@ export default class Logo extends React.PureComponent {
 		})
 	}
 	handleComponentConfig(err, opts) {
-		if (Object.keys(opts).length === 0) {
+		if (!opts || Object.keys(opts).length === 0) {
 			return this.getIconFromConfig(this.props.windowIdentifier);
 		}
 
 		let tabLogo;
 		if (!window.logoCache) window.logoCache = {};
 		try {
-			if (!window.logoCache[opts.customData.component.type]) {
-				tabLogo = window.logoCache[opts.customData.component.type];
+			if (window.logoCache[this.props.windowIdentifier.windowName]) {
+				tabLogo = window.logoCache[this.props.windowIdentifier.windowName];
 				console.log("Retrieved tab logo from logo cache");
 			}
 		} catch (e) {
@@ -90,7 +89,9 @@ export default class Logo extends React.PureComponent {
 			}
 		}
 		//Next time we won't have to go to config/window service to figure out the tab's logo.
-		window.logoCache[opts.customData.component.type] = tabLogo;
+		if (window.logoCache[this.props.windowIdentifier.windowName]) {
+			window.logoCache[this.props.windowIdentifier.windowName] = tabLogo;
+		}
 		this.setState({
 			tabLogo
 		})

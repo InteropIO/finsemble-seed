@@ -25,7 +25,7 @@ import BringSuiteToFront from "./components/right/BringSuiteToFront.jsx";
 import AlwaysOnTop from "./components/right/AlwaysOnTop.jsx";
 import TabRegion from './components/center/TabRegion'
 import "../../../../assets/css/finsemble.css";
-
+const DEFAULT_RIGHT_SECTION_LEFT_PADDING = 80;
 /**
  * This is the main window manager component. It's the custom window frame that we add to each window that has useFSBLHeader set to true in its windowDescriptor.
  */
@@ -359,18 +359,19 @@ class WindowTitleBar extends React.Component {
 	}
 	getRightSectionStyle() {
 		let self = this;
-		let paddingLeft = 125;
+		let paddingLeft = DEFAULT_RIGHT_SECTION_LEFT_PADDING;
 		if (this.tabBar) {
 			let boundingBox = this.tabBar.getBoundingClientRect();
-			let tabsWidth = this.state.tabs.length * 125;
+			let tabsWidth = this.state.tabs.length * 129;
 			let rightWidth = Number(getComputedStyle(this.toolbarRight).width.replace("px", ""));
 			paddingLeft = window.outerWidth - (boundingBox.left + tabsWidth) - rightWidth;
 
 			console.log("tabwidth", tabsWidth + boundingBox.left, window.outerWidth, boundingBox.left, paddingLeft, this.toolbarRight.clientLeft);
-			if (paddingLeft < 125) {
+			if (paddingLeft < DEFAULT_RIGHT_SECTION_LEFT_PADDING) {
 				paddingLeft = 120;
 			}
 		}
+
 		return {
 			paddingLeft
 		}

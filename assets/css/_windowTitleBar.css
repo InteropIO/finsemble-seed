@@ -53,7 +53,16 @@ html.desktop-active .fsbl-header {
     border-right: 1px solid transparent;
     transition: background-color 0.2s ease;
 }
-
+.fsbl-header-title:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: calc(350px - 70px - 30px);
+    height: 100%;
+    width: 30px;
+    background-image: -webkit-linear-gradient(left, rgba(52, 73, 94, 0), #34495e);
+    background-image: linear-gradient(left, rgba(52, 73, 94, 0), #34495e);
+  }
 .fsbl-header-title[data-hover=true] {
     background-color: var(--titlebar-tab-active-background-color);
     color: var(--titlebar-tab-active-font-color);
@@ -91,23 +100,6 @@ html.desktop-active .fsbl-header {
     padding-bottom:0px;
 }
 
-.fsbl-tabs-multiple .fsbl-header-center:after{
-    width: 1px;
-    height: 16px;
-    background-color: #979797;
-    content: '';
-    position: absolute;
-    right: 0;
-}
-
-/* .fsbl-tab:before {
-    width: 1px;
-    height: 16px;
-    background-color: #979797;
-    content: '';
-    position: absolute;
-    left: 0;
-} */
 html.desktop-active .fsbl-header-right {
     background: var(--titleBar-background-active-color);
 }
