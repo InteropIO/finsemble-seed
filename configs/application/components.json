@@ -15,6 +15,7 @@
 			"component": {
 				"inject": false,
 				"spawnOnStartup": false,
+				"showDevConsoleOnVisible": true,
 				"preload": "$applicationRoot/preloads/zoom.js"
 			},
 			"foreign": {
