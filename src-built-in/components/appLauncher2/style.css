@@ -37,6 +37,11 @@ img {
 .top {
     margin-top: 10px;
 }
+
+.folder-list div {
+    outline: none;
+}
+
 .folder-list {
     margin-top: 10px;
     max-height: 245px;
