@@ -28,18 +28,17 @@ export default class Logo extends React.PureComponent {
 		}
 	}
 
-	getIconFromConfig(wi) {
+	getIconFromConfig() {
 		FSBL.Clients.LauncherClient.getActiveDescriptors((err, descriptors) => {
 			let componentConfig = descriptors[this.props.windowIdentifier.windowName];
 			if (componentConfig) {
 				this.handleComponentConfig(err, componentConfig);
-
 			}
 		})
 	}
 	handleComponentConfig(err, opts) {
 		if (!opts || Object.keys(opts).length === 0) {
-			return this.getIconFromConfig(this.props.windowIdentifier);
+			return this.getIconFromConfig();
 		}
 
 		let tabLogo;
