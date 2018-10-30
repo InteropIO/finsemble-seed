@@ -200,7 +200,6 @@ class WindowTitleBar extends React.Component {
 			// If there isn't an FSBLHeader then there doesn't need to be a drag handle.
 			return;
 		}
-
 		// Create the dragger if it doesn't already exist
 		let dragHandle = document.querySelector(".fsbl-drag-handle");
 		if (!dragHandle) {
@@ -241,10 +240,14 @@ class WindowTitleBar extends React.Component {
 				bounds = fsblHeaderCenter.getBoundingClientRect();
 				let theTabBounds = fsblHeaderCenter.querySelector(".tab-region-wrapper div").getBoundingClientRect();
 				// Calculate the right portion
+				let rightSectionWidth = Number(getComputedStyle(this.toolbarRight).width.replace("px", ""));
 				bounds = {
-					left: bounds.left + theTabBounds.width,
-					width: bounds.width - theTabBounds.width
+					left: bounds.left + theTabBounds.width
 				};
+				//The goal here is to make the drag handle take the full width, from the right of the title, to the left of the right section.
+				//To get the left edge of the right section, we Take the width of the right section, and subtract the width of the window. This gives us the left edge of the right section without all the padding futzing up the numbers.
+				bounds.right = window.outerWidth - rightSectionWidth;
+				bounds.width = bounds.right - bounds.left;
 			}
 		} else {
 			// If tabs are not enabled, then the entire center is the drag area
@@ -326,6 +329,7 @@ class WindowTitleBar extends React.Component {
 	onStoreChanged(newState) {
 		this.setState(newState);
 	}
+
 	onShareEmitterChanged(err, response) {
 		this.setState({ showShareButton: response.value });
 	}
@@ -357,18 +361,42 @@ class WindowTitleBar extends React.Component {
 			document.querySelector("body").style.overflowY = "auto";
 		}
 	}
+	/**
+	 * Replaces old media queries that dynamically pushed the right section over to give the user a place to drag.
+	 */
+	getRightSectionPadding() {
+		let { outerWidth } = window;
+		let mediaQueries = {
+			345: DEFAULT_RIGHT_SECTION_LEFT_PADDING,
+			310: 70,
+			280: 60,
+			245: 50,
+			210: 40
+		};
+		//If we're wider than any of the breakpoints, return the value above.
+		for (let breakpoint in mediaQueries) {
+			debugger
+			if (outerWidth > Number(breakpoint)) {
+				return mediaQueries[breakpoint];
+			}
+		}
+
+		//Smallest padding we'll allow.
+		return 30;
+	}
+	/**
+	 * Determines the padding left of the right section, which pushes the center section away, and gives the user a region to drag on.
+	 */
 	getRightSectionStyle() {
-		let self = this;
-		let paddingLeft = DEFAULT_RIGHT_SECTION_LEFT_PADDING;
+		let paddingLeft = this.getRightSectionPadding();
 		if (this.tabBar) {
 			let boundingBox = this.tabBar.getBoundingClientRect();
-			let tabsWidth = this.state.tabs.length * 129;
+			let tabsWidth = this.state.tabs.length ? this.state.tabs.length * 129 : boundingBox.width;
 			let rightWidth = Number(getComputedStyle(this.toolbarRight).width.replace("px", ""));
 			paddingLeft = window.outerWidth - (boundingBox.left + tabsWidth) - rightWidth;
-
-			console.log("tabwidth", tabsWidth + boundingBox.left, window.outerWidth, boundingBox.left, paddingLeft, this.toolbarRight.clientLeft);
-			if (paddingLeft < DEFAULT_RIGHT_SECTION_LEFT_PADDING) {
-				paddingLeft = 120;
+			let minimumPadding = this.getRightSectionPadding();
+			if (paddingLeft < minimumPadding) {
+				paddingLeft = minimumPadding;
 			}
 		}
 
@@ -376,12 +404,12 @@ class WindowTitleBar extends React.Component {
 			paddingLeft
 		}
 	}
+
 	render() {
-		var self = this;
 		const RENDER_LEFT_SECTION = this.state.showLinkerButton || this.state.showShareButton;
-		let showDockingIcon = !self.state.dockingEnabled ? false : self.state.dockingIcon;
-		let isGrouped = (self.state.dockingIcon == "ejector");
-		let showMinimizeIcon = (isGrouped && self.state.isTopRight) || !isGrouped; //If not in a group or if topright in a group
+		let showDockingIcon = !this.state.dockingEnabled ? false : this.state.dockingIcon;
+		let isGrouped = (this.state.dockingIcon == "ejector");
+		let showMinimizeIcon = (isGrouped && this.state.isTopRight) || !isGrouped; //If not in a group or if topright in a group
 		let titleWrapperClasses = "fsbl-header-center";
 		let rightWrapperClasses = "fsbl-header-right";
 		let tabRegionClasses = "fsbl-tab-area";
@@ -400,8 +428,8 @@ class WindowTitleBar extends React.Component {
 				{/* Only render the left section if something is inside of it. The left section has a right-border that we don't want showing willy-nilly. */}
 				{RENDER_LEFT_SECTION &&
 					<div className="fsbl-header-left">
-						{self.state.showLinkerButton ? <Linker /> : null}
-						{self.state.showShareButton ? <Sharer /> : null}
+						{this.state.showLinkerButton ? <Linker /> : null}
+						{this.state.showShareButton ? <Sharer /> : null}
 					</div>
 				}
 				{/* center section of the titlebar */}

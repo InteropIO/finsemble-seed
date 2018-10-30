@@ -48,9 +48,10 @@ html.desktop-active .fsbl-header {
     overflow: hidden;
     align-items: center;
     display:flex;
+    margin-left: 2px;
+    margin-top: 1px;
     padding-right: 14px;
     border-top: 1px solid transparent;
-    border-right: 1px solid transparent;
     transition: background-color 0.2s ease;
 }
 .fsbl-header-title:before {
@@ -66,7 +67,6 @@ html.desktop-active .fsbl-header {
 .fsbl-header-title[data-hover=true] {
     background-color: var(--titlebar-tab-active-background-color);
     color: var(--titlebar-tab-active-font-color);
-    border-right: var(--titlebar-tab-section-separator);
 }
 
 .fsbl-header-left {
@@ -111,8 +111,17 @@ html.desktop-active .fsbl-header-right {
     display: flex;
     justify-content: flex-end;
     z-index: 5;
+    position: relative;
 }
-
+.fsbl-header-right:before {
+    content: '';
+    width: 1px;
+    background-color: var(--gray6);
+    position: absolute;
+    left: 0;
+    top: -4px;
+    bottom: 0px;
+}
 
 /* Offset the contents back up, to make up for half the resize cursor offset */
 .fsbl-header-right > * {
@@ -281,7 +290,7 @@ html.desktop-active .fsbl-linker[hover=true] {
 .fsbl-tab:nth-child(even) {
     background-color: var(--titlebar-tab-inactive-hover-color);
 }
-.fsbl-tab {
+.fsbl-tab, .fsbl-header-title[data-hover=true]  {
     height: calc(100% - 3px);
     margin-top: 3px;
     margin-left: 2px;
@@ -299,7 +308,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     border-top-right-radius: var(--titlebar-tab-border-radius);
 }
 
-.fsbl-tab[data-hover=true], .fsbl-active-tab {
+.fsbl-tab[data-hover=true], .fsbl-active-tab, .fsbl-header-title[data-hover=true] {
     background-color: var(--titlebar-tab-active-background-color) !important;
     color: var(--titlebar-tab-active-font-color);
 }
@@ -309,9 +318,7 @@ html.desktop-active .fsbl-linker[hover=true] {
 }
 .fsbl-active-tab:before {width:0px;}
 .fsbl-tab[data-hover=true]:before {width: 0px;}
-.tab-region-wrapper {
-    max-width: 75%; /* make sure there's always some space to grab and move the window */
-}
+
 /* When there are multiple tabs, no border for the last tab on the right side. */
 .fsbl-tabs-multiple .tab-region-wrapper > div:last-child {
     border-right: none;
@@ -391,7 +398,7 @@ html.desktop-active .fsbl-linker[hover=true] {
 }
 .ghost-tab {
     background-color: var(--titlebar-tab-ghost-background-color);
-    border-right: 1px solid var(--titlebar-tab-ghost-border-colorcolor);
+    border-right: 1px solid var(--titlebar-tab-ghost-border-color);
     border-top:1px solid var(--titlebar-tab-ghost-border-color);
     width: 175px;
     opacity: 0.7;
@@ -406,11 +413,9 @@ html.desktop-active .fsbl-linker[hover=true] {
     .fsbl-icon.ff-share {
         display: none !important;
     }
-    .fsbl-tabs-multiple .fsbl-header-right {
-        padding-left: 70px; /* leave some space for a user to grab */
-    }
+
     .fsbl-header-title {
-        /* max-width:50%; */
+        max-width:50%;
     }
 }
 
@@ -419,18 +424,12 @@ html.desktop-active .fsbl-linker[hover=true] {
     .fsbl-header-left {
         display: none !important;
     }
-    .fsbl-tabs-multiple .fsbl-header-right {
-        padding-left: 60px; /* leave some space for a user to grab */
-    }
 }
 
 /* At 280px, the docking icon will be removed. */
 @media screen and (min-width: 0px) and (max-width: 280px){
     .fsbl-icon.ff-detached, .fsbl-icon.ff-attached {
         display: none !important;
-    }
-    .fsbl-tabs-multiple .fsbl-header-right {
-        padding-left: 50px; /* this will leave some space for window dragging */
     }
 }
 
@@ -439,9 +438,6 @@ html.desktop-active .fsbl-linker[hover=true] {
     .fsbl-icon.fsbl-maximize {
         display: none !important;
     }
-    .fsbl-tabs-multiple .fsbl-header-right {
-        padding-left: 40px; /* this will leave some space for window dragging */
-    }
 }
 
 /* At 210px, the minimize icon will be removed. */
@@ -449,10 +445,5 @@ html.desktop-active .fsbl-linker[hover=true] {
     .fsbl-icon.fsbl-minimize {
         display: none !important;
     }
-    .fsbl-tabs-multiple .fsbl-header-right {
-        padding-left: 30px; /* this will leave some space for window dragging */
-    }
-    .fsbl-header-title {
-        max-width:25%;
-    }
+
 }
