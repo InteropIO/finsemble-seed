@@ -25,7 +25,18 @@ class AppLauncher extends React.Component {
 	}
 
 	openAppMarket() {
-		FSBL.Clients.LauncherClient.spawn("App Market");
+		FSBL.Clients.LauncherClient.showWindow(
+			{
+				componentType: "App Market"
+			},
+			{
+				monitor: "mine",
+				staggerPixels: 0,
+				spawnIfNotFound: true,
+				left: "center",
+				top: "center"
+			}
+		)
 	}
 
 	render() {
