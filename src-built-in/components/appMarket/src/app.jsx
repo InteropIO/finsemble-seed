@@ -28,6 +28,7 @@ export default class AppMarket extends React.Component {
 		this.state = {
 			apps: [],
 			filteredApps: [],
+			installed: [],
 			tags: [],
 			activeTags: [],
 			activePage: "home",
@@ -38,6 +39,7 @@ export default class AppMarket extends React.Component {
 	}
 	bindCorrectContext() {
 		this.tagsChanged = this.tagsChanged.bind(this);
+		this.filteringApps = this.filteringApps.bind(this);
 		this.goHome = this.goHome.bind(this);
 		this.addTag = this.addTag.bind(this);
 		this.removeTag = this.removeTag.bind(this);
@@ -46,20 +48,31 @@ export default class AppMarket extends React.Component {
 		this.addApp = this.addApp.bind(this);
 		this.removeApp = this.removeApp.bind(this);
 		this.stopShowingInstalledNotification = this.stopShowingInstalledNotification.bind(this);
+		this.compileInstalledInfo = this.compileInstalledInfo.bind(this);
 	}
 	async componentDidMount() {
 		this.setState({
 			tags: await storeActions.getTags(),
-			apps: await storeActions.getApps()
+			apps: await storeActions.getApps(),
+			installed: await storeActions.fetchInstalledApps()
 		})
 		getStore().addListener({ field: 'activeTags' }, this.tagsChanged);
+		getStore().addListener({ field: 'installed' }, this.stopShowingInstalledNotification);
+		getStore().addListener({ field: 'filteredApps' }, this.filteringApps);
 	}
 	componentWillUnmount() {
 		getStore().removeListener({ field: 'activeTags' }, this.tagsChanged);
+		getStore().removeListener({ field: 'filteredApps' }.this.filteringApps);
+		getStore().removeListener({ field: 'installed' }, this.stopShowingInstalledNotification);
 	}
 	tagsChanged() {
 		this.setState({
 			activeTags: storeActions.getActiveTags()
+		});
+	}
+	filteringApps() {
+		this.setState({
+			filteredApps: storeActions.getFilteredApps()
 		});
 	}
 	addTag(tag) {
@@ -91,48 +104,34 @@ export default class AppMarket extends React.Component {
 	}
 	goHome() {
 		storeActions.clearTags();
+		storeActions.clearFilteredApps();
 		this.setState({
 			activePage: "home",
 			activeApp: null
 		});
 	}
 	changeSearch(search) {
-
-		// if (search || appCatalogStore.Actions.getActiveTags().length > 0) {
-		// 	appCatalogStore.Actions.searchApps(search);
-
-		// 	this.setState({
-		// 		activePage: "appSearch"
-		// 	});
-		// } else {
-		// 	appCatalogStore.Actions.clearSearchResults();
-
-		// 	this.setState({
-		// 		activePage: appCatalogStore.Actions.getActiveTags().length === 0 ? "home" : this.state.activePage
-		// 	});
-		// }
+		if (search !== "") {
+			storeActions.searchApps(search);
+			this.setState({
+				activePage: 'appSearch'
+			});
+		} else {
+			if (this.state.activeTags.length === 0) {
+				storeActions.clearFilteredApps();
+				this.setState({
+					activePage: 'home'
+				});
+			}
+		}
 	}
 	addApp(appName) {
 		// //TODO: This won't work when this comes from a db
-		// appCatalogStore.Actions.addApp(appName);
-
-		// this.setState({
-		// 	apps: appCatalogStore.Actions.getApps(),
-		// 	installationActionTaken: "add"
-		// }, () => {
-		// 	setTimeout(this.stopShowingInstalledNotification, 1000);
-		// });
+		storeActions.addApp(appName);
 	}
 	removeApp(appName) {
 		// //TODO: This won't work when this comes from a db
-		// appCatalogStore.Actions.removeApp(appName);
-
-		// this.setState({
-		// 	apps: appCatalogStore.Actions.getApps(),
-		// 	installationActionTaken: "remove"
-		// }, () => {
-		// 	setTimeout(this.stopShowingInstalledNotification, 1000);
-		// })
+		storeActions.removeApp(appName);
 	}
 	stopShowingInstalledNotification() {
 		this.setState({
@@ -161,10 +160,26 @@ export default class AppMarket extends React.Component {
 			});
 		}
 	}
+	compileInstalledInfo() {
+		let { apps, installed } = this.state;
+
+		apps = apps.map((app) => {
+			for (let i = 0; i < installed.length; i++) {
+				if (app.appId === installed[i]) {
+					app.installed = true;
+					break;
+				}
+			}
+			return app;
+		});
+		return apps;
+	}
 	render() {
 
-		let { apps, tags, activeTags, activePage } = this.state;
-		let filteredApps = [];
+		let { tags, activeTags, activePage } = this.state;
+		let apps = this.compileInstalledInfo();
+
+		let filteredApps = this.state.filteredApps;
 
 		let pageContents = <div></div>;
 
