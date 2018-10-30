@@ -18,10 +18,6 @@
     display: none;
 }
 
-.fsbl-tabs-multiple .fsbl-header-right {
-    padding-left: 80px; /* leave some space for a user to grab */
-}
-
 .fsbl-header {
     font-family: var(--font-family);
     text-align: center;

@@ -357,7 +357,24 @@ class WindowTitleBar extends React.Component {
 			document.querySelector("body").style.overflowY = "auto";
 		}
 	}
+	getRightSectionStyle() {
+		let self = this;
+		let paddingLeft = 125;
+		if (this.tabBar) {
+			let boundingBox = this.tabBar.getBoundingClientRect();
+			let tabsWidth = this.state.tabs.length * 125;
+			let rightWidth = Number(getComputedStyle(this.toolbarRight).width.replace("px", ""));
+			paddingLeft = window.outerWidth - (boundingBox.left + tabsWidth) - rightWidth;
 
+			console.log("tabwidth", tabsWidth + boundingBox.left, window.outerWidth, boundingBox.left, paddingLeft, this.toolbarRight.clientLeft);
+			if (paddingLeft < 125) {
+				paddingLeft = 120;
+			}
+		}
+		return {
+			paddingLeft
+		}
+	}
 	render() {
 		var self = this;
 		const RENDER_LEFT_SECTION = this.state.showLinkerButton || this.state.showShareButton;
@@ -404,7 +421,7 @@ class WindowTitleBar extends React.Component {
 						/>}
 
 				</div>
-				<div className={rightWrapperClasses} ref={this.setToolbarRight}>
+				<div className={rightWrapperClasses} ref={this.setToolbarRight} style={this.getRightSectionStyle()}>
 					{this.state.alwaysOnTopButton && showMinimizeIcon ? <AlwaysOnTop /> : null}
 					<BringSuiteToFront />
 					{this.state.minButton && showMinimizeIcon ? <Minimize /> : null}
