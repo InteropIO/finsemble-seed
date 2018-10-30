@@ -104,14 +104,14 @@ html.desktop-active .fsbl-header {
     right: 0;
 }
 
-.fsbl-tab:before {
+/* .fsbl-tab:before {
     width: 1px;
     height: 16px;
     background-color: #979797;
     content: '';
     position: absolute;
     left: 0;
-}
+} */
 html.desktop-active .fsbl-header-right {
     background: var(--titleBar-background-active-color);
 }
@@ -287,7 +287,12 @@ html.desktop-active .fsbl-linker[hover=true] {
 .ff-restore {
     padding-top: 4px;
 }
-
+.fsbl-tab:nth-child(odd) {
+    background-color: var(--titlebar-tab-inactive-hover-color);
+}
+.fsbl-tab:nth-child(even) {
+    background-color: var(--titlebar-tab-inactive-hover-color);
+}
 .fsbl-tab {
     height: calc(100% - 3px);
     margin-top: 3px;
@@ -297,19 +302,18 @@ html.desktop-active .fsbl-linker[hover=true] {
     align-content: center;
     align-items: center;
     vertical-align: top;
-    background-color: var(--titlebar-tab-inactive-background-color);
     color: var(--titlebar-tab-inactive-font-color);
     user-select: none;
     box-sizing: border-box;
     justify-content: flex-start;
     transition: color 0.2s ease;
+    border-top-left-radius: var(--titlebar-tab-border-radius);
+    border-top-right-radius: var(--titlebar-tab-border-radius);
 }
 
 .fsbl-tab[data-hover=true], .fsbl-active-tab {
-    background-color: var(--titlebar-tab-active-background-color);
+    background-color: var(--titlebar-tab-active-background-color) !important;
     color: var(--titlebar-tab-active-font-color);
-    border-top-left-radius: var(--titlebar-tab-border-radius);
-    border-top-right-radius: var(--titlebar-tab-border-radius);
 }
 
 .fsbl-tab[data-hover=true] {

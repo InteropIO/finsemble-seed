@@ -1,4 +1,5 @@
 import React from "react";
+import { cpus } from "os";
 export default class Logo extends React.PureComponent {
 	constructor(props) {
 		super();
@@ -20,59 +21,79 @@ export default class Logo extends React.PureComponent {
 		//We only need to re-render the logo if the name of the component changes. Otherwise excessive calls to getOptions
 		const needsLogo = this.state.tabLogo && typeof this.state.tabLogo.type === "undefined";
 		if (needsLogo || nextProps.windowIdentifier.windowName !== this.props.windowIdentifier.windowName) {
+			console.log("Getting logo", this.props.windowIdentifier.windowName);
 			this.getWrap((wrapper) => {
-				if (!wrapper.getOptions) {
-					return this.getIconFromConfig(this.props.windowIdentifier);
-				}
 				wrapper.getOptions(this.handleComponentConfig);
 			});
 		}
 	}
 
 	getIconFromConfig(wi) {
-		FSBL.Clients.LauncherClient.getComponentDefaultConfig(wi.componentType, (err, config) => {
-			//This is just to make sure the object is the same shape as what comes back from getOptions.
-			this.getWrap((wrapper) => {
-				this.handleComponentConfig(err, { customData: config });
-			})
+		FSBL.Clients.LauncherClient.getActiveDescriptors((err, descriptors) => {
+			debugger;
+			let componentConfig = descriptors[this.props.windowIdentifier.windowName];
+			if (componentConfig) {
+				this.handleComponentConfig(err, componentConfig);
+
+			}
+
 		})
 	}
 	handleComponentConfig(err, opts) {
-		let fontIcon;
-		try {
-			fontIcon = opts.customData.foreign.components.Toolbar.iconClass;
-		} catch (e) {
-			fontIcon = "";
+		if (Object.keys(opts).length === 0) {
+			return this.getIconFromConfig(this.props.windowIdentifier);
 		}
 
-		var imageIcon;
+		let tabLogo;
+		if (!window.logoCache) window.logoCache = {};
 		try {
-			imageIcon = opts.customData.foreign.components.Toolbar.iconURL;
+			if (!window.logoCache[opts.customData.component.type]) {
+				tabLogo = window.logoCache[opts.customData.component.type];
+				console.log("Retrieved tab logo from logo cache");
+			}
 		} catch (e) {
-			imageIcon = "";
+			//bury error.
 		}
-		if (fontIcon && fontIcon != "") {
-			this.setState({
-				tabLogo: {
+
+
+		if (!tabLogo) {
+			let fontIcon;
+			try {
+				fontIcon = opts.customData.foreign.components.Toolbar.iconClass;
+			} catch (e) {
+				fontIcon = "";
+			}
+
+			var imageIcon;
+			try {
+				imageIcon = opts.customData.foreign.components.Toolbar.iconURL;
+			} catch (e) {
+				imageIcon = "";
+			}
+
+			tabLogo = {
+				type: "icon",
+				class: "ff-grid"
+			};
+
+			if (fontIcon && fontIcon != "") {
+				tabLogo = {
 					type: "icon",
 					class: fontIcon
-				}
-			})
-		} else if (imageIcon && imageIcon !== "") {
-			this.setState({
-				tabLogo: {
+				};
+
+			} else if (imageIcon && imageIcon !== "") {
+				tabLogo = {
 					type: "image",
 					url: imageIcon
 				}
-			})
-		} else {
-			this.setState({
-				tabLogo: {
-					type: "icon",
-					class: "ff-grid"
-				}
-			})
+			}
 		}
+		//Next time we won't have to go to config/window service to figure out the tab's logo.
+		window.logoCache[opts.customData.component.type] = tabLogo;
+		this.setState({
+			tabLogo
+		})
 	}
 
 	render() {

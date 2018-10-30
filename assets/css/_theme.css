@@ -50,7 +50,7 @@
 
     /* Window Title bar */
     --titleBar-height: 25px;
-    --titleBar-font-size: 11px;
+    --titleBar-font-size: 12px;
     --titleBar-icon-font-size: 10px;
     --titleBar-active-font-color: var(--primary-font-color);
     --titleBar-inactive-font-color: var(--gray3);
