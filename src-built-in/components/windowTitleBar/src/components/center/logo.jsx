@@ -11,18 +11,18 @@ export default class Logo extends React.PureComponent {
 		this.getWrap = this.getWrap.bind(this);
 		this.handleComponentConfig = this.handleComponentConfig.bind(this);
 	}
-	getWrap(cb = Function.prototype) {
+	getWrap(wi = this.props.windowIdentifier, cb = Function.prototype) {
 		if (this.wrap) return cb(this.wrap);
-		FSBL.FinsembleWindow.getInstance(this.props.windowIdentifier, (err, wrapper) => {
+		FSBL.FinsembleWindow.getInstance(wi, (err, wrapper) => {
 			cb(wrapper);
 		});
 	}
 	componentWillReceiveProps(nextProps) {
 		//We only need to re-render the logo if the name of the component changes. Otherwise excessive calls to getOptions
 		const needsLogo = this.state.tabLogo && typeof this.state.tabLogo.type === "undefined";
+
 		if (needsLogo || nextProps.windowIdentifier.windowName !== this.props.windowIdentifier.windowName) {
-			console.log("Getting logo", this.props.windowIdentifier.windowName);
-			this.getWrap((wrapper) => {
+			this.getWrap(nextProps.windowIdentifier, (wrapper) => {
 				wrapper.getOptions(this.handleComponentConfig);
 			});
 		}
@@ -35,7 +35,6 @@ export default class Logo extends React.PureComponent {
 				this.handleComponentConfig(err, componentConfig);
 
 			}
-
 		})
 	}
 	handleComponentConfig(err, opts) {

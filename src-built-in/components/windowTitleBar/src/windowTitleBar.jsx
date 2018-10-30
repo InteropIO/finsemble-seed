@@ -375,7 +375,6 @@ class WindowTitleBar extends React.Component {
 		};
 		//If we're wider than any of the breakpoints, return the value above.
 		for (let breakpoint in mediaQueries) {
-			debugger
 			if (outerWidth > Number(breakpoint)) {
 				return mediaQueries[breakpoint];
 			}
