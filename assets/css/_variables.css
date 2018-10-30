@@ -22,7 +22,7 @@
 
     --toolbar-line-height: 1em;
     --toolbar-font-weight: var(--primary-font-weight);
-    --toolbar-icon-font-size: 22px;
+    --toolbar-icon-font-size: 15px;
 
     --toolbar-separator: 1px solid rgba(255, 255, 255, 0.3);
 
@@ -31,7 +31,7 @@
     --breakpoint-small-window: 299px;
     --breakpoint-very-small-window: 175px;
     --titleBar-center-padding-bottom: 2px;
-    --titleBar-icon-width: 21px;
+    --titleBar-icon-width: 13px;
     --titleBar-linker-group-width: 3px;
 
     --titleBar-background-color: var(--secondary-background-color);

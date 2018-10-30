@@ -134,7 +134,7 @@ html.desktop-active .fsbl-tab-region-drag-area {
     position: relative;
     color: var(--titleBar-inactive-font-color);
     font-size: var(--titleBar-icon-font-size);
-    width: 18px;
+    width: 13px;
     padding: 0px 6px;
     height: calc(100% + 5px);
     margin-top: -5px;
@@ -145,6 +145,7 @@ html.desktop-active .fsbl-tab-region-drag-area {
     cursor: pointer;
     box-sizing: content-box !important;
 }
+
 
 html.desktop-active .fsbl-icon {
     color: var(--titleBar-active-font-color);
