@@ -83,6 +83,7 @@
 	padding: 1px;
 	margin: 3px;
 	border-radius: 5px;
+	cursor: pointer;
 }
 
 .pagination-oval.active {
