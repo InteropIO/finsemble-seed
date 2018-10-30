@@ -18,7 +18,8 @@ export default class Logo extends React.PureComponent {
 	}
 	componentWillReceiveProps(nextProps) {
 		//We only need to re-render the logo if the name of the component changes. Otherwise excessive calls to getOptions
-		if (nextProps.windowIdentifier.windowName !== this.props.windowIdentifier.windowName) {
+		const needsLogo = this.state.tabLogo && typeof this.state.tabLogo.type === "undefined";
+		if (needsLogo || nextProps.windowIdentifier.windowName !== this.props.windowIdentifier.windowName) {
 			this.getWrap((wrapper) => {
 				if (!wrapper.getOptions) {
 					return this.getIconFromConfig(this.props.windowIdentifier);
