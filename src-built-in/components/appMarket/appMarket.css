@@ -96,6 +96,7 @@
 	background-color: var(--catalog-hero-background-color);
 	cursor: pointer;
 	padding: 10px;
+	user-select: none;
 }
 
 .ff-chevron-right, .ff-chevron-left {
@@ -131,6 +132,7 @@
 	box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.25);
 	background-color: var(--catalog-card-background-color);
 	padding: 5px;
+	user-select:none;
 }
 
 .app-card .app-image {
@@ -225,6 +227,7 @@
 	font-weight: var(--tertiary-font-weight);
 	color: var(--catalog-section-header-font-color);
 	cursor: pointer;
+	user-select: none;
 }
 
 .carousel-main .carousel-header .carousel-title.highlight {
@@ -456,6 +459,7 @@
 	font-weight: var(--primary-font-weight);
 	text-align: center;
 	color: var(--catalog-font-color);
+	user-select: none;
 }
 
 .label-bar {
