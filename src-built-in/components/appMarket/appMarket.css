@@ -453,13 +453,14 @@
 }
 
 .app-results .app-results-no-results {
-	width: 264px;
 	height: 21px;
 	font-size: 16px;
 	font-weight: var(--primary-font-weight);
 	text-align: center;
 	color: var(--catalog-font-color);
 	user-select: none;
+	display: flex;
+	justify-content: center;
 }
 
 .label-bar {
