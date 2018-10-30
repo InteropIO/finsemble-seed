@@ -249,4 +249,5 @@
 
     /* App Menu */
     --appMenu-font-color: var(--primary-font-color);
+    --appMenu-scrollbar-color: var(--slate1);
 }
