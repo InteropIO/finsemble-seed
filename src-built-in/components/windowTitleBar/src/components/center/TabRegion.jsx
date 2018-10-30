@@ -68,6 +68,7 @@ export default class TabRegion extends React.Component {
     }
 
     getTabWidth(params = {}) {
+        return 125;
         let { boundingBox, tabList } = params;
         if (typeof (tabList) === "undefined") {
             tabList = this.state.tabs;

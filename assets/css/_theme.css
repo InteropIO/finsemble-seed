@@ -50,7 +50,7 @@
 
     /* Window Title bar */
     --titleBar-height: 25px;
-    --titleBar-font-size: 14px;
+    --titleBar-font-size: 11px;
     --titleBar-icon-font-size: 10px;
     --titleBar-active-font-color: var(--primary-font-color);
     --titleBar-inactive-font-color: var(--gray3);
@@ -60,12 +60,15 @@
     --titleBar-background-active-color: var(--tertiary-background-color);
     --titlebar-tab-icon-font-color: var(--tertiary-accent-color);
     --titlebar-tab-active-font-color: var(--primary-font-color);
-    --titlebar-tab-active-background-color: var(--primary-background-color);
+    --titlebar-tab-active-background-color: var(--slate3);
     --titlebar-tab-inactive-font-color: var(--gray);
     --titlebar-tab-inactive-background-color: var(--titlebar-background-active-color);
     --titlebar-tab-ghost-background-color: var(--secondary-accent-color);
     --titlebar-tab-ghost-border-color: var(--primary-accent-color);
+    --titlebar-tab-inactive-hover-color: var(--slate4);
     --titlebar-tab-separator: 1px solid var(--gray7);
+    --titlebar-tab-border-radius: 5px;
+
     --titlebar-tab-section-separator: 1px solid var(--gray5);
 
     --titleBar-button-hover-active-color: var(--primary-accent-color);

@@ -72,7 +72,6 @@ html.desktop-active .fsbl-header {
     align-items: center;
     justify-content: flex-start;
     display: flex;
-    border-right: var(--titlebar-tab-section-separator);
 }
 
 .fsbl-header-center {
@@ -96,10 +95,23 @@ html.desktop-active .fsbl-header {
     padding-bottom:0px;
 }
 
-.fsbl-tabs-multiple .fsbl-header-center {
-    border-right: var(--titlebar-tab-section-separator);
+.fsbl-tabs-multiple .fsbl-header-center:after{
+    width: 1px;
+    height: 16px;
+    background-color: #979797;
+    content: '';
+    position: absolute;
+    right: 0;
 }
 
+.fsbl-tab:before {
+    width: 1px;
+    height: 16px;
+    background-color: #979797;
+    content: '';
+    position: absolute;
+    left: 0;
+}
 html.desktop-active .fsbl-header-right {
     background: var(--titleBar-background-active-color);
 }
@@ -277,7 +289,9 @@ html.desktop-active .fsbl-linker[hover=true] {
 }
 
 .fsbl-tab {
-    height: 100%;
+    height: calc(100% - 3px);
+    margin-top: 3px;
+    margin-left: 2px;
     position: relative;
     display: inline-flex;
     align-content: center;
@@ -285,7 +299,6 @@ html.desktop-active .fsbl-linker[hover=true] {
     vertical-align: top;
     background-color: var(--titlebar-tab-inactive-background-color);
     color: var(--titlebar-tab-inactive-font-color);
-    border-right: var(--titlebar-tab-separator);
     user-select: none;
     box-sizing: border-box;
     justify-content: flex-start;
@@ -295,8 +308,15 @@ html.desktop-active .fsbl-linker[hover=true] {
 .fsbl-tab[data-hover=true], .fsbl-active-tab {
     background-color: var(--titlebar-tab-active-background-color);
     color: var(--titlebar-tab-active-font-color);
+    border-top-left-radius: var(--titlebar-tab-border-radius);
+    border-top-right-radius: var(--titlebar-tab-border-radius);
 }
 
+.fsbl-tab[data-hover=true] {
+    background-color: var(--titlebar-tab-inactive-hover-color);
+}
+.fsbl-active-tab:before {width:0px;}
+.fsbl-tab[data-hover=true]:before {width: 0px;}
 .tab-region-wrapper {
     max-width: 75%; /* make sure there's always some space to grab and move the window */
 }
