@@ -445,18 +445,6 @@ img {
     background-color: var(--slate1);
 }
 
-.scheduled-restart {
-    margin-top: .5em;
-}
-.scheduled-restart-select-label {
-    margin-left: 4em;
-    margin-right:.5em;
-}
-
-.disabled-restart {
-    color: darkgray !important;
-}
-
 select:focus, option:focus {
     outline: none;
     background-color: transparent;
@@ -579,7 +567,7 @@ select:focus, option:focus {
 
 .search-box {
 	margin-bottom: 6px;
-    padding-left: .75em;
+    padding-left: 10px;
     display: flex;
     align-items: flex-start;
 }
@@ -606,7 +594,8 @@ select:focus, option:focus {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-	padding-left: .55em;
+    padding-left: 10px;
+    margin-bottom: 4px;
 }
 .tag-item {
 	cursor: default;
