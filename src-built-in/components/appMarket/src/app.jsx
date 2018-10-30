@@ -75,42 +75,39 @@ export default class AppMarket extends React.Component {
 		});
 	}
 	addTag(tag) {
-		// appCatalogStore.Actions.addTag(tag);
-		// let tags = appCatalogStore.Actions.getActiveTags();
-
-		// let page = this.state.activePage;
-
-		// if (tags.length === 1) {
-		// 	page = "appSearch";
-		// }
-
-		// this.setState({
-		// 	activePage: page
-		// });
 		storeActions.addTag(tag);
+		let tags = storeActions.getActiveTags();
+
+		let page = this.state.activePage;
+
+		if (tags.length === 1) {
+			page = "appSearch";
+		}
+
+		this.setState({
+			activePage: page
+		});
 	}
-	removeTag(tagName) {
-		// appCatalogStore.Actions.removeTag(tagName);
-		// let tags = appCatalogStore.Actions.getActiveTags();
+	removeTag(tag) {
+		storeActions.removeTag(tag);
+		let tags = storeActions.getActiveTags();
 
-		// let page = this.state.activePage;
+		let page = this.state.activePage;
 
-		// if (tags.length === 0) {
-		// 	page = "home";
-		// 	appCatalogStore.Actions.clearSearchResults();
-		// }
+		if (tags.length === 0) {
+			page = "home";
+		}
 
-		// this.setState({
-		// 	activePage: page
-		// });
+		this.setState({
+			activePage: page
+		});
 	}
 	goHome() {
-		// appCatalogStore.Actions.clearTags();
-		// appCatalogStore.Actions.clearSearchResults();
-		// this.setState({
-		// 	activePage: "home",
-		// 	activeApp: null
-		// });
+		storeActions.clearTags();
+		this.setState({
+			activePage: "home",
+			activeApp: null
+		});
 	}
 	changeSearch(search) {
 

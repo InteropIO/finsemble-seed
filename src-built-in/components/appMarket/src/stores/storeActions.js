@@ -58,6 +58,8 @@ function _addActiveTag(tag) {
         field: 'apps'
     });
 
+    activeTags.push(tag);
+
     let newApps = apps.filter((app) => {
         for (let i = 0; i < activeTags.length; i++) {
             let tag = activeTags[i];
@@ -68,8 +70,13 @@ function _addActiveTag(tag) {
     });
 
     getStore().setValue({
-        field: 'filteredApps',
+        field: 'apps',
         value: newApps
+    });
+
+    getStore().setValue({
+        field: 'activeTags',
+        value: activeTags
     });
 }
 
