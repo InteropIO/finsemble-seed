@@ -18,14 +18,20 @@
 				{
 					"name": "App Folder",
 					"foundation": {
-						"testAddFromFoundation": "add",
-						"startItem": {
-							"item2": "merged in"
+						"folders": {
+							"My Apps": {
+								"type": "folder"
+							},
+							"Favorites": {
+								"type": "favorites"
+							}
 						}
 					},
 					"default": {
-						"startItem": {
-							"item1": 1
+						"folders": {
+							"default":{
+								"type":"folder"
+							}
 						}
 					},
 					"security": {}
