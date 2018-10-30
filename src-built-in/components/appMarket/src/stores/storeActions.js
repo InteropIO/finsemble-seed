@@ -45,7 +45,7 @@ function _addActiveTag(tag) {
     });
 
     getStore().setValue({
-        field: 'apps',
+        field: 'filteredApps',
         value: newApps
     });
 
@@ -108,9 +108,12 @@ function searchApps(terms) {
         field: 'activeTags'
     });
 
-    appd.search({ text: terms, tag: activeTags }, (err, data) => {
+    appd.search({ text: terms, tags: activeTags }, (err, data) => {
         if (err) console.log("Failed to search apps");
-        return data;
+        getStore().setValue({
+            field: 'filteredApps',
+            value: data
+        });
     });
 }
 

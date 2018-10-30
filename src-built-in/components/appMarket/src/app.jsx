@@ -27,6 +27,7 @@ export default class AppMarket extends React.Component {
 		super(props);
 		this.state = {
 			apps: [],
+			filteredApps: [],
 			tags: [],
 			activeTags: [],
 			activePage: "home",
@@ -139,27 +140,26 @@ export default class AppMarket extends React.Component {
 		});
 	}
 	openAppShowcase(appName) {
-		//clear tags
-		// appCatalogStore.Actions.clearTags();
+		storeActions.clearTags();
 
-		// let app;
-		// let apps = appCatalogStore.Actions.getApps();
-		// for (let i = 0; i < apps.length; i++) {
-		// 	let thisApp = apps[i];
-		// 	let thisAppName = thisApp.title || thisApp.name;
+		let app;
+		let apps = this.state.apps;
+		for (let i = 0; i < apps.length; i++) {
+			let thisApp = apps[i];
+			let thisAppName = thisApp.title || thisApp.name;
 
-		// 	if (appName === thisAppName) {
-		// 		app = thisApp;
-		// 		break;
-		// 	}
-		// }
+			if (appName === thisAppName) {
+				app = thisApp;
+				break;
+			}
+		}
 
-		// if (app) {
-		// 	this.setState({
-		// 		activeApp: app,
-		// 		activePage: "showcase"
-		// 	});
-		// }
+		if (app) {
+			this.setState({
+				activeApp: app,
+				activePage: "showcase"
+			});
+		}
 	}
 	render() {
 
