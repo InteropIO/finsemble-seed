@@ -59,7 +59,7 @@ export default class AppDefinition extends React.Component {
 					{app.friendlyName} {this.isFavorite() && <i className='ff-favorite'></i>}
 				</span>
 				<AppTagsList tags={app.tags} />
-				<AppActionsMenu app={app}/>
+				<AppActionsMenu app={app} folder={this.props.folder}/>
 			</div>
 		)
 	}

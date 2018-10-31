@@ -51,11 +51,11 @@ export default class FoldersList extends React.Component {
 	}
 
 	componentWillMount() {
-		getStore().addListener({ field: 'appFolders' }, this.onAppFoldersUpdate.bind(this))
+		getStore().addListener({ field: 'folders' }, this.onAppFoldersUpdate.bind(this))
 	}
 
 	componentWillUnmount() {
-		getStore().removeListener({ field: 'appFolders' }, this.onAppFoldersUpdate.bind(this))
+		getStore().removeListener({ field: 'folders' }, this.onAppFoldersUpdate.bind(this))
 	}
 
 	renderFoldersList() {

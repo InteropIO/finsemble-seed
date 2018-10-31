@@ -92,7 +92,7 @@ export default class Content extends React.Component {
 	 * Because there is no way to subscribe to 
 	 * folders[index].appDefinitions updates.
 	 */
-	async onAppListUpdate() {
+	async onAppListUpdate(error, data) {
 		this.setState({
 			folder: await storeActions.getActiveFolder()
 		})
@@ -110,7 +110,7 @@ export default class Content extends React.Component {
 		// We can't subscribe to folders[index].appDefinitions
 		// So we are looking at appFolders.folders update 
 		// Since that update is done After removing an app of definitions
-		store.addListener({ field: 'appFolders.folders' }, this.onAppListUpdate)
+		store.addListener({ field: 'folders' }, this.onAppListUpdate)
 	}
 
 	componentWillUnmount() {
@@ -118,18 +118,18 @@ export default class Content extends React.Component {
 		store.removeListener({ field: 'filterText' }, this.onSearch)
 		store.removeListener({ field: 'sortBy' }, this.onSort)
 		store.removeListener({ field: 'tags' }, this.onTagsUpdate)
-		store.removeListener({ field: 'appFolders.folders' }, this.onAppListUpdate)
+		store.removeListener({ field: 'folders' }, this.onAppListUpdate)
 	}
 
 	renderAppList() {
 		return this.filterApps().map((app, index) => {
-			return <AppDefinition app={app} key={index}></AppDefinition>
+			return <AppDefinition app={app} folder={this.state.folder} key={index}></AppDefinition>
 		})
 	}
 
 	getNoResultsMessage() {
 		const messages = {
-			search: 'No results found. Please try again.',
+			search: ['No results found. Please try again.'],
 			Favorites: ['There’s nothing here!', <br />, 'Add apps and dashboards to Favorites to view them here.'],
 			Dashboards: ['There’s nothing here!', <br />, 'Press “New Dashboard” to construct an Dashboard.'],
 			default: ['There’s nothing here!', <br />,  'Add apps to folders to view them here.']

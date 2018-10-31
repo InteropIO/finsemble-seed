@@ -30,12 +30,12 @@ export default class AppActionsMenu extends React.Component {
 	}
 
 	//TODO: Implement handlers
-	onAddToFavorite() {
-		const favorite = storeActions.getFolders().find((folder) => {
-			return folder.name === 'Favorites'
-		})
+	async onAddToFavorite() {
+		const favorite = await storeActions.getFavoriteFolder()
 		storeActions.addAppToFolder(favorite, this.props.app)
-		this.toggleMenu()
+		this.setState({
+			isVisible: false
+		})		
 	}
 
 	onViewInfo() {
@@ -44,13 +44,13 @@ export default class AppActionsMenu extends React.Component {
 
 	onRemove() {
 		storeActions.removeAppFromFolder(
-			storeActions.getActiveFolder(),
+			this.props.folder,
 			this.props.app)
 		this.toggleMenu()
 	}
 
 	renderList() {
-		const folder = storeActions.getActiveFolder()
+		const folder = this.props.folder
 		return (
 			<div onMouseLeave={this.state.isVisible ? this.toggleMenu : null}
 				className="actions-menu" style={{ right: 0 }}>

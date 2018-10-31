@@ -9,7 +9,9 @@ export default class NoAppsFound extends React.Component {
 	render() {
 		return (
 			<div className="no-results"> 
-				{this.props.message}
+				{this.props.message.map((message, index) => {
+					return <span key={index}>{message}</span>
+				})}
 			</div>	
 		)
 	}
