@@ -541,8 +541,7 @@
 
 .app-showcase .header .action-button-container {
 	display: flex;
-	flex-direction: column;
-	justify-content: center;
+	flex-direction: row;
 	font-size: 12px;
 	font-weight: var(--secondary-font-weight);
 	color: var(--catalog-font-color);
@@ -557,6 +556,7 @@
 .app-showcase .header .action-button {
 	width: 83px;
 	height: 30px;
+	margin-left: 5px;
 	background-color: var(--blue6);
 	border: none;
 	display: flex;
@@ -565,6 +565,7 @@
 	align-items: center;
 	user-select: none;
 	outline: none;
+	transition: .2s ease-in;
 }
 
 .action-button .ff-plus {
@@ -576,22 +577,28 @@
 	background-color: var(--catalog-disabled-button-background-color);
 }
 
+.app-showcase .header .action-button.remove {
+	background-color: var(--red6);
+}
+
+.app-showcase .header .action-button.open:hover {
+	background-color: var(--blue7);
+}
+
+.app-showcase .header .action-button.remove:hover {
+	background-color: var(--red7);
+}
+
 .remove-button {
-	margin: 0 28px;
   	font-size: 12px;
   	font-weight: var(--primary-font-weight);
 	color: var(--catalog-font-color);
+	font-family: Roboto;
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
 	cursor: pointer;
 	outline: none;
-}
-
-.remove-button .ff-close-2 {
-	color: var(--red1);
-	font-size: 9px;
-    padding-right: 3px;
 }
 
 .app-showcase .header .action-button-label {
