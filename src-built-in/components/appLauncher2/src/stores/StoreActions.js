@@ -1,6 +1,7 @@
 import { getStore } from './LauncherStore'
 
 export default {
+	getValue,
 	addNewFolder,
 	addAppToFolder,
 	removeAppFromFolder,
@@ -18,7 +19,7 @@ export default {
 
 function _setFolders(folders) {
 	getStore().setValue({
-		field: 'appFolders.folders',
+		field: 'folders',
 		value: folders
 	}, (error, data) => {
 		if (error) {
@@ -26,19 +27,37 @@ function _setFolders(folders) {
 		}
 	})
 }
+/**
+ * A wrapper for StoreModel.getValue to return a promise
+ * instead of callback to take advantage of the async/await syntax
+ * @param {string} field The field we want to get its value
+ */
+function getValue(field) {
+	return new Promise((resolve, reject) => {
+		getStore().getValue({field: field}, (error, data) => {
+			if(!error) {
+				resolve(data)
+			} else {
+				reject(error)
+			}
+			
+		})
+	})
+}
 
 function getFolders() {
-	return getStore().getValue({
-		field: 'appFolders'
-	}).folders
+	return getValue('folders')
 }
 
 function getFavoriteFolder() {
-	return getFolders().find(folder => folder.name === 'Favorites')
+	return new Promise(async (resolve, reject) => {
+		const folders = await getFolders()
+		resolve(folders.find(folder => folder.name === 'Favorites'))
+	})
 }
 
-function reorderFolders(destIndex, srcIndex) {
-	const folders = getFolders()
+async function reorderFolders(destIndex, srcIndex) {
+	const folders = await getFolders()
 	// Swap array elements
 	const temp = folders[srcIndex]
 	folders[srcIndex] = folders[destIndex]
@@ -46,9 +65,9 @@ function reorderFolders(destIndex, srcIndex) {
 	_setFolders(folders)
 }
 
-function addNewFolder(name) {
+async function addNewFolder(name) {
 	// Find folders that have a name of "New folder" or "New folder #"
-	const folders = getFolders()
+	const folders = await getFolders()
 	const newFolders = folders.filter((folder) => {
 		return folder.name.toLowerCase().indexOf('new folder') > -1
 	})
@@ -64,8 +83,8 @@ function addNewFolder(name) {
 	return newFolder
 }
 
-function addAppToFolder(folder, app) {
-	const folders = getFolders()
+async function addAppToFolder(folder, app) {
+	const folders = await getFolders()
 	const index = folders.findIndex((item) => {
 		return item.name === folder.name
 	})
@@ -81,8 +100,8 @@ function addAppToFolder(folder, app) {
 	}
 }
 
-function removeAppFromFolder(folder, app) {
-	const folders = getFolders()
+async function removeAppFromFolder(folder, app) {
+	const folders = await getFolders()
 	const folderIndex = folders.findIndex((item) => {
 		return item.name === folder.name
 	})
@@ -95,50 +114,59 @@ function removeAppFromFolder(folder, app) {
 }
 
 function getActiveFolder() {
-	return getFolders().find((folder) => {
-		return folder.name == getStore().getValue({ field: 'activeFolder' })
+	return new Promise(async (resolve, reject) => {
+		const folders = await getFolders()
+		const activeFolder = await getValue('activeFolder')
+		const folder = folders.find((folder) => {
+			return folder.name == activeFolder
+		})
+		resolve(folder)
 	})
 }
 
 function getSearchText() {
-	return getStore().getValue({ field: 'filterText' })
+	return getValue('filterText')
 }
 
 function getSortBy() {
-	return getStore().getValue({ field: 'sortBy' })
+	return getValue('sortBy')
 }
 
 function getTags() {
-	return getStore().getValue({ field: 'tags' }) || []
+	return getValue('tags')
 }
 
 function getAllAppsTags() {
-	let tags = []
-	getFolders().forEach((folder) => {
-		folder.appDefinitions.forEach((app) => {
-			tags = tags.concat(app.tags)
+	return new Promise(async (resolve, reject) => {
+		let tags = []
+		const folders = await getFolders()
+		folders.forEach((folder) => {
+			folder.appDefinitions.forEach((app) => {
+				tags = tags.concat(app.tags)
+			})
 		})
-	})
-	// return unique ones only
-	return tags.filter((tag, index) => {
-		return tags.indexOf(tag) === index
+		// return unique ones only
+		tags = tags.filter((tag, index) => {
+			return tags.indexOf(tag) === index
+		})
+		resolve(tags)
 	})
 }
 
-function addTag(tag) {
+async function addTag(tag) {
 	// Get current list of tags
-	const tags = getTags()
+	const tags = await getTags()
 	// Push new tag to list
 	tags.indexOf(tag) < 0 && tags.push(tag)
 	// Update tags in store
-	return getStore().setValue({ field: 'tags', value: tags })
+	getStore().setValue({ field: 'tags', value: tags })
 }
 
-function deleteTag(tag) {
+async function deleteTag(tag) {
 	// Get current list of tags
-	const tags = getTags()
+	const tags = await getTags()
 	// Push new tag to list
 	tags.splice(tags.indexOf(tag), 1)
 	// Update tags in store
-	return getStore().setValue({ field: 'tags', value: tags })
+	getStore().setValue({ field: 'tags', value: tags })
 }

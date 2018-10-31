@@ -1,11 +1,11 @@
 let launcherStore
 
-async function createStore(done) {
+function createStore(done) {
 	FSBL.Clients.DistributedStoreClient
-	.createStore({ store: "Finsemble-AppLauncher-2", 
-		values: require('../folders.json') 
-	}).then((store) => {
-		launcherStore = store.data
+	.getStore({ store: "Finsemble-AppLauncher-2", 
+		global: true
+	}, (error, store) => {
+		launcherStore = store
 		done(launcherStore)
 	})
 }
@@ -13,8 +13,6 @@ async function createStore(done) {
 function getStore(){
 	return launcherStore
 }
-
-
 
 export {
 	createStore,

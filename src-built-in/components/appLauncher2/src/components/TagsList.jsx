@@ -8,7 +8,7 @@ export default class TagsList extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			tags: storeActions.getTags()
+			tags: []
 		}
 	}
 

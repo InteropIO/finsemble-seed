@@ -9,10 +9,16 @@ export default class FoldersList extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			folders: storeActions.getFolders(),
+			folders: [],
 			activeFolder: 'My Apps'
 		}
+		this.setStateValues()
+	}
 
+	async setStateValues() {
+		this.setState({
+			folders: await storeActions.getFolders()
+		})
 	}
 
 	onAppDrop(event, folder) {
@@ -27,9 +33,9 @@ export default class FoldersList extends React.Component {
 	}
 
 
-	onAppFoldersUpdate() {
+	async onAppFoldersUpdate() {
 		this.setState({
-			folders: storeActions.getFolders()
+			folders: await storeActions.getFolders()
 		})
 	}
 

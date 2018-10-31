@@ -14,6 +14,9 @@ export default class AppDefinition extends React.Component {
 
 	constructor(props) {
 		super(props)
+		this.state = {
+			favorites: []
+		}
 		this.onDragToFolder = this.onDragToFolder.bind(this)
 		this.onDoubleClick = this.onDoubleClick.bind(this)
 	}
@@ -37,9 +40,14 @@ export default class AppDefinition extends React.Component {
 	}
 
 	isFavorite() {
-		return storeActions
-		.getFavoriteFolder().appDefinitions
-		.find(app => app.name === this.props.app.name)
+		return this.state.favorites.find(app => app.name === this.props.app.name)
+	}
+
+	async componentWillMount() {
+		const favFolder = await storeActions.getFavoriteFolder()
+		this.setState({
+			favorites: favFolder.appDefinitions
+		})
 	}
 
 	render() {

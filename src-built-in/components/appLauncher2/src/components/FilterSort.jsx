@@ -12,9 +12,16 @@ export default class FilterSort extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
+			tags: [],
 			search: ''
 		}
 		this.onSearch = this.onSearch.bind(this)
+	}
+
+	async setStateValues(){
+		this.setState({
+			tags: await storeActions.getAllAppsTags()
+		})
 	}
 
 	onSearch(event) {
@@ -36,6 +43,10 @@ export default class FilterSort extends React.Component {
 		storeActions.addTag(tag)
 	}
 
+	componentDidMount(){
+		this.setStateValues()
+	}
+	
 	render() {
 		return (
 			<div className="filter-sort">
@@ -45,7 +56,7 @@ export default class FilterSort extends React.Component {
 				<TagsMenu
 					label="Tags"
 					align="right"
-					list={storeActions.getAllAppsTags()}
+					list={this.state.tags}
 					onItemClick={this.onTagClick}/>
 			</div>
 			)

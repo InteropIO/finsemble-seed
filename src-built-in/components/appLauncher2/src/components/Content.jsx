@@ -6,6 +6,7 @@ import { getStore } from '../stores/LauncherStore'
 import storeActions from '../stores/StoreActions'
 import sortFunctions from '../utils/sort-functions'
 
+window.storeActions = storeActions
 // To be assigned a value later in the constructor
 let store
 
@@ -14,10 +15,10 @@ export default class Content extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			tags: storeActions.getTags(),
-			sortBy: storeActions.getSortBy(),
-			filterText: storeActions.getSearchText(),
-			folder: storeActions.getActiveFolder()
+			tags: [],
+			sortBy: 'Alphabetical',
+			filterText: '',
+			folder: {appDefinitions: []}
 		}
 		this.onSort = this.onSort.bind(this)
 		this.onSearch = this.onSearch.bind(this)
@@ -27,7 +28,20 @@ export default class Content extends React.Component {
 		store = getStore()
 	}
 
+	async setStateValues() {
+		this.setState({
+			tags: await storeActions.getTags(),
+			sortBy: await storeActions.getSortBy(),
+			filterText: await storeActions.getSearchText(),
+			folder: await storeActions.getActiveFolder()
+		})
+	}
+
 	filterApps() {
+		const folder = this.state.folder
+		if(!folder.appDefinitions) {
+			return []
+		}
 		const sortFunc = sortFunctions[this.state.sortBy]
 		const apps = this.filterAppsByTags(sortFunc(this.state.folder.appDefinitions))
 		if (!this.state.filterText) {
@@ -40,7 +54,7 @@ export default class Content extends React.Component {
 	}
 
 	filterAppsByTags(apps) {
-		if (!this.state.tags.length) {
+		if (!this.state.tags) {
 			return apps
 		}
 		return apps.filter((app) => {
@@ -50,15 +64,15 @@ export default class Content extends React.Component {
 		})
 	}
 
-	onActiveFolderChanged(error, data) {
+	async onActiveFolderChanged(error, data) {
 		this.setState({
-			folder: storeActions.getActiveFolder()
+			folder: await storeActions.getActiveFolder()
 		})
 	}
 
-	onSearch(error, data) {
+	async onSearch(error, data) {
 		this.setState({
-			filterText: storeActions.getSearchText()
+			filterText: await storeActions.getSearchText()
 		})
 	}
 
@@ -68,7 +82,7 @@ export default class Content extends React.Component {
 		})
 	}
 
-	onTagsUpdate(error, data) {
+	async onTagsUpdate(error, data) {
 		this.setState({
 			tags: data.value
 		})
@@ -78,10 +92,14 @@ export default class Content extends React.Component {
 	 * Because there is no way to subscribe to 
 	 * folders[index].appDefinitions updates.
 	 */
-	onAppListUpdate() {
+	async onAppListUpdate() {
 		this.setState({
-			folder: storeActions.getActiveFolder()
+			folder: await storeActions.getActiveFolder()
 		})
+	}
+
+	componentDidMount() {
+		this.setStateValues()
 	}
 
 	componentWillMount() {
