@@ -288,7 +288,7 @@ const IndexedDBAdapter = function () {
 		const request = objectStore.get(combinedKey);
 
 		request.onsuccess = (event) => {
-			const data = event.target.result && event.target.result.value ? event.target.result.value : {};
+			const data = event.target.result && event.target.result.value ? event.target.result.value : undefined;
 
 			Logger.system.debug("IndexedDBAdapter.get for key=" + combinedKey + " data=", data);
 			console.debug("IndexedDBAdapter.get for key=" + combinedKey + " data=", data);
