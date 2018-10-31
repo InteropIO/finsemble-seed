@@ -103,8 +103,8 @@ export default class FoldersList extends React.Component {
 						{folder.icon !== undefined ? <i className={folder.icon}></i> : null}
 						{nameField}
 					</span>
+					{folder.icon === 'ff-folder' ? <FolderActionsMenu folder={folder} renameFolder={this.renameFolder} /> : null}
 				</div>
-				{folder.icon === 'ff-folder' ? <FolderActionsMenu folder={folder} renameFolder={this.renameFolder} /> : null}
 			</FinsembleDraggable>
 		})
 	}
