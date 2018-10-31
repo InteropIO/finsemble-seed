@@ -16,6 +16,12 @@ const Header = props => {
 				<span className="appName">{props.name}</span>
 			</div>
 			<div className='action-button-container'>
+				{props.installed ? <button className={props.entitled ? "action-button disabled" : "action-button"} disabled={props.entitled} onClick={props.appAction}>
+					<div className='remove-button' onClick={this.removeApp}>
+						<i className='ff-close-2'></i>
+						&nbsp;Remove App
+					</div>
+				</button> : null}
 				<button className={props.entitled ? "action-button disabled" : "action-button"} disabled={props.entitled} onClick={props.appAction}>
 					{props.installed ? (
 						<div>
