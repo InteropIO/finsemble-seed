@@ -35,6 +35,7 @@
     font-size: var(--titleBar-font-size);
     font-weight: var(--titleBar-font-weight);
     color: var(--titleBar-inactive-font-color);
+    border-bottom: 1px solid var(--slate4);
 }
 
 html.desktop-active .fsbl-header {
@@ -119,8 +120,8 @@ html.desktop-active .fsbl-header-right {
     background-color: var(--gray6);
     position: absolute;
     left: 0;
-    top: -4px;
-    bottom: 0px;
+    top: 3px;
+    height: 12px;
 }
 
 /* Offset the contents back up, to make up for half the resize cursor offset */
@@ -220,6 +221,7 @@ html.desktop-active .fsbl-icon-highlighted {
     width: 5px;
     height: 15px;
     margin-left: 3px;
+    margin-top: -4px;
     border-radius: 4px;
     border: 1px solid var(--titleBar-background-inactive-color);
     box-sizing: content-box; /* otherwise any box-sizing on the page can override how our linker appears */
@@ -261,7 +263,7 @@ html.desktop-active .fsbl-linker[hover=true] {
 }
 
 .ff-minimize {
-    padding-bottom: 3px;
+    padding-bottom: 6px;
 }
 
 .ff-linker:before {
@@ -284,12 +286,7 @@ html.desktop-active .fsbl-linker[hover=true] {
 .ff-restore {
     padding-top: 4px;
 }
-.fsbl-tab:nth-child(odd) {
-    background-color: var(--titlebar-tab-inactive-hover-color);
-}
-.fsbl-tab:nth-child(even) {
-    background-color: var(--titlebar-tab-inactive-hover-color);
-}
+
 .fsbl-tab, .fsbl-header-title[data-hover=true]  {
     height: calc(100% - 3px);
     margin-top: 3px;
@@ -304,6 +301,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     box-sizing: border-box;
     justify-content: flex-start;
     transition: color 0.2s ease;
+    background-color: var(--titlebar-tab-inactive-hover-color);
     border-top-left-radius: var(--titlebar-tab-border-radius);
     border-top-right-radius: var(--titlebar-tab-border-radius);
 }
