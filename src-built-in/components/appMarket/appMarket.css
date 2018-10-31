@@ -514,8 +514,9 @@
 .app-showcase .header {
 	display: flex;
 	flex-direction: row;
+	justify-content: space-between;
 	padding: 5px 0;
-	margin: 0 28px;
+	margin: 0 49px;
 }
 
 .app-showcase .header .icon-title-container {
@@ -532,9 +533,7 @@
 }
 
 .app-showcase .header .appName {
-	width: 410px;
 	padding-right: 12px;
-
   	font-size: 14px;
   	font-weight: var(--primary-font-weight);
 	color: var(--catalog-font-color);
