@@ -4,6 +4,8 @@ export default {
 	addNewFolder,
 	addAppToFolder,
 	removeAppFromFolder,
+	renameFolder,
+	deleteFolder,
 	deleteTag,
 	reorderFolders,
 	getFolders,
@@ -62,6 +64,31 @@ function addNewFolder(name) {
 	folders.push(newFolder)
 	_setFolders(folders)
 	return newFolder
+}
+
+function deleteFolder(name) {
+	const folders = getFolders();
+	const newFolders = folders.filter((folder) => {
+		if (folder.name !== name) return true;
+	});
+	_setFolders(newFolders);
+}
+
+function renameFolder(oldName, newName) {
+	const folders = getFolders();
+	let targetFolder;
+	const newFolders = folders.map((folder) => {
+		if (folder.name === oldName) {
+			folder.name = newName;
+			targetFolder = folder;
+		}
+		return folder;
+	});
+	_setFolders(newFolders);
+	getStore().setValue({
+		field: 'activeFolder',
+		value: newName
+	});
 }
 
 function addAppToFolder(folder, app) {

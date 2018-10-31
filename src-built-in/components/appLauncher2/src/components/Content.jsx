@@ -75,7 +75,7 @@ export default class Content extends React.Component {
 	}
 	/**
 	 * Mainly used to know when a user remove an app from a folder
-	 * Because there is no way to subscribe to 
+	 * Because there is no way to subscribe to
 	 * folders[index].appDefinitions updates.
 	 */
 	onAppListUpdate() {
@@ -90,7 +90,7 @@ export default class Content extends React.Component {
 		store.addListener({ field: 'sortBy' }, this.onSort)
 		store.addListener({ field: 'tags' }, this.onTagsUpdate)
 		// We can't subscribe to folders[index].appDefinitions
-		// So we are looking at appFolders.folders update 
+		// So we are looking at appFolders.folders update
 		// Since that update is done After removing an app of definitions
 		store.addListener({ field: 'appFolders.folders' }, this.onAppListUpdate)
 	}

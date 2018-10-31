@@ -1,5 +1,6 @@
 import React from 'react'
 import AddNewFolder from './AddNewFolder'
+import FolderActionsMenu from './FolderActionsMenu'
 import storeActions from '../stores/StoreActions'
 import { getStore } from '../stores/LauncherStore'
 import { FinsembleDraggable } from '@chartiq/finsemble-react-controls'
@@ -10,9 +11,13 @@ export default class FoldersList extends React.Component {
 		super(props)
 		this.state = {
 			folders: storeActions.getFolders(),
-			activeFolder: 'My Apps'
+			activeFolder: 'My Apps',
+			renamingFolder: null,
+			folderNameInput: ""
 		}
-
+		this.renameFolder = this.renameFolder.bind(this);
+		this.changeFolderName = this.changeFolderName.bind(this);
+		this.keyPressed = this.keyPressed.bind(this);
 	}
 
 	onAppDrop(event, folder) {
@@ -52,13 +57,42 @@ export default class FoldersList extends React.Component {
 		getStore().removeListener({ field: 'appFolders' }, this.onAppFoldersUpdate.bind(this))
 	}
 
+	renameFolder(name) {
+		this.setState({
+			renamingFolder: name
+		});
+	}
+
+	changeFolderName(e) {
+		this.setState({
+			folderNameInput: e.target.value
+		});
+	}
+
+	keyPressed(e) {
+		if (e.key === "Enter") {
+			let oldName = this.state.renamingFolder, newName = this.state.folderNameInput;
+			this.setState({
+				folderNameInput: "",
+				renamingFolder: null
+			}, () => {
+				storeActions.renameFolder(oldName, newName);
+			});
+		}
+	}
+
 	renderFoldersList() {
+
 		return this.state.folders.map((folder, index) => {
 
 			let className = 'complex-menu-section-toggle'
 			if (this.state.activeFolder === folder.name) {
 				className += ' active-section-toggle'
 			}
+
+			let nameField = folder.icon === 'ff-folder' && this.state.renamingFolder === folder.name ? <input value={this.state.folderNameInput} onChange={this.changeFolderName} onKeyPress={this.keyPressed} /> : folder.name;
+
+
 			return <FinsembleDraggable
 				draggableId={folder.name}
 				key={index} index={index}>
@@ -67,9 +101,10 @@ export default class FoldersList extends React.Component {
 					className={className} key={index}>
 					<span className='left-nav-label'>
 						{folder.icon !== undefined ? <i className={folder.icon}></i> : null}
-						{folder.name}
+						{nameField}
 					</span>
 				</div>
+				{folder.icon === 'ff-folder' ? <FolderActionsMenu folder={folder} renameFolder={this.renameFolder} /> : null}
 			</FinsembleDraggable>
 		})
 	}
