@@ -111,8 +111,8 @@ async function renameFolder(oldName, newName) {
 	});
 }
 
-function addAppToFolder(folder, app) {
-	const folders = getFolders()
+async function addAppToFolder(folder, app) {
+	const folders = await getFolders()
 	const index = folders.findIndex((item) => {
 		return item.name === folder.name
 	})

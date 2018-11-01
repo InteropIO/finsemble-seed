@@ -29,8 +29,8 @@ class FolderActionsMenu extends React.Component {
 	renameFolder() {
 		this.props.renameFolder(this.props.folder.name);
 	}
-	launchAll() {
-		let folders = storeActions.getFolders();
+	async launchAll() {
+		let folders = await storeActions.getFolders();
 		let folder = folders.find((folder) => {
 			return folder.name === this.props.folder.name;
 		});
