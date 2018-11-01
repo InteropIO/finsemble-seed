@@ -55,15 +55,26 @@ function _addActiveTag(tag) {
         }
     });
 
-    getStore().setValue({
-        field: 'filteredApps',
-        value: newApps
-    });
+    // getStore().setValue({
+    //     field: 'filteredApps',
+    //     value: newApps
+    // });
 
-    getStore().setValue({
-        field: 'activeTags',
-        value: activeTags
-    });
+    // getStore().setValue({
+    //     field: 'activeTags',
+    //     value: activeTags
+    // });
+
+    getStore().setValues([
+        {
+            field: 'filteredApps',
+            value: newApps
+        },
+        {
+            field: 'activeTags',
+            value: activeTags
+        }
+    ]);
 }
 
 /**
@@ -114,17 +125,25 @@ function getApps() {
  * @param {string} name The name of the app
  */
 function addApp(name) {
-    let apps = getStore().getValue({
-        field: 'apps'
-    });
+    // let apps = getStore().getValue({
+    //     field: 'apps'
+    // });
 
-    let installed = getStore().getValue({
-        field: 'installed'
-    });
+    // let installed = getStore().getValue({
+    //     field: 'installed'
+    // });
+    let { installed, apps } = getStore().getValues([
+        {
+            field: 'apps'
+        },
+        {
+            field: 'installed'
+        }
+    ])
 
     for (let i = 0; i < apps.length; i++) {
         let app = apps[i];
-        let thisAppName = app.title ? app.title : app.name;
+        let thisAppName = app.title || app.name;
         if (thisAppName === name && !installed.includes(app.appId)) {
             installed.push(app.appId);
             break;
@@ -152,7 +171,7 @@ function removeApp(name) {
 
     for (let i = 0; i < apps.length; i++) {
         let app = apps[i];
-        let thisAppName = app.title ? app.title : app.name;
+        let thisAppName = app.title || app.name;
         if (thisAppName === name && installed.includes(app.appId)) {
             let index = installed.indexOf(app.appId);
             installed.splice(index, 1);
@@ -195,7 +214,7 @@ function clearFilteredApps() {
 }
 
 /**
- * Async call to appD to get the list of all tags
+ * Call to appD to get the list of all tags
  */
 function getTags() {
     return appd.getTags()
@@ -244,7 +263,6 @@ function searchApps(terms) {
 
     appd.search({ text: terms, tags: activeTags }, (err, data) => {
         if (err) console.log("Failed to search apps");
-        console.log('searching: ', data);
         getStore().setValue({
             field: 'filteredApps',
             value: data

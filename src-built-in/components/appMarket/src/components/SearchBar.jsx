@@ -69,7 +69,9 @@ class SearchBar extends Component {
 	selectTag(tag) {
 		this.setState({
 			tagSelectorOpen: false
-		}, this.props.tagSelected(tag));
+		}, () => {
+			this.props.tagSelected(tag)
+		});
 	}
 	/**
 	 * Calls parent function to remove a tag from filters
@@ -84,7 +86,9 @@ class SearchBar extends Component {
 			this.setState({
 				searchValue: ""
 			}, callParent);
-		} else callParent();
+		} else {
+			callParent();
+		}
 	}
 	render() {
 

@@ -1,7 +1,7 @@
 /*!
 * Copyright 2018 by ChartIQ, Inc.
 * All rights reserved.
-* 
+*
 */
 
 import React from 'react'
@@ -10,7 +10,7 @@ import React from 'react'
 * A reusable flyout component for tags and any other lists
 * This component creates a button with a customizable label
 * and an item click handler.
-* Example: <TagsMenu label="Tags" align="left" list={list} onItemClick={handler}/>	
+* Example: <TagsMenu label="Tags" align="left" list={list} onItemClick={handler}/>
 **/
 export default class TagsMenu extends React.Component {
 
@@ -41,7 +41,7 @@ export default class TagsMenu extends React.Component {
 		const items = this.props.list
 		const styles = this.props.align === 'right' ? { right: 0 } : { left: 0 }
 		return (
-			<div onMouseLeave={this.state.isVisible ? this.toggleMenu : null}
+			<div onMouseLeave={this.state.isVisible ? this.toggleMenu : Function.prototype}
 				className="tags-menu" style={styles}>
 				<ul> {
 					items.map((item, index) => {

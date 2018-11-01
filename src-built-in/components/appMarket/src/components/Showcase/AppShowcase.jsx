@@ -18,6 +18,7 @@ import AppDevNotes from './AppDevNotes';
 import VersionNotes from './VersionNotes';
 import SupportNotes from './SupportNotes';
 
+const imagesInCarousel = 4;
 class AppShowcase extends Component {
 	constructor(props) {
 		super(props);
@@ -131,7 +132,7 @@ class AppShowcase extends Component {
 		let { name, iconUrl, imageIndex:index } = this.state;
 
 		let images = [];
-		for (let i = 0; i < 4; i++) {
+		for (let i = 0; i < imagesInCarousel; i++) {
 
 			if (index > this.props.app.images.length - 1) {
 				index = 0;
@@ -149,7 +150,7 @@ class AppShowcase extends Component {
 				<Modal open={this.state.imageModalOpen} closeModal={this.closeModal}>
 					<img src={this.state.modalImage} className="modal-image" />
 				</Modal>
-				{this.state.entitled ? (
+				{this.state.entitled && (
 					<div className="app-warning">
 						<span className="app-warning-wrapper">
 							<i className='ff-alert'></i>
@@ -158,14 +159,14 @@ class AppShowcase extends Component {
 							</span>
 						</span>
 					</div>
-				) : null}
+				)}
 				<Header iconUrl={iconUrl} name={name} entitled={this.state.entitled} installed={this.props.app.installed} appAction={appAction} removeApp={this.removeApp} />
 
-				{this.props.app.installed ?
+				{this.props.app.installed && (
 				<div className='remove-button' onClick={this.removeApp}>
 					<i className='ff-close-2'></i>
 					&nbsp;Remove App
-				</div> : null}
+				</div>)}
 
 				<ImageCarousel nextImage={this.nextImage} previousImage={this.previousImage} openModal={this.openModal} images={images} />
 

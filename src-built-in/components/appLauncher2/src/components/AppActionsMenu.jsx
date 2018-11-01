@@ -64,7 +64,7 @@ export default class AppActionsMenu extends React.Component {
 		let favoritesActionOnClick = this.props.isFavorite ? this.onRemoveFromFavorite : this.onAddToFavorite;
 		let favoritesText = this.props.isFavorite ? "Remove from favorites" : "Add to favorites";
 		return (
-			<div onMouseLeave={this.state.isVisible ? this.toggleMenu : null}
+			<div onMouseLeave={this.state.isVisible ? this.toggleMenu : Function.prototype}
 				className="actions-menu" style={{ right: 0 }}>
 				<ul>
 					<li onClick={favoritesActionOnClick}>{favoritesText}</li>

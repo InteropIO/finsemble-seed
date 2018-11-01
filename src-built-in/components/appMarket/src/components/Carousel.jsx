@@ -30,6 +30,7 @@ export default class Carousel extends Component {
 		this.pageDown = this.pageDown.bind(this);
 		this.highlightTitle = this.highlightTitle.bind(this);
 		this.seeMore = this.seeMore.bind(this);
+		this.buildCarousel = this.buildCarousel.bind(this);
 	}
 	/**
 	 * Pages through the carousel by one card (right)
@@ -80,8 +81,10 @@ export default class Carousel extends Component {
 	seeMore() {
 		this.props.seeMore(this.props.tag);
 	}
-	render() {
-
+	/**
+	 * Function to build the items in the carousel
+	 */
+	buildCarousel() {
 		let { cards } = this.props;
 		let firstCard = this.state.firstIndex;
 
@@ -95,6 +98,11 @@ export default class Carousel extends Component {
 			firstCard++;
 		}
 
+		return displayCards;
+	}
+	render() {
+
+		let displayCards = this.buildCarousel();
 		let titleClass = "carousel-title";
 		if (this.state.titleHighlighted) titleClass += " highlight";
 

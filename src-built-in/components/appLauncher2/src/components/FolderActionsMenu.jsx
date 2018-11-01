@@ -53,7 +53,7 @@ class FolderActionsMenu extends React.Component {
 	}
 	renderList() {
 		return (
-			<div onMouseLeave={this.state.isVisible ? this.toggleMenu : null}
+			<div onMouseLeave={this.state.isVisible ? this.toggleMenu : Function.prototype}
 				className="folder-actions-menu" style={{ right: 0 }}>
 				<ul>
 					<li onClick={this.renameFolder}>Rename</li>

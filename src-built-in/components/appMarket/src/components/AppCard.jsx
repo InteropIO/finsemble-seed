@@ -95,7 +95,7 @@ class AppCard extends Component {
 	render() {
 		let imageUrl = this.props.images !== undefined ? this.props.images[0].url : "../assets/placeholder.svg";
 
-		let { appName: title, checkShown:showCheck } = this.state;
+		let { appName, checkShown } = this.state;
 
 		let imageIconClasses = "ff-check-circle";
 		if (this.state.checkHighlighted || this.props.installed) imageIconClasses += " highlighted"
@@ -105,15 +105,15 @@ class AppCard extends Component {
 
 		let entitled = this.state.entitled ? " entitled" : "";
 
-		let addApp = this.props.installed ? this.removeApp : this.addApp;
+		let appAction = this.props.installed ? this.removeApp : this.addApp;
 
 		return (
 			<div className='app-card' onClick={this.openAppShowcase} onMouseEnter={this.showCheck} onMouseLeave={this.hideCheck}>
 				<div className="app-image-container">
-					{entitled || !showCheck ? null : <i className={imageIconClasses} onMouseEnter={this.toggleHighlight} onMouseLeave={this.toggleHighlight} onClick={addApp}></i>}
+					{entitled || !checkShown ? null : <i className={imageIconClasses} onMouseEnter={this.toggleHighlight} onMouseLeave={this.toggleHighlight} onClick={appAction}></i>}
 					<img className={'app-image' + entitled} src={imageUrl} />
 				</div>
-				<h4 className={titleClass} onMouseEnter={this.toggleTitleUnderline} onMouseLeave={this.toggleTitleUnderline}>{title}</h4>
+				<h4 className={titleClass} onMouseEnter={this.toggleTitleUnderline} onMouseLeave={this.toggleTitleUnderline}>{appName}</h4>
 				<div className='footer'>
 					<span className={"app-tags" + entitled}>
 						<i className="ff-tag"></i>
