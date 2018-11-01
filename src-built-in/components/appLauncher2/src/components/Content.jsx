@@ -39,7 +39,7 @@ export default class Content extends React.Component {
 
 	filterApps() {
 		const folder = this.state.folder
-		if(!folder.appDefinitions) {
+		if(!folder || !folder.appDefinitions) {
 			return []
 		}
 		const sortFunc = sortFunctions[this.state.sortBy]
@@ -102,7 +102,7 @@ export default class Content extends React.Component {
 		this.setStateValues()
 	}
 
-	componentWillMount() {
+	componentDidMount() {
 		store.addListener({ field: 'activeFolder' }, this.onActiveFolderChanged)
 		store.addListener({ field: 'filterText' }, this.onSearch)
 		store.addListener({ field: 'sortBy' }, this.onSort)
@@ -134,6 +134,7 @@ export default class Content extends React.Component {
 			Dashboards: ['There’s nothing here!', <br />, 'Press “New Dashboard” to construct an Dashboard.'],
 			default: ['There’s nothing here!', <br />,  'Add apps to folders to view them here.']
 		}
+		if (!this.state.folder) return ["Loading data...", <br />];
 		// User is searching so we need the search message
 		if (this.state.filterText) return messages.search
 		// Now let's check which folder is currently active

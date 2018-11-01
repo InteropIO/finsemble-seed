@@ -2,11 +2,11 @@ let launcherStore
 
 function createStore(done) {
 	FSBL.Clients.DistributedStoreClient
-	.getStore({ store: "Finsemble-AppLauncher-2", 
+	.getStore({ store: "Finsemble-AppLauncher-2",
 		global: true
 	}, (error, store) => {
-		launcherStore = store
-		done(launcherStore)
+		launcherStore = store;
+		done(null, launcherStore)
 	})
 }
 

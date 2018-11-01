@@ -68,6 +68,7 @@ async function reorderFolders(destIndex, srcIndex) {
 }
 
 async function addNewFolder(name) {
+	console.log('adding a folder asyncrounously');
 	// Find folders that have a name of "New folder" or "New folder #"
 	const folders = await getFolders()
 	const newFolders = folders.filter((folder) => {
@@ -85,16 +86,16 @@ async function addNewFolder(name) {
 	return newFolder
 }
 
-function deleteFolder(name) {
-	const folders = getFolders();
+async function deleteFolder(name) {
+	const folders = await getFolders();
 	const newFolders = folders.filter((folder) => {
 		if (folder.name !== name) return true;
 	});
 	_setFolders(newFolders);
 }
 
-function renameFolder(oldName, newName) {
-	const folders = getFolders();
+async function renameFolder(oldName, newName) {
+	const folders = await getFolders();
 	let targetFolder;
 	const newFolders = folders.map((folder) => {
 		if (folder.name === oldName) {

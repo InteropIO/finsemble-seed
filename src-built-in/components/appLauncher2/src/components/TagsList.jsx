@@ -1,7 +1,9 @@
 import React from 'react'
 import Tag from '../../../shared/Tag';
 import storeActions from '../stores/StoreActions'
-import {getStore} from '../stores/LauncherStore'
+import { getStore } from '../stores/LauncherStore'
+
+let store;
 
 export default class TagsList extends React.Component {
 
@@ -10,6 +12,9 @@ export default class TagsList extends React.Component {
 		this.state = {
 			tags: []
 		}
+		this.onTagDelete = this.onTagDelete.bind(this);
+		this.onTagListUpdate = this.onTagListUpdate.bind(this);
+		store = getStore();
 	}
 
 	onTagDelete(tag) {
@@ -22,12 +27,12 @@ export default class TagsList extends React.Component {
 		})
 	}
 
-	componentWillMount() {
-		getStore().addListener({field: 'tags'}, this.onTagListUpdate.bind(this))
+	componentDidMount() {
+		store.addListener({field: 'tags'}, this.onTagListUpdate)
 	}
 
 	componentWillUnmount () {
-		getStore().removeListener({field: 'tags'}, this.onTagListUpdate.bind(this))
+		store.removeListener({field: 'tags'}, this.onTagListUpdate)
 	}
 
 	renderTagsList() {
