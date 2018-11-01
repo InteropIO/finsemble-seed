@@ -30,7 +30,6 @@
 	overflow-y: auto;
 	border-radius: 3px;
   	background-color: var(--tag-background-color);
-	color: var(--tag-background-color);
 	padding: 5px 10px;
 }
 .tags-menu ul {

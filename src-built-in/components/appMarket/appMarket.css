@@ -417,7 +417,7 @@
 	width: 51px;
 	height: 17px;
 	border-radius: 2px;
-	background-color: var(--catalog-tag-backgrond-color);
+	background-color: var(--tag-backgrond-color);
 	font-size: 10px;
 	font-weight: var(--secondary-font-weight);
 	color: var(--catalog-font-color);
@@ -441,7 +441,7 @@
 	width: 132px;
 	height: 214px;
 	border-radius: 3px;
-	background-color: var(--catalog-tag-backgrond-color);
+	background-color: var(--tag-backgrond-color);
 	text-overflow: ellipsis;
 	overflow-y: auto;
 	z-index: 1;

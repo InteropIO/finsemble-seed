@@ -1,16 +1,8 @@
 body {
-    height: 100%;
-    margin: 0px;
-    font-weight: var(--content-font-weight);
-    font-family: var(--font-family);
-    color: var(--content-font-color);
-    font-family: Roboto;
-    font-weight: normal;
     font-style: normal;
     font-stretch: normal;
     line-height: normal;
     letter-spacing: normal;
-    color: var(--appMenu-font-color);
 }
 
 
@@ -180,15 +172,14 @@ img {
 }
 
 .folder-actions-menu {
-    z-index: 11;
+	z-index: 11;
     top: 22px;
 	position: absolute;
 	width: 100px;
 	max-height: 200px;
 	overflow-y: auto;
 	border-radius: 3px;
-  	background-color: var(--slate2);
-	color: #495a69;
+  	background-color: var(--tag-background-color);
 	padding: 5px 10px;
 }
 
@@ -378,32 +369,7 @@ select:focus, option:focus {
 	padding: 3px 5px;
 	margin-right: 5px;
 	border-radius: 2px;
-  	background-color: var(--catalog-tag-background-color);
-}
-
-.tag-item i {
-	font-size: 6px;
-	padding: 0 4px;
-}
-
-.tags-menu-wrapper {
-	height: 17px;
-	border-radius: 2px;
-	background: var(--catalog-tag-background-color);
-	color: #fff;
-	padding: 0 5px;
-	display: table;
-	position: absolute;
-	top: 10px;
-	right: 10px;
-}
-.tags-menu-wrapper span {
-	line-height: 17px;
-	font-size: 10px;
-	cursor: pointer;
-}
-.tags-menu-wrapper span i {
-	margin-right: 5px;
+  	background-color: var(--tag-background-color);
 }
 
 .no-results {
