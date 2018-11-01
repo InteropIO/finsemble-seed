@@ -6,11 +6,10 @@ Logger.log("defaultworkspaces Service starting up");
 
 // Add and initialize any other clients you need to use 
 //   (services are initialised by the system, clients are not)
-let WorkspacesClient = Finsemble.Clients.WorkspacesClient;
-WorkspacesClient.initialize();
+let WorkspaceClient = Finsemble.Clients.WorkspaceClient;
+WorkspaceClient.initialize();
 let ConfigClient = Finsemble.Clients.ConfigClient;
 ConfigClient.initialize();
-
 
 /**
  * 
@@ -40,9 +39,9 @@ function defaultworkspacesService() {
 
 				//check if templates exist as workspaces and create instances of workspaces if not present
 				for (let t=0; t<workspaceTemplateNames.length; t++) {
-					if (initialWorkspaceNames.indexOf(workspaceTemplateNames[t] == -1)) {
+					if (workspaceTemplateNames[t] != "Blank Template" && initialWorkspaceNames.indexOf(workspaceTemplateNames[t] == -1)) {
 						//create an instance of the workspace
-						FSBL.Clients.WorkspaceClient.createNewWorkspace(
+						WorkspaceClient.createNewWorkspace(
 							workspaceTemplateNames[t], 
 							{templateName: workspaceTemplateNames[t], switchAfterCreation: false}, 
 							function(err, response){
