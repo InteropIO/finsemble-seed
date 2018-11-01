@@ -254,6 +254,7 @@
     --appMenu-close-hover-color: var(--secondary-negative-color);
     --appMenu-leftNav-highlighter-hover: var(--slate2);
     --appMenu-leftNav-highlighter: var(--slate3);
+    --appMenu-leftNav-icon-color: var(--blue3);
     --appMenu-background-color: var(--slate4);
     --appMenu-actions-menu-background-color: var(--secondary-background-color);
     --appMenu-app-item-hover-background-color: var(--slate3);
