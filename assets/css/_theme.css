@@ -245,6 +245,11 @@
     --catalog-tag-backgrond-color: var(--slate2);
     --catalog-disabled-button-background-color: var(--gray5);
 
+    /* Shared Tag Styles */
+    --tag-background-color: var(--slate2);
+    --tag-font-color: var(--primary-font-color);
+    --tag-font-weight: var(--primary-font-weight);
+    --tag-close-icon-hover-color: var(--secondary-negative-color);
 
 
     /* App Menu */

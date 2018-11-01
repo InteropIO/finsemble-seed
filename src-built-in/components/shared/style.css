@@ -1,8 +1,8 @@
 .tags-menu-wrapper {
 	height: 17px;
 	border-radius: 2px;
-	background: #67829a;
-	color: var(--appMenu-font-color);
+	background: var(--tag-background-color);
+	color: var(--tag-font-color);
 	padding: 0 5px;
 	display: table;
 	position: absolute;
@@ -29,8 +29,8 @@
 	max-height: 200px;
 	overflow-y: auto;
 	border-radius: 3px;
-  	background-color: var(--slate2);
-	color: #495a69;
+  	background-color: var(--tag-background-color);
+	color: var(--tag-background-color);
 	padding: 5px 10px;
 }
 .tags-menu ul {
@@ -42,13 +42,13 @@
 	line-height: 19px;
 	font-size: 11px;
 	list-style: none;
-	color: #fff;
+	color: var(--tag-font-color);
 }
 
 .app-tag {
 	height: 17px;
 	border-radius: 2px;
-	background-color: #67829a;
+	background-color: var(--tag-background-color);
 	user-select: none;
 	margin: 0 4px;
 	padding: 2px 5px 0 5px;
@@ -63,14 +63,14 @@
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
-	font-family: Roboto;
 	font-size: 10px;
-	font-weight: 300;
+	font-weight: var(--tag-font-weight);
+	font-family: var(--font-family);
 	font-style: normal;
 	font-stretch: normal;
 	line-height: normal;
 	letter-spacing: normal;
-	color: #ffffff;
+	color: var(--tag-font-color);
 	cursor: default;
 }
 
@@ -81,7 +81,7 @@
 }
 
 .tag-delete:hover {
-	color: var(--red1);
+	color: var(--tag-close-icon-hover-color);
 }
 
 .tag-name {
