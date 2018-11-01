@@ -49,7 +49,7 @@ function defaultworkspacesService() {
 						//create an instance of the workspace
 						let definition = {};
 						definition[workspaceTemplateNames[t]] = workspaceTemplates[workspaceTemplateNames[t]];
-						WorkspaceClient.addWorkspaceTemplateDefinition({ workspaceTemplateDefinition: definition }, { force: true }, () => { debugger; });
+						WorkspaceClient.addWorkspaceDefinition({ workspaceJSONDefinition: definition }, { force: true }, () => { debugger; });
 						/*WorkspaceClient.createNewWorkspace(
 							workspaceTemplateNames[t],
 							{templateName: workspaceTemplateNames[t], switchAfterCreation: false},
