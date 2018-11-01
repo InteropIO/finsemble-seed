@@ -127,6 +127,7 @@ img {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
 }
 
 .complex-menu-action {
@@ -171,16 +172,41 @@ img {
     background-color: var(--appMenu-background-color);
 }
 
+/* .folder-actions-menu-wrapper {
+	height: 17px;
+	position: relative;
+	right: 10px;
+}
+
+.folder-actions-menu-wrapper span {
+	line-height: 17px;
+	font-size: 10px;
+	cursor: pointer;
+} */
+
 .folder-actions-menu {
 	z-index: 11;
-    top: 22px;
+    /* top: 22px; */
 	position: absolute;
-	width: 100px;
+	width: 70px;
 	max-height: 200px;
 	overflow-y: auto;
 	border-radius: 3px;
-  	background-color: var(--tag-background-color);
-	padding: 5px 10px;
+  	background-color: var(--appMenu-leftNav-contextMenu-background-color);
+    padding: 5px 10px;
+}
+
+.folder-actions-menu ul {
+	padding: 0;
+	margin: 0;
+}
+
+.folder-actions-menu li {
+    cursor: pointer;
+	line-height: 19px;
+	font-size: 11px;
+	list-style: none;
+	color: var(--appMenu-font-color);
 }
 
 .no-top-border {
