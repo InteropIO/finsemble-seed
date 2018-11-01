@@ -9,7 +9,7 @@ let windowTitleBarStore;
 /**
  * Close button, located on the far right of the window Manager.
  */
-export default class CloseButton extends React.Component{
+export default class CloseButton extends React.Component {
 	constructor(props) {
 		super(props);
 		this.bindCorrectContext();

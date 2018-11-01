@@ -1,11 +1,11 @@
 {
 	"comment": "Top-level application config for development, adding on top of the core config",
-	"defaultStorage": "IndexedDBAdapter",
+	"defaultStorage": "LocalStorageAdapter",
 	"storage": {
 		"topicToDataStoreAdapters": {
-			"finsemble": "IndexedDBAdapter",
-			"finsemble.workspace": "IndexedDBAdapter",
-			"finsemble.workspace.cache": "IndexedDBAdapter"
+			"finsemble": "LocalStorageAdapter",
+			"finsemble.workspace": "LocalStorageAdapter",
+			"finsemble.workspace.cache": "LocalStorageAdapter"
 		},
 		"dataStoreAdapters": {
 			"LocalStorageAdapter": "$applicationRoot/adapters/localStorageAdapter.js",
@@ -36,7 +36,16 @@
 			}
 		},
 		"logger": {
-			"hotkeyShowCentralLogger": ["ctrl","shift","L"]
+			"hotkeyShowCentralLogger": [
+				"ctrl",
+				"shift",
+				"L"
+			]
+		}
+	},
+	"preferences": {
+		"workspaceService": {
+			"promptUserOnDirtyWorkspace": false
 		}
 	},
 	"systemTrayIcon": "$applicationRoot/assets/img/Finsemble_Taskbar_Icon.png",

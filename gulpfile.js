@@ -14,7 +14,7 @@
 	const gulp = require("gulp");
 	const prettyHrtime = require("pretty-hrtime");
 	const watch = require("gulp-watch");
-	const launcher = require("openfin-launcher");	
+	const launcher = require("openfin-launcher");
 	const shell = require("shelljs");
 	const path = require("path");
 	const webpack = require("webpack");
@@ -60,7 +60,7 @@
 		env.PORT = startupConfig[env.NODE_ENV].serverPort;
 	}
 
-	// This variable controls whether the build should watch files for changes. This `startsWith` catches all of the 
+	// This variable controls whether the build should watch files for changes. This `startsWith` catches all of the
 	// tasks that are dev * (dev, dev: fresh, dev: nolaunch), but excludes build:dev because it is intended to only
 	// build for a development environment and not watch for changes.
 	const isRunningDevTask = process.argv[2].startsWith("dev");
@@ -75,10 +75,10 @@
 		/**
 		 * Attach some variables to the taskMethods so that they are available to gulp-extensions.
 		 */
-		distPath : path.join(__dirname, "dist"),
+		distPath: path.join(__dirname, "dist"),
 		srcPath: path.join(__dirname, "src"),
 		startupConfig: startupConfig,
-		
+
 		/**
 		 * Builds the application in the distribution directory. Internal only, don't use because no environment is set!!!!
 		 */
@@ -170,7 +170,7 @@
 					}
 				});
 			}
-	
+
 			//Requires are done in the function because webpack.components.js will error out if there's no vendor-manifest. The first webpack function generates the vendor manifest.
 			async.series([
 				(cb) => {
@@ -218,17 +218,20 @@
 		},
 		checkSymbolicLinks: done => {
 			const FINSEMBLE_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble");
+			const FINSEMBLE_VERSION = require(path.join(FINSEMBLE_PATH, "package.json")).version;
 			const CLI_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-cli");
+			const CLI_VERSION = require(path.join(CLI_PATH, "package.json")).version;
 			const CONTROLS_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-react-controls");
+			const CONTROLS_VERSION = require(path.join(CONTROLS_PATH, "package.json")).version;
 
 			function checkLink(params, cb) {
-				let { path, name } = params;
+				let { path, name, version } = params;
 				if (fs.existsSync(path)) {
 					fs.readlink(path, (err, str) => {
 						if (str) {
-							logToTerminal(`LINK DETECTED: ${name}. Path: ${str}`, "yellow");
+							logToTerminal(`LINK DETECTED: ${name}. @Version ${version} Path: ${str}.`, "yellow");
 						} else {
-							logToTerminal(`Using: @chartiq/${name}`, "magenta");
+							logToTerminal(`Using: @chartiq/${name} @Version ${version}`, "magenta");
 						}
 						cb();
 					});
@@ -241,19 +244,22 @@
 				(cb) => {
 					checkLink({
 						path: FINSEMBLE_PATH,
-						name: "finsemble"
+						name: "finsemble",
+						version: FINSEMBLE_VERSION
 					}, cb)
 				},
 				(cb) => {
 					checkLink({
 						path: CLI_PATH,
-						name: "finsemble-cli"
+						name: "finsemble-cli",
+						version: CLI_VERSION
 					}, cb)
 				},
 				(cb) => {
 					checkLink({
 						path: CONTROLS_PATH,
-						name: "finsemble-react-controls"
+						name: "finsemble-react-controls",
+						version: CONTROLS_VERSION
 					}, cb)
 				},
 			], done)
@@ -453,7 +459,7 @@
 		// Convert every taskMethod into a gulp task that can be run
 		for (var taskName in taskMethods) {
 			var task = taskMethods[taskName];
-			if(typeof task==="function") gulp.task(taskName, taskMethods[taskName]);
+			if (typeof task === "function") gulp.task(taskName, taskMethods[taskName]);
 		}
 
 		// By default run dev

@@ -11,19 +11,23 @@ export default class Logo extends React.PureComponent {
 	}
 	getWrap(cb = Function.prototype) {
 		if (this.wrap) return cb();
-		FSBL.FinsembleWindow.wrap(this.props.windowIdentifier, (err, wrapper) => {
+		FSBL.FinsembleWindow.getInstance(this.props.windowIdentifier, (err, wrapper) => {
 			cb(wrapper);
 		});
 	}
+
 	componentWillReceiveProps(nextProps) {
-		//We only need to re-render the logo if the name of the component changes. Otherwise this sucker would fire umpteen times.
-		this.getWrap((wrapper) => {
-			if (!wrapper.getOptions) {
-				return this.getIconFromConfig(this.props.windowIdentifier);
-			}
-			wrapper.getOptions(this.handleComponentConfig);
-		})
+		//We only need to re-render the logo if the name of the component changes. Otherwise excessive calls to getOptions
+		if (nextProps.windowIdentifier.windowName !== this.props.windowIdentifier.windowName) {
+			this.getWrap((wrapper) => {
+				if (!wrapper.getOptions) {
+					return this.getIconFromConfig(this.props.windowIdentifier);
+				}
+				wrapper.getOptions(this.handleComponentConfig);
+			});
+		}
 	}
+
 
 	getIconFromConfig(wi) {
 		FSBL.Clients.LauncherClient.getComponentDefaultConfig(wi.componentType, (err, config) => {

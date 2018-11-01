@@ -12,7 +12,7 @@ function setZoom(pct) {
 	let FSBLHeader = document.querySelector("#FSBLHeader");
 	if (FSBLHeader) {
 		FSBLHeader.style.zoom = 1;
-	//document.body.style.zoom = 1/pct;
+		//document.body.style.zoom = 1/pct;
 	}
 }
 
@@ -31,7 +31,7 @@ function zoomOut() {
 
 // Startup, attaches ctrl+ and ctrl- as hot keys
 // Checks for an existing zoom state and initializes the screen to that zoom level if set
-function runZoomHandler(){
+function runZoomHandler() {
 	FSBL.Clients.HotkeyClient.addBrowserHotkey(["ctrl", "="], zoomIn);
 	FSBL.Clients.HotkeyClient.addBrowserHotkey(["ctrl", "-"], zoomOut);
 	FSBL.Clients.WindowClient.getComponentState({ field: "fsbl-zoom" }, function (err, state) {
@@ -45,7 +45,7 @@ function runZoomHandler(){
 // TODO, catch and recall scroll position
 
 // Startup pattern for preload. Preloads can come in any order, so we need to wait on either the window event or the FSBL event
-if (FSBL && FSBL.addEventListener) {
+if (window.FSBL && FSBL.addEventListener) {
 	FSBL.addEventListener("onReady", runZoomHandler);
 } else {
 	window.addEventListener("FSBLReady", runZoomHandler);

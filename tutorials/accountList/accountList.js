@@ -136,11 +136,12 @@ function communicateBetweenComponents() {
 	// });
 }
 
-FSBL.addEventListener("onReady", function () {
+if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLready", FSBLReady) }
+function FSBLReady() {
 	//alert(FSBL.Clients.WindowClient.options.customData.component["account-type"]); // --> Step 1.4
 
 	FSBL.Clients.WindowClient.setWindowTitle("Account List");
 	renderPage();
 	getState(); // --> Step 3.1
 	communicateBetweenComponents(); // --> Step 4.1
-});
+}

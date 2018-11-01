@@ -37,8 +37,8 @@ function mouseInBounds(bounds, cb) {
 	});
 
 }
-function mouseInWindow(window, cb) {
-	window.getBounds(function (bounds) {
+function mouseInWindow(win, cb) {
+	win.getBounds(function (err, bounds) {
 		mouseInBounds(bounds, cb)
 	})
 }
@@ -60,10 +60,12 @@ var Actions = {
 			menuStore.setValue({ field: "active", value: true })
 			activeSearchBar = true;
 			if (!menuWindow) {
-				this.setupWindow()
+				return this.setupWindow(() => {
+					this.setFocus(bool, target);
+				})
 			}
 			if (!menuWindow) return;
-			return menuWindow.isShowing((showing) => {
+			return menuWindow.isShowing((err, showing) => {
 				if (showing) return;
 
 				Actions.positionSearchResults();
@@ -74,7 +76,7 @@ var Actions = {
 		if (!menuWindow) {
 			return Actions.handleClose();
 		}
-		menuWindow.isShowing(function (showing) {
+		menuWindow.isShowing(function (err, showing) {
 			//if (!showing) return//console.log("not showing")
 			mouseInWindow(menuWindow, function (err, inBounds) {
 
@@ -104,9 +106,9 @@ var Actions = {
 	},
 	//handleClose gets called for several reasons. One of those is when the window starts moving. If it starts moving, an event is passed in. If the event is passed in, we don't want to animate the window. If it's just a blur, we'll animate the change in size.
 	handleClose(e) {
-		if (!menuWindow) return;
-		menuWindow.isShowing(function (showing) {
+		menuWindow.isShowing(function (err, showing) {
 			if (showing) {
+				console.log("close a window")
 				if (!e && cachedBounds) {
 					finsembleWindow.animate({ transitions: { size: { duration: 150, width: cachedBounds.width } } }, {}, () => {
 						cachedBounds = null;
@@ -121,9 +123,14 @@ var Actions = {
 		});
 
 	},
-	setupWindow() {
-		if (!menuReference.finWindow) return;
-		menuWindow = fin.desktop.Window.wrap(menuReference.finWindow.app_uuid, menuReference.finWindow.name);
+
+	setupWindow(cb = Function.prototype) {
+		console.log("SETUP WINDOW!", menuReference.name);
+		//menuWindow = fin.desktop.Window.wrap(menuReference.finWindow.app_uuid, menuReference.finWindow.name);
+		FSBL.FinsembleWindow.getInstance({ windowName: menuReference.name }, (err, wrap) => {
+			menuWindow = wrap;
+			cb();
+		});
 	},
 	getComponentList(cb) {
 
@@ -140,7 +147,6 @@ var Actions = {
 		menuStore.setValue({ field: "list", value: list })
 	},
 	updateMenuReference(err, data) {
-
 		menuReference = data.value;
 		if (!menuWindow) {
 			Actions.setupWindow()
@@ -191,20 +197,6 @@ function createStore(done) {
 
 		store.getValues(["owner", "menuSpawned"], function (err, data) {
 			store.addListener({ field: "menuIdentifier" }, Actions.updateMenuReference);
-			if (!data.menuSpawned) {
-				FSBL.Clients.LauncherClient.spawn("searchMenu", { name: "searchMenu." + finWindow.name, data: { owner: finWindow.name } }, function (err, data) {
-					//console.log("Err", err, data)
-					menuStore.setValue({ field: "menuIdentifier", value: data })
-					menuWindow = fin.desktop.Window.wrap(data.finWindow.app_uuid, data.finWindow.name);
-					menuStore.setValue({ field: "menuSpawned", value: true })
-				});
-			} else {
-				menuStore.getValue("menuIdentifier", function (err, menuIdentifier) {
-					menuReference = menuIdentifier;
-					Actions.setupWindow();
-				})
-
-			}
 			menuStore.Dispatcher.register(function (action) {
 				if (action.actionType === "menuBlur") {
 					Actions.menuBlur();
@@ -212,16 +204,27 @@ function createStore(done) {
 					Actions.handleClose();
 				}
 			});
+
+			if (!data.menuSpawned) {
+				FSBL.Clients.LauncherClient.spawn("searchMenu", { name: "searchMenu." + finWindow.name, data: { owner: finWindow.name } }, function (err, data) {
+					//console.log("Err", err, data)
+					menuStore.setValue({ field: "menuIdentifier", value: data.windowIdentifier })
+					Actions.setupWindow(() => {
+						menuStore.setValue({ field: "menuSpawned", value: true })
+						done();
+					});
+				});
+			} else {
+				menuStore.getValue("menuIdentifier", function (err, menuIdentifier) {
+					menuReference = menuIdentifier;
+					Actions.setupWindow(done);
+				})
+			}
 		})
-		done();
 	});
 
 	finsembleWindow.listenForBoundsSet();
 	finsembleWindow.addListener("startedMoving", Actions.handleClose);
-	finsembleWindow.addListener("focused", () => {
-		console.log("window Focused");
-		Actions.setFocus(true);
-	})
 	finsembleWindow.addListener("blurred", function (event) {
 		Actions.setFocus(false);
 	}, function () {

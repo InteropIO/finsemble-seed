@@ -41,11 +41,11 @@ export default class MaximizeButton extends React.Component {
 	 * @memberof MaximizeButton
 	 */
 	onRestored(err, response) {
-	//console.log("onRestored")
+		//console.log("onRestored")
 		this.setState({ maximized: false });
 	}
 	onMaximized() {
-	//console.log("onMaximized")
+		//console.log("onMaximized")
 		this.setState({ maximized: true });
 	}
 	/**
@@ -63,7 +63,7 @@ export default class MaximizeButton extends React.Component {
 	 * @memberof MaximizeButton
 	 */
 	componentWillMount() {
-	//console.log("componentWillMount")
+		//console.log("componentWillMount")
 		FSBL.Clients.WindowClient.finsembleWindow.addListener("maximized", this.onMaximized)
 		FSBL.Clients.WindowClient.finsembleWindow.addListener("restored", this.onRestored);
 
@@ -76,7 +76,7 @@ export default class MaximizeButton extends React.Component {
 	 * @memberof MaximizeButton
 	 */
 	componentWillUnmount() {
-	//console.log("unmount this")
+		//console.log("unmount this")
 		FSBL.Clients.WindowClient.finsembleWindow.removeListener("maximized", this.onMaximized)
 		FSBL.Clients.WindowClient.finsembleWindow.removeListener("restored", this.onRestored)
 		//windowTitleBarStore.removeListener({ field: "Maximize.maximized" }, this.onMaxChange);
