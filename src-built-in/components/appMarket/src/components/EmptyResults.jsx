@@ -2,12 +2,12 @@
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
-/**
- * This component is the name of a component and a pin that will pin that component to all toolbars.
- *
- */
 import React from "react";
 
+/**
+ * Empty Results to show on the search page when filters/search text apply to zero results
+ * @param {*} props
+ */
 const EmptyResults = props => {
 	return (
 		<div className='app-results'>

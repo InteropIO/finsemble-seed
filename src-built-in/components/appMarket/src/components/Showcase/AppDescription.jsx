@@ -2,12 +2,13 @@
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
-/**
- * This component is the name of a component and a pin that will pin that component to all toolbars.
- *
- */
 import React from "react";
 
+/**
+ * AppShowcase description section
+ * @param {object} props Component props
+ * @param {string} props.description The app description
+ */
 const AppDescription = props => {
 	return (
 		<div className="app-notes description">

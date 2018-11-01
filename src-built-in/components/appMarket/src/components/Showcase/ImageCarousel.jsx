@@ -8,6 +8,13 @@
  */
 import React from "react";
 
+/**
+ * The image carousel which displays images for a single app
+ * @param {object} props Component props
+ * @param {func} props.nextImage Function supplied by the parent to page through the images (right)
+ * @param {func} props.previousImage Function supplied by the parent to page through the images (left)
+ * @param {array} props.images The images of the displayed app
+ */
 const ImageCarousel = props => {
 	return (
 		<div className="image-carousel-container">

@@ -2,10 +2,6 @@
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
-/**
- * This component is the name of a component and a pin that will pin that component to all toolbars.
- *
- */
 import React, { Component } from "react";
 
 class AppCard extends Component {
@@ -30,39 +26,67 @@ class AppCard extends Component {
 		this.removeApp = this.removeApp.bind(this);
 		this.addTag = this.addTag.bind(this);
 	}
+	/**
+	 * Toggles the hightlight state of the checkmark for installing an app
+	 */
 	toggleHighlight() {
 		this.setState({
 			checkHighlighted: !this.state.checkHighlighted
 		})
 	}
+	/**
+	 * Toggles the 'highlight' state of the app title. On mouse over, the title is underlined to show that its a link
+	 */
 	toggleTitleUnderline() {
 		this.setState({
 			titleUnderlined: !this.state.titleUnderlined
 		});
 	}
+	/**
+	 * Shows the checkmark for adding/removing an app
+	 */
 	showCheck() {
 		this.setState({
 			checkShown: true
 		});
 	}
+	/**
+	 * Higes the checkmark for adding/removing an app
+	 */
 	hideCheck() {
 		this.setState({
 			checkShown: false
 		});
 	}
+	/**
+	 * Calls parent passed function to open the app showcase for the supplied app
+	 */
 	openAppShowcase() {
 		this.props.openAppShowcase(this.state.appName);
 	}
+	/**
+	 * Prevents bubbling (which would open the app showcase), then calls to add an app
+	 * @param {object} e React Synthetic event
+	 */
 	addApp(e) {
 		e.preventDefault();
 		e.stopPropagation();
 		this.props.addApp(this.state.appName)
 	}
+	/**
+	 * Prevents bubbling (which would open the app showcase), then calls to remove an app
+	 * @param {object} e React Synthetic event
+	 */
 	removeApp(e) {
 		e.preventDefault();
 		e.stopPropagation();
 		this.props.removeApp(this.state.appName);
 	}
+	/**
+	 * Prevents bubbling (which would open the app showcase), then calls to add a filtering tag
+	 * @param {string} name The tag name to add
+	 * @param {object} e React Synthetic event
+	 */
 	addTag(name, e) {
 		e.preventDefault();
 		e.stopPropagation();

@@ -2,12 +2,13 @@
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
-/**
- * This component is the name of a component and a pin that will pin that component to all toolbars.
- *
- */
 import React from "react";
 
+/**
+ * Toast component. Displays a success/failure message when an app is added/removed
+ * @param {object} props Component props
+ * @param {string} props.installationActionTaken String containing the action that occured
+ */
 const Toast = props => {
 	let classes = "toast-content";
 	let icon = null, messageContent = null;

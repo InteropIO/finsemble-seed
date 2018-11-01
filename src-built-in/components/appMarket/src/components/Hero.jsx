@@ -8,6 +8,11 @@
  */
 import React, { Component } from "react";
 
+/**
+ * The hero component at the top of the App Catalog homepage. Display images and textual descriptions of showcased apps
+ * @param {object} props Component props
+ * @param {}
+ */
 export default class Hero extends Component {
 	constructor(props) {
 		super(props);
@@ -20,6 +25,10 @@ export default class Hero extends Component {
 		this.changePage = this.changePage.bind(this);
 		this.openApp = this.openApp.bind(this);
 	}
+	/**
+	 * Changes the page of the hero component depending on the action its handed
+	 * @param {string} action One of 'page_down' or 'page_up'. Any other action is ignored
+	 */
 	changePage(action) {
 		let { cards } = this.props;
 		let newActive = this.state.active;
@@ -43,6 +52,9 @@ export default class Hero extends Component {
 			active: newActive
 		});
 	}
+	/**
+	 * Called the parent function to open the AppShowcase for the clicked app
+	 */
 	openApp() {
 		let name = this.props.cards[this.state.active].title || this.props.cards[this.state.active].name;
 		this.props.openAppShowcase(name);

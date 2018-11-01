@@ -2,12 +2,14 @@
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
-/**
- * This component is the name of a component and a pin that will pin that component to all toolbars.
- *
- */
 import React from "react";
 
+/**
+ * The image modal (lightbox)
+ * @param {object} props Component props
+ * @param {func} props.closeModal Parent function to close the modal. Actual display is handled by CSS
+ * @param {object} props.children The inner contents (elements) of the array
+ */
 const Modal = props => {
 	let modalClassName = "modal";
 	if (props.open) {

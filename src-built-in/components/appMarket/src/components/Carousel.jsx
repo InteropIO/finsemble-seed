@@ -2,15 +2,20 @@
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
-/**
- * This component is the name of a component and a pin that will pin that component to all toolbars.
- *
- */
 import React, { Component } from "react";
 
 //components
 import AppCard from './AppCard';
-
+/**
+ * A coursel of AppCards
+ * @param {object} props Component props
+ * @param {array} props.cards An array of AppCards to display in a carousel
+ * @param {string} props.tag The carousel's tag (title)
+ * @param {func} props.addApp See AppCard.jsx
+ * @param {func} props.removeApp See AppCard.jsx
+ * @param {func} props.openAppShowcase See AppCard.jsx
+ * @param {func} props.addTag See AppCard.jsx
+ */
 export default class Carousel extends Component {
 	constructor(props) {
 		super(props);
@@ -26,25 +31,52 @@ export default class Carousel extends Component {
 		this.highlightTitle = this.highlightTitle.bind(this);
 		this.seeMore = this.seeMore.bind(this);
 	}
+	/**
+	 * Pages through the carousel by one card (right)
+	 */
 	pageUp() {
-		let newFirstIndex = (this.state.firstIndex + 1 > this.props.cards.length - 1) ? 0 : this.state.firstIndex + 1;
+		let index = this.state.firstIndex;
+
+		//If increasing the carousel's first index will move beyond the array's limits, we reset back to zero
+		if (index + 1 > this.props.cards.length - 1) {
+			index = 0;
+		} else {
+			index++;
+		}
 
 		this.setState({
-			firstIndex: newFirstIndex
+			firstIndex: index
 		});
 	}
+	/**
+	 * Pages through the carousel by one card (left)
+	 */
 	pageDown() {
-		let newFirstIndex = (this.state.firstIndex - 1 < 0) ? this.props.cards.length - 1 : this.state.firstIndex - 1;
+		let index = this.state.firstIndex;
+
+		//If increasing the carousel's first index will move beyond the array's limits, we reset back to zero
+		if (index - 1 < 0) {
+			index = this.props.cards.length - 1;
+		} else {
+			index--;
+		}
 
 		this.setState({
-			firstIndex: newFirstIndex
+			firstIndex: index
 		});
 	}
+	/**
+	 * Toggles the highlight on a carousel's title. When a user mouses over, we want to style it so its obvious its a link
+	 * @param {*} highlight
+	 */
 	highlightTitle(highlight) {
 		this.setState({
 			titleHighlighted: highlight
 		});
 	}
+	/**
+	 * Calls the parents seeMore function, which will add the selected tag as a filter
+	 */
 	seeMore() {
 		this.props.seeMore(this.props.tag);
 	}

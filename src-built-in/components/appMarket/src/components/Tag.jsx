@@ -2,12 +2,14 @@
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
-/**
- * This component is the name of a component and a pin that will pin that component to all toolbars.
- *
- */
 import React from "react";
 
+/**
+ * A display component for tag name. Contains a stylized label
+ * @param {object} props Component props
+ * @param {string} props.name The name of the tag
+ * @param {func} props.removeTag Parent function to remove a tag from active filters
+ */
 const Tag = props => {
 	const remove = () => {
 		props.removeTag(props.name);

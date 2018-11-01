@@ -2,12 +2,13 @@
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
-/**
- * This component is the name of a component and a pin that will pin that component to all toolbars.
- *
- */
 import React from "react";
 
+/**
+ * AppShowcase release notes section. Display information about app's most recent change notes
+ * @param {object} props Component props
+ * @param {string} props.releaseNotes The release notes
+ */
 const ReleaseNotes = props => {
 	return (
 		<div className="app-notes release-notes">

@@ -2,12 +2,16 @@
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
-/**
- * This component is the name of a component and a pin that will pin that component to all toolbars.
- *
- */
+
 import React from "react";
 
+/**
+ * The header of the AppShowcase. Contains the actionable buttons (to add/remove and app) and the app title and icon
+ * @param {object} props Component props
+ * @param {string} props.iconUrl The image url for the app's icon
+ * @param {string} props.name The app name
+ * @param {func} props.appAction The function to call when a button is clicked.
+ */
 const Header = props => {
 	return (
 		<div className="header">

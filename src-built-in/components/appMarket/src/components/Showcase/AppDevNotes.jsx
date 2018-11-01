@@ -2,12 +2,15 @@
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
-/**
- * This component is the name of a component and a pin that will pin that component to all toolbars.
- *
- */
 import React from "react";
 
+/**
+ * AppShowcase dev notes section. Contains developer information
+ * @param {object} props Component props
+ * @param {string} props.publisher The name of this app's publisher
+ * @param {func} props.openSite Parent function to launch the developer's site in Finsemble window
+ * @param {string} props.email The developer's contact email
+ */
 const AppDevNotes = props => {
 	return (
 		<div className="app-notes developer">

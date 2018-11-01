@@ -41,45 +41,89 @@ class AppShowcase extends Component {
 		this.addApp = this.addApp.bind(this);
 		this.removeApp = this.removeApp.bind(this);
 	}
+	/**
+	 * Pages right through the app's images.
+	 */
 	nextImage() {
-		let index = this.state.imageIndex + 1 > this.props.app.images.length - 1 ? 0 : this.state.imageIndex + 1;
+		let index = this.state.imageIndex;
+
+		//We want to increase the image index for the carousel, but if this paging action takes us past the length of the image array, we need to reset
+		if (index + 1 > this.props.app.images.length) {
+			index = 0;
+		} else {
+			index++;
+		}
+
 
 		this.setState({
 			imageIndex: index
 		});
 	}
+	/**
+	 * Pages left through the app's images.
+	 */
 	previousImage() {
-		let index = this.state.imageIndex - 1 < 0 ? this.props.app.images.length - 1 : this.state.imageIndex - 1;
+		let index = this.state.imageIndex;
+
+		//We want to decrease the image index for the carousel, but if this paging action takes us under 0, we need to reset
+		if (index - 1 < 0) {
+			index = this.props.app.images.length - 1;
+		} else {
+			index--;
+		}
 
 		this.setState({
 			imageIndex: index
 		});
 	}
+	/**
+	 * Opens the publisher's website.
+	 */
+	//NOTE: There is currently no prop in the FDC spec that has a dev site.
 	openSite() {
 		console.log('open the developers site');
 	}
+	/**
+	 * Opens the image modal (lightbox). Sets the image to display
+	 * @param {string} url The image url to display in the lightbox
+	 */
 	openModal(url) {
 		this.setState({
 			modalImage: url,
 			imageModalOpen: true
 		});
 	}
+	/**
+	 * Closes the image modal
+	 */
 	closeModal() {
 		this.setState({
 			imageModalOpen: false,
 			modalImage: null
 		});
 	}
+	/**
+	 * When the check is clicked, we want to add the app and stop any other events (bubbling) from occuring
+	 * @param {object} e The React Synthetic event
+	 */
 	addApp(e) {
 		e.preventDefault();
 		e.stopPropagation();
 		this.props.addApp(this.state.name);
 	}
+	/**
+	 * When the check is clicked, we want to remove the app and stop any other events (bubbling) from occuring
+	 * @param {object} e The React Synthetic event
+	 */
 	removeApp(e) {
 		e.preventDefault();
 		e.stopPropagation();
 		this.props.removeApp(this.state.name);
 	}
+	/**
+	 * Calls the parents function to add a tag to list of filters
+	 * @param {string} name The tag name
+	 */
 	addTag(name) {
 		this.props.addTag(name);
 	}

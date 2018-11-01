@@ -2,12 +2,14 @@
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
-/**
- * This component is the name of a component and a pin that will pin that component to all toolbars.
- *
- */
 import React from "react";
 
+/**
+ * AppShowcase support notes section.
+ * @param {object} props Component props
+ * @param {string} props.email The publisher's support email address
+ * @param {array} props.tags An array containing the names of all tags that apply to this app
+ */
 const SupportNotes = props => {
 	return (
 		<div className="dev-notes support">
