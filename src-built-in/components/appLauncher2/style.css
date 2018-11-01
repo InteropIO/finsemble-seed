@@ -121,6 +121,24 @@ img {
     color: var(--yellow3);
 }
 
+.left-nav-label input {
+    color: var(--appMenu-font-color);
+	/* width: calc(100% - 72px); */
+    /* height: 17px; */
+    font-family: var(--font-family);
+    font-weight: var(--primary-font-weight);
+	background: none;
+	border: 0;
+	border-bottom: solid 1px var(--appMenu-search-input-inactive-color);
+	font-size: 14px;
+	transition: .2s ease-in;
+}
+
+.left-nav-label input:focus {
+    border-bottom: solid 1px var(--appMenu-search-input-active-color);
+	outline: none;
+}
+
 .complex-menu-section-toggle {
     padding: 5px 5px 5px 0px;
     padding-left: 7px;

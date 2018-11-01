@@ -270,5 +270,5 @@
     --appMenu-sort-inactive-border-color: var(--gray5);
     --appMenu-sort-active-color: var(--primary-accent-color);
     --appMenu-search-input-inactive-color: var(--blue4);
-    --appMenu-search-input-active-color: var(--blue4);
+    --appMenu-search-input-active-color: var(--blue2);
 }
