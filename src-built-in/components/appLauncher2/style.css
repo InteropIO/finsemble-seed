@@ -123,8 +123,7 @@ img {
 
 .left-nav-label input {
     color: var(--appMenu-font-color);
-	/* width: calc(100% - 72px); */
-    /* height: 17px; */
+    width: 100%;
     font-family: var(--font-family);
     font-weight: var(--primary-font-weight);
 	background: none;
