@@ -157,7 +157,10 @@
 	font-size: 14px;
 	font-weight: var(--primary-font-weight);
 	color: var(--catalog-font-color);
-	text-overflow: clip;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	margin: 18px 0;
 }
 
 .app-card .app-title.highlighted {
