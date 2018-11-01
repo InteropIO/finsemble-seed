@@ -45,7 +45,7 @@ function defaultworkspacesService() {
 
 				//check if templates exist as workspaces and create instances of workspaces if not present
 				for (let t=0; t<workspaceTemplateNames.length; t++) {
-					if (workspaceTemplateNames[t] != "Blank Template" /*&& initialWorkspaceNames.indexOf(workspaceTemplateNames[t] == -1 )*/) {
+					if (workspaceTemplateNames[t] != "Blank Template" && initialWorkspaceNames.indexOf(workspaceTemplateNames[t] == -1 )) {
 						//create an instance of the workspace
 						let definition = {};
 						definition[workspaceTemplateNames[t]] = workspaceTemplates[workspaceTemplateNames[t]];
