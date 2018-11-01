@@ -85,11 +85,6 @@ img {
     background-color: var(--appMenu-leftNav-background-color);
 }
 
-.left-nav-label {
-    display: flex;
-    align-items: center;
-}
-
 .complex-menu-header-wrapper {
     display: flex;
     justify-content: space-between;
@@ -119,6 +114,11 @@ img {
 	margin-top: 3px;
 }
 
+.left-nav-label {
+    display: flex;
+    align-items: center;
+}
+
 .left-nav-label i {
     padding-right: 4px;
     font-size: 13px;
@@ -133,7 +133,7 @@ img {
     padding: 5px 5px 5px 0px;
     padding-left: 7px;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
 }
 
@@ -410,10 +410,6 @@ select:focus, option:focus {
     line-height: 22px;
     margin-top: 20px;
     text-align: center;
-}
-
-.ff-favorite {
-    margin-top: -1px;
 }
 
 .ff-plus-circle, .ff-dashboard-new {
