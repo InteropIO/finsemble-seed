@@ -53,12 +53,17 @@ export default class Hero extends Component {
 		let { cards } = this.props;
 		let contentTitle = cards[active].title === undefined ? cards[active].name : cards[active].title
 		let contentMsg = cards[active].description;
+		let imageUrl = cards[active].images ? cards[active].images[0].url : "../assets/placeholder.svg";
+
+		let bgImageStyle = {
+			background: "url(" + imageUrl + ") no-repeat fixed center"
+		};
 
 		return (
 			<div>
 				<div className='hero-main'>
 					<i className='ff-chevron-left' onClick={this.changePage.bind(this, 'page_down')} />
-					<div className='hero_selected_content' onClick={this.openApp}>
+					<div className='hero_selected_content' onClick={this.openApp} style={bgImageStyle}>
 						<div className='selected-content-title'>
 							{contentTitle}
 						</div>

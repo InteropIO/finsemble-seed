@@ -5,6 +5,8 @@ export default {
 	addNewFolder,
 	addAppToFolder,
 	removeAppFromFolder,
+	renameFolder,
+	deleteFolder,
 	deleteTag,
 	reorderFolders,
 	getFolders,
@@ -40,7 +42,7 @@ function getValue(field) {
 			} else {
 				reject(error)
 			}
-			
+
 		})
 	})
 }
@@ -83,8 +85,33 @@ async function addNewFolder(name) {
 	return newFolder
 }
 
-async function addAppToFolder(folder, app) {
-	const folders = await getFolders()
+function deleteFolder(name) {
+	const folders = getFolders();
+	const newFolders = folders.filter((folder) => {
+		if (folder.name !== name) return true;
+	});
+	_setFolders(newFolders);
+}
+
+function renameFolder(oldName, newName) {
+	const folders = getFolders();
+	let targetFolder;
+	const newFolders = folders.map((folder) => {
+		if (folder.name === oldName) {
+			folder.name = newName;
+			targetFolder = folder;
+		}
+		return folder;
+	});
+	_setFolders(newFolders);
+	getStore().setValue({
+		field: 'activeFolder',
+		value: newName
+	});
+}
+
+function addAppToFolder(folder, app) {
+	const folders = getFolders()
 	const index = folders.findIndex((item) => {
 		return item.name === folder.name
 	})

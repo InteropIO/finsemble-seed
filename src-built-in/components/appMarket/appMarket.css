@@ -160,6 +160,10 @@
 	text-overflow: clip;
 }
 
+.app-card .app-title.highlighted {
+	text-decoration: underline;
+}
+
 .app-card .app-title.entitled {
 	opacity: 0.4;
 }

@@ -373,3 +373,8 @@ select:focus, option:focus {
 .ff-plus-circle, .ff-dashboard-new {
     padding-top: 2px;
 }
+
+.tag-name.highlight {
+    text-decoration: underline;
+    cursor: pointer;
+}

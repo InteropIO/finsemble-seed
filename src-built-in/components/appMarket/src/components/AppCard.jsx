@@ -14,6 +14,7 @@ class AppCard extends Component {
 		this.state = {
 			checkShown: false,
 			checkHighlighted: false,
+			titleUnderlined: false,
 			appName: this.props.title || this.props.name,
 			entitled: this.props.entitled ? this.props.entitled : false
 		};
@@ -21,6 +22,7 @@ class AppCard extends Component {
 	}
 	bindCorrectContext() {
 		this.toggleHighlight = this.toggleHighlight.bind(this);
+		this.toggleTitleUnderline = this.toggleTitleUnderline.bind(this);
 		this.showCheck = this.showCheck.bind(this);
 		this.hideCheck = this.hideCheck.bind(this);
 		this.openAppShowcase = this.openAppShowcase.bind(this);
@@ -32,6 +34,11 @@ class AppCard extends Component {
 		this.setState({
 			checkHighlighted: !this.state.checkHighlighted
 		})
+	}
+	toggleTitleUnderline() {
+		this.setState({
+			titleUnderlined: !this.state.titleUnderlined
+		});
 	}
 	showCheck() {
 		this.setState({
@@ -70,6 +77,8 @@ class AppCard extends Component {
 		if (this.state.checkHighlighted || this.props.installed) imageIconClasses += " highlighted"
 		else imageIconClasses += " faded";
 
+		let titleClass = this.state.titleUnderlined ? "app-title highlighted" : "app-title";
+
 		let entitled = this.state.entitled ? " entitled" : "";
 
 		let addApp = this.props.installed ? this.removeApp : this.addApp;
@@ -80,7 +89,7 @@ class AppCard extends Component {
 					{entitled || !showCheck ? null : <i className={imageIconClasses} onMouseEnter={this.toggleHighlight} onMouseLeave={this.toggleHighlight} onClick={addApp}></i>}
 					<img className={'app-image' + entitled} src={imageUrl} />
 				</div>
-				<h4 className={'app-title' + entitled}>{title}</h4>
+				<h4 className={titleClass} onMouseEnter={this.toggleTitleUnderline} onMouseLeave={this.toggleTitleUnderline}>{title}</h4>
 				<div className='footer'>
 					<span className={"app-tags" + entitled}>
 						<i className="ff-tag"></i>

@@ -1,7 +1,7 @@
 /*!
 * Copyright 2018 by ChartIQ, Inc.
 * All rights reserved.
-* 
+*
 */
 
 import React from 'react'
@@ -18,6 +18,7 @@ export default class AppActionsMenu extends React.Component {
 		}
 		// Bind context
 		this.onAddToFavorite = this.onAddToFavorite.bind(this)
+		this.onRemoveFromFavorite = this.onRemoveFromFavorite.bind(this);
 		this.onViewInfo = this.onViewInfo.bind(this)
 		this.toggleMenu = this.toggleMenu.bind(this)
 		this.onRemove = this.onRemove.bind(this)
@@ -35,7 +36,15 @@ export default class AppActionsMenu extends React.Component {
 		storeActions.addAppToFolder(favorite, this.props.app)
 		this.setState({
 			isVisible: false
-		})		
+		})
+	}
+
+	onRemoveFromFavorite() {
+		const favorite = storeActions.getFolders().find((folder) => {
+			return folder.name === "Favorites";
+		});
+		storeActions.removeAppFromFolder(favorite, this.props.app);
+		this.toggleMenu();
 	}
 
 	onViewInfo() {
@@ -50,16 +59,18 @@ export default class AppActionsMenu extends React.Component {
 	}
 
 	renderList() {
-		const folder = this.props.folder
+		const folder = storeActions.getActiveFolder();
+
+		let favoritesActionOnClick = this.props.isFavorite ? this.onRemoveFromFavorite : this.onAddToFavorite;
+		let favoritesText = this.props.isFavorite ? "Remove from favorites" : "Add to favorites";
 		return (
 			<div onMouseLeave={this.state.isVisible ? this.toggleMenu : null}
 				className="actions-menu" style={{ right: 0 }}>
 				<ul>
-					{folder.name !== 'Favorites' &&
-						<li onClick={this.onAddToFavorite} >Add Favorite</li>
-					}
+					<li onClick={favoritesActionOnClick}>{favoritesText}</li>
 					<li onClick={this.onViewInfo}>View Info</li>
-					<li onClick={this.onRemove}>Remove from {folder.name}</li>
+					{folder.name !== "Favorites" &&
+						<li onClick={this.onRemove}>Remove from {folder.name}</li>}
 				</ul>
 			</div>
 		)
