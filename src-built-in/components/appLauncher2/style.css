@@ -50,6 +50,7 @@ img {
 .bottom {
     position: absolute;
     bottom: 12px;
+    width: 125px;
 }
 
 .bottom .complex-menu-section-toggle {
@@ -87,7 +88,6 @@ img {
 .left-nav-label {
     display: flex;
     align-items: center;
-    width: 90px;
 }
 
 .complex-menu-header-wrapper {
@@ -133,7 +133,7 @@ img {
     padding: 5px 5px 5px 0px;
     padding-left: 7px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
 }
 
@@ -163,6 +163,11 @@ img {
     background-color: var(--appMenu-leftNav-highlighter-hover);
 }
 
+.complex-menu-action:hover {
+    cursor: pointer;
+    background-color: var(--appMenu-leftNav-highlighter-hover);
+}
+
 .active-section-toggle {
     background-color: var(--appMenu-leftNav-highlighter);
 }
@@ -172,6 +177,19 @@ img {
     padding: .75em .75em .75em 0;
     align-content: flex-start;
     background-color: var(--appMenu-background-color);
+}
+
+.folder-actions-menu {
+    z-index: 11;
+    top: 22px;
+	position: absolute;
+	width: 100px;
+	max-height: 200px;
+	overflow-y: auto;
+	border-radius: 3px;
+  	background-color: var(--slate2);
+	color: #495a69;
+	padding: 5px 10px;
 }
 
 .no-top-border {
