@@ -47,7 +47,9 @@ function defaultworkspacesService() {
 				for (let t=0; t<workspaceTemplateNames.length; t++) {
 					if (workspaceTemplateNames[t] != "Blank Template" /*&& initialWorkspaceNames.indexOf(workspaceTemplateNames[t] == -1 )*/) {
 						//create an instance of the workspace
-						WorkspaceClient.addWorkspaceTemplateDefinition({ workspaceTemplateDefinition: workspaceTemplates[workspaceTemplateNames[t]] }, { force: true });
+						let definition = {};
+						definition[workspaceTemplateNames[t]] = workspaceTemplates[workspaceTemplateNames[t]];
+						WorkspaceClient.addWorkspaceTemplateDefinition({ workspaceTemplateDefinition: definition }, { force: true }, () => { debugger; });
 						/*WorkspaceClient.createNewWorkspace(
 							workspaceTemplateNames[t],
 							{templateName: workspaceTemplateNames[t], switchAfterCreation: false},
