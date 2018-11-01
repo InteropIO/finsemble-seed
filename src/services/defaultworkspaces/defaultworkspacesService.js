@@ -1,18 +1,24 @@
-const Finsemble = require("@chartiq/finsemble");
-const RouterClient = Finsemble.Clients.RouterClient;
-const Logger = Finsemble.Clients.Logger;
+const FSBL = require("@chartiq/finsemble");
+window.FSBL = FSBL;
+FSBL.addEventListener = function (event, cb) {
+	if (event == "onReady") {
+		cb();
+	}
+}
+const RouterClient = FSBL.Clients.RouterClient;
+const Logger = FSBL.Clients.Logger;
 Logger.start();
 Logger.log("defaultworkspaces Service starting up");
 
-// Add and initialize any other clients you need to use 
+// Add and initialize any other clients you need to use
 //   (services are initialised by the system, clients are not)
-let WorkspaceClient = Finsemble.Clients.WorkspaceClient;
+let WorkspaceClient = FSBL.Clients.WorkspaceClient;
 WorkspaceClient.initialize();
-let ConfigClient = Finsemble.Clients.ConfigClient;
+let ConfigClient = FSBL.Clients.ConfigClient;
 ConfigClient.initialize();
 
 /**
- * 
+ *
  * @constructor
  */
 function defaultworkspacesService() {
@@ -42,8 +48,8 @@ function defaultworkspacesService() {
 					if (workspaceTemplateNames[t] != "Blank Template" && initialWorkspaceNames.indexOf(workspaceTemplateNames[t] == -1)) {
 						//create an instance of the workspace
 						WorkspaceClient.createNewWorkspace(
-							workspaceTemplateNames[t], 
-							{templateName: workspaceTemplateNames[t], switchAfterCreation: false}, 
+							workspaceTemplateNames[t],
+							{templateName: workspaceTemplateNames[t], switchAfterCreation: false},
 							function(err, response){
 								Logger.log("Created default workspace: " + workspaceTemplateNames[t]);
 							}
@@ -63,8 +69,8 @@ function defaultworkspacesService() {
 	}
 
 	/**
-	 * Creates a router endpoint for you service. 
-	 * Add query responders, listeners or pub/sub topic as appropriate. 
+	 * Creates a router endpoint for you service.
+	 * Add query responders, listeners or pub/sub topic as appropriate.
 	 * @private
 	 */
 	this.createRouterEndpoints = function () {
@@ -72,7 +78,7 @@ function defaultworkspacesService() {
 		RouterClient.addResponder("defaultworkspaces functions", function(error, queryMessage) {
 			if (!error) {
 				Logger.log('defaultworkspaces Query: ' + JSON.stringify(queryMessage));
-				
+
 				if (queryMessage.data.query === "myFunction") {
 					try {
 						queryMessage.sendQueryResponse(null, self.myFunction());
@@ -86,13 +92,13 @@ function defaultworkspacesService() {
 			} else {
 				Logger.error("Failed to setup defaultworkspaces query responder", error);
 			}
-		});	
+		});
 	};
 
 	return this;
 };
 
-defaultworkspacesService.prototype = new Finsemble.baseService({
+defaultworkspacesService.prototype = new FSBL.baseService({
 	startupDependencies: {
 		// add any services or clients that should be started before your service
 		services: ["workspaceService", "storageService"],
