@@ -14,9 +14,10 @@ export default class FoldersList extends React.Component {
 			activeFolder: 'My Apps'
 		}
 		this.setStateValues()
-		this.renameFolder = this.renameFolder.bind(this);
-		this.changeFolderName = this.changeFolderName.bind(this);
-		this.keyPressed = this.keyPressed.bind(this);
+		this.renameFolder = this.renameFolder.bind(this)
+		this.changeFolderName = this.changeFolderName.bind(this)
+		this.onAppFoldersUpdate = this.onAppFoldersUpdate.bind(this)
+		this.keyPressed = this.keyPressed.bind(this)
 	}
 
 	async setStateValues() {
@@ -58,11 +59,11 @@ export default class FoldersList extends React.Component {
 	}
 
 	componentWillMount() {
-		getStore().addListener({ field: 'folders' }, this.onAppFoldersUpdate.bind(this))
+		getStore().addListener({ field: 'folders' }, this.onAppFoldersUpdate)
 	}
 
 	componentWillUnmount() {
-		getStore().removeListener({ field: 'folders' }, this.onAppFoldersUpdate.bind(this))
+		getStore().removeListener({ field: 'folders' }, this.onAppFoldersUpdate)
 	}
 
 	renameFolder(name) {
@@ -79,7 +80,15 @@ export default class FoldersList extends React.Component {
 
 	keyPressed(e) {
 		if (e.key === "Enter") {
-			let oldName = this.state.renamingFolder, newName = this.state.folderNameInput;
+			const input = this.state.folderNameInput.trim()
+			const oldName = this.state.renamingFolder, newName = input
+			// Check user input to make sure its at least 1 character
+			// made of string, number or both
+			if (!/^([a-zA-Z0-9\s]{1,})$/.test(input)) {
+				// Do not rename
+				console.warn('A valid folder name is required. /^([a-zA-Z0-9\s]{1,})$/')
+				return
+			}
 			this.setState({
 				folderNameInput: "",
 				renamingFolder: null
@@ -98,8 +107,10 @@ export default class FoldersList extends React.Component {
 				className += ' active-section-toggle'
 			}
 
-			let nameField = folder.icon === 'ff-folder' && this.state.renamingFolder === folder.name ? <input value={this.state.folderNameInput} onChange={this.changeFolderName} onKeyPress={this.keyPressed} /> : folder.name;
-
+			let nameField = folder.icon === 'ff-folder' && this.state.renamingFolder === folder.name ? 
+			<input value={this.state.folderNameInput}
+				onChange={this.changeFolderName}
+				onKeyPress={this.keyPressed} autoFocus/> : folder.name
 
 			return <FinsembleDraggable
 				draggableId={folder.name}
@@ -108,7 +119,7 @@ export default class FoldersList extends React.Component {
 					onDrop={(event) => this.onAppDrop(event, folder)}
 					className={className} key={index}>
 					<span className='left-nav-label'>
-						{folder.icon !== undefined ? <i className={folder.icon}></i> : null}
+						{folder.icon && <i className={folder.icon}></i>}
 						{nameField}
 					</span>
 					{folder.icon === 'ff-folder' ? <FolderActionsMenu folder={folder} renameFolder={this.renameFolder} /> : null}
