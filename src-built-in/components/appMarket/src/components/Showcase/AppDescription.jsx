@@ -13,7 +13,7 @@ const AppDescription = props => {
 		<div className="app-notes description">
 			<span className="showcase-label">Description</span>
 			<div className="description-content">
-				<p>{props.description}</p>
+				<div>{props.description}</div>
 			</div>
 		</div>
 	);

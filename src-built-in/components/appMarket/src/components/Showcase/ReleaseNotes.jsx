@@ -13,7 +13,7 @@ const ReleaseNotes = props => {
 		<div className="app-notes release-notes">
 			<span className="showcase-label">Release Notes</span>
 			<div className="release-notes-content">
-				<p>{props.releaseNotes}</p>
+				<div>{props.releaseNotes}</div>
 			</div>
 		</div>
 	);
