@@ -50,14 +50,6 @@ function defaultworkspacesService() {
 						let definition = {};
 						definition[workspaceTemplateNames[t]] = workspaceTemplates[workspaceTemplateNames[t]];
 						WorkspaceClient.addWorkspaceDefinition({ workspaceJSONDefinition: definition , force: true }, () => { debugger; });
-						/*WorkspaceClient.createNewWorkspace(
-							workspaceTemplateNames[t],
-							{templateName: workspaceTemplateNames[t], switchAfterCreation: false},
-							function(err, response){
-								Logger.log("Created default workspace: " + workspaceTemplateNames[t]);
-							}
-							//probably ought to wait here for it to be created before jumping to next loop iteration
-						);*/
 					}
 				}
 
@@ -67,10 +59,6 @@ function defaultworkspacesService() {
 	}
 
 
-	this.myFunction = function () {
-		return "some dummy data";
-	}
-
 	/**
 	 * Creates a router endpoint for you service.
 	 * Add query responders, listeners or pub/sub topic as appropriate.
@@ -78,24 +66,24 @@ function defaultworkspacesService() {
 	 */
 	this.createRouterEndpoints = function () {
 		//Example router integration which uses a single query responder to expose multiple functions
-		RouterClient.addResponder("defaultworkspaces functions", function(error, queryMessage) {
-			if (!error) {
-				Logger.log('defaultworkspaces Query: ' + JSON.stringify(queryMessage));
+		// RouterClient.addResponder("defaultworkspaces functions", function(error, queryMessage) {
+		// 	if (!error) {
+		// 		Logger.log('defaultworkspaces Query: ' + JSON.stringify(queryMessage));
 
-				if (queryMessage.data.query === "myFunction") {
-					try {
-						queryMessage.sendQueryResponse(null, self.myFunction());
-					} catch (err) {
-						queryMessage.sendQueryResponse(err);
-					}
-				} else {
-					queryMessage.sendQueryResponse("Unknown defaultworkspaces query function: " + queryMessage, null);
-					Logger.error("Unknown defaultworkspaces query function: ", queryMessage);
-				}
-			} else {
-				Logger.error("Failed to setup defaultworkspaces query responder", error);
-			}
-		});
+		// 		if (queryMessage.data.query === "myFunction") {
+		// 			try {
+		// 				queryMessage.sendQueryResponse(null, self.myFunction());
+		// 			} catch (err) {
+		// 				queryMessage.sendQueryResponse(err);
+		// 			}
+		// 		} else {
+		// 			queryMessage.sendQueryResponse("Unknown defaultworkspaces query function: " + queryMessage, null);
+		// 			Logger.error("Unknown defaultworkspaces query function: ", queryMessage);
+		// 		}
+		// 	} else {
+		// 		Logger.error("Failed to setup defaultworkspaces query responder", error);
+		// 	}
+		// });
 	};
 
 	return this;
