@@ -232,11 +232,11 @@
 
     /* App Catalog */
     --catalog-font-color: var(--primary-font-color);
-    --catalog-background-color: var(--slate5);
+    --catalog-background-color: var(--slate7);
     --catalog-pagination-dots-color: var(--gray2);
     --catalog-hero-border-color: var(--slate5);
-    --catalog-hero-background-color: var(--slate7);
-    --catalog-card-background-color: var(--slate);
+    --catalog-hero-background-color: var(--slate6);
+    --catalog-card-background-color: var(--slate6);
     --catalog-card-checkmark-unselected-color: var(--gray);
     --catalog-card-checkmark-selected-color: var(--green);
     --catalog-section-header-font-color: var(--blue2);
