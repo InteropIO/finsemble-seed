@@ -66,7 +66,7 @@
 
 	/**
 	 * Returns the value for the given name, looking in (1) environment variables, (2) command line args
-	 * and (3) startupConfig. For instance, `set DESKTOP_AGENT=electron` or `npx gulp dev --desktop_agent:electron`
+	 * and (3) startupConfig. For instance, `set BLAH_BLAH=electron` or `npx gulp dev --blah_blah:electron`
 	 * This will search for both all caps, all lowercase and camelcase.
 	 * @param {string} name The name to look for in env variables and args
 	 * @param {string} defaultValue The default value to return if the name isn't found as an env variable or arg
@@ -98,10 +98,10 @@
 	}
 
 	// Currently supported desktop agents include "openfin" and "e2o". This can be set either
-	// with the environment variable DESKTOP_AGENT or by command line argument `npx gulp dev --desktop_agent:electron`
-	let desktopAgent = envOrArg("desktop_agent", "openfin");
-	desktopAgent = desktopAgent.toLowerCase();
-	if (desktopAgent === "electron") desktopAgent = "e2o";
+	// with the environment variable CHANNEL_ADAPTER or by command line argument `npx gulp dev --channel_adapter:electron`
+	let channelAdapter = envOrArg("channel_adapter", "openfin");
+	channelAdapter = channelAdapter.toLowerCase();
+	if (channelAdapter === "electron") channelAdapter = "e2o";
 
 	// This is a reference to the server process that is spawned. The server process is located in server/server.js
 	// and is an Express server that runs in its own node process (via spawn() command).
@@ -414,7 +414,7 @@
 			logToTerminal("Launching Finsemble", "black", "bgCyan");
 
 			launchTimestamp = Date.now();
-			if (desktopAgent === "openfin") {
+			if (channelAdapter === "openfin") {
 				taskMethods.launchOpenFin(done);
 			} else {
 				taskMethods.launchE2O(done);
@@ -425,6 +425,17 @@
 			logToTerminal.apply(this, arguments);
 		},
 
+		/**
+		 * Starts the server, launches the Finsemble application. Use this for a quick launch, for instance when working on e2o.
+		 */
+		"nobuild:dev": done => {
+			async.series([
+				taskMethods.setDevEnvironment,
+				taskMethods.startServer,
+				taskMethods.launchApplication
+			], done);
+		},
+		
 		/**
 		 * Method called after tasks are defined.
 		 * @param done Callback function used to signal function completion to support asynchronous execution. Can
