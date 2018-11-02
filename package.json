@@ -11,6 +11,7 @@
         "dev:fresh": "gulp dev:fresh --gulpfile=./gulpfile.js",
         "dev:nolaunch": "gulp dev:noLaunch --gulpfile=./gulpfile.js",
         "build:prod": "gulp build:prod --gulpfile=./gulpfile.js",
+        "nobuild:dev": "gulp nobuild:dev --gulpfile=./gulpfile.js",
         "prod": "gulp prod --gulpfile=./gulpfile.js",
         "prod:nolaunch": "gulp prod:nolaunch --gulpfile=./gulpfile.js",
         "server": "gulp server --gulpfile=./gulpfile.js",
