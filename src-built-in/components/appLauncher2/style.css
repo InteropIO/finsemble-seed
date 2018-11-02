@@ -412,6 +412,7 @@ select:focus, option:focus {
     justify-content: flex-start;
     padding-left: 10px;
     margin-bottom: 4px;
+    flex-wrap: wrap;
 }
 .tag-item {
 	cursor: default;
