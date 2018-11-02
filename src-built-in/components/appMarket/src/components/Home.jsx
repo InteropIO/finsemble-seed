@@ -17,9 +17,6 @@ import Carousel from './Carousel';
  * @param {object} props Component props
  * @param {array} props.cards An Array of app information from FDC
  * @param {func} props.openAppShowcase Opens the AppShowcase page for a selected app
- * @param {func} props.seeMore Adds a filtering tag
- * @param {func} props.addApp Adds an app to the local finsemble
- * @param {func} props.removeApp Removes an app from local finsemble
  */
 const Home = props => {
 
@@ -34,8 +31,8 @@ const Home = props => {
 	return (
 		<div className='home'>
 			<Hero cards={props.cards} openAppShowcase={props.openAppShowcase} />
-			<Carousel tag="Pizza" cards={carousel1} openAppShowcase={props.openAppShowcase} seeMore={props.seeMore} addApp={props.addApp} removeApp={props.removeApp} addTag={props.seeMore} />
-			<Carousel tag="newrelease" cards={carousel2} openAppShowcase={props.openAppShowcase} seeMore={props.seeMore} addApp={props.addApp} removeApp={props.removeApp} addTag={props.seeMore} />
+			<Carousel tag="Pizza" cards={carousel1} openAppShowcase={props.openAppShowcase} />
+			<Carousel tag="newrelease" cards={carousel2} openAppShowcase={props.openAppShowcase} />
 		</div>
 	);
 }

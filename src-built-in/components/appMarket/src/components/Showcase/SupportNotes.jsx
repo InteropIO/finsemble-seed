@@ -4,6 +4,9 @@
 */
 import React from "react";
 
+//data
+import storeActions from '../../stores/storeActions';
+
 /**
  * AppShowcase support notes section.
  * @param {object} props Component props
@@ -26,7 +29,7 @@ const SupportNotes = props => {
 						let tagName = tag[0].toUpperCase() + tag.substring(1);
 
 						return (
-							<div key={"showcase-tag-label-" + i} className="tag-label" onClick={props.addTag.bind(this, tag)}>
+							<div key={"showcase-tag-label-" + i} className="tag-label" onClick={storeActions.addTag.bind(this, tag)}>
 								<span className="label-content">{tagName}</span>
 							</div>
 						);

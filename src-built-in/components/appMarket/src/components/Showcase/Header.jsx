@@ -5,6 +5,9 @@
 
 import React from "react";
 
+//data
+import storeActions from '../../stores/storeActions';
+
 /**
  * The header of the AppShowcase. Contains the actionable buttons (to add/remove and app) and the app title and icon
  * @param {object} props Component props
@@ -13,6 +16,11 @@ import React from "react";
  * @param {func} props.appAction The function to call when a button is clicked.
  */
 const Header = props => {
+
+	const appAction = () => {
+		props.appAction(props.name);
+	}
+
 	return (
 		<div className="header">
 			<div className='icon-title-container'>
@@ -20,13 +28,13 @@ const Header = props => {
 				<span className="appName">{props.name}</span>
 			</div>
 			<div className='action-button-container'>
-				{props.installed ? <button className={props.entitled ? "action-button disabled" : "action-button"} disabled={props.entitled} onClick={props.appAction}>
-					<div className='remove-button' onClick={this.removeApp}>
+				{props.installed && <button className={props.entitled ? "action-button disabled" : "action-button"} disabled={props.entitled} onClick={appAction}>
+					<div className='remove-button'>
 						<i className='ff-close-2'></i>
 						&nbsp;Remove App
 					</div>
-				</button> : null}
-				<button className={props.entitled ? "action-button disabled" : "action-button"} disabled={props.entitled} onClick={props.appAction}>
+				</button>}
+				<button className={props.entitled ? "action-button disabled" : "action-button"} disabled={props.entitled} onClick={appAction}>
 					{props.installed ? (
 						<div>
 							<span className="action-button-label">Open</span>

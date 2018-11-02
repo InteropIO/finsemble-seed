@@ -63,7 +63,7 @@ const AppResults = props => {
 
 			cardsInRow.push(
 				<td key={key}>
-					<AppCard {...card} openAppShowcase={props.openAppShowcase} addApp={props.addApp} removeApp={props.removeApp} addTag={props.addTag} />
+					<AppCard {...card} openAppShowcase={props.openAppShowcase} />
 				</td>
 			);
 		}
@@ -74,10 +74,10 @@ const AppResults = props => {
 		return cardRows;
 	}
 
-	let cardRows = getCardRows();
-
 	if (cardsForShowcase.length === 0) return (<EmptyResults />);
 	else {
+		let cardRows = getCardRows();
+
 		return (
 			<div className='app-results'>
 				<table className='app-results-table'>

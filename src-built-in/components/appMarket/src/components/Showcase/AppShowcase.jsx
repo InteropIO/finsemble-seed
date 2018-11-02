@@ -2,11 +2,10 @@
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
-/**
- * This component is the name of a component and a pin that will pin that component to all toolbars.
- *
- */
 import React, { Component } from "react";
+
+//data
+import storeActions from '../../stores/storeActions';
 
 //components
 import Modal from './Modal';
@@ -17,6 +16,7 @@ import ReleaseNotes from './ReleaseNotes';
 import AppDevNotes from './AppDevNotes';
 import VersionNotes from './VersionNotes';
 import SupportNotes from './SupportNotes';
+import AppCard from "../AppCard";
 
 const imagesInCarousel = 4;
 class AppShowcase extends Component {
@@ -110,7 +110,7 @@ class AppShowcase extends Component {
 	addApp(e) {
 		e.preventDefault();
 		e.stopPropagation();
-		this.props.addApp(this.state.name);
+		storeActions.addApp(this.state.name);
 	}
 	/**
 	 * When the check is clicked, we want to remove the app and stop any other events (bubbling) from occuring
@@ -119,14 +119,14 @@ class AppShowcase extends Component {
 	removeApp(e) {
 		e.preventDefault();
 		e.stopPropagation();
-		this.props.removeApp(this.state.name);
+		storeActions.removeApp(this.state.name);
 	}
 	/**
 	 * Calls the parents function to add a tag to list of filters
 	 * @param {string} name The tag name
 	 */
 	addTag(name) {
-		this.props.addTag(name);
+		storeActions.addTag(name);
 	}
 	render() {
 		let { name, iconUrl, imageIndex:index } = this.state;
@@ -143,7 +143,7 @@ class AppShowcase extends Component {
 			index++;
 		}
 
-		let appAction = this.props.app.installed ? Function.prototype : this.addApp;
+		let appAction = this.props.installed ? storeActions.removeApp : storeActions.addApp;
 
 		return (
 			<div className="app-showcase">
@@ -162,7 +162,7 @@ class AppShowcase extends Component {
 				)}
 				<Header iconUrl={iconUrl} name={name} entitled={this.state.entitled} installed={this.props.app.installed} appAction={appAction} />
 
-				<ImageCarousel nextImage={this.nextImage} previousImage={this.previousImage} openModal={this.openModal} images={images} />
+				<ImageCarousel nextImage={this.nextImage} previousImage={this.previousImage} openModal={this.openModal} images={images} appAction={appAction} />
 
 				<AppDescription description={this.props.app.description} />
 
@@ -172,7 +172,7 @@ class AppShowcase extends Component {
 
 				<VersionNotes version={this.props.app.version} />
 
-				<SupportNotes email={this.props.app.supportEmail} tags={this.props.app.tags} addTag={this.addTag} />
+				<SupportNotes email={this.props.app.supportEmail} tags={this.props.app.tags} />
 			</div>
 		);
 	}

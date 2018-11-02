@@ -4,6 +4,9 @@
 */
 import React, { Component } from "react";
 
+//data
+import storeActions from '../stores/storeActions';
+
 //components
 import AppCard from './AppCard';
 /**
@@ -11,10 +14,7 @@ import AppCard from './AppCard';
  * @param {object} props Component props
  * @param {array} props.cards An array of AppCards to display in a carousel
  * @param {string} props.tag The carousel's tag (title)
- * @param {func} props.addApp See AppCard.jsx
- * @param {func} props.removeApp See AppCard.jsx
- * @param {func} props.openAppShowcase See AppCard.jsx
- * @param {func} props.addTag See AppCard.jsx
+ * @param {func} props.openAppShowcase Parent function to show the AppShowcase for the selected card
  */
 export default class Carousel extends Component {
 	constructor(props) {
@@ -79,7 +79,7 @@ export default class Carousel extends Component {
 	 * Calls the parents seeMore function, which will add the selected tag as a filter
 	 */
 	seeMore() {
-		this.props.seeMore(this.props.tag);
+		storeActions.addTag(this.props.tag);
 	}
 	/**
 	 * Function to build the items in the carousel
@@ -116,7 +116,7 @@ export default class Carousel extends Component {
 					<i className="ff-chevron-left" onClick={this.pageDown} />
 					{displayCards.map((card, i) => {
 						return (
-							<AppCard key={(card.title || card.name) + i} {...card} openAppShowcase={this.props.openAppShowcase} addApp={this.props.addApp} removeApp={this.props.removeApp} addTag={this.props.addTag} />
+							<AppCard key={(card.title || card.name) + i} {...card} openAppShowcase={this.props.openAppShowcase} />
 						);
 					})}
 					<i className="ff-chevron-right" onClick={this.pageUp} />

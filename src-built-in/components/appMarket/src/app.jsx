@@ -2,10 +2,6 @@
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
-/**
- * This component is the name of a component and a pin that will pin that component to all toolbars.
- *
- */
 import React from "react";
 import ReactDOM from 'react-dom';
 
@@ -31,14 +27,13 @@ export default class AppMarket extends React.Component {
 			installed: [],
 			tags: [],
 			activeTags: [],
-			activePage: "home",
 			activeApp: null,
+			forceSearch: false,
 			installationActionTaken: null
 		};
 		this.bindCorrectContext();
 	}
 	bindCorrectContext() {
-		this.tagsChanged = this.tagsChanged.bind(this);
 		this.filteringApps = this.filteringApps.bind(this);
 		this.goHome = this.goHome.bind(this);
 		this.addTag = this.addTag.bind(this);
@@ -61,52 +56,42 @@ export default class AppMarket extends React.Component {
 				installed: [this.state.apps[0].appId]
 			});
 		});
-		getStore().addListener({ field: 'activeTags' }, this.tagsChanged);
 		getStore().addListener({ field: 'installed' }, this.stopShowingInstalledNotification);
 		getStore().addListener({ field: 'filteredApps' }, this.filteringApps);
 	}
 	componentWillUnmount() {
-		getStore().removeListener({ field: 'activeTags' }, this.tagsChanged);
-		getStore().removeListener({ field: 'filteredApps' }.this.filteringApps);
+		getStore().removeListener({ field: 'filteredApps' }, this.filteringApps);
 		getStore().removeListener({ field: 'installed' }, this.stopShowingInstalledNotification);
-	}
-	/**
-	 * Enacted when the stores 'activeTags' are changed. This means a search has begun (since a filter was added)
-	 */
-	tagsChanged() {
-		let { activePage: page } = this.state;
-		let tags = storeActions.getActiveTags();
-
-		//If this call was actually _removing_ a tag, and its the last tag, and there is no search text, we want to go back home. (No longer want to view the AppResults)
-		if (tags.length === 0) {
-			page = "home";
-		}
-
-		this.setState({
-			activeTags: tags,
-			activePage: page
-		});
 	}
 	/**
 	 * The store has pushed an update to the filtered tags list. This means a user has begun searching or added tags to the filter list
 	 */
 	filteringApps() {
+		let apps = storeActions.getFilteredApps();
+		let tags = storeActions.getActiveTags();
+
 		this.setState({
-			filteredApps: storeActions.getFilteredApps()
+			filteredApps: apps,
+			activeTags: tags,
+			activeApp: null
 		});
 	}
 	/**
 	 * Determines the apps page based on the state of the activeTags, search text, etc
 	 */
 	determineActivePage() {
-		let tags = storeActions.getActiveTags();
-		let filteredApps = storeActions.getFilteredApps();
+		let { activeApp, filteredApps, activeTags, forceSearch } = this.state;
+		let page;
 
-		if (filteredApps.length > 0) {
-			return "appSearch";
-		} else if (filteredApps.length === 0 && tags.length === 0) {
-			return "home";
+		if (activeApp) {
+			page =  "showcase"
+		} else if (filteredApps.length > 0 || forceSearch) {
+			page =  "appSearch";
+		} else if (filteredApps.length === 0 && activeTags.length === 0) {
+			page =  "home";
 		}
+
+		return page;
 	}
 	/**
 	 * Calls the store to add a tag to the activeTag list. Also updates the app view to switch to the AppResults page (since adding a tag implies filtering has begun)
@@ -114,10 +99,6 @@ export default class AppMarket extends React.Component {
 	 */
 	addTag(tag) {
 		storeActions.addTag(tag);
-
-		this.setState({
-			activePage: this.determineActivePage()
-		});
 	}
 	/**
 	 * Calls the store to remove a tag from the activeTag list. Also updates the app view to switch to the homepage if all tags have been removed
@@ -125,10 +106,6 @@ export default class AppMarket extends React.Component {
 	 */
 	removeTag(tag) {
 		storeActions.removeTag(tag);
-
-		this.setState({
-			activePage: this.determineActivePage()
-		});
 	}
 	/**
 	 * Action to take when the back button is clicked (which just goes home)
@@ -137,8 +114,8 @@ export default class AppMarket extends React.Component {
 		storeActions.clearTags();
 		storeActions.clearFilteredApps();
 		this.setState({
-			activePage: this.determineActivePage(),
-			activeApp: null
+			activeApp: null,
+			forceSearch: false
 		});
 	}
 	/**
@@ -147,11 +124,10 @@ export default class AppMarket extends React.Component {
 	 */
 	changeSearch(search) {
 		storeActions.clearFilteredApps();
-		if (search !== "") {
-			storeActions.searchApps(search);
-		}
 		this.setState({
-			activePage: this.determineActivePage()
+			forceSearch: (search !== "")
+		}, () => {
+			if (search !== "") storeActions.searchApps(search);
 		});
 	}
 	/**
@@ -220,9 +196,9 @@ export default class AppMarket extends React.Component {
 	 * @param {boolean} filtered If true, uses the filtered apps array. Otherwise uses all apps
 	 */
 	compileAddedInfo(filtered) {
-		let { installed } = this.state;
+		let { installed, forceSearch } = this.state;
 		let apps;
-		if (filtered) {
+		if (filtered || forceSearch) {
 			apps = this.state.filteredApps;
 		} else {
 			apps = this.state.apps;
@@ -240,42 +216,41 @@ export default class AppMarket extends React.Component {
 		return apps;
 	}
 	getPageContents() {
-		let { activePage, filteredApps } = this.state;
+		let { filteredApps, activeTags } = this.state;
+		let activePage = this.determineActivePage();
 		let apps = this.compileAddedInfo((filteredApps.length > 0));
 
-		if (apps.length > 0) {
-			switch (activePage) {
-				case "home":
-					return (
-						<Home cards={apps} openAppShowcase={this.openAppShowcase} seeMore={this.addTag} addApp={this.addApp} removeApp={this.removeApp} addTag={this.addTag} />
-					);
-				case "appSearch":
-					return (
-						<AppResults cards={apps} tags={activeTags} addApp={this.addApp} removeApp={this.removeApp} openAppShowcase={this.openAppShowcase} addTag={this.addTag} />
-					);
-				case "showcase":
-					return (
-						<AppShowcase app={this.state.activeApp} addApp={this.addApp} removeApp={this.removeApp} addTag={this.addTag} />
-					);
-				default:
-					return (
-						<div></div>
-					);
-			}
-		} else {
-			return (
-				<div></div>
-			);
+		//Force default case if activepage isn't search and apps.length is 0
+		if (apps.length === 0 && activePage !== 'appSearch') activePage = -1;
+
+		switch (activePage) {
+			case "home":
+				return (
+					<Home cards={apps} openAppShowcase={this.openAppShowcase} seeMore={this.addTag} addApp={this.addApp} removeApp={this.removeApp} addTag={this.addTag} />
+				);
+			case "appSearch":
+				return (
+					<AppResults cards={apps} tags={activeTags} addApp={this.addApp} removeApp={this.removeApp} openAppShowcase={this.openAppShowcase} addTag={this.addTag} />
+				);
+			case "showcase":
+				return (
+					<AppShowcase app={this.state.activeApp} addApp={this.addApp} removeApp={this.removeApp} addTag={this.addTag} />
+				);
+			default:
+				return (
+					<div></div>
+				);
 		}
 	}
 	render() {
 
 		let { tags, activeTags } = this.state;
+		let page = this.determineActivePage();
 		let pageContents = this.getPageContents();
 
 		return (
 			<div>
-				<SearchBar backButton={this.state.activePage !== "home"} tags={tags} activeTags={activeTags} tagSelected={this.addTag} removeTag={this.removeTag} goHome={this.goHome} changeSearch={this.changeSearch} installationActionTaken={this.state.installationActionTaken} />
+				<SearchBar backButton={page !== "home"} tags={tags} activeTags={activeTags} tagSelected={this.addTag} removeTag={this.removeTag} goHome={this.goHome} changeSearch={this.changeSearch} installationActionTaken={this.state.installationActionTaken} search={this.changeSearch} />
 				<div className="market_content">
 					{pageContents}
 				</div>

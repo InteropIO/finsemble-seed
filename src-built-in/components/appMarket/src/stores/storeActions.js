@@ -36,13 +36,8 @@ const appd = new AppDirectory(FDC3Client);
  * @param {string} tag The name of the tag
  */
 function _addActiveTag(tag) {
-    let activeTags = getStore().getValue({
-        field: 'activeTags'
-    });
 
-    let apps = getStore().getValue({
-        field: 'apps'
-    });
+    let { apps, activeTags } = getStore().getValues(["activeTags", "apps"]);
 
     activeTags.push(tag);
 
@@ -54,16 +49,6 @@ function _addActiveTag(tag) {
             }
         }
     });
-
-    // getStore().setValue({
-    //     field: 'filteredApps',
-    //     value: newApps
-    // });
-
-    // getStore().setValue({
-    //     field: 'activeTags',
-    //     value: activeTags
-    // });
 
     getStore().setValues([
         {
@@ -83,18 +68,29 @@ function _addActiveTag(tag) {
  * @param {string} tag The name of the tag
  */
 function _removeActiveTag(tag) {
-    let activeTags = getStore().getValue({
-        field: 'activeTags'
-    });
+
+    let { activeTags, apps } = getStore().getValues(['activeTags', 'apps']);
 
     let newActiveTags = activeTags.filter((currentTag) => {
         return currentTag !== tag;
     });
 
-    getStore().setValue({
+    let newApps = apps.filter((app) => {
+        for (let i = 0; i < newActiveTags.length; i++) {
+            let tag = activeTags[i];
+            if (app.tags.includes(tag)) {
+                return true;
+            }
+        }
+    });
+
+    getStore().setValues([{
         field: 'activeTags',
         value: newActiveTags
-    });
+    }, {
+        field: 'filteredApps',
+        value: newApps
+    }]);
 }
 
 /**
@@ -112,10 +108,13 @@ function _clearActiveTags() {
  */
 function getApps() {
     appd.getAll((err, apps) => {
-        getStore().setValue({
+        getStore().setValues([{
             field: 'installed',
             value: [apps[0].appId]
-        });
+        }, {
+            field: 'apps',
+            value: apps
+        }]);
     });
     return appd.getAll();
 }
@@ -260,6 +259,8 @@ function searchApps(terms) {
     let activeTags = getStore().getValue({
         field: 'activeTags'
     });
+
+    console.log('searching: ', terms, activeTags);
 
     appd.search({ text: terms, tags: activeTags }, (err, data) => {
         if (err) console.log("Failed to search apps");

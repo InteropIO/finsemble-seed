@@ -4,6 +4,16 @@
 */
 import React, { Component } from "react";
 
+//data
+import storeActions from '../stores/storeActions';
+
+/**
+ * The card that displays on any page with information about an app. Clicking on it will lead to the AppShowcase or install (if the check is clicked)
+ * @param {object} props Component props
+ * @param {object} props...card The entire object that belongs to a single app. See FDC appd.
+ * @param {boolean} props.entitled If true, the app cannot be installed by this user, only viewed
+ * @param {boolean} props.installed If true the app is installed on this local fsbl
+ */
 class AppCard extends Component {
 	constructor(props) {
 		super(props);
@@ -71,7 +81,7 @@ class AppCard extends Component {
 	addApp(e) {
 		e.preventDefault();
 		e.stopPropagation();
-		this.props.addApp(this.state.appName)
+		storeActions.addApp(this.state.appName);
 	}
 	/**
 	 * Prevents bubbling (which would open the app showcase), then calls to remove an app
@@ -80,7 +90,7 @@ class AppCard extends Component {
 	removeApp(e) {
 		e.preventDefault();
 		e.stopPropagation();
-		this.props.removeApp(this.state.appName);
+		storeActions.removeApp(this.state.appName);
 	}
 	/**
 	 * Prevents bubbling (which would open the app showcase), then calls to add a filtering tag
@@ -90,7 +100,7 @@ class AppCard extends Component {
 	addTag(name, e) {
 		e.preventDefault();
 		e.stopPropagation();
-		this.props.addTag(name);
+		storeActions.addTag(name);
 	}
 	render() {
 		let imageUrl = this.props.images !== undefined ? this.props.images[0].url : "../assets/placeholder.svg";
