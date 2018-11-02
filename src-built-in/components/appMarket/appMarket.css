@@ -732,7 +732,7 @@
 .app-showcase .tags {
 	display: flex;
 	flex-direction: row;
-	justify-content: space-evenly;
+	flex-wrap: wrap;
 }
 
 .app-showcase .tag-label {
@@ -741,7 +741,7 @@
 	border-radius: 2px;
 	padding: 3px 5px;
 	background-color: var(--slate2);
-	margin-right: 8px;
+	margin: 0 8px 4px 0;
 	user-select: none;
 	cursor: pointer;
 }
