@@ -636,8 +636,8 @@
 .app-showcase .app-notes {
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
-  	font-size: 11px;
+	justify-content: flex-start;
+  	font-size: 12px;
 	padding: 5px 0;
 	margin: 0 28px 10px 28px;
 }
@@ -666,18 +666,16 @@
 	font-weight: var(--tertiary-font-weight);
 	font-size: 14px;
 	color: var(--catalog-section-header-font-color);
-	padding-bottom: 3px;
+	padding-bottom: 5px;
 }
 
 .app-showcase .description-content {
 	width: 534px;
-	height: 32px;
 	color: var(--catalog-font-color);
 }
 
 .app-showcase .release-notes-content {
 	width: 540px;
-	height: auto;
 	color: var(--catalog-font-color);
 }
 
@@ -704,7 +702,7 @@
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-  	font-size: 11px;
+  	font-size: 12px;
 	padding: 5px 0;
 	margin-left: 28px;
 }
