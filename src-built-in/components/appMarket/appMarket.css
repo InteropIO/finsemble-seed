@@ -46,12 +46,12 @@
 .hero-main {
 	display: flex;
 	flex-direction: row;
-	justify-content: center;
+	justify-content: space-between;
 	margin-top: 10px;
 }
 
 .hero_selected_content {
-	width: 506px;
+	width: 488px;
 	height: 174px;
 	border: solid 1px var(--catalog-hero-border-color);
 	background-color: var(--catalog-hero-background-color);
@@ -113,33 +113,17 @@
 	cursor: pointer;
 }
 
-.ff-chevron-left {
-	margin-right: -10px;
-}
-
-.ff-chevron-right {
-	margin-left: -10px;
-}
-
-.hero-main .ff-chevron-left, .hero-main .ff-chevron-right {
-	margin: 0;
-}
-
-.app-showcase .image-carousel-container .ff-chevron-left, .app-showcase .image-carousel-container .ff-chevron-right {
-	margin: 0;
-}
-
 .app-card {
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
+	justify-content: flex-start;
 	width: 120px;
 	height: 180px;
 	box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.25);
 	background-color: var(--catalog-card-background-color);
-	padding: 5px;
 	user-select:none;
 	cursor: pointer;
+	position: relative;
 }
 
 .app-card .app-image {
@@ -147,8 +131,10 @@
 	flex-direction: row;
 	justify-content: center;
 	width: 100px;
-	height: 69px;
+	height: 100px;
 	user-select: none;
+	margin: 10px 10px 6px 10px;
+	position: relative;
 }
 
 .app-card .app-images.entitled {
@@ -156,7 +142,7 @@
 }
 
 .app-card .app-title {
-	width: 100%;
+	width: 92%;
 	height: 19px;
 	font-size: 14px;
 	font-weight: var(--primary-font-weight);
@@ -164,7 +150,7 @@
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
-	margin: 18px 0;
+	padding: 5px 0px 5px 5px;
 }
 
 .app-card .app-title.highlighted {
@@ -181,7 +167,7 @@
 	font-size: 10px;
 	font-weight: var(--secondary-font-weight);
 	color: var(--catalog-font-color);
-	padding-left: 5px;
+	padding-left: 6px;
 }
 
 .app-card .footer .app-tags.entitled {
@@ -201,6 +187,8 @@
 .app-card .ff-check-circle {
 	display: none;
 	position: absolute;
+	left: 10px;
+	top: 10px;
 	z-index: 1;
 	cursor: pointer;
 }
@@ -219,12 +207,6 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-}
-
-.app-image {
-	display: block;
-	margin: auto;
-	position: relative;
 }
 
 .carousel-main {
@@ -277,7 +259,7 @@
 	justify-content: space-between;
 	align-items: center;
 	margin-bottom: 6px;
-	padding: 0px 32px;
+	padding: 0px 46px;
 }
 
 .carousel-header .see-more {
