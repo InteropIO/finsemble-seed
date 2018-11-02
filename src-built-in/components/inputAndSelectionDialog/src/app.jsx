@@ -304,8 +304,9 @@ class InputAndSelectionDialog extends React.Component {
 }
 
 //render component when FSBL is ready.
-FSBL.addEventListener("onReady", function () {
+if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
+function FSBLReady() {
 	ReactDOM.render(
 		<InputAndSelectionDialog />
 		, document.getElementById("inputAndSelectionDialog-component-wrapper"));
-});
+}

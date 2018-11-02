@@ -2,7 +2,7 @@
     {
         "align": "left",
         "iconClasses": "finsemble-toolbar-brand-logo",
-        "icon": "/assets/img/Finsemble_Taskbar_Icon.png",
+        "icon": "../../assets/img/Finsemble_Taskbar_Icon.png",
         "menuType": "File Menu"
     },
     {
@@ -18,8 +18,8 @@
         "type": "reactComponent"
     },
     {
-        "align":"left",
-        "type":"seperator"
+        "align": "left",
+        "type": "seperator"
     },
     {
         "comment": "Change align to add AlwaysOnTop capability",
@@ -50,10 +50,11 @@
     {
         "align": "left",
         "label": "Apps",
+        "id": "app-launcher",
         "menuType": "App Launcher"
     },
     {
-        "align":"left",
-        "type":"seperator"
+        "align": "left",
+        "type": "seperator"
     }
 ]
