@@ -68,7 +68,7 @@ export default class AppActionsMenu extends React.Component {
 				<ul>
 					<li onClick={favoritesActionOnClick}>{favoritesText}</li>
 					<li onClick={this.onViewInfo}>View Info</li>
-					{folder.name !== "Favorites" &&
+					{['My Apps', 'Favorites'].indexOf(folder.name) < 0 &&
 						<li onClick={this.onRemove}>Remove from {folder.name}</li>}
 				</ul>
 			</div>
