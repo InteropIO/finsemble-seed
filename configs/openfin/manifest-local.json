@@ -60,7 +60,7 @@
             "src": "https://connect2.chartiq.com/finsemble/Assimilation_2_0_3.zip",
             "version": "2.0.3",
             "alias": "assimilation",
-            "target": "assimilationMain.exe"
+            "target": "AssimilationMain.exe"
         }
     ],
     "finsemble": {
@@ -70,6 +70,10 @@
         "notificationURL": "http://localhost:3375/components/notification/notification.html",
         "importConfig": [
             "$applicationRoot/configs/application/config.json"
-        ]
+        ],
+        "IAC": {
+            "serverAddress" : "wss://127.0.0.1:3376"
+        }
     }
 }
+ 
