@@ -657,6 +657,7 @@
 .app-showcase .app-notes .developer-content {
 	align-self: flex-start;
 	color: var(--catalog-font-color);
+	padding-left: 5px;
 }
 
 .app-showcase .showcase-label {
@@ -672,11 +673,13 @@
 .app-showcase .description-content {
 	width: 534px;
 	color: var(--catalog-font-color);
+	padding-left: 5px;
 }
 
 .app-showcase .release-notes-content {
 	width: 540px;
 	color: var(--catalog-font-color);
+	padding-left: 5px;
 }
 
 .app-showcase .version-content {
@@ -710,17 +713,20 @@
 .app-showcase .version {
 	width: 80px;
   	height: 15px;
+	padding-left: 5px;
 }
 
 .app-showcase .updated {
 	width: 115px;
 	height: 15px;
 	color: var(--catalog-font-color);
+	padding-left: 5px;
 }
 
 .app-showcase .support-content .support {
 	color: var(--catalog-font-color);
 	padding-right: 8px;
+	padding-left: 5px;
 }
 
 .app-showcase .tags {
