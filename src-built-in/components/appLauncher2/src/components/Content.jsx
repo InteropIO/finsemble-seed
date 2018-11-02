@@ -70,9 +70,9 @@ export default class Content extends React.Component {
 		})
 	}
 
-	async onSearch(error, data) {
+	onSearch(error, data) {
 		this.setState({
-			filterText: await storeActions.getSearchText()
+			filterText: data.value
 		})
 	}
 
@@ -82,7 +82,7 @@ export default class Content extends React.Component {
 		})
 	}
 
-	async onTagsUpdate(error, data) {
+	onTagsUpdate(error, data) {
 		this.setState({
 			tags: data.value
 		})

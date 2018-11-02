@@ -41,9 +41,9 @@ export default class FoldersList extends React.Component {
 	}
 
 
-	async onAppFoldersUpdate() {
+	onAppFoldersUpdate(error, data) {
 		this.setState({
-			folders: await storeActions.getFolders()
+			folders: data.value
 		})
 	}
 
