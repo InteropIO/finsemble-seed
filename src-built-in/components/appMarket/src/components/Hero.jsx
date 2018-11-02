@@ -68,7 +68,7 @@ export default class Hero extends Component {
 							{contentTitle}
 						</div>
 						<div className='selected-content-message'>
-							<p>{contentMsg}</p>
+							<div>{contentMsg}</div>
 						</div>
 					</div>
 					<i className='ff-chevron-right' onClick={this.changePage.bind(this, 'page_up')} />
