@@ -5,6 +5,9 @@ import storeActions from '../stores/StoreActions'
 import { getStore } from '../stores/LauncherStore'
 import { FinsembleDraggable } from '@chartiq/finsemble-react-controls'
 
+const MY_APPS = 'My Apps'
+const DASHBOARDS = 'Dashboards'
+
 export default class FoldersList extends React.Component {
 
 	constructor(props) {
@@ -36,8 +39,8 @@ export default class FoldersList extends React.Component {
 		if (folder.name === 'Favorites') {
 			console.info('Dropped app in favorites.')
 		}
-		// Do not do anything if its my apps folder
-		folder.name !== 'My Apps' && storeActions.addAppToFolder(folder, app)
+		// Do not do anything if its my apps or dashboards folder
+		[MY_APPS, DASHBOARDS].indexOf(folder.name) < 0 && storeActions.addAppToFolder(folder, app)
 	}
 
 
