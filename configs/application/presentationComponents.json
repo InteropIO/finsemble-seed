@@ -704,9 +704,9 @@
 				}
 			}
 		},
-		"App Market": {
+		"App Catalog 2": {
 			"window": {
-				"url": "$applicationRoot/components/appMarket/appMarket.html",
+				"url": "$applicationRoot/components/appCatalog2/appCatalog.html",
 				"width": 600,
 				"height": 700,
 				"options": {
@@ -736,7 +736,7 @@
 							"hideMaximize": true
 						},
 						"persistWindowState": true,
-						"title": "App Market"
+						"title": "App Catalog"
 					}
 				}
 			}
