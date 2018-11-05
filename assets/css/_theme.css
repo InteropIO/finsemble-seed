@@ -245,6 +245,11 @@
     --catalog-tag-backgrond-color: var(--slate2);
     --catalog-disabled-button-background-color: var(--gray5);
 
+    /* Shared Tag Styles */
+    --tag-background-color: var(--slate2);
+    --tag-font-color: var(--primary-font-color);
+    --tag-font-weight: var(--primary-font-weight);
+    --tag-close-icon-hover-color: var(--secondary-negative-color);
 
 
     /* App Menu */
@@ -254,6 +259,8 @@
     --appMenu-close-hover-color: var(--secondary-negative-color);
     --appMenu-leftNav-highlighter-hover: var(--slate2);
     --appMenu-leftNav-highlighter: var(--slate3);
+    --appMenu-leftNav-icon-color: var(--blue3);
+    --appMenu-leftNav-contextMenu-background-color: var(--secondary-background-color);
     --appMenu-background-color: var(--slate4);
     --appMenu-actions-menu-background-color: var(--secondary-background-color);
     --appMenu-app-item-hover-background-color: var(--slate3);
@@ -263,5 +270,5 @@
     --appMenu-sort-inactive-border-color: var(--gray5);
     --appMenu-sort-active-color: var(--primary-accent-color);
     --appMenu-search-input-inactive-color: var(--blue4);
-    --appMenu-search-input-active-color: var(--blue4);
+    --appMenu-search-input-active-color: var(--blue2);
 }

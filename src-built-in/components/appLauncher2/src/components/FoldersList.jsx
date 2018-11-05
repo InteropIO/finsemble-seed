@@ -98,7 +98,7 @@ export default class FoldersList extends React.Component {
 				className += ' active-section-toggle'
 			}
 
-			let nameField = folder.icon === 'ff-folder' && this.state.renamingFolder === folder.name ? <input value={this.state.folderNameInput} onChange={this.changeFolderName} onKeyPress={this.keyPressed} /> : folder.name;
+			let nameField = folder.icon === 'ff-folder' && this.state.renamingFolder === folder.name ? <input value={this.state.folderNameInput} onChange={this.changeFolderName} onKeyPress={this.keyPressed} autoFocus /> : folder.name;
 
 
 			return <FinsembleDraggable

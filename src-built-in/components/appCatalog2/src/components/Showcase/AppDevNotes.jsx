@@ -16,7 +16,7 @@ const AppDevNotes = props => {
 		<div className="app-notes developer">
 			<span className="showcase-label">Developer</span>
 			<div className="developer-content">
-				<p>{props.publisher} - <a href="#" onClick={this.openSite} >{props.email}</a></p>
+				<div>{props.publisher} - <a href="#" onClick={this.openSite} >{props.email}</a></div>
 			</div>
 		</div>
 	);

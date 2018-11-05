@@ -17,7 +17,7 @@ export default class LeftNavBottomLinks extends React.Component {
 			<div className="bottom">
 				{
 					bottomEntries.map((entry, index) => {
-						let className = 'complex-menu-section-toggle'
+						let className = 'complex-menu-action'
 						let func = entry.click && this.props[entry.click] ? this.props[entry.click] : Function.prototype;
 						return (
 							<div className={className} key={index} onClick={func ? func : Function.prototype}>
