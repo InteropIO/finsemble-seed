@@ -39,8 +39,6 @@ class AppShowcase extends Component {
 		this.openModal = this.openModal.bind(this);
 		this.closeModal = this.closeModal.bind(this);
 		this.addTag = this.addTag.bind(this);
-		this.addApp = this.addApp.bind(this);
-		this.removeApp = this.removeApp.bind(this);
 	}
 	/**
 	 * Pages right through the app's images.
@@ -104,24 +102,6 @@ class AppShowcase extends Component {
 		});
 	}
 	/**
-	 * When the check is clicked, we want to add the app and stop any other events (bubbling) from occuring
-	 * @param {object} e The React Synthetic event
-	 */
-	addApp(e) {
-		e.preventDefault();
-		e.stopPropagation();
-		storeActions.addApp(this.state.name);
-	}
-	/**
-	 * When the check is clicked, we want to remove the app and stop any other events (bubbling) from occuring
-	 * @param {object} e The React Synthetic event
-	 */
-	removeApp(e) {
-		e.preventDefault();
-		e.stopPropagation();
-		storeActions.removeApp(this.state.name);
-	}
-	/**
 	 * Calls the parents function to add a tag to list of filters
 	 * @param {string} name The tag name
 	 */
@@ -143,8 +123,6 @@ class AppShowcase extends Component {
 			index++;
 		}
 
-		let appAction = this.props.installed ? storeActions.removeApp : storeActions.addApp;
-
 		return (
 			<div className="app-showcase">
 				<Modal open={this.state.imageModalOpen} closeModal={this.closeModal}>
@@ -160,9 +138,9 @@ class AppShowcase extends Component {
 						</span>
 					</div>
 				)}
-				<Header iconUrl={iconUrl} name={name} entitled={this.state.entitled} installed={this.props.app.installed} appAction={appAction} />
+				<Header iconUrl={iconUrl} name={name} entitled={this.state.entitled} installed={this.props.app.installed} appId={this.props.app.appId} />
 
-				<ImageCarousel nextImage={this.nextImage} previousImage={this.previousImage} openModal={this.openModal} images={images} appAction={appAction} />
+				<ImageCarousel nextImage={this.nextImage} previousImage={this.previousImage} openModal={this.openModal} images={images} />
 
 				<AppDescription description={this.props.app.description} />
 

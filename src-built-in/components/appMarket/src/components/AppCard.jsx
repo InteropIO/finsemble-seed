@@ -22,6 +22,7 @@ class AppCard extends Component {
 			checkHighlighted: false,
 			titleUnderlined: false,
 			appName: this.props.title || this.props.name,
+			id: this.props.appId,
 			entitled: this.props.entitled ? this.props.entitled : false
 		};
 		this.bindCorrectContext();
@@ -81,7 +82,7 @@ class AppCard extends Component {
 	addApp(e) {
 		e.preventDefault();
 		e.stopPropagation();
-		storeActions.addApp(this.state.appName);
+		storeActions.addApp(this.state.id);
 	}
 	/**
 	 * Prevents bubbling (which would open the app showcase), then calls to remove an app
@@ -90,7 +91,7 @@ class AppCard extends Component {
 	removeApp(e) {
 		e.preventDefault();
 		e.stopPropagation();
-		storeActions.removeApp(this.state.appName);
+		storeActions.removeApp(this.state.id);
 	}
 	/**
 	 * Prevents bubbling (which would open the app showcase), then calls to add a filtering tag

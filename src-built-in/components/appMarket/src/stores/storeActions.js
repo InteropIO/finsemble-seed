@@ -123,14 +123,7 @@ function getApps() {
  * Function to "install" an app. Adds the id to a list of installed apps
  * @param {string} name The name of the app
  */
-function addApp(name) {
-    // let apps = getStore().getValue({
-    //     field: 'apps'
-    // });
-
-    // let installed = getStore().getValue({
-    //     field: 'installed'
-    // });
+function addApp(id) {
     let { installed, apps } = getStore().getValues([
         {
             field: 'apps'
@@ -142,8 +135,8 @@ function addApp(name) {
 
     for (let i = 0; i < apps.length; i++) {
         let app = apps[i];
-        let thisAppName = app.title || app.name;
-        if (thisAppName === name && !installed.includes(app.appId)) {
+        let thisAppId = app.appId;
+        if (thisAppId === id && !installed.includes(id)) {
             installed.push(app.appId);
             break;
         }
@@ -159,20 +152,14 @@ function addApp(name) {
  * Function to "uninstall" an app. Removes the id from a list of installed apps
  * @param {string} name The name of the app
  */
-function removeApp(name) {
-    let apps = getStore().getValue({
-        field: 'apps'
-    });
-
-    let installed = getStore().getValue({
-        field: 'installed'
-    });
+function removeApp(id) {
+    let { apps, installed } = getStore().getValues(["apps", "installed"]);
 
     for (let i = 0; i < apps.length; i++) {
         let app = apps[i];
-        let thisAppName = app.title || app.name;
-        if (thisAppName === name && installed.includes(app.appId)) {
-            let index = installed.indexOf(app.appId);
+        let thisAppId = app.appId;
+        if (thisAppId === id && installed.includes(id)) {
+            let index = installed.indexOf(id);
             installed.splice(index, 1);
             break;
         }

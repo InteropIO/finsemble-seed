@@ -206,9 +206,10 @@ export default class AppMarket extends React.Component {
 
 		apps = apps.map((app) => {
 			for (let i = 0; i < installed.length; i++) {
-				if (app.appId === installed[i]) {
+				if (installed.includes(app.appId)) {
 					app.installed = true;
-					break;
+				} else {
+					app.installed = false;
 				}
 			}
 			return app;

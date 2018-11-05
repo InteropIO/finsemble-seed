@@ -17,8 +17,16 @@ import storeActions from '../../stores/storeActions';
  */
 const Header = props => {
 
-	const appAction = () => {
-		props.appAction(props.name);
+	const addApp = () => {
+		if (props.installed) {
+			//TODO: Open app
+		} else {
+			storeActions.addApp(props.appId);
+		}
+	}
+
+	const removeApp = () => {
+		storeActions.removeApp(props.appId);
 	}
 
 	return (
@@ -28,12 +36,12 @@ const Header = props => {
 				<span className="appName">{props.name}</span>
 			</div>
 			<div className='action-button-container'>
-				{props.installed ? <button className={props.entitled ? "action-button disabled" : "action-button remove"} disabled={props.entitled} onClick={appAction}>
-					<div className='remove-button' onClick={this.removeApp}>
+				{props.installed && <button className={props.entitled ? "action-button disabled" : "action-button remove"} disabled={props.entitled} onClick={removeApp}>
+					<div className='remove-button'>
 						&nbsp;Remove
 					</div>
-				</button> : null}
-				<button className={props.entitled ? "action-button disabled" : "action-button open"} disabled={props.entitled} onClick={appAction}>
+				</button>}
+				<button className={props.entitled ? "action-button disabled" : "action-button open"} disabled={props.entitled} onClick={addApp}>
 					{props.installed ? (
 						<div>
 							<span className="action-button-label">Open</span>
