@@ -28,13 +28,12 @@ const Header = props => {
 				<span className="appName">{props.name}</span>
 			</div>
 			<div className='action-button-container'>
-				{props.installed && <button className={props.entitled ? "action-button disabled" : "action-button"} disabled={props.entitled} onClick={appAction}>
-					<div className='remove-button'>
-						<i className='ff-close-2'></i>
-						&nbsp;Remove App
+				{props.installed ? <button className={props.entitled ? "action-button disabled" : "action-button remove"} disabled={props.entitled} onClick={appAction}>
+					<div className='remove-button' onClick={this.removeApp}>
+						&nbsp;Remove
 					</div>
-				</button>}
-				<button className={props.entitled ? "action-button disabled" : "action-button"} disabled={props.entitled} onClick={appAction}>
+				</button> : null}
+				<button className={props.entitled ? "action-button disabled" : "action-button open"} disabled={props.entitled} onClick={appAction}>
 					{props.installed ? (
 						<div>
 							<span className="action-button-label">Open</span>
