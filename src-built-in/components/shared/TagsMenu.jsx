@@ -54,7 +54,7 @@ export default class TagsMenu extends React.Component {
 	}
 
 	handleClickOutside(e) {
-		if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+		if (this.wrapperRef && !this.wrapperRef.contains(e.target)) {
 			this.setState({
 				isVisible: false
 			});
