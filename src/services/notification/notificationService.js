@@ -628,7 +628,7 @@ function notificationService() {
 notificationService.prototype = new Finsemble.baseService({
 	startupDependencies: {
 		// TODO: architectural review, are the notifications needed to highlight failures of any of these services and clients?
-		services: ["dockingService", "authenticationService", "routerService"],
+		services: ["authenticationService"],
 		clients: ["launcherClient", "configClient"] 
 	}
 });
