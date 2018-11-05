@@ -9,6 +9,7 @@ import {createStore, getStore} from './stores/LauncherStore'
 import LeftNav from './components/LeftNav'
 import Content from './components/Content'
 import { FinsembleMenu } from '@chartiq/finsemble-react-controls';
+import storeActions from "../../appCatalog2/src/stores/storeActions";
 
 class AppLauncher extends React.Component {
 
@@ -16,6 +17,7 @@ class AppLauncher extends React.Component {
 		super(props);
 		this.finWindow = fin.desktop.Window.getCurrent();
 		this.openAppMarket = this.openAppMarket.bind(this);
+		this.openAdHoc = this.openAdHoc.bind(this);
 	}
 
 	componentWillMount() {
@@ -39,12 +41,18 @@ class AppLauncher extends React.Component {
 		)
 	}
 
+	openAdHoc() {
+		FSBL.Clients.DialogManager.open("AdhocComponentForm", {}, () => {
+			//TODO: Do something here to add the new app to the launcher
+		});
+	}
+
 	render() {
 		return (
 			<FinsembleMenu className="app-launcher-menu">
 				<div className="app-launcher">
 					<div className="complex-menu-wrapper">
-						<LeftNav openAppMarket={this.openAppMarket} />
+						<LeftNav openAppMarket={this.openAppMarket} openAdHoc={this.openAdHoc} />
 						<Content />
 					</div>
 				</div>

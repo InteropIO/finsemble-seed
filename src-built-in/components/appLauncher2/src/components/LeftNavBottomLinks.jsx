@@ -1,7 +1,7 @@
 import React from 'react'
 
 const bottomEntries = [
-	{ name: 'New App', icon: 'ff-new-workspace' },
+	{ name: 'New App', icon: 'ff-new-workspace', click: 'openAdHoc' },
 	{ name: 'New Dashboard', icon: 'ff-dashboard-new' },
 	{ name: 'App Catalog', icon: 'ff-list', click: 'openAppMarket' }
 ]
