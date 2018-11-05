@@ -116,7 +116,7 @@ export default class Carousel extends Component {
 					<i className="ff-chevron-left" onClick={this.pageDown} />
 					{displayCards.map((card, i) => {
 						return (
-							<AppCard key={(card.title || card.name) + i} {...card} openAppShowcase={this.props.openAppShowcase} />
+							<AppCard key={(card.title || card.name) + i} {...card} viewAppShowcase={this.props.viewAppShowcase} />
 						);
 					})}
 					<i className="ff-chevron-right" onClick={this.pageUp} />

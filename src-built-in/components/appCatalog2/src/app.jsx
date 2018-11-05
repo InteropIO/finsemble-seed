@@ -46,6 +46,7 @@ export default class AppMarket extends React.Component {
 		this.compileAddedInfo = this.compileAddedInfo.bind(this);
 		this.getPageContents = this.getPageContents.bind(this);
 		this.determineActivePage = this.determineActivePage.bind(this);
+		this.navigateToShowcase = this.navigateToShowcase.bind(this);
 	}
 	async componentDidMount() {
 		this.setState({
@@ -58,10 +59,12 @@ export default class AppMarket extends React.Component {
 		});
 		getStore().addListener({ field: 'installed' }, this.stopShowingInstalledNotification);
 		getStore().addListener({ field: 'filteredApps' }, this.filteringApps);
+		getStore().addListener({ field: 'activeApp' }, this.openAppShowcase);
 	}
 	componentWillUnmount() {
 		getStore().removeListener({ field: 'filteredApps' }, this.filteringApps);
 		getStore().removeListener({ field: 'installed' }, this.stopShowingInstalledNotification);
+		getStore().removeListener({ field: 'activeApp' }, this.openAppShowcase);
 	}
 	/**
 	 * The store has pushed an update to the filtered tags list. This means a user has begun searching or added tags to the filter list
@@ -113,6 +116,7 @@ export default class AppMarket extends React.Component {
 	goHome() {
 		storeActions.clearTags();
 		storeActions.clearFilteredApps();
+		storeActions.clearApp();
 		this.setState({
 			activeApp: null,
 			forceSearch: false
@@ -163,29 +167,20 @@ export default class AppMarket extends React.Component {
 			installed
 		});
 	}
+	navigateToShowcase(id) {
+		storeActions.openApp(id)
+	}
 	/**
 	 * Opens the AppShowcase page for the app supplied
-	 * @param {string} appName The title/name of the app to open the showcase for
 	 */
-	openAppShowcase(appName) {
-		storeActions.clearTags();
-
-		let app;
-		let apps = this.state.apps;
-		for (let i = 0; i < apps.length; i++) {
-			let thisApp = apps[i];
-			let thisAppName = thisApp.title || thisApp.name;
-
-			if (appName === thisAppName) {
-				app = thisApp;
-				break;
-			}
-		}
-
+	openAppShowcase() {
+		let app = storeActions.getActiveApp();
 		if (app) {
+			storeActions.clearTags();
+			storeActions.clearFilteredApps();
 			this.setState({
 				activeApp: app,
-				activePage: "showcase"
+				forceSearch: false
 			});
 		}
 	}
@@ -227,11 +222,11 @@ export default class AppMarket extends React.Component {
 		switch (activePage) {
 			case "home":
 				return (
-					<Home cards={apps} openAppShowcase={this.openAppShowcase} seeMore={this.addTag} addApp={this.addApp} removeApp={this.removeApp} addTag={this.addTag} />
+					<Home cards={apps} seeMore={this.addTag} addApp={this.addApp} removeApp={this.removeApp} addTag={this.addTag} viewAppShowcase={this.navigateToShowcase} />
 				);
 			case "appSearch":
 				return (
-					<AppResults cards={apps} tags={activeTags} addApp={this.addApp} removeApp={this.removeApp} openAppShowcase={this.openAppShowcase} addTag={this.addTag} />
+					<AppResults cards={apps} tags={activeTags} addApp={this.addApp} removeApp={this.removeApp} viewAppShowcase={this.navigateToShowcase} addTag={this.addTag} />
 				);
 			case "showcase":
 				return (
@@ -251,7 +246,7 @@ export default class AppMarket extends React.Component {
 
 		return (
 			<div>
-				<SearchBar backButton={page !== "home"} tags={tags} activeTags={activeTags} tagSelected={this.addTag} removeTag={this.removeTag} goHome={this.goHome} changeSearch={this.changeSearch} installationActionTaken={this.state.installationActionTaken} search={this.changeSearch} />
+				<SearchBar backButton={page !== "home"} tags={tags} activeTags={activeTags} tagSelected={this.addTag} removeTag={this.removeTag} goHome={this.goHome} installationActionTaken={this.state.installationActionTaken} search={this.changeSearch} isViewingApp={this.state.activeApp !== null} />
 				<div className="market_content">
 					{pageContents}
 				</div>

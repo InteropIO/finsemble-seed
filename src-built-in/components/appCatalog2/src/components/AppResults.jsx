@@ -63,7 +63,7 @@ const AppResults = props => {
 
 			cardsInRow.push(
 				<td key={key}>
-					<AppCard {...card} openAppShowcase={props.openAppShowcase} />
+					<AppCard {...card} viewAppShowcase={props.viewAppShowcase} />
 				</td>
 			);
 		}

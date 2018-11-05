@@ -38,7 +38,7 @@ class SearchBar extends Component {
 		this.removeTag = this.removeTag.bind(this);
 	}
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.activeTags.length === 0 && !nextProps.backButton) {
+		if ((nextProps.activeTags.length === 0 && !nextProps.backButton) || nextProps.isViewingApp) {
 			this.setState({
 				searchValue: ""
 			});

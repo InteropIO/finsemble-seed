@@ -18,8 +18,11 @@ export default {
     clearTags,
     addApp,
     removeApp,
+    openApp,
+    clearApp,
     fetchInstalledApps,
-    getInstalledApps
+    getInstalledApps,
+    getActiveApp
 }
 
 /**
@@ -172,6 +175,43 @@ function removeApp(id) {
 }
 
 /**
+ * Function to set the 'active app' for the catalog.
+ * @param {string} id The app id to show as the actively showcasing app
+ */
+function openApp(id) {
+    let apps = getStore().getValue({
+        field: 'apps'
+    });
+
+    let index = apps.findIndex((app) => {
+        return app.appId === id;
+    });
+
+    let app = null;
+    if (index >= 0 && index < apps.length) {
+        app = apps[index];
+    }
+
+    getStore().setValue({
+        field: 'activeApp',
+        value: app
+    });
+}
+
+function clearApp() {
+    getStore().setValue({
+        field: 'activeApp',
+        value: null
+    });
+}
+
+function getActiveApp() {
+    return getStore().getValue({
+        field: 'activeApp'
+    });
+}
+
+/**
  * Gets the list of installed apps
  */
 function getInstalledApps() {
@@ -246,8 +286,6 @@ function searchApps(terms) {
     let activeTags = getStore().getValue({
         field: 'activeTags'
     });
-
-    console.log('searching: ', terms, activeTags);
 
     appd.search({ text: terms, tags: activeTags }, (err, data) => {
         if (err) console.log("Failed to search apps");

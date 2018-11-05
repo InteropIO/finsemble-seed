@@ -16,7 +16,7 @@ import Carousel from './Carousel';
  * Home page. Contains carousels and a hero component
  * @param {object} props Component props
  * @param {array} props.cards An Array of app information from FDC
- * @param {func} props.openAppShowcase Opens the AppShowcase page for a selected app
+ * @param {func} props.viewAppShowcase Opens the AppShowcase page for a selected app
  */
 const Home = props => {
 
@@ -30,9 +30,9 @@ const Home = props => {
 
 	return (
 		<div className='home'>
-			<Hero cards={props.cards} openAppShowcase={props.openAppShowcase} />
-			<Carousel tag="Pizza" cards={carousel1} openAppShowcase={props.openAppShowcase} />
-			<Carousel tag="newrelease" cards={carousel2} openAppShowcase={props.openAppShowcase} />
+			<Hero cards={props.cards} viewAppShowcase={props.viewAppShowcase} />
+			<Carousel tag="Pizza" cards={carousel1} viewAppShowcase={props.viewAppShowcase} />
+			<Carousel tag="newrelease" cards={carousel2} viewAppShowcase={props.viewAppShowcase} />
 		</div>
 	);
 }

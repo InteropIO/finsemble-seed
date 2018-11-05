@@ -56,8 +56,7 @@ export default class Hero extends Component {
 	 * Called the parent function to open the AppShowcase for the clicked app
 	 */
 	openApp() {
-		let name = this.props.cards[this.state.active].title || this.props.cards[this.state.active].name;
-		this.props.openAppShowcase(name);
+		this.props.viewAppShowcase(this.props.cards[this.state.active].appId);
 	}
 	render() {
 

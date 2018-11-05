@@ -85,7 +85,7 @@ class AppCard extends Component {
 	 * Calls parent passed function to open the app showcase for the supplied app
 	 */
 	openAppShowcase() {
-		this.props.openAppShowcase(this.state.appName);
+		this.props.viewAppShowcase(this.state.id);
 	}
 	/**
 	 * Prevents bubbling (which would open the app showcase), then calls to add an app
