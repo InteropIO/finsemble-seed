@@ -1,11 +1,11 @@
 {
     "notification": {
         "output": "components/notification/notification",
-        "entry": "./src\\components\\notification\\notification.js"
+        "entry": "./src/components/notification/notification.js"
     },
     "testNotifications": {
         "output": "components/testNotifications/testNotifications",
-        "entry": "./src\\components\\testNotifications\\testNotifications.js"
+        "entry": "./src/components/testNotifications/testNotifications.js"
     },
     "NotificationsCenter": {
         "output": "components/notificationsCenter/notificationsCenter",
