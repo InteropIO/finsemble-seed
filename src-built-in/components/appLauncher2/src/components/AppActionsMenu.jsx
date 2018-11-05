@@ -31,20 +31,16 @@ export default class AppActionsMenu extends React.Component {
 	}
 
 	//TODO: Implement handlers
-	async onAddToFavorite() {
-		const favorite = await storeActions.getFavoriteFolder()
-		storeActions.addAppToFolder(favorite, this.props.app)
+	onAddToFavorite() {
+		storeActions.addAppToFolder('Favorites', this.props.app)
 		this.setState({
 			isVisible: false
 		})
 	}
 
 	onRemoveFromFavorite() {
-		const favorite = storeActions.getFolders().find((folder) => {
-			return folder.name === "Favorites";
-		});
-		storeActions.removeAppFromFolder(favorite, this.props.app);
-		this.toggleMenu();
+		storeActions.removeAppFromFolder('Favorites', this.props.app);
+		this.toggleMenu()
 	}
 
 	onViewInfo() {

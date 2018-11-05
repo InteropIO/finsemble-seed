@@ -13,23 +13,15 @@ export default class FoldersList extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			folders: [],
-			activeFolder: 'My Apps'
+			folders: storeActions.getFolders(),
+			activeFolder: storeActions.getActiveFolderName(),
+			renamingFolder: null,
+			folderNameInput: ''
 		}
-		this.setStateValues()
 		this.renameFolder = this.renameFolder.bind(this)
 		this.changeFolderName = this.changeFolderName.bind(this)
 		this.onAppFoldersUpdate = this.onAppFoldersUpdate.bind(this)
 		this.keyPressed = this.keyPressed.bind(this)
-	}
-
-	async setStateValues() {
-		this.setState({
-			folders: await storeActions.getFolders(),
-			activeFolder: 'My Apps',
-			renamingFolder: null,
-			folderNameInput: ""
-		});
 	}
 
 	onAppDrop(event, folder) {
@@ -40,9 +32,8 @@ export default class FoldersList extends React.Component {
 			console.info('Dropped app in favorites.')
 		}
 		// Do not do anything if its my apps or dashboards folder
-		[MY_APPS, DASHBOARDS].indexOf(folder.name) < 0 && storeActions.addAppToFolder(folder, app)
+		[MY_APPS, DASHBOARDS].indexOf(folder) < 0 && storeActions.addAppToFolder(folder, app)
 	}
-
 
 	onAppFoldersUpdate(error, data) {
 		this.setState({
@@ -53,20 +44,20 @@ export default class FoldersList extends React.Component {
 	onFolderClicked(folder) {
 		getStore().setValue({
 			field: 'activeFolder',
-			value: folder.name
-		}, () => {
+			value: folder
+		}, (error, data) => {
 			this.setState({
-				activeFolder: folder.name
+				activeFolder: folder
 			})
 		})
 	}
 
 	componentWillMount() {
-		getStore().addListener({ field: 'folders' }, this.onAppFoldersUpdate)
+		getStore().addListener({ field: 'appFolders.folders' }, this.onAppFoldersUpdate)
 	}
 
 	componentWillUnmount() {
-		getStore().removeListener({ field: 'folders' }, this.onAppFoldersUpdate)
+		getStore().removeListener({ field: 'appFolders.folders' }, this.onAppFoldersUpdate)
 	}
 
 	renameFolder(name) {
@@ -103,29 +94,29 @@ export default class FoldersList extends React.Component {
 
 	renderFoldersList() {
 
-		return this.state.folders.map((folder, index) => {
-
+		return Object.keys(this.state.folders).map((key, index) => {
+			const folder = this.state.folders[key]
 			let className = 'complex-menu-section-toggle'
-			if (this.state.activeFolder === folder.name) {
+			if (this.state.activeFolder === key) {
 				className += ' active-section-toggle'
 			}
 
-			let nameField = folder.icon === 'ff-folder' && this.state.renamingFolder === folder.name ? 
+			let nameField = folder.icon === 'ff-folder' && this.state.renamingFolder === key ? 
 			<input value={this.state.folderNameInput}
 				onChange={this.changeFolderName}
-				onKeyPress={this.keyPressed} autoFocus/> : folder.name
+				onKeyPress={this.keyPressed} autoFocus/> : key
 
 			return <FinsembleDraggable
-				draggableId={folder.name}
+				draggableId={key}
 				key={index} index={index}>
-				<div onClick={() => this.onFolderClicked(folder)}
-					onDrop={(event) => this.onAppDrop(event, folder)}
+				<div onClick={() => this.onFolderClicked(key)}
+					onDrop={(event) => this.onAppDrop(event, key)}
 					className={className} key={index}>
 					<span className='left-nav-label'>
 						{folder.icon && <i className={folder.icon}></i>}
 						{nameField}
 					</span>
-					{folder.icon === 'ff-folder' ? <FolderActionsMenu folder={folder} renameFolder={this.renameFolder} /> : null}
+					{folder.icon === 'ff-folder' ? <FolderActionsMenu folder={key} renameFolder={this.renameFolder} /> : null}
 				</div>
 			</FinsembleDraggable>
 		})
