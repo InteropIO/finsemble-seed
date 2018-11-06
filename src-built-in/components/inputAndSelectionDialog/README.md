@@ -1,4 +1,4 @@
-## SingleInput Dialog
+## Input and Selection
 
 ### Overview
 This is the dialog we show when we need a name for a new workspace. 
