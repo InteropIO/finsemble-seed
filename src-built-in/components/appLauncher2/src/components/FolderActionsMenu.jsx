@@ -13,7 +13,7 @@ class FolderActionsMenu extends React.Component {
 		this.state = {
 			isVisible: false
 		};
-		this.bindCorrectContext();
+		this.bindCorrectContext()
 	}
 	bindCorrectContext() {
 		this.toggleMenu = this.toggleMenu.bind(this);
@@ -32,13 +32,15 @@ class FolderActionsMenu extends React.Component {
 	toggleMenu() {
 		this.setState({
 			isVisible: !this.state.isVisible
-		});
+		})
 	}
+
 	renameFolder() {
-		this.props.renameFolder(this.props.folder.name);
+		this.props.renameFolder(this.props.folder);
 	}
+	
 	launchAll() {
-		let folders = storeActions.getFolders();
+		let folders = storeActions.getFolders()
 		let folder = folders.find((folder) => {
 			return folder.name === this.props.folder.name;
 		});
@@ -56,8 +58,9 @@ class FolderActionsMenu extends React.Component {
 			});
 		}
 	}
-	deleteFolder() {
-		storeActions.deleteFolder(this.props.folder.name);
+
+	deleteFolder(event) {
+		//storeActions.deleteFolder(this.props.folder)
 	}
 	setMenuRef(node) {
 		this.menuRef = node;

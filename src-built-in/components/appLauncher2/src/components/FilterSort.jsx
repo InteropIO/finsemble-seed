@@ -20,7 +20,7 @@ export default class FilterSort extends React.Component {
 
 	async setStateValues(){
 		this.setState({
-			tags: await storeActions.getAllAppsTags()
+			tags: storeActions.getAllAppsTags()
 		})
 	}
 

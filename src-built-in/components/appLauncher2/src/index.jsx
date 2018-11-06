@@ -5,6 +5,8 @@ import "../../../../assets/css/finsemble.css"
 import React from  'react'
 import ReactDOM from  'react-dom'
 import {createStore, getStore} from './stores/LauncherStore'
+import storeActions from './stores/StoreActions'
+
 // Import React components
 import LeftNav from './components/LeftNav'
 import Content from './components/Content'
@@ -64,7 +66,10 @@ class AppLauncher extends React.Component {
 fin.desktop.main(function () {
 	FSBL.addEventListener("onReady", function () {
 		createStore((store) => {
-			ReactDOM.render(<AppLauncher />, document.getElementById("wrapper"));
+			storeActions.initialize(() => {
+				ReactDOM.render(<AppLauncher />, 
+					document.getElementById("wrapper"))
+			})
 		});
 	});
 });

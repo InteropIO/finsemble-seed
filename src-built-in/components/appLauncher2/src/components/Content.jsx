@@ -15,10 +15,11 @@ export default class Content extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			tags: [],
-			sortBy: 'Alphabetical',
-			filterText: '',
-			folder: {appDefinitions: []}
+			apps: storeActions.getAllApps(),
+			tags: storeActions.getTags(),
+			sortBy: storeActions.getSortBy(),
+			filterText: storeActions.getSearchText(),
+			folder: storeActions.getActiveFolder()
 		}
 		this.onSort = this.onSort.bind(this)
 		this.onSearch = this.onSearch.bind(this)
@@ -28,28 +29,20 @@ export default class Content extends React.Component {
 		store = getStore()
 	}
 
-	async setStateValues() {
-		this.setState({
-			tags: await storeActions.getTags(),
-			sortBy: await storeActions.getSortBy(),
-			filterText: await storeActions.getSearchText(),
-			folder: await storeActions.getActiveFolder()
-		})
-	}
-
 	filterApps() {
 		const folder = this.state.folder
-		if(!folder || !folder.appDefinitions) {
+		const apps = Object.values(folder.apps)
+
+		if(!folder || !apps) {
 			return []
 		}
 		const sortFunc = sortFunctions[this.state.sortBy]
-		const apps = this.filterAppsByTags(sortFunc(this.state.folder.appDefinitions))
+		const filteredApps = this.filterAppsByTags(sortFunc(apps))
 		if (!this.state.filterText) {
-			return apps
+			return filteredApps
 		}
-		return apps.filter((app) => {
-			return app.name.toLowerCase().indexOf(this.state.filterText) !== -1 ||
-				app.friendlyName.toLowerCase().indexOf(this.state.filterText) !== -1
+		return filteredApps.filter((app) => {
+			return app.name.toLowerCase().indexOf(this.state.filterText) !== -1
 		})
 	}
 
@@ -64,15 +57,15 @@ export default class Content extends React.Component {
 		})
 	}
 
-	async onActiveFolderChanged(error, data) {
+	onActiveFolderChanged(error, data) {
 		this.setState({
-			folder: await storeActions.getActiveFolder()
+			folder: storeActions.getActiveFolder()
 		})
 	}
 
-	async onSearch(error, data) {
+	onSearch(error, data) {
 		this.setState({
-			filterText: await storeActions.getSearchText()
+			filterText: data.value
 		})
 	}
 
@@ -82,7 +75,7 @@ export default class Content extends React.Component {
 		})
 	}
 
-	async onTagsUpdate(error, data) {
+	onTagsUpdate(error, data) {
 		this.setState({
 			tags: data.value
 		})
@@ -92,9 +85,9 @@ export default class Content extends React.Component {
 	 * Because there is no way to subscribe to
 	 * folders[index].appDefinitions updates.
 	 */
-	async onAppListUpdate(error, data) {
+	onAppListUpdate(error, data) {
 		this.setState({
-			folder: await storeActions.getActiveFolder()
+			folder:  storeActions.getActiveFolder()
 		})
 	}
 
@@ -110,7 +103,7 @@ export default class Content extends React.Component {
 		// We can't subscribe to folders[index].appDefinitions
 		// So we are looking at appFolders.folders update
 		// Since that update is done After removing an app of definitions
-		store.addListener({ field: 'folders' }, this.onAppListUpdate)
+		store.addListener({ field: 'appFolders.folders' }, this.onAppListUpdate)
 	}
 
 	componentWillUnmount() {
@@ -118,7 +111,7 @@ export default class Content extends React.Component {
 		store.removeListener({ field: 'filterText' }, this.onSearch)
 		store.removeListener({ field: 'sortBy' }, this.onSort)
 		store.removeListener({ field: 'tags' }, this.onTagsUpdate)
-		store.removeListener({ field: 'folders' }, this.onAppListUpdate)
+		store.removeListener({ field: 'appFolders.folders' }, this.onAppListUpdate)
 	}
 
 	renderAppList() {

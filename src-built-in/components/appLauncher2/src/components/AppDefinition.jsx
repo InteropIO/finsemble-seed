@@ -40,13 +40,13 @@ export default class AppDefinition extends React.Component {
 	}
 
 	isFavorite() {
-		return this.state.favorites.find(app => app.name === this.props.app.name)
+		return this.state.favorites.indexOf(this.props.app.appID) > -1
 	}
 
 	async componentWillMount() {
-		const favFolder = await storeActions.getFavoriteFolder()
+		const favFolder = await storeActions.getSingleFolder('Favorites')
 		this.setState({
-			favorites: favFolder.appDefinitions
+			favorites: Object.keys(favFolder.apps)
 		})
 	}
 
@@ -56,7 +56,7 @@ export default class AppDefinition extends React.Component {
 			<div onDoubleClick={() => this.onDoubleClick(app)} className="app-item" draggable="true" onDragStart={this.onDragToFolder}>
 				<span className="app-item-title">
 					{app.icon !== undefined ? <i className={app.icon}></i> : null}
-					<span className="app-friendly-name">{app.friendlyName} {this.isFavorite() && <i className='ff-favorite'></i>}</span>
+					{app.name} {this.isFavorite() && <i className='ff-favorite'></i>}
 				</span>
 				<AppTagsList tags={app.tags} />
 				<AppActionsMenu app={app} folder={this.props.folder}/>
