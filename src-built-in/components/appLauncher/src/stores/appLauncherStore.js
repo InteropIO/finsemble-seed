@@ -5,8 +5,7 @@
 
 let ToolbarStore, appLauncherStore, windowGroupStore;
 import async from "async";
-let finWindow = fin.desktop.Window.getCurrent();
-const COMPONENT_UPDATE_CHANNEL = `${finWindow.name}.ComponentsToRender`;
+var COMPONENT_UPDATE_CHANNEL;
 function uuidv4() {
 	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
 		var r = Math.random() * 16 | 0,
@@ -14,7 +13,7 @@ function uuidv4() {
 		return v.toString(16);
 	});
 }
-FSBL.Clients.RouterClient.addPubSubResponder(COMPONENT_UPDATE_CHANNEL, {});
+
 var Actions = {
 	initialize: function (cb) {
 		async.parallel([
@@ -262,7 +261,9 @@ var Actions = {
 			title: "Delete this App?",
 			question: "Are you sure you would like to delete \"" + componentName + "\"?",
 		}, function (err, response) {
-			if (response.choice === "affirmative") {
+			// If the user chooses "affirmative" then delete the component.
+			// We should never get an error, but if we do then go ahead and delete the component too.
+			if (err || response.choice === "affirmative") {
 				self.removeCustomComponent(componentName);
 			}
 		});
@@ -302,9 +303,10 @@ var Actions = {
 		fin.desktop.Window.getCurrent().hide();
 	},
 	//Spawn a component.
-	launchComponent(config, data, cb) {
-		Actions.hideWindow();
-		let params = { addToWorkspace: true, monitor: "mine" };
+	launchComponent(config, params, cb) {
+		//Actions.hideWindow();
+		let defaultParams = { addToWorkspace: true, monitor: "mine" };
+		params = Object.assign(defaultParams, params);
 		if (config.component.windowGroup) params.groupName = config.component.windowGroup;
 		FSBL.Clients.LauncherClient.spawn(config.component.type, params, function (err, windowInfo) {
 			if (cb) {
@@ -370,6 +372,8 @@ function getWindowGroupStore(done) {
 }
 
 function initialize(cb) {
+	COMPONENT_UPDATE_CHANNEL = `${finsembleWindow.name}.ComponentsToRender`;
+	FSBL.Clients.RouterClient.addPubSubResponder(COMPONENT_UPDATE_CHANNEL, {});
 	async.parallel([
 		createLocalStore,
 		getToolbarStore,

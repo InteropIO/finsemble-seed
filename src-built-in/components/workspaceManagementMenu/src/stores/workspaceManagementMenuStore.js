@@ -16,6 +16,7 @@ let defaultData = {
 	WorkspaceList: [],
 	newWorkspaceDialogIsActive: false
 };
+let switching = false;
 
 function uuidv4() {
 	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -26,6 +27,19 @@ function uuidv4() {
 }
 let finWindow = fin.desktop.Window.getCurrent();
 Actions = {
+	autoSave: (callback) => {
+		let activeName = FSBL.Clients.WorkspaceClient.activeWorkspace.name;
+		if (!PROMPT_ON_SAVE) {
+			FSBL.Clients.WorkspaceClient.saveAs({
+				name: activeName,
+				force: true
+			}, (err, response) => {
+				callback(err);
+			});
+		} else {
+			callback(null);
+		}
+	},
 	initialize: function () {
 		//Gets the workspace list and sets the value in the store.
 		FSBL.Clients.WorkspaceClient.getWorkspaces(function (err, workspaces) {
@@ -139,11 +153,14 @@ Actions = {
 			});
 		}
 
+
 		if (!newWorkspaceDialogIsActive) {
 			WorkspaceManagementStore.setValue({ field: "newWorkspaceDialogIsActive", value: true });
 		}
+
 		Actions.blurWindow();
 		let tasks = [
+			Actions.autoSave,
 			Actions.spawnWorkspaceInputField,
 			Actions.validateWorkspaceInput,
 			Actions.checkIfWorkspaceAlreadyExists,
@@ -297,6 +314,7 @@ Actions = {
 		Logger.system.log("SaveWorkspaceAs clicked.");
 
 		async.waterfall([
+			Actions.autoSave,
 			Actions.spawnSaveAsDialog,
 			Actions.validateWorkspaceInput,
 			Actions.checkIfWorkspaceAlreadyExists,
@@ -308,6 +326,8 @@ Actions = {
 	 * Asks the user if they'd like to save their data, then loads the requested workspace.
 	 */
 	switchToWorkspace: function (data) {
+		if (switching) return;
+		switching = true;
 		Actions.blurWindow();
 		let name = data.name;
 		let activeWorkspace = WorkspaceManagementStore.getValue("activeWorkspace");
@@ -318,6 +338,8 @@ Actions = {
 		function switchIt() {
 			FSBL.Clients.WorkspaceClient.switchTo({
 				name: name
+			}, () => {
+				switching = false;
 			});
 		}
 		/**
@@ -330,21 +352,12 @@ Actions = {
 			}, callback);
 		}
 
-		function autoSave(callback) {
-			let activeName = FSBL.Clients.WorkspaceClient.activeWorkspace.name;
-			FSBL.Clients.WorkspaceClient.saveAs({
-				name: activeName,
-				force: true
-			}, (err, response) => {
-				callback(err, null);
-			});
-		}
 		/**
 		 * If the workspace is dirty, we need to do more than if it's clean. We don't want users to lose unsaved work.
 		 */
 		let tasks = [];
 		if (activeWorkspace.isDirty) {
-			let firstMethod = autoSave,
+			let firstMethod = Actions.autoSave,
 				secondMethod = null;
 			if (PROMPT_ON_SAVE === true) {
 				//We want to ask the user to save. But if they're trying to reload the workspace, the mssage needs to be different. The first if block just switches that method.
@@ -423,9 +436,9 @@ Actions = {
 			}
 		}
 		let dialogParams = {
-			title: "Save your workspace",
+			title: "Enter a name for your new workspace.",
 			inputLabel: "Enter a name for your new workspace.",
-			affirmativeButtonLabel: "Continue",
+			affirmativeResponseLabel: "Confirm",
 			showCancelButton: false,
 			showNegativeButton: false
 		};
@@ -450,9 +463,9 @@ Actions = {
 		}
 
 		let dialogParams = {
-			title: "Save your workspace",
-			inputLabel: "Enter a name for your workspace.",
-			affirmativeButtonLabel: "Confirm",
+			title: "Enter a name for your new workspace.",
+			inputLabel: "Enter a name for your new workspace.",
+			affirmativeResponseLabel: "Confirm",
 			showCancelButton: false,
 			showNegativeButton: false
 		};
@@ -550,7 +563,7 @@ Actions = {
 		let dialogParams = {
 			title: "Overwrite Workspace?",
 			question: "The workspace \"" + workspaceName + "\" already exists. A new workspace will be created.",
-			affirmativeResponseLabel: "Okay",
+			affirmativeResponseLabel: "OK",
 			showNegativeButton: false
 		};
 

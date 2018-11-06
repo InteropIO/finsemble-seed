@@ -5,8 +5,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "../inputAndSelectionDialog.css";
-import "../../assets/css/finfont.css";
-import "../../assets/css/finsemble.css";
+import "../../../../assets/css/font-finance.css";
+import "../../../../assets/css/finsemble.css";
 import { FinsembleDialog, FinsembleDialogQuestion, FinsembleDialogTextInput, FinsembleDialogButton } from "@chartiq/finsemble-react-controls";
 import { FinsembleDnDContext, FinsembleDraggable, FinsembleDroppable } from '@chartiq/finsemble-react-controls';
 
@@ -304,8 +304,9 @@ class InputAndSelectionDialog extends React.Component {
 }
 
 //render component when FSBL is ready.
-FSBL.addEventListener("onReady", function () {
+if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
+function FSBLReady() {
 	ReactDOM.render(
 		<InputAndSelectionDialog />
 		, document.getElementById("inputAndSelectionDialog-component-wrapper"));
-});
+}

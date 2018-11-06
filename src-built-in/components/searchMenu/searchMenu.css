@@ -1,13 +1,10 @@
-:root {
-    --scrollbar-color: #039bff;
-}
 						/*!
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
-@import  url('../assets/css/_globals.css');
+@import  url('../../../assets/css/_globals.css');
 
-@import  url('../assets/css/_menus.css');
+@import  url('../../../assets/css/_menus.css');
 
 html {
     height: 100%;
@@ -18,7 +15,7 @@ html {
 body {
     margin-left: 0px !important;
     margin-right: 0px !important;
-    font-size: 1em;
+    font-size: var(--menu-font-size);
     max-height: 500px;
     font-family: var(--font-family);
     overflow-y: auto !important;
@@ -32,15 +29,14 @@ body {
 .searchHeader {
     height: 21px;
     display: flex;
-    font-weight: 600;
-    color: var(--primary-accent-color);
-    padding-left: 14px;
-    padding-top: 6px;
+    color: var(--search-header-font-color);
+    font-weight: var(--search-header-font-weight);
+    padding: 6px 0px 0px 14px;
 }
 
 .divider {
     height: 1px;
-    border: solid 1px #ecf0f1;
+    border: var(--toolbar-separator);
     margin-bottom: 15px;
 }
 
@@ -53,22 +49,26 @@ body {
 }
 
 .resultItem {
-    height: 24px;
-    font-weight: 300;
+    color: var(--search-result-font-color);
+    font-weight: var(--search-result-font-weight);
     text-align: left;
-    color: var(--search-result-item-color);
     padding: 4px 28px 4px 14px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
+.resultItem:hover {
+    background-color: var(--search-result-highlighter-color)
+}
+
+
 .providerContainer:last-child {
     margin-bottom: 0px;
 }
 
 .resultItem.active {
-    background-color: var(--search-result-active-item-color);
+    background-color: var(--search-result-highlighter-color);
 }
 
 .resultItem .resultName {
@@ -92,7 +92,7 @@ body {
 }
 
 .actionButton {
-    border: 1px solid #039bff;
+    border: 1px solid var(--button-neutral-border-color);
     padding: 3px;
     display: inline-block;
     text-align: center;
@@ -102,7 +102,7 @@ body {
 
 .providerAction {
     height: 16px;
-    border: solid 1px #dddddd;
+    border: solid 1px var(--button-neutral-border-color);
     display: flex;
     justify-content: center;
     text-align: center;
@@ -120,7 +120,7 @@ body {
 .actionTitle {
     font-size: 11px;
     vertical-align: middle;
-    color: #000000;
+    color: var(--menu-font-color);
 }
 
 .arrow_right_grey {
@@ -154,5 +154,5 @@ body {
 
 .no-results {
     padding-left: 14px;
-    padding-top: 8px;
+    padding-top: 12px;
 }

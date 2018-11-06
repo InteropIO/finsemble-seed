@@ -3,16 +3,16 @@
 * All rights reserved.
 */
 import React from "react";
+import ReactDOM from "react-dom";
 import { Actions as FileMenuActions } from "./stores/fileMenuStore";
 import { FinsembleMenu, FinsembleMenuItem, FinsembleMenuSection, FinsembleMenuSectionLabel } from "@chartiq/finsemble-react-controls";
-import "../fileMenu.css";
-import "../../assets/css/finfont.css";
-import "../../assets/css/finsemble.css";
+import "../../../../assets/css/font-finance.css";
+import "../../../../assets/css/finsemble.css";
 
 class FileMenu extends React.Component {
 	render() {
 		let padding = {
-			height: 10,
+			height: 0,
 			width: 40
 		};
 		return (<FinsembleMenu padding={padding}>
@@ -36,9 +36,10 @@ class FileMenu extends React.Component {
 }
 
 
-FSBL.addEventListener("onReady", function () {
+if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
+function FSBLReady() {
 	ReactDOM.render(
 		<FileMenu />
 		, document.getElementById("FileMenu-component-wrapper"));
 
-});
+}

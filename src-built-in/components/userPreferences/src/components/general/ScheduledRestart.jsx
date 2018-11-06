@@ -69,6 +69,7 @@ export default class ScheduledRestart extends React.Component {
             Actions.disableScheduledRestart();
         } else {
             this.setState({ enabled })
+            Actions.setScheduledRestart(scheduledRestart);
         }
     }
 
@@ -144,11 +145,14 @@ export default class ScheduledRestart extends React.Component {
     componentDidMount() {
         UserPreferencesStore.addListener({ field: 'preferences' }, this.setPreferences)
         UserPreferencesStore.getValue({ field: "preferences" }, (err, data) => {
+            console.log('response: ', data)
             if (data) {
                 let scheduledRestart = data['finsemble.scheduledRestart'];
-                let enabled = scheduledRestart !== null;
+                let enabled = typeof scheduledRestart === "object";
                 if (enabled) {
                     scheduledRestart.meridiem = scheduledRestart.hour > 11 ? "PM" : "AM";
+                } else {
+                    scheduledRestart = DEFAULT_RESTART;
                 }
                 this.setState({ scheduledRestart, enabled });
             }

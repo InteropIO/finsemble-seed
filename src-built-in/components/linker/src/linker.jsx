@@ -5,9 +5,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./css/linkerWindow.css";
-import "../../assets/css/finfont.css";
-import "../../assets/css/finsemble.css";
-import "../../assets/css/CIQ_Seed.css";
+import "../../../../assets/css/font-finance.css";
+import "../../../../assets/css/finsemble.css";
 import * as storeExports from "./stores/linkerStore";
 let LinkerStore = storeExports.Store;
 let LinkerActions = storeExports.Actions;
@@ -16,7 +15,6 @@ class Linker extends React.Component {
 	constructor() {
 		super();
 		this.onStoreChanged = this.onStoreChanged.bind(this);
-		this.finWindow = fin.desktop.Window.getCurrent();
 	}
 	/**
 	 * When the store changes, set the react component's state, forcing a rerender.
@@ -55,7 +53,7 @@ class Linker extends React.Component {
 	 * @memberof Linker
 	 */
 	onWindowBlur() {
-		this.finWindow.hide();
+		finsembleWindow.hide();
 	}
 	/**
 	 * Fit the contents of the dom to the openfin window's bounds. Also set the component's state.
@@ -63,7 +61,7 @@ class Linker extends React.Component {
 	 * @memberof Linker
 	 */
 	componentWillMount() {
-		this.finWindow.addEventListener("blurred", this.onWindowBlur.bind(this));
+		finsembleWindow.addEventListener("blurred", this.onWindowBlur.bind(this));
 		LinkerStore.addListener(["stateChanged"], this.onStoreChanged);
 		LinkerActions.windowMounted(); //windowMounted
 		this.setState({
@@ -111,8 +109,9 @@ class Linker extends React.Component {
 }
 
 fin.desktop.main(function () {
-	FSBL.addEventListener("onReady", function () {
+	if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
+	function FSBLReady() {
 		LinkerStore.initialize();
 		ReactDOM.render(<Linker />, document.getElementById("main"));
-	});
+	}
 });

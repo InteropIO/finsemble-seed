@@ -3,13 +3,13 @@
 * All rights reserved.
 */
 import React from "react";
-import HoverDetector from "../HoverDetector.jsx";
+import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
 import { getStore, Actions as HeaderActions } from "../../stores/windowTitleBarStore";
 let windowTitleBarStore;
 /**
  * Close button, located on the far right of the window Manager.
  */
-export default class CloseButton extends React.Component{
+export default class CloseButton extends React.Component {
 	constructor(props) {
 		super(props);
 		this.bindCorrectContext();
@@ -51,8 +51,8 @@ export default class CloseButton extends React.Component{
 	 * @memberof CloseButton
 	 */
 	render() {
-		return (<div onClick={this.onClick} className="fsbl-icon fsbl-close cq-no-drag" data-hover={this.state.hoverState} title="Close" id="fsbl-window-close">
-			<HoverDetector edge="right" hoverAction={this.hoverAction} />
+		return (<div onClick={this.onClick} className="fsbl-icon fsbl-close" data-hover={this.state.hoverState} title="Close" id="fsbl-window-close">
+			<FinsembleHoverDetector edge="top right" hoverAction={this.hoverAction} />
 			<i className="ff-close"></i>
 		</div>);
 	}

@@ -9,6 +9,8 @@ var WindowClient;
 import windowTitleBarStoreDefaults from "./windowTitleBarStoreDefaults";
 import * as async from "async";
 var finWindow = fin.desktop.Window.getCurrent();
+//theses are constants that are set inside of setupStore. so they're declared as vars and not constantsa.
+let constants = {};
 var Actions = {
 	initialize: function () {
 		// This ensures that our config is correct, even if the developer missed some entries
@@ -35,16 +37,18 @@ var Actions = {
 				{ field: "Maximize.hide", value: max },
 				{ field: "Minimize.hide", value: FSBLHeader.hideMinimize ? true : false },
 				{ field: "Close.hide", value: FSBLHeader.hideClose ? true : false },
-				{ field: "AlwaysOnTop.show", value: FSBLHeader.alwaysOnTop ? true: false  },
+				{ field: "AlwaysOnTop.show", value: FSBLHeader.alwaysOnTop ? true : false },
 			]);
+
+
+			// By default, we hack the window's scrollbar so that it displays underneath the header. html.overflow: hidden body.overflow:auto
+			windowTitleBarStore.setValue({ field: "hackScrollbar", value: (windowTitleBarConfig.hackScrollbar !== false) });
 
 			// Set by calling WindowClient.setTitle() || from config "foreign.components.Window Manager.title"
 			var title = FSBL.Clients.WindowClient.title || windowTitleBarConfig.title;
 
 			if (title) {
-				windowTitleBarStore.setValue({
-					field: "Main.windowTitle", value: title
-				});
+				FSBL.Clients.WindowClient.setWindowTitle(title)
 			}
 		}
 
@@ -88,11 +92,21 @@ var Actions = {
 			if (err || !response.data || !response.data.groupData) {
 				return;
 			}
+			FSBL.Clients.Logger.system.debug("On docking group update", response.data.groupData);
 			let groupNames = Object.keys(response.data.groupData);
 			let movableGroups = groupNames
 				.filter(groupName => response.data.groupData[groupName].isMovable)
 				.map(groupName => response.data.groupData[groupName]);
-			windowTitleBarStore.setValue({ field: "Main.allMovableDockingGroups", value: movableGroups });
+			//This is all movable and snapped groups. It's used later to figure out the icon to display.
+			windowTitleBarStore.setValue({
+				field: "Main.allDockingGroups", value
+					: response.data.groupData
+			});
+
+			windowTitleBarStore.setValue({
+				field: "Main.allMovableDockingGroups", value
+					: movableGroups
+			});
 			let myGroups = self.getMyDockingGroups(response.data.groupData);
 			windowTitleBarStore.setValue({ field: "Main.dockingGroups", value: myGroups });
 			/**
@@ -101,11 +115,12 @@ var Actions = {
 			let isSnapped = false;
 			let isInMovableGroup = false;
 			let isTopRight = false;
+			let windowName = FSBL.Clients.WindowClient.getWindowNameForDocking();
 			for (let i = 0; i < myGroups.length; i++) {
 				let myGroup = myGroups[i];
 				if (myGroup.isMovable) {
 					isInMovableGroup = true;
-					if (FSBL.Clients.WindowClient.windowName == myGroup.topRightWindow) {
+					if (windowName == myGroup.topRightWindow) {
 						isTopRight = true;
 					}
 				} else {
@@ -139,20 +154,20 @@ var Actions = {
 		FSBL.Clients.WindowClient.finWindow.addEventListener("maximized", function () {
 			self.clickMaximize();
 		});
+
 		//default title.
 		windowTitleBarStore.setValue({ field: "Main.windowTitle ", value: FSBL.Clients.WindowClient.getWindowTitle() });
 
-		/**
-		 * If docking is disabled, don't show buttons on snaps.
-		 * @todo remove once docking is out of beta.
-		 */
 		FSBL.Clients.ConfigClient.getValue({ field: "finsemble" }, function (err, finsembleConfig) {
-			let globalWindowManagerConfig = finsembleConfig["Window Manager"] || { alwaysOnTopIcon: false }; // Override defaults if finsemble.Window Manager exists.
+			let globalWindowManagerConfig = finsembleConfig["Window Manager"] || { alwaysOnTopIcon: false, showTabs: false }; // Override defaults if finsemble.Window Manager exists.
 
 			// Look to see if docking is enabled. Cascade through backward compatibility with old "betaFeatures" and then a default if no config is found at all.
-			let dockingConfig = finsembleConfig.docking;
+
+			if (!finsembleConfig.servicesConfig) finsembleConfig.servicesConfig = {};
+			let dockingConfig = finsembleConfig.servicesConfig.docking || finsembleConfig.docking;
 			if (!dockingConfig && finsembleConfig.betaFeatures) dockingConfig = finsembleConfig.betaFeatures.docking;
-			if (!dockingConfig) dockingConfig = {enabled: true};
+			if (!dockingConfig) dockingConfig = { enabled: true };
+			if (!dockingConfig.tabbing) dockingConfig.tabbing = {};
 
 			windowTitleBarStore.setValues([{ field: "Main.dockingEnabled", value: dockingConfig.enabled }]);
 
@@ -163,7 +178,60 @@ var Actions = {
 				alwaysOnTopIcon = windowTitleBarConfig.alwaysOnTopIcon;
 
 			windowTitleBarStore.setValues([{ field: "AlwaysOnTop.show", value: alwaysOnTopIcon }]);
+
+
+			//If tabbing is turned off, ignore global/local 'windowManager' config about whether to allow tabbing.
+			if (dockingConfig.tabbing.enabled === false) {
+				windowTitleBarStore.setValue({ field: "showTabs", value: dockingConfig.tabbing.enabled });
+			} else {
+				//If tabbing is enabled system-wide, look to the global config for its value. Then look to the local component's config.
+
+
+				//This is the global window manager config.
+				if (typeof windowTitleBarConfig.showTabs !== 'boolean') {
+					windowTitleBarStore.setValue({ field: "showTabs", value: globalWindowManagerConfig.showTabs });
+				}
+				//This is the component's config.
+				if (windowTitleBarConfig.showTabs || windowTitleBarConfig.showTabs === false) {
+					windowTitleBarStore.setValue({ field: "showTabs", value: windowTitleBarConfig.showTabs });
+				}
+			}
 		});
+
+		Actions.getInitialTabList((err, values) => {
+			var onParentSet = () => {
+				Actions.parentWrapper = null;
+				Actions.getInitialTabList(() => {
+					FSBL.Clients.Logger.system.debug("docking group update after initial tab list");
+					onDockingGroupUpdate(null, {
+						data: {
+							groupData: windowTitleBarStore.getValue({ field: "Main.allDockingGroups" })
+						}
+					})
+				});
+			};
+			var onParentCleared = () => {
+				Actions.parentWrapper = null;
+				FSBL.Clients.Logger.system.debug("ClearParent, setting tabs to null");
+				Actions.stopListeningOnParentWrapper(() => {
+					Actions.parentWrapperStore = null;
+					Actions._setTabs(null);
+					onDockingGroupUpdate(null, {
+						data: {
+							groupData: windowTitleBarStore.getValue({ field: "Main.allDockingGroups" })
+						}
+					});
+				});
+			};
+
+			FSBL.Clients.WindowClient.finsembleWindow.addListener("setParent", onParentSet);
+			FSBL.Clients.WindowClient.finsembleWindow.addListener("clearParent", onParentCleared);
+			if (err) {
+				return FSBL.Clients.Logger.error("Error in getInitialTabList.", err);
+			}
+
+			if (values) Actions._setTabs(values);
+		})
 	},
 	/**
 	 * Helper function to sift through all of the data coming from the dockingService. Outputs an array of groups that the window belongs to.
@@ -171,7 +239,11 @@ var Actions = {
 	 */
 	getMyDockingGroups: function (groupData) {
 		let myGroups = [];
-		let windowName = FSBL.Clients.WindowClient.windowName;
+		let windowName = FSBL.Clients.WindowClient.getWindowNameForDocking();
+		if (FSBL.Clients.WindowClient.finsembleWindow.parentWindow) {
+			windowName = FSBL.Clients.WindowClient.finsembleWindow.parentWindow.name
+		}
+		FSBL.Clients.Logger.system.debug("Getting docking groups for ", windowName, groupData);
 		if (groupData) {
 			for (var groupName in groupData) {
 				groupData[groupName].groupName = groupName;
@@ -260,8 +332,14 @@ var Actions = {
 			});
 		}
 	},
+	onTabListScrollPositionChanged: function (err, response) {
+		windowTitleBarStore.setValue({ field: "tabListTranslateX", value: response.data.translateX });
+	},
+	setTabListScrollPosition: function (translateX) {
+		FSBL.Clients.RouterClient.transmit(constants.TAB_SCROLL_POSITION_CHANGED, { translateX });
+	},
 	hyperfocusDockingGroup: function () {
-		FSBL.Clients.RouterClient.transmit("DockingService.hyperfocusGroup", { windowName: FSBL.Clients.WindowClient.windowName });
+		FSBL.Clients.RouterClient.transmit("DockingService.hyperfocusGroup", { windowName: FSBL.Clients.WindowClient.getWindowNameForDocking() });
 	},
 	/**
 	 * Handles messages coming from the windowCclient.
@@ -287,7 +365,8 @@ var Actions = {
 	 */
 	clickClose: function () {
 		FSBL.Clients.WindowClient.close({
-			removeFromWorkspace: true
+			removeFromWorkspace: true, // this will cause the entire stack to close. Using this instead of a new parameter to ensure backwards compatibility
+			userInitiated: true
 		});
 	},
 	/**
@@ -307,16 +386,177 @@ var Actions = {
 	 */
 	clickMaximize: function () {
 		var maxField = windowTitleBarStore.getValue({ field: "Maximize" });
-
-		if (maxField.maximized) {
-			return FSBL.Clients.WindowClient.restore(() => {
-				windowTitleBarStore.setValue({ field: "Maximize.maximized", value: false });
+		if (finsembleWindow.windowState !== finsembleWindow.WINDOWSTATE.MAXIMIZED)
+			return FSBL.Clients.WindowClient.maximize(() => {
+				windowTitleBarStore.setValue({ field: "Maximize.maximized", value: true });
 			});
-		}
-		FSBL.Clients.WindowClient.maximize(() => {
-			windowTitleBarStore.setValue({ field: "Maximize.maximized", value: true });
+
+		return FSBL.Clients.WindowClient.restore(() => {
+			windowTitleBarStore.setValue({ field: "Maximize.maximized", value: false });
 		});
 
+
+	},
+
+	getTabs() {
+		return windowTitleBarStore.getValue({ field: "tabs" });
+	},
+	_setTabs(tabs) {
+		FSBL.Clients.Logger.system.debug("Set tabs", tabs);
+		let activeIdentifier = finsembleWindow.identifier;
+		activeIdentifier.title = finsembleWindow.windowOptions.title;
+		return windowTitleBarStore.setValue({ field: "tabs", value: tabs || [activeIdentifier] })
+	},
+	addTabLocally: function (windowIdentifier, i) {
+		let tabs = Actions.getTabs();
+		if (typeof i === "undefined") {
+			i = tabs.length + 1;
+		}
+		tabs.splice(i, 0, windowIdentifier);
+		Actions._setTabs(tabs);
+	},
+	removeTabsLocally: function () {
+		//console.log("REMOVE TABS LOCALLY");
+		Actions._setTabs(null);
+	},
+	removeTabLocally: function (windowIdentifier) {
+		//console.log("Removing tab", windowIdentifier.name);
+		let tabs = Actions.getTabs();
+		let i = tabs.findIndex(el => el.name === windowIdentifier.name && el.uuid === windowIdentifier.uuid);
+		tabs.splice(i, 1);
+		//console.log("Number of Tabs left", tabs.length);
+		Actions._setTabs(tabs);
+	},
+	reorderTabLocally: function (tab, newIndex) {
+		let tabs = Actions.getTabs();
+		let { currentIndex } = Actions.findTab(tab);
+		//console.log("tab list, reorderTabLocally", tab.windowName, currentIndex, newIndex)
+		if (currentIndex === newIndex) return;
+		if (currentIndex === -1) {
+			return Actions.addTabLocally(tab, newIndex);
+		}
+		tabs.splice(currentIndex, 1);
+		//console.log("After remove", JSON.parse(JSON.stringify(tabs)));
+		tabs.splice(newIndex, 0, tab);
+		//console.log("After reinsert", JSON.parse(JSON.stringify(tabs)));
+
+		Actions._setTabs(tabs)
+	},
+	addTab: function (windowIdentifier, i) {
+		let tabs = Actions.getTabs();
+		tabs.push(windowIdentifier);
+		//quick UI update
+		Actions._setTabs(tabs);
+		let callback = () => {
+			Actions.parentWrapper.setVisibleWindow({ windowIdentifier })
+		};
+
+		if (!Actions.parentWrapper) {
+			return Actions.createParentWrapper({
+				windowIdentifiers: [finsembleWindow.identifier, windowIdentifier],
+				visibleWindowIdentifier: windowIdentifier,
+				create: true
+			});
+		}
+		return Actions.parentWrapper.addWindow({ windowIdentifier, position: i }, callback);
+	},
+	removeTab: function (windowIdentifier, i) {
+		return Actions.parentWrapper.removeWindow({ windowIdentifier, position: i });
+	},
+	closeTab: function (windowIdentifier) {
+		//return Actions.parentWrapper.deleteWindow({ windowIdentifier }) // this will cause the window to be closed but keep the stack intact
+		FSBL.FinsembleWindow.getInstance(windowIdentifier, (err, wrap) => {
+			wrap.close();
+		});
+	},
+	reorderTab: function (tab, newIndex) {
+
+		let tabs = Actions.getTabs();
+		let { currentIndex } = Actions.findTab(tab);
+		if (currentIndex === -1 || !Actions.parentWrapper) {
+			return Actions.addTab(tab, newIndex);
+		}
+		tabs.splice(currentIndex, 1);
+		tabs.splice(newIndex, 0, tab);
+		//Local change, quickly updates the dom.
+		//console.log("Tab list changing", tabs);
+		Actions._setTabs(tabs);
+		Actions.parentWrapper.reorder({ windowIdentifiers: tabs })
+	},
+	findTab: function (tab) {
+		let tabs = this.getTabs();
+		let currentIndex = tabs.findIndex(el => {
+			return tab.windowName === el.windowName && tab.uuid === el.uuid;
+		});
+		return { tab, currentIndex }
+	},
+	setActiveTab: function (windowIdentifier) {
+		FSBL.Clients.Logger.system.debug("setActiveTab.visibleWindow");
+		return finsembleWindow.parentWindow.setVisibleWindow({ windowIdentifier });
+	},
+	parentWrapper: null,
+	onTabListChanged: function (err, response) {
+		FSBL.Clients.Logger.system.debug("OnTabListChanged", response.data);
+		if (response.data && response.data.hasOwnProperty(constants.CHILD_WINDOW_FIELD)) {
+			Actions._setTabs(response.data[constants.CHILD_WINDOW_FIELD]);
+		}
+	},
+	parentSubscriptions: [],
+	stopListeningOnParentWrapper: function (cb) {
+		Actions.parentSubscriptions.forEach(sub => {
+			FSBL.Clients.RouterClient.unsubscribe(sub);
+		});
+		Actions.parentSubscriptions = []; // remove the subscribeId
+		//Syncs scroll state across all tabs in a stack.
+		FSBL.Clients.RouterClient.removeListener(constants.TAB_SCROLL_POSITION_CHANGED, Actions.onTabListScrollPositionChanged);
+		cb();
+	},
+	listenOnParentWrapper: function () {
+		let TABLIST_SUBSCRIPTION = FSBL.Clients.RouterClient.subscribe(constants.PARENT_WRAPPER_UPDATES, Actions.onTabListChanged);
+		FSBL.Clients.RouterClient.addListener(constants.TAB_SCROLL_POSITION_CHANGED, Actions.onTabListScrollPositionChanged);
+		Actions.parentSubscriptions.push(TABLIST_SUBSCRIPTION)
+	},
+	setupStore: function (cb = Function.prototype) {
+		constants.PARENT_WRAPPER_UPDATES = `Finsemble.StackedWindow.${Actions.parentWrapper.identifier.windowName}`;
+		constants.CHILD_WINDOW_FIELD = `childWindowIdentifiers`;
+		constants.VISIBLE_WINDOW_FIELD = `visibleWindowIdentifier`;
+		constants.TAB_SCROLL_POSITION_CHANGED = Actions.parentWrapper.name + ".tabListTabListScrollPositionChanged"
+		Actions.listenOnParentWrapper();
+		cb();
+	},
+	getInitialTabList: function (cb = Function.prototype) {
+		//FSBL.Clients.WindowClient.getStackedWindow((err, parentWrapper) => {
+		finsembleWindow.getParent((err, parentWrapper) => {
+			Actions.parentWrapper = parentWrapper;
+			if (Actions.parentWrapper) {
+				FSBL.Clients.Logger.debug("GetInitialTabList, parent exists")
+				Actions.setupStore(cb);
+			} else {
+				let activeIdentifier = finsembleWindow.identifier;
+				activeIdentifier.title = finsembleWindow.windowOptions.title;
+				let tabs = [activeIdentifier];
+				cb(null, tabs);
+			}
+		});
+
+		//})
+	},
+	createParentWrapper(params, cb) {
+		//console.log("In parentWrapper begin");
+		window.Actions = Actions;
+		if (Actions.parentWrapper) {
+			cb();
+		} else {
+			FSBL.Clients.WindowClient.getStackedWindow(params, (err, response) => {
+				if (err) {
+					Actions.parentWrapper = null;
+					Actions._setTabs(null)
+				} else {
+					Actions.parentWrapper = FSBL.Clients.WindowClient.finsembleWindow.getParent();
+					Actions.setupStore(cb);
+				}
+			})
+		}
 	}
 };
 

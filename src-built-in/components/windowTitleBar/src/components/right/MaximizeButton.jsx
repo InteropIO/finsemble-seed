@@ -3,7 +3,7 @@
 * All rights reserved.
 */
 import React from "react";
-import HoverDetector from "../HoverDetector.jsx";
+import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
 import { getStore, Actions as HeaderActions } from "../../stores/windowTitleBarStore";
 let windowTitleBarStore;
 /**
@@ -28,7 +28,8 @@ export default class MaximizeButton extends React.Component {
 	 * @memberof MaximizeButton
 	 */
 	bindCorrectContext() {
-		this.onMaxChange = this.onMaxChange.bind(this);
+		this.onMaximized = this.onMaximized.bind(this);
+		this.onRestored = this.onRestored.bind(this);
 		this.hoverAction = this.hoverAction.bind(this);
 	}
 
@@ -39,10 +40,14 @@ export default class MaximizeButton extends React.Component {
 	 * @param {any} response
 	 * @memberof MaximizeButton
 	 */
-	onMaxChange(err, response) {
-		this.setState({ maximized: response.value });
+	onRestored(err, response) {
+		//console.log("onRestored")
+		this.setState({ maximized: false });
 	}
-
+	onMaximized() {
+		//console.log("onMaximized")
+		this.setState({ maximized: true });
+	}
 	/**
 	 * Invoked when the user clicks the button.
 	 *
@@ -58,7 +63,11 @@ export default class MaximizeButton extends React.Component {
 	 * @memberof MaximizeButton
 	 */
 	componentWillMount() {
-		windowTitleBarStore.addListener({ field: "Maximize.maximized" }, this.onMaxChange);
+		//console.log("componentWillMount")
+		FSBL.Clients.WindowClient.finsembleWindow.addListener("maximized", this.onMaximized)
+		FSBL.Clients.WindowClient.finsembleWindow.addListener("restored", this.onRestored);
+
+		//windowTitleBarStore.addListener({ field: "Maximize.maximized" }, this.onMaxChange);
 	}
 
 	/**
@@ -67,7 +76,10 @@ export default class MaximizeButton extends React.Component {
 	 * @memberof MaximizeButton
 	 */
 	componentWillUnmount() {
-		windowTitleBarStore.removeListener({ field: "Maximize.maximized" }, this.onMaxChange);
+		//console.log("unmount this")
+		FSBL.Clients.WindowClient.finsembleWindow.removeListener("maximized", this.onMaximized)
+		FSBL.Clients.WindowClient.finsembleWindow.removeListener("restored", this.onRestored)
+		//windowTitleBarStore.removeListener({ field: "Maximize.maximized" }, this.onMaxChange);
 	}
 
 	/**
@@ -87,8 +99,8 @@ export default class MaximizeButton extends React.Component {
 	 * @memberof MaximizeButton
 	 */
 	render() {
-		let iconClasses = "icon-ciq ";
-		let wrapClasses = "fsbl-icon cq-no-drag ";
+		let iconClasses = "";
+		let wrapClasses = "fsbl-icon fsbl-maximize ";
 		let tooltip = this.state.maximized ? "Restore" : "Maximize";
 
 		//Classes for the maximize button.
@@ -97,7 +109,7 @@ export default class MaximizeButton extends React.Component {
 		wrapClasses += this.state.maximized ? "window-restore" : "window-max";
 
 		return (<div className={wrapClasses} id="fsbl-window-restore" title={tooltip} data-hover={this.state.hoverState} onClick={this.onClick}>
-				<HoverDetector edge="top" hoverAction={this.hoverAction} />
+			<FinsembleHoverDetector edge="top" hoverAction={this.hoverAction} />
 			<i className={iconClasses}></i>
 		</div>);
 	}

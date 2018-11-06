@@ -34,7 +34,7 @@ var Actions = {
 	},
 
 	setList(list) {
-		console.log("set list", list)
+		//console.log("set list", list)
 		menuStore.setValue({ field: "list", value: list })
 	},
 	listItemClick(provider, item, action) {
@@ -49,12 +49,12 @@ var Actions = {
 		actionPress = func;
 	},
 	search(text) {
-		if (text === "" || !text) text = "c";
+		if (text === "" || !text) text = "";
 
 		FSBL.Clients.SearchClient.search({ text: text, filter: { resultType: "application" } }, function (err, response) {
 			var updatedResults = [].concat.apply([], response)
 			var parsedList = [];
-			console.log("updatedResults", updatedResults)
+			//console.log("updatedResults", updatedResults)
 			updatedResults.map(function (resultList, index) {
 				parsedList = parsedList.concat(resultList.data.filter((result) => result.type === "Application"))
 			})
@@ -78,11 +78,11 @@ function createStore(done) {
 	FSBL.Clients.DistributedStoreClient.createStore({ store: "AppCatalog-Store" + finWindow.name, values: defaultData, global: false },
 		function (err, store) {
 			menuStore = store;
-			FSBL.Clients.SearchClient.search({ text: "c", filter: { resultType: "application" } }, function (err, response) {
-				console.log("results", response)
+			FSBL.Clients.SearchClient.search({ text: "", filter: { resultType: "application" } }, function (err, response) {
+				//console.log("results", response)
 				var updatedResults = [].concat.apply([], response)
 				var parsedList = [];
-				console.log("updatedResults", updatedResults)
+				//console.log("updatedResults", updatedResults)
 				updatedResults.map(function (resultList, index) {
 					parsedList = parsedList.concat(resultList.data.filter((result) => result.type === "Application"))
 				})

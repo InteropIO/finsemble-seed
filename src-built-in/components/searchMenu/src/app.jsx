@@ -7,8 +7,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 //Finsemble font-icons, general styling, and specific styling.
 import "../searchMenu.css";
-import "../../assets/css/finfont.css";
-import "../../assets/css/finsemble.css";
+import "../../../../assets/css/font-finance.css";
+import "../../../../assets/css/finsemble.css";
 import ComponentItem from "./components/componentItem";
 import ProviderList from "./components/ProviderList";
 import * as storeExports from "./stores/searchStore";
@@ -25,7 +25,6 @@ let menuStore;
 class SearchMenu extends React.Component {
 	constructor(props) {
 		super(props);
-		this.finWindow = fin.desktop.Window.getCurrent();
 		this.buildList = this.buildList.bind(this);
 
 		this.keyPress = this.keyPress.bind(this);
@@ -175,13 +174,14 @@ class SearchMenu extends React.Component {
 }
 
 fin.desktop.main(function () {
-	FSBL.addEventListener("onReady", function () {
-		console.log("searchMenu app onReady");
+	if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
+	function FSBLReady() {
+		//console.log("searchMenu app onReady");
 		storeExports.initialize(function (store) {
 			menuStore = store;
 			ReactDOM.render(
 				<SearchMenu />
 				, document.getElementById("bodyHere"));
 		});
-	});
+	}
 });

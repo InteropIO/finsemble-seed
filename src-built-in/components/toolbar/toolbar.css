@@ -2,17 +2,17 @@
   * Copyright 2017 by ChartIQ, Inc.
   * All rights reserved.
   */
-@import  url('../assets/css/_globals.css');
+@import  url('../../../assets/css/_globals.css');
 
-@import  url('../assets/css/_toolbar.css');
+@import  url('../../../assets/css/_toolbar.css');
 
 body, html {
     height: 100%;
     margin: 0px;
     font-family: var(--font-family);
     font-weight: var(--toolbar-font-weight);
-    font-size: 1em;
-    color: var(--toolbar-primary-font-color);
+    font-size: var(--toolbar-font-size);
+    color: var(--toolbar-font-color);
     line-height: var(--toolbar-line-height);
     vertical-align: middle;
     -webkit-user-select: none;
@@ -29,12 +29,8 @@ body, html {
 
 .icon-only > i {
     height: 22px;
-    font-size: var(--toolbar-font-icon-font-size);
+    font-size: var(--toolbar-icon-font-size);
     width: auto;
-}
-
-.pinned-icon {
-    color: #4495d1;
 }
 
 .searchSection {
@@ -43,6 +39,7 @@ body, html {
     overflow: visible;
     max-height: var(--toolbar-height);
     width: 30px;
+    padding-top: 0px;
 }
 
 .left.finsemble-toolbar-section {
@@ -51,7 +48,7 @@ body, html {
 
 .searchContainer {
     display: flex;
-    margin-right: 15px;
+    margin: 0px 5px;
 }
 
 .searchInput {
@@ -59,8 +56,8 @@ body, html {
     display: inline;
     text-indent: 8px;
     width: 107px;
-    height: var(--search-input-height);
-    line-height:var(--search-input-line-height);
+    height: var(--toolbar-height);
+    line-height:var(--toolbar-height);
     background-color: transparent;
     border-color: transparent;
     z-index: 2;
@@ -79,6 +76,7 @@ body, html {
     padding-left: 9px;
     width: 23px;
     cursor: pointer;
+    color: transparent; /* hide the text when in compact mode */
   /*transition: width .5s,background-color 0s .5s;*/;
 }
 
@@ -91,9 +89,8 @@ body, html {
     padding-left: 9px;
     padding-right: 9px;
     width: 23px;
-    color: white;
+    color: var(--search-input-background-color);
     cursor: pointer;
-    background-color: #1c2a36;
     transition: width .5s,background-color 0s .5s;
 }
 
@@ -108,10 +105,10 @@ body, html {
 .searchInput.active {
     display: inline-block;
     left: 0px;
-    width: 261px;
+    width: 349px;
     text-align: left;
-    background-color: white;
-    color: black;
+    background-color: var(--search-input-background-color);
+    color: var(--search-input-font-color);
     cursor: initial;
     z-index: 99;
 }
@@ -127,9 +124,10 @@ img {
 
 .searchInput::after {
     position: absolute;
-    font-family: finfont;
+    font-family: font-finance;
     right: 10px;
     content: "\2c";
+    color: var(--toolbar-font-color); /* make sure magnifying glass is white */
 }
 
 div {

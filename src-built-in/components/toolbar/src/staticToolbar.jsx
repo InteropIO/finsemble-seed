@@ -18,8 +18,8 @@ import WorkspaceLauncherButton from "../components/WorkspaceLauncherButton";
 import WorkspaceMenuOpener from "../components/WorkspaceMenuOpener"
 // Styles
 import "../toolbar.css";
-import "../../assets/css/finfont.css";
-import "../../assets/css/finsemble.css";
+import "../../../assets/css/font-finance.css";
+import "../../../assets/css/finsemble.css";
 
 var pinnableItems = {
 	"componentLauncher": FinsembleButton,
@@ -38,7 +38,7 @@ export default class Toolbar extends React.Component {
 	render() {
 		return (<FinsembleToolbar>
 			<FinsembleToolbarSection name="left" className="left">
-				<FinsembleButton preSpawn={true} buttonType={["MenuLauncher", "Toolbar"]} iconClasses="finsemble-toolbar-brand-logo" icon="../assets/img/Finsemble_Taskbar_Icon.png" menuType="File Menu" />
+				<FinsembleButton preSpawn={true} buttonType={["MenuLauncher", "Toolbar"]} iconClasses="finsemble-toolbar-brand-logo" icon="../../../assets/img/Finsemble_Taskbar_Icon.png" menuType="File Menu" />
 				<WorkspaceMenuOpener  />
 				<FinsembleButton preSpawn={true} buttonType={["MenuLauncher", "Toolbar"]} label="Apps" menuType="App Launcher" />
 				<FinsembleToolbarSeparator />
@@ -54,10 +54,11 @@ export default class Toolbar extends React.Component {
 	}
 }
 
-FSBL.addEventListener("onReady", function () {
+if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
+function FSBLReady() {
 	ToolbarStore.initialize(function () {
 		ReactDOM.render(
 			<Toolbar />
 			, document.getElementById("toolbar_parent"));
 	});
-});
+}

@@ -12,8 +12,8 @@ import WorkspaceList from "./components/workspaceList";
 import { FinsembleMenu } from "@chartiq/finsemble-react-controls";
 
 import "../workspaceManagementMenu.css";
-import "../../assets/css/finfont.css";
-import "../../assets/css/finsemble.css";
+import "../../../../assets/css/font-finance.css";
+import "../../../../assets/css/finsemble.css";
 let WorkspaceManagementMenuStore;
 // var Test = require('./test');
 
@@ -42,7 +42,6 @@ class WorkspaceManagementMenu extends React.Component {
 	}
 
 	onStoreChange() {
-		FSBL.Clients.Logger.perf.log("OnStoreChange.");
 		this.setState({
 			WorkspaceList: WorkspaceManagementMenuActions.getWorkspaceList(),
 			activeWorkspace: WorkspaceManagementMenuActions.getActiveWorkspace()
@@ -52,7 +51,6 @@ class WorkspaceManagementMenu extends React.Component {
 	}
 
 	onPinChange() {
-		FSBL.Clients.Logger.perf.log("OnPinChange.");
 		this.setState({
 			pinnedWorkspaces: this.convertPinnedWorkspacesToArray()
 		});
@@ -88,13 +86,14 @@ class WorkspaceManagementMenu extends React.Component {
 }
 
 fin.desktop.main(function () {
-	FSBL.addEventListener("onReady", function () {
-		console.log("WorkspaceManagementMenu onReady");
+	if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
+	function FSBLReady() {
+		//console.log("WorkspaceManagementMenu onReady");
 		storeExports.initialize(function (store) {
 			WorkspaceManagementMenuStore = store;
 			ReactDOM.render(
 				<WorkspaceManagementMenu />
 				, document.getElementById("workspaceManagementMenu-component-wrapper"));
 		});
-	});
+	}
 });

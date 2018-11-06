@@ -1,21 +1,24 @@
+<!DOCTYPE html>
+
 <html class="groupMask">
 
 <head>
     <script src="../../vendor.bundle.js"></script>
     <title>Group Mask</title>
-    <link rel="stylesheet" type="text/css" href="../assets/css/finsemble.css">
-    <link rel="stylesheet" type="text/css" href="../assets/css/finfont.css">
+    <link rel="stylesheet" type="text/css" href="../../../assets/css/finsemble.css">
+    <link rel="stylesheet" type="text/css" href="../../../assets/css/font-finance.css">
 </head>
 
 <body>
-    <script type='text/javascript'>
+    <script type="text/javascript">
         var drop = function (e) {
-            FSBL.Clients.RouterClient.transmit('tabbingDragEnd', { gotDrop: true });
+            FSBL.Clients.RouterClient.transmit("tabbingDragEnd", { gotDrop: true });
             FSBL.Clients.WindowClient.stopTilingOrTabbing({
                 mousePosition: {
                     x: e.screenX,
                     y: e.screenY
-                }
+                },
+                allowDropOnSelf: true
             });
         };
 
@@ -24,8 +27,8 @@
             return false;
         };
 
-        document.addEventListener('drop', drop);
-        document.addEventListener('dragover', dragOver);
+        document.addEventListener("drop", drop);
+        document.addEventListener("dragover", dragOver);
     </script>
 </body>
 

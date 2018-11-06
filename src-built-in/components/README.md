@@ -7,6 +7,6 @@ In software development, design principles separate the business logic (the stru
 * Note that you can easily modify the look and feel of your sample components. In **Version >= 1.4**, simply edit the files inside of *src/assets/sass/*. These files contain all of the styling for these system components. In some cases, the individual components have specific styling, and those files are found inside each component's folder.
 
 * For **Version < 1.4&**, go to *configs/openfin/manifest-local* and add the following line inside the `finsemble` property:
-`"cssOverridePath":"$applicationRoot/components/assets/css/finsemble-overrides.css",`. This tells the application to retrieve the *finsemble-overrides* file that you will modify. In older versions of the seed project, this file sits inside of *src/assets/css/finsemble-overrides.scss*. 
+`"cssOverridePath":"$applicationRoot/assets/css/finsemble-overrides.css",`. This tells the application to retrieve the *finsemble-overrides* file that you will modify. In older versions of the seed project, this file sits inside of *src/assets/css/finsemble-overrides.scss*. 
 
 Information about the presentation components can be found in our [documentation](https://documentation.chartiq.com/finsemble/tutorial-understandingUIComponents.html). 

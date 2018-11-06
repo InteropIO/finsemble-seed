@@ -3,7 +3,7 @@
 * All rights reserved.
 */
 import React from "react";
-import HoverDetector from "../HoverDetector.jsx";
+import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
 import { getStore, Actions as HeaderActions } from "../../stores/windowTitleBarStore";
 let windowTitleBarStore;
 
@@ -98,7 +98,7 @@ export default class DockingButton extends React.Component {
      */
 	render() {
 		let iconClass = "ff-";
-		let wrapClasses = "fsbl-icon cq-no-drag fsbl-icon-bordered docking-control";
+		let wrapClasses = "fsbl-icon fsbl-icon-bordered docking-control";
 
 		iconClass += this.state.dockingIcon === "ejector" ? "attached" : "detached";
 		let toolTip = this.state.dockingIcon === "ejector" ? "Detach Window" : "Attach Windows";
@@ -108,7 +108,7 @@ export default class DockingButton extends React.Component {
 		}
 
 		return (<div className={wrapClasses} id="fsbl-window-ejector" title={toolTip} data-hover={this.state.hoverState} onClick={this.onClick}>
-            <HoverDetector edge="top" hoverAction={this.hoverAction} />
+            <FinsembleHoverDetector edge="top" hoverAction={this.hoverAction} />
             <i className={iconClass}></i>
         </div>);
 	}

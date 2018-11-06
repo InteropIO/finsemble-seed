@@ -3,7 +3,7 @@
 * All rights reserved.
 */
 import React from "react";
-import HoverDetector from "../HoverDetector.jsx";
+import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
 import { getStore, Actions as HeaderActions } from "../../stores/windowTitleBarStore";
 let windowTitleBarStore;
 
@@ -64,7 +64,7 @@ export default class LinkerGroups extends React.Component {
      * @memberof LinkerGroups
      */
     onStoreChanged(newState) {
-        console.log("store changed ", newState);
+       //console.log("store changed ", newState);
 		this.setState(newState);
     }
 

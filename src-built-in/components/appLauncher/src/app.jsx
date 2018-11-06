@@ -7,8 +7,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 //Finsemble font-icons, general styling, and specific styling.
 import "../appLauncher.css";
-import "../../assets/css/finfont.css";
-import "../../assets/css/finsemble.css";
+import "../../../../assets/css/font-finance.css";
+import "../../../../assets/css/finsemble.css";
 import ComponentList from "./components/componentList";
 import * as storeExports from "./stores/appLauncherStore";
 import { Actions as appLauncherActions } from "./stores/appLauncherStore";
@@ -35,7 +35,6 @@ import {
 class AppLauncher extends React.Component {
 	constructor(props) {
 		super(props);
-		this.finWindow = fin.desktop.Window.getCurrent();
 
 		this.state = {
 			dimensions: {},
@@ -46,8 +45,8 @@ class AppLauncher extends React.Component {
 	componentWillMount() {
 		var self = this;
 		//Focus on the window when it is shown so that a click elsewhere will trigger a blur.
-		this.finWindow.addEventListener("shown", function () {
-			self.finWindow.focus();
+		finsembleWindow.addEventListener("shown", function () {
+			finsembleWindow.focus();
 		});
 	}
 
@@ -91,9 +90,9 @@ class AppLauncher extends React.Component {
 }
 
 fin.desktop.main(function () {
-	FSBL.addEventListener("onReady", function () {
+	if (window.FSBL && FSBL.addEventListener) {     FSBL.addEventListener("onReady", FSBLReady); } else {     window.addEventListener("FSBLReady", FSBLReady) } function FSBLReady () {
 		// var Test = require('./test');
-		console.log("appLauncher app onReady");
+	//console.log("appLauncher app onReady");
 
 		storeExports.initialize(function (store) {
 			appLauncherStore = store;
@@ -101,5 +100,5 @@ fin.desktop.main(function () {
 				<AppLauncher />
 				, document.getElementById("bodyHere"));
 		});
-	});
+	}
 });
