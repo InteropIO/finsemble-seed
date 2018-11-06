@@ -1,4 +1,4 @@
-## Authentication Log-in Window
+## Authentication Login Window
 
 This is the authentication login screen you see when Finsemble starts with authentication enabled.
 
