@@ -64,7 +64,12 @@ function getSingleFolder(folderName) {
 	return data.folders[folderName]
 }
 
-function reorderFolders(destIndex, srcIndex) {
+function reorderFolders(src, dest) {
+	console.log('data.folders: ', data.folders);
+	let srcFolder = data.folders[src];
+	let destFolder = data.folders[dest];
+
+	_setFolders();
 }
 
 function addNewFolder(name) {
@@ -101,8 +106,8 @@ function addAppToFolder(folderName, app) {
 	_setFolders()
 }
 
-function removeAppFromFolder(folderName, appID) {
-	delete data.folders[folderName].apps[appID]
+function removeAppFromFolder(folderName, app) {
+	delete data.folders[folderName].apps[app.appID];
 	_setFolders()
 }
 
@@ -111,6 +116,8 @@ function getActiveFolder() {
 	Object.values(folder.apps).map((app) => {
 		app.tags = data.apps[app.appID].tags
 	})
+	//Need a name for the AppDefinition/AppActionsMenu rendering
+	folder.name = data.activeFolder;
 	return folder
 }
 

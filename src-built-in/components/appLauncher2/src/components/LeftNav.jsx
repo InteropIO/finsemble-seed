@@ -23,9 +23,11 @@ export default class LeftNav extends React.Component {
 	}
 
 	onDragEnd(event) {
-		storeActions.reorderFolders(
-			event.destination.index,
-			event.source.index)
+		console.log('on drag end');
+		// storeActions.reorderFolders(
+		// 	event.destination.index,
+		// 	event.source.index)
+		storeActions.reorderFolders(event.source.index, event.destination.index);
 	}
 
 	render() {

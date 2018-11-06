@@ -41,7 +41,7 @@ class AppCard extends Component {
 	componentDidMount() {
 		const list = this.tagNamesList;
 		const footer = this.footer;
-		if (list.offsetHeight >= footer.scrollHeight) {
+		if (list.offsetHeight >= footer.scrollHeight + 5) {
 			let newTags = this.state.tags.slice(0, 2);
 			newTags.push("more");
 			this.setState({

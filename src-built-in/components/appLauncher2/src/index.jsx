@@ -11,7 +11,6 @@ import storeActions from './stores/StoreActions'
 import LeftNav from './components/LeftNav'
 import Content from './components/Content'
 import { FinsembleMenu } from '@chartiq/finsemble-react-controls';
-import storeActions from "../../appCatalog2/src/stores/storeActions";
 
 class AppLauncher extends React.Component {
 
@@ -40,7 +39,7 @@ class AppLauncher extends React.Component {
 				left: "center",
 				top: "center"
 			}
-		)
+		);
 	}
 
 	openAdHoc() {
@@ -67,7 +66,7 @@ fin.desktop.main(function () {
 	FSBL.addEventListener("onReady", function () {
 		createStore((store) => {
 			storeActions.initialize(() => {
-				ReactDOM.render(<AppLauncher />, 
+				ReactDOM.render(<AppLauncher />,
 					document.getElementById("wrapper"))
 			})
 		});

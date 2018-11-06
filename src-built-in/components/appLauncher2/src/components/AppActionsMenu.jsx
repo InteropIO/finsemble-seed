@@ -6,8 +6,7 @@
 
 import React from 'react'
 import storeActions from '../stores/StoreActions'
-import { getStore } from '../stores/LauncherStore'
-
+import {default as catalogActions} from '../../../appCatalog2/src/stores/storeActions';
 
 export default class AppActionsMenu extends React.Component {
 
@@ -43,9 +42,7 @@ export default class AppActionsMenu extends React.Component {
 	//TODO: Implement handlers
 	onAddToFavorite() {
 		storeActions.addAppToFolder('Favorites', this.props.app)
-		this.setState({
-			isVisible: false
-		})
+		this.toggleMenu();
 	}
 
 	onRemoveFromFavorite() {
@@ -54,7 +51,21 @@ export default class AppActionsMenu extends React.Component {
 	}
 
 	onViewInfo() {
-		this.toggleMenu()
+		this.toggleMenu();
+		FSBL.Clients.LauncherClient.showWindow(
+			{
+				componentType: "App Catalog 2"
+			},
+			{
+				monitor: "mine",
+				staggerPixels: 0,
+				spawnIfNotFound: true,
+				left: "center",
+				top: "center"
+			}, () => {
+				//TODO: Make this work. There is logic already in the catalog store for opening an apps info page. But calling it directly from here won't work.
+				catalogActions.openApp(this.props.app.appId);
+		});
 	}
 
 	onRemove() {
@@ -78,6 +89,7 @@ export default class AppActionsMenu extends React.Component {
 
 	renderList() {
 		const folder = this.props.folder
+		console.log('folder: ', folder);
 		let favoritesActionOnClick = this.props.isFavorite ? this.onRemoveFromFavorite : this.onAddToFavorite;
 		let favoritesText = this.props.isFavorite ? "Remove from favorites" : "Add to favorites";
 		return (
@@ -85,7 +97,7 @@ export default class AppActionsMenu extends React.Component {
 				<ul>
 					<li onClick={favoritesActionOnClick}>{favoritesText}</li>
 					<li onClick={this.onViewInfo}>View Info</li>
-					{['My Apps', 'Favorites'].indexOf(folder.name) < 0 &&
+					{['My Apps', 'Favorites'].indexOf(folder.name) === -1 &&
 						<li onClick={this.onRemove}>Remove from {folder.name}</li>}
 				</ul>
 			</div>

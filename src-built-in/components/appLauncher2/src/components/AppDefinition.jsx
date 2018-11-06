@@ -40,14 +40,8 @@ export default class AppDefinition extends React.Component {
 	}
 
 	isFavorite() {
-		return this.state.favorites.indexOf(this.props.app.appID) > -1
-	}
-
-	async componentWillMount() {
-		const favFolder = await storeActions.getSingleFolder('Favorites')
-		this.setState({
-			favorites: Object.keys(favFolder.apps)
-		})
+		let favorites = Object.keys(storeActions.getSingleFolder('Favorites').apps);
+		return favorites.indexOf(this.props.app.appID) > -1
 	}
 
 	render() {
@@ -59,7 +53,7 @@ export default class AppDefinition extends React.Component {
 					{app.name} {this.isFavorite() && <i className='ff-favorite'></i>}
 				</span>
 				<AppTagsList tags={app.tags} />
-				<AppActionsMenu app={app} folder={this.props.folder}/>
+				<AppActionsMenu app={app} folder={this.props.folder} isFavorite={this.isFavorite()} />
 			</div>
 		)
 	}

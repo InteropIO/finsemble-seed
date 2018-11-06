@@ -33,17 +33,18 @@ export default class Content extends React.Component {
 		const folder = this.state.folder
 		const apps = Object.values(folder.apps)
 
-		if(!folder || !apps) {
+		if (!folder || !apps) {
 			return []
 		}
 		const sortFunc = sortFunctions[this.state.sortBy]
 		const filteredApps = this.filterAppsByTags(sortFunc(apps))
+
 		if (!this.state.filterText) {
 			return filteredApps
 		}
 		return filteredApps.filter((app) => {
 			return app.name.toLowerCase().indexOf(this.state.filterText) !== -1
-		})
+		});
 	}
 
 	filterAppsByTags(apps) {
