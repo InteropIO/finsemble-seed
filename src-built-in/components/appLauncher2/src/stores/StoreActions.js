@@ -66,8 +66,10 @@ function getSingleFolder(folderName) {
 
 function reorderFolders(src, dest) {
 	console.log('data.folders: ', data.folders);
-	let srcFolder = data.folders[src];
-	let destFolder = data.folders[dest];
+	let srcFolder = Object.keys(data.folders)[src];
+	let destFolder = Object.keys(data.folders)[dest];
+
+	delete data.folders[srcFolder];
 
 	_setFolders();
 }

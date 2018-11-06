@@ -1,6 +1,5 @@
 import React from 'react'
 import AddNewFolder from './AddNewFolder'
-import FolderActionsMenu from './FolderActionsMenu'
 import storeActions from '../stores/StoreActions'
 import { getStore } from '../stores/LauncherStore'
 import { FinsembleDraggable } from '@chartiq/finsemble-react-controls'
@@ -22,6 +21,7 @@ export default class FoldersList extends React.Component {
 		this.changeFolderName = this.changeFolderName.bind(this)
 		this.onAppFoldersUpdate = this.onAppFoldersUpdate.bind(this)
 		this.keyPressed = this.keyPressed.bind(this)
+		this.deleteFolder = this.deleteFolder.bind(this);
 	}
 
 	onAppDrop(event, folder) {
@@ -72,6 +72,10 @@ export default class FoldersList extends React.Component {
 		});
 	}
 
+	deleteFolder(folderName) {
+		// storeActions.deleteFolder(folderName);
+	}
+
 	keyPressed(e) {
 		if (e.key === "Enter") {
 			const input = this.state.folderNameInput.trim()
@@ -112,11 +116,14 @@ export default class FoldersList extends React.Component {
 				<div onClick={() => this.onFolderClicked(key)}
 					onDrop={(event) => this.onAppDrop(event, key)}
 					className={className} key={index}>
-					<span className='left-nav-label'>
+					<div className='left-nav-label'>
 						{folder.icon && <i className={folder.icon}></i>}
 						{nameField}
-					</span>
-					{folder.icon === 'ff-folder' ? <FolderActionsMenu folder={key} renameFolder={this.renameFolder} /> : null}
+						{folder.icon === 'ff-folder' && <span className='folder-action-icons'>
+							<i className='ff-edit' onClick={this.renameFolder.bind(this, key)}></i>
+							<i className='ff-delete' onClick={this.deleteFolder.bind(this, key)}></i>
+						</span>}
+					</div>
 				</div>
 			</FinsembleDraggable>
 		})
