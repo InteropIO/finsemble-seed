@@ -127,13 +127,16 @@ function deleteFolder(folderName) {
 }
 
 function renameFolder(oldName, newName) {
-	data.folders[newName] = data.folders[oldName]
-	delete data.folders[oldName]
+	let oldFolder = data.folders[oldName];
+	data.folders[newName] = oldFolder;
+	delete data.folders[oldName];
 	_setFolders(() => {
-		// Rename the folder in list
-		data.foldersList[oldName] = newName
-		_setValue('appFolders.list', data.foldersList)
-	})
+		let indexOfOld = data.foldersList.findIndex((folderName) => {
+			return folderName === oldName;
+		});
+		data.foldersList[indexOfOld] = newName;
+		_setValue('appFolders.list', data.foldersList);
+	});
 }
 
 function addAppToFolder(folderName, app) {
@@ -153,7 +156,7 @@ function getActiveFolder() {
 	const folder = data.folders[data.activeFolder]
 	Object.values(folder.apps).map((app) => {
 		app.tags = data.apps[app.appID].tags
-	})
+	});
 	//Need a name for the AppDefinition/AppActionsMenu rendering
 	folder.name = data.activeFolder;
 	return folder

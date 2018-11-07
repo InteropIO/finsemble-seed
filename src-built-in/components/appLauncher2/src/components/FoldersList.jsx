@@ -60,7 +60,9 @@ export default class FoldersList extends React.Component {
 		getStore().addListener({ field: 'appFolders.list' }, this.onFoldersListUpdate)
 	}
 
-	renameFolder(name) {
+	renameFolder(name, e) {
+		e.preventDefault();
+		e.stopPropagation();
 		this.setState({
 			renamingFolder: name
 		});
@@ -72,8 +74,10 @@ export default class FoldersList extends React.Component {
 		});
 	}
 
-	deleteFolder(folderName) {
-		// storeActions.deleteFolder(folderName);
+	deleteFolder(name, e) {
+		e.stopPropagation();
+		e.preventDefault();
+		storeActions.deleteFolder(name);
 	}
 
 	keyPressed(e) {
@@ -99,7 +103,7 @@ export default class FoldersList extends React.Component {
 	renderFoldersList() {
 		const folders = storeActions.getFolders()
 		return this.state.foldersList.map((folderName, index) => {
-			const folder = folders[folderName]
+			const folder = folders[folderName];
 			let className = 'complex-menu-section-toggle'
 			if (this.state.activeFolder === folderName) {
 				className += ' active-section-toggle'
