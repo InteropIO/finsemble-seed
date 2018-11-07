@@ -10,6 +10,7 @@ export default {
 	deleteTag,
 	reorderFolders,
 	getFolders,
+	getFoldersList,
 	getActiveFolderName,
 	getActiveFolder,
 	getSingleFolder,
@@ -21,11 +22,13 @@ export default {
 	getTags
 }
 
+const MY_APPS = 'My Apps'
 const data = {}
 
 function initialize(callback) {
 	const store = getStore()
 	data.folders = store.values.appFolders.folders
+	data.foldersList = store.values.appFolders.list
 	data.apps = store.values.appDefinitions
 	data.tags = store.values.tags
 	data.activeFolder = store.values.activeFolder
@@ -34,6 +37,7 @@ function initialize(callback) {
 
 	// Add listeners to keep our copy up to date
 	store.addListener({ field: 'appFolders.folders' }, (err, dt) => data.folders = dt.value)
+	store.addListener({ field: 'appFolders.list' }, (err, dt) => data.foldersList = dt.value)
 	store.addListener({ field: 'appDefinitions' }, (err, dt) => data.apps = dt.value)
 	store.addListener({ field: 'activeFolder' }, (err, dt) => data.activeFolder = dt.value)
 	store.addListener({ field: 'sortBy' }, (err, dt) => data.sortBy = dt.value)
@@ -41,19 +45,36 @@ function initialize(callback) {
 	callback && callback()
 }
 
-function _setFolders(folders) {
+function _setFolders(cb) {
 	getStore().setValue({
 		field: 'appFolders.folders',
 		value: data.folders
 	}, (error, data) => {
 		if (error) {
 			console.log('Failed to save modified folder list.')
+		} else {
+			cb()
+		}
+	})
+}
+
+function _setValue(field, value) {
+	getStore().setValue({
+		field: field,
+		value: value
+	}, (error, data) => {
+		if (error) {
+			console.log('Failed to save. ', field)
 		}
 	})
 }
 
 function getFolders() {
 	return data.folders
+}
+
+function getFoldersList(){
+	return data.foldersList
 }
 
 function getAllApps() {
@@ -64,18 +85,14 @@ function getSingleFolder(folderName) {
 	return data.folders[folderName]
 }
 
-function reorderFolders(src, dest) {
-	console.log('data.folders: ', data.folders);
-	let srcFolder = Object.keys(data.folders)[src];
-	let destFolder = Object.keys(data.folders)[dest];
-
-	delete data.folders[srcFolder];
-
-	_setFolders();
+function reorderFolders(destIndex, srcIndex) {
+	const dest = data.foldersList[destIndex]
+	data.foldersList[destIndex] = data.foldersList[srcIndex]
+	data.foldersList[srcIndex] = dest
+	_setValue('appFolders.list', data.foldersList)
 }
 
 function addNewFolder(name) {
-	console.log('adding a folder asyncrounously');
 	// Find folders that have a name of "New folder" or "New folder #"
 	const newFolders = Object.keys(data.folders).filter((folder) => {
 		return folder.toLowerCase().indexOf('new folder') > -1
@@ -87,17 +104,36 @@ function addNewFolder(name) {
 		apps: []
 	}
 	data.folders[folderName] = newFolder
-	_setFolders()
+	_setFolders( () => {
+		// Update folders order if adding was successful
+		data.foldersList.push(folderName)
+		_setValue('appFolders.list', data.foldersList)
+	})
+
 }
 
 function deleteFolder(folderName) {
-	delete data.folders[folderName] && _setFolders()
+	// Check if user is trying to delete the active folder
+	if(folderName === data.activeFolder) {
+		data.activeFolder = MY_APPS
+	}
+
+	delete data.folders[folderName] && _setFolders(() => {
+		// Update the order of folders
+		const index = data.foldersList.indexOf(folderName)
+		data.foldersList.splice(index, 1)
+		_setValue('appFolders.list', data.foldersList)
+	})
 }
 
 function renameFolder(oldName, newName) {
 	data.folders[newName] = data.folders[oldName]
 	delete data.folders[oldName]
-	_setFolders()
+	_setFolders(() => {
+		// Rename the folder in list
+		data.foldersList[oldName] = newName
+		_setValue('appFolders.list', data.foldersList)
+	})
 }
 
 function addAppToFolder(folderName, app) {
