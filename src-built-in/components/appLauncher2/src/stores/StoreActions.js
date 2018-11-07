@@ -45,7 +45,7 @@ function initialize(callback) {
 	callback && callback()
 }
 
-function _setFolders(cb) {
+function _setFolders(cb = Function.prototype) {
 	getStore().setValue({
 		field: 'appFolders.folders',
 		value: data.folders

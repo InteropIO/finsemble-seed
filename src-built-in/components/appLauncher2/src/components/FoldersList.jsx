@@ -120,8 +120,8 @@ export default class FoldersList extends React.Component {
 						{folder.icon && <i className={folder.icon}></i>}
 						{nameField}
 						{folder.icon === 'ff-folder' && <span className='folder-action-icons'>
-							<i className='ff-edit' onClick={this.renameFolder.bind(this, key)}></i>
-							<i className='ff-delete' onClick={this.deleteFolder.bind(this, key)}></i>
+							<i className='ff-edit' onClick={this.renameFolder.bind(this, folderName)}></i>
+							<i className='ff-delete' onClick={this.deleteFolder.bind(this, folderName)}></i>
 						</span>}
 					</div>
 				</div>
