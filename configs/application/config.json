@@ -19,6 +19,7 @@
 					"name": "Finsemble-AppLauncher-2",
 					"foundation": {
 						"appFolders": {
+							"list": ["My Apps", "Favorites"],
 							"folders": {
 								"My Apps": {
 									"icon": "ff-component",
