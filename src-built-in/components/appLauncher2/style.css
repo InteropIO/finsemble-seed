@@ -109,7 +109,7 @@ img {
 .left-nav-label {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -117,6 +117,18 @@ img {
     padding-right: 4px;
     font-size: 13px;
     color: var(--appMenu-leftNav-icon-color);
+}
+
+.folder-action-icons i {
+    margin-left: 3px;
+    padding-left: 1px;
+}
+
+.folder-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 80px;
 }
 
 .left-nav-label .folder-action-icons {
@@ -138,7 +150,7 @@ img {
 	background: none;
 	border: 0;
 	border-bottom: solid 1px var(--appMenu-search-input-inactive-color);
-	font-size: 14px;
+	font-size: 12px;
 	transition: .2s ease-in;
 }
 
@@ -154,6 +166,7 @@ img {
     align-items: center;
     justify-content: space-between;
     position: relative;
+    width: 138px;
 }
 
 .complex-menu-action {

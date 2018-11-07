@@ -110,9 +110,9 @@ export default class FoldersList extends React.Component {
 			}
 
 			let nameField = folder.icon === 'ff-folder' && this.state.renamingFolder === folderName ?
-			<input value={this.state.folderNameInput}
-				onChange={this.changeFolderName}
-				onKeyPress={this.keyPressed} autoFocus/> : folderName
+				<input value={this.state.folderNameInput}
+					onChange={this.changeFolderName}
+					onKeyPress={this.keyPressed} autoFocus /> : folderName
 
 			return <FinsembleDraggable
 				draggableId={folderName}
@@ -122,12 +122,13 @@ export default class FoldersList extends React.Component {
 					className={className} key={index}>
 					<div className='left-nav-label'>
 						{folder.icon && <i className={folder.icon}></i>}
-						{nameField}
-						{folder.icon === 'ff-folder' && <span className='folder-action-icons'>
-							<i className='ff-edit' onClick={this.renameFolder.bind(this, folderName)}></i>
-							<i className='ff-delete' onClick={this.deleteFolder.bind(this, folderName)}></i>
-						</span>}
+						<div className="folder-name">{nameField}</div>
 					</div>
+					{folder.icon === 'ff-folder' && <span className='folder-action-icons'>
+						<i className='ff-edit' onClick={this.renameFolder.bind(this, folderName)}></i>
+						<i className='ff-delete' onClick={this.deleteFolder.bind(this, folderName)}></i>
+					</span>}
+
 				</div>
 			</FinsembleDraggable>
 		})
