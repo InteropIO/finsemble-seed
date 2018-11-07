@@ -1,0 +1,16 @@
+@charset "UTF-8";
+
+.stx-nav,
+.stx-toolbar,
+.stx-panel-selector,
+.stx-panel-side,
+.stx-footer,
+.dialogContainer,
+.dialog,
+.btn,
+.icons,
+.currentQuote {
+	display:none;
+	visibility:hidden;
+	}
+.stx-wrapper div#chartContainer, .stx-wrapper div.chartContainer {display:block;}

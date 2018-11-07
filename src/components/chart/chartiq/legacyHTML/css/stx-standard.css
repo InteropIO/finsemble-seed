@@ -1,0 +1,1507 @@
+@charset "UTF-8";
+/* This is a very basic sample css file that may be customized */
+
+/* --------------------------------------------------------- GENERAL STYLES --------------------------------------------------------- */
+
+html,body {
+	color:#666;  // default line colors
+}
+
+.chartContainer { /* DIV that the canvas expands to */
+	border: solid 1px #ddd;
+}
+
+.stx-wrapper * { /* This overrides page selection and tap/touch responses */
+	-webkit-touch-callout: none;
+	-webkit-tap-highlight-color: transparent;
+}
+.stx-wrapper canvas { /* This keeps users from accidently highlighting the canvas */
+	-webkit-user-select: none;
+}
+
+.stx-wrapper ul, .stx-wrapper li { /* Override basic List styles */
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+a {cursor:pointer}
+
+/* --------------------------------------------------------- FORM FIELDS --------------------------------------------------------- */
+
+.stx-input-field, .stx-textarea, .stx-input-check, .stx-dialog-container [type=text], .stx-dialog-container [type=number] {
+	background: #f6f6f6;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	border: #CCC solid 1px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	-webkit-box-shadow: inset 0px 1px 3px rgba(0, 0, 0, .2);
+	-moz-box-shadow: inset 0px 1px 3px rgba(0, 0, 0, .2);
+	box-shadow: inset 0px 1px 3px rgba(0, 0, 0, .2);
+	padding: 0px 6px;
+	outline: none;
+	color: #333;
+	resize: none;
+	-webkit-user-select: text;
+	-khtml-user-select: text;
+	-moz-user-select: text;
+	-ms-user-select: text;
+	-o-user-select: text;
+	resize: none;
+}
+.stx-input-field, .stx-dialog-container [type=text], .stx-dialog-container [type=number] {
+	line-height: 27px;
+	height: 27px;
+	width: 110px;
+}
+.stx-input-field:focus,
+.stx-textarea:focus,
+.stx-dialog-container [type=text]:focus, 
+.stx-dialog-container [type=number]:focus {
+	color: #333;
+}
+.stx-input-check {
+	margin-left:0px;
+}
+
+.stx-select {
+	padding-top: 3px;
+	height: 27px;
+	color: #666;
+}
+.stx-select:focus {
+	outline: none;
+}
+
+
+/* --------------------------------------------------------- BUTTONS AND MENUS --------------------------------------------------------- */
+
+/* Basic Buttons */
+
+.stx-btn, .stx-btn > span { /* Defaults */
+	display: inline-block;
+	cursor: pointer;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+.stx-btn { /* Inactive Button */
+	padding: 0px 8px;
+	border: solid 1px #ddd;
+	font-weight: bold;
+	line-height: 27px;
+	color: #7e7e7e;
+	text-align: center;
+	position: relative;
+	overflow: visible;
+	background-repeat: no-repeat;
+	transition: color .25s, border .25s, box-shadow .25s;
+	-webkit-transition: color .25s, border .25s, box-shadow .25s;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+.stx-btn:hover { /* Button Hover State */
+	color: #444444;
+	border: solid 1px #c5c5c5;
+	-webkit-box-shadow: 0px 1px 1px rgba(0, 0, 0, .1), inset 0px -8px 6px rgba(100, 100, 100, .03);
+	-moz-box-shadow: 0px 1px 1px rgba(0, 0, 0, .1), inset 0px -8px 6px rgba(100, 100, 100, .03);
+	box-shadow: 0px 1px 1px rgba(0, 0, 0, .1), inset 0px -8px 6px rgba(100, 100, 100, .03);
+}
+.stx-btn:active { /* Button Active State */
+	color: #333;
+	-webkit-box-shadow: inset 0px 8px 6px rgba(100, 100, 100, .03);
+	-moz-box-shadow: inset 0px 8px 6px rgba(100, 100, 100, .03);
+	box-shadow: inset 0px 8px 6px rgba(100, 100, 100, .03);
+}
+/* Basic Navigation */
+
+.stx-btn.stx-menu-btn { /* Menu Buttons */
+	padding: 0px 28px 0px 10px;
+}
+.stx-btn.stx-menu-btn > em { /* Menu Arrows */
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	line-height: 27px;
+	height: 27px;
+	width: 16px;
+	background-image: url(img/stx-sprite.png);
+	background-position: -302px -118px;
+	border-left: 1px dotted #999;
+	opacity: .4;
+	filter: alpha(opacity=40);/* for IE5-7 */
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=40)";/* for IE8 */
+	transition: opacity .25s, border .25s;
+	-webkit-transition: opacity .25s, border .25s;
+}
+.stx-btn.stx-menu-btn:hover > em {/* Menu Arrow hover */
+	border-left: 1px dotted #ccc;
+	opacity: 1;
+	filter: alpha(opacity=100);/* for IE5-7 */
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";/* for IE8 */
+}
+
+/* General Icon Button Styles */
+
+.stx-btn.stx-ico, /* Override base button styles */ .stx-btn.stx-ico:hover, .stx-btn.stx-ico > span .stx-btn.stx-ico:hover > span, .stx-btn.stx-ico:active > span {
+	overflow: hidden;
+	padding: 0px !important;
+	line-height: 0px;
+	border: none;
+	background: none;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+}
+.stx-btn.stx-ico { /* This is the button wrapper and hit area */
+	width: 27px;
+	height: 27px;
+	padding: 0px;
+}
+.stx-btn.stx-ico > span, .stx-btn.stx-ico:hover > span, .stx-btn.stx-ico:active > span { /* Styling of visible area and text hiding */
+	background-color: #999;
+	background-image: url(img/stx-sprite.png);
+	background-repeat: no-repeat;
+	background-color: rgba(153,153,153,.2);
+	border: 1px solid transparent;
+	width: 17px;
+	height: 17px;
+	text-indent: 2000px;
+	padding: 0px;
+	margin: 4px;
+	transition: color .25s, border .25s, background-color .25s, box-shadow .25s;
+	-webkit-transition: color .25s, border .25s, background-color .25s, box-shadow .25s;
+	opacity:.7;
+}
+.stx-btn.stx-ico:hover > span {/* Visible area hover state */
+	background-color: #666;
+	background-color: rgba(153,153,153,.3);
+	-webkit-box-shadow: 0px 1px 1px rgba(0, 0, 0, .1), inset 0px -8px 6px rgba(100, 100, 100, .03);
+	-moz-box-shadow: 0px 1px 1px rgba(0, 0, 0, .1), inset 0px -8px 6px rgba(100, 100, 100, .03);
+	box-shadow: 0px 1px 1px rgba(0, 0, 0, .1), inset 0px -8px 6px rgba(100, 100, 100, .03);
+	opacity:1;
+}
+.stx-btn.stx-ico:active > span {/* Visible area active state */
+	background-color: #666;
+	background-color: rgba(153,153,153,.9);
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+}
+
+.stx-btn > span.stx-ico-close, .stx-btn > span.stx-ico-close:active {background-position: -160px -40px;} 
+
+.stx-dialog .stx-btn.stx-ico > span.stx-ico-close, 
+.menuSelect .stx-btn.stx-ico > span.stx-ico-close { /* Close buttons */
+	background-image: url(img/stx-sprite.png);
+	background-color: #fff;
+	background-position: -160px -40px;
+	border-color: #ddd;
+}
+.stx-dialog .stx-btn.stx-ico.stx-ico:hover > span.stx-ico-close, 
+.menuSelect .stx-btn.stx-ico:hover > span.stx-ico-close { /* Close button hover state */
+	border-color: #ccc;
+}
+.stx-dialog .stx-btn.stx-ico.stx-ico:active > span.stx-ico-close, 
+.menuSelect .stx-btn.stx-ico:active > span.stx-ico-close { /* Close button active state */
+	border-color: #ccc;
+	-webkit-box-shadow: inset 0px 8px 6px rgba(100, 100, 100, .03);
+	-moz-box-shadow: inset 0px 8px 6px rgba(100, 100, 100, .03);
+	box-shadow: inset 0px 8px 6px rgba(100, 100, 100, .03);
+}
+
+.stx-remove-study, .stx-edit-study {
+	background-image: url(img/stx-sprite.png);
+	border-color: #ddd;
+	float:right;
+	width:15px;
+	height:15px;
+	display:none;
+}
+.stx-remove-study {	background-position: -160px -40px; }
+.stx-edit-study {	background-position: -200px -40px; }
+
+/* comment out if you want the main chart controls on. */
+.stx-panel-control.stx-chart-panel .stx-btn-panel{
+	display:none;
+}
+
+/* --------------------------------------------------------- COLOR PICKER --------------------------------------------------------- */
+
+.stx-color, .stx-border-color {/* Swatch / Open Palette Button */
+	position: relative;
+	display: inline-block;
+	width: 24px;
+	height: 24px;
+	border: solid 1px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	-webkit-box-shadow: inset 0px 1px 3px rgba(0,0,0,.6);
+	-moz-box-shadow: inset 0px 1px 3px rgba(0,0,0,.6);
+	box-shadow: inset 0px 1px 3px rgba(0,0,0,.6);
+	cursor: pointer;
+}
+.stx-color span, .stx-border-color span { /* Swatch Arrow */
+	display:none;
+}
+.stx-color { /* Initial Swatch Value for light theme */
+	background-color: #000000;
+}
+.stxColorDarkChart { /* Initial Swatch Value for dark theme */
+	background-color: #FFFFFF;
+}
+
+	
+/* --------------------------------------------------------- BASIC LAYOUT --------------------------------------------------------- */
+
+.stx-wrapper { /* Content Wrapper/Chart width */
+	display: inline-block;
+	width: 840px;
+	margin: 0 auto;
+	text-align: left;
+	position: relative;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+.stx-nav { /* Navigation Bar */
+	height: 50px;
+}
+.stx-toolbar { /* Toolbar for Drawing and Heads Up */
+	height: 36px;
+	padding: 9px 0 0 0;
+}
+
+/* -------------------------------------------------------- NAV BAR -------------------------------------------------------- */
+
+.stx-nav {
+	position: relative;
+	border: solid 1px;
+	background: #5b656b;
+	background: -webkit-gradient(linear, left top, left bottom, from(#5b656b), to(#424b50));
+	background: -moz-linear-gradient(top, #5b656b, #424b50);
+	background: -o-linear-gradient(top, #5b656b, #424b50);
+}
+
+
+/* Nav sections */
+.stx-nav .stx-search, .stx-nav .stx-menus { 
+	/*float: left;*/
+	display: inline-block;
+	margin: 0px;
+	padding: 0px;
+}
+.stx-nav .stx-menus {
+	float: right;
+	margin-right: 10px;
+}
+.stx-nav .stx-search, .stx-nav #periodBtn, .stx-nav .stx-menus {
+	margin-top: 10px;
+}
+
+/* Button Adjustments for dark background */
+.stx-nav .stx-btn.stx-menu-btn, .stx-nav .stx-nav-ico {
+	border-color: rgba(153,153,153,.4);
+	color: #efefef;
+}
+.stx-nav .stx-btn.stx-menu-btn:hover, .stx-nav .stx-nav-ico:hover {
+	border-color: rgba(153,153,153,.8);
+	color: #fff;
+}
+.stx-nav .stx-btn.stx-menu-btn:active {
+	color: #fff;
+}
+.stx-nav .stx-btn.stx-menu-btn > em {
+	border-left: 1px dotted rgba(153,153,153,.5);
+	opacity: 1;
+	filter: none;/* for IE5-7 */
+	-ms-filter: none;/* for IE8 */
+}
+.stx-nav .stx-btn.stx-menu-btn:hover > em {
+	border-left: 1px dotted rgba(153,153,153,.8);
+}
+
+/* Search */
+.stx-nav .stx-search {
+	margin-left: 15px;
+	position: relative
+}
+input#symbol {
+	text-transform: uppercase;
+	border-right: none;
+	-webkit-border-radius: 3px 0px 0px 3px;
+	-moz-border-radius: 3px 0px 0px 3px;
+	border-radius: 3px 0px 0px 3px;
+}
+
+/* Top Bar specific button styles */
+.stx-nav .stx-btn {
+	margin: 0 6px 0 0;
+}
+.stx-nav .stx-btn.stx-menu-btn {
+	width: 80px;
+}
+.stx-nav .stx-btn.stx-menu-btn#periodBtn { /* Periodicity button */
+	width: auto;
+	-webkit-border-radius: 0px 3px 3px 0px;
+	-moz-border-radius: 0px 3px 3px 0px;
+	border-radius: 0px 3px 3px 0px;
+}
+.stx-nav .stx-btn.stx-menu-btn#cogBtn {  /* Cog Button */
+	background-image: url(img/stx-sprite.png);
+	width: 27px;
+	padding: 0px 20px 0px 0px;
+	background-position: -35px -118px;
+}
+
+/* Dropdown Menus */
+.menuOutline {
+	position: absolute;
+	top: 31px;
+	right: 0px;
+	width: 126px;
+	background: #fff;
+	font-weight: normal;
+	border: solid 1px #ccc;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	-webkit-box-shadow: 0px 2px 3px rgba(0, 0, 0, .2);
+	-moz-box-shadow: 0px 2px 3px rgba(0, 0, 0, .2);
+	box-shadow: 0px 2px 3px rgba(0, 0, 0, .2);
+	z-index: 100;
+}
+.menuSelect > li, 
+.menuSelect > ul > li { /* Menu Items */
+	padding: 2px 16px;
+	line-height: 27px;
+	margin: 0px;
+	text-align: left;
+	cursor: pointer;
+	color: #666;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	transition: color .25s, background-color .25s;
+	-webkit-transition: color .25s, background-color .25s;
+}
+.menuSelect > li:first-child, .menuSelect > ul > li:first-child { /* Give more top padding to first item */
+	padding: 5px 16px 2px 16px;
+}
+.menuSelect > li:last-child, .menuSelect > ul > li:last-child { /* Give more bottom padding to last item */
+	padding: 2px 16px 5px 16px;
+}
+.menuSelect > li:hover, .menuSelect > ul > li:hover { /* Menu item hover state */
+	background: #efefef;
+}
+li.stx-menu-divider, 
+.menuSelect li.stx-menu-content, 
+.menuSelect li.stx-heading, 
+li.stxLookupFilter, 
+li.stx-menu-divider:hover, 
+.menuSelect li.stx-menu-content:hover, 
+.menuSelect li.stx-heading:hover, 
+li.stxLookupFilter:hover { /* Remove hover states for headings, dividers, and nested list parents/special content */
+	background: transparent;
+	cursor: default;
+	white-space: normal;
+}
+li.stx-menu-divider, li.stx-menu-divider:hover,
+.menuSelect li.stx-menu-divider, .menuSelect li.stx-menu-divider:hover { /* Menu Section dividers */
+	height: 1px;
+	padding: 0px;
+	background: #ccc !important;
+}
+.menuSelect li.stx-menu-content { /* Nested list parents and special content padding */
+	padding: 10px 16px 16px 16px;
+}
+.menuSelect li.stx-menu-content:first-child { /* First Nested list parent or special content padding */
+	padding: 16px 16px 16px 16px;
+}
+.menuSelect li.stx-heading, .menuSelect li.stx-heading:first-child, li.stxLookupFilter { /* Menu Headings and Search filter */
+	padding: 10px 1px 5px 16px;
+	font-size: 10px;
+	text-transform: uppercase;
+	line-height: normal;
+	color: #999;
+	font-weight: bold;
+}
+.menuSelect li.stx-heading, .menuSelect li.stx-heading:first-child { /* Menu heading padding */
+	padding: 10px 16px 5px 16px;
+}
+.menuSelect li.stx-option { /* Menu item with checkbox adjustments */
+	position: relative;
+	padding-left: 35px;
+}
+.menuSelect li.stx-option .stx-checkbox, .menuSelect li.stx-option .stx-checkbox.false { /* Menu checkbox toggles */
+	position: absolute;
+	left: 14px;
+	top: 8px;
+	display: block;
+	float: left;
+	width: 14px;
+	height: 14px;
+	text-indent: -1000px;
+	overflow: hidden;
+	background-image: url(img/stx-sprite.png);
+	background-position: -142px -122px;
+}
+.menuSelect li.stx-option .stx-checkbox.true { /* Menu checkbox toggle active */
+	background-position: -182px -122px;
+}
+.menuSelect ul.col { /* Columns for Studies Menu */
+	float: left;
+	cursor: default;
+	width: 201px;
+	border-top: none;
+	border-right: 1px solid #efefef;
+	/*margin-bottom:-100px;
+	padding-bottom:100px;*/
+}
+.menuSelect ul.col:last-child { /* No border divider needed for last column */
+	border-right: none;
+}
+.menuSelect ul.col li { /* Studies menu item padding */
+	padding: 2px 16px 2px 16px;
+}
+.menuSelect ul.col li:first-child { /* Give more top padding to first item */
+	padding: 5px 16px 2px 16px;
+}
+.menuSelect ul.col li:last-child {/* Give more bottom padding to last item */
+	padding: 2px 16px 5px 16px;
+}
+.menuSelect .stx-btn { /* Slightly smaller button for within menus */
+	font-size: 11px;
+	margin: 0px;
+}
+
+
+/* User Injected Menu Content */
+
+.injected .stx-btn { /* Delete button placement for custom item */
+	float: right;
+	margin: 0px
+}
+.injected li { /* Custom Item Basics */
+	clear: both;
+	border-top: 1px dotted #ccc;
+}
+.injected li.stx-menu-content:last-child { /* Give more top padding to list item with custom theme button */
+	padding-top: 5px;
+}
+.injected a.stxItem { /* Custom name/link */
+	color: #666;
+	display: inline-block;
+	width: 110px;
+	float: left;
+	line-height: 29px;
+	cursor: pointer;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	border-bottom:none;
+}
+.injected a.stxItem:hover {
+	color: #333;
+	border-bottom:none;
+}
+
+
+/* Search Results */
+
+.stxLookupResults { /* Search results container */
+	right: auto;
+	left: 0px;
+	width: 400px;
+}
+.stxLookupResults ul, .stxLookupResults li {overflow:hidden;}
+
+.stxLookupResults li.divider {
+	border-top: solid 1px #efefef;
+}
+.stxResults { /* Search results List */
+	right: auto;
+	left: 0px;
+	width: 100%;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	-webkit-box-shadow: 0px 2px 3px rgba(0, 0, 0, .2);
+	-moz-box-shadow: 0px 2px 3px rgba(0, 0, 0, .2);
+	box-shadow: 0px 2px 3px rgba(0, 0, 0, .2);
+}
+.stxResults li { /* Search results List Item */
+	font-size: 11px;
+	line-height: 0px;
+	clear: both
+}
+.stxResults li.stxLookupFilter { /* Search Filter area padding */
+	/*padding: 10px 0px 30px 5px;*/
+}
+.stxResults li.stxLookupFilter .stx-btn { /* Search Filter buttons */
+	padding: 0px;
+	line-height: 18px;
+	font-size: 10px;
+	/*width: 60px;*/
+	padding-left:5px;
+	padding-right:5px;
+	margin-left: 5px;
+	border-color: #efefef;
+	color: #999;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.stxResults li.stxLookupFilter .stx-btn:hover {
+	border-color: #ccc;
+	color: #666
+}
+.stxResults li.stxLookupFilter .stx-btn:first-child { /* Narrower button for "ALL" option */
+	width: 35px;
+}
+.stxResults li.stxLookupFilter .stx-btn.on, .stxResults li.stxLookupFilter .stx-btn.on:hover {/* Active filter button */
+	background: #999;
+	color: #fff;
+	border-color: #999;
+	text-shadow: 0 1px 0px #666;
+	box-shadow: none;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	cursor: default;
+}
+.stxResults span { /* Search results List Item Content */
+	line-height: 27px;
+	display: inline-block;
+	margin: 0px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.stxLookupSymbols li span:nth-of-type(1) { /* Search results Symbol */
+	color: #333333;
+	font-weight: bold;
+	min-width: 55px;
+	float: left;
+	padding-right:10px;
+}
+.stxLookupSymbols li span:nth-of-type(2) { /* Search results Company */
+	width: 200px;
+	float: left;
+}
+.stxLookupSymbols li span:nth-of-type(3) { /* Search results exchange */
+	color: #333333;
+	font-size: 10px;
+	min-width: 40px;
+	float: right;
+	text-align:right;
+}
+
+/* Periodicity Menu Styles */
+.menuSelect.periodicity {
+	right: auto;
+	left: 0px;
+}
+
+/* Studies Menu Styles */
+.menuSelect.studies {
+	width: 404px;
+	overflow:hidden;
+}
+.stx-basic .menuSelect.studies{
+	width: 118px;
+}
+.menuSelect.studies > ul > li {
+	line-height: 24px;
+}
+
+/* Themes Menu Styles */
+.menuSelect.cog {
+	width: 180px;
+}
+.menuSelect.cog .stx-btn.theme {
+	display: block;
+	float: none;
+	clear: both;
+}
+.menuSelect.cog li.stx-menu-content {
+	padding: 0px;
+}
+.menuSelect.cog .injected li.stx-heading {
+	border-top: none;
+	padding-bottom: 10px;
+}
+.menuSelect.cog li.stx-menu-content:last-child {
+	padding: 10px 16px 16px;
+}
+.menuSelect.cog li.themeSelectorTemplate {
+	margin: 0px 16px;
+}
+
+
+/* You may need to set the zIndex of this class if you have body elements that are stacked with different zIndexes.
+ * You can test this by temporarily setting the background-color: red and seeing how the overlays work! Set the zIndexes
+ * for your menus higher until they appear on top of the overlay.
+ */
+.stxBodyOverlay, .stxDialogOverlay {
+	position: absolute;
+	width: 99%; /* prevent scollbars */
+	height: 100%;
+	top: 0px;
+	overflow: hidden;
+	display: none;
+	background: rgba(255,255,255,0);	/* fully transparent. If this is left out then IE9 won't detect clicks on the overlay */
+}
+.stxDialogOverlay {
+	background: rgba(24,27,28,.7);
+}
+
+/* This z-index order is important to maintain so that the dialogs, menus and clickable overlays are all accessible */
+.stxDialogOverlay {
+	z-index: 200;
+}
+.stx-dialog-container {
+	z-index: 201;
+}
+.stxBodyOverlay {
+	z-index: 202;
+}
+.ciqColorPicker {
+	z-index: 205;
+}
+.stxMenu {
+	z-index: 203;
+}
+.stx-nav {
+	z-index: 204;
+}
+
+/* ------------------------------------------------------- TOOLBAR ------------------------------------------------------- */
+
+.stx-toolbar { /* Basic Toolbar */
+	position: relative;
+	display: block;
+	border-right: solid 1px;
+	border-left: solid 1px;
+	text-align: center;
+}
+	
+.stx-toolbar div { /* Keep elements from wrapping */
+	display: inline-block;
+}
+
+/* Heads Up */
+ul.hu { /* Formatting for list container */
+	width: 225px;
+	float: right;
+	margin-right: 10px;
+	text-align: left
+}
+ul.hu li { /* Data Sets */
+	float: left;
+	width: 79px;
+	font-size: 11px;
+}
+.huLabel { /* Data Set Labels */
+	display: inline-block;
+	margin-right: 5px;
+	width: 15px;
+	color: #b2b2b2;
+}
+.huField { /* Data Set Value */
+	display: inline-block;
+	width: 55px;
+}
+
+
+/* Drawing Tools */
+
+.stx-toolbar .drawOptions { /* Drawing Menu Container */
+	width: auto;
+	float: left;
+	margin-left: 6px;
+}
+.stx-toolbar .drawing.false {
+	display: none;
+}
+.stx-toolbar div.stx-btn, .stx-toolbar div.stx-color { /* Tool color */
+	float: left;
+	margin-left: 6px;
+}
+.stx-toolbar .stx-btn { /* Toolbar Buttons */
+	border: solid 1px;
+	font-size: 11px;
+	font-weight: normal;
+	height: 27px;
+	border: solid 1px #ddd;
+}
+.stx-toolbar .menuSelect.draw {left: 0px;}
+.stx-toolbar .menuSelect li { /* Tool Menu Font Size */
+	font-size: 12px;
+}
+.stx-toolbar .menuSelect.stx-line-style-menu li:last-child {
+	padding:2px 10px 5px;
+	}
+.stx-toolbar .stx-btn.stx-menu-btn.drawBtn { /* Tool Menu Button */
+	width: 62px;
+	text-align: left;
+}
+.stx-toolbar .stx-heading { /* Background and line color headings */
+	float: left;
+	line-height: 27px;
+	font-size: 10px;
+	text-transform: uppercase;
+	color: #999;
+}
+
+.stx-annotation-italic{
+	font-style:italic;
+}
+.stx-annotation-bold{
+	font-weight:bold;
+}
+
+.stx-drawing { /* Tool Options container */
+	float: left;
+}
+.stx-drawing .stx-draw-settings { /* Line and background color modules */
+	float: left;
+	margin: 0px 0px 0 10px;
+	padding: 0 0px 0 10px;
+	border-left: dotted 1px #ddd;
+}
+.stx-drawing .stx-draw-settings:first-child { /* Margin for first module */
+	margin: 0 0px 0 10px;
+}
+.stx-drawing .stx-color {/* Line and background color swatches */
+	border-radius: 0px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) inset;
+	-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) inset;
+	-moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) inset;
+	cursor: pointer;
+	display: inline-block;
+	height: 19px;
+	position: relative;
+	width: 19px;
+	margin:5px;
+}
+
+.stx-drawing .stx-color span {/* Hide arrow in toolbar color swatches */
+	display: none;
+}
+.stx-drawing span.stx-line {/* Formatting for line styles */
+	display: block;
+	width: 30px;
+	height: 0px;
+	padding: 0px;
+	margin: 13px -4px 0 -4px;
+	text-indent: -9999px;
+	border-top: 1px solid #666;
+	border-radius:0;
+}
+
+.stx-drawing .stx-checkbox, .stx-drawing .stx-checkbox.false{
+	display: block;
+	float: left;
+	width: 14px;
+	height: 14px;
+	margin: 5px 0px 0 5px;
+	overflow: hidden;
+	background-image: url(img/stx-sprite.png);
+	background-position: -142px -122px;
+}
+
+.stx-drawing .stx-checkbox.true{
+	background-position: -182px -122px;
+}
+
+.menuSelect.stx-drawing-style-menu { /* Drawing Style width */
+	width: 120px;
+}
+.menuSelect.stx-line-style-menu { /* Line Menu width */
+	width: 60px;
+}
+.menuSelect.stx-annotation-size-menu { /* Line Menu width */
+	width: 60px;
+}
+.menuSelect.stx-annotation-family-menu { /* Line Menu width */
+	width: 140px;
+}
+.menuSelect.stx-line-style-menu li.stxToolbarNone {/* Center "none" option */
+	text-align: center;
+}
+.menuSelect li span.stx-line {/* Additional formatting for line styles within the menu */
+	width: auto;
+	margin: 8px -8px 8px -8px;
+	border-top-color: #666;
+}
+.stx-btn .stx-line.style1.weight3, .stx-btn .stx-line.style2.weight3 {/* placement of line within the menu button */
+	margin-bottom: 12px;
+}
+.stx-btn .stx-line.style2.weight1, .stx-btn .stx-line.style3.weight1 {/* placement of line within the menu button */
+	margin-top: 12px;
+}
+
+/* Line style types */
+.stx-btn .stx-line.style1 {
+	border-top-style: solid;
+}
+.stx-btn .stx-line.style2 {
+	border-top-style: dotted;
+}
+.stx-btn .stx-line.style3 {
+	border-top-style: dashed;
+}
+.stx-btn .stx-line.weight0 {
+	border-top-width: 0px;
+}
+.stx-btn .stx-line.weight1 {
+	border-top-width: 1px;
+}
+.stx-btn .stx-line.weight3 {
+	border-top-width: 2px;
+}
+.stx-btn .stx-line.weight5 {
+	border-top-width: 3px;
+}
+
+/*  Measuring tool */
+.currentMeasure {
+	text-align: left;
+	display: inline-block;
+	margin: 4px 0 0 20px;
+	height: 20px;
+	line-height: 20px;
+}
+#mMeasure {
+	/*border-left: dotted 1px #999;*/
+	display: inline-block;
+	margin: 0 0 0 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width:140px;
+}
+
+
+/* ------------------------------------------------------- STUDY DIALOGS ------------------------------------------------------- */
+
+/* Popup Styles */
+
+.stx-dialog-container {/* Wrapper for dialog placement */
+	width: 100%;
+	top: 0px;
+	left: 0px;
+	text-align: center;
+	position: absolute;
+}
+.stx-dialog {/* The dialog */
+	position: relative;
+	text-align: left;
+	margin: 100px auto;
+	padding: 25px 30px;
+	width: 200px;
+	border: solid 1px #ccc;
+	background-color: #fff;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	-webkit-box-shadow: 0 3px 9px 0px rgba(0,0,0,.5);
+	-moz-box-shadow: 0 3px 9px 0px rgba(0,0,0,.5);
+	box-shadow: 0 3px 9px 0px rgba(0,0,0,.5);
+}
+.stx-dialog .stx-btn { /* Make dialog buttons smaller */
+	font-size: 11px;
+}
+.stx-dialog h4 { /* Dialog headings */
+	display: inline-block;
+	font-size: 16px;
+	font-weight: normal;
+	margin: 0px 30px 5px 0px;
+}
+.stx-dialog .stx-btn.stx-ico, .stx-dialog .stx-btn.stx-ico:hover {/* Position close dialog button */
+	position: absolute;
+	top: 3px;
+	right: 3px;
+	margin: 0px;
+}
+.stx-dialog div.stx-heading, .stx-dialog div.stx-data {/* Dialog content columns */
+	display: inline-block;
+	min-height: 24px;
+	color: #666;
+	margin-bottom: 10px;
+}
+.stx-dialog div.stx-heading {/* Dialog content label */
+	width: 120px;
+	text-transform: capitalize;
+	vertical-align: middle;
+}
+.stx-dialog div.stx-data {/* Dialog content swatches and fields */
+	display: inline-block;
+	float: right;
+	width: 75px;
+}
+.stx-dialog .stx-color, .stx-dialog .stx-border-color {/* Dialog color swatch position */
+	float: right;
+	margin-left: 4px;
+}
+.stx-dialog hr {/* Dialog divider */
+	border: none;
+	height: 2px;
+	color: #ccc;
+	background: #ccc;
+	margin: 4px 0px 8px 0px;
+	padding: 0px;
+}
+
+/* Studies Dialogs */
+
+.stx-dialog #inputs, .stx-dialog #outputs { /* Dialog content templates */
+	clear: both;
+}
+.stx-dialog #inputs { /* Dialog Input area (headings with textfields, etc.) */
+	border-top: dotted 2px #ccc;
+	margin: 8px 0px 0px 0px;
+	padding: 8px 0px 4px 0px;
+}
+.stx-dialog #outputs {/* Dialog Output area (headings with color swatches) */
+	border-bottom: dotted 2px #ccc;
+	margin: 0px 0px 15px 0px;
+	padding: 0px 0px 8px 0px;
+}
+.stx-dialog .inputTemplate, .stx-dialog .outputTemplate {/* Specific Dialog Input/Output temlates*/
+	clear: both;
+	border-bottom: #ddd 1px solid;
+	padding: 5px 0 0 0;
+}
+.stx-dialog .inputTemplate:last-child, .stx-dialog .outputTemplate:last-child {/* Remove divider from last item */
+	border: none;
+}
+.stx-dialog .outputTemplate div.stx-heading {/* Dialog Output heading columns */
+	width: 130px;
+}
+.stx-dialog div.stx-data input[type="number"],.stx-dialog div.stx-data input[type="text"] {/* Text Input styles */
+	float: right;
+	width: 58px;
+	margin: 1px 0px 0px 0px;
+}
+.stx-dialog div.stx-data select {/* Select element styles */
+	float: right;
+	text-align: left;
+	width: 70px;
+	margin: 2px 0px 0px 0px;
+}
+.stx-dialog #parameters .outputTemplate div.stx-heading {/* Dialog Parameters heading columns (RIS overbought/oversold) */
+	width: 120px;
+}
+.stx-dialog #parameters div.stx-data {/* Make data area wider for Params  */
+	width: 70px;
+}
+.stx-dialog #parameters input {/* Position textfields for Parameters */
+	float: none;
+}
+.stx-dialog #parameters .stx-color {/* Position Color swatches for Parameters */
+	float: right;
+}
+
+/* Theme Dialog */
+.stx-dialog#themeDialog {
+	width: 460px;
+}
+.stx-dialog .settings { /* Theme Dialog content wrapper */
+	border-top: dotted 2px #ccc;
+	border-bottom: dotted 2px #ccc;
+	margin: 8px 0px 22px 0px;
+	padding: 15px 0px 25px 0px;
+}
+.stx-dialog ul {/* Theme Dialog columns */
+	width: 200px;
+	display: inline-block;
+}
+.stx-dialog ul:last-child {/* Add divider and wider second column */
+	width: 220px;
+	margin-left: 14px;
+	border-left: dotted 1px #ddd;
+}
+.stx-dialog ul:first-child {/* Keep the columns from wrapping */
+	float: left;
+}
+.stx-dialog ul:last-child li { /* Add space after column divider from second column */
+	margin-left: 20px;
+}
+.stx-dialog ul:last-child li:last-child { /* Add space at bottom to even up column heights */
+	margin-bottom: 22px;
+}
+.stx-dialog li {/* Theme Dialog Option set */
+	width: auto;
+	clear: both;
+	border-top: #ddd 1px solid;
+	padding: 8px 0 0 0;
+}
+.stx-dialog li.stx-heading {/* Theme Dialog Option set */
+	font-size: 10px;
+	font-weight: bold;
+	text-transform: uppercase;
+	color: #999;
+	padding: 5px 0 10px 0;
+	border: none;
+}
+.stx-dialog li div.stx-data {/* Theme Dialog Option set */
+	margin-bottom: 5px;
+}
+.stx-dialog .themeName {/* Custom Theme name heading */
+	display: inline-block;
+	padding: 10px 10px 5px 0px;
+	font-size: 10px;
+	text-transform: uppercase;
+	line-height: normal;
+	color: #999;
+	font-weight: bold;
+}
+.stx-dialog#themeDialog input[type="text"] {/* Custom Theme name input */
+	width: 225px;
+	margin: 0px 4px 0px 0px;
+}
+
+#timezoneDialog{
+	text-align:center;
+	width:375px;
+}
+
+#timezoneDialog ul{
+	width:365px;
+	text-align:left;
+	 border-left: 0 none;
+    margin-left: 0;
+}
+#timezoneDialog ul li,
+#timezoneDialog ul li:last-child {
+	margin-left:0px;    
+	padding: 8px 0;
+}
+
+
+#timezoneDialog .title {
+	margin: 0 auto;
+}
+#timezoneDialogWrapper{
+	border-bottom: solid #CCCCCC 1px;
+}
+#timezoneDialog .detect{
+	margin: 20px auto;
+}
+#timezoneDialog .detect .stx-btn {
+	line-height:35px;
+	height:35px;
+	padding:0px 30px;
+	font-size:12px;
+	color:#666;
+}
+#timezoneDialog .instruct{
+	margin: 10px auto 0px;
+	font-style:italic;
+    font-family: Georgia,"Times New Roman",Times,serif;
+    font-size: 12px;
+    font-style: italic;
+	color:#999;
+}
+#timezoneDialog li:hover{
+	background-color:#F0F0F0;
+}
+
+/* ------------------------------------------------------- COLOR PICKER ------------------------------------------------------ */
+
+.ciqColorPicker {/* This is the actual color picker container */
+	position: absolute;
+	background: #FFF;
+	width: 180px;
+	margin: 20px 0 0 0px;
+	padding: 10px 5px 5px 10px;
+	border: 1px solid #ccc;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	-webkit-box-shadow: 0 1px 5px 0px rgba(0,0,0,.5);
+	-moz-box-shadow: 0 1px 5px 0px rgba(0,0,0,.5);
+	box-shadow: 0 1px 5px 0px rgba(0,0,0,.5);
+}
+.ciqColorPicker ul { /* The unordered list with all the swatches */
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	zoom: 1;
+}
+.ciqColorPicker ul:after { /* Fix display in some browsers */
+	content: ".";
+	display: block;
+	height: 0;
+	visibility: hidden;
+	clear: both;
+}
+.ciqColorPicker ul li { /* List item containing each swatch */
+	float: left;
+	margin: 0 5px 5px 0;
+}
+.ciqColorPicker ul li a { /* The swatches themselves */
+	display: block;
+	width: 13px;
+	height: 13px;
+	text-decoration: none;
+	text-indent: -100000px;
+	outline: 0;
+	border: 1px solid #aaa;
+}
+.ciqColorPicker ul li a:hover {/* Swatch hover state */
+	border-color: #000;
+}
+
+
+/* --------------------------------------------------------- MEDIA QUERIES --------------------------------------------------------- */
+/* Very very basic Media queries to make the sample fit in ipad portrait view */
+@media (max-width: 768px) {
+.stx-wrapper {
+	display: inline-block;
+	width: 700px;
+	margin: 0px auto;
+	text-align: left;
+	position: relative;
+}
+
+}
+
+
+/* --------------------------------------------------------- Light Theme --------------------------------------------------------- */
+
+/* Tooltips */
+.Light .stx-tooltip div,
+.Light .stx-tooltip span {
+	background:#000;
+	color:#fff;
+}
+
+/* Nav */
+.Light .stx-nav {border-color:#ddd;}
+
+/* Toolbar */
+.Light .stx-toolbar {
+	background:#fdfdfd;
+	border-color: #ddd;
+}
+
+.Light .huLabel {color: #b2b2b2;}
+.Light .huField {color: #666666;}
+
+.Light .stx-toolbar .stx-btn {
+	background:#fff;
+	border: solid 1px #ddd;
+	color:#7e7e7e;
+}
+.Light .stx-toolbar .stx-btn:hover {
+	color:#444444;
+	border: solid 1px #c5c5c5;
+}
+
+.Light .stx-toolbar .stx-btn.active{
+	background-color: rgba(0,0,0,.1);
+	border-color: rgba(0,0,0,.2);
+}
+.Light .stx-toolbar .stx-btn:active {color:#333;}
+.Light .stx-toolbar .stx-btn.stx-menu-btn > em {border-left:1px dotted #999;}
+.Light .stx-toolbar .stx-btn.stx-menu-btn:hover > em {border-left:1px dotted #ccc;}
+
+.Light .stx-drawing .stx-draw-settings {border-left:dotted 1px #ddd;}
+
+.Light .stx-drawing .stx-color {outline:none;}
+
+.Light .stx-drawing span.stx-line {border-color:#666;}
+.Light .stx-line-style-menu span.stx-line {border-color: #666666;}
+
+.Light .measureUnlit {color:#666;}
+.Light .measureLit {color:#000;}
+
+/* Chart Area */
+.Light .chartContainer {
+	background:#fff;
+	border-color:#ddd;
+	}
+
+.Light .stx-btn-panel > span.stx-ico-up {background-position: -150px -25px;}
+.Light .stx-btn-panel > span.stx-ico-down {background-position: -200px -25px;} 
+.Light .stx-btn-panel > span.stx-ico-close {background-position: -250px -25px;} 
+.Light .stx-btn-panel > span.stx-ico-edit {background-position: -300px -25px;} 
+.Light .stx-btn-panel > span.stx-ico-focus {background-position: -350px -25px;} 
+
+.Light #chartSize {
+	background:rgba(0,0,0,.05);
+	-webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, .2);
+	-moz-box-shadow: 0px 1px 2px rgba(0, 0, 0, .2);
+	box-shadow: 0px 1px 1px rgba(0, 0, 0, .2);
+}
+.Light #chartSize:after {background:rgba(0,0,0,.2);}
+.Light #chartSize .stx-zoom-out {background-position: -45px -25px;}
+.Light #chartSize .stx-zoom-in {background-position: -95px -25px;}
+
+.Light .stx-panel-title {background-color:#999; color: #fff;}
+
+.Light .stx-float-date { background-color: #333; color: #fff;}
+.Light .stx-float-price { color:#fff; background-color: #333;}
+
+.Light .stx_xaxis {color: #666;}
+.Light .stx_xaxis_dark {color: #444;}
+.Light .stx_yaxis {color:#333;}
+
+.Light .stx_crosshair {background-color:rgba(0,0,0,.3);}
+.Light .stx_crosshair_drawing {background-color:rgba(0,0,0,.9);}
+
+.Light .stx_panel_border{color:#ccc;}
+.Light .stx_panel_drag {color:#666;}
+
+.Light .stx_grid {color:#efefef; opacity:.8;}
+.Light .stx_grid_dark {color:#ccc;opacity:.9;}
+
+.Light .stx_line_chart, .Light .stx_bar_chart {color:#000;}
+
+.Light .stx_candle_shadow, .Light .stx_bar_even {color:#2e383b;}
+
+.Light .stx_candle_down, .Light .stx_line_down { border-left-color: #000000; }
+.Light .stx_candle_up, .Light .stx_line_up { border-left-color: #000000; }
+
+/* Volume underlay styles */
+.Light .stx_volume_underlay_up {
+	color: rgb(140, 193, 118);
+	opacity: .2;
+	border-left-color: rgb(0, 0, 0);
+}
+.Light .stx_volume_underlay_down {
+	color: rgb(184, 45, 12);
+	opacity: .2;
+	border-left-color: rgb(0, 0, 0);
+}
+
+/* Volume profile styles */
+.Light .stx_volume_profile {
+	color: #b64a96;
+	opacity: .3;
+	border-color: rgb(0, 0, 0);
+}
+
+.Light .stx_hollow_candle_even{color:#888888;}
+
+.Light .stx_projection {color: black;}
+
+.Light .stx_histogram { 
+	color: #000000;
+	opacity: .2;
+}
+
+
+/* --------------------------------------------------------- Dark Theme --------------------------------------------------------- */
+
+/* Tooltips */
+.Dark .stx-tooltip div,
+.Dark .stx-tooltip span {
+	background:#fff;
+	color:#000;
+}
+
+/* Nav */
+.Dark .stx-nav {border-color:#333;}
+
+/* Toolbar */
+.Dark .stx-toolbar {
+	background:#111111;
+	border-color:#333;
+}
+	
+.Dark .huLabel {color: #999;}
+.Dark .huField {color: #efefef;}
+	
+.Dark .stx-toolbar .stx-btn {
+	background:#1f1f1f;
+	border: solid 1px #414141;
+	color:#ccc;
+}
+.Dark .stx-toolbar .stx-btn:hover {
+	color:#efefef;
+	border: solid 1px #666;
+}
+.Dark .stx-toolbar .stx-btn.active{
+	background-color: rgba(255,255,255,.3);
+	border-color: rgba(255,255,255,.4);
+}
+.Dark .stx-toolbar .stx-btn:active {color:#fff;}
+.Dark .stx-toolbar div.btn.menu > em {border-left:1px dotted #999;}
+.Dark .stx-toolbar div.btn.menu:hover > em {border-left:1px dotted #999;}
+
+.Dark .stx-drawing .stx-draw-settings {border-left:dotted 1px #414141;}
+
+.Dark .stx-drawing .color {outline: 1px solid rgba(255,255,255,.2);}
+
+.Dark .stx-drawing span.stx-line {border-color: #efefef;}
+.Dark .stx-line-style-menu span.stx-line {border-color: #666666;}
+
+.Dark .measureUnlit {color:#cbcccd;}
+.Dark .measureLit {color:#fff;}
+
+/* Chart Area */
+.Dark .chartContainer {
+	background:#000000;
+	border-color:#333;
+	}
+
+
+.Dark .stx-btn-panel > span.stx-ico-up {background-position: -150px -50px;}
+.Dark .stx-btn-panel > span.stx-ico-down {background-position: -200px -50px;} 
+.Dark .stx-btn-panel > span.stx-ico-close {background-position: -250px -50px;} 
+.Dark .stx-btn-panel > span.stx-ico-edit {background-position: -300px -50px;} 
+.Dark .stx-btn-panel > span.stx-ico-focus {background-position: -350px -50px;} 
+
+.Dark #chartSize {
+	background:rgba(255,255,255,.1);
+	-webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, .4);
+	-moz-box-shadow: 0px 1px 2px rgba(0, 0, 0, .4);
+	box-shadow: 0px 1px 1px rgba(0, 0, 0, .4);
+}
+.Dark #chartSize:after {background:rgba(255,255,255,.2);}
+.Dark #chartSize .stx-zoom-out {background-position: -45px -50px;}
+.Dark #chartSize .stx-zoom-in {background-position: -95px -50px;}
+
+.Dark .stx-panel-title {background-color:#7e7e7e; color: #fff;}
+
+.Dark .stx-float-date { background-color: #fff; color: #333;}
+.Dark .stx-float-price { color:#333; background-color: #fff;}
+
+.Dark .stx_xaxis {color: #efefef;}
+.Dark .stx_xaxis_dark {color: #fff;}
+.Dark .stx_yaxis {color:#efefef;}
+
+.Dark .stx_crosshair {background-color:rgba(255,255,255,.4);}
+.Dark .stx_crosshair_drawing {background-color:rgba(255,255,255,.9);}
+
+.Dark .stx_panel_border{color:#666;}
+.Dark .stx_panel_drag {color:#ccc;}
+
+.Dark .stx_grid {color:#343434; opacity:.8;}
+.Dark .stx_grid_dark {color:#656565;opacity:.8;}
+
+.Dark .stx_line_chart, .Dark .stx_bar_chart {color:#fff;}
+
+.Dark .stx_candle_shadow, .Dark .stx_bar_even {color:#ccc;}
+
+.Dark .stx_candle_down, .Dark .stx_line_down, .Dark .stx_histogram_down { border-left-color: #e34621; }
+.Dark .stx_candle_up, .Dark .stx_line_up, .Dark .stx_histogram_up { border-left-color: #b8dea8; }
+
+.Dark .stx_histogram_even { border-left-color: #cccccc; }
+
+.Dark .stx_hollow_candle_even{color:#cccccc;} 
+
+.Dark .stx_baseline{color:#ccc;}
+
+/* Volume underlay styles */
+.Dark .stx_volume_underlay_up {
+	color: rgb(140, 193, 118);
+	opacity: .4;
+	border-left-color: rgb(148, 201, 126);
+}
+.Dark .stx_volume_underlay_down {
+	color: rgb(184, 45, 12);
+	opacity: .4;
+	border-left-color: rgb(242, 103, 70);
+}
+
+/* Volume profile styles */
+.Dark .stx_volume_profile {
+	color: #b64a96;
+	opacity: .3;
+	border-color: rgb(255, 255, 255);	
+}
+
+.Dark .stx_projection {color: #FFF;}
+
+.Dark .stx_histogram{
+	color:#fff;
+	opacity:.3;
+}
+
+/* --- OVERLAY CLOSE --- */
+.stx-close-overlay {
+	font-family: "Helvetica";
+	font-size: 10px;
+	position: absolute;
+	z-index: 4;
+	margin-top: 11px;  /* Note, needs to be 7 when volume study is open */
+}
+.stx-close-overlay span, .Light .stx-close-overlay span {
+	background-position: -160px -40px;
+	background-image: url(img/stx-sprite.png);
+	background-repeat: no-repeat;
+	cursor: pointer;
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+}
+
+.Dark .stx-close-overlay span {
+	background-position: -160px -80px;
+}
+
+/* --------------------------------------------------------- QUOTE ATTRIBUTION --------------------------------------------------------- */
+
+p.attribution {
+	/*width:220px;*/
+	position:absolute;
+	left:10px;
+	bottom:25px;
+	margin:0;
+	font-size:10px;
+	/*z-index:300;*/
+	padding:0 5px;
+}
+p.attribution span {
+	display:none;
+}
+p.attribution.xignite span.xignite{
+	display:inline-block;
+}
+p.attribution.real-time span.real-time{
+	display:inline-block;
+}
+p.attribution.delayed span.delayed{
+	display:inline-block;
+}
+p.attribution.random span.random{
+	display:inline-block;
+}
+p.attribution.bats span.bats{
+	display:inline-block;
+}
+p.attribution.eod span.eod{
+	display:inline-block;
+}
+
+.Light p.attribution {color:rgba(0,0,0,.4);} 
+.Dark p.attribution {color:rgba(255,255,255,.4);} 
+
+p.attribution a {text-decoration:none;}
+.Light p.attribution a {color:#000;}
+.Dark p.attribution a {color:#fff;}
+
+
+.Light p.attribution span {background:rgba(250,250,250,.9);}
+.Dark p.attribution span {background:rgba(0,0,0,.5);}
+
+
+/* --------------------------------------------------------- ISCROLL --------------------------------------------------------- */
+
+.iScrollIndicator {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+.Light .iScrollIndicator {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+.Dark .iScrollIndicator {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+

@@ -23,7 +23,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@chartiq/finsemble": "^3.2.0-1",
+        "@chartiq/finsemble": "^3.2.0-4",
         "@chartiq/finsemble-cli": "2.*",
         "@chartiq/finsemble-react-controls": "^3.1.2",
         "async": "^2.6.0",

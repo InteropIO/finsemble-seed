@@ -3,7 +3,7 @@ node_modules/
 launch.json
 
 # Distribution folder
-dist/
+# dist/
 
 # Optional npm cache directory
 .npm
@@ -12,8 +12,8 @@ dist/
 .node_repl_history
 
 # ChartIQ library files
-chartiq/js
-chartiq/css
+# chartiq/js
+# chartiq/css
 
 # Editor files
 .idea
