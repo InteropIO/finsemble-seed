@@ -127,12 +127,15 @@ function getApps() {
  * @param {string} name The name of the app
  */
 function addApp(id) {
-    let { installed, apps } = getStore().getValues([
+    let { installed, apps, activeApp } = getStore().getValues([
         {
             field: 'apps'
         },
         {
             field: 'installed'
+        },
+        {
+            field: 'activeApp'
         }
     ])
 
@@ -140,15 +143,27 @@ function addApp(id) {
         let app = apps[i];
         let thisAppId = app.appId;
         if (thisAppId === id && !installed.includes(id)) {
-            installed.push(app.appId);
+            installed.push(id);
             break;
+        }
+
+        if (activeApp.appId === id) {
+            activeApp.installed = true;
         }
     };
 
-    getStore().setValue({
-        field: 'installed',
-        value: installed
-    });
+    console.log('installed on add: ', installed);
+
+    getStore().setValues([
+        {
+            field: 'installed',
+            value: installed
+        },
+        {
+            field: 'activeApp',
+            value: activeApp
+        }
+    ])
 }
 
 /**
@@ -156,7 +171,7 @@ function addApp(id) {
  * @param {string} name The name of the app
  */
 function removeApp(id) {
-    let { apps, installed } = getStore().getValues(["apps", "installed"]);
+    let { apps, installed, activeApp } = getStore().getValues(["apps", "installed", "activeApp"]);
 
     for (let i = 0; i < apps.length; i++) {
         let app = apps[i];
@@ -166,12 +181,24 @@ function removeApp(id) {
             installed.splice(index, 1);
             break;
         }
+
+        if (activeApp.appId === id) {
+            activeApp.installed = false;
+        }
     }
 
-    getStore().setValue({
-        field: 'installed',
-        value: installed
-    });
+    console.log('installed on remove: ', installed);
+
+    getStore().setValues([
+        {
+            field: 'installed',
+            value: installed
+        },
+        {
+            field: 'activeApp',
+            value: activeApp
+        }
+    ])
 }
 
 /**

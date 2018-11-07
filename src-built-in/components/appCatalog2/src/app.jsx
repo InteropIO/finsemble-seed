@@ -40,8 +40,7 @@ export default class AppMarket extends React.Component {
 		this.removeTag = this.removeTag.bind(this);
 		this.changeSearch = this.changeSearch.bind(this);
 		this.openAppShowcase = this.openAppShowcase.bind(this);
-		this.addApp = this.addApp.bind(this);
-		this.removeApp = this.removeApp.bind(this);
+		this.installedAppsChanged = this.installedAppsChanged.bind(this);
 		this.stopShowingInstalledNotification = this.stopShowingInstalledNotification.bind(this);
 		this.compileAddedInfo = this.compileAddedInfo.bind(this);
 		this.getPageContents = this.getPageContents.bind(this);
@@ -52,18 +51,14 @@ export default class AppMarket extends React.Component {
 		this.setState({
 			tags: await storeActions.getTags(),
 			apps: await storeActions.getApps()
-		}, () => {
-			this.setState({
-				installed: [this.state.apps[0].appId]
-			});
 		});
-		getStore().addListener({ field: 'installed' }, this.stopShowingInstalledNotification);
+		getStore().addListener({ field: 'installed' }, this.installedAppsChanged);
 		getStore().addListener({ field: 'filteredApps' }, this.filteringApps);
 		getStore().addListener({ field: 'activeApp' }, this.openAppShowcase);
 	}
 	componentWillUnmount() {
 		getStore().removeListener({ field: 'filteredApps' }, this.filteringApps);
-		getStore().removeListener({ field: 'installed' }, this.stopShowingInstalledNotification);
+		getStore().removeListener({ field: 'installed' }, this.installedAppsChanged);
 		getStore().removeListener({ field: 'activeApp' }, this.openAppShowcase);
 	}
 	/**
@@ -134,37 +129,33 @@ export default class AppMarket extends React.Component {
 			if (search !== "") storeActions.searchApps(search);
 		});
 	}
-	/**
-	 * Adds an app to the local finsemble instance
-	 * @param {string} appName The title/name of the app
-	 */
-	addApp(appName) {
-		// //TODO: This won't work when this comes from a dd
-		this.setState({
-			installationActionTaken: 'add'
-		});
-		storeActions.addApp(appName);
-	}
-	/**
-	 * Removes an app from the local finsemble instance
-	 * @param {string} appName The title/name of the app
-	 */
-	removeApp(appName) {
-		// //TODO: This won't work when this comes from a db
-		this.setState({
-			installationActionTaken: 'remove'
-		}, () => {
-			storeActions.removeApp(appName);
-		});
+	installedAppsChanged() {
+		let action;
+		if (this.state.installed.length === storeActions.getInstalledApps().length) {
+			//If the components installed apps is greater than that of the store, that means an app was removed
+			action = "remove";
+		} else if (this.state.installed.length < storeActions.getInstalledApps().length) {
+			//If the component's installed apps is less than that of the store, that means an app was added
+			action = "add";
+		}
+
+		if (action) {
+			this.setState({
+				installationActionTaken: action,
+				installed: storeActions.getInstalledApps()
+			}, () => {
+				setTimeout(this.stopShowingInstalledNotification, 3000);
+			});
+		}
 	}
 	/**
 	 * When the notification for isntalling/removing an app is shown a timeout is set to call this function to cease showing the notification
 	 */
 	stopShowingInstalledNotification() {
-		let installed = storeActions.getInstalledApps();
+		let activeApp = storeActions.getActiveApp();
 		this.setState({
 			installationActionTaken: null,
-			installed
+			activeApp
 		});
 	}
 	navigateToShowcase(id) {
