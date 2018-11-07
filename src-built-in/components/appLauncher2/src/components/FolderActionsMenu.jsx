@@ -52,7 +52,7 @@ class FolderActionsMenu extends React.Component {
 	}
 
 	deleteFolder(event) {
-		//storeActions.deleteFolder(this.props.folder)
+		storeActions.deleteFolder(this.props.folder)
 	}
 	renderList() {
 		return (
