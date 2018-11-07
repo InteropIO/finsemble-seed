@@ -2,7 +2,7 @@
 @import url('_colorPalette.css');
 :root {
     /* Theme Variables:  Use these variables to make broad-sweeping changes to the colors and fonts. */
-   
+
     /* Font Settings */
     --font-family: 'Roboto', sans-serif;
     --primary-font-color: white;
@@ -28,25 +28,26 @@
     --scrollbar-color: var(--gray);
 
     /* Component Variables:  Use these variables to make small changes to colors and general appearance. */
-    
+
     /** Toolbar */
     --toolbar-font-size: 15px;
     --toolbar-font-color: var(--primary-font-color);
     --toolbar-line-height: 1em;
     --toolbar-font-weight: var(--primary-font-weight);
-    
+
     --toolbar-height: 39px;
     --toolbar-brand-logo-width: 20px;
     --toolbar-brand-logo-height: 20px;
     --toolbar-background-color: var(--primary-background-color);
     --toolbar-button-hover-color: var(--secondary-accent-color);
-   
+    --toolbar-resize-area-color: var(--slate5);
+
     --toolbar-icon-workspace-color: var(--yellow);
     --toolbar-icon-app-color: var(--tertiary-accent-color);
     --toolbar-icon-font-size: 22px;
-   
+
     --toolbar-separator: 1px solid rgba(255, 255, 255, 0.3);
-    
+
     /* Window Title bar */
     --titleBar-height: 25px;
     --titleBar-font-size: 14px;
@@ -73,7 +74,7 @@
     --titleBar-button-highlight-inactive-color: var(--secondary-accent-color);
     --titleBar-button-hover-negative-color: var(--primary-negative-color);
     --titleBar-button-hover-linker-group: var(--gray3);
-   
+
     /* Dialogs (e.g., singleInput and yesNo) */
     --dialog-title-font-size: 20px;
     --dialog-question-font-size: 14px;
@@ -90,30 +91,30 @@
     --dialog-input-border-color: var(--gray6);
     --dialog-input-border-focus-color: var(--gray);
     --dialog-input-border-error-color: var(--red2);
-    
+
     /* Buttons and Inputs */
     --button-font-size: 13px;
     --button-font-weight: var(--primary-font-weight);
     --button-solid-font-color: var(--primary-font-color);
     --button-small-font-size: 10px;
- 
+
     --button-affirmative-background-color: var(--primary-accent-color);
     --button-affirmative-border-color: var(--blue5);
     --button-affirmative-background-hover-color: var(--secondary-accent-color);
     --button-affirmative-border-hover-color: var(--blue6);
- 
+
     --button-neutral-background-color: transparent;
     --button-neutral-border-color: transparent;
     --button-neutral-border-hover-color: var(--gray6);
     --button-neutral-solid-font-color: var(--secondary-font-color);
- 
+
     --button-negative-background-color: var(--red6);
     --button-negative-border-color: var(--red4);
     --button-negative-background-hover-color: var(--red7);
     --button-negative-border-hover-color: var(--red5);
 
     --input-negative-border-color: var(--secondary-negative-color);
-    
+
     /* Menus */
     --menu-font-size: 14px;
     --menu-font-weight: var(--primary-font-weight);
@@ -133,33 +134,33 @@
 
     --menu-linker-selected-font-color: var(--primary-font-color);
     --menu-linker-selected-font-size: 18px;
-    
+
     /* Search Menu */
     --search-input-font-color: var(--secondary-font-color);
     --search-input-background-color: white;
-   
+
     --search-header-font-color: var(--tertiary-accent-color);
     --search-header-font-weight: var(--tertiary-font-weight);
-    
+
     --search-result-font-color: var(--primary-font-color);
     --search-result-font-weight: var(--primary-font-weight);
     --search-result-highlighter-color: var(--slate3);
     --search-result-highlighter-background: var(--slate4);
-    
+
     /* Window Frame */
     --window-frame-inactive-color: var(--slate5);
     --window-frame-active-color: var(--window-frame-inactive-color);
-    
+
     /* Window Scrims and Masks */
     --groupMask-background-color: var(--secondary-accent-color);
     --groupMask-border-color: var(--primary-accent-color);
-   
+
     --scrim-icon-font-color: var(--primary-font-color);
     --scrim-icon-font-size: 100px;
-  
+
     --scrim-positive-background-color: var(--secondary-accent-color);
     --scrim-negative-background-color: var(--red7);
-   
+
     /* Content Dialog (e.g., userPreferences and appCatalog) */
     --content-font-size: 16px;
     --content-header-font-size: 18px;
@@ -201,7 +202,7 @@
     --content-details-font-size: 12px;
     --content-back-font-size: 15px;
     --content-close-hover-color: var(--red2);
-  
+
     /* Notifications */
     --notification-body-background-color: var(--toolbar-background-color);
     --notification-body-font-color: var(--primary-font-color);
@@ -211,21 +212,21 @@
     --notification-title-font-weight: bold;
     --notification-close-icon-hover-color: var(--secondary-negative-color);
     --notification-description-font-size: 13px;
-  
+
     /* Process Monitor */
     --procMonitor-font-color: var(--primary-font-color);
     --procMonitor-font-size: 12px;
     --procMonitor-font-weight: var(--primary-font-weight);
     --procMonitor-process-name-font-weight: var(--secondary-font-weight);
     --procMonitor-component-name-font-weight: var(--primary-font-weight);
-   
+
     --procMonitor-background-color: var(--primary-background-color);
     --procMonitor-list-border-color: var(--gray6);
     --procMonitor-close-component-font-color: var(--gray5);
-    
+
     --procMonitor-warning-background-color: var(--yellow7);
     --procMonitor-negative-border-color: var(--tertiary-negative-color);
     --procMonitor-negative-background-color: var(--tertiary-negative-color);
-   
+
     --procMonitor-close-hover-color: var(--red2);
 }
