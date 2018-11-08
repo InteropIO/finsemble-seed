@@ -94,7 +94,7 @@ function reorderFolders(destIndex, srcIndex) {
 
 function addNewFolder(name) {
 	// Find folders that have a name of "New folder" or "New folder #"
-	const newFolders = Object.keys(data.folders).filter((folder) => {
+	const newFolders = data.foldersList.filter((folder) => {
 		return folder.toLowerCase().indexOf('new folder') > -1
 	})
 	const folderName = name || `New folder ${newFolders.length + 1}`
@@ -116,6 +116,7 @@ function deleteFolder(folderName) {
 	// Check if user is trying to delete the active folder
 	if(folderName === data.activeFolder) {
 		data.activeFolder = MY_APPS
+		_setValue('activeFolder', data.activeFolder)
 	}
 
 	delete data.folders[folderName] && _setFolders(() => {
@@ -127,15 +128,15 @@ function deleteFolder(folderName) {
 }
 
 function renameFolder(oldName, newName) {
-	let oldFolder = data.folders[oldName];
-	data.folders[newName] = oldFolder;
-	delete data.folders[oldName];
+	let oldFolder = data.folders[oldName]
+	data.folders[newName] = oldFolder
 	_setFolders(() => {
 		let indexOfOld = data.foldersList.findIndex((folderName) => {
-			return folderName === oldName;
-		});
-		data.foldersList[indexOfOld] = newName;
-		_setValue('appFolders.list', data.foldersList);
+			return folderName === oldName
+		})
+		data.foldersList[indexOfOld] = newName
+		_setValue('appFolders.list', data.foldersList)
+		delete data.folders[oldName]
 	});
 }
 
