@@ -130,4 +130,8 @@ i, i:before, i:after, .fsbl-window-manager-icon {
     box-sizing: content-box;
 }
 
+button#launchTutorial {
+	background-color: red !important;
+}
+
 @import url('./_styleWhitelabel.css');

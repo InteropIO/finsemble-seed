@@ -1,4 +1,3 @@
-
 /*!
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
@@ -23,7 +22,8 @@ import Maximize from "./components/right/MaximizeButton.jsx";
 import Close from "./components/right/CloseButton.jsx";
 import BringSuiteToFront from "./components/right/BringSuiteToFront.jsx";
 import AlwaysOnTop from "./components/right/AlwaysOnTop.jsx";
-import TabRegion from './components/center/TabRegion'
+import TabRegion from './components/center/TabRegion';
+/** 8922 - this file isn't getting loaded for some reason.... */
 import "../../../../assets/css/finsemble.css";
 
 /**
@@ -424,11 +424,20 @@ class WindowTitleBar extends React.Component {
 
 if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
 function FSBLReady() {
-	if (FSBL.titleBarInserted) return;
-	FSBL.titleBarInserted = true;
+	console.log('inside fsblReady');
+	// Create the header element
+	const template = document.createElement("div");
+	const FSBLHeader = document.createElement('div')
+	FSBLHeader.setAttribute('style', 'height: 20px')
+	FSBLHeader.setAttribute('id', 'FSBLHeader')
+	template.appendChild(FSBLHeader)
+	document.body.insertBefore(template.firstChild, document.body.firstChild);
 	storeExports.initialize(function () {
 		HeaderActions = storeExports.Actions;
 		windowTitleBarStore = storeExports.getStore();
 		ReactDOM.render(<WindowTitleBar />, document.getElementById("FSBLHeader"));
+		// FSBL.Clients.WindowClient.registerWithDockingManager();
 	});
 }
+
+console.log('i"m alive!!!!!')
