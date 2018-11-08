@@ -110,7 +110,7 @@ body.menu {
 }
 
 .ff-pin:hover {
-    color: var(--yellow4);
+    color: var(--menu-font-color);
     width: 22px;
     /* border: 1px solid var(--menu-pin-border-color); */
     border-radius: 4px;
@@ -124,29 +124,29 @@ body.menu {
 } 
 
 .ff-favorite:hover {
-    color: var(--yellow4);
+    color: var(--menu-favorite-hover-color);
     width: 22px;
     /* border: 1px solid var(--menu-pin-border-color); */
     /* border-radius: 4px; */
 }
 
 .finsemble-item-pinned {
-    color: var(--yellow4);
+    color: var(--menu-favorite-hover-color);
     width: 22px;
     /* background-color: var(--menu-pin-background-color); */
     /* border-radius: 4px; */
 }
 
 .finsemble-item-pinned:hover {
-    color: var(--yellow1);
+    color: var(--menu-favorite-active-hover-color);
     width: 22px;
     /* background-color: var(--menu-pin-background-hover-color); */
     border-radius: 4px;
 }
 
 .ff-delete:hover {
-    color: var(--menu-font-color);
-    background-color: var(--menu-delete-background-hover-color);
+    color: var(--menu-delete-background-hover-color);
+    /* background-color: var(--menu-delete-background-hover-color); */
     border-radius: 4px;
 }
 
