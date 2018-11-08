@@ -6,7 +6,7 @@
 				"url": "$applicationRoot/components/appLauncher/appLauncher.html",
 				"top": 0,
 				"left": 0,
-				"width": 600,
+				"width": 310,
 				"height": 400,
 				"ephemeral": true,
 				"options": {
