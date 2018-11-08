@@ -68,9 +68,12 @@ export default class TagsMenu extends React.Component {
 			<div className="tags-menu" style={styles}>
 				<ul> {
 					items.map((item, index) => {
+						let active = this.props.active.includes(item);
+
+
 						return <li key={index}
 							onClick={() => this.onItemClick(item)}>
-							{item}
+							{active && <i className='ff-check-mark' />}&nbsp;&nbsp;{item}
 						</li>
 					})
 				} </ul>

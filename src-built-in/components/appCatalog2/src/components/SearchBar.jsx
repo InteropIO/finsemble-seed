@@ -67,10 +67,16 @@ class SearchBar extends Component {
 	 * @param {string} tag The name of the tag
 	 */
 	selectTag(tag) {
+		let tags = storeActions.getActiveTags();
+
 		this.setState({
 			tagSelectorOpen: false
 		}, () => {
-			storeActions.addTag(tag);
+			if (tags.includes(tag)) {
+				storeActions.removeTag(tag);
+			} else {
+				storeActions.addTag(tag);
+			}
 		});
 	}
 	/**
@@ -95,6 +101,8 @@ class SearchBar extends Component {
 			tagListClass += " hidden";
 		}
 
+		let activeTags = storeActions.getActiveTags();
+
 		return (
 			<div className='search-main'>
 				<Toast installationActionTaken={this.props.installationActionTaken} />
@@ -108,7 +116,7 @@ class SearchBar extends Component {
 						<i className='ff-search'></i>
 						<input className='search-input' type="text" value={this.state.searchValue} onChange={this.changeSearch} />
 					</div>
-					<TagsMenu list={this.props.tags} onItemClick={this.selectTag} label={"Tags"} align='right' />
+					<TagsMenu active={activeTags} list={this.props.tags} onItemClick={this.selectTag} label={"Tags"} align='right' />
 				</div>
 				<div className='label-bar'>
 					{this.props.activeTags.map((tag, i) => {
