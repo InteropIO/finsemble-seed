@@ -39,10 +39,8 @@ export default class FilterSort extends React.Component {
 	* so that other components get notified
 	**/
 	onTagClick(tag) {
-		console.log('tag: ', tag);
 		let tags = storeActions.getTags();
 
-		console.log('tags: ', tags);
 		if (tags.includes(tag)) {
 			storeActions.deleteTag(tag);
 		} else {
