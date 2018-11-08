@@ -32,8 +32,9 @@ const AppResults = props => {
 			cardsForShowcase = props.cards.filter((card) => {
 				for (let i = 0; i < props.tags.length; i++) {
 					let tagToSearchFor = props.tags[i];
-					if (card.tags.includes(tagToSearchFor)) return true;
+					if (!card.tags.includes(tagToSearchFor)) return false;
 				}
+				return true;
 			});
 		} else {
 			cardsForShowcase = props.cards;
