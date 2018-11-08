@@ -246,6 +246,7 @@
 	color: var(--catalog-font-color);
 	user-select: none;
 	outline:none;
+	cursor: pointer;
 }
 
 .carousel-main .carousel-header .see-more .button-label {
@@ -560,6 +561,7 @@
 	user-select: none;
 	outline: none;
 	transition: .2s ease-in;
+	cursor: pointer;
 }
 
 .action-button .ff-plus {
