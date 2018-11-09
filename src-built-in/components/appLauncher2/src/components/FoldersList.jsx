@@ -120,6 +120,7 @@ export default class FoldersList extends React.Component {
 	 * To be called when user press Enter or when focus is removed
 	 */
 	attempRename() {
+		const folders = storeActions.getFolders()
 		const input = this.state.folderNameInput.trim()
 		const oldName = this.state.renamingFolder, newName = input
 		// Check user input to make sure its at least 1 character
@@ -129,6 +130,12 @@ export default class FoldersList extends React.Component {
 			console.warn('A valid folder name is required. /^([a-zA-Z0-9\s]{1,})$/')
 			return
 		}
+		// Names must be unique, folders cant share same names
+		if (folders[newName]) {
+			console.log('Folder name ', newName, 'already exists.')
+			return
+		}
+
 		this.setState({
 			folderNameInput: "",
 			renamingFolder: null
