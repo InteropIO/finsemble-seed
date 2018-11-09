@@ -10,7 +10,7 @@ export default class TagsList extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			tags: []
+			tags: storeActions.getTags()
 		}
 		this.onTagDelete = this.onTagDelete.bind(this);
 		this.onTagListUpdate = this.onTagListUpdate.bind(this);
