@@ -61,7 +61,7 @@
 	background-color: var(--tag-background-color);
 	user-select: none;
 	margin: 0 4px 4px 0;
-	padding: 2px 5px 0 5px;
+	padding: 4px 5px 0 5px;
 }
 
 .app-tag .tag-content {
