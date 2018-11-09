@@ -37,7 +37,8 @@ img {
 .folder-list {
     margin-top: 10px;
     max-height: 245px;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 .bottom {
     position: absolute;
@@ -48,6 +49,10 @@ img {
 .bottom .complex-menu-section-toggle {
     display: flex;
     justify-content: flex-start;
+}
+
+.complex-menu-section-toggle #rename.error {
+    border-bottom: 1px solid var(--red3);
 }
 
 .complex-menu-wrapper {
