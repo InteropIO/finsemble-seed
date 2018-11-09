@@ -37,7 +37,8 @@ img {
 .folder-list {
     margin-top: 10px;
     max-height: 245px;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 .bottom {
     position: absolute;
