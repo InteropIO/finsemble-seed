@@ -45,6 +45,10 @@
 	padding: 0 10px;
 }
 
+.tags-checkmark-wrapper {
+	width: 10px;
+}
+
 .app-tag {
 	height: 17px;
 	border-radius: 2px;
