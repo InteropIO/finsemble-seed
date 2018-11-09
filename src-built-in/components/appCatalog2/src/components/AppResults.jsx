@@ -55,11 +55,6 @@ const AppResults = props => {
 			let card = cardsForShowcase[i];
 			let name = card.title || card.name;
 
-			if (cardsInRow.length === 4) {
-				cardRows.push(cardsInRow);
-				cardsInRow = [];
-			}
-
 			let key = "card-" + i + "-" + name.toLowerCase();
 
 			cardsInRow.push(
@@ -67,9 +62,11 @@ const AppResults = props => {
 					<AppCard {...card} viewAppShowcase={props.viewAppShowcase} />
 				</td>
 			);
-		}
-		if (cardRows.length === 0) {
-			cardRows.push(cardsInRow);
+
+			if (cardsInRow.length === 4 || i === cardsForShowcase.length - 1) {
+				cardRows.push(cardsInRow);
+				cardsInRow = [];
+			}
 		}
 
 		return cardRows;

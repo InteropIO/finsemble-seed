@@ -25,7 +25,7 @@ const Home = props => {
 	});
 
 	let carousel2 = props.cards.filter((card) => {
-		return card.tags.includes("newrelease");
+		return card.tags.includes("app");
 	});
 
 	return (

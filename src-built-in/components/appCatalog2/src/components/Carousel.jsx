@@ -83,7 +83,7 @@ export default class Carousel extends Component {
 	 * Spits out a warning if the number of cards supplied to the carousel is < 4
 	 */
 	notEnoughCards() {
-		console.log('Less than 4 card supplied. This carousel will not display optimally');
+		console.warn('Less than 4 card supplied. This carousel will not display optimally');
 	}
 	/**
 	 * Function to build the items in the carousel
@@ -111,12 +111,12 @@ export default class Carousel extends Component {
 		let chevron_left_style = 'ff-chevron-left', chevron_right_style = 'ff-chevron-right';
 		let left_click = this.pageDown, right_click = this.pageUp;
 
-		if (this.state.firstIndex + 3 > this.props.cards.length - 1) {
+		if (this.state.firstIndex + 3 >= this.props.cards.length - 1) {
 			chevron_right_style += " disabled";
 			right_click = Function.prototype;
 		}
 
-		if (this.state.firstIndex <= 4) {
+		if (this.state.firstIndex === 0) {
 			chevron_left_style += " disabled";
 			left_click = Function.prototype;
 		}
