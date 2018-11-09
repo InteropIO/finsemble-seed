@@ -51,11 +51,14 @@ export default class Content extends React.Component {
 		if (!this.state.tags) {
 			return apps
 		}
+		//All active tags must be present in an app for it to show
 		return apps.filter((app) => {
-			const regex = new RegExp(this.state.tags.join('|'))
-			const result = app.tags.join(' ').match(regex)
-			return result
-		})
+			for (let i = 0; i < this.state.tags.length; i++) {
+				let tag = this.state.tags[i];
+				if (!app.tags.includes(tag)) return false
+			}
+			return true;
+		});
 	}
 
 	onActiveFolderChanged(error, data) {

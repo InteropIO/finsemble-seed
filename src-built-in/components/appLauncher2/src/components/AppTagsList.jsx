@@ -12,6 +12,7 @@ export default class AppTagsList extends React.Component {
         this.highlightTag = this.highlightTag.bind(this);
         this.clearHighlights = this.clearHighlights.bind(this);
         this.generateTags = this.generateTags.bind(this);
+        this.onTagClick = this.onTagClick.bind(this);
     }
 
     highlightTag(index) {
@@ -26,13 +27,21 @@ export default class AppTagsList extends React.Component {
         });
     }
 
+    onTagClick(tag, e) {
+        if (e) {
+            e.stopPropagation();
+            e.preventDefault();
+        }
+        storeActions.addTag(tag);
+    }
+
     generateTags() {
         let { highlightedTag:highlight } = this.state;
 
         let tags = this.props.tags.map((tag, i) => {
             let style = highlight === i ? "tag-name highlight" : "tag-name";
             return (
-                <span key={i} className={style} onClick={storeActions.addTag.bind(this, tag)} onMouseEnter={this.highlightTag.bind(this, i)} onMouseLeave={this.clearHighlights}>
+                <span key={i} className={style} onClick={this.onTagClick.bind(this, tag)} onMouseEnter={this.highlightTag.bind(this, i)} onMouseLeave={this.clearHighlights}>
                     {this.props.tags[i + 1] ? `${tag}, ` : `${tag}`}
                 </span>
             );

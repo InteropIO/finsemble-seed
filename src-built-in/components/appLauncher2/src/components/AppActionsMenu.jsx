@@ -33,7 +33,11 @@ export default class AppActionsMenu extends React.Component {
 		document.removeEventListener('mousedown', this.handleClickOutside);
 	}
 
-	toggleMenu() {
+	toggleMenu(e) {
+		if (e) {
+			e.stopPropagation();
+			e.preventDefault();
+		}
 		this.setState({
 			isVisible: !this.state.isVisible
 		})
