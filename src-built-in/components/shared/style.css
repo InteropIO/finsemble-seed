@@ -43,6 +43,12 @@
 	list-style: none;
 	color: var(--tag-font-color);
 	padding: 0 10px;
+	display: flex;
+	align-items: center;
+}
+
+.tags-menu .ff-check-mark {
+	color: var(--tag-checkmark-icon-color);
 }
 
 .tags-checkmark-wrapper {
