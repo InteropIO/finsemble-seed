@@ -83,7 +83,7 @@ export default class Carousel extends Component {
 	 * Spits out a warning if the number of cards supplied to the carousel is < 4
 	 */
 	notEnoughCards() {
-		console.log('Less than 4 card supplied. This carousel will not display optimally');
+		console.warn('Less than 4 card supplied. This carousel will not display optimally');
 	}
 	/**
 	 * Function to build the items in the carousel
