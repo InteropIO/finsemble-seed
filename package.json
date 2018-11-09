@@ -1,6 +1,6 @@
 {
     "name": "FinsembleSeed",
-    "version": "2.6.11",
+    "version": "3.1.2",
     "description": "",
     "main": "index.js",
     "scripts": {
@@ -9,7 +9,7 @@
         "dev": "gulp dev --gulpfile=./gulpfile.js",
         "dev-fresh": "gulp dev:fresh --gulpfile=./gulpfile.js",
         "dev:fresh": "gulp dev:fresh --gulpfile=./gulpfile.js",
-        "dev:nolaunch": "gulp dev:nolaunch --gulpfile=./gulpfile.js",
+        "dev:nolaunch": "gulp dev:noLaunch --gulpfile=./gulpfile.js",
         "build:prod": "gulp build:prod --gulpfile=./gulpfile.js",
         "prod": "gulp prod --gulpfile=./gulpfile.js",
         "prod:nolaunch": "gulp prod:nolaunch --gulpfile=./gulpfile.js",
@@ -23,9 +23,9 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@chartiq/finsemble": "alpha",
+        "@chartiq/finsemble": "^3.2.0-5",
         "@chartiq/finsemble-cli": "2.*",
-        "@chartiq/finsemble-react-controls": "1.*",
+        "@chartiq/finsemble-react-controls": "^3.1.2",
         "async": "^2.6.0",
         "babel-minify-webpack-plugin": "^0.3.0",
         "compression": "^1.7.2",

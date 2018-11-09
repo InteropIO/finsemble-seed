@@ -1,7 +1,8 @@
-## SingleInput Dialog
+## Input and Selection
 
 ### Overview
-This is the dialog we show when we need a name for a new workspace.  In addition to simplly creatingIt allows the user to select a template as the basis of their new workspace.
+This is the dialog we show when we need a name for a new workspace. 
+
 ### What it looks like
 ![](./screenshot.png)
 

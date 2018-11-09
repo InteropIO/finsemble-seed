@@ -4,7 +4,7 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
-import HoverDetector from "../HoverDetector.jsx";
+import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
 import { getStore, Actions as HeaderActions } from "../../stores/windowTitleBarStore";
 let windowTitleBarStore;
 
@@ -85,7 +85,7 @@ export default class MinimizeButton extends React.Component {
 	render() {
 		if (!this.state.show) return null;
 		return (<div className="fsbl-icon" id="fsbl-window-minimize" data-hover={this.state.hoverState} title="Reveal App Suite" onClick={this.handleClick}>
-			<HoverDetector edge="top" hoverAction={this.hoverAction} />
+			<FinsembleHoverDetector edge="top" hoverAction={this.hoverAction} />
 			<i style={{ paddingTop: "6px" }} className="ff-ungrid"></i>
 		</div>);
 	}

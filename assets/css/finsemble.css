@@ -64,6 +64,11 @@
     background-color: var(--scrim-negative-background-color);
 }
 
+/* This should eventually replace fsbl-button. Currently fsbl-button is only used by buttons within dialogs. */
+.finsemble-button {
+    position: relative;
+}
+
 .fsbl-button {
     margin: 0px 6px;
     width: 124px;

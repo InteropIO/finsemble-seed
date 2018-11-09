@@ -6,7 +6,7 @@
  */
 
 /**
- * We have a baseStorage model that provides some methods, such as `getCombinedKey`, which will return a nice key to save our value under. Example: `Finsemble:defaultUser:finsemble:activeWorkspace`. That key would hold the value of our activeWorkspace.
+ * * The baseStorage model provides several utility functions, such as `getCombinedKey`, which will produce a compound key string (for use with a simple key:value store) incorporating the username, topic and key. For example: For the default user, Finsemble topic and activeWorkspace key: `Finsemble:defaultUser:finsemble:activeWorkspace.`
  */
 var BaseStorage = require("@chartiq/finsemble").models.baseStorage;
 var Logger = require("@chartiq/finsemble").Clients.Logger;
@@ -68,18 +68,24 @@ var LocalStorageAdapter = function (uuid) {
 	 * @param {*} cb
 	 */
 	this.keys = function (params, cb) {
-		var keys = [];
-		var keyPreface = this.getKeyPreface(this, params);
-		var keysRegExp = new RegExp(keyPreface + ".*"); // regex to find all keys for this topic
+		const keys = [];
+		const keyPreface = this.getKeyPreface(this, params);
 
-		for (var i = 0, len = localStorage.length; i < len; ++i ) {
-  			var oneKey = localStorage.key(i);
-			if (keysRegExp.test(oneKey)) { // if key is for this topic then save it
-				keys.push(oneKey);
+		// regex to find all keys for this topic
+		const keysRegExp = new RegExp(keyPreface + ".*");
+
+		for (let i = 0, len = localStorage.length; i < len; ++i) {
+			const oneKey = localStorage.key(i);
+			
+			// if key is for this topic then save it
+			if (keysRegExp.test(oneKey)) {
+				// Remove keyPreface from the keys returned. Finsemble storage adapter methods add the preface back in.
+				const fsblKey = oneKey.replace(keyPreface, "");
+				keys.push(fsblKey);
 			}
 		}
 
-		Logger.system.debug("Storage.keys for keyPreface=" + keyPreface + " with keys=" + keys);
+		Logger.system.debug(`Storage.keys for keyPreface=${keyPreface} with keys=`, keys);
 		return cb(null, keys);
 	};
 

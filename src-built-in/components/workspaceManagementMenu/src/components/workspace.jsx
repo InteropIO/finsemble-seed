@@ -5,7 +5,7 @@
  */
 
 import React from "react";
-import { FinsembleMenuItem, FinsembleMenuItemLabel, FinsembleMenuItemActions } from "@chartiq/finsemble-react-controls";
+import { FinsembleMenuItem, FinsembleMenuItemLabel } from "@chartiq/finsemble-react-controls";
 
 export default class Workspace extends React.Component {
 	constructor(props) {
@@ -84,9 +84,9 @@ export default class Workspace extends React.Component {
 		return (
 			<FinsembleMenuItem>
 				<FinsembleMenuItemLabel label={this.props.workspace.name} className={classes} onClick={this.onClick}/>
-				{actionButtons && <FinsembleMenuItemActions>
+				{actionButtons && <div className="menu-item-actions">
 					{actionButtons}
-				</FinsembleMenuItemActions>}
+				</div>}
 			</FinsembleMenuItem>
 		);
 	}

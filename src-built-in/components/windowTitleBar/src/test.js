@@ -5,7 +5,8 @@ var expect = chai.expect;
 var RouterClient = FSBL.Clients.RouterClient;
 var LauncherClient = FSBL.Clients.LauncherClient;
 
-FSBL.addEventListener("onReady", function () {
+if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
+function FSBLReady() {
 
 	const TESTRUNNER_CHANNEL_NAME = `TestRunner.${fin.desktop.Window.getCurrent().name}.windowTitleBar`;
 
@@ -53,4 +54,4 @@ FSBL.addEventListener("onReady", function () {
 		}
 	});
 
-});
+}

@@ -8,7 +8,7 @@
  */
 import React from "react";
 import { Actions as appLauncherActions } from "../stores/appLauncherStore";
-import { FinsembleMenuItem, FinsembleMenuItemLabel, FinsembleMenuItemAction, FinsembleMenuItemActions } from "@chartiq/finsemble-react-controls";
+import { FinsembleMenuItem, FinsembleMenuItemLabel, FinsembleMenuItemAction } from "@chartiq/finsemble-react-controls";
 
 export default class componentItem extends React.Component {
 	constructor() {
@@ -69,6 +69,7 @@ export default class componentItem extends React.Component {
 			itemAction = this.props.itemAction,
 			togglePin = this.props.togglePin;
 
+		/* Terry, 10/15/18 - orphaned code
 		var name = this.props.name;
 		var delItemClassList = "empty-delete";
 		var actionItemClasses = "ff-pin";
@@ -79,7 +80,8 @@ export default class componentItem extends React.Component {
 			delItemClassList = "app-launcher-delete ff-delete";
 		}
 
-		var delItem = (<FinsembleMenuItemAction onClick={this.deleteItem} className={delItemClassList}></FinsembleMenuItemAction>);
+		var delItem = (<div onClick={this.deleteItem} className={delItemClassList}></div>);
+		*/
 
 		return (<FinsembleMenuItem
 			label={this.props.name}
