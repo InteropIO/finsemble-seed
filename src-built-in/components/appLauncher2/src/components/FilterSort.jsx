@@ -1,6 +1,5 @@
 import React from  'react'
 import SearchBox from './SearchBox'
-// import TagsMenu from './TagsMenu'
 import TagsMenu from '../../../shared/TagsMenu';
 import SortBy from './SortBy'
 import TagsList from './TagsList'
@@ -40,14 +39,21 @@ export default class FilterSort extends React.Component {
 	* so that other components get notified
 	**/
 	onTagClick(tag) {
-		storeActions.addTag(tag)
+		let tags = storeActions.getTags();
+
+		if (tags.includes(tag)) {
+			storeActions.deleteTag(tag);
+		} else {
+			storeActions.addTag(tag)
+		}
 	}
 
 	componentDidMount(){
 		this.setStateValues()
 	}
-	
+
 	render() {
+		let activeTags = storeActions.getTags();
 		return (
 			<div className="filter-sort">
 				<SearchBox />
@@ -57,6 +63,7 @@ export default class FilterSort extends React.Component {
 					label="Tags"
 					align="right"
 					list={this.state.tags}
+					active={activeTags}
 					onItemClick={this.onTagClick}/>
 			</div>
 			)
