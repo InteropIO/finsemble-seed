@@ -73,7 +73,7 @@ export default class TagsMenu extends React.Component {
 
 						return <li key={index}
 							onClick={() => this.onItemClick(item)}>
-							{active && <i className='ff-check-mark' />}&nbsp;&nbsp;{item}
+							{active ? <i className='ff-check-mark' /> : <div className='tags-checkmark-wrapper'>&nbsp;</div>}&nbsp;&nbsp;{item}
 						</li>
 					})
 				} </ul>
