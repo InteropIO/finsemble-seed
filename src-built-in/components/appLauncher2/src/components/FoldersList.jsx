@@ -133,9 +133,20 @@ export default class FoldersList extends React.Component {
 		}
 		// Names must be unique, folders cant share same names
 		if (folders[newName]) {
-			console.log('Folder name ', newName, 'already exists.')
 			return this.setState({
 				isNameError: true
+			}, () => {
+				let proceed = window.confirm("Folder name already exists. A (1) will be appended.");
+				if (proceed) {
+					this.setState({
+						folderNameInput: "",
+						renamingFolder: null,
+						isNameError: false
+					}, () => {
+						storeActions.renameFolder(oldName, newName + "(1)");
+						this.removeClickListener();
+					})
+				}
 			});
 		}
 
