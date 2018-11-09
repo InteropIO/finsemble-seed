@@ -165,12 +165,17 @@ var Actions = {
 	 */
 	logout() {
 		finsembleWindow.hide();
-		fetch("/logout", {//Sends our logout message
-			method: "POST",
-			credentials: "include"
-		});
 		Actions.saveWorkspace().then(function (choice) {
 			if (choice !== "cancel") {
+
+				//Reset any server-side sessions or login data necessary to fully log out the user, e.g.
+				/* 
+				fetch("/logout", {//Sends our logout message
+					method: "POST",
+					credentials: "include"
+				});
+				*/
+
 				FSBL.restartApplication();
 			}
 		});
