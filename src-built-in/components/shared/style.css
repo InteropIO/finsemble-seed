@@ -25,12 +25,12 @@
 	z-index: 11;
     top: 22px;
 	position: absolute;
-	width: 100px;
+	width: 130px;
 	max-height: 200px;
 	overflow-y: auto;
 	border-radius: 3px;
   	background-color: var(--tag-background-color);
-	padding: 5px 10px;
+	padding: 5px 0px;
 }
 .tags-menu ul {
 	padding: 0;
@@ -42,6 +42,7 @@
 	font-size: 11px;
 	list-style: none;
 	color: var(--tag-font-color);
+	padding: 0 10px;
 }
 
 .app-tag {
