@@ -86,18 +86,28 @@ function getSingleFolder(folderName) {
 }
 
 function reorderFolders(destIndex, srcIndex) {
-	const dest = data.foldersList[destIndex]
-	data.foldersList[destIndex] = data.foldersList[srcIndex]
-	data.foldersList[srcIndex] = dest
+	const movedFolder = data.foldersList[destIndex]
+    const remainingItems = data.foldersList.filter((item, index) => index !== destIndex)
+    data.foldersList = [
+        ...remainingItems.slice(0, srcIndex),
+        movedFolder,
+        ...remainingItems.slice(srcIndex)
+    ]
 	_setValue('appFolders.list', data.foldersList)
+	return data.foldersList
 }
 
 function addNewFolder(name) {
+	// Each new folder is given a number, lets store them here
+	// to get the highest one and then increment
+	const newFoldersNums = [0]
 	// Find folders that have a name of "New folder" or "New folder #"
-	const newFolders = Object.keys(data.folders).filter((folder) => {
-		return folder.toLowerCase().indexOf('new folder') > -1
+	data.foldersList.forEach((folder) => {
+		const numbers = folder.match(/\d+/g) || []
+		newFoldersNums.push( Math.max.apply(this, numbers) )
 	})
-	const folderName = name || `New folder ${newFolders.length + 1}`
+	const highestFolderNumber = Math.max.apply(this, newFoldersNums)
+	const folderName = name || `New folder ${highestFolderNumber + 1}`
 	const newFolder = {
 		disableUserRemove: true,
 		icon: "ff-folder",
