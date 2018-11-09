@@ -45,6 +45,8 @@
 									}
 								},
 								"Favorites": {
+									"icon": "ff-favorite",
+									"type": "folder",
 									"disableUserRemove": true,
 									"apps" : {}
 								}

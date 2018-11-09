@@ -126,6 +126,7 @@ function deleteFolder(folderName) {
 	// Check if user is trying to delete the active folder
 	if(folderName === data.activeFolder) {
 		data.activeFolder = MY_APPS
+		_setValue('activeFolder', data.activeFolder)
 	}
 
 	delete data.folders[folderName] && _setFolders(() => {
@@ -137,15 +138,15 @@ function deleteFolder(folderName) {
 }
 
 function renameFolder(oldName, newName) {
-	let oldFolder = data.folders[oldName];
-	data.folders[newName] = oldFolder;
-	delete data.folders[oldName];
+	let oldFolder = data.folders[oldName]
+	data.folders[newName] = oldFolder
 	_setFolders(() => {
 		let indexOfOld = data.foldersList.findIndex((folderName) => {
-			return folderName === oldName;
-		});
-		data.foldersList[indexOfOld] = newName;
-		_setValue('appFolders.list', data.foldersList);
+			return folderName === oldName
+		})
+		data.foldersList[indexOfOld] = newName
+		_setValue('appFolders.list', data.foldersList)
+		delete data.folders[oldName]
 	});
 }
 
