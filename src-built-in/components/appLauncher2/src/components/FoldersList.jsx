@@ -2,7 +2,7 @@ import React from 'react'
 import AddNewFolder from './AddNewFolder'
 import storeActions from '../stores/StoreActions'
 import { getStore } from '../stores/LauncherStore'
-import { FinsembleDraggable } from '@chartiq/finsemble-react-controls'
+import { FinsembleDraggable, FinsembleDialog } from '@chartiq/finsemble-react-controls'
 
 const MY_APPS = 'My Apps'
 const DASHBOARDS = 'Dashboards'
@@ -133,32 +133,36 @@ export default class FoldersList extends React.Component {
 		}
 		// Names must be unique, folders cant share same names
 		if (folders[newName]) {
-			return this.setState({
+			this.setState({
 				isNameError: true
 			}, () => {
-				let proceed = window.confirm("Folder name already exists. A (1) will be appended.");
-				if (proceed) {
-					this.setState({
-						folderNameInput: "",
-						renamingFolder: null,
-						isNameError: false
-					}, () => {
+				let dialogParams = {
+					question: "Folder name already exists. A (1) will be appended.",
+					showNegativeButton: false
+				};
+				const userInput = (err, res) => {
+					if (res.choice === "affirmative") {
 						storeActions.renameFolder(oldName, newName + "(1)");
-						this.removeClickListener();
-					})
+						this.setState({
+							folderNameInput: '',
+							renamingFolder: null,
+							isNameError: false
+						}, this.removeClickListener);
+					}
 				}
+				FSBL.Clients.DialogManager.open('yesNo', dialogParams, userInput);
 			});
+		} else {
+			this.setState({
+				folderNameInput: "",
+				renamingFolder: null,
+				isNameError: false
+			}, () => {
+				storeActions.renameFolder(oldName, newName)
+				// No need for the click listener any more
+				this.removeClickListener()
+			})
 		}
-
-		this.setState({
-			folderNameInput: "",
-			renamingFolder: null,
-			isNameError: false
-		}, () => {
-			storeActions.renameFolder(oldName, newName)
-			// No need for the click listener any more
-			this.removeClickListener()
-		})
 	}
 
 	renderFoldersList() {
@@ -173,7 +177,7 @@ export default class FoldersList extends React.Component {
 			let nameField = folder.icon === 'ff-folder' && this.state.renamingFolder === folderName ?
 				<input id="rename" className={this.state.isNameError ? 'error' : ''} value={this.state.folderNameInput}
 					onChange={this.changeFolderName}
-					onKeyPress={this.keyPressed} autoFocus tooltip={this.state.isNameError ? "Names must be unique" : ""} /> : folderName
+					onKeyPress={this.keyPressed} autoFocus /> : folderName
 
 			return <FinsembleDraggable
 				draggableId={folderName}
