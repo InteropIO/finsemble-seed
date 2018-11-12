@@ -1,0 +1,335 @@
+env:
+  commonjs: true
+  browser: true
+  es6: true
+parserOptions:
+  sourceType: module
+  ecmaVersion: 2017
+  ecmaFeatures:
+    experimentalObjectRestSpread: true
+    jsx: true
+rules:
+  accessor-pairs: error
+  #array-bracket-spacing:
+    #- warn
+    #- never
+  #array-callback-return: error
+  #arrow-body-style:
+    #- error
+    #- always
+  #arrow-parens: ??
+  #arrow-spacing: ??
+  #block-scoped-var: warn
+  #block-spacing: ??
+  #brace-style: ??
+  #callback-return: error
+  #camelcase:
+    #- error
+    #- properties: never
+  #class-methods-use-this: error
+  #comma-dangle:
+    #- warn
+    #- never
+  #comma-spacing:
+    #- warn
+    #- before: false
+      #after: true
+  #comma-style:
+    #- warn
+    #- last
+  #complexity:
+    #- error
+    #- max: 19
+  #computed-property-spacing:
+    #- error
+    #- never
+  #consistent-this: ??
+  #consistent-return: ??
+  #constructor-super: ??
+  #curly:
+    #- error
+    #- multi-line
+  #default-case: off
+  #dot-location:
+    #- warn
+    #- property
+  #dot-notation: warn
+  #eol-last:
+    #- error
+    #- unix
+  eqeqeq: off
+  #func-name-matching: error
+  #func-names: warn
+  #func-style: ??
+  #generator-star-spacing:
+    #- error
+    #- after: true
+      #before: false
+  #global-require: off
+  #guard-for-in: error
+  #handle-callback-err: ??
+  #id-blacklist: ??
+  #id-length: ??
+  #id-match: ??
+  indent:
+    - error
+    - tab
+    - { "SwitchCase": 1 }
+  #init-declarations: error
+  #jsx-quotes: ??
+  #key-spacing:
+    #- error
+    #- afterColon: true
+      #beforeColon: false
+      #mode: minimum
+  #keyword-spacing: error
+  #line-comment-position: error
+  #linebreak-style:
+    #- error
+    #- unix
+  #lines-around-comment: ??
+  #lines-around-directive: error
+  #max-depth: ??
+  #max-len: ??
+  #max-lines: ??
+  #max-nested-callbacks: ??
+  #max-params: ??
+  #max-statements-per-line: ??
+  #max-statements: ??
+  #multiline-ternary: error
+  #new-cap:
+    #- error
+    #- capIsNew: false
+      #newIsCap: false
+      #properties: true
+  #new-cap: 0
+  #new-parens: error
+  #newline-after-var: ??
+  #newline-before-return: ??
+  #newline-per-chained-call: ??
+  #no-alert: error
+  #no-array-constructor: error
+  #no-bitwise: error
+  #no-caller: error
+  #no-case-declarations: error
+  #no-catch-shadow: error
+  #no-class-assign: ??
+  no-cond-assign:
+    - error
+    #- always
+  #no-confusing-arrow: error
+  no-console: 0
+  #no-const-assign: ??
+  #no-constant-condition: error
+  #no-continue: ??
+  #no-control-regex: error
+  #no-debugger: error
+  #no-delete-var: error
+  #no-div-regex: error
+  #no-dupe-args: error
+  no-dupe-class-members: error
+  no-dupe-keys: error
+  no-duplicate-case: error
+  no-duplicate-imports: error
+  no-else-return: error
+  #no-empty: error
+  #no-empty-character-class: error
+  #no-empty-function:
+    #- error
+    #- allow:
+      #- functions
+  #no-empty-pattern: error
+  #no-eq-null: error
+  #no-eval: error
+  #no-ex-assign: error
+  no-extra-boolean-cast: error
+  #no-extend-native: error
+  no-extra-bind: warn
+  no-extra-parens:
+    - warn
+    - functions
+  #no-extra-semi: warn
+  #no-fallthrough:
+    #- error
+    #- commentPattern: "[\\s\\w]"
+  #no-floating-decimal: error
+  #no-func-assign: error
+  no-global-assign: error
+  #no-inline-comments: ??
+  #no-implicit-coercion:
+    #- error
+    #- allow:
+      #- '!!'
+  #no-implicit-globals: error
+  no-implied-eval: error
+  #no-inner-declarations: error
+  no-invalid-regexp: error
+  #no-invalid-this: off
+  #no-irregular-whitespace: error
+  #no-iterator: error
+  #no-label-var: error
+  #no-labels: error
+  #no-lone-blocks: error
+  #no-lonely-if: error
+  #no-loop-func: error
+  #no-magic-numbers: off
+  #no-mixed-operators:
+    #- error
+    #- allowSamePrecedence: true
+  #no-mixed-requires:
+    #- error
+    #- allowCall: false
+      #grouping: false
+  #no-mixed-spaces-and-tabs: error
+  #no-multi-spaces: error
+  #no-multi-str: error
+  #no-multiple-empty-lines:
+    #- error
+    #- max: 1
+      #maxBOF: 0
+      #maxEOF: 0
+  #no-native-reassign: error
+  #no-negated-condition: error
+  no-negated-in-lhs: error
+  #no-nested-ternary: error
+  #no-new: error
+  #no-new-func: error
+  #no-new-object: error
+  #no-new-require: ??
+  #no-new-symbol: ??
+  no-new-wrappers: error
+  #no-obj-calls: error
+  #no-octal: error
+  no-octal-escape: error
+  #no-params-reassign: off
+  #no-path-concat: error
+  #no-plusplus: ??
+  #no-process-env: ??
+  #no-process-exit: error
+  no-proto: error
+  #no-redeclare: warn
+  no-regex-spaces: error
+  #no-restricted-global: error
+  #no-restricted-imports: ??
+  #no-restricted-modules: ??
+  no-restricted-properties: error
+  #no-restricted-syntax: ??
+  #no-return-assign: error
+  #no-return-await: error
+  #no-script-url: error
+  #no-self-assign: error
+  #no-self-compare: error
+  #no-sequences: error
+  #no-shadow: ??
+  #no-shadow-restricted-names: error
+  #no-spaced-func: error
+  no-sparse-arrays: error
+  #no-sync: ??
+  no-tabs: off
+  #no-ternary: ??
+  #no-this-before-super: ??
+  #no-throw-literal: error
+  #no-trailing-spaces: warn
+  #no-undef:
+    #- error
+    #- typeof: false
+  no-undef-init: error
+  #no-undefined: error
+  #no-underscore-dangle: off
+  #no-unexpected-multiline: error
+  #no-unmodified-loop-condition: error
+  #no-unneeded-ternary: ??
+  #no-unreachable: error
+  no-unsafe-negation: error
+  #no-unused-expressions:
+    #- error
+    #- allowShortCircuit: true
+      #allowTernary: false
+  no-unused-labels: error
+  no-unused-vars: ["error", { "args": "none" }]
+  no-use-before-define: off
+  #no-useless-call: error
+  no-useless-computed-key: error
+  no-useless-concat: error
+  #no-useless-constructor: ??
+  no-useless-escape: error
+  no-useless-rename:
+    - error
+    - ignoreDestructuring: false
+      ignoreImport: false
+      ignoreExport: false
+  #no-useless-return: error
+  #no-var: ??
+  #no-void: error
+  #no-warning-comments: error
+  #no-with: error
+  #no-whitespace-before-property: ??
+  #object-curly-newline: ??
+  #object-curly-spacing: ??
+  #object-property-newline: ??
+  #object-shorthand: ??
+  #one-var-declaration-per-line: ??
+  #one-var: ??
+  #operator-assignment: ??
+  #operator-linebreak: ??
+  #padded-blocks: ??
+  #prefer-arrow-callback: ??
+  #prefer-const: ??
+  #prefer-destructuring: error
+  #prefer-promise-reject-errors: error
+  #prefer-reflect: ??
+  #prefer-rest-params: ??
+  #prefer-spread: ??
+  #prefer-template: ??
+  #quote-props: ??
+  quotes:
+    - error
+    - double
+  #radix:
+  #  - error
+  # - as-needed
+  #require-await: error
+  #require-jsdoc: ??
+  #require-yield: ??
+  #rest-spread-spacing: ??
+  #semi-spacing: off
+  semi:
+    - error
+    - always
+  #soft-vars: ??
+  sort-keys: off
+  #sort-imports: ??
+  #space-before-blocks: ??
+  #space-before-function-paren: ??
+  #space-in-parens: ??
+  space-infix-ops: off
+  space-unary-ops: off
+  #spaced-comment: ??
+  #symbol-description: error
+  #strict: error
+  #template-curly-spacing: ??
+  template-tag-spacing: error
+  use-isnan: error
+  valid-jsdoc:
+    - off
+    -
+      prefer:
+        arg: param
+        argument: param
+        class: constructor
+        return: return
+        virtual: abstract
+      #matchDescription: '.+' # match any text
+      preferType:
+        array: array
+        object: object
+      requireParamDescription: false
+      requireReturn: false
+      requireReturnDescription: false
+      requireReturnType: true
+  valid-typeof: error
+  vars-on-top: off
+  #wrap-iife: error
+  #wrap-regex: ??
+  #yield-star-spacing: ??
+  #yoda: error
