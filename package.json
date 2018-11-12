@@ -13,6 +13,8 @@
         "dev:fresh": "gulp dev:fresh --gulpfile=./gulpfile.js",
         "dev:nolaunch": "gulp dev:noLaunch --gulpfile=./gulpfile.js",
         "finsemble-cli": "finsemble-cli",
+        "lint:dry": "eslint --config=./eslint.yaml ./src-built-in/**/*.js --fix-dry-run",
+        "lint": "eslint --config=./eslint.yaml ./src-built-in/**/*.js --fix",
         "migrate": "node migration/2.3/migrationScripts/migrate.js",
         "nobuild:dev": "gulp nobuild:dev --gulpfile=./gulpfile.js",
         "prod": "gulp prod --gulpfile=./gulpfile.js",
