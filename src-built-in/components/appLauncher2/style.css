@@ -343,6 +343,7 @@ select:focus, option:focus {
 
   .app-item-title .ff-favorite{
     margin-left: 6px;
+    font-size: 11px;
     color: var(--appMenu-app-favorite-color);
   }
 

@@ -32,8 +32,9 @@ const AppResults = props => {
 			cardsForShowcase = props.cards.filter((card) => {
 				for (let i = 0; i < props.tags.length; i++) {
 					let tagToSearchFor = props.tags[i];
-					if (card.tags.includes(tagToSearchFor)) return true;
+					if (!card.tags.includes(tagToSearchFor)) return false;
 				}
+				return true;
 			});
 		} else {
 			cardsForShowcase = props.cards;
@@ -54,11 +55,6 @@ const AppResults = props => {
 			let card = cardsForShowcase[i];
 			let name = card.title || card.name;
 
-			if (cardsInRow.length === 4) {
-				cardRows.push(cardsInRow);
-				cardsInRow = [];
-			}
-
 			let key = "card-" + i + "-" + name.toLowerCase();
 
 			cardsInRow.push(
@@ -66,9 +62,11 @@ const AppResults = props => {
 					<AppCard {...card} viewAppShowcase={props.viewAppShowcase} />
 				</td>
 			);
-		}
-		if (cardRows.length === 0) {
-			cardRows.push(cardsInRow);
+
+			if (cardsInRow.length === 4 || i === cardsForShowcase.length - 1) {
+				cardRows.push(cardsInRow);
+				cardsInRow = [];
+			}
 		}
 
 		return cardRows;
