@@ -478,6 +478,9 @@ export default class TabRegion extends React.Component {
 
     }
     hoverAction(newHoverState) {
+        if (FSBL.Clients.WindowClient.shouldIgnoreTabbingRequests()) {
+            return;
+        }
         this.setState({ hoverState: newHoverState });
     }
 
