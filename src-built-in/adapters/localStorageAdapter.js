@@ -10,7 +10,7 @@
  */
 var BaseStorage = require("@chartiq/finsemble").models.baseStorage;
 var Logger = require("@chartiq/finsemble").Clients.Logger;
-//Because calls to this storage adapter will likely come from many different windows, we will log successes and failures in the central logger.
+// Because calls to this storage adapter will likely come from many different windows, we will log successes and failures in the central logger.
 Logger.start();
 
 var LocalStorageAdapter = function (uuid) {
@@ -21,10 +21,10 @@ var LocalStorageAdapter = function (uuid) {
 	 * @param {string} params.topic A topic under which the data should be stored.
 	 * @param {string} params.key The key whose value is being set.
 	 * @param {any} params.value The value being saved.
-	 * @param {function} cb callback to be invoked upon save completion
+	 * @param {function} cb Callback to be invoked upon save completion.
 	 */
 	this.save = function (params, cb) {
-		Logger.system.debug("savingggg", params);
+		Logger.system.debug("saving", params);
 		var combinedKey = this.getCombinedKey(this, params);
 		try {
 			localStorage.setItem(combinedKey, JSON.stringify(params.value));
@@ -40,7 +40,7 @@ var LocalStorageAdapter = function (uuid) {
 	 * @param {object} params
 	 * @param {string} params.topic A topic under which the data should be stored.
 	 * @param {string} params.key The key whose value is being set.
-	 * @param {function} cb callback to be invoked upon completion
+	 * @param {function} cb Callback to be invoked upon completion.
 	 */
 	this.get = function (params, cb) {
 		var combinedKey = this.getCombinedKey(this, params);
@@ -53,7 +53,7 @@ var LocalStorageAdapter = function (uuid) {
 		return cb(null, data);
 	};
 
-	// return prefix used to filter keys
+	// Return prefix used to filter keys.
 	this.getKeyPreface = function (self, params) {
 		var preface = self.baseName + ":" + self.userName + ":" + params.topic + ":";
 		if ("keyPrefix" in params) {
@@ -71,14 +71,11 @@ var LocalStorageAdapter = function (uuid) {
 		const keys = [];
 		const keyPreface = this.getKeyPreface(this, params);
 
-		// regex to find all keys for this topic
-		const keysRegExp = new RegExp(keyPreface + ".*");
-
 		for (let i = 0, len = localStorage.length; i < len; ++i) {
 			const oneKey = localStorage.key(i);
 			
-			// if key is for this topic then save it
-			if (keysRegExp.test(oneKey)) {
+			// If key is for this topic then save it.
+			if (oneKey.startsWith(keyPreface)) {
 				// Remove keyPreface from the keys returned. Finsemble storage adapter methods add the preface back in.
 				const fsblKey = oneKey.replace(keyPreface, "");
 				keys.push(fsblKey);
@@ -94,7 +91,7 @@ var LocalStorageAdapter = function (uuid) {
 	 * @param {object} params
 	 * @param {string} params.topic A topic under which the data should be stored.
 	 * @param {string} params.key The key whose value is being deleted.
-	 * @param {function} cb callback to be invoked upon completion
+	 * @param {function} cb Callback to be invoked upon completion.
 	 */
 	this.delete = function (params, cb) {
 		var combinedKey = this.getCombinedKey(this, params);
@@ -108,7 +105,7 @@ var LocalStorageAdapter = function (uuid) {
 	 */
 	this.clearCache = function (params, cb) {
 	//console.log("clear local cache");
-		var arr = []; // Array to hold the keys
+		var arr = []; // Array to hold the keys.
 		// Iterate over localStorage and insert data related to the user into an array.
 		for (var i = 0; i < localStorage.length; i++) {
 		//console.log("localStorage.key(i):::", localStorage.key(i).substring(0, (this.baseName + ":" + this.userName).length));
@@ -117,7 +114,7 @@ var LocalStorageAdapter = function (uuid) {
 			}
 		}
 
-		// Iterate over arr and remove the items by key
+		// Iterate over arr and remove the items by key.
 		for (var i = 0; i < arr.length; i++) {
 		//console.log("remove Iem", arr[i]);
 			localStorage.removeItem(arr[i]);
@@ -134,11 +131,10 @@ var LocalStorageAdapter = function (uuid) {
 		Logger.system.debug("Storage.empty");
 		return cb(null, { status: "success" });
 	};
-
 };
 
 
 LocalStorageAdapter.prototype = new BaseStorage();
 new LocalStorageAdapter("LocalStorageAdapter");
 
-module.exports = LocalStorageAdapter;//Allows us to get access to the unintialized object
+module.exports = LocalStorageAdapter; // Allows us to get access to the unintialized object.
