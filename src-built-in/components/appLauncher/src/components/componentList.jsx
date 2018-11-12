@@ -134,10 +134,17 @@ export default class appLauncherContainer extends React.Component {
 				break;
 			}
 		}
+
+		//Component developers can define a display name that will show instead of the component's type.
+		let displayName = key;
+		if (config.component && config.component.displayName) {
+			displayName = config.component.displayName;
+		}
+
 		return (<ComponentItem
 			isPinned={isPinned}
 			key={key}
-			name={key}
+			name={displayName}
 			component={config}
 			itemAction={self.launchComponent}
 			togglePin={self.togglePin}

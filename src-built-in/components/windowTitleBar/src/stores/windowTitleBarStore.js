@@ -9,16 +9,22 @@ var WindowClient;
 import windowTitleBarStoreDefaults from "./windowTitleBarStoreDefaults";
 import * as async from "async";
 var finWindow = fin.desktop.Window.getCurrent();
-//theses are constants that are set inside of setupStore. so they're declared as vars and not constantsa.
+//theses are constants that are set inside of setupStore. so they're declared as vars and not constants.
 let constants = {};
 var Actions = {
 	initialize: function () {
 		// This ensures that our config is correct, even if the developer missed some entries
-		var options = FSBL.Clients.WindowClient.options;
+		let options = FSBL.Clients.WindowClient.options;
 		// TODO, this should come from config server (probably via a WindowsClient.getConfig() command), so that live components always have the latest config. Currently this config gets saved with the component via workspace customData.
-		var windowTitleBarConfig = options.customData.foreign.components["Window Manager"];
-		var FSBLHeader = windowTitleBarConfig.FSBLHeader;
-		var self = this;
+		let windowTitleBarConfig = options.customData.foreign.components["Window Manager"];
+		let FSBLHeader = windowTitleBarConfig.FSBLHeader;
+		let self = this;
+		let displayName = null;
+
+		//Display name is first up for display. If it doesn't exist, we look for a default title (or one that's already set on init). If no title, we display the window's name (e.g., '5434-Welcome Component-2321').
+		if (options.customData.component && options.customData.component.displayName) {
+			displayName = options.customData.component.displayName;
+		}
 
 		/**
 		 * The windowTitleBar (header) is dumb. It just reflects the state of the component window. The headerCommandChannel allows the WindowClient to take control of the state of the header. All of the details of listening to window events are handled inside the WindowClient
@@ -45,7 +51,7 @@ var Actions = {
 			windowTitleBarStore.setValue({ field: "hackScrollbar", value: (windowTitleBarConfig.hackScrollbar !== false) });
 
 			// Set by calling WindowClient.setTitle() || from config "foreign.components.Window Manager.title"
-			var title = FSBL.Clients.WindowClient.title || windowTitleBarConfig.title;
+			var title = displayName || FSBL.Clients.WindowClient.title || windowTitleBarConfig.title;
 
 			if (title) {
 				FSBL.Clients.WindowClient.setWindowTitle(title)
