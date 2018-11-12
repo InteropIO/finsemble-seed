@@ -384,10 +384,13 @@
 			let e2oLocation = "node_modules/@chartiq/e2o";
 			let electronPath = path.join(".", "/node_modules/electron/dist/electron.exe");
 			let command = "set ELECTRON_DEV=true && " + electronPath + " index.js --remote-debugging-port=9090 --manifest " + manifest;
-			console.log(command);
+			logToTerminal(command);
 			electronProcess = exec(command,
 				{
 					cwd: e2oLocation
+				}, function (err) {
+					logToTerminal(err);
+					logToTerminal("e2o not installed? Try `npm install`", "red");
 				}
 			);
 			
