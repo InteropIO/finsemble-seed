@@ -129,7 +129,7 @@ export default class appLauncherContainer extends React.Component {
 
 		var isPinned = false;
 		for (var i = 0; i < self.state.pinnedComponents.length; i++) {
-			if (self.state.pinnedComponents[i].label === key) {
+			if (self.state.pinnedComponents[i].component === key) {
 				isPinned = true;
 				break;
 			}
