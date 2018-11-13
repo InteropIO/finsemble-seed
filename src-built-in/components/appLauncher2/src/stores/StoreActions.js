@@ -54,7 +54,6 @@ function getToolbarStore(done) {
 		ToolbarStore = store;
 		store.getValue({ field: "pins" }, function (err, pins) {
 			data.pins = pins;
-			console.log('pins: ', data.pins);
 		});
 
 		store.addListener({ field: "pins" }, function (err, pins) {
@@ -89,19 +88,52 @@ function _setValue(field, value) {
 }
 
 function addPin(pin) {
-	console.log('pin: ', pin)
-	let params = { addToWorkspace: true, monitor: "mine" };
-	var thePin = {
-		type: "componentLauncher",
-		label: pin.name,
-		component: pin.name,
-		fontIcon: "",
-		icon: "",
-		toolbarSection: "center",
-		uuid: uuidv4(),
-		params: params
-	};
-	ToolbarStore.setValue({ field: 'pins.' + pin.name.replace(/[.]/g, "^DOT^"), value: thePin });
+	//TODO: This logic may not work for dashboards. Might need to revisit.
+	FSBL.Clients.LauncherClient.getComponentList((err, components) => {
+		let componentToToggle;
+		for (let i = 0; i < Object.keys(components).length; i++) {
+			let componentName = Object.keys(components)[i];
+			if (componentName === pin.name) {
+				componentToToggle = components[componentName];
+			}
+		}
+
+		if (componentToToggle) {
+			let componentType = componentToToggle.group || componentToToggle.component.type;
+			let fontIcon;
+			try {
+				if (componentToToggle.group) {
+					fontIcon = 'ff-ungrid';
+				} else {
+					fontIcon = componentToToggle.foreign.components.Toolbar.iconClass;
+				}
+			} catch (e) {
+				fontIcon = "";
+			}
+
+			let imageIcon;
+			try {
+				imageIcon = componentToToggle.foreign.components.Toolbar.iconURL;
+			} catch (e) {
+				imageIcon = "";
+			}
+
+
+			let params = { addToWorkspace: true, monitor: "mine" };
+			if (componentToToggle.component && componentToToggle.component.windowGroup) params.groupName = componentToToggle.component.windowGroup;
+			var thePin = {
+				type: "componentLauncher",
+				label: pin.name,
+				component: componentToToggle.group ? componentToToggle.list : componentType,
+				fontIcon: fontIcon,
+				icon: imageIcon,
+				toolbarSection: "center",
+				uuid: uuidv4(),
+				params: params
+			};
+			ToolbarStore.setValue({ field: 'pins.' + pin.name.replace(/[.]/g, "^DOT^"), value: thePin });
+		}
+	});
 }
 
 function removePin(pin) {
