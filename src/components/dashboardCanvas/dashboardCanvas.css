@@ -10,7 +10,7 @@
 	overflow: auto;
 	height:500px;
 	width:500;
-	background-color:green;
+	/* background-color:green; */
 }
 
 
@@ -107,4 +107,7 @@ li a:hover {
     background-color: #f1f1f1;
     border: 1px solid #d3d3d3;
     text-align: center;
+}
+.options {
+	width:100%
 }

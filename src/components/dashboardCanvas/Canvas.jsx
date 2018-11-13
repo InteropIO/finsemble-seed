@@ -12,7 +12,7 @@ export default class Canvas extends React.Component {
             moving: -1
         };
     }
-    addListener = () => {
+    addListeners = () => {
         console.log('here')
         for (var index = 0; index < this.state.divs; index++) {
             document.getElementById(`${index}`).addEventListener('mousedown', this.mousedown, false)
@@ -23,15 +23,20 @@ export default class Canvas extends React.Component {
         var divs = [];
         for (var ii = 0; ii < this.state.divs; ii++) {
             divs.push(
-                <div className="droppable" onLoad={this.addListener} onDragOver={this.allowDrop} onDrop={this.drop} data="hello" id={ii + "header"}  >
+                <div className="droppable" onDragOver={this.allowDrop} onDrop={this.drop} data="hello" id={ii + "header"} key={ii}  >
                     <div id={ii} key={ii} className="myDivHeader">
                         Drag Here
                         </div>
-                </div >
+                    <select className="options">
+                        <option value="null"></option>
+                        <option>option 1</option>
+                        <option>option 2</option>
+                        <option>option 3</option>
+                    </select>
+                </div>
             )
-            document.getElementById(`${ii}header`).addEventListener('mousedown', this.mousedown, false)
-            window.addEventListener('mouseup', this.mouseup, false)
         }
+        setTimeout(this.addListeners, 1);
 
         return divs;
     };
@@ -56,18 +61,14 @@ export default class Canvas extends React.Component {
         }
     };
     mouseup = () => {
-        console.log('on mouse up:', this.state.moving)
         window.removeEventListener('mousemove', this.divMove, true)
     };
 
     mousedown = (e) => {
         this.setState({ moving: e.target.id })
-        console.log('on mouse down:', this.state.moving)
         window.addEventListener('mousemove', this.divMove, true);
     }
     divMove = (e) => {
-
-        console.log(document.getElementById(this.state.moving + "header"))
         var div = document.getElementById(this.state.moving + "header")
         div.style.position = 'absolute';
         div.style.top = e.clientY + 'px';
@@ -79,6 +80,7 @@ export default class Canvas extends React.Component {
             document.getElementById(`${index}header`).addEventListener('mousedown', this.mousedown, false)
             window.addEventListener('mouseup', this.mouseup, false)
         };
+
     }
     componentWillUpdate = () => {
 
