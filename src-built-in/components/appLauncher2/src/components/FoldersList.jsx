@@ -134,7 +134,11 @@ export default class FoldersList extends React.Component {
 		}
 		// Names must be unique, folders cant share same names
 		if (folders[newName]) {
-			newName = newName + "(1)";
+			let repeatedFolderIndex = 0;
+			do {
+				repeatedFolderIndex++;
+			} while (Object.keys(folders).includes(newName + "(" + repeatedFolderIndex + ")"));
+			newName = newName + `(${repeatedFolderIndex})`;
 		}
 
 		this.setState({
