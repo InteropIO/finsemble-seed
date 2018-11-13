@@ -34,7 +34,10 @@ export default class FoldersList extends React.Component {
 			console.info('Dropped app in favorites.')
 		}
 		// Do not do anything if its my apps or dashboards folder
-		[MY_APPS, DASHBOARDS].indexOf(folder) < 0 && storeActions.addAppToFolder(folder, app)
+		if ([MY_APPS, DASHBOARDS].indexOf(folder) < 0) {
+			storeActions.addAppToFolder(folder, app);
+			storeActions.addPin(app);
+		}
 	}
 
 	onFoldersListUpdate(error, data) {
@@ -130,7 +133,9 @@ export default class FoldersList extends React.Component {
 		if (!/^([a-zA-Z0-9\s]{1,})$/.test(input)) {
 			// Do not rename
 			console.warn('A valid folder name is required. /^([a-zA-Z0-9\s]{1,})$/')
-			return
+			return this.setState({
+				isNameError: true
+			});
 		}
 		// Names must be unique, folders cant share same names
 		if (folders[newName]) {
@@ -164,7 +169,7 @@ export default class FoldersList extends React.Component {
 			let nameField = folder.icon === 'ff-folder' && this.state.renamingFolder === folderName ?
 				<input id="rename" value={this.state.folderNameInput}
 					onChange={this.changeFolderName}
-					onKeyPress={this.keyPressed} autoFocus /> : folderName
+					onKeyPress={this.keyPressed} className={this.state.isNameError ? "error" : ""} autoFocus /> : folderName
 
 			return <FinsembleDraggable
 				draggableId={folderName}
