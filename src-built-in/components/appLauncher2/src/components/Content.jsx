@@ -120,7 +120,7 @@ export default class Content extends React.Component {
 
 	renderAppList() {
 		return this.filterApps().map((app, index) => {
-			return <AppDefinition app={app} folder={this.state.folder} key={index} toggleFavorite={this.togglePin} />
+			return <AppDefinition app={app} folder={this.state.folder} key={index} />
 		})
 	}
 
