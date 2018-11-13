@@ -66,9 +66,12 @@ export default class AppActionsMenu extends React.Component {
 				spawnIfNotFound: true,
 				left: "center",
 				top: "center"
-			}, () => {
-				//TODO: Make this work. There is logic already in the catalog store for opening an apps info page. But calling it directly from here won't work.
-				catalogActions.openApp(this.props.app.appId);
+			}, (error) => {
+				// Publish this event so that catalog knows
+				// what app we want to view
+				FSBL.Clients.RouterClient.transmit("viewApp", {
+					app: this.props.app
+				})
 		});
 	}
 
