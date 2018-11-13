@@ -722,7 +722,7 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false,
+						"isArrangeable": false,
 						"ignoreTilingAndTabbingRequests": true,
 						"ignoreSnappingRequests": true
 					}
