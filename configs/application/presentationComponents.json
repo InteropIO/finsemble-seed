@@ -722,7 +722,7 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangeable": false,
+						"isArrangable": false,
 						"ignoreTilingAndTabbingRequests": true,
 						"ignoreSnappingRequests": true
 					}
@@ -736,6 +736,7 @@
 							"hideMaximize": true
 						},
 						"persistWindowState": true,
+						"showTabs": false,
 						"title": "App Catalog"
 					}
 				}
