@@ -326,7 +326,10 @@ Actions = {
 	 * Asks the user if they'd like to save their data, then loads the requested workspace.
 	 */
 	switchToWorkspace: function (data) {
-		if (switching) return;
+		if (switching) {
+			console.log("Cannot switch workspaces because switching==true. WorkspaceClient probably didn't respond.");
+			return;
+		}
 		switching = true;
 		Actions.blurWindow();
 		let name = data.name;
@@ -338,7 +341,7 @@ Actions = {
 		function switchIt() {
 			FSBL.Clients.WorkspaceClient.switchTo({
 				name: name
-			}, () => {
+			}, (err) => {
 				switching = false;
 			});
 		}
