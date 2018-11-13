@@ -9,6 +9,6 @@
     },
     "dragDrop": {
         "output": "components/dragDrop/dragDrop",
-        "entry": "./src\\components\\dragDrop\\dragDrop.js"
+        "entry": "./src/components/dragDrop/index.jsx"
     }
 }

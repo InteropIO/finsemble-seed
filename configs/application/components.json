@@ -234,7 +234,7 @@
                         "launchableByUser": true
                     },
                     "Window Manager": {
-                        "title": "dashboardCanvas",
+                        "title": "Dashboard Canvas",
                         "FSBLHeader": true,
                         "persistWindowState": true
                     },
