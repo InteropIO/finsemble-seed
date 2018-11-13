@@ -51,10 +51,6 @@ img {
     justify-content: flex-start;
 }
 
-.complex-menu-section-toggle #rename.error {
-    border-bottom: 1px solid var(--red3);
-}
-
 .complex-menu-wrapper {
     display: flex;
     height: 100%;
