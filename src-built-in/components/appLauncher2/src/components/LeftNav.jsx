@@ -22,18 +22,26 @@ export default class LeftNav extends React.Component {
 		super(props)
 	}
 
-	onDragEnd(event) {
+	onDragEnd(event = {}) {
 		console.log('on drag end');
 		// storeActions.reorderFolders(
 		// 	event.destination.index,
 		// 	event.source.index)
+
+		// Don't allow the destination to be my apps or favorites
+		// This is a quick and easy and clean way, avoiding big change
+		// for now
+		if(event.destination && event.destination.index <= 1) {
+			return
+		}
+
 		storeActions.reorderFolders(event.source.index, event.destination.index);
 	}
 
 	render() {
 		return (
 			<div className="complex-menu-left-nav">
-				<FinsembleDnDContext onDragEnd={this.onDragEnd}>
+				<FinsembleDnDContext onDragStart={this.onDragStart} onDragEnd={this.onDragEnd}>
 					<FinsembleDroppable direction="vertical" droppableId="folderList">
 				  		<FoldersList />
 				  	</FinsembleDroppable>
