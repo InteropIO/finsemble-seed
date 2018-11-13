@@ -1,14 +1,1 @@
-{
-    "dashboardBuilder": {
-        "output": "components/dashboardBuilder/dashboardBuilder",
-        "entry": "./src/components/dashboardBuilder/index.jsx"
-    },
-    "dashboardCanvas": {
-        "output": "components/dashboardCanvas/dashboardCanvas",
-        "entry": "./src/components/dashboardCanvas/dashboardCanvas.js"
-    },
-    "dragDrop": {
-        "output": "components/dragDrop/dragDrop",
-        "entry": "./src/components/dragDrop/index.jsx"
-    }
-}
+{}
