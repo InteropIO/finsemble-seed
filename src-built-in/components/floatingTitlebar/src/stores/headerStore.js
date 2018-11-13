@@ -257,13 +257,7 @@ var Actions = {
 
 		HeaderStore.setCompanionBounds(bounds);
 		if (!bounds.width) bounds.width = bounds.right - bounds.left;
-
-		Actions.isWindowVisible(function (err, isVisible) {
-			if (isVisible) {
-				FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
-			}
-		});
-
+		FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
 		let onBoundsSet = function (err) {
 			if (err) {
 				FSBL.Clients.Logger.error(err);
@@ -287,6 +281,7 @@ var Actions = {
 		FSBL.Clients.WindowClient.finsembleWindow.close({});
 	},
 	onCompanionHidden() {
+
 		Logger.system.debug("Companion window hidden");
 		FSBL.Clients.WindowClient.finsembleWindow.hide();
 	},
