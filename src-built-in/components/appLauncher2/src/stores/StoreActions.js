@@ -1,5 +1,7 @@
 import { getStore } from './LauncherStore'
 
+let ToolbarStore;
+
 export default {
 	initialize,
 	addNewFolder,
@@ -19,7 +21,9 @@ export default {
 	getSearchText,
 	getSortBy,
 	addTag,
-	getTags
+	getTags,
+	addPin,
+	removePin
 }
 
 const MY_APPS = 'My Apps'
@@ -42,7 +46,21 @@ function initialize(callback) {
 	store.addListener({ field: 'activeFolder' }, (err, dt) => data.activeFolder = dt.value)
 	store.addListener({ field: 'sortBy' }, (err, dt) => data.sortBy = dt.value)
 	store.addListener({ field: 'tags' }, (err, dt) => data.tags = dt.value)
-	callback && callback()
+	getToolbarStore(callback || Function.prototype);
+}
+
+function getToolbarStore(done) {
+	FSBL.Clients.DistributedStoreClient.getStore({ global: true, store: "Finsemble-Toolbar-Store" }, function (err, store) {
+		ToolbarStore = store;
+		store.getValue({ field: "pins" }, function (err, pins) {
+			data.pins = pins;
+		});
+
+		store.addListener({ field: "pins" }, function (err, pins) {
+			data.pins = pins;
+		});
+		done();
+	});
 }
 
 function _setFolders(cb = Function.prototype) {
@@ -67,6 +85,59 @@ function _setValue(field, value) {
 			console.log('Failed to save. ', field)
 		}
 	})
+}
+
+function addPin(pin) {
+	//TODO: This logic may not work for dashboards. Might need to revisit.
+	FSBL.Clients.LauncherClient.getComponentList((err, components) => {
+		let componentToToggle;
+		for (let i = 0; i < Object.keys(components).length; i++) {
+			let componentName = Object.keys(components)[i];
+			if (componentName === pin.name) {
+				componentToToggle = components[componentName];
+			}
+		}
+
+		if (componentToToggle) {
+			let componentType = componentToToggle.group || componentToToggle.component.type;
+			let fontIcon;
+			try {
+				if (componentToToggle.group) {
+					fontIcon = 'ff-ungrid';
+				} else {
+					fontIcon = componentToToggle.foreign.components.Toolbar.iconClass;
+				}
+			} catch (e) {
+				fontIcon = "";
+			}
+
+			let imageIcon;
+			try {
+				imageIcon = componentToToggle.foreign.components.Toolbar.iconURL;
+			} catch (e) {
+				imageIcon = "";
+			}
+
+
+			let params = { addToWorkspace: true, monitor: "mine" };
+			if (componentToToggle.component && componentToToggle.component.windowGroup) params.groupName = componentToToggle.component.windowGroup;
+			var thePin = {
+				type: "componentLauncher",
+				label: pin.name,
+				component: componentToToggle.group ? componentToToggle.list : componentType,
+				fontIcon: fontIcon,
+				icon: imageIcon,
+				toolbarSection: "center",
+				uuid: uuidv4(),
+				params: params
+			};
+			ToolbarStore.setValue({ field: 'pins.' + pin.name.replace(/[.]/g, "^DOT^"), value: thePin });
+		}
+	});
+}
+
+function removePin(pin) {
+	ToolbarStore.removeValue({ field: 'pins.' + pin.name.replace(/[.]/g, "^DOT^") });
 }
 
 function getFolders() {
@@ -212,4 +283,12 @@ function deleteTag(tag) {
 	data.tags.splice(data.tags.indexOf(tag), 1)
 	// Update tags in store
 	getStore().setValue({ field: 'tags', value: data.tags })
+}
+
+function uuidv4() {
+	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+		var r = Math.random() * 16 | 0,
+			v = c === 'x' ? r : r & 0x3 | 0x8;
+		return v.toString(16);
+	});
 }

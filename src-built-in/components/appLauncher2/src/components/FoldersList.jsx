@@ -34,7 +34,10 @@ export default class FoldersList extends React.Component {
 			console.info('Dropped app in favorites.')
 		}
 		// Do not do anything if its my apps or dashboards folder
-		[MY_APPS, DASHBOARDS].indexOf(folder) < 0 && storeActions.addAppToFolder(folder, app)
+		if ([MY_APPS, DASHBOARDS].indexOf(folder) < 0) {
+			storeActions.addAppToFolder(folder, app);
+			storeActions.addPin(app);
+		}
 	}
 
 	onFoldersListUpdate(error, data) {
@@ -123,46 +126,35 @@ export default class FoldersList extends React.Component {
 	attempRename() {
 		const folders = storeActions.getFolders()
 		const input = this.state.folderNameInput.trim()
-		const oldName = this.state.renamingFolder, newName = input
+		const oldName = this.state.renamingFolder;
+		let newName = input;
 		// Check user input to make sure its at least 1 character
 		// made of string, number or both
 		if (!/^([a-zA-Z0-9\s]{1,})$/.test(input)) {
 			// Do not rename
 			console.warn('A valid folder name is required. /^([a-zA-Z0-9\s]{1,})$/')
-			return
+			return this.setState({
+				isNameError: true
+			});
 		}
 		// Names must be unique, folders cant share same names
 		if (folders[newName]) {
-			this.setState({
-				isNameError: true
-			}, () => {
-				let dialogParams = {
-					question: "Folder name already exists. A (1) will be appended.",
-					showNegativeButton: false
-				};
-				const userInput = (err, res) => {
-					if (res.choice === "affirmative") {
-						storeActions.renameFolder(oldName, newName + "(1)");
-						this.setState({
-							folderNameInput: '',
-							renamingFolder: null,
-							isNameError: false
-						}, this.removeClickListener);
-					}
-				}
-				FSBL.Clients.DialogManager.open('yesNo', dialogParams, userInput);
-			});
-		} else {
-			this.setState({
-				folderNameInput: "",
-				renamingFolder: null,
-				isNameError: false
-			}, () => {
-				storeActions.renameFolder(oldName, newName)
-				// No need for the click listener any more
-				this.removeClickListener()
-			})
+			let repeatedFolderIndex = 0;
+			do {
+				repeatedFolderIndex++;
+			} while (Object.keys(folders).includes(newName + "(" + repeatedFolderIndex + ")"));
+			newName = newName + `(${repeatedFolderIndex})`;
 		}
+
+		this.setState({
+			folderNameInput: "",
+			renamingFolder: null,
+			isNameError: false
+		}, () => {
+			storeActions.renameFolder(oldName, newName)
+			// No need for the click listener any more
+			this.removeClickListener()
+		})
 	}
 
 	renderFoldersList() {
@@ -175,9 +167,9 @@ export default class FoldersList extends React.Component {
 			}
 
 			let nameField = folder.icon === 'ff-folder' && this.state.renamingFolder === folderName ?
-				<input id="rename" className={this.state.isNameError ? 'error' : ''} value={this.state.folderNameInput}
+				<input id="rename" value={this.state.folderNameInput}
 					onChange={this.changeFolderName}
-					onKeyPress={this.keyPressed} autoFocus /> : folderName
+					onKeyPress={this.keyPressed} className={this.state.isNameError ? "error" : ""} autoFocus /> : folderName
 
 			return <FinsembleDraggable
 				draggableId={folderName}
