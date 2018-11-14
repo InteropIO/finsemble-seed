@@ -402,10 +402,8 @@ Actions = {
 			Logger.system.error(err);
 		}
 
-		//if there's no error, or there is an error and the user has cancelled the switch, we unlock the UI.
-		if (!err || err && err === SAVE_DIALOG_CANCEL_ERROR) {
-			switching = false;
-		}
+		//Unlock the UI.
+		switching = false;
 	},
 	/**
 	 * NOTE: Leaving this function here until we figure out notifications.
