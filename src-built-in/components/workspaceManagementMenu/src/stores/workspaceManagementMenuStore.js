@@ -341,7 +341,7 @@ Actions = {
 		 * Actually perform the switch. Happens after we ask the user what they want.
 		 *
 		 */
-		function switchIt() {
+		function switchWorkspace() {
 			FSBL.Clients.WorkspaceClient.switchTo({
 				name: name
 			}, () => {
@@ -383,11 +383,11 @@ Actions = {
 			}
 
 			//Switch is the last thing we do.
-			tasks.push(switchIt);
+			tasks.push(switchWorkspace);
 
 			async.waterfall(tasks, Actions.onAsyncComplete);
 		} else {
-			switchIt();
+			switchWorkspace();
 		}
 	},
 
@@ -409,6 +409,9 @@ Actions = {
 			//handle error.
 			Logger.system.error(err);
 		}
+
+		//Unlock the UI.
+		setIsSwitchingWorkspaces(false);
 	},
 	/**
 	 * NOTE: Leaving this function here until we figure out notifications.
