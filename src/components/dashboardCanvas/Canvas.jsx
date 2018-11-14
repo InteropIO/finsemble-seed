@@ -8,31 +8,27 @@ export default class Canvas extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            divs: 1,
+            divs: [],
             moving: -1
         };
     }
     addListeners = () => {
-        console.log('here')
-        for (var index = 0; index < this.state.divs; index++) {
-            document.getElementById(`${index}`).addEventListener('mousedown', this.mousedown, false)
+        for (let index = 0; index < this.state.divs.length; index++) {
+            document.getElementById(`${index}header`).addEventListener('mousedown', this.mousedown, false)
             window.addEventListener('mouseup', this.mouseup, false)
         };
     }
     getDivs = () => {
-        var divs = [];
-        for (var ii = 0; ii < this.state.divs; ii++) {
+        let divs = [];
+        for (var ii = 0; ii < this.state.divs.length; ii++) {
             divs.push(
-                <div className="droppable" onDragOver={this.allowDrop} onDrop={this.drop} data="hello" id={ii + "header"} key={ii}  >
-                    <div id={ii} key={ii} className="myDivHeader">
+                <div className="droppable" id={ii + "header"} key={ii}  >
+                    <div id={this.state.divs[ii]} key={ii} className="myDivHeader">
                         Drag Here
                         </div>
-                    <select className="options">
-                        <option value="null"></option>
-                        <option>option 1</option>
-                        <option>option 2</option>
-                        <option>option 3</option>
-                    </select>
+                    <div>
+                        {this.state.divs[ii]}
+                    </div>
                 </div>
             )
         }
@@ -40,26 +36,25 @@ export default class Canvas extends React.Component {
 
         return divs;
     };
-    allowDrop = event => {
-        event.preventDefault();
-        event.currentTarget.style.background = "#7f8082";
-    };
-    addDiv = () => {
-        var newValue = this.state.divs++;
-        newValue = newValue + 1;
-        this.setState({ divs: newValue });
-    };
-    drop = event => {
-        event.preventDefault();
-        const data = event.dataTransfer.getData("id");
-        const element = document.getElementById(event.target.id);
-        event.currentTarget.style.background = "white";
-        try {
-            event.target.appendChild(element);
-        } catch (error) {
-            console.warn("you can't move the item to the same place");
-        }
-    };
+
+    // addDiv = (e) => {
+    // console.log(e.target.id)
+    // var newValue = this.e5state.divs++;
+    // newValue = newValue + 1;
+    // this.setState({ divs: newValue });
+
+    // };
+    // drop = event => {
+    //     event.preventDefault();
+    //     const data = event.dataTransfer.getData("id");
+    //     const element = document.getElementById(event.target.id);
+    //     event.currentTarget.style.background = "white";
+    //     try {
+    //         event.target.appendChild(element);
+    //     } catch (error) {
+    //         console.warn("you can't move the item to the same place");
+    //     }
+    // };
     mouseup = () => {
         window.removeEventListener('mousemove', this.divMove, true)
     };
@@ -74,28 +69,28 @@ export default class Canvas extends React.Component {
         div.style.top = e.clientY + 'px';
         div.style.left = e.clientX + 'px';
     }
-    componentDidMount = () => {
-        this.setState({ divs: 1 })
-        for (var index = 0; index < this.state.divs; index++) {
-            document.getElementById(`${index}header`).addEventListener('mousedown', this.mousedown, false)
-            window.addEventListener('mouseup', this.mouseup, false)
-        };
-
+    onDrop = (ev) => {
+        let id = ev.dataTransfer.getData('text')
+        let arrayOfIds = this.state.divs;
+        log('array of ids: ', arrayOfIds)
+        console.log(id)
+        if (arrayOfIds.includes(parseInt(id)) === false && parseInt(id) != NaN) {
+            arrayOfIds.push(parseInt(id))
+            this.setState({ divs: arrayOfIds })
+        }
     }
-    componentWillUpdate = () => {
 
-    }
 
     render() {
         return (
-            <div className="div">
-                <ul>
+            <div className="div" onDrop={e => this.onDrop(e)} >
+                {/* <ul>
                     <li>
                         <a onClick={this.addDiv}>
                             <i className="fa fa-plus" aria-hidden="true" />
                         </a>
                     </li>
-                </ul>
+                </ul> */}
                 {this.getDivs()}
             </div>
         );

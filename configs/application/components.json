@@ -178,10 +178,10 @@
                 "frame": false,
                 "resizable": true,
                 "autoShow": true,
-                "top": "center",
-                "left": "center",
-                "width": 800,
-                "height": 600
+                "top": "left",
+                "left": "left",
+                "width": 300,
+                "height": 650
             },
             "component": {
                 "inject": false

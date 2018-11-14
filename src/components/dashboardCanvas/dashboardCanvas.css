@@ -12,7 +12,9 @@
 	width:500;
 	/* background-color:green; */
 }
-
+body{
+	background-color: #1c2a36
+}
 
 .droppable {
 	width: 15rem;

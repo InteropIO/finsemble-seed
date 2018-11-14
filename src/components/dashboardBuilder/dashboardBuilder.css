@@ -1,3 +1,40 @@
 body {
 	margin:0px;
+	background-color: #1c2a36
 }
+.search_white {
+	width: 12px;
+	height: 12px;
+	object-fit: contain;
+	vertical-align: middle;
+
+  }
+
+.filterText{
+	opacity: 0;
+	
+}
+.container{
+	margin-top: 5%;
+	margin-left: 5%;
+}
+.line {
+	width: 247px;
+	height: 3px;
+	border:solid 1px #0a8cf4;
+	fill:0a8cf4;
+  }
+
+  .componentText {
+	width: 110px;
+	height: 16px;
+	font-family: Roboto;
+	font-size: 12px;
+	font-weight: 300;
+	font-style: normal;
+	font-stretch: normal;
+	line-height: 1.08;
+	letter-spacing: normal;
+	color: #ffffff;
+	margin-left: 5px;
+  }
