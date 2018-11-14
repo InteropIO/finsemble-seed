@@ -341,19 +341,12 @@ Actions = {
 		 * Actually perform the switch. Happens after we ask the user what they want.
 		 *
 		 */
-<<<<<<< HEAD
 		function switchWorkspace() {
 			FSBL.Clients.WorkspaceClient.switchTo({
 				name: name
 			}, () => {
 				Actions.setIsSwitchingWorkspaces(false);
 			});
-=======
-		function switchIt(callback) {
-			FSBL.Clients.WorkspaceClient.switchTo({
-				name: name
-			}, callback);
->>>>>>> origin/hotfix/3.2.0-6_prep
 		}
 		/**
 		 * Make sure the user wants to do what they say that they want to do.
@@ -394,13 +387,7 @@ Actions = {
 
 			async.waterfall(tasks, Actions.onAsyncComplete);
 		} else {
-<<<<<<< HEAD
 			switchWorkspace();
-=======
-			switchIt(() => {
-				switching = false;
-			});
->>>>>>> origin/hotfix/3.2.0-6_prep
 		}
 	},
 
