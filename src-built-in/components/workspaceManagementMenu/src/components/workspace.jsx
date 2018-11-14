@@ -85,7 +85,7 @@ export default class Workspace extends React.Component {
 		let classes = this.props.isActiveWorkspace ? "active-workspace workspace-name" : "workspace-name";
 		return (
 			<FinsembleMenuItem>
-				{showSpinner && <div className="loader">Loading...</div> }
+				{showSpinner && <div className="fsbl-loader">Loading...</div> }
 				<FinsembleMenuItemLabel label={workspace.name} className={classes} onClick={this.onClick}/>
 				{actionButtons && <div className="menu-item-actions">
 					{actionButtons}

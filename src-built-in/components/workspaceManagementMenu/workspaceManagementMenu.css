@@ -55,7 +55,7 @@ body {
     overflow: hidden;
 }
 
-.loader {
+.fsbl-loader {
   font-size: 10px;
   margin: 10px 10px 10px 10px;
   text-indent: -9999em;
@@ -75,7 +75,7 @@ body {
   -ms-transform: translateZ(0);
 	transform: translateZ(0);
 }
-.loader:before {
+.fsbl-loader:before {
   width: 50%;
   height: 50%;
   background: #ffffff;
@@ -85,7 +85,7 @@ body {
   left: 0;
   content: '';
 }
-.loader:after {
+.fsbl-loader:after {
 	/*
 	 @TODO @FIXME
 	 This value shouldn't be hard coded!
