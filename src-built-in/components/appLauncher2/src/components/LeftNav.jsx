@@ -31,11 +31,13 @@ export default class LeftNav extends React.Component {
 		// Don't allow the destination to be my apps or favorites
 		// This is a quick and easy and clean way, avoiding big change
 		// for now
-		if(event.destination && event.destination.index <= 1) {
-			return
+		let newIndex = event.destination.index;
+		if(event.destination && newIndex <= 1) {
+			newIndex = 2;
 		}
 
-		storeActions.reorderFolders(event.source.index, event.destination.index);
+		storeActions.reorderFolders(event.source.index, newIndex);
+
 	}
 
 	render() {
