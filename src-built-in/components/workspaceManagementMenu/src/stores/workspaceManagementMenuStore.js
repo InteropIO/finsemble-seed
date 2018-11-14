@@ -379,7 +379,9 @@ Actions = {
 
 			async.waterfall(tasks, Actions.onAsyncComplete);
 		} else {
-			switchIt();
+			switchIt(() => {
+				switching = false;
+			});
 		}
 	},
 
