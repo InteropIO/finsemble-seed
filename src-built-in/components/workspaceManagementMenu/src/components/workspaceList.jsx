@@ -65,6 +65,7 @@ export default class WorkspaceManagementList extends React.Component {
 			];
 			let isActiveWorkspace = workspace.name === FSBL.Clients.WorkspaceClient.activeWorkspace.name;
 			let isPinned = self.props.pinnedWorkspaces.includes(workspace.name);
+			const isSwitchingWorkspaces = WorkspaceManagementMenuStore.getValue("isSwitchingWorkspaces");
 			workspace.isPinned = isPinned;
 			return (
 				<FinsembleDraggable

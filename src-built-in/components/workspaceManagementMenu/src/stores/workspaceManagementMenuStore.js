@@ -411,7 +411,7 @@ Actions = {
 		}
 
 		//Unlock the UI.
-		setIsSwitchingWorkspaces(false);
+		Actions.setIsSwitchingWorkspaces(false);
 	},
 	/**
 	 * NOTE: Leaving this function here until we figure out notifications.
