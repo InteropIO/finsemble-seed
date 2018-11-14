@@ -726,8 +726,11 @@ let getStore = () => {
 	return WorkspaceManagementStore;
 };
 
+const getIsSwitchingWorkspaces = () => switching;
+
 export { WorkspaceManagementGlobalStore as GlobalStore }
 export { initialize };
 export { WorkspaceManagementStore as Store };
 export { Actions };
 export { getStore };
+export { getIsSwitchingWorkspaces };
