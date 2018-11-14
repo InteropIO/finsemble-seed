@@ -69,9 +69,14 @@ export default class AppActionsMenu extends React.Component {
 			}, (error) => {
 				// Publish this event so that catalog knows
 				// what app we want to view
-				FSBL.Clients.RouterClient.transmit("viewApp", {
-					app: this.props.app
-				})
+
+
+				//NOTE: While not ideal, without a small delay (when having to launch the app catalog) the app catalog wont recieve the message as it will still be initializing
+				setTimeout(() => {
+					FSBL.Clients.RouterClient.transmit("viewApp", {
+						app: this.props.app
+					})
+				}, 250);
 		});
 	}
 
