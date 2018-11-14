@@ -7,7 +7,7 @@ import React from "react";
 import { FinsembleDraggable, FinsembleDroppable, FinsembleDnDContext, FinsembleMenuSection, FinsembleMenuSectionLabel } from "@chartiq/finsemble-react-controls";
 import Workspace from "./workspace";
 import WorkspaceActions from "./workspaceActions";
-import { getStore, Actions as WorkspaceManagementMenuActions } from "../stores/workspaceManagementMenuStore";
+import { getStore, getIsSwitchingWorkspaces, Actions as WorkspaceManagementMenuActions } from "../stores/workspaceManagementMenuStore";
 let WorkspaceManagementMenuStore;
 
 export default class WorkspaceManagementList extends React.Component {
@@ -77,8 +77,8 @@ export default class WorkspaceManagementList extends React.Component {
 						isActiveWorkspace={isActiveWorkspace}
 						workspace={workspace}
 						mainAction={WorkspaceManagementMenuActions.switchToWorkspace}
-						isSwitchingWorkspaces={isSwitchingWorkspaces}
-						itemActions={workspaceActions} />
+						itemActions={workspaceActions} 
+						isSwitchingWorkspaces={getIsSwitchingWorkspaces()} />
 				</FinsembleDraggable>
 			);
 		});
