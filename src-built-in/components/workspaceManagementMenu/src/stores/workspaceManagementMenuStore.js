@@ -14,9 +14,9 @@ let defaultData = {
 	menuWidth: 285,
 	pins: [],
 	WorkspaceList: [],
-	newWorkspaceDialogIsActive: false
+	newWorkspaceDialogIsActive: false,
+	isSwitchingWorkspaces: false,
 };
-let switching = false;
 
 function uuidv4() {
 	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -105,6 +105,12 @@ Actions = {
 	},
 	getWorkspaceList: function () {
 		return WorkspaceManagementStore.getValue("WorkspaceList");
+	},
+	getIsSwitchingWorkspaces: function () {
+		return WorkspaceManagementStore.getValue("isSwitchingWorkspaces");
+	},
+	setIsSwitchingWorkspaces: function (val) {
+		return WorkspaceManagementStore.setValue({ field: "isSwitchingWorkspaces", value: val });
 	},
 	setPins: function (pins) {
 		if (pins) {
@@ -326,8 +332,8 @@ Actions = {
 	 * Asks the user if they'd like to save their data, then loads the requested workspace.
 	 */
 	switchToWorkspace: function (data) {
-		if (switching) return;
-		switching = true;
+		if (Actions.getIsSwitchingWorkspaces()) return;
+		Actions.setIsSwitchingWorkspaces(true);
 		Actions.blurWindow();
 		let name = data.name;
 		let activeWorkspace = WorkspaceManagementStore.getValue("activeWorkspace");
@@ -339,7 +345,7 @@ Actions = {
 			FSBL.Clients.WorkspaceClient.switchTo({
 				name: name
 			}, () => {
-				switching = false;
+				Actions.setIsSwitchingWorkspaces(false);
 			});
 		}
 		/**
