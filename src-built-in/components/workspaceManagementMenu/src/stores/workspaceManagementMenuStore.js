@@ -335,12 +335,10 @@ Actions = {
 		 * Actually perform the switch. Happens after we ask the user what they want.
 		 *
 		 */
-		function switchIt() {
+		function switchIt(callback) {
 			FSBL.Clients.WorkspaceClient.switchTo({
 				name: name
-			}, () => {
-				switching = false;
-			});
+			}, callback);
 		}
 		/**
 		 * Make sure the user wants to do what they say that they want to do.
@@ -402,6 +400,11 @@ Actions = {
 		if (err && err !== "Negative" && err !== SAVE_DIALOG_CANCEL_ERROR) {
 			//handle error.
 			Logger.system.error(err);
+		}
+
+		//if there's no error, or there is an error and the user has cancelled the switch, we unlock the UI.
+		if (!err || err && err === SAVE_DIALOG_CANCEL_ERROR) {
+			switching = false;
 		}
 	},
 	/**
