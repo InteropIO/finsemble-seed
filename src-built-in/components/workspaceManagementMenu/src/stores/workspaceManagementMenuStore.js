@@ -14,9 +14,9 @@ let defaultData = {
 	menuWidth: 285,
 	pins: [],
 	WorkspaceList: [],
-	newWorkspaceDialogIsActive: false
+	newWorkspaceDialogIsActive: false,
+	isSwitchingWorkspaces: false,
 };
-let switching = false;
 
 function uuidv4() {
 	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -105,6 +105,12 @@ Actions = {
 	},
 	getWorkspaceList: function () {
 		return WorkspaceManagementStore.getValue("WorkspaceList");
+	},
+	getIsSwitchingWorkspaces: function () {
+		return WorkspaceManagementStore.getValue("isSwitchingWorkspaces");
+	},
+	setIsSwitchingWorkspaces: function (val) {
+		return WorkspaceManagementStore.setValue({ field: "isSwitchingWorkspaces", value: val });
 	},
 	setPins: function (pins) {
 		if (pins) {
@@ -326,8 +332,8 @@ Actions = {
 	 * Asks the user if they'd like to save their data, then loads the requested workspace.
 	 */
 	switchToWorkspace: function (data) {
-		if (switching) return;
-		switching = true;
+		if (Actions.getIsSwitchingWorkspaces()) return;
+		Actions.setIsSwitchingWorkspaces(true);
 		Actions.blurWindow();
 		let name = data.name;
 		let activeWorkspace = WorkspaceManagementStore.getValue("activeWorkspace");
@@ -335,10 +341,12 @@ Actions = {
 		 * Actually perform the switch. Happens after we ask the user what they want.
 		 *
 		 */
-		function switchIt(callback) {
+		function switchWorkspace() {
 			FSBL.Clients.WorkspaceClient.switchTo({
 				name: name
-			}, callback);
+			}, () => {
+				Actions.setIsSwitchingWorkspaces(false);
+			});
 		}
 		/**
 		 * Make sure the user wants to do what they say that they want to do.
@@ -375,13 +383,11 @@ Actions = {
 			}
 
 			//Switch is the last thing we do.
-			tasks.push(switchIt);
+			tasks.push(switchWorkspace);
 
 			async.waterfall(tasks, Actions.onAsyncComplete);
 		} else {
-			switchIt(() => {
-				switching = false;
-			});
+			switchWorkspace();
 		}
 	},
 
@@ -405,7 +411,7 @@ Actions = {
 		}
 
 		//Unlock the UI.
-		switching = false;
+		setIsSwitchingWorkspaces(false);
 	},
 	/**
 	 * NOTE: Leaving this function here until we figure out notifications.
