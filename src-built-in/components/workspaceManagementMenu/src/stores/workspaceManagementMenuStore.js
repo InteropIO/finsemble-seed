@@ -15,6 +15,14 @@ let defaultData = {
 	pins: [],
 	WorkspaceList: [],
 	newWorkspaceDialogIsActive: false,
+	/**
+	 * State around whether the workspace is currently in the process of switching.
+	 * 
+	 * For simplicity, we're storing this in the local store for now, but this precludes
+	 * other components from signaling that the workspace is changing. A consequence,
+	 * for example, is that if you switch workspaces uses a pin on the toolbar instead
+	 * of the workspace management menu, the spinner doesn't show up.
+	 */
 	isSwitchingWorkspaces: false,
 };
 
