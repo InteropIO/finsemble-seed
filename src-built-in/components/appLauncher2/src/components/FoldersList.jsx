@@ -6,6 +6,7 @@ import { FinsembleDraggable, FinsembleDialog } from '@chartiq/finsemble-react-co
 
 const MY_APPS = 'My Apps'
 const DASHBOARDS = 'Dashboards'
+const FAVORITES = 'Favorites'
 
 export default class FoldersList extends React.Component {
 
@@ -158,6 +159,7 @@ export default class FoldersList extends React.Component {
 	}
 
 	renderFoldersList() {
+		const dragDisabled = [MY_APPS, DASHBOARDS, FAVORITES]
 		const folders = storeActions.getFolders()
 		return this.state.foldersList.map((folderName, index) => {
 			const folder = folders[folderName]
@@ -171,7 +173,7 @@ export default class FoldersList extends React.Component {
 					onChange={this.changeFolderName}
 					onKeyPress={this.keyPressed} className={this.state.isNameError ? "error" : ""} autoFocus /> : folderName
 
-			return <FinsembleDraggable
+			return <FinsembleDraggable isDragDisabled={dragDisabled.indexOf(folderName) > -1} 
 				draggableId={folderName}
 				key={index} index={index}>
 				<div onClick={(event) => this.onFolderClicked(event, folderName)}
