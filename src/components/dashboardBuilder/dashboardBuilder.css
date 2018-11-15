@@ -11,8 +11,7 @@ body {
   }
 
 .filterText{
-	opacity: 0;
-	
+	opacity: 20;
 }
 .container{
 	margin-top: 5%;
@@ -22,7 +21,7 @@ body {
 	width: 247px;
 	height: 3px;
 	border:solid 1px #0a8cf4;
-	fill:0a8cf4;
+	/* fill:0a8cf4; */
   }
 
   .componentText {
@@ -37,4 +36,18 @@ body {
 	letter-spacing: normal;
 	color: #ffffff;
 	margin-left: 5px;
-  }
+	}
+	
+	input[type=text], select {
+    /* padding: 12px 20px; */
+		/* margin: 8px 0; */
+		
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+		box-sizing: border-box;
+		opacity: 0;
+}
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+	color: red;
+}

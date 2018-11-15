@@ -18,7 +18,7 @@ export default class Dashboard extends React.Component {
             <div className="container">
                 <div>
                     <img src="search-white.png" className="search_white" />
-                    <input type="text" placeholder="filter" className="" onChangeText={(filter) => this.setState({ filter })} STYLE='color:#FFFF00' />
+                    <input type="text" placeholder="filter" className="filterText" onChangeText={(filter) => this.setState({ filter })} STYLE='color:#FFFF00' />
                 </div>
                 <hr className="line" />
                 <div>
