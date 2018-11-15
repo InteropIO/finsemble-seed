@@ -470,3 +470,15 @@ select:focus, option:focus {
     text-decoration: underline;
     cursor: pointer;
 }
+
+.add-app-form {
+    background: rgba(13, 17, 19, .9);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.add-app-form form {
+    padding: 20px;
+}
