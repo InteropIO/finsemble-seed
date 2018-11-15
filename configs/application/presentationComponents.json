@@ -3,6 +3,38 @@
 	"components": {
 		"App Launcher": {
 			"window": {
+				"url": "$applicationRoot/components/appLauncher/appLauncher.html",
+				"top": 0,
+				"left": 0,
+				"width": 310,
+				"height": 400,
+				"ephemeral": true,
+				"options": {
+					"autoShow": false
+				}
+			},
+			"component": {
+				"allowAdhoc": "@TODO",
+				"spawnOnStartup": false,
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": false,
+						"shouldRegister": false
+					}
+				},
+				"components": {
+					"Window Manager": {
+						"persistWindowState": false,
+						"FSBLHeader": false
+					}
+				}
+			}
+		},
+		"App Launcher 2": {
+			"window": {
 				"url": "$applicationRoot/components/appLauncher2/index.html",
 				"top": 0,
 				"left": 0,

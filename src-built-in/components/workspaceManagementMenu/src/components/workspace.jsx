@@ -48,7 +48,7 @@ export default class Workspace extends React.Component {
 		return itemActions.map(function (action, index) {
 			let classes = "menu-item-action";
 			let iconClasses = action.iconClass;
-			if (workspace.isPinned && iconClasses.includes('pin')) {
+			if (workspace.isPinned && iconClasses.includes('favorite')) {
 				iconClasses += " finsemble-item-pinned";
 			} else {
 				classes += " remove-workspace";

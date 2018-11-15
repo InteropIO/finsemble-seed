@@ -104,7 +104,7 @@ export default class AppActionsMenu extends React.Component {
 	renderList() {
 		const folder = this.props.folder
 		let favoritesActionOnClick = this.props.isFavorite ? this.onRemoveFromFavorite : this.onAddToFavorite;
-		let favoritesText = this.props.isFavorite ? "Remove from favorites" : "Add to favorites";
+		let favoritesText = this.props.isFavorite ? "Remove from Favorites" : "Add to Favorites";
 		return (
 			<div className="actions-menu" style={{ right: 0 }}>
 				<ul>
