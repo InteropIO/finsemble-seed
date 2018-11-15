@@ -4,6 +4,7 @@ let ToolbarStore;
 
 export default {
 	initialize,
+	addApp,
 	addNewFolder,
 	addAppToFolder,
 	removeAppFromFolder,
@@ -18,6 +19,7 @@ export default {
 	getSingleFolder,
 	getAllAppsTags,
 	getAllApps,
+	getFormStatus,
 	getSearchText,
 	getSortBy,
 	addTag,
@@ -38,12 +40,14 @@ function initialize(callback) {
 	data.activeFolder = store.values.activeFolder
 	data.filterText = store.values.filterText
 	data.sortBy = store.values.sortBy
+	data.isFormVisible = store.values.isFormVisible
 
 	// Add listeners to keep our copy up to date
 	store.addListener({ field: 'appFolders.folders' }, (err, dt) => data.folders = dt.value)
 	store.addListener({ field: 'appFolders.list' }, (err, dt) => data.foldersList = dt.value)
 	store.addListener({ field: 'appDefinitions' }, (err, dt) => data.apps = dt.value)
 	store.addListener({ field: 'activeFolder' }, (err, dt) => data.activeFolder = dt.value)
+	store.addListener({ field: 'isFormVisible' }, (err, dt) => data.isFormVisible = dt.value)
 	store.addListener({ field: 'sortBy' }, (err, dt) => data.sortBy = dt.value)
 	store.addListener({ field: 'tags' }, (err, dt) => data.tags = dt.value)
 	getToolbarStore(callback || Function.prototype);
@@ -76,13 +80,15 @@ function _setFolders(cb = Function.prototype) {
 	})
 }
 
-function _setValue(field, value) {
+function _setValue(field, value, cb) {
 	getStore().setValue({
 		field: field,
 		value: value
 	}, (error, data) => {
 		if (error) {
 			console.log('Failed to save. ', field)
+		} else {
+			cb && cb()
 		}
 	})
 }
@@ -152,6 +158,10 @@ function getAllApps() {
 	return data.apps
 }
 
+function getFormStatus() {
+	return data.isFormVisible
+}
+
 function getSingleFolder(folderName) {
 	return data.folders[folderName]
 }
@@ -166,6 +176,24 @@ function reorderFolders(destIndex, srcIndex) {
     ]
 	_setValue('appFolders.list', data.foldersList)
 	return data.foldersList
+}
+
+function addApp(app = {}, cb) {
+	const appID = (new Date()).getTime()
+	const folder = data.activeFolder
+	data.apps[appID] = {
+		appID,
+		tags: app.tags.split(","),
+		name: app.name,
+		url: app.url,
+		type: "component"
+	}
+	data.folders[folder].apps[appID] = data.apps[appID]
+	// Save appDefinitions and then folders
+	_setValue('appDefinitions', data.apps, () => {
+		_setFolders()
+		cb && cb()
+	})
 }
 
 function addNewFolder(name) {
