@@ -46,6 +46,7 @@ export default class AppMarket extends React.Component {
 		this.getPageContents = this.getPageContents.bind(this);
 		this.determineActivePage = this.determineActivePage.bind(this);
 		this.navigateToShowcase = this.navigateToShowcase.bind(this);
+		this.viewApp = this.viewApp.bind(this);
 	}
 	async componentDidMount() {
 		this.setState({
@@ -55,11 +56,19 @@ export default class AppMarket extends React.Component {
 		getStore().addListener({ field: 'installed' }, this.installedAppsChanged);
 		getStore().addListener({ field: 'filteredApps' }, this.filteringApps);
 		getStore().addListener({ field: 'activeApp' }, this.openAppShowcase);
+		// Get notified when user wants to view an app
+		FSBL.Clients.RouterClient.addListener("viewApp", this.viewApp)
 	}
 	componentWillUnmount() {
 		getStore().removeListener({ field: 'filteredApps' }, this.filteringApps);
 		getStore().removeListener({ field: 'installed' }, this.installedAppsChanged);
 		getStore().removeListener({ field: 'activeApp' }, this.openAppShowcase);
+		// Get notified when user wants to view an app
+		FSBL.Clients.RouterClient.removeListener("viewApp", this.viewApp)
+	}
+
+	viewApp(error, event) {
+		!error && this.navigateToShowcase(event.data.app.appID)
 	}
 	/**
 	 * The store has pushed an update to the filtered tags list. This means a user has begun searching or added tags to the filter list
