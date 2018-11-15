@@ -188,6 +188,7 @@ function addApp(app = {}, cb) {
 		url: app.url,
 		type: "component"
 	}
+	data.folders[MY_APPS].apps[appID] = data.apps[appID]
 	data.folders[folder].apps[appID] = data.apps[appID]
 	// Save appDefinitions and then folders
 	_setValue('appDefinitions', data.apps, () => {
