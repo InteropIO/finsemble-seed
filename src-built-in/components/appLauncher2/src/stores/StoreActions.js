@@ -1,5 +1,7 @@
 import { getStore } from './LauncherStore'
 
+let ToolbarStore;
+
 export default {
 	initialize,
 	addNewFolder,
@@ -19,7 +21,9 @@ export default {
 	getSearchText,
 	getSortBy,
 	addTag,
-	getTags
+	getTags,
+	addPin,
+	removePin
 }
 
 const MY_APPS = 'My Apps'
@@ -42,7 +46,21 @@ function initialize(callback) {
 	store.addListener({ field: 'activeFolder' }, (err, dt) => data.activeFolder = dt.value)
 	store.addListener({ field: 'sortBy' }, (err, dt) => data.sortBy = dt.value)
 	store.addListener({ field: 'tags' }, (err, dt) => data.tags = dt.value)
-	callback && callback()
+	getToolbarStore(callback || Function.prototype);
+}
+
+function getToolbarStore(done) {
+	FSBL.Clients.DistributedStoreClient.getStore({ global: true, store: "Finsemble-Toolbar-Store" }, function (err, store) {
+		ToolbarStore = store;
+		store.getValue({ field: "pins" }, function (err, pins) {
+			data.pins = pins;
+		});
+
+		store.addListener({ field: "pins" }, function (err, pins) {
+			data.pins = pins;
+		});
+		done();
+	});
 }
 
 function _setFolders(cb = Function.prototype) {
@@ -69,6 +87,59 @@ function _setValue(field, value) {
 	})
 }
 
+function addPin(pin) {
+	//TODO: This logic may not work for dashboards. Might need to revisit.
+	FSBL.Clients.LauncherClient.getComponentList((err, components) => {
+		let componentToToggle;
+		for (let i = 0; i < Object.keys(components).length; i++) {
+			let componentName = Object.keys(components)[i];
+			if (componentName === pin.name) {
+				componentToToggle = components[componentName];
+			}
+		}
+
+		if (componentToToggle) {
+			let componentType = componentToToggle.group || componentToToggle.component.type;
+			let fontIcon;
+			try {
+				if (componentToToggle.group) {
+					fontIcon = 'ff-ungrid';
+				} else {
+					fontIcon = componentToToggle.foreign.components.Toolbar.iconClass;
+				}
+			} catch (e) {
+				fontIcon = "";
+			}
+
+			let imageIcon;
+			try {
+				imageIcon = componentToToggle.foreign.components.Toolbar.iconURL;
+			} catch (e) {
+				imageIcon = "";
+			}
+
+
+			let params = { addToWorkspace: true, monitor: "mine" };
+			if (componentToToggle.component && componentToToggle.component.windowGroup) params.groupName = componentToToggle.component.windowGroup;
+			var thePin = {
+				type: "componentLauncher",
+				label: pin.name,
+				component: componentToToggle.group ? componentToToggle.list : componentType,
+				fontIcon: fontIcon,
+				icon: imageIcon,
+				toolbarSection: "center",
+				uuid: uuidv4(),
+				params: params
+			};
+			ToolbarStore.setValue({ field: 'pins.' + pin.name.replace(/[.]/g, "^DOT^"), value: thePin });
+		}
+	});
+}
+
+function removePin(pin) {
+	ToolbarStore.removeValue({ field: 'pins.' + pin.name.replace(/[.]/g, "^DOT^") });
+}
+
 function getFolders() {
 	return data.folders
 }
@@ -86,18 +157,28 @@ function getSingleFolder(folderName) {
 }
 
 function reorderFolders(destIndex, srcIndex) {
-	const dest = data.foldersList[destIndex]
-	data.foldersList[destIndex] = data.foldersList[srcIndex]
-	data.foldersList[srcIndex] = dest
+	const movedFolder = data.foldersList[destIndex]
+    const remainingItems = data.foldersList.filter((item, index) => index !== destIndex)
+    data.foldersList = [
+        ...remainingItems.slice(0, srcIndex),
+        movedFolder,
+        ...remainingItems.slice(srcIndex)
+    ]
 	_setValue('appFolders.list', data.foldersList)
+	return data.foldersList
 }
 
 function addNewFolder(name) {
+	// Each new folder is given a number, lets store them here
+	// to get the highest one and then increment
+	const newFoldersNums = [0]
 	// Find folders that have a name of "New folder" or "New folder #"
-	const newFolders = Object.keys(data.folders).filter((folder) => {
-		return folder.toLowerCase().indexOf('new folder') > -1
+	data.foldersList.forEach((folder) => {
+		const numbers = folder.match(/\d+/g) || []
+		newFoldersNums.push( Math.max.apply(this, numbers) )
 	})
-	const folderName = name || `New folder ${newFolders.length + 1}`
+	const highestFolderNumber = Math.max.apply(this, newFoldersNums)
+	const folderName = name || `New folder ${highestFolderNumber + 1}`
 	const newFolder = {
 		disableUserRemove: true,
 		icon: "ff-folder",
@@ -116,6 +197,7 @@ function deleteFolder(folderName) {
 	// Check if user is trying to delete the active folder
 	if(folderName === data.activeFolder) {
 		data.activeFolder = MY_APPS
+		_setValue('activeFolder', data.activeFolder)
 	}
 
 	delete data.folders[folderName] && _setFolders(() => {
@@ -127,15 +209,15 @@ function deleteFolder(folderName) {
 }
 
 function renameFolder(oldName, newName) {
-	let oldFolder = data.folders[oldName];
-	data.folders[newName] = oldFolder;
-	delete data.folders[oldName];
+	let oldFolder = data.folders[oldName]
+	data.folders[newName] = oldFolder
 	_setFolders(() => {
 		let indexOfOld = data.foldersList.findIndex((folderName) => {
-			return folderName === oldName;
-		});
-		data.foldersList[indexOfOld] = newName;
-		_setValue('appFolders.list', data.foldersList);
+			return folderName === oldName
+		})
+		data.foldersList[indexOfOld] = newName
+		_setValue('appFolders.list', data.foldersList)
+		delete data.folders[oldName]
 	});
 }
 
@@ -201,4 +283,12 @@ function deleteTag(tag) {
 	data.tags.splice(data.tags.indexOf(tag), 1)
 	// Update tags in store
 	getStore().setValue({ field: 'tags', value: data.tags })
+}
+
+function uuidv4() {
+	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+		var r = Math.random() * 16 | 0,
+			v = c === 'x' ? r : r & 0x3 | 0x8;
+		return v.toString(16);
+	});
 }

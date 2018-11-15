@@ -113,6 +113,11 @@
 	cursor: pointer;
 }
 
+.ff-chevron-left.disabled, .ff-chevron-right.disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+}
+
 .app-card {
 	display: flex;
 	flex-direction: column;

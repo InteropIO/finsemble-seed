@@ -18,7 +18,7 @@ export default class AppDefinition extends React.Component {
 			favorites: []
 		}
 		this.onDragToFolder = this.onDragToFolder.bind(this)
-		this.onDoubleClick = this.onDoubleClick.bind(this)
+		this.onItemClick = this.onItemClick.bind(this);
 	}
 
 	/**
@@ -28,15 +28,18 @@ export default class AppDefinition extends React.Component {
 		event.dataTransfer
 			.setData('app', JSON.stringify(this.props.app))
 	}
+
 	/**
-	 * Spawn a component on double click
+	 * Spawns a component on click
+	 * @param {object} e The Synthetic React event
 	 */
-	onDoubleClick(app) {
-		if (pendingSpawn) return
-		pendingSpawn = true
-		FSBL.Clients.LauncherClient.spawn(app.name, {}, (error, data) => {
-			pendingSpawn = false
-		})
+	onItemClick() {
+		if (pendingSpawn) return;
+		pendingSpawn = true;
+		let name = this.props.app.title || this.props.app.name;
+		FSBL.Clients.LauncherClient.spawn(name, {}, (err, data) => {
+			pendingSpawn = false;
+		});
 	}
 
 	isFavorite() {
@@ -47,7 +50,7 @@ export default class AppDefinition extends React.Component {
 	render() {
 		const app = this.props.app
 		return (
-			<div onDoubleClick={() => this.onDoubleClick(app)} className="app-item" draggable="true" onDragStart={this.onDragToFolder}>
+			<div onClick={this.onItemClick} className="app-item" draggable="true" onDragStart={this.onDragToFolder}>
 				<span className="app-item-title">
 					{app.icon !== undefined ? <i className={app.icon}></i> : null}
 					{app.name} {this.isFavorite() && <i className='ff-favorite'></i>}

@@ -28,7 +28,7 @@
 									"apps": {
 										"1": {
 											"name": "Welcome",
-											"appID": "1"
+											"appID": "welcome-comp"
 										},
 										"2": {
 											"name": "Getting Started Tutorial",
@@ -45,14 +45,16 @@
 									}
 								},
 								"Favorites": {
+									"icon": "ff-favorite",
+									"type": "folder",
 									"disableUserRemove": true,
 									"apps" : {}
 								}
 							}
 						},
 						"appDefinitions": {
-							"1": {
-								"appID": "1",
+							"welcome-comp": {
+								"appID": "welcome-comp",
 								"name": "Welcome",
 								"source": "FDC3",
 								"tags": [

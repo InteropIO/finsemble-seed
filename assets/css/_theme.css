@@ -252,6 +252,7 @@
     --tag-font-color: var(--primary-font-color);
     --tag-font-weight: var(--primary-font-weight);
     --tag-close-icon-hover-color: var(--secondary-negative-color);
+    --tag-checkmark-icon-color: var(--green);
 
 
     /* App Menu */

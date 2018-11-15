@@ -33,7 +33,11 @@ export default class AppActionsMenu extends React.Component {
 		document.removeEventListener('mousedown', this.handleClickOutside);
 	}
 
-	toggleMenu() {
+	toggleMenu(e) {
+		if (e) {
+			e.stopPropagation();
+			e.preventDefault();
+		}
 		this.setState({
 			isVisible: !this.state.isVisible
 		})
@@ -42,11 +46,13 @@ export default class AppActionsMenu extends React.Component {
 	//TODO: Implement handlers
 	onAddToFavorite() {
 		storeActions.addAppToFolder('Favorites', this.props.app)
+		storeActions.addPin(this.props.app);
 		this.toggleMenu();
 	}
 
 	onRemoveFromFavorite() {
 		storeActions.removeAppFromFolder('Favorites', this.props.app);
+		storeActions.removePin(this.props.app);
 		this.toggleMenu()
 	}
 
@@ -62,9 +68,17 @@ export default class AppActionsMenu extends React.Component {
 				spawnIfNotFound: true,
 				left: "center",
 				top: "center"
-			}, () => {
-				//TODO: Make this work. There is logic already in the catalog store for opening an apps info page. But calling it directly from here won't work.
-				catalogActions.openApp(this.props.app.appId);
+			}, (error) => {
+				// Publish this event so that catalog knows
+				// what app we want to view
+
+
+				//NOTE: While not ideal, without a small delay (when having to launch the app catalog) the app catalog wont recieve the message as it will still be initializing
+				setTimeout(() => {
+					FSBL.Clients.RouterClient.transmit("viewApp", {
+						app: this.props.app
+					})
+				}, 250);
 		});
 	}
 
@@ -89,7 +103,6 @@ export default class AppActionsMenu extends React.Component {
 
 	renderList() {
 		const folder = this.props.folder
-		console.log('folder: ', folder);
 		let favoritesActionOnClick = this.props.isFavorite ? this.onRemoveFromFavorite : this.onAddToFavorite;
 		let favoritesText = this.props.isFavorite ? "Remove from Favorites" : "Add to Favorites";
 		return (

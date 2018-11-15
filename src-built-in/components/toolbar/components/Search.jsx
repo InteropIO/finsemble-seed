@@ -124,7 +124,7 @@ export default class Search extends React.Component {
 		storeExports.Actions.setFocus(true, e.target)
 
 		setTimeout(function () {
-			
+
 			// select the old search text, so the user can edit it or type over it
 			// Do this in a timeout to give some time for the animation to work
 			var element = document.getElementById("searchInput");
