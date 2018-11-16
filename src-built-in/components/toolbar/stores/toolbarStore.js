@@ -60,7 +60,6 @@ class _ToolbarStore {
 	retrieveSelfFromStorage(cb) {
 
 		finsembleWindow.getOptions((err, opts) => {
-			console.info("get options", opts);
 			let hasRightProps = () => {
 				return (opts.hasOwnProperty('customData') &&
 					opts.customData.hasOwnProperty('foreign') &&
@@ -138,14 +137,27 @@ class _ToolbarStore {
 				});
 				done();
 			} else {
-				self.Store.setValue({
-					field: "menus",
-					value: menuConfig
+				finsembleWindow.getOptions((err, opts) => {
+					let version = opts.customData.foreign.components["App Launcher"].menuVersion;
+					if (!version) {
+						version = 1;
+					}
+					let newMenuConfig = menuConfig.map((configProp) => {
+						let newConfigProp = configProp;
+						if (configProp.id === 'app-launcher' && version === 2) {
+							newConfigProp.menuType = "My Apps";
+						}
+						return newConfigProp;
+					});
+					self.Store.setValue({
+						field: "menus",
+						value: newMenuConfig
+					});
+					done();
+					if (FSBL.Clients.ConfigClient.setValue) {
+						FSBL.Clients.ConfigClient.setValue({ field: "finsemble.menus", value: newMenuConfig });
+					}
 				});
-				done();
-				if (FSBL.Clients.ConfigClient.setValue) {
-					FSBL.Clients.ConfigClient.setValue({ field: "finsemble.menus", value: menuConfig });
-				}
 			}
 		});
 	}

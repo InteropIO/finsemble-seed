@@ -58,6 +58,9 @@
 					}
 				},
 				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
 					"Window Manager": {
 						"persistWindowState": false,
 						"FSBLHeader": false,
@@ -549,7 +552,8 @@
 				},
 				"components": {
 					"App Launcher": {
-						"launchableByUser": false
+						"launchableByUser": false,
+						"menuVersion": 2
 					},
 					"Window Manager": {
 						"persistWindowState": false,
