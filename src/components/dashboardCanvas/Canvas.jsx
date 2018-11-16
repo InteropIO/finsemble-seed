@@ -21,7 +21,9 @@ export default class Canvas extends React.Component {
     removeDiv = (e) => {
         console.log('typeof:', typeof e.target.id)
         let removeDivs = this.state.divs
+        console.log(removeDivs)
         let loc = removeDivs.indexOf(parseInt(e.target.id))
+        removeDivs.splice(loc, 1)
         this.setState({ divs: removeDivs })
     }
     getDivs = () => {
