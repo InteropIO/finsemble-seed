@@ -27,32 +27,27 @@ export default class Canvas extends React.Component {
         this.setState({ divs: removeDivs })
     }
     getDivs = () => {
-
         const droppable = {
             width: "100vw",
             height: "100vw",
             border: "1px dotted #7f8082",
             borderRadius: "3px",
-            padding: "0.5rem",
             resize: "both",
-            overflow: "auto",
-            backgroundColor: 'red'
+            overflow: "hidden",
         }
-
-
 
         let divs = [];
         for (var ii = 0; ii < this.state.divs.length; ii++) {
             divs.push(
-                <div className="droppable" style={droppable} id={this.state.divs[ii] + "header"} key={ii + 1}  >
-                    <div id={this.state.divs[ii]} key={ii + 2} className="myDivHeader type2">
+                <div style={droppable} id={this.state.divs[ii] + "header"} key={ii + 1}  >
+                    {/* <div id={this.state.divs[ii]} key={ii + 2} className="myDivHeader">
                         Drag Here
-                    </div>
-                    <div onClick={this.removeDiv} >
-                        <i className="fa fa-times" aria-hidden="true" id={this.state.divs[ii]}></i>
-                    </div>
-                    <div>
+                    </div> */}
+                    <div className="name" >
                         {this.state.divs[ii]}
+                    </div>
+                    <div onClick={this.removeDiv} className="remove" >
+                        <i className="fa fa-times" aria-hidden="true" id={this.state.divs[ii]}></i>
                     </div>
                 </div>
             )
@@ -97,9 +92,10 @@ export default class Canvas extends React.Component {
     // }
     onDrop = (ev) => {
         let id = ev.dataTransfer.getData('text')
+        console.log(id)
         let arrayOfIds = this.state.divs;
-        if (arrayOfIds.includes(parseInt(id)) === false && !isNaN(id)) {
-            arrayOfIds.push(parseInt(id))
+        if (!arrayOfIds.includes((id))) {
+            arrayOfIds.push(id)
             this.setState({ divs: arrayOfIds })
         }
     }

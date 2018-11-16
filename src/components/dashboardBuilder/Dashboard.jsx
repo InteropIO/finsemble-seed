@@ -23,13 +23,13 @@ export default class Dashboard extends React.Component {
                 <hr className="line" />
                 <div>
                     <div className="imageDivGroup">
-                        <p draggable id="1" data="bye" onDragStart={(e) => e.dataTransfer.setData('text/plain', 1)} className="componentText"><i className="fas fa-chart-line" /> Advanced Chart</p>
+                        <p draggable id="Advanced Chart" data="bye" onDragStart={(e) => e.dataTransfer.setData('text/plain', 'Advanced Chart')} className="componentText"><i className="fas fa-chart-line" /> Advanced Chart</p>
                     </div>
                     <div className="imageDivGroup">
-                        <p draggable id="2" data="bye" onDragStart={(e) => e.dataTransfer.setData('text/plain', 2)} className="componentText"><i className="fas fa-chart-line" /> Financials</p>
+                        <p draggable id="Financials" data="bye" onDragStart={(e) => e.dataTransfer.setData('text/plain', 'Financials')} className="componentText"><i className="fas fa-chart-line" /> Financials</p>
                     </div>
                     <div className="imageDivGroup">
-                        <p draggable id="3" data="bye" onDragStart={(e) => e.dataTransfer.setData('text/plain', 3)} className="componentText"><i className="fas fa-chart-line" /> News</p>
+                        <p draggable id="News" data="bye" onDragStart={(e) => e.dataTransfer.setData('text/plain', 'News')} className="componentText"><i className="fas fa-chart-line" /> News</p>
                     </div>
                 </div>
             </div>
