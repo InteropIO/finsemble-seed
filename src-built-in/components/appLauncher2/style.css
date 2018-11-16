@@ -273,9 +273,9 @@ img {
     border-radius: 3px;
 }
 
-/* .ff-edit {
-    align-self: flex-start;
-} */
+.folder-action-icons .ff-edit:hover {
+    color: var(--appMenu-edit-icon-hover-color);
+}
 
 /* ::-webkit-scrollbar {
     width: 5px;
