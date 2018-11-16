@@ -98,12 +98,10 @@ export default class Canvas extends React.Component {
     onDrop = (ev) => {
         let id = ev.dataTransfer.getData('text')
         let arrayOfIds = this.state.divs;
-        console.log('actual Id:', parseInt(id))
-        if (arrayOfIds.includes(parseInt(id)) === false && parseInt(id) != NaN) {
+        if (arrayOfIds.includes(parseInt(id)) === false && !isNaN(id)) {
             arrayOfIds.push(parseInt(id))
             this.setState({ divs: arrayOfIds })
         }
-        log('this.state.divs:: ', this.state.divs)
     }
 
 
