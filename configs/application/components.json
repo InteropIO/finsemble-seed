@@ -40,6 +40,44 @@
 				}
 			}
 		},
+		"nonConfiguredComponent": {
+			"window": {
+				"url": "$applicationRoot/components/nonConfiguredComponent/nonConfiguredComponent.html",
+				"frame": false,
+				"resizable": true,
+				"autoShow": true,
+				"top": "center",
+				"left": "center",
+				"width": 400,
+				"height": 432
+			},
+			"component": {
+				"inject": false,
+				"spawnOnStartup": false
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"canGroup": true,
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"showLinker": false,
+						"FSBLHeader": true,
+						"persistWindowState": true,
+						"title": "Non Configured Component"
+					},
+					"Toolbar": {
+						"iconClass": "ff-component"
+					}
+				}
+			}
+		},
 		"Bad Boy": {
 			"window": {
 				"url": "$applicationRoot/components/badBoy/index.html",

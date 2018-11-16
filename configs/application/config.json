@@ -14,7 +14,8 @@
 	},
 	"servicesConfig": {
 		"launcher": {
-			"staggerPixels": 40
+			"staggerPixels": 40,
+			"unknownComponent":"nonConfiguredComponent"
 		},
 		"assimilation": {
 			"useOpenFinSpawn": false,
