@@ -23,7 +23,7 @@
     "splashScreenImage": "http://localhost:3375/assets/img/FinsembleSplash.png",
     "runtime": {
         "arguments": "--noerrdialogs  --v=4 --no-sandbox  --enable-crash-reporting --framestrategy=frames --winhttp-proxy-resolver",
-        "version": "8.56.28.36",
+        "version": "9.61.36.36",
         "//": "Add these arguments when diagnosing issues",
         "--diagnostics": "Adding this to the runtimeArguments activates verbose logging and crash reporting.",
         "--disable-gpu": "This flag disables hardware acceleration. Try this if 'Blank Screen' issues are reported (sometimes on virtual desktops)",

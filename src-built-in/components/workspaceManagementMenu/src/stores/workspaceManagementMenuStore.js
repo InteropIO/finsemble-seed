@@ -338,12 +338,10 @@ Actions = {
 		 * Actually perform the switch. Happens after we ask the user what they want.
 		 *
 		 */
-		function switchIt() {
+		function switchIt(callback) {
 			FSBL.Clients.WorkspaceClient.switchTo({
 				name: name
-			}, (err) => {
-				switching = false;
-			});
+			}, callback);
 		}
 		/**
 		 * Make sure the user wants to do what they say that they want to do.
@@ -384,7 +382,9 @@ Actions = {
 
 			async.waterfall(tasks, Actions.onAsyncComplete);
 		} else {
-			switchIt();
+			switchIt(() => {
+				switching = false;
+			});
 		}
 	},
 
@@ -406,6 +406,9 @@ Actions = {
 			//handle error.
 			Logger.system.error(err);
 		}
+
+		//Unlock the UI.
+		switching = false;
 	},
 	/**
 	 * NOTE: Leaving this function here until we figure out notifications.
