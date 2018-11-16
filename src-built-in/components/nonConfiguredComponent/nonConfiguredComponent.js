@@ -1,9 +1,5 @@
 
 
-window.quitFinsemble = function quitFinsemble() {
-	//console.log("Quit button successfully triggered");
-	FSBL.shutdownApplication();
-}
 
 if (window.FSBL && FSBL.addEventListener) {
 	FSBL.addEventListener('onReady', init);
