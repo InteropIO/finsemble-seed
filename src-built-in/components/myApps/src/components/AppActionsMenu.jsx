@@ -60,7 +60,7 @@ export default class AppActionsMenu extends React.Component {
 		this.toggleMenu();
 		FSBL.Clients.LauncherClient.showWindow(
 			{
-				componentType: "App Catalog 2"
+				componentType: "App Catalog"
 			},
 			{
 				monitor: "mine",
