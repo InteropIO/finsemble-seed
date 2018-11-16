@@ -116,7 +116,7 @@ body.menu {
     border-radius: 4px;
 }
 
-.ff-favorite {
+.menu-item-action .ff-favorite {
     padding: 4px 2px 1px 1px;
     width: 22px;
     text-align: center;
