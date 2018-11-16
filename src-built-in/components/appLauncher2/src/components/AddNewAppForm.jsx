@@ -32,11 +32,16 @@ export default class AddNewAppForm extends React.Component {
      * to save the new app in store.
      */
     onSubmit() {
+        if( !/^[0-9a-zA-Z_.-\s]+$/.test(this.state.form.name) || 
+            !/^\w(\s*,?\s*\w)*$/.test(this.state.form.tags) ||
+            !/^(ftp|http|https):\/\/[^ "]+$/.test(this.state.form.url)) {
+                console.warn('Invalid app name, tags or url.')
+                return
+        }
         storeActions.addApp(this.state.form, (error) => {
             // Notify parent if no errors
             !error && this.done()
-        })
-        
+        })   
     }
     /**
      * Clears all form inputs
