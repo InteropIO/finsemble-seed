@@ -15,7 +15,7 @@
 	"servicesConfig": {
 		"launcher": {
 			"staggerPixels": 40,
-			"unknownComponent":"Welcome Component"
+			"unknownComponent":"nonConfiguredComponent"
 		},
 		"docking": {
 			"enabled": true,
