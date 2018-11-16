@@ -6,7 +6,7 @@
 
 import React from 'react'
 import storeActions from '../stores/StoreActions'
-import {default as catalogActions} from '../../../appCatalog2/src/stores/storeActions';
+import { default as catalogActions } from '../../../appCatalog/src/stores/storeActions';
 
 export default class AppActionsMenu extends React.Component {
 
