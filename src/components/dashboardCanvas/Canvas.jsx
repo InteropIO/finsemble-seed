@@ -102,6 +102,9 @@ export default class Canvas extends React.Component {
 
 
     render() {
+
+        // var myLayout = new GoldenLayout(config);
+        // myLayout.init();
         return (
             <div className="div" onDrop={e => this.onDrop(e)} >
                 {/* <ul>
@@ -116,5 +119,24 @@ export default class Canvas extends React.Component {
         );
     }
 }
-
-// })
+var config = {
+    content: [{
+        type: 'row',
+        content: [{
+            type: 'component',
+            componentName: 'testComponent',
+            componentState: { label: 'A' }
+        }, {
+            type: 'column',
+            content: [{
+                type: 'component',
+                componentName: 'testComponent',
+                componentState: { label: 'B' }
+            }, {
+                type: 'component',
+                componentName: 'testComponent',
+                componentState: { label: 'C' }
+            }]
+        }]
+    }]
+};
