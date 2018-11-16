@@ -214,6 +214,7 @@ img {
     padding: .75em .75em .75em 0;
     align-content: flex-start;
     background-color: var(--appMenu-background-color);
+    overflow-y: auto;
 }
 
 .folder-actions-menu-wrapper {
@@ -385,7 +386,8 @@ select:focus, option:focus {
 
   .filter-sort {
 	width: 100%;
-	margin-bottom: 10px;
+    margin-bottom: 10px;
+    position: relative;
 }
 .sort {
     font-size: 11px;
