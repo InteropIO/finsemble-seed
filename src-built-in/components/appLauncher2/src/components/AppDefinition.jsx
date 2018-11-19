@@ -44,7 +44,7 @@ export default class AppDefinition extends React.Component {
 
 	isFavorite() {
 		let favorites = Object.keys(storeActions.getSingleFolder('Favorites').apps);
-		return favorites.indexOf(this.props.app.appID) > -1
+		return favorites.indexOf(this.props.app.appID.toString()) > -1
 	}
 
 	render() {
