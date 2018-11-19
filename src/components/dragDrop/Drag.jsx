@@ -1,65 +1,6 @@
-
-
-import React from "react";
-import ReactDOM from 'react-dom'
-import "./dragDrop.css";
 /***************************
-* GoldenLayout Init
+* UserList Component
 ***************************/
-var myLayout = new GoldenLayout({
-    content: [{
-        type: 'row',
-        content: [{
-            title: 'Users',
-            type: 'react-component',
-            component: 'user-list'
-        }, {
-            title: 'User Detail',
-            type: 'react-component',
-            component: 'user-detail'
-        }]
-    }]
-})
-
-
-
-// FSBL.addEventListener("onReady", function () {
-export default class Drag extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            moving: 0
-        }
-    }
-    // mouseup = () => {
-    //     console.log('mouseUp:', this.target)
-    //     window.removeEventListener('mousemove', this.divMove, true);
-    // }
-    // mousedown = () => {
-    //     console.log('mousedown:', this.target)
-    //     window.addEventListener('mousemove', this.divMove, true);
-    // }
-    // divMove = (e) => {
-    //     console.log('divmove:', e.target)
-    //     var div = document.getElementById(this.state.moving);
-    //     div.style.position = 'absolute';
-    //     div.style.top = e.clientY + 'px';
-    //     div.style.left = e.clientX + 'px';
-    // }
-    // componentDidMount = () => {
-    //     console.log('mounting')
-    //     var div = document.getElementById('0')
-
-    //     div.addEventListener('mousedown', this.mousedown, true)
-    //     window.addEventListener('mouseup', this.mouseup, true)
-    // }
-    render() {
-        return (
-            <div className="container">
-            </div>
-        );
-    }
-}
 
 var UserList = React.createClass({
     getInitialState: function () {
@@ -73,17 +14,22 @@ var UserList = React.createClass({
             ]
         };
     },
+    onDrop: function () {
+        console.log('hello')
+    },
     render: function () {
         var eventHub = this.props.glEventHub;
         return (
-            <ul className="userlist">
-                {this.state.users.map(function (user) {
-                    return <User
-                        key={user.name}
-                        userData={user}
-                        glEventHub={eventHub} />
-                })}
-            </ul>
+            <div onDrop={this.onDrop}>
+                <ul className="userlist">
+                    {this.state.users.map(function (user) {
+                        return <User
+                            key={user.name}
+                            userData={user}
+                            glEventHub={eventHub} />
+                    })}
+                </ul>
+            </div>
         )
     }
 });
@@ -98,28 +44,9 @@ var User = React.createClass({
     selectUser: function () {
         this.props.glEventHub.emit('user-select', this.state);
     },
-    onDrop: function (e) {
-        console.log('heelo')
-        console.log(config.content)
-        config.content.forEach((v, i) => v.content.push({
-            title: 'Users',
-            type: 'react-component',
-            component: 'user-list'
-        }))
-        console.log('post configs:', config.content)
-    },
     render: function () {
-        const style = {
-            backgroundColor: "red",
-            width: "100%",
-            height: "100%"
-        }
         return (
-            <div onDrop={e => this.onDrop(e)}>
-                <li onClick={this.selectUser}>{this.state.name}</li>
-                <div styel={style} onDrop={e => this.onDrop(e)}>hello</div>
-
-            </div>
+            <li onClick={this.selectUser}>{this.state.name}</li>
         )
     }
 });
@@ -156,22 +83,39 @@ var UserDetail = React.createClass({
 /***************************
 * GoldenLayout Init
 ***************************/
-var config = {
-    content: [{
-        type: 'row',
-        content: [{
-            title: 'Users',
-            type: 'react-component',
-            component: 'user-list'
-        }, {
-            title: 'User Detail',
-            type: 'react-component',
-            component: 'user-detail'
-        }]
-    }]
-};
 
-var myLayout = new GoldenLayout(config);
-myLayout.registerComponent('user-list', UserList);
-myLayout.registerComponent('user-detail', UserDetail);
-myLayout.init();
+
+import React, { Component } from 'react'
+
+export default class Drag extends Component {
+    onDrop = (e) => {
+        console.log
+        var config = {
+            content: [{
+                type: 'row',
+                content: [{
+                    title: 'Users',
+                    type: 'react-component',
+                    component: 'user-list'
+                }, {
+                    title: 'User Detail',
+                    type: 'react-component',
+                    component: 'user-detail'
+                }]
+            }]
+        };
+
+        var myLayout = new GoldenLayout(config);
+        myLayout.registerComponent('user-list', UserList);
+        myLayout.registerComponent('user-detail', UserDetail);
+        myLayout.init();
+    }
+    render() {
+        return (
+            <div onDrop={this.onDrop}>
+                hello
+
+            </div>
+        )
+    }
+}
