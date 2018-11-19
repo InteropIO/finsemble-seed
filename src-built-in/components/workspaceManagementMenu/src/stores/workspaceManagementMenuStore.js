@@ -527,7 +527,7 @@ Actions = {
 			callback();
 		} else {
 			//choice === cancel
-			callback(SAVE_DIALOG_CANCEL_ERROR);
+			callback(new Error(SAVE_DIALOG_CANCEL_ERROR));
 		}
 	},
 	/**
@@ -567,7 +567,7 @@ Actions = {
 			if (response.choice === "affirmative") {
 				callback(null, workspaceName);
 			} else {
-				callback(NEGATIVE);
+				callback(new Error(NEGATIVE));
 			}
 		}
 		if (workspaceExists) {
@@ -695,7 +695,7 @@ function getToolbarStore(done) {
 	}, (callback, results) => {
 		StoreClient.getStore({ global: true, store: "Finsemble-Toolbar-Store" }, function (err, store) {
 			console.info("Trying to retrieve toolbarStore.", store);
-			if (!store) return callback("no store", null);
+			if (!store) return callback(new Error("no store"), null);
 			ToolbarStore = store;
 			store.getValue({ field: "pins" }, function (err, pins) {
 				if (pins) Actions.setPins(pins.value);
