@@ -30,6 +30,7 @@ export default class AppActionsMenu extends React.Component {
 		this.toggleMenu = this.toggleMenu.bind(this)
 		this.onRemove = this.onRemove.bind(this)
 		this.setMenuRef = this.setMenuRef.bind(this)
+		this.deleteApp = this.deleteApp.bind(this)
 		this.handleClickOutside = this.handleClickOutside.bind(this)
 	}
 
@@ -119,6 +120,14 @@ export default class AppActionsMenu extends React.Component {
 		}
 	}
 
+	/**
+	 * Calls storeActions.deleteApp() to delete an app 
+	 * from all folders and from apps list
+	 */
+	deleteApp() {
+		storeActions.deleteApp(this.props.app.appID)
+	}
+
 	renderList() {
 		// The 'View info' action is only visible on apps
 		// that have the source property and with a value of FDC3
@@ -132,6 +141,7 @@ export default class AppActionsMenu extends React.Component {
 				<ul>
 					<li onClick={favoritesActionOnClick}>{favoritesText}</li>
 					{app.source && app.source === FDC3 && <li onClick={this.onViewInfo}>View Info</li>}
+					{!app.source && <li onClick={this.deleteApp}>Delete App</li>}
 					{[MY_APPS, FAVORITES].indexOf(folder.name) === -1 &&
 						<li onClick={this.onRemove}>Remove from {folder.name}</li>}
 				</ul>

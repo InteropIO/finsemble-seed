@@ -10,6 +10,7 @@ export default {
 	removeAppFromFolder,
 	renameFolder,
 	deleteFolder,
+	deleteApp,
 	deleteTag,
 	reorderFolders,
 	getFolders,
@@ -194,6 +195,21 @@ function addApp(app = {}, cb) {
 	_setValue('appDefinitions', data.apps, () => {
 		_setFolders()
 		cb && cb()
+	})
+}
+
+function deleteApp(appID) {
+	// Delete app from any folder that has it
+	for(const key in data.folders) {
+		if(data.folders[key].apps[appID]) {
+			delete data.folders[key].apps[appID]
+		}
+	}
+	// Delete app from the apps list
+	delete data.apps[appID]
+	// Save appDefinitions and then folders
+	_setValue('appDefinitions', data.apps, () => {
+		_setFolders()
 	})
 }
 
