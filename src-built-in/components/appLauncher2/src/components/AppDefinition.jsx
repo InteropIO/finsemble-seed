@@ -32,13 +32,26 @@ export default class AppDefinition extends React.Component {
 	/**
 	 * Spawns a component on click
 	 * @param {object} e The Synthetic React event
+	 * @todo Spawning a url will only work after upgrading finsemble
 	 */
 	onItemClick() {
 		if (pendingSpawn) return;
 		pendingSpawn = true;
-		let name = this.props.app.title || this.props.app.name;
+		const name = this.props.app.title || this.props.app.name
+		// If the app has a URL property
+		// For now, this means it was manually added
+		// So lets spawn from URL
+		if(this.props.app.url) {
+			FSBL.Clients.LauncherClient.spawn(null, {
+				url: this.props.app.url
+			}, () => {
+				pendingSpawn = false
+			})
+			return
+		}
+		// Otherwise launch application by name
 		FSBL.Clients.LauncherClient.spawn(name, {}, (err, data) => {
-			pendingSpawn = false;
+			pendingSpawn = false
 		});
 	}
 
