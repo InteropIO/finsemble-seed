@@ -69,7 +69,7 @@ export default class AddNewAppForm extends React.Component {
 
     render() {
         const form = this.state.form
-        return (<div className="add-app-form">
+        return (<div className="add-app-form controls-wrapper">
             <form id="new-app">
                 <FinsembleDialogTextInput onInputChange={(e) => {this.state.form.name = e.target.value}} placeholder="App Name" autoFocus={true} />
                 <FinsembleDialogTextInput onInputChange={(e) => {this.state.form.url = e.target.value}} defaultValue="https://" />
