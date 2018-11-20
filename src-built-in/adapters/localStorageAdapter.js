@@ -6,7 +6,7 @@
  */
 
 /**
- * * The baseStorage model provides several utility functions, such as `getCombinedKey`, which will produce a compound key string (for use with a simple key:value store) incorporating the username, topic and key. For example: For the default user, Finsemble topic and activeWorkspace key: `Finsemble:defaultUser:finsemble:activeWorkspace.`
+ * We have a baseStorage model that provides some methods, such as `getCombinedKey`, which will return a nice key to save our value under. Example: `Finsemble:defaultUser:finsemble:activeWorkspace`. That key would hold the value of our activeWorkspace.
  */
 var BaseStorage = require("@chartiq/finsemble").models.baseStorage;
 var Logger = require("@chartiq/finsemble").Clients.Logger;
