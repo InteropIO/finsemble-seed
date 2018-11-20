@@ -88,31 +88,80 @@ var UserDetail = React.createClass({
 import React, { Component } from 'react'
 
 export default class Drag extends Component {
-    onDrop = (e) => {
-        console.log
+    constructor(props) {
+        super(props)
+        this.state = {
+            config: {
+                content: [{
+                    type: 'row',
+                    content: [
+                        //     {
+                        //     title: 'Users',
+                        //     type: 'react-component',
+                        //     component: 'user-list'
+                        // }, {
+                        //     title: 'User Detail',
+                        //     type: 'react-component',
+                        //     component: 'user-detail'
+                        // }
+                    ]
+                }]
+            },
+            myLayout: null
+        }
+    }
+    componentDidMount = () => {
+        // this.setState({ myLayout: new GoldenLayout(this.state.config) })
         var config = {
             content: [{
                 type: 'row',
-                content: [{
-                    title: 'Users',
-                    type: 'react-component',
-                    component: 'user-list'
-                }, {
-                    title: 'User Detail',
-                    type: 'react-component',
-                    component: 'user-detail'
-                }]
+                content: [
+                    //     {
+                    //     title: 'Users',
+                    //     type: 'react-component',
+                    //     component: 'user-list'
+                    // }, {
+                    //     title: 'User Detail',
+                    //     type: 'react-component',
+                    //     component: 'user-detail'
+                    // }
+                ]
             }]
-        };
+        }
+        try {
+            var myLayout = new GoldenLayout(this.state.config)
 
-        var myLayout = new GoldenLayout(config);
-        myLayout.registerComponent('user-list', UserList);
-        myLayout.registerComponent('user-detail', UserDetail);
-        myLayout.init();
+            // myLayout.registerComponent('user-list', UserList);
+            // myLayout.registerComponent('user-detail', UserDetail);
+            myLayout.init();
+        } catch (e) {
+            console.log('error right here:', e)
+        }
+        this.setState({ myLayout })
+    }
+
+    onDrop = (ev) => {
+        let compName = Math.random() * (100 - 1) + 0;
+        this.state.myLayout.registerComponent(parseInt(compName, 10) + "test", function (container, state) {
+            container.getElement().html('<h2>' + state.text + '</h2>');
+        });
+
+        console.log(parseInt(compName, 10))
+        console.log(ev.target)
+        let id = ev.dataTransfer.getData('text')
+        console.log(id)
+        var newItemConfig = {
+            type: 'component',
+            componentName: parseInt(compName, 10) + "test",
+            componentState: { text: 'hello' }
+        };
+        console.log(this.state.myLayout)
+        this.state.myLayout.root.contentItems[0].addChild(newItemConfig)
+
     }
     render() {
         return (
-            <div onDrop={this.onDrop}>
+            <div onDrop={e => this.onDrop(e)}>
                 hello
 
             </div>
