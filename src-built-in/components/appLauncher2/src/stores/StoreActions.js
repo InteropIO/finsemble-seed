@@ -141,6 +141,7 @@ function addPin(pin) {
 			ToolbarStore.setValue({ field: 'pins.' + pin.name.replace(/[.]/g, "^DOT^"), value: thePin });
 		}
 	});
+
 }
 
 function removePin(pin) {
@@ -191,11 +192,16 @@ function addApp(app = {}, cb) {
 	}
 	data.folders[MY_APPS].apps[appID] = data.apps[appID]
 	data.folders[folder].apps[appID] = data.apps[appID]
-	// Save appDefinitions and then folders
-	_setValue('appDefinitions', data.apps, () => {
-		_setFolders()
-		cb && cb()
-	})
+	FSBL.Clients.LauncherClient.addUserDefinedComponent(data.apps[appID], (compAddErr) => {
+		if (compAddErr) {
+			//TODO: We need to handle the error here. If the component failed to add, we should probably fall back and not add to launcher
+		}
+		// Save appDefinitions and then folders
+		_setValue('appDefinitions', data.apps, () => {
+			_setFolders()
+			cb && cb()
+		})
+	});
 }
 
 function deleteApp(appID) {
