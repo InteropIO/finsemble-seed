@@ -6,6 +6,7 @@
 import async from "async";
 //When a user cancels the save workspace dialog, we throw an error, which short-circuits the async call.
 const SAVE_DIALOG_CANCEL_ERROR = "Cancel";
+const NEGATIVE = "Negative";
 let PROMPT_ON_SAVE = false;
 let WorkspaceManagementStore, Actions, WindowClient, StoreClient, Logger, ToolbarStore, WorkspaceManagementGlobalStore;
 //Initial data for the store.
@@ -408,12 +409,13 @@ Actions = {
 	 * General handler for `async.series` and `async.waterfall`.
 	 * @todo display errors to the user??
 	 *
-	 * @param {any} err
+	 * @param {Error} err
 	 * @param {any} result
 	 */
 	onAsyncComplete(err, result) {
 		WorkspaceManagementStore.setValue({ field: "newWorkspaceDialogIsActive", value: false });
-		if (err && err !== "Negative" && err !== SAVE_DIALOG_CANCEL_ERROR) {
+		const errMessage = err && err.message;
+		if (errMessage && errMessage !== NEGATIVE && errMessage !== SAVE_DIALOG_CANCEL_ERROR) {
 			//handle error.
 			Logger.system.error(err);
 		}
@@ -525,7 +527,7 @@ Actions = {
 			callback();
 		} else {
 			//choice === cancel
-			callback(SAVE_DIALOG_CANCEL_ERROR);
+			callback(new Error(SAVE_DIALOG_CANCEL_ERROR));
 		}
 	},
 	/**
@@ -549,7 +551,7 @@ Actions = {
 			Actions.spawnDialog("yesNo", dialogParams);
 			return callback(new Error("Invalid workspace name."));
 		} else if (response.choice === 'cancel') {
-			return callback(new Error("cancel"));
+			return callback(new Error(SAVE_DIALOG_CANCEL_ERROR));
 		}
 		callback(null, response);
 	},
@@ -565,7 +567,7 @@ Actions = {
 			if (response.choice === "affirmative") {
 				callback(null, workspaceName);
 			} else {
-				callback("Negative");
+				callback(new Error(NEGATIVE));
 			}
 		}
 		if (workspaceExists) {
@@ -588,7 +590,7 @@ Actions = {
 			if (response.choice === "affirmative") {
 				callback(null, { workspaceName, template });
 			} else {
-				callback(new Error("Negative"));
+				callback(new Error(NEGATIVE));
 			}
 		}
 		if (workspaceExists) {
@@ -693,7 +695,7 @@ function getToolbarStore(done) {
 	}, (callback, results) => {
 		StoreClient.getStore({ global: true, store: "Finsemble-Toolbar-Store" }, function (err, store) {
 			console.info("Trying to retrieve toolbarStore.", store);
-			if (!store) return callback("no store", null);
+			if (!store) return callback(new Error("no store"), null);
 			ToolbarStore = store;
 			store.getValue({ field: "pins" }, function (err, pins) {
 				if (pins) Actions.setPins(pins.value);
