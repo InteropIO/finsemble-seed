@@ -219,7 +219,7 @@ class WindowTitleBar extends React.Component {
 		// header bar with dynamic height!
 		let bounds = fsblHeader.getBoundingClientRect();
 		dragHandle.style.height = (bounds.height - 5) + "px"; // Subtract 5 pixels from height in order to make room for resize window cursor at top edge of window
-		dragHandle.style.marginTop = (-bounds.height + 5) + "px"; // Negative margin pulls the drag handle up over the fixed header
+		dragHandle.style.setProperty("margin-top", (-bounds.height) + "px", "important"); // Negative margin pulls the drag handle up over the fixed header
 
 		// Start logic for determining where to place our dragHandle
 		if (this.state.showTabs) {

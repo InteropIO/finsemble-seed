@@ -7,7 +7,7 @@
     /* use below with window scrollbar hack */
     position: fixed;
     top: 5px!important;
-    margin-top: 0px!important;
+    margin-top: 0px !important;
     /* use below without window scrollbar hack */
     /* position: absolute; */
     /* top: 0px!important; */
