@@ -151,9 +151,14 @@ var Actions = {
 		/**
 		 * Catches a double-click on the title bar. If you don't catch this, openfin will invoke the OS-level maximize, which will put the window on top of the toolbar. `clickMaximize` will fill all of the space that finsemble allows.
 		 */
-		FSBL.Clients.WindowClient.finWindow.addEventListener("maximized", function () {
-			self.clickMaximize();
+		finsembleWindow.addEventListener("maximized", function () {
+			windowTitleBarStore.setValue({ field: "Maximize.maximized", value: true });
 		});
+
+		finsembleWindow.addEventListener("restored", function () {
+			windowTitleBarStore.setValue({ field: "Maximize.maximized", value: false });
+		});
+
 
 		//default title.
 		windowTitleBarStore.setValue({ field: "Main.windowTitle ", value: FSBL.Clients.WindowClient.getWindowTitle() });
@@ -387,15 +392,9 @@ var Actions = {
 	clickMaximize: function () {
 		var maxField = windowTitleBarStore.getValue({ field: "Maximize" });
 		if (finsembleWindow.windowState !== finsembleWindow.WINDOWSTATE.MAXIMIZED)
-			return FSBL.Clients.WindowClient.maximize(() => {
-				windowTitleBarStore.setValue({ field: "Maximize.maximized", value: true });
-			});
+			return FSBL.Clients.WindowClient.maximize();
 
-		return FSBL.Clients.WindowClient.restore(() => {
-			windowTitleBarStore.setValue({ field: "Maximize.maximized", value: false });
-		});
-
-
+		return FSBL.Clients.WindowClient.restore();
 	},
 
 	getTabs() {
