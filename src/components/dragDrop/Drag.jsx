@@ -15,7 +15,8 @@ export default class Drag extends Component {
                     ]
                 }]
             },
-            myLayout: null
+            myLayout: null,
+            contentItems: null
         }
     }
     componentDidMount = () => {
@@ -36,29 +37,26 @@ export default class Drag extends Component {
         // myLayout.childeNodes = this.onDrop
         this.setState({ myLayout })
     }
-    onDestroy = () => {
-        console.log('destroying')
-    }
     onDrop = (ev) => {
         console.log('preAdd:', this.state.myLayout.root)
         let id = ev.dataTransfer.getData('text')
-
+        var RandomNumber = Math.random() * Math.floor(10000)
         let contentItems = this.state.myLayout.root.contentItems[0]
         let rerun = true
         var newItemConfig = {
             type: 'component',
-            componentName: id,
+            componentName: id + RandomNumber + "",
             componentState: { text: id }
         };
-        try {
-            this.state.myLayout.registerComponent(id, function (container, state) {
-                container.getElement().html('<h2>' + state.text + '</h2>');
-            })
-        } catch (e) {
-            console.log(e)
-        }
+        // try {
+
+        this.state.myLayout.registerComponent(id + RandomNumber + "", function (container, state) {
+            container.getElement().html('<h2>' + state.text + '</h2>');
+        })
+        console.log(this.state.myLayout.root)
         this.state.myLayout.root.contentItems[0].addChild(newItemConfig)
-        console.log('poastAdd:', this.state.myLayout.root)
+        console.log('poastAdd:', this.state.myLayout.root.contentItems[0])
+        console.log('\n\n\n\n\n')
     }
 
     render() {
