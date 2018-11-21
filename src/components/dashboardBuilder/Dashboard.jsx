@@ -18,8 +18,8 @@ export default class Dashboard extends React.Component {
         var newItemConfig = {
             title: title,
             type: 'component',
-            componentName: 'example',
-            componentState: { text: text }
+            component: 'example',
+            props: { text: text }
         };
 
         myLayout.createDragSource(element, newItemConfig);
@@ -28,7 +28,7 @@ export default class Dashboard extends React.Component {
         let drags = []
         this.state.draggables.forEach(value => {
             drags.push(<div className="imageDivGroup">
-                <p draggable id={value} data="bye" onDragStart={(e) => e.dataTransfer.setData('text/plain', '${value}')} className="componentText"><i className="fas fa-chart-line" />{value}</p>
+                <p draggable id={value} onDragStart={(e) => e.dataTransfer.setData('text/plain', `${value}`)} className="componentText"><i className="fas fa-chart-line" />{value}</p>
             </div >)
         })
         setTimeout(() => {
@@ -52,12 +52,6 @@ export default class Dashboard extends React.Component {
                 <hr className="line" />
                 <div>
                     {this.getDraggables()}
-                    {/* <div className="imageDivGroup">
-                        <p draggable id="Financials" data="bye" onDragStart={(e) => e.dataTransfer.setData('text/plain', 'Financials')} className="componentText"><i className="fas fa-chart-line" /> Financials</p>
-                    </div>
-                    <div className="imageDivGroup">
-                        <p draggable id="News" data="bye" onDragStart={(e) => e.dataTransfer.setData('text/plain', 'News')} className="componentText"><i className="fas fa-chart-line" /> News</p>
-                    </div> */}
                 </div>
             </div>
         )

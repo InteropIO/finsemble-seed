@@ -139,32 +139,35 @@ export default class Drag extends Component {
         }
         this.setState({ myLayout })
     }
-
+    onDestroy = () => {
+        console.log('destroying')
+    }
     onDrop = (ev) => {
-        let compName = Math.random() * (100 - 1) + 0;
-        this.state.myLayout.registerComponent(parseInt(compName, 10) + "test", function (container, state) {
+        console.log(this.state.myLayout)
+        let id = ev.dataTransfer.getData('text')
+        let rerun = true
+
+        this.state.myLayout.registerComponent(id, function (container, state) {
             container.getElement().html('<h2>' + state.text + '</h2>');
         });
 
-        console.log(parseInt(compName, 10))
-        console.log(ev.target)
-        let id = ev.dataTransfer.getData('text')
-        console.log(id)
         var newItemConfig = {
             type: 'component',
-            componentName: parseInt(compName, 10) + "test",
-            componentState: { text: 'hello' }
+            componentName: id,
+            componentState: { text: id }
         };
-        console.log(this.state.myLayout)
+        console.log(this.state.myLayout.root.contentItems[0])
         this.state.myLayout.root.contentItems[0].addChild(newItemConfig)
+        rerun = false
 
     }
-    render() {
-        return (
-            <div onDrop={e => this.onDrop(e)}>
-                hello
+
+render() {
+    return (
+        <div onDrop={e => this.onDrop(e)}>
+            hello
 
             </div>
-        )
-    }
+    )
+}
 }
