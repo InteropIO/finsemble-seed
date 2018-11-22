@@ -17,7 +17,7 @@ const launchOpenFin = manifest => {
         });
     });
     
-    return openfinLauncher.launchOpenFin({
+    openfinLauncher.launchOpenFin({
         configPath: manifest,
     })
     .then(() => {
@@ -28,8 +28,8 @@ const launchOpenFin = manifest => {
 module.exports = async (channelAdapter, manifest) => {
     logToTerminal("Launching Finsemble", "black", "bgCyan");
     if (channelAdapter === "openfin") {
-        return launchOpenFin(manifest);
+        launchOpenFin(manifest);
     } else {
-        return launchE20(manifest);
+        launchE20(manifest);
     }
 };

@@ -4,7 +4,6 @@ const errorOutColor = chalk.hex("#FF667E");
 const path = require("path");
 const { spawn } = require("child_process");
 const handleMessage = (data, resolve, launchTimestamp) => {
-    // data = "serverFailed";
     if (!data || !data.action) {
         console.log("Unproperly formatted message from server:", data);
         return;
@@ -53,7 +52,6 @@ module.exports = port => {
         serverProcess.on("message", data => handleMessage(data, resolve, launchTimestamp));
         serverProcess.on("exit", code => {
             logToTerminal(`Server closed: exit code ${code}`, "magenta");
-            resolve();
         });
         serverProcess.stderr.on("data", handleStderr);
     });

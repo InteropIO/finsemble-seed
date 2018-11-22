@@ -34,11 +34,12 @@ const configObjects = [
 ];
 
 const packFiles = async (config, bundleName) => {
+    const isRunningDevTask = process.argv[2].startsWith("dev");
     if (!config) {
         return;
     }
     const startTime = process.hrtime();
-    // config.watch = isRunningDevTask;
+    config.watch = isRunningDevTask;
     config.bail = true; // Causes webpack to break upon first encountered error. Pretty annoying when build errors scroll off the screen.
     logToTerminal(`Starting to build ${bundleName}.`);
     await new Promise((resolve, reject) => {
