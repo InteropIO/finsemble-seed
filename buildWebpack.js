@@ -49,7 +49,9 @@ const packFiles = async (config, bundleName) => {
     const prettyTime = chalk.magenta(prettyHrtime(endTime));
     logToTerminal(`Finished building ${bundleName} after ${prettyTime}.`, "cyan");
 }
-
+/**
+ * Helper function that builds webpack, logs errors, and notifies user of start/finish of the webpack task.
+ */
 const checkWebpack = (err, stats, resolve, reject) => {
     if (err) {
         const error = errorOutColor("Webpack Error.", err);
@@ -61,14 +63,6 @@ const checkWebpack = (err, stats, resolve, reject) => {
         console.error(error);
         return reject(error);
     }
-
-    // Webpack will call this function every time the bundle is built.
-    // Webpack is run in "watch" mode which means this function will be called over and over and over.
-    // We only want to invoke the async callback back to the gulp file once - the initial webpack build.
-    // if (callback) {
-    //     callback();
-    //     callback = undefined;
-    // }
     resolve();
 }
 /**
@@ -76,7 +70,6 @@ const checkWebpack = (err, stats, resolve, reject) => {
  */
 module.exports = async () => {
     logToTerminal(`Starting webpack. Environment:"${process.env.NODE_ENV}"`)
-    //Helper function that builds webpack, logs errors, and notifies user of start/finish of the webpack task.
     const configReducer = (promise, configObject) => promise.then(() => packFiles(configObject.config, configObject.name));
     await configObjects.reduce(configReducer, Promise.resolve());
 };

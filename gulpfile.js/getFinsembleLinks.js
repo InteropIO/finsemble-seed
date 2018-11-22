@@ -1,5 +1,9 @@
 const path = require("path");
 
+/**
+ * Return required finsemble links
+ * @returns Object
+ */
 module.exports =  () => {
     const FINSEMBLE_PATH = path.join(__dirname, "../node_modules", "@chartiq", "finsemble");
     const FINSEMBLE_VERSION = require(path.join(FINSEMBLE_PATH, "package.json")).version;

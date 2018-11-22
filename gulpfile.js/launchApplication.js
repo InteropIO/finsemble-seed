@@ -25,6 +25,9 @@ const launchOpenFin = manifest => {
     });
 };
 
+/**
+ * handle launching with different channelAdapters
+ */
 module.exports = async (channelAdapter, manifest) => {
     logToTerminal("Launching Finsemble", "black", "bgCyan");
     if (channelAdapter === "openfin") {

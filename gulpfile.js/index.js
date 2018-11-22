@@ -54,6 +54,10 @@ const taskMethods = {
 	logToTerminal,
 };
 
+/**
+ * for each key in extensionsObject, check if the value is a function and create a corresponding
+ * gulp task. Call the post method upon completion.
+ */
 const createTasks = async extensionsObject => {
 	const keys = Object.keys(extensionsObject);
 	keys.forEach(key => {
@@ -64,6 +68,7 @@ const createTasks = async extensionsObject => {
 	});
 	extensionsObject.post();
 }
+
 (async () => {
 	const extensionsObject = {
 		...taskMethods,
