@@ -9,11 +9,8 @@ const launchApplication = require('./launchApplication');
 const startServer = require("./startServer");
 const startupConfig = require("../configs/other/server-environment-startup");
 
-const pre = async () => {
-    verifyLinks(requiredFinsembleLinks).catch(err => {
-        logToTerminal(`MISSING FINSEMBLE DEPENDENCY!: ${err.toString()}`, "red");
-        process.exit(1);
-    });
+const pre = done => {
+    verifyLinks(requiredFinsembleLinks, done);
 };
 const post = err => {
     if (err) {

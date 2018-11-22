@@ -76,6 +76,6 @@ const createTasks = async extensionsObject => {
 		// This really ought to be returning a new object rather than modifying an existing one.
 		extensions(extensionsObject);
 	}
-	extensionsObject.pre();
-	createTasks(extensionsObject)
+	extensionsObject.pre(() => createTasks(extensionsObject));
+	
 })();
