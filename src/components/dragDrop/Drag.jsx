@@ -34,9 +34,13 @@ export default class Drag extends Component {
         }
 
         this.setState({ myLayout })
+        FSBL.Clients.RouterClient.addListener({ dataType: "save" }, (err, response) => {
+            console.log(response.data)
+        })
     }
 
     onDrop = (ev) => {
+
         console.log('preAdd:', this.state.myLayout.root)
         var RandomNumber = Math.random() * Math.floor(10000)
         //@todo make sure there's some text here.
@@ -58,8 +62,11 @@ export default class Drag extends Component {
     }
 
     render() {
+        var DName = ""
+
+
         return (
-            <div onDrop={this.onDrop}>
+            <div onDrop={this.onDrop} >
                 hello
             </div >
         )

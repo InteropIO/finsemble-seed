@@ -7,51 +7,76 @@ export default class Dashboard extends React.Component {
         super(props)
         this.state = {
             filter: "",
-            draggables: ['Advanced Chart', 'Financials', 'News']
+            initialDraggables: ['Advanced Chart', 'Financials', 'News'],
+            items: [],
+            DName: ""
         }
     }
-    createDragSources = (componentName) => {
-        console.log(componentName)
-        myLayout.registerComponent('example', function (container, state) {
-            container.getElement().html('<h2>' + componentName + '</h2>');
-        });
-        var newItemConfig = {
-            title: title,
-            type: 'component',
-            component: 'example',
-            props: { text: text }
-        };
 
-        myLayout.createDragSource(element, newItemConfig);
-    }
     getDraggables = () => {
         let drags = []
-        this.state.draggables.forEach(value => {
-            drags.push(<div className="imageDivGroup">
-                <p draggable id={value} onDragStart={(e) => e.dataTransfer.setData('text/plain', `${value}`)} className="componentText"><i className="fas fa-chart-line" />{value}</p>
+        this.state.items.forEach((value, index) => {
+            drags.push(<div className="imageDivGroup" key={index}>
+                <p draggable id={value} onDragStart={(e) => e.dataTransfer.setData('text/plain', `${value}`)} className="componentText"><i className="fas fa-chart-line" /> {value}</p>
             </div >)
         })
-        setTimeout(() => {
-            drags.forEach(v => this.createDragSources(v))
-        }, 1);
+
         return drags
     }
-
-    componentWillMount() {
-        console.log('Dashboard mounted')
+    handleChange = (event) => {
+        if (event.target.id == 'filterText') {
+            var updatedList = this.state.initialDraggables;
+            updatedList = updatedList.filter(function (item) {
+                return item.toLowerCase().search(
+                    event.target.value.toLowerCase()) !== -1;
+            });
+            this.setState({ items: updatedList });
+        }
+        else {
+            this.setState({ Dname: event.target.value })
+        }
     }
+    componentDidMount = () => {
+        this.setState({ items: this.state.initialDraggables })
+    }
+    handleClick = (event) => {
+        if (event.target.id == "cancelButton") {
 
-    // Create child components and use them below
+        }
+        else {
+            let windowIdentifier = {
+                componentType: "dragDrop",
+                windowName: FSBL.Clients.WindowClient.options.name + ".dragDrop"
+            };
+
+            FSBL.Clients.RouterClient.transmit(windowIdentifier.windowName, this.state.DName);
+
+        }
+    }
     render() {
         return (
-            <div className="container">
-                <div>
-                    <img src="search-white.png" className="search_white" />
-                    {/* <input type="text" placeholder="filter" className="filterText" onChangeText={(filter) => this.setState({ filter })} STYLE='color:#FFFF00' /> */}
+            <div>
+                <div className="container">
+                    <div>
+                        <div>
+                            <img src="search-white.png" className="search_white" />
+                            <input type="text" placeholder="filter" className="filterText" onChange={this.handleChange} id="filterText" />
+                        </div>
+                        <hr className="line" />
+                        <div>
+                            {this.getDraggables()}
+                        </div>
+                    </div>
                 </div>
-                <hr className="line" />
-                <div>
-                    {this.getDraggables()}
+                <div className="saveAsBlock">
+                    <div>
+                        <label className="search_white" style={{ color: "white" }} >Save As:</label>
+                        <input type="text" className="filterText" placeholder="File Name" id="DName" onChange={this.handleChange} />
+                    </div>
+                    <div>
+                        <input type="button" value="Cancel" className="saveButtons" id="cancelButton" />
+                        <input type="button" value="Save" className="saveButtons" id="saveButton" />
+                    </div>
                 </div>
             </div>
         )
