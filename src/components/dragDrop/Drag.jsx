@@ -25,7 +25,6 @@ export default class Drag extends Component {
         };
         this.onDrop = this.onDrop.bind(this);
     }
-
     componentDidMount = () => {
         try {
             var myLayout = new GoldenLayout(this.state.config)
