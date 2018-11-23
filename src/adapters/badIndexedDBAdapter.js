@@ -5,7 +5,7 @@ import finsemble from "@chartiq/finsemble";
 /**
  * Maximum delay to be applied to get and save operations in millseconds. Actual delay is random but bounded by this amount.
  */
-const getMaxDelay = 11500;
+const getMaxDelay = 11000;
 const saveMaxDelay = 12000;
 
 /**
