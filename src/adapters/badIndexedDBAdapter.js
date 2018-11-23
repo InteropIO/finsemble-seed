@@ -1,10 +1,23 @@
 import finsemble from "@chartiq/finsemble";
 
+// A Badly behaved IndexedDebAdapter for storage service testing.
+
+/**
+ * Maximum delay to be applied to get and save operations in millseconds. Actual delay is random but bounded by this amount.
+ */
+const getMaxDelay = 11500;
+const saveMaxDelay = 12000;
+
+/**
+ * Chance that any get or save operation will fail (after the delay) with an artifical error message.
+ */
+const getFailChance = 0.02;
+const saveFailChance = 0.1;
+
+
+// #region 
 const BaseStorage = finsemble.models.baseStorage;
 const Logger = finsemble.Clients.Logger;
-
-// Because calls to this storage adapter will likely come from many different windows, we will log successes and 
-// failures in the central logger.
 Logger.start();
 
 /**
@@ -17,14 +30,6 @@ const SCHEMA_VERSION = 1;
  * Flag indicating that the IndexedDB connection is initialized. Will be set in releaseQueue after the connection has been created and any schema version changes applied.
  */
 let initialized = false;
-
-/**
- * How much, in milliseconds to delay each operation performed, realtive to the normal adapter implementation
- */
-const getMaxDelay = 20000;
-const saveMaxDelay = 10000;
-let firstfail = true;
-const saveFailChance = 0.2;
 
 // #region 
 /** 
@@ -298,13 +303,13 @@ const BadIndexedDBAdapter = function () {
 
 		setTimeout(() => {
 			const combinedKey = this.getCombinedKey(this, params);
-			if (!firstfail) {
-				firstfail = true;
+			if (Math.random() <= getFailChance) {
 				Logger.system.error("BadIndexedDBAdapter.get key=" + combinedKey + ", Artificial failure");
 				console.error("BadIndexedDBAdapter.get key=" + combinedKey + ", Artificial failure");
 
 				cb("Artificial failure", { status: "failed" });
-			} else {
+
+			}  else {
 				Logger.system.debug("BadIndexedDBAdapter.get, params: ", params);
 				console.debug("BadIndexedDBAdapter.get, params: ", params, cb);
 
