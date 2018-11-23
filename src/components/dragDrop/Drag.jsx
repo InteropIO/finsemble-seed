@@ -34,9 +34,13 @@ export default class Drag extends Component {
         }
 
         this.setState({ myLayout })
-        FSBL.Clients.RouterClient.addListener({ dataType: "save" }, (err, response) => {
-            console.log(response.data)
-        })
+        FSBL.Clients.RouterClient.addListener("ChannelA", function (error, response) {
+            if (error) {
+                console.log("ChannelA Error: " + JSON.stringify(error));
+            } else {
+                console.log("ChannelA Response: " + JSON.stringify(response.data['DName']));
+            }
+        });
     }
 
     onDrop = (ev) => {

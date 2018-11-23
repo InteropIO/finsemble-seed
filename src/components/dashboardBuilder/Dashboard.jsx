@@ -44,12 +44,8 @@ export default class Dashboard extends React.Component {
 
         }
         else {
-            let windowIdentifier = {
-                componentType: "dragDrop",
-                windowName: FSBL.Clients.WindowClient.options.name + ".dragDrop"
-            };
-
-            FSBL.Clients.RouterClient.transmit(windowIdentifier.windowName, this.state.DName);
+            console.log('here i am')
+            FSBL.Clients.RouterClient.transmit("ChannelA", { "DName": this.state.Dname });
 
         }
     }
@@ -74,8 +70,8 @@ export default class Dashboard extends React.Component {
                         <input type="text" className="filterText" placeholder="File Name" id="DName" onChange={this.handleChange} />
                     </div>
                     <div>
-                        <input type="button" value="Cancel" className="saveButtons" id="cancelButton" />
-                        <input type="button" value="Save" className="saveButtons" id="saveButton" />
+                        <input type="button" value="Cancel" className="saveButtons" id="cancelButton" onClick={this.handleClick} />
+                        <input type="button" value="Save" className="saveButtons" id="saveButton" onClick={this.handleClick} />
                     </div>
                 </div>
             </div>
