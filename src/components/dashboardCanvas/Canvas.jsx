@@ -1,142 +1,87 @@
-import React from "react";
-import "./dashboardCanvas.css";
-var log = console.log;
-var error = console.error
-// FSBL.addEventListener("onReady", function () {
+/***************************
+* UserList Component
+***************************/
 
-export default class Canvas extends React.Component {
+import React, { Component } from 'react'
+const DEFAULT_CONFIG = {
+    content: [
+        {
+            type: 'row',
+            //isClosable prevents the default row from closing, which allows us to add components when the layout has nothing in it.
+            isClosable: false,
+            content: [
+            ]
+        }
+    ]
+};
+
+export default class Canvas extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
-            divs: [],
-            moving: -1
+            config: DEFAULT_CONFIG,
+            myLayout: null,
+            GLState: null,
+            name: null
         };
+        this.onDrop = this.onDrop.bind(this);
     }
-    addListeners = () => {
-        for (let index = 0; index < this.state.divs.length; index++) {
-            document.getElementById(`${this.state.divs[index]}`).addEventListener('mousedown', this.mousedown, false)
-            window.addEventListener('mouseup', this.mouseup, false)
-        };
-    }
-    removeDiv = (e) => {
-        console.log('typeof:', typeof e.target.id)
-        let removeDivs = this.state.divs
-        console.log(removeDivs)
-        let loc = removeDivs.indexOf(parseInt(e.target.id))
-        removeDivs.splice(loc, 1)
-        this.setState({ divs: removeDivs })
-    }
-    getDivs = () => {
-        const droppable = {
-            width: "100vw",
-            height: "100vw",
-            border: "1px dotted #7f8082",
-            borderRadius: "3px",
-            resize: "both",
-            overflow: "hidden",
+    componentDidMount = () => {
+        try {
+            var myLayout = new GoldenLayout(this.state.config)
+            myLayout.init();
+        } catch (e) {
+            console.log('error right here:', e)
         }
+        myLayout.on('stateChanged', () => {
+            var GLState = myLayout.toConfig();
+            this.setState({ GLState });
+        });
+        this.setState({ myLayout })
+        FSBL.Clients.RouterClient.addListener("Save", function (error, response) {
+            if (error) {
 
-        let divs = [];
-        for (var ii = 0; ii < this.state.divs.length; ii++) {
-            divs.push(
-                <div style={droppable} id={this.state.divs[ii] + "header"} key={ii + 1}  >
-                    {/* <div id={this.state.divs[ii]} key={ii + 2} className="myDivHeader">
-                        Drag Here
-                    </div> */}
-                    <div className="name" >
-                        {this.state.divs[ii]}
-                    </div>
-                    <div onClick={this.removeDiv} className="remove" >
-                        <i className="fa fa-times" aria-hidden="true" id={this.state.divs[ii]}></i>
-                    </div>
-                </div>
-            )
+                console.log("Save Error: " + (error));
+            } else {
+                FSBL.Clients.WindowClient.setWindowTitle(`${response.data['DName']}`);
+
+                console.log("Save Response: " + (response.data['DName']));
+            }
+        });
+
+    }
+    getJSON = () => {
+        let name = this.state.name
+        let state = this.state.GLState
+        return {
+            name: state
         }
-        setTimeout(this.addListeners, 1);
-
-        return divs;
-    };
-
-    // addDiv = (e) => {
-    // console.log(e.target.id)
-    // var newValue = this.e5state.divs++;
-    // newValue = newValue + 1;
-    // this.setState({ divs: newValue });
-
-    // };
-    // drop = event => {
-    //     event.preventDefault();
-    //     const data = event.dataTransfer.getData("id");
-    //     const element = document.getElementById(event.target.id);
-    //     event.currentTarget.style.background = "white";
-    //     try {
-    //         event.target.appendChild(element);
-    //     } catch (error) {
-    //         console.warn("you can't move the item to the same place");
-    //     }
-    // };
-    // mouseup = () => {
-    //     window.removeEventListener('mousemove', this.divMove, true)
-    // };
-
-    // mousedown = (e) => {
-    //     console.log('mouse down:', e.target.id)
-    //     this.setState({ moving: e.target.id + "header" })
-    //     window.addEventListener('mousemove', this.divMove, true);
-    // }
-    // divMove = (e) => {
-    //     var div = document.getElementById(this.state.moving)
-    //     div.style.position = 'absolute';
-    //     div.style.top = e.clientY + 'px';
-    //     div.style.left = e.clientX + 'px';
-    // }
+    }
     onDrop = (ev) => {
-        let id = ev.dataTransfer.getData('text')
-        console.log(id)
-        let arrayOfIds = this.state.divs;
-        if (!arrayOfIds.includes((id))) {
-            arrayOfIds.push(id)
-            this.setState({ divs: arrayOfIds })
-        }
-    }
+        //need this because you have to have unique names for registered components
+        var RandomNumber = Math.random() * Math.floor(10000)
+        //@todo make sure there's some text here.
+        const componentType = ev.dataTransfer.getData('text');
+        const id = componentType + RandomNumber;
 
+        var newItemConfig = {
+            type: 'component',
+            componentName: id,
+            componentState: { text: componentType }
+        };
+
+        this.state.myLayout.registerComponent(id, function (container, state) {
+            container.getElement().html('<h2>' + state.text + '</h2>');
+        })
+        this.state.myLayout.root.contentItems[0].addChild(newItemConfig)
+
+    }
 
     render() {
-
-        // var myLayout = new GoldenLayout(config);
-        // myLayout.init();
         return (
-            <div className="div" onDrop={e => this.onDrop(e)} >
-                {/* <ul>
-                    <li>
-                        <a onClick={this.addDiv}>
-                            <i className="fa fa-plus" aria-hidden="true" />
-                        </a>
-                    </li>
-                </ul> */}
-                {this.getDivs()}
-            </div>
-        );
+            <div onDrop={this.onDrop} >
+                hello
+            </div >
+        )
     }
 }
-var config = {
-    content: [{
-        type: 'row',
-        content: [{
-            type: 'component',
-            componentName: 'testComponent',
-            componentState: { label: 'A' }
-        }, {
-            type: 'column',
-            content: [{
-                type: 'component',
-                componentName: 'testComponent',
-                componentState: { label: 'B' }
-            }, {
-                type: 'component',
-                componentName: 'testComponent',
-                componentState: { label: 'C' }
-            }]
-        }]
-    }]
-};

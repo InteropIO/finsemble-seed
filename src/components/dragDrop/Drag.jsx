@@ -21,7 +21,7 @@ export default class Drag extends Component {
         this.state = {
             config: DEFAULT_CONFIG,
             myLayout: null,
-            contentItems: null
+            GLState: null
         };
         this.onDrop = this.onDrop.bind(this);
     }
@@ -32,20 +32,23 @@ export default class Drag extends Component {
         } catch (e) {
             console.log('error right here:', e)
         }
-
+        myLayout.on('stateChanged', () => {
+            var GLState = myLayout.toConfig();
+            this.setState({ GLState });
+        });
         this.setState({ myLayout })
-        FSBL.Clients.RouterClient.addListener("ChannelA", function (error, response) {
+        FSBL.Clients.RouterClient.addListener("Save", function (error, response) {
             if (error) {
-                console.log("ChannelA Error: " + JSON.stringify(error));
+                console.log("Save Error: " + (error));
             } else {
-                console.log("ChannelA Response: " + JSON.stringify(response.data['DName']));
+                console.log("Save Response: " + (response.data['DName']));
             }
         });
+
     }
 
     onDrop = (ev) => {
-
-        console.log('preAdd:', this.state.myLayout.root)
+        //need this because you have to have unique names for registered components
         var RandomNumber = Math.random() * Math.floor(10000)
         //@todo make sure there's some text here.
         const componentType = ev.dataTransfer.getData('text');
@@ -61,7 +64,6 @@ export default class Drag extends Component {
             container.getElement().html('<h2>' + state.text + '</h2>');
         })
         this.state.myLayout.root.contentItems[0].addChild(newItemConfig)
-        console.log('poastAdd:', this.state.myLayout.root.contentItems[0])
 
     }
 

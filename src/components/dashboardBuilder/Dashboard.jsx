@@ -41,12 +41,10 @@ export default class Dashboard extends React.Component {
     }
     handleClick = (event) => {
         if (event.target.id == "cancelButton") {
-
+                //Need guidance on what to do here.
         }
         else {
-            console.log('here i am')
-            FSBL.Clients.RouterClient.transmit("ChannelA", { "DName": this.state.Dname });
-
+            FSBL.Clients.RouterClient.transmit("Save", { "DName": this.state.Dname });
         }
     }
     render() {
