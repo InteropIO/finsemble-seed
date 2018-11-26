@@ -6,7 +6,7 @@ export default {
 	 */
 	Alphabetical: (list) => {
 		return list.sort((a, b) => {
-			return a.name > b.name
+			return a.name.toLowerCase() > b.name.toLowerCase()
 		})
 	},
 	/**

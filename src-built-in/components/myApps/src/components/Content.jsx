@@ -151,7 +151,7 @@ export default class Content extends React.Component {
 		return (
 			<div className="complex-menu-content-row">
 				<FilterSort></FilterSort>
-				{apps.length ? apps : <NoAppsFound message={this.getNoResultsMessage()} />}
+				<div className="item-wrapper">{apps.length ? apps : <NoAppsFound message={this.getNoResultsMessage()} />}</div>
 			</div>
 		)
 	}

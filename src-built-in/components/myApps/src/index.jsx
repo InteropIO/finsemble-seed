@@ -2,29 +2,62 @@ import "../style.css"
 import "../../../../assets/css/font-finance.css"
 import "../../../../assets/css/finsemble.css"
 // Import js modules
-import React from  'react'
-import ReactDOM from  'react-dom'
-import {createStore, getStore} from './stores/LauncherStore'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { createStore, getStore } from './stores/LauncherStore'
 import storeActions from './stores/StoreActions'
 
 // Import React components
 import LeftNav from './components/LeftNav'
 import Content from './components/Content'
 import { FinsembleMenu } from '@chartiq/finsemble-react-controls';
+import AddNewAppForm from "./components/AddNewAppForm";
 
 class AppLauncher extends React.Component {
 
 	constructor(props) {
-		super(props);
+		super(props)
+		this.state = {
+			isFormVisible: storeActions.getFormStatus()
+		}
+		this.toggleAddNewAppForm = this.toggleAddNewAppForm.bind(this);
 		this.finWindow = fin.desktop.Window.getCurrent();
 		this.openAppMarket = this.openAppMarket.bind(this);
-		this.openAdHoc = this.openAdHoc.bind(this);
 	}
 
 	componentWillMount() {
+		getStore().addListener({ field: 'isFormVisible' }, this.toggleAddNewAppForm);
 		this.finWindow.addEventListener('shown', () => {
 			this.finWindow.focus();
 		});
+	}
+
+	componentWillUnmount() {
+		getStore().removeListener({ field: 'isFormVisible' }, this.toggleAddNewAppForm);
+	}
+	/**
+	 * Sets isFormVisible to true or false in state
+	 * isFormVisible is used to conditionally show/hide the 
+	 * add new component form.
+	 * @param {objec} error 
+	 * @param {object} data 
+	 */
+	toggleAddNewAppForm(error, data) {
+		this.setState({
+			isFormVisible: data.value
+		})
+	}
+
+	/**
+	 * Sets isFormVisible to false in store to remove the form
+	 */
+	onAddNewAppFormAction() {
+		getStore().setValue({
+			field: 'isFormVisible',
+			value: false
+		}, (error, data) => {
+			error && console.log('Failed to set isFormVisible to false')
+		})
 	}
 
 	openAppMarket() {
@@ -42,19 +75,16 @@ class AppLauncher extends React.Component {
 		);
 	}
 
-	openAdHoc() {
-		FSBL.Clients.DialogManager.open("AdhocComponentForm", {}, () => {
-			//TODO: Do something here to add the new app to the launcher
-		});
-	}
-
 	render() {
 		return (
 			<FinsembleMenu className="app-launcher-menu">
 				<div className="app-launcher">
 					<div className="complex-menu-wrapper">
-						<LeftNav openAppMarket={this.openAppMarket} openAdHoc={this.openAdHoc} />
+						<LeftNav openAppMarket={this.openAppMarket} />
 						<Content />
+						{this.state.isFormVisible &&
+							<AddNewAppForm onDone={this.onAddNewAppFormAction} />
+						}
 					</div>
 				</div>
 			</FinsembleMenu>

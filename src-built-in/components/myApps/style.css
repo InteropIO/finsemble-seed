@@ -214,6 +214,7 @@ img {
     padding: .75em .75em .75em 0;
     align-content: flex-start;
     background-color: var(--appMenu-background-color);
+    overflow-y: auto;
 }
 
 .folder-actions-menu-wrapper {
@@ -273,9 +274,9 @@ img {
     border-radius: 3px;
 }
 
-/* .ff-edit {
-    align-self: flex-start;
-} */
+.folder-action-icons .ff-edit:hover {
+    color: var(--appMenu-edit-icon-hover-color);
+}
 
 /* ::-webkit-scrollbar {
     width: 5px;
@@ -385,7 +386,8 @@ select:focus, option:focus {
 
   .filter-sort {
 	width: 100%;
-	margin-bottom: 10px;
+    margin-bottom: 10px;
+    position: relative;
 }
 .sort {
     font-size: 11px;
@@ -469,4 +471,16 @@ select:focus, option:focus {
 .tag-name.highlight {
     text-decoration: underline;
     cursor: pointer;
+}
+
+.add-app-form {
+    background: rgba(13, 17, 19, .9);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.add-app-form form {
+    padding: 20px;
 }

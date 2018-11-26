@@ -4,11 +4,13 @@ let ToolbarStore;
 
 export default {
 	initialize,
+	addApp,
 	addNewFolder,
 	addAppToFolder,
 	removeAppFromFolder,
 	renameFolder,
 	deleteFolder,
+	deleteApp,
 	deleteTag,
 	reorderFolders,
 	getFolders,
@@ -18,6 +20,7 @@ export default {
 	getSingleFolder,
 	getAllAppsTags,
 	getAllApps,
+	getFormStatus,
 	getSearchText,
 	getSortBy,
 	addTag,
@@ -38,12 +41,14 @@ function initialize(callback) {
 	data.activeFolder = store.values.activeFolder
 	data.filterText = store.values.filterText
 	data.sortBy = store.values.sortBy
+	data.isFormVisible = store.values.isFormVisible
 
 	// Add listeners to keep our copy up to date
 	store.addListener({ field: 'appFolders.folders' }, (err, dt) => data.folders = dt.value)
 	store.addListener({ field: 'appFolders.list' }, (err, dt) => data.foldersList = dt.value)
 	store.addListener({ field: 'appDefinitions' }, (err, dt) => data.apps = dt.value)
 	store.addListener({ field: 'activeFolder' }, (err, dt) => data.activeFolder = dt.value)
+	store.addListener({ field: 'isFormVisible' }, (err, dt) => data.isFormVisible = dt.value)
 	store.addListener({ field: 'sortBy' }, (err, dt) => data.sortBy = dt.value)
 	store.addListener({ field: 'tags' }, (err, dt) => data.tags = dt.value)
 	getToolbarStore(callback || Function.prototype);
@@ -76,13 +81,15 @@ function _setFolders(cb = Function.prototype) {
 	})
 }
 
-function _setValue(field, value) {
+function _setValue(field, value, cb) {
 	getStore().setValue({
 		field: field,
 		value: value
 	}, (error, data) => {
 		if (error) {
 			console.log('Failed to save. ', field)
+		} else {
+			cb && cb()
 		}
 	})
 }
@@ -134,6 +141,7 @@ function addPin(pin) {
 			ToolbarStore.setValue({ field: 'pins.' + pin.name.replace(/[.]/g, "^DOT^"), value: thePin });
 		}
 	});
+
 }
 
 function removePin(pin) {
@@ -152,6 +160,10 @@ function getAllApps() {
 	return data.apps
 }
 
+function getFormStatus() {
+	return data.isFormVisible
+}
+
 function getSingleFolder(folderName) {
 	return data.folders[folderName]
 }
@@ -166,6 +178,54 @@ function reorderFolders(destIndex, srcIndex) {
     ]
 	_setValue('appFolders.list', data.foldersList)
 	return data.foldersList
+}
+
+function addApp(app = {}, cb) {
+	const appID = (new Date()).getTime()
+	const folder = data.activeFolder
+	data.apps[appID] = {
+		appID,
+		tags: app.tags.split(","),
+		name: app.name,
+		url: app.url,
+		type: "component"
+	}
+	data.folders[MY_APPS].apps[appID] = data.apps[appID]
+	data.folders[folder].apps[appID] = data.apps[appID]
+	FSBL.Clients.LauncherClient.addUserDefinedComponent(data.apps[appID], (compAddErr) => {
+		if (compAddErr) {
+			//TODO: We need to handle the error here. If the component failed to add, we should probably fall back and not add to launcher
+			console.warn("Failed to add new app");
+			return;
+		}
+		// Save appDefinitions and then folders
+		_setValue('appDefinitions', data.apps, () => {
+			_setFolders()
+			cb && cb()
+		})
+	});
+}
+
+function deleteApp(appID) {
+	ToolbarStore.removeValue({ field: 'pins.' + data.apps[appID].name.replace(/[.]/g, "^DOT^") }, (err, res) => {
+		if (err) {
+			//TODO: Need to gracefully handle this error. If the pin can't be removed, the app shouldn't either
+			console.warn("Error removing pin for deleted app");
+			return
+		}
+		// Delete app from any folder that has it
+		for(const key in data.folders) {
+			if(data.folders[key].apps[appID]) {
+				delete data.folders[key].apps[appID]
+			}
+		}
+		// Delete app from the apps list
+		delete data.apps[appID]
+		// Save appDefinitions and then folders
+		_setValue('appDefinitions', data.apps, () => {
+			_setFolders()
+		})
+	});
 }
 
 function addNewFolder(name) {
