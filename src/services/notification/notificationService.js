@@ -41,6 +41,7 @@ function notificationService() {
 	let maxNotificationsToShow = DEFAULT_MAX_NOTIFICATIONS_TO_SHOW;
 	//TODO: add a user preference setting and default for which monitor to show notifications on
 
+
 	const alertOnceSinceStartUp = {};
 	const alertCurrentCount = {};
 	let defaultIconURL = null;
@@ -101,7 +102,7 @@ function notificationService() {
 			.toString(16)
 			.substring(1);
 		}
-		return s4() + s4() + '-' + s4();// + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+		return s4() + s4() + '-' + s4();// + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4(); //Crippled GUID formula as the notificaiotn ids were too long
 	}
 
 	
@@ -154,7 +155,7 @@ function notificationService() {
 		const duration = params.duration || 1000 * 60 * 60 * 24;
 		//assign a unique id to each notification
 		const key = "alert." + identifier;
-		const guid = self.guid();
+		const guid = self.guid();  
 		const id = `notification.${guid}`;
 		
 		let alertUser = false;
@@ -226,30 +227,6 @@ function notificationService() {
 			//add notification to array of displayed notifications
 			let len = notificationsDisplayed.unshift(theNotification);
 
-			//Do this first as the notification takes a few secs to show up (stays hidden until rendered)
-			LauncherClient.spawn("notification",
-				{
-					name: theNotification.id,
-					monitor: 0, //TODO: just spawned on primary monitor, could be user preference controlled
-					right: 0,
-					bottom: 0,
-					height: notificationHeight,
-					width: notificationWidth,
-					addToWorkspace: false,
-					data: {
-						notification_id: id,
-						message: message,
-						iconURL: iconURL,
-						params: params
-					}
-				}, function(err, response){
-					if (err) {
-						logger.error(`Failed to spawn notification, err: ${JSON.stringify(err, undefined, 2)}`);
-					} 
-					cb(err, theNotification);
-				}
-			);
-
 			//close any notification that will fall off end of display list
 			if(len > maxNotificationsToShow) {
 				RouterClient.transmit(notificationsDisplayed[maxNotificationsToShow].id+".close", {});
@@ -276,12 +253,34 @@ function notificationService() {
 			}
 
 			
+			
+			LauncherClient.spawn("notification",
+				{
+					name: theNotification.id,
+					monitor: 0, //TODO: just spawned on primary monitor, could be user preference controlled
+					right: 0,
+					bottom: 0,
+					height: notificationHeight,
+					width: notificationWidth,
+					addToWorkspace: false,
+					data: {
+						notification_id: id,
+						message: message,
+						iconURL: iconURL,
+						params: params
+					}
+				}, function(err, response){
+					if (err) {
+						logger.error(`Failed to spawn notification, err: ${JSON.stringify(err, undefined, 2)}`);
+					} 
+					//setup a timer to auto-dismiss the notification
+					setTimeout(function( ) { self.dismissNotification(id); }, duration);
 
-			//setup a timer to auto-dismiss the notification
-			setTimeout(function( ) {self.dismissNotification(id); }, duration);
-
-			//update pub/sub for notification counts
-			RouterClient.publish(COUNTS_PUBSUB_TOPIC, this.getNotificationCounts());
+					//update pub/sub for notification counts
+					RouterClient.publish(COUNTS_PUBSUB_TOPIC, this.getNotificationCounts());
+					cb(err, theNotification);
+				}
+			);
 
 		} else {
 			//just return the non-displayed notification
