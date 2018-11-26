@@ -28,7 +28,7 @@ export default class Canvas extends Component {
     }
     componentDidMount = () => {
         try {
-            var myLayout = new GoldenLayout(this.state.config)
+            var myLayout = new GoldenLayout(this.state.config, document.getElementById('layoutContainer'))
             myLayout.init();
         } catch (e) {
             console.log('error right here:', e)
@@ -77,8 +77,8 @@ export default class Canvas extends Component {
 
     render() {
         return (
-            <div onDrop={this.onDrop} >
-                hello
+            <div onDrop={this.onDrop} id="layoutContainer" style={{ width: "100vw", height: "100vh" }}>
+
             </div >
         )
     }

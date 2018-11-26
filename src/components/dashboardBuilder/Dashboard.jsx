@@ -57,7 +57,7 @@ export default class Dashboard extends React.Component {
                             <input type="text" placeholder="filter" className="filterText" onChange={this.handleChange} id="filterText" />
                         </div>
                         <hr className="line" />
-                        <div className="draggables-div">
+                        <div className="draggables-div" id="layoutContainer">
                             {this.getDraggables()}
                         </div>
                     </div>
