@@ -2,63 +2,263 @@
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
-
 import React from "react";
-import ReactDOM from "react-dom";
-//Finsemble font-icons, general styling, and specific styling.
-import "../../../../assets/css/font-finance.css";
-import "../../../../assets/css/finsemble.css";
-import "../appCatalog.css";
-import ComplexMenu from "../../complexMenu/ComplexMenu";
-import AppContent from "./components/AppContent";
+import ReactDOM from 'react-dom';
 
+//components
+import SearchBar from './components/SearchBar';
+import Home from './components/Home';
+import AppResults from './components/AppResults';
+import AppShowcase from './components/Showcase/AppShowcase';
 
-/**
- * This is our application launcher. It is opened from a button in our sample toolbar, and it handles the launching of finsemble components.
- *
- * @class AppLauncher
- * @extends {React.Component}
- */
-class AppCatalog extends React.Component {
+//data
+import { createStore, getStore } from './stores/appStore';
+import storeActions from './stores/storeActions';
+
+//style
+import '../appCatalog.css';
+
+export default class AppMarket extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			loaded: false,
-			headerImgUrl: ""
+			apps: [],
+			filteredApps: [],
+			installed: [],
+			tags: [],
+			activeTags: [],
+			activeApp: null,
+			forceSearch: false,
+			installationActionTaken: null
 		};
+		this.bindCorrectContext();
 	}
-	componentWillMount() {
-		FSBL.Clients.ConfigClient.getValues(null, (err, config) => {
-			if (config.startup_app && config.startup_app.applicationIcon) {
-				//console.log("config.startup_app.applicationIcon", config.startup_app.applicationIcon)
-				this.setState({
-					loaded: true,
-					// headerImgUrl: config.startup_app.applicationIcon
-				});
+	bindCorrectContext() {
+		this.filteringApps = this.filteringApps.bind(this);
+		this.goHome = this.goHome.bind(this);
+		this.addTag = this.addTag.bind(this);
+		this.removeTag = this.removeTag.bind(this);
+		this.changeSearch = this.changeSearch.bind(this);
+		this.openAppShowcase = this.openAppShowcase.bind(this);
+		this.installedAppsChanged = this.installedAppsChanged.bind(this);
+		this.stopShowingInstalledNotification = this.stopShowingInstalledNotification.bind(this);
+		this.compileAddedInfo = this.compileAddedInfo.bind(this);
+		this.getPageContents = this.getPageContents.bind(this);
+		this.determineActivePage = this.determineActivePage.bind(this);
+		this.navigateToShowcase = this.navigateToShowcase.bind(this);
+		this.viewApp = this.viewApp.bind(this);
+	}
+	async componentDidMount() {
+		this.setState({
+			tags: await storeActions.getTags(),
+			apps: await storeActions.getApps()
+		});
+		getStore().addListener({ field: 'installed' }, this.installedAppsChanged);
+		getStore().addListener({ field: 'filteredApps' }, this.filteringApps);
+		getStore().addListener({ field: 'activeApp' }, this.openAppShowcase);
+		// Get notified when user wants to view an app
+		FSBL.Clients.RouterClient.addListener("viewApp", this.viewApp)
+	}
+	componentWillUnmount() {
+		getStore().removeListener({ field: 'filteredApps' }, this.filteringApps);
+		getStore().removeListener({ field: 'installed' }, this.installedAppsChanged);
+		getStore().removeListener({ field: 'activeApp' }, this.openAppShowcase);
+		// Get notified when user wants to view an app
+		FSBL.Clients.RouterClient.removeListener("viewApp", this.viewApp)
+	}
+
+	viewApp(error, event) {
+		!error && this.navigateToShowcase(event.data.app.appID)
+	}
+	/**
+	 * The store has pushed an update to the filtered tags list. This means a user has begun searching or added tags to the filter list
+	 */
+	filteringApps() {
+		let apps = storeActions.getFilteredApps();
+		let tags = storeActions.getActiveTags();
+
+		this.setState({
+			filteredApps: apps,
+			activeTags: tags,
+			activeApp: null
+		});
+	}
+	/**
+	 * Determines the apps page based on the state of the activeTags, search text, etc
+	 */
+	determineActivePage() {
+		let { activeApp, filteredApps, activeTags, forceSearch } = this.state;
+		let page;
+
+		if (activeApp) {
+			page =  "showcase"
+		} else if (filteredApps.length > 0 || forceSearch) {
+			page =  "appSearch";
+		} else if (filteredApps.length === 0 && activeTags.length === 0) {
+			page =  "home";
+		}
+
+		return page;
+	}
+	/**
+	 * Calls the store to add a tag to the activeTag list. Also updates the app view to switch to the AppResults page (since adding a tag implies filtering has begun)
+	 * @param {string} tag The name of the tag to add
+	 */
+	addTag(tag) {
+		storeActions.addTag(tag);
+	}
+	/**
+	 * Calls the store to remove a tag from the activeTag list. Also updates the app view to switch to the homepage if all tags have been removed
+	 * @param {string} tag The name of the tag to add
+	 */
+	removeTag(tag) {
+		storeActions.removeTag(tag);
+	}
+	/**
+	 * Action to take when the back button is clicked (which just goes home)
+	 */
+	goHome() {
+		storeActions.clearTags();
+		storeActions.clearFilteredApps();
+		storeActions.clearApp();
+		this.setState({
+			activeApp: null,
+			forceSearch: false
+		});
+	}
+	/**
+	 * Performs a search through the catalog
+	 * @param {string} search The text to search the catalog with
+	 */
+	changeSearch(search) {
+		storeActions.clearFilteredApps();
+		this.setState({
+			forceSearch: (search !== "")
+		}, () => {
+			if (search !== "") storeActions.searchApps(search);
+		});
+	}
+	installedAppsChanged() {
+		let action;
+		if (this.state.installed.length === storeActions.getInstalledApps().length) {
+			//If the components installed apps is greater than that of the store, that means an app was removed
+			action = "remove";
+		} else if (this.state.installed.length < storeActions.getInstalledApps().length) {
+			//If the component's installed apps is less than that of the store, that means an app was added
+			action = "add";
+		}
+
+		if (action) {
+			this.setState({
+				installationActionTaken: action,
+				installed: storeActions.getInstalledApps()
+			}, () => {
+				setTimeout(this.stopShowingInstalledNotification, 3000);
+			});
+		}
+	}
+	/**
+	 * When the notification for isntalling/removing an app is shown a timeout is set to call this function to cease showing the notification
+	 */
+	stopShowingInstalledNotification() {
+		let activeApp = storeActions.getActiveApp();
+		this.setState({
+			installationActionTaken: null,
+			activeApp
+		});
+	}
+	navigateToShowcase(id) {
+		storeActions.openApp(id)
+	}
+	/**
+	 * Opens the AppShowcase page for the app supplied
+	 */
+	openAppShowcase() {
+		let app = storeActions.getActiveApp();
+		if (app) {
+			storeActions.clearTags();
+			storeActions.clearFilteredApps();
+			this.setState({
+				activeApp: app,
+				forceSearch: false
+			});
+		}
+	}
+	/**
+	 * Compiles a list of apps that are installed from the information recieved back from appd
+	 * and the information contained on the system
+	 * TODO: This is temporary. It will change when there is actually a way to know from launcher what apps are installed, and which are not
+	 * @param {boolean} filtered If true, uses the filtered apps array. Otherwise uses all apps
+	 */
+	compileAddedInfo(filtered) {
+		let { installed, forceSearch } = this.state;
+		let apps;
+		if (filtered || forceSearch) {
+			apps = this.state.filteredApps;
+		} else {
+			apps = this.state.apps;
+		}
+
+		apps = apps.map((app) => {
+			for (let i = 0; i < installed.length; i++) {
+				if (installed.includes(app.appId)) {
+					app.installed = true;
+				} else {
+					app.installed = false;
+				}
 			}
-		})
-		this.setState({ activeSection: this.props && this.props.activeSection ? this.props.activeSection : '' })//Props did not exist in the contructor
+			return app;
+		});
+		return apps;
+	}
+	getPageContents() {
+		let { filteredApps, activeTags } = this.state;
+		let activePage = this.determineActivePage();
+		let apps = this.compileAddedInfo((filteredApps.length > 0));
+
+		//Force default case if activepage isn't search and apps.length is 0
+		if (apps.length === 0 && activePage !== 'appSearch') activePage = -1;
+
+		switch (activePage) {
+			case "home":
+				return (
+					<Home cards={apps} seeMore={this.addTag} addApp={this.addApp} removeApp={this.removeApp} addTag={this.addTag} viewAppShowcase={this.navigateToShowcase} />
+				);
+			case "appSearch":
+				return (
+					<AppResults cards={apps} tags={activeTags} addApp={this.addApp} removeApp={this.removeApp} viewAppShowcase={this.navigateToShowcase} addTag={this.addTag} />
+				);
+			case "showcase":
+				return (
+					<AppShowcase app={this.state.activeApp} addApp={this.addApp} removeApp={this.removeApp} addTag={this.addTag} />
+				);
+			default:
+				return (
+					<div></div>
+				);
+		}
 	}
 	render() {
-		var self = this;
-		if (!this.state.loaded) return null;
+
+		let { tags, activeTags } = this.state;
+		let page = this.determineActivePage();
+		let pageContents = this.getPageContents();
+
 		return (
-			<ComplexMenu headerImgUrl={this.state.headerImgUrl} title="App Catalog" activeSection="Apps" navOptions={[{
-				label: "Apps",
-				content: <AppContent installed={true} />
-			}]} />
+			<div>
+				<SearchBar backButton={page !== "home"} tags={tags} activeTags={activeTags} tagSelected={this.addTag} removeTag={this.removeTag} goHome={this.goHome} installationActionTaken={this.state.installationActionTaken} search={this.changeSearch} isViewingApp={this.state.activeApp !== null} />
+				<div className="market_content">
+					{pageContents}
+				</div>
+			</div>
 		);
 	}
 }
 
-if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
-function FSBLReady() {
-	//console.log("App Catalog app onReady");
-	FSBL.Clients.WindowClient.finsembleWindow.updateOptions({ alwaysOnTop: true });
-	FSBL.Clients.DialogManager.showModal();
-	//FSBL.Clients.WindowClient.finsembleWindow.addEventListener("shown", FSBL.Clients.DialogManager.showModal);
-
-	ReactDOM.render(
-		<AppCatalog />
-		, document.getElementById("bodyHere"));
-}
+FSBL.addEventListener('onReady', function () {
+	createStore((store) => {
+		ReactDOM.render(
+			<AppMarket />,
+			document.getElementById('bodyHere'));
+	});
+});

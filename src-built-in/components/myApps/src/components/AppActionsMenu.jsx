@@ -6,7 +6,7 @@
 
 import React from 'react'
 import storeActions from '../stores/StoreActions'
-import {default as catalogActions} from '../../../appCatalog2/src/stores/storeActions';
+import { default as catalogActions } from '../../../appCatalog/src/stores/storeActions';
 
 const MY_APPS = 'My Apps'
 const FAVORITES = 'Favorites'
@@ -76,7 +76,7 @@ export default class AppActionsMenu extends React.Component {
 		this.toggleMenu();
 		FSBL.Clients.LauncherClient.showWindow(
 			{
-				componentType: "App Catalog 2"
+				componentType: "App Catalog"
 			},
 			{
 				monitor: "mine",
