@@ -8,6 +8,7 @@ const envOrArg = require('./envOrArg');
 const launchApplication = require('./launchApplication');
 const startServer = require("./startServer");
 const startupConfig = require("../configs/other/server-environment-startup");
+const path = require('path');
 
 const pre = done => {
     verifyLinks(requiredFinsembleLinks, done);
@@ -19,10 +20,12 @@ const post = err => {
     }
 }
 const clean = cleanPath => {
-    del(cleanPath, { force: true });
-    del(".babel_cache", { force: true });
-    del(path.join(__dirname, "build/webpack/vendor-manifest.json"), { force: true });
-    del(".webpack-file-cache", { force: true });
+	return Promise.all([
+		del(cleanPath, { force: true }),
+		del(".babel_cache", { force: true }),
+		del(path.join(__dirname, "build/webpack/vendor-manifest.json"), { force: true }),
+    del(".webpack-file-cache", { force: true }),
+	]);
 };
 const build = async environment => {
     process.env.NODE_ENV = environment || 'development';
