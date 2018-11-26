@@ -33,9 +33,9 @@
 				}
 			}
 		},
-		"App Launcher 2": {
+		"My Apps": {
 			"window": {
-				"url": "$applicationRoot/components/appLauncher2/index.html",
+				"url": "$applicationRoot/components/myApps/index.html",
 				"top": 0,
 				"left": 0,
 				"width": 600,
@@ -60,7 +60,8 @@
 				"components": {
 					"Window Manager": {
 						"persistWindowState": false,
-						"FSBLHeader": false
+						"FSBLHeader": false,
+						"title": "My Apps"
 					}
 				}
 			}
@@ -626,45 +627,6 @@
 				}
 			}
 		},
-		"App Catalog": {
-			"window": {
-				"url": "$applicationRoot/components/appCatalog/appCatalog.html",
-				"frame": false,
-				"top": "center",
-				"left": "center",
-				"width": 800,
-				"height": 600,
-				"options": {
-					"autoShow": true,
-					"resizable": false,
-					"alwaysOnTop": true
-				}
-			},
-			"component": {
-				"category": "system"
-			},
-			"foreign": {
-				"services": {
-					"dockingService": {
-						"canGroup": false,
-						"isArrangable": false,
-						"shouldRegister": false
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"launchableByUser": false
-					},
-					"Window Manager": {
-						"FSBLHeader": false,
-						"persistWindowState": false
-					},
-					"Toolbar": {
-						"iconClass": "UserPreferences"
-					}
-				}
-			}
-		},
 		"Floating Titlebar": {
 			"window": {
 				"url": "$applicationRoot/components/floatingTitlebar/floatingTitlebar.html",
@@ -736,9 +698,9 @@
 				}
 			}
 		},
-		"App Catalog 2": {
+		"App Catalog": {
 			"window": {
-				"url": "$applicationRoot/components/appCatalog2/appCatalog.html",
+				"url": "$applicationRoot/components/appCatalog/appCatalog.html",
 				"width": 600,
 				"height": 700,
 				"options": {
