@@ -195,6 +195,8 @@ function addApp(app = {}, cb) {
 	FSBL.Clients.LauncherClient.addUserDefinedComponent(data.apps[appID], (compAddErr) => {
 		if (compAddErr) {
 			//TODO: We need to handle the error here. If the component failed to add, we should probably fall back and not add to launcher
+			console.warn("Failed to add new app");
+			return;
 		}
 		// Save appDefinitions and then folders
 		_setValue('appDefinitions', data.apps, () => {
@@ -205,18 +207,25 @@ function addApp(app = {}, cb) {
 }
 
 function deleteApp(appID) {
-	// Delete app from any folder that has it
-	for(const key in data.folders) {
-		if(data.folders[key].apps[appID]) {
-			delete data.folders[key].apps[appID]
+	ToolbarStore.removeValue({ field: 'pins.' + data.apps[appID].name.replace(/[.]/g, "^DOT^") }, (err, res) => {
+		if (err) {
+			//TODO: Need to gracefully handle this error. If the pin can't be removed, the app shouldn't either
+			console.warn("Error removing pin for deleted app");
+			return
 		}
-	}
-	// Delete app from the apps list
-	delete data.apps[appID]
-	// Save appDefinitions and then folders
-	_setValue('appDefinitions', data.apps, () => {
-		_setFolders()
-	})
+		// Delete app from any folder that has it
+		for(const key in data.folders) {
+			if(data.folders[key].apps[appID]) {
+				delete data.folders[key].apps[appID]
+			}
+		}
+		// Delete app from the apps list
+		delete data.apps[appID]
+		// Save appDefinitions and then folders
+		_setValue('appDefinitions', data.apps, () => {
+			_setFolders()
+		})
+	});
 }
 
 function addNewFolder(name) {
