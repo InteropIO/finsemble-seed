@@ -34,18 +34,16 @@ export default class Canvas extends Component {
             console.log('error right here:', e)
         }
         myLayout.on('stateChanged', () => {
-            var GLState = myLayout.toConfig();
+            let GLState = myLayout.toConfig();
+            console.log(GLState)
             this.setState({ GLState });
         });
         this.setState({ myLayout })
         FSBL.Clients.RouterClient.addListener("Save", function (error, response) {
             if (error) {
-
                 console.log("Save Error: " + (error));
             } else {
                 FSBL.Clients.WindowClient.setWindowTitle(`${response.data['DName']}`);
-
-                console.log("Save Response: " + (response.data['DName']));
             }
         });
 

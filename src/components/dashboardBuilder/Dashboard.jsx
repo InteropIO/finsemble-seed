@@ -41,7 +41,7 @@ export default class Dashboard extends React.Component {
     }
     handleClick = (event) => {
         if (event.target.id == "cancelButton") {
-                //Need guidance on what to do here.
+            //Need guidance on what to do here.
         }
         else {
             FSBL.Clients.RouterClient.transmit("Save", { "DName": this.state.Dname });
@@ -57,7 +57,7 @@ export default class Dashboard extends React.Component {
                             <input type="text" placeholder="filter" className="filterText" onChange={this.handleChange} id="filterText" />
                         </div>
                         <hr className="line" />
-                        <div>
+                        <div className="draggables-div">
                             {this.getDraggables()}
                         </div>
                     </div>

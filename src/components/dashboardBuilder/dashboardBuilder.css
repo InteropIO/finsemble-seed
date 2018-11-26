@@ -52,6 +52,7 @@ body {
 	}
 
 .saveAsBlock{
+	margin-top: 25px;
 	margin-left: 5%;
 	height:auto;
 }
@@ -67,4 +68,21 @@ body {
 .saveButtons:hover{
 	background-color: var(--blue6);
 	transition: 1s;
+}
+
+.draggables-div{
+	overflow: auto;
+	position:absolute;
+	height: 80%;
+	width: 95%;
+
+}
+
+.draggables-div::-webkit-scrollbar {
+   width: 10px; 
+}
+
+.draggables-div::-webkit-scrollbar-thumb {
+  background-color: #7b98b3	;
+	border-radius: 10px;
 }
