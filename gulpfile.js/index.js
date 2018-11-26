@@ -77,6 +77,14 @@ const createTasks = async extensionsObject => {
 		startupConfig,
 	};
 
+	if (!process.env.NODE_ENV) {
+        process.env.NODE_ENV = 'development';
+	}
+	
+	if (!process.env.PORT) {
+        process.env.PORT = startupConfig[process.env.NODE_ENV].serverPort;
+    }
+
 	if (extensions) {
 		// This really ought to be returning a new object rather than modifying an existing one.
 		extensions(extensionsObject);

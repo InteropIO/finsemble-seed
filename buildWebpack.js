@@ -6,30 +6,42 @@ chalk.enabled = true;
 //setting the level to 1 will force color output.
 chalk.level = 1;
 const errorOutColor = chalk.hex("#FF667E");
-const configObjects = [
-    {
-        config: require("./build/webpack/webpack.adapters"),
-        name: 'adapters bundle',
+const configFunctions = [
+    () => {
+        return {
+            config: require("./build/webpack/webpack.adapters"),
+            name: 'adapters bundle',
+        }
     },
-    {
-        config: require("./build/webpack/webpack.vendor.js"),
-        name: 'vendor bundle',
+    () => {
+        return {
+            config: require("./build/webpack/webpack.vendor.js"),
+            name: 'vendor bundle',
+        }
     },
-    {
-        config: require("./build/webpack/webpack.preloads.js"),
-        name: 'preloads bundle',
+    () => {
+        return {
+            config: require("./build/webpack/webpack.preloads.js"),
+            name: 'preloads bundle',
+        }
     },
-    {
-        config: require("./build/webpack/webpack.titleBar.js"),
-        name: 'titleBar bundle',
+    () => {
+        return {
+            config: require("./build/webpack/webpack.titleBar.js"),
+            name: 'titleBar bundle',
+        }
     },
-    {
-        config: require("./build/webpack/webpack.services.js"),
-        name: 'services bundle',
+    () => {
+        return {
+            config: require("./build/webpack/webpack.services.js"),
+            name: 'services bundle',
+        }
     },
-    {
-        config: require("./build/webpack/webpack.components.js"),
-        name: 'components bundle',
+    () => {
+        return {
+            config: require("./build/webpack/webpack.components.js"),
+            name: 'components bundle',
+        }
     },
 ];
 
@@ -70,6 +82,6 @@ const checkWebpack = (err, stats, resolve, reject) => {
  */
 module.exports = async () => {
     logToTerminal(`Starting webpack. Environment:"${process.env.NODE_ENV}"`)
-    const configReducer = (promise, configObject) => promise.then(() => packFiles(configObject.config, configObject.name));
-    await configObjects.reduce(configReducer, Promise.resolve());
+    const configReducer = (promise, configFunction) => promise.then(() => packFiles(configFunction().config, configFunction().name));
+    await configFunctions.reduce(configReducer, Promise.resolve());
 };

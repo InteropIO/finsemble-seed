@@ -9,6 +9,7 @@ const launchApplication = require('./launchApplication');
 const startServer = require("./startServer");
 const startupConfig = require("../configs/other/server-environment-startup");
 const path = require('path');
+const distPath = path.join(__dirname, "dist");
 
 const pre = done => {
     verifyLinks(requiredFinsembleLinks, done);
@@ -23,7 +24,7 @@ const clean = cleanPath => {
 	return Promise.all([
 		del(cleanPath, { force: true }),
 		del(".babel_cache", { force: true }),
-		del(path.join(__dirname, "build/webpack/vendor-manifest.json"), { force: true }),
+		del(path.join(__dirname, "./build/webpack/vendor-manifest.json"), { force: true }),
     del(".webpack-file-cache", { force: true }),
 	]);
 };
@@ -34,9 +35,6 @@ const build = async environment => {
     await buildAngular();
 };
 const serve = async environment => {
-    if (!process.env.PORT) {
-        process.env.PORT = startupConfig[process.env.NODE_ENV].serverPort;
-    }
     process.env.NODE_ENV = environment || 'development';
     return startServer()
         .catch(err => {
@@ -73,11 +71,11 @@ const buildServeLaunch = async environment => {
     
 };
 const rebuildServeLaunch = environment => {
-    clean();
+    clean(distPath);
     return buildServeLaunch(environment);
 };
 const rebuild = async environment => {
-    clean();
+    clean(distPath);
     await build(environment);
 }
 const serveLaunch = async environment => {

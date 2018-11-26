@@ -2,7 +2,7 @@ const ON_DEATH = require("death")({ debug: false });
 const logToTerminal = require('./logToTerminal');
 const chalk = require('chalk');
 const errorOutColor = chalk.hex("#FF667E");
-const launchE20 = require('./launchE20');
+const launchE20 = require('./launchE2o');
 const { exec } = require("child_process");
 const openfinLauncher = require("openfin-launcher");
 
