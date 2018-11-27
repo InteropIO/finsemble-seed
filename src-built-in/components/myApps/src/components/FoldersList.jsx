@@ -30,14 +30,13 @@ export default class FoldersList extends React.Component {
 	onAppDrop(event, folder) {
 		event.preventDefault()
 		const app = JSON.parse(event.dataTransfer.getData('app'))
-		//TODO: When adding to favorite do more stuff?
-		if (folder.name === 'Favorites') {
-			console.info('Dropped app in favorites.')
-		}
 		// Do not do anything if its my apps or dashboards folder
 		if ([MY_APPS, DASHBOARDS].indexOf(folder) < 0) {
 			storeActions.addAppToFolder(folder, app);
-			storeActions.addPin(app);
+			if (folder === FAVORITES) {
+				//If favorites, then also pin
+				storeActions.addPin(app);
+			}
 		}
 	}
 
@@ -173,7 +172,7 @@ export default class FoldersList extends React.Component {
 					onChange={this.changeFolderName}
 					onKeyPress={this.keyPressed} className={this.state.isNameError ? "error" : ""} autoFocus /> : folderName
 
-			return <FinsembleDraggable isDragDisabled={dragDisabled.indexOf(folderName) > -1} 
+			return <FinsembleDraggable isDragDisabled={dragDisabled.indexOf(folderName) > -1}
 				draggableId={folderName}
 				key={index} index={index}>
 				<div onClick={(event) => this.onFolderClicked(event, folderName)}

@@ -96,11 +96,14 @@ function _setValue(field, value, cb) {
 
 function addPin(pin) {
 	//TODO: This logic may not work for dashboards. Might need to revisit.
+	console.log('pin: ', pin);
 	FSBL.Clients.LauncherClient.getComponentList((err, components) => {
 		let componentToToggle;
 		for (let i = 0; i < Object.keys(components).length; i++) {
 			let componentName = Object.keys(components)[i];
-			if (componentName === pin.name) {
+			//pin name "Welcome" will not be found in component list with "Welcome Component".
+			//Will check both for actual name, and for pin.name + Component against the list
+			if (componentName === pin.name || componentName === pin.name + " Component") {
 				componentToToggle = components[componentName];
 			}
 		}
