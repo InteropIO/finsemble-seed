@@ -3,7 +3,6 @@ body{
 	height: 100vh;
 	width: 100vw;
 	overflow-x: hidden
-	/* overflow: auto; */
 }
 #layoutContainer{
 	height: 100vh;

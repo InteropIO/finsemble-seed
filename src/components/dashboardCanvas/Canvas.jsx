@@ -1,6 +1,3 @@
-/***************************
-* UserList Component
-***************************/
 
 import React, { Component } from 'react'
 const DEFAULT_CONFIG = {
@@ -70,13 +67,10 @@ export default class Canvas extends Component {
             container.getElement().html('<h2>' + state.text + '</h2>');
         })
         this.state.myLayout.root.contentItems[0].addChild(newItemConfig)
-
     }
-
     render() {
         return (
             <div onDrop={this.onDrop} id="layoutContainer" >
-
             </div >
         )
     }

@@ -18,10 +18,6 @@ FSBL.addEventListener("onReady", function () {
 
 				await FSBL.Clients.LauncherClient.spawn("dashboardCanvas", canvasAttributes, (err, response) => { });
 			}
-
-			FSBL.addEventListener("onReady", () => {
-				// spawnCanvas();
-				FSBL.Clients.LauncherClient.spawn('dashboardCanvas')
-			});
+			FSBL.Clients.LauncherClient.spawn('dashboardCanvas')
 		})
 })

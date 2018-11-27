@@ -201,7 +201,8 @@
                     "Window Manager": {
                         "title": "dashboardBuilder",
                         "FSBLHeader": true,
-                        "persistWindowState": true
+                        "persistWindowState": true,
+                        "showTabs": false
                     },
                     "Toolbar": {
                         "iconClass": "dashboardBuilder"
@@ -238,7 +239,8 @@
                     "Window Manager": {
                         "title": "Dashboard Canvas",
                         "FSBLHeader": true,
-                        "persistWindowState": true
+                        "persistWindowState": true,
+                        "showTabs": false
                     },
                     "Toolbar": {
                         "iconClass": "dashboardCanvas"
@@ -274,7 +276,8 @@
                     "Window Manager": {
                         "title": "dragDrop",
                         "FSBLHeader": true,
-                        "persistWindowState": true
+                        "persistWindowState": true,
+                        "showTabs": false
                     },
                     "Toolbar": {
                         "iconClass": "dragDrop"
