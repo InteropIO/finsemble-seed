@@ -730,6 +730,7 @@
 							"hideMaximize": true
 						},
 						"persistWindowState": true,
+						"showTabs": false,
 						"title": "App Catalog"
 					}
 				}
