@@ -1,6 +1,6 @@
-const safeRequire = require('./gulpfile.js/safeRequire');
-const listableExecute = require('./gulpfile.js/listableExecute');
-const logToTerminal = require('./gulpfile.js/logToTerminal');
+const safeRequire = require('../gulpfile.js/safeRequire');
+const listableExecute = require('../gulpfile.js/listableExecute');
+const logToTerminal = require('../gulpfile.js/logToTerminal');
 
 const processComponent = (component) => {
     const name = component.source.split("/").pop();
@@ -13,7 +13,7 @@ const processComponent = (component) => {
     }
 }
 module.exports = async () => {
-    const angularComponents = await safeRequire("./build/angular-components.json");
+    const angularComponents = await safeRequire("./angular-components.json");
     if (!angularComponents) {
         logToTerminal("No Angular component configuration found", "yellow");
         return;

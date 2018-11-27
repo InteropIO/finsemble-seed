@@ -1,6 +1,6 @@
 const webpack = require("webpack");
 const prettyHrtime = require("pretty-hrtime");
-const logToTerminal = require('./gulpfile.js/logToTerminal');
+const logToTerminal = require('../gulpfile.js/logToTerminal');
 const chalk = require("chalk");
 chalk.enabled = true;
 //setting the level to 1 will force color output.
@@ -9,37 +9,37 @@ const errorOutColor = chalk.hex("#FF667E");
 const configFunctions = [
     () => {
         return {
-            config: require("./build/webpack/webpack.adapters"),
+            config: require("./webpack/webpack.adapters"),
             name: 'adapters bundle',
         }
     },
     () => {
         return {
-            config: require("./build/webpack/webpack.vendor.js"),
+            config: require("./webpack/webpack.vendor.js"),
             name: 'vendor bundle',
         }
     },
     () => {
         return {
-            config: require("./build/webpack/webpack.preloads.js"),
+            config: require("./webpack/webpack.preloads.js"),
             name: 'preloads bundle',
         }
     },
     () => {
         return {
-            config: require("./build/webpack/webpack.titleBar.js"),
+            config: require("./webpack/webpack.titleBar.js"),
             name: 'titleBar bundle',
         }
     },
     () => {
         return {
-            config: require("./build/webpack/webpack.services.js"),
+            config: require("./webpack/webpack.services.js"),
             name: 'services bundle',
         }
     },
     () => {
         return {
-            config: require("./build/webpack/webpack.components.js"),
+            config: require("./webpack/webpack.components.js"),
             name: 'components bundle',
         }
     },
