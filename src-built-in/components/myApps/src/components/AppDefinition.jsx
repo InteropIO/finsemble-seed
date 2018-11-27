@@ -3,6 +3,8 @@ import AppActionsMenu from './AppActionsMenu'
 import AppTagsList from './AppTagsList'
 import storeActions from '../stores/StoreActions'
 
+const MY_APPS = 'My Apps'
+
 /**
  * Used to make sure that a user is not waiting for component
  * to spawn after a double click, helps us prevent multiple
@@ -18,7 +20,8 @@ export default class AppDefinition extends React.Component {
 			favorites: []
 		}
 		this.onDragToFolder = this.onDragToFolder.bind(this)
-		this.onItemClick = this.onItemClick.bind(this);
+		this.onItemClick = this.onItemClick.bind(this)
+		this.removeApp = this.removeApp.bind(this)
 	}
 
 	/**
@@ -46,11 +49,22 @@ export default class AppDefinition extends React.Component {
 		let favorites = Object.keys(storeActions.getSingleFolder('Favorites').apps);
 		return favorites.indexOf(this.props.app.appID) > -1
 	}
+	/**
+	 * Removes an app from selected folder as long as it is not My Apps
+	 * Called on right click only.
+	 */
+	removeApp() {
+		const folderName = storeActions.getActiveFolderName()
+		// Do nothing if we are on My Apps folder
+		if(folderName === MY_APPS) return
+		// Otherwise remvoe the app from folder
+		storeActions.removeAppFromFolder(folderName, this.props.app)
+	}
 
 	render() {
 		const app = this.props.app
 		return (
-			<div onClick={this.onItemClick} className="app-item" draggable="true" onDragStart={this.onDragToFolder}>
+			<div onContextMenu={this.removeApp} onClick={this.onItemClick} className="app-item" draggable="true" onDragStart={this.onDragToFolder}>
 				<span className="app-item-title">
 					{app.icon !== undefined ? <i className={app.icon}></i> : null}
 					{app.name} {this.isFavorite() && <i className='ff-favorite'></i>}

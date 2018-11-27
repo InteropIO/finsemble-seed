@@ -228,7 +228,11 @@ function addAppToFolder(folderName, app) {
 	}
 	_setFolders()
 }
-
+/**
+ * Deletes an app from a folder
+ * @param {string} folderName The folder name
+ * @param {object} app The app object
+ */
 function removeAppFromFolder(folderName, app) {
 	delete data.folders[folderName].apps[app.appID];
 	_setFolders()
