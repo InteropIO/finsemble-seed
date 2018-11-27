@@ -100,7 +100,9 @@ function addPin(pin) {
 		let componentToToggle;
 		for (let i = 0; i < Object.keys(components).length; i++) {
 			let componentName = Object.keys(components)[i];
-			if (componentName === pin.name) {
+			//pin name "Welcome" will not be found in component list with "Welcome Component".
+			//Will check both for actual name, and for pin.name + Component against the list
+			if (componentName === pin.name || componentName === pin.name + " Component") {
 				componentToToggle = components[componentName];
 			}
 		}
