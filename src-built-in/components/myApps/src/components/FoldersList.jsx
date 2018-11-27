@@ -3,6 +3,7 @@ import AddNewFolder from './AddNewFolder'
 import storeActions from '../stores/StoreActions'
 import { getStore } from '../stores/LauncherStore'
 import { FinsembleDraggable, FinsembleDialog } from '@chartiq/finsemble-react-controls'
+import effects from '../utils/effects'
 
 const MY_APPS = 'My Apps'
 const DASHBOARDS = 'Dashboards'
@@ -29,9 +30,10 @@ export default class FoldersList extends React.Component {
 
 	onAppDrop(event, folder) {
 		event.preventDefault()
+		effects.animateFolder(event.target)
 		const app = JSON.parse(event.dataTransfer.getData('app'))
 		//TODO: When adding to favorite do more stuff?
-		if (folder.name === 'Favorites') {
+		if (folder.name === FAVORITES) {
 			console.info('Dropped app in favorites.')
 		}
 		// Do not do anything if its my apps or dashboards folder
