@@ -79,7 +79,7 @@ const createTasks = async extensionsObject => {
 	};
 
 	const environment = getFlag('--environment') || 'development';
-	const port = getFlag('--port');
+	const port = 1001 // getFlag('--port');
 
 	if (!process.env.NODE_ENV) {
         process.env.NODE_ENV = environment;
