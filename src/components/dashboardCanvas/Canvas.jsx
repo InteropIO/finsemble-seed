@@ -36,19 +36,7 @@ export default class Canvas extends Component {
             this.setState({ GLState });
         });
 
-        this.setState({ myLayout }, () => {
-            FSBL.Clients.StorageClient.save({
-                key: "dashboardcreator-layout",
-                value: this.state.myLayout
-            }, (err, response) => {
-                if (err)
-                    console.error('error is right here:\n\n\n\n', err)
-                else {
-                    FSBL.Clients.RouterClient.transmit("Updated")
-                }
-            })
-
-        })
+        this.setState({ myLayout })
         FSBL.Clients.RouterClient.addListener("Save", function (error, response) {
             if (error) {
                 console.log("Save Error: " + (error));

@@ -14,8 +14,6 @@ export default class Dashboard extends React.Component {
         }
     }
     createDrags = () => {
-        console.log("is this working?")
-        console.log('here i am as well')
         FSBL.Clients.StorageClient.get({ key: "dashboardcreator-layout" }, (err, response) => {
             this.state.items.forEach((value, index) => {
                 var newItemConfig = {
@@ -23,7 +21,6 @@ export default class Dashboard extends React.Component {
                     componentName: 'example',
                     componentState: { text: "hello" }
                 }
-                console.log('myLayout:', response)
                 response.createDragSource(document.getElementById(value), newItemConfig);
             })
 
@@ -79,17 +76,7 @@ export default class Dashboard extends React.Component {
         }
     }
     render() {
-        FSBL.Clients.RouterClient.addListener("Updated", (error, response) => {
-            console.log('here i am updating')
-            // if (error) {
-            //     console.log("Save Error: " + (error));
-            // } else {
-            //     console.log(this)
-            console.log('here')
-            this.createDrags()
-            console.log('here as well')
-            // }
-        });
+
         return (
             <div>
                 <div className="container">
