@@ -8,6 +8,7 @@ const gulp = require("gulp");
 const path = require("path");
 const extensions = fs.existsSync("./gulpfile-extensions.js") ? require("./gulpfile-extensions.js") : undefined;
 const startupConfig = require("../configs/other/server-environment-startup");
+const getFlag = require('./getFlag');
 
 const distPath = path.join(__dirname, "dist");
 const srcPath = path.join(__dirname, "src");
@@ -77,12 +78,15 @@ const createTasks = async extensionsObject => {
 		startupConfig,
 	};
 
+	const environment = getFlag('--environment') || 'development';
+	const port = getFlag('--port');
+
 	if (!process.env.NODE_ENV) {
-        process.env.NODE_ENV = 'development';
+        process.env.NODE_ENV = environment;
 	}
 	
 	if (!process.env.PORT) {
-        process.env.PORT = startupConfig[process.env.NODE_ENV].serverPort;
+        process.env.PORT = port || startupConfig[process.env.NODE_ENV].serverPort;
     }
 
 	if (extensions) {

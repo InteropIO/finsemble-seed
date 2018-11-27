@@ -46,7 +46,7 @@ const configFunctions = [
 ];
 
 const packFiles = async (config, bundleName) => {
-    const isRunningDevTask = process.argv[2].startsWith("dev");
+    const isRunningDevTask = process.argv[2].startsWith("dev") || process.argv.indexOf("--watch") !== -1;
     if (!config) {
         return;
     }
