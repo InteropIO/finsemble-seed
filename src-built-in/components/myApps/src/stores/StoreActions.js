@@ -96,7 +96,6 @@ function _setValue(field, value, cb) {
 
 function addPin(pin) {
 	//TODO: This logic may not work for dashboards. Might need to revisit.
-	console.log('pin: ', pin);
 	FSBL.Clients.LauncherClient.getComponentList((err, components) => {
 		let componentToToggle;
 		for (let i = 0; i < Object.keys(components).length; i++) {
