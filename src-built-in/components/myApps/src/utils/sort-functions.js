@@ -13,13 +13,14 @@ export default {
 	 * @todo We will implement this later once we have a 
 	 * way to detect when was the last time an app was launched
 	 */
-	Recent: (list) => {
+	/* Recent: (list) => {
 		// dummy sorting
 		// reverse the above
 		return list.sort((a, b) => {
 			return a.name < b.name
 		})
 	},
+	*/
 	/**
 	 * Sorts a list of application by Favorites.
 	 * It gets a list of apps from Favorites folder
