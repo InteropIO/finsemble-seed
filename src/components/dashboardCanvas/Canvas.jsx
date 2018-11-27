@@ -22,23 +22,33 @@ export default class Canvas extends Component {
             config: DEFAULT_CONFIG,
             myLayout: null,
             GLState: null,
-            name: null
+            name: null,
+            storageClient: null
         };
         this.onDrop = this.onDrop.bind(this);
     }
     componentDidMount = () => {
-        try {
-            var myLayout = new GoldenLayout(this.state.config, document.getElementById('layoutContainer'))
-            myLayout.init();
-        } catch (e) {
-            console.log('error right here:', e)
-        }
+        var myLayout = new GoldenLayout(this.state.config, document.getElementById('layoutContainer'))
+        this.setState({ myLayout })
+        myLayout.init();
         myLayout.on('stateChanged', () => {
             let GLState = myLayout.toConfig();
-            console.log(GLState)
             this.setState({ GLState });
         });
-        this.setState({ myLayout })
+
+        this.setState({ myLayout }, () => {
+            FSBL.Clients.StorageClient.save({
+                key: "dashboardcreator-layout",
+                value: this.state.myLayout
+            }, (err, response) => {
+                if (err)
+                    console.error('error is right here:\n\n\n\n', err)
+                else {
+                    FSBL.Clients.RouterClient.transmit("Updated")
+                }
+            })
+
+        })
         FSBL.Clients.RouterClient.addListener("Save", function (error, response) {
             if (error) {
                 console.log("Save Error: " + (error));
@@ -77,7 +87,7 @@ export default class Canvas extends Component {
 
     render() {
         return (
-            <div onDrop={this.onDrop} id="layoutContainer" style={{ width: "100vw", height: "100vh" }}>
+            <div onDrop={this.onDrop} id="layoutContainer" >
 
             </div >
         )

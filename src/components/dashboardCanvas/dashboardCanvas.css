@@ -1,57 +1,14 @@
-.div {
-	height: 100vh;
-	width: 100vw;
-	resize: both;
-	overflow: auto;
-
-}
 body{
 	background-color: #1c2a36;
 	height: 100vh;
 	width: 100vw;
+	overflow-x: hidden
+	/* overflow: auto; */
 }
-
-
-ul {
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
-	overflow: hidden;
-	background-color: #333;
-}
-
-li {
-	float: left;
-}
-
-.myDivHeader {
-    padding: 10px;
-	border-radius: 70%;
-	color: #fff;
-	float:left;
-	margin-right:40%;
-}
-.myDivHeader .name{
-	border: 1px dotted white;
-}
-.remove  {
-	float: right;
-	color: #fff
-
-}
-.name  {
-	float: left;
-	color: #fff
-
-}
-
-.options {
-	width:100%
-}
-
-.type2 {
-    width: 50px;
-    height: 50px;
-    background: #2196F3;
-    border: 3px solid #000;
+#layoutContainer{
+	height: 100vh;
+	width:100vw;
+	overflow-x: hidden;
+	overflow-y:hidden;
+	margin:0 0 0 0 
 }

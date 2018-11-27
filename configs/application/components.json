@@ -219,7 +219,7 @@
                 "top": "center",
                 "left": "center",
                 "width": 800,
-                "height": 600
+                "height": 700
             },
             "component": {
                 "inject": false

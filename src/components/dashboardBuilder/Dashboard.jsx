@@ -9,10 +9,27 @@ export default class Dashboard extends React.Component {
             filter: "",
             initialDraggables: ['Advanced Chart', 'Financials', 'News'],
             items: [],
-            DName: ""
+            DName: "",
+
         }
     }
+    createDrags = () => {
+        console.log("is this working?")
+        console.log('here i am as well')
+        FSBL.Clients.StorageClient.get({ key: "dashboardcreator-layout" }, (err, response) => {
+            this.state.items.forEach((value, index) => {
+                var newItemConfig = {
+                    type: 'component',
+                    componentName: 'example',
+                    componentState: { text: "hello" }
+                }
+                console.log('myLayout:', response)
+                response.createDragSource(document.getElementById(value), newItemConfig);
+            })
 
+        })
+        return null;
+    }
     getDraggables = () => {
         let drags = []
         this.state.items.forEach((value, index) => {
@@ -20,7 +37,6 @@ export default class Dashboard extends React.Component {
                 <p draggable id={value} onDragStart={(e) => e.dataTransfer.setData('text/plain', `${value}`)} className="componentText"><i className="fas fa-chart-line" /> {value}</p>
             </div >)
         })
-
         return drags
     }
     handleChange = (event) => {
@@ -37,9 +53,24 @@ export default class Dashboard extends React.Component {
         }
     }
     componentDidMount = () => {
+
+        let myLayout = null;
+        FSBL.Clients.StorageClient.save({
+            key: "dashboardcreator-layout",
+            value: myLayout
+        }, (err, response) => {
+            if (err)
+                console.error(err)
+            else {
+                console.log('response:', response)
+            }
+        });
+
+
         this.setState({ items: this.state.initialDraggables })
     }
     handleClick = (event) => {
+
         if (event.target.id == "cancelButton") {
             //Need guidance on what to do here.
         }
@@ -48,6 +79,17 @@ export default class Dashboard extends React.Component {
         }
     }
     render() {
+        FSBL.Clients.RouterClient.addListener("Updated", (error, response) => {
+            console.log('here i am updating')
+            // if (error) {
+            //     console.log("Save Error: " + (error));
+            // } else {
+            //     console.log(this)
+            console.log('here')
+            this.createDrags()
+            console.log('here as well')
+            // }
+        });
         return (
             <div>
                 <div className="container">
