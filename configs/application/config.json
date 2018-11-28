@@ -19,7 +19,7 @@
 		},
 		"assimilation": {
 			"useOpenFinSpawn": false,
-			"enabled": true,
+			"enabled": false,
 			"blacklist": [],
 			"whitelist": [],
 			"onlySpawned": true,
