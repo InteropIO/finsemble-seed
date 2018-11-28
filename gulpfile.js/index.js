@@ -6,7 +6,8 @@ const logToTerminal = require('./logToTerminal');
 const fs = require("fs");
 const gulp = require("gulp");
 const path = require("path");
-const extensions = fs.existsSync("./gulpfile-extensions.js") ? require("./gulpfile-extensions.js") : undefined;
+const extensionsPath = path.join(__dirname, '..', 'gulpfile-extensions');
+const extensions = fs.existsSync(`${extensionsPath}.js`) ? require(extensionsPath) : undefined;
 const startupConfig = require("../configs/other/server-environment-startup");
 const getFlag = require('./getFlag');
 
@@ -67,7 +68,7 @@ const createTasks = async extensionsObject => {
 			gulp.task(key, extensionsObject[key]);
 		}
 	});
-	extensionsObject.post();
+	extensionsObject.post(() => {});
 }
 
 (async () => {
