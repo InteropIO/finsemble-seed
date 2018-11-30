@@ -20,7 +20,7 @@ Then insert the following definition into ​*configs/application/services.json*
             "active": true,
             "name": "defaultWorkspacesService",
             "visible": false,
-            "html": "$applictionRoot/services/defaultWorkspaces/defaultWorkspaces.html"
+            "html": "$applicationRoot/services/defaultWorkspaces/defaultWorkspaces.html"
         }
     }
 }
