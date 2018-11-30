@@ -63,13 +63,12 @@ class Linker extends React.Component {
 	componentWillMount() {
 		finsembleWindow.addEventListener("blurred", this.onWindowBlur.bind(this));
 		LinkerStore.addListener(["stateChanged"], this.onStoreChanged);
-		LinkerActions.windowMounted(); //windowMounted
 		this.setState({
 			channels: LinkerStore.getChannels(),
 			attachedWindowIdentifier: LinkerStore.getAttachedWindowIdentifier()
 		});
 	}
-	componentDidUpdate() {
+	componentDidMount() {
 		LinkerActions.windowMounted();
 	}
 	render() {

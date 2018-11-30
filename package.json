@@ -1,6 +1,6 @@
 {
     "name": "FinsembleSeed",
-    "version": "3.1.2",
+    "version": "3.3.0",
     "description": "",
     "main": "index.js",
     "scripts": {
@@ -11,6 +11,7 @@
         "dev:fresh": "gulp dev:fresh --gulpfile=./gulpfile.js",
         "dev:nolaunch": "gulp dev:noLaunch --gulpfile=./gulpfile.js",
         "build:prod": "gulp build:prod --gulpfile=./gulpfile.js",
+        "nobuild:dev": "gulp nobuild:dev --gulpfile=./gulpfile.js",
         "prod": "gulp prod --gulpfile=./gulpfile.js",
         "prod:nolaunch": "gulp prod:nolaunch --gulpfile=./gulpfile.js",
         "server": "gulp server --gulpfile=./gulpfile.js",
@@ -21,9 +22,13 @@
         "migrate": "node migration/2.3/migrationScripts/migrate.js"
     },
     "author": "",
-    "license": "ISC",
+    "license": "",
+    "optionalDependencies": {
+        "openfin-launcher": "^1.3.11",
+        "@chartiq/e2o": "latest"
+    },
     "dependencies": {
-        "@chartiq/finsemble": "^3.2.0-4",
+        "@chartiq/finsemble": "3.3.*",
         "@chartiq/finsemble-cli": "2.*",
         "@chartiq/finsemble-react-controls": "^3.1.2",
         "async": "^2.6.0",
@@ -33,9 +38,7 @@
         "lodash.clonedeep": "^4.5.0",
         "lodash.debounce": "^4.0.8",
         "lodash.throttle": "^4.1.1",
-        "nocache": "^2.0.0",
-        "openfin-launcher": "^1.3.11",
-        "superagent": "^3.8.3"
+        "nocache": "^2.0.0"
     },
     "devDependencies": {
         "@material-ui/core": "^1.4.2",

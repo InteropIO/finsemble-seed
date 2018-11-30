@@ -30,7 +30,8 @@ function handleKeydown(e) {
 
 //Here, you may want to hit a server and request the user's session information. If the session is valid, log them in automatically. This sample code assumes that they are not logged in and just shows the authentication page.
 function checkAuthorizationStatus() {
-    FSBL.Clients.WindowClient.finsembleWindow.show();
+    FSBL.System.Window.getCurrent().show();
+    //setTimeout(processAuthInput, 0);
 }
 
 //Dummy function that just dumbly accepts whatever is in the form.
@@ -40,7 +41,9 @@ function processAuthInput() {
     // real authentication might use BasicAuth, Digest Auth, or pass off to authentication server which redirects back when authenticated
     // below is a dummy example that just accepts credentials from the form and publishes them out.
     var data = { username: username, password: password }
-    FSBL.Clients.WindowClient.finsembleWindow.hide();
+    FSBL.System.Window.getCurrent().hide();
+
+    //FSBL.Clients.WindowClient.finsembleWindow.hide();
     //In the real world, you'd get this from a server. Send joe's credentials to a server, and get back entitlements/basic config. For this example, we just accept the credentials.
     publishCredentials(data)
 }
@@ -48,7 +51,6 @@ function processAuthInput() {
 //Pass credentials to the application.
 function publishCredentials(user) {
     FSBL.Clients.AuthenticationClient.publishAuthorization(user.username, user);
-    FSBL.Clients.WindowClient.close({ removeFromWorkspace: false, closeWindow: true });
 }
 
 //CLose app when the X is clicked.
