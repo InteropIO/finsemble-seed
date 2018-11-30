@@ -26,17 +26,19 @@ function defaultWorkspacesService() {
 
 	//Implement service functionality
 	this.createDefaultWorkspaces = function () {
-
+		Logger.system.debug("defaultWorkspaceService: createDefaultWorkspaces called");
 		let workspaceTemplates = {}, workspaceTemplateNames = [], initialWorkspaces = [], initialWorkspaceNames = [];
 		//get list of workspace templates
 
 		ConfigClient.getValue({ field: "finsemble.workspaceTemplates" }, function (err, configWorkspaceTemplates) {
+			Logger.system.debug("defaultWorkspaceService: Received workspaceTemplates", configWorkspaceTemplates);
 			workspaceTemplates = configWorkspaceTemplates || {};
 			workspaceTemplateNames = Object.keys(workspaceTemplates);
-			Logger.system.debug("Config workspaceTemplate names", workspaceTemplateNames);
-
+			Logger.system.debug("defaultWorkspaceService: Config workspaceTemplate names", workspaceTemplateNames);
+			
 			//get list of user workspaces
 			WorkspaceClient.getWorkspaces(function (err, response) {
+				Logger.system.debug("defaultWorkspaceService: User workspaces", response);
 				initialWorkspaces = response;
 				//produce an array of the workspace names
 				for (let w=0; w<initialWorkspaces.length; w++) {
@@ -46,6 +48,7 @@ function defaultWorkspacesService() {
 				//check if templates exist as workspaces and create instances of workspaces if not present
 				for (let t=0; t<workspaceTemplateNames.length; t++) {
 					if (workspaceTemplateNames[t] != "Blank Template" && initialWorkspaceNames.indexOf(workspaceTemplateNames[t]) == -1 ) {
+						Logger.system.debug("defaultWorkspaceService: Added workspace template", workspaceTemplateNames[t]);
 						//create an instance of the workspace
 						let definition = {};
 						definition[workspaceTemplateNames[t]] = workspaceTemplates[workspaceTemplateNames[t]];
@@ -53,7 +56,7 @@ function defaultWorkspacesService() {
 					}
 				}
 
-				Logger.log("Finished creating default workspaces");
+				Logger.log("defaultWorkspaceService: Finished creating default workspaces");
 			});
 		});
 	}
