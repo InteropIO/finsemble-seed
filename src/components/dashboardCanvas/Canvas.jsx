@@ -1,5 +1,6 @@
 
 import React, { Component } from 'react'
+import { debug } from 'util';
 const DEFAULT_CONFIG = {
     content: [
         {
@@ -34,7 +35,7 @@ export default class Canvas extends Component {
             let numLayouts = this.state.divide ? 4 : 1
             for (var ii = 0; ii < this.state.divs.length; ii++) {
                 console.log('divs:', this.state.divs[ii])
-                let myLayout = new GoldenLayout(this.state.config, document.getElementById(ii))
+                let myLayout = new GoldenLayout(this.state.config, document.getElementById("dz" + ii))
                 myLayout.init();
                 myLayout.on('stateChanged', () => {
                     let GLState = myLayout.toConfig();
@@ -82,8 +83,8 @@ export default class Canvas extends Component {
         }
     }
     onDrop = (ev) => {
-        console.log(ev.target.id)
-        console.log(this.state.layouts)
+        ev.preventDefault();
+        ev.stopPropagation();
         //need this because you have to have unique names for registered components
         var RandomNumber = Math.random() * Math.floor(10000)
         //@todo make sure there's some text here.
@@ -96,10 +97,19 @@ export default class Canvas extends Component {
             componentState: { text: componentType }
         };
         if (this.state.divide) {
-            this.state.layouts[ev.target.id].registerComponent(id, function (container, state) {
-                container.getElement().html('<h2>' + state.text + '</h2>');
-            })
-            this.state.layouts[ev.target.id].root.contentItems[0].addChild(newItemConfig)
+            //@todo needs comments. Why is this being done.
+            let dropId = ev.target.closest(".dropzones").id;
+            let dropZone = this.state.layouts.filter(dz => {
+                return dz.container[0].id == dropId
+            })[0];
+
+            if (dropZone) {
+                dropZone.registerComponent(id, function (container, state) {
+                    container.getElement().html('<h2>' + state.text + '</h2>');
+                })
+                dropZone.root.contentItems[0].addChild(newItemConfig)
+            }
+
         }
         if (!this.state.divide) {
             this.state.myLayout.registerComponent(id, function (container, state) {
@@ -109,20 +119,24 @@ export default class Canvas extends Component {
         }
     }
     handleClick = (ev) => {
-        if (ev.target.id = "divide") {
-            this.setState({ divide: !this.state.divide }, () => this.setState({ divs: this.calculateDivs() }))
+        if (ev.target.id == "divide") {
+            this.setState({ divide: !this.state.divide },
+                () => this.setState({ divs: this.calculateDivs() },
+                    () => {
+                        this.setState({ layouts: this.setLayouts() });
+                    }))
         }
     }
     calculateDivs = () => {
         var divs = [];
         if (this.state.divide) {
             for (var ii = 0; this.state.divide ? ii < 4 : ii < 1; ii++) {
-                divs.push(<div onDrop={this.onDrop} key={ii} id={ii} className="dropzones">                </div>)
+                divs.push(<div onDrop={this.onDrop} key={"dz" + ii} id={"dz" + ii} className="dropzones"></div>)
             }
         }
         if (!this.state.divide) {
             for (var ii = 0; this.state.divide ? ii < 4 : ii < 1; ii++) {
-                divs.push(<div onDrop={this.onDrop} key={ii} id="layoutContainer"></div>)
+                divs.push(<div onDrop={this.onDrop} key={"dz" + ii} id="layoutContainer"></div>)
             }
         }
         return divs
