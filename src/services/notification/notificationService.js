@@ -252,7 +252,8 @@ function notificationService() {
 				LauncherClient.showWindow(windowId, {right: 0, bottom: hackedbottom, height: hackedHeight, width: notificationWidth});
 			}
 
-			
+			//update pub/sub for notification counts
+			RouterClient.publish(COUNTS_PUBSUB_TOPIC, this.getNotificationCounts());
 			
 			LauncherClient.spawn("notification",
 				{
@@ -271,13 +272,12 @@ function notificationService() {
 					}
 				}, function(err, response){
 					if (err) {
-						logger.error(`Failed to spawn notification, err: ${JSON.stringify(err, undefined, 2)}`);
+						Logger.error(`Failed to spawn notification, err: ${JSON.stringify(err, undefined, 2)}`);
 					} 
 					//setup a timer to auto-dismiss the notification
 					setTimeout(function( ) { self.dismissNotification(id); }, duration);
 
-					//update pub/sub for notification counts
-					RouterClient.publish(COUNTS_PUBSUB_TOPIC, this.getNotificationCounts());
+					
 					cb(err, theNotification);
 				}
 			);

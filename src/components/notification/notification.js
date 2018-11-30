@@ -58,7 +58,7 @@ var init = function () {
 		if (error) {
 			Logger.system.log(windowName + ' close listener error: ' + JSON.stringify(error));
 		} else {
-			FSBL.Clients.WindowClient.getCurrentWindow().close();
+			FSBL.Clients.WindowClient.close();
 		}
 	});
 
