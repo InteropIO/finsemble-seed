@@ -1,13 +1,12 @@
 {
     "comment": "Houses config for any custom services that you'd like to import into Finsemble.",
     "services": {
-        "defaultworkspacesService": {
+        "defaultWorkspacesService": {
             "useWindow": true,
             "active": true,
-            "name": "defaultworkspacesService",
-            "file": "defaultworkspaces/defaultworkspacesService.js",
+            "name": "defaultWorkspacesService",
             "visible": false,
-            "html": "/services/defaultworkspaces/defaultworkspaces.html"
+            "html": "$applictionRoot/services/defaultWorkspaces/defaultWorkspaces.html"
         }
     }
 }

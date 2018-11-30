@@ -8,7 +8,7 @@ FSBL.addEventListener = function (event, cb) {
 const RouterClient = FSBL.Clients.RouterClient;
 const Logger = FSBL.Clients.Logger;
 Logger.start();
-Logger.log("defaultworkspaces Service starting up");
+Logger.log("defaultWorkspaces Service starting up");
 
 // Add and initialize any other clients you need to use
 //   (services are initialised by the system, clients are not)
@@ -21,7 +21,7 @@ ConfigClient.initialize();
  *
  * @constructor
  */
-function defaultworkspacesService() {
+function defaultWorkspacesService() {
 	const self = this;
 
 	//Implement service functionality
@@ -66,9 +66,9 @@ function defaultworkspacesService() {
 	 */
 	this.createRouterEndpoints = function () {
 		//Example router integration which uses a single query responder to expose multiple functions
-		// RouterClient.addResponder("defaultworkspaces functions", function(error, queryMessage) {
+		// RouterClient.addResponder("defaultWorkspaces functions", function(error, queryMessage) {
 		// 	if (!error) {
-		// 		Logger.log('defaultworkspaces Query: ' + JSON.stringify(queryMessage));
+		// 		Logger.log('defaultWorkspaces Query: ' + JSON.stringify(queryMessage));
 
 		// 		if (queryMessage.data.query === "myFunction") {
 		// 			try {
@@ -77,11 +77,11 @@ function defaultworkspacesService() {
 		// 				queryMessage.sendQueryResponse(err);
 		// 			}
 		// 		} else {
-		// 			queryMessage.sendQueryResponse("Unknown defaultworkspaces query function: " + queryMessage, null);
-		// 			Logger.error("Unknown defaultworkspaces query function: ", queryMessage);
+		// 			queryMessage.sendQueryResponse("Unknown defaultWorkspaces query function: " + queryMessage, null);
+		// 			Logger.error("Unknown defaultWorkspaces query function: ", queryMessage);
 		// 		}
 		// 	} else {
-		// 		Logger.error("Failed to setup defaultworkspaces query responder", error);
+		// 		Logger.error("Failed to setup defaultWorkspaces query responder", error);
 		// 	}
 		// });
 	};
@@ -89,18 +89,18 @@ function defaultworkspacesService() {
 	return this;
 };
 
-defaultworkspacesService.prototype = new FSBL.baseService({
+defaultWorkspacesService.prototype = new FSBL.baseService({
 	startupDependencies: {
 		// add any services or clients that should be started before your service
 		services: ["workspaceService", "storageService"],
 		clients: ["configClient"]
 	}
 });
-const serviceInstance = new defaultworkspacesService('defaultworkspacesService');
+const serviceInstance = new defaultWorkspacesService('defaultWorkspacesService');
 
 serviceInstance.onBaseServiceReady(function (callback) {
 	serviceInstance.createRouterEndpoints();
-	Logger.log("defaultworkspaces Service ready");
+	Logger.log("defaultWorkspaces Service ready");
 	serviceInstance.createDefaultWorkspaces();
 	callback();
 });
