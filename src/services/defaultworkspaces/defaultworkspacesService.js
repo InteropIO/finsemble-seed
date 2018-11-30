@@ -4,7 +4,7 @@ FSBL.addEventListener = function (event, cb) {
 	if (event == "onReady") {
 		cb();
 	}
-}
+};
 const RouterClient = FSBL.Clients.RouterClient;
 const Logger = FSBL.Clients.Logger;
 Logger.start();
@@ -59,34 +59,6 @@ function defaultWorkspacesService() {
 				Logger.log("defaultWorkspacesService: Finished creating default workspaces");
 			});
 		});
-	}
-
-
-	/**
-	 * Creates a router endpoint for you service.
-	 * Add query responders, listeners or pub/sub topic as appropriate.
-	 * @private
-	 */
-	this.createRouterEndpoints = function () {
-		//Example router integration which uses a single query responder to expose multiple functions
-		// RouterClient.addResponder("defaultWorkspaces functions", function(error, queryMessage) {
-		// 	if (!error) {
-		// 		Logger.log('defaultWorkspaces Query: ' + JSON.stringify(queryMessage));
-
-		// 		if (queryMessage.data.query === "myFunction") {
-		// 			try {
-		// 				queryMessage.sendQueryResponse(null, self.myFunction());
-		// 			} catch (err) {
-		// 				queryMessage.sendQueryResponse(err);
-		// 			}
-		// 		} else {
-		// 			queryMessage.sendQueryResponse("Unknown defaultWorkspaces query function: " + queryMessage, null);
-		// 			Logger.error("Unknown defaultWorkspaces query function: ", queryMessage);
-		// 		}
-		// 	} else {
-		// 		Logger.error("Failed to setup defaultWorkspaces query responder", error);
-		// 	}
-		// });
 	};
 
 	return this;
@@ -102,7 +74,6 @@ defaultWorkspacesService.prototype = new FSBL.baseService({
 const serviceInstance = new defaultWorkspacesService('defaultWorkspacesService');
 
 serviceInstance.onBaseServiceReady(function (callback) {
-	serviceInstance.createRouterEndpoints();
 	serviceInstance.createDefaultWorkspaces();
 	Logger.log("defaultWorkspacesService: ready");
 	callback();
