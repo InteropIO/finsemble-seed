@@ -436,7 +436,7 @@ function notificationService() {
 						if (err) {
 							logger.error(`Failed to spawn notification, err: ${JSON.stringify(err, undefined, 2)}`);
 						} 
-						cb(err, theNotification);
+						cb(err, null);
 					});
 
 					//TODO: hide any +X more marker on the notification stack
