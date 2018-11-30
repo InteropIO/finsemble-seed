@@ -1,1131 +1,1127 @@
 {
 	"workspaceTemplates": {
-		"Blank Template":
-			{
-				"name": "Blank Template",
-				"description": "Empty template with no components",
-				"windows": [],
-				"groups": {},
-				"windowData": []
+		"Blank Template": {
+			"name": "Blank Template",
+			"description": "Empty template with no components",
+			"windows": [],
+			"groups": {},
+			"windowData": []
+		},
+		"double welcome": {
+			"name": "double welcome",
+			"windows": [
+				"Welcome Component-15-3521",
+				"Welcome Component-20-1023"
+			],
+			"isDirty": false,
+			"groups": {
+				"f487cb71-2588-42d2-9580-e8bd378df393": {
+					"windowNames": [
+						"Welcome Component-15-3521",
+						"Welcome Component-20-1023"
+					],
+					"isMovable": false,
+					"isAlwaysOnTop": false,
+					"topRightWindow": "Welcome Component-20-1023",
+					"isARectangle": true
+				}
 			},
-			"double welcome": {
-				"name": "double welcome",
-				"windows": [
-					"Welcome Component-15-3521",
-					"Welcome Component-20-1023"
-				],
-				"isDirty": false,
-				"groups": {
-					"f487cb71-2588-42d2-9580-e8bd378df393": {
-						"windowNames": [
-							"Welcome Component-15-3521",
-							"Welcome Component-20-1023"
-						],
-						"isMovable": false,
-						"isAlwaysOnTop": false,
-						"topRightWindow": "Welcome Component-20-1023",
-						"isARectangle": true
-					}
-				},
-				"workspaceDefinitionFlag": true,
-				"windowData": [
-					{
-						"accelerator": {
-							"devtools": true,
-							"zoom": false,
-							"reload": true,
-							"reloadIgnoringCache": true
+			"workspaceDefinitionFlag": true,
+			"windowData": [
+				{
+					"accelerator": {
+						"devtools": true,
+						"zoom": false,
+						"reload": true,
+						"reloadIgnoringCache": true
+					},
+					"alphaMask": {
+						"blue": -1,
+						"green": -1,
+						"red": -1
+					},
+					"alwaysOnBottom": false,
+					"alwaysOnTop": false,
+					"applicationIcon": "",
+					"autoShow": true,
+					"backgroundThrottling": false,
+					"contextMenu": false,
+					"cornerRounding": {
+						"height": 0,
+						"width": 0
+					},
+					"defaultCentered": false,
+					"defaultHeight": 432,
+					"defaultLeft": 464,
+					"defaultTop": 370,
+					"defaultWidth": 400,
+					"delay_connection": false,
+					"disableIabSecureLogging": false,
+					"draggable": false,
+					"exitOnClose": false,
+					"experimental": {
+						"disableInitialReload": false,
+						"v2Api": false
+					},
+					"frame": false,
+					"frameConnect": "last",
+					"hideOnBlur": false,
+					"hideOnClose": false,
+					"hideWhileChildrenVisible": false,
+					"icon": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png",
+					"launchExternal": "",
+					"loadErrorMessage": "",
+					"maxHeight": -1,
+					"maxWidth": -1,
+					"maximizable": true,
+					"minHeight": 0,
+					"minWidth": 0,
+					"minimizable": true,
+					"name": "Welcome Component-15-3521",
+					"opacity": 1,
+					"plugins": false,
+					"resizable": true,
+					"resize": true,
+					"resizeRegion": {
+						"bottomRightCorner": 9,
+						"size": 5,
+						"sides": {
+							"top": true,
+							"right": true,
+							"bottom": true,
+							"left": true
+						}
+					},
+					"saveWindowState": false,
+					"shadow": false,
+					"showTaskbarIcon": false,
+					"smallWindow": false,
+					"state": "normal",
+					"taskbarIcon": "",
+					"taskbarIconGroup": "Finsemble",
+					"transparent": false,
+					"url": "http://localhost:3375/components/welcome/welcome.html",
+					"uuid": "defaultAgent-11-21",
+					"waitForPageLoad": false,
+					"backgroundColor": "#151f28",
+					"webSecurity": true,
+					"show": true,
+					"skipTaskbar": false,
+					"title": "Welcome",
+					"height": 432,
+					"width": 400,
+					"center": false,
+					"x": 1080,
+					"y": 484,
+					"enableLargerThanScreen": true,
+					"enable-plugins": true,
+					"webPreferences": {
+						"disableInitialReload": false,
+						"nodeIntegration": false,
+						"plugins": false
+					},
+					"customData": {
+						"component": {
+							"canMinimize": true,
+							"inject": false,
+							"preload": "http://localhost:3375/preloads/zoom.js",
+							"spawnOnStartup": false,
+							"type": "Welcome Component"
 						},
-						"alphaMask": {
-							"blue": -1,
-							"green": -1,
-							"red": -1
-						},
-						"alwaysOnBottom": false,
-						"alwaysOnTop": false,
-						"applicationIcon": "",
-						"autoShow": true,
-						"backgroundThrottling": false,
-						"contextMenu": false,
-						"cornerRounding": {
-							"height": 0,
-							"width": 0
-						},
-						"defaultCentered": false,
-						"defaultHeight": 432,
-						"defaultLeft": 464,
-						"defaultTop": 370,
-						"defaultWidth": 400,
-						"delay_connection": false,
-						"disableIabSecureLogging": false,
-						"draggable": false,
-						"exitOnClose": false,
-						"experimental": {
-							"disableInitialReload": false,
-							"v2Api": false
-						},
-						"frame": false,
-						"frameConnect": "last",
-						"hideOnBlur": false,
-						"hideOnClose": false,
-						"hideWhileChildrenVisible": false,
-						"icon": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png",
-						"launchExternal": "",
-						"loadErrorMessage": "",
-						"maxHeight": -1,
-						"maxWidth": -1,
-						"maximizable": true,
-						"minHeight": 0,
-						"minWidth": 0,
-						"minimizable": true,
-						"name": "Welcome Component-15-3521",
-						"opacity": 1,
-						"plugins": false,
-						"resizable": true,
-						"resize": true,
-						"resizeRegion": {
-							"bottomRightCorner": 9,
-							"size": 5,
-							"sides": {
-								"top": true,
-								"right": true,
-								"bottom": true,
-								"left": true
-							}
-						},
-						"saveWindowState": false,
-						"shadow": false,
-						"showTaskbarIcon": false,
-						"smallWindow": false,
-						"state": "normal",
-						"taskbarIcon": "",
-						"taskbarIconGroup": "Finsemble",
-						"transparent": false,
-						"url": "http://localhost:3375/components/welcome/welcome.html",
-						"uuid": "defaultAgent-11-21",
-						"waitForPageLoad": false,
-						"backgroundColor": "#151f28",
-						"webSecurity": true,
-						"show": true,
-						"skipTaskbar": false,
-						"title": "Welcome",
-						"height": 432,
-						"width": 400,
-						"center": false,
-						"x": 1080,
-						"y": 484,
-						"enableLargerThanScreen": true,
-						"enable-plugins": true,
-						"webPreferences": {
-							"disableInitialReload": false,
-							"nodeIntegration": false,
-							"plugins": false
-						},
-						"customData": {
-							"component": {
-								"canMinimize": true,
-								"inject": false,
-								"preload": "http://localhost:3375/preloads/zoom.js",
-								"spawnOnStartup": false,
-								"type": "Welcome Component"
-							},
-							"cssOverride": "",
-							"foreign": {
-								"components": {
-									"App Launcher": {
-										"launchableByUser": true
-									},
-									"Toolbar": {
-										"iconClass": "ff-component"
-									},
-									"Window Manager": {
-										"FSBLHeader": true,
-										"persistWindowState": true,
-										"showLinker": true,
-										"title": "Welcome"
-									}
+						"cssOverride": "",
+						"foreign": {
+							"components": {
+								"App Launcher": {
+									"launchableByUser": true
 								},
-								"services": {
-									"dockingService": {
-										"canGroup": true,
-										"isArrangable": true,
-										"isArrangeable": false
-									},
-									"launcherService": {
-										"inject": false
-									}
+								"Toolbar": {
+									"iconClass": "ff-component"
+								},
+								"Window Manager": {
+									"FSBLHeader": true,
+									"persistWindowState": true,
+									"showLinker": true,
+									"title": "Welcome"
 								}
 							},
-							"monitorDimensions": {
-								"bottom": 1400,
-								"height": 1400,
-								"left": 0,
-								"right": 2560,
-								"top": 0,
-								"width": 2560
-							},
-							"window": {
-								"autoShow": true,
-								"frame": false,
-								"height": 432,
-								"left": "center",
-								"resizable": true,
-								"top": "center",
-								"url": "http://localhost:3375/components/welcome/welcome.html",
-								"width": 400
+							"services": {
+								"dockingService": {
+									"canGroup": true,
+									"isArrangable": true,
+									"isArrangeable": false
+								},
+								"launcherService": {
+									"inject": false
+								}
 							}
 						},
-						"preloadScripts": [
-							{
-								"url": "http://localhost:3375/finsemble/FSBL.js",
-								"state": "succeeded"
-							},
-							{
-								"url": "http://localhost:3375/preloads/zoom.js",
-								"state": "succeeded"
-							}
-						],
-						"plugin": [],
-						"hasLoaded": true,
-						"windowIdentifier": {
-							"uuid": "defaultAgent-11-21",
-							"name": "Welcome Component-15-3521",
-							"windowName": "Welcome Component-15-3521",
-							"windowType": "OpenFinWindow"
-						},
-						"callstack": "Log Stack: \n    at promiseResolver (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8162:43)\n    at FinsembleWindow.queryWindowService (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8180:16)\n    at FinsembleWindow.updateOptions (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8227:14)\n    at WindowClient.listenForHashChanges (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:9662:25)\n    at WindowClient.addListeners (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:10440:14)\n    at FinsembleWindow.getInstance (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:10858:22)\n    at promiseResolver (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8011:28)",
 						"monitorDimensions": {
-							"top": 0,
-							"bottom": 1440,
+							"bottom": 1400,
+							"height": 1400,
 							"left": 0,
 							"right": 2560,
-							"width": 2560,
-							"height": 1440
+							"top": 0,
+							"width": 2560
 						},
-						"cachedLeft": 1080,
-						"cachedTop": 484,
-						"cachedWidth": 400,
-						"cachedHeight": 432,
+						"window": {
+							"autoShow": true,
+							"frame": false,
+							"height": 432,
+							"left": "center",
+							"resizable": true,
+							"top": "center",
+							"url": "http://localhost:3375/components/welcome/welcome.html",
+							"width": 400
+						}
+					},
+					"preloadScripts": [
+						{
+							"url": "http://localhost:3375/finsemble/FSBL.js",
+							"state": "succeeded"
+						},
+						{
+							"url": "http://localhost:3375/preloads/zoom.js",
+							"state": "succeeded"
+						}
+					],
+					"plugin": [],
+					"hasLoaded": true,
+					"windowIdentifier": {
+						"uuid": "defaultAgent-11-21",
+						"name": "Welcome Component-15-3521",
+						"windowName": "Welcome Component-15-3521",
+						"windowType": "OpenFinWindow"
+					},
+					"callstack": "Log Stack: \n    at promiseResolver (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8162:43)\n    at FinsembleWindow.queryWindowService (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8180:16)\n    at FinsembleWindow.updateOptions (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8227:14)\n    at WindowClient.listenForHashChanges (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:9662:25)\n    at WindowClient.addListeners (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:10440:14)\n    at FinsembleWindow.getInstance (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:10858:22)\n    at promiseResolver (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8011:28)",
+					"monitorDimensions": {
+						"top": 0,
+						"bottom": 1440,
+						"left": 0,
+						"right": 2560,
+						"width": 2560,
+						"height": 1440
+					},
+					"cachedLeft": 1080,
+					"cachedTop": 484,
+					"cachedWidth": 400,
+					"cachedHeight": 432,
+					"top": 370,
+					"left": 464,
+					"bottom": 802,
+					"right": 864,
+					"bounds": {
 						"top": 370,
 						"left": 464,
-						"bottom": 802,
-						"right": 864,
-						"bounds": {
-							"top": 370,
-							"left": 464,
-							"width": 400,
-							"height": 432,
-							"bottom": 802,
-							"right": 864
-						}
-					},
-					{
-						"accelerator": {
-							"devtools": true,
-							"zoom": false,
-							"reload": true,
-							"reloadIgnoringCache": true
-						},
-						"alphaMask": {
-							"blue": -1,
-							"green": -1,
-							"red": -1
-						},
-						"alwaysOnBottom": false,
-						"alwaysOnTop": false,
-						"applicationIcon": "",
-						"autoShow": true,
-						"backgroundThrottling": false,
-						"contextMenu": false,
-						"cornerRounding": {
-							"height": 0,
-							"width": 0
-						},
-						"defaultCentered": false,
-						"defaultHeight": 432,
-						"defaultLeft": 864,
-						"defaultTop": 370,
-						"defaultWidth": 400,
-						"delay_connection": false,
-						"disableIabSecureLogging": false,
-						"draggable": false,
-						"exitOnClose": false,
-						"experimental": {
-							"disableInitialReload": false,
-							"v2Api": false
-						},
-						"frame": false,
-						"frameConnect": "last",
-						"hideOnBlur": false,
-						"hideOnClose": false,
-						"hideWhileChildrenVisible": false,
-						"icon": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png",
-						"launchExternal": "",
-						"loadErrorMessage": "",
-						"maxHeight": -1,
-						"maxWidth": -1,
-						"maximizable": true,
-						"minHeight": 0,
-						"minWidth": 0,
-						"minimizable": true,
-						"name": "Welcome Component-20-1023",
-						"opacity": 1,
-						"plugins": false,
-						"resizable": true,
-						"resize": true,
-						"resizeRegion": {
-							"bottomRightCorner": 9,
-							"size": 5,
-							"sides": {
-								"top": true,
-								"right": true,
-								"bottom": true,
-								"left": true
-							}
-						},
-						"saveWindowState": false,
-						"shadow": false,
-						"showTaskbarIcon": true,
-						"smallWindow": false,
-						"state": "normal",
-						"taskbarIcon": "",
-						"taskbarIconGroup": "Finsemble",
-						"transparent": false,
-						"url": "http://localhost:3375/components/welcome/welcome.html",
-						"uuid": "defaultAgent-11-21",
-						"waitForPageLoad": false,
-						"backgroundColor": "#151f28",
-						"webSecurity": true,
-						"show": true,
-						"skipTaskbar": false,
-						"title": "Welcome",
-						"height": 432,
 						"width": 400,
-						"center": false,
-						"x": 1080,
-						"y": 484,
-						"enableLargerThanScreen": true,
-						"enable-plugins": true,
-						"webPreferences": {
-							"disableInitialReload": false,
-							"nodeIntegration": false,
-							"plugins": false
-						},
-						"customData": {
-							"component": {
-								"canMinimize": true,
-								"inject": false,
-								"preload": "http://localhost:3375/preloads/zoom.js",
-								"spawnOnStartup": false,
-								"type": "Welcome Component"
-							},
-							"cssOverride": "",
-							"foreign": {
-								"components": {
-									"App Launcher": {
-										"launchableByUser": true
-									},
-									"Toolbar": {
-										"iconClass": "ff-component"
-									},
-									"Window Manager": {
-										"FSBLHeader": true,
-										"persistWindowState": true,
-										"showLinker": true,
-										"title": "Welcome"
-									}
-								},
-								"services": {
-									"dockingService": {
-										"canGroup": true,
-										"isArrangable": true,
-										"isArrangeable": false
-									},
-									"launcherService": {
-										"inject": false
-									}
-								}
-							},
-							"monitorDimensions": {
-								"bottom": 1400,
-								"height": 1400,
-								"left": 0,
-								"right": 2560,
-								"top": 0,
-								"width": 2560
-							},
-							"window": {
-								"autoShow": true,
-								"frame": false,
-								"height": 432,
-								"left": "center",
-								"resizable": true,
-								"top": "center",
-								"url": "http://localhost:3375/components/welcome/welcome.html",
-								"width": 400
-							}
-						},
-						"preloadScripts": [
-							{
-								"url": "http://localhost:3375/finsemble/FSBL.js",
-								"state": "succeeded"
-							},
-							{
-								"url": "http://localhost:3375/preloads/zoom.js",
-								"state": "succeeded"
-							}
-						],
-						"plugin": [],
-						"hasLoaded": true,
-						"windowIdentifier": {
-							"uuid": "defaultAgent-11-21",
-							"name": "Welcome Component-20-1023",
-							"windowName": "Welcome Component-20-1023",
-							"windowType": "OpenFinWindow"
-						},
-						"callstack": "Log Stack: \n    at promiseResolver (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8162:43)\n    at FinsembleWindow.queryWindowService (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8180:16)\n    at FinsembleWindow.updateOptions (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8227:14)\n    at WindowClient.listenForHashChanges (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:9662:25)\n    at WindowClient.addListeners (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:10440:14)\n    at FinsembleWindow.getInstance (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:10858:22)\n    at promiseResolver (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8011:28)",
-						"monitorDimensions": {
-							"top": 0,
-							"bottom": 1440,
-							"left": 0,
-							"right": 2560,
-							"width": 2560,
-							"height": 1440
-						},
-						"cachedLeft": 1080,
-						"cachedTop": 484,
-						"cachedWidth": 400,
-						"cachedHeight": 432,
-						"top": 370,
-						"left": 864,
+						"height": 432,
 						"bottom": 802,
-						"right": 1264,
-						"bounds": {
-							"top": 370,
-							"left": 864,
-							"width": 400,
-							"height": 432,
-							"bottom": 802,
-							"right": 1264
-						}
-					}
-				]
-			},
-			"welcome tabs and groups": {
-				"name": "welcome tabs and groups",
-				"windows": [
-					"Welcome Component-95-1745",
-					"Welcome Component-72-9134",
-					"StackedWindow-24-8686",
-					"Welcome Component-58-7954"
-				],
-				"isDirty": false,
-				"groups": {
-					"3886627c-d474-434e-8ea6-1a228b7cfc6f": {
-						"windowNames": [],
-						"isMovable": false,
-						"isAlwaysOnTop": false,
-						"topRightWindow": null,
-						"isARectangle": false
-					},
-					"c5252ec5-bf63-41bd-9584-c7fd71bad3c1": {
-						"windowNames": [
-							"StackedWindow-24-8686",
-							"Welcome Component-58-7954"
-						],
-						"isMovable": false,
-						"isAlwaysOnTop": false,
-						"topRightWindow": "Welcome Component-58-7954",
-						"isARectangle": true
-					},
-					"7028155e-a83f-41fc-bb7b-df56f51afb41": {
-						"windowNames": [
-							"Welcome Component-58-7954",
-							"StackedWindow-24-8686"
-						],
-						"isMovable": true,
-						"isAlwaysOnTop": false,
-						"topRightWindow": "Welcome Component-58-7954",
-						"isARectangle": true
+						"right": 864
 					}
 				},
-				"workspaceDefinitionFlag": true,
-				"windowData": [
-					{
-						"accelerator": {
-							"devtools": true,
-							"zoom": false,
-							"reload": true,
-							"reloadIgnoringCache": true
+				{
+					"accelerator": {
+						"devtools": true,
+						"zoom": false,
+						"reload": true,
+						"reloadIgnoringCache": true
+					},
+					"alphaMask": {
+						"blue": -1,
+						"green": -1,
+						"red": -1
+					},
+					"alwaysOnBottom": false,
+					"alwaysOnTop": false,
+					"applicationIcon": "",
+					"autoShow": true,
+					"backgroundThrottling": false,
+					"contextMenu": false,
+					"cornerRounding": {
+						"height": 0,
+						"width": 0
+					},
+					"defaultCentered": false,
+					"defaultHeight": 432,
+					"defaultLeft": 864,
+					"defaultTop": 370,
+					"defaultWidth": 400,
+					"delay_connection": false,
+					"disableIabSecureLogging": false,
+					"draggable": false,
+					"exitOnClose": false,
+					"experimental": {
+						"disableInitialReload": false,
+						"v2Api": false
+					},
+					"frame": false,
+					"frameConnect": "last",
+					"hideOnBlur": false,
+					"hideOnClose": false,
+					"hideWhileChildrenVisible": false,
+					"icon": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png",
+					"launchExternal": "",
+					"loadErrorMessage": "",
+					"maxHeight": -1,
+					"maxWidth": -1,
+					"maximizable": true,
+					"minHeight": 0,
+					"minWidth": 0,
+					"minimizable": true,
+					"name": "Welcome Component-20-1023",
+					"opacity": 1,
+					"plugins": false,
+					"resizable": true,
+					"resize": true,
+					"resizeRegion": {
+						"bottomRightCorner": 9,
+						"size": 5,
+						"sides": {
+							"top": true,
+							"right": true,
+							"bottom": true,
+							"left": true
+						}
+					},
+					"saveWindowState": false,
+					"shadow": false,
+					"showTaskbarIcon": true,
+					"smallWindow": false,
+					"state": "normal",
+					"taskbarIcon": "",
+					"taskbarIconGroup": "Finsemble",
+					"transparent": false,
+					"url": "http://localhost:3375/components/welcome/welcome.html",
+					"uuid": "defaultAgent-11-21",
+					"waitForPageLoad": false,
+					"backgroundColor": "#151f28",
+					"webSecurity": true,
+					"show": true,
+					"skipTaskbar": false,
+					"title": "Welcome",
+					"height": 432,
+					"width": 400,
+					"center": false,
+					"x": 1080,
+					"y": 484,
+					"enableLargerThanScreen": true,
+					"enable-plugins": true,
+					"webPreferences": {
+						"disableInitialReload": false,
+						"nodeIntegration": false,
+						"plugins": false
+					},
+					"customData": {
+						"component": {
+							"canMinimize": true,
+							"inject": false,
+							"preload": "http://localhost:3375/preloads/zoom.js",
+							"spawnOnStartup": false,
+							"type": "Welcome Component"
 						},
-						"alphaMask": {
-							"blue": -1,
-							"green": -1,
-							"red": -1
-						},
-						"alwaysOnBottom": false,
-						"alwaysOnTop": false,
-						"applicationIcon": "",
-						"autoShow": true,
-						"backgroundThrottling": false,
-						"contextMenu": false,
-						"cornerRounding": {
-							"height": 0,
-							"width": 0
-						},
-						"defaultCentered": false,
-						"defaultHeight": 432,
-						"defaultLeft": 390,
-						"defaultTop": 290,
-						"defaultWidth": 400,
-						"delay_connection": false,
-						"disableIabSecureLogging": false,
-						"draggable": false,
-						"exitOnClose": false,
-						"experimental": {
-							"disableInitialReload": false,
-							"v2Api": false
-						},
-						"frame": false,
-						"frameConnect": "last",
-						"hideOnBlur": false,
-						"hideOnClose": false,
-						"hideWhileChildrenVisible": false,
-						"icon": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png",
-						"launchExternal": "",
-						"loadErrorMessage": "",
-						"maxHeight": -1,
-						"maxWidth": -1,
-						"maximizable": true,
-						"minHeight": 0,
-						"minWidth": 0,
-						"minimizable": true,
-						"name": "Welcome Component-95-1745",
-						"opacity": 1,
-						"plugins": false,
-						"resizable": true,
-						"resize": true,
-						"resizeRegion": {
-							"bottomRightCorner": 9,
-							"size": 5,
-							"sides": {
-								"top": true,
-								"right": true,
-								"bottom": true,
-								"left": true
-							}
-						},
-						"saveWindowState": false,
-						"shadow": false,
-						"showTaskbarIcon": false,
-						"smallWindow": false,
-						"state": "normal",
-						"taskbarIcon": "",
-						"taskbarIconGroup": "7028155e-a83f-41fc-bb7b-df56f51afb41",
-						"transparent": false,
-						"url": "http://localhost:3375/components/welcome/welcome.html",
-						"uuid": "defaultAgent-11-21",
-						"waitForPageLoad": false,
-						"backgroundColor": "#151f28",
-						"webSecurity": true,
-						"show": true,
-						"skipTaskbar": false,
-						"title": "Welcome",
-						"height": 432,
-						"width": 400,
-						"center": false,
-						"x": 1080,
-						"y": 484,
-						"enableLargerThanScreen": true,
-						"enable-plugins": true,
-						"webPreferences": {
-							"disableInitialReload": false,
-							"nodeIntegration": false,
-							"plugins": false
-						},
-						"customData": {
-							"component": {
-								"canMinimize": true,
-								"inject": false,
-								"preload": "http://localhost:3375/preloads/zoom.js",
-								"spawnOnStartup": false,
-								"type": "Welcome Component"
-							},
-							"cssOverride": "",
-							"foreign": {
-								"components": {
-									"App Launcher": {
-										"launchableByUser": true
-									},
-									"Toolbar": {
-										"iconClass": "ff-component"
-									},
-									"Window Manager": {
-										"FSBLHeader": true,
-										"persistWindowState": true,
-										"showLinker": true,
-										"title": "Welcome"
-									}
+						"cssOverride": "",
+						"foreign": {
+							"components": {
+								"App Launcher": {
+									"launchableByUser": true
 								},
-								"services": {
-									"dockingService": {
-										"canGroup": true,
-										"isArrangable": true,
-										"isArrangeable": false
-									},
-									"launcherService": {
-										"inject": false
-									}
+								"Toolbar": {
+									"iconClass": "ff-component"
+								},
+								"Window Manager": {
+									"FSBLHeader": true,
+									"persistWindowState": true,
+									"showLinker": true,
+									"title": "Welcome"
 								}
 							},
-							"monitorDimensions": {
-								"bottom": 1400,
-								"height": 1400,
-								"left": 0,
-								"right": 2560,
-								"top": 0,
-								"width": 2560
-							},
-							"window": {
-								"autoShow": true,
-								"frame": false,
-								"height": 432,
-								"left": "center",
-								"resizable": true,
-								"top": "center",
-								"url": "http://localhost:3375/components/welcome/welcome.html",
-								"width": 400
+							"services": {
+								"dockingService": {
+									"canGroup": true,
+									"isArrangable": true,
+									"isArrangeable": false
+								},
+								"launcherService": {
+									"inject": false
+								}
 							}
 						},
-						"preloadScripts": [
-							{
-								"url": "http://localhost:3375/finsemble/FSBL.js",
-								"state": "succeeded"
+						"monitorDimensions": {
+							"bottom": 1400,
+							"height": 1400,
+							"left": 0,
+							"right": 2560,
+							"top": 0,
+							"width": 2560
+						},
+						"window": {
+							"autoShow": true,
+							"frame": false,
+							"height": 432,
+							"left": "center",
+							"resizable": true,
+							"top": "center",
+							"url": "http://localhost:3375/components/welcome/welcome.html",
+							"width": 400
+						}
+					},
+					"preloadScripts": [
+						{
+							"url": "http://localhost:3375/finsemble/FSBL.js",
+							"state": "succeeded"
+						},
+						{
+							"url": "http://localhost:3375/preloads/zoom.js",
+							"state": "succeeded"
+						}
+					],
+					"plugin": [],
+					"hasLoaded": true,
+					"windowIdentifier": {
+						"uuid": "defaultAgent-11-21",
+						"name": "Welcome Component-20-1023",
+						"windowName": "Welcome Component-20-1023",
+						"windowType": "OpenFinWindow"
+					},
+					"callstack": "Log Stack: \n    at promiseResolver (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8162:43)\n    at FinsembleWindow.queryWindowService (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8180:16)\n    at FinsembleWindow.updateOptions (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8227:14)\n    at WindowClient.listenForHashChanges (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:9662:25)\n    at WindowClient.addListeners (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:10440:14)\n    at FinsembleWindow.getInstance (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:10858:22)\n    at promiseResolver (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8011:28)",
+					"monitorDimensions": {
+						"top": 0,
+						"bottom": 1440,
+						"left": 0,
+						"right": 2560,
+						"width": 2560,
+						"height": 1440
+					},
+					"cachedLeft": 1080,
+					"cachedTop": 484,
+					"cachedWidth": 400,
+					"cachedHeight": 432,
+					"top": 370,
+					"left": 864,
+					"bottom": 802,
+					"right": 1264,
+					"bounds": {
+						"top": 370,
+						"left": 864,
+						"width": 400,
+						"height": 432,
+						"bottom": 802,
+						"right": 1264
+					}
+				}
+			]
+		},
+		"welcome tabs and groups": {
+			"name": "welcome tabs and groups",
+			"windows": [
+				"Welcome Component-95-1745",
+				"Welcome Component-72-9134",
+				"StackedWindow-24-8686",
+				"Welcome Component-58-7954"
+			],
+			"isDirty": false,
+			"groups": {
+				"3886627c-d474-434e-8ea6-1a228b7cfc6f": {
+					"windowNames": [],
+					"isMovable": false,
+					"isAlwaysOnTop": false,
+					"topRightWindow": null,
+					"isARectangle": false
+				},
+				"c5252ec5-bf63-41bd-9584-c7fd71bad3c1": {
+					"windowNames": [
+						"StackedWindow-24-8686",
+						"Welcome Component-58-7954"
+					],
+					"isMovable": false,
+					"isAlwaysOnTop": false,
+					"topRightWindow": "Welcome Component-58-7954",
+					"isARectangle": true
+				},
+				"7028155e-a83f-41fc-bb7b-df56f51afb41": {
+					"windowNames": [
+						"Welcome Component-58-7954",
+						"StackedWindow-24-8686"
+					],
+					"isMovable": true,
+					"isAlwaysOnTop": false,
+					"topRightWindow": "Welcome Component-58-7954",
+					"isARectangle": true
+				}
+			},
+			"workspaceDefinitionFlag": true,
+			"windowData": [
+				{
+					"accelerator": {
+						"devtools": true,
+						"zoom": false,
+						"reload": true,
+						"reloadIgnoringCache": true
+					},
+					"alphaMask": {
+						"blue": -1,
+						"green": -1,
+						"red": -1
+					},
+					"alwaysOnBottom": false,
+					"alwaysOnTop": false,
+					"applicationIcon": "",
+					"autoShow": true,
+					"backgroundThrottling": false,
+					"contextMenu": false,
+					"cornerRounding": {
+						"height": 0,
+						"width": 0
+					},
+					"defaultCentered": false,
+					"defaultHeight": 432,
+					"defaultLeft": 390,
+					"defaultTop": 290,
+					"defaultWidth": 400,
+					"delay_connection": false,
+					"disableIabSecureLogging": false,
+					"draggable": false,
+					"exitOnClose": false,
+					"experimental": {
+						"disableInitialReload": false,
+						"v2Api": false
+					},
+					"frame": false,
+					"frameConnect": "last",
+					"hideOnBlur": false,
+					"hideOnClose": false,
+					"hideWhileChildrenVisible": false,
+					"icon": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png",
+					"launchExternal": "",
+					"loadErrorMessage": "",
+					"maxHeight": -1,
+					"maxWidth": -1,
+					"maximizable": true,
+					"minHeight": 0,
+					"minWidth": 0,
+					"minimizable": true,
+					"name": "Welcome Component-95-1745",
+					"opacity": 1,
+					"plugins": false,
+					"resizable": true,
+					"resize": true,
+					"resizeRegion": {
+						"bottomRightCorner": 9,
+						"size": 5,
+						"sides": {
+							"top": true,
+							"right": true,
+							"bottom": true,
+							"left": true
+						}
+					},
+					"saveWindowState": false,
+					"shadow": false,
+					"showTaskbarIcon": false,
+					"smallWindow": false,
+					"state": "normal",
+					"taskbarIcon": "",
+					"taskbarIconGroup": "7028155e-a83f-41fc-bb7b-df56f51afb41",
+					"transparent": false,
+					"url": "http://localhost:3375/components/welcome/welcome.html",
+					"uuid": "defaultAgent-11-21",
+					"waitForPageLoad": false,
+					"backgroundColor": "#151f28",
+					"webSecurity": true,
+					"show": true,
+					"skipTaskbar": false,
+					"title": "Welcome",
+					"height": 432,
+					"width": 400,
+					"center": false,
+					"x": 1080,
+					"y": 484,
+					"enableLargerThanScreen": true,
+					"enable-plugins": true,
+					"webPreferences": {
+						"disableInitialReload": false,
+						"nodeIntegration": false,
+						"plugins": false
+					},
+					"customData": {
+						"component": {
+							"canMinimize": true,
+							"inject": false,
+							"preload": "http://localhost:3375/preloads/zoom.js",
+							"spawnOnStartup": false,
+							"type": "Welcome Component"
+						},
+						"cssOverride": "",
+						"foreign": {
+							"components": {
+								"App Launcher": {
+									"launchableByUser": true
+								},
+								"Toolbar": {
+									"iconClass": "ff-component"
+								},
+								"Window Manager": {
+									"FSBLHeader": true,
+									"persistWindowState": true,
+									"showLinker": true,
+									"title": "Welcome"
+								}
 							},
-							{
-								"url": "http://localhost:3375/preloads/zoom.js",
-								"state": "succeeded"
+							"services": {
+								"dockingService": {
+									"canGroup": true,
+									"isArrangable": true,
+									"isArrangeable": false
+								},
+								"launcherService": {
+									"inject": false
+								}
 							}
-						],
-						"plugin": [],
-						"hasLoaded": true,
-						"windowIdentifier": {
+						},
+						"monitorDimensions": {
+							"bottom": 1400,
+							"height": 1400,
+							"left": 0,
+							"right": 2560,
+							"top": 0,
+							"width": 2560
+						},
+						"window": {
+							"autoShow": true,
+							"frame": false,
+							"height": 432,
+							"left": "center",
+							"resizable": true,
+							"top": "center",
+							"url": "http://localhost:3375/components/welcome/welcome.html",
+							"width": 400
+						}
+					},
+					"preloadScripts": [
+						{
+							"url": "http://localhost:3375/finsemble/FSBL.js",
+							"state": "succeeded"
+						},
+						{
+							"url": "http://localhost:3375/preloads/zoom.js",
+							"state": "succeeded"
+						}
+					],
+					"plugin": [],
+					"hasLoaded": true,
+					"windowIdentifier": {
+						"uuid": "defaultAgent-11-21",
+						"name": "Welcome Component-95-1745",
+						"windowName": "Welcome Component-95-1745",
+						"windowType": "OpenFinWindow"
+					},
+					"callstack": "Log Stack: \n    at promiseResolver (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8162:43)\n    at FinsembleWindow.queryWindowService (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8180:16)\n    at FinsembleWindow.updateOptions (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8227:14)\n    at WindowClient.listenForHashChanges (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:9662:25)\n    at WindowClient.addListeners (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:10440:14)\n    at FinsembleWindow.getInstance (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:10858:22)\n    at promiseResolver (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8011:28)",
+					"monitorDimensions": {
+						"top": 0,
+						"bottom": 1440,
+						"left": 0,
+						"right": 2560,
+						"width": 2560,
+						"height": 1440
+					},
+					"cachedLeft": 1080,
+					"cachedTop": 484,
+					"cachedWidth": 400,
+					"cachedHeight": 432,
+					"top": 290,
+					"left": 390,
+					"bottom": 722,
+					"right": 790,
+					"bounds": {
+						"top": 290,
+						"left": 390,
+						"width": 400,
+						"height": 432,
+						"bottom": 722,
+						"right": 790
+					},
+					"stackedWindowIdentifier": {
+						"windowName": "StackedWindow-24-8686",
+						"windowType": "StackedWindow"
+					},
+					"invokedByParent": true
+				},
+				{
+					"accelerator": {
+						"devtools": true,
+						"zoom": false,
+						"reload": true,
+						"reloadIgnoringCache": true
+					},
+					"alphaMask": {
+						"blue": -1,
+						"green": -1,
+						"red": -1
+					},
+					"alwaysOnBottom": false,
+					"alwaysOnTop": false,
+					"applicationIcon": "",
+					"autoShow": false,
+					"backgroundThrottling": false,
+					"contextMenu": false,
+					"cornerRounding": {
+						"height": 0,
+						"width": 0
+					},
+					"defaultCentered": false,
+					"defaultHeight": 432,
+					"defaultLeft": 390,
+					"defaultTop": 290,
+					"defaultWidth": 400,
+					"delay_connection": false,
+					"disableIabSecureLogging": false,
+					"draggable": false,
+					"exitOnClose": false,
+					"experimental": {
+						"disableInitialReload": false,
+						"v2Api": false
+					},
+					"frame": false,
+					"frameConnect": "last",
+					"hideOnBlur": false,
+					"hideOnClose": false,
+					"hideWhileChildrenVisible": false,
+					"icon": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png",
+					"launchExternal": "",
+					"loadErrorMessage": "",
+					"maxHeight": -1,
+					"maxWidth": -1,
+					"maximizable": true,
+					"minHeight": 0,
+					"minWidth": 0,
+					"minimizable": true,
+					"name": "Welcome Component-72-9134",
+					"opacity": 1,
+					"plugins": false,
+					"resizable": true,
+					"resize": true,
+					"resizeRegion": {
+						"bottomRightCorner": 9,
+						"size": 5,
+						"sides": {
+							"top": true,
+							"right": true,
+							"bottom": true,
+							"left": true
+						}
+					},
+					"saveWindowState": false,
+					"shadow": false,
+					"showTaskbarIcon": true,
+					"smallWindow": false,
+					"state": "normal",
+					"taskbarIcon": "",
+					"taskbarIconGroup": "Finsemble",
+					"transparent": false,
+					"url": "http://localhost:3375/components/welcome/welcome.html",
+					"uuid": "defaultAgent-11-21",
+					"waitForPageLoad": false,
+					"backgroundColor": "#151f28",
+					"webSecurity": true,
+					"show": true,
+					"skipTaskbar": false,
+					"title": "Welcome",
+					"height": 432,
+					"width": 400,
+					"center": false,
+					"x": 1080,
+					"y": 484,
+					"enableLargerThanScreen": true,
+					"enable-plugins": true,
+					"webPreferences": {
+						"disableInitialReload": false,
+						"nodeIntegration": false,
+						"plugins": false
+					},
+					"customData": {
+						"component": {
+							"canMinimize": true,
+							"inject": false,
+							"preload": "http://localhost:3375/preloads/zoom.js",
+							"spawnOnStartup": false,
+							"type": "Welcome Component"
+						},
+						"cssOverride": "",
+						"foreign": {
+							"components": {
+								"App Launcher": {
+									"launchableByUser": true
+								},
+								"Toolbar": {
+									"iconClass": "ff-component"
+								},
+								"Window Manager": {
+									"FSBLHeader": true,
+									"persistWindowState": true,
+									"showLinker": true,
+									"title": "Welcome"
+								}
+							},
+							"services": {
+								"dockingService": {
+									"canGroup": true,
+									"isArrangable": true,
+									"isArrangeable": false
+								},
+								"launcherService": {
+									"inject": false
+								}
+							}
+						},
+						"monitorDimensions": {
+							"bottom": 1400,
+							"height": 1400,
+							"left": 0,
+							"right": 2560,
+							"top": 0,
+							"width": 2560
+						},
+						"window": {
+							"autoShow": true,
+							"frame": false,
+							"height": 432,
+							"left": "center",
+							"resizable": true,
+							"top": "center",
+							"url": "http://localhost:3375/components/welcome/welcome.html",
+							"width": 400
+						}
+					},
+					"preloadScripts": [
+						{
+							"url": "http://localhost:3375/finsemble/FSBL.js",
+							"state": "succeeded"
+						},
+						{
+							"url": "http://localhost:3375/preloads/zoom.js",
+							"state": "succeeded"
+						}
+					],
+					"plugin": [],
+					"hasLoaded": true,
+					"windowIdentifier": {
+						"uuid": "defaultAgent-11-21",
+						"name": "Welcome Component-72-9134",
+						"windowName": "Welcome Component-72-9134",
+						"windowType": "OpenFinWindow"
+					},
+					"callstack": "Log Stack: \n    at promiseResolver (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8162:43)\n    at FinsembleWindow.queryWindowService (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8180:16)\n    at FinsembleWindow.updateOptions (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8227:14)\n    at WindowClient.listenForHashChanges (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:9662:25)\n    at WindowClient.addListeners (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:10440:14)\n    at FinsembleWindow.getInstance (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:10858:22)\n    at promiseResolver (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8011:28)",
+					"monitorDimensions": {
+						"top": 0,
+						"bottom": 1440,
+						"left": 0,
+						"right": 2560,
+						"width": 2560,
+						"height": 1440
+					},
+					"cachedLeft": 1080,
+					"cachedTop": 484,
+					"cachedWidth": 400,
+					"cachedHeight": 432,
+					"top": 290,
+					"left": 390,
+					"bottom": 722,
+					"right": 790,
+					"bounds": {
+						"top": 290,
+						"left": 390,
+						"width": 400,
+						"height": 432,
+						"bottom": 722,
+						"right": 790
+					}
+				},
+				{
+					"windowType": "StackedWindow",
+					"bounds": {
+						"left": 390,
+						"right": 790,
+						"width": 400,
+						"top": 290,
+						"bottom": 722,
+						"height": 432
+					},
+					"windowName": "StackedWindow-24-8686",
+					"name": "StackedWindow-24-8686",
+					"childWindowIdentifiers": [
+						{
 							"uuid": "defaultAgent-11-21",
 							"name": "Welcome Component-95-1745",
 							"windowName": "Welcome Component-95-1745",
 							"windowType": "OpenFinWindow"
 						},
-						"callstack": "Log Stack: \n    at promiseResolver (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8162:43)\n    at FinsembleWindow.queryWindowService (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8180:16)\n    at FinsembleWindow.updateOptions (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8227:14)\n    at WindowClient.listenForHashChanges (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:9662:25)\n    at WindowClient.addListeners (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:10440:14)\n    at FinsembleWindow.getInstance (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:10858:22)\n    at promiseResolver (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8011:28)",
-						"monitorDimensions": {
-							"top": 0,
-							"bottom": 1440,
-							"left": 0,
-							"right": 2560,
-							"width": 2560,
-							"height": 1440
-						},
-						"cachedLeft": 1080,
-						"cachedTop": 484,
-						"cachedWidth": 400,
-						"cachedHeight": 432,
-						"top": 290,
-						"left": 390,
-						"bottom": 722,
-						"right": 790,
-						"bounds": {
-							"top": 290,
-							"left": 390,
-							"width": 400,
-							"height": 432,
-							"bottom": 722,
-							"right": 790
-						},
-						"stackedWindowIdentifier": {
-							"windowName": "StackedWindow-24-8686",
-							"windowType": "StackedWindow"
-						},
-						"invokedByParent": true
-					},
-					{
-						"accelerator": {
-							"devtools": true,
-							"zoom": false,
-							"reload": true,
-							"reloadIgnoringCache": true
-						},
-						"alphaMask": {
-							"blue": -1,
-							"green": -1,
-							"red": -1
-						},
-						"alwaysOnBottom": false,
-						"alwaysOnTop": false,
-						"applicationIcon": "",
-						"autoShow": false,
-						"backgroundThrottling": false,
-						"contextMenu": false,
-						"cornerRounding": {
-							"height": 0,
-							"width": 0
-						},
-						"defaultCentered": false,
-						"defaultHeight": 432,
-						"defaultLeft": 390,
-						"defaultTop": 290,
-						"defaultWidth": 400,
-						"delay_connection": false,
-						"disableIabSecureLogging": false,
-						"draggable": false,
-						"exitOnClose": false,
-						"experimental": {
-							"disableInitialReload": false,
-							"v2Api": false
-						},
-						"frame": false,
-						"frameConnect": "last",
-						"hideOnBlur": false,
-						"hideOnClose": false,
-						"hideWhileChildrenVisible": false,
-						"icon": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png",
-						"launchExternal": "",
-						"loadErrorMessage": "",
-						"maxHeight": -1,
-						"maxWidth": -1,
-						"maximizable": true,
-						"minHeight": 0,
-						"minWidth": 0,
-						"minimizable": true,
-						"name": "Welcome Component-72-9134",
-						"opacity": 1,
-						"plugins": false,
-						"resizable": true,
-						"resize": true,
-						"resizeRegion": {
-							"bottomRightCorner": 9,
-							"size": 5,
-							"sides": {
-								"top": true,
-								"right": true,
-								"bottom": true,
-								"left": true
-							}
-						},
-						"saveWindowState": false,
-						"shadow": false,
-						"showTaskbarIcon": true,
-						"smallWindow": false,
-						"state": "normal",
-						"taskbarIcon": "",
-						"taskbarIconGroup": "Finsemble",
-						"transparent": false,
-						"url": "http://localhost:3375/components/welcome/welcome.html",
-						"uuid": "defaultAgent-11-21",
-						"waitForPageLoad": false,
-						"backgroundColor": "#151f28",
-						"webSecurity": true,
-						"show": true,
-						"skipTaskbar": false,
-						"title": "Welcome",
-						"height": 432,
-						"width": 400,
-						"center": false,
-						"x": 1080,
-						"y": 484,
-						"enableLargerThanScreen": true,
-						"enable-plugins": true,
-						"webPreferences": {
-							"disableInitialReload": false,
-							"nodeIntegration": false,
-							"plugins": false
-						},
-						"customData": {
-							"component": {
-								"canMinimize": true,
-								"inject": false,
-								"preload": "http://localhost:3375/preloads/zoom.js",
-								"spawnOnStartup": false,
-								"type": "Welcome Component"
-							},
-							"cssOverride": "",
-							"foreign": {
-								"components": {
-									"App Launcher": {
-										"launchableByUser": true
-									},
-									"Toolbar": {
-										"iconClass": "ff-component"
-									},
-									"Window Manager": {
-										"FSBLHeader": true,
-										"persistWindowState": true,
-										"showLinker": true,
-										"title": "Welcome"
-									}
-								},
-								"services": {
-									"dockingService": {
-										"canGroup": true,
-										"isArrangable": true,
-										"isArrangeable": false
-									},
-									"launcherService": {
-										"inject": false
-									}
-								}
-							},
-							"monitorDimensions": {
-								"bottom": 1400,
-								"height": 1400,
-								"left": 0,
-								"right": 2560,
-								"top": 0,
-								"width": 2560
-							},
-							"window": {
-								"autoShow": true,
-								"frame": false,
-								"height": 432,
-								"left": "center",
-								"resizable": true,
-								"top": "center",
-								"url": "http://localhost:3375/components/welcome/welcome.html",
-								"width": 400
-							}
-						},
-						"preloadScripts": [
-							{
-								"url": "http://localhost:3375/finsemble/FSBL.js",
-								"state": "succeeded"
-							},
-							{
-								"url": "http://localhost:3375/preloads/zoom.js",
-								"state": "succeeded"
-							}
-						],
-						"plugin": [],
-						"hasLoaded": true,
-						"windowIdentifier": {
+						{
 							"uuid": "defaultAgent-11-21",
 							"name": "Welcome Component-72-9134",
 							"windowName": "Welcome Component-72-9134",
-							"windowType": "OpenFinWindow"
+							"windowType": "OpenFinWindow",
+							"title": "Welcome Component-72-9134"
+						}
+					],
+					"visibleWindowIdentifier": {
+						"uuid": "defaultAgent-11-21",
+						"name": "Welcome Component-95-1745",
+						"windowName": "Welcome Component-95-1745",
+						"windowType": "OpenFinWindow"
+					},
+					"customData": {
+						"component": {
+							"type": "StackedWindow",
+							"canMinimize": true
 						},
-						"callstack": "Log Stack: \n    at promiseResolver (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8162:43)\n    at FinsembleWindow.queryWindowService (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8180:16)\n    at FinsembleWindow.updateOptions (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8227:14)\n    at WindowClient.listenForHashChanges (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:9662:25)\n    at WindowClient.addListeners (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:10440:14)\n    at FinsembleWindow.getInstance (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:10858:22)\n    at promiseResolver (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8011:28)",
+						"foreign": {
+							"services": {
+								"dockingService": {
+									"isArrangeable": true
+								},
+								"launcherService": {
+									"inject": false
+								}
+							},
+							"components": {
+								"App Launcher": {
+									"launchableByUser": false
+								},
+								"Window Manager": {
+									"persistWindowState": true,
+									"FSBLHeader": true,
+									"showLinker": false
+								}
+							}
+						},
+						"cssOverride": "",
 						"monitorDimensions": {
 							"top": 0,
-							"bottom": 1440,
+							"bottom": 1400,
 							"left": 0,
 							"right": 2560,
 							"width": 2560,
-							"height": 1440
+							"height": 1400
 						},
-						"cachedLeft": 1080,
-						"cachedTop": 484,
-						"cachedWidth": 400,
-						"cachedHeight": 432,
-						"top": 290,
-						"left": 390,
-						"bottom": 722,
-						"right": 790,
-						"bounds": {
-							"top": 290,
-							"left": 390,
-							"width": 400,
-							"height": 432,
-							"bottom": 722,
-							"right": 790
+						"window": {
+							"windowType": "StackedWindow",
+							"addToWorkspace": true
+						},
+						"spawnData": {
+							"windowIdentifiers": [
+								{
+									"uuid": "defaultAgent-11-21",
+									"name": "Welcome Component-95-1745",
+									"windowName": "Welcome Component-95-1745",
+									"windowType": "OpenFinWindow"
+								},
+								{
+									"uuid": "defaultAgent-11-21",
+									"name": "Welcome Component-72-9134",
+									"windowName": "Welcome Component-72-9134",
+									"windowType": "OpenFinWindow",
+									"title": "Welcome Component-72-9134"
+								}
+							]
 						}
 					},
-					{
-						"windowType": "StackedWindow",
-						"bounds": {
-							"left": 390,
-							"right": 790,
-							"width": 400,
-							"top": 290,
-							"bottom": 722,
-							"height": 432
-						},
-						"windowName": "StackedWindow-24-8686",
-						"name": "StackedWindow-24-8686",
-						"childWindowIdentifiers": [
-							{
-								"uuid": "defaultAgent-11-21",
-								"name": "Welcome Component-95-1745",
-								"windowName": "Welcome Component-95-1745",
-								"windowType": "OpenFinWindow"
-							},
-							{
-								"uuid": "defaultAgent-11-21",
-								"name": "Welcome Component-72-9134",
-								"windowName": "Welcome Component-72-9134",
-								"windowType": "OpenFinWindow",
-								"title": "Welcome Component-72-9134"
-							}
-						],
-						"visibleWindowIdentifier": {
-							"uuid": "defaultAgent-11-21",
-							"name": "Welcome Component-95-1745",
-							"windowName": "Welcome Component-95-1745",
-							"windowType": "OpenFinWindow"
-						},
-						"customData": {
-							"component": {
-								"type": "StackedWindow",
-								"canMinimize": true
-							},
-							"foreign": {
-								"services": {
-									"dockingService": {
-										"isArrangeable": true
-									},
-									"launcherService": {
-										"inject": false
-									}
-								},
-								"components": {
-									"App Launcher": {
-										"launchableByUser": false
-									},
-									"Window Manager": {
-										"persistWindowState": true,
-										"FSBLHeader": true,
-										"showLinker": false
-									}
-								}
-							},
-							"cssOverride": "",
-							"monitorDimensions": {
-								"top": 0,
-								"bottom": 1400,
-								"left": 0,
-								"right": 2560,
-								"width": 2560,
-								"height": 1400
-							},
-							"window": {
-								"windowType": "StackedWindow",
-								"addToWorkspace": true
-							},
-							"spawnData": {
-								"windowIdentifiers": [
-									{
-										"uuid": "defaultAgent-11-21",
-										"name": "Welcome Component-95-1745",
-										"windowName": "Welcome Component-95-1745",
-										"windowType": "OpenFinWindow"
-									},
-									{
-										"uuid": "defaultAgent-11-21",
-										"name": "Welcome Component-72-9134",
-										"windowName": "Welcome Component-72-9134",
-										"windowType": "OpenFinWindow",
-										"title": "Welcome Component-72-9134"
-									}
-								]
-							}
-						},
-						"left": 390,
-						"top": 290,
-						"height": 432,
-						"width": 400,
-						"right": 790,
-						"bottom": 722
+					"left": 390,
+					"top": 290,
+					"height": 432,
+					"width": 400,
+					"right": 790,
+					"bottom": 722
+				},
+				{
+					"accelerator": {
+						"devtools": true,
+						"zoom": false,
+						"reload": true,
+						"reloadIgnoringCache": true
 					},
-					{
-						"accelerator": {
-							"devtools": true,
-							"zoom": false,
-							"reload": true,
-							"reloadIgnoringCache": true
+					"alphaMask": {
+						"blue": -1,
+						"green": -1,
+						"red": -1
+					},
+					"alwaysOnBottom": false,
+					"alwaysOnTop": false,
+					"applicationIcon": "",
+					"autoShow": true,
+					"backgroundThrottling": false,
+					"contextMenu": false,
+					"cornerRounding": {
+						"height": 0,
+						"width": 0
+					},
+					"defaultCentered": false,
+					"defaultHeight": 432,
+					"defaultLeft": 781,
+					"defaultTop": 288,
+					"defaultWidth": 400,
+					"delay_connection": false,
+					"disableIabSecureLogging": false,
+					"draggable": false,
+					"exitOnClose": false,
+					"experimental": {
+						"disableInitialReload": false,
+						"v2Api": false
+					},
+					"frame": false,
+					"frameConnect": "last",
+					"hideOnBlur": false,
+					"hideOnClose": false,
+					"hideWhileChildrenVisible": false,
+					"icon": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png",
+					"launchExternal": "",
+					"loadErrorMessage": "",
+					"maxHeight": -1,
+					"maxWidth": -1,
+					"maximizable": true,
+					"minHeight": 0,
+					"minWidth": 0,
+					"minimizable": true,
+					"name": "Welcome Component-58-7954",
+					"opacity": 1,
+					"plugins": false,
+					"resizable": true,
+					"resize": true,
+					"resizeRegion": {
+						"bottomRightCorner": 9,
+						"size": 5,
+						"sides": {
+							"top": true,
+							"right": true,
+							"bottom": true,
+							"left": true
+						}
+					},
+					"saveWindowState": false,
+					"shadow": false,
+					"showTaskbarIcon": false,
+					"smallWindow": false,
+					"state": "normal",
+					"taskbarIcon": "",
+					"taskbarIconGroup": "7028155e-a83f-41fc-bb7b-df56f51afb41",
+					"transparent": false,
+					"url": "http://localhost:3375/components/welcome/welcome.html",
+					"uuid": "defaultAgent-11-21",
+					"waitForPageLoad": false,
+					"backgroundColor": "#151f28",
+					"webSecurity": true,
+					"show": true,
+					"skipTaskbar": false,
+					"title": "Welcome",
+					"height": 432,
+					"width": 400,
+					"center": false,
+					"x": 1080,
+					"y": 484,
+					"enableLargerThanScreen": true,
+					"enable-plugins": true,
+					"webPreferences": {
+						"disableInitialReload": false,
+						"nodeIntegration": false,
+						"plugins": false
+					},
+					"customData": {
+						"component": {
+							"canMinimize": true,
+							"inject": false,
+							"preload": "http://localhost:3375/preloads/zoom.js",
+							"spawnOnStartup": false,
+							"type": "Welcome Component"
 						},
-						"alphaMask": {
-							"blue": -1,
-							"green": -1,
-							"red": -1
-						},
-						"alwaysOnBottom": false,
-						"alwaysOnTop": false,
-						"applicationIcon": "",
-						"autoShow": true,
-						"backgroundThrottling": false,
-						"contextMenu": false,
-						"cornerRounding": {
-							"height": 0,
-							"width": 0
-						},
-						"defaultCentered": false,
-						"defaultHeight": 432,
-						"defaultLeft": 781,
-						"defaultTop": 288,
-						"defaultWidth": 400,
-						"delay_connection": false,
-						"disableIabSecureLogging": false,
-						"draggable": false,
-						"exitOnClose": false,
-						"experimental": {
-							"disableInitialReload": false,
-							"v2Api": false
-						},
-						"frame": false,
-						"frameConnect": "last",
-						"hideOnBlur": false,
-						"hideOnClose": false,
-						"hideWhileChildrenVisible": false,
-						"icon": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png",
-						"launchExternal": "",
-						"loadErrorMessage": "",
-						"maxHeight": -1,
-						"maxWidth": -1,
-						"maximizable": true,
-						"minHeight": 0,
-						"minWidth": 0,
-						"minimizable": true,
-						"name": "Welcome Component-58-7954",
-						"opacity": 1,
-						"plugins": false,
-						"resizable": true,
-						"resize": true,
-						"resizeRegion": {
-							"bottomRightCorner": 9,
-							"size": 5,
-							"sides": {
-								"top": true,
-								"right": true,
-								"bottom": true,
-								"left": true
-							}
-						},
-						"saveWindowState": false,
-						"shadow": false,
-						"showTaskbarIcon": false,
-						"smallWindow": false,
-						"state": "normal",
-						"taskbarIcon": "",
-						"taskbarIconGroup": "7028155e-a83f-41fc-bb7b-df56f51afb41",
-						"transparent": false,
-						"url": "http://localhost:3375/components/welcome/welcome.html",
-						"uuid": "defaultAgent-11-21",
-						"waitForPageLoad": false,
-						"backgroundColor": "#151f28",
-						"webSecurity": true,
-						"show": true,
-						"skipTaskbar": false,
-						"title": "Welcome",
-						"height": 432,
-						"width": 400,
-						"center": false,
-						"x": 1080,
-						"y": 484,
-						"enableLargerThanScreen": true,
-						"enable-plugins": true,
-						"webPreferences": {
-							"disableInitialReload": false,
-							"nodeIntegration": false,
-							"plugins": false
-						},
-						"customData": {
-							"component": {
-								"canMinimize": true,
-								"inject": false,
-								"preload": "http://localhost:3375/preloads/zoom.js",
-								"spawnOnStartup": false,
-								"type": "Welcome Component"
-							},
-							"cssOverride": "",
-							"foreign": {
-								"components": {
-									"App Launcher": {
-										"launchableByUser": true
-									},
-									"Toolbar": {
-										"iconClass": "ff-component"
-									},
-									"Window Manager": {
-										"FSBLHeader": true,
-										"persistWindowState": true,
-										"showLinker": true,
-										"title": "Welcome"
-									}
+						"cssOverride": "",
+						"foreign": {
+							"components": {
+								"App Launcher": {
+									"launchableByUser": true
 								},
-								"services": {
-									"dockingService": {
-										"canGroup": true,
-										"isArrangable": true,
-										"isArrangeable": false
-									},
-									"launcherService": {
-										"inject": false
-									}
+								"Toolbar": {
+									"iconClass": "ff-component"
+								},
+								"Window Manager": {
+									"FSBLHeader": true,
+									"persistWindowState": true,
+									"showLinker": true,
+									"title": "Welcome"
 								}
 							},
-							"monitorDimensions": {
-								"bottom": 1400,
-								"height": 1400,
-								"left": 0,
-								"right": 2560,
-								"top": 0,
-								"width": 2560
-							},
-							"window": {
-								"autoShow": true,
-								"frame": false,
-								"height": 432,
-								"left": "center",
-								"resizable": true,
-								"top": "center",
-								"url": "http://localhost:3375/components/welcome/welcome.html",
-								"width": 400
+							"services": {
+								"dockingService": {
+									"canGroup": true,
+									"isArrangable": true,
+									"isArrangeable": false
+								},
+								"launcherService": {
+									"inject": false
+								}
 							}
 						},
-						"preloadScripts": [
-							{
-								"url": "http://localhost:3375/finsemble/FSBL.js",
-								"state": "succeeded"
-							},
-							{
-								"url": "http://localhost:3375/preloads/zoom.js",
-								"state": "succeeded"
-							}
-						],
-						"plugin": [],
-						"hasLoaded": true,
-						"windowIdentifier": {
-							"uuid": "defaultAgent-11-21",
-							"name": "Welcome Component-58-7954",
-							"windowName": "Welcome Component-58-7954",
-							"windowType": "OpenFinWindow"
-						},
-						"callstack": "Log Stack: \n    at promiseResolver (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8162:43)\n    at FinsembleWindow.queryWindowService (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8180:16)\n    at FinsembleWindow.updateOptions (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8227:14)\n    at WindowClient.listenForHashChanges (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:9662:25)\n    at WindowClient.addListeners (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:10440:14)\n    at FinsembleWindow.getInstance (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:10858:22)\n    at promiseResolver (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8011:28)",
 						"monitorDimensions": {
-							"top": 0,
-							"bottom": 1440,
+							"bottom": 1400,
+							"height": 1400,
 							"left": 0,
 							"right": 2560,
-							"width": 2560,
-							"height": 1440
+							"top": 0,
+							"width": 2560
 						},
-						"cachedLeft": 1080,
-						"cachedTop": 484,
-						"cachedWidth": 400,
-						"cachedHeight": 432,
+						"window": {
+							"autoShow": true,
+							"frame": false,
+							"height": 432,
+							"left": "center",
+							"resizable": true,
+							"top": "center",
+							"url": "http://localhost:3375/components/welcome/welcome.html",
+							"width": 400
+						}
+					},
+					"preloadScripts": [
+						{
+							"url": "http://localhost:3375/finsemble/FSBL.js",
+							"state": "succeeded"
+						},
+						{
+							"url": "http://localhost:3375/preloads/zoom.js",
+							"state": "succeeded"
+						}
+					],
+					"plugin": [],
+					"hasLoaded": true,
+					"windowIdentifier": {
+						"uuid": "defaultAgent-11-21",
+						"name": "Welcome Component-58-7954",
+						"windowName": "Welcome Component-58-7954",
+						"windowType": "OpenFinWindow"
+					},
+					"callstack": "Log Stack: \n    at promiseResolver (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8162:43)\n    at FinsembleWindow.queryWindowService (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8180:16)\n    at FinsembleWindow.updateOptions (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8227:14)\n    at WindowClient.listenForHashChanges (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:9662:25)\n    at WindowClient.addListeners (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:10440:14)\n    at FinsembleWindow.getInstance (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:10858:22)\n    at promiseResolver (eval at <anonymous> (eval at registerAPI (C:\\Users\\admin\\AppData\\Local\\OpenFin\\runtime\\8.56.28.36\\OpenFin\\resources\\openfin.asar\\renderer\\init.js:253:11)), <anonymous>:8011:28)",
+					"monitorDimensions": {
+						"top": 0,
+						"bottom": 1440,
+						"left": 0,
+						"right": 2560,
+						"width": 2560,
+						"height": 1440
+					},
+					"cachedLeft": 1080,
+					"cachedTop": 484,
+					"cachedWidth": 400,
+					"cachedHeight": 432,
+					"top": 288,
+					"left": 781,
+					"bottom": 720,
+					"right": 1181,
+					"bounds": {
 						"top": 288,
 						"left": 781,
+						"width": 400,
+						"height": 432,
 						"bottom": 720,
-						"right": 1181,
-						"bounds": {
-							"top": 288,
-							"left": 781,
-							"width": 400,
-							"height": 432,
-							"bottom": 720,
-							"right": 1181
-						}
+						"right": 1181
 					}
-				]
-			}
-
-
+				}
+			]
+		}
 	}
 }
-
