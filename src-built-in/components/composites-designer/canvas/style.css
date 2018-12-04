@@ -1,0 +1,23 @@
+* {
+    margin:0;
+    padding: 0
+}
+
+body {
+    background: #1c2a36;
+    color: #ffffff;
+    font-family: Roboto;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #ffffff;
+}
+
+h1 {
+    width: 100%;
+    text-align: center;
+    margin-top: 30%;
+    font-size: 22px;
+    font-weight: 300;
+}
