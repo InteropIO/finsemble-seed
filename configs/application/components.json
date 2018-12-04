@@ -172,25 +172,21 @@
                 }
             }
         },
-        "dashboardBuilder": {
+        "Composites Designer": {
             "window": {
-                "url": "$applicationRoot/components/dashboardBuilder/dashboardBuilder.html",
+                "url": "$applicationRoot/components/composites-designer/index.html",
                 "frame": false,
-                "resizable": true,
                 "autoShow": true,
                 "alwaysOnTop": true,
-                "top": "left",
-                "left": "left",
+                "top": "100px",
+                "left": "60px",
                 "width": 300,
                 "height": 650
             },
-            "component": {
-                "inject": false
-            },
             "foreign": {
                 "services": {
                     "dockingService": {
-                        "canGroup": true,
+                        "canGroup": false,
                         "isArrangable": true
                     }
                 },
@@ -199,88 +195,40 @@
                         "launchableByUser": true
                     },
                     "Window Manager": {
-                        "title": "dashboardBuilder",
-                        "FSBLHeader": true,
+                        "title": "Composites Designer",
+                        "FSBLHeader": false,
                         "persistWindowState": true,
                         "showTabs": false
                     },
                     "Toolbar": {
-                        "iconClass": "dashboardBuilder"
+                        "iconClass": "cd"
                     }
                 }
             }
         },
-        "dashboardCanvas": {
+        "Composites Canvas": {
             "window": {
-                "url": "$applicationRoot/components/dashboardCanvas/dashboardCanvas.html",
+                "url": "$applicationRoot/components/composites-designer/canvas/index.html",
                 "frame": false,
-                "resizable": true,
-                "autoShow": true,
-                "alwaysOnTop": true,
-                "top": "center",
-                "left": "center",
+                "alwaysOnTop": false,
+                "top": "100px",
+                "left": "380px",
                 "width": 800,
-                "height": 700
-            },
-            "component": {
-                "inject": false
+                "height": 650
             },
             "foreign": {
-                "services": {
-                    "dockingService": {
-                        "canGroup": true,
-                        "isArrangable": true
-                    }
-                },
                 "components": {
                     "App Launcher": {
-                        "launchableByUser": true
+                        "launchableByUser": false
                     },
                     "Window Manager": {
-                        "title": "Dashboard Canvas",
                         "FSBLHeader": true,
+                        "titler": "Composites Name",
                         "persistWindowState": true,
                         "showTabs": false
                     },
                     "Toolbar": {
-                        "iconClass": "dashboardCanvas"
-                    }
-                }
-            }
-        },
-        "dragDrop": {
-            "window": {
-                "url": "$applicationRoot/components/dragDrop/dragDrop.html",
-                "frame": false,
-                "resizable": true,
-                "autoShow": true,
-                "top": "center",
-                "left": "center",
-                "width": 800,
-                "height": 600
-            },
-            "component": {
-                "inject": false
-            },
-            "foreign": {
-                "services": {
-                    "dockingService": {
-                        "canGroup": true,
-                        "isArrangable": true
-                    }
-                },
-                "components": {
-                    "App Launcher": {
-                        "launchableByUser": true
-                    },
-                    "Window Manager": {
-                        "title": "dragDrop",
-                        "FSBLHeader": true,
-                        "persistWindowState": true,
-                        "showTabs": false
-                    },
-                    "Toolbar": {
-                        "iconClass": "dragDrop"
+                        "iconClass": "cdc"
                     }
                 }
             }
