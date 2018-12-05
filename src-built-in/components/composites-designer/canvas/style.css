@@ -50,6 +50,14 @@ h1 {
     outline: none;
     opacity: .7;
 }
+.lm_header .lm_tab.lm_active {
+    box-shadow: none !important;
+}
+.lm_splitter.lm_dragging,
+.lm_splitter.lm_dragging:hover  {
+    background: #0a8cf4;
+}
+
 .lm_dragProxy, .lm_dragProxy * {
     background: none !important;
     border: 0 !important;
