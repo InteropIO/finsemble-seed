@@ -362,7 +362,7 @@
 			});
 			if (done) done();
 		},
-		launchE2O: (channelAdapter, done) => {
+		launchE2O: done => {
 			let electronProcess = null;
 			let manifest = taskMethods.startupConfig[env.NODE_ENV].serverConfig;
 			process.env.ELECTRON_DEV = true;
@@ -383,7 +383,7 @@
 
 			let e2oLocation = "node_modules/@chartiq/e2o";
 			let electronPath = path.join("..", "..", "electron", "dist", "electron.exe");
-			let command = "set ELECTRON_DEV=true && " + electronPath + " index.js --remote-debugging-port=9090" + (channelAdapter == "e2o"? "" : " --inspect-brk=5858") +  " --manifest " + manifest;
+			let command = "set ELECTRON_DEV=true && " + electronPath + " index.js --remote-debugging-port=9090" + (envOrArg("breakpointOnStart") ? " --inspect-brk=5858" : "") +  " --manifest " + manifest;
 			logToTerminal(command);
 			electronProcess = exec(command,
 				{
@@ -420,7 +420,7 @@
 			if (channelAdapter === "openfin") {
 				taskMethods.launchOpenFin(done);
 			} else {
-				taskMethods.launchE2O(channelAdapter, done);
+				taskMethods.launchE2O(done);
 			}
 		},
 
