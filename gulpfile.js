@@ -352,7 +352,7 @@
 					process.exit();
 				});
 			});
-			
+
 			openfinLauncher.launchOpenFin({
 				configPath: taskMethods.startupConfig[env.NODE_ENV].serverConfig
 			}).then(() => {
@@ -362,20 +362,20 @@
 			});
 			if (done) done();
 		},
-		launchE2O: done => {
+		launchE2O: (channelAdapter, done) => {
 			let electronProcess = null;
 			let manifest = taskMethods.startupConfig[env.NODE_ENV].serverConfig;
 			process.env.ELECTRON_DEV = true;
 
 			ON_DEATH((signal, err) => {
 				if (electronProcess) electronProcess.kill();
-			
+
 				exec("taskkill /F /IM electron.* /T", (err, stdout, stderr) => {
 					// Only write the error to console if there is one and it is something other than process not found.
 					if (err && err !== 'The process "electron.*" not found.') {
 						console.error(errorOutColor(err));
 					}
-			
+
 					if (watchClose) watchClose();
 					process.exit();
 				});
@@ -383,7 +383,7 @@
 
 			let e2oLocation = "node_modules/@chartiq/e2o";
 			let electronPath = path.join("..", "..", "electron", "dist", "electron.exe");
-			let command = "set ELECTRON_DEV=true && " + electronPath + " index.js --remote-debugging-port=9090 --manifest " + manifest;
+			let command = "set ELECTRON_DEV=true && " + electronPath + " index.js --remote-debugging-port=9090" + (channelAdapter == "e2o"? "" : " --inspect-brk=5858") +  " --manifest " + manifest;
 			logToTerminal(command);
 			electronProcess = exec(command,
 				{
@@ -393,15 +393,15 @@
 					logToTerminal("e2o not installed? Try `npm install`", "red");
 				}
 			);
-			
+
 			electronProcess.stdout.on("data", function (data) {
 				console.log(data.toString());
 			});
-		
+
 			electronProcess.stderr.on("data", function (data) {
 				console.error("stderr:", data.toString());
 			});
-		
+
 			electronProcess.on("close", function (code) {
 				console.log("child process exited with code " + code);
 				process.exit();
@@ -409,7 +409,7 @@
 
 			process.on('exit', function () {
 				electronProcess.kill();
-			});	
+			});
 			if (done) done();
 		},
 
@@ -420,8 +420,8 @@
 			if (channelAdapter === "openfin") {
 				taskMethods.launchOpenFin(done);
 			} else {
-				taskMethods.launchE2O(done);
-			}	
+				taskMethods.launchE2O(channelAdapter, done);
+			}
 		},
 
 		logToTerminal: () => {
@@ -438,7 +438,7 @@
 				taskMethods.launchApplication
 			], done);
 		},
-		
+
 		/**
 		 * Method called after tasks are defined.
 		 * @param done Callback function used to signal function completion to support asynchronous execution. Can
