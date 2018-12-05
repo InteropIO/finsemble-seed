@@ -132,8 +132,8 @@ export default class Canvas extends React.Component {
      * @param {any} error Error receiving message from RouterClient 
      * @param {object} message Transmited message after clicking on "Save"
      */
-    onCompositeSave(error, message) {
-        const json = compositesJSON.generate(
+    async onCompositeSave(error, message) {
+        const json = await compositesJSON.generate(
             this.state.compositeName, 
             document.getElementsByClassName('lm_stack'))
         console.log(json)
