@@ -68,12 +68,23 @@ export default class AppsList extends React.Component {
                 .indexOf(this.state.filter.toLowerCase()) > -1
         })
     }
+    /**
+     * Sets the data for the drag event
+     * @param {object} event The drag event
+     * @param {string} component The component name
+     */
+    onDragStart(event, component) {
+        event.dataTransfer.effectAllowed = "copyMove"
+        event.dataTransfer.setData("component", component)
+    }
 
     render() {
         return <div id="apps">
             <ul>
                 {this.filteredApps().map((item, index) => {
-                    return <li key={index}>
+                    return <li key={index} onDragStart={(event) => {
+                        this.onDragStart(event, item)
+                    }} draggable="true">
                         <i className="ff-component"></i> <span>
                             {item}
                         </span>

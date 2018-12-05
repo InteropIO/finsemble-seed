@@ -46,7 +46,6 @@ input {
 }
 #apps ul li {
     user-select: none;
-    cursor: move;
     list-style: none;
     line-height: 1.08;
     letter-spacing: normal;
