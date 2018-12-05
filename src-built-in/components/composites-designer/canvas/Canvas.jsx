@@ -3,6 +3,7 @@ import GoldenLayout from 'golden-layout'
 import 'golden-layout/src/css/goldenlayout-base.css'
 import 'golden-layout/src/css/goldenlayout-dark-theme.css'
 import compositesJSON from '../utils/composites-json'
+import storeActions from './store-actions';
 
 // Golden layout instance
 let layout
@@ -32,7 +33,8 @@ export default class Canvas extends React.Component {
         // Subscribe to composites name input
         FSBL.Clients.RouterClient.addListener("composites:name", this.setTitle)
         FSBL.Clients.RouterClient.addListener("composites:save", this.onCompositeSave)
-
+        // Prepare store
+        storeActions.prepareStore()
     }
     componentWillUnmount() {
         // Unsubscribe to composites name input
@@ -136,7 +138,11 @@ export default class Canvas extends React.Component {
         const json = await compositesJSON.generate(
             this.state.compositeName, 
             document.getElementsByClassName('lm_stack'))
-        console.log(json)
+        // We also need the goldenlayout config if we want to edit
+        // this layout in the future
+        json.layout = layout.toConfig()
+        // Save to persistent store
+        storeActions.addComposite(this.state.compositeName, json)
     }
 
     render() {
