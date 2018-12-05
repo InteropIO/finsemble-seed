@@ -38,9 +38,14 @@ export default class Canvas extends React.Component {
     componentDidMount() {
         const tilesElement = document.getElementById("tiles")
         layout = new GoldenLayout({
+            settings: {
+                constrainDragToContainer: false
+            },
             dimensions: {
                 // The gap between tiles
-                borderWidth: 2
+                borderWidth: 2,
+                dragProxyWidth: 200,
+                dragProxyHeight: 50
             },
             content: [{
                 type: 'row',

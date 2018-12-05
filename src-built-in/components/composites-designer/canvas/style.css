@@ -43,6 +43,20 @@ h1 {
 .lm_header .lm_controls {
     display: none;
 }
+.lm_dropTargetIndicator {
+    box-shadow: none;
+    background: #004ba3;
+    border: 2px solid #0a8cf4;
+    outline: none;
+    opacity: .7;
+}
+.lm_dragProxy, .lm_dragProxy * {
+    background: none !important;
+    border: 0 !important;
+    outline: none !important;
+    box-shadow: none !important;
+
+}
 .lm_header .lm_tabs {
     width: 100%;
     padding: 0;
@@ -53,4 +67,7 @@ h1 {
     background: #1c2a36;
     display: block;
     float: none;
+}
+.lm_dropTargetIndicator {
+    top: 0 !important;
 }
