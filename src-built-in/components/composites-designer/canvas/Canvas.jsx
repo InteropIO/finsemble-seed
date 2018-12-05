@@ -2,6 +2,7 @@ import React from 'react'
 import GoldenLayout from 'golden-layout'
 import 'golden-layout/src/css/goldenlayout-base.css'
 import 'golden-layout/src/css/goldenlayout-dark-theme.css'
+import compositesJSON from '../utils/composites-json'
 
 // Golden layout instance
 let layout
@@ -9,7 +10,7 @@ let layout
  * The canvas components, its where you drop apps in
  */
 export default class Canvas extends React.Component {
-
+    
     constructor(props) {
         super(props)
         this.state = {
@@ -21,17 +22,22 @@ export default class Canvas extends React.Component {
         // Bind correct context
         this.onWindowResize = this.onWindowResize.bind(this)
         this.layoutStateChanged = this.layoutStateChanged.bind(this)
+        this.onCompositeSave = this.onCompositeSave.bind(this)
         this.closeWindow = this.closeWindow.bind(this)
+        this.setTitle = this.setTitle.bind(this)
         this.onDrop = this.onDrop.bind(this)
         this.onDrop = this.onDrop.bind(this)
     }
     componentWillMount() {
         // Subscribe to composites name input
         FSBL.Clients.RouterClient.addListener("composites:name", this.setTitle)
+        FSBL.Clients.RouterClient.addListener("composites:save", this.onCompositeSave)
+
     }
     componentWillUnmount() {
         // Unsubscribe to composites name input
         FSBL.Clients.RouterClient.removeListener("composites:name", this.setTitle)
+        FSBL.Clients.RouterClient.removeListener("composites:save", this.onCompositeSave)
         // Remove resize listener
         window.removeEventListener("resize", this.onWindowResize)
     }
@@ -53,6 +59,7 @@ export default class Canvas extends React.Component {
                 content: []
             }]
         }, tilesElement)
+        window.layout = layout
         // Keep updated about the layout state
         layout.on("stateChanged", this.layoutStateChanged)
         // Register our dummy component
@@ -73,6 +80,9 @@ export default class Canvas extends React.Component {
         // in the composites designer component
         FSBL.Clients.WindowClient.setWindowTitle(!data.name ?
             this.state.compositeName : data.name)
+        this.setState({
+            compositeName: data.name
+        })
     }
     /**
      * Closes the canvas window
@@ -116,6 +126,19 @@ export default class Canvas extends React.Component {
             items: layout.root.contentItems.length
         })
     }
+    /**
+     * Triggered when user saves the composite, this function calls composites-json
+     * module to take the layout stacks and convert them into a composite json
+     * @param {any} error Error receiving message from RouterClient 
+     * @param {object} message Transmited message after clicking on "Save"
+     */
+    onCompositeSave(error, message) {
+        const json = compositesJSON.generate(
+            this.state.compositeName, 
+            document.getElementsByClassName('lm_stack'))
+        console.log(json)
+    }
+
     render() {
         return <div id="canvas" onDrop={this.onDrop} onDragOver={this.onDragOver}>
             <div id="tiles"></div>
