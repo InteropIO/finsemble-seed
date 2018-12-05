@@ -30,6 +30,7 @@
         "babel-minify-webpack-plugin": "^0.3.0",
         "compression": "^1.7.2",
         "file-loader": "^1.1.11",
+        "golden-layout": "^1.5.9",
         "lodash.clonedeep": "^4.5.0",
         "lodash.debounce": "^4.0.8",
         "lodash.throttle": "^4.1.1",
