@@ -69,5 +69,5 @@ h1 {
     float: none;
 }
 .lm_dropTargetIndicator {
-    top: 0 !important;
+    margin-top: -45px;
 }
