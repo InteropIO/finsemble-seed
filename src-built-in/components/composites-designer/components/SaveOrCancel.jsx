@@ -1,5 +1,4 @@
 import React from 'react'
-import { getStore } from '../store';
 /**
  * Renders the Save/Cancel buttons and naming input
  */
@@ -12,6 +11,7 @@ export default class SaveOrCancel extends React.Component {
         // Bind correct context
         this.onNameChange = this.onNameChange.bind(this)
         this.onCancelClick = this.onCancelClick.bind(this)
+        this.onSaveClick = this.onSaveClick.bind(this)
     }
     /**
      * Called when the name input value changes
@@ -36,6 +36,14 @@ export default class SaveOrCancel extends React.Component {
         // And close this window
         FSBL.Clients.WindowClient.close()
     }
+    /**
+     * Called when user clicks on save, once this message is received by
+     * canvas, Canvas will generate and save the composites JSON to persistent store
+     */
+    onSaveClick(){
+        // Let the canvas know that we want to save
+        FSBL.Clients.RouterClient.transmit("composites:save")
+    }
 
     render() {
         return <div id="save">
@@ -45,7 +53,7 @@ export default class SaveOrCancel extends React.Component {
             </div>
             <div className="buttons">
                 <button onClick={this.onCancelClick}>Cancel</button>
-                <button className="save-btn" disabled={!this.state.name}>Save</button>
+                <button onClick={this.onSaveClick} className="save-btn" disabled={!this.state.name}>Save</button>
             </div>
         </div>
     }
