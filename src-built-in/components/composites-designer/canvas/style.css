@@ -1,6 +1,7 @@
-* {
+body, #canvas-wrapper, #canvas-wrapper div {
     margin:0;
-    padding: 0
+    padding: 0;
+    overflow: hidden !important;
 }
 
 body {
@@ -13,11 +14,43 @@ body {
     letter-spacing: normal;
     color: #ffffff;
 }
+#canvas-wrapper, #canvas {
+    float: left;
+    width: 100%;
+    height: 100%;
+}
+
+#tiles {
+    width: 100%;
+    height: 100%;
+}
 
 h1 {
     width: 100%;
     text-align: center;
-    margin-top: 30%;
+    top: 30%;
     font-size: 22px;
     font-weight: 300;
+    position: absolute;
+}
+.lm_goldenlayout {
+    background: #151f29;
+    overflow: hidden;
+}
+.lm_content {
+    background: #1c2a36;
+}
+.lm_header .lm_controls {
+    display: none;
+}
+.lm_header .lm_tabs {
+    width: 100%;
+    padding: 0;
+}
+.lm_header .lm_tab,
+.lm_header .lm_tab.lm_active {
+    margin-right: 0;
+    background: #1c2a36;
+    display: block;
+    float: none;
 }
