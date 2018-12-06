@@ -36,11 +36,11 @@
 										},
 										"3": {
 											"name": "Process Monitor",
-											"appID": "3"
+											"appID": "pm"
 										},
 										"4": {
 											"name": "Notepad",
-											"appID": "4"
+											"appID": "note"
 										}
 									}
 								},
@@ -72,8 +72,8 @@
 								],
 								"icon": "ff-component"
 							},
-							"3": {
-								"appID": "3",
+							"pm": {
+								"appID": "pm",
 								"name": "Process Monitor",
 								"source": "FDC3",
 								"type": "component",
@@ -83,8 +83,8 @@
 								],
 								"icon": "ff-chart-alt-1"
 							},
-							"4": {
-								"appID": "4",
+							"note": {
+								"appID": "note",
 								"name": "Notepad",
 								"source": "FDC3",
 								"type": "component",
@@ -98,7 +98,7 @@
 						}
 					},
 					"default": {
-					"tags": [],
+					"activeLauncherTags": [],
 						"filterText": "",
 						"filterTags": [],
 						"activeFolder": "My Apps",
