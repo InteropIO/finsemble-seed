@@ -48,20 +48,22 @@ export default class AppMarket extends React.Component {
 		this.navigateToShowcase = this.navigateToShowcase.bind(this);
 		this.viewApp = this.viewApp.bind(this);
 	}
+
 	async componentDidMount() {
 		this.setState({
 			tags: await storeActions.getTags(),
 			apps: await storeActions.getApps()
 		});
-		getStore().addListener({ field: 'installed' }, this.installedAppsChanged);
 		getStore().addListener({ field: 'filteredApps' }, this.filteringApps);
+		getStore().addListener({ field: 'activeTags' }, this.filteringApps);
 		getStore().addListener({ field: 'activeApp' }, this.openAppShowcase);
 		// Get notified when user wants to view an app
 		FSBL.Clients.RouterClient.addListener("viewApp", this.viewApp)
 	}
+
 	componentWillUnmount() {
 		getStore().removeListener({ field: 'filteredApps' }, this.filteringApps);
-		getStore().removeListener({ field: 'installed' }, this.installedAppsChanged);
+		getStore().removeListener({ field: 'activeTags' }, this.filteringApps);
 		getStore().removeListener({ field: 'activeApp' }, this.openAppShowcase);
 		// Get notified when user wants to view an app
 		FSBL.Clients.RouterClient.removeListener("viewApp", this.viewApp)
@@ -70,18 +72,24 @@ export default class AppMarket extends React.Component {
 	viewApp(error, event) {
 		!error && this.navigateToShowcase(event.data.app.appID)
 	}
+
 	/**
 	 * The store has pushed an update to the filtered tags list. This means a user has begun searching or added tags to the filter list
 	 */
 	filteringApps() {
+		let { filteredApps, activeTags } = this.state;
 		let apps = storeActions.getFilteredApps();
 		let tags = storeActions.getActiveTags();
 
-		this.setState({
-			filteredApps: apps,
-			activeTags: tags,
-			activeApp: null
-		});
+		//Make sure a change actually occured before rerendering. If the store's activeTags or filteredApps is different then local, we make a change (which triggers a page change). Otherwise don't.
+		//NOTE: The potential bug here is if filteredApps or activeTags has somehow changed and maintained the same length (which should be impossible)
+		if (apps.length !== filteredApps.length && activeTags.length !== tags.length) {
+			this.setState({
+				filteredApps: apps,
+				activeTags: tags,
+				activeApp: null
+			});
+		}
 	}
 	/**
 	 * Determines the apps page based on the state of the activeTags, search text, etc
@@ -175,6 +183,7 @@ export default class AppMarket extends React.Component {
 	 */
 	openAppShowcase() {
 		let app = storeActions.getActiveApp();
+		console.log('activeApp: ', app);
 		if (app) {
 			storeActions.clearTags();
 			storeActions.clearFilteredApps();
@@ -257,8 +266,10 @@ export default class AppMarket extends React.Component {
 
 FSBL.addEventListener('onReady', function () {
 	createStore((store) => {
-		ReactDOM.render(
-			<AppMarket />,
-			document.getElementById('bodyHere'));
+		storeActions.initialize(() => {
+			ReactDOM.render(
+				<AppMarket />,
+				document.getElementById('bodyHere'));
+		});
 	});
 });

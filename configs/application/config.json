@@ -16,7 +16,7 @@
 		"distributedStore": {
 			"initialStores": [
 				{
-					"name": "Finsemble-AppLauncher-2",
+					"name": "Finsemble-AppLauncher-Store",
 					"foundation": {
 						"appFolders": {
 							"list": ["My Apps", "Favorites"],

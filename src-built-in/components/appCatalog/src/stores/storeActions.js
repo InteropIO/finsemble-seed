@@ -7,6 +7,7 @@ import FDC3 from '../modules/FDC3'
 import { getStore } from './appStore';
 
 export default {
+    initialize,
     getApps,
     getFilteredApps,
     clearFilteredApps,
@@ -25,6 +26,8 @@ export default {
     getActiveApp
 }
 
+const data = {};
+
 /**
  * I'm thinking of using  a local distributed store and the FDC3 client
  * Some data will be pulled from appd and some from the local store
@@ -33,6 +36,22 @@ export default {
 const FDC3Client = new FDC3({url: 'http://localhost:3030/v1'})
 const appd = new AppDirectory(FDC3Client);
 
+function initialize(done = Function.prototype) {
+    const store = getStore();
+    data.apps = store.values.apps;
+    data.tags = store.values.tags;
+    data.filteredApps = store.values.filteredApps;
+    data.activeTags = store.values.activeTags;
+    data.activeApp = store.values.activeApp;
+
+    store.addListener({ field: 'apps' }, (err, dt) => data.apps = dt.value);
+    store.addListener({ field: 'tags' }, (err, dt) => data.tags = dt.value);
+    store.addListener({ field: 'activeApp' }, (err, dt) => data.activeApp = dt.value);
+    store.addListener({ field: 'activeTags' }, (err, dt) => data.activeTags = dt.value);
+    store.addListener({ field: 'filteredApps' }, (err, dt) => data.filteredApps = dt.value);
+    done();
+}
+
 /**
  * Private function to add an active tag. This will filter apps based on tags
  * NOTE: This will need to use search
@@ -40,7 +59,7 @@ const appd = new AppDirectory(FDC3Client);
  */
 function _addActiveTag(tag) {
 
-    let { apps, activeTags } = getStore().getValues(["activeTags", "apps"]);
+    let { apps, activeTags } = data;
 
     activeTags.push(tag);
 
@@ -72,7 +91,7 @@ function _addActiveTag(tag) {
  */
 function _removeActiveTag(tag) {
 
-    let { activeTags, apps } = getStore().getValues(['activeTags', 'apps']);
+    let { activeTags, apps } = data;
 
     let newActiveTags = activeTags.filter((currentTag) => {
         return currentTag !== tag;
@@ -111,15 +130,25 @@ function _clearActiveTags() {
  */
 function getApps() {
     appd.getAll((err, apps) => {
-        getStore().setValues([{
-            field: 'installed',
-            value: [apps[0].appId]
-        }, {
+        getStore().setValue({
             field: 'apps',
             value: apps
-        }]);
+        });
     });
     return appd.getAll();
+}
+
+/**
+ * Call to appD to get the list of all tags
+ */
+function getTags() {
+    appd.getTags((err, tags) => {
+        getStore().setValue({
+            field: 'tags',
+            value: tags
+        });
+    });
+    return appd.getTags();
 }
 
 /**
@@ -206,18 +235,19 @@ function removeApp(id) {
  * @param {string} id The app id to show as the actively showcasing app
  */
 function openApp(id) {
-    let apps = getStore().getValue({
-        field: 'apps'
-    });
+    let apps = data.apps;
+    console.log('apps: ', apps);
 
     let index = apps.findIndex((app) => {
         return app.appId === id;
     });
+    console.log('index: ', index);
 
     let app = null;
     if (index >= 0 && index < apps.length) {
         app = apps[index];
     }
+    console.log('app: ', app);
 
     getStore().setValue({
         field: 'activeApp',
@@ -233,27 +263,25 @@ function clearApp() {
 }
 
 function getActiveApp() {
-    return getStore().getValue({
-        field: 'activeApp'
-    });
+    return data.activeApp;
 }
 
 /**
  * Gets the list of installed apps
  */
 function getInstalledApps() {
-    return getStore().getValue({
-        field: 'installed'
-    });
+    // return getStore().getValue({
+    //     field: 'installed'
+    // }, err => {
+    //     if (err) console.warn("Error getting installed apps");
+    // });
 }
 
 /**
  * Gets the list of filtered apps (when searching/filtering by tags)
  */
 function getFilteredApps() {
-    return getStore().getValue({
-        field: 'filteredApps'
-    });
+    return data.filteredApps;
 }
 
 /**
@@ -267,19 +295,10 @@ function clearFilteredApps() {
 }
 
 /**
- * Call to appD to get the list of all tags
- */
-function getTags() {
-    return appd.getTags()
-}
-
-/**
  * Gets the list of active tags (these are tags that are actively filtering the content list)
  */
 function getActiveTags() {
-    return getStore().getValue({
-        field: 'activeTags'
-    });
+    return data.activeTags;
 }
 
 /**
@@ -312,6 +331,8 @@ function clearTags() {
 function searchApps(terms) {
     let activeTags = getStore().getValue({
         field: 'activeTags'
+    }, err => {
+        if (err) console.warn("Error getting active tags");
     });
 
     appd.search({ text: terms, tags: activeTags }, (err, data) => {
