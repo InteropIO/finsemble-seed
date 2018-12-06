@@ -30,7 +30,7 @@ export default {
  * Some data will be pulled from appd and some from the local store
  * Not sure if the localstore needs to be a persistent one at some point?
  */
-const FDC3Client = new FDC3({url: 'http://localhost:3030/v1'})
+const FDC3Client = new FDC3({url: 'https://fpe.finsemble.com/v1/'})
 const appd = new AppDirectory(FDC3Client);
 
 /**

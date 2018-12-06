@@ -1,39 +1,39 @@
-import "../style.css"
-import "../../../../assets/css/font-finance.css"
-import "../../../../assets/css/finsemble.css"
+import "../style.css";
+import "../../../../assets/css/font-finance.css";
+import "../../../../assets/css/finsemble.css";
 // Import js modules
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { createStore, getStore } from './stores/LauncherStore'
-import storeActions from './stores/StoreActions'
+import React from "react";
+import ReactDOM from "react-dom";
+import { createStore, getStore } from "./stores/LauncherStore";
+import storeActions from "./stores/StoreActions";
 
 // Import React components
-import LeftNav from './components/LeftNav'
-import Content from './components/Content'
-import { FinsembleMenu } from '@chartiq/finsemble-react-controls';
+import LeftNav from "./components/LeftNav";
+import Content from "./components/Content";
+import { FinsembleMenu } from "@chartiq/finsemble-react-controls";
 import AddNewAppForm from "./components/AddNewAppForm";
 
 class AppLauncher extends React.Component {
 
 	constructor(props) {
-		super(props)
+		super(props);
 		this.state = {
 			isFormVisible: storeActions.getFormStatus()
-		}
+		};
 		this.toggleAddNewAppForm = this.toggleAddNewAppForm.bind(this);
 		this.finWindow = fin.desktop.Window.getCurrent();
 		this.openAppMarket = this.openAppMarket.bind(this);
 	}
 
 	componentWillMount() {
-		getStore().addListener({ field: 'isFormVisible' }, this.toggleAddNewAppForm);
-		this.finWindow.addEventListener('shown', () => {
+		getStore().addListener({ field: "isFormVisible" }, this.toggleAddNewAppForm);
+		this.finWindow.addEventListener("shown", () => {
 			this.finWindow.focus();
 		});
 	}
 
 	componentWillUnmount() {
-		getStore().removeListener({ field: 'isFormVisible' }, this.toggleAddNewAppForm);
+		getStore().removeListener({ field: "isFormVisible" }, this.toggleAddNewAppForm);
 	}
 	/**
 	 * Sets isFormVisible to true or false in state
@@ -45,7 +45,7 @@ class AppLauncher extends React.Component {
 	toggleAddNewAppForm(error, data) {
 		this.setState({
 			isFormVisible: data.value
-		})
+		});
 	}
 
 	/**
@@ -53,11 +53,11 @@ class AppLauncher extends React.Component {
 	 */
 	onAddNewAppFormAction() {
 		getStore().setValue({
-			field: 'isFormVisible',
+			field: "isFormVisible",
 			value: false
 		}, (error, data) => {
-			error && console.log('Failed to set isFormVisible to false')
-		})
+			error && console.log("Failed to set isFormVisible to false");
+		});
 	}
 
 	openAppMarket() {
@@ -88,7 +88,7 @@ class AppLauncher extends React.Component {
 					</div>
 				</div>
 			</FinsembleMenu>
-		)
+		);
 	}
 }
 
@@ -97,8 +97,8 @@ fin.desktop.main(function () {
 		createStore((store) => {
 			storeActions.initialize(() => {
 				ReactDOM.render(<AppLauncher />,
-					document.getElementById("wrapper"))
-			})
+					document.getElementById("wrapper"));
+			});
 		});
 	});
 });
