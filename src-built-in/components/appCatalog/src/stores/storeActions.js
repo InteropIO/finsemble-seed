@@ -65,7 +65,7 @@ function _addActiveTag(tag) {
 
     let newApps = apps.filter((app) => {
         for (let i = 0; i < activeTags.length; i++) {
-            let tag = activeTags[i];
+            let tag = activeTags[i].trim();
             if (app.tags.includes(tag)) {
                 return true;
             }
@@ -99,7 +99,7 @@ function _removeActiveTag(tag) {
 
     let newApps = apps.filter((app) => {
         for (let i = 0; i < newActiveTags.length; i++) {
-            let tag = activeTags[i];
+            let tag = activeTags[i].trim();
             if (app.tags.includes(tag)) {
                 return true;
             }
@@ -335,6 +335,7 @@ function searchApps(terms) {
         if (err) console.warn("Error getting active tags");
     });
 
+    //TODO: The appd search endpoint returns all apps always
     appd.search({ text: terms, tags: activeTags }, (err, data) => {
         if (err) console.log("Failed to search apps");
         getStore().setValue({
@@ -347,34 +348,34 @@ function searchApps(terms) {
 /**
  * Retrieves a list of installed apps by id
  */
-function getInstalledApps() {
-    return getStore().getValue({
-        field: 'installed'
-    });
-}
+// function getInstalledApps() {
+//     return getStore().getValue({
+//         field: 'installed'
+//     });
+// }
 
-/**
- * Async function to call the launcher client to get a list of added apps
- */
-function fetchInstalledApps() {
-    //NOTE: This is a WIP. This api may change so its commented out for now
-    // FSBL.Clients.LauncherClient.getComponentList((err, apps) => {
-    //     if (err) console.log("Error fetching list of added apps");
-    //     getStore().setValue({
-    //         field: 'installed',
-    //         value: apps
-    //     });
-    //     return apps;
-    // });
-    let apps = getStore().getValue({
-        field: 'apps'
-    });
+// /**
+//  * Async function to call the launcher client to get a list of added apps
+//  */
+// function fetchInstalledApps() {
+//     //NOTE: This is a WIP. This api may change so its commented out for now
+//     // FSBL.Clients.LauncherClient.getComponentList((err, apps) => {
+//     //     if (err) console.log("Error fetching list of added apps");
+//     //     getStore().setValue({
+//     //         field: 'installed',
+//     //         value: apps
+//     //     });
+//     //     return apps;
+//     // });
+//     let apps = getStore().getValue({
+//         field: 'apps'
+//     });
 
-    let installed = [];
-    if (apps.length > 0) installed.push([apps[0].appId]);
+//     let installed = [];
+//     if (apps.length > 0) installed.push([apps[0].appId]);
 
-    getStore().setValue({
-        field: 'installed',
-        value: installed
-    });
-}
+//     getStore().setValue({
+//         field: 'installed',
+//         value: installed
+//     });
+// }

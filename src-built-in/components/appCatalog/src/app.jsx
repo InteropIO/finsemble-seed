@@ -81,9 +81,9 @@ export default class AppMarket extends React.Component {
 		let apps = storeActions.getFilteredApps();
 		let tags = storeActions.getActiveTags();
 
-		//Make sure a change actually occured before rerendering. If the store's activeTags or filteredApps is different then local, we make a change (which triggers a page change). Otherwise don't.
+		//Make sure a change actually occured before rerendering. If the store's activeTags or filteredApps is different then component's, we make a change (which triggers a page change). Otherwise don't.
 		//NOTE: The potential bug here is if filteredApps or activeTags has somehow changed and maintained the same length (which should be impossible)
-		if (apps.length !== filteredApps.length && activeTags.length !== tags.length) {
+		if (apps.length !== filteredApps.length || activeTags.length !== tags.length) {
 			this.setState({
 				filteredApps: apps,
 				activeTags: tags,
