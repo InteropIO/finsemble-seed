@@ -383,7 +383,12 @@
 
 			let e2oLocation = "node_modules/@chartiq/e2o";
 			let electronPath = path.join("..", "..", "electron", "dist", "electron.exe");
-			let command = "set ELECTRON_DEV=true && " + electronPath + " index.js --remote-debugging-port=9090" + (envOrArg("breakpointOnStart") ? " --inspect-brk=5858" : "") +  " --manifest " + manifest;
+			let debug = envOrArg("e2odebug");
+			let debugArg = "";
+			if (debug) {
+				debugArg = envOrArg("breakpointOnStart") ? " --inspect-brk=5858" : " --inspect=5858";
+			}
+			let command = "set ELECTRON_DEV=true && " + electronPath + " index.js --remote-debugging-port=9090" + debugArg +  " --manifest " + manifest;
 			logToTerminal(command);
 			electronProcess = exec(command,
 				{
