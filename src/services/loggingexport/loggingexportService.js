@@ -26,6 +26,8 @@ Logger.start();
 const BATCH_SIZE = 100;
 /** Wait at most this number of milliseconds after first message in batch is received before transmitting. */
 const TIMEOUT_MILLISECS = 30 * 1000;
+/** Wait at most this number of milliseconds for batch transmission to complete */
+const TRANSMIT_TIMEOUT_MILLISECS = 10 * 1000;
 /** Log levels of messsages to capture. Valid values: Error, Warning, Log, Info, Debug, Verbose */
 const CAPTURE_LOG_LEVELS = {
 	"Log": true, 
@@ -39,7 +41,7 @@ const CAPTURE_LOG_CATEGORIES = {
 };
 /** Where to transmit the logs to */
 //TODO: Update to your logging endpoint
-const LOGGING_ENDPOINT = "http://somedomain.com/loggingendpoint";
+const LOGGING_ENDPOINT = "http://localhost/loggingendpoint";
 
 
 /**
@@ -126,11 +128,12 @@ function loggingexportService() {
 			.post(LOGGING_ENDPOINT)	
 			.withCredentials()		// set this for CORS requests
 			.type('json')
+			.timeout({response: TRANSMIT_TIMEOUT_MILLISECS})
 			.send({
 				logMessages: toTransmit
 			})
 			.then(res => {
-				console.log("batch tranmitted: ", res);
+				console.log("Log batch transmitted: ", res);
 			})
 			.catch(err => {
 				console.error("Log batch transmission failure: ", err);
