@@ -1,13 +1,18 @@
 let launcherStore
 
+const data = {
+	field: 'defaultFolder',
+	value: 'My Apps'
+};
+
 function createStore(done) {
 	FSBL.Clients.DistributedStoreClient
 	.getStore({ store: "Finsemble-AppLauncher-Store",
 		global: true
 		}, (error, store) => {
-			console.log('error: ', error);
-		launcherStore = store;
-		done(null, launcherStore)
+			launcherStore = store;
+			launcherStore.setValue(data);
+			done(null, launcherStore);
 	})
 }
 

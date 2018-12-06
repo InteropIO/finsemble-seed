@@ -38,12 +38,26 @@ const appd = new AppDirectory(FDC3Client);
 function initialize(done = Function.prototype) {
     const store = getStore();
     data.apps = store.values.apps;
+    store.getValue({ field: 'appFolders.folders' }, (err, folders) => {
+        data.folders = folders;
+    });
+    store.getValue({ field: 'activeFolder' }, (err, active) => {
+        data.activeFolder = active;
+    });
+    store.getValue({ field: 'defaultFolder' }, (err, folder) => {
+        data.defaultFolder = folder;
+    });
+    data.installed = store.values.appDefinitions;
     data.tags = store.values.tags;
     data.filteredApps = store.values.filteredApps;
     data.activeTags = store.values.activeTags;
     data.activeApp = store.values.activeApp;
+    data.MY_APPS = store.values.defaultFolder;
 
     store.addListener({ field: 'apps' }, (err, dt) => data.apps = dt.value);
+    store.addListener({ field: 'appFolders.folders' }, (err, dt) => data.folders = dt.value);
+    store.addListener({ field: 'activeFolder' }, (err, dt) => data.activeFolder = dt.value);
+    store.addListener({ field: 'appDefinitions' }, (err, dt) => data.installed = dt.value);
     store.addListener({ field: 'tags' }, (err, dt) => data.tags = dt.value);
     store.addListener({ field: 'activeApp' }, (err, dt) => data.activeApp = dt.value);
     store.addListener({ field: 'activeTags' }, (err, dt) => data.activeTags = dt.value);
@@ -155,43 +169,58 @@ async function getTags() {
  * @param {string} name The name of the app
  */
 function addApp(id) {
-    let { installed, apps, activeApp } = getStore().getValues([
-        {
-            field: 'apps'
-        },
-        {
-            field: 'installed'
-        },
-        {
-            field: 'activeApp'
-        }
-    ])
+    let { activeApp, installed, apps } = data;
+    console.log('id: ', id);
+    console.log('apps: ', apps);
 
-    for (let i = 0; i < apps.length; i++) {
-        let app = apps[i];
-        let thisAppId = app.appId;
-        if (thisAppId === id && !installed.includes(id)) {
-            installed.push(id);
-            break;
-        }
+    const appID = id;
+    let app = apps.find(app => {
+        return app.appId === appID;
+    })
+    console.log('app: ', app);
+    const folder = data.activeFolder
+    console.log('folder: ', folder);
+    if (app === undefined) {
+        console.warn("App not found.");
+        return;
+    }
+    console.log('installed: ', installed);
+    installed[appID] = {
+		appID,
+		tags: app.tags,
+		name: app.name || app.title,
+		url: app.url,
+		type: "component"
+    }
+    let MY_APPS = data.defaultFolder;
+    let folders = data.folders;
+    console.log('MY_APPS: ', MY_APPS);
+    console.log('folders: ', folders);
+    data.folders[MY_APPS].apps[appID] = installed[appID];
+    data.folders[folder].apps[appID] = installed[appID];
+	FSBL.Clients.LauncherClient.addUserDefinedComponent(data.apps[appID], (compAddErr) => {
+		if (compAddErr) {
+			//TODO: We need to handle the error here. If the component failed to add, we should probably fall back and not add to launcher
+			console.warn("Failed to add new app");
+			return;
+		}
 
-        if (activeApp.appId === id) {
-            activeApp.installed = true;
-        }
-    };
-
-    console.log('installed on add: ', installed);
+	});
 
     getStore().setValues([
         {
-            field: 'installed',
+            field: 'activeApp',
+            value: activeApp
+        },
+        {
+            field: 'appDefinitions',
             value: installed
         },
         {
-            field: 'activeApp',
-            value: activeApp
+            field: 'appFolders.folders',
+            value: folders
         }
-    ])
+    ]);
 }
 
 /**
@@ -215,8 +244,6 @@ function removeApp(id) {
         }
     }
 
-    console.log('installed on remove: ', installed);
-
     getStore().setValues([
         {
             field: 'installed',
@@ -235,23 +262,17 @@ function removeApp(id) {
  */
 function openApp(id) {
     let apps = data.apps;
-    console.log('apps: ', apps);
 
     let index = apps.findIndex((app) => {
         return app.appId === id;
     });
-    console.log('index: ', index);
 
-    let app = null;
-    if (index >= 0 && index < apps.length) {
-        app = apps[index];
+    if (index > -1) {
+        getStore().setValue({
+            field: 'activeApp',
+            value: id
+        });
     }
-    console.log('app: ', app);
-
-    getStore().setValue({
-        field: 'activeApp',
-        value: app
-    });
 }
 
 function clearApp() {
@@ -266,14 +287,10 @@ function getActiveApp() {
 }
 
 /**
- * Gets the list of installed apps
+ * Retrieves a list of installed apps by id
  */
 function getInstalledApps() {
-    // return getStore().getValue({
-    //     field: 'installed'
-    // }, err => {
-    //     if (err) console.warn("Error getting installed apps");
-    // });
+    return data.installed;
 }
 
 /**
@@ -344,37 +361,20 @@ function searchApps(terms) {
     });
 }
 
+
 /**
- * Retrieves a list of installed apps by id
+ * Async function to call the launcher client to get a list of added apps
  */
-// function getInstalledApps() {
-//     return getStore().getValue({
-//         field: 'installed'
-//     });
-// }
+function fetchInstalledApps() {
+    let addedApps = getStore().getValue({
+        field: 'apps'
+    });
 
-// /**
-//  * Async function to call the launcher client to get a list of added apps
-//  */
-// function fetchInstalledApps() {
-//     //NOTE: This is a WIP. This api may change so its commented out for now
-//     // FSBL.Clients.LauncherClient.getComponentList((err, apps) => {
-//     //     if (err) console.log("Error fetching list of added apps");
-//     //     getStore().setValue({
-//     //         field: 'installed',
-//     //         value: apps
-//     //     });
-//     //     return apps;
-//     // });
-//     let apps = getStore().getValue({
-//         field: 'apps'
-//     });
+    let installed = [];
+    if (apps.length > 0) installed.push([apps[0].appId]);
 
-//     let installed = [];
-//     if (apps.length > 0) installed.push([apps[0].appId]);
-
-//     getStore().setValue({
-//         field: 'installed',
-//         value: installed
-//     });
-// }
+    getStore().setValue({
+        field: 'installed',
+        value: installed
+    });
+}

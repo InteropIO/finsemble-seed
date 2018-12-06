@@ -29,15 +29,17 @@ export default {
 	removePin
 }
 
-const MY_APPS = 'My Apps'
+// const MY_APPS = "MY_APPS";
+let MY_APPS;
 const data = {}
 
 function initialize(callback) {
 	const store = getStore()
+	MY_APPS = store.getValue({ field: 'defaultFolder' });
 	data.folders = store.values.appFolders.folders
 	data.foldersList = store.values.appFolders.list
 	data.apps = store.values.appDefinitions
-	data.tags = store.values.tags
+	data.tags = store.values.activeLauncherTags
 	data.activeFolder = store.values.activeFolder
 	data.filterText = store.values.filterText
 	data.sortBy = store.values.sortBy
@@ -50,7 +52,7 @@ function initialize(callback) {
 	store.addListener({ field: 'activeFolder' }, (err, dt) => data.activeFolder = dt.value)
 	store.addListener({ field: 'isFormVisible' }, (err, dt) => data.isFormVisible = dt.value)
 	store.addListener({ field: 'sortBy' }, (err, dt) => data.sortBy = dt.value)
-	store.addListener({ field: 'tags' }, (err, dt) => data.tags = dt.value)
+	store.addListener({ field: 'activeLauncherTags' }, (err, dt) => data.tags = dt.value)
 	getToolbarStore(callback || Function.prototype);
 }
 
@@ -337,14 +339,14 @@ function addTag(tag) {
 	// Push new tag to list
 	data.tags.indexOf(tag) < 0 && data.tags.push(tag)
 	// Update tags in store
-	getStore().setValue({ field: 'tags', value: data.tags })
+	getStore().setValue({ field: 'activeLauncherTags', value: data.tags })
 }
 
 function deleteTag(tag) {
 	// Push new tag to list
 	data.tags.splice(data.tags.indexOf(tag), 1)
 	// Update tags in store
-	getStore().setValue({ field: 'tags', value: data.tags })
+	getStore().setValue({ field: 'activeLauncherTags', value: data.tags })
 }
 
 function uuidv4() {
