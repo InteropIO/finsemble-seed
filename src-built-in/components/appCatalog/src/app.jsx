@@ -205,7 +205,6 @@ export default class AppMarket extends React.Component {
 	 */
 	openAppShowcase() {
 		let app = storeActions.getActiveApp();
-		console.log('activeApp: ', app);
 		if (app) {
 			storeActions.clearTags();
 			storeActions.clearFilteredApps();
