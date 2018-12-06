@@ -1,5 +1,5 @@
 /**
- * Simple log export service example which capture messages of specifed categories and levels
+ * Simple log export service example which captures messages of specifed categories and levels
  * and transmits them to a remote API in batch, once a certin batch size or timeout is reached.
  * 
  * The service will come up as soon as possible during finsemble startup - but will inevitably
@@ -21,7 +21,7 @@ Logger.start();
 // let ConfigClient = Finsemble.Clients.ConfigClient;
 // ConfigClient.initialize();
 
-//Settings 
+// Settings 
 /** Transmit queued messages when their number reaches or exceeds this amount. */
 const BATCH_SIZE = 100;
 /** Wait at most this number of milliseconds after first message in batch is received before transmitting. */
