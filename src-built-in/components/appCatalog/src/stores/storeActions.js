@@ -21,7 +21,6 @@ export default {
     removeApp,
     openApp,
     clearApp,
-    fetchInstalledApps,
     getInstalledApps,
     getActiveApp
 }
@@ -128,27 +127,27 @@ function _clearActiveTags() {
 /**
  * Async function to fetch apps from the FDC3 api (appD)
  */
-function getApps() {
-    appd.getAll((err, apps) => {
+async function getApps() {
+    let apps = await appd.getAll((err, apps) => {
         getStore().setValue({
             field: 'apps',
             value: apps
         });
     });
-    return appd.getAll();
+    return apps;
 }
 
 /**
  * Call to appD to get the list of all tags
  */
-function getTags() {
-    appd.getTags((err, tags) => {
+async function getTags() {
+    let tags = await appd.getTags((err, tags) => {
         getStore().setValue({
             field: 'tags',
             value: tags
         });
     });
-    return appd.getTags();
+    return tags;
 }
 
 /**

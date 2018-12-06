@@ -49,11 +49,24 @@ export default class AppMarket extends React.Component {
 		this.viewApp = this.viewApp.bind(this);
 	}
 
-	async componentDidMount() {
-		this.setState({
-			tags: await storeActions.getTags(),
-			apps: await storeActions.getApps()
+	componentWillMount() {
+		//For more information on async react rendering, see here
+		//https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html
+
+		this._asyncAppRequest = storeActions.getApps().then(apps => {
+			this.setState({
+				apps
+			});
 		});
+
+		this._asyncTagsRequest = storeActions.getTags().then(tags => {
+			this.setState({
+				tags
+			});
+		});
+	}
+
+	componentDidMount() {
 		getStore().addListener({ field: 'filteredApps' }, this.filteringApps);
 		getStore().addListener({ field: 'activeTags' }, this.filteringApps);
 		getStore().addListener({ field: 'activeApp' }, this.openAppShowcase);
@@ -66,7 +79,16 @@ export default class AppMarket extends React.Component {
 		getStore().removeListener({ field: 'activeTags' }, this.filteringApps);
 		getStore().removeListener({ field: 'activeApp' }, this.openAppShowcase);
 		// Get notified when user wants to view an app
-		FSBL.Clients.RouterClient.removeListener("viewApp", this.viewApp)
+		FSBL.Clients.RouterClient.removeListener("viewApp", this.viewApp);
+
+		//Make sure async requests have finished.
+		if (this._asyncAppRequest) {
+			this._asyncAppRequest.cancel();
+		}
+
+		if (this._asyncTagsRequest) {
+			this._asyncTagsRequest.cancel();
+		}
 	}
 
 	viewApp(error, event) {
@@ -77,7 +99,7 @@ export default class AppMarket extends React.Component {
 	 * The store has pushed an update to the filtered tags list. This means a user has begun searching or added tags to the filter list
 	 */
 	filteringApps() {
-		let { filteredApps, activeTags } = this.state;
+		let { filteredApps, activeTags, activeApp } = this.state;
 		let apps = storeActions.getFilteredApps();
 		let tags = storeActions.getActiveTags();
 
@@ -87,7 +109,7 @@ export default class AppMarket extends React.Component {
 			this.setState({
 				filteredApps: apps,
 				activeTags: tags,
-				activeApp: null
+				activeApp: (apps.length !== 0 && tags.length !== 0) ? null : activeApp
 			});
 		}
 	}
