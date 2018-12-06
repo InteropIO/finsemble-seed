@@ -1,46 +1,64 @@
 /**
- * Simple log export service example which captures messages of specifed categories and levels
- * and transmits them to a remote API in batch, once a certin batch size or timeout is reached.
+ * Simple log export service example which captures messages of specified categories and levels
+ * and transmits them to a remote API in batch, once a certain batch size or timeout is reached.
  * 
  * The service will come up as soon as possible during finsemble startup - but will inevitably
- * not be able to capture so of the earliest log messages.
+ * not be able to capture some of the earliest log messages.
  * 
  * Look for //TODO: comments for where to customize the service to your needs
  * 
  * N.B. Be wary of adding too many Logger messages within this service as it will of course receive
- * back to transmit onwards
+ * back to transmit onwards.
  */
 const Finsemble = require("@chartiq/finsemble");
+const Request = require("superagent");
+
 const RouterClient = Finsemble.Clients.RouterClient;
 const Logger = Finsemble.Clients.Logger;
-const Request = require("superagent");
 Logger.start();
 
-// Add and initialize any other clients you need to use 
-//   (services are initialised by the system, clients are not)
-// let ConfigClient = Finsemble.Clients.ConfigClient;
-// ConfigClient.initialize();
-
-// Settings 
-/** Transmit queued messages when their number reaches or exceeds this amount. */
+// #region Settings 
+/** 
+ * Transmit queued messages when their number reaches or exceeds this amount. 
+ */
 const BATCH_SIZE = 100;
-/** Wait at most this number of milliseconds after first message in batch is received before transmitting. */
+
+/** 
+ * Wait at most this number of milliseconds after first message in batch is received before transmitting.
+ */
 const TIMEOUT_MILLISECS = 30 * 1000;
-/** Log levels of messsages to capture. Valid values: Error, Warning, Log, Info, Debug, Verbose */
+
+/** 
+ * Log levels of messages to capture. Valid values: Error, Warning, Log, Info, Debug, Verbose
+ */
 const CAPTURE_LOG_LEVELS = {
-	"Log": true, 
-	"Warn": true, 
+	"Log": true,
+	"Warn": true,
 	"Error": true
 };
-/** Log categories of messages to capture. Valid values: system, dev or perf */
-const CAPTURE_LOG_CATEGORIES = { 
-	"system": true, 
+
+/** 
+ * Log categories of messages to capture. Valid values: system, dev or perf
+ */
+const CAPTURE_LOG_CATEGORIES = {
+	"system": true,
 	"dev": true
 };
-/** Where to transmit the logs to */
+
+/**
+ * Value indicating whether log messages should be sorted by timestamp.
+ * 
+ * Note that, due to the async nature of logging, you might still send a later batch containing messages with a lower 
+ * logTimestamp. Hence, it is best to avoid sorting messages in this service if messages will be sorted elsewhere.
+ */
+const SORT_MESSAGES = false;
+
+/** 
+ * Where to transmit the logs to
+ */
 //TODO: Update to your logging endpoint
 const LOGGING_ENDPOINT = "http://somedomain.com/loggingendpoint";
-
+// #endregion
 
 /**
  * Log messages arrive in small batches from each logger and must be added to an export batch and 
@@ -48,13 +66,13 @@ const LOGGING_ENDPOINT = "http://somedomain.com/loggingendpoint";
  * 
  * @constructor
  */
-function loggingexportService() {
+function LoggingExportService() {
 	const self = this;
+	const batchAllocSize = BATCH_SIZE + 10;   //add a small amount of leeway on batch size
+
 	let timeout = null;
-	let batchAllocSize = BATCH_SIZE + 10;     //add a small amount of leeway on batch size
 	let logBatch = new Array(batchAllocSize); //pre-init the batch array to reduce array allocations
 	let currBatchSize = 0;
-	let msgTmp
 
 	/**
 	 * Add an incoming array of log messages to the batch and transmit if thresholds met.
@@ -66,7 +84,7 @@ function loggingexportService() {
 	 *				"logClientName": "Finsemble",		//The registered name of the logger instance
 	 *				"logType": "Log",					//Log level: Error, Warning, Log, Info, Debug, Verbose
 	 *				"logData": "[\"SERVICE LIFECYCLE: STATE CHANGE: Service initializing\",\"windowService\"]",
-	 *													//JSON encoded erray of message and data components of the log message
+	 *													//JSON encoded array of message and data components of the log message
 	 *													//N.B. maybe be prefixed by string "*** Logging Error: ""
 	 *				"logTimestamp": 1544090028391.6226	//Log message timestamp for ordering use
 	 *			}, 
@@ -81,19 +99,19 @@ function loggingexportService() {
 				if (CAPTURE_LOG_CATEGORIES[dataArr[m].category] && CAPTURE_LOG_LEVELS[dataArr[m].logType]) {
 					//TODO: add any necessary message format changes here
 					logBatch[currBatchSize++] = dataArr[m];
-				} 
-				// else {
-				// 	console.log("discarding message",  dataArr[m]);
-				// }
+				}
+				else {
+					console.debug("discarding message", dataArr[m]);
+				}
 			}
 
-			if(currBatchSize >= BATCH_SIZE){
+			if (currBatchSize >= BATCH_SIZE) {
 				self.transmitBatch();
 			} else if (!timeout) { //always transmit batch within minimum timeout
 				timeout = setTimeout(self.transmitBatch, TIMEOUT_MILLISECS);
 			}
 		} else {
-			Logger.warn("Tried to add an invalid data array to log batch",  dataArr);
+			Logger.warn("Tried to add an invalid data array to log batch", dataArr);
 		}
 	}
 
@@ -105,32 +123,32 @@ function loggingexportService() {
 		clearTimeout(timeout);
 		//trim batch array to length
 		let toTransmit = logBatch;
-		toTransmit.splice(currBatchSize, logBatch.length-currBatchSize);
-		
+		toTransmit.splice(currBatchSize, logBatch.length - currBatchSize);
+
 		//reset
 		timeout = null;
 		logBatch = new Array(batchAllocSize);
 		currBatchSize = 0;
-		
-		//sort the batch by timestamp if necessary - however note that due to the async nature 
-		// of logging you might still send a later batch containing messages with a lower 
-		// logTimestamp. Hence, best avoided if messages will be sorted elsewhere.
-		//toTransmit.sort((a, b) => a.logTimestamp - b.logTimestamp);
+
+		// Sort the batch by timestamp if necessary.
+		if (SORT_MESSAGES) {
+			toTransmit.sort((a, b) => a.logTimestamp - b.logTimestamp);
+		}
 
 		//transmit batch
 		//TODO: Customize batch transmission here
-		//console.log('Batch to transmit: ' + JSON.stringify(toTransmit, null, 2));
+		//console.log("Batch to transmit: " + JSON.stringify(toTransmit, null, 2));
 
-		//See SuperAgent docs for request options: https://visionmedia.github.io/superagent/
+		// See SuperAgent docs for request options: https://visionmedia.github.io/superagent/
 		Request
-			.post(LOGGING_ENDPOINT)	
+			.post(LOGGING_ENDPOINT)
 			.withCredentials()		// set this for CORS requests
-			.type('json')
+			.type("json")
 			.send({
 				logMessages: toTransmit
 			})
 			.then(res => {
-				console.log("batch tranmitted: ", res);
+				console.log("batch transmitted: ", res);
 			})
 			.catch(err => {
 				console.error("Log batch transmission failure: ", err);
@@ -142,7 +160,7 @@ function loggingexportService() {
 	 * @private
 	 */
 	this.createRouterEndpoints = function () {
-		RouterClient.addListener("logger.service.logMessages", function(error, logMessage) {
+		RouterClient.addListener("logger.service.logMessages", function (error, logMessage) {
 			if (!error) {
 				self.addToBatch(logMessage.data);
 			} else {
@@ -154,14 +172,14 @@ function loggingexportService() {
 	return this;
 };
 
-loggingexportService.prototype = new Finsemble.baseService({
+LoggingExportService.prototype = new Finsemble.baseService({
 	startupDependencies: {
 		// Don't depend on any clients or services so that we start-up ASAP
 		services: [],
 		clients: []
 	}
 });
-const serviceInstance = new loggingexportService('loggingexportService');
+const serviceInstance = new LoggingExportService("loggingExportService");
 
 serviceInstance.onBaseServiceReady(function (callback) {
 	serviceInstance.createRouterEndpoints();
