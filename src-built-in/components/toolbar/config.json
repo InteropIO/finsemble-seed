@@ -51,5 +51,11 @@
     {
         "align": "left",
         "type": "seperator"
+    },
+    {
+        "align": "left",
+        "label": "Composites",
+        "menuType": "Composites Menu",
+        "preSpawn": true
     }
 ]

@@ -1,4 +1,8 @@
 {
+    "composites-menu": {
+        "output": "components/composites-menu/app",
+        "entry": "./src-built-in/components/composites-menu/index.jsx"
+    }, 
     "composites-designer": {
         "output": "components/composites-designer/app",
         "entry": "./src-built-in/components/composites-designer/index.jsx"

@@ -172,6 +172,37 @@
                 }
             }
         },
+		"Composites Menu": {
+            "component": {
+                "category": "system"
+            },
+			"window": {
+                "frame": false,
+                "alwaysOnTop": false,
+                "url": "$applicationRoot/components/composites-menu/index.html",
+				"width": 300,
+                "height": 400,
+                "ephemeral": true,
+                "options": {
+                    "autoShow": false
+                }
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": false,
+						"shouldRegister": false
+					}
+				},
+                "components": {
+                    "Window Manager": {
+                        "persistWindowState": false,
+                        "FSBLHeader": false,
+                        "showTabs": false
+                    }
+                }
+			}
+		},
         "Composites Designer": {
             "window": {
                 "url": "$applicationRoot/components/composites-designer/index.html",
@@ -223,7 +254,7 @@
                     },
                     "Window Manager": {
                         "FSBLHeader": true,
-                        "titler": "Composites Name",
+                        "title": "Composites Name",
                         "persistWindowState": true,
                         "showTabs": false
                     },
