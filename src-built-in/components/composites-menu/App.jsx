@@ -5,7 +5,7 @@ import {
     FinsembleMenuSection,
     FinsembleMenuItem,
     FinsembleMenuItemLabel
-} from '@chartiq/finsemble-react-controls';
+} from '@chartiq/finsemble-react-controls'
 
 let store
 
@@ -50,7 +50,13 @@ export default class App extends React.Component {
             })
         }
     }
-    onDeleteClick() {
+    /**
+     * Calls store actions deleteComposite method
+     * to delete a composite
+     * @param {string} commpositeName The composite name to be deleted
+     */
+    onDeleteClick(commpositeName) {
+        storeActions.deleteComposite(commpositeName)
     }
     onEditClick() {
     }
@@ -59,7 +65,6 @@ export default class App extends React.Component {
 
     render() {
         return (<FinsembleMenu className="composites-launcher-menu">
-            {/*Options in the file menu.*/}
             <div>
                 <FinsembleMenuSection className='menu-secondary'>
                     <FinsembleMenuItem>
@@ -70,10 +75,16 @@ export default class App extends React.Component {
                 </FinsembleMenuSection>
                 <FinsembleMenuSection className='menu-primary'>
                     {
-                        Object.keys(this.state.composites).map((itemName, index) => {
+                        Object.keys(this.state.composites)
+                        // @todo Revisit once StoreModel removeValue is reviewed
+                        // Some composites have a null value and the reason is that
+                        // StoreModel.removeValue() sets the field value to null
+                        // and does not delete the field itself
+                        .filter((composite) => this.state.composites[composite])
+                        .map((itemName, index) => {
                             return <FinsembleMenuItem key={index}
                                 isDeletable={true}
-                                deleteAction={this.onDeleteClick}
+                                deleteAction={() => this.onDeleteClick(itemName)}
                                 pinIcon="ff-edit"
                                 isPinned={false}
                                 isPinnable={true}

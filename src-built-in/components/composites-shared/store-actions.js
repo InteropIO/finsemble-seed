@@ -39,6 +39,8 @@ function addComposite(compositeName, composite) {
  * @param {string} compositeName The composite name to delete
  */
 function deleteComposite(compositeName) {
+    // @TODO  Modify StoreModel so that it deletes the value
+    // and not only nullify it
     store.removeValue({field: compositeName})
 }
 
