@@ -382,7 +382,7 @@
 			});
 
 			let e2oLocation = "node_modules/@chartiq/e2o";
-			let electronPath = path.join(".", "/node_modules/electron/dist/electron.exe");
+			let electronPath = path.join("..", "..", "electron", "dist", "electron.exe");
 			let command = "set ELECTRON_DEV=true && " + electronPath + " index.js --remote-debugging-port=9090 --manifest " + manifest;
 			logToTerminal(command);
 			electronProcess = exec(command,
