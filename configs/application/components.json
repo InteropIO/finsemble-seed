@@ -223,7 +223,7 @@
                 },
                 "components": {
                     "App Launcher": {
-                        "launchableByUser": true
+                        "launchableByUser": false
                     },
                     "Window Manager": {
                         "title": "Composites Designer",

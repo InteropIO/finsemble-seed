@@ -30,7 +30,6 @@ export default class App extends React.Component {
      */
     bindContext() {
         const methods = [
-            'onEditClick',
             'onDeleteClick',
             'onCompositesUpdate',
             'onNewCompositeClick'
@@ -58,9 +57,9 @@ export default class App extends React.Component {
     onDeleteClick(commpositeName) {
         storeActions.deleteComposite(commpositeName)
     }
-    onEditClick() {
-    }
     onNewCompositeClick() {
+        // Launch the composites designer
+        FSBL.Clients.LauncherClient.spawn("Composites Designer", {})
     }
 
     render() {
@@ -88,7 +87,7 @@ export default class App extends React.Component {
                                 pinIcon="ff-edit"
                                 isPinned={false}
                                 isPinnable={true}
-                                pinAction={this.onEditClick}
+                                pinAction={()=> {}}
                                 label={itemName} />
                         })
                     }
