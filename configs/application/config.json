@@ -27,7 +27,7 @@
 									"disableUserRemove": true,
 									"apps": {
 										"1": {
-											"name": "Welcome",
+											"name": "Welcome Component",
 											"appID": "welcome-comp"
 										},
 										"2": {
@@ -55,7 +55,7 @@
 						"appDefinitions": {
 							"welcome-comp": {
 								"appID": "welcome-comp",
-								"name": "Welcome",
+								"name": "Welcome Component",
 								"source": "FDC3",
 								"tags": [
 									"newrelease"
