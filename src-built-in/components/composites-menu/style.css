@@ -1,0 +1,13 @@
+@import "../../../assets/css/_globals.css";
+@import "../../../assets/css/_menus.css";
+@import "../../../assets/css/font-finance.css";
+@import "../../../assets/css/finsemble.css";
+
+*{
+    padding: 0;
+    margin: 0;
+}
+
+.composites-launcher-menu {
+    height: 250px;
+}
