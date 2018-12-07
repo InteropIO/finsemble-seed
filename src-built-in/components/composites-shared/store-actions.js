@@ -1,4 +1,5 @@
 export default {
+    getStore,
     prepareStore,
     addComposite,
     deleteComposite
@@ -6,7 +7,12 @@ export default {
 
 // The persistent store reference
 let store
-
+/**
+ * Returns store reference
+ */
+function getStore(){
+    return store
+}
 /**
  * Gets the persistent store and keeps a reference for it
  * @param {function} cb The callback function
