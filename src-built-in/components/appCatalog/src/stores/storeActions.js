@@ -41,9 +41,11 @@ function initialize(done = Function.prototype) {
     data.apps = store.values.apps;
     store.getValue({ field: 'appFolders.folders' }, (err, folders) => {
         data.folders = folders;
+        store.addListener({ field: 'appFolders.folders' }, (err, dt) => data.folders = dt.value);
     });
     store.getValue({ field: 'activeFolder' }, (err, active) => {
         data.activeFolder = active;
+        store.addListener({ field: 'activeFolder' }, (err, dt) => data.activeFolder = dt.value);
     });
     store.getValue({ field: 'defaultFolder' }, (err, folder) => {
         data.defaultFolder = folder;
@@ -56,8 +58,6 @@ function initialize(done = Function.prototype) {
     data.MY_APPS = store.values.defaultFolder;
 
     store.addListener({ field: 'apps' }, (err, dt) => data.apps = dt.value);
-    store.addListener({ field: 'appFolders.folders' }, (err, dt) => data.folders = dt.value);
-    store.addListener({ field: 'activeFolder' }, (err, dt) => data.activeFolder = dt.value);
     store.addListener({ field: 'appDefinitions' }, (err, dt) => data.installed = dt.value);
     store.addListener({ field: 'tags' }, (err, dt) => data.tags = dt.value);
     store.addListener({ field: 'activeApp' }, (err, dt) => data.activeApp = dt.value);

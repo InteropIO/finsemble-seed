@@ -103,7 +103,7 @@ export default class Content extends React.Component {
 		store.addListener({ field: 'activeFolder' }, this.onActiveFolderChanged)
 		store.addListener({ field: 'filterText' }, this.onSearch)
 		store.addListener({ field: 'sortBy' }, this.onSort)
-		store.addListener({ field: 'tags' }, this.onTagsUpdate)
+		store.addListener({ field: 'activeLauncherTags' }, this.onTagsUpdate)
 		// We can't subscribe to folders[index].appDefinitions
 		// So we are looking at appFolders.folders update
 		// Since that update is done After removing an app of definitions
@@ -114,7 +114,7 @@ export default class Content extends React.Component {
 		store.removeListener({ field: 'activeFolder' }, this.onActiveFolderChanged)
 		store.removeListener({ field: 'filterText' }, this.onSearch)
 		store.removeListener({ field: 'sortBy' }, this.onSort)
-		store.removeListener({ field: 'tags' }, this.onTagsUpdate)
+		store.removeListener({ field: 'activeLauncherTags' }, this.onTagsUpdate)
 		store.removeListener({ field: 'appFolders.folders' }, this.onAppListUpdate)
 	}
 

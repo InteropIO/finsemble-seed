@@ -35,7 +35,9 @@ const data = {}
 
 function initialize(callback) {
 	const store = getStore()
-	MY_APPS = store.getValue({ field: 'defaultFolder' });
+	store.getValue({ field: 'defaultFolder' }, (err, defaultFolder) => {
+		MY_APPS = defaultFolder;
+	});
 	data.folders = store.values.appFolders.folders
 	data.foldersList = store.values.appFolders.list
 	data.apps = store.values.appDefinitions

@@ -28,11 +28,11 @@ export default class TagsList extends React.Component {
 	}
 
 	componentDidMount() {
-		store.addListener({field: 'tags'}, this.onTagListUpdate)
+		store.addListener({field: 'activeLauncherTags'}, this.onTagListUpdate)
 	}
 
 	componentWillUnmount () {
-		store.removeListener({field: 'tags'}, this.onTagListUpdate)
+		store.removeListener({field: 'activeLauncherTags'}, this.onTagListUpdate)
 	}
 
 	renderTagsList() {
