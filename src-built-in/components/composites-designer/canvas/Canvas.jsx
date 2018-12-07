@@ -3,7 +3,7 @@ import GoldenLayout from 'golden-layout'
 import 'golden-layout/src/css/goldenlayout-base.css'
 import 'golden-layout/src/css/goldenlayout-dark-theme.css'
 import compositesJSON from '../utils/composites-json'
-import storeActions from './store-actions';
+import storeActions from '../../composites-shared/store-actions'
 
 // Golden layout instance
 let layout
