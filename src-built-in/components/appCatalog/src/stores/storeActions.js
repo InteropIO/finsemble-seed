@@ -25,6 +25,7 @@ export default {
     getActiveApp
 }
 
+let ToolbarStore;
 const data = {};
 
 /**
@@ -62,7 +63,14 @@ function initialize(done = Function.prototype) {
     store.addListener({ field: 'activeApp' }, (err, dt) => data.activeApp = dt.value);
     store.addListener({ field: 'activeTags' }, (err, dt) => data.activeTags = dt.value);
     store.addListener({ field: 'filteredApps' }, (err, dt) => data.filteredApps = dt.value);
-    done();
+    getToolbarStore(done);
+}
+
+function getToolbarStore(done) {
+    FSBL.Clients.DistributedStoreClient.getStore({ global: true, store: "Finsemble-Toolbar-Store" }, (err, toolbarStore) => {
+        ToolbarStore = toolbarStore;
+        done();
+    });
 }
 
 /**
@@ -170,57 +178,52 @@ async function getTags() {
  */
 function addApp(id) {
     let { activeApp, installed, apps } = data;
-    console.log('id: ', id);
-    console.log('apps: ', apps);
 
     const appID = id;
     let app = apps.find(app => {
         return app.appId === appID;
     })
-    console.log('app: ', app);
     const folder = data.activeFolder
-    console.log('folder: ', folder);
+
     if (app === undefined) {
         console.warn("App not found.");
         return;
     }
-    console.log('installed: ', installed);
+
     installed[appID] = {
 		appID,
 		tags: app.tags,
-		name: app.name || app.title,
+		name: app.title ? app.title : app.name,
 		url: app.url,
 		type: "component"
     }
     let MY_APPS = data.defaultFolder;
     let folders = data.folders;
-    console.log('MY_APPS: ', MY_APPS);
-    console.log('folders: ', folders);
+
     data.folders[MY_APPS].apps[appID] = installed[appID];
     data.folders[folder].apps[appID] = installed[appID];
-	FSBL.Clients.LauncherClient.addUserDefinedComponent(data.apps[appID], (compAddErr) => {
-		if (compAddErr) {
-			//TODO: We need to handle the error here. If the component failed to add, we should probably fall back and not add to launcher
+	FSBL.Clients.LauncherClient.addUserDefinedComponent(installed[appID], (compAddErr) => {
+		if (compAddErr && compAddErr.indexOf('already exists') === -1) {
+            //TODO: We need to handle the error here. If the component failed to add, we should probably fall back and not add to launcher
+            console.log('componentAddErr: ', compAddErr);
 			console.warn("Failed to add new app");
-			return;
-		}
-
-	});
-
-    getStore().setValues([
-        {
-            field: 'activeApp',
-            value: activeApp
-        },
-        {
-            field: 'appDefinitions',
-            value: installed
-        },
-        {
-            field: 'appFolders.folders',
-            value: folders
+        } else {
+            getStore().setValues([
+                {
+                    field: 'activeApp',
+                    value: activeApp
+                },
+                {
+                    field: 'appDefinitions',
+                    value: installed
+                },
+                {
+                    field: 'appFolders.folders',
+                    value: folders
+                }
+            ]);
         }
-    ]);
+	});
 }
 
 /**
@@ -228,32 +231,34 @@ function addApp(id) {
  * @param {string} name The name of the app
  */
 function removeApp(id) {
-    let { apps, installed, activeApp } = getStore().getValues(["apps", "installed", "activeApp"]);
+    let { installed, folders } = data;
 
-    for (let i = 0; i < apps.length; i++) {
-        let app = apps[i];
-        let thisAppId = app.appId;
-        if (thisAppId === id && installed.includes(id)) {
-            let index = installed.indexOf(id);
-            installed.splice(index, 1);
-            break;
+    ToolbarStore.removeValue({ field: 'pins.' + installed[id].name.replace(/[.]/g, "^DOT^") }, (err, res) => {
+        if (err) {
+            console.warn("Error removing pin for deleted app");
+            return;
         }
 
-        if (activeApp.appId === id) {
-            activeApp.installed = false;
+        for (const key in data.folders) {
+            if (folders[key].apps[id]) {
+                delete folders[key].apps[id];
+            }
         }
-    }
 
-    getStore().setValues([
-        {
-            field: 'installed',
-            value: installed
-        },
-        {
-            field: 'activeApp',
-            value: activeApp
-        }
-    ])
+        //Delete the app from the list
+        delete installed[id];
+
+        getStore().setValues([
+            {
+                field: 'appDefinitions',
+                value: installed
+            },
+            {
+                field: 'appFolders.folders',
+                value: folders
+            }
+        ]);
+    });
 }
 
 /**

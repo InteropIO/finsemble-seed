@@ -104,10 +104,10 @@ export default class AppMarket extends React.Component {
 
 	addedAppsChanged() {
 		let action;
-		if (this.state.installed.length === storeActions.getInstalledApps().length) {
+		if (this.state.installed.length > Object.keys(storeActions.getInstalledApps()).length) {
 			//If the components installed apps is greater than that of the store, that means an app was removed
 			action = "remove";
-		} else if (this.state.installed.length < storeActions.getInstalledApps().length) {
+		} else if (this.state.installed.length < Object.keys(storeActions.getInstalledApps()).length) {
 			//If the component's installed apps is less than that of the store, that means an app was added
 			action = "add";
 		}
@@ -115,7 +115,7 @@ export default class AppMarket extends React.Component {
 		if (action) {
 			this.setState({
 				installationActionTaken: action,
-				installed: storeActions.getInstalledApps()
+				installed: Object.keys(storeActions.getInstalledApps())
 			}, () => {
 				setTimeout(this.stopShowingInstalledNotification, 3000);
 			});
@@ -132,7 +132,7 @@ export default class AppMarket extends React.Component {
 
 		//Make sure a change actually occured before rerendering. If the store's activeTags or filteredApps is different then component's, we make a change (which triggers a page change). Otherwise don't.
 		//NOTE: The potential bug here is if filteredApps or activeTags has somehow changed and maintained the same length (which should be impossible)
-		if (apps.length !== filteredApps.length || activeTags.length !== tags.length) {
+		if ((apps && filteredApps && activeTags && tags) && (apps.length !== filteredApps.length || activeTags.length !== tags.length)) {
 			this.setState({
 				filteredApps: apps,
 				activeTags: tags,
@@ -199,15 +199,16 @@ export default class AppMarket extends React.Component {
 	 * When the notification for isntalling/removing an app is shown a timeout is set to call this function to cease showing the notification
 	 */
 	stopShowingInstalledNotification() {
-		let activeApp = storeActions.getActiveApp();
 		this.setState({
 			installationActionTaken: null,
-			activeApp
+			activeApp: storeActions.getActiveApp()
 		});
 	}
+
 	navigateToShowcase(id) {
 		storeActions.openApp(id)
 	}
+
 	/**
 	 * Opens the AppShowcase page for the app supplied
 	 */
