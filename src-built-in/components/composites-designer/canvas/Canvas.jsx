@@ -11,7 +11,7 @@ let layout
  * The canvas components, its where you drop apps in
  */
 export default class Canvas extends React.Component {
-    
+
     constructor(props) {
         super(props)
         this.state = {
@@ -20,14 +20,21 @@ export default class Canvas extends React.Component {
             // Tells us whether we should display the instructions or not
             items: 0,
         }
-        // Bind correct context
-        this.onWindowResize = this.onWindowResize.bind(this)
-        this.layoutStateChanged = this.layoutStateChanged.bind(this)
-        this.onCompositeSave = this.onCompositeSave.bind(this)
-        this.closeWindow = this.closeWindow.bind(this)
-        this.setTitle = this.setTitle.bind(this)
-        this.onDrop = this.onDrop.bind(this)
-        this.onDrop = this.onDrop.bind(this)
+        this.bindContext()
+    }
+    /**
+     * Binds correct context
+     */
+    bindContext() {
+        [
+            'onWindowResize',
+            'onCompositeSave',
+            'layoutStateChanged',
+            'closeWindow',
+            'setTitle',
+            'onDrop'].forEach((method) => {
+                this[method] = this[method].bind(this)
+            })
     }
     componentWillMount() {
         // Subscribe to composites name input
@@ -45,7 +52,10 @@ export default class Canvas extends React.Component {
     }
     componentDidMount() {
         const tilesElement = document.getElementById("tiles")
-        layout = new GoldenLayout({
+        // If we are editing a composite, then layout is available
+        // in spawn data and so we use it as a config for goldenlayout
+        const spawnData = FSBL.Clients.WindowClient.getSpawnData()
+        layout = new GoldenLayout(spawnData.layout || {
             settings: {
                 constrainDragToContainer: false
             },
@@ -61,7 +71,6 @@ export default class Canvas extends React.Component {
                 content: []
             }]
         }, tilesElement)
-        window.layout = layout
         // Keep updated about the layout state
         layout.on("stateChanged", this.layoutStateChanged)
         // Register our dummy component
@@ -136,7 +145,7 @@ export default class Canvas extends React.Component {
      */
     async onCompositeSave(error, message) {
         const json = await compositesJSON.generate(
-            this.state.compositeName, 
+            this.state.compositeName,
             document.getElementsByClassName('lm_stack'))
         // We also need the goldenlayout config if we want to edit
         // this layout in the future

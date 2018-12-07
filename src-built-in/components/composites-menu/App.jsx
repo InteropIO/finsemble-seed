@@ -7,6 +7,7 @@ import {
     FinsembleMenuItemLabel
 } from '@chartiq/finsemble-react-controls'
 
+const COMPOSITE_DESIGNER_APP = "Composites Designer"
 let store
 
 export default class App extends React.Component {
@@ -57,9 +58,25 @@ export default class App extends React.Component {
     onDeleteClick(commpositeName) {
         storeActions.deleteComposite(commpositeName)
     }
+    /**
+     * Launches the composites designer
+     */
     onNewCompositeClick() {
-        // Launch the composites designer
-        FSBL.Clients.LauncherClient.spawn("Composites Designer", {})
+        FSBL.Clients.LauncherClient.spawn(COMPOSITE_DESIGNER_APP, {})
+    }
+    /**
+     * Spawns the composite designer and passes the composite's name
+     * and composites layout (goldenlayout setting) in spawnData
+     * @param {string} compositeName The composite name
+     */
+    onEditComposite(compositeName) {
+        const compositeObject = this.state.composites[compositeName]
+        FSBL.Clients.LauncherClient.spawn(COMPOSITE_DESIGNER_APP, {
+            data: {
+                layout: compositeObject.layout,
+                name: compositeName
+            }
+        })
     }
 
     render() {
@@ -75,21 +92,21 @@ export default class App extends React.Component {
                 <FinsembleMenuSection className='menu-primary'>
                     {
                         Object.keys(this.state.composites)
-                        // @todo Revisit once StoreModel removeValue is reviewed
-                        // Some composites have a null value and the reason is that
-                        // StoreModel.removeValue() sets the field value to null
-                        // and does not delete the field itself
-                        .filter((composite) => this.state.composites[composite])
-                        .map((itemName, index) => {
-                            return <FinsembleMenuItem key={index}
-                                isDeletable={true}
-                                deleteAction={() => this.onDeleteClick(itemName)}
-                                pinIcon="ff-edit"
-                                isPinned={false}
-                                isPinnable={true}
-                                pinAction={()=> {}}
-                                label={itemName} />
-                        })
+                            // @todo Revisit once StoreModel removeValue is reviewed
+                            // Some composites have a null value and the reason is that
+                            // StoreModel.removeValue() sets the field value to null
+                            // and does not delete the field itself
+                            .filter((composite) => this.state.composites[composite])
+                            .map((itemName, index) => {
+                                return <FinsembleMenuItem key={index}
+                                    isDeletable={true}
+                                    deleteAction={() => this.onDeleteClick(itemName)}
+                                    pinIcon="ff-edit"
+                                    isPinned={false}
+                                    isPinnable={true}
+                                    pinAction={() => { this.onEditComposite(itemName) }}
+                                    label={itemName} />
+                            })
                     }
                 </FinsembleMenuSection>
             </div>

@@ -6,12 +6,22 @@ export default class SaveOrCancel extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            name: ''
+           name: ''
         }
         // Bind correct context
         this.onNameChange = this.onNameChange.bind(this)
         this.onCancelClick = this.onCancelClick.bind(this)
         this.onSaveClick = this.onSaveClick.bind(this)
+    }
+    componentWillMount(){
+        // If we are modifying a composite then there
+        // will be data in spawnData, which has name and layout
+        // we need the name to set the input value of name to the one
+        // we are editing
+        const spawnData = FSBL.Clients.WindowClient.getSpawnData()
+        this.setState({
+            name: spawnData.name || ''
+        })
     }
     /**
      * Called when the name input value changes
@@ -49,7 +59,7 @@ export default class SaveOrCancel extends React.Component {
         return <div id="save">
             <div>
                 <span>Save As:</span> 
-                <input onChange={this.onNameChange} className="input-name" />
+                <input defaultValue={this.state.name} onChange={this.onNameChange} className="input-name" />
             </div>
             <div className="buttons">
                 <button onClick={this.onCancelClick}>Cancel</button>

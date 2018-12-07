@@ -3,7 +3,7 @@ import Search from './Search'
 import AppsList from './AppsList'
 import SaveOrCancel from './SaveOrCancel'
 
-const canvasComponent = 'Composites Canvas'
+const COMPOSITES_CANVAS_COMPONENT = 'Composites Canvas'
 let canvasWindow  = null
 /**
  * The left side of the composites designer.
@@ -19,8 +19,16 @@ export default class App extends React.Component {
     }
     
     componentDidMount() {
+        // User might have clicked on edit composite instead of new
+        // in that case, there are data passed {name, layout}
+        // we need them to set the name in this component
+        // and pass goldenlayout (layout) to canvas
+        const data = FSBL.Clients.WindowClient.getSpawnData()
+        const canvasSpawnData = data.name && data.layout ? data : {}
         // Launch the canvas once mounted
-        FSBL.Clients.LauncherClient.spawn(canvasComponent, {}, (error, data) => {
+        FSBL.Clients.LauncherClient.spawn(COMPOSITES_CANVAS_COMPONENT, {
+            data: canvasSpawnData
+        }, (error, data) => {
             // Keep a reference to the fin window to close it later
             canvasWindow = data.finWindow
         })
