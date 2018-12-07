@@ -48,9 +48,33 @@ const CAPTURE_LOG_CATEGORIES = {
  */
 const SORT_MESSAGES = false;
 
+/**
+ * Message formatting function which converts each log message from Finsemble's format to the format you wish to transmit.
+ * Incoming log message format:
+ *		[										
+ *			{
+ *				"category": "system",				//Log message type: system, dev or perf
+ *				"logClientName": "Finsemble",		//The registered name of the logger instance
+ *				"logType": "Log",					//Log level: Error, Warning, Log, Info, Debug, Verbose
+ *				"logData": "[\"SERVICE LIFECYCLE: STATE CHANGE: Service initializing\",\"windowService\"]",
+ *													//JSON encoded array of message and data components of the log message
+ *													//N.B. maybe be prefixed by string "*** Logging Error: ""
+ *				"logTimestamp": 1544090028391.6226	//Log message timestamp for ordering use
+ *			}, 
+ *			{...},
+ *			...
+ *		]
+ */
+const FORMAT_MESSAGE = function (log_message) {
+	//TODO: add any necessary message format changes here
+
+	return log_message;
+};
+
 /** Where to transmit the logs to. */
 //TODO: Update to your logging endpoint
 const LOGGING_ENDPOINT = "http://somedomain.com/loggingendpoint";
+
 // #endregion
 
 /**
@@ -69,29 +93,13 @@ function LoggingExportService() {
 
 	/**
 	 * Add an incoming array of log messages to the batch and transmit if thresholds met.
-	 * 
-	 * Logging message format:
-	 *		[										
-	 *			{
-	 *				"category": "system",				//Log message type: system, dev or perf
-	 *				"logClientName": "Finsemble",		//The registered name of the logger instance
-	 *				"logType": "Log",					//Log level: Error, Warning, Log, Info, Debug, Verbose
-	 *				"logData": "[\"SERVICE LIFECYCLE: STATE CHANGE: Service initializing\",\"windowService\"]",
-	 *													//JSON encoded array of message and data components of the log message
-	 *													//N.B. maybe be prefixed by string "*** Logging Error: ""
-	 *				"logTimestamp": 1544090028391.6226	//Log message timestamp for ordering use
-	 *			}, 
-	 *			{...},
-	 *			...
-	 *		]
 	 * @private
 	 */
 	this.addToBatch = function (dataArr) {
 		if (dataArr) {
 			for (let m = 0; m < dataArr.length; m++) {
 				if (CAPTURE_LOG_CATEGORIES[dataArr[m].category] && CAPTURE_LOG_LEVELS[dataArr[m].logType]) {
-					//TODO: add any necessary message format changes here
-					logBatch[currBatchSize++] = dataArr[m];
+					logBatch[currBatchSize++] = FORMAT_MESSAGE(dataArr[m]);
 				}
 				else {
 					console.debug("discarding message", dataArr[m]);
