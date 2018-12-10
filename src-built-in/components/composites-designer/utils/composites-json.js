@@ -15,11 +15,6 @@ function generate(name, stacks) {
         // Initial config with composite width and height
         // set to window width and height
         const config = {
-            // Get the current top and left for this composite
-            // just incase we end up using it as the composite's
-            // default spawn position
-            top: window.screenTop,
-            left: window.screenLeft,
             width: window.innerWidth,
             height: window.innerHeight,
             components: []
@@ -36,11 +31,19 @@ function generate(name, stacks) {
                 .getComponentDefaultConfig(name)).data
             // Override window's width, height , top and left
             defaultConfig.window = Object.assign(defaultConfig.window, {
-                width: stack.clientWidth,
-                height: stack.clientHeight,
+                width: stack.offsetWidth,
+                height: stack.offsetHeight,
                 top: stack.offsetTop,
                 left: stack.offsetLeft
             })
+            // We also need to hide the header
+            // @todo Do this in a better and shorter way, maybe deep Object.assign?
+            try {
+                defaultConfig.foreign.components["Window Manager"].FSBLHeader = false
+            } catch (e) {
+                // @todo rebuild config if needed
+                console.log('Failed', defaultConfig)
+            }
             // Push the component to the array
             config.components.push({
                 name: name,

@@ -1,5 +1,6 @@
 import React from 'react'
 import storeActions from '../composites-shared/store-actions'
+import compositesLauncher from './utils/composites-launcher'
 import {
     FinsembleMenu,
     FinsembleMenuSection,
@@ -33,7 +34,8 @@ export default class App extends React.Component {
         const methods = [
             'onDeleteClick',
             'onCompositesUpdate',
-            'onNewCompositeClick'
+            'onNewCompositeClick',
+            'onCompositeClick'
         ]
         methods.forEach((method) => {
             this[method] = this[method].bind(this)
@@ -78,6 +80,16 @@ export default class App extends React.Component {
             }
         })
     }
+    /**
+     * Calls the compositeLauncher launch method to spawn
+     * all components in the composite
+     * @param {string} compositeName The composite name
+     */
+    onCompositeClick(compositeName) {
+        compositesLauncher.launch(
+            compositeName,
+            this.state.composites[compositeName])
+    }
 
     render() {
         return (<FinsembleMenu className="composites-launcher-menu">
@@ -99,12 +111,13 @@ export default class App extends React.Component {
                             .filter((composite) => this.state.composites[composite])
                             .map((itemName, index) => {
                                 return <FinsembleMenuItem key={index}
+                                    onClick={() => this.onCompositeClick(itemName)}
                                     isDeletable={true}
                                     deleteAction={() => this.onDeleteClick(itemName)}
                                     pinIcon="ff-edit"
                                     isPinned={false}
                                     isPinnable={true}
-                                    pinAction={() => { this.onEditComposite(itemName) }}
+                                    pinAction={() => this.onEditComposite(itemName)}
                                     label={itemName} />
                             })
                     }
