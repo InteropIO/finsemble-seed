@@ -34,7 +34,8 @@ function createLinkage() {
 	});
 }
 
-FSBL.addEventListener("onReady", function () {
+if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLready", FSBLReady) }
+function FSBLReady() {
 	createLinkage();
 	getState();
-})
+}

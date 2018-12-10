@@ -4,66 +4,66 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
-import HoverDetector from "../HoverDetector.jsx";
+import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
 import { getStore, Actions as HeaderActions } from "../../stores/windowTitleBarStore";
 let windowTitleBarStore;
 export default class ShareButton extends React.Component {
 	constructor(props) {
 		super(props);
 		this.bindCorrectContext();
-        /**
-		 * We assign in the constructor instead of via a require at the top of the file because the store is initialized asynchronously.
-		 */
+		/**
+ * We assign in the constructor instead of via a require at the top of the file because the store is initialized asynchronously.
+ */
 		windowTitleBarStore = getStore();
 
 		this.state = {
 			hoverState: "false"
 		};
 	}
-    /**
-     * This is necessary to make sure that the `this` inside of the callback is correct.
-     *
-     * @memberof ShareButton
-     */
+	/**
+	 * This is necessary to make sure that the `this` inside of the callback is correct.
+	 *
+	 * @memberof ShareButton
+	 */
 	bindCorrectContext() {
 		this.hoverAction = this.hoverAction.bind(this);
 	}
 
 
 
-    /**
-     * When the user starts to drag the share button, let the DragAndDropClient know.
-     *
-     * @param {any} ev
-     * @memberof ShareButton
-     */
+	/**
+	 * When the user starts to drag the share button, let the DragAndDropClient know.
+	 *
+	 * @param {any} ev
+	 * @memberof ShareButton
+	 */
 	onDragStart(ev) {
 		FSBL.Clients.DragAndDropClient.dragStart(ev);
 	}
 
-    /**
-     * Add listeners to store.
-     *
-     * @memberof ShareButton
-     */
+	/**
+	 * Add listeners to store.
+	 *
+	 * @memberof ShareButton
+	 */
 	componentWillMount() {
 		windowTitleBarStore.addListener({ field: "Sharer.receiverHandler" }, this.onReceiverhandler);
 	}
-    /**
-     * Remove listeners from the store.
-     *
-     * @memberof ShareButton
-     */
+	/**
+	 * Remove listeners from the store.
+	 *
+	 * @memberof ShareButton
+	 */
 	componentWillUnmount() {
 		windowTitleBarStore.removeListener({ field: "Sharer.receiverHandler" }, this.onReceiverhandler);
 	}
 
-    /**
-     * When your mouse enters/leaves the hoverDetector, this function is invoked.
-     *
-     * @param {any} newHoverState
-     * @memberof LinkerButton
-     */
+	/**
+	 * When your mouse enters/leaves the hoverDetector, this function is invoked.
+	 *
+	 * @param {any} newHoverState
+	 * @memberof LinkerButton
+	 */
 	hoverAction(newHoverState) {
 		this.setState({ hoverState: newHoverState });
 	}
@@ -75,7 +75,7 @@ export default class ShareButton extends React.Component {
 		}
 		*/
 		return (<div className="fsbl-icon ff-share" title="Drag To Share" data-hover={this.state.hoverState} draggable="true" onDragStart={this.onDragStart}>
-			<HoverDetector edge="top" hoverAction = {this.hoverAction.bind(this)} />
-        </div>);
+			<FinsembleHoverDetector edge="top" hoverAction={this.hoverAction.bind(this)} />
+		</div>);
 	}
 }

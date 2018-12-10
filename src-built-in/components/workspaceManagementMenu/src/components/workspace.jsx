@@ -5,7 +5,7 @@
  */
 
 import React from "react";
-import { FinsembleMenuItem, FinsembleMenuItemLabel, FinsembleMenuItemActions } from "@chartiq/finsemble-react-controls";
+import { FinsembleMenuItem, FinsembleMenuItemLabel } from "@chartiq/finsemble-react-controls";
 
 export default class Workspace extends React.Component {
 	constructor(props) {
@@ -72,21 +72,24 @@ export default class Workspace extends React.Component {
 	 * @memberof Workspace
 	 */
 	render() {
-		let actionButtons = null,
-			style = {};
+		const { isSwitchingWorkspaces, workspace, isActiveWorkspace } = this.props;
+		let actionButtons = null;
 
 		//Actions are remove and pin workspace.
 		if (this.props.itemActions) {
 			actionButtons = this.renderButtons();
 		}
 
+		const showSpinner = isSwitchingWorkspaces && isActiveWorkspace;
+
 		let classes = this.props.isActiveWorkspace ? "active-workspace workspace-name" : "workspace-name";
 		return (
 			<FinsembleMenuItem>
-				<FinsembleMenuItemLabel label={this.props.workspace.name} className={classes} onClick={this.onClick}/>
-				{actionButtons && <FinsembleMenuItemActions>
+				{showSpinner && <div className="fsbl-loader">Loading...</div> }
+				<FinsembleMenuItemLabel label={workspace.name} className={classes} onClick={this.onClick}/>
+				{actionButtons && <div className="menu-item-actions">
 					{actionButtons}
-				</FinsembleMenuItemActions>}
+				</div>}
 			</FinsembleMenuItem>
 		);
 	}

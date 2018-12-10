@@ -27,7 +27,7 @@
 	const handleError = e => {
 		if (e) {
 			console.error(e);
-			process.send("serverFailed");
+			process.send({ "action": "serverFailed" });
 			process.exit(1);
 		}
 	}
@@ -132,21 +132,14 @@
 	}
 	logToTerminal(outputColor("Starting Server"));
 	if (process.env.NODE_ENV === "development") {
-		//JSON file that has start times and retrieval times for the manifest and startup_app.
-		const STATS_PATH = path.join(__dirname, "./stats.json");
 		//Listens for the first time that the config and the serviceManager are retrieved, and logs output to the console.
 		let notified_config = false, notified_sm = false;
 		let serviceManagerRetrievedTimeout;
 		app.get("/configs/openfin/manifest-local.json", (req, res, next) => {
 			if (!notified_config) {
-				let stats = require(STATS_PATH);
-				const now = Date.now();
-				const launchDuration = (now - stats.startTime) / 1000;
-				stats.manifest_retrieval = now;
-				stats.manifest_retrieval_diff_in_s = launchDuration;
-				fs.writeFileSync(STATS_PATH, JSON.stringify(stats), "utf-8");
 
-				logToTerminal(outputColor(`Application manifest retrieved ${launchDuration}s after launch`));
+				// Send a timestamp back to the parent process
+				process.send({ "action": "timestamp", "milestone": "Application manifest retrieved", "timestamp": Date.now() });
 				notified_config = true;
 				serviceManagerRetrievedTimeout = setTimeout(() => {
 					logToTerminal(errorColor(`ERROR: Finsemble application manifest has been retrieved from the server, but the Finsemble Service Manager has not. This can be caused by a slow internet connection (e.g., downloading assets). This can also be a symptom that you have a hanging openfin process. Please inspect your task manager to ensure that there are no lingering processes. Alternatively, run 'finsemble-cli kill'`))
@@ -158,14 +151,9 @@
 		app.get("/finsemble/components/system/serviceManager/serviceManager.html", (req, res, next) => {
 			if (!notified_sm) {
 				clearTimeout(serviceManagerRetrievedTimeout);
-				const stats = require(STATS_PATH);
-				const now = Date.now();
-				const launchDuration = (now - stats.startTime) / 1000;
-				stats.sm_retrieval = now;
-				stats.sm_retrieval_diff_in_s = launchDuration;
-				fs.writeFileSync(STATS_PATH, JSON.stringify(stats), "utf-8");
 
-				logToTerminal(outputColor(`Application started ${launchDuration}s after launch`));
+				// Send a timestamp back to the parent process
+				process.send({ "action": "timestamp", "milestone": "Application started", "timestamp": Date.now() });
 				notified_sm = true;
 			}
 			next();
@@ -190,7 +178,7 @@
 					if (err) {
 						handleError(err);
 					} else {
-						process.send("serverStarted");
+						process.send({ "action": "serverStarted" });
 					}
 				});
 			};
