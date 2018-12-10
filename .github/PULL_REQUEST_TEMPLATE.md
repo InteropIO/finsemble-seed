@@ -1,8 +1,9 @@
-**Resolves issue [####](https://chartiq.kanbanize.com/ctrl_board/18/cards/####/details)**
+**Resolves #001**
 
-**Description of change**
--Change 1
--Change 2
+- Change A
+- Change B
 
-**Description of testing**
--How did you verify that your code satisfies the card's requirements?
+**What to verify:**
+
+- Step 1
+- Step 2

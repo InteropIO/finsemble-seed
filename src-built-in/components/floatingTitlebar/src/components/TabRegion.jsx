@@ -4,16 +4,19 @@ import React from "react";
 import ReactDOM from "react-dom";
 import Tab from "./tab";
 import { FinsembleDnDContext, FinsembleDroppable } from '@chartiq/finsemble-react-controls';
-import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
+import HoverDetector from "./HoverDetector.jsx";
 import Logo from "./logo";
-import Title from "../../../common/windowTitle"
+
 import { Store, Actions } from "../stores/tabbingStore";
 import { Store as HeaderStore, Actions as HeaderActions } from "../stores/headerStore";
 
+import { debug } from "util";
+const PLACEHOLDER_TAB = {
+    windowName: "",
+    uuid: "",
+    componentType: "placeholder-tab"
+};
 let TAB_WIDTH = 300;
-//Next two items are for calculating how large the title should be within a tab.
-const ICON_AREA = 29;
-const CLOSE_BUTTON_MARGIN = 22;
 const MINIMUM_TAB_SIZE = 100;
 
 export default class TabRegion extends React.Component {
@@ -165,7 +168,6 @@ export default class TabRegion extends React.Component {
 
         FSBL.Clients.Logger.system.debug("Tab drag drop.");
         let identifier = this.extractWindowIdentifier(e);
-        if (!identifier) return; // the dropped item is not a tab
         FSBL.Clients.WindowClient.stopTilingOrTabbing({ allowDropOnSelf: true, action: "tabbing" }, () => {
             FSBL.Clients.RouterClient.transmit("tabbingDragEnd", { success: true });
             if (identifier && identifier.windowName) {
@@ -431,7 +433,6 @@ export default class TabRegion extends React.Component {
         this.setState({ hoverState: newHoverState });
     }
     renderTabs() {
-        let titleWidth = this.state.tabWidth - ICON_AREA - CLOSE_BUTTON_MARGIN;
         return this.state.tabs.map((tab, i) => {
             return <Tab
                 onClick={() => {
@@ -452,7 +453,7 @@ export default class TabRegion extends React.Component {
                 onTabDraggedOver={this.onTabDraggedOver}
                 listenForDragOver={this.props.listenForDragOver}
                 tabWidth={this.state.tabWidth}
-                titleWidth={titleWidth}
+                title={tab.title || tab.windowName}
                 windowIdentifier={tab} />
         });
     }
@@ -466,9 +467,9 @@ export default class TabRegion extends React.Component {
             onDragEnd={this.stopDrag}
             data-hover={this.state.hoverState}
             className={"fsbl-header-title cq-no-drag"}>
-            <FinsembleHoverDetector edge="top" hoverAction={this.hoverAction.bind(this)} />
+            <HoverDetector edge="top" hoverAction={this.hoverAction.bind(this)} />
             <Logo windowIdentifier={Actions.getWindowIdentifier()} />
-            <Title windowIdentifier={Actions.getWindowIdentifier()}></Title>
+            <div className="fsbl-tab-title">{this.props.thisWindowsTitle}</div>
         </div>);
     }
     render() {

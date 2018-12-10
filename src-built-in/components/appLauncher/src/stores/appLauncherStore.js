@@ -5,7 +5,8 @@
 
 let ToolbarStore, appLauncherStore, windowGroupStore;
 import async from "async";
-var COMPONENT_UPDATE_CHANNEL;
+let finWindow = fin.desktop.Window.getCurrent();
+const COMPONENT_UPDATE_CHANNEL = `${finWindow.name}.ComponentsToRender`;
 function uuidv4() {
 	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
 		var r = Math.random() * 16 | 0,
@@ -13,7 +14,7 @@ function uuidv4() {
 		return v.toString(16);
 	});
 }
-
+FSBL.Clients.RouterClient.addPubSubResponder(COMPONENT_UPDATE_CHANNEL, {});
 var Actions = {
 	initialize: function (cb) {
 		async.parallel([
@@ -372,8 +373,6 @@ function getWindowGroupStore(done) {
 }
 
 function initialize(cb) {
-	COMPONENT_UPDATE_CHANNEL = `${finsembleWindow.name}.ComponentsToRender`;
-	FSBL.Clients.RouterClient.addPubSubResponder(COMPONENT_UPDATE_CHANNEL, {});
 	async.parallel([
 		createLocalStore,
 		getToolbarStore,

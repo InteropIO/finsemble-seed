@@ -34,7 +34,7 @@ class _ToolbarStore {
 			}
 			function createStore(err, result) {
 				let values = {};
-				if (monitors.mine && monitors.primary && monitors.mine.deviceId === monitors.primary.deviceId) {
+				if (monitors.mine.deviceId === monitors.primary.deviceId) {
 					values = { mainToolbar: fin.desktop.Window.getCurrent().name };
 					storeOwner = true;//until we put creator in by default
 				}
@@ -59,42 +59,31 @@ class _ToolbarStore {
 	 */
 	retrieveSelfFromStorage(cb) {
 
-		finsembleWindow.getOptions((err, opts) => {
-			console.info("get options", opts);
-			let hasRightProps = () => {
-				return (opts.hasOwnProperty('customData') &&
-					opts.customData.hasOwnProperty('foreign') &&
-					opts.customData.foreign.hasOwnProperty('services') &&
-					opts.customData.foreign.services.hasOwnProperty('workspaceService') && opts.customData.foreign.services.workspaceService.hasOwnProperty('global'));
+		let hasRightProps = () => {
+			return (finsembleWindow.hasOwnProperty('windowOptions') && finsembleWindow.windowOptions.hasOwnProperty('customData') && finsembleWindow.windowOptions.customData.hasOwnProperty('foreign') && finsembleWindow.windowOptions.customData.foreign.hasOwnProperty('services') && finsembleWindow.windowOptions.customData.foreign.services.hasOwnProperty('workspaceService') && finsembleWindow.windowOptions.customData.foreign.services.workspaceService.hasOwnProperty('global'));
+		}
+
+		let isGloballyDocked = hasRightProps() ? finsembleWindow.windowOptions.customData.foreign.services.workspaceService.global : false;
+
+		finsembleWindow.getComponentState({}, (err, result) => {
+			if (err) {
+				finsembleWindow.show();
+				cb();
+				return;
 			}
-			var isGloballyDocked = hasRightProps() ? opts.customData.foreign.services.workspaceService.global : false;
-
-			finsembleWindow.getComponentState(null, (err, result) => {
-				if (err) {
-					finsembleWindow.show();
-					return cb();
-				}
-
-				let visible = (result && result.hasOwnProperty('visible')) ? result.visible : true;
-				finsembleWindow.getBounds(null, (err, bounds) => {
-					if (!err && bounds && isGloballyDocked) {
-						this.Store.setValue({
-							field: 'window-bounds',
-							value: bounds
-						});
-						finsembleWindow.setBounds(bounds, () => {
-							if (visible) {
-								finsembleWindow.show();
-							}
-						});
-					} else {
+			let bounds = result.hasOwnProperty('window-bounds') && result["window-bounds"] !== null ? result["window-bounds"] : null;
+			let visible = result.hasOwnProperty('visible') ? result.visible : true;
+			if (bounds && isGloballyDocked) {
+				finsembleWindow.setBounds(bounds, () => {
+					if (visible) {
 						finsembleWindow.show();
 					}
-					cb(null, result);
-				})
-			});
-		})
-
+				});
+			} else {
+				finsembleWindow.show();
+			}
+			cb(null, result);
+		});
 	}
 	/**
 	 * Sets the toolbars visibility in memory
@@ -130,7 +119,7 @@ class _ToolbarStore {
 	 * @memberof _ToolbarStore
 	 */
 	loadMenusFromConfig(done, self) {
-		FSBL.Clients.ConfigClient.getValue({ field: "finsemble.menus" }, function (err, menus) {
+		FSBL.Clients.ConfigClient.get({ field: "finsemble.menus" }, function (err, menus) {
 			if (menus && menus.length) {
 				self.Store.setValue({
 					field: "menus",
@@ -172,62 +161,91 @@ class _ToolbarStore {
 			}
 			done();
 		});
-
-		let onBoundsSet = (bounds) => {
-			bounds = bounds.data ? bounds.data : bounds;
-			self.Store.setValue({ field: "window-bounds", value: bounds });
-			FSBL.Clients.WindowClient.setComponentState({
+		FSBL.Clients.WindowClient.finsembleWindow.listenForBoundsSet();
+		let onBoundsChanged = (err, response) => {
+			let bounds = response.data.bounds;
+			console.log("CHANGING BOUNDS AND SETTING THEM");
+			finsembleWindow.setComponentState({
 				field: 'window-bounds',
 				value: bounds
-			}, Function.prototype);
+			}, () => {
+				console.log("BOUNDS SET");
+			});
 		}
-		let restoreWindow = (e) => {
-			finsembleWindow.restore();
-		}
-		//Immediately restore on maximize.
-		finsembleWindow.addListener("maximized", restoreWindow);
-		finsembleWindow.addListener("bounds-change-end", onBoundsSet)
-
 		FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", "t"], () => {
-			self.showToolbarAtFront();
+			self.toggleToolbarVisibility();
 		});
 
-		FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", "h"], () => {
-			self.hideToolbar();
-		});
+		//This is a hack until we have proper events in finsemble. We need to notify windows that aren't part of the workspace so that they can save their bounds.
+		FSBL.Clients.RouterClient.addListener(finsembleWindow.name + ".bounds-change-end", onBoundsChanged)
+	}
+
+	/**
+	 * Function to handle maximize click
+	 * @memberof _ToolbarStore
+	 */
+	clickMaximize() {
+		var self = this;
+		FSBL.Clients.WindowClient.restore(Function.prototype);
 	}
 
 	/**
 	 * Function to bring toolbar to front (since dockable toolbar can be hidden)
-	 * @param {boolean} focus If true, will also focus the toolbar
 	 * @memberof _ToolbarStore
 	 */
-	bringToolbarToFront(focus) {
-		var self = this;
-		finsembleWindow.bringToFront(null, () => {
-			if (focus) {
-				finsembleWindow.focus();
-				self.Store.setValue({ field: "searchActive", value: false });
+	bringToolbarToFront() {
+		finsembleWindow.bringToFront();
+	}
+
+	/**
+	 * Function to hide/show the toolbar
+	 * @memberof _ToolbarStore
+	 */
+	toggleToolbarVisibility(cb = Function.prototype) {
+		finsembleWindow.getComponentState({}, (err, response) => {
+			//'Not found' is a custom error thrown by getComponentState that just means the state is empty. This isn't an error we're too concerned about because we have default options to use. This is _most likely_ due to a reset, where the state variables for toolbar no longer exist
+			if (err && err !== "Not found") {
+				FSBL.Clients.Logger.system.error("Error retrieving dockable component state");
+				cb();
+				return;
 			}
+
+			let blurred = response && response.hasOwnProperty('blurred') ? response.blurred : false;
+			let visible = response && response.hasOwnProperty('visible') ? response.visible : true;
+			if (visible) {
+				if (blurred) {
+					FSBL.Clients.WindowClient.showAtMousePosition();
+					finsembleWindow.bringToFront(null, () => {
+						finsembleWindow.focus();
+						SearchActions.positionSearchResults();
+					});
+					this.Store.setValue({ field: "searchActive", value: true });
+				} else {
+					this.Store.setValue({ field: "searchActive", value: false });
+					finsembleWindow.setComponentState({
+						field: 'visible',
+						value: false
+					}, () => {
+						SearchActions.handleClose();
+						finsembleWindow.hide();
+						finsembleWindow.blur();
+					});
+				}
+			} else {
+				finsembleWindow.setComponentState({
+					field: 'visible',
+					value: true
+				}, () => {
+					FSBL.Clients.WindowClient.showAtMousePosition();
+					finsembleWindow.bringToFront(() => {
+						finsembleWindow.focus();
+						SearchActions.setFocus(true);
+					});
+					this.Store.setValue({ field: "searchActive", value: true });
+				});
+			}
+			cb(null, "success");
 		});
-	}
-
-	/**
-	 * Unhides/brings to front the toolbar
-	 * @memberof _ToolbarStore
-	 */
-	showToolbarAtFront() {
-		FSBL.Clients.WindowClient.showAtMousePosition();
-		this.bringToolbarToFront(true);
-	}
-
-	/**
-	 * Hides the toolbar
-	 * @memberof _ToolbarStore
-	 */
-	hideToolbar() {
-		finsembleWindow.blur();
-		finsembleWindow.hide();
 	}
 
 	/**
@@ -304,10 +322,13 @@ class _ToolbarStore {
 					self.retrieveSelfFromStorage(done);
 				},
 				function (done) {
-					finsembleWindow.addEventListener('focused', function () {
+					FSBL.Clients.WindowClient.finWindow.addEventListener("maximized", function () {
+						self.clickMaximize();
+					});
+					FSBL.Clients.WindowClient.finWindow.addEventListener('focused', function () {
 						self.onFocus();
 					});
-					finsembleWindow.addEventListener('blurred', function () {
+					FSBL.Clients.WindowClient.finWindow.addEventListener('blurred', function () {
 						self.onBlur();
 					});
 					done();
@@ -365,9 +386,6 @@ class _ToolbarStore {
 		FSBL.Clients.RouterClient.subscribe("Finsemble.WorkspaceService.update", (err, response) => {
 			this.setWorkspaceMenuWindowName(response.data.activeWorkspace.name);
 			this.Store.setValue({ field: "activeWorkspaceName", value: response.data.activeWorkspace.name });
-			if (response.data.reason && response.data.reason === "workspace:load:finished") {
-				this.bringToolbarToFront();
-			}
 		})
 	}
 

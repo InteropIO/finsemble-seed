@@ -122,14 +122,13 @@ export default class ProcessMonitor extends React.Component {
 	}
 }
 
-if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
-function FSBLReady() {
+FSBL.addEventListener("onReady", function () {
 	// var Test = require('./test');
-	//console.log("appLauncher app onReady");
+//console.log("appLauncher app onReady");
 
 	Actions.initialize(function (store) {
 		ReactDOM.render(
 			<ProcessMonitor />
 			, document.getElementById("ProcessMonitor-component-wrapper"));
 	});
-}
+});

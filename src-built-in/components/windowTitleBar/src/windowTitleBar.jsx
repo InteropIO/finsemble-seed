@@ -10,7 +10,7 @@ import ReactDOM from "react-dom";
 import * as storeExports from "./stores/windowTitleBarStore";
 let HeaderData, HeaderActions, windowTitleBarStore;
 
-import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
+import HoverDetector from "./components/HoverDetector.jsx";
 
 //Parts that make up the windowTitleBar.
 //Left side
@@ -88,7 +88,6 @@ class WindowTitleBar extends React.Component {
 		this.onHackScrollbarChanged = this.onHackScrollbarChanged.bind(this);
 		this.onTilingStop = this.onTilingStop.bind(this);
 		this.onTilingStart = this.onTilingStart.bind(this);
-		this.resizeDragHandle = this.resizeDragHandle.bind(this);
 
 	}
 	componentWillMount() {
@@ -400,7 +399,6 @@ class WindowTitleBar extends React.Component {
 							listenForDragOver={!this.state.allowDragOnCenterRegion}
 							tabs={this.state.tabs}
 							ref="tabArea"
-							onTitleUpdated={this.resizeDragHandle}
 						/>}
 
 				</div>
@@ -422,13 +420,10 @@ class WindowTitleBar extends React.Component {
 // it is pub/sub, if the event had fired in the past then it will still be fired.
 // window.addEventListener("FSBLReady", function () {
 
-if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
-function FSBLReady() {
-	if (FSBL.titleBarInserted) return;
-	FSBL.titleBarInserted = true;
+FSBL.addEventListener("onReady", function () {
 	storeExports.initialize(function () {
 		HeaderActions = storeExports.Actions;
 		windowTitleBarStore = storeExports.getStore();
 		ReactDOM.render(<WindowTitleBar />, document.getElementById("FSBLHeader"));
 	});
-}
+});

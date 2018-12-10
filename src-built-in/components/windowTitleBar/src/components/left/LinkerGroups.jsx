@@ -3,7 +3,7 @@
 * All rights reserved.
 */
 import React from "react";
-import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
+import HoverDetector from "../HoverDetector.jsx";
 import { getStore, Actions as HeaderActions } from "../../stores/windowTitleBarStore";
 let windowTitleBarStore;
 

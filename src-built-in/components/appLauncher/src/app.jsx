@@ -35,6 +35,7 @@ import {
 class AppLauncher extends React.Component {
 	constructor(props) {
 		super(props);
+		this.finWindow = fin.desktop.Window.getCurrent();
 
 		this.state = {
 			dimensions: {},
@@ -45,8 +46,8 @@ class AppLauncher extends React.Component {
 	componentWillMount() {
 		var self = this;
 		//Focus on the window when it is shown so that a click elsewhere will trigger a blur.
-		finsembleWindow.addEventListener("shown", function () {
-			finsembleWindow.focus();
+		this.finWindow.addEventListener("shown", function () {
+			self.finWindow.focus();
 		});
 	}
 
@@ -90,7 +91,7 @@ class AppLauncher extends React.Component {
 }
 
 fin.desktop.main(function () {
-	if (window.FSBL && FSBL.addEventListener) {     FSBL.addEventListener("onReady", FSBLReady); } else {     window.addEventListener("FSBLReady", FSBLReady) } function FSBLReady () {
+	FSBL.addEventListener("onReady", function () {
 		// var Test = require('./test');
 	//console.log("appLauncher app onReady");
 
@@ -100,5 +101,5 @@ fin.desktop.main(function () {
 				<AppLauncher />
 				, document.getElementById("bodyHere"));
 		});
-	}
+	});
 });

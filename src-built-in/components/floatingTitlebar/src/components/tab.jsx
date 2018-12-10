@@ -1,9 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
+import HoverDetector from "./HoverDetector.jsx";
 import Logo from "./logo";
 import { FinsembleDraggable } from "@chartiq/finsemble-react-controls";
-import Title from "../../../common/windowTitle"
+const ICON_AREA = 29;
+const CLOSE_BUTTON_MARGIN = 22;
 /**
  * This component is pretty basic. It just takes a bunch of props and renders them.
  */
@@ -31,6 +32,7 @@ export default class Tab extends React.Component {
 	componentWillUnmount() {
 	}
 	render() {
+		let titleWidth = this.props.tabWidth - ICON_AREA - CLOSE_BUTTON_MARGIN;
 		let style = {
 			width: this.props.tabWidth
 		}
@@ -54,9 +56,12 @@ export default class Tab extends React.Component {
 						onDragOver={this.onDragOver}
 					></div>
 				}
-				<FinsembleHoverDetector edge="top" hoverAction={this.hoverAction.bind(this)} />
-				<Logo windowIdentifier={this.props.windowIdentifier} />
-				<Title titleWidth={this.props.titleWidth} windowIdentifier={this.props.windowIdentifier} />
+				<HoverDetector edge="top" hoverAction={this.hoverAction.bind(this)} />
+				<Logo windowIdentifier={this.props.windowIdentifier}/>
+				<div className="fsbl-tab-title" style={{ width: titleWidth }}>
+					{/* @todo, figure out where we're setting the title to an empty object.... */}
+					{typeof (this.props.title) === "string" ? this.props.title : ''}
+				</div>
 				<div className="fsbl-tab-close" onClick={(e) => {
 					e.preventDefault();
 					e.stopPropagation();

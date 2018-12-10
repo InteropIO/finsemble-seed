@@ -15,6 +15,7 @@ class Linker extends React.Component {
 	constructor() {
 		super();
 		this.onStoreChanged = this.onStoreChanged.bind(this);
+		this.finWindow = fin.desktop.Window.getCurrent();
 	}
 	/**
 	 * When the store changes, set the react component's state, forcing a rerender.
@@ -53,7 +54,7 @@ class Linker extends React.Component {
 	 * @memberof Linker
 	 */
 	onWindowBlur() {
-		finsembleWindow.hide();
+		this.finWindow.hide();
 	}
 	/**
 	 * Fit the contents of the dom to the openfin window's bounds. Also set the component's state.
@@ -61,14 +62,15 @@ class Linker extends React.Component {
 	 * @memberof Linker
 	 */
 	componentWillMount() {
-		finsembleWindow.addEventListener("blurred", this.onWindowBlur.bind(this));
+		this.finWindow.addEventListener("blurred", this.onWindowBlur.bind(this));
 		LinkerStore.addListener(["stateChanged"], this.onStoreChanged);
+		LinkerActions.windowMounted(); //windowMounted
 		this.setState({
 			channels: LinkerStore.getChannels(),
 			attachedWindowIdentifier: LinkerStore.getAttachedWindowIdentifier()
 		});
 	}
-	componentDidMount() {
+	componentDidUpdate() {
 		LinkerActions.windowMounted();
 	}
 	render() {
@@ -108,9 +110,8 @@ class Linker extends React.Component {
 }
 
 fin.desktop.main(function () {
-	if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
-	function FSBLReady() {
+	FSBL.addEventListener("onReady", function () {
 		LinkerStore.initialize();
 		ReactDOM.render(<Linker />, document.getElementById("main"));
-	}
+	});
 });

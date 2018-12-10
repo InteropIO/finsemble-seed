@@ -14,7 +14,7 @@
 	const gulp = require("gulp");
 	const prettyHrtime = require("pretty-hrtime");
 	const watch = require("gulp-watch");
-	const openfinLauncher = require("openfin-launcher");
+	const launcher = require("openfin-launcher");	
 	const shell = require("shelljs");
 	const path = require("path");
 	const webpack = require("webpack");
@@ -51,6 +51,7 @@
 	// PATH. So, copy based on our existing env variables.
 	const env = process.env;
 
+
 	if (!env.NODE_ENV) {
 		env.NODE_ENV = "development";
 	}
@@ -59,56 +60,10 @@
 		env.PORT = startupConfig[env.NODE_ENV].serverPort;
 	}
 
-	// This variable controls whether the build should watch files for changes. This `startsWith` catches all of the
+	// This variable controls whether the build should watch files for changes. This `startsWith` catches all of the 
 	// tasks that are dev * (dev, dev: fresh, dev: nolaunch), but excludes build:dev because it is intended to only
 	// build for a development environment and not watch for changes.
 	const isRunningDevTask = process.argv[2].startsWith("dev");
-
-	/**
-	 * Returns the value for the given name, looking in (1) environment variables, (2) command line args
-	 * and (3) startupConfig. For instance, `set BLAH_BLAH=electron` or `npx gulp dev --blah_blah:electron`
-	 * This will search for both all caps, all lowercase and camelcase.
-	 * @param {string} name The name to look for in env variables and args
-	 * @param {string} defaultValue The default value to return if the name isn't found as an env variable or arg
-	 */
-	function envOrArg(name, defaultValue) {
-		let lc = name.toLowerCase();
-		let uc = name.toUpperCase();
-		let cc = name.replace(/(-|_)([a-z])/g, function (g) { return g[1].toUpperCase(); });
-
-		// Check environment variables
-		if (env[lc]) return env[lc];
-		if (env[uc]) return env[uc];
-
-		// Check command line arguments
-		lc = "--" + lc + ":";
-		uc = "--" + uc + ":";
-		let rc = null;
-		process.argv.forEach(arg => {
-			if (arg.startsWith(lc)) rc = arg.split(lc)[1];
-			if (arg.startsWith(uc)) rc = arg.split(uc)[1];
-		});
-
-		// Look in startupConfig
-		if (!rc) {
-			rc = startupConfig[env.NODE_ENV][cc] || startupConfig[env.NODE_ENV][lc] || startupConfig[env.NODE_ENV][uc];
-		}
-		rc = rc || defaultValue;
-		return rc;
-	}
-
-	// Currently supported desktop agents include "openfin" and "e2o". This can be set either
-	// with the environment variable CHANNEL_ADAPTER or by command line argument `npx gulp dev --channel_adapter:electron`
-	let channelAdapter = envOrArg("channel_adapter", "openfin");
-	channelAdapter = channelAdapter.toLowerCase();
-	if (channelAdapter === "electron") channelAdapter = "e2o";
-
-	// This is a reference to the server process that is spawned. The server process is located in server/server.js
-	// and is an Express server that runs in its own node process (via spawn() command).
-	let serverProcess = null;
-
-	// This will get set when the container (Electron or Openfin) is launched. This is used to calculate how long it takes to start up the app.
-	let launchTimestamp = 0;
 
 	// #endregion
 
@@ -120,10 +75,10 @@
 		/**
 		 * Attach some variables to the taskMethods so that they are available to gulp-extensions.
 		 */
-		distPath: path.join(__dirname, "dist"),
+		distPath : path.join(__dirname, "dist"),
 		srcPath: path.join(__dirname, "src"),
 		startupConfig: startupConfig,
-
+		
 		/**
 		 * Builds the application in the distribution directory. Internal only, don't use because no environment is set!!!!
 		 */
@@ -215,7 +170,7 @@
 					}
 				});
 			}
-
+	
 			//Requires are done in the function because webpack.components.js will error out if there's no vendor-manifest. The first webpack function generates the vendor manifest.
 			async.series([
 				(cb) => {
@@ -263,20 +218,17 @@
 		},
 		checkSymbolicLinks: done => {
 			const FINSEMBLE_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble");
-			const FINSEMBLE_VERSION = require(path.join(FINSEMBLE_PATH, "package.json")).version;
 			const CLI_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-cli");
-			const CLI_VERSION = require(path.join(CLI_PATH, "package.json")).version;
 			const CONTROLS_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-react-controls");
-			const CONTROLS_VERSION = require(path.join(CONTROLS_PATH, "package.json")).version;
 
 			function checkLink(params, cb) {
-				let { path, name, version } = params;
+				let { path, name } = params;
 				if (fs.existsSync(path)) {
 					fs.readlink(path, (err, str) => {
 						if (str) {
-							logToTerminal(`LINK DETECTED: ${name}. @Version ${version} Path: ${str}.`, "yellow");
+							logToTerminal(`LINK DETECTED: ${name}. Path: ${str}`, "yellow");
 						} else {
-							logToTerminal(`Using: @chartiq/${name} @Version ${version}`, "magenta");
+							logToTerminal(`Using: @chartiq/${name}`, "magenta");
 						}
 						cb();
 					});
@@ -289,22 +241,19 @@
 				(cb) => {
 					checkLink({
 						path: FINSEMBLE_PATH,
-						name: "finsemble",
-						version: FINSEMBLE_VERSION
+						name: "finsemble"
 					}, cb)
 				},
 				(cb) => {
 					checkLink({
 						path: CLI_PATH,
-						name: "finsemble-cli",
-						version: CLI_VERSION
+						name: "finsemble-cli"
 					}, cb)
 				},
 				(cb) => {
 					checkLink({
 						path: CONTROLS_PATH,
-						name: "finsemble-react-controls",
-						version: CONTROLS_VERSION
+						name: "finsemble-react-controls"
 					}, cb)
 				},
 			], done)
@@ -340,7 +289,7 @@
 				taskMethods.startServer
 			], done);
 		},
-		launchOpenFin: done => {
+		launchApplication: done => {
 			ON_DEATH((signal, err) => {
 				exec("taskkill /F /IM openfin.* /T", (err, stdout, stderr) => {
 					// Only write the error to console if there is one and it is something other than process not found.
@@ -352,93 +301,29 @@
 					process.exit();
 				});
 			});
-			
-			openfinLauncher.launchOpenFin({
-				configPath: taskMethods.startupConfig[env.NODE_ENV].serverConfig
-			}).then(() => {
-				// OpenFin has closed so exit gulpfile
-				if (watchClose) watchClose();
-				process.exit();
-			});
-			if (done) done();
-		},
-		launchE2O: done => {
-			let electronProcess = null;
-			let manifest = taskMethods.startupConfig[env.NODE_ENV].serverConfig;
-			process.env.ELECTRON_DEV = true;
+			logToTerminal("Launching Finsemble", "black", "bgCyan");
+			//Wipe old stats.
+			fs.writeFileSync(path.join(__dirname, "server", "stats.json"), JSON.stringify({}), "utf-8");
 
-			ON_DEATH((signal, err) => {
-				if (electronProcess) electronProcess.kill();
-			
-				exec("taskkill /F /IM electron.* /T", (err, stdout, stderr) => {
-					// Only write the error to console if there is one and it is something other than process not found.
-					if (err && err !== 'The process "electron.*" not found.') {
-						console.error(errorOutColor(err));
-					}
-			
+			let startTime = Date.now();
+			fs.writeFileSync(path.join(__dirname, "server", "stats.json"), JSON.stringify({ startTime }), "utf-8");
+			launcher
+				.launchOpenFin({
+					configPath: taskMethods.startupConfig[env.NODE_ENV].serverConfig
+				})
+				.then(() => {
+					// OpenFin has closed so exit gulpfile
 					if (watchClose) watchClose();
 					process.exit();
 				});
-			});
 
-			let e2oLocation = "node_modules/@chartiq/e2o";
-			let electronPath = path.join("..", "..", "electron", "dist", "electron.exe");
-			let command = "set ELECTRON_DEV=true && " + electronPath + " index.js --remote-debugging-port=9090 --manifest " + manifest;
-			logToTerminal(command);
-			electronProcess = exec(command,
-				{
-					cwd: e2oLocation
-				}, function (err) {
-					logToTerminal(err);
-					logToTerminal("e2o not installed? Try `npm install`", "red");
-				}
-			);
-			
-			electronProcess.stdout.on("data", function (data) {
-				console.log(data.toString());
-			});
-		
-			electronProcess.stderr.on("data", function (data) {
-				console.error("stderr:", data.toString());
-			});
-		
-			electronProcess.on("close", function (code) {
-				console.log("child process exited with code " + code);
-				process.exit();
-			});
-
-			process.on('exit', function () {
-				electronProcess.kill();
-			});	
-			if (done) done();
-		},
-
-		launchApplication: done => {
-			logToTerminal("Launching Finsemble", "black", "bgCyan");
-
-			launchTimestamp = Date.now();
-			if (channelAdapter === "openfin") {
-				taskMethods.launchOpenFin(done);
-			} else {
-				taskMethods.launchE2O(done);
-			}	
+			done();
 		},
 
 		logToTerminal: () => {
 			logToTerminal.apply(this, arguments);
 		},
 
-		/**
-		 * Starts the server, launches the Finsemble application. Use this for a quick launch, for instance when working on e2o.
-		 */
-		"nobuild:dev": done => {
-			async.series([
-				taskMethods.setDevEnvironment,
-				taskMethods.startServer,
-				taskMethods.launchApplication
-			], done);
-		},
-		
 		/**
 		 * Method called after tasks are defined.
 		 * @param done Callback function used to signal function completion to support asynchronous execution. Can
@@ -507,7 +392,7 @@
 		startServer: done => {
 			const serverPath = path.join(__dirname, "server", "server.js");
 
-			serverProcess = spawn(
+			const serverExec = spawn(
 				"node",
 				[
 					serverPath,
@@ -526,30 +411,21 @@
 				}
 			);
 
-			serverProcess.on("message", data => {
-				if (!data || !data.action) {
-					console.log("Unproperly formatted message from server:", data);
-					return;
-				}
-				if (data.action === "serverStarted") {
-					done();
-				} else if (data.action === "serverFailed") {
-					process.exit(1);
-				} else if (data.action === "timestamp") {
-					// The server process can send timestamps back to us. We will output the results here.
-					let duration = (data.timestamp - launchTimestamp) / 1000;
-					logToTerminal(`${data.milestone} ${duration}s after launch`);
-				} else {
-					console.log("Unhandled message from server: ", data);
-				}
-			});
+			serverExec.on(
+				"message",
+				data => {
+					if (data === "serverStarted") {
+						done();
+					} else if (data === "serverFailed") {
+						process.exit(1);
+					}
+				});
 
-			serverProcess.on("exit", code => logToTerminal(`Server closed: exit code ${code}`, "magenta"));
+			serverExec.on("exit", code => logToTerminal(`Server closed: exit code ${code}`, "magenta"));
 
 			// Prints server errors to your terminal.
-			serverProcess.stderr.on("data", data => { console.error(errorOutColor(`ERROR: ${data}`)); });
+			serverExec.stderr.on("data", data => { console.error(errorOutColor(`ERROR: ${data}`)); });
 		},
-
 		setDevEnvironment: done => {
 			process.env.NODE_ENV = "development";
 			done();
@@ -577,7 +453,7 @@
 		// Convert every taskMethod into a gulp task that can be run
 		for (var taskName in taskMethods) {
 			var task = taskMethods[taskName];
-			if (typeof task === "function") gulp.task(taskName, taskMethods[taskName]);
+			if(typeof task==="function") gulp.task(taskName, taskMethods[taskName]);
 		}
 
 		// By default run dev

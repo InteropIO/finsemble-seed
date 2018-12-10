@@ -50,9 +50,10 @@
 }
 
 .finsemble-toolbar-button {
+    display: -webkit-box;
     padding: 5px 6px;
+    height: 100%;
     border: 1px solid var(--toolbar-background-color);
-    display: inline-flex;
 }
 
 .finsemble-toolbar-button-label {
@@ -65,7 +66,7 @@
     margin-top: 6px;
 }
 
-.finsemble-toolbar-button[data-hover=true] {
+.finsemble-toolbar-button:hover {
     background: var(--toolbar-button-hover-color);
     border: 1px solid transparent;
     cursor: pointer;
@@ -128,7 +129,7 @@
     white-space: nowrap;
 }
 
-.finsemble-toolbar-workspace-button-label.finsemble-toolbar-button[data-hover=true] {
+.finsemble-toolbar-workspace-button-label.finsemble-toolbar-button:hover {
     background: var(--toolbar-button-hover-color);
     border: 1px solid transparent;
     cursor: pointer;
@@ -168,9 +169,8 @@
 }
 
 img.pinned-icon {
-    padding-top: 1px;
-    width: 22px;
-    height: 22px;
+    padding-top: 5px;
+    max-width: 17px;
 }
 
 .pinned-icon {

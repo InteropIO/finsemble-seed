@@ -216,11 +216,6 @@ var Actions = {
 				Actions.stopListeningOnParentWrapper(() => {
 					Actions.parentWrapperStore = null;
 					Actions._setTabs(null);
-					onDockingGroupUpdate(null, {
-						data: {
-							groupData: windowTitleBarStore.getValue({ field: "Main.allDockingGroups" })
-						}
-					});
 				});
 			};
 
@@ -240,9 +235,6 @@ var Actions = {
 	getMyDockingGroups: function (groupData) {
 		let myGroups = [];
 		let windowName = FSBL.Clients.WindowClient.getWindowNameForDocking();
-		if (FSBL.Clients.WindowClient.finsembleWindow.parentWindow) {
-			windowName = FSBL.Clients.WindowClient.finsembleWindow.parentWindow.name
-		}
 		FSBL.Clients.Logger.system.debug("Getting docking groups for ", windowName, groupData);
 		if (groupData) {
 			for (var groupName in groupData) {
@@ -365,7 +357,7 @@ var Actions = {
 	 */
 	clickClose: function () {
 		FSBL.Clients.WindowClient.close({
-			removeFromWorkspace: true, // this will cause the entire stack to close. Using this instead of a new parameter to ensure backwards compatibility
+			removeFromWorkspace: true,
 			userInitiated: true
 		});
 	},
@@ -464,10 +456,7 @@ var Actions = {
 		return Actions.parentWrapper.removeWindow({ windowIdentifier, position: i });
 	},
 	closeTab: function (windowIdentifier) {
-		//return Actions.parentWrapper.deleteWindow({ windowIdentifier }) // this will cause the window to be closed but keep the stack intact
-		FSBL.FinsembleWindow.getInstance(windowIdentifier, (err, wrap) => {
-			wrap.close();
-		});
+		return Actions.parentWrapper.deleteWindow({ windowIdentifier })
 	},
 	reorderTab: function (tab, newIndex) {
 
@@ -492,21 +481,19 @@ var Actions = {
 	},
 	setActiveTab: function (windowIdentifier) {
 		FSBL.Clients.Logger.system.debug("setActiveTab.visibleWindow");
-		return finsembleWindow.parentWindow.setVisibleWindow({ windowIdentifier });
+		return Actions.parentWrapper.setVisibleWindow({ windowIdentifier });
 	},
 	parentWrapper: null,
 	onTabListChanged: function (err, response) {
-		FSBL.Clients.Logger.system.debug("OnTabListChanged", response.data);
-		if (response.data && response.data.hasOwnProperty(constants.CHILD_WINDOW_FIELD)) {
-			Actions._setTabs(response.data[constants.CHILD_WINDOW_FIELD]);
-		}
+		FSBL.Clients.Logger.system.debug("OnTabListChanged");
+		if (!response.data) return;
+		return Actions._setTabs(response.data[constants.CHILD_WINDOW_FIELD]);
 	},
 	parentSubscriptions: [],
 	stopListeningOnParentWrapper: function (cb) {
 		Actions.parentSubscriptions.forEach(sub => {
 			FSBL.Clients.RouterClient.unsubscribe(sub);
 		});
-		Actions.parentSubscriptions = []; // remove the subscribeId
 		//Syncs scroll state across all tabs in a stack.
 		FSBL.Clients.RouterClient.removeListener(constants.TAB_SCROLL_POSITION_CHANGED, Actions.onTabListScrollPositionChanged);
 		cb();
@@ -525,8 +512,7 @@ var Actions = {
 		cb();
 	},
 	getInitialTabList: function (cb = Function.prototype) {
-		//FSBL.Clients.WindowClient.getStackedWindow((err, parentWrapper) => {
-		finsembleWindow.getParent((err, parentWrapper) => {
+		FSBL.Clients.WindowClient.getStackedWindow((err, parentWrapper) => {
 			Actions.parentWrapper = parentWrapper;
 			if (Actions.parentWrapper) {
 				FSBL.Clients.Logger.debug("GetInitialTabList, parent exists")
@@ -535,11 +521,9 @@ var Actions = {
 				let activeIdentifier = finsembleWindow.identifier;
 				activeIdentifier.title = finsembleWindow.windowOptions.title;
 				let tabs = [activeIdentifier];
-				cb(null, tabs);
+				cb(null, tabs)
 			}
-		});
-
-		//})
+		})
 	},
 	createParentWrapper(params, cb) {
 		//console.log("In parentWrapper begin");

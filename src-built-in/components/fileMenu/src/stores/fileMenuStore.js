@@ -6,6 +6,7 @@ import { EventEmitter } from "events";
 let PROMPT_ON_DIRTY = false;
 const constants = {
 	METHOD: "METHOD",
+	GET_FIN_WINDOW: "getFinWindow",
 	SHUTDOWN_APPLICATION: "shutdownApplication",
 };
 
@@ -16,8 +17,8 @@ var FileMenuStore = Object.assign({}, EventEmitter.prototype, {
 	 */
 	initialize: function () {
 		var self = this;
-		if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
-		function FSBLReady() {
+		FSBL.addEventListener("onReady", function () {
+			self.finWindow = fin.desktop.Window.getCurrent();
 			self.emit("initialized");
 			FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "shift", "alt", "r"], FSBL.restartApplication);
 			FSBL.Clients.ConfigClient.getValue({ field: "finsemble" }, function (err, config) {
@@ -31,9 +32,13 @@ var FileMenuStore = Object.assign({}, EventEmitter.prototype, {
 				//Default to false.
 				PROMPT_ON_DIRTY = typeof prompt === null ? PROMPT_ON_DIRTY : prompt;
 			});
-		}
+		});
 	},
 	finsembleConfig: null,
+	getFinWindow: function () {
+		return this.finWindow;
+	},
+	finWindow: {},
 	activeWorkspace: {},
 	monitorDimensions: {},
 	initializeActiveWorkspace() {
@@ -59,7 +64,8 @@ var FileMenuStore = Object.assign({}, EventEmitter.prototype, {
 		this.monitorDimensions = dimensions;
 	},
 	hideWindow() {
-		finsembleWindow.hide();
+		var finWindow = this.finWindow;
+		finWindow.hide();
 	}
 });
 var keys = {};
@@ -80,13 +86,13 @@ function setupHotKeys() {
 };
 var Actions = {
 	hideWindow() {
-		finsembleWindow.hide();
+		FileMenuStore.finWindow.hide();
 	},
 	/**
 	 * Hides the window and fires off a message shutting down the application.
 	 */
 	restart() {
-		finsembleWindow.hide();
+		fin.desktop.Window.getCurrent().hide();
 		Actions.saveWorkspace().then(function (choice) {
 			if (choice !== "cancel") {
 				FSBL.restartApplication();
@@ -98,14 +104,14 @@ var Actions = {
 	 *
 	 */
 	showCentralConsole() {
-		finsembleWindow.hide();
+		fin.desktop.Window.getCurrent().hide();
 		FSBL.Clients.RouterClient.transmit("CentralConsole-Show", true);
 	},
 	/**
 	 * Spawns the preferences menu.
 	 */
 	spawnPreferences() {
-		finsembleWindow.hide();
+		fin.desktop.Window.getCurrent().hide();
 		FSBL.Clients.LauncherClient.showWindow({
 			componentType: "UserPreferences"
 		}, {
@@ -149,7 +155,7 @@ var Actions = {
 	 * Hides the window and fires off a message shutting down the application.
 	 */
 	shutdownApplication() {
-		finsembleWindow.hide();
+		fin.desktop.Window.getCurrent().blur();
 		//FSBL.shutdownApplication();
 		Actions.saveWorkspace().then((choice) => {
 			if (choice === 'cancel') {
@@ -164,18 +170,13 @@ var Actions = {
 	 *
 	 */
 	logout() {
-		finsembleWindow.hide();
+		fin.desktop.Window.getCurrent().hide();
+		fetch("/logout", {//Sends our logout message
+			method: "POST",
+			credentials: "include"
+		});
 		Actions.saveWorkspace().then(function (choice) {
 			if (choice !== "cancel") {
-
-				//Reset any server-side sessions or login data necessary to fully log out the user, e.g.
-				/* 
-				fetch("/logout", {//Sends our logout message
-					method: "POST",
-					credentials: "include"
-				});
-				*/
-
 				FSBL.restartApplication();
 			}
 		});
@@ -185,7 +186,7 @@ var Actions = {
 	 */
 	clearCacheRestart() {
 		FSBL.Clients.StorageClient.clearCache(function () {
-			FSBL.restartApplication({ forceRestart: true });
+			Actions.restart();
 		});
 	},
 	spawnAbout() {

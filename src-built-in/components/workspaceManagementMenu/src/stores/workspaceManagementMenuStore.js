@@ -6,7 +6,6 @@
 import async from "async";
 //When a user cancels the save workspace dialog, we throw an error, which short-circuits the async call.
 const SAVE_DIALOG_CANCEL_ERROR = "Cancel";
-const NEGATIVE = "Negative";
 let PROMPT_ON_SAVE = false;
 let WorkspaceManagementStore, Actions, WindowClient, StoreClient, Logger, ToolbarStore, WorkspaceManagementGlobalStore;
 //Initial data for the store.
@@ -15,16 +14,7 @@ let defaultData = {
 	menuWidth: 285,
 	pins: [],
 	WorkspaceList: [],
-	newWorkspaceDialogIsActive: false,
-	/**
-	 * State around whether the workspace is currently in the process of switching.
-	 * 
-	 * For simplicity, we're storing this in the local store for now, but this precludes
-	 * other components from signaling that the workspace is changing. A consequence,
-	 * for example, is that if you switch workspaces uses a pin on the toolbar instead
-	 * of the workspace management menu, the spinner doesn't show up.
-	 */
-	isSwitchingWorkspaces: false,
+	newWorkspaceDialogIsActive: false
 };
 
 function uuidv4() {
@@ -114,12 +104,6 @@ Actions = {
 	},
 	getWorkspaceList: function () {
 		return WorkspaceManagementStore.getValue("WorkspaceList");
-	},
-	getIsSwitchingWorkspaces: function () {
-		return WorkspaceManagementStore.getValue("isSwitchingWorkspaces");
-	},
-	setIsSwitchingWorkspaces: function (val) {
-		return WorkspaceManagementStore.setValue({ field: "isSwitchingWorkspaces", value: val });
 	},
 	setPins: function (pins) {
 		if (pins) {
@@ -341,8 +325,6 @@ Actions = {
 	 * Asks the user if they'd like to save their data, then loads the requested workspace.
 	 */
 	switchToWorkspace: function (data) {
-		if (Actions.getIsSwitchingWorkspaces()) return;
-		Actions.setIsSwitchingWorkspaces(true);
 		Actions.blurWindow();
 		let name = data.name;
 		let activeWorkspace = WorkspaceManagementStore.getValue("activeWorkspace");
@@ -350,11 +332,9 @@ Actions = {
 		 * Actually perform the switch. Happens after we ask the user what they want.
 		 *
 		 */
-		function switchWorkspace() {
+		function switchIt() {
 			FSBL.Clients.WorkspaceClient.switchTo({
 				name: name
-			}, () => {
-				Actions.setIsSwitchingWorkspaces(false);
 			});
 		}
 		/**
@@ -392,11 +372,11 @@ Actions = {
 			}
 
 			//Switch is the last thing we do.
-			tasks.push(switchWorkspace);
+			tasks.push(switchIt);
 
 			async.waterfall(tasks, Actions.onAsyncComplete);
 		} else {
-			switchWorkspace();
+			switchIt();
 		}
 	},
 
@@ -409,19 +389,15 @@ Actions = {
 	 * General handler for `async.series` and `async.waterfall`.
 	 * @todo display errors to the user??
 	 *
-	 * @param {Error} err
+	 * @param {any} err
 	 * @param {any} result
 	 */
 	onAsyncComplete(err, result) {
 		WorkspaceManagementStore.setValue({ field: "newWorkspaceDialogIsActive", value: false });
-		const errMessage = err && err.message;
-		if (errMessage && errMessage !== NEGATIVE && errMessage !== SAVE_DIALOG_CANCEL_ERROR) {
+		if (err && err !== "Negative" && err !== SAVE_DIALOG_CANCEL_ERROR) {
 			//handle error.
 			Logger.system.error(err);
 		}
-
-		//Unlock the UI.
-		Actions.setIsSwitchingWorkspaces(false);
 	},
 	/**
 	 * NOTE: Leaving this function here until we figure out notifications.
@@ -527,7 +503,7 @@ Actions = {
 			callback();
 		} else {
 			//choice === cancel
-			callback(new Error(SAVE_DIALOG_CANCEL_ERROR));
+			callback(SAVE_DIALOG_CANCEL_ERROR);
 		}
 	},
 	/**
@@ -551,7 +527,7 @@ Actions = {
 			Actions.spawnDialog("yesNo", dialogParams);
 			return callback(new Error("Invalid workspace name."));
 		} else if (response.choice === 'cancel') {
-			return callback(new Error(SAVE_DIALOG_CANCEL_ERROR));
+			return callback(new Error("cancel"));
 		}
 		callback(null, response);
 	},
@@ -567,7 +543,7 @@ Actions = {
 			if (response.choice === "affirmative") {
 				callback(null, workspaceName);
 			} else {
-				callback(new Error(NEGATIVE));
+				callback("Negative");
 			}
 		}
 		if (workspaceExists) {
@@ -590,7 +566,7 @@ Actions = {
 			if (response.choice === "affirmative") {
 				callback(null, { workspaceName, template });
 			} else {
-				callback(new Error(NEGATIVE));
+				callback(new Error("Negative"));
 			}
 		}
 		if (workspaceExists) {
@@ -695,7 +671,7 @@ function getToolbarStore(done) {
 	}, (callback, results) => {
 		StoreClient.getStore({ global: true, store: "Finsemble-Toolbar-Store" }, function (err, store) {
 			console.info("Trying to retrieve toolbarStore.", store);
-			if (!store) return callback(new Error("no store"), null);
+			if (!store) return callback("no store", null);
 			ToolbarStore = store;
 			store.getValue({ field: "pins" }, function (err, pins) {
 				if (pins) Actions.setPins(pins.value);

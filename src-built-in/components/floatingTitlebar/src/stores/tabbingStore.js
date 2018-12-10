@@ -6,13 +6,13 @@
 var StoreClient;
 var tabbingRegionStore;
 var WindowClient;
-let constants = {};
 
 import * as async from "async";
-var attachedWindow;
+var finWindow = fin.desktop.Window.getCurrent();
+var attachedWindow = finWindow;
 //theses are constants that are set inside of setupStore. so they're declared as vars and not constantsa.
-
-var windowIdentifier; // = FSBL.Clients.WindowClient.getWindowIdentifier(); <- no idea why this was here. attempts to use FSBL before it is ready.
+var windowIdentifier = FSBL.Clients.WindowClient.getWindowIdentifier();
+let constants = {};
 var Actions = {
 	initialize: function () {
 		var onParentSet = () => {
@@ -156,10 +156,8 @@ var Actions = {
 		cb();
 	},
 	getInitialTabList: function (cb = Function.prototype) {
-		//FSBL.Clients.WindowClient.getStackedWindow((err, parentWrapper) => {
-
-		attachedWindow.getParent((err, parentWrapper) => {
-			Actions.parentWrapper = parentWrapper;
+		FSBL.Clients.WindowClient.getStackedWindow((err, parentWrapper) => {
+			Actions.parentWrapper = attachedWindow.getParent();
 			if (Actions.parentWrapper) {
 				FSBL.Clients.Logger.debug("GetInitialTabList, parent exists")
 				Actions.setupStore(cb);
@@ -167,9 +165,7 @@ var Actions = {
 				let tabs = [windowIdentifier];
 				cb(null, tabs)
 			}
-		});
-
-		//})
+		})
 	},
 	createParentWrapper(params, cb) {
 		window.Actions = Actions;
@@ -195,7 +191,6 @@ var Actions = {
  * @param {any} cb
  */
 function initialize(windowWithTabs, cb) {
-	FSBL.Clients.WindowClient.getWindowIdentifier();
 	if (windowWithTabs) attachedWindow = windowWithTabs;
 	WindowClient = FSBL.Clients.WindowClient;
 	StoreClient = FSBL.Clients.DistributedStoreClient;

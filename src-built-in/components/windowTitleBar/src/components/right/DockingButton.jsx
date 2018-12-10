@@ -3,7 +3,7 @@
 * All rights reserved.
 */
 import React from "react";
-import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
+import HoverDetector from "../HoverDetector.jsx";
 import { getStore, Actions as HeaderActions } from "../../stores/windowTitleBarStore";
 let windowTitleBarStore;
 
@@ -108,7 +108,7 @@ export default class DockingButton extends React.Component {
 		}
 
 		return (<div className={wrapClasses} id="fsbl-window-ejector" title={toolTip} data-hover={this.state.hoverState} onClick={this.onClick}>
-            <FinsembleHoverDetector edge="top" hoverAction={this.hoverAction} />
+            <HoverDetector edge="top" hoverAction={this.hoverAction} />
             <i className={iconClass}></i>
         </div>);
 	}

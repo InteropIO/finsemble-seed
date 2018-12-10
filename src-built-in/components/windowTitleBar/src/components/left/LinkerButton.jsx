@@ -5,7 +5,7 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
-import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
+import HoverDetector from "../HoverDetector.jsx";
 import LinkerGroups from "./LinkerGroups";
 import { getStore, Actions as HeaderActions } from "../../stores/windowTitleBarStore";
 let windowTitleBarStore;
@@ -100,19 +100,15 @@ export default class LinkerButton extends React.Component {
             let wi = {
                 componentType: "linkerWindow"
             };
-            //The offset parent is needed so that the menu isn't shown relative to the icon.
-            // The HTMLElement.offsetParent read-only property returns a reference to the object which is the closest (nearest in the containment hierarchy) positioned containing element.
-            let linkerParent = self.refs.LinkerButton.offsetParent ? self.refs.LinkerButton.offsetParent : self.refs.LinkerButton.parentElement;
 
             let params = {
                 position: 'relative',
-                left: linkerParent.offsetLeft,
-                top: linkerParent.offsetHeight,
+                left: self.refs.LinkerButton.offsetLeft,
+                top: self.refs.LinkerButton.offsetHeight,
                 forceOntoMonitor: true,
                 spawnIfNotFound: false
             };
-            //pass linkerbutton. If it's clicked while the menu is open, we let the blur occur.
-            FSBL.Clients.LauncherClient.toggleWindowOnClick(self.refs.LinkerButton, wi, params);
+            FSBL.Clients.LauncherClient.toggleWindowOnClick(e.target.parentElement, wi, params);
         });
     }
 
@@ -157,7 +153,7 @@ export default class LinkerButton extends React.Component {
     render() {
         return (<div ref="LinkerButton" title="Link Data" className="linkerSection">
             <div className="fsbl-icon fsbl-linker ff-linker" data-hover={this.state.hoverState} onClick={this.showLinkerWindow} >
-                <FinsembleHoverDetector edge="top left" hoverAction={this.hoverAction} />
+                <HoverDetector edge="left" hoverAction={this.hoverAction} />
             </div>
             <LinkerGroups />
         </div>);

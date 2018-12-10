@@ -54,7 +54,7 @@ function communicateBetweenComponents() {
 	// 		}
 	// 	});
 	// }
-
+	
 	// $("next").click(function() {console.log("NEXT"); traversalFn("next")});
 	// $("prev").click(function() {console.log("PREV"); traversalFn("prev")});
 }
@@ -62,10 +62,9 @@ function communicateBetweenComponents() {
 /**
  * Everything needs to happen after Finsemble is ready
  */
-if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLready", FSBLReady) }
-function FSBLReady() {
+FSBL.addEventListener("onReady", function () {
 	getInitialCustomer();
 	getState();
 	listenForCustomer();
 	communicateBetweenComponents();
-}
+});
