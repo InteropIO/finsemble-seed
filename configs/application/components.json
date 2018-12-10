@@ -172,6 +172,46 @@
                 }
             }
         },
+        "Composites Header": {
+            "window": {
+                "smallWindow": true,
+                "url": "$applicationRoot/components/composites-header/index.html",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "width": 400,
+                "height": 18,
+                "maxHeight": 18,
+                "minHeight": 18,
+                "dockedHeight": 18,
+                "options": {
+                    "smallWindow": true
+                }
+            },
+            "component": {
+                "inject": false,
+                "spawnOnStartup": false
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "Window Manager": {
+                        "showLinker": true,
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "title": "Welcome"
+                    },
+                    "Toolbar": {
+                        "iconClass": "ff-component"
+                    }
+                }
+            }
+        },
 		"Composites Menu": {
             "component": {
                 "category": "system"
