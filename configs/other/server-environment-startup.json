@@ -2,11 +2,13 @@
     "development": {
         "serverPort": 3375,
         "serverConfig": "http://localhost:3375/configs/openfin/manifest-local.json",
-        "clientRoute": "http://localhost:3375/"
+        "clientRoute": "http://localhost:3375/",
+        "channelAdapter": "openfin"
     },
     "production": {
         "serverPort": 3375,
         "serverConfig": "http://localhost:3375/configs/openfin/manifest-local.json",
-        "clientRoute": "http://localhost:3375/"
+        "clientRoute": "http://localhost:3375/",
+        "channelAdapter": "openfin"
     }
 }

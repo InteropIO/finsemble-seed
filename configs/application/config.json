@@ -14,7 +14,18 @@
 	},
 	"servicesConfig": {
 		"launcher": {
-			"staggerPixels": 40
+			"staggerPixels": 40,
+			"unknownComponent":"nonConfiguredComponent"
+		},
+		"assimilation": {
+			"useOpenFinSpawn": false,
+			"enabled": true,
+			"blacklist": [],
+			"whitelist": [],
+			"onlySpawned": true,
+			"throttle": 10,
+			"focusDelay": 30,
+			"eventIgnore": 50
 		},
 		"docking": {
 			"enabled": true,
@@ -31,7 +42,16 @@
 			}
 		},
 		"logger": {
-			"hotkeyShowCentralLogger": ["ctrl","shift","L"]
+			"hotkeyShowCentralLogger": [
+				"ctrl",
+				"shift",
+				"L"
+			]
+		}
+	},
+	"preferences": {
+		"workspaceService": {
+			"promptUserOnDirtyWorkspace": true
 		}
 	},
 	"systemTrayIcon": "$applicationRoot/assets/img/Finsemble_Taskbar_Icon.png",
@@ -42,18 +62,7 @@
 		"showNativeTabs": true,
 		"floatingTitlebarComponent": "Floating Titlebar"
 	},
-	"betaFeatures": {
-		"assimilation": {
-			"useOpenFinSpawn": false,
-			"enabled": true,
-			"blacklist": [],
-			"whitelist": [],
-			"onlySpawned": true,
-			"throttle": 10,
-			"focusDelay": 30,
-			"eventIgnore": 50
-		}
-	},
+	"betaFeatures": {},
 	"splinteringConfig": {
 		"comment": "A SplinterAgent is just an openfin application that is capable of spawning specific components/services. If you try to spawn a component/service that one of these agents does not cover, it will be spawned by the defaultAgent. You can also specify maxWindowsPerAgent if you would like to limit your agents to some ceiling. This is useful when you have a particularly heavy component.",
 		"enabled": true,
