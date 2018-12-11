@@ -7,42 +7,30 @@ chalk.enabled = true;
 chalk.level = 1;
 const errorOutColor = chalk.hex("#FF667E");
 const configFunctions = [
-    () => {
-        return {
-            config: require("./webpack/webpack.adapters"),
-            name: 'adapters bundle',
-        }
-    },
-    () => {
-        return {
-            config: require("./webpack/webpack.vendor.js"),
-            name: 'vendor bundle',
-        }
-    },
-    () => {
-        return {
-            config: require("./webpack/webpack.preloads.js"),
-            name: 'preloads bundle',
-        }
-    },
-    () => {
-        return {
-            config: require("./webpack/webpack.titleBar.js"),
-            name: 'titleBar bundle',
-        }
-    },
-    () => {
-        return {
-            config: require("./webpack/webpack.services.js"),
-            name: 'services bundle',
-        }
-    },
-    () => {
-        return {
-            config: require("./webpack/webpack.components.js"),
-            name: 'components bundle',
-        }
-    },
+    () => ({
+        config: require("./webpack/webpack.adapters"),
+        name: 'adapters bundle',
+    }),
+    () => ({
+        config: require("./webpack/webpack.vendor.js"),
+        name: 'vendor bundle',
+    }),
+    () => ({
+        config: require("./webpack/webpack.preloads.js"),
+        name: 'preloads bundle',
+    }),
+    () => ({
+        config: require("./webpack/webpack.titleBar.js"),
+        name: 'titleBar bundle',
+    }),
+    () => ({
+        config: require("./webpack/webpack.services.js"),
+        name: 'services bundle',
+    }),
+    () => ({
+        config: require("./webpack/webpack.components.js"),
+        name: 'components bundle',
+    }),
 ];
 
 const packFiles = async (config, bundleName) => {

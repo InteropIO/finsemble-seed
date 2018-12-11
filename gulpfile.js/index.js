@@ -13,54 +13,15 @@ const getFlag = require('./getFlag');
 
 const distPath = path.join(__dirname, "dist");
 const srcPath = path.join(__dirname, "src");
-const {
-    pre,
-    post,
-    clean,
-    build,
-    serve,
-    launch,
-    applicationConfig,
-    buildServe,
-    buildServeLaunch,
-    rebuildServeLaunch,
-    rebuild,
-    serveLaunch,
-    buildWebpack,
-    buildSass,
-    buildAngular,
-} = require('./tasks');
+const Tasks = require('./newTasks');
+const tasks = new Tasks();
 
-const taskMethods = {
-	'default':       () => buildServeLaunch('development'),
-	'build':         () => build('development'),
-	'build:dev':     () => build('development'),
-	'build:prod':    () => build('production'),
-	'dev':           () => buildServeLaunch('development'),
-	'dev:fresh':     () => rebuildServeLaunch('development'),
-	'dev:noLaunch':  () => buildServe('development'),
-	'prod':          () => buildServeLaunch('production'),
-	'prod:noLaunch': () => buildServe('production'),
-	'rebuild':       () => rebuild('development'),
-	'server':        () => serve('development'),
-	'server:prod':   () => serve('production'),
-	'nobuild:dev':   () => serveLaunch('development'),
-	'clean':         () => clean(distPath),
-	launchApplication: launch,
-	buildSass,
-	buildWebpack,
-	buildAngular,
-	pre,
-	post,
-	applicationConfig,
-	logToTerminal,
-};
 
 /**
  * for each key in extensionsObject, check if the value is a function and create a corresponding
  * gulp task. Call the post method upon completion.
  */
-const createTasks = async extensionsObject => {
+const buildGulpTasks = async extensionsObject => {
 	const keys = Object.keys(extensionsObject);
 	keys.forEach(key => {
 		const value = extensionsObject[key];
@@ -68,12 +29,12 @@ const createTasks = async extensionsObject => {
 			gulp.task(key, extensionsObject[key]);
 		}
 	});
-	extensionsObject.post(() => {});
+	extensionsObject.post();
 }
-
 (async () => {
+
 	const extensionsObject = {
-		...taskMethods,
+		...tasks.getTaskMethods(),
 		distPath,
 		srcPath,
 		startupConfig,
@@ -94,6 +55,5 @@ const createTasks = async extensionsObject => {
 		// This really ought to be returning a new object rather than modifying an existing one.
 		extensions(extensionsObject);
 	}
-	extensionsObject.pre(() => createTasks(extensionsObject));
-	
+	tasks.pre(() => buildGulpTasks(extensionsObject));
 })();
