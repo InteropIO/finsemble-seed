@@ -18,7 +18,7 @@ class AppCard extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			checkShown: false,
+			checkShown: this.props.installed === true ? true : false,
 			checkHighlighted: false,
 			titleUnderlined: false,
 			appName: this.props.title || this.props.name,
@@ -77,9 +77,12 @@ class AppCard extends Component {
 	 * Higes the checkmark for adding/removing an app
 	 */
 	hideCheck() {
-		this.setState({
-			checkShown: false
-		});
+		//Don't hide if installed. Stay green and showing
+		if (this.props.installed === false) {
+			this.setState({
+				checkShown: false
+			});
+		}
 	}
 	/**
 	 * Calls parent passed function to open the app showcase for the supplied app

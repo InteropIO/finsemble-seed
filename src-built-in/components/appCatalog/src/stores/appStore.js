@@ -3,31 +3,39 @@
 * All rights reserved.
 */
 export {
-    createStore,
-    getStore
+	createStore,
+	getStore
+};
+
+const defaultValues = [
+	{
+		field: "apps",
+		value: []
+	},
+	{
+		field: "filteredApps",
+		value: []
+	},
+	{
+		field: "activeTags",
+		value: []
+	},
+	{
+		field: "activeApp",
+		value: null
+	}
+];
+
+let appCatalogStore;
+
+function createStore(cb) {
+	FSBL.Clients.DistributedStoreClient.getStore({ store: "Finsemble-AppLauncher-Store", global: true }, (err, store) => {
+		appCatalogStore = store;
+		appCatalogStore.setValues(defaultValues);
+		cb(null, appCatalogStore);
+	});
 }
-
-const defaultValues = {
-	apps: [],
-	filteredCards: [],
-	activeTags: [],
-	activeApp: null
-}
-
-let appCatalogStore
-
-function createStore(done) {
-    FSBL.Clients.DistributedStoreClient
-        .createStore({ store: "AppCatalog-Store" + fin.desktop.Window.getCurrent().name,
-        values: defaultValues,
-        global: false
-     }, (error, store) => {
-        appCatalogStore = store
-        done(null, appCatalogStore)
-	})
-}
-
 
 function getStore() {
-    return appCatalogStore
+	return appCatalogStore;
 }

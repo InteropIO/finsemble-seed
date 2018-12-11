@@ -34,13 +34,13 @@ export default class AppMarket extends React.Component {
 		this.bindCorrectContext();
 	}
 	bindCorrectContext() {
+		this.addedAppsChanged = this.addedAppsChanged.bind(this);
 		this.filteringApps = this.filteringApps.bind(this);
 		this.goHome = this.goHome.bind(this);
 		this.addTag = this.addTag.bind(this);
 		this.removeTag = this.removeTag.bind(this);
 		this.changeSearch = this.changeSearch.bind(this);
 		this.openAppShowcase = this.openAppShowcase.bind(this);
-		this.installedAppsChanged = this.installedAppsChanged.bind(this);
 		this.stopShowingInstalledNotification = this.stopShowingInstalledNotification.bind(this);
 		this.compileAddedInfo = this.compileAddedInfo.bind(this);
 		this.getPageContents = this.getPageContents.bind(this);
@@ -48,40 +48,97 @@ export default class AppMarket extends React.Component {
 		this.navigateToShowcase = this.navigateToShowcase.bind(this);
 		this.viewApp = this.viewApp.bind(this);
 	}
-	async componentDidMount() {
-		this.setState({
-			tags: await storeActions.getTags(),
-			apps: await storeActions.getApps()
+
+	componentWillMount() {
+		//For more information on async react rendering, see here
+		//https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html
+
+		this._asyncAppRequest = storeActions.getApps().then(apps => {
+			this.setState({
+				apps
+			});
 		});
-		getStore().addListener({ field: 'installed' }, this.installedAppsChanged);
+
+		this._asyncTagsRequest = storeActions.getTags().then(tags => {
+			this.setState({
+				tags
+			});
+		});
+	}
+
+	componentDidMount() {
+		getStore().addListener({ field: 'appDefinitions' }, this.addedAppsChanged);
 		getStore().addListener({ field: 'filteredApps' }, this.filteringApps);
+		getStore().addListener({ field: 'activeTags' }, this.filteringApps);
 		getStore().addListener({ field: 'activeApp' }, this.openAppShowcase);
 		// Get notified when user wants to view an app
-		FSBL.Clients.RouterClient.addListener("viewApp", this.viewApp)
+		FSBL.Clients.RouterClient.addListener("viewApp", this.viewApp);
+		let installed = storeActions.getInstalledApps();
+
+		this.setState({
+			installed: Object.keys(installed)
+		});
 	}
+
 	componentWillUnmount() {
+		getStore().removeListener({ field: 'appDefinitions' }, this.addedAppsChanged);
 		getStore().removeListener({ field: 'filteredApps' }, this.filteringApps);
-		getStore().removeListener({ field: 'installed' }, this.installedAppsChanged);
+		getStore().removeListener({ field: 'activeTags' }, this.filteringApps);
 		getStore().removeListener({ field: 'activeApp' }, this.openAppShowcase);
 		// Get notified when user wants to view an app
-		FSBL.Clients.RouterClient.removeListener("viewApp", this.viewApp)
+		FSBL.Clients.RouterClient.removeListener("viewApp", this.viewApp);
+
+		//Make sure async requests have finished.
+		if (this._asyncAppRequest) {
+			this._asyncAppRequest.cancel();
+		}
+
+		if (this._asyncTagsRequest) {
+			this._asyncTagsRequest.cancel();
+		}
 	}
 
 	viewApp(error, event) {
 		!error && this.navigateToShowcase(event.data.app.appID)
 	}
+
+	addedAppsChanged() {
+		let action;
+		if (this.state.installed.length > Object.keys(storeActions.getInstalledApps()).length) {
+			//If the components installed apps is greater than that of the store, that means an app was removed
+			action = "remove";
+		} else if (this.state.installed.length < Object.keys(storeActions.getInstalledApps()).length) {
+			//If the component's installed apps is less than that of the store, that means an app was added
+			action = "add";
+		}
+
+		if (action) {
+			this.setState({
+				installationActionTaken: action,
+				installed: Object.keys(storeActions.getInstalledApps())
+			}, () => {
+				setTimeout(this.stopShowingInstalledNotification, 3000);
+			});
+		}
+	}
+
 	/**
 	 * The store has pushed an update to the filtered tags list. This means a user has begun searching or added tags to the filter list
 	 */
 	filteringApps() {
+		let { filteredApps, activeTags, activeApp } = this.state;
 		let apps = storeActions.getFilteredApps();
 		let tags = storeActions.getActiveTags();
 
-		this.setState({
-			filteredApps: apps,
-			activeTags: tags,
-			activeApp: null
-		});
+		//Make sure a change actually occured before rerendering. If the store's activeTags or filteredApps is different then component's, we make a change (which triggers a page change). Otherwise don't.
+		//NOTE: The potential bug here is if filteredApps or activeTags has somehow changed and maintained the same length (which should be impossible)
+		if ((apps && filteredApps && activeTags && tags) && (apps.length !== filteredApps.length || activeTags.length !== tags.length)) {
+			this.setState({
+				filteredApps: apps,
+				activeTags: tags,
+				activeApp: (apps.length !== 0 && tags.length !== 0) ? null : activeApp
+			});
+		}
 	}
 	/**
 	 * Determines the apps page based on the state of the activeTags, search text, etc
@@ -138,44 +195,26 @@ export default class AppMarket extends React.Component {
 			if (search !== "") storeActions.searchApps(search);
 		});
 	}
-	installedAppsChanged() {
-		let action;
-		if (this.state.installed.length === storeActions.getInstalledApps().length) {
-			//If the components installed apps is greater than that of the store, that means an app was removed
-			action = "remove";
-		} else if (this.state.installed.length < storeActions.getInstalledApps().length) {
-			//If the component's installed apps is less than that of the store, that means an app was added
-			action = "add";
-		}
-
-		if (action) {
-			this.setState({
-				installationActionTaken: action,
-				installed: storeActions.getInstalledApps()
-			}, () => {
-				setTimeout(this.stopShowingInstalledNotification, 3000);
-			});
-		}
-	}
 	/**
 	 * When the notification for isntalling/removing an app is shown a timeout is set to call this function to cease showing the notification
 	 */
 	stopShowingInstalledNotification() {
-		let activeApp = storeActions.getActiveApp();
 		this.setState({
 			installationActionTaken: null,
-			activeApp
+			activeApp: storeActions.getActiveApp()
 		});
 	}
+
 	navigateToShowcase(id) {
 		storeActions.openApp(id)
 	}
+
 	/**
 	 * Opens the AppShowcase page for the app supplied
 	 */
 	openAppShowcase() {
 		let app = storeActions.getActiveApp();
-		if (app) {
+		if (app !== null) {
 			storeActions.clearTags();
 			storeActions.clearFilteredApps();
 			this.setState({
@@ -229,8 +268,11 @@ export default class AppMarket extends React.Component {
 					<AppResults cards={apps} tags={activeTags} addApp={this.addApp} removeApp={this.removeApp} viewAppShowcase={this.navigateToShowcase} addTag={this.addTag} />
 				);
 			case "showcase":
+				let app = this.compileAddedInfo(false).find((app) => {
+					return this.state.activeApp === app.appId;
+				});
 				return (
-					<AppShowcase app={this.state.activeApp} addApp={this.addApp} removeApp={this.removeApp} addTag={this.addTag} />
+					<AppShowcase app={app} addApp={this.addApp} removeApp={this.removeApp} addTag={this.addTag} />
 				);
 			default:
 				return (
@@ -257,8 +299,10 @@ export default class AppMarket extends React.Component {
 
 FSBL.addEventListener('onReady', function () {
 	createStore((store) => {
-		ReactDOM.render(
-			<AppMarket />,
-			document.getElementById('bodyHere'));
+		storeActions.initialize(() => {
+			ReactDOM.render(
+				<AppMarket />,
+				document.getElementById('bodyHere'));
+		});
 	});
 });

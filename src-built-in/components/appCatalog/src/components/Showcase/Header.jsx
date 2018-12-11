@@ -8,6 +8,8 @@ import React from "react";
 //data
 import storeActions from '../../stores/storeActions';
 
+let pendingSpawn = false;
+
 /**
  * The header of the AppShowcase. Contains the actionable buttons (to add/remove and app) and the app title and icon
  * @param {object} props Component props
@@ -19,7 +21,24 @@ const Header = props => {
 
 	const addApp = () => {
 		if (props.installed) {
-			//TODO: Open app
+			if (pendingSpawn) return;
+			pendingSpawn = true;
+			const name = props.title || props.name
+			// If the app has a URL property
+			// For now, this means it was manually added
+			// So lets spawn from URL
+			if(props.url) {
+				FSBL.Clients.LauncherClient.spawn(null, {
+					url: props.url
+				}, () => {
+					pendingSpawn = false
+				})
+				return
+			}
+			// Otherwise launch application by name
+			FSBL.Clients.LauncherClient.spawn(name, {}, (err, data) => {
+				pendingSpawn = false
+			});
 		} else {
 			storeActions.addApp(props.appId);
 		}
@@ -27,6 +46,10 @@ const Header = props => {
 
 	const removeApp = () => {
 		storeActions.removeApp(props.appId);
+	}
+
+	const launchApp = () => {
+
 	}
 
 	return (

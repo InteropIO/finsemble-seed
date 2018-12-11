@@ -32,11 +32,9 @@ export default class Content extends React.Component {
 
 	filterApps() {
 		const folder = this.state.folder;
-		console.log("folder", folder);
 		let apps;
 		if (folder.name === MY_APPS) {
-			apps = Object.values(this.state.apps);
-			console.log("apps---",storeActions.getAllApps());
+			apps = Object.values( storeActions.getAllApps());
 		} else {
 			apps = Object.values(folder.apps);
 		}
@@ -46,11 +44,11 @@ export default class Content extends React.Component {
 			return [];
 		}
 		const sortFunc = sortFunctions[this.state.sortBy];
-		const filteredApps = this.filterAppsByTags(sortFunc(apps));
-
+		const filteredApps =this.filterAppsByTags(sortFunc(apps));
 		if (!this.state.filterText) {
 			return filteredApps;
 		}
+		
 		return filteredApps.filter((app) => {
 			return app.name.toLowerCase().indexOf(this.state.filterText) !== -1;
 		});
@@ -104,15 +102,13 @@ export default class Content extends React.Component {
 		});
 	}
 
-	componentDidMount() {
-		this.setStateValues();
-	}
 
 	componentDidMount() {
+		//this.setStateValues();
 		store.addListener({field: "activeFolder"}, this.onActiveFolderChanged);
 		store.addListener({field: "filterText"}, this.onSearch);
 		store.addListener({field: "sortBy"}, this.onSort);
-		store.addListener({field: "tags"}, this.onTagsUpdate);
+		store.addListener({field: "activeLauncherTags"}, this.onTagsUpdate);
 		// We can't subscribe to folders[index].appDefinitions
 		// So we are looking at appFolders.folders update
 		// Since that update is done After removing an app of definitions
@@ -123,7 +119,7 @@ export default class Content extends React.Component {
 		store.removeListener({field: "activeFolder"}, this.onActiveFolderChanged);
 		store.removeListener({field: "filterText"}, this.onSearch);
 		store.removeListener({field: "sortBy"}, this.onSort);
-		store.removeListener({field: "tags"}, this.onTagsUpdate);
+		store.removeListener({field: "activeLauncherTags"}, this.onTagsUpdate);
 		store.removeListener({field: "appFolders.folders"}, this.onAppListUpdate);
 	}
 

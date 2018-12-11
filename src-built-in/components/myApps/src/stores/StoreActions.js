@@ -42,7 +42,7 @@ function initialize(callback = Function.prototype) {
 	data.folders = store.values.appFolders.folders;
 	data.foldersList = store.values.appFolders.list;
 	data.apps = store.values.appDefinitions;
-	data.tags = store.values.tags;
+	data.tags = store.values.activeLauncherTags;
 	data.activeFolder = store.values.activeFolder;
 	data.filterText = store.values.filterText;
 	data.sortBy = store.values.sortBy;
@@ -56,24 +56,31 @@ function initialize(callback = Function.prototype) {
 	store.addListener({field: "activeFolder"}, (err, dt) => data.activeFolder = dt.value);
 	store.addListener({field: "isFormVisible"}, (err, dt) => data.isFormVisible = dt.value);
 	store.addListener({field: "sortBy"}, (err, dt) => data.sortBy = dt.value);
-	store.addListener({field: "tags"}, (err, dt) => data.tags = dt.value);
+	store.addListener({field: "activeLauncherTags"}, (err, dt) =>data.tags = dt.value);
 	getToolbarStore((err, response) => {
 		FSBL.Clients.RouterClient.subscribe("Finsemble.Service.State.launcherService", (err, response) => {
-			console.log("Finsemble.Service.State.launcherService");
-			loadInstalledConfigComponents();
-			loadInstalledComponentsFromStore(callback);//We load our stored components here
+			loadInstalledComponentsFromStore(()=>{
+				//We load our stored components here
+				loadInstalledConfigComponents(callback);
+			});
+			
 		});
-		//callback();
 	});
-
 }
 function getApp(appID, cb = Function.prototype) {
 	appd.get(appID).then(app => cb(null, app)).catch(err => cb(err));
 }
+function appInAppList(appName){
+	let components  =Object.values(data.apps);
+	for(let i=0;i<components.length;i++){
+		let component = components[i];
+		if(component.name === appName)return true;
+	}
+	return false;
+}
 function loadInstalledComponentsFromStore(cb = Function.prototype) {
 	async.map(Object.values(data.apps), (component, componentDone) => {
 		// Load FDC3 components here
-		console.log("component FDC3",component);;
 		if (component.source && component.source === "FDC3") {
 			return getApp(component.appID, (err, app) => {// get the app info so we can load it into the launcher
 				if (err) {// don't want to kill this;
@@ -102,15 +109,13 @@ function loadInstalledComponentsFromStore(cb = Function.prototype) {
 	});
 }
 
-function loadInstalledConfigComponents() {
-
+function loadInstalledConfigComponents(cb = Function.prototype) {
 	FSBL.Clients.LauncherClient.getComponentList((err, componentList) => {
-		console.log("componentList", componentList);
 		let componentNameList = Object.keys(componentList);
 		componentNameList.map(componentName => {
+			if(appInAppList(componentName))return;
 			let component = componentList[componentName];
 			if (component.foreign.components["App Launcher"] && component.foreign.components["App Launcher"].launchableByUser) {
-				console.log("spawnable component",componentName);
 				data.configComponents[componentName]={
 					appID:componentName,
 					icon:component.foreign.Toolbar && component.foreign.Toolbar.iconClass?component.foreign.Toolbar.iconClass:null,
@@ -120,6 +125,7 @@ function loadInstalledConfigComponents() {
 				};
 			}
 		});
+		cb();
 	});
 
 }
@@ -229,9 +235,7 @@ function getFoldersList() {
 }
 
 function getAllApps() {
-	
 	let mergedApps = Object.assign({},data.apps,data.configComponents);;
-	console.log("getAllApps",data.apps,data.configComponents);;
 	return mergedApps;
 }
 
@@ -412,16 +416,18 @@ function getAllAppsTags() {
 
 function addTag(tag) {
 	// Push new tag to list
+	console.log("addTag",tag);
 	data.tags.indexOf(tag) < 0 && data.tags.push(tag);
 	// Update tags in store
-	getStore().setValue({field: "tags", value: data.tags});
+	getStore().setValue({ field: "activeLauncherTags", value: data.tags });
 }
 
 function deleteTag(tag) {
 	// Push new tag to list
 	data.tags.splice(data.tags.indexOf(tag), 1);
 	// Update tags in store
-	getStore().setValue({field: "tags", value: data.tags});
+	console.log("deleteTag",data.tags);
+	getStore().setValue({ field: "activeLauncherTags", value: data.tags });
 }
 
 function uuidv4() {
