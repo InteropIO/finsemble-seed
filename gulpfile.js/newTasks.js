@@ -54,27 +54,22 @@ const Tasks = class Tasks {
     }
 
     buildGulpTasks(tasks) {
-        console.log('tasks', tasks);
         const keys = Object.keys(tasks);
-        console.log('keys', keys);
         const tasks = keys.map(key => {
             const value = tasks[key];
             if (typeof value === "function") {
                 return gulp.task(key, this[key]);
             }
         });
-        console.log('testasdf');
         this.post(() => {});
         return tasks;
     }
 
     pre(done) {
-        console.log('wtf', done);
         verifyLinks(requiredFinsembleLinks, done);
     }
 
     post(err) {
-        console.log('wooop')
         if (err) {
             console.error(errorOutColor(err));
             process.exit(1);
