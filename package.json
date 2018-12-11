@@ -43,6 +43,7 @@
         "nocache": "^2.0.0"
     },
     "devDependencies": {
+        "@chartiq/tslint-config-chartiq-base": "^0.1.0",
         "ansi-html": "0.0.7",
         "babel-core": "^6.24.0",
         "babel-loader": "^7.1.2",
