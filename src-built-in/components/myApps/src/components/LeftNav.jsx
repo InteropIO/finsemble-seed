@@ -1,29 +1,29 @@
-import React from  'react'
-import FoldersList from  './FoldersList'
-import LeftNavBottomLinks from  './LeftNavBottomLinks'
-import {getStore} from '../stores/LauncherStore'
-import storeActions from '../stores/StoreActions'
+import React from  "react";
+import FoldersList from  "./FoldersList";
+import LeftNavBottomLinks from  "./LeftNavBottomLinks";
+import {getStore} from "../stores/LauncherStore";
+import storeActions from "../stores/StoreActions";
 
 import {
 	FinsembleDnDContext,
 	FinsembleDroppable
-} from '@chartiq/finsemble-react-controls'
+} from "@chartiq/finsemble-react-controls";
 
 
 const bottomEntries = [
-	'New folder',
-	'New dashboard',
-	'App catalog'
-]
+	"New folder",
+	//'New dashboard',
+	"App catalog"
+];
 
 export default class LeftNav extends React.Component {
 
 	constructor(props) {
-		super(props)
+		super(props);
 	}
 
 	onDragEnd(event = {}) {
-		console.log('on drag end');
+		console.log("on drag end");
 		// storeActions.reorderFolders(
 		// 	event.destination.index,
 		// 	event.source.index)
@@ -51,6 +51,6 @@ export default class LeftNav extends React.Component {
 				<LeftNavBottomLinks {...this.props} />
 			</div>
 
-		)
+		);
 	}
 }

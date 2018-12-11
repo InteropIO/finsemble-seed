@@ -1,7 +1,7 @@
 {
 	"comment": "Sample component configuration",
 	"components": {
-		"Welcome Component": {
+		"Welcome Component2": {
 			"window": {
 				"url": "$applicationRoot/components/welcome/welcome.html",
 				"frame": false,
@@ -10,7 +10,8 @@
 				"top": "center",
 				"left": "center",
 				"width": 400,
-				"height": 432
+				"height": 432,
+				"addToWorkspace": true
 			},
 			"component": {
 				"inject": false,

@@ -37,7 +37,8 @@ export default class AppDefinition extends React.Component {
 	onItemClick() {
 		if (pendingSpawn) { return; }
 		pendingSpawn = true;
-		FSBL.Clients.LauncherClient.spawn(this.props.app.name, {}, (err, data) => {
+		FSBL.Clients.LauncherClient.spawn(this.props.app.name, null, (err, data) => {
+			console.log("pending spawn complete");
 			pendingSpawn = false;
 		});
 	}
@@ -50,10 +51,10 @@ export default class AppDefinition extends React.Component {
 	render() {
 		const app = this.props.app;
 		return (
-			<div onClick={this.onItemClick} className="app-item" draggable="true" onDragStart={this.onDragToFolder}>
+			<div onClick={this.onItemClick} className="app-item link" draggable="true" onDragStart={this.onDragToFolder}>
 				<span className="app-item-title">
 					{app.icon !== undefined ? <i className={app.icon}></i> : null}
-					{app.name} {this.isFavorite() && <i className='ff-favorite'></i>}
+					<span >{app.name}</span> {this.isFavorite() && <i className='ff-favorite'></i>}
 				</span>
 				<AppTagsList tags={app.tags} />
 				<AppActionsMenu app={app} folder={this.props.folder} isFavorite={this.isFavorite()} />

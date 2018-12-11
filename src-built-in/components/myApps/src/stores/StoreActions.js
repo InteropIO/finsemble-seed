@@ -1,4 +1,4 @@
-import { getStore } from "./LauncherStore";
+import {getStore} from "./LauncherStore";
 import AppDirectory from "../modules/AppDirectory";
 import FDC3 from "../modules/FDC3";
 const async = require("async");
@@ -47,38 +47,45 @@ function initialize(callback = Function.prototype) {
 	data.filterText = store.values.filterText;
 	data.sortBy = store.values.sortBy;
 	data.isFormVisible = store.values.isFormVisible;
+	data.configComponents={};
 
 	// Add listeners to keep our copy up to date
-	store.addListener({ field: "appFolders.folders" }, (err, dt) => data.folders = dt.value);
-	store.addListener({ field: "appFolders.list" }, (err, dt) => data.foldersList = dt.value);
-	store.addListener({ field: "appDefinitions" }, (err, dt) => data.apps = dt.value);
-	store.addListener({ field: "activeFolder" }, (err, dt) => data.activeFolder = dt.value);
-	store.addListener({ field: "isFormVisible" }, (err, dt) => data.isFormVisible = dt.value);
-	store.addListener({ field: "sortBy" }, (err, dt) => data.sortBy = dt.value);
-	store.addListener({ field: "tags" }, (err, dt) => data.tags = dt.value);
-	getToolbarStore((err,response)=>{
-		loadInstalledComponents(callback);//We load our stored components here
+	store.addListener({field: "appFolders.folders"}, (err, dt) => data.folders = dt.value);
+	store.addListener({field: "appFolders.list"}, (err, dt) => data.foldersList = dt.value);
+	store.addListener({field: "appDefinitions"}, (err, dt) => data.apps = dt.value);
+	store.addListener({field: "activeFolder"}, (err, dt) => data.activeFolder = dt.value);
+	store.addListener({field: "isFormVisible"}, (err, dt) => data.isFormVisible = dt.value);
+	store.addListener({field: "sortBy"}, (err, dt) => data.sortBy = dt.value);
+	store.addListener({field: "tags"}, (err, dt) => data.tags = dt.value);
+	getToolbarStore((err, response) => {
+		FSBL.Clients.RouterClient.subscribe("Finsemble.Service.State.launcherService", (err, response) => {
+			console.log("Finsemble.Service.State.launcherService");
+			loadInstalledConfigComponents();
+			loadInstalledComponentsFromStore(callback);//We load our stored components here
+		});
+		//callback();
 	});
-	
+
 }
-function getApp(appID,cb=Function.prototype){
-	appd.get(appID).then(app=>cb(null,app)).catch(err=>cb(err));
+function getApp(appID, cb = Function.prototype) {
+	appd.get(appID).then(app => cb(null, app)).catch(err => cb(err));
 }
-function loadInstalledComponents(cb=Function.prototype){
-	async.map(Object.values(data.apps),(component,componentDone)=>{
+function loadInstalledComponentsFromStore(cb = Function.prototype) {
+	async.map(Object.values(data.apps), (component, componentDone) => {
 		// Load FDC3 components here
-		if(component.source && component.source === "FDC3"){
-			return getApp(component.appID,(err,app)=>{// get the app info so we can load it into the launcher
-				if(err){// don't want to kill this;
+		console.log("component FDC3",component);;
+		if (component.source && component.source === "FDC3") {
+			return getApp(component.appID, (err, app) => {// get the app info so we can load it into the launcher
+				if (err) {// don't want to kill this;
 					deleteApp(component.appID);
-					console.error("there was an error loading from FDC3",component,err);
+					console.error("there was an error loading from FDC3", component, err);
 					return componentDone();
 				}
 				// register the component with the launcher service
 				FSBL.Clients.LauncherClient.registerComponent({
-					componentType:component.name,
-					manifest:app.manifest
-				},(err,response)=>{
+					componentType: component.name,
+					manifest: app.manifest
+				}, (err, response) => {
 					componentDone(err);
 				});
 			});
@@ -90,18 +97,41 @@ function loadInstalledComponents(cb=Function.prototype){
 			}
 			componentDone(compAddErr);
 		});
-	},(err)=>{
+	}, (err) => {
 		cb(err);
 	});
 }
+
+function loadInstalledConfigComponents() {
+
+	FSBL.Clients.LauncherClient.getComponentList((err, componentList) => {
+		console.log("componentList", componentList);
+		let componentNameList = Object.keys(componentList);
+		componentNameList.map(componentName => {
+			let component = componentList[componentName];
+			if (component.foreign.components["App Launcher"] && component.foreign.components["App Launcher"].launchableByUser) {
+				console.log("spawnable component",componentName);
+				data.configComponents[componentName]={
+					appID:componentName,
+					icon:component.foreign.Toolbar && component.foreign.Toolbar.iconClass?component.foreign.Toolbar.iconClass:null,
+					name:componentName,
+					source:"config",
+					tags:[]
+				};
+			}
+		});
+	});
+
+}
+
 function getToolbarStore(done) {
-	FSBL.Clients.DistributedStoreClient.getStore({ global: true, store: "Finsemble-Toolbar-Store" }, function (err, store) {
+	FSBL.Clients.DistributedStoreClient.getStore({global: true, store: "Finsemble-Toolbar-Store"}, function (err, store) {
 		ToolbarStore = store;
-		store.getValue({ field: "pins" }, function (err, pins) {
+		store.getValue({field: "pins"}, function (err, pins) {
 			data.pins = pins;
 		});
 
-		store.addListener({ field: "pins" }, function (err, pins) {
+		store.addListener({field: "pins"}, function (err, pins) {
 			data.pins = pins;
 		});
 		done();
@@ -168,8 +198,8 @@ function addPin(pin) {
 			}
 
 
-			let params = { addToWorkspace: true, monitor: "mine" };
-			if (componentToToggle.component && componentToToggle.component.windowGroup) {params.groupName = componentToToggle.component.windowGroup;}
+			let params = {addToWorkspace: true, monitor: "mine"};
+			if (componentToToggle.component && componentToToggle.component.windowGroup) { params.groupName = componentToToggle.component.windowGroup; }
 			var thePin = {
 				type: "componentLauncher",
 				label: pin.name,
@@ -180,26 +210,29 @@ function addPin(pin) {
 				uuid: uuidv4(),
 				params: params
 			};
-			ToolbarStore.setValue({ field: "pins." + pin.name.replace(/[.]/g, "^DOT^"), value: thePin });
+			ToolbarStore.setValue({field: "pins." + pin.name.replace(/[.]/g, "^DOT^"), value: thePin});
 		}
 	});
 
 }
 
 function removePin(pin) {
-	ToolbarStore.removeValue({ field: "pins." + pin.name.replace(/[.]/g, "^DOT^") });
+	ToolbarStore.removeValue({field: "pins." + pin.name.replace(/[.]/g, "^DOT^")});
 }
 
 function getFolders() {
 	return data.folders;
 }
 
-function getFoldersList(){
+function getFoldersList() {
 	return data.foldersList;
 }
 
 function getAllApps() {
-	return data.apps;
+	
+	let mergedApps = Object.assign({},data.apps,data.configComponents);;
+	console.log("getAllApps",data.apps,data.configComponents);;
+	return mergedApps;
 }
 
 function getFormStatus() {
@@ -249,15 +282,15 @@ function addApp(app = {}, cb) {
 }
 
 function deleteApp(appID) {
-	ToolbarStore.removeValue({ field: "pins." + data.apps[appID].name.replace(/[.]/g, "^DOT^") }, (err, res) => {
+	ToolbarStore.removeValue({field: "pins." + data.apps[appID].name.replace(/[.]/g, "^DOT^")}, (err, res) => {
 		if (err) {
 			//TODO: Need to gracefully handle this error. If the pin can't be removed, the app shouldn't either
 			console.warn("Error removing pin for deleted app");
 			return;
 		}
 		// Delete app from any folder that has it
-		for(const key in data.folders) {
-			if(data.folders[key].apps[appID]) {
+		for (const key in data.folders) {
+			if (data.folders[key].apps[appID]) {
 				delete data.folders[key].apps[appID];
 			}
 		}
@@ -277,7 +310,7 @@ function addNewFolder(name) {
 	// Find folders that have a name of "New folder" or "New folder #"
 	data.foldersList.forEach((folder) => {
 		const numbers = folder.match(/\d+/g) || [];
-		newFoldersNums.push( Math.max.apply(this, numbers) );
+		newFoldersNums.push(Math.max.apply(this, numbers));
 	});
 	const highestFolderNumber = Math.max.apply(this, newFoldersNums);
 	const folderName = name || `New folder ${highestFolderNumber + 1}`;
@@ -287,7 +320,7 @@ function addNewFolder(name) {
 		apps: []
 	};
 	data.folders[folderName] = newFolder;
-	_setFolders( () => {
+	_setFolders(() => {
 		// Update folders order if adding was successful
 		data.foldersList.push(folderName);
 		_setValue("appFolders.list", data.foldersList);
@@ -297,7 +330,7 @@ function addNewFolder(name) {
 
 function deleteFolder(folderName) {
 	// Check if user is trying to delete the active folder
-	if(folderName === data.activeFolder) {
+	if (folderName === data.activeFolder) {
 		data.activeFolder = MY_APPS;
 		_setValue("activeFolder", data.activeFolder);
 	}
@@ -339,9 +372,9 @@ function removeAppFromFolder(folderName, app) {
 function getActiveFolder() {
 	const folder = data.folders[data.activeFolder];
 	Object.values(folder.apps).map((app) => {
-		if(!data.apps[app.appID]){
+		if (!data.apps[app.appID]) {
 			app.tags = [];
-		}else{
+		} else {
 			app.tags = data.apps[app.appID].tags;
 		}
 	});
@@ -381,14 +414,14 @@ function addTag(tag) {
 	// Push new tag to list
 	data.tags.indexOf(tag) < 0 && data.tags.push(tag);
 	// Update tags in store
-	getStore().setValue({ field: "tags", value: data.tags });
+	getStore().setValue({field: "tags", value: data.tags});
 }
 
 function deleteTag(tag) {
 	// Push new tag to list
 	data.tags.splice(data.tags.indexOf(tag), 1);
 	// Update tags in store
-	getStore().setValue({ field: "tags", value: data.tags });
+	getStore().setValue({field: "tags", value: data.tags});
 }
 
 function uuidv4() {
