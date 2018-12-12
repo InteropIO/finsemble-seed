@@ -15,7 +15,7 @@
 	"servicesConfig": {
 		"launcher": {
 			"staggerPixels": 40,
-			"unknownComponent":"nonConfiguredComponent"
+			"unknownComponent": "nonConfiguredComponent"
 		},
 		"assimilation": {
 			"useOpenFinSpawn": false,
@@ -34,6 +34,9 @@
 			"MINIMUM_WIDTH": 175,
 			"defaultHeight": 39,
 			"defaultWidth": 600,
+			"requireRectangularityForGroupResize": true,
+			"undockDisbandsEntireGroup": false,
+			"fillHolesOnUndock": true,
 			"tabbing": {
 				"enabled": true
 			},
