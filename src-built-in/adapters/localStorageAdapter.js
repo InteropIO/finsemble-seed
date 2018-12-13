@@ -8,8 +8,8 @@
 /**
  * We have a baseStorage model that provides some methods, such as `getCombinedKey`, which will return a nice key to save our value under. Example: `Finsemble:defaultUser:finsemble:activeWorkspace`. That key would hold the value of our activeWorkspace.
  */
-var BaseStorage = require("@chartiq/finsemble").models.baseStorage;
-var Logger = require("@chartiq/finsemble").Clients.Logger;
+var BaseStorage = require("@chartiq/finsemble").default.models.baseStorage;
+var Logger = require("@chartiq/finsemble").default.Clients.Logger;
 //Because calls to this storage adapter will likely come from many different windows, we will log successes and failures in the central logger.
 Logger.start();
 
