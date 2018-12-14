@@ -102,12 +102,6 @@
 					"storageService",
 					"searchService"
 				]
-			},
-			{
-				"agentLabel": "dockingService",
-				"services": [
-					"dockingService"
-				]
 			}
 		]
 	},
