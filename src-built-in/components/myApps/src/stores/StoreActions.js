@@ -47,7 +47,7 @@ function initialize(callback = Function.prototype) {
 	data.filterText = store.values.filterText;
 	data.sortBy = store.values.sortBy;
 	data.isFormVisible = store.values.isFormVisible;
-	data.configComponents={};
+	data.configComponents = {};
 
 	// Add listeners to keep our copy up to date
 	store.addListener({field: "appFolders.folders"}, (err, dt) => data.folders = dt.value);
@@ -60,29 +60,36 @@ function initialize(callback = Function.prototype) {
 	getToolbarStore((err, response) => {
 		FSBL.Clients.RouterClient.subscribe("Finsemble.Service.State.launcherService", (err, response) => {
 			loadInstalledComponentsFromStore(()=>{
-				//We load our stored components here
+				//We load our stored components(config driven) here
 				loadInstalledConfigComponents(callback);
 			});
 			
 		});
 	});
 }
+//This gets a specific app in FDC3 and returns the results
 function getApp(appID, cb = Function.prototype) {
 	appd.get(appID).then(app => cb(null, app)).catch(err => cb(err));
 }
+// Check to see if an app is already in our list of apps
 function appInAppList(appName){
-	let components  =Object.values(data.apps);
-	for(let i=0;i<components.length;i++){
+	let components  = Object.values(data.apps);
+	for(let i = 0;i < components.length;i++){
 		let component = components[i];
 		if(component.name === appName)return true;
 	}
 	return false;
 }
+/**
+ * Here we load apps from FDC3
+ * @param {*} cb 
+ */
 function loadInstalledComponentsFromStore(cb = Function.prototype) {
 	async.map(Object.values(data.apps), (component, componentDone) => {
 		// Load FDC3 components here
 		if (component.source && component.source === "FDC3") {
-			return getApp(component.appID, (err, app) => {// get the app info so we can load it into the launcher
+			// get the app info so we can load it into the launcher
+			return getApp(component.appID, (err, app) => {
 				if (err) {// don't want to kill this;
 					deleteApp(component.appID);
 					console.error("there was an error loading from FDC3", component, err);
@@ -108,17 +115,20 @@ function loadInstalledComponentsFromStore(cb = Function.prototype) {
 		cb(err);
 	});
 }
-
+// We load our apps that were loaded from the config.
 function loadInstalledConfigComponents(cb = Function.prototype) {
+	// Get the list of components from the launcher service
 	FSBL.Clients.LauncherClient.getComponentList((err, componentList) => {
 		let componentNameList = Object.keys(componentList);
 		componentNameList.map(componentName => {
+			// If the app is already in our list move on
 			if(appInAppList(componentName))return;
 			let component = componentList[componentName];
+			// Make sure the app is launchable by user
 			if (component.foreign.components["App Launcher"] && component.foreign.components["App Launcher"].launchableByUser) {
-				data.configComponents[componentName]={
+				data.configComponents[componentName] = {
 					appID:componentName,
-					icon:component.foreign.Toolbar && component.foreign.Toolbar.iconClass?component.foreign.Toolbar.iconClass:null,
+					icon:component.foreign.Toolbar && component.foreign.Toolbar.iconClass ? component.foreign.Toolbar.iconClass : null,
 					name:componentName,
 					source:"config",
 					tags:[]
@@ -127,7 +137,6 @@ function loadInstalledConfigComponents(cb = Function.prototype) {
 		});
 		cb();
 	});
-
 }
 
 function getToolbarStore(done) {
@@ -184,7 +193,7 @@ function addPin(pin) {
 		}
 
 		if (componentToToggle) {
-			let componentType = componentToToggle.group || componentToToggle.component.type;
+			let componentType = componentToToggle.group || componentToToggle.component.type || pin.name;
 			let fontIcon;
 			try {
 				if (componentToToggle.group) {

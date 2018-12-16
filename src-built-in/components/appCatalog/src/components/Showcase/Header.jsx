@@ -6,7 +6,7 @@
 import React from "react";
 
 //data
-import storeActions from '../../stores/storeActions';
+import storeActions from "../../stores/storeActions";
 
 let pendingSpawn = false;
 
@@ -20,10 +20,11 @@ let pendingSpawn = false;
 const Header = props => {
 
 	const addApp = () => {
+	
 		if (props.installed) {
 			if (pendingSpawn) return;
 			pendingSpawn = true;
-			const name = props.title || props.name
+			const name = props.title || props.name;
 			// If the app has a URL property
 			// For now, this means it was manually added
 			// So lets spawn from URL
@@ -31,27 +32,27 @@ const Header = props => {
 				FSBL.Clients.LauncherClient.spawn(null, {
 					url: props.url
 				}, () => {
-					pendingSpawn = false
-				})
-				return
+					pendingSpawn = false;
+				});
+				return;
 			}
 			// Otherwise launch application by name
 			FSBL.Clients.LauncherClient.spawn(name, {}, (err, data) => {
-				pendingSpawn = false
+				pendingSpawn = false;
 			});
 		} else {
 			storeActions.addApp(props.appId);
 		}
-	}
+	};
 
 	const removeApp = () => {
 		storeActions.removeApp(props.appId);
-	}
+	};
 
 	const launchApp = () => {
 
-	}
-
+	};
+	console.log("addApp",props);
 	return (
 		<div className="header">
 			<div className='icon-title-container'>
@@ -79,6 +80,6 @@ const Header = props => {
 			</div>
 		</div>
 	);
-}
+};
 
 export default Header;

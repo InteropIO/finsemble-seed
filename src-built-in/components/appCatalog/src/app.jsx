@@ -3,20 +3,20 @@
 * All rights reserved.
 */
 import React from "react";
-import ReactDOM from 'react-dom';
+import ReactDOM from "react-dom";
 
 //components
-import SearchBar from './components/SearchBar';
-import Home from './components/Home';
-import AppResults from './components/AppResults';
-import AppShowcase from './components/Showcase/AppShowcase';
+import SearchBar from "./components/SearchBar";
+import Home from "./components/Home";
+import AppResults from "./components/AppResults";
+import AppShowcase from "./components/Showcase/AppShowcase";
 
 //data
-import { createStore, getStore } from './stores/appStore';
-import storeActions from './stores/storeActions';
+import { createStore, getStore } from "./stores/appStore";
+import storeActions from "./stores/storeActions";
 
 //style
-import '../appCatalog.css';
+import "../appCatalog.css";
 
 export default class AppMarket extends React.Component {
 	constructor(props) {
@@ -67,10 +67,10 @@ export default class AppMarket extends React.Component {
 	}
 
 	componentDidMount() {
-		getStore().addListener({ field: 'appDefinitions' }, this.addedAppsChanged);
-		getStore().addListener({ field: 'filteredApps' }, this.filteringApps);
-		getStore().addListener({ field: 'activeTags' }, this.filteringApps);
-		getStore().addListener({ field: 'activeApp' }, this.openAppShowcase);
+		getStore().addListener({ field: "appDefinitions" }, this.addedAppsChanged);
+		getStore().addListener({ field: "filteredApps" }, this.filteringApps);
+		getStore().addListener({ field: "activeTags" }, this.filteringApps);
+		getStore().addListener({ field: "activeApp" }, this.openAppShowcase);
 		// Get notified when user wants to view an app
 		FSBL.Clients.RouterClient.addListener("viewApp", this.viewApp);
 		let installed = storeActions.getInstalledApps();
@@ -81,10 +81,10 @@ export default class AppMarket extends React.Component {
 	}
 
 	componentWillUnmount() {
-		getStore().removeListener({ field: 'appDefinitions' }, this.addedAppsChanged);
-		getStore().removeListener({ field: 'filteredApps' }, this.filteringApps);
-		getStore().removeListener({ field: 'activeTags' }, this.filteringApps);
-		getStore().removeListener({ field: 'activeApp' }, this.openAppShowcase);
+		getStore().removeListener({ field: "appDefinitions" }, this.addedAppsChanged);
+		getStore().removeListener({ field: "filteredApps" }, this.filteringApps);
+		getStore().removeListener({ field: "activeTags" }, this.filteringApps);
+		getStore().removeListener({ field: "activeApp" }, this.openAppShowcase);
 		// Get notified when user wants to view an app
 		FSBL.Clients.RouterClient.removeListener("viewApp", this.viewApp);
 
@@ -99,7 +99,7 @@ export default class AppMarket extends React.Component {
 	}
 
 	viewApp(error, event) {
-		!error && this.navigateToShowcase(event.data.app.appID)
+		!error && this.navigateToShowcase(event.data.app.appID);
 	}
 
 	addedAppsChanged() {
@@ -147,12 +147,12 @@ export default class AppMarket extends React.Component {
 		let { activeApp, filteredApps, activeTags, forceSearch } = this.state;
 		let page;
 
-		if (activeApp) {
-			page =  "showcase"
+		if (activeApp && !forceSearch) {
+			page = "showcase";
 		} else if (filteredApps.length > 0 || forceSearch) {
-			page =  "appSearch";
+			page = "appSearch";
 		} else if (filteredApps.length === 0 && activeTags.length === 0) {
-			page =  "home";
+			page = "home";
 		}
 
 		return page;
@@ -187,13 +187,11 @@ export default class AppMarket extends React.Component {
 	 * Performs a search through the catalog
 	 * @param {string} search The text to search the catalog with
 	 */
-	changeSearch(search) {
-		storeActions.clearFilteredApps();
-		this.setState({
-			forceSearch: (search !== "")
-		}, () => {
-			if (search !== "") storeActions.searchApps(search);
-		});
+	changeSearch(search) {		
+		storeActions.searchApps(search,()=>{
+				
+			this.setState({forceSearch: (search !== "")});
+		});		
 	}
 	/**
 	 * When the notification for isntalling/removing an app is shown a timeout is set to call this function to cease showing the notification
@@ -206,7 +204,7 @@ export default class AppMarket extends React.Component {
 	}
 
 	navigateToShowcase(id) {
-		storeActions.openApp(id)
+		storeActions.openApp(id);
 	}
 
 	/**
@@ -254,9 +252,8 @@ export default class AppMarket extends React.Component {
 		let { filteredApps, activeTags } = this.state;
 		let activePage = this.determineActivePage();
 		let apps = this.compileAddedInfo((filteredApps.length > 0));
-
 		//Force default case if activepage isn't search and apps.length is 0
-		if (apps.length === 0 && activePage !== 'appSearch') activePage = -1;
+		if (apps.length === 0 && activePage !== "appSearch") activePage = -1;
 
 		switch (activePage) {
 			case "home":
@@ -288,7 +285,9 @@ export default class AppMarket extends React.Component {
 
 		return (
 			<div>
-				<SearchBar backButton={page !== "home"} tags={tags} activeTags={activeTags} tagSelected={this.addTag} removeTag={this.removeTag} goHome={this.goHome} installationActionTaken={this.state.installationActionTaken} search={this.changeSearch} isViewingApp={this.state.activeApp !== null} />
+				<SearchBar hidden={page === "showcase" ? true : false}backButton={page !== "home"} tags={tags} activeTags={activeTags} tagSelected={this.addTag}
+					removeTag={this.removeTag} goHome={this.goHome} installationActionTaken={this.state.installationActionTaken}
+					search={this.changeSearch} isViewingApp={this.state.activeApp !== null} />
 				<div className="market_content">
 					{pageContents}
 				</div>
@@ -297,12 +296,12 @@ export default class AppMarket extends React.Component {
 	}
 }
 
-FSBL.addEventListener('onReady', function () {
+FSBL.addEventListener("onReady", function () {
 	createStore((store) => {
 		storeActions.initialize(() => {
 			ReactDOM.render(
 				<AppMarket />,
-				document.getElementById('bodyHere'));
+				document.getElementById("bodyHere"));
 		});
 	});
 });
