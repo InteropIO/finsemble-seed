@@ -11,7 +11,7 @@ var activeSearchBar = false;
 var menuReference = {};
 var menuWindow = null;
 var control = null;
-
+var toolbarInFocus = false;
 
 
 function mouseInElement(element, cb) {
@@ -157,9 +157,9 @@ var Actions = {
 		FSBL.Clients.SearchClient.search({ text: text }, function (err, response) {
 			var updatedResults = [].concat.apply([], response)
 			Actions.setList(updatedResults);
-			setTimeout(() => {
-				Actions.positionSearchResults();
-			}, 100);
+			// setTimeout(() => {
+			// 	Actions.positionSearchResults();
+			// }, 100);
 		})
 	},
 	menuBlur() {
@@ -225,13 +225,14 @@ function createStore(done) {
 
 	finsembleWindow.listenForBoundsSet();
 	finsembleWindow.addListener("startedMoving", Actions.handleClose);
-	finsembleWindow.addListener("blurred", function (event) {
-		Actions.setFocus(false);
-	}, function () {
-	}, function (reason) {
-		//console.log("failure:" + reason);
-	});
+	// finsembleWindow.addListener("blurred", function (event) {
+	// 	Actions.setFocus(false);
+	// }, function () {
+	// }, function (reason) {
+	// 	//console.log("failure:" + reason);
+	// });
 	finsembleWindow.addListener("hidden", () => {
+		console.log('window hidden');
 		Actions.handleClose();
 	});
 }

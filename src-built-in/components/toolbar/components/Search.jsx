@@ -5,6 +5,7 @@ import * as _debounce from "lodash.debounce"
 import ToolbarStore from "../stores/toolbarStore";
 
 let menuStore;
+let toolbarInFocus = false;
 export default class Search extends React.Component {
 	constructor(props) {
 		super(props);
@@ -76,6 +77,25 @@ export default class Search extends React.Component {
 			textRange.select();
 		}
 	}
+	componentDidMount() {
+		let el = document.getElementById('searchInput');
+		finsembleWindow.addEventListener('focused', () => {
+			toolbarInFocus = true;
+			console.log('toolbarInFocus: ', toolbarInFocus);
+		});
+
+		finsembleWindow.addEventListener('blurred', () => {
+			toolbarInFocus = false;
+			console.log('toolbarInFocus: ', toolbarInFocus);
+		});
+
+		el.addEventListener('blur', () => {
+			console.log('search blurred');
+			if (toolbarInFocus) {
+				storeExports.Actions.handleClose(el);
+			}
+		});
+	}
 	componentDidUpdate() {
 		if (this.state.hotketSet) {
 			FSBL.Clients.WindowClient.finWindow.focus(() => {
@@ -99,8 +119,6 @@ export default class Search extends React.Component {
 		this.setActive = this.setActive.bind(this);
 		this.emptyInput = this.emptyInput.bind(this);
 		this.hotKeyActive = this.hotKeyActive.bind(this);
-
-
 	}
 	setActive(err, data) {
 		this.setState({ active: data.value })
@@ -117,14 +135,14 @@ export default class Search extends React.Component {
 			sel.addRange(range);
 		}
 		if (this.state.hotketSet) {
-			storeExports.Actions.setFocus(true, e.target)
+			// storeExports.Actions.setFocus(true, e.target)
 			return this.setState({ focus: true, hotketSet: false })
 		}
 		//this.setState({ focus: true });
 		storeExports.Actions.setFocus(true, e.target)
 
 		setTimeout(function () {
-			
+
 			// select the old search text, so the user can edit it or type over it
 			// Do this in a timeout to give some time for the animation to work
 			var element = document.getElementById("searchInput");
@@ -134,7 +152,7 @@ export default class Search extends React.Component {
 	blurred() {
 		//this.setState({ focus: false, saveText: document.getElementById("searchInput").textContent });
 		//document.getElementById("searchInput").innerHTML = ""; // Don't clear out the old search text
-		storeExports.Actions.setFocus(false)
+		// storeExports.Actions.setFocus(false)
 	}
 	keyPress(event) {
 		var events = ["ArrowUp", "ArrowDown", "Enter"]
@@ -149,7 +167,7 @@ export default class Search extends React.Component {
 				<div ref="Search" id="searchInput" contentEditable className={"searchInput " + (this.state.active ? "active" : "compact")} placeholder="Search" onKeyDown={this.keyPress}
 					onFocus={this.focused}
 					/*onInput={this.textChange} onBlur={this.blurred} onChange={this.textChange} dangerouslySetInnerHTML={{ __html: (this.state.focus ? this.state.saveText : "") }} />*/
-					onInput={this.textChange} onBlur={this.blurred} onChange={this.textChange} />
+					onInput={this.textChange} onChange={this.textChange} />
 			</div>
 		</div>
 	}
