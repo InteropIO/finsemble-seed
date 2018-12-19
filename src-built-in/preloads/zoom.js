@@ -153,7 +153,7 @@ const zoomConfigHandler = (err, zoom) => {
  */
 const getZoomLevelHandler = (err, zoomLevel) => {
 	if (err) {
-		FSBL.Clients.Logger.debug("Error getting \"fsbl-zoom\" configuration from component", err);
+		FSBL.Clients.Logger.info("No \"fsbl-zoom\" settings found in component state", err);
 	}
 
 	if (zoomLevel != null) {
@@ -174,7 +174,7 @@ const runZoomHandler = () => {
 
 	// Create hot keys for zooming.
 	FSBL.Clients.HotkeyClient.addBrowserHotkey(["ctrl", "="], zoomIn);
-	//enable when finsemble supports mapping + key
+	//TODO: enable when finsemble supports mapping + key
 	//FSBL.Clients.HotkeyClient.addBrowserHotkey(["ctrl", "+"], zoomIn);
 	FSBL.Clients.HotkeyClient.addBrowserHotkey(["ctrl", "-"], zoomOut);
 	FSBL.Clients.HotkeyClient.addBrowserHotkey(["ctrl", "0"], resetZoom);
