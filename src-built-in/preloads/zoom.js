@@ -74,6 +74,19 @@ const resetZoom = () => {
 	setZoom(window.fsblZoomLevel);
 }
 
+const handleWheel = (event) => {
+	  const e = window.event || event;
+	  //if Control key was held down while scrolling mouse wheel interpret as zoom
+	if (e.ctrlKey){
+		if (e.wheelDelta > 0){
+			zoomIn();
+		} else if (e.wheelDelta < 0) {
+			zoomOut();
+		}
+		e.preventDefault();
+	}
+};
+
 /**
  * Inserts the pop up element into the page if needed.
  */
@@ -181,6 +194,8 @@ const runZoomHandler = () => {
 
 	// Updates the component with the zoom level from the previous load, if one exists.
 	FSBL.Clients.WindowClient.getComponentState({ field: "fsbl-zoom" }, getZoomLevelHandler);
+
+	window.addEventListener("wheel", handleWheel, false);
 };
 
 // TODO, catch and recall scroll position
