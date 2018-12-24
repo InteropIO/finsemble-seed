@@ -117,10 +117,12 @@ function createCopyWebpackConfig() {
 			from: './assets/',
 			to: './assets/'
 		},
+		/* // Enabling this causes the favicon to show up as a background image in localhost:9090
 		{
 			from: './assets/img/favicon.ico',
 			to: './favicon.ico'
 		},
+		*/
 		{
 			from: './node_modules/@chartiq/finsemble/dist',
 			to: path.join(__dirname, "../../finsemble/")

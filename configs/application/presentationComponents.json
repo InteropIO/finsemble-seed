@@ -677,50 +677,6 @@
 				}
 			}
 		},
-		"Floating Titlebar": {
-			"window": {
-				"url": "$applicationRoot/components/floatingTitlebar/floatingTitlebar.html",
-				"frame": false,
-				"top": "center",
-				"left": "center",
-				"width": 30,
-				"height": 30,
-				"options": {
-					"cornerRounding": {
-						"height": 0,
-						"width": 0
-					},
-					"showTaskbarIcon": false,
-					"autoShow": false,
-					"resizable": false,
-					"alwaysOnTop": false,
-					"smallWindow": true
-				}
-			},
-			"component": {
-				"category": "system"
-			},
-			"foreign": {
-				"services": {
-					"dockingService": {
-						"canGroup": true,
-						"isArrangable": false
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"launchableByUser": false
-					},
-					"Window Manager": {
-						"FSBLHeader": false,
-						"persistWindowState": false
-					},
-					"Toolbar": {
-						"iconClass": "UserPreferences"
-					}
-				}
-			}
-		},
 		"Process Monitor": {
 			"window": {
 				"url": "$applicationRoot/components/processMonitor/processMonitor.html",
