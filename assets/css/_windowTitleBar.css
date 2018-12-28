@@ -388,7 +388,7 @@ html.desktop-active .fsbl-linker[hover=true] {
 }
 
 /* Styles the zoom pop up */
-.popup {
+.fsbl-zoom-popup {
     display: none;
     position: absolute;
     top: -15px;
@@ -397,14 +397,29 @@ html.desktop-active .fsbl-linker[hover=true] {
     padding: 5px;
     color: var(--primary-font-color);
     opacity: 0.8;
+    font-size: 0.9em;
 }
 
-.popup button {
+.fsbl-zoom-popup button {
     width: unset;
     font-size: unset;
     padding: 1px 5px 1px 5px;
     margin: 0px 2px 0px 2px;
 }
+
+.fsbl-zoom-popup-text {
+    margin-left: 3px;
+}
+
+.fsbl-zoom-popup-title {
+    margin-left: 0px;
+}
+
+.fsbl-zoom-popup-heading {
+    margin-left: 4px;
+    margin-bottom: 4px;
+}
+
 
 /* Responsive Sizing */
 /* At 345px, the Drag-to-Share icon will be removed. */

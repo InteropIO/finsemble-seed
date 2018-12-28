@@ -1,12 +1,41 @@
 // This global will contain our current zoom level
 window.fsblZoomLevel = 1;
 
-// Global variable with the timeout for the zoom
-window.zoomTimeout = 1000;
+// Global variables hold our zoom heuristics. We set the defaults here but they can be overridden
+// with the config finsemble.Window Manager.zoom
+window.zoomTimeout = 3000;
 window.zoomStep = 0.1;
 window.zoomMin = 0.2;
 window.zoomMax = 5;
 
+// This gets flipped to false once the intial zoom is set.
+// We use this flag to prevent the zoom level pop up from displaying when the component is first loaded.
+window.settingInitialZoom = true;
+
+/**
+ * Show a pop up control that displays the current zoom level and allows users to manipulate it with the mouse.
+ * @param {int} pct 
+ */
+const showPopup = (pct) => {
+	const popup = document.querySelector("#zoom-popup");
+
+	if (popup) {
+		popup.style.zoom = 1;
+
+		const span = document.querySelector("#zoom-popup-text");
+		span.innerHTML = `${Math.floor(pct * 100)}%`
+
+		popup.style.display = "block";
+
+		if (window.timerHandle) {
+			// Clear timer to reset hide timeout
+			clearTimeout(window.timerHandle);
+			window.timerHandle = null;
+		}
+
+		window.timerHandle = setTimeout(() => popup.style.display = "none", window.zoomTimeout);
+	}
+}
 /**
  * Sets the zoom by setting the CSS "zoom" value on the body.
  *
@@ -28,23 +57,7 @@ const setZoom = (pct) => {
 		FSBLHeader.style.zoom = 1;
 	}
 
-	const popup = document.querySelector("#zoom-popup");
-	if (popup) {
-		popup.style.zoom = 1;
-
-		const span = document.querySelector("#zoom-popup-text");
-		span.innerHTML = `${Math.floor(pct * 100)}%`
-
-		popup.style.display = "block";
-
-		if (window.timerHandle) {
-			// Clear timer to reset hide timeout
-			clearTimeout(window.timerHandle);
-			window.timerHandle = null;
-		}
-
-		window.timerHandle = setTimeout(() => popup.style.display = "none", window.zoomTimeout);
-	}
+	if(!window.settingInitialZoom) showPopup(pct);
 
 	// Zoom levels are saved as component state "fsbl-zoom"
 	FSBL.Clients.WindowClient.setComponentState({ field: "fsbl-zoom", value: window.fsblZoomLevel });
@@ -97,20 +110,25 @@ const insertPopUp = () => {
 		return;
 	}
 
-	// Create popup div, with ID anc class and text
+	// Create popup div, with ID, class and text
 	popup = document.createElement("div");
 	popup.id = "zoom-popup";
-	popup.className = "popup";
-	popup.appendChild(document.createTextNode("Zoom: "));
+	popup.className = "fsbl-zoom-popup";
+
+	const heading = document.createElement("div");
+	heading.className = "fsbl-zoom-popup-heading";
+	popup.appendChild(heading);
+
+	const title = document.createElement("span");
+	title.className = "fsbl-zoom-popup-title";
+	title.appendChild(document.createTextNode("Zoom:"));
+	heading.appendChild(title);
 
 	// Create Div to contain the zoom level text
 	const span = document.createElement("span");
+	span.className = "fsbl-zoom-popup-text";
 	span.id = "zoom-popup-text";
-	popup.appendChild(span);
-
-	// Add line break between zoom level and buttons
-	const br = document.createElement("br");
-	popup.appendChild(br);
+	heading.appendChild(span);
 
 	// Create zoom out button
 	const zoomOutBtn = document.createElement("button");
@@ -137,7 +155,7 @@ const insertPopUp = () => {
  * Handles the zoom configuration.
  * @param {*} err The error getting zoom config, if one occurred.
  * @param {object} zoom The zoom configuration object
- * @param {Number} zoom.timeout The number of milliseconds the zoom pop up should be displayed before it is hidden (Default 1000).
+ * @param {Number} zoom.timeout The number of milliseconds the zoom pop up should be displayed before it is hidden (Default 3000).
  * @param {Number} zoom.step How much the zoom should increase or decrease when zooming in or out (Default 0.1).
  * @param {Number} zoom.max The maximum allowed zoom level (Default 5).
  * @param {Number} zoom.min The minimum allowed zoom level (Default 0.2).
@@ -152,10 +170,10 @@ const zoomConfigHandler = (err, zoom) => {
 		return;
 	}
 
-	window.zoomTimeout = zoom.timeout ? zoom.timeout : 1000;
-	window.zoomStep = zoom.step ? zoom.step : 0.1;
-	window.zoomMin = zoom.min ? zoom.min : 0.2;
-	window.zoomMax = zoom.max ? zoom.max : 5;
+	window.zoomTimeout = zoom.timeout ? zoom.timeout : window.zoomTimeout;
+	window.zoomStep = zoom.step ? zoom.step : window.zoomStep;
+	window.zoomMin = zoom.min ? zoom.min : window.zoomMin;
+	window.zoomMax = zoom.max ? zoom.max : window.zoomMax;
 }
 
 /**
@@ -167,12 +185,12 @@ const zoomConfigHandler = (err, zoom) => {
 const getZoomLevelHandler = (err, zoomLevel) => {
 	if (err) {
 		FSBL.Clients.Logger.info("No \"fsbl-zoom\" settings found in component state", err);
-	}
-
-	if (zoomLevel != null) {
+	}else if (zoomLevel != null) {
 		window.fsblZoomLevel = zoomLevel;
 		setZoom(window.fsblZoomLevel);
 	}
+	
+	window.settingInitialZoom = false;
 };
 
 /**
