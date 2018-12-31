@@ -27,43 +27,43 @@ export default {
 
 let ToolbarStore;
 const data = {};
-
-/**
- * I'm thinking of using  a local distributed store and the FDC3 client
- * Some data will be pulled from appd and some from the local store
- * Not sure if the localstore needs to be a persistent one at some point?
- */
-const FDC3Client = new FDC3({url: "https://fpe.finsemble.com/v1/"});
-const appd = new AppDirectory(FDC3Client);
+let FDC3Client ;
+let appd;
 
 function initialize(done = Function.prototype) {
-	const store = getStore();
-	data.apps = store.values.apps;
-	store.getValue({ field: "appFolders.folders" }, (err, folders) => {
-		data.folders = folders;
-		store.addListener({ field: "appFolders.folders" }, (err, dt) => data.folders = dt.value);
-	});
-	store.getValue({ field: "activeFolder" }, (err, active) => {
-		data.activeFolder = active;
-		store.addListener({ field: "activeFolder" }, (err, dt) => data.activeFolder = dt.value);
-	});
-	store.getValue({ field: "defaultFolder" }, (err, folder) => {
-		data.defaultFolder = folder;
-	});
-	data.installed = store.values.appDefinitions;
-	data.tags = store.values.tags;
-	data.filteredApps = store.values.filteredApps;
-	data.activeTags = store.values.activeTags;
-	data.activeApp = store.values.activeApp;
-	data.MY_APPS = store.values.defaultFolder;
+	FSBL.Clients.ConfigClient.getValue({ field: "finsemble.FD3CServer" }, function (err, FD3CServer) {
+		FDC3Client = new FDC3({url: FD3CServer});
+		appd = new AppDirectory(FDC3Client);
+	
+	
+		const store = getStore();
+		data.apps = store.values.apps;
+		store.getValue({ field: "appFolders.folders" }, (err, folders) => {
+			data.folders = folders;
+			store.addListener({ field: "appFolders.folders" }, (err, dt) => data.folders = dt.value);
+		});
+		store.getValue({ field: "activeFolder" }, (err, active) => {
+			data.activeFolder = active;
+			store.addListener({ field: "activeFolder" }, (err, dt) => data.activeFolder = dt.value);
+		});
+		store.getValue({ field: "defaultFolder" }, (err, folder) => {
+			data.defaultFolder = folder;
+		});
+		data.installed = store.values.appDefinitions;
+		data.tags = store.values.tags;
+		data.filteredApps = store.values.filteredApps;
+		data.activeTags = store.values.activeTags;
+		data.activeApp = store.values.activeApp;
+		data.MY_APPS = store.values.defaultFolder;
 
-	store.addListener({ field: "apps" }, (err, dt) => data.apps = dt.value);
-	store.addListener({ field: "appDefinitions" }, (err, dt) => data.installed = dt.value);
-	store.addListener({ field: "tags" }, (err, dt) => data.tags = dt.value);
-	store.addListener({ field: "activeApp" }, (err, dt) => data.activeApp = dt.value);
-	store.addListener({ field: "activeTags" }, (err, dt) => data.activeTags = dt.value);
-	store.addListener({ field: "filteredApps" }, (err, dt) => data.filteredApps = dt.value);
-	getToolbarStore(done);
+		store.addListener({ field: "apps" }, (err, dt) => data.apps = dt.value);
+		store.addListener({ field: "appDefinitions" }, (err, dt) => data.installed = dt.value);
+		store.addListener({ field: "tags" }, (err, dt) => data.tags = dt.value);
+		store.addListener({ field: "activeApp" }, (err, dt) => data.activeApp = dt.value);
+		store.addListener({ field: "activeTags" }, (err, dt) => data.activeTags = dt.value);
+		store.addListener({ field: "filteredApps" }, (err, dt) => data.filteredApps = dt.value);
+		getToolbarStore(done);
+	});
 }
 
 function getToolbarStore(done) {

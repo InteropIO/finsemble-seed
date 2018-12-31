@@ -37,9 +37,11 @@ export default class AppDefinition extends React.Component {
 	onItemClick() {
 		if (pendingSpawn) { return; }
 		pendingSpawn = true;
+		fin.desktop.Window.getCurrent().blur();
 		FSBL.Clients.LauncherClient.spawn(this.props.app.name, null, (err, data) => {
 			console.log("pending spawn complete");
 			pendingSpawn = false;
+			
 		});
 	}
 

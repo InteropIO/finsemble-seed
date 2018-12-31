@@ -31,9 +31,9 @@ export default class AddNewAppForm extends React.Component {
      * Calls the storeActions.addApp() method
      * to save the new app in store.
      */
-	onSubmit() {
+	onSubmit() {// !/^\w(\s*,?\s*\w)*$/.test(this.state.form.tags) ||
 		if( !/^[0-9a-zA-Z_.-\s]+$/.test(this.state.form.name) || 
-            !/^\w(\s*,?\s*\w)*$/.test(this.state.form.tags) ||
+
             !/^(ftp|http|https):\/\/[^ "]+$/.test(this.state.form.url)) {
 			console.warn("Invalid app name, tags or url.");
 			return;
@@ -67,13 +67,13 @@ export default class AddNewAppForm extends React.Component {
 		console.log("No onDone found in props.");
 	}
 
-	render() {
+	render() {//<FinsembleDialogTextInput onInputChange={(e) => {this.state.form.tags = e.target.value;}} placeholder="App Tags" />
 		const form = this.state.form;
 		return (<div className="add-app-form controls-wrapper">
 			<form id="new-app">
 				<FinsembleDialogTextInput onInputChange={(e) => {this.state.form.name = e.target.value;}} placeholder="App Name" autoFocus={true} />
 				<FinsembleDialogTextInput onInputChange={(e) => {this.state.form.url = e.target.value;}} defaultValue="https://" />
-				<FinsembleDialogTextInput onInputChange={(e) => {this.state.form.tags = e.target.value;}} placeholder="App Tags" />
+				
 				<div className="button-wrapper">
 					<FinsembleDialogButton className="fsbl-button-neutral" onClick={this.onClear}>
                         Clear

@@ -2,8 +2,8 @@ import {getStore} from "./LauncherStore";
 import AppDirectory from "../modules/AppDirectory";
 import FDC3 from "../modules/FDC3";
 const async = require("async");
-const FDC3Client = new FDC3({url: "https://fpe.finsemble.com/v1/"});
-const appd = new AppDirectory(FDC3Client);
+let FDC3Client;
+let appd;
 let ToolbarStore;
 
 export default {
@@ -38,32 +38,37 @@ const MY_APPS = "My Apps";
 const data = {};
 
 function initialize(callback = Function.prototype) {
-	const store = getStore();
-	data.folders = store.values.appFolders.folders;
-	data.foldersList = store.values.appFolders.list;
-	data.apps = store.values.appDefinitions;
-	data.tags = store.values.activeLauncherTags;
-	data.activeFolder = store.values.activeFolder;
-	data.filterText = store.values.filterText;
-	data.sortBy = store.values.sortBy;
-	data.isFormVisible = store.values.isFormVisible;
-	data.configComponents = {};
+	FSBL.Clients.ConfigClient.getValue({ field: "finsemble.FD3CServer" }, function (err, FD3CServer) {
+		FDC3Client = new FDC3({url: FD3CServer});
+		appd = new AppDirectory(FDC3Client);
+		
+		const store = getStore();
+		data.folders = store.values.appFolders.folders;
+		data.foldersList = store.values.appFolders.list;
+		data.apps = store.values.appDefinitions;
+		data.tags = store.values.activeLauncherTags;
+		data.activeFolder = store.values.activeFolder;
+		data.filterText = store.values.filterText;
+		data.sortBy = store.values.sortBy;
+		data.isFormVisible = store.values.isFormVisible;
+		data.configComponents = {};
 
-	// Add listeners to keep our copy up to date
-	store.addListener({field: "appFolders.folders"}, (err, dt) => data.folders = dt.value);
-	store.addListener({field: "appFolders.list"}, (err, dt) => data.foldersList = dt.value);
-	store.addListener({field: "appDefinitions"}, (err, dt) => data.apps = dt.value);
-	store.addListener({field: "activeFolder"}, (err, dt) => data.activeFolder = dt.value);
-	store.addListener({field: "isFormVisible"}, (err, dt) => data.isFormVisible = dt.value);
-	store.addListener({field: "sortBy"}, (err, dt) => data.sortBy = dt.value);
-	store.addListener({field: "activeLauncherTags"}, (err, dt) =>data.tags = dt.value);
-	getToolbarStore((err, response) => {
-		FSBL.Clients.RouterClient.subscribe("Finsemble.Service.State.launcherService", (err, response) => {
-			loadInstalledComponentsFromStore(()=>{
+		// Add listeners to keep our copy up to date
+		store.addListener({field: "appFolders.folders"}, (err, dt) => data.folders = dt.value);
+		store.addListener({field: "appFolders.list"}, (err, dt) => data.foldersList = dt.value);
+		store.addListener({field: "appDefinitions"}, (err, dt) => data.apps = dt.value);
+		store.addListener({field: "activeFolder"}, (err, dt) => data.activeFolder = dt.value);
+		store.addListener({field: "isFormVisible"}, (err, dt) => data.isFormVisible = dt.value);
+		store.addListener({field: "sortBy"}, (err, dt) => data.sortBy = dt.value);
+		store.addListener({field: "activeLauncherTags"}, (err, dt) =>data.tags = dt.value);
+		getToolbarStore((err, response) => {
+			FSBL.Clients.RouterClient.subscribe("Finsemble.Service.State.launcherService", (err, response) => {
+				loadInstalledComponentsFromStore(()=>{
 				//We load our stored components(config driven) here
-				loadInstalledConfigComponents(callback);
-			});
+					loadInstalledConfigComponents(callback);
+				});
 			
+			});
 		});
 	});
 }
