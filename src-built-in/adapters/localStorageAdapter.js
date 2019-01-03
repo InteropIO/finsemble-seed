@@ -63,11 +63,36 @@ var LocalStorageAdapter = function (uuid) {
 	};
 
 	/**
-	 * Returns all keys stored in localstorage.
-	 * @param {*} params
-	 * @param {*} cb
+	 * Returns all keys stored in localstorage of a given topic and keyPrefix.
+	 * 
+	 * LocalStorage is synchronous, so the callback is optional (the function
+	 * immediately returns the results if the callback is ommitted).
+	 * 
+	 * @param {*} params An object that must include the topic and keyPrefix of the desired keys.
+	 * @param {*} cb An optional callback that will be passed any errors that occured and the found keys.
 	 */
 	this.keys = function (params, cb) {
+			/**
+			 * Daniel H. 1/3/2019 - Validate.args is still broken, so I'm doing it ad-hoc here.
+			 * @TODO Replace ad-hoc validation with Validate.args. */
+		let errMessage;
+		if (!params) {
+			errMessage = "You must pass params to localStorageAdapter.keys";
+		} else {
+			const missingArgs = params && ["topic", "keyPrefix"].filter(k => !params[k]);
+			if (missingArgs.length) {
+				errMessage = `Missing parameters to localStorageAdapter.keys: ${missingArgs.join(", ")}`;
+			}
+		}
+
+		if (errMessage) {
+			if (cb) {
+				cb(errMessage)
+			} else {
+				throw new Error(errMessage);
+			}
+		}
+
 		const keys = [];
 		const keyPreface = this.getKeyPreface(this, params);
 
@@ -83,7 +108,12 @@ var LocalStorageAdapter = function (uuid) {
 		}
 
 		Logger.system.debug(`Storage.keys for keyPreface=${keyPreface} with keys=`, keys);
-		return cb(null, keys);
+
+		if (cb) {
+			cb(null, keys);
+		} else {
+			return keys;
+		}
 	};
 
 	/**
