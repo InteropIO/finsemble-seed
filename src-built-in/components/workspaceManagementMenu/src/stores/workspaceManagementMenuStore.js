@@ -580,7 +580,7 @@ Actions = {
 		let { workspaceExists, workspaceName, template } = params;
 
 		let dialogParams = {
-			title: "Overwrite Workspace?",
+			title: "New Workspace",
 			question: "The workspace \"" + workspaceName + "\" already exists. A new workspace will be created.",
 			affirmativeResponseLabel: "OK",
 			showNegativeButton: false
