@@ -7,7 +7,8 @@ const data = {
 
 function createStore(done) {
 	FSBL.Clients.DistributedStoreClient
-		.getStore({ store: "Finsemble-AppLauncher-Store",
+		.getStore({
+			store: "Finsemble-AppLauncher-Store",
 			global: true
 		}, (error, store) => {
 			launcherStore = store;
@@ -16,10 +17,11 @@ function createStore(done) {
 		});
 }
 
-function getStore(){
+function getStore() {
 	return launcherStore;
+};
 
 export {
 	createStore,
 	getStore
-};
+}

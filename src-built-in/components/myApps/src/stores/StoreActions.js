@@ -38,8 +38,8 @@ const MY_APPS = "My Apps";
 const data = {};
 
 function initialize(callback = Function.prototype) {
-	FSBL.Clients.ConfigClient.getValue({ field: "finsemble.FD3CServer" }, function (err, FD3CServer) {
-		FDC3Client = new FDC3({ url: FD3CServer });
+	FSBL.Clients.ConfigClient.getValue({ field: "finsemble.FDC3Server" }, function (err, FDC3Server) {
+		FDC3Client = new FDC3({ url: FDC3Server });
 		appd = new AppDirectory(FDC3Client);
 
 		const store = getStore();

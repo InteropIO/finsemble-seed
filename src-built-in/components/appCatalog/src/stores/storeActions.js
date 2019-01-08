@@ -27,15 +27,15 @@ export default {
 
 let ToolbarStore;
 const data = {};
-let FDC3Client ;
+let FDC3Client;
 let appd;
 
 function initialize(done = Function.prototype) {
-	FSBL.Clients.ConfigClient.getValue({ field: "finsemble.FD3CServer" }, function (err, FD3CServer) {
-		FDC3Client = new FDC3({url: FD3CServer});
+	FSBL.Clients.ConfigClient.getValue({ field: "finsemble.FDC3Server" }, function (err, FDC3Server) {
+		FDC3Client = new FDC3({ url: FDC3Server });
 		appd = new AppDirectory(FDC3Client);
-	
-	
+
+
 		const store = getStore();
 		data.apps = store.values.apps;
 		store.getValue({ field: "appFolders.folders" }, (err, folders) => {
@@ -203,7 +203,7 @@ function addApp(id) {
 	data.folders[MY_APPS].apps[appID] = installed[appID];
 	data.folders[folder].apps[appID] = installed[appID];
 	FSBL.Clients.LauncherClient.registerComponent({
-		componentType:installed[appID].name,
+		componentType: installed[appID].name,
 		manifest: installed[appID].manifest
 	}, (err, response) => {
 		getStore().setValues([
@@ -257,7 +257,7 @@ function removeApp(id) {
 			console.warn("Error removing pin for deleted app");
 			return;
 		}
-		FSBL.Clients.LauncherClient.unRegisterComponent({componentType:installed[id].name});
+		FSBL.Clients.LauncherClient.unRegisterComponent({ componentType: installed[id].name });
 		for (const key in data.folders) {
 			if (folders[key].apps[id]) {
 				delete folders[key].apps[id];
@@ -368,8 +368,8 @@ function clearTags() {
  * Calls appD to search the directory of apps based on search text and tag names
  * @param {string} terms The search terms provided by the user
  */
-function searchApps(terms,cb = Function.prototype) {
-	if(!terms || terms.length === 0 ){
+function searchApps(terms, cb = Function.prototype) {
+	if (!terms || terms.length === 0) {
 		getStore().setValue({
 			field: "filteredApps",
 			value: []

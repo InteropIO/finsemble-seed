@@ -12,6 +12,7 @@
 			"IndexedDBAdapter": "$applicationRoot/adapters/indexedDBAdapter.js"
 		}
 	},
+	"FDC3Server": "https://fpe.finsemble.com/v1/",
 	"servicesConfig": {
 		"distributedStore": {
 			"initialStores": [
@@ -101,7 +102,7 @@
 						}
 					},
 					"default": {
-  					"activeLauncherTags": [],
+						"activeLauncherTags": [],
 						"filterText": "",
 						"filterTags": [],
 						"activeFolder": "My Apps",
