@@ -40,6 +40,39 @@
 				}
 			}
 		},
+		"WPFDemo": {
+			"window": {
+				"id": "WPF1",
+				"windowType": "native",
+				"alias": "WPFDemo",
+				"url": "",
+				"defaultHeight": 600,
+				"autoShow": true,
+				"alwaysOnTop": false,
+				"resizable": true,
+				"showTaskbarIcon": false,
+				"contextMenu": true,
+				"addToWorkspace": true
+			},
+			"foreign": {
+				"services": {
+					"workspaceService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"showLinker": true
+					},
+					"Toolbar": {
+						"iconURL": "$applicationRoot/components/assets/img/notepad.png"
+					}
+				}
+			}
+		},
 		"nonConfiguredComponent": {
 			"window": {
 				"url": "$applicationRoot/components/nonConfiguredComponent/nonConfiguredComponent.html",
