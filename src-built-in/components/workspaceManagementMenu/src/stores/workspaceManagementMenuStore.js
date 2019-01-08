@@ -581,7 +581,7 @@ Actions = {
 
 		let dialogParams = {
 			title: "New Workspace",
-			question: "The workspace \"" + workspaceName + "\" already exists. A new workspace will be created.",
+			question: "The workspace \"" + workspaceName + "\" already exists. A new workspace with a modified name will be created.",
 			affirmativeResponseLabel: "OK",
 			showNegativeButton: false
 		};
