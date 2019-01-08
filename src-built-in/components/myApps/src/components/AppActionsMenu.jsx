@@ -4,13 +4,13 @@
 *
 */
 
-import React from 'react'
-import storeActions from '../stores/StoreActions'
-import { default as catalogActions } from '../../../appCatalog/src/stores/storeActions';
+import React from "react";
+import storeActions from "../stores/StoreActions";
+import { default as catalogActions } from "../../../appCatalog/src/stores/storeActions";
 
-const MY_APPS = 'My Apps'
-const FAVORITES = 'Favorites'
-const FDC3 = 'FDC3'
+const MY_APPS = "My Apps";
+const FAVORITES = "Favorites";
+const FDC3 = "FDC3";
 
 /**
  * Displays a list of actions like 'View info', 'Add to favorite'
@@ -19,27 +19,27 @@ const FDC3 = 'FDC3'
 export default class AppActionsMenu extends React.Component {
 
 	constructor(props) {
-		super(props)
+		super(props);
 		this.state = {
 			isVisible: false
-		}
+		};
 		// Bind correct context
-		this.onAddToFavorite = this.onAddToFavorite.bind(this)
+		this.onAddToFavorite = this.onAddToFavorite.bind(this);
 		this.onRemoveFromFavorite = this.onRemoveFromFavorite.bind(this);
-		this.onViewInfo = this.onViewInfo.bind(this)
-		this.toggleMenu = this.toggleMenu.bind(this)
-		this.onRemove = this.onRemove.bind(this)
-		this.setMenuRef = this.setMenuRef.bind(this)
-		this.deleteApp = this.deleteApp.bind(this)
-		this.handleClickOutside = this.handleClickOutside.bind(this)
+		this.onViewInfo = this.onViewInfo.bind(this);
+		this.toggleMenu = this.toggleMenu.bind(this);
+		this.onRemove = this.onRemove.bind(this);
+		this.setMenuRef = this.setMenuRef.bind(this);
+		this.deleteApp = this.deleteApp.bind(this);
+		this.handleClickOutside = this.handleClickOutside.bind(this);
 	}
 
 	componentDidMount() {
-		document.addEventListener('mousedown', this.handleClickOutside);
+		document.addEventListener("mousedown", this.handleClickOutside);
 	}
 
 	componentWillUnmount() {
-		document.removeEventListener('mousedown', this.handleClickOutside);
+		document.removeEventListener("mousedown", this.handleClickOutside);
 	}
 
 	toggleMenu(e) {
@@ -49,14 +49,14 @@ export default class AppActionsMenu extends React.Component {
 		}
 		this.setState({
 			isVisible: !this.state.isVisible
-		})
+		});
 	}
 
 	/**
 	 * Adds app to Favorites folder, then adds pin and hides the menu
 	 */
 	onAddToFavorite() {
-		storeActions.addAppToFolder(FAVORITES, this.props.app)
+		storeActions.addAppToFolder(FAVORITES, this.props.app);
 		storeActions.addPin(this.props.app);
 		this.toggleMenu();
 	}
@@ -66,7 +66,7 @@ export default class AppActionsMenu extends React.Component {
 	onRemoveFromFavorite() {
 		storeActions.removeAppFromFolder(FAVORITES, this.props.app);
 		storeActions.removePin(this.props.app);
-		this.toggleMenu()
+		this.toggleMenu();
 	}
 	/**
 	 * Opens app catalog and switches to the page when you see all
@@ -93,9 +93,9 @@ export default class AppActionsMenu extends React.Component {
 				setTimeout(() => {
 					FSBL.Clients.RouterClient.transmit("viewApp", {
 						app: this.props.app
-					})
+					});
 				}, 250);
-		});
+			});
 	}
 	/**
 	 * Calls the storeActions.removeAppFromFolder to remove
@@ -103,9 +103,9 @@ export default class AppActionsMenu extends React.Component {
 	 */
 	onRemove() {
 		storeActions.removeAppFromFolder(
-			this.props.folder,
-			this.props.app)
-		this.toggleMenu()
+			this.props.folder.name,
+			this.props.app);
+		this.toggleMenu();
 	}
 
 	setMenuRef(node) {
@@ -125,15 +125,15 @@ export default class AppActionsMenu extends React.Component {
 	 * from all folders and from apps list
 	 */
 	deleteApp() {
-		storeActions.deleteApp(this.props.app.appID)
+		storeActions.deleteApp(this.props.app.appID);
 	}
 
 	renderList() {
 		// The 'View info' action is only visible on apps
 		// that have the source property and with a value of FDC3
-		const apps = storeActions.getAllApps()
-		const app = apps[this.props.app.appID]
-		const folder = this.props.folder
+		const apps = storeActions.getAllApps();
+		const app = apps[this.props.app.appID];
+		const folder = this.props.folder;
 		let favoritesActionOnClick = this.props.isFavorite ? this.onRemoveFromFavorite : this.onAddToFavorite;
 		let favoritesText = this.props.isFavorite ? "Remove from Favorites" : "Add to Favorites";
 		return (
@@ -146,7 +146,7 @@ export default class AppActionsMenu extends React.Component {
 						<li onClick={this.onRemove}>Remove from {folder.name}</li>}
 				</ul>
 			</div>
-		)
+		);
 	}
 	render() {
 		return (
@@ -154,6 +154,6 @@ export default class AppActionsMenu extends React.Component {
 				<span><i className="ff-dots-vert" /></span>
 				{this.state.isVisible && this.renderList()}
 			</div>
-		)
+		);
 	}
 }

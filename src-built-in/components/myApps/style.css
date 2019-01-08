@@ -484,3 +484,6 @@ select:focus, option:focus {
 .add-app-form form {
     padding: 20px;
 }
+.link{
+    cursor: pointer;
+}

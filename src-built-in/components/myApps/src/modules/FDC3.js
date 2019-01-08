@@ -1,3 +1,4 @@
+
 /**
  * Copyright 2018 by ChartIQ, Inc.
  * All rights reserved.
@@ -21,10 +22,9 @@ export default class FDC3 {
      * @param {function} done The callback function
      */
 	_get(path, done) {
-
-            
 		fetch(this.config.url + path, {
-			method: "GET",
+			method: "GET"
+		
 		}).then((response) => {
 			response.json().then((data) => {
 				// We are expecting 200 here for data
@@ -52,6 +52,7 @@ export default class FDC3 {
 	_post(path, params, done) {
 		fetch(this.config.url + path, {
 			method: "POST",
+			credentials: "include",
 			body: JSON.stringify(params),
 			headers: {
 				"Content-Type": "application/json"

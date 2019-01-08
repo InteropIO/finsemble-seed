@@ -16,7 +16,7 @@
 		"distributedStore": {
 			"initialStores": [
 				{
-					"name": "Finsemble-AppLauncher-2",
+					"name": "Finsemble-AppLauncher-Store",
 					"foundation": {
 						"appFolders": {
 							"list": [
@@ -30,7 +30,7 @@
 									"disableUserRemove": true,
 									"apps": {
 										"1": {
-											"name": "Welcome",
+											"name": "Welcome Component",
 											"appID": "welcome-comp"
 										},
 										"2": {
@@ -39,11 +39,11 @@
 										},
 										"3": {
 											"name": "Process Monitor",
-											"appID": "3"
+											"appID": "pm"
 										},
 										"4": {
 											"name": "Notepad",
-											"appID": "4"
+											"appID": "note"
 										}
 									}
 								},
@@ -58,7 +58,7 @@
 						"appDefinitions": {
 							"welcome-comp": {
 								"appID": "welcome-comp",
-								"name": "Welcome",
+								"name": "Welcome Component",
 								"source": "FDC3",
 								"tags": [
 									"newrelease"
@@ -75,8 +75,8 @@
 								],
 								"icon": "ff-component"
 							},
-							"3": {
-								"appID": "3",
+							"pm": {
+								"appID": "pm",
 								"name": "Process Monitor",
 								"source": "FDC3",
 								"type": "component",
@@ -86,8 +86,8 @@
 								],
 								"icon": "ff-chart-alt-1"
 							},
-							"4": {
-								"appID": "4",
+							"note": {
+								"appID": "note",
 								"name": "Notepad",
 								"source": "FDC3",
 								"type": "component",
@@ -101,7 +101,7 @@
 						}
 					},
 					"default": {
-						"tags": [],
+  					"activeLauncherTags": [],
 						"filterText": "",
 						"filterTags": [],
 						"activeFolder": "My Apps",
