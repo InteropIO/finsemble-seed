@@ -18,7 +18,6 @@ function createStore(done) {
 
 function getStore(){
 	return launcherStore;
-}
 
 export {
 	createStore,

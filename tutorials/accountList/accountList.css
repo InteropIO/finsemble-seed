@@ -38,10 +38,11 @@ customer.selected {
 relocate {
 	display: block;
 	position: fixed;
-	bottom: 0px;
+	bottom: 25px;
 	text-align: center;
 	background-color: #eee;
 	cursor: pointer;
+	height: 34px;
 	margin: 20px;
 	padding: 10px;
 	background-color: #068de6;

@@ -19,20 +19,19 @@ import Carousel from './Carousel';
  * @param {func} props.viewAppShowcase Opens the AppShowcase page for a selected app
  */
 const Home = props => {
-
 	let carousel1 = props.cards.filter((card) => {
-		return card.tags.includes("Pizza");
+		return card.tags.includes("app");
 	});
 
 	let carousel2 = props.cards.filter((card) => {
-		return card.tags.includes("app");
+		return card.tags.includes("Pizza");
 	});
 
 	return (
 		<div className='home'>
 			<Hero cards={props.cards} viewAppShowcase={props.viewAppShowcase} />
-			<Carousel tag="Pizza" cards={carousel1} viewAppShowcase={props.viewAppShowcase} />
-			<Carousel tag="newrelease" cards={carousel2} viewAppShowcase={props.viewAppShowcase} />
+			<Carousel tag="app" cards={carousel1} viewAppShowcase={props.viewAppShowcase} />
+			<Carousel tag="Pizza" cards={carousel2} viewAppShowcase={props.viewAppShowcase} />
 		</div>
 	);
 }

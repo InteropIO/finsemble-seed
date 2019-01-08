@@ -60,12 +60,12 @@ export default class FoldersList extends React.Component {
 	onFocusRemove(event) {
 		// We don't want to hide the input if user clicked on it
 		// We only hide when the click is anywhere else in the document
-		if(event.target.id === 'rename') {
+		if (event.target.id === 'rename') {
 			return
 		}
 		// If focus removed and nothing was type, then just hide
 		// and consider it a rename cancel
-		if(!this.state.folderNameInput) {
+		if (!this.state.folderNameInput) {
 			// Cancel rename
 			this.setState({
 				renamingFolder: null
@@ -170,11 +170,10 @@ export default class FoldersList extends React.Component {
 			let nameField = folder.icon === 'ff-folder' && this.state.renamingFolder === folderName ?
 				<input id="rename" value={this.state.folderNameInput}
 					onChange={this.changeFolderName}
-					onKeyPress={this.keyPressed} className={this.state.isNameError ? "error" : ""} autoFocus /> : folderName
+					onKeyPress={this.keyPressed} className={this.state.isNameError ? "error" : ""} autoFocus /> : folderName;
 
-			return <FinsembleDraggable isDragDisabled={dragDisabled.indexOf(folderName) > -1}
-				draggableId={folderName}
-				key={index} index={index}>
+			//This DOM will be rendered within a draggable (if the folder can be dragged), and a plain ol div if it cannot be dragged.
+			const guts = (
 				<div onClick={(event) => this.onFolderClicked(event, folderName)}
 					onDrop={(event) => this.onAppDrop(event, folderName)}
 					className={className} key={index}>
@@ -186,8 +185,17 @@ export default class FoldersList extends React.Component {
 						<i className='ff-edit' onClick={this.renameFolder.bind(this, folderName)}></i>
 						<i className='ff-delete' onClick={this.deleteFolder.bind(this, folderName)}></i>
 					</span>}
+				</div>);
 
-				</div>
+			if (dragDisabled.indexOf(folderName) > -1) {
+				return (<div key={index}>
+					{guts}
+				</div>);
+			}
+			return <FinsembleDraggable isDragDisabled={dragDisabled.indexOf(folderName) > -1}
+				draggableId={folderName}
+				key={index} index={index}>
+				{guts}
 			</FinsembleDraggable>
 		})
 	}
