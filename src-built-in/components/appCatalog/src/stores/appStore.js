@@ -23,7 +23,6 @@ function createStore(done) {
             values: defaultValues,
             global: false
         }, (error, store) => {
-            debugger
             appCatalogStore = store
             done(null, appCatalogStore)
         })
@@ -31,6 +30,5 @@ function createStore(done) {
 
 
 function getStore() {
-    debugger
     return appCatalogStore
 }

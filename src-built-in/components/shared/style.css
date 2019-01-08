@@ -13,6 +13,12 @@
 	font-size: var(--menu-font-size);
     font-weight: var(--menu-font-weight);
 }
+
+/* Different positioning for the catalog vs the launcher. */
+.appMarket .tags-menu-wrapper {
+	top: 11px;
+	right: 9px;
+}
 .tags-menu-wrapper span {
 	line-height: 17px;
 	font-size: 10px;
