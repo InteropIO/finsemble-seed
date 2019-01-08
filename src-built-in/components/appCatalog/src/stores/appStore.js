@@ -8,26 +8,29 @@ export {
 }
 
 const defaultValues = {
-	apps: [],
-	filteredCards: [],
-	activeTags: [],
-	activeApp: null
+    apps: [],
+    filteredCards: [],
+    activeTags: [],
+    activeApp: null
 }
 
 let appCatalogStore
 
 function createStore(done) {
     FSBL.Clients.DistributedStoreClient
-        .createStore({ store: "AppCatalog-Store" + fin.desktop.Window.getCurrent().name,
-        values: defaultValues,
-        global: false
-     }, (error, store) => {
-        appCatalogStore = store
-        done(null, appCatalogStore)
-	})
+        .createStore({
+            store: "AppCatalog-Store" + fin.desktop.Window.getCurrent().name,
+            values: defaultValues,
+            global: false
+        }, (error, store) => {
+            debugger
+            appCatalogStore = store
+            done(null, appCatalogStore)
+        })
 }
 
 
 function getStore() {
+    debugger
     return appCatalogStore
 }
