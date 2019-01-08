@@ -5,12 +5,12 @@
 import React, { Component } from "react";
 
 //data
-import storeActions from '../stores/storeActions';
+import storeActions from "../stores/storeActions";
 
 //components
-import Toast from './Toast';
-import Tag from '../../../shared/Tag';
-import TagsMenu from '../../../shared/TagsMenu';
+import Toast from "./Toast";
+import Tag from "../../../shared/Tag";
+import TagsMenu from "../../../shared/TagsMenu";
 
 /**
  * The search bar, tags filter menu, and any active tage being filtered on
@@ -39,9 +39,9 @@ class SearchBar extends Component {
 	}
 	componentWillReceiveProps(nextProps) {
 		if ((nextProps.activeTags.length === 0 && !nextProps.backButton) || nextProps.isViewingApp) {
-			this.setState({
-				searchValue: ""
-			});
+			//this.setState({
+			//	searchValue: ""
+			//});
 		}
 	}
 	/**
@@ -95,8 +95,8 @@ class SearchBar extends Component {
 		}, this.props.goHome);
 	}
 	render() {
-
 		let tagListClass = "tag-selector-content";
+		
 		if (!this.state.tagSelectorOpen) {
 			tagListClass += " hidden";
 		}
@@ -106,13 +106,13 @@ class SearchBar extends Component {
 		return (
 			<div className='search-main'>
 				<Toast installationActionTaken={this.props.installationActionTaken} />
-				<div className="search-action-items">
+				 <div className="search-action-items">
 					{this.props.backButton ?
 						<div className='search-back' onClick={this.goHome}>
 							<i className='ff-arrow-back'></i>
 							<span className='button-label'>Back</span>
 						</div> : null}
-					<div className="search-input-container">
+					 <div className="search-input-container">
 						<i className='ff-search'></i>
 						<input className='search-input' type="text" value={this.state.searchValue} onChange={this.changeSearch} />
 					</div>

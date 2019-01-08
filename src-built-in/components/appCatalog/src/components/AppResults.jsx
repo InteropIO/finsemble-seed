@@ -5,8 +5,8 @@
 import React from "react";
 
 //components
-import EmptyResults from './EmptyResults';
-import AppCard from './AppCard';
+import EmptyResults from "./EmptyResults";
+import AppCard from "./AppCard";
 
 /**
  * The results page. Shown when filter tags are applied, search text is entered, or both.
@@ -41,7 +41,7 @@ const AppResults = props => {
 		}
 
 		return cardsForShowcase;
-	}
+	};
 
 	let cardsForShowcase = buildResultCards();
 
@@ -70,28 +70,28 @@ const AppResults = props => {
 		}
 
 		return cardRows;
-	}
+	};
 
 	if (cardsForShowcase.length === 0) return (<EmptyResults />);
-	else {
-		let cardRows = getCardRows();
+	
+	let cardRows = getCardRows();
 
-		return (
-			<div className='app-results'>
-				<table className='app-results-table'>
-					<tbody>
-						{cardRows.map((row, i) => {
-							return (
-								<tr key={"tablerow-" + i}>
-									{row}
-								</tr>
-							);
-						})}
-					</tbody>
-				</table>
-			</div>
-		);
-	}
-}
+	return (
+		<div className='app-results'>
+			<table className='app-results-table'>
+				<tbody>
+					{cardRows.map((row, i) => {
+						return (
+							<tr key={"tablerow-" + i}>
+								{row}
+							</tr>
+						);
+					})}
+				</tbody>
+			</table>
+		</div>
+	);
+	
+};
 
 export default AppResults;

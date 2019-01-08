@@ -5,17 +5,17 @@
 import React, { Component } from "react";
 
 //data
-import storeActions from '../../stores/storeActions';
+import storeActions from "../../stores/storeActions";
 
 //components
-import Modal from './Modal';
-import Header from './Header';
-import ImageCarousel from './ImageCarousel';
-import AppDescription from './AppDescription';
-import ReleaseNotes from './ReleaseNotes';
-import AppDevNotes from './AppDevNotes';
-import VersionNotes from './VersionNotes';
-import SupportNotes from './SupportNotes';
+import Modal from "./Modal";
+import Header from "./Header";
+import ImageCarousel from "./ImageCarousel";
+import AppDescription from "./AppDescription";
+import ReleaseNotes from "./ReleaseNotes";
+import AppDevNotes from "./AppDevNotes";
+import VersionNotes from "./VersionNotes";
+import SupportNotes from "./SupportNotes";
 import AppCard from "../AppCard";
 
 const imagesInCarousel = 4;
@@ -80,7 +80,7 @@ class AppShowcase extends Component {
 	 */
 	//NOTE: There is currently no prop in the FDC spec that has a dev site.
 	openSite() {
-		console.log('open the developers site');
+		console.log("open the developers site");
 	}
 	/**
 	 * Opens the image modal (lightbox). Sets the image to display
@@ -122,7 +122,6 @@ class AppShowcase extends Component {
 			images.push(imageUrl);
 			index++;
 		}
-
 		return (
 			<div className="app-showcase">
 				<Modal open={this.state.imageModalOpen} closeModal={this.closeModal}>
@@ -138,7 +137,7 @@ class AppShowcase extends Component {
 						</span>
 					</div>
 				)}
-				<Header iconUrl={iconUrl} name={name} entitled={this.state.entitled} installed={this.props.app.installed} appId={this.props.app.appId} />
+				<Header iconUrl={iconUrl} name={this.props.app.name} entitled={this.state.entitled} installed={this.props.app.installed} appId={this.props.app.appId} />
 
 				<ImageCarousel nextImage={this.nextImage} previousImage={this.previousImage} openModal={this.openModal} images={images} />
 
