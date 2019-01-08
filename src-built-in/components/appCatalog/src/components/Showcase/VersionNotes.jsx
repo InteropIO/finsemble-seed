@@ -3,6 +3,7 @@
 * All rights reserved.
 */
 import React from "react";
+import { DEFAULT_APP_VERSION } from "./defaults";
 
 /**
  * AppShowcase version notes section.
@@ -15,7 +16,7 @@ const VersionNotes = props => {
 			<div className="version-content">
 				<span className="showcase-label">Version</span>
 				<div className="version">
-					{props.version}
+					{props.version || DEFAULT_APP_VERSION}
 				</div>
 			</div>
 			<div className="updated-content">

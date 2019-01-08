@@ -1,5 +1,5 @@
 import React from 'react'
-import {getStore} from '../stores/LauncherStore'
+import { getStore } from '../stores/LauncherStore'
 
 const bottomEntries = [
 	{ name: 'New App', icon: 'ff-new-workspace', click: 'showAddAppForm' },
@@ -17,12 +17,7 @@ export default class LeftNavBottomLinks extends React.Component {
 	 * renders the AddNewAppForm component or removes it
 	 */
 	showAddAppForm() {
-		getStore().setValue({
-			field: 'isFormVisible',
-			value: true
-		}, (error, data) => {
-			error && console.log('Failed to set isFormVisible to true')
-		})
+		FSBL.Clients.DialogManager.open("AdhocComponentForm", {}, () => { });
 	}
 
 	render() {
