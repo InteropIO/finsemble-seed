@@ -1,11 +1,11 @@
 {
 	"comment": "Top-level application config for development, adding on top of the core config",
-	"defaultStorage": "LocalStorageAdapter",
+	"defaultStorage": "IndexedDBAdapter",
 	"storage": {
 		"topicToDataStoreAdapters": {
-			"finsemble": "LocalStorageAdapter",
-			"finsemble.workspace": "LocalStorageAdapter",
-			"finsemble.workspace.cache": "LocalStorageAdapter"
+			"finsemble": "IndexedDBAdapter",
+			"finsemble.workspace": "IndexedDBAdapter",
+			"finsemble.workspace.cache": "IndexedDBAdapter"
 		},
 		"dataStoreAdapters": {
 			"LocalStorageAdapter": "$applicationRoot/adapters/localStorageAdapter.js",
@@ -19,7 +19,10 @@
 					"name": "Finsemble-AppLauncher-2",
 					"foundation": {
 						"appFolders": {
-							"list": ["My Apps", "Favorites"],
+							"list": [
+								"My Apps",
+								"Favorites"
+							],
 							"folders": {
 								"My Apps": {
 									"icon": "ff-component",
@@ -48,7 +51,7 @@
 									"icon": "ff-favorite",
 									"type": "folder",
 									"disableUserRemove": true,
-									"apps" : {}
+									"apps": {}
 								}
 							}
 						},
@@ -98,7 +101,7 @@
 						}
 					},
 					"default": {
-					"tags": [],
+						"tags": [],
 						"filterText": "",
 						"filterTags": [],
 						"activeFolder": "My Apps",
@@ -107,108 +110,122 @@
 				}
 			]
 		},
-	"launcher": {
-		"staggerPixels": 40
-	},
-	"docking": {
-		"enabled": true,
-		"groupTileBuffer": 30,
-		"headerHeight": 32,
-		"MINIMUM_WIDTH": 175,
-		"defaultHeight": 39,
-		"defaultWidth": 600,
-		"tabbing": {
-			"enabled": true
+		"launcher": {
+			"staggerPixels": 40,
+			"unknownComponent": "nonConfiguredComponent"
 		},
-		"tiling": {
-			"enabled": true
+		"assimilation": {
+			"useOpenFinSpawn": false,
+			"enabled": true,
+			"blacklist": [],
+			"whitelist": [],
+			"onlySpawned": true,
+			"throttle": 10,
+			"focusDelay": 30,
+			"eventIgnore": 50
+		},
+		"docking": {
+			"enabled": true,
+			"groupTileBuffer": 30,
+			"headerHeight": 32,
+			"MINIMUM_WIDTH": 175,
+			"defaultHeight": 39,
+			"defaultWidth": 600,
+			"requireRectangularityForGroupResize": true,
+			"undockDisbandsEntireGroup": false,
+			"fillHolesOnUndock": true,
+			"tabbing": {
+				"enabled": true
+			},
+			"tiling": {
+				"enabled": true
+			}
+		},
+		"logger": {
+			"hotkeyShowCentralLogger": [
+				"ctrl",
+				"shift",
+				"L"
+			]
 		}
 	},
-	"logger": {
-		"hotkeyShowCentralLogger": [
-			"ctrl",
-			"shift",
-			"L"
+	"preferences": {
+		"workspaceService": {
+			"promptUserOnDirtyWorkspace": true
+		}
+	},
+	"systemTrayIcon": "$applicationRoot/assets/img/Finsemble_Taskbar_Icon.png",
+	"systemTrayComponent": "File Menu",
+	"Window Manager": {
+		"alwaysOnTopIcon": false,
+		"showTabs": true,
+		"showNativeTabs": true,
+		"floatingTitlebarComponent": "Floating Titlebar"
+	},
+	"betaFeatures": {
+		"assimilation": {
+			"useOpenFinSpawn": false,
+			"enabled": true,
+			"blacklist": [],
+			"whitelist": [],
+			"onlySpawned": true,
+			"throttle": 10,
+			"focusDelay": 30,
+			"eventIgnore": 50
+		}
+	},
+	"splinteringConfig": {
+		"comment": "A SplinterAgent is just an openfin application that is capable of spawning specific components/services. If you try to spawn a component/service that one of these agents does not cover, it will be spawned by the defaultAgent. You can also specify maxWindowsPerAgent if you would like to limit your agents to some ceiling. This is useful when you have a particularly heavy component.",
+		"enabled": true,
+		"splinterAgents": [
+			{
+				"agentLabel": "systemComponents",
+				"components": [
+					"Toolbar",
+					"App Launcher",
+					"Workspace Management Menu",
+					"linkerWindow",
+					"defaultAuthentication",
+					"dialogSignOn",
+					"dialogTemplate",
+					"dialogTest",
+					"File Menu",
+					"AdhocComponentForm",
+					"Process Monitor",
+					"Docking Move Mask",
+					"yesNo",
+					"singleInput",
+					"dialogModal",
+					"UserPreferences",
+					"App Catalog",
+					"searchMenu"
+				]
+			},
+			{
+				"agentLabel": "Tier2",
+				"services": [
+					"launcherService",
+					"authenticationService",
+					"workspaceService",
+					"storageService",
+					"searchService"
+				]
+			},
+			{
+				"agentLabel": "dockingService",
+				"services": [
+					"dockingService"
+				]
+			}
 		]
-	}
-},
-"preferences": {
-	"workspaceService": {
-		"promptUserOnDirtyWorkspace": false
-	}
-},
-"systemTrayIcon": "$applicationRoot/assets/img/Finsemble_Taskbar_Icon.png",
-"systemTrayComponent": "File Menu",
-"Window Manager": {
-	"alwaysOnTopIcon": false,
-	"showTabs": true,
-	"showNativeTabs": true,
-	"floatingTitlebarComponent": "Floating Titlebar"
-},
-"betaFeatures": {
-	"assimilation": {
-		"useOpenFinSpawn": false,
-		"enabled": true,
-		"blacklist": [],
-		"whitelist": [],
-		"onlySpawned": true,
-		"throttle": 10,
-		"focusDelay": 30,
-		"eventIgnore": 50
-	}
-},
-"splinteringConfig": {
-	"comment": "A SplinterAgent is just an openfin application that is capable of spawning specific components/services. If you try to spawn a component/service that one of these agents does not cover, it will be spawned by the defaultAgent. You can also specify maxWindowsPerAgent if you would like to limit your agents to some ceiling. This is useful when you have a particularly heavy component.",
-	"enabled": true,
-	"splinterAgents": [
-		{
-			"agentLabel": "systemComponents",
-			"components": [
-				"Toolbar",
-				"App Launcher",
-				"Workspace Management Menu",
-				"linkerWindow",
-				"defaultAuthentication",
-				"dialogSignOn",
-				"dialogTemplate",
-				"dialogTest",
-				"File Menu",
-				"AdhocComponentForm",
-				"Process Monitor",
-				"Docking Move Mask",
-				"yesNo",
-				"singleInput",
-				"dialogModal",
-				"UserPreferences",
-				"App Catalog",
-				"searchMenu"
-			]
-		},
-		{
-			"agentLabel": "Tier2",
-			"services": [
-				"launcherService",
-				"authenticationService",
-				"workspaceService",
-				"storageService",
-				"searchService"
-			]
-		},
-		{
-			"agentLabel": "dockingService",
-			"services": [
-				"dockingService"
-			]
-		}
+	},
+	"globalHotkeys": {},
+	"//": "importConfig contains components that are necessary to start Finsemble. All other components are loaded dynamically. See server/auth/test.json",
+	"importConfig": [
+		"$applicationRoot/configs/application/presentationComponents.json",
+		"$applicationRoot/configs/application/components.json",
+		"$applicationRoot/configs/application/workspaces.json",
+		"$applicationRoot/configs/application/workspaceTemplates.json",
+		"$applicationRoot/configs/application/services.json"
 	]
-},
-"globalHotkeys": {},
-"//": "importConfig contains components that are necessary to start Finsemble. All other components are loaded dynamically. See server/auth/test.json",
-"importConfig": [
-	"$applicationRoot/configs/application/presentationComponents.json",
-	"$applicationRoot/configs/application/components.json",
-	"$applicationRoot/configs/application/workspaces.json",
-	"$applicationRoot/configs/application/workspaceTemplates.json",
-	"$applicationRoot/configs/application/services.json"
-]
 }

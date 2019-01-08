@@ -1,7 +1,15 @@
-import finsemble from "@chartiq/finsemble";
+/**
+ * This file is a copy of the default IndexedDBAdapter adapter, the default storage model used by finsemble-seed.
+ * It's provided as an example. Feel free to modify, add to, or erase parts of it.
+ *
+ * Core Finsemble calls are written with key-value pair databases in mind. If you want to use a different database type, you will need to translate the key/value pairs passed in from finsemble so that you can successfully retrieve them at a later time.
+ */
 
-const BaseStorage = finsemble.models.baseStorage;
-const Logger = finsemble.Clients.Logger;
+/**
+ * We have a baseStorage model that provides some methods, such as `getCombinedKey`, which will return a nice key to save our value under. Example: `Finsemble:defaultUser:finsemble:activeWorkspace`. That key would hold the value of our activeWorkspace.
+ */
+const BaseStorage = require("@chartiq/finsemble").models.baseStorage;
+const Logger = require("@chartiq/finsemble").Clients.Logger;
 
 // Because calls to this storage adapter will likely come from many different windows, we will log successes and 
 // failures in the central logger.
@@ -12,6 +20,11 @@ Logger.start();
  * to the new schema.
  */
 const SCHEMA_VERSION = 1;
+
+/**
+ * Flag indicating that the IndexedDB connection is initialized. Will be set in releaseQueue after the connection has been created and any schema version changes applied.
+ */
+let initialized = false;
 
 // #region 
 /** 
@@ -58,13 +71,13 @@ IDBKeyRange.forPrefix = (prefix) => {
 // #endregion
 
 /**
- * IndexDB Storage Adapter.
+ * IndexedDB Storage Adapter.
  * 
  * We have a baseStorage model that provides some methods, such as `getCombinedKey`, which will return a nice key to 
  * save our value under. Example: `Finsemble:defaultUser:finsemble:activeWorkspace`. That key would hold the value of 
  * our activeWorkspace.
  */
-const IndexedDBAdapter = function () {
+const IndexedDBAdapter = function (uuid) {
 	// #region Initializes a new instance of the IndexedDBAdapter.
 	BaseStorage.call(this, arguments);
 
@@ -79,8 +92,8 @@ const IndexedDBAdapter = function () {
 	 */
 	this.queue = [];
 
-	Logger.system.debug("IndexedDBAdapter init");
-	console.debug("IndexedDBAdapter init");
+	Logger.system.log("IndexedDBAdapter init");
+	console.log("IndexedDBAdapter init");
 
 	// #region Initialize IndexedDB connection.
 	// Open the IndexedDB connection
@@ -104,8 +117,8 @@ const IndexedDBAdapter = function () {
 	};
 
 	request.onsuccess = (event) => {
-		Logger.system.debug("IndexedDBAdapter initialized successfully");
-		console.debug("IndexedDBAdapter initialized successfully");
+		Logger.system.log("IndexedDBAdapter initialized successfully");
+		console.log("IndexedDBAdapter initialized successfully");
 
 		this.db = event.target.result;
 		this.releaseQueue();
@@ -147,8 +160,9 @@ const IndexedDBAdapter = function () {
 	 * @private
 	 */
 	this.releaseQueue = () => {
-		Logger.system.debug(`IndexedDBAdapter.releaseQueue: ${this.queue.length} commands`);
-		console.debug(`IndexedDBAdapter.releaseQueue: ${this.queue.length} commands`);
+		initialized = true;
+		Logger.system.log(`IndexedDBAdapter.releaseQueue: ${this.queue.length} commands`);
+		console.log(`IndexedDBAdapter.releaseQueue: ${this.queue.length} commands`);
 
 		while (this.queue.length) {
 			const action = this.queue.shift();
@@ -161,7 +175,7 @@ const IndexedDBAdapter = function () {
 	 * particular user.
 	 */
 	this.clearCache = (params, cb) => {
-		if (!this.db) {
+		if (!initialized) {
 			Logger.system.debug("queuing", "clearCache", [params, cb]);
 			console.debug("queuing", "clearCache", [params, cb]);
 			this.queue.push({ method: "clearCache", args: [params, cb] });
@@ -170,25 +184,25 @@ const IndexedDBAdapter = function () {
 
 		const userPreface = this.getUserPreface(this);
 
-		Logger.system.debug("IndexedDBAdapter.clearCache for userPreface=" + userPreface);
-		console.debug("IndexedDBAdapter.clearCache for userPreface=" + userPreface);
+		Logger.system.log("IndexedDBAdapter.clearCache for userPreface=" + userPreface);
+		console.log("IndexedDBAdapter.clearCache for userPreface=" + userPreface);
 
 		const keyRange = IDBKeyRange.forPrefix(userPreface);
 		const objectStore = this.db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
 		const request = objectStore.delete(keyRange);
 
 		request.onsuccess = () => {
-			Logger.system.debug("IndexedDBAdapter.clearCache Success: userPreface=" + userPreface);
-			console.debug("IndexedDBAdapter.clearCache Success: userPreface=" + userPreface);
+			Logger.system.log("IndexedDBAdapter.clearCache Success: userPreface=" + userPreface);
+			console.log("IndexedDBAdapter.clearCache Success: userPreface=" + userPreface);
 
-			cb();
+			cb(null, { status: "success" });
 		};
 
 		request.onerror = (err) => {
 			Logger.system.error("IndexedDBAdapter.clearCache failed Error", err, "userPreface=" + userPreface);
 			console.error("IndexedDBAdapter.clearCache failed Error", err, "userPreface=" + userPreface);
 
-			return cb(err, { status: "failed" });
+			cb(err, { status: "failed" });
 		};
 	}
 
@@ -201,7 +215,7 @@ const IndexedDBAdapter = function () {
 	 * @param {function} cb callback to be invoked upon completion
 	 */
 	this.delete = (params, cb) => {
-		if (!this.db) {
+		if (!initialized) {
 			Logger.system.debug("queuing", "delete", [params, cb]);
 			console.debug("queuing", "delete", [params, cb]);
 			this.queue.push({ method: "delete", args: [params, cb] });
@@ -227,7 +241,7 @@ const IndexedDBAdapter = function () {
 			Logger.system.error("IndexedDBAdapter.delete key=" + combinedKey + ", Error", err);
 			console.error("IndexedDBAdapter.delete key=" + combinedKey + ", Error", err);
 
-			return cb(err, { status: "failed" });
+			cb(err, { status: "failed" });
 		};
 	}
 
@@ -236,15 +250,15 @@ const IndexedDBAdapter = function () {
 	 * @param {function} cb
 	 */
 	this.empty = (cb) => {
-		if (!this.db) {
+		if (!initialized) {
 			Logger.system.debug("queuing", "empty", [cb]);
 			console.debug("queuing", "empty", [cb]);
 			this.queue.push({ method: "empty", args: [cb] });
 			return;
 		}
 
-		Logger.system.debug("IndexedDBAdapter.empty");
-		console.debug("IndexedDBAdapter.empty");
+		Logger.system.log("IndexedDBAdapter.empty");
+		console.log("IndexedDBAdapter.empty");
 
 		const objectStore = this.db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
 		const request = objectStore.clear();
@@ -257,8 +271,8 @@ const IndexedDBAdapter = function () {
 		};
 
 		request.onsuccess = () => {
-			Logger.system.debug("IndexedDBAdapter.empty Success");
-			console.debug("IndexedDBAdapter.empty Success");
+			Logger.system.log("IndexedDBAdapter.empty Success");
+			console.log("IndexedDBAdapter.empty Success");
 
 			cb();
 		};
@@ -273,7 +287,7 @@ const IndexedDBAdapter = function () {
 	 * @param {function} cb callback to be invoked upon completion
 	 */
 	this.get = (params, cb) => {
-		if (!this.db) {
+		if (!initialized) {
 			Logger.system.debug("queuing", "get", [params, cb]);
 			console.debug("queuing", "get", [params, cb]);
 			this.queue.push({ method: "get", args: [params, cb] });
@@ -281,14 +295,15 @@ const IndexedDBAdapter = function () {
 		}
 
 		Logger.system.debug("IndexedDBAdapter.get, params: ", params);
-		console.debug("IndexedDBAdapter.get, params: ", params, cb);
+		console.debug("IndexedDBAdapter.get, params: ", params);
 
 		const combinedKey = this.getCombinedKey(this, params);
 		const objectStore = this.db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
 		const request = objectStore.get(combinedKey);
 
 		request.onsuccess = (event) => {
-			const data = event.target.result && event.target.result.value ? event.target.result.value : {};
+			let data;
+			if (event.target.result) data = event.target.result.value;
 
 			Logger.system.debug("IndexedDBAdapter.get for key=" + combinedKey + " data=", data);
 			console.debug("IndexedDBAdapter.get for key=" + combinedKey + " data=", data);
@@ -311,7 +326,7 @@ const IndexedDBAdapter = function () {
 	 * @param {function} cb
 	 */
 	this.keys = (params, cb) => {
-		if (!this.db) {
+		if (!initialized) {
 			Logger.system.debug("queuing", "keys", [params, cb]);
 			console.debug("queuing", "keys", [params, cb]);
 			this.queue.push({ method: "keys", args: [params, cb] });
@@ -341,7 +356,7 @@ const IndexedDBAdapter = function () {
 			Logger.system.error("Failed to retrieve IndexedDBAdapter.keys keyPreface=" + keyPreface + ", Error", err);
 			console.error("Failed to retrieve IndexedDBAdapter.keys keyPreface=" + keyPreface + ", Error", err);
 
-			return cb(err, { status: "failed" });
+			cb(err, { status: "failed" });
 		};
 	}
 
@@ -355,7 +370,7 @@ const IndexedDBAdapter = function () {
 	 * @param {function} cb callback to be invoked upon save completion
 	 */
 	this.save = (params, cb) => {
-		if (!this.db) {
+		if (!initialized) {
 			Logger.system.debug("queuing", "save", [params, cb]);
 			console.debug("queuing", "save", [params, cb]);
 			this.queue.push({ method: "save", args: [params, cb] });
@@ -388,3 +403,4 @@ const IndexedDBAdapter = function () {
 
 IndexedDBAdapter.prototype = new BaseStorage();
 new IndexedDBAdapter("IndexedDBAdapter");
+module.exports = IndexedDBAdapter;//Allows us to get access to the uninitialized object

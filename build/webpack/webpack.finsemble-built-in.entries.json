@@ -67,6 +67,10 @@
 		"output": "components/appCatalog/appCatalog",
 		"entry": "./src-built-in/components/appCatalog/src/app.jsx"
 	},
+	"nonConfiguredComponent": {
+		"output": "components/nonConfiguredComponent/nonConfiguredComponent",
+		"entry": "./src-built-in/components/nonConfiguredComponent/nonConfiguredComponent.js"
+	},
 	"processMonitor": {
 		"output": "components/processMonitor/processMonitor",
 		"entry": "./src-built-in/components/processMonitor/src/app.jsx"
