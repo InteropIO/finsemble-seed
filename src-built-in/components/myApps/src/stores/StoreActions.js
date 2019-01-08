@@ -154,7 +154,7 @@ function getFolders() {
 	return data.folders
 }
 
-function getFoldersList(){
+function getFoldersList() {
 	return data.foldersList
 }
 
@@ -172,12 +172,12 @@ function getSingleFolder(folderName) {
 
 function reorderFolders(destIndex, srcIndex) {
 	const movedFolder = data.foldersList[destIndex]
-    const remainingItems = data.foldersList.filter((item, index) => index !== destIndex)
-    data.foldersList = [
-        ...remainingItems.slice(0, srcIndex),
-        movedFolder,
-        ...remainingItems.slice(srcIndex)
-    ]
+	const remainingItems = data.foldersList.filter((item, index) => index !== destIndex)
+	data.foldersList = [
+		...remainingItems.slice(0, srcIndex),
+		movedFolder,
+		...remainingItems.slice(srcIndex)
+	]
 	_setValue('appFolders.list', data.foldersList)
 	return data.foldersList
 }
@@ -197,6 +197,7 @@ function addApp(app = {}, cb) {
 	FSBL.Clients.LauncherClient.addUserDefinedComponent(data.apps[appID], (compAddErr) => {
 		if (compAddErr) {
 			//TODO: We need to handle the error here. If the component failed to add, we should probably fall back and not add to launcher
+			cb({ code: "failed_to_add_app", message: compAddErr });
 			console.warn("Failed to add new app");
 			return;
 		}
@@ -216,8 +217,8 @@ function deleteApp(appID) {
 			return
 		}
 		// Delete app from any folder that has it
-		for(const key in data.folders) {
-			if(data.folders[key].apps[appID]) {
+		for (const key in data.folders) {
+			if (data.folders[key].apps[appID]) {
 				delete data.folders[key].apps[appID]
 			}
 		}
@@ -237,7 +238,7 @@ function addNewFolder(name) {
 	// Find folders that have a name of "New folder" or "New folder #"
 	data.foldersList.forEach((folder) => {
 		const numbers = folder.match(/\d+/g) || []
-		newFoldersNums.push( Math.max.apply(this, numbers) )
+		newFoldersNums.push(Math.max.apply(this, numbers))
 	})
 	const highestFolderNumber = Math.max.apply(this, newFoldersNums)
 	const folderName = name || `New folder ${highestFolderNumber + 1}`
@@ -247,7 +248,7 @@ function addNewFolder(name) {
 		apps: []
 	}
 	data.folders[folderName] = newFolder
-	_setFolders( () => {
+	_setFolders(() => {
 		// Update folders order if adding was successful
 		data.foldersList.push(folderName)
 		_setValue('appFolders.list', data.foldersList)
@@ -257,7 +258,7 @@ function addNewFolder(name) {
 
 function deleteFolder(folderName) {
 	// Check if user is trying to delete the active folder
-	if(folderName === data.activeFolder) {
+	if (folderName === data.activeFolder) {
 		data.activeFolder = MY_APPS
 		_setValue('activeFolder', data.activeFolder)
 	}
