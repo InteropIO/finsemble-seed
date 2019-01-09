@@ -73,6 +73,32 @@
 				}
 			}
 		},
+		"DotNetWindowLess": {
+			"window": {
+				"id": "DotNetWindowLess",
+				"windowType": "native",
+				"alias": "DotNetWindowLess",
+				"url": "",
+				"autoShow": false,
+				"addToWorkspace": false
+			},
+			"component": {
+				"spawnOnStartup": true,
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"workspaceService": {
+						"isArrangable": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					}
+				}
+			}
+		},
 		"nonConfiguredComponent": {
 			"window": {
 				"url": "$applicationRoot/components/nonConfiguredComponent/nonConfiguredComponent.html",

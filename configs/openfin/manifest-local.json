@@ -69,6 +69,12 @@
             "version": "3.6.0",
             "alias": "WPFDemo",
             "target": "FinsembleWPFDemo.exe"
+        },
+        {
+            "src": "https://files.chartiq.com/finsemble/DotNetWindowLessExample.zip",
+            "version": "3.6.0",
+            "alias": "DotNetWindowLess",
+            "target": "WindowlessExample.exe"
         }
     ],
     "finsemble": {
