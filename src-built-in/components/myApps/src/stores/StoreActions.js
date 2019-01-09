@@ -301,6 +301,7 @@ function addApp(app = {}, cb) {
 }
 
 function deleteApp(appID) {
+
 	ToolbarStore.removeValue({ field: "pins." + data.apps[appID].name.replace(/[.]/g, "^DOT^") }, (err, res) => {
 		if (err) {
 			//TODO: Need to gracefully handle this error. If the pin can't be removed, the app shouldn't either
