@@ -3,12 +3,14 @@
         "serverPort": 3375,
         "serverConfig": "http://localhost:3375/configs/openfin/manifest-local.json",
         "clientRoute": "http://localhost:3375/",
-        "channelAdapter": "openfin"
+        "channelAdapter": "openfin",
+        "e2odebug": true,
+        "breakpointOnStart": false
     },
     "production": {
         "serverPort": 3375,
         "serverConfig": "http://localhost:3375/configs/openfin/manifest-local.json",
         "clientRoute": "http://localhost:3375/",
-        "channelAdapter": "openfin"
+        "channelAdapter": "e2o"
     }
 }

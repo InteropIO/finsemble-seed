@@ -2,6 +2,18 @@
 /*!
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
+
+This file is compiled into windowTitleBar.js. Finsemble injects or preloads this file into all non-system
+components. The FSBLReady() code at the bottom of this page automatically runs when this file is injected.
+It looks for a fsbl-header DOM element in which to place the windowTitleBar (the react code in this jsx file).
+
+How does Finsemble know to inject this file? WindowClient is currently hard coded to look for a component
+called "windowTitleBar" in the config (presentationComponents.json). It then looks in the url field, which
+points to the compiled js for this file. That url is then passed to the WindowService which does the actual
+injection.
+
+We will likely clean that up in the future by moving code from WindowClient.ts into this file and using
+a config setting to drive the injection directly inside the WindowService.
 */
 import React from "react";
 import ReactDOM from "react-dom";
@@ -416,6 +428,7 @@ class WindowTitleBar extends React.Component {
 		);
 	}
 }
+
 
 // This is how we used to do it, but this was causing timing problems in windows that
 // reload, such as Symphony. FSBL.addEventListener() is a better approach because
