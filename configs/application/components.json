@@ -4,7 +4,9 @@
 		"Welcome Component": {
 			"window": {
 				"url": "$applicationRoot/components/welcome/welcome.html",
-				"affinity": "workspaceComponents",
+				"frame": false,
+				"resizable": true,
+				"autoShow": true,
 				"top": "center",
 				"left": "center",
 				"width": 400,
@@ -41,7 +43,9 @@
 		"nonConfiguredComponent": {
 			"window": {
 				"url": "$applicationRoot/components/nonConfiguredComponent/nonConfiguredComponent.html",
-				"affinity": "presentationComponents",
+				"frame": false,
+				"resizable": true,
+				"autoShow": true,
 				"top": "center",
 				"left": "center",
 				"width": 400,
@@ -81,6 +85,12 @@
 				"native": true,
 				"path": "notepad.exe",
 				"url": "",
+				"defaultHeight": 600,
+				"autoShow": true,
+				"alwaysOnTop": false,
+				"resizable": true,
+				"showTaskbarIcon": false,
+				"contextMenu": true,
 				"addToWorkspace": true
 			},
 			"component": {
