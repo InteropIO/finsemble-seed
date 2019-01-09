@@ -8,8 +8,6 @@ import storeActions from "../stores/StoreActions";
  * to spawn after a double click, helps us prevent multiple
  * spawns for the same app.
  */
-let pendingSpawn = false;
-
 export default class AppDefinition extends React.Component {
 
 	constructor(props) {
@@ -35,8 +33,6 @@ export default class AppDefinition extends React.Component {
 	 *
 	 */
 	onItemClick() {
-		if (pendingSpawn) { return; }
-		pendingSpawn = true;
 		//an immediate hide when the button was clicked felt like a bug. Add a nice timeout that's a little less than human reaction time. Feels nice.
 		setTimeout(() => {
 			finsembleWindow.hide();
@@ -48,14 +44,10 @@ export default class AppDefinition extends React.Component {
 		if (this.props.app.url) {
 			return FSBL.Clients.LauncherClient.spawn(null, {
 				url: this.props.app.url
-			}, () => {
-				pendingSpawn = false;
 			})
 		}
 		// Otherwise launch application by name
-		FSBL.Clients.LauncherClient.spawn(name, {}, (err, data) => {
-			pendingSpawn = false
-		});
+		FSBL.Clients.LauncherClient.spawn(name, {});
 	}
 
 	isFavorite() {
