@@ -2,7 +2,7 @@ import React from "react";
 import AppDefinition from "./AppDefinition";
 import NoAppsFound from "./NoAppsFound";
 import FilterSort from "./FilterSort";
-import {getStore} from "../stores/LauncherStore";
+import { getStore } from "../stores/LauncherStore";
 import storeActions from "../stores/StoreActions";
 import sortFunctions from "../utils/sort-functions";
 const MY_APPS = "My Apps";
@@ -34,7 +34,7 @@ export default class Content extends React.Component {
 		const folder = this.state.folder;
 		let apps;
 		if (folder.name === MY_APPS) {
-			apps = Object.values( storeActions.getAllApps());
+			apps = Object.values(storeActions.getAllApps());
 		} else {
 			apps = Object.values(folder.apps);
 		}
@@ -44,11 +44,11 @@ export default class Content extends React.Component {
 			return [];
 		}
 		const sortFunc = sortFunctions[this.state.sortBy];
-		const filteredApps =this.filterAppsByTags(sortFunc(apps));
+		const filteredApps = this.filterAppsByTags(sortFunc(apps));
 		if (!this.state.filterText) {
 			return filteredApps;
 		}
-		
+
 		return filteredApps.filter((app) => {
 			return app.name.toLowerCase().indexOf(this.state.filterText) !== -1;
 		});
@@ -105,22 +105,22 @@ export default class Content extends React.Component {
 
 	componentDidMount() {
 		//this.setStateValues();
-		store.addListener({field: "activeFolder"}, this.onActiveFolderChanged);
-		store.addListener({field: "filterText"}, this.onSearch);
-		store.addListener({field: "sortBy"}, this.onSort);
-		store.addListener({field: "activeLauncherTags"}, this.onTagsUpdate);
+		store.addListener({ field: "activeFolder" }, this.onActiveFolderChanged);
+		store.addListener({ field: "filterText" }, this.onSearch);
+		store.addListener({ field: "sortBy" }, this.onSort);
+		store.addListener({ field: "activeLauncherTags" }, this.onTagsUpdate);
 		// We can't subscribe to folders[index].appDefinitions
 		// So we are looking at appFolders.folders update
 		// Since that update is done After removing an app of definitions
-		store.addListener({field: "appFolders.folders"}, this.onAppListUpdate);
+		store.addListener({ field: "appFolders.folders" }, this.onAppListUpdate);
 	}
 
 	componentWillUnmount() {
-		store.removeListener({field: "activeFolder"}, this.onActiveFolderChanged);
-		store.removeListener({field: "filterText"}, this.onSearch);
-		store.removeListener({field: "sortBy"}, this.onSort);
-		store.removeListener({field: "activeLauncherTags"}, this.onTagsUpdate);
-		store.removeListener({field: "appFolders.folders"}, this.onAppListUpdate);
+		store.removeListener({ field: "activeFolder" }, this.onActiveFolderChanged);
+		store.removeListener({ field: "filterText" }, this.onSearch);
+		store.removeListener({ field: "sortBy" }, this.onSort);
+		store.removeListener({ field: "activeLauncherTags" }, this.onTagsUpdate);
+		store.removeListener({ field: "appFolders.folders" }, this.onAppListUpdate);
 	}
 
 	renderAppList() {
@@ -138,7 +138,7 @@ export default class Content extends React.Component {
 		};
 		if (!this.state.folder) { return ["Loading data...", <br />]; }
 		// User is searching so we need the search message
-		if (this.state.filterText) { return messages.search;; };
+		if (this.state.filterText || this.state.tags.length) { return messages.search; };
 		// Now let's check which folder is currently active
 		switch (this.state.folder.name) {
 			case "Favorites":
