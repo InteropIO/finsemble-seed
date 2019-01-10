@@ -63,6 +63,10 @@
 		"output": "components/welcome/welcome",
 		"entry": "./src-built-in/components/welcome/welcome.js"
 	},
+	"nonConfiguredComponent": {
+		"output": "components/nonConfiguredComponent/nonConfiguredComponent",
+		"entry": "./src-built-in/components/nonConfiguredComponent/nonConfiguredComponent.js"
+	},
 	"processMonitor": {
 		"output": "components/processMonitor/processMonitor",
 		"entry": "./src-built-in/components/processMonitor/src/app.jsx"
