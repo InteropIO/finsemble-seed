@@ -112,7 +112,7 @@ function loadInstalledComponentsFromStore(cb = Function.prototype) {
 		// We'll load our user defined components here
 		FSBL.Clients.LauncherClient.addUserDefinedComponent(component, (compAddErr) => {
 			if (compAddErr) {
-				console.warn("Failed to add new app");
+				console.warn("Failed to add new app:", compAddErr);
 			}
 			componentDone(compAddErr);
 		});
@@ -289,7 +289,7 @@ function addApp(app = {}, cb) {
 		if (compAddErr) {
 			//TODO: We need to handle the error here. If the component failed to add, we should probably fall back and not add to launcher
 			cb({ code: "failed_to_add_app", message: compAddErr });
-			console.warn("Failed to add new app");
+			console.warn("Failed to add new app:", compAddErr);
 			return;
 		}
 		// Save appDefinitions and then folders
