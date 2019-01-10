@@ -381,6 +381,7 @@ select:focus, option:focus {
 
   .app-item-title i {
     padding-right: 4px;
+    padding-top: 2px;
     color: var(--appMenu-app-icon-color);
   }
 

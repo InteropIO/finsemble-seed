@@ -37,10 +37,10 @@ class AppLauncher extends React.Component {
 	}
 	/**
 	 * Sets isFormVisible to true or false in state
-	 * isFormVisible is used to conditionally show/hide the 
+	 * isFormVisible is used to conditionally show/hide the
 	 * add new component form.
-	 * @param {objec} error 
-	 * @param {object} data 
+	 * @param {objec} error
+	 * @param {object} data
 	 */
 	toggleAddNewAppForm(error, data) {
 		this.setState({

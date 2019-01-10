@@ -276,9 +276,10 @@ function reorderFolders(destIndex, srcIndex) {
 function addApp(app = {}, cb) {
 	const appID = (new Date()).getTime();
 	const folder = data.activeFolder;
+	debugger
 	data.apps[appID] = {
 		appID,
-		tags: app.tags.split(","),
+		tags: app.tags !== "" ? app.tags.split(",") : [],
 		name: app.name,
 		url: app.url,
 		type: "component"

@@ -2,7 +2,7 @@ import React from "react";
 import AppActionsMenu from "./AppActionsMenu";
 import AppTagsList from "./AppTagsList";
 import storeActions from "../stores/StoreActions";
-
+const DEFAULT_APP_ICON = "ff-component";
 /**
  * Used to make sure that a user is not waiting for component
  * to spawn after a double click, helps us prevent multiple
@@ -57,13 +57,15 @@ export default class AppDefinition extends React.Component {
 
 	render() {
 		const app = this.props.app;
+		if (typeof (app.icon) === "undefined") app.icon = DEFAULT_APP_ICON;
 		return (
 			<div onClick={this.onItemClick} className="app-item link" draggable="true" onDragStart={this.onDragToFolder}>
 				<span className="app-item-title">
-					{app.icon !== undefined ? <i className={app.icon}></i> : null}
+					<i className={app.icon}></i>
 					<span >{app.name}</span> {this.isFavorite() && <i className='ff-favorite'></i>}
 				</span>
-				<AppTagsList tags={app.tags} />
+				{app.tags.length > 0 &&
+					<AppTagsList tags={app.tags} />}
 				<AppActionsMenu app={app} folder={this.props.folder} isFavorite={this.isFavorite()} />
 			</div>
 		);
