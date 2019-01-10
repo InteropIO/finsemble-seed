@@ -487,3 +487,8 @@ select:focus, option:focus {
 .link{
     cursor: pointer;
 }
+
+.input-error {
+    color: #f16767;
+    margin: .5em;
+}
