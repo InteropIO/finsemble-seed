@@ -315,11 +315,14 @@ function deleteApp(appID) {
 			}
 		}
 		// Delete app from the apps list
-		delete data.apps[appID];
-		// Save appDefinitions and then folders
-		_setValue("appDefinitions", data.apps, () => {
-			_setFolders();
+		FSBL.Clients.LauncherClient.removeUserDefinedComponent(data.apps[appID], () => {
+			delete data.apps[appID];
+			// Save appDefinitions and then folders
+			_setValue("appDefinitions", data.apps, () => {
+				_setFolders();
+			});
 		});
+
 	});
 }
 
