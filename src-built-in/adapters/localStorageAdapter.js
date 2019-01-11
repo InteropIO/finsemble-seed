@@ -10,7 +10,7 @@
  */
 const BaseStorage = require("@chartiq/finsemble").models.baseStorage;
 const Logger = require("@chartiq/finsemble").Clients.Logger;
-//Because calls to this storage adapter will likely come from many different windows, we will log successes and failures in the central logger.
+// Because calls to this storage adapter will likely come from many different windows, we will log successes and failures in the central logger.
 Logger.start();
 
 const LocalStorageAdapter = function (uuid) {
@@ -25,7 +25,7 @@ const LocalStorageAdapter = function (uuid) {
 	 * @param {string} params.topic A topic under which the data should be stored.
 	 * @param {string} params.key The key whose value is being set.
 	 * @param {any} params.value The value being saved.
-	 * @param {function} cb callback to be invoked upon save completion
+	 * @param {function} cb Callback to be invoked upon save completion.
 	 */
 	this.save = function (params, cb) {
 		Logger.system.debug("LocalStorageAdapter.save, params: ", params);
@@ -47,7 +47,7 @@ const LocalStorageAdapter = function (uuid) {
 	 * @param {object} params
 	 * @param {string} params.topic A topic under which the data should be stored.
 	 * @param {string} params.key The key whose value is being set.
-	 * @param {function} cb callback to be invoked upon completion
+	 * @param {function} cb Callback to be invoked upon completion.
 	 */
 	this.get = function (params, cb) {
 		let combinedKey = this.getCombinedKey(this, params);
@@ -65,7 +65,7 @@ const LocalStorageAdapter = function (uuid) {
 		}
 	};
 
-	// return prefix used to filter keys
+	// Return prefix used to filter keys.
 	this.getKeyPreface = function (self, params) {
 		let preface = self.baseName + ":" + self.userName + ":" + params.topic + ":";
 		if ("keyPrefix" in params) {
@@ -75,22 +75,45 @@ const LocalStorageAdapter = function (uuid) {
 	};
 
 	/**
-	 * Returns all keys stored in localstorage.
-	 * @param {*} params
-	 * @param {*} cb
+	 * Returns all keys stored in localstorage of a given topic and keyPrefix.
+	 * 
+	 * LocalStorage is synchronous, so the callback is optional (the function
+	 * immediately returns the results if the callback is ommitted).
+	 * 
+	 * @param {*} params An object that must include the topic and keyPrefix of the desired keys.
+	 * @param {*} cb An optional callback that will be passed any errors that occured and the found keys.
 	 */
 	this.keys = function (params, cb) {
+			/**
+			 * Daniel H. 1/3/2019 - Validate.args is still broken, so I'm doing it ad-hoc here.
+			 * @TODO Replace ad-hoc validation with Validate.args. */
+		let errMessage;
+		if (!params) {
+			errMessage = "You must pass params to localStorageAdapter.keys";
+		} else {
+			const missingArgs = params && ["topic", "keyPrefix"].filter(k => !params[k]);
+			if (missingArgs.length) {
+				errMessage = `Missing parameters to localStorageAdapter.keys: ${missingArgs.join(", ")}`;
+			}
+		}
+
+		if (errMessage) {
+			if (cb) {
+				cb(errMessage)
+			} else {
+				throw new Error(errMessage);
+			}
+		}
+
 		const keys = [];
 		const keyPreface = this.getKeyPreface(this, params);
 		try {
-			// regex to find all keys for this topic
-			const keysRegExp = new RegExp(keyPreface + ".*");
 
 			for (let i = 0, len = localStorage.length; i < len; ++i) {
 				const oneKey = localStorage.key(i);
 
-				// if key is for this topic then save it
-				if (keysRegExp.test(oneKey)) {
+				// If key is for this topic then save it
+				if (oneKey.startsWith(keyPreface)) {
 					// Remove keyPreface from the keys returned. Finsemble storage adapter methods add the preface back in.
 					const fsblKey = oneKey.replace(keyPreface, "");
 					keys.push(fsblKey);
@@ -112,7 +135,7 @@ const LocalStorageAdapter = function (uuid) {
 	 * @param {object} params
 	 * @param {string} params.topic A topic under which the data should be stored.
 	 * @param {string} params.key The key whose value is being deleted.
-	 * @param {function} cb callback to be invoked upon completion
+	 * @param {function} cb Callback to be invoked upon completion.
 	 */
 	this.delete = function (params, cb) {
 		let combinedKey = this.getCombinedKey(this, params);
