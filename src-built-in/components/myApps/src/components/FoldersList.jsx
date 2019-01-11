@@ -2,11 +2,14 @@ import React from 'react'
 import AddNewFolder from './AddNewFolder'
 import storeActions from '../stores/StoreActions'
 import { getStore } from '../stores/LauncherStore'
-import { FinsembleDraggable, FinsembleDialog } from '@chartiq/finsemble-react-controls'
+const { MY_APPS, DASHBOARDS, FAVORITES } = storeActions.getConstants();
+import {
+	FinsembleDraggable, FinsembleDialog,
+	FinsembleDnDContext,
+	FinsembleDroppable
+} from '@chartiq/finsemble-react-controls'
 
-const MY_APPS = 'My Apps'
-const DASHBOARDS = 'Dashboards'
-const FAVORITES = 'Favorites'
+const dragDisabled = storeActions.getDragDisabled()
 
 export default class FoldersList extends React.Component {
 
@@ -25,8 +28,17 @@ export default class FoldersList extends React.Component {
 		this.keyPressed = this.keyPressed.bind(this)
 		this.deleteFolder = this.deleteFolder.bind(this)
 		this.onFocusRemove = this.onFocusRemove.bind(this)
+		this.onDragEnd = this.onDragEnd.bind(this);
 	}
 
+	onDragEnd(event = {}) {
+		if (!event.destination) return;
+		//There are two items above the 0th item in the list. They aren't reorderable. We add 2 to the index so that it matches with reality. The source comes in properly but the destination needs to be offset.
+		let newIndex = event.destination.index;
+
+		storeActions.reorderFolders(event.source.index, newIndex);
+
+	}
 	onAppDrop(event, folder) {
 		event.preventDefault()
 		const app = JSON.parse(event.dataTransfer.getData('app'))
@@ -157,46 +169,63 @@ export default class FoldersList extends React.Component {
 		})
 	}
 
-	renderFoldersList() {
-		const dragDisabled = [MY_APPS, DASHBOARDS, FAVORITES]
+	/**
+	 * Given some data, renders the basic folder structure that cannot be unordered. Used for orderable folders too. Those just get wrapped in a Draggable
+	 * @param {*} folder
+	 * @param {*} folderName
+	 * @param {*} index
+	 */
+	renderFolder(folder, folderName, index) {
+		let className = 'complex-menu-section-toggle'
+		if (this.state.activeFolder === folderName) {
+			className += ' active-section-toggle'
+		}
+
+		let nameField = folder.icon === 'ff-folder' && this.state.renamingFolder === folderName ?
+			<input id="rename" value={this.state.folderNameInput}
+				onChange={this.changeFolderName}
+				onKeyPress={this.keyPressed} className={this.state.isNameError ? "error" : ""} autoFocus /> : folderName;
+
+		//This DOM will be rendered within a draggable (if the folder can be dragged), and a plain ol div if it cannot be dragged.
+		return (
+			<div onClick={(event) => this.onFolderClicked(event, folderName)}
+				onDrop={(event) => this.onAppDrop(event, folderName)}
+				className={className} key={index}>
+				<div className='left-nav-label'>
+					{folder.icon && <i className={folder.icon}></i>}
+					<div className="folder-name">{nameField}</div>
+				</div>
+				{folder.icon === 'ff-folder' && <span className='folder-action-icons'>
+					<i className='ff-edit' onClick={this.renameFolder.bind(this, folderName)}></i>
+					<i className='ff-delete' onClick={this.deleteFolder.bind(this, folderName)}></i>
+				</span>}
+			</div>);
+	}
+	/**
+	 * Render all folders that cannot be reordered.
+	 */
+	renderUnorderableFolders() {
+		let unorderableFolders = this.state.foldersList.filter(folderName => dragDisabled.includes(folderName));
 		const folders = storeActions.getFolders()
-		return this.state.foldersList.map((folderName, index) => {
+		return unorderableFolders.map((folderName, index) => {
 			const folder = folders[folderName]
-			let className = 'complex-menu-section-toggle'
-			if (this.state.activeFolder === folderName) {
-				className += ' active-section-toggle'
-			}
+			return this.renderFolder(folder, folderName, index)
+		})
+	}
 
-			let nameField = folder.icon === 'ff-folder' && this.state.renamingFolder === folderName ?
-				<input id="rename" value={this.state.folderNameInput}
-					onChange={this.changeFolderName}
-					onKeyPress={this.keyPressed} className={this.state.isNameError ? "error" : ""} autoFocus /> : folderName;
-
-			//This DOM will be rendered within a draggable (if the folder can be dragged), and a plain ol div if it cannot be dragged.
-			const guts = (
-				<div onClick={(event) => this.onFolderClicked(event, folderName)}
-					onDrop={(event) => this.onAppDrop(event, folderName)}
-					className={className} key={index}>
-					<div className='left-nav-label'>
-						{folder.icon && <i className={folder.icon}></i>}
-						<div className="folder-name">{nameField}</div>
-					</div>
-					{folder.icon === 'ff-folder' && <span className='folder-action-icons'>
-						<i className='ff-edit' onClick={this.renameFolder.bind(this, folderName)}></i>
-						<i className='ff-delete' onClick={this.deleteFolder.bind(this, folderName)}></i>
-					</span>}
-				</div>);
-
-			if (dragDisabled.indexOf(folderName) > -1) {
-				return (<div key={index}>
-					{guts}
-				</div>);
-			}
-			return <FinsembleDraggable isDragDisabled={dragDisabled.indexOf(folderName) > -1}
+	/**
+	 * Renders all folders that can be reordered (user created folders).
+	 */
+	renderOrderableFolders() {
+		let orderableFolders = this.state.foldersList.filter(folderName => !dragDisabled.includes(folderName));
+		const folders = storeActions.getFolders()
+		return orderableFolders.map((folderName, index) => {
+			const folder = folders[folderName]
+			return (<FinsembleDraggable
 				draggableId={folderName}
 				key={index} index={index}>
-				{guts}
-			</FinsembleDraggable>
+				{this.renderFolder(folder, folderName, index)}
+			</FinsembleDraggable>);
 		})
 	}
 
@@ -204,7 +233,12 @@ export default class FoldersList extends React.Component {
 		return (
 			<div className="top">
 				<div className='folder-list'>
-					{this.renderFoldersList()}
+					{this.renderUnorderableFolders()}
+					<FinsembleDnDContext onDragStart={this.onDragStart} onDragEnd={this.onDragEnd}>
+						<FinsembleDroppable direction="vertical" droppableId="folderList">
+							{this.renderOrderableFolders()}
+						</FinsembleDroppable>
+					</FinsembleDnDContext>
 				</div>
 				<AddNewFolder />
 			</div>

@@ -31,11 +31,28 @@ export default {
 	getTags,
 	addPin,
 	removePin,
-	getApp
+	getApp,
+	getDragDisabled,
+	getConstants
 };
 
-const MY_APPS = "My Apps";
 const data = {};
+
+
+//returns names of default folders.
+function getConstants() {
+	const MY_APPS = "My Apps";
+	const DASHBOARDS = 'Dashboards'
+	const FAVORITES = 'Favorites'
+	return { MY_APPS, DASHBOARDS, FAVORITES }
+}
+
+//Add to here if you want to disable dragging on a folder.
+function getDragDisabled() {
+	const { MY_APPS, DASHBOARDS, FAVORITES } = getConstants();
+	return [MY_APPS, DASHBOARDS, FAVORITES]
+
+}
 
 function initialize(callback = Function.prototype) {
 	FSBL.Clients.ConfigClient.getValue({ field: "finsemble.FDC3Server" }, function (err, FDC3Server) {
@@ -262,9 +279,14 @@ function getSingleFolder(folderName) {
 }
 
 function reorderFolders(destIndex, srcIndex) {
-	const movedFolder = data.foldersList[destIndex];
-	const remainingItems = data.foldersList.filter((item, index) => index !== destIndex);
+	//There are two types of folders: Those that can be arranged, and those that cannot. We don't want to reorder the folders relative to the unorderable folders. Split them out, and then combine them after doing the filtering/swapping.
+	const dragDisabled = getDragDisabled();
+	const unorderableFolders = data.foldersList.filter(folderName => dragDisabled.includes(folderName));
+	const orderableFolders = data.foldersList.filter(folderName => !dragDisabled.includes(folderName));
+	const movedFolder = orderableFolders[destIndex];
+	const remainingItems = orderableFolders.filter((item, index) => index !== destIndex);
 	data.foldersList = [
+		...unorderableFolders,
 		...remainingItems.slice(0, srcIndex),
 		movedFolder,
 		...remainingItems.slice(srcIndex)
