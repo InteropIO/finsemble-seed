@@ -69,6 +69,7 @@ class SearchMenu extends React.Component {
 			self.setState({
 				newList: true,
 				pref: false,
+				listChanged: true,
 				componentList: data.value || []
 			}, () => {
 				if (FTD) self.fitToDOM();
@@ -125,6 +126,8 @@ class SearchMenu extends React.Component {
 		var bestMatch = this.getBestMatch();//We need to find this ahead of time so that we don't render the best match in multiple locations
 		var totalElements = 0;// So we can decide if we want to use best match
 		var componentIndex = -1;
+		var listChanged = false;
+		listChanged = this.state.listChanged;
 		this.state.componentList.map(function (providerInfo, providerIndex) {
 			if (!providerInfo.data.length) return;
 
@@ -159,7 +162,7 @@ class SearchMenu extends React.Component {
 				</ProviderList >
 			)
 		})
-		if (!listElements.length) return <div className="no-results"> No Results Found</div>
+		if (!listElements.length && listChanged) return <div className="no-results"> No Results Found</div>
 		return <div >
 			{(totalElements >= 1 ? <div><div className="bestMatch searchHeader">Best Match</div>
 				<div>{(bestMatch ? bestMatch.component : null)}</div></div> : null)}
