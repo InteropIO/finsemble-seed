@@ -68,7 +68,10 @@ var Actions = {
 			return menuWindow.isShowing((err, showing) => {
 				if (showing) return;
 
-				Actions.positionSearchResults();
+				var textEmpty = JSON.parse(window.localStorage.getItem('textEmpty'));
+				if (!textEmpty)
+					Actions.positionSearchResults();
+				
 			});
 
 		}
@@ -86,6 +89,11 @@ var Actions = {
 			})
 		})
 	},
+
+	/**
+	 * Positions a dropdown window under the search bar containing the search results.
+	 *
+	 */
 	positionSearchResults() {
 		const inputContainer = document.getElementById("inputContainer");
 		if (inputContainer) {
@@ -104,7 +112,13 @@ var Actions = {
 			FSBL.Clients.Logger.error("No element with ID 'inputContainer' exists");
 		}
 	},
-	//handleClose gets called for several reasons. One of those is when the window starts moving. If it starts moving, an event is passed in. If the event is passed in, we don't want to animate the window. If it's just a blur, we'll animate the change in size.
+	
+	/**
+	 * handleClose gets called for several reasons. One of those is when the window starts moving. 
+	 * If it starts moving, an event is passed in. If the event is passed in, we don't want to animate the window.
+	 *  If it's just a blur, we'll animate the change in size.
+	 * @param {*} e
+	 */
 	handleClose(e) {
 		menuWindow.isShowing(function (err, showing) {
 			if (showing) {
@@ -120,6 +134,7 @@ var Actions = {
 				if (!menuWindow) return;
 				menuWindow.hide();
 			}
+			menuStore.setValue({ field: "active", value: false })
 		});
 
 	},
@@ -152,10 +167,24 @@ var Actions = {
 			Actions.setupWindow()
 		}
 	},
+
+	/**
+	 * Perform the search action
+	 * If there is no search text, don't show any results
+	 * @param {*} text
+	 * @returns
+	 */
 	search(text) {
-		if (text === "" || !text) return Actions.setList([]);
+		var updatedResults;
+		if (text === "" || !text) {
+			updatedResults =[];
+			updatedResults.textEmpty = true;
+			Actions.setList(updatedResults);
+			return menuWindow.hide();
+		}
 		FSBL.Clients.SearchClient.search({ text: text }, function (err, response) {
-			var updatedResults = [].concat.apply([], response)
+			updatedResults = [].concat.apply([], response)
+			updatedResults.textEmpty = false;
 			Actions.setList(updatedResults);
 			setTimeout(() => {
 				Actions.positionSearchResults();
