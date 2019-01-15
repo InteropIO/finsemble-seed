@@ -11,8 +11,6 @@ var activeSearchBar = false;
 var menuReference = {};
 var menuWindow = null;
 var control = null;
-var textEmpty = true;
-
 
 
 function mouseInElement(element, cb) {
@@ -50,7 +48,6 @@ var Actions = {
 		cb();
 	},
 	setFocus(bool, target) {
-		console.log("in setFocus, target, bool: ", target, bool)
 		focus = bool;
 		if (bool) {
 			if (window.outerWidth < 400) {
@@ -60,7 +57,6 @@ var Actions = {
 				})
 			}
 			menuStore.setValue({ field: "active", value: true })
-			menuStore.getValue({ field: "active"}, (err, value) => {console.log("value of field ", value)});
 			activeSearchBar = true;
 			if (!menuWindow) {
 				return this.setupWindow(() => {
@@ -69,25 +65,19 @@ var Actions = {
 			}
 			if (!menuWindow) return;
 			return menuWindow.isShowing((err, showing) => {
-				if (showing) return;
-
-				if (!textEmpty)
-					Actions.positionSearchResults();
-				
+				if (showing) return;				
+				Actions.positionSearchResults();				
 			});
 
 		}
 		activeSearchBar = false;
 		if (!menuWindow) {
-			console.log("menuWindow not found, handleClose");
 			return Actions.handleClose();
 		}
 		menuWindow.isShowing(function (err, showing) {
 			//if (!showing) return//console.log("not showing")
 			mouseInWindow(menuWindow, function (err, inBounds) {
-				console.log("mouseInWindow, before !inBounds calls handleClose");
 				if (!inBounds) {
-					console.log("in setFocus !inBounds, handleClose");
 					Actions.handleClose();
 				}
 			})
@@ -96,9 +86,11 @@ var Actions = {
 
 	/**
 	 * Positions a dropdown window under the search bar containing the search results.
-	 *
+	 * Returns immediately if the text is empty so a search results menu doesn't appear
 	 */
 	positionSearchResults() {
+		let text = document.getElementById("searchInput").innerHTML;
+		if (!text) return;
 		const inputContainer = document.getElementById("inputContainer");
 		if (inputContainer) {
 			const bounds = inputContainer.getBoundingClientRect();
@@ -124,23 +116,23 @@ var Actions = {
 	 * @param {*} e
 	 */
 	handleClose(e) {
-		console.log("in handleClose");
-		menuStore.setValue({ field: "active", value: false })
-		if (!menuWindow) return;
 		menuWindow.isShowing(function (err, showing) {
 			if (showing) {
-				console.log("close a window")
 				if (!e && cachedBounds) {
 					finsembleWindow.animate({ transitions: { size: { duration: 150, width: cachedBounds.width } } }, {}, () => {
 						cachedBounds = null;
 					});
 				}
-				window.getSelection().removeAllRanges();
-				document.getElementById("searchInput").blur();
-				menuStore.setValue({ field: "active", value: false })				
+				window.getSelection().removeAllRanges();								
+				if (!menuWindow) return;			
 				menuWindow.hide();
-			}			
+			}
+			//These lines handle closing the searchInput box. This needs to happen outside the isShowing show
+			// the search field will still close when there is no text string.
+			document.getElementById("searchInput").blur();
+			menuStore.setValue({ field: "active", value: false })		
 		});
+		
 	},
 
 	setupWindow(cb = Function.prototype) {
@@ -181,13 +173,11 @@ var Actions = {
 	search(text) {
 		var updatedResults;
 		if (text === "" || !text) {
-			textEmpty = true;
 			Actions.setList([]);
 			return menuWindow.hide();
 		}
 		FSBL.Clients.SearchClient.search({ text: text }, function (err, response) {
 			updatedResults = [].concat.apply([], response)
-			textEmpty = false;
 			Actions.setList(updatedResults);
 			setTimeout(() => {
 				Actions.positionSearchResults();
@@ -196,9 +186,7 @@ var Actions = {
 	},
 	menuBlur() {
 		mouseInElement(document.getElementById("searchInput"), function (err, inBounds) {
-			console.log("menuBlur, before !inBounds calls handleClose");
 			if (!inBounds) {
-				console.log(" menuBlur, !inBounds, handleClose");
 				Actions.handleClose();
 			}
 		})
@@ -236,7 +224,7 @@ function createStore(done) {
 				if (action.actionType === "menuBlur") {
 					Actions.menuBlur();
 				} else if (action.actionType === "clear") {
-					console.log("createStore.getValues, clear action: handleClose");
+					//console.log("createStore.getValues, clear action: handleClose");
 					Actions.handleClose();
 				}
 			});
@@ -262,7 +250,7 @@ function createStore(done) {
 	finsembleWindow.listenForBoundsSet();
 	finsembleWindow.addListener("startedMoving", Actions.handleClose);
 	finsembleWindow.addListener("blurred", function (event) {
-		console.log("Window blurred event fired");
+		//console.log("Window blurred event fired");
 		Actions.setFocus(false);
 	}, function () {
 	}, function (reason) {

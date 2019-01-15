@@ -109,7 +109,6 @@ export default class Search extends React.Component {
 		this.setState({ active: true, hotketSet: true })
 	}
 	focused(e) {
-		console.log("in focused");
 		function selectElementContents(el) {
 			var range = document.createRange();
 			range.selectNodeContents(el);
@@ -133,7 +132,6 @@ export default class Search extends React.Component {
 		}, 100);
 	}
 	blurred() {
-		console.log("in blurred");
 		//this.setState({ focus: false, saveText: document.getElementById("searchInput").textContent });
 		//document.getElementById("searchInput").innerHTML = ""; // Don't clear out the old search text
 		storeExports.Actions.setFocus(false)
