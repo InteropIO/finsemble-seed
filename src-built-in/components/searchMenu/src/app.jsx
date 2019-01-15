@@ -69,7 +69,6 @@ class SearchMenu extends React.Component {
 			self.setState({
 				newList: true,
 				pref: false,
-				textEmpty: data.value.textEmpty,
 				componentList: data.value || []
 			}, () => {
 				if (FTD) self.fitToDOM();
@@ -126,8 +125,6 @@ class SearchMenu extends React.Component {
 		var bestMatch = this.getBestMatch();//We need to find this ahead of time so that we don't render the best match in multiple locations
 		var totalElements = 0;// So we can decide if we want to use best match
 		var componentIndex = -1;
-		const textEmpty = (typeof this.state.textEmpty !== 'undefined') ? this.state.textEmpty : true;
-		window.localStorage.setItem('textEmpty', textEmpty);
 		this.state.componentList.map(function (providerInfo, providerIndex) {
 			if (!providerInfo.data.length) return;
 

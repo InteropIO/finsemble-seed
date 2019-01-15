@@ -11,6 +11,7 @@ var activeSearchBar = false;
 var menuReference = {};
 var menuWindow = null;
 var control = null;
+var textEmpty = true;
 
 
 
@@ -49,6 +50,7 @@ var Actions = {
 		cb();
 	},
 	setFocus(bool, target) {
+		console.log("in setFocus, target, bool: ", target, bool)
 		focus = bool;
 		if (bool) {
 			if (window.outerWidth < 400) {
@@ -58,6 +60,7 @@ var Actions = {
 				})
 			}
 			menuStore.setValue({ field: "active", value: true })
+			menuStore.getValue({ field: "active"}, (err, value) => {console.log("value of field ", value)});
 			activeSearchBar = true;
 			if (!menuWindow) {
 				return this.setupWindow(() => {
@@ -68,7 +71,6 @@ var Actions = {
 			return menuWindow.isShowing((err, showing) => {
 				if (showing) return;
 
-				var textEmpty = JSON.parse(window.localStorage.getItem('textEmpty'));
 				if (!textEmpty)
 					Actions.positionSearchResults();
 				
@@ -77,13 +79,15 @@ var Actions = {
 		}
 		activeSearchBar = false;
 		if (!menuWindow) {
+			console.log("menuWindow not found, handleClose");
 			return Actions.handleClose();
 		}
 		menuWindow.isShowing(function (err, showing) {
 			//if (!showing) return//console.log("not showing")
 			mouseInWindow(menuWindow, function (err, inBounds) {
-
+				console.log("mouseInWindow, before !inBounds calls handleClose");
 				if (!inBounds) {
+					console.log("in setFocus !inBounds, handleClose");
 					Actions.handleClose();
 				}
 			})
@@ -120,6 +124,9 @@ var Actions = {
 	 * @param {*} e
 	 */
 	handleClose(e) {
+		console.log("in handleClose");
+		menuStore.setValue({ field: "active", value: false })
+		if (!menuWindow) return;
 		menuWindow.isShowing(function (err, showing) {
 			if (showing) {
 				console.log("close a window")
@@ -130,13 +137,10 @@ var Actions = {
 				}
 				window.getSelection().removeAllRanges();
 				document.getElementById("searchInput").blur();
-				menuStore.setValue({ field: "active", value: false })
-				if (!menuWindow) return;
+				menuStore.setValue({ field: "active", value: false })				
 				menuWindow.hide();
-			}
-			menuStore.setValue({ field: "active", value: false })
+			}			
 		});
-
 	},
 
 	setupWindow(cb = Function.prototype) {
@@ -177,14 +181,13 @@ var Actions = {
 	search(text) {
 		var updatedResults;
 		if (text === "" || !text) {
-			updatedResults =[];
-			updatedResults.textEmpty = true;
-			Actions.setList(updatedResults);
+			textEmpty = true;
+			Actions.setList([]);
 			return menuWindow.hide();
 		}
 		FSBL.Clients.SearchClient.search({ text: text }, function (err, response) {
 			updatedResults = [].concat.apply([], response)
-			updatedResults.textEmpty = false;
+			textEmpty = false;
 			Actions.setList(updatedResults);
 			setTimeout(() => {
 				Actions.positionSearchResults();
@@ -193,11 +196,14 @@ var Actions = {
 	},
 	menuBlur() {
 		mouseInElement(document.getElementById("searchInput"), function (err, inBounds) {
+			console.log("menuBlur, before !inBounds calls handleClose");
 			if (!inBounds) {
+				console.log(" menuBlur, !inBounds, handleClose");
 				Actions.handleClose();
 			}
 		})
-	}
+	},
+
 };
 function searchTest(params, cb) {
 	//console.log("params", params)
@@ -230,6 +236,7 @@ function createStore(done) {
 				if (action.actionType === "menuBlur") {
 					Actions.menuBlur();
 				} else if (action.actionType === "clear") {
+					console.log("createStore.getValues, clear action: handleClose");
 					Actions.handleClose();
 				}
 			});
@@ -255,6 +262,7 @@ function createStore(done) {
 	finsembleWindow.listenForBoundsSet();
 	finsembleWindow.addListener("startedMoving", Actions.handleClose);
 	finsembleWindow.addListener("blurred", function (event) {
+		console.log("Window blurred event fired");
 		Actions.setFocus(false);
 	}, function () {
 	}, function (reason) {
