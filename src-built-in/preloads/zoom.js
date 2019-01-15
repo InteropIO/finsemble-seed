@@ -212,7 +212,7 @@ const runZoomHandler = () => {
 	// Create hot keys for zooming.
 	FSBL.Clients.HotkeyClient.addBrowserHotkey(["ctrl", "="], zoomIn);
 	//TODO: enable when finsemble supports mapping + key
-	//FSBL.Clients.HotkeyClient.addBrowserHotkey(["ctrl", "+"], zoomIn);
+	FSBL.Clients.HotkeyClient.addBrowserHotkey(["ctrl", "+"], zoomIn);
 	FSBL.Clients.HotkeyClient.addBrowserHotkey(["ctrl", "-"], zoomOut);
 	FSBL.Clients.HotkeyClient.addBrowserHotkey(["ctrl", "0"], resetZoom);
 
