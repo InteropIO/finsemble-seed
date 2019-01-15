@@ -13,6 +13,7 @@ var menuWindow = null;
 var control = null;
 
 
+
 function mouseInElement(element, cb) {
 	var elementBounds = element.getBoundingClientRect();
 	window.screenX;
@@ -77,6 +78,7 @@ var Actions = {
 		menuWindow.isShowing(function (err, showing) {
 			//if (!showing) return//console.log("not showing")
 			mouseInWindow(menuWindow, function (err, inBounds) {
+
 				if (!inBounds) {
 					Actions.handleClose();
 				}
@@ -118,6 +120,7 @@ var Actions = {
 	handleClose(e) {
 		menuWindow.isShowing(function (err, showing) {
 			if (showing) {
+				console.log("close a window")
 				if (!e && cachedBounds) {
 					finsembleWindow.animate({ transitions: { size: { duration: 150, width: cachedBounds.width } } }, {}, () => {
 						cachedBounds = null;
@@ -132,7 +135,7 @@ var Actions = {
 			document.getElementById("searchInput").blur();
 			menuStore.setValue({ field: "active", value: false })		
 		});
-		
+	
 	},
 
 	setupWindow(cb = Function.prototype) {
@@ -171,13 +174,12 @@ var Actions = {
 	 * @returns
 	 */
 	search(text) {
-		var updatedResults;
 		if (text === "" || !text) {
 			Actions.setList([]);
 			return menuWindow.hide();
 		}
 		FSBL.Clients.SearchClient.search({ text: text }, function (err, response) {
-			updatedResults = [].concat.apply([], response)
+			var updatedResults = [].concat.apply([], response)
 			Actions.setList(updatedResults);
 			setTimeout(() => {
 				Actions.positionSearchResults();
@@ -190,8 +192,7 @@ var Actions = {
 				Actions.handleClose();
 			}
 		})
-	},
-
+	}
 };
 function searchTest(params, cb) {
 	//console.log("params", params)
@@ -224,7 +225,6 @@ function createStore(done) {
 				if (action.actionType === "menuBlur") {
 					Actions.menuBlur();
 				} else if (action.actionType === "clear") {
-					//console.log("createStore.getValues, clear action: handleClose");
 					Actions.handleClose();
 				}
 			});
@@ -250,7 +250,6 @@ function createStore(done) {
 	finsembleWindow.listenForBoundsSet();
 	finsembleWindow.addListener("startedMoving", Actions.handleClose);
 	finsembleWindow.addListener("blurred", function (event) {
-		//console.log("Window blurred event fired");
 		Actions.setFocus(false);
 	}, function () {
 	}, function (reason) {

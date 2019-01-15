@@ -159,10 +159,7 @@ class SearchMenu extends React.Component {
 				</ProviderList >
 			)
 		})
-		//if (textEmpty)	return null;
-		if (!listElements.length) {
-			return <div className="no-results"> No Results Found</div>;
-		}
+		if (!listElements.length) return <div className="no-results"> No Results Found</div>
 		return <div >
 			{(totalElements >= 1 ? <div><div className="bestMatch searchHeader">Best Match</div>
 				<div>{(bestMatch ? bestMatch.component : null)}</div></div> : null)}
