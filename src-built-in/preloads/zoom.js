@@ -197,6 +197,12 @@ const getZoomLevelHandler = (err, zoomLevel) => {
  * Initializes the zoom handler.
  */
 const runZoomHandler = () => {
+	//ovrrriding openfin zoom function to do nothing
+	var finWindow = fin.desktop.Window.getCurrent();
+	finWindow.setZoomLevel  = function() {
+		//Dont do anything on openfin Zoom
+	}
+
 	// Insert the zoom pop up, if needed.
 	insertPopUp();
 
