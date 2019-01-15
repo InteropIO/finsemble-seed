@@ -130,8 +130,8 @@ var Actions = {
 				if (!menuWindow) return;			
 				menuWindow.hide();
 			}
-			//These lines handle closing the searchInput box. This needs to happen outside the isShowing show
-			// the search field will still close when there is no text string.
+			//These lines handle closing the searchInput box. As showing is only true when the search results
+			//menu opens, they need to be outside so the search inputbox will still close when there is no text string.
 			document.getElementById("searchInput").blur();
 			menuStore.setValue({ field: "active", value: false })		
 		});
