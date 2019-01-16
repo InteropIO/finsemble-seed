@@ -106,7 +106,7 @@ class SearchMenu extends React.Component {
 		this.state.componentList.map(function (providerInfo, index) {
 			providerInfo.data.map(function (component, index) {
 				var isBestMatch = !bestMatch || component.score < bestMatch.score;
-				if (isBestMatch) bestMatch = { component: component, score: component.score, index: index, provider: providerInfo.provider.displayName };
+				if (isBestMatch) bestMatch = { component: component, score: component.score, index: index, provider: providerInfo.provider.friendlyName };
 			})
 		});
 		return bestMatch;
@@ -132,7 +132,7 @@ class SearchMenu extends React.Component {
 				totalElements++
 				var isBestMatch = false;
 				var currentIndex = ++componentIndex;
-				if (providerInfo.provider.displayName === bestMatch.provider && bestMatch.component.name) {
+				if (providerInfo.provider.friendlyName === bestMatch.provider && bestMatch.component.name) {
 					isBestMatch = true;
 					componentIndex--;
 					currentIndex = -1;
@@ -152,7 +152,7 @@ class SearchMenu extends React.Component {
 				return item;
 			})
 			//Don't show provider if there are no items or the only item is the best match
-			var showProvider = (!elementList.length || (elementList.length === 1 && bestMatch.provider === providerInfo.provider.displayName)) ? false : true;
+			var showProvider = (!elementList.length || (elementList.length === 1 && bestMatch.provider === providerInfo.provider.friendlyName)) ? false : true;
 			listElements.push(
 				<ProviderList onClick={self.providerClick} key={"provider." + providerIndex} providerInfo={providerInfo} displayContainter={showProvider}>
 					{elementList}

@@ -227,14 +227,14 @@ var Actions = {
 		if (componentToToggle.component && componentToToggle.component.windowGroup) params.groupName = componentToToggle.component.windowGroup;
 
 		//Component developers can define a display name that will show instead of the component's type.
-		let displayName = componentType;
-		if (componentToToggle.component && componentToToggle.component.displayName) {
-			displayName = componentToToggle.component.displayName;
+		let friendlyName = componentType;
+		if (componentToToggle.component && componentToToggle.component.friendlyName) {
+			friendlyName = componentToToggle.component.friendlyName;
 		}
 
 		var thePin = {
 			type: "componentLauncher",
-			label: displayName,
+			label: friendlyName,
 			component: componentToToggle.group ? componentToToggle.list : componentType,
 			fontIcon: fontIcon,
 			icon: imageIcon,

@@ -30,7 +30,7 @@ export default class ProviderList extends React.Component {
 		return <div className="providerContainer" >
 			<div className="provider">
 				<div className="searchHeader">
-					{providerInfo.provider.displayName}
+					{providerInfo.provider.friendlyName}
 
 				</div>
 
