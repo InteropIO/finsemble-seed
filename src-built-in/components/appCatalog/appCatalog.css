@@ -192,8 +192,8 @@
 .app-card .ff-check-circle {
 	display: none;
 	position: absolute;
-	left: 10px;
-	top: 10px;
+	left: 15px;
+	top: 15px;
 	z-index: 1;
 	cursor: pointer;
 }

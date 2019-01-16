@@ -37,11 +37,11 @@ export default {
 };
 
 const data = {};
+const MY_APPS = "My Apps";
 
 
 //returns names of default folders.
 function getConstants() {
-	const MY_APPS = "My Apps";
 	const DASHBOARDS = 'Dashboards'
 	const FAVORITES = 'Favorites'
 	return { MY_APPS, DASHBOARDS, FAVORITES }
