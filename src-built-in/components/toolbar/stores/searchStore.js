@@ -54,7 +54,7 @@ var Actions = {
 			if (window.outerWidth < 400) {
 				finsembleWindow.getBounds((err, bounds) => {
 					cachedBounds = bounds;
-					finsembleWindow.animate({ transitions: { size: { duration: 150, width: 400 } } }, {}, Function.prototype);
+					finsembleWindow.animate({ transitions: { size: { duration: 150, width: 400 } } }, Function.prototype);
 				})
 			}
 			menuStore.setValue({ field: "active", value: true })
@@ -110,7 +110,7 @@ var Actions = {
 			if (showing) {
 				console.log("close a window")
 				if (!e && cachedBounds) {
-					finsembleWindow.animate({ transitions: { size: { duration: 150, width: cachedBounds.width } } }, {}, () => {
+					finsembleWindow.animate({ transitions: { size: { duration: 150, width: cachedBounds.width } } }, () => {
 						cachedBounds = null;
 					});
 				}
