@@ -342,7 +342,12 @@
 		},
 		launchOpenFin: done => {
 			ON_DEATH((signal, err) => {
-				exec("taskkill /F /IM openfin.* /T", (err, stdout, stderr) => {
+				// Check platform for appropriate kill command.
+				const killCommand = process.platform === "win32" ?
+					"taskkill /F /IM openfin.* /T" :
+					"kill -9 $(ps aux | grep openfin | grep -v grep | awk '{print $2}')";
+
+				exec(killCommand, (err, stdout, stderr) => {
 					// Only write the error to console if there is one and it is something other than process not found.
 					if (err && err !== 'The process "openfin.*" not found.') {
 						console.error(errorOutColor(err));
