@@ -11,6 +11,9 @@ import * as async from "async";
 var finWindow = fin.desktop.Window.getCurrent();
 //theses are constants that are set inside of setupStore. so they're declared as vars and not constantsa.
 let constants = {};
+
+FSBL.Clients.WindowClient.finsembleWindow.addListener("restored", () => console.log("I'm restoring now."));
+
 var Actions = {
 	initialize: function () {
 		// This ensures that our config is correct, even if the developer missed some entries
@@ -151,10 +154,8 @@ var Actions = {
 		/**
 		 * Catches a double-click on the title bar. If you don't catch this, openfin will invoke the OS-level maximize, which will put the window on top of the toolbar. `clickMaximize` will fill all of the space that finsemble allows.
 		 */
-		FSBL.Clients.WindowClient.finWindow.addEventListener("maximized", function () {
-			self.clickMaximize();
-		});
-
+		FSBL.Clients.WindowClient.finWindow.addEventListener("maximized", () => setTimeout(() => self.clickMaximize()), 0);
+	
 		//default title.
 		windowTitleBarStore.setValue({ field: "Main.windowTitle ", value: FSBL.Clients.WindowClient.getWindowTitle() });
 
@@ -409,17 +410,14 @@ var Actions = {
 	 * Maximizes the window.
 	 */
 	clickMaximize: function () {
-		var maxField = windowTitleBarStore.getValue({ field: "Maximize" });
-		if (finsembleWindow.windowState !== finsembleWindow.WINDOWSTATE.MAXIMIZED)
-			return FSBL.Clients.WindowClient.maximize(() => {
-				windowTitleBarStore.setValue({ field: "Maximize.maximized", value: true });
-			});
+		const shouldMaximize = finsembleWindow.windowState !== finsembleWindow.WINDOWSTATE.MAXIMIZED;
+		const cb = () => windowTitleBarStore.setValue({ field: "Maximize.maximized", value: shouldMaximize });
+		if (shouldMaximize) {
+			FSBL.Clients.WindowClient.maximize(cb);
+			return;
+		}
 
-		return FSBL.Clients.WindowClient.restore(() => {
-			windowTitleBarStore.setValue({ field: "Maximize.maximized", value: false });
-		});
-
-
+		FSBL.Clients.WindowClient.restore(cb);
 	},
 
 	getTabs() {

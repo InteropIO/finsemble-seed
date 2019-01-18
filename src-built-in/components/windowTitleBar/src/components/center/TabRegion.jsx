@@ -34,7 +34,9 @@ export default class TabRegion extends React.Component {
             hoverState: false,
             tabWidth: TAB_WIDTH
         };
-        this.bindCorrectContext();
+				this.bindCorrectContext();
+				
+				FSBL.Clients.WindowClient.finsembleWindow.addListener("restored", () => setTimeout(this.onWindowResize, 0));
     }
 
     /**
@@ -87,6 +89,8 @@ export default class TabRegion extends React.Component {
  * Resize handler. Calculates the space that the center-region is taking up. May be used to scale tabs proportionally.
  */
     onWindowResize() {
+			debugger;
+			console.log("I'm resizing from within TabRegion.jsx");
         let bounds = this.refs.Me.getBoundingClientRect();
         this.setState({
             boundingBox: bounds,
