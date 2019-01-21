@@ -23,9 +23,9 @@
     "splashScreenImage": "http://localhost:3375/assets/img/FinsembleSplash.png",
     "runtime": {
         "arguments": "--noerrdialogs  --v=4 --no-sandbox  --enable-crash-reporting --framestrategy=frames --winhttp-proxy-resolver",
-        "version": "8.56.28.36",
+        "version_of8": "8.56.28.36",
         "///": "This version of OF9 can be used but has stability problems with splintering",
-        "version_of9": "9.61.36.36",
+        "version": "9.61.36.36",
         "//": "Add these arguments when diagnosing issues",
         "--diagnostics": "Adding this to the runtimeArguments activates verbose logging and crash reporting.",
         "--disable-gpu": "This flag disables hardware acceleration. Try this if 'Blank Screen' issues are reported (sometimes on virtual desktops)",
@@ -75,6 +75,12 @@
             "version": "3.7.0",
             "alias": "DotNetWindowLess",
             "target": "WindowlessExample.exe"
+        },
+        {
+            "src": "https://files.chartiq.com/finsemble/MultiWindowDotNetExample3.7.0.zip",
+            "version": "3.7.0",
+            "alias": "MultiWindowExample",
+            "target": "MultiWindowExample.exe"
         }
     ],
     "finsemble": {
