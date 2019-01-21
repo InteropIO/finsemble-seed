@@ -36,7 +36,7 @@ export default class TabRegion extends React.Component {
         };
 				this.bindCorrectContext();
 				
-				FSBL.Clients.WindowClient.finsembleWindow.addListener("restored", () => setTimeout(this.onWindowResize, 0));
+				FSBL.Clients.WindowClient.finsembleWindow.addListener("restored", () => setTimeout(this.onWindowResize, 50));
     }
 
     /**
