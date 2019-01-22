@@ -392,7 +392,8 @@
 			logToTerminal(command);
 			electronProcess = exec(command,
 				{
-					cwd: e2oLocation
+					cwd: e2oLocation,
+					env: process.env,
 				}, function (err) {
 					logToTerminal(err);
 					logToTerminal("e2o not installed? Try `npm install`", "red");
