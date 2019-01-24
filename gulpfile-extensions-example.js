@@ -14,7 +14,9 @@ module.exports = taskMethods => {
     "use strict";
 
     const gulp = require("gulp");
-
+	const ON_DEATH = require("death")({ debug: false });
+	const path = require('path');
+	const { exec } = require("child_process");
     /** -------------------------------------- PRE ----------------------------------------
 	  * You can use this section to run code that should execute *before* any gulp tasks run.
 	  * For instance, if you need to spin up a server or run a shell command, do it here.
@@ -25,6 +27,69 @@ module.exports = taskMethods => {
 			// <------  Put your code to run "pre" tasks here
 			done();
 		});
+	};
+
+	/**
+	 * overwrite E2O to use 
+	 */
+	taskMethods.launchE2O = done => {
+		let electronProcess = null;
+		let manifest = taskMethods.startupConfig[process.env.NODE_ENV].serverConfig;
+		process.env.ELECTRON_DEV = true;
+		ON_DEATH((signal, err) => {
+
+			if (electronProcess) electronProcess.kill();
+
+			exec("taskkill /F /IM electron.* /T", (err, stdout, stderr) => {
+				// Only write the error to console if there is one and it is something other than process not found.
+				if (err && err !== 'The process "electron.*" not found.') {
+					console.error(errorOutColor(err));
+				}
+
+				if (watchClose) watchClose();
+				process.exit();
+			});
+		});
+
+		let e2oLocation = "node_modules/@chartiq/e2o";
+		let electronPath = path.join("..", "..", "electron", "dist", "electron.exe");
+		let debug = taskMethods.envOrArg("e2odebug");
+		let debugArg = "";
+		if (debug) {
+			debugArg = taskMethods.envOrArg("breakpointOnStart") ? " --inspect-brk=5858" : " --inspect=5858";
+		}
+		let command = "set ELECTRON_DEV=true && " + electronPath + " index.js --auth-server-whitelist='*' --remote-debugging-port=9090" + debugArg +  " --manifest " + manifest;
+		taskMethods.logToTerminal(command);
+		electronProcess = exec(command,
+			{
+				cwd: e2oLocation
+			}, function (err) {
+				taskMethods.logToTerminal(err);
+				taskMethods.logToTerminal("e2o not installed? Try `npm install`", "red");
+			}
+		);
+
+		electronProcess.stdout.on("data", function (data) {
+			console.log(data.toString());
+		});
+
+		electronProcess.stderr.on("data", function (data) {
+			console.error("stderr:", data.toString());
+		});
+
+		electronProcess.on("close", function (code) {
+			console.log("child process exited with code " + code);
+			//Server shouldn't shut down on exit because electron restart closes down electron and restarts in the background.
+			//Didn't want to remove the code in case problems are encountered in openfin with this change
+			// process.exit();
+		});
+
+		process.on('exit', function () {
+			//Server shouldn't shut down on exit because electron restart closes down electron and restarts in the background.
+			//Didn't want to remove the code in case problems are encountered in openfin with this change
+			// electronProcess.kill();
+		});
+		if (done) done();
 	};
 
 	/** --------------------------------------- CODE -------------------------------------
