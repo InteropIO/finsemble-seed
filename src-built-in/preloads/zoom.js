@@ -1,3 +1,17 @@
+/*
+	Finsemble Zoom preload, which adds support for: 
+	- Zoom hotkeys (Ctrl +, Ctrl -, Ctrl 0, Ctrl Mousewheel),
+	- A Chrome style popup showing the current zoom level,
+	- Global zoom configuration settings:
+	  - finsemble.Window Manager.zoom.timeout: how long to display the zoom popup for (default 3000ms)
+	  - finsemble.Window Manager.zoom.step: Zoom step size (default 0.1)
+	  - finsemble.Window Manager.zoom.min: Minimum zoom level (default 0.2)
+	  - finsemble.Window Manager.zoom.max Maximum zoom level (default 5)
+	- Zoom level being preserved in window state/workspaces
+
+	N.B. should not be used with OpenFin's window.options.accelerator.zoom option.
+*/
+
 // This global will contain our current zoom level
 window.fsblZoomLevel = 1;
 
@@ -197,11 +211,10 @@ const getZoomLevelHandler = (err, zoomLevel) => {
  * Initializes the zoom handler.
  */
 const runZoomHandler = () => {
-	//ovrrriding openfin zoom function to do nothing
-	var finWindow = fin.desktop.Window.getCurrent();
-	finWindow.setZoomLevel  = function() {
-		//Dont do anything on openfin Zoom
-	}
+	//Override OpenFin zoom function to do nothing 
+	  //which prevents manual use of this function which conflicts with zoom preload
+	  //N.B. window.options.accelerator.zoom setting is not affected by this and will still conflict with Zoom preload if set
+	FSBL.Clients.WindowClient.getCurrentWindow().setZoomLevel = function(level, callback, errorCallback) { callback(); }
 
 	// Insert the zoom pop up, if needed.
 	insertPopUp();
