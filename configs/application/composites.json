@@ -1,15 +1,24 @@
 {
     "composites": {
         "Sample Composite": {
-            "width": 800,
+            "width": 860,
             "height": 700,
             "top": 80,
             "left": 40,
             "components": [
                 {
+                  "component": "Composite Titlebar",
+                  "params": {
+                      "top": 0,
+                      "left": 0,
+                      "width": "100%",
+                      "height": 25
+                  }
+                },
+                {
                     "component": "Welcome Component",
                     "params": {
-                        "top": 0,
+                        "top": 25,
                         "left": 0,
                         "width": "50%",
                         "height": "50%"
@@ -18,8 +27,8 @@
                 {
                     "component": "Welcome Component",
                     "params": {
-                        "top": 0,
-                        "left": 400,
+                        "top": 25,
+                        "left": 430,
                         "width": "50%",
                         "height": "50%"
                     }
@@ -27,7 +36,7 @@
                 {
                     "component": "Welcome Component",
                     "params": {
-                        "top": 350,
+                        "top": 375,
                         "left": 0,
                         "width": "50%",
                         "height": "50%"
@@ -36,8 +45,8 @@
                 {
                     "component": "Welcome Component",
                     "params": {
-                        "top": 350,
-                        "left": 400,
+                        "top": 375,
+                        "left": 430,
                         "width": "50%",
                         "height": "50%"
                     }
