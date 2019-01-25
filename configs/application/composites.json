@@ -2,8 +2,8 @@
     "composites": {
         "Sample Composite": {
             "width": 800,
-            "height": 800,
-            "top": 40,
+            "height": 700,
+            "top": 80,
             "left": 40,
             "components": [
                 {
@@ -11,8 +11,8 @@
                     "params": {
                         "top": 0,
                         "left": 0,
-                        "width": 50,
-                        "height": 50
+                        "width": "50%",
+                        "height": "50%"
                     }
                 },
                 {
@@ -20,26 +20,26 @@
                     "params": {
                         "top": 0,
                         "left": 400,
-                        "width": 50,
-                        "height": 50
+                        "width": "50%",
+                        "height": "50%"
                     }
                 },
                 {
                     "component": "Welcome Component",
                     "params": {
-                        "top": 400,
+                        "top": 350,
                         "left": 0,
-                        "width": 50,
-                        "height": 50
+                        "width": "50%",
+                        "height": "50%"
                     }
                 },
                 {
                     "component": "Welcome Component",
                     "params": {
-                        "top": 400,
+                        "top": 350,
                         "left": 400,
-                        "width": 50,
-                        "height": 50
+                        "width": "50%",
+                        "height": "50%"
                     }
                 }
             ]
