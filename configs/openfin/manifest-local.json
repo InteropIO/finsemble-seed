@@ -59,8 +59,8 @@
     "fileName": "ChartIQ-local-installer",
     "appAssets": [
         {
-            "src": "https://connect2.chartiq.com/finsemble/Assimilation_3_6_0c.zip",
-            "version": "3.6.0c",
+            "src": "https://connect2.chartiq.com/finsemble/Assimilation_3_6_0d.zip",
+            "version": "3.6.0d",
             "alias": "assimilation",
             "target": "AssimilationMain.exe"
         },
