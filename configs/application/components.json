@@ -1,216 +1,216 @@
 {
-	"comment": "Sample component configuration",
-	"components": {
-		"Welcome Component": {
-			"window": {
-				"url": "$applicationRoot/components/welcome/welcome.html",
-				"frame": false,
-				"resizable": true,
-				"autoShow": true,
-				"top": "center",
-				"left": "center",
-				"width": 400,
-				"height": 432
-			},
-			"component": {
-				"inject": false,
-				"spawnOnStartup": false,
-				"preload": "$applicationRoot/preloads/zoom.js"
-			},
-			"foreign": {
-				"services": {
-					"dockingService": {
-						"canGroup": true,
-						"isArrangable": true
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"launchableByUser": true
-					},
-					"Window Manager": {
-						"showLinker": true,
-						"FSBLHeader": true,
-						"persistWindowState": true,
-						"title": "Welcome"
-					},
-					"Toolbar": {
-						"iconClass": "ff-component"
-					}
-				}
-			}
-		},
-		"nonConfiguredComponent": {
-			"window": {
-				"url": "$applicationRoot/components/nonConfiguredComponent/nonConfiguredComponent.html",
-				"frame": false,
-				"resizable": true,
-				"autoShow": true,
-				"top": "center",
-				"left": "center",
-				"width": 400,
-				"height": 432
-			},
-			"component": {
-				"inject": false,
-				"spawnOnStartup": false,
-				"category": "system"
-			},
-			"foreign": {
-				"services": {
-					"dockingService": {
-						"canGroup": true,
-						"isArrangable": true
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"launchableByUser": false
-					},
-					"Window Manager": {
-						"showLinker": false,
-						"FSBLHeader": true,
-						"persistWindowState": true,
-						"title": "Non Configured Component"
-					},
-					"Toolbar": {
-						"iconClass": "ff-component"
-					}
-				}
-			}
-		},
-		"Notepad": {
-			"window": {
-				"id": "Notepad",
-				"native": true,
-				"path": "notepad.exe",
-				"url": "",
-				"defaultHeight": 600,
-				"autoShow": true,
-				"alwaysOnTop": false,
-				"resizable": true,
-				"showTaskbarIcon": false,
-				"contextMenu": true,
-				"addToWorkspace": true
-			},
-			"component": {
-				"spawnOnHotkey": [
-					"ctrl",
-					"alt",
-					"n"
-				]
-			},
-			"foreign": {
-				"services": {
-					"workspaceService": {
-						"isArrangable": true
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"launchableByUser": true
-					},
-					"Window Manager": {
-						"persistWindowState": false,
-						"FSBLHeader": true
-					},
-					"Toolbar": {
-						"iconURL": "$applicationRoot/assets/img/notepad.png"
-					}
-				}
-			}
-		},
-		"Getting Started Tutorial": {
-			"window": {
-				"url": "https://www.chartiq.com/tutorials/?slug=finsemble-seed-project",
-				"height": 800,
-				"width": 1000
-			},
-			"component": {
-				"spawnOnStartup": false
-			},
-			"foreign": {
-				"services": {
-					"dockingService": {
-						"isArrangable": true
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"launchableByUser": false
-					},
-					"Window Manager": {
-						"persistWindowState": true,
-						"FSBLHeader": true,
-						"showLinker": false
-					}
-				}
-			}
-		},
-		"Finsemble Documentation": {
-			"window": {
-				"url": "http://documentation.chartiq.com/finsemble",
-				"left": "center",
-				"top": "center",
-				"height": 800,
-				"width": 1000
-			},
-			"component": {},
-			"foreign": {
-				"services": {
-					"dockingService": {
-						"isArrangable": true
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"launchableByUser": false
-					},
-					"Window Manager": {
-						"persistWindowState": false,
-						"FSBLHeader": true,
-						"showLinker": false
-					}
-				}
-			}
-		},
-		"defaultAuthentication": {
-			"window": {
-				"url": "$applicationRoot/components/authentication/defaultAuthentication.html",
-				"top": "center",
-				"left": "center",
-				"width": 358,
-				"height": 458,
-				"ephemeral": true,
-				"options": {
-					"autoShow": false
-				}
-			},
-			"component": {
-				"neededClients": [
-					"LauncherClient",
-					"AuthenticationClient",
-					"StorageClient"
-				],
-				"category": "system"
-			},
-			"foreign": {
-				"services": {
-					"dockingService": {
-						"isArrangable": false
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"launchableByUser": false
-					},
-					"Window Manager": {
-						"FSBLHeader": false,
-						"persistWindowState": false
-					}
-				}
-			}
-		},
+    "comment": "Sample component configuration",
+    "components": {
+        "Welcome Component": {
+            "window": {
+                "url": "$applicationRoot/components/welcome/welcome.html",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 400,
+                "height": 432
+            },
+            "component": {
+                "inject": false,
+                "spawnOnStartup": false,
+                "preload": "$applicationRoot/preloads/zoom.js"
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "showLinker": true,
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "title": "Welcome"
+                    },
+                    "Toolbar": {
+                        "iconClass": "ff-component"
+                    }
+                }
+            }
+        },
+        "nonConfiguredComponent": {
+            "window": {
+                "url": "$applicationRoot/components/nonConfiguredComponent/nonConfiguredComponent.html",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 400,
+                "height": 432
+            },
+            "component": {
+                "inject": false,
+                "spawnOnStartup": false,
+                "category": "system"
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": false
+                    },
+                    "Window Manager": {
+                        "showLinker": false,
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "title": "Non Configured Component"
+                    },
+                    "Toolbar": {
+                        "iconClass": "ff-component"
+                    }
+                }
+            }
+        },
+        "Notepad": {
+            "window": {
+                "id": "Notepad",
+                "native": true,
+                "path": "notepad.exe",
+                "url": "",
+                "defaultHeight": 600,
+                "autoShow": true,
+                "alwaysOnTop": false,
+                "resizable": true,
+                "showTaskbarIcon": false,
+                "contextMenu": true,
+                "addToWorkspace": true
+            },
+            "component": {
+                "spawnOnHotkey": [
+                    "ctrl",
+                    "alt",
+                    "n"
+                ]
+            },
+            "foreign": {
+                "services": {
+                    "workspaceService": {
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "persistWindowState": false,
+                        "FSBLHeader": true
+                    },
+                    "Toolbar": {
+                        "iconURL": "$applicationRoot/assets/img/notepad.png"
+                    }
+                }
+            }
+        },
+        "Getting Started Tutorial": {
+            "window": {
+                "url": "https://www.chartiq.com/tutorials/?slug=finsemble-seed-project",
+                "height": 800,
+                "width": 1000
+            },
+            "component": {
+                "spawnOnStartup": false
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": false
+                    },
+                    "Window Manager": {
+                        "persistWindowState": true,
+                        "FSBLHeader": true,
+                        "showLinker": false
+                    }
+                }
+            }
+        },
+        "Finsemble Documentation": {
+            "window": {
+                "url": "http://documentation.chartiq.com/finsemble",
+                "left": "center",
+                "top": "center",
+                "height": 800,
+                "width": 1000
+            },
+            "component": {},
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": false
+                    },
+                    "Window Manager": {
+                        "persistWindowState": false,
+                        "FSBLHeader": true,
+                        "showLinker": false
+                    }
+                }
+            }
+        },
+        "defaultAuthentication": {
+            "window": {
+                "url": "$applicationRoot/components/authentication/defaultAuthentication.html",
+                "top": "center",
+                "left": "center",
+                "width": 358,
+                "height": 458,
+                "ephemeral": true,
+                "options": {
+                    "autoShow": false
+                }
+            },
+            "component": {
+                "neededClients": [
+                    "LauncherClient",
+                    "AuthenticationClient",
+                    "StorageClient"
+                ],
+                "category": "system"
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "isArrangable": false
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": false
+                    },
+                    "Window Manager": {
+                        "FSBLHeader": false,
+                        "persistWindowState": false
+                    }
+                }
+            }
+        },
         "Composite Titlebar": {
             "window": {
                 "smallWindow": true,
@@ -249,6 +249,99 @@
                     }
                 }
             }
+        },
+        "Composites Menu": {
+            "component": {
+                "category": "system"
+            },
+            "window": {
+                "frame": false,
+                "alwaysOnTop": false,
+                "url": "$applicationRoot/components/composites-menu/index.html",
+                "width": 300,
+                "height": 400,
+                "ephemeral": true,
+                "options": {
+                    "autoShow": false
+                }
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "isArrangable": false,
+                        "shouldRegister": false
+                    }
+                },
+                "components": {
+                    "Window Manager": {
+                        "persistWindowState": false,
+                        "FSBLHeader": false,
+                        "showTabs": false
+                    }
+                }
+            }
+        },
+        "Composites Designer": {
+            "window": {
+                "url": "$applicationRoot/components/composites-designer/index.html",
+                "frame": false,
+                "autoShow": true,
+                "alwaysOnTop": true,
+                "top": "100px",
+                "left": "60px",
+                "width": 300,
+                "height": 650
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": false,
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": false
+                    },
+                    "Window Manager": {
+                        "title": "Composites Designer",
+                        "FSBLHeader": false,
+                        "persistWindowState": true,
+                        "showTabs": false
+                    },
+                    "Toolbar": {
+                        "iconClass": "cd"
+                    }
+                }
+            }
+        },
+        "Composites Canvas": {
+            "window": {
+                "url": "$applicationRoot/components/composites-designer/canvas/index.html",
+                "frame": false,
+                "alwaysOnTop": false,
+                "top": "100px",
+                "left": "380px",
+                "width": 800,
+                "height": 650
+            },
+            "foreign": {
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": false
+                    },
+                    "Window Manager": {
+                        "FSBLHeader": true,
+                        "title": "Composites Name",
+                        "persistWindowState": true,
+                        "showTabs": false
+                    },
+                    "Toolbar": {
+                        "iconClass": "cdc"
+                    }
+                }
+            }
         }
-	}
+    }
+}
 }
