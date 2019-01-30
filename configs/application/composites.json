@@ -1,79 +1,54 @@
 {
     "composites": {
         "Sample Composite": {
-            "width": 600,
-            "height": 800,
-            "top": "center",
-            "left": "center",
+            "width": 860,
+            "height": 700,
+            "top": 80,
+            "left": 40,
             "components": [
                 {
-                    "windowTitleBar": {
-                        "window": {
-                            "top": 0,
-                            "left": 0,
-                            "height": 25,
-                            "width": "100%"
-                        }
+                  "component": "Composite Titlebar",
+                  "params": {
+                      "top": 0,
+                      "left": 0,
+                      "width": "100%",
+                      "height": 25
+                  }
+                },
+                {
+                    "component": "Welcome Component",
+                    "params": {
+                        "top": 25,
+                        "left": 0,
+                        "width": "50%",
+                        "height": "50%"
                     }
                 },
                 {
-                    "Welcome Component": {
-                        "window": {
-                            "top": 25,
-                            "left": 0,
-                            "width": "50%",
-                            "height": "25%"
-                        }
+                    "component": "Welcome Component",
+                    "params": {
+                        "top": 25,
+                        "left": 430,
+                        "width": "50%",
+                        "height": "50%"
                     }
                 },
                 {
-                    "Welcome Component": {
-                        "window": {
-                            "top": 25,
-                            "left": "50%",
-                            "width": "50%",
-                            "height": "25%"
-                        }
+                    "component": "Welcome Component",
+                    "params": {
+                        "top": 375,
+                        "left": 0,
+                        "width": "50%",
+                        "height": "50%"
                     }
                 },
                 {
-                    "Welcome Component": {
-                        "window": {
-                            "top": "25%",
-                            "left": 0,
-                            "width": "100%",
-                            "height": "25%"
-                        }
-                    }
-                },
-                {
-                    "Welcome Component": {
-                        "window": {
-                            "top": "50%",
-                            "left": 0,
-                            "width": "100%",
-                            "height": "25%"
-                        }
-                    }
-                },
-                {
-                    "Welcome Component": {
-                        "window": {
-                            "top": "75%",
-                            "left": 0,
-                            "width": "30%",
-                            "height": "25%"
-                        }
-                    }
-                },
-                {
-                    "Welcome Component": {
-                        "window": {
-                            "top": "75%",
-                            "left": 0,
-                            "width": "70%",
-                            "height": "25%"
-                        }
+                    "component": "Welcome Component",
+                    "params": {
+                        "top": 375,
+                        "left": 430,
+                        "width": "50%",
+                        "height": "50%"
                     }
                 }
             ]
