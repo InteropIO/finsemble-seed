@@ -1,11 +1,11 @@
 {
 	"comment": "Top-level application config for development, adding on top of the core config",
-	"defaultStorage": "LocalStorageAdapter",
+	"defaultStorage": "IndexedDBAdapter",
 	"storage": {
 		"topicToDataStoreAdapters": {
-			"finsemble": "LocalStorageAdapter",
-			"finsemble.workspace": "LocalStorageAdapter",
-			"finsemble.workspace.cache": "LocalStorageAdapter"
+			"finsemble": "IndexedDBAdapter",
+			"finsemble.workspace": "IndexedDBAdapter",
+			"finsemble.workspace.cache": "IndexedDBAdapter"
 		},
 		"dataStoreAdapters": {
 			"LocalStorageAdapter": "$applicationRoot/adapters/localStorageAdapter.js",
@@ -21,7 +21,8 @@
 			}]
 		},
 		"launcher": {
-			"staggerPixels": 40
+			"staggerPixels": 40,
+			"unknownComponent": "nonConfiguredComponent"
 		},
 		"docking": {
 			"enabled": true,
@@ -30,6 +31,9 @@
 			"MINIMUM_WIDTH": 175,
 			"defaultHeight": 39,
 			"defaultWidth": 600,
+			"requireRectangularityForGroupResize": true,
+			"undockDisbandsEntireGroup": false,
+			"fillHolesOnUndock": true,
 			"tabbing": {
 				"enabled": true
 			},
@@ -47,7 +51,7 @@
 	},
 	"preferences": {
 		"workspaceService": {
-			"promptUserOnDirtyWorkspace": false
+			"promptUserOnDirtyWorkspace": true
 		}
 	},
 	"systemTrayIcon": "$applicationRoot/assets/img/Finsemble_Taskbar_Icon.png",
@@ -106,12 +110,6 @@
 					"storageService",
 					"searchService"
 				]
-			},
-			{
-				"agentLabel": "dockingService",
-				"services": [
-					"dockingService"
-				]
 			}
 		]
 	},
@@ -122,6 +120,7 @@
 		"$applicationRoot/configs/application/components.json",
 		"$applicationRoot/configs/application/workspaces.json",
 		"$applicationRoot/configs/application/workspaceTemplates.json",
+		"$applicationRoot/configs/application/composites.json",
 		"$applicationRoot/configs/application/services.json"
 	]
 }
