@@ -6,11 +6,11 @@ export default {
 }
 
 // The persistent store reference
-let store
+let store;
 /**
  * Returns store reference
  */
-function getStore(){
+function getStore() {
     return store
 }
 /**
@@ -19,7 +19,7 @@ function getStore(){
  */
 function prepareStore(cb) {
     FSBL.Clients.DistributedStoreClient
-        .getStore({
+        .createStore({
             store: "composites",
             global: true
         }, (error, storeObj) => {
@@ -32,7 +32,7 @@ function prepareStore(cb) {
  * @param {object} composite The composite object
  */
 function addComposite(compositeName, composite) {
-    store.setValue({field: compositeName, value: composite})
+    store.setValue({ field: compositeName, value: composite })
 }
 /**
  * Deletes a composite from the store
@@ -41,6 +41,6 @@ function addComposite(compositeName, composite) {
 function deleteComposite(compositeName) {
     // @TODO  Modify StoreModel so that it deletes the value
     // and not only nullify it
-    store.removeValue({field: compositeName})
+    store.removeValue({ field: compositeName })
 }
 

@@ -21,6 +21,10 @@ export default class App extends React.Component {
     }
     componentWillMount() {
         store = storeActions.getStore()
+        FSBL.Clients.WindowClient.fitToDOM(
+            {
+                maxHeight: 500
+            }, function () { });
         store.addListener(this.onCompositesUpdate)
     }
 
@@ -49,6 +53,11 @@ export default class App extends React.Component {
         if (!error) {
             this.setState({
                 composites: data.value.values
+            }, () => {
+                FSBL.Clients.WindowClient.fitToDOM(
+                    {
+                        maxHeight: 500
+                    }, function () { });
             })
         }
     }
