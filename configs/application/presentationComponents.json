@@ -700,6 +700,45 @@
 		"App Catalog": {
 			"window": {
 				"url": "$applicationRoot/components/appCatalog/appCatalog.html",
+				"frame": false,
+				"top": "center",
+				"left": "center",
+				"width": 800,
+				"height": 600,
+				"options": {
+					"autoShow": true,
+					"resizable": false,
+					"alwaysOnTop": true
+				}
+			},
+			"component": {
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"canGroup": false,
+						"isArrangable": false,
+						"shouldRegister": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"FSBLHeader": false,
+						"persistWindowState": false
+					},
+					"Toolbar": {
+						"iconClass": "UserPreferences"
+					}
+				}
+			}
+		},
+		"App Catalog2": {
+			"window": {
+				"url": "$applicationRoot/components/appCatalog2/appCatalog.html",
 				"width": 600,
 				"height": 700,
 				"options": {
