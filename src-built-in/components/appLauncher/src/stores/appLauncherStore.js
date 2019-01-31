@@ -48,7 +48,7 @@ var Actions = {
 		//When an app launcher button is clicked, it sends over the types of components that the app launcher can spawn. We assign that data to an object in the windowClient, and then use that to render the app launcher.
 		FSBL.Clients.RouterClient.subscribe(COMPONENT_UPDATE_CHANNEL, function (err, response) {
 
-			if (!FSBL.Clients.WindowClient.options.customData.spawnData) {FSBL.Clients.WindowClient.options.customData.spawnData = {};}
+			if (!FSBL.Clients.WindowClient.options.customData.spawnData) { FSBL.Clients.WindowClient.options.customData.spawnData = {}; }
 			Object.assign(FSBL.Clients.WindowClient.options.customData.spawnData, response.data);
 			if (firstTime) { // only update component list the first time to eliminate re-rendering the menu
 				Actions.getComponentList(cb);
@@ -186,9 +186,11 @@ var Actions = {
 						};
 					}
 					self.componentList[componentGroup].list[componentType] = componentList[componentType];
-					if (componentList[componentType].component.windowGroup) {componentList[componentType].params = {
-						groupName: componentList[componentType].component.windowGroup
-					};};
+					if (componentList[componentType].component.windowGroup) {
+						componentList[componentType].params = {
+							groupName: componentList[componentType].component.windowGroup
+						};
+					};
 				}
 			}
 			config.component.type = componentType;
@@ -225,7 +227,7 @@ var Actions = {
 
 		var pins = appLauncherStore.getValue("pins");
 		let params = { addToWorkspace: true, monitor: "mine" };
-		if (componentToToggle.component && componentToToggle.component.windowGroup) {params.groupName = componentToToggle.component.windowGroup;}
+		if (componentToToggle.component && componentToToggle.component.windowGroup) { params.groupName = componentToToggle.component.windowGroup; }
 		var thePin = {
 			type: "componentLauncher",
 			label: componentType,
@@ -307,12 +309,12 @@ var Actions = {
 	launchComponent(config, params, cb) {
 		//Actions.hideWindow();
 		console.log("launchComponent");
-		let defaultParams = { addToWorkspace: true, monitor: "mine" };
+		let defaultParams = { addToWorkspace: true, monitor: "mine", options: { customData: {} } };
 		params = Object.assign(defaultParams, params);
-		if(!params.customData){params.customData={};}
-		if(!params.options.customData.component) {params.options.customData.component = {};}
+		if (!params.options.customData) { params.options.customData = {}; }
+		if (!params.options.customData.component) { params.options.customData.component = {}; }
 		params.options.customData.component.isUserDefined = true;
-		if (config.component.windowGroup) {params.groupName = config.component.windowGroup;}
+		if (config.component.windowGroup) { params.groupName = config.component.windowGroup; }
 		FSBL.Clients.LauncherClient.spawn(config.component.type, params, function (err, windowInfo) {
 			if (cb) {
 				cb(windowInfo.windowIdentifier);
@@ -396,7 +398,7 @@ var keys = {};
 function setupHotkeys(cb) {
 
 	FSBL.Clients.RouterClient.subscribe("humanInterface.keydown", function (err, response) {
-		if (!keys[response.data.key]) {keys[response.data.key] = {};}
+		if (!keys[response.data.key]) { keys[response.data.key] = {}; }
 		keys[response.data.key] = true;
 		if (keys[160] && keys[162] && keys[68]) {
 			if (Actions.componentList["Advanced Chart"]) {
@@ -405,7 +407,7 @@ function setupHotkeys(cb) {
 		}
 	});
 	FSBL.Clients.RouterClient.subscribe("humanInterface.keyup", function (err, response) {
-		if (!keys[response.data.key]) {keys[response.data.key] = {};}
+		if (!keys[response.data.key]) { keys[response.data.key] = {}; }
 		keys[response.data.key] = false;
 	});
 
