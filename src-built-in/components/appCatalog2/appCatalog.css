@@ -477,6 +477,8 @@
 
 .app-results {
 	padding: 0 32px;
+	display: flex;
+	justify-content: center;
 }
 
 .app-showcase {
