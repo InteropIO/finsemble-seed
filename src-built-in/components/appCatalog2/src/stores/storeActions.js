@@ -176,9 +176,8 @@ async function getTags() {
  * Function to "install" an app. Adds the id to a list of installed apps
  * @param {string} name The name of the app
  */
-function addApp(id) {
+async function addApp(id) {
 	let { activeApp, installed, apps } = data;
-
 	const appID = id;
 	let app = apps.find(app => {
 		return app.appId === appID;
@@ -190,21 +189,35 @@ function addApp(id) {
 		return;
 	}
 
+	let applicationRoot = "";
+	if (!app.url) {
+		applicationRoot = (await FSBL.Clients.ConfigClient.getValue({ field: "finsemble.applicationRoot" })).data;
+		debugger;
+	}
 	installed[appID] = {
 		appID,
 		tags: app.tags,
 		name: app.title ? app.title : app.name,
-		url: app.url,
-		type: "component"
+		url: app.url || `${applicationRoot}/components/processMonitor/processMonitor.html`,
+		type: "component",
+		component: {},
+		window: {},
+		foreign: {}
 	};
+
+	const appConfig = installed[appID];
+	appConfig.window.url = appConfig.url;
+	if (typeof app.manifest !== "object") {
+		appConfig.manifest = { ...appConfig };
+	}
 	let MY_APPS = data.defaultFolder;
 	let folders = data.folders;
 
-	data.folders[MY_APPS].apps[appID] = installed[appID];
-	data.folders[folder].apps[appID] = installed[appID];
+	data.folders[MY_APPS].apps[appID] = appConfig
+	data.folders[folder].apps[appID] = appConfig
 	FSBL.Clients.LauncherClient.registerComponent({
-		componentType: installed[appID].name,
-		manifest: installed[appID].manifest
+		componentType: appConfig.name,
+		manifest: appConfig.manifest
 	}, (err, response) => {
 		getStore().setValues([
 			{
