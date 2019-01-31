@@ -191,14 +191,14 @@ async function addApp(id) {
 
 	let applicationRoot = "";
 	if (!app.url) {
-		applicationRoot = (await FSBL.Clients.ConfigClient.getValue({ field: "finsemble.applicationRoot" })).data;
-		debugger;
+		//we may use this if we put macros in the stored URLs on the FDC3 server. commented out for now.
+		//applicationRoot = (await FSBL.Clients.ConfigClient.getValue({ field: "finsemble.applicationRoot" })).data;
 	}
 	installed[appID] = {
 		appID,
 		tags: app.tags,
 		name: app.title ? app.title : app.name,
-		url: app.url || `${applicationRoot}/components/processMonitor/processMonitor.html`,
+		url: app.url,
 		type: "component",
 		component: {},
 		window: {},
