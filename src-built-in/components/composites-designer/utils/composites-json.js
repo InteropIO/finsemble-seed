@@ -46,8 +46,8 @@ function generate(name, stacks) {
             }
             // Push the component to the array
             config.components.push({
-                name: name,
-                config: defaultConfig
+                component: name,
+                params: defaultConfig
             })
         }
         // Return a named composites entry

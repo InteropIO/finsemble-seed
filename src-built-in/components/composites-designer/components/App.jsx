@@ -4,7 +4,7 @@ import AppsList from './AppsList'
 import SaveOrCancel from './SaveOrCancel'
 
 const COMPOSITES_CANVAS_COMPONENT = 'Composites Canvas'
-let canvasWindow  = null
+let canvasWindow = null
 /**
  * The left side of the composites designer.
  * This displays a list of apps that can be grabbed
@@ -17,7 +17,7 @@ export default class App extends React.Component {
         // Bind correct context
         this.closeCanvas = this.closeCanvas.bind(this)
     }
-    
+
     componentDidMount() {
         // User might have clicked on edit composite instead of new
         // in that case, there are data passed {name, layout}
@@ -43,7 +43,7 @@ export default class App extends React.Component {
         return <div>
             <Search />
             <AppsList />
-            <SaveOrCancel onDone={this.closeCanvas}/>
+            <SaveOrCancel onDone={this.closeCanvas} />
         </div>
     }
 }

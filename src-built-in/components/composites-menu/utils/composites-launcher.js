@@ -9,5 +9,6 @@ export default {
  * @param {object} compositeObject The composite's object (components, position, etc)
  */
 function launch(compositeName, compositeObject) {
-    FSBL.Clients.LauncherClient.spawn({ type: "composite", name: compositeName }, compositeObject);
+    //@todo we need to be able to register composites so that the launcher can read them. That will be possible when app catalog gets merged.
+    FSBL.Clients.LauncherClient.spawn({ type: "composite", name: compositeName }, {});
 }
