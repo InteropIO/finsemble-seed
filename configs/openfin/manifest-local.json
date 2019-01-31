@@ -74,8 +74,7 @@
             "$applicationRoot/configs/application/config.json"
         ],
         "IAC": {
-            "serverAddress" : "wss://127.0.0.1:3376"
+            "serverAddress": "wss://127.0.0.1:3376"
         }
     }
 }
- 
