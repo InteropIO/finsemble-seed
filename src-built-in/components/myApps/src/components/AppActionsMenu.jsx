@@ -6,7 +6,7 @@
 
 import React from "react";
 import storeActions from "../stores/StoreActions";
-import { default as catalogActions } from "../../../appCatalog/src/stores/storeActions";
+import { default as catalogActions } from "../../../appCatalog2/src/stores/storeActions";
 
 const MY_APPS = "My Apps";
 const FAVORITES = "Favorites";
@@ -121,7 +121,7 @@ export default class AppActionsMenu extends React.Component {
 	}
 
 	/**
-	 * Calls storeActions.deleteApp() to delete an app 
+	 * Calls storeActions.deleteApp() to delete an app
 	 * from all folders and from apps list
 	 */
 	deleteApp() {
