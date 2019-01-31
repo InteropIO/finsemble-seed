@@ -1,0 +1,93 @@
+@import  url('../../../assets/css/_globals.css');
+@import  url('../../../assets/css/_menus.css');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing : border-box;
+}
+body {
+    padding: 20px;
+    background: #1c2a36;
+    font-family: Roboto;
+    font-size: 12px;
+    font-weight: 300;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.08;
+    letter-spacing: normal;
+    color: #ffffff;
+}
+
+input {
+    padding: 2px 20px;
+    color: #ddd;
+    border: 0;
+    background: none;
+    outline: none;
+    border-bottom: 1px solid #0a8cf4;
+}
+
+#search {
+    position: relative;
+    height: 20px;
+}
+#search input, #search input:focus {
+    width: 100%;
+}
+#search i {
+    top: 2px;
+    left: 0;
+    position: absolute;
+}
+#apps {
+    padding-top: 20px;
+    height: 530px;
+}
+#apps ul li {
+    user-select: none;
+    list-style: none;
+    line-height: 1.08;
+    letter-spacing: normal;
+    color: #ffffff;
+    padding: 8px 0;
+}
+#apps li i {
+    margin-right: 5px;
+    color: #0a8cf4;
+}
+
+#save {
+    height: 60px;
+}
+
+#save input {
+    padding: 2px 5px;
+    width: 215px;
+    display: inline-block;
+}
+
+#save span {
+    width: 40px;
+}
+
+#save .buttons {
+    padding-top: 12px;
+    text-align: right;
+}
+
+#save button {
+    width: 119px;
+    height: 35px;
+    line-height: 35px;
+    border: 0;
+    background: none;
+    color: #ffffff;
+    text-align: center;
+}
+#save button:disabled {
+    color: #689DDA;
+}
+#save button.save-btn {
+    background: #005bc5;
+}
