@@ -69,7 +69,7 @@
 	},
 	"appCatalog2": {
 		"output": "components/appCatalog2/appCatalog",
-		"entry": "./src-built-in/components/appCatalog/src/app.jsx"
+		"entry": "./src-built-in/components/appCatalog2/src/app.jsx"
 	},
 	"nonConfiguredComponent": {
 		"output": "components/nonConfiguredComponent/nonConfiguredComponent",
