@@ -268,6 +268,8 @@
 			const CLI_VERSION = require(path.join(CLI_PATH, "package.json")).version;
 			const CONTROLS_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-react-controls");
 			const CONTROLS_VERSION = require(path.join(CONTROLS_PATH, "package.json")).version;
+			const E2O_PATH = path.join(__dirname, "node_modules", "@chartiq", "e2o");
+			const E2O_VERSION = channelAdapter === "e2o" && fs.existsSync(E2O_PATH) ? require(path.join(E2O_PATH, "package.json")).version : undefined ;
 
 			function checkLink(params, cb) {
 				let { path, name, version } = params;
@@ -307,6 +309,18 @@
 						version: CONTROLS_VERSION
 					}, cb)
 				},
+				(cb) => {
+					if (!E2O_VERSION) {
+						// e2o not found so skip check
+						return cb();
+					}
+
+					checkLink({
+						path: E2O_PATH,
+						name: "e2o",
+						version: E2O_VERSION
+					}, cb)
+				}
 			], done)
 		},
 
