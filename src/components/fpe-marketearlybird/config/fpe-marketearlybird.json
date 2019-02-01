@@ -1,0 +1,49 @@
+{
+    "comment": "EarlyBird",
+    "components": {
+        "EarlyBird": {
+            "window": {
+                "listName": "EarlyBird",
+                "type": "openfinApplication",
+                "url": "https://beta-app.marketearlybird.com",
+                "icon": "https://beta-app.marketearlybird.com/img/Earlybird_icon_up.png",
+                "frame": false,
+                "frameConnect": "all",
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 500,
+                "height": 800
+            },
+            "component": {
+                "mode": [
+					"3rdparty"
+				],
+                "inject": false,
+                "spawnOnStartup": false
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "showLinker": true,
+                        "FSBLHeader": true,
+                        "persistWindowState": true
+                    },
+                    "Toolbar": {
+                        "iconClass": "welcome"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,24 @@
+# Vendor files
+node_modules/
+launch.json
+
+# Distribution folder
+dist/
+
+# Optional npm cache directory
+.npm
+
+# Optional REPL history
+.node_repl_history
+
+# Editor files
+.idea
+.vscode/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
