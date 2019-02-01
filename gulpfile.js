@@ -271,6 +271,10 @@
 			const E2O_PATH = path.join(__dirname, "node_modules", "@chartiq", "e2o");
 			const E2O_VERSION = channelAdapter === "e2o" && fs.existsSync(E2O_PATH) ? require(path.join(E2O_PATH, "package.json")).version : undefined ;
 
+			if (channelAdapter === "e2o" && !fs.existsSync(E2O_PATH)) {
+				throw "Cannot use e2o channelAdapter unless e2o optional dependency is installed. Please run npm i @chartiq/e2o";
+			}
+
 			function checkLink(params, cb) {
 				let { path, name, version } = params;
 				if (fs.existsSync(path)) {
