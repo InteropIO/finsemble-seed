@@ -254,7 +254,6 @@ export default class AppMarket extends React.Component {
 		let apps = this.compileAddedInfo((filteredApps.length > 0));
 		//Force default case if activepage isn't search and apps.length is 0
 		if (apps.length === 0 && activePage !== "appSearch") activePage = -1;
-		debugger
 		switch (activePage) {
 			case "home":
 				return (

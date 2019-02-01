@@ -20,7 +20,7 @@ let pendingSpawn = false;
 const Header = props => {
 
 	const addApp = () => {
-	
+
 		if (props.installed) {
 			if (pendingSpawn) return;
 			pendingSpawn = true;
@@ -28,7 +28,7 @@ const Header = props => {
 			// If the app has a URL property
 			// For now, this means it was manually added
 			// So lets spawn from URL
-			if(props.url) {
+			if (props.url) {
 				FSBL.Clients.LauncherClient.spawn(null, {
 					url: props.url
 				}, () => {
@@ -52,7 +52,7 @@ const Header = props => {
 	const launchApp = () => {
 
 	};
-	console.log("addApp",props);
+	console.log("addApp", props);
 	return (
 		<div className="header">
 			<div className='icon-title-container'>
@@ -60,22 +60,22 @@ const Header = props => {
 				<span className="appName">{props.name}</span>
 			</div>
 			<div className='action-button-container'>
-				{props.installed && <button className={props.entitled ? "action-button disabled" : "action-button remove"} disabled={props.entitled} onClick={removeApp}>
+				{props.installed && <button className={props.entitled ? "action-button remove" : "action-button disabled"} disabled={!props.entitled} onClick={removeApp}>
 					<div className='remove-button'>
 						Remove
 					</div>
 				</button>}
-				<button className={props.entitled ? "action-button disabled" : "action-button open"} disabled={props.entitled} onClick={addApp}>
+				<button className={props.entitled ? "action-button open" : "action-button disabled"} disabled={!props.entitled} onClick={addApp}>
 					{props.installed ? (
 						<div>
 							<span className="action-button-label">Open</span>
 						</div>
 					) : (
-						<span className="action-button-label">
-							<i className="ff-plus"></i>
-							&nbsp;My Apps
+							<span className="action-button-label">
+								<i className="ff-plus"></i>
+								&nbsp;My Apps
 						</span>
-					)}
+						)}
 				</button>
 			</div>
 		</div>

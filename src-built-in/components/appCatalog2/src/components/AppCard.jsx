@@ -136,7 +136,7 @@ class AppCard extends Component {
 		return (
 			<div className='app-card' onClick={this.openAppShowcase} onMouseEnter={this.showCheck} onMouseLeave={this.hideCheck}>
 				<div className="app-image-container">
-					{entitled || !checkShown ? null : <i className={imageIconClasses} onMouseEnter={this.toggleHighlight} onMouseLeave={this.toggleHighlight} onClick={appAction}></i>}
+					{!entitled || !checkShown ? null : <i className={imageIconClasses} onMouseEnter={this.toggleHighlight} onMouseLeave={this.toggleHighlight} onClick={appAction}></i>}
 					<img className={'app-image' + entitled} src={imageUrl} />
 				</div>
 				<div className={titleClass} onMouseEnter={this.toggleTitleUnderline} onMouseLeave={this.toggleTitleUnderline}>{appName}</div>

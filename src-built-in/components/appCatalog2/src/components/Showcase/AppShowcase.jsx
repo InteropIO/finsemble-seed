@@ -109,7 +109,7 @@ class AppShowcase extends Component {
 		storeActions.addTag(name);
 	}
 	render() {
-		let { name, iconUrl, imageIndex:index } = this.state;
+		let { name, iconUrl, imageIndex: index } = this.state;
 
 		let images = [];
 		for (let i = 0; i < imagesInCarousel; i++) {
@@ -127,7 +127,7 @@ class AppShowcase extends Component {
 				<Modal open={this.state.imageModalOpen} closeModal={this.closeModal}>
 					<img src={this.state.modalImage} className="modal-image" />
 				</Modal>
-				{this.state.entitled && (
+				{!this.state.entitled && (
 					<div className="app-warning">
 						<span className="app-warning-wrapper">
 							<i className='ff-alert'></i>
