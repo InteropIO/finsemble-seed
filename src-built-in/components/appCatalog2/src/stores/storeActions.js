@@ -197,9 +197,14 @@ async function addApp(id) {
 		url: app.url,
 		type: "component",
 		component: {},
-		window: {},
+		window: {
+			windowType: app.windowType || "OpenFinWindow"
+		},
 		foreign: {
 			components: {
+				"App Launcher": {
+					"launchableByUser": true
+				},
 				"Window Manager": {
 					title: app.title ? app.title : app.name
 				}
