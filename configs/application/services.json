@@ -1,4 +1,13 @@
 {
     "comment": "Houses config for any custom services that you'd like to import into Finsemble.",
-    "services": {}
+    "services": {
+		"heartbeatListenerService": {
+			"active": true,
+			"debugServiceDelay": 5000,
+            "name": "heartbeatListenerService",
+            "visible": true,
+            "showDevConsoleOnVisible": true,
+            "html": "$applicationRoot/services/heartbeatListener/heartbeatListener.html"
+        }
+	}
 }
