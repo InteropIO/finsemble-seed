@@ -11,7 +11,8 @@ import React from "react";
 //components
 import Hero from './Hero';
 import Carousel from './Carousel';
-
+const TAG1 = "App";
+const TAG2 = "Native";
 /**
  * Home page. Contains carousels and a hero component
  * @param {object} props Component props
@@ -20,18 +21,18 @@ import Carousel from './Carousel';
  */
 const Home = props => {
 	let carousel1 = props.cards.filter((card) => {
-		return card.tags.includes("app");
+		return card.tags.includes(TAG1);
 	});
 
 	let carousel2 = props.cards.filter((card) => {
-		return card.tags.includes("Pizza");
+		return card.tags.includes(TAG2);
 	});
 
 	return (
 		<div className='home'>
 			<Hero cards={props.cards} viewAppShowcase={props.viewAppShowcase} />
-			<Carousel tag="app" cards={carousel1} viewAppShowcase={props.viewAppShowcase} />
-			<Carousel tag="Pizza" cards={carousel2} viewAppShowcase={props.viewAppShowcase} />
+			<Carousel tag={TAG1} cards={carousel1} viewAppShowcase={props.viewAppShowcase} />
+			<Carousel tag={TAG2} cards={carousel2} viewAppShowcase={props.viewAppShowcase} />
 		</div>
 	);
 }

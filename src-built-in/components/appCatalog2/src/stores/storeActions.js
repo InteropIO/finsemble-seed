@@ -5,7 +5,7 @@
 import AppDirectory from "../modules/AppDirectory";
 import FDC3 from "../modules/FDC3";
 import { getStore } from "./appStore";
-
+import * as path from "path";
 export default {
 	initialize,
 	getApps,
@@ -189,11 +189,7 @@ async function addApp(id) {
 		return;
 	}
 
-	let applicationRoot = "";
-	if (!app.url) {
-		//we may use this if we put macros in the stored URLs on the FDC3 server. commented out for now.
-		//applicationRoot = (await FSBL.Clients.ConfigClient.getValue({ field: "finsemble.applicationRoot" })).data;
-	}
+
 	installed[appID] = {
 		appID,
 		tags: app.tags,
@@ -201,12 +197,37 @@ async function addApp(id) {
 		url: app.url,
 		type: "component",
 		component: {},
-		window: {},
-		foreign: {}
+		window: {
+			windowType: app.windowType || "OpenFinWindow"
+		},
+		foreign: {
+			components: {
+				"App Launcher": {
+					"launchableByUser": true
+				},
+				"Window Manager": {
+					title: app.title ? app.title : app.name
+				}
+			}
+		}
 	};
 
 	const appConfig = installed[appID];
-	appConfig.window.url = appConfig.url;
+	let applicationRoot = "";
+	if (appConfig.url && appConfig.url.includes("$applicationRoot")) {
+		//we may use this if we put macros in the stored URLs on the FDC3 server. commented out for now.
+		applicationRoot = (await FSBL.Clients.ConfigClient.getValue({ field: "finsemble.applicationRoot" })).data;
+		appConfig.url = appConfig.url.replace("$applicationRoot", "");
+		appConfig.url = applicationRoot + appConfig.url;
+		appConfig.window.url = appConfig.url;
+	}
+
+	if (typeof appConfig.url === "undefined") {
+		//If there is no url, it will be set to the 'unknown component' inside of the Launcher.
+		delete appConfig.url;
+		delete appConfig.window.url;
+	}
+
 	if (typeof app.manifest !== "object") {
 		appConfig.manifest = { ...appConfig };
 	}

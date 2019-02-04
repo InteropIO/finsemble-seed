@@ -187,11 +187,11 @@ export default class AppMarket extends React.Component {
 	 * Performs a search through the catalog
 	 * @param {string} search The text to search the catalog with
 	 */
-	changeSearch(search) {		
-		storeActions.searchApps(search,()=>{
-				
-			this.setState({forceSearch: (search !== "")});
-		});		
+	changeSearch(search) {
+		storeActions.searchApps(search, () => {
+
+			this.setState({ forceSearch: (search !== "") });
+		});
 	}
 	/**
 	 * When the notification for isntalling/removing an app is shown a timeout is set to call this function to cease showing the notification
@@ -254,7 +254,6 @@ export default class AppMarket extends React.Component {
 		let apps = this.compileAddedInfo((filteredApps.length > 0));
 		//Force default case if activepage isn't search and apps.length is 0
 		if (apps.length === 0 && activePage !== "appSearch") activePage = -1;
-
 		switch (activePage) {
 			case "home":
 				return (
@@ -285,7 +284,7 @@ export default class AppMarket extends React.Component {
 
 		return (
 			<div>
-				<SearchBar hidden={page === "showcase" ? true : false}backButton={page !== "home"} tags={tags} activeTags={activeTags} tagSelected={this.addTag}
+				<SearchBar hidden={page === "showcase" ? true : false} backButton={page !== "home"} tags={tags} activeTags={activeTags} tagSelected={this.addTag}
 					removeTag={this.removeTag} goHome={this.goHome} installationActionTaken={this.state.installationActionTaken}
 					search={this.changeSearch} isViewingApp={this.state.activeApp !== null} />
 				<div className="market_content">
