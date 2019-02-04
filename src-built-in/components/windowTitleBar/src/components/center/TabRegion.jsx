@@ -8,6 +8,8 @@ import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
 import { FinsembleDnDContext, FinsembleDroppable } from '@chartiq/finsemble-react-controls';
 import { Store, Actions } from "../../stores/windowTitleBarStore";
 import Title from "../../../../common/windowTitle";
+import * as _throttle from "lodash.throttle";
+
 const PLACEHOLDER_TAB = {
     windowName: "",
     uuid: "",
@@ -18,7 +20,6 @@ let TAB_WIDTH = 300;
 const ICON_AREA = 29;
 const CLOSE_BUTTON_MARGIN = 22;
 const MINIMUM_TAB_SIZE = 100;
-import * as _throttle from "lodash.throttle";
 export default class TabRegion extends React.Component {
     constructor(props) {
         super(props);
