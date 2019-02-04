@@ -1,1 +1,6 @@
-{}
+{
+    "CustomNotification": {
+        "output": "components/CustomNotification/CustomNotification",
+        "entry": "./src\\components\\CustomNotification\\CustomNotification.js"
+    }
+}

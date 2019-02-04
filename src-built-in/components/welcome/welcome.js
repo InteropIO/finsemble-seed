@@ -20,3 +20,11 @@ if (window.FSBL && FSBL.addEventListener) {
 function init() {
 
 }
+window.run = () => FSBL.Clients.LauncherClient.spawn("CustomNotification",
+{
+		data: { "notificationMessage": "You are not authenticated.  No access to C1 Desktop." },
+		left: "center",
+		top: "center",
+}, function (err, msg) {
+		console.log("Report showWindow error", msg);
+});
