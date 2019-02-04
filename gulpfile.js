@@ -18,6 +18,7 @@
 	const shell = require("shelljs");
 	const path = require("path");
 	const webpack = require("webpack");
+	const e2o = require("@chartiq/e2o")
 	// local
 	const extensions = fs.existsSync("./gulpfile-extensions.js") ? require("./gulpfile-extensions.js") : undefined;
 	const async = require("async");
@@ -363,8 +364,12 @@
 			if (done) done();
 		},
 		launchE2O: done => {
+			let config = {
+				manifest:taskMethods.startupConfig[env.NODE_ENV].serverConfig
+			}
+			return e2o.openE2o(config,done)
 			let electronProcess = null;
-			let manifest = taskMethods.startupConfig[env.NODE_ENV].serverConfig;
+			
 			process.env.ELECTRON_DEV = true;
 
 			ON_DEATH((signal, err) => {
