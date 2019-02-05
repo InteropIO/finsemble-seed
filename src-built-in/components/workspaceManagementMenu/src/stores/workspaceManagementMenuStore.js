@@ -501,7 +501,9 @@ Actions = {
 			Logger.system.log("NewWorkspace.spawnDialog start.");
 			let dialogParams = {
 				title: "Save your workspace?",
-				question: `Your workspace "${activeWorkspace.name}" has unsaved changes. Would you like to save?`
+				question: `Your workspace "${activeWorkspace.name}" has unsaved changes. Would you like to save?`,
+				affirmativeResponseLabel: "Save",
+				negativeResponseLabel: "Don't Save"
 			};
 			function onUserInput(err, response) {
 				Logger.system.log("Spawn Dialog callback.");
