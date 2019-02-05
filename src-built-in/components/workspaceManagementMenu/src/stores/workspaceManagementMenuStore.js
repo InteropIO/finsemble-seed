@@ -561,8 +561,8 @@ Actions = {
 		let dialogParams = {
 			title: "Overwrite Workspace?",
 			question: "This will overwrite the saved data for  \"" + workspaceName + "\". Would you like to proceed?",
-			affirmativeResponseLabel: "Yes, overwrite",
-			showCancelButton: false
+			affirmativeResponseLabel: "Overwrite",
+			showNegativeButton: false
 		};
 		function onUserInput(err, response) {
 			if (response.choice === "affirmative") {
