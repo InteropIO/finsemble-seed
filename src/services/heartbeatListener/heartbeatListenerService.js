@@ -1,11 +1,21 @@
+/**
+ * Heartbeat Listener Service
+ * This is an example service that listens for heartbeat events that indicate that windows
+ * are in a bad state. It performs the following actions:
+ * - Removes a window from a stack if that window enters the state "notResponding"
+ * - Kills a window if it enters the state "crashed"
+ * 
+ * Available heartbeat events (times to reach state are configurable):
+ * "notResponding"
+ * "possiblyCrashed"
+ * "crashed"
+ * "responding" (only when returning to a good state after being in one of the above states)
+ */
+
 const Finsemble = require("@chartiq/finsemble");
 const RouterClient = Finsemble.Clients.RouterClient;
 const BaseService = Finsemble.baseService;
 const Logger = Finsemble.Clients.Logger;
-window.Logger = Logger;
-window.Finsemble = Finsemble;
-debugger;
-Logger.start();
 
 class heartbeatListenerService extends BaseService {
 
@@ -14,18 +24,19 @@ class heartbeatListenerService extends BaseService {
 		
 		this.handleHeartbeat = this.handleHeartbeat.bind(this);
 	}
-
+	/**
+	 * Responds to a HeartbeatTimeout Event
+	 * - Kicks windows out of a stack if they are not responding
+	 * - Kills crashed windows
+	 * @param {*} err 
+	 * @param {*} response 
+	 */
 	handleHeartbeat(err, response) {
-		console.log("HANDLEHEARTBEAT", response);
-		if (response.data.type === "notResponding") {
-			//break out of stack
-			
-			
-			Finsemble.FinsembleWindow.getInstance({name: response.data.window}, (err, wrap) => {
-				console.log("inside getInstance, wrap", wrap);
+		//check if the window is in a stack, if so remove it, otherwise do nothing
+		if (response.data.type === "notResponding") {			
+			Finsemble.FinsembleWindow.getInstance({name: response.data.window}, (err, wrap) => {				
 				wrap.getParent((err, parentWindow) => {
 					if(parentWindow) {
-						console.log("heartbeatListenerService: Removing window from stack", response.data.window);
 						Logger.info("heartbeatListenerService: Removing window from stack", response.data.window);
 						 parentWindow.removeWindow({ 
 						 	stackedWindowIdentifier: parentWindow.identifier,
@@ -33,14 +44,11 @@ class heartbeatListenerService extends BaseService {
 					}
 				});				
 			});
-		} else if (response.data.type === "possiblyCrashed") {
-			//kill the window
-			console.log("heartbeatListenerService: Will kill crashed window if not dead yet", response.data.window);
-			Logger.info("heartbeatListenerService: Will kill crashed window if not dead yet", response.data.window);
+		//kill a window sending a heartbeat event of "crashed"
+		} else if (response.data.type === "crashed") {
 			Finsemble.FinsembleWindow.getInstance({name: response.data.window}, (err, wrap) => {
 				if (wrap) {
-					console.log("heartbeatListenerService: Killing crashed window", wrap);
-					Logger.info("heartbeatListenerService: Killing crashed window", wrap);
+					Logger.info("heartbeatListenerService: Killing crashed window", response.data.window);
 					wrap.close();
 				}
 			});
@@ -54,19 +62,11 @@ class heartbeatListenerService extends BaseService {
 
 }
 
-console.log("BEFORE CREATING HEARTBEAT LISTENER SERVICE");
+Logger.start();
 const heartbeatInstance = new heartbeatListenerService();
-console.log("AFTER CREATING HEARTBEAT LISTENER SERVICE");
 heartbeatInstance.onBaseServiceReady(async (callback) => {
-	console.log("onBaseServiceReady called, cb", callback);
-	heartbeatInstance.addListeners();
-	console.log("after adding listner call");
+	heartbeatInstance.addListeners();	
 	callback();
-	console.log("after callback");
 });
-console.log("after baseready");
 heartbeatInstance.start();
 Logger.info("heartbeatListenerService: Starting up");
-console.log("after start");
-let finWin = Finsemble.FinsembleWindow;
-console.log("finwindow", finWin)
