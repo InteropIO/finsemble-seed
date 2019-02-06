@@ -54,7 +54,7 @@ var Actions = {
 			if (window.outerWidth < 400) {
 				finsembleWindow.getBounds((err, bounds) => {
 					cachedBounds = bounds;
-					finsembleWindow.animate({ transitions: { size: { duration: 150, width: 400 } } }, {}, Function.prototype);
+					finsembleWindow.animate({ transitions: { size: { duration: 150, width: 400 } } }, Function.prototype);
 				})
 			}
 			menuStore.setValue({ field: "active", value: true })
@@ -104,13 +104,17 @@ var Actions = {
 			FSBL.Clients.Logger.error("No element with ID 'inputContainer' exists");
 		}
 	},
-	//handleClose gets called for several reasons. One of those is when the window starts moving. If it starts moving, an event is passed in. If the event is passed in, we don't want to animate the window. If it's just a blur, we'll animate the change in size.
-	handleClose(e) {
-		menuWindow.isShowing(function (err, showing) {
+	handleClose() {
+	//console.log("close a window")
+		window.getSelection().removeAllRanges();
+		document.getElementById("searchInput").blur();
+		menuStore.setValue({ field: "active", value: false })
+		if (!menuWindow) return;
+		menuWindow.isShowing(function (showing) {
 			if (showing) {
 				console.log("close a window")
 				if (!e && cachedBounds) {
-					finsembleWindow.animate({ transitions: { size: { duration: 150, width: cachedBounds.width } } }, {}, () => {
+					finsembleWindow.animate({ transitions: { size: { duration: 150, width: cachedBounds.width } } }, () => {
 						cachedBounds = null;
 					});
 				}
@@ -171,11 +175,11 @@ var Actions = {
 	}
 };
 function searchTest(params, cb) {
-	//console.log("params", params)
+//console.log("params", params)
 	fetch('/search?text=' + params.text).then(function (response) {
 		return response.json();
 	}).then(function (json) {
-		//console.log("json", cb);
+	//console.log("json", cb);
 		return cb(null, json);
 
 	});
@@ -191,7 +195,7 @@ function createStore(done) {
 		activeSearchBar: null,
 		menuIdentifier: null
 	};
-	//console.log("CreateStore", "Finsemble-SearchStore-" + finWindow.name)
+//console.log("CreateStore", "Finsemble-SearchStore-" + finWindow.name)
 	FSBL.Clients.DistributedStoreClient.createStore({ store: "Finsemble-SearchStore-" + finWindow.name, values: defaultData, global: true }, function (err, store) {
 		menuStore = store;
 
