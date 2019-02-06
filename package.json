@@ -30,7 +30,7 @@
         "@chartiq/e2o": "latest"
     },
     "dependencies": {
-        "@chartiq/finsemble": "3.5.*",
+        "@chartiq/finsemble": "3.6.3-pre3",
         "@chartiq/finsemble-cli": "2.*",
         "@chartiq/finsemble-react-controls": "^3.1.2",
         "async": "^2.6.0",
