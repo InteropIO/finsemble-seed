@@ -38,6 +38,7 @@ class heartbeatListenerService extends BaseService {
 				wrap.getParent((err, parentWindow) => {
 					if(parentWindow) {
 						Logger.info("heartbeatListenerService: Removing window from stack", response.data.window);
+						console.debug("heartbeatListenerService: Removing window from stack", response.data.window);
 						 parentWindow.removeWindow({ 
 						 	stackedWindowIdentifier: parentWindow.identifier,
 						 	windowIdentifier: wrap.identifier });
@@ -49,6 +50,7 @@ class heartbeatListenerService extends BaseService {
 			Finsemble.FinsembleWindow.getInstance({name: response.data.window}, (err, wrap) => {
 				if (wrap) {
 					Logger.info("heartbeatListenerService: Killing crashed window", response.data.window);
+					console.debug("heartbeatListenerService: Killing crashed window", response.data.window);
 					wrap.close();
 				}
 			});
