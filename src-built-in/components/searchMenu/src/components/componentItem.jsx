@@ -29,14 +29,14 @@ export default class componentItem extends React.Component {
 				<div className={"resultName "} onClick={function () {
 					if (!self.props.item.actions[0]) return;
 					self.props.onClick(self.props.item, self.props.item.actions[0]);
-				}}>{this.props.item.name}</div>
+				}}>{this.props.item.friendlyName}</div>
 			</div>
 		}
-		return <div className={"resultItem " + (this.props.isActive ? "bestmatch active" : "")}><div className={"resultName "}>{this.props.item.name}</div>
+		return <div className={"resultItem " + (this.props.isActive ? "bestmatch active" : "")}><div className={"resultName "}>{this.props.item.friendlyName}</div>
 			<div className="actions">{(this.props.item.actions.map(function (action, index) {
 				return <div key={"actionbtn" + index} className="action actionButton" onClick={function () {
 					self.props.onClick(self.props.item, action);
-				}}>{action.name}</div>
+				}}>{action.friendlyName}</div>
 			}))}
 			</div>
 		</div>
