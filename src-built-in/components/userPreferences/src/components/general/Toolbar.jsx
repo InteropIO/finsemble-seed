@@ -18,7 +18,7 @@ export default class Toolbar extends React.Component {
 	 * Sets the monitor by calling the setPreferences API. This will override the config for the component.
 	 * Possible values:
 	 * All monitors: "all"
-	 * Primary monitor: "0"
+	 * Previous monitor when floating (defaults to primary): "0"
 	 * @param {event} e
 	 */
 	setMonitor(value) {
@@ -31,7 +31,7 @@ export default class Toolbar extends React.Component {
 
 	/**
 	 * Sets the toolbar as Fixed or Floating by calling the setPreferences API. This will override the config for the component.
-	 * Sets the monitor to position the toolbar on to all monitors for Fixed the primary montior for Floating
+	 * Triggers monitor position based on toolbar option
 	 * @param {event}
 	 */
 	setToolbarState() {
@@ -42,7 +42,6 @@ export default class Toolbar extends React.Component {
 		if (previousState === "Fixed") {
 			FSBL.Clients.ConfigClient.setPreference({ field: "finsemble.components.Toolbar.window.dockable", value: ["top", "bottom"] });
 			toolbarType = "Floating";
-			//set monitor to primary
 			this.setMonitor("0");
 		} else if (previousState === "Floating") {
 			FSBL.Clients.ConfigClient.setPreference({ field: "finsemble.components.Toolbar.window.dockable", value: null });
