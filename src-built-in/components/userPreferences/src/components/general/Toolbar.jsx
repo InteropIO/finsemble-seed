@@ -1,10 +1,13 @@
 import React from 'react';
+import Checkbox from '../checkbox';
 
 export default class Toolbar extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			monitor: "all"
+			monitor: "0",
+			toolbarType: "Floating",
+			change: false,
 		};
 		this.setMonitor = this.setMonitor.bind(this);
 		this.setToolbarState = this.setToolbarState.bind(this);
@@ -13,46 +16,44 @@ export default class Toolbar extends React.Component {
 
 	/**
 	 * Sets the monitor by calling the setPreferences API. This will override the config for the component.
-	 * Using all works, but nothing else works from existing code. Likely a mismatch between values used for monitor. Need to pull current monitors in.
+	 * Possible values:
+	 * All monitors: "all"
+	 * Primary monitor: "0"
 	 * @param {event} e
 	 */
-	setMonitor(e) {
-		let monitor = e.target.value;
-		console.log("MONITOR: ", e.target.value);
+	setMonitor(value) {
 		this.setState({
-			monitor: monitor
+			monitor: value
 		});
-		FSBL.Clients.ConfigClient.setPreference({ field: "finsemble.components.Toolbar.window.monitor", value: monitor });
 		// There's no need to override spawnOnAllMonitors. Setting monitor to anything other than undefined will automatically override that value. Setting monitor="all" is equivalent.
+		FSBL.Clients.ConfigClient.setPreference({ field: "finsemble.components.Toolbar.window.monitor", value: value });		
 	}
 
 	/**
-	 * Sets the toolbar as fixed or floating by calling the setPreferences API. This will override the config for the component.
-	 * @param {event} e
+	 * Sets the toolbar as Fixed or Floating by calling the setPreferences API. This will override the config for the component.
+	 * Sets the monitor to position the toolbar on to all monitors for Fixed the primary montior for Floating
+	 * @param {event}
 	 */
-	setToolbarState(e) {
-		let toolbarType = e.target.value;
-		this.setState({
-			toolbarType: toolbarType
-		});
-		if (toolbarType === "Fixed") {
-			FSBL.Clients.ConfigClient.setPreference({ field: "finsemble.components.Toolbar.window.dockable", value: null });
-		} else if (toolbarType === "Floating") {
+	setToolbarState() {
+		//Use the previous state to toggle the checkbox, Floating is always checked
+		let previousState = this.state.toolbarType;
+		let toolbarType;
+		
+		if (previousState === "Fixed") {
 			FSBL.Clients.ConfigClient.setPreference({ field: "finsemble.components.Toolbar.window.dockable", value: ["top", "bottom"] });
+			toolbarType = "Floating";
+			//set monitor to primary
+			this.setMonitor("0");
+		} else if (previousState === "Floating") {
+			FSBL.Clients.ConfigClient.setPreference({ field: "finsemble.components.Toolbar.window.dockable", value: null });
+			toolbarType = "Fixed";
+			this.setMonitor("all");
 		}
-	}
-
-	//Create a list of monitors available to move toolbar to.
-	//Not including all monitors because we have no current way to tell the users which monitor is which
-	createSelectItems() {
-		let items = [];
-		if (this.state.toolbarType === "Fixed") {
-			items.push(<option value={"all"}>All</option>);
-		}
-		items.push(<option value={"0"}>Primary</option>);
-		items.push(<option value={this.state.monitor}>Current Location</option>);
-		console.log(items);
-		return items;
+		
+		this.setState({
+			toolbarType: toolbarType,
+			change: true,
+		});	
 	}
 
 	restartApplication() {
@@ -73,7 +74,6 @@ export default class Toolbar extends React.Component {
 		//Unless we want to add another config variable tracking dockable state we need to determine state
 		//using the set values.
 		FSBL.Clients.ConfigClient.getValue("finsemble.components.Toolbar.window.dockable", (err, value) => {
-			console.log("GETVALUE INIT: " , JSON.stringify(value));
 			if (!value) { 
 				value = "Fixed";
 			} else if (JSON.stringify(value) === JSON.stringify(["top", "bottom"])) {
@@ -89,18 +89,15 @@ export default class Toolbar extends React.Component {
 	}
 
 	render() {
+		//Render this button only after a change in the checkbox state. It will remain visible unti restart.
+		const restartButton = this.state.change ? <div><span className="change-text">This change requires a restart.</span><button className="blue-button" onClick={this.restartApplication}>Restart Now</button></div> : null
 		return <div className="complex-menu-content-row">
-			<div>			    
-				<span>Toolbar Type</span>
-				<p>Floating: <input type="radio" name="toolbarState" value="Floating" onChange={this.setToolbarState} checked={this.state.toolbarType === "Floating"}/></p>
-				<p>Fixed: <input type="radio" name="toolbarState" value="Fixed" onChange={this.setToolbarState} checked={this.state.toolbarType === "Fixed"} /></p>
-				<span>Display toolbar on monitor</span>				
-				<select style={{ margin: "0px 10px" }} onChange={this.setMonitor} value={this.state.monitor}>
-					{this.createSelectItems()}					
-				</select>
-				<span> </span>
-				<button onClick={this.restartApplication}>Restart Application</button>
-			</div>
+			<Checkbox
+			onClick={this.setToolbarState}
+			checked={this.state.toolbarType === "Floating"}
+			label="Float the Toolbar" />				
+			<span> </span>
+			{restartButton}
 		</div>
 	}
 }
