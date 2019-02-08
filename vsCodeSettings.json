@@ -1,0 +1,70 @@
+
+{
+    "files.autoSave": "onFocusChange",
+    "files.trimTrailingWhitespace": true,
+    "window.zoomLevel": 0,
+    "editor.tabSize": 2,
+    "editor.autoIndent": true,
+    "editor.renderLineHighlight": "all",
+    "editor.formatOnType": true,
+    "editor.formatOnSave": true,
+    "editor.wordWrap": "bounded",
+    "editor.wordWrapColumn": 150,
+    "editor.find.autoFindInSelection": true,
+    "editor.mouseWheelZoom": true,
+    "editor.cursorStyle": "line-thin",
+    "eslint.autoFixOnSave": true,
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "git.confirmSync": false,
+    "better-comments.highlightPlainText": true,
+    "better-comments.tags": [
+        {
+            "tag": "!",
+            "color": "#FF2D00",
+            "strikethrough": false,
+            "backgroundColor": "transparent"
+        },
+        {
+            "tag": "?",
+            "color": "#3498DB",
+            "strikethrough": false,
+            "backgroundColor": "transparent"
+        },
+        {
+            "tag": "todo",
+            "color": "#04db89",
+            "strikethrough": false,
+            "backgroundColor": "transparent"
+        },
+        {
+            "tag": "TODO",
+            "color": "#04db89",
+            "strikethrough": false,
+            "backgroundColor": "transparent"
+        },
+        {
+            "tag": "@todo",
+            "color": "#04db89",
+            "strikethrough": false,
+            "backgroundColor": "transparent"
+        },
+        {
+            "tag": "@TODO",
+            "color": "#04db89",
+            "strikethrough": false,
+            "backgroundColor": "transparent"
+        },
+        {
+            "tag": "fix",
+            "color": "#04db89",
+            "strikethrough": false,
+            "backgroundColor": "transparent"
+        },
+        {
+            "tag": "@note",
+            "color": "#3777dd",
+            "strikethrough": false,
+            "backgroundColor": "transparent"
+        }
+    ]
+}
