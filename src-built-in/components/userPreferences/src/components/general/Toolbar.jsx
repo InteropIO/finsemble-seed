@@ -61,7 +61,7 @@ export default class Toolbar extends React.Component {
 
 	/**
 	 * Add listener on the store. When the preferences field changes, we change our local state.
-	 * Also, get the intiial state from the store.
+	 * Get the intitial state from the store.
 	 */
 	componentDidMount() {
 		FSBL.Clients.ConfigClient.getValue("finsemble.components.Toolbar.window.monitor", (err, value) => {
@@ -88,7 +88,7 @@ export default class Toolbar extends React.Component {
 	}
 
 	render() {
-		//Render this button only after a change in the checkbox state. It will remain visible unti restart.
+		//Render this button only after a change in the checkbox state. It will remain visible until restart.
 		const restartButton = this.state.change ? <div><span className="change-text">This change requires a restart.</span><button className="blue-button" onClick={this.restartApplication}>Restart Now</button></div> : null
 		return <div className="complex-menu-content-row">
 			<Checkbox
