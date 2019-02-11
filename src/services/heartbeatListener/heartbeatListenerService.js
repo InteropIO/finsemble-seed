@@ -9,7 +9,7 @@
  * "notResponding"
  * "possiblyCrashed"
  * "crashed"
- * "responding" (only when returning to a good state after being in one of the above states)
+ * "nowResponding" (only when returning to a good state after being in one of the above states)
  */
 
 const Finsemble = require("@chartiq/finsemble");
@@ -32,32 +32,36 @@ class heartbeatListenerService extends BaseService {
 	 * @param {*} response 
 	 */
 	handleHeartbeat(err, response) {
-		//check if the window is in a stack, if so remove it, otherwise do nothing
-		if (response.data.type === "notResponding") {			
-			Finsemble.FinsembleWindow.getInstance({name: response.data.window}, (err, wrap) => {				
-				wrap.getParent((err, parentWindow) => {
-					if(parentWindow) {
-						Logger.info("heartbeatListenerService: Removing window from stack", response.data.window);
-						console.debug("heartbeatListenerService: Removing window from stack", response.data.window);
-						 parentWindow.removeWindow({ 
-						 	stackedWindowIdentifier: parentWindow.identifier,
-						 	windowIdentifier: wrap.identifier });
+		switch(response.data.type) {		
+			case "notResponding":
+				//check if the window is in a stack, if so remove it, otherwise do nothing
+				Finsemble.FinsembleWindow.getInstance({name: response.data.window}, (err, wrap) => {				
+					wrap.getParent((err, parentWindow) => {
+						if(parentWindow) {
+							Logger.info("heartbeatListenerService: Removing window from stack", response.data.window);
+							console.debug("heartbeatListenerService: Removing window from stack", response.data.window);
+							parentWindow.removeWindow({ 
+								stackedWindowIdentifier: parentWindow.identifier,
+								windowIdentifier: wrap.identifier });
+						}
+					});				
+				});
+				break;			
+			case "crashed":
+				Finsemble.FinsembleWindow.getInstance({name: response.data.window}, (err, wrap) => {
+					if (wrap) {
+						Logger.info("heartbeatListenerService: Killing crashed window", response.data.window);
+						console.debug("heartbeatListenerService: Killing crashed window", response.data.window);
+						wrap.close();
 					}
-				});				
-			});
-		//kill a window sending a heartbeat event of "crashed"
-		} else if (response.data.type === "crashed") {
-			Finsemble.FinsembleWindow.getInstance({name: response.data.window}, (err, wrap) => {
-				if (wrap) {
-					Logger.info("heartbeatListenerService: Killing crashed window", response.data.window);
-					console.debug("heartbeatListenerService: Killing crashed window", response.data.window);
-					wrap.close();
-				}
-			});
+				});
+				break;
+			case "possiblyCrashed":
+			case "nowResponding":
+			default:
+				break;
 		}
-
 	}
-
 	addListeners() {
 		RouterClient.addListener("Finsemble.WindowService.HeartbeatTimeout", this.handleHeartbeat);
 	}
