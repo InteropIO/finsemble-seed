@@ -367,7 +367,7 @@
 			let config = {
 				manifest:taskMethods.startupConfig[env.NODE_ENV].serverConfig
 			}
-			return e2o.openE2o(config,done)
+			return e2o.e2oLauncher(config,done)
 			let electronProcess = null;
 			
 			process.env.ELECTRON_DEV = true;
