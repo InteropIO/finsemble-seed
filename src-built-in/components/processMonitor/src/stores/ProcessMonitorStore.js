@@ -292,7 +292,7 @@ var Actions = {
 		FSBL.Clients.DialogManager.open("yesNo", {
 			title: "Terminate Process?",
 			question: "Terminating the process may close other apps. Are you sure you want to continue?",
-			affirmativeButtonLabel: "Terminate",
+			affirmativeResponseLabel: "Terminate",
 			showNegativeButton: false
 		}, (err, response) => {
 			if (err || response.choice === "affirmative") {
@@ -341,7 +341,7 @@ var Actions = {
 				FSBL.Clients.DialogManager.open("yesNo", {
 					title: "Terminate Process?",
 					question: "The app that you are attempting to close is unresponsive. Would you like to terminate the process? Terminating the process may close other apps.",
-					affirmativeButtonLabel:"Terminate",
+					affirmativeResponseLabel:"Terminate",
 					showNegativeButton: false
 				}, (err, response) => {
 					if (err || response.choice === "affirmative") {
