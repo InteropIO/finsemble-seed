@@ -181,11 +181,7 @@ class _ToolbarStore {
 				value: bounds
 			}, Function.prototype);
 		}
-		let restoreWindow = (e) => {
-			finsembleWindow.restore();
-		}
-		//Immediately restore on maximize.
-		finsembleWindow.addListener("maximized", restoreWindow);
+		
 		finsembleWindow.addListener("bounds-change-end", onBoundsSet)
 
 		FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", "t"], () => {
