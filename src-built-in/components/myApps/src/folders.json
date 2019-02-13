@@ -1,0 +1,79 @@
+{
+	"filterText": "",
+	"filterTags": [],
+	"activeFolder": "My Apps",
+	"sortBy": "Alphabetical",
+	"appFolders": {
+		"folders": [
+			{
+				"name": "My Apps",
+				"type": "folder",
+				"disableUserRemove": true,
+				"icon": "ff-component",
+				"appDefinitions": [
+					{
+						"name": "Welcome",
+						"type": "component",
+						"tags": [
+							"newrelease"
+						],
+						"friendlyName": "The Welcome Component",
+						"icon": "ff-home-2"
+					},
+					{
+						"name": "Getting Started Tutorial",
+						"type": "component",
+						"tags": [
+							"newrelease"
+						],
+						"friendlyName": "Learn finsemble!",
+						"icon": "ff-component"
+					},
+					{
+						"name": "Process Monitor",
+						"type": "component",
+						"tags": [
+							"bad information", "don't click here"
+						],
+						"friendlyName": "Process Monitor",
+						"icon": "ff-chart-alt-1"
+					},
+					{
+						"name": "Notepad",
+						"type": "component",
+						"tags": [
+							"assimilation",
+							"wizardry",
+							"TESLA"
+						],
+						"friendlyName": "Notepad!!!",
+						"icon": "ff-saveas-2"
+					}
+				]
+			},
+			{
+				"name": "Favorites",
+				"type": "folder",
+				"disableUserRemove": true,
+				"icon": "ff-favorite",
+				"appDefinitions": [
+					{
+						"name": "Process Monitor",
+						"type": "component",
+						"tags": [
+							"bad information", "don't click here"
+						],
+						"friendlyName": "Process Monitor"
+					}
+				]
+			},
+			{
+				"name": "Dashboards",
+				"type": "folder",
+				"disableUserRemove": true,
+				"icon": "ff-dashboard",
+				"appDefinitions": []
+			}
+		]
+	}
+}
