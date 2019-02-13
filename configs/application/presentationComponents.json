@@ -533,7 +533,8 @@
 				"category": "system",
 				"spawnOnStartup": true,
 				"spawnOnAllMonitors": false,
-				"canMinimize": false
+				"canMinimize": false,
+				"canMaximize": false
 			},
 			"foreign": {
 				"services": {
