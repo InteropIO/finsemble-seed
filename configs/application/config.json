@@ -36,6 +36,7 @@
 			"defaultWidth": 600,
 			"requireRectangularityForGroupResize": true,
 			"undockDisbandsEntireGroup": false,
+			"enableWindowsAeroSnap": true,
 			"fillHolesOnUndock": true,
 			"tabbing": {
 				"enabled": true
