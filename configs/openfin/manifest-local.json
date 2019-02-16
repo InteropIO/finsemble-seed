@@ -9,7 +9,7 @@
         "defaultTop": 0,
 		"defaultLeft": 0,
         "showTaskbarIcon": true,
-        "autoShow": true,
+        "autoShow": false,
         "frame": false,
         "resizable": false,
         "maximizable": false,
@@ -70,7 +70,15 @@
         "applicationRoot": "http://localhost:3375",
         "moduleRoot": "http://localhost:3375/finsemble",
         "servicesRoot": "http://localhost:3375/finsemble/services",
-        "notificationURL": "http://localhost:3375/components/notification/notification.html",
+		"notificationURL": "http://localhost:3375/components/notification/notification.html",
+		"bootConfig": {
+			"onErrorMakeSystemManagerVisible": true,
+			"defaults": {
+				"startServiceTimeout": 5000,
+				"startComponentTimeout": 5000,
+				"startModuleTimeout": 4000
+			}
+		},
         "importConfig": [
             "$applicationRoot/configs/application/config.json"
         ],
