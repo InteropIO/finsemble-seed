@@ -488,7 +488,6 @@
 				"minHeight": 39,
 				"minWidth": 300,
 				"docked": "top",
-				"canGroup": false,
 				"options": {
 					"autoShow": false,
 					"contextMenu": false,
@@ -507,6 +506,7 @@
 				"services": {
 					"dockingService": {
 						"isArrangable": false,
+						"canGroup": false,
 						"ignoreSnappingRequests": true,
 						"ignoreTilingAndTabbingRequests": true
 					},
