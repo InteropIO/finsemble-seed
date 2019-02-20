@@ -381,8 +381,9 @@
 				});
 			});
 
-			let e2oLocation = "node_modules/@chartiq/e2o";
-			let electronPath = path.join("..", "..", "electron", "dist", "electron.exe");
+			const e2oLocation = "node_modules/@chartiq/e2o";
+			// Use electron executable from e2o
+			const electronPath = path.join(__dirname, e2oLocation, "node_modules", "electron", "dist", "electron.exe");
 			let debug = envOrArg("e2odebug");
 			let debugArg = "";
 			if (debug) {
@@ -393,7 +394,7 @@
 			electronProcess = exec(command,
 				{
 					cwd: e2oLocation
-				}, function (err) {
+				}, function execCallback (err) {
 					logToTerminal(err);
 					logToTerminal("e2o not installed? Try `npm install`", "red");
 				}
