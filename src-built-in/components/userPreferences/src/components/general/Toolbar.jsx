@@ -10,7 +10,7 @@ export default class Toolbar extends React.Component {
 			change: false,
 		};
 		this.setMonitor = this.setMonitor.bind(this);
-		this.setToolbarState = this.setToolbarState.bind(this);
+		this.toggleToolbarState = this.toggleToolbarState.bind(this);
 		this.restartApplication = this.restartApplication.bind(this);
 	}
 
@@ -34,7 +34,7 @@ export default class Toolbar extends React.Component {
 	 * Triggers monitor position based on toolbar option
 	 * @param {event}
 	 */
-	setToolbarState() {
+	toggleToolbarState() {
 		//Use the previous state to toggle the checkbox, Floating is always checked
 		let previousState = this.state.toolbarType;
 		let toolbarType;
@@ -73,14 +73,18 @@ export default class Toolbar extends React.Component {
 		//Unless we want to add another config variable tracking dockable state we need to determine state
 		//using the set values.
 		FSBL.Clients.ConfigClient.getValue("finsemble.components.Toolbar.window.dockable", (err, value) => {
+			let toolbarType = null;
 			if (!value) { 
-				value = "Fixed";
+				toolbarType = "Fixed";
 			} else if (JSON.stringify(value) === JSON.stringify(["top", "bottom"])) {
-				value = "Floating";
+				toolbarType = "Floating";
 			}
-			this.setState({
-				toolbarType: value
-			});
+			//Only set the state if the expected values were found in the config, otherwise use the default
+			if (toolbarType){
+				this.setState({
+					toolbarType: toolbarType
+				});
+			}
 		});
 	}
 
@@ -92,7 +96,7 @@ export default class Toolbar extends React.Component {
 		const restartButton = this.state.change ? <div><span className="change-text">This change requires a restart.</span><button className="blue-button" onClick={this.restartApplication}>Restart Now</button></div> : null
 		return <div className="complex-menu-content-row">
 			<Checkbox
-			onClick={this.setToolbarState}
+			onClick={this.toggleToolbarState}
 			checked={this.state.toolbarType === "Floating"}
 			label="Float the Toolbar" />				
 			<span> </span>
