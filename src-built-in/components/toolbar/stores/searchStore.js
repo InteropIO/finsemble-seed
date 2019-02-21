@@ -15,6 +15,9 @@ var control = null;
 // Handler for determing where to show the search results component.  Currently being set by the search input in Search.jsx
 var inputContainerBoundsHandler = Function.prototype;
 
+// Handler for bluring the search input.  Currently being set and used in Search.jsx
+var blurSearchInputHandler = Function.prototype;
+
 function mouseInElement(element, cb) {
 	var elementBounds = element.getBoundingClientRect();
 	window.screenX;
@@ -90,13 +93,13 @@ var Actions = {
 	/**
 	 * Assign a function to retrieve the location where the search results should be displayed.
 	 *
-	 * @param {Function} inputContainerBoundsHandler
+	 * @param {Function} boundsHandler
 	 */
-	setInputContainerBoundsHandler(inputContainerBoundsHandler) {
-		if (typeof inputContainerBoundsHandler !== 'function') {
-			FSBL.Clients.Logger.error("Parameter inputContainerBoundsHandler must be a function.")
+	setInputContainerBoundsHandler(boundsHandler) {
+		if (typeof boundsHandler !== 'function') {
+			FSBL.Clients.Logger.error("Parameter boundsHandler must be a function.")
 		} else {
-			this.inputContainerBoundsHandler = inputContainerBoundsHandler;
+			inputContainerBoundsHandler = boundsHandler;
 		}
 	},
 
@@ -107,7 +110,7 @@ var Actions = {
 	positionSearchResults() {
 
 		// Call function to retrieve location to display search results
-		const bounds = this.inputContainerBoundsHandler();
+		const bounds = inputContainerBoundsHandler();
 
 		if (!bounds || !bounds.left) {
 			FSBL.Clients.Logger.error("No bounds received from inputContainerBoundsHandler.  Assuming {left: 0}.")
@@ -124,6 +127,20 @@ var Actions = {
 		}
 		FSBL.Clients.LauncherClient.showWindow({ windowName: menuWindow.name }, showParams);
 
+	},
+
+
+	/**
+	 * Assign a function to blur the search input DOM element.
+	 *
+	 * @param {Function} blurHandler
+	 */
+	setBlurSearchInputHandler(blurHandler) {
+		if(typeof blurHandler !== 'function'){
+			FSBL.Clients.Logger.error("Parameter blurHandler must be a function.");
+		} else {
+			blurSearchInputHandler = blurHandler;
+		}
 	},
 	
 	/**
@@ -147,7 +164,7 @@ var Actions = {
 			}
 			//These lines handle closing the searchInput box. As showing is only true when the search results
 			//menu opens, they need to be outside so the search inputbox will still close when there is no text string.
-			document.getElementById("searchInput").blur();
+			blurSearchInputHandler();
 			menuStore.setValue({ field: "active", value: false })		
 		});
 	
@@ -179,6 +196,14 @@ var Actions = {
 		menuReference = data.value;
 		if (!menuWindow) {
 			Actions.setupWindow()
+		}
+	},
+
+	setBlurSearchInputHandler(blurHandler) {
+		if(typeof blurHandler !== 'function'){
+			FSBL.Clients.Logger.error("Parameter blurHandler must be a function.");
+		} else {
+			blurSearchInputHandler = blurHandler;
 		}
 	},
 

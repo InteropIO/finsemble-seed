@@ -20,7 +20,8 @@ export default class Search extends React.Component {
 
 		// Handler for obtaining the search inputContainer bounds for the location of the
 		// search results popup, which is displayed by the SearchStore.
-		SearchStore.setInputContainerBoundsHandler(this.getInputContainerBounds.bind(this))
+		SearchStore.setInputContainerBoundsHandler(this.getInputContainerBounds.bind(this));
+		SearchStore.setBlurSearchInputHandler(this.blurSearchInput.bind(this));
 	}
 	/**
 	 * Returns getBoundingClientRect of the inputContainer div element for positioning search results
@@ -31,6 +32,9 @@ export default class Search extends React.Component {
 			return inputContainer.getBoundingClientRect();
 		}
 		return undefined;
+	}
+	blurSearchInput() {
+		document.getElementById("searchInput").blur();
 	}
 	onStateUpdate(err, data) {
 		//this.setState({ focus: data.value, saveText: document.getElementById("searchInput").textContent })
