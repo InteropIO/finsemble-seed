@@ -3,6 +3,7 @@ import { FinsembleButton, FinsembleToolbarSeparator } from "@chartiq/finsemble-r
 import * as storeExports from "../stores/searchStore";
 import * as _debounce from "lodash.debounce"
 import ToolbarStore from "../stores/toolbarStore";
+import {Actions as SearchStore} from "../stores/searchStore";
 
 let menuStore;
 export default class Search extends React.Component {
@@ -16,6 +17,17 @@ export default class Search extends React.Component {
 		};
 		this.bindCorrectContext();
 		let self = this;
+
+		// Handler for obtaining the search inputContainer bounds for the location of the
+		// search results popup, which is displayed by the SearchStore.
+		SearchStore.getInputContainerBounds = this.getInputContainerBounds.bind(this);
+	}
+	getInputContainerBounds(){
+		const inputContainer = document.getElementById("inputContainer");
+		if (inputContainer) {
+			return inputContainer.getBoundingClientRect();
+		}
+		return undefined;
 	}
 	onStateUpdate(err, data) {
 		//this.setState({ focus: data.value, saveText: document.getElementById("searchInput").textContent })

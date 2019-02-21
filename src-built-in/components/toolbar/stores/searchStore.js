@@ -87,28 +87,33 @@ var Actions = {
 	},
 
 	/**
+	 * Event handler for determining bounds for the search input container div
+	 */
+	getInputContainerBounds : Function.prototype,
+
+	/**
 	 * Positions a dropdown window under the search bar containing the search results.
 	 * Returns immediately if the text is empty so a search results menu doesn't appear
 	 */
 	positionSearchResults() {
-		let text = document.getElementById("searchInput").innerHTML;
-		if (!text) return;
-		const inputContainer = document.getElementById("inputContainer");
-		if (inputContainer) {
-			const bounds = inputContainer.getBoundingClientRect();
-			let showParams = {
-				monitor: 'mine',
-				position: 'relative',
-				left: bounds.left,
-				forceOntoMonitor: true,
-				top: 'adjacent',
-				autoFocus: false
-			}
-			FSBL.Clients.LauncherClient.showWindow({ windowName: menuWindow.name }, showParams);
 
-		} else {
-			FSBL.Clients.Logger.error("No element with ID 'inputContainer' exists");
+		const bounds = this.getInputContainerBounds();
+
+		if(!bounds || !bounds.left) {
+			FSBL.Clients.Logger.error("No bounds received from getInputContainerBounds.  Assuming {left: 0}.")
+			bounds = {left:0};
 		}
+
+		let showParams = {
+			monitor: 'mine',
+			position: 'relative',
+			left: bounds.left,
+			forceOntoMonitor: true,
+			top: 'adjacent',
+			autoFocus: false
+		}
+		FSBL.Clients.LauncherClient.showWindow({ windowName: menuWindow.name }, showParams);
+
 	},
 	
 	/**
