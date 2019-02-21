@@ -55,8 +55,8 @@ function getDragDisabled() {
 }
 
 function initialize(callback = Function.prototype) {
-	FSBL.Clients.ConfigClient.getValue({ field: "finsemble.appDendpoint" }, function (err, appDendpoint) {
-		FDC3Client = new FDC3({ url: appDendpoint });
+	FSBL.Clients.ConfigClient.getValue({ field: "finsemble.appDirectoryEndpoint" }, function (err, appDirectoryEndpoint) {
+		FDC3Client = new FDC3({ url: appDirectoryEndpoint });
 		appd = new AppDirectory(FDC3Client);
 
 		const store = getStore();
