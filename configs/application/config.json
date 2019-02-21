@@ -131,7 +131,6 @@
 			"MINIMUM_WIDTH": 175,
 			"defaultHeight": 39,
 			"defaultWidth": 600,
-			"enableWindowsAeroSnap": true,
 			"requireRectangularityForGroupResize": true,
 			"undockDisbandsEntireGroup": false,
 			"fillHolesOnUndock": true,
