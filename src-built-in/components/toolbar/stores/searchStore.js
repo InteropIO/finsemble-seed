@@ -12,7 +12,8 @@ var menuReference = {};
 var menuWindow = null;
 var control = null;
 
-
+// Handler for determing where to show the search results component.  Currently being set by the search input in Search.jsx
+var inputContainerBoundsHandler = Function.prototype;
 
 function mouseInElement(element, cb) {
 	var elementBounds = element.getBoundingClientRect();
@@ -87,9 +88,17 @@ var Actions = {
 	},
 
 	/**
-	 * Event handler for determining bounds for the search input container div
+	 * Assign a function to retrieve the location where the search results should be displayed.
+	 *
+	 * @param {Function} inputContainerBoundsHandler
 	 */
-	getInputContainerBounds : Function.prototype,
+	setInputContainerBoundsHandler(inputContainerBoundsHandler) {
+		if (typeof inputContainerBoundsHandler !== 'function') {
+			FSBL.Clients.Logger.error("Parameter inputContainerBoundsHandler must be a function.")
+		} else {
+			this.inputContainerBoundsHandler = inputContainerBoundsHandler;
+		}
+	},
 
 	/**
 	 * Positions a dropdown window under the search bar containing the search results.
@@ -97,11 +106,12 @@ var Actions = {
 	 */
 	positionSearchResults() {
 
-		const bounds = this.getInputContainerBounds();
+		// Call function to retrieve location to display search results
+		const bounds = this.inputContainerBoundsHandler();
 
-		if(!bounds || !bounds.left) {
-			FSBL.Clients.Logger.error("No bounds received from getInputContainerBounds.  Assuming {left: 0}.")
-			bounds = {left:0};
+		if (!bounds || !bounds.left) {
+			FSBL.Clients.Logger.error("No bounds received from inputContainerBoundsHandler.  Assuming {left: 0}.")
+			bounds = { left: 0 };
 		}
 
 		let showParams = {
