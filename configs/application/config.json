@@ -12,9 +12,6 @@
 			"IndexedDBAdapter": "$applicationRoot/adapters/indexedDBAdapter.js"
 		}
 	},
-	"FDC3Comment": "swap values for FDC3Server with LOCAL_FDC3Server after running it.",
-	"FDC3Server": "https://fpe.finsemble.com/v1/",
-	"aFDC3Server": "http://localhost:3030/v1/",
 	"servicesConfig": {
 		"distributedStore": {
 			"initialStores": [
@@ -134,6 +131,7 @@
 			"MINIMUM_WIDTH": 175,
 			"defaultHeight": 39,
 			"defaultWidth": 600,
+			"enableWindowsAeroSnap": true,
 			"requireRectangularityForGroupResize": true,
 			"undockDisbandsEntireGroup": false,
 			"fillHolesOnUndock": true,
@@ -222,6 +220,8 @@
 			}
 		]
 	},
+	"//appDendpoint": "If you'd like to test the server locally, point 'appDendpoint' to http://localhost:3030/v1/ and make sure to run the AppD project.",
+	"appDendpoint": "https://fpe.finsemble.com/v1/",
 	"globalHotkeys": {},
 	"//": "importConfig contains components that are necessary to start Finsemble. All other components are loaded dynamically. See server/auth/test.json",
 	"importConfig": [
