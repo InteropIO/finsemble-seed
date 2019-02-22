@@ -102,6 +102,14 @@ var Actions = {
 		FSBL.Clients.RouterClient.transmit("CentralConsole-Show", true);
 	},
 	/**
+	 * Sends a message to the system manager to show the log.
+	 *
+	 */
+	showSystemLog() {
+		finsembleWindow.hide();
+		FSBL.Clients.RouterClient.transmit("ShowSystemLog-Show", true);
+	},
+	/**
 	 * Spawns the preferences menu.
 	 */
 	spawnPreferences() {
@@ -169,7 +177,7 @@ var Actions = {
 			if (choice !== "cancel") {
 
 				//Reset any server-side sessions or login data necessary to fully log out the user, e.g.
-				/* 
+				/*
 				fetch("/logout", {//Sends our logout message
 					method: "POST",
 					credentials: "include"

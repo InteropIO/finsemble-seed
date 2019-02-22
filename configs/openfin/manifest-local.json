@@ -9,7 +9,7 @@
         "defaultTop": 0,
 		"defaultLeft": 0,
         "showTaskbarIcon": true,
-        "autoShow": true,
+        "autoShow": false,
         "frame": false,
         "resizable": false,
         "maximizable": false,
