@@ -91,10 +91,7 @@
 				});
 
 				app.use(compression());
-				app.use((req,res,next)=>{
-					console.log(req.path);
-					next();
-				})
+			
 				// Sample server root set to "/" -- must align with paths throughout
 				app.use("/", express.static(rootDir, options));
 				// Open up the Finsemble Components,services, and clients
