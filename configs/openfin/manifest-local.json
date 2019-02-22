@@ -74,9 +74,9 @@
 		"bootConfig": {
 			"onErrorMakeSystemManagerVisible": true,
 			"defaults": {
-				"startServiceTimeout": 5000,
-				"startComponentTimeout": 5000,
-				"startModuleTimeout": 4000
+				"startServiceTimeout": 10000,
+				"startComponentTimeout": 15000,
+				"startModuleTimeout": 5000
 			}
 		},
         "importConfig": [
