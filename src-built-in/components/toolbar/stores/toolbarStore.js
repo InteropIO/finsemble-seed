@@ -4,6 +4,7 @@
 */
 import async from "async";
 import * as menuConfig from '../config.json';
+import * as storeExports from "../stores/searchStore";
 
 import { Actions as SearchActions } from "./searchStore"
 
@@ -195,6 +196,7 @@ class _ToolbarStore {
 
 	/**
 	 * Function to bring toolbar to front (since dockable toolbar can be hidden)
+	 * The search input box will be open and any previous results will be displayed
 	 * @param {boolean} focus If true, will also focus the toolbar
 	 * @memberof _ToolbarStore
 	 */
@@ -204,6 +206,7 @@ class _ToolbarStore {
 			if (focus) {
 				finsembleWindow.focus();
 				self.Store.setValue({ field: "searchActive", value: false });
+				storeExports.Actions.positionSearchResults();				
 			}
 		});
 	}

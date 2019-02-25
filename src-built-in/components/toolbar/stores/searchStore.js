@@ -12,7 +12,11 @@ var menuReference = {};
 var menuWindow = null;
 var control = null;
 
+// Handler for determing where to show the search results component.  Currently being set by the search input in Search.jsx
+var inputContainerBoundsHandler = Function.prototype;
 
+// Handler for bluring the search input.  Currently being set and used in Search.jsx
+var blurSearchInputHandler = Function.prototype;
 
 function mouseInElement(element, cb) {
 	var elementBounds = element.getBoundingClientRect();
@@ -67,7 +71,6 @@ var Actions = {
 			if (!menuWindow) return;
 			return menuWindow.isShowing((err, showing) => {
 				if (showing) return;
-
 				Actions.positionSearchResults();
 			});
 
@@ -86,31 +89,68 @@ var Actions = {
 			})
 		})
 	},
-	positionSearchResults() {
-		const inputContainer = document.getElementById("inputContainer");
-		if (inputContainer) {
-			const bounds = inputContainer.getBoundingClientRect();
-			let showParams = {
-				monitor: 'mine',
-				position: 'relative',
-				left: bounds.left,
-				forceOntoMonitor: true,
-				top: 'adjacent',
-				autoFocus: false
-			}
-			FSBL.Clients.LauncherClient.showWindow({ windowName: menuWindow.name }, showParams);
 
+	/**
+	 * Assign a function to retrieve the location where the search results should be displayed.
+	 *
+	 * @param {Function} boundsHandler
+	 */
+	setInputContainerBoundsHandler(boundsHandler) {
+		if (typeof boundsHandler !== 'function') {
+			FSBL.Clients.Logger.error("Parameter boundsHandler must be a function.")
 		} else {
-			FSBL.Clients.Logger.error("No element with ID 'inputContainer' exists");
+			inputContainerBoundsHandler = boundsHandler;
 		}
 	},
-	handleClose() {
-	//console.log("close a window")
-		window.getSelection().removeAllRanges();
-		document.getElementById("searchInput").blur();
-		menuStore.setValue({ field: "active", value: false })
-		if (!menuWindow) return;
-		menuWindow.isShowing(function (showing) {
+
+	/**
+	 * Positions a dropdown window under the search bar containing the search results.
+	 * Returns immediately if the text is empty so a search results menu doesn't appear
+	 */
+	positionSearchResults() {
+
+		// Call function to retrieve location to display search results
+		const bounds = inputContainerBoundsHandler();
+
+		if (!bounds || !bounds.left) {
+			FSBL.Clients.Logger.error("No bounds received from inputContainerBoundsHandler.  Assuming {left: 0}.")
+			bounds = { left: 0 };
+		}
+
+		let showParams = {
+			monitor: 'mine',
+			position: 'relative',
+			left: bounds.left,
+			forceOntoMonitor: true,
+			top: 'adjacent',
+			autoFocus: false
+		}
+		FSBL.Clients.LauncherClient.showWindow({ windowName: menuWindow.name }, showParams);
+
+	},
+
+
+	/**
+	 * Assign a function to blur the search input DOM element.
+	 *
+	 * @param {Function} blurHandler
+	 */
+	setBlurSearchInputHandler(blurHandler) {
+		if(typeof blurHandler !== 'function'){
+			FSBL.Clients.Logger.error("Parameter blurHandler must be a function.");
+		} else {
+			blurSearchInputHandler = blurHandler;
+		}
+	},
+
+	/**
+	 * handleClose gets called for several reasons. One of those is when the window starts moving.
+	 * If it starts moving, an event is passed in. If the event is passed in, we don't want to animate the window.
+	 *  If it's just a blur, we'll animate the change in size.
+	 * @param {*} e
+	 */
+	handleClose(e) {
+		menuWindow.isShowing(function (err, showing) {
 			if (showing) {
 				console.log("close a window")
 				if (!e && cachedBounds) {
@@ -119,11 +159,13 @@ var Actions = {
 					});
 				}
 				window.getSelection().removeAllRanges();
-				document.getElementById("searchInput").blur();
-				menuStore.setValue({ field: "active", value: false })
 				if (!menuWindow) return;
 				menuWindow.hide();
 			}
+			//These lines handle closing the searchInput box. As showing is only true when the search results
+			//menu opens, they need to be outside so the search inputbox will still close when there is no text string.
+			blurSearchInputHandler();
+			menuStore.setValue({ field: "active", value: false })
 		});
 
 	},
@@ -156,8 +198,26 @@ var Actions = {
 			Actions.setupWindow()
 		}
 	},
+
+	setBlurSearchInputHandler(blurHandler) {
+		if(typeof blurHandler !== 'function'){
+			FSBL.Clients.Logger.error("Parameter blurHandler must be a function.");
+		} else {
+			blurSearchInputHandler = blurHandler;
+		}
+	},
+
+	/**
+	 * Perform the search action
+	 * If there is no search text, don't show any results
+	 * @param {*} text
+	 * @returns
+	 */
 	search(text) {
-		if (text === "" || !text) return Actions.setList([]);
+		if (text === "" || !text) {
+			Actions.setList([]);
+			return menuWindow.hide();
+		}
 		FSBL.Clients.SearchClient.search({ text: text }, function (err, response) {
 			var updatedResults = [].concat.apply([], response)
 			Actions.setList(updatedResults);
