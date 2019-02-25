@@ -1,4 +1,4 @@
-fix:|feat:|BREAKING CHANGE: #id [CARD]
+fix|feat|chore|docs|refactor|style|test: #id [CARD]
 
 [Kanban link](https://chartiq.kanbanize.com/ctrl_board/18/cards/CARD/details)
 
