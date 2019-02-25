@@ -1,8 +1,13 @@
-**Resolves issue [####](https://chartiq.kanbanize.com/ctrl_board/18/cards/####/details)**
+fix:|feat:|BREAKING CHANGE: #id [CARD]
+
+[Kanban link](https://chartiq.kanbanize.com/ctrl_board/18/cards/CARD/details)
 
 **Description of change**
--Change 1
--Change 2
+* Changes
 
 **Description of testing**
--How did you verify that your code satisfies the card's requirements?
+1. Step 1.
+2. Step 2.
+[x] Thing happened.
+[ ] Thing did not happen.
+3. Step 3
