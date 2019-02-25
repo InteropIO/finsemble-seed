@@ -8,6 +8,6 @@ fix|feat|chore|docs|refactor|style|test: #id [CARD]
 **Description of testing**
 1. Step 1.
 2. Step 2.
-[x] Thing happened.
-[ ] Thing did not happen.
+- [x] Thing happened.
+- [ ] Thing did not happen.
 3. Step 3
