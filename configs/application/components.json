@@ -5,6 +5,7 @@
 			"window": {
 				"url": "$applicationRoot/components/welcome/welcome.html",
 				"frame": false,
+				"transparent":true,
 				"resizable": true,
 				"autoShow": true,
 				"top": "center",
@@ -14,14 +15,16 @@
 			},
 			"component": {
 				"inject": false,
-				"spawnOnStartup": false,
-				"preload": "$applicationRoot/preloads/zoom.js"
+				"spawnOnStartup": false
+				
 			},
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"canGroup": true,
-						"isArrangable": true
+						"canGroup": false,
+						"isArrangable": false,
+						"ignoreSnappingRequests": true,
+						"ignoreTilingAndTabbingRequests": true
 					}
 				},
 				"components": {
@@ -30,7 +33,7 @@
 					},
 					"Window Manager": {
 						"showLinker": true,
-						"FSBLHeader": true,
+						"FSBLHeader": false,
 						"persistWindowState": true,
 						"title": "Welcome"
 					},

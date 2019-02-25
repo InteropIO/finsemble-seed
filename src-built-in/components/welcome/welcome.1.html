@@ -6,11 +6,6 @@
 		<title>Welcome to Finsemble!</title>
 		<meta name="description" content="" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<link
-			rel="stylesheet"
-			type="text/css"
-			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-		/>
 		<script src="../../vendor.bundle.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<style>
@@ -109,17 +104,17 @@
 
 			.container {
 				/*padding:150px;*/
-				/*	background: #2f2f31;*/
+			/*	background: #2f2f31;*/
 			}
 
 			#navMenu {
-				top: 70px;
-				left: 20px;
+				top: 150px;
+				left: 200px;
 				width: 140px;
 				height: 140px;
 				z-index: 100;
-				background: linear-gradient(90deg, #004ba3, #039bff, #004ba3);
-				-webkit-background: linear-gradient(90deg, #004ba3, #039bff, #004ba3);
+				background: linear-gradient(90deg, #910ec9, #d350db, #910ec9);
+				-webkit-background: linear-gradient(90deg, #910ec9, #d350db, #910ec9);
 				background-size: 400% 400%;
 				-webkit-background-size: 400% 400%;
 				animation: gradient 5s infinite;
@@ -128,7 +123,7 @@
 
 			#navMenu:hover,
 			.nav:hover {
-				background: #039bff;
+				background: #d350db;
 			}
 
 			@keyframes gradient {
@@ -148,14 +143,14 @@
 				height: 67.5px;
 				transform: rotate(45deg);
 				-webkit-transform: rotate(45deg);
-				background: rgba(11, 181, 119, 0.85);
+				background: #910ec9;
 				margin: 10px;
 				cursor: pointer;
 				box-shadow: 1px 4px 10px #101010;
 			}
 
 			.diamond:active {
-				background: rgba(3, 143, 92, 0.85);
+				background: #710b9e;
 				box-shadow: 0px 1px 2.5px #101010;
 				transition: 0.1s;
 				-webkit-transition: 0.1s;
@@ -183,35 +178,35 @@
 			}
 
 			.nav1 {
-				top: 5px;
-				left: 110px;
+				top: 86px;
+				left: 287px;
 			}
 
 			.nav2 {
-				top: 55px;
-				left: 160px;
+				top: 136px;
+				left: 337px;
 			}
 
 			.nav3 {
-				top: 105px;
-				left: 212px;
+				top: 186px;
+				left: 387px;
 			}
 
 			.nav4 {
-				top: 155px;
-				left: 160px;
+				top: 236px;
+				left: 337px;
 			}
 
 			.nav5 {
-				top: 207px;
-				left: 108px;
+				top: 286px;
+				left: 287px;
 			}
 
 			.small {
-				top: 100px;
-				left: 50px;
+				top: 186px;
+				left: 236px;
 				z-index: 10;
-				background: rgba(3, 143, 92, 0.85);
+				background: #643fc1;
 				transition: 0.5s;
 				-webkit-transition: 0.5s;
 			}
@@ -234,74 +229,29 @@
 			i {
 				color: #eeeeee;
 			}
-			.dragregion {
-				width: 30px;
-				height: 30px;
-				-webkit-app-region: drag;
-				position: fixed;
-				top: 130px;
-				left: 0px;
-				background: repeating-linear-gradient(
-					45deg,
-					#004ba3,
-					#004ba3 1px,
-					#039bff 1px,
-					#039bff 2px
-				);
-				z-index: 9999;
-			
-			}
-			.arrow-left {
-				width: 0;
-				height: 0;
-				border-top: 20px solid transparent;
-				border-bottom: 20px solid transparent;
-        background: repeating-linear-gradient(
-					45deg,
-					#004ba3,
-					#004ba3 1px,
-					#039bff 1px,
-					#039bff 2px
-				);
-				border-right: 20px solid #004ca3;
-			}
 		</style>
 	</head>
 	<body>
-		<div class="dragregion arrow-left"></div>
-		<div class="container">
-			<div id="navMenu" class="diamond">
-				<div id="mainRotCorrect" class="rotCorrect">
-					<i class="fa fa-cubes fa-4x" aria-hidden="true"></i>
-				</div>
-			</div>
-			<div id="nav1" class="nav nav1 small diamond">
-				<div class="rotCorrect">
-					<i class="fa fa-home fa-2x" aria-hidden="true"></i>
-				</div>
-			</div>
-			<!--<div class="popUp">Home</div>-->
-			<div id="nav2" class="nav nav2 small diamond">
-				<div class="rotCorrect">
-					<i class="fa fa-file-text-o fa-2x" aria-hidden="true"></i>
-				</div>
-			</div>
-			<div id="nav3" class="nav nav3 small diamond">
-				<div class="rotCorrect">
-					<i class="fa fa-calendar fa-2x" aria-hidden="true"></i>
-				</div>
-			</div>
-			<div id="nav4" class="nav nav4 small diamond">
-				<div class="rotCorrect">
-					<i class="fa fa-line-chart fa-2x" aria-hidden="true"></i>
-				</div>
-			</div>
-			<div id="nav5" class="nav nav5 small diamond">
-				<div class="rotCorrect">
-					<i class="fa fa-cogs fa-2x" aria-hidden="true"></i>
-				</div>
+		<div class="flexRow">
+			<div
+				style="background-color:red;-webkit-app-region: drag;width:10px;"
+			></div>
+			<div id="dd" class="wrapper-dropdown-2">
+				Sign in with
+				<ul class="dropdown">
+					<li>
+						<a href="#"><i class="icon-twitter icon-large"></i>Twitter</a>
+					</li>
+					<li>
+						<a href="#"><i class="icon-github icon-large"></i>Github</a>
+					</li>
+					<li>
+						<a href="#"><i class="icon-facebook icon-large"></i>Facebook</a>
+					</li>
+				</ul>
 			</div>
 		</div>
+		
 		<script>
 			//	obj.dd.on("click", function(event) {
 			//	$(this).toggleClass("active");
