@@ -16,6 +16,11 @@ export default class Search extends React.Component {
 			active: false
 		};
 		this.bindCorrectContext();
+		//Instead of accessing elements on the DOM directly (document.getElementById)
+		//Since any number of elements can share that id we instead want to use built in React refs
+		//More information can be found here https://reactjs.org/docs/refs-and-the-dom.html
+		this.searchContainer = React.createRef();
+		this.searchInput = React.createRef();
 		let self = this;
 
 		// Handler for obtaining the search inputContainer bounds for the location of the
@@ -27,18 +32,17 @@ export default class Search extends React.Component {
 	 * Returns getBoundingClientRect of the inputContainer div element for positioning search results
 	 */
 	getInputContainerBounds() {
-		const inputContainer = document.getElementById("inputContainer");
+		const inputContainer = this.searchContainer.current;
 		if (inputContainer) {
 			return inputContainer.getBoundingClientRect();
 		}
 		return undefined;
 	}
 	blurSearchInput() {
-		document.getElementById("searchInput").blur();
+		this.searchInput.current.blur();
 	}
 	onStateUpdate(err, data) {
-		//this.setState({ focus: data.value, saveText: document.getElementById("searchInput").textContent })
-		//if (!data.value) document.getElementById("searchInput").innerHTML = ""
+
 	}
 	componentWillMount() {
 		var self = this;
@@ -60,8 +64,8 @@ export default class Search extends React.Component {
 		})
 	}
 	emptyInput() {
-		this.setState({ saveText: document.getElementById("searchInput").textContent });
-		document.getElementById("searchInput").innerHTML = "";
+		this.setState({ saveText: this.searchInput.current.textContent });
+		this.searchInput.current.innerHTML = "";
 	}
 	componentWillUnmount() {
 		ToolbarStore.removeListener({ field: "searchActive" }, self.hotKeyActive);
@@ -79,7 +83,7 @@ export default class Search extends React.Component {
 		storeExports.Actions.search(event.target.textContent);
 	}
 	placeCursorOnEnd() {
-		var el = document.getElementById("searchInput");
+		var el = this.searchInput.current;
 		if (typeof window.getSelection != "undefined"
 			&& typeof document.createRange != "undefined") {
 			var range = document.createRange();
@@ -98,7 +102,7 @@ export default class Search extends React.Component {
 	componentDidUpdate() {
 		if (this.state.hotketSet) {
 			FSBL.Clients.WindowClient.finWindow.focus(() => {
-				this.refs.Search.focus();
+				this.searchContainer.current.focus();
 			});
 
 		}
@@ -118,8 +122,6 @@ export default class Search extends React.Component {
 		this.setActive = this.setActive.bind(this);
 		this.emptyInput = this.emptyInput.bind(this);
 		this.hotKeyActive = this.hotKeyActive.bind(this);
-
-
 	}
 	setActive(err, data) {
 		this.setState({ active: data.value })
@@ -146,26 +148,23 @@ export default class Search extends React.Component {
 
 			// select the old search text, so the user can edit it or type over it
 			// Do this in a timeout to give some time for the animation to work
-			var element = document.getElementById("searchInput");
+			var element = this.searchInput.current;
 			selectElementContents(element);
 		}, 100);
 	}
 	blurred() {
-		//this.setState({ focus: false, saveText: document.getElementById("searchInput").textContent });
-		//document.getElementById("searchInput").innerHTML = ""; // Don't clear out the old search text
 		storeExports.Actions.setFocus(false)
 	}
 	keyPress(event) {
 		var events = ["ArrowUp", "ArrowDown", "Enter"]
 		if (events.includes(event.key)) {
-			//if (event.key === "Enter") document.getElementById("searchInput").innerHTML = ""; // Don't clear out the old search text
 			storeExports.Actions.actionPress(event.key)
 		}
 	}
 	render() {
-		return <div id="inputContainer" className="searchContainer">
+		return <div ref={this.searchContainer} id="inputContainer" className="searchContainer">
 			<div className="searchSection  finsemble-toolbar-button">
-				<div ref="Search" id="searchInput" contentEditable className={"searchInput " + (this.state.active ? "active" : "compact")} placeholder="Search" onKeyDown={this.keyPress}
+				<div ref={this.searchInput} id="searchInput" contentEditable className={"searchInput " + (this.state.active ? "active" : "compact")} placeholder="Search" onKeyDown={this.keyPress}
 					onFocus={this.focused}
 					/*onInput={this.textChange} onBlur={this.blurred} onChange={this.textChange} dangerouslySetInnerHTML={{ __html: (this.state.focus ? this.state.saveText : "") }} />*/
 					onInput={this.textChange} onBlur={this.blurred} onChange={this.textChange} />
