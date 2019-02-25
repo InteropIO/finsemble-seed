@@ -82,23 +82,6 @@ export default class Search extends React.Component {
 	textChangeDebounced(event) {
 		storeExports.Actions.search(event.target.textContent);
 	}
-	placeCursorOnEnd() {
-		var el = this.searchInput.current;
-		if (typeof window.getSelection != "undefined"
-			&& typeof document.createRange != "undefined") {
-			var range = document.createRange();
-			range.selectNodeContents(el);
-			range.collapse(false);
-			var sel = window.getSelection();
-			sel.removeAllRanges();
-			sel.addRange(range);
-		} else if (typeof document.body.createTextRange != "undefined") {
-			var textRange = document.body.createTextRange();
-			textRange.moveToElementText(el);
-			textRange.collapse(false);
-			textRange.select();
-		}
-	}
 	componentDidUpdate() {
 		if (this.state.hotketSet) {
 			FSBL.Clients.WindowClient.finWindow.focus(() => {
@@ -115,7 +98,6 @@ export default class Search extends React.Component {
 		this.onStateUpdate = this.onStateUpdate.bind(this);
 		this.focused = this.focused.bind(this);
 		this.blurred = this.blurred.bind(this);
-		this.placeCursorOnEnd = this.placeCursorOnEnd.bind(this);
 		this.keyPress = this.keyPress.bind(this);
 		this.textChange = this.textChange.bind(this);
 		this.textChangeDebounced = _debounce(this.textChangeDebounced, 200);
@@ -141,14 +123,14 @@ export default class Search extends React.Component {
 			storeExports.Actions.setFocus(true, e.target)
 			return this.setState({ focus: true, hotketSet: false })
 		}
-		//this.setState({ focus: true });
+
 		storeExports.Actions.setFocus(true, e.target)
 
 		setTimeout(function () {
 
 			// select the old search text, so the user can edit it or type over it
 			// Do this in a timeout to give some time for the animation to work
-			var element = this.searchInput.current;
+			var element = this.searchInput;
 			selectElementContents(element);
 		}, 100);
 	}
