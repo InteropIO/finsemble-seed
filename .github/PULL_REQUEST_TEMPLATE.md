@@ -6,8 +6,9 @@ fix|feat|chore|docs|refactor|style|test: #id [CARD]
 * Changes
 
 **Description of testing**
+Markdown will convert the 1s to the appropriate number.
 1. Step 1.
-2. Step 2.
-- [x] Thing happened.
-- [ ] Thing did not happen.
-3. Step 3
+1. Step 2.
+1. - [x] Thing happened.
+1. - [ ] Thing did not happen.
+1. Step 3
