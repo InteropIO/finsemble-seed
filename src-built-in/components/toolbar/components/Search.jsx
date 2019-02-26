@@ -85,14 +85,8 @@ export default class Search extends React.Component {
 	}
 	componentDidUpdate() {
 		if (this.state.hotketSet) {
-			console.log('hotket set, calling to focus finWindow');
 			FSBL.Clients.WindowClient.finWindow.focus(() => {
-				console.log('focusing searchContainer');
 				this.searchContainer.current.focus();
-				SearchStore.setFocus(false);
-				this.setState({
-					hotketSet: false
-				});
 			});
 		}
 		/*if (!this.state.focus) return;

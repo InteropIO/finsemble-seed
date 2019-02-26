@@ -216,13 +216,14 @@ var Actions = {
 	search(text) {
 		if (text === "" || !text) {
 			Actions.setList([]);
-			return menuWindow.hide();
+			menuWindow.hide();
+			return;
 		}
 		FSBL.Clients.SearchClient.search({ text: text }, function (err, response) {
 			var updatedResults = [].concat.apply([], response)
 			Actions.setList(updatedResults);
 			setTimeout(() => {
-				Actions.positionSearchResults();
+				Actions.positionSearchResults(text);
 			}, 100);
 		})
 	},

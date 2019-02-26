@@ -182,7 +182,7 @@ class _ToolbarStore {
 				value: bounds
 			}, Function.prototype);
 		}
-		
+
 		finsembleWindow.addListener("bounds-change-end", onBoundsSet)
 
 		FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", "t"], () => {
@@ -206,7 +206,6 @@ class _ToolbarStore {
 			if (focus) {
 				finsembleWindow.focus();
 				self.Store.setValue({ field: "searchActive", value: false });
-				storeExports.Actions.positionSearchResults();				
 			}
 		});
 	}
