@@ -119,23 +119,19 @@ export default class Search extends React.Component {
 			sel.removeAllRanges();
 			sel.addRange(range);
 		}
+
+		storeExports.Actions.setFocus(true, e.target)
+
 		if (this.state.hotketSet) {
-			storeExports.Actions.setFocus(true, e.target)
 			return this.setState({ focus: true, hotketSet: false })
 		}
-
-		storeExports.Actions.setFocus(true, e.target, (this.searchInput.innerHTML === ""));
 
 		setTimeout(function () {
 
 			// select the old search text, so the user can edit it or type over it
 			// Do this in a timeout to give some time for the animation to work
 			var element = this.searchInput;
-			if (element.innerHTML.trim() === "") {
-				SearchStore.search("");
-			} else {
-				selectElementContents(element);
-			}
+			selectElementContents(element);
 		}, 100);
 	}
 	blurred() {

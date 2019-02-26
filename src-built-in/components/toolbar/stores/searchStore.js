@@ -52,9 +52,11 @@ var Actions = {
 	initialize: function (cb) {
 		cb();
 	},
-	setFocus(bool, target, ignoreSearchResults) {
+	setFocus(bool, target) {
 		focus = bool;
 		if (bool) {
+			let hideResults = false;
+			if (!target.innerHTML) hideResults = true;
 			if (window.outerWidth < 400) {
 				finsembleWindow.getBounds((err, bounds) => {
 					cachedBounds = bounds;
@@ -70,7 +72,7 @@ var Actions = {
 			}
 			if (!menuWindow) return;
 			return menuWindow.isShowing((err, showing) => {
-				if (showing || ignoreSearchResults) return;
+				if (showing || hideResults) return;
 				Actions.positionSearchResults();
 			});
 
