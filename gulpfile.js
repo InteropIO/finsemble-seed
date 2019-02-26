@@ -409,11 +409,15 @@
 
 			electronProcess.on("close", function (code) {
 				console.log("child process exited with code " + code);
-				process.exit();
+				//Server shouldn't shut down on exit because electron restart closes down electron and restarts in the background.
+				//Didn't want to remove the code in case problems are encountered in openfin with this change
+				// process.exit();
 			});
 
 			process.on('exit', function () {
-				electronProcess.kill();
+				//Server shouldn't shut down on exit because electron restart closes down electron and restarts in the background.
+				//Didn't want to remove the code in case problems are encountered in openfin with this change
+				// electronProcess.kill();
 			});
 			if (done) done();
 		},
