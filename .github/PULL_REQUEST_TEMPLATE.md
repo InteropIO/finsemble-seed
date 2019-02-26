@@ -9,6 +9,6 @@ fix|feat|chore|docs|refactor|style|test: #id [CARD]
 Markdown will convert the 1s to the appropriate number.
 1. Step 1.
 1. Step 2.
-1. - [x] Thing happened.
-1. - [ ] Thing did not happen.
+1. [x] Thing happened.
+1. [ ] Thing did not happen.
 1. Step 3
