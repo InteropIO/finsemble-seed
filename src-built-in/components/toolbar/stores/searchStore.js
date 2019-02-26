@@ -52,7 +52,7 @@ var Actions = {
 	initialize: function (cb) {
 		cb();
 	},
-	setFocus(bool, target) {
+	setFocus(bool, target, ignoreSearchResults) {
 		focus = bool;
 		if (bool) {
 			if (window.outerWidth < 400) {
@@ -70,7 +70,7 @@ var Actions = {
 			}
 			if (!menuWindow) return;
 			return menuWindow.isShowing((err, showing) => {
-				if (showing) return;
+				if (showing || ignoreSearchResults) return;
 				Actions.positionSearchResults();
 			});
 
