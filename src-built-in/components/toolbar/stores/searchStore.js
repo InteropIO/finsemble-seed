@@ -65,7 +65,7 @@ var Actions = {
 			}
 			if (!menuWindow) return;
 			return menuWindow.isShowing((err, showing) => {
-				if (showing || (searchInputHandler !== "")) return;
+				if (showing || searchInputHandler() !== "") return;
 				Actions.positionSearchResults();
 			});
 
@@ -98,6 +98,11 @@ var Actions = {
 		}
 	},
 
+	/**
+	 * Assign a function to retrieve the actual DOM element where the search input is
+	 *
+	 * @param {Function} inputHandler
+	 */
 	setSearchInputHandler(inputHandler) {
 		if (typeof inputHandler !== 'function') {
 			FSBL.Clients.Logger.error("Parameter inputHandler must be a function.")
@@ -106,6 +111,11 @@ var Actions = {
 		}
 	},
 
+	/**
+	 * Assign a function to retrieve a menu blur handler which will actually hide search results
+	 *
+	 * @param {Function} menuHandler
+	 */
 	setSearchMenuBlurHandler(menuHandler) {
 		if (typeof menuHandler !== 'function') {
 			FSBL.Clients.Logger.error("Parameter menuHandler must be a function.")
