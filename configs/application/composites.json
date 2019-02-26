@@ -1,5 +1,6 @@
 {
     "composites": {
+        "//Sample Composite": "This is not even an alpha feature. This is here for a future release.",
         "Sample Composite": {
             "width": 860,
             "height": 700,
@@ -7,13 +8,13 @@
             "left": 40,
             "components": [
                 {
-                  "component": "Composite Titlebar",
-                  "params": {
-                      "top": 0,
-                      "left": 0,
-                      "width": "100%",
-                      "height": 25
-                  }
+                    "component": "Composite Titlebar",
+                    "params": {
+                        "top": 0,
+                        "left": 0,
+                        "width": "100%",
+                        "height": 25
+                    }
                 },
                 {
                     "component": "Welcome Component",
