@@ -88,14 +88,14 @@ export default class Search extends React.Component {
 		storeExports.Actions.search(event.target.textContent);
 	}
 	componentDidUpdate() {
-		if (this.state.hotketSet) {
+		if (this.state.hotkeySet) {
 			FSBL.Clients.WindowClient.finWindow.focus(() => {
 				this.searchContainer.current.focus();
 				if (this.searchInput.current.innerHTML && this.searchInput.current.innerHTML.trim() !== "") {
 					SearchStore.positionSearchResults();
 				}
 				this.setState({
-					hotketSet: false
+					hotkeySet: false
 				});
 			});
 		}
@@ -119,7 +119,7 @@ export default class Search extends React.Component {
 		this.setState({ active: data.value })
 	}
 	hotKeyActive() {
-		this.setState({ active: true, hotketSet: true })
+		this.setState({ active: true, hotkeySet: true })
 	}
 	focused(e) {
 		function selectElementContents(el) {
@@ -132,8 +132,8 @@ export default class Search extends React.Component {
 
 		storeExports.Actions.setFocus(true, e.target)
 
-		if (this.state.hotketSet) {
-			return this.setState({ focus: true, hotketSet: false })
+		if (this.state.hotkeySet) {
+			return this.setState({ focus: true, hotkeySet: false })
 		}
 
 		setTimeout(function () {
