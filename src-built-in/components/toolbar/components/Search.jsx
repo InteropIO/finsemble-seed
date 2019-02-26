@@ -91,10 +91,12 @@ export default class Search extends React.Component {
 		if (this.state.hotketSet) {
 			FSBL.Clients.WindowClient.finWindow.focus(() => {
 				this.searchContainer.current.focus();
-				console.log('this.searchInput.innerHTML: ', this.searchInput.current.innerHTML);
 				if (this.searchInput.current.innerHTML && this.searchInput.current.innerHTML.trim() !== "") {
 					SearchStore.positionSearchResults();
 				}
+				this.setState({
+					hotketSet: false
+				});
 			});
 		}
 		/*if (!this.state.focus) return;
