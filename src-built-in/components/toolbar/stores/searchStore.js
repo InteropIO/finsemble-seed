@@ -18,20 +18,18 @@ var inputContainerBoundsHandler = Function.prototype;
 // Handler for bluring the search input.  Currently being set and used in Search.jsx
 var blurSearchInputHandler = Function.prototype;
 
+//Handler for getting search input text
 var searchInputHandler = Function.prototype;
 
-function mouseInElement(element, cb) {
-	var elementBounds = element.getBoundingClientRect();
-	window.screenX;
-	window.screenY
-	var bounds = {
-		top: window.screenY + elementBounds.top,
-		left: window.screenX + elementBounds.left,
-		bottom: element.offsetHeight + window.screenY,
-		right: elementBounds.right + window.screenX + elementBounds.left
-	}
-	mouseInBounds(bounds, cb)
+//Handler for bluring the results menu
+var menuBlurHandler = Function.prototype;
+
+function mouseInWindow(win, cb) {
+	win.getBounds(function (err, bounds) {
+		mouseInBounds(bounds, cb)
+	})
 }
+
 function mouseInBounds(bounds, cb) {
 	fin.desktop.System.getMousePosition(function (mousePosition) {
 		if (mousePosition.left >= bounds.left & mousePosition.left <= bounds.right) {
@@ -42,11 +40,6 @@ function mouseInBounds(bounds, cb) {
 		return cb(null, false);
 	});
 
-}
-function mouseInWindow(win, cb) {
-	win.getBounds(function (err, bounds) {
-		mouseInBounds(bounds, cb)
-	})
 }
 
 let cachedBounds = null;
@@ -72,8 +65,7 @@ var Actions = {
 			}
 			if (!menuWindow) return;
 			return menuWindow.isShowing((err, showing) => {
-				let element = searchInputHandler();
-				if (showing || (element && element.innerHTML.trim() === "")) return;
+				if (showing || (searchInputHandler !== "")) return;
 				Actions.positionSearchResults();
 			});
 
@@ -106,11 +98,19 @@ var Actions = {
 		}
 	},
 
-	setSearchInputHandler(handler) {
-		if (typeof handler !== 'function') {
-			FSBL.Clients.Logger.error("Parameter boundsHandler must be a function.")
+	setSearchInputHandler(inputHandler) {
+		if (typeof inputHandler !== 'function') {
+			FSBL.Clients.Logger.error("Parameter inputHandler must be a function.")
 		} else {
-			searchInputHandler = handler;
+			searchInputHandler = inputHandler;
+		}
+	},
+
+	setSearchMenuBlurHandler(menuHandler) {
+		if (typeof menuHandler !== 'function') {
+			FSBL.Clients.Logger.error("Parameter menuHandler must be a function.")
+		} else {
+			menuBlurHandler = menuHandler;
 		}
 	},
 
@@ -239,14 +239,7 @@ var Actions = {
 		})
 	},
 	menuBlur() {
-		let element = searchInputHandler();
-		if (element) {
-			mouseInElement(element, function (err, inBounds) {
-				if (!inBounds) {
-					Actions.handleClose();
-				}
-			})
-		}
+		menuBlurHandler();
 	}
 };
 function searchTest(params, cb) {

@@ -27,7 +27,12 @@ export default class Search extends React.Component {
 		// search results popup, which is displayed by the SearchStore.
 		SearchStore.setInputContainerBoundsHandler(this.getInputContainerBounds.bind(this));
 		SearchStore.setBlurSearchInputHandler(this.blurSearchInput.bind(this));
+
+		//Handler to get the input where search terms are actually entered
 		SearchStore.setSearchInputHandler(this.getSearchInput.bind(this));
+
+		//Sets the handler for menu bluring
+		SearchStore.set
 	}
 	/**
 	 * Returns getBoundingClientRect of the inputContainer div element for positioning search results
@@ -40,11 +45,23 @@ export default class Search extends React.Component {
 		return undefined;
 	}
 	blurSearchInput() {
-		console.log('bluring search input');
 		this.searchInput.current.blur();
 	}
 	getSearchInput() {
-		return this.searchInput.current;
+		let response;
+		if (this.searchInput.current.innerHTML) {
+			response = this.searchInput.current.innerHTML.trim();
+		} else {
+			response = "";
+		}
+		return response;
+	}
+	meunBlur() {
+		mouseInElement(this.searchInput.current, function (err, inBounds) {
+			if (!inBounds) {
+				Actions.handleClose();
+			}
+		})
 	}
 	onStateUpdate(err, data) {
 
@@ -91,6 +108,8 @@ export default class Search extends React.Component {
 		if (this.state.hotkeySet) {
 			FSBL.Clients.WindowClient.finWindow.focus(() => {
 				this.searchContainer.current.focus();
+
+				//After focusing the container (which causes the results to show) we want to position the results. This way if the toolbar was moved with a keyboard shortcut, the results will follow it. Avoid doing this when the search text is empty since we don't want to show the 'No results found'
 				if (this.searchInput.current.innerHTML && this.searchInput.current.innerHTML.trim() !== "") {
 					SearchStore.positionSearchResults();
 				}
@@ -138,12 +157,14 @@ export default class Search extends React.Component {
 
 		setTimeout(function () {
 
-			// select the old search text, so the user can edit it or type over it
-			// Do this in a timeout to give some time for the animation to work
+
 			var element = this.searchInput;
 			if (element.innerHTML.trim() === "") {
+				//If the search text is empty after focusing do an empty search, which will cause the store to rehide the menu
 				SearchStore.search("");
 			} else {
+				// select the old search text, so the user can edit it or type over it
+				// Do this in a timeout to give some time for the animation to work
 				selectElementContents(element);
 			}
 		}, 100);
@@ -162,9 +183,32 @@ export default class Search extends React.Component {
 			<div className="searchSection  finsemble-toolbar-button">
 				<div ref={this.searchInput} id="searchInput" contentEditable className={"searchInput " + (this.state.active ? "active" : "compact")} placeholder="Search" onKeyDown={this.keyPress}
 					onFocus={this.focused}
-					/*onInput={this.textChange} onBlur={this.blurred} onChange={this.textChange} dangerouslySetInnerHTML={{ __html: (this.state.focus ? this.state.saveText : "") }} />*/
 					onInput={this.textChange} onBlur={this.blurred} onChange={this.textChange} />
 			</div>
 		</div>
 	}
+}
+
+function mouseInElement(element, cb) {
+	var elementBounds = element.getBoundingClientRect();
+	window.screenX;
+	window.screenY
+	var bounds = {
+		top: window.screenY + elementBounds.top,
+		left: window.screenX + elementBounds.left,
+		bottom: element.offsetHeight + window.screenY,
+		right: elementBounds.right + window.screenX + elementBounds.left
+	}
+	mouseInBounds(bounds, cb)
+}
+function mouseInBounds(bounds, cb) {
+	fin.desktop.System.getMousePosition(function (mousePosition) {
+		if (mousePosition.left >= bounds.left & mousePosition.left <= bounds.right) {
+			if (mousePosition.top >= bounds.top & mousePosition.top <= bounds.bottom) {
+				return cb(null, true);
+			}
+		}
+		return cb(null, false);
+	});
+
 }
