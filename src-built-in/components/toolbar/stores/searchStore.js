@@ -18,6 +18,8 @@ var inputContainerBoundsHandler = Function.prototype;
 // Handler for bluring the search input.  Currently being set and used in Search.jsx
 var blurSearchInputHandler = Function.prototype;
 
+var searchInputHandler = Function.prototype;
+
 function mouseInElement(element, cb) {
 	var elementBounds = element.getBoundingClientRect();
 	window.screenX;
@@ -55,8 +57,6 @@ var Actions = {
 	setFocus(bool, target) {
 		focus = bool;
 		if (bool) {
-			let hideResults = false;
-			if (!target.innerHTML) hideResults = true;
 			if (window.outerWidth < 400) {
 				finsembleWindow.getBounds((err, bounds) => {
 					cachedBounds = bounds;
@@ -72,7 +72,8 @@ var Actions = {
 			}
 			if (!menuWindow) return;
 			return menuWindow.isShowing((err, showing) => {
-				if (showing || hideResults) return;
+				let element = searchInputHandler();
+				if (showing || (element && element.innerHTML.trim() === "")) return;
 				Actions.positionSearchResults();
 			});
 
@@ -102,6 +103,14 @@ var Actions = {
 			FSBL.Clients.Logger.error("Parameter boundsHandler must be a function.")
 		} else {
 			inputContainerBoundsHandler = boundsHandler;
+		}
+	},
+
+	setSearchInputHandler(handler) {
+		if (typeof handler !== 'function') {
+			FSBL.Clients.Logger.error("Parameter boundsHandler must be a function.")
+		} else {
+			searchInputHandler = handler;
 		}
 	},
 
@@ -230,11 +239,14 @@ var Actions = {
 		})
 	},
 	menuBlur() {
-		mouseInElement(document.getElementById("searchInput"), function (err, inBounds) {
-			if (!inBounds) {
-				Actions.handleClose();
-			}
-		})
+		let element = searchInputHandler();
+		if (element) {
+			mouseInElement(element, function (err, inBounds) {
+				if (!inBounds) {
+					Actions.handleClose();
+				}
+			})
+		}
 	}
 };
 function searchTest(params, cb) {

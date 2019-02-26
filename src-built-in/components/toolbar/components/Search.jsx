@@ -27,6 +27,7 @@ export default class Search extends React.Component {
 		// search results popup, which is displayed by the SearchStore.
 		SearchStore.setInputContainerBoundsHandler(this.getInputContainerBounds.bind(this));
 		SearchStore.setBlurSearchInputHandler(this.blurSearchInput.bind(this));
+		SearchStore.setSearchInputHandler(this.getSearchInput.bind(this));
 	}
 	/**
 	 * Returns getBoundingClientRect of the inputContainer div element for positioning search results
@@ -41,6 +42,9 @@ export default class Search extends React.Component {
 	blurSearchInput() {
 		console.log('bluring search input');
 		this.searchInput.current.blur();
+	}
+	getSearchInput() {
+		return this.searchInput.current;
 	}
 	onStateUpdate(err, data) {
 
@@ -87,6 +91,10 @@ export default class Search extends React.Component {
 		if (this.state.hotketSet) {
 			FSBL.Clients.WindowClient.finWindow.focus(() => {
 				this.searchContainer.current.focus();
+				console.log('this.searchInput.innerHTML: ', this.searchInput.current.innerHTML);
+				if (this.searchInput.current.innerHTML && this.searchInput.current.innerHTML.trim() !== "") {
+					SearchStore.positionSearchResults();
+				}
 			});
 		}
 		/*if (!this.state.focus) return;
@@ -131,7 +139,11 @@ export default class Search extends React.Component {
 			// select the old search text, so the user can edit it or type over it
 			// Do this in a timeout to give some time for the animation to work
 			var element = this.searchInput;
-			selectElementContents(element);
+			if (element.innerHTML.trim() === "") {
+				SearchStore.search("");
+			} else {
+				selectElementContents(element);
+			}
 		}, 100);
 	}
 	blurred() {
