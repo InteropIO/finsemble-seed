@@ -41,10 +41,12 @@ export default class Toolbar extends React.Component {
 		
 		if (previousState === "Fixed") {
 			FSBL.Clients.ConfigClient.setPreference({ field: "finsemble.components.Toolbar.window.dockable", value: ["top", "bottom"] });
+			FSBL.Clients.ConfigClient.setPreference({ field: "finsemble.components.Toolbar.window.options.resizable", value: true });
 			toolbarType = "Floating";
 			this.setMonitor("0");
 		} else if (previousState === "Floating") {
 			FSBL.Clients.ConfigClient.setPreference({ field: "finsemble.components.Toolbar.window.dockable", value: null });
+			FSBL.Clients.ConfigClient.setPreference({ field: "finsemble.components.Toolbar.window.options.resizable", value: false });
 			toolbarType = "Fixed";
 			this.setMonitor("all");
 		}
