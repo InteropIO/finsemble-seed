@@ -30,7 +30,7 @@ export default class Search extends React.Component {
 		//Handler to get the input where search terms are actually entered
 		storeExports.Actions.setSearchInputHandler(this.getSearchInput.bind(this));
 
-		//Sets the handler for menu bluring
+		//Sets the handler for menu blurring
 		storeExports.Actions.setSearchMenuBlurHandler(this.meunBlur.bind(this));
 	}
 	/**

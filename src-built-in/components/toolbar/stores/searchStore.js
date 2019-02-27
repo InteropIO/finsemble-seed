@@ -15,13 +15,13 @@ var control = null;
 // Handler for determing where to show the search results component.  Currently being set by the search input in Search.jsx
 var inputContainerBoundsHandler = Function.prototype;
 
-// Handler for bluring the search input.  Currently being set and used in Search.jsx
+// Handler for blurring the search input.  Currently being set and used in Search.jsx
 var blurSearchInputHandler = Function.prototype;
 
 //Handler for getting search input text
 var searchInputHandler = Function.prototype;
 
-//Handler for bluring the results menu
+//Handler for blurring the results menu
 var menuBlurHandler = Function.prototype;
 
 function mouseInWindow(win, cb) {
