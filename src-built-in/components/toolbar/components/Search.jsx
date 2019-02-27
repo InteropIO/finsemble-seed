@@ -48,7 +48,7 @@ export default class Search extends React.Component {
 	}
 	getSearchInput() {
 		let response;
-		if (this.searchInput.current.innerHTML) {
+		if (this.searchInput.current.innerHTML && this.searchInput.current.innerHTML.trim() !== "") {
 			response = this.searchInput.current.innerHTML.trim();
 		} else {
 			response = "";
@@ -155,17 +155,9 @@ export default class Search extends React.Component {
 		}
 
 		setTimeout(function () {
-
-
-			var element = this.searchInput;
-			if (element.innerHTML.trim() === "") {
-				//If the search text is empty after focusing do an empty search, which will cause the store to rehide the menu
-				storeExports.Actions.search("");
-			} else {
-				// select the old search text, so the user can edit it or type over it
-				// Do this in a timeout to give some time for the animation to work
-				selectElementContents(element);
-			}
+			// select the old search text, so the user can edit it or type over it
+			// Do this in a timeout to give some time for the animation to work
+			selectElementContents(this.searchInput);
 		}, 100);
 	}
 	blurred() {

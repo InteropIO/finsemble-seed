@@ -65,7 +65,10 @@ var Actions = {
 			}
 			if (!menuWindow) return;
 			return menuWindow.isShowing((err, showing) => {
-				if (showing || searchInputHandler() !== "") return;
+				//Gets the input text that is in the current search box.
+				//If the text is empty or the search is not showing, no need to position search results
+				let inputText = searchInputHandler();
+				if (showing || inputText === "") return;
 				Actions.positionSearchResults();
 			});
 
