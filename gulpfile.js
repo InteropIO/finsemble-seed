@@ -7,6 +7,7 @@
 	chalk.enabled = true;
 	//setting the level to 1 will force color output.
 	chalk.level = 1;
+	const async = require("async");
 	const { exec, spawn } = require("child_process");
 	const ON_DEATH = require("death")({ debug: false });
 	const del = require("del");
@@ -18,10 +19,27 @@
 	const shell = require("shelljs");
 	const path = require("path");
 	const webpack = require("webpack");
+
 	// local
 	const extensions = fs.existsSync("./gulpfile-extensions.js") ? require("./gulpfile-extensions.js") : undefined;
-	const async = require("async");
+	const isMacOrNix = process.platform !== "win32";
 	// #endregion
+
+
+	const killApp = (processName, callback = () => { }) => {
+		const command = isMacOrNix ? `killall -9 ${processName}` : `taskkill /F /IM ${processName.toLowerCase()}.* /T`;
+		const error = isMacOrNix ? "No matching processes belonging to you were found" : `The process "${processName.toLowerCase()}.*" not found.`;
+
+		logToTerminal(`kill: running: ${command}...`);
+
+		exec(command, err => {
+			if (err && !err.includes(error)) {
+				console.error(errorOutColor(err));
+			}
+
+			callback(err);
+		});
+	};
 
 	const logToTerminal = (msg, color = "white", bgcolor = "bgBlack") => {
 		if (!chalk[color]) color = "white";
@@ -341,17 +359,8 @@
 			], done);
 		},
 		launchOpenFin: done => {
-			ON_DEATH((signal, err) => {
-				// Check platform for appropriate kill command.
-				const killCommand = process.platform === "win32" ?
-					"taskkill /F /IM openfin.* /T" :
-					"kill -9 $(ps aux | grep openfin | grep -v grep | awk '{print $2}')";
-
-				exec(killCommand, (err, stdout, stderr) => {
-					// Only write the error to console if there is one and it is something other than process not found.
-					if (err && err !== 'The process "openfin.*" not found.') {
-						console.error(errorOutColor(err));
-					}
+			ON_DEATH(() => {
+				killApp("OpenFin", () => {
 
 					if (watchClose) watchClose();
 					process.exit();
@@ -372,15 +381,10 @@
 			let manifest = taskMethods.startupConfig[env.NODE_ENV].serverConfig;
 			process.env.ELECTRON_DEV = true;
 
-			ON_DEATH((signal, err) => {
+			ON_DEATH(() => {
 				if (electronProcess) electronProcess.kill();
 
-				exec("taskkill /F /IM electron.* /T", (err, stdout, stderr) => {
-					// Only write the error to console if there is one and it is something other than process not found.
-					if (err && err !== 'The process "electron.*" not found.') {
-						console.error(errorOutColor(err));
-					}
-
+				killApp("Electron", () => {
 					if (watchClose) watchClose();
 					process.exit();
 				});
@@ -393,7 +397,7 @@
 			if (debug) {
 				debugArg = envOrArg("breakpointOnStart") ? " --inspect-brk=5858" : " --inspect=5858";
 			}
-			let command = "set ELECTRON_DEV=true && " + electronPath + " index.js --remote-debugging-port=9090" + debugArg +  " --manifest " + manifest;
+			let command = "set ELECTRON_DEV=true && " + electronPath + " index.js --remote-debugging-port=9090" + debugArg + " --manifest " + manifest;
 			logToTerminal(command);
 			electronProcess = exec(command,
 				{
