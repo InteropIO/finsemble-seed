@@ -58,7 +58,7 @@ export default class Search extends React.Component {
 	meunBlur() {
 		mouseInElement(this.searchInput.current, function (err, inBounds) {
 			if (!inBounds) {
-				Actions.handleClose();
+				storeExports.Actions.handleClose();
 			}
 		})
 	}
