@@ -3,7 +3,6 @@ import { FinsembleButton, FinsembleToolbarSeparator } from "@chartiq/finsemble-r
 import * as storeExports from "../stores/searchStore";
 import * as _debounce from "lodash.debounce"
 import ToolbarStore from "../stores/toolbarStore";
-import {Actions as SearchStore} from "../stores/searchStore";
 
 let menuStore;
 export default class Search extends React.Component {
@@ -25,14 +24,14 @@ export default class Search extends React.Component {
 
 		// Handler for obtaining the search inputContainer bounds for the location of the
 		// search results popup, which is displayed by the SearchStore.
-		SearchStore.setInputContainerBoundsHandler(this.getInputContainerBounds.bind(this));
-		SearchStore.setBlurSearchInputHandler(this.blurSearchInput.bind(this));
+		storeExports.Actions.setInputContainerBoundsHandler(this.getInputContainerBounds.bind(this));
+		storeExports.Actions.setBlurSearchInputHandler(this.blurSearchInput.bind(this));
 
 		//Handler to get the input where search terms are actually entered
-		SearchStore.setSearchInputHandler(this.getSearchInput.bind(this));
+		storeExports.Actions.setSearchInputHandler(this.getSearchInput.bind(this));
 
 		//Sets the handler for menu bluring
-		SearchStore.set
+		storeExports.Actions.setSearchMenuBlurHandler(this.meunBlur.bind(this));
 	}
 	/**
 	 * Returns getBoundingClientRect of the inputContainer div element for positioning search results
@@ -111,7 +110,7 @@ export default class Search extends React.Component {
 
 				//After focusing the container (which causes the results to show) we want to position the results. This way if the toolbar was moved with a keyboard shortcut, the results will follow it. Avoid doing this when the search text is empty since we don't want to show the 'No results found'
 				if (this.searchInput.current.innerHTML && this.searchInput.current.innerHTML.trim() !== "") {
-					SearchStore.positionSearchResults();
+					storeExports.Actions.positionSearchResults();
 				}
 				this.setState({
 					hotkeySet: false
@@ -161,7 +160,7 @@ export default class Search extends React.Component {
 			var element = this.searchInput;
 			if (element.innerHTML.trim() === "") {
 				//If the search text is empty after focusing do an empty search, which will cause the store to rehide the menu
-				SearchStore.search("");
+				storeExports.Actions.search("");
 			} else {
 				// select the old search text, so the user can edit it or type over it
 				// Do this in a timeout to give some time for the animation to work
@@ -191,15 +190,13 @@ export default class Search extends React.Component {
 
 function mouseInElement(element, cb) {
 	var elementBounds = element.getBoundingClientRect();
-	window.screenX;
-	window.screenY
 	var bounds = {
 		top: window.screenY + elementBounds.top,
 		left: window.screenX + elementBounds.left,
 		bottom: element.offsetHeight + window.screenY,
 		right: elementBounds.right + window.screenX + elementBounds.left
-	}
-	mouseInBounds(bounds, cb)
+	};
+	mouseInBounds(bounds, cb);
 }
 function mouseInBounds(bounds, cb) {
 	fin.desktop.System.getMousePosition(function (mousePosition) {
