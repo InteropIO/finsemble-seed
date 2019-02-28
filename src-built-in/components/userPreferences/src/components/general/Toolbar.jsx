@@ -75,10 +75,8 @@ export default class Toolbar extends React.Component {
 		//Unless we want to add another config variable tracking dockable state we need to determine state
 		//using the set values.
 		FSBL.Clients.ConfigClient.getValue("finsemble.components.Toolbar.window.dockable", (err, value) => {
-			let toolbarType = null;
-			if (!value) { 
-				toolbarType = "Fixed";
-			} else if (JSON.stringify(value) === JSON.stringify(["top", "bottom"])) {
+			let toolbarType = "Fixed";
+			if (value) { 
 				toolbarType = "Floating";
 			}
 			//Only set the state if the expected values were found in the config, otherwise use the default
