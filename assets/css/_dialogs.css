@@ -48,27 +48,32 @@ body.dialog .dialog-question {
     word-wrap: break-word;
 }
 
+.controls-wrapper .button-wrapper,
 body.dialog .button-wrapper {
     display: flex;
     justify-content: flex-end;
 }
 
+.controls-wrapper input[type=number]::-webkit-inner-spin-button,
+.controls-wrapper input[type=number]::-webkit-outer-spin-button,
 body.dialog input[type=number]::-webkit-inner-spin-button,
   body.dialog input[type=number]::-webkit-outer-spin-button {
     opacity: 1;
 }
-
+.controls-wrapper input::-webkit-outer-spin-button,
+.controls-wrapper input::-webkit-inner-spin-button,
 body.dialog input::-webkit-outer-spin-button,
   body.dialog input::-webkit-inner-spin-button {
     margin-left: 5px;
 }
-
+.controls-wrapper input:focus,
 body.dialog input:focus {
     box-shadow: 0 0 5px rgba 81, 203, 238, 1;
     border: 1px solid var(--dialog-input-border-focus-color);
     outline: none;
 }
 
+.controls-wrapper input,
 body.dialog input {
     -webkit-appearance: none;
     font-family: var(--font-family);
