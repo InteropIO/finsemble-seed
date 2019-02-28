@@ -268,6 +268,16 @@
 			const CLI_VERSION = require(path.join(CLI_PATH, "package.json")).version;
 			const CONTROLS_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-react-controls");
 			const CONTROLS_VERSION = require(path.join(CONTROLS_PATH, "package.json")).version;
+			
+			// Check e2o version
+			const E2O_PATH = path.join(__dirname, "node_modules", "@chartiq", "e2o");
+			const E2O_PATH_EXISTS = fs.existsSync(E2O_PATH);
+			const USING_E2O = channelAdapter === "e2o";
+			if (USING_E2O && !E2O_PATH_EXISTS) {
+				throw "Cannot use e2o channelAdapter unless e2o optional dependency is installed. Please run npm i @chartiq/e2o";
+			}
+
+			const E2O_VERSION = require(path.join(E2O_PATH, "package.json")).version;
 
 			function checkLink(params, cb) {
 				let { path, name, version } = params;
@@ -307,6 +317,18 @@
 						version: CONTROLS_VERSION
 					}, cb)
 				},
+				(cb) => {
+					if (!E2O_VERSION) {
+						// e2o not found so skip check
+						return cb();
+					}
+
+					checkLink({
+						path: E2O_PATH,
+						name: "e2o",
+						version: E2O_VERSION
+					}, cb)
+				}
 			], done)
 		},
 
