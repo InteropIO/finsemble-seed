@@ -67,9 +67,9 @@
     ],
     "finsemble": {
         "applicationRoot": "http://localhost:3375",
-        "moduleRoot": "http://localhost:3375/finsemble",
-        "servicesRoot": "http://localhost:3375/finsemble/services",
-        "notificationURL": "http://localhost:3375/components/notification/notification.html",
+        "moduleRoot": "$applicationRoot/finsemble",
+        "servicesRoot": "$applicationRoot/finsemble/services",
+        "notificationURL": "$applicationRoot/components/notification/notification.html",
         "importConfig": [
             "$applicationRoot/configs/application/config.json"
         ],
