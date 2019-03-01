@@ -9,7 +9,26 @@ var WindowClient;
 import windowTitleBarStoreDefaults from "./windowTitleBarStoreDefaults";
 import * as async from "async";
 var finWindow = fin.desktop.Window.getCurrent();
-//theses are constants that are set inside of setupStore. so they're declared as vars and not constantsa.
+
+//autohide functions and timers
+let headerTimeout = null;
+let autoHideTimer = function () {
+	//console.log("reset timer");
+	headerTimeout = setTimeout(function () {
+		console.log("hiding header...");
+		let header = document.getElementsByClassName("fsbl-header")[0];
+		header.style.opacity = 0;
+	}, 2500);
+};
+let autoHideMouseMoveHandler = function( event ) {
+	//console.log(`moving mouse... X=${event.clientX} Y=${event.clientY}`);
+	if (headerTimeout) {clearTimeout(headerTimeout);}
+	let header = document.getElementsByClassName("fsbl-header")[0];
+	header.style.opacity = 1;
+	autoHideTimer();
+}
+
+//theses are constants that are set inside of setupStore. so they're declared as vars and not constants.
 let constants = {};
 var Actions = {
 	initialize: function () {
@@ -38,6 +57,7 @@ var Actions = {
 				{ field: "Minimize.hide", value: FSBLHeader.hideMinimize ? true : false },
 				{ field: "Close.hide", value: FSBLHeader.hideClose ? true : false },
 				{ field: "AlwaysOnTop.show", value: FSBLHeader.alwaysOnTop ? true : false },
+				{ field: "AutoHide.show", value: FSBLHeader.autoHide ? true : false }
 			]);
 
 
@@ -172,12 +192,20 @@ var Actions = {
 			windowTitleBarStore.setValues([{ field: "Main.dockingEnabled", value: dockingConfig.enabled }]);
 
 			// Whether the alwaysOnTop pin shows or not depends first on the global setting (finsemble["Window Manager"].alwaysOnTop) and then
-			// on the specific setting for this component (foreigh.components["Widow Manager"].alwaysOnTop)
+			// on the specific setting for this component (foreign.components["Widow Manager"].alwaysOnTop)
 			let alwaysOnTopIcon = globalWindowManagerConfig.alwaysOnTopIcon;
 			if (windowTitleBarConfig.alwaysOnTopIcon === false || windowTitleBarConfig.alwaysOnTopIcon === true)
 				alwaysOnTopIcon = windowTitleBarConfig.alwaysOnTopIcon;
 
 			windowTitleBarStore.setValues([{ field: "AlwaysOnTop.show", value: alwaysOnTopIcon }]);
+
+			// Whether the autohide pin shows or not depends first on the global setting (finsemble["Window Manager"].autoHideIcon) and then
+			// on the specific setting for this component (foreign.components["Widow Manager"].autoHideIcon)
+			let autoHideIcon = globalWindowManagerConfig.autoHideIcon;
+			if (windowTitleBarConfig.autoHideIcon === false || windowTitleBarConfig.autoHideIcon === true)
+				autoHideIcon = windowTitleBarConfig.autoHideIcon;
+
+			windowTitleBarStore.setValues([{ field: "AutoHide.show", value: autoHideIcon }]);
 
 
 			//If tabbing is turned off, ignore global/local 'windowManager' config about whether to allow tabbing.
@@ -397,7 +425,40 @@ var Actions = {
 
 
 	},
+	/**
+	 * Set state for autohiding the header.
+	 */
+	setAutoHide: function(autoHide, cb = Function.prototype) {
+		
+		console.log("setAutoHide: " + autoHide);
+		if (autoHide){
+			let header = document.getElementsByClassName("fsbl-header")[0];
+			//let headerTimeout = null;
+			header.style['transition-property'] = "opacity";
+			header.style['transition-duration'] = "0.7s";
+			header.style['transition-timing-function'] = "ease";
+			
+			//setup any activity listeners to redisplay window chrome
+			let b = document.getElementsByTagName("body")[0];
+			b.addEventListener("mousemove", autoHideMouseMoveHandler);
+			// b.addEventListener("mouseleave", function( event ) {
+			// 	console.log("leaving...");
+			// 	let header = document.getElementsByClassName("fsbl-header")[0];
+			// 	header.style.display = "none";
+			// });
+			
+			//set the autohide timer
+			autoHideTimer();
+		} else {
+			//clear the autohide timer
+			if (headerTimeout) {clearTimeout(headerTimeout);}
+			//unhook activity listeners
+			let b = document.getElementsByTagName("body")[0];
+			b.removeEventListener("mousemove", autoHideMouseMoveHandler);
+		}
 
+		cb();
+	},
 	getTabs() {
 		return windowTitleBarStore.getValue({ field: "tabs" });
 	},

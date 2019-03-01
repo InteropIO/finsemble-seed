@@ -35,6 +35,7 @@ import Maximize from "./components/right/MaximizeButton.jsx";
 import Close from "./components/right/CloseButton.jsx";
 import BringSuiteToFront from "./components/right/BringSuiteToFront.jsx";
 import AlwaysOnTop from "./components/right/AlwaysOnTop.jsx";
+import AutoHide from "./components/right/AutoHide.jsx";
 import TabRegion from './components/center/TabRegion'
 import "../../../../assets/css/finsemble.css";
 
@@ -70,6 +71,7 @@ class WindowTitleBar extends React.Component {
 			showShareButton: windowTitleBarStore.getValue({ field: "Sharer.emitterEnabled" }),
 			isTopRight: windowTitleBarStore.getValue({ field: "isTopRight" }),
 			alwaysOnTopButton: windowTitleBarStore.getValue({ field: "AlwaysOnTop.show" }),
+			autoHideButton: windowTitleBarStore.getValue({ field: "AutoHide.show" }),
 			tabs: [activeIdentifier], //array of tabs for this window
 			showTabs: windowTitleBarStore.getValue({ field: "showTabs" }),
 			hackScrollbar: windowTitleBarStore.getValue({ field: "hackScrollbar" }),
@@ -89,6 +91,7 @@ class WindowTitleBar extends React.Component {
 		this.onToggleDockingIcon = this.onToggleDockingIcon.bind(this);
 		this.onDockingEnabledChanged = this.onDockingEnabledChanged.bind(this);
 		this.onAlwaysOnTopChanged = this.onAlwaysOnTopChanged.bind(this);
+		this.onAutoHideChanged = this.onAutoHideChanged.bind(this);
 		this.showLinkerButton = this.showLinkerButton.bind(this);
 		this.isTopRight = this.isTopRight.bind(this);
 		this.allowDragOnCenterRegion = this.allowDragOnCenterRegion.bind(this);
@@ -110,6 +113,7 @@ class WindowTitleBar extends React.Component {
 			{ field: "Main.dockingIcon", listener: this.onToggleDockingIcon },
 			{ field: "Main.dockingEnabled", listener: this.onDockingEnabledChanged },
 			{ field: "AlwaysOnTop.show", listener: this.onAlwaysOnTopChanged },
+			{ field: "AutoHide.show", listener: this.onAutoHideChanged },
 			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton },
 			{ field: "Sharer.emitterEnabled", listener: this.onShareEmitterChanged },
 			{ field: "isTopRight", listener: this.isTopRight },
@@ -126,9 +130,6 @@ class WindowTitleBar extends React.Component {
 	}
 
 	componentDidMount() {
-		let header = document.getElementsByClassName("fsbl-header")[0];
-		let headerHeight = window.getComputedStyle(header, null).getPropertyValue("height");
-		document.body.style.marginTop = headerHeight;
 		this.resizeDragHandle();
 		this.hackScrollbar();
 	}
@@ -144,6 +145,7 @@ class WindowTitleBar extends React.Component {
 			{ field: "Main.dockingIcon", listener: this.onToggleDockingIcon },
 			{ field: "Main.dockingEnabled", listener: this.onDockingEnabledChanged },
 			{ field: "AlwaysOnTop.show", listener: this.onAlwaysOnTopChanged },
+			{ field: "AutoHide.show", listener: this.onAutoHideChanged },
 			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton },
 			{ field: "Sharer.emitterEnabled", listener: this.onShareEmitterChanged },
 			{ field: "isTopRight", listener: this.isTopRight },
@@ -335,6 +337,9 @@ class WindowTitleBar extends React.Component {
 	onAlwaysOnTopChanged(err, response) {
 		this.setState({ alwaysOnTopButton: response.value });
 	}
+	onAutoHideChanged(err, response) {
+		this.setState({ autoHideButton: response.value });
+	}
 	onStoreChanged(newState) {
 		this.setState(newState);
 	}
@@ -418,6 +423,7 @@ class WindowTitleBar extends React.Component {
 				</div>
 				<div className={rightWrapperClasses} ref={this.setToolbarRight}>
 					{this.state.alwaysOnTopButton && showMinimizeIcon ? <AlwaysOnTop /> : null}
+					{this.state.autoHideButton && showMinimizeIcon ? <AutoHide /> : null}
 					<BringSuiteToFront />
 					{this.state.minButton && showMinimizeIcon ? <Minimize /> : null}
 					{showDockingIcon ? <DockingButton /> : null}
@@ -442,6 +448,7 @@ function FSBLReady() {
 	storeExports.initialize(function () {
 		HeaderActions = storeExports.Actions;
 		windowTitleBarStore = storeExports.getStore();
+		console.log("rendering title bar");
 		ReactDOM.render(<WindowTitleBar />, document.getElementById("FSBLHeader"));
 	});
 }
