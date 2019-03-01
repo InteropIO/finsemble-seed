@@ -12,13 +12,17 @@ var finWindow = fin.desktop.Window.getCurrent();
 
 //autohide functions and timers
 let headerTimeout = null;
+let suspendAutoHide = false;
+let autohideTimeout = 2000;
 let autoHideTimer = function () {
 	//console.log("reset timer");
-	headerTimeout = setTimeout(function () {
-		console.log("hiding header...");
-		let header = document.getElementsByClassName("fsbl-header")[0];
-		header.style.opacity = 0;
-	}, 2500);
+	if (!suspendAutoHide){
+		headerTimeout = setTimeout(function () {
+			console.log("hiding header...");
+			let header = document.getElementsByClassName("fsbl-header")[0];
+			header.style.opacity = 0;
+		}, autohideTimeout);
+	}
 };
 let autoHideMouseMoveHandler = function( event ) {
 	//console.log(`moving mouse... X=${event.clientX} Y=${event.clientY}`);
@@ -26,7 +30,8 @@ let autoHideMouseMoveHandler = function( event ) {
 	let header = document.getElementsByClassName("fsbl-header")[0];
 	header.style.opacity = 1;
 	autoHideTimer();
-}
+};
+
 
 //theses are constants that are set inside of setupStore. so they're declared as vars and not constants.
 let constants = {};
@@ -429,7 +434,6 @@ var Actions = {
 	 * Set state for autohiding the header.
 	 */
 	setAutoHide: function(autoHide, cb = Function.prototype) {
-		
 		console.log("setAutoHide: " + autoHide);
 		if (autoHide){
 			let header = document.getElementsByClassName("fsbl-header")[0];
@@ -458,6 +462,16 @@ var Actions = {
 		}
 
 		cb();
+	},
+	suspendAutoHide(suspend) {
+		suspendAutoHide = suspend;
+		if (suspendAutoHide) {
+			let header = document.getElementsByClassName("fsbl-header")[0];
+			header.style.opacity = 1;
+			if (headerTimeout) {clearTimeout(headerTimeout);}
+		} else {
+			autoHideTimer();
+		}
 	},
 	getTabs() {
 		return windowTitleBarStore.getValue({ field: "tabs" });
