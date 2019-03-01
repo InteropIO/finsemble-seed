@@ -288,20 +288,44 @@ class _ToolbarStore {
 					self.createStores(done, self);
 				},
 				function (done) {
+					FSBL.SystemManagerAPI.publishCheckpointState("Toolbar", "createStores", "completed");
+					done();
+				},
+				function (done) {
 					self.loadMenusFromConfig(done, self);
+				},
+				function (done) {
+					FSBL.SystemManagerAPI.publishCheckpointState("Toolbar", "loadMenusFromConfig", "completed");
+					done();
 				},
 				function (done) {
 					self.addListeners(done, self);
 				},
 				function (done) {
+					FSBL.SystemManagerAPI.publishCheckpointState("Toolbar", "addListeners", "completed");
+					done();
+				},
+				function (done) {
 					self.setupHotkeys(done);
+				},
+				function (done) {
+					FSBL.SystemManagerAPI.publishCheckpointState("Toolbar", "setupHotkeys", "completed");
+					done();
 				},
 				function (done) {
 					self.listenForWorkspaceUpdates();
 					done();
 				},
 				function (done) {
+					FSBL.SystemManagerAPI.publishCheckpointState("Toolbar", "listenForWorkspaceUpdates", "completed");
+					done();
+				},
+				function (done) {
 					self.retrieveSelfFromStorage(done);
+				},
+				function (done) {
+					FSBL.SystemManagerAPI.publishCheckpointState("Toolbar", "retrieveSelfFromStorage", "completed");
+					done();
 				},
 				function (done) {
 					finsembleWindow.addEventListener('focused', function () {
@@ -313,7 +337,15 @@ class _ToolbarStore {
 					done();
 				},
 				function (done) {
+					FSBL.SystemManagerAPI.publishCheckpointState("Toolbar", "addMoreListeners", "completed");
+					done();
+				},
+				function (done) {
 					self.setToolbarVisibilityInMemory(done);
+				},
+				function (done) {
+					FSBL.SystemManagerAPI.publishCheckpointState("Toolbar", "setToolbarVisibilityInMemory", "completed");
+					done();
 				}
 			],
 			cb

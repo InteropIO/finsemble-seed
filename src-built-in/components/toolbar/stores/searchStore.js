@@ -247,7 +247,8 @@ function initialize(cb) {
 	], function (err) {
 		if (err) {
 			console.error(err);
-		}
+			}
+		FSBL.SystemManagerAPI.publishCheckpointState("Toolbar", "searchStoreInit", "completed");
 		cb(menuStore);
 	});
 }

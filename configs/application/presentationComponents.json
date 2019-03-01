@@ -515,7 +515,43 @@
 		},
 		"Toolbar": {
 			"bootParams": {
-				"stage": "earlyUser"
+				"stage": "earlyUser",
+				"checkpoints" : {
+					"searchStoreInit" : {
+						"postStartupCompletion": true
+					},
+					"createStores" : {
+						"postStartupCompletion": true
+					},
+					"loadMenusFromConfig" : {
+						"dependencies": ["createStores"],
+						"postStartupCompletion": true
+					},
+					"addListeners" : {
+						"dependencies": [ "loadMenusFromConfig" ],
+						"postStartupCompletion": true
+					},
+					"setupHotkeys" : {
+						"dependencies": [  "addListeners" ],
+						"postStartupCompletion": true
+					},
+					"listenForWorkspaceUpdates" : {
+						"dependencies": [  "setupHotkeys" ],
+						"postStartupCompletion": true
+					},
+					"retrieveSelfFromStorage" : {
+						"dependencies": [  "listenForWorkspaceUpdates" ],
+						"postStartupCompletion": true
+					},
+					"addMoreListeners" : {
+						"dependencies": [  "retrieveSelfFromStorage" ],
+						"postStartupCompletion": true
+					},
+					"setToolbarVisibilityInMemory" : {
+						"dependencies": [  "addMoreListeners" ],
+						"postStartupCompletion": true
+					}
+				}
 			},
 			"window": {
 				"id": "launcher",
