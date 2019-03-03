@@ -61,7 +61,11 @@
 	"systemTrayComponent": "File Menu",
 	"Window Manager": {
 		"alwaysOnTopIcon": true,
-		"autoHideIcon": true,
+		"autoHideIcon": {
+			"defaultSetting": true,
+			"timeout": 2000,
+			"resetMargin": true
+		},
 		"showTabs": true,
 		"showNativeTabs": true,
 		"floatingTitlebarComponent": "Floating Titlebar"
@@ -111,6 +115,7 @@
 	"importConfig": [
 		"$applicationRoot/configs/application/presentationComponents.json",
 		"$applicationRoot/configs/application/components.json",
+		"$applicationRoot/configs/application/sales_demo_components.json",
 		"$applicationRoot/configs/application/workspaces.json",
 		"$applicationRoot/configs/application/workspaceTemplates.json",
 		"$applicationRoot/configs/application/services.json"

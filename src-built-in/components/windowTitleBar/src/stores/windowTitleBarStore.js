@@ -14,6 +14,13 @@ var finWindow = fin.desktop.Window.getCurrent();
 let headerTimeout = null;
 let suspendAutoHide = false;
 let autohideTimeout = 2000;
+let autohideSavedBodyMargin = null;
+const autoHideDefaultConfig = {
+	defaultSetting: false,
+	timeout: 2000,
+	resetMargin: true
+};
+let autoHideConfig = autoHideDefaultConfig;
 let autoHideTimer = function () {
 	//console.log("reset timer");
 	if (!suspendAutoHide){
@@ -21,7 +28,7 @@ let autoHideTimer = function () {
 			console.log("hiding header...");
 			let header = document.getElementsByClassName("fsbl-header")[0];
 			header.style.opacity = 0;
-		}, autohideTimeout);
+		}, autoHideConfig.timeout);
 	}
 };
 let autoHideMouseMoveHandler = function( event ) {
@@ -207,11 +214,16 @@ var Actions = {
 			// Whether the autohide pin shows or not depends first on the global setting (finsemble["Window Manager"].autoHideIcon) and then
 			// on the specific setting for this component (foreign.components["Widow Manager"].autoHideIcon)
 			let autoHideIcon = globalWindowManagerConfig.autoHideIcon;
-			if (windowTitleBarConfig.autoHideIcon === false || windowTitleBarConfig.autoHideIcon === true)
+			if (windowTitleBarConfig.autoHideIcon === false || windowTitleBarConfig.autoHideIcon === true ||
+				(typeof windowTitleBarConfig.autoHideIcon === 'object' && windowTitleBarConfig.autoHideIcon != null)) {
 				autoHideIcon = windowTitleBarConfig.autoHideIcon;
-
-			windowTitleBarStore.setValues([{ field: "AutoHide.show", value: autoHideIcon }]);
-
+			}
+			let showAutoHide = autoHideIcon ? true : false;
+			if (typeof autoHideIcon === 'object' && autoHideIcon != null) {
+				autoHideConfig = Object.assign(autoHideDefaultConfig, autoHideIcon);
+			} /* else { defaults apply } */
+			windowTitleBarStore.setValues([{ field: "AutoHide.show", value: showAutoHide }]);
+			FSBL.Clients.Logger.log("Autohide window chrome settings: ", autoHideConfig) 
 
 			//If tabbing is turned off, ignore global/local 'windowManager' config about whether to allow tabbing.
 			if (dockingConfig.tabbing.enabled === false) {
@@ -430,14 +442,25 @@ var Actions = {
 
 
 	},
+	/** Return the default state for autohide (via global or component local config). */
+	getDefaultAutoHide: function () {
+		return autoHideConfig.defaultSetting;
+	},
 	/**
 	 * Set state for autohiding the header.
 	 */
 	setAutoHide: function(autoHide, cb = Function.prototype) {
 		console.log("setAutoHide: " + autoHide);
+
+		//preserve the body margin so we can remove and restore it
+		if (!autohideSavedBodyMargin){
+			autohideSavedBodyMargin = document.body.style.marginTop;
+		} 
+
 		if (autoHide){
 			let header = document.getElementsByClassName("fsbl-header")[0];
-			//let headerTimeout = null;
+
+			//ensure autohiding styles are set
 			header.style['transition-property'] = "opacity";
 			header.style['transition-duration'] = "0.7s";
 			header.style['transition-timing-function'] = "ease";
@@ -450,12 +473,23 @@ var Actions = {
 			// 	let header = document.getElementsByClassName("fsbl-header")[0];
 			// 	header.style.display = "none";
 			// });
-			
+
+			//remove the body margin used to accomodate the header
+			if (autoHideConfig.resetMargin){
+				document.body.style.marginTop = "0px";
+			}
+
 			//set the autohide timer
 			autoHideTimer();
 		} else {
 			//clear the autohide timer
 			if (headerTimeout) {clearTimeout(headerTimeout);}
+			
+			//restore body margin to accommodate header
+			if (autoHideConfig.resetMargin){
+				document.body.style.marginTop = autohideSavedBodyMargin;
+			}
+
 			//unhook activity listeners
 			let b = document.getElementsByTagName("body")[0];
 			b.removeEventListener("mousemove", autoHideMouseMoveHandler);

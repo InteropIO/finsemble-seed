@@ -25,22 +25,15 @@ export default class AutoHide extends React.Component {
 		FSBL.Clients.WindowClient.getComponentState({
 			field: 'autoHide',
 		}, (err, state) => {
-			if (err) {
-				FSBL.Clients.Logger.log("Loaded AutoHide state: ", err);
-				console.log("Loaded AutoHide state: ", err);
-				this.setState({
-					autoHide: false
-				});
-			} else {
-				//turn on autohide
-				this.setState({
-					autoHide: state
-				});
-				HeaderActions.setAutoHide(state,  () => {
-					FSBL.Clients.Logger.log("Loaded AutoHide state: ", state);
-					console.log("Loaded AutoHide state: ", state);
-				});
-			}	
+			let stateToSet = state;
+			if (err) { stateToSet = HeaderActions.getDefaultAutoHide(); }
+			this.setState({
+				autoHide: stateToSet
+			});
+			HeaderActions.setAutoHide(stateToSet,  () => {
+				FSBL.Clients.Logger.log("Loaded with AutoHide state: ", stateToSet);
+				console.log("Loaded with AutoHide state: ", stateToSet);
+			});
 		});
 	}
 

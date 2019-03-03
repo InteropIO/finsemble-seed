@@ -1,0 +1,389 @@
+{
+	"components": {
+		"Advanced Chart": {
+			"window": {
+				"url": "https://finsemble.chartiq.com/components/reactChart/index.html",
+				"width": 500,
+				"height": 410,
+				"options": {
+					"minWidth": 75
+				}
+			},
+			"component": {
+				"mode": "premium",
+				"advertiseReceivers": [
+					"chartiq.chart",
+					"symbol"
+				],
+				"spawnOnHotkey": ["ctrl", "alt", "a"],
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Toolbar": {
+						"iconClass": "ff-chart-advanced"
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": true,
+						"persistWindowState": true
+					}
+				}
+			}
+		},
+		"Simple Chart": {
+			"window": {
+				"url": "https://finsemble.chartiq.com/components/widgets/simpleChart/simpleChart.html",
+				"width": 500,
+				"height": 410
+			},
+			"component": {
+				"mode": "premium",
+				"category": "system",
+				"spawnOnHotkey": ["ctrl", "alt", "c"]
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Toolbar": {
+						"iconClass": "ff-chart-simple"
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": true,
+						"persistWindowState": true
+					}
+				}
+			}
+		},
+		"Rates": {
+			"window": {
+				"listName": "Rates",
+				"url": "https://finsemble.chartiq.com/components/widgets/rates/rates.html",
+				"width": 500,
+				"height": 410
+			},
+			"component": {
+				"mode": "premium",
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Toolbar": {
+						"iconClass": "ff-document-2"
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": false,
+						"persistWindowState": true
+					}
+				}
+			}
+		},
+		"Rates Chart": {
+			"window": {
+				"listName": "Rates Chart",
+				"url": "https://finsemble.chartiq.com/components/widgets/ratesChart/ratesChart.html",
+				"width": 500,
+				"height": 410
+			},
+			"component": {
+				"mode": "premium",
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Toolbar": {
+						"iconClass": "ff-chart-simple"
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": false,
+						"persistWindowState": true
+					}
+				}
+			}
+		},
+		"Markets Overview": {
+			"window": {
+				"listName": "Markets Overview",
+				"url": "https://finsemble.chartiq.com/components/widgets/marketsOverview/marketsOverview.html",
+				"width": 815,
+				"height": 600
+			},
+			"component": {
+				"mode": "premium",
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Toolbar": {
+						"iconClass": "ff-overview"
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": false,
+						"persistWindowState": true
+					}
+				}
+			}
+		},
+		"Market Charts": {
+			"window": {
+				"listName": "Market Charts",
+				"url": "https://finsemble.chartiq.com/components/widgets/marketCharts/marketCharts.html",
+				"width": 815,
+				"height": 170
+			},
+			"component": {
+				"mode": "premium",
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Toolbar": {
+						"iconClass": "ff-chart-alt-1"
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": false,
+						"persistWindowState": true
+					}
+				}
+			}
+		},
+		"Top Movers": {
+			"window": {
+				"url": "https://finsemble.chartiq.com/components/widgets/topMovers/topMovers.html",
+				"width": 950,
+				"height": 410
+			},
+			"component": {
+				"mode": "premium",
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Toolbar": {
+						"iconClass": "ff-chart-alt-2"
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": false,
+						"persistWindowState": true
+					}
+				}
+			}
+		},
+		"News": {
+			"window": {
+				"listName": "News",
+				"url": "https://finsemble.chartiq.com/components/widgets/news/news.html",
+				"width": 354,
+				"height": 600
+			},
+			"component": {
+				"mode": "premium",
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Toolbar": {
+						"iconClass": "ff-news"
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": true,
+						"persistWindowState": true
+					}
+				}
+			}
+		},
+		"Financials": {
+			"window": {
+				"url": "https://finsemble.chartiq.com/components/widgets/financials/financials.html",
+				"width": 660,
+				"height": 410
+			},
+			"component": {
+				"mode": "premium",
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Toolbar": {
+						"iconClass": "ff-chart-pie"
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": true,
+						"persistWindowState": true
+					}
+				}
+			}
+		},
+		"Insider Trades": {
+			"window": {
+				"listName": "Insiders",
+				"url": "https://finsemble.chartiq.com/components/widgets/insiders/insiders.html",
+				"width": 660,
+				"height": 410
+			},
+			"component": {
+				"mode": "premium",
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Toolbar": {
+						"iconClass": "ff-insiders-2"
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": true,
+						"persistWindowState": true
+					}
+				}
+			}
+		},
+		"Company": {
+			"window": {
+				"url": "https://finsemble.chartiq.com/components/widgets/fundamentals/fundamentals.html",
+				"width": 500,
+				"height": 410
+			},
+			"component": {},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Toolbar": {
+						"iconClass": "ff-company"
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": true,
+						"persistWindowState": true
+					}
+				}
+			}
+		},
+		"Fundamental Chart": {
+			"window": {
+				"listName": "Fundamental Chart",
+				"url": "https://finsemble.chartiq.com/components/widgets/fundamentalsChart/fundamentalsChart.html",
+				"width": 500,
+				"height": 410
+			},
+			"component": {
+				"mode": "premium",
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Toolbar": {
+						"iconClass": "ff-chart-alt-1"
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": true,
+						"persistWindowState": true
+					}
+				}
+			}
+		}
+	}
+}
