@@ -166,7 +166,7 @@
 		},
 		"linkerWindow": {
 			"bootParams": {
-				"stage": "earlyUser",
+				"stage": "earlyuser",
 				"dependencies": [ "Toolbar" ]
 			},
 			"window": {
@@ -348,7 +348,7 @@
 		},
 		"yesNo": {
 			"bootParams": {
-				"stage": "earlyUser",
+				"stage": "earlyuser",
 				"dependencies": [ "Toolbar" ]
 			},
 			"window": {
@@ -393,7 +393,7 @@
 		},
 		"singleInput": {
 			"bootParams": {
-				"stage": "earlyUser",
+				"stage": "earlyuser",
 				"dependencies": [ "Toolbar" ]
 			},
 			"window": {
@@ -515,7 +515,7 @@
 		},
 		"Toolbar": {
 			"bootParams": {
-				"stage": "earlyUser",
+				"stage": "earlyuser",
 				"checkpoints" : {
 					"searchStoreInit" : {
 						"postStartupCompletion": true
@@ -639,7 +639,7 @@
 		},
 		"UserPreferences": {
 			"bootParams": {
-				"stage": "earlyUser",
+				"stage": "earlyuser",
 				"dependencies": [ "Toolbar" ]
 			},
 			"window": {

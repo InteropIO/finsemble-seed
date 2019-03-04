@@ -107,7 +107,7 @@ var Actions = {
 	 */
 	showSystemLog() {
 		finsembleWindow.hide();
-		FSBL.Clients.RouterClient.transmit("ShowSystemLog-Show", true);
+		FSBL.SystemManagerAPI.showSystemLog();
 	},
 	/**
 	 * Spawns the preferences menu.
