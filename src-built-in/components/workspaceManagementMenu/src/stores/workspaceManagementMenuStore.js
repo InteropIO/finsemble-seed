@@ -8,7 +8,7 @@ import async from "async";
 const SAVE_DIALOG_CANCEL_ERROR = "Cancel";
 const NEGATIVE = "Negative";
 let PROMPT_ON_SAVE = false;
-let WorkspaceManagementStore, Actions, WindowClient, StoreClient, Logger, ToolbarStore, WorkspaceManagementGlobalStore;
+let WorkspaceManagementStore, WindowClient, StoreClient, Logger, ToolbarStore, WorkspaceManagementGlobalStore;
 //Initial data for the store.
 let defaultData = {
 	activeWorkspace: {},
@@ -35,7 +35,7 @@ function uuidv4() {
 	});
 }
 let finWindow = fin.desktop.Window.getCurrent();
-Actions = {
+const Actions = {
 	autoSave: (callback) => {
 		let activeName = FSBL.Clients.WorkspaceClient.activeWorkspace.name;
 		if (!PROMPT_ON_SAVE) {
@@ -161,9 +161,8 @@ Actions = {
 			let { workspaceName, template } = params;
 			FSBL.Clients.WorkspaceClient.createNewWorkspace(workspaceName, { templateName: template }, function (err, response) {
 				Logger.system.log("createIt createNewWorkspace response", workspaceName, template, response);
-				newWorkspaceName = response.workspaceName;
 				if (cb) {
-					cb(null, newWorkspaceName);
+					cb(null, response);
 				}
 			});
 		}
