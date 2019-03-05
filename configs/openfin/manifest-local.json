@@ -75,7 +75,7 @@
 			"defaults": {
 				"startServiceTimeout": 10000,
 				"startComponentTimeout": 15000,
-				"startModuleTimeout": 5000
+				"startModuleTimeout": 10000
 			}
 		},
         "importConfig": [
@@ -83,6 +83,8 @@
         ],
         "IAC": {
             "serverAddress": "wss://localhost.chartiq.com:3376"
-        }
+		},
+		"****************HERE******************** remove below shutdownTimeout before merging": true,
+		"shutdownTimeout": 1000
     }
 }

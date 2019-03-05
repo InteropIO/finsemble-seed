@@ -518,7 +518,8 @@
 				"stage": "earlyuser",
 				"checkpoints" : {
 					"searchStoreInit" : {
-						"postStartupCompletion": true
+						"postStartupCompletion": true,
+						"timeout": 20000
 					},
 					"createStores" : {
 						"postStartupCompletion": true
