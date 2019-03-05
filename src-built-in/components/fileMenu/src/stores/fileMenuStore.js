@@ -105,24 +105,25 @@ var Actions = {
 	 * @returns
 	 */
 	saveWorkspace() {
-		return new Promise((resolve, reject) => {
-			if (PROMPT_ON_DIRTY && FSBL.Clients.WorkspaceClient.activeWorkspace.isDirty) {
-				FSBL.Clients.DialogManager.open("yesNo",
-					{
-						question: "Your workspace \"" + FSBL.Clients.WorkspaceClient.activeWorkspace.name + "\" has unsaved changes, would you like to save?"
-					}, async (err, response) => {
-						if (err || response.choice === "affirmative") {
-							try {
-								await FSBL.Clients.WorkspaceClient.save();
-							} catch (error) {
-								reject(error);
-							}
-						}
-						resolve(response.choice);
-					});
-			}
-		});
+		if (!(PROMPT_ON_DIRTY && FSBL.Clients.WorkspaceClient.activeWorkspace.isDirty)) {
+			return Promise.resolve();
+		}
 
+		return new Promise((resolve, reject) => {
+			FSBL.Clients.DialogManager.open("yesNo",
+				{
+					question: "Your workspace \"" + FSBL.Clients.WorkspaceClient.activeWorkspace.name + "\" has unsaved changes, would you like to save?"
+				}, async (err, response) => {
+					if (err || response.choice === "affirmative") {
+						try {
+							await FSBL.Clients.WorkspaceClient.save();
+						} catch (error) {
+							reject(error);
+						}
+					}
+					resolve(response.choice);
+				});
+		});
 	},
 	/**
 	 * Hides the window and fires off a message shutting down the application.
