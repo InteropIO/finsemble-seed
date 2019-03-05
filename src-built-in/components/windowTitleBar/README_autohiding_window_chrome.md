@@ -2,6 +2,7 @@
 
 ### Overview
 The windowTitleBar is a component that's injected into every component. However, large numbers of titlebars on the screen can create visual noise within components thats are not moved very often. To recover screen realestate and reduce visual noise, this version of the window titlebar supports an additional button and configuration for automatically hiding the window chrome (titlebar) when the window is not being interacted with by the user's mouse.
+![](./autohiding-window-chrome.gif)
 
 ### Configuration ###
 Whether the autohide pin shows or not depends first on the global setting (`finsemble["Window Manager"].autoHideIcon`) and then
