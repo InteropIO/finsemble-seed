@@ -15,7 +15,7 @@ var listOfWebpackEntryFiles = [
 ];
 
 // Look through the src/components directory for webpack.entries.json files at the top level.
-var componentsPath = path.join(__homename, "src/components");
+var componentsPath = path.join(__homename, "src");
 var items = fs.readdirSync(componentsPath);
 // For each file in the directory (src/components/*)
 for (var i = 0; i < items.length; i++) {
@@ -40,8 +40,8 @@ listOfWebpackEntryFiles.forEach(function (filename) {
 		entries.forEach(function (assetName) {
 			let assetNoSuffix = assetName.replace(/\.[^/.]+$/, ""); // Remove the .js or .jsx extension
 			additionalComponents[assetName] = {
-				output: "components/" + subDirectory + "/" + assetNoSuffix,
-				entry: "./src/components/" + subDirectory + "/" + assetName
+				output: "/" + subDirectory + "/" + assetNoSuffix,
+				entry: "./src/" + subDirectory + "/" + assetName
 			};		
 		});		
 	} else {
