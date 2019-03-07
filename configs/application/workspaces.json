@@ -7,10 +7,24 @@
 			"groups": {},
 			"windows": [
 				{
-					"componentType": "Welcome Component",
-					"options": {
-						"top": 50,
-						"left": 50
+					"componentType": "Welcome Component"
+				},
+				{
+					"defaultHeight": 432,
+					"defaultLeft": 294,
+					"defaultTop": 284,
+					"defaultWidth": 400,
+					"componentType": "Welcome Component"
+				},
+				{
+					"defaultHeight": 432,
+					"defaultLeft": 0,
+					"defaultTop": 0,
+					"defaultWidth": 400,
+					"customData": {
+						"component": {
+							"type": "Welcome Component"
+						}
 					}
 				}
 			]

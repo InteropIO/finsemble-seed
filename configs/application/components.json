@@ -46,37 +46,10 @@
 				"frame": false,
 				"resizable": true,
 				"autoShow": true,
-				"top": "center",
-				"left": "center",
+				"top": 200,
+				"left": 2000,
 				"width": 400,
 				"height": 432
-			},
-			"component": {
-				"inject": false,
-				"spawnOnStartup": false,
-				"category": "system"
-			},
-			"foreign": {
-				"services": {
-					"dockingService": {
-						"canGroup": true,
-						"isArrangable": true
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"launchableByUser": false
-					},
-					"Window Manager": {
-						"showLinker": false,
-						"FSBLHeader": true,
-						"persistWindowState": true,
-						"title": "Non Configured Component"
-					},
-					"Toolbar": {
-						"iconClass": "ff-component"
-					}
-				}
 			}
 		},
 		"Notepad": {
