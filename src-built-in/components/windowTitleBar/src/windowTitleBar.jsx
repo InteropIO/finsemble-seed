@@ -56,6 +56,7 @@ class WindowTitleBar extends React.Component {
 			this.toolbarRight = element;
 		}
 
+
 		this.bindCorrectContext();
 		windowTitleBarStore.getValue({ field: "Maximize.hide" });
 		this.dragEndTimeout = null;
@@ -127,8 +128,6 @@ class WindowTitleBar extends React.Component {
 
 	componentDidMount() {
 		let header = document.getElementsByClassName("fsbl-header")[0];
-		let headerHeight = window.getComputedStyle(header, null).getPropertyValue("height");
-		document.body.style.marginTop = headerHeight;
 		this.resizeDragHandle();
 		this.hackScrollbar();
 	}
