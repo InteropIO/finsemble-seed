@@ -210,6 +210,38 @@
 					}
 				}
 			}
+		},
+		"Github": {
+			"window": {
+				"url": "http://github.com",
+				"height": 550,
+				"width": 600,
+				"options": {
+					"Content-Security-Policy": ["*"]
+				}
+			},
+			"component": {
+				"spawnOnStartup": false
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"canGroup": true,
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"showLinker": true,
+						"FSBLHeader": true,
+						"persistWindowState": true,
+						"title": "GitHub"
+					}
+				}
+			}
 		}
 	}
 }

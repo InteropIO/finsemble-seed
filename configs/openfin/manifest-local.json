@@ -76,5 +76,6 @@
         "IAC": {
             "serverAddress": "wss://localhost.chartiq.com:3376"
         }
-    }
+    },
+    "Content-Security-Policy": "respect-server-defined-csp"
 }
