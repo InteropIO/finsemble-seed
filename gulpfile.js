@@ -7,6 +7,7 @@
 	chalk.enabled = true;
 	//setting the level to 1 will force color output.
 	chalk.level = 1;
+	const async = require("async");
 	const { exec, spawn } = require("child_process");
 	const ON_DEATH = require("death")({ debug: false });
 	const del = require("del");
@@ -18,10 +19,27 @@
 	const shell = require("shelljs");
 	const path = require("path");
 	const webpack = require("webpack");
+
 	// local
 	const extensions = fs.existsSync("./gulpfile-extensions.js") ? require("./gulpfile-extensions.js") : undefined;
-	const async = require("async");
+	const isMacOrNix = process.platform !== "win32";
 	// #endregion
+
+
+	const killApp = (processName, callback = () => { }) => {
+		const command = isMacOrNix ? `killall -9 ${processName}` : `taskkill /F /IM ${processName.toLowerCase()}.* /T`;
+		const error = isMacOrNix ? "No matching processes belonging to you were found" : `The process "${processName.toLowerCase()}.*" not found.`;
+
+		logToTerminal(`kill: running: ${command}...`);
+
+		exec(command, err => {
+			if (err && !err.includes(error)) {
+				console.error(errorOutColor(err));
+			}
+
+			callback(err);
+		});
+	};
 
 	const logToTerminal = (msg, color = "white", bgcolor = "bgBlack") => {
 		if (!chalk[color]) color = "white";
@@ -268,6 +286,16 @@
 			const CLI_VERSION = require(path.join(CLI_PATH, "package.json")).version;
 			const CONTROLS_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-react-controls");
 			const CONTROLS_VERSION = require(path.join(CONTROLS_PATH, "package.json")).version;
+			
+			// Check e2o version
+			const E2O_PATH = path.join(__dirname, "node_modules", "@chartiq", "e2o");
+			const E2O_PATH_EXISTS = fs.existsSync(E2O_PATH);
+			const USING_E2O = channelAdapter === "e2o";
+			if (USING_E2O && !E2O_PATH_EXISTS) {
+				throw "Cannot use e2o channelAdapter unless e2o optional dependency is installed. Please run npm i @chartiq/e2o";
+			}
+
+			const E2O_VERSION = require(path.join(E2O_PATH, "package.json")).version;
 
 			function checkLink(params, cb) {
 				let { path, name, version } = params;
@@ -307,6 +335,18 @@
 						version: CONTROLS_VERSION
 					}, cb)
 				},
+				(cb) => {
+					if (!E2O_VERSION) {
+						// e2o not found so skip check
+						return cb();
+					}
+
+					checkLink({
+						path: E2O_PATH,
+						name: "e2o",
+						version: E2O_VERSION
+					}, cb)
+				}
 			], done)
 		},
 
@@ -341,12 +381,8 @@
 			], done);
 		},
 		launchOpenFin: done => {
-			ON_DEATH((signal, err) => {
-				exec("taskkill /F /IM openfin.* /T", (err, stdout, stderr) => {
-					// Only write the error to console if there is one and it is something other than process not found.
-					if (err && err !== 'The process "openfin.*" not found.') {
-						console.error(errorOutColor(err));
-					}
+			ON_DEATH(() => {
+				killApp("OpenFin", () => {
 
 					if (watchClose) watchClose();
 					process.exit();
@@ -367,15 +403,10 @@
 			let manifest = taskMethods.startupConfig[env.NODE_ENV].serverConfig;
 			process.env.ELECTRON_DEV = true;
 
-			ON_DEATH((signal, err) => {
+			ON_DEATH(() => {
 				if (electronProcess) electronProcess.kill();
 
-				exec("taskkill /F /IM electron.* /T", (err, stdout, stderr) => {
-					// Only write the error to console if there is one and it is something other than process not found.
-					if (err && err !== 'The process "electron.*" not found.') {
-						console.error(errorOutColor(err));
-					}
-
+				killApp("Electron", () => {
 					if (watchClose) watchClose();
 					process.exit();
 				});
@@ -388,7 +419,7 @@
 			if (debug) {
 				debugArg = envOrArg("breakpointOnStart") ? " --inspect-brk=5858" : " --inspect=5858";
 			}
-			let command = "set ELECTRON_DEV=true && " + electronPath + " index.js --remote-debugging-port=9090" + debugArg +  " --manifest " + manifest;
+			let command = "set ELECTRON_DEV=true && " + electronPath + " index.js --remote-debugging-port=9090" + debugArg + " --manifest " + manifest;
 			logToTerminal(command);
 			electronProcess = exec(command,
 				{
@@ -409,11 +440,15 @@
 
 			electronProcess.on("close", function (code) {
 				console.log("child process exited with code " + code);
-				process.exit();
+				//Server shouldn't shut down on exit because electron restart closes down electron and restarts in the background.
+				//Didn't want to remove the code in case problems are encountered in openfin with this change
+				// process.exit();
 			});
 
 			process.on('exit', function () {
-				electronProcess.kill();
+				//Server shouldn't shut down on exit because electron restart closes down electron and restarts in the background.
+				//Didn't want to remove the code in case problems are encountered in openfin with this change
+				// electronProcess.kill();
 			});
 			if (done) done();
 		},

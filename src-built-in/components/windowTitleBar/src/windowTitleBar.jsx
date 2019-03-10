@@ -57,6 +57,7 @@ class WindowTitleBar extends React.Component {
 			this.toolbarRight = element;
 		}
 
+
 		this.bindCorrectContext();
 		windowTitleBarStore.getValue({ field: "Maximize.hide" });
 		this.dragEndTimeout = null;

@@ -1,6 +1,6 @@
 {
     "name": "FinsembleSeed",
-    "version": "3.6.3",
+    "version": "3.7.0",
     "description": "",
     "main": "index.js",
     "scripts": {
@@ -27,11 +27,11 @@
     "license": "",
     "optionalDependencies": {
         "openfin-launcher": "^1.3.11",
-        "@chartiq/e2o": "latest"
+        "@chartiq/e2o": "3.7.*"
     },
     "dependencies": {
-        "@chartiq/finsemble": "3.6.*",
-        "@chartiq/finsemble-cli": "2.*",
+        "@chartiq/finsemble": "3.7.*",
+        "@chartiq/finsemble-cli": "3.*",
         "@chartiq/finsemble-react-controls": "^3.1.2",
         "async": "^2.6.0",
         "babel-minify-webpack-plugin": "^0.3.0",
@@ -68,8 +68,8 @@
         "merge-stream": "^1.0.1",
         "openfin-launcher": "^1.3.12",
         "querystring": "^0.2.0",
-        "react": "^15.4.2",
-        "react-dom": "^15.4.2",
+        "react": "^16.0",
+        "react-dom": "^16.0",
         "react-table": "^6.8.2",
         "shelljs": "^0.8.1",
         "socket.io": "^2.0.4",
