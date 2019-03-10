@@ -324,7 +324,7 @@
                         "showLinker": true
                     },
                     "Toolbar": {
-                        "iconClass": "pdfTester"
+                        "iconClass": "ff-component"
                     }
                 }
             }
