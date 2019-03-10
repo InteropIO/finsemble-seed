@@ -1,6 +1,8 @@
 ## PDF Viewer Testing Component ##
 This testing component is intended to provide examples of working with the [PDF.js](../pdfJs/README.md) or [Viewer.js](../viewerJS/README.md) PDF viewer components. Please ensure that you have included one or both of these viewers before using this component.
 
+![](./screenshot.png)
+
 Please review [pdfTester.html](./pdfTester.html) and [pdfTester.js](./pdfTester.js) for other examples of spawning or context sharing with the viewers.
 
 ### Installation ###

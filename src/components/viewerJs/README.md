@@ -1,6 +1,8 @@
 ## Viewer.js PDF Viewer Component ##
 This component adds support for viewing PDF files inside a Finsemble PDF viewer, based on [Viewer.js](https://viewerjs.org/).
 
+![](./screenshot.png)
+
 The viewer can be launched for a specified PDF, preserves its state in workspaces and supports context linking on color channels or drag and drop, via topic names `url` and `pdf`. The payload can either be string or an object with key `url`, indicating which PDF URL to load. 
 
 ### Installation ###
