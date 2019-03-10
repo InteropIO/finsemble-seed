@@ -20,21 +20,19 @@ const autoHideDefaultConfig = {
 	timeout: 2000,
 	resetMargin: true
 };
-let autoHideConfig = autoHideDefaultConfig;
-let autoHideTimer = function () {
-	//console.log("reset timer");
+let autoHideConfig = JSON.parse(JSON.stringify(autoHideDefaultConfig));
+const autoHideTimer = function () {
 	if (!suspendAutoHide){
 		headerTimeout = setTimeout(function () {
-			console.log("hiding header...");
+			FSBL.Clients.Logger.system.debug("hiding header...");
 			let header = document.getElementsByClassName("fsbl-header")[0];
 			header.style.opacity = 0;
 		}, autoHideConfig.timeout);
 	}
 };
-let autoHideMouseMoveHandler = function( event ) {
-	//console.log(`moving mouse... X=${event.clientX} Y=${event.clientY}`);
+const autoHideMouseMoveHandler = function( event ) {
 	if (headerTimeout) {clearTimeout(headerTimeout);}
-	let header = document.getElementsByClassName("fsbl-header")[0];
+	const header = document.getElementsByClassName("fsbl-header")[0];
 	header.style.opacity = 1;
 	autoHideTimer();
 };
@@ -450,7 +448,7 @@ var Actions = {
 	 * Set state for autohiding the header.
 	 */
 	setAutoHide: function(autoHide, cb = Function.prototype) {
-		console.log("setAutoHide: " + autoHide);
+		FSBL.Clients.Logger.system.debug("setAutoHide: " + autoHide);
 
 		//preserve the body margin so we can remove and restore it
 		if (!autohideSavedBodyMargin){

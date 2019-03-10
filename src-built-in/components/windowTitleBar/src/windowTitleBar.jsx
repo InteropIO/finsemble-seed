@@ -463,7 +463,6 @@ function FSBLReady() {
 	storeExports.initialize(function () {
 		HeaderActions = storeExports.Actions;
 		windowTitleBarStore = storeExports.getStore();
-		console.log("rendering title bar");
 		ReactDOM.render(<WindowTitleBar />, document.getElementById("FSBLHeader"));
 	});
 }
