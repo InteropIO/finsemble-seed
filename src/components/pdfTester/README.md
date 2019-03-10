@@ -16,7 +16,7 @@ Please review [pdfTester.html](./pdfTester.html) and [pdfTester.js](./pdfTester.
     ...
 }
 ```
-3. Install either or both of the [PDF.js](../pdfJs/README.md) or [Viewer.js](../viewerJS/README.md) PDF viewer components (as per their own instructions).
+3. Install either or both of the [PDF.js](../pdfJs/README.md) or [Viewer.js](../viewerJs/README.md) PDF viewer components (as per their own instructions).
 4. Add the following configuration to your _/configs/application/components.json_ file:
 ```
 {
