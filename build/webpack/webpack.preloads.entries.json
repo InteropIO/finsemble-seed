@@ -6,5 +6,10 @@
 	"zoom": {
 		"output": "preloads/zoom",
 		"entry": "./src-built-in/preloads/zoom.js"
+	},
+	"pdfJsNativeOverrides": {
+		"output": "preloads/pdfJsNativeOverrides",
+		"entry": "./src/components/pdfJs/pdfJsNativeOverrides.js"
 	}
+	
 }

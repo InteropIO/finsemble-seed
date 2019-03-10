@@ -220,7 +220,8 @@
                 "top": "center",
                 "left": "center",
                 "width": 800,
-                "height": 600
+                "height": 600,
+                "addToWorkspace": true
             },
             "component": {
                 "preload": false
@@ -239,7 +240,9 @@
                     "Window Manager": {
                         "title": "viewerJs",
                         "FSBLHeader": true,
-                        "persistWindowState": true
+                        "persistWindowState": true,
+                        "showLinker": true,
+                        "alwaysOnTopIcon": true
                     },
                     "Toolbar": {
                         "iconClass": "viewerJs"
@@ -256,7 +259,8 @@
                 "top": "center",
                 "left": "center",
                 "width": 800,
-                "height": 600
+                "height": 600,
+                "addToWorkspace": true
             },
             "component": {
                 "preload": false
@@ -274,12 +278,53 @@
                     },
                     "Window Manager": {
                         "title": "pdfJs",
-                        "FSBLHeader": { "bodyMarginTop": "0px" },
+                        "FSBLHeader": {
+                            "bodyMarginTop": "0px"
+                        },
                         "hackScrollbar": true,
-                        "persistWindowState": true
+                        "persistWindowState": true,
+                        "showLinker": true,
+                        "alwaysOnTopIcon": true
                     },
                     "Toolbar": {
                         "iconClass": "pdfJs"
+                    }
+                }
+            }
+        },
+        "pdfTester": {
+            "window": {
+                "url": "$applicationRoot/components/pdfTester/pdfTester.html",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 400,
+                "height": 850
+            },
+            "component": {
+                "preload": "$applicationRoot/preloads/pdfJsNativeOverrides.js"
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "title": "pdfTester",
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "showLinker": true
+                    },
+                    "Toolbar": {
+                        "iconClass": "pdfTester"
                     }
                 }
             }

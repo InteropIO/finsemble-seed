@@ -6,5 +6,9 @@
     "pdfJs": {
         "output": "components/pdfJs/pdfJs",
         "entry": "./src/components/pdfJs/pdfJs.js"
+    },
+    "pdfTester": {
+        "output": "components/pdfTester/pdfTester",
+        "entry": "./src/components/pdfTester/pdfTester.js"
     }
 }
