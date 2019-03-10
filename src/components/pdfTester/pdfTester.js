@@ -9,7 +9,7 @@ window.launchPDFJs = function(url){
 		data: {
 			url: url          //PDF URL to load
 		}
-	}, function(err, w) {
+	}, function(err, response) {
 		if(err) {
 			FSBL.Clients.Logger.error("Error launching PDF viewer!",err);
 		} else {
