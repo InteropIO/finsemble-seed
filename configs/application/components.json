@@ -301,7 +301,7 @@
                 "top": "center",
                 "left": "center",
                 "width": 400,
-                "height": 850
+                "height": 870
             },
             "component": {
                 "preload": "$applicationRoot/preloads/pdfJsNativeOverrides.js"
