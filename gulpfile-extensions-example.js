@@ -17,6 +17,10 @@ module.exports = taskMethods => {
 	const ON_DEATH = require("death")({ debug: false });
 	const path = require('path');
 	const { exec } = require("child_process");
+	const chalk = require('chalk');
+	//Force colors on terminals.
+	const errorOutColor = chalk.hex("#FF667E");
+	
     /** -------------------------------------- PRE ----------------------------------------
 	  * You can use this section to run code that should execute *before* any gulp tasks run.
 	  * For instance, if you need to spin up a server or run a shell command, do it here.
