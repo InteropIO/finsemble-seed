@@ -46,8 +46,8 @@
 				"frame": false,
 				"resizable": true,
 				"autoShow": true,
-				"top": 200,
-				"left": 2000,
+				"top": "center",
+				"left": "center",
 				"width": 400,
 				"height": 432
 			}
