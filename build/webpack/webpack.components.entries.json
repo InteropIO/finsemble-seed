@@ -1,1 +1,6 @@
-{}
+{
+    "typeTest": {
+        "output": "components/typeTest/typeTest",
+        "entry": "./src/components/typeTest/typeTest.ts"
+    }
+}
