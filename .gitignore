@@ -22,3 +22,4 @@ build/webpack/vendor-manifest.json
 server/stats.json
 package-lock.json
 installers/*
+pkg

@@ -1,16 +1,30 @@
 {
     "development": {
+        "//serverPort": "Port number for your server.",
         "serverPort": 3375,
+        "//serverConfig": "Url for your application's manifest.",
         "serverConfig": "http://localhost:3375/configs/openfin/manifest-local.json",
-        "clientRoute": "http://localhost:3375/",
+        "//channel": "Which adapter to use. ChartIq's Electron Security Adapter or Openfin. Valid values are e2o and openfin. Default: e2o.",
         "channelAdapter": "e2o",
+        "//e2odebug": "Whether to start e2o in debug mode. Default: true.",
         "e2odebug": true,
-        "breakpointOnStart": false
+        "//breakpointOnStart": "Whether to pause e2o when it starts. Default: false.",
+        "breakpointOnStart": false,
+        "//updateUrl": "experimental",
+        "updateUrl": "http://localhost:3375/pkg/"
     },
     "production": {
+        "//serverPort": "Port number for your server.",
         "serverPort": 3375,
+        "//serverConfig": "Url for your application's manifest.",
         "serverConfig": "http://localhost:3375/configs/openfin/manifest-local.json",
-        "clientRoute": "http://localhost:3375/",
-        "channelAdapter": "e2o"
+        "//channel": "Which adapter to use. ChartIq's Electron Security Adapter or Openfin. Valid values are e2o and openfin. Default: e2o.",
+        "channelAdapter": "e2o",
+        "//e2odebug": "Whether to start e2o in debug mode. Default: true.",
+        "e2odebug": true,
+        "//breakpointOnStart": "Whether to pause e2o when it starts. Default: false.",
+        "breakpointOnStart": false,
+        "//updateUrl": "experimental",
+        "updateUrl": "http://localhost:3375/pkg/"
     }
 }

@@ -19,12 +19,12 @@
 	const shell = require("shelljs");
 	const path = require("path");
 	const webpack = require("webpack");
-	const e2o = require("@chartiq/e2o")
+	const e2o = require("@chartiq/e2o/exports");
+	const e2oPackager = require("@chartiq/e2o/deploy/deploymentHelpers");
 	// local
 	const extensions = fs.existsSync("./gulpfile-extensions.js") ? require("./gulpfile-extensions.js") : undefined;
 	const isMacOrNix = process.platform !== "win32";
 	// #endregion
-
 
 	const killApp = (processName, callback = () => { }) => {
 		const command = isMacOrNix ? `killall -9 ${processName}` : `taskkill /F /IM ${processName.toLowerCase()}.* /T`;
@@ -402,62 +402,48 @@
 			let config = {
 				manifest: taskMethods.startupConfig[env.NODE_ENV].serverConfig
 			}
-			return e2o.e2oLauncher(config, done)
-			let electronProcess = null;
-
-			process.env.ELECTRON_DEV = true;
-
-			ON_DEATH(() => {
-				if (electronProcess) electronProcess.kill();
-
-				killApp("Electron", () => {
-					if (watchClose) watchClose();
-					process.exit();
-				});
-			});
-
-			const e2oLocation = "node_modules/@chartiq/e2o";
-			// Use electron executable from e2o
-			const electronPath = path.join(__dirname, e2oLocation, "node_modules", "electron", "dist", "electron.exe");
-			let debug = envOrArg("e2odebug");
-			let debugArg = "";
-			if (debug) {
-				debugArg = envOrArg("breakpointOnStart") ? " --inspect-brk=5858" : " --inspect=5858";
-			}
-			let command = "set ELECTRON_DEV=true && " + electronPath + " index.js --remote-debugging-port=9090" + debugArg + " --manifest " + manifest;
-			logToTerminal(command);
-			electronProcess = exec(command,
-				{
-					cwd: e2oLocation
-				}, function execCallback(err) {
-					logToTerminal(err);
-					logToTerminal("e2o not installed? Try `npm install`", "red");
-				}
-			);
-
-			electronProcess.stdout.on("data", function (data) {
-				console.log(data.toString());
-			});
-
-			electronProcess.stderr.on("data", function (data) {
-				console.error("stderr:", data.toString());
-			});
-
-			electronProcess.on("close", function (code) {
-				console.log("child process exited with code " + code);
-				//Server shouldn't shut down on exit because electron restart closes down electron and restarts in the background.
-				//Didn't want to remove the code in case problems are encountered in openfin with this change
-				// process.exit();
-			});
-
-			process.on('exit', function () {
-				//Server shouldn't shut down on exit because electron restart closes down electron and restarts in the background.
-				//Didn't want to remove the code in case problems are encountered in openfin with this change
-				// electronProcess.kill();
-			});
-			if (done) done();
+			return e2o.e2oLauncher(config, done);
 		},
+		makeInstaller: async (done) => {
+			if (!env.NODE_ENV) throw new Error("NODE_ENV must be set to generate an installer.");
+			function resolveRelativePaths(obj, properties, rootPath) {
+				properties.forEach(prop => {
+					obj[prop] = path.resolve(rootPath, obj[prop]);
+				});
+				return obj;
+			}
 
+			// Inline require because this file is so large, it reduces the amount of scrolling the user has to do.
+			let installerConfig = require("./configs/other/installer.json");
+
+			// need absolute paths for certain installer configs
+			installerConfig = resolveRelativePaths(installerConfig, ['icon'], './');
+
+			const manifestUrl = taskMethods.startupConfig[env.NODE_ENV].serverConfig;
+			const updateUrl = taskMethods.startupConfig[env.NODE_ENV].updateUrl;
+
+			// Installer won't work without a proper manifest. Throw a helpful error.
+			if (!manifestUrl) {
+				throw new Error(`Installer misconfigured. No property in 'serverConfig' in configs/other/server-environment-startup.json under ${env.NODE_ENV}. This is required in order to generate the proper config.`)
+			}
+
+			// If an installer is pointing to localhost, it's likely an error. Let the dev know with a helpful error.
+			if (manifestUrl.includes("localhost")) {
+				logToTerminal(`>>>> WARNING: Installer is pointing to a manifest hosted at ${manifestUrl}. Was this accidental?
+				NODE_ENV: ${env.NODE_ENV}`, "yellow");
+			}
+
+			// UpdateURL isn't required, but we let them know in case they're expecting it to work.
+			if (!updateUrl) {
+				logToTerminal(`>>>> WARNING: Installer potentially misconfigured. No property 'updateUrl' in configs/other/server-environment-startup.json under ${env.NODE_ENV}. The application will still work, but it will not update.`, "yellow");
+				updateUrl = null;
+			}
+
+			await e2oPackager.setManifestURL(manifestUrl);
+			await e2oPackager.setUpdateURL(updateUrl);
+			await e2oPackager.createFullInstaller(installerConfig);
+			done();
+		},
 		launchApplication: done => {
 			logToTerminal("Launching Finsemble", "black", "bgCyan");
 
