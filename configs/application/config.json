@@ -1,5 +1,21 @@
 {
 	"comment": "Top-level application config for development, adding on top of the core config",
+	"defaultStorage": "IndexedDBAdapter",
+	"storage": {
+		"topicToDataStoreAdapters": {
+			"finsemble": "IndexedDBAdapter",
+			"finsemble.workspace": "IndexedDBAdapter",
+			"finsemble.workspace.cache": "IndexedDBAdapter"
+		},
+		"dataStoreAdapters": {
+			"LocalStorageAdapter": "$applicationRoot/adapters/localStorageAdapter.js",
+			"IndexedDBAdapter": "$applicationRoot/adapters/indexedDBAdapter.js"
+		}
+	},
+	"FDC3Comment": "swap values for FDC3Server with LOCAL_FDC3Server after running it.",
+	"FDC3Server": "https://fpe.finsemble.com/v1/",
+	"aFDC3Server": "http://localhost:3030/v1/",
+	"accessibleLinker": true,
 	"servicesConfig": {
 		"distributedStore": {
 			"initialStores": [

@@ -8,43 +8,43 @@ import { getStore, Actions as HeaderActions } from "../../stores/windowTitleBarS
 let windowTitleBarStore;
 
 export default class LinkerGroups extends React.Component {
-	constructor(props) {
-		super(props);
+    constructor(props) {
+        super(props);
         /**
 		 * We assign in the constructor instead of via a require at the top of the file because the store is initialized asynchronously.
 		 */
-		windowTitleBarStore = getStore();
+        windowTitleBarStore = getStore();
         this.bindCorrectContext();
-		this.state = {
-			channels: FSBL.Clients.LinkerClient.getState().channels
-		};
-	}
+        this.state = {
+            channels: FSBL.Clients.LinkerClient.getState().channels
+        };
+    }
     /**
      * This is necessary to make sure that the `this` inside of the callback is correct.
      *
      * @memberof LinkerGroups
      */
-	bindCorrectContext() {
-		this.onChannelChange = this.onChannelChange.bind(this);
-	}
+    bindCorrectContext() {
+        this.onChannelChange = this.onChannelChange.bind(this);
+    }
 
     /**
      * Add listeners to the store.
      *
      * @memberof LinkerGroups
      */
-	componentWillMount() {
-		windowTitleBarStore.addListener({ field: "Linker.channels" }, this.onChannelChange);
-	}
+    componentWillMount() {
+        windowTitleBarStore.addListener({ field: "Linker.channels" }, this.onChannelChange);
+    }
 
     /**
      * Remove listeners from the store.
      *
      * @memberof LinkerGroups
      */
-	componentWillUnmount() {
-		windowTitleBarStore.removeListener({ field: "Linker.channels" }, this.onChannelChange);
-	}
+    componentWillUnmount() {
+        windowTitleBarStore.removeListener({ field: "Linker.channels" }, this.onChannelChange);
+    }
 
     /**
      * When the user adds/removes a link in the linkerWindow, the values in the store will change, and this listener will be invoked.
@@ -53,9 +53,9 @@ export default class LinkerGroups extends React.Component {
      * @param {any} response
      * @memberof LinkerGroups
      */
-	onChannelChange(err, response) {
-		this.setState({ channels: response.value });
-	}
+    onChannelChange(err, response) {
+        this.setState({ channels: response.value });
+    }
 
     /**
      * Whenever the store changes, set state.
@@ -64,8 +64,8 @@ export default class LinkerGroups extends React.Component {
      * @memberof LinkerGroups
      */
     onStoreChanged(newState) {
-       //console.log("store changed ", newState);
-		this.setState(newState);
+        //console.log("store changed ", newState);
+        this.setState(newState);
     }
 
     onClick(e, channel) {
@@ -89,21 +89,23 @@ export default class LinkerGroups extends React.Component {
      * @returns
      * @memberof LinkerGroups
      */
-	render() {
-		let self = this;
-		if (!this.state.channels) {
-			return (<div className="linker-groups"></div>);
-		}
+    render() {
+        let self = this;
+        if (!this.state.channels) {
+            return (<div className="linker-groups"></div>);
+        }
 
         /**
          * Iterate through the channels that the window belongs to, render a colored bar to denote channel membership.
          */
-		let channels = self.state.channels.map(function (channel, index) {
-			let classNames = `linker-group linker-${channel.label}`;
-            return (<div key={channel.name} className={classNames} style={{ background: channel.color }} onMouseUp={function (e) { self.onClick(e, channel.name) }}></div>);
-		});
-		return (<div className="linker-groups">
+        let channels = self.state.channels.map(function (channel, index) {
+            let classNames = `linker-group linker-${channel.label}`;
+            return (<div key={channel.name} className={classNames} style={{ background: channel.color }} onMouseUp={function (e) { self.onClick(e, channel.name) }}>
+                {true ? index : null}
+            </div>);
+        });
+        return (<div className="linker-groups">
             {channels}
         </div>);
-	}
+    }
 }
