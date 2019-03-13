@@ -20,6 +20,7 @@ module.exports = taskMethods => {
 	const chalk = require('chalk');
 	//Force colors on terminals.
 	const errorOutColor = chalk.hex("#FF667E");
+	let watchClose;
 	
     /** -------------------------------------- PRE ----------------------------------------
 	  * You can use this section to run code that should execute *before* any gulp tasks run.
@@ -36,6 +37,7 @@ module.exports = taskMethods => {
 	/**
 	 * overwrites the launchE2O function in gulpfile.js
 	 */
+	/*
 	taskMethods.launchE2O = done => {
 		let electronProcess = null;
 		let manifest = taskMethods.startupConfig[process.env.NODE_ENV].serverConfig;
@@ -56,7 +58,7 @@ module.exports = taskMethods => {
 		});
 
 		let e2oLocation = "node_modules/@chartiq/e2o";
-		let electronPath = path.join("..", "..", "electron", "dist", "electron.exe");
+		const electronPath = path.join(__dirname, e2oLocation, "node_modules", "electron", "dist", "electron.exe");
 		let debug = taskMethods.envOrArg("e2odebug");
 		let debugArg = "";
 		if (debug) {
@@ -91,6 +93,7 @@ module.exports = taskMethods => {
 
 		if (done) done();
 	};
+	*/
 
 	/** --------------------------------------- CODE -------------------------------------
 	 * Add or override any internal methods used by gulp tasks (a gulp task for instance would be "build" or "dev", called with npm run dev)

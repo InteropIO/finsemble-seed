@@ -432,9 +432,7 @@
 			logToTerminal.apply(this, arguments);
 		},
 
-		envOrArg: (...args) => {
-			envOrArg.apply(this, args);
-		},
+		envOrArg: (...args) => envOrArg.apply(this, args),
 
 		/**
 		 * Starts the server, launches the Finsemble application. Use this for a quick launch, for instance when working on e2o.
