@@ -428,7 +428,7 @@
 			}
 		},
 
-		logToTerminal: () => logToTerminal.apply(this, arguments),
+		logToTerminal: (...args) => logToTerminal.apply(this, args),
 
 		envOrArg: (...args) => envOrArg.apply(this, args),
 
