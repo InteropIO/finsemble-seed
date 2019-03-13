@@ -15,6 +15,7 @@
 	"FDC3Comment": "swap values for FDC3Server with LOCAL_FDC3Server after running it.",
 	"FDC3Server": "https://fpe.finsemble.com/v1/",
 	"aFDC3Server": "http://localhost:3030/v1/",
+	"accessibleLinker": true,
 	"servicesConfig": {
 		"distributedStore": {
 			"initialStores": [

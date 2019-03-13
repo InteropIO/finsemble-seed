@@ -207,7 +207,7 @@ html.desktop-active .fsbl-icon-highlighted {
 }
 
 .linker-group {
-    width: 5px;
+    width: 1em;
     height: 15px;
     margin-left: 3px;
     border-radius: 4px;
