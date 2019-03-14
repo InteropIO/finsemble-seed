@@ -11,8 +11,8 @@
 				"readRegistryValue": false
 			},
 			"Window": {
-				"executeJavaScript": false,
-				"webPreferences": {
+				"executeJavascript": false,
+				"options": {
 					"preload": false
 				}
 			}
