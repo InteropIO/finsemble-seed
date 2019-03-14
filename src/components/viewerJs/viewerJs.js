@@ -54,7 +54,6 @@ const setupContextSharing = function (){
 
 const init = function (){
 	//Check for existing component state
-	let state = 
 	FSBL.Clients.WindowClient.getComponentState({
 		field: STATE_TOPIC_URL,
 	}, function (err, state) {
