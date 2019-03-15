@@ -64,7 +64,7 @@ var LinkerStore = Object.assign({}, EventEmitter.prototype, {
 			value = (value === null) ? false : value;
 			
 			self.accessibleLinker = value;
-		})
+		});
 	}
 });
 
