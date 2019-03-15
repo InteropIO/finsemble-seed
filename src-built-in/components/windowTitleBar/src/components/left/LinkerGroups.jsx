@@ -6,6 +6,7 @@ import React from "react";
 import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
 import { getStore, Actions as HeaderActions } from "../../stores/windowTitleBarStore";
 let windowTitleBarStore;
+let accessibleLinker = false;
 
 export default class LinkerGroups extends React.Component {
     constructor(props) {
@@ -34,6 +35,17 @@ export default class LinkerGroups extends React.Component {
      * @memberof LinkerGroups
      */
     componentWillMount() {
+        //are we using the accessible linker?
+        FSBL.Clients.ConfigClient.getValue("finsemble.accessibleLinker", (err, value) => {
+            if (err) {
+                console.err("Error getting accessibleLinker value", err);
+            }
+
+            // Default value is false.
+            value = (value === null) ? false : value;
+            
+            accessibleLinker = value;
+        });
         windowTitleBarStore.addListener({ field: "Linker.channels" }, this.onChannelChange);
     }
 
@@ -99,9 +111,9 @@ export default class LinkerGroups extends React.Component {
          * Iterate through the channels that the window belongs to, render a colored bar to denote channel membership.
          */
         let channels = self.state.channels.map(function (channel, index) {
-            let classNames = `linker-group linker-${channel.label}`;
+            let classNames = `linker-group${accessibleLinker ? " linker-group-accessible" : ""} linker-${channel.label}`;
             return (<div key={channel.name} className={classNames} style={{ background: channel.color }} onMouseUp={function (e) { self.onClick(e, channel.name) }}>
-                {true ? index : null}
+                {accessibleLinker ? index : null}
             </div>);
         });
         return (<div className="linker-groups">
