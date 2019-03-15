@@ -14,7 +14,14 @@ module.exports = taskMethods => {
     "use strict";
 
     const gulp = require("gulp");
-
+	const ON_DEATH = require("death")({ debug: false });
+	const path = require('path');
+	const { exec } = require("child_process");
+	const chalk = require('chalk');
+	//Force colors on terminals.
+	const errorOutColor = chalk.hex("#FF667E");
+	let watchClose;
+	
     /** -------------------------------------- PRE ----------------------------------------
 	  * You can use this section to run code that should execute *before* any gulp tasks run.
 	  * For instance, if you need to spin up a server or run a shell command, do it here.
@@ -26,6 +33,67 @@ module.exports = taskMethods => {
 			done();
 		});
 	};
+
+	/**
+	 * overwrites the launchE2O function in gulpfile.js
+	 */
+	/*
+	taskMethods.launchE2O = done => {
+		let electronProcess = null;
+		let manifest = taskMethods.startupConfig[process.env.NODE_ENV].serverConfig;
+		process.env.ELECTRON_DEV = true;
+		ON_DEATH((signal, err) => {
+
+			if (electronProcess) electronProcess.kill();
+
+			exec("taskkill /F /IM electron.* /T", (err, stdout, stderr) => {
+				// Only write the error to console if there is one and it is something other than process not found.
+				if (err && err !== 'The process "electron.*" not found.') {
+					console.error(errorOutColor(err));
+				}
+
+				if (watchClose) watchClose();
+				process.exit();
+			});
+		});
+
+		let e2oLocation = "node_modules/@chartiq/e2o";
+		const electronPath = path.join(__dirname, e2oLocation, "node_modules", "electron", "dist", "electron.exe");
+		let debug = taskMethods.envOrArg("e2odebug");
+		let debugArg = "";
+		if (debug) {
+			debugArg = taskMethods.envOrArg("breakpointOnStart") ? " --inspect-brk=5858" : " --inspect=5858";
+		}
+		let command = "set ELECTRON_DEV=true && " + electronPath + " index.js --auth-server-whitelist='*' --remote-debugging-port=9090" + debugArg +  " --manifest " + manifest;
+		taskMethods.logToTerminal(command);
+		electronProcess = exec(command,
+			{
+				cwd: e2oLocation
+			}, function (err) {
+				taskMethods.logToTerminal(err);
+				taskMethods.logToTerminal("e2o not installed? Try `npm install`", "red");
+			}
+		);
+
+		electronProcess.stdout.on("data", function (data) {
+			console.log(data.toString());
+		});
+
+		electronProcess.stderr.on("data", function (data) {
+			console.error("stderr:", data.toString());
+		});
+
+		electronProcess.on("close", function (code) {
+			console.log("child process exited with code " + code);
+		});
+
+		process.on('exit', function (code) {
+			console.log("child process exited with code " + code)
+		});
+
+		if (done) done();
+	};
+	*/
 
 	/** --------------------------------------- CODE -------------------------------------
 	 * Add or override any internal methods used by gulp tasks (a gulp task for instance would be "build" or "dev", called with npm run dev)
