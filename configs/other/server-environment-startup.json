@@ -9,7 +9,7 @@
         "//e2odebug": "Whether to start e2o in debug mode. Default: true.",
         "e2odebug": true,
         "//breakpointOnStart": "Whether to pause e2o when it starts. Default: false.",
-        "breakpointOnStart": false,
+        "breakpointOnStart": true,
         "//updateUrl": "experimental",
         "updateUrl": "http://localhost:3375/pkg/"
     },
