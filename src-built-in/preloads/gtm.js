@@ -10,6 +10,11 @@
 	The three actions listed above need no extra code and can be done via GTM directly.
 
 	Once integrated with GTM it is best to use Google Analatics but alternatives can be used.
+
+
+	Instructions for use:
+	Add to each component you would like to track via the config file i.e.
+		presentationalComponents.json / conponents.json
 */
 
 const gtmID = "GTM-55JT28T";
