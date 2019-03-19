@@ -4,9 +4,9 @@
  * 1) Run code before a normal gulp task (PRE)
  * 2) Modify or add code that is called within a gulp task (CODE)
  * 3) Override or add new gulp tasks (TASKS)
- * 
+ *
  * See comments in each section to understand how to complete your desired customization.
- * 
+ *
  * Once completed, rename this file gulpfile-extensions.js. The Finsemble build process will then begin
  * processing this file during builds.
  */
@@ -21,7 +21,7 @@ module.exports = taskMethods => {
 	//Force colors on terminals.
 	const errorOutColor = chalk.hex("#FF667E");
 	let watchClose;
-	
+
     /** -------------------------------------- PRE ----------------------------------------
 	  * You can use this section to run code that should execute *before* any gulp tasks run.
 	  * For instance, if you need to spin up a server or run a shell command, do it here.
@@ -35,10 +35,10 @@ module.exports = taskMethods => {
 	};
 
 	/**
-	 * overwrites the launchE2O function in gulpfile.js
+	 * overwrites the launchElectron function in gulpfile.js
 	 */
 	/*
-	taskMethods.launchE2O = done => {
+	taskMethods.launchElectron = done => {
 		let electronProcess = null;
 		let manifest = taskMethods.startupConfig[process.env.NODE_ENV].serverConfig;
 		process.env.ELECTRON_DEV = true;
@@ -97,7 +97,7 @@ module.exports = taskMethods => {
 
 	/** --------------------------------------- CODE -------------------------------------
 	 * Add or override any internal methods used by gulp tasks (a gulp task for instance would be "build" or "dev", called with npm run dev)
-	 * 
+	 *
 	 * We've included overrides for a few common tasks
 	 */
 
@@ -105,7 +105,7 @@ module.exports = taskMethods => {
 	/*
 	let copyStaticFilesOriginal = taskMethods.copyStaticFiles
 	taskMethods.copyStaticFiles = (done) => {
-		
+
 		copyStaticFilesOriginal().on("end", // Execute the original function, which, in this case, returns a stream.
 			() => {
 				// <------- Put code here that you want to be called after the original copyStaticFiles task
@@ -114,7 +114,7 @@ module.exports = taskMethods => {
 		});
 	};
 	*/
-	
+
 	// Add SASS compilation. You'll need to add gulp-sass and sass-loader to your package.json
 /*
 	taskMethods.buildSass = done => {
@@ -131,7 +131,7 @@ module.exports = taskMethods => {
 			.src(source)
 			.pipe(sass().on("error", sass.logError))
 			.pipe(gulp.dest(path.join(taskMethods.distPath, "components")));
-		
+
 		stream.on("end", function () {
 			console.log("Finished buildSass");
 			done();
@@ -154,7 +154,7 @@ module.exports = taskMethods => {
 		const ON_DEATH = require("death")({ debug: false });
 		const fs = require("fs");
 		const path = require("path");
-		
+
 		ON_DEATH((signal, err) => {
 			exec("taskkill /F /IM openfin.* /T", (err, stdout, stderr) => {
 				// Only write the error to console if there is one and it is something other than process not found.
@@ -167,7 +167,7 @@ module.exports = taskMethods => {
 				process.exit();
 			});
 		});
-		
+
 		taskMethods.logToTerminal("Launching Finsemble", "black", "bgCyan");
 		//Wipe old stats.
 		fs.writeFileSync(path.join(__dirname, "server", "stats.json"), JSON.stringify({}), "utf-8");
@@ -177,23 +177,23 @@ module.exports = taskMethods => {
 		async function launchAndConnect(manifestUrl, uuid) {
 			// launching an application returns the port number used, this port number will be used to connect to the runtime
 			const port = await launch({ manifestUrl });
-		
+
 			// address to connect to the runtime using the port
 			const address = `ws://localhost:${port}`;
-		
+
 			// unique UUID used to launch an application, this must be different from the uuid the application uses
 			const launchUUID = `${uuid}-${Math.floor(1000 * Math.random())}`;
-			
+
 			// use the websocket address and uuid to connect to the runtime
 			const fin = await connect({ address, uuid: launchUUID });
-		
+
 			// get an instance of the application using wrap and the UUID set in the config file
 			const app = await fin.Application.wrap({ uuid });
-		
+
 			// listen to the closed event on the application to run code when it closes
 			app.on("closed", () => {
 				taskMethods.logToTerminal("Finsemble application terminated", "black", "bgCyan");
-		
+
 				// OpenFin has closed so exit gulpfile
 				if (watchClose) watchClose();
 
@@ -212,19 +212,19 @@ module.exports = taskMethods => {
 
 		launchAndConnect(manifestUrl, uuid);
 	},
-*/	
+*/
 
 	/** ---------------------------------------- TASKS ----------------------------------------------
 	 * Here is where you can override the actual gulp tasks. For instance, npm run dev, npm run build, etc.
 	 * You'll find these all in the "defineTasks" section in gulpfile.js.
-	 * 
+	 *
 	 * To run new tasks from the command line you will also need to add them to your package.json. For instance
 	 * the task "myTask" below would require a new line in package.json in the scripts section. Alternatively,
 	 * you can install gulp globally and run directly with gulp.
-	 * 
+	 *
 	 * For information on configuring gulp tasks:
 	 * https://github.com/gulpjs/gulp/blob/master/docs/API.md#gulptaskname-fn
-	 * 
+	 *
 	 */
    taskMethods.post = (done) => {
 

@@ -290,8 +290,8 @@
 			// Check electron version
 			const E2O_PATH = path.join(__dirname, "node_modules", "@chartiq", "e2o");
 			const E2O_PATH_EXISTS = fs.existsSync(E2O_PATH);
-			const USING_E2O = container === "electron";
-			if (USING_E2O && !E2O_PATH_EXISTS) {
+			const USING_Electron = container === "electron";
+			if (USING_Electron && !E2O_PATH_EXISTS) {
 				throw "Cannot use electron container unless e2o optional dependency is installed. Please run npm i @chartiq/e2o";
 			}
 
@@ -398,7 +398,7 @@
 			});
 			if (done) done();
 		},
-		launchE2O: done => {
+		launchElectron: done => {
 			let electronProcess = null;
 			let manifest = taskMethods.startupConfig[env.NODE_ENV].serverConfig;
 			process.env.ELECTRON_DEV = true;
@@ -456,7 +456,7 @@
 			if (container === "openfin") {
 				taskMethods.launchOpenFin(done);
 			} else {
-				taskMethods.launchE2O(done);
+				taskMethods.launchElectron(done);
 			}
 		},
 
