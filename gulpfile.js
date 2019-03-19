@@ -415,7 +415,7 @@
 			const e2oLocation = "node_modules/@chartiq/e2o";
 			// Use electron executable from e2o
 			const electronPath = path.join(__dirname, e2oLocation, "node_modules", "electron", "dist", "electron.exe");
-			let debug = envOrArg("e2odebug");
+			let debug = envOrArg("electronDebug");
 			let debugArg = "";
 			if (debug) {
 				debugArg = envOrArg("breakpointOnStart") ? " --inspect-brk=5858" : " --inspect=5858";

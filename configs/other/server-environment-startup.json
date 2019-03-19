@@ -4,7 +4,7 @@
         "serverConfig": "http://localhost:3375/configs/openfin/manifest-local.json",
         "clientRoute": "http://localhost:3375/",
         "container": "electron",
-        "e2odebug": true,
+        "electronDebug": true,
         "breakpointOnStart": false
     },
     "production": {
