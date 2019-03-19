@@ -119,7 +119,6 @@
 	// with the environment variable container or by command line argument `npx gulp dev --container:electron`
 	let container = envOrArg("container", "openfin");
 	container = container.toLowerCase();
-	if (container === "electron") container = "electron";
 
 	// This is a reference to the server process that is spawned. The server process is located in server/server.js
 	// and is an Express server that runs in its own node process (via spawn() command).
@@ -287,11 +286,11 @@
 			const CONTROLS_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-react-controls");
 			const CONTROLS_VERSION = require(path.join(CONTROLS_PATH, "package.json")).version;
 
-			// Check electron version
+			// Check electron adpater version
 			const E2O_PATH = path.join(__dirname, "node_modules", "@chartiq", "e2o");
 			const E2O_PATH_EXISTS = fs.existsSync(E2O_PATH);
-			const USING_Electron = container === "electron";
-			if (USING_Electron && !E2O_PATH_EXISTS) {
+			const USING_ELECTRON = container === "electron";
+			if (USING_ELECTRON && !E2O_PATH_EXISTS) {
 				throw "Cannot use electron container unless e2o optional dependency is installed. Please run npm i @chartiq/e2o";
 			}
 
