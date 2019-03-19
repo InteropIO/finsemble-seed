@@ -116,10 +116,10 @@
 	}
 
 	// Currently supported desktop agents include "openfin" and "e2o". This can be set either
-	// with the environment variable CHANNEL_ADAPTER or by command line argument `npx gulp dev --channel_adapter:electron`
-	let channelAdapter = envOrArg("channel_adapter", "openfin");
-	channelAdapter = channelAdapter.toLowerCase();
-	if (channelAdapter === "electron") channelAdapter = "e2o";
+	// with the environment variable container or by command line argument `npx gulp dev --container:electron`
+	let container = envOrArg("container", "openfin");
+	container = container.toLowerCase();
+	if (container === "electron") container = "e2o";
 
 	// This is a reference to the server process that is spawned. The server process is located in server/server.js
 	// and is an Express server that runs in its own node process (via spawn() command).
@@ -286,13 +286,13 @@
 			const CLI_VERSION = require(path.join(CLI_PATH, "package.json")).version;
 			const CONTROLS_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-react-controls");
 			const CONTROLS_VERSION = require(path.join(CONTROLS_PATH, "package.json")).version;
-			
+
 			// Check e2o version
 			const E2O_PATH = path.join(__dirname, "node_modules", "@chartiq", "e2o");
 			const E2O_PATH_EXISTS = fs.existsSync(E2O_PATH);
-			const USING_E2O = channelAdapter === "e2o";
+			const USING_E2O = container === "e2o";
 			if (USING_E2O && !E2O_PATH_EXISTS) {
-				throw "Cannot use e2o channelAdapter unless e2o optional dependency is installed. Please run npm i @chartiq/e2o";
+				throw "Cannot use e2o container unless e2o optional dependency is installed. Please run npm i @chartiq/e2o";
 			}
 
 			const E2O_VERSION = require(path.join(E2O_PATH, "package.json")).version;
@@ -425,7 +425,7 @@
 			electronProcess = exec(command,
 				{
 					cwd: e2oLocation
-				}, function execCallback (err) {
+				}, function execCallback(err) {
 					logToTerminal(err);
 					logToTerminal("e2o not installed? Try `npm install`", "red");
 				}
@@ -453,7 +453,7 @@
 			logToTerminal("Launching Finsemble", "black", "bgCyan");
 
 			launchTimestamp = Date.now();
-			if (channelAdapter === "openfin") {
+			if (container === "openfin") {
 				taskMethods.launchOpenFin(done);
 			} else {
 				taskMethods.launchE2O(done);
