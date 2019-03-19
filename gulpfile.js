@@ -115,11 +115,11 @@
 		return rc;
 	}
 
-	// Currently supported desktop agents include "openfin" and "e2o". This can be set either
+	// Currently supported desktop agents include "openfin" and "electron". This can be set either
 	// with the environment variable container or by command line argument `npx gulp dev --container:electron`
 	let container = envOrArg("container", "openfin");
 	container = container.toLowerCase();
-	if (container === "electron") container = "e2o";
+	if (container === "electron") container = "electron";
 
 	// This is a reference to the server process that is spawned. The server process is located in server/server.js
 	// and is an Express server that runs in its own node process (via spawn() command).
@@ -287,12 +287,12 @@
 			const CONTROLS_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-react-controls");
 			const CONTROLS_VERSION = require(path.join(CONTROLS_PATH, "package.json")).version;
 
-			// Check e2o version
+			// Check electron version
 			const E2O_PATH = path.join(__dirname, "node_modules", "@chartiq", "e2o");
 			const E2O_PATH_EXISTS = fs.existsSync(E2O_PATH);
-			const USING_E2O = container === "e2o";
+			const USING_E2O = container === "electron";
 			if (USING_E2O && !E2O_PATH_EXISTS) {
-				throw "Cannot use e2o container unless e2o optional dependency is installed. Please run npm i @chartiq/e2o";
+				throw "Cannot use electron container unless e2o optional dependency is installed. Please run npm i @chartiq/e2o";
 			}
 
 			const E2O_VERSION = require(path.join(E2O_PATH, "package.json")).version;
@@ -337,7 +337,7 @@
 				},
 				(cb) => {
 					if (!E2O_VERSION) {
-						// e2o not found so skip check
+						// electron not found so skip check
 						return cb();
 					}
 
