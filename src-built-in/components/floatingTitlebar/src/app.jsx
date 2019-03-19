@@ -83,7 +83,7 @@ class FloatingTitlebar extends React.Component {
 
 	onDragStart(e) {
 		isDragging = true;
-		e.dataTransfer.setData("text/plain", JSON.stringify(storeExports.Actions.getWindowIdentifier()));
+		e.dataTransfer.setData("application/fsbl-tab-data", JSON.stringify(storeExports.Actions.getWindowIdentifier()));
 		FSBL.Clients.WindowClient.startTilingOrTabbing({
 			windowIdentifier: storeExports.Actions.getWindowIdentifier()
 		});
