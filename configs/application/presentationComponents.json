@@ -534,7 +534,8 @@
 				"spawnOnStartup": true,
 				"spawnOnAllMonitors": false,
 				"canMinimize": false,
-				"canMaximize": false
+				"canMaximize": false,
+				"preload": "$applicationRoot/preloads/gtm.js"
 			},
 			"foreign": {
 				"services": {

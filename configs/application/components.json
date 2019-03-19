@@ -15,7 +15,10 @@
 			"component": {
 				"inject": false,
 				"spawnOnStartup": false,
-				"preload": "$applicationRoot/preloads/zoom.js"
+				"preload": [
+					"$applicationRoot/preloads/zoom.js",
+					"$applicationRoot/preloads/gtm.js"
+				]
 			},
 			"foreign": {
 				"services": {
