@@ -293,7 +293,8 @@
 				throw "Cannot use electron container unless finsemble-electron-adapter optional dependency is installed. Please run npm i @chartiq/finsemble-electron-adapter";
 			}
 
-			const FEA_VERSION = require(path.join(FEA_PATH, "package.json")).version;
+			// Check version before require so optionalDependency can stay optional
+			const E2O_VERSION = E2O_PATH_EXISTS ? require(path.join(E2O_PATH, "package.json")).version : undefined;
 
 			function checkLink(params, cb) {
 				let { path, name, version } = params;
