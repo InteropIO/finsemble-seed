@@ -182,7 +182,6 @@ class _ToolbarStore {
 				value: bounds
 			}, Function.prototype);
 		}
-
 		finsembleWindow.addListener("bounds-change-end", onBoundsSet)
 
 		FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", "t"], () => {
