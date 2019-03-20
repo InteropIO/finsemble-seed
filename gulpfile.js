@@ -294,7 +294,7 @@
 			}
 
 			// Check version before require so optionalDependency can stay optional
-			const E2O_VERSION = E2O_PATH_EXISTS ? require(path.join(E2O_PATH, "package.json")).version : undefined;
+			const FEA_VERSION = FEA_PATH_EXISTS ? require(path.join(FEA_PATH, "package.json")).version : undefined;
 
 			function checkLink(params, cb) {
 				let { path, name, version } = params;
