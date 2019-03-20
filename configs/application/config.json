@@ -160,7 +160,8 @@
 		"alwaysOnTopIcon": false,
 		"showTabs": true,
 		"showNativeTabs": true,
-		"floatingTitlebarComponent": "Floating Titlebar"
+		"floatingTitlebarComponent": "Floating Titlebar",
+		"deliveryMechanism": "preload"
 	},
 	"betaFeatures": {
 		"assimilation": {
