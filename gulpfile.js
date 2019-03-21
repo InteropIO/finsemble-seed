@@ -19,8 +19,14 @@
 	const shell = require("shelljs");
 	const path = require("path");
 	const webpack = require("webpack");
-	const e2o = require("@chartiq/e2o/exports");
-	const e2oPackager = require("@chartiq/e2o/deploy/deploymentHelpers");
+	let e2o = null;
+	let e2oPackager = null;
+	try {
+		e2o = require("@chartiq/e2o/exports");
+		e2oPackager = require("@chartiq/e2o/deploy/deploymentHelpers");
+	} catch(e) {
+		// Ignore the error here since we may not use this.
+	}
 	// local
 	const extensions = fs.existsSync("./gulpfile-extensions.js") ? require("./gulpfile-extensions.js") : undefined;
 	const isMacOrNix = process.platform !== "win32";
@@ -399,13 +405,21 @@
 			if (done) done();
 		},
 		launchE2O: done => {
+			if (e2o === null) {
+				throw new Error('E2O not found. Please ensure it is properly installed or run on Openfin.');
+			}
 			let config = {
 				manifest: taskMethods.startupConfig[env.NODE_ENV].serverConfig
 			}
 			return e2o.e2oLauncher(config, done);
 		},
 		makeInstaller: async (done) => {
-			if (!env.NODE_ENV) throw new Error("NODE_ENV must be set to generate an installer.");
+			if (!env.NODE_ENV) {
+				throw new Error("NODE_ENV must be set to generate an installer.");
+			}
+			if (e2oPackager === null) {
+				throw new Error('E2O not found. Please ensure it is properly installed or run on Openfin.');
+			}
 			function resolveRelativePaths(obj, properties, rootPath) {
 				properties.forEach(prop => {
 					obj[prop] = path.resolve(rootPath, obj[prop]);
