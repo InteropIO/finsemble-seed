@@ -176,15 +176,13 @@
 		},
 		"defaultAuthentication": {
 			"window": {
-				"url": "$applicationRoot/components/authentication/defaultAuthentication.html",
+				"url": "$applicationRoot/components/defaultAuthentication/defaultAuthentication.html",
 				"top": "center",
 				"left": "center",
 				"width": 358,
-				"height": 458,
+				"height": 192,
 				"ephemeral": true,
-				"options": {
-					"autoShow": false
-				}
+				"autoShow": true
 			},
 			"component": {
 				"neededClients": [

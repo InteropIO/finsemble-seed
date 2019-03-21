@@ -7,8 +7,8 @@
         "startup": {
              "adapter": "PASSWORD",
              "component": "defaultAuthentication"
-         }
-     },
+        }
+    },
 	"storage": {
 		"topicToDataStoreAdapters": {
 			"finsemble": "IndexedDBAdapter",
