@@ -52,7 +52,7 @@ if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSB
 function FSBLReady() {
 	FSBL.Clients.WindowClient.finsembleWindow.addEventListener("shown", () => {
 		finsembleWindow.bringToFront();
-		FSBL.Clients.DialogManager.showModal();
+		//Used to call to show dialog modal. Since the preferences component no longer needs to be alwaysOnTop there's no need to visually represent that its a modal
 	});
 
 	storeExports.initialize(() => {
