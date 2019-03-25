@@ -76,7 +76,7 @@ export default class Workspaces extends React.Component {
 			focusedWorkspaceComponentList: [],
 			initialAlwaysOnTop: finsembleWindow.windowOptions.alwaysOnTop,
 			alwaysOnTop: finsembleWindow.windowOptions.alwaysOnTop
-		}
+		};
 		this.bindCorrectContext();
 		this.addListeners();
 	}
@@ -115,16 +115,17 @@ export default class Workspaces extends React.Component {
 	 * not be always on top when a file dialog is open.
 	 * @param {boolean} alwaysOnTop The value to set finsembleWindow.options.alwaysOnTop
 	 */
-	async changeAlwaysOnTop(alwaysOnTop, cb = Function.prototype) {
+	async changeAlwaysOnTop(alwaysOnTop) {
 		//The initialAlwaysOnTop check is to prevent making a component be alwaysOnTop when the
 		//client may have set it to alwaysOnTop:false in the config. If that's the case, it should
 		//never set its alwaysOnTop to true and should always remain unchanged
-		console.log("Preferences.alwaysOnTop changed: ", alwaysOnTop);
-		await FSBL.Clients.WindowClient.setAlwaysOnTop(alwaysOnTop, () => {
-			this.setState({
-				alwaysOnTop: alwaysOnTop
-			}, cb);
-		});
+		if (this.state.initialAlwaysOnTop) {
+			await FSBL.Clients.WindowClient.setAlwaysOnTop(alwaysOnTop, () => {
+				this.setState({
+					alwaysOnTop: alwaysOnTop
+				});
+			});
+		}
 	}
 
 	onDragEnd(changeEvent) {
