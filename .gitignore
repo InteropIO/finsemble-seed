@@ -20,3 +20,6 @@ finsemble/
 .babel_cache
 build/webpack/vendor-manifest.json
 server/stats.json
+package-lock.json
+installer-tmp/
+pkg/
