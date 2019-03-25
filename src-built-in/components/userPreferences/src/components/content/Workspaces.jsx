@@ -115,12 +115,12 @@ export default class Workspaces extends React.Component {
 	 * not be always on top when a file dialog is open.
 	 * @param {boolean} alwaysOnTop The value to set finsembleWindow.options.alwaysOnTop
 	 */
-	async changeAlwaysOnTop(alwaysOnTop) {
+	changeAlwaysOnTop(alwaysOnTop) {
 		//The initialAlwaysOnTop check is to prevent making a component be alwaysOnTop when the
 		//client may have set it to alwaysOnTop:false in the config. If that's the case, it should
 		//never set its alwaysOnTop to true and should always remain unchanged
 		if (this.state.initialAlwaysOnTop) {
-			await FSBL.Clients.WindowClient.setAlwaysOnTop(alwaysOnTop, () => {
+			FSBL.Clients.WindowClient.setAlwaysOnTop(alwaysOnTop, () => {
 				this.setState({
 					alwaysOnTop: alwaysOnTop
 				});
