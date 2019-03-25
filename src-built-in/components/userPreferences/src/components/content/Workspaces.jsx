@@ -326,7 +326,7 @@ export default class Workspaces extends React.Component {
 		//Set alwaysOnTop to false and add an event listener on the window. When focus is regained
 		//then reset always on top
 		this.changeAlwaysOnTop(false);
-		finsembleWindow.addEventListener('focused', this.preferencesFocused, false);
+		finsembleWindow.addEventListener('focused', this.preferencesFocused);
 		let inputElement = document.getElementById("file-input");
 		inputElement.addEventListener("change", importWorkspace, false);
 		inputElement.click();
@@ -400,7 +400,7 @@ export default class Workspaces extends React.Component {
 		//Set alwaysOnTop to false and add an event listener on the window. When focus is regained
 		//then reset always on top
 		self.changeAlwaysOnTop(false);
-		finsembleWindow.addEventListener('focused', this.preferencesFocused, false);
+		finsembleWindow.addEventListener('focused', this.preferencesFocused);
 		//If we're autosaving, autosave, then export.
 		//@todo, put into store. consider moving autosave into workspaceClient.
 		FSBL.Clients.ConfigClient.getValue({ field: "finsemble.preferences.workspaceService.promptUserOnDirtyWorkspace" }, (err, data) => {
