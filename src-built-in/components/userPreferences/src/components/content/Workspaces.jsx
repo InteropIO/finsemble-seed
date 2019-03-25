@@ -323,6 +323,8 @@ export default class Workspaces extends React.Component {
 	}
 
 	openFileDialog() {
+		//Set alwaysOnTop to false and add an event listener on the window. When focus is regained
+		//then reset always on top
 		this.changeAlwaysOnTop(false);
 		finsembleWindow.addEventListener('focused', this.preferencesFocused, false);
 		let inputElement = document.getElementById("file-input");
@@ -395,6 +397,8 @@ export default class Workspaces extends React.Component {
 			});
 		}
 
+		//Set alwaysOnTop to false and add an event listener on the window. When focus is regained
+		//then reset always on top
 		self.changeAlwaysOnTop(false);
 		finsembleWindow.addEventListener('focused', this.preferencesFocused, false);
 		//If we're autosaving, autosave, then export.
