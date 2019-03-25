@@ -598,7 +598,7 @@
 				"options": {
 					"autoShow": false,
 					"resizable": false,
-					"alwaysOnTop": false
+					"alwaysOnTop": true
 				}
 			},
 			"component": {

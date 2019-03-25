@@ -73,7 +73,9 @@ export default class Workspaces extends React.Component {
 			workspaceToLoadOnStart: null,
 			templateName: '',
 			workspaceBeingEdited: '',
-			focusedWorkspaceComponentList: []
+			focusedWorkspaceComponentList: [],
+			initialAlwaysOnTop: finsembleWindow.windowOptions.alwaysOnTop,
+			alwaysOnTop: finsembleWindow.windowOptions.alwaysOnTop
 		}
 		this.bindCorrectContext();
 		this.addListeners();
@@ -88,7 +90,7 @@ export default class Workspaces extends React.Component {
 		});
 	}
 	bindCorrectContext() {
-		let methods = ["deleteWorkspace", "addListeners", "setWorkspaceList", "onDragEnd", "startEditingWorkspace", "renameWorkspace", "cancelEdit", "setWorkspaceToLoadOnStart", "setPreferences", "exportWorkspace", "handleButtonClicks", "getFocusedWorkspaceComponentList"];
+		let methods = ["deleteWorkspace", "addListeners", "setWorkspaceList", "onDragEnd", "startEditingWorkspace", "renameWorkspace", "cancelEdit", "setWorkspaceToLoadOnStart", "setPreferences", "exportWorkspace", "handleButtonClicks", "getFocusedWorkspaceComponentList", "changeAlwaysOnTop", "openFileDialog", "preferencesFocused"];
 		methods.forEach((method) => {
 			this[method] = this[method].bind(this);
 		});
@@ -106,6 +108,23 @@ export default class Workspaces extends React.Component {
 
 	addListeners() {
 		UserPreferencesStore.addListener({ field: 'WorkspaceList' }, this.setWorkspaceList)
+	}
+
+	/**
+	 * Sets the windowOptions.alwaysOnTop to the value supplied. The preferences component should
+	 * not be always on top when a file dialog is open.
+	 * @param {boolean} alwaysOnTop The value to set finsembleWindow.options.alwaysOnTop
+	 */
+	async changeAlwaysOnTop(alwaysOnTop, cb = Function.prototype) {
+		//The initialAlwaysOnTop check is to prevent making a component be alwaysOnTop when the
+		//client may have set it to alwaysOnTop:false in the config. If that's the case, it should
+		//never set its alwaysOnTop to true and should always remain unchanged
+		console.log("Preferences.alwaysOnTop changed: ", alwaysOnTop);
+		await FSBL.Clients.WindowClient.setAlwaysOnTop(alwaysOnTop, () => {
+			this.setState({
+				alwaysOnTop: alwaysOnTop
+			}, cb);
+		});
 	}
 
 	onDragEnd(changeEvent) {
@@ -303,16 +322,30 @@ export default class Workspaces extends React.Component {
 	}
 
 	openFileDialog() {
+		this.changeAlwaysOnTop(false);
+		finsembleWindow.addEventListener('focused', this.preferencesFocused, false);
 		let inputElement = document.getElementById("file-input");
 		inputElement.addEventListener("change", importWorkspace, false);
 		inputElement.click();
+	}
 
+	/**
+	 * If the event is being listened to, when the preferences component is focused
+	 * it will set always on top to true, and remove the event listener
+	 *
+	 * This is to handle bringing alwaysOnTop back to true when file dialogs are closed
+	 * without changes (also handles bringing back to front after exporting)
+	 */
+	preferencesFocused() {
+		finsembleWindow.removeEventListener('focused', this.preferencesFocused);
+		this.changeAlwaysOnTop(true);
 	}
 
 	importWorkspace(evt) {
 		let inputElement = document.getElementById("file-input");
 		inputElement.removeEventListener("change", importWorkspace);
 		var files = evt.target.files; // FileList object
+		var self = this;
 
 		function loadFile(file, done) {
 			let reader = new FileReader();
@@ -361,6 +394,8 @@ export default class Workspaces extends React.Component {
 			});
 		}
 
+		self.changeAlwaysOnTop(false);
+		finsembleWindow.addEventListener('focused', this.preferencesFocused, false);
 		//If we're autosaving, autosave, then export.
 		//@todo, put into store. consider moving autosave into workspaceClient.
 		FSBL.Clients.ConfigClient.getValue({ field: "finsemble.preferences.workspaceService.promptUserOnDirtyWorkspace" }, (err, data) => {
@@ -372,13 +407,11 @@ export default class Workspaces extends React.Component {
 					name: activeName,
 					force: true
 				}, (err, response) => {
-					doExport();
+						doExport();
 				});
 			}
 			doExport();
 		});
-
-
 	}
 	handleButtonClicks(e) {
 		if (this.state.adding || this.state.editing) {
