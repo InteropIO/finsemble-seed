@@ -408,7 +408,7 @@ export default class Workspaces extends React.Component {
 					name: activeName,
 					force: true
 				}, (err, response) => {
-						doExport();
+					doExport();
 				});
 			}
 			doExport();
