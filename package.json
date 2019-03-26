@@ -27,7 +27,7 @@
     "license": "",
     "optionalDependencies": {
         "openfin-launcher": "^1.3.11",
-        "@chartiq/e2o": "3.7.*"
+        "@chartiq/finsemble-electron-adapter": "3.8.*"
     },
     "dependencies": {
         "@chartiq/finsemble": "3.7.*",

@@ -287,14 +287,14 @@
 			const CONTROLS_VERSION = require(path.join(CONTROLS_PATH, "package.json")).version;
 
 			// Check electron adpater version
-			const E2O_PATH = path.join(__dirname, "node_modules", "@chartiq", "e2o");
-			const E2O_PATH_EXISTS = fs.existsSync(E2O_PATH);
+			const FEA_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-electron-adapter");
+			const FEA_PATH_EXISTS = fs.existsSync(FEA_PATH);
 			const USING_ELECTRON = container === "electron";
-			if (USING_ELECTRON && !E2O_PATH_EXISTS) {
-				throw "Cannot use electron container unless e2o optional dependency is installed. Please run npm i @chartiq/e2o";
+			if (USING_ELECTRON && !FEA_PATH_EXISTS) {
+				throw "Cannot use electron container unless finsemble-electron-adapter optional dependency is installed. Please run npm i @chartiq/finsemble-electron-adapter";
 			}
 
-			const E2O_VERSION = require(path.join(E2O_PATH, "package.json")).version;
+			const FEA_VERSION = require(path.join(FEA_PATH, "package.json")).version;
 
 			function checkLink(params, cb) {
 				let { path, name, version } = params;
@@ -335,15 +335,15 @@
 					}, cb)
 				},
 				(cb) => {
-					if (!E2O_VERSION) {
+					if (!FEA_VERSION) {
 						// electron not found so skip check
 						return cb();
 					}
 
 					checkLink({
-						path: E2O_PATH,
-						name: "e2o",
-						version: E2O_VERSION
+						path: FEA_PATH,
+						name: "finsemble-electron-adapter",
+						version: FEA_VERSION
 					}, cb)
 				}
 			], done)
@@ -411,9 +411,9 @@
 				});
 			});
 
-			const e2oLocation = "node_modules/@chartiq/e2o";
-			// Use electron executable from e2o
-			const electronPath = path.join(__dirname, e2oLocation, "node_modules", "electron", "dist", "electron.exe");
+			const FEALocation = "node_modules/@chartiq/finsemble-electron-adapter";
+			// Use electron executable from FEA
+			const electronPath = path.join(__dirname, FEALocation, "node_modules", "electron", "dist", "electron.exe");
 			let debug = envOrArg("electronDebug");
 			let debugArg = "";
 			if (debug) {
@@ -423,10 +423,10 @@
 			logToTerminal(command);
 			electronProcess = exec(command,
 				{
-					cwd: e2oLocation
+					cwd: FEALocation
 				}, function execCallback(err) {
 					logToTerminal(err);
-					logToTerminal("e2o not installed? Try `npm install`", "red");
+					logToTerminal("finsemble-electron-adapter not installed? Try `npm install`", "red");
 				}
 			);
 
@@ -464,7 +464,7 @@
 		envOrArg: (...args) => envOrArg.apply(this, args),
 
 		/**
-		 * Starts the server, launches the Finsemble application. Use this for a quick launch, for instance when working on e2o.
+		 * Starts the server, launches the Finsemble application. Use this for a quick launch, for instance when working on finsemble-electron-adapter.
 		 */
 		"nobuild:dev": done => {
 			async.series([
