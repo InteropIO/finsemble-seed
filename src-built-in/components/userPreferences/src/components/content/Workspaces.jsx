@@ -74,6 +74,7 @@ export default class Workspaces extends React.Component {
 			templateName: '',
 			workspaceBeingEdited: '',
 			focusedWorkspaceComponentList: [],
+			isElectron: (fin.container && fin.container === "Electron"),
 			initialAlwaysOnTop: finsembleWindow.windowOptions.alwaysOnTop,
 			alwaysOnTop: finsembleWindow.windowOptions.alwaysOnTop
 		};
@@ -119,7 +120,7 @@ export default class Workspaces extends React.Component {
 		//The initialAlwaysOnTop check is to prevent making a component be alwaysOnTop when the
 		//client may have set it to alwaysOnTop:false in the config. If that's the case, it should
 		//never set its alwaysOnTop to true and should always remain unchanged
-		if (this.state.initialAlwaysOnTop) {
+		if (this.state.initialAlwaysOnTop && this.state.isElectron) {
 			FSBL.Clients.WindowClient.setAlwaysOnTop(alwaysOnTop, () => {
 				this.setState({
 					alwaysOnTop: alwaysOnTop
@@ -150,7 +151,7 @@ export default class Workspaces extends React.Component {
 			let windowData = templateObject.windowData[i];
 			FSBL.Clients.Logger.system.debug("getComponentTypes loop", windowData);
 			componentType = "Unknown Component";
-			if (windowData) { // current assimulation doesn't fill in windowData, so in this case use "Unknown Component" for component type
+			if (windowData) { // current assimilation doesn't fill in windowData, so in this case use "Unknown Component" for component type
 				componentType = windowData.customData.component.type;
 			} else {
 				componentType = "Unknown Component";
