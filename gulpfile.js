@@ -19,8 +19,8 @@
 	const shell = require("shelljs");
 	const path = require("path");
 	const webpack = require("webpack");
-	const e2o = require("@chartiq/e2o/exports");
-	const e2oPackager = require("@chartiq/e2o/deploy/deploymentHelpers");
+	const FEA = require("@chartiq/finsemble-electron-adapter/exports");
+	const FEAPackager = require("@chartiq/finsemble-electron-adapter/deploy/deploymentHelpers");
 	// local
 	const extensions = fs.existsSync("./gulpfile-extensions.js") ? require("./gulpfile-extensions.js") : undefined;
 	const isMacOrNix = process.platform !== "win32";
@@ -401,7 +401,7 @@
 			let config = {
 				manifest: taskMethods.startupConfig[env.NODE_ENV].serverConfig
 			}
-			return e2o.e2oLauncher(config, done);
+			return FEA.e2oLauncher(config, done);
 		},
 		makeInstaller: async (done) => {
 			if (!env.NODE_ENV) throw new Error("NODE_ENV must be set to generate an installer.");
@@ -438,9 +438,9 @@
 				updateUrl = null;
 			}
 
-			await e2oPackager.setManifestURL(manifestUrl);
-			await e2oPackager.setUpdateURL(updateUrl);
-			await e2oPackager.createFullInstaller(installerConfig);
+			await FEAPackager.setManifestURL(manifestUrl);
+			await FEAPackager.setUpdateURL(updateUrl);
+			await FEAPackager.createFullInstaller(installerConfig);
 			done();
 		},
 		launchApplication: done => {

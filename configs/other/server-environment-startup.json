@@ -9,7 +9,7 @@
         "container": "electron",
         "//electronDebug": "Whether to start the finsemble-electron-adapter in debug mode. Default: true.",
         "electronDebug": true,
-        "//breakpointOnStart": "Whether to pause e2o when it starts. Default: false.",
+        "//breakpointOnStart": "Whether to pause finsemble-electron-adapter when it starts. Default: false.",
         "breakpointOnStart": false,
         "//updateUrl": "experimental",
         "updateUrl": "http://localhost:3375/pkg/"
@@ -24,7 +24,7 @@
         "container": "electron",
         "//electronDebug": "Whether to start the finsemble-electron-adapter in debug mode. Default: true.",
         "electronDebug": true,
-        "//breakpointOnStart": "Whether to pause e2o when it starts. Default: false.",
+        "//breakpointOnStart": "Whether to pause finsemble-electron-adapter when it starts. Default: false.",
         "breakpointOnStart": false,
         "//updateUrl": "experimental",
         "updateUrl": "http://localhost:3375/pkg/"
