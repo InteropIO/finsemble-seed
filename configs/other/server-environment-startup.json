@@ -1,6 +1,8 @@
 {
     "development": {
+        "//serverPort": "Port number for your server.",
         "serverPort": 3375,
+        "//serverConfig": "Url for your application's manifest.",
         "serverConfig": "http://localhost:3375/configs/openfin/manifest-local.json",
         "clientRoute": "http://localhost:3375/",
         "container": "electron",
@@ -8,7 +10,9 @@
         "breakpointOnStart": false
     },
     "production": {
+        "//serverPort": "Port number for your server.",
         "serverPort": 3375,
+        "//serverConfig": "Url for your application's manifest.",
         "serverConfig": "http://localhost:3375/configs/openfin/manifest-local.json",
         "clientRoute": "http://localhost:3375/",
         "container": "electron"
