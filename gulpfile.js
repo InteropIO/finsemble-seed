@@ -419,7 +419,7 @@
 			installerConfig = resolveRelativePaths(installerConfig, ['icon'], './');
 
 			const manifestUrl = taskMethods.startupConfig[env.NODE_ENV].serverConfig;
-			const updateUrl = taskMethods.startupConfig[env.NODE_ENV].updateUrl;
+			let updateUrl = taskMethods.startupConfig[env.NODE_ENV].updateUrl;
 
 			// Installer won't work without a proper manifest. Throw a helpful error.
 			if (!manifestUrl) {
