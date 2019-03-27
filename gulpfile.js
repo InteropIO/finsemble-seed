@@ -434,7 +434,7 @@
 
 			// UpdateURL isn't required, but we let them know in case they're expecting it to work.
 			if (!updateUrl) {
-				logToTerminal(`>>>> WARNING: Installer potentially misconfigured. No property 'updateUrl' in configs/other/server-environment-startup.json under ${env.NODE_ENV}. The application will still work, but it will not update.`, "yellow");
+				logToTerminal(`[Info] Did not find 'updateUrl' in configs/other/server-environment-startup.json under ${env.NODE_ENV}. The application will still work, but it will not update itself with new versions of the finsemble-electron-adapter.`, "white");
 				updateUrl = null;
 			}
 
