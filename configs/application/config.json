@@ -12,10 +12,110 @@
 			"IndexedDBAdapter": "$applicationRoot/adapters/indexedDBAdapter.js"
 		}
 	},
+	"FDC3Comment": "swap values for FDC3Server with LOCAL_FDC3Server after running it.",
+	"FDC3Server": "https://fpe.finsemble.com/v1/",
+	"aFDC3Server": "http://localhost:3030/v1/",
 	"servicesConfig": {
+		"distributedStore": {
+			"initialStores": [
+				{
+					"name": "Finsemble-AppLauncher-Store",
+					"foundation": {
+						"appFolders": {
+							"list": [
+								"My Apps",
+								"Favorites"
+							],
+							"folders": {
+								"My Apps": {
+									"icon": "ff-component",
+									"type": "folder",
+									"disableUserRemove": true,
+									"apps": {
+										"1": {
+											"name": "Welcome Component",
+											"appID": "welcome-comp"
+										},
+										"2": {
+											"name": "Getting Started Tutorial",
+											"appID": "2"
+										},
+										"3": {
+											"name": "Process Monitor",
+											"appID": "pm"
+										},
+										"4": {
+											"name": "Notepad",
+											"appID": "note"
+										}
+									}
+								},
+								"Favorites": {
+									"icon": "ff-favorite",
+									"type": "folder",
+									"disableUserRemove": true,
+									"apps": {}
+								}
+							}
+						},
+						"appDefinitions": {
+							"welcome-comp": {
+								"appID": "welcome-comp",
+								"name": "Welcome Component",
+								"source": "FDC3",
+								"tags": [
+									"newrelease"
+								],
+								"icon": "ff-home-2"
+							},
+							"2": {
+								"appID": "2",
+								"name": "Getting Started Tutorial",
+								"source": "FDC3",
+								"type": "component",
+								"tags": [
+									"newrelease"
+								],
+								"icon": "ff-component"
+							},
+							"pm": {
+								"appID": "pm",
+								"name": "Process Monitor",
+								"source": "FDC3",
+								"type": "component",
+								"tags": [
+									"bad information",
+									"don't click here"
+								],
+								"icon": "ff-chart-alt-1"
+							},
+							"note": {
+								"appID": "note",
+								"name": "Notepad",
+								"source": "FDC3",
+								"type": "component",
+								"tags": [
+									"assimilation",
+									"wizardry",
+									"TESLA"
+								],
+								"icon": "ff-saveas-2"
+							}
+						}
+					},
+					"default": {
+						"activeLauncherTags": [],
+						"filterText": "",
+						"filterTags": [],
+						"activeFolder": "My Apps",
+						"sortBy": "Alphabetical"
+					}
+				}
+			]
+		},
 		"launcher": {
 			"staggerPixels": 40,
-			"unknownComponent":"nonConfiguredComponent"
+			"unknownComponent": "nonConfiguredComponent"
 		},
 		"assimilation": {
 			"useOpenFinSpawn": false,
@@ -34,6 +134,9 @@
 			"MINIMUM_WIDTH": 175,
 			"defaultHeight": 39,
 			"defaultWidth": 600,
+			"requireRectangularityForGroupResize": true,
+			"undockDisbandsEntireGroup": false,
+			"fillHolesOnUndock": true,
 			"tabbing": {
 				"enabled": true
 			},
@@ -62,7 +165,8 @@
 		"showNativeTabs": true,
 		"floatingTitlebarComponent": "Floating Titlebar"
 	},
-	"betaFeatures": {},
+	"betaFeatures": {
+	},
 	"splinteringConfig": {
 		"comment": "A SplinterAgent is just an openfin application that is capable of spawning specific components/services. If you try to spawn a component/service that one of these agents does not cover, it will be spawned by the defaultAgent. You can also specify maxWindowsPerAgent if you would like to limit your agents to some ceiling. This is useful when you have a particularly heavy component.",
 		"enabled": true,

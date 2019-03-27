@@ -4,6 +4,7 @@
 */
 import async from "async";
 import * as menuConfig from '../config.json';
+import * as storeExports from "../stores/searchStore";
 
 import { Actions as SearchActions } from "./searchStore"
 
@@ -181,11 +182,7 @@ class _ToolbarStore {
 				value: bounds
 			}, Function.prototype);
 		}
-		let restoreWindow = (e) => {
-			finsembleWindow.restore();
-		}
-		//Immediately restore on maximize.
-		finsembleWindow.addListener("maximized", restoreWindow);
+
 		finsembleWindow.addListener("bounds-change-end", onBoundsSet)
 
 		FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", "t"], () => {
@@ -199,6 +196,7 @@ class _ToolbarStore {
 
 	/**
 	 * Function to bring toolbar to front (since dockable toolbar can be hidden)
+	 * The search input box will be open and any previous results will be displayed
 	 * @param {boolean} focus If true, will also focus the toolbar
 	 * @memberof _ToolbarStore
 	 */

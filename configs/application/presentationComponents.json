@@ -4,10 +4,10 @@
 		"App Launcher": {
 			"window": {
 				"url": "$applicationRoot/components/appLauncher/appLauncher.html",
-				"top": 32,
-				"left": 45,
-				"width": 350,
-				"height": 330,
+				"top": 0,
+				"left": 0,
+				"width": 310,
+				"height": 400,
 				"ephemeral": true,
 				"options": {
 					"autoShow": false
@@ -29,6 +29,39 @@
 					"Window Manager": {
 						"persistWindowState": false,
 						"FSBLHeader": false
+					}
+				}
+			}
+		},
+		"My Apps": {
+			"window": {
+				"url": "$applicationRoot/components/myApps/index.html",
+				"top": 0,
+				"left": 0,
+				"width": 600,
+				"height": 400,
+				"ephemeral": true,
+				"options": {
+					"autoShow": false
+				}
+			},
+			"component": {
+				"allowAdhoc": "@TODO",
+				"spawnOnStartup": false,
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": false,
+						"shouldRegister": false
+					}
+				},
+				"components": {
+					"Window Manager": {
+						"persistWindowState": false,
+						"FSBLHeader": false,
+						"title": "My Apps"
 					}
 				}
 			}
@@ -500,7 +533,8 @@
 				"category": "system",
 				"spawnOnStartup": true,
 				"spawnOnAllMonitors": false,
-				"canMinimize": false
+				"canMinimize": false,
+				"canMaximize": false
 			},
 			"foreign": {
 				"services": {
@@ -593,90 +627,6 @@
 				}
 			}
 		},
-		"App Catalog": {
-			"window": {
-				"url": "$applicationRoot/components/appCatalog/appCatalog.html",
-				"frame": false,
-				"top": "center",
-				"left": "center",
-				"width": 800,
-				"height": 600,
-				"options": {
-					"autoShow": true,
-					"resizable": false,
-					"alwaysOnTop": true
-				}
-			},
-			"component": {
-				"category": "system"
-			},
-			"foreign": {
-				"services": {
-					"dockingService": {
-						"canGroup": false,
-						"isArrangable": false,
-						"shouldRegister": false
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"launchableByUser": false
-					},
-					"Window Manager": {
-						"FSBLHeader": false,
-						"persistWindowState": false
-					},
-					"Toolbar": {
-						"iconClass": "UserPreferences"
-					}
-				}
-			}
-		},
-		"Floating Titlebar": {
-			"window": {
-				"url": "$applicationRoot/components/floatingTitlebar/floatingTitlebar.html",
-				"frame": false,
-				"top": "center",
-				"left": "center",
-				"width": 30,
-				"height": 30,
-				"options": {
-					"cornerRounding": {
-						"height": 0,
-						"width": 0
-					},
-					"showTaskbarIcon": false,
-					"autoShow": false,
-					"resizable": false,
-					"alwaysOnTop": false,
-					"smallWindow": true
-				}
-			},
-			"component": {
-				"category": "system"
-			},
-			"foreign": {
-				"services": {
-					"dockingService": {
-						"canGroup": true,
-						"isArrangable": false,
-						"shouldRegister": false
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"launchableByUser": false
-					},
-					"Window Manager": {
-						"FSBLHeader": false,
-						"persistWindowState": false
-					},
-					"Toolbar": {
-						"iconClass": "UserPreferences"
-					}
-				}
-			}
-		},
 		"Floating Titlebar": {
 			"window": {
 				"url": "$applicationRoot/components/floatingTitlebar/floatingTitlebar.html",
@@ -725,7 +675,7 @@
 			"window": {
 				"url": "$applicationRoot/components/processMonitor/processMonitor.html",
 				"width": 600,
-				"height": 400
+				"height": 700
 			},
 			"component": {
 				"category": "system"
@@ -744,6 +694,83 @@
 						"FSBLHeader": true,
 						"persistWindowState": true,
 						"title": "Process Monitor"
+					}
+				}
+			}
+		},
+		"App Catalog": {
+			"window": {
+				"url": "$applicationRoot/components/appCatalog/appCatalog.html",
+				"frame": false,
+				"top": "center",
+				"left": "center",
+				"width": 800,
+				"height": 600,
+				"options": {
+					"autoShow": true,
+					"resizable": false,
+					"alwaysOnTop": true
+				}
+			},
+			"component": {
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"canGroup": false,
+						"isArrangable": false,
+						"shouldRegister": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"FSBLHeader": false,
+						"persistWindowState": false
+					},
+					"Toolbar": {
+						"iconClass": "UserPreferences"
+					}
+				}
+			}
+		},
+		"App Catalog2": {
+			"window": {
+				"url": "$applicationRoot/components/appCatalog2/appCatalog.html",
+				"width": 600,
+				"height": 700,
+				"options": {
+					"autoShow": true,
+					"resizable": false,
+					"showTaskbarIcon": true
+				}
+			},
+			"component": {
+				"category": "system",
+				"spawnOnStartup": false
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangeable": false,
+						"ignoreTilingAndTabbingRequests": true,
+						"ignoreSnappingRequests": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"FSBLHeader": {
+							"hideMaximize": true
+						},
+						"persistWindowState": true,
+						"showTabs": false,
+						"title": "App Catalog"
 					}
 				}
 			}
