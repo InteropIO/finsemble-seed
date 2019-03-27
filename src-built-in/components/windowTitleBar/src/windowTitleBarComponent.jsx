@@ -421,7 +421,6 @@ function init () {
 	// Create the header element
 	const template = document.createElement("div");
 	const FSBLHeader = document.createElement('div')
-		  FSBLHeader.setAttribute('style', 'height: 20px')
 		  FSBLHeader.setAttribute('id', 'FSBLHeader')
 	template.appendChild(FSBLHeader)
 	document.body.insertBefore(template.firstChild, document.body.firstChild);
