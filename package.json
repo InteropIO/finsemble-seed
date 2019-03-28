@@ -32,9 +32,9 @@
         "openfin-launcher": "^1.3.11"
     },
     "dependencies": {
-        "@chartiq/finsemble-electron-adapter": "3.8.*",
-        "@chartiq/finsemble": "3.7.*",
+        "@chartiq/finsemble": "^3.8.0",
         "@chartiq/finsemble-cli": "3.*",
+        "@chartiq/finsemble-electron-adapter": "3.8.*",
         "@chartiq/finsemble-react-controls": "3.7.*",
         "async": "^2.6.0",
         "babel-minify-webpack-plugin": "^0.3.0",
