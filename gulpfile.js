@@ -19,8 +19,8 @@
 	const shell = require("shelljs");
 	const path = require("path");
 	const webpack = require("webpack");
-	const e2o = require("@chartiq/e2o/exports");
-	const e2oPackager = require("@chartiq/e2o/deploy/deploymentHelpers");
+	const FEA = require("@chartiq/finsemble-electron-adapter/exports");
+	const FEAPackager = require("@chartiq/finsemble-electron-adapter/deploy/deploymentHelpers");
 	// local
 	const extensions = fs.existsSync("./gulpfile-extensions.js") ? require("./gulpfile-extensions.js") : undefined;
 	const isMacOrNix = process.platform !== "win32";
@@ -54,7 +54,6 @@
 		logToTerminal("No Angular component configuration found", "yellow");
 		angularComponents = null;
 	}
-
 	// #region Constants
 	const startupConfig = require("./configs/other/server-environment-startup");
 
@@ -115,11 +114,10 @@
 		return rc;
 	}
 
-	// Currently supported desktop agents include "openfin" and "e2o". This can be set either
-	// with the environment variable CHANNEL_ADAPTER or by command line argument `npx gulp dev --channel_adapter:electron`
-	let channelAdapter = envOrArg("channel_adapter", "openfin");
-	channelAdapter = channelAdapter.toLowerCase();
-	if (channelAdapter === "electron") channelAdapter = "e2o";
+	// Currently supported desktop agents include "openfin" and "electron". This can be set either
+	// with the environment variable container or by command line argument `npx gulp dev --container:electron`
+	let container = envOrArg("container", "openfin");
+	container = container.toLowerCase();
 
 	// This is a reference to the server process that is spawned. The server process is located in server/server.js
 	// and is an Express server that runs in its own node process (via spawn() command).
@@ -287,15 +285,15 @@
 			const CONTROLS_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-react-controls");
 			const CONTROLS_VERSION = require(path.join(CONTROLS_PATH, "package.json")).version;
 
-			// Check e2o version
-			const E2O_PATH = path.join(__dirname, "node_modules", "@chartiq", "e2o");
-			const E2O_PATH_EXISTS = fs.existsSync(E2O_PATH);
-			const USING_E2O = channelAdapter === "e2o";
-			if (USING_E2O && !E2O_PATH_EXISTS) {
-				throw "Cannot use e2o channelAdapter unless e2o optional dependency is installed. Please run npm i @chartiq/e2o";
+			// Check electron adpater version
+			const FEA_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-electron-adapter");
+			const FEA_PATH_EXISTS = fs.existsSync(FEA_PATH);
+			const USING_ELECTRON = container === "electron";
+			if (USING_ELECTRON && !FEA_PATH_EXISTS) {
+				throw "Cannot use electron container unless finsemble-electron-adapter optional dependency is installed. Please run npm i @chartiq/finsemble-electron-adapter";
 			}
 
-			const E2O_VERSION = require(path.join(E2O_PATH, "package.json")).version;
+			const FEA_VERSION = require(path.join(FEA_PATH, "package.json")).version;
 
 			function checkLink(params, cb) {
 				let { path, name, version } = params;
@@ -336,15 +334,15 @@
 					}, cb)
 				},
 				(cb) => {
-					if (!E2O_VERSION) {
-						// e2o not found so skip check
+					if (!FEA_VERSION) {
+						// electron not found so skip check
 						return cb();
 					}
 
 					checkLink({
-						path: E2O_PATH,
-						name: "e2o",
-						version: E2O_VERSION
+						path: FEA_PATH,
+						name: "finsemble-electron-adapter",
+						version: FEA_VERSION
 					}, cb)
 				}
 			], done)
@@ -398,11 +396,11 @@
 			});
 			if (done) done();
 		},
-		launchE2O: done => {
+		launchElectron: done => {
 			let config = {
 				manifest: taskMethods.startupConfig[env.NODE_ENV].serverConfig
 			}
-			return e2o.e2oLauncher(config, done);
+			return FEA.e2oLauncher(config, done);
 		},
 		makeInstaller: async (done) => {
 			if (!env.NODE_ENV) throw new Error("NODE_ENV must be set to generate an installer.");
@@ -420,7 +418,7 @@
 			installerConfig = resolveRelativePaths(installerConfig, ['icon'], './');
 
 			const manifestUrl = taskMethods.startupConfig[env.NODE_ENV].serverConfig;
-			const updateUrl = taskMethods.startupConfig[env.NODE_ENV].updateUrl;
+			let updateUrl = taskMethods.startupConfig[env.NODE_ENV].updateUrl;
 
 			// Installer won't work without a proper manifest. Throw a helpful error.
 			if (!manifestUrl) {
@@ -435,23 +433,23 @@
 
 			// UpdateURL isn't required, but we let them know in case they're expecting it to work.
 			if (!updateUrl) {
-				logToTerminal(`>>>> WARNING: Installer potentially misconfigured. No property 'updateUrl' in configs/other/server-environment-startup.json under ${env.NODE_ENV}. The application will still work, but it will not update.`, "yellow");
+				logToTerminal(`[Info] Did not find 'updateUrl' in configs/other/server-environment-startup.json under ${env.NODE_ENV}. The application will still work, but it will not update itself with new versions of the finsemble-electron-adapter.`, "white");
 				updateUrl = null;
 			}
 
-			await e2oPackager.setManifestURL(manifestUrl);
-			await e2oPackager.setUpdateURL(updateUrl);
-			await e2oPackager.createFullInstaller(installerConfig);
+			await FEAPackager.setManifestURL(manifestUrl);
+			await FEAPackager.setUpdateURL(updateUrl);
+			await FEAPackager.createFullInstaller(installerConfig);
 			done();
 		},
 		launchApplication: done => {
 			logToTerminal("Launching Finsemble", "black", "bgCyan");
 
 			launchTimestamp = Date.now();
-			if (channelAdapter === "openfin") {
+			if (container === "openfin") {
 				taskMethods.launchOpenFin(done);
 			} else {
-				taskMethods.launchE2O(done);
+				taskMethods.launchElectron(done);
 			}
 		},
 
@@ -460,7 +458,7 @@
 		envOrArg: (...args) => envOrArg.apply(this, args),
 
 		/**
-		 * Starts the server, launches the Finsemble application. Use this for a quick launch, for instance when working on e2o.
+		 * Starts the server, launches the Finsemble application. Use this for a quick launch, for instance when working on finsemble-electron-adapter.
 		 */
 		"nobuild:dev": done => {
 			async.series([
