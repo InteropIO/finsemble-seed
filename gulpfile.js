@@ -54,7 +54,6 @@
 		logToTerminal("No Angular component configuration found", "yellow");
 		angularComponents = null;
 	}
-
 	// #region Constants
 	const startupConfig = require("./configs/other/server-environment-startup");
 

@@ -1,8 +1,8 @@
 {
     "name": "FinsembleSeed",
-    "version": "3.7.0",
+    "version": "3.8.0",
     "description": "",
-    "main": "installer/index.js",
+    "main": "index.js",
     "scripts": {
         "build:dev": "gulp build:dev --gulpfile=./gulpfile.js",
         "build": "gulp build:dev --gulpfile=./gulpfile.js",
@@ -39,7 +39,6 @@
         "async": "^2.6.0",
         "babel-minify-webpack-plugin": "^0.3.0",
         "compression": "^1.7.2",
-        "electron": "^4.0.5",
         "file-loader": "^1.1.11",
         "lodash.clonedeep": "^4.5.0",
         "lodash.debounce": "^4.0.8",
