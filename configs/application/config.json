@@ -207,6 +207,12 @@
 				"services": [
 					"dockingService"
 				]
+			},
+			{
+				"agentLabel": "routerService",
+				"services": [
+					"routerService"
+				]
 			}
 		]
 	},
