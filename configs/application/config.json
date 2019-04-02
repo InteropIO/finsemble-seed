@@ -157,7 +157,12 @@
 	"systemTrayIcon": "$applicationRoot/assets/img/Finsemble_Taskbar_Icon.png",
 	"systemTrayComponent": "File Menu",
 	"Window Manager": {
-		"alwaysOnTopIcon": false,
+		"alwaysOnTopIcon": true,
+		"autoHideIcon": {
+			"defaultSetting": true,
+			"timeout": 2000,
+			"resetMargin": true
+		},
 		"showTabs": true,
 		"showNativeTabs": true,
 		"floatingTitlebarComponent": "Floating Titlebar",
