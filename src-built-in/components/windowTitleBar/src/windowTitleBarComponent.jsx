@@ -112,10 +112,6 @@ class WindowTitleBar extends React.Component {
 		//console.log("Adding listener for stopTilingOrTabbing.");
 		FSBL.Clients.RouterClient.addListener("DockingService.stopTilingOrTabbing", this.allowDragOnCenterRegion);
 		FSBL.Clients.RouterClient.addListener("DockingService.cancelTilingOrTabbing", this.allowDragOnCenterRegion);
-
-		FSBL.Clients.RouterClient.addListener("DockingService.startTilingOrTabbing", this.suspendAutoHide);
-		FSBL.Clients.RouterClient.addListener("DockingService.stopTilingOrTabbing", this.reeanbleAutoHide);
-		FSBL.Clients.RouterClient.addListener("DockingService.cancelTilingOrTabbing", this.reeanbleAutoHide);
 	}
 
 	componentDidMount() {
@@ -149,10 +145,6 @@ class WindowTitleBar extends React.Component {
 		FSBL.Clients.RouterClient.removeListener("DockingService.startTilingOrTabbing", this.disallowDragOnCenterRegion);
 		FSBL.Clients.RouterClient.removeListener("DockingService.stopTilingOrTabbing", this.allowDragOnCenterRegion);
 		FSBL.Clients.RouterClient.removeListener("DockingService.cancelTilingOrTabbing", this.allowDragOnCenterRegion);
-
- 		FSBL.Clients.RouterClient.removeListener("DockingService.startTilingOrTabbing", this.suspendAutoHide);
-		FSBL.Clients.RouterClient.removeListener("DockingService.stopTilingOrTabbing", this.reeanbleAutoHide);
-		FSBL.Clients.RouterClient.removeListener("DockingService.cancelTilingOrTabbing", this.reeanbleAutoHide);
 	}
 
 	/**
@@ -370,14 +362,6 @@ class WindowTitleBar extends React.Component {
 			document.querySelector("html").style.overflowY = "hidden";
 			document.querySelector("body").style.overflowY = "auto";
 		}
-	}
-
-	suspendAutoHide() {
-		HeaderActions.suspendAutoHide(true);
-	}
-
- 	reeanbleAutoHide(){
-		HeaderActions.suspendAutoHide(false);
 	}
 
 	render() {

@@ -10,33 +10,6 @@ import windowTitleBarStoreDefaults from "./windowTitleBarStoreDefaults";
 import * as async from "async";
 var finWindow = fin.desktop.Window.getCurrent();
 
-//autohide functions and timers
-let headerTimeout = null;
-let suspendAutoHide = false;
-let autohideTimeout = 2000;
-let autohideSavedBodyMargin = null;
-const autoHideDefaultConfig = {
-	defaultSetting: false,
-	timeout: 2000,
-	resetMargin: true
-};
-let autoHideConfig = JSON.parse(JSON.stringify(autoHideDefaultConfig));
-const autoHideTimer = function () {
-	if (!suspendAutoHide){
-		headerTimeout = setTimeout(function () {
-			FSBL.Clients.Logger.system.debug("hiding header...");
-			let header = document.getElementsByClassName("fsbl-header")[0];
-			header.style.opacity = 0;
-		}, autoHideConfig.timeout);
-	}
-};
-const autoHideMouseMoveHandler = function( event ) {
-	if (headerTimeout) {clearTimeout(headerTimeout);}
-	const header = document.getElementsByClassName("fsbl-header")[0];
-	header.style.opacity = 1;
-	autoHideTimer();
-};
-
 //theses are constants that are set inside of setupStore. so they're declared as vars and not constants.
 let constants = {};
 var Actions = {
@@ -216,11 +189,7 @@ var Actions = {
 				autoHideIcon = windowTitleBarConfig.autoHideIcon;
 			}
 			let showAutoHide = autoHideIcon ? true : false;
-			if (typeof autoHideIcon === 'object' && autoHideIcon != null) {
-				autoHideConfig = Object.assign(autoHideDefaultConfig, autoHideIcon);
-			} /* else { defaults apply } */
 			windowTitleBarStore.setValues([{ field: "AutoHide.show", value: showAutoHide }]);
-			FSBL.Clients.Logger.log("Autohide window chrome settings: ", autoHideConfig) 
 
 			//If tabbing is turned off, ignore global/local 'windowManager' config about whether to allow tabbing.
 			if (dockingConfig.tabbing.enabled === false) {
@@ -462,72 +431,6 @@ var Actions = {
 		});
 
 
-	},
-	/** Return the default state for autohide (via global or component local config). */
-	getDefaultAutoHide: function () {
-		return autoHideConfig.defaultSetting;
-	},
-	/**
-	 * Set state for autohiding the header.
-	 */
-	setAutoHide: function(autoHide, cb = Function.prototype) {
-		FSBL.Clients.Logger.system.debug("setAutoHide: " + autoHide);
-
- 		//preserve the body margin so we can remove and restore it
-		if (!autohideSavedBodyMargin){
-			autohideSavedBodyMargin = document.body.style.marginTop;
-		} 
-
- 		if (autoHide){
-			let header = document.getElementsByClassName("fsbl-header")[0];
-
- 			//ensure autohiding styles are set
-			header.style['transition-property'] = "opacity";
-			header.style['transition-duration'] = "0.7s";
-			header.style['transition-timing-function'] = "ease";
-
- 			//setup any activity listeners to redisplay window chrome
-			let b = document.getElementsByTagName("body")[0];
-			b.addEventListener("mousemove", autoHideMouseMoveHandler);
-			// b.addEventListener("mouseleave", function( event ) {
-			// 	console.log("leaving...");
-			// 	let header = document.getElementsByClassName("fsbl-header")[0];
-			// 	header.style.display = "none";
-			// });
-
- 			//remove the body margin used to accomodate the header
-			if (autoHideConfig.resetMargin){
-				document.body.style.marginTop = "0px";
-			}
-
- 			//set the autohide timer
-			autoHideTimer();
-		} else {
-			//clear the autohide timer
-			if (headerTimeout) {clearTimeout(headerTimeout);}
-
- 			//restore body margin to accommodate header
-			if (autoHideConfig.resetMargin){
-				document.body.style.marginTop = autohideSavedBodyMargin;
-			}
-
- 			//unhook activity listeners
-			let b = document.getElementsByTagName("body")[0];
-			b.removeEventListener("mousemove", autoHideMouseMoveHandler);
-		}
-
-
- 		cb();
-	},
-	suspendAutoHide(suspend) {
-		suspendAutoHide = suspend;
-		if (suspendAutoHide) {
-			let header = document.getElementsByClassName("fsbl-header")[0];
-			header.style.opacity = 1;
-			if (headerTimeout) {clearTimeout(headerTimeout);}
-		} else {
-			autoHideTimer();
-		}
 	},
 	getTabs() {
 		return windowTitleBarStore.getValue({ field: "tabs" });

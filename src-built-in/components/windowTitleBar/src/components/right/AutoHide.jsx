@@ -4,8 +4,19 @@
 */
 import React from "react";
 import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
-import { getStore, Actions as HeaderActions } from "../../stores/windowTitleBarStore";
-let windowTitleBarStore;
+
+//autohide functions and timers
+let headerTimeout = null;
+let suspendAutoHide = false;
+let autohideTimeout = 2000;
+let autohideSavedBodyMargin = null;
+const autoHideDefaultConfig = {
+	defaultSetting: false,
+	timeout: 2000,
+	resetMargin: true
+};
+let autoHideConfig = JSON.parse(JSON.stringify(autoHideDefaultConfig));
+
 
 /**
  * Auto-hide window chrome toggle button.
@@ -15,6 +26,124 @@ export default class AutoHide extends React.Component {
 		super(props);
 		this.changeAutoHide = this.changeAutoHide.bind(this);
 		this.hoverAction = this.hoverAction.bind(this);
+		this.autoHideTimer = this.autoHideTimer.bind(this);
+		this.autoHideMouseMoveHandler = this.autoHideMouseMoveHandler.bind(this);
+
+		FSBL.Clients.ConfigClient.getValue({ field: "finsemble.Window Manager" }, function (err, globalWindowManagerConfig) {
+			//get global config
+			if (!globalWindowManagerConfig) { globalWindowManagerConfig =  {  }; } 
+			let autoHideIcon = globalWindowManagerConfig.autoHideIcon;
+			//get local config
+			let windowTitleBarConfig = FSBL.Clients.WindowClient.options.customData.foreign.components["Window Manager"];
+			if (windowTitleBarConfig.autoHideIcon === false || windowTitleBarConfig.autoHideIcon === true ||
+				(typeof windowTitleBarConfig.autoHideIcon === 'object' && windowTitleBarConfig.autoHideIcon != null)) {
+				autoHideIcon = windowTitleBarConfig.autoHideIcon;
+			}
+			if (typeof autoHideIcon === 'object' && autoHideIcon != null) {
+				autoHideConfig = Object.assign(autoHideDefaultConfig, autoHideIcon);
+			} /* else { defaults apply } */
+			FSBL.Clients.Logger.log("Autohide window chrome settings: ", autoHideConfig);
+		});
+	}
+
+	autoHideTimer() {
+		if (!suspendAutoHide){
+			headerTimeout = setTimeout(function () {
+				FSBL.Clients.Logger.system.debug("hiding header...");
+				let header = document.getElementsByClassName("fsbl-header")[0];
+				header.style.opacity = 0;
+			}, autoHideConfig.timeout);
+		}
+	}
+
+	autoHideMouseMoveHandler( event ) {
+		if (headerTimeout) {clearTimeout(headerTimeout);}
+		const header = document.getElementsByClassName("fsbl-header")[0];
+		header.style.opacity = 1;
+		this.autoHideTimer();
+	};
+
+	/** Return the default state for autohide (via global or component local config). */
+	getDefaultAutoHide() {
+		return autoHideConfig.defaultSetting;
+	}
+
+	/**
+	 * Set state for autohiding the header.
+	 */
+	setAutoHide(autoHide, cb = Function.prototype) {
+		FSBL.Clients.Logger.system.debug("setAutoHide: " + autoHide);
+
+		//preserve the body margin so we can remove and restore it
+		if (!autohideSavedBodyMargin){
+			autohideSavedBodyMargin = document.body.style.marginTop;
+		} 
+
+		if (autoHide){
+			let header = document.getElementsByClassName("fsbl-header")[0];
+
+			//ensure autohiding styles are set
+			header.style['transition-property'] = "opacity";
+			header.style['transition-duration'] = "0.7s";
+			header.style['transition-timing-function'] = "ease";
+
+			//setup any activity listeners to re-display window chrome
+			let b = document.getElementsByTagName("body")[0];
+			b.addEventListener("mousemove", this.autoHideMouseMoveHandler);
+			// b.addEventListener("mouseleave", function( event ) {
+			// 	console.log("leaving...");
+			// 	let header = document.getElementsByClassName("fsbl-header")[0];
+			// 	header.style.display = "none";
+			// });
+
+			//remove the body margin used to accommodate the header
+			if (autoHideConfig.resetMargin){
+				document.body.style.marginTop = "0px";
+			}
+
+			//set the autohide timer
+			this.autoHideTimer();
+		} else {
+			//clear the autohide timer
+			if (headerTimeout) {clearTimeout(headerTimeout);}
+
+			//restore body margin to accommodate header
+			if (autoHideConfig.resetMargin){
+				document.body.style.marginTop = autohideSavedBodyMargin;
+			}
+
+			//unhook activity listeners
+			let b = document.getElementsByTagName("body")[0];
+			b.removeEventListener("mousemove", this.autoHideMouseMoveHandler);
+		}
+
+
+		cb();
+	}
+
+	suspendAutoHide(suspend) {
+		suspendAutoHide = suspend;
+		if (suspendAutoHide) {
+			let header = document.getElementsByClassName("fsbl-header")[0];
+			header.style.opacity = 1;
+			if (headerTimeout) {clearTimeout(headerTimeout);}
+		} else {
+			this.autoHideTimer();
+		}
+	}
+
+	changeAutoHide() {
+		const newState = !this.state.autoHide;
+		return this.setAutoHide(newState,  () => {
+			FSBL.Clients.WindowClient.setComponentState({
+				field: 'autoHide',
+				value: newState
+			}, () => {
+				this.setState({
+					autoHide: newState
+				});
+			});
+		});
 	}
 
 	componentWillMount() {
@@ -25,28 +154,24 @@ export default class AutoHide extends React.Component {
 		FSBL.Clients.WindowClient.getComponentState({
 			field: 'autoHide',
 		}, (err, state) => {
-			let stateToSet = err ? HeaderActions.getDefaultAutoHide() : state;
+			let stateToSet = err ? this.getDefaultAutoHide() : state;
 			this.setState({
 				autoHide: stateToSet
 			});
-			HeaderActions.setAutoHide(stateToSet,  () => {
+			this.setAutoHide(stateToSet,  () => {
 				FSBL.Clients.Logger.system.debug("Loaded with AutoHide state: ", stateToSet);
 			});
 		});
+
+		FSBL.Clients.RouterClient.addListener("DockingService.startTilingOrTabbing", this.suspendAutoHide);
+		FSBL.Clients.RouterClient.addListener("DockingService.stopTilingOrTabbing", this.reeanbleAutoHide);
+		FSBL.Clients.RouterClient.addListener("DockingService.cancelTilingOrTabbing", this.reeanbleAutoHide);
 	}
 
-	changeAutoHide() {
-		const newState = !this.state.autoHide;
-		return HeaderActions.setAutoHide(newState,  () => {
-			FSBL.Clients.WindowClient.setComponentState({
-				field: 'autoHide',
-				value: newState
-			}, () => {
-				this.setState({
-					autoHide: newState
-				});
-			});
-		});
+	componentWillUnmount() {
+		FSBL.Clients.RouterClient.removeListener("DockingService.startTilingOrTabbing", this.suspendAutoHide);
+		FSBL.Clients.RouterClient.removeListener("DockingService.stopTilingOrTabbing", this.reeanbleAutoHide);
+		FSBL.Clients.RouterClient.removeListener("DockingService.cancelTilingOrTabbing", this.reeanbleAutoHide);
 	}
 
 	/**
