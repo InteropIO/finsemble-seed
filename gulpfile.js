@@ -19,8 +19,12 @@
 	const shell = require("shelljs");
 	const path = require("path");
 	const webpack = require("webpack");
-	const FEA = require("@chartiq/finsemble-electron-adapter/exports");
-	const FEAPackager = require("@chartiq/finsemble-electron-adapter/deploy/deploymentHelpers");
+
+	const FEA_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-electron-adapter");
+	const FEA_PATH_EXISTS = fs.existsSync(FEA_PATH);
+	const FEA = FEA_PATH_EXISTS ? require("@chartiq/finsemble-electron-adapter/exports") : undefined;
+	const FEAPackager = FEA_PATH_EXISTS ? require("@chartiq/finsemble-electron-adapter/deploy/deploymentHelpers") : undefined;
+
 	// local
 	const extensions = fs.existsSync("./gulpfile-extensions.js") ? require("./gulpfile-extensions.js") : undefined;
 	const isMacOrNix = process.platform !== "win32";
@@ -285,15 +289,14 @@
 			const CONTROLS_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-react-controls");
 			const CONTROLS_VERSION = require(path.join(CONTROLS_PATH, "package.json")).version;
 
-			// Check electron adpater version
-			const FEA_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-electron-adapter");
-			const FEA_PATH_EXISTS = fs.existsSync(FEA_PATH);
+			// Check electron adapter version
 			const USING_ELECTRON = container === "electron";
 			if (USING_ELECTRON && !FEA_PATH_EXISTS) {
 				throw "Cannot use electron container unless finsemble-electron-adapter optional dependency is installed. Please run npm i @chartiq/finsemble-electron-adapter";
 			}
 
-			const FEA_VERSION = require(path.join(FEA_PATH, "package.json")).version;
+			// Check version before require so optionalDependency can stay optional
+			const FEA_VERSION = FEA_PATH_EXISTS ? require(path.join(FEA_PATH, "package.json")).version : undefined;
 
 			function checkLink(params, cb) {
 				let { path, name, version } = params;
@@ -400,6 +403,12 @@
 			let config = {
 				manifest: taskMethods.startupConfig[env.NODE_ENV].serverConfig
 			}
+
+			if (!FEA) {
+				console.error("Could not launch ");
+				process.exit(1);
+			}
+
 			return FEA.e2oLauncher(config, done);
 		},
 		makeInstaller: async (done) => {
@@ -435,6 +444,11 @@
 			if (!updateUrl) {
 				logToTerminal(`[Info] Did not find 'updateUrl' in configs/other/server-environment-startup.json under ${env.NODE_ENV}. The application will still work, but it will not update itself with new versions of the finsemble-electron-adapter.`, "white");
 				updateUrl = null;
+			}
+
+			if (!FEAPackager) {
+				console.error("Cannot create installer because Finsemble Electron Adapter is not installed").
+				process.exit(1);
 			}
 
 			await FEAPackager.setManifestURL(manifestUrl);
