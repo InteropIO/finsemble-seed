@@ -1,0 +1,25 @@
+{
+	"securityPolicies": {
+		"comment": "Only Supported on electron",
+		"//trusted": "By default, the trusted policy allows access to every API endpoint.",
+		"trusted": {},
+		"untrusted": {
+			"System": {
+				"clearCache": false,
+				"exit": false,
+				"launchExternalProcess": false,
+				"readRegistryValue": false
+			},
+			"Window": {
+				"executeJavaScript": false,
+				"webPreferences": {
+					"preload": false
+				}
+			}
+		}
+	},
+	"securityPolicyRules": {
+		"crossDomain": "untrusted",
+		"sameDomain": "trusted"
+	}
+}
