@@ -519,7 +519,7 @@
 				"checkpoints" : {
 					"searchStoreInit" : {
 						"postStartupCompletion": true,
-						"timeout": 20000
+						"timeout": 30000
 					},
 					"createStores" : {
 						"postStartupCompletion": true
