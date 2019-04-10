@@ -201,18 +201,6 @@
 					"storageService",
 					"searchService"
 				]
-			},
-			{
-				"agentLabel": "dockingService",
-				"services": [
-					"dockingService"
-				]
-			},
-			{
-				"agentLabel": "routerService",
-				"services": [
-					"routerService"
-				]
 			}
 		]
 	},
