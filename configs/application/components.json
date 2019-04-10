@@ -116,7 +116,6 @@
 				"id": "Notepad",
 				"native": true,
 				"path": "notepad.exe",
-				"arguments": "C:/Users/Sidd/Documents/storageService_old.txt",
 				"url": "",
 				"defaultHeight": 600,
 				"autoShow": true,
@@ -207,106 +206,6 @@
 				}
 			}
 		},
-		"MultiWindow-Parent": {
-            "window": {
-                "id": "MultiWindow",
-                "windowType": "native",
-                "alias": "MultiWindowExample",
-                "arguments": "",
-                "autoShow": false,
-                "addToWorkspace": false
-            },
-            "component": {
-                "spawnOnStartup": true
-            },
-            "foreign": {
-                "components": {
-                    "App Launcher": {
-                        "launchableByUser": false
-                    }
-                }
-            }
-        },
-        "MultiWindow-Window1": {
-            "window": {
-                "id": "MultiWindow-Window1",
-                "windowType": "native",
-                "alias": "MultiWindowExample",
-                "arguments": "Window1",
-                "autoShow": false,
-                "addToWorkspace": false
-            },
-            "component": {
-                "spawnOnStartup": false
-            },
-            "foreign": {
-                "components": {
-                    "App Launcher": {
-                        "launchableByUser": true
-                    }
-                }
-            }
-        },
-        "MultiWindow-Window2": {
-            "window": {
-                "id": "MultiWindow-Window2",
-                "windowType": "native",
-                "alias": "MultiWindowExample",
-                "arguments": "Window2",
-                "autoShow": false,
-                "addToWorkspace": false
-            },
-            "component": {
-                "spawnOnStartup": false
-            },
-            "foreign": {
-                "components": {
-                    "App Launcher": {
-                        "launchableByUser": true
-                    }
-                }
-            }
-        },
-        "MultiWindow-Window3": {
-            "window": {
-                "id": "MultiWindow-Window3",
-                "windowType": "native",
-                "alias": "MultiWindowExample",
-                "arguments": "Window3",
-                "autoShow": false,
-                "addToWorkspace": false
-            },
-            "component": {
-                "spawnOnStartup": false
-            },
-            "foreign": {
-                "components": {
-                    "App Launcher": {
-                        "launchableByUser": true
-                    }
-                }
-            }
-        },
-        "MultiWindow-Window4": {
-            "window": {
-                "id": "MultiWindow-Window4",
-                "windowType": "native",
-                "alias": "MultiWindowExample",
-                "arguments": "Window4",
-                "autoShow": false,
-                "addToWorkspace": false
-            },
-            "component": {
-                "spawnOnStartup": false
-            },
-            "foreign": {
-                "components": {
-                    "App Launcher": {
-                        "launchableByUser": true
-                    }
-                }
-            }
-        },
 		"defaultAuthentication": {
 			"window": {
 				"url": "$applicationRoot/components/authentication/defaultAuthentication.html",
