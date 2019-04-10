@@ -4,27 +4,25 @@
         "serverPort": 3375,
         "//serverConfig": "Url for your application's manifest.",
         "serverConfig": "http://localhost:3375/configs/openfin/manifest-local.json",
-        "//channel": "Which adapter to use. ChartIq's Electron Security Adapter or Openfin. Valid values are e2o and openfin. Default: e2o.",
-        "channelAdapter": "e2o",
-        "//e2odebug": "Whether to start e2o in debug mode. Default: true.",
-        "e2odebug": true,
-        "//breakpointOnStart": "Whether to pause e2o when it starts. Default: false.",
-        "breakpointOnStart": true,
-        "//updateUrl": "experimental",
-        "updateUrl": "http://localhost:3375/pkg/"
+        "clientRoute": "http://localhost:3375/",
+        "//container": "Which adapter to use. The finsemble-electron-adapter Adapter or Openfin. Valid values are electron and openfin. Default: electron .",
+        "container": "electron",
+        "//electronDebug": "Whether to start the finsemble-electron-adapter in debug mode. Default: true.",
+        "electronDebug": true,
+        "//breakpointOnStart": "Whether to pause finsemble-electron-adapter when it starts. Default: false.",
+        "breakpointOnStart": false
     },
     "production": {
         "//serverPort": "Port number for your server.",
         "serverPort": 3375,
         "//serverConfig": "Url for your application's manifest.",
         "serverConfig": "http://localhost:3375/configs/openfin/manifest-local.json",
-        "//channel": "Which adapter to use. ChartIq's Electron Security Adapter or Openfin. Valid values are e2o and openfin. Default: e2o.",
-        "channelAdapter": "e2o",
-        "//e2odebug": "Whether to start e2o in debug mode. Default: true.",
-        "e2odebug": true,
-        "//breakpointOnStart": "Whether to pause e2o when it starts. Default: false.",
-        "breakpointOnStart": false,
-        "//updateUrl": "experimental",
-        "updateUrl": "http://localhost:3375/pkg/"
+        "clientRoute": "http://localhost:3375/",
+        "//container": "Which adapter to use. The finsemble-electron-adapter Adapter or Openfin. Valid values are electron and openfin. Default: electron .",
+        "container": "electron",
+        "//electronDebug": "Whether to start the finsemble-electron-adapter in debug mode. Default: true.",
+        "electronDebug": true,
+        "//breakpointOnStart": "Whether to pause finsemble-electron-adapter when it starts. Default: false.",
+        "breakpointOnStart": false
     }
 }

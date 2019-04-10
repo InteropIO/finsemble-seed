@@ -1,6 +1,6 @@
 {
 	"securityPolicies": {
-		"comment": "Only Supported on e2o",
+		"comment": "Only Supported on electron",
 		"//trusted": "By default, the trusted policy allows access to every API endpoint.",
 		"trusted": {},
 		"untrusted": {
