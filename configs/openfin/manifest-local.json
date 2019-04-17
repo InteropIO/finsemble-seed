@@ -69,6 +69,7 @@
         "moduleRoot": "$applicationRoot/finsemble",
         "servicesRoot": "$applicationRoot/finsemble/services",
         "notificationURL": "$applicationRoot/components/notification/notification.html",
+        "feaURLWhitelist": "^(https?:\/\/localhost).+",
         "importConfig": [
             "$applicationRoot/configs/application/config.json"
         ],
@@ -76,4 +77,5 @@
             "serverAddress": "wss://localhost.chartiq.com:3376"
         }
     }
+    
 }
