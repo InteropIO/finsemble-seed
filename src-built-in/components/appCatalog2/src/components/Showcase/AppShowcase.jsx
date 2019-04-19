@@ -83,8 +83,8 @@ class AppShowcase extends Component {
 		console.log("open the developers site");
 	}
 	/**
-	 * Opens the image modal (lightbox). Sets the image to display
-	 * @param {string} url The image url to display in the lightbox
+	 * Opens the image modal (light box). Sets the image to display
+	 * @param {string} url The image url to display in the light box
 	 */
 	openModal(url) {
 		this.setState({

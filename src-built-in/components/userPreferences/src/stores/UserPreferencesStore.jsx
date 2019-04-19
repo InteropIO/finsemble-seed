@@ -36,13 +36,13 @@ var Actions = {
         });
 	},
 	importTemplate: function () {
-		var newTemplateJSONDefinition; // ************* needs to be intialized from file input **********************
+		var newTemplateJSONDefinition; // ************* needs to be initialized from file input **********************
         FSBL.Clients.WorkspaceClient.addWorkspaceTemplateDefinition(newTemplateJSONDefinition, { force: true }, function (err) {
            //console.log("addWorkspaceTemplateDefinition result", err);
         });
 	},
 	/**
-	 * By making the value of `finsembke.scheduledRestart` falsy, the application will remove any existing restart timers.
+	 * By making the value of `finsemble.scheduledRestart` falsy, the application will remove any existing restart timers.
 	 */
 	disableScheduledRestart: () => {
 		FSBL.Clients.ConfigClient.setPreference({
