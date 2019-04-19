@@ -289,12 +289,6 @@
 			const CONTROLS_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-react-controls");
 			const CONTROLS_VERSION = require(path.join(CONTROLS_PATH, "package.json")).version;
 
-			// Check electron adapter version
-			const USING_ELECTRON = container === "electron";
-			if (USING_ELECTRON && !FEA_PATH_EXISTS) {
-				throw "Cannot use electron container unless finsemble-electron-adapter optional dependency is installed. Please run npm i @chartiq/finsemble-electron-adapter";
-			}
-
 			// Check version before require so optionalDependency can stay optional
 			const FEA_VERSION = FEA_PATH_EXISTS ? require(path.join(FEA_PATH, "package.json")).version : undefined;
 
@@ -400,6 +394,11 @@
 			if (done) done();
 		},
 		launchElectron: done => {
+			const USING_ELECTRON = container === "electron";
+			if (USING_ELECTRON && !FEA_PATH_EXISTS) {
+				throw "Cannot use electron container unless finsemble-electron-adapter optional dependency is installed. Please run npm i @chartiq/finsemble-electron-adapter";
+			}
+
 			let config = {
 				manifest: taskMethods.startupConfig[env.NODE_ENV].serverConfig
 			}
