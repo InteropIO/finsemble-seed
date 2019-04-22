@@ -44,7 +44,7 @@
 		"nonConfiguredComponent": {
 			"window": {
 				"url": "$applicationRoot/components/nonConfiguredComponent/nonConfiguredComponent.html",
-				"affinity": "presentationComponents",
+				"affinity": "systemComponents",
 				"frame": false,
 				"resizable": true,
 				"autoShow": true,
