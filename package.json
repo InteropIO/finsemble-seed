@@ -1,6 +1,6 @@
 {
     "name": "FinsembleSeed",
-    "version": "3.8.0",
+    "version": "3.8.2",
     "description": "",
     "main": "index.js",
     "scripts": {
@@ -34,7 +34,7 @@
         "@chartiq/finsemble-electron-adapter": "3.8.*"
     },
     "dependencies": {
-        "@chartiq/finsemble": "^3.8.0",
+        "@chartiq/finsemble": "3.8.2",
         "@chartiq/finsemble-react-controls": "3.7.*",
         "async": "^2.6.0",
         "babel-minify-webpack-plugin": "^0.3.0",
