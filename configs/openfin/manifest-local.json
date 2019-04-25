@@ -85,7 +85,7 @@
             "$applicationRoot/configs/application/config.json"
         ],
         "IAC": {
-            "serverAddress": "wss://localhost.chartiq.com:3376"
+            "serverAddress": "ws://127.0.0.1:3376"
         }
     }
 }
