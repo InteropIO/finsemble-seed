@@ -4,6 +4,7 @@
 		"Welcome Component": {
 			"window": {
 				"url": "$applicationRoot/components/welcome/welcome.html",
+				"affinity": "workspaceComponents",
 				"frame": false,
 				"resizable": true,
 				"autoShow": true,
@@ -43,6 +44,7 @@
 		"nonConfiguredComponent": {
 			"window": {
 				"url": "$applicationRoot/components/nonConfiguredComponent/nonConfiguredComponent.html",
+				"affinity": "systemComponents",
 				"frame": false,
 				"resizable": true,
 				"autoShow": true,
