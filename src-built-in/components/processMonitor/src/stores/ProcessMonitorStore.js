@@ -292,8 +292,8 @@ var Actions = {
 		FSBL.Clients.DialogManager.open("yesNo", {
 			title: "Terminate Process?",
 			question: "Terminating the process may close other apps. Are you sure you want to continue?",
-			showCancelButton: false,
-			showNegativeButton: true
+			affirmativeResponseLabel: "Terminate",
+			showNegativeButton: false
 		}, (err, response) => {
 			if (err || response.choice === "affirmative") {
 				politeCloseProcess();
@@ -341,8 +341,8 @@ var Actions = {
 				FSBL.Clients.DialogManager.open("yesNo", {
 					title: "Terminate Process?",
 					question: "The app that you are attempting to close is unresponsive. Would you like to terminate the process? Terminating the process may close other apps.",
-					showCancelButton: false,
-					showNegativeButton: true
+					affirmativeResponseLabel: "Terminate",
+					showNegativeButton: false
 				}, (err, response) => {
 					if (err || response.choice === "affirmative") {
 						return Actions.terminateProcess(parentApp, true)

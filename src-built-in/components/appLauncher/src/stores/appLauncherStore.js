@@ -263,6 +263,8 @@ var Actions = {
 		FSBL.Clients.DialogManager.open("yesNo", {
 			title: "Delete this App?",
 			question: "Are you sure you would like to delete \"" + componentName + "\"?",
+			affirmativeResponseLabel: "Delete",
+			showNegativeButton: false
 		}, function (err, response) {
 			// If the user chooses "affirmative" then delete the component.
 			// We should never get an error, but if we do then go ahead and delete the component too.
