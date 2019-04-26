@@ -7,7 +7,7 @@
             "name": "notificationService",
             "file": "notification/notificationService.js",
             "visible": false,
-            "html": "/services/notification/notification.html"
+            "html": "$applicationRoot/services/notification/notification.html"
         }
     }
 }

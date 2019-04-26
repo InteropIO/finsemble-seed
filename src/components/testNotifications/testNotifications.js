@@ -1,6 +1,6 @@
 import * as notifier from '../../services/notification/notificationClient';
 
-FSBL.addEventListener('onReady', function () {
+function FSBLReady() {
 	//setup notifyButton1
 	let count = 0;
 	document.getElementById('notifyButton1').addEventListener('click', function (event) { 
@@ -63,4 +63,10 @@ FSBL.addEventListener('onReady', function () {
 		notifier.notify("Test-Actions", "ALWAYS", "TEST-4", "Notification number " + count + " (with showWindow)", {actions: [spawnAction, showWindowAction, notepadSpawnAction, processMonitorSpawnAction ]});
 	}, false);
 
-});
+};
+
+if (window.FSBL && FSBL.addEventListener) {
+	FSBL.addEventListener("onReady", FSBLReady)
+} else {
+	window.addEventListener("FSBLReady", FSBLReady)
+}

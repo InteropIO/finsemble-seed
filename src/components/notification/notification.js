@@ -66,9 +66,15 @@ var init = function () {
 	console.log("Set up complete");
 };
 
-FSBL.addEventListener('onReady', function () {
+function FSBLReady () {
 	//grab spawn data and populate the notification
 	init();
 	//don't show the notificiton until its initialised so it appears more nicely
 	FSBL.Clients.WindowClient.getCurrentWindow().show();
-});
+};
+
+if (window.FSBL && FSBL.addEventListener) {
+	FSBL.addEventListener("onReady", FSBLReady)
+} else {
+	window.addEventListener("FSBLReady", FSBLReady)
+}

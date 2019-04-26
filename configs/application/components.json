@@ -212,123 +212,123 @@
 			}
 		},
 		"notification": {
-            "window": {
-                "url": "$applicationRoot/components/notification/notification.html",
-                "frame": false,
-                "resizable": false,
-                "autoShow": true,
-                "bottom": "0",
-                "right": "0",
-                "width": 350,
-                "height": 100,
-                "title": "Finsemble Notification",
-                "options": {
-                    "alwaysOnTop": true,
-                    "autoShow": false,
-                    "cornerRounding": {
-                        "height": 8,
-                        "width": 8
-                    },
-                    "opacity": 0.85,
-                    "showTaskbarIcon": false
-                }
-            },
-            "component": {
-                "inject": false,
-                "category": "system"
-            },
-            "foreign": {
-                "services": {
-                    "dockingService": {
-                        "isArrangable": false
-                    }
-                },
-                "components": {
-                    "App Launcher": {
-                        "launchableByUser": false
-                    },
-                    "Window Manager": {
-                        "FSBLHeader": false,
-                        "persistWindowState": false
-                    }
-                }
-            }
-        },
-        "testNotifications": {
-            "window": {
-                "url": "$applicationRoot/components/testNotifications/testNotifications.html",
-                "frame": false,
-                "resizable": true,
-                "autoShow": true,
-                "top": "center",
-                "left": "center",
-                "width": 800,
-                "height": 600,
-                "title": "testNotifications"
-            },
-            "component": {
-                "inject": false
-            },
-            "foreign": {
-                "services": {
-                    "dockingService": {
-                        "canGroup": true,
-                        "isArrangable": true
-                    }
-                },
-                "components": {
-                    "App Launcher": {
-                        "launchableByUser": true
-                    },
-                    "Window Manager": {
-                        "FSBLHeader": true,
-                        "persistWindowState": true
-                    },
-                    "Toolbar": {
-                        "iconClass": "testNotifications"
-                    }
-                }
-            }
-        },
-        "NotificationsCenter": {
-            "window": {
-                "url": "$applicationRoot/components/notificationsCenter/notificationsCenter.html",
-                "frame": false,
-                "top": "center",
-                "left": "center",
-                "width": 800,
-                "height": 600,
+			"window": {
+				"url": "$applicationRoot/components/notification/notification.html",
+				"frame": false,
+				"resizable": false,
+				"autoShow": true,
+				"bottom": "0",
+				"right": "0",
+				"width": 350,
+				"height": 100,
+				"title": "Finsemble Notification",
+				"options": {
+					"alwaysOnTop": true,
+					"autoShow": false,
+					"cornerRounding": {
+						"height": 8,
+						"width": 8
+					},
+					"opacity": 0.85,
+					"showTaskbarIcon": false
+				}
+			},
+			"component": {
+				"inject": false,
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"FSBLHeader": false,
+						"persistWindowState": false
+					}
+				}
+			}
+		},
+		"testNotifications": {
+			"window": {
+				"url": "$applicationRoot/components/testNotifications/testNotifications.html",
+				"frame": false,
+				"resizable": true,
+				"autoShow": true,
+				"top": "center",
+				"left": "center",
+				"width": 800,
+				"height": 600,
+				"title": "testNotifications"
+			},
+			"component": {
+				"inject": false
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"canGroup": true,
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"persistWindowState": true
+					},
+					"Toolbar": {
+						"iconClass": "testNotifications"
+					}
+				}
+			}
+		},
+		"NotificationsCenter": {
+			"window": {
+				"url": "$applicationRoot/components/notificationsCenter/notificationsCenter.html",
+				"frame": false,
+				"top": "center",
+				"left": "center",
+				"width": 800,
+				"height": 600,
 				"title": "Notification Center",
-                "options": {
-                    "autoShow": false,
+				"options": {
+					"autoShow": false,
 					"resizable": false,
-                    "alwaysOnTop": true
-                }
-            },
-            "component": {
-                "category": "system",
-                "spawnOnStartup": true
-            },
-            "foreign": {
-                "services": {
-                    "dockingService": {
-                        "canGroup": false,
-                        "isArrangable": false
-                    }
-                },
-                "components": {
-                    "App Launcher": {
-                        "launchableByUser": false
-                    },
-                    "Window Manager": {
-                        "FSBLHeader": false,
-                        "persistWindowState": false
-                    },
-                    "Toolbar": {
-                        "iconClass": "NotificationsCenter"
-                    }
-                }
-            }
-        }
+					"alwaysOnTop": true
+				}
+			},
+			"component": {
+				"category": "system",
+				"spawnOnStartup": true
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"canGroup": false,
+						"isArrangable": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"FSBLHeader": false,
+						"persistWindowState": false
+					},
+					"Toolbar": {
+						"iconClass": "NotificationsCenter"
+					}
+				}
+			}
+		}
 	}
 }

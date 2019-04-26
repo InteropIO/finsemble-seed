@@ -65,14 +65,14 @@ class NotificationsCenter extends React.Component {
 }
 
 fin.desktop.main(function () {
-	FSBL.addEventListener("onReady", function () {
+	function FSBLReady() {
 		console.log("Notification center onReady");
 		
 		ReactDOM.render(
 			<NotificationsCenter />
 			, document.getElementById("bodyHere"));
 		
-		//Notificaition center persists so show/hide on a router channel 
+		//Notification center persists so show/hide on a router channel 
 		FSBL.Clients.RouterClient.addListener("notificationCenter.toggle", function (error, response) {
 			if (error) {
 				Logger.system.log('notificationCenter toggle error: ' + JSON.stringify(error));
@@ -88,5 +88,11 @@ fin.desktop.main(function () {
 				});
 			}
 		});
-	});
+	};
+
+	if (window.FSBL && FSBL.addEventListener) {
+		FSBL.addEventListener("onReady", FSBLReady)
+	} else {
+		window.addEventListener("FSBLReady", FSBLReady)
+	}
 });

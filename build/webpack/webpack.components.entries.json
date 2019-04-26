@@ -10,5 +10,5 @@
     "NotificationsCenter": {
         "output": "components/notificationsCenter/notificationsCenter",
         "entry": "./src/components/notificationsCenter/src/app.jsx"
-	}
+    }
 }
