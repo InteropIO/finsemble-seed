@@ -102,7 +102,7 @@ export default class TabRegion extends React.Component {
         this.setState({
             iAmDragging: true
         });
-        e.dataTransfer.setData("text/plain", JSON.stringify(windowIdentifier));
+        e.dataTransfer.setData("application/fsbl-tab-data", JSON.stringify(windowIdentifier));
         FSBL.Clients.WindowClient.startTilingOrTabbing({
             windowIdentifier: windowIdentifier
         });
@@ -140,7 +140,7 @@ export default class TabRegion extends React.Component {
      */
     extractWindowIdentifier(e) {
         try {
-            let identifier = JSON.parse(e.dataTransfer.getData('text/plain'));
+            let identifier = JSON.parse(e.dataTransfer.getData('application/fsbl-tab-data'));
             //If the "identifier" is formed properly, it'll have this properly. Otherwise, it's something else (e.g., share data, image, etc).
             if (typeof identifier.windowName !== "undefined") {
                 return identifier;

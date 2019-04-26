@@ -215,7 +215,8 @@ Actions = {
 		let dialogParams = {
 			title: "Delete this workspace?",
 			question: "Are you sure you want to delete the workspace \"" + workspaceName + "\"?",
-			showCancelButton: false,
+			showNegativeButton: false,
+			affirmativeResponseLabel: "Delete",
 			hideModalOnClose: data.hideModalOnClose
 		};
 
@@ -500,7 +501,9 @@ Actions = {
 			Logger.system.log("NewWorkspace.spawnDialog start.");
 			let dialogParams = {
 				title: "Save your workspace?",
-				question: `Your workspace "${activeWorkspace.name}" has unsaved changes. Would you like to save?`
+				question: `Your workspace "${activeWorkspace.name}" has unsaved changes. Would you like to save?`,
+				affirmativeResponseLabel: "Save",
+				negativeResponseLabel: "Don't Save"
 			};
 			function onUserInput(err, response) {
 				Logger.system.log("Spawn Dialog callback.");
@@ -560,8 +563,8 @@ Actions = {
 		let dialogParams = {
 			title: "Overwrite Workspace?",
 			question: "This will overwrite the saved data for  \"" + workspaceName + "\". Would you like to proceed?",
-			affirmativeResponseLabel: "Yes, overwrite",
-			showCancelButton: false
+			affirmativeResponseLabel: "Overwrite",
+			showNegativeButton: false
 		};
 		function onUserInput(err, response) {
 			if (response.choice === "affirmative") {
@@ -580,8 +583,8 @@ Actions = {
 		let { workspaceExists, workspaceName, template } = params;
 
 		let dialogParams = {
-			title: "Overwrite Workspace?",
-			question: "The workspace \"" + workspaceName + "\" already exists. A new workspace will be created.",
+			title: "New Workspace",
+			question: "The workspace \"" + workspaceName + "\" already exists. A new workspace with a modified name will be created.",
 			affirmativeResponseLabel: "OK",
 			showNegativeButton: false
 		};

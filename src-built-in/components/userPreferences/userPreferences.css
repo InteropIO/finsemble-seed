@@ -410,3 +410,23 @@ select:focus, option:focus {
     outline: none;
     background-color: transparent;
 }
+
+.change-text {
+	color: var(--yellow1);
+	font-size: 14px;
+    margin-top: 12px;
+	margin-left: 12px;
+	margin-right: 10px;
+	display: inline-block;
+}
+
+.blue-button {
+	width: 110px;
+	height: 24px;
+	border: 0;
+	background: none;
+	box-shadow: none;
+	background-color: var(--blue6);
+	color: white;
+	font-size: 12px;
+  }

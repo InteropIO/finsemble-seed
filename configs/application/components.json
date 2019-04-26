@@ -53,7 +53,8 @@
 			},
 			"component": {
 				"inject": false,
-				"spawnOnStartup": false
+				"spawnOnStartup": false,
+				"category": "system"
 			},
 			"foreign": {
 				"services": {
@@ -71,45 +72,6 @@
 						"FSBLHeader": true,
 						"persistWindowState": true,
 						"title": "Non Configured Component"
-					},
-					"Toolbar": {
-						"iconClass": "ff-component"
-					}
-				}
-			}
-		},
-		"Bad Boy": {
-			"window": {
-				"url": "$applicationRoot/components/badBoy/index.html",
-				"frame": false,
-				"resizable": true,
-				"autoShow": true,
-				"top": "center",
-				"left": "center",
-				"width": 400,
-				"height": 432
-			},
-			"component": {
-				"inject": false,
-				"spawnOnStartup": false,
-				"preload": "$applicationRoot/preloads/zoom.js"
-			},
-			"foreign": {
-				"services": {
-					"dockingService": {
-						"canGroup": true,
-						"isArrangable": true
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"launchableByUser": true
-					},
-					"Window Manager": {
-						"showLinker": true,
-						"FSBLHeader": true,
-						"persistWindowState": true,
-						"title": "Welcome"
 					},
 					"Toolbar": {
 						"iconClass": "ff-component"
