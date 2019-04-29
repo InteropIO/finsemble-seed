@@ -22,11 +22,10 @@
     },
     "splashScreenImage": "http://localhost:3375/assets/img/FinsembleSplash.png",
     "runtime": {
-        "arguments": "--noerrdialogs  --v=4 --no-sandbox  --enable-crash-reporting --framestrategy=frames --winhttp-proxy-resolver",
-        "version": "8.56.28.36",
-        "///": "This version of OF9 can be used but has stability problems with splintering",
-        "version_of9": "9.61.36.36",
+        "arguments": "--noerrdialogs  --v=4 --no-sandbox  --framestrategy=frames --winhttp-proxy-resolver",
+        "version": "9.61.36.36",
         "//": "Add these arguments when diagnosing issues",
+        "--enable-crash-reporting": "Adding this flag will enable crash reporting to openfin, which has caused memory leaks in some versions.",
         "--diagnostics": "Adding this to the runtimeArguments activates verbose logging and crash reporting.",
         "--disable-gpu": "This flag disables hardware acceleration. Try this if 'Blank Screen' issues are reported (sometimes on virtual desktops)",
         "--winhttp-proxy-resolver": "Chromium v56 contains a bug that in some environments can create a memory leak. The bug is related to the way Chromium handles PAC files."
@@ -67,9 +66,9 @@
     ],
     "finsemble": {
         "applicationRoot": "http://localhost:3375",
-        "moduleRoot": "http://localhost:3375/finsemble",
-        "servicesRoot": "http://localhost:3375/finsemble/services",
-        "notificationURL": "http://localhost:3375/components/notification/notification.html",
+        "moduleRoot": "$applicationRoot/finsemble",
+        "servicesRoot": "$applicationRoot/finsemble/services",
+        "notificationURL": "$applicationRoot/components/notification/notification.html",
         "importConfig": [
             "$applicationRoot/configs/application/config.json"
         ],

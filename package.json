@@ -1,6 +1,6 @@
 {
     "name": "FinsembleSeed",
-    "version": "3.7.0",
+    "version": "3.8.2",
     "description": "",
     "main": "index.js",
     "scripts": {
@@ -12,6 +12,9 @@
         "dev:nolaunch": "gulp dev:noLaunch --gulpfile=./gulpfile.js",
         "build:prod": "gulp build:prod --gulpfile=./gulpfile.js",
         "nobuild:dev": "gulp nobuild:dev --gulpfile=./gulpfile.js",
+        "makeInstaller:prod": "set NODE_ENV=production&&gulp makeInstaller --gulpfile=./gulpfile.js",
+        "makeInstaller:dev": "set NODE_ENV=development&&gulp makeInstaller --gulpfile=./gulpfile.js",
+        "makePackage": "gulp makePackage --gulpfile=./gulpfile.js",
         "prod": "gulp prod --gulpfile=./gulpfile.js",
         "prod:nolaunch": "gulp prod:nolaunch --gulpfile=./gulpfile.js",
         "server": "gulp server --gulpfile=./gulpfile.js",
@@ -27,12 +30,12 @@
     "license": "",
     "optionalDependencies": {
         "openfin-launcher": "^1.3.11",
-        "@chartiq/e2o": "3.7.0-pre1.2"
+        "@chartiq/finsemble-cli": "3.*",
+        "@chartiq/finsemble-electron-adapter": "3.8.*"
     },
     "dependencies": {
-        "@chartiq/finsemble": "3.7.*",
-        "@chartiq/finsemble-cli": "3.*",
-        "@chartiq/finsemble-react-controls": "^3.1.2",
+        "@chartiq/finsemble": "3.8.2",
+        "@chartiq/finsemble-react-controls": "3.7.*",
         "async": "^2.6.0",
         "babel-minify-webpack-plugin": "^0.3.0",
         "compression": "^1.7.2",
@@ -66,13 +69,12 @@
         "gulp-watch": "^4.3.11",
         "hard-source-webpack-plugin": "^0.6.4",
         "merge-stream": "^1.0.1",
-        "openfin-launcher": "^1.3.12",
         "querystring": "^0.2.0",
-        "react": "^16.0",
-        "react-dom": "^16.0",
+        "react": "16.8.3",
+        "react-dom": "16.8.3",
         "react-table": "^6.8.2",
-        "shelljs": "^0.8.1",
-        "socket.io": "^2.0.4",
+				"shelljs": "^0.8.1",
+				"socket.io": "^2.0.4",
         "strip-ansi": "^3.0.0",
         "style-loader": "^0.19.0",
         "tslint": "^5.11.0",
