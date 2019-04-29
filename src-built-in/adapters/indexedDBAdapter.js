@@ -68,7 +68,7 @@ IDBKeyRange.forPrefix = (prefix) => {
 
 	return IDBKeyRange.bound(prefix, upperKey, false, true);
 };
-// #end region
+// #endregion
 
 /**
  * IndexedDB Storage Adapter.
@@ -128,8 +128,8 @@ const IndexedDBAdapter = function (uuid) {
 		Logger.system.error("IndexedDBAdapter DB connection initialization failed, Error: ", err);
 		console.error("IndexedDBAdapter DB connection initialization failed, Error: ", err);
 	};
-	// #end region
-	// #end region
+	// #endregion
+	// #endregion
 
 	/**
 	 * Get the prefix used to filter keys for particular topics and key prefixes.
@@ -398,7 +398,7 @@ const IndexedDBAdapter = function (uuid) {
 			cb(err, { status: "failed" });
 		};
 	}
-	// #end region
+	// #endregion
 }
 
 IndexedDBAdapter.prototype = new BaseStorage();
