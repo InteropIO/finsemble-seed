@@ -58,20 +58,20 @@
     "fileName": "ChartIQ-local-installer",
     "appAssets": [
         {
-            "src": "https://files.chartiq.com/finsemble/Assimilation_3_7_0_pre1.zip",
-            "version": "3.7.0-pre1",
+            "src": "https://files.chartiq.com/finsemble-dev/Assimilation_3_8_3_pre1.zip",
+            "version": "3.8.3-pre1",
             "alias": "assimilation",
             "target": "AssimilationMain.exe"
         },
         {
-            "src": "https://files.chartiq.com/finsemble-dev/WPFExample3_8_1.zip",
-            "version": "3.8.1",
+            "src": "https://files.chartiq.com/finsemble-dev/WPFExample3_8_3_pre1.zip",
+            "version": "3.8.3-pre1",
             "alias": "WPFDemo",
             "target": "WPFExample.exe"
         },
         {
-            "src": "https://files.chartiq.com/finsemble-dev/WindowlessExample3_8_1.zip",
-            "version": "3.8.1",
+            "src": "https://files.chartiq.com/finsemble-dev/WindowlessExample3_8_3_pre1.zip",
+            "version": "3.8.3-pre1",
             "alias": "DotNetWindowLess",
             "target": "WindowlessExample.exe"
         }
