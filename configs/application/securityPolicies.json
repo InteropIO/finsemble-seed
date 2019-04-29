@@ -7,8 +7,7 @@
 			"System": {
 				"clearCache": false,
 				"exit": false,
-				"launchExternalProcess": false,
-				"readRegistryValue": false
+				"launchExternalProcess": false
 			},
 			"Window": {
 				"executeJavaScript": false,
