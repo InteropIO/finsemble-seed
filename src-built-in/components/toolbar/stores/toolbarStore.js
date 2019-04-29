@@ -151,6 +151,38 @@ class _ToolbarStore {
 		});
 	}
 
+	// /**
+	//  * Load the hotkeys from the config.json. If there are no items in config.json, hotkeys are loaded from the Finsemble Config `finsemble.hotkeys` item.
+	//  *
+	//  *
+	//  * @param {any} done
+	//  * @param {any} self
+	//  * @memberof _ToolbarStore
+	//  */
+	// loadHotkeysFromConfig(done, self) {
+	// 	// example:
+	// 	// var serverAddress = getDefault(params, "params.transportSettings.FinsembleTransport.serverAddress", "wss://localhost.chartiq.com:3376");
+	// 	FSBL.ConfigUtils.getDefault()
+	// 	FSBL.Clients.ConfigClient.getValue({ field: "finsemble.menus" }, (err, hotkeys) => {
+	// 		if (menus && menus.length) {
+	// 			self.Store.setValue({
+	// 				field: "menus",
+	// 				value: menus
+	// 			});
+	// 			done();
+	// 		} else {
+	// 			self.Store.setValue({
+	// 				field: "menus",
+	// 				value: menuConfig
+	// 			});
+	// 			done();
+	// 			if (FSBL.Clients.ConfigClient.setValue) {
+	// 				FSBL.Clients.ConfigClient.setValue({ field: "finsemble.menus", value: menuConfig });
+	// 			}
+	// 		}
+	// 	});
+	// }
+
 
 	/**
 	 * Listen for pin and menu changes on the global store. Listen for menu changes in the config.
