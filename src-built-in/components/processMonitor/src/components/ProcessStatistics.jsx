@@ -64,7 +64,7 @@ function prettyPrint(number, statType) {
     if (statType === "CPU") {
         //make it a percent.
         return round(number, 2) + "%";
-    } else if (statType !== "processId") {
+    } else if (statType !== "PID") {
         return bytesToSize(number);
     } else {
         return number;
