@@ -174,24 +174,26 @@ var Actions = {
 	 * @param {*} e
 	 */
 	handleClose(e) {
-		menuWindow.isShowing(function (err, showing) {
-			if (showing) {
-				console.log("close a window")
-				if (!e && cachedBounds) {
-					finsembleWindow.animate({ transitions: { size: { duration: 150, width: cachedBounds.width } } }, () => {
-						cachedBounds = null;
-					});
+		// Don't call isShowing if menuWindow is not set yet
+		if (menuWindow) {
+			menuWindow.isShowing(function (err, showing) {
+				if (showing) {
+					console.log("close a window")
+					if (!e && cachedBounds) {
+						finsembleWindow.animate({ transitions: { size: { duration: 150, width: cachedBounds.width } } }, () => {
+							cachedBounds = null;
+						});
+					}
+					window.getSelection().removeAllRanges();
+					if (!menuWindow) return;
+					menuWindow.hide();
 				}
-				window.getSelection().removeAllRanges();
-				if (!menuWindow) return;
-				menuWindow.hide();
-			}
-			//These lines handle closing the searchInput box. As showing is only true when the search results
-			//menu opens, they need to be outside so the search inputbox will still close when there is no text string.
-			blurSearchInputHandler();
-			menuStore.setValue({ field: "active", value: false })
-		});
-
+				//These lines handle closing the searchInput box. As showing is only true when the search results
+				//menu opens, they need to be outside so the search inputbox will still close when there is no text string.
+				blurSearchInputHandler();
+				menuStore.setValue({ field: "active", value: false })
+			});
+		}
 	},
 
 	setupWindow(cb = Function.prototype) {
