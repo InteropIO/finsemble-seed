@@ -44,7 +44,6 @@ export default class Toolbar extends React.Component {
 		super(props);
 		this.state = {
 			sections: ToolbarStore.getSectionsFromMenus(),
-			finWindow: fin.desktop.Window.getCurrent(),
 			dockingEnabled: true
 		};
 		this.bindCorrectContext();
@@ -62,7 +61,7 @@ export default class Toolbar extends React.Component {
 
 	componentDidMount() {
 		//console.log("this", this)
-		this.state.finWindow.bringToFront();
+		finsembleWindow.bringToFront();
 		FSBL.Clients.ConfigClient.getValues({ field: "finsemble.components.Toolbar.window.dockable" }, (err, dockable) => {
 			this.setState({
 				dockingEnabled: dockable

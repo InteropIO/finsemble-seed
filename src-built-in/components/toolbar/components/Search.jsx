@@ -191,7 +191,7 @@ function mouseInElement(element, cb) {
 	mouseInBounds(bounds, cb);
 }
 function mouseInBounds(bounds, cb) {
-	fin.desktop.System.getMousePosition(function (mousePosition) {
+	FSBL.System.getMousePosition(function (err, mousePosition) {
 		if (mousePosition.left >= bounds.left & mousePosition.left <= bounds.right) {
 			if (mousePosition.top >= bounds.top & mousePosition.top <= bounds.bottom) {
 				return cb(null, true);

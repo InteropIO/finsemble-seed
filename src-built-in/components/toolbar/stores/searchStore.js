@@ -5,7 +5,6 @@
 
 let menuStore;
 import async from "async";
-let finWindow = fin.desktop.Window.getCurrent();
 var focus = false;
 var activeSearchBar = false;
 var menuReference = {};
@@ -31,7 +30,7 @@ function mouseInWindow(win, cb) {
 }
 
 function mouseInBounds(bounds, cb) {
-	fin.desktop.System.getMousePosition(function (mousePosition) {
+	FSBL.System.getMousePosition(function (err, mousePosition) {
 		if (mousePosition.left >= bounds.left & mousePosition.left <= bounds.right) {
 			if (mousePosition.top >= bounds.top & mousePosition.top <= bounds.bottom) {
 				return cb(null, true);
@@ -196,7 +195,6 @@ var Actions = {
 
 	setupWindow(cb = Function.prototype) {
 		console.log("SETUP WINDOW!", menuReference.name);
-		//menuWindow = fin.desktop.Window.wrap(menuReference.finWindow.app_uuid, menuReference.finWindow.name);
 		FSBL.FinsembleWindow.getInstance({ windowName: menuReference.name }, (err, wrap) => {
 			menuWindow = wrap;
 			cb();
@@ -271,13 +269,13 @@ function createStore(done) {
 	let defaultData = {
 		inFocus: false,
 		list: [],
-		owner: finWindow.name,
+		owner: finsembleWindow.name,
 		menuSpawned: false,
 		activeSearchBar: null,
 		menuIdentifier: null
 	};
-//console.log("CreateStore", "Finsemble-SearchStore-" + finWindow.name)
-	FSBL.Clients.DistributedStoreClient.createStore({ store: "Finsemble-SearchStore-" + finWindow.name, values: defaultData, global: true }, function (err, store) {
+
+	FSBL.Clients.DistributedStoreClient.createStore({ store: "Finsemble-SearchStore-" + finsembleWindow.name, values: defaultData, global: true }, function (err, store) {
 		menuStore = store;
 
 		store.getValues(["owner", "menuSpawned"], function (err, data) {
@@ -291,7 +289,7 @@ function createStore(done) {
 			});
 
 			if (!data.menuSpawned) {
-				FSBL.Clients.LauncherClient.spawn("searchMenu", { name: "searchMenu." + finWindow.name, data: { owner: finWindow.name } }, function (err, data) {
+				FSBL.Clients.LauncherClient.spawn("searchMenu", { name: "searchMenu." + finsembleWindow.name, data: { owner: finsembleWindow.name } }, function (err, data) {
 					//console.log("Err", err, data)
 					menuStore.setValue({ field: "menuIdentifier", value: data.windowIdentifier })
 					Actions.setupWindow(() => {
