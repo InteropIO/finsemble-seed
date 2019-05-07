@@ -26,7 +26,7 @@ class _ToolbarStore {
 	createStores(done, self) {
 		FSBL.Clients.DistributedStoreClient.createStore({ store: "Finsemble-ToolbarLocal-Store" }, function (err, store) {
 			if (err) { FSBL.Clients.Logger.error(`DistributedStoreClient.createStore failed for store Finsemble-ToolbarLocal-Store, error:`, err); }
-		
+
 			self.Store = store;
 			let monitors = {};
 			function getMonitor(monitorName, done) {
@@ -37,6 +37,7 @@ class _ToolbarStore {
 				});
 			}
 			function createStore(err, result) {
+				if (err) { FSBL.Clients.Logger.error(`DistributedStoreClient.createStore failed for Finsemble-Configuration-Store, error:`, err); }
 				let values = {};
 				if (monitors.mine && monitors.primary && monitors.mine.deviceId === monitors.primary.deviceId) {
 					values = { mainToolbar: fin.desktop.Window.getCurrent().name };
@@ -45,7 +46,7 @@ class _ToolbarStore {
 
 				FSBL.Clients.DistributedStoreClient.createStore({ store: "Finsemble-Toolbar-Store", global: true, values: values }, function (err, store) {
 					if (err) { FSBL.Clients.Logger.error(`DistributedStoreClient.createStore failed for store Finsemble-Toolbar-Store, error:`, err); }
-		
+
 					self.GlobalStore = store;
 					done();
 				});
@@ -67,7 +68,7 @@ class _ToolbarStore {
 
 		finsembleWindow.getOptions((err, opts) => {
 			if (err) { FSBL.Clients.Logger.error(`finsembleWindow.getOptions failed, error:`, err); }
-		
+
 			console.info("get options", opts);
 			let hasRightProps = () => {
 				return (opts.hasOwnProperty('customData') &&
@@ -173,6 +174,7 @@ class _ToolbarStore {
 			if (err) { FSBL.Clients.Logger.error(`DistributedStoreClient.getStore failed for Finsemble-Configuration-Store, error:`, err); }
 			if (configStore) {
 				configStore.addListener({ field: "finsemble.menus" }, function (err, data) {
+					if (err) { FSBL.Clients.Logger.error(`DistributedStoreClient.getStore -> configStore.addListener failed for Finsemble-Configuration-Store, error:`, err); }
 					self.Store.setValue({
 						field: "menus",
 						value: data.value
@@ -375,7 +377,7 @@ class _ToolbarStore {
 	listenForWorkspaceUpdates() {
 		FSBL.Clients.RouterClient.subscribe("Finsemble.WorkspaceService.update", (err, response) => {
 			if (err) { FSBL.Clients.Logger.error(`RouterClient.subscribe failed for Finsemble.WorkspaceService.update, error:`, err); }
-			
+
 			this.setWorkspaceMenuWindowName(response.data.activeWorkspace.name);
 			this.Store.setValue({ field: "activeWorkspaceName", value: response.data.activeWorkspace.name });
 			if (response.data.reason && response.data.reason === "workspace:load:finished") {

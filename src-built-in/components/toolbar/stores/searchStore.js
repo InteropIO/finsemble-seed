@@ -26,6 +26,7 @@ var menuBlurHandler = Function.prototype;
 
 function mouseInWindow(win, cb) {
 	win.getBounds(function (err, bounds) {
+		if (err) FSBL.Clients.Logger.error('mouseInWindow->getBounds, error:', err);
 		mouseInBounds(bounds, cb)
 	})
 }
@@ -52,6 +53,7 @@ var Actions = {
 		if (bool) {
 			if (window.outerWidth < 400) {
 				finsembleWindow.getBounds((err, bounds) => {
+					if (err) FSBL.Clients.Logger.error('setFocus->finsembleWindow.getBounds', err);
 					cachedBounds = bounds;
 					finsembleWindow.animate({ transitions: { size: { duration: 150, width: 400 } } }, Function.prototype);
 				})
@@ -83,7 +85,7 @@ var Actions = {
 			if (err) { FSBL.Clients.Logger.error(`menuWindow.isShowing failed, error:`, err); }
 			//if (!showing) return//console.log("not showing")
 			mouseInWindow(menuWindow, function (err, inBounds) {
-
+				if (err) { FSBL.Clients.Logger.error(`menuWindow.isShowing->mouseInWindow failed, error:`, err); }
 				if (!inBounds) {
 					Actions.handleClose();
 				}
@@ -223,6 +225,7 @@ var Actions = {
 		menuStore.setValue({ field: "list", value: list })
 	},
 	updateMenuReference(err, data) {
+		if (err) { FSBL.Clients.Logger.error(`updateMenuReference, error:`, err); }
 		menuReference = data.value;
 		if (!menuWindow) {
 			Actions.setupWindow()
@@ -289,6 +292,7 @@ function createStore(done) {
 		menuStore = store;
 
 		store.getValues(["owner", "menuSpawned"], function (err, data) {
+			if (err) { FSBL.Clients.Logger.error(`DistributedStoreClient.createStore->store.getValues, error:`, err); }
 			store.addListener({ field: "menuIdentifier" }, Actions.updateMenuReference);
 			menuStore.Dispatcher.register(function (action) {
 				if (action.actionType === "menuBlur") {
@@ -311,6 +315,7 @@ function createStore(done) {
 				});
 			} else {
 				menuStore.getValue("menuIdentifier", function (err, menuIdentifier) {
+					if (err) { FSBL.Clients.Logger.error(`DistributedStoreClient.createStore->menuStore.getValue, error:`, err); }
 					menuReference = menuIdentifier;
 					Actions.setupWindow(done);
 				})
