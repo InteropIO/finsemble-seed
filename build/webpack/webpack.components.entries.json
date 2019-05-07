@@ -1,1 +1,10 @@
-{}
+{
+    "accountList": {
+        "output": "components/accountList/accountList",
+        "entry": "./src/components/accountList/accountList.js"
+    },
+    "accountDetail": {
+        "output": "components/accountDetail/accountDetail",
+        "entry": "./src/components/accountDetail/accountDetail.js"
+    }
+}
