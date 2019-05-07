@@ -6,5 +6,9 @@
     "accountDetail": {
         "output": "components/accountDetail/accountDetail",
         "entry": "./src/components/accountDetail/accountDetail.js"
+    },
+    "accountStatement": {
+        "output": "components/accountStatement/accountStatement",
+        "entry": "./src/components/accountStatement/accountStatement.js"
     }
 }

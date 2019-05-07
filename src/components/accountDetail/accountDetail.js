@@ -30,33 +30,33 @@ function listenForCustomer() {
 
 // STEP 3.1
 function setState() {
-	// FSBL.Clients.WindowClient.setComponentState({ field: 'customer', value: customer });
+	FSBL.Clients.WindowClient.setComponentState({ field: 'customer', value: customer });
 }
 function getState() {
-	// FSBL.Clients.WindowClient.getComponentState({
-	// 	field: 'customer',
-	// }, function (err, state) {
-	// 	if (state) {
-	// 		setCustomer(state);
-	// 	}
-	// });
+	FSBL.Clients.WindowClient.getComponentState({
+		field: 'customer',
+	}, function (err, state) {
+		if (state) {
+			setCustomer(state);
+		}
+	});
 }
 
 // STEP 4.1
 function communicateBetweenComponents() {
-	// function traversalFn(direction) {
-	// 	console.log("traveral dir: " + direction);
-	// 	FSBL.Clients.RouterClient.query("accountTraversal", { action: direction }, function (err, response) {
-	// 		if (err) {
-	// 			alert("Error: " + err);
-	// 		} else {
-	// 			setCustomer(response.data);
-	// 		}
-	// 	});
-	// }
+	function traversalFn(direction) {
+		console.log("traveral dir: " + direction);
+		FSBL.Clients.RouterClient.query("accountTraversal", { action: direction }, function (err, response) {
+			if (err) {
+				alert("Error: " + err);
+			} else {
+				setCustomer(response.data);
+			}
+		});
+	}
 
-	// $("next").click(function() {console.log("NEXT"); traversalFn("next")});
-	// $("prev").click(function() {console.log("PREV"); traversalFn("prev")});
+	$("next").click(function() {console.log("NEXT"); traversalFn("next")});
+	$("prev").click(function() {console.log("PREV"); traversalFn("prev")});
 }
 
 /**

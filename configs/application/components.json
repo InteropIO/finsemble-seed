@@ -251,10 +251,48 @@
                     "Window Manager": {
                         "title": "accountDetail",
                         "FSBLHeader": true,
-                        "persistWindowState": true
+                        "persistWindowState": true,
+                        "showLinker": true
                     },
                     "Toolbar": {
                         "iconClass": "accountDetail"
+                    }
+                }
+            }
+        },
+        "accountStatement": {
+            "window": {
+                "url": "$applicationRoot/components/accountStatement/accountStatement.html",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 800,
+                "height": 600
+            },
+            "component": {
+                "preload": false
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "title": "accountStatement",
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "showLinker": true
+                    },
+                    "Toolbar": {
+                        "iconClass": "accountStatement"
                     }
                 }
             }

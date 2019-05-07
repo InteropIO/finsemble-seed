@@ -69,26 +69,26 @@ function launchAccountDetail(selectedAccountNumber) {
 
 // STEP 2.2.7
 function launchAccountDetailAdvanced(selectedAccountNumber) {
-	// advancedIsRunning=true;
-	// setCustomer(selectedAccountNumber);
+	advancedIsRunning=true;
+	setCustomer(selectedAccountNumber);
 
-	// var windowIdentifier={
-	// 	componentType: "accountDetail",
-	// 	windowName: FSBL.Clients.WindowClient.options.name + ".accountDetail"
-	// };
+	var windowIdentifier={
+		componentType: "accountDetail",
+		windowName: FSBL.Clients.WindowClient.options.name + ".accountDetail"
+	};
 
-	// FSBL.Clients.LauncherClient.showWindow(windowIdentifier,
-	// 	{
-	// 		addToWorkspace: true,
-	// 		left: "adjacent",
-	// 		spawnIfNotFound: true,
-	// 		data: {customer: customers[customerIndex]}
-	// 	}, function(err, response){
-	// 		console.log("spawn() returns information about the new component", response);
-	// 		accountDetailSpawnResponse=response;
-	// 		FSBL.Clients.RouterClient.transmit(windowIdentifier.windowName, customers[customerIndex]);
-	// 	}
-	// );
+	FSBL.Clients.LauncherClient.showWindow(windowIdentifier,
+		{
+			addToWorkspace: true,
+			left: "adjacent",
+			spawnIfNotFound: true,
+			data: {customer: customers[customerIndex]}
+		}, function(err, response){
+			console.log("spawn() returns information about the new component", response);
+			accountDetailSpawnResponse=response;
+			FSBL.Clients.RouterClient.transmit(windowIdentifier.windowName, customers[customerIndex]);
+		}
+	);
 }
 
 function relocateAccountDetail() {
@@ -101,18 +101,18 @@ function relocateAccountDetail() {
 
 //STEP 3.1
 function setState() {
-	// FSBL.Clients.WindowClient.setComponentState({ field: 'customerIndex', value: customerIndex });
+	FSBL.Clients.WindowClient.setComponentState({ field: 'customerIndex', value: customerIndex });
 }
 
 function getState() {
-	// FSBL.Clients.WindowClient.getComponentState({
-	// 	field: 'customerIndex',
-	// }, function (err, state) {
-	// 	if (state === null) {
-	// 		return;
-	// 	}
-	// 	setCustomer(customers[state].acc);
-	// });
+	FSBL.Clients.WindowClient.getComponentState({
+		field: 'customerIndex',
+	}, function (err, state) {
+		if (state === null) {
+			return;
+		}
+		setCustomer(customers[state].acc);
+	});
 }
 
 // STEP 4.1
@@ -121,19 +121,19 @@ function getState() {
  * When clients send requests for the next customer in the list, we will respond by traversing through the customer list and sending the response.
  */
 function communicateBetweenComponents() {
-	// FSBL.Clients.RouterClient.addResponder("accountTraversal", function (err, query) {
-	// 	if (err) return;
-	// 	var newIndex = customerIndex;
-	// 	if (query.data.action === "next") {
-	// 		newIndex++;
-	// 		if (newIndex >= customers.length) newIndex = 0;
-	// 	} else if (query.data.action === "prev") {
-	// 		newIndex--;
-	// 		if (newIndex < 0) newIndex = customers.length - 1;
-	// 	}
-	// 	setCustomer(customers[newIndex].acc);
-	// 	query.sendQueryResponse(null, customers[customerIndex]);
-	// });
+	FSBL.Clients.RouterClient.addResponder("accountTraversal", function (err, query) {
+		if (err) return;
+		var newIndex = customerIndex;
+		if (query.data.action === "next") {
+			newIndex++;
+			if (newIndex >= customers.length) newIndex = 0;
+		} else if (query.data.action === "prev") {
+			newIndex--;
+			if (newIndex < 0) newIndex = customers.length - 1;
+		}
+		setCustomer(customers[newIndex].acc);
+		query.sendQueryResponse(null, customers[customerIndex]);
+	});
 }
 
 if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLready", FSBLReady) }
