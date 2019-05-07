@@ -11,7 +11,7 @@ var activeSearchBar = false;
 var menuReference = {};
 var menuWindow = null;
 var control = null;
-
+window.menuReference = menuReference;
 // Handler for determing where to show the search results component.  Currently being set by the search input in Search.jsx
 var inputContainerBoundsHandler = Function.prototype;
 
@@ -50,6 +50,7 @@ var Actions = {
 	},
 	setFocus(bool, target) {
 		focus = bool;
+		if (!menuWindow) return;
 		if (bool) {
 			if (window.outerWidth < 400) {
 				finsembleWindow.getBounds((err, bounds) => {
@@ -65,7 +66,6 @@ var Actions = {
 					this.setFocus(bool, target);
 				})
 			}
-			if (!menuWindow) return;
 			return menuWindow.isShowing((err, showing) => {
 				if (err) { FSBL.Clients.Logger.error(`menuWindow.isShowing failed, error:`, err); }
 
@@ -165,7 +165,7 @@ var Actions = {
 	 * @param {Function} blurHandler
 	 */
 	setBlurSearchInputHandler(blurHandler) {
-		if(typeof blurHandler !== 'function'){
+		if (typeof blurHandler !== 'function') {
 			FSBL.Clients.Logger.error("Parameter blurHandler must be a function.");
 		} else {
 			blurSearchInputHandler = blurHandler;
@@ -201,7 +201,8 @@ var Actions = {
 	},
 
 	setupWindow(cb = Function.prototype) {
-		console.log("SETUP WINDOW!", menuReference.name);
+		// The toolbar can render before we have the menuReference. Add this gate so that the dev isn't spammed with errors about an being able to
+		if (!menuReference.name) return cb();
 		//menuWindow = fin.desktop.Window.wrap(menuReference.finWindow.app_uuid, menuReference.finWindow.name);
 		FSBL.FinsembleWindow.getInstance({ windowName: menuReference.name }, (err, wrap) => {
 			if (err) { FSBL.Clients.Logger.error(`Failed to retrieve reference to search results menu: ${menuReference.name}, error:`, err); }
@@ -233,7 +234,7 @@ var Actions = {
 	},
 
 	setBlurSearchInputHandler(blurHandler) {
-		if(typeof blurHandler !== 'function'){
+		if (typeof blurHandler !== 'function') {
 			FSBL.Clients.Logger.error("Parameter blurHandler must be a function.");
 		} else {
 			blurSearchInputHandler = blurHandler;
@@ -266,11 +267,11 @@ var Actions = {
 	}
 };
 function searchTest(params, cb) {
-//console.log("params", params)
+	//console.log("params", params)
 	fetch('/search?text=' + params.text).then(function (response) {
 		return response.json();
 	}).then(function (json) {
-	//console.log("json", cb);
+		//console.log("json", cb);
 		return cb(null, json);
 
 	});
@@ -286,7 +287,7 @@ function createStore(done) {
 		activeSearchBar: null,
 		menuIdentifier: null
 	};
-//console.log("CreateStore", "Finsemble-SearchStore-" + finWindow.name)
+	//console.log("CreateStore", "Finsemble-SearchStore-" + finWindow.name)
 	FSBL.Clients.DistributedStoreClient.createStore({ store: "Finsemble-SearchStore-" + finWindow.name, values: defaultData, global: true }, function (err, store) {
 		if (err) { FSBL.Clients.Logger.error(`DistributedStoreClient.createStore failed for store Finsemble-SearchStore-${finWindow.name}, error:`, err); }
 		menuStore = store;
@@ -305,8 +306,7 @@ function createStore(done) {
 			if (!data.menuSpawned) {
 				FSBL.Clients.LauncherClient.spawn("searchMenu", { name: "searchMenu." + finWindow.name, data: { owner: finWindow.name } }, function (err, data) {
 					if (err) { FSBL.Clients.Logger.error(`LauncherClient.spawn failed for searchMenu, error:`, err); }
-
-					//console.log("Err", err, data)
+					menuReference = data.windowIdentifier;
 					menuStore.setValue({ field: "menuIdentifier", value: data.windowIdentifier })
 					Actions.setupWindow(() => {
 						menuStore.setValue({ field: "menuSpawned", value: true })

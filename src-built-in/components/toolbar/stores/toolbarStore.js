@@ -37,7 +37,7 @@ class _ToolbarStore {
 				});
 			}
 			function createStore(err, result) {
-				if (err) { FSBL.Clients.Logger.error(`DistributedStoreClient.createStore failed for Finsemble-Configuration-Store, error:`, err); }
+				if (err) { FSBL.Clients.Logger.error(`ToolbarStore.createStores Error:`, err); }
 				let values = {};
 				if (monitors.mine && monitors.primary && monitors.mine.deviceId === monitors.primary.deviceId) {
 					values = { mainToolbar: fin.desktop.Window.getCurrent().name };
@@ -170,20 +170,15 @@ class _ToolbarStore {
 	 */
 	addListeners(done, self) {
 		// menus change - menus come from config
-		FSBL.Clients.DistributedStoreClient.getStore({ store: "Finsemble-Configuration-Store", global: true }, function (err, configStore) {
-			if (err) { FSBL.Clients.Logger.error(`DistributedStoreClient.getStore failed for Finsemble-Configuration-Store, error:`, err); }
-			if (configStore) {
-				configStore.addListener({ field: "finsemble.menus" }, function (err, data) {
-					if (err) { FSBL.Clients.Logger.error(`DistributedStoreClient.getStore -> configStore.addListener failed for Finsemble-Configuration-Store, error:`, err); }
-					self.Store.setValue({
-						field: "menus",
-						value: data.value
-					});
-					self.getSectionsFromMenus(data.value);
-				});
-			}
-			done();
+		FSBL.Clients.ConfigClient.addListener({ field: "finsemble.menus" }, function (err, data) {
+			if (err) { FSBL.Clients.Logger.error(`DistributedStoreClient.getStore -> configStore.addListener failed for Finsemble-Configuration-Store, error:`, err); }
+			self.Store.setValue({
+				field: "menus",
+				value: data.value
+			});
+			self.getSectionsFromMenus(data.value);
 		});
+		done();
 
 		let onBoundsSet = (bounds) => {
 			bounds = bounds.data ? bounds.data : bounds;
@@ -303,6 +298,7 @@ class _ToolbarStore {
 				function (done) {
 					self.loadMenusFromConfig(done, self);
 				},
+				FSBL.Clients.ConfigClient.onReady,
 				function (done) {
 					self.addListeners(done, self);
 				},
