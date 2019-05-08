@@ -190,39 +190,40 @@ var Actions = {
 	 */
 	identifyWindow: function (winID) {
 		const OPACITY_ANIMATION_DURATION = 200;
-		let win = fin.desktop.Window.wrap(winID.uuid, winID.name);
-		let windowState = "hidden";
-		function flash(n, done) {
-			win.animate({
-				opacity: {
-					opacity: 0.5,
-					duration: OPACITY_ANIMATION_DURATION
-				}
-			}, {}, () => {
+		FSBL.FinsembleWindow.getInstance({ name: winID.name }, (err, win) => {
+			let windowState = "hidden";
+			function flash(n, done) {
 				win.animate({
 					opacity: {
-						opacity: 1,
+						opacity: 0.5,
 						duration: OPACITY_ANIMATION_DURATION
 					}
-				}, {}, () => {
-					done(null);
-				});
-			})
-		}
-		win.isShowing(isVisible => {
-			//cache the visible state of the window prior to making it flash. If it was hidden before, hide it when the flashing is done.
-			windowState = isVisible ? "visible" : "hidden";
-			win.show(() => {
-				win.bringToFront(() => {
-					//Flash 5 times, in series.
-					timesSeries(5, flash, () => {
-						if (windowState === "hidden") {
-							win.hide();
+				}, () => {
+					win.animate({
+						opacity: {
+							opacity: 1,
+							duration: OPACITY_ANIMATION_DURATION
 						}
+					}, () => {
+						done(null);
 					});
 				})
+			}
+			win.isShowing((err, isVisible) => {
+				//cache the visible state of the window prior to making it flash. If it was hidden before, hide it when the flashing is done.
+				windowState = isVisible ? "visible" : "hidden";
+				win.show(() => {
+					win.bringToFront(() => {
+						//Flash 5 times, in series.
+						timesSeries(5, flash, () => {
+							if (windowState === "hidden") {
+								win.hide();
+							}
+						});
+					})
+				})
 			})
-		})
+		});
 	},
 	/**
 	 * Terminates a process. Prompts first. If it fails to terminate the process, displays an error message.
