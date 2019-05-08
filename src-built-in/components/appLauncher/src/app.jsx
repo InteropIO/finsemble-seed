@@ -89,16 +89,20 @@ class AppLauncher extends React.Component {
 	}
 }
 
-fin.desktop.main(function () {
-	if (window.FSBL && FSBL.addEventListener) {     FSBL.addEventListener("onReady", FSBLReady); } else {     window.addEventListener("FSBLReady", FSBLReady) } function FSBLReady () {
-		// var Test = require('./test');
-	//console.log("appLauncher app onReady");
 
-		storeExports.initialize(function (store) {
-			appLauncherStore = store;
-			ReactDOM.render(
-				<AppLauncher />
-				, document.getElementById("bodyHere"));
-		});
-	}
-});
+if (window.FSBL && FSBL.addEventListener) {
+	FSBL.addEventListener("onReady", FSBLReady);
+} else {
+	window.addEventListener("FSBLReady", FSBLReady)
+}
+
+function FSBLReady() {
+	// var Test = require('./test');
+	//console.log("appLauncher app onReady");
+	storeExports.initialize(function (store) {
+		appLauncherStore = store;
+		ReactDOM.render(
+			<AppLauncher />
+			, document.getElementById("bodyHere"));
+	});
+}

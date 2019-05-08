@@ -149,7 +149,7 @@ var Actions = {
 			if (choice !== "cancel") {
 
 				//Reset any server-side sessions or login data necessary to fully log out the user, e.g.
-				/* 
+				/*
 				fetch("/logout", {//Sends our logout message
 					method: "POST",
 					credentials: "include"
@@ -179,7 +179,7 @@ var Actions = {
 			});
 	},
 	spawnDocs() {
-		fin.desktop.System.openUrlWithBrowser("https://www.chartiq.com/tutorials/?slug=finsemble-seed-project", function () {
+		FSBL.System.openUrlWithBrowser("https://www.chartiq.com/tutorials/?slug=finsemble-seed-project", function () {
 			//console.log("successfully launched docs");
 		}, function (err) {
 			//console.log("failed to launch docs");

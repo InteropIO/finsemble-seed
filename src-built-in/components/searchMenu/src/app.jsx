@@ -95,8 +95,8 @@ class SearchMenu extends React.Component {
 	}
 	listItemClick(provider, item, action) {
 		storeExports.Actions.listItemClick(provider, item, action);
-		fin.desktop.Window.getCurrent().blur();
-		fin.desktop.Window.getCurrent().hide();
+		finsembleWindow.blur();
+		finsembleWindow.hide();
 	}
 	providerClick(provider) {
 		storeExports.Actions.providerItemClick(provider);
@@ -173,15 +173,18 @@ class SearchMenu extends React.Component {
 	}
 }
 
-fin.desktop.main(function () {
-	if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
-	function FSBLReady() {
-		//console.log("searchMenu app onReady");
-		storeExports.initialize(function (store) {
-			menuStore = store;
-			ReactDOM.render(
-				<SearchMenu />
-				, document.getElementById("bodyHere"));
-		});
-	}
-});
+
+if (window.FSBL && FSBL.addEventListener) {
+	FSBL.addEventListener("onReady", FSBLReady);
+} else {
+	window.addEventListener("FSBLReady", FSBLReady)
+}
+function FSBLReady() {
+	//console.log("searchMenu app onReady");
+	storeExports.initialize(function (store) {
+		menuStore = store;
+		ReactDOM.render(
+			<SearchMenu />
+			, document.getElementById("bodyHere"));
+	});
+}

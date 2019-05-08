@@ -5,7 +5,7 @@
 
 let menuStore;
 import async from "async";
-let finWindow = fin.desktop.Window.getCurrent();
+
 var values = {
 	focus: false,
 	list: [],

@@ -45,7 +45,7 @@ class AdHocComponentForm extends React.Component {
 	 * @memberof AdHoc
 	 */
 	hideWindow() {
-		fin.desktop.Window.getCurrent().hide();
+		finsembleWindow.hide();
 	}
 	/**
 	 * Persists the adHoc component to storage.

@@ -41,8 +41,9 @@ class Linker extends React.Component {
 	 */
 	channelClicked(channel, active) {
 		var attachedWindowIdentifier = LinkerStore.getAttachedWindowIdentifier();
-		var attachedWindow = fin.desktop.Window.wrap(attachedWindowIdentifier.uuid, attachedWindowIdentifier.windowName);
-		attachedWindow.focus();
+		FSBL.FinsembleWindow.getInstance({ name: attachedWindowIdentifier.windowName }, (err, attachedWindow) => {
+			if (attachedWindow) attachedWindow.focus();
+		});
 
 		if (!active) return LinkerActions.linkToChannel(channel.name);
 		LinkerActions.unlinkFromChannel(channel.name);
@@ -107,10 +108,13 @@ class Linker extends React.Component {
 	}
 }
 
-fin.desktop.main(function () {
-	if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
-	function FSBLReady() {
-		LinkerStore.initialize();
-		ReactDOM.render(<Linker />, document.getElementById("main"));
-	}
-});
+
+if (window.FSBL && FSBL.addEventListener) {
+	FSBL.addEventListener("onReady", FSBLReady);
+} else {
+	window.addEventListener("FSBLReady", FSBLReady)
+}
+function FSBLReady() {
+	LinkerStore.initialize();
+	ReactDOM.render(<Linker />, document.getElementById("main"));
+}
