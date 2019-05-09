@@ -60,6 +60,7 @@ class WorkspaceManagementMenu extends React.Component {
 		WorkspaceManagementMenuStore.addListeners([
 			{ field: "WorkspaceList", listener: this.onStoreChange },
 			{ field: "activeWorkspace", listener: this.onStoreChange },
+			{ field: "isSwitchingWorkspaces", listener: this.onStoreChange },
 			{ field: "pins", listener: this.onPinChange }
 		]);
 	}
