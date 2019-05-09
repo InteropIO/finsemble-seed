@@ -1,0 +1,47 @@
+:root {
+  /* Theme Variables:  Use these variables to make broad-sweeping changes to the colors and fonts. */
+
+  /* Font Settings */
+  --font-family: 'Roboto', sans-serif;
+  --primary-font-color: white;
+  --secondary-font-color: black;
+
+  --primary-font-weight: 300;
+  --secondary-font-weight: 500;
+  --tertiary-font-weight: bold;
+
+  /* Color Theme */
+  --bronze: #936C56;
+  --grey:#292929;
+  --orange: #FF9F19;
+  --contrast: #1A5071;
+  --light-grey: #76777B;
+  --brown-shade:#6F625A;
+  --charcoal: #212529;
+
+
+
+  --primary-accent-color: var(--bronze);
+  --secondary-accent-color: var(--orange);
+  --tertiary-accent-color: var(--blue3);
+
+  --primary-negative-color: var(--red5);
+  --secondary-negative-color: var(--red1);
+  --tertiary-negative-color: var(--red7);
+
+  --primary-background-color: var(--grey);
+  --secondary-background-color: var(--slate6);
+  --tertiary-background-color: var(--slate5);
+
+  --scrollbar-color: var(--gray);
+/* Toolbar */
+  --toolbar-font-color: var(--bronze);
+  --toolbar-brand-logo-width: auto;
+
+  /* Component Variables:  Use these variables to make small changes to colors and general appearance. */
+
+}
+
+.finsemble-toolbar-drag-handle  g {
+    fill:var(--bronze)
+}
