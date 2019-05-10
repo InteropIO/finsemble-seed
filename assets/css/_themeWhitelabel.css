@@ -18,30 +18,84 @@
   --light-grey: #76777B;
   --brown-shade:#6F625A;
   --charcoal: #212529;
+  --hover-color-light:wheat;
+  --hover-color-dark:black;
 
 
 
   --primary-accent-color: var(--bronze);
-  --secondary-accent-color: var(--orange);
-  --tertiary-accent-color: var(--blue3);
+  --secondary-accent-color: var(--brown-shade);
+  --tertiary-accent-color: var(--orange);
 
   --primary-negative-color: var(--red5);
   --secondary-negative-color: var(--red1);
   --tertiary-negative-color: var(--red7);
 
-  --primary-background-color: var(--grey);
-  --secondary-background-color: var(--slate6);
-  --tertiary-background-color: var(--slate5);
+  --primary-background-color: var(--charcoal);
+  --secondary-background-color: var(--charcoal);
+  --tertiary-background-color: var(--brown-shade);
 
   --scrollbar-color: var(--gray);
 /* Toolbar */
   --toolbar-font-color: var(--bronze);
   --toolbar-brand-logo-width: auto;
+  --toolbar-button-hover-color-light:var(--hover-color-light);
 
-  /* Component Variables:  Use these variables to make small changes to colors and general appearance. */
+  /* App Menu */
+  --appMenu-font-color: var(--primary-font-color);
+  --appMenu-scrollbar-color: var(--slate1);
+  --appMenu-leftNav-background-color: var(--slate5);
+  --appMenu-close-hover-color-light: var(--secondary-negative-color);
+  --appMenu-leftNav-highlighter-hover: var(--hover-color-light);
+  --appMenu-leftNav-highlighter: var(--hover-color-light);
+  --appMenu-leftNav-icon-color: var(--blue3);
+  --appMenu-leftNav-contextMenu-background-color: var(--secondary-background-color);
+  --appMenu-background-color: var(--charcoal);
+  --appMenu-actions-menu-background-color: var(--secondary-background-color);
+  --appMenu-app-item-hover-background-color: var(--hover-color-light);
+  --appMenu-app-item-bottom-border-color: rgba(98, 116, 132, 0.4);
+  --appMenu-app-favorite-color: var(--yellow3);
+  --appMenu-app-icon-color: var(--tertiary-accent-color);
+  --appMenu-sort-inactive-border-color: var(--gray5);
+  --appMenu-sort-active-color: var(--primary-accent-color);
+  --appMenu-search-input-inactive-color: var(--blue4);
+  --appMenu-search-input-active-color: var(--blue2);
+  --appMenu-edit-icon-hover-color-light: var(--orange);
+
+  /* Menus */
+  --menu-font-size: 14px;
+  --menu-font-weight: var(--primary-font-weight);
+  --menu-font-color: var(--primary-font-color);
+  --menu-active-workspace-font-weight: var(--secondary-font-weight);
+
+  --menu-background-color: var(--secondary-background-color);
+  --menu-actions-background-color: var(--brown-shade);
+  --menu-actions-hover-color-light: var(--hover-color-light);
+  --menu-content-background-color: var(--secondary-background-color);
+  --menu-content-hover-color-light: var(--hover-color-dark);
+  /* both hover colors for menus */
+  --menu-content-hover-color:var(--bronze);
+  --menu-actions-hover-color:var(--bronze);
+
+  --menu-pin-border-color: var(--secondary-accent-color);
+  --menu-pin-background-color: var(--primary-accent-color);
+  --menu-pin-background-hover-color-light: var(--secondary-accent-color);
+  --menu-favorite-hover-color-light: var(--yellow4);
+  --menu-favorite-active-hover-color-light: var(--yellow1);
+  --menu-delete-background-hover-color-light: var(--secondary-negative-color);
+
+  --menu-linker-selected-font-color: var(--primary-font-color);
+  --menu-linker-selected-font-size: 18px;
+
 
 }
 
 .finsemble-toolbar-drag-handle  g {
     fill:var(--bronze)
+}
+.menu{
+  background-color: var(--charcoal)
+}
+.menu-secondary{
+  background-color: var(--brown-shade)
 }
