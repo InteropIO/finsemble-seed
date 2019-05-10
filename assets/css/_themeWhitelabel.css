@@ -11,15 +11,24 @@
   --tertiary-font-weight: bold;
 
   /* Color Theme */
-  --bronze: #936C56;
-  --grey:#292929;
-  --orange: #FF9F19;
-  --contrast: #1A5071;
+  --lo-brown:#5D4F4C;
+  --bronze: rgb(223, 174, 114);
+  --bronze-lighter: rgb(238, 172, 92);
+  /* --bronze: #936C56; */
+  /* --brown-shade:#6F625A; */
+  --brown-shade:#5D4F4C;
   --light-grey: #76777B;
-  --brown-shade:#6F625A;
+  --orange: rgb(167, 102, 11);
+  --grey:#292929;
+  --dark-charcoal:#1C1C1C;
   --charcoal: #212529;
+  --contrast: #1A5071;
+  /* background colors */
   --hover-color-light:wheat;
   --hover-color-dark:black;
+  /* text color */
+  --hover-text-light:var(--bronze);
+  --hover-text-dark:  var(--charcoal);
 
 
 
@@ -91,11 +100,24 @@
 }
 
 .finsemble-toolbar-drag-handle  g {
-    fill:var(--bronze)
+    fill:var(--bronze);
 }
 .menu{
-  background-color: var(--charcoal)
+  background-color: var(--charcoal);
 }
 .menu-secondary{
-  background-color: var(--brown-shade)
+  background-color: var(--brown-shade);
+}
+
+.finsemble-toolbar-button[data-hover=true] {
+color:var(--hover-color-dark);
+}
+
+/* welcome component */
+.button {
+  background-color: var(--bronze);
+  color:var(--charcoal)
+}
+.button:hover {
+  background-color: var(--bronze-lighter);
 }
