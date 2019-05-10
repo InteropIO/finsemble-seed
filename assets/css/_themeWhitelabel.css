@@ -49,6 +49,7 @@
 /* Toolbar */
   --toolbar-font-color: var(--bronze);
   --toolbar-brand-logo-width: auto;
+  --toolbar-brand-logo-height: 25px;
   --toolbar-button-hover-color-light:var(--hover-color-light);
 
   /* App Menu */

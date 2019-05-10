@@ -154,7 +154,7 @@
 			"promptUserOnDirtyWorkspace": true
 		}
 	},
-	"systemTrayIcon": "$applicationRoot/assets/img/Finsemble_Taskbar_Icon.png",
+	"systemTrayIcon": "$applicationRoot/assets/img/Finsemble_System_Tray_Icon.png",
 	"systemTrayComponent": "File Menu",
 	"Window Manager": {
 		"alwaysOnTopIcon": false,
