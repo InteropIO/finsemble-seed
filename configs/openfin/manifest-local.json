@@ -20,7 +20,7 @@
         },
         "alwaysOnTop": false
     },
-    "splashScreenImage": "http://localhost:3375/assets/img/FinsembleSplash.png",
+    "splashScreenImage": "http://localhost:3375/assets/img/lombard-odier-splash.png",
     "runtime": {
         "arguments": "--noerrdialogs  --v=4 --no-sandbox  --framestrategy=frames --winhttp-proxy-resolver",
         "version": "9.61.36.36",
