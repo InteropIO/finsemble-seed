@@ -14,6 +14,7 @@
   --lo-brown:#5D4F4C;
   --bronze: rgb(223, 174, 114);
   --bronze-lighter: rgb(238, 172, 92);
+  --bronze-lightest:#ffd199;
   /* --bronze: #936C56; */
   /* --brown-shade:#6F625A; */
   --brown-shade:#5D4F4C;
@@ -24,10 +25,10 @@
   --charcoal: #212529;
   --contrast: #1A5071;
   /* background colors */
-  --hover-color-light:wheat;
-  --hover-color-dark:black;
+  --hover-color-light:var(--bronze);
+  --hover-color-dark:var(--charcoal);
   /* text color */
-  --hover-text-light:var(--bronze);
+  --hover-text-light: var(--bronze);
   --hover-text-dark:  var(--charcoal);
 
 
@@ -51,6 +52,8 @@
   --toolbar-button-hover-color-light:var(--hover-color-light);
 
   /* App Menu */
+  --menu-hover: rgba(223, 174, 114, 0.62);
+
   --appMenu-font-color: var(--primary-font-color);
   --appMenu-scrollbar-color: var(--slate1);
   --appMenu-leftNav-background-color: var(--slate5);
@@ -83,8 +86,8 @@
   --menu-content-background-color: var(--secondary-background-color);
   --menu-content-hover-color-light: var(--hover-color-dark);
   /* both hover colors for menus */
-  --menu-content-hover-color:var(--bronze);
-  --menu-actions-hover-color:var(--bronze);
+  --menu-content-hover-color:var(--menu-hover);
+  --menu-actions-hover-color:var(--menu-hover);
 
   --menu-pin-border-color: var(--secondary-accent-color);
   --menu-pin-background-color: var(--primary-accent-color);
@@ -110,7 +113,7 @@
 }
 
 .finsemble-toolbar-button[data-hover=true] {
-color:var(--hover-color-dark);
+color:var(--bronze-lightest)
 }
 
 /* welcome component */
@@ -121,3 +124,9 @@ color:var(--hover-color-dark);
 .button:hover {
   background-color: var(--bronze-lighter);
 }
+
+/* hover for all primary and secondary section for menus,
+ easier to set this here due to many menus */
+/* .menu-secondary :hover{
+  background-color: var(--menu-hover);
+} */
