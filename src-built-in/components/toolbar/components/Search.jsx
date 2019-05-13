@@ -136,8 +136,15 @@ export default class Search extends React.Component {
 	setActive(err, data) {
 		this.setState({ active: data.value })
 	}
-	hotKeyActive() {
-		this.setState({ active: true, hotkeySet: true })
+	hotKeyActive(...args) {
+		// the first argument seems to be empty but the second value returns
+		// the field and value of "searchActive"
+		// see the toolbarStore - this.Store.setValue({ field: "searchActive" })
+		const [nullValue, isActive] = args;
+		this.setState({ active: isActive.value, hotkeySet: isActive.value })
+		if (isActive.value === false) {
+			this.blurred()
+		}
 	}
 	focused(e) {
 		function selectElementContents(el) {

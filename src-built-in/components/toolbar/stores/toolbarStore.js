@@ -3,7 +3,7 @@
 * All rights reserved.
 */
 import async from "async";
-import * as menuConfig from '../config.json';
+import * as toolbarConfig from '../config.json';
 import * as storeExports from "../stores/searchStore";
 
 import { Actions as SearchActions } from "./searchStore"
@@ -15,6 +15,10 @@ var storeOwner = false;
  * @class _ToolbarStore
  */
 class _ToolbarStore {
+	constructor() {
+		this.setHotkeys = this.setHotkeys.bind(this)
+		this.loadHotkeysFromConfig = this.loadHotkeysFromConfig.bind(this)
+	}
 	/**
 	 * Creates a Local Store and a Global Store using the DistributedStoreClient. The Local Store is used for component state.
 	 * The global store is used to allow other components to add/remove items from the Toolbar
@@ -141,47 +145,15 @@ class _ToolbarStore {
 			} else {
 				self.Store.setValue({
 					field: "menus",
-					value: menuConfig
+					value: toolbarConfig.menus
 				});
 				done();
 				if (FSBL.Clients.ConfigClient.setValue) {
-					FSBL.Clients.ConfigClient.setValue({ field: "finsemble.menus", value: menuConfig });
+					FSBL.Clients.ConfigClient.setValue({ field: "finsemble.menus", value: toolbarConfig.menus });
 				}
 			}
 		});
 	}
-
-	// /**
-	//  * Load the hotkeys from the config.json. If there are no items in config.json, hotkeys are loaded from the Finsemble Config `finsemble.hotkeys` item.
-	//  *
-	//  *
-	//  * @param {any} done
-	//  * @param {any} self
-	//  * @memberof _ToolbarStore
-	//  */
-	// loadHotkeysFromConfig(done, self) {
-	// 	// example:
-	// 	// var serverAddress = getDefault(params, "params.transportSettings.FinsembleTransport.serverAddress", "wss://localhost.chartiq.com:3376");
-	// 	FSBL.ConfigUtils.getDefault()
-	// 	FSBL.Clients.ConfigClient.getValue({ field: "finsemble.menus" }, (err, hotkeys) => {
-	// 		if (menus && menus.length) {
-	// 			self.Store.setValue({
-	// 				field: "menus",
-	// 				value: menus
-	// 			});
-	// 			done();
-	// 		} else {
-	// 			self.Store.setValue({
-	// 				field: "menus",
-	// 				value: menuConfig
-	// 			});
-	// 			done();
-	// 			if (FSBL.Clients.ConfigClient.setValue) {
-	// 				FSBL.Clients.ConfigClient.setValue({ field: "finsemble.menus", value: menuConfig });
-	// 			}
-	// 		}
-	// 	});
-	// }
 
 
 	/**
@@ -215,14 +187,6 @@ class _ToolbarStore {
 			}, Function.prototype);
 		}
 		finsembleWindow.addListener("bounds-change-end", onBoundsSet)
-
-		FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", "t"], () => {
-			self.showToolbarAtFront();
-		});
-
-		FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", "h"], () => {
-			self.hideToolbar();
-		});
 	}
 
 	/**
@@ -232,11 +196,9 @@ class _ToolbarStore {
 	 * @memberof _ToolbarStore
 	 */
 	bringToolbarToFront(focus) {
-		var self = this;
 		finsembleWindow.bringToFront(null, () => {
 			if (focus) {
 				finsembleWindow.focus();
-				self.Store.setValue({ field: "searchActive", value: false });
 			}
 		});
 	}
@@ -283,21 +245,46 @@ class _ToolbarStore {
 	 *
 	 */
 
-	setupHotkeys(cb) {
-		var self = this;
-		if (storeOwner) {
-			let keys = FSBL.Clients.HotkeyClient.keyMap;
-			FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.alt, keys.up], () => {
-				FSBL.Clients.LauncherClient.bringWindowsToFront()
-			});
-			FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.alt, keys.down], () => {
-				FSBL.Clients.WorkspaceClient.minimizeAll()
-			});
-			FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.alt, keys.f], () => {
-				self.Store.setValue({ field: "searchActive", value: true });
-			});
-		}
-		return cb();
+
+	/**
+ * Load the menus from the config.json. If there are no items in config.json, menus are loaded from the Finsemble Config `finsemble.menus` item.
+ *
+ *
+ * @param {any} done
+ * @param {any} self
+ * @memberof _ToolbarStore
+ */
+	loadHotkeysFromConfig(done) {
+		FSBL.Clients.ConfigClient.getValue({ field: "finsemble.hotkeys" }, (err, hotkeys) => {
+			// if (hotkeys && hotkeys.length) {
+			// }
+			this.setHotkeys(done)
+		});
+	}
+
+
+	setHotkeys(done) {
+		const keys = FSBL.Clients.HotkeyClient.keyMap;
+
+		FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", "t"], () => {
+			this.Store.setValue({ field: "searchActive", value: false });
+			this.showToolbarAtFront();
+		});
+
+		FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", "h"], () => {
+			this.hideToolbar();
+		});
+		FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.alt, keys.up], () => {
+			FSBL.Clients.LauncherClient.bringWindowsToFront()
+		});
+		FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.alt, keys.down], () => {
+			FSBL.Clients.WorkspaceClient.minimizeAll()
+		});
+		FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.alt, keys.f], () => {
+			this.showToolbarAtFront()
+			this.Store.setValue({ field: "searchActive", value: true });
+		});
+		done();
 	}
 	addListener(params, cb) {
 		this.Store.addListener(params, cb);
@@ -323,7 +310,7 @@ class _ToolbarStore {
 					self.addListeners(done, self);
 				},
 				function (done) {
-					self.setupHotkeys(done);
+					self.loadHotkeysFromConfig(done, self);
 				},
 				function (done) {
 					self.listenForWorkspaceUpdates();
