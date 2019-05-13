@@ -11,7 +11,27 @@
 				"top": "center",
 				"left": "center",
 				"width": 400,
-				"height": 432
+				"height": 432,
+				"options":{
+					"alwaysOnTop": true,
+					"minWidth": 150,
+					"backgroundColor": "#28a745",
+					"defaultCentered": true,
+					"maxHeight": 300,
+					"minimizable": false,
+					"maximizable": false,
+					"resizable": false,
+					"closable": false,
+					"transparent": true,
+					"hasShadow": true,
+					"title": "Tom Bombadil",
+					"movable": false,
+					"titleBarStyle": "hidden",
+					"state": "maximized",
+					"darkTheme": true,
+					"kiosk": true,
+					"vibrancy": "light"
+				}
 			},
 			"component": {
 				"inject": false,
@@ -209,6 +229,51 @@
 					"Window Manager": {
 						"FSBLHeader": false,
 						"persistWindowState": false
+					}
+				}
+			}
+		},
+		"Advanced Chart": {
+			"window": {
+				"url": "https://demo.chartiq.com",
+				"width": 800,
+				"height": 600,
+				"options": {
+					"minWidth": 75
+				}
+			},
+			"component": {
+				"mode": "premium",
+				"advertiseReceivers": [
+					"chartiq.chart",
+					"symbol"
+				],
+				"spawnOnHotkey": [
+					"ctrl",
+					"alt",
+					"a"
+				],
+				"category": "system",
+				"preload": "$applicationRoot/components/chart/chartiq.js"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Toolbar": {
+						"iconClass": "ff-chart-advanced"
+					},
+					"Window Manager": {
+						"title": "ChartIQ",
+						"FSBLHeader": true,
+						"showLinker": true,
+						"persistWindowState": true
 					}
 				}
 			}

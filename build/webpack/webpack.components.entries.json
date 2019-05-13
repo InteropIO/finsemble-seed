@@ -1,1 +1,6 @@
-{}
+{
+    "chart":{
+        "output": "components/chart/chartiq",
+        "entry": "./src/components/chart/chartiq.js"
+    }
+}
