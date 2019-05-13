@@ -14,23 +14,55 @@
 				"height": 432,
 				"options":{
 					"alwaysOnTop": true,
+					"accelerator": {
+						"devtools": true,
+						"reload": true,
+						"reloadIgnoringCache": true,
+						"zoom": true
+					},
+					"aspectRatio": 2,
+					"contentNavigation": {
+						"whiteList": [
+							"https://www.google.com"
+						]
+					},
+					"contextMenu": true,
+					"cornerRounding": {
+						"height": 20,
+						"width": 20
+					},
+					"customData": "Random test custom data",
+					"defaultHeight": 500,
+					"defaultWidth": 1000,
+					"maxWidth": 1000,
 					"minWidth": 150,
 					"backgroundColor": "#28a745",
-					"defaultCentered": true,
-					"maxHeight": 300,
+					"minHeight": 300,
+					"maxHeight": 700,
 					"minimizable": false,
 					"maximizable": false,
-					"resizable": false,
+					"resizable": true,
+					"saveWindowState": false,
 					"closable": false,
-					"transparent": true,
+					"transparent": false,
+					"shadow": true,
+					"smallWindow": true,
+					"url": "about:openfin",
+					"uuid": 123456789,
+					"waitForPageLoad": false,
 					"hasShadow": true,
-					"title": "Tom Bombadil",
+					"name": "Tom Bombadil",
+					"opacity": 0.5,
 					"movable": false,
-					"titleBarStyle": "hidden",
-					"state": "maximized",
-					"darkTheme": true,
+					"titleBarStyle": "customButtonsOnHover",
+
+					"focusable": false,
+					"center": true,
+					"title": "Aragorn",
 					"kiosk": true,
-					"vibrancy": "light"
+					"frame": true,
+					"fullscreenable": true,
+					"skipTaskBar": false
 				}
 			},
 			"component": {
