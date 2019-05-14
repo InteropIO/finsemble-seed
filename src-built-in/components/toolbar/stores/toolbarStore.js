@@ -16,7 +16,6 @@ var storeOwner = false;
  */
 class _ToolbarStore {
 	constructor() {
-		this.setHotkeys = this.setHotkeys.bind(this)
 		this.loadHotkeysFromConfig = this.loadHotkeysFromConfig.bind(this)
 	}
 	/**
@@ -254,20 +253,15 @@ class _ToolbarStore {
  * @memberof _ToolbarStore
  */
 	loadHotkeysFromConfig(done) {
-		this.setHotkeys(toolbarConfig.hotkeys, done)
-	}
 
-
-	setHotkeys(hotkeysFromConfig, done) {
-
-		// destructure from hotkeysFromConfig and provide a default value.
-		// The default value is used as a fallback if the config file does not include a matching hotkey.
+		// destructure toolbarConfig.hotkeys and provide a default fallback value for each hotkey.
 		const {
 			showToolbar = ["ctrl", "alt", "t"],
 			hideToolbar = ["ctrl", "alt", "h"],
 			bringWindowsToFront = ["ctrl", "alt", "up"],
+			minimizeAll = ["ctrl", "alt", "down"],
 			showSearch = ["ctrl", "alt", "f"],
-		} = hotkeysFromConfig
+		} = toolbarConfig.hotkeys
 
 		// show the toolbar
 		FSBL.Clients.HotkeyClient.addGlobalHotkey(
@@ -293,7 +287,7 @@ class _ToolbarStore {
 
 		// maximize all finsemble component windows
 		FSBL.Clients.HotkeyClient.addGlobalHotkey(
-			bringWindowsToFront,
+			minimizeAll,
 			() => {
 				FSBL.Clients.WorkspaceClient.minimizeAll()
 			})

@@ -69,12 +69,17 @@
         "bringWindowsToFront": [
             "ctrl",
             "alt",
-            "."
+            "up"
+        ],
+        "minimizeAll": [
+            "ctrl",
+            "alt",
+            "down"
         ],
         "showSearch": [
             "ctrl",
             "alt",
-            "h"
+            "f"
         ]
     }
 }
