@@ -255,40 +255,65 @@ class _ToolbarStore {
  * @memberof _ToolbarStore
  */
 	loadHotkeysFromConfig(done) {
-		FSBL.Clients.ConfigClient.getValue({ field: "finsemble.hotkeys" }, (err, hotkeys) => {
-			// if (hotkeys && hotkeys.length) {
-			// }
-			this.setHotkeys(done)
-		});
+		this.setHotkeys(toolbarConfig.hotkeys, done)
 	}
 
 
-	setHotkeys(done) {
-		const keys = FSBL.Clients.HotkeyClient.keyMap;
+	setHotkeys(hotkeysFromConfig, done) {
 
-		FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", "t"], () => {
-			this.Store.setValue({ field: "searchActive", value: false });
-			this.showToolbarAtFront();
-		});
+		// destructure from hotkeysFromConfig and provide a default value.
+		// The default value is used as a fallback if the config file does not include a matching hotkey.
+		const {
+			SHOW_TOOLBAR = ["ctrl", "alt", "t"],
+			HIDE_TOOLBAR = ["ctrl", "alt", "h"],
+			BRING_WINDOWS_TO_FRONT = ["ctrl", "alt", "up"],
+			SHOW_SEARCH = ["ctrl", "alt", "f"],
+		} = hotkeysFromConfig
 
-		FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", "h"], () => {
-			this.hideToolbar();
-		});
-		FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.alt, keys.up], () => {
-			FSBL.Clients.LauncherClient.bringWindowsToFront()
-		});
-		FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.alt, keys.down], () => {
-			FSBL.Clients.WorkspaceClient.minimizeAll()
-		});
-		FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.alt, keys.f], () => {
-			this.showToolbarAtFront()
-			this.Store.setValue({ field: "searchActive", value: true });
-		});
+		// show the toolbar
+		FSBL.Clients.HotkeyClient.addGlobalHotkey(
+			SHOW_TOOLBAR,
+			() => {
+				this.Store.setValue({ field: "searchActive", value: false });
+				this.showToolbarAtFront();
+			});
+
+		// hide the toolbar
+		FSBL.Clients.HotkeyClient.addGlobalHotkey(
+			HIDE_TOOLBAR,
+			() => {
+				this.hideToolbar();
+			});
+
+		// bring all finsemble component windows to front
+		FSBL.Clients.HotkeyClient.addGlobalHotkey(
+			BRING_WINDOWS_TO_FRONT,
+			() => {
+				FSBL.Clients.LauncherClient.bringWindowsToFront()
+			});
+
+		// maximize all finsemble component windows
+		FSBL.Clients.HotkeyClient.addGlobalHotkey(
+			BRING_WINDOWS_TO_FRONT,
+			() => {
+				FSBL.Clients.WorkspaceClient.minimizeAll()
+			})
+
+		// open the search bar and give it focus
+		FSBL.Clients.HotkeyClient.addGlobalHotkey(
+			SHOW_SEARCH,
+			() => {
+				this.showToolbarAtFront()
+				this.Store.setValue({ field: "searchActive", value: true });
+			});
+
 		done();
 	}
+
 	addListener(params, cb) {
 		this.Store.addListener(params, cb);
 	}
+
 	/**
 	 *
 	 *
@@ -310,7 +335,7 @@ class _ToolbarStore {
 					self.addListeners(done, self);
 				},
 				function (done) {
-					self.loadHotkeysFromConfig(done, self);
+					self.loadHotkeysFromConfig(done);
 				},
 				function (done) {
 					self.listenForWorkspaceUpdates();
