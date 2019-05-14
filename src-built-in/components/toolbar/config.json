@@ -56,10 +56,25 @@
         }
     ],
     "hotkeys": {
-        "SHOW_SEARCH": [
+        "showToolbar": [
+            "ctrl",
+            "alt",
+            "t"
+        ],
+        "hideToolbar": [
+            "ctrl",
+            "alt",
+            "h"
+        ],
+        "bringWindowsToFront": [
             "ctrl",
             "alt",
             "."
+        ],
+        "showSearch": [
+            "ctrl",
+            "alt",
+            "h"
         ]
     }
 }

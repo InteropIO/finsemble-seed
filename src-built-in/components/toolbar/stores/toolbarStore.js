@@ -247,11 +247,10 @@ class _ToolbarStore {
 
 
 	/**
- * Load the menus from the config.json. If there are no items in config.json, menus are loaded from the Finsemble Config `finsemble.menus` item.
+ * Load the hotkeys from the config.json. If there are no items in config.json, hotkeys use the defaults in the current file.
  *
  *
  * @param {any} done
- * @param {any} self
  * @memberof _ToolbarStore
  */
 	loadHotkeysFromConfig(done) {
@@ -264,15 +263,15 @@ class _ToolbarStore {
 		// destructure from hotkeysFromConfig and provide a default value.
 		// The default value is used as a fallback if the config file does not include a matching hotkey.
 		const {
-			SHOW_TOOLBAR = ["ctrl", "alt", "t"],
-			HIDE_TOOLBAR = ["ctrl", "alt", "h"],
-			BRING_WINDOWS_TO_FRONT = ["ctrl", "alt", "up"],
-			SHOW_SEARCH = ["ctrl", "alt", "f"],
+			showToolbar = ["ctrl", "alt", "t"],
+			hideToolbar = ["ctrl", "alt", "h"],
+			bringWindowsToFront = ["ctrl", "alt", "up"],
+			showSearch = ["ctrl", "alt", "f"],
 		} = hotkeysFromConfig
 
 		// show the toolbar
 		FSBL.Clients.HotkeyClient.addGlobalHotkey(
-			SHOW_TOOLBAR,
+			showToolbar,
 			() => {
 				this.Store.setValue({ field: "searchActive", value: false });
 				this.showToolbarAtFront();
@@ -280,28 +279,28 @@ class _ToolbarStore {
 
 		// hide the toolbar
 		FSBL.Clients.HotkeyClient.addGlobalHotkey(
-			HIDE_TOOLBAR,
+			hideToolbar,
 			() => {
 				this.hideToolbar();
 			});
 
 		// bring all finsemble component windows to front
 		FSBL.Clients.HotkeyClient.addGlobalHotkey(
-			BRING_WINDOWS_TO_FRONT,
+			bringWindowsToFront,
 			() => {
 				FSBL.Clients.LauncherClient.bringWindowsToFront()
 			});
 
 		// maximize all finsemble component windows
 		FSBL.Clients.HotkeyClient.addGlobalHotkey(
-			BRING_WINDOWS_TO_FRONT,
+			bringWindowsToFront,
 			() => {
 				FSBL.Clients.WorkspaceClient.minimizeAll()
 			})
 
 		// open the search bar and give it focus
 		FSBL.Clients.HotkeyClient.addGlobalHotkey(
-			SHOW_SEARCH,
+			showSearch,
 			() => {
 				this.showToolbarAtFront()
 				this.Store.setValue({ field: "searchActive", value: true });
