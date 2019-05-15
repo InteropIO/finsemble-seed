@@ -715,9 +715,9 @@
 				}
 			}
 		},
-		"App Catalog": {
+		"App Catalog old": {
 			"window": {
-				"url": "$applicationRoot/components/appCatalog2/appCatalog.html",
+				"url": "$applicationRoot/components/appCatalog/appCatalog.html",
 				"affinity": "systemComponents",
 				"frame": false,
 				"top": "center",
@@ -755,7 +755,7 @@
 				}
 			}
 		},
-		"App Catalog2": {
+		"App Catalog": {
 			"window": {
 				"url": "$applicationRoot/components/appCatalog2/appCatalog.html",
 				"affinity": "systemComponents",
