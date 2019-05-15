@@ -717,7 +717,7 @@
 		},
 		"App Catalog": {
 			"window": {
-				"url": "$applicationRoot/components/appCatalog/appCatalog.html",
+				"url": "$applicationRoot/components/appCatalog2/appCatalog.html",
 				"affinity": "systemComponents",
 				"frame": false,
 				"top": "center",
