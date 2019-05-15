@@ -14,13 +14,27 @@
 				"height": 432,
 				"options":{
 					"alwaysOnTop": true,
+					"maxWidth": 1000,
+					"minWidth": 150,
+					"minHeight": 300,
+					"maxHeight": 700,
+					"minimizable": false,
+					"maximizable": false,
+					"resizable": true,
+					"saveWindowState": true,
+					"frame": false,
+					"opacity": 0.5,
+					"icon": "https://image.shutterstock.com/image-vector/welcome-poster-spectrum-brush-strokes-260nw-1146069941.jpg",
+
+					
+					"autoShow": true,
 					"accelerator": {
 						"devtools": true,
 						"reload": true,
 						"reloadIgnoringCache": true,
 						"zoom": true
 					},
-					"aspectRatio": 2,
+					"aspectRatio": 5,
 					"contentNavigation": {
 						"whiteList": [
 							"https://www.google.com"
@@ -31,38 +45,17 @@
 						"height": 20,
 						"width": 20
 					},
-					"customData": "Random test custom data",
+                    "customData": "Random test custom data",
 					"defaultHeight": 500,
 					"defaultWidth": 1000,
-					"maxWidth": 1000,
-					"minWidth": 150,
-					"backgroundColor": "#28a745",
-					"minHeight": 300,
-					"maxHeight": 700,
-					"minimizable": false,
-					"maximizable": false,
-					"resizable": true,
-					"saveWindowState": false,
-					"closable": false,
-					"transparent": false,
-					"shadow": true,
-					"smallWindow": true,
-					"url": "about:openfin",
-					"uuid": 123456789,
+					"name": "Joe Rogan",
+					"defaultCentered": true,
+					"resizeRegion": {
+						"bottomRightCorner": 100
+					},
+					"shadow": false,
 					"waitForPageLoad": false,
-					"hasShadow": true,
-					"name": "Tom Bombadil",
-					"opacity": 0.5,
-					"movable": false,
-					"titleBarStyle": "customButtonsOnHover",
-
-					"focusable": false,
-					"center": true,
-					"title": "Aragorn",
-					"kiosk": true,
-					"frame": true,
-					"fullscreenable": true,
-					"skipTaskBar": false
+					"backgroundColor": "#f37325"
 				}
 			},
 			"component": {
