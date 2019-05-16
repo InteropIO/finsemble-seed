@@ -5,25 +5,21 @@
   --font-family: 'Roboto', sans-serif;
   --primary-font-color: white;
   --secondary-font-color: black;
-
   --primary-font-weight: 300;
   --secondary-font-weight: 500;
   --tertiary-font-weight: bold;
 
   /* Color Theme */
-  --lo-brown:#5D4F4C;
+
   --bronze: rgb(223, 174, 114);
   --bronze-lighter: rgb(238, 172, 92);
   --bronze-lightest:#ffd199;
-  /* --bronze: #936C56; */
-  /* --brown-shade:#6F625A; */
   --brown-shade:#5D4F4C;
-  --light-grey: #76777B;
   --orange: rgb(167, 102, 11);
-  --grey:#292929;
-  --dark-charcoal:#1C1C1C;
   --charcoal: #212529;
-  --contrast: #1A5071;
+
+  /* === highlight / hover colors === */
+
   /* background colors */
   --hover-color-light:var(--bronze);
   --hover-color-dark:var(--charcoal);
@@ -31,9 +27,10 @@
   --hover-text-light: var(--bronze);
   --hover-text-dark:  var(--charcoal);
 
+  --primary-theme-color:var(--bronze);
+  --secondary-theme-color:var(--charcoal);
 
-
-  --primary-accent-color: var(--bronze);
+  --primary-accent-color: var(--primary-theme-color);
   --secondary-accent-color: var(--brown-shade);
   --tertiary-accent-color: var(--orange);
 
@@ -46,6 +43,7 @@
   --tertiary-background-color: var(--brown-shade);
 
   --scrollbar-color: var(--gray);
+
 /* Toolbar */
   --toolbar-font-color: var(--bronze);
   --toolbar-brand-logo-width: auto;
@@ -54,80 +52,40 @@
 
   /* App Menu */
   --menu-hover: rgba(223, 174, 114, 0.62);
-
-  --appMenu-font-color: var(--primary-font-color);
-  --appMenu-scrollbar-color: var(--slate1);
-  --appMenu-leftNav-background-color: var(--slate5);
-  --appMenu-close-hover-color-light: var(--secondary-negative-color);
   --appMenu-leftNav-highlighter-hover: var(--hover-color-light);
   --appMenu-leftNav-highlighter: var(--hover-color-light);
-  --appMenu-leftNav-icon-color: var(--blue3);
-  --appMenu-leftNav-contextMenu-background-color: var(--secondary-background-color);
-  --appMenu-background-color: var(--charcoal);
-  --appMenu-actions-menu-background-color: var(--secondary-background-color);
+  --appMenu-background-color: var(--secondary-theme-color);
   --appMenu-app-item-hover-background-color: var(--hover-color-light);
-  --appMenu-app-item-bottom-border-color: rgba(98, 116, 132, 0.4);
-  --appMenu-app-favorite-color: var(--yellow3);
-  --appMenu-app-icon-color: var(--tertiary-accent-color);
-  --appMenu-sort-inactive-border-color: var(--gray5);
-  --appMenu-sort-active-color: var(--primary-accent-color);
-  --appMenu-search-input-inactive-color: var(--blue4);
-  --appMenu-search-input-active-color: var(--blue2);
   --appMenu-edit-icon-hover-color-light: var(--orange);
 
   /* Menus */
-  --menu-font-size: 14px;
-  --menu-font-weight: var(--primary-font-weight);
-  --menu-font-color: var(--primary-font-color);
-  --menu-active-workspace-font-weight: var(--secondary-font-weight);
-
-  --menu-background-color: var(--secondary-background-color);
   --menu-actions-background-color: var(--brown-shade);
   --menu-actions-hover-color-light: var(--hover-color-light);
-  --menu-content-background-color: var(--secondary-background-color);
   --menu-content-hover-color-light: var(--hover-color-dark);
-  /* both hover colors for menus */
   --menu-content-hover-color:var(--menu-hover);
   --menu-actions-hover-color:var(--menu-hover);
-
-  --menu-pin-border-color: var(--secondary-accent-color);
-  --menu-pin-background-color: var(--primary-accent-color);
-  --menu-pin-background-hover-color-light: var(--secondary-accent-color);
-  --menu-favorite-hover-color-light: var(--yellow4);
-  --menu-favorite-active-hover-color-light: var(--yellow1);
-  --menu-delete-background-hover-color-light: var(--secondary-negative-color);
-
-  --menu-linker-selected-font-color: var(--primary-font-color);
-  --menu-linker-selected-font-size: 18px;
-
-
 }
+
+/* Manual overrides */
 
 .finsemble-toolbar-drag-handle  g {
-    fill:var(--bronze);
+    fill:var(--primary-theme-color);
 }
 .menu{
-  background-color: var(--charcoal);
+  background-color: var(--secondary-theme-color);
 }
-.menu-secondary{
-  background-color: var(--brown-shade);
-}
-
 .finsemble-toolbar-button[data-hover=true] {
-color:var(--bronze-lightest)
+color: var(--primary-theme-color);
+/* you may need to change the filter if you pick a dark background color */
+filter: brightness(120%);
 }
 
 /* welcome component */
 .button {
-  background-color: var(--bronze);
-  color:var(--charcoal)
+  background-color: var(--primary-theme-color);
+  color:var(--secondary-theme-color)
 }
 .button:hover {
-  background-color: var(--bronze-lighter);
+  background-color: var(--primary-theme-color);
+  filter: brightness(120%);
 }
-
-/* hover for all primary and secondary section for menus,
- easier to set this here due to many menus */
-/* .menu-secondary :hover{
-  background-color: var(--menu-hover);
-} */
