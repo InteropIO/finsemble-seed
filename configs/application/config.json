@@ -12,9 +12,6 @@
 			"IndexedDBAdapter": "$applicationRoot/adapters/indexedDBAdapter.js"
 		}
 	},
-	"FDC3Comment": "swap values for FDC3Server with LOCAL_FDC3Server after running it.",
-	"FDC3Server": "https://fpe.finsemble.com/v1/",
-	"aFDC3Server": "http://localhost:3030/v1/",
 	"servicesConfig": {
 		"distributedStore": {
 			"initialStores": [
@@ -163,7 +160,8 @@
 		"alwaysOnTopIcon": false,
 		"showTabs": true,
 		"showNativeTabs": true,
-		"floatingTitlebarComponent": "Floating Titlebar"
+		"floatingTitlebarComponent": "Floating Titlebar",
+		"deliveryMechanism": "preload"
 	},
 	"betaFeatures": {
 	},
@@ -203,15 +201,11 @@
 					"storageService",
 					"searchService"
 				]
-			},
-			{
-				"agentLabel": "dockingService",
-				"services": [
-					"dockingService"
-				]
 			}
 		]
 	},
+	"//appDirectoryEndpoint": "If you'd like to test the server locally, point 'appDirectoryEndpoint' to http://localhost:3030/v1/ and make sure to run the AppD project.",
+	"appDirectoryEndpoint": "https://fpe.finsemble.com/v1/",
 	"globalHotkeys": {},
 	"//": "importConfig contains components that are necessary to start Finsemble. All other components are loaded dynamically. See server/auth/test.json",
 	"importConfig": [
@@ -219,6 +213,7 @@
 		"$applicationRoot/configs/application/components.json",
 		"$applicationRoot/configs/application/workspaces.json",
 		"$applicationRoot/configs/application/workspaceTemplates.json",
-		"$applicationRoot/configs/application/services.json"
+		"$applicationRoot/configs/application/services.json",
+		"$applicationRoot/configs/application/securityPolicies.json"
 	]
 }
