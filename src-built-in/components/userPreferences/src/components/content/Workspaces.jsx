@@ -451,8 +451,6 @@ export default class Workspaces extends React.Component {
 
 		if (this.state.focusedWorkspace === FSBL.Clients.WorkspaceClient.activeWorkspace.name) {
 			deleteButtonClasses += " disabled-individual-workspace-action";
-			allowDelete = false;
-			deleteTooltip = "Cannot delete the active workspace";
 		}
 
 		if (this.state.focusedWorkspace === '') {
