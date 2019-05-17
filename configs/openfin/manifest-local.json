@@ -58,8 +58,8 @@
     "fileName": "ChartIQ-local-installer",
     "appAssets": [
         {
-            "src": "https://files.chartiq.com/finsemble/Assimilation_3_7_0_pre1.zip",
-            "version": "3.7.0-pre1",
+            "src": "https://files.chartiq.com/finsemble/Assimilation_3_8_3.zip",
+            "version": "3.8.3",
             "alias": "assimilation",
             "target": "AssimilationMain.exe"
         }
@@ -73,7 +73,7 @@
             "$applicationRoot/configs/application/config.json"
         ],
         "IAC": {
-            "serverAddress": "wss://localhost.chartiq.com:3376"
+            "serverAddress": "ws://127.0.0.1:3376"
         }
     }
 }
