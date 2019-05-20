@@ -1,9 +1,4 @@
 window.launchTutorial = function launchTutorial() {
-	fin.desktop.System.openUrlWithBrowser("https://www.chartiq.com/tutorials/?slug=finsemble-seed-project", function () {
-		//console.log("successfully launched docs");
-	}, function (err) {
-		//console.log("failed to launch docs");
-	});
 }
 
 window.quitFinsemble = function quitFinsemble() {
@@ -18,5 +13,14 @@ if (window.FSBL && FSBL.addEventListener) {
 }
 
 function init() {
-
+	console.log("Adding Broadcast Listener");
+	FSBL.Clients.RouterClient.addListener("broadcast", function (error, response) {
+		if (error) {
+			console.log("Desktop Agent Broadcast Listener Error: " + JSON.stringify(error));
+		} else {
+			console.log("Desktop Agent Listener Received Transmit: " + JSON.stringify(response));
+			console.log("Broadcast Received:", response);
+		}
+	});
+		
 }

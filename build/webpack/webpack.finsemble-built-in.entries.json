@@ -63,6 +63,10 @@
 		"output": "components/welcome/welcome",
 		"entry": "./src-built-in/components/welcome/welcome.js"
 	},
+	"welcome_sender": {
+		"output": "components/welcome_sender/welcome_sender",
+		"entry": "./src-built-in/components/welcome_sender/welcome_sender.js"
+	},
 	"appCatalog": {
 		"output": "components/appCatalog/appCatalog",
 		"entry": "./src-built-in/components/appCatalog/src/app.jsx"
