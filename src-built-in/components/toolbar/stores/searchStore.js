@@ -233,13 +233,6 @@ var Actions = {
 		}
 	},
 
-	setBlurSearchInputHandler(blurHandler) {
-		if (typeof blurHandler !== 'function') {
-			FSBL.Clients.Logger.error("Parameter blurHandler must be a function.");
-		} else {
-			blurSearchInputHandler = blurHandler;
-		}
-	},
 
 	/**
 	 * Perform the search action
