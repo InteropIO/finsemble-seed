@@ -50,7 +50,7 @@ var Actions = {
 	},
 	setFocus(bool, target) {
 		focus = bool;
-		if (!menuWindow) return;
+		if (!menuWindow) return Actions.handleClose();
 		if (bool) {
 			if (window.outerWidth < 400) {
 				finsembleWindow.getBounds((err, bounds) => {
@@ -76,11 +76,11 @@ var Actions = {
 				Actions.positionSearchResults();
 			});
 
+		} else {
+			var sel = window.getSelection();
+			sel.removeAllRanges();
 		}
 		activeSearchBar = false;
-		if (!menuWindow) {
-			return Actions.handleClose();
-		}
 		menuWindow.isShowing(function (err, showing) {
 			if (err) { FSBL.Clients.Logger.error(`menuWindow.isShowing failed, error:`, err); }
 			//if (!showing) return//console.log("not showing")
