@@ -135,6 +135,18 @@
 				"shift",
 				"L"
 			]
+		},
+		"storage": {
+			"defaultStorage": "IndexedDBAdapter",
+			"topicToDataStoreAdapters": {
+				"finsemble": "IndexedDBAdapter",
+				"finsemble.workspace": "IndexedDBAdapter",
+				"finsemble.workspace.cache": "IndexedDBAdapter"
+			},
+			"dataStoreAdapters": {
+				"LocalStorageAdapter": "$applicationRoot/adapters/localStorageAdapter.js",
+				"IndexedDBAdapter": "$applicationRoot/adapters/indexedDBAdapter.js"
+			}
 		}
 	},
 	"preferences": {
