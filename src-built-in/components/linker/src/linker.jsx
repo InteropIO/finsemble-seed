@@ -95,7 +95,7 @@ class Linker extends React.Component {
 			return (<div key={item.name + index} className={groupClass} style={style} onClick={function () {
 				self.channelClicked(item, activeChannel);
 			}}>
-				{LinkerStore.isAccessibleLinker() ? <div className="channel-label">{index}</div> : null} {activeChannel ? activeChannelIndicator : null}
+				{LinkerStore.isAccessibleLinker() ? <div className="channel-label">{item.label}</div> : null} {activeChannel ? activeChannelIndicator : null}
 			</div>);
 		});
 

@@ -113,7 +113,7 @@ export default class LinkerGroups extends React.Component {
         let channels = self.state.channels.map(function (channel, index) {
             let classNames = `linker-group${accessibleLinker ? " linker-group-accessible" : ""} linker-${channel.label}`;
             return (<div key={channel.name} className={classNames} style={{ background: channel.color }} onMouseUp={function (e) { self.onClick(e, channel.name) }}>
-                {accessibleLinker ? index : null}
+                {accessibleLinker ? channel.label : null}
             </div>);
         });
         return (<div className="linker-groups">
