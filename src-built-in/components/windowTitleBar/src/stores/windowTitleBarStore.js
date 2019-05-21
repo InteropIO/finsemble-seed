@@ -148,13 +148,6 @@ var Actions = {
 
 		FSBL.Clients.RouterClient.subscribe("Finsemble.WorkspaceService.groupUpdate", onDockingGroupUpdate);
 
-		/**
-		 * Catches a double-click on the title bar. If you don't catch this, openfin will invoke the OS-level maximize, which will put the window on top of the toolbar. `clickMaximize` will fill all of the space that finsemble allows.
-		 */
-		FSBL.Clients.WindowClient.finWindow.addEventListener("maximized", function () {
-			self.clickMaximize();
-		});
-
 		//default title.
 		windowTitleBarStore.setValue({ field: "Main.windowTitle ", value: FSBL.Clients.WindowClient.getWindowTitle() });
 
@@ -186,7 +179,6 @@ var Actions = {
 			} else {
 				//If tabbing is enabled system-wide, look to the global config for its value. Then look to the local component's config.
 
-
 				//This is the global window manager config.
 				if (typeof windowTitleBarConfig.showTabs !== 'boolean') {
 					windowTitleBarStore.setValue({ field: "showTabs", value: globalWindowManagerConfig.showTabs });
@@ -195,6 +187,31 @@ var Actions = {
 				if (windowTitleBarConfig.showTabs || windowTitleBarConfig.showTabs === false) {
 					windowTitleBarStore.setValue({ field: "showTabs", value: windowTitleBarConfig.showTabs });
 				}
+
+				//Once the above has been checked the individual component config is checked for customData.foreign.services[windowService || dockingService][!ignoreTilingAndTabbingRequests || allowTabbing]
+				let showTabs = true;
+				finsembleWindow.getOptions((err, opts) => {
+					if (opts.customData && opts.customData.foreign && opts.customData.foreign.services) {
+						if (opts.customData.foreign.services.windowService) {
+							if (opts.customData.foreign.services.windowService.allowTabbing !== undefined) {
+								showTabs = opts.customData.foreign.services.windowService.allowTabbing;
+							} else if (opts.customData.foreign.services.windowService.ignoreTilingAndTabbingRequests != undefined) {
+								showTabs = !opts.customData.foreign.services.windowService.ignoreTilingAndTabbingRequests;
+							}
+						} else if (opts.customData.foreign.services.dockingService) {
+							if (opts.customData.foreign.services.dockingService.allowTabbing !== undefined) {
+								showTabs = opts.customData.foreign.services.dockingService.allowTabbing;
+							} else if (opts.customData.foreign.services.dockingService.ignoreTilingAndTabbingRequests != undefined) {
+								showTabs = !opts.customData.foreign.services.dockingService.ignoreTilingAndTabbingRequests;
+							}
+						}
+					}
+
+					windowTitleBarStore.setValue({ field: 'showTabs', value: showTabs });
+				});
+
+
+
 			}
 		});
 

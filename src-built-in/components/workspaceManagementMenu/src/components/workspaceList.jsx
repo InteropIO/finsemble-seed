@@ -59,7 +59,7 @@ export default class WorkspaceManagementList extends React.Component {
 					method: self.removeWorkspace
 				},
 				{
-					iconClass: "ff-pin",
+					iconClass: "ff-favorite",
 					method: self.togglePin
 				}
 			];

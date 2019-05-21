@@ -44,7 +44,8 @@ export default class Toolbar extends React.Component {
 		super(props);
 		this.state = {
 			sections: ToolbarStore.getSectionsFromMenus(),
-			finWindow: fin.desktop.Window.getCurrent()
+			finWindow: fin.desktop.Window.getCurrent(),
+			dockingEnabled: true
 		};
 		this.bindCorrectContext();
 	}
@@ -62,6 +63,11 @@ export default class Toolbar extends React.Component {
 	componentDidMount() {
 		//console.log("this", this)
 		this.state.finWindow.bringToFront();
+		FSBL.Clients.ConfigClient.getValues({ field: "finsemble.components.Toolbar.window.dockable" }, (err, dockable) => {
+			this.setState({
+				dockingEnabled: dockable
+			});
+		});
 	}
 
 	componentWillMount() {
@@ -173,9 +179,9 @@ export default class Toolbar extends React.Component {
 		//console.log("Toolbar Render ");
 		if (!this.state.sections) return;
 		return (<FinsembleToolbar onDragStart={this.moveToolbar} onDragEnd={this.onPinDrag}>
-			<DragHandle />
+			{this.state.dockingEnabled && <DragHandle />} {/*If this is not dockable, no need to show the drag handle */}
 			{this.getSections()}
-			<div className='resize-area' />
+			{this.state.dockingEnabled && <div className='resize-area' />} {}
 		</FinsembleToolbar>);
 	}
 

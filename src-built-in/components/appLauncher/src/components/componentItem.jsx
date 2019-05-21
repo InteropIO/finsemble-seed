@@ -102,7 +102,7 @@ export default class componentItem extends React.Component {
 				}
 			}
 			isPinnable={true}
-			pinIcon={'ff-pin'}
+			pinIcon={'ff-favorite'}
 			activePinModifier={'finsemble-item-pinned'}
 			isPinned={this.props.isPinned}
 			pinAction={function () {

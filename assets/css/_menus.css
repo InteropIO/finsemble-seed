@@ -104,35 +104,49 @@ body.menu {
 }
 
 .ff-delete:hover {
-    color: var(--menu-font-color);
-    background-color: var(--menu-delete-background-hover-color);
+    color: var(--menu-delete-background-hover-color);
+    /* background-color: var(--menu-delete-background-hover-color); */
     border-radius: 4px;
 }
 
 .ff-pin:hover {
     color: var(--menu-font-color);
     width: 22px;
-    border: 1px solid var(--menu-pin-border-color);
+    /* border: 1px solid var(--menu-pin-border-color); */
     border-radius: 4px;
+}
+
+.menu-item-action .ff-favorite {
+    padding: 4px 2px 1px 1px;
+    width: 22px;
+    text-align: center;
+    border: 1px solid transparent;
+} 
+
+.ff-favorite:hover {
+    color: var(--menu-favorite-hover-color);
+    width: 22px;
+    /* border: 1px solid var(--menu-pin-border-color); */
+    /* border-radius: 4px; */
 }
 
 .finsemble-item-pinned {
-    color: var(--menu-font-color);
+    color: var(--menu-favorite-hover-color);
     width: 22px;
-    background-color: var(--menu-pin-background-color);
-    border-radius: 4px;
+    /* background-color: var(--menu-pin-background-color); */
+    /* border-radius: 4px; */
 }
 
 .finsemble-item-pinned:hover {
-    color: var(--menu-font-color);
+    color: var(--menu-favorite-active-hover-color);
     width: 22px;
-    background-color: var(--menu-pin-background-hover-color);
+    /* background-color: var(--menu-pin-background-hover-color); */
     border-radius: 4px;
 }
 
 .ff-delete:hover {
-    color: var(--menu-font-color);
-    background-color: var(--menu-delete-background-hover-color);
+    color: var(--menu-delete-background-hover-color);
+    /* background-color: var(--menu-delete-background-hover-color); */
     border-radius: 4px;
 }
 

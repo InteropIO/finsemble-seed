@@ -7,9 +7,9 @@ let ToolbarStore, appLauncherStore, windowGroupStore;
 import async from "async";
 var COMPONENT_UPDATE_CHANNEL;
 function uuidv4() {
-	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+	return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
 		var r = Math.random() * 16 | 0,
-			v = c === 'x' ? r : r & 0x3 | 0x8;
+			v = c === "x" ? r : r & 0x3 | 0x8;
 		return v.toString(16);
 	});
 }
@@ -34,7 +34,7 @@ var Actions = {
 				throw new Error(err);
 			}
 			//Each AppLauncher
-			FSBL.Clients.Logger.debug("getComponentList from LauncherClient", response)
+			FSBL.Clients.Logger.debug("getComponentList from LauncherClient", response);
 			Actions.filterComponents(response);
 			if (cb) {
 				cb();
@@ -48,7 +48,7 @@ var Actions = {
 		//When an app launcher button is clicked, it sends over the types of components that the app launcher can spawn. We assign that data to an object in the windowClient, and then use that to render the app launcher.
 		FSBL.Clients.RouterClient.subscribe(COMPONENT_UPDATE_CHANNEL, function (err, response) {
 
-			if (!FSBL.Clients.WindowClient.options.customData.spawnData) FSBL.Clients.WindowClient.options.customData.spawnData = {};
+			if (!FSBL.Clients.WindowClient.options.customData.spawnData) { FSBL.Clients.WindowClient.options.customData.spawnData = {}; }
 			Object.assign(FSBL.Clients.WindowClient.options.customData.spawnData, response.data);
 			if (firstTime) { // only update component list the first time to eliminate re-rendering the menu
 				Actions.getComponentList(cb);
@@ -67,6 +67,7 @@ var Actions = {
 	},
 	//get adhoc components that the user created from storage.
 	getUserDefinedComponentList(cb) {
+		return cb();
 		var self = Actions;
 		FSBL.Clients.StorageClient.get({ topic: "finsemble", key: "userDefinedComponents" }, function (err, response) {
 			var data = response;
@@ -168,7 +169,7 @@ var Actions = {
 			}
 		}
 
-		self.componentList = {}
+		self.componentList = {};
 		// deal with groups
 		for (let componentType in componentList) {
 			let config = components[componentType];
@@ -182,12 +183,14 @@ var Actions = {
 						self.componentList[componentGroup] = {
 							group: componentGroup,
 							list: {}
-						}
+						};
 					}
 					self.componentList[componentGroup].list[componentType] = componentList[componentType];
-					if (componentList[componentType].component.windowGroup) componentList[componentType].params = {
-						groupName: componentList[componentType].component.windowGroup
-					}
+					if (componentList[componentType].component.windowGroup) {
+						componentList[componentType].params = {
+							groupName: componentList[componentType].component.windowGroup
+						};
+					};
 				}
 			}
 			config.component.type = componentType;
@@ -204,7 +207,7 @@ var Actions = {
 		var fontIcon;
 		try {
 			if (componentToToggle.group) {
-				fontIcon = "ff-ungrid"
+				fontIcon = "ff-ungrid";
 			} else {
 				fontIcon = componentToToggle.foreign.components.Toolbar.iconClass;
 			}
@@ -220,11 +223,11 @@ var Actions = {
 		}
 
 		//No dots allowed in keys in the global store, so escaping dots
-		var componentTypeDotRemove = componentType.replace(/[.]/g, "^DOT^")
+		var componentTypeDotRemove = componentType.replace(/[.]/g, "^DOT^");
 
-		var pins = appLauncherStore.getValue('pins');
+		var pins = appLauncherStore.getValue("pins");
 		let params = { addToWorkspace: true, monitor: "mine" };
-		if (componentToToggle.component && componentToToggle.component.windowGroup) params.groupName = componentToToggle.component.windowGroup;
+		if (componentToToggle.component && componentToToggle.component.windowGroup) { params.groupName = componentToToggle.component.windowGroup; }
 		var thePin = {
 			type: "componentLauncher",
 			label: componentType,
@@ -260,6 +263,8 @@ var Actions = {
 		FSBL.Clients.DialogManager.open("yesNo", {
 			title: "Delete this App?",
 			question: "Are you sure you would like to delete \"" + componentName + "\"?",
+			affirmativeResponseLabel: "Delete",
+			showNegativeButton: false
 		}, function (err, response) {
 			// If the user chooses "affirmative" then delete the component.
 			// We should never get an error, but if we do then go ahead and delete the component too.
@@ -305,9 +310,13 @@ var Actions = {
 	//Spawn a component.
 	launchComponent(config, params, cb) {
 		//Actions.hideWindow();
-		let defaultParams = { addToWorkspace: true, monitor: "mine" };
+		console.log("launchComponent");
+		let defaultParams = { addToWorkspace: true, monitor: "mine", options: { customData: {} } };
 		params = Object.assign(defaultParams, params);
-		if (config.component.windowGroup) params.groupName = config.component.windowGroup;
+		if (!params.options.customData) { params.options.customData = {}; }
+		if (!params.options.customData.component) { params.options.customData.component = {}; }
+		params.options.customData.component.isUserDefined = true;
+		if (config.component.windowGroup) { params.groupName = config.component.windowGroup; }
 		FSBL.Clients.LauncherClient.spawn(config.component.type, params, function (err, windowInfo) {
 			if (cb) {
 				cb(windowInfo.windowIdentifier);
@@ -324,13 +333,13 @@ var Actions = {
 			if (value) {
 				currentGroup = Math.max(...Object.keys(value)) + 1;
 			}
-			let groupName = groupPrefix + '.' + currentGroup;
+			let groupName = groupPrefix + "." + currentGroup;
 			FSBL.Clients.LauncherClient.createWindowGroup({
 				groupName: groupName
 			}, function (err, response) {
 				cb(groupName);
-			})
-		})
+			});
+		});
 	}
 };
 
@@ -391,7 +400,7 @@ var keys = {};
 function setupHotkeys(cb) {
 
 	FSBL.Clients.RouterClient.subscribe("humanInterface.keydown", function (err, response) {
-		if (!keys[response.data.key]) keys[response.data.key] = {};
+		if (!keys[response.data.key]) { keys[response.data.key] = {}; }
 		keys[response.data.key] = true;
 		if (keys[160] && keys[162] && keys[68]) {
 			if (Actions.componentList["Advanced Chart"]) {
@@ -400,7 +409,7 @@ function setupHotkeys(cb) {
 		}
 	});
 	FSBL.Clients.RouterClient.subscribe("humanInterface.keyup", function (err, response) {
-		if (!keys[response.data.key]) keys[response.data.key] = {};
+		if (!keys[response.data.key]) { keys[response.data.key] = {}; }
 		keys[response.data.key] = false;
 	});
 

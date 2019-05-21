@@ -8,6 +8,8 @@ import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
 import { FinsembleDnDContext, FinsembleDroppable } from '@chartiq/finsemble-react-controls';
 import { Store, Actions } from "../../stores/windowTitleBarStore";
 import Title from "../../../../common/windowTitle";
+import * as _throttle from "lodash.throttle";
+
 const PLACEHOLDER_TAB = {
     windowName: "",
     uuid: "",
@@ -18,7 +20,6 @@ let TAB_WIDTH = 300;
 const ICON_AREA = 29;
 const CLOSE_BUTTON_MARGIN = 22;
 const MINIMUM_TAB_SIZE = 100;
-
 export default class TabRegion extends React.Component {
     constructor(props) {
         super(props);
@@ -61,6 +62,7 @@ export default class TabRegion extends React.Component {
         this.onTabDraggedOver = this.onTabDraggedOver.bind(this);
         this.isTabRegionOverflowing = this.isTabRegionOverflowing.bind(this);
         this.onWindowResize = this.onWindowResize.bind(this);
+        this.onWindowResizeThrottled = _throttle(this.onWindowResize, 100);
         this.getTabWidth = this.getTabWidth.bind(this);
         this.setTabListTranslateX = this.setTabListTranslateX.bind(this);
         this.onTabListTranslateChanged = this.onTabListTranslateChanged.bind(this);
@@ -84,8 +86,8 @@ export default class TabRegion extends React.Component {
         return newTabWidth < MINIMUM_TAB_SIZE ? MINIMUM_TAB_SIZE : newTabWidth;
     }
     /**
- * Resize handler. Calculates the space that the center-region is taking up. May be used to scale tabs proportionally.
- */
+     * Resize handler. Calculates the space that the center-region is taking up. May be used to scale tabs proportionally.
+     */
     onWindowResize() {
         let bounds = this.refs.Me.getBoundingClientRect();
         this.setState({
@@ -110,7 +112,7 @@ export default class TabRegion extends React.Component {
         this.setState({
             iAmDragging: true
         });
-        e.dataTransfer.setData("text/plain", JSON.stringify(windowIdentifier));
+        e.dataTransfer.setData("application/fsbl-tab-data", JSON.stringify(windowIdentifier));
         FSBL.Clients.WindowClient.startTilingOrTabbing({
             windowIdentifier: windowIdentifier
         });
@@ -148,7 +150,7 @@ export default class TabRegion extends React.Component {
      */
     extractWindowIdentifier(e) {
         try {
-            let identifier = JSON.parse(e.dataTransfer.getData('text/plain'));
+            let identifier = JSON.parse(e.dataTransfer.getData('application/fsbl-tab-data'));
             //If the "identifier" is formed properly, it'll have this properly. Otherwise, it's something else (e.g., share data, image, etc).
             if (typeof identifier.windowName !== "undefined") {
                 return identifier;
@@ -463,7 +465,7 @@ export default class TabRegion extends React.Component {
     }
 
     componentDidMount() {
-        FSBL.Clients.WindowClient.finsembleWindow.addListener('bounds-set', this.onWindowResize);
+        window.addEventListener("resize", this.onWindowResizeThrottled);
         let boundingBox = this.refs.Me.getBoundingClientRect();
         this.setState({
             boundingBox: boundingBox,
@@ -475,7 +477,7 @@ export default class TabRegion extends React.Component {
         // Store.removeListener({ field: "activeTab" }, this.onActiveTabChanged);
         Store.removeListener({ field: "tabs" }, this.onTabsChanged);
         Store.removeListener({ field: "tabListTranslateX" }, this.onTabListTranslateChanged)
-        FSBL.Clients.WindowClient.finsembleWindow.removeListener('bounds-set', this.onWindowResize);
+        window.removeEventListener("resize", this.onWindowResizeThrottled);
 
     }
     hoverAction(newHoverState) {

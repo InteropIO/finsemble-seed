@@ -4,6 +4,7 @@
 */
 import async from "async";
 import * as menuConfig from '../config.json';
+import * as storeExports from "../stores/searchStore";
 
 import { Actions as SearchActions } from "./searchStore"
 
@@ -24,15 +25,19 @@ class _ToolbarStore {
 	 */
 	createStores(done, self) {
 		FSBL.Clients.DistributedStoreClient.createStore({ store: "Finsemble-ToolbarLocal-Store" }, function (err, store) {
+			if (err) { FSBL.Clients.Logger.error(`DistributedStoreClient.createStore failed for store Finsemble-ToolbarLocal-Store, error:`, err); }
+
 			self.Store = store;
 			let monitors = {};
 			function getMonitor(monitorName, done) {
 				FSBL.Clients.LauncherClient.getMonitorInfo({ monitor: monitorName }, (err, monitorInfo) => {
+					if (err) { FSBL.Clients.Logger.error(`LauncherClient.getMonitorInfo failed for monitor ${monitorName}, error:`, err); }
 					monitors[monitorName] = monitorInfo;
 					done();
 				});
 			}
 			function createStore(err, result) {
+				if (err) { FSBL.Clients.Logger.error(`ToolbarStore.createStores Error:`, err); }
 				let values = {};
 				if (monitors.mine && monitors.primary && monitors.mine.deviceId === monitors.primary.deviceId) {
 					values = { mainToolbar: fin.desktop.Window.getCurrent().name };
@@ -40,6 +45,8 @@ class _ToolbarStore {
 				}
 
 				FSBL.Clients.DistributedStoreClient.createStore({ store: "Finsemble-Toolbar-Store", global: true, values: values }, function (err, store) {
+					if (err) { FSBL.Clients.Logger.error(`DistributedStoreClient.createStore failed for store Finsemble-Toolbar-Store, error:`, err); }
+
 					self.GlobalStore = store;
 					done();
 				});
@@ -60,6 +67,8 @@ class _ToolbarStore {
 	retrieveSelfFromStorage(cb) {
 
 		finsembleWindow.getOptions((err, opts) => {
+			if (err) { FSBL.Clients.Logger.error(`finsembleWindow.getOptions failed, error:`, err); }
+
 			console.info("get options", opts);
 			let hasRightProps = () => {
 				return (opts.hasOwnProperty('customData') &&
@@ -131,6 +140,7 @@ class _ToolbarStore {
 	 */
 	loadMenusFromConfig(done, self) {
 		FSBL.Clients.ConfigClient.getValue({ field: "finsemble.menus" }, function (err, menus) {
+			if (err) { FSBL.Clients.Logger.error(`ConfigClient.getValue failed for finsemble.menus, error:`, err); }
 			if (menus && menus.length) {
 				self.Store.setValue({
 					field: "menus",
@@ -160,18 +170,15 @@ class _ToolbarStore {
 	 */
 	addListeners(done, self) {
 		// menus change - menus come from config
-		FSBL.Clients.DistributedStoreClient.getStore({ store: "Finsemble-Configuration-Store", global: true }, function (err, configStore) {
-			if (configStore) {
-				configStore.addListener({ field: "finsemble.menus" }, function (err, data) {
-					self.Store.setValue({
-						field: "menus",
-						value: data.value
-					});
-					self.getSectionsFromMenus(data.value);
-				});
-			}
-			done();
+		FSBL.Clients.ConfigClient.addListener({ field: "finsemble.menus" }, function (err, data) {
+			if (err) { FSBL.Clients.Logger.error(`DistributedStoreClient.getStore -> configStore.addListener failed for Finsemble-Configuration-Store, error:`, err); }
+			self.Store.setValue({
+				field: "menus",
+				value: data.value
+			});
+			self.getSectionsFromMenus(data.value);
 		});
+		done();
 
 		let onBoundsSet = (bounds) => {
 			bounds = bounds.data ? bounds.data : bounds;
@@ -181,11 +188,6 @@ class _ToolbarStore {
 				value: bounds
 			}, Function.prototype);
 		}
-		let restoreWindow = (e) => {
-			finsembleWindow.restore();
-		}
-		//Immediately restore on maximize.
-		finsembleWindow.addListener("maximized", restoreWindow);
 		finsembleWindow.addListener("bounds-change-end", onBoundsSet)
 
 		FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", "t"], () => {
@@ -199,12 +201,15 @@ class _ToolbarStore {
 
 	/**
 	 * Function to bring toolbar to front (since dockable toolbar can be hidden)
+	 * The search input box will be open and any previous results will be displayed
 	 * @param {boolean} focus If true, will also focus the toolbar
 	 * @memberof _ToolbarStore
 	 */
 	bringToolbarToFront(focus) {
 		var self = this;
-		finsembleWindow.bringToFront(null, () => {
+		finsembleWindow.bringToFront(null, (err) => {
+			if (err) { FSBL.Clients.Logger.error(`finsembleWindow.bringToFront failed, error:`, err); }
+
 			if (focus) {
 				finsembleWindow.focus();
 				self.Store.setValue({ field: "searchActive", value: false });
@@ -258,13 +263,16 @@ class _ToolbarStore {
 		var self = this;
 		if (storeOwner) {
 			let keys = FSBL.Clients.HotkeyClient.keyMap;
-			FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.alt, keys.up], () => {
+			FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.alt, keys.up], (err) => {
+				if (err) { FSBL.Clients.Logger.error(`HotkeyClient.addGlobalHotkey failed, error:`, err); }
 				FSBL.Clients.LauncherClient.bringWindowsToFront()
 			});
 			FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.alt, keys.down], () => {
+				if (err) { FSBL.Clients.Logger.error(`HotkeyClient.addGlobalHotkey failed, error:`, err); }
 				FSBL.Clients.WorkspaceClient.minimizeAll()
 			});
 			FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.alt, keys.f], () => {
+				if (err) { FSBL.Clients.Logger.error(`HotkeyClient.addGlobalHotkey failed, error:`, err); }
 				self.Store.setValue({ field: "searchActive", value: true });
 			});
 		}
@@ -290,6 +298,7 @@ class _ToolbarStore {
 				function (done) {
 					self.loadMenusFromConfig(done, self);
 				},
+				FSBL.Clients.ConfigClient.onReady,
 				function (done) {
 					self.addListeners(done, self);
 				},
@@ -363,6 +372,8 @@ class _ToolbarStore {
 	 */
 	listenForWorkspaceUpdates() {
 		FSBL.Clients.RouterClient.subscribe("Finsemble.WorkspaceService.update", (err, response) => {
+			if (err) { FSBL.Clients.Logger.error(`RouterClient.subscribe failed for Finsemble.WorkspaceService.update, error:`, err); }
+
 			this.setWorkspaceMenuWindowName(response.data.activeWorkspace.name);
 			this.Store.setValue({ field: "activeWorkspaceName", value: response.data.activeWorkspace.name });
 			if (response.data.reason && response.data.reason === "workspace:load:finished") {
