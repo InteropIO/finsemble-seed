@@ -77,7 +77,7 @@ var Actions = {
 			});
 
 		} else {
-			var sel = window.getSelection();
+		const sel = window.getSelection();
 			sel.removeAllRanges();
 		}
 		activeSearchBar = false;
