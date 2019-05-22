@@ -179,7 +179,6 @@ var Actions = {
 	 * @param {*} e
 	 */
 	handleClose(e) {
-		if (!menuWindow) { return; }
 		menuWindow.isShowing(function (err, showing) {
 			if (err) { FSBL.Clients.Logger.error(`menuWindow.isShowing failed, error:`, err); }
 			if (showing) {
@@ -192,9 +191,9 @@ var Actions = {
 				//These lines handle closing the searchInput box. As showing is only true when the search results
 				//menu opens, they need to be outside so the search inputbox will still close when there is no text string.
 				blurSearchInputHandler();
-				menuStore.setValue({ field: "active", value: false })
-			});
-		}
+				menuStore.setValue({ field: "active", value: false });
+			}
+		});
 	},
 
 	setupWindow(cb = Function.prototype) {
