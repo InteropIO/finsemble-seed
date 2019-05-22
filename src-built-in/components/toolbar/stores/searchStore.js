@@ -179,6 +179,7 @@ var Actions = {
 	 * @param {*} e
 	 */
 	handleClose(e) {
+		if (!menuWindow) { return; }
 		menuWindow.isShowing(function (err, showing) {
 			if (err) { FSBL.Clients.Logger.error(`menuWindow.isShowing failed, error:`, err); }
 			if (showing) {
