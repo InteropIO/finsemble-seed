@@ -148,13 +148,6 @@ var Actions = {
 
 		FSBL.Clients.RouterClient.subscribe("Finsemble.WorkspaceService.groupUpdate", onDockingGroupUpdate);
 
-		/**
-		 * Catches a double-click on the title bar. If you don't catch this, openfin will invoke the OS-level maximize, which will put the window on top of the toolbar. `clickMaximize` will fill all of the space that finsemble allows.
-		 */
-		FSBL.Clients.WindowClient.finWindow.addEventListener("maximized", function () {
-			self.clickMaximize();
-		});
-
 		//default title.
 		windowTitleBarStore.setValue({ field: "Main.windowTitle ", value: FSBL.Clients.WindowClient.getWindowTitle() });
 
