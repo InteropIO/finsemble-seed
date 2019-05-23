@@ -138,6 +138,7 @@ export default class Search extends React.Component {
 	}
 	hotKeyActive() {
 		this.setState({ active: true, hotkeySet: true })
+		this.searchInput.current.focus();
 	}
 	focused(e) {
 		function selectElementContents(el) {
