@@ -112,10 +112,8 @@ export default class appLauncherContainer extends React.Component {
 		appLauncherActions.togglePin(component);
 	}
 	buildComponentItem(params) {
-		if (!this.state.componentList) {
-			return;
-		}
-		var self = this;
+		if (!this.state.componentList) return;
+		
 		var i = params.i,
 			key = params.key,
 			config = self.state.componentList[key],
@@ -150,35 +148,34 @@ export default class appLauncherContainer extends React.Component {
 			togglePin={self.togglePin}
 			isUserDefined={isUserDefined} />);
 	}
-	render() {
-		if (!this.state.componentList) {
-			return (<div></div>);
-		}
-		var self = this;
-		FSBL.Clients.Logger.debug("this.state", this.state);
-		var buildComponentItem = this.buildComponentItem;
-		var components = Object.keys(this.state.componentList);
-		//if this is greater than 0, we don't show a note telling the user to check their configs.
-		//iterate through componentList and render a componentItem for each one.
-		var componentList = components.map(function (key, i) {
-			var isUserDefined = false;
-			var config = self.state.componentList[key];
-			if (config.component && config.component.isUserDefined) {
-				isUserDefined = true;
-			}
-			return buildComponentItem({
-				i: i,
-				key: key,
-				isUserDefined: isUserDefined
-			});
+
+	renderComponentsList() {
+		const { state } = this;
+		const components = Object.keys(state.componentList);
+		// if this is greater than 0, we don't show a note telling the user to check their configs.
+		// iterate through componentList and render a componentItem for each one.
+		const componentList = components.map((key, i) => {
+			const { component } = state.componentList[key];
+			const isUserDefined = component && component.isUserDefined;
+			return this.buildComponentItem({ i, key, isUserDefined });
 		});
-
-		if (!componentList.length) {
-			componentList = (<p>No components loaded. Make sure to check ./src/components.json to make sure you've set everything up correctly.</p>);
-		}
-
-		return (<FinsembleMenuSection maxHeight={350} scrollable={true} className="ComponentList menu-primary">
-			{componentList}
+		return (<FinsembleMenuSection
+			maxHeight={350} scrollable={true}
+			className="ComponentList menu-primary">
+			{
+				componentList.length ? componentList :
+					<p> No components loaded.
+						Make sure to check ./src/components.json
+						to make sure you've set everything up correctly.</p>
+			}
 		</FinsembleMenuSection>);
+	}
+
+	render() {
+		return (
+			this.state.componentList
+				? this.renderComponentsList()
+				: <div></div>
+		);
 	}
 }
