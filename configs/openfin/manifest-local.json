@@ -70,7 +70,7 @@
             "target": "WPFExample.exe"
         },
         {
-            "src": "https://files.chartiq.com/finsemble-dev/WindowlessExample3_0_0.zip",
+            "src": "https://files.chartiq.com/finsemble-dev/WindowlessExample3_9_0.zip",
             "version": "3.9.0",
             "alias": "DotNetWindowLess",
             "target": "WindowlessExample.exe"
