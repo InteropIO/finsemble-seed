@@ -111,13 +111,14 @@ export default class appLauncherContainer extends React.Component {
 	togglePin(component) {
 		appLauncherActions.togglePin(component);
 	}
+
 	buildComponentItem(params) {
-		if (!this.state.componentList) return;
-		
-		var i = params.i,
-			key = params.key,
-			config = self.state.componentList[key],
-			isUserDefined = params.isUserDefined;
+		const { pinnedComponents } = this.state;
+		const{ key, isUserDefined } = params;
+		const config = this.state.componentList[key];
+		let friendlyName = key;
+		let isPinned = false;
+
 		if ((!config.window ||
 			!config.foreign.components["App Launcher"] ||
 			!config.foreign.components["App Launcher"].launchableByUser) &&
@@ -125,16 +126,14 @@ export default class appLauncherContainer extends React.Component {
 			return;
 		}
 
-		var isPinned = false;
-		for (var i = 0; i < self.state.pinnedComponents.length; i++) {
-			if (self.state.pinnedComponents[i].component === key) {
+		for (let i = 0; i < pinnedComponents.length; i++) {
+			if (pinnedComponents[i].component === key) {
 				isPinned = true;
 				break;
 			}
 		}
 
-		//Component developers can define a display name that will show instead of the component's type.
-		let friendlyName = key;
+		// Component developers can define a display name that will show instead of the component's type.
 		if (config.component && config.component.friendlyName) {
 			friendlyName = config.component.friendlyName;
 		}
@@ -144,8 +143,8 @@ export default class appLauncherContainer extends React.Component {
 			key={key}
 			name={friendlyName}
 			component={config}
-			itemAction={self.launchComponent}
-			togglePin={self.togglePin}
+			itemAction={this.launchComponent}
+			togglePin={this.togglePin}
 			isUserDefined={isUserDefined} />);
 	}
 
