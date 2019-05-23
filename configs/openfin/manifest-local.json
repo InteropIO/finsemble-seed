@@ -64,14 +64,14 @@
             "target": "AssimilationMain.exe"
         },
         {
-            "src": "https://files.chartiq.com/finsemble-dev/WPFExample3_8_1.zip",
-            "version": "3.8.1",
+            "src": "https://files.chartiq.com/finsemble-dev/WPFExample3_9_0.zip",
+            "version": "3.9.0",
             "alias": "WPFDemo",
             "target": "WPFExample.exe"
         },
         {
-            "src": "https://files.chartiq.com/finsemble-dev/WindowlessExample3_8_1.zip",
-            "version": "3.8.1",
+            "src": "https://files.chartiq.com/finsemble-dev/WindowlessExample3_0_0.zip",
+            "version": "3.9.0",
             "alias": "DotNetWindowLess",
             "target": "WindowlessExample.exe"
         }
