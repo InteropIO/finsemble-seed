@@ -564,12 +564,12 @@ var Actions = {
 		if (Actions.parentWrapper) {
 			cb();
 		} else {
-			FSBL.Clients.WindowClient.getStackedWindow(params, (err, response) => {
+			FSBL.Clients.WindowClient.getStackedWindow(params, (err, wrap) => {
 				if (err) {
 					Actions.parentWrapper = null;
 					Actions._setTabs(null)
 				} else {
-					Actions.parentWrapper = FSBL.Clients.WindowClient.finsembleWindow.getParent();
+					Actions.parentWrapper = wrap;
 					Actions.setupStore(cb);
 				}
 			})
