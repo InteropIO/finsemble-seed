@@ -765,7 +765,6 @@
 
 .modal-main {
 	position: fixed;
-	width: 80%;
 	height: auto;
 	top: 50%;
 	left: 50%;
@@ -783,6 +782,6 @@
 .modal .modal-image {
 	display: flex;
 	justify-content: center;
-	width: 453px;
+	width: auto;
 	height: 311px;
 }
