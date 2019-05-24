@@ -5,6 +5,7 @@
 import React from "react";
 import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
 import { getStore, Actions as HeaderActions } from "../../stores/windowTitleBarStore";
+import { getChannelLabelFromIndex } from "../../../../shared/linkerUtil";
 let windowTitleBarStore;
 let accessibleLinker = false;
 
@@ -103,6 +104,17 @@ export default class LinkerGroups extends React.Component {
      */
     render() {
         let self = this;
+		const getLabel = (channel, accessibleLinker) => {
+			if (!accessibleLinker) {
+                return null;
+            } else if (channel.label) {
+				return channel.label;
+			} else {
+                //backwards compatibility
+				return getChannelLabelFromIndex(channel.name, FSBL.Clients.LinkerClient.getAllChannels());
+			}
+		}
+
         if (!this.state.channels) {
             return (<div className="linker-groups"></div>);
         }
@@ -113,7 +125,7 @@ export default class LinkerGroups extends React.Component {
         let channels = self.state.channels.map(function (channel, index) {
             let classNames = `linker-group${accessibleLinker ? " linker-group-accessible" : ""} linker-${channel.label}`;
             return (<div key={channel.name} className={classNames} style={{ background: channel.color }} onMouseUp={function (e) { self.onClick(e, channel.name) }}>
-                {accessibleLinker ? channel.label : null}
+                {getLabel(channel, accessibleLinker)}
             </div>);
         });
         return (<div className="linker-groups">
