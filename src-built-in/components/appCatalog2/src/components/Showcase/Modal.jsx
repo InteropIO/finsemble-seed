@@ -5,7 +5,7 @@
 import React from "react";
 
 /**
- * The image modal (lightbox)
+ * The image modal (light box)
  * @param {object} props Component props
  * @param {func} props.closeModal Parent function to close the modal. Actual display is handled by CSS
  * @param {object} props.children The inner contents (elements) of the array

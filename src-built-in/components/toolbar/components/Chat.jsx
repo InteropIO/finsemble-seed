@@ -16,7 +16,7 @@ export default class Chat extends React.Component {
 	componentWillMount(){
 		let self = this;
 		FSBL.Clients.RouterClient.subscribe("chatService-unreadCount", function (err, response) {
-		//console.log("unread msgs", err, response);
+		//console.log("unread messages", err, response);
 			self.setState({
 				unread: response.data.count
 			});
@@ -43,7 +43,6 @@ export default class Chat extends React.Component {
 		});
 	}
 	render() {
-	//console.log("rendero");
 		let tooltip = "Chat";
 		let buttonClass = "ff-chat" + (this.state.unread > 0 ? " badge" : "");
 		return (<FinsembleButton buttonType={["Toolbar"]} className={this.props.classes + " icon-only"} title={tooltip} onClick={this.toggleChat}>
