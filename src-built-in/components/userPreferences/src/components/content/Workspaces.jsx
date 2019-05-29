@@ -104,7 +104,6 @@ export default class Workspaces extends React.Component {
 		this.setState({
 			workspaceList: data.value
 		});
-		this.cancelEdit();
 	}
 
 	addListeners() {
