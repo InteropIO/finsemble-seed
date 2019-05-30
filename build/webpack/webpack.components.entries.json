@@ -1,6 +1,6 @@
 {
     "iPushPullTest":{
-        "output": "components/ipushpull/components/iPushPullTest",
+        "output": "components/ipushpull/iPushPullTest",
         "entry": "./src/components/ipushpull/ipushpullTest.js"
     }
 }
