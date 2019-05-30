@@ -1,4 +1,13 @@
 {
     "comment": "Houses config for any custom services that you'd like to import into Finsemble.",
-    "services": {}
+    "services": {
+            "ipushpullTestService": {
+                "useWindow": true,
+                "active": true,
+                "name": "ipushpullTestService",
+                "file": "$applicationRoot/services/ipushpullTest/ipushpullTestService.js",
+                "visible": false,
+                "html": "$applicationRoot/services/ipushpull.html"
+            }
+    }
 }

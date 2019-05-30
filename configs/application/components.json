@@ -212,6 +212,45 @@
 					}
 				}
 			}
-		}
+		},
+		"iPushPullTest": {
+            "window": {
+                "url": "https://test.ipushpull.com/syapp/?contrast=dark",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 650,
+				"height": 600,
+				"options":{
+					"securityPolicy": "trusted"
+				}
+            },
+            "component": {
+                "inject": "$applicationRoot/components/ipushpull/iPushPullTest.js"
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "showLinker": true,
+                        "FSBLHeader": true,
+                        "persistWindowState": true
+                    },
+                    "Toolbar": {
+                        "iconClass": "iPushPullTest"
+                    }
+                }
+            }
+        }
 	}
 }
