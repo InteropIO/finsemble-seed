@@ -1,0 +1,3 @@
+[submodule "fpe-salesforce"]
+	path = fpe-salesforce
+	url = https://github.com/ChartIQ/fpe-salesforce.git

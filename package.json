@@ -4,6 +4,8 @@
     "description": "",
     "main": "index.js",
     "scripts": {
+        "postinstall": "npm run init-submodule",
+        "init-submodule": "git submodule init&& git submodule update",
         "build:dev": "gulp build:dev --gulpfile=./gulpfile.js",
         "build": "gulp build:dev --gulpfile=./gulpfile.js",
         "dev": "gulp dev --gulpfile=./gulpfile.js",
