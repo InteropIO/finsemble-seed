@@ -483,7 +483,7 @@ var Actions = {
 	closeTab: function (windowIdentifier) {
 		//return Actions.parentWrapper.deleteWindow({ windowIdentifier }) // this will cause the window to be closed but keep the stack intact
 		FSBL.FinsembleWindow.getInstance(windowIdentifier, (err, wrap) => {
-			wrap.close();
+			wrap.close({ removeFromWorkspace: true });
 		});
 	},
 	reorderTab: function (tab, newIndex) {
