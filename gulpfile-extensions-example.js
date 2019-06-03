@@ -149,7 +149,7 @@ module.exports = taskMethods => {
 	/*
 		taskMethods.launchApplication = done => {
 			// Local manifest is used to read the UUID for launching the Finsemble application
-			const manifestLocal = require("./configs/openapplicationfin/manifest-local.json");
+			const manifestLocal = require("./configs/application/manifest-local.json");
 			const { launch, connect } = require("hadouken-js-adapter");
 			const ON_DEATH = require("death")({ debug: false });
 			const fs = require("fs");
