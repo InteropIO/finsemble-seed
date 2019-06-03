@@ -4,6 +4,7 @@
 		"App Launcher": {
 			"window": {
 				"url": "$applicationRoot/components/appLauncher/appLauncher.html",
+				"affinity": "systemComponents",
 				"top": 0,
 				"left": 0,
 				"width": 310,
@@ -69,6 +70,7 @@
 		"searchMenu": {
 			"window": {
 				"url": "$applicationRoot/components/searchMenu/searchMenu.html",
+				"affinity": "systemComponents",
 				"top": 32,
 				"left": 45,
 				"width": 350,
@@ -101,6 +103,7 @@
 		"Overflow Menu": {
 			"window": {
 				"url": "$applicationRoot/components/overflowMenu/overflowMenu.html",
+				"affinity": "systemComponents",
 				"top": 32,
 				"left": 45,
 				"width": 350,
@@ -133,6 +136,7 @@
 		"Workspace Management Menu": {
 			"window": {
 				"url": "$applicationRoot/components/workspaceManagementMenu/workspaceManagementMenu.html",
+				"affinity": "systemComponents",
 				"top": 32,
 				"left": 45,
 				"width": 310,
@@ -167,6 +171,7 @@
 		"linkerWindow": {
 			"window": {
 				"url": "$applicationRoot/components/linker/linker.html",
+				"affinity": "systemComponents",
 				"width": 65,
 				"height": 163,
 				"ephemeral": true,
@@ -246,6 +251,7 @@
 		"Window Context Menu": {
 			"window": {
 				"url": "$applicationRoot/components/windowContextMenu/windowContextMenu.html",
+				"affinity": "systemComponents",
 				"top": 0,
 				"left": 100,
 				"width": 125,
@@ -280,6 +286,7 @@
 		"AdhocComponentForm": {
 			"window": {
 				"url": "$applicationRoot/components/adhocComponentForm/adhocComponentForm.html",
+				"affinity": "systemComponents",
 				"width": 550,
 				"height": 175,
 				"position": "absolute",
@@ -313,6 +320,7 @@
 		"Docking Move Mask": {
 			"window": {
 				"url": "$applicationRoot/components/dockingGroupMask/dockingGroupMask.html",
+				"affinity": "systemComponents",
 				"frame": false,
 				"resizable": false,
 				"showTaskbarIcon": false,
@@ -345,6 +353,7 @@
 		"yesNo": {
 			"window": {
 				"url": "$applicationRoot/components/yesNoDialog/yesNoDialog.html",
+				"affinity": "systemComponents",
 				"width": 500,
 				"height": 223,
 				"position": "absolute",
@@ -386,6 +395,7 @@
 		"singleInput": {
 			"window": {
 				"url": "$applicationRoot/components/singleInputDialog/singleInputDialog.html",
+				"affinity": "systemComponents",
 				"width": 480,
 				"height": 154,
 				"position": "absolute",
@@ -427,6 +437,7 @@
 		"inputAndSelection": {
 			"window": {
 				"url": "$applicationRoot/components/inputAndSelectionDialog/inputAndSelectionDialog.html",
+				"affinity": "systemComponents",
 				"width": 587,
 				"height": 358,
 				"position": "absolute",
@@ -468,6 +479,7 @@
 		"dialogModal": {
 			"window": {
 				"url": "$applicationRoot/components/dialogModal/dialogModal.html",
+				"affinity": "systemComponents",
 				"width": 1,
 				"height": 1,
 				"position": "absolute",
@@ -505,6 +517,7 @@
 			"window": {
 				"id": "launcher",
 				"url": "$applicationRoot/components/toolbar/toolbar.html",
+				"affinity": "systemComponents",
 				"width": 600,
 				"height": 39,
 				"dockedHeight": 39,
@@ -526,7 +539,8 @@
 					"autoShow": false,
 					"contextMenu": false,
 					"showTaskbarIcon": false,
-					"smallWindow": true
+					"smallWindow": true,
+					"maximizable": false
 				}
 			},
 			"component": {
@@ -560,6 +574,7 @@
 		},
 		"windowTitleBar": {
 			"window": {
+				"//": "This is never called as a component. It is compiled to js and then injected into other components",
 				"url": "$applicationRoot/components/windowTitleBar/windowTitleBar.js",
 				"top": "center",
 				"left": "center",
@@ -590,6 +605,7 @@
 		"UserPreferences": {
 			"window": {
 				"url": "$applicationRoot/components/userPreferences/userPreferences.html",
+				"affinity": "systemComponents",
 				"frame": false,
 				"top": "center",
 				"left": "center",
@@ -630,6 +646,7 @@
 		"Floating Titlebar": {
 			"window": {
 				"url": "$applicationRoot/components/floatingTitlebar/floatingTitlebar.html",
+				"affinity": "systemComponents",
 				"frame": false,
 				"top": "center",
 				"left": "center",
@@ -674,6 +691,7 @@
 		"Process Monitor": {
 			"window": {
 				"url": "$applicationRoot/components/processMonitor/processMonitor.html",
+				"affinity": "workspaceComponents",
 				"width": 600,
 				"height": 700
 			},
@@ -701,6 +719,7 @@
 		"App Catalog": {
 			"window": {
 				"url": "$applicationRoot/components/appCatalog/appCatalog.html",
+				"affinity": "systemComponents",
 				"frame": false,
 				"top": "center",
 				"left": "center",
@@ -740,6 +759,7 @@
 		"App Catalog2": {
 			"window": {
 				"url": "$applicationRoot/components/appCatalog2/appCatalog.html",
+				"affinity": "systemComponents",
 				"width": 600,
 				"height": 700,
 				"options": {

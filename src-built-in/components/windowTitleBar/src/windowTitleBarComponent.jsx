@@ -172,7 +172,7 @@ class WindowTitleBar extends React.Component {
 	}
 
 	/**
-	 * When tiling stops, we want to find the dragHandler and reshow it
+	 * When tiling stops, we want to find the dragHandler and re-show it
 	 */
 	onTilingStop() {
 		let dragHandle = document.querySelector('.fsbl-drag-handle.hidden');
@@ -421,7 +421,6 @@ function init () {
 	// Create the header element
 	const template = document.createElement("div");
 	const FSBLHeader = document.createElement('div')
-		  FSBLHeader.setAttribute('style', 'height: 20px')
 		  FSBLHeader.setAttribute('id', 'FSBLHeader')
 	template.appendChild(FSBLHeader)
 	document.body.insertBefore(template.firstChild, document.body.firstChild);
