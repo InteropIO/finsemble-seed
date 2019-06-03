@@ -220,6 +220,7 @@ html.desktop-active .fsbl-icon-highlighted {
     width: 1em !important;
     padding-bottom: 1px;
     margin-bottom: 4px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.79);
 }
 
 html.desktop-active .linker-group {
