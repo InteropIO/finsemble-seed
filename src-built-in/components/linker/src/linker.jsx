@@ -56,7 +56,7 @@ class Linker extends React.Component {
 		finsembleWindow.hide();
 	}
 	/**
-	 * Fit the contents of the dom to the openfin window's bounds. Also set the component's state.
+	 * Fit the contents of the dom to the window's bounds. Also set the component's state.
 	 *
 	 * @memberof Linker
 	 */
