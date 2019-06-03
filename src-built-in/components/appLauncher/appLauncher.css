@@ -35,7 +35,7 @@ html {
 
 ::-webkit-scrollbar {
     width: 9px;
-    /* background-color: var(--scrollbar-color); */
+    background-color: var(--scrollbar-color);
     border-radius: 3px;
 }
 
