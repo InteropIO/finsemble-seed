@@ -361,6 +361,7 @@
 		"dev:fresh": done => {
 			async.series([
 				taskMethods.setDevEnvironment,
+				taskMethods.copySalesforceFPE,
 				taskMethods.rebuild,
 				taskMethods.startServer,
 				taskMethods.launchApplication
@@ -374,6 +375,23 @@
 				taskMethods["build:dev"],
 				taskMethods.startServer
 			], done);
+		},
+		"copySalesforceFPE": (done) => {
+			gulp.src('fpe-salesforce/dist/*.*')
+				.pipe(gulp.dest('./src/components/salesforce'));
+				
+			gulp.src('fpe-salesforce/dist/salesForceConfig.json')
+				.pipe(gulp.dest('./configs/application'));
+			
+			gulp.src('fpe-salesforce/dist/salesForceComponents.json')
+				.pipe(gulp.dest('./configs/application'));
+			
+			gulp.src('fpe-salesforce/dist/salesForceServices.json')
+				.pipe(gulp.dest('./configs/application'));
+
+			gulp.src('fpe-salesforce/server/**/*.*')
+				.pipe(gulp.dest('./server/salesforce'));
+			done();
 		},
 		launchOpenFin: done => {
 			ON_DEATH(() => {
