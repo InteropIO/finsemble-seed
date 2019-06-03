@@ -34,7 +34,7 @@
         "@chartiq/finsemble-electron-adapter": "3.8.*"
     },
     "dependencies": {
-        "@chartiq/finsemble": "3.9.*",
+        "@chartiq/finsemble": "3.8.*",
         "@chartiq/finsemble-react-controls": "3.7.*",
         "async": "2.6.*",
         "babel-minify-webpack-plugin": "0.3.*",
