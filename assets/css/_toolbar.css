@@ -52,9 +52,9 @@
 
 .finsemble-toolbar-button {
     padding: 0 6px;
-    margin: 5px 0;
     border: 1px solid var(--toolbar-background-color);
-    display: inline-flex;
+    display: flex;
+    align-items: center;
     border-radius: 30px;
 }
 
@@ -65,13 +65,16 @@
     letter-spacing: .25px;
     align-content: center;
     display: block;
-    margin-top: 6px;
 }
 
 .finsemble-toolbar-button[data-hover=true] {
     background: var(--toolbar-button-hover-color);
     border: 1px solid transparent;
     cursor: pointer;
+}
+
+.ff-adp-workspace:before {
+    padding-right: 4px;
 }
 
 .finsemble-toolbar .resize-area {
@@ -176,12 +179,14 @@ img.pinned-icon {
     padding-top: 1px;
     width: 22px;
     height: 22px;
+    margin-top: -1px;
 }
 
 .pinned-icon {
     color: var(--toolbar-icon-app-color);
     font-size: var(--toolbar-icon-font-size);
     padding-right: .25em;
+    margin-top: 11px;
 }
 
 .pinned-workspace-icon {
@@ -198,6 +203,7 @@ img.pinned-icon {
 
 .finsemble-button-label {
     padding-top: 1px;
+    margin-top: 2px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
