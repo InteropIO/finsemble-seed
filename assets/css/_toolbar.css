@@ -229,10 +229,14 @@ img.pinned-icon {
     padding-top: 4px;
 }
 
-
-.finsemble-toolbar-drag-handle {
-    padding-left:5px;
-    padding-right:5px;
-    padding-top: 6px;
+.finsemble-toolbar-drag-handle > svg {
+    width: 23px;
+    margin-top: -7px;
+  }
+  
+  .finsemble-toolbar-drag-handle {
+    padding-left: 5px;
+    padding-right: 0px;
+    padding-top: 0px;
     -webkit-app-region: drag;
-}
+  }
