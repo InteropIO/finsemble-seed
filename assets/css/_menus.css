@@ -4,7 +4,7 @@
 
 body.menu {
     margin: 0px;
-    font-family: var(--font-family);
+    font-family: var(--font-primary);
     font-size: var(--menu-font-size);
     font-weight: var(--menu-font-weight);
     overflow-y: hidden;

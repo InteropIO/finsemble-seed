@@ -74,7 +74,7 @@
     width: 124px;
     height: 35px;
     text-align: center;
-    font-family: var(--font-family);
+    font-family: var(--font-primary);
     color: var(--button-solid-text);
     font-weight: var(--button-font-weight);
     font-size: 15px;

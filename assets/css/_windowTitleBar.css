@@ -23,7 +23,7 @@
 }
 
 .fsbl-header {
-    font-family: var(--font-family);
+    font-family: var(--font-primary);
     text-align: center;
     display: flex;
     height: var(--titleBar-height);

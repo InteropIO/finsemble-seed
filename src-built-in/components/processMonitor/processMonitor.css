@@ -5,7 +5,7 @@ body {
 	overflow: hidden;
 	font-size: var(--procMonitor-font-size);
 	font-weight: var(--procMonitor-font-weight);
-	font-family: var(--font-family);
+	font-family: var(--font-primary);
 	color: var(--procMonitor-font-color);
 	background-color: var(--procMonitor-background-color);
 }

@@ -5,7 +5,8 @@
     /* Theme Variables:  Use these variables to make broad-sweeping changes to the colors and fonts. */
 
     /* Font Settings */
-    --font-family: 'Roboto', sans-serif;
+    --font-primary: 'Open Sans', sans-serif;
+    --font-primary-1: 'Roboto', sans-serif;
     --primary-font-color: white;
     --secondary-font-color: black;
 
@@ -33,7 +34,6 @@
     /** Toolbar */
     --toolbar-font-size: 15px;
     --toolbar-font-color: var(--primary-font-color);
-    --toolbar-line-height: 1em;
     --toolbar-font-weight: var(--primary-font-weight);
 
     --toolbar-height: 39px;
@@ -209,7 +209,7 @@
     /* Notifications */
     --notification-body-background-color: var(--toolbar-background-color);
     --notification-body-font-color: var(--primary-font-color);
-    --notification-body-font-family: var(--font-family);
+    --notification-body-font-family: var(--font-primary);
     --notification-logo-width: 14px;
     --notification-title-font-size: 13px;
     --notification-title-font-weight: bold;

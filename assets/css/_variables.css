@@ -150,7 +150,7 @@
     /* Notifications */
     --notification-body-background-color: var(--toolbar-background-color);
     --notification-body-font-color: var(--primary-font-color);
-    --notification-body-font-family: var(--font-family);
+    --notification-body-font-family: var(--font-primary);
     --notification-logo-width: 14px;
     --notification-title-font-size: 13px;
     --notification-title-font-weight: bold;

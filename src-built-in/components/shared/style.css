@@ -9,7 +9,7 @@
 	top: 1px;
 	right: 1px;
 	user-select: none;
-	font-family: var(--font-family);
+	font-family: var(--font-primary);
 	font-size: var(--menu-font-size);
     font-weight: var(--menu-font-weight);
 }
@@ -77,7 +77,7 @@
 	align-items: center;
 	font-size: 10px;
 	font-weight: var(--tag-font-weight);
-	font-family: var(--font-family);
+	font-family: var(--font-primary);
 	font-style: normal;
 	font-stretch: normal;
 	line-height: normal;

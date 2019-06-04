@@ -150,7 +150,7 @@ img {
 .left-nav-label input {
     color: var(--appMenu-font-color);
     width: 100%;
-    font-family: var(--font-family);
+    font-family: var(--font-primary);
     font-weight: var(--primary-font-weight);
 	background: none;
 	border: 0;
