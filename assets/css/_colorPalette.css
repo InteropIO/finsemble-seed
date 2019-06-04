@@ -1,5 +1,5 @@
 :root {
-    --slate1: #7B98B3;
+/*    --slate1: #7B98B3;
     --slate2: #67829A;
     --slate3: #617383;
     --slate4: #495A69;
@@ -45,5 +45,25 @@
     --gray: var(--gray4);
     --blue: var(--blue4);
     --yellow: var(--yellow4);
-    --red: var(--red4);
+    --red: var(--red4); */
+
+/* New color palette starts here */
+    --core-primary: #22262F;
+    --core-primary-1: #171A20;
+    --core-primary-2: #373B43;
+    --core-primary-3: #3D4455;
+    --core-primary-4: #5B606F;
+    --core-primary-5: #ACB2C0;
+
+    --accent-primary: #0A8CF4;
+    --accent-primary-1: #087DDB;
+
+    --accent-positive: #2CC13F;
+    --accent-positive-1: #27AE38;
+    
+    --accent-aware: #F5A623;
+    --accent-aware-1: #DC951F;
+
+    --accent-negative: #F26666;
+    --accent-negative-1: #DA5C5C;
 }
