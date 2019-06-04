@@ -116,7 +116,7 @@ export default class appLauncherContainer extends React.Component {
 		const { pinnedComponents } = this.state;
 		const{ key, isUserDefined } = params;
 		const config = this.state.componentList[key];
-		let friendlyName = key;
+		let displayName = key;
 		let isPinned = false;
 
 		if ((!config.window ||
@@ -134,14 +134,14 @@ export default class appLauncherContainer extends React.Component {
 		}
 
 		// Component developers can define a display name that will show instead of the component's type.
-		if (config.component && config.component.friendlyName) {
-			friendlyName = config.component.friendlyName;
+		if (config.component && config.component.displayName) {
+			displayName = config.component.displayName;
 		}
 
 		return (<ComponentItem
 			isPinned={isPinned}
 			key={key}
-			name={friendlyName}
+			name={displayName}
 			component={config}
 			itemAction={this.launchComponent}
 			togglePin={this.togglePin}

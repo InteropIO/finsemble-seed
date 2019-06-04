@@ -17,7 +17,7 @@
 						"tags": [
 							"newrelease"
 						],
-						"friendlyName": "The Welcome Component",
+						"displayName": "The Welcome Component",
 						"icon": "ff-home-2"
 					},
 					{
@@ -26,7 +26,7 @@
 						"tags": [
 							"newrelease"
 						],
-						"friendlyName": "Learn finsemble!",
+						"displayName": "Learn finsemble!",
 						"icon": "ff-component"
 					},
 					{
@@ -35,7 +35,7 @@
 						"tags": [
 							"bad information", "don't click here"
 						],
-						"friendlyName": "Process Monitor",
+						"displayName": "Process Monitor",
 						"icon": "ff-chart-alt-1"
 					},
 					{
@@ -46,7 +46,7 @@
 							"wizardry",
 							"TESLA"
 						],
-						"friendlyName": "Notepad!!!",
+						"displayName": "Notepad!!!",
 						"icon": "ff-saveas-2"
 					}
 				]
@@ -63,7 +63,7 @@
 						"tags": [
 							"bad information", "don't click here"
 						],
-						"friendlyName": "Process Monitor"
+						"displayName": "Process Monitor"
 					}
 				]
 			},

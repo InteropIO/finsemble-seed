@@ -30,7 +30,7 @@ export default class ProviderList extends React.Component {
 		return <div className="providerContainer" >
 			<div className="provider">
 				<div className="searchHeader">
-					{providerInfo.provider.friendlyName}
+					{providerInfo.provider.displayName}
 
 				</div>
 
@@ -40,6 +40,6 @@ export default class ProviderList extends React.Component {
 				</div> : null)}
 			</div>
 			{this.props.children}
-		</div >
+		</div>
 	}
 }
