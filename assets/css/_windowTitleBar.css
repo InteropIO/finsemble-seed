@@ -396,7 +396,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     right: 10px;
     background-color: var(--tertiary-background-color);
     padding: 5px;
-    color: var(--primary-font-color);
+    color: var(--font-color-primary);
     opacity: 0.8;
     font-size: 0.9em;
 }

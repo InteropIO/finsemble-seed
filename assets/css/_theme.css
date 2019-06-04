@@ -7,8 +7,7 @@
     /* Font Settings */
     --font-primary: 'Open Sans', sans-serif;
     --font-primary-1: 'Roboto', sans-serif;
-    --primary-font-color: white;
-    --secondary-font-color: black;
+    --font-color-primary: white;
 
     --primary-font-weight: 300;
     --secondary-font-weight: 500;
@@ -33,7 +32,7 @@
 
     /** Toolbar */
     --toolbar-font-size: 15px;
-    --toolbar-font-color: var(--primary-font-color);
+    --toolbar-font-color: var(--font-color-primary);
     --toolbar-font-weight: var(--primary-font-weight);
 
     --toolbar-height: 39px;
@@ -53,14 +52,14 @@
     --titleBar-height: 25px;
     --titleBar-font-size: 14px;
     --titleBar-icon-font-size: 14px;
-    --titleBar-active-font-color: var(--primary-font-color);
+    --titleBar-active-font-color: var(--font-color-primary);
     --titleBar-inactive-font-color: var(--gray3);
     --titleBar-font-weight: var(--primary-font-weight);
 
     --titleBar-background-inactive-color: var(--secondary-background-color);
     --titleBar-background-active-color: var(--tertiary-background-color);
     --titlebar-tab-icon-font-color: var(--tertiary-accent-color);
-    --titlebar-tab-active-font-color: var(--primary-font-color);
+    --titlebar-tab-active-font-color: var(--font-color-primary);
     --titlebar-tab-active-background-color: var(--primary-background-color);
     --titlebar-tab-inactive-font-color: var(--gray);
     --titlebar-tab-inactive-background-color: var(--titlebar-background-active-color);
@@ -79,14 +78,14 @@
     /* Dialogs (e.g., singleInput and yesNo) */
     --dialog-title-font-size: 20px;
     --dialog-question-font-size: 14px;
-    --dialog-font-color: var(--primary-font-color);
+    --dialog-font-color: var(--font-color-primary);
     --dialog-font-weight: var(--primary-font-weight);
     --dialog-title-font-weight: var(--primary-font-weight);
     --dialog-question-font-weight: var(--secondary-font-weight);
 
     --dialog-background-color: var(--primary-background-color);
     --dialog-input-font-size: 16px;
-    --dialog-input-font-color: var(--primary-font-color);
+    --dialog-input-font-color: var(--font-color-primary);
     --dialog-input-font-weight: var(--primary-font-weight);
     --dialog-input-background-color: var(--primary-background-color);
     --dialog-input-border-color: var(--gray6);
@@ -96,7 +95,7 @@
     /* Buttons and Inputs */
     --button-font-size: 13px;
     --button-font-weight: var(--primary-font-weight);
-    --button-solid-font-color: var(--primary-font-color);
+    --button-solid-font-color: var(--font-color-primary);
     --button-small-font-size: 10px;
 
     --button-affirmative-background-color: var(--primary-accent-color);
@@ -107,7 +106,7 @@
     --button-neutral-background-color: transparent;
     --button-neutral-border-color: transparent;
     --button-neutral-border-hover-color: var(--gray6);
-    --button-neutral-solid-font-color: var(--secondary-font-color);
+    --button-neutral-solid-font-color: black;
 
     --button-negative-background-color: var(--red6);
     --button-negative-border-color: var(--red4);
@@ -119,7 +118,7 @@
     /* Menus */
     --menu-font-size: 14px;
     --menu-font-weight: var(--primary-font-weight);
-    --menu-font-color: var(--primary-font-color);
+    --menu-font-color: var(--font-color-primary);
     --menu-active-workspace-font-weight: var(--secondary-font-weight);
 
     --menu-background-color: var(--secondary-background-color);
@@ -135,17 +134,17 @@
     --menu-favorite-active-hover-color: var(--yellow1);
     --menu-delete-background-hover-color: var(--secondary-negative-color);
 
-    --menu-linker-selected-font-color: var(--primary-font-color);
+    --menu-linker-selected-font-color: var(--font-color-primary);
     --menu-linker-selected-font-size: 18px;
 
     /* Search Menu */
-    --search-input-font-color: var(--secondary-font-color);
+    --search-input-font-color: black;
     --search-input-background-color: white;
 
     --search-header-font-color: var(--tertiary-accent-color);
     --search-header-font-weight: var(--tertiary-font-weight);
 
-    --search-result-font-color: var(--primary-font-color);
+    --search-result-font-color: var(--font-color-primary);
     --search-result-font-weight: var(--primary-font-weight);
     --search-result-highlighter-color: var(--slate3);
     --search-result-highlighter-background: var(--slate4);
@@ -158,7 +157,7 @@
     --groupMask-background-color: var(--secondary-accent-color);
     --groupMask-border-color: var(--primary-accent-color);
 
-    --scrim-icon-font-color: var(--primary-font-color);
+    --scrim-icon-font-color: var(--font-color-primary);
     --scrim-icon-font-size: 100px;
 
     --scrim-positive-background-color: var(--secondary-accent-color);
@@ -168,7 +167,7 @@
     --content-font-size: 16px;
     --content-header-font-size: 18px;
     --content-header-font-color: var(--tertiary-accent-color);
-    --content-font-color: var(--primary-font-color);
+    --content-font-color: var(--font-color-primary);
     --content-font-weight: var(--primary-font-weight);
 
     --content-nav-header-font-size: 21px;
@@ -184,7 +183,7 @@
     --content-list-border-color: var(--gray6);
     --content-list-highlighter: var(--slate3);
     --content-list-item-flagged-color: var(--blue1);
-    --content-list-editor-font-color: var(--primary-font-color);
+    --content-list-editor-font-color: var(--font-color-primary);
     --content-list-editor-border-color: var(--gray);
     --content-list-editor-highlighted-text: var(--blue1);
 
@@ -193,7 +192,7 @@
     --content-button-neutral-border-hover-color: var(--gray);
     --content-button-negative-border-hover-color: var(--red1);
 
-    --content-checkbox-check-color: var(--primary-font-color);
+    --content-checkbox-check-color: var(--font-color-primary);
     --content-checkbox-background-color: var(--blue);
     --content-checkbox-unchecked-border-color: var(--gray4);
 
@@ -208,7 +207,7 @@
 
     /* Notifications */
     --notification-body-background-color: var(--toolbar-background-color);
-    --notification-body-font-color: var(--primary-font-color);
+    --notification-body-font-color: var(--font-color-primary);
     --notification-body-font-family: var(--font-primary);
     --notification-logo-width: 14px;
     --notification-title-font-size: 13px;
@@ -217,7 +216,7 @@
     --notification-description-font-size: 13px;
 
     /* Process Monitor */
-    --procMonitor-font-color: var(--primary-font-color);
+    --procMonitor-font-color: var(--font-color-primary);
     --procMonitor-font-size: 12px;
     --procMonitor-font-weight: var(--primary-font-weight);
     --procMonitor-process-name-font-weight: var(--secondary-font-weight);
@@ -234,7 +233,7 @@
     --procMonitor-close-hover-color: var(--red2);
 
     /* App Catalog */
-    --catalog-font-color: var(--primary-font-color);
+    --catalog-font-color: var(--font-color-primary);
     --catalog-background-color: var(--slate7);
     --catalog-pagination-dots-color: var(--gray2);
     --catalog-hero-border-color: var(--slate5);
@@ -250,14 +249,14 @@
 
     /* Shared Tag Styles */
     --tag-background-color: var(--slate2);
-    --tag-font-color: var(--primary-font-color);
+    --tag-font-color: var(--font-color-primary);
     --tag-font-weight: var(--primary-font-weight);
     --tag-close-icon-hover-color: var(--secondary-negative-color);
     --tag-checkmark-icon-color: var(--green);
 
 
     /* App Menu */
-    --appMenu-font-color: var(--primary-font-color);
+    --appMenu-font-color: var(--font-color-primary);
     --appMenu-scrollbar-color: var(--slate1);
     --appMenu-leftNav-background-color: var(--slate5);
     --appMenu-close-hover-color: var(--secondary-negative-color);
