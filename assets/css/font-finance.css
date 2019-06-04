@@ -12,6 +12,19 @@
 
 }
 
+[data-icon]:before {
+  font-family: "font-finance" !important;
+  content: attr(data-icon);
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 [class^="ff-"]:before,
 [class*=" ff-"]:before {
   font-family: "font-finance" !important;
@@ -318,4 +331,37 @@
 }
 .ff-filter:before {
   content: "\30";
+}
+.ff-arrow-triangle-both:before {
+  content: "\2d";
+}
+.ff-arrow-triangle-left:before {
+  content: "\e002";
+}
+.ff-arrow-triangle-right:before {
+  content: "\e006";
+}
+.ff-adp-apps:before {
+  content: "\e007";
+}
+.ff-adp-edit:before {
+  content: "\e008";
+}
+.ff-adp-share-context:before {
+  content: "\e009";
+}
+.ff-adp-minimize-all:before {
+  content: "\e00a";
+}
+.ff-adp-to-front:before {
+  content: "\e00b";
+}
+.ff-adp-trash:before {
+  content: "\e00c";
+}
+.ff-adp-linker:before {
+  content: "\e00d";
+}
+.ff-adp-apps-1:before {
+  content: "\e00e";
 }
