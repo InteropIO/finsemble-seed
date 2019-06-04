@@ -394,14 +394,18 @@
 			if (done) done();
 		},
 		launchElectron: done => {
+			const cfg = taskMethods.startupConfig[env.NODE_ENV];
 			const USING_ELECTRON = container === "electron";
 			if (USING_ELECTRON && !FEA_PATH_EXISTS) {
 				throw "Cannot use electron container unless finsemble-electron-adapter optional dependency is installed. Please run npm i @chartiq/finsemble-electron-adapter";
 			}
 
 			let config = {
-				manifest: taskMethods.startupConfig[env.NODE_ENV].serverConfig
+				manifest: cfg.serverConfig
 			}
+
+			// set breakpointOnStart variable so FEA knows whether to pause initial code execution
+			process.env.breakpointOnStart = cfg.breakpointOnStart;
 
 			if (!FEA) {
 				console.error("Could not launch ");
@@ -447,7 +451,7 @@
 
 			if (!FEAPackager) {
 				console.error("Cannot create installer because Finsemble Electron Adapter is not installed").
-				process.exit(1);
+					process.exit(1);
 			}
 
 			await FEAPackager.setManifestURL(manifestUrl);
