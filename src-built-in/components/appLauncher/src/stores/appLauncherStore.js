@@ -315,7 +315,6 @@ var Actions = {
 		params = Object.assign(defaultParams, params);
 		if (!params.options.customData) { params.options.customData = {}; }
 		if (!params.options.customData.component) { params.options.customData.component = {}; }
-		params.options.customData.component.isUserDefined = true;
 		if (config.component.windowGroup) { params.groupName = config.component.windowGroup; }
 		FSBL.Clients.LauncherClient.spawn(config.component.type, params, function (err, windowInfo) {
 			if (cb) {

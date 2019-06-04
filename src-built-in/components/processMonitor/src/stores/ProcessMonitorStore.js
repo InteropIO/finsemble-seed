@@ -188,25 +188,21 @@ var Actions = {
 	 * Make the window flash a couple of times so that the user can identify it.
 	 */
 	identifyWindow: function (winID) {
+		if (winID.name.includes("Service")) return;
+
 		const OPACITY_ANIMATION_DURATION = 200;
 		FSBL.FinsembleWindow.getInstance({ name: winID.name }, (err, win) => {
 			let windowState = "hidden";
 			function flash(n, done) {
-				win.animate({
-					opacity: {
-						opacity: 0.5,
-						duration: OPACITY_ANIMATION_DURATION
-					}
-				}, () => {
-					win.animate({
-						opacity: {
-							opacity: 1,
-							duration: OPACITY_ANIMATION_DURATION
-						}
-					}, () => {
-						done(null);
+				setTimeout(() => {
+					win.hide(() => {
+						setTimeout(() => {
+							win.show(() => {
+								done(null);
+							});
+						}, OPACITY_ANIMATION_DURATION / 1.5);
 					});
-				})
+				}, OPACITY_ANIMATION_DURATION / 1.5);
 			}
 			win.isShowing((err, isVisible) => {
 				//cache the visible state of the window prior to making it flash. If it was hidden before, hide it when the flashing is done.
