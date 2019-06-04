@@ -202,7 +202,6 @@ var Actions = {
 	setupWindow(cb = Function.prototype) {
 		// The toolbar can render before we have the menuReference. Add this gate so that the dev isn't spammed with errors about an being able to
 		if (!menuReference.name) return cb();
-		//menuWindow = fin.desktop.Window.wrap(menuReference.finWindow.app_uuid, menuReference.finWindow.name);
 		FSBL.FinsembleWindow.getInstance({ windowName: menuReference.name }, (err, wrap) => {
 			if (err) { FSBL.Clients.Logger.error(`Failed to retrieve reference to search results menu: ${menuReference.name}, error:`, err); }
 			menuWindow = wrap;

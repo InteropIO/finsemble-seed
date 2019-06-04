@@ -18,7 +18,7 @@ let defaultData = {
 	newWorkspaceDialogIsActive: false,
 	/**
 	 * State around whether the workspace is currently in the process of switching.
-	 * 
+	 *
 	 * For simplicity, we're storing this in the local store for now, but this precludes
 	 * other components from signaling that the workspace is changing. A consequence,
 	 * for example, is that if you switch workspaces uses a pin on the toolbar instead
@@ -34,7 +34,7 @@ function uuidv4() {
 		return v.toString(16);
 	});
 }
-let finWindow = fin.desktop.Window.getCurrent();
+
 Actions = {
 	autoSave: (callback) => {
 		let activeName = FSBL.Clients.WorkspaceClient.activeWorkspace.name;
@@ -74,7 +74,7 @@ Actions = {
 			}
 		});
 		WorkspaceManagementGlobalStore.getValue({ field: "owner" }, (err, data) => {
-			if (data !== fin.desktop.Window.getCurrent().name) return;
+			if (data !== finsembleWindow.name) return;
 			WorkspaceManagementGlobalStore.Dispatcher.register(function (action) {
 				switch (action.actionType) {
 					case "switchToWorkspace":
@@ -662,7 +662,7 @@ Actions = {
 	 * Unfocuses from the menu.
 	 */
 	blurWindow: function () {
-		finWindow.blur();
+		finsembleWindow.blur();
 	},
 	/**
 	 * Hides the window.
@@ -683,7 +683,7 @@ function createGlobalStore(done) {
 	StoreClient.createStore({
 		store: "Finsemble-WorkspaceMenu-Global-Store",
 		global: true,
-		values: { owner: fin.desktop.Window.getCurrent().name }
+		values: { owner: finsembleWindow.name }
 	}, function (err, store) {
 		WorkspaceManagementGlobalStore = store;
 		done();
