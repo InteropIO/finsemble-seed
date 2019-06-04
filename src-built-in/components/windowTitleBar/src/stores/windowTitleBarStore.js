@@ -19,11 +19,11 @@ var Actions = {
 		let windowTitleBarConfig = options.customData.foreign.components["Window Manager"];
 		let FSBLHeader = windowTitleBarConfig.FSBLHeader;
 		let self = this;
-		let friendlyName = null;
+		let displayName = null;
 
 		//Display name is first up for display. If it doesn't exist, we look for a default title (or one that's already set on init). If no title, we display the window's name (e.g., '5434-Welcome Component-2321').
-		if (options.customData.component && options.customData.component.friendlyName) {
-			friendlyName = options.customData.component.friendlyName;
+		if (options.customData.component && options.customData.component.displayName) {
+			displayName = options.customData.component.displayName;
 		}
 
 		/**
@@ -51,7 +51,7 @@ var Actions = {
 			windowTitleBarStore.setValue({ field: "hackScrollbar", value: (windowTitleBarConfig.hackScrollbar !== false) });
 
 			// Set by calling WindowClient.setTitle() || from config "foreign.components.Window Manager.title"
-			var title = FSBL.Clients.WindowClient.title || windowTitleBarConfig.title || friendlyName;
+			const title = FSBL.Clients.WindowClient.title || windowTitleBarConfig.title || displayName;
 
 			if (title) {
 				FSBL.Clients.WindowClient.setWindowTitle(title)

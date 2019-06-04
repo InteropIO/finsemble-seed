@@ -23,20 +23,21 @@ export default class componentItem extends React.Component {
 		//appLauncherActions.handleRemoveCustomComponent(this.props.name);
 	}
 	render() {
+		// @todo: Refactor this
 		var self = this;
 		if (this.props.item.actions.length <= 1) {
 			return <div className={"resultItem action " + (this.props.isActive ? "bestmatch active" : "")}>
 				<div className={"resultName "} onClick={function () {
 					if (!self.props.item.actions[0]) return;
 					self.props.onClick(self.props.item, self.props.item.actions[0]);
-				}}>{this.props.item.friendlyName}</div>
+				}}>{this.props.item.displayName}</div>
 			</div>
 		}
-		return <div className={"resultItem " + (this.props.isActive ? "bestmatch active" : "")}><div className={"resultName "}>{this.props.item.friendlyName}</div>
+		return <div className={"resultItem " + (this.props.isActive ? "bestmatch active" : "")}><div className={"resultName "}>{this.props.item.displayName}</div>
 			<div className="actions">{(this.props.item.actions.map(function (action, index) {
 				return <div key={"actionbtn" + index} className="action actionButton" onClick={function () {
 					self.props.onClick(self.props.item, action);
-				}}>{action.friendlyName}</div>
+				}}>{action.displayName}</div>
 			}))}
 			</div>
 		</div>
