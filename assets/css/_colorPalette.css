@@ -1,5 +1,5 @@
 :root {
-/*    --slate1: #7B98B3;
+   --slate1: #7B98B3;
     --slate2: #67829A;
     --slate3: #617383;
     --slate4: #495A69;
@@ -45,7 +45,7 @@
     --gray: var(--gray4);
     --blue: var(--blue4);
     --yellow: var(--yellow4);
-    --red: var(--red4); */
+    --red: var(--red4);
 
 /* New color palette starts here */
     --core-primary: #22262F;

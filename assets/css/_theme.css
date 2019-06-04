@@ -1,4 +1,5 @@
 @import url("./fonts/Roboto/Roboto-Definition.css");
+@import url("./fonts/Open_Sans/OpenSans-Definition.css");
 @import url('_colorPalette.css');
 :root {
     /* Theme Variables:  Use these variables to make broad-sweeping changes to the colors and fonts. */
