@@ -15,7 +15,7 @@ export default class BringToFront extends React.Component {
 	}
 	render() {
 		let tooltip = "Bring all Windows to the Front";
-		let buttonClass = "ff-bring-to-front finsemble-toolbar-button-icon";
+		let buttonClass = "ff-adp-to-front finsemble-toolbar-button-icon";
 		return (<FinsembleButton className={this.props.classes + " icon-only"} buttonType={["Toolbar"]} title={tooltip} onClick={this.bringToFront}>
 			<i className={buttonClass}></i>
 		</FinsembleButton>);

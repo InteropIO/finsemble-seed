@@ -42,9 +42,9 @@
     --toolbar-button-hover-color: var(--core-primary-3);
     --toolbar-resize-area-color: var(--core-primary-3);
 
-    --toolbar-icon-workspace-color: var(--yellow);
-    --toolbar-icon-app-color: var(--tertiary-accent-color);
-    --toolbar-icon-font-size: 22px;
+    --toolbar-icon-workspace-color: var(--accent-aware);
+    --toolbar-icon-app-color: var(--accent-primary);
+    --toolbar-icon-font-size: 18px;
 
     --toolbar-separator: 1px solid rgba(255, 255, 255, 0.3);
 
