@@ -227,10 +227,17 @@ var Actions = {
 
 		var pins = appLauncherStore.getValue("pins");
 		let params = { addToWorkspace: true, monitor: "mine" };
-		if (componentToToggle.component && componentToToggle.component.windowGroup) { params.groupName = componentToToggle.component.windowGroup; }
+		if (componentToToggle.component && componentToToggle.component.windowGroup) params.groupName = componentToToggle.component.windowGroup;
+
+		//Component developers can define a display name that will show instead of the component's type.
+		let friendlyName = componentType;
+		if (componentToToggle.component && componentToToggle.component.friendlyName) {
+			friendlyName = componentToToggle.component.friendlyName;
+		}
+
 		var thePin = {
 			type: "componentLauncher",
-			label: componentType,
+			label: friendlyName,
 			component: componentToToggle.group ? componentToToggle.list : componentType,
 			fontIcon: fontIcon,
 			icon: imageIcon,
@@ -241,7 +248,7 @@ var Actions = {
 		var wasPinned = false;
 		for (var i = 0; i < pins.length; i++) {
 			var pin = pins[i];
-			if (pin.label === componentType) {
+			if (pin.component === componentType) {
 				pins.splice(i, 1);
 				wasPinned = true;
 				break;

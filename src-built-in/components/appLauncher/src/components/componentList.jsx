@@ -131,15 +131,22 @@ export default class appLauncherContainer extends React.Component {
 
 		var isPinned = false;
 		for (var i = 0; i < self.state.pinnedComponents.length; i++) {
-			if (self.state.pinnedComponents[i].label === key) {
+			if (self.state.pinnedComponents[i].component === key) {
 				isPinned = true;
 				break;
 			}
 		}
+
+		//Component developers can define a display name that will show instead of the component's type.
+		let friendlyName = key;
+		if (config.component && config.component.friendlyName) {
+			friendlyName = config.component.friendlyName;
+		}
+
 		return (<ComponentItem
 			isPinned={isPinned}
 			key={key}
-			name={key}
+			name={friendlyName}
 			component={config}
 			itemAction={self.launchComponent}
 			togglePin={self.togglePin}
