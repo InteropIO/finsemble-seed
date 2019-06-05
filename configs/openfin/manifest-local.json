@@ -10,7 +10,7 @@
 		"defaultHeight": 950,
 		"defaultWidth": 700,
         "showTaskbarIcon": true,
-        "autoShow": true,
+        "autoShow": false,
         "frame": true,
         "resizable": true,
         "maximizable": false,
