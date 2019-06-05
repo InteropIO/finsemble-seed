@@ -26,6 +26,10 @@ body {
     padding-top: 8px;
 }
 
+.searchResults {
+    padding: 10px;
+}
+
 .searchHeader {
     height: 21px;
     display: flex;
@@ -49,10 +53,13 @@ body {
 }
 
 .resultItem {
+    height: 31px;
+    padding-left: 20px;
+    padding-right: 10px;
+    border-radius: 15px;
     color: var(--search-result-font-color);
     font-weight: var(--search-result-font-weight);
     text-align: left;
-    padding: 4px 28px 4px 14px;
     display: flex;
     align-items: center;
     justify-content: center;

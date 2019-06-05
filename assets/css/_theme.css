@@ -8,6 +8,7 @@
     --font-primary: 'Open Sans', sans-serif;
     --font-primary-1: 'Roboto', sans-serif;
     --font-color-primary: white;
+    --font-color-secondary: var(--core-primary-5);
 
     --primary-font-weight: 300;
     --secondary-font-weight: 500;
@@ -142,13 +143,13 @@
     --search-input-font-color: black;
     --search-input-background-color: white;
 
-    --search-header-font-color: var(--tertiary-accent-color);
-    --search-header-font-weight: var(--tertiary-font-weight);
+    --search-header-font-color: var(--accent-primary);
+    --search-header-font-weight: 700;
 
     --search-result-font-color: var(--font-color-primary);
-    --search-result-font-weight: var(--primary-font-weight);
-    --search-result-highlighter-color: var(--slate3);
-    --search-result-highlighter-background: var(--slate4);
+    --search-result-font-weight: 400;
+    --search-result-highlighter-color: var(--core-primary-3);
+    --search-result-highlighter-background: var(--core-primary-3);
 
     /* Window Frame */
     --window-frame-inactive-color: var(--slate5);
