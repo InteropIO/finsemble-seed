@@ -5,8 +5,10 @@
 		"url": "http://localhost:3375/finsemble/services/systemManager/systemManager.html",
         "uuid": "Finsemble",
         "applicationIcon": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png",
-        "defaultTop": 0,
-		"defaultLeft": 0,
+        "defaultTop": 75,
+		"defaultLeft": 200,
+		"defaultHeight": 950,
+		"defaultWidth": 700,
         "showTaskbarIcon": true,
         "autoShow": true,
         "frame": true,
@@ -58,8 +60,8 @@
     "fileName": "ChartIQ-local-installer",
     "appAssets": [
         {
-            "src": "https://files.chartiq.com/finsemble/Assimilation_3_7_0_pre1.zip",
-            "version": "3.7.0-pre1",
+            "src": "https://files.chartiq.com/finsemble-dev/Assimilation_3_9_0_pre1.zip",
+            "version": "3.9.0_pre1",
             "alias": "assimilation",
             "target": "AssimilationMain.exe"
         }
@@ -81,9 +83,7 @@
             "$applicationRoot/configs/application/config.json"
         ],
         "IAC": {
-            "serverAddress": "wss://localhost.chartiq.com:3376"
-		},
-		"****************HERE******************** remove below shutdownTimeout before merging": true,
-		"shutdownTimeout": 1000
+            "serverAddress": "ws://127.0.0.1:3376"
+        }
     }
 }
