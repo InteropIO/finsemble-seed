@@ -22,6 +22,7 @@ body.menu {
 .menu {
     background: var(--menu-content-background-color);
     color: var(--menu-font-color);
+    padding: 10px;
 }
 
 .menu .menu-section {
@@ -36,6 +37,13 @@ body.menu {
 
 .menu-secondary {
     background: var(--menu-actions-background-color);
+    border-bottom: 4px solid;
+    border-color: var(--core-primary-3);
+    padding-bottom: 4px;
+}
+
+.menu-primary {
+    padding-top: 4px;
 }
 
 .menu-primary .menu-item:hover {
@@ -53,6 +61,7 @@ body.menu {
     padding-right: 10px;
     cursor: pointer;
     position:relative;
+    border-radius: 15px;
 }
 
 .menu-item-function {
