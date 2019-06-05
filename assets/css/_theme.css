@@ -117,6 +117,7 @@
 
     /* Menus */
     --menu-font-size: 11px;
+    --menu-font-icon-size: 13px;
     --menu-font-weight: var(--primary-font-weight);
     --menu-font-color: var(--font-color-primary);
     --menu-active-workspace-font-weight: var(--secondary-font-weight);
@@ -127,12 +128,12 @@
     --menu-content-background-color: var(--core-primary);
     --menu-content-hover-color: var(--core-primary-3);
 
-    --menu-pin-border-color: var(--secondary-accent-color);
+    /* --menu-pin-border-color: var(--secondary-accent-color);
     --menu-pin-background-color: var(--primary-accent-color);
-    --menu-pin-background-hover-color: var(--secondary-accent-color);
-    --menu-favorite-hover-color: var(--yellow4);
-    --menu-favorite-active-hover-color: var(--yellow1);
-    --menu-delete-background-hover-color: var(--secondary-negative-color);
+    --menu-pin-background-hover-color: var(--secondary-accent-color); */
+    --menu-favorite-hover-color: var(--accent-primary);
+    --menu-favorite-active-hover-color: var(--accent-primary-1);
+    --menu-delete-background-hover-color: var(--accent-negative);
 
     --menu-linker-selected-font-color: var(--font-color-primary);
     --menu-linker-selected-font-size: 18px;

@@ -105,14 +105,15 @@ body.menu {
     border: 1px solid transparent;
 } 
 
-.ff-delete {
+.ff-adp-trash {
     padding: 4px 2px 1px 0px;
+    font-size: var(--menu-font-icon-size);
     width: 22px;
     text-align: center;
     border: 1px solid transparent;
 }
 
-.ff-delete:hover {
+.ff-adp-trash:hover {
     color: var(--menu-delete-background-hover-color);
     /* background-color: var(--menu-delete-background-hover-color); */
     border-radius: 4px;
@@ -127,6 +128,7 @@ body.menu {
 
 .menu-item-action .ff-favorite {
     padding: 4px 2px 1px 1px;
+    font-size: var(--menu-font-icon-size);
     width: 22px;
     text-align: center;
     border: 1px solid transparent;
