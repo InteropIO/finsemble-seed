@@ -114,7 +114,7 @@ export default class appLauncherContainer extends React.Component {
 
 	buildComponentItem(params) {
 		const { pinnedComponents } = this.state;
-		const{ key, isUserDefined } = params;
+		const { key, isUserDefined } = params;
 		const config = this.state.componentList[key];
 		let displayName = key;
 		let isPinned = false;
