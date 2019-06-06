@@ -47,7 +47,7 @@ var Actions = {
 			]);
 
 
-			// By default, we hack the window's scrollbar so that it displays underneath the header. html.overflow: hidden body.overflow:auto
+			// By default, we hack the window's scroll bar so that it displays underneath the header. html.overflow: hidden body.overflow:auto
 			windowTitleBarStore.setValue({ field: "hackScrollbar", value: (windowTitleBarConfig.hackScrollbar !== false) });
 
 			// Set by calling WindowClient.setTitle() || from config "foreign.components.Window Manager.title"
@@ -62,7 +62,7 @@ var Actions = {
 		 * Handles whether to show the linker button.
 		 */
 		if (windowTitleBarConfig.showLinker) {
-			//Get state (channel memebership) from the linkerClient. Then set the value in the header so that the title bar accurately reflects the state.
+			//Get state (channel membership) from the linkerClient. Then set the value in the header so that the title bar accurately reflects the state.
 			let cb = (err, response) => {
 				if (response.channels) { windowTitleBarStore.setValue({ field: "Linker.channels", value: response.channels }); }
 				windowTitleBarStore.setValue({ field: "Linker.showLinkerButton", value: true });
@@ -154,13 +154,6 @@ var Actions = {
 
 		FSBL.Clients.RouterClient.subscribe("Finsemble.WorkspaceService.groupUpdate", onDockingGroupUpdate);
 
-		/**
-		 * Catches a double-click on the title bar. If you don't catch this, openfin will invoke the OS-level maximize, which will put the window on top of the toolbar. `clickMaximize` will fill all of the space that finsemble allows.
-		 */
-		FSBL.Clients.WindowClient.finWindow.addEventListener("maximized", function () {
-			self.clickMaximize();
-		});
-
 		//default title.
 		windowTitleBarStore.setValue({ field: "Main.windowTitle ", value: FSBL.Clients.WindowClient.getWindowTitle() });
 
@@ -178,7 +171,7 @@ var Actions = {
 			windowTitleBarStore.setValues([{ field: "Main.dockingEnabled", value: dockingConfig.enabled }]);
 
 			// Whether the alwaysOnTop pin shows or not depends first on the global setting (finsemble["Window Manager"].alwaysOnTop) and then
-			// on the specific setting for this component (foreigh.components["Widow Manager"].alwaysOnTop)
+			// on the specific setting for this component (foreign.components["Widow Manager"].alwaysOnTop)
 			let alwaysOnTopIcon = globalWindowManagerConfig.alwaysOnTopIcon;
 			if (windowTitleBarConfig.alwaysOnTopIcon === false || windowTitleBarConfig.alwaysOnTopIcon === true)
 				alwaysOnTopIcon = windowTitleBarConfig.alwaysOnTopIcon;
@@ -372,7 +365,7 @@ var Actions = {
 		FSBL.Clients.RouterClient.transmit("DockingService.hyperfocusGroup", { windowName: FSBL.Clients.WindowClient.getWindowNameForDocking() });
 	},
 	/**
-	 * Handles messages coming from the windowCclient.
+	 * Handles messages coming from the windowClient.
 	 */
 	remoteStateUpdate: function (command, state) {
 		var key = Object.keys(state)[0];
@@ -496,7 +489,7 @@ var Actions = {
 	closeTab: function (windowIdentifier) {
 		//return Actions.parentWrapper.deleteWindow({ windowIdentifier }) // this will cause the window to be closed but keep the stack intact
 		FSBL.FinsembleWindow.getInstance(windowIdentifier, (err, wrap) => {
-			wrap.close();
+			wrap.close({ removeFromWorkspace: true });
 		});
 	},
 	reorderTab: function (tab, newIndex) {
@@ -577,12 +570,12 @@ var Actions = {
 		if (Actions.parentWrapper) {
 			cb();
 		} else {
-			FSBL.Clients.WindowClient.getStackedWindow(params, (err, response) => {
+			FSBL.Clients.WindowClient.getStackedWindow(params, (err, wrap) => {
 				if (err) {
 					Actions.parentWrapper = null;
 					Actions._setTabs(null)
 				} else {
-					Actions.parentWrapper = FSBL.Clients.WindowClient.finsembleWindow.getParent();
+					Actions.parentWrapper = wrap;
 					Actions.setupStore(cb);
 				}
 			})

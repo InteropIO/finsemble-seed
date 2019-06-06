@@ -33,7 +33,7 @@ export default class ProcessMonitor extends React.Component {
 		})
 	}
 	/**
-	 * Invoked at minimum, once per second. This listener handles updates that we recieve from the system.
+	 * Invoked at minimum, once per second. This listener handles updates that we receive from the system.
 	 * @param {*} err
 	 * @param {*} response
 	 */
@@ -67,7 +67,7 @@ export default class ProcessMonitor extends React.Component {
 					<ListHeader fields={this.state.viewMode === "simple" ? SIMPLE_MODE_STATISTICS : ADVANCED_MODE_STATISTICS
 					} />
 					<div className="process-list">
-						{/* Filter will remove the hidden processes. Afterwards, map will render the remanining processes in turn. */}
+						{/* Filter will remove the hidden processes. Afterwards, map will render the remaining processes in turn. */}
 						{this.state.processList
 							.filter(proc => proc.visible)
 							.map((proc, i) => {

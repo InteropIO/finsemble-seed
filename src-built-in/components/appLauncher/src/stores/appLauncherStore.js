@@ -118,7 +118,7 @@ var Actions = {
 		appLauncherStore.setValue({ field: "pins", value: filteredPins });
 	},
 	// This filters components based on the mode and list settings in customData
-	// Available settings are list - where you list specfic individual component Types, mode - which piggybacks on config.mode and lists all components where the mode matches
+	// Available settings are list - where you list specific individual component Types, mode - which piggybacks on config.mode and lists all components where the mode matches
 	// If neither mode not list are set, all components are shown
 	// Custom Components are always shown @TODO - make this a setting
 	filterComponents(components) {
@@ -270,6 +270,8 @@ var Actions = {
 		FSBL.Clients.DialogManager.open("yesNo", {
 			title: "Delete this App?",
 			question: "Are you sure you would like to delete \"" + componentName + "\"?",
+			affirmativeResponseLabel: "Delete",
+			showNegativeButton: false
 		}, function (err, response) {
 			// If the user chooses "affirmative" then delete the component.
 			// We should never get an error, but if we do then go ahead and delete the component too.
@@ -320,7 +322,6 @@ var Actions = {
 		params = Object.assign(defaultParams, params);
 		if (!params.options.customData) { params.options.customData = {}; }
 		if (!params.options.customData.component) { params.options.customData.component = {}; }
-		params.options.customData.component.isUserDefined = true;
 		if (config.component.windowGroup) { params.groupName = config.component.windowGroup; }
 		FSBL.Clients.LauncherClient.spawn(config.component.type, params, function (err, windowInfo) {
 			if (cb) {
