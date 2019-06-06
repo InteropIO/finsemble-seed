@@ -51,12 +51,16 @@
 }
 
 .finsemble-toolbar-button {
-    padding: 0 6px;
+    padding: 0 6px 2px 6px;
     margin: 5px 0;
     border: 1px solid var(--toolbar-background-color);
     display: flex;
     align-items: center;
     border-radius: 30px;
+}
+
+span > svg {
+    margin-top: 2px;
 }
 
 .finsemble-toolbar-button-label {
@@ -75,7 +79,8 @@
 }
 
 .ff-adp-workspace:before {
-    padding-right: 4px;
+    padding-right: 8px;
+    padding-top: 2px;
 }
 
 .finsemble-toolbar .resize-area {
@@ -151,7 +156,6 @@
 
 .finsemble-toolbar-button-icon {
     height: 100%;
-    padding-top: 2px;
     display: table-cell;
     vertical-align: middle;
 }
