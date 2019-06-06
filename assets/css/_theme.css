@@ -84,17 +84,17 @@
     --dialog-question-font-size: 12px;
     --dialog-question-font-weight: 400;
     --dialog-question-font-color: var(--core-primary-5);
-    --dialog-font-weight: var(--primary-font-weight);
+    --dialog-font-weight: 400;
 
     --dialog-background-color: var(--core-primary);
     --dialog-font-color: var(--font-color-primary);
-    --dialog-input-font-size: 16px;
+    --dialog-input-font-size: 11px;
     --dialog-input-font-color: var(--font-color-primary);
-    --dialog-input-font-weight: var(--primary-font-weight);
-    --dialog-input-background-color: var(--primary-background-color);
-    --dialog-input-border-color: var(--gray6);
-    --dialog-input-border-focus-color: var(--gray);
-    --dialog-input-border-error-color: var(--red2);
+    --dialog-input-font-weight: 400;
+    --dialog-input-background-color: var(--core-primary);
+    --dialog-input-border-color: var(--core-primary-3);
+    --dialog-input-border-focus-color: var(--accent-primary);
+    --dialog-input-border-error-color: var(--accent-negative);
 
     /* Buttons and Inputs */
     --button-font-size: 12px;

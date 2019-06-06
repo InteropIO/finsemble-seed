@@ -70,7 +70,8 @@ body.dialog input::-webkit-outer-spin-button,
 .controls-wrapper input:focus,
 body.dialog input:focus {
     box-shadow: 0 0 5px rgba 81, 203, 238, 1;
-    border: 1px solid var(--dialog-input-border-focus-color);
+    border: none;
+    border-bottom: 2px solid var(--dialog-input-border-focus-color);
     outline: none;
 }
 
@@ -88,7 +89,8 @@ body.dialog input {
     height: 33px;
     max-width: 100%;
     padding: 3px 10px;
-    border: 1px solid var(--dialog-input-border-color);
+    border: none;
+    border-bottom: 2px solid var(--dialog-input-border-color);
     box-sizing: border-box;
     transition: .2s ease-in;
 }
