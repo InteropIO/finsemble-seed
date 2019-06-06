@@ -30,17 +30,17 @@
     {
         "align": "right",
         "type": "reactComponent",
-        "reactComponent": "AutoArrange"
-    },
-    {
-        "align": "right",
-        "type": "reactComponent",
         "reactComponent": "MinimizeAll"
     },
     {
         "align": "right",
         "type": "reactComponent",
         "reactComponent": "BringToFront"
+    },
+    {
+        "align": "right",
+        "type": "reactComponent",
+        "reactComponent": "AutoArrange"
     },
     {
         "align": "left",
