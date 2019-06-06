@@ -85,6 +85,7 @@
     align-self: center;
     letter-spacing: 0.4px;
     line-height: 34px;
+    user-select: none;
 }
 
 .fsbl-button:hover {
@@ -108,7 +109,7 @@
 }
 
 .fsbl-button-neutral:hover {
-    border: 1px solid var(--button-neutral-border-hover-color);
+    text-decoration: underline;
 }
 
 .fsbl-button-negative {

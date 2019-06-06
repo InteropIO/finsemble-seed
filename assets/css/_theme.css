@@ -102,10 +102,10 @@
     --button-solid-font-color: var(--font-color-primary);
     --button-small-font-size: 10px;
 
-    --button-affirmative-background-color: var(--primary-accent-color);
-    --button-affirmative-border-color: var(--blue5);
-    --button-affirmative-background-hover-color: var(--secondary-accent-color);
-    --button-affirmative-border-hover-color: var(--blue6);
+    --button-affirmative-background-color: var(--accent-primary);
+    --button-affirmative-border-color: transparent;
+    --button-affirmative-background-hover-color: var(--accent-primary-1);
+    --button-affirmative-border-hover-color: transparent;
 
     --button-neutral-background-color: transparent;
     --button-neutral-border-color: transparent;
