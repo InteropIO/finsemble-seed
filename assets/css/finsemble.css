@@ -77,7 +77,7 @@
     font-family: var(--font-primary);
     color: var(--button-solid-text);
     font-weight: var(--button-font-weight);
-    font-size: 15px;
+    font-size: var(--button-font-size);
     transition: .2s ease;
     display:flex;
     flex-direction: column;

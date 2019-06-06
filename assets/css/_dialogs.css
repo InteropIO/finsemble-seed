@@ -30,17 +30,18 @@ body.dialog .dialog {
 
 body.dialog .dialog-title {
     height: 30px;
+    font-family: var(--dialog-title-font-family);
     font-weight: var(--dialog-title-font-weight);
     font-size: var(--dialog-title-font-size);
     text-align: left;
-    color:  var(--dialog-font-color);
+    color:  var(--dialog-title-font-color);
     padding: 0px 4px 4px 4px;
 }
 
 body.dialog .dialog-question {
     height: 45px;
     font-weight: var(--dialog-question-font-weight);
-    color:  var(--dialog-font-color);
+    color:  var(--dialog-question-font-color);
     font-size: var(--dialog-question-font-size);
     padding: 0px 4px;
     margin-bottom: 10px;
