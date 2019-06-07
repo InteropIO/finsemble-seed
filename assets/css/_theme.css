@@ -51,29 +51,30 @@
 
     /* Window Title bar */
     --titleBar-height: 25px;
-    --titleBar-font-size: 14px;
-    --titleBar-icon-font-size: 14px;
+    --titleBar-font-size: 11px;
+    --titleBar-icon-font-size: 8px;
     --titleBar-active-font-color: var(--font-color-primary);
-    --titleBar-inactive-font-color: var(--gray3);
-    --titleBar-font-weight: var(--primary-font-weight);
+    --titleBar-inactive-font-color: var(--core-primary-5);
+    --titleBar-font-weight: 600;
 
-    --titleBar-background-inactive-color: var(--secondary-background-color);
-    --titleBar-background-active-color: var(--tertiary-background-color);
-    --titlebar-tab-icon-font-color: var(--tertiary-accent-color);
+    --titleBar-background-inactive-color: var(--core-primary);
+    --titleBar-background-active-color: var(--core-primary-3);
+    --titlebar-tab-icon-font-color: var(--accent-primary-1);
     --titlebar-tab-active-font-color: var(--font-color-primary);
-    --titlebar-tab-active-background-color: var(--primary-background-color);
-    --titlebar-tab-inactive-font-color: var(--gray);
-    --titlebar-tab-inactive-background-color: var(--titlebar-background-active-color);
+    --titlebar-tab-hover-background-color: var(--core-primary-2);
+    --titlebar-tab-active-background-color: var(--core-primary-3);
+    --titlebar-tab-inactive-font-color: var(--core-primary-5);
+    --titlebar-tab-inactive-background-color: var(--core-primary);
     --titlebar-tab-ghost-background-color: var(--secondary-accent-color);
     --titlebar-tab-ghost-border-color: var(--primary-accent-color);
     --titlebar-tab-separator: 1px solid var(--gray7);
     --titlebar-tab-section-separator: 1px solid var(--gray5);
 
-    --titleBar-button-hover-active-color: var(--primary-accent-color);
-    --titleBar-button-hover-inactive-color: var(--secondary-accent-color);
+    --titleBar-button-hover-active-color: white;
+    --titleBar-button-hover-inactive-color: white;
     --titleBar-button-highlight-active-color: var(--primary-accent-color);
     --titleBar-button-highlight-inactive-color: var(--secondary-accent-color);
-    --titleBar-button-hover-negative-color: var(--primary-negative-color);
+    --titleBar-button-hover-negative-color: var(--accent-negative);
     --titleBar-button-hover-linker-group: var(--gray3);
 
     /* Dialogs (e.g., singleInput and yesNo) */

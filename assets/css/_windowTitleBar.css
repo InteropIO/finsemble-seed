@@ -134,7 +134,7 @@ html.desktop-active .fsbl-tab-region-drag-area {
     position: relative;
     color: var(--titleBar-inactive-font-color);
     font-size: var(--titleBar-icon-font-size);
-    width: 18px;
+    width: 10px;
     padding: 0px 6px;
     height: calc(100% + 5px);
     margin-top: -5px;
@@ -151,11 +151,11 @@ html.desktop-active .fsbl-icon {
 }
 
 .fsbl-icon[data-hover=true] {
-    background-color: var(--titleBar-button-hover-inactive-color);
+    color: var(--titleBar-button-hover-inactive-color);
 }
 
 html.desktop-active .fsbl-icon[data-hover=true] {
-    background: var(--titleBar-button-hover-active-color);
+    color: var(--titleBar-button-hover-active-color);
     transition: background .2s ease;
 }
 
@@ -165,13 +165,11 @@ html.desktop-active .fsbl-icon[data-hover=true] {
 }
 
 .fsbl-icon.fsbl-close[data-hover=true] {
-    background: var(--titleBar-button-hover-negative-color);
-    color: var(--titleBar-active-font-color);
+    color: var(--titleBar-button-hover-negative-color);
 }
 
 html.desktop-active .fsbl-icon.fsbl-close[data-hover=true] {
-    background: var(--titleBar-button-hover-negative-color);
-    color: var(--titleBar-active-font-color);
+    color: var(--titleBar-button-hover-negative-color);
 }
 
 .fsbl-icon-highlighted {
@@ -185,7 +183,8 @@ html.desktop-active .fsbl-icon-highlighted {
 }
 
 .fsbl-minimize {
-    align-items: flex-end;
+    align-items: center;
+    margin-top: -3px;
 }
 
 .fsbl-ejector {
@@ -292,7 +291,7 @@ html.desktop-active .fsbl-linker[hover=true] {
 }
 
 .fsbl-tab[data-hover=true], .fsbl-active-tab {
-    background-color: var(--titlebar-tab-active-background-color);
+    background-color: var(--titlebar-tab-hover-background-color);
     color: var(--titlebar-tab-active-font-color);
 }
 
