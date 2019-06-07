@@ -145,6 +145,7 @@
     /* Search Menu */
     --search-input-font-color: black;
     --search-input-background-color: white;
+    --search-hover-background-color: var(--core-primary-3);
 
     --search-header-font-color: var(--accent-primary);
     --search-header-font-weight: 700;

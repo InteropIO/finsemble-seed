@@ -38,8 +38,12 @@ body, html {
     max-width: 107px;
     overflow: visible;
     max-height: var(--toolbar-height);
-    width: 30px;
+    width: 20px;
     padding-top: 0px;
+}
+
+.searchSection:hover{
+    background-color: var(--search-hover-background-color);
 }
 
 .left.finsemble-toolbar-section {
