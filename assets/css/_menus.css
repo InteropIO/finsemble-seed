@@ -95,7 +95,7 @@ body.menu {
 }
 
 .menu-item .menu-item-action {
-    align-self: center;
+    align-self: baseline;
 }
 
 .ff-pin {
