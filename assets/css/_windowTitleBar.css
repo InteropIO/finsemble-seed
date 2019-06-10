@@ -202,7 +202,7 @@ html.desktop-active .fsbl-icon-highlighted {
     height: 100%;
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .linker-group {
