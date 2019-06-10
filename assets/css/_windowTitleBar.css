@@ -53,15 +53,12 @@ html.desktop-active .fsbl-header {
     align-items: center;
     display:flex;
     padding-right: 14px;
-    border-top: 1px solid transparent;
-    border-right: 1px solid transparent;
     transition: background-color 0.2s ease;
 }
 
 .fsbl-header-title[data-hover=true] {
     background-color: var(--titlebar-tab-active-background-color);
     color: var(--titlebar-tab-active-font-color);
-    border-right: var(--titlebar-tab-section-separator);
 }
 
 .fsbl-header-left {
@@ -176,6 +173,7 @@ html.desktop-active .fsbl-icon.fsbl-close[data-hover=true] {
     -webkit-transition: background-color 300ms ease-in-out;
     transition: background-color 300ms ease-in-out;
     background-color: var(--titleBar-button-highlight-inactive-color);
+    border-radius: 25px;
 }
 
 html.desktop-active .fsbl-icon-highlighted {
@@ -283,7 +281,8 @@ html.desktop-active .fsbl-linker[hover=true] {
     vertical-align: top;
     background-color: var(--titlebar-tab-inactive-background-color);
     color: var(--titlebar-tab-inactive-font-color);
-    border-right: var(--titlebar-tab-separator);
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
     user-select: none;
     box-sizing: border-box;
     justify-content: flex-start;

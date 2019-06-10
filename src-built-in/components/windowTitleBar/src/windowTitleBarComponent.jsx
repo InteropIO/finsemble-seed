@@ -402,10 +402,10 @@ class WindowTitleBar extends React.Component {
 
 				</div>
 				<div className={rightWrapperClasses} ref={this.setToolbarRight}>
+					{showDockingIcon ? <DockingButton /> : null}
 					{this.state.alwaysOnTopButton && showMinimizeIcon ? <AlwaysOnTop /> : null}
 					<BringSuiteToFront />
 					{this.state.minButton && showMinimizeIcon ? <Minimize /> : null}
-					{showDockingIcon ? <DockingButton /> : null}
 					{this.state.maxButton ? <Maximize /> : null}
 					{this.state.closeButton ? <Close /> : null}
 				</div>
