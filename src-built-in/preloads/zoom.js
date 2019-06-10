@@ -1,17 +1,3 @@
-/*
-	Finsemble Zoom preload, which adds support for:
-	- Zoom hotkeys (Ctrl +, Ctrl -, Ctrl 0, Ctrl Mousewheel),
-	- A Chrome style popup showing the current zoom level,
-	- Global zoom configuration settings:
-	  - finsemble.Window Manager.zoom.timeout: how long to display the zoom popup for (default 3000ms)
-	  - finsemble.Window Manager.zoom.step: Zoom step size (default 0.1)
-	  - finsemble.Window Manager.zoom.min: Minimum zoom level (default 0.2)
-	  - finsemble.Window Manager.zoom.max Maximum zoom level (default 5)
-	- Zoom level being preserved in window state/workspaces
-
-	N.B. should not be used with OpenFin's window.options.accelerator.zoom option.
-*/
-
 // This global will contain our current zoom level
 window.fsblZoomLevel = 1;
 
@@ -22,13 +8,13 @@ window.zoomStep = 0.1;
 window.zoomMin = 0.2;
 window.zoomMax = 5;
 
-// This gets flipped to false once the initial zoom is set.
+// This gets flipped to false once the intial zoom is set.
 // We use this flag to prevent the zoom level pop up from displaying when the component is first loaded.
 window.settingInitialZoom = true;
 
 /**
  * Show a pop up control that displays the current zoom level and allows users to manipulate it with the mouse.
- * @param {int} pct
+ * @param {int} pct 
  */
 const showPopup = (pct) => {
 	const popup = document.querySelector("#zoom-popup");
@@ -203,7 +189,7 @@ const getZoomLevelHandler = (err, zoomLevel) => {
 		window.fsblZoomLevel = zoomLevel;
 		setZoom(window.fsblZoomLevel);
 	}
-
+	
 	window.settingInitialZoom = false;
 };
 
@@ -211,11 +197,6 @@ const getZoomLevelHandler = (err, zoomLevel) => {
  * Initializes the zoom handler.
  */
 const runZoomHandler = () => {
-	//Override OpenFin zoom function to do nothing
-	  //which prevents manual use of this function which conflicts with zoom preload
-	  //N.B. window.options.accelerator.zoom setting is not affected by this and will still conflict with Zoom preload if set
-	FSBL.Clients.WindowClient.getCurrentWindow().setZoomLevel = function(level, callback, errorCallback) { callback(); }
-
 	// Insert the zoom pop up, if needed.
 	insertPopUp();
 
@@ -225,7 +206,7 @@ const runZoomHandler = () => {
 	// Create hot keys for zooming.
 	FSBL.Clients.HotkeyClient.addBrowserHotkey(["ctrl", "="], zoomIn);
 	//TODO: enable when finsemble supports mapping + key
-	FSBL.Clients.HotkeyClient.addBrowserHotkey(["ctrl", "+"], zoomIn);
+	//FSBL.Clients.HotkeyClient.addBrowserHotkey(["ctrl", "+"], zoomIn);
 	FSBL.Clients.HotkeyClient.addBrowserHotkey(["ctrl", "-"], zoomOut);
 	FSBL.Clients.HotkeyClient.addBrowserHotkey(["ctrl", "0"], resetZoom);
 

@@ -112,7 +112,7 @@ export default class TabRegion extends React.Component {
         this.setState({
             iAmDragging: true
         });
-        e.dataTransfer.setData("application/fsbl-tab-data", JSON.stringify(windowIdentifier));
+        e.dataTransfer.setData("text/plain", JSON.stringify(windowIdentifier));
         FSBL.Clients.WindowClient.startTilingOrTabbing({
             windowIdentifier: windowIdentifier
         });
@@ -150,14 +150,14 @@ export default class TabRegion extends React.Component {
      */
     extractWindowIdentifier(e) {
         try {
-            let identifier = JSON.parse(e.dataTransfer.getData('application/fsbl-tab-data'));
+            let identifier = JSON.parse(e.dataTransfer.getData('text/plain'));
             //If the "identifier" is formed properly, it'll have this properly. Otherwise, it's something else (e.g., share data, image, etc).
             if (typeof identifier.windowName !== "undefined") {
                 return identifier;
             } else if (identifier.waitForIdentifier) {
                 return identifier;
             } else {
-                FSBL.Clients.Logger.system.error("Malformed drop object detected in windowTitleBar. Check tab dropping code. Expected windowIdentifier, got ", identifier);
+                FSBL.Clients.Logger.system.error("Malformed drop object detected in windowTitleBar. Check tab droppping code. Expected windowIdentifier, got ", identifier);
                 return null;
             }
         } catch (e) {
@@ -292,7 +292,7 @@ export default class TabRegion extends React.Component {
         this.scrollToTab(lastTab);
     }
     /**
-     * Function that will horizontally scroll the tab region so that the right edge of the tab lines up with the right edge of the tab region.
+     * Function that will horiztonally scroll the tab region so that the right edge of the tab lines up with the right edge of the tab region.
      * @param {} tab
      */
     scrollToTab(tab) {
@@ -307,7 +307,7 @@ export default class TabRegion extends React.Component {
             let leftEdgeOfTab = tabIndex * this.state.tabWidth;
             let rightEdgeOfTab = leftEdgeOfTab + this.state.tabWidth;
             let translateX = rightEdgeOfTab
-            //Our translation is  this: Take the  right edge of the bounding box, and subtract the left edge. This gives us the 0 point for the box. Then, we subtract the right edge of the tab. The result is a number that we use to shift the entire element and align the right edge of the tab with the right edge of the bounding box. We also account for the 30 px region on the right.
+            //Our translation is  this: Take the  right edge of the bounding box, and subract the left edge. This gives us the 0 point for the box. Then, we subtract the right edge of the tab. The result is a number that we use to shift the entire element and align the right edge of the tab with the right edge of the bounding box. We also account for the 30 px region on the right.
 
             //If there's no overflow, we don't scroll.
             if (rightEdgeOfTab < boundingBox.right) {
@@ -316,7 +316,7 @@ export default class TabRegion extends React.Component {
                 //Other tabs are less simple.
                 let leftEdgeOfTab = tabIndex * this.state.tabWidth;
                 let rightEdgeOfTab = leftEdgeOfTab + this.state.tabWidth;
-                //Our translation is  this: Take the  right edge of the bounding box, and subtract the left edge. This gives us the 0 point for the box. Then, we subtract the right edge of the tab. The result is a number that we use to shift the entire element and align the right edge of the tab with the right edge of the bounding box.
+                //Our translation is  this: Take the  right edge of the bounding box, and subract the left edge. This gives us the 0 point for the box. Then, we subtract the right edge of the tab. The result is a number that we use to shift the entire element and align the right edge of the tab with the right edge of the bounding box.
                 translateX = boundingBox.right - boundingBox.left - rightEdgeOfTab;
                 //If there's no overflow, we don't scroll.
                 if (rightEdgeOfTab < boundingBox.right) {
@@ -445,6 +445,7 @@ export default class TabRegion extends React.Component {
 
     onTabsChanged(err, response) {
         let { value } = response;
+        ////console.log("Tablist changed", value);
         this.setState({
             tabs: value,
             tabWidth: this.getTabWidth({ tabList: value })

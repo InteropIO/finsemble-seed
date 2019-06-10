@@ -33,7 +33,7 @@ export default class FoldersList extends React.Component {
 
 	onDragEnd(event = {}) {
 		if (!event.destination) return;
-		//There are two items above the 0th item in the list. They aren't re-orderable. We add 2 to the index so that it matches with reality. The source comes in properly but the destination needs to be offset.
+		//There are two items above the 0th item in the list. They aren't reorderable. We add 2 to the index so that it matches with reality. The source comes in properly but the destination needs to be offset.
 		let newIndex = event.destination.index;
 
 		storeActions.reorderFolders(event.source.index, newIndex);
@@ -115,7 +115,7 @@ export default class FoldersList extends React.Component {
 	deleteFolder(name, e) {
 		e.stopPropagation();
 		e.preventDefault();
-		// Do not attempt to delete if user is renaming a folder
+		// Do not attemp to delete if user is renaming a folder
 		!this.state.renamingFolder && storeActions.deleteFolder(name)
 	}
 

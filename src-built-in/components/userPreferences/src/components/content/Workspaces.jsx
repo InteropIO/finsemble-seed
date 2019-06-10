@@ -73,11 +73,8 @@ export default class Workspaces extends React.Component {
 			workspaceToLoadOnStart: null,
 			templateName: '',
 			workspaceBeingEdited: '',
-			focusedWorkspaceComponentList: [],
-			isElectron: (fin.container && fin.container === "Electron"),
-			initialAlwaysOnTop: finsembleWindow.windowOptions.alwaysOnTop,
-			alwaysOnTop: finsembleWindow.windowOptions.alwaysOnTop
-		};
+			focusedWorkspaceComponentList: []
+		}
 		this.bindCorrectContext();
 		this.addListeners();
 	}
@@ -91,7 +88,7 @@ export default class Workspaces extends React.Component {
 		});
 	}
 	bindCorrectContext() {
-		let methods = ["deleteWorkspace", "addListeners", "setWorkspaceList", "onDragEnd", "startEditingWorkspace", "renameWorkspace", "cancelEdit", "setWorkspaceToLoadOnStart", "setPreferences", "exportWorkspace", "handleButtonClicks", "getFocusedWorkspaceComponentList", "changePreferencesAlwaysOnTop", "openFileDialog", "preferencesFocused"];
+		let methods = ["deleteWorkspace", "addListeners", "setWorkspaceList", "onDragEnd", "startEditingWorkspace", "renameWorkspace", "cancelEdit", "setWorkspaceToLoadOnStart", "setPreferences", "exportWorkspace", "handleButtonClicks", "getFocusedWorkspaceComponentList"];
 		methods.forEach((method) => {
 			this[method] = this[method].bind(this);
 		});
@@ -104,28 +101,11 @@ export default class Workspaces extends React.Component {
 		this.setState({
 			workspaceList: data.value
 		});
+		this.cancelEdit();
 	}
 
 	addListeners() {
 		UserPreferencesStore.addListener({ field: 'WorkspaceList' }, this.setWorkspaceList)
-	}
-
-	/**
-	 * Sets the windowOptions.alwaysOnTop to the value supplied. The preferences component should
-	 * not be always on top when a file dialog is open.
-	 * @param {boolean} alwaysOnTop The value to set finsembleWindow.options.alwaysOnTop
-	 */
-	changePreferencesAlwaysOnTop(alwaysOnTop) {
-		//The initialAlwaysOnTop check is to prevent making a component be alwaysOnTop when the
-		//client may have set it to alwaysOnTop:false in the config. If that's the case, it should
-		//never set its alwaysOnTop to true and should always remain unchanged
-		if (this.state.initialAlwaysOnTop && this.state.isElectron) {
-			FSBL.Clients.WindowClient.setAlwaysOnTop(alwaysOnTop, () => {
-				this.setState({
-					alwaysOnTop: alwaysOnTop
-				});
-			});
-		}
 	}
 
 	onDragEnd(changeEvent) {
@@ -150,8 +130,8 @@ export default class Workspaces extends React.Component {
 			let windowData = templateObject.windowData[i];
 			FSBL.Clients.Logger.system.debug("getComponentTypes loop", windowData);
 			componentType = "Unknown Component";
-			if (windowData) { // current assimilation doesn't fill in windowData, so in this case use "Unknown Component" for component type
-				componentType = windowData.componentType || windowData.customData.component.type;
+			if (windowData) { // current assimulation doesn't fill in windowData, so in this case use "Unknown Component" for component type
+				componentType = windowData.customData.component.type;
 			} else {
 				componentType = "Unknown Component";
 			}
@@ -323,25 +303,10 @@ export default class Workspaces extends React.Component {
 	}
 
 	openFileDialog() {
-		//Set alwaysOnTop to false and add an event listener on the window. When focus is regained
-		//then reset always on top
-		this.changePreferencesAlwaysOnTop(false);
-		finsembleWindow.addEventListener('focused', this.preferencesFocused);
 		let inputElement = document.getElementById("file-input");
 		inputElement.addEventListener("change", importWorkspace, false);
 		inputElement.click();
-	}
 
-	/**
-	 * If the event is being listened to, when the preferences component is focused
-	 * it will set always on top to true, and remove the event listener
-	 *
-	 * This is to handle bringing alwaysOnTop back to true when file dialogs are closed
-	 * without changes (also handles bringing back to front after exporting)
-	 */
-	preferencesFocused() {
-		finsembleWindow.removeEventListener('focused', this.preferencesFocused);
-		this.changePreferencesAlwaysOnTop(true);
 	}
 
 	importWorkspace(evt) {
@@ -396,10 +361,6 @@ export default class Workspaces extends React.Component {
 			});
 		}
 
-		//Set alwaysOnTop to false and add an event listener on the window. When focus is regained
-		//then reset always on top
-		self.changePreferencesAlwaysOnTop(false);
-		finsembleWindow.addEventListener('focused', this.preferencesFocused);
 		//If we're autosaving, autosave, then export.
 		//@todo, put into store. consider moving autosave into workspaceClient.
 		FSBL.Clients.ConfigClient.getValue({ field: "finsemble.preferences.workspaceService.promptUserOnDirtyWorkspace" }, (err, data) => {
@@ -416,6 +377,8 @@ export default class Workspaces extends React.Component {
 			}
 			doExport();
 		});
+
+
 	}
 	handleButtonClicks(e) {
 		if (this.state.adding || this.state.editing) {
@@ -450,6 +413,8 @@ export default class Workspaces extends React.Component {
 
 		if (this.state.focusedWorkspace === FSBL.Clients.WorkspaceClient.activeWorkspace.name) {
 			deleteButtonClasses += " disabled-individual-workspace-action";
+			allowDelete = false;
+			deleteTooltip = "Cannot delete the active workspace";
 		}
 
 		if (this.state.focusedWorkspace === '') {

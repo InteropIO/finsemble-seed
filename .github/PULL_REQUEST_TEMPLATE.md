@@ -1,14 +1,8 @@
-fix|feat|chore|docs|refactor|style|test: #id [CARD]
-
-[Kanban link](https://chartiq.kanbanize.com/ctrl_board/18/cards/CARD/details)
+**Resolves issue [####](https://chartiq.kanbanize.com/ctrl_board/18/cards/####/details)**
 
 **Description of change**
-* Changes
+-Change 1
+-Change 2
 
 **Description of testing**
-Markdown will convert the 1s to the appropriate number.
-1. Step 1.
-1. Step 2.
-1. [x] Thing happened.
-1. [ ] Thing did not happen.
-1. Step 3
+-How did you verify that your code satisfies the card's requirements?

@@ -7,7 +7,7 @@ import React from "react";
 /**
  * Toast component. Displays a success/failure message when an app is added/removed
  * @param {object} props Component props
- * @param {string} props.installationActionTaken String containing the action that occurred
+ * @param {string} props.installationActionTaken String containing the action that occured
  */
 const Toast = props => {
 	let classes = "toast-content";

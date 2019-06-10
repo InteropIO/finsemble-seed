@@ -17,7 +17,7 @@ class Linker extends React.Component {
 		this.onStoreChanged = this.onStoreChanged.bind(this);
 	}
 	/**
-	 * When the store changes, set the react component's state, forcing a re-render.
+	 * When the store changes, set the react component's state, forcing a rerender.
 	 *
 	 * @param {any} changeEvent
 	 * @memberof Linker
@@ -76,7 +76,7 @@ class Linker extends React.Component {
 		//Checkbox inside of a circle. Rendered in the center of a group if the attachedWindow is part of that group.
 		let activeChannelIndicator = (<i className="active-linker-group ff-check-circle"></i>);
 		/**
-		 * This function iterates through all of the channels that have registered with the linkerClient. If the attachedWindow belongs to any of them, it renders a check mark and a circle in the center of the channel's rectangle.
+		 * This function iterates through all of the channels that have registered with the linkerClient. If the attachedWindow belongs to any of them, it renders a checkmark and a circle in the center of the channel's rectangle.
 		 **/
 		let channels = FSBL.Clients.LinkerClient.getAllChannels().map(function (item, index) {
 			//Boolean, whether the attachedWindow belongs to the channel.
