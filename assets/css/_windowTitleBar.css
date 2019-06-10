@@ -213,6 +213,16 @@ html.desktop-active .fsbl-icon-highlighted {
     border: 1px solid var(--titleBar-background-inactive-color);
     box-sizing: content-box; /* otherwise any box-sizing on the page can override how our linker appears */
 }
+  
+.linkerGroup {
+    border-radius: 30px;
+    width: 20px;
+}
+  
+.linkerContainer {
+    justify-content: center;
+    align-items: center;
+}
 
 html.desktop-active .linker-group {
     border: 1px solid var(--titleBar-background-active-color);
@@ -237,17 +247,18 @@ html.desktop-active .linker-group {
     align-content: center;
     transition: background .3s ease;
     position: relative;
+    width: 13px;
+    border-radius:20px;
 }
 
-.fsbl-linker[hover=true] {
-    background: var(--titleBar-button-hover-inactive-color);
-    color: var(--titlebar-active-font-color);
+.fsbl-linker[data-hover=true] {
+    background-color: var(--titleBar-button-hover-active-color);
 }
 
-html.desktop-active .fsbl-linker[hover=true] {
+/* html.desktop-active .fsbl-linker[data-hover=true] {
     background: var(--titleBar-button-hover-active-color);
     color: var(--titleBar-button-hover-linker-group);
-}
+} */
 
 .ff-minimize {
     padding-bottom: 3px;

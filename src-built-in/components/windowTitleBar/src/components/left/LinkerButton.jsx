@@ -156,10 +156,29 @@ export default class LinkerButton extends React.Component {
      */
     render() {
         return (<div ref="LinkerButton" title="Link Data" className="linkerSection">
-            <div className="fsbl-icon fsbl-linker ff-linker" data-hover={this.state.hoverState} onClick={this.showLinkerWindow} >
+            <div className="fsbl-icon fsbl-linker" data-hover={this.state.hoverState} onClick={this.showLinkerWindow} >
+                <svg width="15px" height="15px" viewBox="1 0 15 15" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                    <title>Linker</title>
+                    <defs>
+                        <path d="M17.9246212,15.4246212 L16.9246212,15.4246212 L16.9246212,12.9246212 C16.9246212,11.5439093 15.8053331,10.4246212 14.4246212,10.4246212 C13.0439093,10.4246212 11.9246212,11.5439093 11.9246212,12.9246212 L11.9246212,15.4246212 L10.9246212,15.4246212 L10.9246212,12.9246212 C10.9246212,10.9916246 12.4916246,9.4246212 14.4246212,9.4246212 C16.3576178,9.4246212 17.9246212,10.9916246 17.9246212,12.9246212 L17.9246212,15.4246212 Z M17.9246212,17.4246212 L17.9246212,19.9246212 C17.9246212,21.8576178 16.3576178,23.4246212 14.4246212,23.4246212 C12.4916246,23.4246212 10.9246212,21.8576178 10.9246212,19.9246212 L10.9246212,17.4246212 L11.9246212,17.4246212 L11.9246212,19.9246212 C11.9246212,21.3053331 13.0439093,22.4246212 14.4246212,22.4246212 C15.8053331,22.4246212 16.9246212,21.3053331 16.9246212,19.9246212 L16.9246212,17.4246212 L17.9246212,17.4246212 Z M14.4246212,13.4246212 C14.7007636,13.4246212 14.9246212,13.6484788 14.9246212,13.9246212 L14.9246212,18.9246212 C14.9246212,19.2007636 14.7007636,19.4246212 14.4246212,19.4246212 C14.1484788,19.4246212 13.9246212,19.2007636 13.9246212,18.9246212 L13.9246212,13.9246212 C13.9246212,13.6484788 14.1484788,13.4246212 14.4246212,13.4246212 Z" id="path-1"></path>
+                        <filter x="-28.6%" y="-7.1%" width="157.1%" height="128.6%" filterUnits="objectBoundingBox" id="filter-2">
+                            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+                            <feGaussianBlur stdDeviation="0.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+                            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+                        </filter>
+                    </defs>
+                    <g id="Symbols" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+                        <g id="atoms/icons/link" transform="translate(-6.000000, -9.000000)" fillRule="nonzero">
+                            <g id="Linker" transform="translate(14.424621, 16.424621) rotate(45.000000) translate(-14.424621, -16.424621) ">
+                                <use fill="black" fillOpacity="1" filter="url(#filter-2)" xlinkHref="#path-1"></use>
+                                <use fill="#FFFFFF" xlinkHref="#path-1"></use>
+                            </g>
+                        </g>
+                    </g>
+                </svg>
                 <FinsembleHoverDetector edge="top left" hoverAction={this.hoverAction} />
-            </div>
+            </div >
             <LinkerGroups />
-        </div>);
+        </div >);
     }
 }
