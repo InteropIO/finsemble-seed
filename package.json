@@ -75,6 +75,7 @@
         "react-table": "^6.8.2",
         "shelljs": "^0.8.1",
         "socket.io": "^2.0.4",
+        "spectron": "^5.0.0",
         "strip-ansi": "^3.0.0",
         "style-loader": "^0.19.0",
         "tslint": "^5.11.0",
