@@ -61,9 +61,9 @@
     --titleBar-background-active-color: var(--core-primary-3);
     --titlebar-tab-icon-font-color: var(--accent-primary-1);
     --titlebar-tab-active-font-color: var(--font-color-primary);
+    --titlebar-tab-inactive-font-color: var(--core-primary-5);
     --titlebar-tab-hover-background-color: var(--core-primary-2);
     --titlebar-tab-active-background-color: var(--core-primary-3);
-    --titlebar-tab-inactive-font-color: var(--core-primary-5);
     --titlebar-tab-inactive-background-color: var(--core-primary);
     --titlebar-tab-ghost-background-color: var(--secondary-accent-color);
     --titlebar-tab-ghost-border-color: var(--primary-accent-color);
@@ -72,8 +72,8 @@
 
     --titleBar-button-hover-active-color: white;
     --titleBar-button-hover-inactive-color: white;
-    --titleBar-button-highlight-active-color: var(--primary-accent-color);
-    --titleBar-button-highlight-inactive-color: var(--secondary-accent-color);
+    --titleBar-button-highlight-active-color: var(--accent-primary);
+    --titleBar-button-highlight-inactive-color: var(--accent-primary-1);
     --titleBar-button-hover-negative-color: var(--accent-negative);
     --titleBar-button-hover-linker-group: var(--gray3);
 

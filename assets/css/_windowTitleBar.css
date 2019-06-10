@@ -54,6 +54,8 @@ html.desktop-active .fsbl-header {
     display:flex;
     padding-right: 14px;
     transition: background-color 0.2s ease;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }
 
 .fsbl-header-title[data-hover=true] {
@@ -289,9 +291,14 @@ html.desktop-active .fsbl-linker[hover=true] {
     transition: color 0.2s ease;
 }
 
-.fsbl-tab[data-hover=true], .fsbl-active-tab {
-    background-color: var(--titlebar-tab-hover-background-color);
+.fsbl-active-tab {
+    background-color: var(--titlebar-tab-active-background-color);
     color: var(--titlebar-tab-active-font-color);
+}
+
+.fsbl-tab[data-hover=true] {
+    background-color: var(--titlebar-tab-hover-background-color);
+    color: var(--titlebar-tab-inactive-font-color);
 }
 
 .tab-region-wrapper {
