@@ -120,6 +120,8 @@ export default class appLauncherContainer extends React.Component {
 		let isPinned = false;
 
 		if ((!config.window ||
+			!config.foreign ||
+			!config.foreign.components ||
 			!config.foreign.components["App Launcher"] ||
 			!config.foreign.components["App Launcher"].launchableByUser) &&
 			!config.group) {

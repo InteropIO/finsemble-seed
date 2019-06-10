@@ -4,6 +4,7 @@
 		"Welcome Component": {
 			"window": {
 				"url": "$applicationRoot/components/welcome/welcome.html",
+				"affinity": "workspaceComponents",
 				"frame": false,
 				"resizable": true,
 				"autoShow": true,
@@ -44,6 +45,7 @@
 		"nonConfiguredComponent": {
 			"window": {
 				"url": "$applicationRoot/components/nonConfiguredComponent/nonConfiguredComponent.html",
+				"affinity": "systemComponents",
 				"frame": false,
 				"resizable": true,
 				"autoShow": true,
@@ -51,33 +53,6 @@
 				"left": "center",
 				"width": 400,
 				"height": 432
-			},
-			"component": {
-				"inject": false,
-				"spawnOnStartup": false,
-				"category": "system"
-			},
-			"foreign": {
-				"services": {
-					"dockingService": {
-						"canGroup": true,
-						"isArrangable": true
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"launchableByUser": false
-					},
-					"Window Manager": {
-						"showLinker": false,
-						"FSBLHeader": true,
-						"persistWindowState": true,
-						"title": "Non Configured Component"
-					},
-					"Toolbar": {
-						"iconClass": "ff-component"
-					}
-				}
 			}
 		},
 		"Notepad": {
