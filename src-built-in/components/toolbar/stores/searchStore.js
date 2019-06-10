@@ -104,13 +104,17 @@ var Actions = {
 			FSBL.Clients.Logger.error("No element with ID 'inputContainer' exists");
 		}
 	},
-	handleClose() {
-	//console.log("close a window")
-		window.getSelection().removeAllRanges();
-		document.getElementById("searchInput").blur();
-		menuStore.setValue({ field: "active", value: false })
-		if (!menuWindow) return;
-		menuWindow.isShowing(function (showing) {
+
+	/**
+	 * handleClose gets called for several reasons. One of those is when the window starts moving.
+	 * If it starts moving, an event is passed in. If the event is passed in, we don't want to animate the window.
+	 *  If it's just a blur, we'll animate the change in size.
+	 * @param {*} e
+	 */
+	handleClose(e) {
+		if (!menuWindow) { return; }
+		menuWindow.isShowing(function (err, showing) {
+			if (err) { FSBL.Clients.Logger.error(`menuWindow.isShowing failed, error:`, err); }
 			if (showing) {
 				console.log("close a window")
 				if (!e && cachedBounds) {
@@ -118,14 +122,12 @@ var Actions = {
 						cachedBounds = null;
 					});
 				}
-				window.getSelection().removeAllRanges();
-				document.getElementById("searchInput").blur();
-				menuStore.setValue({ field: "active", value: false })
-				if (!menuWindow) return;
-				menuWindow.hide();
 			}
+			//These lines handle closing the searchInput box. As showing is only true when the search results
+			//menu opens, they need to be outside so the search inputbox will still close when there is no text string.
+			blurSearchInputHandler();
+			menuStore.setValue({ field: "active", value: false });
 		});
-
 	},
 
 	setupWindow(cb = Function.prototype) {

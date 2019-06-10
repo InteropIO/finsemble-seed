@@ -14,10 +14,10 @@ var listOfWebpackEntryFiles = [
 	path.join(__dirname, 'webpack.components.entries.json')
 ];
 
-// Look through the src/components directory for webpack.entries.json files at the top level.
-var componentsPath = path.join(__homename, "src/components");
+// Look through the src directory for webpack.entries.json files at the top level.
+var componentsPath = path.join(__homename, "src");
 var items = fs.readdirSync(componentsPath);
-// For each file in the directory (src/components/*)
+// For each file in the directory (src/*)
 for (var i = 0; i < items.length; i++) {
 	// Then maybe there's a webpack.entries.json in there to process, slap it into the list as a possibility
 	let possibleWebpackEntry = path.join(componentsPath, items[i] + "/finsemble.webpack.json");
@@ -40,8 +40,8 @@ listOfWebpackEntryFiles.forEach(function (filename) {
 		entries.forEach(function (assetName) {
 			let assetNoSuffix = assetName.replace(/\.[^/.]+$/, ""); // Remove the .js or .jsx extension
 			additionalComponents[assetName] = {
-				output: "components/" + subDirectory + "/" + assetNoSuffix,
-				entry: "./src/components/" + subDirectory + "/" + assetName
+				output: "/" + subDirectory + "/" + assetNoSuffix,
+				entry: "./src/" + subDirectory + "/" + assetName
 			};		
 		});		
 	} else {
