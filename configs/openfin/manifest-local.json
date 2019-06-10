@@ -2,18 +2,20 @@
     "devtools_port": 9090,
     "startup_app": {
         "name": "ChartIQ Local",
-        "url": "http://localhost:3375/finsemble/components/system/serviceManager/serviceManager.html",
+		"url": "http://localhost:3375/finsemble/services/systemManager/systemManager.html",
         "uuid": "Finsemble",
         "applicationIcon": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png",
-        "defaultTop": 0,
-        "defaultLeft": 0,
+        "defaultTop": 75,
+		"defaultLeft": 200,
+		"defaultHeight": 950,
+		"defaultWidth": 700,
         "showTaskbarIcon": true,
         "autoShow": false,
-        "frame": false,
-        "resizable": false,
+        "frame": true,
+        "resizable": true,
         "maximizable": false,
-        "delay_connection": true,
-        "contextMenu": true,
+		"delay_connection": true,
+		"contextMenu": true,
         "cornerRounding": {
             "width": 4,
             "height": 4
@@ -68,7 +70,15 @@
         "applicationRoot": "http://localhost:3375",
         "moduleRoot": "$applicationRoot/finsemble",
         "servicesRoot": "$applicationRoot/finsemble/services",
-        "notificationURL": "$applicationRoot/components/notification/notification.html",
+		"notificationURL": "$applicationRoot/components/notification/notification.html",
+		"bootConfig": {
+			"onErrorMakeSystemManagerVisible": true,
+			"defaults": {
+				"startServiceTimeout": 10000,
+				"startComponentTimeout": 15000,
+				"startModuleTimeout": 10000
+			}
+		},
         "importConfig": [
             "$applicationRoot/configs/application/config.json"
         ],
