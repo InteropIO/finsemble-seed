@@ -80,7 +80,7 @@ span > svg {
 
 .ff-adp-workspace:before {
     padding-right: 8px;
-    padding-top: 2px;
+    padding-top: 1px;
 }
 
 .finsemble-toolbar .resize-area {
@@ -135,7 +135,9 @@ span > svg {
 
 }
 
-.finsemble-toolbar-workspace-button-label > .finsemble-toolbar-button-label {
+.finsemble-toolbar-section.left > .finsemble-toolbar-button-label {
+    padding-top: 1px;
+    margin-top: 2px;
     overflow: hidden;
     text-align: center;
     text-overflow: ellipsis;
@@ -191,7 +193,7 @@ img.pinned-icon {
     color: var(--toolbar-icon-app-color);
     font-size: var(--toolbar-icon-font-size);
     padding-right: .25em;
-    margin-top: 10px;
+    margin-top: 8px;
 }
 
 .pinned-workspace-icon {
@@ -207,8 +209,6 @@ img.pinned-icon {
 }
 
 .finsemble-button-label {
-    padding-top: 1px;
-    margin-top: 2px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;

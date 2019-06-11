@@ -61,7 +61,7 @@ body.menu {
     padding-right: 10px;
     cursor: pointer;
     position:relative;
-    border-radius: 15px;
+    border-radius: 20px;
 }
 
 .menu-item-function {
@@ -73,8 +73,9 @@ body.menu {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding: 8px 0px;
-    height: 100%;
+    padding-top: 6px;
+    margin: 3px 0;
+    height: 22px;
     flex: .75;
 }
 
