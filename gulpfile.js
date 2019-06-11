@@ -401,7 +401,8 @@
 			}
 
 			let config = {
-				manifest: cfg.serverConfig
+				manifest: cfg.serverConfig,
+				chromiumFlags: JSON.stringify(cfg.chromiumFlags),
 			}
 
 			// set breakpointOnStart variable so FEA knows whether to pause initial code execution
