@@ -104,7 +104,10 @@ var Actions = {
 		return Actions.parentWrapper.removeWindow({ windowIdentifier: wi, position: i });
 	},
 	closeTab: function (wi) {
-		return Actions.parentWrapper.deleteWindow({ windowIdentifier: wi })
+		return FSBL.FinsembleWindow.getInstance(wi, (err, wrap) => {
+			FSBL.Clients.Logger.system.debug("floating titlebar closeTab", wi);
+			wrap.close({ removeFromWorkspace: true });
+		});
 	},
 	reorderTab: function (tab, newIndex) {
 
