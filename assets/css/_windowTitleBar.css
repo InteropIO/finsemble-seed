@@ -237,11 +237,10 @@ html.desktop-active .linker-group {
     margin-right: 5px;
 }
 
-.fsbl-linker {
+.fsbl-linker, .fsbl-share {
     cursor: pointer;
     display: flex;
   /* So it sits over the border*/
-    margin-left: -1px;
     align-items: center;
     justify-content: center;
     align-content: center;
@@ -251,14 +250,14 @@ html.desktop-active .linker-group {
     border-radius:20px;
 }
 
-.fsbl-linker[data-hover=true] {
-    background-color: var(--titleBar-button-hover-active-color);
-}
-
 /* html.desktop-active .fsbl-linker[data-hover=true] {
     background: var(--titleBar-button-hover-active-color);
     color: var(--titleBar-button-hover-linker-group);
 } */
+
+.fsbl-linker[data-hover=true], .fsbl-share[data-hover=true] {
+    background-color: var(--titleBar-button-hover-active-color);
+}
 
 .ff-minimize {
     padding-bottom: 3px;

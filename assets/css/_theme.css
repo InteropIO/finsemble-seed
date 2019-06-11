@@ -71,7 +71,7 @@
     --titlebar-tab-section-separator: 1px solid var(--core-primary-2);
 
     --titleBar-button-hover-active-color: var(--core-primary-3);
-    --titleBar-button-hover-inactive-color: var(--core-primary-5);
+    --titleBar-button-hover-inactive-color: white;
     --titleBar-button-highlight-active-color: var(--accent-primary);
     --titleBar-button-highlight-inactive-color: var(--accent-primary-1);
     --titleBar-button-hover-negative-color: var(--accent-negative);
