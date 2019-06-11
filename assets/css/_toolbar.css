@@ -85,15 +85,14 @@ span > svg {
 
 .finsemble-toolbar .resize-area {
     height: 100%;
-    width: 6px;
-    max-width: 6px;
-    min-width: 6px;
-		background-color: var(--toolbar-resize-area-color);
-		position: absolute;
-		right: 0;
-    /* justify-content: flex-end;
+    width: 4px;
+    max-width: 4px;
+    min-width: 4px;
+    background-color: var(--toolbar-resize-area-color);
+    justify-content: flex-end;
     order: 3;
-    flex: 0 0 auto; */
+    flex: 0 0 auto;
+    margin-left: .25em;
 }
 
 @media screen and (max-width: 170px) {
@@ -250,7 +249,7 @@ img.pinned-icon {
     width: 23px;
     margin-top: -7px;
   }
-  
+
   .finsemble-toolbar-drag-handle {
     padding-left: 5px;
     padding-right: 0px;
