@@ -71,7 +71,6 @@ html.desktop-active .fsbl-header {
     align-items: center;
     justify-content: flex-start;
     display: flex;
-    border-right: var(--titlebar-tab-section-separator);
 }
 
 .fsbl-header-center {
@@ -93,10 +92,6 @@ html.desktop-active .fsbl-header {
     height: 100%;
     width: 100%;
     padding-bottom:0px;
-}
-
-.fsbl-tabs-multiple .fsbl-header-center {
-    border-right: var(--titlebar-tab-section-separator);
 }
 
 html.desktop-active .fsbl-header-right {
