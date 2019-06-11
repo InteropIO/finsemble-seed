@@ -205,6 +205,7 @@ img {
     flex-direction: row;
     align-items: center;
     width: 50px;
+    color: var(--content-button-icon-color);
 }
 
 .individual-workspace-action {
@@ -224,13 +225,10 @@ img {
 }
 
 .individual-workspace-action:hover {
-    border: 1px solid var(--content-button-neutral-border-hover-color);
-    border-radius: 3px;
-    height: 17px;
+    color: white;
 }
 
 .delete-workspace:hover {
-    border: 1px solid var(--content-button-negative-border-hover-color);
     color: var(--content-close-hover-color);
 }
 
@@ -261,11 +259,13 @@ img {
     align-items: center;
     justify-content: center;
     margin: 16px 0 6px 0;
+    color: var(--content-button-icon-color);
 }
 
 .action-button:hover {
     cursor: pointer;
-    border: solid 1px var(--content-button-neutral-border-hover-color);
+    border: solid 1px var(--content-button-neutral-hover-color);
+    color: var(--content-button-neutral-hover-color);
 }
 
 .disabled-button, .disabled-button:hover {

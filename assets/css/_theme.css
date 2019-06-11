@@ -196,7 +196,8 @@
 
     --content-button-label-font-size: 11px;
     --content-button-disabled-border-color: var(--core-primary-2);
-    --content-button-neutral-border-hover-color: var(--core-primary-5);
+    --content-button-icon-color: var(--core-primary-5);
+    --content-button-neutral-hover-color: white;
     --content-button-negative-border-hover-color: var(--accent-negative);
 
     --content-checkbox-check-color: var(--font-color-primary);
