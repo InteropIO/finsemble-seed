@@ -5,6 +5,7 @@ body {
     margin: 0px;
     font-family: var(--font-primary);
     font-weight: var(--content-font-weight);
+    user-select: none;
 }
 
 #bodyHere {
@@ -112,7 +113,9 @@ body {
 
 .complex-menu-section-toggle {
     padding: 4px 30px 4px 0px;
+    margin: 1px 6px;
     padding-left: 30px;
+    border-radius: 30px;
 }
 
 .complex-menu-section-toggle:hover {

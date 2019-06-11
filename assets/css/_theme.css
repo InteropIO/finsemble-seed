@@ -204,8 +204,8 @@
     --content-checkbox-background-color: var(--accent-primary);
     --content-checkbox-unchecked-border-color: var(--core-primary-5);
 
-    --content-card-background-color: var(--slate4);
-    --content-card-bestMatch-background-color: var(--gray1);
+    --content-card-background-color: var(--core-primary-2);
+    --content-card-bestMatch-background-color: var(--core-primary-2);
     --content-card-icon-background-color: var(--secondary-accent-color);
     --content-card-icon-font-size: 20px;
     --content-card-title-font-size: 14px;
