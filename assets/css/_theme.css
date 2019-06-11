@@ -171,37 +171,37 @@
     --scrim-negative-background-color: var(--red7);
 
     /* Content Dialog (e.g., userPreferences and appCatalog) */
-    --content-font-size: 16px;
-    --content-header-font-size: 18px;
-    --content-header-font-color: var(--tertiary-accent-color);
+    --content-font-size: 13px;
+    --content-header-font-size: 16px;
+    --content-header-font-color: var(--accent-primary);
     --content-font-color: var(--font-color-primary);
-    --content-font-weight: var(--primary-font-weight);
+    --content-font-weight: 600;
 
-    --content-nav-header-font-size: 21px;
-    --content-nav-header-font-weight: var(--primary-font-weight);
-    --content-nav-header-background-color: var(--slate);
-    --content-nav-background-color: var(--tertiary-background-color);
-    --content-nav-highlighter: var(--slate3);
-    --content-nav-highlighter-hover: var(--slate2);
-    --content-background-color: var(--secondary-background-color);
-    --content-hint-font-color: var(--gray);
-    --content-component-list-font-size: 12px;
+    --content-nav-header-font-size: 16px;
+    --content-nav-header-font-weight: 600;
+    --content-nav-header-background-color: var(--core-primary-2);
+    --content-nav-background-color: var(--core-primary);
+    --content-nav-highlighter: var(--core-primary-3);
+    --content-nav-highlighter-hover: var(--core-primary-2);
+    --content-background-color: var(--core-primary-1);
+    --content-hint-font-color: var(--core-primary-5);
+    --content-component-list-font-size: 11px;
 
-    --content-list-border-color: var(--gray6);
-    --content-list-highlighter: var(--slate3);
-    --content-list-item-flagged-color: var(--blue1);
+    --content-list-border-color: var(--core-primary-5);
+    --content-list-highlighter: var(--core-primary-2);
+    --content-list-item-flagged-color: var(--accent-primary);
     --content-list-editor-font-color: var(--font-color-primary);
-    --content-list-editor-border-color: var(--gray);
-    --content-list-editor-highlighted-text: var(--blue1);
+    --content-list-editor-border-color: var(--core-primary-5);
+    --content-list-editor-highlighted-text: var(--accent-primary);
 
     --content-button-label-font-size: 11px;
-    --content-button-disabled-border-color: var(--gray7);
-    --content-button-neutral-border-hover-color: var(--gray);
-    --content-button-negative-border-hover-color: var(--red1);
+    --content-button-disabled-border-color: var(--core-primary-2);
+    --content-button-neutral-border-hover-color: var(--core-primary-5);
+    --content-button-negative-border-hover-color: var(--accent-negative);
 
     --content-checkbox-check-color: var(--font-color-primary);
-    --content-checkbox-background-color: var(--blue);
-    --content-checkbox-unchecked-border-color: var(--gray4);
+    --content-checkbox-background-color: var(--accent-primary);
+    --content-checkbox-unchecked-border-color: var(--core-primary-5);
 
     --content-card-background-color: var(--slate4);
     --content-card-bestMatch-background-color: var(--gray1);
@@ -210,7 +210,10 @@
     --content-card-title-font-size: 14px;
     --content-details-font-size: 12px;
     --content-back-font-size: 15px;
-    --content-close-hover-color: var(--red2);
+    --content-close-hover-color: var(--accent-negative);
+
+    --content-warning-text: var(--accent-aware);
+    --content-restart-button-color: var(--accent-primary);
 
     /* Notifications */
     --notification-body-background-color: var(--toolbar-background-color);

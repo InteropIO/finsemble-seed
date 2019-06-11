@@ -6,6 +6,7 @@ body {
     font-weight: var(--content-font-weight);
     font-family: var(--font-primary);
     color: var(--content-font-color);
+    font-size: var(--content-font-size);
 }
 
 img {
@@ -102,6 +103,7 @@ img {
     height: 100%;
     display: flex;
     flex-direction: column;
+    user-select: none;
 }
 
 .complex-menu-header {
@@ -113,6 +115,7 @@ img {
 
 .ff-close {
     cursor: pointer;
+    font-size: var(--content-button-label-font-size);
 }
 
 .ff-close:hover {
@@ -120,8 +123,12 @@ img {
 }
 
 .complex-menu-section-toggle {
-    padding: 4px 30px 4px 0px;
-    padding-left: 30px;
+    padding: 5px 30px 5px 30px;
+    margin: 1px 6px;
+    border-radius: 20px;
+    height: 22px;
+    display:flex;
+    align-items: center;
 }
 
 .complex-menu-section-toggle:hover {
@@ -165,10 +172,11 @@ img {
     height: 210px;
     overflow-y: auto;
     margin-right: 16px;
+    padding: 5px;
+    border-radius: 3px;
 }
 
 .workspace-item {
-    user-select: none;
     height: 28px;
     padding: 4px 10px 0 20px;
     display: flex;
@@ -202,10 +210,9 @@ img {
 .individual-workspace-action {
     margin-left: 1px;
     cursor: pointer;
-    padding: 2px;
+    padding: 4px;
     height: 17px;
     border: 1px solid transparent;
-    font-weight: 100 !important;
 }
 
 .individual-workspace-action > i:before {
@@ -218,12 +225,13 @@ img {
 
 .individual-workspace-action:hover {
     border: 1px solid var(--content-button-neutral-border-hover-color);
-    border-radius: 4px;
+    border-radius: 3px;
     height: 17px;
 }
 
 .delete-workspace:hover {
     border: 1px solid var(--content-button-negative-border-hover-color);
+    color: var(--content-close-hover-color);
 }
 
 .active-workspace {
@@ -232,6 +240,7 @@ img {
 
 .focused-workspace-item {
     background-color: var(--content-list-highlighter);
+    border-radius: 20px;
 }
 
 .auto-start-workspace-item:before {
@@ -276,6 +285,7 @@ img {
     font-size: var(--content-button-label-font-size);
     display: flex;
     flex-direction: column;
+    border-radius: 3px;
 }
 
 .workspace-action-button-icon {
@@ -334,6 +344,7 @@ img {
     align-items: center;
     margin-top: 8px;
     margin-left: 12px;
+    width: 270px;
 }
 
 .complex-menu-checkbox {
@@ -367,10 +378,10 @@ img {
     padding: 7px;
     font-size: var(--content-component-list-font-size);
     width: 140px;
-    height: 104px;
+    height: 114px;
     overflow-y: auto;
-    user-select: none;
     color: var(--workspace-component-list-font-color);
+    border-radius: 3px;
 }
 
 .ff-edit {
@@ -408,11 +419,11 @@ img {
 
 select:focus, option:focus {
     outline: none;
-    background-color: transparent;
+    background-color: white;
 }
 
 .change-text {
-	color: var(--yellow1);
+	color: var(--content-warning-text);
 	font-size: 14px;
     margin-top: 12px;
 	margin-left: 12px;
@@ -426,7 +437,9 @@ select:focus, option:focus {
 	border: 0;
 	background: none;
 	box-shadow: none;
-	background-color: var(--blue6);
+	background-color: var(--content-restart-button-color);
 	color: white;
-	font-size: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 3px;
   }
