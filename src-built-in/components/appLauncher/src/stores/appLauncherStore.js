@@ -227,7 +227,9 @@ var Actions = {
 
 		var pins = appLauncherStore.getValue("pins");
 		let params = { addToWorkspace: true, monitor: "mine" };
-		if (componentToToggle.component && componentToToggle.component.windowGroup) params.groupName = componentToToggle.component.windowGroup;
+		if (componentToToggle.component && componentToToggle.component.windowGroup) {
+			params.groupName = componentToToggle.component.windowGroup;
+		}
 
 		//Component developers can define a display name that will show instead of the component's type.
 		let displayName = componentType;

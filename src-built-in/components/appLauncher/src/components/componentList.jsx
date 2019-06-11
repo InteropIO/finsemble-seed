@@ -157,7 +157,7 @@ export default class appLauncherContainer extends React.Component {
 		// iterate through componentList and render a componentItem for each one.
 		const componentList = components.map((key, i) => {
 			const { component } = state.componentList[key];
-			const isUserDefined = component && component.isUserDefined;
+			const isUserDefined = Boolean(component && component.isUserDefined);
 			return this.buildComponentItem({ i, key, isUserDefined });
 		});
 		return (<FinsembleMenuSection
