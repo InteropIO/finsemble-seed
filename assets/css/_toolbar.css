@@ -89,11 +89,12 @@ span > svg {
     width: 4px;
     max-width: 4px;
     min-width: 4px;
-    background-color: var(--toolbar-resize-area-color);
-    justify-content: flex-end;
+		background-color: var(--toolbar-resize-area-color);
+		position: absolute;
+		right: 0;
+    /* justify-content: flex-end;
     order: 3;
-    flex: 0 0 auto;
-    margin-left: .25em;
+    flex: 0 0 auto; */
 }
 
 @media screen and (max-width: 170px) {
