@@ -47,7 +47,7 @@
         "label": "Apps",
         "id": "app-launcher",
         "comment": "Change menuType to 'My Apps' for a preview of the finsemble app catalog!",
-        "menuType": "My Apps"
+        "menuType": "App Launcher"
     },
     {
         "align": "left",
