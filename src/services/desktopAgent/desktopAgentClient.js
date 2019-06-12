@@ -50,7 +50,7 @@ export function findIntentsByContext(context) {
 			if (err) {
 				reject(err);
 			}
-			resolve();
+			resolve(response.data);
 		});
 	})
 };

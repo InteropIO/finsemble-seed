@@ -4,13 +4,15 @@
 */
 
 const Finsemble = require("@chartiq/finsemble");
-// import Finsemble from "@chartiq/finsemble";
+// // import Finsemble from "@chartiq/finsemble";
 const BaseService = Finsemble.baseService;
 const ConfigClient = Finsemble.Clients.ConfigClient;
 const LauncherClient = Finsemble.Clients.LauncherClient;
 const RouterClient = Finsemble.Clients.RouterClient;
 const LinkerClient = Finsemble.Clients.LinkerClient;
 const Logger = Finsemble.Clients.Logger;
+
+const desktopAgentUtilities = require('./desktopAgentUtilities.js');
 
 Logger.start();
 Logger.log("Desktop Agent starting up");
@@ -23,37 +25,23 @@ Logger.log("Desktop Agent starting up");
 function desktopAgentService() {
 
 	const self = this;
+	this.fdc3Configuration;
 
-	// const dig = (obj, target) =>
-	// 	target in obj
-	// 		? obj[target]
-	// 		: Object.values(obj).reduce((acc, val) => {
-	// 			if (acc !== undefined) return acc;
-	// 			if (typeof val === 'object') return dig(val, target);
-	// 		}, undefined);
-
-	const getNestedObject = (nestedObj, pathArr) => {
-		return pathArr.reduce((obj, key) =>
-			(obj && obj[key] !== 'undefined') ? obj[key] : undefined, nestedObj);
+	var getFDC3Congifuration = async function getFDC3Congifuration() {
+		this.fdc3Configuration = await desktopAgentUtilities.getAllComponentAppSpec();
+		console.log("Find all Intents:", this.fdc3Configuration);
+		return this.fdc3Configuration;
 	}
 
-	this.findAllIntents = function () {
-		return new Promise(function (resolve, reject) {
-			ConfigClient.getValues([{ field: 'finsemble.components.Welcome Sender.foreign.services.fdc3' }], function (err, values) {
-				console.log("Component Config Values for FDC3", values);
-				// fp('fdc3')(values);
-				// var test = dig(values, 'fdc3');
-				const test = getNestedObject(values, ['fdc3']);
-				console.log("Values returned from all intents: ", test);
-				debugger;
-				// console.log("pick test, ", test);
-				resolve(values);
-			});
-		})
+	/**
+	 * Initializes service variables
+	 * @private
+	 */
+	this.initialize = function () {
+		getFDC3Congifuration().then((value) => {
+			this.fdc3Configuration = value;
+		});
 	}
-
-	// var allIntents = self.findAllIntents();
-
 
 	/**
 	 * Creates router endpoints for all of our client APIs. Add servers or listeners for requests coming from your clients.
@@ -87,10 +75,9 @@ function desktopAgentService() {
 					Logger.error("Desktop Agent - Find Intent without valid intent: ", queryMessage);
 					queryMessage.sendQueryResponse("Error, FindIntent requires intent parameter[1]: " + queryMessage, null);
 				} else {
-					serviceInstance.findIntent(queryMessage.data.intent, queryMessage.data.context, (err, response) => {
-						console.log("CallBack for FindIntent Occured, Informing Client");
-						queryMessage.sendQueryResponse(err, response.data);
-					});
+					let responseData = serviceInstance.findIntent(queryMessage.data.intent, queryMessage.data.context);
+					console.log("CallBack for FindIntent Occured, Informing Client");
+					queryMessage.sendQueryResponse(null, responseData);
 				}
 			} else {
 				Logger.error("Failed to setup query responder", error);
@@ -99,18 +86,14 @@ function desktopAgentService() {
 
 		RouterClient.addResponder("desktopAgentFindIntentsByContext", function (error, queryMessage) {
 			if (!error) {
-				console.log("Check Intent Data Message:", queryMessage.data);
-				if (!queryMessage.data.intent) {
-					queryMessage.sendQueryResponse("Error, FindIntent requires Intent parameter: " + queryMessage, null);
-					Logger.error("Desktop Agent - Find Intent without valid Intent: ", queryMessage);
+				console.log("Validate findIntentsByContext Data Message:", queryMessage.data);
+				if (!queryMessage.data.context) {
+					queryMessage.sendQueryResponse("Error, findIntentsByContext requires context parameter: " + queryMessage, null);
+					Logger.error("Desktop Agent - findIntentsByContext without valid context: ", queryMessage);
 				} else {
-					console.log("Check FindIntent Data intent:", queryMessage.data.intent);
-					console.log("Check FindIntent Data context:", queryMessage.data.context);
-					serviceInstance.findIntent(queryMessage.data.intent, queryMessage.data.context, () => {
-						console.log("CallBack for FindIntent Occured, Informing Client");
-						queryMessage.sendQueryResponse(null, queryMessage.data);
-					});
-
+					let responseData = serviceInstance.findIntentsByContext(queryMessage.data.context);
+					console.log("CallBack for findIntentsByContext Occured, Informing Client");
+					queryMessage.sendQueryResponse(null, responseData);
 				}
 			} else {
 				Logger.error("Failed to setup query responder", error);
@@ -224,23 +207,18 @@ function desktopAgentService() {
 
 	// findIntent
 	// findIntent(intent: string, context?: Context): Promise<AppIntent>;
-	this.findIntent = function (intent, context, callback) {
-		//Developer should be able to specify the number of intents that this can max return
-		//Developer should be able to specify via flag, or via passing contents of promise into indep FDC3 App Intent selector - Should allow user to slect which app the intent is intended for
-		//This could be built in to find intent as a param flag, but ideally would be implement by developers as part of a .then (would require that first change is made first)
-		console.log("All FDC3 Intents: ");
-		Logger.log("All FDC3 Intents: ");
-		// LauncherClient.spawn(name, { data: { context } }, (err, response) => {
-		// 	console.log("FDC3.desktopAgent triggered LauncherClient.spawn");
-		// 	callback(err, response);
-		// });
-		return this;
+	this.findIntent = function (intent, context) {
+		var appIntentMatches = desktopAgentUtilities.findAllIntentMatchesandFormatResponse(this.fdc3Configuration, intent, context);
+		console.log("All Formatted Matches: ", appIntentMatches);
+		return appIntentMatches;
 	}
 
 	// findIntentsByContext
 	// findIntentsByContext(context: Context): Promise<Array<AppIntent>>;
 	this.findIntentsByContext = function (context) {
-
+		var appIntentMatches = desktopAgentUtilities.findAllContextMatchesandFormatResponse(this.fdc3Configuration, context);
+		console.log("All Formatted Matches: ", appIntentMatches);
+		return appIntentMatches;
 	}
 
 	// broadcast
@@ -282,15 +260,6 @@ function desktopAgentService() {
 	}
 
 
-	/**
-	* Helper Functions
-	*/
-
-
-	//getComponentAppD
-	//get Application Directory Intents Values
-
-
 }
 
 
@@ -306,12 +275,7 @@ const serviceInstance = new desktopAgentService('desktopAgentService');
 
 serviceInstance.onBaseServiceReady(function (callback) {
 	serviceInstance.createRouterEndpoints();
-	serviceInstance.findAllIntents().then(function (values) {
-		console.log("All Intents in Await: ", values)
-	}
-	);
-	// Logger.log("All Desktop Intents: ", allIntents);
-	// console.log("All Desktop Intents: ", allIntents);
+	serviceInstance.initialize();
 	Logger.log("Desktop Agent Online");
 	callback();
 });

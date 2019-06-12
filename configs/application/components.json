@@ -22,6 +22,54 @@
 					"dockingService": {
 						"canGroup": true,
 						"isArrangable": true
+					},
+					"fdc3": {
+						"appId": "welcome",
+						"name": "welcome",
+						"manifest": "http://welcome.com",
+						"manifestType": "welcome",
+						"version": "1",
+						"title": "DeskTop Agent Testerwelcome",
+						"tooltip": "none",
+						"description": "To Test FDC3 DesktopAgent API FSBL Implementation",
+						"images": [
+							{
+								"url": "http://welcome.com"
+							}
+						],
+						"contactEmail": "mark@chartiq.com",
+						"supportEmail": "mark@chartiq.com",
+						"publisher": "ChartIQ",
+						"icons": [
+							{
+								"icon": "http://welcome.com"
+							}
+						],
+						"customConfig": [
+							{
+								"name": "none",
+								"value": "none"
+							}
+						],
+						"intents": [
+							{
+								"name": "welcome",
+								"displayName": "Welcome",
+								"contexts": [
+									"contact",
+									"instrument"
+								],
+								"customConfig": {}
+							},
+							{
+								"name": "SitPretty",
+								"displayName": "Do Nothing",
+								"contexts": [
+									"garbage"
+								],
+								"customConfig": {}
+							}
+						]
 					}
 				},
 				"components": {
