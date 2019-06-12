@@ -261,13 +261,14 @@
     /* Shared Tag Styles */
     --tag-background-color: var(--core-primary-2);
     --tag-font-color: var(--font-color-primary);
-    --tag-font-weight: 300;
+    --tag-font-weight: 400;
     --tag-close-icon-hover-color: var(--accent-negative);
     --tag-checkmark-icon-color: var(--accent-positive);
 
 
     /* App Menu */
     --appMenu-font-weight: 600;
+    --appMenu-tag-font-weight: 400;
     --appMenu-font-color: var(--font-color-primary);
     --appMenu-scrollbar-color: white;
     --appMenu-leftNav-background-color: var(--core-primary);
@@ -277,7 +278,7 @@
     --appMenu-leftNav-icon-color: var(--accent-primary);
     --appMenu-leftNav-contextMenu-background-color: var(--core-primary-3);
     --appMenu-background-color: var(--core-primary-1);
-    --appMenu-actions-menu-background-color: var(--core-primary-3);
+    --appMenu-actions-menu-background-color: var(--core-primary-2);
     --appMenu-app-item-hover-background-color: var(--core-primary-3);
     /* --appMenu-app-item-bottom-border-color: rgba(98, 116, 132, 0.4); */
     --appMenu-app-favorite-color: var(--accent-primary);

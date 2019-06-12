@@ -13,7 +13,7 @@
 	user-select: none;
 	font-family: var(--font-primary);
 	font-size: var(--menu-font-size);
-    font-weight: var(--menu-font-weight);
+    font-weight: var(--tag-font-weight);
 }
 
 /* Different positioning for the catalog vs the launcher. */
@@ -66,12 +66,12 @@
 }
 
 .app-tag {
-	height: 17px;
+	height: 20px;
 	border-radius: 2px;
 	background-color: var(--tag-background-color);
 	user-select: none;
 	margin: 0 4px 4px 0;
-	padding: 4px 5px 0 5px;
+	padding: 5px 5px 0 5px;
 }
 
 .app-tag .tag-content {
@@ -79,7 +79,7 @@
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
-	font-size: 10px;
+	font-size: 11px;
 	font-weight: var(--tag-font-weight);
 	font-family: var(--font-primary);
 	font-style: normal;

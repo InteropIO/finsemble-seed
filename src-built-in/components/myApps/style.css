@@ -107,7 +107,7 @@ img {
 }
 
 .tags-list .app-tag .ff-close {
-	margin-top: 3px;
+	margin-top: 2px;
 }
 
 .left-nav-label {
@@ -328,7 +328,7 @@ select:focus, option:focus {
 	z-index: 10;
     top: 22px;
 	position: absolute;
-	width: 132px;
+	width: 140px;
 	max-height: 214px;
 	overflow-y: auto;
 }
@@ -368,10 +368,12 @@ select:focus, option:focus {
     overflow: hidden;
     text-overflow: ellipsis;
     width: 390px;
+    font-weight: var(--appMenu-tag-font-weight);
   }
 
   .app-item-tags i {
     padding-right: 6px;
+    padding-top: 3px;
   }
 
   .app-item:hover {
@@ -381,11 +383,11 @@ select:focus, option:focus {
   .app-item-title {
     display: flex;
     align-items: center;
-    font-size: 13px;
+    font-size: 12px;
     margin-bottom: 7px;
     line-height: 1;
     width: 390px;
-    height: 14px;
+    height: 15px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -414,6 +416,7 @@ select:focus, option:focus {
   .sort-option {
     font-size: 11px;
     border-radius: 2px;
+    font-weight: var(--appMenu-tag-font-weight);
     border: solid 1px var(--appMenu-sort-inactive-border-color);
     height: 16px;
     line-height: 16px;

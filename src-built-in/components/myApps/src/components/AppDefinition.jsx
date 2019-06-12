@@ -64,7 +64,6 @@ export default class AppDefinition extends React.Component {
 		return (
 			<div onClick={this.onItemClick} className="app-item link" draggable="true" onDragStart={this.onDragToFolder}>
 				<span className="app-item-title">
-					<i className={app.icon}></i>
 					<span >{app.name}</span> {this.isFavorite() && <i className='ff-favorite'></i>}
 				</span>
 				{app.tags.length > 0 &&
