@@ -2,7 +2,8 @@
 .project
 node_modules
 dist/
-.vscode
+.vscode/tasks.json
+.vscode/settings.json
 .idea
 .DS_Store
 apps

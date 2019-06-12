@@ -1,0 +1,32 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Node Server",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/server/server.js"
+        },
+        {
+            "name": "Electron Main",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/node_modules/@chartiq/finsemble-electron-adapter/startup/devIndex.js",
+            "stopOnEntry": false,
+            "args": ["ELECTRON_DEV=true"],
+            "cwd": "${workspaceRoot}/node_modules/@chartiq/finsemble-electron-adapter",
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
+            "runtimeArgs": [
+                "--remote-debugging-port=9090 --inspect=5858",
+                "--manifest http://localhost:3375/configs/openfin/manifest-local.json"
+            ],
+            "env": {}
+        },
+    ],
+    "compounds": [
+        {
+            "name": "Node Server + Electron Main",
+            "configurations": ["Node Server", "Electron Main"]
+        }
+    ]
+}
