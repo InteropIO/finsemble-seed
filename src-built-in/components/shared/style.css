@@ -18,7 +18,7 @@
 
 /* Different positioning for the catalog vs the launcher. */
 .appMarket .tags-menu-wrapper {
-	top: 11px;
+	top: 6px;
 	right: 9px;
 }
 .tags-menu-wrapper span {
@@ -106,4 +106,8 @@
 
 .tag-content .ff-close {
 	padding-top: 0;
+}
+
+.label-bar .ff-close{
+	padding-top: 2px;
 }

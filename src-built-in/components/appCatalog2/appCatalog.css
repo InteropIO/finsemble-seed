@@ -101,7 +101,8 @@
 }
 
 .pagination-oval.active {
-	background-color: var(--catalog-pagination-dots-color);
+	background-color: var(--catalog-pagination-dots-active-color);
+	border-color: var(--catalog-pagination-dots-active-color);
 }
 
 .ff-chevron-right, .ff-chevron-left {
@@ -289,15 +290,16 @@
 }
 
 .ff-search {
-    padding: 0 10px 0 5px;
+    padding: 8px 10px 0 5px;
 }
 
 .search-main {
-	margin: 10px 15px;
+	margin: 6px 15px;
 }
 
 .search-main .ff-search {
 	color: var(--catalog-font-color);
+	font-size: 11px;
 }
 
 .search-input-container {
@@ -308,11 +310,12 @@
 .search-main .search-input {
 	width: 100%;
 	color: var(--catalog-font-color);
-	height: 17px;
+	font-family: var(--font-primary);
+	height: 22px;
 	background: none;
 	border: 0;
 	border-bottom: solid 1px var(--catalog-search-border-color);
-	font-size: 14px;
+	font-size: 11px;
 	transition: .2s ease-in;
 }
 

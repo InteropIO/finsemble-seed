@@ -245,18 +245,19 @@
 
     /* App Catalog */
     --catalog-font-color: var(--font-color-primary);
-    --catalog-background-color: var(--slate7);
-    --catalog-pagination-dots-color: var(--gray2);
-    --catalog-hero-border-color: var(--slate5);
-    --catalog-hero-background-color: var(--slate6);
-    --catalog-card-background-color: var(--slate6);
-    --catalog-card-checkmark-unselected-color: var(--gray);
-    --catalog-card-checkmark-selected-color: var(--green);
-    --catalog-section-header-font-color: var(--blue2);
-    --catalog-search-border-color: var(--blue);
-    --catalog-search-active-border-color: var(--blue2);
-    --catalog-tag-backgrond-color: var(--slate2);
-    --catalog-disabled-button-background-color: var(--gray5);
+    --catalog-background-color: var(--core-primary-1);
+    --catalog-pagination-dots-color: var(--core-primary-3);
+    --catalog-pagination-dots-active-color: white;
+    --catalog-hero-border-color: transparent;
+    --catalog-hero-background-color: var(--core-primary-2);
+    --catalog-card-background-color: var(--core-primary);
+    --catalog-card-checkmark-unselected-color: var(--core-primary-4);
+    --catalog-card-checkmark-selected-color: var(--accent-positive);
+    --catalog-section-header-font-color: white;
+    --catalog-search-border-color: var(--core-primary-4);
+    --catalog-search-active-border-color: var(--accent-primary-2);
+    --catalog-tag-backgrond-color: var(--core-primary);
+    --catalog-disabled-button-background-color: var(--core-primary-3);
 
     /* Shared Tag Styles */
     --tag-background-color: var(--core-primary-2);

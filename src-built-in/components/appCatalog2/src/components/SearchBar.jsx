@@ -114,7 +114,7 @@ class SearchBar extends Component {
 						</div> : null}
 					 <div className="search-input-container">
 						<i className='ff-search'></i>
-						<input className='search-input' type="text" value={this.state.searchValue} onChange={this.changeSearch} />
+						<input className='search-input' placeholder="Search" type="text" value={this.state.searchValue} onChange={this.changeSearch} />
 					</div>
 					<TagsMenu active={activeTags} list={this.props.tags} onItemClick={this.selectTag} label={"Tags"} align='right' />
 				</div>
