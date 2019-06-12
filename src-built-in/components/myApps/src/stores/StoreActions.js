@@ -4,6 +4,7 @@ import FDC3 from "../modules/FDC3";
 const async = require("async");
 let FDC3Client;
 let appd;
+let appDEndpoint;
 let ToolbarStore;
 
 export default {
@@ -56,9 +57,8 @@ function getDragDisabled() {
 
 function initialize(callback = Function.prototype) {
 	FSBL.Clients.ConfigClient.getValue({ field: "finsemble.appDirectoryEndpoint" }, function (err, appDirectoryEndpoint) {
-		FDC3Client = new FDC3({ url: appDirectoryEndpoint });
-		appd = new AppDirectory(FDC3Client);
-
+		// cache value globally to be used in the event that we need to fetch data for a given component.
+		appDEndpoint = appDirectoryEndpoint;
 		const store = getStore();
 		data.folders = store.values.appFolders.folders;
 		data.foldersList = store.values.appFolders.list;
@@ -102,6 +102,38 @@ function appInAppList(appName) {
 	}
 	return false;
 }
+
+/**
+ * Given a component config, will return tags, or an empty array.
+ *
+ * @param {*} componentConfig
+ * @returns
+ */
+function extractTagsFromFinsembleComponentConfig(componentConfig) {
+	if (!componentConfig.foreign) return [];
+	if (!componentConfig.foreign.components) return [];
+	if (!componentConfig.foreign.components["App Launcher"]) return [];
+
+	const { tags } = componentConfig.foreign.components["App Launcher"];
+
+	if (tags) {
+		if (typeof tags === "string") {
+			return [tags];
+		}
+		return tags;
+	}
+
+	return [];
+}
+/**
+ * Instantiates classes needed to interact with the appD server.
+ * Only done when needed. If there are no components with source 'FDC3', this code will not execute.
+ */
+function lazyLoadAppD() {
+	if (!FDC3Client) FDC3Client = new FDC3({ url: appDEndpoint });
+	if (!appd) appd = new AppDirectory(FDC3Client);
+}
+
 /**
  * Here we load apps from FDC3
  * @param {*} cb
@@ -110,6 +142,7 @@ function loadInstalledComponentsFromStore(cb = Function.prototype) {
 	async.map(Object.values(data.apps), (component, componentDone) => {
 		// Load FDC3 components here
 		if (component.source && component.source === "FDC3") {
+			lazyLoadAppD();
 			// get the app info so we can load it into the launcher
 			return getApp(component.appID, (err, app) => {
 				if (err) {// don't want to kill this;
@@ -147,13 +180,13 @@ function loadInstalledConfigComponents(cb = Function.prototype) {
 			if (appInAppList(componentName)) return;
 			let component = componentList[componentName];
 			// Make sure the app is launchable by user
-			if (component.foreign.components["App Launcher"] && component.foreign.components["App Launcher"].launchableByUser) {
+			if (component.foreign.components && component.foreign.components["App Launcher"] && component.foreign.components["App Launcher"].launchableByUser) {
 				data.configComponents[componentName] = {
 					appID: componentName,
 					icon: component.foreign.Toolbar && component.foreign.Toolbar.iconClass ? component.foreign.Toolbar.iconClass : null,
 					name: componentName,
 					source: "config",
-					tags: []
+					tags: extractTagsFromFinsembleComponentConfig(component)
 				};
 			}
 		});
@@ -446,7 +479,10 @@ function getTags() {
 
 function getAllAppsTags() {
 	let tags = [];
-	Object.values(data.apps).forEach((app) => {
+	// Pull tags from applications installed via FDC3 and the component config.
+	const apps = Object.values(data.apps).concat(Object.values(data.configComponents));
+
+	apps.forEach((app) => {
 		tags = tags.concat(app.tags);
 	});
 	// return unique ones only
