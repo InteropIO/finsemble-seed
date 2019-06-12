@@ -94,7 +94,7 @@
     --dialog-input-font-weight: 400;
     --dialog-input-background-color: var(--core-primary);
     --dialog-input-border-color: var(--core-primary-3);
-    --dialog-input-border-focus-color: var(--accent-primary);
+    --dialog-input-border-focus-color: var(--accent-primary-2);
     --dialog-input-border-error-color: var(--accent-negative);
 
     /* Buttons and Inputs */
@@ -268,22 +268,22 @@
 
     /* App Menu */
     --appMenu-font-color: var(--font-color-primary);
-    --appMenu-scrollbar-color: var(--slate1);
-    --appMenu-leftNav-background-color: var(--slate5);
-    --appMenu-close-hover-color: var(--secondary-negative-color);
-    --appMenu-leftNav-highlighter-hover: var(--slate2);
-    --appMenu-leftNav-highlighter: var(--slate3);
-    --appMenu-leftNav-icon-color: var(--blue3);
-    --appMenu-leftNav-contextMenu-background-color: var(--secondary-background-color);
-    --appMenu-background-color: var(--slate4);
-    --appMenu-actions-menu-background-color: var(--secondary-background-color);
-    --appMenu-app-item-hover-background-color: var(--slate3);
-    --appMenu-app-item-bottom-border-color: rgba(98, 116, 132, 0.4);
-    --appMenu-app-favorite-color: var(--yellow3);
-    --appMenu-app-icon-color: var(--tertiary-accent-color);
-    --appMenu-sort-inactive-border-color: var(--gray5);
-    --appMenu-sort-active-color: var(--primary-accent-color);
-    --appMenu-search-input-inactive-color: var(--blue4);
-    --appMenu-search-input-active-color: var(--blue2);
-    --appMenu-edit-icon-hover-color: var(--blue2);
+    --appMenu-scrollbar-color: white;
+    --appMenu-leftNav-background-color: var(--core-primary);
+    --appMenu-close-hover-color: var(--accent-negative);
+    --appMenu-leftNav-highlighter-hover: var(--core-primary-2);
+    --appMenu-leftNav-highlighter: var(--core-primary-3);
+    --appMenu-leftNav-icon-color: var(--accent-primary);
+    --appMenu-leftNav-contextMenu-background-color: var(--core-primary-3);
+    --appMenu-background-color: var(--core-primary-1);
+    --appMenu-actions-menu-background-color: var(--core-primary-3);
+    --appMenu-app-item-hover-background-color: var(--core-primary-3);
+    /* --appMenu-app-item-bottom-border-color: rgba(98, 116, 132, 0.4); */
+    --appMenu-app-favorite-color: var(--accent-primary);
+    --appMenu-app-icon-color: var(--accent-primary);
+    --appMenu-sort-inactive-border-color: var(--core-primary-5);
+    --appMenu-sort-active-color: var(--accent-primary);
+    --appMenu-search-input-inactive-color: var(--core-primary-3);
+    --appMenu-search-input-active-color: var(--accent-primary-2);
+    --appMenu-edit-icon-hover-color: white;
 }
