@@ -110,15 +110,15 @@
 
     --button-neutral-background-color: transparent;
     --button-neutral-border-color: transparent;
-    --button-neutral-border-hover-color: var(--gray6);
+    --button-neutral-border-hover-color: var(--core-primary-5);
     --button-neutral-solid-font-color: black;
 
-    --button-negative-background-color: var(--red6);
-    --button-negative-border-color: var(--red4);
-    --button-negative-background-hover-color: var(--red7);
-    --button-negative-border-hover-color: var(--red5);
+    --button-negative-background-color: var(--accent-negative);
+    --button-negative-border-color: var(--accent-negative-1);
+    --button-negative-background-hover-color: var(--accent-negative);
+    --button-negative-border-hover-color: var(--accent-negative-1);
 
-    --input-negative-border-color: var(--secondary-negative-color);
+    --input-negative-border-color: var(--accent-negative);
 
     /* Menus */
     --menu-font-size: 11px;
@@ -157,8 +157,8 @@
     --search-result-highlighter-background: var(--core-primary-3);
 
     /* Window Frame */
-    --window-frame-inactive-color: var(--slate5);
-    --window-frame-active-color: var(--window-frame-inactive-color);
+    --window-frame-inactive-color: var(--core-primary);
+    --window-frame-active-color: var(--core-primary-2);
 
     /* Window Scrims and Masks */
     --groupMask-background-color: var(--secondary-accent-color);
