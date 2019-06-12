@@ -67,11 +67,11 @@
 
 .app-tag {
 	height: 20px;
-	border-radius: 2px;
+	border-radius: 12px;
 	background-color: var(--tag-background-color);
 	user-select: none;
 	margin: 0 4px 4px 0;
-	padding: 5px 5px 0 5px;
+	padding: 5px 7px 0 8px;
 }
 
 .app-tag .tag-content {
@@ -102,4 +102,8 @@
 
 .tag-name {
 	margin-right: 2px;
+}
+
+.tag-content .ff-close {
+	padding-top: 0;
 }

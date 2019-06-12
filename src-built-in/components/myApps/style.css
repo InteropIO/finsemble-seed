@@ -415,12 +415,12 @@ select:focus, option:focus {
 
   .sort-option {
     font-size: 11px;
-    border-radius: 2px;
+    border-radius: 15px;
     font-weight: var(--appMenu-tag-font-weight);
     border: solid 1px var(--appMenu-sort-inactive-border-color);
     height: 16px;
     line-height: 16px;
-    padding: 2px 5px 1px 5px;
+    padding: 2px 7px 1px 7px;
     display: inline-block;
     margin: 0 5px;
   }
