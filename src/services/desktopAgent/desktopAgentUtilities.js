@@ -60,151 +60,53 @@ function flattenFDC3Config(deepPickResults) {
 
 
 //App Intent Object Formatting
-
-// var data = {
-//   "rows": [{
-//     "key": ["zeit.de"],
-//     "value": 98
-//   }, {
-//     "key": ["google.com"],
-//     "value": 49
-//   }, {
-//     "key": ["spiegel.de"],
-//     "value": 20
-//   }, {
-//     "key": ["spiegel.de"],
-//     "value": 12
-//   }, {
-//     "key": ["spiegel.de"],
-//     "value": 20
-//   }, {
-//     "key": ["spiegel.de"],
-//     "value": 12
-//   }, {
-//     "key": ["netmng.com"],
-//     "value": 49
-//   }, {
-//     "key": ["zeit.de"],
-//     "value": 300
-//   }]
-// };
-
-// var merged = {
-//   rows: []
-// };
-
-// data.rows.forEach(function(sourceRow) {
-//   debugger;
-//   if(!merged.rows.some(function(row) { return row.key[0] == sourceRow.key[0]; })) {
-//     merged.rows.push({ key: [sourceRow.key[0]], value: sourceRow.value });
-//   } else {
-//     var targetRow = merged.rows.filter(function(targetRow) { return targetRow.key[0] == sourceRow.key[0] })[0];
-
-//     targetRow.value += sourceRow.value;
-//   }
-// });
-
-// document.getElementById("result").textContent = JSON.stringify(merged);
-
-// ORRRRRRRRRRRRRRR
-
-// var json = '{"rows":[{"key":["zeit.de"],"value":98},{"key":["google.com"],"value":49},{"key":["spiegel.de"],"value":20},{"key":["spiegel.de"],"value":12},{"key":["spiegel.de"],"value":20},{"key":["spiegel.de"],"value":12},{"key":["netmng.com"],"value":49},{"key":["zeit.de"],"value":300}]}';
-// var obj = JSON.parse(json);
-
-// var newObj = {};
-// for(i in obj['rows']){
-//  var item = obj['rows'][i];
-//     if(newObj[item.key[0]] === undefined){
-//         newObj[item.key[0]] = 0;
-//     }
-//     newObj[item.key[0]] += item.value;
-// }
-
-// var result = {};
-// result.rows = [];
-// for(i in newObj){
-//     result.rows.push({'key':i,'value':newObj[i]});
-// }
-// console.log(result);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//Find Intent Helper Functions
 function formatAppIntentResponse(filteredResult) {
-  var responseArray = [];
+  var intentArray = [];
   var merged = {
     rows: []
   };
-  // var intentDetails = {};
-  var appIntentResponse;
-  console.log(typeof filteredResult);
+  var responseArray = [];
+
   filteredResult.forEach((intent) => {
     let intentName = intent['intent']['name'];
     let componentName = { name: intent['name'] };
     let intentDisplayName = intent['intent']['displayName'];
-    //   if (!intentDetails.hasOwnProperty('name') || !intentDetails.hasOwnProperty('displayName')) {
-    //     intentDetails = {
-    //       name: intentName,
-    //       displayName: intentDisplayName
-    //     }
-    //   }
-    //   appArray.push(componentName);
-
-
     let appIntent = {
       intent: { name: intentName, displayName: intentDisplayName },
       apps: componentName
     }
-    responseArray.push(appIntent);
+    intentArray.push(appIntent);
   });
-  // appIntentResponse = {
-  //   intent: intentDetails,
-  //   apps: appArray
-  // }
   var mergedResult = [];
-  for (var i = 0; i < responseArray.length; i++) {
-    mergedResult = mergedResult.concat(responseArray[i]);
+  for (var i = 0; i < intentArray.length; i++) {
+    mergedResult = mergedResult.concat(intentArray[i]);
   }
-  console.log("Merge Me", mergedResult);
-
 
   mergedResult.forEach(function (sourceRow) {
     var sourceRowKeys = Object.keys(sourceRow);
-    var mergeId=0;
-    console.log("Keys for src:", sourceRowKeys);
-    // debugger;
-    if (!merged.rows.some(function (row) { return _.isEqual(row[sourceRowKeys[0]], sourceRow[sourceRowKeys[0]]);})) {
+    var mergeId = -1;
+    if (!merged.rows.some(function (row) { return _.isEqual(row[sourceRowKeys[0]], sourceRow[sourceRowKeys[0]]); })) {
       merged.rows.push(sourceRow);
     } else {
-      var targetRow = merged.rows.filter(function (targetRow, index) { mergeId = index; return _.isEqual(targetRow[sourceRowKeys[0]], sourceRow[sourceRowKeys[0]]) });
-      console.log("targetRow", mergeId);
-      // merged.rows.
-      // targetRow.value += sourceRow.value;
+      merged.rows.filter(function (targetRow, index) {
+        if (_.isEqual(targetRow[sourceRowKeys[0]], sourceRow[sourceRowKeys[0]])) {
+          mergeId = index;
+          return sourceRow[sourceRowKeys[0]]
+        }
+
+      });
+      if (!(mergeId === -1)) {
+        merged.rows[mergeId].apps = [merged.rows[mergeId].apps, sourceRow['apps']];
+        mergeId = -1;
+      }
     }
   });
 
-  console.log("Merged Result", merged);
-
-
-
-  return appIntentResponse;
+  responseArray = merged.rows;
+  return responseArray;
 }
 
+//Find Intent Helper Functions
 function customClientIntentResultFilter(results) {
   if (results) {
     return results;
@@ -229,9 +131,7 @@ function findAllIntentMatches(fdc3Configuration, intent, context) {
 
 //Find Intent By Context Helper Functions
 function customClientContextResultFilter(results) {
-  // if (results) {
   return results;
-  // }
 }
 
 function findAllContextMatches(fdc3Configuration, context) {
