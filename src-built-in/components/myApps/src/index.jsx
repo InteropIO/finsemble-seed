@@ -77,7 +77,7 @@ class AppLauncher extends React.Component {
 
 	render() {
 		return (
-			<FinsembleMenu className="app-launcher-menu">
+			<div className="app-launcher-menu">
 				<div className="app-launcher">
 					<div className="complex-menu-wrapper">
 						<LeftNav openAppMarket={this.openAppMarket} />
@@ -87,7 +87,7 @@ class AppLauncher extends React.Component {
 						}
 					</div>
 				</div>
-			</FinsembleMenu>
+			</div>
 		);
 	}
 }

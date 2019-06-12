@@ -259,11 +259,11 @@
     --catalog-disabled-button-background-color: var(--gray5);
 
     /* Shared Tag Styles */
-    --tag-background-color: var(--slate2);
+    --tag-background-color: var(--core-primary-2);
     --tag-font-color: var(--font-color-primary);
-    --tag-font-weight: var(--primary-font-weight);
-    --tag-close-icon-hover-color: var(--secondary-negative-color);
-    --tag-checkmark-icon-color: var(--green);
+    --tag-font-weight: 300;
+    --tag-close-icon-hover-color: var(--accent-negative);
+    --tag-checkmark-icon-color: var(--accent-positive);
 
 
     /* App Menu */
@@ -283,7 +283,7 @@
     --appMenu-app-favorite-color: var(--accent-primary);
     --appMenu-app-icon-color: var(--accent-primary);
     --appMenu-sort-inactive-border-color: var(--core-primary-5);
-    --appMenu-sort-active-color: var(--accent-primary);
+    --appMenu-sort-active-color: var(--accent-primary-1);
     --appMenu-search-input-inactive-color: var(--core-primary-3);
     --appMenu-search-input-active-color: var(--accent-primary-2);
     --appMenu-search-input-error-color: var(--accent-negative);

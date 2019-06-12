@@ -1,10 +1,12 @@
 .tags-menu-wrapper {
-	height: 17px;
-	border-radius: 2px;
+	height: 24px;
+	border-radius: 12px;
 	background: var(--tag-background-color);
 	color: var(--tag-font-color);
-	padding: 0 5px;
-	display: table;
+	padding: 0 5px 0 9px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	position: absolute;
 	top: 1px;
 	right: 1px;
@@ -25,7 +27,8 @@
 	cursor: pointer;
 }
 .tags-menu-wrapper span i {
-	margin-right: 5px;
+	padding: 0 5px;
+	font-size: 6px;
 }
 .tags-menu {
 	z-index: 11;
@@ -37,6 +40,7 @@
 	border-radius: 3px;
   	background-color: var(--tag-background-color);
 	padding: 5px 0px;
+	margin-top: 5px;
 }
 .tags-menu ul {
 	padding: 0;
@@ -48,7 +52,7 @@
 	font-size: 11px;
 	list-style: none;
 	color: var(--tag-font-color);
-	padding: 0 10px;
+	padding: 0 6px;
 	display: flex;
 	align-items: center;
 }
