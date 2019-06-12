@@ -220,7 +220,7 @@ export default class FoldersList extends React.Component {
 				onDrop={(event) => this.onAppDrop(event, folderName)}
 				className={className} key={index}>
 				<div className='left-nav-label'>
-					{folder.icon && <i className={folder.icon}></i>}
+					{/* {folder.icon && <i className={folder.icon}></i>} */}
 					<div className="folder-name">{nameField}</div>
 				</div>
 				{folder.icon === 'ff-folder' && <span className='folder-action-icons'>

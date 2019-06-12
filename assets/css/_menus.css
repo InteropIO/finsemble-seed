@@ -11,7 +11,7 @@ body.menu {
     overflow-x: hidden;
     height: 100%;
     -webkit-user-select: none;
-    background-color: var(--appMenu-background-color);
+    background-color: var(--menu-background-color);
 }
 
 .menu-header {
@@ -22,7 +22,7 @@ body.menu {
 .menu {
     background: var(--menu-content-background-color);
     color: var(--menu-font-color);
-    padding-right: 10px;
+    padding: 10px;
 }
 
 .menu .menu-section {

@@ -92,7 +92,7 @@
     --dialog-input-font-size: 11px;
     --dialog-input-font-color: var(--font-color-primary);
     --dialog-input-font-weight: 400;
-    --dialog-input-background-color: var(--core-primary);
+    --dialog-input-background-color: transparent;
     --dialog-input-border-color: var(--core-primary-3);
     --dialog-input-border-focus-color: var(--accent-primary-2);
     --dialog-input-border-error-color: var(--accent-negative);
@@ -113,7 +113,7 @@
     --button-neutral-border-hover-color: var(--core-primary-5);
     --button-neutral-solid-font-color: black;
 
-    --button-negative-background-color: var(--accent-negative);
+    --button-negative-background-color: var(--accent-negative-1);
     --button-negative-border-color: var(--accent-negative-1);
     --button-negative-background-hover-color: var(--accent-negative);
     --button-negative-border-hover-color: var(--accent-negative-1);
@@ -267,6 +267,7 @@
 
 
     /* App Menu */
+    --appMenu-font-weight: 600;
     --appMenu-font-color: var(--font-color-primary);
     --appMenu-scrollbar-color: white;
     --appMenu-leftNav-background-color: var(--core-primary);
@@ -285,5 +286,8 @@
     --appMenu-sort-active-color: var(--accent-primary);
     --appMenu-search-input-inactive-color: var(--core-primary-3);
     --appMenu-search-input-active-color: var(--accent-primary-2);
+    --appMenu-search-input-error-color: var(--accent-negative);
     --appMenu-edit-icon-hover-color: white;
+    --appMenu-separator-color: var(--core-primary-3);
+    --appMenu-folder-action-icon-color: var(--core-primary-5);
 }

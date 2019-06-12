@@ -208,7 +208,7 @@ export default class AddNewAppForm extends React.Component {
 					<FinsembleDialogButton className="fsbl-button-neutral" onClick={this.onClear}>
 						Clear
 					</FinsembleDialogButton>
-					<FinsembleDialogButton className="fsbl-button-negative" onClick={this.onCancel}>
+					<FinsembleDialogButton className="fsbl-button-neutral" onClick={this.onCancel}>
 						Cancel
 					</FinsembleDialogButton>
 					<FinsembleDialogButton className="fsbl-button-affirmative" onClick={this.onSubmit}>

@@ -16,6 +16,7 @@ img {
 
 .app-launcher-menu {
     height: 100%;
+    padding: 0 !important;
 }
 
 .pointer {
@@ -24,9 +25,6 @@ img {
 
 #wrapper {
     height: 100%;
-}
-.top {
-    margin-top: 10px;
 }
 
 .folder-list div {
@@ -38,11 +36,13 @@ img {
     max-height: 245px;
     overflow-y: auto;
     overflow-x: hidden;
+    padding: 5px 5px 0 5px;
 }
 .bottom {
     position: absolute;
     bottom: 12px;
-    width: 150px;
+    width: 195px;
+    border-top: 4px solid var(--appMenu-separator-color);
 }
 
 .bottom .complex-menu-section-toggle {
@@ -51,7 +51,7 @@ img {
 }
 
 .complex-menu-section-toggle #rename.error {
-    border-bottom: 1px solid var(--red3);
+    border-bottom: 1px solid var(--appMenu-search-input-error-color);
 }
 
 .complex-menu-wrapper {
@@ -75,7 +75,7 @@ img {
 }
 
 .complex-menu-left-nav {
-    width: 150px;
+    width: 195px;
     font-size: 11px;
     flex-direction: column;
     background-color: var(--appMenu-leftNav-background-color);
@@ -123,16 +123,25 @@ img {
     color: var(--appMenu-leftNav-icon-color);
 }
 
+.folder-action-icons {
+    margin-right: 5px;
+    color: var(--appMenu-folder-action-icon-color);
+}
+
 .folder-action-icons i {
-    margin-left: 3px;
+    margin-left: 5px;
     padding-left: 1px;
+}
+
+.folder-action-icons .ff-delete:hover {
+    color: var(--menu-delete-background-hover-color);
 }
 
 .folder-name {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    width: 80px;
+    width: 105px;
 }
 
 .left-nav-label .folder-action-icons {
@@ -150,7 +159,7 @@ img {
     color: var(--appMenu-font-color);
     width: 100%;
     font-family: var(--font-primary);
-    font-weight: var(--primary-font-weight);
+    font-weight: var(--appMenu-font-weight);
 	background: none;
 	border: 0;
 	border-bottom: solid 1px var(--appMenu-search-input-inactive-color);
@@ -164,21 +173,25 @@ img {
 }
 
 .complex-menu-section-toggle {
-    padding: 5px 5px 5px 0px;
-    padding-left: 7px;
+    padding: 5px 5px 5px 30px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     position: relative;
-    width: 138px;
+    border-radius: 20px;
+    height: 22px;
+    margin: 2px 0;
 }
 
 .complex-menu-action {
-    padding: 5px 5px 5px 0px;
-    padding-left: 7px;
+    padding: 5px 5px 5px 30px;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-between;
+    position: relative;
+    border-radius: 20px;
+    height: 22px;
+    margin: 2px 5px;
 }
 
 .complex-menu-action i {
@@ -337,7 +350,7 @@ select:focus, option:focus {
 
   .app-item, .app-item-title, .app-item-tags {
     display: block;
-    font-weight: var(--primary-font-weight);
+    font-weight: var(--appMenu-font-weight);
     font-size: 11px;
   }
 
