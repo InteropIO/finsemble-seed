@@ -1,4 +1,3 @@
-// var isEqual = require('lodash.isequal');
 const _ = require('lodash');
 const Finsemble = require("@chartiq/finsemble");
 const ConfigClient = Finsemble.Clients.ConfigClient;
@@ -58,7 +57,6 @@ function flattenFDC3Config(deepPickResults) {
 }
 
 
-
 //App Intent Object Formatting
 function formatAppIntentResponse(filteredResult) {
   var intentArray = [];
@@ -83,15 +81,14 @@ function formatAppIntentResponse(filteredResult) {
   }
 
   mergedResult.forEach(function (sourceRow) {
-    var sourceRowKeys = Object.keys(sourceRow);
     var mergeId = -1;
-    if (!merged.rows.some(function (row) { return _.isEqual(row[sourceRowKeys[0]], sourceRow[sourceRowKeys[0]]); })) {
+    if (!merged.rows.some(function (row) { return _.isEqual(row['intent'], sourceRow['intent']); })) {
       merged.rows.push(sourceRow);
     } else {
       merged.rows.filter(function (targetRow, index) {
-        if (_.isEqual(targetRow[sourceRowKeys[0]], sourceRow[sourceRowKeys[0]])) {
+        if (_.isEqual(targetRow['intent'], sourceRow['intent'])) {
           mergeId = index;
-          return sourceRow[sourceRowKeys[0]]
+          return sourceRow['intent']
         }
 
       });
