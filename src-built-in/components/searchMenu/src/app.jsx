@@ -156,7 +156,7 @@ class SearchMenu extends React.Component {
 			listElements.push(
 				<ProviderList onClick={self.providerClick} key={"provider." + providerIndex} providerInfo={providerInfo} displayContainter={showProvider}>
 					{elementList}
-				</ProviderList >
+				</ProviderList>
 			)
 		})
 		if (!listElements.length) return <div className="no-results"> No Results Found</div>
