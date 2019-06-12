@@ -9,7 +9,7 @@ var WindowClient;
 import windowTitleBarStoreDefaults from "./windowTitleBarStoreDefaults";
 import * as async from "async";
 var finWindow = fin.desktop.Window.getCurrent();
-//theses are constants that are set inside of setupStore. so they're declared as vars and not constantsa.
+//theses are constants that are set inside of setupStore. so they're declared as vars and not constants.
 let constants = {};
 var Actions = {
 	initialize: function () {
@@ -41,7 +41,7 @@ var Actions = {
 			]);
 
 
-			// By default, we hack the window's scrollbar so that it displays underneath the header. html.overflow: hidden body.overflow:auto
+			// By default, we hack the window's scroll bar so that it displays underneath the header. html.overflow: hidden body.overflow:auto
 			windowTitleBarStore.setValue({ field: "hackScrollbar", value: (windowTitleBarConfig.hackScrollbar !== false) });
 
 			// Set by calling WindowClient.setTitle() || from config "foreign.components.Window Manager.title"
@@ -56,7 +56,7 @@ var Actions = {
 		 * Handles whether to show the linker button.
 		 */
 		if (windowTitleBarConfig.showLinker) {
-			//Get state (channel memebership) from the linkerClient. Then set the value in the header so that the title bar accurately reflects the state.
+			//Get state (channel membership) from the linkerClient. Then set the value in the header so that the title bar accurately reflects the state.
 			let cb = (err, response) => {
 				if (response.channels) { windowTitleBarStore.setValue({ field: "Linker.channels", value: response.channels }); }
 				windowTitleBarStore.setValue({ field: "Linker.showLinkerButton", value: true });
@@ -165,7 +165,7 @@ var Actions = {
 			windowTitleBarStore.setValues([{ field: "Main.dockingEnabled", value: dockingConfig.enabled }]);
 
 			// Whether the alwaysOnTop pin shows or not depends first on the global setting (finsemble["Window Manager"].alwaysOnTop) and then
-			// on the specific setting for this component (foreigh.components["Widow Manager"].alwaysOnTop)
+			// on the specific setting for this component (foreign.components["Widow Manager"].alwaysOnTop)
 			let alwaysOnTopIcon = globalWindowManagerConfig.alwaysOnTopIcon;
 			if (windowTitleBarConfig.alwaysOnTopIcon === false || windowTitleBarConfig.alwaysOnTopIcon === true)
 				alwaysOnTopIcon = windowTitleBarConfig.alwaysOnTopIcon;
@@ -359,7 +359,7 @@ var Actions = {
 		FSBL.Clients.RouterClient.transmit("DockingService.hyperfocusGroup", { windowName: FSBL.Clients.WindowClient.getWindowNameForDocking() });
 	},
 	/**
-	 * Handles messages coming from the windowCclient.
+	 * Handles messages coming from the windowClient.
 	 */
 	remoteStateUpdate: function (command, state) {
 		var key = Object.keys(state)[0];

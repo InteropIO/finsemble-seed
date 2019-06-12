@@ -50,7 +50,7 @@ var Actions = {
 	},
 	setFocus(bool, target) {
 		focus = bool;
-		if (!menuWindow) return;
+		if (!menuWindow) return Actions.handleClose();
 		if (bool) {
 			if (window.outerWidth < 400) {
 				finsembleWindow.getBounds((err, bounds) => {
@@ -76,11 +76,11 @@ var Actions = {
 				Actions.positionSearchResults();
 			});
 
+		} else {
+		const sel = window.getSelection();
+			sel.removeAllRanges();
 		}
 		activeSearchBar = false;
-		if (!menuWindow) {
-			return Actions.handleClose();
-		}
 		menuWindow.isShowing(function (err, showing) {
 			if (err) { FSBL.Clients.Logger.error(`menuWindow.isShowing failed, error:`, err); }
 			//if (!showing) return//console.log("not showing")
@@ -179,6 +179,7 @@ var Actions = {
 	 * @param {*} e
 	 */
 	handleClose(e) {
+		if (!menuWindow) { return; }
 		menuWindow.isShowing(function (err, showing) {
 			if (err) { FSBL.Clients.Logger.error(`menuWindow.isShowing failed, error:`, err); }
 			if (showing) {
@@ -188,16 +189,12 @@ var Actions = {
 						cachedBounds = null;
 					});
 				}
-				window.getSelection().removeAllRanges();
-				if (!menuWindow) return;
-				menuWindow.hide();
 			}
 			//These lines handle closing the searchInput box. As showing is only true when the search results
 			//menu opens, they need to be outside so the search inputbox will still close when there is no text string.
 			blurSearchInputHandler();
-			menuStore.setValue({ field: "active", value: false })
+			menuStore.setValue({ field: "active", value: false });
 		});
-
 	},
 
 	setupWindow(cb = Function.prototype) {
@@ -233,13 +230,6 @@ var Actions = {
 		}
 	},
 
-	setBlurSearchInputHandler(blurHandler) {
-		if (typeof blurHandler !== 'function') {
-			FSBL.Clients.Logger.error("Parameter blurHandler must be a function.");
-		} else {
-			blurSearchInputHandler = blurHandler;
-		}
-	},
 
 	/**
 	 * Perform the search action

@@ -26,7 +26,7 @@ export default class Toolbar extends React.Component {
 			monitor: value
 		});
 		// There's no need to override spawnOnAllMonitors. Setting monitor to anything other than undefined will automatically override that value. Setting monitor="all" is equivalent.
-		FSBL.Clients.ConfigClient.setPreference({ field: "finsemble.components.Toolbar.window.monitor", value: value });		
+		FSBL.Clients.ConfigClient.setPreference({ field: "finsemble.components.Toolbar.window.monitor", value: value });
 	}
 
 	/**
@@ -38,7 +38,7 @@ export default class Toolbar extends React.Component {
 		//Use the previous state to toggle the checkbox, Floating is always checked
 		let previousState = this.state.toolbarType;
 		let toolbarType;
-		
+
 		if (previousState === "Fixed") {
 			FSBL.Clients.ConfigClient.setPreference({ field: "finsemble.components.Toolbar.window.dockable", value: ["top", "bottom"] });
 			FSBL.Clients.ConfigClient.setPreference({ field: "finsemble.components.Toolbar.window.options.resizable", value: true });
@@ -50,11 +50,11 @@ export default class Toolbar extends React.Component {
 			toolbarType = "Fixed";
 			this.setMonitor("all");
 		}
-		
+
 		this.setState({
 			toolbarType: toolbarType,
 			change: true,
-		});	
+		});
 	}
 
 	restartApplication() {
@@ -63,7 +63,7 @@ export default class Toolbar extends React.Component {
 
 	/**
 	 * Add listener on the store. When the preferences field changes, we change our local state.
-	 * Get the intitial state from the store.
+	 * Get the initial state from the store.
 	 */
 	componentDidMount() {
 		FSBL.Clients.ConfigClient.getValue("finsemble.components.Toolbar.window.monitor", (err, value) => {
@@ -76,7 +76,7 @@ export default class Toolbar extends React.Component {
 		//using the set values.
 		FSBL.Clients.ConfigClient.getValue("finsemble.components.Toolbar.window.dockable", (err, value) => {
 			let toolbarType = "Fixed";
-			if (value) { 
+			if (value) {
 				toolbarType = "Floating";
 			}
 			//Only set the state if the expected values were found in the config, otherwise use the default
@@ -98,7 +98,7 @@ export default class Toolbar extends React.Component {
 			<Checkbox
 			onClick={this.toggleToolbarState}
 			checked={this.state.toolbarType === "Floating"}
-			label="Float the Toolbar" />				
+			label="Float the Toolbar" />
 			<span> </span>
 			{restartButton}
 		</div>

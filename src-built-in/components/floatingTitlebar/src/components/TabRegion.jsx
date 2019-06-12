@@ -147,7 +147,7 @@ export default class TabRegion extends React.Component {
             } else if (identifier.waitForIdentifier) {
                 return identifier;
             } else {
-                FSBL.Clients.Logger.system.error("Malformed drop object detected in windowTitleBar. Check tab droppping code. Expected windowIdentifier, got ", identifier);
+                FSBL.Clients.Logger.system.error("Malformed drop object detected in windowTitleBar. Check tab dropping code. Expected windowIdentifier, got ", identifier);
                 return null;
             }
         } catch (e) {
@@ -252,7 +252,7 @@ export default class TabRegion extends React.Component {
         this.scrollToTab(lastTab);
     }
     /**
-     * Function that will horiztonally scroll the tab region so that the right edge of the tab lines up with the right edge of the tab region.
+     * Function that will horizontally scroll the tab region so that the right edge of the tab lines up with the right edge of the tab region.
      * @param {} tab
      */
     scrollToTab(tab) {
@@ -265,7 +265,7 @@ export default class TabRegion extends React.Component {
         if (tabIndex > -1) {
             let leftEdgeOfTab = tabIndex * this.state.tabWidth;
             let rightEdgeOfTab = leftEdgeOfTab + this.state.tabWidth;
-            //Our translation is  this: Take the  right edge of the bounding box, and subract the left edge. This gives us the 0 point for the box. Then, we subtract the right edge of the tab. The result is a number that we use to shift the entire element and align the right edge of the tab with the right edge of the bounding box. We also account for the 30 px region on the right.
+            //Our translation is  this: Take the  right edge of the bounding box, and subtract the left edge. This gives us the 0 point for the box. Then, we subtract the right edge of the tab. The result is a number that we use to shift the entire element and align the right edge of the tab with the right edge of the bounding box. We also account for the 30 px region on the right.
             let translateX = boundingBox.right - boundingBox.left - rightEdgeOfTab;
 
             //If there's no overflow, we don't scroll.

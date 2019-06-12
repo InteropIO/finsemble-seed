@@ -13,7 +13,7 @@ export default class Workspace extends React.Component {
 		this.bindCorrectContext();
 	}
 	/**
-     * This is necessary to make sure that the `this` insid of the callback is correct.
+     * This is necessary to make sure that the `this` inside of the callback is correct.
      *
      * @memberof LinkerButton
      */
