@@ -161,14 +161,14 @@
     --window-frame-active-color: var(--core-primary-2);
 
     /* Window Scrims and Masks */
-    --groupMask-background-color: var(--secondary-accent-color);
-    --groupMask-border-color: var(--primary-accent-color);
+    --groupMask-background-color: var(--accent-primary);
+    --groupMask-border-color: var(--accent-primary-1);
 
     --scrim-icon-font-color: var(--font-color-primary);
     --scrim-icon-font-size: 100px;
 
-    --scrim-positive-background-color: var(--secondary-accent-color);
-    --scrim-negative-background-color: var(--red7);
+    --scrim-positive-background-color: var(--accent-primary-2);
+    --scrim-negative-background-color: var(--accent-negative);
 
     /* Content Dialog (e.g., userPreferences and appCatalog) */
     --content-font-size: 13px;
