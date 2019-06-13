@@ -73,6 +73,7 @@
     margin: 0px 6px;
     width: 124px;
     height: 35px;
+    border-radius: 4px;
     text-align: center;
     font-family: var(--font-primary);
     color: var(--button-solid-text);
