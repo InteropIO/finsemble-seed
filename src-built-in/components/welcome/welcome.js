@@ -18,5 +18,7 @@ if (window.FSBL && FSBL.addEventListener) {
 }
 
 function init() {
-
+	FSBL.Clients.LauncherClient.spawn("Process Monitor", {slave:true}, (err, data) => {
+		pendingSpawn = false;
+	});
 }
