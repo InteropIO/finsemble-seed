@@ -113,9 +113,9 @@
     --button-neutral-border-hover-color: var(--core-primary-5);
     --button-neutral-solid-font-color: black;
 
-    --button-negative-background-color: var(--accent-negative-1);
+    --button-negative-background-color: var(--accent-negative);
     --button-negative-border-color: var(--accent-negative-1);
-    --button-negative-background-hover-color: var(--accent-negative);
+    --button-negative-background-hover-color: var(--accent-negative-1);
     --button-negative-border-hover-color: var(--accent-negative-1);
 
     --input-negative-border-color: var(--accent-negative);
@@ -244,16 +244,18 @@
     --procMonitor-close-hover-color: var(--red2);
 
     /* App Catalog */
+    --catalog-font-weight: 600;
     --catalog-font-color: var(--font-color-primary);
+    --catalog-toast-background-color: var(--core-primary);
     --catalog-background-color: var(--core-primary-1);
     --catalog-pagination-dots-color: var(--core-primary-3);
     --catalog-pagination-dots-active-color: white;
     --catalog-hero-border-color: transparent;
     --catalog-hero-background-color: var(--core-primary-2);
     --catalog-card-background-color: var(--core-primary);
-    --catalog-card-checkmark-unselected-color: var(--core-primary-4);
+    --catalog-card-checkmark-unselected-color: var(--core-primary-5);
     --catalog-card-checkmark-selected-color: var(--accent-positive);
-    --catalog-section-header-font-color: white;
+    --catalog-section-header-font-color: var(--accent-primary);
     --catalog-search-border-color: var(--core-primary-4);
     --catalog-search-active-border-color: var(--accent-primary-2);
     --catalog-tag-backgrond-color: var(--core-primary);

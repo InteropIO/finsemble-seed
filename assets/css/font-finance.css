@@ -347,21 +347,15 @@
 .ff-adp-edit:before {
   content: "\e008";
 }
-.ff-adp-share-context:before {
-  content: "\e009";
-}
-.ff-adp-minimize-all:before {
-  content: "\e00a";
-}
-.ff-adp-to-front:before {
-  content: "\e00b";
-}
 .ff-adp-trash:before {
   content: "\e00c";
 }
-.ff-adp-linker:before {
-  content: "\e00d";
-}
 .ff-adp-workspace:before {
   content: "\e00e";
+}
+.ff-star-outline:before {
+  content: "\e00f";
+}
+.ff-adp-trash-outline:before {
+  content: "\e010";
 }

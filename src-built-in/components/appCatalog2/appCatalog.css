@@ -2,7 +2,7 @@
 	background-color: var(--catalog-background-color);
 	color: var(--catalog-font-color);
 	/* background-image: linear-gradient(to top, rgb(60, 76, 88), rgb(48, 61, 71)); */
-	font-family: Roboto;
+	font-family: var(--font-primary);
 	font-style: normal;
     font-stretch: normal;
     line-height: normal;
@@ -40,7 +40,7 @@
 
 .market_content {
 	padding-bottom: 25px;
-	font-family: Roboto;
+	font-family: var(--font-primary);
 }
 
 .hero-main {
@@ -247,6 +247,7 @@
   	height: 23px;
 	background-color: var(--button-affirmative-background-color);
 	border: none;
+	border-radius: 4px;
 	font-size: 10px;
 	font-weight: var(--secondary-font-weight);
 	color: var(--catalog-font-color);
@@ -343,10 +344,10 @@
 	width: 166px;
 	height: 25px;
 	font-size: 12px;
-	font-weight: var(--secondary-font-weight);
+	font-weight: var(--catalog-font-weight);
 	text-align: center;
 	color: var(--catalog-font-color);
-	background-color: rgba(60, 76, 88, 1.0);
+	background-color: var(--catalog-toast-background-color);
 	z-index: 99;
 	left: 0;
 	right: 0;
@@ -488,7 +489,7 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	font-family: Roboto;
+	font-family: var(--font-primary);
 }
 
 .app-showcase .app-warning {
@@ -562,9 +563,10 @@
 	width: 83px;
 	height: 30px;
 	margin-left: 5px;
-	background-color: var(--blue6);
+	background-color: var(--button-affirmative-background-color);
 	border: none;
 	display: flex;
+	border-radius: 4px;
 	flex-direction: column;
     justify-content: center;
 	align-items: center;
@@ -584,22 +586,29 @@
 }
 
 .app-showcase .header .action-button.remove {
-	background-color: var(--red6);
+	color: var(--button-negative-background-color);
+	width: 34px;
+	background-color: transparent;
+}
+
+.action-button .ff-adp-trash-outline {
+	font-size: 19px;
+	padding-top: 5px;
 }
 
 .app-showcase .header .action-button.open:hover {
-	background-color: var(--blue7);
+	background-color: var(--button-affirmative-background-hover-color);
 }
 
 .app-showcase .header .action-button.remove:hover {
-	background-color: var(--red7);
+	color: var(--button-negative-background-hover-color);
 }
 
 .remove-button {
   	font-size: 12px;
   	font-weight: var(--primary-font-weight);
 	color: var(--catalog-font-color);
-	font-family: Roboto;
+	font-family: var(--font-primary);
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
@@ -614,7 +623,7 @@
 	height: 16px;
 	font-size: 12px;
 	font-weight: var(--primary-font-weight);
-	font-family: Roboto;
+	font-family: var(--font-primary);
 	text-align: center;
 	color: var(--catalog-font-color);
 	padding-left: 5px;
@@ -648,11 +657,7 @@
 }
 
 .app-showcase a {
-	color: var(--blue2);
-}
-
-.app-showcase a:visited {
-	color: var(--blue5);
+	color: var(--catalog-section-header-font-color);
 }
 
 .app-showcase .app-notes .developer-content {
@@ -734,16 +739,16 @@
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
+	margin-top: 2px;
 }
 
 .app-showcase .tag-label {
-	width: auto;
-  	height: auto;
-	border-radius: 2px;
-	padding: 3px 5px;
-	background-color: var(--slate2);
-	margin: 0 4px 4px 0;
+	height: 20px;
+	border-radius: 12px;
+	background-color: var(--tag-background-color);
 	user-select: none;
+	margin: 0 4px 4px 0;
+	padding: 0px 7px 0 8px;
 	cursor: pointer;
 }
 
