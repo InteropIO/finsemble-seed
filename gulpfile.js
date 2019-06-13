@@ -432,6 +432,7 @@
 
 			const manifestUrl = taskMethods.startupConfig[env.NODE_ENV].serverConfig;
 			let updateUrl = taskMethods.startupConfig[env.NODE_ENV].updateUrl;
+			const chromiumFlags = taskMethods.startupConfig[env.NODE_ENV].chromiumFlags;
 
 			// Installer won't work without a proper manifest. Throw a helpful error.
 			if (!manifestUrl) {
@@ -457,6 +458,7 @@
 
 			await FEAPackager.setManifestURL(manifestUrl);
 			await FEAPackager.setUpdateURL(updateUrl);
+			await FEAPackager.setChromiumFlags(chromiumFlags || {});
 			await FEAPackager.createFullInstaller(installerConfig);
 			done();
 		},
