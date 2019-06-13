@@ -57,6 +57,7 @@
     display: flex;
     align-items: center;
     border-radius: 30px;
+    transition: all .1s ease;
 }
 
 span > svg {
