@@ -91,7 +91,7 @@ var Actions = {
 	 */
 	showSystemLog() {
 		finsembleWindow.hide();
-		FSBL.SystemManagerAPI.showSystemLog();
+		FSBL.SystemManagerClient.showSystemLog();
 	},
 	/**
 	 * Spawns the preferences menu.
