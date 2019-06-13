@@ -341,11 +341,12 @@
 	flex-direction: row;
 	justify-content: center;
 	visibility: visible;
-	width: 166px;
-	height: 25px;
-	font-size: 12px;
+	width: 175px;
+	height: 34px;
+	font-size: 13px;
 	font-weight: var(--catalog-font-weight);
 	text-align: center;
+	border-radius: 25px;
 	color: var(--catalog-font-color);
 	background-color: var(--catalog-toast-background-color);
 	z-index: 99;
