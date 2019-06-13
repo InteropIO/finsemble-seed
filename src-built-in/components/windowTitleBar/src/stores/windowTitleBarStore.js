@@ -148,13 +148,6 @@ var Actions = {
 
 		FSBL.Clients.RouterClient.subscribe("Finsemble.WorkspaceService.groupUpdate", onDockingGroupUpdate);
 
-		/**
-		 * Catches a double-click on the title bar. If you don't catch this, openfin will invoke the OS-level maximize, which will put the window on top of the toolbar. `clickMaximize` will fill all of the space that finsemble allows.
-		 */
-		FSBL.Clients.WindowClient.finWindow.addEventListener("maximized", function () {
-			self.clickMaximize();
-		});
-
 		//default title.
 		windowTitleBarStore.setValue({ field: "Main.windowTitle ", value: FSBL.Clients.WindowClient.getWindowTitle() });
 
@@ -490,7 +483,7 @@ var Actions = {
 	closeTab: function (windowIdentifier) {
 		//return Actions.parentWrapper.deleteWindow({ windowIdentifier }) // this will cause the window to be closed but keep the stack intact
 		FSBL.FinsembleWindow.getInstance(windowIdentifier, (err, wrap) => {
-			wrap.close();
+			wrap.close({ removeFromWorkspace: true });
 		});
 	},
 	reorderTab: function (tab, newIndex) {
@@ -571,12 +564,12 @@ var Actions = {
 		if (Actions.parentWrapper) {
 			cb();
 		} else {
-			FSBL.Clients.WindowClient.getStackedWindow(params, (err, response) => {
+			FSBL.Clients.WindowClient.getStackedWindow(params, (err, wrap) => {
 				if (err) {
 					Actions.parentWrapper = null;
 					Actions._setTabs(null)
 				} else {
-					Actions.parentWrapper = FSBL.Clients.WindowClient.finsembleWindow.getParent();
+					Actions.parentWrapper = wrap;
 					Actions.setupStore(cb);
 				}
 			})

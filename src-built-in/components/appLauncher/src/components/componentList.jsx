@@ -121,6 +121,8 @@ export default class appLauncherContainer extends React.Component {
 			config = self.state.componentList[key],
 			isUserDefined = params.isUserDefined;
 		if ((!config.window ||
+			!config.foreign ||
+			!config.foreign.components ||
 			!config.foreign.components["App Launcher"] ||
 			!config.foreign.components["App Launcher"].launchableByUser) &&
 			!config.group) {

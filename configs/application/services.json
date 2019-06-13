@@ -1,4 +1,44 @@
 {
     "comment": "Houses config for any custom services that you'd like to import into Finsemble.",
-    "services": {}
+    "services": {
+        "linkerService": {
+            "spawnAs": "window",
+            "name": "linkerService",
+            "html": "$servicesRoot/linker/linker.html",
+            "file": "$servicesRoot/linker/linkerService.js",
+            "category": "system",
+            "channels": [
+                {
+                    "name": "group1",
+                    "color": "#FFFFFF",
+                    "border": "#797381"
+                },
+                {
+                    "name": "group2",
+                    "color": "#FFE035",
+                    "border": "#FFD803"
+                },
+                {
+                    "name": "group3",
+                    "color": "#89D803",
+                    "border": "#71CE47"
+                },
+                {
+                    "name": "group4",
+                    "color": "#FE6262",
+                    "border": "#F83B3B"
+                },
+                {
+                    "name": "group5",
+                    "color": "#2DACFF",
+                    "border": "#039BFF"
+                },
+                {
+                    "name": "group6",
+                    "color": "#FFA200",
+                    "border": "#F29A01"
+                }
+            ]
+        }
+    }
 }
