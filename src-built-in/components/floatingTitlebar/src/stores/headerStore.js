@@ -307,7 +307,7 @@ var Actions = {
 				}
 				FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
 			});
-			//@note this was 500, it was lowered to 50 after improvements were made to the eventing system.
+			//@note this was 500, it was lowered to 50 after improvements were made to the event system.
 		}, 50);
 
 	},
@@ -326,7 +326,7 @@ var Actions = {
 		});
 		// Actions.updateWindowPosition();
 	},
-	//Expand the window and set the animate flag. If trying to setbounds at the same time as animate, bounds gets messed up.
+	//Expand the window and set the animate flag. If trying to setBounds at the same time as animate, bounds gets messed up.
 	expandWindow(cb = Function.prototype) {
 		if (animating) return cb();
 		animating = true;
@@ -344,7 +344,7 @@ var Actions = {
 
 		const logAnimationError = (err) => {
 			if (err) {
-				console.error("Erorr in size animation", err);
+				console.error("Error in size animation", err);
 			}
 		};
 		const widenCompanion = (done) => {
@@ -397,7 +397,7 @@ var Actions = {
 
 		const logAnimationError = (err) => {
 			if (err) {
-				console.error("Erorr in size animation", err);
+				console.error("Error in size animation", err);
 			}
 		};
 		const shrinkCompanion = (done) => {

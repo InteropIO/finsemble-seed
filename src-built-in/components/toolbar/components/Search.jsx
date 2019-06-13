@@ -11,7 +11,7 @@ export default class Search extends React.Component {
 		this.state = {
 			ready: false,
 			focus: false,
-			saveText: null,
+			saveText: '',
 			active: false
 		};
 		this.bindCorrectContext();
@@ -169,7 +169,7 @@ export default class Search extends React.Component {
 		}, 100);
 	}
 	blurred() {
-		storeExports.Actions.setFocus(false)
+		storeExports.Actions.setFocus(false);
 	}
 	keyPress(event) {
 		var events = ["ArrowUp", "ArrowDown", "Enter"]

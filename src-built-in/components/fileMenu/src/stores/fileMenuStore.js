@@ -86,6 +86,14 @@ var Actions = {
 		FSBL.Clients.RouterClient.transmit("CentralConsole-Show", true);
 	},
 	/**
+	 * Sends a message to the system manager to show the log.
+	 *
+	 */
+	showSystemLog() {
+		finsembleWindow.hide();
+		FSBL.SystemManagerAPI.showSystemLog();
+	},
+	/**
 	 * Spawns the preferences menu.
 	 */
 	spawnPreferences() {

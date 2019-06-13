@@ -169,6 +169,10 @@
 			}
 		},
 		"linkerWindow": {
+			"bootParams": {
+				"stage": "earlyuser",
+				"dependencies": [ "Toolbar" ]
+			},
 			"window": {
 				"url": "$applicationRoot/components/linker/linker.html",
 				"affinity": "systemComponents",
@@ -351,6 +355,10 @@
 			}
 		},
 		"yesNo": {
+			"bootParams": {
+				"stage": "earlyuser",
+				"dependencies": [ "Toolbar" ]
+			},
 			"window": {
 				"url": "$applicationRoot/components/yesNoDialog/yesNoDialog.html",
 				"affinity": "systemComponents",
@@ -393,6 +401,10 @@
 			}
 		},
 		"singleInput": {
+			"bootParams": {
+				"stage": "earlyuser",
+				"dependencies": [ "Toolbar" ]
+			},
 			"window": {
 				"url": "$applicationRoot/components/singleInputDialog/singleInputDialog.html",
 				"affinity": "systemComponents",
@@ -514,6 +526,46 @@
 			}
 		},
 		"Toolbar": {
+			"bootParams": {
+				"stage": "earlyuser",
+				"checkpoints" : {
+					"searchStoreInit" : {
+						"postStartupCompletion": true,
+						"timeout": 30000
+					},
+					"createStores" : {
+						"postStartupCompletion": true
+					},
+					"loadMenusFromConfig" : {
+						"dependencies": ["createStores"],
+						"postStartupCompletion": true
+					},
+					"addListeners" : {
+						"dependencies": [ "loadMenusFromConfig" ],
+						"postStartupCompletion": true
+					},
+					"setupHotkeys" : {
+						"dependencies": [  "addListeners" ],
+						"postStartupCompletion": true
+					},
+					"listenForWorkspaceUpdates" : {
+						"dependencies": [  "setupHotkeys" ],
+						"postStartupCompletion": true
+					},
+					"retrieveSelfFromStorage" : {
+						"dependencies": [  "listenForWorkspaceUpdates" ],
+						"postStartupCompletion": true
+					},
+					"addMoreListeners" : {
+						"dependencies": [  "retrieveSelfFromStorage" ],
+						"postStartupCompletion": true
+					},
+					"setToolbarVisibilityInMemory" : {
+						"dependencies": [  "addMoreListeners" ],
+						"postStartupCompletion": true
+					}
+				}
+			},
 			"window": {
 				"id": "launcher",
 				"url": "$applicationRoot/components/toolbar/toolbar.html",
@@ -539,7 +591,8 @@
 					"autoShow": false,
 					"contextMenu": false,
 					"showTaskbarIcon": false,
-					"smallWindow": true
+					"smallWindow": true,
+					"maximizable": false
 				}
 			},
 			"component": {
@@ -602,6 +655,10 @@
 			}
 		},
 		"UserPreferences": {
+			"bootParams": {
+				"stage": "earlyuser",
+				"dependencies": [ "Toolbar" ]
+			},
 			"window": {
 				"url": "$applicationRoot/components/userPreferences/userPreferences.html",
 				"affinity": "systemComponents",

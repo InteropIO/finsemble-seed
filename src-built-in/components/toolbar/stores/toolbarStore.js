@@ -66,52 +66,42 @@ class _ToolbarStore {
 	 */
 	retrieveSelfFromStorage(cb) {
 
-		finsembleWindow.getOptions((err, opts) => {
-			if (err) { FSBL.Clients.Logger.error(`finsembleWindow.getOptions failed, error:`, err); }
-
-			console.info("get options", opts);
-			let hasRightProps = () => {
-				return (opts.hasOwnProperty('customData') &&
-					opts.customData.hasOwnProperty('foreign') &&
-					opts.customData.foreign.hasOwnProperty('services') &&
-					opts.customData.foreign.services.hasOwnProperty('workspaceService') && opts.customData.foreign.services.workspaceService.hasOwnProperty('global'));
+		FSBL.Clients.StorageClient.get({ topic: finsembleWindow.name, key: finsembleWindow.name }, (err, result) => {
+			if (err || !result) {
+				finsembleWindow.show();
+				return cb();
 			}
-			var isGloballyDocked = hasRightProps() ? opts.customData.foreign.services.workspaceService.global : false;
-
-			finsembleWindow.getComponentState(null, (err, result) => {
-				if (err) {
-					finsembleWindow.show();
-					return cb();
-				}
-
-				let visible = (result && result.hasOwnProperty('visible')) ? result.visible : true;
-				finsembleWindow.getBounds(null, (err, bounds) => {
-					if (!err && bounds && isGloballyDocked) {
-						this.Store.setValue({
-							field: 'window-bounds',
-							value: bounds
-						});
-						finsembleWindow.setBounds(bounds, () => {
-							if (visible) {
-								finsembleWindow.show();
-							}
-						});
-					} else {
+			let visible = (result && result.hasOwnProperty("visible") && typeof result.visible === "boolean") ? result.visible : true;
+			this.Store.setValue({
+				field: "visible", value: visible
+			})
+			let bounds = (result && result.hasOwnProperty("window-bounds")) ? result["window-bounds"] : null;
+			if (bounds) {
+				this.Store.setValue({
+					field: "window-bounds", value: bounds
+				})
+				finsembleWindow.setBounds(bounds, () => {
+					if (visible) {
 						finsembleWindow.show();
 					}
-					cb(null, result);
-				})
-			});
-		})
-
+					cb();
+				});
+			} else if (visible) {
+				finsembleWindow.show();
+				cb();
+			}
+		});
 	}
 	/**
 	 * Sets the toolbars visibility in memory
 	 */
 	setToolbarVisibilityInMemory(cb = Function.prototype) {
-		FSBL.Clients.WindowClient.setComponentState({
-			field: 'visible',
-			value: true
+		if (!this.Store.getValue({ field: "window-bounds" })) return cb();
+		FSBL.Clients.StorageClient.save({
+			topic: finsembleWindow.name, key: finsembleWindow.name, value: {
+				visible: true,
+				"window-bounds": this.Store.getValue({ field: "window-bounds" })
+			}
 		}, cb);
 	}
 	/**
@@ -183,10 +173,12 @@ class _ToolbarStore {
 		let onBoundsSet = (bounds) => {
 			bounds = bounds.data ? bounds.data : bounds;
 			self.Store.setValue({ field: "window-bounds", value: bounds });
-			FSBL.Clients.WindowClient.setComponentState({
-				field: 'window-bounds',
-				value: bounds
-			}, Function.prototype);
+			FSBL.Clients.StorageClient.save({
+				topic: finsembleWindow.name, key: finsembleWindow.name, value: {
+					visible: this.Store.getValue({ field: "visible" }),
+					"window-bounds": bounds
+				}
+			});
 		}
 		finsembleWindow.addListener("bounds-change-end", onBoundsSet)
 
@@ -296,23 +288,35 @@ class _ToolbarStore {
 					self.createStores(done, self);
 				},
 				function (done) {
+					// first ack the previous checkpoint step as done
+					FSBL.SystemManagerAPI.publishCheckpointState("Toolbar", "createStores", "completed");
 					self.loadMenusFromConfig(done, self);
 				},
 				FSBL.Clients.ConfigClient.onReady,
 				function (done) {
+					// first ack the previous checkpoint step as done
+					FSBL.SystemManagerAPI.publishCheckpointState("Toolbar", "loadMenusFromConfig", "completed");
 					self.addListeners(done, self);
 				},
 				function (done) {
+					// first ack the previous checkpoint step as done
+					FSBL.SystemManagerAPI.publishCheckpointState("Toolbar", "addListeners", "completed");
 					self.setupHotkeys(done);
 				},
 				function (done) {
+					// first ack the previous checkpoint step as done
+					FSBL.SystemManagerAPI.publishCheckpointState("Toolbar", "setupHotkeys", "completed");
 					self.listenForWorkspaceUpdates();
 					done();
 				},
 				function (done) {
+					// first ack the previous checkpoint step as done
+					FSBL.SystemManagerAPI.publishCheckpointState("Toolbar", "listenForWorkspaceUpdates", "completed");
 					self.retrieveSelfFromStorage(done);
 				},
 				function (done) {
+					// first ack the previous checkpoint step as done
+					FSBL.SystemManagerAPI.publishCheckpointState("Toolbar", "retrieveSelfFromStorage", "completed");
 					finsembleWindow.addEventListener('focused', function () {
 						self.onFocus();
 					});
@@ -322,7 +326,14 @@ class _ToolbarStore {
 					done();
 				},
 				function (done) {
+					// first ack the previous checkpoint step as done
+					FSBL.SystemManagerAPI.publishCheckpointState("Toolbar", "addMoreListeners", "completed");
 					self.setToolbarVisibilityInMemory(done);
+				},
+				function (done) {
+					// ack the previous checkpoint step as done
+					FSBL.SystemManagerAPI.publishCheckpointState("Toolbar", "setToolbarVisibilityInMemory", "completed");
+					done();
 				}
 			],
 			cb
