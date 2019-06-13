@@ -198,6 +198,7 @@ html.desktop-active .fsbl-icon-highlighted {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
+    margin-top: -1px;
 }
 
 .linker-group {
