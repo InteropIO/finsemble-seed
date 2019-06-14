@@ -442,7 +442,9 @@ function removeAppFromFolder(folderName, app) {
 	delete data.folders[folderName].apps[app.appID];
 	_setFolders();
 }
-
+/**
+ * Given a field, search through FDC3 apps and apps pulled in via config and return that app.
+ * */
 function findAppByField(field, value) {
 	return Object.values(data.apps).find(app => app ? app[field] === value : false) ||
 		Object.values(data.configComponents).find(app => app ? app[field] === value : false)
