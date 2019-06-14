@@ -222,26 +222,26 @@
     --notification-body-font-family: var(--font-primary);
     --notification-logo-width: 14px;
     --notification-title-font-size: 13px;
-    --notification-title-font-weight: bold;
-    --notification-close-icon-hover-color: var(--secondary-negative-color);
+    --notification-title-font-weight: 600;
+    --notification-close-icon-hover-color: var(--accent-negative);
     --notification-description-font-size: 13px;
 
     /* Process Monitor */
     --procMonitor-font-color: var(--font-color-primary);
     --procMonitor-font-size: 12px;
-    --procMonitor-font-weight: var(--primary-font-weight);
-    --procMonitor-process-name-font-weight: var(--secondary-font-weight);
-    --procMonitor-component-name-font-weight: var(--primary-font-weight);
+    --procMonitor-font-weight: 400;
+    --procMonitor-component-name-font-weight: 400;
+    --procMonitor-process-name-font-weight: 600;
 
-    --procMonitor-background-color: var(--primary-background-color);
-    --procMonitor-list-border-color: var(--gray6);
-    --procMonitor-close-component-font-color: var(--gray5);
+    --procMonitor-background-color: var(--core-primary);
+    --procMonitor-list-border-color: var(--core-primary-3);
+    --procMonitor-close-component-font-color: var(--core-primary-5);
 
-    --procMonitor-warning-background-color: var(--yellow7);
-    --procMonitor-negative-border-color: var(--tertiary-negative-color);
-    --procMonitor-negative-background-color: var(--tertiary-negative-color);
+    --procMonitor-warning-background-color: var(--accent-aware-1);
+    --procMonitor-negative-border-color: var(--accent-negative-1);
+    --procMonitor-negative-background-color: var(--accent-negative);
 
-    --procMonitor-close-hover-color: var(--red2);
+    --procMonitor-close-hover-color: var(--accent-negative);
 
     /* App Catalog */
     --catalog-font-weight: 600;
