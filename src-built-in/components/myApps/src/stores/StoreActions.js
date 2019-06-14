@@ -95,12 +95,8 @@ function getApp(appID, cb = Function.prototype) {
 }
 // Check to see if an app is already in our list of apps
 function appInAppList(appName) {
-	let components = Object.values(data.apps);
-	for (let i = 0; i < components.length; i++) {
-		let component = components[i];
-		if (component.name === appName) return true;
-	}
-	return false;
+	let app = findAppByField('name', appName);
+	return Boolean(app);
 }
 
 /**
@@ -447,13 +443,19 @@ function removeAppFromFolder(folderName, app) {
 	_setFolders();
 }
 
+function findAppByField(field, value) {
+	return Object.values(data.apps).find(app => app ? app[field] === value : false) ||
+		Object.values(data.configComponents).find(app => app ? app[field] === value : false)
+}
+
 function getActiveFolder() {
 	const folder = data.folders[data.activeFolder];
 	Object.values(folder.apps).map((app) => {
-		if (!data.apps[app.appID]) {
+		const appData = findAppByField('appID', app.appID)
+		if (!appData) {
 			app.tags = [];
 		} else {
-			app.tags = data.apps[app.appID].tags;
+			app.tags = appData.tags;
 		}
 	});
 	//Need a name for the AppDefinition/AppActionsMenu rendering

@@ -57,7 +57,7 @@ export default class AppDefinition extends React.Component {
 
 	render() {
 		const app = this.props.app;
-		if (typeof (app.icon) === "undefined") app.icon = DEFAULT_APP_ICON;
+		if (typeof (app.icon) === "undefined" || app.icon === null) app.icon = DEFAULT_APP_ICON;
 		return (
 			<div onClick={this.onItemClick} className="app-item link" draggable="true" onDragStart={this.onDragToFolder}>
 				<span className="app-item-title">
