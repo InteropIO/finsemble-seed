@@ -452,7 +452,7 @@
 			}
 
 			if (!FEAPackager) {
-				console.error("Cannot create installer because Finsemble Electron Adapter is not installed").
+				console.error("Cannot create installer because Finsemble Electron Adapter is not installed");
 					process.exit(1);
 			}
 
