@@ -72,7 +72,7 @@ export default class AddNewAppForm extends React.Component {
 		storeActions.addApp(this.state.form, (error) => {
 			// Notify parent if no errors
 			this.done();
-			FSBL.Clients.Logger.error(error)
+			if (error) FSBL.Clients.Logger.error(error)
 		});
 	}
 	/**
