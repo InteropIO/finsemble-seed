@@ -124,8 +124,8 @@ img {
 
 .complex-menu-section-toggle {
     padding: 5px 30px 5px 30px;
-    margin: 1px 6px;
-    border-radius: 20px;
+    margin: 1px 6px 1px 0;
+    border-radius: 0 20px 20px 0;
     height: 22px;
     display:flex;
     align-items: center;
