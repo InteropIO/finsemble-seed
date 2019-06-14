@@ -327,22 +327,24 @@ function reorderFolders(destIndex, srcIndex) {
 function addApp(app = {}, cb) {
 	const appID = (new Date()).getTime();
 	const folder = data.activeFolder;
-	data.apps[appID] = {
+	const newAppData = {
 		appID,
 		tags: app.tags !== "" ? app.tags.split(",") : [],
 		name: app.name,
 		url: app.url,
 		type: "component"
 	};
-	data.folders[MY_APPS].apps[appID] = data.apps[appID];
-	data.folders[folder].apps[appID] = data.apps[appID];
-	FSBL.Clients.LauncherClient.addUserDefinedComponent(data.apps[appID], (compAddErr) => {
+
+	FSBL.Clients.LauncherClient.addUserDefinedComponent(newAppData, (compAddErr) => {
 		if (compAddErr) {
 			//TODO: We need to handle the error here. If the component failed to add, we should probably fall back and not add to launcher
 			cb({ code: "failed_to_add_app", message: compAddErr });
 			console.warn("Failed to add new app:", compAddErr);
 			return;
 		}
+		data.apps[appID] = newAppData;
+		data.folders[MY_APPS].apps[appID] = newAppData;
+		data.folders[folder].apps[appID] = newAppData;
 		// Save appDefinitions and then folders
 		_setValue("appDefinitions", data.apps, () => {
 			_setFolders();
