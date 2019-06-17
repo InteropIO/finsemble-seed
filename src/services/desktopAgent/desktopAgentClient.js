@@ -1,6 +1,8 @@
 const Finsemble = require("@chartiq/finsemble");
 const RouterClient = Finsemble.Clients.RouterClient;
 const Logger = Finsemble.Clients.Logger;
+const WindowClient = Finsemble.Clients.WindowClient;
+const LinkerClient = Finsemble.Clients.LinkerClient;
 
 //FDC3 Desktop Agent V1.0 Functions 6/5/2019
 
@@ -76,11 +78,15 @@ export function raiseIntent(intent, context, target) {
 	return new Promise(function (resolve, reject) {
 		Logger.log("Desktop Agent raiseIntent called");
 		RouterClient.query("desktopAgentRaiseIntent", { "intent": intent, "context": context, "target": target }, function (err, response) {
-			Logger.log("DesktopAgent.raiseIntent response: ", response.data);
+			// debugger;
+			console.log("DesktopAgent.raiseIntent response: ", response.data);
+			debugger;
+			LinkerClient.publish(response.data);
+			
 			if (err) {
 				reject(err);
 			}
-			resolve();
+			resolve(response.data);
 		});
 	})
 };
@@ -88,34 +94,26 @@ export function raiseIntent(intent, context, target) {
 // addIntentListener
 // addIntentListener(intent: string, handler: (context: Context) => void): Listener;
 export function addIntentListener(intent, handler) {
-	return new Promise(function (resolve, reject) {
 		console.log("Handler Type", ({}).toString.call(handler));
+		var appName = WindowClient.getWindowIdentifier().componentType;
+		console.log("WindowIdentifier: ", appName);
 		//check handler is function
 		if (({}).toString.call(handler) === '[object AsyncFunction]' || ({}).toString.call(handler) === '[object Function]') {
 			//This is a valid handler
-			RouterClient.query("desktopAgentAddIntentListener", context, function (err, response) {
-				Logger.log("DesktopAgent.addIntentListener response: ", response.data);
-				if (error) {
-					reject(error);
+			let channel = appName + intent;
+			// debugger;
+			LinkerClient.subscribe(channel, function(err, response){
+				if(err){
+					console.log("Error adding IntentListener: ", err);
 				}
-			})
+				// debugger;
+				// handler(response.data.context);
+			});
 		} else {
 			//This is not a valid handler
 			Logger.log("addIntentListener: Handler arguement must be [object Function] or [object AsyncFunction]");
-			reject(handler);
+			return handler;
 		}
-		//check that function takes context
-		// return new Promise(function (resolve, reject) {
-		// Logger.log("Desktop Agent addIntentListener called");
-		// resolve();
-		// RouterClient.query("desktopAgentAddIntentListener", context, function (err, response) {
-		// 	Logger.log("DesktopAgent.addIntentListener response: ", response.data);
-		// 	if (error) {
-		// 		reject(error);
-		// 	}
-		// 	resolve();
-		// });
-	})
 };
 
 // addContextListener

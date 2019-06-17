@@ -53,8 +53,8 @@
 						],
 						"intents": [
 							{
-								"name": "welcome",
-								"displayName": "Welcome",
+								"name": "StartChat",
+								"displayName": "Start Chat",
 								"contexts": [
 									"contact",
 									"instrument"

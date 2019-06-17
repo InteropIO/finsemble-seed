@@ -3,6 +3,7 @@ const Finsemble = require("@chartiq/finsemble");
 const ConfigClient = Finsemble.Clients.ConfigClient;
 
 
+
 //AppD Specification Helper Functions
 function getAllFDC3Config() {
   return new Promise(function (resolve, reject) {
@@ -173,4 +174,13 @@ export function findAllIntentMatchesandFormatResponse(fdc3Configuration, intent,
 export function findAllContextMatchesandFormatResponse(fdc3Configuration, context) {
   let matches = findAllContextMatches(fdc3Configuration, context);
   return matches;
+}
+
+export function getAllConfig() {
+  return new Promise(function (resolve, reject) {
+    ConfigClient.getValues([{ field: 'finsemble' }], function (err, values) {
+      console.log("Config", values);
+      resolve(values);
+    });
+  })
 }

@@ -10,9 +10,19 @@ const ConfigClient = Finsemble.Clients.ConfigClient;
 const LauncherClient = Finsemble.Clients.LauncherClient;
 const RouterClient = Finsemble.Clients.RouterClient;
 const LinkerClient = Finsemble.Clients.LinkerClient;
+const DistributedStoreClient = Finsemble.Clients.DistributedStoreClient;
 const Logger = Finsemble.Clients.Logger;
 
+// import { IGlobals } from "../common/Globals";
+// import { _BaseClient } from "./baseClient";
+// /** The global `window` object. We cast it to a specific interface here to be
+//  * explicit about what Finsemble-related properties it may have. */
+// const Globals = window as IGlobals;
+const Globals = window;
+
+
 const desktopAgentUtilities = require('./desktopAgentUtilities.js');
+const queryJSON = require('./objectQuery/queryJSON.js');
 
 Logger.start();
 Logger.log("Desktop Agent starting up");
@@ -124,7 +134,7 @@ function desktopAgentService() {
 				if (!queryMessage.data.intent) {
 					queryMessage.sendQueryResponse("Error, RaiseIntent requires Intent parameter: " + queryMessage, null);
 					Logger.error("Desktop Agent - Raise Intent without valid Intent: ", queryMessage);
-				} else if (queryMessage.data.context) {
+				} else if (!queryMessage.data.context) {
 					queryMessage.sendQueryResponse("Error, RaiseIntent requires Context data: " + queryMessage, null);
 					Logger.error("Desktop Agent - Raise Intent without valid Context: ", queryMessage);
 				}
@@ -132,10 +142,12 @@ function desktopAgentService() {
 					console.log("Check RaiseIntent Data intent:", queryMessage.data.intent);
 					console.log("Check RaiseIntent Data context:", queryMessage.data.context);
 					console.log("Check RaiseIntent Data target:", queryMessage.data.target);
-					serviceInstance.raiseIntent(queryMessage.data.intent, queryMessage.data.context, queryMessage.data.target, () => {
+					let responseData = serviceInstance.raiseIntent(queryMessage.data.intent, queryMessage.data.context, queryMessage.data.target).then((value) => {
 						console.log("CallBack for RaiseIntent Occured, Informing Client");
-						queryMessage.sendQueryResponse(null, queryMessage.data);
+						queryMessage.sendQueryResponse(null, value);
 					});
+					// debugger;
+
 
 				}
 			} else {
@@ -145,20 +157,15 @@ function desktopAgentService() {
 
 		RouterClient.addResponder("desktopAgentAddIntentListener", function (error, queryMessage) {
 			if (!error) {
-				console.log("Check Intent Data Message:", queryMessage.data);
+				console.log("Check Listener Intent:", queryMessage.data);
 				if (!queryMessage.data.intent) {
-					queryMessage.sendQueryResponse("Error, RaiseIntent requires Intent parameter: " + queryMessage, null);
-					Logger.error("Desktop Agent - Raise Intent without valid Intent: ", queryMessage);
-				} else if (queryMessage.data.context) {
-					queryMessage.sendQueryResponse("Error, RaiseIntent requires Context data: " + queryMessage, null);
-					Logger.error("Desktop Agent - Raise Intent without valid Context: ", queryMessage);
+					queryMessage.sendQueryResponse("Error, addIntentListener requires Intent parameter: " + queryMessage, null);
+					Logger.error("Desktop Agent - addIntentListener without valid Intent: ", queryMessage);
 				}
 				else {
-					console.log("Check RaiseIntent Data intent:", queryMessage.data.intent);
-					console.log("Check RaiseIntent Data context:", queryMessage.data.context);
-					console.log("Check RaiseIntent Data target:", queryMessage.data.target);
-					serviceInstance.raiseIntent(queryMessage.data.intent, queryMessage.data.context, queryMessage.data.target, () => {
-						console.log("CallBack for RaiseIntent Occured, Informing Client");
+					console.log("Check addIntentListener Data intent:", queryMessage.data.intent);
+					serviceInstance.addIntentListener(queryMessage.data.intent, () => {
+						console.log("CallBack for addIntentListener Occured, Informing Client");
 						queryMessage.sendQueryResponse(null, queryMessage.data);
 					});
 
@@ -210,7 +217,12 @@ function desktopAgentService() {
 	this.findIntent = function (intent, context) {
 		var appIntentMatches = desktopAgentUtilities.findAllIntentMatchesandFormatResponse(this.fdc3Configuration, intent, context);
 		console.log("All Formatted Matches: ", appIntentMatches);
-		return appIntentMatches;
+
+		if (Array.isArray(appIntentMatches)) {
+			return appIntentMatches[0];
+		} else {
+			return appIntentMatches;
+		}
 	}
 
 	// findIntentsByContext
@@ -231,26 +243,52 @@ function desktopAgentService() {
 
 	// raiseIntent
 	// raiseIntent(intent: string, context: Context, target?: string): Promise<IntentResolution>;
-	this.raiseIntent = function (intent, context, target) {
-		var appList = this.findIntent(intent, context).then(
-			console.log("Theoretically Found Intent")
-		)
+	this.raiseIntent = async function (intent, context, target) {
+		console.log("window distributed store: ", Globals.distributedStoreClient);
+		let channels = await ConfigClient.getValue({ field: "finsemble.servicesConfig.linker.channels" })
+		var storeVal = await Globals.distributedStoreClient.getStore({
+			store: "Finsemble_Linker",
+			global: true,
+			values: {
+				channels: channels,
+				clients: {}
+			}
+		}, function (err, linkerStore) {
+			console.log(linkerStore);
+		});
+		console.log("store Values", storeVal);
+		var linkedComponentStore = storeVal.response.data.values.clients;
+		//To Do - Should accept multiple channels
+		var linkedComponents = queryJSON.hasOwnDeepProperty(linkedComponentStore, "group1");
+		var resolvedIntent = queryJSON.filterTargetComponent(linkedComponents, target);
+		// debugger;
+		if (!resolvedIntent || resolvedIntent.length == 0) {
+			//No linked Components, if target I can launch
+			//If no target, What does it do?
+			if (target) {
+				this.open(target, context, (err, response) => {
+					console.log("Spawn Occured");
+					// callback();
+				});
+			} else {
+				console.log("No Target so I didnt know what to open");
+			}
 
-		//pass context on intent channel to an intentlistener
-		// Should be able to take component name and only trigger intent to that component type
-		//transmit, topic = intent
-		// LauncherClient.spawn(name, { data: { context } }, (err, response) => {
-		// 	console.log("Mark Spawn Occured");
-		// 	callback();
-		// }
-		// );
-		return this;
+		} else {
+			//TO DO: add a resolver for target - user should be able to select target if multiple options are available
+			target = resolvedIntent[0].client.componentType;
+		}
+		console.log("return value", resolvedIntent);
+		let dataType = target + intent;
+		return { channels: "group1", dataType: dataType, data: context };
+		// return this;
 	}
 
 	// addIntentListener
 	// addIntentListener(intent: string, handler: (context: Context) => void): Listener;
 	this.addIntentListener = function (intent) {
-		//does this need handler as an arguement??
+		//TO DO - Implement addIntentListener where the service sents up the intent mapping rather than the client
+		//Desktop specific mappings
 	}
 
 	// addContextListener
