@@ -38,8 +38,8 @@
     --toolbar-font-weight: var(--font-weight-primary);
 
     --toolbar-height: 39px;
-    --toolbar-brand-logo-width: 20px;
-    --toolbar-brand-logo-height: 20px;
+    --toolbar-brand-logo-width: 14px;
+    --toolbar-brand-logo-height: 16px;
     --toolbar-background-color: var(--core-primary);
     --toolbar-button-hover-color: var(--core-primary-3);
     --toolbar-resize-area-color: var(--core-primary-3);
