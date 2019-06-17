@@ -66,7 +66,7 @@
 .selected-content-title {
 	width: 100%;
 	font-size: 20px;
-	font-weight: var(--primary-font-weight);
+	font-weight: var(--font-weight-primary);
 	color: var(--catalog-font-color);
 	padding: 0 5px;
 	margin-bottom: 10px;
@@ -76,7 +76,7 @@
 	width: 477px;
 	height: 130px;
 	font-size: 14px;
-	font-weight: var(--primary-font-weight);
+	font-weight: var(--font-weight-primary);
 	color: var(--catalog-font-color);
 	text-overflow: clip;
 	overflow: hidden;
@@ -151,7 +151,7 @@
 	width: 92%;
 	height: 19px;
 	font-size: 14px;
-	font-weight: var(--primary-font-weight);
+	font-weight: var(--font-weight-primary);
 	color: var(--catalog-font-color);
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -171,7 +171,7 @@
 	width: 89px;
 	height: 26px;
 	font-size: 10px;
-	font-weight: var(--secondary-font-weight);
+	font-weight: var(--font-weight-secondary);
 	color: var(--catalog-font-color);
 	padding-left: 6px;
 	overflow-y: scroll;
@@ -226,7 +226,7 @@
 	width: 90px;
 	height: 19px;
 	font-size: 14px;
-	font-weight: var(--tertiary-font-weight);
+	font-weight: var(--catalog-carousel-font-weight);
 	color: var(--catalog-section-header-font-color);
 	cursor: pointer;
 	user-select: none;
@@ -249,7 +249,7 @@
 	border: none;
 	border-radius: 4px;
 	font-size: 10px;
-	font-weight: var(--secondary-font-weight);
+	font-weight: var(--font-weight-secondary);
 	color: var(--catalog-font-color);
 	user-select: none;
 	outline:none;
@@ -400,7 +400,7 @@
 	background-color: inherit;
 	cursor: pointer;
 	font-size: 12px;
-	font-weight: var(--primary-font-weight);
+	font-weight: var(--font-weight-primary);
 	user-select: none;
 }
 
@@ -419,7 +419,7 @@
 	border-radius: 2px;
 	background-color: var(--tag-backgrond-color);
 	font-size: 10px;
-	font-weight: var(--secondary-font-weight);
+	font-weight: var(--font-weight-secondary);
 	color: var(--catalog-font-color);
 	cursor: pointer;
 }
@@ -463,7 +463,7 @@
 .app-results .app-results-no-results {
 	height: 21px;
 	font-size: 16px;
-	font-weight: var(--primary-font-weight);
+	font-weight: var(--font-weight-primary);
 	text-align: center;
 	color: var(--catalog-font-color);
 	user-select: none;
@@ -498,7 +498,7 @@
 	align-self: center;
 	height: 16px;
 	font-size: 12px;
-	font-weight: var(--tertiary-font-weight);
+	font-weight: var(--catalog-carousel-font-weight);
 	letter-spacing: normal;
 	color: var(--secondary-negative-color);
 	margin-bottom: 8px
@@ -542,7 +542,7 @@
 .app-showcase .header .appName {
 	padding-right: 12px;
   	font-size: 14px;
-  	font-weight: var(--primary-font-weight);
+  	font-weight: var(--font-weight-primary);
 	color: var(--catalog-font-color);
 }
 
@@ -550,7 +550,7 @@
 	display: flex;
 	flex-direction: row;
 	font-size: 12px;
-	font-weight: var(--secondary-font-weight);
+	font-weight: var(--font-weight-secondary);
 	color: var(--catalog-font-color);
 }
 
@@ -607,7 +607,7 @@
 
 .remove-button {
   	font-size: 12px;
-  	font-weight: var(--primary-font-weight);
+  	font-weight: var(--font-weight-primary);
 	color: var(--catalog-font-color);
 	font-family: var(--font-primary);
 	display: flex;
@@ -623,7 +623,7 @@
 	width: 100%;
 	height: 16px;
 	font-size: 12px;
-	font-weight: var(--primary-font-weight);
+	font-weight: var(--font-weight-primary);
 	font-family: var(--font-primary);
 	text-align: center;
 	color: var(--catalog-font-color);
@@ -671,7 +671,7 @@
 	display: flex;
 	width: 100%;
 	height: 15px;
-	font-weight: var(--tertiary-font-weight);
+	font-weight: var(--catalog-carousel-font-weight);
 	font-size: 14px;
 	color: var(--catalog-section-header-font-color);
 	padding-bottom: 5px;

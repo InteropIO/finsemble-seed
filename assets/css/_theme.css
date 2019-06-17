@@ -6,12 +6,13 @@
 
     /* Font Settings */
     --font-primary: "Open Sans", sans-serif;
-    --font-primary-1: "Roboto", sans-serif;
     --font-color-primary: white;
     --font-color-secondary: var(--core-primary-5);
+    --font-weight-primary: 600;
+    --font-weight-secondary: 400;
 
     --primary-font-weight: 600;
-    --secondary-font-weight: 400;
+    --font-weight-secondary: 400;
     --tertiary-font-weight: bold;
 
     /* Color Theme */
@@ -34,7 +35,7 @@
     /** Toolbar */
     --toolbar-font-size: 11px;
     --toolbar-font-color: var(--font-color-primary);
-    --toolbar-font-weight: 600;
+    --toolbar-font-weight: var(--font-weight-primary);
 
     --toolbar-height: 39px;
     --toolbar-brand-logo-width: 20px;
@@ -53,15 +54,15 @@
     --titleBar-height: 25px;
     --titleBar-font-size: 11px;
     --titleBar-icon-font-size: 8px;
-    --titleBar-font-weight: 600;
+    --titleBar-font-weight: var(--font-weight-primary);
     --titleBar-active-font-color: var(--font-color-primary);
-    --titleBar-inactive-font-color: var(--core-primary-5);
+    --titleBar-inactive-font-color: var(--font-color-secondary);
 
     --titleBar-background-inactive-color: var(--core-primary);
     --titleBar-background-active-color: var(--core-primary);
     --titlebar-tab-icon-font-color: var(--accent-primary-1);
     --titlebar-tab-active-font-color: var(--font-color-primary);
-    --titlebar-tab-inactive-font-color: var(--core-primary-5);
+    --titlebar-tab-inactive-font-color: var(--font-color-secondary);
     --titlebar-tab-hover-font-color: var(--font-color-primary);
     --titlebar-tab-hover-background-color: var(--core-primary-2);
     --titlebar-tab-active-background-color: var(--core-primary-3);
@@ -71,7 +72,7 @@
     --titlebar-tab-separator: 1px solid var(--core-primary-2);
     --titlebar-tab-section-separator: 1px solid var(--core-primary-2);
 
-    --titlebar-icon-color: var(--core-primary-5);
+    --titlebar-icon-color: var(--font-color-secondary);
     --titlebar-icon-hover-color: var(--font-color-primary);
     --titleBar-button-hover-active-color: var(--core-primary-4);
     --titleBar-button-hover-inactive-color: var(--core-primary-3);
@@ -82,19 +83,19 @@
 
     /* Dialogs (e.g., singleInput and yesNo) */
     --dialog-title-font-size: 21px;
-    --dialog-title-font-weight: 400;
-    --dialog-title-font-family: var(--font-primary-1);
+    --dialog-title-font-weight: var(--font-weight-secondary);
+    --dialog-title-font-family: Roboto;
     --dialog-title-font-color: var(--font-color-primary);
     --dialog-question-font-size: 12px;
-    --dialog-question-font-weight: 400;
-    --dialog-question-font-color: var(--core-primary-5);
-    --dialog-font-weight: 400;
+    --dialog-question-font-weight: var(--font-weight-secondary);
+    --dialog-question-font-color: var(--font-color-secondary);
+    --dialog-font-weight: var(--font-weight-secondary);
 
     --dialog-background-color: var(--core-primary);
     --dialog-font-color: var(--font-color-primary);
     --dialog-input-font-size: 11px;
     --dialog-input-font-color: var(--font-color-primary);
-    --dialog-input-font-weight: 400;
+    --dialog-input-font-weight: var(--font-weight-secondary);
     --dialog-input-background-color: transparent;
     --dialog-input-border-color: var(--core-primary-3);
     --dialog-input-border-focus-color: var(--accent-primary-2);
@@ -102,7 +103,7 @@
 
     /* Buttons and Inputs */
     --button-font-size: 12px;
-    --button-font-weight: 600;
+    --button-font-weight: var(--font-weight-primary);
     --button-solid-font-color: var(--font-color-primary);
     --button-small-font-size: 10px;
 
@@ -126,7 +127,7 @@
     /* Menus */
     --menu-font-size: 11px;
     --menu-font-icon-size: 13px;
-    --menu-font-weight: 600;
+    --menu-font-weight: var(--font-weight-primary);
     --menu-font-color: var(--font-color-primary);
     --menu-active-workspace-font-weight: var(--secondary-font-weight);
 
@@ -155,7 +156,7 @@
     --search-header-font-weight: 700;
 
     --search-result-font-color: var(--font-color-primary);
-    --search-result-font-weight: 400;
+    --search-result-font-weight: var(--font-weight-secondary);
     --search-result-highlighter-color: var(--core-primary-3);
     --search-result-highlighter-background: var(--core-primary-3);
 
@@ -178,16 +179,16 @@
     --content-header-font-size: 16px;
     --content-header-font-color: var(--accent-primary);
     --content-font-color: var(--font-color-primary);
-    --content-font-weight: 600;
+    --content-font-weight: var(--font-weight-primary);
 
     --content-nav-header-font-size: 16px;
-    --content-nav-header-font-weight: 600;
+    --content-nav-header-font-weight: var(--font-weight-primary);
     --content-nav-header-background-color: var(--core-primary-2);
     --content-nav-background-color: var(--core-primary);
     --content-nav-highlighter: var(--core-primary-3);
     --content-nav-highlighter-hover: var(--core-primary-2);
     --content-background-color: var(--core-primary-1);
-    --content-hint-font-color: var(--core-primary-5);
+    --content-hint-font-color: var(--font-color-secondary);
     --content-component-list-font-size: 11px;
 
     --content-list-border-color: var(--core-primary-5);
@@ -199,7 +200,7 @@
 
     --content-button-label-font-size: 11px;
     --content-button-disabled-border-color: var(--core-primary-2);
-    --content-button-icon-color: var(--core-primary-5);
+    --content-button-icon-color: var(--font-color-secondary);
     --content-button-neutral-hover-color: white;
     --content-button-negative-border-hover-color: var(--accent-negative);
 
@@ -225,20 +226,20 @@
     --notification-body-font-family: var(--font-primary);
     --notification-logo-width: 14px;
     --notification-title-font-size: 13px;
-    --notification-title-font-weight: 600;
+    --notification-title-font-weight: var(--font-weight-primary);
     --notification-close-icon-hover-color: var(--accent-negative);
     --notification-description-font-size: 13px;
 
     /* Process Monitor */
     --procMonitor-font-color: var(--font-color-primary);
     --procMonitor-font-size: 12px;
-    --procMonitor-font-weight: 400;
-    --procMonitor-component-name-font-weight: 400;
-    --procMonitor-process-name-font-weight: 600;
+    --procMonitor-font-weight: var(--font-weight-secondary);
+    --procMonitor-component-name-font-weight: var(--font-weight-secondary);
+    --procMonitor-process-name-font-weight: var(--font-weight-primary);
 
     --procMonitor-background-color: var(--core-primary);
     --procMonitor-list-border-color: var(--core-primary-3);
-    --procMonitor-close-component-font-color: var(--core-primary-5);
+    --procMonitor-close-component-font-color: var(--font-color-secondary);
 
     --procMonitor-warning-background-color: var(--accent-aware-1);
     --procMonitor-negative-border-color: var(--accent-negative-1);
@@ -247,7 +248,8 @@
     --procMonitor-close-hover-color: var(--accent-negative);
 
     /* App Catalog */
-    --catalog-font-weight: 600;
+    --catalog-font-weight: var(--font-weight-primary);
+    --catalog-carousel-font-weight: bold;
     --catalog-font-color: var(--font-color-primary);
     --catalog-toast-background-color: var(--core-primary);
     --catalog-background-color: var(--core-primary-1);
@@ -267,14 +269,14 @@
     /* Shared Tag Styles */
     --tag-background-color: var(--core-primary-2);
     --tag-font-color: var(--font-color-primary);
-    --tag-font-weight: 400;
+    --tag-font-weight: var(--font-weight-secondary);
     --tag-close-icon-hover-color: var(--accent-negative);
     --tag-checkmark-icon-color: var(--accent-positive);
 
 
     /* App Menu */
-    --appMenu-font-weight: 600;
-    --appMenu-tag-font-weight: 400;
+    --appMenu-font-weight: var(--font-weight-primary);
+    --appMenu-tag-font-weight: var(--font-weight-secondary);
     --appMenu-font-color: var(--font-color-primary);
     --appMenu-scrollbar-color: white;
     --appMenu-leftNav-background-color: var(--core-primary);
@@ -296,5 +298,5 @@
     --appMenu-search-input-error-color: var(--accent-negative);
     --appMenu-edit-icon-hover-color: white;
     --appMenu-separator-color: var(--core-primary-3);
-    --appMenu-folder-action-icon-color: var(--core-primary-5);
+    --appMenu-folder-action-icon-color: var(--font-color-secondary);
 }
