@@ -15,7 +15,7 @@ const VALIDATION_DEFAULTS = {
 	url: true
 };
 
-const INVALID_NAME_MSG = "Name cannot contain special characters, be empty, or be a duplicate of an existing component.";
+const INVALID_NAME_MSG = "Name cannot be empty or be a duplicate of an existing component.";
 const INVALID_URL_MSG = "URL must be valid (e.g., http://www.google.com).";
 /**
  * A component that has a form to accept new app properties
