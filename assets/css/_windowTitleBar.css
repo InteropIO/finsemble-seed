@@ -242,8 +242,9 @@ html.desktop-active .linker-group {
     align-content: center;
     transition: background .3s ease;
     position: relative;
-    width: 13px;
+    width: 10px;
     border-radius:20px;
+    margin-right: 2px;
 }
 
 /* html.desktop-active .fsbl-linker[data-hover=true] {
@@ -365,7 +366,7 @@ html.desktop-active .fsbl-active-tab .fsbl-tab-title {
 
 .fsbl-tab-logo {
     margin: 0 7px;
-    padding-top: 1px;
+    padding-top: 3px;
     width: auto;
     height: auto;
     color: var(--titlebar-tab-icon-font-color);
