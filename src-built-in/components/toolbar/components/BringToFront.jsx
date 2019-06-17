@@ -12,10 +12,10 @@ const BringToFront = (props) => {
 			ToolbarStore.bringToolbarToFront();
 		});
 	}
-	let wrapperClasses = props.classes + " icon-only";
+	let wrapperClasses = props.classes + " icon-only window-mgmt-center";
 
 	return (
-		<FinsembleButton className={wrapperClasses} buttonType={["Toolbar"]} title="Bring All To Front" onClick={BringToFront}>
+		<FinsembleButton className={wrapperClasses} buttonType={["Toolbar"]} title="Reveal All" onClick={BringToFront}>
 			<span>
 				<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg">
 					<g id="Symbols" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">

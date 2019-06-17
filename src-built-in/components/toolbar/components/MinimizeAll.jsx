@@ -6,7 +6,7 @@ const MinimizeAll = (props) => {
 	const MinimizeAll = () => {
 		FSBL.Clients.WorkspaceClient.minimizeAll();
 	}
-	let wrapperClasses = props.classes + " icon-only";
+	let wrapperClasses = props.classes + " icon-only window-mgmt-left";
 
 	return (
 		<FinsembleButton className={wrapperClasses} buttonType={["Toolbar"]} title="Minimize All" onClick={MinimizeAll}>

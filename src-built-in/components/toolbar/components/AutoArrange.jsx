@@ -39,7 +39,7 @@ export default class AutoArrange extends React.Component {
 
 	render() {
 		let tooltip = this.state.isAutoArranged ? "Restore" : "Auto Arrange";
-		let wrapperClasses = this.props.classes + " icon-only";
+		let wrapperClasses = this.props.classes + " icon-only window-mgmt-right";
 		if (this.state.isAutoArranged) {
 			wrapperClasses += " highlighted";
 		}
