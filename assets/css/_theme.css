@@ -12,7 +12,7 @@
     --font-weight-secondary: 400;
 
     --primary-font-weight: 600;
-    --font-weight-secondary: 400;
+    --secondary-font-weight: 400;
     --tertiary-font-weight: bold;
 
     /* Color Theme */
@@ -28,7 +28,7 @@
     --secondary-background-color: var(--slate6);
     --tertiary-background-color: var(--slate5);
 
-    --scrollbar-color: var(--gray);
+    --scrollbar-color: var(--core-primary-5);
 
     /* Component Variables:  Use these variables to make small changes to colors and general appearance. */
 
@@ -129,7 +129,7 @@
     --menu-font-icon-size: 13px;
     --menu-font-weight: var(--font-weight-primary);
     --menu-font-color: var(--font-color-primary);
-    --menu-active-workspace-font-weight: var(--secondary-font-weight);
+    --menu-active-workspace-font-weight: var(--font-weight-secondary);
 
     --menu-background-color: var(--core-primary);
     --menu-actions-background-color: var(--core-primary);
@@ -153,7 +153,7 @@
     --search-hover-background-color: var(--core-primary-3);
 
     --search-header-font-color: var(--accent-primary);
-    --search-header-font-weight: 700;
+    --search-header-font-weight: var(--font-weight-primary);
 
     --search-result-font-color: var(--font-color-primary);
     --search-result-font-weight: var(--font-weight-secondary);

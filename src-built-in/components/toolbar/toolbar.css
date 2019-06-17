@@ -115,6 +115,7 @@ body, html {
     color: var(--search-input-font-color);
     cursor: initial;
     z-index: 99;
+    text-shadow: none;
 }
 
 img {
