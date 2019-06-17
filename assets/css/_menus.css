@@ -79,7 +79,7 @@ body.menu {
     flex: .75;
 }
 
-.menu-item-label-fullwidth {
+.menu-item-fullwidth {
     flex: 1;
 }
 
