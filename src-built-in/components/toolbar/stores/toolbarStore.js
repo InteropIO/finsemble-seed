@@ -8,6 +8,10 @@ import * as storeExports from "../stores/searchStore";
 
 import { Actions as SearchActions } from "./searchStore"
 
+// this refers to the new menu section in the toolbar, to add backward compatibility
+// if this structure does not exist then just default to using the old array structure
+const menuConfig = 'menus' in toolbarConfig ? toolbarConfig.menus : toolbarConfig
+
 var keys = {};
 var storeOwner = false;
 /**
@@ -16,7 +20,7 @@ var storeOwner = false;
  */
 class _ToolbarStore {
 	constructor() {
-		this.loadHotkeysFromConfig = this.loadHotkeysFromConfig.bind(this)
+		this.loadHotkeysFromConfig = this.setupHotkeys.bind(this)
 	}
 	/**
 	 * Creates a Local Store and a Global Store using the DistributedStoreClient. The Local Store is used for component state.
@@ -143,11 +147,11 @@ class _ToolbarStore {
 			} else {
 				self.Store.setValue({
 					field: "menus",
-					value: toolbarConfig.menus
+					value: menuConfig
 				});
 				done();
 				if (FSBL.Clients.ConfigClient.setValue) {
-					FSBL.Clients.ConfigClient.setValue({ field: "finsemble.menus", value: toolbarConfig.menus });
+					FSBL.Clients.ConfigClient.setValue({ field: "finsemble.menus", value: menuConfig });
 				}
 			}
 		});
@@ -199,6 +203,7 @@ class _ToolbarStore {
 
 			if (focus) {
 				finsembleWindow.focus();
+				this.Store.setValue({ field: "searchActive", value: false });
 			}
 		});
 	}
@@ -240,67 +245,166 @@ class _ToolbarStore {
 	}
 
 	/**
-	 *
-	 *
-	 *
-	 */
+ *
+ *
+ *
+ */
 
 
 	/**
- * Load the hotkeys from the config.json. If there are no items in config.json, hotkeys use the defaults in the current file.
- *
- *
- * @param {any} done
- * @memberof _ToolbarStore
- */
-	loadHotkeysFromConfig(done) {
+	* Load the hotkeys from the config.json. If there are no items in config.json, hotkeys use the defaults in the current file.
+  *
+  *
+	* @param {any} done
+	* @memberof _ToolbarStore
+	*/
+	setupHotkeys(done) {
+		// defaults for the hotkeys
+		const defaultHotkeys = [
+			{
+				name: "showToolbar",
+				"keyCombination": [
+					"ctrl",
+					"alt",
+					"t"
+				],
+				action: 'SHOW_TOOLBAR',
+				enabled: true
+			},
+			{
+				name: "hideToolbar",
+				"keyCombination": [
+					"ctrl",
+					"alt",
+					"h"
+				],
+				action: 'HIDE_TOOLBAR',
+				enabled: true
+			},
+			{
+				name: "bringWindowsToFront",
+				"keyCombination": [
+					"ctrl",
+					"alt",
+					"up"
+				],
+				action: 'BRING_WINDOWS_TO_FRONT',
+				enabled: true
+			},
+			{
+				name: "minimizeAll",
+				"keyCombination": [
+					"ctrl",
+					"alt",
+					"down"
+				],
+				action: 'MINIMIZE_ALL',
+				enabled: true
+			},
+			{
+				name: "showSearch",
+				"keyCombination": [
+					"ctrl",
+					"alt",
+					"f"
+				],
+				action: 'SHOW_SEARCH',
+				enabled: true
+			}
+		]
 
-		// destructure toolbarConfig.hotkeys and provide a default fallback value for each hotkey.
-		const {
-			showToolbar = ["ctrl", "alt", "t"],
-			hideToolbar = ["ctrl", "alt", "h"],
-			bringWindowsToFront = ["ctrl", "alt", "up"],
-			minimizeAll = ["ctrl", "alt", "down"],
-			showSearch = ["ctrl", "alt", "f"],
-		} = toolbarConfig.hotkeys
+		/**
+		 * hotkeyActions
+		 * A string can be provided by a hotkey and the corresponding function gets returned.
+		 * ?This is the only way to be able to send actions from JSON.
+		 * ?This flexibility allows us to change the action via config.
+		 * @param {string} action
+		 */
+		const hotkeyActions = action => {
+			const self = this;
+			switch (action) {
 
-		// show the toolbar
-		FSBL.Clients.HotkeyClient.addGlobalHotkey(
-			showToolbar,
-			() => {
-				this.Store.setValue({ field: "searchActive", value: false });
-				this.showToolbarAtFront();
-			});
+				case 'SHOW_TOOLBAR':
+					return function showToolbar() {
+						self.Store.setValue({ field: "searchActive", value: false });
+						self.showToolbarAtFront();
+					}
 
-		// hide the toolbar
-		FSBL.Clients.HotkeyClient.addGlobalHotkey(
-			hideToolbar,
-			() => {
-				this.hideToolbar();
-			});
+				case 'HIDE_TOOLBAR':
+					return self.hideToolbar
 
-		// bring all finsemble component windows to front
-		FSBL.Clients.HotkeyClient.addGlobalHotkey(
-			bringWindowsToFront,
-			() => {
-				FSBL.Clients.LauncherClient.bringWindowsToFront()
-			});
+				case 'BRING_WINDOWS_TO_FRONT':
+					return function bringWindowsToFront() {
+						FSBL.Clients.LauncherClient.bringWindowsToFront()
+					}
 
-		// maximize all finsemble component windows
-		FSBL.Clients.HotkeyClient.addGlobalHotkey(
-			minimizeAll,
-			() => {
-				FSBL.Clients.WorkspaceClient.minimizeAll()
+				case 'MINIMIZE_ALL':
+					return function minimizeAll() {
+						FSBL.Clients.WorkspaceClient.minimizeAll()
+					}
+
+				case 'SHOW_SEARCH':
+					return function showSearch() {
+						self.showToolbarAtFront()
+						self.Store.setValue({ field: "searchActive", value: true });
+					}
+
+				default:
+					return null
+			}
+		}
+
+		/**
+		 * setHotkey
+		 *
+		 * This function does a some validation checks and then sets the global hotkey to the keyCombination with the action passed to it.
+		 * @param hotkey array of keys
+		 * @param action function to be assigned to the hotkey
+		 */
+		const setHotkey = ({ name, keyCombination, action, enabled }) => {
+			try {
+				const getAction = hotkeyActions(action)
+				// ensure the action is a function, the key combo is an array and not empty
+				if (typeof getAction === "function" && Array.isArray(keyCombination) && keyCombination.length && enabled) {
+					FSBL.Clients.HotkeyClient.addGlobalHotkey(keyCombination, getAction, console.log)
+				} else {
+					throw 'The key combination or action supplied are not valid.'
+				}
+			} catch (err) {
+				console.error(`Failed to add the hotkey ${keyCombination} for ${name}.`, err)
+			}
+		}
+
+		/**
+		 * updateDefaultHotkeysFromConfig
+		 *
+		 * This function takes the hotkeys from the config file and updates the default hotkeys with it's values.
+		 * @param {Array} configHotkeys
+		 * @param {Array} defaultHotkeys
+		 */
+		const updateDefaultHotkeysFromConfig = (configHotkeys, defaultHotkeys) =>
+			defaultHotkeys.map(defaultHotkey => {
+
+				// This checks to see if there is an object inside the default hotkey array that matches
+				// one from the configHotkeys - validation check
+				const config = configHotkeys
+					.find(configHotkey => defaultHotkey.name === configHotkey.name)
+
+				// return one object by merging the two objects into one object.
+				// If there is a value already set in both objects then the right-hand side (configHotkeys)
+				// overwrites the left (hotkeys)
+				return { ...defaultHotkey, ...config }
+
 			})
 
-		// open the search bar and give it focus
-		FSBL.Clients.HotkeyClient.addGlobalHotkey(
-			showSearch,
-			() => {
-				this.showToolbarAtFront()
-				this.Store.setValue({ field: "searchActive", value: true });
-			});
+		// check to see if there is a key in the config called hotkeys.
+		if ('hotkeys' in toolbarConfig) {
 
+			const hotkeys = updateDefaultHotkeysFromConfig(toolbarConfig.hotkeys, defaultHotkeys)
+			hotkeys.forEach(config => setHotkey(config))
+		}
+
+		// completed action
 		done();
 	}
 
@@ -330,7 +434,7 @@ class _ToolbarStore {
 					self.addListeners(done, self);
 				},
 				function (done) {
-					self.loadHotkeysFromConfig(done);
+					self.setupHotkeys(done);
 				},
 				function (done) {
 					self.listenForWorkspaceUpdates();

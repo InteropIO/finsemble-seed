@@ -55,31 +55,56 @@
             "type": "seperator"
         }
     ],
-    "hotkeys": {
-        "showToolbar": [
-            "ctrl",
-            "alt",
-            "t"
-        ],
-        "hideToolbar": [
-            "ctrl",
-            "alt",
-            "h"
-        ],
-        "bringWindowsToFront": [
-            "ctrl",
-            "alt",
-            "up"
-        ],
-        "minimizeAll": [
-            "ctrl",
-            "alt",
-            "down"
-        ],
-        "showSearch": [
-            "ctrl",
-            "alt",
-            "f"
-        ]
-    }
+    "hotkeys": [
+        {
+            "name": "showToolbar",
+            "keyCombination": [
+                "ctrl",
+                "alt",
+                "t"
+            ],
+            "description": "Show the Finsemble toolbar above all other windows.",
+            "enabled": true
+        },
+        {
+            "name": "hideToolbar",
+            "keyCombination": [
+                "ctrl",
+                "alt",
+                "h"
+            ],
+            "description": "Hide the Finsemble toolbar.",
+            "enabled": true
+        },
+        {
+            "name": "bringWindowsToFront",
+            "keyCombination": [
+                "ctrl",
+                "alt",
+                "up"
+            ],
+            "description": "Bring all Finsemble components to the front, above all other windows.",
+            "enabled": true
+        },
+        {
+            "name": "minimizeAll",
+            "keyCombination": [
+                "ctrl",
+                "alt",
+                "down"
+            ],
+            "description": "Minimize all Finsemble Components.",
+            "enabled": true
+        },
+        {
+            "name": "showSearch",
+            "keyCombination": [
+                "ctrl",
+                "alt",
+                "f"
+            ],
+            "description": "Show the search bar, this is located in the toolbar",
+            "enabled": true
+        }
+    ]
 }
