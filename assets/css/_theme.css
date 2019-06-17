@@ -129,7 +129,7 @@
     --menu-font-icon-size: 13px;
     --menu-font-weight: var(--font-weight-primary);
     --menu-font-color: var(--font-color-primary);
-    --menu-active-workspace-font-weight: var(--font-weight-secondary);
+    --menu-active-workspace-font-weight: bold;
 
     --menu-background-color: var(--core-primary);
     --menu-actions-background-color: var(--core-primary);

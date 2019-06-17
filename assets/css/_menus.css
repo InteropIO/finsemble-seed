@@ -76,7 +76,7 @@ body.menu {
     padding-top: 6px;
     margin: 3px 0;
     height: 22px;
-    flex: .75;
+    flex: 1;
 }
 
 .menu-item-fullwidth {
