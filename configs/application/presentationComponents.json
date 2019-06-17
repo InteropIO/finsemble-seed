@@ -706,8 +706,7 @@
 				},
 				"components": {
 					"App Launcher": {
-						"launchableByUser": true,
-						"tags": "look, it's not an array, and it won't break."
+						"launchableByUser": true
 					},
 					"Window Manager": {
 						"FSBLHeader": true,

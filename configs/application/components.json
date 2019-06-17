@@ -27,12 +27,7 @@
 				},
 				"components": {
 					"App Launcher": {
-						"launchableByUser": true,
-						"tags": [
-							"Tag1",
-							"Tag2",
-							"Tag3"
-						]
+						"launchableByUser": true
 					},
 					"Window Manager": {
 						"showLinker": true,
