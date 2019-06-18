@@ -2,7 +2,7 @@ import { INotification } from './notification';
 
 interface IFeedService {
     handleNotification: any;
-    notificationRecieved: string;
+    notificationRecieved: { (receivedTime: string) };
     query: { (lastUpdatedTimestamp: string): INotification[]; };
 }
 
