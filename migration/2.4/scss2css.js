@@ -32,7 +32,6 @@ function mapFileReferencesToCSS(finished) {
 			let fileContents = fs.readFileSync(filename, 'utf-8');
 			fileContents = fileContents.replace(/scss/g, "css");
 			fileContents = fileContents.replace(/sass/g, "css");
-			fileContents = fileContents.replace("_colorPalette'", "_colorPalette.css'");
 			fileContents = fileContents.replace("_dialogs'", "_dialogs.css'");
 			fileContents = fileContents.replace("_formElements'", "_formElements.css'");
 			fileContents = fileContents.replace("_globals'", "_globals.css'");

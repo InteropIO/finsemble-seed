@@ -1,8 +1,29 @@
 @import url("./fonts/Roboto/Roboto-Definition.css");
 @import url("./fonts/Open_Sans/OpenSans-Definition.css");
-@import url('_colorPalette.css');
+
 :root {
     /* Theme Variables:  Use these variables to make broad-sweeping changes to the colors and fonts. */
+    --core-primary: #22262F;
+    --core-primary-1: #171A20;
+    --core-primary-2: #373B43;
+    --core-primary-3: #3D4455;
+    --core-primary-4: #5B606F;
+    --core-primary-5: #ACB2C0;
+
+    --accent-primary: #0A8CF4;
+    --accent-primary-1: #087DDB;
+    --accent-primary-2: #398BFF;
+
+    --accent-positive: #2CC13F;
+    --accent-positive-1: #27AE38;
+    
+    --accent-aware: #F5A623;
+    --accent-aware-1: #DC951F;
+
+    --accent-negative: #F26666;
+    --accent-negative-1: #DA5C5C;
+    
+    --scrollbar-color: var(--core-primary-5);
 
     /* Font Settings */
     --font-primary: "Open Sans", sans-serif;
@@ -14,22 +35,7 @@
     --primary-font-weight: 600;
     --secondary-font-weight: 400;
     --tertiary-font-weight: bold;
-
-    /* Color Theme */
-    --primary-accent-color: var(--blue6);
-    --secondary-accent-color: var(--blue7);
-    --tertiary-accent-color: var(--blue3);
-
-    --primary-negative-color: var(--red5);
-    --secondary-negative-color: var(--red1);
-    --tertiary-negative-color: var(--red7);
-
-    --primary-background-color: var(--slate7);
-    --secondary-background-color: var(--slate6);
-    --tertiary-background-color: var(--slate5);
-
-    --scrollbar-color: var(--core-primary-5);
-
+    
     /* Component Variables:  Use these variables to make small changes to colors and general appearance. */
 
     /** Toolbar */
