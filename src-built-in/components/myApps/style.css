@@ -343,7 +343,6 @@ select:focus, option:focus {
 }
 
 .app-item {
-    /* border-bottom: solid 1px var(--appMenu-app-item-bottom-border-color); */
     position: relative;
     padding: 6px .75em;
   }

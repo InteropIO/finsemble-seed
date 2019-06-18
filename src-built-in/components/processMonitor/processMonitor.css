@@ -176,7 +176,6 @@ body {
 	height: 35px;
 	background-color: var(--button-neutral-background-color);
 	border: solid 1px var(--button-neutral-border-hover-color);
-	color: var(--button-neutral-solid-font-color);
 	display:flex;
 	align-content: center;
 	justify-content: center;

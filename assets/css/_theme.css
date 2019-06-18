@@ -59,12 +59,11 @@
     --titleBar-font-size: 11px;
     --titleBar-icon-font-size: 8px;
     --titleBar-font-weight: var(--font-weight-primary);
-    --titleBar-active-font-color: var(--font-color-primary);
+    --titleBar-active-font-color: var(--font-color-primary);  /* Not in use by default */
     --titleBar-inactive-font-color: var(--font-color-secondary);
 
     --titleBar-background-inactive-color: var(--core-primary);
     --titleBar-background-active-color: var(--core-primary);
-    --titlebar-tab-icon-font-color: var(--accent-primary-1);
     --titlebar-tab-active-font-color: var(--font-color-primary);
     --titlebar-tab-inactive-font-color: var(--font-color-secondary);
     --titlebar-tab-hover-font-color: var(--font-color-primary);
@@ -73,8 +72,6 @@
     --titlebar-tab-inactive-background-color: var(--core-primary);
     --titlebar-tab-ghost-background-color: var(--accent-primary-1);
     --titlebar-tab-ghost-border-color: var(--accent-primary);
-    --titlebar-tab-separator: 1px solid var(--core-primary-2);
-    --titlebar-tab-section-separator: 1px solid var(--core-primary-2);
 
     --titlebar-icon-color: var(--font-color-secondary);
     --titlebar-icon-hover-color: var(--font-color-primary);
@@ -93,7 +90,6 @@
     --dialog-question-font-size: 12px;
     --dialog-question-font-weight: var(--font-weight-secondary);
     --dialog-question-font-color: var(--font-color-secondary);
-    --dialog-font-weight: var(--font-weight-secondary);
 
     --dialog-background-color: var(--core-primary);
     --dialog-font-color: var(--font-color-primary);
@@ -108,8 +104,6 @@
     /* Buttons and Inputs */
     --button-font-size: 12px;
     --button-font-weight: var(--font-weight-primary);
-    --button-solid-font-color: var(--font-color-primary);
-    --button-small-font-size: 10px;
 
     --button-affirmative-background-color: var(--accent-primary);
     --button-affirmative-border-color: transparent;
@@ -119,14 +113,13 @@
     --button-neutral-background-color: transparent;
     --button-neutral-border-color: transparent;
     --button-neutral-border-hover-color: var(--core-primary-5);
-    --button-neutral-solid-font-color: black;
 
     --button-negative-background-color: var(--accent-negative);
     --button-negative-border-color: var(--accent-negative-1);
     --button-negative-background-hover-color: var(--accent-negative-1);
     --button-negative-border-hover-color: var(--accent-negative-1);
 
-    --input-negative-border-color: var(--accent-negative);
+    --input-negative-border-color: var(--accent-negative); /* Currently not in use */
 
     /* Menus */
     --menu-font-size: 11px;
@@ -141,9 +134,6 @@
     --menu-content-background-color: var(--core-primary);
     --menu-content-hover-color: var(--core-primary-3);
 
-    /* --menu-pin-border-color: var(--secondary-accent-color);
-    --menu-pin-background-color: var(--primary-accent-color);
-    --menu-pin-background-hover-color: var(--secondary-accent-color); */
     --menu-favorite-hover-color: var(--accent-primary);
     --menu-favorite-active-hover-color: var(--accent-primary-1);
     --menu-delete-background-hover-color: var(--accent-negative);
@@ -162,7 +152,6 @@
     --search-result-font-color: var(--font-color-primary);
     --search-result-font-weight: var(--font-weight-secondary);
     --search-result-highlighter-color: var(--core-primary-3);
-    --search-result-highlighter-background: var(--core-primary-3);
 
     /* Window Frame */
     --window-frame-inactive-color: var(--core-primary);
@@ -206,7 +195,6 @@
     --content-button-disabled-border-color: var(--core-primary-2);
     --content-button-icon-color: var(--font-color-secondary);
     --content-button-neutral-hover-color: white;
-    --content-button-negative-border-hover-color: var(--accent-negative);
 
     --content-checkbox-check-color: var(--font-color-primary);
     --content-checkbox-background-color: var(--accent-primary);
@@ -217,7 +205,6 @@
     --content-card-icon-background-color: var(--accent-primary-1);
     --content-card-icon-font-size: 20px;
     --content-card-title-font-size: 11px;
-    --content-details-font-size: 11px;
     --content-back-font-size: 13px;
     --content-close-hover-color: var(--accent-negative);
 
@@ -267,7 +254,6 @@
     --catalog-section-header-font-color: var(--accent-primary);
     --catalog-search-border-color: var(--core-primary-4);
     --catalog-search-active-border-color: var(--accent-primary-2);
-    --catalog-tag-backgrond-color: var(--core-primary);
     --catalog-disabled-button-background-color: var(--core-primary-3);
 
     /* Shared Tag Styles */
@@ -292,7 +278,6 @@
     --appMenu-background-color: var(--core-primary-1);
     --appMenu-actions-menu-background-color: var(--core-primary-2);
     --appMenu-app-item-hover-background-color: var(--core-primary-3);
-    /* --appMenu-app-item-bottom-border-color: rgba(98, 116, 132, 0.4); */
     --appMenu-app-favorite-color: var(--accent-primary);
     --appMenu-app-icon-color: var(--accent-primary);
     --appMenu-sort-inactive-border-color: var(--core-primary-5);
