@@ -2,7 +2,7 @@
 @import url("./fonts/Open_Sans/OpenSans-Definition.css");
 
 :root {
-    /* Theme Variables:  Use these variables to make broad-sweeping changes to the colors and fonts. */
+    /* Color Variables:  Use these variables to make broad-sweeping changes to the colors throughout the application. */
     --core-primary: #22262F;
     --core-primary-1: #171A20;
     --core-primary-2: #373B43;
@@ -25,20 +25,18 @@
     
     --scrollbar-color: var(--core-primary-5);
 
-    /* Font Settings */
+    /* Font Variables:  Use these variables to make changes to the global font styles. */
     --font-primary: "Open Sans", sans-serif;
+
     --font-color-primary: white;
     --font-color-secondary: var(--core-primary-5);
+    
     --font-weight-primary: 600;
     --font-weight-secondary: 400;
 
-    --primary-font-weight: 600;
-    --secondary-font-weight: 400;
-    --tertiary-font-weight: bold;
-    
-    /* Component Variables:  Use these variables to make small changes to colors and general appearance. */
+    /* Component Variables:  Use these variables to make granular changes to specific components. */
 
-    /** Toolbar */
+    /* Toolbar */
     --toolbar-font-size: 11px;
     --toolbar-font-color: var(--font-color-primary);
     --toolbar-font-weight: var(--font-weight-primary);
