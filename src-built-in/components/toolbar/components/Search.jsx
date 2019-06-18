@@ -101,7 +101,14 @@ export default class Search extends React.Component {
 	}
 
 	textChangeDebounced(event) {
-		storeExports.Actions.search(event.target.textContent);
+		// The event.nativeEvent is of type 'InputEvent'. nativeEvent.data gives us new keys that were added
+		// If the user presses enter, this event will still trigger, but there's no data.
+		// If the user is using hotkeys to scroll through search results and they hit enter, we don't want to search,
+		// as that will position the search results.
+		// So if the data is null, we skip the search.
+		if (event.nativeEvent.data) {
+			storeExports.Actions.search(event.target.textContent);
+		}
 	}
 	componentDidUpdate() {
 		if (this.state.hotkeySet) {
@@ -138,6 +145,7 @@ export default class Search extends React.Component {
 	}
 	hotKeyActive() {
 		this.setState({ active: true, hotkeySet: true })
+		this.searchInput.current.focus();
 	}
 	focused(e) {
 		function selectElementContents(el) {

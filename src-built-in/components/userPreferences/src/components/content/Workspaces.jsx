@@ -104,7 +104,6 @@ export default class Workspaces extends React.Component {
 		this.setState({
 			workspaceList: data.value
 		});
-		this.cancelEdit();
 	}
 
 	addListeners() {
@@ -152,7 +151,7 @@ export default class Workspaces extends React.Component {
 			FSBL.Clients.Logger.system.debug("getComponentTypes loop", windowData);
 			componentType = "Unknown Component";
 			if (windowData) { // current assimilation doesn't fill in windowData, so in this case use "Unknown Component" for component type
-				componentType = windowData.customData.component.type;
+				componentType = windowData.componentType || windowData.customData.component.type;
 			} else {
 				componentType = "Unknown Component";
 			}

@@ -104,7 +104,10 @@ var Actions = {
 		return Actions.parentWrapper.removeWindow({ windowIdentifier: wi, position: i });
 	},
 	closeTab: function (wi) {
-		return Actions.parentWrapper.deleteWindow({ windowIdentifier: wi })
+		return FSBL.FinsembleWindow.getInstance(wi, (err, wrap) => {
+			FSBL.Clients.Logger.system.debug("floating titlebar closeTab", wi);
+			wrap.close({ removeFromWorkspace: true });
+		});
 	},
 	reorderTab: function (tab, newIndex) {
 
@@ -176,12 +179,12 @@ var Actions = {
 		if (Actions.parentWrapper) {
 			cb();
 		} else {
-			FSBL.Clients.WindowClient.getStackedWindow(params, (err, response) => {
+			FSBL.Clients.WindowClient.getStackedWindow(params, (err, wrap) => {
 				if (err) {
 					Actions.parentWrapper = null;
 					Actions._setTabs(null)
 				} else {
-					Actions.parentWrapper = attachedWindow.getParent();
+					Actions.parentWrapper = wrap;
 					Actions.setupStore(cb);
 				}
 			})
