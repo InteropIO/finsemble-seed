@@ -18,10 +18,11 @@ var listOfWebpackEntryFiles = [
 const srcPath = path.join(__homename, "src");
 
 /**
+ * Recursively searches a path for files of a specific name.
  * 
  * @param {string} base The base path 
  * @param {string} searchFilename the name of the file to search for
- * @param {string[]} 
+ * @param {string[]} array of file/folder names to search in base path
  * @param {string[]} result array of files found 
  */
 const recursiveFind = (base, searchFilename, files, result) => {
