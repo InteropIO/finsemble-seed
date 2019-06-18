@@ -15,16 +15,36 @@ var listOfWebpackEntryFiles = [
 ];
 
 // Look through the src directory for webpack.entries.json files at the top level.
-var componentsPath = path.join(__homename, "src");
-var items = fs.readdirSync(componentsPath);
-// For each file in the directory (src/*)
-for (var i = 0; i < items.length; i++) {
-	// Then maybe there's a webpack.entries.json in there to process, slap it into the list as a possibility
-	let possibleWebpackEntry = path.join(componentsPath, items[i] + "/finsemble.webpack.json");
-	listOfWebpackEntryFiles.push(possibleWebpackEntry);
+const srcPath = path.join(__homename, "src");
+
+/**
+ * 
+ * @param {string} base The base path 
+ * @param {string} searchFilename the name of the file to search for
+ * @param {string[]} 
+ * @param {string[]} result array of files found 
+ */
+const recursiveFind = (base, searchFilename, files, result) => {
+	files = files || fs.readdirSync(base)
+	result = result || []
+
+	files.forEach((file) => {
+		const newBase = path.join(base, file)
+		if (fs.statSync(newBase).isDirectory()) {
+			result = recursiveFind(newBase, searchFilename, fs.readdirSync(newBase), result)
+		}
+		else {
+			if (path.basename(file) === searchFilename) {
+				result.push(newBase)
+			}
+		}
+	});
+
+	return result
 }
 
-//console.log("Webpack entry files: components", listOfWebpackEntryFiles);
+// For each file in the directory (src/*)
+listOfWebpackEntryFiles.push(...recursiveFind(srcPath, "finsemble.webpack.json"));
 
 // Compile all of those files into a single webpack entries object "componentsToBuild"
 // If a file doesn't exist, then no big deal ": {}"
@@ -39,7 +59,7 @@ listOfWebpackEntryFiles.forEach(function (filename) {
 		// Process arrays (finsemble.webpack.json files) by automatically building the output & entry fields that webpack needs
 		entries.forEach(function (assetName) {
 			let assetNoSuffix = assetName.replace(/\.[^/.]+$/, ""); // Remove the .js or .jsx extension
-			additionalComponents[assetName] = {
+			additionalComponents[assetNoSuffix] = {
 				output: "/" + subDirectory + "/" + assetNoSuffix,
 				entry: "./src/" + subDirectory + "/" + assetName
 			};		
@@ -146,5 +166,3 @@ webpackConfig.plugins.push(new CopyWebpackPlugin(createCopyWebpackConfig()));
 
 
 module.exports = webpackConfig;
-
-
