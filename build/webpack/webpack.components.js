@@ -4,7 +4,7 @@ const glob_entries = require('webpack-glob-entries');
 const webpack = require("webpack");
 const fs = require("fs");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const __homename = path.join(__dirname, "../../");
+const __homename = path.resolve(__dirname, "..", "..");
 
 // The standard webpack files that we always look in
 // webpack.finsemble-built-in.entries.json - src-built-in components
@@ -50,7 +50,7 @@ listOfWebpackEntryFiles.push(...recursiveFind(srcPath, "finsemble.webpack.json")
 // Compile all of those files into a single webpack entries object "componentsToBuild"
 // If a file doesn't exist, then no big deal ": {}"
 let componentsToBuild = {};
-listOfWebpackEntryFiles.forEach(function (filename) {
+listOfWebpackEntryFiles.forEach((filename) => {
 	let entries = fs.existsSync(filename) ? require(filename) : {};
 	let componentDirectory = path.dirname(filename);
 	let subDirectory = componentDirectory.replace(/^.*[\\\/]/, '');
@@ -58,11 +58,13 @@ listOfWebpackEntryFiles.forEach(function (filename) {
 	let additionalComponents = {};
 	if (Array.isArray(entries)) {
 		// Process arrays (finsemble.webpack.json files) by automatically building the output & entry fields that webpack needs
-		entries.forEach(function (assetName) {
-			let assetNoSuffix = assetName.replace(/\.[^/.]+$/, ""); // Remove the .js or .jsx extension
+		entries.forEach((assetName) => {
+			const outputPath = path.relative(srcPath, path.dirname(filename));
+			const assetNoSuffix = assetName.replace(/\.[^/.]+$/, ""); // Remove the .js or .jsx extension
+			const entryPath = path.relative(__homename, path.dirname(filename))
 			additionalComponents[assetNoSuffix] = {
-				output: "/" + subDirectory + "/" + assetNoSuffix,
-				entry: "./src/" + subDirectory + "/" + assetName
+				output: path.join(outputPath, assetNoSuffix),
+				entry: path.join(entryPath, assetName)
 			};		
 		});		
 	} else {
