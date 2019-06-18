@@ -43,11 +43,14 @@ export default class AppDefinition extends React.Component {
 		// So lets spawn from URL
 		if (this.props.app.url) {
 			return FSBL.Clients.LauncherClient.spawn(null, {
-				url: this.props.app.url
+				url: this.props.app.url,
+				addToWorkspace: true
 			})
 		}
 		// Otherwise launch application by name
-		FSBL.Clients.LauncherClient.spawn(name, {});
+		FSBL.Clients.LauncherClient.spawn(name, {
+			addToWorkspace: true
+		});
 	}
 
 	isFavorite() {
@@ -57,7 +60,7 @@ export default class AppDefinition extends React.Component {
 
 	render() {
 		const app = this.props.app;
-		if (typeof (app.icon) === "undefined") app.icon = DEFAULT_APP_ICON;
+		if (typeof (app.icon) === "undefined" || app.icon === null) app.icon = DEFAULT_APP_ICON;
 		return (
 			<div onClick={this.onItemClick} className="app-item link" draggable="true" onDragStart={this.onDragToFolder}>
 				<span className="app-item-title">
