@@ -245,13 +245,6 @@ class _ToolbarStore {
 	}
 
 	/**
- *
- *
- *
- */
-
-
-	/**
 	* Load the hotkeys from the config.json. If there are no items in config.json, hotkeys use the defaults in the current file.
   *
   *

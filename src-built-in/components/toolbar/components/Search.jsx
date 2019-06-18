@@ -113,7 +113,7 @@ export default class Search extends React.Component {
 	componentDidUpdate() {
 		if (this.state.hotkeySet) {
 			FSBL.Clients.WindowClient.finWindow.focus(() => {
-				this.searchContainer.current.querySelector('#searchInput').focus()
+				this.searchInput.current.focus()
 
 				//After focusing the container (which causes the results to show) we want to position the results. This way if the toolbar was moved with a keyboard shortcut, the results will follow it. Avoid doing this when the search text is empty since we don't want to show the 'No results found'
 				if (this.searchInput.current.innerHTML && this.searchInput.current.innerHTML.trim() !== "") {
