@@ -52,8 +52,6 @@ listOfWebpackEntryFiles.push(...recursiveFind(srcPath, "finsemble.webpack.json")
 let componentsToBuild = {};
 listOfWebpackEntryFiles.forEach((filename) => {
 	let entries = fs.existsSync(filename) ? require(filename) : {};
-	let componentDirectory = path.dirname(filename);
-	let subDirectory = componentDirectory.replace(/^.*[\\\/]/, '');
 
 	let additionalComponents = {};
 	if (Array.isArray(entries)) {
@@ -64,7 +62,7 @@ listOfWebpackEntryFiles.forEach((filename) => {
 			const entryPath = path.relative(__homename, path.dirname(filename))
 			additionalComponents[assetNoSuffix] = {
 				output: path.join(outputPath, assetNoSuffix),
-				entry: path.join(entryPath, assetName)
+				entry: `.${path.sep}${path.join(entryPath, assetName)}`
 			};		
 		});		
 	} else {
