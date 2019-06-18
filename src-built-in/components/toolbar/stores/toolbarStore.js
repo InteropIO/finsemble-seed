@@ -359,23 +359,23 @@ class _ToolbarStore {
 				const getAction = hotkeyActions(action)
 				// ensure the action is a function, the key combo is an array and not empty
 				if (typeof getAction === "function" && Array.isArray(keyCombination) && keyCombination.length && enabled) {
-					FSBL.Clients.HotkeyClient.addGlobalHotkey(keyCombination, getAction, console.log)
+					FSBL.Clients.HotkeyClient.addGlobalHotkey(keyCombination, getAction, () => { FSBL.Clients.Logger.log(`Hotkey added - ${name} ${keyCombination}`) })
 				} else {
 					throw 'The key combination or action supplied are not valid.'
 				}
 			} catch (err) {
-				console.error(`Failed to add the hotkey ${keyCombination} for ${name}.`, err)
+				FSBL.Clients.Logger.error(`Failed to add the hotkey ${keyCombination} for ${name}.`, err)
 			}
 		}
 
 		/**
 		 * updateDefaultHotkeysFromConfig
 		 *
-		 * This function takes the hotkeys from the config file and updates the default hotkeys with it's values.
+		 * This function takes the hotkeys from the config file and updates / merges the default hotkeys with it's values.
 		 * @param {Array} configHotkeys
 		 * @param {Array} defaultHotkeys
 		 */
-		const updateDefaultHotkeysFromConfig = (configHotkeys, defaultHotkeys) =>
+		const overrideDefaultHotkeysWithConfigHotkeys = (configHotkeys, defaultHotkeys) =>
 			defaultHotkeys.map(defaultHotkey => {
 
 				// This checks to see if there is an object inside the default hotkey array that matches
@@ -393,8 +393,11 @@ class _ToolbarStore {
 		// check to see if there is a key in the config called hotkeys.
 		if ('hotkeys' in toolbarConfig) {
 
-			const hotkeys = updateDefaultHotkeysFromConfig(toolbarConfig.hotkeys, defaultHotkeys)
+			const hotkeys = overrideDefaultHotkeysWithConfigHotkeys(toolbarConfig.hotkeys, defaultHotkeys)
 			hotkeys.forEach(config => setHotkey(config))
+		} else {
+			// if hotkeys property does not exist in the config fallback to default hotkeys
+			defaultHotkeys.forEach(config => setHotkey(config))
 		}
 
 		// completed action
