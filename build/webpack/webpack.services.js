@@ -2,8 +2,10 @@ const path = require('path');
 const fs = require("fs");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const glob_entries = require('webpack-glob-entries');
-const services = glob_entries(path.join(__dirname, '../../', "/src/services/**/*.js"));
+let services = {};
 let entry = {};
+
+['js','ts'].forEach((ext)=> services = Object.assign(services, glob_entries(path.join(__dirname, '../../', `/src/services/**/*.${ext}`))));
 
 //process service files found
 for (let key in services) {

@@ -8,6 +8,14 @@
             "file": "notification/notificationService.js",
             "visible": false,
             "html": "$applicationRoot/services/notification/notification.html"
+        },
+        "feedService": {
+            "useWindow": true,
+            "active": true,
+            "name": "feedService",
+            "file": "feed/feedService.js",
+            "visible": false,
+            "html": "$applicationRoot/services/feed/feed.html"
         }
     }
 }

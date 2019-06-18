@@ -91,6 +91,11 @@ module.exports = class WebpackDefaults {
 							cacheDirectory: './.babel_cache/',
 							presets: ['react', 'stage-1']
 						}
+					},
+					{
+						test: /\.tsx?$/,
+						loader: "awesome-typescript-loader",
+						exclude: [/node_modules/, "/chartiq/", "/finsemble/"],
 					}
 				]
 			},
@@ -101,7 +106,7 @@ module.exports = class WebpackDefaults {
 				path: path.resolve(__dirname, '../../dist/')
 			},
 			resolve: {
-				extensions: ['.js', '.jsx', '.json', 'scss', 'html'],
+				extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', 'scss', 'html'],
 				modules: [
 					'./node_modules'
 				],
