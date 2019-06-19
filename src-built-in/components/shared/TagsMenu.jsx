@@ -9,7 +9,7 @@ import React from 'react'
 import './style.css';
 
 /**
-* A reusable flyout component for tags and any other lists
+* A reusable fly out component for tags and any other lists
 * This component creates a button with a customizable label
 * and an item click handler.
 * Example: <TagsMenu label="Tags" align="left" list={list} onItemClick={handler}/>
@@ -67,7 +67,7 @@ export default class TagsMenu extends React.Component {
 		return (
 			<div className="tags-menu" style={styles}>
 				<ul> {
-					items.map((item, index) => {
+					items.sort().map((item, index) => {
 						let active = this.props.active.includes(item);
 
 

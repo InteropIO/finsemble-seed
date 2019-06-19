@@ -118,7 +118,7 @@ var Actions = {
 		appLauncherStore.setValue({ field: "pins", value: filteredPins });
 	},
 	// This filters components based on the mode and list settings in customData
-	// Available settings are list - where you list specfic individual component Types, mode - which piggybacks on config.mode and lists all components where the mode matches
+	// Available settings are list - where you list specific individual component Types, mode - which piggybacks on config.mode and lists all components where the mode matches
 	// If neither mode not list are set, all components are shown
 	// Custom Components are always shown @TODO - make this a setting
 	filterComponents(components) {
@@ -227,10 +227,19 @@ var Actions = {
 
 		var pins = appLauncherStore.getValue("pins");
 		let params = { addToWorkspace: true, monitor: "mine" };
-		if (componentToToggle.component && componentToToggle.component.windowGroup) { params.groupName = componentToToggle.component.windowGroup; }
+		if (componentToToggle.component && componentToToggle.component.windowGroup) {
+			params.groupName = componentToToggle.component.windowGroup;
+		}
+
+		//Component developers can define a display name that will show instead of the component's type.
+		let displayName = componentType;
+		if (componentToToggle.component && componentToToggle.component.displayName) {
+			displayName = componentToToggle.component.displayName;
+		}
+
 		var thePin = {
 			type: "componentLauncher",
-			label: componentType,
+			label: displayName,
 			component: componentToToggle.group ? componentToToggle.list : componentType,
 			fontIcon: fontIcon,
 			icon: imageIcon,
@@ -241,7 +250,7 @@ var Actions = {
 		var wasPinned = false;
 		for (var i = 0; i < pins.length; i++) {
 			var pin = pins[i];
-			if (pin.label === componentType) {
+			if (pin.component === componentType) {
 				pins.splice(i, 1);
 				wasPinned = true;
 				break;
@@ -315,7 +324,6 @@ var Actions = {
 		params = Object.assign(defaultParams, params);
 		if (!params.options.customData) { params.options.customData = {}; }
 		if (!params.options.customData.component) { params.options.customData.component = {}; }
-		params.options.customData.component.isUserDefined = true;
 		if (config.component.windowGroup) { params.groupName = config.component.windowGroup; }
 		FSBL.Clients.LauncherClient.spawn(config.component.type, params, function (err, windowInfo) {
 			if (cb) {

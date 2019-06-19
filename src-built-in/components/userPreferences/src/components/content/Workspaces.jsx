@@ -104,7 +104,6 @@ export default class Workspaces extends React.Component {
 		this.setState({
 			workspaceList: data.value
 		});
-		this.cancelEdit();
 	}
 
 	addListeners() {
@@ -148,7 +147,7 @@ export default class Workspaces extends React.Component {
 		var componentMap = {};
 		var annotatedComponentList = [];
 		for (let i = 0; i < templateObject.windows.length; i++) {
-			let windowData = templateObject.windows[i];
+			let windowData = templateObject.windowData[i];
 			FSBL.Clients.Logger.system.debug("getComponentTypes loop", windowData);
 			componentType = "Unknown Component";
 			if (windowData) { // current assimilation doesn't fill in windowData, so in this case use "Unknown Component" for component type

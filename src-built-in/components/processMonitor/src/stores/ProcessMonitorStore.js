@@ -65,7 +65,7 @@ var Actions = {
 		}
 
 		ProcessMonitorStore.setValue({ field: "sort", value: newSort }, () => {
-			// When changing sort we'll re-render the UI immediately instead of waiting for the processlist to update. Without this step, it could be 999ms until the next update, which makes the process monitor feel very unresponsive and very bad.
+			// When changing sort we'll re-render the UI immediately instead of waiting for the process list to update. Without this step, it could be 999ms until the next update, which makes the process monitor feel very unresponsive and very bad.
 			procs = Actions.sortProcesses(procs);
 			ProcessMonitorStore.setValue({ field: "processList", value: procs })
 		});
