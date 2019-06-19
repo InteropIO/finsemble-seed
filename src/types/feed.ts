@@ -5,7 +5,7 @@ interface IFeedService {
       Called whenever a new notification is delivered from a remote source. The send function needs to be
       called whenever a notification needs to be sent to the notification service.
     */
-    onNotification: (notification: INotification) => void;
+    handleNotification: (notification: INotification) => void;
 }
 
 interface IFeedDataService {
