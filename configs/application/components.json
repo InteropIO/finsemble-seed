@@ -126,7 +126,7 @@
 				},
 				"components": {
 					"App Launcher": {
-						"launchableByUser": false
+						"launchableByUser": true
 					},
 					"Window Manager": {
 						"persistWindowState": false,
@@ -164,7 +164,7 @@
 				},
 				"components": {
 					"App Launcher": {
-						"launchableByUser": false
+						"launchableByUser": true
 					},
 					"Window Manager": {
 						"persistWindowState": false,
@@ -202,7 +202,7 @@
 				},
 				"components": {
 					"App Launcher": {
-						"launchableByUser": false
+						"launchableByUser": true
 					},
 					"Window Manager": {
 						"persistWindowState": false,
@@ -240,7 +240,7 @@
 				},
 				"components": {
 					"App Launcher": {
-						"launchableByUser": false
+						"launchableByUser": true
 					},
 					"Window Manager": {
 						"persistWindowState": false,
