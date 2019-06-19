@@ -216,6 +216,7 @@ html.desktop-active .fsbl-icon-highlighted {
 .linkerGroup {
     border-radius: 30px;
     width: 20px;
+    border: 1px solid white;
 }
 
 .linkerContainer {
@@ -227,8 +228,7 @@ html.desktop-active .linker-group {
     border: 1px solid var(--titleBar-background-active-color);
 }
 
-.linker-group:hover {
-    cursor: pointer;
+.linkerGroup:hover {
     border: 1px solid var(--titleBar-button-hover-inactive-color) !important;
 }
 
