@@ -15,7 +15,7 @@ interface IFeedDataService {
     */
     query(lastUpdatedTimestamp: string): INotification[];
     /*
-        This function will be implemented by Finsemble developer and needs to call FeedService.onNotification
+        This function will be implemented by Finsemble developer and needs to call FeedService.handleNotification
         each time it wants to send a notification through the system.
     */
     processNotifications(): void;
