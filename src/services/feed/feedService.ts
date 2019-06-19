@@ -1,11 +1,11 @@
-import { IFeedService } from '../../types/feed';
+import { IFeedService, IFeedDataService } from '../../types/feed';
 
 const Finsemble = require("@chartiq/finsemble");
 const Logger = Finsemble.Clients.Logger;
 Logger.start();
 Logger.log("feed Service starting up");
 
-class FeedService implements IFeedService {
+class FeedService implements IFeedService, IFeedDataService {
 
 	public onBaseServiceReady: Function;
 	public start: Function;
