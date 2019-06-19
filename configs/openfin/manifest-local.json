@@ -64,16 +64,28 @@
             "target": "AssimilationMain.exe"
         },
         {
-            "src": "https://files.chartiq.com/finsemble-dev/WPFExample3_8_1.zip",
-            "version": "3.8.1",
-            "alias": "WPFDemo",
+            "src": "https://assets.finsemble.com/finsembleDLL/dev/WPFExample3_10_0.zip",
+            "version": "3.10.0",
+            "alias": "FinsembleWPFDemo",
             "target": "WPFExample.exe"
         },
         {
-            "src": "https://files.chartiq.com/finsemble-dev/WindowlessExample3_8_1.zip",
-            "version": "3.8.1",
+            "src": "https://s3.amazonaws.com/assets.finsemble.com/finsembleDLL/dev/WindowlessExample3_10_0.zip",
+            "version": "3.10.0",
             "alias": "DotNetWindowLess",
             "target": "WindowlessExample.exe"
+        },
+        {
+            "src": "https://assets.finsemble.com/finsembleDLL/dev/MultiWindowExample_3_10_0.zip",
+            "version": "3.10.0",
+            "alias": "MultiWindowExample",
+            "target": "MultiWindowExample.exe"
+        },
+        {
+            "src": "https://files.chartiq.com/finsemble/RPCv2JavaExample.zip",
+            "version": "1.0.0",
+            "alias": "FinsembleJavaDemo",
+            "target": "RPCv2JavaExample.jar"
         }
     ],
     "finsemble": {

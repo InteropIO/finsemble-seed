@@ -45,7 +45,7 @@
 			"window": {
 				"id": "WPF1",
 				"windowType": "native",
-				"alias": "WPFDemo",
+				"alias": "FinsembleWPFDemo",
 				"url": "",
 				"defaultHeight": 600,
 				"autoShow": true,
@@ -96,6 +96,158 @@
 				"components": {
 					"App Launcher": {
 						"launchableByUser": false
+					}
+				}
+			}
+		},
+		"MultiWindow-Window1": {
+			"window": {
+				"id": "MultiWindow",
+				"windowType": "FinsembleNativeWindow",
+				"alias": "MultiWindowExample",
+				"arguments": "Window1",
+				"defaultHeight": 600,
+				"autoShow": true,
+				"alwaysOnTop": false,
+				"resizable": true,
+				"showTaskbarIcon": false,
+				"contextMenu": true,
+				"addToWorkspace": true
+			},
+			"component": {
+				"mode": "native",
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"workspaceService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"persistWindowState": false,
+						"FSBLHeader": true
+					},
+					"Toolbar": {
+						"iconURL": "https://demo-dev.finsemble.com/assets/img/notepad.png"
+					}
+				}
+			}
+		},
+		"MultiWindow-Window2": {
+			"window": {
+				"id": "MultiWindow",
+				"windowType": "FinsembleNativeWindow",
+				"alias": "MultiWindowExample",
+				"arguments": "Window2",
+				"defaultHeight": 600,
+				"autoShow": true,
+				"alwaysOnTop": false,
+				"resizable": true,
+				"showTaskbarIcon": false,
+				"contextMenu": true,
+				"addToWorkspace": true
+			},
+			"component": {
+				"mode": "native",
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"workspaceService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"persistWindowState": false,
+						"FSBLHeader": true
+					},
+					"Toolbar": {
+						"iconURL": "https://demo-dev.finsemble.com/assets/img/notepad.png"
+					}
+				}
+			}
+		},
+		"MultiWindow-Window3": {
+			"window": {
+				"id": "MultiWindow",
+				"windowType": "FinsembleNativeWindow",
+				"alias": "MultiWindowExample",
+				"arguments": "Window3",
+				"defaultHeight": 600,
+				"autoShow": true,
+				"alwaysOnTop": false,
+				"resizable": true,
+				"showTaskbarIcon": false,
+				"contextMenu": true,
+				"addToWorkspace": true
+			},
+			"component": {
+				"mode": "native",
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"workspaceService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"persistWindowState": false,
+						"FSBLHeader": true
+					},
+					"Toolbar": {
+						"iconURL": "https://demo-dev.finsemble.com/assets/img/notepad.png"
+					}
+				}
+			}
+		},
+		"MultiWindow-Window4": {
+			"window": {
+				"id": "MultiWindow",
+				"windowType": "FinsembleNativeWindow",
+				"alias": "MultiWindowExample",
+				"arguments": "Window4",
+				"defaultHeight": 600,
+				"autoShow": true,
+				"alwaysOnTop": false,
+				"resizable": true,
+				"showTaskbarIcon": false,
+				"contextMenu": true,
+				"addToWorkspace": true
+			},
+			"component": {
+				"mode": "native",
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"workspaceService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"persistWindowState": false,
+						"FSBLHeader": true
+					},
+					"Toolbar": {
+						"iconURL": "https://demo-dev.finsemble.com/assets/img/notepad.png"
 					}
 				}
 			}
