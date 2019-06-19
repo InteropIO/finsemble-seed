@@ -23,6 +23,8 @@
 
 .fsbl-header {
     font-family: var(--font-primary);
+    font-size: var(--titleBar-font-size);
+    font-weight: var(--titleBar-font-weight);
     text-align: center;
     display: flex;
     height: var(--titleBar-height);
@@ -35,8 +37,6 @@
     left: 0;
     z-index: 2147483640;
     top: 0;
-    font-size: var(--titleBar-font-size);
-    font-weight: var(--titleBar-font-weight);
     color: var(--titleBar-inactive-font-color);
 }
 

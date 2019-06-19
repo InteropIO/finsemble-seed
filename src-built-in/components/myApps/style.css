@@ -506,6 +506,6 @@ select:focus, option:focus {
 }
 
 .input-error {
-    color: #f16767;
+    color: var(--accent-negative);
     margin: .5em;
 }

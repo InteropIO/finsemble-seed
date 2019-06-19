@@ -210,7 +210,7 @@
     --content-close-hover-color: var(--accent-negative);
 
     --content-warning-text: var(--accent-aware);
-    --content-restart-button-color: var(--accent-primary);
+    --content-restart-button-color: var(--accent-primary-1);
 
     /* Notifications */
     --notification-body-background-color: var(--toolbar-background-color);

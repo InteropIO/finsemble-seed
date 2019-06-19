@@ -220,12 +220,8 @@ img {
     padding-top: 2px;
 }
 
-.ff-delete:hover {
-    background-color: transparent;
-}
-
 .individual-workspace-action:hover {
-    color: white;
+    color: var(--content-button-neutral-hover-color);
 }
 
 .delete-workspace:hover {
@@ -395,14 +391,14 @@ img {
 
 ::-webkit-scrollbar {
     width: 5px;
-    background-color: var(--scrollbar-color);
+    background-color: transparent;
     border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb {
     cursor: pointer;
     border-radius: inherit;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: var(--scrollbar-color);
 }
 
 .scheduled-restart {
@@ -414,12 +410,12 @@ img {
 }
 
 .disabled-restart {
-    color: darkgray !important;
+    color: var(--scrollbar-color) !important;
 }
 
 select:focus, option:focus {
     outline: none;
-    background-color: white;
+    background-color: var(--content-font-color);
 }
 
 .change-text {
@@ -438,8 +434,8 @@ select:focus, option:focus {
 	background: none;
 	box-shadow: none;
 	background-color: var(--content-restart-button-color);
-	color: white;
+	color: var(--content-font-color);
     font-size: 11px;
-    font-weight: 600;
+    font-weight: var(--content-font-weight);
     border-radius: 3px;
   }

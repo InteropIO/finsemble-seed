@@ -1,4 +1,3 @@
-/* New Toolbar Starts Here*/
 .finsemble-toolbar {
     display: flex;
     align-items: stretch;
@@ -32,7 +31,7 @@
 }
 
 .finsemble-toolbar-section.right {
-		margin-right: 8px;
+    margin-right: 8px;
     justify-content: flex-end;
     order: 2;
     flex: 1;
@@ -90,19 +89,9 @@ span > svg {
     width: 4px;
     max-width: 4px;
     min-width: 4px;
-		background-color: var(--toolbar-resize-area-color);
-		position: absolute;
-		right: 0;
-    /* justify-content: flex-end;
-    order: 3;
-    flex: 0 0 auto; */
-}
-
-@media screen and (max-width: 170px) {
-    /* remove */
-    .workspace-menu-button {
-        display: none !important;
-    }
+    background-color: var(--toolbar-resize-area-color);
+    position: absolute;
+    right: 0;
 }
 
 @media screen and (max-width: 270px) {

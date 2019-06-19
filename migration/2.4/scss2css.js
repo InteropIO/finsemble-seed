@@ -46,7 +46,6 @@ function mapFileReferencesToCSS(finished) {
 			fileContents = fileContents.replace("_variablesWindowTitleBar'", "_variablesWindowTitleBar.css'");
 			fileContents = fileContents.replace("_windowFrame'", "_windowFrame.css'");
 			fileContents = fileContents.replace("_windowTitleBar'", "_windowTitleBar.css'");
-			fileContents = fileContents.replace("_workspaceManagement'", "_workspaceManagement.css'");
 			fileContents = fileContents.replace("_fontIcon'", "_fontIcon.css'");
 
 			fs.writeFileSync(filename, fileContents, 'utf-8');
