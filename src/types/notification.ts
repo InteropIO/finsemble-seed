@@ -27,6 +27,15 @@ interface INotification {
     meta?: Map<string, any>;
 }
 
+interface Subscription {
+    /* Internal uuid */
+    id: string;
+    /* Name of channel used by UI Components to determine what data they receive. */
+    channelName: string;
+    /* Name value pair of filters to use for subscriptions. IE tradeId:12345 */
+    filters: Map<string, string>;
+}
+
 interface INotificationService {
     /* Persist a notification using the StorageClient */
     saveNotification(notification: INotification): boolean;
@@ -48,19 +57,38 @@ interface INotificationService {
 }
 
 interface INotificationClient {
-    handleNotification(notification: INotification): string;
+    /* 
+        Called whenever notification is recieved from FeedService.
+    */    
+    onNotification(notification: INotification): string;
+    /* 
+        Broadcast notification to listeners.
+    */    
     broadcast(notification: INotification): string;
+    /* 
+        UI Components will subscribe for updates. The initial query per channel / filter combination will
+        return the subscriptionId a concatination of channel name + filter. IE trades/12345.
+    */    
     registerNotificationResponder(subscription: Subscription): string;
+    /* 
+        Remove stored subscription from NotificationService. Therefore, no more notifications will be sent 
+        the UI components for that subscriptionId.
+    */    
     deregisterNotificationResponder(subscriptionId:string ): boolean;
-    registerActionResponder():void;
-    deregisterActionResponder():void;
+    /* 
+        Internally used to register a query / responder to for actions dispatched VIA Finsemble UI Components. 
+        When an action is received the notification stored in the service will updated with the action name
+        and time it was performed.
+    */    
+    _registerActionResponder():void;
+    /* 
+        Cleanup of internal action responder.
+    */ 
+    _deregisterActionResponder():void;
+    /* 
+        User by UI components that need to display a list of historical notifications.
+    */     
     fetchSnapshot(): INotification[];
-}
-
-interface Subscription {
-    id: string;
-    channelName: string;
-    filters: Map<string, string>;
 }
 
 export { INotification, INotificationService, INotificationClient };
