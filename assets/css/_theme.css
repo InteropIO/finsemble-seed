@@ -61,12 +61,13 @@
     --titleBar-font-weight: var(--font-weight-primary);
     --titleBar-active-font-color: var(--font-color-primary);  /* Not in use by default */
     --titleBar-inactive-font-color: var(--font-color-secondary);
-
+    
     --titleBar-background-inactive-color: var(--core-primary);
     --titleBar-background-active-color: var(--core-primary);
     --titlebar-tab-active-font-color: var(--font-color-primary);
     --titlebar-tab-inactive-font-color: var(--font-color-secondary);
     --titlebar-tab-hover-font-color: var(--font-color-primary);
+    --titlebar-tab-icon-font-color: var(--accent-primary);
     --titlebar-tab-hover-background-color: var(--core-primary-2);
     --titlebar-tab-active-background-color: var(--core-primary-3);
     --titlebar-tab-inactive-background-color: var(--core-primary);
