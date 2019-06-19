@@ -5,7 +5,7 @@ interface IFeedService {
       Called whenever a new notification is delivered from a remote source. The send function needs to be
       called whenever a notification needs to be sent to the notification service.
     */
-    handleNotifications: (send: (notification: INotification) => void) => void;
+    handleNotifications: (onNotification: (notification: INotification) => void) => void;
     /*
         Most likely will query a remote source for notifications at a point in time. Used to pull in
         notifications which occurred when Finsemble was offline.
