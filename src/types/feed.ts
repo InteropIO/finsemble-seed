@@ -6,11 +6,6 @@ interface IFeedService {
       called whenever a notification needs to be sent to the notification service.
     */
     onNotification: (notification: INotification) => void;
-    /*
-        Called whenever a new notification is received successfully in Finsemble. Useful for logging,
-        error handleing, or reporting back to the remote service, etc...
-    */    
-    notificationReceived?(receivedTime: string): void;
 }
 
 interface IFeedDataService {
@@ -24,6 +19,11 @@ interface IFeedDataService {
         each time it wants to send a notification through the system.
     */
     processNotifications(): void;
+    /*
+        Called whenever a new notification is received successfully in Finsemble. Useful for logging,
+        error handleing, or reporting back to the remote service, etc...
+    */    
+   notificationReceived?(receivedTime: string): void;
 }
 
 interface IFeedClient {
