@@ -23,7 +23,7 @@ interface IFeedDataService {
         Called whenever a new notification is received successfully in Finsemble. Useful for logging,
         error handleing, or reporting back to the remote service, etc...
     */    
-   notificationReceived?(receivedTime: string): void;
+   notificationReceived?(receivedTime: string, notification: INotification): void;
 }
 
 interface IFeedClient {
