@@ -15,9 +15,15 @@ body {
 
 .linkerGroup{
     height: 20px;
+    width: 20px;
     margin: 4px 8px;
     cursor: pointer;
-    border-radius: 2px;
+    border-radius: 30px;
+    border: 1px solid transparent;
+}
+ 
+.linkerGroup:hover {
+    border: 1px solid var(--titlebar-icon-hover-color);
 }
 
 .linkerContainer{

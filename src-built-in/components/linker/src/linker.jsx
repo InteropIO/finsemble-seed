@@ -74,7 +74,7 @@ class Linker extends React.Component {
 	render() {
 		var self = this;
 		//Checkbox inside of a circle. Rendered in the center of a group if the attachedWindow is part of that group.
-		let activeChannelIndicator = (<i className="active-linker-group ff-check-circle"></i>);
+		let activeChannelIndicator = (<i className="active-linker-group ff-check-mark"></i>);
 		/**
 		 * This function iterates through all of the channels that have registered with the linkerClient. If the attachedWindow belongs to any of them, it renders a check mark and a circle in the center of the channel's rectangle.
 		 **/
@@ -88,8 +88,7 @@ class Linker extends React.Component {
 			}
 
 			let style = {
-				backgroundColor: item.color,
-				border: "1px solid " + item.border
+				backgroundColor: item.color
 			};
 			//returns a group row. It's essentially a colored rectangle.
 			return (<div key={item.name + index} className={groupClass} style={style} onClick={function () {

@@ -140,7 +140,7 @@
     --menu-delete-background-hover-color: var(--accent-negative);
 
     --menu-linker-selected-font-color: var(--font-color-primary);
-    --menu-linker-selected-font-size: 18px;
+    --menu-linker-selected-font-size: 12px;
 
     /* Search Menu */
     --search-input-font-color: black;
