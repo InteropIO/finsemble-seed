@@ -1,10 +1,3 @@
-interface IAction {
-    /* Used to identify what should be done when action is triggered by user. IE: CONFIRM, REJECT, SNOOZE; */
-    key: string;
-    /* Display label in UI. */
-    label: string;
-}
-
 interface INotification {
     /* Internal uuid */
     id: string;
@@ -27,6 +20,13 @@ interface INotification {
     meta?: Map<string, any>;
 }
 
+interface IAction {
+    /* Used to identify what should be done when action is triggered by user. IE: CONFIRM, REJECT, SNOOZE; */
+    key: string;
+    /* Display label in UI. */
+    label: string;
+}
+
 interface Subscription {
     /* Internal uuid */
     id: string;
@@ -37,13 +37,23 @@ interface Subscription {
 }
 
 interface INotificationService {
-    /* Persist a notification using the StorageClient */
-    saveNotification(notification: INotification): boolean;
     /* 
-        Persist the last time a notification was save using the StorageClient. 
+        Persist a notification via the StorageClient 
+    */
+    createNotification(notification: INotification): boolean;
+    /* 
+        Delete a notification via the StorageClient 
+    */
+    deleteNotification(id: string): void;
+    /* 
+        Update a notification via the StorageClient 
+    */
+    updateNotification(notification: INotification): void;
+    /* 
+        Update / Persist the last time a notification was save using the StorageClient. 
         This is used during startup to fetch and notification that happened with desktop was shutdown. 
     */
-    saveLastUpdatedTimestamp(saveLastUpdatedTimestamp: string): boolean;
+    saveLastUpdatedTime(lastUpdatedTimestamp: string): boolean;
     /* 
         Per notification type configure display how often they're displayed.
         Per event type configure what sound you'd like to hear when that notification occurs.
