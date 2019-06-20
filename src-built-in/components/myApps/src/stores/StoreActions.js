@@ -334,6 +334,7 @@ function addApp(app = {}, cb) {
 		url: app.url,
 		type: "component"
 	};
+	const { FAVORITES } = getConstants();
 
 	FSBL.Clients.LauncherClient.addUserDefinedComponent(newAppData, (compAddErr) => {
 		if (compAddErr) {
@@ -342,6 +343,9 @@ function addApp(app = {}, cb) {
 			console.warn("Failed to add new app:", compAddErr);
 			return;
 		}
+		// If we're creating the app while in the favorites folder,
+		// we need to make sure it gets pinned to the toolbar
+		if (folder === FAVORITES) addPin({ name: app.name });
 		data.apps[appID] = newAppData;
 		data.folders[MY_APPS].apps[appID] = newAppData;
 		data.folders[folder].apps[appID] = newAppData;
