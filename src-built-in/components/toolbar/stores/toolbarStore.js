@@ -321,11 +321,6 @@ class _ToolbarStore {
 		async.series(
 			[
 				function (done) {
-					fin.desktop.System.showDeveloperTools(finsembleWindow.uuid, finsembleWindow.name, () => {
-						setTimeout(done, 2000)
-					});
-				},
-				function (done) {
 					self.createStores(done, self);
 				},
 				function (done) {
