@@ -3,12 +3,15 @@ var inLogin = true;
  * 			SAMPLE AUTHENTICATION
  ************************************************/
 //On ready, check to see if the user has a valid session
-FSBL.Clients.RouterClient.onReady(() => {
-    checkAuthorizationStatus();
-});
+if (window.FSBL && FSBL.addEventListener) {
+	FSBL.addEventListener("onReady", checkAuthorizationStatus);
+} else {
+	window.addEventListener("FSBLReady", checkAuthorizationStatus)
+}
+
 
 $('#authAction').click(function (e) {
-    var text = inLogin ? "Sign Up" : "Login"
+    var text = inLogin ? "Sign Up" : "Login";
     var actionLink = inLogin ? "Login" : "Sign Up";
     inLogin = !inLogin;
     $('#submitButton').html(text);
@@ -19,7 +22,7 @@ document.body.addEventListener('keydown', handleKeydown);
 
 //Submits credentials on enter, closes on quit.
 function handleKeydown(e) {
-    if (e.code === 'Enter' && e.shiftKey === false) {
+    if ((e.code === 'Enter' || e.code === 'NumpadEnter') && e.shiftKey === false) {
         processAuthInput();
     }
 
