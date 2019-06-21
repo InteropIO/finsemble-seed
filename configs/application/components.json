@@ -1,6 +1,43 @@
 {
 	"comment": "Sample component configuration",
 	"components": {
+		"switchUser": {
+			"window": {
+				"url": "$applicationRoot/components/switchUser/switchUser.html",
+				"affinity": "workspaceComponents",
+				"frame": false,
+				"resizable": true,
+				"autoShow": true,
+				"top": "center",
+				"left": "center",
+				"width": 400,
+				"height": 432
+			},
+			"component": {
+				"inject": false,
+				"spawnOnStartup": false,
+				"preload": "$applicationRoot/preloads/zoom.js"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"canGroup": true,
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"showLinker": true,
+						"FSBLHeader": true,
+						"persistWindowState": true,
+						"title": "Switch User"
+					}
+				}
+			}
+		},
 		"Welcome Component": {
 			"window": {
 				"url": "$applicationRoot/components/welcome/welcome.html",
@@ -155,7 +192,44 @@
 				"top": "center",
 				"left": "center",
 				"width": 358,
-				"height": 458,
+				"height": 658,
+				"ephemeral": true,
+				"options": {
+					"autoShow": true
+				}
+			},
+			"component": {
+				"neededClients": [
+					"LauncherClient",
+					"AuthenticationClient",
+					"StorageClient"
+				],
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"FSBLHeader": false,
+						"persistWindowState": false
+					}
+				}
+			}
+		},
+		"customAuthentication": {
+			"window": {
+				"url": "$applicationRoot/components/customAuthentication/customAuthentication.html",
+				"top": "center",
+				"left": "center",
+				"width": 358,
+				"height": 658,
 				"ephemeral": true,
 				"options": {
 					"autoShow": false

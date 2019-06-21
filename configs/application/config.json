@@ -215,5 +215,11 @@
 		"$applicationRoot/configs/application/workspaceTemplates.json",
 		"$applicationRoot/configs/application/services.json",
 		"$applicationRoot/configs/application/securityPolicies.json"
-	]
+	],
+	"authentication": {
+		"startup": {
+			"adapter": "PASSWORD",
+			"component": "customAuthentication"
+		}
+	}
 }
