@@ -79,11 +79,6 @@ span > svg {
     cursor: pointer;
 }
 
-.ff-adp-workspace:before {
-    padding-right: 8px;
-    padding-top: 1px;
-}
-
 .finsemble-toolbar .resize-area {
     height: 100%;
     width: 4px;
@@ -183,8 +178,8 @@ img.pinned-icon {
 .pinned-icon {
     color: var(--toolbar-icon-app-color);
     font-size: var(--toolbar-icon-font-size);
-    padding-right: .25em;
-    margin-top: 8px;
+    padding-right: 6px;
+    margin-top: 11px;
 }
 
 .pinned-workspace-icon {
