@@ -50,7 +50,7 @@
 
     --toolbar-icon-workspace-color: var(--accent-aware);
     --toolbar-icon-app-color: var(--accent-primary);
-    --toolbar-icon-font-size: 18px;
+    --toolbar-icon-font-size: 13px;
 
     --toolbar-separator: 1px solid rgba(255, 255, 255, 0.3);
 
