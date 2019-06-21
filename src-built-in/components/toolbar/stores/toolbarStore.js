@@ -5,9 +5,9 @@
 import async from "async";
 import * as menuConfig from '../config.json';
 import * as storeExports from "../stores/searchStore";
-
+import { PinManager } from "../modules/pinManager"
 import { Actions as SearchActions } from "./searchStore"
-
+const PinManagerInstance = new PinManager();
 var keys = {};
 var storeOwner = false;
 /**
@@ -44,10 +44,46 @@ class _ToolbarStore {
 					storeOwner = true;//until we put creator in by default
 				}
 
+				/**
+				 * When pins are set initially, go through and handle any that
+				 * have had display name changes. Additional, remove any
+				 * components that are no longer in components.json.
+				 *
+				 * @param {*} err
+				 * @param {*} data
+				 * @returns void
+				 */
+				async function onPinsFirstSet(err, data) {
+					const { value: pins } = data;
+
+					// This will be null if there are no pins saved yet.
+					// @early-exit
+					if (!pins) return;
+
+					const { data: components } = await FSBL.Clients.LauncherClient.getComponentList();
+
+					// First we remove any pins that are no longer registered components
+					const filteredPins = PinManagerInstance.removePinsNotInComponentList(components, Object.values(pins));
+
+					// Handle any pins whose components had their displayName changed
+					const finalPins = PinManagerInstance.handleNameChanges(components, filteredPins);
+
+					// convert the array back to an object
+					const pinObject = PinManagerInstance.convertPinArrayToObject(finalPins);
+
+					// We don't want this to fire again
+					self.GlobalStore.removeListener({ field: "pins" }, onPinsFirstSet);
+					self.GlobalStore.setValue({ field: "pins", value: pinObject })
+				}
+
 				FSBL.Clients.DistributedStoreClient.createStore({ store: "Finsemble-Toolbar-Store", global: true, values: values }, function (err, store) {
 					if (err) { FSBL.Clients.Logger.error(`DistributedStoreClient.createStore failed for store Finsemble-Toolbar-Store, error:`, err); }
 
 					self.GlobalStore = store;
+					// There should never be a race condition here because the initial pins are
+					// set inside of the toolbarSection, which is not rendered
+					// until the store is finally finshed initializing
+					self.GlobalStore.addListener({ field: "pins" }, onPinsFirstSet);
 					done();
 				});
 			}
@@ -284,6 +320,11 @@ class _ToolbarStore {
 		//Create local store for state
 		async.series(
 			[
+				function (done) {
+					fin.desktop.System.showDeveloperTools(finsembleWindow.uuid, finsembleWindow.name, () => {
+						setTimeout(done, 2000)
+					});
+				},
 				function (done) {
 					self.createStores(done, self);
 				},
