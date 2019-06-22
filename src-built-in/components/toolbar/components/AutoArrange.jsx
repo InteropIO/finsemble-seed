@@ -43,15 +43,12 @@ export default class AutoArrange extends React.Component {
 	}
 
 	render() {
-		let wrapperClasses = this.props.classes + " icon-only window-mgmt-right";
+		const autoArrangedCss = this.state.isAutoArranged ? "auto-arranged" : "";
 
-		if (this.state.isAutoArranged) {
-			wrapperClasses += " highlighted";
-		}
 
 		return (
 			<FinsembleButton
-				className={wrapperClasses}
+				className={`icon-only window-mgmt-right ${autoArrangedCss}`}
 				buttonType={["Toolbar"]}
 				title={this.state.isAutoArranged ? "Restore" : "Auto Arrange"}
 				onClick={this.autoArrange}>

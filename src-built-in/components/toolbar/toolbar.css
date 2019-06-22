@@ -43,6 +43,10 @@ body, html {
     border-radius: 0 30px 30px 0;
 }
 
+.auto-arranged{
+    background-color: var(--accent-primary-1);
+}
+
 .searchSection {
     position: relative;
     max-width: 107px;
