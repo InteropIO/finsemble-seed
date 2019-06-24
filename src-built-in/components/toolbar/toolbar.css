@@ -154,3 +154,17 @@ img {
 div {
     outline-color: transparent;
 }
+
+.ff-chevron-down {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    order: 1;
+    padding-left: 8px;
+    padding-top: 3px;
+    color: var(--font-color-secondary);
+}
+
+.overflow .ff-chevron-down {
+    padding-left: 0;
+}
