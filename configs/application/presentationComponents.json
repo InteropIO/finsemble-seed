@@ -612,9 +612,7 @@
 					"contextMenu": false,
 					"showTaskbarIcon": false,
 					"smallWindow": true,
-					"maximizable": false,
-					"transparent": true,
-					"backgroundColor": "#2b2b2b00"
+					"maximizable": false
 				}
 			},
 			"component": {
