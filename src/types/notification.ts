@@ -1,8 +1,9 @@
 interface INotification {
-    /* Internal uuid */
+    /* If not set by Service sending the notification automatically set to UUID. */
     id: string;
-    /* id from remote source useful for transitioning a single notification through a workflow. */
-    externalId: string;
+    /* Used for historical purposes. */
+    createdTimestamp: string;
+    filters: Filter;
     type: string;
     content: {
         /* Display title */
@@ -28,13 +29,17 @@ interface IAction {
 }
 
 interface Subscription {
-    /* Internal uuid */
-    id: string;
-    /* Name of channel used by UI Components to determine what data they receive. */
-    channelName: string;
-    /* Name value pair of filters to use for subscriptions. IE tradeId:12345 */
-    filters: Map<string, string>;
+    id: string; /* uuid generated */
+    onNotification(notification: INotification); /* Callback for notification*/
 }
+
+interface FilteredSubscription {
+    [filterId: string]: Subscription;
+}
+
+interface Filter {
+    [key: string]: string;
+} 
 
 interface INotificationService {
     /* 
@@ -53,7 +58,7 @@ interface INotificationService {
         Update / Persist the last time a notification was save using the StorageClient. 
         This is used during startup to fetch and notification that happened with desktop was shutdown. 
     */
-    saveLastUpdatedTime(lastUpdatedTimestamp: string): boolean;
+    saveLastUpdatedTime(lastUpdatedTimestamp: string, filter: Filter): boolean;
     /* 
         Per notification type configure display how often they're displayed.
         Per event type configure what sound you'd like to hear when that notification occurs.
@@ -63,42 +68,39 @@ interface INotificationService {
     /* 
         Update the stored notification via the StorageClient to mark action as being preformed.
     */    
-    handleNotificationAction(notification: INotification, actionPreformed: string): void;
+    handleNotificationAction(notification: INotification, action: IAction): void;
+    /* 
+        When incoming notification arrive, lookup matching subscriptions and call nessesary callbacks
+        on subscription.
+    */    
+    sendNotification(notification: INotification): string;
+    /* 
+        Hash function to take Filter name/value object to return a filterId. 
+    */    
+    filterHashFunction(filter: Filter): string;
+    /* 
+        Array of subscriptions for a particular set of filters.
+    */    
+    subscriptions: FilteredSubscription[];    
 }
 
 interface INotificationClient {
     /* 
-        Called whenever notification is recieved from FeedService.
+        Subscribe for a set of name/value pair filters. Returns subscriptionId
     */    
-    onNotification(notification: INotification): string;
+    subscribe(filters: [], onNotification, onSubscriptionSuccess, onSubscriptionFault): string;
     /* 
-        Broadcast notification to listeners.
+        Remove subscription
     */    
-    broadcast(notification: INotification): string;
+    unsubscribe(subscriptionId: string): void;
+    /*
+        Return lastUpdatesTime for a filter
+    */
+    getLastUpdated(filter: Filter): string;
     /* 
-        UI Components will subscribe for updates. The initial query per channel / filter combination will
-        return the subscriptionId a concatination of channel name + filter. IE trades/12345.
-    */    
-    registerNotificationResponder(subscription: Subscription): string;
-    /* 
-        Remove stored subscription from NotificationService. Therefore, no more notifications will be sent 
-        the UI components for that subscriptionId.
-    */    
-    deregisterNotificationResponder(subscriptionId:string ): boolean;
-    /* 
-        Internally used to register a query / responder to for actions dispatched VIA Finsemble UI Components. 
-        When an action is received the notification stored in the service will updated with the action name
-        and time it was performed.
-    */    
-    _registerActionResponder():void;
-    /* 
-        Cleanup of internal action responder.
-    */ 
-    _deregisterActionResponder():void;
-    /* 
-        User by UI components that need to display a list of historical notifications.
-    */     
-    fetchSnapshot(): INotification[];
+        Used by UI components that need to display a list of historical notifications.
+    */
+    fetchSnapshot(lastUpdatedTime: string, filter: Filter): INotification[];
 }
 
-export { INotification, INotificationService, INotificationClient };
+export { INotification, INotificationService, INotificationClient, Filter };
