@@ -73,7 +73,7 @@ interface INotificationService {
         When incoming notification arrive, lookup matching subscriptions and call nessesary callbacks
         on subscription.
     */    
-    sendNotification(notification: INotification): string;
+    broadcastNotification(notification: INotification): string;
     /* 
         Hash function to take Filter name/value object to return a filterId. 
     */    
