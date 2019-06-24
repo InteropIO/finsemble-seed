@@ -38,6 +38,8 @@
     z-index: 2147483640;
     top: 0;
     color: var(--titleBar-inactive-font-color);
+    /* rounded edges */
+    border-radius: 8px 8px 0 0;
 }
 
 html.desktop-active .fsbl-header {

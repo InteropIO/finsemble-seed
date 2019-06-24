@@ -13,6 +13,11 @@
     display: none !important;
 }
 
+/* add rounded edges to the bottom of the window */
+.finsemble > body {
+    border-radius: 0 0 4px 4px;
+}
+
 .fsbl-share-scrim {
     position: fixed;
     display: flex;

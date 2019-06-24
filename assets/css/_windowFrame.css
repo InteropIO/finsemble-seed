@@ -12,6 +12,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
+    background: #17171700;
 }
 
 html.desktop-active:before {
@@ -21,7 +22,6 @@ html.desktop-active:before {
 /* Create a series of empty pseudo-elements... */
 html:before, html:after, body:before, body:after {
     content: "";
-    background: var(--window-frame-inactive-color);
     position: fixed;
     display: block;
     z-index: 2147483640;

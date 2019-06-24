@@ -171,7 +171,9 @@
 		"linkerWindow": {
 			"bootParams": {
 				"stage": "earlyuser",
-				"dependencies": [ "Toolbar" ]
+				"dependencies": [
+					"Toolbar"
+				]
 			},
 			"window": {
 				"url": "$applicationRoot/components/linker/linker.html",
@@ -357,7 +359,9 @@
 		"yesNo": {
 			"bootParams": {
 				"stage": "earlyuser",
-				"dependencies": [ "Toolbar" ]
+				"dependencies": [
+					"Toolbar"
+				]
 			},
 			"window": {
 				"url": "$applicationRoot/components/yesNoDialog/yesNoDialog.html",
@@ -403,7 +407,9 @@
 		"singleInput": {
 			"bootParams": {
 				"stage": "earlyuser",
-				"dependencies": [ "Toolbar" ]
+				"dependencies": [
+					"Toolbar"
+				]
 			},
 			"window": {
 				"url": "$applicationRoot/components/singleInputDialog/singleInputDialog.html",
@@ -528,40 +534,54 @@
 		"Toolbar": {
 			"bootParams": {
 				"stage": "earlyuser",
-				"checkpoints" : {
-					"searchStoreInit" : {
+				"checkpoints": {
+					"searchStoreInit": {
 						"postStartupCompletion": true,
 						"timeout": 30000
 					},
-					"createStores" : {
+					"createStores": {
 						"postStartupCompletion": true
 					},
-					"loadMenusFromConfig" : {
-						"dependencies": ["createStores"],
+					"loadMenusFromConfig": {
+						"dependencies": [
+							"createStores"
+						],
 						"postStartupCompletion": true
 					},
-					"addListeners" : {
-						"dependencies": [ "loadMenusFromConfig" ],
+					"addListeners": {
+						"dependencies": [
+							"loadMenusFromConfig"
+						],
 						"postStartupCompletion": true
 					},
-					"setupHotkeys" : {
-						"dependencies": [  "addListeners" ],
+					"setupHotkeys": {
+						"dependencies": [
+							"addListeners"
+						],
 						"postStartupCompletion": true
 					},
-					"listenForWorkspaceUpdates" : {
-						"dependencies": [  "setupHotkeys" ],
+					"listenForWorkspaceUpdates": {
+						"dependencies": [
+							"setupHotkeys"
+						],
 						"postStartupCompletion": true
 					},
-					"retrieveSelfFromStorage" : {
-						"dependencies": [  "listenForWorkspaceUpdates" ],
+					"retrieveSelfFromStorage": {
+						"dependencies": [
+							"listenForWorkspaceUpdates"
+						],
 						"postStartupCompletion": true
 					},
-					"addMoreListeners" : {
-						"dependencies": [  "retrieveSelfFromStorage" ],
+					"addMoreListeners": {
+						"dependencies": [
+							"retrieveSelfFromStorage"
+						],
 						"postStartupCompletion": true
 					},
-					"setToolbarVisibilityInMemory" : {
-						"dependencies": [  "addMoreListeners" ],
+					"setToolbarVisibilityInMemory": {
+						"dependencies": [
+							"addMoreListeners"
+						],
 						"postStartupCompletion": true
 					}
 				}
@@ -592,7 +612,9 @@
 					"contextMenu": false,
 					"showTaskbarIcon": false,
 					"smallWindow": true,
-					"maximizable": false
+					"maximizable": false,
+					"transparent": true,
+					"backgroundColor": "#2b2b2b00"
 				}
 			},
 			"component": {
@@ -657,7 +679,9 @@
 		"UserPreferences": {
 			"bootParams": {
 				"stage": "earlyuser",
-				"dependencies": [ "Toolbar" ]
+				"dependencies": [
+					"Toolbar"
+				]
 			},
 			"window": {
 				"url": "$applicationRoot/components/userPreferences/userPreferences.html",
@@ -749,7 +773,11 @@
 				"url": "$applicationRoot/components/processMonitor/processMonitor.html",
 				"affinity": "workspaceComponents",
 				"width": 600,
-				"height": 700
+				"height": 700,
+				"options": {
+					"transparent": true,
+					"backgroundColor": "#2b2b2b00"
+				}
 			},
 			"component": {
 				"category": "system"

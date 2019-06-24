@@ -7,6 +7,7 @@
     align-content: center;
     height: var(--toolbar-height);
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+    border-radius: 6px;
 }
 
 .fullHeightFlex {
@@ -236,7 +237,8 @@ img.pinned-icon {
   }
 
   .finsemble-toolbar-drag-handle {
-    padding-left: 5px;
+    margin-left: 3px;
+    padding-left: 2px;
     padding-right: 0px;
     padding-top: 0px;
     -webkit-app-region: drag;
