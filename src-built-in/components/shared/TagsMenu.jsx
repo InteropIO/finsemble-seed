@@ -67,7 +67,7 @@ export default class TagsMenu extends React.Component {
 		return (
 			<div className="tags-menu" style={styles}>
 				<ul> {
-					items.map((item, index) => {
+					items.sort().map((item, index) => {
 						let active = this.props.active.includes(item);
 
 
