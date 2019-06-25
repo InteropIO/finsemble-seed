@@ -262,7 +262,6 @@ img {
 }
 
 .disabled-button, .disabled-button:hover {
-    border: 1px solid var(--content-button-disabled-border-color);
     color: var(--content-button-disabled-border-color);
     cursor: not-allowed;
 }
