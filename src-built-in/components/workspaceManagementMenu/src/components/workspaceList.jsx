@@ -55,7 +55,7 @@ export default class WorkspaceManagementList extends React.Component {
 			//Separate array for each workspace. This way, the activeWorkspace can be rendered without a trashcan.
 			let workspaceActions = [
 				{
-					iconClass: "ff-delete",
+					iconClass: "ff-adp-trash-outline",
 					method: self.removeWorkspace
 				},
 				{

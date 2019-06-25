@@ -92,11 +92,12 @@ body.menu {
 
 .menu-item-action {
     display: flex;
-    padding: 0em .15em;
+    width: 34px;
 }
 
 .menu-item .menu-item-action {
     align-self: baseline;
+    justify-content: center;
 }
 
 .ff-pin {
@@ -106,17 +107,10 @@ body.menu {
     border: 1px solid transparent;
 } 
 
-.ff-adp-trash {
-    padding: 4px 2px 1px 0px;
+.ff-adp-trash-outline {
     font-size: var(--menu-font-icon-size);
     width: 22px;
     text-align: center;
-    border: 1px solid transparent;
-}
-
-.ff-adp-trash:hover {
-    color: var(--menu-delete-background-hover-color);
-    border-radius: 4px;
 }
 
 .ff-pin:hover {
@@ -130,7 +124,6 @@ body.menu {
     font-size: var(--menu-font-icon-size);
     width: 22px;
     text-align: center;
-    border: 1px solid transparent;
 } 
 
 .ff-favorite:hover {
@@ -148,9 +141,8 @@ body.menu {
     border-radius: 4px;
 }
 
-.menu-item-action .ff-delete:hover {
+.menu-item-action .ff-adp-trash-outline:hover {
     color: var(--menu-delete-background-hover-color);
-    border-radius: 4px;
 }
 
 .ff-new-workspace, .ff-save-1, .ff-saveas-1, .ff-settings, .ff-list {

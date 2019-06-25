@@ -225,7 +225,7 @@ export default class FoldersList extends React.Component {
 				</div>
 				{folder.icon === 'ff-folder' && <span className='folder-action-icons'>
 					<i className='ff-edit' onClick={this.renameFolder.bind(this, folderName)}></i>
-					<i className='ff-delete' onClick={this.deleteFolder.bind(this, folderName)}></i>
+					<i className='ff-adp-trash-outline' onClick={this.deleteFolder.bind(this, folderName)}></i>
 				</span>}
 			</div>);
 	}

@@ -133,7 +133,7 @@ img {
     padding-left: 1px;
 }
 
-.folder-action-icons .ff-delete:hover {
+.folder-action-icons .ff-adp-trash-outline:hover {
     color: var(--menu-delete-background-hover-color);
 }
 
