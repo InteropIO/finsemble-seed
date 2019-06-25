@@ -66,8 +66,6 @@
 
 	// #endregion
 
-	// #region Script variables
-	let watchClose;
 	// If you specify environment variables to child_process, it overwrites all environment variables, including
 	// PATH. So, copy based on our existing env variables.
 	const env = process.env;
@@ -384,8 +382,6 @@
 		launchOpenFin: done => {
 			ON_DEATH(() => {
 				killApp("OpenFin", () => {
-
-					if (watchClose) watchClose();
 					process.exit();
 				});
 			});
@@ -394,14 +390,14 @@
 				configPath: taskMethods.startupConfig[env.NODE_ENV].serverConfig
 			}).then(() => {
 				// OpenFin has closed so exit gulpfile
-				if (watchClose) watchClose();
 				process.exit();
 			});
 			if (done) done();
 		},
 		launchElectron: done => {
 			let config = {
-				manifest: taskMethods.startupConfig[env.NODE_ENV].serverConfig
+				manifest: taskMethods.startupConfig[env.NODE_ENV].serverConfig,
+				onElectronClose: (code)=> process.exit(code)
 			}
 
 			if (!FEA) {
