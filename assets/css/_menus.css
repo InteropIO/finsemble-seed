@@ -22,7 +22,7 @@ body.menu {
 .menu {
     background: var(--menu-content-background-color);
     color: var(--menu-font-color);
-    padding: 10px;
+    padding: 5px;
 }
 
 .menu .menu-section {
