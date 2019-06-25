@@ -124,13 +124,15 @@ img {
 }
 
 .folder-action-icons {
-    margin-right: 5px;
     color: var(--appMenu-folder-action-icon-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 40px;
 }
 
-.folder-action-icons i {
-    margin-left: 5px;
-    padding-left: 1px;
+.folder-action-icons .ff-adp-trash-outline {
+    padding-top: 2px;
 }
 
 .folder-action-icons .ff-adp-trash-outline:hover {
@@ -180,7 +182,6 @@ img {
     position: relative;
     border-radius: 0 20px 20px 0;
     height: 22px;
-    margin: 2px 0;
 }
 
 .complex-menu-action {
@@ -191,7 +192,7 @@ img {
     position: relative;
     border-radius: 0 20px 20px 0;
     height: 22px;
-    margin: 2px 5px 2px 0;
+    margin-right: 5px;
 }
 
 .complex-menu-action i {
@@ -286,7 +287,7 @@ img {
     border-radius: 3px;
 }
 
-.folder-action-icons .ff-edit:hover {
+.folder-action-icons .ff-adp-edit:hover {
     color: var(--appMenu-edit-icon-hover-color);
 }
 

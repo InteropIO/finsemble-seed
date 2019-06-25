@@ -124,7 +124,7 @@ img {
 
 .complex-menu-section-toggle {
     padding: 5px 30px 5px 30px;
-    margin: 1px 6px 1px 0;
+    margin-right:6px;
     border-radius: 0 20px 20px 0;
     height: 22px;
     display:flex;
@@ -204,6 +204,7 @@ img {
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: space-between;
     width: 50px;
     color: var(--content-button-icon-color);
 }
@@ -213,11 +214,6 @@ img {
     cursor: pointer;
     padding: 4px;
     height: 17px;
-    border: 1px solid transparent;
-}
-
-.individual-workspace-action > i:before {
-    padding-top: 2px;
 }
 
 .individual-workspace-action:hover {
@@ -229,7 +225,8 @@ img {
 }
 
 .active-workspace {
-    font-style: italic;
+    font-weight: 700;
+    color: var(--accent-aware);
 }
 
 .focused-workspace-item {
@@ -293,8 +290,6 @@ img {
 }
 
 .workspace-item-editing {
-    border-top: 1px solid var(--content-list-editor-border-color);
-    border-bottom: 1px solid var(--content-list-editor-border-color);
     color: var(--content-list-editor-font-color);
 }
 
@@ -377,15 +372,6 @@ img {
     height: 114px;
     overflow-y: auto;
     color: var(--workspace-component-list-font-color);
-    border-radius: 3px;
-}
-
-.ff-edit {
-    align-self: flex-start;
-}
-
-
-::-webkit-scrollbar-track {
     border-radius: 3px;
 }
 
