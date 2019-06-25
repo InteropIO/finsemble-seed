@@ -33,10 +33,10 @@ export class PinManager {
 	 * @returns any
 	 */
 	convertPinArrayToObject(arr: Pin[]): any {
-		let obj: any = {};
+		const obj: any = {};
 		arr.forEach((el, i) => {
 			if (el) {
-				let key = el.label;
+				const key = el.label;
 				obj[key] = el;
 				obj[key].index = i;
 			}
@@ -56,7 +56,7 @@ export class PinManager {
 		return pins.map((pin: Pin) => {
 			if (typeof pin.component === "undefined") return pin;
 
-			let componentConfig = componentList[pin.component];
+			const componentConfig = componentList[pin.component];
 
 			let label = componentConfig.component.type;
 			if (componentConfig.component.displayName) {
