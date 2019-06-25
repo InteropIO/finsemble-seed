@@ -771,10 +771,7 @@
 				"url": "$applicationRoot/components/processMonitor/processMonitor.html",
 				"affinity": "workspaceComponents",
 				"width": 600,
-				"height": 700,
-				"options": {
-					"backgroundColor": "#2b2b2b00"
-				}
+				"height": 700
 			},
 			"component": {
 				"category": "system"

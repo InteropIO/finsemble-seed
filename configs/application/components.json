@@ -11,10 +11,7 @@
 				"top": "center",
 				"left": "center",
 				"width": 400,
-				"height": 432,
-				"options": {
-					"backgroundColor": "#2b2b2b00"
-				}
+				"height": 432
 			},
 			"component": {
 				"inject": false,
