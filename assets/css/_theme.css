@@ -31,13 +31,13 @@
     --font-color-primary: white;
     --font-color-secondary: var(--core-primary-5);
 
-    --font-weight-primary: 200;
+    --font-weight-primary: 600;
     --font-weight-secondary: 400;
 
     /* Component Variables:  Use these variables to make granular changes to specific components. */
 
     /* Toolbar */
-    --toolbar-font-size: 13px;
+    --toolbar-font-size: 11px;
     --toolbar-font-color: var(--font-color-primary);
     --toolbar-font-weight: var(--font-weight-primary);
 
@@ -123,7 +123,7 @@
     --input-negative-border-color: var(--accent-negative); /* Currently not in use */
 
     /* Menus */
-    --menu-font-size: 13px;
+    --menu-font-size: 11px;
     --menu-font-icon-size: 13px;
     --menu-font-weight: var(--font-weight-primary);
     --menu-font-color: var(--font-color-primary);
