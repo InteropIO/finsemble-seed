@@ -773,7 +773,6 @@
 				"width": 600,
 				"height": 700,
 				"options": {
-					"transparent": true,
 					"backgroundColor": "#2b2b2b00"
 				}
 			},
