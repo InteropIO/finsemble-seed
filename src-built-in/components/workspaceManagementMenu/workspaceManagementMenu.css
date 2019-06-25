@@ -43,7 +43,7 @@ html {
 
 .active-workspace > div {
     font-weight: var(--menu-active-workspace-font-weight);
-    color: var(--accent-aware);
+    color: var(--menu-active-workspace-font-color);
 }
 
 body {
