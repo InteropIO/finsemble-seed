@@ -478,7 +478,7 @@ export default class Workspaces extends React.Component {
 		let addTooltip = "Add new workspace",
 			importTooltip = "Import workspace from file",
 			exportTooltip = allowExport ? "Export selected workspace" : "No workspace selected",
-			renameTooltip = allowRename ? "Rename" : "No workspace selected";
+			renameTooltip = allowRename ? "Rename" : "Cannot Edit";
 
 		return <div>
 			<input style={{ display: 'none' }} type="file" id="file-input" />
