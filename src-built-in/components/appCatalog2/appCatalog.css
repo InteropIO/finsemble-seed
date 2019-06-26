@@ -322,27 +322,30 @@
 	transition: .2s ease-in;
 }
 
-@keyframes fadeOut {
+/* @keyframes fadeOut {
 	0% {opacity: 0.9;}
 	25% {opacity: 0.7;}
 	50% {opacity: 0.5;}
 	75% {opacity: 0.2;}
 	100% {opacity: 0; visibility: hidden;}
-}
+} */
 
 @keyframes fadeIn {
 	0% {opacity: 0.2;}
-	25% {opacity: 0.3;}
-	50% {opacity: 0.5;}
-	75% {opacity: 0.7;}
-	100% {opacity: 1;}
+	20% {opacity: 0.4;}
+	30% {opacity: 0.6;}
+	40% {opacity: 1.0;}
+	60% {opacity: 1.0;}
+	70% {opacity: 0.6;}
+	80% {opacity: 0.4;}
+	95% {opacity: 0.2;}
+	100% {opacity: 0;}
 }
 
 .search-main .toast-content {
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
-	visibility: visible;
 	width: 175px;
 	height: 34px;
 	font-size: 13px;
@@ -356,18 +359,19 @@
 	right: 0;
 	margin: auto;
 	position: absolute;
-	animation-name: fadeIn;
-	animation-duration: 0.5s;
+	animation: fadeIn 1.5s linear;
 	cursor: default;
 	pointer-events: none;
 }
 
 .search-main .toast-content.success {
 	border: 3px solid var(--catalog-card-checkmark-selected-color);
+	opacity: 0;
 }
 
 .search-main .toast-content.error {
-	border: 3px solid var(--secondary-negative-color);
+	border: 3px solid var(--accent-negative);
+	opacity: 0;
 }
 
 .search-main .toast-content.not-shown {
@@ -388,7 +392,7 @@
 }
 
 .search-main .toast-content .ff-close {
-	color: var(--secondary-negative-color);
+	color: var(--accent-negative);
 }
 
 .search-main .search-input:focus {
@@ -502,7 +506,7 @@
 	font-size: 12px;
 	font-weight: var(--catalog-carousel-font-weight);
 	letter-spacing: normal;
-	color: var(--secondary-negative-color);
+	color: var(--accent-negative);
 	margin-bottom: 8px
 }
 
@@ -772,7 +776,6 @@
 
 .modal-main {
 	position: fixed;
-	width: 80%;
 	height: auto;
 	top: 50%;
 	left: 50%;
@@ -790,6 +793,6 @@
 .modal .modal-image {
 	display: flex;
 	justify-content: center;
-	width: 453px;
+	width: auto;
 	height: 311px;
 }
