@@ -1,3 +1,5 @@
+@import  url('../../../assets/css/_globals.css');
+
 .appMarket {
 	background-color: var(--catalog-background-color);
 	color: var(--catalog-font-color);
