@@ -54,7 +54,6 @@ listOfWebpackEntryFiles.forEach((filename) => {
 	let entries = fs.existsSync(filename) ? require(filename) : {};
 
 	let additionalComponents = {};
-	console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", entries);
 	if (Array.isArray(entries)) {
 		// Process arrays (finsemble.webpack.json files) by automatically building the output & entry fields that webpack needs
 		entries.forEach((assetName) => {
@@ -64,8 +63,7 @@ listOfWebpackEntryFiles.forEach((filename) => {
 			additionalComponents[assetNoSuffix] = {
 				output: path.join(outputPath, assetNoSuffix).replace(/\\/g, "/"),
 				entry: `.${path.sep}${path.join(entryPath, assetName)}`.replace(/\\/g, "/")
-			};
-			console.log(additionalComponents[assetNoSuffix]);
+			};		
 		});		
 	} else {
 		// Otherwise assume it's already in object format (webpack.components.entries.json)
