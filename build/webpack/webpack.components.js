@@ -63,8 +63,8 @@ listOfWebpackEntryFiles.forEach((filename) => {
 			additionalComponents[assetNoSuffix] = {
 				output: path.join(outputPath, assetNoSuffix).replace(/\\/g, "/"),
 				entry: `.${path.sep}${path.join(entryPath, assetName)}`.replace(/\\/g, "/")
-			};		
-		});		
+			};
+		});
 	} else {
 		// Otherwise assume it's already in object format (webpack.components.entries.json)
 		additionalComponents = entries;
