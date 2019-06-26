@@ -72,7 +72,7 @@ const Header = props => {
 						</span>
 						)}
 				</button>
-				{props.installed && <button className={props.entitled ? "action-button remove" : "action-button disabled"} disabled={!props.entitled} onClick={removeApp}>
+				{props.installed && <button className={props.entitled ? "action-button remove" : "action-button remove disabled"} disabled={!props.entitled} onClick={removeApp}>
 					<div className='ff-adp-trash-outline' title='Remove App'/>
 				</button>}
 			</div>

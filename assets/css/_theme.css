@@ -120,6 +120,7 @@
     --button-negative-background-hover-color: var(--accent-negative-1);
     --button-negative-border-hover-color: var(--accent-negative-1);
 
+    --button-disabled-color: var(--core-primary-4);
     --input-negative-border-color: var(--accent-negative); /* Currently not in use */
 
     /* Menus */
@@ -243,6 +244,7 @@
     --catalog-font-weight: var(--font-weight-primary);
     --catalog-carousel-font-weight: bold;
     --catalog-font-color: var(--font-color-primary);
+    --catalog-tag-font-color: var(--core-primary-5);
     --catalog-toast-background-color: var(--core-primary);
     --catalog-background-color: var(--core-primary-1);
     --catalog-pagination-dots-color: var(--core-primary-3);
