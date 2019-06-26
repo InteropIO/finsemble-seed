@@ -79,7 +79,7 @@
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
-	font-size: 11px;
+	font-size: 10px;
 	font-weight: var(--tag-font-weight);
 	font-family: var(--font-primary);
 	font-style: normal;
