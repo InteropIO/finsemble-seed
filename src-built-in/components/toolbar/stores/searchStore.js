@@ -336,7 +336,7 @@ function initialize(cb) {
 		if (err) {
 			console.error(err);
 		}
-		FSBL.SystemManagerAPI.publishCheckpointState("Toolbar", "searchStoreInit", "completed");
+		FSBL.SystemManagerClient.publishCheckpointState("Toolbar", "searchStoreInit", "completed");
 		cb(menuStore);
 	});
 }
