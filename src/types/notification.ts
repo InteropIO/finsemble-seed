@@ -1,47 +1,75 @@
+/**
+ * @property {string} id - Either sent when notification is created to refer to id an external system or if null set to UUID.
+ * @property {Date} lastUpdated - When the notification occured.
+ * @property {Filter} filter - name / value pair to match subscriptions on. Most commonly 'channelName' and / or 'source' but could also be arbitrary name / value.
+ * @property {string} type - Type of notification.
+ * @property {string} title - Main display title.
+ * @property {string} details - Details about the notification mainly for display purposes.
+ * @property {string} header - Display header.
+ * @property {IAction[]} actions - List of actions which can be preformed on a notification.
+ * @property {number} timeout - List of actions which can be preformed on a notification.
+ * @property {Map<string, any>} meta - Additional meta data to be pass along with notification.
+ * @property {Date} dismissedDate - When notification was dismissed.
+ * @property {IPerformedAction[]} actionsHistory - list of actions which have been preformed on a notification.
+ */
 interface INotification {
-    /* If not set by Service sending the notification automatically set to UUID. */
-    id: string;
-    /* Used for historical purposes. */
+    id?: string;
     lastUpdated: Date;
-    filters: Filter;
-    type: string;
-    content: {
-        /* Display title */
-        title: string;
-        /* Main details */
-        details: string;
-    };
-    /* Display header */
-    header: string;
-    /* Set of optional actions */
-    actions: IAction[];
-    /* How long should notification be displayed */
-    timeout?: string;
-    /* Additional meta data. */
+    filters?: Filter;
+    type?: string;
+    title: string;
+    details?: string;
+    header?: string;
+    actions?: IAction[];
+    timeout?: number;
     meta?: Map<string, any>;
-    dismissed?: boolean;
+    dismissedDate?: Date;
+    actionsHistory?: IPerformedAction[]; 
 }
 
+/**
+ * @property {string} id - UUID
+ * @property {string} buttonText - Text to display on the button UI.
+ * @property {string} type - Type of notification.
+ * @property {string} component - Component to perform the action on.
+ * @property {Map<string, any>} params - Additional params passed along with action. 
+ */
 interface IAction {
-    /* Used to identify what should be done when action is triggered by user. IE: CONFIRM, REJECT, SNOOZE; */
     id: string;
-    /* Display label in UI. */
     buttonText: string;
 	type: string;
-	component: string;
-    /* params */
+	component?: string;
     params?: object;
 }
 
+/**
+ * @property {string} id - UUID.
+ * @property {Date} datePerformed - When the action was preforned.
+ */
+interface IPerformedAction {
+    id: string;
+    datePerformed: Date;
+}
+
+/**
+ * @property {string} id - UUID
+ * @property {Function(notification:INotification)} onNotification - callback for when a subscribing UI component received a notification.
+ */
 interface Subscription {
-    id: string; /* uuid generated */
-    onNotification(notification: INotification); /* Callback for notification*/
+    id: string;
+    onNotification(notification: INotification);
 }
 
+/**
+ * @property {object} filterId: Subscription[] - filterId generated from filterHashFunction and an array of Subscription objects.
+ */
 interface FilteredSubscription {
-    [filterId: string]: Subscription;
+    [key: string]: Subscription[];
 }
 
+/**
+ * @property {object} name : value - name value pair of filter to match subscriptions on. Most commonly something like {channelName: 'mychannel', source: 'mysource'}
+ */
 interface Filter {
     [key: string]: string;
 } 
