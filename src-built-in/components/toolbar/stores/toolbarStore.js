@@ -126,14 +126,6 @@ class _ToolbarStore {
 		});
 		done();
 
-		let onBoundsSet = (bounds) => {
-			bounds = bounds.data ? bounds.data : bounds;
-			let visibility = this.Store.getValue({ field: "visible" });
-			FSBL.Clients.Logger.system.log(`'MONITOR: _ToolbarStore onBoundsSet bounds=${bounds} visibility=${visibility}`);
-			self.Store.setValue({ field: "window-bounds", value: bounds });
-		}
-		finsembleWindow.addListener("bounds-change-end", onBoundsSet)
-
 		FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", "t"], () => {
 			self.showToolbarAtFront();
 		});
@@ -293,17 +285,6 @@ class _ToolbarStore {
 
 		this.Store.setValue({ field: "sections", value: sections });
 		return sections;
-	}
-
-	/**
-	 * Shortcut to get values from the local store.
-	 *
-	 * @param {any} field
-	 * @returns
-	 * @memberof _ToolbarStore
-	 */
-	get(field) {
-		return this.Store.getValue({ field: field });
 	}
 	/**
 	 * Provides data to the workspace menu opening button.
