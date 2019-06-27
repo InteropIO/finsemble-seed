@@ -60,7 +60,14 @@ module.exports = class WebpackDefaults {
 						loader: 'url-loader'
 					},
 					{
-						test: /\.svg$/,
+						test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+						issuer: {
+							test: /\.jsx?$/
+						},
+						use: ['@svgr/webpack']
+					},
+					{
+						test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
 						loader: 'url-loader?limit=65000&mimetype=image/svg+xml&name=/public/fonts/[name].[ext]'
 					},
 					{
