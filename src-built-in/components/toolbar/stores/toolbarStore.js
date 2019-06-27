@@ -65,28 +65,41 @@ class _ToolbarStore {
 	 * @param {Function} cb The callback
 	 */
 	retrieveSelfFromStorage(cb) {
+		return cb();
 
 		FSBL.Clients.StorageClient.get({ topic: finsembleWindow.name, key: finsembleWindow.name }, (err, result) => {
+			FSBL.Clients.Logger.system.log("MONITOR: Toolbar retrieveSelfFromStorage get results", err, result);
+
 			if (err || !result) {
 				finsembleWindow.show();
+				setTimeout(() => {
+					finsembleWindow.bringToFront();
+				}, 5000);
 				return cb();
 			}
 			let visible = (result && result.hasOwnProperty("visible") && typeof result.visible === "boolean") ? result.visible : true;
 			this.Store.setValue({
 				field: "visible", value: visible
-			})
+			});
+
 			let bounds = (result && result.hasOwnProperty("window-bounds")) ? result["window-bounds"] : null;
 			if (bounds) {
 				this.Store.setValue({
 					field: "window-bounds", value: bounds
 				})
+				FSBL.Clients.Logger.system.log("MONITOR: Toolbar retrieveSelfFromStorage bounds", visible, bounds);
+
 				finsembleWindow.setBounds(bounds, () => {
 					if (visible) {
 						finsembleWindow.show();
+						setTimeout(() => {
+							finsembleWindow.bringToFront();
+						}, 5000);
 					}
 					cb();
 				});
 			} else if (visible) {
+				FSBL.Clients.Logger.system.log("MONITOR: Toolbar retrieveSelfFromStorage ELSE", visible, bounds);
 				finsembleWindow.show();
 				cb();
 			}
@@ -96,13 +109,17 @@ class _ToolbarStore {
 	 * Sets the toolbars visibility in memory
 	 */
 	setToolbarVisibilityInMemory(cb = Function.prototype) {
-		if (!this.Store.getValue({ field: "window-bounds" })) return cb();
-		FSBL.Clients.StorageClient.save({
-			topic: finsembleWindow.name, key: finsembleWindow.name, value: {
-				visible: true,
-				"window-bounds": this.Store.getValue({ field: "window-bounds" })
-			}
-		}, cb);
+		//  let bounds = this.Store.getValue({ field: "window-bounds" });
+		// FSBL.Clients.Logger.system.log(`'MONITOR: _ToolbarStore setToolbarVisibilityInMemory bounds=(${bounds})`);
+		// if (!bounds) return cb();
+
+		// FSBL.Clients.StorageClient.save({
+		// 	topic: finsembleWindow.name, key: finsembleWindow.name, value: {
+		// 		visible: true,
+		// 		"window-bounds": bounds.window-bounds
+		// 	}
+		// }, cb);
+		cb();
 	}
 	/**
 	 * Set up our hotkeys
@@ -172,13 +189,15 @@ class _ToolbarStore {
 
 		let onBoundsSet = (bounds) => {
 			bounds = bounds.data ? bounds.data : bounds;
+			let visibility = this.Store.getValue({ field: "visible" });
+			FSBL.Clients.Logger.system.log(`'MONITOR: _ToolbarStore onBoundsSet bounds=${bounds} visibility=${visibility}`);
 			self.Store.setValue({ field: "window-bounds", value: bounds });
-			FSBL.Clients.StorageClient.save({
-				topic: finsembleWindow.name, key: finsembleWindow.name, value: {
-					visible: this.Store.getValue({ field: "visible" }),
-					"window-bounds": bounds
-				}
-			});
+			// FSBL.Clients.StorageClient.save({
+			// 	topic: finsembleWindow.name, key: finsembleWindow.name, value: {
+			// 		visible: visibility,
+			// 		"window-bounds": bounds
+			// 	}
+			// });
 		}
 		finsembleWindow.addListener("bounds-change-end", onBoundsSet)
 
