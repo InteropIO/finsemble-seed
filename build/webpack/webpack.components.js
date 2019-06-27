@@ -61,10 +61,10 @@ listOfWebpackEntryFiles.forEach((filename) => {
 			const assetNoSuffix = assetName.replace(/\.[^/.]+$/, ""); // Remove the .js or .jsx extension
 			const entryPath = path.relative(__homename, path.dirname(filename))
 			additionalComponents[assetNoSuffix] = {
-				output: path.join(outputPath, assetNoSuffix),
-				entry: `.${path.sep}${path.join(entryPath, assetName)}`
-			};		
-		});		
+				output: path.join(outputPath, assetNoSuffix).replace(/\\/g, "/"),
+				entry: `.${path.sep}${path.join(entryPath, assetName)}`.replace(/\\/g, "/")
+			};
+		});
 	} else {
 		// Otherwise assume it's already in object format (webpack.components.entries.json)
 		additionalComponents = entries;
