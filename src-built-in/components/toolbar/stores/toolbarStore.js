@@ -268,17 +268,11 @@ class _ToolbarStore {
 	 * @memberof _ToolbarStore
 	 */
 	onBlur(cb = Function.prototype) {
-		finsembleWindow.setComponentState({
-			field: 'blurred',
-			value: true
-		}, cb);
+		FSBL.Clients.StorageClient.save({ topic: finsembleWindow.name, key: 'blurred', value: true }, cb);
 	}
 
 	onFocus(cb = Function.prototype) {
-		finsembleWindow.setComponentState({
-			field: 'blurred',
-			value: false
-		}, cb);
+		FSBL.Clients.StorageClient.save({ topic: finsembleWindow.name, key: 'blurred', value: false }, cb);
 	}
 
 	/**
