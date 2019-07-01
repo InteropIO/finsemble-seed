@@ -224,7 +224,6 @@ img {
 
 .complex-menu-content-row {
     flex: 1;
-    padding: .75em .75em .75em 0;
     align-content: flex-start;
     background-color: var(--appMenu-background-color);
     overflow-y: auto;
@@ -402,7 +401,11 @@ select:focus, option:focus {
   .filter-sort {
 	width: 100%;
     margin-bottom: 10px;
-    position: relative;
+    padding-top: 10px;
+    position: sticky;
+    top: 0;
+    background-color: var(--appMenu-background-color);
+    z-index: 2147483647;
 }
 .sort {
     font-size: 11px;
@@ -434,6 +437,7 @@ select:focus, option:focus {
 	margin-bottom: 6px;
     padding-left: 10px;
     display: flex;
+    width: 96%;
     align-items: flex-start;
 }
 .search-box input {

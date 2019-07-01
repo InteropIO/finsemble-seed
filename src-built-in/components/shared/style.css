@@ -8,18 +8,22 @@
 	justify-content: center;
 	align-items: center;
 	position: absolute;
-	top: 1px;
-	right: 1px;
 	user-select: none;
 	font-family: var(--font-primary);
 	font-size: var(--menu-font-size);
     font-weight: var(--tag-font-weight);
 }
 
+.filter-sort .tags-menu-wrapper {
+	position: fixed;
+	top: 13px;
+	right: 16px;
+}
+
 /* Different positioning for the catalog vs the launcher. */
 .appMarket .tags-menu-wrapper {
-	top: 7px;
-	right: 28px;
+	top: 8px;
+	right: 22px;
 }
 .tags-menu-wrapper span {
 	line-height: 17px;
