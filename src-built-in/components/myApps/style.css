@@ -33,16 +33,16 @@ img {
 
 .folder-list {
     margin-top: 10px;
-    max-height: 245px;
+    max-height: 328px;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 5px 5px 0 0;
+    padding-right: 5px;
 }
 .bottom {
-    position: absolute;
-    bottom: 12px;
+    padding-top: 10px;
     width: 195px;
     border-top: 4px solid var(--appMenu-separator-color);
+    margin-bottom: 10px;
 }
 
 .bottom .complex-menu-section-toggle {
@@ -79,6 +79,8 @@ img {
     font-size: 11px;
     flex-direction: column;
     background-color: var(--appMenu-leftNav-background-color);
+    display: flex;
+    justify-content: space-between;
 }
 
 .complex-menu-header-wrapper {
@@ -193,6 +195,10 @@ img {
     border-radius: 0 20px 20px 0;
     height: 22px;
     margin-right: 5px;
+}
+
+.complex-menu-action:first-child{
+
 }
 
 .complex-menu-action i {
@@ -344,7 +350,7 @@ select:focus, option:focus {
 
 .app-item {
     position: relative;
-    padding: 6px .75em;
+    padding: 6px 15px;
   }
 
   .app-item, .app-item-title, .app-item-tags {
@@ -383,7 +389,7 @@ select:focus, option:focus {
     display: flex;
     align-items: center;
     font-size: 12px;
-    margin-bottom: 7px;
+    margin: 3px 0;
     line-height: 1;
     width: 390px;
     height: 15px;
