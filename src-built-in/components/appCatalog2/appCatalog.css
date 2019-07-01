@@ -49,7 +49,6 @@
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-	margin-top: 10px;
 }
 
 .hero_selected_content {
@@ -132,7 +131,11 @@
 	background-color: var(--catalog-card-background-color);
 	user-select:none;
 	cursor: pointer;
+}
+
+.app-image-container {
 	position: relative;
+    z-index: 0;
 }
 
 .app-card .app-image {
@@ -143,7 +146,7 @@
 	height: 100px;
 	user-select: none;
 	margin: 10px 10px 6px 10px;
-	position: relative;
+	position: static;
 }
 
 .app-card .app-title {
@@ -279,7 +282,7 @@
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
-	width: 92%;
+	width: 89%;
 }
 
 .search-main .button-label {
@@ -291,7 +294,12 @@
 }
 
 .search-main {
-	margin: 6px 15px;
+	padding: 6px 19px;
+	position: sticky;
+	z-index: 2147483647;
+	top: 0px;
+	width: 96%;
+	background-color: var(--catalog-background-color);
 }
 
 .search-main .ff-search {

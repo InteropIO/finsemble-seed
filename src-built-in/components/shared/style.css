@@ -18,8 +18,8 @@
 
 /* Different positioning for the catalog vs the launcher. */
 .appMarket .tags-menu-wrapper {
-	top: 6px;
-	right: 9px;
+	top: 7px;
+	right: 28px;
 }
 .tags-menu-wrapper span {
 	line-height: 17px;
