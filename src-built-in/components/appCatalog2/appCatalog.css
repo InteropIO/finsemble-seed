@@ -234,7 +234,7 @@
 .carousel-main .carousel-header .carousel-title {
 	width: 90px;
 	height: 19px;
-	font-size: 14px;
+	font-size: 13px;
 	font-weight: var(--catalog-carousel-font-weight);
 	color: var(--catalog-section-header-font-color);
 	cursor: pointer;
@@ -360,7 +360,7 @@
 	justify-content: center;
 	width: 175px;
 	height: 34px;
-	font-size: 13px;
+	font-size: 12px;
 	font-weight: var(--catalog-font-weight);
 	text-align: center;
 	border-radius: 25px;
@@ -486,7 +486,7 @@
 
 .app-results .app-results-no-results {
 	height: 21px;
-	font-size: 16px;
+	font-size: 12px;
 	font-weight: var(--font-weight-primary);
 	text-align: center;
 	color: var(--catalog-font-color);
@@ -559,7 +559,7 @@
 
 .app-showcase .header .appName {
 	padding-right: 12px;
-  	font-size: 14px;
+	  font-size: 13px;
   	font-weight: var(--font-weight-primary);
 	color: var(--catalog-font-color);
 }
@@ -664,7 +664,7 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
-  	font-size: 12px;
+  	font-size: 11px;
 	padding: 5px 0;
 	margin: 0 28px 10px 28px;
 }
@@ -688,7 +688,7 @@
 	width: 100%;
 	height: 15px;
 	font-weight: var(--catalog-carousel-font-weight);
-	font-size: 14px;
+	font-size: 13px;
 	color: var(--catalog-section-header-font-color);
 	padding-bottom: 5px;
 }
