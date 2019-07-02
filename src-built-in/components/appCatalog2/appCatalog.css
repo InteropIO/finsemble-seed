@@ -816,7 +816,7 @@
 .app-showcase .header .action-button.disabled {
 	background-color: transparent;
 	color: var(--button-disabled-color);
-	cursor: no-drop;
+	cursor: default;
 }
 
 .app-showcase .header .action-button.disabled:hover {
