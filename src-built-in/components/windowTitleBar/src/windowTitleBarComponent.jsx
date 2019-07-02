@@ -284,14 +284,14 @@ class WindowTitleBar extends React.Component {
 		let { tabs } = this.state;
 		let myIdentifier = FSBL.Clients.WindowClient.getWindowIdentifier();
 		
-		tabs = tabs.map((el, i) => {
+		tabs = tabs.map((el) => {
 			if (!el.windowName && el.name) el.windowName = el.name;
 			if (!el.name && el.windowName) el.name = el.windowName;
 			return el;
 		});
 
-		let myIndex = tabs.findIndex(el => el.name === myIdentifier.windowName);
-		if(myIndex === -1) return;
+		const myIndex = tabs.findIndex(el => el.name === myIdentifier.windowName);
+		if (myIndex === -1) return;
 
 		let myTab = tabs[myIndex] || {};
 		myTab.title = response.value;
