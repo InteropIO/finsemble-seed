@@ -67,7 +67,7 @@ export default class Hero extends Component {
 		let imageUrl = cards[active].images ? cards[active].images[0].url : "../assets/placeholder.svg";
 
 		let bgImageStyle = {
-			background: "url(" + imageUrl + ") no-repeat fixed center"
+			background: "url(" + imageUrl + ") center center / 100% no-repeat scroll"
 		};
 
 		return (
