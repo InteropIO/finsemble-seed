@@ -69,12 +69,11 @@
 	font-size: 18px;
 	font-weight: var(--font-weight-primary);
 	color: var(--catalog-font-color);
-	padding: 0 5px;
 	margin-bottom: 10px;
 }
 
 .selected-content-message {
-	width: 477px;
+	width: 90%;
 	height: 130px;
 	font-size: 12px;
 	font-weight: var(--font-weight-primary);
@@ -82,7 +81,13 @@
 	text-overflow: clip;
 	overflow: hidden;
 	white-space: normal;
-	margin-left: 20px;
+	align-self: center;
+}
+
+.selected-content-message-wrapper {
+	background-color: rgba(0,0,0,0.5);
+	padding: 4px;
+	border-radius: 4px;
 }
 
 .paginator {

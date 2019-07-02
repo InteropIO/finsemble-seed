@@ -79,7 +79,7 @@ export default class Hero extends Component {
 							<span style={{padding:'3px', backgroundColor:'rgba(0,0,0,0.5)', borderRadius:'4px', padding:'4px'}}>{contentTitle}</span>
 						</div>
 						<div className='selected-content-message'>
-							<div><span style={{backgroundColor:'rgba(0,0,0,0.5)', borderRadius:'4px'}}>{contentMsg}</span></div>
+							<div className='selected-content-message-wrapper'>{contentMsg}</div>
 						</div>
 					</div>
 					<i className='ff-chevron-right' onClick={this.changePage.bind(this, 'page_up')} />
