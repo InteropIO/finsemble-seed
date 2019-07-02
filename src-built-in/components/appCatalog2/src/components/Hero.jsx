@@ -76,7 +76,7 @@ export default class Hero extends Component {
 					<i className='ff-chevron-left' onClick={this.changePage.bind(this, 'page_down')} />
 					<div className='hero_selected_content' onClick={this.openApp} style={bgImageStyle}>
 						<div className='selected-content-title'>
-							<span style={{padding:'3px', backgroundColor:'rgba(0,0,0,0.5)', borderRadius:'4px', padding:'4px'}}>{contentTitle}</span>
+							<span>{contentTitle}</span>
 						</div>
 						<div className='selected-content-message'>
 							<div className='selected-content-message-wrapper'>{contentMsg}</div>
