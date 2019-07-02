@@ -411,7 +411,7 @@ select:focus, option:focus {
     position: sticky;
     top: 0;
     background-color: var(--appMenu-background-color);
-    z-index: 2147483647;
+    z-index: 2147483646;
 }
 .sort {
     font-size: 11px;
@@ -508,6 +508,7 @@ select:focus, option:focus {
     position: absolute;
     top: 0;
     left: 0;
+    z-index: 2147483647;
 }
 .add-app-form form {
     padding: 20px;
