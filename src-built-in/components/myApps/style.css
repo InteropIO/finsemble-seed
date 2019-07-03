@@ -39,7 +39,7 @@ img {
     padding-right: 5px;
 }
 .bottom {
-    padding-top: 10px;
+    padding-top: 7px;
     width: 195px;
     border-top: 4px solid var(--appMenu-separator-color);
     margin-bottom: 10px;
@@ -188,7 +188,7 @@ img {
     justify-content: space-between;
     position: relative;
     border-radius: 0 20px 20px 0;
-    height: 22px;
+    height: 24px;
 }
 
 .complex-menu-action {
@@ -198,7 +198,7 @@ img {
     justify-content: space-between;
     position: relative;
     border-radius: 0 20px 20px 0;
-    height: 22px;
+    height: 24px;
     margin-right: 5px;
 }
 
