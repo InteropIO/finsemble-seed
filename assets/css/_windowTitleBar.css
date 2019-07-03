@@ -184,6 +184,7 @@ html.desktop-active .fsbl-icon-highlighted {
 .fsbl-minimize {
     align-items: center;
     margin-top: -2px;
+    transition: .2s all;
 }
 
 .fsbl-ejector {
@@ -265,6 +266,7 @@ html.desktop-active .fsbl-icon-highlighted {
 
 .ff-maximize, .ff-close, .ff-detached, .ff-attached{
     padding-top: 2px;
+    transition: .2s all;
 }
 
 .ff-always-on-top {
