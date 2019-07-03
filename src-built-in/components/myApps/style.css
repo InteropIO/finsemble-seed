@@ -319,12 +319,25 @@ select:focus, option:focus {
 }
 
 .actions-menu-wrapper {
-	height: 17px;
+    height: 34px;
+    width: 34px;
+    border-radius: 40px;
 	display: table;
 	position: absolute;
 	top: 10px;
-	right: 10px;
+    right: 10px;
+    color: var(--appMenu-folder-action-icon-color);
+    transition: .2s all;
 }
+
+.actions-menu-wrapper:hover {
+    color: var(--appMenu-edit-icon-hover-color);
+}
+
+.actions-menu-wrapper li {
+    color: var(--appMenu-font-color);
+}
+
 .actions-menu-wrapper span {
 	line-height: 17px;
 	font-size: 10px;
