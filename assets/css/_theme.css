@@ -261,6 +261,7 @@
 
     /* Shared Tag Styles */
     --tag-background-color: var(--core-primary-2);
+    --tag-background-hover-color: var(--core-primary-3);
     --tag-font-color: var(--font-color-primary);
     --tag-font-weight: var(--font-weight-secondary);
     --tag-close-icon-hover-color: var(--accent-negative);
