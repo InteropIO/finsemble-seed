@@ -346,3 +346,9 @@
 .ff-adp-trash-outline:before {
   content: "\e010";
 }
+.ff-adp-chevron-left:before {
+  content: "\e009";
+}
+.ff-adp-chevron-right:before {
+  content: "\e00a";
+}
