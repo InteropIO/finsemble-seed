@@ -272,7 +272,6 @@
     --appMenu-font-weight: var(--font-weight-primary);
     --appMenu-tag-font-weight: var(--font-weight-secondary);
     --appMenu-font-color: var(--font-color-primary);
-    --appMenu-scrollbar-color: white;
     --appMenu-leftNav-background-color: var(--core-primary);
     --appMenu-close-hover-color: var(--accent-negative);
     --appMenu-leftNav-highlighter-hover: var(--core-primary-2);

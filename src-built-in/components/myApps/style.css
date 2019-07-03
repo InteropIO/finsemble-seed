@@ -310,7 +310,7 @@ img {
 ::-webkit-scrollbar-thumb {
     cursor: pointer;
     border-radius: 3px;
-    background-color: var(--appMenu-scrollbar-color);
+    background-color: var(--scrollbar-color);
 }
 
 select:focus, option:focus {

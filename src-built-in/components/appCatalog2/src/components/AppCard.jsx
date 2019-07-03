@@ -138,8 +138,8 @@ class AppCard extends Component {
 				<div className="app-image-container">
 					{!entitled || !checkShown ? null : <i className={imageIconClasses} onMouseEnter={this.toggleHighlight} onMouseLeave={this.toggleHighlight} onClick={appAction}></i>}
 					<img className={'app-image' + entitled} src={imageUrl} />
+					<div className={titleClass} onMouseEnter={this.toggleTitleUnderline} onMouseLeave={this.toggleTitleUnderline}>{appName}</div>
 				</div>
-				<div className={titleClass} onMouseEnter={this.toggleTitleUnderline} onMouseLeave={this.toggleTitleUnderline}>{appName}</div>
 				<div className='footer' ref={(el) => { this.footer = el; }}>
 					<span className={"app-tags" + entitled}>
 						<i className="ff-tag"></i>
