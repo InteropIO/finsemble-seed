@@ -11,7 +11,8 @@
 	user-select: none;
 	font-family: var(--font-primary);
 	font-size: var(--menu-font-size);
-    font-weight: var(--tag-font-weight);
+	font-weight: var(--tag-font-weight);
+	transition: .2s background;
 }
 
 .tags-menu-wrapper:hover {

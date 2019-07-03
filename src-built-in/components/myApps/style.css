@@ -133,8 +133,13 @@ img {
     width: 40px;
 }
 
+.folder-action-icons .ff-adp-edit {
+    transition: .2s all;
+}
+
 .folder-action-icons .ff-adp-trash-outline {
     padding-top: 2px;
+    transition: .2s all;
 }
 
 .folder-action-icons .ff-adp-trash-outline:hover {
@@ -472,7 +477,7 @@ select:focus, option:focus {
     flex-direction: row;
     justify-content: flex-start;
     padding-left: 10px;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
     flex-wrap: wrap;
 }
 .tag-item {

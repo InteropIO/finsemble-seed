@@ -253,6 +253,7 @@ img {
     justify-content: center;
     margin: 16px 0 6px 0;
     color: var(--content-button-icon-color);
+    transition: .2s all;
 }
 
 .action-button:hover {

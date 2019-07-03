@@ -284,6 +284,7 @@
 	user-select: none;
 	outline:none;
 	cursor: pointer;
+	transition: .2s all;
 }
 
 .carousel-main .carousel-header .see-more:hover {
@@ -451,6 +452,7 @@
 	font-size: 10px;
 	font-weight: var(--font-weight-secondary);
 	user-select: none;
+	transition: .2s all;
 }
 
 .search-main .search-back:hover {
@@ -796,6 +798,7 @@
 	margin: 0 4px 4px 0;
 	padding: 0px 7px 0 8px;
 	cursor: pointer;
+	transition: .2s all;
 }
 
 .app-showcase .tag-label:hover {
