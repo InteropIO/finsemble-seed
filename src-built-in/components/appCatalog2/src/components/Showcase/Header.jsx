@@ -67,8 +67,7 @@ const Header = props => {
 						</div>
 					) : (
 							<span className="action-button-label">
-								<i className="ff-plus"></i>
-								&nbsp;My Apps
+								Add
 						</span>
 						)}
 				</button>

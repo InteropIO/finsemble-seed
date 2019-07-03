@@ -579,7 +579,7 @@
 }
 
 .app-showcase .header .action-button {
-	width: 83px;
+	width: 54px;
 	height: 30px;
 	margin-left: 5px;
 	background-color: var(--button-affirmative-background-color);
@@ -639,7 +639,6 @@
 	font-family: var(--font-primary);
 	text-align: center;
 	color: var(--catalog-font-color);
-	padding-left: 5px;
 }
 
 .action-button.disabled .action-button-label {
