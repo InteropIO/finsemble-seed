@@ -108,7 +108,7 @@ export default class Carousel extends Component {
 		let titleClass = "carousel-title";
 		if (this.state.titleHighlighted) titleClass += " highlight";
 
-		let chevron_left_style = 'ff-chevron-left', chevron_right_style = 'ff-chevron-right';
+		let chevron_left_style = 'ff-adp-chevron-left', chevron_right_style = 'ff-adp-chevron-right';
 		let left_click = this.pageDown, right_click = this.pageUp;
 
 		if (this.state.firstIndex + 3 >= this.props.cards.length - 1) {
