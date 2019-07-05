@@ -556,13 +556,13 @@ function renderTitle() {
  */
 function renderTabs() {
     let titleWidth = this.state.tabWidth - ICON_AREA - CLOSE_BUTTON_MARGIN;
-    return this.state.tabs.map((tab, i) => {
+    return this.state.tabs.map(tab => {
         return <Tab
             onClick={() => {
                 this.setActiveTab(tab);
             }}
             draggable="true"
-            key={i}
+            key={tab.windowName} //this is a unique identifier for React so it knows when to update the DOM
             className={this.getTabClasses(tab)}
             onDragStart={(e, identifier) => {
                 FSBL.Clients.Logger.system.debug("Tab drag - TAB", identifier.windowName);
