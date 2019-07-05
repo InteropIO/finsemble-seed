@@ -188,7 +188,7 @@
     --content-component-list-font-size: 11px;
 
     --content-list-border-color: var(--core-primary-5);
-    --content-list-highlighter: var(--core-primary-2);
+    --content-list-highlighter: var(--core-primary-3);
     --content-list-item-flagged-color: var(--accent-primary);
     --content-list-editor-font-color: var(--font-color-primary);
     --content-list-editor-highlighted-text: var(--accent-primary);

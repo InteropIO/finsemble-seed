@@ -182,6 +182,11 @@ img {
     display: flex;
     align-items: center;
     border: 1px solid transparent;
+    border-radius: 20px;
+}
+
+.workspace-item:hover {
+    background-color: var(--content-nav-highlighter-hover);
 }
 
 .workspace-item > div {
@@ -198,6 +203,7 @@ img {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    line-height: 13px;
 }
 
 .individual-workspace-actions {
@@ -214,6 +220,7 @@ img {
     cursor: pointer;
     padding: 4px;
     height: 17px;
+    transition: .2s all;
 }
 
 .individual-workspace-action:hover {
@@ -231,7 +238,6 @@ img {
 
 .focused-workspace-item {
     background-color: var(--content-list-highlighter);
-    border-radius: 20px;
 }
 
 .auto-start-workspace-item:before {
