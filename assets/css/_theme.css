@@ -154,7 +154,8 @@
 
     --search-result-font-color: var(--font-color-primary);
     --search-result-font-weight: var(--font-weight-secondary);
-    --search-result-highlighter-color: var(--core-primary-3);
+    --search-result-highlighter-color: var(--core-primary-2);
+    --search-result-selected-color: var(--core-primary-3);
 
     /* Window Frame */
     --window-frame-inactive-color: var(--core-primary);

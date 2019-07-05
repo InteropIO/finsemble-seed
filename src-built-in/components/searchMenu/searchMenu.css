@@ -75,7 +75,7 @@ body {
 }
 
 .resultItem.active {
-    background-color: var(--search-result-highlighter-color);
+    background-color: var(--search-result-selected-color);
 }
 
 .resultItem .resultName {
