@@ -125,22 +125,23 @@ export default class TabRegion extends React.Component {
 	 * @memberof windowTitleBar
 	 */
     stopDrag(e) {
-        FSBL.Clients.Logger.system.debug("Tab drag stop");
-        //@sidd can you document this?
         this.mousePositionOnDragEnd = {
             x: e.nativeEvent.screenX,
             y: e.nativeEvent.screenY
         }
-        let boundingRect = this.state.boundingBox;
-        if (!FSBL.Clients.WindowClient.isPointInBox(this.mousePositionOnDragEnd, FSBL.Clients.WindowClient.options)) {
-            setTimeout(() => {
-                FSBL.Clients.WindowClient.stopTilingOrTabbing({ mousePosition: this.mousePositionOnDragEnd });
-            }, 50);
-            this.setState({
-                iAmDragging: false
-            });
-            this.onWindowResize();
-        }
+        FSBL.Clients.WindowClient.getBounds(
+            (err, bounds) => {
+                if (!FSBL.Clients.WindowClient.isPointInBox(this.mousePositionOnDragEnd, bounds)) {
+                    setTimeout(() => {
+                        FSBL.Clients.WindowClient.stopTilingOrTabbing({ mousePosition: this.mousePositionOnDragEnd });
+                    }, 50);
+                    this.setState({
+                        iAmDragging: false
+                    });
+                    this.onWindowResize();
+                }
+            } 
+        );
     }
 
     /**
