@@ -98,6 +98,7 @@ body.menu {
 .menu-item .menu-item-action {
     align-self: baseline;
     justify-content: center;
+    color: var(--menu-action-icon-color);
 }
 
 .ff-pin {

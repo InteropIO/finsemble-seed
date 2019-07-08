@@ -126,6 +126,7 @@
     /* Menus */
     --menu-font-size: 11px;
     --menu-font-icon-size: 13px;
+    --menu-action-icon-color: var(--core-primary-5);
     --menu-font-weight: var(--font-weight-primary);
     --menu-font-color: var(--font-color-primary);
     --menu-active-workspace-font-weight: bold;
