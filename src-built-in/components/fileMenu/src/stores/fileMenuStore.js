@@ -120,6 +120,7 @@ var Actions = {
 		return new Promise((resolve, reject) => {
 			FSBL.Clients.DialogManager.open("yesNo",
 				{
+					title: "Save your workspace?",
 					question: "Your workspace \"" + FSBL.Clients.WorkspaceClient.activeWorkspace.name + "\" has unsaved changes, would you like to save?"
 				}, async (err, response) => {
 					if (err || response.choice === "affirmative") {
