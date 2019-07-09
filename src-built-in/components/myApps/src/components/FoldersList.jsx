@@ -203,13 +203,18 @@ export default class FoldersList extends React.Component {
 	 * @param {*} folderName
 	 * @param {*} index
 	 */
-	renderFolder(folder, folderName, index) {
+	renderFolder(folder, folderName, index, renderIcon = false) {
 		let className = 'complex-menu-section-toggle'
 		if (this.state.activeFolder === folderName) {
 			className += ' active-section-toggle'
 		}
+		if (folder.icon) {
+			className += ' folder-with-icon'
+		}
 
-		let nameField = folder.icon === 'ff-folder' && this.state.renamingFolder === folderName ?
+		const EDITABLE_FOLDER_ICON_CLASS = 'ff-adp-hamburger'
+
+		let nameField = folder.icon === EDITABLE_FOLDER_ICON_CLASS && this.state.renamingFolder === folderName ?
 			<input id="rename" value={this.state.folderNameInput}
 				onChange={this.changeFolderName}
 				onKeyPress={this.keyPressed} className={this.state.isNameError ? "error" : ""} autoFocus /> : folderName;
@@ -220,10 +225,10 @@ export default class FoldersList extends React.Component {
 				onDrop={(event) => this.onAppDrop(event, folderName)}
 				className={className} key={index}>
 				<div className='left-nav-label'>
-					{/* {folder.icon && <i className={folder.icon}></i>} */}
+					{folder.icon && <i className={folder.icon}></i>}
 					<div className="folder-name">{nameField}</div>
 				</div>
-				{folder.icon === 'ff-folder' && <span className='folder-action-icons'>
+				{folder.icon === EDITABLE_FOLDER_ICON_CLASS && <span className='folder-action-icons'>
 					<i className='ff-adp-edit' title='Rename' onClick={this.renameFolder.bind(this, folderName)}></i>
 					<i className='ff-adp-trash-outline' title='Delete Folder' onClick={this.deleteFolder.bind(this, folderName)}></i>
 				</span>}

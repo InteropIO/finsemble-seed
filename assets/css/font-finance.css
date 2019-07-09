@@ -358,3 +358,6 @@
 .ff-close-3:before {
   content: "\e00d";
 }
+.ff-adp-hamburger:before {
+  content: "\e011";
+}

@@ -278,7 +278,7 @@
     --appMenu-close-hover-color: var(--accent-negative);
     --appMenu-leftNav-highlighter-hover: var(--core-primary-2);
     --appMenu-leftNav-highlighter: var(--core-primary-3);
-    --appMenu-leftNav-icon-color: var(--accent-primary);
+    --appMenu-leftNav-icon-color: var(--core-primary-4);
     --appMenu-leftNav-contextMenu-background-color: var(--core-primary-3);
     --appMenu-background-color: var(--core-primary-1);
     --appMenu-actions-menu-background-color: var(--core-primary-2);
