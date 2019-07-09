@@ -125,13 +125,23 @@ export default class TabRegion extends React.Component {
 	 * @memberof windowTitleBar
 	 */
     stopDrag(e) {
+        FSBL.Clients.Logger.system.debug("Tab stopDrag.");
         this.mousePositionOnDragEnd = {
             x: e.nativeEvent.screenX,
             y: e.nativeEvent.screenY
         }
+        
+        const boundingBox = this.state.boundingBox;
         FSBL.Clients.WindowClient.getBounds(
             (err, bounds) => {
-                if (!FSBL.Clients.WindowClient.isPointInBox(this.mousePositionOnDragEnd, bounds)) {
+                // We ONLY want to know if we're in the tab region!
+                const tabRegion = {
+                    top: boundingBox.top + bounds.top,
+                    bottom: boundingBox.bottom + bounds.top,
+                    left: boundingBox.left + bounds.left,
+                    right: boundingBox.right + bounds.left 
+                };
+                if (!FSBL.Clients.WindowClient.isPointInBox(this.mousePositionOnDragEnd, tabRegion)) {
                     setTimeout(() => {
                         FSBL.Clients.WindowClient.stopTilingOrTabbing({ mousePosition: this.mousePositionOnDragEnd });
                     }, 50);
@@ -140,7 +150,7 @@ export default class TabRegion extends React.Component {
                     });
                     this.onWindowResize();
                 }
-            } 
+            }
         );
     }
 
