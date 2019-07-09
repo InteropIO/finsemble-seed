@@ -399,7 +399,7 @@
 				manifest: taskMethods.startupConfig[env.NODE_ENV].serverConfig,
 				
 				manifest: cfg.serverConfig,
-				onElectronClose: (code)=> process.exit(code),
+				onElectronClose: (exitCode)=> process.exit(exitCode),
 				chromiumFlags: JSON.stringify(cfg.chromiumFlags)
 			}
 
