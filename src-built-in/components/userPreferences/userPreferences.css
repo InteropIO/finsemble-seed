@@ -123,7 +123,7 @@ img {
 }
 
 .complex-menu-section-toggle {
-    padding: 5px 30px 5px 30px;
+    padding: 6px 30px;
     margin-right:6px;
     border-radius: 0 20px 20px 0;
     height: 22px;
@@ -178,7 +178,7 @@ img {
 
 .workspace-item {
     height: 28px;
-    padding: 4px 10px 0 20px;
+    padding: 4px 10px 0 10px;
     display: flex;
     align-items: center;
     border: 1px solid transparent;
@@ -196,6 +196,10 @@ img {
     align-items: center;
     outline-color: transparent;
     justify-content: space-between;
+}
+
+.workspace-item .ff-adp-hamburger {
+    color: var(--content-list-drag-icon-color);
 }
 
 .workspace-item > div > .workspace-name {
@@ -241,7 +245,7 @@ img {
     background-color: var(--content-list-highlighter);
 }
 
-.auto-start-workspace-item:before {
+/* .auto-start-workspace-item {
     content: "";
     width: 5px;
     height: 5px;
@@ -250,6 +254,10 @@ img {
     margin-left: -15px;
     margin-right: 10px;
     background-color: var(--content-list-item-flagged-color);
+} */
+
+.auto-start-workspace-item {
+    font-style: italic;
 }
 
 .action-button {
@@ -293,7 +301,7 @@ img {
 }
 
 .workspace-item > .workspace-editor {
-    padding-left: 0px;
+    padding-left: 4px;
 }
 
 .workspace-item-editing {
@@ -303,13 +311,15 @@ img {
 .workspace-editor {
     border: 0;
     font-family: var(--font-primary);
+    font-weight: var(--font-weight-primary);
     background-color: transparent;
-    padding-left: 20px;
     height: 100%;
     width: 100%;
+    padding-bottom: 2px;
     font-size: var(--content-font-size);
     outline-color: transparent;
     color: var(--content-list-editor-font-color);
+    line-height: 13px;
 }
 
 .workspace-editor::selection {

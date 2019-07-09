@@ -524,6 +524,7 @@ export default class Workspaces extends React.Component {
 									}
 									return (
 										<FinsembleDraggable onClick={() => this.setFocusedWorkspace(workspace.name)} wrapperClass={classNames} draggableId={workspace.name} key={i} index={i}>
+											<div className="ff-adp-hamburger"></div>
 											<div className="workspace-name">
 												{workspace.name}
 											</div>
