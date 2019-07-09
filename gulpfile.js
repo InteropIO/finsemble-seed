@@ -396,8 +396,6 @@
 			}
 
 			let config = {
-				manifest: taskMethods.startupConfig[env.NODE_ENV].serverConfig,
-				
 				manifest: cfg.serverConfig,
 				onElectronClose: (exitCode)=> process.exit(exitCode),
 				chromiumFlags: JSON.stringify(cfg.chromiumFlags)
