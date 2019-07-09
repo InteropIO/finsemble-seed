@@ -185,7 +185,7 @@
 
 .app-card .app-title {
 	height: 34px;
-	width: 100%;
+	width: 95px;
 	font-size: 11px;
 	font-weight: var(--font-weight-primary);
 	color: var(--catalog-font-color);
@@ -228,21 +228,23 @@
 	text-decoration: underline;
 }
 
-.app-card .ff-check-circle {
+.app-card .ff-check-mark-2 {
 	display: none;
 	position: absolute;
 	right: -4px;
-	top: -6px;
+	top: -5px;
 	z-index: 1;
 	cursor: pointer;
+	transition: .2s all;
+	font-size: 13px;
 }
 
-.app-card .ff-check-circle.faded {
+.app-card .ff-check-mark-2.faded {
 	display: block;
 	color: var(--catalog-card-checkmark-unselected-color);
 }
 
-.app-card .ff-check-circle.highlighted {
+.app-card .ff-check-mark-2.highlighted {
 	display: block;
 	color: var(--catalog-card-checkmark-selected-color);
 }

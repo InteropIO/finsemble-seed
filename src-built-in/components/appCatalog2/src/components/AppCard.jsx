@@ -123,7 +123,7 @@ class AppCard extends Component {
 
 		let { appName, checkShown } = this.state;
 
-		let imageIconClasses = "ff-check-circle";
+		let imageIconClasses = "ff-check-mark-2";
 		if (this.state.checkHighlighted || this.props.installed) imageIconClasses += " highlighted"
 		else imageIconClasses += " faded";
 
