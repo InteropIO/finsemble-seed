@@ -22,6 +22,8 @@ export default class FoldersList extends React.Component {
 			folderNameInput: '',
 			isNameError: false
 		}
+		// Reference to ontainer element of folder list
+		this.listDiv = React.createRef();
 		this.renameFolder = this.renameFolder.bind(this)
 		this.changeFolderName = this.changeFolderName.bind(this)
 		this.onFoldersListUpdate = this.onFoldersListUpdate.bind(this)
@@ -29,16 +31,40 @@ export default class FoldersList extends React.Component {
 		this.deleteFolder = this.deleteFolder.bind(this)
 		this.onFocusRemove = this.onFocusRemove.bind(this)
 		this.onDragEnd = this.onDragEnd.bind(this);
+		this.onMouseMove = this.onMouseMove.bind(this);
+		// The last known mouse Y position
+		this.mouseY = null;
+	}
+
+	/**
+	 * Keeps a track of the last mouse's clientY position
+	 * @param {MouseEvent} event The mouse move event
+	 */
+	onMouseMove(event) {
+		this.mouseY = event.clientY
 	}
 
 	onDragEnd(event = {}) {
-		if (!event.destination) return;
-		//There are two items above the 0th item in the list. They aren't reorderable. We add 2 to the index so that it matches with reality. The source comes in properly but the destination needs to be offset.
-		let newIndex = event.destination.index;
-
-		storeActions.reorderFolders(event.source.index, newIndex);
-
+		const listHeight = this.listDiv.current.clientHeight
+		const destination = event.destination || {};
+		// When mouseUp event fired outside of the list element
+		if (!destination.index) {
+			// When mouseUp high and outside the list 
+			if (this.mouseY < listHeight) {
+				destination.index = 0;
+			}
+			// When mouseUp below list or outside below the window
+			if (this.mouseY >= listHeight) {
+				destination.index = this.state.foldersList.length -1;
+			}
+		};
+		if (typeof destination.index === 'undefined') {
+			return;
+		}
+		//There are two items above the 0th item in the list. They aren't re-orderable. We add 2 to the index so that it matches with reality. The source comes in properly but the destination needs to be offset.
+		storeActions.reorderFolders(event.source.index, destination.index);
 	}
+
 	onAppDrop(event, folder) {
 		event.preventDefault()
 		const app = JSON.parse(event.dataTransfer.getData('app'))
@@ -91,10 +117,12 @@ export default class FoldersList extends React.Component {
 
 	componentWillMount() {
 		getStore().addListener({ field: 'appFolders.list' }, this.onFoldersListUpdate)
+		document.addEventListener('mousemove', this.onMouseMove);
 	}
 
 	componentWillUnmount() {
 		getStore().addListener({ field: 'appFolders.list' }, this.onFoldersListUpdate)
+		document.removeEventListener('mousemove', this.onMouseMove);
 	}
 
 	renameFolder(name, e) {
@@ -115,7 +143,7 @@ export default class FoldersList extends React.Component {
 	deleteFolder(name, e) {
 		e.stopPropagation();
 		e.preventDefault();
-		// Do not attemp to delete if user is renaming a folder
+		// Do not attempt to delete if user is renaming a folder
 		!this.state.renamingFolder && storeActions.deleteFolder(name)
 	}
 
@@ -232,7 +260,7 @@ export default class FoldersList extends React.Component {
 	render() {
 		return (
 			<div className="top">
-				<div className='folder-list'>
+				<div className='folder-list' ref={this.listDiv}>
 					{this.renderUnorderableFolders()}
 					<FinsembleDnDContext onDragStart={this.onDragStart} onDragEnd={this.onDragEnd}>
 						<FinsembleDroppable direction="vertical" droppableId="folderList">

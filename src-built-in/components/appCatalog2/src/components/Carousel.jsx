@@ -10,7 +10,7 @@ import storeActions from '../stores/storeActions';
 //components
 import AppCard from './AppCard';
 /**
- * A coursel of AppCards
+ * A carousel of AppCards
  * @param {object} props Component props
  * @param {array} props.cards An array of AppCards to display in a carousel
  * @param {string} props.tag The carousel's tag (title)

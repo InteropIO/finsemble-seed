@@ -11,7 +11,7 @@
 const BaseStorage = require("@chartiq/finsemble").models.baseStorage;
 const Logger = require("@chartiq/finsemble").Clients.Logger;
 
-// Because calls to this storage adapter will likely come from many different windows, we will log successes and 
+// Because calls to this storage adapter will likely come from many different windows, we will log successes and
 // failures in the central logger.
 Logger.start();
 
@@ -26,23 +26,23 @@ const SCHEMA_VERSION = 1;
  */
 let initialized = false;
 
-// #region 
-/** 
- * PolyFill IDBKeyRange for a key prefix search. 
- * 
- * In IndexedDB, Primary keys are ordered, and a key range is used to selectively retrieve them without having 
- * to iterate the whole set and test each. We use string keys built up with various prefixes. This polyfill makes it 
+// #region
+/**
+ * PolyFill IDBKeyRange for a key prefix search.
+ *
+ * In IndexedDB, Primary keys are ordered, and a key range is used to selectively retrieve them without having
+ * to iterate the whole set and test each. We use string keys built up with various prefixes. This polyfill makes it
  * possible to easily retrieve all keys with a specified prefix.
- * 
+ *
  * @param prefix The string by which to filter the primary keys.
  */
 IDBKeyRange.forPrefix = (prefix) => {
-	/** 
-	 * Determines the string that would sort immediately after all strings with the specified prefix and hence can be 
-	 * used as the upper bound for an IDBKeyRange to retrieve all keys with a specified prefix (where the lower bound is 
-	 * the prefix itself). 
-	 * 
-	 * @param key 
+	/**
+	 * Determines the string that would sort immediately after all strings with the specified prefix and hence can be
+	 * used as the upper bound for an IDBKeyRange to retrieve all keys with a specified prefix (where the lower bound is
+	 * the prefix itself).
+	 *
+	 * @param key
 	 */
 	const successor = (key) => {
 		let len = key.length;
@@ -72,9 +72,9 @@ IDBKeyRange.forPrefix = (prefix) => {
 
 /**
  * IndexedDB Storage Adapter.
- * 
- * We have a baseStorage model that provides some methods, such as `getCombinedKey`, which will return a nice key to 
- * save our value under. Example: `Finsemble:defaultUser:finsemble:activeWorkspace`. That key would hold the value of 
+ *
+ * We have a baseStorage model that provides some methods, such as `getCombinedKey`, which will return a nice key to
+ * save our value under. Example: `Finsemble:defaultUser:finsemble:activeWorkspace`. That key would hold the value of
  * our activeWorkspace.
  */
 const IndexedDBAdapter = function (uuid) {
@@ -99,15 +99,15 @@ const IndexedDBAdapter = function (uuid) {
 	// Open the IndexedDB connection
 	const request = window.indexedDB.open("finsemble", SCHEMA_VERSION);
 
-	// Create the object store if necessary 
+	// Create the object store if necessary
 	request.onupgradeneeded = (event) => {
-		// Save the IDBDatabase interface 
+		// Save the IDBDatabase interface
 		this.db = event.target.result;
 
 		// Create an objectStore for this database
 		const objectStore = this.db.createObjectStore("fsbl", { keyPath: "key" });
 
-		// Use transaction oncomplete to make sure the objectStore creation is 
+		// Use transaction oncomplete to make sure the objectStore creation is
 		// finished before adding data into it.
 		objectStore.transaction.oncomplete = () => {
 			Logger.system.debug("IndexedDBAdapter object store created");
@@ -133,8 +133,8 @@ const IndexedDBAdapter = function (uuid) {
 
 	/**
 	 * Get the prefix used to filter keys for particular topics and key prefixes.
-	 * 
-	 * @param {object} params 
+	 *
+	 * @param {object} params
 	 * @param {string} params.topic The topic
 	 * @param {string} params.keyPrefix The key prefix (optional).
 	 * @private
@@ -171,7 +171,7 @@ const IndexedDBAdapter = function (uuid) {
 	}
 	// #region Interface Methods
 	/**
-	 * This method should be used very, very judiciously. It's essentially a method designed to wipe the database for a 
+	 * This method should be used very, very judiciously. It's essentially a method designed to wipe the database for a
 	 * particular user.
 	 */
 	this.clearCache = (params, cb) => {
@@ -208,7 +208,7 @@ const IndexedDBAdapter = function (uuid) {
 
 	/**
 	 * Delete method.
-	 * 
+	 *
 	 * @param {object} params
 	 * @param {string} params.topic A topic under which the data should be stored.
 	 * @param {string} params.key The key whose value is being deleted.
@@ -280,7 +280,7 @@ const IndexedDBAdapter = function (uuid) {
 
 	/**
 	 * Get method.
-	 * 
+	 *
 	 * @param {object} params
 	 * @param {string} params.topic A topic under which the data should be stored.
 	 * @param {string} params.key The key whose value is being set.
@@ -321,7 +321,7 @@ const IndexedDBAdapter = function (uuid) {
 
 	/**
 	 * Returns all keys stored in IndexDB.
-	 * 
+	 *
 	 * @param {object} params
 	 * @param {function} cb
 	 */
@@ -362,7 +362,7 @@ const IndexedDBAdapter = function (uuid) {
 
 	/**
 	 * Save method.
-	 * 
+	 *
 	 * @param {object} params
 	 * @param {string} params.topic A topic under which the data should be stored.
 	 * @param {string} params.key The key whose value is being set.

@@ -539,7 +539,8 @@
 					"autoShow": false,
 					"contextMenu": false,
 					"showTaskbarIcon": false,
-					"smallWindow": true
+					"smallWindow": true,
+					"maximizable": false
 				}
 			},
 			"component": {

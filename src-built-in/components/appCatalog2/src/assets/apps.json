@@ -30,7 +30,7 @@
 				"type": "primary"
 			}
 		],
-		"friendlyName": "The Welcome Component"
+		"displayName": "The Welcome Component"
 	},
 	{
 		"name": "Notepad",
@@ -75,7 +75,7 @@
 				"type": "primary"
 			}
 		],
-		"friendlyName": "Notepad"
+		"displayName": "Notepad"
 	},
 	{
 		"name": "Process Monitor",
@@ -123,7 +123,7 @@
 				"type": "primary"
 			}
 		],
-		"friendlyName": "Process Monitor"
+		"displayName": "Process Monitor"
 	},
 	{
 		"name": "DBOD",
@@ -189,6 +189,6 @@
 				"type": "primary"
 			}
 		],
-		"friendlyName": "Dashboard of death"
+		"displayName": "Dashboard of death"
 	}
 ]

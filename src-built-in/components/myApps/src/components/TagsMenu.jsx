@@ -7,7 +7,7 @@
 import React from 'react'
 
 /**
-* A reusable flyout component for tags and any other lists
+* A reusable fly out component for tags and any other lists
 * This component creates a button with a customizable label
 * and an item click handler.
 * Example: <TagsMenu label="Tags" align="left" list={list} onItemClick={handler}/>
