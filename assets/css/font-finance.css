@@ -352,3 +352,9 @@
 .ff-adp-chevron-right:before {
   content: "\e00a";
 }
+.ff-check-mark-2:before {
+  content: "\e00b";
+}
+.ff-close-3:before {
+  content: "\e00d";
+}
