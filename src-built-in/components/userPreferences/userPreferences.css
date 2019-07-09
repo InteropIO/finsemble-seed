@@ -205,6 +205,7 @@ img {
 .workspace-item > div > .workspace-name {
     width: 250px;
     height: 16px;
+    padding-left: 1px;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
