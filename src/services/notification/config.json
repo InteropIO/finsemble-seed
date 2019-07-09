@@ -1,0 +1,53 @@
+{
+    "maxNotificationsToRetain": 1000,
+    "maxNotificationRetentionPeriodHours": 24,
+    "presentationComponents": {
+       "toast": { 
+            "component": "toast"
+        },
+       "center": { 
+            "component": "center",
+            "showAllTimelines": false
+        },
+       "drawer": { 
+            "component": "drawer",
+            "muteFilters": [
+	            {"field": "metadata.source", "value": "/execution notifications|fx markets/"}
+            ]
+        }
+    },
+    "types": {
+        "default": {
+            "component": "toast",
+            "showDismissAction": true,
+            "defaultTimeout": false,
+            "defaultHeaderLogo": "...",
+            "defaultContentLogo": "...",
+            "defaultNotificationAlertSound": "",
+            "displayPriority": 2,
+            "timeout": 3000
+       },
+       "notificationType1": {
+           "component": "drawer",
+           "displayPriority": 1,
+           "showDismissAction": false,
+           "cssClass": "my-notificationType1",
+           "timeout": 2000
+       },
+       "notificationType2": {
+           "component": "center",
+           "cssClass": "my-notificationType2",
+           "timeout": 1000
+       },
+       "notificationType3": {
+           "component": "toast",
+           "cssClass": "my-notificationType3",
+           "timeout": 1000
+       },
+       "notificationType4": {
+           "component": "center",
+           "cssClass": "my-notificationType4",
+           "timeout": 1000
+       }
+   }
+}
