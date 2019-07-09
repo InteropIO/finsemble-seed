@@ -199,6 +199,7 @@ img.pinned-icon {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    max-width: 148px;
 }
 
 .finsemble-toolbar-brand-logo {
