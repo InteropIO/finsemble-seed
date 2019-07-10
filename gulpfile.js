@@ -401,7 +401,8 @@
 			}
 
 			let config = {
-				manifest: cfg.serverConfig
+				manifest: cfg.serverConfig,
+				chromiumFlags: JSON.stringify(cfg.chromiumFlags),
 			}
 
 			// set breakpointOnStart variable so FEA knows whether to pause initial code execution
@@ -431,6 +432,7 @@
 
 			const manifestUrl = taskMethods.startupConfig[env.NODE_ENV].serverConfig;
 			let updateUrl = taskMethods.startupConfig[env.NODE_ENV].updateUrl;
+			const chromiumFlags = taskMethods.startupConfig[env.NODE_ENV].chromiumFlags;
 
 			// Installer won't work without a proper manifest. Throw a helpful error.
 			if (!manifestUrl) {
@@ -450,12 +452,13 @@
 			}
 
 			if (!FEAPackager) {
-				console.error("Cannot create installer because Finsemble Electron Adapter is not installed").
+				console.error("Cannot create installer because Finsemble Electron Adapter is not installed");
 					process.exit(1);
 			}
 
 			await FEAPackager.setManifestURL(manifestUrl);
 			await FEAPackager.setUpdateURL(updateUrl);
+			await FEAPackager.setChromiumFlags(chromiumFlags || {});
 			await FEAPackager.createFullInstaller(installerConfig);
 			done();
 		},

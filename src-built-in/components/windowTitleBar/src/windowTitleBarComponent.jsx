@@ -172,7 +172,7 @@ class WindowTitleBar extends React.Component {
 	}
 
 	/**
-	 * When tiling stops, we want to find the dragHandler and reshow it
+	 * When tiling stops, we want to find the dragHandler and re-show it
 	 */
 	onTilingStop() {
 		let dragHandle = document.querySelector('.fsbl-drag-handle.hidden');
