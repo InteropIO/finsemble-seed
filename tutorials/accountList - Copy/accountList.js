@@ -55,16 +55,16 @@ function launchAccountDetail(selectedAccountNumber) {
 	if (advancedIsRunning) return;
 	setCustomer(selectedAccountNumber);
 
-	FSBL.Clients.LauncherClient.spawn("accountDetail",
-		{
-			addToWorkspace: true,
-			left: "adjacent",
-			data: {customer: customers[customerIndex]}
-		}, function(err, response){
-			console.log("spawn() returns information about the new component", response);
-			accountDetailSpawnResponse=response;
-		}
-	);
+	// FSBL.Clients.LauncherClient.spawn("accountDetail",
+	// 	{
+	// 		addToWorkspace: true,
+	// 		left: "adjacent",
+	// 		data: {customer: customers[customerIndex]}
+	// 	}, function(err, response){
+	// 		console.log("spawn() returns information about the new component", response);
+	// 		accountDetailSpawnResponse=response;
+	// 	}
+	// );
 }
 
 // STEP 2.2.7
@@ -138,7 +138,7 @@ function communicateBetweenComponents() {
 
 if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
 function FSBLReady() {
-	alert(FSBL.Clients.WindowClient.options.customData.component["account-type"]); // --> Step 1.4
+	//alert(FSBL.Clients.WindowClient.options.customData.component["account-type"]); // --> Step 1.4
 
 	FSBL.Clients.WindowClient.setWindowTitle("Account List");
 	renderPage();

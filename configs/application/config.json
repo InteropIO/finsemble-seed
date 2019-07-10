@@ -207,6 +207,7 @@
 	"//appDirectoryEndpoint": "If you'd like to test the server locally, point 'appDirectoryEndpoint' to http://localhost:3030/v1/ and make sure to run the AppD project.",
 	"appDirectoryEndpoint": "https://fpe.finsemble.com/v1/",
 	"globalHotkeys": {},
+	"fpe-marketearlybirdRoot": "$applicationRoot/components/fpe-marketearlybird/dist",
 	"//": "importConfig contains components that are necessary to start Finsemble. All other components are loaded dynamically. See server/auth/test.json",
 	"importConfig": [
 		"$applicationRoot/configs/application/presentationComponents.json",
@@ -214,6 +215,7 @@
 		"$applicationRoot/configs/application/workspaces.json",
 		"$applicationRoot/configs/application/workspaceTemplates.json",
 		"$applicationRoot/configs/application/services.json",
-		"$applicationRoot/configs/application/securityPolicies.json"
+		"$applicationRoot/configs/application/securityPolicies.json",
+		"$applicationRoot/components/fpe-marketearlybird/config/config-examples.json"
 	]
 }

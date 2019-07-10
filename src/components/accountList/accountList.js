@@ -69,26 +69,26 @@ function launchAccountDetail(selectedAccountNumber) {
 
 // STEP 2.2.7
 function launchAccountDetailAdvanced(selectedAccountNumber) {
-	// advancedIsRunning=true;
-	// setCustomer(selectedAccountNumber);
+	advancedIsRunning=true;
+	setCustomer(selectedAccountNumber);
 
-	// var windowIdentifier={
-	// 	componentType: "accountDetail",
-	// 	windowName: FSBL.Clients.WindowClient.options.name + ".accountDetail"
-	// };
+	var windowIdentifier={
+		componentType: "accountDetail",
+		windowName: FSBL.Clients.WindowClient.options.name + ".accountDetail"
+	};
 
-	// FSBL.Clients.LauncherClient.showWindow(windowIdentifier,
-	// 	{
-	// 		addToWorkspace: true,
-	// 		left: "adjacent",
-	// 		spawnIfNotFound: true,
-	// 		data: {customer: customers[customerIndex]}
-	// 	}, function(err, response){
-	// 		console.log("spawn() returns information about the new component", response);
-	// 		accountDetailSpawnResponse=response;
-	// 		FSBL.Clients.RouterClient.transmit(windowIdentifier.windowName, customers[customerIndex]);
-	// 	}
-	// );
+	FSBL.Clients.LauncherClient.showWindow(windowIdentifier,
+		{
+			addToWorkspace: true,
+			left: "adjacent",
+			spawnIfNotFound: true,
+			data: {customer: customers[customerIndex]}
+		}, function(err, response){
+			console.log("spawn() returns information about the new component", response);
+			accountDetailSpawnResponse=response;
+			FSBL.Clients.RouterClient.transmit(windowIdentifier.windowName, customers[customerIndex]);
+		}
+	);
 }
 
 function relocateAccountDetail() {
