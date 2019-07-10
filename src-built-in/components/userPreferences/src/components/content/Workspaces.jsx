@@ -484,12 +484,7 @@ export default class Workspaces extends React.Component {
 			<input style={{ display: 'none' }} type="file" id="file-input" />
 			<div className="complex-menu-content-row">
 				<div className="workspace-list-header-row">
-					<div className="content-section-header workspace-list-header">
-						<div className="content-section-info">
-							Drag to reorder
-					</div>
-					</div>
-
+					<div className="content-section-header workspace-list-header"></div>
 				</div>
 				<div className="content-section-wrapper">
 					<div ref="WorkspaceList" className="workspace-list">
