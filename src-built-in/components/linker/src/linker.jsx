@@ -57,7 +57,7 @@ class Linker extends React.Component {
 		finsembleWindow.hide();
 	}
 	/**
-	 * Fit the contents of the dom to the openfin window's bounds. Also set the component's state.
+	 * Fit the contents of the dom to the window's bounds. Also set the component's state.
 	 *
 	 * @memberof Linker
 	 */
@@ -108,7 +108,6 @@ class Linker extends React.Component {
 	}
 }
 
-
 if (window.FSBL && FSBL.addEventListener) {
 	FSBL.addEventListener("onReady", FSBLReady);
 } else {
@@ -116,5 +115,17 @@ if (window.FSBL && FSBL.addEventListener) {
 }
 function FSBLReady() {
 	LinkerStore.initialize();
+	finsembleWindow.addEventListener("shown", () => {
+		/** DH 6/19/2019
+		 * Because Finsemble uses a combination of
+		 * native OS and synthetic window events,
+		 * it's possible for the Linker Window to
+		 * have OS level focus but Finsemble not
+		 * be aware of it. Therefore, we must trigger
+		 * focus manually until we can figure out a
+		 * better way of synchronizing these states.
+		*/
+		finsembleWindow.focus();
+	});
 	ReactDOM.render(<Linker />, document.getElementById("main"));
 }

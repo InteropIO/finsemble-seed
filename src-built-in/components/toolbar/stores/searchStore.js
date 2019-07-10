@@ -188,6 +188,8 @@ var Actions = {
 						cachedBounds = null;
 					});
 				}
+				window.getSelection().removeAllRanges();
+				menuWindow.hide();
 			}
 			//These lines handle closing the searchInput box. As showing is only true when the search results
 			//menu opens, they need to be outside so the search inputbox will still close when there is no text string.
@@ -332,7 +334,7 @@ function initialize(cb) {
 		if (err) {
 			console.error(err);
 		}
-		FSBL.SystemManagerAPI.publishCheckpointState("Toolbar", "searchStoreInit", "completed");
+		FSBL.SystemManagerClient.publishCheckpointState("Toolbar", "searchStoreInit", "completed");
 		cb(menuStore);
 	});
 }

@@ -36,10 +36,12 @@ export default class AppActionsMenu extends React.Component {
 
 	componentDidMount() {
 		document.addEventListener("mousedown", this.handleClickOutside);
+		finsembleWindow.addEventListener("blurred", this.handleClickOutside);
 	}
 
 	componentWillUnmount() {
 		document.removeEventListener("mousedown", this.handleClickOutside);
+		finsembleWindow.removeEventListener("blurred", this.handleClickOutside);
 	}
 
 	toggleMenu(e) {

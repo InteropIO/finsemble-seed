@@ -223,7 +223,6 @@ var Actions = {
 		}
 
 		//No dots allowed in keys in the global store, so escaping dots
-		var componentTypeDotRemove = componentType.replace(/[.]/g, "^DOT^");
 
 		var pins = appLauncherStore.getValue("pins");
 		let params = { addToWorkspace: true, monitor: "mine" };
@@ -259,6 +258,8 @@ var Actions = {
 		if (!wasPinned) {
 			pins.push(thePin);
 		}
+
+		var componentTypeDotRemove = displayName.replace(/[.]/g, "^DOT^");
 
 		if (wasPinned) {
 			ToolbarStore.removeValue({ field: "pins." + componentTypeDotRemove });

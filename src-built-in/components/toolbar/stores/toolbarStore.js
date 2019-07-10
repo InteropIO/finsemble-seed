@@ -5,9 +5,9 @@
 import async from "async";
 import * as menuConfig from '../config.json';
 import * as storeExports from "../stores/searchStore";
-
+import { PinManager } from "../modules/pinManager"
 import { Actions as SearchActions } from "./searchStore"
-
+const PinManagerInstance = new PinManager();
 var keys = {};
 var storeOwner = false;
 /**
@@ -44,10 +44,46 @@ class _ToolbarStore {
 					storeOwner = true;//until we put creator in by default
 				}
 
+				/**
+				 * When pins are set initially, go through and handle any that
+				 * have had display name changes. Additional, remove any
+				 * components that are no longer in components.json.
+				 *
+				 * @param {*} err
+				 * @param {*} data
+				 * @returns void
+				 */
+				async function onPinsFirstSet(err, data) {
+					const { value: pins } = data;
+
+					// This will be null if there are no pins saved yet.
+					// @early-exit
+					if (!pins) return;
+
+					const { data: components } = await FSBL.Clients.LauncherClient.getComponentList();
+
+					// First we remove any pins that are no longer registered components
+					const filteredPins = PinManagerInstance.removePinsNotInComponentList(components, Object.values(pins));
+
+					// Handle any pins whose components had their displayName changed
+					const finalPins = PinManagerInstance.handleNameChanges(components, filteredPins);
+
+					// convert the array back to an object
+					const pinObject = PinManagerInstance.convertPinArrayToObject(finalPins);
+
+					// We don't want this to fire again
+					self.GlobalStore.removeListener({ field: "pins" }, onPinsFirstSet);
+					self.GlobalStore.setValue({ field: "pins", value: pinObject })
+				}
+
 				FSBL.Clients.DistributedStoreClient.createStore({ store: "Finsemble-Toolbar-Store", global: true, values: values }, function (err, store) {
 					if (err) { FSBL.Clients.Logger.error(`DistributedStoreClient.createStore failed for store Finsemble-Toolbar-Store, error:`, err); }
 
 					self.GlobalStore = store;
+					// There should never be a race condition here because the initial pins are
+					// set inside of the toolbarSection, which is not rendered
+					// until the store is finally finshed initializing
+					self.GlobalStore.addListener({ field: "pins" }, onPinsFirstSet);
 					done();
 				});
 			}
@@ -232,17 +268,11 @@ class _ToolbarStore {
 	 * @memberof _ToolbarStore
 	 */
 	onBlur(cb = Function.prototype) {
-		finsembleWindow.setComponentState({
-			field: 'blurred',
-			value: true
-		}, cb);
+		FSBL.Clients.StorageClient.save({ topic: finsembleWindow.name, key: 'blurred', value: true }, cb);
 	}
 
 	onFocus(cb = Function.prototype) {
-		finsembleWindow.setComponentState({
-			field: 'blurred',
-			value: false
-		}, cb);
+		FSBL.Clients.StorageClient.save({ topic: finsembleWindow.name, key: 'blurred', value: false }, cb);
 	}
 
 	/**
@@ -289,34 +319,34 @@ class _ToolbarStore {
 				},
 				function (done) {
 					// first ack the previous checkpoint step as done
-					FSBL.SystemManagerAPI.publishCheckpointState("Toolbar", "createStores", "completed");
+					FSBL.SystemManagerClient.publishCheckpointState("Toolbar", "createStores", "completed");
 					self.loadMenusFromConfig(done, self);
 				},
 				FSBL.Clients.ConfigClient.onReady,
 				function (done) {
 					// first ack the previous checkpoint step as done
-					FSBL.SystemManagerAPI.publishCheckpointState("Toolbar", "loadMenusFromConfig", "completed");
+					FSBL.SystemManagerClient.publishCheckpointState("Toolbar", "loadMenusFromConfig", "completed");
 					self.addListeners(done, self);
 				},
 				function (done) {
 					// first ack the previous checkpoint step as done
-					FSBL.SystemManagerAPI.publishCheckpointState("Toolbar", "addListeners", "completed");
+					FSBL.SystemManagerClient.publishCheckpointState("Toolbar", "addListeners", "completed");
 					self.setupHotkeys(done);
 				},
 				function (done) {
 					// first ack the previous checkpoint step as done
-					FSBL.SystemManagerAPI.publishCheckpointState("Toolbar", "setupHotkeys", "completed");
+					FSBL.SystemManagerClient.publishCheckpointState("Toolbar", "setupHotkeys", "completed");
 					self.listenForWorkspaceUpdates();
 					done();
 				},
 				function (done) {
 					// first ack the previous checkpoint step as done
-					FSBL.SystemManagerAPI.publishCheckpointState("Toolbar", "listenForWorkspaceUpdates", "completed");
+					FSBL.SystemManagerClient.publishCheckpointState("Toolbar", "listenForWorkspaceUpdates", "completed");
 					self.retrieveSelfFromStorage(done);
 				},
 				function (done) {
 					// first ack the previous checkpoint step as done
-					FSBL.SystemManagerAPI.publishCheckpointState("Toolbar", "retrieveSelfFromStorage", "completed");
+					FSBL.SystemManagerClient.publishCheckpointState("Toolbar", "retrieveSelfFromStorage", "completed");
 					finsembleWindow.addEventListener('focused', function () {
 						self.onFocus();
 					});
@@ -327,12 +357,12 @@ class _ToolbarStore {
 				},
 				function (done) {
 					// first ack the previous checkpoint step as done
-					FSBL.SystemManagerAPI.publishCheckpointState("Toolbar", "addMoreListeners", "completed");
+					FSBL.SystemManagerClient.publishCheckpointState("Toolbar", "addMoreListeners", "completed");
 					self.setToolbarVisibilityInMemory(done);
 				},
 				function (done) {
 					// ack the previous checkpoint step as done
-					FSBL.SystemManagerAPI.publishCheckpointState("Toolbar", "setToolbarVisibilityInMemory", "completed");
+					FSBL.SystemManagerClient.publishCheckpointState("Toolbar", "setToolbarVisibilityInMemory", "completed");
 					done();
 				}
 			],
