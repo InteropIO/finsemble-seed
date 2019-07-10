@@ -133,6 +133,7 @@
     --menu-active-workspace-font-color: var(--accent-aware);
 
     --menu-background-color: var(--core-primary);
+    --menu-dragHandle-color: var(--core-primary-4);
     --menu-actions-background-color: var(--core-primary);
     --menu-actions-hover-color: var(--core-primary-3);
     --menu-content-background-color: var(--core-primary);

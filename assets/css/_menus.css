@@ -62,6 +62,7 @@ body.menu {
     cursor: pointer;
     position:relative;
     border-radius: 20px;
+    align-items: center;
 }
 
 .menu-item-function {

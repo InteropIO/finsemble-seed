@@ -74,6 +74,7 @@ export default class Workspace extends React.Component {
 	render() {
 		const { isSwitchingWorkspaces, workspace, isActiveWorkspace } = this.props;
 		let actionButtons = null;
+		const dragHandle = this.props.dragHandle;
 
 		//Actions are remove and pin workspace.
 		if (this.props.itemActions) {
@@ -86,6 +87,7 @@ export default class Workspace extends React.Component {
 		return (
 			<FinsembleMenuItem>
 				{showSpinner && <div className="fsbl-loader">Loading...</div> }
+				{dragHandle && dragHandle.iconClass && <div className={dragHandle.iconClass}></div>}
 				<FinsembleMenuItemLabel label={workspace.name} className={classes} onClick={this.onClick}/>
 				{actionButtons && <div className="menu-item-actions">
 					{actionButtons}
