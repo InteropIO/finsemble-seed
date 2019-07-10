@@ -81,6 +81,7 @@
     letter-spacing: 0.4px;
     line-height: 34px;
     user-select: none;
+    position: relative;
 }
 
 .fsbl-button:hover {
