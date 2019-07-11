@@ -1,6 +1,49 @@
 {
 	"comment": "Sample component configuration",
 	"components": {
+		"groupUpdate Test": {
+            "window": {
+                "url": "$applicationRoot/components/welcome/welcome.html",
+                "affinity": "workspaceComponents",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 400,
+                "height": 432
+            },
+            "component": {
+                "inject": false,
+                "spawnOnStartup": false,
+                "preload": [
+                    "$applicationRoot/preloads/zoom.js",
+                    "$applicationRoot/components/groupUpdateTest/groupUpdateTest.js"
+                ]
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "showLinker": true,
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "title": "Welcome"
+                    },
+                    "Toolbar": {
+                        "iconClass": "ff-component"
+                    }
+                }
+            }
+    	},
 		"Welcome Component": {
 			"window": {
 				"url": "$applicationRoot/components/welcome/welcome.html",

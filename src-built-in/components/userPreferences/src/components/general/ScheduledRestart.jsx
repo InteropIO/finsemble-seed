@@ -16,11 +16,11 @@ for (var i = 1; i < 13; i++) {
 }
 
 //FOR TESTING
-// let MINUTES = [];
-// for (var i = 1; i <= 60; i++){
-//     MINUTES.push(i);
-// }
-const MINUTES = ["00", 15, 30, 45];
+let MINUTES = [];
+for (var i = 1; i <= 60; i++){
+    MINUTES.push(i);
+}
+// const MINUTES = ["00", 15, 30, 45];
 export default class ScheduledRestart extends React.Component {
     constructor(props) {
         super(props);

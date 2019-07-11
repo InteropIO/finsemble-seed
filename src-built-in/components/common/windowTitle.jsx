@@ -60,3 +60,5 @@ class title extends Component {
 }
 
 export default title;
+
+//@ sourceURL=dynamicScript.js

@@ -1,0 +1,6 @@
+{
+    "groupUpdateTest": {
+        "output": "components/groupUpdateTest/groupUpdateTest",
+        "entry": "./src/components/groupUpdateTest/groupUpdateTest.js"
+    }
+}
