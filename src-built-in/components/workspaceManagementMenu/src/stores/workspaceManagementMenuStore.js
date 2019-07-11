@@ -551,7 +551,7 @@ Actions = {
 				showNegativeButton: false,
 				showCancelButton: false
 			};
-			Actions.spawnDialog("yesNo", dialogParams);
+			Actions.spawnDialog("yesNo", dialogParams, Function.prototype);
 			return callback(new Error("Invalid workspace name."));
 		} else if (response.choice === 'cancel') {
 			return callback(new Error(SAVE_DIALOG_CANCEL_ERROR));
