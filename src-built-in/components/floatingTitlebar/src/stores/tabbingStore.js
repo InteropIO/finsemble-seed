@@ -83,6 +83,8 @@ var Actions = {
 		Actions._setTabs(tabs)
 	},
 	addTab: function (wi, i) {
+		console.log("dause tabbingStore addtab!");
+
 		let tabs = Actions.getTabs();
 		tabs.push(wi);
 		//quick UI update

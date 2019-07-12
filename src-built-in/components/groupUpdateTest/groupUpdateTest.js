@@ -44,6 +44,7 @@ const groupUpdateHandler = (err, res) => {
 	log(`Getting docking state for "${windowNameForDocking}"`);
 	const dockingState = determineDockingState(res.data.groupData, windowNameForDocking);
 	log(`Docking state: ${dockingState}`);
+	console.log('windowGroups', FSBL.Clients.WindowClient.getWindowGroups());
 };
 
 /**

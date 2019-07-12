@@ -466,6 +466,8 @@ var Actions = {
 		Actions._setTabs(tabs)
 	},
 	addTab: function (windowIdentifier, i) {
+		console.log("dause windowTitleBarStore addtab!");
+
 		let tabs = Actions.getTabs();
 		tabs.push(windowIdentifier);
 		//quick UI update
