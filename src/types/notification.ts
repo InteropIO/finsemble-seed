@@ -82,10 +82,10 @@ interface IFilter {
 } 
 
 /**
- * @property {object} lastUpdated stores when a notification matching a particular filter was last updated. 
+ * @property {object} updated stores when a notification matching a particular filter was last updated.
+ * @property {IFilter} filter - Could contain any properties of the notification to match on. EG id, meta.channel, type etc...
  */
 interface ILastUpdated {
-    notificationId: string;
     filter: IFilter;
     updated: Date;
 }
