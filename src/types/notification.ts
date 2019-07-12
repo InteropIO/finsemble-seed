@@ -45,6 +45,17 @@ interface IAction {
 }
 
 /**
+ * @property {string} dismissed action.
+ * @property {string} transmit - finsemble Router.
+ * @property {string} spawn - finsemble Launcher.
+ */
+enum Actions {
+    DISMISSED = "DISMISSED",
+    TRANSMIT = "TRANSMIT",
+    SPAWN = "SPAWN"
+} 
+
+/**
  * @property {string} id - UUID.
  * @property {Date} datePerformed - When the action was preforned.
  */
@@ -57,26 +68,38 @@ interface IPerformedAction {
  * @property {string} id - UUID
  * @property {Function(notification:INotification)} onNotification - callback for when a subscribing UI component received a notification.
  */
-interface Subscription {
+interface ISubscription {
     id: string;
     onNotification(notification: INotification);
-}
-
-/**
- * @property {object} filterId: Subscription[] - filterId generated from filterHashFunction and an array of Subscription objects.
- */
-interface FilteredSubscription {
-    [key: string]: Subscription[];
+    filters: IFilter[];
 }
 
 /**
  * @property {object} name : value - name value pair of filter to match subscriptions on. Most commonly something like {channelName: 'mychannel', source: 'mysource'}
  */
-interface Filter {
+interface IFilter {
     [key: string]: string;
 } 
 
+/**
+ * @property {object} lastUpdated stores when a notification matching a particular filter was last updated. 
+ */
+interface ILastUpdated {
+    notificationId: string;
+    filter: IFilter;
+    updated: Date;
+}
+
 interface INotificationService {
+    /**
+     * A look up of when a notification matching a filter was last updated.
+     * @param {IFilter} filter to check the last updated time of a specific notification "type"
+     */
+    lastUpdated: ILastUpdated[];
+    /**
+     * List of all notifications.
+     */
+    notifications: INotification[];
     /**
      * Creates or updates notifications in Finsemble.
      * @param {INotification[]} notifications from external source to be created or updated in Finsemble.
@@ -94,7 +117,7 @@ interface INotificationService {
      * @param {Filter} filter to identify which notification to save lastUpdated time for.
      * @private
      */
-    saveLastUpdatedTime(lastUpdated: Date, filter: Filter): void;
+    saveLastUpdatedTime(lastUpdated: Date, filter: IFilter): void;
     /** 
      * Subscribing to ConfigClient for notifications preferences set by UIs.
 	 * Per notification type configure display how often they're displayed.
@@ -115,17 +138,10 @@ interface INotificationService {
 	 */    
     broadcastNotifications(notification: INotification[]): void;
     /** 
-	 * Hash function to return a filterId.
-     * @param {Filter} name / value pairs are sorted and used to create a hash string.
-     * @returns {string} hash from Filter.
-     * @private
-     */        
-    filterHashFunction(filter: Filter): string;
-    /** 
 	 * Array of subscriptions for a particular set of filters.
      * @private
      */    
-    subscriptions: FilteredSubscription[];    
+    subscriptions: ISubscription[];
 }
 
 interface INotificationClient {
@@ -136,7 +152,7 @@ interface INotificationClient {
      * @param {Function} onSubscriptionSuccess called when subscription is succesfully created.
      * @param {Function} onSubscriptionFault if there is an error creating the subscription.
      */    
-    subscribe(filter: Filter, onNotification: Function, onSubscriptionSuccess: Function, onSubscriptionFault: Function): string;
+    subscribe(filter: IFilter, onNotification: Function, onSubscriptionSuccess: Function, onSubscriptionFault: Function): string;
     /** 
      * Used to unsubscribe to notifications.
      * @param {string} subscriptionId which was returned when subscription was created.
@@ -146,14 +162,14 @@ interface INotificationClient {
      * @param {Filter} filter to identify which notification to save lastUpdated time for.
      * @returns last updated Date object.
      */
-    getLastUpdatedTime(filter?: Filter): Date;
+    getLastUpdatedTime(filter?: IFilter): Date;
     /** 
      * Used by UI components that need to display a list of historical notifications.
      * @param {Date} date / time to fetch notifications from.
      * @param {Filter} filter to match to notifications.
      * @returns {INotification[]} array of notifications.
      */
-    fetchSnapshot(since: Date, filter: Filter): INotification[];
+    fetchSnapshot(since: Date, filter: IFilter): INotification[];
 	/**
 	 * When incoming notification arrive, lookup matching subscriptions and call nessesary callbacks on subscription.
 	 * @param {INotification[]} Array of INotification objects to broadcast.
@@ -172,4 +188,4 @@ interface INotificationClient {
     handleAction(notification: INotification[], action: IAction): void;
 }
 
-export { INotification, INotificationService, INotificationClient, Filter };
+export { INotification, INotificationService, INotificationClient, IFilter };
