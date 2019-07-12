@@ -119,13 +119,6 @@ interface INotificationService {
      */
     saveLastUpdatedTime(lastUpdated: Date, filter: IFilter): void;
     /** 
-     * Subscribing to ConfigClient for notifications preferences set by UIs.
-	 * Per notification type configure display how often they're displayed.
-	 * Per event type configure what sound you'd like to hear when that notification occurs.
-     * @private
-     */
-    saveUserPreferences(preferences: Map<string, string>): void;
-    /** 
      * Update the notification to mark actions preformed.
        @param {INotification[]} notifications to apply action to.
        @param {IAction} action which has been triggered by user.
