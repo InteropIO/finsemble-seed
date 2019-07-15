@@ -43,7 +43,7 @@ export default class Workspace extends React.Component {
 		//Remove trashcan for activeWorkspace. Prevents it from being deleted and causing issues.
 		if (this.props.isActiveWorkspace) {
 			let index = itemActions.findIndex(el => el.iconClass.includes('ff-adp-trash-outline'));
-			itemActions.splice(index, 1);
+			if (index > -1) itemActions.splice(index, 1);
 		}
 		return itemActions.map(function (action, index) {
 			let classes = "menu-item-action";
