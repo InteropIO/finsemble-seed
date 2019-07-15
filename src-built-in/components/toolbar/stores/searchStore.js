@@ -77,7 +77,7 @@ var Actions = {
 			});
 
 		} else {
-			const sel = window.getSelection();
+		const sel = window.getSelection();
 			sel.removeAllRanges();
 		}
 		activeSearchBar = false;
@@ -336,7 +336,6 @@ function initialize(cb) {
 		if (err) {
 			console.error(err);
 		}
-		FSBL.SystemManagerClient.publishCheckpointState("Toolbar", "searchStoreInit", "completed");
 		cb(menuStore);
 	});
 }

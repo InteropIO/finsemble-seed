@@ -19,7 +19,6 @@ class FileMenu extends React.Component {
 			{/*Options in the file menu.*/}
 			<FinsembleMenuSection className='menu-primary'>
 				<FinsembleMenuItem label="Preferences" onClick={FileMenuActions.spawnPreferences} />
-				<FinsembleMenuItem label="System Log" onClick={FileMenuActions.showSystemLog} />
 				<FinsembleMenuItem label="Central Logger" onClick={FileMenuActions.showCentralConsole} />
 				<FinsembleMenuItem label="Documentation" onClick={FileMenuActions.spawnDocs} />
 				{window.location.toString().includes("localhost") ?
