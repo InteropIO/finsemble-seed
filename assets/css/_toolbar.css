@@ -231,5 +231,5 @@ img.pinned-icon {
     padding-left:5px;
     padding-right:5px;
     padding-top: 6px;
-    -webkit-app-region: drag;
+    /* -webkit-app-region: drag; */
 }
