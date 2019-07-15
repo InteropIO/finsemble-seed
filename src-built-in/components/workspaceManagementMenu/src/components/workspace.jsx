@@ -88,7 +88,7 @@ export default class Workspace extends React.Component {
 			<FinsembleMenuItem>
 				{showSpinner && <div className="fsbl-loader">Loading...</div> }
 				{dragHandle && dragHandle.iconClass && <div className={dragHandle.iconClass}></div>}
-				<FinsembleMenuItemLabel label={workspace.name} className={classes} onClick={this.onClick}/>
+				<FinsembleMenuItemLabel label={workspace.name} title={workspace.name} className={classes} onClick={this.onClick}/>
 				{actionButtons && <div className="menu-item-actions">
 					{actionButtons}
 				</div>}
