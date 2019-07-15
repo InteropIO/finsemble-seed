@@ -203,7 +203,7 @@ export default class FoldersList extends React.Component {
 	 * @param {*} folderName
 	 * @param {*} index
 	 */
-	renderFolder(folder, folderName, index, renderIcon = false) {
+	renderFolder(folder, folderName, index) {
 		let className = 'complex-menu-section-toggle'
 		if (this.state.activeFolder === folderName) {
 			className += ' active-section-toggle'
