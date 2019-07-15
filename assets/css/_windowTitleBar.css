@@ -47,6 +47,7 @@ html.desktop-active .fsbl-header {
 .fsbl-header-title {
     position: relative;
     height: 100%;
+    padding-left: 8px;
     overflow: hidden;
     align-items: center;
     display:flex;
@@ -280,6 +281,7 @@ html.desktop-active .fsbl-icon-highlighted {
 
 .fsbl-tab {
     height: 100%;
+    padding-left: 8px;
     position: relative;
     display: inline-flex;
     align-content: center;
