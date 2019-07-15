@@ -18,10 +18,6 @@
         "type": "reactComponent"
     },
     {
-        "align": "left",
-        "type": "seperator"
-    },
-    {
         "comment": "Change align to add AlwaysOnTop capability",
         "align": "none",
         "type": "reactComponent",
