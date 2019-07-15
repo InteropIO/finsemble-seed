@@ -428,7 +428,7 @@ function init () {
 	storeExports.initialize(function () {
 		HeaderActions = storeExports.Actions;
 		windowTitleBarStore = storeExports.getStore();
-		ReactDOM.render(<WindowTitleBar />, FSBLHeader);
+		//ReactDOM.render(<WindowTitleBar />, FSBLHeader);
 		// Register with docking manager
 		FSBL.Clients.WindowClient.registerWithDockingManager();
 	});
