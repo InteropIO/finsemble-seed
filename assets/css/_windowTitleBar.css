@@ -327,6 +327,7 @@ html.desktop-active .fsbl-icon-highlighted {
 
 .fsbl-tab-title {
     text-align: left;
+    padding-left: 1px;
     min-width: 0;
     overflow: hidden;
     white-space: nowrap;
