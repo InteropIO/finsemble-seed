@@ -1,6 +1,7 @@
 {
 	"compilerOptions": {
-		"module": "system",
+		"target": "es2017",
+		"module": "commonjs",
 		"noImplicitAny": true,
 		"removeComments": true,
 		"preserveConstEnums": true,
@@ -8,7 +9,7 @@
 	},
 	"include": [
 		"src/**/*",
-		"src-built-in/preloads/*"
+		"src-built-in/**/*"
 	],
 	"exclude": [
 		"node_modules",
