@@ -14,6 +14,13 @@
     /* background-color: red; */
 }
 
+.channel-label {
+    padding-left: 4px;
+    display: inline-flex;
+    color: var(--menu-linker-selected-font-color);
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.44);
+}
+
 .fsbl-drag-handle.hidden {
     display: none;
 }
@@ -218,6 +225,9 @@ html.desktop-active .fsbl-icon-highlighted {
 
 .linker-group-accessible {
     width: 1em !important;
+    padding-bottom: 1px;
+    margin-bottom: 4px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.79);
 }
 
 html.desktop-active .linker-group {
