@@ -15,7 +15,7 @@ const VALIDATION_DEFAULTS = {
 	url: true
 };
 
-const INVALID_NAME_MSG = "Name cannot contain special characters or be empty.";
+const INVALID_NAME_MSG = "Name cannot be empty or be a duplicate of an existing component.";
 const INVALID_URL_MSG = "URL must be valid (e.g., http://www.google.com).";
 /**
  * A component that has a form to accept new app properties
@@ -39,6 +39,7 @@ export default class AddNewAppForm extends React.Component {
 		this.onSubmit = this.onSubmit.bind(this);
 		this.onClear = this.onClear.bind(this);
 		this.onCancel = this.onCancel.bind(this);
+		this.done = this.done.bind(this);
 		this.onURLChanged = this.onURLChanged.bind(this);
 		this.onAppNameChanged = this.onAppNameChanged.bind(this);
 		this.onKeyDown = this.onKeyDown.bind(this);
@@ -71,8 +72,17 @@ export default class AddNewAppForm extends React.Component {
 
 		storeActions.addApp(this.state.form, (error) => {
 			// Notify parent if no errors
-			this.done();
-			FSBL.Clients.Logger.error(error)
+			if (error) {
+				FSBL.Clients.Logger.error(error);
+				this.setState({
+					validation: {
+						name: false,
+						url: true
+					}
+				})
+			} else {
+				this.done();
+			}
 		});
 	}
 	/**
@@ -176,10 +186,12 @@ export default class AddNewAppForm extends React.Component {
 	//Listen for esc/enter
 	componentWillMount() {
 		window.addEventListener("keydown", this.onKeyDown);
+		finsembleWindow.addEventListener("blurred", this.done);
 	}
 	//remove listen for esc/enter
 	componentWillUnmount() {
 		window.removeEventListener("keydown", this.onKeyDown);
+		finsembleWindow.removeEventListener("blurred", this.done);
 	}
 
 	render() {

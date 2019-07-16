@@ -51,21 +51,20 @@ export default class AppList extends React.Component {
 	}
 
 	render() {
-		var self = this;
-	//console.log(this.props)
+		const { app, openDetails } = this.props;
 		return <div className="appItem">
-			<div onClick={function () {
-				self.props.openDetails(self.props.app)
-			}} className="appHeader">
+			<div onClick={() => openDetails(app)} className="appHeader">
 				{this.createIcon.call(this)}
 				<div className="titleContainer">
-					<div className="title">{this.props.app.name}</div>
-					<div className="vendor">{this.props.app.vendor}</div>
+					<div className="title">{app.displayName || app.name}</div>
+					<div className="vendor">{app.vendor}</div>
 				</div>
 			</div>
 			<div className="containerFooter">
 				<div className="footerLeft"></div>
-				<div className="footerRight"><div className="openButton" onClick={this.itemClick}>Open</div></div>
+				<div className="footerRight">
+					<div className="openButton" onClick={this.itemClick}>Open</div>
+				</div>
 			</div>
 		</div>
 	}
