@@ -241,6 +241,7 @@ img.pinned-icon {
     margin-left: 3px;
     padding-left: 2px;
     padding-right: 0px;
-    padding-top: 0px;
+    padding-top: 15px;
     -webkit-app-region: drag;
+    cursor: grab;
   }
