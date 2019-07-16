@@ -3,7 +3,8 @@
         "align": "left",
         "iconClasses": "finsemble-toolbar-brand-logo",
         "icon": "../../assets/img/Finsemble_Taskbar_Icon.png",
-        "menuType": "File Menu"
+        "menuType": "File Menu",
+        "title": "Main Menu"
     },
     {
         "align": "left",
@@ -41,6 +42,7 @@
     {
         "align": "left",
         "label": "Apps",
+        "title": "Apps",
         "id": "app-launcher",
         "comment": "Change menuType to 'My Apps' for a preview of the finsemble app catalog!",
         "fontIcon": "ff-chevron-down",
