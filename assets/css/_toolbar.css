@@ -180,7 +180,7 @@ img.pinned-icon {
     color: var(--toolbar-icon-app-color);
     font-size: var(--toolbar-icon-font-size);
     padding-right: 6px;
-    margin-top: 11px;
+    margin-top: 13px;
 }
 
 .pinned-workspace-icon {
