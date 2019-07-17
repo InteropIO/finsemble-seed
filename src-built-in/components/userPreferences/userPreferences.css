@@ -280,7 +280,8 @@ img {
 
 .disabled-button, .disabled-button:hover {
     color: var(--content-button-disabled-border-color);
-    cursor: not-allowed;
+    cursor: default;
+    border: 1px solid;
 }
 
 .workspace-action-buttons {
