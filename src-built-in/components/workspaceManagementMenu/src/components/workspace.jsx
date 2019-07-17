@@ -53,8 +53,17 @@ export default class Workspace extends React.Component {
 			} else {
 				classes += " remove-workspace";
 			}
+			let title="";
+			if (iconClasses.includes('favorite') && workspace.isPinned) {
+				title="Unfavorite"
+			} else {
+				title="Favorite"
+			}
+			if (iconClasses.includes('trash')) {
+				title="Delete"
+			}
 			let label = action.label || "";
-			return (<div key={index} className={classes} onClick={
+			return (<div key={index} title={title} className={classes} onClick={
 				() => {
 					action.method(workspace);
 				}
