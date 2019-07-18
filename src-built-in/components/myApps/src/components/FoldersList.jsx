@@ -241,7 +241,8 @@ export default class FoldersList extends React.Component {
 		let unorderableFolders = this.state.foldersList.filter(folderName => dragDisabled.includes(folderName));
 		const folders = storeActions.getFolders()
 		return unorderableFolders.map((folderName, index) => {
-			const folder = folders[folderName]
+			const folder = folders[folderName];
+			folder.icon = null;
 			return this.renderFolder(folder, folderName, index)
 		})
 	}
