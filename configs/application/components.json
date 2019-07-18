@@ -1,9 +1,9 @@
 {
 	"comment": "Sample component configuration",
 	"components": {
-		"Welcome Component": {
+		"PubSub Cross Domain Component A": {
 			"window": {
-				"url": "$applicationRoot/components/welcome/welcome.html",
+				"url": "https://login.salesforce.com/",
 				"affinity": "workspaceComponents",
 				"frame": false,
 				"resizable": true,
@@ -14,7 +14,47 @@
 				"height": 432
 			},
 			"component": {
-				"inject": false,
+				"inject": "$applicationRoot/components/welcome/publishInjectA.js",
+				"spawnOnStartup": false,
+				"preload": "$applicationRoot/preloads/zoom.js"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"canGroup": true,
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"showLinker": true,
+						"FSBLHeader": true,
+						"persistWindowState": true,
+						"title": "Welcome"
+					},
+					"Toolbar": {
+						"iconClass": "ff-component"
+					}
+				}
+			}
+		},
+		"PubSub Cross Domain Component B": {
+			"window": {
+				"url": "https://www.github.com/",
+				"affinity": "workspaceComponents",
+				"frame": false,
+				"resizable": true,
+				"autoShow": true,
+				"top": "center",
+				"left": "center",
+				"width": 400,
+				"height": 432
+			},
+			"component": {
+				"inject": "$applicationRoot/components/welcome/publishInjectB.js",
 				"spawnOnStartup": false,
 				"preload": "$applicationRoot/preloads/zoom.js"
 			},

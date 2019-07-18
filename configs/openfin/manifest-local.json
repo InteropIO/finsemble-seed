@@ -74,6 +74,10 @@
         ],
         "IAC": {
             "serverAddress": "ws://127.0.0.1:3376"
+        },
+        "router": {
+            "crossDomainTranport": "OpenFinBus"
         }
-    }
+    },
+    "Content-Security-Policy": "*"
 }
