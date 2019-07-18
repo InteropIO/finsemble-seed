@@ -226,11 +226,15 @@ img {
     cursor: pointer;
     padding: 4px;
     height: 17px;
-    transition: .2s all;
+    transition: .2s color;
 }
 
 .individual-workspace-action:hover {
     color: var(--content-button-neutral-hover-color);
+}
+
+.individual-workspace-action.disabled-button {
+    border: 0;
 }
 
 .delete-workspace:hover {
