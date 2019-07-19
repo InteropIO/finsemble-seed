@@ -114,10 +114,10 @@ interface INotificationService {
     /** 
 	 * Update saveLastUpdated time when incoming notification arrives in Finsemble.
      * @param {Date} lastUpdated when alert was last delivered to Finsemble.
-     * @param {Filter} filter to identify which notification to save lastUpdated time for.
+     * @param {INotification} notification a notification that was updated. This notification can then be matched on using a filter to find out when different notifications were last updated.
      * @private
      */
-    saveLastUpdatedTime(lastUpdated: Date, filter: IFilter): void;
+    saveLastUpdatedTime(lastUpdated: Date, notification: INotification): void;
     /** 
      * Update the notification to mark actions preformed.
        @param {INotification[]} notifications to apply action to.
