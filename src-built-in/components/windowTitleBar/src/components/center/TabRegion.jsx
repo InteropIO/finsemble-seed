@@ -125,22 +125,33 @@ export default class TabRegion extends React.Component {
 	 * @memberof windowTitleBar
 	 */
     stopDrag(e) {
-        FSBL.Clients.Logger.system.debug("Tab drag stop");
-        //@sidd can you document this?
+        FSBL.Clients.Logger.system.debug("Tab stopDrag.");
         this.mousePositionOnDragEnd = {
             x: e.nativeEvent.screenX,
             y: e.nativeEvent.screenY
         }
-        let boundingRect = this.state.boundingBox;
-        if (!FSBL.Clients.WindowClient.isPointInBox(this.mousePositionOnDragEnd, FSBL.Clients.WindowClient.options)) {
-            setTimeout(() => {
-                FSBL.Clients.WindowClient.stopTilingOrTabbing({ mousePosition: this.mousePositionOnDragEnd });
-            }, 50);
-            this.setState({
-                iAmDragging: false
-            });
-            this.onWindowResize();
-        }
+        
+        const boundingBox = this.state.boundingBox;
+        FSBL.Clients.WindowClient.getBounds(
+            (err, bounds) => {
+                // We ONLY want to know if we're in the tab region!
+                const tabRegion = {
+                    top: boundingBox.top + bounds.top,
+                    bottom: boundingBox.bottom + bounds.top,
+                    left: boundingBox.left + bounds.left,
+                    right: boundingBox.right + bounds.left 
+                };
+                if (!FSBL.Clients.WindowClient.isPointInBox(this.mousePositionOnDragEnd, tabRegion)) {
+                    setTimeout(() => {
+                        FSBL.Clients.WindowClient.stopTilingOrTabbing({ mousePosition: this.mousePositionOnDragEnd });
+                    }, 50);
+                    this.setState({
+                        iAmDragging: false
+                    });
+                    this.onWindowResize();
+                }
+            }
+        );
     }
 
     /**
@@ -556,13 +567,13 @@ function renderTitle() {
  */
 function renderTabs() {
     let titleWidth = this.state.tabWidth - ICON_AREA - CLOSE_BUTTON_MARGIN;
-    return this.state.tabs.map((tab, i) => {
+    return this.state.tabs.map(tab => {
         return <Tab
             onClick={() => {
                 this.setActiveTab(tab);
             }}
             draggable="true"
-            key={i}
+            key={tab.windowName} //this is a unique identifier for React so it knows when to update the DOM
             className={this.getTabClasses(tab)}
             onDragStart={(e, identifier) => {
                 FSBL.Clients.Logger.system.debug("Tab drag - TAB", identifier.windowName);
