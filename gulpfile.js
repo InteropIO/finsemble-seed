@@ -23,7 +23,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 	const FEA_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-electron-adapter");
 	const FEA_PATH_EXISTS = fs.existsSync(FEA_PATH);
 	const FEA = FEA_PATH_EXISTS ? require("@chartiq/finsemble-electron-adapter/dist/main.bundle") : undefined;
-	const FEAPackager = FEA_PATH_EXISTS ? require("@chartiq/finsemble-electron-adapter/deploy/deploymentHelpers") : undefined;
+	const FEAPackager = FEA ? FEA.packager : undefined;
 
 	// local
 	const extensions = fs.existsSync("./gulpfile-extensions.js") ? require("./gulpfile-extensions.js") : undefined;
