@@ -147,16 +147,11 @@ img {
 
 .searchInput::after {
     position: absolute;
-    font-family: font-finance;
     right: 26px;
-    top: 1px;
+    top: 3px;
     font-size: 13px;
-    content: "\2c";
+    content: url(../../../assets/img/toolbar/search.svg);
     color: var(--toolbar-font-color); /* make sure magnifying glass is white */
-}
-
-.searchInput.active::after{
-    color: var(--search-input-font-color);
 }
 
 div {
