@@ -76,7 +76,7 @@
             "serverAddress": "ws://127.0.0.1:3376"
         },
         "router": {
-            "crossDomainTranport": "OpenFinBus"
+            "crossDomainTransport": "OpenFinBus"
         }
     },
     "Content-Security-Policy": "*"
