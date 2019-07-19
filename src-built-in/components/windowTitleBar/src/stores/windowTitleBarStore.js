@@ -8,8 +8,8 @@ var windowTitleBarStore;
 var WindowClient;
 import windowTitleBarStoreDefaults from "./windowTitleBarStoreDefaults";
 import * as async from "async";
-var finWindow = fin.desktop.Window.getCurrent();
-//theses are constants that are set inside of setupStore. so they're declared as vars and not constants.
+
+//these are constants that are set inside of setupStore. so they're declared as vars and not constants.
 let constants = {};
 var Actions = {
 	initialize: function () {
@@ -146,9 +146,9 @@ var Actions = {
 			]);
 
 			if (isInMovableGroup && !isTopRight) {
-				fin.desktop.Window.getCurrent().updateOptions({ showTaskbarIcon: false });
+				finsembleWindow.updateOptions({ showTaskbarIcon: false });
 			} else {
-				fin.desktop.Window.getCurrent().updateOptions({ showTaskbarIcon: true });
+				finsembleWindow.updateOptions({ showTaskbarIcon: true });
 			}
 		};
 

@@ -40,7 +40,7 @@ class _ToolbarStore {
 				if (err) { FSBL.Clients.Logger.error(`ToolbarStore.createStores Error:`, err); }
 				let values = {};
 				if (monitors.mine && monitors.primary && monitors.mine.deviceId === monitors.primary.deviceId) {
-					values = { mainToolbar: fin.desktop.Window.getCurrent().name };
+					values = { mainToolbar: finsembleWindow.name };
 					storeOwner = true;//until we put creator in by default
 				}
 

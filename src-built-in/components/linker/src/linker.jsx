@@ -41,8 +41,9 @@ class Linker extends React.Component {
 	 */
 	channelClicked(channel, active) {
 		var attachedWindowIdentifier = LinkerStore.getAttachedWindowIdentifier();
-		var attachedWindow = fin.desktop.Window.wrap(attachedWindowIdentifier.uuid, attachedWindowIdentifier.windowName);
-		attachedWindow.focus();
+		FSBL.FinsembleWindow.getInstance({ name: attachedWindowIdentifier.windowName }, (err, attachedWindow) => {
+			if (attachedWindow) attachedWindow.focus();
+		});
 
 		if (!active) return LinkerActions.linkToChannel(channel.name);
 		LinkerActions.unlinkFromChannel(channel.name);
@@ -107,22 +108,24 @@ class Linker extends React.Component {
 	}
 }
 
-fin.desktop.main(function () {
-	if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
-	function FSBLReady() {
-		LinkerStore.initialize();
-		finsembleWindow.addEventListener("shown", () => {
-			/** DH 6/19/2019
-			 * Because Finsemble uses a combination of
-			 * native OS and synthetic window events,
-			 * it's possible for the Linker Window to
-			 * have OS level focus but Finsemble not
-			 * be aware of it. Therefore, we must trigger
-			 * focus manually until we can figure out a
-			 * better way of synchronizing these states.
-			*/
-			finsembleWindow.focus();
-		});
-		ReactDOM.render(<Linker />, document.getElementById("main"));
-	}
-});
+if (window.FSBL && FSBL.addEventListener) {
+	FSBL.addEventListener("onReady", FSBLReady);
+} else {
+	window.addEventListener("FSBLReady", FSBLReady)
+}
+function FSBLReady() {
+	LinkerStore.initialize();
+	finsembleWindow.addEventListener("shown", () => {
+		/** DH 6/19/2019
+		 * Because Finsemble uses a combination of
+		 * native OS and synthetic window events,
+		 * it's possible for the Linker Window to
+		 * have OS level focus but Finsemble not
+		 * be aware of it. Therefore, we must trigger
+		 * focus manually until we can figure out a
+		 * better way of synchronizing these states.
+		*/
+		finsembleWindow.focus();
+	});
+	ReactDOM.render(<Linker />, document.getElementById("main"));
+}

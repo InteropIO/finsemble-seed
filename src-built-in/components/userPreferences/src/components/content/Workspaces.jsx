@@ -74,7 +74,6 @@ export default class Workspaces extends React.Component {
 			templateName: '',
 			workspaceBeingEdited: '',
 			focusedWorkspaceComponentList: [],
-			isElectron: (fin.container && fin.container === "Electron"),
 			initialAlwaysOnTop: finsembleWindow.windowOptions.alwaysOnTop,
 			alwaysOnTop: finsembleWindow.windowOptions.alwaysOnTop
 		};
@@ -119,7 +118,7 @@ export default class Workspaces extends React.Component {
 		//The initialAlwaysOnTop check is to prevent making a component be alwaysOnTop when the
 		//client may have set it to alwaysOnTop:false in the config. If that's the case, it should
 		//never set its alwaysOnTop to true and should always remain unchanged
-		if (this.state.initialAlwaysOnTop && this.state.isElectron) {
+		if (this.state.initialAlwaysOnTop && FSBL.System.container === "Electron") {
 			FSBL.Clients.WindowClient.setAlwaysOnTop(alwaysOnTop, () => {
 				this.setState({
 					alwaysOnTop: alwaysOnTop

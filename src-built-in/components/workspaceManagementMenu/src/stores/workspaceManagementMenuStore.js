@@ -34,7 +34,7 @@ function uuidv4() {
 		return v.toString(16);
 	});
 }
-let finWindow = fin.desktop.Window.getCurrent();
+
 Actions = {
 	autoSave: (callback) => {
 		let activeName = FSBL.Clients.WorkspaceClient.activeWorkspace.name;
@@ -74,7 +74,7 @@ Actions = {
 			}
 		});
 		WorkspaceManagementGlobalStore.getValue({ field: "owner" }, (err, data) => {
-			if (data !== fin.desktop.Window.getCurrent().name) return;
+			if (data !== finsembleWindow.name) return;
 			WorkspaceManagementGlobalStore.Dispatcher.register(function (action) {
 				switch (action.actionType) {
 					case "switchToWorkspace":
@@ -662,7 +662,7 @@ Actions = {
 	 * Un-focuses from the menu.
 	 */
 	blurWindow: function () {
-		finWindow.blur();
+		finsembleWindow.blur();
 	},
 	/**
 	 * Hides the window.
@@ -683,7 +683,7 @@ function createGlobalStore(done) {
 	StoreClient.createStore({
 		store: "Finsemble-WorkspaceMenu-Global-Store",
 		global: true,
-		values: { owner: fin.desktop.Window.getCurrent().name }
+		values: { owner: finsembleWindow.name }
 	}, function (err, store) {
 		WorkspaceManagementGlobalStore = store;
 		done();
