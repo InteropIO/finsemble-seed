@@ -294,5 +294,5 @@
     --appMenu-search-input-error-color: var(--accent-negative);
     --appMenu-edit-icon-hover-color: white;
     --appMenu-separator-color: var(--core-primary-3);
-    --appMenu-folder-action-icon-color: var(--font-color-secondary);
+    --appMenu-icon-color: var(--font-color-secondary);
 }

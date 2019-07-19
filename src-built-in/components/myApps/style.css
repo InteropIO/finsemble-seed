@@ -127,7 +127,7 @@ img {
 }
 
 .folder-action-icons {
-    color: var(--appMenu-folder-action-icon-color);
+    color: var(--appMenu-icon-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -332,7 +332,7 @@ select:focus, option:focus {
 	position: absolute;
 	top: 10px;
     right: 10px;
-    color: var(--appMenu-folder-action-icon-color);
+    color: var(--appMenu-icon-color);
     transition: .2s all;
 }
 
@@ -544,4 +544,43 @@ select:focus, option:focus {
 .input-error {
     color: var(--accent-negative);
     margin: .5em;
+}
+
+.close-icon {
+    border:1px solid transparent;
+	background-color: transparent;
+	display: inline-block;
+	vertical-align: middle;
+  outline: 0;
+  cursor: pointer;
+}
+
+.close-icon::after {
+	content: "\70";
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: font-finance;
+	width: 15px;
+	height: 15px;
+	position: absolute;
+	z-index:1;
+	right: 68px;
+	top: -21px;
+    bottom: 0;
+    margin: auto;
+	padding: 3px 3px 2px 2px;
+	border-radius: 50%;
+	text-align: center;
+	color: var(--appMenu-icon-color);
+	font-size: 8px;
+	cursor: pointer;
+}
+
+.close-icon:hover::after {
+    color: var(--appMenu-font-color);
+}
+
+.input-box:not(:valid) ~ .close-icon {
+	display: none;
 }
