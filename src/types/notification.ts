@@ -78,6 +78,13 @@ interface Filter {
 
 interface INotificationService {
     /**
+     * Saves a list of notifications in the system.
+     * @param {INotification[]} notifications to save.
+     * @param {Function} onSuccess callback when save is successful.
+     * @param {Function} onFault callback when save fails.
+     */
+    save(notification: INotification[], onSuccess: Function, onFault: Function): void;
+    /**
      * Creates or updates notifications in Finsemble.
      * @param {INotification[]} notifications from external source to be created or updated in Finsemble.
      */
