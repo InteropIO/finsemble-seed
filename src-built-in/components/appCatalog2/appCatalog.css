@@ -865,3 +865,45 @@
 .app-showcase .header .action-button.disabled:hover {
 	color: var(--button-disabled-color);
 }
+
+.close-icon {
+	border:1px solid transparent;
+	background-color: transparent;
+	display: inline-block;
+	vertical-align: middle;
+	outline: 0;
+	cursor: pointer;
+	position: absolute;
+	top: 20px;
+	right: -12px;
+}
+
+.close-icon::after {
+	content: "\70";
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: font-finance;
+	width: 15px;
+	height: 15px;
+	position: absolute;
+	z-index:1;
+	right: 88px;
+	top: -6px;
+    bottom: 0;
+    margin: auto;
+	padding: 3px 3px 2px 2px;
+	border-radius: 50%;
+	text-align: center;
+	color: var(--appMenu-icon-color);
+	font-size: 8px;
+	cursor: pointer;
+}
+
+.close-icon:hover::after {
+    color: var(--appMenu-font-color);
+}
+
+.search-input:not(:valid) ~ .close-icon {
+	display: none;
+}
