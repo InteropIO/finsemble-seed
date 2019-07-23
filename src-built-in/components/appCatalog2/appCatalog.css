@@ -265,7 +265,7 @@
 .carousel-main .carousel-header .carousel-title {
 	width: 90px;
 	height: 19px;
-	font-size: 13px;
+	font-size: var(--catalog-font-size-header);
 	font-weight: var(--catalog-carousel-font-weight);
 	color: var(--catalog-section-header-font-color);
 	cursor: pointer;
@@ -598,7 +598,7 @@
 
 .app-showcase .header .appName {
 	padding-right: 12px;
-	  font-size: 13px;
+	font-size: var(--catalog-font-size-header);
   	font-weight: var(--font-weight-primary);
 	color: var(--catalog-font-color);
 }
@@ -727,7 +727,7 @@
 	width: 100%;
 	height: 15px;
 	font-weight: var(--catalog-carousel-font-weight);
-	font-size: 13px;
+	font-size: var(--catalog-font-size-header);
 	color: var(--catalog-section-header-font-color);
 	padding-bottom: 5px;
 }

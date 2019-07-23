@@ -175,7 +175,7 @@
     --scrim-negative-background-color: var(--accent-negative);
 
     /* Content Dialog (e.g., userPreferences and appCatalog) */
-    --content-font-size: 13px;
+    --content-font-size: 12px;
     --content-header-font-size: 16px;
     --content-header-font-color: var(--accent-primary);
     --content-font-color: var(--font-color-primary);
@@ -246,6 +246,7 @@
     --procMonitor-close-hover-color: var(--accent-negative);
 
     /* App Catalog */
+    --catalog-font-size-header: 14px;
     --catalog-font-size-text: 12px;
     --catalog-font-weight: var(--font-weight-primary);
     --catalog-carousel-font-weight: bold;
