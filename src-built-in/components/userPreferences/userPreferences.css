@@ -209,7 +209,7 @@ img {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    line-height: 13px;
+    line-height: 14px;
 }
 
 .individual-workspace-actions {
