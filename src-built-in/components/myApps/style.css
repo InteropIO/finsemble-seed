@@ -255,7 +255,7 @@ img {
 
 .folder-actions-menu-wrapper span {
 	line-height: 17px;
-	font-size: 10px;
+	font-size: var(--appMenu-font-size);
 	cursor: pointer;
 }
 
@@ -346,7 +346,7 @@ select:focus, option:focus {
 
 .actions-menu-wrapper span {
 	line-height: 17px;
-	font-size: 10px;
+	font-size: var(--appMenu-font-size);
 	cursor: pointer;
 }
 .actions-menu-wrapper span i {
@@ -379,8 +379,8 @@ select:focus, option:focus {
 
   .app-item, .app-item-title, .app-item-tags {
     display: block;
-    font-weight: var(--appMenu-font-weight);
-    font-size: var(--appMenu-font-size);
+    font-weight: var(--tag-font-weight);
+    font-size: var(--tag-font-size);
   }
 
   .app-item-title .ff-favorite{
@@ -503,7 +503,7 @@ select:focus, option:focus {
 	cursor: default;
 	margin-bottom: 5px;
 	display: inline-block;
-	font-size: 10px;
+	font-size: var(--tag-font-size);
 	padding: 3px 5px;
 	margin-right: 5px;
 	border-radius: 2px;

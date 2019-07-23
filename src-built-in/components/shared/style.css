@@ -32,7 +32,7 @@
 }
 .tags-menu-wrapper span {
 	line-height: 17px;
-	font-size: 10px;
+	font-size: var(--tag-font-size);
 	cursor: pointer;
 }
 .tags-menu-wrapper span i {
@@ -88,7 +88,7 @@
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
-	font-size: 10px;
+	font-size: var(--tag-font-size);
 	font-weight: var(--tag-font-weight);
 	font-family: var(--font-primary);
 	font-style: normal;

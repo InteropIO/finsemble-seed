@@ -266,6 +266,7 @@
     --catalog-disabled-button-background-color: var(--core-primary-3);
 
     /* Shared Tag Styles */
+    --tag-font-size: 11px;
     --tag-background-color: var(--core-primary-2);
     --tag-background-hover-color: var(--core-primary-3);
     --tag-font-color: var(--font-color-primary);
