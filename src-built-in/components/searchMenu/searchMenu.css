@@ -33,9 +33,10 @@ body {
 .searchHeader {
     height: 21px;
     display: flex;
+    font-size: var(--search-header-font-size);
     color: var(--search-header-font-color);
     font-weight: var(--search-header-font-weight);
-    padding: 6px 0px 0px 14px;
+    padding: 6px 0px 4px 14px;
 }
 
 .divider {
