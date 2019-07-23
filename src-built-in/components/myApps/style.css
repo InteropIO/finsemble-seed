@@ -76,7 +76,7 @@ img {
 
 .complex-menu-left-nav {
     width: 195px;
-    font-size: 11px;
+    font-size: var(--appMenu-font-size);
     flex-direction: column;
     background-color: var(--appMenu-leftNav-background-color);
     display: flex;
@@ -174,7 +174,7 @@ img {
 	background: none;
 	border: 0;
 	border-bottom: solid 1px var(--appMenu-search-input-inactive-color);
-	font-size: 11px;
+	font-size: var(--appMenu-font-size);
 	transition: .2s ease-in;
 }
 
@@ -279,7 +279,7 @@ img {
 .folder-actions-menu li {
     cursor: pointer;
 	line-height: 19px;
-	font-size: 11px;
+	font-size: var(--appMenu-font-size);
 	list-style: none;
 	color: var(--appMenu-font-color);
 }
@@ -367,7 +367,7 @@ select:focus, option:focus {
 	margin: 4px 0;
 }
 .actions-menu li {
-	font-size: 11px;
+	font-size: var(--appMenu-font-size);
 	cursor: pointer;
 	padding: 5px 8px;
 }
@@ -380,13 +380,13 @@ select:focus, option:focus {
   .app-item, .app-item-title, .app-item-tags {
     display: block;
     font-weight: var(--appMenu-font-weight);
-    font-size: 11px;
+    font-size: var(--appMenu-font-size);
   }
 
   .app-item-title .ff-favorite{
     margin-left: 6px;
     padding: 0;
-    font-size: 11px;
+    font-size: var(--appMenu-font-size);
     color: var(--appMenu-app-favorite-color);
   }
 
@@ -438,7 +438,7 @@ select:focus, option:focus {
     z-index: 2147483646;
 }
 .sort {
-    font-size: 11px;
+    font-size: var(--appMenu-font-size);
     padding-left: 10px;
   }
 
@@ -447,7 +447,7 @@ select:focus, option:focus {
   }
 
   .sort-option {
-    font-size: 11px;
+    font-size: var(--appMenu-font-size);
     border-radius: 15px;
     font-weight: var(--appMenu-tag-font-weight);
     border: solid 1px var(--appMenu-sort-inactive-border-color);
@@ -478,7 +478,7 @@ select:focus, option:focus {
 	background: none;
 	border: 0;
 	border-bottom: solid 1px var(--appMenu-search-input-inactive-color);
-	font-size: 11px;
+	font-size: var(--appMenu-font-size);
 	transition: .2s ease-in;
 }
 

@@ -37,7 +37,7 @@
     /* Component Variables:  Use these variables to make granular changes to specific components. */
 
     /* Toolbar */
-    --toolbar-font-size: 11px;
+    --toolbar-font-size: 12px;
     --toolbar-font-color: var(--font-color-primary);
     --toolbar-font-weight: var(--font-weight-primary);
 
@@ -56,7 +56,7 @@
 
     /* Window Title bar */
     --titleBar-height: 25px;
-    --titleBar-font-size: 11px;
+    --titleBar-font-size: 12px;
     --titleBar-icon-font-size: 8px;
     --titleBar-font-weight: var(--font-weight-primary);
     --titleBar-active-font-color: var(--font-color-primary);  /* Not in use by default */
@@ -94,7 +94,7 @@
 
     --dialog-background-color: var(--core-primary);
     --dialog-font-color: var(--font-color-primary);
-    --dialog-input-font-size: 11px;
+    --dialog-input-font-size: 12px;
     --dialog-input-font-color: var(--font-color-primary);
     --dialog-input-font-weight: var(--font-weight-secondary);
     --dialog-input-background-color: transparent;
@@ -124,7 +124,7 @@
     --input-negative-border-color: var(--accent-negative); /* Currently not in use */
 
     /* Menus */
-    --menu-font-size: 11px;
+    --menu-font-size: 12px;
     --menu-font-icon-size: 13px;
     --menu-action-icon-color: var(--core-primary-5);
     --menu-font-weight: var(--font-weight-primary);
@@ -147,6 +147,7 @@
     --menu-linker-selected-font-size: 12px;
 
     /* Search Menu */
+    --search-menu-font-size: 12px;
     --search-input-font-color: black;
     --search-input-background-color: white;
     --search-hover-background-color: var(--core-primary-3);
@@ -188,7 +189,7 @@
     --content-nav-highlighter-hover: var(--core-primary-2);
     --content-background-color: var(--core-primary-1);
     --content-hint-font-color: var(--font-color-secondary);
-    --content-component-list-font-size: 11px;
+    --content-component-list-font-size: 12px;
 
     --content-list-border-color: var(--core-primary-5);
     --content-list-highlighter: var(--core-primary-3);
@@ -197,7 +198,7 @@
     --content-list-editor-font-color: var(--font-color-primary);
     --content-list-editor-highlighted-text: var(--accent-primary);
 
-    --content-button-label-font-size: 11px;
+    --content-button-label-font-size: 12px;
     --content-button-disabled-border-color: var(--core-primary-2);
     --content-button-icon-color: var(--font-color-secondary);
     --content-button-neutral-hover-color: white;
@@ -210,7 +211,7 @@
     --content-card-bestMatch-background-color: var(--core-primary-2);
     --content-card-icon-background-color: var(--accent-primary-1);
     --content-card-icon-font-size: 20px;
-    --content-card-title-font-size: 11px;
+    --content-card-title-font-size: 12px;
     --content-back-font-size: 13px;
     --content-close-hover-color: var(--accent-negative);
 
@@ -245,6 +246,7 @@
     --procMonitor-close-hover-color: var(--accent-negative);
 
     /* App Catalog */
+    --catalog-font-size-text: 12px;
     --catalog-font-weight: var(--font-weight-primary);
     --catalog-carousel-font-weight: bold;
     --catalog-font-color: var(--font-color-primary);
@@ -273,6 +275,7 @@
 
 
     /* App Menu */
+    --appMenu-font-size: 12px;
     --appMenu-font-weight: var(--font-weight-primary);
     --appMenu-tag-font-weight: var(--font-weight-secondary);
     --appMenu-font-color: var(--font-color-primary);

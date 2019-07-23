@@ -186,7 +186,7 @@
 .app-card .app-title {
 	height: 34px;
 	width: 95px;
-	font-size: 11px;
+	font-size: var(--catalog-font-size-text);
 	font-weight: var(--font-weight-primary);
 	color: var(--catalog-font-color);
 	overflow: hidden;
@@ -347,7 +347,7 @@
 
 .search-main .ff-search {
 	color: var(--catalog-font-color);
-	font-size: 11px;
+	font-size: var(--catalog-font-size-text);
 }
 
 .search-input-container {
@@ -363,7 +363,7 @@
 	background: none;
 	border: 0;
 	border-bottom: solid 1px var(--catalog-search-border-color);
-	font-size: 11px;
+	font-size: var(--catalog-font-size-text);
 	transition: .2s ease-in;
 }
 
@@ -513,7 +513,7 @@
 .search-main .tag-selector .tag-selector-content .tag-selector-item {
 	width: 103px;
 	height: 19px;
-	font-size: 11px;
+	font-size: var(--catalog-font-size-text);
 	color: var(--catalog-font-color);
 	align-self: center;
 }
@@ -560,7 +560,7 @@
 	align-self: center;
 	text-align: center;
 	height: 25px;
-	font-size: 11px;
+	font-size: var(--catalog-font-size-text);
 	font-weight: var(--catalog-carousel-font-weight);
 	color: var(--accent-negative);
 }
@@ -702,7 +702,7 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
-  	font-size: 11px;
+  	font-size: var(--catalog-font-size-text);
 	padding: 5px 0;
 	margin: 0 28px 10px 28px;
 }

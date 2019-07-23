@@ -125,7 +125,7 @@ body {
 }
 
 .actionTitle {
-    font-size: 11px;
+    font-size: var(--search-menu-font-size);
     vertical-align: middle;
     color: var(--menu-font-color);
 }
@@ -134,7 +134,7 @@ body {
     width: 10px;
     height: 9px;
     object-fit: contain;
-    font-size: 11px;
+    font-size: var(--search-menu-font-size);
     margin-left: 4px;
 }
 
