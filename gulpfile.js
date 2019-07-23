@@ -467,9 +467,10 @@ const { launch, connect } = require('hadouken-js-adapter');
 
 			if (!FEAPackager) {
 				console.error("Cannot create installer because Finsemble Electron Adapter is not installed");
-					process.exit(1);
+				process.exit(1);
 			}
 
+			FEAPackager.setFeaPath(FEA_PATH);
 			await FEAPackager.setManifestURL(manifestUrl);
 			await FEAPackager.setUpdateURL(updateUrl);
 			await FEAPackager.setChromiumFlags(chromiumFlags || {});
