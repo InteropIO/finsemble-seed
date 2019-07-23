@@ -36,10 +36,12 @@ export default class AppActionsMenu extends React.Component {
 
 	componentDidMount() {
 		document.addEventListener("mousedown", this.handleClickOutside);
+		finsembleWindow.addEventListener("blurred", this.handleClickOutside);
 	}
 
 	componentWillUnmount() {
 		document.removeEventListener("mousedown", this.handleClickOutside);
+		finsembleWindow.removeEventListener("blurred", this.handleClickOutside);
 	}
 
 	toggleMenu(e) {
@@ -89,7 +91,7 @@ export default class AppActionsMenu extends React.Component {
 				// what app we want to view
 
 
-				//NOTE: While not ideal, without a small delay (when having to launch the app catalog) the app catalog wont recieve the message as it will still be initializing
+				//NOTE: While not ideal, without a small delay (when having to launch the app catalog) the app catalog wont receive the message as it will still be initializing
 				setTimeout(() => {
 					FSBL.Clients.RouterClient.transmit("viewApp", {
 						app: this.props.app

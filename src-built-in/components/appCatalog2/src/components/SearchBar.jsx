@@ -13,7 +13,7 @@ import Tag from "../../../shared/Tag";
 import TagsMenu from "../../../shared/TagsMenu";
 
 /**
- * The search bar, tags filter menu, and any active tage being filtered on
+ * The search bar, tags filter menu, and any active tags being filtered on
  * @param {object} props Component props
  * @param {boolean} [props.backButton] If true, display a back button for going back to the homepage
  * @param {array} props.tags An array of all available tags for the tags menu
@@ -96,7 +96,7 @@ class SearchBar extends Component {
 	}
 	render() {
 		let tagListClass = "tag-selector-content";
-		
+
 		if (!this.state.tagSelectorOpen) {
 			tagListClass += " hidden";
 		}

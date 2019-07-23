@@ -16,7 +16,7 @@ export default class ComplexMenu extends React.Component {
 		}
 	}
 	componentWillMount() {
-		this.setState({ activeSection: this.props && this.props.activeSection ? this.props.activeSection : '' })//Props did not exist in the contructor
+		this.setState({ activeSection: this.props && this.props.activeSection ? this.props.activeSection : '' })//Props did not exist in the constructor
 	}
 	bindCorrectContext() {
 		this.setActiveSection = this.setActiveSection.bind(this);

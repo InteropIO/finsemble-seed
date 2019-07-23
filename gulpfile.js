@@ -394,14 +394,19 @@
 			if (done) done();
 		},
 		launchElectron: done => {
+			const cfg = taskMethods.startupConfig[env.NODE_ENV];
 			const USING_ELECTRON = container === "electron";
 			if (USING_ELECTRON && !FEA_PATH_EXISTS) {
 				throw "Cannot use electron container unless finsemble-electron-adapter optional dependency is installed. Please run npm i @chartiq/finsemble-electron-adapter";
 			}
 
 			let config = {
-				manifest: taskMethods.startupConfig[env.NODE_ENV].serverConfig
+				manifest: cfg.serverConfig,
+				chromiumFlags: JSON.stringify(cfg.chromiumFlags),
 			}
+
+			// set breakpointOnStart variable so FEA knows whether to pause initial code execution
+			process.env.breakpointOnStart = cfg.breakpointOnStart;
 
 			if (!FEA) {
 				console.error("Could not launch ");
@@ -427,6 +432,7 @@
 
 			const manifestUrl = taskMethods.startupConfig[env.NODE_ENV].serverConfig;
 			let updateUrl = taskMethods.startupConfig[env.NODE_ENV].updateUrl;
+			const chromiumFlags = taskMethods.startupConfig[env.NODE_ENV].chromiumFlags;
 
 			// Installer won't work without a proper manifest. Throw a helpful error.
 			if (!manifestUrl) {
@@ -446,12 +452,13 @@
 			}
 
 			if (!FEAPackager) {
-				console.error("Cannot create installer because Finsemble Electron Adapter is not installed").
-				process.exit(1);
+				console.error("Cannot create installer because Finsemble Electron Adapter is not installed");
+					process.exit(1);
 			}
 
 			await FEAPackager.setManifestURL(manifestUrl);
 			await FEAPackager.setUpdateURL(updateUrl);
+			await FEAPackager.setChromiumFlags(chromiumFlags || {});
 			await FEAPackager.createFullInstaller(installerConfig);
 			done();
 		},

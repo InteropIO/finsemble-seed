@@ -2,13 +2,12 @@ import storeActions from '../stores/StoreActions'
 
 export default {
 	/**
-	 * Sorts list alphabetically
+	 * Sorts list by name alphabetically
 	 */
 	Alphabetical: (list) => {
-		return list.sort((a, b) => {
-			return a.name.toLowerCase() > b.name.toLowerCase()
-		})
+		return list.sort((a, b) => a.name.localeCompare(b.name));
 	},
+
 	/**
 	 * Sorts a list of application by Favorites.
 	 * It gets a list of apps from Favorites folder
@@ -17,9 +16,20 @@ export default {
 	 * for apps that are in Favorite folder
 	 */
 	Favorites: (list) => {
-		const favorites = storeActions.getSingleFolder('Favorites').apps
+		const favorites = storeActions.getSingleFolder('Favorites').apps;
 		return list.sort((a, b) => {
-			return Boolean(favorites[a.appID]) < Boolean(favorites[b.appID])
-		})
+			const aInFavorites = a.appID in favorites;
+			const bInFavorites = b.appID in favorites;
+			// a component being in favorites means it is "less than" another component not in favorites, so return -1
+			if (aInFavorites && !bInFavorites) 
+			{
+				return -1;
+			}
+			else if (!aInFavorites && bInFavorites)
+			{
+				return 1;
+			}
+			return a.name.localeCompare(b.name);
+		});
 	}
 }

@@ -111,67 +111,72 @@ export default class appLauncherContainer extends React.Component {
 	togglePin(component) {
 		appLauncherActions.togglePin(component);
 	}
+
 	buildComponentItem(params) {
-		if (!this.state.componentList) {
-			return;
-		}
-		var self = this;
-		var i = params.i,
-			key = params.key,
-			config = self.state.componentList[key],
-			isUserDefined = params.isUserDefined;
+		const { pinnedComponents } = this.state;
+		const { key, isUserDefined } = params;
+		const config = this.state.componentList[key];
+		let displayName = key;
+		let isPinned = false;
+
 		if ((!config.window ||
+			!config.foreign ||
+			!config.foreign.components ||
 			!config.foreign.components["App Launcher"] ||
 			!config.foreign.components["App Launcher"].launchableByUser) &&
 			!config.group) {
 			return;
 		}
 
-		var isPinned = false;
-		for (var i = 0; i < self.state.pinnedComponents.length; i++) {
-			if (self.state.pinnedComponents[i].label === key) {
+		for (let i = 0; i < pinnedComponents.length; i++) {
+			if (pinnedComponents[i].component === key) {
 				isPinned = true;
 				break;
 			}
 		}
+
+		// Component developers can define a display name that will show instead of the component's type.
+		if (config.component && config.component.displayName) {
+			displayName = config.component.displayName;
+		}
+
 		return (<ComponentItem
 			isPinned={isPinned}
 			key={key}
-			name={key}
+			name={displayName}
 			component={config}
-			itemAction={self.launchComponent}
-			togglePin={self.togglePin}
+			itemAction={this.launchComponent}
+			togglePin={this.togglePin}
 			isUserDefined={isUserDefined} />);
 	}
-	render() {
-		if (!this.state.componentList) {
-			return (<div></div>);
-		}
-		var self = this;
-		FSBL.Clients.Logger.debug("this.state", this.state);
-		var buildComponentItem = this.buildComponentItem;
-		var components = Object.keys(this.state.componentList);
-		//if this is greater than 0, we don't show a note telling the user to check their configs.
-		//iterate through componentList and render a componentItem for each one.
-		var componentList = components.map(function (key, i) {
-			var isUserDefined = false;
-			var config = self.state.componentList[key];
-			if (config.component && config.component.isUserDefined) {
-				isUserDefined = true;
-			}
-			return buildComponentItem({
-				i: i,
-				key: key,
-				isUserDefined: isUserDefined
-			});
+
+	renderComponentsList() {
+		const { state } = this;
+		const components = Object.keys(state.componentList);
+		// if this is greater than 0, we don't show a note telling the user to check their configs.
+		// iterate through componentList and render a componentItem for each one.
+		const componentList = components.map((key, i) => {
+			const { component } = state.componentList[key];
+			const isUserDefined = Boolean(component && component.isUserDefined);
+			return this.buildComponentItem({ i, key, isUserDefined });
 		});
-
-		if (!componentList.length) {
-			componentList = (<p>No components loaded. Make sure to check ./src/components.json to make sure you've set everything up correctly.</p>);
-		}
-
-		return (<FinsembleMenuSection maxHeight={350} scrollable={true} className="ComponentList menu-primary">
-			{componentList}
+		return (<FinsembleMenuSection
+			maxHeight={350} scrollable={true}
+			className="ComponentList menu-primary">
+			{
+				componentList.length ? componentList :
+					<p> No components loaded.
+						Make sure to check ./src/components.json
+						to make sure you've set everything up correctly.</p>
+			}
 		</FinsembleMenuSection>);
+	}
+
+	render() {
+		return (
+			this.state.componentList
+				? this.renderComponentsList()
+				: <div></div>
+		);
 	}
 }
