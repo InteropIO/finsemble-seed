@@ -163,7 +163,8 @@ div {
     justify-content: center;
     align-items: center;
     order: 1;
-    padding-left: 8px;
+    padding-left: 6px;
+    font-size: 8px;
     padding-top: 3px;
     color: var(--font-color-secondary);
 }
