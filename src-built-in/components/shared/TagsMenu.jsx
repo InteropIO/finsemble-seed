@@ -81,6 +81,7 @@ export default class TagsMenu extends React.Component {
 		)
 	}
 	render() {
+		if(this.props.list.length===0) return <div></div>
 		return (
 			<div ref={this.setWrapperRef} className="tags-menu-wrapper" onClick={this.toggleMenu}>
 				<span>{this.props.label}<i className="ff-chevron-down" /></span>
