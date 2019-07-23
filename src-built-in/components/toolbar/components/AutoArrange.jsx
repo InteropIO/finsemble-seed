@@ -27,7 +27,7 @@ export default class AutoArrange extends React.Component {
 			FSBL.Clients.RouterClient.subscribe('DockingService.AutoarrangeStatus', (err, response) => {
 				if (err) {
 					return FSBL.Clients.Logger.error(err)
-				} 
+				}
 				this.setState({
 					isAutoArranged: response.data.isAutoArranged && response.data.isAutoArranged[monitorInfo.name]
 				});
@@ -55,7 +55,9 @@ export default class AutoArrange extends React.Component {
 				buttonType={["Toolbar"]}
 				title={this.state.isAutoArranged ? "Restore" : "Auto Arrange"}
 				onClick={this.autoArrange}>
-				<AutoArrangeIcon />
+				<span>
+					<AutoArrangeIcon />
+				</span>
 			</FinsembleButton>
 		);
 	}

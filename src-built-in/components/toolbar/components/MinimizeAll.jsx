@@ -11,7 +11,9 @@ const MinimizeAll = (props) => {
 
 	return (
 		<FinsembleButton className={wrapperClasses} buttonType={["Toolbar"]} title="Minimize All" onClick={MinimizeAll}>
-			<MinimizeAllIcon />
+			<span>
+				<MinimizeAllIcon />
+			</span>
 		</FinsembleButton>
 	)
 };
