@@ -123,7 +123,7 @@ class AdHocComponentForm extends React.Component {
 			}}
 			isModal={true}>
 			<div className="dialog-title">Enter a name and URL for your app.</div>
-			<FinsembleDialogTextInput onInputChange={this.setName} placeholder="Name" autoFocus value={this.name} />
+			<FinsembleDialogTextInput onInputChange={this.setName} placeholder="Name" autoFocus value={this.name} focusOnShow={true} />
 			<FinsembleDialogTextInput onInputChange={this.setURL} placeholder="URL" value={this.URL} />
 			<div className="button-wrapper">
 
