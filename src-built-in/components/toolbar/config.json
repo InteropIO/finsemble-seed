@@ -4,7 +4,8 @@
         "iconClasses": "finsemble-toolbar-brand-logo",
         "icon": "../../assets/img/Finsemble_Taskbar_Icon.png",
         "menuType": "File Menu",
-        "title": "Main Menu"
+        "title": "Main Menu",
+        "fontIcon": "ff-chevron-down"
     },
     {
         "align": "left",
