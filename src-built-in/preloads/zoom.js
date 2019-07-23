@@ -1,5 +1,5 @@
 /*
-	Finsemble Zoom preload, which adds support for: 
+	Finsemble Zoom preload, which adds support for:
 	- Zoom hotkeys (Ctrl +, Ctrl -, Ctrl 0, Ctrl Mousewheel),
 	- A Chrome style popup showing the current zoom level,
 	- Global zoom configuration settings:
@@ -22,13 +22,13 @@ window.zoomStep = 0.1;
 window.zoomMin = 0.2;
 window.zoomMax = 5;
 
-// This gets flipped to false once the intial zoom is set.
+// This gets flipped to false once the initial zoom is set.
 // We use this flag to prevent the zoom level pop up from displaying when the component is first loaded.
 window.settingInitialZoom = true;
 
 /**
  * Show a pop up control that displays the current zoom level and allows users to manipulate it with the mouse.
- * @param {int} pct 
+ * @param {int} pct
  */
 const showPopup = (pct) => {
 	const popup = document.querySelector("#zoom-popup");
@@ -203,7 +203,7 @@ const getZoomLevelHandler = (err, zoomLevel) => {
 		window.fsblZoomLevel = zoomLevel;
 		setZoom(window.fsblZoomLevel);
 	}
-	
+
 	window.settingInitialZoom = false;
 };
 
@@ -211,7 +211,7 @@ const getZoomLevelHandler = (err, zoomLevel) => {
  * Initializes the zoom handler.
  */
 const runZoomHandler = () => {
-	//Override OpenFin zoom function to do nothing 
+	//Override OpenFin zoom function to do nothing
 	  //which prevents manual use of this function which conflicts with zoom preload
 	  //N.B. window.options.accelerator.zoom setting is not affected by this and will still conflict with Zoom preload if set
 	FSBL.Clients.WindowClient.getCurrentWindow().setZoomLevel = function(level, callback, errorCallback) { callback(); }

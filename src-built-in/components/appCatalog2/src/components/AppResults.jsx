@@ -12,7 +12,7 @@ import AppCard from "./AppCard";
  * The results page. Shown when filter tags are applied, search text is entered, or both.
  * @param {object} props Component props
  * @param {array} props.tags Array of tags that are applied for filtering
- * @param {array} props.cards Array of app card objects (apps that come from FDC appd)
+ * @param {array} props.cards Array of app card objects (apps that come from FDC app directory)
  * @param {func} props.addApp See AppCard.jsx
  * @param {func} props.removeApp See AppCard.jsx
  * @param {func} props.openAppShowcase See AppCard.jsx
@@ -73,7 +73,7 @@ const AppResults = props => {
 	};
 
 	if (cardsForShowcase.length === 0) return (<EmptyResults />);
-	
+
 	let cardRows = getCardRows();
 
 	return (
@@ -91,7 +91,7 @@ const AppResults = props => {
 			</table>
 		</div>
 	);
-	
+
 };
 
 export default AppResults;

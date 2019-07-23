@@ -9,7 +9,6 @@ export default class MinimizeAll extends React.Component {
 		FSBL.Clients.WorkspaceClient.minimizeAll();
 	}
 	render() {
-		//console.log('rendero')
 		let tooltip = "Minimize Workspace";
 		let buttonClass = "ff-minimize-all finsemble-toolbar-button-icon";
 		return (<FinsembleButton className={this.props.classes + " icon-only"} buttonType={["Toolbar"]} title={tooltip} onClick={this.MinimizeAll}>

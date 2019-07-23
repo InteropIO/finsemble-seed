@@ -38,6 +38,7 @@ class AdHocComponentForm extends React.Component {
 		};
 
 		document.body.addEventListener("keydown", onkeydown);
+		FSBL.Clients.WindowClient.setAlwaysOnTop(true);
 	}
 	/**
 	 * Hides the window when the save button is clicked.

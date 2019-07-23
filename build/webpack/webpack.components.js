@@ -4,7 +4,7 @@ const glob_entries = require('webpack-glob-entries');
 const webpack = require("webpack");
 const fs = require("fs");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const __homename = path.join(__dirname, "../../");
+const __homename = path.resolve(__dirname, "..", "..");
 
 // The standard webpack files that we always look in
 // webpack.finsemble-built-in.entries.json - src-built-in components
@@ -14,36 +14,57 @@ var listOfWebpackEntryFiles = [
 	path.join(__dirname, 'webpack.components.entries.json')
 ];
 
-// Look through the src/components directory for webpack.entries.json files at the top level.
-var componentsPath = path.join(__homename, "src/components");
-var items = fs.readdirSync(componentsPath);
-// For each file in the directory (src/components/*)
-for (var i = 0; i < items.length; i++) {
-	// Then maybe there's a webpack.entries.json in there to process, slap it into the list as a possibility
-	let possibleWebpackEntry = path.join(componentsPath, items[i] + "/finsemble.webpack.json");
-	listOfWebpackEntryFiles.push(possibleWebpackEntry);
+// Look through the src directory for webpack.entries.json files at the top level.
+const srcPath = path.join(__homename, "src");
+
+/**
+ * Recursively searches a path for files of a specific name.
+ * 
+ * @param {string} base The base path 
+ * @param {string} searchFilename the name of the file to search for
+ * @param {string[]} array of file/folder names to search in base path
+ * @param {string[]} result array of files found 
+ */
+const recursiveFind = (base, searchFilename, files, result) => {
+	files = files || fs.readdirSync(base)
+	result = result || []
+
+	files.forEach((file) => {
+		const newBase = path.join(base, file)
+		if (fs.statSync(newBase).isDirectory()) {
+			result = recursiveFind(newBase, searchFilename, fs.readdirSync(newBase), result)
+		}
+		else {
+			if (path.basename(file) === searchFilename) {
+				result.push(newBase)
+			}
+		}
+	});
+
+	return result
 }
 
-//console.log("Webpack entry files: components", listOfWebpackEntryFiles);
+// For each file in the directory (src/*)
+listOfWebpackEntryFiles.push(...recursiveFind(srcPath, "finsemble.webpack.json"));
 
 // Compile all of those files into a single webpack entries object "componentsToBuild"
 // If a file doesn't exist, then no big deal ": {}"
 let componentsToBuild = {};
-listOfWebpackEntryFiles.forEach(function (filename) {
+listOfWebpackEntryFiles.forEach((filename) => {
 	let entries = fs.existsSync(filename) ? require(filename) : {};
-	let componentDirectory = path.dirname(filename);
-	let subDirectory = componentDirectory.replace(/^.*[\\\/]/, '');
 
 	let additionalComponents = {};
 	if (Array.isArray(entries)) {
 		// Process arrays (finsemble.webpack.json files) by automatically building the output & entry fields that webpack needs
-		entries.forEach(function (assetName) {
-			let assetNoSuffix = assetName.replace(/\.[^/.]+$/, ""); // Remove the .js or .jsx extension
-			additionalComponents[assetName] = {
-				output: "components/" + subDirectory + "/" + assetNoSuffix,
-				entry: "./src/components/" + subDirectory + "/" + assetName
-			};		
-		});		
+		entries.forEach((assetName) => {
+			const outputPath = path.relative(srcPath, path.dirname(filename));
+			const assetNoSuffix = assetName.replace(/\.[^/.]+$/, ""); // Remove the .js or .jsx extension
+			const entryPath = path.relative(__homename, path.dirname(filename))
+			additionalComponents[assetNoSuffix] = {
+				output: path.join(outputPath, assetNoSuffix).replace(/\\/g, "/"),
+				entry: `.${path.sep}${path.join(entryPath, assetName)}`.replace(/\\/g, "/")
+			};
+		});
 	} else {
 		// Otherwise assume it's already in object format (webpack.components.entries.json)
 		additionalComponents = entries;
@@ -146,5 +167,3 @@ webpackConfig.plugins.push(new CopyWebpackPlugin(createCopyWebpackConfig()));
 
 
 module.exports = webpackConfig;
-
-
