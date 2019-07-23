@@ -4,8 +4,7 @@
 */
 import React from "react";
 import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
-import { getStore, Actions as HeaderActions } from "../../stores/windowTitleBarStore";
-let windowTitleBarStore;
+import { Actions as HeaderActions } from "../../stores/windowTitleBarStore";
 
 /**
  * Auto-hide window chrome toggle button.
