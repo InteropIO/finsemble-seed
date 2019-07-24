@@ -29,6 +29,15 @@ export default class AutoHide extends React.Component {
 		this.autoHideTimer = this.autoHideTimer.bind(this);
 		this.autoHideMouseMoveHandler = this.autoHideMouseMoveHandler.bind(this);
 
+		this.suspendAutoHide = this.suspendAutoHide.bind(this);
+		this.startTile = this.startTile.bind(this);
+		this.stopTile = this.stopTile.bind(this);
+
+		this.state = {
+			autoHide: false
+		};
+
+
 		FSBL.Clients.ConfigClient.getValue({ field: "finsemble.Window Manager" }, function (err, globalWindowManagerConfig) {
 			//get global config
 			if (!globalWindowManagerConfig) { globalWindowManagerConfig =  {  }; } 
@@ -121,14 +130,29 @@ export default class AutoHide extends React.Component {
 		cb();
 	}
 
+	startTile() {
+		this.suspendAutoHide(true);
+	}
+
+	stopTile() {
+		this.suspendAutoHide(false);
+	}
+
 	suspendAutoHide(suspend) {
-		suspendAutoHide = suspend;
-		if (suspendAutoHide) {
-			let header = document.getElementsByClassName("fsbl-header")[0];
-			header.style.opacity = 1;
-			if (headerTimeout) {clearTimeout(headerTimeout);}
-		} else {
-			this.autoHideTimer();
+		let autoHideEndabled = this.state.autoHide;
+
+		if (typeof autoHideEndabled === "undefined") {
+			autoHideEndabled = this.getDefaultAutoHide();
+		}
+
+		if (autoHideEndabled) {
+			if (suspendAutoHide) {
+				let header = document.getElementsByClassName("fsbl-header")[0];
+				header.style.opacity = 1;
+				if (headerTimeout) {clearTimeout(headerTimeout);}
+			} else {
+				this.autoHideTimer();
+			}
 		}
 	}
 
@@ -147,14 +171,10 @@ export default class AutoHide extends React.Component {
 	}
 
 	componentWillMount() {
-		this.setState({
-			autoHide: false
-		});
-
 		FSBL.Clients.WindowClient.getComponentState({
 			field: 'autoHide',
 		}, (err, state) => {
-			let stateToSet = err ? this.getDefaultAutoHide() : state;
+			let stateToSet = err || typeof state === "undefined" ? this.getDefaultAutoHide() : state;
 			this.setState({
 				autoHide: stateToSet
 			});
@@ -163,15 +183,15 @@ export default class AutoHide extends React.Component {
 			});
 		});
 
-		FSBL.Clients.RouterClient.addListener("DockingService.startTilingOrTabbing", this.suspendAutoHide);
-		FSBL.Clients.RouterClient.addListener("DockingService.stopTilingOrTabbing", this.reeanbleAutoHide);
-		FSBL.Clients.RouterClient.addListener("DockingService.cancelTilingOrTabbing", this.reeanbleAutoHide);
+		FSBL.Clients.RouterClient.addListener("DockingService.startTilingOrTabbing", this.startTile);
+		FSBL.Clients.RouterClient.addListener("DockingService.stopTilingOrTabbing", this.stopTile);
+		FSBL.Clients.RouterClient.addListener("DockingService.cancelTilingOrTabbing", this.stopTile);
 	}
 
 	componentWillUnmount() {
-		FSBL.Clients.RouterClient.removeListener("DockingService.startTilingOrTabbing", this.suspendAutoHide);
-		FSBL.Clients.RouterClient.removeListener("DockingService.stopTilingOrTabbing", this.reeanbleAutoHide);
-		FSBL.Clients.RouterClient.removeListener("DockingService.cancelTilingOrTabbing", this.reeanbleAutoHide);
+		FSBL.Clients.RouterClient.removeListener("DockingService.startTilingOrTabbing", this.startTile);
+		FSBL.Clients.RouterClient.removeListener("DockingService.stopTilingOrTabbing", this.stopTile);
+		FSBL.Clients.RouterClient.removeListener("DockingService.cancelTilingOrTabbing", this.stopTile);
 	}
 
 	/**
