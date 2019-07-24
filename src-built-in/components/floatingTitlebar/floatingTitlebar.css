@@ -93,7 +93,7 @@ html:after {
 body {
     margin-left: 0px !important;
     margin-right: 0px !important;
-    font-family: var(--font-primary);
+    font-family: var(--font-family);
     color: var(--dialog-font-color)
 }
 

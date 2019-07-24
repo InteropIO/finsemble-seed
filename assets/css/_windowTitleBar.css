@@ -22,7 +22,7 @@
 }
 
 .fsbl-header {
-    font-family: var(--font-primary);
+    font-family: var(--font-family);
     font-size: var(--titleBar-font-size);
     font-weight: var(--titleBar-font-weight);
     text-align: center;
@@ -414,7 +414,7 @@ html.desktop-active .fsbl-active-tab .fsbl-tab-title {
     right: 10px;
     background-color: var(--tertiary-background-color);
     padding: 5px;
-    color: var(--font-color-primary);
+    color: var(--font-color);
     opacity: 0.8;
     font-size: 0.9em;
 }

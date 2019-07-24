@@ -169,7 +169,7 @@ img {
 .left-nav-label input {
     color: var(--appMenu-font-color);
     width: 100%;
-    font-family: var(--font-primary);
+    font-family: var(--font-family);
     font-weight: var(--appMenu-font-weight);
 	background: none;
 	border: 0;
@@ -474,7 +474,7 @@ select:focus, option:focus {
 	color: var(--appMenu-font-color);
 	width: calc(100% - 72px);
     height: 24px;
-    font-family: var(--font-primary);
+    font-family: var(--font-family);
 	background: none;
 	border: 0;
 	border-bottom: solid 1px var(--appMenu-search-input-inactive-color);

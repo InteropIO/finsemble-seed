@@ -69,7 +69,7 @@
     height: 35px;
     border-radius: 4px;
     text-align: center;
-    font-family: var(--font-primary);
+    font-family: var(--font-family);
     color: var(--button-solid-text);
     font-weight: var(--button-font-weight);
     font-size: var(--button-font-size);

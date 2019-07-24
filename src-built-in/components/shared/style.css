@@ -9,7 +9,7 @@
 	align-items: center;
 	position: absolute;
 	user-select: none;
-	font-family: var(--font-primary);
+	font-family: var(--font-family);
 	font-size: var(--menu-font-size);
 	font-weight: var(--tag-font-weight);
 	transition: .2s background;
@@ -90,7 +90,7 @@
 	align-items: center;
 	font-size: var(--tag-font-size);
 	font-weight: var(--tag-font-weight);
-	font-family: var(--font-primary);
+	font-family: var(--font-family);
 	font-style: normal;
 	font-stretch: normal;
 	line-height: normal;

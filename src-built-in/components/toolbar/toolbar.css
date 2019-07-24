@@ -9,7 +9,7 @@
 body, html {
     height: 100%;
     margin: 0px;
-    font-family: var(--font-primary);
+    font-family: var(--font-family);
     font-weight: var(--toolbar-font-weight);
     font-size: var(--toolbar-font-size);
     color: var(--toolbar-font-color);
@@ -166,7 +166,7 @@ div {
     padding-left: 6px;
     font-size: 8px;
     padding-top: 3px;
-    color: var(--font-color-secondary);
+    color: var(--font-color-1);
 }
 
 .overflow .ff-chevron-down {

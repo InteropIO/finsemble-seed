@@ -4,7 +4,7 @@
 body {
     margin: 0px;
     font-weight: var(--content-font-weight);
-    font-family: var(--font-primary);
+    font-family: var(--font-family);
     color: var(--content-font-color);
     font-size: var(--content-font-size);
 }
@@ -68,7 +68,7 @@ img {
     flex-direction: row;
     align-self: flex-start;
     font-size: var(--content-header-font-size);
-    font-weight: bold;
+    font-weight: var(--font-weight-2);
     color: var(--content-header-font-color);
     margin-bottom: 4px;
 }
@@ -317,8 +317,8 @@ img {
 
 .workspace-editor {
     border: 0;
-    font-family: var(--font-primary);
-    font-weight: var(--font-weight-primary);
+    font-family: var(--font-family);
+    font-weight: var(--font-weight);
     background-color: transparent;
     height: 100%;
     width: 100%;

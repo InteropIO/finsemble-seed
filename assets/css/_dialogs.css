@@ -5,7 +5,7 @@
 body.dialog {
     -webkit-appearance: none;
     overflow: hidden;
-    font-family: var(--font-primary);
+    font-family: var(--font-family);
     color: var(--dialog-font-color);
   /* Styling for General Typography */
   /* Always Show Number Input Arrows, Give A Bit Of Space */;
@@ -78,7 +78,7 @@ body.dialog input:focus {
 .controls-wrapper input,
 body.dialog input {
     -webkit-appearance: none;
-    font-family: var(--font-primary);
+    font-family: var(--font-family);
     color: var(--dialog-input-font-color);
     text-align: left;
     font-size: var(--dialog-input-font-size);

@@ -1,6 +1,6 @@
 body {
     margin: 0px;
-    font-family: var(--font-primary);
+    font-family: var(--font-family);
 }
 
 .inputAndSelectionDialog-component-class {

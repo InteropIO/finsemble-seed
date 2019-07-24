@@ -17,7 +17,7 @@ body {
     margin-right: 0px !important;
     font-size: var(--menu-font-size);
     max-height: 500px;
-    font-family: var(--font-primary);
+    font-family: var(--font-family);
     overflow-y: auto !important;
     background-color: var(--menu-background-color);
 }

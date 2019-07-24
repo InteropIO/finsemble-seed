@@ -4,7 +4,7 @@
 	background-color: var(--catalog-background-color);
 	color: var(--catalog-font-color);
 	/* background-image: linear-gradient(to top, rgb(60, 76, 88), rgb(48, 61, 71)); */
-	font-family: var(--font-primary);
+	font-family: var(--font-family);
 	font-style: normal;
     font-stretch: normal;
     line-height: normal;
@@ -42,7 +42,7 @@
 
 .market_content {
 	padding: 0 5px 25px 5px;
-	font-family: var(--font-primary);
+	font-family: var(--font-family);
 }
 
 .hero-main {
@@ -69,7 +69,7 @@
 .selected-content-title {
 	width: fit-content;
 	font-size: 18px;
-	font-weight: var(--font-weight-primary);
+	font-weight: var(--font-weight);
 	color: var(--catalog-font-color);
 	margin-bottom: 10px;
 	padding: 4px;
@@ -81,7 +81,7 @@
 	width: 95%;
 	height: 130px;
 	font-size: 12px;
-	font-weight: var(--font-weight-primary);
+	font-weight: var(--font-weight);
 	color: var(--catalog-font-color);
 	text-overflow: clip;
 	overflow: hidden;
@@ -187,7 +187,7 @@
 	height: 34px;
 	width: 95px;
 	font-size: var(--catalog-font-size-text);
-	font-weight: var(--font-weight-primary);
+	font-weight: var(--font-weight);
 	color: var(--catalog-font-color);
 	overflow: hidden;
 	display: -webkit-box;
@@ -202,7 +202,7 @@
 .app-card .footer {
 	height: 28px;
 	font-size: var(--tag-font-size);
-	font-weight: var(--font-weight-secondary);
+	font-weight: var(--font-weight-1);
 	color: var(--catalog-font-color);
 	margin: 0 10px;
 }
@@ -285,9 +285,9 @@
 	background-color: var(--button-affirmative-background-color);
 	border: none;
 	border-radius: 4px;
-	font-family: var(--font-primary);
+	font-family: var(--font-family);
 	font-size: var(--tag-font-size);
-	font-weight: var(--font-weight-secondary);
+	font-weight: var(--font-weight-1);
 	color: var(--catalog-font-color);
 	user-select: none;
 	outline:none;
@@ -359,7 +359,7 @@
 .search-main .search-input {
 	width: 100%;
 	color: var(--catalog-font-color);
-	font-family: var(--font-primary);
+	font-family: var(--font-family);
 	height: 22px;
 	background: none;
 	border: 0;
@@ -458,7 +458,7 @@
 	background-color: var(--tag-background-color);
 	cursor: pointer;
 	font-size: var(--tag-font-size);
-	font-weight: var(--font-weight-secondary);
+	font-weight: var(--font-weight-1);
 	user-select: none;
 	transition: .2s all;
 }
@@ -482,7 +482,7 @@
 	border-radius: 2px;
 	background-color: var(--tag-backgrond-color);
 	font-size: var(--tag-font-size);
-	font-weight: var(--font-weight-secondary);
+	font-weight: var(--font-weight-1);
 	color: var(--catalog-font-color);
 	cursor: pointer;
 }
@@ -526,7 +526,7 @@
 .app-results .app-results-no-results {
 	height: 21px;
 	font-size: 12px;
-	font-weight: var(--font-weight-primary);
+	font-weight: var(--font-weight);
 	text-align: center;
 	color: var(--catalog-font-color);
 	user-select: none;
@@ -553,7 +553,7 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	font-family: var(--font-primary);
+	font-family: var(--font-family);
 }
 
 .app-showcase .app-warning {
@@ -599,7 +599,7 @@
 .app-showcase .header .appName {
 	padding-right: 12px;
 	font-size: var(--catalog-font-size-header);
-  	font-weight: var(--font-weight-primary);
+  	font-weight: var(--font-weight);
 	color: var(--catalog-font-color);
 }
 
@@ -607,7 +607,7 @@
 	display: flex;
 	flex-direction: row;
 	font-size: 12px;
-	font-weight: var(--font-weight-secondary);
+	font-weight: var(--font-weight-1);
 	color: var(--catalog-font-color);
 }
 
@@ -658,9 +658,9 @@
 
 .remove-button {
   	font-size: 12px;
-  	font-weight: var(--font-weight-primary);
+  	font-weight: var(--font-weight);
 	color: var(--catalog-font-color);
-	font-family: var(--font-primary);
+	font-family: var(--font-family);
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
@@ -674,8 +674,8 @@
 	width: 100%;
 	height: 16px;
 	font-size: 12px;
-	font-weight: var(--font-weight-primary);
-	font-family: var(--font-primary);
+	font-weight: var(--font-weight);
+	font-family: var(--font-family);
 	text-align: center;
 	color: var(--catalog-font-color);
 }

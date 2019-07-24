@@ -3,7 +3,7 @@
 
 body {
     margin: 0px;
-    font-family: var(--font-primary);
+    font-family: var(--font-family);
     font-weight: var(--content-font-weight);
     user-select: none;
 }

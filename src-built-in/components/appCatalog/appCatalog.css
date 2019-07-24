@@ -36,7 +36,7 @@ html:after {
 body {
     margin-left: 0px !important;
     margin-right: 0px !important;
-    font-family: var(--font-primary);
+    font-family: var(--font-family);
     font-weight: var(--content-font-weight);
     color: var(--content-font-color)
 }
@@ -53,7 +53,7 @@ body {
 }
 
 .filterInput {
-    font-family: var(--font-primary);
+    font-family: var(--font-family);
     -webkit-appearance: none;
     color: var(--dialog-input-font-color);
     text-align: left;
