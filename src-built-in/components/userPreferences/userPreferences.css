@@ -200,6 +200,7 @@ img {
 
 .workspace-item .ff-adp-hamburger {
     color: var(--content-list-drag-icon-color);
+    margin-top: -1px;
 }
 
 .workspace-item > div > .workspace-name {
