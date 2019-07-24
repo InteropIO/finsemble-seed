@@ -15,9 +15,9 @@ body {
     background: var(--core-primary-1);
 }
 
-html.desktop-active:before {
+/* html.desktop-active:before {
     background: var(--window-frame-active-color);
-}
+} */
 
 /* Create a series of empty pseudo-elements... */
 html:before, html:after, body:before, body:after {
