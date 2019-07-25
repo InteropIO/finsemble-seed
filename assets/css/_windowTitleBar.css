@@ -230,7 +230,7 @@ html.desktop-active .fsbl-icon-highlighted {
     margin-right: 5px;
 }
 
-.fsbl-linker, .fsbl-share {
+.fsbl-linker {
     cursor: pointer;
     display: flex;
   /* So it sits over the border*/
@@ -239,7 +239,21 @@ html.desktop-active .fsbl-icon-highlighted {
     align-content: center;
     transition: background .3s ease;
     position: relative;
-    width: 10px;
+    width: 12px;
+    border-radius:20px;
+    margin-right: 2px;
+}
+
+.fsbl-share {
+    cursor: pointer;
+    display: flex;
+  /* So it sits over the border*/
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    transition: background .3s ease;
+    position: relative;
+    width: 14px;
     border-radius:20px;
     margin-right: 2px;
 }
