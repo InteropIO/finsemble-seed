@@ -174,9 +174,15 @@ function loadInstalledConfigComponents(cb = Function.prototype) {
 		componentNameList.map(componentName => {
 			// If the app is already in our list move on
 			if (appInAppList(componentName)) return;
-			let component = componentList[componentName];
+			const component = componentList[componentName];
+			let launchableByUser;
+			try {
+				launchableByUser = component.foreign.components["App Launcher"].launchableByUser;
+			} catch (error) {
+				launchableByUser = false
+			}
 			// Make sure the app is launchable by user
-			if (component.foreign.components && component.foreign.components["App Launcher"] && component.foreign.components["App Launcher"].launchableByUser) {
+			if (launchableByUser) {
 				data.configComponents[componentName] = {
 					appID: componentName,
 					icon: component.foreign.Toolbar && component.foreign.Toolbar.iconClass ? component.foreign.Toolbar.iconClass : null,
