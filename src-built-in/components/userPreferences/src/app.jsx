@@ -55,6 +55,37 @@ function FSBLReady() {
 		FSBL.Clients.DialogManager.showModal();
 	});
 
+	// Still need to determine best location for this block of code.
+	fin.desktop.logger.error('FSBLReady');
+
+	// attempt one to hook onto close requested using Window.getCurrent()
+	fin.desktop.Window.getCurrent().addEventListener("close-requested", () => {
+		fin.desktop.logger.error('never called');
+		// askUser();
+		return false;
+	});
+
+	// attempt two to hook onto close requested using WindowClient.finsembleWindow
+	FSBL.Clients.WindowClient.finsembleWindow.addEventListener("close-requested", async () => {
+		fin.desktop.logger.error('also never called');
+		const result = await confirmClose();
+		// if result is true return true;
+		// else return false
+	});
+
+	// confirmClose will not live here long term. This is just for iteration.
+	const confirmClose = () => {
+		const dialogParams = {
+			title: "Confirm Shutdown",
+			question: "Do you wish to shut down finsemble?",
+			affirmativeResponseLabel: "Shut down",
+			negativeResponseLabel: "Cancel"
+		};
+		return new Promise(resolve => {
+			FSBL.Clients.DialogManager.open("yesNo", dialogParams, resolve);
+		});
+	}
+	
 	storeExports.initialize(() => {
 		WorkspaceManagementMenuGlobalStore = storeExports.GlobalStore;
 		UserPreferencesStoreInitialize(WorkspaceManagementMenuGlobalStore, (store) => {
