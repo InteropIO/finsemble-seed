@@ -58,8 +58,8 @@
     "fileName": "ChartIQ-local-installer",
     "appAssets": [
         {
-            "src": "https://assets.finsemble.com/assimilation/dev/assimilation_pr47.zip",
-            "version": "3.11.0_47",
+            "src": "https://assets.finsemble.com/assimilation/dev/assimilation_pr50.zip",
+            "version": "3.11.0_50",
             "alias": "assimilation",
             "target": "AssimilationMain.exe"
         }
