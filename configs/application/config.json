@@ -67,7 +67,8 @@
 			"onlySpawned": true,
 			"throttle": 10,
 			"focusDelay": 30,
-			"eventIgnore": 50
+			"eventIgnore": 50,
+			"hideTitleBars": false
 		},
 		"docking": {
 			"enabled": true,
