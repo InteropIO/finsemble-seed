@@ -235,6 +235,8 @@ class _ToolbarStore {
 	 */
 	async closeRequestedHandler() {
 		const args = await this.confirmCloseToolbar();
+		// proceed even if there is an error in case the user selected to shut down. Shut down despite error.
+		// do nothing if there was an error or they chose cancel.
 		if (args.err) {
 			Logger.system.log(`Error received on confirm close: ${args.err} Continuing.`);
 		}
