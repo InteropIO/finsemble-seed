@@ -1,3 +1,4 @@
+import _get from 'lodash.get';
 import { getStore } from "./LauncherStore";
 import AppDirectory from "../modules/AppDirectory";
 import FDC3 from "../modules/FDC3";
@@ -175,12 +176,7 @@ function loadInstalledConfigComponents(cb = Function.prototype) {
 			// If the app is already in our list move on
 			if (appInAppList(componentName)) return;
 			const component = componentList[componentName];
-			let launchableByUser;
-			try {
-				launchableByUser = component.foreign.components["App Launcher"].launchableByUser;
-			} catch (error) {
-				launchableByUser = false
-			}
+			const launchableByUser = _get(component, 'foreign.components.App Launcher.launchableByUser');
 			// Make sure the app is launchable by user
 			if (launchableByUser) {
 				data.configComponents[componentName] = {
