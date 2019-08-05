@@ -182,6 +182,15 @@ export default class Toolbar extends React.Component {
 			{this.state.dockingEnabled && <DragHandle />} {/*If this is not dockable, no need to show the drag handle */}
 			{this.getSections()}
 			{this.state.dockingEnabled && <div className='resize-area' />} {}
+			<div className="modal line-extend show">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 265.93 5">
+                <g id="Layer_2" data-name="Layer 2">
+                  <g id="Layer_1-2" data-name="Layer 1">
+                    <line className="cls-1" y1="2.5" x2="265.93" y2="2.5"/>
+                  </g>
+                </g>
+              </svg>
+         	</div>
 		</FinsembleToolbar>);
 	}
 

@@ -19,6 +19,62 @@ body, html {
     overflow: hidden;
 }
 
+.workspace_load.show {
+    display: block;
+}
+
+.workspace_load.hide {
+    display: none;
+}
+
+.line-extend svg {
+    margin: 100px 11em 0px;
+}
+
+.line-extend .cls-1{fill:none;stroke:#039bff;stroke-miterlimit:10;stroke-width:2px;}
+
+.line-extend  {
+    -webkit-animation: line-extend 1.75s infinite ease; /* Safari 4+ */
+    -moz-animation:    line-extend 1.75s infinite ease; /* Fx 5+ */
+    -o-animation:      line-extend 1.75s infinite ease; /* Opera 12+ */
+}
+@-webkit-keyframes line-extend {
+    0% {
+      -webkit-transform:  translate(-50%,0)  scaleX(0.00) ;
+    }
+    50% {
+      -webkit-transform:  translate(0,0)  scaleX(1) ;
+    }
+    100% {
+      -webkit-transform:  translate(50%,0)  scaleX(0.00) ;
+    }
+}
+
+/* Standard syntax */
+@keyframes line-extend {
+    0% {
+      -webkit-transform:  translate(-50%,0)  scaleX(0.00) ;
+    }
+    50% {
+      -webkit-transform:  translate(0,0)  scaleX(1) ;
+    }
+    100% {
+      -webkit-transform:  translate(50%,0)  scaleX(0.00) ;
+    }
+}
+
+.modal.line-extend.show {
+    width: 95%;
+    height: 15%;
+    background-color: #039bff;
+    top: 85%;
+    position: absolute;
+}
+
+.modal.line-extend.hide {
+    display: none;
+}
+
 .fsbl-share-scrim {
     display: none !important;
 }
