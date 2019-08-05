@@ -225,6 +225,23 @@ class _ToolbarStore {
 		FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", "h"], () => {
 			self.hideToolbar();
 		});
+
+		fin.desktop.Window.getCurrent().addEventListener("close-requested", () => this.closeRequestedHandler());
+	}
+
+	/**
+	 * handles a close request by showing the user a dialog prompting for shutdown.
+	 * affirmative will shutdown finsemble, negative will do nothing.
+	 */
+	async closeRequestedHandler() {
+		const args = await this.confirmCloseToolbar();
+		if (args.err) {
+			Logger.system.log(`Error received on confirm close: ${args.err} Continuing.`);
+		}
+		if (args.result.choice === 'affirmative') {
+			fin.desktop.Window.getCurrent().close(true);
+			FSBL.shutdownApplication();
+		}
 	}
 
 	/**
@@ -273,6 +290,23 @@ class _ToolbarStore {
 
 	onFocus(cb = Function.prototype) {
 		FSBL.Clients.StorageClient.save({ topic: finsembleWindow.name, key: 'blurred', value: false }, cb);
+	}
+
+	/**
+	 * prompts the user to confirm they want to shutdown finsemble
+	 * @return Promise
+	 * @resolve { err, result }
+	 */
+	confirmCloseToolbar = () => {
+		const dialogParams = {
+			title: "Confirm Shutdown",
+			question: "Do you wish to shut down finsemble?",
+			affirmativeResponseLabel: "Shut down",
+			negativeResponseLabel: "Cancel"
+		};
+		return new Promise(resolve => {
+			FSBL.Clients.DialogManager.open("yesNo", dialogParams, (err, result) => resolve({ err, result }));
+		});
 	}
 
 	/**
