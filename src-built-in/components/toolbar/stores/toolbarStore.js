@@ -240,7 +240,8 @@ class _ToolbarStore {
 		if (args.err) {
 			Logger.system.log(`Error received on confirm close: ${args.err} Continuing.`);
 		}
-		if (args.result.choice === 'affirmative') {
+		const choice = _get(args, 'result.choice');
+		if (choice === 'affirmative') {
 			fin.desktop.Window.getCurrent().close(true);
 			FSBL.shutdownApplication();
 		}
