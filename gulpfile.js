@@ -1,3 +1,5 @@
+const { launch, connect } = require('hadouken-js-adapter');
+
 (() => {
 	"use strict";
 
@@ -373,6 +375,31 @@
 			async.series([
 				taskMethods["build:dev"],
 				taskMethods.startServer
+			], done);
+		},
+		hadoukenDev: (done) => {
+			const manifestUrl = taskMethods.startupConfig[env.NODE_ENV].serverConfig;
+			async.series([
+				taskMethods["build:dev"],
+				taskMethods.startServer,
+				async () => {
+					try {
+						// Once the server is running we can launch OpenFin and retrieve the port.
+						const port = await launch({ manifestUrl });
+						// Use the port to connect and determine when OpenFin exists.
+						const fin = await connect({
+							uuid: 'server-connection',
+							// Connect to the given port.
+							address: `ws://localhost:${port}`,
+							// We want OpenFin to exit as our application exists.
+							nonPersistent: true
+						});
+						// Once OpenFin exits we shut down the server.
+						fin.once('disconnected', process.exit);
+					} catch (error) {
+						console.error(`Unable to launch and connect to OpenFin: ${error.message}`);
+					}
+				},
 			], done);
 		},
 		launchOpenFin: done => {
