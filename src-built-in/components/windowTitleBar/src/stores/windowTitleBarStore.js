@@ -8,12 +8,10 @@ var windowTitleBarStore;
 var WindowClient;
 import windowTitleBarStoreDefaults from "./windowTitleBarStoreDefaults";
 import * as async from "async";
-var finWindow = fin.desktop.Window.getCurrent();
 
 //autohide functions and timers
 let headerTimeout = null;
 let suspendAutoHide = false;
-let autohideTimeout = 2000;
 let autohideSavedBodyMargin = null;
 const autoHideDefaultConfig = {
 	defaultSetting: false,
@@ -219,7 +217,7 @@ var Actions = {
 				autoHideConfig = Object.assign(autoHideDefaultConfig, autoHideIcon);
 			} /* else { defaults apply } */
 			windowTitleBarStore.setValues([{ field: "AutoHide.show", value: showAutoHide }]);
-			FSBL.Clients.Logger.log("Autohide window chrome settings: ", autoHideConfig) 
+			FSBL.Clients.Logger.log("Autohide window chrome settings: ", autoHideConfig)
 
 			//If tabbing is turned off, ignore global/local 'windowManager' config about whether to allow tabbing.
 			if (dockingConfig.tabbing.enabled === false) {
@@ -475,7 +473,7 @@ var Actions = {
  		//preserve the body margin so we can remove and restore it
 		if (!autohideSavedBodyMargin){
 			autohideSavedBodyMargin = document.body.style.marginTop;
-		} 
+		}
 
  		if (autoHide){
 			let header = document.getElementsByClassName("fsbl-header")[0];
@@ -519,14 +517,24 @@ var Actions = {
  		cb();
 	},
 	suspendAutoHide(suspend) {
-		suspendAutoHide = suspend;
-		if (suspendAutoHide) {
-			let header = document.getElementsByClassName("fsbl-header")[0];
-			header.style.opacity = 1;
-			if (headerTimeout) {clearTimeout(headerTimeout);}
-		} else {
-			autoHideTimer();
-		}
+		FSBL.Clients.WindowClient.getComponentState({"field": "autoHide"}, (err, isAutoHideEnabled) => {
+			if (err || isAutoHideEnabled === null) {
+				isAutoHideEnabled = autoHideConfig.defaultSetting;
+			}
+
+			if (isAutoHideEnabled) {
+				suspendAutoHide = suspend;
+				if (suspendAutoHide) {
+					let header = document.getElementsByClassName("fsbl-header")[0];
+					header.style.opacity = 1;
+					if (headerTimeout) {
+						clearTimeout(headerTimeout);
+					}
+				} else {
+					autoHideTimer();
+				}
+			}
+		});
 	},
 	getTabs() {
 		return windowTitleBarStore.getValue({ field: "tabs" });
