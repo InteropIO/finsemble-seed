@@ -5,6 +5,7 @@
 import async from "async";
 import * as menuConfig from '../config.json';
 import * as storeExports from "../stores/searchStore";
+import _get from 'lodash.get';
 import { PinManager } from "../modules/pinManager"
 import { Actions as SearchActions } from "./searchStore"
 const PinManagerInstance = new PinManager();
@@ -238,7 +239,7 @@ class _ToolbarStore {
 		// proceed even if there is an error in case the user selected to shut down. Shut down despite error.
 		// do nothing if there was an error or they chose cancel.
 		if (args.err) {
-			Logger.system.log(`Error received on confirm close: ${args.err} Continuing.`);
+			Logger.system.log(`Error received on confirm close: ${args.err}. Continuing.`);
 		}
 		const choice = _get(args, 'result.choice');
 		if (choice === 'affirmative') {
@@ -305,7 +306,8 @@ class _ToolbarStore {
 			title: "Confirm Shutdown",
 			question: "Do you wish to shut down finsemble?",
 			affirmativeResponseLabel: "Shut down",
-			negativeResponseLabel: "Cancel"
+			negativeResponseLabel: "Cancel",
+			showCancelButton: false,
 		};
 		return new Promise(resolve => {
 			FSBL.Clients.DialogManager.open("yesNo", dialogParams, (err, result) => resolve({ err, result }));
