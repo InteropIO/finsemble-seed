@@ -43,6 +43,7 @@
         "file-loader": "1.1.11",
         "lodash.clonedeep": "4.5.0",
         "lodash.debounce": "4.0.8",
+        "lodash.get": "^4.4.2",
         "lodash.throttle": "4.1.1",
         "nocache": "2.0.0"
     },
