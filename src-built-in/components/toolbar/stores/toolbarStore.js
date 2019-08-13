@@ -239,7 +239,7 @@ class _ToolbarStore {
 			});
 			FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.alt, keys.f], (err) => {
 				if (err) { FSBL.Clients.Logger.error(`HotkeyClient.addGlobalHotkey failed, error:`, err); }
-				self.Store.setValue({ field: "searchActive", value: true });
+				this.bringToolbarToFront(true);
 			});
 		}
 		return cb();
