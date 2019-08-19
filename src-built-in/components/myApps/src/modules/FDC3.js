@@ -2,9 +2,9 @@
 /**
  * Copyright 2018 by ChartIQ, Inc.
  * All rights reserved.
- * 
+ *
  * FDC3 App directory client, I will be using fetch()
- * to make calls to the appd web service, even though I'm
+ * to make calls to the app directory web service, even though I'm
  * not sure where did fetch() come from, will investigate later
  */
 export default class FDC3 {
@@ -24,7 +24,7 @@ export default class FDC3 {
 	_get(path, done) {
 		fetch(this.config.url + path, {
 			method: "GET"
-		
+
 		}).then((response) => {
 			response.json().then((data) => {
 				// We are expecting 200 here for data
@@ -44,7 +44,7 @@ export default class FDC3 {
 	}
 
 	/**
-     * 
+     *
      * @param {string} path The restful method path
      * @param {object} params The post data
      * @param {function} done The callback function
@@ -130,7 +130,7 @@ export default class FDC3 {
 	}
 	/**
      * Returns a list of applications based on text and filter
-     * @param {object} params The search criteria 
+     * @param {object} params The search criteria
      * @param {function} callback The callback function
      * @example search({text: 'blah', filter: {tag: 'newrelease'}})
      */
