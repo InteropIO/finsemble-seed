@@ -1,0 +1,11 @@
+{
+    "services": {
+        "loggingexportService": {
+            "useWindow": true,
+            "active": true,
+            "name": "loggingexportService",
+            "visible": false,
+            "html": "$applicationRoot/services/loggingexport/loggingexport.html"
+        }
+    }
+}
