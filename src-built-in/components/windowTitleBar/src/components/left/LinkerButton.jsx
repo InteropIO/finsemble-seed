@@ -157,8 +157,8 @@ export default class LinkerButton extends React.Component {
      */
     render() {
         return (<div ref="LinkerButton" title="Link Data" className="linkerSection">
-            <div className="fsbl-icon fsbl-linker" data-hover={this.state.hoverState} onClick={this.showLinkerWindow} >
-                <LinkerButtonIcon />
+            <div className="fsbl-icon fsbl-linker ff-linker" data-hover={this.state.hoverState} onClick={this.showLinkerWindow} >
+                {/* <LinkerButtonIcon /> */}
                 <FinsembleHoverDetector edge="top left" hoverAction={this.hoverAction} />
             </div >
             <LinkerGroups />

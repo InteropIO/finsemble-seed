@@ -56,7 +56,7 @@ export default class AutoArrange extends React.Component {
 				title={this.state.isAutoArranged ? "Restore" : "Auto Arrange"}
 				onClick={this.autoArrange}>
 				<span>
-					<AutoArrangeIcon />
+					<i className="ff-grid finsemble-toolbar-button-icon"></i>
 				</span>
 			</FinsembleButton>
 		);

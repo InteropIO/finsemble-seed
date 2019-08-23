@@ -75,12 +75,12 @@ class AppLauncher extends React.Component {
 			<FinsembleMenuSection className="menu-secondary">
 				{<FinsembleMenuItem>
 					<FinsembleMenuItemLabel onClick={this.openAdHoc}>
-						New App
+						<i className="ff-new-workspace"></i>New App
 					</FinsembleMenuItemLabel>
 				</FinsembleMenuItem> }
 				<FinsembleMenuItem>
 					<FinsembleMenuItemLabel onClick={this.openAppCatalog}>
-						App Catalog
+					<i className="ff-list"></i>App Catalog
 					</FinsembleMenuItemLabel>
 				</FinsembleMenuItem>
 			</FinsembleMenuSection>

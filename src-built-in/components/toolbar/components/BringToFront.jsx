@@ -17,7 +17,7 @@ const BringToFront = (props) => {
 	return (
 		<FinsembleButton className={wrapperClasses} buttonType={["Toolbar"]} title="Reveal All" onClick={BringToFront}>
 			<span>
-				<BringToFrontIcon />
+				<i className="ff-bring-to-front finsemble-toolbar-button-icon"></i>
 			</span>
 		</FinsembleButton>
 	)

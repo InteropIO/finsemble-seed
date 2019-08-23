@@ -484,6 +484,7 @@ export default class Workspaces extends React.Component {
 			<input style={{ display: 'none' }} type="file" id="file-input" />
 			<div className="complex-menu-content-row">
 				<div className="workspace-list-header-row">
+					<div className="content-section-info">Drag to reorder</div>
 					<div className="content-section-header workspace-list-header"></div>
 				</div>
 				<div className="content-section-wrapper">
@@ -519,17 +520,16 @@ export default class Workspaces extends React.Component {
 									}
 									return (
 										<FinsembleDraggable onClick={() => this.setFocusedWorkspace(workspace.name)} wrapperClass={classNames} draggableId={workspace.name} key={i} index={i}>
-											<div className="ff-adp-hamburger"></div>
 											<div className="workspace-name" title={workspace.name}>
 												{workspace.name}
 											</div>
 											<div className="individual-workspace-actions">
 												{workspace.name !== FSBL.Clients.WorkspaceClient.activeWorkspace.name &&
 												<div title={renameTooltip} className={renameButtonClasses} onMouseDown={this.handleButtonClicks} onClick={
-													allowRename ? () => { this.startEditingWorkspace(workspace.name) } : Function.prototype}><i className="ff-adp-edit"></i></div>}
+													allowRename ? () => { this.startEditingWorkspace(workspace.name) } : Function.prototype}><i className="ff-edit"></i></div>}
 												{workspace.name !== FSBL.Clients.WorkspaceClient.activeWorkspace.name &&
 													<div title={deleteTooltip} className={deleteButtonClasses} onMouseDown={this.handleButtonClicks} onClick={
-														allowDelete ? () => { this.deleteWorkspace(workspace.name); } : Function.prototype}><i className="ff-adp-trash-outline"></i></div>}
+														allowDelete ? () => { this.deleteWorkspace(workspace.name); } : Function.prototype}><i className="ff-delete"></i></div>}
 											</div>
 										</FinsembleDraggable>
 									)

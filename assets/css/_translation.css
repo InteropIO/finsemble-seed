@@ -1,0 +1,767 @@
+@import url("./fonts/Roboto/Roboto-Definition.css");
+
+
+:root {
+/* Remapped Variables: Insert these variables into your _themeWhiteLabel.css file */
+    --slate1: #7B98B3;
+    --slate2: #67829A;
+    --slate3: #617383;
+    --slate4: #495A69;
+    --slate5: #3C4C58;
+    --slate6: #303D47;
+    --slate7: #1C2A36;
+
+    --gray1: #EEE;
+    --gray2: #DDD;
+    --gray3: #CCC;
+    --gray4: #BBB;
+    --gray5: #999;
+    --gray6: #777;
+    --gray7: #555;
+
+    --blue1: #66C2FF;
+    --blue2: #3FB2FC;
+    --blue3: #039BFF;
+    --blue4: #0A8CF4;
+    --blue5: #117DE9;
+    --blue6: #005BC5;
+    --blue7: #004BA3;
+
+    --yellow1: #FFE869;
+    --yellow2: #FFE347;
+    --yellow3: #FFDD25;
+    --yellow4: #FFD803;
+    --yellow5: #F1CC00;
+    --yellow6: #E0BD00;
+    --yellow7: #CFAF00;
+
+    --red1: #EE5C5C;
+    --red2: #F64352;
+    --red3: #FF2445;
+    --red4: #EF1436;
+    --red5: #D30E2D;
+    --red6: #B70C06;
+    --red7: #960A05;
+
+    --green: #27cc8d;
+
+    --slate: var(--slate4);
+    --gray: var(--gray4);
+    --blue: var(--blue4);
+    --yellow: var(--yellow4);
+    --red: var(--red4);
+
+    /* Font Settings */
+    --font-family: 'Roboto', sans-serif;
+    --primary-font-color: white;
+    --secondary-font-color: black;
+
+    --primary-font-weight: 300;
+    --secondary-font-weight: 500;
+    --tertiary-font-weight: bold;
+
+    /* Color Theme */
+    --primary-accent-color: var(--blue6);
+    --secondary-accent-color: var(--blue7);
+    --tertiary-accent-color: var(--blue3);
+
+    --primary-negative-color: var(--red5);
+    --secondary-negative-color: var(--red1);
+    --tertiary-negative-color: var(--red7);
+
+    --primary-background-color: var(--slate7);
+    --secondary-background-color: var(--slate6);
+    --tertiary-background-color: var(--slate5);
+
+    --scrollbar-color: var(--gray);
+
+    /* Component Variables: Use these variables to make small changes to colors and general appearance. */
+
+    /** Toolbar */
+    --toolbar-font-size: 15px;
+    --toolbar-font-color: var(--primary-font-color);
+    --toolbar-line-height: 1em;
+    --toolbar-font-weight: var(--primary-font-weight);
+
+    --toolbar-height: 39px;
+    --toolbar-brand-logo-width: 20px;
+    --toolbar-brand-logo-height: 20px;
+    --toolbar-background-color: var(--primary-background-color);
+    --toolbar-button-hover-color: var(--secondary-accent-color);
+    --toolbar-resize-area-color: var(--slate5);
+
+    --toolbar-icon-workspace-color: var(--yellow);
+    --toolbar-icon-app-color: var(--tertiary-accent-color);
+    --toolbar-icon-font-size: 22px;
+
+    --toolbar-separator: 1px solid rgba(255, 255, 255, 0.3);
+
+    /* Window Title bar */
+    --titleBar-height: 25px;
+    --titleBar-font-size: 14px;
+    --titleBar-icon-font-size: 14px;
+    --titleBar-active-font-color: var(--primary-font-color);
+    --titleBar-inactive-font-color: var(--gray3);
+    --titleBar-font-weight: var(--primary-font-weight);
+
+    --titleBar-background-inactive-color: var(--secondary-background-color);
+    --titleBar-background-active-color: var(--tertiary-background-color);
+    --titlebar-tab-icon-font-color: var(--tertiary-accent-color);
+    --titlebar-tab-active-font-color: var(--primary-font-color);
+    --titlebar-tab-active-background-color: var(--primary-background-color);
+    --titlebar-tab-inactive-font-color: var(--gray);
+    --titlebar-tab-inactive-background-color: var(--titlebar-background-active-color);
+    --titlebar-tab-ghost-background-color: var(--secondary-accent-color);
+    --titlebar-tab-ghost-border-color: var(--primary-accent-color);
+    --titlebar-tab-separator: 1px solid var(--gray7);
+    --titlebar-tab-section-separator: 1px solid var(--gray5);
+
+    --titleBar-button-hover-active-color: var(--primary-accent-color);
+    --titleBar-button-hover-inactive-color: var(--secondary-accent-color);
+    --titleBar-button-highlight-active-color: var(--primary-accent-color);
+    --titleBar-button-highlight-inactive-color: var(--secondary-accent-color);
+    --titleBar-button-hover-negative-color: var(--primary-negative-color);
+    --titleBar-button-hover-linker-group: var(--gray3);
+
+    /* Dialogs (e.g., singleInput and yesNo) */
+    --dialog-title-font-size: 20px;
+    --dialog-question-font-size: 14px;
+    --dialog-font-color: var(--primary-font-color);
+    --dialog-font-weight: var(--primary-font-weight);
+    --dialog-title-font-weight: var(--primary-font-weight);
+    --dialog-question-font-weight: var(--secondary-font-weight);
+
+    --dialog-background-color: var(--primary-background-color);
+    --dialog-input-font-size: 16px;
+    --dialog-input-font-color: var(--primary-font-color);
+    --dialog-input-font-weight: var(--primary-font-weight);
+    --dialog-input-background-color: var(--primary-background-color);
+    --dialog-input-border-color: var(--gray6);
+    --dialog-input-border-focus-color: var(--gray);
+    --dialog-input-border-error-color: var(--red2);
+
+    /* Buttons and Inputs */
+    --button-font-size: 15px;
+    --button-font-weight: var(--primary-font-weight);
+    --button-solid-font-color: var(--primary-font-color);
+    --button-small-font-size: 10px;
+
+    --button-affirmative-background-color: var(--primary-accent-color);
+    --button-affirmative-border-color: var(--blue5);
+    --button-affirmative-background-hover-color: var(--secondary-accent-color);
+    --button-affirmative-border-hover-color: var(--blue6);
+
+    --button-neutral-background-color: transparent;
+    --button-neutral-border-color: transparent;
+    --button-neutral-border-hover-color: var(--gray6);
+    --button-neutral-solid-font-color: var(--secondary-font-color);
+
+    --button-negative-background-color: var(--red6);
+    --button-negative-border-color: var(--red4);
+    --button-negative-background-hover-color: var(--red7);
+    --button-negative-border-hover-color: var(--red5);
+
+    --input-negative-border-color: var(--secondary-negative-color);
+
+    /* Menus */
+    --menu-font-size: 14px;
+    --menu-font-weight: var(--primary-font-weight);
+    --menu-font-color: var(--primary-font-color);
+    --menu-active-workspace-font-weight: var(--secondary-font-weight);
+
+    --menu-background-color: var(--secondary-background-color);
+    --menu-actions-background-color: var(--slate4);
+    --menu-actions-hover-color: var(--slate3);
+    --menu-content-background-color: var(--secondary-background-color);
+    --menu-content-hover-color: var(--slate3);
+
+    --menu-pin-border-color: var(--secondary-accent-color);
+    --menu-pin-background-color: var(--primary-accent-color);
+    --menu-pin-background-hover-color: var(--secondary-accent-color);
+    --menu-favorite-hover-color: var(--yellow4);
+    --menu-favorite-active-hover-color: var(--yellow1);
+    --menu-delete-background-hover-color: var(--secondary-negative-color);
+
+    --menu-linker-selected-font-color: var(--primary-font-color);
+    --menu-linker-selected-font-size: 18px;
+
+    --menu-dragHandle-color: var(--gray4);
+
+    /* Search Menu */
+    --search-input-font-color: var(--secondary-font-color);
+    --search-input-background-color: white;
+
+    --search-header-font-color: var(--tertiary-accent-color);
+    --search-header-font-weight: var(--tertiary-font-weight);
+
+    --search-result-font-color: var(--primary-font-color);
+    --search-result-font-weight: var(--primary-font-weight);
+    --search-result-highlighter-color: var(--slate3);
+    --search-result-highlighter-background: var(--slate4);
+
+    /* Window Frame */
+    --window-frame-inactive-color: var(--slate5);
+    --window-frame-active-color: var(--window-frame-inactive-color);
+
+    /* Window Scrims and Masks */
+    --groupMask-background-color: var(--secondary-accent-color);
+    --groupMask-border-color: var(--primary-accent-color);
+
+    --scrim-icon-font-color: var(--primary-font-color);
+    --scrim-icon-font-size: 100px;
+
+    --scrim-positive-background-color: var(--secondary-accent-color);
+    --scrim-negative-background-color: var(--red7);
+
+    /* Content Dialog (e.g., userPreferences and appCatalog) */
+    --content-font-size: 16px;
+    --content-header-font-size: 18px;
+    --content-header-font-color: var(--tertiary-accent-color);
+    --content-font-color: var(--primary-font-color);
+    --content-font-weight: var(--primary-font-weight);
+
+    --content-nav-header-font-size: 21px;
+    --content-nav-header-font-weight: var(--primary-font-weight);
+    --content-nav-header-background-color: var(--slate);
+    --content-nav-background-color: var(--tertiary-background-color);
+    --content-nav-highlighter: var(--slate3);
+    --content-nav-highlighter-hover: var(--slate2);
+    --content-background-color: var(--secondary-background-color);
+    --content-hint-font-color: var(--gray);
+    --content-component-list-font-size: 12px;
+
+    --content-list-border-color: var(--gray6);
+    --content-list-highlighter: var(--slate3);
+    --content-list-item-flagged-color: var(--blue1);
+    --content-list-editor-font-color: var(--primary-font-color);
+    --content-list-editor-border-color: var(--gray);
+    --content-list-editor-highlighted-text: var(--blue1);
+
+    --content-button-label-font-size: 11px;
+    --content-button-disabled-border-color: var(--gray7);
+    --content-button-neutral-border-hover-color: var(--gray);
+    --content-button-negative-border-hover-color: var(--red1);
+
+    --content-checkbox-check-color: var(--primary-font-color);
+    --content-checkbox-background-color: var(--blue);
+    --content-checkbox-unchecked-border-color: var(--gray4);
+
+    --content-card-background-color: var(--slate4);
+    --content-card-bestMatch-background-color: var(--gray1);
+    --content-card-icon-background-color: var(--secondary-accent-color);
+    --content-card-icon-font-size: 20px;
+    --content-card-title-font-size: 14px;
+    --content-details-font-size: 12px;
+    --content-back-font-size: 15px;
+    --content-close-hover-color: var(--red2);
+
+    /* Notifications */
+    --notification-body-background-color: var(--toolbar-background-color);
+    --notification-body-font-color: var(--primary-font-color);
+    --notification-body-font-family: var(--font-family);
+    --notification-logo-width: 14px;
+    --notification-title-font-size: 13px;
+    --notification-title-font-weight: bold;
+    --notification-close-icon-hover-color: var(--secondary-negative-color);
+    --notification-description-font-size: 13px;
+
+    /* Process Monitor */
+    --procMonitor-font-color: var(--primary-font-color);
+    --procMonitor-font-size: 12px;
+    --procMonitor-font-weight: var(--primary-font-weight);
+    --procMonitor-process-name-font-weight: var(--secondary-font-weight);
+    --procMonitor-component-name-font-weight: var(--primary-font-weight);
+
+    --procMonitor-background-color: var(--primary-background-color);
+    --procMonitor-list-border-color: var(--gray6);
+    --procMonitor-close-component-font-color: var(--gray5);
+
+    --procMonitor-warning-background-color: var(--yellow7);
+    --procMonitor-negative-border-color: var(--tertiary-negative-color);
+    --procMonitor-negative-background-color: var(--tertiary-negative-color);
+
+    --procMonitor-close-hover-color: var(--red2);
+
+    /* App Catalog */
+    --catalog-font-color: var(--primary-font-color);
+    --catalog-background-color: var(--slate7);
+    --catalog-pagination-dots-color: var(--gray2);
+    --catalog-hero-border-color: var(--slate5);
+    --catalog-hero-background-color: var(--slate6);
+    --catalog-card-background-color: var(--slate6);
+    --catalog-card-checkmark-unselected-color: var(--gray);
+    --catalog-card-checkmark-selected-color: var(--green);
+    --catalog-section-header-font-color: var(--blue2);
+    --catalog-search-border-color: var(--blue);
+    --catalog-search-active-border-color: var(--blue2);
+    --catalog-tag-backgrond-color: var(--slate2);
+    --catalog-disabled-button-background-color: var(--gray5);
+
+    /* Shared Tag Styles */
+    --tag-background-color: var(--slate2);
+    --tag-font-color: var(--primary-font-color);
+    --tag-font-weight: var(--primary-font-weight);
+    --tag-close-icon-hover-color: var(--secondary-negative-color);
+    --tag-checkmark-icon-color: var(--green);
+
+
+    /* App Menu */
+    --appMenu-font-color: var(--primary-font-color);
+    --appMenu-scrollbar-color: var(--slate1);
+    --appMenu-leftNav-background-color: var(--slate5);
+    --appMenu-close-hover-color: var(--secondary-negative-color);
+    --appMenu-leftNav-highlighter-hover: var(--slate2);
+    --appMenu-leftNav-highlighter: var(--slate3);
+    --appMenu-leftNav-icon-color: var(--blue3);
+    --appMenu-leftNav-contextMenu-background-color: var(--secondary-background-color);
+    --appMenu-background-color: var(--slate4);
+    --appMenu-actions-menu-background-color: var(--secondary-background-color);
+    --appMenu-app-item-hover-background-color: var(--slate3);
+    --appMenu-app-item-bottom-border-color: rgba(98, 116, 132, 0.4);
+    --appMenu-app-favorite-color: var(--yellow3);
+    --appMenu-app-icon-color: var(--tertiary-accent-color);
+    --appMenu-sort-inactive-border-color: var(--gray5);
+    --appMenu-sort-active-color: var(--primary-accent-color);
+    --appMenu-search-input-inactive-color: var(--blue4);
+    --appMenu-search-input-active-color: var(--blue2);
+    --appMenu-edit-icon-hover-color: var(--blue2);
+
+}
+
+/* Changed Classes: Insert these classes into _styleWhiteLabel.css */
+
+/* Dialog Classes */
+body.dialog .dialog-title {
+    color:  var(--dialog-font-color);
+}
+
+body.dialog .dialog-question {
+    color:  var(--dialog-font-color);
+}
+
+.controls-wrapper input:focus,
+body.dialog input:focus {
+    border: 1px solid var(--dialog-input-border-focus-color);
+    border-bottom: 1px solid var(--dialog-input-border-focus-color);
+}
+
+.controls-wrapper input,
+body.dialog input {
+    border: 1px solid var(--dialog-input-border-color);
+    border-bottom: 1px solid var(--dialog-input-border-color);
+}
+
+.fsbl-button {
+    border-radius: 0;
+}
+
+.fsbl-button-neutral:hover {
+    border: 1px solid var(--button-neutral-border-hover-color);
+    text-decoration: none;
+}
+
+/* Menu Classes */
+
+.menu {
+    padding: 0;
+}
+
+.menu-secondary {
+    border-bottom: 0;
+    border-color: none;
+    padding-bottom: 0;
+}
+
+.menu-primary {
+    padding-top: 0;
+}
+
+.menu-item {
+    border-radius: 0;
+    align-items: initial;
+}
+
+.menu-item .ff-adp-hamburger {
+    color: var(--menu-dragHandle-color);
+    padding-right: 7px;
+    padding-top: 9px;
+    margin-left: -8px;
+    cursor: grab;
+  }
+
+.menu-item-label {
+    padding: 8px 0px;
+    height: 100%;
+    flex: .75;
+    margin: 0;
+    position: relative;
+}
+
+.menu-item-action {
+    padding: 0em .15em;
+    width: auto;
+}
+
+.menu-item .menu-item-action {
+    align-self: center;
+    justify-content: initial;
+    color: var(--menu-font-color);
+}
+
+.ff-delete {
+    padding: 4px 2px 1px 0px;
+    width: 22px;
+    text-align: center;
+    border: 1px solid transparent;
+}
+
+.ff-delete:hover {
+    color: var(--menu-delete-background-hover-color);
+    /* background-color: var(--menu-delete-background-hover-color); */
+    border-radius: 4px;
+}
+
+.menu-item-action .ff-favorite {
+    padding: 4px 2px 1px 1px;
+    font-size: var(--menu-font-size);
+    text-align: center;
+    border: 1px solid transparent;
+} 
+
+.active-workspace > div {
+    color: var(--primary-font-color);
+  }
+
+/* Toolbar Classes */
+
+.finsemble-toolbar {
+    text-shadow: none;
+}
+
+.finsemble-toolbar-button {
+    padding: 5px 6px;
+    display: inline-flex;
+    align-items: initial;
+    border-radius: 0;
+    transition: none;
+    margin: 0;
+}
+
+.finsemble-toolbar-button-icon {
+    height: 100%;
+    display: table-cell;
+    padding-top: 2px;
+    vertical-align: middle;
+    font-size: 22px;
+}
+
+.icon-only > i {
+    height: 22px;
+    font-size: var(--toolbar-icon-font-size);
+    width: auto;
+}
+
+.finsemble-toolbar .resize-area {
+    width: 6px;
+    max-width: 6px;
+    min-width: 6px;
+    position: absolute;
+}
+
+.finsemble-toolbar-button-icon {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+img.pinned-icon {
+    padding-top: 1px;
+    width: 22px;
+    height: 22px;
+}
+
+.pinned-icon {
+    color: var(--toolbar-icon-app-color);
+    font-size: var(--toolbar-icon-font-size);
+    padding-right: .25em;
+    margin: 0;
+    padding-top: 4px;
+}
+
+.finsemble-button-label {
+    padding-top: 5px;
+}
+
+.finsemble-toolbar-brand-logo {
+    width: var(--toolbar-brand-logo-width);
+    height: var(--toolbar-brand-logo-height);
+    margin: 2px 2px;
+    padding: 2px 0px 0px 0px;
+}
+
+.finsemble-toolbar-drag-handle {
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 13px;
+    -webkit-app-region: drag;
+    margin-left: 0;
+}
+
+.overflow .ff-chevron-down {
+    font-size: 15px;
+    margin-top: 5px;
+}
+
+.searchContainer {
+    margin-right: 22px;
+}
+
+.searchSection:hover {
+    background-color: transparent;
+}
+
+.searchInput.active {
+    top: 0;
+}
+
+.searchInput::after {
+    right: 23px;
+    top: -4px;
+    font-size: 15px;
+    font-family: font-finance;
+    content: "\2c";
+}
+
+/* Search Menu Classes */
+
+.resultItem {
+    border-radius: 0px;
+}
+
+.searchResults {
+    padding: 0;
+}
+
+.resultItem.active {
+    background-color: var(--search-result-highlighter-color);
+}
+
+.searchResults .no-results {
+    padding: 12px 0 0 14px;
+    height: 25px;
+}
+
+/* Window Frame Classes */
+
+body {
+    background-color: var(--procMonitor-background-color);
+}
+
+html:before, html:after, body:before, body:after {
+    background: var(--window-frame-inactive-color);
+}
+
+/* Window Titlebar Classes */
+
+html.desktop-active .fsbl-header {
+    color: var(--titleBar-active-font-color);
+}
+
+.fsbl-header-title {
+    padding-left: 0;
+    border-top: 1px solid transparent;
+    border-right: 1px solid transparent;
+    border-radius: 0;
+    text-shadow: none;
+}
+
+.fsbl-header-title[data-hover=true] {
+    background-color: var(--titlebar-tab-active-background-color);
+    color: var(--titlebar-tab-active-font-color);
+    border-right: var(--titlebar-tab-section-separator);
+}
+
+.fsbl-header-left {
+    border-right: var(--titlebar-tab-section-separator);
+}
+
+.fsbl-tabs-multiple .fsbl-header-center {
+    border-right: var(--titlebar-tab-section-separator);
+}
+
+.fsbl-icon {
+    width: 18px;
+    height: calc(100% + 5px);
+    margin-top: -5px;
+}
+
+.fsbl-icon[data-hover=true] {
+    background-color: var(--titleBar-button-hover-inactive-color);
+    color: inherit;
+}
+
+html.desktop-active .fsbl-icon[data-hover=true] {
+    background: var(--titleBar-button-hover-active-color);
+    transition: background .2s ease;
+    color: inherit;
+}
+
+.fsbl-icon.fsbl-close[data-hover=true] {
+    background: var(--titleBar-button-hover-negative-color);
+    color: var(--titleBar-active-font-color);
+}
+
+html.desktop-active .fsbl-icon.fsbl-close[data-hover=true] {
+    background: var(--titleBar-button-hover-negative-color);
+    color: var(--titleBar-active-font-color);
+}
+
+.fsbl-icon-highlighted {
+    border-radius: 0;
+    color: inherit;
+}
+
+.fsbl-minimize {
+    align-items: flex-end;
+    transition: none;
+}
+
+.linker-groups {
+    align-items: center;
+}
+
+.linker-group {
+    width: 5px;
+    height: 15px;
+    border: 1px solid var(--titleBar-background-inactive-color);
+}
+
+.ff-linker:before {
+    padding-top: 0px;
+}
+
+html.desktop-active .linker-group {
+    border: 1px solid var(--titleBar-background-active-color);
+}
+
+.linker-group:hover {
+    cursor: pointer;
+    border: 1px solid var(--titleBar-button-hover-inactive-color) !important;
+}
+
+.fsbl-linker {
+    margin-left: -1px;
+    width: auto;
+    border-radius: 0;
+    margin-right: 0;
+}
+
+.fsbl-linker[hover=true] {
+    background: var(--titleBar-button-hover-inactive-color);
+    color: var(--titlebar-active-font-color);
+}
+
+.fsbl-share {
+    border-radius: 0px;
+}
+
+html.desktop-active .fsbl-linker[hover=true] {
+    background: var(--titleBar-button-hover-active-color);
+    color: var(--titleBar-button-hover-linker-group);
+}
+
+.ff-maximize, .ff-close, .ff-detached, .ff-attached{
+    transition: none;
+}
+
+.fsbl-tab {
+    padding-left: 0;
+    border-right: var(--titlebar-tab-separator);
+    border-radius: 0;
+}
+
+.fsbl-tab[data-hover=true], .fsbl-active-tab {
+    background-color: var(--titlebar-tab-active-background-color);
+    color: var(--titlebar-tab-active-font-color);
+}
+
+.fsbl-tab-title {
+    padding-left: 8px;
+    text-shadow: none;
+    color: inherit;
+}
+
+.fsbl-tab-logo {
+    padding-top: 1px;
+}
+
+.fsbl-zoom-popup {
+    color: var(--primary-font-color);
+}
+
+.ghost-tab {
+    z-index: 2147483638;
+}
+
+/* User Preferences Classes */
+
+.complex-menu-section-toggle {
+    padding: 4px 30px;
+    margin-right: 0px;
+    border-radius: 0;
+}
+
+.workspace-list {
+    height: 220px;
+    padding: 0;
+    border-radius: 0px;
+}
+
+.workspace-item {
+    border-radius: 0px;
+}
+
+.workspace-item:hover {
+    background-color: var(--content-list-highlighter);
+}
+
+.workspace-action-button {
+    border-radius: 0px;
+}
+
+.content-section-info {
+    width: 66%;
+    justify-content: flex-end;
+}
+
+.workspace-component-list {
+    border-radius: 0px;
+}
+
+/* My Apps Menu Classes */
+
+.complex-menu-action {
+    border-radius: 0;
+    margin-right: 0;
+}
+
+.folder-list {
+    padding-right: 0;
+}
+
+/* App Catalog Classes */
+
+.ff-adp-chevron-right:hover, .ff-adp-chevron-left:hover {
+    background-color: var(--primary-accent-color);
+}
+
+.ff-adp-trash-outline {
+    color: var(--negative-accent-color);
+}
+
+.carousel-main .carousel-header .see-more {
+	border-radius: 0px;
+}
+
+.app-showcase .tag-label {
+    line-height: 18px;
+}
