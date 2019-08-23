@@ -61,7 +61,7 @@
 		},
 		"assimilation": {
 			"useOpenFinSpawn": false,
-			"enabled": true,
+			"enabled": false,
 			"blacklist": [],
 			"whitelist": [],
 			"onlySpawned": true,
@@ -118,7 +118,7 @@
 		"showTabs": true,
 		"showNativeTabs": true,
 		"floatingTitlebarComponent": "Floating Titlebar",
-		"deliveryMechanism": "preload"
+		"deliveryMechanism": "injection"
 	},
 	"betaFeatures": {},
 	"splinteringConfig": {
