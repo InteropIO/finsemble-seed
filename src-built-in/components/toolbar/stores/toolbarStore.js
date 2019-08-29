@@ -227,7 +227,7 @@ class _ToolbarStore {
 			self.hideToolbar();
 		});
 
-		fin.desktop.Window.getCurrent().addEventListener("close-requested", () => this.closeRequestedHandler());
+		FSBL.System.Window.getCurrent().addEventListener("close-requested", () => this.closeRequestedHandler());
 	}
 
 	/**
