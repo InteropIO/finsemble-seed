@@ -243,7 +243,7 @@ class _ToolbarStore {
 		}
 		const choice = _get(args, 'result.choice');
 		if (choice === 'affirmative') {
-			fin.desktop.Window.getCurrent().close(true);
+			FSBL.System.Window.getCurrent().close(true);
 			FSBL.shutdownApplication();
 		}
 	}
