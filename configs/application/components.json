@@ -1,6 +1,47 @@
 {
 	"comment": "Sample component configuration",
 	"components": {
+		"WindowLess": {
+            "window": {
+                "id": "WindowLess",
+                "windowType": "native",
+                "alias": "WindowLess",
+                "url": "",
+                "defaultHeight": 600,
+                "autoShow": true,
+                "alwaysOnTop": false,
+                "resizable": true,
+                "showTaskbarIcon": false,
+                "contextMenu": true,
+                "addToWorkspace": true
+            },
+            "component": {
+                "spawnOnHotkey": [
+                    "ctrl",
+                    "alt",
+                    "n"
+                ]
+            },
+            "foreign": {
+                "services": {
+                    "workspaceService": {
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "persistWindowState": false,
+                        "FSBLHeader": true
+                    },
+                    "Toolbar": {
+                        "iconURL": "$applicationRoot/assets/img/notepad.png"
+                    }
+                }
+            }
+        },
 		"Welcome Component": {
 			"window": {
 				"url": "$applicationRoot/components/welcome/welcome.html",
