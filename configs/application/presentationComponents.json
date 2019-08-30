@@ -552,16 +552,8 @@
 						"dependencies": [  "setupHotkeys" ],
 						"postStartupCompletion": true
 					},
-					"retrieveSelfFromStorage" : {
-						"dependencies": [  "listenForWorkspaceUpdates" ],
-						"postStartupCompletion": true
-					},
 					"addMoreListeners" : {
-						"dependencies": [  "retrieveSelfFromStorage" ],
-						"postStartupCompletion": true
-					},
-					"setToolbarVisibilityInMemory" : {
-						"dependencies": [  "addMoreListeners" ],
+						"dependencies": [  "listenForWorkspaceUpdates" ],
 						"postStartupCompletion": true
 					}
 				}
