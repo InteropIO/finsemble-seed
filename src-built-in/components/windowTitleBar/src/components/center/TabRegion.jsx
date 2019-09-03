@@ -3,7 +3,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Tab from "./tab";
-import Logo from "./logo";
 import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
 import { FinsembleDnDContext, FinsembleDroppable } from '@chartiq/finsemble-react-controls';
 import { Store, Actions } from "../../stores/windowTitleBarStore";
@@ -126,22 +125,33 @@ export default class TabRegion extends React.Component {
 	 * @memberof windowTitleBar
 	 */
     stopDrag(e) {
-        FSBL.Clients.Logger.system.debug("Tab drag stop");
-        //@sidd can you document this?
+        FSBL.Clients.Logger.system.debug("Tab stopDrag.");
         this.mousePositionOnDragEnd = {
             x: e.nativeEvent.screenX,
             y: e.nativeEvent.screenY
         }
-        let boundingRect = this.state.boundingBox;
-        if (!FSBL.Clients.WindowClient.isPointInBox(this.mousePositionOnDragEnd, FSBL.Clients.WindowClient.options)) {
-            setTimeout(() => {
-                FSBL.Clients.WindowClient.stopTilingOrTabbing({ mousePosition: this.mousePositionOnDragEnd });
-            }, 50);
-            this.setState({
-                iAmDragging: false
-            });
-            this.onWindowResize();
-        }
+        
+        const boundingBox = this.state.boundingBox;
+        FSBL.Clients.WindowClient.getBounds(
+            (err, bounds) => {
+                // We ONLY want to know if we're in the tab region!
+                const tabRegion = {
+                    top: boundingBox.top + bounds.top,
+                    bottom: boundingBox.bottom + bounds.top,
+                    left: boundingBox.left + bounds.left,
+                    right: boundingBox.right + bounds.left 
+                };
+                if (!FSBL.Clients.WindowClient.isPointInBox(this.mousePositionOnDragEnd, tabRegion)) {
+                    setTimeout(() => {
+                        FSBL.Clients.WindowClient.stopTilingOrTabbing({ mousePosition: this.mousePositionOnDragEnd });
+                    }, 50);
+                    this.setState({
+                        iAmDragging: false
+                    });
+                    this.onWindowResize();
+                }
+            }
+        );
     }
 
     /**
@@ -157,7 +167,7 @@ export default class TabRegion extends React.Component {
             } else if (identifier.waitForIdentifier) {
                 return identifier;
             } else {
-                FSBL.Clients.Logger.system.error("Malformed drop object detected in windowTitleBar. Check tab droppping code. Expected windowIdentifier, got ", identifier);
+                FSBL.Clients.Logger.system.error("Malformed drop object detected in windowTitleBar. Check tab dropping code. Expected windowIdentifier, got ", identifier);
                 return null;
             }
         } catch (e) {
@@ -292,7 +302,7 @@ export default class TabRegion extends React.Component {
         this.scrollToTab(lastTab);
     }
     /**
-     * Function that will horiztonally scroll the tab region so that the right edge of the tab lines up with the right edge of the tab region.
+     * Function that will horizontally scroll the tab region so that the right edge of the tab lines up with the right edge of the tab region.
      * @param {} tab
      */
     scrollToTab(tab) {
@@ -307,7 +317,7 @@ export default class TabRegion extends React.Component {
             let leftEdgeOfTab = tabIndex * this.state.tabWidth;
             let rightEdgeOfTab = leftEdgeOfTab + this.state.tabWidth;
             let translateX = rightEdgeOfTab
-            //Our translation is  this: Take the  right edge of the bounding box, and subract the left edge. This gives us the 0 point for the box. Then, we subtract the right edge of the tab. The result is a number that we use to shift the entire element and align the right edge of the tab with the right edge of the bounding box. We also account for the 30 px region on the right.
+            //Our translation is  this: Take the  right edge of the bounding box, and subtract the left edge. This gives us the 0 point for the box. Then, we subtract the right edge of the tab. The result is a number that we use to shift the entire element and align the right edge of the tab with the right edge of the bounding box. We also account for the 30 px region on the right.
 
             //If there's no overflow, we don't scroll.
             if (rightEdgeOfTab < boundingBox.right) {
@@ -316,7 +326,7 @@ export default class TabRegion extends React.Component {
                 //Other tabs are less simple.
                 let leftEdgeOfTab = tabIndex * this.state.tabWidth;
                 let rightEdgeOfTab = leftEdgeOfTab + this.state.tabWidth;
-                //Our translation is  this: Take the  right edge of the bounding box, and subract the left edge. This gives us the 0 point for the box. Then, we subtract the right edge of the tab. The result is a number that we use to shift the entire element and align the right edge of the tab with the right edge of the bounding box.
+                //Our translation is  this: Take the  right edge of the bounding box, and subtract the left edge. This gives us the 0 point for the box. Then, we subtract the right edge of the tab. The result is a number that we use to shift the entire element and align the right edge of the tab with the right edge of the bounding box.
                 translateX = boundingBox.right - boundingBox.left - rightEdgeOfTab;
                 //If there's no overflow, we don't scroll.
                 if (rightEdgeOfTab < boundingBox.right) {
@@ -445,7 +455,6 @@ export default class TabRegion extends React.Component {
 
     onTabsChanged(err, response) {
         let { value } = response;
-        ////console.log("Tablist changed", value);
         this.setState({
             tabs: value,
             tabWidth: this.getTabWidth({ tabList: value })
@@ -548,7 +557,6 @@ function renderTitle() {
         data-hover={this.state.hoverState}
         className={"fsbl-header-title"}>
         <FinsembleHoverDetector edge="top" hoverAction={this.hoverAction.bind(this)} />
-        <Logo windowIdentifier={FSBL.Clients.WindowClient.getWindowIdentifier()} />
         <Title onUpdate={this.props.onTitleUpdated} windowIdentifier={FSBL.Clients.WindowClient.getWindowIdentifier()}></Title>
     </div>);
 }
@@ -559,13 +567,13 @@ function renderTitle() {
  */
 function renderTabs() {
     let titleWidth = this.state.tabWidth - ICON_AREA - CLOSE_BUTTON_MARGIN;
-    return this.state.tabs.map((tab, i) => {
+    return this.state.tabs.map(tab => {
         return <Tab
             onClick={() => {
                 this.setActiveTab(tab);
             }}
             draggable="true"
-            key={i}
+            key={tab.windowName} //this is a unique identifier for React so it knows when to update the DOM
             className={this.getTabClasses(tab)}
             onDragStart={(e, identifier) => {
                 FSBL.Clients.Logger.system.debug("Tab drag - TAB", identifier.windowName);

@@ -31,6 +31,7 @@
 }
 
 .finsemble-toolbar-section.right {
+		margin-right: 8px;
     justify-content: flex-end;
     order: 2;
     flex: 1;
@@ -76,10 +77,12 @@
     width: 6px;
     max-width: 6px;
     min-width: 6px;
-    background-color: var(--toolbar-resize-area-color);
-    justify-content: flex-end;
+		background-color: var(--toolbar-resize-area-color);
+		position: absolute;
+		right: 0;
+    /* justify-content: flex-end;
     order: 3;
-    flex: 0 0 auto;
+    flex: 0 0 auto; */
 }
 
 @media screen and (max-width: 170px) {

@@ -321,6 +321,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+	  padding-left: 8px;
 }
 
 .fsbl-tab-close {

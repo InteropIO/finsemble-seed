@@ -18,7 +18,7 @@ let defaultData = {
 	newWorkspaceDialogIsActive: false,
 	/**
 	 * State around whether the workspace is currently in the process of switching.
-	 * 
+	 *
 	 * For simplicity, we're storing this in the local store for now, but this precludes
 	 * other components from signaling that the workspace is changing. A consequence,
 	 * for example, is that if you switch workspaces uses a pin on the toolbar instead
@@ -376,7 +376,7 @@ Actions = {
 			let firstMethod = Actions.autoSave,
 				secondMethod = null;
 			if (PROMPT_ON_SAVE === true) {
-				//We want to ask the user to save. But if they're trying to reload the workspace, the mssage needs to be different. The first if block just switches that method.
+				//We want to ask the user to save. But if they're trying to reload the workspace, the message needs to be different. The first if block just switches that method.
 				firstMethod = Actions.askIfUserWantsToSave;
 				if (name === FSBL.Clients.WorkspaceClient.activeWorkspace.name) {
 					firstMethod = askAboutReload;
@@ -551,7 +551,7 @@ Actions = {
 				showNegativeButton: false,
 				showCancelButton: false
 			};
-			Actions.spawnDialog("yesNo", dialogParams);
+			Actions.spawnDialog("yesNo", dialogParams, Function.prototype);
 			return callback(new Error("Invalid workspace name."));
 		} else if (response.choice === 'cancel') {
 			return callback(new Error(SAVE_DIALOG_CANCEL_ERROR));
@@ -640,7 +640,7 @@ Actions = {
 	 */
 	togglePin: function (workspace) {
 
-		let workspaceName = workspace.name.replace(/[.]/g, "^DOT^"); //No dots allowed in store fieldnames
+		let workspaceName = workspace.name.replace(/[.]/g, "^DOT^"); //No dots allowed in store field names
 		//toggles the pinned state of the component. This change will be broadcast to all toolbars so that the state changes in each component.
 		let pins = Actions.getPins();
 		let thePin = {
@@ -659,7 +659,7 @@ Actions = {
 		}
 	},
 	/**
-	 * Unfocuses from the menu.
+	 * Un-focuses from the menu.
 	 */
 	blurWindow: function () {
 		finWindow.blur();
