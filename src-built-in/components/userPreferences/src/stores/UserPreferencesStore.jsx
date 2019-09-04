@@ -28,19 +28,6 @@ var Actions = {
 			}
 		});
 	},
-	exportWorkspace: function (selectedWorkspace) {
-		var workspaceName; // ************* needs to be set to selected workspace **********************
-        FSBL.Clients.WorkspaceClient.getWorkspaceDefinition(workspaceName, function (err, workspaceDefinition) {
-            var newTemplateDefinition = FSBL.Clients.WorkspaceClient.convertWorkspaceDefinitionToTemplate("templateX", workspaceDefinition);
-            FSBL.Clients.WorkspaceClient.saveWorkspaceTemplateToConfigFile(newTemplateDefinition);
-        });
-	},
-	importTemplate: function () {
-		var newTemplateJSONDefinition; // ************* needs to be initialized from file input **********************
-        FSBL.Clients.WorkspaceClient.addWorkspaceTemplateDefinition(newTemplateJSONDefinition, { force: true }, function (err) {
-           //console.log("addWorkspaceTemplateDefinition result", err);
-        });
-	},
 	/**
 	 * By making the value of `finsemble.scheduledRestart` falsy, the application will remove any existing restart timers.
 	 */

@@ -243,24 +243,6 @@ export default class Workspaces extends React.Component {
 		});
 	}
 
-	startExportingTemplate() {
-		WorkspaceManagementMenuStore.Dispatcher.dispatch({
-			actionType: "exportWorkspace",
-			data: {
-				name: this.state.focusedWorkspace
-			}
-		})
-	}
-
-	startImportingTemplate() {
-		WorkspaceManagementMenuStore.Dispatcher.dispatch({
-			actionType: "importTemplate",
-			data: {
-				name: this.state.templateName
-			}
-		})
-	}
-
 	deleteWorkspace(workspaceName = this.state.focusedWorkspace) {
 		let workspaceToRemove = workspaceName;
 		this.resetState();
@@ -342,9 +324,37 @@ export default class Workspaces extends React.Component {
 	preferencesFocused() {
 		finsembleWindow.removeEventListener('focused', this.preferencesFocused);
 		this.changePreferencesAlwaysOnTop(true);
-	}
+  }
+  
+  importWorkspace(evt) {
+    console.log("init");
+		let inputElement = document.getElementById("file-input");
+    inputElement.removeEventListener("change", importWorkspace);
+    const filePath = evt.target.value;
+    const search = /(.*)(\\)(.*)(\.json)/.exec(filePath);
+    const name = search[search.length - 2];
+    
+    const reader = new FileReader();
 
-	importWorkspace(evt) {
+    console.log("about to read file");
+    reader.onload = async function (e) {
+      console.log("Parsing file");
+      const ws = { ...JSON.parse(e.target.result), name };
+      try {
+        console.log("finished parsing.")
+        await FSBL.Clients.WorkspaceClient.import({ workspaceJSONDefinition: ws, force: true });
+        console.log("Done");
+      } catch (err) {
+        FSBL.Clients.Logger.info("addWorkspaceTemplateDefinition error", err);
+      }
+    }  
+
+	  reader.readAsText(evt.target.files[0]);
+    console.log("Read file");
+  }
+
+	importWorkspaceOld(evt) {
+    debugger;
 		let inputElement = document.getElementById("file-input");
 		inputElement.removeEventListener("change", importWorkspace);
 		var files = evt.target.files; // FileList object
@@ -381,60 +391,44 @@ export default class Workspaces extends React.Component {
 			inputElement.value = "";
 			FSBL.Clients.Logger.info("Workspaces imported");
 		});
-	}
-	exportWorkspace() {
-		if (this.state.focusedWorkspace === '') return;
-		var self = this;
-		function doExport() {
-			FSBL.Clients.WorkspaceClient.getWorkspaceDefinition({ workspaceName: self.state.focusedWorkspace }, (err, workspaceDefinition) => {
-				if (err) {
-					FSBL.Clients.Logger.error("getWorkspaceDefinition error", err);
-				} else {
-					//We're saving using a routine initially created for templates. The outcome is the same and it probably should have just been "Save to file". This bool is to allow it to save.
-					FSBL.ConfigUtils.promptAndSaveJSONToLocalFile(self.state.focusedWorkspace, { workspaceTemplates: workspaceDefinition });
-				}
-			});
-		}
-
-		//Set alwaysOnTop to false and add an event listener on the window. When focus is regained
-		//then reset always on top
-		self.changePreferencesAlwaysOnTop(false);
-		finsembleWindow.addEventListener('focused', this.preferencesFocused);
-		//If we're autosaving, autosave, then export.
-		//@todo, put into store. consider moving autosave into workspaceClient.
-		FSBL.Clients.ConfigClient.getValue({ field: "finsemble.preferences.workspaceService.promptUserOnDirtyWorkspace" }, (err, data) => {
-			//default to false.
-			let PROMPT_ON_SAVE = data === null ? false : data;
-			if (!PROMPT_ON_SAVE) {
-				let activeName = FSBL.Clients.WorkspaceClient.activeWorkspace.name;
-				return FSBL.Clients.WorkspaceClient.saveAs({
-					name: activeName,
-					force: true
-				}, (err, response) => {
-					doExport();
-				});
-			}
-			doExport();
-		});
-	}
+  }
+  
+  async exportWorkspace() {
+    this.changePreferencesAlwaysOnTop(false);
+    finsembleWindow.addEventListener('focused', this.preferencesFocused);
+    
+    const workspaceName = this.state.focusedWorkspace;
+    await FSBL.Clients.WorkspaceClient.save();
+    const workspace = await FSBL.Clients.WorkspaceClient.export({ workspaceName });
+    FSBL.ConfigUtils.promptAndSaveJSONToLocalFile(workspaceName, workspace);
+  }
+  
 	handleButtonClicks(e) {
 		if (this.state.adding || this.state.editing) {
 			e.preventDefault();
 		}
 	}
 
-	getFocusedWorkspaceComponentList() {
-		let { workspaceList, focusedWorkspace } = this.state;
+	async getFocusedWorkspaceComponentList() {
+		const { workspaceList, focusedWorkspace } = this.state;
 		if (focusedWorkspace === "") return [];
-		let workspace = workspaceList.filter(wSpace => wSpace.name === focusedWorkspace)[0];
+    const ws = await FSBL.Clients.WorkspaceClient.export({ workspaceName: focusedWorkspace });
+    const componentHistogram = ws.windowData.reduce((prev, curr) => {
+      const name = curr.componentType
+        || curr.customData.component.type
+        || "Unknown Component";
+      prev[name] = prev[name] === undefined ? 1 : prev[name] + 1;
+      return prev;
+    }, {});
 
-		FSBL.Clients.WorkspaceClient.getWorkspaceDefinition({ workspaceName: focusedWorkspace }, (err, workspaceDefinition) => {
-			let componentTypes = this.getComponentTypes(workspaceDefinition[focusedWorkspace]);
-			this.setState({
-				focusedWorkspaceComponentList: componentTypes
-			});
-		});
-	}
+    const focusedWorkspaceComponentList = Object.keys(componentHistogram).reduce((prev, curr) => {
+      const value = componentHistogram[curr];
+      return [...prev, `${curr} (${value})`];
+    }, []);
+    
+		this.setState({ focusedWorkspaceComponentList });
+  }
+  
 	render() {
 		let deleteButtonClasses = "individual-workspace-action delete-workspace",
 			exportButtonClasses = "action-button workspace-action-button",
@@ -452,7 +446,7 @@ export default class Workspaces extends React.Component {
 			deleteButtonClasses += " disabled-individual-workspace-action";
 		}
 
-		if (this.state.focusedWorkspace === '') {
+		if (!this.state.focusedWorkspace) {
 			exportButtonClasses += " disabled-button";
 			renameButtonClasses += " disabled-individual-workspace-action";
 			deleteButtonClasses += " disabled-individual-workspace-action";
@@ -555,7 +549,7 @@ export default class Workspaces extends React.Component {
 								<i className="workspace-action-button-icon ff-import"></i>
 								<div>Import</div>
 							</div>
-							<div title={exportTooltip} className={exportButtonClasses} onMouseDown={this.handleButtonClicks} onClick={allowExport ? this.exportWorkspace : Function.prototype}>
+							<div title={exportTooltip} className={exportButtonClasses} onMouseDown={this.handleButtonClicks} onClick={this.exportWorkspace}>
 								<i className="workspace-action-button-icon ff-export"></i>
 								<div>Export</div>
 							</div>
