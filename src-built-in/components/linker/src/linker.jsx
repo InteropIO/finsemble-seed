@@ -76,7 +76,7 @@ class Linker extends React.Component {
 	render() {
 		var self = this;
 		//Checkbox inside of a circle. Rendered in the center of a group if the attachedWindow is part of that group.
-		let activeChannelIndicator = (<i className="active-linker-group ff-check-circle"></i>);
+		let activeChannelIndicator = (<i className="active-linker-group ff-check-mark"></i>);
 
 		const getLinkerItemRenderer = (channel, isAccessibleLinker) => {
 			if (!isAccessibleLinker) return null;
@@ -84,10 +84,7 @@ class Linker extends React.Component {
 			if (channel.label) {
 				return <div className="channel-label">{channel.label}</div>
 			} else {
-				//backwards compatibility
-				return (<div className="channel-label">
-					{getChannelLabelFromIndex(channel.name, FSBL.Clients.LinkerClient.getAllChannels())}
-				</div>)
+				return <div className="channel-label">{"Group " + getChannelLabelFromIndex(channel.name, FSBL.Clients.LinkerClient.getAllChannels())}</div>
 			}
 		}
 
@@ -97,7 +94,7 @@ class Linker extends React.Component {
 		let channels = FSBL.Clients.LinkerClient.getAllChannels().map(function (channel, index) {
 			//Boolean, whether the attachedWindow belongs to the channel.
 			let activeChannel = self.state.channels.filter(function (g) { return g.name == channel.name; }).length;
-			let groupClass = `linkerGroup ${channel.label}`;
+			let groupClass = `linkerGroup ${channel.name}`;
 
 			if (activeChannel) {
 				groupClass += " active";
@@ -107,13 +104,16 @@ class Linker extends React.Component {
 				backgroundColor: channel.color,
 				border: "1px solid " + channel.border
 			};
-			//returns a group row. It's essentially a colored rectangle.
-			return (<div key={channel.name + index} className={groupClass} style={style} onClick={function () {
-				self.channelClicked(channel, activeChannel);
-			}}>
-				{getLinkerItemRenderer(channel, LinkerStore.isAccessibleLinker())}
-				{activeChannel ? activeChannelIndicator : null}
-			</div>);
+			//returns a group row.
+			return (
+				<div className="channel-wrapper" onClick={function () {
+					self.channelClicked(channel, activeChannel); {/* Circle */ }
+				}}>
+					{getLinkerItemRenderer(channel, LinkerStore.isAccessibleLinker())} {/*Channel Name */}
+					<div key={channel.name + index} className={groupClass} style={style}>
+						{activeChannel ? activeChannelIndicator : null} {/*Check Mark */}
+					</div>
+				</div>);
 		});
 
 		return (

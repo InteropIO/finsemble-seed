@@ -13,13 +13,6 @@
     /* background-color: red; */
 }
 
-.channel-label {
-    padding-left: 4px;
-    display: inline-flex;
-    color: var(--menu-linker-selected-font-color);
-    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.44);
-}
-
 .fsbl-drag-handle.hidden {
     display: none;
 }
@@ -211,7 +204,7 @@ html.desktop-active .fsbl-icon-highlighted {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    margin-top: 0px;
+    margin-top: -1px;
 }
 
 .linker-group {
@@ -233,7 +226,7 @@ html.desktop-active .fsbl-icon-highlighted {
 
 .linkerContainer {
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .linker-group:hover {
