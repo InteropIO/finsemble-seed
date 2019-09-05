@@ -1,0 +1,290 @@
+body {
+	font-family: Open Sans Condensed, sans-serif;
+	font-weight: 300;
+	font-size: 14px;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	margin: 0px;
+	background: #18252e;
+	color: #ffffff;
+}
+
+customer {
+	display: flex;
+	flex-direction: row;
+	border-bottom: 1px solid #4a6877;
+	box-sizing: border-box;
+}
+
+customer > * {
+	display: inline-block;
+	padding: 10px 10px 5px 10px;
+	cursor: pointer;
+	width: 50%;
+	text-align: center;
+	border-bottom: 5px solid transparent;
+	transition: border 0.5s;
+}
+
+customer:hover > * {
+	border-bottom: 5px solid #0ccd87 !important;
+}
+
+customer.selected {
+	font-weight: bold;
+	background-color: #068de6;
+}
+
+bringWindowToFront,
+getStorageValue,
+getStorageKeys,
+removeStorageValue,
+saveStorageValue,
+setStorageStore,
+setStorageUser,
+setStoreValue2,
+setStoreValue1,
+removeStoreListener,
+getStoreValue,
+addStoreListener,
+removeStore,
+getStore,
+createStore,
+switchToWorkspace,
+saveAsWorkspace,
+saveWorkspace,
+renameWorkspace,
+removeWorkspace,
+minimizeAll,
+importWorkspace,
+getWorkspaces,
+getActiveWorkspace,
+exportWorkspace,
+createWorkspace,
+bringWinsToFront,
+autoArrange,
+disconnectAll,
+transmit,
+query,
+removePubSubResponder,
+publish,
+addPubSubResponder,
+warn,
+verbose,
+log,
+info,
+error,
+debug,
+unlinkToGroup1,
+linkerPub,
+openLinkerWindow,
+startOnStateChange,
+linkToGroup1,
+getState,
+getWinLinkedCurWindow,
+getWinLinkedGroup1,
+getComLinkedCurWindow,
+getComLinkedGroup1,
+getAllChannels,
+unregisterComponent,
+spawnComponent,
+showWindow,
+registerComponent,
+getMyWindowIdentifier,
+getMonitorInfo,
+getMonitorInfoAll,
+getComponentsThatCanReceiveDataTypes,
+getComponentList,
+getComponentDefaultConfig,
+getActiveDescriptors,
+registerGlobalHotKey,
+unregisterGlobalHotKey,
+registerLocalHotKey,
+unregisterLocalHotKey,
+notification,
+getDistributedStoreData,
+cancelTilingOrTabbing,
+closeWindow,
+fitToDom,
+getBounds,
+getComponentState,
+setComponentState,
+getCurWin,
+getSpawnData,
+getStackedWindow,
+getWindowsGroup,
+getWindowIdentifier,
+getWindowNameForDocking,
+getWindowTitle,
+estHeaderCommandChannel,
+injectHeader,
+maximize,
+minimize,
+removeComponentState,
+restore,
+sendWinIdentifierForTilingOrTabbing,
+setAlwaysOnTop,
+setWindowTitle,
+showAtMousePos,
+startTilingOrTabbing,
+stopTilingOrTabbing,
+checkIfWindowIsDialog,
+openDialog,
+search {
+	display: block;
+	bottom: 25px;
+	text-align: center;
+	background-color: #eee;
+	cursor: pointer;
+	width: 300px;
+	height: 34px;
+	margin: 20px;
+	padding: 10px;
+	background-color: #068de6;
+	color: #ffffff;
+	font-family: Open Sans Condensed, sans-serif;
+	font-weight: 300;
+	font-size: 12px;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	transition: background-color 0.4s ease-out;
+	box-sizing: border-box;
+}
+search:hover,
+openDialog:hover,
+checkIfWindowIsDialog:hover,
+stopTilingOrTabbing:hover,
+startTilingOrTabbing:hover,
+showAtMousePos:hover,
+setWindowTitle:hover,
+setAlwaysOnTop:hover,
+sendWinIdentifierForTilingOrTabbing:hover,
+restore:hover,
+removeComponentState:hover,
+minimize:hover,
+maximize:hover,
+injectHeader:hover,
+estHeaderCommandChannel:hover,
+getWindowTitle:hover,
+getWindowNameForDocking:hover,
+getWindowIdentifier:hover,
+getWindowsGroup:hover,
+getStackedWindow:hover,
+getSpawnData:hover,
+getCurWin:hover,
+setComponentState:hover,
+getComponentState:hover,
+getBounds:hover,
+fitToDom:hover,
+closeWindow:hover,
+cancelTilingOrTabbing:hover,
+bringWindowToFront:hover,
+getStorageValue:hover,
+getStorageKeys:hover,
+removeStorageValue:hover,
+saveStorageValue:hover,
+setStorageStore:hover,
+setStorageUser:hover,
+setStoreValue2:hover,
+setStoreValue1:hover,
+removeStoreListener:hover,
+getStoreValue:hover,
+addStoreListener:hover,
+removeStore:hover,
+getStore:hover,
+createStore:hover,
+switchToWorkspace:hover,
+saveAsWorkspace:hover,
+saveWorkspace:hover,
+renameWorkspace:hover,
+removeWorkspace:hover,
+minimizeAll:hover,
+importWorkspace:hover,
+getWorkspaces:hover getActiveWorkspace:hover,
+exportWorkspace:hover,
+createWorkspace:hover,
+bringWinsToFront:hover,
+autoArrange:hover,
+disconnectAll:hover,
+transmit:hover,
+query:hover,
+removePubSubResponder:hover,
+publish:hover,
+addPubSubResponder:hover,
+warn:hover,
+verbose:hover,
+log:hover,
+info:hover,
+error:hover,
+debug:hover,
+unlinkToGroup1:hover,
+linkerPub:hover,
+openLinkerWindow:hover,
+startOnStateChange:hover,
+linkToGroup1:hover,
+getState:hover,
+getWinLinkedCurWindow:hover,
+getWinLinkedGroup1:hover,
+getComLinkedCurWindow:hover,
+getComLinkedGroup1:hover,
+getAllChannels:hover,
+unregisterComponent:hover,
+spawnComponent:hover,
+showWindow:hover,
+registerComponent:hover,
+getMyWindowIdentifier:hover,
+etMonitorInfo:hover,
+getMonitorInfoAll:hover,
+getComponentsThatCanReceiveDataTypes:hover,
+getComponentList:hover,
+getComponentDefaultConfig:hover,
+getActiveDescriptors:hover,
+registerGlobalHotKey:hover,
+unregisterGlobalHotKey:hover,
+registerLocalHotKey:hover,
+unregisterLocalHotKey:hover,
+notification:hover,
+getDistributedStoreData:hover {
+	background-color: #2cabff;
+}
+
+#symbolLabel {
+	margin: 20px;
+}
+
+/* Style the tab */
+.tab {
+	overflow: hidden;
+	border: 1px solid #ccc;
+	background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+	background-color: inherit;
+	float: left;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	padding: 5px 6px;
+	transition: 0.3s;
+	font-size: 15px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+	background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+	background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+	display: none;
+	padding: 6px 12px;
+	border: 1px solid #ccc;
+	border-top: none;
+}

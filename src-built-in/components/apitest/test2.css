@@ -1,0 +1,54 @@
+body {
+	margin: 0px;
+	font-family: Open Sans Condensed, sans-serif;
+	font-weight: 300;
+	font-size: 14px;
+	text-transform: uppercase;
+	letter-spacing: .1em;
+	margin: 0px;
+	background: #18252e;
+	color: #FFFFFF
+}
+
+section {
+	display: flex;
+	flex-direction: row;
+	padding: 10px;
+}
+
+section > field {
+	width:30%;
+}
+
+section > owed, section > draganddropSymbol,routerSymbol,dsSymbol,linkerSymbol, routerSymbolListenTran, routerSymbolPubSub, dsField1, dsField2{
+	display: inline-block;
+	padding: 0 10px;
+	border-bottom: solid gray 1px;
+	margin: 0 10px;
+	width: 70%;
+}
+
+removeStoreListener, addStoreListener, routerDisconnectAll, routerRemoveListener, routerAddListener, routerRemoveResponder, routerAddResponder, routerUnsub, routerSub, linkerSub, linkerUnsub{
+	display: block;
+	bottom: 25px;
+	text-align: center;
+	background-color: #eee;
+	cursor: pointer;
+	width: 300px;
+	height: 34px;
+	margin: 20px;
+	padding: 10px;
+	background-color: #068de6;
+	color: #ffffff;
+	font-family: Open Sans Condensed, sans-serif;
+	font-weight: 300;
+	font-size: 12px;
+	text-transform: uppercase;
+	letter-spacing: .1em;
+	transition: background-color .4s ease-out;
+	box-sizing: border-box;
+}
+
+removeStoreListener:hover, addStoreListener:hover, routerDisconnectAll:hover, routerRemoveListener:hover, routerAddListener:hover, routerRemoveResponder:hover, routerAddResponder, routerUnsub:hover, routerSub:hover, linkerSub:hover, linkerUnsub:hover{
+	background-color: #2cabff;
+}
