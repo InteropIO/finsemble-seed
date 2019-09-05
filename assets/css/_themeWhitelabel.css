@@ -1,91 +1,102 @@
 :root {
-  /* Theme Variables:  Use these variables to make broad-sweeping changes to the colors and fonts. */
+	/* Theme Variables:  Use these variables to make broad-sweeping changes to the colors and fonts. */
 
-  /* Font Settings */
-  --font-family: 'Roboto', sans-serif;
-  --primary-font-color: white;
-  --secondary-font-color: black;
-  --primary-font-weight: 300;
-  --secondary-font-weight: 500;
-  --tertiary-font-weight: bold;
+	/* color variable overrides */
+	--slate1: var(--brown-shade);
+	--slate2: var(--brown-shade);
+	--slate3: var(--brown-shade);
+	--slate4: var(--brown-shade);
+	--slate5: var(--brown-shade);
 
-  /* Color Theme */
+	/* Font Settings */
+	--font-family: "Roboto", sans-serif;
+	--primary-font-color: white;
+	--secondary-font-color: black;
+	--primary-font-weight: 300;
+	--secondary-font-weight: 500;
+	--tertiary-font-weight: bold;
 
-  --bronze: rgb(223, 174, 114);
-  --bronze-lighter: rgb(238, 172, 92);
-  --bronze-lightest:#ffd199;
-  --brown-shade:#5D4F4C;
-  --orange: rgb(167, 102, 11);
-  --charcoal: #212529;
+	/* Color Theme */
 
-  /* === highlight / hover colors === */
+	--bronze: rgb(223, 174, 114);
+	--bronze-lighter: rgb(238, 172, 92);
+	--bronze-lightest: #ffd199;
+	--brown-shade: #5d4f4c;
+	--orange: rgb(167, 102, 11);
+	--charcoal: #212529;
 
-  /* background colors */
-  --hover-color-light:var(--bronze);
-  --hover-color-dark:var(--charcoal);
-  /* text color */
-  --hover-text-light: var(--bronze);
-  --hover-text-dark:  var(--charcoal);
+	/* === highlight / hover colors === */
 
-  --primary-theme-color:var(--bronze);
-  --secondary-theme-color:var(--charcoal);
+	/* background colors */
+	--hover-color-light: var(--bronze);
+	--hover-color-dark: var(--charcoal);
+	/* text color */
+	--hover-text-light: var(--bronze);
+	--hover-text-dark: var(--charcoal);
 
-  --primary-accent-color: var(--primary-theme-color);
-  --secondary-accent-color: var(--brown-shade);
-  --tertiary-accent-color: var(--orange);
+	--primary-theme-color: var(--bronze);
+	--secondary-theme-color: var(--charcoal);
 
-  --primary-negative-color: var(--red5);
-  --secondary-negative-color: var(--red1);
-  --tertiary-negative-color: var(--red7);
+	--primary-accent-color: var(--primary-theme-color);
+	--secondary-accent-color: var(--brown-shade);
+	--tertiary-accent-color: var(--orange);
 
-  --primary-background-color: var(--charcoal);
-  --secondary-background-color: var(--charcoal);
-  --tertiary-background-color: var(--brown-shade);
+	--primary-negative-color: var(--red5);
+	--secondary-negative-color: var(--red1);
+	--tertiary-negative-color: var(--red7);
 
-  --scrollbar-color: var(--gray);
+	--primary-background-color: var(--charcoal);
+	--secondary-background-color: var(--charcoal);
+	--tertiary-background-color: var(--brown-shade);
 
-/* Toolbar */
-  --toolbar-font-color: var(--bronze);
-  --toolbar-brand-logo-width: auto;
-  --toolbar-brand-logo-height: 25px;
-  --toolbar-button-hover-color-light:var(--hover-color-light);
+	--scrollbar-color: var(--gray);
 
-  /* App Menu */
-  --menu-hover: rgba(223, 174, 114, 0.62);
-  --appMenu-leftNav-highlighter-hover: var(--hover-color-light);
-  --appMenu-leftNav-highlighter: var(--hover-color-light);
-  --appMenu-background-color: var(--secondary-theme-color);
-  --appMenu-app-item-hover-background-color: var(--hover-color-light);
-  --appMenu-edit-icon-hover-color-light: var(--orange);
+	/* Toolbar */
+	--toolbar-font-color: var(--bronze);
+	--toolbar-brand-logo-width: auto;
+	--toolbar-brand-logo-height: 25px;
+	--toolbar-button-hover-color-light: var(--hover-color-light);
 
-  /* Menus */
-  --menu-actions-background-color: var(--brown-shade);
-  --menu-actions-hover-color-light: var(--hover-color-light);
-  --menu-content-hover-color-light: var(--hover-color-dark);
-  --menu-content-hover-color:var(--menu-hover);
-  --menu-actions-hover-color:var(--menu-hover);
+	/* App Menu */
+	--menu-hover: rgba(223, 174, 114, 0.62);
+	--appMenu-leftNav-highlighter-hover: var(--hover-color-light);
+	--appMenu-leftNav-highlighter: var(--hover-color-light);
+	--appMenu-background-color: var(--secondary-theme-color);
+	--appMenu-app-item-hover-background-color: var(--hover-color-light);
+	--appMenu-edit-icon-hover-color-light: var(--orange);
+	--appMenu-leftNav-icon-color: #e28c58;
+
+	/* Menus */
+	--menu-actions-background-color: var(--brown-shade);
+	--menu-actions-hover-color-light: var(--hover-color-light);
+	--menu-content-hover-color-light: var(--hover-color-dark);
+	--menu-content-hover-color: var(--menu-hover);
+	--menu-actions-hover-color: var(--menu-hover);
 }
 
 /* Manual overrides */
 
-.finsemble-toolbar-drag-handle  g {
-    fill:var(--primary-theme-color);
+.finsemble-toolbar-drag-handle g {
+	fill: var(--primary-theme-color);
 }
-.menu{
-  background-color: var(--secondary-theme-color);
+.menu {
+	background-color: var(--secondary-theme-color);
 }
-.finsemble-toolbar-button[data-hover=true] {
-color: var(--primary-theme-color);
-/* you may need to change the filter if you pick a dark background color */
-filter: brightness(120%);
+.finsemble-toolbar-button[data-hover="true"] {
+	color: var(--primary-theme-color);
+	/* you may need to change the filter if you pick a dark background color */
+	filter: brightness(120%);
 }
 
 /* welcome component */
 .button {
-  background-color: var(--primary-theme-color);
-  color:var(--secondary-theme-color)
+	background-color: var(--primary-theme-color);
+	color: var(--secondary-theme-color);
 }
 .button:hover {
-  background-color: var(--primary-theme-color);
-  filter: brightness(120%);
+	background-color: var(--primary-theme-color);
+	filter: brightness(120%);
+}
+
+.complex-menu-left-nav > i {
 }
