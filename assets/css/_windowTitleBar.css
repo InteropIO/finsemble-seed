@@ -204,7 +204,7 @@ html.desktop-active .fsbl-icon-highlighted {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    margin-top: -1px;
+    margin-top: -2px;
 }
 
 .linker-group {
@@ -219,7 +219,7 @@ html.desktop-active .fsbl-icon-highlighted {
 
 .linker-group-accessible {
     width: 1em !important;
-    padding-bottom: 1px;
+    padding-bottom: 4px;
     margin-bottom: 4px;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.79);
 }
