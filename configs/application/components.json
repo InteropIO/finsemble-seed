@@ -69,11 +69,7 @@
 				"addToWorkspace": true
 			},
 			"component": {
-				"spawnOnHotkey": [
-					"ctrl",
-					"alt",
-					"n"
-				]
+				"spawnOnHotkey": ["ctrl", "alt", "n"]
 			},
 			"foreign": {
 				"services": {
@@ -182,6 +178,66 @@
 					"Window Manager": {
 						"FSBLHeader": false,
 						"persistWindowState": false
+					}
+				}
+			}
+		},
+		"News": {
+			"window": {
+				"listName": "News",
+				"url": "https://finsemble.chartiq.com/components/widgets/news/news.html",
+				"width": 354,
+				"height": 600
+			},
+			"component": {
+				"mode": "premium",
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Toolbar": {
+						"iconClass": "ff-news"
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": true,
+						"persistWindowState": true
+					}
+				}
+			}
+		},
+		"Company": {
+			"window": {
+				"url": "https://finsemble.chartiq.com/components/widgets/fundamentals/fundamentals.html",
+				"width": 500,
+				"height": 410
+			},
+			"component": {},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Toolbar": {
+						"iconClass": "ff-company"
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": true,
+						"persistWindowState": true
 					}
 				}
 			}
