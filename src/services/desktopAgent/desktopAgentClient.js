@@ -2,9 +2,8 @@ const Finsemble = require("@chartiq/finsemble");
 const RouterClient = Finsemble.Clients.RouterClient;
 const Logger = Finsemble.Clients.Logger;
 const WindowClient = Finsemble.Clients.WindowClient;
-const LinkerClient = Finsemble.Clients.LinkerClient;
 
-//FDC3 Desktop Agent V1.0 Functions 6/5/2019
+//FDC3 Desktop Agent V1.0 Functions 8/14/2019
 
 // open
 // open(name: string, context?: Context): Promise<void>;
@@ -81,7 +80,8 @@ export function raiseIntent(intent, context, target) {
 			// debugger;
 			console.log("DesktopAgent.raiseIntent response: ", response.data);
 			// debugger;
-			// LinkerClient.publish(response.data);
+			// Implementation Removed
+			// Router Publish
 			
 			if (err) {
 				reject(err);
@@ -101,7 +101,7 @@ export function addIntentListener(intent, handler) {
 		if (({}).toString.call(handler) === '[object AsyncFunction]' || ({}).toString.call(handler) === '[object Function]') {
 			//This is a valid handler
 			let channel = appName + intent;
-			LinkerClient.subscribe(channel, function(err, response){
+			RouterClient.subscribe(channel, function(err, response){
 				if(err){
 					console.log("Error adding IntentListener: ", err);
 				}

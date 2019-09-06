@@ -206,16 +206,17 @@ function desktopAgentService() {
 			if (!isTargetAvailable) {
 				//No Components, if target I can launch
 				//If no target, What does it do?
-				if (target) {
+				// if (target) {
 					this.open(target, context, (err, response) => {
 						console.log("Spawn Occured");
 					});
-				} else {
-					console.log("No Target so I didnt know what to open");
-				}
+				// } else {
+				// 	console.log("Handle this");
+				// }
 		} else {
 			// Raise the Intent - Router Communication
-			//Implement here
+			//Implementation Removed
+			//Router Publish obj w/o target
 		}
 	}
 		console.log("return value", resolvedIntent);
