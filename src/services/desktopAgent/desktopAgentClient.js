@@ -12,7 +12,7 @@ export function open(name, context) {
 
 	return new Promise(function (resolve, reject) {
 		Logger.log("Desktop Agent open called");
-		RouterClient.query("desktopAgentOpen", { "name": name, "context": context }, function (err, response) {
+		RouterClient.query("FDC3.desktopAgent.open", { "name": name, "context": context }, function (err, response) {
 			Logger.log("DesktopAgent.open response: ", response.data);
 			if (err) {
 				reject(err);
@@ -32,7 +32,7 @@ export function open(name, context) {
 export function findIntent(intent, context) {
 	return new Promise(function (resolve, reject) {
 		Logger.log("Desktop Agent findIntent called", intent, context);
-		RouterClient.query("desktopAgentFindIntent", { "intent": intent, "context": context }, function (err, response) {
+		RouterClient.query("FDC3.desktopAgent.findIntent", { "intent": intent, "context": context }, function (err, response) {
 			Logger.log("DesktopAgent.FindIntent response: ", response.data);
 			if (err) {
 				reject(err);
@@ -47,7 +47,7 @@ export function findIntent(intent, context) {
 export function findIntentsByContext(context) {
 	return new Promise(function (resolve, reject) {
 		Logger.log("Desktop Agent open called");
-		RouterClient.query("desktopAgentFindIntentsByContext", { "context": context }, function (err, response) {
+		RouterClient.query("FDC3.desktopAgent.findIntentsByContext", { "context": context }, function (err, response) {
 			Logger.log("DesktopAgent.findIntentsByContext response: ", response.data);
 			if (err) {
 				reject(err);
@@ -61,7 +61,7 @@ export function findIntentsByContext(context) {
 // broadcast(context: Context): void;
 export function broadcast(context) {
 	Logger.log("Desktop Agent broadcast called");
-	RouterClient.query("desktopAgentBroadcast", context, function (err, response) {
+	RouterClient.query("FDC3.desktopAgent.broadcast", context, function (err, response) {
 		if (err) {
 			Logger.log("DesktopAgent.broadcast ERROR:", err);
 			return;
@@ -77,11 +77,11 @@ export function broadcast(context) {
 export function raiseIntent(intent, context, target) {
 	return new Promise(function (resolve, reject) {
 		Logger.log("Desktop Agent raiseIntent called");
-		RouterClient.query("desktopAgentRaiseIntent", { "intent": intent, "context": context, "target": target }, function (err, response) {
+		RouterClient.query("FDC3.desktopAgent.raiseIntent", { "intent": intent, "context": context, "target": target }, function (err, response) {
 			// debugger;
 			console.log("DesktopAgent.raiseIntent response: ", response.data);
-			debugger;
-			LinkerClient.publish(response.data);
+			// debugger;
+			// LinkerClient.publish(response.data);
 			
 			if (err) {
 				reject(err);
@@ -101,13 +101,12 @@ export function addIntentListener(intent, handler) {
 		if (({}).toString.call(handler) === '[object AsyncFunction]' || ({}).toString.call(handler) === '[object Function]') {
 			//This is a valid handler
 			let channel = appName + intent;
-			// debugger;
 			LinkerClient.subscribe(channel, function(err, response){
 				if(err){
 					console.log("Error adding IntentListener: ", err);
 				}
 				// debugger;
-				// handler(response.data.context);
+				handler(response.data.context);
 			});
 		} else {
 			//This is not a valid handler

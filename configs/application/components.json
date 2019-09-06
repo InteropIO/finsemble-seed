@@ -24,33 +24,6 @@
 						"isArrangable": true
 					},
 					"fdc3": {
-						"appId": "welcome",
-						"name": "welcome",
-						"manifest": "http://welcome.com",
-						"manifestType": "welcome",
-						"version": "1",
-						"title": "DeskTop Agent Testerwelcome",
-						"tooltip": "none",
-						"description": "To Test FDC3 DesktopAgent API FSBL Implementation",
-						"images": [
-							{
-								"url": "http://welcome.com"
-							}
-						],
-						"contactEmail": "mark@chartiq.com",
-						"supportEmail": "mark@chartiq.com",
-						"publisher": "ChartIQ",
-						"icons": [
-							{
-								"icon": "http://welcome.com"
-							}
-						],
-						"customConfig": [
-							{
-								"name": "none",
-								"value": "none"
-							}
-						],
 						"intents": [
 							{
 								"name": "StartChat",
@@ -111,33 +84,6 @@
 						"isArrangable": true
 					},
 					"fdc3": {
-						"appId": "welcomeSender",
-						"name": "welcomeSender",
-						"manifest": "http://someURl.com",
-						"manifestType": "Finsembluh",
-						"version": "1",
-						"title": "DeskTop Agent Tester",
-						"tooltip": "none",
-						"description": "To Test FDC3 DesktopAgent API FSBL Implementation",
-						"images": [
-							{
-								"url": "http://someimage.com"
-							}
-						],
-						"contactEmail": "mark@chartiq.com",
-						"supportEmail": "mark@chartiq.com",
-						"publisher": "ChartIQ",
-						"icons": [
-							{
-								"icon": "http://someimage.com"
-							}
-						],
-						"customConfig": [
-							{
-								"name": "none",
-								"value": "none"
-							}
-						],
 						"intents": [
 							{
 								"name": "StartChat",

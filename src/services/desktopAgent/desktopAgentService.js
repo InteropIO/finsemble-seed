@@ -4,20 +4,11 @@
 */
 
 const Finsemble = require("@chartiq/finsemble");
-// // import Finsemble from "@chartiq/finsemble";
 const BaseService = Finsemble.baseService;
 const ConfigClient = Finsemble.Clients.ConfigClient;
 const LauncherClient = Finsemble.Clients.LauncherClient;
 const RouterClient = Finsemble.Clients.RouterClient;
-const LinkerClient = Finsemble.Clients.LinkerClient;
-const DistributedStoreClient = Finsemble.Clients.DistributedStoreClient;
 const Logger = Finsemble.Clients.Logger;
-
-// import { IGlobals } from "../common/Globals";
-// import { _BaseClient } from "./baseClient";
-// /** The global `window` object. We cast it to a specific interface here to be
-//  * explicit about what Finsemble-related properties it may have. */
-// const Globals = window as IGlobals;
 const Globals = window;
 
 
@@ -59,7 +50,7 @@ function desktopAgentService() {
 	 */
 	this.createRouterEndpoints = function () {
 
-		RouterClient.addResponder("desktopAgentOpen", function (error, queryMessage) {
+		RouterClient.addResponder("FDC3.desktopAgent.open", function (error, queryMessage) {
 			if (!error) {
 				console.log("Check Open Data Message:", queryMessage.data);
 				if (!queryMessage.data.name) {
@@ -78,7 +69,7 @@ function desktopAgentService() {
 			}
 		});
 
-		RouterClient.addResponder("desktopAgentFindIntent", function (error, queryMessage) {
+		RouterClient.addResponder("FDC3.desktopAgent.findIntent", function (error, queryMessage) {
 			if (!error) {
 				console.log("Validate findIntent Data Message:", queryMessage.data);
 				if (!queryMessage.data.intent) {
@@ -94,7 +85,7 @@ function desktopAgentService() {
 			}
 		});
 
-		RouterClient.addResponder("desktopAgentFindIntentsByContext", function (error, queryMessage) {
+		RouterClient.addResponder("FDC3.desktopAgent.findIntentsByContext", function (error, queryMessage) {
 			if (!error) {
 				console.log("Validate findIntentsByContext Data Message:", queryMessage.data);
 				if (!queryMessage.data.context) {
@@ -110,7 +101,7 @@ function desktopAgentService() {
 			}
 		});
 
-		RouterClient.addResponder("desktopAgentBroadcast", function (error, queryMessage) {
+		RouterClient.addResponder("FDC3.desktopAgent.broadcast", function (error, queryMessage) {
 			if (!error) {
 				console.log("This function executes without error");
 				if (!queryMessage.data) {
@@ -128,7 +119,7 @@ function desktopAgentService() {
 			}
 		});
 
-		RouterClient.addResponder("desktopAgentRaiseIntent", function (error, queryMessage) {
+		RouterClient.addResponder("FDC3.desktopAgent.raiseIntent", function (error, queryMessage) {
 			if (!error) {
 				console.log("Check Intent Data Message:", queryMessage.data);
 				if (!queryMessage.data.intent) {
@@ -145,48 +136,6 @@ function desktopAgentService() {
 					let responseData = serviceInstance.raiseIntent(queryMessage.data.intent, queryMessage.data.context, queryMessage.data.target).then((value) => {
 						console.log("CallBack for RaiseIntent Occured, Informing Client");
 						queryMessage.sendQueryResponse(null, value);
-					});
-					// debugger;
-
-
-				}
-			} else {
-				Logger.error("Failed to setup query responder", error);
-			}
-		});
-
-		RouterClient.addResponder("desktopAgentAddIntentListener", function (error, queryMessage) {
-			if (!error) {
-				console.log("Check Listener Intent:", queryMessage.data);
-				if (!queryMessage.data.intent) {
-					queryMessage.sendQueryResponse("Error, addIntentListener requires Intent parameter: " + queryMessage, null);
-					Logger.error("Desktop Agent - addIntentListener without valid Intent: ", queryMessage);
-				}
-				else {
-					console.log("Check addIntentListener Data intent:", queryMessage.data.intent);
-					serviceInstance.addIntentListener(queryMessage.data.intent, () => {
-						console.log("CallBack for addIntentListener Occured, Informing Client");
-						queryMessage.sendQueryResponse(null, queryMessage.data);
-					});
-
-				}
-			} else {
-				Logger.error("Failed to setup query responder", error);
-			}
-		});
-
-		RouterClient.addResponder("desktopAgentAddContextListener", function (error, queryMessage) {
-			if (!error) {
-				console.log("Check Intent Data Message:", queryMessage.data);
-				if (!queryMessage.data.intent) {
-					queryMessage.sendQueryResponse("Error, FindIntent requires Intent parameter: " + queryMessage, null);
-					Logger.error("Desktop Agent - Find Intent without valid Intent: ", queryMessage);
-				} else {
-					console.log("Check FindIntent Data intent:", queryMessage.data.intent);
-					console.log("Check FindIntent Data context:", queryMessage.data.context);
-					serviceInstance.findIntent(queryMessage.data.intent, queryMessage.data.context, () => {
-						console.log("CallBack for FindIntent Occured, Informing Client");
-						queryMessage.sendQueryResponse(null, queryMessage.data);
 					});
 
 				}
@@ -237,66 +186,42 @@ function desktopAgentService() {
 	// broadcast(context: Context): void;
 	this.broadcast = function (context) {
 		RouterClient.transmit("broadcast", context);
-		// Logger.log("Desktop Agent - Broadcast:", context);
 		return this;
 	}
 
 	// raiseIntent
 	// raiseIntent(intent: string, context: Context, target?: string): Promise<IntentResolution>;
 	this.raiseIntent = async function (intent, context, target) {
-		console.log("window distributed store: ", Globals.distributedStoreClient);
-		let channels = await ConfigClient.getValue({ field: "finsemble.servicesConfig.linker.channels" })
-		var storeVal = await Globals.distributedStoreClient.getStore({
-			store: "Finsemble_Linker",
-			global: true,
-			values: {
-				channels: channels,
-				clients: {}
-			}
-		}, function (err, linkerStore) {
-			console.log(linkerStore);
-		});
-		console.log("store Values", storeVal);
-		var linkedComponentStore = storeVal.response.data.values.clients;
-		//To Do - Should accept multiple channels
-		var linkedComponents = queryJSON.hasOwnDeepProperty(linkedComponentStore, "group1");
-		var resolvedIntent = queryJSON.filterTargetComponent(linkedComponents, target);
-		// debugger;
-		if (!resolvedIntent || resolvedIntent.length == 0) {
-			//No linked Components, if target I can launch
-			//If no target, What does it do?
-			if (target) {
-				this.open(target, context, (err, response) => {
-					console.log("Spawn Occured");
-					// callback();
-				});
-			} else {
-				console.log("No Target so I didnt know what to open");
-			}
+		var resolvedIntent;
+		var componentList = await LauncherClient.getActiveDescriptors(function(err, response){
+			return response});
+		console.log("componentList", componentList);
 
-		} else {
-			//TO DO: add a resolver for target - user should be able to select target if multiple options are available
-			target = resolvedIntent[0].client.componentType;
+		if(!target){
+			desktopAgentUtilities.resolveIntent(intent, context, componentList.data);
 		}
+		else{
+			var availableComponentMatch = queryJSON.filterTargetComponent(componentList.data, target);
+			var isTargetAvailable = (availableComponentMatch && !(availableComponentMatch.length == 0));
+			if (!isTargetAvailable) {
+				//No Components, if target I can launch
+				//If no target, What does it do?
+				if (target) {
+					this.open(target, context, (err, response) => {
+						console.log("Spawn Occured");
+					});
+				} else {
+					console.log("No Target so I didnt know what to open");
+				}
+		} else {
+			// Raise the Intent - Router Communication
+			//Implement here
+		}
+	}
 		console.log("return value", resolvedIntent);
 		let dataType = target + intent;
-		return { channels: "group1", dataType: dataType, data: context };
-		// return this;
+		return {dataType: dataType, data: context };
 	}
-
-	// addIntentListener
-	// addIntentListener(intent: string, handler: (context: Context) => void): Listener;
-	this.addIntentListener = function (intent) {
-		//TO DO - Implement addIntentListener where the service sents up the intent mapping rather than the client
-		//Desktop specific mappings
-	}
-
-	// addContextListener
-	// addContextListener(handler: (context: Context) => void): Listener;
-	this.addContextLstener = function (context) {
-
-	}
-
 
 }
 
@@ -305,7 +230,7 @@ desktopAgentService.prototype = new Finsemble.baseService({
 	startupDependencies: {
 		// add any services or clients that should be started before your service
 		services: ["authenticationService"],
-		clients: [/* "storageClient" */]
+		clients: []
 	}
 });
 
