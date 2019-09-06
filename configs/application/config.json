@@ -1,5 +1,6 @@
 {
 	"comment": "Top-level application config for development, adding on top of the core config",
+	"accessibleLinker": true,
 	"servicesConfig": {
 		"distributedStore": {
 			"initialStores": [
@@ -7,10 +8,7 @@
 					"name": "Finsemble-AppLauncher-Store",
 					"foundation": {
 						"appFolders": {
-							"list": [
-								"My Apps",
-								"Favorites"
-							],
+							"list": ["My Apps", "Favorites"],
 							"folders": {
 								"My Apps": {
 									"icon": "ff-component",
@@ -67,7 +65,8 @@
 			"onlySpawned": true,
 			"throttle": 10,
 			"focusDelay": 30,
-			"eventIgnore": 50
+			"eventIgnore": 50,
+			"hideTitleBars": false
 		},
 		"docking": {
 			"enabled": true,
@@ -87,11 +86,7 @@
 			}
 		},
 		"logger": {
-			"hotkeyShowCentralLogger": [
-				"ctrl",
-				"shift",
-				"L"
-			]
+			"hotkeyShowCentralLogger": ["ctrl", "shift", "L"]
 		},
 		"storage": {
 			"defaultStorage": "IndexedDBAdapter",

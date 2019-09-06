@@ -315,7 +315,7 @@ var Actions = {
 	},
 	//Hide the window.
 	hideWindow() {
-		fin.desktop.Window.getCurrent().hide();
+		finsembleWindow.hide();
 	},
 	//Spawn a component.
 	launchComponent(config, params, cb) {

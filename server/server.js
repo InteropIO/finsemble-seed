@@ -100,7 +100,7 @@
 				// For Assimilation
 				app.use("/hosted", express.static(path.join(__dirname, "..", "hosted"), options));
 
-				// configs/openfin/manifest-local.json and configs/other/server-environment-startup.json
+				// configs/application/manifest-local.json and configs/other/server-environment-startup.json
 				// Make the config public
 				app.use("/configs", express.static("./configs", options));
 				app.use("/pkg", express.static('./pkg', options));
@@ -137,7 +137,7 @@
 		//Listens for the first time that the config and the serviceManager are retrieved, and logs output to the console.
 		let notified_config = false, notified_sm = false;
 		let serviceManagerRetrievedTimeout;
-		app.get("/configs/openfin/manifest-local.json", (req, res, next) => {
+		app.get("/configs/application/manifest-local.json", (req, res, next) => {
 			if (!notified_config) {
 
 				// Send a timestamp back to the parent process

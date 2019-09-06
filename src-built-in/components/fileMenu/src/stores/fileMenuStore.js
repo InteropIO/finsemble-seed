@@ -86,6 +86,14 @@ var Actions = {
 		FSBL.Clients.RouterClient.transmit("CentralConsole-Show", true);
 	},
 	/**
+	 * Sends a message to the system manager to show the log.
+	 *
+	 */
+	showSystemLog() {
+		finsembleWindow.hide();
+		FSBL.SystemManagerClient.showSystemLog();
+	},
+	/**
 	 * Spawns the preferences menu.
 	 */
 	spawnPreferences() {
@@ -180,7 +188,7 @@ var Actions = {
 			});
 	},
 	spawnDocs() {
-		fin.desktop.System.openUrlWithBrowser("https://www.chartiq.com/tutorials/?slug=finsemble-seed-project", function () {
+		FSBL.System.openUrlWithBrowser("https://www.chartiq.com/tutorials/?slug=finsemble-seed-project", function () {
 			//console.log("successfully launched docs");
 		}, function (err) {
 			//console.log("failed to launch docs");

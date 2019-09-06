@@ -1,3 +1,5 @@
+const { launch, connect } = require('hadouken-js-adapter');
+
 (() => {
 	"use strict";
 
@@ -14,8 +16,6 @@
 	const fs = require("fs");
 	const gulp = require("gulp");
 	const prettyHrtime = require("pretty-hrtime");
-	const watch = require("gulp-watch");
-	const openfinLauncher = require("openfin-launcher");
 	const shell = require("shelljs");
 	const path = require("path");
 	const webpack = require("webpack");
@@ -375,22 +375,33 @@
 				taskMethods.startServer
 			], done);
 		},
-		launchOpenFin: done => {
+		launchOpenFin: async (done) => {
 			ON_DEATH(() => {
 				killApp("OpenFin", () => {
-
 					if (watchClose) watchClose();
 					process.exit();
 				});
 			});
-
-			openfinLauncher.launchOpenFin({
-				configPath: taskMethods.startupConfig[env.NODE_ENV].serverConfig
-			}).then(() => {
-				// OpenFin has closed so exit gulpfile
+			try {
+				const manifestUrl = taskMethods.startupConfig[env.NODE_ENV].serverConfig;
+				// Once the server is running we can launch OpenFin and retrieve the port.
+				const port = await launch({ manifestUrl });
+				// Use the port to connect and determine when OpenFin exists.
+				const fin = await connect({
+					uuid: 'server-connection',
+					// Connect to the given port.
+					address: `ws://localhost:${port}`,
+					// We want OpenFin to exit as our application exists.
+					nonPersistent: true
+				});
 				if (watchClose) watchClose();
+				// Once OpenFin exits we shut down the server.
+				fin.once('disconnected', process.exit);
+			} catch (error) {
+				console.error(`Unable to launch and connect to OpenFin: ${error.message}`);
 				process.exit();
-			});
+			}
+
 			if (done) done();
 		},
 		launchElectron: done => {
