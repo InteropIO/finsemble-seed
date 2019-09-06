@@ -635,6 +635,11 @@ html.desktop-active .fsbl-icon.fsbl-close[data-hover=true] {
     border: 1px solid var(--titleBar-background-inactive-color);
 }
 
+.linker-group-accessible {
+    width: 5px !important;
+    margin-top: 2px;
+}
+
 .ff-linker:before {
     padding-top: 0px;
 }
@@ -700,6 +705,30 @@ html.desktop-active .fsbl-linker[hover=true] {
 
 .ghost-tab {
     z-index: 2147483638;
+}
+
+/* Linker Menu */
+
+#main {
+    padding: 0;
+}
+
+.channel-wrapper {
+    border-radius: 0;
+}
+
+.channel-wrapper:hover {
+    background-color: var(--menu-content-hover-color);
+}
+
+.channel-label {
+    font-weight: var(--primary-font-weight);
+    text-shadow: none;
+}
+
+.active-linker-group {
+    font-size: 16px;
+    margin: 4px 2px 0 2px;
 }
 
 /* User Preferences Classes */
