@@ -714,11 +714,15 @@ html.desktop-active .fsbl-linker[hover=true] {
 }
 
 .channel-wrapper {
-    border-radius: 0;
+    border-radius: 0px;
 }
 
 .channel-wrapper:hover {
-    background-color: var(--menu-content-hover-color);
+    background-color: transparent;
+}
+
+.channel-wrapper {
+    justify-content: center;
 }
 
 .channel-label {
@@ -728,7 +732,17 @@ html.desktop-active .fsbl-linker[hover=true] {
 
 .active-linker-group {
     font-size: 16px;
-    margin: 4px 2px 0 2px;
+    margin: 4px 2px 0px 2px;
+}
+
+.linkerGroup {
+    width: 100%;
+    border-radius: 2px;
+    margin-right: 8px;
+}
+
+.linkerGroup:hover {
+    background-color: #eee;
 }
 
 /* User Preferences Classes */

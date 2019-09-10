@@ -176,7 +176,7 @@
 			"window": {
 				"url": "$applicationRoot/components/linker/linker.html",
 				"affinity": "systemComponents",
-				"width": 132,
+				"width": 65,
 				"height": 232,
 				"ephemeral": true,
 				"options": {
