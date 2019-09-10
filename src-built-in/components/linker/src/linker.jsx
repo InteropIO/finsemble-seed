@@ -81,6 +81,12 @@ class Linker extends React.Component {
 
 		const getLinkerItemRenderer = (channel, isAccessibleLinker) => {
 			if (!isAccessibleLinker) return null;
+			
+			if (channel.label) {
+				return <div className="channel-label">{channel.label}</div>
+			} else {
+				return <div className="channel-label">{"Group " + getChannelLabelFromIndex(channel.name, FSBL.Clients.LinkerClient.getAllChannels())}</div>
+			}
 		}
 
 		/**
