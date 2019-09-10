@@ -266,6 +266,10 @@ html.desktop-active .fsbl-icon-highlighted {
     margin-right: 2px;
 }
 
+.fsbl-share > svg {
+    margin-top: 1px;
+}
+
 /* html.desktop-active .fsbl-linker[data-hover=true] {
     background: var(--titleBar-button-hover-active-color);
     color: var(--titleBar-button-hover-linker-group);
