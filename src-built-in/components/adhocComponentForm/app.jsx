@@ -14,7 +14,10 @@ import { FinsembleDialog, FinsembleDialogTextInput, FinsembleDialogQuestion, Fin
 class AdHocComponentForm extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {name: '', url: ''}
+		this.state = {
+			name: "", 
+			url: ""
+		}
 		this.save = this.save.bind(this);
 		this.cancel = this.cancel.bind(this);
 		this.setName = this.setName.bind(this);

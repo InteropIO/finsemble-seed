@@ -81,9 +81,8 @@ export default class Workspace extends React.Component {
 	 * @memberof Workspace
 	 */
 	render() {
-		const { isSwitchingWorkspaces, workspace, isActiveWorkspace } = this.props;
+		const { isSwitchingWorkspaces, workspace, isActiveWorkspace, dragHandle } = this.props;
 		let actionButtons = null;
-		const dragHandle = this.props.dragHandle;
 
 		//Actions are remove and pin workspace.
 		if (this.props.itemActions) {
