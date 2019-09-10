@@ -6,7 +6,7 @@
 @import '../../../../../assets/css/_globals.css';
 
 body {
-    margin: 0;
+    margin: 0px;
     border: 0;
     font-family: var(--font-family);
     font-size: var(--menu-font-size);
@@ -60,5 +60,5 @@ body {
 .active-linker-group {
     color: var(--menu-linker-selected-font-color);
     font-size: var(--menu-linker-selected-font-size);
-    margin: 2px 2px 0 0;
+    margin: 2px 2px 0px 0px;
 }

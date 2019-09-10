@@ -70,7 +70,6 @@ body.dialog input::-webkit-outer-spin-button,
 .controls-wrapper input:focus,
 body.dialog input:focus {
     box-shadow: 0 0 5px rgba 81, 203, 238, 1;
-    border: none;
     border-bottom: 2px solid var(--dialog-input-border-focus-color);
     outline: none;
 }
@@ -89,7 +88,7 @@ body.dialog input {
     height: 33px;
     max-width: 100%;
     padding: 3px 10px;
-    border: none;
+    border: 0px;
     border-bottom: 2px solid var(--dialog-input-border-color);
     box-sizing: border-box;
     transition: .2s ease-in;
@@ -106,7 +105,7 @@ body.dialog input {
     font-weight: var(--button-font-weight);
     font-size: var(--button-font-size);
     transition: .2s ease;
-    display:flex;
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-self: center;

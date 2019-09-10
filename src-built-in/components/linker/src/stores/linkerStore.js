@@ -61,7 +61,7 @@ var LinkerStore = Object.assign({}, EventEmitter.prototype, {
 			}
 
 			// Default value is false.
-			value = (value === null) ? false : value;
+			value = (value === null) ? true : value;
 			
 			self.accessibleLinker = value;
 		});

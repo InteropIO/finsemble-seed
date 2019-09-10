@@ -47,7 +47,7 @@ h1 {
 button {
 	width: 200px;
     text-align: center !important;
-    margin: 0 auto;
+    margin: 0px auto;
     max-width: 2000px;
     -webkit-appearance:none;
     background-color: #2068C3;

@@ -30,7 +30,7 @@ body.menu {
     overflow-y: auto;
     list-style-type: none;
     width: 100%;
-    padding-left: 0;
+    padding-left: 0px;
     margin-top: 0px;
     margin-bottom: 0px;
 }
@@ -75,7 +75,7 @@ body.menu {
     overflow: hidden;
     text-overflow: ellipsis;
     padding-top: 6px;
-    margin: 3px 0;
+    margin: 3px 0px;
     height: 22px;
     flex: 1;
     position: relative;

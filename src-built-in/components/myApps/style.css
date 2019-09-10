@@ -16,7 +16,7 @@ img {
 
 .app-launcher-menu {
     height: 100%;
-    padding: 0 !important;
+    padding: 0px !important;
 }
 
 .pointer {
@@ -272,8 +272,8 @@ img {
 }
 
 .folder-actions-menu ul {
-	padding: 0;
-	margin: 0;
+	padding: 0px;
+	margin: 0px;
 }
 
 .folder-actions-menu li {
@@ -363,8 +363,8 @@ select:focus, option:focus {
 	overflow-y: auto;
 }
 .actions-menu ul {
-	padding: 0;
-	margin: 4px 0;
+	padding: 0px;
+	margin: 4px 0px;
 }
 .actions-menu li {
 	font-size: var(--appMenu-font-size);
@@ -385,7 +385,7 @@ select:focus, option:focus {
 
   .app-item-title .ff-favorite{
     margin-left: 6px;
-    padding: 0;
+    padding: 0px;
     font-size: var(--appMenu-font-size);
     color: var(--appMenu-app-favorite-color);
   }
@@ -413,7 +413,7 @@ select:focus, option:focus {
     display: flex;
     align-items: center;
     font-size: 12px;
-    margin: 3px 0;
+    margin: 3px 0px;
     line-height: 1;
     width: 390px;
     height: 15px;
@@ -455,7 +455,7 @@ select:focus, option:focus {
     line-height: 17px;
     padding: 2px 7px;
     display: inline-block;
-    margin: 0 5px;
+    margin: 0px 5px;
   }
 
   .sort-option.active {

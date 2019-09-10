@@ -51,8 +51,8 @@
 }
 
 .finsemble-toolbar-button {
-    padding: 0 8px 2px 8px;
-    margin: 5px 0;
+    padding: 0px 8px 2px 8px;
+    margin: 5px 0px;
     border: 1px solid var(--toolbar-background-color);
     display: flex;
     align-items: center;
@@ -166,7 +166,7 @@ span > svg {
     height: 24px;
     border-right: var(--toolbar-separator);
     content: '';
-    margin: 0 .25em;
+    margin: 0em .25em;
 }
 
 img.pinned-icon {

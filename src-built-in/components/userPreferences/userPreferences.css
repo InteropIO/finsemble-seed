@@ -125,7 +125,7 @@ img {
 .complex-menu-section-toggle {
     padding: 6px 30px;
     margin-right:6px;
-    border-radius: 0 20px 20px 0;
+    border-radius: 0px 20px 20px 0px;
     height: 22px;
     display:flex;
     align-items: center;
@@ -178,7 +178,7 @@ img {
 
 .workspace-item {
     height: 28px;
-    padding: 4px 10px 0 10px;
+    padding: 4px 10px 0px 10px;
     display: flex;
     align-items: center;
     border: 1px solid transparent;
@@ -268,11 +268,11 @@ img {
 
 .action-button {
     border: 1px solid var(--button-neutral-border-hover-color);
-    padding: .25em 0;
+    padding: .25em 0em;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 16px 0 6px 0;
+    margin: 16px 0px 6px 0px;
     color: var(--content-button-icon-color);
     transition: .2s all;
 }

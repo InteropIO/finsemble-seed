@@ -10,8 +10,8 @@
     line-height: normal;
     letter-spacing: normal;
 	height: 100%;
-	margin-left: 0;
-	margin-right: 0;
+	margin-left: 0px;
+	margin-right: 0px;
 }
 
 .appMarket .market-content {
@@ -41,7 +41,7 @@
 }
 
 .market_content {
-	padding: 0 5px 25px 5px;
+	padding: 0px 5px 25px 5px;
 	font-family: var(--font-family);
 }
 
@@ -204,7 +204,7 @@
 	font-size: var(--tag-font-size);
 	font-weight: var(--font-weight-1);
 	color: var(--catalog-font-color);
-	margin: 0 10px;
+	margin: 0px 10px;
 }
 
 .app-card .app-tags {
@@ -330,11 +330,11 @@
 }
 
 .search-main .button-label {
-	padding: 0 5px;
+	padding: 0px 5px;
 }
 
 .ff-search {
-    padding: 8px 10px 0 5px;
+    padding: 8px 10px 0px 5px;
 }
 
 .search-main {
@@ -451,7 +451,7 @@
 	height: 24px;
 	border-radius: 12px;
 	color: var(--catalog-font-color);
-	padding: 0 5px 0 9px;
+	padding: 0px 5px 0px 9px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -544,7 +544,7 @@
 }
 
 .app-results {
-	padding: 0 32px;
+	padding: 0px 32px;
 	display: flex;
 	justify-content: center;
 }
@@ -572,15 +572,15 @@
 }
 
 .app-showcase .app-warning .app-warning-text {
-	padding: 0 5px;
+	padding: 0px 5px;
 }
 
 .app-showcase .header {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-	padding: 5px 0;
-	margin: 0 49px;
+	padding: 5px 0px;
+	margin: 0px 49px;
 }
 
 .app-showcase .header .icon-title-container {
@@ -613,7 +613,7 @@
 
 .app-showcase .header .action-button-container .remove-button {
 	height: 16px;
-	padding: 5px 0;
+	padding: 5px 0px;
 	cursor: pointer;
 }
 
@@ -689,12 +689,12 @@
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
-	padding: 5px 0;
+	padding: 5px 0px;
 	user-select: none;
 }
 
 .app-showcase .image-carousel-image {
-	padding: 5px 0;
+	padding: 5px 0px;
 	height: 125px;
 	width: 125px;
 }
@@ -704,12 +704,12 @@
 	flex-direction: column;
 	justify-content: flex-start;
   	font-size: var(--catalog-font-size-text);
-	padding: 5px 0;
-	margin: 0 28px 10px 28px;
+	padding: 5px 0px;
+	margin: 0px 28px 10px 28px;
 }
 
 .app-notes p {
-	margin: 0;
+	margin: 0px;
 }
 
 .app-showcase a {
@@ -768,7 +768,7 @@
 	flex-direction: row;
 	justify-content: space-between;
   	font-size: 12px;
-	padding: 5px 0;
+	padding: 5px 0px;
 	margin-left: 28px;
 }
 
@@ -803,8 +803,8 @@
 	border-radius: 12px;
 	background-color: var(--tag-background-color);
 	user-select: none;
-	margin: 0 4px 4px 0;
-	padding: 1px 8px 0 8px;
+	margin: 0px 4px 4px 0px;
+	padding: 1px 8px 0px 8px;
 	cursor: pointer;
 	transition: .2s all;
 }

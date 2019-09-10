@@ -146,11 +146,11 @@ body {
 
 .action-button {
     border: 1px solid var(--button-neutral-border-color);
-    padding: .25em 0;
+    padding: .25em 0em;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 16px 0 6px 0;
+    margin: 16px 0px 6px 0px;
 }
 
 .action-button:hover {
