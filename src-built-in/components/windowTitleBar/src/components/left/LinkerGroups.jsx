@@ -41,7 +41,7 @@ export default class LinkerGroups extends React.Component {
                 console.err("Error getting accessibleLinker value", err);
             }
 
-            // Default value is false.
+            // Default value for accessibleLinker is true.
             value = (value === null) ? true : value;
             
             accessibleLinker = value;

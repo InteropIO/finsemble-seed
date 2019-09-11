@@ -60,7 +60,7 @@ var LinkerStore = Object.assign({}, EventEmitter.prototype, {
 				console.err("Error getting accessibleLinker value", err);
 			}
 
-			// Default value is false.
+			// Default value for accessibleLinker is true.
 			value = (value === null) ? true : value;
 			
 			self.accessibleLinker = value;
