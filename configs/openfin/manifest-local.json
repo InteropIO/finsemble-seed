@@ -3,7 +3,7 @@
     "startup_app": {
         "name": "ChartIQ Local",
         "url": "https://localhost.chartiq.com:3375/finsemble/components/system/serviceManager/serviceManager.html",
-        "uuid": "Finsemble",
+        "uuid": "Finsemble-Lombard-Odier",
         "applicationIcon": "https://localhost.chartiq.com:3375/assets/img/Finsemble_Taskbar_Icon.png",
         "defaultTop": 0,
         "defaultLeft": 0,
@@ -32,15 +32,15 @@
     },
     "shortcut": {
         "company": "ChartIQ",
-        "description": "ChartIQ Local",
+        "description": "FInsemble Lombard Odier",
         "icon": "https://localhost.chartiq.com:3375/assets/img/Finsemble_Taskbar_Icon.ico",
-        "name": "ChartIQ - LOCAL",
+        "name": "Finsemble - Lombard Odier",
         "target": [
             "desktop",
             "start-menu"
         ],
         "force": false,
-        "startMenuRootFolder": "ChartIQ Local"
+        "startMenuRootFolder": "Finsemble"
     },
     "dialogSettings": {
         "logo": "https://localhost.chartiq.com:3375/assets/img/ciq-banner-100x25.png",
@@ -53,9 +53,9 @@
     "supportInformation": {
         "company": "ChartIQ",
         "product": "Finsemble Local Demo",
-        "email": "finsemble@chartiq.com"
+        "email": "support@finsemble.com"
     },
-    "fileName": "ChartIQ-local-installer",
+    "fileName": "Finsemble-Lombard-Odier-installer",
     "appAssets": [
         {
             "src": "https://localhost.chartiq.com:3375/assimilation/assimilation_3.11.0.0.zip",

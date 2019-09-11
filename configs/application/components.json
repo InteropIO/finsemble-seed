@@ -16,7 +16,8 @@
 			"component": {
 				"inject": false,
 				"spawnOnStartup": false,
-				"preload": "$applicationRoot/preloads/zoom.js"
+				"preload": "$applicationRoot/preloads/zoom.js",
+				"category": "system"
 			},
 			"foreign": {
 				"services": {

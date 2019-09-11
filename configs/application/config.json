@@ -1,9 +1,5 @@
 {
 	"comment": "Top-level application config for development, adding on top of the core config",
-	"startup": {
-		"adapter": "PASSWORD",
-		"component": "defaultAuthentication"
-	},
 	"servicesConfig": {
 		"distributedStore": {
 			"initialStores": [
@@ -175,5 +171,11 @@
 		"$applicationRoot/configs/application/workspaceTemplates.json",
 		"$applicationRoot/configs/application/services.json",
 		"$applicationRoot/configs/application/securityPolicies.json"
-	]
+	],
+	"authentication": {
+		"startup": {
+			"adapter": "PASSWORD",
+			"component": "defaultAuthentication"
+		}
+	}
 }
