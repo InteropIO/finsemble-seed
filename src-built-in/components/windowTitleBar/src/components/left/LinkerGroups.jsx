@@ -7,7 +7,7 @@ import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
 import { getStore, Actions as HeaderActions } from "../../stores/windowTitleBarStore";
 import { getChannelLabelFromIndex } from "../../../../shared/linkerUtil";
 let windowTitleBarStore;
-let accessibleLinker = true;
+let accessibleLinker;
 export default class LinkerGroups extends React.Component {
     constructor(props) {
         super(props);
@@ -42,9 +42,7 @@ export default class LinkerGroups extends React.Component {
             }
 
             // Default value for accessibleLinker is true.
-            value = (value === null) ? true : value;
-            
-            accessibleLinker = value;
+            accessibleLinker = (value && typeof value === "boolean") ? value : true;
         });
         windowTitleBarStore.addListener({ field: "Linker.channels" }, this.onChannelChange);
     }

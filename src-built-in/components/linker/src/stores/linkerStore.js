@@ -61,9 +61,7 @@ var LinkerStore = Object.assign({}, EventEmitter.prototype, {
 			}
 
 			// Default value for accessibleLinker is true.
-			value = (value === null) ? true : value;
-			
-			self.accessibleLinker = value;
+			self.accessibleLinker = (value && typeof value === "boolean") ? value : true;
 		});
 	}
 });
