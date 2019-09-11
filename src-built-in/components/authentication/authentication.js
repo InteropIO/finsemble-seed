@@ -1,140 +1,119 @@
-let inLogin = true;
-/************************************************
- * 			SAMPLE AUTHENTICATION
- ************************************************/
-// On ready, check to see if the user has a valid session
-if (window.FSBL && FSBL.addEventListener) {
-	FSBL.addEventListener("onReady", checkAuthorizationStatus);
-} else {
-	window.addEventListener("FSBLReady", checkAuthorizationStatus);
-}
+const FSBLReady = () => {
+    console.log("Finsemble Ready");
 
-$('#authAction').click( (e) => {
-    const text = inLogin ? 'Sign Up' : 'Login';
-    const actionLink = inLogin ? 'Login' : 'Sign Up';
-    inLogin = !inLogin;
-    $('#submitButton').html(text);
-    $('#authAction').html(actionLink);
-});
+    FSBL.Clients.Logger.system.log("APPLICATION LIFECYCLE:STARTUP:Authorization Component Load");
 
-document.body.addEventListener('keydown', handleKeydown);
-
-// Submits credentials on enter, closes on quit.
-function handleKeydown(event) {
-    switch (event.code) {
-        case 'Enter':
-        case 'NumpadEnter':
-            !event.shiftKey &&
-                processAuthInput();
-            break;
-        case 'Escape':
-            quit();
-            break;
+    //Finsemble will never come online for the authentication component and we don't want to alarm anyone.
+    // FSBL.displayStartupTimeoutError = false;
+    function quit() {
+        FSBL.shutdownApplication();
     }
-}
 
-//Here, you may want to hit a server and request the user's session information. If the session is valid, log them in automatically. This sample code assumes that they are not logged in and just shows the authentication page.
-function checkAuthorizationStatus() {
-    FSBL.System.Window.getCurrent().show();
-    //setTimeout(processAuthInput, 0);
-}
+    // In theory check whether we have a good session. In practice, just show the login dialog.
+    function checkSession() {
+        fin.desktop.Window.getCurrent().show();
+    }
 
-//Dummy function that just dumbly accepts whatever is in the form.
-function processAuthInput() {
-    var username = document.getElementById("username").value;
-    var password = document.getElementById("password").value;
-    // real authentication might use BasicAuth, Digest Auth, or pass off to authentication server which redirects back when authenticated
-    // below is a dummy example that just accepts credentials from the form and publishes them out.
-    var data = { username: username, password: password }
-    FSBL.System.Window.getCurrent().hide();
-
-    //FSBL.Clients.WindowClient.finsembleWindow.hide();
-    //In the real world, you'd get this from a server. Send joe's credentials to a server, and get back entitlements/basic config. For this example, we just accept the credentials.
-    publishCredentials(data)
-}
-
-//Pass credentials to the application.
-function publishCredentials(user) {
-    FSBL.Clients.AuthenticationClient.publishAuthorization(user.username, user);
-}
-
-//CLose app when the X is clicked.
-function quit() {
-    FSBL.shutdownApplication();
-}
-
-// Add events to HTML elements
-$("#submitButton").click(processAuthInput);
-$("#FSBL-close").click(quit);
-
-// For this example, the password doesn't do anything, so we are disabling it and setting a tooltip to let the user
-// know they don't need to enter a password. This should be removed in a production implementation.
-$("#password")
-    .prop("disabled", true)
-    .prop("placeholder", "Demo needs no password");
-
-
-
-
-
-
-
-
-
-/************************************************
- * 				UNUSED EXAMPLE CODE
- ************************************************/
-
-//Add the config to the config service. Our sample has nothing, b
-function updateConfig(config, cb) {
-    var configSet = {}
-    if (config.components) configSet["components"] = config.components;
-    if (config.menuItems) configSet["menus"] = config.menuItems;
-    if (config.defaultWorkspace) configSet["workspaces"] = config.defaultWorkspace.workspaces;
-
-    //if (config.overrides) configSet["cssOverridePath"] = config.overrides;
-    FSBL.Clients.ConfigClient.processAndSet(
-        {
-            newConfig: configSet,
+    //Add the config to the config service
+    function updateConfig(config, cb) {
+        FSBL.Clients.ConfigClient.processAndSet({
+            newConfig: config,
             overwrite: true,
             replace: true
-        },
-        function (err, config) {
-            return cb(err)
-        })
-}
+        }, cb);
+    }
 
-//Get a config for the user
-function getConfig(cb) {
-    fetch("/user/config", {
-        method: "GET",
-        credentials: 'include'
-    })
-        .catch((reason) => {
-            console.warn("Fail Auth Get", reason);
-        })
-        .then((res) => {
-            return res.json();
-        }).then(data => {
-            if (data) {
-                updateConfig(data, cb);
-            }
-        });
-}
+    //Tell authentication we're all good
+    function acceptCredentials(user) {
+        FSBL.Clients.Logger.system.log("APPLICATION LIFECYCLE:STARTUP:Authorization Component accept credentials");
+        FSBL.Clients.AuthenticationClient.publishAuthorization(user.username, user);
+        // FSBL.Clients.WindowClient.close( { removeFromWorkspace: false, closeWindow: true });
+    }
 
-
-function displayErrorMessage() {
-    fin.desktop.Window.getCurrent().show();
-    var ERROR_MESSAGE = $('.fsbl-input-error-message');
-    var INPUTS = $('.fsbl-auth-input');
-    const INPUT_ERROR_CLASS = 'fsbl-input-error';
-
-    INPUTS.addClass(INPUT_ERROR_CLASS);
-
-    ERROR_MESSAGE.show();
-
-    INPUTS.on('keydown', function () {
-        INPUTS.removeClass(INPUT_ERROR_CLASS)
-        ERROR_MESSAGE.hide();
+    $('#password').keypress(function (e) {
+        if (e.keyCode == 13)
+            processAuthInput();
     });
+
+    $('#authAction').click(function (e) {
+        var text = "Login"
+        var actionLink = "Login";
+        $('#submitButton').html(text);
+        $('#authAction').html(actionLink);
+    });
+
+    function displayErrorMessage() {
+        fin.desktop.Window.getCurrent().show();
+        var ERROR_MESSAGE = $('.fsbl-input-error-message');
+        var INPUTS = $('.fsbl-auth-input');
+        const INPUT_ERROR_CLASS = 'fsbl-input-error';
+
+        INPUTS.addClass(INPUT_ERROR_CLASS);
+
+        ERROR_MESSAGE.show();
+
+        INPUTS.on('keydown', function () {
+            INPUTS.removeClass(INPUT_ERROR_CLASS)
+            ERROR_MESSAGE.hide();
+        });
+    }
+
+    function processAuthInput() {
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+
+        // real authentication might use BasicAuth, Digest Auth, or pass off to authentication server which redirects back when authenticated
+        // below is a dummy example that sends an HTTP get with username and password to a serverl, then assumes authenticated when any responses is received
+
+        var authUrl = "/login";
+        var data = new FormData();
+        data.append("credentials", JSON.stringify({ username: username, password: password }));
+        fin.desktop.Window.getCurrent().hide();
+        fetch(authUrl, {
+            method: "POST",
+            body: data,
+            credentials: 'include'
+        })
+            .catch((reason) => {
+                displayErrorMessage();
+                console.warn("Fail Auth Get", reason);
+            })
+            .then((res) => {
+                if (res.ok) { // dummy example -- if ok response then move on like authentication was successful
+                    return res.json();
+                } else {
+                    displayErrorMessage();
+                    console.warn("Auth Error", res);
+                }
+            })
+            .then(data => {
+                var credentials = { token: "dummyToken-abcdenfhij1234567890" }; // create dummy credentials
+                updateConfig(data.config, function () {
+                    acceptCredentials(data.user)
+                });
+            });
+    }
+    document.body.addEventListener('keydown', handleKeydown);
+    function handleKeydown(e) {
+        if (e.code === 'Enter' && e.shiftKey === false) {
+            processAuthInput();
+        }
+
+        if (e.code === 'Escape') {
+            quit();
+        }
+    }
+
+    FSBL.Clients.Logger.system.log("APPLICATION LIFECYCLE:STARTUP:Authorization Component onReady");
+    checkSession();
+
+    // Add events to HTML elements
+    $("#submitButton").click(processAuthInput);
+    $("#FSBL-close").click(quit);
+}
+
+if (window.FSBL && FSBL.addEventListener) {
+    FSBL.addEventListener("onReady", FSBLReady);
+} else {
+    window.addEventListener("FSBLReady", FSBLReady)
 }

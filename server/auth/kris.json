@@ -1,0 +1,46 @@
+{
+	"importConfig": [
+		"$applicationRoot/components/chartiq/config.json"
+	],
+	"menus": [
+		{
+			"align": "left",
+			"iconClasses": "finsemble-toolbar-brand-logo",
+			"icon": "$applicationRoot/assets/img/Finsemble_Taskbar_Icon.png",
+			"menuType": "File Menu"
+		},
+		{
+			"align": "left",
+			"type": "reactComponent",
+			"reactComponent": "Search"
+		},
+		{
+			"align": "left",
+			"label": "Workspaces",
+			"menuType": "Workspace Management Menu",
+			"reactComponent": "WorkspaceMenuOpener",
+			"type": "reactComponent"
+		},
+		{
+			"align": "right",
+			"type": "reactComponent",
+			"reactComponent": "AutoArrange"
+		},
+		{
+			"align": "right",
+			"type": "reactComponent",
+			"reactComponent": "MinimizeAll"
+		},
+		{
+			"align": "right",
+			"type": "reactComponent",
+			"reactComponent": "BringToFront"
+		},
+		{
+			"align": "left",
+			"label": "Apps",
+			"menuType": "App Launcher"
+		}
+	]
+
+}

@@ -44,6 +44,7 @@
         "lodash.clonedeep": "4.5.0",
         "lodash.debounce": "4.0.8",
         "lodash.throttle": "4.1.1",
+        "multer": "^1.4.1",
         "nocache": "2.0.0"
     },
     "devDependencies": {
