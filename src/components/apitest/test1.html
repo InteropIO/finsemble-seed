@@ -8,11 +8,21 @@
 		<link rel="stylesheet" type="text/css" href="test1.css" />
 		<script src="test1.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-		<link
-			href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed"
-			rel="stylesheet"
-		/>
-		<script src="../../vendor.bundle.js"></script>
+		<script>
+			function openTab(evt, tabName) {
+			  var i, tabcontent, tablinks;
+			  tabcontent = document.getElementsByClassName("tabcontent");
+			  for (i = 0; i < tabcontent.length; i++) {
+				tabcontent[i].style.display = "none";
+			  }
+			  tablinks = document.getElementsByClassName("tablinks");
+			  for (i = 0; i < tablinks.length; i++) {
+				tablinks[i].className = tablinks[i].className.replace(" active", "");
+			  }
+			  document.getElementById(tabName).style.display = "block";
+			  evt.currentTarget.className += " active";
+			}
+		  </script>
 	</head>
 
 	<body>

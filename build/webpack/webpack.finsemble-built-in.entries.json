@@ -82,13 +82,5 @@
 	"throbber": {
 		"output": "components/throbber/throbber",
 		"entry": "./src-built-in/components/throbber/throbber.js"
-	},
-	"apitest1": {
-		"output": "components/apitest/apitest1",
-		"entry": "./src-built-in/components/apitest/test1.js"
-	},
-	"apitest2": {
-		"output": "components/apitest/apitest2",
-		"entry": "./src-built-in/components/apitest/test2.js"
 	}
 }

@@ -1,535 +1,508 @@
-//setup all the clients to be used
-const dragdropClient = FSBL.Clients.DragAndDropClient;
-const hotkeyClient = FSBL.Clients.HotkeyClient;
-const distributedStoreClient = FSBL.Clients.DistributedStoreClient
-const launcherClient = FSBL.Clients.LauncherClient
-const windowClient = FSBL.Clients.WindowClient
-const linkerClient = FSBL.Clients.LinkerClient
-const loggerClient = FSBL.Clients.Logger
-const routerClient = FSBL.Clients.RouterClient
-const workspaceClient = FSBL.Clients.WorkspaceClient
-const storageClient = FSBL.Clients.StorageClient
-const dialogManager = FSBL.Clients.DialogManager
-const searchClient = FSBL.Clients.SearchClient
-
 const keyMap = FSBL.Clients.HotkeyClient.keyMap;
-var store, test2SpawnResopnse
-
-function openTab(evt, tabName) {
-	var i, tabcontent, tablinks;
-	tabcontent = document.getElementsByClassName("tabcontent");
-	for (i = 0; i < tabcontent.length; i++) {
-		tabcontent[i].style.display = "none";
-	}
-	tablinks = document.getElementsByClassName("tablinks");
-	for (i = 0; i < tablinks.length; i++) {
-		tablinks[i].className = tablinks[i].className.replace(" active", "");
-	}
-	document.getElementById(tabName).style.display = "block";
-	evt.currentTarget.className += " active";
-}
+var dsStore, test2SpawnResopnse
 
 function renderPage() {
 	/* Setup dragevent listener for inputbox */
 	document.getElementById('symbolInput').addEventListener('dragstart', function (event) {
-		var data = {
+		const data = {
 			'rsrchx.report': {
 				symbol: event.target.value
 			},
 			'symbol': event.target.value
 		};
-		dragdropClient.dragStartWithData(event, data);
+		FSBL.Clients.DragAndDropClient.dragStartWithData(event, data);
 	})
 
-	routerClient.onReady(function () {
+	FSBL.Clients.RouterClient.onReady(function () {
 		console.log('RouterClient is ready')
 	})
 
 	/* Global hotkey button */
-	var registerGlobalHotKey = $("<registerGlobalHotKey>Register Global Ctrl+Q</registerGlobalHotKey>");
+	const registerGlobalHotKey = $("<registerGlobalHotKey>Register Global Ctrl+Q</registerGlobalHotKey>");
 	registerGlobalHotKey.click(function () {
 		registerGlobalHotkey();
 	});
 	$("#Hotkeys").append(registerGlobalHotKey);
 
-	var unregisterGlobalHotKey = $("<unregisterGlobalHotKey>Unregister Global Ctrl+Q</unregisterGlobalHotKey>");
+	const unregisterGlobalHotKey = $("<unregisterGlobalHotKey>Unregister Global Ctrl+Q</unregisterGlobalHotKey>");
 	unregisterGlobalHotKey.click(function () {
 		unregisterGlobalHotkey();
 	});
 	$("#Hotkeys").append(unregisterGlobalHotKey);
 
 	/* Local hotkey button */
-	var registerLocalHotKey = $("<registerLocalHotKey>Register Local Ctrl+Q</registerLocalHotKey>");
+	const registerLocalHotKey = $("<registerLocalHotKey>Register Local Ctrl+Q</registerLocalHotKey>");
 	registerLocalHotKey.click(function () {
 		registerLocalHotkey();
 	});
 	$("#Hotkeys").append(registerLocalHotKey);
 
-	var unregisterLocalHotKey = $("<unregisterLocalHotKey>Unregister Local Ctrl+Q</unregisterLocalHotKey>");
+	const unregisterLocalHotKey = $("<unregisterLocalHotKey>Unregister Local Ctrl+Q</unregisterLocalHotKey>");
 	unregisterLocalHotKey.click(function () {
 		unregisterLocalHotkey();
 	});
 	$("#Hotkeys").append(unregisterLocalHotKey);
 
 	/* Notification buttons */
-	var notification = $("<notification>Trigger Notification</notification>");
+	const notification = $("<notification>Trigger Notification</notification>");
 	notification.click(function () {
 		triggerNotification();
 	});
 	$("#Notification").append(notification);
 
 	/* LauncherClient buttons */
-	var getActiveDescriptors = $("<getActiveDescriptors>Get Active Descriptor</getActiveDescriptors>");
+	const getActiveDescriptors = $("<getActiveDescriptors>Get Active Descriptor</getActiveDescriptors>");
 	getActiveDescriptors.click(function () {
 		triggerGetActiveDescriptors();
 	});
 	$("#Launcher").append(getActiveDescriptors);
-	var getComponentDefaultConfig = $("<getComponentDefaultConfig>Get Component Default Config</getComponentDefaultConfig>");
+	const getComponentDefaultConfig = $("<getComponentDefaultConfig>Get Component Default Config</getComponentDefaultConfig>");
 	getComponentDefaultConfig.click(function () {
 		triggerGetComponentDefaultConfig();
 	});
 	$("#Launcher").append(getComponentDefaultConfig);
-	var getComponentList = $("<getComponentList>Get Component List</getComponentList>");
+	const getComponentList = $("<getComponentList>Get Component List</getComponentList>");
 	getComponentList.click(function () {
 		triggerGetComponentList();
 	});
 	$("#Launcher").append(getComponentList);
-	var getComponentsThatCanReceiveDataTypes = $("<getComponentsThatCanReceiveDataTypes>Get Components That Can Receive Data Types</getComponentsThatCanReceiveDataTypes>");
+	const getComponentsThatCanReceiveDataTypes = $("<getComponentsThatCanReceiveDataTypes>Get Components That Can Receive Data Types</getComponentsThatCanReceiveDataTypes>");
 	getComponentsThatCanReceiveDataTypes.click(function () {
 		triggerGetComponentsThatCanReceiveDataTypes();
 	});
 	$("#Launcher").append(getComponentsThatCanReceiveDataTypes);
-	var getMonitorInfo = $("<getMonitorInfo>Get Monitor Info</getMonitorInfo>");
+	const getMonitorInfo = $("<getMonitorInfo>Get Monitor Info</getMonitorInfo>");
 	getMonitorInfo.click(function () {
 		triggerGetMonitorInfo();
 	});
 	$("#Launcher").append(getMonitorInfo);
-	var getMonitorInfoAll = $("<getMonitorInfoAll>Get Monitor Info All</getMonitorInfoAll>");
+	const getMonitorInfoAll = $("<getMonitorInfoAll>Get Monitor Info All</getMonitorInfoAll>");
 	getMonitorInfoAll.click(function () {
 		triggerGetMonitorInfoAll();
 	});
 	$("#Launcher").append(getMonitorInfoAll);
-	var getMyWindowIdentifier = $("<getMyWindowIdentifier>Get My Window Identifer</getMyWindowIdentifier>");
+	const getMyWindowIdentifier = $("<getMyWindowIdentifier>Get My Window Identifer</getMyWindowIdentifier>");
 	getMyWindowIdentifier.click(function () {
 		triggerGetMyWindowIdentifier();
 	});
 	$("#Launcher").append(getMyWindowIdentifier);
-	var registerComponent = $("<registerComponent>Register Component</registerComponent>");
+	const registerComponent = $("<registerComponent>Register Component</registerComponent>");
 	registerComponent.click(function () {
 		triggerRegisterComponent();
 	});
 	$("#Launcher").append(registerComponent);
-	var unregisterComponent = $("<unregisterComponent>Unregister Component</unregisterComponent>");
+	const unregisterComponent = $("<unregisterComponent>Unregister Component</unregisterComponent>");
 	unregisterComponent.click(function () {
 		triggerUnregisterComponent();
 	});
 	$("#Launcher").append(unregisterComponent);
-	var spawnComponent = $("<spawnComponent>Spawn Component</spawnComponent>");
+	const spawnComponent = $("<spawnComponent>Spawn Component</spawnComponent>");
 	spawnComponent.click(function () {
 		triggerSpawnComponent();
 	});
 	$("#Launcher").append(spawnComponent);
-	var showWindow = $("<showWindow>Show Window</showWindow>");
+	const showWindow = $("<showWindow>Show Window</showWindow>");
 	showWindow.click(function () {
 		triggerShowWindow();
 	});
 	$("#Launcher").append(showWindow);
 
 	/* Linker Client buttons */
-	var getAllChannels = $("<getAllChannels>Get All Channels</getAllChannels>");
+	const getAllChannels = $("<getAllChannels>Get All Channels</getAllChannels>");
 	getAllChannels.click(function () {
 		triggerGetAllChannels();
 	});
 	$("#Linker").append(getAllChannels);
-	var getComLinkedGroup1 = $("<getComLinkedGroup1>Get Components Linked with Group1</getComLinkedGroup1>");
+	const getComLinkedGroup1 = $("<getComLinkedGroup1>Get Components Linked with Group1</getComLinkedGroup1>");
 	getComLinkedGroup1.click(function () {
 		triggerGetComLinkedGroup1();
 	});
 	$("#Linker").append(getComLinkedGroup1);
-	var getComLinkedCurWindow = $("<getComLinkedCurWindow>Get Components Linked with Current window</getComLinkedCurWindow>");
+	const getComLinkedCurWindow = $("<getComLinkedCurWindow>Get Components Linked with Current window</getComLinkedCurWindow>");
 	getComLinkedCurWindow.click(function () {
 		triggerGetComLinkedCurWindow();
 	});
 	$("#Linker").append(getComLinkedCurWindow);
-	var getWinLinkedGroup1 = $("<getWinLinkedGroup1>Get Windows Linked with Group1</getWinLinkedGroup1>");
+	const getWinLinkedGroup1 = $("<getWinLinkedGroup1>Get Windows Linked with Group1</getWinLinkedGroup1>");
 	getWinLinkedGroup1.click(function () {
 		triggerGetWinLinkedGroup1();
 	});
 	$("#Linker").append(getWinLinkedGroup1);
-	var getWinLinkedCurWindow = $("<getWinLinkedCurWindow>Get Windows Linked with Current window</getWinLinkedCurWindow>");
+	const getWinLinkedCurWindow = $("<getWinLinkedCurWindow>Get Windows Linked with Current window</getWinLinkedCurWindow>");
 	getWinLinkedCurWindow.click(function () {
 		triggerGetWinLinkedCurWindow();
 	});
 	$("#Linker").append(getWinLinkedCurWindow);
-	var getState = $("<getState>Get State of Current window</getState>");
+	const getState = $("<getState>Get State of Current window</getState>");
 	getState.click(function () {
 		triggerGetState();
 	});
 	$("#Linker").append(getState);
-	var linkToGroup1 = $("<linkToGroup1>Link to Group1</linkToGroup1>");
+	const linkToGroup1 = $("<linkToGroup1>Link to Group1</linkToGroup1>");
 	linkToGroup1.click(function () {
 		triggerLinkToGroup1();
 	});
 	$("#Linker").append(linkToGroup1);
-	var unlinkToGroup1 = $("<unlinkToGroup1>Unlink to Group1</unlinkToGroup1>");
+	const unlinkToGroup1 = $("<unlinkToGroup1>Unlink to Group1</unlinkToGroup1>");
 	unlinkToGroup1.click(function () {
 		triggerUnlinkToGroup1();
 	});
 	$("#Linker").append(unlinkToGroup1);
-	var startOnStateChange = $("<startOnStateChange>Start on state change</startOnStateChange>");
+	const startOnStateChange = $("<startOnStateChange>Start on state change</startOnStateChange>");
 	startOnStateChange.click(function () {
 		triggerStartOnStateChange();
 	});
 	$("#Linker").append(startOnStateChange);
-	var openLinkerWindow = $("<openLinkerWindow>Open Linker Window</openLinkerWindow>");
+	const openLinkerWindow = $("<openLinkerWindow>Open Linker Window</openLinkerWindow>");
 	openLinkerWindow.click(function () {
 		triggerOpenLinkerWindow();
 	});
 	$("#Linker").append(openLinkerWindow);
-	var linkerPub = $("<linkerPub>Linker Publish</linkerPub>");
+	const linkerPub = $("<linkerPub>Linker Publish</linkerPub>");
 	linkerPub.click(function () {
 		triggerLinkerPub();
 	});
 	$("#Linker").append(linkerPub);
 
 	/* Logger Client buttons */
-	var debug = $("<debug>Debug</debug>");
+	const debug = $("<debug>Debug</debug>");
 	debug.click(function () {
 		triggerDebug();
 	});
 	$("#Logger").append(debug);
-	var error = $("<error>Error</error>");
+	const error = $("<error>Error</error>");
 	error.click(function () {
 		triggerError();
 	});
 	$("#Logger").append(error);
-	var info = $("<info>Info</info>");
+	const info = $("<info>Info</info>");
 	info.click(function () {
 		triggerInfo();
 	});
 	$("#Logger").append(info);
-	var log = $("<log>Log</log>");
+	const log = $("<log>Log</log>");
 	log.click(function () {
 		triggerLog();
 	});
 	$("#Logger").append(log);
-	var verbose = $("<verbose>Verbose</verbose>");
+	const verbose = $("<verbose>Verbose</verbose>");
 	verbose.click(function () {
 		triggerVerbose();
 	});
 	$("#Logger").append(verbose);
-	var warn = $("<warn>Warn</warn>");
+	const warn = $("<warn>Warn</warn>");
 	warn.click(function () {
 		triggerWarn();
 	});
 	$("#Logger").append(warn);
 
 	/* Router client buttons */
-	var addPubSubResponder = $("<addPubSubResponder>Add Pub Sub Responder</addPubSubResponder>");
+	const addPubSubResponder = $("<addPubSubResponder>Add Pub Sub Responder</addPubSubResponder>");
 	addPubSubResponder.click(function () {
 		triggerAddPubSubResponder();
 	});
 	$("#Router").append(addPubSubResponder);
-	var removePubSubResponder = $("<removePubSubResponder>Remove Pub Sub Responder</removePubSubResponder>");
+	const removePubSubResponder = $("<removePubSubResponder>Remove Pub Sub Responder</removePubSubResponder>");
 	removePubSubResponder.click(function () {
 		triggerRemovePubSubResponder();
 	});
 	$("#Router").append(removePubSubResponder);
-	var publish = $("<publish>Publish</publish>");
+	const publish = $("<publish>Publish</publish>");
 	publish.click(function () {
 		triggerPublish();
 	});
 	$("#Router").append(publish);
-	var query = $("<query>Query</query>");
+	const query = $("<query>Query</query>");
 	query.click(function () {
 		triggerQuery();
 	});
 	$("#Router").append(query);
-	var transmit = $("<transmit>Transmit</transmit>");
+	const transmit = $("<transmit>Transmit</transmit>");
 	transmit.click(function () {
 		triggerTransmit();
 	});
 	$("#Router").append(transmit);
-	var disconnectAll = $("<disconnectAll>Disconnect all</disconnectAll>");
+	const disconnectAll = $("<disconnectAll>Disconnect all</disconnectAll>");
 	disconnectAll.click(function () {
 		triggerDisconnectAll();
 	});
 	$("#Router").append(disconnectAll);
 
 	/* Workspace client buttons */
-	var autoArrange = $("<autoArrange>Auto Arrange</autoArrange>");
+	const autoArrange = $("<autoArrange>Auto Arrange</autoArrange>");
 	autoArrange.click(function () {
 		triggerAutoArrange();
 	});
 	$("#Workspace").append(autoArrange);
-	var bringWinsToFront = $("<bringWinsToFront>Bring Windows To Front</bringWinsToFront>");
+	const bringWinsToFront = $("<bringWinsToFront>Bring Windows To Front</bringWinsToFront>");
 	bringWinsToFront.click(function () {
 		triggerBringWinsToFront();
 	});
 	$("#Workspace").append(bringWinsToFront);
-	var createWorkspace = $("<createWorkspace>Create Workspace</createWorkspace>");
+	const createWorkspace = $("<createWorkspace>Create Workspace</createWorkspace>");
 	createWorkspace.click(function () {
 		triggerCreateWorkspace();
 	});
 	$("#Workspace").append(createWorkspace);
-	var exportWorkspace = $("<exportWorkspace>Export Workspace</exportWorkspace>");
+	const exportWorkspace = $("<exportWorkspace>Export Workspace</exportWorkspace>");
 	exportWorkspace.click(function () {
 		triggerExportWorkspace();
 	});
 	$("#Workspace").append(exportWorkspace);
-	var getActiveWorkspace = $("<getActiveWorkspace>Get Active Workspace</getActiveWorkspace>");
+	const getActiveWorkspace = $("<getActiveWorkspace>Get Active Workspace</getActiveWorkspace>");
 	getActiveWorkspace.click(function () {
 		triggerGetActiveWorkspace();
 	});
 	$("#Workspace").append(getActiveWorkspace);
-	var getWorkspaces = $("<getWorkspaces>Get Workspaces</getWorkspaces>");
+	const getWorkspaces = $("<getWorkspaces>Get Workspaces</getWorkspaces>");
 	getWorkspaces.click(function () {
 		triggerGetWorkspaces();
 	});
 	$("#Workspace").append(getWorkspaces);
-	var importWorkspace = $("<importWorkspace>Import Workspace</importWorkspace>");
+	const importWorkspace = $("<importWorkspace>Import Workspace</importWorkspace>");
 	importWorkspace.click(function () {
 		triggerImportWorkspace();
 	});
 	$("#Workspace").append(importWorkspace);
-	var minimizeAll = $("<minimizeAll>Minimize All</minimizeAll>");
+	const minimizeAll = $("<minimizeAll>Minimize All</minimizeAll>");
 	minimizeAll.click(function () {
 		triggerMinimizeAll();
 	});
 	$("#Workspace").append(minimizeAll);
-	var removeWorkspace = $("<removeWorkspace>Remove Workspace</removeWorkspace>");
+	const removeWorkspace = $("<removeWorkspace>Remove Workspace</removeWorkspace>");
 	removeWorkspace.click(function () {
 		triggerRemoveWorkspace();
 	});
 	$("#Workspace").append(removeWorkspace);
-	var renameWorkspace = $("<renameWorkspace>Rename Workspace</renameWorkspace>");
+	const renameWorkspace = $("<renameWorkspace>Rename Workspace</renameWorkspace>");
 	renameWorkspace.click(function () {
 		triggerRenameWorkspace();
 	});
 	$("#Workspace").append(renameWorkspace);
-	var saveWorkspace = $("<saveWorkspace>Save Workspace</saveWorkspace>");
+	const saveWorkspace = $("<saveWorkspace>Save Workspace</saveWorkspace>");
 	saveWorkspace.click(function () {
 		triggerSaveWorkspace();
 	});
 	$("#Workspace").append(saveWorkspace);
-	var saveAsWorkspace = $("<saveAsWorkspace>Save As Workspace</saveAsWorkspace>");
+	const saveAsWorkspace = $("<saveAsWorkspace>Save As Workspace</saveAsWorkspace>");
 	saveAsWorkspace.click(function () {
 		triggerSaveAsWorkspace();
 	});
 	$("#Workspace").append(saveAsWorkspace);
-	var switchToWorkspace = $("<switchToWorkspace>Switch To Workspace</switchToWorkspace>");
+	const switchToWorkspace = $("<switchToWorkspace>Switch To Workspace</switchToWorkspace>");
 	switchToWorkspace.click(function () {
 		triggerSwitchToWorkspace();
 	});
 	$("#Workspace").append(switchToWorkspace);
 
-	/* DistributedStore Client buttons*/
-	var createStore = $("<createStore>Create Store</createStore>");
+	/* Distributed Store Client buttons*/
+	const createStore = $("<createStore>Create Store</createStore>");
 	createStore.click(function () {
 		triggerCreateStore();
 	});
 	$("#DistributedStore").append(createStore);
-	var getStore = $("<getStore>Get Store</getStore>");
+	const getStore = $("<getStore>Get Store</getStore>");
 	getStore.click(function () {
 		triggerGetStore();
 	});
 	$("#DistributedStore").append(getStore);
-	var removeStore = $("<removeStore>Remove Store</removeStore>");
+
+
+	const getStoreValue = $("<getStoreValue>Get Store Value</getStoreValue>");
+	getStoreValue.click(function () {
+		triggerGetStoreValue();
+	});
+	$("#DistributedStore").append(getStoreValue);
+	const setStoreValue1 = $("<setStoreValue1>Set Store Value field1</setStoreValue1>");
+	setStoreValue1.click(function () {
+		triggerSetStoreValue('field1');
+	});
+	$("#DistributedStore").append(setStoreValue1);
+	const setStoreValue2 = $("<setStoreValue2>Set Store Value field2</setStoreValue2>");
+	setStoreValue2.click(function () {
+		triggerSetStoreValue('field2');
+	});
+	$("#DistributedStore").append(setStoreValue2);
+	const removeStore = $("<removeStore>Remove Store</removeStore>");
 	removeStore.click(function () {
 		triggerRemoveStore();
 	});
 	$("#DistributedStore").append(removeStore);
 
-	var getStoreValue = $("<getStoreValue>Get Store Value</getStoreValue>");
-	getStoreValue.click(function () {
-		triggerGetStoreValue();
-	});
-	$("#DistributedStore").append(getStoreValue);
-	var setStoreValue1 = $("<setStoreValue1>Set Store Value field1</setStoreValue1>");
-	setStoreValue1.click(function () {
-		triggerSetStoreValue('field1');
-	});
-	$("#DistributedStore").append(setStoreValue1);
-	var setStoreValue2 = $("<setStoreValue2>Set Store Value field2</setStoreValue2>");
-	setStoreValue2.click(function () {
-		triggerSetStoreValue('field2');
-	});
-	$("#DistributedStore").append(setStoreValue2);
-
 	/* Storage client buttons */
-	var setStorageUser = $("<setStorageUser>Set User</setStorageUser>");
+	const setStorageUser = $("<setStorageUser>Set User</setStorageUser>");
 	setStorageUser.click(function () {
 		triggerSetStorageUser();
 	});
 	$("#Storage").append(setStorageUser);
-	var setStorageStore = $("<setStorageStore>Set Store</setStorageStore>");
+	const setStorageStore = $("<setStorageStore>Set Store</setStorageStore>");
 	setStorageStore.click(function () {
 		triggerSetStorageStore();
 	});
 	$("#Storage").append(setStorageStore);
-	var saveStorageValue = $("<saveStorageValue>Save Value</saveStorageValue>");
+	const saveStorageValue = $("<saveStorageValue>Save Value</saveStorageValue>");
 	saveStorageValue.click(function () {
 		triggerSaveStorageValue();
 	});
 	$("#Storage").append(saveStorageValue);
-	var getStorageValue = $("<getStorageValue>Get Storage Value</getStorageValue>");
+	const getStorageValue = $("<getStorageValue>Get Storage Value</getStorageValue>");
 	getStorageValue.click(function () {
 		triggerGetStorageValue();
 	});
 	$("#Storage").append(getStorageValue);
-	var removeStorageValue = $("<removeStorageValue>Remove Value</removeStorageValue>");
+	const removeStorageValue = $("<removeStorageValue>Remove Value</removeStorageValue>");
 	removeStorageValue.click(function () {
 		triggerRemoveStorageValue();
 	});
 	$("#Storage").append(removeStorageValue);
-	var getStorageKeys = $("<getStorageKeys>Get Storage Keys</getStorageKeys>");
+	const getStorageKeys = $("<getStorageKeys>Get Storage Keys</getStorageKeys>");
 	getStorageKeys.click(function () {
 		triggerGetStorageKeys();
 	});
 	$("#Storage").append(getStorageKeys);
 
 	/* WindowClient buttons */
-	var bringWindowToFront = $("<bringWindowToFront>Bring Windows To Front</bringWindowToFront>");
+	const bringWindowToFront = $("<bringWindowToFront>Bring Windows To Front</bringWindowToFront>");
 	bringWindowToFront.click(function () {
 		triggerBringWindowToFront();
 	});
 	$("#Windows").append(bringWindowToFront);
-	var cancelTilingOrTabbing = $("<cancelTilingOrTabbing>Cancel Tiling or Tabbing</cancelTilingOrTabbing>");
+	const cancelTilingOrTabbing = $("<cancelTilingOrTabbing>Cancel Tiling or Tabbing</cancelTilingOrTabbing>");
 	cancelTilingOrTabbing.click(function () {
 		triggerCancelTilingOrTabbing();
 	});
 	$("#Windows").append(cancelTilingOrTabbing);
-	var closeWindow = $("<closeWindow>Close Window</closeWindow>");
+	const closeWindow = $("<closeWindow>Close Window</closeWindow>");
 	closeWindow.click(function () {
 		triggerCloseWindow();
 	});
 	$("#Windows").append(closeWindow);
-	var fitToDom = $("<fitToDom>Fit to Dom</fitToDom>");
+	const fitToDom = $("<fitToDom>Fit to Dom</fitToDom>");
 	fitToDom.click(function () {
 		triggerFitToDom();
 	});
 	$("#Windows").append(fitToDom);
-	var getBounds = $("<getBounds>Get Bounds</getBounds>");
+	const getBounds = $("<getBounds>Get Bounds</getBounds>");
 	getBounds.click(function () {
 		triggerGetBounds();
 	});
 	$("#Windows").append(getBounds);
 
-	var setComponentState = $("<setComponentState>Set Component State</setComponentState>");
+	const setComponentState = $("<setComponentState>Set Component State</setComponentState>");
 	setComponentState.click(function () {
 		triggerSetComponentState();
 	});
 	$("#Windows").append(setComponentState);
-	var removeComponentState = $("<removeComponentState>Remove Component State</removeComponentState>");
+	const removeComponentState = $("<removeComponentState>Remove Component State</removeComponentState>");
 	removeComponentState.click(function () {
 		triggerRemoveComponentState();
 	});
 	$("#Windows").append(removeComponentState);
-	var getComponentState = $("<getComponentState>Get Component State</getComponentState>");
+	const getComponentState = $("<getComponentState>Get Component State</getComponentState>");
 	getComponentState.click(function () {
 		triggerGetComponentState();
 	});
 	$("#Windows").append(getComponentState);
-	var getCurWin = $("<getCurWin>Get Current Window</getCurWin>");
+	const getCurWin = $("<getCurWin>Get Current Window</getCurWin>");
 	getCurWin.click(function () {
 		triggerGetCurWin();
 	});
 	$("#Windows").append(getCurWin);
-	var getSpawnData = $("<getSpawnData>Get Spawn Data</getSpawnData>");
+	const getSpawnData = $("<getSpawnData>Get Spawn Data</getSpawnData>");
 	getSpawnData.click(function () {
 		triggerGetSpawnData();
 	});
 	$("#Windows").append(getSpawnData);
-	var getStackedWindow = $("<getStackedWindow>Get Stacked Window</getStackedWindow>");
+	const getStackedWindow = $("<getStackedWindow>Get Stacked Window</getStackedWindow>");
 	getStackedWindow.click(function () {
 		triggerGetStackedWindow();
 	});
 	$("#Windows").append(getStackedWindow);
-	var getWindowsGroup = $("<getWindowsGroup>Get Window Groups</getWindowsGroup>");
+	const getWindowsGroup = $("<getWindowsGroup>Get Window Groups</getWindowsGroup>");
 	getWindowsGroup.click(function () {
 		triggerGetWindowsGroup();
 	});
 	$("#Windows").append(getWindowsGroup);
-	var getWindowIdentifier = $("<getWindowIdentifier>Get Window Identifier</getWindowIdentifier>");
+	const getWindowIdentifier = $("<getWindowIdentifier>Get Window Identifier</getWindowIdentifier>");
 	getWindowIdentifier.click(function () {
 		triggerGetWindowIdentifier();
 	});
 	$("#Windows").append(getWindowIdentifier);
-	var getWindowNameForDocking = $("<getWindowNameForDocking>Get Window Name For Docking</getWindowNameForDocking>");
+	const getWindowNameForDocking = $("<getWindowNameForDocking>Get Window Name For Docking</getWindowNameForDocking>");
 	getWindowNameForDocking.click(function () {
 		triggerGetWindowNameForDocking();
 	});
 	$("#Windows").append(getWindowNameForDocking);
-	var getWindowTitle = $("<getWindowTitle>Get Window Title</getWindowTitle>");
+	const getWindowTitle = $("<getWindowTitle>Get Window Title</getWindowTitle>");
 	getWindowTitle.click(function () {
 		triggerGetWindowTitle();
 	});
 	$("#Windows").append(getWindowTitle);
-	var estHeaderCommandChannel = $("<estHeaderCommandChannel>Establish Header Command Channel</estHeaderCommandChannel>");
+	const estHeaderCommandChannel = $("<estHeaderCommandChannel>Establish Header Command Channel</estHeaderCommandChannel>");
 	estHeaderCommandChannel.click(function () {
 		triggerEstHeaderCommandChannel();
 	});
 	$("#Windows").append(estHeaderCommandChannel);
-	var injectHeader = $("<injectHeader>Inject Header</injectHeader>");
+	const injectHeader = $("<injectHeader>Inject Header</injectHeader>");
 	injectHeader.click(function () {
 		triggerInjectHeader();
 	});
 	$("#Windows").append(injectHeader);
-	var maximize = $("<maximize>Maximize</maximize>");
+	const maximize = $("<maximize>Maximize</maximize>");
 	maximize.click(function () {
 		triggerMaximize();
 	});
 	$("#Windows").append(maximize);
-	var minimize = $("<minimize>Minimize</minimize>");
+	const minimize = $("<minimize>Minimize</minimize>");
 	minimize.click(function () {
 		triggerMinimize();
 	});
 	$("#Windows").append(minimize);
-	var restore = $("<restore>Restore</restore>");
+	const restore = $("<restore>Restore</restore>");
 	restore.click(function () {
 		triggerRestore();
 	});
 	$("#Windows").append(restore);
-	var sendWinIdentifierForTilingOrTabbing = $("<sendWinIdentifierForTilingOrTabbing>Send Window Identifier For Tiling or Tabbing</sendWinIdentifierForTilingOrTabbing>");
+	const sendWinIdentifierForTilingOrTabbing = $("<sendWinIdentifierForTilingOrTabbing>Send Window Identifier For Tiling or Tabbing</sendWinIdentifierForTilingOrTabbing>");
 	sendWinIdentifierForTilingOrTabbing.click(function () {
 		triggerSendWinIdentifierForTilingOrTabbing();
 	});
 	$("#Windows").append(sendWinIdentifierForTilingOrTabbing);
-	var setAlwaysOnTop = $("<setAlwaysOnTop>Set Always On Top</setAlwaysOnTop>");
+	const setAlwaysOnTop = $("<setAlwaysOnTop>Set Always On Top</setAlwaysOnTop>");
 	setAlwaysOnTop.click(function () {
 		triggerSetAlwaysOnTop();
 	});
 	$("#Windows").append(setAlwaysOnTop);
-	var setWindowTitle = $("<setWindowTitle>Set Window Title</setWindowTitle>");
+	const setWindowTitle = $("<setWindowTitle>Set Window Title</setWindowTitle>");
 	setWindowTitle.click(function () {
 		triggerSetWindowTitle();
 	});
 	$("#Windows").append(setWindowTitle);
-	var showAtMousePos = $("<showAtMousePos>Show At Mouse Position</setWindowTshowAtMousePositle>");
+	const showAtMousePos = $("<showAtMousePos>Show At Mouse Position</setWindowTshowAtMousePositle>");
 	showAtMousePos.click(function () {
 		triggerShowAtMousePos();
 	});
 	$("#Windows").append(showAtMousePos);
-	var startTilingOrTabbing = $("<startTilingOrTabbing>Start Tiling Or Tabbing</startTilingOrTabbing>");
+	const startTilingOrTabbing = $("<startTilingOrTabbing>Start Tiling Or Tabbing</startTilingOrTabbing>");
 	startTilingOrTabbing.click(function () {
 		triggerStartTilingOrTabbing();
 	});
 	$("#Windows").append(startTilingOrTabbing);
-	var stopTilingOrTabbing = $("<stopTilingOrTabbing>Stop Tiling Or Tabbing</stopTilingOrTabbing>");
+	const stopTilingOrTabbing = $("<stopTilingOrTabbing>Stop Tiling Or Tabbing</stopTilingOrTabbing>");
 	stopTilingOrTabbing.click(function () {
 		triggerStopTilingOrTabbing();
 	});
 	$("#Windows").append(stopTilingOrTabbing);
 
 	/* Dialog Buttons */
-	var openDialog = $("<openDialog>Open Dialog</openDialog>");
+	const openDialog = $("<openDialog>Open Dialog</openDialog>");
 	openDialog.click(function () {
 		triggerOpenDialog();
 	});
 	$("#Dialog").append(openDialog);
 
 	/* Search Client Buttons */
-	var search = $("<search>search</search>");
+	const search = $("<search>search</search>");
 	search.click(function () {
 		triggerSearch();
 	});
@@ -538,7 +511,7 @@ function renderPage() {
 /* SeachClient Functions*/
 function triggerSearch() {
 	if (document.getElementById('symbolInput').value != '')
-		searchClient.search({
+		FSBL.Clients.SearchClient.search({
 			text: document.getElementById('symbolInput').value
 		}, function (err, response) {
 			if (!err) {
@@ -560,7 +533,7 @@ function triggerOpenDialog() {
 		includeNegative: true,
 		includeCancel: false
 	};
-	dialogManager.open('yesNo', dialogParams, function (err, response) {
+	FSBL.Clients.DialogManager.open('yesNo', dialogParams, function (err, response) {
 		//choice can be `'affirmative'`, `'negative'`, or `'cancel'`.
 		console.log("Response Received: " + response.choice)
 		if (err || response.choice === 'affirmative') {
@@ -571,8 +544,8 @@ function triggerOpenDialog() {
 
 /* WindowClient functions */
 function triggerStopTilingOrTabbing() {
-	var windowIdentifier = windowClient.getWindowIdentifier()
-	windowClient.startTilingOrTabbing({
+	var windowIdentifier = FSBL.Clients.WindowClient.getWindowIdentifier()
+	FSBL.Clients.WindowClient.startTilingOrTabbing({
 		windowIdentifier: windowIdentifier
 	}, function (err) {
 		if (!err) {
@@ -582,8 +555,8 @@ function triggerStopTilingOrTabbing() {
 }
 
 function triggerStartTilingOrTabbing() {
-	var windowIdentifier = windowClient.getWindowIdentifier()
-	windowClient.startTilingOrTabbing({
+	var windowIdentifier = FSBL.Clients.WindowClient.getWindowIdentifier()
+	FSBL.Clients.WindowClient.startTilingOrTabbing({
 		mousePosition: {
 			x: 100,
 			y: 100
@@ -596,18 +569,18 @@ function triggerStartTilingOrTabbing() {
 }
 
 function triggerShowAtMousePos() {
-	windowClient.showAtMousePosition()
+	FSBL.Clients.WindowClient.showAtMousePosition()
 }
 
 function triggerSetWindowTitle() {
 	if (document.getElementById('symbolInput').value != '')
-		windowClient.setWindowTitle(document.getElementById('symbolInput').value)
+		FSBL.Clients.WindowClient.setWindowTitle(document.getElementById('symbolInput').value)
 	else
 		alert('Input a value.')
 }
 
 function triggerSetAlwaysOnTop() {
-	windowClient.setAlwaysOnTop(true, function (err) {
+	FSBL.Clients.WindowClient.setAlwaysOnTop(true, function (err) {
 		if (!err) {
 			alert('Sussceed.')
 		}
@@ -615,8 +588,8 @@ function triggerSetAlwaysOnTop() {
 }
 
 function triggerSendWinIdentifierForTilingOrTabbing() {
-	var windowIdentifier = windowClient.getWindowIdentifier()
-	windowClient.sendIdentifierForTilingOrTabbing({
+	var windowIdentifier = FSBL.Clients.WindowClient.getWindowIdentifier()
+	FSBL.Clients.WindowClient.sendIdentifierForTilingOrTabbing({
 		windowIdentifier: windowIdentifier
 	}, function (err) {
 		if (!err) {
@@ -626,13 +599,13 @@ function triggerSendWinIdentifierForTilingOrTabbing() {
 }
 
 function triggerRestore() {
-	windowClient.restore(function (err) {
+	FSBL.Clients.WindowClient.restore(function (err) {
 		if (!err) {}
 	})
 }
 
 function triggerRemoveComponentState() {
-	windowClient.removeComponentState({
+	FSBL.Clients.WindowClient.removeComponentState({
 		fields: [{
 			field: 'testField1'
 		}, {
@@ -646,46 +619,46 @@ function triggerRemoveComponentState() {
 }
 
 function triggerMinimize() {
-	windowClient.minimize(function (err) {
+	FSBL.Clients.WindowClient.minimize(function (err) {
 		if (!err) {}
 
 	})
 }
 
 function triggerMaximize() {
-	windowClient.maximize(function (err) {
+	FSBL.Clients.WindowClient.maximize(function (err) {
 		if (!err) {}
 
 	})
 }
 
 function triggerInjectHeader() {
-	windowClient.injectHeader({}, function (err) {
+	FSBL.Clients.WindowClient.injectHeader({}, function (err) {
 
 	})
 }
 
 function triggerEstHeaderCommandChannel() {
-	windowClient.headerCommandChannel(function (err, header) {
+	FSBL.Clients.WindowClient.headerCommandChannel(function (err, header) {
 		console.log(header)
 	})
 }
 
 function triggerGetWindowTitle() {
-	var windowTitle = windowClient.getWindowTitle()
+	var windowTitle = FSBL.Clients.WindowClient.getWindowTitle()
 	if (windowTitle)
 		alert('Sussceed. Window Title: ' + windowTitle)
 }
 
 function triggerGetWindowNameForDocking() {
-	var windowName = windowClient.getWindowNameForDocking()
+	var windowName = FSBL.Clients.WindowClient.getWindowNameForDocking()
 	if (windowName) {
 		alert('Sussceed. Window Name: ' + windowName)
 	}
 }
 
 function triggerGetWindowIdentifier() {
-	var windowIdentifier = windowClient.getWindowIdentifier()
+	var windowIdentifier = FSBL.Clients.WindowClient.getWindowIdentifier()
 	if (windowIdentifier) {
 		alert('Sussceed. See console for detail.')
 		console.log(windowIdentifier)
@@ -693,7 +666,7 @@ function triggerGetWindowIdentifier() {
 }
 
 function triggerGetWindowsGroup() {
-	var windowGroups = windowClient.getWindowGroups()
+	var windowGroups = FSBL.Clients.WindowClient.getWindowGroups()
 	if (windowGroups) {
 		alert('Sussceed. See console for detail.')
 		console.log(windowGroups)
@@ -701,7 +674,7 @@ function triggerGetWindowsGroup() {
 }
 
 function triggerGetStackedWindow() {
-	windowClient.getStackedWindow({}, function (err, stackedWindow) {
+	FSBL.Clients.WindowClient.getStackedWindow({}, function (err, stackedWindow) {
 		if (!err) {
 			console.log(stackedWindow)
 		}
@@ -709,7 +682,7 @@ function triggerGetStackedWindow() {
 }
 
 function triggerGetSpawnData() {
-	var spawnData = windowClient.getSpawnData()
+	var spawnData = FSBL.Clients.WindowClient.getSpawnData()
 	if (spawnData) {
 		alert('Sussceed. See console for detail.')
 		console.log(spawnData)
@@ -717,7 +690,7 @@ function triggerGetSpawnData() {
 }
 
 function triggerGetCurWin() {
-	var currentWindow = windowClient.getCurrentWindow()
+	var currentWindow = FSBL.Clients.WindowClient.getCurrentWindow()
 	if (currentWindow) {
 		alert('Sussceed. See console for detail.')
 		console.log(currentWindow)
@@ -726,7 +699,7 @@ function triggerGetCurWin() {
 
 function triggerSetComponentState() {
 	if (document.getElementById('symbolInput').value != '')
-		windowClient.setComponentState({
+		FSBL.Clients.WindowClient.setComponentState({
 				fields: [{
 					field: 'testField1',
 					value: document.getElementById('symbolInput').value
@@ -745,7 +718,7 @@ function triggerSetComponentState() {
 }
 
 function triggerGetComponentState() {
-	windowClient.getComponentState({}, function (err, state) {
+	FSBL.Clients.WindowClient.getComponentState({}, function (err, state) {
 		if (!err) {
 			alert('Sussceed. See console for detail.')
 			console.log(state)
@@ -754,7 +727,7 @@ function triggerGetComponentState() {
 }
 
 function triggerGetBounds() {
-	windowClient.getBounds(function (err, bounds) {
+	FSBL.Clients.WindowClient.getBounds(function (err, bounds) {
 		if (!err) {
 			alert('Sussceed. See console for detail.')
 			console.log(bounds)
@@ -763,7 +736,7 @@ function triggerGetBounds() {
 }
 
 function triggerFitToDom() {
-	windowClient.fitToDOM({
+	FSBL.Clients.WindowClient.fitToDOM({
 		maxHeight: 300,
 		maxWidth: 300,
 		padding: {
@@ -776,12 +749,12 @@ function triggerFitToDom() {
 }
 
 function triggerCloseWindow() {
-	windowClient.close(false);
+	FSBL.Clients.WindowClient.close(false);
 }
 
 function triggerCancelTilingOrTabbing() {
-	windowClient.cancelTilingOrTabbing({
-		windowIdentifier: windowClient.getWindowIdentifier()
+	FSBL.Clients.WindowClient.cancelTilingOrTabbing({
+		windowIdentifier: FSBL.Clients.WindowClient.getWindowIdentifier()
 	}, function (err) {
 		if (!err) {
 			alert('Sussceed.')
@@ -790,12 +763,12 @@ function triggerCancelTilingOrTabbing() {
 }
 
 function triggerBringWindowToFront() {
-	windowClient.bringWindowToFront()
+	FSBL.Clients.WindowClient.bringWindowToFront()
 }
 
 /* Storage client functions */
 function triggerGetStorageValue() {
-	storageClient.get({
+	FSBL.Clients.StorageClient.get({
 		topic: "finsemble",
 		key: "testKey"
 	}, function (err, val) {
@@ -806,7 +779,7 @@ function triggerGetStorageValue() {
 }
 
 function triggerGetStorageKeys() {
-	storageClient.keys({
+	FSBL.Clients.StorageClient.keys({
 		topic: "finsemble"
 	}, function (err, keys) {
 		if (!err) {
@@ -817,7 +790,7 @@ function triggerGetStorageKeys() {
 }
 
 function triggerRemoveStorageValue() {
-	storageClient.remove({
+	FSBL.Clients.StorageClient.remove({
 		topic: "finsemble",
 		key: "testKey"
 	}, function (err) {
@@ -828,7 +801,7 @@ function triggerRemoveStorageValue() {
 
 function triggerSaveStorageValue() {
 	if (document.getElementById('symbolInput').value != '')
-		storageClient.save({
+		FSBL.Clients.StorageClient.save({
 			topic: "finsemble",
 			key: "testKey",
 			value: document.getElementById('symbolInput').value
@@ -841,7 +814,7 @@ function triggerSaveStorageValue() {
 }
 
 function triggerSetStorageStore() {
-	storageClient.setStore({
+	FSBL.Clients.StorageClient.setStore({
 		topic: "local",
 		dataStore: "LocalStorageAdapter"
 	}, function (err) {
@@ -851,7 +824,7 @@ function triggerSetStorageStore() {
 }
 
 function triggerSetStorageUser() {
-	storageClient.setUser({
+	FSBL.Clients.StorageClient.setUser({
 		user: 'testUser'
 	}, function (err) {
 		if (!err)
@@ -861,36 +834,25 @@ function triggerSetStorageUser() {
 
 /* Distributed store client functions */
 function triggerSetStoreValue(field) {
-	distributedStoreClient.getStore({
-		store: 'testDs1',
-	}, function (err, store) {
-		if (!err) {
-			store.setValue({
-				field: field,
-				value: document.getElementById('symbolInput').value
-			}, function (err) {})
-		} else
-			alert('No such store.')
+	dsStore.setValue({
+		field: field,
+		value: document.getElementById('symbolInput').value
+	}, function (err) {
+		alert('Value set for '+field)
 	})
 }
 
 function triggerGetStoreValue() {
-	distributedStoreClient.getStore({
-		store: 'testDs1',
-	}, function (err, store) {
-		if (!err) {
-			store.getValue({
-				field: 'field1'
-			}, function (err, value) {
-				alert('Field1: ' + value)
-			})
-		} else
-			alert('No such store.')
+	dsStore.getValue({
+		field: 'field1'
+	}, function (err, value) {
+		alert('Field1: ' + value)
 	})
+
 }
 
 function triggerRemoveStore() {
-	distributedStoreClient.removeStore({
+	FSBL.Clients.DistributedStoreClient.removeStore({
 		store: 'testDs1',
 	}, function (err) {
 		if (!err) {
@@ -901,7 +863,7 @@ function triggerRemoveStore() {
 }
 
 function triggerGetStore() {
-	distributedStoreClient.getStore({
+	FSBL.Clients.DistributedStoreClient.getStore({
 		store: 'testDs1',
 	}, function (err, store) {
 		if (!err) {
@@ -913,7 +875,7 @@ function triggerGetStore() {
 }
 
 function triggerCreateStore() {
-	distributedStoreClient.createStore({
+	FSBL.Clients.DistributedStoreClient.createStore({
 		store: 'testDs1',
 		global: true,
 		values: {
@@ -922,6 +884,7 @@ function triggerCreateStore() {
 		}
 	}, function (err, store) {
 		if (!err) {
+			dsStore = store
 			alert('testDs1 created. See console for store detail')
 			console.log(store)
 		}
@@ -931,7 +894,7 @@ function triggerCreateStore() {
 /* Workspace client functions */
 function triggerSwitchToWorkspace() {
 	if (document.getElementById('symbolInput').value != '')
-		workspaceClient.switchTo({
+		FSBL.Clients.WorkspaceClient.switchTo({
 			name: document.getElementById('symbolInput').value
 		}, function (err, response) {
 			if (!err) {
@@ -944,7 +907,7 @@ function triggerSwitchToWorkspace() {
 
 function triggerSaveAsWorkspace() {
 	if (document.getElementById('symbolInput').value != '')
-		workspaceClient.saveAs({
+		FSBL.Clients.WorkspaceClient.saveAs({
 			name: document.getElementById('symbolInput').value
 		}, function (err, response) {
 			if (!err) {
@@ -956,7 +919,7 @@ function triggerSaveAsWorkspace() {
 }
 
 function triggerSaveWorkspace() {
-	workspaceClient.save(function (err, response) {
+	FSBL.Clients.WorkspaceClient.save(function (err, response) {
 		if (!err) {
 			alert('Saved.')
 		}
@@ -965,9 +928,9 @@ function triggerSaveWorkspace() {
 
 function triggerRenameWorkspace() {
 	if (document.getElementById('symbolInput').value != '')
-		workspaceClient.getActiveWorkspace(function (err, response) {
+		FSBL.Clients.WorkspaceClient.getActiveWorkspace(function (err, response) {
 			if (!err) {
-				workspaceClient.rename({
+				FSBL.Clients.WorkspaceClient.rename({
 					oldName: response.data.name,
 					newName: document.getElementById('symbolInput').value
 				}, function (err, response) {
@@ -983,7 +946,7 @@ function triggerRenameWorkspace() {
 
 function triggerRemoveWorkspace() {
 	if (document.getElementById('symbolInput').value != '')
-		workspaceClient.remove({
+		FSBL.Clients.WorkspaceClient.remove({
 			name: document.getElementById('symbolInput').value
 		}, function (err, response) {
 			if (!err) {
@@ -997,20 +960,20 @@ function triggerRemoveWorkspace() {
 }
 
 function triggerMinimizeAll() {
-	workspaceClient.minimizeAll({}, function (err) {
+	FSBL.Clients.WorkspaceClient.minimizeAll({}, function (err) {
 		if (!err) {}
 	})
 }
 
 
 function triggerImportWorkspace() {
-	workspaceClient.getActiveWorkspace(function (err, response) {
+	FSBL.Clients.WorkspaceClient.getActiveWorkspace(function (err, response) {
 		if (!err) {
-			workspaceClient.export({
+			FSBL.Clients.WorkspaceClient.export({
 				workspaceName: response.data.name
 			}, function (err, workspaceDefinition) {
 				if (!err) {
-					workspaceClient.import({
+					FSBL.Clients.WorkspaceClient.import({
 						force: false,
 						workspaceJSONDefinition: workspaceDefinition
 					}, function (err) {
@@ -1024,7 +987,7 @@ function triggerImportWorkspace() {
 }
 
 function triggerGetWorkspaces() {
-	workspaceClient.getWorkspaces(function (err, response) {
+	FSBL.Clients.WorkspaceClient.getWorkspaces(function (err, response) {
 		if (!err) {
 			console.log(response)
 			alert('Sussceed. See console for detail')
@@ -1033,7 +996,7 @@ function triggerGetWorkspaces() {
 }
 
 function triggerGetActiveWorkspace() {
-	workspaceClient.getActiveWorkspace(function (err, response) {
+	FSBL.Clients.WorkspaceClient.getActiveWorkspace(function (err, response) {
 		if (!err) {
 			console.log(response)
 			alert('Sussceed. See console for detail')
@@ -1043,7 +1006,7 @@ function triggerGetActiveWorkspace() {
 
 function triggerExportWorkspace() {
 	if (document.getElementById('symbolInput').value != '')
-		workspaceClient.export({
+		FSBL.Clients.WorkspaceClient.export({
 			workspaceName: document.getElementById('symbolInput').value
 		}, function (err, workspaceDefinition) {
 			if (!err) {
@@ -1057,7 +1020,7 @@ function triggerExportWorkspace() {
 
 function triggerCreateWorkspace() {
 	if (document.getElementById('symbolInput').value != '')
-		workspaceClient.createWorkspace(document.getElementById('symbolInput').value, {}, function (err, response) {
+		FSBL.Clients.WorkspaceClient.createWorkspace(document.getElementById('symbolInput').value, {}, function (err, response) {
 			if (!err) {
 
 			}
@@ -1067,31 +1030,31 @@ function triggerCreateWorkspace() {
 }
 
 function triggerBringWinsToFront() {
-	workspaceClient.bringWindowsToFront({}, function () {
+	FSBL.Clients.WorkspaceClient.bringWindowsToFront({}, function () {
 
 	})
 }
 
 function triggerAutoArrange() {
-	workspaceClient.autoArrange({}, function () {
+	FSBL.Clients.WorkspaceClient.autoArrange({}, function () {
 
 	})
 }
 
 /* Router client functions */
 function triggerDisconnectAll() {
-	routerClient.disconnectAll()
+	FSBL.Clients.RouterClient.disconnectAll()
 	alert('Disconnected all.')
 }
 
 function triggerTransmit() {
-	routerClient.transmit('symbol', {
+	FSBL.Clients.RouterClient.transmit('symbol', {
 		'data': document.getElementById('symbolInput').value
 	})
 }
 
 function triggerQuery() {
-	routerClient.query("symbol", {
+	FSBL.Clients.RouterClient.query("symbol", {
 		queryKey: "abc123"
 	}, {
 		timeout: 1000
@@ -1104,17 +1067,17 @@ function triggerQuery() {
 }
 
 function triggerPublish() {
-	routerClient.publish('symbol', {
+	FSBL.Clients.RouterClient.publish('symbol', {
 		'symbol': document.getElementById('symbolInput').value
 	})
 }
 
 function triggerRemovePubSubResponder() {
-	routerClient.removePubSubResponder('symbol')
+	FSBL.Clients.RouterClient.removePubSubResponder('symbol')
 }
 
 function triggerAddPubSubResponder() {
-	routerClient.addPubSubResponder("symbol", {
+	FSBL.Clients.RouterClient.addPubSubResponder("symbol", {
 		"State": "start"
 	}, {
 		subscribeCallback: subscribeCallback,
@@ -1151,32 +1114,32 @@ function unsubscribeCallback(error, unsubscribe) {
 
 /* Logger client functions */
 function triggerWarn() {
-	loggerClient.warn('This is a warn message')
+	FSBL.Clients.Logger.warn('This is a warn message')
 }
 
 function triggerVerbose() {
-	loggerClient.verbose('This is a verbose message')
+	FSBL.Clients.Logger.verbose('This is a verbose message')
 }
 
 function triggerLog() {
-	loggerClient.log('This is a log message')
+	FSBL.Clients.Logger.log('This is a log message')
 }
 
 function triggerInfo() {
-	loggerClient.info('This an info message')
+	FSBL.Clients.Logger.info('This an info message')
 }
 
 function triggerError() {
-	loggerClient.error('This is an error message')
+	FSBL.Clients.Logger.error('This is an error message')
 }
 
 function triggerDebug() {
-	loggerClient.debug('This is a debug message')
+	FSBL.Clients.Logger.debug('This is a debug message')
 }
 
 /* Linker client functions */
 function triggerLinkerPub() {
-	linkerClient.publish({
+	FSBL.Clients.LinkerClient.publish({
 		dataType: "symbol",
 		data: document.getElementById('symbolInput').value
 	}, function (err) {
@@ -1187,7 +1150,7 @@ function triggerLinkerPub() {
 }
 
 function triggerOpenLinkerWindow() {
-	linkerClient.openLinkerWindow(function (err, response) {
+	FSBL.Clients.LinkerClient.openLinkerWindow(function (err, response) {
 		if (!err) {
 			console.log(response)
 		}
@@ -1195,7 +1158,7 @@ function triggerOpenLinkerWindow() {
 }
 
 function triggerStartOnStateChange() {
-	linkerClient.onStateChange(function (err, response) {
+	FSBL.Clients.LinkerClient.onStateChange(function (err, response) {
 		if (!err) {
 			alert("Linker state changed. See console for detail.")
 			console.log(response)
@@ -1204,7 +1167,7 @@ function triggerStartOnStateChange() {
 }
 
 function triggerLinkToGroup1() {
-	linkerClient.linkToChannel("group1", null, function (err, channel) {
+	FSBL.Clients.LinkerClient.linkToChannel("group1", null, function (err, channel) {
 		if (!err) {
 			alert('Link to group1 succeed. See console for detail')
 			console.log(channel)
@@ -1213,7 +1176,7 @@ function triggerLinkToGroup1() {
 }
 
 function triggerUnlinkToGroup1() {
-	linkerClient.unlinkFromChannel("group1", null, function (err, channel) {
+	FSBL.Clients.LinkerClient.unlinkFromChannel("group1", null, function (err, channel) {
 		if (!err) {
 			alert('Unlink to group1 succeed. See console for detail')
 			console.log(channel)
@@ -1222,7 +1185,7 @@ function triggerUnlinkToGroup1() {
 }
 
 function triggerGetState() {
-	linkerClient.getState(windowClient.getWindowIdentifier, function (err, state) {
+	FSBL.Clients.LinkerClient.getState(FSBL.Clients.WindowClient.getWindowIdentifier, function (err, state) {
 		if (!err) {
 			alert('Get state succeed. See console for detail')
 			console.log(state)
@@ -1231,7 +1194,7 @@ function triggerGetState() {
 }
 
 function triggerGetWinLinkedCurWindow() {
-	linkerClient.getLinkedWindows(windowClient.getWindowIdentifier, function (err, windows) {
+	FSBL.Clients.LinkerClient.getLinkedWindows(FSBL.Clients.WindowClient.getWindowIdentifier, function (err, windows) {
 		if (!err) {
 			alert(windows.length + ' windows linked with current component. See console for detail.')
 			console.log(windows)
@@ -1240,7 +1203,7 @@ function triggerGetWinLinkedCurWindow() {
 }
 
 function triggerGetWinLinkedGroup1() {
-	linkerClient.getLinkedWindows({
+	FSBL.Clients.LinkerClient.getLinkedWindows({
 		channels: ['group1']
 	}, function (err, windows) {
 		if (!err) {
@@ -1251,7 +1214,7 @@ function triggerGetWinLinkedGroup1() {
 }
 
 function triggerGetComLinkedCurWindow() {
-	linkerClient.getLinkedComponents(windowClient.getWindowIdentifier, function (err, components) {
+	FSBL.Clients.LinkerClient.getLinkedComponents(FSBL.Clients.WindowClient.getWindowIdentifier, function (err, components) {
 		if (!err) {
 			alert(components.length + ' components linked with current component. See console for detail.')
 			console.log(components)
@@ -1260,7 +1223,7 @@ function triggerGetComLinkedCurWindow() {
 }
 
 function triggerGetComLinkedGroup1() {
-	linkerClient.getLinkedComponents({
+	FSBL.Clients.LinkerClient.getLinkedComponents({
 		channels: ['group1']
 	}, function (err, components) {
 		if (!err) {
@@ -1271,7 +1234,7 @@ function triggerGetComLinkedGroup1() {
 }
 
 function triggerGetAllChannels() {
-	linkerClient.getAllChannels(function (err, channels) {
+	FSBL.Clients.LinkerClient.getAllChannels(function (err, channels) {
 		if (!err) {
 			alert(channels.length + ' Linker channels found. See console for detail.')
 			console.log(channels)
@@ -1282,7 +1245,7 @@ function triggerGetAllChannels() {
 
 /* Launcher client functions */
 function triggerGetActiveDescriptors() {
-	launcherClient.getActiveDescriptors(function (err, desc) {
+	FSBL.Clients.LauncherClient.getActiveDescriptors(function (err, desc) {
 		if (!err) {
 			console.log(desc)
 			alert('There are ' + Object.keys(desc).length + ' window descriptors. See console for detail.')
@@ -1291,7 +1254,7 @@ function triggerGetActiveDescriptors() {
 }
 
 function triggerGetComponentDefaultConfig() {
-	launcherClient.getComponentDefaultConfig('test1', function (err, config) {
+	FSBL.Clients.LauncherClient.getComponentDefaultConfig('test1', function (err, config) {
 		if (!err) {
 			console.log(config)
 			alert('Test1 component found. See console for detail.')
@@ -1300,7 +1263,7 @@ function triggerGetComponentDefaultConfig() {
 }
 
 function triggerGetComponentList() {
-	launcherClient.getComponentList(function (err, componentList) {
+	FSBL.Clients.LauncherClient.getComponentList(function (err, componentList) {
 		if (!err) {
 			console.log(componentList)
 			alert('Component list found. See console for detail.')
@@ -1310,7 +1273,7 @@ function triggerGetComponentList() {
 
 function triggerGetComponentsThatCanReceiveDataTypes() {
 	//This function cooperate with field "advertiseReceivers" in component.json which should be deprecated
-	launcherClient.getComponentsThatCanReceiveDataTypes({
+	FSBL.Clients.LauncherClient.getComponentsThatCanReceiveDataTypes({
 		dataTypes: ['symbol']
 	}, function (err, componentList) {
 		if (!err) {
@@ -1321,7 +1284,7 @@ function triggerGetComponentsThatCanReceiveDataTypes() {
 }
 
 function triggerGetMonitorInfo() {
-	launcherClient.getMonitorInfo({}, function (err, monitorList) {
+	FSBL.Clients.LauncherClient.getMonitorInfo({}, function (err, monitorList) {
 		if (!err) {
 			console.log(monitorList)
 			alert('Monitor list found. See console for detail.')
@@ -1330,7 +1293,7 @@ function triggerGetMonitorInfo() {
 }
 
 function triggerGetMonitorInfoAll() {
-	launcherClient.getMonitorInfoAll(function (err, monitorList) {
+	FSBL.Clients.LauncherClient.getMonitorInfoAll(function (err, monitorList) {
 		if (!err) {
 			console.log(monitorList)
 			alert('Monitor list found. See console for detail.')
@@ -1340,7 +1303,7 @@ function triggerGetMonitorInfoAll() {
 
 function triggerGetMyWindowIdentifier() {
 	//Should the cb able to return 'err'?
-	launcherClient.getMyWindowIdentifier(function (windowIdentifer) {
+	FSBL.Clients.LauncherClient.getMyWindowIdentifier(function (windowIdentifer) {
 		if (windowIdentifer) {
 			console.log(windowIdentifer)
 			alert('Window Identifer found. See console for detail.')
@@ -1349,7 +1312,7 @@ function triggerGetMyWindowIdentifier() {
 }
 
 function triggerRegisterComponent() {
-	launcherClient.registerComponent({
+	FSBL.Clients.LauncherClient.registerComponent({
 		componentType: 'testRegisterComponent',
 		manifest: {
 			window: {
@@ -1388,7 +1351,7 @@ function triggerRegisterComponent() {
 }
 
 function triggerUnregisterComponent() {
-	launcherClient.unRegisterComponent({
+	FSBL.Clients.LauncherClient.unRegisterComponent({
 		componentType: 'testRegisterComponent'
 	}, function (err) {
 		if (!err) {
@@ -1398,7 +1361,7 @@ function triggerUnregisterComponent() {
 }
 
 function triggerSpawnComponent() {
-	launcherClient.spawn('apitest2', {
+	FSBL.Clients.LauncherClient.spawn('API Test 2', {
 			addToWorkspace: true,
 			left: "adjacent",
 			spawnIfNotFound: true,
@@ -1414,11 +1377,11 @@ function triggerSpawnComponent() {
 
 function triggerShowWindow() {
 	var windowIdentifier = {
-		componentType: "test2",
-		windowName: windowClient.options.name + ".test2"
+		componentType: "API Test 2",
+		windowName: FSBL.Clients.WindowClient.options.name + ".apitest2"
 	};
 
-	launcherClient.showWindow(
+	FSBL.Clients.LauncherClient.showWindow(
 		windowIdentifier, {
 			addToWorkspace: true,
 			left: "adjacent",
@@ -1441,12 +1404,12 @@ function triggerShowWindow() {
 /* Global Hotkey functions*/
 function registerGlobalHotkey() {
 	const keys = [keyMap.ctrl, keyMap.q];
-	hotkeyClient.addGlobalHotkey(keys, onGlobalHotkeyTriggered, onGlobalHotkeyRegistered);
+	FSBL.Clients.HotkeyClient.addGlobalHotkey(keys, onGlobalHotkeyTriggered, onGlobalHotkeyRegistered);
 }
 
 function unregisterGlobalHotkey() {
 	const keys = [keyMap.ctrl, keyMap.q];
-	hotkeyClient.removeGlobalHotkey(keys, onGlobalHotkeyTriggered, onGlobalHotkeyUnregistered);
+	FSBL.Clients.HotkeyClient.removeGlobalHotkey(keys, onGlobalHotkeyTriggered, onGlobalHotkeyUnregistered);
 }
 
 function onGlobalHotkeyTriggered(err, response) {
@@ -1470,7 +1433,7 @@ function onGlobalHotkeyUnregistered(err, response) {
 /* Local Hotkey functions*/
 function registerLocalHotkey() {
 	const keys = [keyMap.ctrl, keyMap.q];
-	hotkeyClient.addLocalHotkey(keys, onLocalHotkeyTriggered, onLocalHotkeyRegistered);
+	FSBL.Clients.HotkeyClient.addLocalHotkey(keys, onLocalHotkeyTriggered, onLocalHotkeyRegistered);
 }
 
 function onLocalHotkeyTriggered(err, response) {
@@ -1489,7 +1452,7 @@ function onLocalHotkeyRegistered(err, response) {
 
 function unregisterLocalHotkey() {
 	const keys = [keyMap.ctrl, keyMap.q];
-	hotkeyClient.removeLocalHotkey(keys, onLocalHotkeyTriggered, onLocalHotkeyUnregistered);
+	FSBL.Clients.HotkeyClient.removeLocalHotkey(keys, onLocalHotkeyTriggered, onLocalHotkeyUnregistered);
 }
 
 function onLocalHotkeyUnregistered(err, response) {
@@ -1508,7 +1471,7 @@ function triggerNotification() {
 
 
 function setupEmitter() {
-	dragdropClient.setEmitters({
+	FSBL.Clients.DragAndDropClient.setEmitters({
 		emitters: [{
 			type: "symbol",
 			data: getSymbol

@@ -1,67 +1,63 @@
-const dragAndDropClient = FSBL.Clients.DragAndDropClient
-const linkerClient = FSBL.Clients.LinkerClient
-const routerClient = FSBL.Clients.RouterClient
-const dsClient = FSBL.Clients.DistributedStoreClient
-var routerSubId
+let routerSubId
 var dsStore
 
 function renderPage() {
 	/* Linker client button */
-	var linkerSub = $("<linkerSub>Linker Subscribe</linkerSub>");
+	const linkerSub = $("<linkerSub>Linker Subscribe</linkerSub>");
 	linkerSub.click(function () {
 		triggerLinkerSub();
 	});
 	$("body").append(linkerSub);
-	var linkerUnsub = $("<linkerUnsub>Linker Unsubscribe</linkerUnsub>");
+	const linkerUnsub = $("<linkerUnsub>Linker Unsubscribe</linkerUnsub>");
 	linkerUnsub.click(function () {
 		triggerLinkerUnsub();
 	});
 	$("body").append(linkerUnsub);
 
 	/* Router client buttons */
-	var routerSub = $("<routerSub>Router Subscribe</routerSub>");
+	const routerSub = $("<routerSub>Router Subscribe</routerSub>");
 	routerSub.click(function () {
 		triggerRouterSub();
 	});
 	$("body").append(routerSub);
-	var routerUnsub = $("<routerUnsub>Router Unsubscribe</routerUnsub>");
+	const routerUnsub = $("<routerUnsub>Router Unsubscribe</routerUnsub>");
 	routerUnsub.click(function () {
 		triggerRouterUnsub();
 	});
 	$("body").append(routerUnsub);
-	var routerAddResponder = $("<routerAddResponder>Router Add Responder</routerAddResponder>");
+	const routerAddResponder = $("<routerAddResponder>Router Add Responder</routerAddResponder>");
 	routerAddResponder.click(function () {
 		triggerRouterAddResponder();
 	});
 	$("body").append(routerAddResponder);
-	var routerRemoveResponder = $("<routerRemoveResponder>Router Remove Responder</routerRemoveResponder>");
+	const routerRemoveResponder = $("<routerRemoveResponder>Router Remove Responder</routerRemoveResponder>");
 	routerRemoveResponder.click(function () {
 		triggerRouterRemoveResponder();
 	});
 	$("body").append(routerRemoveResponder);
-	var routerAddListener = $("<routerAddListener>Router Add Listener</routerAddListener>");
+	const routerAddListener = $("<routerAddListener>Router Add Listener</routerAddListener>");
 	routerAddListener.click(function () {
 		triggerRouterAddListener();
 	});
 	$("body").append(routerAddListener);
-	var routerRemoveListener = $("<routerRemoveListener>Router Remove Listener</routerRemoveListener>");
+	const routerRemoveListener = $("<routerRemoveListener>Router Remove Listener</routerRemoveListener>");
 	routerRemoveListener.click(function () {
 		triggerRouterRemoveListener();
 	});
 	$("body").append(routerRemoveListener);
-	var routerDisconnectAll = $("<routerDisconnectAll>Router Disconnect All</routerDisconnectAll>");
+	const routerDisconnectAll = $("<routerDisconnectAll>Router Disconnect All</routerDisconnectAll>");
 	routerDisconnectAll.click(function () {
 		triggerRouterDisconnectAll();
 	});
 	$("body").append(routerDisconnectAll);
 
 	/* DistributedStore Client buttons */
-	var addStoreListener = $("<addStoreListener>Add Store Listeners</addStoreListener>");
+	const addStoreListener = $("<addStoreListener>Add Store Listeners</addStoreListener>");
 	addStoreListener.click(function () {
 		triggerAddStoreListener();
 	});
 	$("body").append(addStoreListener);
-	var removeStoreListener = $("<removeStoreListener>Remove Store Listeners</removeStoreListener>");
+	const removeStoreListener = $("<removeStoreListener>Remove Store Listeners</removeStoreListener>");
 	removeStoreListener.click(function () {
 		triggerRemoveStoreListener();
 	});
@@ -82,7 +78,7 @@ function triggerRemoveStoreListener() {
 }
 
 function triggerAddStoreListener() {
-	dsClient.getStore({
+	FSBL.Clients.DistributedStoreClient.getStore({
 		store: 'testDs1',
 	}, function (err, store) {
 		if (!err) {
@@ -105,17 +101,17 @@ function onFieldDataChange(err, newData) {
 
 /* Router client functions */
 function triggerRouterDisconnectAll() {
-	routerClient.disconnectAll()
+	FSBL.Clients.RouterClient.disconnectAll()
 	alert('Disconnected all.')
 }
 
 function triggerRouterRemoveListener() {
-	routerClient.removeListener('symbol', onRouterValueChanged)
+	FSBL.Clients.RouterClient.removeListener('symbol', onRouterValueChanged)
 	alert('Router listener removed.')
 }
 
 function triggerRouterAddListener() {
-	routerClient.addListener('symbol', onRouterValueChanged)
+	FSBL.Clients.RouterClient.addListener('symbol', onRouterValueChanged)
 	alert('Router listener added.')
 }
 
@@ -127,12 +123,12 @@ function onRouterValueChanged(err, response) {
 }
 
 function triggerRouterRemoveResponder() {
-	routerClient.removeResponder('symbol')
+	FSBL.Clients.RouterClient.removeResponder('symbol')
 	alert('Router client reponder removed.')
 }
 
 function triggerRouterAddResponder() {
-	routerClient.addResponder("symbol", function (err, queryMessage) {
+	FSBL.Clients.RouterClient.addResponder("symbol", function (err, queryMessage) {
 		if (!err) {
 			alert("Router query incoming data=" + queryMessage.data.queryKey)
 			var response = "router query response data"; // Responses can be objects or strings
@@ -143,7 +139,7 @@ function triggerRouterAddResponder() {
 }
 
 function triggerRouterUnsub() {
-	routerClient.unsubscribe({
+	FSBL.Clients.RouterClient.unsubscribe({
 		'subscribeID': routerSubId,
 		'topic': 'symbol'
 	})
@@ -151,7 +147,7 @@ function triggerRouterUnsub() {
 }
 
 function triggerRouterSub() {
-	routerClient.subscribe('symbol', function (err, notify) {
+	FSBL.Clients.RouterClient.subscribe('symbol', function (err, notify) {
 		if (!err) {
 			if (notify.data.symbol)
 				$("routerSymbolPubSub").text(notify.data.symbol);
@@ -167,14 +163,14 @@ function triggerRouterSub() {
 
 /* linker client functions */
 function triggerLinkerSub() {
-	linkerClient.subscribe('symbol', function (data, response) {
+	FSBL.Clients.LinkerClient.subscribe('symbol', function (data, response) {
 		$("linkerSymbol").text(data);
 	})
 	alert('Linker subscribed.')
 }
 
 function triggerLinkerUnsub() {
-	linkerClient.unsubscribe('symbol')
+	FSBL.Clients.LinkerClient.unsubscribe('symbol')
 	alert('Linker unsubscribed.')
 }
 
@@ -199,7 +195,7 @@ function getState() {
 }
 
 function setupReceiver() {
-	dragAndDropClient.addReceivers({
+	FSBL.Clients.DragAndDropClient.addReceivers({
 		receivers: [{
 			type: 'symbol',
 			handler: getEverythingAComponentCanEmit
