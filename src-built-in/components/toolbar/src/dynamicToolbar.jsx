@@ -20,28 +20,29 @@ import WorkspaceMenuOpener from "../components/WorkspaceMenuOpener"
 import Search from "../components/Search"
 import DragHandle from "../components/DragHandle"
 
-// Support Dynamically Loading External Components
-var customComponents = [];
-customComponents["AutoArrange"] = AutoArrange;
-customComponents["AlwaysOnTop"] = AlwaysOnTop;
-customComponents["BringToFront"] = BringToFront;
-customComponents["MinimizeAll"] = MinimizeAll;
-customComponents["WorkspaceMenuOpener"] = WorkspaceMenuOpener;
-customComponents["Search"] = Search;
 
 // Styles
 import "../toolbar.css";
 import "../../../../assets/css/font-finance.css";
 import "../../../../assets/css/finsemble.css";
 
-var pinnableItems = {
-	"componentLauncher": FinsembleButton,
-	"workspaceSwitcher": WorkspaceLauncherButton
-};
-
 export default class Toolbar extends React.Component {
 	constructor(props) {
 		super(props);
+		// Able to load external components by overriding the class
+		this.customComponents = [];
+		this.customComponents["AutoArrange"] = AutoArrange;
+		this.customComponents["AlwaysOnTop"] = AlwaysOnTop;
+		this.customComponents["BringToFront"] = BringToFront;
+		this.customComponents["MinimizeAll"] = MinimizeAll;
+		this.customComponents["WorkspaceMenuOpener"] = WorkspaceMenuOpener;
+		this.customComponents["Search"] = Search;
+
+		this.pinnableItems = {
+			"componentLauncher": FinsembleButton,
+			"workspaceSwitcher": WorkspaceLauncherButton
+		};
+
 		this.state = {
 			sections: ToolbarStore.getSectionsFromMenus(),
 			finWindow: fin.desktop.Window.getCurrent(),
@@ -135,7 +136,7 @@ export default class Toolbar extends React.Component {
 						buttonComponent = <FinsembleToolbarSeparator key={i} />;
 						break;
 					case "reactComponent":
-						let Component = customComponents[button.reactComponent];
+						let Component = this.customComponents[button.reactComponent];
 						buttonComponent = <Component key={i} {...button} className={"finsemble-toolbar-button"} />;
 						break;
 					case "workspaceSwitcher":
@@ -163,7 +164,7 @@ export default class Toolbar extends React.Component {
 				arrangeable={sectionPosition === "center"}
 				ref="pinSection"
 				name={sectionPosition}
-				pinnableItems={pinnableItems}
+				pinnableItems={this.pinnableItems}
 				className={sectionPosition}
 				key={sectionPosition}
 				handleOverflow={sectionPosition === "center"}
@@ -185,17 +186,13 @@ export default class Toolbar extends React.Component {
 		</FinsembleToolbar>);
 	}
 
-}
-
-if (window.FSBL && FSBL.addEventListener) {
-	FSBL.addEventListener("onReady", FSBLReady);
-} else {
-	window.addEventListener("FSBLReady", FSBLReady);
-}
-function FSBLReady() {
-	ToolbarStore.initialize(function () {
-		ReactDOM.render(
-			<Toolbar />
-			, document.getElementById("toolbar_parent"));
-	});
+	static initialise() {
+		// Class can be extended so `this` instead of `Toolbar` to get correct class type
+		const Component = this;
+		ToolbarStore.initialize(function () {
+			ReactDOM.render(
+				<Component />
+				, document.getElementById("toolbar_parent"));
+		});
+	}
 }

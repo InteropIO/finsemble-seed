@@ -17,3 +17,12 @@ if (!fin.container || fin.container != "electron") {
     })
   })
 }
+
+if (window.FSBL && FSBL.addEventListener) {
+	FSBL.addEventListener("onReady", FSBLReady);
+} else {
+	window.addEventListener("FSBLReady", FSBLReady);
+}
+function FSBLReady() {
+	Toolbar.initialise();
+}
