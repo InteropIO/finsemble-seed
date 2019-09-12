@@ -625,6 +625,10 @@ html.desktop-active .fsbl-icon.fsbl-close[data-hover=true] {
     transition: none;
 }
 
+.ff-always-on-top {
+    font-size: 16px;
+}
+
 .linker-groups {
     align-items: center;
 }
