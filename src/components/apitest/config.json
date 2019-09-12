@@ -6,10 +6,10 @@
         "frame": false,
         "resizable": true,
         "autoShow": true,
-        "top": "center",
-        "left": "center",
+        "top": "top",
+        "left": "left",
         "width": 925,
-        "height": 600
+        "height": "100%"
       },
       "component": {
         "preload": false
@@ -43,10 +43,10 @@
         "frame": false,
         "resizable": true,
         "autoShow": true,
-        "top": "center",
+        "top": "top",
         "left": "center",
-        "width": 800,
-        "height": 600
+        "width": 600,
+        "height": "100%"
       },
       "component": {
         "preload": false

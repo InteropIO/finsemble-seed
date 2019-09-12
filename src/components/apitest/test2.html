@@ -9,18 +9,19 @@
 		<link rel="stylesheet" type="text/css" href="test2.css" />
 		<script src="test2.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-		<link
-			href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed"
-			rel="stylesheet"
-		/>
+
 		<script src="../../vendor.bundle.js"></script>
 	</head>
 	<body>
-		<section><field>Symbol by drag and drop:</field><draganddropSymbol></draganddropSymbol></section>
-		<section><field>Symbol by linker:</field><linkerSymbol></linkerSymbol></section>
-		<section><field>Symbol by router pubsub:</field><routerSymbolPubSub></routerSymbolPubSub></section>
-		<section><field>Symbol by router listener:</field><routerSymbolListenTran></routerSymbolListenTran></section>
-		<section><field>Ds Field1:</field><dsField1></dsField1></section>
-		<section><field>Ds Field2:</field><dsField2></dsField2></section>
+		<div id='inputSection'>
+			<section><field>Symbol by drag and drop:</field><draganddropSymbol></draganddropSymbol></section>
+			<section><field>Symbol by linker:</field><linkerSymbol></linkerSymbol></section>
+			<section><field>Symbol by router pubsub:</field><routerSymbolPubSub></routerSymbolPubSub></section>
+			<section><field>Symbol by router listener:</field><routerSymbolListenTran></routerSymbolListenTran></section>
+			<section><field>Ds Field1:</field><dsField1></dsField1></section>
+			<section><field>Ds Field2:</field><dsField2></dsField2></section>
+		</div>
+		<div id='functionBtns'></div>
+		<textarea id='displayMsg' readonly></textarea>
 	</body>
 </html>

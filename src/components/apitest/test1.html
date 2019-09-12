@@ -26,11 +26,15 @@
 	</head>
 
 	<body>
-		<label for="symbolInput" id="symbolLabel">Input text</label>
-		<input type='text' draggable="true" id='symbolInput'/>
+		<div id='inputSection'>
+			<br/>
+			<label for="symbolInput" id="symbolLabel">Input a value for testing</label>
+			<input type='text' draggable="true" id='symbolInput'/>
+			<br/>
+		</div>
 
 		<div class='tab'>
-			<button class="tablinks" onclick="openTab(event, 'DistributedStore')">Distributed Store</button>
+			<button class="tablinks" onclick="openTab(event, 'DistributedStore')" id='dsBtn'>Distributed Store</button>
 			<button class="tablinks" onclick="openTab(event, 'Hotkeys')">Hotkeys</button>
 			<button class="tablinks" onclick="openTab(event, 'Launcher')">Launcher</button>
 			<button class="tablinks" onclick="openTab(event, 'Linker')">Linker</button>
@@ -45,6 +49,7 @@
 		</div>
 		<div id='DistributedStore' class='tabcontent'>
 			<h3>Testing function for Distributed Store</h3>
+			<h4>Please test using the buttons with sequence from top to bottom.</h4>
 		</div>
 		<div id='DragandDrop' class='tabcontent'>
 			<h3>Testing function for Drag and Drop</h3>
@@ -60,12 +65,14 @@
 		</div>
 		<div id='Logger' class='tabcontent'>
 			<h3>Testing function for Logger</h3>
+			<h4>Please use the central logger to see the testing result.</h4>
 		</div>
 		<div id='Notification' class='tabcontent'>
 			<h3>Testing function for Notification</h3>
 		</div>
 		<div id='Router' class='tabcontent'>
 			<h3>Testing function for Router</h3>
+			<h4>Please use "API Test 2" Component together for testing.</h4>
 		</div>
 		<div id='Search' class='tabcontent'>
 			<h3>Testing function for Search</h3>
@@ -83,5 +90,6 @@
 			<h3>Testing function for Workspace</h3>
 		</div>
 
+		<textarea id='displayMsg' readonly></textarea>
 	</body>
 </html>

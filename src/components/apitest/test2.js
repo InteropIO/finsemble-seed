@@ -7,61 +7,61 @@ function renderPage() {
 	linkerSub.click(function () {
 		triggerLinkerSub();
 	});
-	$("body").append(linkerSub);
+	$("#functionBtns").append(linkerSub);
 	const linkerUnsub = $("<linkerUnsub>Linker Unsubscribe</linkerUnsub>");
 	linkerUnsub.click(function () {
 		triggerLinkerUnsub();
 	});
-	$("body").append(linkerUnsub);
+	$("#functionBtns").append(linkerUnsub);
 
 	/* Router client buttons */
 	const routerSub = $("<routerSub>Router Subscribe</routerSub>");
 	routerSub.click(function () {
 		triggerRouterSub();
 	});
-	$("body").append(routerSub);
+	$("#functionBtns").append(routerSub);
 	const routerUnsub = $("<routerUnsub>Router Unsubscribe</routerUnsub>");
 	routerUnsub.click(function () {
 		triggerRouterUnsub();
 	});
-	$("body").append(routerUnsub);
+	$("#functionBtns").append(routerUnsub);
 	const routerAddResponder = $("<routerAddResponder>Router Add Responder</routerAddResponder>");
 	routerAddResponder.click(function () {
 		triggerRouterAddResponder();
 	});
-	$("body").append(routerAddResponder);
+	$("#functionBtns").append(routerAddResponder);
 	const routerRemoveResponder = $("<routerRemoveResponder>Router Remove Responder</routerRemoveResponder>");
 	routerRemoveResponder.click(function () {
 		triggerRouterRemoveResponder();
 	});
-	$("body").append(routerRemoveResponder);
+	$("#functionBtns").append(routerRemoveResponder);
 	const routerAddListener = $("<routerAddListener>Router Add Listener</routerAddListener>");
 	routerAddListener.click(function () {
 		triggerRouterAddListener();
 	});
-	$("body").append(routerAddListener);
+	$("#functionBtns").append(routerAddListener);
 	const routerRemoveListener = $("<routerRemoveListener>Router Remove Listener</routerRemoveListener>");
 	routerRemoveListener.click(function () {
 		triggerRouterRemoveListener();
 	});
-	$("body").append(routerRemoveListener);
+	$("#functionBtns").append(routerRemoveListener);
 	const routerDisconnectAll = $("<routerDisconnectAll>Router Disconnect All</routerDisconnectAll>");
 	routerDisconnectAll.click(function () {
 		triggerRouterDisconnectAll();
 	});
-	$("body").append(routerDisconnectAll);
+	$("#functionBtns").append(routerDisconnectAll);
 
 	/* DistributedStore Client buttons */
 	const addStoreListener = $("<addStoreListener>Add Store Listeners</addStoreListener>");
 	addStoreListener.click(function () {
 		triggerAddStoreListener();
 	});
-	$("body").append(addStoreListener);
+	$("#functionBtns").append(addStoreListener);
 	const removeStoreListener = $("<removeStoreListener>Remove Store Listeners</removeStoreListener>");
 	removeStoreListener.click(function () {
 		triggerRemoveStoreListener();
 	});
-	$("body").append(removeStoreListener);
+	$("#functionBtns").append(removeStoreListener);
 }
 /* DistributedStore Client functions */
 function triggerRemoveStoreListener() {
@@ -73,7 +73,7 @@ function triggerRemoveStoreListener() {
 		listener: onFieldDataChange
 	}], null, function (err) {
 		if (!err)
-			alert('Distributed store listeners removed.')
+			setDisplayMsg('Distributed store listeners removed.')
 	});
 }
 
@@ -85,10 +85,10 @@ function triggerAddStoreListener() {
 			dsStore = store
 			store.addListeners(['field1', 'field2'], onFieldDataChange, function (err) {
 				if (!err)
-					alert('Distributed store listeners added.')
+					setDisplayMsg('Distributed store listeners added.')
 			});
 		} else
-			alert('No such store.')
+			setDisplayMsg('No such store.')
 	})
 }
 
@@ -102,17 +102,17 @@ function onFieldDataChange(err, newData) {
 /* Router client functions */
 function triggerRouterDisconnectAll() {
 	FSBL.Clients.RouterClient.disconnectAll()
-	alert('Disconnected all.')
+	setDisplayMsg('Disconnected all.')
 }
 
 function triggerRouterRemoveListener() {
 	FSBL.Clients.RouterClient.removeListener('symbol', onRouterValueChanged)
-	alert('Router listener removed.')
+	setDisplayMsg('Router listener removed.')
 }
 
 function triggerRouterAddListener() {
 	FSBL.Clients.RouterClient.addListener('symbol', onRouterValueChanged)
-	alert('Router listener added.')
+	setDisplayMsg('Router listener added.')
 }
 
 function onRouterValueChanged(err, response) {
@@ -124,18 +124,18 @@ function onRouterValueChanged(err, response) {
 
 function triggerRouterRemoveResponder() {
 	FSBL.Clients.RouterClient.removeResponder('symbol')
-	alert('Router client reponder removed.')
+	setDisplayMsg('Router client reponder removed.')
 }
 
 function triggerRouterAddResponder() {
 	FSBL.Clients.RouterClient.addResponder("symbol", function (err, queryMessage) {
 		if (!err) {
-			alert("Router query incoming data=" + queryMessage.data.queryKey)
+			setDisplayMsg("Router query incoming data=" + queryMessage.data.queryKey)
 			var response = "router query response data"; // Responses can be objects or strings
 			queryMessage.sendQueryResponse(null, response); // The callback must respond, else a timeout will occur on the querying client.
 		}
 	})
-	alert("Router client responder added.")
+	setDisplayMsg("Router client responder added.")
 }
 
 function triggerRouterUnsub() {
@@ -143,7 +143,7 @@ function triggerRouterUnsub() {
 		'subscribeID': routerSubId,
 		'topic': 'symbol'
 	})
-	alert('Router unsubscribed.')
+	setDisplayMsg('Router unsubscribed.')
 }
 
 function triggerRouterSub() {
@@ -157,7 +157,7 @@ function triggerRouterSub() {
 
 		}
 	})
-	alert('Router subscribed.')
+	setDisplayMsg('Router subscribed.')
 }
 
 
@@ -166,12 +166,12 @@ function triggerLinkerSub() {
 	FSBL.Clients.LinkerClient.subscribe('symbol', function (data, response) {
 		$("linkerSymbol").text(data);
 	})
-	alert('Linker subscribed.')
+	setDisplayMsg('Linker subscribed.')
 }
 
 function triggerLinkerUnsub() {
 	FSBL.Clients.LinkerClient.unsubscribe('symbol')
-	alert('Linker unsubscribed.')
+	setDisplayMsg('Linker unsubscribed.')
 }
 
 
@@ -210,6 +210,15 @@ function getEverythingAComponentCanEmit(err, response) {
 			$("draganddropSymbol").text(response.data.symbol);
 
 	}
+}
+
+function setDisplayMsg(msg, respondObj, append) {
+	if(append)
+		document.getElementById('displayMsg').value += '\n\n' + msg + '\n\n'
+	else
+		document.getElementById('displayMsg').value = msg + '\n\n'
+	if (respondObj)
+		document.getElementById('displayMsg').value += JSON.stringify(respondObj)
 }
 
 if (window.FSBL && FSBL.addEventListener) {

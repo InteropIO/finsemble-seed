@@ -14,8 +14,10 @@ function renderPage() {
 	})
 
 	FSBL.Clients.RouterClient.onReady(function () {
-		console.log('RouterClient is ready')
+		document.getElementById('displayMsg').value = 'RouterClient is ready'
 	})
+
+	document.getElementById('dsBtn').click()
 
 	/* Global hotkey button */
 	const registerGlobalHotKey = $("<registerGlobalHotKey>Register Global Ctrl+Q</registerGlobalHotKey>");
@@ -393,16 +395,16 @@ function renderPage() {
 		triggerSetComponentState();
 	});
 	$("#Windows").append(setComponentState);
-	const removeComponentState = $("<removeComponentState>Remove Component State</removeComponentState>");
-	removeComponentState.click(function () {
-		triggerRemoveComponentState();
-	});
-	$("#Windows").append(removeComponentState);
 	const getComponentState = $("<getComponentState>Get Component State</getComponentState>");
 	getComponentState.click(function () {
 		triggerGetComponentState();
 	});
 	$("#Windows").append(getComponentState);
+	const removeComponentState = $("<removeComponentState>Remove Component State</removeComponentState>");
+	removeComponentState.click(function () {
+		triggerRemoveComponentState();
+	});
+	$("#Windows").append(removeComponentState);
 	const getCurWin = $("<getCurWin>Get Current Window</getCurWin>");
 	getCurWin.click(function () {
 		triggerGetCurWin();
@@ -515,17 +517,15 @@ function triggerSearch() {
 			text: document.getElementById('symbolInput').value
 		}, function (err, response) {
 			if (!err) {
-				alert('Sussceed. See console for detail.')
-				console.log(response)
+				setDisplayMsg('Search success with the following details.', response)
 			}
 		})
 	else
-		alert('Input a value.')
+		setDisplayMsg('Input a search value in the textbox at the top.')
 }
 
 /* Dialog manager functions */
 function triggerOpenDialog() {
-	let self = this;
 	let dialogParams = {
 		question: 'Test Question. See response in console.',
 		affirmativeResponseText: 'Yes, overwrite',
@@ -535,21 +535,19 @@ function triggerOpenDialog() {
 	};
 	FSBL.Clients.DialogManager.open('yesNo', dialogParams, function (err, response) {
 		//choice can be `'affirmative'`, `'negative'`, or `'cancel'`.
-		console.log("Response Received: " + response.choice)
-		if (err || response.choice === 'affirmative') {
-			//alert("Response Received: "+response.choice)
-		}
+		if (!err)
+			setDisplayMsg("Response Received: " + response.choice)
 	});
 }
 
 /* WindowClient functions */
 function triggerStopTilingOrTabbing() {
 	var windowIdentifier = FSBL.Clients.WindowClient.getWindowIdentifier()
-	FSBL.Clients.WindowClient.startTilingOrTabbing({
+	FSBL.Clients.WindowClient.stopTilingOrTabbing({
 		windowIdentifier: windowIdentifier
 	}, function (err) {
 		if (!err) {
-			alert('Stopped')
+			setDisplayMsg('stopTilingOrTabbing Stopped.')
 		}
 	})
 }
@@ -563,7 +561,7 @@ function triggerStartTilingOrTabbing() {
 		}
 	}, function (err) {
 		if (!err) {
-			alert('Started')
+			setDisplayMsg('startTilingOrTabbing Started.')
 		}
 	})
 }
@@ -573,16 +571,17 @@ function triggerShowAtMousePos() {
 }
 
 function triggerSetWindowTitle() {
-	if (document.getElementById('symbolInput').value != '')
+	if (document.getElementById('symbolInput').value != ''){
 		FSBL.Clients.WindowClient.setWindowTitle(document.getElementById('symbolInput').value)
-	else
-		alert('Input a value.')
+		setDisplayMsg('setWindowTitle Successed.')
+	}else
+		setDisplayMsg('Input a title in the textbox at the top.')
 }
 
 function triggerSetAlwaysOnTop() {
 	FSBL.Clients.WindowClient.setAlwaysOnTop(true, function (err) {
 		if (!err) {
-			alert('Sussceed.')
+			setDisplayMsg('setAlwaysOnTop Successed.')
 		}
 	})
 }
@@ -593,14 +592,16 @@ function triggerSendWinIdentifierForTilingOrTabbing() {
 		windowIdentifier: windowIdentifier
 	}, function (err) {
 		if (!err) {
-			alert('Sussceed.')
+			setDisplayMsg('sendIdentifierForTilingOrTabbing Successed.')
 		}
 	})
 }
 
 function triggerRestore() {
 	FSBL.Clients.WindowClient.restore(function (err) {
-		if (!err) {}
+		if (!err) {
+			setDisplayMsg('restore Successed.')
+		}
 	})
 }
 
@@ -613,70 +614,71 @@ function triggerRemoveComponentState() {
 		}]
 	}, function (err) {
 		if (!err) {
-			alert('Sussceed.')
+			setDisplayMsg('removeComponentState Successed.')
 		}
 	})
 }
 
 function triggerMinimize() {
 	FSBL.Clients.WindowClient.minimize(function (err) {
-		if (!err) {}
-
+		if (!err) {
+			setDisplayMsg('minimize Successed.')
+		}
 	})
 }
 
 function triggerMaximize() {
 	FSBL.Clients.WindowClient.maximize(function (err) {
-		if (!err) {}
-
+		if (!err) {
+			setDisplayMsg('maximize Successed.')
+		}
 	})
 }
 
 function triggerInjectHeader() {
 	FSBL.Clients.WindowClient.injectHeader({}, function (err) {
-
+		setDisplayMsg('injectHeader Successed.')
 	})
 }
 
 function triggerEstHeaderCommandChannel() {
 	FSBL.Clients.WindowClient.headerCommandChannel(function (err, header) {
-		console.log(header)
+		setDisplayMsg('triggerHeaderCommandChannel successed.', header, true)
 	})
+	setDisplayMsg('triggerEstHeaderCommandChannel successed.')
 }
 
 function triggerGetWindowTitle() {
 	var windowTitle = FSBL.Clients.WindowClient.getWindowTitle()
 	if (windowTitle)
-		alert('Sussceed. Window Title: ' + windowTitle)
+		setDisplayMsg('getWindowTitle Successed. Window Title: ' + windowTitle)
 }
 
 function triggerGetWindowNameForDocking() {
 	var windowName = FSBL.Clients.WindowClient.getWindowNameForDocking()
 	if (windowName) {
-		alert('Sussceed. Window Name: ' + windowName)
+		setDisplayMsg('getWindowNameForDocking Successed. Window Name: ' + windowName)
 	}
 }
 
 function triggerGetWindowIdentifier() {
 	var windowIdentifier = FSBL.Clients.WindowClient.getWindowIdentifier()
 	if (windowIdentifier) {
-		alert('Sussceed. See console for detail.')
-		console.log(windowIdentifier)
+		setDisplayMsg('getWindowIdentifier Successed.', windowIdentifier)
 	}
 }
 
 function triggerGetWindowsGroup() {
 	var windowGroups = FSBL.Clients.WindowClient.getWindowGroups()
 	if (windowGroups) {
-		alert('Sussceed. See console for detail.')
-		console.log(windowGroups)
+		setDisplayMsg('getWindowGroups Successed.', windowGroups)
 	}
 }
 
 function triggerGetStackedWindow() {
 	FSBL.Clients.WindowClient.getStackedWindow({}, function (err, stackedWindow) {
 		if (!err) {
-			console.log(stackedWindow)
+			setDisplayMsg('triggerGetStackedWindow Successed. ', stackedWindow)
 		}
 	})
 }
@@ -684,16 +686,14 @@ function triggerGetStackedWindow() {
 function triggerGetSpawnData() {
 	var spawnData = FSBL.Clients.WindowClient.getSpawnData()
 	if (spawnData) {
-		alert('Sussceed. See console for detail.')
-		console.log(spawnData)
+		setDisplayMsg('Successed.', spawnData)
 	}
 }
 
 function triggerGetCurWin() {
 	var currentWindow = FSBL.Clients.WindowClient.getCurrentWindow()
 	if (currentWindow) {
-		alert('Sussceed. See console for detail.')
-		console.log(currentWindow)
+		setDisplayMsg('Successed.', currentWindow)
 	}
 }
 
@@ -710,18 +710,19 @@ function triggerSetComponentState() {
 			},
 			function (err) {
 				if (!err) {
-					alert('Sussceed.')
+					setDisplayMsg('setComponentState Successed.')
 				}
 			})
 	else
-		alert('Input a value.')
+		setDisplayMsg('Input a value in the textbox at the top.')
 }
 
 function triggerGetComponentState() {
-	FSBL.Clients.WindowClient.getComponentState({}, function (err, state) {
+	FSBL.Clients.WindowClient.getComponentState({
+		fields: ['testField1', 'testField2']
+	}, function (err, state) {
 		if (!err) {
-			alert('Sussceed. See console for detail.')
-			console.log(state)
+			setDisplayMsg('getComponentState Successed.', state)
 		}
 	})
 }
@@ -729,8 +730,7 @@ function triggerGetComponentState() {
 function triggerGetBounds() {
 	FSBL.Clients.WindowClient.getBounds(function (err, bounds) {
 		if (!err) {
-			alert('Sussceed. See console for detail.')
-			console.log(bounds)
+			setDisplayMsg('Successed.', bounds)
 		}
 	})
 }
@@ -744,7 +744,9 @@ function triggerFitToDom() {
 			wdith: 100
 		}
 	}, function (err) {
-		if (!err) {}
+		if (!err) {
+			setDisplayMsg('triggerFitToDom Successed.')
+		}
 	})
 }
 
@@ -757,13 +759,14 @@ function triggerCancelTilingOrTabbing() {
 		windowIdentifier: FSBL.Clients.WindowClient.getWindowIdentifier()
 	}, function (err) {
 		if (!err) {
-			alert('Sussceed.')
+			setDisplayMsg('cancelTilingOrTabbing Successed.')
 		}
 	})
 }
 
 function triggerBringWindowToFront() {
 	FSBL.Clients.WindowClient.bringWindowToFront()
+	setDisplayMsg('bringWindowToFront Successed.')
 }
 
 /* Storage client functions */
@@ -773,7 +776,7 @@ function triggerGetStorageValue() {
 		key: "testKey"
 	}, function (err, val) {
 		if (!err) {
-			alert('Topic: finsemble, Key: testKey, value: ' + val)
+			setDisplayMsg('Topic: finsemble, Key: testKey, value: ' + val)
 		}
 	})
 }
@@ -783,8 +786,7 @@ function triggerGetStorageKeys() {
 		topic: "finsemble"
 	}, function (err, keys) {
 		if (!err) {
-			alert('Successed. Check console for detail.')
-			console.log(keys)
+			setDisplayMsg('Successed. Check indexedDB for detail.', keys)
 		}
 	})
 }
@@ -795,7 +797,7 @@ function triggerRemoveStorageValue() {
 		key: "testKey"
 	}, function (err) {
 		if (!err)
-			alert('Sussceed. Check console for detail.')
+			setDisplayMsg('Successed. Check indexedDB for detail.')
 	})
 }
 
@@ -807,10 +809,10 @@ function triggerSaveStorageValue() {
 			value: document.getElementById('symbolInput').value
 		}, function (err) {
 			if (!err)
-				alert('Sussceed. Check console for detail.')
+				setDisplayMsg('Successed. Check indexedDB for detail.')
 		})
 	else
-		alert('Input a value.')
+		setDisplayMsg('Input a value in the textbox at the top.')
 }
 
 function triggerSetStorageStore() {
@@ -819,7 +821,7 @@ function triggerSetStorageStore() {
 		dataStore: "LocalStorageAdapter"
 	}, function (err) {
 		if (!err)
-			alert('Sussceed. Check console for detail.')
+			setDisplayMsg('Successed. Check indexedDB for detail.')
 	})
 }
 
@@ -828,37 +830,45 @@ function triggerSetStorageUser() {
 		user: 'testUser'
 	}, function (err) {
 		if (!err)
-			alert('Sussceed. Check console for detail.')
+			setDisplayMsg('Successed. Check indexedDB for detail.')
 	})
 }
 
 /* Distributed store client functions */
 function triggerSetStoreValue(field) {
-	dsStore.setValue({
-		field: field,
-		value: document.getElementById('symbolInput').value
-	}, function (err) {
-		alert('Value set for '+field)
-	})
+	if (document.getElementById('symbolInput').value != '')
+		if (dsStore)
+			dsStore.setValue({
+				field: field,
+				value: document.getElementById('symbolInput').value
+			}, function (err) {
+				setDisplayMsg('Value set for ' + field)
+			})
+	else
+		setDisplayMsg('Please create distributed store.')
+	else
+		setDisplayMsg('Input a value in the textbox at the top.')
 }
 
 function triggerGetStoreValue() {
-	dsStore.getValue({
-		field: 'field1'
-	}, function (err, value) {
-		alert('Field1: ' + value)
-	})
-
+	if (dsStore)
+		dsStore.getValue({
+			field: 'field1'
+		}, function (err, value) {
+			setDisplayMsg('Field1: ' + value)
+		})
+	else
+		setDisplayMsg('Please create distributed store.')
 }
 
 function triggerRemoveStore() {
 	FSBL.Clients.DistributedStoreClient.removeStore({
 		store: 'testDs1',
 	}, function (err) {
-		if (!err) {
-			alert('testDs1 removed.')
-		} else
-			alert('No such store.')
+		if (!err)
+			setDisplayMsg('testDs1 removed.')
+		else
+			setDisplayMsg('No such store.')
 	})
 }
 
@@ -867,10 +877,9 @@ function triggerGetStore() {
 		store: 'testDs1',
 	}, function (err, store) {
 		if (!err) {
-			alert('Sussceed. Check console.log for store object detail.')
-			console.log(store)
+			setDisplayMsg('GetStore Successed.', store)
 		} else
-			alert('No such store.')
+			setDisplayMsg('No such store.')
 	})
 }
 
@@ -885,8 +894,7 @@ function triggerCreateStore() {
 	}, function (err, store) {
 		if (!err) {
 			dsStore = store
-			alert('testDs1 created. See console for store detail')
-			console.log(store)
+			setDisplayMsg('testDs1 created.', store)
 		}
 	})
 }
@@ -898,11 +906,11 @@ function triggerSwitchToWorkspace() {
 			name: document.getElementById('symbolInput').value
 		}, function (err, response) {
 			if (!err) {
-				alert('Switched.')
+				setDisplayMsg('Switched.')
 			}
 		})
 	else
-		alert('Input a name.')
+		setDisplayMsg('Input a name in the textbox at the top.')
 }
 
 function triggerSaveAsWorkspace() {
@@ -911,17 +919,17 @@ function triggerSaveAsWorkspace() {
 			name: document.getElementById('symbolInput').value
 		}, function (err, response) {
 			if (!err) {
-				alert('Saved.')
+				setDisplayMsg('Saved.')
 			}
 		})
 	else
-		alert('Input a name.')
+		setDisplayMsg('Input a name in the textbox at the top.')
 }
 
 function triggerSaveWorkspace() {
 	FSBL.Clients.WorkspaceClient.save(function (err, response) {
 		if (!err) {
-			alert('Saved.')
+			setDisplayMsg('Saved.')
 		}
 	})
 }
@@ -935,13 +943,13 @@ function triggerRenameWorkspace() {
 					newName: document.getElementById('symbolInput').value
 				}, function (err, response) {
 					if (!err) {
-						alert('Sussceed')
+						setDisplayMsg('rename current workspace Successed.')
 					}
 				})
 			}
 		})
 	else
-		alert('Input a name')
+		setDisplayMsg('Input a name in the textbox at the top.')
 }
 
 function triggerRemoveWorkspace() {
@@ -950,18 +958,20 @@ function triggerRemoveWorkspace() {
 			name: document.getElementById('symbolInput').value
 		}, function (err, response) {
 			if (!err) {
-				alert('Sussceed.')
+				setDisplayMsg('remove workspace Successed.')
 			} else {
-				alert('Workspace not found.')
+				setDisplayMsg('Workspace not found.')
 			}
 		})
 	else
-		alert('Input a name')
+		setDisplayMsg('Input a name in the textbox at the top.')
 }
 
 function triggerMinimizeAll() {
 	FSBL.Clients.WorkspaceClient.minimizeAll({}, function (err) {
-		if (!err) {}
+		if (!err) {
+			setDisplayMsg('minimizeAll successed.')
+		}
 	})
 }
 
@@ -978,7 +988,7 @@ function triggerImportWorkspace() {
 						workspaceJSONDefinition: workspaceDefinition
 					}, function (err) {
 						if (!err)
-							alert('Sussceed.')
+							setDisplayMsg('import Successed.')
 					})
 				}
 			})
@@ -989,8 +999,7 @@ function triggerImportWorkspace() {
 function triggerGetWorkspaces() {
 	FSBL.Clients.WorkspaceClient.getWorkspaces(function (err, response) {
 		if (!err) {
-			console.log(response)
-			alert('Sussceed. See console for detail')
+			setDisplayMsg('getWorkspaces Successed.', response)
 		}
 	})
 }
@@ -998,8 +1007,7 @@ function triggerGetWorkspaces() {
 function triggerGetActiveWorkspace() {
 	FSBL.Clients.WorkspaceClient.getActiveWorkspace(function (err, response) {
 		if (!err) {
-			console.log(response)
-			alert('Sussceed. See console for detail')
+			setDisplayMsg('Successed.', response)
 		}
 	})
 }
@@ -1010,47 +1018,52 @@ function triggerExportWorkspace() {
 			workspaceName: document.getElementById('symbolInput').value
 		}, function (err, workspaceDefinition) {
 			if (!err) {
-				console.log(workspaceDefinition)
-				alert('Workspace definition exported. See console for detail')
+				setDisplayMsg('Workspace definition exported.', workspaceDefinition)
 			}
 		})
 	else
-		alert('Input a name')
+		setDisplayMsg('Input a name in the textbox at the top.')
 }
 
 function triggerCreateWorkspace() {
 	if (document.getElementById('symbolInput').value != '')
 		FSBL.Clients.WorkspaceClient.createWorkspace(document.getElementById('symbolInput').value, {}, function (err, response) {
 			if (!err) {
-
+				setDisplayMsg('createWorkspace successed', response)
 			}
 		})
 	else
-		alert('Input a name!')
+		setDisplayMsg('Input a name in the textbox at the top.')
 }
 
 function triggerBringWinsToFront() {
-	FSBL.Clients.WorkspaceClient.bringWindowsToFront({}, function () {
-
+	FSBL.Clients.WorkspaceClient.bringWindowsToFront({}, function (err, response) {
+		setDisplayMsg('bringWindowsToFront successed', response)
 	})
 }
 
 function triggerAutoArrange() {
-	FSBL.Clients.WorkspaceClient.autoArrange({}, function () {
-
+	FSBL.Clients.WorkspaceClient.autoArrange({}, function (err, response) {
+		if(!err)
+			setDisplayMsg('autoArrange successed',response)
 	})
 }
 
 /* Router client functions */
 function triggerDisconnectAll() {
 	FSBL.Clients.RouterClient.disconnectAll()
-	alert('Disconnected all.')
+	setDisplayMsg('Disconnected all.')
 }
 
 function triggerTransmit() {
-	FSBL.Clients.RouterClient.transmit('symbol', {
-		'data': document.getElementById('symbolInput').value
-	})
+	if (document.getElementById('symbolInput').value != '') {
+		FSBL.Clients.RouterClient.transmit('symbol', {
+			'data': document.getElementById('symbolInput').value
+		})
+		setDisplayMsg('Transmitted.')
+	} else {
+		setDisplayMsg('Input a value in the textbox at the top.')
+	}
 }
 
 function triggerQuery() {
@@ -1061,19 +1074,27 @@ function triggerQuery() {
 	}, function (error, queryResponseMessage) {
 		if (!error) {
 			// process income query response message
-			alert("Router client query respond: " + queryResponseMessage.data)
+			setDisplayMsg("Router client query respond: " + queryResponseMessage.data)
+		} else {
+			setDisplayMsg("Please add a Router Responder in 'API Test 2' component.")
 		}
 	});
 }
 
 function triggerPublish() {
-	FSBL.Clients.RouterClient.publish('symbol', {
-		'symbol': document.getElementById('symbolInput').value
-	})
+	if (document.getElementById('symbolInput').value != '') {
+		FSBL.Clients.RouterClient.publish('symbol', {
+			'symbol': document.getElementById('symbolInput').value
+		})
+		setDisplayMsg('Published.')
+	} else {
+		setDisplayMsg('Input a value in the textbox at the top.')
+	}
 }
 
 function triggerRemovePubSubResponder() {
 	FSBL.Clients.RouterClient.removePubSubResponder('symbol')
+	setDisplayMsg("Pubsub responder removed.")
 }
 
 function triggerAddPubSubResponder() {
@@ -1084,13 +1105,13 @@ function triggerAddPubSubResponder() {
 		publishCallback: publishCallback,
 		unsubscribeCallback: unsubscribeCallback
 	});
-	alert("Pubsub responder added.")
+	setDisplayMsg("Pubsub responder added.")
 }
 
 function subscribeCallback(error, subscribe) {
 	if (subscribe) {
 		// must make this callback to accept or reject the subscribe (default is to accept). First parm is err and second is the initial state
-		alert(subscribe.header.origin + ' subscribed topic ' + subscribe.header.topic)
+		setDisplayMsg(subscribe.header.origin + ' subscribed topic ' + subscribe.header.topic, null, true)
 		subscribe.sendNotifyToSubscriber(null, {
 			"NOTIFICATION-STATE": "One"
 		});
@@ -1100,6 +1121,7 @@ function subscribeCallback(error, subscribe) {
 function publishCallback(error, publish) {
 	if (publish) {
 		// must make this callback to send notify to all subscribers (if error parameter set then notify will not be sent)
+		setDisplayMsg(publish.header.origin + ' published topic ' + publish.header.topic, null, true)
 		publish.sendNotifyToAllSubscribers(null, publish.data);
 	}
 }
@@ -1107,7 +1129,7 @@ function publishCallback(error, publish) {
 function unsubscribeCallback(error, unsubscribe) {
 	if (unsubscribe) {
 		// must make this callback to acknowledge the unsubscribe
-		alert(unsubscribe.header.origin + ' unsubscribed topic ' + unsubscribe.header.topic)
+		setDisplayMsg(unsubscribe.header.origin + ' unsubscribed topic ' + unsubscribe.header.topic, null, true)
 		unsubscribe.removeSubscriber();
 	}
 }
@@ -1139,20 +1161,23 @@ function triggerDebug() {
 
 /* Linker client functions */
 function triggerLinkerPub() {
-	FSBL.Clients.LinkerClient.publish({
-		dataType: "symbol",
-		data: document.getElementById('symbolInput').value
-	}, function (err) {
-		if (!err) {
-			//alert('Publish sussceed.')
-		}
-	})
+	if (document.getElementById('symbolInput').value != '')
+		FSBL.Clients.LinkerClient.publish({
+			dataType: "symbol",
+			data: document.getElementById('symbolInput').value
+		}, function (err) {
+			if (!err) {
+				setDisplayMsg('Published.')
+			}
+		})
+	else
+		setDisplayMsg('Input a value in the textbox at the top.')
 }
 
 function triggerOpenLinkerWindow() {
 	FSBL.Clients.LinkerClient.openLinkerWindow(function (err, response) {
 		if (!err) {
-			console.log(response)
+			setDisplayMsg('Opened linker window.', response)
 		}
 	})
 }
@@ -1160,17 +1185,16 @@ function triggerOpenLinkerWindow() {
 function triggerStartOnStateChange() {
 	FSBL.Clients.LinkerClient.onStateChange(function (err, response) {
 		if (!err) {
-			alert("Linker state changed. See console for detail.")
-			console.log(response)
+			setDisplayMsg("Linker state changed.", response, true)
 		}
 	})
+	setDisplayMsg('Callback function set for onLinkerStateChanged.')
 }
 
 function triggerLinkToGroup1() {
 	FSBL.Clients.LinkerClient.linkToChannel("group1", null, function (err, channel) {
 		if (!err) {
-			alert('Link to group1 succeed. See console for detail')
-			console.log(channel)
+			setDisplayMsg('Linked to group1.', channel)
 		}
 	})
 }
@@ -1178,8 +1202,7 @@ function triggerLinkToGroup1() {
 function triggerUnlinkToGroup1() {
 	FSBL.Clients.LinkerClient.unlinkFromChannel("group1", null, function (err, channel) {
 		if (!err) {
-			alert('Unlink to group1 succeed. See console for detail')
-			console.log(channel)
+			setDisplayMsg('Unlinked to group1.', channel)
 		}
 	})
 }
@@ -1187,8 +1210,7 @@ function triggerUnlinkToGroup1() {
 function triggerGetState() {
 	FSBL.Clients.LinkerClient.getState(FSBL.Clients.WindowClient.getWindowIdentifier, function (err, state) {
 		if (!err) {
-			alert('Get state succeed. See console for detail')
-			console.log(state)
+			setDisplayMsg('Get state succeed.', state)
 		}
 	})
 }
@@ -1196,8 +1218,7 @@ function triggerGetState() {
 function triggerGetWinLinkedCurWindow() {
 	FSBL.Clients.LinkerClient.getLinkedWindows(FSBL.Clients.WindowClient.getWindowIdentifier, function (err, windows) {
 		if (!err) {
-			alert(windows.length + ' windows linked with current component. See console for detail.')
-			console.log(windows)
+			setDisplayMsg(windows.length + ' windows linked with current component.', windows)
 		}
 	})
 }
@@ -1207,8 +1228,7 @@ function triggerGetWinLinkedGroup1() {
 		channels: ['group1']
 	}, function (err, windows) {
 		if (!err) {
-			alert(windows.length + ' windows linked with Group1. See console for detail.')
-			console.log(windows)
+			setDisplayMsg(windows.length + ' windows linked with Group1.', windows)
 		}
 	})
 }
@@ -1216,8 +1236,7 @@ function triggerGetWinLinkedGroup1() {
 function triggerGetComLinkedCurWindow() {
 	FSBL.Clients.LinkerClient.getLinkedComponents(FSBL.Clients.WindowClient.getWindowIdentifier, function (err, components) {
 		if (!err) {
-			alert(components.length + ' components linked with current component. See console for detail.')
-			console.log(components)
+			setDisplayMsg(components.length + ' components linked with current component.', components)
 		}
 	})
 }
@@ -1227,8 +1246,7 @@ function triggerGetComLinkedGroup1() {
 		channels: ['group1']
 	}, function (err, components) {
 		if (!err) {
-			alert(components.length + ' components linked with Group1. See console for detail.')
-			console.log(components)
+			setDisplayMsg(components.length + ' components linked with Group1.', components)
 		}
 	})
 }
@@ -1236,8 +1254,7 @@ function triggerGetComLinkedGroup1() {
 function triggerGetAllChannels() {
 	FSBL.Clients.LinkerClient.getAllChannels(function (err, channels) {
 		if (!err) {
-			alert(channels.length + ' Linker channels found. See console for detail.')
-			console.log(channels)
+			setDisplayMsg(channels.length + ' Linker channels found.', channels)
 		}
 	})
 }
@@ -1247,17 +1264,15 @@ function triggerGetAllChannels() {
 function triggerGetActiveDescriptors() {
 	FSBL.Clients.LauncherClient.getActiveDescriptors(function (err, desc) {
 		if (!err) {
-			console.log(desc)
-			alert('There are ' + Object.keys(desc).length + ' window descriptors. See console for detail.')
+			setDisplayMsg('There are ' + Object.keys(desc).length + ' window descriptors.', desc)
 		}
 	})
 }
 
 function triggerGetComponentDefaultConfig() {
-	FSBL.Clients.LauncherClient.getComponentDefaultConfig('test1', function (err, config) {
+	FSBL.Clients.LauncherClient.getComponentDefaultConfig('API Test 1', function (err, config) {
 		if (!err) {
-			console.log(config)
-			alert('Test1 component found. See console for detail.')
+			setDisplayMsg('"API Test 1" component found.', config)
 		}
 	})
 }
@@ -1265,8 +1280,7 @@ function triggerGetComponentDefaultConfig() {
 function triggerGetComponentList() {
 	FSBL.Clients.LauncherClient.getComponentList(function (err, componentList) {
 		if (!err) {
-			console.log(componentList)
-			alert('Component list found. See console for detail.')
+			setDisplayMsg('Component list found.', componentList)
 		}
 	})
 }
@@ -1277,8 +1291,7 @@ function triggerGetComponentsThatCanReceiveDataTypes() {
 		dataTypes: ['symbol']
 	}, function (err, componentList) {
 		if (!err) {
-			console.log(componentList)
-			alert('Component list found. See console for detail.')
+			setDisplayMsg('Component list found.', componentList)
 		}
 	})
 }
@@ -1287,7 +1300,7 @@ function triggerGetMonitorInfo() {
 	FSBL.Clients.LauncherClient.getMonitorInfo({}, function (err, monitorList) {
 		if (!err) {
 			console.log(monitorList)
-			alert('Monitor list found. See console for detail.')
+			setDisplayMsg('Monitor list found.', monitorList)
 		}
 	})
 }
@@ -1295,8 +1308,7 @@ function triggerGetMonitorInfo() {
 function triggerGetMonitorInfoAll() {
 	FSBL.Clients.LauncherClient.getMonitorInfoAll(function (err, monitorList) {
 		if (!err) {
-			console.log(monitorList)
-			alert('Monitor list found. See console for detail.')
+			setDisplayMsg('Monitor list found.', monitorList)
 		}
 	})
 }
@@ -1305,8 +1317,7 @@ function triggerGetMyWindowIdentifier() {
 	//Should the cb able to return 'err'?
 	FSBL.Clients.LauncherClient.getMyWindowIdentifier(function (windowIdentifer) {
 		if (windowIdentifer) {
-			console.log(windowIdentifer)
-			alert('Window Identifer found. See console for detail.')
+			setDisplayMsg('Window Identifer found.', windowIdentifer)
 		}
 	})
 }
@@ -1345,7 +1356,7 @@ function triggerRegisterComponent() {
 		}
 	}, function (err) {
 		if (!err) {
-			alert("Register Component Succeed.")
+			setDisplayMsg("Registered Component.")
 		}
 	})
 }
@@ -1355,7 +1366,7 @@ function triggerUnregisterComponent() {
 		componentType: 'testRegisterComponent'
 	}, function (err) {
 		if (!err) {
-			alert("Unregister Component Succeed.")
+			setDisplayMsg("Unregistered Component.")
 		}
 	})
 }
@@ -1371,7 +1382,7 @@ function triggerSpawnComponent() {
 			if (!err) {
 				test2SpawnResopnse = response
 			} else
-				alert('Spawn error')
+				setDisplayMsg('Spawn error')
 		})
 }
 
@@ -1392,7 +1403,7 @@ function triggerShowWindow() {
 			if (!err) {
 				test2SpawnResopnse = response
 			} else {
-				alert("Window can only shown once.")
+				setDisplayMsg("Window can only shown once.")
 			}
 		}
 	);
@@ -1413,21 +1424,18 @@ function unregisterGlobalHotkey() {
 }
 
 function onGlobalHotkeyTriggered(err, response) {
-	if (err)
-		return console.error(err);
-	alert("Pressed Global Ctrl + Q");
+	if (!err)
+		setDisplayMsg("Pressed Global Ctrl + Q");
 }
 
 function onGlobalHotkeyRegistered(err, response) {
-	if (err)
-		return console.error(err);
-	alert("Registered global hotkey Ctrl + Q");
+	if (!err)
+		setDisplayMsg("Registered global hotkey Ctrl + Q");
 }
 
 function onGlobalHotkeyUnregistered(err, response) {
-	if (err)
-		return console.error(err);
-	alert("Unregistered global hotkey Ctrl + Q");
+	if (!err)
+		setDisplayMsg("Unregistered global hotkey Ctrl + Q");
 }
 
 /* Local Hotkey functions*/
@@ -1437,17 +1445,13 @@ function registerLocalHotkey() {
 }
 
 function onLocalHotkeyTriggered(err, response) {
-	if (err)
-		return console.error(err);
-
-	alert("Pressed local Ctrl + Q");
+	if (!err)
+		setDisplayMsg("Pressed local Ctrl + Q");
 }
 
 function onLocalHotkeyRegistered(err, response) {
-	if (err)
-		return console.error(err);
-
-	alert("Registered local hotkey Ctrl + Q");
+	if (!err)
+		setDisplayMsg("Registered local hotkey Ctrl + Q");
 }
 
 function unregisterLocalHotkey() {
@@ -1456,10 +1460,8 @@ function unregisterLocalHotkey() {
 }
 
 function onLocalHotkeyUnregistered(err, response) {
-	if (err)
-		return console.error(err);
-
-	alert("Unregistered local hotkey Ctrl + Q");
+	if (!err)
+		setDisplayMsg("Unregistered local hotkey Ctrl + Q");
 }
 
 /* notification */
@@ -1490,12 +1492,16 @@ if (window.FSBL && FSBL.addEventListener) {
 	window.addEventListener("FSBLReady", FSBLReady);
 }
 
+function setDisplayMsg(msg, respondObj, append) {
+	if (append)
+		document.getElementById('displayMsg').value += '\n\n' + msg + '\n\n'
+	else
+		document.getElementById('displayMsg').value = msg + '\n\n'
+	if (respondObj)
+		document.getElementById('displayMsg').value += JSON.stringify(respondObj)
+}
+
 function FSBLReady() {
-	//alert(FSBL.Clients.WindowClient.options.customData.component["account-type"]); // --> Step 1.4
 	renderPage();
 	setupEmitter();
-	//triggerGetDistributedStoreData()
-	//getState(); // --> Step 3.1
-	//communicateBetweenComponents(); // --> Step 4.1
-
 }
