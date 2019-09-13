@@ -94,21 +94,24 @@
 			]
 		},
 		"storage": {
-			"defaultStorage": "IndexedDBAdapter",
+			"defaultStorage": "MongoStorageAdapter",
 			"topicToDataStoreAdapters": {
-				"finsemble": "IndexedDBAdapter",
-				"finsemble.workspace": "IndexedDBAdapter",
-				"finsemble.workspace.cache": "IndexedDBAdapter"
+				"finsemble": "MongoStorageAdapter",
+				"finsemble.workspace": "MongoStorageAdapter",
+				"finsemble.workspace.cache": "IndexedDBAdapter",
+				"finsemble.migration": "IndexedDBMigrationAdapter"
 			},
 			"dataStoreAdapters": {
 				"LocalStorageAdapter": "$applicationRoot/adapters/localStorageAdapter.js",
-				"IndexedDBAdapter": "$applicationRoot/adapters/indexedDBAdapter.js"
+				"IndexedDBAdapter": "$applicationRoot/adapters/indexedDBAdapter.js",
+				"IndexedDBMigrationAdapter": "$applicationRoot/adapters/IndexedDBMigrationAdapter.js",
+				"MongoStorageAdapter": "$applicationRoot/adapters/MongoStorageAdapter.js"
 			}
 		}
 	},
 	"preferences": {
 		"workspaceService": {
-			"promptUserOnDirtyWorkspace": true
+			"promptUserOnDirtyWorkspace": false
 		}
 	},
 	"systemTrayIcon": "$applicationRoot/assets/img/Finsemble_Taskbar_Icon.png",
@@ -155,7 +158,8 @@
 					"authenticationService",
 					"workspaceService",
 					"storageService",
-					"searchService"
+					"searchService",
+					"datamigrationService"
 				]
 			}
 		]
