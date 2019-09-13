@@ -1,8 +1,13 @@
 import React from 'react';
 
 const DragHandle = () => {
+	const currentWindow = fin.desktop.Window.getCurrent();
 	return (
-		<span className="cq-drag finsemble-toolbar-drag-handle" onMouseDown={(e) => {fin.desktop.Window.getCurrent().onMouseDown(e)}}>
+		<span 
+			className="cq-drag finsemble-toolbar-drag-handle" 
+			onMouseDown={e => currentWindow.onMouseDown(e)}
+			onMouseUp={e => currentWindow.onMouseUp(e)}
+		>
 			<svg xmlns="http://www.w3.org/2000/svg" width="13" height="26" viewBox="0 0 13 26">
 				<g fill="#495A69" fillRule="evenodd">
 					<circle cx="2.5" cy="2.5" r="2.5" />
