@@ -37,7 +37,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 		logToTerminal(`kill: running: ${command}...`);
 
 		exec(command, err => {
-			if (err && !err.includes(error)) {
+			if (err && err.message && !err.message.includes(error)) {
 				console.error(errorOutColor(err));
 			}
 
