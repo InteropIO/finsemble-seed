@@ -63,6 +63,38 @@
 		"output": "components/welcome/welcome",
 		"entry": "./src-built-in/components/welcome/welcome.js"
 	},
+	"welcome1": {
+		"output": "components/welcome-1/welcome",
+		"entry": "./src-built-in/components/welcome-1/welcome.js"
+	},
+	"welcome2": {
+		"output": "components/welcome-2/welcome",
+		"entry": "./src-built-in/components/welcome-1/welcome.js"
+	},
+	"welcome3": {
+		"output": "components/welcome-3/welcome",
+		"entry": "./src-built-in/components/welcome-1/welcome.js"
+	},
+	"welcome4": {
+		"output": "components/welcome-4/welcome",
+		"entry": "./src-built-in/components/welcome-1/welcome.js"
+	},
+	"welcome5": {
+		"output": "components/welcome-5/welcome",
+		"entry": "./src-built-in/components/welcome-1/welcome.js"
+	},
+	"welcome6": {
+		"output": "components/welcome-6/welcome",
+		"entry": "./src-built-in/components/welcome-1/welcome.js"
+	},
+	"welcome7": {
+		"output": "components/welcome-7/welcome",
+		"entry": "./src-built-in/components/welcome-1/welcome.js"
+	},
+	"welcome8": {
+		"output": "components/welcome-8/welcome",
+		"entry": "./src-built-in/components/welcome-1/welcome.js"
+	},
 	"appCatalog": {
 		"output": "components/appCatalog/appCatalog",
 		"entry": "./src-built-in/components/appCatalog/src/app.jsx"
