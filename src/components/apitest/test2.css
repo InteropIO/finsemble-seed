@@ -29,7 +29,7 @@ section > owed, section > draganddropSymbol,routerSymbol,dsSymbol,linkerSymbol, 
 }
 
 removeStoreListener, addStoreListener, routerDisconnectAll, routerRemoveListener, routerAddListener, routerRemoveResponder, routerAddResponder, routerUnsub, routerSub, linkerSub, linkerUnsub{
-	display: block;
+	display: inline-block;
 	bottom: 25px;
 	text-align: center;
 	background-color: #eee;
@@ -53,14 +53,14 @@ removeStoreListener:hover, addStoreListener:hover, routerDisconnectAll:hover, ro
 	background-color: #2cabff;
 }
 #inputSection{
-	height:30%;
+	height:23%;
 }
 
 #functionBtns {
 	padding: 6px 12px;
 	border: 1px solid #ccc;
 	border-top: none;
-	height:38%;
+	height:45%;
 	overflow: scroll;
 }
 
@@ -69,4 +69,8 @@ removeStoreListener:hover, addStoreListener:hover, routerDisconnectAll:hover, ro
 	height:30%;
 	position: absolute;
     bottom: 0;
+}
+
+.instruct{
+	display: inline-block;
 }

@@ -131,7 +131,7 @@ stopTilingOrTabbing,
 checkIfWindowIsDialog,
 openDialog,
 search {
-	display: block;
+	display:inline-block;
 	bottom: 25px;
 	text-align: center;
 	background-color: #eee;
@@ -149,6 +149,7 @@ search {
 	letter-spacing: 0.1em;
 	transition: background-color 0.4s ease-out;
 	box-sizing: border-box;
+	
 }
 search:hover,
 openDialog:hover,
@@ -300,4 +301,8 @@ getDistributedStoreData:hover {
 	height:30%;
 	position: absolute;
     bottom: 0;
+}
+
+.instruct{
+	display: inline-block;
 }

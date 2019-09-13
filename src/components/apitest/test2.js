@@ -3,61 +3,61 @@ var dsStore
 
 function renderPage() {
 	/* Linker client button */
-	const linkerSub = $("<linkerSub>Linker Subscribe</linkerSub>");
+	const linkerSub = $("<linkerSub>Linker Subscribe</linkerSub></br>");
 	linkerSub.click(function () {
 		triggerLinkerSub();
 	});
 	$("#functionBtns").append(linkerSub);
-	const linkerUnsub = $("<linkerUnsub>Linker Unsubscribe</linkerUnsub>");
+	const linkerUnsub = $("<linkerUnsub>Linker Unsubscribe</linkerUnsub></br>");
 	linkerUnsub.click(function () {
 		triggerLinkerUnsub();
 	});
 	$("#functionBtns").append(linkerUnsub);
 
 	/* Router client buttons */
-	const routerSub = $("<routerSub>Router Subscribe</routerSub>");
+	const routerSub = $("<routerSub>Router Subscribe</routerSub><p class='instruct'>Add Pub sub Responder in 'API Testing 1' before subscribe</p></br>");
 	routerSub.click(function () {
 		triggerRouterSub();
 	});
 	$("#functionBtns").append(routerSub);
-	const routerUnsub = $("<routerUnsub>Router Unsubscribe</routerUnsub>");
+	const routerUnsub = $("<routerUnsub>Router Unsubscribe</routerUnsub></br>");
 	routerUnsub.click(function () {
 		triggerRouterUnsub();
 	});
 	$("#functionBtns").append(routerUnsub);
-	const routerAddResponder = $("<routerAddResponder>Router Add Responder</routerAddResponder>");
+	const routerAddResponder = $("<routerAddResponder>Router Add Responder</routerAddResponder></br>");
 	routerAddResponder.click(function () {
 		triggerRouterAddResponder();
 	});
 	$("#functionBtns").append(routerAddResponder);
-	const routerRemoveResponder = $("<routerRemoveResponder>Router Remove Responder</routerRemoveResponder>");
+	const routerRemoveResponder = $("<routerRemoveResponder>Router Remove Responder</routerRemoveResponder></br>");
 	routerRemoveResponder.click(function () {
 		triggerRouterRemoveResponder();
 	});
 	$("#functionBtns").append(routerRemoveResponder);
-	const routerAddListener = $("<routerAddListener>Router Add Listener</routerAddListener>");
+	const routerAddListener = $("<routerAddListener>Router Add Listener</routerAddListener></br>");
 	routerAddListener.click(function () {
 		triggerRouterAddListener();
 	});
 	$("#functionBtns").append(routerAddListener);
-	const routerRemoveListener = $("<routerRemoveListener>Router Remove Listener</routerRemoveListener>");
+	const routerRemoveListener = $("<routerRemoveListener>Router Remove Listener</routerRemoveListener></br>");
 	routerRemoveListener.click(function () {
 		triggerRouterRemoveListener();
 	});
 	$("#functionBtns").append(routerRemoveListener);
-	const routerDisconnectAll = $("<routerDisconnectAll>Router Disconnect All</routerDisconnectAll>");
+	const routerDisconnectAll = $("<routerDisconnectAll>Router Disconnect All</routerDisconnectAll></br>");
 	routerDisconnectAll.click(function () {
 		triggerRouterDisconnectAll();
 	});
 	$("#functionBtns").append(routerDisconnectAll);
 
 	/* DistributedStore Client buttons */
-	const addStoreListener = $("<addStoreListener>Add Store Listeners</addStoreListener>");
+	const addStoreListener = $("<addStoreListener>Add Store Listeners</addStoreListener></br>");
 	addStoreListener.click(function () {
 		triggerAddStoreListener();
 	});
 	$("#functionBtns").append(addStoreListener);
-	const removeStoreListener = $("<removeStoreListener>Remove Store Listeners</removeStoreListener>");
+	const removeStoreListener = $("<removeStoreListener>Remove Store Listeners</removeStoreListener></br>");
 	removeStoreListener.click(function () {
 		triggerRemoveStoreListener();
 	});
@@ -65,16 +65,20 @@ function renderPage() {
 }
 /* DistributedStore Client functions */
 function triggerRemoveStoreListener() {
-	dsStore.removeListeners([{
-		field: 'field1',
-		listener: onFieldDataChange
-	}, {
-		field: 'field2',
-		listener: onFieldDataChange
-	}], null, function (err) {
-		if (!err)
-			setDisplayMsg('Distributed store listeners removed.')
-	});
+	if (dsStore)
+		dsStore.removeListeners([{
+			field: 'field1',
+			listener: onFieldDataChange
+		}, {
+			field: 'field2',
+			listener: onFieldDataChange
+		}], null, function (err) {
+			if (!err)
+				setDisplayMsg('Distributed store listeners removed.')
+
+		});
+	else
+		setDisplayMsg('No such store. Please create distributed store in "API Testing 1"')
 }
 
 function triggerAddStoreListener() {
@@ -88,7 +92,7 @@ function triggerAddStoreListener() {
 					setDisplayMsg('Distributed store listeners added.')
 			});
 		} else
-			setDisplayMsg('No such store.')
+			setDisplayMsg('No such store. Please create distributed store in "API Testing 1"', err)
 	})
 }
 
@@ -205,15 +209,16 @@ function setupReceiver() {
 
 function getEverythingAComponentCanEmit(err, response) {
 	if (!err) {
-		//console.log(response)
-		if (response.data.symbol)
+		if (response.data.symbol) {
 			$("draganddropSymbol").text(response.data.symbol);
+			setDisplayMsg('Date received through drag and drop.', response)
+		}
 
 	}
 }
 
 function setDisplayMsg(msg, respondObj, append) {
-	if(append)
+	if (append)
 		document.getElementById('displayMsg').value += '\n\n' + msg + '\n\n'
 	else
 		document.getElementById('displayMsg').value = msg + '\n\n'
