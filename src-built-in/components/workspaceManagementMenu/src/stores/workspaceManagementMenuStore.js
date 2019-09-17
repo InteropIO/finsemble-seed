@@ -546,7 +546,8 @@ Actions = {
 		//@todo, look in to using async.retry - we could throw an error and start the whole process over again.
 		if (response.choice !== "cancel" && (!response.value || response.value === "")) {
 			let dialogParams = {
-				question: "Invalid workspace name. Please try again.",
+				title: "Invalid Workspace Name",
+				question: "Workspace names must contain letters or numbers. Please try again.",
 				affirmativeResponseLabel: "OK",
 				showNegativeButton: false,
 				showCancelButton: false

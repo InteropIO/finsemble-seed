@@ -477,18 +477,13 @@ export default class Workspaces extends React.Component {
 		let addTooltip = "Add new workspace",
 			importTooltip = "Import workspace from file",
 			exportTooltip = allowExport ? "Export selected workspace" : "No workspace selected",
-			renameTooltip = allowRename ? "Rename" : "No workspace selected";
+			renameTooltip = allowRename ? "Rename" : "Cannot Edit";
 
 		return <div>
 			<input style={{ display: 'none' }} type="file" id="file-input" />
 			<div className="complex-menu-content-row">
 				<div className="workspace-list-header-row">
-					<div className="content-section-header workspace-list-header">
-						<div className="content-section-info">
-							Drag to reorder
-					</div>
-					</div>
-
+					<div className="content-section-header workspace-list-header"></div>
 				</div>
 				<div className="content-section-wrapper">
 					<div ref="WorkspaceList" className="workspace-list">
@@ -523,16 +518,17 @@ export default class Workspaces extends React.Component {
 									}
 									return (
 										<FinsembleDraggable onClick={() => this.setFocusedWorkspace(workspace.name)} wrapperClass={classNames} draggableId={workspace.name} key={i} index={i}>
-											<div className="workspace-name">
+											<div className="ff-adp-hamburger"></div>
+											<div className="workspace-name" title={workspace.name}>
 												{workspace.name}
 											</div>
 											<div className="individual-workspace-actions">
 												{workspace.name !== FSBL.Clients.WorkspaceClient.activeWorkspace.name &&
 												<div title={renameTooltip} className={renameButtonClasses} onMouseDown={this.handleButtonClicks} onClick={
-													allowRename ? () => { this.startEditingWorkspace(workspace.name) } : Function.prototype}><i className="ff-edit"></i></div>}
+													allowRename ? () => { this.startEditingWorkspace(workspace.name) } : Function.prototype}><i className="ff-adp-edit"></i></div>}
 												{workspace.name !== FSBL.Clients.WorkspaceClient.activeWorkspace.name &&
 													<div title={deleteTooltip} className={deleteButtonClasses} onMouseDown={this.handleButtonClicks} onClick={
-														allowDelete ? () => { this.deleteWorkspace(workspace.name); } : Function.prototype}><i className="ff-delete"></i></div>}
+														allowDelete ? () => { this.deleteWorkspace(workspace.name); } : Function.prototype}><i className="ff-adp-trash-outline"></i></div>}
 											</div>
 										</FinsembleDraggable>
 									)

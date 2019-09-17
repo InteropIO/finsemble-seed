@@ -8,6 +8,8 @@ import "./css/linkerWindow.css";
 import "../../../../assets/css/font-finance.css";
 import "../../../../assets/css/finsemble.css";
 import * as storeExports from "./stores/linkerStore";
+import { getChannelLabelFromIndex } from "../../shared/linkerUtil";
+
 let LinkerStore = storeExports.Store;
 let LinkerActions = storeExports.Actions;
 
@@ -75,29 +77,44 @@ class Linker extends React.Component {
 	render() {
 		var self = this;
 		//Checkbox inside of a circle. Rendered in the center of a group if the attachedWindow is part of that group.
-		let activeChannelIndicator = (<i className="active-linker-group ff-check-circle"></i>);
+		let activeChannelIndicator = (<i className="active-linker-group ff-check-mark"></i>);
+
+		const getLinkerItemRenderer = (channel, isAccessibleLinker) => {
+			if (!isAccessibleLinker) return null;
+
+			if (channel.label) {
+				return <div className="channel-label">{channel.label}</div>
+			} else {
+				return <div className="channel-label">{"Group " + getChannelLabelFromIndex(channel.name, FSBL.Clients.LinkerClient.getAllChannels())}</div>
+			}
+		}
+
 		/**
 		 * This function iterates through all of the channels that have registered with the linkerClient. If the attachedWindow belongs to any of them, it renders a check mark and a circle in the center of the channel's rectangle.
 		 **/
-		let channels = FSBL.Clients.LinkerClient.getAllChannels().map(function (item, index) {
+		let channels = FSBL.Clients.LinkerClient.getAllChannels().map(function (channel, index) {
 			//Boolean, whether the attachedWindow belongs to the channel.
-			let activeChannel = self.state.channels.filter(function (g) { return g.name == item.name; }).length;
-			let groupClass = `linkerGroup ${item.label}`;
+			let activeChannel = self.state.channels.filter(function (g) { return g.name == channel.name; }).length;
+			let groupClass = `linkerGroup ${channel.name}`;
 
 			if (activeChannel) {
 				groupClass += " active";
 			}
 
 			let style = {
-				backgroundColor: item.color,
-				border: "1px solid " + item.border
+				backgroundColor: channel.color,
+				border: "1px solid " + channel.border
 			};
-			//returns a group row. It's essentially a colored rectangle.
-			return (<div key={item.name + index} className={groupClass} style={style} onClick={function () {
-				self.channelClicked(item, activeChannel);
-			}}>
-				{activeChannel ? activeChannelIndicator : null}
-			</div>);
+			//returns a group row.
+			return (
+				<div className="channel-wrapper" onClick={function () {
+					self.channelClicked(channel, activeChannel); {/* Circle */ }
+				}}>
+					{getLinkerItemRenderer(channel, LinkerStore.isAccessibleLinker())} {/*Channel Name */}
+					<div key={channel.name + index} className={groupClass} style={style}>
+						{activeChannel ? activeChannelIndicator : null} {/*Check Mark */}
+					</div>
+				</div>);
 		});
 
 		return (

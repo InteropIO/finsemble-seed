@@ -398,7 +398,7 @@ function addNewFolder(name) {
 	const folderName = name || `New folder ${highestFolderNumber + 1}`;
 	const newFolder = {
 		disableUserRemove: true,
-		icon: "ff-folder",
+		icon: "ff-adp-hamburger",
 		apps: []
 	};
 	data.folders[folderName] = newFolder;

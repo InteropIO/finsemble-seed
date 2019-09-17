@@ -180,7 +180,7 @@ export default class Toolbar extends React.Component {
 		return (<FinsembleToolbar onDragStart={this.moveToolbar} onDragEnd={this.onPinDrag}>
 			{this.state.dockingEnabled && <DragHandle />} {/*If this is not dockable, no need to show the drag handle */}
 			{this.getSections()}
-			{this.state.dockingEnabled && <div className='resize-area' />} {}
+			{this.state.dockingEnabled && <div className='resize-area' />}
 		</FinsembleToolbar>);
 	}
 

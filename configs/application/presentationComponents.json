@@ -39,8 +39,8 @@
 				"url": "$applicationRoot/components/myApps/index.html",
 				"top": 0,
 				"left": 0,
-				"width": 600,
-				"height": 400,
+				"width": 700,
+				"height": 467,
 				"ephemeral": true,
 				"options": {
 					"autoShow": false
@@ -176,8 +176,8 @@
 			"window": {
 				"url": "$applicationRoot/components/linker/linker.html",
 				"affinity": "systemComponents",
-				"width": 65,
-				"height": 163,
+				"width": 132,
+				"height": 232,
 				"ephemeral": true,
 				"options": {
 					"autoShow": false,

@@ -60,11 +60,6 @@ const Header = props => {
 				<span className="appName">{props.name}</span>
 			</div>
 			<div className='action-button-container'>
-				{props.installed && <button className={props.entitled ? "action-button remove" : "action-button disabled"} disabled={!props.entitled} onClick={removeApp}>
-					<div className='remove-button'>
-						Remove
-					</div>
-				</button>}
 				<button className={props.entitled ? "action-button open" : "action-button disabled"} disabled={!props.entitled} onClick={addApp}>
 					{props.installed ? (
 						<div>
@@ -72,11 +67,13 @@ const Header = props => {
 						</div>
 					) : (
 							<span className="action-button-label">
-								<i className="ff-plus"></i>
-								&nbsp;My Apps
+								Add
 						</span>
 						)}
 				</button>
+				{props.installed && <button className={props.entitled ? "action-button remove" : "action-button remove disabled"} disabled={!props.entitled} onClick={removeApp}>
+					<div className='ff-adp-trash-outline' title='Remove App'/>
+				</button>}
 			</div>
 		</div>
 	);
