@@ -150,7 +150,7 @@
 			next();
 		});
 
-		app.get("/finsemble/components/system/serviceManager/serviceManager.html", (req, res, next) => {
+		app.get("/finsemble/services/systemManager/systemManager.html", (req, res, next) => {
 			if (!notified_sm) {
 				clearTimeout(serviceManagerRetrievedTimeout);
 
