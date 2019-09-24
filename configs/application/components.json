@@ -62,11 +62,13 @@
 				"url": "",
 				"defaultHeight": 600,
 				"autoShow": true,
-				"alwaysOnTop": false,
 				"resizable": true,
 				"showTaskbarIcon": false,
 				"contextMenu": true,
-				"addToWorkspace": true
+				"addToWorkspace": true,
+				"options": {
+					"alwaysOnTop": true
+				}
 			},
 			"component": {
 				"spawnOnHotkey": [
