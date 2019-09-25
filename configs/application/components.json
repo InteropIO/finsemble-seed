@@ -1,6 +1,45 @@
 {
 	"comment": "Sample component configuration",
 	"components": {
+ "WPFExample": {
+			"window": {
+				"id": "WPFExample",
+				"windowType": "FinsembleNativeWindow",
+				"path": "C:/Users/d4hin/repos/finsemble-dll/WPFExample/bin/Release/WPFExample.exe",
+				"url": "",
+				"arguments": "",
+								"autoShow": true,
+				"alwaysOnTop": false,
+				"resizable": true,
+				"showTaskbarIcon": false,
+				"contextMenu": true,
+				"addToWorkspace": true
+			},
+			"component": {
+				"spawnOnStartup": false
+			},
+			"foreign": {
+				"services": {
+					"workspaceService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+            "alwaysOnTopIcon": true,
+						"persistWindowState": false,
+						"FSBLHeader": true
+					},
+					"Toolbar": {
+						"iconURL": "$applicationRoot/assets/img/notepad.png"
+					}
+				}
+			}
+        }
+    ,
 		"Welcome Component": {
 			"window": {
 				"url": "$applicationRoot/components/welcome/welcome.html",
@@ -59,9 +98,9 @@
 				"id": "Notepad",
 				"native": true,
 				"path": "notepad.exe",
-				"url": "",
-				"defaultHeight": 600,
-				"autoShow": true,
+        "url": "",
+        "defaultHeight": 600,
+								"autoShow": true,
 				"alwaysOnTop": false,
 				"resizable": true,
 				"showTaskbarIcon": false,

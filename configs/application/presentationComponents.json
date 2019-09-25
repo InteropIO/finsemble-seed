@@ -135,7 +135,7 @@
 		},
 		"Workspace Management Menu": {
 			"window": {
-				"url": "$applicationRoot/components/workspaceManagementMenu/workspaceManagementMenu.html",
+				"url": "http://localhost:3000",
 				"affinity": "systemComponents",
 				"top": 32,
 				"left": 45,
