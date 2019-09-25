@@ -19,6 +19,8 @@
 	//force color output
 	chalk.level = 1;
 	const express = require("express");
+	const session = require('cookie-session');
+	const parser = require('cookie-parser');
 	const fs = require("fs");
 	const path = require("path");
 	const compression = require("compression");
@@ -39,7 +41,7 @@
 			 * Method called before starting the server.
 			 *
 			 * @param {function} done Function can take one argument; an error message if one occurred.
-			 			 * @example
+			 * @example
 			 * const pre => {
 			 * 	try {
 			 * 		// do something that could throw an error
@@ -90,12 +92,23 @@
 						global.port = server.address().port;
 					});
 
+				app.use(function(req, res, next) {
+					console.log(req.url);
+					next();
+				});
+
 				app.use(compression());
 
 				// Sample server root set to "/" -- must align with paths throughout
 				app.use("/", express.static(rootDir, options));
 				// Open up the Finsemble Components,services, and clients
-				app.use("/finsemble", express.static(moduleDirectory, options));
+				app.use('/finsemble', function (req, res, next) {
+					if (req.session.authenticated !== 'absolutely') {
+						throw new Error('Must have a session to get anything from this server.');
+					}
+					next();
+				}, express.static(moduleDirectory, options));
+				// app.use("/finsemble", express.static(moduleDirectory, options));
 				app.use("/installers", express.static(path.join(__dirname, "..", "installers"), options));
 				// For Assimilation
 				app.use("/hosted", express.static(path.join(__dirname, "..", "hosted"), options));
@@ -111,6 +124,11 @@
 
 	// #region Constants
 	const app = express();
+
+	app.use(parser('keyboard cat'));
+
+	app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 60000 }}));
+
 	const rootDir = path.join(__dirname, "..", "dist");
 	const moduleDirectory = path.join(__dirname, "..", "finsemble");
 	const ONE_DAY = 24 * 3600 * 1000;
@@ -158,6 +176,9 @@
 				process.send({ "action": "timestamp", "milestone": "Application started", "timestamp": Date.now() });
 				notified_sm = true;
 			}
+
+			req.session.authenticated = 'absolutely';
+
 			next();
 		});
 	}
