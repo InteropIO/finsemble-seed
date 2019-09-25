@@ -60,6 +60,7 @@
         "beautify": "0.0.8",
         "body-parser": "1.18.3",
         "chalk": "2.3.2",
+	"cookie-session": "1.3.3",
         "cookie-parser": "1.4.3",
         "copy-webpack-plugin": "4.5.4",
         "css-loader": "2.1.0",
