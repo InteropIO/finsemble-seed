@@ -114,8 +114,6 @@
 	"systemTrayComponent": "File Menu",
 	"Window Manager": {
 		"alwaysOnTopIcon": false,
-		"showTabs": true,
-		"showNativeTabs": true,
 		"floatingTitlebarComponent": "Floating Titlebar",
 		"deliveryMechanism": "preload"
 	},
