@@ -1,6 +1,3 @@
-import { setMilliseconds } from "date-fns";
-import { isTaggedTemplateExpression } from "typescript";
-
 //they already set the days as numbers!!!
 
 // const daysOfTheWeek = [
@@ -15,13 +12,10 @@ import { isTaggedTemplateExpression } from "typescript";
 
 const config = {
 	day: 4,
-	hours: 15,
-	minutes: 01
+	hour: 15,
+	minute: 1
 };
 
-// !NOTE: what if the exact time, day and minute were used? Do we really need to accommodate for this?
-
-const now = new Date(); /*?*/
 // work out how many days until shutdown
 const daysUntilShutdown = (restartDay, today) => {
 	const shutdownIsToday = restartDay - today === 0;
@@ -38,13 +32,6 @@ const daysUntilShutdown = (restartDay, today) => {
 	}
 };
 
-const shutdownTime = new Date();
-shutdownTime.setDate(
-	now.getDate() + daysUntilShutdown(config.day, now.getDay())
-);
-shutdownTime.setHours(config.hours);
-shutdownTime.setMinutes(config.minutes);
-
 const timeInMsToShutdown = (shutdownTime, now) => {
 	// ensure the time has not passed
 	if (shutdownTime - now < 0) {
@@ -54,15 +41,22 @@ const timeInMsToShutdown = (shutdownTime, now) => {
 	return shutdownTime - now;
 };
 
-const timeUntilShutdown = timeInMsToShutdown(shutdownTime, now); /*?*/
+const now = new Date(); /*?*/
+
+const shutdownTime = new Date();
+// using days to set the date for shutdown
+shutdownTime.setDate(
+	now.getDate() + daysUntilShutdown(config.day, now.getDay())
+);
+shutdownTime.setHours(config.hour);
+shutdownTime.setMinutes(config.minute);
 
 setTimeout(() => {
 	console.log("shutting down now");
-}, timeUntilShutdown);
+}, timeInMsToShutdown(shutdownTime, now));
 
 const hrs = (timeUntilShutdown / (1000 * 60 * 60)).toFixed(1);
 hrs;
-setMilliseconds(new Date(), timeUntilShutdown); /*?*/
 
 // =========================
 // const isTimeToShutdown = () => {

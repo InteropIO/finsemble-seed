@@ -1,6 +1,11 @@
 const Finsemble = require("@chartiq/finsemble");
-const { Clients } = Finsemble.Clients;
-const { RouterClient, Logger, WorkspaceClient, DialogManager } = Clients;
+const {
+	RouterClient,
+	Logger,
+	WorkspaceClient,
+	DialogManager,
+	ConfigClient
+} = Finsemble.Clients;
 
 Logger.start();
 Logger.log("shutdown Service starting up");
@@ -17,12 +22,45 @@ Logger.log("shutdown Service starting up");
 function shutdownService() {
 	const self = this;
 
-	//Implement service functionality
-	this.myFunction = function() {
+	this.shutdownFunction = function() {
+		ConfigClient.getValue(
+			{ field: "finsemble.scheduledShutdown" },
+			(err, config) => {
+				//Allow the timeout for the restart dialog to be driven by config. See checkForScheduledRestart comments for format.
+				let scheduledShutdownTimeout = 60000;
+				//If the dialogTimeout property exists and is a number, override our default.
+				if (config && !isNaN(config.dialogTimeout)) {
+					scheduledShutdownTimeout = config.dialogTimeout;
+				}
+				//create an object for the 2nd arg so that the scheduleRestart function doesn't have to change.
+				scheduleShutdown(err, config);
+			}
+		);
+
+		//If the user changes it via the preferences API, we catch the change here, log it out, and schedule the restart.
+		ConfigClient.addListener(
+			{ field: "finsemble.scheduledShutdown" },
+			(err, config) => {
+				if (config.value) {
+					Logger.system.log(
+						"APPLICATION LIFECYCLE:SCHEDULED SHUTDOWN TIME CHANGED. NEW TIME:",
+						config.value
+					);
+				} else {
+					Logger.system.log(
+						"APPLICATION LIFECYCLE:SCHEDULED SHUTDOWN DISABLED."
+					);
+				}
+
+				scheduleShutdown(err, config.value);
+			}
+		);
+
 		/**
 		 * Saves workspace and if it is dirty then  fires off a message shutting down the application.
 		 */
 		const saveWorkspace = () => {
+			Logger.log(WorkspaceClient);
 			if (!WorkspaceClient.activeWorkspace.isDirty) {
 				return Promise.resolve();
 			}
@@ -51,48 +89,53 @@ function shutdownService() {
 		};
 
 		const shutdownFinsemble = async () => {
+			// if the user cancels the event then don't shutdown
 			if ((await saveWorkspace()) === "cancel") return;
 			// code to shutdown Finsemble
 			RouterClient.transmit("Application.shutdown");
 		};
 
-		const timeLeftBeforeShutdown = () => {
-			const now = new Date();
-			now.setDate(now.getDate() + 7);
+		function scheduleShutdown(err, config) {
+			const daysUntilShutdown = (restartDay, today) => {
+				const shutdownIsToday = restartDay - today === 0;
+				const shutdownIsNextWeek = restartDay - today < 0;
 
-			const daysOfTheWeek = [
-				"Sunday",
-				"Monday",
-				"Tuesday",
-				"Wednesday",
-				"Thursday",
-				"Friday",
-				"Saturday"
-			];
-
-			const today = daysOfTheWeek[dateNow.getDay()].toLowerCase();
-			const hourNow = dateNow.getHours();
-			const minutesNow = dateNow.getMinutes();
-
-			const config = {
-				day: "Wednesday",
-				hour: 17,
-				minutes: 59
+				if (shutdownIsToday) {
+					return 0;
+				} else if (shutdownIsNextWeek) {
+					// 6 is how many full days until the same day next week
+					return restartDay - today + 6;
+				} else {
+					// shutdown day is coming up soon this week
+					return restartDay - today;
+				}
 			};
 
-			return config.day.toLowerCase() === today &&
-				Number(config.hour) === hourNow &&
-				Number(config.minutes) === minutesNow
-				? true
-				: false;
-		};
+			const timeInMsToShutdown = (shutdownTime, now) => {
+				// ensure the time has not passed
+				if (shutdownTime - now < 0) {
+					//if the time has passed then set the day to next week (same day)
+					shutdownTime.setDate(shutdownTime.getDate() + 7);
+				}
+				return shutdownTime - now;
+			};
 
-		const checkTime = () => {
-			console.log("checking to see if I need to shutdown");
+			const now = new Date();
+
+			const shutdownTime = new Date();
+			// using days to set the date for shutdown
+			shutdownTime.setDate(
+				now.getDate() + daysUntilShutdown(config.day, now.getDay())
+			);
+			shutdownTime.setHours(config.hour);
+			shutdownTime.setMinutes(config.minute);
+
+			const countdownTillShutdown = timeInMsToShutdown(shutdownTime, now);
+			// countdown timer until the shutdown
 			setTimeout(() => {
 				shutdownFinsemble();
-			}, timeLeftBeforeShutdown);
-		};
+			}, countdownTillShutdown);
+		}
 	};
 
 	/**
@@ -134,23 +177,16 @@ function shutdownService() {
 shutdownService.prototype = new Finsemble.baseService({
 	startupDependencies: {
 		// add any services or clients that should be started before your service
-		services: [
-			/* "dockingService", "authenticationService" */
-		],
-		clients: [
-			/* "storageClient" */
-			"RouterClient",
-			"Logger",
-			"WorkspaceClient",
-			"DialogManager"
-		]
+		services: [],
+		clients: []
 	}
 });
 const serviceInstance = new shutdownService("shutdownService");
 
 serviceInstance.onBaseServiceReady(function(callback) {
-	serviceInstance.createRouterEndpoints();
+	// serviceInstance.createRouterEndpoints();
 	Logger.log("shutdown Service ready");
+	serviceInstance.shutdownFunction();
 	callback();
 });
 
