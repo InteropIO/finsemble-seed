@@ -1,4 +1,12 @@
 {
     "comment": "Houses config for any custom services that you'd like to import into Finsemble.",
-    "services": {}
+    "services": {
+        "shutdownService": {
+            "useWindow": true,
+            "active": true,
+            "name": "shutdownService",
+            "visible": false,
+            "html": "$applicationRoot/services/shutdown/shutdown.html"
+        }
+    }
 }
