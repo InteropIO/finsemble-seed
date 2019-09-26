@@ -52,6 +52,9 @@
 				"left": "center",
 				"width": 400,
 				"height": 432
+			},
+			"component": {
+				"preload": ["FSBL.js"]
 			}
 		},
 		"Notepad": {
