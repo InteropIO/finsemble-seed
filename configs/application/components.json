@@ -16,7 +16,7 @@
 			"component": {
 				"inject": false,
 				"spawnOnStartup": false,
-				"preload": "$applicationRoot/preloads/zoom.js"
+				"preload": ["$applicationRoot/preloads/zoom.js", "FSBL.js"]
 			},
 			"foreign": {
 				"services": {
@@ -73,7 +73,8 @@
 					"ctrl",
 					"alt",
 					"n"
-				]
+				],
+				"preload": ["FSBL.js"]
 			},
 			"foreign": {
 				"services": {
@@ -102,7 +103,8 @@
 				"width": 1000
 			},
 			"component": {
-				"spawnOnStartup": false
+				"spawnOnStartup": false,
+				"preload": ["FSBL.js"]
 			},
 			"foreign": {
 				"services": {
@@ -130,7 +132,7 @@
 				"height": 800,
 				"width": 1000
 			},
-			"component": {},
+			"component": {"preload": ["FSBL.js"]},
 			"foreign": {
 				"services": {
 					"dockingService": {
@@ -167,7 +169,8 @@
 					"AuthenticationClient",
 					"StorageClient"
 				],
-				"category": "system"
+				"category": "system",
+				"preload": ["FSBL.js"]
 			},
 			"foreign": {
 				"services": {

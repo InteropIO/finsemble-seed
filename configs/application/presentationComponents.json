@@ -17,7 +17,8 @@
 			"component": {
 				"allowAdhoc": "@TODO",
 				"spawnOnStartup": false,
-				"category": "system"
+				"category": "system",
+				"preload": ["FSBL.js"]
 			},
 			"foreign": {
 				"services": {
@@ -49,7 +50,8 @@
 			"component": {
 				"allowAdhoc": "@TODO",
 				"spawnOnStartup": false,
-				"category": "system"
+				"category": "system",
+				"preload": ["FSBL.js"]
 			},
 			"foreign": {
 				"services": {
@@ -83,7 +85,8 @@
 			"component": {
 				"allowAdhoc": "@TODO",
 				"spawnOnStartup": false,
-				"category": "system"
+				"category": "system",
+				"preload": ["FSBL.js"]
 			},
 			"foreign": {
 				"services": {
@@ -116,7 +119,8 @@
 			"component": {
 				"allowAdhoc": "@TODO",
 				"spawnOnStartup": false,
-				"category": "system"
+				"category": "system",
+				"preload": ["FSBL.js"]
 			},
 			"foreign": {
 				"services": {
@@ -148,7 +152,8 @@
 			},
 			"component": {
 				"spawnOnStartup": false,
-				"category": "system"
+				"category": "system",
+				"preload": ["FSBL.js"]
 			},
 			"foreign": {
 				"services": {
@@ -182,7 +187,8 @@
 			},
 			"component": {
 				"spawnOnStartup": true,
-				"category": "system"
+				"category": "system",
+				"preload": ["FSBL.js"]
 			},
 			"foreign": {
 				"services": {
@@ -228,7 +234,8 @@
 					}
 				],
 				"spawnOnStartup": false,
-				"category": "system"
+				"category": "system",
+				"preload": ["FSBL.js"]
 			},
 			"foreign": {
 				"services": {
@@ -263,7 +270,8 @@
 			},
 			"component": {
 				"spawnOnStartup": false,
-				"category": "system"
+				"category": "system",
+				"preload": ["FSBL.js"]
 			},
 			"foreign": {
 				"services": {
@@ -297,7 +305,8 @@
 				}
 			},
 			"component": {
-				"category": "system"
+				"category": "system",
+				"preload": ["FSBL.js"]
 			},
 			"foreign": {
 				"services": {
@@ -330,7 +339,8 @@
 				}
 			},
 			"component": {
-				"category": "system"
+				"category": "system",
+				"preload": ["FSBL.js"]
 			},
 			"foreign": {
 				"services": {
@@ -367,7 +377,8 @@
 			},
 			"component": {
 				"category": "system",
-				"spawnOnStartup": true
+				"spawnOnStartup": true,
+				"preload": ["FSBL.js"]
 			},
 			"foreign": {
 				"clients": {
@@ -409,7 +420,8 @@
 			},
 			"component": {
 				"category": "system",
-				"spawnOnStartup": true
+				"spawnOnStartup": true,
+				"preload": ["FSBL.js"]
 			},
 			"foreign": {
 				"clients": {
@@ -451,7 +463,9 @@
 			},
 			"component": {
 				"category": "system",
-				"spawnOnStartup": false
+				"spawnOnStartup": false,
+				"preload": ["FSBL.js"]
+
 			},
 			"foreign": {
 				"clients": {
@@ -493,7 +507,9 @@
 				}
 			},
 			"component": {
-				"category": "system"
+				"category": "system",
+				"preload": ["FSBL.js"]
+
 			},
 			"foreign": {
 				"services": {
@@ -548,7 +564,9 @@
 				"spawnOnStartup": true,
 				"spawnOnAllMonitors": false,
 				"canMinimize": false,
-				"canMaximize": false
+				"canMaximize": false,
+				"preload": ["FSBL.js"]
+
 			},
 			"foreign": {
 				"services": {
@@ -583,7 +601,9 @@
 				"ephemeral": true
 			},
 			"component": {
-				"category": "system"
+				"category": "system",
+				"preload": ["FSBL.js"]
+
 			},
 			"foreign": {
 				"services": {
@@ -619,7 +639,9 @@
 			},
 			"component": {
 				"category": "system",
-				"spawnOnStartup": true
+				"spawnOnStartup": true,
+				"preload": ["FSBL.js"]
+
 			},
 			"foreign": {
 				"services": {
@@ -665,7 +687,9 @@
 				}
 			},
 			"component": {
-				"category": "system"
+				"category": "system",
+				"preload": ["FSBL.js"]
+
 			},
 			"foreign": {
 				"services": {
@@ -696,7 +720,9 @@
 				"height": 700
 			},
 			"component": {
-				"category": "system"
+				"category": "system",
+				"preload": ["FSBL.js"]
+
 			},
 			"foreign": {
 				"services": {
@@ -732,7 +758,9 @@
 				}
 			},
 			"component": {
-				"category": "system"
+				"category": "system",
+				"preload": ["FSBL.js"]
+
 			},
 			"foreign": {
 				"services": {
@@ -770,7 +798,9 @@
 			},
 			"component": {
 				"category": "system",
-				"spawnOnStartup": false
+				"spawnOnStartup": false,
+				"preload": ["FSBL.js"]
+
 			},
 			"foreign": {
 				"services": {
