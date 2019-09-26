@@ -102,7 +102,6 @@
 
 				// configs/openfin/manifest-local.json and configs/other/server-environment-startup.json
 				// Make the config public
-				app.use("/configs", express.static("./configs", options));
 				app.use("/pkg", express.static('./pkg', options));
 				cb();
 			}
