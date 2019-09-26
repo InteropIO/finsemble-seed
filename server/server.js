@@ -93,7 +93,9 @@
 					});
 
 				app.use(function(req, res, next) {
-					console.log(req.url);
+					if (req.path.includes('fsbl')) {
+						console.log(req.url);
+					}
 					next();
 				});
 
@@ -101,13 +103,26 @@
 
 				// Sample server root set to "/" -- must align with paths throughout
 				app.use("/", express.static(rootDir, options));
+
 				// Open up the Finsemble Components,services, and clients
 				app.use('/finsemble', function (req, res, next) {
 					if (req.session.authenticated !== 'absolutely') {
 						throw new Error('Must have a session to get anything from this server.');
 					}
+					if (req.path.endsWith('fsbl.js')) {
+						res.set('Content-Type', 'text/javascript');
+						res.send('');
+						return;
+					}
+
+					if (req.path.endsWith('fsbl-inject.js')) {
+						const location = path.join(moduleDirectory, 'fsbl.js');
+						res.sendFile(location);
+						return;
+					}
 					next();
 				}, express.static(moduleDirectory, options));
+
 				// app.use("/finsemble", express.static(moduleDirectory, options));
 				app.use("/installers", express.static(path.join(__dirname, "..", "installers"), options));
 				// For Assimilation

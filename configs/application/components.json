@@ -14,7 +14,7 @@
 				"height": 432
 			},
 			"component": {
-				"inject": false,
+				"inject": ["http://localhost:3375/finsemble/fsbl-inject.js"],
 				"spawnOnStartup": false,
 				"preload": "$applicationRoot/preloads/zoom.js"
 			},
