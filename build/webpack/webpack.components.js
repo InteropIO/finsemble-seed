@@ -146,7 +146,7 @@ function createCopyWebpackConfig() {
 		*/
 		{
 			from: './node_modules/@chartiq/finsemble/dist',
-			to: path.join(__dirname, "../../finsemble/")
+			to: path.join(__dirname, "../../dist/finsemble/")
 		}
 	];
 
