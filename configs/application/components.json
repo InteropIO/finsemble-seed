@@ -14,9 +14,9 @@
 				"height": 432
 			},
 			"component": {
-				"inject": false,
+				"inject": "FSBL.js",
 				"spawnOnStartup": false,
-				"preload": ["$applicationRoot/preloads/zoom.js", "FSBL.js"]
+				"preload": "$applicationRoot/preloads/zoom.js"
 			},
 			"foreign": {
 				"services": {
@@ -54,7 +54,7 @@
 				"height": 432
 			},
 			"component": {
-				"preload": ["FSBL.js"]
+				"inject": "FSBL.js"
 			}
 		},
 		"Notepad": {
@@ -77,7 +77,7 @@
 					"alt",
 					"n"
 				],
-				"preload": ["FSBL.js"]
+				"inject": "FSBL.js"
 			},
 			"foreign": {
 				"services": {
@@ -107,7 +107,7 @@
 			},
 			"component": {
 				"spawnOnStartup": false,
-				"preload": ["FSBL.js"]
+				"inject": "FSBL.js"
 			},
 			"foreign": {
 				"services": {
@@ -135,7 +135,7 @@
 				"height": 800,
 				"width": 1000
 			},
-			"component": {"preload": ["FSBL.js"]},
+			"component": {"inject": "FSBL.js"},
 			"foreign": {
 				"services": {
 					"dockingService": {
@@ -173,7 +173,7 @@
 					"StorageClient"
 				],
 				"category": "system",
-				"preload": ["FSBL.js"]
+				"inject": "FSBL.js"
 			},
 			"foreign": {
 				"services": {

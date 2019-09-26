@@ -18,7 +18,7 @@
 				"allowAdhoc": "@TODO",
 				"spawnOnStartup": false,
 				"category": "system",
-				"preload": ["FSBL.js"]
+				"inject": "FSBL.js"
 			},
 			"foreign": {
 				"services": {
@@ -51,7 +51,7 @@
 				"allowAdhoc": "@TODO",
 				"spawnOnStartup": false,
 				"category": "system",
-				"preload": ["FSBL.js"]
+				"inject": "FSBL.js"
 			},
 			"foreign": {
 				"services": {
@@ -86,7 +86,7 @@
 				"allowAdhoc": "@TODO",
 				"spawnOnStartup": false,
 				"category": "system",
-				"preload": ["FSBL.js"]
+				"inject": "FSBL.js"
 			},
 			"foreign": {
 				"services": {
@@ -120,7 +120,7 @@
 				"allowAdhoc": "@TODO",
 				"spawnOnStartup": false,
 				"category": "system",
-				"preload": ["FSBL.js"]
+				"inject": "FSBL.js"
 			},
 			"foreign": {
 				"services": {
@@ -153,7 +153,7 @@
 			"component": {
 				"spawnOnStartup": false,
 				"category": "system",
-				"preload": ["FSBL.js"]
+				"inject": "FSBL.js"
 			},
 			"foreign": {
 				"services": {
@@ -188,7 +188,7 @@
 			"component": {
 				"spawnOnStartup": true,
 				"category": "system",
-				"preload": ["FSBL.js"]
+				"inject": "FSBL.js"
 			},
 			"foreign": {
 				"services": {
@@ -235,7 +235,7 @@
 				],
 				"spawnOnStartup": false,
 				"category": "system",
-				"preload": ["FSBL.js"]
+				"inject": "FSBL.js"
 			},
 			"foreign": {
 				"services": {
@@ -271,7 +271,7 @@
 			"component": {
 				"spawnOnStartup": false,
 				"category": "system",
-				"preload": ["FSBL.js"]
+				"inject": "FSBL.js"
 			},
 			"foreign": {
 				"services": {
@@ -306,7 +306,7 @@
 			},
 			"component": {
 				"category": "system",
-				"preload": ["FSBL.js"]
+				"inject": "FSBL.js"
 			},
 			"foreign": {
 				"services": {
@@ -340,7 +340,7 @@
 			},
 			"component": {
 				"category": "system",
-				"preload": ["FSBL.js"]
+				"inject": "FSBL.js"
 			},
 			"foreign": {
 				"services": {
@@ -378,7 +378,7 @@
 			"component": {
 				"category": "system",
 				"spawnOnStartup": true,
-				"preload": ["FSBL.js"]
+				"inject": "FSBL.js"
 			},
 			"foreign": {
 				"clients": {
@@ -421,7 +421,7 @@
 			"component": {
 				"category": "system",
 				"spawnOnStartup": true,
-				"preload": ["FSBL.js"]
+				"inject": "FSBL.js"
 			},
 			"foreign": {
 				"clients": {
@@ -464,8 +464,7 @@
 			"component": {
 				"category": "system",
 				"spawnOnStartup": false,
-				"preload": ["FSBL.js"]
-
+				"inject": "FSBL.js"
 			},
 			"foreign": {
 				"clients": {
@@ -508,8 +507,7 @@
 			},
 			"component": {
 				"category": "system",
-				"preload": ["FSBL.js"]
-
+				"inject": "FSBL.js"
 			},
 			"foreign": {
 				"services": {
@@ -565,8 +563,7 @@
 				"spawnOnAllMonitors": false,
 				"canMinimize": false,
 				"canMaximize": false,
-				"preload": ["FSBL.js"]
-
+				"inject": "FSBL.js"
 			},
 			"foreign": {
 				"services": {
@@ -602,8 +599,7 @@
 			},
 			"component": {
 				"category": "system",
-				"preload": ["FSBL.js"]
-
+				"inject": "FSBL.js"
 			},
 			"foreign": {
 				"services": {
@@ -640,8 +636,7 @@
 			"component": {
 				"category": "system",
 				"spawnOnStartup": true,
-				"preload": ["FSBL.js"]
-
+				"inject": "FSBL.js"
 			},
 			"foreign": {
 				"services": {
@@ -688,8 +683,7 @@
 			},
 			"component": {
 				"category": "system",
-				"preload": ["FSBL.js"]
-
+				"inject": "FSBL.js"
 			},
 			"foreign": {
 				"services": {
@@ -721,8 +715,7 @@
 			},
 			"component": {
 				"category": "system",
-				"preload": ["FSBL.js"]
-
+				"inject": "FSBL.js"
 			},
 			"foreign": {
 				"services": {
@@ -759,8 +752,7 @@
 			},
 			"component": {
 				"category": "system",
-				"preload": ["FSBL.js"]
-
+				"inject": "FSBL.js"
 			},
 			"foreign": {
 				"services": {
@@ -799,8 +791,7 @@
 			"component": {
 				"category": "system",
 				"spawnOnStartup": false,
-				"preload": ["FSBL.js"]
-
+				"inject": "FSBL.js"
 			},
 			"foreign": {
 				"services": {
