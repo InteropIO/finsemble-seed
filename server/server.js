@@ -94,15 +94,13 @@
 
 				// Sample server root set to "/" -- must align with paths throughout
 				app.use("/", express.static(rootDir, options));
-				// Open up the Finsemble Components,services, and clients
 
-				app.use("/installers", express.static(path.join(__dirname, "..", "installers"), options));
 				// For Assimilation
 				app.use("/hosted", express.static(path.join(__dirname, "..", "hosted"), options));
 
-				// configs/openfin/manifest-local.json and configs/other/server-environment-startup.json
-				// Make the config public
+				// For installers
 				app.use("/pkg", express.static('./pkg', options));
+
 				cb();
 			}
 		};
@@ -111,7 +109,6 @@
 	// #region Constants
 	const app = express();
 	const rootDir = path.join(__dirname, "..", "dist");
-	const moduleDirectory = path.join(__dirname, "..", "finsemble");
 	const ONE_DAY = 24 * 3600 * 1000;
 	const cacheAge = process.env.NODE_ENV === "development" ? 0 : ONE_DAY;
 	const PORT = process.env.PORT || 3375;
