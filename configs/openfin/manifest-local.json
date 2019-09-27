@@ -69,11 +69,6 @@
 		"importConfig": ["$applicationRoot/configs/application/config.json"],
 		"IAC": {
 			"serverAddress": "ws://127.0.0.1:3376"
-		},
-		"scheduledShutdown": {
-			"day": 4,
-			"hour": 22,
-			"minute": 45
 		}
 	}
 }

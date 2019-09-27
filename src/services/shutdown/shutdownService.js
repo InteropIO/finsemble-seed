@@ -141,42 +141,6 @@ function shutdownService() {
 		}
 	};
 
-	/**
-	 * Creates a router endpoint for you service.
-	 * Add query responders, listeners or pub/sub topic as appropriate.
-	 * @private
-	 */
-	this.createRouterEndpoints = function() {
-		//Example router integration which uses a single query responder to expose multiple functions
-		RouterClient.addResponder("shutdown functions", function(
-			error,
-			queryMessage
-		) {
-			if (!error) {
-				Logger.log("shutdown Query: " + JSON.stringify(queryMessage));
-
-				if (queryMessage.data.query === "myFunction") {
-					try {
-						queryMessage.sendQueryResponse(null, self.myFunction());
-					} catch (err) {
-						queryMessage.sendQueryResponse(err);
-					}
-				} else {
-					queryMessage.sendQueryResponse(
-						"Unknown shutdown query function: " + queryMessage,
-						null
-					);
-					Logger.error("Unknown shutdown query function: ", queryMessage);
-				}
-			} else {
-				Logger.error("Failed to setup shutdown query responder", error);
-			}
-		});
-	};
-
-	return this;
-}
-
 shutdownService.prototype = new Finsemble.baseService({
 	startupDependencies: {
 		// add any services or clients that should be started before your service
