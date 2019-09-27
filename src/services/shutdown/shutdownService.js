@@ -24,6 +24,7 @@ DialogManager.initialize();
  */
 function shutdownService() {
 	const self = this;
+	let shutDownTimer = null;
 
 	this.shutdownFunction = function() {
 		ConfigClient.getValue(
@@ -36,6 +37,16 @@ function shutdownService() {
 					scheduledShutdownTimeout = config.dialogTimeout;
 				}
 				//create an object for the 2nd arg so that the scheduleRestart function doesn't have to change.
+				if (config) {
+					Logger.system.log(
+						"APPLICATION LIFECYCLE:SCHEDULED SHUTDOWN TIME:",
+						config
+					);
+				} else {
+					Logger.system.log(
+						"APPLICATION LIFECYCLE:SCHEDULED SHUTDOWN NOT CONFIGURED."
+					);
+				}
 				scheduleShutdown(err, config);
 			}
 		);
@@ -98,49 +109,55 @@ function shutdownService() {
 		};
 
 		function scheduleShutdown(err, config) {
-			const daysUntilShutdown = (restartDay, today) => {
-				const shutdownIsToday = restartDay - today === 0;
-				const shutdownIsNextWeek = restartDay - today < 0;
+			if (config){
+				const daysUntilShutdown = (restartDay, today) => {
+					const shutdownIsToday = restartDay - today === 0;
+					const shutdownIsNextWeek = restartDay - today < 0;
 
-				if (shutdownIsToday) {
-					return 0;
-				} else if (shutdownIsNextWeek) {
-					// 6 is how many full days until the same day next week
-					return restartDay - today + 6;
-				} else {
-					// shutdown day is coming up soon this week
-					return restartDay - today;
+					if (shutdownIsToday) {
+						return 0;
+					} else if (shutdownIsNextWeek) {
+						// 6 is how many full days until the same day next week
+						return restartDay - today + 6;
+					} else {
+						// shutdown day is coming up soon this week
+						return restartDay - today;
+					}
+				};
+
+				const timeInMsToShutdown = (shutdownTime, now) => {
+					// ensure the time has not passed
+					if (shutdownTime - now < 0) {
+						//if the time has passed then set the day to next week (same day)
+						shutdownTime.setDate(shutdownTime.getDate() + 7);
+					}
+					return shutdownTime - now;
+				};
+
+				const now = new Date();
+
+				const shutdownTime = new Date();
+				// using days to set the date for shutdown
+				shutdownTime.setDate(
+					now.getDate() + daysUntilShutdown(config.day, now.getDay())
+				);
+				shutdownTime.setHours(config.hour);
+				shutdownTime.setMinutes(config.minute);
+
+				const countdownTillShutdown = timeInMsToShutdown(shutdownTime, now);
+
+				// countdown timer until the shutdown
+				shutDownTimer = setTimeout(() => {
+					shutdownFinsemble();
+				}, countdownTillShutdown);
+				// clearTimeout(shutDownTimer);
+				// clear the timer just in case there is an existing one set up
+				shutDownTimer;
+			} else {
+				if (shutDownTimer) {
+					clearTimeout(shutDownTimer);
 				}
-			};
-
-			const timeInMsToShutdown = (shutdownTime, now) => {
-				// ensure the time has not passed
-				if (shutdownTime - now < 0) {
-					//if the time has passed then set the day to next week (same day)
-					shutdownTime.setDate(shutdownTime.getDate() + 7);
-				}
-				return shutdownTime - now;
-			};
-
-			const now = new Date();
-
-			const shutdownTime = new Date();
-			// using days to set the date for shutdown
-			shutdownTime.setDate(
-				now.getDate() + daysUntilShutdown(config.day, now.getDay())
-			);
-			shutdownTime.setHours(config.hour);
-			shutdownTime.setMinutes(config.minute);
-
-			const countdownTillShutdown = timeInMsToShutdown(shutdownTime, now);
-
-			// countdown timer until the shutdown
-			const shutDownTimer = setTimeout(() => {
-				shutdownFinsemble();
-			}, countdownTillShutdown);
-			// clearTimeout(shutDownTimer);
-			// clear the timer just in case there is an existing one set up
-			shutDownTimer;
+			}
 		}
 	};
 
@@ -151,7 +168,7 @@ shutdownService.prototype = new Finsemble.baseService({
 	startupDependencies: {
 		// add any services or clients that should be started before your service
 		services: [],
-		clients: []
+		clients: ["configClient","workspaceClient","dialogManager"]
 	}
 });
 const serviceInstance = new shutdownService("shutdownService");
