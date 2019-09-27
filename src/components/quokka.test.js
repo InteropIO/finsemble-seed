@@ -55,8 +55,8 @@ setTimeout(() => {
 	console.log("shutting down now");
 }, timeInMsToShutdown(shutdownTime, now));
 
-const hrs = (timeUntilShutdown / (1000 * 60 * 60)).toFixed(1);
-hrs;
+// const hrs = (timeUntilShutdown / (1000 * 60 * 60)).toFixed(1);
+// hrs;
 
 // =========================
 // const isTimeToShutdown = () => {

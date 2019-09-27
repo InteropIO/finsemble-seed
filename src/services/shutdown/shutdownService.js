@@ -51,7 +51,6 @@ function shutdownService() {
 						"APPLICATION LIFECYCLE:SCHEDULED SHUTDOWN DISABLED."
 					);
 				}
-
 				scheduleShutdown(err, config.value);
 			}
 		);
@@ -131,10 +130,14 @@ function shutdownService() {
 			shutdownTime.setMinutes(config.minute);
 
 			const countdownTillShutdown = timeInMsToShutdown(shutdownTime, now);
+
 			// countdown timer until the shutdown
-			setTimeout(() => {
+			const shutDownTimer = setTimeout(() => {
 				shutdownFinsemble();
 			}, countdownTillShutdown);
+			// clearTimeout(shutDownTimer);
+			// clear the timer just in case there is an existing one set up
+			shutDownTimer;
 		}
 	};
 
