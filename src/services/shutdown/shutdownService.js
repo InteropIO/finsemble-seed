@@ -14,6 +14,9 @@ Logger.log("shutdown Service starting up");
 //   (services are initialised by the system, clients are not)
 // let StorageClient = Finsemble.Clients.StorageClient;
 // StorageClient.initialize();
+WorkspaceClient.initialize();
+ConfigClient.initialize();
+DialogManager.initialize();
 
 /**
  *
@@ -140,6 +143,9 @@ function shutdownService() {
 			shutDownTimer;
 		}
 	};
+
+	return this;
+}
 
 shutdownService.prototype = new Finsemble.baseService({
 	startupDependencies: {
