@@ -73,31 +73,45 @@ function shutdownService() {
 		 * Saves workspace and if it is dirty then  fires off a message shutting down the application.
 		 */
 		const saveWorkspace = () => {
-			Logger.log(WorkspaceClient);
 			if (!WorkspaceClient.activeWorkspace.isDirty) {
 				return Promise.resolve();
 			}
 
 			return new Promise((resolve, reject) => {
-				DialogManager.open(
-					"yesNo",
-					{
-						question:
-							'Your workspace "' +
-							WorkspaceClient.activeWorkspace.name +
-							'" has unsaved changes, would you like to save?'
-					},
-					async (err, response) => {
-						if (err || response.choice === "affirmative") {
+				DialogManager.onReady(() => {
+					DialogManager.open(
+						"yesNo",
+						{
+							monitor: "primary",
+							title: "Scheduled Shutdown",
+							question:
+								"The application will shutdown in one minute. Your workspace will be saved.",
+							showTimer: true,
+							timerDuration: 60000,
+							showNegativeButton: false,
+							affirmativeResponseLabel: "Shutdown Now"
+						},
+						async (err, response) => {
+							if (err) reject(err);
 							try {
-								await WorkspaceClient.save();
+								if (response.choice === "cancel") {
+									//do stuff here
+									resolve(response.choice);
+								} else {
+									// save the workspace
+									Logger.info("Saving workspace.");
+									await WorkspaceClient.save();
+									Logger.info("Workspace saved successfully.");
+									resolve(response.choice);
+								}
 							} catch (error) {
-								reject(error);
+								const errorMessage = `Failed to save workspace: ${error}`;
+								Logger.warn(errorMessage);
+								reject(errorMessage);
 							}
 						}
-						resolve(response.choice);
-					}
-				);
+					);
+				});
 			});
 		};
 
@@ -109,7 +123,7 @@ function shutdownService() {
 		};
 
 		function scheduleShutdown(err, config) {
-			if (config){
+			if (config) {
 				const daysUntilShutdown = (restartDay, today) => {
 					const shutdownIsToday = restartDay - today === 0;
 					const shutdownIsNextWeek = restartDay - today < 0;
@@ -150,11 +164,10 @@ function shutdownService() {
 				shutDownTimer = setTimeout(() => {
 					shutdownFinsemble();
 				}, countdownTillShutdown);
-				// clearTimeout(shutDownTimer);
-				// clear the timer just in case there is an existing one set up
 				shutDownTimer;
 			} else {
 				if (shutDownTimer) {
+					// clear the timer just in case there is an existing one set up
 					clearTimeout(shutDownTimer);
 				}
 			}
@@ -168,7 +181,7 @@ shutdownService.prototype = new Finsemble.baseService({
 	startupDependencies: {
 		// add any services or clients that should be started before your service
 		services: [],
-		clients: ["configClient","workspaceClient","dialogManager"]
+		clients: ["configClient", "workspaceClient", "dialogManager"]
 	}
 });
 const serviceInstance = new shutdownService("shutdownService");
