@@ -12,8 +12,6 @@ Logger.log("shutdown Service starting up");
 
 // Add and initialize any other clients you need to use
 //   (services are initialised by the system, clients are not)
-// let StorageClient = Finsemble.Clients.StorageClient;
-// StorageClient.initialize();
 WorkspaceClient.initialize();
 ConfigClient.initialize();
 DialogManager.initialize();
@@ -23,20 +21,13 @@ DialogManager.initialize();
  * @constructor
  */
 function shutdownService() {
-	const self = this;
 	let shutDownTimer = null;
 
 	this.shutdownFunction = function() {
+		// Get the shutdown day, hour and minutes from the config
 		ConfigClient.getValue(
 			{ field: "finsemble.scheduledShutdown" },
 			(err, config) => {
-				//Allow the timeout for the restart dialog to be driven by config. See checkForScheduledRestart comments for format.
-				let scheduledShutdownTimeout = 60000;
-				//If the dialogTimeout property exists and is a number, override our default.
-				if (config && !isNaN(config.dialogTimeout)) {
-					scheduledShutdownTimeout = config.dialogTimeout;
-				}
-				//create an object for the 2nd arg so that the scheduleRestart function doesn't have to change.
 				if (config) {
 					Logger.system.log(
 						"APPLICATION LIFECYCLE:SCHEDULED SHUTDOWN TIME:",
@@ -51,11 +42,11 @@ function shutdownService() {
 			}
 		);
 
-		//If the user changes it via the preferences API, we catch the change here, log it out, and schedule the restart.
+		// If dynamically changing the schedule shutdown, log it out, and schedule the shutdown.
 		ConfigClient.addListener(
 			{ field: "finsemble.scheduledShutdown" },
 			(err, config) => {
-				if (config.value) {
+				if ("value" in config && config.value) {
 					Logger.system.log(
 						"APPLICATION LIFECYCLE:SCHEDULED SHUTDOWN TIME CHANGED. NEW TIME:",
 						config.value
@@ -78,6 +69,7 @@ function shutdownService() {
 			}
 
 			return new Promise((resolve, reject) => {
+				// launch a dialog if the workspace isDirty to ensure the user can save changes
 				DialogManager.onReady(() => {
 					DialogManager.open(
 						"yesNo",
@@ -95,7 +87,6 @@ function shutdownService() {
 							if (err) reject(err);
 							try {
 								if (response.choice === "cancel") {
-									//do stuff here
 									resolve(response.choice);
 								} else {
 									// save the workspace
@@ -122,7 +113,14 @@ function shutdownService() {
 			RouterClient.transmit("Application.shutdown");
 		};
 
+		/**
+		 * Schedule the timer and fire the shutdown function
+		 * @param {*} err
+		 * @param {*} config
+		 */
 		function scheduleShutdown(err, config) {
+			if (err) Logger.log(err);
+
 			if (config) {
 				const daysUntilShutdown = (restartDay, today) => {
 					const shutdownIsToday = restartDay - today === 0;
