@@ -22,7 +22,7 @@
 				"services": {
 					"dockingService": {
 						"canGroup": true,
-						"isArrangable": true
+						"isArrangeable": true
 					}
 				},
 				"components": {
@@ -78,7 +78,7 @@
 			"foreign": {
 				"services": {
 					"workspaceService": {
-						"isArrangable": true
+						"isArrangeable": true
 					}
 				},
 				"components": {
@@ -107,7 +107,7 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": true
+						"isArrangeable": true
 					}
 				},
 				"components": {
@@ -134,7 +134,7 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": true
+						"isArrangeable": true
 					}
 				},
 				"components": {
@@ -172,7 +172,7 @@
 			"foreign": {
 				"services": {
 					"dockingService": {
-						"isArrangable": false
+						"isArrangeable": false
 					}
 				},
 				"components": {
