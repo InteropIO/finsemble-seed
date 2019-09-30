@@ -95,11 +95,12 @@
 				// Sample server root set to "/" -- must align with paths throughout
 				app.use("/", express.static(rootDir, options));
 
-				// For Assimilation
+				// Optional for Assimilation
 				app.use("/hosted", express.static(path.join(__dirname, "..", "hosted"), options));
 
-				// For installers
-				app.use("/pkg", express.static('./pkg', options));
+				// Optional for installers. This can be removed if/when building installers becomes a part of the 
+				// default build.
+				app.use("/pkg", express.static("./pkg", options));
 
 				cb();
 			}
