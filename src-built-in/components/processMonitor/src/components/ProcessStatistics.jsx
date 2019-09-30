@@ -2,32 +2,52 @@ import React from "react";
 import { Store, Actions } from "../stores/ProcessMonitorStore";
 import { SIMPLE_MODE_STATISTICS, ADVANCED_MODE_STATISTICS, HIGH_CPU, HIGH_MEMORY_USAGE, MODERATE_CPU_USAGE, MODERATE_MEMORY_USAGE, TO_MB } from "../constants";
 import { bytesToSize, round } from "../helpers";
+import ChildWindows from "./ChildWindows"
+
 //Not used right now. Currently using alerts. This is for the future.
 export default class ProcessStatistics extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            visible: true,
+            viewMode: props.viewMode,
+            childWindows: props.childWindows
+        }
+        this.toggleVisibility = this.toggleVisibility.bind(this);
     }
-
+    toggleVisibility() {
+		this.setState({
+			visible: !this.state.visible
+		});
+	}
     render() {
         //simple mode: CPU, memory
         //Advanced mode: add Peak Memory.
-        return <div className="process-row">
-            <div className="process-name">
-                {/* In simple mode, we print out "Group 1", "Group 2", etc. The belief is that end users don't care about our wonderful process names ("e.g., Default-Agent-62-4421). In advanced mode, you get the actual name of the process.  */}
-                {this.props.mode === "simple" ? "Process Group" : this.props.stats.name}
-            </div>
-            <div className="process-statistics">
-                {this.props.fields.map((field, i) => {
-                    return (<div key={i} className={getClassesForStat(this.props.stats[field.value], field.label)}>
-                        {prettyPrint(this.props.stats[field.value], field.label)}
-                    </div>)
-                })}
-                <div className="statistic process-actions">
-                    <div className=" terminate fsbl-button-negative process-action" onClick={() => {
-                        Actions.terminateProcess(this.props.stats)
-                    }}>Terminate</div>
+    
+        return <div>
+            <div className="process-row"  onClick={this.toggleVisibility}>
+                        {this.state.visible && <span>&#9660;</span>}
+                        {!this.state.visible && <span className="hidden-arrow">&#9654;</span>}
+                <div className="process-name">
+                    {/* In simple mode, we print out "Group 1", "Group 2", etc. The belief is that end users don't care about our wonderful process names ("e.g., Default-Agent-62-4421). In advanced mode, you get the actual name of the process.  */}
+                    {this.props.mode === "simple" ? "Process Group" : this.props.stats.name}
+                </div>
+                <div className="process-statistics">
+                    {this.props.fields.map((field, i) => {
+                        return (<div key={i} className={getClassesForStat(this.props.stats[field.value], field.label)}>
+                            {prettyPrint(this.props.stats[field.value], field.label)}
+                        </div>)
+                    })}
+                    <div className="statistic process-actions">
+                        <div className=" terminate fsbl-button-negative process-action" onClick={() => {
+                            Actions.terminateProcess(this.props.stats)
+                        }}>Terminate</div>
+                    </div>
                 </div>
             </div>
+            {this.state.visible && <div>
+                <ChildWindows viewMode={this.state.viewMode} childWindows={this.state.childWindows} />
+            </div>}
         </div>
     }
 }
