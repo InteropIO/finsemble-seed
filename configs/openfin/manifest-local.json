@@ -74,7 +74,6 @@
         ],
         "IAC": {
             "serverAddress": "ws://127.0.0.1:3376"
-        },
-        "trustedPreloads": ["http://localhost:3375/preloads/linkerPreload.js"]
+        }
     }
 }

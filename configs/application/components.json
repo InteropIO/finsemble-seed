@@ -1,133 +1,6 @@
 {
 	"comment": "Sample component configuration",
 	"components": {
-		"createReactApp": {
-			"window": {
-				"//url": "This is the most important entry. The contents of the URL address listed here are brought in as a component.",
-				"url": "https://vast-cove-91378.herokuapp.com",
-				"//resizable": "When `true`, the window can be resized by the user.",
-				"resizable": true,
-				"frame": false,
-				"//autoShow": "Defines the window as visible and not invisible.",
-				"autoShow": true,
-				"//top": "A pixel value representing the distance from the top edge of the viewport. When set to 'center,' this centers the window.",
-				"top": "center",
-				"//left": "A pixel value representing the distance from the left edge of the viewport. When set to 'center,' this centers the window.",
-				"left": "center",
-				"//width": "Sets the default width of the component.",
-				"width": 400,
-				"//height": "Sets the default height of the component.",
-				"height": 432
-			},
-			"component": {
-				"//spawnOnStartup": "Controls whether the component automatically spawns during Finsemble's startup.",
-				"spawnOnStartup": false,
-				"//preload": "Defines what scripts are loaded into the window prior to the `url` contents.",
-				"preload": "$applicationRoot/preloads/linkerPreload.js"
-			},
-			"//foreign": "This subsection provides a place for the component to offer up parameters to other services and components.",
-			"foreign": {
-				"services": {
-					"dockingService": {
-						"//canGroup": "When `true`, allows the window to form groups with other windows.",
-						"canGroup": true
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"//launchableByUser": "When `true`, this component is added to the app launcher menu.",
-						"launchableByUser": true
-					},
-					"Window Manager": {
-						"//persistWindowState": "When `true`, Finsemble will restore this window to the same position when the workspace is reloaded.",
-						"persistWindowState": true,
-						"//FSBLHeader": "FSBLHeader can be true, false or an object. If true, a Finsemble-specific window title bar will be injected into the component and the maximize, minimize, and close buttons will be displayed. If false, the title bar will not be displayed. If an object, you can override whether buttons are shown with 'hideMaximize', 'hideMinimize', and 'hideClose.'",
-						"FSBLHeader": true,
-						"showLinker": true
-					}
-				}
-			}
-		},
-		"accountDetail": {
-			"window": {
-				"//url": "This is the most important entry. The contents of the URL address listed here are brought in as a component.",
-				"url": "https://documentation.chartiq.com/finsemble/tutorials/components/accountDetail/accountDetail.html",
-				"//resizable": "When `true`, the window can be resized by the user.",
-				"resizable": true,
-				"frame": false,
-				"//autoShow": "Defines the window as visible and not invisible.",
-				"autoShow": true,
-				"//top": "A pixel value representing the distance from the top edge of the viewport. When set to 'center,' this centers the window.",
-				"top": "center",
-				"//left": "A pixel value representing the distance from the left edge of the viewport. When set to 'center,' this centers the window.",
-				"left": "center",
-				"//width": "Sets the default width of the component.",
-				"width": 400,
-				"//height": "Sets the default height of the component.",
-				"height": 432
-			},
-			"component": {
-				"//spawnOnStartup": "Controls whether the component automatically spawns during Finsemble's startup.",
-				"spawnOnStartup": false,
-				"//preload": "Defines what scripts are loaded into the window prior to the `url` contents.",
-				"preload": "$applicationRoot/preloads/linkerPreload.js"
-			},
-			"//foreign": "This subsection provides a place for the component to offer up parameters to other services and components.",
-			"foreign": {
-				"services": {
-					"dockingService": {
-						"//canGroup": "When `true`, allows the window to form groups with other windows.",
-						"canGroup": true
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"//launchableByUser": "When `true`, this component is added to the app launcher menu.",
-						"launchableByUser": true
-					},
-					"Window Manager": {
-						"//persistWindowState": "When `true`, Finsemble will restore this window to the same position when the workspace is reloaded.",
-						"persistWindowState": true,
-						"//FSBLHeader": "FSBLHeader can be true, false or an object. If true, a Finsemble-specific window title bar will be injected into the component and the maximize, minimize, and close buttons will be displayed. If false, the title bar will not be displayed. If an object, you can override whether buttons are shown with 'hideMaximize', 'hideMinimize', and 'hideClose.'",
-						"FSBLHeader": true,
-						"showLinker": true
-					}
-				}
-			}
-		},
-		"accountStatement": {
-			"window": {
-				"url": "https://documentation.chartiq.com/finsemble/tutorials/components/accountStatement/accountStatement.html",
-				"resizable": true,
-				"frame": false,
-				"autoShow": true,
-				"top": "center",
-				"left": "center",
-				"width": 400,
-				"height": 432
-			},
-			"component": {
-				"spawnOnStartup": false,
-				"preload": "$applicationRoot/preloads/linkerPreload.js"
-			},
-			"foreign": {
-				"services": {
-					"dockingService": {
-						"canGroup": true
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"launchableByUser": true
-					},
-					"Window Manager": {
-						"persistWindowState": true,
-						"FSBLHeader": true,
-						"showLinker": true
-					}
-				}
-			}
-		},
 		"Welcome Component": {
 			"window": {
 				"url": "$applicationRoot/components/welcome/welcome.html",
@@ -137,7 +10,7 @@
 				"autoShow": true,
 				"top": "center",
 				"left": "center",
-				"width": 1000,
+				"width": 400,
 				"height": 432
 			},
 			"component": {
