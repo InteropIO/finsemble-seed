@@ -73,8 +73,6 @@
 			"groupTileBuffer": 30,
 			"headerHeight": 32,
 			"MINIMUM_WIDTH": 175,
-			"defaultHeight": 39,
-			"defaultWidth": 600,
 			"requireRectangularityForGroupResize": true,
 			"undockDisbandsEntireGroup": false,
 			"fillHolesOnUndock": true,
@@ -110,8 +108,6 @@
 	"systemTrayComponent": "File Menu",
 	"Window Manager": {
 		"alwaysOnTopIcon": false,
-		"showTabs": true,
-		"showNativeTabs": true,
 		"floatingTitlebarComponent": "Floating Titlebar",
 		"deliveryMechanism": "preload"
 	},
