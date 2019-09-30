@@ -23,7 +23,7 @@ DialogManager.initialize();
 function shutdownService() {
 	let shutDownTimer = null;
 
-	this.shutdownFunction = function () {
+	this.shutdownFunction = function() {
 		/**
 		 * Saves workspace and if it is dirty then  fires off a message shutting down the application.
 		 */
@@ -118,15 +118,14 @@ function shutdownService() {
 		 * @param {error} err
 		 * @param {Object} config
 		 */
-		const shutdownFinsemble = async (err, config) => {
+		const shutdownFinsemble = (err, config) => {
 			if (err) {
 				Logger.log(err);
-				return err
-			}
-			else if (config) {
+				return err;
+			} else if (config) {
 				const shutdownTimer = setShutdownTimer(config);
 				// countdown timer until the shutdown
-				shutDownTimer = setTimeout(() => {
+				shutDownTimer = setTimeout(async () => {
 					// if the user cancels the event then don't shutdown
 					if ((await saveWorkspace()) === "cancel") return;
 					// code to shutdown Finsemble
@@ -139,9 +138,7 @@ function shutdownService() {
 					clearTimeout(shutDownTimer);
 				}
 			}
-
 		};
-
 
 		// Get the shutdown day, hour and minutes from the config
 		ConfigClient.getValue(
@@ -178,9 +175,9 @@ function shutdownService() {
 				shutdownFinsemble(err, config.value);
 			}
 		);
+	};
 
-		return this;
-	}
+	return this;
 }
 
 shutdownService.prototype = new Finsemble.baseService({
