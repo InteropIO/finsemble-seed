@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { Store, Actions } from "./stores/ProcessMonitorStore";
 import ListHeader from "./components/ListHeader";
 import ProcessStatistics from "./components/ProcessStatistics";
+
 import ChildWindows from "./components/ChildWindows";
 import "../processMonitor.css";
 import { EMPTY_TOTALS, SIMPLE_MODE_STATISTICS, ADVANCED_MODE_STATISTICS } from "./constants";
@@ -72,18 +73,18 @@ export default class ProcessMonitor extends React.Component {
 							.filter(proc => proc.visible)
 							.map((proc, i) => {
 								return (<div key={i} className="process">
-									{/* Process statistics is the meat of this component. It's the statistics and the child windows. */}
-									<ProcessStatistics
-										mode={this.state.viewMode}
-										fields={this.state.viewMode === "simple" ? SIMPLE_MODE_STATISTICS : ADVANCED_MODE_STATISTICS
-										}
-										stats={proc.statistics} />
-									<ChildWindows viewMode={this.state.viewMode} childWindows={proc.childWindows} />
+									<ProcessStatistics mode={this.state.viewMode}
+											fields={this.state.viewMode === "simple" ? SIMPLE_MODE_STATISTICS : ADVANCED_MODE_STATISTICS
+											}
+											stats={proc.statistics}
+											viewMode={this.state.viewMode} 
+											childWindows={proc.childWindows}>
+									</ProcessStatistics>
 								</div>)
-							})}
+							})
+						}
 					</div>
 				</div>
-
 				<div className="bottom-section">
 					<div className="summary-statistics-wrapper">
 						<div className="summary-statistics-header">

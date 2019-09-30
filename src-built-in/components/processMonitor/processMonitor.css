@@ -187,3 +187,7 @@ body {
 	display:flex;
 	justify-content: space-between;
 }
+
+.hidden-arrow {
+	padding-left: 2px;
+}
