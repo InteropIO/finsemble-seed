@@ -144,7 +144,7 @@
 				process.send({ "action": "timestamp", "milestone": "Application manifest retrieved", "timestamp": Date.now() });
 				notified_config = true;
 				serviceManagerRetrievedTimeout = setTimeout(() => {
-					logToTerminal(errorColor(`ERROR: Finsemble application manifest has been retrieved from the server, but the Finsemble System Manager has not. This can be caused by a slow internet connection (e.g., downloading assets). This can also be a symptom that you have a hanging process. Please inspect your task manager to ensure that there are no lingering processes. Alternatively, run 'finsemble-cli kill'`))
+					logToTerminal(errorColor(`ERROR: Finsemble application manifest has been retrieved from the server, but the Finsemble System Manager has not. This can be caused by a slow internet connection (e.g., downloading assets). This can also be a symptom that you have a hanging openfin process. Please inspect your task manager to ensure that there are no lingering processes. Alternatively, run 'finsemble-cli kill'`))
 				}, 10000);
 			}
 			next();
