@@ -254,8 +254,9 @@ class WindowTitleBar extends React.Component {
 		//Add an event listener to hide the drag-handler when tiling is started
 		FSBL.Clients.RouterClient.addListener("DockingService.startTilingOrTabbing", this.onTilingStart);
 
-		//Add an event listener to show the drag-handler when tiling is stopped
+		//Add an event listener to show the drag-handler when tiling is stopped or cancelled
 		FSBL.Clients.RouterClient.addListener("DockingService.stopTilingOrTabbing", this.onTilingStop);
+		FSBL.Clients.RouterClient.addListener("DockingService.cancelTilingOrTabbing", this.onTilingStop);
 	}
 
 	/**
