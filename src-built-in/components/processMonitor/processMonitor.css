@@ -53,6 +53,10 @@ body {
 	flex-direction: row;
 }
 
+.process-row {
+	cursor: pointer;
+}
+
 .process {
 	padding-top: 8px;
 	padding-bottom: 8px;
