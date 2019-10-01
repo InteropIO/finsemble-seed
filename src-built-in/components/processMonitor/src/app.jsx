@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import { Store, Actions } from "./stores/ProcessMonitorStore";
 import ListHeader from "./components/ListHeader";
 import ProcessStatistics from "./components/ProcessStatistics";
-
 import ChildWindows from "./components/ChildWindows";
 import "../processMonitor.css";
 import { EMPTY_TOTALS, SIMPLE_MODE_STATISTICS, ADVANCED_MODE_STATISTICS } from "./constants";
@@ -67,9 +66,7 @@ export default class ProcessMonitor extends React.Component {
 		return (
 			<div>
 				<div className="process-list-wrapper">
-					<ListHeader fields={this.state.viewMode === "simple" ? SIMPLE_MODE_STATISTICS : ADVANCED_MODE_STATISTICS }
-						stats={getStatistics(this.state)}
-						viewMode={this.state.viewMode} />
+					<ListHeader fields={this.state.viewMode === "simple" ? SIMPLE_MODE_STATISTICS : ADVANCED_MODE_STATISTICS } />
 					<div className="process-list">
 						{/* Filter will remove the hidden processes. Afterwards, map will render the remaining processes in turn. */}
 						{this.state.processList
@@ -116,6 +113,11 @@ export default class ProcessMonitor extends React.Component {
 							}
 						</div>
 					</div>
+					{this.state.viewMode === "advanced" && 	<div className="advanced-button-wrapper">
+					<a className="fsbl-button advanced-button" onClick={(event) => {
+							event.target.setAttribute('href', 'data:application/json;charset=utf-8,' + JSON.stringify(this.state.processList));
+							event.target.setAttribute('download', 'finsemble_logs_' + Date.now() + '.json');
+						}}>Export Logs</a></div>}		
 					<div className="advanced-button-wrapper">
 						<div className="fsbl-button advanced-button" onClick={() => { Actions.toggleViewMode() }}>
 							{this.state.viewMode === "advanced" ? "Simple" : "Advanced"}</div>

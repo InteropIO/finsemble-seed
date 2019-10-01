@@ -58,15 +58,6 @@ export default class ListHeader extends React.Component {
                     </div>)
                 })}
             </div>
-            {this.props.viewMode === "advanced" && <a className=" export fsbl-button process-action" onClick={(event) => {
-                let logText = "Process Id, Process Name, CPU Usage, Peak Working Set Size, Working Set Size^\n";
-                {this.props.stats.map((field, i) => {
-                    logText += field.processId + ',' + field.name + ',' + field.cpuUsage + ',' + field.peakWorkingSetSize + ',' + field.workingSetSize + '\n';
-                })}
-
-                event.target.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(logText));
-                event.target.setAttribute('download', Date.now() + '.csv');
-            }}>Export Logs</a>}
         </div>
     }
 }

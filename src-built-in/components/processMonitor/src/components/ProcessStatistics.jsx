@@ -13,6 +13,7 @@ export default class ProcessStatistics extends React.Component {
             viewMode: props.viewMode,
             childWindows: props.childWindows
         }
+        console.log(this.state.childWindows)
         this.toggleVisibility = this.toggleVisibility.bind(this);
     }
     toggleVisibility() {
