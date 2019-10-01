@@ -21,7 +21,7 @@ body {
 	color: var(--procMonitor-font-color);
 }
 
-.terminate {
+.terminate, .export.fsbl-button {
 	font-style: normal;
 	font-stretch: normal;
 	line-height: normal;
@@ -35,6 +35,21 @@ body {
 .terminate:hover {
 	border-color: var(--procMonitor-negative-border-color);
 	background-color: var(--procMonitor-negative-background-color);
+	color: var(--procMonitor-font-color);
+}
+
+.export.fsbl-button {
+	font-size: 12px;
+	margin:0;
+	border: 1px solid #ccc;
+	background-color: var(--button-affirmative-background-color);
+	color: var(--procMonitor-font-color);
+	padding: 0;
+	width: 75px;
+}
+.export:hover {
+	border-color: var(--tertiary-accent-color);
+	background-color: var(--button-affirmative-background-hover-color);
 	color: var(--procMonitor-font-color);
 }
 

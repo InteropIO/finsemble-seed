@@ -61,12 +61,15 @@ export default class ProcessMonitor extends React.Component {
 		//Use helpers.bytesToSize.
 		//Array of process components.
 		//statReducer is an array.reduce function that will sum all of the CPU/memory usage across the app.
+		
 		let totals = this.state.processList.length ? this.state.processList.reduce(statReducer) : EMPTY_TOTALS;
+
 		return (
 			<div>
 				<div className="process-list-wrapper">
-					<ListHeader fields={this.state.viewMode === "simple" ? SIMPLE_MODE_STATISTICS : ADVANCED_MODE_STATISTICS
-					} />
+					<ListHeader fields={this.state.viewMode === "simple" ? SIMPLE_MODE_STATISTICS : ADVANCED_MODE_STATISTICS }
+						stats={getStatistics(this.state)}
+						viewMode={this.state.viewMode} />
 					<div className="process-list">
 						{/* Filter will remove the hidden processes. Afterwards, map will render the remaining processes in turn. */}
 						{this.state.processList
@@ -133,4 +136,13 @@ function FSBLReady() {
 			<ProcessMonitor />
 			, document.getElementById("ProcessMonitor-component-wrapper"));
 	});
+}
+
+/* Filter will remove the hidden processes. Afterwards, map will render the remaining processes in turn. */
+function getStatistics(state) {
+	return state.processList
+		.filter(proc => proc.visible)
+		.map((proc, i) => {
+			return proc.statistics;
+		})
 }

@@ -1,5 +1,6 @@
 import React from "react";
 import { Store, Actions } from "../stores/ProcessMonitorStore";
+
 /**
  * This is the "table header" that shows which columns are visible.
  * Since we aren't using an HTML table, this component exists.
@@ -56,8 +57,16 @@ export default class ListHeader extends React.Component {
                         }
                     </div>)
                 })}
-                <div className="list-header-statistic-label"></div>
             </div>
+            {this.props.viewMode === "advanced" && <a className=" export fsbl-button process-action" onClick={(event) => {
+                let logText = "Process Id, Process Name, CPU Usage, Peak Working Set Size, Working Set Size^\n";
+                {this.props.stats.map((field, i) => {
+                    logText += field.processId + ',' + field.name + ',' + field.cpuUsage + ',' + field.peakWorkingSetSize + ',' + field.workingSetSize + '\n';
+                })}
+
+                event.target.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(logText));
+                event.target.setAttribute('download', Date.now() + '.csv');
+            }}>Export Logs</a>}
         </div>
     }
 }

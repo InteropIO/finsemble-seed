@@ -1,7 +1,7 @@
 import React from "react";
 import { Store, Actions } from "../stores/ProcessMonitorStore";
 import { SIMPLE_MODE_STATISTICS, ADVANCED_MODE_STATISTICS, HIGH_CPU, HIGH_MEMORY_USAGE, MODERATE_CPU_USAGE, MODERATE_MEMORY_USAGE, TO_MB } from "../constants";
-import { bytesToSize, round } from "../helpers";
+import { bytesToSize, roundm, prettyPrint } from "../helpers";
 import ChildWindows from "./ChildWindows"
 
 //Not used right now. Currently using alerts. This is for the future.
@@ -18,17 +18,17 @@ export default class ProcessStatistics extends React.Component {
     toggleVisibility() {
 		this.setState({
 			visible: !this.state.visible
-		});
+        });
 	}
     render() {
         //simple mode: CPU, memory
         //Advanced mode: add Peak Memory.
     
         return <div>
-            <div className="process-row"  onClick={this.toggleVisibility}>
-                        {this.state.visible && <span>&#9660;</span>}
-                        {!this.state.visible && <span className="hidden-arrow">&#9654;</span>}
-                <div className="process-name">
+            <div className="process-row">
+                    {this.state.visible && <span onClick={this.toggleVisibility}>&#9660;</span>}
+                    {!this.state.visible && <span onClick={this.toggleVisibility}className="hidden-arrow">&#9654;</span>}
+                <div className="process-name"  onClick={this.toggleVisibility}>
                     {/* In simple mode, we print out "Group 1", "Group 2", etc. The belief is that end users don't care about our wonderful process names ("e.g., Default-Agent-62-4421). In advanced mode, you get the actual name of the process.  */}
                     {this.props.mode === "simple" ? "Process Group" : this.props.stats.name}
                 </div>
@@ -72,21 +72,4 @@ function getClassesForStat(number, statType) {
         classes += " moderate-usage";
     }
     return classes;
-}
-
-/**
- * Outputs something nice,. 102423465243 outputs whatever that number is in KB/MB/GB.
- * 0.035123 will output 0.35% for CPU.
- * @param {number} number
- * @param {string} statType
- */
-function prettyPrint(number, statType) {
-    if (statType === "CPU") {
-        //make it a percent.
-        return round(number, 2) + "%";
-    } else if (statType !== "PID") {
-        return bytesToSize(number);
-    } else {
-        return number;
-    }
 }

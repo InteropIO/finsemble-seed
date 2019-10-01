@@ -9,7 +9,6 @@ export const ADVANCED_MODE_STATISTICS = [
 	{ label: "Memory", value: "workingSetSize" },
 	{ label: "Peak Memory", value: "peakWorkingSetSize" },
 	{ label: "PID", value: "processId" }
-
 ];
 //These are percentages
 export const HIGH_CPU = 10;

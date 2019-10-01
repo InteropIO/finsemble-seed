@@ -50,3 +50,20 @@ export function round(number, precision) {
     };
     return shift(Math.round(shift(number, precision, false)), precision, true);
 }
+
+/**
+ * Outputs something nice,. 102423465243 outputs whatever that number is in KB/MB/GB.
+ * 0.035123 will output 0.35% for CPU.
+ * @param {number} number
+ * @param {string} statType
+ */
+export function prettyPrint(number, statType) {
+    if (statType === "CPU") {
+        //make it a percent.
+        return round(number, 2) + "%";
+    } else if (statType !== "PID") {
+        return bytesToSize(number);
+    } else {
+        return number;
+    }
+}
