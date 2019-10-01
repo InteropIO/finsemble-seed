@@ -16,7 +16,6 @@
 			"component": {
 				"displayName": "Welcome Component",
 				"spawnOnStartup": false,
-				"inject": false,
 				"preload": "$applicationRoot/preloads/zoom.js"
 			},
 			"foreign": {

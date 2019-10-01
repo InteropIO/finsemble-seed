@@ -257,7 +257,7 @@ var Actions = {
 		})
 	},
 	/**
-	 * Helper function to sift through all of the data coming from the dockingService. Outputs an array of groups that the window belongs to.
+	 * Helper function to sift through all of the data coming from the windowService. Outputs an array of groups that the window belongs to.
 	 * @todo consider sending targeted messages to windows instead of a bulk update. Will cut down on this kind of code.
 	 */
 	getMyDockingGroups: function (groupData) {
