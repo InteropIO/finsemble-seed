@@ -21,7 +21,7 @@ body {
 	color: var(--procMonitor-font-color);
 }
 
-.terminate, .export.fsbl-button {
+.terminate {
 	font-style: normal;
 	font-stretch: normal;
 	line-height: normal;

@@ -73,12 +73,13 @@ export default class ProcessMonitor extends React.Component {
 							.filter(proc => proc.visible)
 							.map((proc, i) => {
 								return (<div key={i} className="process">
+									{/* Process statistics is the meat of this component. It's the statistics and the child windows. */}
 									<ProcessStatistics mode={this.state.viewMode}
-											fields={this.state.viewMode === "simple" ? SIMPLE_MODE_STATISTICS : ADVANCED_MODE_STATISTICS
-											}
-											stats={proc.statistics}
-											viewMode={this.state.viewMode} 
-											childWindows={proc.childWindows}>
+										fields={this.state.viewMode === "simple" ? SIMPLE_MODE_STATISTICS : ADVANCED_MODE_STATISTICS
+										}
+										stats={proc.statistics}
+										viewMode={this.state.viewMode} 
+										childWindows={proc.childWindows}>
 									</ProcessStatistics>
 								</div>)
 							})
@@ -138,13 +139,4 @@ function FSBLReady() {
 			<ProcessMonitor />
 			, document.getElementById("ProcessMonitor-component-wrapper"));
 	});
-}
-
-/* Filter will remove the hidden processes. Afterwards, map will render the remaining processes in turn. */
-function getStatistics(state) {
-	return state.processList
-		.filter(proc => proc.visible)
-		.map((proc, i) => {
-			return proc.statistics;
-		})
 }

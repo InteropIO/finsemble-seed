@@ -1,6 +1,5 @@
 import React from "react";
 import { Store, Actions } from "../stores/ProcessMonitorStore";
-
 /**
  * This is the "table header" that shows which columns are visible.
  * Since we aren't using an HTML table, this component exists.
