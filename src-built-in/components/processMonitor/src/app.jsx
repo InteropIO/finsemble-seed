@@ -60,9 +60,7 @@ export default class ProcessMonitor extends React.Component {
 		//Use helpers.bytesToSize.
 		//Array of process components.
 		//statReducer is an array.reduce function that will sum all of the CPU/memory usage across the app.
-		
 		let totals = this.state.processList.length ? this.state.processList.reduce(statReducer) : EMPTY_TOTALS;
-
 		return (
 			<div>
 				<div className="process-list-wrapper">
@@ -82,8 +80,7 @@ export default class ProcessMonitor extends React.Component {
 										childWindows={proc.childWindows}>
 									</ProcessStatistics>
 								</div>)
-							})
-						}
+							})}
 					</div>
 				</div>
 				<div className="bottom-section">
