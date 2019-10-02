@@ -23,6 +23,8 @@
         "//electronDebug": "Whether to start the finsemble-electron-adapter in debug mode. Default: true.",
         "electronDebug": true,
         "//breakpointOnStart": "Whether to pause finsemble-electron-adapter when it starts. Default: false.",
-        "breakpointOnStart": false
+        "breakpointOnStart": false,
+        "//updateUrl": "http://localhost:3375/pkg",
+        "updateUrl": null
     }
 }
