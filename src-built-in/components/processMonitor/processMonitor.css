@@ -190,8 +190,14 @@ body {
 .bottom-section {
 	display:flex;
 	justify-content: space-between;
+	width: 100%;
 }
 
 .hidden-arrow {
 	padding-left: 2px;
+}
+
+.export-button {
+	margin-left: auto;
+	justify-content: flex-end;
 }

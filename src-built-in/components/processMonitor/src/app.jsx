@@ -61,6 +61,7 @@ export default class ProcessMonitor extends React.Component {
 		//Array of process components.
 		//statReducer is an array.reduce function that will sum all of the CPU/memory usage across the app.
 		let totals = this.state.processList.length ? this.state.processList.reduce(statReducer) : EMPTY_TOTALS;
+		let tooltip = "Export the data from processes in JSON format";
 		return (
 			<div>
 				<div className="process-list-wrapper">
@@ -111,10 +112,10 @@ export default class ProcessMonitor extends React.Component {
 							}
 						</div>
 					</div>
-					{this.state.viewMode === "advanced" && 	<div className="advanced-button-wrapper">
-					<a className="fsbl-button advanced-button" onClick={(event) => {
-							event.target.setAttribute('href', 'data:application/json;charset=utf-8,' + JSON.stringify(this.state.processList));
-							event.target.setAttribute('download', 'finsemble_logs_' + Date.now() + '.json');
+					{this.state.viewMode === "advanced" && 	<div className="advanced-button-wrapper export-button">
+					<a className="fsbl-button advanced-button" title={tooltip} onClick={(event) => {
+							event.target.setAttribute('href', 'data:application/json;charset=utf-8,' + JSON.stringify(this.state.processList, null,"\t"));
+							event.target.setAttribute('download', 'finsemble_process_data_' + Date.now() + '.json');
 						}}>Export Data</a></div>}		
 					<div className="advanced-button-wrapper">
 						<div className="fsbl-button advanced-button" onClick={() => { Actions.toggleViewMode() }}>
