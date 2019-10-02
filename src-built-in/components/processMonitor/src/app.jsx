@@ -115,7 +115,7 @@ export default class ProcessMonitor extends React.Component {
 					<a className="fsbl-button advanced-button" onClick={(event) => {
 							event.target.setAttribute('href', 'data:application/json;charset=utf-8,' + JSON.stringify(this.state.processList));
 							event.target.setAttribute('download', 'finsemble_logs_' + Date.now() + '.json');
-						}}>Export Logs</a></div>}		
+						}}>Export Data</a></div>}		
 					<div className="advanced-button-wrapper">
 						<div className="fsbl-button advanced-button" onClick={() => { Actions.toggleViewMode() }}>
 							{this.state.viewMode === "advanced" ? "Simple" : "Advanced"}</div>
