@@ -376,6 +376,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 			], done);
 		},
 		launchOpenFin: async (done) => {
+			logToTerminal("Using Container: OpenFin", "green");
 			ON_DEATH(() => {
 				killApp("OpenFin", () => {
 					if (watchClose) watchClose();
@@ -405,6 +406,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 			if (done) done();
 		},
 		launchElectron: done => {
+			logToTerminal("Using Container: Electron", "green");
 			const cfg = taskMethods.startupConfig[env.NODE_ENV];
 			const USING_ELECTRON = container === "electron";
 			if (USING_ELECTRON && !FEA_PATH_EXISTS) {
