@@ -11,13 +11,12 @@ export default class DockingButton extends React.Component {
 	constructor(props) {
 		super(props);
 		this.bindEventHandlers();
-        /**
+    /**
 		 * We assign in the constructor instead of via a require at the top of the file because the store is initialized asynchronously.
 		 */
 		windowTitleBarStore = getStore();
 		this.state = {
 			showDockingTooltip: false,
-			dockingEnabled: false,
 			dockingIcon: windowTitleBarStore.getValue({ field: "Main.dockingIcon" }),
 			hoverState: "false"
 		};
