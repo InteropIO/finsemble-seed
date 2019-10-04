@@ -198,7 +198,7 @@ async function addApp(id) {
 		type: "component",
 		component: {},
 		window: {
-			windowType: app.windowType || "OpenFinWindow"
+			windowType: app.windowType || "WebWindow"
 		},
 		foreign: {
 			components: {
