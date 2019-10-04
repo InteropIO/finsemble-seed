@@ -67,7 +67,7 @@
 				"contextMenu": true,
 				"addToWorkspace": true,
 				"options": {
-					"alwaysOnTop": true
+					"alwaysOnTop": false
 				}
 			},
 			"component": {
