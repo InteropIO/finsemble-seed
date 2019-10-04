@@ -148,13 +148,13 @@ const { launch, connect } = require('hadouken-js-adapter');
 					'node_modules',
 					'electron',
 					'package.json')
-			)
-			return packageFile.version
+			);
+			return packageFile.version;
 		} catch (error) {
 			logToTerminal(`Failed to get electron's verion from FEA: ${error.message}`, "red");
-			return 'unknown'
+			return 'unknown';
 		}
-	}
+	};
 	// #endregion
 
 	// #region Task Methods
