@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <!--
-    /*!
-    * Copyright 2017 by ChartIQ, Inc.
+    /**
+    * Copyright 2019, ChartIQ, Inc.
     * All rights reserved.
-    */
+	*/
+	
 	OAUTH Authentication example. This example uses Google as a OpenID Provider (OP).
-
 -->
 
 <head>
@@ -16,54 +16,86 @@
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<script>
-		function closeThisWindow(){
-			// When we close this window, if the user isn't logged in then it must mean we
-			// were using OAUTH to log in, and it failed, so shut down the entire app. Otherwise
-			// we were just using it to authenticate a client, in which case we just want to close
-			// this window but keep Finsemble running.
-			FSBL.Clients.AuthenticationClient.getCurrentCredentials(function(err, credentials){
-				if(!credentials){
-					FSBL.shutdownApplication();
-				}else{
-					fin.desktop.Window.getCurrent().close(true);
-				}
-			});
+		var urlParams = new URLSearchParams(window.location.search);
+		console.log('oauthresponse', urlParams)
+		/** Class for handling oAuth returns */
+		class HandleOauth {
+			constructor() {
+
+			}
+
+			/**
+			 *  closeThisWindow
+			 * 
+			 *  When we close this window, if the user isn't logged in then it must mean we
+			 *  were using OAUTH to log in, and it failed, so shut down the entire app. Otherwise
+			 *  we were just using it to authenticate a client, in which case we just want to close
+			 * this window but keep Finsemble running.
+			 */
+			closeThisWindow() {
+				FSBL.Clients.AuthenticationClient.getCurrentCredentials((err, credentials) => {
+					if (!credentials) {
+						FSBL.shutdownApplication();
+					} else {
+						FSBL.Clients.WindowClient.getCurrentWindow().close();
+					}
+				});
+			}
+		
+			/**
+			 * showError
+			 * 
+			 * @param {string} reason Textual representation of why the Oauth Process Failed
+			 */
+			showError(reason) {
+				document.querySelector("#error").innerHTML = `Oauth Failed: ${reason}`;
+			}
+
+			/**
+			 * runBusinessLogic
+			 * 
+			 * Run your oAuth business logic to handle the user's action
+			 * 
+			 * @param {object} credentials 
+			 * @param {function} cb The callback function to invoke when your custom logic has completed.
+			 */
+			runBusinessLogic(credentials, cb) {
+				// Run your custom  business logic here. For instance, fetch dynamic config based on the user's credentials.
+				cb();
+			}
 		}
 
-		function showError(reason){
-			$("#error").text("Oauth Failed: " + reason);
-		}
+		const OauthClient = new HandleOauth();
 
-		function runBusinessLogic(credentials, cb){
-			// Run your business logic here. For instance, fetch dynamic config based on the user's credentials.
-			cb();
-		};
-
-		FSBL.Clients.AuthenticationClient.completeOAUTH(null, function(err, response){
-			if(err){
-				showError(err);
-			}else{
-				var credentials=response;
-				runBusinessLogic(credentials, function(){
+		FSBL.Clients.AuthenticationClient.completeOAUTH(null, null, (err, response) => {
+			
+			console.log('AuthenticationClient.completeOAUTH', response)
+			if (err) {
+				OauthClient.showError('x');
+			} else {
+				const credentials = response;
+				OauthClient.runBusinessLogic(credentials, () => {
 					// In the special case of "startup" then we publish the authorization, which releases Finsemble and lets is start
 					if (credentials.config.name === "startup") {
 						// "sub" is the user ID provided by the OP. Not all OP's support this. If not supported, then we just set the user to the access token.
-						var user = credentials.sub;
-						if (!user) user = credentials.access_token;
+						const user = credentials.sub;
+						if (!user) {
+							user = credentials.access_token;
+						}
 						// Finish the authentication process
 						FSBL.Clients.RouterClient.transmit("AuthenticationService.authorization", { user: user, credentials: credentials });
 					}
-					closeThisWindow();
+					OauthClient.closeThisWindow();
 				});
 			}
 		});
+	
 
 	</script>
 	<link href='https://fonts.googleapis.com/css?family=Roboto:400,700,500,100,300,400italic|Roboto+Condensed:400,700,300' rel='stylesheet'
 	type='text/css'>
 	<link rel="stylesheet" type="text/css" href="../../assets/css/finsemble.css">
 	<link rel="stylesheet" type="text/css" href="../../assets/css/font-finance.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js" type="text/javascript"></script>
 </head>
 
 <body class="dialog">
@@ -104,5 +136,11 @@
 		</div>
 	</div>
 	<div id="error"></div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+	<script src="authentication.js"></script>
+	<script src="https://apis.google.com/js/api.js"></script>
+
+
 </body>
 </html>
