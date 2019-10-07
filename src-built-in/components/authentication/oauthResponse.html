@@ -16,8 +16,6 @@
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<script>
-		var urlParams = new URLSearchParams(window.location.search);
-		console.log('oauthresponse', urlParams)
 		/** Class for handling oAuth returns */
 		class HandleOauth {
 			constructor() {
@@ -68,10 +66,8 @@
 		const OauthClient = new HandleOauth();
 
 		FSBL.Clients.AuthenticationClient.completeOAUTH(null, null, (err, response) => {
-			
-			console.log('AuthenticationClient.completeOAUTH', response)
 			if (err) {
-				OauthClient.showError('x');
+				OauthClient.showError(err);
 			} else {
 				const credentials = response;
 				OauthClient.runBusinessLogic(credentials, () => {
@@ -131,14 +127,12 @@
 	</style>
 	<div class="fsbl-auth-top">
 		<img class="fsbl-logo" src="../../assets/img/ciq-banner-black-100x25.png" width="100" height="25">
-		<div class="fsbl-close" id="FSBL-close" onclick="closeThisWindow()">
+		<div class="fsbl-close" id="FSBL-close" onclick="OauthClient.closeThisWindow()">
 			<i class="ff-close" style=color:#666></i>
 		</div>
 	</div>
 	<div id="error"></div>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
-	<script src="authentication.js"></script>
 	<script src="https://apis.google.com/js/api.js"></script>
 
 
