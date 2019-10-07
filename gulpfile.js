@@ -23,7 +23,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 	const FEA_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-electron-adapter");
 	const FEA_PATH_EXISTS = fs.existsSync(FEA_PATH);
 	const FEA = FEA_PATH_EXISTS ? require("@chartiq/finsemble-electron-adapter/exports") : undefined;
-	const FEAPackager = FEA_PATH_EXISTS ? require("@chartiq/finsemble-electron-adapter/deploy/deploymentHelpers") : undefined;
+	const FEAPackager = FEA ? FEA.packager : undefined;
 
 	// local
 	const extensions = fs.existsSync("./gulpfile-extensions.js") ? require("./gulpfile-extensions.js") : undefined;
@@ -416,6 +416,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 			let config = {
 				manifest: cfg.serverConfig,
 				chromiumFlags: JSON.stringify(cfg.chromiumFlags),
+				path: FEA_PATH,
 			}
 
 			// set breakpointOnStart variable so FEA knows whether to pause initial code execution
@@ -466,9 +467,10 @@ const { launch, connect } = require('hadouken-js-adapter');
 
 			if (!FEAPackager) {
 				console.error("Cannot create installer because Finsemble Electron Adapter is not installed");
-					process.exit(1);
+				process.exit(1);
 			}
 
+			FEAPackager.setFeaPath(FEA_PATH);
 			await FEAPackager.setManifestURL(manifestUrl);
 			await FEAPackager.setUpdateURL(updateUrl);
 			await FEAPackager.setChromiumFlags(chromiumFlags || {});
