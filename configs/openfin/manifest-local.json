@@ -3,8 +3,8 @@
     "startup_app": {
         "name": "ChartIQ Local",
         "url": "http://localhost:3375/finsemble/components/system/serviceManager/serviceManager.html",
-		"uuid": "Finsemble",
-		"requireHandshake": true,
+        "uuid": "Finsemble",
+        "requireHandshake": true,
         "applicationIcon": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png",
         "defaultTop": 0,
         "defaultLeft": 0,
@@ -59,8 +59,8 @@
     "fileName": "ChartIQ-local-installer",
     "appAssets": [
         {
-            "src": "https://assets.finsemble.com/assimilation/assimilation_3.12.0.0.zip",
-            "version": "3.12.0.0",
+            "src": "https://assets.finsemble.com/assimilation/dev/assimilation_pr69.zip",
+            "version": "3.13.0_69",
             "alias": "assimilation",
             "target": "AssimilationMain.exe"
         }
