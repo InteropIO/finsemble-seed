@@ -85,7 +85,7 @@ class Linker extends React.Component {
 			if (channel.label) {
 				return <div className="channel-label">{channel.label}</div>
 			} else {
-				return <div className="channel-label">{"Group " + getChannelLabelFromIndex(channel.name, FSBL.Clients.LinkerClient.getAllChannels())}</div>
+				return <div className="channel-label">{"Channel " + getChannelLabelFromIndex(channel.name, FSBL.Clients.LinkerClient.getAllChannels())}</div>
 			}
 		}
 

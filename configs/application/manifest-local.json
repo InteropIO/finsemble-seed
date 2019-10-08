@@ -3,7 +3,8 @@
     "startup_app": {
         "name": "ChartIQ Local",
 		"url": "http://localhost:3375/finsemble/services/systemManager/systemManager.html",
-        "uuid": "Finsemble",
+		"uuid": "Finsemble",
+		"requireHandshake": true,
         "applicationIcon": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png",
         "defaultTop": 75,
 		"defaultLeft": 200,
