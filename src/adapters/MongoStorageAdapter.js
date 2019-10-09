@@ -35,7 +35,8 @@ const MongoStorageAdapter = function (uuid) {
 		let combinedKey = this.getCombinedKey(this, params);
 		try {
 			Logger.system.debug("MongoStorageAdapter.save for key=" + combinedKey + " with data=" + params.value);
-			MongoStorage.setItem(combinedKey, JSON.stringify(params.value));
+			console.log('trying to save')
+			//MongoStorageAdapter.setItem(combinedKey, JSON.stringify(params.value));
 			cb(null, { status: "success" });
 		} catch (err) {
 			Logger.system.error("MongoStorageAdapter.save Error", err, "key=" + combinedKey, "value=", params.value);
@@ -81,7 +82,10 @@ const MongoStorageAdapter = function (uuid) {
 	};*/
 
 	this.get = (params, cb) => {
-		return cb(null, 1)
+		console.log('this.get')
+		const workspace = '{"Default Workspace":{"version":"1.0.0","name":"Default Workspace","type":"workspace","groups":{},"windows":["Welcome Component-4-782-Finsemble"],"windowData":[{"componentType":"Welcome Component","defaultLeft":50,"defaultTop":50,"name":"Welcome Component-4-782-Finsemble"}],"componentStates":{"Welcome Component-4-782-Finsemble":{}}}}';
+
+		return cb(null, workspace)
 	}
 
 	// Return prefix used to filter keys.
@@ -128,7 +132,7 @@ const MongoStorageAdapter = function (uuid) {
 		const keyPreface = this.getKeyPreface(this, params);
 		try {
 
-			for (let i = 0, len = MongoStorage.length; i < len; ++i) {
+			/*for (let i = 0, len = MongoStorage.length; i < len; ++i) {
 				const oneKey = MongoStorage.key(i);
 
 				// If key is for this topic then save it
@@ -137,7 +141,7 @@ const MongoStorageAdapter = function (uuid) {
 					const fsblKey = oneKey.replace(keyPreface, "");
 					keys.push(fsblKey);
 				}
-			}
+			}*/
 
 			Logger.system.debug(`MongoStorageAdapter.keys for keyPreface=${keyPreface} keys=`, keys);
 			console.debug(`MongoStorageAdapter.get keys keyPreface=${keyPreface} keys=`, keys);
@@ -163,7 +167,7 @@ const MongoStorageAdapter = function (uuid) {
 		console.debug("MongoStorageAdapter.delete for key=" + combinedKey);
 
 		try {
-			MongoStorage.removeItem(combinedKey);
+			//MongoStorage.removeItem(combinedKey);
 			Logger.system.debug("MongoStorageAdapter.delete key=" + combinedKey + ", Success");
 			console.debug("MongoStorageAdapter.delete key=" + combinedKey + ", Success");
 			cb(null, { status: "success" });
@@ -185,17 +189,17 @@ const MongoStorageAdapter = function (uuid) {
 		try {
 			let arr = []; // Array to hold the keys
 			// Iterate over MongoStorage and insert data related to the user into an array.
-			for (let i = 0; i < MongoStorage.length; i++) {
+			//for (let i = 0; i < MongoStorage.length; i++) {
 				//console.log("MongoStorage.key(i):::", MongoStorage.key(i).substring(0, (this.baseName + ":" + this.userName).length));
-				if (MongoStorage.key(i).substring(0, (this.baseName + ":" + this.userName).length) === this.baseName + ":" + this.userName) {
+				/*if (MongoStorage.key(i).substring(0, (this.baseName + ":" + this.userName).length) === this.baseName + ":" + this.userName) {
 					arr.push(MongoStorage.key(i));
-				}
-			}
+				}*/
+			//}
 
 			// Iterate over arr and remove the items by key
 			for (let i = 0; i < arr.length; i++) {
 				//console.log("remove Iem", arr[i]);
-				MongoStorage.removeItem(arr[i]);
+				//MongoStorage.removeItem(arr[i]);
 			}
 			Logger.system.log("MongoStorageAdapter.clearCache Success: userPreface=" + userPreface);
 			console.log("MongoStorageAdapter.clearCache Success: userPreface=" + userPreface);
@@ -218,7 +222,7 @@ const MongoStorageAdapter = function (uuid) {
 		console.log("MongoStorageAdapter.empty");
 
 		try {
-			MongoStorage.clear();
+			//MongoStorage.clear();
 			Logger.system.log("MongoStorageAdapter.empty Success");
 			console.log("MongoStorageAdapter.empty Success");
 

@@ -89,7 +89,7 @@ function setData(key, value) {
 function getData(key) {
 	//FSBL.Clients.Logger.log('my key is',key);
   console.log('getdata')
-	FSBL.Clients.StorageClient.onReady('onLoad', () => { FSBL.Clients.StorageClient.get({ topic: 'finsemble.workspace', key: 'fsblWorkspaces' }, (err, data) => {
+	/*FSBL.Clients.StorageClient.onReady('onLoad', () => { FSBL.Clients.StorageClient.get({ topic: 'finsemble.workspace', key: 'fsblWorkspaces' }, (err, data) => {
 		console.log("StorageClient.get callback invoked");
 		if (err) {
 			console.error("StorageClient.get error for key", key, err);
@@ -97,7 +97,7 @@ function getData(key) {
 			console.log("Data found for", key, "data:", data);
 			return data;
 		}
-  })});
+  })});*/
   
   return 1
 }
