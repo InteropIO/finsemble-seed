@@ -29,13 +29,24 @@ const MongoStorageAdapter = function (uuid) {
 	 * @param {function} cb Callback to be invoked upon save completion.
 	 */
 	this.save = function (params, cb) {
+
 		Logger.system.debug("MongoStorageAdapter.save, params: ", params);
 		console.debug("MongoStorageAdapter.save, params: ", params);
+
+		const data = { combinedKey: params.value }
 
 		let combinedKey = this.getCombinedKey(this, params);
 		try {
 			Logger.system.debug("MongoStorageAdapter.save for key=" + combinedKey + " with data=" + params.value);
 			console.log('trying to save')
+			fetch(baseURL + "/save", {
+				method: 'POST',
+				body: JSON.stringify(data),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+			
 			//MongoStorageAdapter.setItem(combinedKey, JSON.stringify(params.value));
 			cb(null, { status: "success" });
 		} catch (err) {
@@ -81,11 +92,48 @@ const MongoStorageAdapter = function (uuid) {
 
 	};*/
 
+	/**
+	 * Get method.
+	 *
+	 * @param {object} params
+	 * @param {string} params.topic A topic under which the data should be stored.
+	 * @param {string} params.key The key whose value is being set.
+	 * @param {function} cb callback to be invoked upon completion
+	 */
 	this.get = (params, cb) => {
-		console.log('this.get')
-		const workspace = '{"Default Workspace":{"version":"1.0.0","name":"Default Workspace","type":"workspace","groups":{},"windows":["Welcome Component-4-782-Finsemble"],"windowData":[{"componentType":"Welcome Component","defaultLeft":50,"defaultTop":50,"name":"Welcome Component-4-782-Finsemble"}],"componentStates":{"Welcome Component-4-782-Finsemble":{}}}}';
+		if (!initialized) {
+			Logger.system.debug("queuing", "get", [params, cb]);
+			console.debug("queuing", "get", [params, cb]);
+			this.queue.push({ method: "get", args: [params, cb] });
+			return;
+		}
 
-		return cb(null, workspace)
+		
+		Logger.system.debug("MongodDBAdapter.get, params: ", params);
+		console.debug("IndexedDBAdapter.get, params: ", params);
+
+		const combinedKey = this.getCombinedKey(this, params);
+		//const objectStore = this.db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
+		//const request = objectStore.get(combinedKey);
+
+		const request = fetch(baseURL + `/get?topic=${params.topic}&key=${params.key}`);
+
+		request.onsuccess = (event) => {
+			let data;
+			if (event.target.result) data = event.target.result.value;
+
+			Logger.system.debug("IndexedDBAdapter.get for key=" + combinedKey + " data=", data);
+			console.debug("IndexedDBAdapter.get for key=" + combinedKey + " data=", data);
+
+			cb(null, data);
+		};
+
+		request.onerror = (err) => {
+			Logger.system.error("IndexedDBAdapter.get key=" + combinedKey + ", Error", err);
+			console.error("IndexedDBAdapter.get key=" + combinedKey + ", Error", err);
+
+			cb(err, { status: "failed" });
+		};
 	}
 
 	// Return prefix used to filter keys.
