@@ -1,5 +1,5 @@
 /**
- * This file is a copy of the default MongoStorage adapter, the default storage model used by finsemble-seed.
+ * This file is a copy of the default MongoDBAdapter adapter, the default storage model used by finsemble-seed.
  * It's provided as an example. Feel free to modify, add to, or erase parts of it.
  *
  * Core Finsemble calls are written with key-value pair databases in mind. If you want to use a different database type, you will need to translate the key/value pairs passed in from finsemble so that you can successfully retrieve them at a later time.
@@ -10,87 +10,273 @@
  */
 const BaseStorage = require("@chartiq/finsemble").models.baseStorage;
 const Logger = require("@chartiq/finsemble").Clients.Logger;
-// Because calls to this storage adapter will likely come from many different windows, we will log successes and failures in the central logger.
+
+// Because calls to this storage adapter will likely come from many different windows, we will log successes and
+// failures in the central logger.
 Logger.start();
 
-const MongoStorageAdapter = function (uuid) {
-	const baseURL = "http://localhost:3001";
+/**
+ * The schema version for the IndexedDB. Changing this signals onupgradeneeded so the existing database can be upgraded
+ * to the new schema.
+ */
+const SCHEMA_VERSION = 1;
+
+/**
+ * Flag indicating that the IndexedDB connection is initialized. Will be set in releaseQueue after the connection has been created and any schema version changes applied.
+ */
+let initialized = false;
+
+// #region
+/**
+ * PolyFill IDBKeyRange for a key prefix search.
+ *
+ * In IndexedDB, Primary keys are ordered, and a key range is used to selectively retrieve them without having
+ * to iterate the whole set and test each. We use string keys built up with various prefixes. This polyfill makes it
+ * possible to easily retrieve all keys with a specified prefix.
+ *
+ * @param prefix The string by which to filter the primary keys.
+ */
+IDBKeyRange.forPrefix = (prefix) => {
+	/**
+	 * Determines the string that would sort immediately after all strings with the specified prefix and hence can be
+	 * used as the upper bound for an IDBKeyRange to retrieve all keys with a specified prefix (where the lower bound is
+	 * the prefix itself).
+	 *
+	 * @param key
+	 */
+	const successor = (key) => {
+		let len = key.length;
+		while (len > 0) {
+			const head = key.substring(0, len - 1);
+			const tail = key.charCodeAt(len - 1);
+
+			if (tail !== 0xFFFF) {
+				return head + String.fromCharCode(tail + 1);
+			}
+
+			key = head;
+			--len;
+		}
+
+		return UPPER_BOUND.STRING;
+	}
+
+	const upperKey = successor(prefix);
+	if (upperKey === undefined) {
+		return IDBKeyRange.lowerBound(prefix);
+	}
+
+	return IDBKeyRange.bound(prefix, upperKey, false, true);
+};
+// #endregion
+
+/**
+ * IndexedDB Storage Adapter.
+ *
+ * We have a baseStorage model that provides some methods, such as `getCombinedKey`, which will return a nice key to
+ * save our value under. Example: `Finsemble:defaultUser:finsemble:activeWorkspace`. That key would hold the value of
+ * our activeWorkspace.
+ */
+const MongoDBAdapter = function (uuid) {
+	// #region Initializes a new instance of the MongoDBAdapter.
 	BaseStorage.call(this, arguments);
 
-	Logger.system.log("MongoStorageAdapter init");
-	console.log("MongoStorageAdapter init");
+	/**
+	 * The IndexedDB instance.
+	 */
+	this.db;
 
 	/**
-	 * Save method.
-	 * @param {object} params
-	 * @param {string} params.topic A topic under which the data should be stored.
-	 * @param {string} params.key The key whose value is being set.
-	 * @param {any} params.value The value being saved.
-	 * @param {function} cb Callback to be invoked upon save completion.
+	 * Array of commands received before the IndexedDB is initialized. These commands are executed once the connection
+	 * has been established.
 	 */
-	this.save = function (params, cb) {
+	this.queue = [];
 
-		Logger.system.debug("MongoStorageAdapter.save, params: ", params);
-		console.debug("MongoStorageAdapter.save, params: ", params);
+	Logger.system.log("MongoDBAdapter init");
+	console.log("MongoDBAdapter init");
 
-		const data = { combinedKey: params.value }
+	// #region Initialize IndexedDB connection.
+	// Open the IndexedDB connection
+	const request = window.indexedDB.open("finsemble", SCHEMA_VERSION);
 
-		let combinedKey = this.getCombinedKey(this, params);
-		try {
-			Logger.system.debug("MongoStorageAdapter.save for key=" + combinedKey + " with data=" + params.value);
-			console.log('trying to save')
-			fetch(baseURL + "/save", {
-				method: 'POST',
-				body: JSON.stringify(data),
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			})
-			
-			//MongoStorageAdapter.setItem(combinedKey, JSON.stringify(params.value));
-			cb(null, { status: "success" });
-		} catch (err) {
-			Logger.system.error("MongoStorageAdapter.save Error", err, "key=" + combinedKey, "value=", params.value);
-			cb(err, { status: "failed" });
-		}
+	// Create the object store if necessary
+	request.onupgradeneeded = (event) => {
+		// Save the IDBDatabase interface
+		this.db = event.target.result;
+
+		// Create an objectStore for this database
+		const objectStore = this.db.createObjectStore("fsbl", { keyPath: "key" });
+
+		// Use transaction oncomplete to make sure the objectStore creation is
+		// finished before adding data into it.
+		objectStore.transaction.oncomplete = () => {
+			Logger.system.debug("MongoDBAdapter object store created");
+			console.debug("MongoDBAdapter object store created");
+			this.releaseQueue();
+		};
 	};
 
+	request.onsuccess = (event) => {
+		Logger.system.log("MongoDBAdapter initialized successfully");
+		console.log("MongoDBAdapter initialized successfully");
+
+		this.db = event.target.result;
+		this.releaseQueue();
+	};
+
+	request.onerror = (err) => {
+		Logger.system.error("MongoDBAdapter DB connection initialization failed, Error: ", err);
+		console.error("MongoDBAdapter DB connection initialization failed, Error: ", err);
+	};
+	// #endregion
+	// #endregion
+
 	/**
-	 * Get method.
+	 * Get the prefix used to filter keys for particular topics and key prefixes.
+	 *
+	 * @param {object} params
+	 * @param {string} params.topic The topic
+	 * @param {string} params.keyPrefix The key prefix (optional).
+	 * @private
+	 */
+	this.getKeyPreface = (params) => {
+		const keyPrefix = "keyPrefix" in params ? params.keyPrefix : "";
+		const preface = `${this.getUserPreface()}:${params.topic}:${keyPrefix}`;
+
+		return preface;
+	}
+
+	/**
+	 * Get prefix for all the users stored data.
+	 * @private
+	 */
+	this.getUserPreface = () => {
+		const preface = `${this.baseName}:${this.userName}`;
+		return preface;
+	}
+
+	/**
+	 * Process the commands queued for execution after the IndexedDB connection is established.
+	 * @private
+	 */
+	this.releaseQueue = () => {
+		initialized = true;
+		Logger.system.log(`MongoDBAdapter.releaseQueue: ${this.queue.length} commands`);
+		console.log(`MongoDBAdapter.releaseQueue: ${this.queue.length} commands`);
+
+		while (this.queue.length) {
+			const action = this.queue.shift();
+			this[action.method].apply(this, action.args);
+		}
+	}
+	// #region Interface Methods
+	/**
+	 * This method should be used very, very judiciously. It's essentially a method designed to wipe the database for a
+	 * particular user.
+	 */
+	this.clearCache = (params, cb) => {
+		if (!initialized) {
+			Logger.system.debug("queuing", "clearCache", [params, cb]);
+			console.debug("queuing", "clearCache", [params, cb]);
+			this.queue.push({ method: "clearCache", args: [params, cb] });
+			return;
+		}
+
+		const userPreface = this.getUserPreface(this);
+
+		Logger.system.log("MongoDBAdapter.clearCache for userPreface=" + userPreface);
+		console.log("MongoDBAdapter.clearCache for userPreface=" + userPreface);
+
+		const keyRange = IDBKeyRange.forPrefix(userPreface);
+		const objectStore = this.db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
+		const request = objectStore.delete(keyRange);
+
+		request.onsuccess = () => {
+			Logger.system.log("MongoDBAdapter.clearCache Success: userPreface=" + userPreface);
+			console.log("MongoDBAdapter.clearCache Success: userPreface=" + userPreface);
+
+			cb(null, { status: "success" });
+		};
+
+		request.onerror = (err) => {
+			Logger.system.error("MongoDBAdapter.clearCache failed Error", err, "userPreface=" + userPreface);
+			console.error("MongoDBAdapter.clearCache failed Error", err, "userPreface=" + userPreface);
+
+			cb(err, { status: "failed" });
+		};
+	}
+
+	/**
+	 * Delete method.
+	 *
 	 * @param {object} params
 	 * @param {string} params.topic A topic under which the data should be stored.
-	 * @param {string} params.key The key whose value is being set.
-	 * @param {function} cb Callback to be invoked upon completion.
+	 * @param {string} params.key The key whose value is being deleted.
+	 * @param {function} cb callback to be invoked upon completion
 	 */
-	/*this.get = async (params, cb) => {
-		console.log('get');
-		let combinedKey = this.getCombinedKey(this, params);
-		Logger.system.debug("MongoStorageAdapter.get, params: ", params);
-		console.debug("MongoStorageAdapter.get, params: ", params);
+	this.delete = (params, cb) => {
+		if (!initialized) {
+			Logger.system.debug("queuing", "delete", [params, cb]);
+			console.debug("queuing", "delete", [params, cb]);
+			this.queue.push({ method: "delete", args: [params, cb] });
+			return;
+		}
 
-			console.log('get')
-	
-			const data = await fetch(baseURL + `/get?topic=${params.topic}&key=${params.key}`);		
-			let returnValue;
-			let err;
-			try {
-				returnValue = await data.json();
-				console.log(returnValue)
-			} catch(e) {
-				err = `No data found for key ${params.key}, ${e}`;
-				console.log(err);	
-				const workspace = await FSBL.Clients.WorkspaceClient.createWorkspace();
-				const name = await workspace.name();
-				console.log('workspacename',name);
-				
-				this.save(workspace, (e) => {
-					console.log(e)
-				});
-			}
-	
-			return cb(err, 1);
+		const combinedKey = this.getCombinedKey(this, params);
 
-	};*/
+		Logger.system.debug("MongoDBAdapter.delete for key=" + combinedKey);
+		console.debug("MongoDBAdapter.delete for key=" + combinedKey);
+
+		const objectStore = this.db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
+		const request = objectStore.delete(combinedKey);
+
+		request.onsuccess = () => {
+			Logger.system.debug("MongoDBAdapter.delete key=" + combinedKey + ", Success");
+			console.debug("MongoDBAdapter.delete key=" + combinedKey + ", Success");
+
+			cb(null, { status: "success" });
+		};
+
+		request.onerror = (err) => {
+			Logger.system.error("MongoDBAdapter.delete key=" + combinedKey + ", Error", err);
+			console.error("MongoDBAdapter.delete key=" + combinedKey + ", Error", err);
+
+			cb(err, { status: "failed" });
+		};
+	}
+
+	/**
+	 * Wipes the storage container.
+	 * @param {function} cb
+	 */
+	this.empty = (cb) => {
+		if (!initialized) {
+			Logger.system.debug("queuing", "empty", [cb]);
+			console.debug("queuing", "empty", [cb]);
+			this.queue.push({ method: "empty", args: [cb] });
+			return;
+		}
+
+		Logger.system.log("MongoDBAdapter.empty");
+		console.log("MongoDBAdapter.empty");
+
+		const objectStore = this.db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
+		const request = objectStore.clear();
+
+		request.onerror = (err) => {
+			Logger.system.error("MongoDBAdapter.empty failed Error", err);
+			console.error("MongoDBAdapter.empty failed Error", err);
+
+			return cb(err, { status: "failed" });
+		};
+
+		request.onsuccess = () => {
+			Logger.system.log("MongoDBAdapter.empty Success");
+			console.log("MongoDBAdapter.empty Success");
+
+			cb();
+		};
+	}
 
 	/**
 	 * Get method.
@@ -108,182 +294,113 @@ const MongoStorageAdapter = function (uuid) {
 			return;
 		}
 
-		
-		Logger.system.debug("MongodDBAdapter.get, params: ", params);
-		console.debug("IndexedDBAdapter.get, params: ", params);
+		Logger.system.debug("MongoDBAdapter.get, params: ", params);
+		console.debug("MongoDBAdapter.get, params: ", params);
 
 		const combinedKey = this.getCombinedKey(this, params);
-		//const objectStore = this.db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
-		//const request = objectStore.get(combinedKey);
-
-		const request = fetch(baseURL + `/get?topic=${params.topic}&key=${params.key}`);
+		const objectStore = this.db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
+		const request = objectStore.get(combinedKey);
 
 		request.onsuccess = (event) => {
 			let data;
 			if (event.target.result) data = event.target.result.value;
 
-			Logger.system.debug("IndexedDBAdapter.get for key=" + combinedKey + " data=", data);
-			console.debug("IndexedDBAdapter.get for key=" + combinedKey + " data=", data);
+			Logger.system.debug("MongoDBAdapter.get for key=" + combinedKey + " data=", data);
+			console.debug("MongoDBAdapter.get for key=" + combinedKey + " data=", data);
 
 			cb(null, data);
 		};
 
 		request.onerror = (err) => {
-			Logger.system.error("IndexedDBAdapter.get key=" + combinedKey + ", Error", err);
-			console.error("IndexedDBAdapter.get key=" + combinedKey + ", Error", err);
+			Logger.system.error("MongoDBAdapter.get key=" + combinedKey + ", Error", err);
+			console.error("MongoDBAdapter.get key=" + combinedKey + ", Error", err);
 
 			cb(err, { status: "failed" });
 		};
 	}
 
-	// Return prefix used to filter keys.
-	this.getKeyPreface = function (self, params) {
-		let preface = self.baseName + ":" + self.userName + ":" + params.topic + ":";
-		if ("keyPrefix" in params) {
-			preface = preface + params.keyPrefix;
-		}
-		return preface;
-	};
-
 	/**
-	 * Returns all keys stored in MongoStorage of a given topic and keyPrefix.
+	 * Returns all keys stored in IndexDB.
 	 *
-	 * MongoStorage is synchronous, so the callback is optional (the function
-	 * immediately returns the results if the callback is omitted).
-	 *
-	 * @param {*} params An object that must include the topic and keyPrefix of the desired keys.
-	 * @param {*} cb An optional callback that will be passed any errors that occurred and the found keys.
-	 */
-	this.keys = function (params, cb) {
-			/**
-			 * Daniel H. 1/3/2019 - Validate.args is still broken, so I'm doing it ad-hoc here.
-			 * @TODO Replace ad-hoc validation with Validate.args. */
-		let errMessage;
-		if (!params) {
-			errMessage = "You must pass params to MongoStorageAdapter.keys";
-		} else {
-			const missingArgs = params && ["topic", "keyPrefix"].filter(k => !params[k]);
-			if (missingArgs.length) {
-				errMessage = `Missing parameters to MongoStorageAdapter.keys: ${missingArgs.join(", ")}`;
-			}
-		}
-
-		if (errMessage) {
-			if (cb) {
-				cb(errMessage)
-			} else {
-				throw new Error(errMessage);
-			}
-		}
-
-		const keys = [];
-		const keyPreface = this.getKeyPreface(this, params);
-		try {
-
-			/*for (let i = 0, len = MongoStorage.length; i < len; ++i) {
-				const oneKey = MongoStorage.key(i);
-
-				// If key is for this topic then save it
-				if (oneKey.startsWith(keyPreface)) {
-					// Remove keyPreface from the keys returned. Finsemble storage adapter methods add the preface back in.
-					const fsblKey = oneKey.replace(keyPreface, "");
-					keys.push(fsblKey);
-				}
-			}*/
-
-			Logger.system.debug(`MongoStorageAdapter.keys for keyPreface=${keyPreface} keys=`, keys);
-			console.debug(`MongoStorageAdapter.get keys keyPreface=${keyPreface} keys=`, keys);
-			cb(null, keys);
-		} catch (err) {
-			Logger.system.error("Failed to retrieve MongoStorageAdapter.keys keyPreface=" + keyPreface + ", Error", err);
-			console.error("Failed to retrieve MongoStorageAdapter.keys keyPreface=" + keyPreface + ", Error", err);
-			cb(err, { status: "failed" });
-		}
-	};
-
-	/**
-	 * Delete method.
 	 * @param {object} params
-	 * @param {string} params.topic A topic under which the data should be stored.
-	 * @param {string} params.key The key whose value is being deleted.
-	 * @param {function} cb Callback to be invoked upon completion.
-	 */
-	this.delete = function (params, cb) {
-		let combinedKey = this.getCombinedKey(this, params);
-
-		Logger.system.debug("MongoStorageAdapter.delete for key=" + combinedKey);
-		console.debug("MongoStorageAdapter.delete for key=" + combinedKey);
-
-		try {
-			//MongoStorage.removeItem(combinedKey);
-			Logger.system.debug("MongoStorageAdapter.delete key=" + combinedKey + ", Success");
-			console.debug("MongoStorageAdapter.delete key=" + combinedKey + ", Success");
-			cb(null, { status: "success" });
-		} catch (err) {
-			Logger.system.error("MongoStorageAdapter.delete key=" + combinedKey + ", Error", err);
-			console.error(".delete key=" + combinedKey + ", Error", err);
-			cb(err, { status: "failed" });
-		}
-	};
-
-	/**
-	 * This method should be used very, very judiciously. It's essentially a method designed to wipe the database for a particular user.
-	 */
-	this.clearCache = function (params, cb) {
-		//console.log("clear local cache");
-		Logger.system.debug("MongoStorageAdapter.clearCache for userPreface=" + userPreface);
-		console.debug("MongoStorageAdapter.clearCache for userPreface=" + userPreface);
-
-		try {
-			let arr = []; // Array to hold the keys
-			// Iterate over MongoStorage and insert data related to the user into an array.
-			//for (let i = 0; i < MongoStorage.length; i++) {
-				//console.log("MongoStorage.key(i):::", MongoStorage.key(i).substring(0, (this.baseName + ":" + this.userName).length));
-				/*if (MongoStorage.key(i).substring(0, (this.baseName + ":" + this.userName).length) === this.baseName + ":" + this.userName) {
-					arr.push(MongoStorage.key(i));
-				}*/
-			//}
-
-			// Iterate over arr and remove the items by key
-			for (let i = 0; i < arr.length; i++) {
-				//console.log("remove Iem", arr[i]);
-				//MongoStorage.removeItem(arr[i]);
-			}
-			Logger.system.log("MongoStorageAdapter.clearCache Success: userPreface=" + userPreface);
-			console.log("MongoStorageAdapter.clearCache Success: userPreface=" + userPreface);
-
-			cb(null, { status: "success" });
-		} catch (err) {
-			Logger.system.error("MongoStorageAdapter.clearCache failed Error", err, "userPreface=" + userPreface);
-			console.error("MongoStorageAdapter.clearCache failed Error", err, "userPreface=" + userPreface);
-
-			cb(err, { status: "failed" });
-		}
-	};
-
-	/**
-	 * Wipes the storage container.
 	 * @param {function} cb
 	 */
-	this.empty = function (cb) {
-		Logger.system.log("MongoStorageAdapter.empty");
-		console.log("MongoStorageAdapter.empty");
+	this.keys = (params, cb) => {
+		if (!initialized) {
+			Logger.system.debug("queuing", "keys", [params, cb]);
+			console.debug("queuing", "keys", [params, cb]);
+			this.queue.push({ method: "keys", args: [params, cb] });
+			return;
+		}
 
-		try {
-			//MongoStorage.clear();
-			Logger.system.log("MongoStorageAdapter.empty Success");
-			console.log("MongoStorageAdapter.empty Success");
+		const keyPreface = this.getKeyPreface(params);
+		const keyRange = IDBKeyRange.forPrefix(keyPreface);
+		const objectStore = this.db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
+		const request = objectStore.getAllKeys(keyRange);
+
+		request.onsuccess = (event) => {
+			// Get results, if defined, otherwise default to an empty array
+			const data = event.target.result ? event.target.result : [];
+
+			// Remove the keyPreface from the key, the methods add the key preface back in.
+			const keys = data
+				.map(key => key.replace(keyPreface, ""));
+
+			Logger.system.debug(`MongoDBAdapter.keys for keyPreface=${keyPreface} keys=`, keys);
+			console.debug(`MongoDBAdapter.get keys keyPreface=${keyPreface} keys=`, keys);
+
+			cb(null, keys);
+		};
+
+		request.onerror = (err) => {
+			Logger.system.error("Failed to retrieve MongoDBAdapter.keys keyPreface=" + keyPreface + ", Error", err);
+			console.error("Failed to retrieve MongoDBAdapter.keys keyPreface=" + keyPreface + ", Error", err);
+
+			cb(err, { status: "failed" });
+		};
+	}
+
+	/**
+	 * Save method.
+	 *
+	 * @param {object} params
+	 * @param {string} params.topic A topic under which the data should be stored.
+	 * @param {string} params.key The key whose value is being set.
+	 * @param {any} params.value The value being saved.
+	 * @param {function} cb callback to be invoked upon save completion
+	 */
+	this.save = (params, cb) => {
+		if (!initialized) {
+			Logger.system.debug("queuing", "save", [params, cb]);
+			console.debug("queuing", "save", [params, cb]);
+			this.queue.push({ method: "save", args: [params, cb] });
+			return;
+		}
+
+		Logger.system.debug("MongoDBAdapter.save, params: ", params);
+		console.debug("MongoDBAdapter.save, params: ", params);
+
+		const combinedKey = this.getCombinedKey(this, params);
+		const objectStore = this.db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
+		const request = objectStore.put({ key: combinedKey, value: params.value });
+
+		request.onsuccess = () => {
+			Logger.system.debug("MongoDBAdapter.save Request Succeeded");
+			console.debug("MongoDBAdapter.save Request Succeeded");
 
 			cb(null, { status: "success" });
-		} catch (err) {
-			Logger.system.error("MongoStorageAdapter.empty failed Error", err);
-			console.error("MongoStorageAdapter.empty failed Error", err);
+		};
+
+		request.onerror = (err) => {
+			Logger.system.error("MongoDBAdapter.save Request Failed: ", err);
+			console.error("MongoDBAdapter.save Request Failed: ", err);
+
 			cb(err, { status: "failed" });
-		}
-	};
-};
+		};
+	}
+	// #endregion
+}
 
-
-MongoStorageAdapter.prototype = new BaseStorage();
-new MongoStorageAdapter("MongoStorageAdapter");
-module.exports = MongoStorageAdapter;//Allows us to get access to the uninitialized object
+MongoDBAdapter.prototype = new BaseStorage();
+new MongoDBAdapter("MongoDBAdapter");
+module.exports = MongoDBAdapter;//Allows us to get access to the uninitialized object
