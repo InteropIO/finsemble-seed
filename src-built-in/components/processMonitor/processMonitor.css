@@ -200,4 +200,9 @@ body {
 .export-button {
 	margin-left: auto;
 	justify-content: flex-end;
+	margin-right: 0px;
+}
+
+.export-button a {
+	text-decoration: none;
 }

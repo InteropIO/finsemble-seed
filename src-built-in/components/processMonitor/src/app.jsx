@@ -112,11 +112,11 @@ export default class ProcessMonitor extends React.Component {
 							}
 						</div>
 					</div>
-					{this.state.viewMode === "advanced" && 	<div className="advanced-button-wrapper export-button">
+					<div className="advanced-button-wrapper export-button">
 					<a className="fsbl-button advanced-button" title={tooltip} onClick={(event) => {
 							event.target.setAttribute('href', 'data:application/json;charset=utf-8,' + JSON.stringify(this.state.processList, null,"\t"));
 							event.target.setAttribute('download', 'finsemble_process_data_' + Date.now() + '.json');
-						}}>Export Data</a></div>}		
+						}}>Export Data</a></div>		
 					<div className="advanced-button-wrapper">
 						<div className="fsbl-button advanced-button" onClick={() => { Actions.toggleViewMode() }}>
 							{this.state.viewMode === "advanced" ? "Simple" : "Advanced"}</div>
@@ -129,9 +129,6 @@ export default class ProcessMonitor extends React.Component {
 
 if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
 function FSBLReady() {
-	// var Test = require('./test');
-	//console.log("appLauncher app onReady");
-
 	Actions.initialize(function (store) {
 		ReactDOM.render(
 			<ProcessMonitor />
