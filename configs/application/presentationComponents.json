@@ -549,15 +549,6 @@
 			},
 			"foreign": {
 				"services": {
-					"windowService": {
-						"allowAutoArrange": false,
-						"allowSnapping": false,
-						"allowGrouping": false,
-						"allowMinimize": false,
-						"allowMaximize": false,
-						"allowTabbing": false,
-						"allowTiling": false
-					},
 					"workspaceService": {
 						"global": true
 					}

@@ -107,21 +107,13 @@
 			},
 			"foreign": {
 				"services": {
-					"windowService": {
-						"allowSnapping": true,
-						"allowGrouping": true,
-						"allowTabbing": true,
-						"allowTiling": true,
-						"allowAutoArrange": true,
-						"allowMinimize": true
-					},
 					"workspaceService": {
 						"persistURL": true
 					}
 				},
 				"components": {
 					"App Launcher": {
-						"launchableByUser": true
+						"launchableByUser": false
 					},
 					"Window Manager": {
 						"alwaysOnTopIcon": false,
@@ -144,21 +136,13 @@
 			"component": {},
 			"foreign": {
 				"services": {
-					"windowService": {
-						"allowSnapping": true,
-						"allowGrouping": true,
-						"allowTabbing": true,
-						"allowTiling": true,
-						"allowAutoArrange": true,
-						"allowMinimize": true
-					},
 					"workspaceService": {
 						"persistURL": true
 					}
 				},
 				"components": {
 					"App Launcher": {
-						"launchableByUser": true
+						"launchableByUser": false
 					},
 					"Window Manager": {
 						"alwaysOnTopIcon": false,
