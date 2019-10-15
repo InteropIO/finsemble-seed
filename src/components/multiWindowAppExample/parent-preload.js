@@ -59,11 +59,12 @@ window.open = function (URL, name, specs, data) {
 }
 
 /**
- * Override for an apps function that spawns a window and sets some data on it. 
+ * Override for an app's function that spawns a window and sets some data on it. 
  * */
 window.myOpenPopup = function(e){
 	let child;
 	
+	//note the data we want to set has been passed in the window.open call
 	child = window.open('child.html',null,null,{childValue: 123});
 
 	// child.addEventListener('customevent', (e) => {
@@ -71,6 +72,9 @@ window.myOpenPopup = function(e){
 	// });
 }
 
+/**
+ * Override the apps built in function for spawning a window
+ */
 function doOverrides() {
 	//messy waiting loop - should prob change to some event....
 	if (window.openPopup) {
