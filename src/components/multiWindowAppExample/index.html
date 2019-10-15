@@ -15,10 +15,11 @@
 
 <script>
 console.log('init parent');
-let child;
 
 // Note: must be a function declaration to have hoisted window scope
 function openPopup(e) {
+	let child;
+
 	child = window.open('child.html');
 	child.childValue = 123;
 	child.addEventListener('customevent', receiveData);
