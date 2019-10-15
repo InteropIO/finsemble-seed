@@ -1,0 +1,82 @@
+{
+	"components": {
+		"multiWindowAppExample-Parent": {
+			"window": {
+				"url": "$applicationRoot/components/multiWindowAppExample/index.html",
+				"frame": false,
+				"resizable": true,
+				"autoShow": true,
+				"top": "center",
+				"left": "center",
+				"width": 500,
+				"height": 400,
+				"options" : {
+					"securityPolicy": "trusted"
+				}
+			},
+			"component": {
+				"preload": "$applicationRoot/preloads/multiWindowApp-parent-preload.js"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"canGroup": true,
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"title": "multiWindowAppExample - Parent",
+						"FSBLHeader": true,
+						"persistWindowState": true
+					},
+					"Toolbar": {
+						"iconClass": "multiWindowAppExample"
+					}
+				}
+			}
+		},
+		"multiWindowAppExample-Child": {
+			"window": {
+				"url": "$applicationRoot/components/multiWindowAppExample/child.html",
+				"frame": false,
+				"resizable": true,
+				"autoShow": true,
+				"top": "center",
+				"left": "center",
+				"width": 300,
+				"height": 400,
+				"options" : {
+					"securityPolicy": "trusted"
+				}
+			},
+			"component": {
+				"preload": "$applicationRoot/preloads/multiWindowApp-child-preload.js"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"canGroup": true,
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"title": "multiWindowAppExample - Child",
+						"FSBLHeader": true,
+						"persistWindowState": true
+					},
+					"Toolbar": {
+						"iconClass": "multiWindowAppExample"
+					}
+				}
+			}
+		}
+	}
+}

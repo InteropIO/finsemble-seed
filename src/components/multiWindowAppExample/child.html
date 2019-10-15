@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>multiWindowAppExample - child page - HTML5 boilerplate</title>
+</head>
+
+<body>
+
+	<h1>Child Page</h1>
+	<p>
+		<button id="get">Get childValue</button>
+		<input type="text" id="parentvalue"/>
+	</p>
+	<p>
+		<button id="set">Set childValue</button>
+	</p>
+</body>
+
+<script>
+const customevent = new Event('customevent');
+
+document.querySelector('#get').addEventListener('click', (e) => {
+	document.querySelector('#parentvalue').value = this.childValue;	
+});
+
+document.querySelector('#set').addEventListener('click', (e) => {
+	this.childValue = prompt('Enter a value');
+
+	this.dispatchEvent(customevent)
+});
+</script>
+</html>
