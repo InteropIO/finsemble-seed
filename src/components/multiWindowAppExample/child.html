@@ -13,7 +13,7 @@
 		<input type="text" id="parentvalue"/>
 	</p>
 	<p>
-		<button id="set">Set childValue</button>
+		<input type="text" id="childvalue" /><button id="set">Set childValue</button>
 	</p>
 </body>
 
@@ -24,10 +24,11 @@ document.querySelector('#get').addEventListener('click', (e) => {
 	document.querySelector('#parentvalue').value = this.childValue;	
 });
 
-document.querySelector('#set').addEventListener('click', (e) => {
-	this.childValue = prompt('Enter a value');
+function setData() {
+	this.childValue = document.querySelector('#childvalue').value;
+	this.dispatchEvent(customevent);
+}
 
-	this.dispatchEvent(customevent)
-});
+document.querySelector('#set').addEventListener('click', setData);
 </script>
 </html>
