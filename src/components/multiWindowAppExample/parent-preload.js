@@ -3,7 +3,7 @@
  * the preload runs.
  * Note additional parameter for data that will be set as spawn data.
  */
-window.open = function (URL, name, specs, data) {
+window.open = function (theURL, name, specs, data) {
 	var params = {};
 	if (specs) {
 		let paramList = specs.split(",");
@@ -29,7 +29,8 @@ window.open = function (URL, name, specs, data) {
 				params.name = name;
 		}
 	}
-	params.url = URL;
+	let u = new URL(theURL, window.location);
+	params.url = u.href;
 
 	if (data) {
 		params.data = data;
@@ -76,7 +77,8 @@ window.myOpenPopup = function(e){
  * Override the apps built in function for spawning a window
  */
 function doOverrides() {
-	//messy waiting loop - should prob change to some event....
+	//Waiting for the function to be available 
+	// - that could be on DOMContentLoaded or might be dynamically added later (replace as appropriate)
 	if (window.openPopup) {
 		console.log("overriding popup behaviour");
 		document.querySelector('#spawn').removeEventListener('click', window.openPopup);
