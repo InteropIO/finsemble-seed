@@ -20,7 +20,13 @@ function init() {
 
 window.mySetData = function(e) {
 	this.childValue = document.querySelector('#childvalue').value;
-	FSBL.Clients.RouterClient.transmit(window.channelName, this.childValue);
+	FSBL.Clients.RouterClient.query(window.channelName, this.childValue, function(error, queryResponseMessage) {
+		if (error) {
+			console.log('query failed: ' + JSON.stringify(error));
+		} else {
+			console.log('query response: ' + JSON.stringify(queryResponseMessage));
+		}
+	});
 }
 
 if (window.FSBL && FSBL.addEventListener) {

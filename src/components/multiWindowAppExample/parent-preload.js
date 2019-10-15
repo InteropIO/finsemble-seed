@@ -72,6 +72,7 @@ window.myOpenPopup = function(e){
 window.myReceiveData = function(err, res) {
 	if (!err) {
 		document.querySelector('#receiver').value = res.data;
+		res.sendQueryResponse(null, 'received ' + res.data);
 	} else {
 		console.error(err);
 	}
@@ -89,7 +90,7 @@ function doOverrides() {
 		document.querySelector('#spawn').addEventListener('click', window.myOpenPopup);
 		document.removeEventListener('customevent', window.receiveData);
 
-		FSBL.Clients.RouterClient.addListener(window.parent.name, window.myReceiveData);
+		FSBL.Clients.RouterClient.addResponder(window.parent.name, window.myReceiveData);
 	} else {
 		setTimeout(doOverrides, 200);
 		console.log("window.openPopup not found, waiting for it...")
