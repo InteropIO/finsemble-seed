@@ -15,13 +15,13 @@ window.open = function (theURL, name, specs, data) {
 	if (name) {
 		switch (name) {
 			case "_self":
-				location.href = URL;
+				location.href = theURL;
 				return;
 			case "_top":
-				window.top.href = URL;
+				window.top.href = theURL;
 				return;
 			case "_parent":
-				window.parent.href = URL;
+				window.parent.href = theURL;
 				return;
 			case "_blank":
 				break;
