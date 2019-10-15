@@ -31,17 +31,16 @@ export default class AppActionsMenu extends React.Component {
 		this.onRemove = this.onRemove.bind(this);
 		this.setMenuRef = this.setMenuRef.bind(this);
 		this.deleteApp = this.deleteApp.bind(this);
-		this.handleClickOutside = this.handleClickOutside.bind(this);
 	}
 
 	componentDidMount() {
-		document.addEventListener("mousedown", this.handleClickOutside);
-		finsembleWindow.addEventListener("blurred", this.handleClickOutside);
+		document.addEventListener("mousedown", this.handleClickOutside.bind(this));
+		finsembleWindow.addEventListener("blurred", this.handleClickOutside.bind(this));
 	}
 
 	componentWillUnmount() {
-		document.removeEventListener("mousedown", this.handleClickOutside);
-		finsembleWindow.removeEventListener("blurred", this.handleClickOutside);
+		document.removeEventListener("mousedown", this.handleClickOutside.bind(this));
+		finsembleWindow.removeEventListener("blurred", this.handleClickOutside.bind(this));
 	}
 
 	toggleMenu(e) {
