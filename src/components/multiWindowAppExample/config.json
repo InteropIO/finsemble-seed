@@ -12,7 +12,8 @@
 				"height": 400,
 				"options" : {
 					"securityPolicy": "trusted"
-				}
+				},
+				"addToWorkspace": true
 			},
 			"component": {
 				"preload": "$applicationRoot/preloads/multiWindowApp-parent-preload.js"
@@ -51,7 +52,8 @@
 				"height": 400,
 				"options" : {
 					"securityPolicy": "trusted"
-				}
+				},
+				"addToWorkspace": false
 			},
 			"component": {
 				"preload": "$applicationRoot/preloads/multiWindowApp-child-preload.js"

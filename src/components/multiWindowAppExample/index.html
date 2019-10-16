@@ -8,20 +8,23 @@
 <body>
 
 	<h1>Parent Page</h1>
-	<button id="spawn">Spawn Child</button>
+	<p>
+		<input id="parentvalue" value=123 />
+		<button id="spawn">Spawn Child</button>
+	</p>
 
 	<p>Received Data: <input id="receiver" /></p>
 </body>
 
 <script>
 console.log('init parent');
+//reference to child window
+let child;
 
 // Note: must be a function declaration to have hoisted window scope
 function openPopup(e) {
-	let child;
-
 	child = window.open('child.html');
-	child.childValue = 123;
+	child.parentValue = document.querySelector('#parentvalue').value;
 	child.addEventListener('customevent', receiveData);
 }
 
