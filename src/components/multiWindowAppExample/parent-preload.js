@@ -67,7 +67,6 @@ window.myOpenPopup = function(e){
 	let parentValue = document.querySelector('#parentvalue').value;
 	//note that the data we want to set is  passed in the window.open call
 	// as is a channel name (our window name) for the child-preload to use to send us data
-	console.log('id',FSBL.Clients.WindowClient.getWindowIdentifier().uuid,'name',window.parent.name)
 	let child = window.open('child.html',null,null,{parentValue: parentValue, channelName: FSBL.Clients.WindowClient.getWindowIdentifier().windowName});
 }
 
