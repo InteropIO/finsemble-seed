@@ -9,11 +9,11 @@
 
 	<h1>Child Page</h1>
 	<p>
-		<button id="get">Get childValue</button>
+		<button id="get">Get parentValue</button>
 		<input type="text" id="parentvalue"/>
 	</p>
 	<p>
-		<input type="text" id="childvalue" /><button id="set">Set childValue</button>
+		<input type="text" id="childvalue" value=456 /><button id="set">Return value to parent</button>
 	</p>
 </body>
 
@@ -21,14 +21,14 @@
 const customevent = new Event('customevent');
 
 document.querySelector('#get').addEventListener('click', (e) => {
-	document.querySelector('#parentvalue').value = this.childValue;	
+	document.querySelector('#parentvalue').value = window.parentValue;	
 });
 
-function setData() {
-	this.childValue = document.querySelector('#childvalue').value;
-	this.dispatchEvent(customevent);
+function returnData() {
+	window.childValue = document.querySelector('#childvalue').value;
+	window.dispatchEvent(customevent);
 }
 
-document.querySelector('#set').addEventListener('click', setData);
+document.querySelector('#set').addEventListener('click', returnData);
 </script>
 </html>
