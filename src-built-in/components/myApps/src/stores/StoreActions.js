@@ -84,7 +84,6 @@ function initialize(callback = Function.prototype) {
 				loadInstalledComponentsFromStore(() => {
 					//We load our stored components(config driven) here
 					loadInstalledConfigComponents(callback);
-					console.log(`after loading installed config component, apps:${JSON.stringify(data.apps)}`)
 				});
 
 			});
@@ -174,12 +173,18 @@ function loadInstalledConfigComponents(cb = Function.prototype) {
 	FSBL.Clients.LauncherClient.getComponentList((err, componentList) => {
 		let componentNameList = Object.keys(componentList);
 		
-		// Update the folders under the "App" menu and delete any apps in the folder that are no longer in the config
-		const folders = data.folders;
+		/*
+		 * Update the folders under the "App" menu and delete any apps in the folder 
+		 * that are no longer in the config and are not user defined components.
+		 */
+		const { folders } = data;
+		// Get the user defined apps
+		const apps = Object.keys(data.apps);
 		Object.keys(folders).forEach(folderName => {
 			const appsName = Object.keys(folders[folderName]["apps"]);
 			appsName.forEach(appName => {
-				if (!componentNameList.includes(appName)) {
+				// If the component is not in the config component list and is not a user defined component
+				if (!componentNameList.includes(appName) && !apps.includes(folders[folderName]["apps"][appName]["appID"].toString())) {
 					// Delete app from the folder
 					delete data.folders[folderName]["apps"][appName];
 				}
