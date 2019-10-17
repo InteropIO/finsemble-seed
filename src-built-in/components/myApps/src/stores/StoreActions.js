@@ -186,7 +186,7 @@ function loadInstalledConfigComponents(cb = Function.prototype) {
 				// If the component is not in the config component list and is not a user defined component
 				if (!componentNameList.includes(appName) && !apps.includes(folders[folderName]["apps"][appName]["appID"].toString())) {
 					// Delete app from the folder
-					delete data.folders[folderName]["apps"][appName];
+					delete folders[folderName]["apps"][appName];
 				}
 			})
 		});
