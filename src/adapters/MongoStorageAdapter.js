@@ -67,8 +67,10 @@ const MongoStorageAdapter = function (uuid) {
 		fetch(`${this.baseURL}/get?key=${combinedKey}`)
 			.then(response => response.json())
 			.then(data => {
+				console.log('my data',data)
+				Logger.system.error('Mongo got', data, 'for ', combinedKey)
 				Logger.system.debug("Mongo.get for key=" + combinedKey + " data=", data.value);
-				console.debug("Mongo.get for key=" + combinedKey + " data=", data.value);
+				console.log("Mongo.got this for key=" + combinedKey + " data=", data);
 				cb(null, data.value);
 			})
 			.catch(err => {

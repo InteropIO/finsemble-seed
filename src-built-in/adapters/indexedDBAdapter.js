@@ -304,7 +304,7 @@ const IndexedDBAdapter = function (uuid) {
 		request.onsuccess = (event) => {
 			let data;
 			if (event.target.result) data = event.target.result.value;
-
+			console.log('indexdb', combinedKey, data)
 			Logger.system.debug("IndexedDBAdapter.get for key=" + combinedKey + " data=", data);
 			console.debug("IndexedDBAdapter.get for key=" + combinedKey + " data=", data);
 
