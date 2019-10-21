@@ -116,7 +116,6 @@ var Actions = {
 			wrappedWindow.addListener("closed", Actions.onCompanionClosed);
 			wrappedWindow.addListener("hidden", Actions.onCompanionHidden);
 			wrappedWindow.addListener("shown", Actions.onCompanionShown);
-			wrappedWindow.addListener("maximized", Actions.onCompanionMaximized);
 			wrappedWindow.addListener("restored", Actions.onCompanionRestored);
 			wrappedWindow.addListener("bringToFront", Actions.onCompanionBringToFront);
 			wrappedWindow.addListener("minimized", Actions.onCompanionMinimized);
