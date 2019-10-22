@@ -21,8 +21,8 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"isArrangable": false,
+					"windowService": {
+						"allowAutoArrange": false,
 						"shouldRegister": false
 					}
 				},
@@ -53,8 +53,8 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"isArrangable": false,
+					"windowService": {
+						"allowAutoArrange": false,
 						"shouldRegister": false
 					}
 				},
@@ -87,8 +87,8 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"isArrangable": false,
+					"windowService": {
+						"allowAutoArrange": false,
 						"shouldRegister": false
 					}
 				},
@@ -120,8 +120,8 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"isArrangable": false,
+					"windowService": {
+						"allowAutoArrange": false,
 						"shouldRegister": false
 					}
 				},
@@ -152,8 +152,8 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"isArrangable": false,
+					"windowService": {
+						"allowAutoArrange": false,
 						"shouldRegister": false
 					}
 				},
@@ -190,8 +190,8 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"isArrangable": false,
+					"windowService": {
+						"allowAutoArrange": false,
 						"shouldRegister": false
 					}
 				},
@@ -236,8 +236,8 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"isArrangable": false,
+					"windowService": {
+						"allowAutoArrange": false,
 						"shouldRegister": false
 					}
 				},
@@ -271,8 +271,8 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"isArrangable": false,
+					"windowService": {
+						"allowAutoArrange": false,
 						"shouldRegister": false
 					}
 				},
@@ -305,8 +305,8 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"isArrangable": false,
+					"windowService": {
+						"allowAutoArrange": false,
 						"shouldRegister": false
 					}
 				},
@@ -338,8 +338,8 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"isArrangable": false,
+					"windowService": {
+						"allowAutoArrange": false,
 						"shouldRegister": false
 					}
 				},
@@ -384,8 +384,8 @@
 					}
 				},
 				"services": {
-					"dockingService": {
-						"isArrangable": false,
+					"windowService": {
+						"allowAutoArrange": false,
 						"shouldRegister": false
 					}
 				},
@@ -430,8 +430,8 @@
 					}
 				},
 				"services": {
-					"dockingService": {
-						"isArrangable": false,
+					"windowService": {
+						"allowAutoArrange": false,
 						"shouldRegister": false
 					}
 				},
@@ -472,8 +472,8 @@
 					}
 				},
 				"services": {
-					"dockingService": {
-						"isArrangable": false,
+					"windowService": {
+						"allowAutoArrange": false,
 						"shouldRegister": false
 					}
 				},
@@ -509,8 +509,8 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"isArrangable": false,
+					"windowService": {
+						"allowAutoArrange": false,
 						"shouldRegister": false
 					}
 				},
@@ -577,7 +577,6 @@
 				"minHeight": 39,
 				"minWidth": 300,
 				"docked": "top",
-				"canGroup": false,
 				"options": {
 					"autoShow": false,
 					"contextMenu": false,
@@ -589,17 +588,10 @@
 			"component": {
 				"category": "system",
 				"spawnOnStartup": true,
-				"spawnOnAllMonitors": false,
-				"canMinimize": false,
-				"canMaximize": false
+				"spawnOnAllMonitors": false
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"isArrangable": false,
-						"ignoreSnappingRequests": true,
-						"ignoreTilingAndTabbingRequests": true
-					},
 					"workspaceService": {
 						"global": true
 					}
@@ -630,8 +622,8 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"isArrangable": false
+					"windowService": {
+						"allowAutoArrange": false
 					}
 				},
 				"components": {
@@ -670,9 +662,9 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"canGroup": false,
-						"isArrangable": false,
+					"windowService": {
+						"allowGrouping": false,
+						"allowAutoArrange": false,
 						"shouldRegister": false
 					}
 				},
@@ -716,9 +708,9 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"canGroup": true,
-						"isArrangable": false
+					"windowService": {
+						"allowGrouping": true,
+						"allowAutoArrange": false
 					}
 				},
 				"components": {
@@ -747,8 +739,8 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"isArrangable": true
+					"windowService": {
+						"allowAutoArrange": true
 					}
 				},
 				"components": {
@@ -783,9 +775,9 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"canGroup": false,
-						"isArrangable": false,
+					"windowService": {
+						"allowGrouping": false,
+						"allowAutoArrange": false,
 						"shouldRegister": false
 					}
 				},
@@ -821,10 +813,11 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"isArrangeable": false,
-						"ignoreTilingAndTabbingRequests": true,
-						"ignoreSnappingRequests": true
+					"windowService": {
+						"allowAutoArrange": false,
+						"allowTabbing": false,
+						"allowTiling": false,
+						"allowSnapping": false
 					}
 				},
 				"components": {
