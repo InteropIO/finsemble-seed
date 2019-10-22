@@ -15,6 +15,7 @@ steps:
     versionSpec: '10.15.3'
   displayName: 'Install Node.js'
 
+- script: del .npmrc
 - task: npmAuthenticate@0
   inputs:
     workingFile: .npmrc
