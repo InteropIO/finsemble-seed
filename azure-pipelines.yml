@@ -20,7 +20,5 @@ steps:
     workingFile: '.npmrc'
     customEndpoint: 'ciq'
 
-- script: npm whoami
-
 - script: npm install
   displayName: 'npm install'
