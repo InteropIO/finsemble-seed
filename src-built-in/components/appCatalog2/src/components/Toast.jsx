@@ -15,12 +15,10 @@ const Toast = props => {
 
 	switch (props.installationActionTaken) {
 		case "add":
-			icon = 'ff-check-mark';
 			messageContent = "Added to My Apps";
 			classes += " success";
 			break;
 		case "remove":
-			icon = 'ff-close';
 			messageContent = "Removed from My Apps";
 			classes += " error";
 			break;

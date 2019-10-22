@@ -32,7 +32,7 @@ export default class Toolbar extends React.Component {
 	}
 
 	componentDidMount() {
-		fin.desktop.Window.getCurrent().bringToFront();
+		finsembleWindow.bringToFront();
 	}
 
 	render() {

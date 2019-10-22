@@ -65,9 +65,13 @@
 				"path": "notepad.exe",
 				"defaultHeight": 600,
 				"autoShow": true,
-				"alwaysOnTop": false,
 				"resizable": true,
-				"addToWorkspace": true
+				"showTaskbarIcon": false,
+				"contextMenu": true,
+				"addToWorkspace": true,
+				"options": {
+					"alwaysOnTop": false
+				}
 			},
 			"component": {
 				"spawnOnHotkey": [

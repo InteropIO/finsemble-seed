@@ -5,7 +5,6 @@
 
 let menuStore;
 import async from "async";
-let finWindow = fin.desktop.Window.getCurrent();
 var focus = false;
 var activeSearchBar = false;
 var menuReference = {};
@@ -32,7 +31,7 @@ function mouseInWindow(win, cb) {
 }
 
 function mouseInBounds(bounds, cb) {
-	fin.desktop.System.getMousePosition(function (mousePosition) {
+	FSBL.System.getMousePosition(function (err, mousePosition) {
 		if (mousePosition.left >= bounds.left & mousePosition.left <= bounds.right) {
 			if (mousePosition.top >= bounds.top & mousePosition.top <= bounds.bottom) {
 				return cb(null, true);
@@ -202,7 +201,6 @@ var Actions = {
 	setupWindow(cb = Function.prototype) {
 		// The toolbar can render before we have the menuReference. Add this gate so that the dev isn't spammed with errors about an being able to
 		if (!menuReference.name) return cb();
-		//menuWindow = fin.desktop.Window.wrap(menuReference.finWindow.app_uuid, menuReference.finWindow.name);
 		FSBL.FinsembleWindow.getInstance({ windowName: menuReference.name }, (err, wrap) => {
 			if (err) { FSBL.Clients.Logger.error(`Failed to retrieve reference to search results menu: ${menuReference.name}, error:`, err); }
 			menuWindow = wrap;
@@ -274,14 +272,14 @@ function createStore(done) {
 	let defaultData = {
 		inFocus: false,
 		list: [],
-		owner: finWindow.name,
+		owner: finsembleWindow.name,
 		menuSpawned: false,
 		activeSearchBar: null,
 		menuIdentifier: null
 	};
 	//console.log("CreateStore", "Finsemble-SearchStore-" + finWindow.name)
-	FSBL.Clients.DistributedStoreClient.createStore({ store: "Finsemble-SearchStore-" + finWindow.name, values: defaultData, global: true }, function (err, store) {
-		if (err) { FSBL.Clients.Logger.error(`DistributedStoreClient.createStore failed for store Finsemble-SearchStore-${finWindow.name}, error:`, err); }
+	FSBL.Clients.DistributedStoreClient.createStore({ store: "Finsemble-SearchStore-" + finsembleWindow.name, values: defaultData, global: true }, function (err, store) {
+		if (err) { FSBL.Clients.Logger.error(`DistributedStoreClient.createStore failed for store Finsemble-SearchStore-${finsembleWindow.name}, error:`, err); }
 		menuStore = store;
 
 		store.getValues(["owner", "menuSpawned"], function (err, data) {
@@ -296,7 +294,7 @@ function createStore(done) {
 			});
 
 			if (!data.menuSpawned) {
-				FSBL.Clients.LauncherClient.spawn("searchMenu", { name: "searchMenu." + finWindow.name, data: { owner: finWindow.name } }, function (err, data) {
+				FSBL.Clients.LauncherClient.spawn("searchMenu", { name: "searchMenu." + finsembleWindow.name, data: { owner: finsembleWindow.name } }, function (err, data) {
 					if (err) { FSBL.Clients.Logger.error(`LauncherClient.spawn failed for searchMenu, error:`, err); }
 					menuReference = data.windowIdentifier;
 					menuStore.setValue({ field: "menuIdentifier", value: data.windowIdentifier })
@@ -336,6 +334,7 @@ function initialize(cb) {
 		if (err) {
 			console.error(err);
 		}
+		FSBL.SystemManagerClient.publishCheckpointState("Toolbar", "searchStoreInit", "completed");
 		cb(menuStore);
 	});
 }

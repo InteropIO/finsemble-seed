@@ -24,6 +24,7 @@ import TagsMenu from "../../../shared/TagsMenu";
 class SearchBar extends Component {
 	constructor(props) {
 		super(props);
+		this.textInput = React.createRef();
 		this.state = {
 			searchValue: "",
 			tagSelectorOpen: false
@@ -36,6 +37,8 @@ class SearchBar extends Component {
 		this.toggleTagSelector = this.toggleTagSelector.bind(this);
 		this.selectTag = this.selectTag.bind(this);
 		this.removeTag = this.removeTag.bind(this);
+		this.clearSearch = this.clearSearch.bind(this);
+		this.focus = this.focus.bind(this);
 	}
 	componentWillReceiveProps(nextProps) {
 		if ((nextProps.activeTags.length === 0 && !nextProps.backButton) || nextProps.isViewingApp) {
@@ -53,6 +56,14 @@ class SearchBar extends Component {
 			searchValue: e.target.value
 		});
 		this.props.search(e.target.value);
+	}
+
+	clearSearch() {
+		this.setState({
+			searchValue: ''
+		});
+		this.props.search({ field: 'filteredApps', value: null })
+		this.focus();
 	}
 	/**
 	 * Opens/hides the tag selection menu
@@ -94,6 +105,11 @@ class SearchBar extends Component {
 			searchValue: ""
 		}, this.props.goHome);
 	}
+
+	focus() {
+		this.textInput.current.focus();
+	}
+
 	render() {
 		let tagListClass = "tag-selector-content";
 
@@ -106,15 +122,16 @@ class SearchBar extends Component {
 		return (
 			<div className='search-main'>
 				<Toast installationActionTaken={this.props.installationActionTaken} />
-				 <div className="search-action-items">
+				<div className="search-action-items">
 					{this.props.backButton ?
 						<div className='search-back' onClick={this.goHome}>
 							<i className='ff-arrow-back'></i>
 							<span className='button-label'>Back</span>
 						</div> : null}
-					 <div className="search-input-container">
+					<div className="search-input-container">
 						<i className='ff-search'></i>
-						<input className='search-input' type="text" value={this.state.searchValue} onChange={this.changeSearch} />
+						<input className='search-input' required ref={this.textInput}placeholder="Search" type="text" value={this.state.searchValue} onChange={this.changeSearch} />
+						<button class="close-icon" onClick={this.clearSearch} type="reset"></button>
 					</div>
 					<TagsMenu active={activeTags} list={this.props.tags} onItemClick={this.selectTag} label={"Tags"} align='right' />
 				</div>

@@ -39,8 +39,8 @@
 				"url": "$applicationRoot/components/myApps/index.html",
 				"top": 0,
 				"left": 0,
-				"width": 600,
-				"height": 400,
+				"width": 700,
+				"height": 467,
 				"ephemeral": true,
 				"options": {
 					"autoShow": false
@@ -169,11 +169,15 @@
 			}
 		},
 		"linkerWindow": {
+			"bootParams": {
+				"stage": "earlyuser",
+				"dependencies": [ "Toolbar" ]
+			},
 			"window": {
 				"url": "$applicationRoot/components/linker/linker.html",
 				"affinity": "systemComponents",
-				"width": 65,
-				"height": 163,
+				"width": 132,
+				"height": 232,
 				"ephemeral": true,
 				"options": {
 					"autoShow": false,
@@ -351,6 +355,10 @@
 			}
 		},
 		"yesNo": {
+			"bootParams": {
+				"stage": "earlyuser",
+				"dependencies": [ "Toolbar" ]
+			},
 			"window": {
 				"url": "$applicationRoot/components/yesNoDialog/yesNoDialog.html",
 				"affinity": "systemComponents",
@@ -393,6 +401,10 @@
 			}
 		},
 		"singleInput": {
+			"bootParams": {
+				"stage": "earlyuser",
+				"dependencies": [ "Toolbar" ]
+			},
 			"window": {
 				"url": "$applicationRoot/components/singleInputDialog/singleInputDialog.html",
 				"affinity": "systemComponents",
@@ -514,6 +526,38 @@
 			}
 		},
 		"Toolbar": {
+			"bootParams": {
+				"stage": "earlyuser",
+				"checkpoints" : {
+					"searchStoreInit" : {
+						"postStartupCompletion": true,
+						"timeout": 30000
+					},
+					"createStores" : {
+						"postStartupCompletion": true
+					},
+					"loadMenusFromConfig" : {
+						"dependencies": ["createStores"],
+						"postStartupCompletion": true
+					},
+					"addListeners" : {
+						"dependencies": [ "loadMenusFromConfig" ],
+						"postStartupCompletion": true
+					},
+					"setupHotkeys" : {
+						"dependencies": [  "addListeners" ],
+						"postStartupCompletion": true
+					},
+					"listenForWorkspaceUpdates" : {
+						"dependencies": [  "setupHotkeys" ],
+						"postStartupCompletion": true
+					},
+					"addMoreListeners" : {
+						"dependencies": [  "listenForWorkspaceUpdates" ],
+						"postStartupCompletion": true
+					}
+				}
+			},
 			"window": {
 				"id": "launcher",
 				"url": "$applicationRoot/components/toolbar/toolbar.html",
@@ -525,7 +569,6 @@
 				"left": 0,
 				"right": 0,
 				"position": "available",
-				"autoShow": true,
 				"dockable": [
 					"top",
 					"bottom"
@@ -595,6 +638,10 @@
 			}
 		},
 		"UserPreferences": {
+			"bootParams": {
+				"stage": "earlyuser",
+				"dependencies": [ "Toolbar" ]
+			},
 			"window": {
 				"url": "$applicationRoot/components/userPreferences/userPreferences.html",
 				"affinity": "systemComponents",

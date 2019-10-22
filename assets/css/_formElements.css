@@ -1,7 +1,7 @@
 .form-group {
     /* display: flex; */
     flex-direction: row;
-    margin: 16px 0;
+    margin: 16px 0px;
     padding-right: 5px;
     justify-content: center;
 }

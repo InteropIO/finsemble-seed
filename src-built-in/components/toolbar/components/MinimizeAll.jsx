@@ -1,18 +1,21 @@
 import React from "react";
 import { FinsembleButton } from "@chartiq/finsemble-react-controls";
+import { ReactComponent as MinimizeAllIcon } from '../../../../assets/img/toolbar/minimize-all.svg'
 
-export default class MinimizeAll extends React.Component {
-	constructor(props) {
-		super(props);
-	}
-	MinimizeAll() {
+
+const MinimizeAll = (props) => {
+	const MinimizeAll = () => {
 		FSBL.Clients.WorkspaceClient.minimizeAll();
 	}
-	render() {
-		let tooltip = "Minimize Workspace";
-		let buttonClass = "ff-minimize-all finsemble-toolbar-button-icon";
-		return (<FinsembleButton className={this.props.classes + " icon-only"} buttonType={["Toolbar"]} title={tooltip} onClick={this.MinimizeAll}>
-			<i className={buttonClass}></i>
-		</FinsembleButton>);
-	}
-}
+	let wrapperClasses = props.classes + " icon-only window-mgmt-left";
+
+	return (
+		<FinsembleButton className={wrapperClasses} buttonType={["Toolbar"]} title="Minimize All" onClick={MinimizeAll}>
+			<span>
+				<MinimizeAllIcon />
+			</span>
+		</FinsembleButton>
+	)
+};
+
+export default MinimizeAll;

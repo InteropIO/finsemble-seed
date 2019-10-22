@@ -18,7 +18,7 @@ import React from "react";
 const ImageCarousel = props => {
 	return (
 		<div className="image-carousel-container">
-			<i className='ff-chevron-left' onClick={props.nextImage}></i>
+			<i className='ff-adp-chevron-left' onClick={props.nextImage}></i>
 			<div className="image-carousel">
 				{props.images.map((imageUrl, i) => {
 					return (
@@ -26,7 +26,7 @@ const ImageCarousel = props => {
 					);
 				})}
 			</div>
-			<i className='ff-chevron-right' onClick={props.previousImage}></i>
+			<i className='ff-adp-chevron-right' onClick={props.previousImage}></i>
 		</div>
 	);
 }

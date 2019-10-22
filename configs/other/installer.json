@@ -6,5 +6,11 @@
 	"outputDirectory": "./pkg",
 	"//name": "Name of your application. Will be used for the exe and windows metadata.",
 	"name": "xyz",
-	"authors": "ChartIQ"
+	"authors": "ChartIQ",
+	"//certificateFile": "The path to an Authenticode Code Signing Certificate",
+	"certificateFile": null,
+	"//certificatePassword": "The password to decrypt the certificate given in certificateFile", 
+	"certificatePassword": null, 
+	"//signWithParams": "Params to pass to signtool. Specifying a time server is recommended (e.g. '/tr http://timestamp.digicert.com'",
+	"signWithParams": null
 }

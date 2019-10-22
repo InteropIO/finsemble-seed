@@ -21,14 +21,13 @@ class AppLauncher extends React.Component {
 			isFormVisible: storeActions.getFormStatus()
 		};
 		this.toggleAddNewAppForm = this.toggleAddNewAppForm.bind(this);
-		this.finWindow = fin.desktop.Window.getCurrent();
 		this.openAppMarket = this.openAppMarket.bind(this);
 	}
 
 	componentWillMount() {
 		getStore().addListener({ field: "isFormVisible" }, this.toggleAddNewAppForm);
-		this.finWindow.addEventListener("shown", () => {
-			this.finWindow.focus();
+		finsembleWindow.addEventListener("shown", () => {
+			finsembleWindow.focus();
 		});
 	}
 
@@ -92,19 +91,17 @@ class AppLauncher extends React.Component {
 	}
 }
 
-fin.desktop.main(function () {
-	if (window.FSBL && FSBL.addEventListener) { 
-		FSBL.addEventListener("onReady", FSBLReady); 
-	} else {
-		window.addEventListener("FSBLReady", FSBLReady);
-	} 
+if (window.FSBL && FSBL.addEventListener) {
+	FSBL.addEventListener("onReady", FSBLReady);
+} else {
+	window.addEventListener("FSBLReady", FSBLReady);
+}
 
-	function FSBLReady(){
-		createStore((store) => {
-			storeActions.initialize(() => {
-				ReactDOM.render(<AppLauncher />,
-				document.getElementById("wrapper"));
-			});
+function FSBLReady(){
+	createStore((store) => {
+		storeActions.initialize(() => {
+			ReactDOM.render(<AppLauncher />,
+			document.getElementById("wrapper"));
 		});
-	}
-});
+	});
+}
