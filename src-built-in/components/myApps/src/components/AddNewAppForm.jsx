@@ -144,10 +144,14 @@ export default class AddNewAppForm extends React.Component {
 	 * Matches valid URLs. Must include a protocol.
 	 * Does _not_ enforce TLD to accomodate port-based URLs
 	 * Enforces max length of 64 characters per piece as per spec
+	 * 
+	 * Examples of passing: http://www.google.com http://localhost:3000 fsbl://localhost
+	 * Example of not passing: localhost
+	 * 
 	 * @param {keyboardEvent} e
 	 */
 	validateURL(url) {
-		return /^(?:\w+?:\/\/)+[\w-]{1,64}(?:[\w-]{1,64})?(?:\.[\w\-\._~:\/?#[\]@!\$&'\(\)\*\+,;=.]{1,64})?(?:\:\d+)?$/gmi.test(url);
+		return /^(?:\w+?:\/\/)+[\w-]{1,64}(?:[\w-]{1,64})?(?:\.[\w\-\._~:\/?#[\]@!\$&'\(\)\*\+,;=.]{1,64})?(?:\:\d+)?$/gi.test(url);
 	}
 
 	/**
