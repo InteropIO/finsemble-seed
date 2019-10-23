@@ -147,7 +147,7 @@ export default class AddNewAppForm extends React.Component {
 	 * @param {keyboardEvent} e
 	 */
 	validateURL(url) {
-		return /^(?:\w+?:\/\/)+[\w-]{1,64}+(?:[\w-]{1,64}+)?(?:\.[\w\-\._~:\/?#[\]@!\$&'\(\)\*\+,;=.]{1,64})?(?:\:\d+)?$/gmi.test(url);
+		return /^(?:\w+?:\/\/)+[\w-]{1,64}(?:[\w-]{1,64})?(?:\.[\w\-\._~:\/?#[\]@!\$&'\(\)\*\+,;=.]{1,64})?(?:\:\d+)?$/gmi.test(url);
 	}
 
 	/**
