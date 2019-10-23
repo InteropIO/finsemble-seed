@@ -141,11 +141,13 @@ export default class AddNewAppForm extends React.Component {
 		});
 	}
 	/**
-	 * WILD regex I stole off of google. Allows http or https. Requires some kind of .co or something. Great.
+	 * Matches valid URLs. Must include a protocol.
+	 * Does _not_ enforce TLD to accomodate port-based URLs
+	 * Enforces max length of 64 characters per piece as per spec
 	 * @param {keyboardEvent} e
 	 */
 	validateURL(url) {
-		return /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm.test(url);
+		return /^(?:\w+?:\/\/)+[\w-]{1,64}+(?:[\w-]{1,64}+)?(?:\.[\w\-\._~:\/?#[\]@!\$&'\(\)\*\+,;=.]{1,64})?(?:\:\d+)?$/gmi.test(url);
 	}
 
 	/**
