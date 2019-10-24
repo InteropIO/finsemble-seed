@@ -39,7 +39,7 @@
         "@chartiq/finsemble-react-controls": "3.7.0",
         "async": "2.6.2",
         "babel-minify-webpack-plugin": "0.3.1",
-        "lodash.get": "^4.4.2",
+        "lodash.get": "4.4.2",
         "compression": "1.7.3",
         "file-loader": "1.1.11",
         "lodash.clonedeep": "4.5.0",
