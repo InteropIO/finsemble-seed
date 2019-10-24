@@ -77,7 +77,7 @@
 			"defaults": {
 				"startServiceTimeout": 10000,
 				"startComponentTimeout": 15000,
-				"startModuleTimeout": 10000
+				"startTaskTimeout": 10000
 			}
 		},
         "importConfig": [
