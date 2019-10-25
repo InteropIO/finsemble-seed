@@ -1,9 +1,7 @@
 
 
 import React from "react";
-import ReactDOM from "react-dom";
 import Tab from "./tab";
-import { FinsembleDnDContext, FinsembleDroppable } from '@chartiq/finsemble-react-controls';
 import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
 import Logo from "./logo";
 import Title from "../../../common/windowTitle"
@@ -173,10 +171,18 @@ export default class TabRegion extends React.Component {
     drop(e) {
         e.preventDefault();
         e.stopPropagation();
-
         FSBL.Clients.Logger.system.debug("Tab drag drop.");
-        let identifier = this.extractWindowIdentifier(e);
-        if (!identifier) return; // the dropped item is not a tab
+        const identifier = this.extractWindowIdentifier(e);
+        // the dropped item is not a tab
+        if (!identifier) return; 
+        // If we only have single tab and its the activeTab
+        // and if the dropped window's name is the same as 
+        // active tab's windowName we cancel tabbing.
+        if (
+            this.state.tabs.length === 1
+            && identifier.windowName === this.state.activeTab.windowName) {
+            return this.cancelTabbing();
+        }
         FSBL.Clients.WindowClient.stopTilingOrTabbing({ allowDropOnSelf: true, action: "tabbing" }, () => {
             FSBL.Clients.RouterClient.transmit("tabbingDragEnd", { success: true });
             if (identifier && identifier.windowName) {
