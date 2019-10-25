@@ -1,7 +1,6 @@
 @import url('./_themeWhitelabel.css');
 
 .fsbl-drag-handle {
-    /* -webkit-app-region: drag; */
     z-index: 2147483641;
     /* use below with window scrollbar hack */
     position: fixed;
