@@ -12,7 +12,6 @@ import ToolbarStore from "../stores/toolbarStore";
 
 // External Components to show on Toolbar
 import AutoArrange from "../components/AutoArrange";
-import AlwaysOnTop from "../components/AlwaysOnTop";
 import BringToFront from "../components/BringToFront";
 import MinimizeAll from "../components/MinimizeAll";
 import WorkspaceLauncherButton from "../components/WorkspaceLauncherButton";
@@ -21,9 +20,8 @@ import Search from "../components/Search"
 import DragHandle from "../components/DragHandle"
 
 // Support Dynamically Loading External Components
-var customComponents = [];
+var customComponents = {};
 customComponents["AutoArrange"] = AutoArrange;
-customComponents["AlwaysOnTop"] = AlwaysOnTop;
 customComponents["BringToFront"] = BringToFront;
 customComponents["MinimizeAll"] = MinimizeAll;
 customComponents["WorkspaceMenuOpener"] = WorkspaceMenuOpener;

@@ -19,12 +19,9 @@ export default class AlwaysOnTop extends React.Component {
 	}
 
 	changeAlwaysOnTop() {
-		let newState = !this.state.alwaysOnTop;
-		FSBL.Clients.WindowClient.finsembleWindow.updateOptions({ alwaysOnTop: newState }, () => {
-			this.setState({
-				alwaysOnTop: newState
-			})
-		});
+		const newState = !this.state.alwaysOnTop;
+		const { response } = await FSBL.Clients.WindowClient.setAlwaysOnTop(newState);
+		if (response) this.setState({ alwaysOnTop: newState });
 	}
 
 	render() {
