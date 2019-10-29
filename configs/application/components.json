@@ -34,7 +34,6 @@
 						"launchableByUser": true
 					},
 					"Window Manager": {
-						"alwaysOnTopIcon": false,
 						"showLinker": true,
 						"FSBLHeader": true,
 						"persistWindowState": true,
@@ -120,7 +119,6 @@
 						"launchableByUser": false
 					},
 					"Window Manager": {
-						"alwaysOnTopIcon": false,
 						"showLinker": false,
 						"FSBLHeader": true,
 						"persistWindowState": true,
@@ -149,7 +147,6 @@
 						"launchableByUser": false
 					},
 					"Window Manager": {
-						"alwaysOnTopIcon": false,
 						"showLinker": false,
 						"FSBLHeader": true,
 						"persistWindowState": true,

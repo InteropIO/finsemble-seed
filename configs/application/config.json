@@ -107,7 +107,7 @@
 	"systemTrayIcon": "$applicationRoot/assets/img/Finsemble_Taskbar_Icon.png",
 	"systemTrayComponent": "File Menu",
 	"Window Manager": {
-		"alwaysOnTopIcon": false,
+		"alwaysOnTopIcon": true,
 		"floatingTitlebarComponent": "Floating Titlebar",
 		"deliveryMechanism": "preload"
 	},
