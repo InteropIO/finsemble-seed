@@ -16,8 +16,15 @@ export default class AlwaysOnTop extends React.Component {
 		this.hoverAction = this.hoverAction.bind(this);
 	}
 
-	alwaysOnTopListener({ data: alwaysOnTop }) {
-		this.setState(alwaysOnTop);
+	alwaysOnTopListener(event) {
+		console.log(event);
+		console.log(this.state);
+		if (event.data.alwaysOnTop !== this.state.alwaysOnTop) {
+			console.log("going always on top", event.data.alwaysOnTop);
+			this.setState({
+				alwaysOnTop: event.data.alwaysOnTop
+			});
+		}
 	}
 
 	componentWillMount() {
@@ -37,7 +44,12 @@ export default class AlwaysOnTop extends React.Component {
 	}
 
 	changeAlwaysOnTop() {
-		FSBL.Clients.WindowClient.setAlwaysOnTop({ alwaysOnTop: !this.state.alwaysOnTop });
+		const newState = !this.state.alwaysOnTop;
+		finsembleWindow.alwaysOnTop(newState, () => {
+			this.setState({
+				alwaysOnTop: newState
+			})
+		});
 	}
 
 	/**
