@@ -5,10 +5,10 @@ import { ReactComponent as DragHandleIcon } from '../../../../assets/img/toolbar
 const DragHandle = () => {
 	const currentWindow = fin.desktop.Window.getCurrent();
 	const handleMouseDown = (event) => {
-		currentWindow.onMouseDown(event);
+		currentWindow.startMovingWindow(event);
 	};
 	const handleMouseUp = (event) => {
-		currentWindow.onMouseUp(event);
+		currentWindow.stopMovingWindow(event);
 	};
 	return (
 		<span className="cq-drag finsemble-toolbar-drag-handle"
