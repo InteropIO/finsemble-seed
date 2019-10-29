@@ -13,29 +13,45 @@ export default class AlwaysOnTop extends React.Component {
 	constructor(props) {
 		super(props);
 		this.changeAlwaysOnTop = this.changeAlwaysOnTop.bind(this);
+		this.alwaysOnTopListener = this.alwaysOnTopListener.bind(this);
 		this.hoverAction = this.hoverAction.bind(this);
+	}
+
+	alwaysOnTopListener(event) {
+		console.log(event);
+		console.log(this.state);
+		if (event.data.alwaysOnTop !== this.state.alwaysOnTop) {
+			console.log("going always on top", event.data.alwaysOnTop);
+			this.setState({
+				alwaysOnTop: event.data.alwaysOnTop
+			});
+		}
 	}
 
 	componentWillMount() {
 		this.setState({
 			alwaysOnTop: false
 		})
-		FSBL.Clients.WindowClient.finsembleWindow.getOptions((err, descriptor) => {
+		finsembleWindow.isAlwaysOnTop((err, alwaysOnTop) => {
 			this.setState({
-				alwaysOnTop: descriptor.alwaysOnTop
+				alwaysOnTop
 			})
 		});
+		finsembleWindow.addEventListener("alwaysOnTop", this.alwaysOnTopListener);
+	}
+
+	componentWillUnmount() {
+		finsembleWindow.removeEventListener("alwaysOnTop", this.alwaysOnTopListener);
 	}
 
 	changeAlwaysOnTop() {
-		let newState = !this.state.alwaysOnTop;
-		FSBL.Clients.WindowClient.setAlwaysOnTop(newState, () => {
+		const newState = !this.state.alwaysOnTop;
+		finsembleWindow.alwaysOnTop(newState, () => {
 			this.setState({
 				alwaysOnTop: newState
 			})
 		});
 	}
-
 
 	/**
      * When your mouse enters/leaves the hoverDetector, this function is invoked.
