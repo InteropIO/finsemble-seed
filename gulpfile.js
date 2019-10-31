@@ -24,6 +24,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 	const FEA_PATH_EXISTS = fs.existsSync(FEA_PATH);
 	const FEA = FEA_PATH_EXISTS ? require("@chartiq/finsemble-electron-adapter/exports") : undefined;
 	const FEAPackager = FEA ? FEA.packager : undefined;
+	const MAX_NODE_VERSION = '10.15.3';
 
 	// local
 	const extensions = fs.existsSync("./gulpfile-extensions.js") ? require("./gulpfile-extensions.js") : undefined;
@@ -49,6 +50,49 @@ const { launch, connect } = require('hadouken-js-adapter');
 		if (!chalk[color]) color = "white";
 		if (!chalk[color][bgcolor]) bgcolor = "bgBlack";
 		console.log(`[${new Date().toLocaleTimeString()}] ${chalk[color][bgcolor](msg)}.`);
+	}
+
+	/** 
+	* Validates the current node version against supported node versions specified in this file
+	* Returns true of false if current node version is valid
+	* Currently only validates against a max node version
+	*
+	* Note: This method is being used instead of npm engines because of an npm bug where warnings don't print
+	* This bug was resolved in npm 6.12.0 but as that is a very new version of npm and is not linked to node 10.15.3
+	* in nvm we can't assume our users have access to this version.
+	*/
+	const isNodeVersionValid = () => {
+		let ret = true;
+		// split the current node version into major, minor and patch numbers
+		let version = process.version.split('v');
+		version = version[1].split('.');		
+		const majorCurrent = Number(version[0]);
+		const minorCurrent = Number(version[1]);
+		const patchCurrent = Number(version[2]);
+
+		// split the max node version into major, minor and patch numbers
+		let maxNodeArray = MAX_NODE_VERSION.split('.');
+		if (maxNodeArray.length !== 3) {
+			console.log("Format of maximum node version must be: 'X.X.X', unable to validate node version");
+			return ret;
+		}
+		const majorMAX = Number(maxNodeArray[0]);
+		const minorMAX = Number(maxNodeArray[1]);
+		const patchMAX = Number(maxNodeArray[2]);
+
+		// major version is too high
+		if (majorCurrent > majorMAX ) {
+			ret = false;
+		} else if (majorCurrent === majorMAX) {
+			// major version matches the max allowed version, minor version is too high
+			if (minorCurrent > minorMAX) {
+				ret = false;
+			// major and minor version matches the max allowed version, patch version is too high
+			} else if (minorCurrent === minorMAX && patchCurrent > patchMAX) {
+				ret = false;
+			}
+		}
+		return ret;
 	}
 
 	let angularComponents;
@@ -507,6 +551,9 @@ const { launch, connect } = require('hadouken-js-adapter');
 			done();
 		},
 		launchApplication: done => {
+			if (!isNodeVersionValid()) {
+				logToTerminal(`Node version: ${process.version} is not supported. Max supported version: ${MAX_NODE_VERSION}`, "red");
+			}
 			logToTerminal("Launching Finsemble", "black", "bgCyan");
 
 			launchTimestamp = Date.now();
