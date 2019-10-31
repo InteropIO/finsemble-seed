@@ -63,7 +63,7 @@ const AppResults = props => {
 				</td>
 			);
 
-			if (cardsInRow.length === 4 || i === cardsForShowcase.length - 1) {
+			if (cardsInRow.length === 3 || i === cardsForShowcase.length - 1) {
 				cardRows.push(cardsInRow);
 				cardsInRow = [];
 			}

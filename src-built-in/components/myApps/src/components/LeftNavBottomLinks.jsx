@@ -36,7 +36,7 @@ export default class LeftNavBottomLinks extends React.Component {
 						let className = "complex-menu-action";
 						return (
 							<div className={className} key={index} onClick={handler}>
-								{entry.icon !== undefined ? <i className={entry.icon}></i> : null}
+								{/* {entry.icon !== undefined ? <i className={entry.icon}></i> : null} */}
 								{entry.name}
 							</div>
 						);

@@ -14,19 +14,16 @@ export default class WorkspaceActions extends React.Component {
 			{
 				method: this.createWorkspace,
 				label: "New Workspace",
-				iconClass: "ff-new-workspace",
 				id: "NewWorkspace"
 			},
 			{
 				method: this.saveWorkspace,
 				label: "Save",
-				iconClass: "ff-save-1",
 				id: "SaveWorkspace"
 			},
 			{
 				method: this.saveWorkspaceAs,
 				label: "Save As",
-				iconClass: "ff-saveas-1",
 				id: "SaveWorkspaceAs"
 			}];
 	}

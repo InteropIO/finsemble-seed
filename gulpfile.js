@@ -1,3 +1,5 @@
+const { launch, connect } = require('hadouken-js-adapter');
+
 (() => {
 	"use strict";
 
@@ -14,8 +16,6 @@
 	const fs = require("fs");
 	const gulp = require("gulp");
 	const prettyHrtime = require("pretty-hrtime");
-	const watch = require("gulp-watch");
-	const openfinLauncher = require("openfin-launcher");
 	const shell = require("shelljs");
 	const path = require("path");
 	const webpack = require("webpack");
@@ -23,7 +23,7 @@
 	const FEA_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-electron-adapter");
 	const FEA_PATH_EXISTS = fs.existsSync(FEA_PATH);
 	const FEA = FEA_PATH_EXISTS ? require("@chartiq/finsemble-electron-adapter/exports") : undefined;
-	const FEAPackager = FEA_PATH_EXISTS ? require("@chartiq/finsemble-electron-adapter/deploy/deploymentHelpers") : undefined;
+	const FEAPackager = FEA ? FEA.packager : undefined;
 
 	// local
 	const extensions = fs.existsSync("./gulpfile-extensions.js") ? require("./gulpfile-extensions.js") : undefined;
@@ -118,6 +118,7 @@
 		return rc;
 	}
 
+	
 	// Currently supported desktop agents include "openfin" and "electron". This can be set either
 	// with the environment variable container or by command line argument `npx gulp dev --container:electron`
 	let container = envOrArg("container", "openfin");
@@ -130,6 +131,30 @@
 	// This will get set when the container (Electron or Openfin) is launched. This is used to calculate how long it takes to start up the app.
 	let launchTimestamp = 0;
 
+	/**
+	 * Mody 10/04/2019
+	 * Reads installed Electron's version from FEA repo.
+	 * Another option is to export electron's version in
+	 * deploymentHelpers in FEA. However I'm just avoiding 2 PRs
+	 */
+	const getElectronVersion = () => {
+		// You may run `npm run dev` before running `npm i` inside 
+		// finsemble-electron-adapter in that case, the electron
+		// module does not exists.
+		try {
+			const packageFile = require(
+				path.join(
+					FEA_PATH,
+					'node_modules',
+					'electron',
+					'package.json')
+			);
+			return packageFile.version;
+		} catch (error) {
+			logToTerminal(`Failed to get electron's verion from FEA: ${error.message}`, "red");
+			return 'unknown';
+		}
+	};
 	// #endregion
 
 	// #region Task Methods
@@ -375,25 +400,42 @@
 				taskMethods.startServer
 			], done);
 		},
-		launchOpenFin: done => {
+		launchOpenFin: async (done) => {
+			// We are unable to read OpenFin version at the moment.
+			// We request it after hadouken connection.
+			logToTerminal("Using Container: OpenFin", "green");
 			ON_DEATH(() => {
 				killApp("OpenFin", () => {
-
 					if (watchClose) watchClose();
 					process.exit();
 				});
 			});
-
-			openfinLauncher.launchOpenFin({
-				configPath: taskMethods.startupConfig[env.NODE_ENV].serverConfig
-			}).then(() => {
-				// OpenFin has closed so exit gulpfile
+			try {
+				const manifestUrl = taskMethods.startupConfig[env.NODE_ENV].serverConfig;
+				// Once the server is running we can launch OpenFin and retrieve the port.
+				const port = await launch({ manifestUrl });
+				// Use the port to connect and determine when OpenFin exists.
+				const fin = await connect({
+					uuid: 'server-connection',
+					// Connect to the given port.
+					address: `ws://localhost:${port}`,
+					// We want OpenFin to exit as our application exists.
+					nonPersistent: true
+				});
+				const openfinVersion = await fin.System.getVersion();
+				logToTerminal(`Openfin version: ${openfinVersion}`, "green");
 				if (watchClose) watchClose();
+				// Once OpenFin exits we shut down the server.
+				fin.once('disconnected', process.exit);
+			} catch (error) {
+				console.error(`Unable to launch and connect to OpenFin: ${error.message}`);
 				process.exit();
-			});
+			}
+
 			if (done) done();
 		},
 		launchElectron: done => {
+			logToTerminal(`Using Container: Electron@${getElectronVersion()}`, "green");
 			const cfg = taskMethods.startupConfig[env.NODE_ENV];
 			const USING_ELECTRON = container === "electron";
 			if (USING_ELECTRON && !FEA_PATH_EXISTS) {
@@ -403,6 +445,7 @@
 			let config = {
 				manifest: cfg.serverConfig,
 				chromiumFlags: JSON.stringify(cfg.chromiumFlags),
+				path: FEA_PATH,
 			}
 
 			// set breakpointOnStart variable so FEA knows whether to pause initial code execution
@@ -453,9 +496,10 @@
 
 			if (!FEAPackager) {
 				console.error("Cannot create installer because Finsemble Electron Adapter is not installed");
-					process.exit(1);
+				process.exit(1);
 			}
 
+			FEAPackager.setFeaPath(FEA_PATH);
 			await FEAPackager.setManifestURL(manifestUrl);
 			await FEAPackager.setUpdateURL(updateUrl);
 			await FEAPackager.setChromiumFlags(chromiumFlags || {});

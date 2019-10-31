@@ -117,7 +117,7 @@ export default class AppMarket extends React.Component {
 				installationActionTaken: action,
 				installed: Object.keys(storeActions.getInstalledApps())
 			}, () => {
-				setTimeout(this.stopShowingInstalledNotification, 3000);
+				setTimeout(this.stopShowingInstalledNotification, 1500);
 			});
 		}
 	}

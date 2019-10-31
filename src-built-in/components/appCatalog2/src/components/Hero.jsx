@@ -67,22 +67,22 @@ export default class Hero extends Component {
 		let imageUrl = cards[active].images ? cards[active].images[0].url : "../assets/placeholder.svg";
 
 		let bgImageStyle = {
-			background: "url(" + imageUrl + ") no-repeat fixed center"
+			background: "url(" + imageUrl + ") center center / 100% no-repeat scroll"
 		};
 
 		return (
 			<div>
 				<div className='hero-main'>
-					<i className='ff-chevron-left' onClick={this.changePage.bind(this, 'page_down')} />
+					<i className='ff-adp-chevron-left' onClick={this.changePage.bind(this, 'page_down')} />
 					<div className='hero_selected_content' onClick={this.openApp} style={bgImageStyle}>
 						<div className='selected-content-title'>
-							{contentTitle}
+							<span>{contentTitle}</span>
 						</div>
 						<div className='selected-content-message'>
-							<div>{contentMsg}</div>
+							<div className='selected-content-message-wrapper'>{contentMsg}</div>
 						</div>
 					</div>
-					<i className='ff-chevron-right' onClick={this.changePage.bind(this, 'page_up')} />
+					<i className='ff-adp-chevron-right' onClick={this.changePage.bind(this, 'page_up')} />
 				</div>
 				<div className="paginator">
 					{cards.map((card, i) => {
