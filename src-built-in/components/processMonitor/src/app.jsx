@@ -61,11 +61,11 @@ export default class ProcessMonitor extends React.Component {
 		//Array of process components.
 		//statReducer is an array.reduce function that will sum all of the CPU/memory usage across the app.
 		let totals = this.state.processList.length ? this.state.processList.reduce(statReducer) : EMPTY_TOTALS;
+		let tooltip = "Export the data from processes in JSON format";
 		return (
 			<div>
 				<div className="process-list-wrapper">
-					<ListHeader fields={this.state.viewMode === "simple" ? SIMPLE_MODE_STATISTICS : ADVANCED_MODE_STATISTICS
-					} />
+					<ListHeader fields={this.state.viewMode === "simple" ? SIMPLE_MODE_STATISTICS : ADVANCED_MODE_STATISTICS } />
 					<div className="process-list">
 						{/* Filter will remove the hidden processes. Afterwards, map will render the remaining processes in turn. */}
 						{this.state.processList
@@ -73,17 +73,17 @@ export default class ProcessMonitor extends React.Component {
 							.map((proc, i) => {
 								return (<div key={i} className="process">
 									{/* Process statistics is the meat of this component. It's the statistics and the child windows. */}
-									<ProcessStatistics
-										mode={this.state.viewMode}
+									<ProcessStatistics mode={this.state.viewMode}
 										fields={this.state.viewMode === "simple" ? SIMPLE_MODE_STATISTICS : ADVANCED_MODE_STATISTICS
 										}
-										stats={proc.statistics} />
-									<ChildWindows viewMode={this.state.viewMode} childWindows={proc.childWindows} />
+										stats={proc.statistics}
+										viewMode={this.state.viewMode} 
+										childWindows={proc.childWindows}>
+									</ProcessStatistics>
 								</div>)
 							})}
 					</div>
 				</div>
-
 				<div className="bottom-section">
 					<div className="summary-statistics-wrapper">
 						<div className="summary-statistics-header">
@@ -112,6 +112,11 @@ export default class ProcessMonitor extends React.Component {
 							}
 						</div>
 					</div>
+					<div className="advanced-button-wrapper export-button">
+					<a className="fsbl-button advanced-button" title={tooltip} onClick={(event) => {
+							event.target.setAttribute('href', 'data:application/json;charset=utf-8,' + JSON.stringify(this.state.processList, null,"\t"));
+							event.target.setAttribute('download', 'finsemble_process_data_' + Date.now() + '.json');
+						}}>Export Data</a></div>		
 					<div className="advanced-button-wrapper">
 						<div className="fsbl-button advanced-button" onClick={() => { Actions.toggleViewMode() }}>
 							{this.state.viewMode === "advanced" ? "Simple" : "Advanced"}</div>
@@ -124,9 +129,6 @@ export default class ProcessMonitor extends React.Component {
 
 if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
 function FSBLReady() {
-	// var Test = require('./test');
-	//console.log("appLauncher app onReady");
-
 	Actions.initialize(function (store) {
 		ReactDOM.render(
 			<ProcessMonitor />

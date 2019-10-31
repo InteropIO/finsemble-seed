@@ -55,6 +55,10 @@ body {
 	flex-direction: row;
 }
 
+.process-row {
+	cursor: pointer;
+}
+
 .process {
 	padding-top: 8px;
 	padding-bottom: 8px;
@@ -187,6 +191,7 @@ body {
 .bottom-section {
 	display:flex;
 	justify-content: space-between;
+	width: 100%;
 }
 
 ::-webkit-scrollbar-track {
@@ -203,4 +208,19 @@ body {
     cursor: pointer;
     border-radius: inherit;
     background-color: rgba(0, 0, 0, 0.2);
+	width: 100%;
+}
+
+.hidden-arrow {
+	padding-left: 2px;
+}
+
+.export-button {
+	margin-left: auto;
+	justify-content: flex-end;
+	margin-right: 0px;
+}
+
+.export-button a {
+	text-decoration: none;
 }
