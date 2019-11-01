@@ -53,46 +53,79 @@ const { launch, connect } = require('hadouken-js-adapter');
 	}
 
 	/** 
+	* Splits a string version with semantic versioning into an object with major, minor and patch versions
+	* Valid inputs are 'X.X.X' or 'vX.X.X'
+	*/
+	const createSemverObject = (version) => {
+		let tempVersionArray;
+		let semverObject;
+		if (!version || typeof version !== 'string') {
+			console.log(`Version must be type string`);
+			return;
+		}
+		// Split the version into a temp array.
+		if (version.startsWith('v')) {
+			tempVersionArray = version.split('v');
+			tempVersionArray = tempVersionArray[1].split('.');
+		} else {
+			tempVersionArray = version.split('.')
+		}
+		if (tempVersionArray)
+
+		// Convert each array element to a number and store in the object.
+		semverObject = {
+			majorVersion: Number(tempVersionArray[0]) || null,
+			minorVersion: Number(tempVersionArray[1]) || null,
+			patchVersion: Number(tempVersionArray[2]) || null,
+		}
+		// If major, minor or patch versions are missing or not a number return nothing
+		if (!semverObject.majorVersion || !semverObject.minorVersion || !semverObject.patchVersion) {
+			return;
+		}
+		return semverObject
+	}
+
+	/** 
+	* Compares two node version objects
+	* Each object is expected to contain majorVersion, minorVersion, patchVersion
+	*/
+	const compareNodeVersions = (a, b) => {
+		if (a.majorVersion !== b.majorVersion) {
+			return a.majorVersion > b.majorVersion ? 1: -1
+		}
+		if (a.minorVersion !== b.minorVersion) {
+			return a.minorVersion > b.minorVersion ? 1: -1
+		}
+		if (a.patchVersion !== b.patchVersion) {
+			return a.patchVersion > b.patchVersion ? 1: -1
+		}
+		return 0;
+	}
+
+	/** 
 	* Validates the current node version against supported node versions specified in this file
 	* Returns boolean indicating whether current node version is valid
-	* Currently only validates against a max node version
+	* Currently only validates against a max node version which must be in the format 'X.X.X' or 'vX.X.X'
 	*
 	* Note: This method is being used instead of npm engines because of an npm bug where warnings don't print
 	* This bug was resolved in npm 6.12.0 but as that is a very new version of npm and is not linked to node 10.15.3
 	* in nvm we can't assume our users have access to this version.
 	*/
 	const isNodeVersionValid = () => {
-		let ret = true;
-		// split the current node version into major, minor and patch numbers
-		let version = process.version.split('v');
-		version = version[1].split('.');		
-		const majorCurrent = Number(version[0]);
-		const minorCurrent = Number(version[1]);
-		const patchCurrent = Number(version[2]);
-
-		// split the max node version into major, minor and patch numbers
-		let maxNodeArray = MAX_NODE_VERSION.split('.');
-		if (maxNodeArray.length !== 3) {
-			console.log("Format of maximum node version must be: 'X.X.X', unable to validate node version");
-			return ret;
+		// Split the current node version into an object with major, minor and patch numbers for easier comparison.
+		// If any of these values are missing, nothing will be returned
+		let currentVersionObject = createSemverObject(process.version);
+		let maxVersionObject = createSemverObject(MAX_NODE_VERSION);
+		
+		// Only allow the check both objects exist and contain major, minor and patch versions. 
+		if (!currentVersionObject || !maxVersionObject) {
+			logToTerminal("Format of node version must be: 'X.X.X', unable to validate node version", "yellow");
+			return true;
 		}
-		const majorMAX = Number(maxNodeArray[0]);
-		const minorMAX = Number(maxNodeArray[1]);
-		const patchMAX = Number(maxNodeArray[2]);
 
-		// major version is too high
-		if (majorCurrent > majorMAX ) {
-			ret = false;
-		} else if (majorCurrent === majorMAX) {
-			// major version matches the max allowed version, minor version is too high
-			if (minorCurrent > minorMAX) {
-				ret = false;
-			// major and minor version matches the max allowed version, patch version is too high
-			} else if (minorCurrent === minorMAX && patchCurrent > patchMAX) {
-				ret = false;
-			}
-		}
-		return ret;
+		// Check if the node version is higher than the maximum allowed node version.
+		if (compareNodeVersions(currentVersionObject, maxVersionObject) == 1) return false;
+		return true;
 	}
 
 	let angularComponents;
