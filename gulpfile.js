@@ -54,7 +54,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 
 	/** 
 	* Validates the current node version against supported node versions specified in this file
-	* Returns true of false if current node version is valid
+	* Returns boolean indicating whether current node version is valid
 	* Currently only validates against a max node version
 	*
 	* Note: This method is being used instead of npm engines because of an npm bug where warnings don't print
