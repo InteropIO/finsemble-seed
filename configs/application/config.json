@@ -98,8 +98,7 @@
 			"topicToDataStoreAdapters": {
 				"finsemble": "MongoStorageAdapter",
 				"finsemble.workspace": "MongoStorageAdapter",
-				"finsemble.workspace.cache": "IndexedDBAdapter",
-				"finsemble.migration": "IndexedDBMigrationAdapter"
+				"finsemble.workspace.cache": "IndexedDBAdapter"
 			},
 			"dataStoreAdapters": {
 				"LocalStorageAdapter": "$applicationRoot/adapters/localStorageAdapter.js",
@@ -111,7 +110,7 @@
 	},
 	"preferences": {
 		"workspaceService": {
-			"promptUserOnDirtyWorkspace": false
+			"promptUserOnDirtyWorkspace": true
 		}
 	},
 	"systemTrayIcon": "$applicationRoot/assets/img/Finsemble_Taskbar_Icon.png",
