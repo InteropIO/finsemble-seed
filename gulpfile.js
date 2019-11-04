@@ -60,7 +60,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 		let tempVersionArray;
 		let semverObject;
 		if (typeof version !== 'string') {
-			console.log(`Version must be type string`);
+			console.log(`Version must be type string but is ${typeof version}`);
 			return;
 		}
 		// Split the version into a temp array.
