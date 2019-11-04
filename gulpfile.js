@@ -70,19 +70,20 @@ const { launch, connect } = require('hadouken-js-adapter');
 		} else {
 			tempVersionArray = version.split('.')
 		}
-		if (tempVersionArray)
+		if (tempVersionArray.length === 3) {
 
-		// Convert each array element to a number and store in the object.
-		semverObject = {
-			majorVersion: Number(tempVersionArray[0]) || null,
-			minorVersion: Number(tempVersionArray[1]) || null,
-			patchVersion: Number(tempVersionArray[2]) || null,
+			// Convert each array element to a number and store in the object.
+			semverObject = {
+				majorVersion: Number(tempVersionArray[0]) || null,
+				minorVersion: Number(tempVersionArray[1]) || null,
+				patchVersion: Number(tempVersionArray[2]) || null,
+			}
+			// If major, minor or patch versions are missing or not a number return nothing
+			if (!semverObject.majorVersion || !semverObject.minorVersion || !semverObject.patchVersion) {
+				return;
+			}
+			return semverObject
 		}
-		// If major, minor or patch versions are missing or not a number return nothing
-		if (!semverObject.majorVersion || !semverObject.minorVersion || !semverObject.patchVersion) {
-			return;
-		}
-		return semverObject
 	}
 
 	/** 
