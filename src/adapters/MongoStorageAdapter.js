@@ -19,10 +19,16 @@ Logger.start();
 class MongoStorageAdapter extends BaseStorage {
 	constructor(uuid) {
 		super(arguments);
-		Logger.system.log("MongoStorageAdapter init");
-		console.log('MongoStorageAdapter init');
 
-		this.baseURL = "http://localhost:3001"; 
+		Logger.system.log("MongoStorageAdapter init");
+		this.baseURL = "http://localhost:3001";
+
+		this.ROUTES = {
+			SAVE: `${this.baseURL}/save`,
+			GET: `${this.baseURL}/get`,
+			KEYS: `${this.baseURL}/keys`,
+			DELETE: `${this.baseURL}/delete`
+		};
 	}
 
 	/**
@@ -36,7 +42,7 @@ class MongoStorageAdapter extends BaseStorage {
 		console.log('get')
 		let combinedKey = this.getCombinedKey(this, params);
 		
-		fetch(`${this.baseURL}/get?key=${combinedKey}`)
+		fetch(`${this.ROUTES.GET}?key=${combinedKey}`)
 			.then(response => response.json())
 			.then(data => {
 				Logger.system.debug("Mongo.get for key=" + combinedKey + " data=", data.value);
@@ -46,7 +52,7 @@ class MongoStorageAdapter extends BaseStorage {
 				Logger.system.error("Mongo.get key=" + combinedKey + ", Error", err);
 				cb(err, { status: "failed" });
 			});
-	}
+	};
 
 	/**
 	 * Save method.
@@ -61,7 +67,7 @@ class MongoStorageAdapter extends BaseStorage {
 
 		Logger.system.debug("Mongo.save for key=" + combinedKey + " with data=" + params.value);
 		
-		fetch(`${this.baseURL}/save`, {
+		fetch(`${this.ROUTES.SAVE}`, {
 			method: 'POST',
 			body: JSON.stringify({ key: combinedKey, value: params.value }),
 			headers: {
@@ -75,7 +81,7 @@ class MongoStorageAdapter extends BaseStorage {
 			Logger.system.error("Mongo.save Error", err, "key=" + combinedKey, "value=", params.value);
 			cb(err, { status: "failed" });
 		});
-	}
+	};
 
 	/**
 	 * Returns all keys stored in MongoDB.
@@ -86,7 +92,7 @@ class MongoStorageAdapter extends BaseStorage {
 	keys = function(params, cb) {
 		const keyPreface = this.getKeyPreface(params);
 
-		fetch(`${this.baseURL}/keys?param=${keyPreface}`)
+		fetch(`${this.ROUTES.KEYS}?param=${keyPreface}`)
 			.then(response => response.json())
 			.then(data => {
 				Logger.system.debug("Mongo.get for keys" + keyPreface + " data=", data.value);
@@ -96,7 +102,7 @@ class MongoStorageAdapter extends BaseStorage {
 				Logger.system.error("Mongo.get keys" + keyPreface + ", Error", err);
 				cb(err, { status: "failed" });
 			});
-	}
+	};
 
 	/**
 	 * Delete method.
@@ -111,7 +117,7 @@ class MongoStorageAdapter extends BaseStorage {
 		Logger.system.debug("Mongo.delete for key=" + combinedKey);
 
 
-		fetch(`${this.baseURL}/delete`, {
+		fetch(`${this.ROUTES.DELETE}`, {
 			method: 'DELETE',
 			body: JSON.stringify({ key: combinedKey }),
 			headers: {
@@ -125,7 +131,7 @@ class MongoStorageAdapter extends BaseStorage {
 			Logger.system.error("Mongo.delete key=" + combinedKey + ", Error", err);
 			cb(err, { status: "failed" });
 		});
-	}
+	};
 
 	/**
 	 * Get the prefix used to filter keys for particular topics and key prefixes.
@@ -140,7 +146,7 @@ class MongoStorageAdapter extends BaseStorage {
 		const preface = `${this.getUserPreface()}:${params.topic}:${keyPrefix}`;
 
 		return preface;
-	}
+	};
 
 	/**
 	 * Get prefix for all the users stored data.
@@ -149,8 +155,24 @@ class MongoStorageAdapter extends BaseStorage {
 	getUserPreface = function() {
 		const preface = `${this.baseName}:${this.userName}`;
 		return preface;
-	}
+	};
+
+	/**
+	 * This method should be used very, very judiciously. It's essentially a method designed to wipe the database for a
+	 * particular user.
+	 */
+	clearCache = function(params, cb) {
+		// Implementation here
+	};
+
+	/**
+	 * Wipes the storage container.
+	 * @param {function} cb
+	 */
+	empty = function(cb) {
+		// Implementation here
+	};
 }
 
 let mongoAdapter = new MongoStorageAdapter("MongoStorageAdapter")
-module.exports = mongoAdapter ; //Allows us to get access to the uninitialized object
+module.exports = mongoAdapter; // Allows us to get access to the uninitialized object
