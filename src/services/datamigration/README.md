@@ -4,7 +4,7 @@
 
 In some cases, users have been deployed using Chromium's IndexedDB as the default storage adapter, as this is the default for Finsemble's seed project. For more sustainable usage across multiple machines and centralized handling of data, migration to a remote database is often times needed.
 
-In other cases, migration from one remote datastore to another is needed. This recipe, with appropriate modifications, can handle both cases. 
+In other cases, migration from one remote datastore to another is needed. This recipe, with appropriate modifications, can handle both cases.
 
 For the purposes of this example, the **current** datasource will be **IndexedDB**. _N.b._: this recipe does not utilize a remote data adapter. It utilizes LocalStorage as a mimic for data migration. It is up to you to create the storage adapter you'd like to use and register it by comparing the recipe to your extant code.
 
