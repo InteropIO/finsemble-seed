@@ -94,17 +94,15 @@
 			]
 		},
 		"storage": {
-			"defaultStorage": "MongoStorageAdapter",
+			"defaultStorage": "LocalStorageAdapter",
 			"topicToDataStoreAdapters": {
-				"finsemble": "MongoStorageAdapter",
-				"finsemble.workspace": "MongoStorageAdapter",
-				"finsemble.workspace.cache": "IndexedDBAdapter"
+				"finsemble": "LocalStorageAdapter",
+				"finsemble.workspace": "LocalStorageAdapter",
+				"finsemble.workspace.cache": "LocalStorageAdapter"
 			},
 			"dataStoreAdapters": {
 				"LocalStorageAdapter": "$applicationRoot/adapters/localStorageAdapter.js",
-				"IndexedDBAdapter": "$applicationRoot/adapters/indexedDBAdapter.js",
-				"IndexedDBMigrationAdapter": "$applicationRoot/adapters/IndexedDBMigrationAdapter.js",
-				"MongoStorageAdapter": "$applicationRoot/adapters/MongoStorageAdapter.js"
+				"IndexedDBAdapter": "$applicationRoot/adapters/indexedDBAdapter.js"
 			}
 		}
 	},

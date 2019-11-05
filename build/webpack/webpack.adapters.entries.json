@@ -6,13 +6,5 @@
 	"indexDBAdapter": {
 		"output": "adapters/indexedDBAdapter",
 		"entry":"./src-built-in/adapters/indexedDBAdapter.js"
-	},
-	"IndexedDBMigrationAdapter": {
-		"output": "adapters/IndexedDBMigrationAdapter",
-		"entry":"./src/adapters/IndexedDBMigrationAdapter.js"
-	},
-	"MongoStorageAdapter": {
-		"output": "adapters/MongoStorageAdapter",
-		"entry":"./src/adapters/MongoStorageAdapter.js"
 	}
 }

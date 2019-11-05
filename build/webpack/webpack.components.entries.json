@@ -1,6 +1,6 @@
 {
-    "migrationComponent": {
-        "output": "components/migrationComponent/migrationComponent",
-        "entry": "./src/components/migrationComponent/migrationComponent.js"
+    "migration": {
+        "output": "components/migration/migration",
+        "entry": "./src/components/migration/migration.js"
     }
 }
