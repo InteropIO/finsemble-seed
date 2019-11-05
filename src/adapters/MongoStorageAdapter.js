@@ -16,13 +16,37 @@ const Logger = require("@chartiq/finsemble").Clients.Logger;
 // Because calls to this storage adapter will likely come from many different windows, we will log successes and failures in the central logger.
 Logger.start();
 
-const MongoStorageAdapter = function (uuid) {
-	BaseStorage.call(this, arguments);
+class MongoStorageAdapter extends BaseStorage {
+	constructor(uuid) {
+		super(arguments);
+		Logger.system.log("MongoStorageAdapter init");
+		console.log('MongoStorageAdapter init');
 
-	Logger.system.log("MongoStorageAdapter init");
+		this.baseURL = "http://localhost:3001"; 
+	}
 
-	// This baseURL is the middleware to allow communication with MongoDB.
-	this.baseURL = "http://localhost:3001"; 
+	/**
+	 * Get method.
+	 * @param {object} params
+	 * @param {string} params.topic A topic under which the data should be stored.
+	 * @param {string} params.key The key whose value is being set.
+	 * @param {function} cb Callback to be invoked upon completion.
+	 */
+	get = function(params, cb) {
+		console.log('get')
+		let combinedKey = this.getCombinedKey(this, params);
+		
+		fetch(`${this.baseURL}/get?key=${combinedKey}`)
+			.then(response => response.json())
+			.then(data => {
+				Logger.system.debug("Mongo.get for key=" + combinedKey + " data=", data.value);
+				cb(null, data.value);
+			})
+			.catch(err => {
+				Logger.system.error("Mongo.get key=" + combinedKey + ", Error", err);
+				cb(err, { status: "failed" });
+			});
+	}
 
 	/**
 	 * Save method.
@@ -32,7 +56,7 @@ const MongoStorageAdapter = function (uuid) {
 	 * @param {any} params.value The value being saved.
 	 * @param {function} cb Callback to be invoked upon save completion.
 	 */
-	this.save = function (params, cb) {
+	save = function(params, cb) {
 		let combinedKey = this.getCombinedKey(this, params);
 
 		Logger.system.debug("Mongo.save for key=" + combinedKey + " with data=" + params.value);
@@ -51,39 +75,28 @@ const MongoStorageAdapter = function (uuid) {
 			Logger.system.error("Mongo.save Error", err, "key=" + combinedKey, "value=", params.value);
 			cb(err, { status: "failed" });
 		});
-	};
+	}
 
 	/**
-	 * Get method.
+	 * Returns all keys stored in MongoDB.
+	 *
 	 * @param {object} params
-	 * @param {string} params.topic A topic under which the data should be stored.
-	 * @param {string} params.key The key whose value is being set.
-	 * @param {function} cb Callback to be invoked upon completion.
+	 * @param {function} cb
 	 */
-	this.get = function (params, cb) {
-		let combinedKey = this.getCombinedKey(this, params);
-		
-		fetch(`${this.baseURL}/get?key=${combinedKey}`)
+	keys = function(params, cb) {
+		const keyPreface = this.getKeyPreface(params);
+
+		fetch(`${this.baseURL}/keys?param=${keyPreface}`)
 			.then(response => response.json())
 			.then(data => {
-				Logger.system.debug("Mongo.get for key=" + combinedKey + " data=", data.value);
+				Logger.system.debug("Mongo.get for keys" + keyPreface + " data=", data.value);
 				cb(null, data.value);
 			})
 			.catch(err => {
-				Logger.system.error("Mongo.get key=" + combinedKey + ", Error", err);
+				Logger.system.error("Mongo.get keys" + keyPreface + ", Error", err);
 				cb(err, { status: "failed" });
 			});
-	};
-
-	// Return prefix used to filter keys.
-	this.getKeyPreface = function (self, params) {
-		let preface = self.baseName + ":" + self.userName + ":" + params.topic + ":";
-		if ("keyPrefix" in params) {
-			preface = preface + params.keyPrefix;
-		}
-		return preface;
-	};
-
+	}
 
 	/**
 	 * Delete method.
@@ -92,7 +105,7 @@ const MongoStorageAdapter = function (uuid) {
 	 * @param {string} params.key The key whose value is being deleted.
 	 * @param {function} cb Callback to be invoked upon completion.
 	 */
-	this.delete = function (params, cb) {
+	delete = function(params, cb) {
 		let combinedKey = this.getCombinedKey(this, params);
 
 		Logger.system.debug("Mongo.delete for key=" + combinedKey);
@@ -112,10 +125,32 @@ const MongoStorageAdapter = function (uuid) {
 			Logger.system.error("Mongo.delete key=" + combinedKey + ", Error", err);
 			cb(err, { status: "failed" });
 		});
-	};
-};
+	}
 
+	/**
+	 * Get the prefix used to filter keys for particular topics and key prefixes.
+	 *
+	 * @param {object} params
+	 * @param {string} params.topic The topic
+	 * @param {string} params.keyPrefix The key prefix (optional).
+	 * @private
+	 */
+	getKeyPreface = function(params) {
+		const keyPrefix = "keyPrefix" in params ? params.keyPrefix : "";
+		const preface = `${this.getUserPreface()}:${params.topic}:${keyPrefix}`;
 
-MongoStorageAdapter.prototype = new BaseStorage();
-new MongoStorageAdapter("MongoStorageAdapter");
-module.exports = MongoStorageAdapter;//Allows us to get access to the uninitialized object
+		return preface;
+	}
+
+	/**
+	 * Get prefix for all the users stored data.
+	 * @private
+	 */
+	getUserPreface = function() {
+		const preface = `${this.baseName}:${this.userName}`;
+		return preface;
+	}
+}
+
+let mongoAdapter = new MongoStorageAdapter("MongoStorageAdapter")
+module.exports = mongoAdapter ; //Allows us to get access to the uninitialized object
