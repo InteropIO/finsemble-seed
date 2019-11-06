@@ -15,10 +15,8 @@ steps:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
 
-- task: npmAuthenticate@0
+- task: Npm@1
   inputs:
-    workingFile: .npmrc
+    command: 'install'
+    workingDir: '.'
     customEndpoint: 'ciq'
-
-- script: npm install
-  displayName: 'npm install'
