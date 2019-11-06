@@ -1,4 +1,12 @@
 {
     "comment": "Houses config for any custom services that you'd like to import into Finsemble.",
-    "services": {}
+    "services": {
+        "datamigrationService": {
+            "useWindow": true,
+            "active": true,
+            "name": "datamigrationService",
+            "visible": false,
+            "html": "$applicationRoot/services/datamigration/datamigration.html"
+        }
+    }
 }

@@ -1,1 +1,6 @@
-{}
+{
+    "migrationComponent": {
+        "output": "components/migrationComponent/migrationComponent",
+        "entry": "./src/components/migrationComponent/migrationComponent.js"
+    }
+}

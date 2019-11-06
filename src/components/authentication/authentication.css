@@ -1,0 +1,142 @@
+/* TODO: Use Finsemble CSS variables */
+
+.fsbl-logo {
+    content: url("../../../assets/img/ciq-banner-black-100x25.png");
+    width: 100px;
+    height: 25px;
+}
+
+.fsbl-login-logo {
+    content: url("../../../assets/img/finsembleDarkBG_Solo@1.5x.png");
+    width: 154px;
+    height: 173px;
+}
+
+.form-wrapper {
+    width: 342px;
+    text-align: center;
+    padding-top: 20px;
+}
+
+.fsbl-button-wrapper {
+    padding-top: 10px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.fsbl-button {
+    margin: 6px;
+}
+
+.fsbl-auth-top {
+    display: flex;
+    justify-content: space-between;
+    height: 20px;
+    align-items: center;
+    padding: 10px 10px 5px 0px;
+}
+
+.fsbl-close {
+    cursor: pointer;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    flex-direction: column;
+    height: 100%;
+}
+
+.ff-close:hover {
+    color: var(--content-close-hover-color);
+}
+
+.fsbl-auth-input {
+    width: 65%;
+    padding: 6px 0px;
+    margin: 0px auto;
+}
+
+.fsbl-input-error input {
+    border: var(--dialog-input-border-error-color) 1px solid !important;
+}
+
+.fsbl-input-error-message {
+    display: none;
+    color: var(--dialog-input-border-error-color);
+    font-size: small;
+}
+
+.link {
+    cursor: pointer;
+}
+
+body {
+    background: var(--dialog-background-color);
+    max-height: 442px;
+    max-width: 342px;
+}
+
+::-webkit-input-placeholder {
+    text-align: left;
+}
+
+
+.lds-ellipsis {
+	display: inline-block;
+	position: relative;
+	width: 64px;
+	height: 64px;
+  }
+  .lds-ellipsis div {
+	position: absolute;
+	top: 27px;
+	width: 11px;
+	height: 11px;
+	border-radius: 50%;
+	background: #fff;
+	animation-timing-function: cubic-bezier(0, 1, 1, 0);
+  }
+  .lds-ellipsis div:nth-child(1) {
+	left: 6px;
+	animation: lds-ellipsis1 0.6s infinite;
+  }
+  .lds-ellipsis div:nth-child(2) {
+	left: 6px;
+	animation: lds-ellipsis2 0.6s infinite;
+  }
+  .lds-ellipsis div:nth-child(3) {
+	left: 26px;
+	animation: lds-ellipsis2 0.6s infinite;
+  }
+  .lds-ellipsis div:nth-child(4) {
+	left: 45px;
+	animation: lds-ellipsis3 0.6s infinite;
+  }
+  @keyframes lds-ellipsis1 {
+	0% {
+	  transform: scale(0);
+	}
+	100% {
+	  transform: scale(1);
+	}
+  }
+  @keyframes lds-ellipsis3 {
+	0% {
+	  transform: scale(1);
+	}
+	100% {
+	  transform: scale(0);
+	}
+  }
+  @keyframes lds-ellipsis2 {
+	0% {
+	  transform: translate(0, 0);
+	}
+	100% {
+	  transform: translate(19px, 0);
+	}
+  }
+  
+  .hidden {
+    display: none;
+  }
