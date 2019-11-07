@@ -136,7 +136,7 @@ class DataMigrationService extends BaseService {
 			if (!data) {
 				// The user does not have a migration record.
 				
-				StorageClient.get({ topic: "finsemble.workspace", key: "defaultWorkspace"}, (err, data) => {
+				StorageClient.get({ topic: "finsemble.workspace.cache", key: "activeWorkspace"}, (err, data) => {
 					if (err) {
 						throw new Error(err);
 					}

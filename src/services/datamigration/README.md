@@ -10,7 +10,29 @@ For the purposes of this example, the **current** datasource will be **IndexedDB
 
 ## Ingredients
 
-This recipe contains a service and a component to assist in setting up a migration workflow:
+This recipe contains a service and a component to assist in setting up a migration workflow. Here are the provided files in the `src` diretory of this branch:
+
+```
+src
+├── adapters
+├── clients
+├── components
+│   └── migration
+│       ├── config.json
+│       ├── finsemble.webpack.json
+│       ├── migration.css
+│       ├── migration.html
+│       └── migration.js
+├── services
+│   └── datamigration
+│       ├── README.md
+│       ├── config.json
+│       ├── datamigration.html
+│       ├── datamigration.png
+│       └── datamigrationService.js
+└── thirdParty
+```
+
 
 ### Service: `datamigration`
 
@@ -53,6 +75,22 @@ The Migration Assistant component is a basic HTML5 component designed to communi
 1. Place the `src/services/datamigration` directory from this branch in your Finsemble `src/services` directory.
 1. Copy the `src/components/migration` directory from this branch to your Finsemble `src/components` directory.
 1. Modify `configs/application/config.json:servicesConfig.storage` topics to use `LocalStorageAdapter` or your custom storage adapter that you've already created as per [the documentation](https://documentation.chartiq.com/finsemble/tutorial-storingData.html).
+    ```json
+    "storage": {
+			"defaultStorage": "LocalStorageAdapter",
+			"topicToDataStoreAdapters": {
+				"finsemble": "LocalStorageAdapter",
+				"finsemble.workspace": "LocalStorageAdapter",
+				"finsemble.workspace.cache": "LocalStorageAdapter"
+			},
+			"dataStoreAdapters": {
+				"LocalStorageAdapter": "$applicationRoot/adapters/localStorageAdapter.js",
+				"IndexedDBAdapter": "$applicationRoot/adapters/indexedDBAdapter.js"
+			}
+        }
+    }
+    ```
+    
 1. In the  `finsemble.importConfig` array of your [manifest](https://documentation.chartiq.com/finsemble/tutorial-Configuration.html), include references to the component and service `config.json`:
     
     ```json
