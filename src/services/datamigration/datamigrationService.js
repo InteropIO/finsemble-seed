@@ -44,7 +44,7 @@ class DataMigrationService extends BaseService {
 					}
 					const topickeypairs = [];
 					keys.forEach((key) => {
-						topickeypairs.push({ topic: topic, key: key })
+						topickeypairs.push({ topic: topic, key: key });
 					});
 					resolve(topickeypairs);
 				});
@@ -160,7 +160,7 @@ class DataMigrationService extends BaseService {
 					}
 				});
 			} else {
-
+				RouterClient.transmit("Migration", "not needed");
 			}
 		});
 	}
