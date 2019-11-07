@@ -57,24 +57,22 @@ const handlePdfUrl = function(urlToOpen, name, specs, replace) {
 	} else {
 		//else spawn one
 		FSBL.Clients.Logger.log("Spawning new PDF viewer component: " + urlToOpen);
+		let data = {
+			url: urlToOpen,          	    //PDF URL to load
+			linker: {
+				channels: channels  //Set same linker channels as parent
+			}
+		};
 		var w;
 		FSBL.Clients.LauncherClient.spawn("viewerJs", { 
 			position: 'relative',
 			left: 'adjacent',
-			data: {
-				url: urlToOpen
-			}
+			data: data
 		}, function (err, response) {
 			if (err) {
 				console.error("viewerJsNativeOverrides.js window.open patch error: " + err);
 			} else {
 				w = response.finWindow;
-				
-				//link new window to parent if any channel is set
-				let channels = FSBL.Clients.LinkerClient.getState().channels;
-				for (let c=0; c<channels.length; c++) {
-					FSBL.Clients.LinkerClient.linkToChannel(channels[c].name, response.windowIdentifier);
-				}
 			}
 		});
 		return w;
