@@ -76,7 +76,7 @@ class DataMigrationService extends BaseService {
 	}
 
 	/**
-	 * method saveAllData
+	 * saveAllData
 	 * 
 	 * Saves data from the old storage adapter into the new one.
 	 * 
