@@ -34,23 +34,7 @@ var FileMenuStore = Object.assign({}, EventEmitter.prototype, {
 		}
 	},
 	finsembleConfig: null,
-	activeWorkspace: {},
 	monitorDimensions: {},
-	initializeActiveWorkspace() {
-		var self = this;
-		//listen for updates to workspaces and set the activeWorkspace.
-		FSBL.Clients.RouterClient.subscribe("Finsemble.WorkspaceService.update", function (err, response) {
-			if (response.data && response.data.activeWorkspace) {
-				self.activeWorkspace = response.data.activeWorkspace;
-				self.emit("change:activeWorkspace");
-			}
-
-		});
-		FSBL.Clients.WorkspaceClient.getActiveWorkspace(function (err, response) {
-			self.activeWorkspace = response;
-			self.emit("change:activeWorkspace");
-		});
-	},
 	getMonitorDimensions() {
 		return this.monitorDimensions;
 	},
@@ -121,28 +105,24 @@ var Actions = {
 	 * @returns
 	 */
 	saveWorkspace() {
-		return new Promise(function (resolve, reject) {
-			var self = this;
-			if (PROMPT_ON_DIRTY && FSBL.Clients.WorkspaceClient.activeWorkspace.isDirty) {
-				FSBL.Clients.DialogManager.open("yesNo",
-					{
-						question: "Your workspace \"" + FSBL.Clients.WorkspaceClient.activeWorkspace.name + "\" has unsaved changes, would you like to save?"
-					}, function (err, response) {
-						if (err || response.choice === "affirmative") {
-							FSBL.Clients.WorkspaceClient.saveAs({
-								force: true,
-								name: FSBL.Clients.WorkspaceClient.activeWorkspace.name
-							}, function (err1, response1) {
-								resolve(response.choice);
-							});
-						} else {
-							resolve(response.choice);
+		if (!(PROMPT_ON_DIRTY && FSBL.Clients.WorkspaceClient.activeWorkspace.isDirty)) {
+			return Promise.resolve();
+		}
+
+		return new Promise((resolve, reject) => {
+			FSBL.Clients.DialogManager.open("yesNo",
+				{
+					question: "Your workspace \"" + FSBL.Clients.WorkspaceClient.activeWorkspace.name + "\" has unsaved changes, would you like to save?"
+				}, async (err, response) => {
+					if (err || response.choice === "affirmative") {
+						try {
+							await FSBL.Clients.WorkspaceClient.save();
+						} catch (error) {
+							reject(error);
 						}
-					});
-			} else {
-				//If no prompt, just resolve - activeworkspace is saved after every state change or window move, no need to do it again.
-				resolve();
-			}
+					}
+					resolve(response.choice);
+				});
 		});
 	},
 	/**

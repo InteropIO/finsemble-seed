@@ -1,17 +1,5 @@
 {
 	"comment": "Top-level application config for development, adding on top of the core config",
-	"defaultStorage": "IndexedDBAdapter",
-	"storage": {
-		"topicToDataStoreAdapters": {
-			"finsemble": "IndexedDBAdapter",
-			"finsemble.workspace": "IndexedDBAdapter",
-			"finsemble.workspace.cache": "IndexedDBAdapter"
-		},
-		"dataStoreAdapters": {
-			"LocalStorageAdapter": "$applicationRoot/adapters/localStorageAdapter.js",
-			"IndexedDBAdapter": "$applicationRoot/adapters/indexedDBAdapter.js"
-		}
-	},
 	"servicesConfig": {
 		"distributedStore": {
 			"initialStores": [
@@ -55,50 +43,7 @@
 								}
 							}
 						},
-						"appDefinitions": {
-							"welcome-comp": {
-								"appID": "welcome-comp",
-								"name": "Welcome Component",
-								"source": "FDC3",
-								"tags": [
-									"newrelease"
-								],
-								"icon": "ff-home-2"
-							},
-							"2": {
-								"appID": "2",
-								"name": "Getting Started Tutorial",
-								"source": "FDC3",
-								"type": "component",
-								"tags": [
-									"newrelease"
-								],
-								"icon": "ff-component"
-							},
-							"pm": {
-								"appID": "pm",
-								"name": "Process Monitor",
-								"source": "FDC3",
-								"type": "component",
-								"tags": [
-									"bad information",
-									"don't click here"
-								],
-								"icon": "ff-chart-alt-1"
-							},
-							"note": {
-								"appID": "note",
-								"name": "Notepad",
-								"source": "FDC3",
-								"type": "component",
-								"tags": [
-									"assimilation",
-									"wizardry",
-									"TESLA"
-								],
-								"icon": "ff-saveas-2"
-							}
-						}
+						"appDefinitions": {}
 					},
 					"default": {
 						"activeLauncherTags": [],
@@ -147,6 +92,18 @@
 				"shift",
 				"L"
 			]
+		},
+		"storage": {
+			"defaultStorage": "IndexedDBAdapter",
+			"topicToDataStoreAdapters": {
+				"finsemble": "IndexedDBAdapter",
+				"finsemble.workspace": "IndexedDBAdapter",
+				"finsemble.workspace.cache": "IndexedDBAdapter"
+			},
+			"dataStoreAdapters": {
+				"LocalStorageAdapter": "$applicationRoot/adapters/localStorageAdapter.js",
+				"IndexedDBAdapter": "$applicationRoot/adapters/indexedDBAdapter.js"
+			}
 		}
 	},
 	"preferences": {
@@ -163,8 +120,7 @@
 		"floatingTitlebarComponent": "Floating Titlebar",
 		"deliveryMechanism": "preload"
 	},
-	"betaFeatures": {
-	},
+	"betaFeatures": {},
 	"splinteringConfig": {
 		"comment": "A SplinterAgent is just an openfin application that is capable of spawning specific components/services. If you try to spawn a component/service that one of these agents does not cover, it will be spawned by the defaultAgent. You can also specify maxWindowsPerAgent if you would like to limit your agents to some ceiling. This is useful when you have a particularly heavy component.",
 		"enabled": true,

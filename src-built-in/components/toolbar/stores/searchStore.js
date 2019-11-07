@@ -11,7 +11,7 @@ var activeSearchBar = false;
 var menuReference = {};
 var menuWindow = null;
 var control = null;
-
+window.menuReference = menuReference;
 // Handler for determing where to show the search results component.  Currently being set by the search input in Search.jsx
 var inputContainerBoundsHandler = Function.prototype;
 
@@ -26,6 +26,7 @@ var menuBlurHandler = Function.prototype;
 
 function mouseInWindow(win, cb) {
 	win.getBounds(function (err, bounds) {
+		if (err) FSBL.Clients.Logger.error('mouseInWindow->getBounds, error:', err);
 		mouseInBounds(bounds, cb)
 	})
 }
@@ -49,9 +50,11 @@ var Actions = {
 	},
 	setFocus(bool, target) {
 		focus = bool;
+		if (!menuWindow) return Actions.handleClose();
 		if (bool) {
 			if (window.outerWidth < 400) {
 				finsembleWindow.getBounds((err, bounds) => {
+					if (err) FSBL.Clients.Logger.error('setFocus->finsembleWindow.getBounds', err);
 					cachedBounds = bounds;
 					finsembleWindow.animate({ transitions: { size: { duration: 150, width: 400 } } }, Function.prototype);
 				})
@@ -63,8 +66,9 @@ var Actions = {
 					this.setFocus(bool, target);
 				})
 			}
-			if (!menuWindow) return;
 			return menuWindow.isShowing((err, showing) => {
+				if (err) { FSBL.Clients.Logger.error(`menuWindow.isShowing failed, error:`, err); }
+
 				//Gets the input text that is in the current search box.
 				//If the text is empty or the search is not showing, no need to position search results
 				let inputText = searchInputHandler();
@@ -72,15 +76,16 @@ var Actions = {
 				Actions.positionSearchResults();
 			});
 
+		} else {
+		const sel = window.getSelection();
+			sel.removeAllRanges();
 		}
 		activeSearchBar = false;
-		if (!menuWindow) {
-			return Actions.handleClose();
-		}
 		menuWindow.isShowing(function (err, showing) {
+			if (err) { FSBL.Clients.Logger.error(`menuWindow.isShowing failed, error:`, err); }
 			//if (!showing) return//console.log("not showing")
 			mouseInWindow(menuWindow, function (err, inBounds) {
-
+				if (err) { FSBL.Clients.Logger.error(`menuWindow.isShowing->mouseInWindow failed, error:`, err); }
 				if (!inBounds) {
 					Actions.handleClose();
 				}
@@ -160,7 +165,7 @@ var Actions = {
 	 * @param {Function} blurHandler
 	 */
 	setBlurSearchInputHandler(blurHandler) {
-		if(typeof blurHandler !== 'function'){
+		if (typeof blurHandler !== 'function') {
 			FSBL.Clients.Logger.error("Parameter blurHandler must be a function.");
 		} else {
 			blurSearchInputHandler = blurHandler;
@@ -174,7 +179,9 @@ var Actions = {
 	 * @param {*} e
 	 */
 	handleClose(e) {
+		if (!menuWindow) { return; }
 		menuWindow.isShowing(function (err, showing) {
+			if (err) { FSBL.Clients.Logger.error(`menuWindow.isShowing failed, error:`, err); }
 			if (showing) {
 				console.log("close a window")
 				if (!e && cachedBounds) {
@@ -183,21 +190,21 @@ var Actions = {
 					});
 				}
 				window.getSelection().removeAllRanges();
-				if (!menuWindow) return;
 				menuWindow.hide();
 			}
 			//These lines handle closing the searchInput box. As showing is only true when the search results
 			//menu opens, they need to be outside so the search inputbox will still close when there is no text string.
 			blurSearchInputHandler();
-			menuStore.setValue({ field: "active", value: false })
+			menuStore.setValue({ field: "active", value: false });
 		});
-
 	},
 
 	setupWindow(cb = Function.prototype) {
-		console.log("SETUP WINDOW!", menuReference.name);
+		// The toolbar can render before we have the menuReference. Add this gate so that the dev isn't spammed with errors about an being able to
+		if (!menuReference.name) return cb();
 		//menuWindow = fin.desktop.Window.wrap(menuReference.finWindow.app_uuid, menuReference.finWindow.name);
 		FSBL.FinsembleWindow.getInstance({ windowName: menuReference.name }, (err, wrap) => {
+			if (err) { FSBL.Clients.Logger.error(`Failed to retrieve reference to search results menu: ${menuReference.name}, error:`, err); }
 			menuWindow = wrap;
 			cb();
 		});
@@ -207,6 +214,7 @@ var Actions = {
 	},
 	actionPress(action) {
 		menuStore.getValue("list", function (err, list) {
+			if (err) { FSBL.Clients.Logger.error(`Failed to retrieve 'list' value from menuStore, error:`, err); }
 			if (!list) return;
 			if (list.length > 1) {
 				FSBL.Clients.RouterClient.transmit("SearchMenu." + menuWindow.name + ".actionpress", action);
@@ -217,19 +225,13 @@ var Actions = {
 		menuStore.setValue({ field: "list", value: list })
 	},
 	updateMenuReference(err, data) {
+		if (err) { FSBL.Clients.Logger.error(`updateMenuReference, error:`, err); }
 		menuReference = data.value;
 		if (!menuWindow) {
 			Actions.setupWindow()
 		}
 	},
 
-	setBlurSearchInputHandler(blurHandler) {
-		if(typeof blurHandler !== 'function'){
-			FSBL.Clients.Logger.error("Parameter blurHandler must be a function.");
-		} else {
-			blurSearchInputHandler = blurHandler;
-		}
-	},
 
 	/**
 	 * Perform the search action
@@ -244,6 +246,7 @@ var Actions = {
 			return;
 		}
 		FSBL.Clients.SearchClient.search({ text: text }, function (err, response) {
+			if (err) { FSBL.Clients.Logger.error(`Failed to perform SearchClient.search, error:`, err); }
 			var updatedResults = [].concat.apply([], response)
 			Actions.setList(updatedResults);
 			setTimeout(() => {
@@ -256,11 +259,11 @@ var Actions = {
 	}
 };
 function searchTest(params, cb) {
-//console.log("params", params)
+	//console.log("params", params)
 	fetch('/search?text=' + params.text).then(function (response) {
 		return response.json();
 	}).then(function (json) {
-	//console.log("json", cb);
+		//console.log("json", cb);
 		return cb(null, json);
 
 	});
@@ -276,11 +279,13 @@ function createStore(done) {
 		activeSearchBar: null,
 		menuIdentifier: null
 	};
-//console.log("CreateStore", "Finsemble-SearchStore-" + finWindow.name)
+	//console.log("CreateStore", "Finsemble-SearchStore-" + finWindow.name)
 	FSBL.Clients.DistributedStoreClient.createStore({ store: "Finsemble-SearchStore-" + finWindow.name, values: defaultData, global: true }, function (err, store) {
+		if (err) { FSBL.Clients.Logger.error(`DistributedStoreClient.createStore failed for store Finsemble-SearchStore-${finWindow.name}, error:`, err); }
 		menuStore = store;
 
 		store.getValues(["owner", "menuSpawned"], function (err, data) {
+			if (err) { FSBL.Clients.Logger.error(`DistributedStoreClient.createStore->store.getValues, error:`, err); }
 			store.addListener({ field: "menuIdentifier" }, Actions.updateMenuReference);
 			menuStore.Dispatcher.register(function (action) {
 				if (action.actionType === "menuBlur") {
@@ -292,7 +297,8 @@ function createStore(done) {
 
 			if (!data.menuSpawned) {
 				FSBL.Clients.LauncherClient.spawn("searchMenu", { name: "searchMenu." + finWindow.name, data: { owner: finWindow.name } }, function (err, data) {
-					//console.log("Err", err, data)
+					if (err) { FSBL.Clients.Logger.error(`LauncherClient.spawn failed for searchMenu, error:`, err); }
+					menuReference = data.windowIdentifier;
 					menuStore.setValue({ field: "menuIdentifier", value: data.windowIdentifier })
 					Actions.setupWindow(() => {
 						menuStore.setValue({ field: "menuSpawned", value: true })
@@ -301,6 +307,7 @@ function createStore(done) {
 				});
 			} else {
 				menuStore.getValue("menuIdentifier", function (err, menuIdentifier) {
+					if (err) { FSBL.Clients.Logger.error(`DistributedStoreClient.createStore->menuStore.getValue, error:`, err); }
 					menuReference = menuIdentifier;
 					Actions.setupWindow(done);
 				})
