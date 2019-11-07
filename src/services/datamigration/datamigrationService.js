@@ -134,8 +134,6 @@ class DataMigrationService extends BaseService {
 				throw new Error(err);
 			}
 
-			Logger.log("*** datamigration check", data, `migrated_from_${this.adapter}`)
-
 			if (!data) {
 				// The user does not have a migration record.
 				

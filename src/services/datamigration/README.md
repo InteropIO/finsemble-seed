@@ -8,30 +8,60 @@ In other cases, migration from one remote datastore to another is needed. This r
 
 For the purposes of this example, the **current** datasource will be **IndexedDB**. _N.b._: this recipe does not utilize a remote data adapter. It utilizes LocalStorage as a mimic for data migration. It is up to you to create the storage adapter you'd like to use and register it by comparing the recipe to your extant code.
 
-## Setup
+## Ingredients
 
-**Preconditions**:
+This recipe contains a service and a component to assist in setting up a migration workflow:
 
-1. Check out the `master` branch or whichever branch is your current use-case.
-1. Clear all caches (AppData and LocalStorage + IndexedDB in Chromium). Start Finsemble to clear the latter two items by bringing up the developer tools with **Ctrl + Shift + `i`**, selecting the "Application" tab, and clearing each of the two storage items.
-1. Begin Finsemble with `npm run dev`.
-1. Create a new workspace. Ensure it has at least one or two recognizable components in a recognizable layout.
-1. Save and quit (using the toolbar menu item).
+### Service: `datamigration`
+
+**Files**:
+```
+└── datamigration
+    ├── README.md (this file)
+    ├── config.json
+    ├── datamigration.html
+    └── datamigrationService.js
+```
+
+**Flowchart**
+
+![Data Migration Flowchart](./datamigration.png)
 
 
-## Testing
+1. If the user has no data (is a new user) or has already been migrated, this component should not spawn.
+1. If the user has data in the current storage adapter, a simple message displays with warning copy and action buttons.
+1. Upon completion, Finsemble should be restarted.
 
-1. Check out the `recipes/DataMigration` branch.
-1. Do **not** clear any caches.
-1. Begin Finsemble with `npm run dev`.
-1. Expected: A "Migration" component appears. For demonstration, it:
-    1. Displays a countdown.
-    1. Can be cancelled.
-    1. Can be fast-forwarded by clicking the "Begin" button.
-1. Expected: upon countdown completion or clicking "Begin" to fast-foward, the instance will pause and restart.
 
-## Success Conditions
 
-1. The migration component will not display.
-1. The active workspace from the Preconditions setup will be displayed with the recognizable components and layout.
+### Migration Assistant Component: `migration`
+
+The Migration Assistant component is a basic HTML5 component designed to communicate to the user the state of their data. This component is a sample and is designed to be customized to your needs.   
+
+```
+└── migration
+    ├── config.json
+    ├── finsemble.webpack.json
+    ├── migration.css
+    ├── migration.html
+    └── migration.js
+```
+
+## Directions
+
+1. Place the `src/services/datamigration` directory from this branch in your Finsemble `src/services` directory.
+1. Copy the `src/components/migration` directory from this branch to your Finsemble `src/components` directory.
+1. Modify `configs/application/config.json:servicesConfig.storage` topics to use `LocalStorageAdapter` or your custom storage adapter that you've already created as per [the documentation](https://documentation.chartiq.com/finsemble/tutorial-storingData.html).
+1. In the  `finsemble.importConfig` array of your [manifest](https://documentation.chartiq.com/finsemble/tutorial-Configuration.html), include references to the component and service `config.json`:
+    
+    ```json
+    "importConfig": [
+        ...
+        "$applicationRoot/components/migration/config.json",
+        "$applicationRoot/services/datamigration/config.json",
+        ...
+    ],
+    ```
+1. Install if needed and start Finsemble: `npm install; npm run dev`.
+1. After the user is authenticated, the Migration Assistant component will or will not display as per the logic from the service, as above.
 

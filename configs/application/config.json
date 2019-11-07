@@ -155,8 +155,7 @@
 					"authenticationService",
 					"workspaceService",
 					"storageService",
-					"searchService",
-					"datamigrationService"
+					"searchService"
 				]
 			}
 		]
