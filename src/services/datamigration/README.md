@@ -36,15 +36,6 @@ src
 
 ### Service: `datamigration`
 
-**Files**:
-```
-└── datamigration
-    ├── README.md (this file)
-    ├── config.json
-    ├── datamigration.html
-    └── datamigrationService.js
-```
-
 **Flowchart**
 
 ![Data Migration Flowchart](./datamigration.png)
@@ -54,21 +45,9 @@ src
 1. If the user has data in the current storage adapter, a simple message displays with warning copy and action buttons.
 1. Upon completion, Finsemble should be restarted.
 
-
-
 ### Migration Assistant Component: `migration`
 
 The Migration Assistant component is a basic HTML5 component designed to communicate to the user the state of their data. This component is a sample and is designed to be customized to your needs.   
-
-**Files**:
-```
-└── migration
-    ├── config.json
-    ├── finsemble.webpack.json
-    ├── migration.css
-    ├── migration.html
-    └── migration.js
-```
 
 ## Directions
 
@@ -90,7 +69,7 @@ The Migration Assistant component is a basic HTML5 component designed to communi
         }
     }
     ```
-    
+
 1. In the  `finsemble.importConfig` array of your [manifest](https://documentation.chartiq.com/finsemble/tutorial-Configuration.html), include references to the component and service `config.json`:
     
     ```json
