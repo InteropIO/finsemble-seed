@@ -3,21 +3,25 @@
  * Once spawned the viewer's linker channels are set to match the current window's.
  */
 window.launchPDFJs = function(url){
+	let myChannels = FSBL.Clients.LinkerClient.getState().channels;
+	let channels = [];
+	myChannels.forEach(channel => {
+		channels.push(channel.name);
+	});
+	let data = {
+		url: url,          	    //PDF URL to load
+		linker: {
+			channels: channels  //Set same linker channels as parent
+		}
+	};
+	
 	FSBL.Clients.LauncherClient.spawn("pdfJs", {
 		position: 'relative', //position the window relative to this window
 		left: 'adjacent',     //  to the right
-		data: {
-			url: url          //PDF URL to load
-		}
+		data: data
 	}, function(err, response) {
 		if(err) {
 			FSBL.Clients.Logger.error("Error launching PDF viewer!",err);
-		} else {
-			//link new window to same channels as parent (if any are set)
-			let channels = FSBL.Clients.LinkerClient.getState().channels;
-			for (let c=0; c<channels.length; c++) {
-				FSBL.Clients.LinkerClient.linkToChannel(channels[c].name, response.windowIdentifier);
-			}
 		}
 	});
 }
@@ -28,26 +32,26 @@ window.launchPDFJs = function(url){
  * (although note the slight delay added to account for the viewer refreshing on load).
  */
 window.launchViewerJs = function(url){
+	let myChannels = FSBL.Clients.LinkerClient.getState().channels;
+	let channels = [];
+	myChannels.forEach(channel => {
+		channels.push(channel.name);
+	});
+	let data = {
+		url: url,          	    //PDF URL to load
+		linker: {
+			channels: channels  //Set same linker channels as parent
+		}
+	};
+	
 	FSBL.Clients.LauncherClient.spawn("viewerJs", {
 		position: 'relative', //position the window relative to this window
 		right: 'adjacent',    //  to the left
-		data: {
-			url: url          //PDF URL to load
-		}
+		data: data
 	}, function(err, response) {
 		if(err) {
 			FSBL.Clients.Logger.error("Error launching PDF viewer!",err);
-		} else {
-			//link new window to parent if any channel is set
-			  //add a slight delay as viewerJS windows refresh after spawning and can miss the signal
-			let winId = response.windowIdentifier;
-			setTimeout(() => {
-				let channels = FSBL.Clients.LinkerClient.getState().channels;
-				for (let c=0; c<channels.length; c++) {
-					FSBL.Clients.LinkerClient.linkToChannel(channels[c].name, winId);
-				}
-			},2500);
-		}
+		} 
 	});
 }
 

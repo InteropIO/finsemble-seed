@@ -78,7 +78,7 @@ const init = function (){
 	FSBL.Clients.WindowClient.getComponentState({
 		field: STATE_TOPIC_URL,
 	}, function (err, state) {
-		if (err || state === null) {
+		if (err || !state) {
 			//Check for a URL to load in spawn data
 			let spawndata = FSBL.Clients.WindowClient.getSpawnData();
 			if (spawndata && spawndata.url) {
