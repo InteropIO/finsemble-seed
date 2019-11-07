@@ -136,13 +136,13 @@ class DataMigrationService extends BaseService {
 			if (!data) {
 				// The user does not have a migration record.
 				
-				StorageClient.get({ topic: "finsemble.workspace.cache", key: "activeWorkspace"}, (err, data) => {
+				StorageClient.keys({ topic: "finsemble"}, (err, keys) => {
 					if (err) {
 						throw new Error(err);
 					}
 
-					if (data) {
-						// The user has a default workspace and thus should be migrated.
+					if (keys) {
+						// The user has Finsemble records and thus should be migrated.
 
 						LauncherClient.spawn("migration", {}, (err, response) => {
 							RouterClient.transmit('Migration', 'needed');
