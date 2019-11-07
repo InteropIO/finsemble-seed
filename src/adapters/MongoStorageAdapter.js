@@ -68,10 +68,10 @@ class MongoStorageAdapter extends BaseStorage {
 		Logger.system.debug("Mongo.save for key=" + combinedKey + " with data=" + params.value);
 		
 		fetch(`${this.ROUTES.SAVE}`, {
-			method: 'POST',
+			method: "POST",
 			body: JSON.stringify({ key: combinedKey, value: params.value }),
 			headers: {
-				'Content-Type': 'application/json'
+				"Content-Type": "application/json"
 			}
 		})
 		.then(data => {
@@ -118,7 +118,7 @@ class MongoStorageAdapter extends BaseStorage {
 
 
 		fetch(`${this.ROUTES.DELETE}`, {
-			method: 'DELETE',
+			method: "DELETE",
 			body: JSON.stringify({ key: combinedKey }),
 			headers: {
 				'Content-Type': 'application/json'
