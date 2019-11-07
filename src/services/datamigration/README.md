@@ -21,7 +21,7 @@ For the purposes of this example, the **current** datasource will be **IndexedDB
 
 ## Testing
 
-1. Check out the `recipes/DataMigration` granch.
+1. Check out the `recipes/DataMigration` branch.
 1. Do **not** clear any caches.
 1. Begin Finsemble with `npm run dev`.
 1. Expected: A "Migration" component appears. For demonstration, it:
