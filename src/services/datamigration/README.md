@@ -28,7 +28,7 @@ This recipe contains a service and a component to assist in setting up a migrati
 ![Data Migration Flowchart](./datamigration.png)
 
 
-1. If the user has no data (is a new user) or has already been migrated, this component should not spawn.
+1. If the user has no data (is a new user) or has already been migrated, the Migration Assistant component should not spawn.
 1. If the user has data in the current storage adapter, a simple message displays with warning copy and action buttons.
 1. Upon completion, Finsemble should be restarted.
 
