@@ -20,3 +20,11 @@ steps:
     command: 'install'
     workingDir: '.'
     customEndpoint: 'ciq'
+
+- script: npm run build
+  name: build
+  displayName: "Run the build"
+
+- script: npm run makeInstaller:prod
+  name: makeInstaller
+  displayName: "Make a production installer"
