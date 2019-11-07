@@ -38,6 +38,7 @@ This recipe contains a service and a component to assist in setting up a migrati
 
 The Migration Assistant component is a basic HTML5 component designed to communicate to the user the state of their data. This component is a sample and is designed to be customized to your needs.   
 
+**Files**:
 ```
 └── migration
     ├── config.json
