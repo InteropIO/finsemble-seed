@@ -1,21 +1,19 @@
 const FSBLReady = () => {
 	try {
-		FSBL.Clients.Logger.log("*** datamigration FE");
-		console.log('fsbl ready 1')
-
-		let shutdownTimer;
-
-		FSBL.Clients.RouterClient.addListener('Migration', (err, event) => {
-			if (event.data == 'needed') {
+		FSBL.Clients.RouterClient.addListener("Migration", (err, event) => {
+			if (event.data == "needed") {
+				// The Migration component isn't intended to be visible to users in a menu, but just in case, there is a default message.
+				// However, if migration is needed, that message will be hidden and migration activities begun.
+				document.querySelector('#migrationCheck').classList.add('hidden');
+				
+				// Warn the user that migration is needed.
 				document.querySelector('#migrationWarning').classList.remove('hidden');
-				FSBL.Clients.Logger.log("*** datamigration FE handling needed");
-
 				let timeout = 30000;
 
 				migrationTimer = setInterval(() => {
 					timeout -= 1000;
 
-					document.querySelector('#countdown').innerHTML = (timeout/ 1000);
+					document.querySelector('#countdown').innerHTML = (timeout / 1000);
 
 					if (timeout === 0) {
 						clearInterval(migrationTimer);
@@ -23,49 +21,33 @@ const FSBLReady = () => {
 					}
 				}, 1000);	
 			}
-			
-			document.querySelector('#cancel').addEventListener('click', (e) => {
-				console.log('Cancelled')
+
+			if (event.data == "end") {
+				document.querySelector("#migrationWarning").classList.add("hidden");
+				document.querySelector("#migrationComplete").classList.remove("hidden");
+			}
+
+			if (event.data == "not needed") {
+				document.querySelector("#migrationNotNeeded").classList.remove("hidden");
+				document.querySelector("#migrationCheck").classList.add("hidden");
+			}
+
+			// Allow the user to cancel the migration and ask questions.
+			document.querySelector("#cancel").addEventListener("click", (e) => {
 				clearInterval(migrationTimer);
 				FSBL.Clients.RouterClient.transmit("Application.shutdown");
 			});
 
+			// Allow the user to skip the countdown and begin immediately.
 			document.querySelector('#begin').addEventListener('click', (e) => {
-				console.log('Begin')
 				clearInterval(migrationTimer);
 				FSBL.Clients.RouterClient.transmit("Migration", "begin");
 			});
-			
 
-			
-			
-
+			document.querySelector("#restart").addEventListener("click", (e) => {
+				FSBL.Clients.RouterClient.transmit("Application.restart");
+			});
 		})
-
-
-		
-		
-
-		/*let data = FSBL.Clients.StorageClient;
-		FSBL.Clients.Logger.log("*** datamigration storageclient options", data)
-		FSBL.Clients.ConfigClient.getValue('finsemble', (err, value) => {
-			FSBL.Clients.Logger.log('*** datamigration all', value.servicesConfig.storage.topicToDataStoreAdapters.finsemble)
-		});
-
-
-		/*FSBL.Clients.RouterClient.query("Migration", {}, function (error, queryResponseMessage) {
-			if (error) {
-				FSBL.Clients.Logger.log('*** datamigration query failed: ' + JSON.stringify(error));
-			} else {
-				// process income query response message
-				const responseData = queryResponseMessage.data;
-				FSBL.Clients.Logger.log('*** datamigration query response: ' + JSON.stringify(queryResponseMessage));
-
-				if (!responseData) {
-					document.querySelector('.migration-needed').classList.remove('hidden')
-				}
-			}
-		});*/
 	} catch (e) {
 		FSBL.Clients.Logger.error(e);
 	}
