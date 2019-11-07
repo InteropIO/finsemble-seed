@@ -83,7 +83,7 @@
         "importConfig": [
             "$applicationRoot/configs/application/config.json"
         ],
-        "router" :{
+        "router": {
             "crossDomainTransport": "IPCBus"
         }
     }
