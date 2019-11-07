@@ -83,8 +83,8 @@
         "importConfig": [
             "$applicationRoot/configs/application/config.json"
         ],
-        "IAC": {
-            "serverAddress": "ws://127.0.0.1:3376"
+        "router" :{
+            "crossDomainTransport": "IPCBus"
         }
     }
 }
