@@ -23,7 +23,6 @@ class DataMigrationService extends BaseService {
 		super(args);
 		this.adapter = "IndexedDBAdapter";
 		this.newAdapter = "LocalStorageAdapter";
-		this.topics = ["finsemble", "finsemble.workspace", "finsemble.workspace.cache"];
 	}
 
 	/**
