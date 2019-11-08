@@ -11,9 +11,9 @@ export default class AutoArrange extends React.Component {
 		super(props);
 
 		this.state = {
-			isAutoArranged: false
+			isAutoArranged: false,
+			autoArrangeData: {}
 		};
-
 		this.autoArrange = this.autoArrange.bind(this);
 	}
 
@@ -32,14 +32,35 @@ export default class AutoArrange extends React.Component {
 					isAutoArranged: response.data.isAutoArranged && response.data.isAutoArranged[monitorInfo.name]
 				});
 			});
-		})
+		});
+
+		/*
+			11/6/19 JC: If the auto arrange status changes this could be due to the toolbar changing monitors.
+			The old way only pulled monitor info once and compared against the updating auto arrange status.
+			This way, every time the auto arrange status changes get the updated monitor info
+			from docking and compare against updated monitor info
+		*/
+		FSBL.Clients.RouterClient.subscribe('DockingService.AutoarrangeStatus', (err, response) => {
+			FSBL.Clients.WindowClient.getMonitorInfo({}, (err, monitorInfo) => {
+				this.setState({
+					autoArrangeData: response.data.isAutoArranged,
+					isAutoArranged: response.data.isAutoArranged && response.data.isAutoArranged[monitorInfo.name]
+				});
+			});
+		});
+
+		//If the toolbar is moved, recalculate the auto arrange status since the monitor might have changed
+		finsembleWindow.addEventListener('bounds-change-end', () => {
+			FSBL.Clients.WindowClient.getMonitorInfo({}, (err, monitorInfo) => {
+				this.setState({
+					isAutoArranged: this.state.autoArrangeData && this.state.autoArrangeData[monitorInfo.name]
+				});
+			});
+		});
 	}
 
 
 	autoArrange() {
-		this.setState({
-			isAutoArranged: !this.state.isAutoArranged
-		});
 		FSBL.Clients.WorkspaceClient.autoArrange({}, () => {
 			ToolbarStore.bringToolbarToFront();
 		});
