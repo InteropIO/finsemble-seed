@@ -27,7 +27,7 @@
         "migrate": "node migration/2.3/migrationScripts/migrate.js"
     },
     "author": "",
-    "license": "",
+    "license": "apache-2.0",
     "optionalDependencies": {
         "@chartiq/finsemble-cli": "3.3.1",
         "@chartiq/finsemble-electron-adapter": "3.12.1",
