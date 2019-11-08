@@ -141,11 +141,19 @@ export default class AddNewAppForm extends React.Component {
 		});
 	}
 	/**
-	 * WILD regex I stole off of google. Allows http or https. Requires some kind of .co or something. Great.
-	 * @param {keyboardEvent} e
+	 * Attempt to make a URL object, if successful the provided URL is valid.
+	 * If the URL constructor determines the provided string to be invalid it throws a TypeError.
+	 *
+	 * @param {string} url
+	 * @return boolean
 	 */
 	validateURL(url) {
-		return /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm.test(url);
+		try {
+			new URL(url);
+			return true;
+		} catch(e) {
+			return false;
+		}
 	}
 
 	/**
