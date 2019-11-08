@@ -226,11 +226,7 @@ var Actions = {
 				Actions.parentWrapper = null;
 				Actions.getInitialTabList(() => {
 					FSBL.Clients.Logger.system.debug("docking group update after initial tab list");
-					onDockingGroupUpdate(null, {
-						data: {
-							groupData: windowTitleBarStore.getValue({ field: "Main.allDockingGroups" })
-						}
-					})
+					FSBL.Clients.WindowClient.alpha_requestGroupDataPublish();
 				});
 			};
 			var onParentCleared = () => {
@@ -239,11 +235,7 @@ var Actions = {
 				Actions.stopListeningOnParentWrapper(() => {
 					Actions.parentWrapperStore = null;
 					Actions._setTabs(null);
-					onDockingGroupUpdate(null, {
-						data: {
-							groupData: windowTitleBarStore.getValue({ field: "Main.allDockingGroups" })
-						}
-					});
+					FSBL.Clients.WindowClient.alpha_requestGroupDataPublish();
 				});
 			};
 
