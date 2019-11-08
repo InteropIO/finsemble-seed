@@ -11,7 +11,7 @@ const FSBLReady = () => {
 		 * 3. "not needed" - Either the user has already been migrated or has no data to migrate. Continue as normal.
 		 * 
 		 * This component also throws one event to the service: Migration.begin. It can be used to work with 
-		 * the service on a coutdown or, alternately, thrown immediately upon launch if there is no need to communicate
+		 * the service on a countdown or, alternately, thrown immediately upon launch if there is no need to communicate
 		 * with the user.
 		 * 
 		 */

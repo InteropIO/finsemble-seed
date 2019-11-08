@@ -166,7 +166,7 @@ class DataMigrationService extends BaseService {
 	}
 }
 
-const TOPICS = ['finsemble', 'finsemble.workspace', 'finsemble.workspace.cache'];
+const TOPICS = ['finsemble', 'finsemble.workspace'];
 
 const dms = new DataMigrationService({ 
 	startupDependencies: {

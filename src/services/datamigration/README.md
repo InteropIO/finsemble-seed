@@ -6,11 +6,11 @@ In some cases, users have been deployed using Chromium's IndexedDB as the defaul
 
 In other cases, migration from one remote datastore to another is needed. This recipe, with appropriate modifications, can handle both cases.
 
-For the purposes of this example, the **current** datasource will be **IndexedDB**. _N.b._: this recipe does not utilize a remote data adapter. It utilizes LocalStorage as a mimic for data migration. It is up to you to create the storage adapter you'd like to use and register it by comparing the recipe to your extant code.
+For the purposes of this example, the **current** datasource will be **IndexedDB**. _N.b._: this recipe does not utilize a remote data adapter. It utilizes LocalStorage as a mimic for data migration. It is up to you to create the storage adapter you'd like to use and register it by comparing the recipe to your extant code. [This tutorial](https://documentation.chartiq.com/finsemble/tutorial-storingData.html) has more information on storage adapter fundamentals.
 
 ## Ingredients
 
-This recipe contains a service and a component to assist in setting up a migration workflow. Here are the provided files in the `src` diretory of this branch:
+This recipe contains a service and a component to assist in setting up a migration workflow. Here are the provided files in the `src` directory of this branch:
 
 ```
 src
@@ -59,8 +59,7 @@ The Migration Assistant component is a basic HTML5 component designed to communi
 			"defaultStorage": "LocalStorageAdapter",
 			"topicToDataStoreAdapters": {
 				"finsemble": "LocalStorageAdapter",
-				"finsemble.workspace": "LocalStorageAdapter",
-				"finsemble.workspace.cache": "LocalStorageAdapter"
+				"finsemble.workspace": "LocalStorageAdapter"
 			},
 			"dataStoreAdapters": {
 				"LocalStorageAdapter": "$applicationRoot/adapters/localStorageAdapter.js",
