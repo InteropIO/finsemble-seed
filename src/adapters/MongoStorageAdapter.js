@@ -171,7 +171,7 @@ class MongoStorageAdapter extends BaseStorage {
 	 * @param {function} cb
 	 */
 	empty = function(cb) {
-		// Implementation here
+		Logger.system.error("empty is not implemented for the MongoStorageAdapter");
 	};
 }
 
