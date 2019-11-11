@@ -84,7 +84,7 @@ class MongoStorageAdapter extends BaseStorage {
 	};
 
 	/**
-	 * Returns all keys stored in MongoDB.
+	 * Returns all keys stored in MongoDB for the user and an optional topic and keyPrefix.
 	 *
 	 * @param {object} params
 	 * @param {function} cb
