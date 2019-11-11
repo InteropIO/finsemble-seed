@@ -109,7 +109,7 @@ class MongoStorageAdapter extends BaseStorage {
 	/**
 	 * Delete method.
 	 * @param {object} params
-	 * @param {string} params.topic A topic under which the data should be stored.
+	 * @param {string} params.topic The topic under which the data is stored.
 	 * @param {string} params.key The key whose value is being deleted.
 	 * @param {function} cb Callback to be invoked upon completion.
 	 */
