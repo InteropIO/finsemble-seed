@@ -202,6 +202,7 @@ function loadInstalledConfigComponents(cb = Function.prototype) {
 					appID: componentName,
 					icon: component.foreign.Toolbar && component.foreign.Toolbar.iconClass ? component.foreign.Toolbar.iconClass : null,
 					name: componentName,
+					displayName: component.component.displayName || componentName,
 					source: "config",
 					tags: extractTagsFromFinsembleComponentConfig(component)
 				};
@@ -289,7 +290,7 @@ function addPin(pin) {
 			if (componentToToggle.component && componentToToggle.component.windowGroup) { params.groupName = componentToToggle.component.windowGroup; }
 			var thePin = {
 				type: "componentLauncher",
-				label: pin.name,
+				label: pin.displayName,
 				component: componentToToggle.group ? componentToToggle.list : componentType,
 				fontIcon: fontIcon,
 				icon: imageIcon,
@@ -459,7 +460,7 @@ function renameFolder(oldName, newName) {
 
 function addAppToFolder(folderName, app) {
 	data.folders[folderName].apps[app.appID] = {
-		name: app.name,
+		name: app.displayName,
 		appID: app.appID
 	};
 	_setFolders();
