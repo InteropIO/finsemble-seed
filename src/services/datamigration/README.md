@@ -59,7 +59,8 @@ The Migration Assistant component is a basic HTML5 component designed to communi
 			"defaultStorage": "LocalStorageAdapter",
 			"topicToDataStoreAdapters": {
 				"finsemble": "LocalStorageAdapter",
-				"finsemble.workspace": "LocalStorageAdapter"
+				"finsemble.workspace": "LocalStorageAdapter",
+				"finsemble.workspace.cache": "IndexedDBAdapter"
 			},
 			"dataStoreAdapters": {
 				"LocalStorageAdapter": "$applicationRoot/adapters/localStorageAdapter.js",
