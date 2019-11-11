@@ -134,7 +134,8 @@ class MongoStorageAdapter extends BaseStorage {
 	};
 
 	/**
-	 * Get the prefix used to filter keys for particular topics and key prefixes.
+	 * Get the prefix used to filter keys with an optional topic and keyPrefix.
+	 * Note that if topic is not provided, keyPrefix is also ignored.
 	 *
 	 * @param {object} params
 	 * @param {string} params.topic The topic (optional).
