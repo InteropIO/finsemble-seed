@@ -146,7 +146,11 @@ class MongoStorageAdapter extends BaseStorage {
 	 */
 	getKeyPreface = function(params) {
 		const keyPrefix = "keyPrefix" in params ? params.keyPrefix : "";
-		const preface = `${this.getUserPreface()}:${params.topic}:${keyPrefix}`;
+		if (params && params.topic){
+			return `${this.getUserPreface()}${params.topic}:${keyPrefix}`;
+		} else {
+			return `${this.getUserPreface()}`;
+		}
 
 		return preface;
 	};
