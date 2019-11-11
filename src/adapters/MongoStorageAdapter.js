@@ -153,7 +153,7 @@ class MongoStorageAdapter extends BaseStorage {
 	 * @private
 	 */
 	getUserPreface = function() {
-		const preface = `${this.baseName}:${this.userName}`;
+		const preface = `${this.baseName}:${this.userName}:`;
 		return preface;
 	};
 
