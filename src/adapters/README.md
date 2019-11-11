@@ -416,7 +416,8 @@ module.exports = mongoAdapter; // Allows us to get access to the uninitialized o
     ```
 
 1. Add a `dataStoreAdapter` as shown above.
-1. Register your new adapter as `defaultStorage` and for the  `finsemble` and `finsemble.workspace` topics. Note that `finsemble.workspace.cache` is a _high frequency_ topic (e.g., it's read and written every time a component is opened, dragged, resized, etc.) and thus should be maintained as a local storage adapter and _not_ saved to an external datastore.
+1. Register your new adapter as `defaultStorage` so that it is used for any unspecified storage topics.
+1. Map the `finsemble` and `finsemble.workspace` topics to your new adapter in `topicToDataStoreAdapters`. Note that `finsemble.workspace.cache` is a _high frequency_ topic (e.g., it's read and written every time a component is opened, dragged, resized, etc.) and thus should be maintained as a local storage adapter and _not_ saved to an external datastore.
 1. Add your storage adapter to _build/webpack/webpack.adapters.entries.json_.
 1. Start Finsemble: `npm run dev`.
 
