@@ -132,7 +132,7 @@ const IndexedDBAdapter = function (uuid) {
 	// #endregion
 
 	/**
-	 * Get the prefix used to filter keys for particular topics and key prefixes.
+	 * Get the prefix used to filter keys with an option topic and key prefixe.
 	 *
 	 * @param {object} params
 	 * @param {string} params.topic The topic
@@ -140,8 +140,11 @@ const IndexedDBAdapter = function (uuid) {
 	 * @private
 	 */
 	this.getKeyPreface = (params) => {
-		const keyPrefix = "keyPrefix" in params ? params.keyPrefix : "";
-		const preface = `${this.getUserPreface()}:${params.topic}:${keyPrefix}`;
+		let preface = this.getUserPreface();
+		if (params && params.topic){
+			const keyPrefix = "keyPrefix" in params ? params.keyPrefix : "";
+			preface += `${params.topic}:${keyPrefix}`;
+		}
 
 		return preface;
 	}
@@ -151,7 +154,7 @@ const IndexedDBAdapter = function (uuid) {
 	 * @private
 	 */
 	this.getUserPreface = () => {
-		const preface = `${this.baseName}:${this.userName}`;
+		const preface = `${this.baseName}:${this.userName}:`;
 		return preface;
 	}
 
@@ -171,8 +174,8 @@ const IndexedDBAdapter = function (uuid) {
 	}
 	// #region Interface Methods
 	/**
-	 * This method should be used very, very judiciously. It's essentially a method designed to wipe the database for a
-	 * particular user.
+	 * This method should be used very, very judiciously. It's essentially a method designed to wipe the 
+	 * database for a particular user.
 	 */
 	this.clearCache = (params, cb) => {
 		if (!initialized) {
@@ -320,7 +323,7 @@ const IndexedDBAdapter = function (uuid) {
 	}
 
 	/**
-	 * Returns all keys stored in IndexDB.
+	 * Returns all keys stored in IndexDB, with an option topic and keyPrefix.
 	 *
 	 * @param {object} params
 	 * @param {function} cb

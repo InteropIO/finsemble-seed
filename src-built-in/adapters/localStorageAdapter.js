@@ -67,20 +67,24 @@ const LocalStorageAdapter = function (uuid) {
 
 	// Return prefix used to filter keys.
 	this.getKeyPreface = function (self, params) {
-		let preface = self.baseName + ":" + self.userName + ":" + params.topic + ":";
-		if ("keyPrefix" in params) {
-			preface = preface + params.keyPrefix;
+		let preface = self.baseName + ":" + self.userName + ":"
+		if (params && params.topic){
+			preface += params.topic + ":";
+			if (params.keyPrefix) {
+				preface += params.keyPrefix;
+			}
 		}
+		
 		return preface;
 	};
 
 	/**
-	 * Returns all keys stored in localstorage of a given topic and keyPrefix.
+	 * Returns all keys stored in localstorage for the current user, with an optional topic and keyPrefix.
 	 *
 	 * LocalStorage is synchronous, so the callback is optional (the function
 	 * immediately returns the results if the callback is omitted).
 	 *
-	 * @param {*} params An object that must include the topic and keyPrefix of the desired keys.
+	 * @param {*} params An object that may include the topic and keyPrefix of the desired keys.
 	 * @param {*} cb An optional callback that will be passed any errors that occurred and the found keys.
 	 */
 	this.keys = function (params, cb) {
@@ -168,7 +172,7 @@ const LocalStorageAdapter = function (uuid) {
 			// Iterate over localStorage and insert data related to the user into an array.
 			for (let i = 0; i < localStorage.length; i++) {
 				//console.log("localStorage.key(i):::", localStorage.key(i).substring(0, (this.baseName + ":" + this.userName).length));
-				if (localStorage.key(i).substring(0, (this.baseName + ":" + this.userName).length) === this.baseName + ":" + this.userName) {
+				if (localStorage.key(i).substring(0, (this.baseName + ":" + this.userName + ":").length) === this.baseName + ":" + this.userName + ":") {
 					arr.push(localStorage.key(i));
 				}
 			}
