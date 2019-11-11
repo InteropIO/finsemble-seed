@@ -172,7 +172,8 @@ const LocalStorageAdapter = function (uuid) {
 			// Iterate over localStorage and insert data related to the user into an array.
 			for (let i = 0; i < localStorage.length; i++) {
 				//console.log("localStorage.key(i):::", localStorage.key(i).substring(0, (this.baseName + ":" + this.userName).length));
-				if (localStorage.key(i).substring(0, (this.baseName + ":" + this.userName + ":").length) === this.baseName + ":" + this.userName + ":") {
+        const userKeyBase = this.baseName + ":" + this.userName + ":";
+				if (localStorage.key(i).startsWith(userKeyBase)) {
 					arr.push(localStorage.key(i));
 				}
 			}
