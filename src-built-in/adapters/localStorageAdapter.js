@@ -80,6 +80,7 @@ const LocalStorageAdapter = function (uuid) {
 
 	/**
 	 * Returns all keys stored in localstorage for the current user, with an optional topic and keyPrefix.
+	 * Note that if topic is not provided, keyPrefix is also ignored.
 	 *
 	 * LocalStorage is synchronous, so the callback is optional (the function
 	 * immediately returns the results if the callback is omitted).
