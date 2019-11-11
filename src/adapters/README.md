@@ -73,7 +73,7 @@ class MongoStorageAdapter extends BaseStorage {
 		
 	}
 
-    /**
+	/**
 	 * Returns all keys stored in MongoDB.
 	 *
 	 * @param {object} params
