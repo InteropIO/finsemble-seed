@@ -101,7 +101,9 @@ module.exports = mongoAdapter;
 
 ```
 
-Because keys are a multipart string, it's useful to have a helper function to construct what we'll refer to as the _combined key_. The helper `getCombinedKey` is provided for you in the baseStorage model within Finsemble; by extending our adapter from BaseStorage, it will inherit this helper. You should also include the Logger client for debugging purposes.
+The Storage service in Finsemble provides multiple variables that can be used to address stored data. In our MongoDB example, however, we're going to work with simple key:value pairs. This means that keys are a multipart strings and therefore it's useful to have a helper function to construct what we'll refer to as the _combined key_. The helper `getCombinedKey` is provided for you in the baseStorage model within Finsemble; by extending our adapter from BaseStorage, it will inherit this helper. You should also include the Logger client for debugging purposes.
+
+Note that you do not have to use the `getCombinedKey` helper, particularly if you intend to store data in a multi-column format using all of the variables provided.
 
 Each of our methods will take a **params** object and a **cb** callback method.
 
