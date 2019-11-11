@@ -460,7 +460,8 @@ function renameFolder(oldName, newName) {
 
 function addAppToFolder(folderName, app) {
 	data.folders[folderName].apps[app.appID] = {
-		name: app.displayName,
+		name: app.name,
+		displayName: app.displayName,
 		appID: app.appID
 	};
 	_setFolders();
