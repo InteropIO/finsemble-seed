@@ -163,7 +163,7 @@ class MongoStorageAdapter extends BaseStorage {
 	 * particular user.
 	 */
 	clearCache = function(params, cb) {
-		// Implementation here
+		Logger.system.error("clearCache is not implemented for the MongoStorageAdapter");
 	};
 
 	/**
