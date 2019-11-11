@@ -132,10 +132,10 @@ const IndexedDBAdapter = function (uuid) {
 	// #endregion
 
 	/**
-	 * Get the prefix used to filter keys with an option topic and key prefixe.
-	 *
+	 * Get the prefix used to filter keys with an optional topic and keyPrefix.
+	 * Note that if topic is not provided, keyPrefix is also ignored.
 	 * @param {object} params
-	 * @param {string} params.topic The topic
+	 * @param {string} params.topic The topic (optional).
 	 * @param {string} params.keyPrefix The key prefix (optional).
 	 * @private
 	 */
