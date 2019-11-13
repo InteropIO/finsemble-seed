@@ -63,7 +63,7 @@ export default class Search extends React.Component {
 				// which is preventing the onClick handler which from firing.
 				// A search result item's click handler must have the highest priority
 				// otherwise clicking on search results to spawn a component will fail.
-				// I really hate setTimeout, but it shouldn't have any side here.
+				// I really hate setTimeout, but it shouldn't have any side effects here.
 				setTimeout(storeExports.Actions.handleClose, 300)
 			}
 		})
