@@ -58,7 +58,13 @@ export default class Search extends React.Component {
 	meunBlur() {
 		mouseInElement(this.searchInput.current, function (err, inBounds) {
 			if (!inBounds) {
-				storeExports.Actions.handleClose();
+				// Sometimes storeExports.Actions.handleClose is invoked
+				// before the onClick handler inside searchMenu/componentitem.jsx
+				// which is preventing the onClick handler which from firing.
+				// A search result item's click handler must have the highest priority
+				// otherwise clicking on search results to spawn a component will fail.
+				// I really hate setTimeout, but it shouldn't have any side here.
+				setTimeout(storeExports.Actions.handleClose, 300)
 			}
 		})
 	}
