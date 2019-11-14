@@ -37,17 +37,7 @@ export default class AppDefinition extends React.Component {
 		setTimeout(() => {
 			finsembleWindow.hide();
 		}, 100);
-		const name = this.props.app.title || this.props.app.name
-		// If the app has a URL property
-		// For now, this means it was manually added
-		// So lets spawn from URL
-		if (this.props.app.url) {
-			return FSBL.Clients.LauncherClient.spawn(null, {
-				url: this.props.app.url,
-				addToWorkspace: true
-			})
-		}
-		// Otherwise launch application by name
+		const name = this.props.app.title || this.props.app.name;
 		FSBL.Clients.LauncherClient.spawn(name, {
 			addToWorkspace: true
 		});
