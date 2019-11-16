@@ -17,10 +17,7 @@ export default class AlwaysOnTop extends React.Component {
 	}
 
 	alwaysOnTopListener(event) {
-		console.log(event);
-		console.log(this.state);
 		if (event.data.alwaysOnTop !== this.state.alwaysOnTop) {
-			console.log("going always on top", event.data.alwaysOnTop);
 			this.setState({
 				alwaysOnTop: event.data.alwaysOnTop
 			});
