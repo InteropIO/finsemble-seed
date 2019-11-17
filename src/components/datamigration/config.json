@@ -23,7 +23,7 @@
                     "Window Manager": {
                         "alwaysOnTopIcon": true,
                         "title": "Data Migration Assistant",
-                        "FSBLHeader": false,
+                        "FSBLHeader": true,
                         "persistWindowState": true
                     },
                     "Toolbar": {
