@@ -4,11 +4,9 @@ const {
 	RouterClient,
 	Logger,
 	StorageClient,
-	ConfigClient,
 	LauncherClient
 } = Finsemble.Clients;
 
-ConfigClient.initialize();
 Logger.start();
 
 /**
