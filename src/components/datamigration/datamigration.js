@@ -15,7 +15,23 @@ const FSBLReady = () => {
 		 * with the user.
 		 * 
 		 */
-		FSBL.Clients.RouterClient.addListener("Migration", (err, event) => {
+		FSBL.Clients.RouterClient.subscribe("Migration", (err, notify) => {
+			console.log("migration", notify.data)
+			if (!err) {
+				switch(notify.data) {
+					case "end":
+						document.querySelector("#migrationWarning").classList.add("hidden");
+						document.querySelector("#migrationComplete").classList.remove("hidden");
+						break;
+					case "not needed":
+						document.querySelector("#migrationNotNeeded").classList.remove("hidden");
+						document.querySelector("#migrationCheck").classList.add("hidden");
+						break;
+				}
+			}
+		});
+		/*(err, event) => {
+			FSBL.Clients.Logger.log("***  migration ", event.data)
 
 			if (event.data == "end") {
 				document.querySelector("#migrationWarning").classList.add("hidden");
@@ -26,25 +42,22 @@ const FSBLReady = () => {
 				document.querySelector("#migrationNotNeeded").classList.remove("hidden");
 				document.querySelector("#migrationCheck").classList.add("hidden");
 			}
-
+*/
 			// Allow the user to cancel the migration and ask questions.
 			// If they choose to cancel the countdown because they'd like to talk to support, close Finsemble to not allow further work.
-			document.querySelector("#cancel").addEventListener("click", (e) => {
-				clearInterval(migrationTimer);
-				FSBL.Clients.RouterClient.transmit("Application.shutdown");
-			});
+		document.querySelector("#cancel").addEventListener("click", (e) => {
+			FSBL.Clients.RouterClient.transmit("Application.shutdown");
+		});
 
-			// Allow the user to skip the countdown and begin immediately.
-			document.querySelector('#begin').addEventListener('click', (e) => {
-				clearInterval(migrationTimer);
-				FSBL.Clients.RouterClient.transmit("Migration", "begin");
-			});
+		// Allow the user to skip the countdown and begin immediately.
+		document.querySelector('#begin').addEventListener('click', (e) => {
+			FSBL.Clients.RouterClient.publish("Migration", "begin");
+		});
 
-			// Force Finsemble to restart
-			document.querySelector("#restart").addEventListener("click", (e) => {
-				FSBL.Clients.RouterClient.transmit("Application.restart");
-			});
-		})
+		// Force Finsemble to restart
+		document.querySelector("#restart").addEventListener("click", (e) => {
+			FSBL.Clients.RouterClient.transmit("Application.restart");
+		});
 	} catch (e) {
 		FSBL.Clients.Logger.error(e);
 	}

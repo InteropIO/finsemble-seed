@@ -3,18 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Migration Assistant</title>
+  <title>Data Migration Assistant</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-   <link rel="stylesheet" type="text/css" href="migration.css">
-   <script src="migration.js"></script>
+   <link rel="stylesheet" type="text/css" href="datamigration.css">
+   <script src="datamigration.js"></script>
 </head>
 <body>
-<h1>Migration Assistant</h1>
+<h1>Data Migration Assistant</h1>
 
-<div id="migrationWarning" class="hidden migration-needed"><h2>Your user data may need to be migrated.</h2>
+<div id="migrationWarning" class="migration-needed"><h2>Your user data may need to be migrated.</h2>
   <p class="warning">If this message is unexpected, please click "Cancel and shut down" and contact your IT helpdesk.</p>
-  <p>Your data will be migrated to the database as per IT request in <span id="countdown">30</span> seconds and the application will be restarted.</p>
   <button id="cancel">Cancel and shut down.</button> <button id="begin">Begin migration now.</button>
 </div>
 
@@ -29,4 +28,3 @@
   
 </body>
 </html>
-

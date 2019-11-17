@@ -31,48 +31,69 @@ class DataMigrationService extends BaseService {
 	 * Takes all Storage Adapter topics provided and creates an array of objects for all topics
 	 * Invokes saveAllData afterwards.
 	 * 
-	 * @param {Array} topics 
+	 * @param {Array} topics The storage topics to be migrated as specified in TOPICS
 	 */
 	retrieveDatabase(topics) {
-		const keysPromises = [];
+		const promiseSet = [];
 
 		topics.forEach((topic) => {
-			keysPromises.push(new Promise((resolve, reject) => {
-				StorageClient.keys({ topic: topic }, (err, keys) => {
+			promiseSet.push(new Promise((resolve, reject) => {
+				// Reset to use old storage adapter to retrieve all the user's data
+				StorageClient.setStore({ topic: topic, dataStore: this.adapter }, (err, data) => {
 					if (err) {
-						reject(err);
+						reject(new Error(err));
 					}
-					const topickeypairs = [];
-					keys.forEach((key) => {
-						topickeypairs.push({ topic: topic, key: key });
-					});
-					resolve(topickeypairs);
+					resolve(data);
 				});
 			}));
-
-			Promise.all(keysPromises).then((allpairs) => {
-				const pairs = allpairs.reduce((acc, curr) => {
-					return [...acc, ...curr];
-				});
-
-				const valuesPromises = [];
-
-				pairs.forEach((pair) => {
-					valuesPromises.push(new Promise((resolve, reject) => {
-						StorageClient.get({ topic: pair.topic, key: pair.key }, (err, value) => {
-							if (err) {
-								reject(err);
-							}
-							resolve({topic: pair.topic, key: pair.key, value: value});
-						});
-					}));
-				});
-
-				Promise.all(valuesPromises).then((data) => {
-					this.saveAllData(topics, data);
-				});
-			})
 		});
+
+		Promise.all(promiseSet).then((data) => {
+			const keysPromises = [];
+
+			topics.forEach((topic) => {
+				keysPromises.push(new Promise((resolve, reject) => {
+					StorageClient.keys({ topic: topic }, (err, keys) => {
+						if (err) {
+							reject(err);
+						}
+						
+						const topickeypairs = [];
+
+						keys.forEach((key) => {
+							topickeypairs.push({ topic: topic, key: key });
+						});
+
+						resolve(topickeypairs);
+					});
+				}));
+
+				Promise.all(keysPromises).then((allpairs) => {
+					const pairs = allpairs.reduce((acc, curr) => {
+						return [...acc, ...curr];
+					});
+		
+					const valuesPromises = [];
+		
+					pairs.forEach((pair) => {
+						valuesPromises.push(new Promise((resolve, reject) => {
+							StorageClient.get({ topic: pair.topic, key: pair.key }, (err, value) => {
+								if (err) {
+									reject(err);
+								}
+								resolve({topic: pair.topic, key: pair.key, value: value});
+							});
+						}));
+					});
+		
+					Promise.all(valuesPromises).then((data) => {
+						this.saveAllData(topics, data);
+					});
+				});
+			});
+		})
+		
+		
 	}
 
 	/**
@@ -89,6 +110,7 @@ class DataMigrationService extends BaseService {
 
 		topics.forEach((topic) => {
 			promiseSet.push(new Promise((resolve, reject) => {
+				// Reset to use new storage adapter
 				StorageClient.setStore({ topic: topic, dataStore: this.newAdapter }, (err, data) => {
 					if (err) {
 						reject(new Error(err));
@@ -115,7 +137,7 @@ class DataMigrationService extends BaseService {
 
 			Promise.all(saveSet).then(() => {
 				StorageClient.save({ topic: "finsemble", key: `migrated_from_${this.adapter}`, value: Date.now() });
-				RouterClient.transmit("Migration", "end");
+				RouterClient.publish("Migration", "end");
 			});
 		});
 	}
@@ -135,32 +157,43 @@ class DataMigrationService extends BaseService {
 
 			if (!data) {
 				// The user does not have a migration record.
-				
-				StorageClient.keys({ topic: "finsemble"}, (err, keys) => {
+				const promiseSet = [];
+
+				StorageClient.setStore({ topic: "finsemble", dataStore: this.adapter }, (err, data) => {
 					if (err) {
-						throw new Error(err);
+						reject(new Error(err));
 					}
+					StorageClient.keys({ topic: "finsemble" }, (err, keys) => {
+						if (err) {
+							throw new Error(err);
+						}
+	
+						if (keys) {
+							// The user has Finsemble records and thus should be migrated.
+							RouterClient.addPubSubResponder("Migration", { "State" : "start"}, {
+								publishCallback: (err, publish) => { 
+									if (publish) {
+										publish.sendNotifyToAllSubscribers(null, publish.data);
 
-					if (keys) {
-						// The user has Finsemble records and thus should be migrated.
-
-						LauncherClient.spawn("migration", {}, (err, response) => {
-							RouterClient.transmit('Migration', 'needed');
-							RouterClient.addListener('Migration', (err, event) => {
-								if (event.data == 'begin') {
-									Logger.log("*** datamigration begin")
-									this.retrieveDatabase(TOPICS);
+										if (publish.data == "begin") {
+											Logger.log("*** datamigration begin")
+											this.retrieveDatabase(TOPICS);
+										}
+									}
 								}
 							});
-						});
-					} else {
-						// This is a new user. Set their migration record as 0 so they're not checked again.
-						StorageClient.save({ topic: "finsemble", key: `migrated_from_${this.adapter}`, value: 0 });
-						RouterClient.transmit("Migration", "not needed");
-					}
+
+							LauncherClient.spawn("datamigration", {}, (err, response) => {
+								RouterClient.publish("Migration", "needed");
+
+							});
+						} else {
+							// This is a new user. Set their migration record as 0 so they're not checked again.
+							StorageClient.save({ topic: "finsemble", key: `migrated_from_${this.adapter}`, value: 0 });
+							RouterClient.publish("Migration", "not needed");
+						}
+					});
 				});
-			} else {
-				RouterClient.transmit("Migration", "not needed");
 			}
 		});
 	}

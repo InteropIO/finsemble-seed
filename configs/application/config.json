@@ -1,6 +1,11 @@
 {
 	"comment": "Top-level application config for development, adding on top of the core config",
-	"accessibleLinker": true,
+	"authentication": {
+		"startup": {
+			"adapter": "PASSWORD",
+			"component": "defaultAuthentication"
+		}
+	},
 	"servicesConfig": {
 		"distributedStore": {
 			"initialStores": [
@@ -8,7 +13,10 @@
 					"name": "Finsemble-AppLauncher-Store",
 					"foundation": {
 						"appFolders": {
-							"list": ["My Apps", "Favorites"],
+							"list": [
+								"My Apps",
+								"Favorites"
+							],
 							"folders": {
 								"My Apps": {
 									"icon": "ff-component",
@@ -65,14 +73,15 @@
 			"onlySpawned": true,
 			"throttle": 10,
 			"focusDelay": 30,
-			"eventIgnore": 50,
-			"hideTitleBars": false
+			"eventIgnore": 50
 		},
 		"docking": {
 			"enabled": true,
 			"groupTileBuffer": 30,
 			"headerHeight": 32,
 			"MINIMUM_WIDTH": 175,
+			"defaultHeight": 39,
+			"defaultWidth": 600,
 			"requireRectangularityForGroupResize": true,
 			"undockDisbandsEntireGroup": false,
 			"fillHolesOnUndock": true,
@@ -84,13 +93,17 @@
 			}
 		},
 		"logger": {
-			"hotkeyShowCentralLogger": ["ctrl", "shift", "L"]
+			"hotkeyShowCentralLogger": [
+				"ctrl",
+				"shift",
+				"L"
+			]
 		},
 		"storage": {
-			"defaultStorage": "IndexedDBAdapter",
+			"defaultStorage": "LocalStorageAdapter",
 			"topicToDataStoreAdapters": {
-				"finsemble": "IndexedDBAdapter",
-				"finsemble.workspace": "IndexedDBAdapter",
+				"finsemble": "LocalStorageAdapter",
+				"finsemble.workspace": "LocalStorageAdapter",
 				"finsemble.workspace.cache": "IndexedDBAdapter"
 			},
 			"dataStoreAdapters": {
@@ -108,6 +121,8 @@
 	"systemTrayComponent": "File Menu",
 	"Window Manager": {
 		"alwaysOnTopIcon": false,
+		"showTabs": true,
+		"showNativeTabs": true,
 		"floatingTitlebarComponent": "Floating Titlebar",
 		"deliveryMechanism": "preload"
 	},

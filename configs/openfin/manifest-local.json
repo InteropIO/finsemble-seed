@@ -71,7 +71,7 @@
         "notificationURL": "$applicationRoot/components/notification/notification.html",
         "importConfig": [
             "$applicationRoot/configs/application/config.json",
-            "$applicationRoot/components/migration/config.json",
+            "$applicationRoot/components/datamigration/config.json",
             "$applicationRoot/services/datamigration/config.json"
         ],
         "IAC": {
