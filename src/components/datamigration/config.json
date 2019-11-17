@@ -16,19 +16,14 @@
                 "spawnOnStartup": false
             },
             "foreign": {
-                "services": {
-                    "dockingService": {
-                        "canGroup": true,
-                        "isArrangable": true
-                    }
-                },
                 "components": {
                     "App Launcher": {
                         "launchableByUser": false
                     },
                     "Window Manager": {
+                        "alwaysOnTopIcon": true,
                         "title": "Data Migration Assistant",
-                        "FSBLHeader": true,
+                        "FSBLHeader": false,
                         "persistWindowState": true
                     },
                     "Toolbar": {

@@ -1,11 +1,5 @@
 {
 	"comment": "Top-level application config for development, adding on top of the core config",
-	"authentication": {
-		"startup": {
-			"adapter": "PASSWORD",
-			"component": "defaultAuthentication"
-		}
-	},
 	"servicesConfig": {
 		"distributedStore": {
 			"initialStores": [
