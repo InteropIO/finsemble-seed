@@ -70,6 +70,8 @@ The Migration Assistant component is a basic HTML5 component designed to communi
     }
     ```
 
+    Note: as `finsemble.workspace.cache` is a topic that is very frequently read from and written to, it is not advisable to use an external storage adapter for it.
+
 1. In the  `finsemble.importConfig` array of your [manifest](https://documentation.chartiq.com/finsemble/tutorial-Configuration.html), include references to the component and service `config.json`:
     
     ```json

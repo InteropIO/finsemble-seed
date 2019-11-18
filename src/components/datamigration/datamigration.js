@@ -32,7 +32,7 @@ const FSBLReady = () => {
 		// Allow the user to cancel the migration and ask questions.
 		// If they choose to cancel the countdown because they'd like to talk to support, close Finsemble to not allow further work.
 		document.querySelector("#cancel").addEventListener("click", (e) => {
-			FSBL.Clients.RouterClient.transmit("Application.shutdown");
+			FSBL.shutdownApplication();
 		});
 
 		// Begin the migration immediately.
@@ -42,7 +42,7 @@ const FSBLReady = () => {
 
 		// Force Finsemble to restart
 		document.querySelector("#restart").addEventListener("click", (e) => {
-			FSBL.Clients.RouterClient.transmit("Application.restart");
+			FSBL.restartApplication();
 		});
 	} catch (e) {
 		FSBL.Clients.Logger.error(e);

@@ -8,6 +8,8 @@ const {
 } = Finsemble.Clients;
 
 Logger.start();
+StorageClient.initialize();
+LauncherClient.initialize();
 
 /**
  * class DataMigrationService
@@ -41,12 +43,14 @@ class DataMigrationService extends BaseService {
 					if (err) {
 						reject(new Error(err));
 					}
-					resolve(data);
+					resolve();
 				});
+			}).catch((error) => {
+				Logger.error("*** datamigration error", error);
 			}));
 		});
 
-		Promise.all(promiseSet).then((data) => {
+		Promise.all(promiseSet).then(() => {
 			const keysPromises = [];
 
 			topics.forEach((topic) => {
@@ -64,6 +68,8 @@ class DataMigrationService extends BaseService {
 
 						resolve(topickeypairs);
 					});
+				}).catch((error) => {
+					Logger.error("*** datamigration error", error);
 				}));
 
 				Promise.all(keysPromises).then((allpairs) => {
@@ -81,6 +87,8 @@ class DataMigrationService extends BaseService {
 								}
 								resolve({topic: pair.topic, key: pair.key, value: value});
 							});
+						}).catch((error) => {
+							Logger.error("*** datamigration error", error);
 						}));
 					});
 		
@@ -89,9 +97,7 @@ class DataMigrationService extends BaseService {
 					});
 				});
 			});
-		})
-		
-		
+		});
 	}
 
 	/**
@@ -115,6 +121,8 @@ class DataMigrationService extends BaseService {
 					}
 					resolve(data);
 				});
+			}).catch((error) => {
+				Logger.error("*** datamigration error", error);
 			}));
 		});
 
@@ -131,6 +139,8 @@ class DataMigrationService extends BaseService {
 						resolve(response);
 					});
 				});
+			}).catch((error) => {
+				Logger.error("*** datamigration error", error);
 			}));
 
 			Promise.all(saveSet).then(() => {
@@ -150,26 +160,29 @@ class DataMigrationService extends BaseService {
 	fetchUserStatus() {
 		StorageClient.get({ topic: "finsemble", key: `migrated_from_${this.adapter}` }, (err, data) => {
 			if (err) {
-				throw new Error(err);
+				Logger.log(`Error fetching the user migration status for migration from ${this.adapter}.`);
 			}
 
 			if (!data) {
 				// The user does not have a migration record.
-				const promiseSet = [];
 
-				StorageClient.setStore({ topic: "finsemble", dataStore: this.adapter }, (err, data) => {
+				StorageClient.setStore({ topic: "finsemble", dataStore: this.adapter }, (err) => {
 					if (err) {
-						reject(new Error(err));
+						Logger.error("*** datamigration failed to set store", err);
 					}
 					StorageClient.keys({ topic: "finsemble" }, (err, keys) => {
 						if (err) {
-							throw new Error(err);
+							Logger.error("*** datamigration failed to fetch", err);
 						}
 	
 						if (keys) {
 							// The user has Finsemble records and thus should be migrated.
 							RouterClient.addPubSubResponder("Migration", { "State" : "start"}, {
-								publishCallback: (err, publish) => { 
+								publishCallback: (err, publish) => {
+									if (err) {
+										Logger.error("*** datamigration failed to publish callback", err);
+									}
+
 									if (publish) {
 										publish.sendNotifyToAllSubscribers(null, publish.data);
 
@@ -181,7 +194,7 @@ class DataMigrationService extends BaseService {
 								}
 							});
 
-							LauncherClient.spawn("datamigration", {}, (err, response) => {
+							LauncherClient.spawn("datamigration", {}, () => {
 								RouterClient.publish("Migration", "needed");
 
 							});
@@ -197,7 +210,7 @@ class DataMigrationService extends BaseService {
 	}
 }
 
-const TOPICS = ['finsemble', 'finsemble.workspace'];
+const TOPICS = ["finsemble", "finsemble.workspace"];
 
 const dms = new DataMigrationService({ 
 	startupDependencies: {
@@ -210,7 +223,7 @@ dms.onBaseServiceReady((callback) => {
 	
 	RouterClient.subscribe("AuthorizationState", function(err,notify) {
 		if (err) {
-			Logger.log("*** datamigration failed to auth");
+			Logger.error("*** datamigration failed to auth");
 		} else {
 			if (!ranMigrationCheck && notify.data.state == "done") {
 				ranMigrationCheck = true;
