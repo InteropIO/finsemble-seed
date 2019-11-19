@@ -84,7 +84,12 @@
             "$applicationRoot/configs/application/config.json"
         ],
         "router": {
-            "crossDomainTransport": "IPCBus"
+            "crossDomainTransport": "IPCBus",
+            "transportSettings": {
+                "FinsembleTransport": {
+                    "serverAddress": "ws://127.0.0.1:3376"
+                }
+            }
         }
     }
 }
