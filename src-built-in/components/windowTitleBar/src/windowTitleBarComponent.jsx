@@ -202,8 +202,11 @@ class WindowTitleBar extends React.Component {
 		// Create the dragger if it doesn't already exist
 		let dragHandle = document.querySelector(".fsbl-drag-handle");
 		if (!dragHandle) {
+			const currentWindow = fin.desktop.Window.getCurrent();
 			dragHandle = document.createElement("div");
 			dragHandle.className = "fsbl-drag-handle";
+			dragHandle.onmousedown = (e) => {currentWindow.startMovingWindow(e)}
+			dragHandle.onmouseup = (e) => {currentWindow.stopMovingWindow(e)}
 
 			fsblHeader.insertBefore(dragHandle, fsblHeader.firstChild);
 			var self = this;

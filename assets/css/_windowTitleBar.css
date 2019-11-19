@@ -1,7 +1,6 @@
 @import url('./_themeWhitelabel.css');
 
 .fsbl-drag-handle {
-    -webkit-app-region: drag;
     z-index: 2147483641;
     /* use below with window scrollbar hack */
     position: fixed;
@@ -92,6 +91,7 @@ html.desktop-active .fsbl-header-title[data-hover=true] {
     text-overflow: ellipsis;
     white-space: nowrap;
     --webkit-user-select: none;
+    user-select: none;
     position: relative;
     padding-bottom: 3px; /* This needs to be half of the thing subtracted from the height. e.g. height = 100% - 6px, then this is 3px) */
 }
