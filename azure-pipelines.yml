@@ -25,6 +25,14 @@ steps:
   name: build
   displayName: "Run the build"
 
+# Copy the finsemble-seed files to the publish location based on PR or version (if master)
+
+# Modify the manifest file 
+
+# Modify manifest location to match the publish location
+
 - script: npm run makeInstaller:prod
   name: makeInstaller
   displayName: "Make a production installer"
+
+# Publish the installer
