@@ -25,6 +25,8 @@ steps:
   name: build
   displayName: "Run the build"
 
+- script: npm install electron-packager
+
 # Copy the finsemble-seed files to the publish location based on PR or version (if master)
 
 # Modify the manifest file 
