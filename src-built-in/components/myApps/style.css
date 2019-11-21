@@ -5,7 +5,6 @@ body {
     letter-spacing: normal;
 }
 
-
 img {
     user-drag: none;
     user-select: none;
@@ -17,6 +16,7 @@ img {
 
 .app-launcher-menu {
     height: 100%;
+    padding: 0px !important;
 }
 
 .pointer {
@@ -26,9 +26,6 @@ img {
 #wrapper {
     height: 100%;
 }
-.top {
-    margin-top: 10px;
-}
 
 .folder-list div {
     outline: none;
@@ -36,14 +33,16 @@ img {
 
 .folder-list {
     margin-top: 10px;
-    max-height: 245px;
+    max-height: 328px;
     overflow-y: auto;
     overflow-x: hidden;
+    padding-right: 5px;
 }
 .bottom {
-    position: absolute;
-    bottom: 12px;
-    width: 150px;
+    padding-top: 8px;
+    width: 195px;
+    border-top: 4px solid var(--appMenu-separator-color);
+    margin-bottom: 10px;
 }
 
 .bottom .complex-menu-section-toggle {
@@ -52,7 +51,7 @@ img {
 }
 
 .complex-menu-section-toggle #rename.error {
-    border-bottom: 1px solid var(--red3);
+    border-bottom: 1px solid var(--appMenu-search-input-error-color);
 }
 
 .complex-menu-wrapper {
@@ -76,10 +75,12 @@ img {
 }
 
 .complex-menu-left-nav {
-    width: 150px;
-    font-size: 12px;
+    width: 195px;
+    font-size: var(--appMenu-font-size);
     flex-direction: column;
     background-color: var(--appMenu-leftNav-background-color);
+    display: flex;
+    justify-content: space-between;
 }
 
 .complex-menu-header-wrapper {
@@ -108,7 +109,7 @@ img {
 }
 
 .tags-list .app-tag .ff-close {
-	margin-top: 3px;
+	margin-top: 2px;
 }
 
 .left-nav-label {
@@ -119,21 +120,39 @@ img {
 }
 
 .left-nav-label i {
-    padding-right: 4px;
+    padding-right: 8px;
+    padding-top: 4px;
     font-size: 13px;
     color: var(--appMenu-leftNav-icon-color);
 }
 
-.folder-action-icons i {
-    margin-left: 3px;
-    padding-left: 1px;
+.folder-action-icons {
+    color: var(--appMenu-icon-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 45px;
+}
+
+.folder-action-icons .ff-adp-edit {
+    transition: .2s all;
+}
+
+.folder-action-icons .ff-adp-trash-outline {
+    padding-top: 2px;
+    padding-right: 4px;
+    transition: .2s all;
+}
+
+.folder-action-icons .ff-adp-trash-outline:hover {
+    color: var(--menu-delete-background-hover-color);
 }
 
 .folder-name {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    width: 80px;
+    width: 105px;
 }
 
 .left-nav-label .folder-action-icons {
@@ -144,18 +163,18 @@ img {
 }
 
 .left-nav-label .ff-favorite {
-    color: var(--yellow3);
+    color: var(--appMenu-app-favorite-color);
 }
 
 .left-nav-label input {
     color: var(--appMenu-font-color);
     width: 100%;
     font-family: var(--font-family);
-    font-weight: var(--primary-font-weight);
+    font-weight: var(--appMenu-font-weight);
 	background: none;
 	border: 0;
 	border-bottom: solid 1px var(--appMenu-search-input-inactive-color);
-	font-size: 12px;
+	font-size: var(--appMenu-font-size);
 	transition: .2s ease-in;
 }
 
@@ -165,21 +184,32 @@ img {
 }
 
 .complex-menu-section-toggle {
-    padding: 5px 5px 5px 0px;
-    padding-left: 7px;
+    padding: 5px 5px 5px 28px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     position: relative;
-    width: 138px;
+    border-radius: 0 20px 20px 0;
+    height: 24px;
+}
+
+.complex-menu-section-toggle.folder-with-icon {
+    padding: 5px 5px 5px 7px;
 }
 
 .complex-menu-action {
-    padding: 5px 5px 5px 0px;
-    padding-left: 7px;
+    padding: 5px 5px 5px 28px;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-between;
+    position: relative;
+    border-radius: 0 20px 20px 0;
+    height: 24px;
+    margin-right: 5px;
+}
+
+.complex-menu-action:first-child{
+
 }
 
 .complex-menu-action i {
@@ -211,7 +241,6 @@ img {
 
 .complex-menu-content-row {
     flex: 1;
-    padding: .75em .75em .75em 0;
     align-content: flex-start;
     background-color: var(--appMenu-background-color);
     overflow-y: auto;
@@ -226,7 +255,7 @@ img {
 
 .folder-actions-menu-wrapper span {
 	line-height: 17px;
-	font-size: 10px;
+	font-size: var(--appMenu-font-size);
 	cursor: pointer;
 }
 
@@ -243,14 +272,14 @@ img {
 }
 
 .folder-actions-menu ul {
-	padding: 0;
-	margin: 0;
+	padding: 0px;
+	margin: 0px;
 }
 
 .folder-actions-menu li {
     cursor: pointer;
 	line-height: 19px;
-	font-size: 11px;
+	font-size: var(--appMenu-font-size);
 	list-style: none;
 	color: var(--appMenu-font-color);
 }
@@ -274,7 +303,7 @@ img {
     border-radius: 3px;
 }
 
-.folder-action-icons .ff-edit:hover {
+.folder-action-icons .ff-adp-edit:hover {
     color: var(--appMenu-edit-icon-hover-color);
 }
 
@@ -287,7 +316,7 @@ img {
 ::-webkit-scrollbar-thumb {
     cursor: pointer;
     border-radius: 3px;
-    background-color: var(--appMenu-scrollbar-color);
+    background-color: var(--scrollbar-color);
 }
 
 select:focus, option:focus {
@@ -296,15 +325,28 @@ select:focus, option:focus {
 }
 
 .actions-menu-wrapper {
-	height: 17px;
+    height: 34px;
+    width: 34px;
+    border-radius: 40px;
 	display: table;
 	position: absolute;
 	top: 10px;
-	right: 10px;
+    right: 10px;
+    color: var(--appMenu-icon-color);
+    transition: .2s all;
 }
+
+.actions-menu-wrapper:hover {
+    color: var(--appMenu-edit-icon-hover-color);
+}
+
+.actions-menu-wrapper li {
+    color: var(--appMenu-font-color);
+}
+
 .actions-menu-wrapper span {
 	line-height: 17px;
-	font-size: 10px;
+	font-size: var(--appMenu-font-size);
 	cursor: pointer;
 }
 .actions-menu-wrapper span i {
@@ -316,36 +358,35 @@ select:focus, option:focus {
 	z-index: 10;
     top: 22px;
 	position: absolute;
-	width: 132px;
+	width: 140px;
 	max-height: 214px;
 	overflow-y: auto;
 }
 .actions-menu ul {
-	padding: 0;
-	margin: 4px 0;
+	padding: 0px;
+	margin: 4px 0px;
 }
 .actions-menu li {
-	font-size: 11px;
+	font-size: var(--appMenu-font-size);
 	cursor: pointer;
 	padding: 5px 8px;
 }
 
 .app-item {
-    border-bottom: solid 1px var(--appMenu-app-item-bottom-border-color);
     position: relative;
-    padding: 6px .75em;
+    padding: 6px 15px;
   }
 
   .app-item, .app-item-title, .app-item-tags {
     display: block;
-    font-weight: var(--primary-font-weight);
-    font-size: 11px;
+    font-weight: var(--tag-font-weight);
+    font-size: var(--tag-font-size);
   }
 
   .app-item-title .ff-favorite{
     margin-left: 6px;
-    padding: 0;
-    font-size: 11px;
+    padding: 0px;
+    font-size: var(--appMenu-font-size);
     color: var(--appMenu-app-favorite-color);
   }
 
@@ -356,10 +397,12 @@ select:focus, option:focus {
     overflow: hidden;
     text-overflow: ellipsis;
     width: 390px;
+    font-weight: var(--appMenu-tag-font-weight);
   }
 
   .app-item-tags i {
     padding-right: 6px;
+    padding-top: 3px;
   }
 
   .app-item:hover {
@@ -369,11 +412,11 @@ select:focus, option:focus {
   .app-item-title {
     display: flex;
     align-items: center;
-    font-size: 13px;
-    margin-bottom: 7px;
+    font-size: 12px;
+    margin: 3px 0px;
     line-height: 1;
     width: 390px;
-    height: 14px;
+    height: 15px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -388,10 +431,14 @@ select:focus, option:focus {
   .filter-sort {
 	width: 100%;
     margin-bottom: 10px;
-    position: relative;
+    padding-top: 10px;
+    position: sticky;
+    top: 0;
+    background-color: var(--appMenu-background-color);
+    z-index: 2147483646;
 }
 .sort {
-    font-size: 11px;
+    font-size: var(--appMenu-font-size);
     padding-left: 10px;
   }
 
@@ -400,14 +447,15 @@ select:focus, option:focus {
   }
 
   .sort-option {
-    font-size: 11px;
-    border-radius: 2px;
+    font-size: var(--appMenu-font-size);
+    border-radius: 15px;
+    font-weight: var(--appMenu-tag-font-weight);
     border: solid 1px var(--appMenu-sort-inactive-border-color);
-    height: 16px;
-    line-height: 16px;
-    padding: 2px 5px 1px 5px;
+    height: 18px;
+    line-height: 17px;
+    padding: 2px 7px;
     display: inline-block;
-    margin: 0 5px;
+    margin: 0px 5px;
   }
 
   .sort-option.active {
@@ -419,16 +467,18 @@ select:focus, option:focus {
 	margin-bottom: 6px;
     padding-left: 10px;
     display: flex;
+    width: 96%;
     align-items: flex-start;
 }
 .search-box input {
 	color: var(--appMenu-font-color);
 	width: calc(100% - 72px);
-	height: 17px;
+    height: 24px;
+    font-family: var(--font-family);
 	background: none;
 	border: 0;
 	border-bottom: solid 1px var(--appMenu-search-input-inactive-color);
-	font-size: 14px;
+	font-size: var(--appMenu-font-size);
 	transition: .2s ease-in;
 }
 
@@ -438,21 +488,22 @@ select:focus, option:focus {
 }
 
 .search-box i {
-	padding-right: 5px;
+    padding-right: 8px;
+    margin-top: 7px;
 }
 .tags-list {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     padding-left: 10px;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
     flex-wrap: wrap;
 }
 .tag-item {
 	cursor: default;
 	margin-bottom: 5px;
 	display: inline-block;
-	font-size: 10px;
+	font-size: var(--tag-font-size);
 	padding: 3px 5px;
 	margin-right: 5px;
 	border-radius: 2px;
@@ -481,6 +532,7 @@ select:focus, option:focus {
     position: absolute;
     top: 0;
     left: 0;
+    z-index: 2147483647;
 }
 .add-app-form form {
     padding: 20px;
@@ -490,6 +542,45 @@ select:focus, option:focus {
 }
 
 .input-error {
-    color: #f16767;
+    color: var(--accent-negative);
     margin: .5em;
+}
+
+.close-icon {
+    border:1px solid transparent;
+	background-color: transparent;
+	display: inline-block;
+	vertical-align: middle;
+  outline: 0;
+  cursor: pointer;
+}
+
+.close-icon::after {
+	content: "\70";
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: font-finance;
+	width: 15px;
+	height: 15px;
+	position: absolute;
+	z-index:1;
+	right: 68px;
+	top: -21px;
+    bottom: 0;
+    margin: auto;
+	padding: 3px 3px 2px 2px;
+	border-radius: 50%;
+	text-align: center;
+	color: var(--appMenu-icon-color);
+	font-size: 8px;
+	cursor: pointer;
+}
+
+.close-icon:hover::after {
+    color: var(--appMenu-font-color);
+}
+
+.input-box:not(:valid) ~ .close-icon {
+	display: none;
 }

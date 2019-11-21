@@ -1,32 +1,40 @@
 import React from "react";
 import { FinsembleButton } from "@chartiq/finsemble-react-controls";
 
+import { ReactComponent as AutoArrangeIcon } from '../../../../assets/img/toolbar/auto-arrange.svg'
+
 // Store
 import ToolbarStore from "../stores/toolbarStore";
 
 export default class AutoArrange extends React.Component {
 	constructor(props) {
 		super(props);
+
 		this.state = {
 			isAutoArranged: false
 		};
-		this.bindCorrectContext();
-		let self = this;
+
+		this.autoArrange = this.autoArrange.bind(this);
+	}
+
+	componentDidMount() {
 		FSBL.Clients.LauncherClient.getMonitorInfo({
 			windowIdentifier: FSBL.Clients.LauncherClient.windowIdentifier
 		}, (err, monitorInfo) => {
-			FSBL.Clients.RouterClient.subscribe('DockingService.AutoarrangeStatus', function (err, response) {
-				self.setState({
+			if (err) {
+				return FSBL.Clients.Logger.error(err)
+			}
+			FSBL.Clients.RouterClient.subscribe('DockingService.AutoarrangeStatus', (err, response) => {
+				if (err) {
+					return FSBL.Clients.Logger.error(err)
+				}
+				this.setState({
 					isAutoArranged: response.data.isAutoArranged && response.data.isAutoArranged[monitorInfo.name]
 				});
 			});
 		})
-
 	}
 
-	bindCorrectContext(){
-		this.autoArrange = this.autoArrange.bind(this);
-	}
 
 	autoArrange() {
 		this.setState({
@@ -38,14 +46,19 @@ export default class AutoArrange extends React.Component {
 	}
 
 	render() {
-		let tooltip = this.state.isAutoArranged ? "Restore" : "Auto Arrange";
-		let wrapperClasses = this.props.classes + " icon-only";
-		if (this.state.isAutoArranged) {
-			wrapperClasses += " highlighted";
-		}
-		let buttonClass = "finsemble-toolbar-button-icon ff-grid";
-		return (<FinsembleButton className={wrapperClasses} buttonType={["Toolbar"]} title={tooltip} onClick={this.autoArrange}>
-			<i className={buttonClass}></i>
-		</FinsembleButton>);
+		const autoArrangedCss = this.state.isAutoArranged ? "auto-arranged" : "";
+
+
+		return (
+			<FinsembleButton
+				className={`icon-only window-mgmt-right ${autoArrangedCss}`}
+				buttonType={["Toolbar"]}
+				title={this.state.isAutoArranged ? "Restore" : "Auto Arrange"}
+				onClick={this.autoArrange}>
+				<span>
+					<AutoArrangeIcon />
+				</span>
+			</FinsembleButton>
+		);
 	}
 }

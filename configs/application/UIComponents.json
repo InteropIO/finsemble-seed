@@ -21,8 +21,8 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"isArrangable": false,
+					"windowService": {
+						"allowAutoArrange": false,
 						"shouldRegister": false
 					}
 				},
@@ -39,8 +39,8 @@
 				"url": "$applicationRoot/components/myApps/index.html",
 				"top": 0,
 				"left": 0,
-				"width": 600,
-				"height": 400,
+				"width": 700,
+				"height": 467,
 				"ephemeral": true,
 				"options": {
 					"autoShow": false
@@ -53,8 +53,8 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"isArrangable": false,
+					"windowService": {
+						"allowAutoArrange": false,
 						"shouldRegister": false
 					}
 				},
@@ -87,8 +87,8 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"isArrangable": false,
+					"windowService": {
+						"allowAutoArrange": false,
 						"shouldRegister": false
 					}
 				},
@@ -120,8 +120,8 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"isArrangable": false,
+					"windowService": {
+						"allowAutoArrange": false,
 						"shouldRegister": false
 					}
 				},
@@ -152,8 +152,8 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"isArrangable": false,
+					"windowService": {
+						"allowAutoArrange": false,
 						"shouldRegister": false
 					}
 				},
@@ -169,11 +169,15 @@
 			}
 		},
 		"linkerWindow": {
+			"bootParams": {
+				"stage": "earlyuser",
+				"dependencies": [ "Toolbar" ]
+			},
 			"window": {
 				"url": "$applicationRoot/components/linker/linker.html",
 				"affinity": "systemComponents",
-				"width": 65,
-				"height": 163,
+				"width": 132,
+				"height": 232,
 				"ephemeral": true,
 				"options": {
 					"autoShow": false,
@@ -186,8 +190,8 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"isArrangable": false,
+					"windowService": {
+						"allowAutoArrange": false,
 						"shouldRegister": false
 					}
 				},
@@ -232,8 +236,8 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"isArrangable": false,
+					"windowService": {
+						"allowAutoArrange": false,
 						"shouldRegister": false
 					}
 				},
@@ -267,8 +271,8 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"isArrangable": false,
+					"windowService": {
+						"allowAutoArrange": false,
 						"shouldRegister": false
 					}
 				},
@@ -301,8 +305,8 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"isArrangable": false,
+					"windowService": {
+						"allowAutoArrange": false,
 						"shouldRegister": false
 					}
 				},
@@ -334,8 +338,8 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"isArrangable": false,
+					"windowService": {
+						"allowAutoArrange": false,
 						"shouldRegister": false
 					}
 				},
@@ -351,6 +355,10 @@
 			}
 		},
 		"yesNo": {
+			"bootParams": {
+				"stage": "earlyuser",
+				"dependencies": [ "Toolbar" ]
+			},
 			"window": {
 				"url": "$applicationRoot/components/yesNoDialog/yesNoDialog.html",
 				"affinity": "systemComponents",
@@ -376,8 +384,8 @@
 					}
 				},
 				"services": {
-					"dockingService": {
-						"isArrangable": false,
+					"windowService": {
+						"allowAutoArrange": false,
 						"shouldRegister": false
 					}
 				},
@@ -393,6 +401,10 @@
 			}
 		},
 		"singleInput": {
+			"bootParams": {
+				"stage": "earlyuser",
+				"dependencies": [ "Toolbar" ]
+			},
 			"window": {
 				"url": "$applicationRoot/components/singleInputDialog/singleInputDialog.html",
 				"affinity": "systemComponents",
@@ -418,8 +430,8 @@
 					}
 				},
 				"services": {
-					"dockingService": {
-						"isArrangable": false,
+					"windowService": {
+						"allowAutoArrange": false,
 						"shouldRegister": false
 					}
 				},
@@ -460,8 +472,8 @@
 					}
 				},
 				"services": {
-					"dockingService": {
-						"isArrangable": false,
+					"windowService": {
+						"allowAutoArrange": false,
 						"shouldRegister": false
 					}
 				},
@@ -497,8 +509,8 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"isArrangable": false,
+					"windowService": {
+						"allowAutoArrange": false,
 						"shouldRegister": false
 					}
 				},
@@ -514,6 +526,38 @@
 			}
 		},
 		"Toolbar": {
+			"bootParams": {
+				"stage": "earlyuser",
+				"checkpoints" : {
+					"searchStoreInit" : {
+						"postStartupCompletion": true,
+						"timeout": 30000
+					},
+					"createStores" : {
+						"postStartupCompletion": true
+					},
+					"loadMenusFromConfig" : {
+						"dependencies": ["createStores"],
+						"postStartupCompletion": true
+					},
+					"addListeners" : {
+						"dependencies": [ "loadMenusFromConfig" ],
+						"postStartupCompletion": true
+					},
+					"setupHotkeys" : {
+						"dependencies": [  "addListeners" ],
+						"postStartupCompletion": true
+					},
+					"listenForWorkspaceUpdates" : {
+						"dependencies": [  "setupHotkeys" ],
+						"postStartupCompletion": true
+					},
+					"addMoreListeners" : {
+						"dependencies": [  "listenForWorkspaceUpdates" ],
+						"postStartupCompletion": true
+					}
+				}
+			},
 			"window": {
 				"id": "launcher",
 				"url": "$applicationRoot/components/toolbar/toolbar.html",
@@ -525,7 +569,6 @@
 				"left": 0,
 				"right": 0,
 				"position": "available",
-				"autoShow": true,
 				"dockable": [
 					"top",
 					"bottom"
@@ -534,7 +577,6 @@
 				"minHeight": 39,
 				"minWidth": 300,
 				"docked": "top",
-				"canGroup": false,
 				"options": {
 					"autoShow": false,
 					"contextMenu": false,
@@ -546,17 +588,10 @@
 			"component": {
 				"category": "system",
 				"spawnOnStartup": true,
-				"spawnOnAllMonitors": false,
-				"canMinimize": false,
-				"canMaximize": false
+				"spawnOnAllMonitors": false
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"isArrangable": false,
-						"ignoreSnappingRequests": true,
-						"ignoreTilingAndTabbingRequests": true
-					},
 					"workspaceService": {
 						"global": true
 					}
@@ -587,8 +622,8 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"isArrangable": false
+					"windowService": {
+						"allowAutoArrange": false
 					}
 				},
 				"components": {
@@ -603,6 +638,10 @@
 			}
 		},
 		"UserPreferences": {
+			"bootParams": {
+				"stage": "earlyuser",
+				"dependencies": [ "Toolbar" ]
+			},
 			"window": {
 				"url": "$applicationRoot/components/userPreferences/userPreferences.html",
 				"affinity": "systemComponents",
@@ -623,9 +662,9 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"canGroup": false,
-						"isArrangable": false,
+					"windowService": {
+						"allowGrouping": false,
+						"allowAutoArrange": false,
 						"shouldRegister": false
 					}
 				},
@@ -669,9 +708,9 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"canGroup": true,
-						"isArrangable": false
+					"windowService": {
+						"allowGrouping": true,
+						"allowAutoArrange": false
 					}
 				},
 				"components": {
@@ -700,8 +739,8 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"isArrangable": true
+					"windowService": {
+						"allowAutoArrange": true
 					}
 				},
 				"components": {
@@ -736,9 +775,9 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"canGroup": false,
-						"isArrangable": false,
+					"windowService": {
+						"allowGrouping": false,
+						"allowAutoArrange": false,
 						"shouldRegister": false
 					}
 				},
@@ -774,10 +813,11 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"isArrangeable": false,
-						"ignoreTilingAndTabbingRequests": true,
-						"ignoreSnappingRequests": true
+					"windowService": {
+						"allowAutoArrange": false,
+						"allowTabbing": false,
+						"allowTiling": false,
+						"allowSnapping": false
 					}
 				},
 				"components": {

@@ -254,8 +254,9 @@ class WindowTitleBar extends React.Component {
 		//Add an event listener to hide the drag-handler when tiling is started
 		FSBL.Clients.RouterClient.addListener("DockingService.startTilingOrTabbing", this.onTilingStart);
 
-		//Add an event listener to show the drag-handler when tiling is stopped
+		//Add an event listener to show the drag-handler when tiling is stopped or cancelled
 		FSBL.Clients.RouterClient.addListener("DockingService.stopTilingOrTabbing", this.onTilingStop);
+		FSBL.Clients.RouterClient.addListener("DockingService.cancelTilingOrTabbing", this.onTilingStop);
 	}
 
 	/**
@@ -283,18 +284,17 @@ class WindowTitleBar extends React.Component {
 	onTitleChange(err, response) {
 		let { tabs } = this.state;
 		let myIdentifier = FSBL.Clients.WindowClient.getWindowIdentifier();
-		let myIndex = -1;
-		tabs = tabs.filter((el, i) => {
+		
+		tabs = tabs.map((el) => {
 			if (!el.windowName && el.name) el.windowName = el.name;
 			if (!el.name && el.windowName) el.name = el.windowName;
-
-			if (el.name === myIdentifier.windowName) {
-				myIndex = i;
-				return true;
-			}
-			return false;
+			return el;
 		});
-		let myTab = tabs[0] || {};
+
+		const myIndex = tabs.findIndex(el => el.name === myIdentifier.windowName);
+		if (myIndex === -1) return;
+
+		let myTab = tabs[myIndex] || {};
 		myTab.title = response.value;
 		tabs.splice(myIndex, 1, myTab);
 
@@ -403,10 +403,10 @@ class WindowTitleBar extends React.Component {
 
 				</div>
 				<div className={rightWrapperClasses} ref={this.setToolbarRight}>
+					{showDockingIcon ? <DockingButton /> : null}
 					{this.state.alwaysOnTopButton && showMinimizeIcon ? <AlwaysOnTop /> : null}
 					<BringSuiteToFront />
 					{this.state.minButton && showMinimizeIcon ? <Minimize /> : null}
-					{showDockingIcon ? <DockingButton /> : null}
 					{this.state.maxButton ? <Maximize /> : null}
 					{this.state.closeButton ? <Close /> : null}
 				</div>

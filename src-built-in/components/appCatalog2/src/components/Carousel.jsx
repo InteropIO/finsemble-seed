@@ -24,7 +24,7 @@ export default class Carousel extends Component {
 			titleHighlighted: false
 		}
 		this.bindCorrectContext();
-		if (this.props.cards.length <= 4) this.notEnoughCards();
+		if (this.props.cards.length < 3) this.notEnoughCards();
 	}
 	bindCorrectContext() {
 		this.pageUp = this.pageUp.bind(this);
@@ -80,10 +80,10 @@ export default class Carousel extends Component {
 		storeActions.addTag(this.props.tag);
 	}
 	/**
-	 * Spits out a warning if the number of cards supplied to the carousel is < 4
+	 * Spits out a warning if the number of cards supplied to the carousel is < 3
 	 */
 	notEnoughCards() {
-		console.warn('Less than 4 card supplied. This carousel will not display optimally');
+		console.warn('Less than 3 card supplied. This carousel will not display optimally');
 	}
 	/**
 	 * Function to build the items in the carousel
@@ -93,7 +93,7 @@ export default class Carousel extends Component {
 		let firstCard = this.state.firstIndex;
 
 		let displayCards = [];
-		for (let i = 0; i < 4; i++) {
+		for (let i = 0; i < 3; i++) {
 			if (firstCard >= 0 && firstCard <= cards.length - 1) {
 				displayCards.push(cards[firstCard]);
 				firstCard++;
@@ -108,10 +108,10 @@ export default class Carousel extends Component {
 		let titleClass = "carousel-title";
 		if (this.state.titleHighlighted) titleClass += " highlight";
 
-		let chevron_left_style = 'ff-chevron-left', chevron_right_style = 'ff-chevron-right';
+		let chevron_left_style = 'ff-adp-chevron-left', chevron_right_style = 'ff-adp-chevron-right';
 		let left_click = this.pageDown, right_click = this.pageUp;
 
-		if (this.state.firstIndex + 3 >= this.props.cards.length - 1) {
+		if (this.state.firstIndex + 2 >= this.props.cards.length - 1) {
 			chevron_right_style += " disabled";
 			right_click = Function.prototype;
 		}

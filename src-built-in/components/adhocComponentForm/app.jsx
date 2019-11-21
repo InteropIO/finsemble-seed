@@ -14,6 +14,10 @@ import { FinsembleDialog, FinsembleDialogTextInput, FinsembleDialogQuestion, Fin
 class AdHocComponentForm extends React.Component {
 	constructor(props) {
 		super(props);
+		this.state = {
+			name: "", 
+			url: ""
+		}
 		this.save = this.save.bind(this);
 		this.cancel = this.cancel.bind(this);
 		this.setName = this.setName.bind(this);
@@ -46,7 +50,7 @@ class AdHocComponentForm extends React.Component {
 	 * @memberof AdHoc
 	 */
 	hideWindow() {
-		fin.desktop.Window.getCurrent().hide();
+		finsembleWindow.hide();
 	}
 	/**
 	 * Persists the adHoc component to storage.
@@ -95,10 +99,8 @@ class AdHocComponentForm extends React.Component {
 	 * @memberof AdHoc
 	 */
 	cancel() {
-		this.setState({
-			name: "",
-			url: ""
-		});
+		Array.from(document.querySelectorAll("input")).forEach((el) => el.value = "");
+
 		//FSBL.Clients.WindowClient.close(false);
 		FSBL.Clients.DialogManager.respondToOpener({});
 
@@ -123,8 +125,8 @@ class AdHocComponentForm extends React.Component {
 			}}
 			isModal={true}>
 			<div className="dialog-title">Enter a name and URL for your app.</div>
-			<FinsembleDialogTextInput onInputChange={this.setName} placeholder="Name" autofocus value={this.name} />
-			<FinsembleDialogTextInput onInputChange={this.setURL} placeholder="URL" value={this.URL} />
+			<FinsembleDialogTextInput onInputChange={this.setName} placeholder="Name" autoFocus value={this.state.name} focusOnShow={true} />
+			<FinsembleDialogTextInput onInputChange={this.setURL} placeholder="URL" value={this.state.url} />
 			<div className="button-wrapper">
 
 				<FinsembleDialogButton show={true} className="fsbl-button-neutral" onClick={this.cancel}>
@@ -136,10 +138,6 @@ class AdHocComponentForm extends React.Component {
 				</FinsembleDialogButton>
 			</div>
 		</FinsembleDialog>
-
-
-
-
 		);
 	}
 }

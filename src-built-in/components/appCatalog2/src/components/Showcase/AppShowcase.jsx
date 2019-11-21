@@ -130,7 +130,6 @@ class AppShowcase extends Component {
 				{!this.state.entitled && (
 					<div className="app-warning">
 						<span className="app-warning-wrapper">
-							<i className='ff-alert'></i>
 							<span className='app-warning-text'>
 								You don't have permission to add this App. <a href='#'>Contact your administrator</a> to request permission.
 							</span>

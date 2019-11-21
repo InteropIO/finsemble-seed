@@ -5,6 +5,7 @@
 import async from "async";
 import * as menuConfig from '../config.json';
 import * as storeExports from "../stores/searchStore";
+import _get from 'lodash.get';
 import { PinManager } from "../modules/pinManager"
 import { Actions as SearchActions } from "./searchStore"
 const PinManagerInstance = new PinManager();
@@ -40,7 +41,7 @@ class _ToolbarStore {
 				if (err) { FSBL.Clients.Logger.error(`ToolbarStore.createStores Error:`, err); }
 				let values = {};
 				if (monitors.mine && monitors.primary && monitors.mine.deviceId === monitors.primary.deviceId) {
-					values = { mainToolbar: fin.desktop.Window.getCurrent().name };
+					values = { mainToolbar: finsembleWindow.name };
 					storeOwner = true;//until we put creator in by default
 				}
 
@@ -95,50 +96,6 @@ class _ToolbarStore {
 	 */
 	isStoreOwner() {
 		return storeOwner;
-	}
-	/**
-	 * Retrieves options about self from storage, where applicable
-	 * @param {Function} cb The callback
-	 */
-	retrieveSelfFromStorage(cb) {
-
-		FSBL.Clients.StorageClient.get({ topic: finsembleWindow.name, key: finsembleWindow.name }, (err, result) => {
-			if (err || !result) {
-				finsembleWindow.show();
-				return cb();
-			}
-			let visible = (result && result.hasOwnProperty("visible") && typeof result.visible === "boolean") ? result.visible : true;
-			this.Store.setValue({
-				field: "visible", value: visible
-			})
-			let bounds = (result && result.hasOwnProperty("window-bounds")) ? result["window-bounds"] : null;
-			if (bounds) {
-				this.Store.setValue({
-					field: "window-bounds", value: bounds
-				})
-				finsembleWindow.setBounds(bounds, () => {
-					if (visible) {
-						finsembleWindow.show();
-					}
-					cb();
-				});
-			} else if (visible) {
-				finsembleWindow.show();
-				cb();
-			}
-		});
-	}
-	/**
-	 * Sets the toolbars visibility in memory
-	 */
-	setToolbarVisibilityInMemory(cb = Function.prototype) {
-		if (!this.Store.getValue({ field: "window-bounds" })) return cb();
-		FSBL.Clients.StorageClient.save({
-			topic: finsembleWindow.name, key: finsembleWindow.name, value: {
-				visible: true,
-				"window-bounds": this.Store.getValue({ field: "window-bounds" })
-			}
-		}, cb);
 	}
 	/**
 	 * Set up our hotkeys
@@ -206,18 +163,6 @@ class _ToolbarStore {
 		});
 		done();
 
-		let onBoundsSet = (bounds) => {
-			bounds = bounds.data ? bounds.data : bounds;
-			self.Store.setValue({ field: "window-bounds", value: bounds });
-			FSBL.Clients.StorageClient.save({
-				topic: finsembleWindow.name, key: finsembleWindow.name, value: {
-					visible: this.Store.getValue({ field: "visible" }),
-					"window-bounds": bounds
-				}
-			});
-		}
-		finsembleWindow.addListener("bounds-change-end", onBoundsSet)
-
 		FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", "t"], () => {
 			self.showToolbarAtFront();
 		});
@@ -225,6 +170,26 @@ class _ToolbarStore {
 		FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", "h"], () => {
 			self.hideToolbar();
 		});
+
+		FSBL.System.Window.getCurrent().addEventListener("close-requested", () => this.closeRequestedHandler());
+	}
+
+	/**
+	 * handles a close request by showing the user a dialog prompting for shutdown.
+	 * affirmative will shutdown finsemble, negative will do nothing.
+	 */
+	async closeRequestedHandler() {
+		const args = await this.confirmCloseToolbar();
+		// proceed even if there is an error in case the user selected to shut down. Shut down despite error.
+		// do nothing if there was an error or they chose cancel.
+		if (args.err) {
+			Logger.system.log(`Error received on confirm close: ${args.err}. Continuing.`);
+		}
+		const choice = _get(args, 'result.choice');
+		if (choice === 'affirmative') {
+			FSBL.System.Window.getCurrent().close(true);
+			FSBL.shutdownApplication();
+		}
 	}
 
 	/**
@@ -276,6 +241,24 @@ class _ToolbarStore {
 	}
 
 	/**
+	 * prompts the user to confirm they want to shutdown finsemble
+	 * @return Promise
+	 * @resolve { err, result }
+	 */
+	confirmCloseToolbar = () => {
+		const dialogParams = {
+			title: "Confirm Shutdown",
+			question: "Do you wish to shut down finsemble?",
+			affirmativeResponseLabel: "Shut down",
+			negativeResponseLabel: "Cancel",
+			showCancelButton: false,
+		};
+		return new Promise(resolve => {
+			FSBL.Clients.DialogManager.open("yesNo", dialogParams, (err, result) => resolve({ err, result }));
+		});
+	}
+
+	/**
 	 *
 	 *
 	 *
@@ -295,7 +278,7 @@ class _ToolbarStore {
 			});
 			FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.alt, keys.f], (err) => {
 				if (err) { FSBL.Clients.Logger.error(`HotkeyClient.addGlobalHotkey failed, error:`, err); }
-				self.Store.setValue({ field: "searchActive", value: true });
+				this.bringToolbarToFront(true);
 			});
 		}
 		return cb();
@@ -318,23 +301,30 @@ class _ToolbarStore {
 					self.createStores(done, self);
 				},
 				function (done) {
+					// first ack the previous checkpoint step as done
+					FSBL.SystemManagerClient.publishCheckpointState("Toolbar", "createStores", "completed");
 					self.loadMenusFromConfig(done, self);
 				},
 				FSBL.Clients.ConfigClient.onReady,
 				function (done) {
+					// first ack the previous checkpoint step as done
+					FSBL.SystemManagerClient.publishCheckpointState("Toolbar", "loadMenusFromConfig", "completed");
 					self.addListeners(done, self);
 				},
 				function (done) {
+					// first ack the previous checkpoint step as done
+					FSBL.SystemManagerClient.publishCheckpointState("Toolbar", "addListeners", "completed");
 					self.setupHotkeys(done);
 				},
 				function (done) {
+					// first ack the previous checkpoint step as done
+					FSBL.SystemManagerClient.publishCheckpointState("Toolbar", "setupHotkeys", "completed");
 					self.listenForWorkspaceUpdates();
 					done();
 				},
 				function (done) {
-					self.retrieveSelfFromStorage(done);
-				},
-				function (done) {
+					// first ack the previous checkpoint step as done
+					FSBL.SystemManagerClient.publishCheckpointState("Toolbar", "listenForWorkspaceUpdates", "completed");
 					finsembleWindow.addEventListener('focused', function () {
 						self.onFocus();
 					});
@@ -344,7 +334,9 @@ class _ToolbarStore {
 					done();
 				},
 				function (done) {
-					self.setToolbarVisibilityInMemory(done);
+					// first ack the previous checkpoint step as done
+					FSBL.SystemManagerClient.publishCheckpointState("Toolbar", "addMoreListeners", "completed");
+					done();
 				}
 			],
 			cb
@@ -377,17 +369,6 @@ class _ToolbarStore {
 
 		this.Store.setValue({ field: "sections", value: sections });
 		return sections;
-	}
-
-	/**
-	 * Shortcut to get values from the local store.
-	 *
-	 * @param {any} field
-	 * @returns
-	 * @memberof _ToolbarStore
-	 */
-	get(field) {
-		return this.Store.getValue({ field: field });
 	}
 	/**
 	 * Provides data to the workspace menu opening button.

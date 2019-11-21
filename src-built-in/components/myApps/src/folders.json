@@ -9,7 +9,6 @@
 				"name": "My Apps",
 				"type": "folder",
 				"disableUserRemove": true,
-				"icon": "ff-component",
 				"appDefinitions": [
 					{
 						"name": "Welcome",
