@@ -83,7 +83,9 @@ function initialize(callback = Function.prototype) {
 			FSBL.Clients.RouterClient.subscribe("Finsemble.Service.State.launcherService", (err, response) => {
 				loadInstalledComponentsFromStore(() => {
 					//We load our stored components(config driven) here
-					loadInstalledConfigComponents(callback);
+					loadInstalledConfigComponents(() => {
+						updateAppsInFolders(callback);
+					});
 				});
 
 			});
@@ -98,6 +100,23 @@ function getApp(appID, cb = Function.prototype) {
 function appInAppList(appName) {
 	let app = findAppByField('name', appName);
 	return Boolean(app);
+}
+//Update apps in folders with updated config information
+function updateAppsInFolders(cb = Function.prototype) {
+	//Loop through folders and update apps with new info
+	const { MY_APPS: MyAppsFolderName } = getConstants(); 
+	Object.keys(data.folders).map(folderName => {
+		if (folderName === MyAppsFolderName) return;
+		else {
+			const folder = data.folders[folderName];
+			Object.values(data.configComponents).map(configComp => {
+				if (Object.keys(folder.apps).includes(configComp.appID)) {
+					data.folders[folderName].apps[configComp.appID] = configComp;
+				}
+			});
+		}
+	});
+	_setFolders(cb);
 }
 
 /**
