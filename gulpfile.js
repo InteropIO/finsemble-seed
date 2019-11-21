@@ -578,6 +578,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 			}
 
 			FEAPackager.setFeaPath(FEA_PATH);
+			await FEAPackager.setApplicationFolderName(installerConfig.name);
 			await FEAPackager.setManifestURL(manifestUrl);
 			await FEAPackager.setUpdateURL(updateUrl);
 			await FEAPackager.setChromiumFlags(chromiumFlags || {});
