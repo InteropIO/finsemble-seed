@@ -27,6 +27,8 @@ steps:
 
 - script: npm install electron-packager
 
+- script: ls node_modules\electron-packager
+
 # Copy the finsemble-seed files to the publish location based on PR or version (if master)
 
 # Modify the manifest file 
