@@ -25,10 +25,10 @@
  */
 
 var originalWindowOpen = window.open;
-window.open = function (theURL, name, specs, replace) {
+window.open = function (URL, name, specs, replace) {
 	// For some strange reason, openfin notifications use window.open. So we make an exception for that one case.
 	if (name && name.includes("openfin-child-window")) {
-		originalWindowOpen.call(window, theURL, name, specs, replace);
+		originalWindowOpen.call(window, URL, name, specs, replace);
 		return;
 	}
 	var params = {};
@@ -42,13 +42,13 @@ window.open = function (theURL, name, specs, replace) {
 	if (name) {
 		switch (name) {
 			case "_self":
-				location.href = theURL;
+				location.href = URL;
 				return;
 			case "_top":
-				window.top.href = theURL;
+				window.top.href = URL;
 				return;
 			case "_parent":
-				window.parent.href = theURL;
+				window.parent.href = URL;
 				return;
 			case "_blank":
 				break;
@@ -56,8 +56,7 @@ window.open = function (theURL, name, specs, replace) {
 				params.name = name;
 		}
 	}
-	let u = new URL(theURL, window.location);
-	params.url = u.href;
+	params.url = URL;
 
 	var w;
 	FSBL.Clients.LauncherClient.spawn(null, params, function (err, response) {
