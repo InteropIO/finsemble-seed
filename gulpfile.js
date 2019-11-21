@@ -520,7 +520,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 
 			let config = {
 				manifest: cfg.serverConfig,
-				onElectronClose: (exitCode)=> process.exit(exitCode),
+				onElectronClose: process.exit,
 				chromiumFlags: JSON.stringify(cfg.chromiumFlags),
 				path: FEA_PATH,
 			}
