@@ -8,8 +8,12 @@
                 "autoShow": false,
                 "top": "center",
                 "left": "center",
-                "width": 800,
-                "height": 600
+                "width": 570,
+                "height": 460,
+                "options": {
+                    "alwaysOnTop":true
+                },
+                "addToWorkspace": false
             },
             "component": {
                 "preload": false,
@@ -21,10 +25,10 @@
                         "launchableByUser": false
                     },
                     "Window Manager": {
-                        "alwaysOnTopIcon": true,
+                        "alwaysOnTopIcon": false,
                         "title": "Data Migration Assistant",
-                        "FSBLHeader": true,
-                        "persistWindowState": true
+                        "FSBLHeader": false,
+                        "persistWindowState": false
                     },
                     "Toolbar": {
                         "iconClass": "datamigration"

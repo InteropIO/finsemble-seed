@@ -44,6 +44,11 @@ const FSBLReady = () => {
 		document.querySelector("#restart").addEventListener("click", (e) => {
 			FSBL.restartApplication();
 		});
+
+		// Close the migration window - should not be needed.
+		document.querySelector("#close").addEventListener("click", (e) => {
+			FSBL.Clients.WindowClient.close({ removeFromWorkspace: true, closeWindow: true });
+		});
 	} catch (e) {
 		FSBL.Clients.Logger.error(e);
 	}
