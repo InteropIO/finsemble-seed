@@ -31,6 +31,9 @@ export default class AlwaysOnTop extends React.Component {
 		});
 		finsembleWindow.addEventListener("alwaysOnTop", this.alwaysOnTopListener);
 	}
+	/** Receives the "visible" prop from the parent component (see comments
+	 * in windowTitleBarComponent.jsx)
+	 */
 	componentWillReceiveProps({ visible }) {
 		this.setState({ visible });
 	}
