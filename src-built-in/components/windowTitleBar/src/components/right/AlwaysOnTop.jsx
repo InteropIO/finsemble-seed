@@ -23,12 +23,11 @@ export default class AlwaysOnTop extends React.Component {
 	componentWillMount() {
 		this.setState({alwaysOnTop: false });
 		finsembleWindow.isAlwaysOnTop(null, (err, alwaysOnTop) => {
-			this.setState({
-				alwaysOnTop
-			});
+			this.setState({ alwaysOnTop });
 		});
 		finsembleWindow.addEventListener("alwaysOnTop", this.alwaysOnTopListener);
 	}
+
 	/** Receives the "visible" prop from the parent component (see comments
 	 * in windowTitleBarComponent.jsx)
 	 */
