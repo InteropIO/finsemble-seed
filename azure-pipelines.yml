@@ -25,7 +25,7 @@ steps:
   name: build
   displayName: "Run the build"
 
-- script: npm show electron-packager
+- script: nnpm install electron-packager@13.1.1
 
 # Copy the finsemble-seed files to the publish location based on PR or version (if master)
 
