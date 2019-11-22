@@ -72,6 +72,11 @@ The Migration Assistant component is a basic HTML5 component designed to communi
 
     Note: as `finsemble.workspace.cache` is a topic that is very frequently read from and written to, it is not advisable to use an external storage adapter for it.
 
+1. Modify `src/services/datamigration/datamigrationService.js` to set which adapter and storage topics you wish to migrate: 
+    - Set `MIGRATE_FROM_ADAPTER` to the name of source storage adapter (e.g. "IndexedDBAdapter").
+    - Set `MIGRATE_TO_ADAPTER` to the name of destination storage adapter (i.e. "LocalStorageAdapter" or the name of your custom storage adapter).
+    - Set `TOPICS_TO_MIGRATE` to an array of storage topics you wish to migrate (e.g. `["finsemble", "finsemble.workspace"]`)
+
 1. In the  `finsemble.importConfig` array of your [manifest](https://documentation.chartiq.com/finsemble/tutorial-Configuration.html), include references to the component and service `config.json`:
     
     ```json

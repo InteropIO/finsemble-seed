@@ -11,6 +11,15 @@ Logger.start();
 StorageClient.initialize();
 LauncherClient.initialize();
 
+//Migration config
+//The name of source storage adapter (e.g. "IndexedDBAdapter")
+const MIGRATE_FROM_ADAPTER = "IndexedDBAdapter";
+//The name of destination storage adapter (i.e. "LocalStorageAdapter" or the name of your custom storage adapter).
+const MIGRATE_TO_ADAPTER = "LocalStorageAdapter";
+// an array of storage topics you wish to migrate (e.g. `["finsemble", "finsemble.workspace"]`)
+// Note: as `finsemble.workspace.cache` is a topic that is very frequently read from and written to, it is not advisable to use an external storage adapter for it.
+const TOPICS_TO_MIGRATE = ["finsemble", "finsemble.workspace"];
+
 /**
  * class DataMigrationService
  * 
@@ -21,8 +30,8 @@ LauncherClient.initialize();
 class DataMigrationService extends BaseService {
 	constructor(args) {
 		super(args);
-		this.adapter = "IndexedDBAdapter";
-		this.newAdapter = "LocalStorageAdapter";
+		this.adapter = MIGRATE_FROM_ADAPTER;
+		this.newAdapter = MIGRATE_TO_ADAPTER;
 	}
 
 	/**
@@ -31,7 +40,7 @@ class DataMigrationService extends BaseService {
 	 * Takes all Storage Adapter topics provided and creates an array of objects for all topics
 	 * Invokes saveAllData afterwards.
 	 * 
-	 * @param {Array} topics The storage topics to be migrated as specified in TOPICS
+	 * @param {Array} topics The storage topics to be migrated.
 	 */
 	retrieveDatabase(topics) {
 		const promiseSet = [];
@@ -188,7 +197,7 @@ class DataMigrationService extends BaseService {
 
 										if (publish.data == "begin") {
 											Logger.log("*** datamigration begin")
-											this.retrieveDatabase(TOPICS);
+											this.retrieveDatabase(TOPICS_TO_MIGRATE);
 										}
 									}
 								}
@@ -209,8 +218,6 @@ class DataMigrationService extends BaseService {
 		});
 	}
 }
-
-const TOPICS = ["finsemble", "finsemble.workspace"];
 
 const dms = new DataMigrationService({ 
 	startupDependencies: {
