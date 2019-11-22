@@ -21,13 +21,11 @@ export default class AlwaysOnTop extends React.Component {
 	}
 
 	componentWillMount() {
-		this.setState({
-			alwaysOnTop: false
-		})
-		finsembleWindow.isAlwaysOnTop((err, alwaysOnTop) => {
+		this.setState({alwaysOnTop: false });
+		finsembleWindow.isAlwaysOnTop(null, (err, alwaysOnTop) => {
 			this.setState({
 				alwaysOnTop
-			})
+			});
 		});
 		finsembleWindow.addEventListener("alwaysOnTop", this.alwaysOnTopListener);
 	}
