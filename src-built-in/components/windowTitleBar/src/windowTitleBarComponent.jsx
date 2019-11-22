@@ -407,7 +407,15 @@ class WindowTitleBar extends React.Component {
 				</div>
 				<div className={rightWrapperClasses} ref={this.setToolbarRight}>
 					{showDockingIcon ? <DockingButton /> : null}
-					{this.state.alwaysOnTopButton && showMinimizeIcon ? <AlwaysOnTop /> : null}
+					{/** DH 11/22/2019
+					 * Because AlwaysOnTop is a "smart" component that registers
+					 * event handlers, etc., it's not a good idea to constantly mount
+					 * and unmount it. To prevent this, we pass in a "visible" prop that,
+					 * if false, sets "display: none". Ideally, AlwaysOnTop should be a "dumb"
+					 * component, and all the event handlers, etc. should be registered in a parent component,
+					 * as this simplifies the UI and allows React to better optimize under the hood.
+					 */}
+					<AlwaysOnTop visible={this.state.alwaysOnTopButton && showMinimizeIcon}/>
 					<BringSuiteToFront />
 					{this.state.minButton && showMinimizeIcon ? <Minimize /> : null}
 					{this.state.maxButton ? <Maximize /> : null}
