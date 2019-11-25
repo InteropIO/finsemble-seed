@@ -37,7 +37,7 @@ steps:
 
 # Copy the finsemble-seed files to the publish location based on PR or version (if master)
 
-- script: aws s3 sync .\dist\ $PUBLISH_LOCATION/pr$(System.PullRequest.PullRequestNumber)/ --acl public-read
+- script: aws s3 sync .\dist\ $(PUBLISH_LOCATION)/pr$(System.PullRequest.PullRequestNumber)/ --acl public-read
   env:
     AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
     AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
