@@ -53,8 +53,8 @@ steps:
 
 - script: dir .\pkg\
 
-#- script: aws s3 cp .\pkg\xzySetup.exe $(PUBLISH_LOCATION)/pr$(System.PullRequest.PullRequestNumber)/ --acl public-read
-#  env:
-#    AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
-#    AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
-#  condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
+- script: aws s3 cp .\pkg\xzySetup.exe $(PUBLISH_LOCATION)/pr$(System.PullRequest.PullRequestNumber)/ --acl public-read
+  env:
+    AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
+    AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
+  condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
