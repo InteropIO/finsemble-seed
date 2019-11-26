@@ -35,7 +35,11 @@ steps:
 
 - script: npm install electron-packager@13.1.1
 
-# Copy the finsemble-seed files to the publish location based on PR or version (if master)
+- powershell: cat .\configs\other\server-environment-startup.json | %{$_ -replace "http://localhost:3375/configs/openfin/manifest-local.json", $(HOSTING_LOCATION) + pr$(System.PullRequest.PullRequestNumber)/manifest.json}
+  condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
+
+- powershell: cat .\configs\openfin\manifest-local.json | %{$_ -replace "http://localhost:3375", $(HOSTING_LOCATION) + pr$(System.PullRequest.PullRequestNumber)} > .\dist\manifest.json
+  condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
 
 - script: aws s3 sync .\dist\ $(PUBLISH_LOCATION)/pr$(System.PullRequest.PullRequestNumber)/ --acl public-read
   env:
@@ -43,12 +47,12 @@ steps:
     AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
   condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
 
-# Modify the manifest file 
-
-# Modify manifest location to match the publish location
-
 - script: npm run makeInstaller:prod
   name: makeInstaller
   displayName: "Make a production installer"
 
-# Publish the installer
+- script: aws s3 cp .\pkg\xzySetup.exe $(PUBLISH_LOCATION)/pr$(System.PullRequest.PullRequestNumber)/ --acl public-read
+  env:
+    AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
+    AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
+  condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
