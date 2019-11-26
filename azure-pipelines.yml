@@ -35,7 +35,7 @@ steps:
 
 - script: npm install electron-packager@13.1.1
 
-- powershell: cat .\configs\other\server-environment-startup.json | %{$_ -replace "http://localhost:3375/configs/openfin/manifest-local.json", "$(HOSTING_LOCATION)pr$(System.PullRequest.PullRequestNumber)/manifest.json"}
+- powershell: cat .\configs\other\server-environment-startup.json | %{$_ -replace "http://localhost:3375/configs/openfin/manifest-local.json", "$(HOSTING_LOCATION)pr$(System.PullRequest.PullRequestNumber)/manifest.json"} > .\configs\other\server-environment-startup.json
   condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
 
 - powershell: cat .\configs\openfin\manifest-local.json | %{$_ -replace "http://localhost:3375", "$(HOSTING_LOCATION)pr$(System.PullRequest.PullRequestNumber)"} > .\dist\manifest.json
@@ -51,8 +51,10 @@ steps:
   name: makeInstaller
   displayName: "Make a production installer"
 
-- script: aws s3 cp .\pkg\xzySetup.exe $(PUBLISH_LOCATION)/pr$(System.PullRequest.PullRequestNumber)/ --acl public-read
-  env:
-    AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
-    AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
-  condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
+- script: dir .\pkg\
+
+#- script: aws s3 cp .\pkg\xzySetup.exe $(PUBLISH_LOCATION)/pr$(System.PullRequest.PullRequestNumber)/ --acl public-read
+#  env:
+#    AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
+#    AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
+#  condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
