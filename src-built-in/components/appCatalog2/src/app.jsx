@@ -23,6 +23,7 @@ export default class AppMarket extends React.Component {
 		super(props);
 		this.state = {
 			apps: [],
+			isLoading: false,
 			filteredApps: [],
 			installed: [],
 			tags: [],
@@ -53,15 +54,20 @@ export default class AppMarket extends React.Component {
 		//For more information on async react rendering, see here
 		//https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html
 
-		this._asyncAppRequest = storeActions.getApps().then(apps => {
-			this.setState({
-				apps
+		this.setState({
+			isLoading: true
+		}, () => {
+			this._asyncAppRequest = storeActions.getApps().then(apps => {
+				this.setState({
+					apps,
+					isLoading: false
+				});
 			});
-		});
-
-		this._asyncTagsRequest = storeActions.getTags().then(tags => {
-			this.setState({
-				tags
+	
+			this._asyncTagsRequest = storeActions.getTags().then(tags => {
+				this.setState({
+					tags
+				});
 			});
 		});
 	}
@@ -284,12 +290,25 @@ export default class AppMarket extends React.Component {
 
 		return (
 			<div>
-				<SearchBar hidden={page === "showcase" ? true : false} backButton={page !== "home"} tags={tags} activeTags={activeTags} tagSelected={this.addTag}
-					removeTag={this.removeTag} goHome={this.goHome} installationActionTaken={this.state.installationActionTaken}
-					search={this.changeSearch} isViewingApp={this.state.activeApp !== null} />
-				<div className="market_content">
-					{pageContents}
-				</div>
+				{this.state.apps.length === 0 && !this.state.isLoading &&
+					<div className='server-error'>
+						<br />
+						<br />
+						<span>There are no apps loaded to the catalog.</span>
+						<br />
+						<span>Please consult your System Admin.</span>
+					</div>
+				}
+				{this.state.apps.length > 0 &&
+					<div> 
+						<SearchBar hidden={page === "showcase" ? true : false} backButton={page !== "home"} tags={tags} activeTags={activeTags} tagSelected={this.addTag}
+							removeTag={this.removeTag} goHome={this.goHome} installationActionTaken={this.state.installationActionTaken}
+							search={this.changeSearch} isViewingApp={this.state.activeApp !== null} />
+						<div className="market_content">
+							{pageContents}
+						</div>
+					</div>
+				}
 			</div>
 		);
 	}
