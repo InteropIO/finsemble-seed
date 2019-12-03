@@ -18,7 +18,6 @@ export default class MinimizeButton extends React.Component {
 		windowTitleBarStore = getStore();
 		this.state = { hoverState: "false", show: false, groups: [] };
 		this.onLeftClick = this.onLeftClick.bind(this);
-		this.onShiftClick = this.onShiftClick.bind(this);
 		this.handleClick = this.handleClick.bind(this);
 	}
 
@@ -63,17 +62,8 @@ export default class MinimizeButton extends React.Component {
 		});
 	}
 
-	onShiftClick() {
-		return HeaderActions.hyperFocus({
-			linkerChannel: null,
-			includeDockedGroups: true,
-			includeAppSuites: true
-		});
-	}
+	
 	handleClick(e) {
-		if (e.shiftKey) {
-			return this.onShiftClick(e);
-		}
 		this.onLeftClick(e);
 	}
 	/**
