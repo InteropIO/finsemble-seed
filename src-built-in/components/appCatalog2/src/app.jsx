@@ -188,7 +188,7 @@ export default class AppMarket extends React.Component {
 	 * @param {string} search The text to search the catalog with
 	 */
 	changeSearch(search) {
-		storeActions.searchApps(search, () => {
+		storeActions.searchApps(search.toLowerCase().trim(), () => {
 
 			this.setState({ forceSearch: (search !== "") });
 		});
