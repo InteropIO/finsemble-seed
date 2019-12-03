@@ -67,19 +67,28 @@ export default class AutoArrange extends React.Component {
 	}
 
 	render() {
-		const autoArrangedCss = this.state.isAutoArranged ? "auto-arranged" : "";
+		// For 4.0 auto-arrange is disabled -- it will be re-enabled in a future release after it is improved and hardened
+		const AutoArrangeEnabled = false;
 
+		if (AutoArrangeEnabled) {
+			const autoArrangedCss = this.state.isAutoArranged ? "auto-arranged" : "";
 
-		return (
-			<FinsembleButton
-				className={`icon-only window-mgmt-right ${autoArrangedCss}`}
-				buttonType={["Toolbar"]}
-				title={this.state.isAutoArranged ? "Restore" : "Auto Arrange"}
-				onClick={this.autoArrange}>
-				<span>
-					<AutoArrangeIcon />
-				</span>
-			</FinsembleButton>
-		);
+			// the below enables AutoArrange by returning the AutoArrange icon to be rendered
+			return (
+				<FinsembleButton
+					className={`icon-only window-mgmt-right ${autoArrangedCss}`}
+					buttonType={["Toolbar"]}
+					title={this.state.isAutoArranged ? "Restore" : "Auto Arrange"}
+					onClick={this.autoArrange}>
+					<span>
+						<AutoArrangeIcon />
+					</span>
+				</FinsembleButton>
+			);
+		} else {
+			// the below effectively disables AutoArrange by returning an empty div to be rendered for the auto-arrange icon
+			return (<div></div>);
+		}
+
 	}
 }
