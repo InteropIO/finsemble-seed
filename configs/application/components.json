@@ -5,7 +5,6 @@
 			"window": {
 				"url": "$applicationRoot/components/welcome/welcome.html",
 				"affinity": "workspaceComponents",
-				"frame": false,
 				"options": {
 					"resizable": true,
 					"autoShow": true,
