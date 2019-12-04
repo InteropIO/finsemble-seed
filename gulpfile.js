@@ -144,8 +144,6 @@ const { launch, connect } = require('hadouken-js-adapter');
 
 	// #endregion
 
-	// #region Script variables
-	let watchClose;
 	// If you specify environment variables to child_process, it overwrites all environment variables, including
 	// PATH. So, copy based on our existing env variables.
 	const env = process.env;
@@ -196,7 +194,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 		return rc;
 	}
 
-	
+
 	// Currently supported desktop agents include "openfin" and "electron". This can be set either
 	// with the environment variable container or by command line argument `npx gulp dev --container:electron`
 	let container = envOrArg("container", "openfin");
@@ -216,7 +214,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 	 * deploymentHelpers in FEA. However I'm just avoiding 2 PRs
 	 */
 	const getElectronVersion = () => {
-		// You may run `npm run dev` before running `npm i` inside 
+		// You may run `npm run dev` before running `npm i` inside
 		// finsemble-electron-adapter in that case, the electron
 		// module does not exists.
 		try {
@@ -522,6 +520,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 
 			let config = {
 				manifest: cfg.serverConfig,
+				onElectronClose: process.exit,
 				chromiumFlags: JSON.stringify(cfg.chromiumFlags),
 				path: FEA_PATH,
 			}
