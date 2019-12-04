@@ -84,13 +84,16 @@ export default class Hero extends Component {
 					</div>
 					<i className='ff-adp-chevron-right' onClick={this.changePage.bind(this, 'page_up')} />
 				</div>
-				<div className="paginator">
-					{cards.map((card, i) => {
-						let classes = 'pagination-oval';
-						if (i === active) classes += " active";
-						return (<div key={i} className={classes} onClick={this.changePage.bind(this, i)} />);
-					})}
-				</div>
+				<br />
+				{cards.length >= 2 && cards.length <= 10 && 
+					<div className="paginator">
+						{cards.map((card, i) => {
+							let classes = 'pagination-oval';
+							if (i === active) classes += " active";
+							return (<div key={i} className={classes} onClick={this.changePage.bind(this, i)} />);
+						})}
+					</div>
+				}
  			</div>
 		);
 	}
