@@ -532,7 +532,7 @@ select:focus, option:focus {
 }
 
 .add-app-form {
-    background: rgba(13, 17, 19, .9);
+    background: var(--appMenu-background-color);
     width: 100%;
     height: 100%;
     position: absolute;
