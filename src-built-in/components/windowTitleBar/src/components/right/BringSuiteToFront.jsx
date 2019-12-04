@@ -64,15 +64,15 @@ export default class MinimizeButton extends React.Component {
 	}
 
 	onShiftClick() {
-		return HeaderActions.hyperFocus({	
-			linkerChannel: null,	
-			includeDockedGroups: true,	
-			includeAppSuites: true	
-		});	
+		return HeaderActions.hyperFocus({
+			linkerChannel: null,
+			includeDockedGroups: true,
+			includeAppSuites: true
+		});
 	}
 	handleClick(e) {
-		if (e.shiftKey) {	
-			return this.onShiftClick(e);	
+		if (e.shiftKey) {
+			return this.onShiftClick(e);
 		}
 		this.onLeftClick(e);
 	}
