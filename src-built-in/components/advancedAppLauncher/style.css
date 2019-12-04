@@ -389,13 +389,6 @@ select:focus, option:focus {
     font-size: var(--tag-font-size);
   }
 
-  .app-item-title .ff-favorite{
-    margin-left: 6px;
-    padding: 0px;
-    font-size: var(--appMenu-font-size);
-    color: var(--appMenu-app-favorite-color);
-  }
-
   .app-item-tags {
     display: flex;
     align-items: center;
@@ -428,10 +421,18 @@ select:focus, option:focus {
     white-space: nowrap;
   }
 
-  .app-item-title i {
-    padding-right: 4px;
-    padding-top: 2px;
-    color: var(--appMenu-app-icon-color);
+  .app-item-title .ff-favorite {
+    padding-top: 1px;
+    padding-right: 7px;
+    font-size: var(--appMenu-font-size);
+    color: var(--appMenu-app-favorite-color);
+  }
+
+  .app-item-title .ff-star-outline {
+    padding-top: 1px;
+    padding-right: 7px;
+    font-size: var(--appMenu-font-size);
+    color: var(--appMenu-app-favorite-color);
   }
 
   .filter-sort {
