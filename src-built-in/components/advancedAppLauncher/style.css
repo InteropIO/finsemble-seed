@@ -198,14 +198,20 @@ img {
 }
 
 .complex-menu-action {
-    padding: 5px 5px 5px 28px;
+    padding: 5px 5px 5px 8px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     position: relative;
     border-radius: 0 20px 20px 0;
     height: 24px;
     margin-right: 5px;
+}
+
+.ff-plus-2:before {
+    color: var(--appMenu-leftNav-icon-color);
+    padding: 1px 7px 0px 0px;
+    font-size: 13px;
 }
 
 .complex-menu-action:first-child{
