@@ -8,7 +8,6 @@
 				"options": {
 					"resizable": true,
 					"autoShow": true,
-					"backgroundColor": "#22262F",
 					"alwaysOnTop": false
 				},
 				"top": "center",
