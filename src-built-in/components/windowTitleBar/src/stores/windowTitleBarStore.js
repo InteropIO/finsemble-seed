@@ -299,26 +299,7 @@ var Actions = {
 			async.forEach(dockingGroups, getWindows, callback);
 		}
 
-		function getWindowsInAppSuite(callback) {
-			FSBL.Clients.LauncherClient.getGroupsForWindow((err, data) => {
-				function getWindowsInGroup(group, done) {
-					FSBL.Clients.RouterClient.query("LauncherService.getWindowsInGroup", { groupName: group }, (err, response) => {
-						windowList = windowList.concat(response.data);
-						done();
-					});
-				}
-				if (err) return callback(err, null);
-				let groups = data;
-				if (groups) {
-					async.forEach(groups, getWindowsInGroup, callback);
-				} else {
-					callback(null, null);
-				}
-			});
-		}
-
-
-		let { linkerChannel, includeAppSuites, includeDockedGroups } = params;
+		let { linkerChannel, includeDockedGroups } = params;
 		let windowList = [],
 			tasks = [],
 			dockingGroups = [],
@@ -336,10 +317,6 @@ var Actions = {
 				dockingGroups = dockingGroups.filter(grp => grp.isMovable).map(grp => grp.groupName);
 				tasks.push(getDockedWindows);
 			}
-		}
-
-		if (includeAppSuites) {
-			tasks.push(getWindowsInAppSuite);
 		}
 
 		if (tasks.length) {

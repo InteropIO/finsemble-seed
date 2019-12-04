@@ -83,8 +83,7 @@ export default class LinkerGroups extends React.Component {
             //leaves any docking group.
             return HeaderActions.hyperFocus({
                 linkerChannel: channel,
-                includeDockedGroups: true,
-                includeAppSuites: false
+                includeDockedGroups: true
             });
         }
         FSBL.Clients.LinkerClient.bringAllToFront({
