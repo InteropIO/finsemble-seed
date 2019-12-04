@@ -52,7 +52,6 @@
 			"window": {
 				"url": "$applicationRoot/components/nonConfiguredComponent/nonConfiguredComponent.html",
 				"affinity": "systemComponents",
-				"frame": false,
 				"options": {
 					"resizable": true,
 					"autoShow": true
