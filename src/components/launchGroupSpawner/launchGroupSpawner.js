@@ -17,7 +17,9 @@ const FSBLReady = () => {
 
 				//close the spawner now we're done
 				FSBL.Clients.Logger.log("Done spawning, time to close");
-				FSBL.Clients.WindowClient.close();
+				
+				//disabled as its making it hard to debug by dropping logs from central logger
+				//FSBL.Clients.WindowClient.close();
 			});
 		} else {
 			FSBL.Logger.error("Received no spawner data, spawnerData: ", spawnerData);
