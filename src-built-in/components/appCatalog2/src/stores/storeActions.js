@@ -193,7 +193,7 @@ async function addApp(id) {
 	installed[appID] = {
 		appID,
 		tags: app.tags,
-		name: app.title ? app.title : app.name,
+		name: app.title || app.name,
 		url: app.url,
 		type: "component",
 		component: {},
@@ -206,7 +206,7 @@ async function addApp(id) {
 					"launchableByUser": true
 				},
 				"Window Manager": {
-					title: app.title ? app.title : app.name
+					title: app.title || app.name
 				}
 			}
 		}
@@ -255,28 +255,6 @@ async function addApp(id) {
 			}
 		]);
 	});
-	/*FSBL.Clients.LauncherClient.addUserDefinedComponent(installed[appID], (compAddErr) => {
-		if (compAddErr && compAddErr.indexOf('already exists') === -1) {
-            //TODO: We need to handle the error here. If the component failed to add, we should probably fall back and not add to launcher
-            console.log('componentAddErr: ', compAddErr);
-			console.warn("Failed to add new app");
-        } else {
-            getStore().setValues([
-                {
-                    field: 'activeApp',
-                    value: activeApp
-                },
-                {
-                    field: 'appDefinitions',
-                    value: installed
-                },
-                {
-                    field: 'appFolders.folders',
-                    value: folders
-                }
-            ]);
-        }
-	});*/
 }
 
 /**
@@ -291,26 +269,32 @@ function removeApp(id) {
 			console.warn("Error removing pin for deleted app");
 			return;
 		}
-		FSBL.Clients.LauncherClient.unRegisterComponent({ componentType: installed[id].name });
-		for (const key in data.folders) {
-			if (folders[key].apps[id]) {
-				delete folders[key].apps[id];
+		FSBL.Clients.LauncherClient.unRegisterComponent({ componentType: installed[id].name }, (err, res) => {
+			if (err) {
+				console.warn("Failed to deregister a component");
+				return;
 			}
-		}
 
-		//Delete the app from the list
-		delete installed[id];
-
-		getStore().setValues([
-			{
-				field: "appDefinitions",
-				value: installed
-			},
-			{
-				field: "appFolders.folders",
-				value: folders
+			for (const key in data.folders) {
+				if (folders[key].apps[id]) {
+					delete folders[key].apps[id];
+				}
 			}
-		]);
+	
+			//Delete the app from the list
+			delete installed[id];
+	
+			getStore().setValues([
+				{
+					field: "appDefinitions",
+					value: installed
+				},
+				{
+					field: "appFolders.folders",
+					value: folders
+				}
+			]);
+		});
 	});
 }
 
