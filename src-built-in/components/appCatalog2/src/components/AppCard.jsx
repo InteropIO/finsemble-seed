@@ -78,7 +78,7 @@ class AppCard extends Component {
 	 */
 	hideCheck() {
 		//Don't hide if installed. Stay green and showing
-		if (this.props.installed === false) {
+		if (!this.props.installed) {
 			this.setState({
 				checkShown: false
 			});
@@ -121,10 +121,10 @@ class AppCard extends Component {
 	render() {
 		let imageUrl = this.props.images !== undefined ? this.props.images[0].url : "../assets/placeholder.svg";
 
-		let { appName, checkShown } = this.state;
+		let { appName, checkShown, checkHighlighted } = this.state;
 
 		let imageIconClasses = "ff-check-mark-2";
-		if (this.state.checkHighlighted || this.props.installed) imageIconClasses += " highlighted"
+		if (this.props.installed || checkHighlighted) imageIconClasses += " highlighted"
 		else imageIconClasses += " faded";
 
 		let titleClass = this.state.titleUnderlined ? "app-title highlighted" : "app-title";
