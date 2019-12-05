@@ -16,6 +16,7 @@ export default {
 	getTags,
 	addTag,
 	removeTag,
+	refreshTagSearch,
 	clearTags,
 	addApp,
 	removeApp,
@@ -132,6 +133,27 @@ function _removeActiveTag(tag) {
 		value: newActiveTags
 	}, {
 		field: "filteredApps",
+		value: newApps
+	}]);
+}
+
+function _refreshTags() {
+	let { activeTags, apps } = data;
+
+	let newApps = apps.filter((app) => {
+		for (let i = o; i < activeTags.length; i++) {
+			const tag = activeTags[i].trim();
+			if (app.tags.includes(tag)) {
+				return true;
+			}
+		}
+	});
+
+	getStore().setValues([{
+		field: 'activeTags',
+		value: activeTags
+	}, {
+		field: 'filteredApps',
 		value: newApps
 	}]);
 }
@@ -389,6 +411,13 @@ function addTag(tag) {
  */
 function removeTag(tag) {
 	_removeActiveTag(tag);
+}
+
+/**
+ * Refreshes the active tags search
+ */
+function refreshTagSearch() {
+	_refreshTags();
 }
 
 /**

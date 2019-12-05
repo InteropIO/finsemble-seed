@@ -55,7 +55,12 @@ class SearchBar extends Component {
 		this.setState({
 			searchValue: e.target.value
 		});
-		this.props.search(e.target.value);
+
+		if (searchTerms !== "") {
+			this.props.search(searchTerms);
+		} else {
+			storeActions.refreshTagSearch();
+		}
 	}
 
 	clearSearch() {
