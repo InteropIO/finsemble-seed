@@ -176,7 +176,7 @@ async function getTags() {
  * Function to "install" an app. Adds the id to a list of installed apps
  * @param {string} name The name of the app
  */
-async function addApp(id) {
+async function addApp(id, cb = Function.prototype) {
 	let { activeApp, installed, apps } = data;
 	const appID = id;
 	let app = apps.find(app => {
@@ -253,7 +253,7 @@ async function addApp(id) {
 				field: "appFolders.folders",
 				value: folders
 			}
-		]);
+		], cb);
 	});
 }
 
@@ -261,7 +261,7 @@ async function addApp(id) {
  * Function to "uninstall" an app. Removes the id from a list of installed apps
  * @param {string} name The name of the app
  */
-function removeApp(id) {
+function removeApp(id, cb = Function.prototype) {
 	let { installed, folders } = data;
 
 	ToolbarStore.removeValue({ field: "pins." + installed[id].name.replace(/[.]/g, "^DOT^") }, (err, res) => {
@@ -293,7 +293,7 @@ function removeApp(id) {
 					field: "appFolders.folders",
 					value: folders
 				}
-			]);
+			], cb);
 		});
 	});
 }
