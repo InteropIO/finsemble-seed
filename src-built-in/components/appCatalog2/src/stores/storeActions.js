@@ -176,7 +176,7 @@ async function getTags() {
  * Function to "install" an app. Adds the id to a list of installed apps
  * @param {string} name The name of the app
  */
-async function addApp(id) {
+async function addApp(id, cb = Function.prototype) {
 	let { activeApp, installed, apps } = data;
 	const appID = id;
 	let app = apps.find(app => {
@@ -253,37 +253,15 @@ async function addApp(id) {
 				field: "appFolders.folders",
 				value: folders
 			}
-		]);
+		], cb);
 	});
-	/*FSBL.Clients.LauncherClient.addUserDefinedComponent(installed[appID], (compAddErr) => {
-		if (compAddErr && compAddErr.indexOf('already exists') === -1) {
-            //TODO: We need to handle the error here. If the component failed to add, we should probably fall back and not add to launcher
-            console.log('componentAddErr: ', compAddErr);
-			console.warn("Failed to add new app");
-        } else {
-            getStore().setValues([
-                {
-                    field: 'activeApp',
-                    value: activeApp
-                },
-                {
-                    field: 'appDefinitions',
-                    value: installed
-                },
-                {
-                    field: 'appFolders.folders',
-                    value: folders
-                }
-            ]);
-        }
-	});*/
 }
 
 /**
  * Function to "uninstall" an app. Removes the id from a list of installed apps
  * @param {string} name The name of the app
  */
-function removeApp(id) {
+function removeApp(id, cb = Function.prototype) {
 	let { installed, folders } = data;
 
 	ToolbarStore.removeValue({ field: "pins." + installed[id].name.replace(/[.]/g, "^DOT^") }, (err, res) => {
@@ -310,7 +288,7 @@ function removeApp(id) {
 				field: "appFolders.folders",
 				value: folders
 			}
-		]);
+		], cb);
 	});
 }
 

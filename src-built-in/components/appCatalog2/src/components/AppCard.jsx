@@ -20,6 +20,8 @@ class AppCard extends Component {
 		this.state = {
 			checkShown: this.props.installed === true ? true : false,
 			checkHighlighted: false,
+			awaitingInstall: false,
+			toggleCheckAfterAction: false,
 			titleUnderlined: false,
 			appName: this.props.title || this.props.name,
 			id: this.props.appId,
@@ -77,11 +79,18 @@ class AppCard extends Component {
 	 * Hides the check mark for adding/removing an app
 	 */
 	hideCheck() {
-		//Don't hide if installed. Stay green and showing
-		if (this.props.installed === false) {
+		if (this.state.awaitingInstall) {
+			// If an add/remove is taking place and this is called, toggle the check after the action completes
 			this.setState({
-				checkShown: false
+				toggleCheckAfterAction: true
 			});
+		} else {
+			//Don't hide if installed. Stay green and showing
+			if (!this.props.installed) {
+				this.setState({
+					checkShown: false
+				});
+			}
 		}
 	}
 	/**
@@ -97,7 +106,15 @@ class AppCard extends Component {
 	addApp(e) {
 		e.preventDefault();
 		e.stopPropagation();
-		storeActions.addApp(this.state.id);
+		this.setState({
+			awaitingInstall: true
+		}, () => {
+			storeActions.addApp(this.state.id, (err) => {
+				this.setState({
+					awaitingInstall: false
+				});
+			});
+		});
 	}
 	/**
 	 * Prevents bubbling (which would open the app showcase), then calls to remove an app
@@ -106,7 +123,23 @@ class AppCard extends Component {
 	removeApp(e) {
 		e.preventDefault();
 		e.stopPropagation();
-		storeActions.removeApp(this.state.id);
+		this.setState({
+			awaitingInstall: true
+		}, () => {
+			storeActions.removeApp(this.state.id, (err) => {
+				if (this.state.toggleCheckAfterAction) {
+					this.setState({
+						awaitingInstall: false,
+						toggleCheckAfterAction: false,
+						checkShown: !this.state.checkShown
+					});
+				} else {
+					this.setState({
+						awaitingInstall: false
+					});
+				}
+			});
+		});
 	}
 	/**
 	 * Prevents bubbling (which would open the app showcase), then calls to add a filtering tag
