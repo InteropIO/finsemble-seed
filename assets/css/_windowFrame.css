@@ -19,12 +19,7 @@ body {
 } */
 
 /* Create a series of empty pseudo-elements... */
-html:before, html:after, body:before, body:after {
-    content: "";
-    position: fixed;
-    display: block;
-    z-index: 2147483640;
-}
+
 
 /* ...and position them! */
 html:before {
