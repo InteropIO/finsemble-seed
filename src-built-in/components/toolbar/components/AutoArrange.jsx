@@ -67,8 +67,7 @@ export default class AutoArrange extends React.Component {
 	}
 
 	render() {
-		// For 4.0 auto-arrange is disabled -- it will be re-enabled in a future release after it is improved and hardened.
-		// However, keep it easy to re-enable by setting AutoArrangeEnabled=true -- this should only be done for in-house testing with a large number of windows
+		// To re-enable auto-arrange set AutoArrangeEnabled=true -- this should only be done for in-house testing
 		const AutoArrangeEnabled = false;
 
 		if (AutoArrangeEnabled) {
