@@ -65,7 +65,7 @@ var Actions = {
 			self.filterComponents(response.data.componentList);
 		});
 	},
-	//get adhoc components that the user created from storage.
+	//get quick components that the user created from storage.
 	getUserDefinedComponentList(cb) {
 		return cb();
 		var self = Actions;
@@ -84,7 +84,7 @@ var Actions = {
 			cb();
 		});
 	},
-	//saves adhoc components
+	//saves quick components
 	saveCustomComponents() {
 		var UDCs = {};
 		var components = Object.keys(Actions.componentList);
@@ -241,7 +241,7 @@ var Actions = {
 			ToolbarStore.setValue({ field: "pins." + componentTypeDotRemove, value: thePin });
 		}
 	},
-	//Handler for when the user wants to remove an adhoc component.
+	//Handler for when the user wants to remove a quick component.
 	handleRemoveCustomComponent(componentName) {
 		var self = this;
 		FSBL.Clients.DialogManager.open("yesNo", {
