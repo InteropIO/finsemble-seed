@@ -61,6 +61,8 @@ export default class AppMarket extends React.Component {
 		}).catch(() => {
 			this.setState({
 				serverError: true
+			}, () => {
+				FSBL.Clients.Logger.error("Error connecting to FDC3 AppD server.");
 			});
 		});
 
@@ -71,6 +73,8 @@ export default class AppMarket extends React.Component {
 		}).catch(() => {
 			this.setState({
 				serverError: true
+			}, () => {
+				FSBL.Clients.Logger.error("Error retrieving tags from FDC3 AppD server.");
 			});
 		});
 	}
