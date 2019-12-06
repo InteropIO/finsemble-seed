@@ -12,7 +12,7 @@ const BringToFront = (props) => {
 			ToolbarStore.bringToolbarToFront();
 		});
 	}
-	let wrapperClasses = props.classes + " icon-only window-mgmt-center";
+	let wrapperClasses = props.classes + " icon-only window-mgmt-right";
 
 	return (
 		<FinsembleButton className={wrapperClasses} buttonType={["Toolbar"]} title="Reveal All" onClick={BringToFront}>
