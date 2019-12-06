@@ -1,5 +1,5 @@
 ## Spawning Groups of Components into your Workspace ##
-You may wish to spawn a group of components in a predetermined layout. This is recipe demonstrates how to achieve that with the Finsemble LuancherClient API.
+You may wish to spawn a group of components in a predetermined layout. This is recipe demonstrates how to achieve that with the Finsemble LauncherClient API.
 
 ![](./spawn_component_group_demo.gif)
 
