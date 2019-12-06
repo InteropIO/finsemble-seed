@@ -316,9 +316,9 @@ export default class AppMarket extends React.Component {
 					<div className='server-error'>
 						<br />
 						<br />
-						<span>There are no apps loaded to the catalog.</span>
+						<span>There are no apps available in this catalog.</span>
 						<br />
-						<span>Please consult your System Admin.</span>
+						<span>Please contact your System Admin.</span>
 					</div>
 				}
 				{this.state.apps.length > 0 &&
