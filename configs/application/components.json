@@ -188,7 +188,7 @@
                 }
             }
         },
-        "launchGroupSpawner": {
+        "launchGroupSpawnerExample1": {
             "window": {
                 "url": "$applicationRoot/components/launchGroupSpawner/launchGroupSpawner.html",
                 "options": {
@@ -196,56 +196,64 @@
                     "autoShow": false,
                     "alwaysOnTop": false
                 },
-                "top": "200",
-                "left": "200",
+                "top": 100,
+                "left": 400,
                 "width": 200,
                 "height": 200,
+				"addToWorkspace": false,
                 "data": {
-                    "toSpawn": {
-                        "componentType": "Welcome Component",
-                        "spawnOptions": {
-                            "top": 100,
-                            "left": 100,
-                            "height": 300,
-                            "width": 300,
-                            "data": {}
+                    "toSpawn": [
+                        {
+                            "componentType": "Welcome Component",
+                            "spawnOptions": {
+								"top": 0,
+								"left": 0,
+								"height": 300,
+								"width": 250,
+								"data": {}
+							}
                         },
-                        "formGroup": true,
-                        "relatives": [
-                            {
-                                "componentType": "Welcome Component",
-                                "spawnOptions": {
-                                    "left": "adjacent",
-                                    "top": 0,
-                                    "height": 300,
-                                    "width": 200,
-                                    "data": {}
-                                }
-                            },
-                            {
-                                "componentType": "Welcome Component",
-                                "spawnOptions": {
-                                    "top": "adjacent",
-                                    "left": 0,
-                                    "height": 150,
-                                    "width": 300,
-                                    "data": {}
-                                },
-                                "relatives": [
-                                    {
-                                        "componentType": "Welcome Component",
-                                        "spawnOptions": {
-                                            "left": "adjacent",
-                                            "top": 0,
-                                            "height": 150,
-                                            "width": 200,
-                                            "data": {}
-                                        }
-                                    }
-                                ]
-                            }
-                        ]
-                    }
+                        {
+                            "componentType": "Welcome Component",
+                            "spawnOptions": {
+								"top": 0,
+								"left": 250,
+								"height": 300,
+								"width": 350,
+								"data": {}
+							}
+                        },
+                        {
+                            "componentType": "Welcome Component",
+                            "spawnOptions": {
+								"top": 300,
+								"left": 0,
+								"height": 300,
+								"width": 200,
+								"data": {}
+							}
+                        },
+                        {
+                            "componentType": "Welcome Component",
+                            "spawnOptions": {
+								"top": 300,
+								"left": 200,
+								"height": 300,
+								"width": 400,
+								"data": {}
+							}
+                        },
+                        {
+                            "componentType": "Welcome Component",
+                            "spawnOptions": {
+								"top": 0,
+								"left": 600,
+								"height": 600,
+								"width": 250,
+								"data": {}
+							}
+                        }
+                    ]
                 }
             },
             "component": {},
@@ -254,16 +262,15 @@
                     "App Launcher": {
                         "launchableByUser": true
                     },
-                    "Window Manager": {
-                    },
+                    "Window Manager": {},
                     "Toolbar": {
                         "iconClass": "launchGroupSpawner",
                         "iconURL": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png"
                     }
                 }
             }
-        },
-        "launchGroupSpawner2": {
+		},
+		"launchGroupSpawnerExample2": {
             "window": {
                 "url": "$applicationRoot/components/launchGroupSpawner/launchGroupSpawner.html",
                 "options": {
@@ -271,68 +278,64 @@
                     "autoShow": false,
                     "alwaysOnTop": false
                 },
-                "top": "200",
-                "left": "200",
+                "top": 50,
+                "left": 100,
                 "width": 200,
-                "height": 200,
+				"height": 200,
+				"addToWorkspace": false,
                 "data": {
-                    "toSpawn": {
-                        "componentType": "Welcome Component",
-                        "spawnOptions": {
-                            "top": 100,
-                            "left": 200,
-                            "height": 400,
-                            "width": 500,
-                            "data": {}
+                    "toSpawn": [
+                        {
+                            "componentType": "Welcome Component",
+							"spawnOptions": {
+								"top": 0,
+								"left": 0,
+								"height": 250,
+								"width": 600,
+								"data": {}
+							}
                         },
-                        "formGroup": true,
-                        "relatives": [
-                            {
-                                "componentType": "Welcome Component",
-                                "spawnOptions": {
-                                    "left": "adjacent",
-                                    "top": 0,
-                                    "height": 400,
-                                    "width": 300,
-                                    "data": {}
-								},
-								"relatives": [
-                                    {
-                                        "componentType": "Welcome Component",
-                                        "spawnOptions": {
-                                            "left": "adjacent",
-                                            "top": 0,
-                                            "height": 400,
-                                            "width": 300,
-                                            "data": {}
-                                        }
-                                    }
-                                ]
-                            },
-                            {
-                                "componentType": "Welcome Component",
-                                "spawnOptions": {
-                                    "top": "adjacent",
-                                    "left": 0,
-                                    "height": 300,
-                                    "width": 1100,
-                                    "data": {}
-                                },
-                                "relatives": [
-                                    {
-                                        "componentType": "Welcome Component",
-                                        "spawnOptions": {
-                                            "top": "adjacent",
-                                            "left": 0,
-                                            "height": 300,
-                                            "width": 1100,
-                                            "data": {}
-                                        }
-                                    }
-                                ]
-                            }
-                        ]
-                    }
+                        {
+                            "componentType": "Welcome Component",
+                            "spawnOptions": {
+								"top": 250,
+								"left": 0,
+								"height": 250,
+								"width": 300,
+								"data": {}
+							}
+                        },
+                        {
+                            "componentType": "Welcome Component",
+                            "spawnOptions": {
+								"top": 250,
+								"left": 300,
+								"height": 250,
+								"width": 300,
+								"data": {}
+							}
+                        },
+                        {
+                            "componentType": "Welcome Component",
+                            "spawnOptions": {
+								"top": 500,
+								"left": 0,
+								"height": 200,
+								"width": 600,
+								"data": {}
+							}
+                        },
+                        {
+                            "componentType": "Process Monitor",
+                            "spawnOptions": {
+								"top": 0,
+								"left": 600,
+								"height": 700,
+								"width": 300,
+								"data": {}
+							}
+                        }
+                    ]
                 }
             },
             "component": {},
@@ -341,8 +344,7 @@
                     "App Launcher": {
                         "launchableByUser": true
                     },
-                    "Window Manager": {
-                    },
+                    "Window Manager": {},
                     "Toolbar": {
                         "iconClass": "launchGroupSpawner",
                         "iconURL": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png"

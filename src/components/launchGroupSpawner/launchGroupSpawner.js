@@ -1,66 +1,81 @@
-import { isArray } from "util";
-
 const FSBLReady = () => {
 	try {
+		//get the spawner configuration provided in spawn data.
 		let spawnerData = FSBL.Clients.WindowClient.getSpawnData();
 		if (spawnerData && spawnerData.toSpawn) {
-			//spawn the first component and then recurse relatives
-			doSpawn(spawnerData.toSpawn)
-			.then(function(firstWindowIdentifier) {
-				if (spawnerData.toSpawn.formGroup) {
-					//tell the primary component to form a group if requested to
-					FSBL.Clients.Logger.log("forming group on:", firstWindowIdentifier);
-					FSBL.Clients.RouterClient.transmit("DockingService.formGroup", { windowName: firstWindowIdentifier.windowName });
-				} else {
-					FSBL.Clients.Logger.log("formGroup not requested");
-				}
+			//get the spawner's own config and position info (the spawned components will offset from that position)
+			let spawnerConfig = FSBL.Clients.WindowClient.options.customData;
+			let groupTop = spawnerConfig.window.top;
+			let groupLeft = spawnerConfig.window.left;
 
-				//close the spawner now we're done
-				FSBL.Clients.Logger.log("Done spawning, time to close");
-				
-				//disabled as its making it hard to debug by dropping logs from central logger
-				//FSBL.Clients.WindowClient.close();
-			});
+			spawnComponentGroup(spawnerData.toSpawn, groupTop, groupLeft);
 		} else {
 			FSBL.Logger.error("Received no spawner data, spawnerData: ", spawnerData);
-			FSBL.Clients.WindowClient.close();
 		}
+		//FSBL.Clients.WindowClient.close({ removeFromWorkspace: true, closeWindow: true });
 
 	} catch (e) {
 		FSBL.Clients.Logger.error(e);
 	}
 }
 
-const spawnRelatives = function(parentWindowIdentifier, relativeData) {
-	if (relativeData && Array.isArray(relativeData) && relativeData.length > 0) {
-		FSBL.Clients.Logger.log("Spawning relatives of: ", parentWindowIdentifier);
-		return (Promise.all(relativeData.map(function (elem) {
-			return doSpawn(elem,parentWindowIdentifier);
-		})).then(Promise.resolve(parentWindowIdentifier))); //pass the parentWindowIdentifier back up when done
-	} else {
-		FSBL.Clients.Logger.log("No relatives to spawn for: ", parentWindowIdentifier);
-		return Promise.resolve(parentWindowIdentifier);//pass the parentWindowIdentifier back up when done
-	}
+/**
+ * Spawn multiple components, via an array of Objects defining the componentType and spawnOptions 
+ * to pass to LauncherClient.spawn. The spawned components are grouped automatically.
+ * 
+ * @param {Array} componentsToSpawn An array of objects with componentType and spawnOptions values. 
+ * Most arguments that are normally passed to spawn are supported, although positioning must be specified
+ * using top and left, which will be interpreted as an offset from the groupTop and groupLeft coordinates provided.
+ * @param {number} groupTop The top coordinate of the group from which each component's top is offset
+ * @param {number} groupLeft  The left coordinate of the group from which each component's left is offset.
+ * @returns {Array} An array of the responses from each spawn command [{err, response},...]
+ * @example 
+ * let toSpawn = [{
+ * 			"componentType": "Welcome Component",
+ * 			"spawnOptions": {"top": 0, "left": 0, "height": 400, "width": 300, "data": {}}
+ * 		},
+ * 		{
+ * 			"componentType": "Welcome Component",
+ * 			"spawnOptions": {"top": 0, "left": 300, "height": 400, "width": 500, "data": {}}
+ * 		},
+ * 		{
+ * 			"componentType": "Welcome Component",
+ * 			"spawnOptions": {"top": 400, "left": 0, "height": 400, "width": 800, "data": {})
+ * 			}
+ * 		}];
+ * let promise = spawnComponentGroup(toSpawn, 200, 200);
+ */
+const spawnComponentGroup = function(componentsToSpawn, groupTop, groupLeft) {
+	let compsToSpawn = processConfig(componentsToSpawn, groupTop, groupLeft);
+	FSBL.Clients.Logger.log(`Spawning component group at top: ${groupTop}, left: ${groupLeft} and config:`, componentsToSpawn);
+	return Promise.all(compsToSpawn.map(function(aComp) {
+		FSBL.Clients.Logger.log(`Spawning ${aComp.componentType} with options: ${JSON.stringify(aComp.spawnOptions, null, 2)}`);
+		return FSBL.Clients.LauncherClient.spawn(aComp.componentType, aComp.spawnOptions);
+	})).then(function(spawnResponses){
+		FSBL.Clients.Logger.log("Spawn responses:", spawnResponses);
+		//tell the first component to form a group 
+		FSBL.Clients.Logger.log("forming group on:", spawnResponses[0].response.windowIdentifier);
+		FSBL.Clients.RouterClient.transmit("DockingService.formGroup", { windowName: spawnResponses[0].response.windowIdentifier.windowName });
+		return spawnResponses;
+	});
 }
 
-const doSpawn = function(toSpawn, parentWindowIdentifier) {
-	if (!toSpawn.spawnOptions) { toSpawn.spawnOptions = {}; }
-	if (parentWindowIdentifier) {
-		toSpawn.spawnOptions.relativeWindow = parentWindowIdentifier;
-		toSpawn.spawnOptions.position = "relative";
-	}
-	//make sure spawned components are added to workspace
-	toSpawn.spawnOptions.addToWorkspace = true;
-	FSBL.Clients.Logger.log(`Spawning ${toSpawn.componentType} with options: ${JSON.stringify(toSpawn.spawnOptions, null, 2)}`);
-
-	return FSBL.Clients.LauncherClient.spawn(
-		toSpawn.componentType, 
-		toSpawn.spawnOptions)
-	.then(function(data) {
-		//collect its window identifier for later
-		FSBL.Clients.Logger.log("Response from spawn: ", data.response);
-		//recursively spawn all relative components
-		return spawnRelatives(data.response.windowIdentifier, toSpawn.relatives);
+/**
+ * Process the arguments provide for each component and offset their position from the groupTOp and groupLeft.
+ * @param {Array} componentsToSpawn An array of objects defining the componentType and spawnOptions to pass to LauncherClient.spawn for each component
+ * @param {number} groupTop The top coordinate of the group from which each component's top is offset
+ * @param {number} groupLeft  The left coordinate of the group from which each component's left is offset
+ * @returns {Array} The array of processed config objects [{componentType: "Comp Type", spawnOptions: {...}},...]
+ */
+const processConfig = function(componentsToSpawn, groupTop, groupLeft) {
+	//process the array of components to set position arguments
+	return componentsToSpawn.map(function (comp){ 
+		if (!comp.spawnOptions) { comp.spawnOptions = {}; }
+		comp.spawnOptions.top = groupTop + comp.spawnOptions.top;
+		comp.spawnOptions.left = groupLeft + comp.spawnOptions.left;
+		//ensure the spawned components are added to the workspace
+		comp.spawnOptions.addToWorkspace = true;
+		return comp;
 	});
 }
 
