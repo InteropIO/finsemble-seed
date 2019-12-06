@@ -25,6 +25,7 @@ export default class AppMarket extends React.Component {
 			apps: [],
 			isLoading: false,
 			filteredApps: [],
+			serverError: false,
 			installed: [],
 			tags: [],
 			activeTags: [],
@@ -63,11 +64,23 @@ export default class AppMarket extends React.Component {
 					isLoading: false
 				});
 			});
-	
-			this._asyncTagsRequest = storeActions.getTags().then(tags => {
-				this.setState({
-					tags
-				});
+		}).catch((err) => {
+			this.setState({
+				serverError: true
+			}, () => {
+				FSBL.Clients.Logger.error("Error connecting to FDC3 AppD server.", err);
+			});
+		});
+
+		this._asyncTagsRequest = storeActions.getTags().then(tags => {
+			this.setState({
+				tags
+			});
+		}).catch((err) => {
+			this.setState({
+				serverError: true
+			}, () => {
+				FSBL.Clients.Logger.error("Error retrieving tags from FDC3 AppD server.", err);
 			});
 		});
 	}
@@ -95,11 +108,11 @@ export default class AppMarket extends React.Component {
 		FSBL.Clients.RouterClient.removeListener("viewApp", this.viewApp);
 
 		//Make sure async requests have finished.
-		if (this._asyncAppRequest) {
+		if (this._asyncAppRequest && this._asyncAppRequest.cancel) {
 			this._asyncAppRequest.cancel();
 		}
 
-		if (this._asyncTagsRequest) {
+		if (this._asyncTagsRequest && this._asyncTagsRequest.cancel) {
 			this._asyncTagsRequest.cancel();
 		}
 	}
@@ -136,7 +149,7 @@ export default class AppMarket extends React.Component {
 		let apps = storeActions.getFilteredApps();
 		let tags = storeActions.getActiveTags();
 
-		//Make sure a change actually occured before rerendering. If the store's activeTags or filteredApps is different then component's, we make a change (which triggers a page change). Otherwise don't.
+		//Make sure a change actually occurred before re-rendering. If the store's activeTags or filteredApps is different then component's, we make a change (which triggers a page change). Otherwise don't.
 		//NOTE: The potential bug here is if filteredApps or activeTags has somehow changed and maintained the same length (which should be impossible)
 		if ((apps && filteredApps && activeTags && tags) && (apps.length !== filteredApps.length || activeTags.length !== tags.length)) {
 			this.setState({
@@ -200,7 +213,7 @@ export default class AppMarket extends React.Component {
 		});
 	}
 	/**
-	 * When the notification for isntalling/removing an app is shown a timeout is set to call this function to cease showing the notification
+	 * When the notification for installing/removing an app is shown a timeout is set to call this function to cease showing the notification
 	 */
 	stopShowingInstalledNotification() {
 		this.setState({
@@ -228,7 +241,7 @@ export default class AppMarket extends React.Component {
 		}
 	}
 	/**
-	 * Compiles a list of apps that are installed from the information recieved back from appd
+	 * Compiles a list of apps that are installed from the information received back from appd
 	 * and the information contained on the system
 	 * TODO: This is temporary. It will change when there is actually a way to know from launcher what apps are installed, and which are not
 	 * @param {boolean} filtered If true, uses the filtered apps array. Otherwise uses all apps
@@ -290,6 +303,15 @@ export default class AppMarket extends React.Component {
 
 		return (
 			<div>
+				{this.state.serverError && 
+					<div className='server-error'>
+						<br />
+						<br />
+						<span>Catalog contents are currently unavailable.</span>
+						<br />
+						<span>Please check your connection or consult your System Admin.</span>
+					</div>
+				}
 				{this.state.apps.length === 0 && !this.state.isLoading &&
 					<div className='server-error'>
 						<br />
@@ -300,10 +322,10 @@ export default class AppMarket extends React.Component {
 					</div>
 				}
 				{this.state.apps.length > 0 &&
-					<div> 
+					<div>
 						<SearchBar hidden={page === "showcase" ? true : false} backButton={page !== "home"} tags={tags} activeTags={activeTags} tagSelected={this.addTag}
-							removeTag={this.removeTag} goHome={this.goHome} installationActionTaken={this.state.installationActionTaken}
-							search={this.changeSearch} isViewingApp={this.state.activeApp !== null} />
+						removeTag={this.removeTag} goHome={this.goHome} installationActionTaken={this.state.installationActionTaken}
+						search={this.changeSearch} isViewingApp={this.state.activeApp !== null} />
 						<div className="market_content">
 							{pageContents}
 						</div>

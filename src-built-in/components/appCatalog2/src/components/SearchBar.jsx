@@ -37,34 +37,29 @@ class SearchBar extends Component {
 		this.toggleTagSelector = this.toggleTagSelector.bind(this);
 		this.selectTag = this.selectTag.bind(this);
 		this.removeTag = this.removeTag.bind(this);
-		this.clearSearch = this.clearSearch.bind(this);
 		this.focus = this.focus.bind(this);
 	}
-	componentWillReceiveProps(nextProps) {
-		if ((nextProps.activeTags.length === 0 && !nextProps.backButton) || nextProps.isViewingApp) {
-			//this.setState({
-			//	searchValue: ""
-			//});
-		}
-	}
+
 	/**
 	 * Handles changing the component state for handling local input value. Also calls parent function to effect the store
 	 * @param {object} e React Synthetic event
 	 */
 	changeSearch(e) {
+		const { value : searchTerms } = e.target;
 		this.setState({
-			searchValue: e.target.value
+			searchValue: searchTerms
 		});
-		this.props.search(e.target.value);
+
+		if (searchTerms !== "") {
+			this.props.search(searchTerms);
+		} else {
+			let tags = storeActions.getActiveTags();
+
+			storeActions.removeTag(tag);
+			storeActions.addTag(tag);
+		}
 	}
 
-	clearSearch() {
-		this.setState({
-			searchValue: ''
-		});
-		this.props.search({ field: 'filteredApps', value: null })
-		this.focus();
-	}
 	/**
 	 * Opens/hides the tag selection menu
 	 */

@@ -151,10 +151,12 @@ function _clearActiveTags() {
  */
 async function getApps() {
 	let apps = await appd.getAll((err, apps) => {
-		getStore().setValue({
-			field: "apps",
-			value: apps
-		});
+		if (!err) {
+			getStore().setValue({
+				field: "apps",
+				value: apps
+			});
+		}
 	});
 	return apps;
 }
