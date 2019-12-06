@@ -69,6 +69,8 @@
         "gulp": "4.0.0",
         "gulp-watch": "5.0.1",
         "hard-source-webpack-plugin": "0.6.12",
+        "lodash": "^4.17.15",
+        "lodash.isequal": "^4.5.0",
         "merge-stream": "1.0.1",
         "querystring": "0.2.0",
         "react": "16.8.4",

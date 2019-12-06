@@ -1,1 +1,10 @@
-{}
+{
+	"sender": {
+		"output": "components/sender/sender",
+		"entry": "./src/components/sender/sender.js"
+    },
+    "intentResolverModal": {
+		"output": "services/desktopAgent/intentResolver/intentResolverModal",
+		"entry": "./src/services/desktopAgent/intentResolver/src/app.jsx"
+	}
+}

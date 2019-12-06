@@ -23,6 +23,27 @@
 					"dockingService": {
 						"canGroup": true,
 						"isArrangable": true
+					},
+					"fdc3": {
+						"intents": [
+							{
+								"name": "StartChat",
+								"displayName": "Start Chat",
+								"contexts": [
+									"contact",
+									"instrument"
+								],
+								"customConfig": {}
+							},
+							{
+								"name": "SitPretty",
+								"displayName": "Do Nothing",
+								"contexts": [
+									"garbage"
+								],
+								"customConfig": {}
+							}
+						]
 					}
 				},
 				"components": {
@@ -182,6 +203,105 @@
 					"Window Manager": {
 						"FSBLHeader": false,
 						"persistWindowState": false
+					}
+				}
+			}
+		},
+		"Intent Resolver": {
+			"window": {
+				"url": "$applicationRoot/services/desktopAgent/intentResolver/intentResolverModal.html",
+				"resizable": false,
+				"autoShow": true,
+				"width": 400,
+				"height": 336,
+				"ephemeral": true,
+				"slave": false,
+				"left": "adjacent",
+				"dockOnSpawn": true
+			},
+			"component": {
+				"spawnOnStartup": false
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"canGroup": false,
+						"isArrangable": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"showLinker": false,
+						"FSBLHeader": false,
+						"persistWindowState": false,
+						"title": "Intent Resolver"
+					},
+					"Toolbar": {
+						"iconClass": "ff-component"
+					}
+				}
+			}
+		},
+		"Sender": {
+			"window": {
+				"url": "$applicationRoot/components/sender/sender.html",
+				"affinity": "workspaceComponents",
+				"frame": false,
+				"resizable": true,
+				"autoShow": true,
+				"top": "center",
+				"left": "center",
+				"width": 400,
+				"height": 432
+			},
+			"component": {
+				"inject": false,
+				"spawnOnStartup": false
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"canGroup": true,
+						"isArrangable": true
+					},
+					"fdc3": {
+						"intents": [
+							{
+								"name": "StartChat",
+								"displayName": "Start Chat",
+								"contexts": [
+									"contact",
+									"instrument",
+									"garbage"
+								],
+								"customConfig": {}
+							},
+							{
+								"name": "SitPretty",
+								"displayName": "Do Nothing",
+								"contexts": [
+									"garbage"
+								],
+								"customConfig": {}
+							}
+						]
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"showLinker": true,
+						"FSBLHeader": true,
+						"persistWindowState": true,
+						"title": "Welcome"
+					},
+					"Toolbar": {
+						"iconClass": "ff-component"
 					}
 				}
 			}
