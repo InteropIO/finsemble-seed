@@ -1,5 +1,5 @@
 /*!
-* The adhoc component is a form that will create ta new adhoc component that the user can spawn from the app launcher.
+* The quick component is a form that will create a new component that the user can spawn from the app launcher.
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
@@ -7,15 +7,15 @@
 import React from "react";
 import ReactDOM from "react-dom";
 //Finsemble font-icons, general styling, and specific styling.
-import "./adhoc.css";
+import "./quickComponent.css";
 import "../../../assets/css/finsemble.css";
 import { FinsembleDialog, FinsembleDialogTextInput, FinsembleDialogQuestion, FinsembleDialogButton } from "@chartiq/finsemble-react-controls";
 
-class AdHocComponentForm extends React.Component {
+class QuickComponentForm extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			name: "", 
+			name: "",
 			url: ""
 		}
 		this.save = this.save.bind(this);
@@ -26,7 +26,7 @@ class AdHocComponentForm extends React.Component {
 	/**
 	 * Adds eventListeners on keydown, sets the height of the component.
 	 *
-	 * @memberof AdHoc
+	 * @memberof QuickComponent
 	 */
 	componentDidMount() {
 		FSBL.Clients.WindowClient.fitToDOM();
@@ -47,15 +47,15 @@ class AdHocComponentForm extends React.Component {
 	/**
 	 * Hides the window when the save button is clicked.
 	 *
-	 * @memberof AdHoc
+	 * @memberof QuickComponent
 	 */
 	hideWindow() {
 		finsembleWindow.hide();
 	}
 	/**
-	 * Persists the adHoc component to storage.
+	 * Persists the quick component to storage.
 	 * @todo On error, display error message and allow user to try again.
-	 * @memberof AdHoc
+	 * @memberof QuickComponent
 	 */
 	save() {
 		if (!this.state) return FSBL.Clients.DialogManager.respondToOpener({});
@@ -96,7 +96,7 @@ class AdHocComponentForm extends React.Component {
 	/**
 	 * Kills the window.
 	 * @todo make this component show/hide instead of spawn/close.
-	 * @memberof AdHoc
+	 * @memberof QuickComponent
 	 */
 	cancel() {
 		Array.from(document.querySelectorAll("input")).forEach((el) => el.value = "");
@@ -145,8 +145,8 @@ class AdHocComponentForm extends React.Component {
 
 if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
 function FSBLReady() {
-	console.debug("AdhocComponentForm onready");
+	console.debug("QuickComponentForm onready");
 	ReactDOM.render(
-		<AdHocComponentForm />
+		<QuickComponentForm />
 		, document.getElementById("bodyHere"));
 }

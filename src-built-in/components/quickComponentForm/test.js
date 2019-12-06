@@ -5,7 +5,7 @@ var expect = chai.expect;
 var RouterClient = FSBL.Clients.RouterClient;
 var LauncherClient = FSBL.Clients.LauncherClient;
 var merge = require("deepmerge");
-RouterClient.addResponder("TestRunner.AdhocComponentForm", function (response, message) {
+RouterClient.addResponder("TestRunner.QuickComponentForm", function (response, message) {
 	function sendSuccess(data) {
 		message.sendQueryResponse(null, data || "success");
 	}
