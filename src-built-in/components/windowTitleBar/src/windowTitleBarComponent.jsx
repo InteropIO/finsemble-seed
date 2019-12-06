@@ -202,11 +202,17 @@ class WindowTitleBar extends React.Component {
 		// Create the dragger if it doesn't already exist
 		let dragHandle = document.querySelector(".fsbl-drag-handle");
 		if (!dragHandle) {
-			const currentWindow = fin.desktop.Window.getCurrent();
 			dragHandle = document.createElement("div");
 			dragHandle.className = "fsbl-drag-handle";
-			dragHandle.onmousedown = (e) => {currentWindow.startMovingWindow(e)}
-			dragHandle.onmouseup = (e) => {currentWindow.stopMovingWindow(e)}
+			const handleMouseDown = (event) => {
+				FSBL.Clients.WindowClient.startMovingWindow(event);
+			};
+			const handleMouseUp = () => {
+				FSBL.Clients.WindowClient.stopMovingWindow();
+			};
+
+			dragHandle.onmousedown = handleMouseDown;
+			dragHandle.onmouseup = handleMouseUp;
 
 			fsblHeader.insertBefore(dragHandle, fsblHeader.firstChild);
 			var self = this;
@@ -287,7 +293,7 @@ class WindowTitleBar extends React.Component {
 	onTitleChange(err, response) {
 		let { tabs } = this.state;
 		let myIdentifier = FSBL.Clients.WindowClient.getWindowIdentifier();
-		
+
 		tabs = tabs.map((el) => {
 			if (!el.windowName && el.name) el.windowName = el.name;
 			if (!el.name && el.windowName) el.name = el.windowName;
@@ -415,7 +421,7 @@ class WindowTitleBar extends React.Component {
 					 * component, and all the event handlers, etc. should be registered in a parent component,
 					 * as this simplifies the UI and allows React to better optimize under the hood.
 					 */}
-					<AlwaysOnTop visible={this.state.alwaysOnTopButton && showMinimizeIcon}/>
+					<AlwaysOnTop visible={this.state.alwaysOnTopButton && showMinimizeIcon} />
 					<BringSuiteToFront />
 					{this.state.minButton && showMinimizeIcon ? <Minimize /> : null}
 					{this.state.maxButton ? <Maximize /> : null}
@@ -426,13 +432,13 @@ class WindowTitleBar extends React.Component {
 	}
 }
 
-function init () {
+function init() {
 	// The following line fixes the CSS issues, weird..
 	const css = require("../../../../assets/css/finsemble.css");
 	// Create the header element
 	const template = document.createElement("div");
 	const FSBLHeader = document.createElement('div')
-		  FSBLHeader.setAttribute('id', 'FSBLHeader')
+	FSBLHeader.setAttribute('id', 'FSBLHeader')
 	template.appendChild(FSBLHeader)
 	document.body.insertBefore(template.firstChild, document.body.firstChild);
 	storeExports.initialize(function () {
