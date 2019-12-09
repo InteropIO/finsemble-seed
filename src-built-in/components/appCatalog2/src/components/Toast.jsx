@@ -15,11 +15,11 @@ const Toast = props => {
 
 	switch (props.installationActionTaken) {
 		case "add":
-			messageContent = "Added to My Apps";
+			messageContent = "Application Added";
 			classes += " success";
 			break;
 		case "remove":
-			messageContent = "Removed from My Apps";
+			messageContent = "Application Removed";
 			classes += " error";
 			break;
 		default:
