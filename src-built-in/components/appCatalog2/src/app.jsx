@@ -23,6 +23,7 @@ export default class AppMarket extends React.Component {
 		super(props);
 		this.state = {
 			apps: [],
+			isLoading: false,
 			filteredApps: [],
 			serverError: false,
 			installed: [],
@@ -54,9 +55,14 @@ export default class AppMarket extends React.Component {
 		//For more information on async react rendering, see here
 		//https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html
 
-		this._asyncAppRequest = storeActions.getApps().then(apps => {
-			this.setState({
-				apps
+		this.setState({
+			isLoading: true
+		}, () => {
+			this._asyncAppRequest = storeActions.getApps().then(apps => {
+				this.setState({
+					apps,
+					isLoading: false
+				});
 			});
 		}).catch((err) => {
 			this.setState({
@@ -302,6 +308,15 @@ export default class AppMarket extends React.Component {
 						<span>Catalog contents are currently unavailable.</span>
 						<br />
 						<span>Please check your connection or consult your System Admin.</span>
+					</div>
+				}
+				{this.state.apps.length === 0 && !this.state.isLoading &&
+					<div className='server-error'>
+						<br />
+						<br />
+						<span>There are no apps available in this catalog.</span>
+						<br />
+						<span>Please contact your System Admin.</span>
 					</div>
 				}
 				{this.state.apps.length > 0 &&
