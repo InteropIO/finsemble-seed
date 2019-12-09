@@ -49,10 +49,6 @@ const Header = props => {
 		storeActions.removeApp(props.appId);
 	};
 
-	const launchApp = () => {
-
-	};
-	console.log("addApp", props);
 	return (
 		<div className="header">
 			<div className='icon-title-container'>

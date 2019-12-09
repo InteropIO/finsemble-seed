@@ -249,17 +249,15 @@ export default class AppMarket extends React.Component {
 			apps = this.state.apps;
 		}
 
-		apps = apps.map((app) => {
-			for (let i = 0; i < installed.length; i++) {
-				if (installed.includes(app.appId)) {
-					app.installed = true;
-				} else {
-					app.installed = false;
-				}
+		return apps.map((app) => {
+			if (installed.includes(app.appId)) {
+				app.installed = true;
+			} else {
+				app.installed = false;
 			}
+
 			return app;
 		});
-		return apps;
 	}
 	getPageContents() {
 		let { filteredApps, activeTags } = this.state;
