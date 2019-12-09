@@ -53,6 +53,13 @@ class SearchBar extends Component {
 		if (searchTerms !== "") {
 			this.props.search(searchTerms);
 		} else {
+			storeActions.refreshTagSearch();
+		}
+	}
+
+		if (searchTerms !== "") {
+			this.props.search(searchTerms);
+		} else {
 			let tags = storeActions.getActiveTags();
 
 			storeActions.removeTag(tag);
