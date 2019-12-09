@@ -63,12 +63,12 @@ export default class AppMarket extends React.Component {
 					apps,
 					isLoading: false
 				});
-			});
-		}).catch((err) => {
-			this.setState({
-				serverError: true
-			}, () => {
-				FSBL.Clients.Logger.error("Error connecting to FDC3 AppD server.", err);
+			}).catch((err) => {
+				this.setState({
+					serverError: true
+				}, () => {
+					FSBL.Clients.Logger.error("Error connecting to FDC3 AppD server.", err);
+				});
 			});
 		});
 
