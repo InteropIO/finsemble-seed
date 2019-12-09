@@ -255,6 +255,11 @@ async function addApp(id, cb = Function.prototype) {
 	if (typeof app.manifest !== "object") {
 		appConfig.manifest = { ...appConfig };
 	}
+
+	if (app.friendlyName) {
+		appConfig.displayName = app.friendlyName;
+	}
+
 	let MY_APPS = data.defaultFolder;
 	let folders = data.folders;
 
