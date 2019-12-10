@@ -77,6 +77,7 @@ export default class DockingButton extends React.Component {
      *
      * @memberof DockingButton
      */
+
     onClick(e) {        
 		HeaderActions.toggleGroup();
 	}
