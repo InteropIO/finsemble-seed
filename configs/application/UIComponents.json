@@ -15,7 +15,7 @@
 				}
 			},
 			"component": {
-				"allowAdhoc": "@TODO",
+				"allowQuickComponent": "@TODO",
 				"spawnOnStartup": false,
 				"category": "system"
 			},
@@ -47,7 +47,7 @@
 				}
 			},
 			"component": {
-				"allowAdhoc": "@TODO",
+				"allowQuickComponent": "@TODO",
 				"spawnOnStartup": false,
 				"category": "system"
 			},
@@ -81,7 +81,7 @@
 				}
 			},
 			"component": {
-				"allowAdhoc": "@TODO",
+				"allowQuickComponent": "@TODO",
 				"spawnOnStartup": false,
 				"category": "system"
 			},
@@ -114,7 +114,7 @@
 				}
 			},
 			"component": {
-				"allowAdhoc": "@TODO",
+				"allowQuickComponent": "@TODO",
 				"spawnOnStartup": false,
 				"category": "system"
 			},
@@ -287,9 +287,9 @@
 				}
 			}
 		},
-		"AdhocComponentForm": {
+		"QuickComponentForm": {
 			"window": {
-				"url": "$applicationRoot/components/adhocComponentForm/adhocComponentForm.html",
+				"url": "$applicationRoot/components/quickComponentForm/quickComponentForm.html",
 				"affinity": "systemComponents",
 				"width": 550,
 				"height": 175,

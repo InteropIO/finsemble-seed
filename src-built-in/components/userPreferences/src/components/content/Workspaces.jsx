@@ -545,7 +545,7 @@ export default class Workspaces extends React.Component {
 							{this.state.focusedWorkspaceComponentList.length === 0 &&
 								"No components."}
 						</div>
-						<div className="workspace-action-buttons">
+						{/* <div className="workspace-action-buttons">
 							<div title={importTooltip} className={importButtonClasses} onMouseDown={this.handleButtonClicks} onClick={allowImport ? this.openFileDialog : Function.prototype}>
 								<i className="workspace-action-button-icon ff-import"></i>
 								<div>Import</div>
@@ -555,7 +555,7 @@ export default class Workspaces extends React.Component {
 								<div>Export</div>
 							</div>
 
-						</div>
+						</div> */}
 					</div>
 				</div>
 				<Checkbox

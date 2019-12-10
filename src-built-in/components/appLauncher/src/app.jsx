@@ -50,9 +50,9 @@ class AppLauncher extends React.Component {
 		});
 	}
 
-	openAdHoc() {
-		//FSBL.Clients.LauncherClient.spawn("AdhocComponentForm", { monitor: "mine" });
-		FSBL.Clients.DialogManager.open("AdhocComponentForm", {}, () => { });
+	openQuickComponent() {
+		//FSBL.Clients.LauncherClient.spawn("QuickComponentForm", { monitor: "mine" });
+		FSBL.Clients.DialogManager.open("QuickComponentForm", {}, () => { });
 	}
 
 	openAppCatalog() {
@@ -74,7 +74,7 @@ class AppLauncher extends React.Component {
 		return (<FinsembleMenu>
 			<FinsembleMenuSection className="menu-secondary">
 				{<FinsembleMenuItem>
-					<FinsembleMenuItemLabel onClick={this.openAdHoc}>
+					<FinsembleMenuItemLabel onClick={this.openQuickComponent}>
 						New App
 					</FinsembleMenuItemLabel>
 				</FinsembleMenuItem> }

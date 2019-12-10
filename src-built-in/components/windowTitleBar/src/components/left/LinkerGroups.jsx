@@ -79,13 +79,6 @@ export default class LinkerGroups extends React.Component {
     }
 
     onClick(e, channel) {
-        if (e.shiftKey) {
-            //leaves any docking group.
-            return HeaderActions.hyperFocus({
-                linkerChannel: channel,
-                includeDockedGroups: true
-            });
-        }
         FSBL.Clients.LinkerClient.bringAllToFront({
             channel: channel,
             restoreWindows: true
