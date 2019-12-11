@@ -171,7 +171,9 @@
 		"linkerWindow": {
 			"bootParams": {
 				"stage": "earlyuser",
-				"dependencies": [ "Toolbar" ]
+				"dependencies": [
+					"Toolbar"
+				]
 			},
 			"window": {
 				"url": "$applicationRoot/components/linker/linker.html",
@@ -357,7 +359,9 @@
 		"yesNo": {
 			"bootParams": {
 				"stage": "earlyuser",
-				"dependencies": [ "Toolbar" ]
+				"dependencies": [
+					"Toolbar"
+				]
 			},
 			"window": {
 				"url": "$applicationRoot/components/yesNoDialog/yesNoDialog.html",
@@ -403,7 +407,9 @@
 		"singleInput": {
 			"bootParams": {
 				"stage": "earlyuser",
-				"dependencies": [ "Toolbar" ]
+				"dependencies": [
+					"Toolbar"
+				]
 			},
 			"window": {
 				"url": "$applicationRoot/components/singleInputDialog/singleInputDialog.html",
@@ -528,32 +534,42 @@
 		"Toolbar": {
 			"bootParams": {
 				"stage": "earlyuser",
-				"checkpoints" : {
-					"searchStoreInit" : {
+				"checkpoints": {
+					"searchStoreInit": {
 						"postStartupCompletion": true,
 						"timeout": 30000
 					},
-					"createStores" : {
+					"createStores": {
 						"postStartupCompletion": true
 					},
-					"loadMenusFromConfig" : {
-						"dependencies": ["createStores"],
+					"loadMenusFromConfig": {
+						"dependencies": [
+							"createStores"
+						],
 						"postStartupCompletion": true
 					},
-					"addListeners" : {
-						"dependencies": [ "loadMenusFromConfig" ],
+					"addListeners": {
+						"dependencies": [
+							"loadMenusFromConfig"
+						],
 						"postStartupCompletion": true
 					},
-					"setupHotkeys" : {
-						"dependencies": [  "addListeners" ],
+					"setupHotkeys": {
+						"dependencies": [
+							"addListeners"
+						],
 						"postStartupCompletion": true
 					},
-					"listenForWorkspaceUpdates" : {
-						"dependencies": [  "setupHotkeys" ],
+					"listenForWorkspaceUpdates": {
+						"dependencies": [
+							"setupHotkeys"
+						],
 						"postStartupCompletion": true
 					},
-					"addMoreListeners" : {
-						"dependencies": [  "listenForWorkspaceUpdates" ],
+					"addMoreListeners": {
+						"dependencies": [
+							"listenForWorkspaceUpdates"
+						],
 						"postStartupCompletion": true
 					}
 				}
@@ -577,6 +593,7 @@
 				"minHeight": 39,
 				"minWidth": 300,
 				"docked": "top",
+				"canGroup": false,
 				"options": {
 					"autoShow": false,
 					"contextMenu": false,
@@ -588,10 +605,17 @@
 			"component": {
 				"category": "system",
 				"spawnOnStartup": true,
-				"spawnOnAllMonitors": false
+				"spawnOnAllMonitors": false,
+				"canMinimize": false,
+				"canMaximize": false
 			},
 			"foreign": {
 				"services": {
+					"windowService": {
+						"allowAutoArrange": false,
+						"ignoreSnappingRequests": true,
+						"ignoreTilingAndTabbingRequests": true
+					},
 					"workspaceService": {
 						"global": true
 					}
@@ -640,7 +664,9 @@
 		"UserPreferences": {
 			"bootParams": {
 				"stage": "earlyuser",
-				"dependencies": [ "Toolbar" ]
+				"dependencies": [
+					"Toolbar"
+				]
 			},
 			"window": {
 				"url": "$applicationRoot/components/userPreferences/userPreferences.html",
