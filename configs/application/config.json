@@ -8,9 +8,9 @@
 					"name": "Finsemble-AppLauncher-Store",
 					"foundation": {
 						"appFolders": {
-							"list": ["My Apps", "Favorites"],
+							"list": ["Advanced App Launcher", "Favorites"],
 							"folders": {
-								"My Apps": {
+								"Advanced App Launcher": {
 									"icon": "ff-component",
 									"type": "folder",
 									"disableUserRemove": true,
@@ -47,7 +47,7 @@
 						"activeLauncherTags": [],
 						"filterText": "",
 						"filterTags": [],
-						"activeFolder": "My Apps",
+						"activeFolder": "Advanced App Launcher",
 						"sortBy": "Alphabetical"
 					}
 				}
@@ -152,7 +152,7 @@
 		]
 	},
 	"//appDirectoryEndpoint": "If you'd like to test the server locally, point 'appDirectoryEndpoint' to http://localhost:3030/v1/ and make sure to run the AppD project.",
-	"appDirectoryEndpoint": "https://fpe.finsemble.com/v1/",
+	"appDirectoryEndpoint": "http://localhost:3030/v1/",
 	"globalHotkeys": {},
 	"//": "importConfig contains components that are necessary to start Finsemble. All other components are loaded dynamically. See server/auth/test.json",
 	"importConfig": [

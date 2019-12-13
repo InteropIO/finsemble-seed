@@ -55,7 +55,7 @@ function initialize(done = Function.prototype) {
 		data.filteredApps = store.values.filteredApps;
 		data.activeTags = store.values.activeTags;
 		data.activeApp = store.values.activeApp;
-		data.MY_APPS = store.values.defaultFolder;
+		data.ADVANCED_APP_LAUNCHER = store.values.defaultFolder;
 
 		store.addListener({ field: "apps" }, (err, dt) => data.apps = dt.value);
 		store.addListener({ field: "appDefinitions" }, (err, dt) => data.installed = dt.value);
@@ -260,10 +260,10 @@ async function addApp(id, cb = Function.prototype) {
 		appConfig.displayName = app.friendlyName;
 	}
 
-	let MY_APPS = data.defaultFolder;
+	let ADVANCED_APP_LAUNCHER = data.defaultFolder;
 	let folders = data.folders;
 
-	data.folders[MY_APPS].apps[appID] = appConfig
+	data.folders[ADVANCED_APP_LAUNCHER].apps[appID] = appConfig
 	data.folders[folder].apps[appID] = appConfig
 	FSBL.Clients.LauncherClient.registerComponent({
 		componentType: appConfig.name,

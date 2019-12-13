@@ -39,20 +39,20 @@ export default {
 };
 
 const data = {};
-const MY_APPS = "My Apps";
+const ADVANCED_APP_LAUNCHER = "Advanced App Launcher";
 
 
 //returns names of default folders.
 function getConstants() {
 	const DASHBOARDS = 'Dashboards'
 	const FAVORITES = 'Favorites'
-	return { MY_APPS, DASHBOARDS, FAVORITES }
+	return { ADVANCED_APP_LAUNCHER, DASHBOARDS, FAVORITES }
 }
 
 //Add to here if you want to disable dragging on a folder.
 function getDragDisabled() {
-	const { MY_APPS, DASHBOARDS, FAVORITES } = getConstants();
-	return [MY_APPS, DASHBOARDS, FAVORITES]
+	const { ADVANCED_APP_LAUNCHER, DASHBOARDS, FAVORITES } = getConstants();
+	return [ADVANCED_APP_LAUNCHER, DASHBOARDS, FAVORITES]
 
 }
 
@@ -104,9 +104,9 @@ function appInAppList(appName) {
 //Update apps in folders with updated config information
 function updateAppsInFolders(cb = Function.prototype) {
 	//Loop through folders and update apps with new info
-	const { MY_APPS: MyAppsFolderName } = getConstants(); 
+	const { ADVANCED_APP_LAUNCHER: advancedAppLauncherFolderName } = getConstants(); 
 	Object.keys(data.folders).map(folderName => {
-		if (folderName === MyAppsFolderName) return;
+		if (folderName === advancedAppLauncherFolderName) return;
 		else {
 			const folder = data.folders[folderName];
 			Object.values(data.configComponents).map(configComp => {
@@ -388,7 +388,7 @@ function addApp(app = {}, cb) {
 		// we need to make sure it gets pinned to the toolbar
 		if (folder === FAVORITES) addPin({ name: app.name });
 		data.apps[appID] = newAppData;
-		data.folders[MY_APPS].apps[appID] = newAppData;
+		data.folders[ADVANCED_APP_LAUNCHER].apps[appID] = newAppData;
 		data.folders[folder].apps[appID] = newAppData;
 		// Save appDefinitions and then folders
 		_setValue("appDefinitions", data.apps, () => {
@@ -452,7 +452,7 @@ function addNewFolder(name) {
 function deleteFolder(folderName) {
 	// Check if user is trying to delete the active folder
 	if (folderName === data.activeFolder) {
-		data.activeFolder = MY_APPS;
+		data.activeFolder = ADVANCED_APP_LAUNCHER;
 		_setValue("activeFolder", data.activeFolder);
 	}
 

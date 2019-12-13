@@ -5,7 +5,7 @@ import FilterSort from "./FilterSort";
 import { getStore } from "../stores/LauncherStore";
 import storeActions from "../stores/StoreActions";
 import sortFunctions from "../utils/sort-functions";
-const MY_APPS = "My Apps";
+const ADVANCED_APP_LAUNCHER = "Advanced App Launcher";
 
 window.storeActions = storeActions;
 // To be assigned a value later in the constructor
@@ -33,7 +33,7 @@ export default class Content extends React.Component {
 	filterApps() {
 		const folder = this.state.folder;
 		let apps;
-		if (folder.name === MY_APPS) {
+		if (folder.name === ADVANCED_APP_LAUNCHER) {
 			apps = Object.values(storeActions.getAllApps());
 		} else {
 			apps = Object.values(folder.apps);
