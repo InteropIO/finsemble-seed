@@ -145,19 +145,14 @@ export default class AppMarket extends React.Component {
 	 * The store has pushed an update to the filtered tags list. This means a user has begun searching or added tags to the filter list
 	 */
 	filteringApps() {
-		let { filteredApps, activeTags, activeApp } = this.state;
-		let apps = storeActions.getFilteredApps();
-		let tags = storeActions.getActiveTags();
-
-		//Make sure a change actually occurred before re-rendering. If the store's activeTags or filteredApps is different then component's, we make a change (which triggers a page change). Otherwise don't.
-		//NOTE: The potential bug here is if filteredApps or activeTags has somehow changed and maintained the same length (which should be impossible)
-		if ((apps && filteredApps && activeTags && tags) && (apps.length !== filteredApps.length || activeTags.length !== tags.length)) {
-			this.setState({
-				filteredApps: apps,
-				activeTags: tags,
-				activeApp: (apps.length !== 0 && tags.length !== 0) ? null : activeApp
-			});
-		}
+		const { activeApp } = this.state;
+		const filteredApps = storeActions.getFilteredApps();
+		const activeTags = storeActions.getActiveTags();
+		this.setState({
+			filteredApps,
+			activeTags,
+			activeApp: (filteredApps.length && activeTags.length) ? null : activeApp
+		});
 	}
 	/**
 	 * Determines the apps page based on the state of the activeTags, search text, etc
