@@ -821,9 +821,9 @@
 				}
 			}
 		},
-		"App Catalog2": {
+		"Advanced App Catalog": {
 			"window": {
-				"url": "$applicationRoot/components/appCatalog2/appCatalog.html",
+				"url": "$applicationRoot/components/advancedAppCatalog/appCatalog.html",
 				"affinity": "systemComponents",
 				"width": 600,
 				"height": 700,

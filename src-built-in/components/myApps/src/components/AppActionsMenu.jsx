@@ -6,7 +6,6 @@
 
 import React from "react";
 import storeActions from "../stores/StoreActions";
-import { default as catalogActions } from "../../../appCatalog2/src/stores/storeActions";
 
 const MY_APPS = "My Apps";
 const FAVORITES = "Favorites";
