@@ -6,7 +6,6 @@
 
 import React from "react";
 import storeActions from "../stores/StoreActions";
-import { default as catalogActions } from "../../../appCatalog2/src/stores/storeActions";
 
 const ADVANCED_APP_LAUNCHER = "Advanced App Launcher";
 const FAVORITES = "Favorites";
@@ -32,16 +31,23 @@ export default class AppActionsMenu extends React.Component {
 		this.setMenuRef = this.setMenuRef.bind(this);
 		this.deleteApp = this.deleteApp.bind(this);
 		this.handleClickOutside = this.handleClickOutside.bind(this);
+		this.handleWindowBlurred = this.handleWindowBlurred.bind(this);
+
 	}
 
 	componentDidMount() {
 		document.addEventListener("mousedown", this.handleClickOutside);
-		finsembleWindow.addEventListener("blurred", this.handleClickOutside);
+		// Mody on 12/12/19
+		// window.blur seems to work much better than finsembleWindow's
+		// blurred event. The first, is only fired when you actually click
+		// away from the window, while finsembleWindow's blurred fires even 
+		// when you click inside the window, causing possible race conditions.
+		window.addEventListener("blur", this.handleWindowBlurred);
 	}
 
 	componentWillUnmount() {
 		document.removeEventListener("mousedown", this.handleClickOutside);
-		finsembleWindow.removeEventListener("blurred", this.handleClickOutside);
+		window.removeEventListener("blur", this.handleWindowBlurred);
 	}
 
 	toggleMenu(e) {
@@ -120,6 +126,12 @@ export default class AppActionsMenu extends React.Component {
 				isVisible: false
 			});
 		}
+	}
+
+	handleWindowBlurred() {
+		this.setState({
+			isVisible: false
+		});
 	}
 
 	/**
