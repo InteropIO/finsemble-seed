@@ -44,10 +44,10 @@ export default class SearchBox extends React.Component {
 		return (
 			<div className="search-box"> 
 				<i className="ff-search" />
-				<input required class="input-box" ref={this.textInput} value={this.state.search}  
+				<input required className="input-box" ref={this.textInput} value={this.state.search}  
 				type="text" placeholder="Search" 
 				onChange={this.onSearch} />
-				<button class="close-icon" onClick={this.clearSearch} type="reset"></button>
+				<button className="close-icon" onClick={this.clearSearch} type="reset"></button>
 			</div>	
 			)
 	}

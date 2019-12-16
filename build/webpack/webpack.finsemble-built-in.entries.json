@@ -67,9 +67,9 @@
 		"output": "components/appCatalog/appCatalog",
 		"entry": "./src-built-in/components/appCatalog/src/app.jsx"
 	},
-	"appCatalog2": {
-		"output": "components/appCatalog2/appCatalog",
-		"entry": "./src-built-in/components/appCatalog2/src/app.jsx"
+	"advancedAppCatalog": {
+		"output": "components/advancedAppCatalog/appCatalog",
+		"entry": "./src-built-in/components/advancedAppCatalog/src/app.jsx"
 	},
 	"nonConfiguredComponent": {
 		"output": "components/nonConfiguredComponent/nonConfiguredComponent",
