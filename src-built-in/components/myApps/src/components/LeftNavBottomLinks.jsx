@@ -18,7 +18,7 @@ export default class LeftNavBottomLinks extends React.Component {
 	 * renders the AddNewAppForm component or removes it
 	 */
 	showAddAppForm() {
-		// FSBL.Clients.DialogManager.open("AdhocComponentForm", {}, () => { });
+		// FSBL.Clients.DialogManager.open("QuickComponentForm", {}, () => { });
 		getStore().setValue({
 			field: "isFormVisible",
 			value: true

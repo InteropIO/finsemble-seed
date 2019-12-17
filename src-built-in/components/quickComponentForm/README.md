@@ -1,4 +1,4 @@
-### Adhoc Component Form
+### Quick Component Form
 
 This is a dialog that pops up and allows users to create finsemble components from their favorite websites.
 

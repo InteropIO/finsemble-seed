@@ -19,7 +19,6 @@ import Minimize from "./components/right/MinimizeButton.jsx";
 import DockingButton from "./components/right/DockingButton.jsx";
 import Maximize from "./components/right/MaximizeButton.jsx";
 import Close from "./components/right/CloseButton.jsx";
-import BringSuiteToFront from "./components/right/BringSuiteToFront.jsx";
 import AlwaysOnTop from "./components/right/AlwaysOnTop.jsx";
 import TabRegion from './components/center/TabRegion'
 import "../../../../assets/css/finsemble.css";
@@ -416,7 +415,6 @@ class WindowTitleBar extends React.Component {
 					 * as this simplifies the UI and allows React to better optimize under the hood.
 					 */}
 					<AlwaysOnTop visible={this.state.alwaysOnTopButton && showMinimizeIcon}/>
-					<BringSuiteToFront />
 					{this.state.minButton && showMinimizeIcon ? <Minimize /> : null}
 					{this.state.maxButton ? <Maximize /> : null}
 					{this.state.closeButton ? <Close /> : null}

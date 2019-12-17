@@ -83,7 +83,9 @@ function initialize(callback = Function.prototype) {
 			FSBL.Clients.RouterClient.subscribe("Finsemble.Service.State.launcherService", (err, response) => {
 				loadInstalledComponentsFromStore(() => {
 					//We load our stored components(config driven) here
-					loadInstalledConfigComponents(callback);
+					loadInstalledConfigComponents(() => {
+						updateAppsInFolders(callback);
+					});
 				});
 
 			});
@@ -98,6 +100,23 @@ function getApp(appID, cb = Function.prototype) {
 function appInAppList(appName) {
 	let app = findAppByField('name', appName);
 	return Boolean(app);
+}
+//Update apps in folders with updated config information
+function updateAppsInFolders(cb = Function.prototype) {
+	//Loop through folders and update apps with new info
+	const { MY_APPS: MyAppsFolderName } = getConstants(); 
+	Object.keys(data.folders).map(folderName => {
+		if (folderName === MyAppsFolderName) return;
+		else {
+			const folder = data.folders[folderName];
+			Object.values(data.configComponents).map(configComp => {
+				if (Object.keys(folder.apps).includes(configComp.appID)) {
+					data.folders[folderName].apps[configComp.appID] = configComp;
+				}
+			});
+		}
+	});
+	_setFolders(cb);
 }
 
 /**
@@ -202,6 +221,7 @@ function loadInstalledConfigComponents(cb = Function.prototype) {
 					appID: componentName,
 					icon: component.foreign.Toolbar && component.foreign.Toolbar.iconClass ? component.foreign.Toolbar.iconClass : null,
 					name: componentName,
+					displayName: component.component.displayName || componentName,
 					source: "config",
 					tags: extractTagsFromFinsembleComponentConfig(component)
 				};
@@ -289,7 +309,7 @@ function addPin(pin) {
 			if (componentToToggle.component && componentToToggle.component.windowGroup) { params.groupName = componentToToggle.component.windowGroup; }
 			var thePin = {
 				type: "componentLauncher",
-				label: pin.name,
+				label: pin.displayName,
 				component: componentToToggle.group ? componentToToggle.list : componentType,
 				fontIcon: fontIcon,
 				icon: imageIcon,
@@ -460,6 +480,7 @@ function renameFolder(oldName, newName) {
 function addAppToFolder(folderName, app) {
 	data.folders[folderName].apps[app.appID] = {
 		name: app.name,
+		displayName: app.displayName,
 		appID: app.appID
 	};
 	_setFolders();
