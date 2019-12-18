@@ -35,19 +35,20 @@ steps:
 
 - script: npm install electron-packager@13.1.1
 
-#- powershell: cat .\configs\other\server-environment-startup.json | %{$_ -replace "http://localhost:3375/configs/openfin/manifest-local.json", "$(HOSTING_LOCATION)-pr$(System.PullRequest.PullRequestNumber)/manifest.json"} > .\dist\server-environment-startup.json
+#- powershell: cat .\configs\other\server-environment-startup.json | %{$_ -replace "http://localhost:3375/configs/openfin/manifest-local.json", "$HOSTING_LOCATION-pr$(System.PullRequest.PullRequestNumber)/manifest.json"} > .\dist\server-environment-startup.json
 #  condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
 
-#- powershell: cat .\configs\openfin\manifest-local.json | %{$_ -replace "http://localhost:3375", "$(HOSTING_LOCATION)-pr$(System.PullRequest.PullRequestNumber)"} > .\dist\manifest.json
+#- powershell: cat .\configs\openfin\manifest-local.json | %{$_ -replace "http://localhost:3375", "$HOSTING_LOCATION-pr$(System.PullRequest.PullRequestNumber)"} > .\dist\manifest.json
 #  condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
 
-- powershell: cat .\configs\other\server-environment-startup.json | %{$_ -replace "http://localhost:3375/configs/openfin/manifest-local.json", "$(HOSTING_LOCATION)/manifest.json"} > .\configs\other\server-environment-startup.json
+- powershell: cat .\configs\other\server-environment-startup.json | %{$_ -replace "http://localhost:3375/configs/openfin/manifest-local.json", "$HOSTING_LOCATION/manifest.json"} > .\dist\server-environment-startup.json
 #  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
 
-- powershell: cat .\configs\other\server-environment-startup.json | %{$_ -replace "http://localhost:3375/configs/openfin/manifest-local.json", "$(HOSTING_LOCATION)/manifest.json"} > .\dist\server-environment-startup.json
-#  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+- powershell: rm .\configs\other\server-environment-startup.json
 
-- powershell: cat .\configs\openfin\manifest-local.json | %{$_ -replace "http://localhost:3375", "$(HOSTING_LOCATION)"} > .\dist\manifest.json
+- powershell: mv .\dist\server-environment-startup.json .\configs\other\server-environment-startup.json
+
+- powershell: cat .\configs\openfin\manifest-local.json | %{$_ -replace "http://localhost:3375", "$HOSTING_LOCATION"} > .\dist\manifest.json
 #  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
 
 - script: aws s3 sync .\dist\ $(PUBLISH_LOCATION)-pr$(System.PullRequest.PullRequestNumber)/ --acl public-read
