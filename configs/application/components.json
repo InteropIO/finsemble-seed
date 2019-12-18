@@ -23,8 +23,6 @@
 					"windowService": {
 						"allowSnapping": true,
 						"allowGrouping": true,
-						"allowTabbing": true,
-						"allowTiling": true,
 						"allowAutoArrange": true,
 						"allowMinimize": true
 					}
