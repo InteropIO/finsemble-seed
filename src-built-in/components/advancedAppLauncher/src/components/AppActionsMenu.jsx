@@ -7,7 +7,7 @@
 import React from "react";
 import storeActions from "../stores/StoreActions";
 
-const MY_APPS = "My Apps";
+const ADVANCED_APP_LAUNCHER = "Advanced App Launcher";
 const FAVORITES = "Favorites";
 const FDC3 = "FDC3";
 
@@ -156,7 +156,7 @@ export default class AppActionsMenu extends React.Component {
 					<li onClick={favoritesActionOnClick}>{favoritesText}</li>
 					{app.source && app.source === FDC3 && <li onClick={this.onViewInfo}>View Info</li>}
 					{!app.source && <li onClick={this.deleteApp}>Delete App</li>}
-					{[MY_APPS, FAVORITES].indexOf(folder.name) === -1 &&
+					{[ADVANCED_APP_LAUNCHER, FAVORITES].indexOf(folder.name) === -1 &&
 						<li onClick={this.onRemove}>Remove from {folder.name}</li>}
 				</ul>
 			</div>
