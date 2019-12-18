@@ -46,7 +46,7 @@ steps:
 #- powershell: cat .\configs\other\server-environment-startup.json | %{$_ -replace "http://localhost:3375/configs/openfin/manifest-local.json", "$HOSTING_LOCATION/manifest.json"} > .\dist\server-environment-startup.json
 #  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
 
-- powershell: ((Get-Content -path .\configs\openfin\manifest-local.json-Raw) -replace 'http://localhost:3375', "$HOSTING_LOCATION") | Set-Content -Path .\dist\manifest.json
+- powershell: ((Get-Content -path .\configs\openfin\manifest-local.json -Raw) -replace 'http://localhost:3375', "$HOSTING_LOCATION") | Set-Content -Path .\dist\manifest.json
 
 #- powershell: cat .\configs\openfin\manifest-local.json | %{$_ -replace "http://localhost:3375", "$HOSTING_LOCATION"} > .\dist\manifest.json
 #  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
