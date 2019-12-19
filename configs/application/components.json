@@ -3,15 +3,15 @@
 	"components": {
 		"Welcome Component": {
 			"window": {
-				"url": "$applicationRoot/components/welcome/welcome.html",
+				"url": "$applicationRoot/components/newWelcome/newWelcome.html",
 				"affinity": "workspaceComponents",
 				"frame": false,
 				"resizable": true,
 				"autoShow": true,
-				"top": "center",
+				"top": "470",
 				"left": "center",
 				"width": 400,
-				"height": 432
+				"height": 520
 			},
 			"component": {
 				"inject": false,
@@ -30,10 +30,115 @@
 						"launchableByUser": true
 					},
 					"Window Manager": {
-						"showLinker": true,
+						"showLinker": false,
 						"FSBLHeader": true,
 						"persistWindowState": true,
-						"title": "Welcome"
+						"title": "Welcome to Finsemble!"
+					},
+					"Toolbar": {
+						"iconClass": "ff-component"
+					}
+				}
+			}
+		},
+		"Tour Snap and Dock": {
+			"window": {
+				"url": "$applicationRoot/components/newWelcome/tourSnapandDock.html",
+				"affinity": "workspaceComponents",
+				"frame": false,
+				"resizable": true,
+				"autoShow": true,
+				"top": "center",
+				"left": "center",
+				"width": 400,
+				"height": 650
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"canGroup": true,
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"showLinker": false,
+						"FSBLHeader": true,
+						"persistWindowState": true,
+						"title": "Snapping and Docking"
+					},
+					"Toolbar": {
+						"iconClass": "ff-component"
+					}
+				}
+			}
+		},
+		"Tour Hotkeys": {
+			"window": {
+				"url": "$applicationRoot/components/newWelcome/tourHotkeys.html",
+				"affinity": "workspaceComponents",
+				"frame": false,
+				"resizable": true,
+				"autoShow": true,
+				"top": "center",
+				"left": "center",
+				"width": 400,
+				"height": 650
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"canGroup": true,
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"showLinker": false,
+						"FSBLHeader": true,
+						"persistWindowState": true,
+						"title": "Hotkeys"
+					},
+					"Toolbar": {
+						"iconClass": "ff-component"
+					}
+				}
+			}
+		},
+		"Tour Workspaces": {
+			"window": {
+				"url": "$applicationRoot/components/newWelcome/tourWorkspaces.html",
+				"affinity": "workspaceComponents",
+				"frame": false,
+				"resizable": true,
+				"autoShow": true,
+				"top": "center",
+				"left": "center",
+				"width": 1200,
+				"height": 400
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"canGroup": true,
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"showLinker": false,
+						"FSBLHeader": true,
+						"persistWindowState": true,
+						"title": "Workspaces"
 					},
 					"Toolbar": {
 						"iconClass": "ff-component"
@@ -114,7 +219,7 @@
 				},
 				"components": {
 					"App Launcher": {
-						"launchableByUser": false
+						"launchableByUser": true
 					},
 					"Window Manager": {
 						"persistWindowState": true,
@@ -144,7 +249,7 @@
 						"launchableByUser": false
 					},
 					"Window Manager": {
-						"persistWindowState": false,
+						"persistWindowState": true,
 						"FSBLHeader": true,
 						"showLinker": false
 					}

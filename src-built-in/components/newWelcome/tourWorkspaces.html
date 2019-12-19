@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="../../vendor.bundle.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Workspaces</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="newWelcome.css">
+  <script src="../../vendor.bundle.js"></script>
+  <script src="newWelcome.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    .row {
+      display: flex;
+    }
+
+    .column {
+      flex: 25%;
+      padding: 0px 10px 10px 75px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="container">
+    <div id="bounds"></div>
+    <div class="spacer2"></div>
+    <h1>Workspaces</h1>
+  </div>
+
+  <div class="row">
+    <div class="column" style="">
+      <p>Your workspace is comprised of all of your Finsemble windows on all of your monitors.
+        When you start up your smart desktop, your workspace will reload with the exact same configuration as when you
+        shut down.
+      </p>
+    </div>
+    <div class="column" style="">
+      <p>Let's try out the workspace management capabilities.</p>
+      <ul>
+        <li>On the toolbar, click the "Default Workspace" button.</li>
+        <li>Click the "Save As" button.</li>
+        <li>Name your sample workspace.</li>
+        <li>Press the hotkey CTRL+ALT+SHIFT+R to restart Finsemble.</li>
+        <li>Viola! Here we are again.</li>
+      </ul>
+      </p>
+    </div>
+    <div class="column" style="">
+      <p>You can save a particular configuration of applications using the Workspace menu.
+        You can restore your workspace at any time, switching between different sets of applications for different
+        tasks.</p>
+    </div>
+  </div>
+
+  <p style="text-align:center">You now have a good handle on Finsemble's UX.
+    You can get started developing a smart desktop by clicking "Start Tutorial" below.
+    <div class="spacer6"></div>
+    <button class="button" id="launchTutorial" onclick="launchTutorial()" style="display: block; margin: 0 auto;">Start
+      Tutorial</button>
+    <div class="spacer4"></div>
+  </p>
+  </div>
+</body>
+
+</html>
