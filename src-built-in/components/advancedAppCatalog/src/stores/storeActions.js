@@ -220,7 +220,9 @@ async function addApp(id, cb = Function.prototype) {
 		name: app.title || app.name,
 		url: app.url,
 		type: "component",
-		component: {},
+		component: {
+			type: app.title || app.name
+		},
 		window: {
 			windowType: app.windowType || "WebWindow"
 		},
@@ -309,10 +311,10 @@ function removeApp(id, cb = Function.prototype) {
 					delete folders[key].apps[id];
 				}
 			}
-	
+
 			//Delete the app from the list
 			delete installed[id];
-	
+
 			getStore().setValues([
 				{
 					field: "appDefinitions",
