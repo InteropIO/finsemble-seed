@@ -11,7 +11,16 @@
 				"top": "center",
 				"left": "center",
 				"width": 400,
-				"height": 432
+				"height": 432,
+				"options":{
+					"autoDownloadConfig":{
+						"dir": "C:\\projects",
+						"ext":{
+							"autoDownload":[".xls"],
+							"autoOpen":[".csv", ".xls"]
+						}
+					}
+				}
 			},
 			"component": {
 				"inject": false,
