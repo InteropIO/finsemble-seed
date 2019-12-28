@@ -141,7 +141,7 @@ function _refreshTags() {
 	let { activeTags, apps } = data;
 
 	let newApps = apps.filter((app) => {
-		for (let i = o; i < activeTags.length; i++) {
+		for (let i = 0; i < activeTags.length; i++) {
 			const tag = activeTags[i].trim();
 			if (app.tags.includes(tag)) {
 				return true;
