@@ -97,50 +97,6 @@ class _ToolbarStore {
 		return storeOwner;
 	}
 	/**
-	 * Retrieves options about self from storage, where applicable
-	 * @param {Function} cb The callback
-	 */
-	retrieveSelfFromStorage(cb) {
-
-		FSBL.Clients.StorageClient.get({ topic: finsembleWindow.name, key: finsembleWindow.name }, (err, result) => {
-			if (err || !result) {
-				finsembleWindow.show();
-				return cb();
-			}
-			let visible = (result && result.hasOwnProperty("visible") && typeof result.visible === "boolean") ? result.visible : true;
-			this.Store.setValue({
-				field: "visible", value: visible
-			})
-			let bounds = (result && result.hasOwnProperty("window-bounds")) ? result["window-bounds"] : null;
-			if (bounds) {
-				this.Store.setValue({
-					field: "window-bounds", value: bounds
-				})
-				finsembleWindow.setBounds(bounds, () => {
-					if (visible) {
-						finsembleWindow.show();
-					}
-					cb();
-				});
-			} else if (visible) {
-				finsembleWindow.show();
-				cb();
-			}
-		});
-	}
-	/**
-	 * Sets the toolbars visibility in memory
-	 */
-	setToolbarVisibilityInMemory(cb = Function.prototype) {
-		if (!this.Store.getValue({ field: "window-bounds" })) return cb();
-		FSBL.Clients.StorageClient.save({
-			topic: finsembleWindow.name, key: finsembleWindow.name, value: {
-				visible: true,
-				"window-bounds": this.Store.getValue({ field: "window-bounds" })
-			}
-		}, cb);
-	}
-	/**
 	 * Set up our hotkeys
 	 */
 	setupPinnedHotKeys(cb) {//return the number of the F key that is pressed
@@ -205,18 +161,6 @@ class _ToolbarStore {
 			self.getSectionsFromMenus(data.value);
 		});
 		done();
-
-		let onBoundsSet = (bounds) => {
-			bounds = bounds.data ? bounds.data : bounds;
-			self.Store.setValue({ field: "window-bounds", value: bounds });
-			FSBL.Clients.StorageClient.save({
-				topic: finsembleWindow.name, key: finsembleWindow.name, value: {
-					visible: this.Store.getValue({ field: "visible" }),
-					"window-bounds": bounds
-				}
-			});
-		}
-		finsembleWindow.addListener("bounds-change-end", onBoundsSet)
 
 		FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", "t"], () => {
 			self.showToolbarAtFront();
@@ -295,7 +239,7 @@ class _ToolbarStore {
 			});
 			FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.alt, keys.f], (err) => {
 				if (err) { FSBL.Clients.Logger.error(`HotkeyClient.addGlobalHotkey failed, error:`, err); }
-				self.Store.setValue({ field: "searchActive", value: true });
+				this.bringToolbarToFront(true);
 			});
 		}
 		return cb();
@@ -332,9 +276,6 @@ class _ToolbarStore {
 					done();
 				},
 				function (done) {
-					self.retrieveSelfFromStorage(done);
-				},
-				function (done) {
 					finsembleWindow.addEventListener('focused', function () {
 						self.onFocus();
 					});
@@ -342,9 +283,6 @@ class _ToolbarStore {
 						self.onBlur();
 					});
 					done();
-				},
-				function (done) {
-					self.setToolbarVisibilityInMemory(done);
 				}
 			],
 			cb
@@ -377,17 +315,6 @@ class _ToolbarStore {
 
 		this.Store.setValue({ field: "sections", value: sections });
 		return sections;
-	}
-
-	/**
-	 * Shortcut to get values from the local store.
-	 *
-	 * @param {any} field
-	 * @returns
-	 * @memberof _ToolbarStore
-	 */
-	get(field) {
-		return this.Store.getValue({ field: field });
 	}
 	/**
 	 * Provides data to the workspace menu opening button.

@@ -1,3 +1,4 @@
+import _get from 'lodash.get';
 import { getStore } from "./LauncherStore";
 import AppDirectory from "../modules/AppDirectory";
 import FDC3 from "../modules/FDC3";
@@ -171,12 +172,32 @@ function loadInstalledConfigComponents(cb = Function.prototype) {
 	// Get the list of components from the launcher service
 	FSBL.Clients.LauncherClient.getComponentList((err, componentList) => {
 		let componentNameList = Object.keys(componentList);
+		
+		/*
+		 * Update the folders under the "App" menu and delete any apps in the folder 
+		 * that are no longer in the config and are not user defined components.
+		 */
+		const { folders } = data;
+		// Get the user defined apps
+		const apps = Object.keys(data.apps);
+		Object.keys(folders).forEach(folderName => {
+			const appsName = Object.keys(folders[folderName]["apps"]);
+			appsName.forEach(appName => {
+				// If the component is not in the config component list and is not a user defined component
+				if (!componentNameList.includes(appName) && !apps.includes(folders[folderName]["apps"][appName]["appID"].toString())) {
+					// Delete app from the folder
+					delete folders[folderName]["apps"][appName];
+				}
+			})
+		});
+		
 		componentNameList.map(componentName => {
 			// If the app is already in our list move on
 			if (appInAppList(componentName)) return;
-			let component = componentList[componentName];
+			const component = componentList[componentName];
+			const launchableByUser = _get(component, 'foreign.components.App Launcher.launchableByUser');
 			// Make sure the app is launchable by user
-			if (component.foreign.components && component.foreign.components["App Launcher"] && component.foreign.components["App Launcher"].launchableByUser) {
+			if (launchableByUser) {
 				data.configComponents[componentName] = {
 					appID: componentName,
 					icon: component.foreign.Toolbar && component.foreign.Toolbar.iconClass ? component.foreign.Toolbar.iconClass : null,
