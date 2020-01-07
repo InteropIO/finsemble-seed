@@ -1,9 +1,11 @@
+import _get from 'lodash.get';
 import { getStore } from "./LauncherStore";
 import AppDirectory from "../modules/AppDirectory";
 import FDC3 from "../modules/FDC3";
 const async = require("async");
 let FDC3Client;
 let appd;
+let appDEndpoint;
 let ToolbarStore;
 
 export default {
@@ -56,9 +58,8 @@ function getDragDisabled() {
 
 function initialize(callback = Function.prototype) {
 	FSBL.Clients.ConfigClient.getValue({ field: "finsemble.appDirectoryEndpoint" }, function (err, appDirectoryEndpoint) {
-		FDC3Client = new FDC3({ url: appDirectoryEndpoint });
-		appd = new AppDirectory(FDC3Client);
-
+		// cache value globally to be used in the event that we need to fetch data for a given component.
+		appDEndpoint = appDirectoryEndpoint;
 		const store = getStore();
 		data.folders = store.values.appFolders.folders;
 		data.foldersList = store.values.appFolders.list;
@@ -95,13 +96,41 @@ function getApp(appID, cb = Function.prototype) {
 }
 // Check to see if an app is already in our list of apps
 function appInAppList(appName) {
-	let components = Object.values(data.apps);
-	for (let i = 0; i < components.length; i++) {
-		let component = components[i];
-		if (component.name === appName) return true;
-	}
-	return false;
+	let app = findAppByField('name', appName);
+	return Boolean(app);
 }
+
+/**
+ * Given a component config, will return tags, or an empty array.
+ *
+ * @param {*} componentConfig
+ * @returns
+ */
+function extractTagsFromFinsembleComponentConfig(componentConfig) {
+	if (!componentConfig.foreign) return [];
+	if (!componentConfig.foreign.components) return [];
+	if (!componentConfig.foreign.components["App Launcher"]) return [];
+
+	const { tags } = componentConfig.foreign.components["App Launcher"];
+
+	if (tags) {
+		if (typeof tags === "string") {
+			return [tags];
+		}
+		return tags;
+	}
+
+	return [];
+}
+/**
+ * Instantiates classes needed to interact with the appD server.
+ * Only done when needed. If there are no components with source 'FDC3', this code will not execute.
+ */
+function lazyLoadAppD() {
+	if (!FDC3Client) FDC3Client = new FDC3({ url: appDEndpoint });
+	if (!appd) appd = new AppDirectory(FDC3Client);
+}
+
 /**
  * Here we load apps from FDC3
  * @param {*} cb
@@ -110,6 +139,7 @@ function loadInstalledComponentsFromStore(cb = Function.prototype) {
 	async.map(Object.values(data.apps), (component, componentDone) => {
 		// Load FDC3 components here
 		if (component.source && component.source === "FDC3") {
+			lazyLoadAppD();
 			// get the app info so we can load it into the launcher
 			return getApp(component.appID, (err, app) => {
 				if (err) {// don't want to kill this;
@@ -142,18 +172,38 @@ function loadInstalledConfigComponents(cb = Function.prototype) {
 	// Get the list of components from the launcher service
 	FSBL.Clients.LauncherClient.getComponentList((err, componentList) => {
 		let componentNameList = Object.keys(componentList);
+		
+		/*
+		 * Update the folders under the "App" menu and delete any apps in the folder 
+		 * that are no longer in the config and are not user defined components.
+		 */
+		const { folders } = data;
+		// Get the user defined apps
+		const apps = Object.keys(data.apps);
+		Object.keys(folders).forEach(folderName => {
+			const appsName = Object.keys(folders[folderName]["apps"]);
+			appsName.forEach(appName => {
+				// If the component is not in the config component list and is not a user defined component
+				if (!componentNameList.includes(appName) && !apps.includes(folders[folderName]["apps"][appName]["appID"].toString())) {
+					// Delete app from the folder
+					delete folders[folderName]["apps"][appName];
+				}
+			})
+		});
+		
 		componentNameList.map(componentName => {
 			// If the app is already in our list move on
 			if (appInAppList(componentName)) return;
-			let component = componentList[componentName];
+			const component = componentList[componentName];
+			const launchableByUser = _get(component, 'foreign.components.App Launcher.launchableByUser');
 			// Make sure the app is launchable by user
-			if (component.foreign.components["App Launcher"] && component.foreign.components["App Launcher"].launchableByUser) {
+			if (launchableByUser) {
 				data.configComponents[componentName] = {
 					appID: componentName,
 					icon: component.foreign.Toolbar && component.foreign.Toolbar.iconClass ? component.foreign.Toolbar.iconClass : null,
 					name: componentName,
 					source: "config",
-					tags: []
+					tags: extractTagsFromFinsembleComponentConfig(component)
 				};
 			}
 		});
@@ -298,22 +348,28 @@ function reorderFolders(destIndex, srcIndex) {
 function addApp(app = {}, cb) {
 	const appID = (new Date()).getTime();
 	const folder = data.activeFolder;
-	data.apps[appID] = {
+	const newAppData = {
 		appID,
 		tags: app.tags !== "" ? app.tags.split(",") : [],
 		name: app.name,
 		url: app.url,
 		type: "component"
 	};
-	data.folders[MY_APPS].apps[appID] = data.apps[appID];
-	data.folders[folder].apps[appID] = data.apps[appID];
-	FSBL.Clients.LauncherClient.addUserDefinedComponent(data.apps[appID], (compAddErr) => {
+	const { FAVORITES } = getConstants();
+
+	FSBL.Clients.LauncherClient.addUserDefinedComponent(newAppData, (compAddErr) => {
 		if (compAddErr) {
 			//TODO: We need to handle the error here. If the component failed to add, we should probably fall back and not add to launcher
 			cb({ code: "failed_to_add_app", message: compAddErr });
 			console.warn("Failed to add new app:", compAddErr);
 			return;
 		}
+		// If we're creating the app while in the favorites folder,
+		// we need to make sure it gets pinned to the toolbar
+		if (folder === FAVORITES) addPin({ name: app.name });
+		data.apps[appID] = newAppData;
+		data.folders[MY_APPS].apps[appID] = newAppData;
+		data.folders[folder].apps[appID] = newAppData;
 		// Save appDefinitions and then folders
 		_setValue("appDefinitions", data.apps, () => {
 			_setFolders();
@@ -413,14 +469,22 @@ function removeAppFromFolder(folderName, app) {
 	delete data.folders[folderName].apps[app.appID];
 	_setFolders();
 }
+/**
+ * Given a field, search through FDC3 apps and apps pulled in via config and return that app.
+ * */
+function findAppByField(field, value) {
+	return Object.values(data.apps).find(app => app ? app[field] === value : false) ||
+		Object.values(data.configComponents).find(app => app ? app[field] === value : false)
+}
 
 function getActiveFolder() {
 	const folder = data.folders[data.activeFolder];
 	Object.values(folder.apps).map((app) => {
-		if (!data.apps[app.appID]) {
+		const appData = findAppByField('appID', app.appID)
+		if (!appData) {
 			app.tags = [];
 		} else {
-			app.tags = data.apps[app.appID].tags;
+			app.tags = appData.tags;
 		}
 	});
 	//Need a name for the AppDefinition/AppActionsMenu rendering
@@ -446,7 +510,10 @@ function getTags() {
 
 function getAllAppsTags() {
 	let tags = [];
-	Object.values(data.apps).forEach((app) => {
+	// Pull tags from applications installed via FDC3 and the component config.
+	const apps = Object.values(data.apps).concat(Object.values(data.configComponents));
+
+	apps.forEach((app) => {
 		tags = tags.concat(app.tags);
 	});
 	// return unique ones only

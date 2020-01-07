@@ -525,7 +525,6 @@
 				"left": 0,
 				"right": 0,
 				"position": "available",
-				"autoShow": true,
 				"dockable": [
 					"top",
 					"bottom"
@@ -539,7 +538,8 @@
 					"autoShow": false,
 					"contextMenu": false,
 					"showTaskbarIcon": false,
-					"smallWindow": true
+					"smallWindow": true,
+					"maximizable": false
 				}
 			},
 			"component": {

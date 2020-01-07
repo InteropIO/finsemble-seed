@@ -65,7 +65,7 @@ var Actions = {
 		}
 
 		ProcessMonitorStore.setValue({ field: "sort", value: newSort }, () => {
-			// When changing sort we'll re-render the UI immediately instead of waiting for the processlist to update. Without this step, it could be 999ms until the next update, which makes the process monitor feel very unresponsive and very bad.
+			// When changing sort we'll re-render the UI immediately instead of waiting for the process list to update. Without this step, it could be 999ms until the next update, which makes the process monitor feel very unresponsive and very bad.
 			procs = Actions.sortProcesses(procs);
 			ProcessMonitorStore.setValue({ field: "processList", value: procs })
 		});
@@ -189,25 +189,40 @@ var Actions = {
 	 * Make the window flash a couple of times so that the user can identify it.
 	 */
 	identifyWindow: function (winID) {
+		if (winID.name.includes("Service")) return;
+
 		const OPACITY_ANIMATION_DURATION = 200;
 		let win = fin.desktop.Window.wrap(winID.uuid, winID.name);
 		let windowState = "hidden";
+
 		function flash(n, done) {
-			win.animate({
-				opacity: {
-					opacity: 0.5,
-					duration: OPACITY_ANIMATION_DURATION
-				}
-			}, {}, () => {
+			if (fin.container !== "Electron") { // Animate doesn't work in electron yet.
 				win.animate({
 					opacity: {
-						opacity: 1,
+						opacity: 0.5,
 						duration: OPACITY_ANIMATION_DURATION
 					}
 				}, {}, () => {
-					done(null);
-				});
-			})
+					win.animate({
+						opacity: {
+							opacity: 1,
+							duration: OPACITY_ANIMATION_DURATION
+						}
+					}, {}, () => {
+						done(null);
+					});
+				})
+			} else {
+				setTimeout(() => {
+					win.hide(() => {
+						setTimeout(() => {
+							win.show(() => {
+								done(null);
+							});
+						}, OPACITY_ANIMATION_DURATION / 1.5);
+					});
+				}, OPACITY_ANIMATION_DURATION / 1.5);
+			}
 		}
 		win.isShowing(isVisible => {
 			//cache the visible state of the window prior to making it flash. If it was hidden before, hide it when the flashing is done.
