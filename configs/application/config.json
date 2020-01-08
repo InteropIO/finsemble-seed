@@ -8,9 +8,9 @@
 					"name": "Finsemble-AppLauncher-Store",
 					"foundation": {
 						"appFolders": {
-							"list": ["My Apps", "Favorites"],
+							"list": ["Advanced App Launcher", "Favorites"],
 							"folders": {
-								"My Apps": {
+								"Advanced App Launcher": {
 									"icon": "ff-component",
 									"type": "folder",
 									"disableUserRemove": true,
@@ -47,7 +47,7 @@
 						"activeLauncherTags": [],
 						"filterText": "",
 						"filterTags": [],
-						"activeFolder": "My Apps",
+						"activeFolder": "Advanced App Launcher",
 						"sortBy": "Alphabetical"
 					}
 				}
@@ -77,10 +77,10 @@
 			"undockDisbandsEntireGroup": false,
 			"fillHolesOnUndock": true,
 			"tabbing": {
-				"enabled": true
+				"enabled": false
 			},
 			"tiling": {
-				"enabled": true
+				"enabled": false
 			}
 		},
 		"logger": {

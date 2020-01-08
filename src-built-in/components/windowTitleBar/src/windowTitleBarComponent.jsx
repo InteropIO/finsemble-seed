@@ -181,6 +181,14 @@ class WindowTitleBar extends React.Component {
 	}
 
 	/**
+	 * Called whenever a tab is dropped on a non tab area.
+	 * It won't be called when dropped on a tab that handles handle the event.
+	 */
+	onDropHandler() {
+		FSBL.Clients.WindowClient.cancelTilingOrTabbing({});
+	}
+
+	/**
 	 * The dragger is an absolutely positioned element that is superimposed on the actual area that we'd like to drag.
 	 * This is necessary due to a bug in Chromium. Effectively, we need the dragger to change its left position and width
 	 * to match the intended drag area. These dimensions can change whenever the header is re-rendered (for instance when
@@ -378,7 +386,7 @@ class WindowTitleBar extends React.Component {
 		}
 		//See this.allowDragOnCenterRegion for more explanation.
 		return (
-			<div className={headerClasses}>
+			<div className={headerClasses} onDrop={this.onDropHandler.bind(this)}>
 				{/* Only render the left section if something is inside of it. The left section has a right-border that we don't want showing willy-nilly. */}
 				{RENDER_LEFT_SECTION &&
 					<div className="fsbl-header-left">

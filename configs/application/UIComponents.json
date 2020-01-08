@@ -34,9 +34,9 @@
 				}
 			}
 		},
-		"My Apps": {
+		"Advanced App Launcher": {
 			"window": {
-				"url": "$applicationRoot/components/myApps/index.html",
+				"url": "$applicationRoot/components/advancedAppLauncher/index.html",
 				"top": 0,
 				"left": 0,
 				"width": 700,
@@ -62,7 +62,7 @@
 					"Window Manager": {
 						"persistWindowState": false,
 						"FSBLHeader": false,
-						"title": "My Apps"
+						"title": "Advanced App Launcher"
 					}
 				}
 			}

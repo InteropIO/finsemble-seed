@@ -53,7 +53,7 @@ class SearchBar extends Component {
 		if (searchTerms !== "") {
 			this.props.search(searchTerms);
 		} else {
-			storeActions.refreshTagSearch();
+			this.goHome();
 		}
 	}
 
@@ -123,7 +123,7 @@ class SearchBar extends Component {
 					<div className="search-input-container">
 						<i className='ff-search'></i>
 						<input className='search-input' required ref={this.textInput}placeholder="Search" type="text" value={this.state.searchValue} onChange={this.changeSearch} />
-						<button class="close-icon" onClick={this.clearSearch} type="reset"></button>
+						<button class="close-icon" onClick={this.goHome} type="reset"></button>
 					</div>
 					<TagsMenu active={activeTags} list={this.props.tags} onItemClick={this.selectTag} label={"Tags"} align='right' />
 				</div>

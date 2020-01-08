@@ -55,7 +55,7 @@ function initialize(done = Function.prototype) {
 		data.filteredApps = store.values.filteredApps;
 		data.activeTags = store.values.activeTags;
 		data.activeApp = store.values.activeApp;
-		data.MY_APPS = store.values.defaultFolder;
+		data.ADVANCED_APP_LAUNCHER = store.values.defaultFolder;
 
 		store.addListener({ field: "apps" }, (err, dt) => data.apps = dt.value);
 		store.addListener({ field: "appDefinitions" }, (err, dt) => data.installed = dt.value);
@@ -141,7 +141,7 @@ function _refreshTags() {
 	let { activeTags, apps } = data;
 
 	let newApps = apps.filter((app) => {
-		for (let i = o; i < activeTags.length; i++) {
+		for (let i = 0; i < activeTags.length; i++) {
 			const tag = activeTags[i].trim();
 			if (app.tags.includes(tag)) {
 				return true;
@@ -220,7 +220,9 @@ async function addApp(id, cb = Function.prototype) {
 		name: app.title || app.name,
 		url: app.url,
 		type: "component",
-		component: {},
+		component: {
+			type: app.title || app.name
+		},
 		window: {
 			windowType: app.windowType || "WebWindow"
 		},
@@ -260,10 +262,10 @@ async function addApp(id, cb = Function.prototype) {
 		appConfig.displayName = app.friendlyName;
 	}
 
-	let MY_APPS = data.defaultFolder;
+	let ADVANCED_APP_LAUNCHER = data.defaultFolder;
 	let folders = data.folders;
 
-	data.folders[MY_APPS].apps[appID] = appConfig
+	data.folders[ADVANCED_APP_LAUNCHER].apps[appID] = appConfig
 	data.folders[folder].apps[appID] = appConfig
 	FSBL.Clients.LauncherClient.registerComponent({
 		componentType: appConfig.name,
@@ -309,10 +311,10 @@ function removeApp(id, cb = Function.prototype) {
 					delete folders[key].apps[id];
 				}
 			}
-	
+
 			//Delete the app from the list
 			delete installed[id];
-	
+
 			getStore().setValues([
 				{
 					field: "appDefinitions",

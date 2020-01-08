@@ -2,7 +2,7 @@ import React from 'react'
 import AddNewFolder from './AddNewFolder'
 import storeActions from '../stores/StoreActions'
 import { getStore } from '../stores/LauncherStore'
-const { MY_APPS, DASHBOARDS, FAVORITES } = storeActions.getConstants();
+const { ADVANCED_APP_LAUNCHER, DASHBOARDS, FAVORITES } = storeActions.getConstants();
 import {
 	FinsembleDraggable, FinsembleDialog,
 	FinsembleDnDContext,
@@ -68,8 +68,8 @@ export default class FoldersList extends React.Component {
 	onAppDrop(event, folder) {
 		event.preventDefault()
 		const app = JSON.parse(event.dataTransfer.getData('app'))
-		// Do not do anything if its my apps or dashboards folder
-		if ([MY_APPS, DASHBOARDS].indexOf(folder) < 0) {
+		// Do not do anything if its Advanced App Launcher or dashboards folder
+		if ([ADVANCED_APP_LAUNCHER, DASHBOARDS].indexOf(folder) < 0) {
 			storeActions.addAppToFolder(folder, app);
 			if (folder === FAVORITES) {
 				//If favorites, then also pin
@@ -214,10 +214,16 @@ export default class FoldersList extends React.Component {
 
 		const EDITABLE_FOLDER_ICON_CLASS = 'ff-adp-hamburger'
 
-		let nameField = folder.icon === EDITABLE_FOLDER_ICON_CLASS && this.state.renamingFolder === folderName ?
-			<input id="rename" value={this.state.folderNameInput}
-				onChange={this.changeFolderName}
-				onKeyPress={this.keyPressed} className={this.state.isNameError ? "error" : ""} autoFocus /> : folderName;
+		let nameField;
+		if (folder.icon === EDITABLE_FOLDER_ICON_CLASS && this.state.renamingFolder === folderName) {
+			nameField = <input id="rename" value={this.state.folderNameInput}
+			onChange={this.changeFolderName}
+			onKeyPress={this.keyPressed} className={this.state.isNameError ? "error" : ""} autoFocus />;
+		} else if (folderName === "Advanced App Launcher") {
+			nameField = "App Launcher"
+		} else {
+			nameField = folderName;
+		}
 
 		//This DOM will be rendered within a draggable (if the folder can be dragged), and a plain ol div if it cannot be dragged.
 		return (

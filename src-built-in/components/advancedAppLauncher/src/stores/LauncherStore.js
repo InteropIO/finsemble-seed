@@ -2,7 +2,7 @@ let launcherStore;
 
 const data = {
 	field: "defaultFolder",
-	value: "My Apps"
+	value: "Advanced App Launcher"
 };
 
 function createStore(done) {

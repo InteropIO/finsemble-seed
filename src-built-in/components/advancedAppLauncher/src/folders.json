@@ -1,12 +1,12 @@
 {
 	"filterText": "",
 	"filterTags": [],
-	"activeFolder": "My Apps",
+	"activeFolder": "Advanced App Launcher",
 	"sortBy": "Alphabetical",
 	"appFolders": {
 		"folders": [
 			{
-				"name": "My Apps",
+				"name": "Advanced App Launcher",
 				"type": "folder",
 				"disableUserRemove": true,
 				"appDefinitions": [
