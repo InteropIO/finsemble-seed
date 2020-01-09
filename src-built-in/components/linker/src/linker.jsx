@@ -2,7 +2,8 @@
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { Provider, useSelector, useDispatch } from 'react-redux';
 import ReactDOM from "react-dom";
 import "./css/linkerWindow.css";
 import "../../../../assets/css/font-finance.css";
@@ -10,8 +11,56 @@ import "../../../../assets/css/finsemble.css";
 import * as storeExports from "./stores/linkerStore";
 import { getChannelLabelFromIndex } from "../../shared/linkerUtil";
 
+import store from '../../UIAPI/store';
+import linkerActions from "../../UIAPI/actions/linkerActions";
+
 let LinkerStore = storeExports.Store;
 let LinkerActions = storeExports.Actions;
+
+const LinkerRefactored = () => {
+	const linker = useSelector(state => state.linker);
+	const dispatch = useDispatch();
+
+    finsembleWindow.addEventListener("blurred", () => {
+        finsembleWindow.hide();
+	});
+	
+	const toggleLinker = (linkerIndex) => {
+		dispatch(linkerActions.toggleLinker(linkerIndex));
+	};
+
+    useEffect(() => {
+        LinkerActions.windowMounted();
+        return () => {
+            finsembleWindow.removeEventListener("blurred", () => {
+                finsembleWindow.hide();
+            });
+        }
+    }, []);
+
+    const channelsElements = linker.channels.map(({color, name, active, id}) => {
+        const groupClass = `linkerGroup ${color}`;
+        const style = {
+            backgroundColor: color,
+            border: `1px solid ${color}`
+        }
+        return (
+            <div key={id} className="channel-wrapper" onClick={() => toggleLinker(id)}>
+                <div className="channel-label">{name}</div>
+				<div className={groupClass} style={style}>
+					{active ? "x" : null}
+				</div>
+            </div>
+        );
+    });
+
+    return (
+        <div className="linkerContainer">
+            {channelsElements}
+        </div>
+    );
+}
+
 
 class Linker extends React.Component {
 	constructor() {
@@ -144,5 +193,10 @@ function FSBLReady() {
 		*/
 		finsembleWindow.focus();
 	});
-	ReactDOM.render(<Linker />, document.getElementById("main"));
+	ReactDOM.render(
+		<Provider store={store}>
+    		<LinkerRefactored />
+  		</Provider>,
+   		document.getElementById("main")
+   	);
 }
