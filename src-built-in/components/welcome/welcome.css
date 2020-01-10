@@ -8,6 +8,7 @@ body {
 	color: var(--procMonitor-font-color);
 	background-color: var(--procMonitor-background-color);
 	user-select: none;
+	background-color: var(--content-background-color);
 }
 
 #container {
