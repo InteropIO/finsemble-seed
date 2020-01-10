@@ -192,7 +192,7 @@ class WindowTitleBar extends React.Component {
 	 * Called when user double clicks on drag handle
 	 */
 	onDoubleClick() {
-		// Looks like Actions.clickMaximize checks the window state
+		// Actions.clickMaximize checks the window state
 		// and toggles between maximize and minimize.
 		HeaderActions.clickMaximize();
 	}
