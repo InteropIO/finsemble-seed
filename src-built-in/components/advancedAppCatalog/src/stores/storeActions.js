@@ -83,7 +83,7 @@ function _addActiveTag(tag) {
 
 	let { apps, activeTags } = data;
 
-	activeTags.push(tag);
+	if (!activeTags.includes(tag)) {activeTags.push(tag);}
 
 	let newApps = apps.filter((app) => {
 		for (let i = 0; i < activeTags.length; i++) {
