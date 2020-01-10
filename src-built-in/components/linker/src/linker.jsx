@@ -25,8 +25,15 @@ const LinkerRefactored = () => {
         finsembleWindow.hide();
 	});
 	
-	const toggleLinker = (linkerIndex) => {
-		dispatch(linkerActions.toggleLinker(linkerIndex));
+	const toggleChannel = (linkerIndex) => {
+		// var attachedWindowIdentifier = LinkerStore.getAttachedWindowIdentifier();
+		// FSBL.FinsembleWindow.getInstance({ name: attachedWindowIdentifier.windowName }, (err, attachedWindow) => {
+		// 	if (attachedWindow) attachedWindow.focus();
+		// });
+
+		// if (!active) return LinkerActions.linkToChannel(channel.name);
+		// LinkerActions.unlinkFromChannel(channel.name);
+		dispatch(linkerActions.toggleChannel(linkerIndex));
 	};
 
     useEffect(() => {
@@ -45,7 +52,7 @@ const LinkerRefactored = () => {
             border: `1px solid ${color}`
         }
         return (
-            <div key={id} className="channel-wrapper" onClick={() => toggleLinker(id)}>
+            <div key={id} className="channel-wrapper" onClick={() => toggleChannel(id)}>
                 <div className="channel-label">{name}</div>
 				<div className={groupClass} style={style}>
 					{active ? "x" : null}

@@ -1,6 +1,6 @@
 import { TOGGLE_CHANNEL } from "../actionTypes";
 
-const toggleLinker = (id) => {
+const toggleChannel = (id) => {
     return {
         type: TOGGLE_CHANNEL,
         payload: {
@@ -10,5 +10,5 @@ const toggleLinker = (id) => {
 };
 
 export default {
-    toggleLinker
+    toggleChannel
 };
