@@ -86,6 +86,7 @@ class WindowTitleBar extends React.Component {
 		this.onTilingStop = this.onTilingStop.bind(this);
 		this.onTilingStart = this.onTilingStart.bind(this);
 		this.resizeDragHandle = this.resizeDragHandle.bind(this);
+		this.onDoubleClick = this.onDoubleClick.bind(this);
 
 	}
 	componentWillMount() {
@@ -187,7 +188,14 @@ class WindowTitleBar extends React.Component {
 	onDropHandler() {
 		FSBL.Clients.WindowClient.cancelTilingOrTabbing({});
 	}
-
+	/**
+	 * Called when user double clicks on drag handle
+	 */
+	onDoubleClick() {
+		// Looks like Actions.clickMaximize checks the window state
+		// and toggles between maximize and minimize.
+		HeaderActions.clickMaximize();
+	}
 	/**
 	 * The dragger is an absolutely positioned element that is superimposed on the actual area that we'd like to drag.
 	 * This is necessary due to a bug in Chromium. Effectively, we need the dragger to change its left position and width
@@ -214,7 +222,7 @@ class WindowTitleBar extends React.Component {
 			dragHandle.className = "fsbl-drag-handle";
 			dragHandle.onmousedown = (e) => {currentWindow.startMovingWindow(e)}
 			dragHandle.onmouseup = (e) => {currentWindow.stopMovingWindow(e)}
-
+			dragHandle.ondblclick = () => { this.onDoubleClick(); }
 			fsblHeader.insertBefore(dragHandle, fsblHeader.firstChild);
 			var self = this;
 			window.addEventListener("resize", function () {
