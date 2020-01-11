@@ -1,6 +1,5 @@
 import { loop, Cmd } from 'redux-loop';
 import { TOGGLE_CHANNEL } from "../actionTypes";
-import { Store, Actions } from "../../linker/src/stores/linkerStore";
 
 const initialState = {
     channels: [
@@ -45,6 +44,7 @@ const channel = (state, action) => {
 
 // The linker's reducer
 export default function(state = initialState, action) {
+    console.log("state", state);
     switch (action.type) {
         case TOGGLE_CHANNEL:
             const newState = {
@@ -57,6 +57,7 @@ export default function(state = initialState, action) {
             });
 
             console.log("after cmd.run");
+            console.log("newState", newState);
             return loop(newState, cmd);
         default:
             return state;
