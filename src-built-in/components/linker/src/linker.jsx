@@ -2,7 +2,7 @@
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Provider, useSelector, useDispatch } from 'react-redux';
 import ReactDOM from "react-dom";
 import "./css/linkerWindow.css";
@@ -26,13 +26,6 @@ const LinkerRefactored = () => {
 	});
 	
 	const toggleChannel = (linkerIndex) => {
-		// var attachedWindowIdentifier = LinkerStore.getAttachedWindowIdentifier();
-		// FSBL.FinsembleWindow.getInstance({ name: attachedWindowIdentifier.windowName }, (err, attachedWindow) => {
-		// 	if (attachedWindow) attachedWindow.focus();
-		// });
-
-		// if (!active) return LinkerActions.linkToChannel(channel.name);
-		// LinkerActions.unlinkFromChannel(channel.name);
 		dispatch(linkerActions.toggleChannel(linkerIndex));
 	};
 
@@ -43,16 +36,17 @@ const LinkerRefactored = () => {
                 finsembleWindow.hide();
             });
         }
-    }, []);
+	}, []);
 
-    const channelsElements = linker.channels.map(({color, name, active, id}) => {
+	const allChannels = Object.values(linker.channels);
+    const channelsElements = allChannels.map(({color, name, active, id}) => {
         const groupClass = `linkerGroup ${color}`;
         const style = {
             backgroundColor: color,
             border: `1px solid ${color}`
-        }
+		}
         return (
-            <div key={id} className="channel-wrapper" onClick={() => toggleChannel(id)}>
+            <div key={name} className="channel-wrapper" onClick={() => toggleChannel(id)}>
                 <div className="channel-label">{name}</div>
 				<div className={groupClass} style={style}>
 					{active ? "x" : null}

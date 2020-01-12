@@ -1,65 +1,54 @@
-import { loop, Cmd } from 'redux-loop';
+import { loop, Cmd, reduceReducers } from 'redux-loop';
 import { TOGGLE_CHANNEL } from "../actionTypes";
+import { Store } from "../../linker/src/stores/linkerStore";
 
 const initialState = {
-    channels: [
-        {
+    channels: {
+        0: {
             id: 0,
-            color: 'yellow',
-            name: 'channel 1',
+            color: '#8781BD',
+            name: 'group1',
             active: true,
         },
-        {
+        1: {
             id: 1,
-            color: 'purple',
-            name: 'channel 2',
+            color: '#FFE035',
+            name: 'group2',
             active: false,
         }
-    ],
+    },
     allChannelIds: [0, 1]
 };
 
-function linkChannel(channelName) {
-    // let attachedWindowIdentifier = Store.getAttachedWindowIdentifier();
-    // FSBL.Clients.LinkerClient.linkToChannel(channelName, attachedWindowIdentifier);
-    console.log("linkChannel function ran with ", channelName);
+function linkChannel(channelName, isActive) {
+    let attachedWindowIdentifier = Store.getAttachedWindowIdentifier();
+    if (!isActive) return FSBL.Clients.LinkerClient.linkToChannel(channelName, attachedWindowIdentifier);
+    FSBL.Clients.LinkerClient.unlinkFromChannel(channelName, attachedWindowIdentifier);
 }
 
-// Individual channel's reducer
-const channel = (state, action) => {
-    switch (action.type) {
-        case TOGGLE_CHANNEL:
-            if (state.id === action.payload.id) {
-                const newState = {
-                    ...state,
-                    active: !state.active
-                }
-               return newState
-            }
-            return state;
-        default:
-            return state;
-    }
-};
-
 // The linker's reducer
-export default function(state = initialState, action) {
-    console.log("state", state);
-    switch (action.type) {
+const linker = (state = initialState, { type, payload }) => {
+    switch (type) {
         case TOGGLE_CHANNEL:
             const newState = {
                 ...state,
-                channels: state.channels.map(c => channel(c, action))
+                channels: {
+                    ...state.channels,
+                    [payload.id]: {
+                        ...state.channels[payload.id],
+                        active: !state.channels[payload.id].active
+                    }
+                }
             };
-             // Side effect to link/unlink the channel
+            // Side effect to link/unlink the channel
             const cmd = Cmd.run(linkChannel, {
-                args: ["test"]
+                args: [newState.channels[payload.id].name, newState.channels[payload.id].active]
             });
 
-            console.log("after cmd.run");
-            console.log("newState", newState);
             return loop(newState, cmd);
         default:
             return state;
     }
 }
+
+export default linker;
