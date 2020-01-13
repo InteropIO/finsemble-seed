@@ -1,12 +1,28 @@
-import { TOGGLE_CHANNEL_REQUEST, TOGGLE_CHANNEL_SUCCESS, TOGGLE_CHANNEL_FAILURE } from "../actionTypes";
+import { 
+    TOGGLE_CHANNEL_REQUEST, 
+    TOGGLE_CHANNEL_SUCCESS, 
+    TOGGLE_CHANNEL_FAILURE,
+    LINKER_INIT,
+    LINKER_CLEANUP
+} from "../actionTypes";
 
-// Function signature to expose to the client
+// Functions signature to expose to the client
 const toggleChannel = (id) => {
     return {
         type: TOGGLE_CHANNEL_REQUEST,
         payload: {
             id
         }
+    };
+};
+const init = () => {
+    return {
+        type: LINKER_INIT
+    };
+};
+const cleanUp = () => {
+    return {
+        type: LINKER_CLEANUP
     };
 };
 
@@ -28,5 +44,7 @@ const toggleFailure = () => {
 export {
     toggleChannel,
     toggleSuccess,
-    toggleFailure
+    toggleFailure,
+    init,
+    cleanUp
 };

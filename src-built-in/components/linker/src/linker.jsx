@@ -15,26 +15,19 @@ import store from '../../UIAPI/store';
 import * as linkerActions from "../../UIAPI/actions/linkerActions";
 
 let LinkerStore = storeExports.Store;
-let LinkerActions = storeExports.Actions;
 
 const LinkerRefactored = () => {
 	const linker = useSelector(state => state.linker);
 	const dispatch = useDispatch();
-
-    finsembleWindow.addEventListener("blurred", () => {
-        finsembleWindow.hide();
-	});
 	
 	const toggleChannel = (linkerIndex) => {
 		dispatch(linkerActions.toggleChannel(linkerIndex));
 	};
 
     useEffect(() => {
-        LinkerActions.windowMounted();
+		dispatch(linkerActions.init());
         return () => {
-            finsembleWindow.removeEventListener("blurred", () => {
-                finsembleWindow.hide();
-            });
+            dispatch(linkerActions.cleanUp());
         }
 	}, []);
 
@@ -49,7 +42,7 @@ const LinkerRefactored = () => {
             <div key={id} className="channel-wrapper" onClick={() => toggleChannel(id)}>
                 <div className="channel-label">{name}</div>
 				<div className={groupClass} style={style}>
-					{active ? "x" : null}
+					{active ? <i className="active-linker-group ff-check-mark"></i> : null}
 				</div>
             </div>
         );
@@ -74,15 +67,15 @@ class Linker extends React.Component {
 	 * @param {any} changeEvent
 	 * @memberof Linker
 	 */
-	onStoreChanged(changeEvent) {
-		switch (changeEvent) {
-			case "state":
-				this.setState({
-					channels: LinkerStore.getChannels(),
-					attachedWindowIdentifier: LinkerStore.getAttachedWindowIdentifier()
-				});
-		}
-	}
+	// onStoreChanged(changeEvent) {
+	// 	switch (changeEvent) {
+	// 		case "state":
+	// 			this.setState({
+	// 				channels: LinkerStore.getChannels(),
+	// 				attachedWindowIdentifier: LinkerStore.getAttachedWindowIdentifier()
+	// 			});
+	// 	}
+	// }
 	/**
 	 * Event handler when the user clicks on a colored rectangle, indicating that they want the attached window to join the channel.
 	 *
@@ -91,43 +84,43 @@ class Linker extends React.Component {
 	 * @returns
 	 * @memberof Linker
 	 */
-	channelClicked(channel, active) {
-		var attachedWindowIdentifier = LinkerStore.getAttachedWindowIdentifier();
-		FSBL.FinsembleWindow.getInstance({ name: attachedWindowIdentifier.windowName }, (err, attachedWindow) => {
-			if (attachedWindow) attachedWindow.focus();
-		});
+	// channelClicked(channel, active) {
+	// 	var attachedWindowIdentifier = LinkerStore.getAttachedWindowIdentifier();
+	// 	FSBL.FinsembleWindow.getInstance({ name: attachedWindowIdentifier.windowName }, (err, attachedWindow) => {
+	// 		if (attachedWindow) attachedWindow.focus();
+	// 	});
 
-		if (!active) return LinkerActions.linkToChannel(channel.name);
-		LinkerActions.unlinkFromChannel(channel.name);
-	}
+	// 	if (!active) return LinkerActions.linkToChannel(channel.name);
+	// 	LinkerActions.unlinkFromChannel(channel.name);
+	// }
 	/**
 	 * Hides window on blur.
 	 *
 	 * @memberof Linker
 	 */
-	onWindowBlur() {
-		finsembleWindow.hide();
-	}
+	// onWindowBlur() {
+	// 	finsembleWindow.hide();
+	// }
 	/**
 	 * Fit the contents of the dom to the window's bounds. Also set the component's state.
 	 *
 	 * @memberof Linker
 	 */
 	componentWillMount() {
-		finsembleWindow.addEventListener("blurred", this.onWindowBlur.bind(this));
-		LinkerStore.addListener(["stateChanged"], this.onStoreChanged);
+		// finsembleWindow.addEventListener("blurred", this.onWindowBlur.bind(this));
+		// LinkerStore.addListener(["stateChanged"], this.onStoreChanged);
 		this.setState({
 			channels: LinkerStore.getChannels(),
 			attachedWindowIdentifier: LinkerStore.getAttachedWindowIdentifier()
 		});
 	}
-	componentDidMount() {
-		LinkerActions.windowMounted();
-	}
+	// componentDidMount() {
+	// 	LinkerActions.windowMounted();
+	// }
 	render() {
-		var self = this;
+		// var self = this;
 		//Checkbox inside of a circle. Rendered in the center of a group if the attachedWindow is part of that group.
-		let activeChannelIndicator = (<i className="active-linker-group ff-check-mark"></i>);
+		// let activeChannelIndicator = (<i className="active-linker-group ff-check-mark"></i>);
 
 		const getLinkerItemRenderer = (channel, isAccessibleLinker) => {
 			if (!isAccessibleLinker) return null;

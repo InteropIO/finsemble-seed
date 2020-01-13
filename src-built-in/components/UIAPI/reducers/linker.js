@@ -1,5 +1,11 @@
 import { loop, Cmd } from 'redux-loop';
-import { TOGGLE_CHANNEL_REQUEST, TOGGLE_CHANNEL_SUCCESS, TOGGLE_CHANNEL_FAILURE } from "../actionTypes";
+import { 
+    TOGGLE_CHANNEL_REQUEST, 
+    TOGGLE_CHANNEL_SUCCESS, 
+    TOGGLE_CHANNEL_FAILURE,
+    LINKER_INIT,
+    LINKER_CLEANUP
+} from "../actionTypes";
 import { Store } from "../../linker/src/stores/linkerStore";
 import { toggleSuccess, toggleFailure } from '../actions/linkerActions';
 
@@ -26,12 +32,27 @@ const initialState = {
 function linkChannel(channelName, isActive) {
     let attachedWindowIdentifier = Store.getAttachedWindowIdentifier();
     if (!isActive) return FSBL.Clients.LinkerClient.linkToChannel(channelName, attachedWindowIdentifier);
-    FSBL.Clients.LinkerClient.unlinkFromChannel(channelName, attachedWindowIdentifier);
+    else return FSBL.Clients.LinkerClient.unlinkFromChannel(channelName, attachedWindowIdentifier);
+}
+
+function initializeLinker() {
+    finsembleWindow.addEventListener("blurred", () => {
+        finsembleWindow.hide();
+    });
+    FSBL.Clients.WindowClient.fitToDOM();
+}
+
+function cleanUpAfterComponentUnmount() {
+    finsembleWindow.removeEventListener("blurred", () => {
+        finsembleWindow.hide();
+    });
 }
 
 // The linker's reducer
 const linker = (state = initialState, { type, payload }) => {
     switch (type) {
+        case LINKER_INIT:
+            return loop(state, Cmd.run(initializeLinker));
         case TOGGLE_CHANNEL_REQUEST:
             const newState_request = {
                 ...state,
@@ -58,6 +79,14 @@ const linker = (state = initialState, { type, payload }) => {
                 }
             };
             return newState_success;
+        case TOGGLE_CHANNEL_FAILURE:
+            const newState_failure = {
+                ...state,
+                processingRequest: false
+            };
+            return newState_failure;
+        case LINKER_CLEANUP:
+            return loop(state, Cmd.run(cleanUpAfterComponentUnmount));
         default:
             return state;
     }
