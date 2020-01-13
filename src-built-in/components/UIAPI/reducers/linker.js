@@ -1,6 +1,7 @@
-import { loop, Cmd, reduceReducers } from 'redux-loop';
-import { TOGGLE_CHANNEL } from "../actionTypes";
+import { loop, Cmd } from 'redux-loop';
+import { TOGGLE_CHANNEL_REQUEST, TOGGLE_CHANNEL_SUCCESS, TOGGLE_CHANNEL_FAILURE } from "../actionTypes";
 import { Store } from "../../linker/src/stores/linkerStore";
+import { toggleSuccess, toggleFailure } from '../actions/linkerActions';
 
 const initialState = {
     channels: {
@@ -17,9 +18,11 @@ const initialState = {
             active: false,
         }
     },
-    allChannelIds: [0, 1]
+    allChannelIds: [0, 1],
+    processingRequest: false
 };
 
+// Effectful code to link/unlink the channel which will run outside the reducer function
 function linkChannel(channelName, isActive) {
     let attachedWindowIdentifier = Store.getAttachedWindowIdentifier();
     if (!isActive) return FSBL.Clients.LinkerClient.linkToChannel(channelName, attachedWindowIdentifier);
@@ -29,9 +32,23 @@ function linkChannel(channelName, isActive) {
 // The linker's reducer
 const linker = (state = initialState, { type, payload }) => {
     switch (type) {
-        case TOGGLE_CHANNEL:
-            const newState = {
+        case TOGGLE_CHANNEL_REQUEST:
+            const newState_request = {
                 ...state,
+                processingRequest: true
+            };
+
+            const cmd = Cmd.run(linkChannel, {
+                successActionCreator: () => toggleSuccess(payload.id),
+                failActionCreator: toggleFailure,
+                args: [newState_request.channels[payload.id].name, newState_request.channels[payload.id].active]
+            });
+
+            return loop(newState_request, cmd);
+        case TOGGLE_CHANNEL_SUCCESS:
+            const newState_success = {
+                ...state,
+                processingRequest: false,
                 channels: {
                     ...state.channels,
                     [payload.id]: {
@@ -40,12 +57,7 @@ const linker = (state = initialState, { type, payload }) => {
                     }
                 }
             };
-            // Side effect to link/unlink the channel
-            const cmd = Cmd.run(linkChannel, {
-                args: [newState.channels[payload.id].name, newState.channels[payload.id].active]
-            });
-
-            return loop(newState, cmd);
+            return newState_success;
         default:
             return state;
     }

@@ -12,7 +12,7 @@ import * as storeExports from "./stores/linkerStore";
 import { getChannelLabelFromIndex } from "../../shared/linkerUtil";
 
 import store from '../../UIAPI/store';
-import linkerActions from "../../UIAPI/actions/linkerActions";
+import * as linkerActions from "../../UIAPI/actions/linkerActions";
 
 let LinkerStore = storeExports.Store;
 let LinkerActions = storeExports.Actions;
@@ -46,7 +46,7 @@ const LinkerRefactored = () => {
             border: `1px solid ${color}`
 		}
         return (
-            <div key={name} className="channel-wrapper" onClick={() => toggleChannel(id)}>
+            <div key={id} className="channel-wrapper" onClick={() => toggleChannel(id)}>
                 <div className="channel-label">{name}</div>
 				<div className={groupClass} style={style}>
 					{active ? "x" : null}
