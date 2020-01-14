@@ -27,11 +27,12 @@ const cleanUp = () => {
 };
 
 // Function signatures to use internally
-const toggleSuccess = (id) => {
+const toggleSuccess = (id, value) => {
     return {
         type: TOGGLE_CHANNEL_SUCCESS,
         payload: {
-            id
+            id,
+            value
         }
     };
 };

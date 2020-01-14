@@ -30,9 +30,18 @@ const initialState = {
 
 // Effectful code to link/unlink the channel which will run outside the reducer function
 function linkChannel(channelName, isActive) {
-    let attachedWindowIdentifier = Store.getAttachedWindowIdentifier();
-    if (!isActive) return FSBL.Clients.LinkerClient.linkToChannel(channelName, attachedWindowIdentifier);
-    else return FSBL.Clients.LinkerClient.unlinkFromChannel(channelName, attachedWindowIdentifier);
+    return new Promise((res, rej) => {
+        const callback = (err, data) => {
+            if (err) return rej(err);
+            res(data);
+        };
+        let attachedWindowIdentifier = Store.getAttachedWindowIdentifier();
+        if (!isActive) {
+            FSBL.Clients.LinkerClient.linkToChannel(channelName, attachedWindowIdentifier, callback);
+        } else {
+            FSBL.Clients.LinkerClient.unlinkFromChannel(channelName, attachedWindowIdentifier, callback);
+        }
+    });
 }
 
 function initializeLinker() {
@@ -60,7 +69,7 @@ const linker = (state = initialState, { type, payload }) => {
             };
 
             const cmd = Cmd.run(linkChannel, {
-                successActionCreator: () => toggleSuccess(payload.id),
+                successActionCreator: (value) => toggleSuccess(payload.id, value),
                 failActionCreator: toggleFailure,
                 args: [newState_request.channels[payload.id].name, newState_request.channels[payload.id].active]
             });
@@ -78,6 +87,7 @@ const linker = (state = initialState, { type, payload }) => {
                     }
                 }
             };
+            console.log("TOGGLE_CHANNEL_SUCCESS: ", payload.value);
             return newState_success;
         case TOGGLE_CHANNEL_FAILURE:
             const newState_failure = {
