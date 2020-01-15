@@ -1,0 +1,20 @@
+trigger:
+  - master
+  - pr
+
+pool:
+  vmImage: 'VS2017-Win2016'
+
+steps:
+- task: SonarQubePrepare@4
+  inputs:
+    SonarQube: 'SonarQube Finsemble'
+    scannerMode: 'CLI'
+    configMode: 'manual'
+    cliProjectKey: 'Finsemble'
+    cliProjectName: 'Finsemble'
+    cliSources: '.'
+- task: SonarQubeAnalyze@4
+- task: SonarQubePublish@4
+  inputs:
+    pollingTimeoutSec: '300'
