@@ -4,10 +4,11 @@ import {
     TOGGLE_CHANNEL_SUCCESS, 
     TOGGLE_CHANNEL_FAILURE,
     LINKER_INIT,
+    LINKER_INIT_SUCCESS,
     LINKER_CLEANUP
 } from "../actionTypes";
 import { Store } from "../../linker/src/stores/linkerStore";
-import { toggleSuccess, toggleFailure } from '../actions/linkerActions';
+import { toggleSuccess, toggleFailure, initSuccess } from '../actions/linkerActions';
 
 const initialState = {
     channels: {
@@ -22,9 +23,40 @@ const initialState = {
             color: '#FFE035',
             name: 'group2',
             active: false,
-        }
+        },
+        2: {
+            id: 2,
+            name: "group3",
+            color: "#89D803",
+            active: false,
+        },
+        3: {
+            id: 3,
+            name: "group4",
+            color: "#FE6262",
+            active: false,
+        },
+        4: {
+            id: 4,
+            name: "group5",
+            color: "#2DACFF",
+            active: false,
+        },
+        5: {
+            id: 5,
+            name: "group6",
+            color: "#FFA200",
+            active: false,
+          }
     },
-    allChannelIds: [0, 1],
+    nameToId: {
+        group1: 0,
+        group2: 1,
+        group3: 2,
+        group4: 3,
+        group5: 4,
+        group6: 5
+    },
     processingRequest: false
 };
 
@@ -45,13 +77,34 @@ function linkChannel(channelName, isActive) {
 }
 
 function initializeLinker() {
+    console.log("*********  initializing linker  *********");
     finsembleWindow.addEventListener("blurred", () => {
+        console.log("finsemble window -> hide");
         finsembleWindow.hide();
     });
     FSBL.Clients.WindowClient.fitToDOM();
+
+    return new Promise((res, rej) => {
+        let linkerInfo = {};
+        FSBL.Clients.LinkerClient.getAllChannels(function (err, data) {
+            if (err) {
+                return rej("Failed to add Finsemble.LinkerWindow.SetActiveChannels Responder: ", err);
+            }
+            linkerInfo.allChannels = data;
+        });
+
+        FSBL.Clients.ConfigClient.getValue("finsemble.accessibleLinker", (err, value) => {
+            if (err) {
+                rej("Error getting accessibleLinker value", err);
+            }
+            linkerInfo.isAccessibleLinker = (value && typeof value === "boolean") ? value : true;
+        });
+        res(linkerInfo);
+    });
 }
 
 function cleanUpAfterComponentUnmount() {
+    console.log("********  cleanup  *********");
     finsembleWindow.removeEventListener("blurred", () => {
         finsembleWindow.hide();
     });
@@ -61,7 +114,12 @@ function cleanUpAfterComponentUnmount() {
 const linker = (state = initialState, { type, payload }) => {
     switch (type) {
         case LINKER_INIT:
-            return loop(state, Cmd.run(initializeLinker));
+            return loop(state, Cmd.run(initializeLinker, {
+                successActionCreator: initSuccess,
+            }));
+        case LINKER_INIT_SUCCESS:
+            console.log("linker init success! Payload value: ", payload.value);
+            return state;
         case TOGGLE_CHANNEL_REQUEST:
             const newState_request = {
                 ...state,

@@ -3,6 +3,7 @@ import {
     TOGGLE_CHANNEL_SUCCESS, 
     TOGGLE_CHANNEL_FAILURE,
     LINKER_INIT,
+    LINKER_INIT_SUCCESS,
     LINKER_CLEANUP
 } from "../actionTypes";
 
@@ -41,11 +42,20 @@ const toggleFailure = () => {
         type: TOGGLE_CHANNEL_FAILURE
     };
 };
+const initSuccess = (value) => {
+    return {
+        type: LINKER_INIT_SUCCESS,
+        payload: {
+            value
+        }
+    };
+};
 
 export {
     toggleChannel,
     toggleSuccess,
     toggleFailure,
     init,
+    initSuccess,
     cleanUp
 };

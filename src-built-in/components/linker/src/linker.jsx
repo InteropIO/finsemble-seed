@@ -25,8 +25,10 @@ const LinkerRefactored = () => {
 	};
 
     useEffect(() => {
+		// Equivalent to componentDidMount. Will only run once if [] is empty
 		dispatch(linkerActions.init());
         return () => {
+			// Equivalent to componentWillUnmount. Will only run once if [] is empty
             dispatch(linkerActions.cleanUp());
         }
 	}, []);
