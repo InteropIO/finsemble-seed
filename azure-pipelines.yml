@@ -8,11 +8,11 @@ pool:
 steps:
 - task: SonarQubePrepare@4
   inputs:
-    SonarQube: 'SonarQube Finsemble'
+    SonarQube: 'Finsemble-Seed'
     scannerMode: 'CLI'
     configMode: 'manual'
-    cliProjectKey: 'Finsemble'
-    cliProjectName: 'Finsemble'
+    cliProjectKey: 'Finsemble-Seed'
+    cliProjectName: 'Finsemble-Seed'
     cliSources: '.'
 - task: SonarQubeAnalyze@4
 - task: SonarQubePublish@4
