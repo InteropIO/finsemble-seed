@@ -1,0 +1,31 @@
+trigger:
+  - master
+  - pr
+  
+pool:
+  vmImage: 'VS2017-Win2016'
+  
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '10.15.3'
+  displayName: 'Install Node.js'
+
+- task: Npm@1
+  inputs:
+    command: 'install'
+    workingDir: '.'
+    customEndpoint: 'ciq'
+
+- task: SonarQubePrepare@4
+  inputs:
+    SonarQube: 'SonarQube Finsemble-Seed'
+    scannerMode: 'CLI'
+    configMode: 'manual'
+    cliProjectKey: 'Finsemble-Seed'
+    cliProjectName: 'Finsemble-Seed'
+    cliSources: '.'
+- task: SonarQubeAnalyze@4
+- task: SonarQubePublish@4
+  inputs:
+    pollingTimeoutSec: '300'
