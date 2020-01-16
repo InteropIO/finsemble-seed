@@ -7,7 +7,6 @@ import {
     LINKER_INIT_SUCCESS,
     LINKER_CLEANUP
 } from "../actionTypes";
-import { Store } from "../../linker/src/stores/linkerStore";
 import { toggleSuccess, toggleFailure, initSuccess } from '../actions/linkerActions';
 
 const initialState = {
@@ -19,17 +18,16 @@ const initialState = {
 };
 
 // Effectful code to link/unlink the channel which will run outside the reducer function
-function linkChannel(channelName, isActive) {
+function linkChannel(channelName, isActive, windowIdentifier) {
     return new Promise((res, rej) => {
         const callback = (err, data) => {
             if (err) return rej(err);
             res(data);
         };
-        let attachedWindowIdentifier = Store.getAttachedWindowIdentifier();
         if (!isActive) {
-            FSBL.Clients.LinkerClient.linkToChannel(channelName, attachedWindowIdentifier, callback);
+            FSBL.Clients.LinkerClient.linkToChannel(channelName, windowIdentifier, callback);
         } else {
-            FSBL.Clients.LinkerClient.unlinkFromChannel(channelName, attachedWindowIdentifier, callback);
+            FSBL.Clients.LinkerClient.unlinkFromChannel(channelName, windowIdentifier, callback);
         }
     });
 }
@@ -53,7 +51,6 @@ function initializeLinker() {
             if (err) {
                 return rej("Failed to add Finsemble.LinkerWindow.SetActiveChannels Responder: ", err);
             }
-            Store.setState(msg.data);
             console.log("initializing ------------- ", msg.data);
             linkerInfo.activeChannels = msg.data.channels;
             linkerInfo.windowIdentifier = msg.data.windowIdentifier;
@@ -65,7 +62,6 @@ function initializeLinker() {
                     rej("Error getting accessibleLinker value", err);
                 }
                 linkerInfo.isAccessibleLinker = value;
-                Store.accessibleLinker = value;
                 res(linkerInfo);
             });
         });
@@ -130,7 +126,7 @@ const linker = (state = initialState, { type, payload }) => {
             const cmd = Cmd.run(linkChannel, {
                 successActionCreator: (value) => toggleSuccess(payload.id, value),
                 failActionCreator: toggleFailure,
-                args: [newState_request.channels[payload.id].name, newState_request.channels[payload.id].active]
+                args: [newState_request.channels[payload.id].name, newState_request.channels[payload.id].active, newState_request.windowIdentifier]
             });
 
             return loop(newState_request, cmd);

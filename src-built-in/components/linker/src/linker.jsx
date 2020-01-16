@@ -40,7 +40,7 @@ const LinkerRefactored = () => {
 		}
         return (
             <div key={id} className="channel-wrapper" onClick={() => toggleChannel(id)}>
-                <div className="channel-label">{name}</div>
+                {linker.isAccessibleLinker ? <div className="channel-label">{name}</div> : null}
 				<div className={groupClass} style={style}>
 					{active ? <i className="active-linker-group ff-check-mark"></i> : null}
 				</div>
