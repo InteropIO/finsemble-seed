@@ -9,6 +9,7 @@ import {
 } from "../actionTypes";
 import { Store } from "../../linker/src/stores/linkerStore";
 import { toggleSuccess, toggleFailure, initSuccess } from '../actions/linkerActions';
+import store from '../store';
 
 const initialState = {
     channels: {
@@ -16,7 +17,7 @@ const initialState = {
             id: 0,
             color: '#8781BD',
             name: 'group1',
-            active: true,
+            active: false,
         },
         1: {
             id: 1,
@@ -57,6 +58,8 @@ const initialState = {
         group5: 4,
         group6: 5
     },
+    isAccessibleLinker: true,
+    windowIdentifier: {},
     processingRequest: false
 };
 
@@ -82,24 +85,37 @@ function initializeLinker() {
         console.log("finsemble window -> hide");
         finsembleWindow.hide();
     });
+    finsembleWindow.addEventListener("shown", () => {
+		finsembleWindow.focus();
+	});
     FSBL.Clients.WindowClient.fitToDOM();
 
     return new Promise((res, rej) => {
-        let linkerInfo = {};
-        FSBL.Clients.LinkerClient.getAllChannels(function (err, data) {
+        let linkerInfo = {
+            activeChannels: null,
+            windowIdentifier: null,
+            isAccessibleLinker: true
+        };
+        FSBL.Clients.RouterClient.addResponder("Finsemble.LinkerWindow.SetActiveChannels", function (err, msg) {
             if (err) {
                 return rej("Failed to add Finsemble.LinkerWindow.SetActiveChannels Responder: ", err);
             }
-            linkerInfo.allChannels = data;
+            Store.setState(msg.data);
+            console.log("initializing ------------- ", msg.data);
+            linkerInfo.activeChannels = msg.data.channels;
+            linkerInfo.windowIdentifier = msg.data.windowIdentifier;
+            FSBL.Clients.Logger.system.log("toggle Linker window");
+            msg.sendQueryResponse(null, {});
+            
+            FSBL.Clients.ConfigClient.getValue("finsemble.accessibleLinker", (err, value) => {
+                if (err) {
+                    rej("Error getting accessibleLinker value", err);
+                }
+                linkerInfo.isAccessibleLinker = value;
+                Store.accessibleLinker = value;
+                res(linkerInfo);
+            });
         });
-
-        FSBL.Clients.ConfigClient.getValue("finsemble.accessibleLinker", (err, value) => {
-            if (err) {
-                rej("Error getting accessibleLinker value", err);
-            }
-            linkerInfo.isAccessibleLinker = (value && typeof value === "boolean") ? value : true;
-        });
-        res(linkerInfo);
     });
 }
 
@@ -108,6 +124,9 @@ function cleanUpAfterComponentUnmount() {
     finsembleWindow.removeEventListener("blurred", () => {
         finsembleWindow.hide();
     });
+    finsembleWindow.removeEventListener("shown", () => {
+		finsembleWindow.focus();
+	});
 }
 
 // The linker's reducer
@@ -118,8 +137,24 @@ const linker = (state = initialState, { type, payload }) => {
                 successActionCreator: initSuccess,
             }));
         case LINKER_INIT_SUCCESS:
-            console.log("linker init success! Payload value: ", payload.value);
-            return state;
+            const { isAccessibleLinker, activeChannels, windowIdentifier } = payload.value;
+            const activeChannelIds = [];
+            activeChannels.forEach(channel => {
+                activeChannelIds.push(state.nameToId[channel.name]);
+            });
+            const updatedChannels = state.channels;
+            activeChannelIds.forEach(channelId => {
+                updatedChannels[channelId].active = true;
+            });
+            const newLinkerState_success = {
+                ...state,
+                channels: updatedChannels,
+                isAccessibleLinker: isAccessibleLinker,
+                windowIdentifier: windowIdentifier
+            };
+            console.log("linker init success! activeChannelIds value: ", activeChannelIds);
+            console.log("linker new state: ", JSON.stringify(newLinkerState_success, null, 4))
+            return newLinkerState_success;
         case TOGGLE_CHANNEL_REQUEST:
             const newState_request = {
                 ...state,

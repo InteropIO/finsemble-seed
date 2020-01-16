@@ -44,25 +44,25 @@ var LinkerStore = Object.assign({}, EventEmitter.prototype, {
 	 * Moves the linker window around and populates it with channel information.
 	 */
 	initialize: function () {
-		var self = this;
-		FSBL.Clients.RouterClient.addResponder("Finsemble.LinkerWindow.SetActiveChannels", function (error, queryMessage) {
-			if (error) {
-				return FSBL.Clients.Logger.system.error("Failed to add Finsemble.LinkerWindow.SetActiveChannels Responder: ", error);
-			}
+		// var self = this;
+		// FSBL.Clients.RouterClient.addResponder("Finsemble.LinkerWindow.SetActiveChannels", function (error, queryMessage) {
+		// 	if (error) {
+		// 		return FSBL.Clients.Logger.system.error("Failed to add Finsemble.LinkerWindow.SetActiveChannels Responder: ", error);
+		// 	}
 
-			self.setState(queryMessage.data);
-			FSBL.Clients.Logger.system.log("toggle Linker window");
-			queryMessage.sendQueryResponse(null, {});
-		});
+		// 	self.setState(queryMessage.data);
+		// 	FSBL.Clients.Logger.system.log("toggle Linker window");
+		// 	queryMessage.sendQueryResponse(null, {});
+		// });
 
-		FSBL.Clients.ConfigClient.getValue("finsemble.accessibleLinker", (err, value) => {
-			if (err) {
-				console.err("Error getting accessibleLinker value", err);
-			}
+		// FSBL.Clients.ConfigClient.getValue("finsemble.accessibleLinker", (err, value) => {
+		// 	if (err) {
+		// 		console.err("Error getting accessibleLinker value", err);
+		// 	}
 
-			// Default value for accessibleLinker is true.
-			self.accessibleLinker = (value && typeof value === "boolean") ? value : true;
-		});
+		// 	// Default value for accessibleLinker is true.
+		// 	self.accessibleLinker = (value && typeof value === "boolean") ? value : true;
+		// });
 	}
 });
 

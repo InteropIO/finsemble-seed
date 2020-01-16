@@ -25,10 +25,8 @@ const LinkerRefactored = () => {
 	};
 
     useEffect(() => {
-		// Equivalent to componentDidMount. Will only run once if [] is empty
 		dispatch(linkerActions.init());
         return () => {
-			// Equivalent to componentWillUnmount. Will only run once if [] is empty
             dispatch(linkerActions.cleanUp());
         }
 	}, []);
@@ -177,18 +175,6 @@ if (window.FSBL && FSBL.addEventListener) {
 }
 function FSBLReady() {
 	LinkerStore.initialize();
-	finsembleWindow.addEventListener("shown", () => {
-		/** DH 6/19/2019
-		 * Because Finsemble uses a combination of
-		 * native OS and synthetic window events,
-		 * it's possible for the Linker Window to
-		 * have OS level focus but Finsemble not
-		 * be aware of it. Therefore, we must trigger
-		 * focus manually until we can figure out a
-		 * better way of synchronizing these states.
-		*/
-		finsembleWindow.focus();
-	});
 	ReactDOM.render(
 		<Provider store={store}>
     		<LinkerRefactored />
