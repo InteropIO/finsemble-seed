@@ -42,8 +42,6 @@ export default class LinkerGroups extends React.Component {
                 console.err("Error getting accessibleLinker value", err);
             }
 
-            console.log('got accessibleLinker value: ', value);
-
             // Default value for accessibleLinker is true.
             this.setState({
                 accessibleLinker: value && typeof value === "boolean" ? value : true
