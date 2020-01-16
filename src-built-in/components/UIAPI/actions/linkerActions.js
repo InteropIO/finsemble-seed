@@ -4,7 +4,8 @@ import {
     TOGGLE_CHANNEL_FAILURE,
     LINKER_INIT,
     LINKER_INIT_SUCCESS,
-    LINKER_CLEANUP
+    LINKER_CLEANUP,
+    UPDATE_ACTIVE_CHANNELS
 } from "../actionTypes";
 
 // Functions signature to expose to the client
@@ -50,11 +51,21 @@ const initSuccess = (value) => {
         }
     };
 };
+const updateActiveChannels = (value) => {
+    return {
+        type: UPDATE_ACTIVE_CHANNELS,
+        payload: {
+            updatedActiveChannels: value.channels,
+            updatedWindowIdentifier: value.windowIdentifier
+        }
+    };
+};
 
 export {
     toggleChannel,
     toggleSuccess,
     toggleFailure,
+    updateActiveChannels,
     init,
     initSuccess,
     cleanUp

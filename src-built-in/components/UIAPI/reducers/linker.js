@@ -5,9 +5,11 @@ import {
     TOGGLE_CHANNEL_FAILURE,
     LINKER_INIT,
     LINKER_INIT_SUCCESS,
-    LINKER_CLEANUP
+    LINKER_CLEANUP,
+    UPDATE_ACTIVE_CHANNELS
 } from "../actionTypes";
-import { toggleSuccess, toggleFailure, initSuccess } from '../actions/linkerActions';
+import store from '../store';
+import { toggleSuccess, toggleFailure, initSuccess, updateActiveChannels } from '../actions/linkerActions';
 
 const initialState = {
     channels: {},
@@ -25,6 +27,7 @@ function linkChannel(channelName, isActive, windowIdentifier) {
             res(data);
         };
         if (!isActive) {
+            console.log("linking the window: ", windowIdentifier);
             FSBL.Clients.LinkerClient.linkToChannel(channelName, windowIdentifier, callback);
         } else {
             FSBL.Clients.LinkerClient.unlinkFromChannel(channelName, windowIdentifier, callback);
@@ -33,7 +36,6 @@ function linkChannel(channelName, isActive, windowIdentifier) {
 }
 
 function initializeLinker() {
-    console.log("*********  initializing linker  *********");
     finsembleWindow.addEventListener("blurred", () => {
         finsembleWindow.hide();
     });
@@ -51,11 +53,11 @@ function initializeLinker() {
             if (err) {
                 return rej("Failed to add Finsemble.LinkerWindow.SetActiveChannels Responder: ", err);
             }
-            console.log("initializing ------------- ", msg.data);
             linkerInfo.activeChannels = msg.data.channels;
             linkerInfo.windowIdentifier = msg.data.windowIdentifier;
             FSBL.Clients.Logger.system.log("toggle Linker window");
             msg.sendQueryResponse(null, {});
+            store.dispatch(updateActiveChannels(msg.data));
             
             FSBL.Clients.ConfigClient.getValue("finsemble.accessibleLinker", (err, value) => {
                 if (err) {
@@ -106,7 +108,7 @@ const linker = (state = initialState, { type, payload }) => {
             activeChannels.forEach(channel => {
                 activeChannelIds.push(state.nameToId[channel.name]);
             });
-            const updatedChannels = state.channels;
+            const updatedChannels = Object.assign({}, state.channels);
             activeChannelIds.forEach(channelId => {
                 updatedChannels[channelId].active = true;
             });
@@ -125,7 +127,7 @@ const linker = (state = initialState, { type, payload }) => {
 
             const cmd = Cmd.run(linkChannel, {
                 successActionCreator: (value) => toggleSuccess(payload.id, value),
-                failActionCreator: toggleFailure,
+                failActionCreator: () => toggleFailure(),
                 args: [newState_request.channels[payload.id].name, newState_request.channels[payload.id].active, newState_request.windowIdentifier]
             });
 
@@ -150,6 +152,27 @@ const linker = (state = initialState, { type, payload }) => {
                 processingRequest: false
             };
             return newState_failure;
+        case UPDATE_ACTIVE_CHANNELS:
+            const { updatedActiveChannels, updatedWindowIdentifier } = payload;
+            const activeChannelNames = [];
+            updatedActiveChannels.forEach(channel => {
+                activeChannelNames.push(channel.name);
+            });
+            const updatedChannel = Object.assign({}, state.channels);
+            const channelIds = Object.keys(updatedChannel);
+            channelIds.forEach(channelId => {
+                if (activeChannelNames.includes(updatedChannel[channelId].name)) {
+                    updatedChannel[channelId].active = true;
+                } else {
+                    updatedChannel[channelId].active = false;
+                }
+            });
+            const newUpdateChannelState = {
+                ...state,
+                channels: updatedChannel,
+                windowIdentifier: updatedWindowIdentifier
+            };
+            return newUpdateChannelState;
         case LINKER_CLEANUP:
             return loop(state, Cmd.run(cleanUpAfterComponentUnmount));
         default:
