@@ -189,6 +189,7 @@ export default class AppMarket extends React.Component {
 	 * Action to take when the back button is clicked (which just goes home)
 	 */
 	goHome() {
+		storeActions.clearSearchText();
 		storeActions.clearTags();
 		storeActions.clearFilteredApps();
 		storeActions.clearApp();

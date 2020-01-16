@@ -46,11 +46,11 @@ class SearchBar extends Component {
 	 */
 	changeSearch(e) {
 		const { value : searchTerms } = e.target;
-		this.setState({
-			searchValue: searchTerms
-		});
+		this.setState({	searchValue: searchTerms });
 
-		if (searchTerms !== "") {
+		let activeTags = storeActions.getActiveTags();
+
+		if (searchTerms !== "" || activeTags.length > 0) {
 			this.props.search(searchTerms);
 		} else {
 			this.goHome();
