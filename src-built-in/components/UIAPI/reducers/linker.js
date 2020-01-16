@@ -9,55 +9,10 @@ import {
 } from "../actionTypes";
 import { Store } from "../../linker/src/stores/linkerStore";
 import { toggleSuccess, toggleFailure, initSuccess } from '../actions/linkerActions';
-import store from '../store';
 
 const initialState = {
-    channels: {
-        0: {
-            id: 0,
-            color: '#8781BD',
-            name: 'group1',
-            active: false,
-        },
-        1: {
-            id: 1,
-            color: '#FFE035',
-            name: 'group2',
-            active: false,
-        },
-        2: {
-            id: 2,
-            name: "group3",
-            color: "#89D803",
-            active: false,
-        },
-        3: {
-            id: 3,
-            name: "group4",
-            color: "#FE6262",
-            active: false,
-        },
-        4: {
-            id: 4,
-            name: "group5",
-            color: "#2DACFF",
-            active: false,
-        },
-        5: {
-            id: 5,
-            name: "group6",
-            color: "#FFA200",
-            active: false,
-          }
-    },
-    nameToId: {
-        group1: 0,
-        group2: 1,
-        group3: 2,
-        group4: 3,
-        group5: 4,
-        group6: 5
-    },
+    channels: {},
+    nameToId: {},
     isAccessibleLinker: true,
     windowIdentifier: {},
     processingRequest: false
@@ -82,13 +37,11 @@ function linkChannel(channelName, isActive) {
 function initializeLinker() {
     console.log("*********  initializing linker  *********");
     finsembleWindow.addEventListener("blurred", () => {
-        console.log("finsemble window -> hide");
         finsembleWindow.hide();
     });
     finsembleWindow.addEventListener("shown", () => {
 		finsembleWindow.focus();
 	});
-    FSBL.Clients.WindowClient.fitToDOM();
 
     return new Promise((res, rej) => {
         let linkerInfo = {
@@ -120,7 +73,6 @@ function initializeLinker() {
 }
 
 function cleanUpAfterComponentUnmount() {
-    console.log("********  cleanup  *********");
     finsembleWindow.removeEventListener("blurred", () => {
         finsembleWindow.hide();
     });
@@ -133,7 +85,23 @@ function cleanUpAfterComponentUnmount() {
 const linker = (state = initialState, { type, payload }) => {
     switch (type) {
         case LINKER_INIT:
-            return loop(state, Cmd.run(initializeLinker, {
+            const linkerInitState = Object.assign({}, state);
+            let nextChannelId = 0;
+            const initialChannels = {};
+            const initialNametoId = {};
+            FSBL.Clients.LinkerClient.getAllChannels().forEach(channel => {
+                initialChannels[nextChannelId] = {
+                    id: nextChannelId,
+                    name: channel.name,
+                    color: channel.color,
+                    active: false
+                };
+                initialNametoId[channel.name] = nextChannelId;
+                nextChannelId += 1;
+            });
+            linkerInitState.channels = initialChannels;
+            linkerInitState.nameToId = initialNametoId;
+            return loop(linkerInitState, Cmd.run(initializeLinker, {
                 successActionCreator: initSuccess,
             }));
         case LINKER_INIT_SUCCESS:
@@ -152,9 +120,7 @@ const linker = (state = initialState, { type, payload }) => {
                 isAccessibleLinker: isAccessibleLinker,
                 windowIdentifier: windowIdentifier
             };
-            console.log("linker init success! activeChannelIds value: ", activeChannelIds);
-            console.log("linker new state: ", JSON.stringify(newLinkerState_success, null, 4))
-            return newLinkerState_success;
+            return loop(newLinkerState_success, Cmd.run(() => FSBL.Clients.WindowClient.fitToDOM()));
         case TOGGLE_CHANNEL_REQUEST:
             const newState_request = {
                 ...state,

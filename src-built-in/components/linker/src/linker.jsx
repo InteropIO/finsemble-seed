@@ -174,7 +174,6 @@ if (window.FSBL && FSBL.addEventListener) {
 	window.addEventListener("FSBLReady", FSBLReady)
 }
 function FSBLReady() {
-	LinkerStore.initialize();
 	ReactDOM.render(
 		<Provider store={store}>
     		<LinkerRefactored />
