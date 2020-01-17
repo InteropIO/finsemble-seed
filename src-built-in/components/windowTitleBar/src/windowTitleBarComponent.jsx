@@ -22,6 +22,7 @@ import Close from "./components/right/CloseButton.jsx";
 import AlwaysOnTop from "./components/right/AlwaysOnTop.jsx";
 import TabRegion from './components/center/TabRegion'
 import "../../../../assets/css/finsemble.css";
+import "../../../../assets/css/_windowTitleBar.css";
 
 /**
  * This is the main window manager component. It's the custom window frame that we add to each window that has useFSBLHeader set to true in its windowDescriptor.
