@@ -85,6 +85,9 @@ function getToolbarStore(done) {
 	});
 }
 
+/**
+ * Return to the App Catalog home page
+ */
 function goHome() {
 	clearFilteredApps();
 	clearApp();
@@ -95,7 +98,6 @@ function goHome() {
 
 /**
  * Private function to add an active tag. This will filter apps based on tags
- * NOTE: This will need to use search
  * @param {string} tag The name of the tag
  */
 function _addActiveTag(tag) {
@@ -107,7 +109,6 @@ function _addActiveTag(tag) {
 
 /**
  * Private function to remove an active tag. This will filter apps based on tags
- * NOTE: This will need to use search
  * @param {string} tag The name of the tag
  */
 function _removeActiveTag(tag) {
@@ -119,10 +120,6 @@ function _removeActiveTag(tag) {
 	filterApps();
 }
 
-function _refreshTags() {
-	filterApps();
-}
-
 /**
  * Clears all active tags
  */
@@ -131,6 +128,9 @@ function _clearActiveTags() {
 }
 
 
+/**
+ * Send the search text and tags to the appd server and get a list of apps
+ */
 function filterApps() {
 	let { activeTags, searchText } = data;
 	
@@ -139,7 +139,10 @@ function filterApps() {
 		goHome();
 	} else {
 		appd.search({ text: searchText, tags: activeTags }, (err, data) => {
-			if (err) console.log("Failed to search apps");
+			if (err) {
+				Logger.system.error("FDC3 App search failed!: ${err}");
+				return;
+			}
 			getStore().setValue({ field: "filteredApps", value: data });
 		});
 	}
@@ -360,23 +363,47 @@ function clearFilteredApps() {
 	});
 }
 
+/**
+ * Set the value of the search text in store
+ *
+ * @param {set} val Search string
+ */
 function setSearchValue(val) {
 	getStore().setValue({field: "searchText", value: val})
 }
 
+/**
+ * Get the current value of the text in the store
+ *
+ * @returns {string}  Search string
+ */
 function getSearchValue() {
 	return data.searchText;
 }
 
+/**
+ * Clears the search text in store
+ *
+ */
 function clearSearchText() {
 	getStore().setValue({field: "searchText", value: ""})
 }
 
+/**
+ * Get forceSearch store value
+ *
+ * @returns {boolean} forceSearch
+ */
 function getForceSearch() {
 	return data.forceSearch;
 }
 
 
+/**
+ * Set the forceSearch value
+ *
+ * @param {string} val Boolean value for forceSearch
+ */
 function setForceSearch(val) {
 	getStore().setValue({field: "forceSearch", value: val})
 }
@@ -408,7 +435,7 @@ function removeTag(tag) {
  * Refreshes the active tags search
  */
 function refreshTagSearch() {
-	_refreshTags();
+	filterApps();
 }
 
 /**
