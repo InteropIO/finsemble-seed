@@ -21,7 +21,7 @@
 	},
 	"linker": {
 		"output": "components/linker/linker",
-		"entry": "./src-built-in/components/linker/src/linker.jsx"
+		"entry": "./src-built-in/components/linker/src/linker.tsx"
 	},
 	"workspaceManagementMenu": {
 		"output": "components/workspaceManagementMenu/workspaceManagementMenu",
