@@ -5,4 +5,5 @@ const rootReducer = combineReducers({
     linker
 });
 
+export type RootState = ReturnType<typeof rootReducer>;
 export default rootReducer;
