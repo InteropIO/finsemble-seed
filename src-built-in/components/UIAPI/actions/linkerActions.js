@@ -9,11 +9,11 @@ import {
 } from "../actionTypes";
 
 // Functions signature to expose to the client
-const toggleChannel = (id) => {
+const toggleChannel = (channelID) => {
     return {
         type: TOGGLE_CHANNEL_REQUEST,
         payload: {
-            id
+            channelID
         }
     };
 };
@@ -29,12 +29,11 @@ const cleanUp = () => {
 };
 
 // Function signatures to use internally
-const toggleSuccess = (id, value) => {
+const toggleSuccess = (channelID) => {
     return {
         type: TOGGLE_CHANNEL_SUCCESS,
         payload: {
-            id,
-            value
+            channelID
         }
     };
 };

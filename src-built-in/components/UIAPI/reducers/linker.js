@@ -126,9 +126,9 @@ const linker = (state = initialState, { type, payload }) => {
             };
 
             const cmd = Cmd.run(linkChannel, {
-                successActionCreator: (value) => toggleSuccess(payload.id, value),
+                successActionCreator: () => toggleSuccess(payload.channelID),
                 failActionCreator: () => toggleFailure(),
-                args: [newState_request.channels[payload.id].name, newState_request.channels[payload.id].active, newState_request.windowIdentifier]
+                args: [newState_request.channels[payload.channelID].name, newState_request.channels[payload.channelID].active, newState_request.windowIdentifier]
             });
 
             return loop(newState_request, cmd);
@@ -138,13 +138,12 @@ const linker = (state = initialState, { type, payload }) => {
                 processingRequest: false,
                 channels: {
                     ...state.channels,
-                    [payload.id]: {
-                        ...state.channels[payload.id],
-                        active: !state.channels[payload.id].active
+                    [payload.channelID]: {
+                        ...state.channels[payload.channelID],
+                        active: !state.channels[payload.channelID].active
                     }
                 }
             };
-            console.log("TOGGLE_CHANNEL_SUCCESS: ", payload.value);
             return newState_success;
         case TOGGLE_CHANNEL_FAILURE:
             const newState_failure = {
