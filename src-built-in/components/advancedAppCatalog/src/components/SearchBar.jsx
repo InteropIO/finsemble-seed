@@ -26,7 +26,6 @@ class SearchBar extends Component {
 		super(props);
 		this.textInput = React.createRef();
 		this.state = {
-			searchValue: "",
 			tagSelectorOpen: false
 		};
 		this.bindCorrectContext();
@@ -46,15 +45,7 @@ class SearchBar extends Component {
 	 */
 	changeSearch(e) {
 		const { value : searchTerms } = e.target;
-		this.setState({	searchValue: searchTerms });
-
-		let activeTags = storeActions.getActiveTags();
-
-		if (searchTerms !== "" || activeTags.length > 0) {
-			this.props.search(searchTerms);
-		} else {
-			this.goHome();
-		}
+		this.props.search(searchTerms);
 	}
 
 	/**
@@ -93,9 +84,7 @@ class SearchBar extends Component {
 	 * Clears search because 'back' button was clicked
 	 */
 	goHome() {
-		this.setState({
-			searchValue: ""
-		}, this.props.goHome);
+		this.props.goHome();
 	}
 
 	focus() {
@@ -122,7 +111,7 @@ class SearchBar extends Component {
 						</div> : null}
 					<div className="search-input-container">
 						<i className='ff-search'></i>
-						<input className='search-input' required ref={this.textInput}placeholder="Search" type="text" value={this.state.searchValue} onChange={this.changeSearch} />
+						<input className='search-input' required ref={this.textInput}placeholder="Search" type="text" value={this.props.searchText} onChange={this.changeSearch} />
 						<button class="close-icon" onClick={this.goHome} type="reset"></button>
 					</div>
 					<TagsMenu active={activeTags} list={this.props.tags} onItemClick={this.selectTag} label={"Tags"} align='right' />

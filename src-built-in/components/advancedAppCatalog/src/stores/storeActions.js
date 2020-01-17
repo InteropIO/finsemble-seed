@@ -25,7 +25,12 @@ export default {
 	clearApp,
 	getInstalledApps,
 	getActiveApp,
-	filterApps
+	filterApps,
+	setSearchValue,
+	setForceSearch,
+	getSearchValue,
+	getForceSearch,
+	goHome
 };
 
 let ToolbarStore;
@@ -58,6 +63,7 @@ function initialize(done = Function.prototype) {
 		data.activeTags = store.values.activeTags;
 		data.activeApp = store.values.activeApp;
 		data.searchText = store.values.searchText;
+		data.forceSearch = store.values.forceSearch;
 		data.ADVANCED_APP_LAUNCHER = store.values.defaultFolder;
 
 		store.addListener({ field: "apps" }, (err, dt) => data.apps = dt.value);
@@ -67,6 +73,7 @@ function initialize(done = Function.prototype) {
 		store.addListener({ field: "activeTags" }, (err, dt) => data.activeTags = dt.value);
 		store.addListener({ field: "filteredApps" }, (err, dt) => data.filteredApps = dt.value);
 		store.addListener({ field: "searchText" }, (err, dt) => data.searchText = dt.value);
+		store.addListener({ field: "forceSearch" }, (err, dt) => data.forceSearch = dt.value);
 		getToolbarStore(done);
 	});
 }
@@ -76,6 +83,14 @@ function getToolbarStore(done) {
 		ToolbarStore = toolbarStore;
 		done();
 	});
+}
+
+function goHome() {
+	clearFilteredApps();
+	clearApp();
+	clearTags();
+	clearSearchText();
+	setForceSearch(false);
 }
 
 /**
@@ -96,18 +111,12 @@ function _addActiveTag(tag) {
  * @param {string} tag The name of the tag
  */
 function _removeActiveTag(tag) {
-	let newActiveTags = data.activeTags.filter((currentTag) => {
+	data.activeTags = data.activeTags.filter((currentTag) => {
 		return currentTag !== tag;
 	});
 
-	getStore().setValue({ field: "activeTags", value: newActiveTags	});
-
-	if (newActiveTags.length === 0 && data.searchText === "") {
-		clearFilteredApps();
-		clearApp();
-	} else {
-		filterApps();
-	}
+	getStore().setValue({ field: "activeTags", value: data.activeTags	});
+	filterApps();
 }
 
 function _refreshTags() {
@@ -124,11 +133,16 @@ function _clearActiveTags() {
 
 function filterApps() {
 	let { activeTags, searchText } = data;
+	
 
-	appd.search({ text: searchText, tags: activeTags }, (err, data) => {
-		if (err) console.log("Failed to search apps");
-		getStore().setValue({ field: "filteredApps", value: data });
-	});
+	if (activeTags.length === 0 && searchText === "") {
+		goHome();
+	} else {
+		appd.search({ text: searchText, tags: activeTags }, (err, data) => {
+			if (err) console.log("Failed to search apps");
+			getStore().setValue({ field: "filteredApps", value: data });
+		});
+	}
 }
 
 /**
@@ -346,8 +360,25 @@ function clearFilteredApps() {
 	});
 }
 
+function setSearchValue(val) {
+	getStore().setValue({field: "searchText", value: val})
+}
+
+function getSearchValue() {
+	return data.searchText;
+}
+
 function clearSearchText() {
 	getStore().setValue({field: "searchText", value: ""})
+}
+
+function getForceSearch() {
+	return data.forceSearch;
+}
+
+
+function setForceSearch(val) {
+	getStore().setValue({field: "forceSearch", value: val})
 }
 
 /**

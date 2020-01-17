@@ -158,7 +158,8 @@ export default class AppMarket extends React.Component {
 	 * Determines the apps page based on the state of the activeTags, search text, etc
 	 */
 	determineActivePage() {
-		let { activeApp, filteredApps, activeTags, forceSearch } = this.state;
+		let { activeApp, filteredApps, activeTags } = this.state;
+		let forceSearch = this.props.forceSearch;
 		let page;
 
 		if (activeApp && !forceSearch) {
@@ -189,24 +190,14 @@ export default class AppMarket extends React.Component {
 	 * Action to take when the back button is clicked (which just goes home)
 	 */
 	goHome() {
-		storeActions.clearSearchText();
-		storeActions.clearTags();
-		storeActions.clearFilteredApps();
-		storeActions.clearApp();
-		this.setState({
-			activeApp: null,
-			forceSearch: false
-		});
+		storeActions.goHome();
 	}
 	/**
 	 * Performs a search through the catalog
 	 * @param {string} search The text to search the catalog with
 	 */
 	changeSearch(search) {
-		storeActions.searchApps(search, () => {
-
-			this.setState({ forceSearch: (search !== "") });
-		});
+		storeActions.searchApps(search);
 	}
 	/**
 	 * When the notification for installing/removing an app is shown a timeout is set to call this function to cease showing the notification
@@ -230,9 +221,9 @@ export default class AppMarket extends React.Component {
 		if (app !== null) {
 			storeActions.clearTags();
 			storeActions.clearFilteredApps();
+			storeActions.setForceSearch(false);
 			this.setState({
-				activeApp: app,
-				forceSearch: false
+				activeApp: app
 			});
 		}
 	}

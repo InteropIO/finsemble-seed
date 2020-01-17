@@ -27,6 +27,10 @@ const defaultValues = [
 	{
 		field: "searchText",
 		value: ""
+	},
+	{
+		field: "forceSearch",
+		value: false
 	}
 ];
 
