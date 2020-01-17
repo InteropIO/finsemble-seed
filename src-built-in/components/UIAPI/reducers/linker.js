@@ -41,20 +41,43 @@ function initializeLinker() {
     });
     finsembleWindow.addEventListener("shown", () => {
 		finsembleWindow.focus();
-	});
+    });
+    
+    let nextChannelId = 0;
+    const linkerInitState = Object.assign({}, initialState);
+    const initialChannels = {};
+    const initialNametoId = {};
 
     return new Promise((res, rej) => {
-        let linkerInfo = {
-            activeChannels: null,
-            windowIdentifier: null,
-            isAccessibleLinker: true
-        };
+        FSBL.Clients.LinkerClient.getAllChannels().forEach(channel => {
+            initialChannels[nextChannelId] = {
+                id: nextChannelId,
+                name: channel.name,
+                color: channel.color,
+                active: false
+            };
+            initialNametoId[channel.name] = nextChannelId;
+            nextChannelId += 1;
+        });
+        linkerInitState.channels = initialChannels;
+        linkerInitState.nameToId = initialNametoId;
+
         FSBL.Clients.RouterClient.addResponder("Finsemble.LinkerWindow.SetActiveChannels", function (err, msg) {
             if (err) {
                 return rej("Failed to add Finsemble.LinkerWindow.SetActiveChannels Responder: ", err);
             }
-            linkerInfo.activeChannels = msg.data.channels;
-            linkerInfo.windowIdentifier = msg.data.windowIdentifier;
+            const activeChannels = msg.data.channels;
+
+            const activeChannelIds = [];
+            activeChannels.forEach(channel => {
+                activeChannelIds.push(linkerInitState.nameToId[channel.name]);
+            });
+            const updatedChannels = Object.assign({}, linkerInitState.channels);
+            activeChannelIds.forEach(channelId => {
+                updatedChannels[channelId].active = true;
+            });
+
+            linkerInitState.windowIdentifier = msg.data.windowIdentifier;
             FSBL.Clients.Logger.system.log("toggle Linker window");
             msg.sendQueryResponse(null, {});
             store.dispatch(updateActiveChannels(msg.data));
@@ -63,8 +86,12 @@ function initializeLinker() {
                 if (err) {
                     rej("Error getting accessibleLinker value", err);
                 }
-                linkerInfo.isAccessibleLinker = value;
-                res(linkerInfo);
+                const newLinkerState = {
+                    ...linkerInitState,
+                    channels: updatedChannels,
+                    isAccessibleLinker: value,
+                };
+                res(newLinkerState);
             });
         });
     });
@@ -82,43 +109,13 @@ function cleanUpAfterComponentUnmount() {
 // The linker's reducer
 const linker = (state = initialState, { type, payload }) => {
     switch (type) {
-        case LINKER_INIT:
-            const linkerInitState = Object.assign({}, state);
-            let nextChannelId = 0;
-            const initialChannels = {};
-            const initialNametoId = {};
-            FSBL.Clients.LinkerClient.getAllChannels().forEach(channel => {
-                initialChannels[nextChannelId] = {
-                    id: nextChannelId,
-                    name: channel.name,
-                    color: channel.color,
-                    active: false
-                };
-                initialNametoId[channel.name] = nextChannelId;
-                nextChannelId += 1;
-            });
-            linkerInitState.channels = initialChannels;
-            linkerInitState.nameToId = initialNametoId;
-            return loop(linkerInitState, Cmd.run(initializeLinker, {
+        case LINKER_INIT:            
+            return loop(state, Cmd.run(initializeLinker, {
                 successActionCreator: initSuccess,
             }));
         case LINKER_INIT_SUCCESS:
-            const { isAccessibleLinker, activeChannels, windowIdentifier } = payload.value;
-            const activeChannelIds = [];
-            activeChannels.forEach(channel => {
-                activeChannelIds.push(state.nameToId[channel.name]);
-            });
-            const updatedChannels = Object.assign({}, state.channels);
-            activeChannelIds.forEach(channelId => {
-                updatedChannels[channelId].active = true;
-            });
-            const newLinkerState_success = {
-                ...state,
-                channels: updatedChannels,
-                isAccessibleLinker: isAccessibleLinker,
-                windowIdentifier: windowIdentifier
-            };
-            return loop(newLinkerState_success, Cmd.run(() => FSBL.Clients.WindowClient.fitToDOM()));
+            const newState = payload.value;
+            return loop(newState, Cmd.run(() => FSBL.Clients.WindowClient.fitToDOM()));
         case TOGGLE_CHANNEL_REQUEST:
             const newState_request = {
                 ...state,
