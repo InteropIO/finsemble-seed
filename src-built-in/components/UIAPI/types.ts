@@ -27,7 +27,7 @@ export interface Channel {
 
 export interface LinkerAction {
     type: string,
-    payload: {
+    payload?: {
         value?: any,
         channelID?: number,
         updatedActiveChannels?: any,

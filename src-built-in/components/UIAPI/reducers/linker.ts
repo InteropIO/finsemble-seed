@@ -15,7 +15,7 @@ import { Channel, Channels, NameToId, Linker, LinkerAction } from '../types';
 declare var FSBL: any;
 declare var finsembleWindow: any;
 
-const initialState: Linker = {
+export const initialState: Linker = {
     channels: {},
     nameToId: {},
     isAccessibleLinker: true,
