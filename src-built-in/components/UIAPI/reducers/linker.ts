@@ -17,7 +17,7 @@ declare var finsembleWindow: any;
 
 // The linker state before we initialize the linker. The initialize linker function will make calls to the LinkerClient and 
 // fill in the state with the relevant linker information.
-const initialState: Linker = {
+export const initialState: Linker = {
     channels: {},
     nameToId: {},
     isAccessibleLinker: true,
