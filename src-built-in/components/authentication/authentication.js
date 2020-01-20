@@ -43,14 +43,17 @@ function checkAuthorizationStatus() {
 function processAuthInput() {
     var username = document.getElementById("username").value;
     var password = document.getElementById("password").value;
+    
     // real authentication might use BasicAuth, Digest Auth, or pass off to authentication server which redirects back when authenticated
     // below is a dummy example that just accepts credentials from the form and publishes them out.
     var data = { username: username, password: password }
     FSBL.System.Window.getCurrent().hide();
-
-    //FSBL.Clients.WindowClient.finsembleWindow.hide();
-    //In the real world, you'd get this from a server. Send joe's credentials to a server, and get back entitlements/basic config. For this example, we just accept the credentials.
-    publishCredentials(data)
+    publishCredentials(data);
+    
+    // In the real world, you'd get this from a server. Send joe's credentials to a server, and get back entitlements/basic config.
+    // Example code is provided at the end of this file to illustrate this case. 
+    // Remember to call AuthenticationClient.publishAuthorization() *after* updating completing the update of the Finsemble config 
+    // with FSBL.Clients.ConfigClient.processAndSet(), e.g. getConfig(function () { publishCredentials(data); });
 }
 
 //Pass credentials to the application.
@@ -58,7 +61,7 @@ function publishCredentials(user) {
     FSBL.Clients.AuthenticationClient.publishAuthorization(user.username, user);
 }
 
-//CLose app when the X is clicked.
+//Close app when the X is clicked.
 function quit() {
     FSBL.shutdownApplication();
 }
@@ -72,12 +75,6 @@ $("#FSBL-close").click(quit);
 $("#password")
     .prop("disabled", true)
     .prop("placeholder", "Demo needs no password");
-
-
-
-
-
-
 
 
 
