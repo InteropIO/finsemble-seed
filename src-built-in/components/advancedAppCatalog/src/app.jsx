@@ -30,7 +30,7 @@ export default class AppMarket extends React.Component {
 			tags: [],
 			activeTags: [],
 			activeApp: null,
-			forceSearch: false,
+			//forceSearch: false,
 			installationActionTaken: null
 		};
 		this.bindCorrectContext();
@@ -159,8 +159,9 @@ export default class AppMarket extends React.Component {
 	 */
 	determineActivePage() {
 		let { activeApp, filteredApps, activeTags } = this.state;
-		let forceSearch = this.props.forceSearch;
+		let forceSearch = storeActions.getForceSearch();
 		let page;
+		console.log("ForceSearch is:", forceSearch);
 
 		if (activeApp && !forceSearch) {
 			page = "showcase";
@@ -234,7 +235,8 @@ export default class AppMarket extends React.Component {
 	 * @param {boolean} filtered If true, uses the filtered apps array. Otherwise uses all apps
 	 */
 	compileAddedInfo(filtered) {
-		let { installed, forceSearch } = this.state;
+		let { installed } = this.state;
+		let forceSearch =  storeActions.getForceSearch();
 		let apps;
 		if (filtered || forceSearch) {
 			apps = this.state.filteredApps;

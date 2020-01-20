@@ -89,11 +89,11 @@ function getToolbarStore(done) {
  * Return to the App Catalog home page
  */
 function goHome() {
+	setForceSearch(false);
 	clearFilteredApps();
 	clearApp();
 	clearTags();
-	clearSearchText();
-	setForceSearch(false);
+	clearSearchText();	
 }
 
 /**
@@ -451,6 +451,7 @@ function clearTags() {
  */
 function searchApps(terms, cb = Function.prototype) {
 	data.searchText = terms;
+	setForceSearch(true);
 	getStore().setValue({
 		field: "searchText",
 		value: terms
