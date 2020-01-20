@@ -140,7 +140,7 @@ function filterApps() {
 	} else {
 		appd.search({ text: searchText, tags: activeTags }, (err, data) => {
 			if (err) {
-				Logger.system.error("FDC3 App search failed!: ${err}");
+				Logger.system.error(`FDC3 App search failed!: ${err}`);
 				return;
 			}
 			getStore().setValue({ field: "filteredApps", value: data });
