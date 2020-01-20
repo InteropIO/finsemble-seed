@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>chromeDownload</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" href="chromeDownload.css" />
+    <script src="../../vendor.bundle.js"></script>
+    <script src="chromeDownload.js"></script>
+    <script>
+      function downloadXls() {
+        window.location =
+          "https://file-examples.com/wp-content/uploads/2017/02/file_example_XLS_10.xls";
+      }
+
+      function downloadXlsx() {
+        window.location =
+          "https://file-examples.com/wp-content/uploads/2017/02/file_example_XLSX_10.xlsx";
+      }
+    </script>
+  </head>
+  <body>
+    <h1>chromeDownload</h1>
+    <button onclick="downloadXls()">Download Sample xls file</button>
+    <button onclick="downloadXlsx()">Download Sample xlsx file</button>
+    <h2>FileList</h2>
+    <div id='fileList'></div>
+  </body>
+</html>

@@ -75,6 +75,14 @@
         ],
         "IAC": {
             "serverAddress": "ws://127.0.0.1:3376"
+        },
+        "downloadConfig": {
+            "//autoDownload":"true | false | ['.ext1', 'ext2', 'etc.']",
+            "autoDownload": true,
+            "//downloadDir": "If not provided, download to default 'Download' directory",
+            "downloadDir": "C:\\projects",
+            "//autoOpen": "true | false | ['.ext1', 'ext2', 'etc.']",
+            "autoOpen":  true
         }
     }
 }

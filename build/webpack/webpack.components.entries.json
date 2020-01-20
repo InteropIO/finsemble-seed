@@ -1,1 +1,10 @@
-{}
+{
+    "chromeDownload": {
+        "output": "components/chromeDownload/chromeDownload",
+        "entry": "./src/components/chromeDownload/chromeDownload.js"
+    },
+    "firefoxDownloadManager": {
+        "output": "components/firefoxDownloadManager/firefoxDownloadManager",
+        "entry": "./src/components/firefoxDownloadManager/firefoxDownloadManager.js"
+    }
+}
