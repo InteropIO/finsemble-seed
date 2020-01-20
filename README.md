@@ -2,7 +2,7 @@
 
 # Finsemble Seed Project
 
-To get started with Finsemble, check out the [seed project tutorial](https://www.chartiq.com/tutorials/finsemble-seed-project). This tutorial walks you through setting up the seed project and introduces you to the basic concepts of developing a Finsemble smart desktop.
+To get started with Finsemble, check out the [seed project tutorial](https://www.chartiq.com/tutorials/?slug=finsemble). This tutorial walks you through setting up the seed project and introduces you to the basic concepts of developing a Finsemble smart desktop.
 
 For everything you need to know about Finsemble, including our API documentation, check out the [developer documentation](https://documentation.chartiq.com/finsemble).
 

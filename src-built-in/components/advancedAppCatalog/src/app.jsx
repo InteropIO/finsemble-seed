@@ -159,6 +159,7 @@ export default class AppMarket extends React.Component {
 	 */
 	determineActivePage() {
 		let { activeApp, filteredApps, activeTags } = this.state;
+
 		let forceSearch = storeActions.getForceSearch();
 		let page;
 		console.log("ForceSearch is:", forceSearch);
