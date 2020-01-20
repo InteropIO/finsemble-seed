@@ -162,7 +162,6 @@ export default class AppMarket extends React.Component {
 
 		let forceSearch = storeActions.getForceSearch();
 		let page;
-		console.log("ForceSearch is:", forceSearch);
 
 		if (activeApp && !forceSearch) {
 			page = "showcase";
