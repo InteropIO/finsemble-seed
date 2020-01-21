@@ -107,6 +107,8 @@ function initializeLinker() {
                 windowIdentifier: msg.data.windowIdentifier,
                 channels: updatedChannels
             }
+
+            // Need to invoke the callback function in order for us to be able to toggle the linker window again - see LinkerButton.jsx
             msg.sendQueryResponse(null, {});
             res(newLinkerState);
         }
@@ -115,8 +117,9 @@ function initializeLinker() {
         // The default value for isAccessibleLinker is `true`.
         FSBL.Clients.ConfigClient.getValue("finsemble.accessibleLinker", (err: any, value: boolean) => {
             if (err) {
+                console.error(`Error getting accessibleLinker value: ${err}`);
                 /* @early-exit */
-                rej(`Error getting accessibleLinker value: ${err}`);
+                rej(`Error getting accessibleLinker value.`);
             }
             initialLinkerState.isAccessibleLinker = value;
         });
