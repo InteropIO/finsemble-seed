@@ -1,12 +1,4 @@
-import { 
-    TOGGLE_CHANNEL_REQUEST, 
-    TOGGLE_CHANNEL_SUCCESS, 
-    TOGGLE_CHANNEL_FAILURE,
-    LINKER_INIT,
-    LINKER_INIT_SUCCESS,
-    LINKER_CLEANUP,
-    UPDATE_ACTIVE_CHANNELS
-} from "../actionTypes";
+import { actionTypes } from "../fsblUI";
 
 /**
  * Generates the action to pass to the reducer to toggle a certain channel. This will trigger the call to
@@ -16,7 +8,7 @@ import {
  */
 const toggleChannel = (channelID: number) => {
     return {
-        type: TOGGLE_CHANNEL_REQUEST,
+        type: actionTypes.TOGGLE_CHANNEL_REQUEST,
         payload: {
             channelID
         }
@@ -30,7 +22,7 @@ const toggleChannel = (channelID: number) => {
  */
 const init = () => {
     return {
-        type: LINKER_INIT
+        type: actionTypes.LINKER_INIT
     };
 };
 
@@ -40,7 +32,7 @@ const init = () => {
  */
 const cleanUp = () => {
     return {
-        type: LINKER_CLEANUP
+        type: actionTypes.LINKER_CLEANUP
     };
 };
 
@@ -52,7 +44,7 @@ const cleanUp = () => {
  */
 const toggleSuccess = (channelID: number) => {
     return {
-        type: TOGGLE_CHANNEL_SUCCESS,
+        type: actionTypes.TOGGLE_CHANNEL_SUCCESS,
         payload: {
             channelID
         }
@@ -65,7 +57,7 @@ const toggleSuccess = (channelID: number) => {
  */
 const toggleFailure = () => {
     return {
-        type: TOGGLE_CHANNEL_FAILURE
+        type: actionTypes.TOGGLE_CHANNEL_FAILURE
     };
 };
 
@@ -77,7 +69,7 @@ const toggleFailure = () => {
  */
 const initSuccess = (value: object) => {
     return {
-        type: LINKER_INIT_SUCCESS,
+        type: actionTypes.LINKER_INIT_SUCCESS,
         payload: {
             value
         }
@@ -91,7 +83,7 @@ interface channelUpdateReturnObject {
 
 const updateActiveChannels = (value: channelUpdateReturnObject) => {
     return {
-        type: UPDATE_ACTIVE_CHANNELS,
+        type: actionTypes.UPDATE_ACTIVE_CHANNELS,
         payload: {
             updatedActiveChannels: value.channels,
             updatedWindowIdentifier: value.windowIdentifier

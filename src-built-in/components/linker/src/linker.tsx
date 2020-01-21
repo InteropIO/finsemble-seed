@@ -13,13 +13,7 @@ import "../../../../assets/css/finsemble.css";
 import { RootState } from '../../UIAPI/fsblUI';
 import store from '../../UIAPI/store';
 import * as linkerActions from "../../UIAPI/actions/linkerActions";
-
-declare var FSBL: any;
-declare global {
-    interface Window {
-        FSBL: any
-    }
-};
+import { FSBL } from "../../UIAPI/fsblUI";
 
 const LinkerRefactored = () => {
 	const linker = useSelector((state: RootState) => state.linker);
