@@ -329,6 +329,9 @@ function openApp(id) {
 	}
 }
 
+/**
+ * Clear the activeApp in store
+ */
 function clearApp() {
 	getStore().setValue({
 		field: "activeApp",
@@ -336,6 +339,11 @@ function clearApp() {
 	});
 }
 
+/**
+ * Return activeApp from store
+ *
+ * @returns {string} activeApp
+ */
 function getActiveApp() {
 	return data.activeApp;
 }

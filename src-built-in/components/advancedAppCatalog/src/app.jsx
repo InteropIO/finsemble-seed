@@ -140,8 +140,9 @@ export default class AppMarket extends React.Component {
 	}
 
 	/**
-	 * The store has pushed an update to the filtered tags list. This means a user has begun searching or added tags to the filter list
-	 * 
+	 * Force an update. Used to update from store listeners.
+	 *
+	 * @memberof AppMarket
 	 */
 	update() {
 		this.forceUpdate();
@@ -169,9 +170,9 @@ export default class AppMarket extends React.Component {
 	}
 
 	/**
+	 * Returns the activeApp from the Store
 	 *
-	 *
-	 * @returns
+	 * @returns {string} activeApp
 	 * @memberof AppMarket
 	 */
 	getActiveApp() {
@@ -179,9 +180,9 @@ export default class AppMarket extends React.Component {
 	}
 
 	/**
+	 * Checks if we have an activeApp defined
 	 *
-	 *
-	 * @returns
+	 * @returns {boolean}
 	 * @memberof AppMarket
 	 */
 	isActiveApp() {
@@ -189,9 +190,9 @@ export default class AppMarket extends React.Component {
 	}
 
 	/**
+	 * Returns the active tags from the store
 	 *
-	 *
-	 * @returns
+	 * @returns {array} activeTags
 	 * @memberof AppMarket
 	 */
 	getActiveTags() {
@@ -199,9 +200,9 @@ export default class AppMarket extends React.Component {
 	}
 
 	/**
+	 * Returns the filtered list of apps from search
 	 *
-	 *
-	 * @returns
+	 * @returns {object} filteredApps
 	 * @memberof AppMarket
 	 */
 	getFilteredApps() {
