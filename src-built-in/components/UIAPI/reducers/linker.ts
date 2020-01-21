@@ -55,63 +55,75 @@ function initializeLinker() {
     finsembleWindow.addEventListener("shown", showWindow);
     
     let nextChannelId: number = 0;
-    const InitialLinkerState: Linker = Object.assign({}, initialState);
+    const initialLinkerState: Linker = Object.assign({}, initialState);
     const initialChannels: Channels = {};
     const initialNametoId: NameToId = {};
 
-    return new Promise((res, rej) => {
-        FSBL.Clients.LinkerClient.getAllChannels().forEach((channel: Channel) => {
-            initialChannels[nextChannelId] = {
-                id: nextChannelId,
-                name: channel.name,
-                color: channel.color,
-                active: false
-            };
-            initialNametoId[channel.name] = nextChannelId;
-            nextChannelId += 1;
+    // Add the channels user specifies in the config to the linker's initial state
+    const addChanneltoInitialState = (channel: Channel) => {
+        initialChannels[nextChannelId] = {
+            id: nextChannelId,
+            name: channel.name,
+            color: channel.color,
+            active: false
+        };
+        initialNametoId[channel.name] = nextChannelId;
+        nextChannelId = nextChannelId + 1;
+    }
+
+    const updateChannels = (activeChannels: Array<Channel>) => {
+        // get all the active channels' ids on the component that user switches to
+        const activeChannelIds: any[number] = [];
+        activeChannels.forEach((channel: Channel) => {
+            activeChannelIds.push(initialLinkerState.nameToId[channel.name]);
         });
-        InitialLinkerState.channels = initialChannels;
-        InitialLinkerState.nameToId = initialNametoId;
+
+        // Updates the initialLinkerState with the new channel information
+        const updatedChannels: Channels = Object.assign({}, initialLinkerState.channels);
+        activeChannelIds.forEach((channelId: number) => {
+            updatedChannels[channelId].active = true;
+        });
+
+        return updatedChannels;
+    }
+
+    return new Promise((res, rej) => {
+        FSBL.Clients.LinkerClient.getAllChannels().forEach(addChanneltoInitialState);
+        initialLinkerState.channels = initialChannels;
+        initialLinkerState.nameToId = initialNametoId;
+
+        const setActiveChannelsCallback = (err: any, msg: any) => {
+            if (err) {
+                /* @early-exit */
+                return rej(`Failed to add Finsemble.LinkerWindow.SetActiveChannels Responder: ${err}`);
+            }
+            const updatedChannels = updateChannels(msg.data.channels);
+
+            // Update the linker state according to the new channel information
+            store.dispatch(updateActiveChannels(msg.data));
+                        
+            const newLinkerState = {
+                ...initialLinkerState,
+                windowIdentifier: msg.data.windowIdentifier,
+                channels: updatedChannels
+            }
+            msg.sendQueryResponse(null, {});
+            res(newLinkerState);
+        }
+
+        // Check whether the linker is configured to be an accessible linker or not; update the state accordingly.  
+        // The default value for isAccessibleLinker is `true`.
+        FSBL.Clients.ConfigClient.getValue("finsemble.accessibleLinker", (err: any, value: boolean) => {
+            if (err) {
+                /* @early-exit */
+                rej(`Error getting accessibleLinker value: ${err}`);
+            }
+            initialLinkerState.isAccessibleLinker = value;
+        });
 
         // If user switches the linker channel for different components, this function would be invoked. It will dispatch another
         // action to update the linker's state according to the linker setup on the switched component.
-        FSBL.Clients.RouterClient.addResponder("Finsemble.LinkerWindow.SetActiveChannels", function (err: any, msg: any) {
-            if (err) {
-                return rej(`Failed to add Finsemble.LinkerWindow.SetActiveChannels Responder: ${err}`);
-            }
-            const activeChannels = msg.data.channels;
-
-            const activeChannelIds: any[number] = [];
-
-            // get all the active channels' names on the switched component
-            activeChannels.forEach((channel: Channel) => {
-                activeChannelIds.push(InitialLinkerState.nameToId[channel.name]);
-            });
-
-            const updatedChannels: Channels = Object.assign({}, InitialLinkerState.channels);
-            activeChannelIds.forEach((channelId: number) => {
-                updatedChannels[channelId].active = true;
-            });
-
-            InitialLinkerState.windowIdentifier = msg.data.windowIdentifier;
-            FSBL.Clients.Logger.system.log("toggle Linker window");
-            msg.sendQueryResponse(null, {});
-            store.dispatch(updateActiveChannels(msg.data));
-            
-            // Check whether the linker is configured to be an accessible linker or not; update the state accordingly.  
-            // The default value for isAccessibleLinker is `true`.
-            FSBL.Clients.ConfigClient.getValue("finsemble.accessibleLinker", (err: any, value: boolean) => {
-                if (err) {
-                    rej(`Error getting accessibleLinker value: ${err}`);
-                }
-                const newLinkerState = {
-                    ...InitialLinkerState,
-                    channels: updatedChannels,
-                    isAccessibleLinker: value,
-                };
-                res(newLinkerState);
-            });
-        });
+        FSBL.Clients.RouterClient.addResponder("Finsemble.LinkerWindow.SetActiveChannels", setActiveChannelsCallback);
     });
 }
 
