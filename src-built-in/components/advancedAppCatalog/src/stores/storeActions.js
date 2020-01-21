@@ -25,6 +25,7 @@ export default {
 	clearApp,
 	getInstalledApps,
 	getActiveApp,
+	setActiveApp,
 	filterApps,
 	setSearchValue,
 	setForceSearch,
@@ -337,6 +338,18 @@ function clearApp() {
 
 function getActiveApp() {
 	return data.activeApp;
+}
+
+/**
+ * Set the activeApp param in store
+ *
+ * @param {*} app
+ */
+function setActiveApp(app) {
+	getStore().setValue({
+		field: "activeApp",
+		value: app
+	});
 }
 
 /**

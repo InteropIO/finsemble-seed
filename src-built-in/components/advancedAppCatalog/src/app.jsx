@@ -24,20 +24,16 @@ export default class AppMarket extends React.Component {
 		this.state = {
 			apps: [],
 			isLoading: false,
-			filteredApps: [],
 			serverError: false,
 			installed: [],
 			tags: [],
-			activeTags: [],
-			activeApp: null,
-			//forceSearch: false,
 			installationActionTaken: null
 		};
 		this.bindCorrectContext();
 	}
 	bindCorrectContext() {
 		this.addedAppsChanged = this.addedAppsChanged.bind(this);
-		this.filteringApps = this.filteringApps.bind(this);
+		this.update = this.update.bind(this);
 		this.goHome = this.goHome.bind(this);
 		this.addTag = this.addTag.bind(this);
 		this.removeTag = this.removeTag.bind(this);
@@ -49,6 +45,8 @@ export default class AppMarket extends React.Component {
 		this.determineActivePage = this.determineActivePage.bind(this);
 		this.navigateToShowcase = this.navigateToShowcase.bind(this);
 		this.viewApp = this.viewApp.bind(this);
+		this.isActiveApp = this.isActiveApp.bind(this);
+		this.getActiveTags = this.getActiveTags.bind(this);
 	}
 
 	componentWillMount() {
@@ -87,8 +85,8 @@ export default class AppMarket extends React.Component {
 
 	componentDidMount() {
 		getStore().addListener({ field: "appDefinitions" }, this.addedAppsChanged);
-		getStore().addListener({ field: "filteredApps" }, this.filteringApps);
-		getStore().addListener({ field: "activeTags" }, this.filteringApps);
+		getStore().addListener({ field: "filteredApps" }, this.update);
+		getStore().addListener({ field: "activeTags" }, this.update);
 		getStore().addListener({ field: "activeApp" }, this.openAppShowcase);
 		// Get notified when user wants to view an app
 		FSBL.Clients.RouterClient.addListener("viewApp", this.viewApp);
@@ -101,8 +99,8 @@ export default class AppMarket extends React.Component {
 
 	componentWillUnmount() {
 		getStore().removeListener({ field: "appDefinitions" }, this.addedAppsChanged);
-		getStore().removeListener({ field: "filteredApps" }, this.filteringApps);
-		getStore().removeListener({ field: "activeTags" }, this.filteringApps);
+		getStore().removeListener({ field: "filteredApps" }, this.update);
+		getStore().removeListener({ field: "activeTags" }, this.update);
 		getStore().removeListener({ field: "activeApp" }, this.openAppShowcase);
 		// Get notified when user wants to view an app
 		FSBL.Clients.RouterClient.removeListener("viewApp", this.viewApp);
@@ -143,24 +141,20 @@ export default class AppMarket extends React.Component {
 
 	/**
 	 * The store has pushed an update to the filtered tags list. This means a user has begun searching or added tags to the filter list
+	 * 
 	 */
-	filteringApps() {
-		const { activeApp } = this.state;
-		const filteredApps = storeActions.getFilteredApps();
-		const activeTags = storeActions.getActiveTags();
-		this.setState({
-			filteredApps,
-			activeTags,
-			activeApp: (filteredApps.length && activeTags.length) ? null : activeApp
-		});
+	update() {
+		this.forceUpdate();
 	}
+
 	/**
 	 * Determines the apps page based on the state of the activeTags, search text, etc
 	 */
 	determineActivePage() {
-		let { activeApp, filteredApps, activeTags } = this.state;
-
-		let forceSearch = storeActions.getForceSearch();
+		const activeTags = this.getActiveTags();
+		const filteredApps = this.getFilteredApps();
+		const activeApp = this.getActiveApp();
+		const forceSearch = storeActions.getForceSearch();
 		let page;
 
 		if (activeApp && !forceSearch) {
@@ -173,6 +167,47 @@ export default class AppMarket extends React.Component {
 
 		return page;
 	}
+
+	/**
+	 *
+	 *
+	 * @returns
+	 * @memberof AppMarket
+	 */
+	getActiveApp() {
+		return storeActions.getActiveApp();
+	}
+
+	/**
+	 *
+	 *
+	 * @returns
+	 * @memberof AppMarket
+	 */
+	isActiveApp() {
+		return storeActions.getActiveApp() !== null;
+	}
+
+	/**
+	 *
+	 *
+	 * @returns
+	 * @memberof AppMarket
+	 */
+	getActiveTags() {
+		return storeActions.getActiveTags();
+	}
+
+	/**
+	 *
+	 *
+	 * @returns
+	 * @memberof AppMarket
+	 */
+	getFilteredApps() {
+		return storeActions.getFilteredApps();
+	}
+
 	/**
 	 * Calls the store to add a tag to the activeTag list. Also updates the app view to switch to the AppResults page (since adding a tag implies filtering has begun)
 	 * @param {string} tag The name of the tag to add
@@ -205,8 +240,7 @@ export default class AppMarket extends React.Component {
 	 */
 	stopShowingInstalledNotification() {
 		this.setState({
-			installationActionTaken: null,
-			activeApp: storeActions.getActiveApp()
+			installationActionTaken: null
 		});
 	}
 
@@ -219,14 +253,14 @@ export default class AppMarket extends React.Component {
 	 */
 	openAppShowcase() {
 		let app = storeActions.getActiveApp();
+		
 		if (app !== null) {
 			storeActions.clearTags();
 			storeActions.clearFilteredApps();
 			storeActions.setForceSearch(false);
-			this.setState({
-				activeApp: app
-			});
 		}
+
+		this.forceUpdate();
 	}
 	/**
 	 * Compiles a list of apps that are installed from the information received back from appd
@@ -239,7 +273,7 @@ export default class AppMarket extends React.Component {
 		let forceSearch =  storeActions.getForceSearch();
 		let apps;
 		if (filtered || forceSearch) {
-			apps = this.state.filteredApps;
+			apps = storeActions.getFilteredApps();
 		} else {
 			apps = this.state.apps;
 		}
@@ -255,7 +289,8 @@ export default class AppMarket extends React.Component {
 		});
 	}
 	getPageContents() {
-		let { filteredApps, activeTags } = this.state;
+		let filteredApps = this.getFilteredApps();
+		let activeTags = this.getActiveTags();
 		let activePage = this.determineActivePage();
 		let apps = this.compileAddedInfo((filteredApps.length > 0));
 		//Force default case if activepage isn't search and apps.length is 0
@@ -271,7 +306,7 @@ export default class AppMarket extends React.Component {
 				);
 			case "showcase":
 				let app = this.compileAddedInfo(false).find((app) => {
-					return this.state.activeApp === app.appId;
+					return this.getActiveApp() === app.appId;
 				});
 				return (
 					<AppShowcase app={app} addApp={this.addApp} removeApp={this.removeApp} addTag={this.addTag} />
@@ -284,7 +319,7 @@ export default class AppMarket extends React.Component {
 	}
 	render() {
 
-		let { tags, activeTags } = this.state;
+		let { tags } = this.state;
 		let page = this.determineActivePage();
 		let pageContents = this.getPageContents();
 
@@ -310,9 +345,9 @@ export default class AppMarket extends React.Component {
 				}
 				{this.state.apps.length > 0 &&
 					<div>
-						<SearchBar hidden={page === "showcase" ? true : false} backButton={page !== "home"} tags={tags} activeTags={activeTags} tagSelected={this.addTag}
+						<SearchBar hidden={page === "showcase" ? true : false} backButton={page !== "home"} tags={tags} activeTags={this.getActiveTags} tagSelected={this.addTag}
 						removeTag={this.removeTag} goHome={this.goHome} installationActionTaken={this.state.installationActionTaken}
-						search={this.changeSearch} isViewingApp={this.state.activeApp !== null} />
+						search={this.changeSearch} isViewingApp={this.isActiveApp} />
 						<div className="market_content">
 							{pageContents}
 						</div>
