@@ -10,7 +10,7 @@ import * as ReactDOM from "react-dom";
 import "./css/linkerWindow.css";
 import "../../../../assets/css/font-finance.css";
 import "../../../../assets/css/finsemble.css";
-import { RootState } from '../../UIAPI/types';
+import { RootState } from '../../UIAPI/fsblUI';
 import store from '../../UIAPI/store';
 import * as linkerActions from "../../UIAPI/actions/linkerActions";
 

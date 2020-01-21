@@ -10,7 +10,7 @@ import {
 } from "../actionTypes";
 import store from '../store';
 import { toggleSuccess, toggleFailure, initSuccess, updateActiveChannels } from '../actions/linkerActions';
-import { Channel, Channels, NameToId, Linker, LinkerAction } from '../types';
+import { Channel, Channels, NameToId, Linker, LinkerAction } from '../fsblUI';
 
 declare var FSBL: any;
 declare var finsembleWindow: any;
@@ -139,7 +139,7 @@ function cleanUpAfterComponentUnmount() {
 const linker = (state = initialState, action: LinkerAction) => {
     const { type, payload } = action;
     switch (type) {
-        case LINKER_INIT:            
+        case LINKER_INIT:
             return loop(state, Cmd.run(initializeLinker, {
                 successActionCreator: initSuccess,
             }));
