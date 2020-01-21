@@ -37,7 +37,7 @@ const LinkerRefactored = () => {
 	}, []);
 
 	const allChannels = Object.values(linker.channels);
-    const channelsElements = allChannels.map(({color, name, active, id}) => {
+    const channelElements = allChannels.map(({color, name, active, id}) => {
         const groupClass = `linkerGroup ${color}`;
         const style = {
             backgroundColor: color,
@@ -55,7 +55,7 @@ const LinkerRefactored = () => {
 
     return (
         <div className="linkerContainer">
-            {channelsElements}
+            {channelElements}
         </div>
     );
 }
