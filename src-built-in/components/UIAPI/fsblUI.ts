@@ -1,6 +1,14 @@
 // Type definitions for Finsemble UI API 1.0.0
 
-
+export namespace actionTypes {
+    export const TOGGLE_CHANNEL_REQUEST = "TOGGLE_CHANNEL_REQUEST";
+    export const TOGGLE_CHANNEL_SUCCESS = "TOGGLE_CHANNEL_SUCCESS";
+    export const TOGGLE_CHANNEL_FAILURE = "TOGGLE_CHANNEL_FAILURE";
+    export const LINKER_INIT = "LINKER_INIT";
+    export const LINKER_INIT_SUCCESS = "LINKER_INIT_SUCCESS";
+    export const LINKER_CLEANUP = "LINKER_CLEANUP";
+    export const UPDATE_ACTIVE_CHANNELS = "UPDATE_ACTIVE_CHANNELS";
+}
 
 /**
  * The root state of the finsemble UI API. It is composed of different states from
