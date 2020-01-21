@@ -4,7 +4,7 @@ You may wish to spawn a group of components in a predetermined layout. This is r
 ![](./spawn_component_group_demo.gif)
 
 ### Spawning a group ###
-[spawnComponentGroup.js](./spawnComponentGroup.js) provides a utility function that allows you to spawn a group of components and group them, by providing an array of Objects with `componentType` and `spawnOptions` values that define each of the components. The group itself can be spawned at a particular location, from which each component's position is calculated. 
+[spawnComponentGroup.js](./spawnComponentGroup.js) provides a utility function that allows you to spawn a group of components, group them and add them to a common linker channel. This is achieved by providing an array of Objects with `componentType` and `spawnOptions` values that define each of the components. The group itself can be spawned at a particular location, from which each component's position is calculated. By additionally providing a linkerGroup or 'auto' (to automatically select a free group) the components are all added to the same linker gorup on spawn.
 
 Example usage:
 ```
@@ -21,7 +21,7 @@ let toSpawn = [{
 		"spawnOptions": {"top": 400, "left": 0, "height": 400, "width": 800, "data": {})
 		}
 	}];
-let promise = spawnComponentGroup(toSpawn, 200, 200); 
+let promise = spawnComponentGroup(toSpawn, 200, 200, 'auto'); 
 ```
 
 The `spawnComponentGroup()` function can be integrated into your project in a variety of ways, for example, call it from a service or other component when you need to spawn your group. 

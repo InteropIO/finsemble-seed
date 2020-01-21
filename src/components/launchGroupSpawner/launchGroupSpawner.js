@@ -9,8 +9,9 @@ const FSBLReady = () => {
 			let spawnerConfig = FSBL.Clients.WindowClient.options.customData;
 			let groupTop = spawnerConfig.window.top;
 			let groupLeft = spawnerConfig.window.left;
+			let linkerGroup = spawnerConfig.window.data.linkerGroup;
 
-			spawnComponentGroup(spawnerData.toSpawn, groupTop, groupLeft);
+			spawnComponentGroup(spawnerData.toSpawn, groupTop, groupLeft, linkerGroup);
 		} else {
 			FSBL.Logger.error("Received no spawner data, spawnerData: ", spawnerData);
 		}
