@@ -152,10 +152,14 @@ const linker = (state = initialState, action: LinkerAction) => {
                 processingRequest: true
             };
 
+            const targetChannelName = newState_request.channels[payload.channelID].name,
+                  targetChannelActive = newState_request.channels[payload.channelID].active,
+                  targetWindowIdentifier = newState_request.windowIdentifier;
+
             const cmd = Cmd.run(linkChannel, {
                 successActionCreator: () => toggleSuccess(payload.channelID),
                 failActionCreator: () => toggleFailure(),
-                args: [newState_request.channels[payload.channelID].name, newState_request.channels[payload.channelID].active, newState_request.windowIdentifier]
+                args: [targetChannelName, targetChannelActive, targetWindowIdentifier]
             });
 
             return loop(newState_request, cmd);
