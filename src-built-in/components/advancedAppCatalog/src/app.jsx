@@ -256,9 +256,9 @@ export default class AppMarket extends React.Component {
 		let app = storeActions.getActiveApp();
 		
 		if (app !== null) {
+			storeActions.setForceSearch(false);
 			storeActions.clearTags();
 			storeActions.clearFilteredApps();
-			storeActions.setForceSearch(false);
 		}
 
 		this.forceUpdate();
