@@ -290,7 +290,7 @@ export default class AppMarket extends React.Component {
 		});
 	}
 	getPageContents() {
-		let filteredApps = this.getFilteredApps();
+		const filteredApps = this.getFilteredApps();
 		let activeTags = this.getActiveTags();
 		let activePage = this.determineActivePage();
 		let apps = this.compileAddedInfo((filteredApps.length > 0));
