@@ -1,4 +1,4 @@
-import { actionTypes } from "../fsblUI";
+import { ActionTypes } from "../fsblUI";
 
 /**
  * Generates the action to pass to the reducer to toggle a certain channel. This will trigger the call to
@@ -8,7 +8,7 @@ import { actionTypes } from "../fsblUI";
  */
 const toggleChannel = (channelID: number) => {
     return {
-        type: actionTypes.TOGGLE_CHANNEL_REQUEST,
+        type: ActionTypes.TOGGLE_CHANNEL_REQUEST,
         payload: {
             channelID
         }
@@ -22,7 +22,7 @@ const toggleChannel = (channelID: number) => {
  */
 const init = () => {
     return {
-        type: actionTypes.LINKER_INIT
+        type: ActionTypes.LINKER_INIT
     };
 };
 
@@ -32,7 +32,7 @@ const init = () => {
  */
 const cleanUp = () => {
     return {
-        type: actionTypes.LINKER_CLEANUP
+        type: ActionTypes.LINKER_CLEANUP
     };
 };
 
@@ -44,7 +44,7 @@ const cleanUp = () => {
  */
 const toggleSuccess = (channelID: number) => {
     return {
-        type: actionTypes.TOGGLE_CHANNEL_SUCCESS,
+        type: ActionTypes.TOGGLE_CHANNEL_SUCCESS,
         payload: {
             channelID
         }
@@ -57,7 +57,7 @@ const toggleSuccess = (channelID: number) => {
  */
 const toggleFailure = () => {
     return {
-        type: actionTypes.TOGGLE_CHANNEL_FAILURE
+        type: ActionTypes.TOGGLE_CHANNEL_FAILURE
     };
 };
 
@@ -69,7 +69,7 @@ const toggleFailure = () => {
  */
 const initSuccess = (value: object) => {
     return {
-        type: actionTypes.LINKER_INIT_SUCCESS,
+        type: ActionTypes.LINKER_INIT_SUCCESS,
         payload: {
             value
         }
@@ -83,7 +83,7 @@ interface channelUpdateReturnObject {
 
 const updateActiveChannels = (value: channelUpdateReturnObject) => {
     return {
-        type: actionTypes.UPDATE_ACTIVE_CHANNELS,
+        type: ActionTypes.UPDATE_ACTIVE_CHANNELS,
         payload: {
             updatedActiveChannels: value.channels,
             updatedWindowIdentifier: value.windowIdentifier

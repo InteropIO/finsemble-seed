@@ -1,7 +1,7 @@
 import { loop, Cmd } from 'redux-loop';
 import store from '../store';
 import { toggleSuccess, toggleFailure, initSuccess, updateActiveChannels } from '../actions/linkerActions';
-import { Channel, Channels, NameToId, Linker, LinkerAction, actionTypes } from '../fsblUI';
+import { Channel, Channels, NameToId, Linker, LinkerAction, ActionTypes } from '../fsblUI';
 
 declare const FSBL: any;
 declare const finsembleWindow: any;
@@ -130,14 +130,14 @@ function cleanUpAfterComponentUnmount() {
 const linker = (state = initialState, action: LinkerAction) => {
     const { type, payload } = action;
     switch (type) {
-        case actionTypes.LINKER_INIT:
+        case ActionTypes.LINKER_INIT:
             return loop(state, Cmd.run(initializeLinker, {
                 successActionCreator: initSuccess,
             }));
-        case actionTypes.LINKER_INIT_SUCCESS:
+        case ActionTypes.LINKER_INIT_SUCCESS:
             const newState = payload.value;
             return loop(newState, Cmd.run(() => FSBL.Clients.WindowClient.fitToDOM()));
-        case actionTypes.TOGGLE_CHANNEL_REQUEST:
+        case ActionTypes.TOGGLE_CHANNEL_REQUEST:
             const newState_request: Linker = {
                 ...state,
                 processingRequest: true
@@ -154,7 +154,7 @@ const linker = (state = initialState, action: LinkerAction) => {
             });
 
             return loop(newState_request, cmd);
-        case actionTypes.TOGGLE_CHANNEL_SUCCESS:
+        case ActionTypes.TOGGLE_CHANNEL_SUCCESS:
             // Updates the channel's 'active' field
             const newState_success = {
                 ...state,
@@ -168,13 +168,13 @@ const linker = (state = initialState, action: LinkerAction) => {
                 }
             };
             return newState_success;
-        case actionTypes.TOGGLE_CHANNEL_FAILURE:
+        case ActionTypes.TOGGLE_CHANNEL_FAILURE:
             const newState_failure = {
                 ...state,
                 processingRequest: false
             };
             return newState_failure;
-        case actionTypes.UPDATE_ACTIVE_CHANNELS:
+        case ActionTypes.UPDATE_ACTIVE_CHANNELS:
             // Update the channels' 'active' field and the windowIdentifier state information
             // This is triggered by user switching linker window for different components.
             const { updatedActiveChannels, updatedWindowIdentifier } = payload;
@@ -197,7 +197,7 @@ const linker = (state = initialState, action: LinkerAction) => {
                 windowIdentifier: updatedWindowIdentifier
             };
             return newUpdateChannelState;
-        case actionTypes.LINKER_CLEANUP:
+        case ActionTypes.LINKER_CLEANUP:
             return loop(state, Cmd.run(cleanUpAfterComponentUnmount));
         default:
             return state;
