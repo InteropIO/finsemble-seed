@@ -2,7 +2,9 @@ import { loop, Cmd } from 'redux-loop';
 import store from '../store';
 import { toggleSuccess, toggleFailure, initSuccess, updateActiveChannels } from '../actions/linkerActions';
 import { Channel, Channels, NameToId, Linker, LinkerAction, actionTypes } from '../fsblUI';
-import { FSBL, finsembleWindow } from '../fsblUI'
+
+declare const FSBL: any;
+declare const finsembleWindow: any;
 
 // The linker state before we initialize the linker. The initialize linker function will make calls to the LinkerClient and 
 // fill in the state with the relevant linker information.

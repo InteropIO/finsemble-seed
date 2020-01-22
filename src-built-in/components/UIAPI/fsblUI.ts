@@ -1,15 +1,5 @@
 // Type definitions for Finsemble UI API 1.0.0
 
-
- /** All global variables */
- export var FSBL: any;
- export var finsembleWindow: any;
-declare global {
-    interface Window {
-        FSBL: any
-    }
-};
-
  /** All available action types */
  export const actionTypes = {
     TOGGLE_CHANNEL_REQUEST: "TOGGLE_CHANNEL_REQUEST",
