@@ -291,7 +291,7 @@ export default class AppMarket extends React.Component {
 	}
 	getPageContents() {
 		const filteredApps = this.getFilteredApps();
-		let activeTags = this.getActiveTags();
+		const activeTags = this.getActiveTags();
 		let activePage = this.determineActivePage();
 		let apps = this.compileAddedInfo((filteredApps.length > 0));
 		//Force default case if activepage isn't search and apps.length is 0
