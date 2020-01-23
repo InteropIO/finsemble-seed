@@ -55,11 +55,12 @@ export default class AutoHide extends React.Component {
 	}
 
 	autoHideTimer() {
-		headerTimeout = setTimeout(function () {
-			FSBL.Clients.Logger.system.debug("hiding header...");
-			let header = document.getElementsByClassName("fsbl-header")[0];
-			header.style.opacity = 0;
-		}, autoHideConfig.timeout);
+			if (headerTimeout) {clearTimeout(headerTimeout);}
+			headerTimeout = setTimeout(function () {
+				FSBL.Clients.Logger.system.debug("hiding header...");
+				let header = document.getElementsByClassName("fsbl-header")[0];
+				header.style.opacity = 0;
+			}, autoHideConfig.timeout);
 	}
 
 	autoHideMouseMoveHandler( event ) {
