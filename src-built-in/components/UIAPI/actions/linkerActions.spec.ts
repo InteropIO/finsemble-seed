@@ -1,13 +1,5 @@
 import * as actions from './linkerActions';
-import {
-    TOGGLE_CHANNEL_REQUEST,
-    TOGGLE_CHANNEL_SUCCESS,
-    TOGGLE_CHANNEL_FAILURE,
-    LINKER_INIT,
-    LINKER_INIT_SUCCESS,
-    LINKER_CLEANUP,
-    UPDATE_ACTIVE_CHANNELS
-} from "../actionTypes";
+import { ActionTypes } from "../fsblUI";
 import { assert } from 'chai';
 /**
  * Make sure that the right action creator is called 
@@ -16,7 +8,7 @@ import { assert } from 'chai';
 describe('linker actions', () => {
     it('should create a toggle channel request action', () => {
         const action = {
-            type: TOGGLE_CHANNEL_REQUEST,
+            type: ActionTypes.TOGGLE_CHANNEL_REQUEST,
             payload: {
                 channelID: 1
             }
@@ -25,7 +17,7 @@ describe('linker actions', () => {
     });
     it('should create a toggle channel success action', () => {
         const action = {
-            type: TOGGLE_CHANNEL_SUCCESS,
+            type: ActionTypes.TOGGLE_CHANNEL_SUCCESS,
             payload: {
                 channelID: 1
             }
@@ -34,20 +26,20 @@ describe('linker actions', () => {
     });
     it('should create a toggle channel failure action', () => {
         const action = {
-            type: TOGGLE_CHANNEL_FAILURE
+            type: ActionTypes.TOGGLE_CHANNEL_FAILURE
         };
         assert.deepEqual(actions.toggleFailure(), action);
     });
     it('should create an init action', () => {
         const action = {
-            type: LINKER_INIT,
+            type: ActionTypes.LINKER_INIT,
         };
         assert.deepEqual(actions.init(), action);
     });
     it('should create an init success action', () => {
         const args = {};
         const action = {
-            type: LINKER_INIT_SUCCESS,
+            type: ActionTypes.LINKER_INIT_SUCCESS,
             payload: {
                 value: args
             }
@@ -56,7 +48,7 @@ describe('linker actions', () => {
     });
     it('should create a linker cleanup action', () => {
         const action = {
-            type: LINKER_CLEANUP,
+            type: ActionTypes.LINKER_CLEANUP,
         };
         assert.deepEqual(actions.cleanUp(), action);
     });
@@ -66,7 +58,7 @@ describe('linker actions', () => {
             windowIdentifier: {}
         };
         const action = {
-            type: UPDATE_ACTIVE_CHANNELS,
+            type: ActionTypes.UPDATE_ACTIVE_CHANNELS,
             payload: {
                 updatedActiveChannels: args.channels,
                 updatedWindowIdentifier: args.windowIdentifier

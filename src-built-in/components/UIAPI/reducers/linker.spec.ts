@@ -8,6 +8,7 @@
 import reducer, { initialState } from './linker';
 import * as actions from '../actions/linkerActions';
 import { assert } from 'chai';
+import 'mocha';
 
 /**
  * Creates a dummy channel object for testing purposes
@@ -30,14 +31,82 @@ describe('Linker reducer', () => {
         const output = reducer(undefined, action);
         assert.deepEqual(output, initialState);
     });
-    /* Mody: The following tests are pending because
-    there are many internal functions that aren't
-    referencable which makes it difficult to stub/spy.
-    */
-    it('Should handle init');
-    it('Should handle init success');
-    it('Should handle linker cleanup');
-    it('Should handle toggle channel request');
+    
+    // Init request shouldn't change any state value
+    it('Should handle init', () => {
+        const output = reducer(initialState, actions.init());
+        assert.deepEqual(initialState, output[0]);
+    });
+
+    it('Should handle init success', () => {
+        const expectedOutput = {
+            channels: {
+                20: channel(20, false, 'green'),
+                30: channel(30, false, 'red'),
+            },
+            nameToId: {
+                'green': 20,
+                'red': 30
+            },
+            isAccessibleLinker: true,
+            windowIdentifier: {
+                windowName: "welcome component"
+            },
+            processingRequest: false
+        };
+        const initSuccessAction = actions.initSuccess({
+            channels: {
+                20: channel(20, false, 'green'),
+                30: channel(30, false, 'red'),
+            },
+            nameToId: {
+                'green': 20,
+                'red': 30
+            },
+            isAccessibleLinker: true,
+            windowIdentifier: {
+                windowName: "welcome component"
+            },
+            processingRequest: false
+        });
+        const output = reducer(initialState, initSuccessAction);
+        assert.deepEqual(expectedOutput, output[0]);
+    });
+
+    // Cleaning up shouldn't change the state
+    it('Should handle linker cleanup', () => {
+        const output = reducer(initialState, actions.cleanUp());
+        assert.deepEqual(initialState, output[0]);
+    });
+
+    // Toggle channel request set the "prosessingRequest" property on the linker state to "true"
+    it('Should handle toggle channel request', () => {
+        const expectedInput = {
+            channels: {
+                2: channel(2, false, 'green'),
+            },
+            nameToId: {
+                "green": 2
+            },
+            isAccessibleLinker: true,
+            windowIdentifier: {},
+            processingRequest: false
+        }
+        const expectedOutput = {
+            channels: {
+                2: channel(2, false, 'green'),
+            },
+            nameToId: {
+                "green": 2
+            },
+            isAccessibleLinker: true,
+            windowIdentifier: {},
+            processingRequest: true
+        }
+        const output = reducer(expectedInput, actions.toggleChannel(2));
+        assert.deepEqual(expectedOutput, output[0]);
+    });
+
     it('Should handle update active channels', () => {
         const state = {
             ...initialState,
