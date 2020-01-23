@@ -1,9 +1,7 @@
 
 
 import React from "react";
-import ReactDOM from "react-dom";
 import Tab from "./tab";
-import { FinsembleDnDContext, FinsembleDroppable } from '@chartiq/finsemble-react-controls';
 import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
 import Logo from "./logo";
 import Title from "../../../common/windowTitle"
@@ -116,22 +114,33 @@ export default class TabRegion extends React.Component {
 	 * @memberof windowTitleBar
 	 */
     stopDrag(e) {
-        FSBL.Clients.Logger.system.debug("Tab drag stop");
-        //@sidd can you document this?
+        FSBL.Clients.Logger.system.debug("Tab stopDrag.");
         this.mousePositionOnDragEnd = {
             x: e.nativeEvent.screenX,
             y: e.nativeEvent.screenY
         }
-        let boundingRect = this.state.boundingBox;
-        if (!FSBL.Clients.WindowClient.isPointInBox(this.mousePositionOnDragEnd, FSBL.Clients.WindowClient.options)) {
-            setTimeout(() => {
-                FSBL.Clients.WindowClient.stopTilingOrTabbing({ mousePosition: this.mousePositionOnDragEnd });
-            }, 50);
-            this.setState({
-                iAmDragging: false
-            });
-            this.onWindowResize();
-        }
+        
+        const boundingBox = this.state.boundingBox;
+        FSBL.Clients.WindowClient.getBounds(
+            (err, bounds) => {
+                // We ONLY want to know if we're in the tab region!
+                const tabRegion = {
+                    top: boundingBox.top + bounds.top,
+                    bottom: boundingBox.bottom + bounds.top,
+                    left: boundingBox.left + bounds.left,
+                    right: boundingBox.right + bounds.left 
+                };
+                if (!FSBL.Clients.WindowClient.isPointInBox(this.mousePositionOnDragEnd, tabRegion)) {
+                    setTimeout(() => {
+                        FSBL.Clients.WindowClient.stopTilingOrTabbing({ mousePosition: this.mousePositionOnDragEnd });
+                    }, 50);
+                    this.setState({
+                        iAmDragging: false
+                    });
+                    this.onWindowResize();
+                }
+            }
+        );
     }
 
     /**
@@ -162,10 +171,18 @@ export default class TabRegion extends React.Component {
     drop(e) {
         e.preventDefault();
         e.stopPropagation();
-
         FSBL.Clients.Logger.system.debug("Tab drag drop.");
-        let identifier = this.extractWindowIdentifier(e);
-        if (!identifier) return; // the dropped item is not a tab
+        const identifier = this.extractWindowIdentifier(e);
+        // the dropped item is not a tab
+        if (!identifier) return; 
+        // If we only have single tab and its the activeTab
+        // and if the dropped window's name is the same as 
+        // active tab's windowName we cancel tabbing.
+        if (
+            this.state.tabs.length === 1
+            && identifier.windowName === this.state.activeTab.windowName) {
+            return this.cancelTabbing();
+        }
         FSBL.Clients.WindowClient.stopTilingOrTabbing({ allowDropOnSelf: true, action: "tabbing" }, () => {
             FSBL.Clients.RouterClient.transmit("tabbingDragEnd", { success: true });
             if (identifier && identifier.windowName) {
