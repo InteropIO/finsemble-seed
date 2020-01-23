@@ -21,6 +21,7 @@ import Maximize from "./components/right/MaximizeButton.jsx";
 import Close from "./components/right/CloseButton.jsx";
 import BringSuiteToFront from "./components/right/BringSuiteToFront.jsx";
 import AlwaysOnTop from "./components/right/AlwaysOnTop.jsx";
+import AutoHide from "./components/right/AutoHide.jsx";
 import TabRegion from './components/center/TabRegion'
 import "../../../../assets/css/finsemble.css";
 
@@ -56,6 +57,7 @@ class WindowTitleBar extends React.Component {
 			showShareButton: windowTitleBarStore.getValue({ field: "Sharer.emitterEnabled" }),
 			isTopRight: windowTitleBarStore.getValue({ field: "isTopRight" }),
 			alwaysOnTopButton: windowTitleBarStore.getValue({ field: "AlwaysOnTop.show" }),
+			autoHideButton: windowTitleBarStore.getValue({ field: "AutoHide.show" }),
 			tabs: [activeIdentifier], //array of tabs for this window
 			showTabs: windowTitleBarStore.getValue({ field: "showTabs" }),
 			hackScrollbar: windowTitleBarStore.getValue({ field: "hackScrollbar" }),
@@ -321,6 +323,9 @@ class WindowTitleBar extends React.Component {
 	onAlwaysOnTopChanged(err, response) {
 		this.setState({ alwaysOnTopButton: response.value });
 	}
+	onAutoHideChanged(err, response) {
+		this.setState({ autoHideButton: response.value });
+	}
 	onStoreChanged(newState) {
 		this.setState(newState);
 	}
@@ -404,6 +409,7 @@ class WindowTitleBar extends React.Component {
 				</div>
 				<div className={rightWrapperClasses} ref={this.setToolbarRight}>
 					{this.state.alwaysOnTopButton && showMinimizeIcon ? <AlwaysOnTop /> : null}
+					{this.state.autoHideButton && showMinimizeIcon ? <AutoHide /> : null}
 					<BringSuiteToFront />
 					{this.state.minButton && showMinimizeIcon ? <Minimize /> : null}
 					{showDockingIcon ? <DockingButton /> : null}
