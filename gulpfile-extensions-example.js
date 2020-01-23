@@ -149,7 +149,7 @@ module.exports = taskMethods => {
 	/*
 		taskMethods.launchApplication = done => {
 			// Local manifest is used to read the UUID for launching the Finsemble application
-			const manifestLocal = require("./configs/openfin/manifest-local.json");
+			const manifestLocal = require("./configs/application/manifest-local.json");
 			const { launch, connect } = require("hadouken-js-adapter");
 			const ON_DEATH = require("death")({ debug: false });
 			const fs = require("fs");
@@ -206,7 +206,7 @@ module.exports = taskMethods => {
 
 			const manifestUrl = taskMethods.startupConfig[env.NODE_ENV].serverConfig;
 
-			// Get the UUID from the *manifestLocal* manifest file (./configs/openfin/manifest-local.json).
+			// Get the UUID from the *manifestLocal* manifest file (./configs/application/manifest-local.json).
 			// If you're testing against any NODE_Env other than development, make sure the UUID in your manifest is the same as in manifest-local (i.e. "uuid": "Finsemble" )
 			const uuid = manifestLocal.startup_app.uuid;
 

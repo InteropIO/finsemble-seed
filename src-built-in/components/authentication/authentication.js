@@ -124,7 +124,8 @@ function getConfig(cb) {
 
 
 function displayErrorMessage() {
-    fin.desktop.Window.getCurrent().show();
+    // Test if finsembleWindow is available here.
+    FSBL.System.Window.getCurrent().show();
     var ERROR_MESSAGE = $('.fsbl-input-error-message');
     var INPUTS = $('.fsbl-auth-input');
     const INPUT_ERROR_CLASS = 'fsbl-input-error';

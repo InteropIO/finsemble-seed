@@ -74,7 +74,6 @@ export default class Workspaces extends React.Component {
 			templateName: '',
 			workspaceBeingEdited: '',
 			focusedWorkspaceComponentList: [],
-			isElectron: (fin.container && fin.container === "Electron"),
 			initialAlwaysOnTop: finsembleWindow.windowOptions.alwaysOnTop,
 			alwaysOnTop: finsembleWindow.windowOptions.alwaysOnTop
 		};
@@ -119,7 +118,7 @@ export default class Workspaces extends React.Component {
 		//The initialAlwaysOnTop check is to prevent making a component be alwaysOnTop when the
 		//client may have set it to alwaysOnTop:false in the config. If that's the case, it should
 		//never set its alwaysOnTop to true and should always remain unchanged
-		if (this.state.initialAlwaysOnTop && this.state.isElectron) {
+		if (this.state.initialAlwaysOnTop && FSBL.System.container === "Electron") {
 			FSBL.Clients.WindowClient.setAlwaysOnTop(alwaysOnTop, () => {
 				this.setState({
 					alwaysOnTop: alwaysOnTop
@@ -478,18 +477,13 @@ export default class Workspaces extends React.Component {
 		let addTooltip = "Add new workspace",
 			importTooltip = "Import workspace from file",
 			exportTooltip = allowExport ? "Export selected workspace" : "No workspace selected",
-			renameTooltip = allowRename ? "Rename" : "No workspace selected";
+			renameTooltip = allowRename ? "Rename" : "Cannot Edit";
 
 		return <div>
 			<input style={{ display: 'none' }} type="file" id="file-input" />
 			<div className="complex-menu-content-row">
 				<div className="workspace-list-header-row">
-					<div className="content-section-header workspace-list-header">
-						<div className="content-section-info">
-							Drag to reorder
-					</div>
-					</div>
-
+					<div className="content-section-header workspace-list-header"></div>
 				</div>
 				<div className="content-section-wrapper">
 					<div ref="WorkspaceList" className="workspace-list">
@@ -524,16 +518,17 @@ export default class Workspaces extends React.Component {
 									}
 									return (
 										<FinsembleDraggable onClick={() => this.setFocusedWorkspace(workspace.name)} wrapperClass={classNames} draggableId={workspace.name} key={i} index={i}>
-											<div className="workspace-name">
+											<div className="ff-adp-hamburger"></div>
+											<div className="workspace-name" title={workspace.name}>
 												{workspace.name}
 											</div>
 											<div className="individual-workspace-actions">
 												{workspace.name !== FSBL.Clients.WorkspaceClient.activeWorkspace.name &&
 												<div title={renameTooltip} className={renameButtonClasses} onMouseDown={this.handleButtonClicks} onClick={
-													allowRename ? () => { this.startEditingWorkspace(workspace.name) } : Function.prototype}><i className="ff-edit"></i></div>}
+													allowRename ? () => { this.startEditingWorkspace(workspace.name) } : Function.prototype}><i className="ff-adp-edit"></i></div>}
 												{workspace.name !== FSBL.Clients.WorkspaceClient.activeWorkspace.name &&
 													<div title={deleteTooltip} className={deleteButtonClasses} onMouseDown={this.handleButtonClicks} onClick={
-														allowDelete ? () => { this.deleteWorkspace(workspace.name); } : Function.prototype}><i className="ff-delete"></i></div>}
+														allowDelete ? () => { this.deleteWorkspace(workspace.name); } : Function.prototype}><i className="ff-adp-trash-outline"></i></div>}
 											</div>
 										</FinsembleDraggable>
 									)
@@ -550,7 +545,7 @@ export default class Workspaces extends React.Component {
 							{this.state.focusedWorkspaceComponentList.length === 0 &&
 								"No components."}
 						</div>
-						<div className="workspace-action-buttons">
+						{/* <div className="workspace-action-buttons">
 							<div title={importTooltip} className={importButtonClasses} onMouseDown={this.handleButtonClicks} onClick={allowImport ? this.openFileDialog : Function.prototype}>
 								<i className="workspace-action-button-icon ff-import"></i>
 								<div>Import</div>
@@ -560,7 +555,7 @@ export default class Workspaces extends React.Component {
 								<div>Export</div>
 							</div>
 
-						</div>
+						</div> */}
 					</div>
 				</div>
 				<Checkbox
