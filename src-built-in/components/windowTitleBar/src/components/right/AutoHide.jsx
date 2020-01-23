@@ -7,7 +7,6 @@ import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
 
 //autohide functions and timers
 let headerTimeout = null;
-let suspendAutoHide = false;
 let autohideTimeout = 2000;
 let autohideSavedBodyMargin = null;
 const autoHideDefaultConfig = {
@@ -56,13 +55,12 @@ export default class AutoHide extends React.Component {
 	}
 
 	autoHideTimer() {
-		if (!suspendAutoHide){
+			if (headerTimeout) {clearTimeout(headerTimeout);}
 			headerTimeout = setTimeout(function () {
 				FSBL.Clients.Logger.system.debug("hiding header...");
 				let header = document.getElementsByClassName("fsbl-header")[0];
 				header.style.opacity = 0;
 			}, autoHideConfig.timeout);
-		}
 	}
 
 	autoHideMouseMoveHandler( event ) {
@@ -139,14 +137,14 @@ export default class AutoHide extends React.Component {
 	}
 
 	suspendAutoHide(suspend) {
-		let autoHideEndabled = this.state.autoHide;
+		let autoHideEnabled = this.state.autoHide;
 
-		if (typeof autoHideEndabled === "undefined") {
-			autoHideEndabled = this.getDefaultAutoHide();
+		if (typeof autoHideEnabled === "undefined") {
+			autoHideEnabled = this.getDefaultAutoHide();
 		}
 
-		if (autoHideEndabled) {
-			if (suspendAutoHide) {
+		if (autoHideEnabled) {
+			if (suspend) {
 				let header = document.getElementsByClassName("fsbl-header")[0];
 				header.style.opacity = 1;
 				if (headerTimeout) {clearTimeout(headerTimeout);}
