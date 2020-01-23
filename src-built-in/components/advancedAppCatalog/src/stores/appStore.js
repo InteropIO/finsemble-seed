@@ -23,6 +23,14 @@ const defaultValues = [
 	{
 		field: "activeApp",
 		value: null
+	},
+	{
+		field: "searchText",
+		value: ""
+	},
+	{
+		field: "forceSearch",
+		value: false
 	}
 ];
 
