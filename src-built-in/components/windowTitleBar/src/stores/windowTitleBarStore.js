@@ -20,6 +20,7 @@ const autoHideDefaultConfig = {
 };
 let autoHideConfig = JSON.parse(JSON.stringify(autoHideDefaultConfig));
 const autoHideTimer = function () {
+
 	if (!suspendAutoHide){
 		headerTimeout = setTimeout(function () {
 			FSBL.Clients.Logger.system.debug("hiding header...");
@@ -503,6 +504,7 @@ var Actions = {
 			//clear the autohide timer
 			if (headerTimeout) {clearTimeout(headerTimeout);}
 
+
  			//restore body margin to accommodate header
 			if (autoHideConfig.resetMargin){
 				document.body.style.marginTop = autohideSavedBodyMargin;
@@ -512,8 +514,7 @@ var Actions = {
 			let b = document.getElementsByTagName("body")[0];
 			b.removeEventListener("mousemove", autoHideMouseMoveHandler);
 		}
-
-
+    
  		cb();
 	},
 	suspendAutoHide(suspend) {
