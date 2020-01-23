@@ -11,7 +11,6 @@ import * as async from "async";
 
 //autohide functions and timers
 let headerTimeout = null;
-let suspendAutoHide = false;
 let autohideSavedBodyMargin = null;
 const autoHideDefaultConfig = {
 	defaultSetting: false,
@@ -20,17 +19,15 @@ const autoHideDefaultConfig = {
 };
 let autoHideConfig = JSON.parse(JSON.stringify(autoHideDefaultConfig));
 const autoHideTimer = function () {
-
-	if (!suspendAutoHide){
+		if (headerTimeout) {clearTimeout(headerTimeout);}
 		headerTimeout = setTimeout(function () {
 			FSBL.Clients.Logger.system.debug("hiding header...");
 			let header = document.getElementsByClassName("fsbl-header")[0];
 			header.style.opacity = 0;
 		}, autoHideConfig.timeout);
-	}
+	
 };
 const autoHideMouseMoveHandler = function( event ) {
-	if (headerTimeout) {clearTimeout(headerTimeout);}
 	const header = document.getElementsByClassName("fsbl-header")[0];
 	header.style.opacity = 1;
 	autoHideTimer();
@@ -524,8 +521,7 @@ var Actions = {
 			}
 
 			if (isAutoHideEnabled) {
-				suspendAutoHide = suspend;
-				if (suspendAutoHide) {
+				if (suspend) {
 					let header = document.getElementsByClassName("fsbl-header")[0];
 					header.style.opacity = 1;
 					if (headerTimeout) {
