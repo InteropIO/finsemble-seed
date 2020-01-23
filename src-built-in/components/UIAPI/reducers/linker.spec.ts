@@ -13,7 +13,7 @@ import 'mocha';
 /**
  * Creates a dummy channel object for testing purposes
  */
-const channel = (id, active, color) => {
+const channel = (id: number, active: boolean, color: string) => {
     return {
         name: color,
         color,
@@ -34,7 +34,7 @@ describe('Linker reducer', () => {
     
     // Init request shouldn't change any state value
     it('Should handle init', () => {
-        const output = reducer(initialState, actions.init());
+        const output: any = reducer(initialState, actions.init());
         assert.deepEqual(initialState, output[0]);
     });
 
@@ -69,13 +69,13 @@ describe('Linker reducer', () => {
             },
             processingRequest: false
         });
-        const output = reducer(initialState, initSuccessAction);
+        const output: any = reducer(initialState, initSuccessAction);
         assert.deepEqual(expectedOutput, output[0]);
     });
 
     // Cleaning up shouldn't change the state
     it('Should handle linker cleanup', () => {
-        const output = reducer(initialState, actions.cleanUp());
+        const output: any = reducer(initialState, actions.cleanUp());
         assert.deepEqual(initialState, output[0]);
     });
 
@@ -103,7 +103,7 @@ describe('Linker reducer', () => {
             windowIdentifier: {},
             processingRequest: true
         }
-        const output = reducer(expectedInput, actions.toggleChannel(2));
+        const output: any = reducer(expectedInput, actions.toggleChannel(2));
         assert.deepEqual(expectedOutput, output[0]);
     });
 

@@ -24,14 +24,17 @@ const showWindow = () => {
 };
 
 // Effectful code to link/unlink the channel
-function linkChannel(channelName: string, isActive: boolean, windowIdentifier: object) {
+const linkChannel = (channelName: string, isActive: boolean, windowIdentifier: object) => {
     return new Promise((res, rej) => {
         const callback = (err: any, data: object) => {
-            if (err) return rej(err);
+            if (err) {
+                FSBL.Clients.Logger.system.error(`Failed to togger channel ${channelName}: ${err}`);
+                return rej(err);
+            }
+            FSBL.Clients.Logger.system.log(`Toggle channel success. Channel name: ${channelName}`);
             res(data);
         };
         if (!isActive) {
-            console.log("linking the window: ", windowIdentifier);
             FSBL.Clients.LinkerClient.linkToChannel(channelName, windowIdentifier, callback);
         } else {
             FSBL.Clients.LinkerClient.unlinkFromChannel(channelName, windowIdentifier, callback);
@@ -41,7 +44,8 @@ function linkChannel(channelName: string, isActive: boolean, windowIdentifier: o
 
 // Effectful code to initialize the linker with the relevant channel information. It also sets up a listener to update the linker state when 
 // users open the linker for different components.
-function initializeLinker() {
+const initializeLinker = () => {
+    FSBL.Clients.Logger.system.log(`Initializing the linker state. Current linker state: ${initialState}`);
     finsembleWindow.addEventListener("blurred", hideWindow);
     finsembleWindow.addEventListener("shown", showWindow);
     
@@ -86,6 +90,7 @@ function initializeLinker() {
         const setActiveChannelsCallback = (err: any, msg: any) => {
             if (err) {
                 /* @early-exit */
+                FSBL.Clients.Logger.system.error(`Failed to update the linker state. Current linker state: ${store.getState()}`);
                 return rej(`Failed to add Finsemble.LinkerWindow.SetActiveChannels Responder: ${err}`);
             }
             const updatedChannels = updateChannels(msg.data.channels);
@@ -99,6 +104,8 @@ function initializeLinker() {
                 channels: updatedChannels
             }
 
+            FSBL.Clients.Logger.system.log(`Finished updating the linker state. Current linker state: ${newLinkerState}`);
+
             // Need to invoke the callback function in order for us to be able to toggle the linker window again - see LinkerButton.jsx
             msg.sendQueryResponse(null, {});
             res(newLinkerState);
@@ -108,7 +115,7 @@ function initializeLinker() {
         // The default value for isAccessibleLinker is `true`.
         FSBL.Clients.ConfigClient.getValue("finsemble.accessibleLinker", (err: any, value: boolean) => {
             if (err) {
-                console.error(`Error getting accessibleLinker value: ${err}`);
+                FSBL.Clients.Logger.system.error(`Failed to get accessibleLinker value: ${err}`);
                 /* @early-exit */
                 rej(`Error getting accessibleLinker value.`);
             }
@@ -121,7 +128,8 @@ function initializeLinker() {
     });
 }
 
-function cleanUpAfterComponentUnmount() {
+const cleanUpAfterComponentUnmount = () => {
+    FSBL.Clients.Logger.system.log("Linker component is unmount. Cleaning up the event listeners.");
     finsembleWindow.removeEventListener("blurred", hideWindow);
     finsembleWindow.removeEventListener("shown", showWindow);
 }
@@ -131,11 +139,13 @@ const linker = (state = initialState, action: LinkerAction) => {
     const { type, payload } = action;
     switch (type) {
         case ActionTypes.LINKER_INIT:
+            FSBL.Clients.Logger.system.debug(`LINKER_INIT. Linker state: ${state}`);
             return loop(state, Cmd.run(initializeLinker, {
                 successActionCreator: initSuccess,
             }));
         case ActionTypes.LINKER_INIT_SUCCESS:
             const newState = payload.value;
+            FSBL.Clients.Logger.system.debug(`LINKER_INIT_SUCCESS. Linker state: ${newState}`);
             return loop(newState, Cmd.run(() => FSBL.Clients.WindowClient.fitToDOM()));
         case ActionTypes.TOGGLE_CHANNEL_REQUEST:
             const newState_request: Linker = {
@@ -152,7 +162,7 @@ const linker = (state = initialState, action: LinkerAction) => {
                 failActionCreator: () => toggleFailure(),
                 args: [targetChannelName, targetChannelActive, targetWindowIdentifier]
             });
-
+            FSBL.Clients.Logger.system.debug(`TOGGLE_CHANNEL_REQUEST. Linker state: ${newState_request}`);
             return loop(newState_request, cmd);
         case ActionTypes.TOGGLE_CHANNEL_SUCCESS:
             // Updates the channel's 'active' field
@@ -167,12 +177,14 @@ const linker = (state = initialState, action: LinkerAction) => {
                     }
                 }
             };
+            FSBL.Clients.Logger.system.debug(`TOGGLE_CHANNEL_SUCCESS. Linker state: ${newState_success}`);
             return newState_success;
         case ActionTypes.TOGGLE_CHANNEL_FAILURE:
             const newState_failure = {
                 ...state,
                 processingRequest: false
             };
+            FSBL.Clients.Logger.system.debug(`TOGGLE_CHANNEL_FAILURE. Linker state: ${newState_failure}`);
             return newState_failure;
         case ActionTypes.UPDATE_ACTIVE_CHANNELS:
             // Update the channels' 'active' field and the windowIdentifier state information
@@ -196,10 +208,13 @@ const linker = (state = initialState, action: LinkerAction) => {
                 channels: updatedChannel,
                 windowIdentifier: updatedWindowIdentifier
             };
+            FSBL.Clients.Logger.system.debug(`UPDATE_ACTIVE_CHANNELS. Linker state: ${newUpdateChannelState}`);
             return newUpdateChannelState;
         case ActionTypes.LINKER_CLEANUP:
+            FSBL.Clients.Logger.system.debug(`LINKER_CLEANUP. Linker state: ${state}`);
             return loop(state, Cmd.run(cleanUpAfterComponentUnmount));
         default:
+            FSBL.Clients.Logger.system.debug(`linker reducer default case. Returning the original state: ${state}`);
             return state;
     }
 }

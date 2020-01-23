@@ -11,9 +11,9 @@
 	"include": [
 		"src/**/*",
 		"src-built-in/**/*",
-		"**/*.spec.ts"
 	],
 	"exclude": [
 		"node_modules",
+		"**/*.spec.ts"
 	]
 }

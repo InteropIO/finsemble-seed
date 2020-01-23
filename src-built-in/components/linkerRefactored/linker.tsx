@@ -18,6 +18,7 @@ const LinkerRefactored = () => {
 	const dispatch = useDispatch();
 	
 	const toggleChannel = (linkerIndex: number) => {
+        console.log(`Toggling the linker channel. Channel id: ${linkerIndex}`);
 		dispatch(linkerActions.toggleChannel(linkerIndex));
 	};
 
