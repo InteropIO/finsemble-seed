@@ -19,14 +19,15 @@ const autoHideDefaultConfig = {
 };
 let autoHideConfig = JSON.parse(JSON.stringify(autoHideDefaultConfig));
 const autoHideTimer = function () {
+		if (headerTimeout) {clearTimeout(headerTimeout);}
 		headerTimeout = setTimeout(function () {
 			FSBL.Clients.Logger.system.debug("hiding header...");
 			let header = document.getElementsByClassName("fsbl-header")[0];
 			header.style.opacity = 0;
 		}, autoHideConfig.timeout);
+	
 };
 const autoHideMouseMoveHandler = function( event ) {
-	if (headerTimeout) {clearTimeout(headerTimeout);}
 	const header = document.getElementsByClassName("fsbl-header")[0];
 	header.style.opacity = 1;
 	autoHideTimer();
@@ -500,6 +501,7 @@ var Actions = {
 			//clear the autohide timer
 			if (headerTimeout) {clearTimeout(headerTimeout);}
 
+
  			//restore body margin to accommodate header
 			if (autoHideConfig.resetMargin){
 				document.body.style.marginTop = autohideSavedBodyMargin;
@@ -509,8 +511,7 @@ var Actions = {
 			let b = document.getElementsByTagName("body")[0];
 			b.removeEventListener("mousemove", autoHideMouseMoveHandler);
 		}
-
-
+    
  		cb();
 	},
 	suspendAutoHide(suspend) {
