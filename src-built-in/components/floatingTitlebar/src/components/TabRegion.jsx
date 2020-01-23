@@ -1,9 +1,7 @@
 
 
 import React from "react";
-import ReactDOM from "react-dom";
 import Tab from "./tab";
-import { FinsembleDnDContext, FinsembleDroppable } from '@chartiq/finsemble-react-controls';
 import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
 import Logo from "./logo";
 import Title from "../../../common/windowTitle"
@@ -102,7 +100,7 @@ export default class TabRegion extends React.Component {
         this.setState({
             iAmDragging: true
         });
-        e.dataTransfer.setData("text/plain", JSON.stringify(windowIdentifier));
+        e.dataTransfer.setData("application/fsbl-tab-data", JSON.stringify(windowIdentifier));
         FSBL.Clients.WindowClient.startTilingOrTabbing({
             windowIdentifier: windowIdentifier
         });
@@ -116,22 +114,33 @@ export default class TabRegion extends React.Component {
 	 * @memberof windowTitleBar
 	 */
     stopDrag(e) {
-        FSBL.Clients.Logger.system.debug("Tab drag stop");
-        //@sidd can you document this?
+        FSBL.Clients.Logger.system.debug("Tab stopDrag.");
         this.mousePositionOnDragEnd = {
             x: e.nativeEvent.screenX,
             y: e.nativeEvent.screenY
         }
-        let boundingRect = this.state.boundingBox;
-        if (!FSBL.Clients.WindowClient.isPointInBox(this.mousePositionOnDragEnd, FSBL.Clients.WindowClient.options)) {
-            setTimeout(() => {
-                FSBL.Clients.WindowClient.stopTilingOrTabbing({ mousePosition: this.mousePositionOnDragEnd });
-            }, 50);
-            this.setState({
-                iAmDragging: false
-            });
-            this.onWindowResize();
-        }
+        
+        const boundingBox = this.state.boundingBox;
+        FSBL.Clients.WindowClient.getBounds(
+            (err, bounds) => {
+                // We ONLY want to know if we're in the tab region!
+                const tabRegion = {
+                    top: boundingBox.top + bounds.top,
+                    bottom: boundingBox.bottom + bounds.top,
+                    left: boundingBox.left + bounds.left,
+                    right: boundingBox.right + bounds.left 
+                };
+                if (!FSBL.Clients.WindowClient.isPointInBox(this.mousePositionOnDragEnd, tabRegion)) {
+                    setTimeout(() => {
+                        FSBL.Clients.WindowClient.stopTilingOrTabbing({ mousePosition: this.mousePositionOnDragEnd });
+                    }, 50);
+                    this.setState({
+                        iAmDragging: false
+                    });
+                    this.onWindowResize();
+                }
+            }
+        );
     }
 
     /**
@@ -140,14 +149,14 @@ export default class TabRegion extends React.Component {
      */
     extractWindowIdentifier(e) {
         try {
-            let identifier = JSON.parse(e.dataTransfer.getData('text/plain'));
+            let identifier = JSON.parse(e.dataTransfer.getData('application/fsbl-tab-data'));
             //If the "identifier" is formed properly, it'll have this properly. Otherwise, it's something else (e.g., share data, image, etc).
             if (typeof identifier.windowName !== "undefined") {
                 return identifier;
             } else if (identifier.waitForIdentifier) {
                 return identifier;
             } else {
-                FSBL.Clients.Logger.system.error("Malformed drop object detected in windowTitleBar. Check tab droppping code. Expected windowIdentifier, got ", identifier);
+                FSBL.Clients.Logger.system.error("Malformed drop object detected in windowTitleBar. Check tab dropping code. Expected windowIdentifier, got ", identifier);
                 return null;
             }
         } catch (e) {
@@ -162,10 +171,18 @@ export default class TabRegion extends React.Component {
     drop(e) {
         e.preventDefault();
         e.stopPropagation();
-
         FSBL.Clients.Logger.system.debug("Tab drag drop.");
-        let identifier = this.extractWindowIdentifier(e);
-        if (!identifier) return; // the dropped item is not a tab
+        const identifier = this.extractWindowIdentifier(e);
+        // the dropped item is not a tab
+        if (!identifier) return; 
+        // If we only have single tab and its the activeTab
+        // and if the dropped window's name is the same as 
+        // active tab's windowName we cancel tabbing.
+        if (
+            this.state.tabs.length === 1
+            && identifier.windowName === this.state.activeTab.windowName) {
+            return this.cancelTabbing();
+        }
         FSBL.Clients.WindowClient.stopTilingOrTabbing({ allowDropOnSelf: true, action: "tabbing" }, () => {
             FSBL.Clients.RouterClient.transmit("tabbingDragEnd", { success: true });
             if (identifier && identifier.windowName) {
@@ -252,7 +269,7 @@ export default class TabRegion extends React.Component {
         this.scrollToTab(lastTab);
     }
     /**
-     * Function that will horiztonally scroll the tab region so that the right edge of the tab lines up with the right edge of the tab region.
+     * Function that will horizontally scroll the tab region so that the right edge of the tab lines up with the right edge of the tab region.
      * @param {} tab
      */
     scrollToTab(tab) {
@@ -265,7 +282,7 @@ export default class TabRegion extends React.Component {
         if (tabIndex > -1) {
             let leftEdgeOfTab = tabIndex * this.state.tabWidth;
             let rightEdgeOfTab = leftEdgeOfTab + this.state.tabWidth;
-            //Our translation is  this: Take the  right edge of the bounding box, and subract the left edge. This gives us the 0 point for the box. Then, we subtract the right edge of the tab. The result is a number that we use to shift the entire element and align the right edge of the tab with the right edge of the bounding box. We also account for the 30 px region on the right.
+            //Our translation is  this: Take the  right edge of the bounding box, and subtract the left edge. This gives us the 0 point for the box. Then, we subtract the right edge of the tab. The result is a number that we use to shift the entire element and align the right edge of the tab with the right edge of the bounding box. We also account for the 30 px region on the right.
             let translateX = boundingBox.right - boundingBox.left - rightEdgeOfTab;
 
             //If there's no overflow, we don't scroll.

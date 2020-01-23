@@ -10,7 +10,7 @@ import storeActions from '../stores/storeActions';
 /**
  * The card that displays on any page with information about an app. Clicking on it will lead to the AppShowcase or install (if the check is clicked)
  * @param {object} props Component props
- * @param {object} props...card The entire object that belongs to a single app. See FDC appd.
+ * @param {object} props...card The entire object that belongs to a single app. See FDC app directory.
  * @param {boolean} props.entitled If true, the app cannot be installed by this user, only viewed
  * @param {boolean} props.installed If true the app is installed on this local fsbl
  */
@@ -50,7 +50,7 @@ class AppCard extends Component {
 		}
 	}
 	/**
-	 * Toggles the hightlight state of the checkmark for installing an app
+	 * Toggles the highlight state of the check mark for installing an app
 	 */
 	toggleHighlight() {
 		this.setState({
@@ -66,7 +66,7 @@ class AppCard extends Component {
 		});
 	}
 	/**
-	 * Shows the checkmark for adding/removing an app
+	 * Shows the check mark for adding/removing an app
 	 */
 	showCheck() {
 		this.setState({
@@ -74,7 +74,7 @@ class AppCard extends Component {
 		});
 	}
 	/**
-	 * Higes the checkmark for adding/removing an app
+	 * Hides the check mark for adding/removing an app
 	 */
 	hideCheck() {
 		//Don't hide if installed. Stay green and showing

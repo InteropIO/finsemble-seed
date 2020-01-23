@@ -76,12 +76,12 @@ const LocalStorageAdapter = function (uuid) {
 
 	/**
 	 * Returns all keys stored in localstorage of a given topic and keyPrefix.
-	 * 
+	 *
 	 * LocalStorage is synchronous, so the callback is optional (the function
-	 * immediately returns the results if the callback is ommitted).
-	 * 
+	 * immediately returns the results if the callback is omitted).
+	 *
 	 * @param {*} params An object that must include the topic and keyPrefix of the desired keys.
-	 * @param {*} cb An optional callback that will be passed any errors that occured and the found keys.
+	 * @param {*} cb An optional callback that will be passed any errors that occurred and the found keys.
 	 */
 	this.keys = function (params, cb) {
 			/**
@@ -215,4 +215,4 @@ const LocalStorageAdapter = function (uuid) {
 
 LocalStorageAdapter.prototype = new BaseStorage();
 new LocalStorageAdapter("LocalStorageAdapter");
-module.exports = LocalStorageAdapter;//Allows us to get access to the unintialized object
+module.exports = LocalStorageAdapter;//Allows us to get access to the uninitialized object
