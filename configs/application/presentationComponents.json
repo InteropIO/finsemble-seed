@@ -525,7 +525,6 @@
 				"left": 0,
 				"right": 0,
 				"position": "available",
-				"autoShow": true,
 				"dockable": [
 					"top",
 					"bottom"

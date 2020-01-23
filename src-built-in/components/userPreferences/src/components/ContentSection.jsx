@@ -1,11 +1,9 @@
 import React from 'react';
 import General from './content/General';
-import Toolbar from './content/Toolbar';
 import Workspaces from './content/Workspaces';
 
 let content = {
 	general: General,
-	toolbar: Toolbar,
 	workspaces: Workspaces
 }
 export default class ContentSection extends React.Component {
