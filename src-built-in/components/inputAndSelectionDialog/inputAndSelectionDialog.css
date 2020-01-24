@@ -1,6 +1,3 @@
-@import '../../..//assets/css/_variables.css';
-@import '../../../assets/css/_variablesWhitelabel.css';
-
 body {
     margin: 0px;
     font-family: var(--font-family);
@@ -269,7 +266,7 @@ body {
 }
 
 .negative-action-button, .action-button {
-    padding: .25em 0;
+    padding: .25em 0em;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -308,8 +305,8 @@ body {
 
 .workspace-action-button {
     width: 110px;
-    padding: 0;
-    margin: 0 8px;
+    padding: 0px;
+    margin: 0px 8px;
 }
 
 .workspace-item > .workspace-editor {

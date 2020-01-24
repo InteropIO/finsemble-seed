@@ -5,7 +5,7 @@
 
 let menuStore;
 import async from "async";
-let finWindow = fin.desktop.Window.getCurrent();
+
 var values = {
 	focus: false,
 	list: [],
@@ -23,7 +23,7 @@ var Actions = {
 	listChange(err, data) {
 		if (!data.value) {
 			values.list = [];
-			finWindow.isShowing(function (value) { })
+			finsembleWindow.isShowing(function (value) { })
 		} else {
 			values.list = data.value;
 		}
@@ -39,7 +39,7 @@ var Actions = {
 	},
 	listItemClick(provider, item, action) {
 		FSBL.Clients.SearchClient.invokeItemAction(provider, item, action)
-		finWindow.hide();
+		finsembleWindow.hide();
 		menuStore.setValue({ field: "list", value: [] })
 	},
 	actionPress(err, msg) {
@@ -68,14 +68,14 @@ function createStore(done) {
 	let defaultData = {
 		inFocus: false,
 		list: [],
-		owner: finWindow.name
+		owner: finsembleWindow.name
 	};
 
-	finWindow.addEventListener("reloaded", function () {
+	finsembleWindow.addEventListener("reloaded", function () {
 		menuStore.removeListener({ field: "list" }, Actions.listChange);
 	})
 
-	FSBL.Clients.DistributedStoreClient.createStore({ store: "AppCatalog-Store" + finWindow.name, values: defaultData, global: false },
+	FSBL.Clients.DistributedStoreClient.createStore({ store: "AppCatalog-Store" + finsembleWindow.name, values: defaultData, global: false },
 		function (err, store) {
 			menuStore = store;
 			FSBL.Clients.SearchClient.search({ text: "", filter: { resultType: "application" } }, function (err, response) {
