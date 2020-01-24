@@ -125,6 +125,9 @@ export default class TabRegion extends React.Component {
 	 * @memberof windowTitleBar
 	 */
     stopDrag(e) {
+        // We don't want onDropHandler() in windowTitleBarComponent.jsx
+        // to handle this drop event, so we call event.stopPropagation().
+        e.stopPropagation();
         FSBL.Clients.Logger.system.debug("Tab stopDrag.");
         this.mousePositionOnDragEnd = {
             x: e.nativeEvent.screenX,

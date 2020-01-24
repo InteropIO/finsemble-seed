@@ -1,4 +1,3 @@
-/* New Toolbar Starts Here*/
 .finsemble-toolbar {
     display: flex;
     align-items: stretch;
@@ -7,6 +6,7 @@
     color: var(--toolbar-font-color);
     align-content: center;
     height: var(--toolbar-height);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
 }
 
 .fullHeightFlex {
@@ -31,7 +31,7 @@
 }
 
 .finsemble-toolbar-section.right {
-		margin-right: 8px;
+    margin-right: 8px;
     justify-content: flex-end;
     order: 2;
     flex: 1;
@@ -51,9 +51,18 @@
 }
 
 .finsemble-toolbar-button {
-    padding: 5px 6px;
+    padding: 0px 8px 2px 8px;
+    margin: 5px 0px;
     border: 1px solid var(--toolbar-background-color);
-    display: inline-flex;
+    display: flex;
+    align-items: center;
+    border-radius: 30px;
+    transition: all .1s ease;
+    position: relative;
+}
+
+span > svg {
+    margin-top: 4px;
 }
 
 .finsemble-toolbar-button-label {
@@ -63,7 +72,6 @@
     letter-spacing: .25px;
     align-content: center;
     display: block;
-    margin-top: 6px;
 }
 
 .finsemble-toolbar-button[data-hover=true] {
@@ -74,22 +82,12 @@
 
 .finsemble-toolbar .resize-area {
     height: 100%;
-    width: 6px;
-    max-width: 6px;
-    min-width: 6px;
-		background-color: var(--toolbar-resize-area-color);
-		position: absolute;
-		right: 0;
-    /* justify-content: flex-end;
-    order: 3;
-    flex: 0 0 auto; */
-}
-
-@media screen and (max-width: 170px) {
-    /* remove */
-    .workspace-menu-button {
-        display: none !important;
-    }
+    width: 4px;
+    max-width: 4px;
+    min-width: 4px;
+    background-color: var(--toolbar-resize-area-color);
+    position: absolute;
+    right: 0;
 }
 
 @media screen and (max-width: 270px) {
@@ -124,7 +122,9 @@
 
 }
 
-.finsemble-toolbar-workspace-button-label > .finsemble-toolbar-button-label {
+.finsemble-toolbar-section.left > .finsemble-toolbar-button-label {
+    padding-top: 1px;
+    margin-top: 2px;
     overflow: hidden;
     text-align: center;
     text-overflow: ellipsis;
@@ -145,7 +145,6 @@
 
 .finsemble-toolbar-button-icon {
     height: 100%;
-    padding-top: 2px;
     display: table-cell;
     vertical-align: middle;
 }
@@ -167,19 +166,21 @@
     height: 24px;
     border-right: var(--toolbar-separator);
     content: '';
-    margin: 0 .25em;
+    margin: 0em .25em;
 }
 
 img.pinned-icon {
     padding-top: 1px;
-    width: 22px;
-    height: 22px;
+    width: 18px;
+    height: 18px;
+    margin-top: -1px;
 }
 
 .pinned-icon {
     color: var(--toolbar-icon-app-color);
     font-size: var(--toolbar-icon-font-size);
-    padding-right: .25em;
+    padding-right: 6px;
+    margin-top: 13px;
 }
 
 .pinned-workspace-icon {
@@ -195,17 +196,15 @@ img.pinned-icon {
 }
 
 .finsemble-button-label {
-    padding-top: 1px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    max-width: 190px;
 }
 
 .finsemble-toolbar-brand-logo {
     width: var(--toolbar-brand-logo-width);
     height: var(--toolbar-brand-logo-height);
-    margin: 2px 2px;
-    padding: 2px 0px 0px 0px;
 }
 
 /* Special tweaks for pinned icons */
@@ -229,10 +228,19 @@ img.pinned-icon {
     padding-top: 4px;
 }
 
+.ff-caret-down {
+    margin-top: 14px;
+}
+
+.finsemble-toolbar-drag-handle > svg {
+    width: 23px;
+    margin-top: -7px;
+}
 
 .finsemble-toolbar-drag-handle {
-    padding-left:5px;
-    padding-right:5px;
-    padding-top: 6px;
-    -webkit-app-region: drag;
+    margin-left: 3px;
+    padding-left: 2px;
+    padding-right: 0px;
+    padding-top: 15px;
+    cursor: grab;
 }

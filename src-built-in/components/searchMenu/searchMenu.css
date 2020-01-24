@@ -26,12 +26,17 @@ body {
     padding-top: 8px;
 }
 
+.searchResults {
+    padding: 10px;
+}
+
 .searchHeader {
     height: 21px;
     display: flex;
+    font-size: var(--search-header-font-size);
     color: var(--search-header-font-color);
     font-weight: var(--search-header-font-weight);
-    padding: 6px 0px 0px 14px;
+    padding: 6px 0px 4px 14px;
 }
 
 .divider {
@@ -49,10 +54,13 @@ body {
 }
 
 .resultItem {
+    height: 31px;
+    padding-left: 20px;
+    padding-right: 10px;
+    border-radius: 15px;
     color: var(--search-result-font-color);
     font-weight: var(--search-result-font-weight);
     text-align: left;
-    padding: 4px 28px 4px 14px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -68,7 +76,7 @@ body {
 }
 
 .resultItem.active {
-    background-color: var(--search-result-highlighter-color);
+    background-color: var(--search-result-selected-color);
 }
 
 .resultItem .resultName {
@@ -118,7 +126,7 @@ body {
 }
 
 .actionTitle {
-    font-size: 11px;
+    font-size: var(--search-menu-font-size);
     vertical-align: middle;
     color: var(--menu-font-color);
 }
@@ -127,7 +135,7 @@ body {
     width: 10px;
     height: 9px;
     object-fit: contain;
-    font-size: 11px;
+    font-size: var(--search-menu-font-size);
     margin-left: 4px;
 }
 
@@ -154,5 +162,5 @@ body {
 
 .no-results {
     padding-left: 14px;
-    padding-top: 12px;
+    padding-top: 3px;
 }

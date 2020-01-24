@@ -1,8 +1,6 @@
-@import "./_variablesWhitelabel.css";
 @import url('./_themeWhitelabel.css');
 
 .fsbl-drag-handle {
-    -webkit-app-region: drag;
     z-index: 2147483641;
     /* use below with window scrollbar hack */
     position: fixed;
@@ -22,8 +20,18 @@
     padding-left: 80px; /* leave some space for a user to grab */
 }
 
+html:before, html:after, body:before, body:after {
+    content: "";
+    position: fixed;
+    display: block;
+    z-index: 2147483640;
+    background-color: var(--window-border-color);
+}
+
 .fsbl-header {
     font-family: var(--font-family);
+    font-size: var(--titleBar-font-size);
+    font-weight: var(--titleBar-font-weight);
     text-align: center;
     display: flex;
     height: var(--titleBar-height);
@@ -34,34 +42,40 @@
     background: var(--titleBar-background-inactive-color);
     width: 100%;
     left: 0;
-    z-index: 2147483640;
+    z-index: 2147483639;
     top: 0;
-    font-size: var(--titleBar-font-size);
-    font-weight: var(--titleBar-font-weight);
     color: var(--titleBar-inactive-font-color);
 }
 
 html.desktop-active .fsbl-header {
     background: var(--titleBar-background-active-color);
-    color: var(--titleBar-active-font-color);
 }
 
 .fsbl-header-title {
     position: relative;
     height: 100%;
+    padding-left: 8px;
     overflow: hidden;
     align-items: center;
     display:flex;
     padding-right: 14px;
-    border-top: 1px solid transparent;
-    border-right: 1px solid transparent;
     transition: background-color 0.2s ease;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
 }
 
-.fsbl-header-title[data-hover=true] {
+.fsbl-header-title[data-hover=true]{
+    background-color: var(--core-primary-2);
+}
+
+html.desktop-active .fsbl-header-title .fsbl-tab-title {
+    color: var(--titlebar-tab-active-font-color);
+}
+
+html.desktop-active .fsbl-header-title[data-hover=true] {
     background-color: var(--titlebar-tab-active-background-color);
     color: var(--titlebar-tab-active-font-color);
-    border-right: var(--titlebar-tab-section-separator);
 }
 
 .fsbl-header-left {
@@ -72,7 +86,6 @@ html.desktop-active .fsbl-header {
     align-items: center;
     justify-content: flex-start;
     display: flex;
-    border-right: var(--titlebar-tab-section-separator);
 }
 
 .fsbl-header-center {
@@ -86,6 +99,7 @@ html.desktop-active .fsbl-header {
     text-overflow: ellipsis;
     white-space: nowrap;
     --webkit-user-select: none;
+    user-select: none;
     position: relative;
     padding-bottom: 3px; /* This needs to be half of the thing subtracted from the height. e.g. height = 100% - 6px, then this is 3px) */
 }
@@ -94,10 +108,6 @@ html.desktop-active .fsbl-header {
     height: 100%;
     width: 100%;
     padding-bottom:0px;
-}
-
-.fsbl-tabs-multiple .fsbl-header-center {
-    border-right: var(--titlebar-tab-section-separator);
 }
 
 html.desktop-active .fsbl-header-right {
@@ -134,10 +144,10 @@ html.desktop-active .fsbl-tab-region-drag-area {
     position: relative;
     color: var(--titleBar-inactive-font-color);
     font-size: var(--titleBar-icon-font-size);
-    width: 18px;
+    width: 10px;
     padding: 0px 6px;
-    height: calc(100% + 5px);
-    margin-top: -5px;
+    height: calc(100% + 1px);
+    margin-top: -3px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -146,18 +156,14 @@ html.desktop-active .fsbl-tab-region-drag-area {
     box-sizing: content-box !important;
 }
 
-html.desktop-active .fsbl-icon {
-    color: var(--titleBar-active-font-color);
-}
-
 .fsbl-icon[data-hover=true] {
-    background-color: var(--titleBar-button-hover-inactive-color);
+    color: var(--titlebar-icon-hover-color);
 }
-
+/*
 html.desktop-active .fsbl-icon[data-hover=true] {
-    background: var(--titleBar-button-hover-active-color);
+    color: var(--titleBar-icon-hover-color);
     transition: background .2s ease;
-}
+} */
 
 /* So it sits over the border*/
 .fsbl-icon.fsbl-close {
@@ -165,19 +171,19 @@ html.desktop-active .fsbl-icon[data-hover=true] {
 }
 
 .fsbl-icon.fsbl-close[data-hover=true] {
-    background: var(--titleBar-button-hover-negative-color);
-    color: var(--titleBar-active-font-color);
+    color: var(--titleBar-button-hover-negative-color);
 }
 
 html.desktop-active .fsbl-icon.fsbl-close[data-hover=true] {
-    background: var(--titleBar-button-hover-negative-color);
-    color: var(--titleBar-active-font-color);
+    color: var(--titleBar-button-hover-negative-color);
 }
 
 .fsbl-icon-highlighted {
     -webkit-transition: background-color 300ms ease-in-out;
     transition: background-color 300ms ease-in-out;
     background-color: var(--titleBar-button-highlight-inactive-color);
+    border-radius: 25px;
+    color: var(--titlebar-icon-hover-color)
 }
 
 html.desktop-active .fsbl-icon-highlighted {
@@ -185,7 +191,9 @@ html.desktop-active .fsbl-icon-highlighted {
 }
 
 .fsbl-minimize {
-    align-items: flex-end;
+    align-items: center;
+    margin-top: -2px;
+    transition: .2s all;
 }
 
 .fsbl-ejector {
@@ -203,25 +211,35 @@ html.desktop-active .fsbl-icon-highlighted {
     height: 100%;
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-start;
+    margin-top: -2px;
 }
 
 .linker-group {
-    width: 5px;
-    height: 15px;
+    width: 3px;
+    height: 13px;
     margin-left: 3px;
     border-radius: 4px;
-    border: 1px solid var(--titleBar-background-inactive-color);
+    border: 1px solid transparent;
     box-sizing: content-box; /* otherwise any box-sizing on the page can override how our linker appears */
+    color: var(--menu-linker-selected-font-color);
 }
 
-html.desktop-active .linker-group {
-    border: 1px solid var(--titleBar-background-active-color);
+.linker-group-accessible {
+    width: 1em !important;
+    padding-bottom: 4px;
+    margin-bottom: 4px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.79);
+}
+
+.linkerContainer {
+    justify-content: center;
+    align-items: flex-start;
 }
 
 .linker-group:hover {
     cursor: pointer;
-    border: 1px solid var(--titleBar-button-hover-inactive-color) !important;
+    border: 1px solid var(--content-button-neutral-hover-color);
 }
 
 .linker-group:nth-last-child(1) {
@@ -232,22 +250,41 @@ html.desktop-active .linker-group {
     cursor: pointer;
     display: flex;
   /* So it sits over the border*/
-    margin-left: -1px;
     align-items: center;
     justify-content: center;
     align-content: center;
     transition: background .3s ease;
     position: relative;
+    width: 12px;
+    border-radius:20px;
+    margin-right: 2px;
 }
 
-.fsbl-linker[hover=true] {
-    background: var(--titleBar-button-hover-inactive-color);
-    color: var(--titlebar-active-font-color);
+.fsbl-share {
+    cursor: pointer;
+    display: flex;
+  /* So it sits over the border*/
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    transition: background .3s ease;
+    position: relative;
+    width: 14px;
+    border-radius:20px;
+    margin-right: 2px;
 }
 
-html.desktop-active .fsbl-linker[hover=true] {
+.fsbl-share > svg {
+    margin-top: 1px;
+}
+
+/* html.desktop-active .fsbl-linker[data-hover=true] {
     background: var(--titleBar-button-hover-active-color);
     color: var(--titleBar-button-hover-linker-group);
+} */
+
+.fsbl-linker[data-hover=true], .fsbl-share[data-hover=true] {
+    background-color: var(--titleBar-button-hover-active-color);
 }
 
 .ff-minimize {
@@ -264,11 +301,12 @@ html.desktop-active .fsbl-linker[hover=true] {
 
 .ff-maximize, .ff-close, .ff-detached, .ff-attached{
     padding-top: 2px;
+    transition: .2s all;
 }
 
 .ff-always-on-top {
     padding-top: 3px;
-    font-size: 16px;
+    font-size: 11px;
 }
 
 .ff-restore {
@@ -277,6 +315,7 @@ html.desktop-active .fsbl-linker[hover=true] {
 
 .fsbl-tab {
     height: 100%;
+    padding-left: 8px;
     position: relative;
     display: inline-flex;
     align-content: center;
@@ -284,16 +323,22 @@ html.desktop-active .fsbl-linker[hover=true] {
     vertical-align: top;
     background-color: var(--titlebar-tab-inactive-background-color);
     color: var(--titlebar-tab-inactive-font-color);
-    border-right: var(--titlebar-tab-separator);
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
     user-select: none;
     box-sizing: border-box;
     justify-content: flex-start;
     transition: color 0.2s ease;
 }
 
-.fsbl-tab[data-hover=true], .fsbl-active-tab {
+.fsbl-active-tab {
     background-color: var(--titlebar-tab-active-background-color);
     color: var(--titlebar-tab-active-font-color);
+}
+
+.fsbl-tab[data-hover=true] {
+    background-color: var(--titlebar-tab-hover-background-color);
+    color: var(--titlebar-tab-hover-font-color);
 }
 
 .tab-region-wrapper {
@@ -315,13 +360,20 @@ html.desktop-active .fsbl-linker[hover=true] {
 .fsbl-tab-area::-webkit-scrollbar  {
     display: none;
 }
+
 .fsbl-tab-title {
     text-align: left;
+    padding-left: 1px;
     min-width: 0;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-	  padding-left: 8px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+    color: var(--titlebar-tab-inactive-font-color);
+}
+
+html.desktop-active .fsbl-active-tab .fsbl-tab-title {
+    color: var(--titlebar-tab-active-font-color);
 }
 
 .fsbl-tab-close {
@@ -347,8 +399,8 @@ html.desktop-active .fsbl-linker[hover=true] {
 }
 
 .fsbl-tab-logo {
-    margin: 0 7px;
-    padding-top: 1px;
+    margin: 0px 7px;
+    padding-top: 3px;
     width: auto;
     height: auto;
     color: var(--titlebar-tab-icon-font-color);
@@ -396,7 +448,7 @@ html.desktop-active .fsbl-linker[hover=true] {
     right: 10px;
     background-color: var(--tertiary-background-color);
     padding: 5px;
-    color: var(--primary-font-color);
+    color: var(--font-color);
     opacity: 0.8;
     font-size: 0.9em;
 }
