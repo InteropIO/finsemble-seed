@@ -8,6 +8,8 @@
 	  - finsemble.Window Manager.zoom.min: Minimum zoom level (default 0.2)
 	  - finsemble.Window Manager.zoom.max Maximum zoom level (default 5)
 	- Zoom level being preserved in window state/workspaces
+	- Default zoom level config with-in the component configuration at:
+	  `foreign.components.['Window Manager'].zoomDefault`
 
 	N.B. should not be used with OpenFin's window.options.accelerator.zoom option.
 */
@@ -191,7 +193,7 @@ const zoomConfigHandler = (err, zoom) => {
 }
 
 /**
- * Applies the zoom level from the component state.
+ * Applies the zoom level from the component state or default configuration.
  *
  * @param {*} err The error, if one occurred, from getting the zoom level from component state.
  * @param {Number} zoomLevel The zoom level saved in the component.
@@ -199,12 +201,34 @@ const zoomConfigHandler = (err, zoom) => {
 const getZoomLevelHandler = (err, zoomLevel) => {
 	if (err) {
 		FSBL.Clients.Logger.info("No \"fsbl-zoom\" settings found in component state", err);
-	}else if (zoomLevel != null) {
+	} else if (zoomLevel != null) {
+		FSBL.Clients.Logger.info(`Retrieved zoomLevel from state: ${zoomLevel}`, err);
 		window.fsblZoomLevel = zoomLevel;
 		setZoom(window.fsblZoomLevel);
+		window.settingInitialZoom = false;
+	} else {
+		//check for default configuration for zoom level and apply as needed
+		FSBL.Clients.LauncherClient.getMyWindowIdentifier().then((identifier) => {
+			FSBL.Clients.LauncherClient.getComponentDefaultConfig(identifier.componentType)
+			.then(response => {
+				if (response.err) {
+					FSBL.Clients.Logger.error(`Error retrieving config for ${identifier.componentType}`,err);
+					window.settingInitialZoom = false;
+				} else {
+					let defaultLevel = _.get(response.data, "foreign.components.['Window Manager'].zoomDefault");
+					if (defaultLevel) { 
+						FSBL.Clients.Logger.info(`Retrieved default zoom level from config: ${defaultLevel}`, err);
+						window.fsblZoomLevel = zoomLevel;
+						setZoom(defaultLevel); 
+						window.settingInitialZoom = false;
+					} else {
+						FSBL.Clients.Logger.info("No default zoom level retrieved from config: ",response.data, err);
+						window.settingInitialZoom = false;
+					}
+				}
+			}).catch(err => {FSBL.Clients.Logger.error(`Error retrieving config for ${identifier.componentType}`,err);});
+		});
 	}
-
-	window.settingInitialZoom = false;
 };
 
 /**
