@@ -218,7 +218,7 @@ const getZoomLevelHandler = (err, zoomLevel) => {
 					let defaultLevel = _.get(response.data, "foreign.components.['Window Manager'].zoomDefault");
 					if (defaultLevel) { 
 						FSBL.Clients.Logger.info(`Retrieved default zoom level from config: ${defaultLevel}`, err);
-						window.fsblZoomLevel = zoomLevel;
+						window.fsblZoomLevel = defaultLevel;
 						setZoom(defaultLevel); 
 						window.settingInitialZoom = false;
 					} else {
