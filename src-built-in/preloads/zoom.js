@@ -10,8 +10,6 @@
 	- Zoom level being preserved in window state/workspaces
 	- Default zoom level config with-in the component configuration at:
 	  `foreign.components.['Window Manager'].zoomDefault`
-
-	N.B. should not be used with OpenFin's window.options.accelerator.zoom option.
 */
 
 // This global will contain our current zoom level
@@ -208,24 +206,21 @@ const getZoomLevelHandler = (err, zoomLevel) => {
 	if (err) {
 		FSBL.Clients.Logger.info("No \"fsbl-zoom\" settings found in component state", err);
 	} else if (zoomLevel != null) {
-		FSBL.Clients.Logger.info(`Retrieved zoomLevel from state: ${zoomLevel}`, err);
+		FSBL.Clients.Logger.info(`Retrieved zoomLevel from state: ${zoomLevel}`);
 		window.fsblZoomLevel = zoomLevel;
 		setZoom(window.fsblZoomLevel);
-		window.settingInitialZoom = false;
 	} else {
 		//check for default configuration for zoom level and apply as needed
 		let defaultLevel = _.get(FSBL.Clients.WindowClient.options.customData, "foreign.components.['Window Manager'].zoomDefault");
 		if (defaultLevel) { 
-			FSBL.Clients.Logger.info(`Retrieved default zoom level from config: ${defaultLevel}`, err);
+			FSBL.Clients.Logger.info(`Retrieved default zoom level from config: ${defaultLevel}`);
 			window.fsblZoomLevel = defaultLevel;
 			setZoom(defaultLevel); 
-			window.settingInitialZoom = false;
 		} else {
-			FSBL.Clients.Logger.info("No default zoom level retrieved from config: ",response.data, err);
-			window.settingInitialZoom = false;
+			FSBL.Clients.Logger.info("No default zoom level retrieved from configuration ");
 		}
-		
 	}
+	window.settingInitialZoom = false;
 };
 
 /**
@@ -253,7 +248,7 @@ const runZoomHandler = () => {
 	// Updates the component with the zoom level from the previous load, if one exists.
 	FSBL.Clients.WindowClient.getComponentState({ field: "fsbl-zoom" }, getZoomLevelHandler);
 
-	window.addEventListener("wheel", handleWheel, false);
+	window.addEventListener("wheel", handleWheel, {capture: false, passive: false});
 };
 
 // TODO, catch and recall scroll position
