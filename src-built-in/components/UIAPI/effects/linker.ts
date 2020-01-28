@@ -136,3 +136,12 @@ export const cleanUp = () => {
     finsembleWindow.removeEventListener("blurred", hideWindow);
     finsembleWindow.removeEventListener("shown", showWindow);
 }
+
+
+/**
+ * This function is run after the component is initialized.
+ * We will fit the component window with the presence of the finsemble titlebar so that all the component elements would be visible
+ */
+export const fitDOM = () => {
+    FSBL.Clients.WindowClient.fitToDOM();
+}

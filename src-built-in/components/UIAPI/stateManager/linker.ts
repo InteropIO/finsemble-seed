@@ -1,4 +1,6 @@
 import produce from 'immer';
+// @ts-ignore
+import * as clone from 'lodash.clonedeep';
 
 import { Linker, LinkerAction, Channel } from '../fsblUI';
 
@@ -20,7 +22,7 @@ export const updateActiveChannelsState = (originalState: Linker, payload: Linker
     updatedActiveChannels.forEach((channel: Channel) => {
         activeChannelNames.push(channel.name);
     });
-    const updatedChannel = Object.assign({}, originalState.channels);
+    let updatedChannel = clone(originalState.channels);
     const channelIds: any[number] = Object.keys(updatedChannel);
     channelIds.forEach((channelId: number) => {
         if (activeChannelNames.includes(updatedChannel[channelId].name)) {
