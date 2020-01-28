@@ -1,8 +1,9 @@
 import { loop, Cmd } from 'redux-loop';
 
 import { toggleSuccess, toggleFailure, initSuccess } from '../actions/linkerActions';
-import { Channel, Linker, LinkerAction, ActionTypes } from '../fsblUI';
+import { Linker, LinkerAction, ActionTypes } from '../fsblUI';
 import { linkChannel, initializeLinker, cleanUp } from '../effects/linker';
+import { updateToggleChannelSuccessState, updateActiveChannelsState } from '../stateManager/linker';
 
 declare const FSBL: any;
 
@@ -24,12 +25,14 @@ const linker = (state = initialState, action: LinkerAction) => {
             FSBL.Clients.Logger.system.debug(`LINKER_INIT. Linker state: ${state}`);
             return loop(state, Cmd.run(initializeLinker, {
                 successActionCreator: initSuccess,
-                args: [initialState]
+                args: [state]
             }));
+
         case ActionTypes.LINKER_INIT_SUCCESS:
             const initSuccessState = payload.value;
             FSBL.Clients.Logger.system.debug(`LINKER_INIT_SUCCESS. Linker state: ${initSuccessState}`);
             return loop(initSuccessState, Cmd.run(() => FSBL.Clients.WindowClient.fitToDOM()));
+
         case ActionTypes.TOGGLE_CHANNEL_REQUEST:
             const toggleRequestState: Linker = {
                 ...state,
@@ -47,21 +50,12 @@ const linker = (state = initialState, action: LinkerAction) => {
             });
             FSBL.Clients.Logger.system.debug(`TOGGLE_CHANNEL_REQUEST. Linker state: ${toggleRequestState}`);
             return loop(toggleRequestState, cmd);
+
         case ActionTypes.TOGGLE_CHANNEL_SUCCESS:
-            // Updates the channel's 'active' field
-            const toggleSuccessState = {
-                ...state,
-                processingRequest: false,
-                channels: {
-                    ...state.channels,
-                    [payload.channelID]: {
-                        ...state.channels[payload.channelID],
-                        active: !state.channels[payload.channelID].active
-                    }
-                }
-            };
+            const toggleSuccessState = updateToggleChannelSuccessState(state, payload);
             FSBL.Clients.Logger.system.debug(`TOGGLE_CHANNEL_SUCCESS. Linker state: ${toggleSuccessState}`);
             return toggleSuccessState;
+
         case ActionTypes.TOGGLE_CHANNEL_FAILURE:
             const toggleFailureState = {
                 ...state,
@@ -69,33 +63,16 @@ const linker = (state = initialState, action: LinkerAction) => {
             };
             FSBL.Clients.Logger.system.debug(`TOGGLE_CHANNEL_FAILURE. Linker state: ${toggleFailureState}`);
             return toggleFailureState;
+
         case ActionTypes.UPDATE_ACTIVE_CHANNELS:
-            // Update the channels' 'active' field and the windowIdentifier state information
-            // This is triggered by user switching linker window for different components.
-            const { updatedActiveChannels, updatedWindowIdentifier } = payload;
-            const activeChannelNames: any[string] = [];
-            updatedActiveChannels.forEach((channel: Channel) => {
-                activeChannelNames.push(channel.name);
-            });
-            const updatedChannel = Object.assign({}, state.channels);
-            const channelIds: any[number] = Object.keys(updatedChannel);
-            channelIds.forEach((channelId: number) => {
-                if (activeChannelNames.includes(updatedChannel[channelId].name)) {
-                    updatedChannel[channelId].active = true;
-                } else {
-                    updatedChannel[channelId].active = false;
-                }
-            });
-            const updateChannelsState = {
-                ...state,
-                channels: updatedChannel,
-                windowIdentifier: updatedWindowIdentifier
-            };
+            const updateChannelsState = updateActiveChannelsState(state, payload);
             FSBL.Clients.Logger.system.debug(`UPDATE_ACTIVE_CHANNELS. Linker state: ${updateChannelsState}`);
             return updateChannelsState;
+
         case ActionTypes.LINKER_CLEANUP:
             FSBL.Clients.Logger.system.debug(`LINKER_CLEANUP. Linker state: ${state}`);
             return loop(state, Cmd.run(cleanUp));
+
         default:
             FSBL.Clients.Logger.system.debug(`linker reducer default case. Returning the original state: ${state}`);
             return state;
