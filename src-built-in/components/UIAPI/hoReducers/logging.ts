@@ -1,4 +1,4 @@
-import { Linker, LinkerAction, ActionTypes } from '../fsblUI';
+import { Linker, LinkerAction } from '../fsblUI';
 
 declare const FSBL: any;
 

@@ -17,7 +17,7 @@ export const initialState: Linker = {
 };
 
 // The linker's reducer
-const linker = (state = initialState, action: LinkerAction) => {
+export const linker = (state = initialState, action: LinkerAction) => {
     const { type, payload } = action;
     switch (type) {
         case ActionTypes.LINKER_INIT:

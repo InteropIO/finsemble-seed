@@ -5,9 +5,9 @@
  * directory for now (personal pref) I can move them
  * to another folder later on if requested to do so.
  */
-import reducer, { initialState } from './linker';
+import { linker as reducer, initialState } from './linker';
 import { loop, Cmd } from 'redux-loop';
-import { linkChannel, initializeLinker, cleanUp } from '../effects/linker';
+import { linkChannel, initializeLinker, cleanUp, fitDOM } from '../effects/linker';
 import { toggleSuccess, toggleFailure, initSuccess } from '../actions/linkerActions';
 import * as actions from '../actions/linkerActions';
 import { assert } from 'chai';
@@ -36,17 +36,17 @@ describe('Linker reducer', () => {
     });
     
     // Init request shouldn't change any state value
-    // it('Should handle init', () => {
-    //     const output: any = reducer(initialState, actions.init());
-    //     const expectedOutput = loop(initialState, Cmd.run(initializeLinker, {
-    //             successActionCreator: initSuccess,
-    //             args: [initialState]
-    //         }))
-    //     assert.deepEqual(expectedOutput, output);
-    // });
+    it('Should handle init', () => {
+        const output: any = reducer(initialState, actions.init());
+        const expectedOutput = loop(initialState, Cmd.run(initializeLinker, {
+                successActionCreator: initSuccess,
+                args: [initialState]
+            }))
+        assert.deepEqual(expectedOutput, output);
+    });
 
     it('Should handle init success', () => {
-        const expectedOutput = {
+        const payloadValue = {
             channels: {
                 20: channel(20, false, 'green'),
                 30: channel(30, false, 'red'),
@@ -61,57 +61,50 @@ describe('Linker reducer', () => {
             },
             processingRequest: false
         };
-        const initSuccessAction = actions.initSuccess({
-            channels: {
-                20: channel(20, false, 'green'),
-                30: channel(30, false, 'red'),
-            },
-            nameToId: {
-                'green': 20,
-                'red': 30
-            },
-            isAccessibleLinker: true,
-            windowIdentifier: {
-                windowName: "welcome component"
-            },
-            processingRequest: false
-        });
+        const initSuccessAction = actions.initSuccess(payloadValue);
         const output: any = reducer(initialState, initSuccessAction);
-        assert.deepEqual(expectedOutput, output[0]);
+        const expectedOutput = loop(payloadValue, Cmd.run(fitDOM));
+        assert.deepEqual(expectedOutput, output);
     });
 
     // Cleaning up shouldn't change the state
     it('Should handle linker cleanup', () => {
         const output: any = reducer(initialState, actions.cleanUp());
-        assert.deepEqual(initialState, output[0]);
+        const expectedOutput = loop(initialState, Cmd.run(cleanUp));
+        assert.deepEqual(expectedOutput, output);
     });
 
     // Toggle channel request set the "prosessingRequest" property on the linker state to "true"
     it('Should handle toggle channel request', () => {
         const expectedInput = {
             channels: {
-                2: channel(2, false, 'green'),
+                2: {
+                    name: "hi",
+                    color: "green",
+                    active: true,
+                    id: 2
+                }
             },
             nameToId: {
-                "green": 2
+                "hi": 2
             },
             isAccessibleLinker: true,
             windowIdentifier: {},
             processingRequest: false
         }
-        const expectedOutput = {
-            channels: {
-                2: channel(2, false, 'green'),
-            },
-            nameToId: {
-                "green": 2
-            },
-            isAccessibleLinker: true,
-            windowIdentifier: {},
+        const changedState = {
+            ...expectedInput,
             processingRequest: true
-        }
+        };
+        changedState.processingRequest = true;
         const output: any = reducer(expectedInput, actions.toggleChannel(2));
-        assert.deepEqual(expectedOutput, output[0]);
+        const cmd = Cmd.run(linkChannel, {
+            successActionCreator: () => toggleSuccess(2),
+            failActionCreator: () => toggleFailure(),
+            args: ["hi", true, {}]
+        });
+        const expectedOutput = loop(changedState, cmd);
+        assert.deepEqual(JSON.stringify(expectedOutput), JSON.stringify(output));
     });
 
     it('Should handle update active channels', () => {
