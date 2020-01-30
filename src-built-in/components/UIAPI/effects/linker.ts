@@ -23,6 +23,7 @@ export const linkChannel = (channelName: string, isActive: boolean, windowIdenti
         } else {
             FSBL.Clients.LinkerClient.unlinkFromChannel(channelName, windowIdentifier, callback);
         }
+        hideWindow();
     });
 }
 
