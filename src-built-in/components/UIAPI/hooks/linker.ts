@@ -1,10 +1,13 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from "react";
+
+import { RootState, Linker } from '../fsblUI';
 import * as actions from '../actions/linkerActions';
 
 // Encapsulate the linker initialization and Redux dispatch functions inside the hook
 export const useLinker = () => {
     const dispatch = useDispatch();
+    const linker: Linker = useSelector((state: RootState) => state.linker);
 
     useEffect(() => {
 		dispatch(actions.init());
@@ -17,5 +20,5 @@ export const useLinker = () => {
         dispatch(actions.toggleChannel(channelId));
     }
 
-    return [toggleChannel];
+    return { linker, toggleChannel };
 };

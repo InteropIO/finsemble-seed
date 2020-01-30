@@ -8,13 +8,11 @@ import { Provider, useSelector } from 'react-redux';
 import "./css/linkerWindow.css";
 import "../../../assets/css/font-finance.css";
 import "../../../assets/css/finsemble.css";
-import { RootState } from '../UIAPI/fsblUI';
 import store from '../UIAPI/store';
 import { useLinker } from "../UIAPI/hooks/linker";
 
 const LinkerRefactored = () => {
-	const linker = useSelector((state: RootState) => state.linker);
-    const [toggleChannel] = useLinker();
+    const { linker, toggleChannel } = useLinker();
 
 	const allChannels = Object.values(linker.channels);
     const channelElements = allChannels.map(({color, name, active, id}) => {
