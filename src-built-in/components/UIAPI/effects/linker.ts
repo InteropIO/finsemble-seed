@@ -79,7 +79,12 @@ export const initializeLinker = (initialState: Linker) => {
     }
 
     return new Promise((res, rej) => {
-        FSBL.Clients.LinkerClient.getAllChannels().forEach(addChanneltoInitialState);
+        const allConfiguredChannels = FSBL.Clients.LinkerClient.getAllChannels();
+        if (allConfiguredChannels.length > 20) {
+            FSBL.Clients.Logger.system.error(`More than 20 linker channels are configured. Finsemble is showing the maximum of 20 linker channels.`);
+            allConfiguredChannels.splice(20);
+        }
+        allConfiguredChannels.forEach(addChanneltoInitialState);
         initialLinkerState.channels = initialChannels;
         initialLinkerState.nameToId = initialNametoId;
 
