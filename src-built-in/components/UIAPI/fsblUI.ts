@@ -1,6 +1,6 @@
 // Type definitions for Finsemble UI API 1.0.0
 
-/** Set new property like FSBL on the window object */
+/** Define the global object */
 declare global {
     const FSBL: any;
     const finsembleWindow: any;
@@ -83,8 +83,17 @@ export interface LinkerAction {
         /* Linker's channel ID */
         channelID?: number,
         /* All the active channels for a certain component */
-        updatedActiveChannels?: any,
+        updatedActiveChannels?: Array<object>,
         /* The window identifier for a certain component */
-        updatedWindowIdentifier?: any
+        updatedWindowIdentifier?: object
     }
+}
+
+/**
+ * The active channels and the window identifier those channels belong to.
+ * This value is used to update the linker component.
+ */
+export interface channelUpdateReturnObject {
+    channels: Array<object>;
+    windowIdentifier: object
 }

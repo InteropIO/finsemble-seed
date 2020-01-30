@@ -1,4 +1,4 @@
-import { ActionTypes } from "../fsblUI";
+import { ActionTypes, Linker, channelUpdateReturnObject } from "../fsblUI";
 
 /**
  * Generates the action to pass to the reducer to toggle a certain channel. This will trigger the call to
@@ -65,9 +65,9 @@ const toggleFailure = () => {
  * This action creator will be triggered by the "init" action creator if the action succeeds. 
  * It takes in the updated linker state generated from the 'init' action and pass it in to the reducer for it to
  * update the state.
- * @param {object} value The updated linker state after the initialization
+ * @param {Linker} value The updated linker state after the initialization
  */
-const initSuccess = (value: object) => {
+const initSuccess = (value: Linker) => {
     return {
         type: ActionTypes.LINKER_INIT_SUCCESS,
         payload: {
@@ -75,11 +75,6 @@ const initSuccess = (value: object) => {
         }
     };
 };
-
-interface channelUpdateReturnObject {
-    channels: object;
-    windowIdentifier: object
-}
 
 const updateActiveChannels = (value: channelUpdateReturnObject) => {
     return {
