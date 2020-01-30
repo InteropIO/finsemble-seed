@@ -3,7 +3,8 @@
 * All rights reserved.
 */
 import * as React from "react";
-import { Provider, useSelector } from 'react-redux';
+import * as ReactDOM from "react-dom";
+import { Provider } from 'react-redux';
 
 import "./css/linkerWindow.css";
 import "../../../assets/css/font-finance.css";

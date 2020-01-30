@@ -6,12 +6,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import Linker from "../../linkerRefactored/linker";
+import onReady from "../../UIAPI/effects/index";
 
-if (window.FSBL && FSBL.addEventListener) {
-	FSBL.addEventListener("onReady", FSBLReady);
-} else {
-	window.addEventListener("FSBLReady", FSBLReady)
-}
-function FSBLReady() {
-	ReactDOM.render(<Linker />, document.getElementById("main"));
-}
+onReady(() => ReactDOM.render(<Linker />, document.getElementById("main")));

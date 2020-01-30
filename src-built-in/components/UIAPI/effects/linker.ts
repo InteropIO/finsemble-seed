@@ -2,10 +2,6 @@ import store from '../store';
 import { Channel, Channels, NameToId, Linker } from '../fsblUI';
 import { updateActiveChannels } from '../actions/linkerActions';
 
-declare const FSBL: any;
-declare const finsembleWindow: any;
-
-
 /**
  * Link/unlink a channel for the current component.
  * @param channelName The channel name to toggle

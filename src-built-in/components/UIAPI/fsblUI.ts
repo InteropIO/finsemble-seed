@@ -1,5 +1,14 @@
 // Type definitions for Finsemble UI API 1.0.0
 
+/** Set new property like FSBL on the window object */
+declare global {
+    const FSBL: any;
+    const finsembleWindow: any;
+    interface Window {
+        FSBL: any,
+    }
+}
+
  /** All available action types */
  export enum ActionTypes {
     TOGGLE_CHANNEL_REQUEST = "TOGGLE_CHANNEL_REQUEST",
