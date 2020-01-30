@@ -49,6 +49,7 @@ html:before, html:after, body:before, body:after {
 
 html.desktop-active .fsbl-header {
     background: var(--titleBar-background-active-color);
+    color: var(--titleBar-active-font-color);
 }
 
 .fsbl-header-title {
