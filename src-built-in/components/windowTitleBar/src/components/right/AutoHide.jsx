@@ -49,7 +49,9 @@ export default class AutoHide extends React.Component {
 			}
 			if (typeof autoHideIcon === 'object' && autoHideIcon != null) {
 				autoHideConfig = Object.assign(autoHideDefaultConfig, autoHideIcon);
-			} /* else { defaults apply } */
+			} else { //defaults apply 
+				autoHideConfig = autoHideDefaultConfig;
+			} 
 			FSBL.Clients.Logger.log("Autohide window chrome settings: ", autoHideConfig);
 		});
 	}
@@ -213,9 +215,8 @@ export default class AutoHide extends React.Component {
 		let wrapClasses = "fsbl-icon ";
 		if (this.state && this.state.autoHide) wrapClasses += "fsbl-icon-highlighted ";
 		const tooltip = "Auto-hide window chrome";
-
-		return (<div className={wrapClasses} id="fsbl-window-autohide" title={tooltip} data-hover={this.state.hoverState} onClick={this.changeAutoHide}>
-				<FinsembleHoverDetector edge="top" hoverAction={this.hoverAction} style={this.state.visible ? {} : { display: "none" }}></FinsembleHoverDetector>
+		return (<div className={wrapClasses} id="fsbl-window-autohide" title={tooltip} data-hover={this.state.hoverState} onClick={this.changeAutoHide} style={this.props.visible ? {} : { display: "none" }}>
+				<FinsembleHoverDetector edge="top" hoverAction={this.hoverAction}></FinsembleHoverDetector>
 			<i className={iconClasses}></i>
 		</div>);
 	}
