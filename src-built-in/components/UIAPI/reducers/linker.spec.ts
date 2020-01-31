@@ -59,6 +59,7 @@ describe('Linker reducer', () => {
             windowIdentifier: {
                 windowName: "welcome component"
             },
+            actives: 0,
             processingRequest: false
         };
         const initSuccessAction = actions.initSuccess(payloadValue);
@@ -90,7 +91,8 @@ describe('Linker reducer', () => {
             },
             isAccessibleLinker: true,
             windowIdentifier: {},
-            processingRequest: false
+            processingRequest: false,
+            actives: 1
         }
         const changedState = {
             ...expectedInput,

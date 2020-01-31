@@ -69,7 +69,9 @@ export interface Channel {
     /* The color of the channel */
     color: string,
     /* Whether the channel is selected for a certain component or not. If selected, this field will be set to 'true' */
-    active: boolean
+    active: boolean,
+    /* The color of the channel's border */
+    border: string
 }
 
 /**

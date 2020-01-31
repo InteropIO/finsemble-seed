@@ -16,11 +16,11 @@ const LinkerRefactored = () => {
     const { linker, toggleChannel } = useLinker();
 
 	const allChannels = Object.values(linker.channels);
-    const channelElements = allChannels.map(({color, name, active, id}) => {
+    const channelElements = allChannels.map(({color, border, name, active, id}) => {
         const groupClass = `linkerGroup ${color}`;
         const style = {
             backgroundColor: color,
-            border: `1px solid ${color}`
+            border: `1px solid ${border}`
 		}
         return (
             <div key={id} className="channel-wrapper" onClick={() => toggleChannel(id)}>

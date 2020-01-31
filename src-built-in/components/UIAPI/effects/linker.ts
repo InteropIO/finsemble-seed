@@ -9,6 +9,7 @@ import { updateActiveChannels, updateActives } from '../actions/linkerActions';
  * @param windowIdentifier The window identifier for the current component the linker window is attached to
  */
 export const linkChannel = (channelName: string, isActive: boolean, windowIdentifier: object, actives: number) => {
+    // Limit the number of maximum active channels to 6
     if (actives > 5 && !isActive) {
         return Promise.reject("The number of active channels shall not exceed 6.");
     }
@@ -63,6 +64,7 @@ export const initializeLinker = (initialState: Linker) => {
             id: nextChannelId,
             name: channel.name,
             color: channel.color,
+            border: channel.border,
             active: false
         };
         initialNametoId[channel.name] = nextChannelId;

@@ -41,14 +41,13 @@ describe('linker actions', () => {
         assert.deepEqual(actions.init(), action);
     });
     it('should create an init success action', () => {
-        const args: Linker = initalState;
         const action = {
             type: ActionTypes.LINKER_INIT_SUCCESS,
             payload: {
                 value: initalState
             }
         };
-        assert.deepEqual(actions.initSuccess(args), action);
+        assert.deepEqual(actions.initSuccess(initalState), action);
     });
     it('should create a linker cleanup action', () => {
         const action = {
