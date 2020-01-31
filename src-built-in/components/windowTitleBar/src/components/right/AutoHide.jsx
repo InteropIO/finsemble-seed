@@ -36,7 +36,6 @@ export default class AutoHide extends React.Component {
 			autoHide: false
 		};
 
-
 		FSBL.Clients.ConfigClient.getValue({ field: "finsemble.Window Manager" }, function (err, globalWindowManagerConfig) {
 			//get global config
 			if (!globalWindowManagerConfig) { globalWindowManagerConfig =  {  }; } 
@@ -165,11 +164,11 @@ export default class AutoHide extends React.Component {
 		});
 	}
 
-	componentWillMount() {
+	componentDidMount() {
 		FSBL.Clients.WindowClient.getComponentState({
 			field: 'autoHide',
 		}, (err, state) => {
-			let stateToSet = err || typeof state === "undefined" ? this.getDefaultAutoHide() : state;
+			let stateToSet = (err || !state) ? this.getDefaultAutoHide() : state;
 			this.setState({
 				autoHide: stateToSet
 			});
