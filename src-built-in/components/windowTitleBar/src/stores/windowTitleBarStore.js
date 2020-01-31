@@ -44,6 +44,7 @@ var Actions = {
 				{ field: "Minimize.hide", value: FSBLHeader.hideMinimize ? true : false },
 				{ field: "Close.hide", value: FSBLHeader.hideClose ? true : false },
 				{ field: "AlwaysOnTop.show", value: FSBLHeader.alwaysOnTop ? true : false },
+				{ field: "AutoHide.show", value: FSBLHeader.autoHide ? true : false }
 			]);
 
 
@@ -178,6 +179,12 @@ var Actions = {
 
 			windowTitleBarStore.setValues([{ field: "AlwaysOnTop.show", value: alwaysOnTopIcon }]);
 
+			// Whether the autohide pin shows or not depends on both the global setting (finsemble["Window Manager"].autoHideIcon) and 
+			// on the specific setting for this component (foreign.components["Widow Manager"].autoHideIcon)
+		
+			let showAutoHide = !(windowTitleBarConfig.autoHideIcon === false ||  //expressly false for the component
+				(!windowTitleBarConfig.autoHideIcon && !globalWindowManagerConfig.autoHideIcon)) //no config specified at global or window level;
+			windowTitleBarStore.setValues([{ field: "AutoHide.show", value: showAutoHide }]);
 
 			//If tabbing is turned off, ignore global/local 'windowManager' config about whether to allow tabbing.
 			if (dockingConfig.tabbing.enabled === false) {
@@ -339,7 +346,6 @@ var Actions = {
 
 
 	},
-
 	getTabs() {
 		return windowTitleBarStore.getValue({ field: "tabs" });
 	},

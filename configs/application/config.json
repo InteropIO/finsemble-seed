@@ -108,6 +108,11 @@
 	"systemTrayComponent": "File Menu",
 	"Window Manager": {
 		"alwaysOnTopIcon": false,
+		"autoHideIcon": {
+			"defaultSetting": true,
+			"timeout": 2000,
+			"resetMargin": true
+		},
 		"floatingTitlebarComponent": "Floating Titlebar",
 		"deliveryMechanism": "preload"
 	},
