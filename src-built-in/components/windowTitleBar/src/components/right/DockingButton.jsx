@@ -77,16 +77,9 @@ export default class DockingButton extends React.Component {
      *
      * @memberof DockingButton
      */
-    onClick(e) {
-        if (this.state.dockingIcon === "ejector" && e.shiftKey) {
-            return HeaderActions.hyperFocus({
-                linkerChannel: null,
-                includeDockedGroups: true,
-                includeAppSuites: false
-            });
-        } else {
-    		HeaderActions.toggleGroup();
-        }
+
+    onClick(e) {        
+		HeaderActions.toggleGroup();
 	}
 
     /**
