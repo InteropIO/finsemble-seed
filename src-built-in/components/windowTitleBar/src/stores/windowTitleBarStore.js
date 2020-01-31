@@ -179,14 +179,11 @@ var Actions = {
 
 			windowTitleBarStore.setValues([{ field: "AlwaysOnTop.show", value: alwaysOnTopIcon }]);
 
-			// Whether the autohide pin shows or not depends first on the global setting (finsemble["Window Manager"].autoHideIcon) and then
+			// Whether the autohide pin shows or not depends on both the global setting (finsemble["Window Manager"].autoHideIcon) and 
 			// on the specific setting for this component (foreign.components["Widow Manager"].autoHideIcon)
-			let autoHideIcon = globalWindowManagerConfig.autoHideIcon;
-			if (windowTitleBarConfig.autoHideIcon === false || windowTitleBarConfig.autoHideIcon === true ||
-				(typeof windowTitleBarConfig.autoHideIcon === 'object' && windowTitleBarConfig.autoHideIcon != null)) {
-				autoHideIcon = windowTitleBarConfig.autoHideIcon;
-			}
-			let showAutoHide = autoHideIcon ? true : false;
+		
+			let showAutoHide = !(windowTitleBarConfig.autoHideIcon === false ||  //expressly false for the component
+				(!windowTitleBarConfig.autoHideIcon && !globalWindowManagerConfig.autoHideIcon)) //no config specified at global or window level;
 			windowTitleBarStore.setValues([{ field: "AutoHide.show", value: showAutoHide }]);
 
 			//If tabbing is turned off, ignore global/local 'windowManager' config about whether to allow tabbing.
