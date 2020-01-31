@@ -1,6 +1,10 @@
 import * as actions from './linkerActions';
-import { ActionTypes } from "../fsblUI";
+import { ActionTypes, Linker, channelUpdateReturnObject } from "../types";
+import initalState from "../reducers";
 import { assert } from 'chai';
+import 'mocha';
+
+
 /**
  * Make sure that the right action creator is called 
  * and the right action returned.
@@ -37,11 +41,11 @@ describe('linker actions', () => {
         assert.deepEqual(actions.init(), action);
     });
     it('should create an init success action', () => {
-        const args = {};
+        const args: Linker = initalState;
         const action = {
             type: ActionTypes.LINKER_INIT_SUCCESS,
             payload: {
-                value: args
+                value: initalState
             }
         };
         assert.deepEqual(actions.initSuccess(args), action);
@@ -53,8 +57,8 @@ describe('linker actions', () => {
         assert.deepEqual(actions.cleanUp(), action);
     });
     it('should create update active channels action', () => {
-        const args = {
-            channels: {},
+        const args: channelUpdateReturnObject = {
+            channels: [],
             windowIdentifier: {}
         };
         const action = {

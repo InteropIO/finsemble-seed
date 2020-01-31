@@ -1,4 +1,4 @@
-import { ActionTypes, Linker, channelUpdateReturnObject } from "../fsblUI";
+import { ActionTypes, Linker, channelUpdateReturnObject } from "../types";
 
 /**
  * Generates the action to pass to the reducer to toggle a certain channel. This will trigger the call to
@@ -76,6 +76,11 @@ const initSuccess = (value: Linker) => {
     };
 };
 
+/**
+ * When user switches the linker channel for different finsemble components, this action will be called to update the
+ * active linker channels.
+ * @param value The value returned by the linker client on the action channels for a given linker window
+ */
 const updateActiveChannels = (value: channelUpdateReturnObject) => {
     return {
         type: ActionTypes.UPDATE_ACTIVE_CHANNELS,
@@ -86,6 +91,18 @@ const updateActiveChannels = (value: channelUpdateReturnObject) => {
     };
 };
 
+/**
+ * Update the number of active channels.
+ * @param value The number of current active channels
+ */
+const updateActives = (value: number) => {
+    return {
+        type: ActionTypes.UPDATE_ACTIVES,
+        payload: {
+            value
+        }
+    }
+}
 
 
 export {
@@ -93,6 +110,7 @@ export {
     toggleSuccess,
     toggleFailure,
     updateActiveChannels,
+    updateActives,
     init,
     initSuccess,
     cleanUp

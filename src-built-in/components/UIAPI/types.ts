@@ -17,7 +17,8 @@ declare global {
     LINKER_INIT = "LINKER_INIT",
     LINKER_INIT_SUCCESS = "LINKER_INIT_SUCCESS",
     LINKER_CLEANUP = "LINKER_CLEANUP",
-    UPDATE_ACTIVE_CHANNELS = "UPDATE_ACTIVE_CHANNELS"
+    UPDATE_ACTIVE_CHANNELS = "UPDATE_ACTIVE_CHANNELS",
+    UPDATE_ACTIVES = "UPDATE_ACTIVES",
 }
 
 /**
@@ -41,7 +42,9 @@ export interface Linker {
     /* The window identifier for the window that the linker component is on. They have one to one matching relationship */
     windowIdentifier: object,
     /* When the UI component is waiting for the response from the service, this will be set to 'true' */
-    processingRequest: boolean
+    processingRequest: boolean,
+    /* The number of the active channels. We allow user to set no more than 6 active lin */
+    actives: number
 }
 /**
  * The map of linker name -> linker channel ID
@@ -96,4 +99,14 @@ export interface LinkerAction {
 export interface channelUpdateReturnObject {
     channels: Array<object>;
     windowIdentifier: object
+}
+
+/**
+ * The return object by calling LinkerClient.linkToChannel or LinkerClient.unlinkFromChannel.
+ * "channels" contains an array of the current active channels after the linking, and "allChannels"
+ * contains all the current channels given a linker window.
+ */
+export interface linkChannelReturnObject {
+    channels: Array<object>;
+    allChannels: Array<object>;
 }

@@ -1,7 +1,7 @@
 import { loop, Cmd } from 'redux-loop';
 
-import { toggleSuccess, toggleFailure, initSuccess } from '../actions/linkerActions';
-import { Linker, LinkerAction, ActionTypes } from '../fsblUI';
+import { toggleSuccess, toggleFailure, initSuccess, updateActives } from '../actions/linkerActions';
+import { Linker, LinkerAction, ActionTypes } from '../types';
 import { linkChannel, initializeLinker, cleanUp, fitDOM } from '../effects/linker';
 import { updateToggleChannelSuccessState, updateActiveChannelsState } from '../stateManager/linker';
 import withLogging from '../hoReducers/logging';
@@ -13,6 +13,7 @@ export const initialState: Linker = {
     nameToId: {},
     isAccessibleLinker: true,
     windowIdentifier: {},
+    actives: 0,
     processingRequest: false
 };
 
@@ -43,7 +44,7 @@ export const linker = (state = initialState, action: LinkerAction) => {
             const cmd = Cmd.run(linkChannel, {
                 successActionCreator: () => toggleSuccess(payload.channelID),
                 failActionCreator: () => toggleFailure(),
-                args: [targetChannelName, targetChannelActive, targetWindowIdentifier]
+                args: [targetChannelName, targetChannelActive, targetWindowIdentifier, toggleRequestState.actives]
             });
             return loop(toggleRequestState, cmd);
 
@@ -61,6 +62,13 @@ export const linker = (state = initialState, action: LinkerAction) => {
         case ActionTypes.UPDATE_ACTIVE_CHANNELS:
             const updateChannelsState = updateActiveChannelsState(state, payload);
             return updateChannelsState;
+
+        case ActionTypes.UPDATE_ACTIVES:
+            const updateActivesState = {
+                ...state,
+                actives: payload.value
+            };
+            return updateActivesState;
 
         case ActionTypes.LINKER_CLEANUP:
             return loop(state, Cmd.run(cleanUp));

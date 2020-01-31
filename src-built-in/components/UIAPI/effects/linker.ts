@@ -1,6 +1,6 @@
 import store from '../store';
-import { Channel, Channels, NameToId, Linker } from '../fsblUI';
-import { updateActiveChannels } from '../actions/linkerActions';
+import { Channel, Channels, NameToId, Linker, linkChannelReturnObject } from '../types';
+import { updateActiveChannels, updateActives } from '../actions/linkerActions';
 
 /**
  * Link/unlink a channel for the current component.
@@ -8,23 +8,30 @@ import { updateActiveChannels } from '../actions/linkerActions';
  * @param isActive Whether the channel is active or not before the toggle
  * @param windowIdentifier The window identifier for the current component the linker window is attached to
  */
-export const linkChannel = (channelName: string, isActive: boolean, windowIdentifier: object) => {
-    return new Promise((res, rej) => {
-        const callback = (err: any, data: object) => {
-            if (err) {
-                FSBL.Clients.Logger.system.error(`Failed to togger channel ${channelName}: ${err}`);
-                return rej(err);
+export const linkChannel = (channelName: string, isActive: boolean, windowIdentifier: object, actives: number) => {
+    if (actives > 5 && !isActive) {
+        return Promise.reject("The number of active channels shall not exceed 6.");
+    }
+    else {
+        return new Promise((res, rej) => {
+            const callback = (err: any, data: linkChannelReturnObject) => {
+                if (err) {
+                    FSBL.Clients.Logger.system.error(`Failed to togger channel ${channelName}: ${err}`);
+                    return rej(err);
+                }
+                FSBL.Clients.Logger.system.log(`Toggle channel success. Channel name: ${channelName}`);
+                const numActiveChannels = data.channels.length;
+                store.dispatch(updateActives(numActiveChannels));
+                res(data);
+            };
+            if (!isActive) {
+                FSBL.Clients.LinkerClient.linkToChannel(channelName, windowIdentifier, callback);
+            } else {
+                FSBL.Clients.LinkerClient.unlinkFromChannel(channelName, windowIdentifier, callback);
             }
-            FSBL.Clients.Logger.system.log(`Toggle channel success. Channel name: ${channelName}`);
-            res(data);
-        };
-        if (!isActive) {
-            FSBL.Clients.LinkerClient.linkToChannel(channelName, windowIdentifier, callback);
-        } else {
-            FSBL.Clients.LinkerClient.unlinkFromChannel(channelName, windowIdentifier, callback);
-        }
-        hideWindow();
-    });
+            hideWindow();
+        });
+    }
 }
 
 // Window event listeners

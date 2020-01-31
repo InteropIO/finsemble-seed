@@ -2,7 +2,7 @@ import produce from 'immer';
 // @ts-ignore
 import * as clone from 'lodash.clonedeep';
 
-import { Linker, LinkerAction, Channel } from '../fsblUI';
+import { Linker, LinkerAction, Channel } from '../types';
 
 // Updates the channel's 'active' field
 export const updateToggleChannelSuccessState = (originalState: Linker, payload: LinkerAction["payload"]) => {

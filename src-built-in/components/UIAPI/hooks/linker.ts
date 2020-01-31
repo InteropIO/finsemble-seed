@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from "react";
 
-import { RootState, Linker } from '../fsblUI';
+import { RootState, Linker } from '../types';
 import * as actions from '../actions/linkerActions';
 
 // Encapsulate the linker initialization and Redux dispatch functions inside the hook
