@@ -1,6 +1,6 @@
 import { loop, Cmd } from 'redux-loop';
 
-import { toggleSuccess, toggleFailure, initSuccess, updateActives } from '../actions/linkerActions';
+import { toggleSuccess, toggleFailure, initSuccess } from '../actions/linkerActions';
 import { Linker, LinkerAction, ActionTypes } from '../types';
 import { linkChannel, initializeLinker, cleanUp, fitDOM } from '../effects/linker';
 import { updateToggleChannelSuccessState, updateActiveChannelsState } from '../stateManager/linker';

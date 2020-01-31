@@ -21,7 +21,8 @@ const channel = (id: number, active: boolean, color: string) => {
         name: color,
         color,
         active,
-        id
+        id,
+        border: color
     }
 }
 
@@ -83,7 +84,8 @@ describe('Linker reducer', () => {
                     name: "hi",
                     color: "green",
                     active: true,
-                    id: 2
+                    id: 2,
+                    border: "green"
                 }
             },
             nameToId: {
