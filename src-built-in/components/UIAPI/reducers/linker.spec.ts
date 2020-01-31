@@ -105,7 +105,7 @@ describe('Linker reducer', () => {
         const cmd = Cmd.run(linkChannel, {
             successActionCreator: () => toggleSuccess(2),
             failActionCreator: () => toggleFailure(),
-            args: ["hi", true, {}]
+            args: ["hi", true, {}, 1]
         });
         const expectedOutput = loop(changedState, cmd);
         assert.deepEqual(JSON.stringify(expectedOutput), JSON.stringify(output));

@@ -1,6 +1,6 @@
 import * as actions from './linkerActions';
-import { ActionTypes, Linker, channelUpdateReturnObject } from "../types";
-import initalState from "../reducers";
+import { ActionTypes, channelUpdateReturnObject } from "../types";
+import initalState from "../reducers/linker";
 import { assert } from 'chai';
 import 'mocha';
 
