@@ -12,15 +12,15 @@ import { Actions as HeaderActions } from "../../stores/windowTitleBarStore";
 export default class AutoHide extends React.Component {
 	constructor(props) {
 		super(props);
+		this.state = {
+			autoHide: false,
+			hoverState: false
+		};
 		this.changeAutoHide = this.changeAutoHide.bind(this);
 		this.hoverAction = this.hoverAction.bind(this);
 	}
 
-	componentWillMount() {
-		this.setState({
-			autoHide: false
-		});
-
+	componentDidMount() {
 		FSBL.Clients.WindowClient.getComponentState({
 			field: 'autoHide',
 		}, (err, state) => {
@@ -74,7 +74,7 @@ export default class AutoHide extends React.Component {
 					id="fsbl-window-autohide" title={tooltip} 
 					data-hover={this.state.hoverState} 
 					onClick={this.changeAutoHide} 
-					style={this.state.visible ? {} : { display: "none" }}>
+					style={this.props.visible ? {} : { display: "none" }}>
 				<FinsembleHoverDetector edge="top" hoverAction={this.hoverAction} />
 			<i className={iconClasses}></i>
 		</div>);

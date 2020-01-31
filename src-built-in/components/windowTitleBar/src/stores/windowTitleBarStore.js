@@ -206,7 +206,7 @@ var Actions = {
 			// Whether the autohide pin shows or not depends first on the global setting (finsemble["Window Manager"].autoHideIcon) and then
 			// on the specific setting for this component (foreign.components["Widow Manager"].autoHideIcon)
 			let autoHideIcon = globalWindowManagerConfig.autoHideIcon;
-			FSBL.Clients.Logger.log("AutoHide: global config: ",autoHideIcon);
+			FSBL.Clients.Logger.debug("AutoHide: global config: ",autoHideIcon);
 			if (windowTitleBarConfig.autoHideIcon === false || windowTitleBarConfig.autoHideIcon === true ||
 				(typeof windowTitleBarConfig.autoHideIcon === 'object' && windowTitleBarConfig.autoHideIcon != null)) {
 				autoHideIcon = windowTitleBarConfig.autoHideIcon;
@@ -214,10 +214,9 @@ var Actions = {
 			if (typeof autoHideIcon === 'object' && autoHideIcon != null) {
 				autoHideConfig = Object.assign(autoHideDefaultConfig, autoHideIcon);
 			} /* else { defaults apply } */
-			FSBL.Clients.Logger.log("Autohide window chrome settings: ", autoHideConfig)
-			FSBL.Clients.Logger.log("AutoHide: config post merge with local config: ",autoHideIcon);
+			FSBL.Clients.Logger.debug("Autohide window chrome settings: ", autoHideConfig)
+			FSBL.Clients.Logger.debug("AutoHide: config post merge with local config: ",autoHideIcon);
 			let showAutoHide = autoHideIcon ? true : false;
-			FSBL.Clients.Logger.log("AutoHide: showAutoHide: " + (showAutoHide ? " is true" : " is false"));
 			windowTitleBarStore.setValues([{ field: "AutoHide.show", value: showAutoHide }]);
 			
 			//If tabbing is turned off, ignore global/local 'windowManager' config about whether to allow tabbing.
