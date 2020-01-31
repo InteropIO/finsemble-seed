@@ -22,7 +22,7 @@ export const updateActiveChannelsState = (originalState: Linker, payload: Linker
     updatedActiveChannels.forEach((channel: Channel) => {
         activeChannelNames.push(channel.name);
     });
-    let updatedChannel = clone(originalState.channels);
+    const updatedChannel = clone(originalState.channels);
     const channelIds: any[number] = Object.keys(updatedChannel);
     channelIds.forEach((channelId: number) => {
         if (activeChannelNames.includes(updatedChannel[channelId].name)) {
