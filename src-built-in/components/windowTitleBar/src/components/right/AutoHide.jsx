@@ -40,18 +40,13 @@ export default class AutoHide extends React.Component {
 		FSBL.Clients.ConfigClient.getValue({ field: "finsemble.Window Manager" }, function (err, globalWindowManagerConfig) {
 			//get global config
 			if (!globalWindowManagerConfig) { globalWindowManagerConfig =  {  }; } 
-			let autoHideIcon = globalWindowManagerConfig.autoHideIcon;
+			autoHideConfig = Object.assign(autoHideDefaultConfig, globalWindowManagerConfig.autoHideIcon);
 			//get local config
 			let windowTitleBarConfig = FSBL.Clients.WindowClient.options.customData.foreign.components["Window Manager"];
 			if (windowTitleBarConfig.autoHideIcon === false || windowTitleBarConfig.autoHideIcon === true ||
 				(typeof windowTitleBarConfig.autoHideIcon === 'object' && windowTitleBarConfig.autoHideIcon != null)) {
-				autoHideIcon = windowTitleBarConfig.autoHideIcon;
+					autoHideConfig = Object.assign(autoHideConfig, windowTitleBarConfig.autoHideIcon);
 			}
-			if (typeof autoHideIcon === 'object' && autoHideIcon != null) {
-				autoHideConfig = Object.assign(autoHideDefaultConfig, autoHideIcon);
-			} else { //defaults apply 
-				autoHideConfig = autoHideDefaultConfig;
-			} 
 			FSBL.Clients.Logger.log("Autohide window chrome settings: ", autoHideConfig);
 		});
 	}
