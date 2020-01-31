@@ -20,7 +20,7 @@ const LinkerRefactored = () => {
         const groupClass = `linkerGroup ${color}`;
         const style = {
             backgroundColor: color,
-            border: `1px solid ${border}`
+            border: `1px solid ${border ? border : color}`
 		}
         return (
             <div key={id} className="channel-wrapper" onClick={() => toggleChannel(id)}>
