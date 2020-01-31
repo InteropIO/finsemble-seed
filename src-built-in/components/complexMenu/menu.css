@@ -5,6 +5,7 @@ body {
     margin: 0px;
     font-family: var(--font-family);
     font-weight: var(--content-font-weight);
+    user-select: none;
 }
 
 #bodyHere {
@@ -112,7 +113,9 @@ body {
 
 .complex-menu-section-toggle {
     padding: 4px 30px 4px 0px;
+    margin: 1px 6px;
     padding-left: 30px;
+    border-radius: 30px;
 }
 
 .complex-menu-section-toggle:hover {
@@ -143,11 +146,11 @@ body {
 
 .action-button {
     border: 1px solid var(--button-neutral-border-color);
-    padding: .25em 0;
+    padding: .25em 0em;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 16px 0 6px 0;
+    margin: 16px 0px 6px 0px;
 }
 
 .action-button:hover {
