@@ -4,9 +4,12 @@ You may wish to spawn a group of components in a predetermined layout. This is r
 ![](./spawn_component_group_demo.gif)
 
 ### Spawning a group ###
-[spawnComponentGroup.js](./spawnComponentGroup.js) provides a utility function that allows you to spawn a group of components, group them and add them to a common linker channel. This is achieved by providing an array of Objects with `componentType` and `spawnOptions` values that define each of the components. The group itself can be spawned at a particular location, from which each component's position is calculated. By additionally providing a linkerGroup or 'auto' (to automatically select a free group) the components are all added to the same linker gorup on spawn.
+[spawnComponentGroup.js](./spawnComponentGroup.js) provides a utility function that allows you to spawn a group of components, group them and add them to a common linker channel. This is achieved by providing an array of Objects with `componentType` and `spawnOptions` values that define each of the components. The group itself can be spawned at a particular location, from which each component's position is calculated. 
 
-Example usage:
+#### Setting a Linker group ####
+The components spawned can all be added to the same group on spawn by specifying that group as the final argument to the commend. Alternatively, specify 'auto' to automatically select an unused linker group (or if none is available the least used group).
+
+#### Example usage: ####
 ```
 let toSpawn = [{
 		"componentType": "Welcome Component",
