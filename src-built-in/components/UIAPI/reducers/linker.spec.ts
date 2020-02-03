@@ -100,7 +100,6 @@ describe('Linker reducer', () => {
             ...expectedInput,
             processingRequest: true
         };
-        changedState.processingRequest = true;
         const output: any = reducer(expectedInput, actions.toggleChannel(2));
         const cmd = Cmd.run(linkChannel, {
             successActionCreator: () => toggleSuccess(2),
@@ -108,7 +107,7 @@ describe('Linker reducer', () => {
             args: ["hi", true, {}, 1]
         });
         const expectedOutput = loop(changedState, cmd);
-        assert.deepEqual(JSON.stringify(expectedOutput), JSON.stringify(output));
+        assert.equal(JSON.stringify(expectedOutput), JSON.stringify(output));
     });
 
     it('Should handle update active channels', () => {

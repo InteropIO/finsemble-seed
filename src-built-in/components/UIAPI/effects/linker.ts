@@ -13,26 +13,24 @@ export const linkChannel = (channelName: string, isActive: boolean, windowIdenti
     if (actives > 5 && !isActive) {
         return Promise.reject("The number of active channels shall not exceed 6.");
     }
-    else {
-        return new Promise((res, rej) => {
-            const callback = (err: any, data: linkChannelReturnObject) => {
-                if (err) {
-                    FSBL.Clients.Logger.system.error(`Failed to togger channel ${channelName}: ${err}`);
-                    return rej(err);
-                }
-                FSBL.Clients.Logger.system.log(`Toggle channel success. Channel name: ${channelName}`);
-                const numActiveChannels = data.channels.length;
-                store.dispatch(updateActives(numActiveChannels));
-                res(data);
-            };
-            if (!isActive) {
-                FSBL.Clients.LinkerClient.linkToChannel(channelName, windowIdentifier, callback);
-            } else {
-                FSBL.Clients.LinkerClient.unlinkFromChannel(channelName, windowIdentifier, callback);
+    return new Promise((resolve, reject) => {
+        const callback = (err: any, data: linkChannelReturnObject) => {
+            if (err) {
+                FSBL.Clients.Logger.system.error(`Failed to togger channel ${channelName}: ${err}`);
+                return reject(err);
             }
-            hideWindow();
-        });
-    }
+            FSBL.Clients.Logger.system.log(`Toggle channel success. Channel name: ${channelName}`);
+            const numActiveChannels = data.channels.length;
+            store.dispatch(updateActives(numActiveChannels));
+            resolve(data);
+        };
+        if (!isActive) {
+            FSBL.Clients.LinkerClient.linkToChannel(channelName, windowIdentifier, callback);
+        } else {
+            FSBL.Clients.LinkerClient.unlinkFromChannel(channelName, windowIdentifier, callback);
+        }
+        hideWindow();
+    });
 }
 
 // Window event listeners
@@ -87,7 +85,7 @@ export const initializeLinker = (initialState: Linker) => {
         return updatedChannels;
     }
 
-    return new Promise((res, rej) => {
+    return new Promise((resolve, reject) => {
         const allConfiguredChannels = FSBL.Clients.LinkerClient.getAllChannels();
         if (allConfiguredChannels.length > 20) {
             FSBL.Clients.Logger.system.error(`More than 20 linker channels are configured. Finsemble is showing the maximum of 20 linker channels.`);
@@ -101,7 +99,7 @@ export const initializeLinker = (initialState: Linker) => {
             if (err) {
                 /* @early-exit */
                 FSBL.Clients.Logger.system.error(`Failed to update the linker state. Current linker state: ${store.getState()}`);
-                return rej(`Failed to add Finsemble.LinkerWindow.SetActiveChannels Responder: ${err}`);
+                return reject(`Failed to add Finsemble.LinkerWindow.SetActiveChannels Responder: ${err}`);
             }
             const updatedChannels = updateChannels(msg.data.channels);
 
@@ -118,7 +116,7 @@ export const initializeLinker = (initialState: Linker) => {
 
             // Need to invoke the callback function in order for us to be able to toggle the linker window again - see LinkerButton.jsx
             msg.sendQueryResponse(null, {});
-            res(newLinkerState);
+            resolve(newLinkerState);
         }
 
         // Check whether the linker is configured to be an accessible linker or not; update the state accordingly.  
@@ -127,7 +125,7 @@ export const initializeLinker = (initialState: Linker) => {
             if (err) {
                 FSBL.Clients.Logger.system.error(`Failed to get accessibleLinker value: ${err}`);
                 /* @early-exit */
-                rej(`Error getting accessibleLinker value.`);
+                reject(`Error getting accessibleLinker value.`);
             }
             initialLinkerState.isAccessibleLinker = value;
         });
