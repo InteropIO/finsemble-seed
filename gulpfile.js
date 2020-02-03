@@ -511,6 +511,9 @@ const { launch, connect } = require('hadouken-js-adapter');
 			if (done) done();
 		},
 		launchElectron: done => {
+			console.log(path.resolve(path.join(".", "../finsemble-electron-adapter")))
+			
+			
 			logToTerminal(`Using Container: Electron@${getElectronVersion()}`, "green");
 			const cfg = taskMethods.startupConfig[env.NODE_ENV];
 			const USING_ELECTRON = container === "electron";
@@ -518,11 +521,22 @@ const { launch, connect } = require('hadouken-js-adapter');
 				throw "Cannot use electron container unless finsemble-electron-adapter optional dependency is installed. Please run npm i @chartiq/finsemble-electron-adapter";
 			}
 
+			let socketCertificatePath
+			console.log(cfg.socketCertificateKey, cfg.socketCertificateCert)
+			if (cfg.socketCertificateKey && cfg.socketCertificateCert) {
+				socketCertificatePath = { 
+					key: path.resolve(path.join(__dirname, cfg.socketCertificateKey)),
+					cert: path.resolve(path.join(__dirname, cfg.socketCertificateCert))
+				}
+			}
+			console.log("certkeypath", socketCertificatePath);
+
 			let config = {
 				manifest: cfg.serverConfig,
 				onElectronClose: process.exit,
 				chromiumFlags: JSON.stringify(cfg.chromiumFlags),
 				path: FEA_PATH,
+				socketCertificatePath
 			}
 
 			// set breakpointOnStart variable so FEA knows whether to pause initial code execution
@@ -536,6 +550,8 @@ const { launch, connect } = require('hadouken-js-adapter');
 			return FEA.e2oLauncher(config, done);
 		},
 		makeInstaller: async (done) => {
+			//console.log(path.resolve(path.join("./installer""../finsemble"))
+			//return;
 			if (!env.NODE_ENV) throw new Error("NODE_ENV must be set to generate an installer.");
 			function resolveRelativePaths(obj, properties, rootPath) {
 				properties.forEach(prop => {
@@ -576,11 +592,25 @@ const { launch, connect } = require('hadouken-js-adapter');
 				process.exit(1);
 			}
 
+			let socketCertificatePath
+			const cfg = taskMethods.startupConfig[env.NODE_ENV];
+			console.log(cfg.socketCertificateKey, cfg.socketCertificateCert)
+			if (cfg.socketCertificateKey && cfg.socketCertificateCert) {
+				socketCertificatePath = { 
+					key: path.resolve(path.join(__dirname, cfg.socketCertificateKey)),
+					cert: path.resolve(path.join(__dirname, cfg.socketCertificateCert))
+				}
+			}
+			console.log("certkeypath", socketCertificatePath);
+			//console.log(installerConfig);
+			//exit
+
 			FEAPackager.setFeaPath(FEA_PATH);
 			await FEAPackager.setApplicationFolderName(installerConfig.name);
 			await FEAPackager.setManifestURL(manifestUrl);
 			await FEAPackager.setUpdateURL(updateUrl);
 			await FEAPackager.setChromiumFlags(chromiumFlags || {});
+			await FEAPackager.copySocketCertificates(socketCertificatePath);
 			await FEAPackager.createFullInstaller(installerConfig);
 			done();
 		},
