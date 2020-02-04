@@ -237,6 +237,8 @@ async function addApp(id, cb = Function.prototype) {
 
 	if (typeof app.manifest !== "object") {
 		appConfig.manifest = { ...appConfig };
+	} else {
+		appConfig.manifest = app.manifest;
 	}
 
 	if (app.friendlyName) {
