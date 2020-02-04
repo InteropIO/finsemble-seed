@@ -20,6 +20,14 @@
     padding-left: 80px; /* leave some space for a user to grab */
 }
 
+html:before, html:after, body:before, body:after {
+    content: "";
+    position: fixed;
+    display: block;
+    z-index: 2147483640;
+    background-color: var(--window-border-color);
+}
+
 .fsbl-header {
     font-family: var(--font-family);
     font-size: var(--titleBar-font-size);
@@ -34,13 +42,14 @@
     background: var(--titleBar-background-inactive-color);
     width: 100%;
     left: 0;
-    z-index: 2147483640;
+    z-index: 2147483639;
     top: 0;
     color: var(--titleBar-inactive-font-color);
 }
 
 html.desktop-active .fsbl-header {
     background: var(--titleBar-background-active-color);
+    color: var(--titleBar-active-font-color);
 }
 
 .fsbl-header-title {

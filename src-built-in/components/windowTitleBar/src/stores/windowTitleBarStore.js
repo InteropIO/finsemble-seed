@@ -144,12 +144,6 @@ var Actions = {
 				{ field: "isTopRight", value: isTopRight },
 				{ field: "Main.dockingIcon", value: icon }
 			]);
-
-			if (isInMovableGroup && !isTopRight) {
-				finsembleWindow.updateOptions({ showTaskbarIcon: false });
-			} else {
-				finsembleWindow.updateOptions({ showTaskbarIcon: true });
-			}
 		};
 
 		FSBL.Clients.RouterClient.subscribe("Finsemble.WorkspaceService.groupUpdate", onDockingGroupUpdate);

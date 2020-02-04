@@ -166,6 +166,7 @@
     /* Window Frame */
     --window-frame-inactive-color: var(--core-primary);
     --window-frame-active-color: var(--core-primary-2);
+    --window-border-color: rgba(61, 69, 85, 0.20);
 
     /* Window Scrims and Masks */
     --groupMask-background-color: var(--accent-primary);
