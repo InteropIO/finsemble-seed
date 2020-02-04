@@ -235,11 +235,15 @@ async function addApp(id, cb = Function.prototype) {
 		delete appConfig.window.url;
 	}
 
-	if (typeof app.manifest !== "object") {
-		appConfig.manifest = { ...appConfig };
-	} else {
-		appConfig.manifest = app.manifest;
+	let manifest;
+	try {
+		manifest = JSON.parse(app.manifest);
+	} catch(e) {
+		FSBL.Clients.Logger.warn(`${app.title} is missing a valid manifest. Creating a default manifest`);
+		manifest = { ...appConfig };
 	}
+
+	appConfig.manifest = manifest;
 
 	if (app.friendlyName) {
 		appConfig.displayName = app.friendlyName;
