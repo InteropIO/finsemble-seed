@@ -25,6 +25,7 @@ let defaultData = {
 	 * of the workspace management menu, the spinner doesn't show up.
 	 */
 	isSwitchingWorkspaces: false,
+	isPromptingUser: false,
 };
 
 function uuidv4() {
@@ -120,6 +121,12 @@ Actions = {
 	},
 	setIsSwitchingWorkspaces: function (val) {
 		return WorkspaceManagementStore.setValue({ field: "isSwitchingWorkspaces", value: val });
+	},
+	getIsPromptingUser: function () {
+		return WorkspaceManagementStore.getValue("isPromptingUser");
+	},
+	setIsPromptingUser: function (val) {
+		return WorkspaceManagementStore.setValue({ field: "isPromptingUser", value: val });
 	},
 	setPins: function (pins) {
 		if (pins) {
@@ -342,6 +349,10 @@ Actions = {
 	 * Asks the user if they'd like to save their data, then loads the requested workspace.
 	 */
 	switchToWorkspace: function (data) {
+		let prompting = Actions.getIsPromptingUser()
+		Logger.system.log("workspaceManagementMenuStore: switchToWorkspace", prompting ? "prompting" : "not-prompting");
+
+		if (prompting) return;
 		Actions.setIsSwitchingWorkspaces(true);
 		Actions.blurWindow();
 		let name = data.name;
@@ -350,11 +361,12 @@ Actions = {
 		 * Actually perform the switch. Happens after we ask the user what they want.
 		 *
 		 */
-		function switchWorkspace() {
+		function switchWorkspace(callback) {
 			FSBL.Clients.WorkspaceClient.switchTo({
 				name: name
 			}, () => {
-				Actions.setIsSwitchingWorkspaces(false);
+					Actions.setIsSwitchingWorkspaces(false);
+					callback();
 			});
 		}
 		/**
@@ -372,6 +384,7 @@ Actions = {
 		 */
 		let tasks = [];
 		if (activeWorkspace.isDirty) {
+			Actions.setIsPromptingUser(true);
 			let firstMethod = Actions.autoSave,
 				secondMethod = null;
 			if (PROMPT_ON_SAVE === true) {
@@ -413,6 +426,8 @@ Actions = {
 	 * @param {any} result
 	 */
 	onAsyncComplete(err, result) {
+		Logger.system.log("workspaceManagementMenuStore: onAsyncComplete");
+
 		WorkspaceManagementStore.setValue({ field: "newWorkspaceDialogIsActive", value: false });
 		const errMessage = err && err.message;
 		if (errMessage && errMessage !== NEGATIVE && errMessage !== SAVE_DIALOG_CANCEL_ERROR) {
@@ -422,6 +437,8 @@ Actions = {
 
 		//Unlock the UI.
 		Actions.setIsSwitchingWorkspaces(false);
+		Actions.setIsPromptingUser(false);
+
 	},
 	/**
 	 * NOTE: Leaving this function here until we figure out notifications.
