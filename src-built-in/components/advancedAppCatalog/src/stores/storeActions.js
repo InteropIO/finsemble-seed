@@ -239,7 +239,7 @@ async function addApp(id, cb = Function.prototype) {
 	try {
 		manifest = JSON.parse(app.manifest);
 	} catch(e) {
-		FSBL.Clients.Logger.warn(`${app.title} is missing a valid manifest. Creating a default manifest`);
+		FSBL.Clients.Logger.warn(`${app.title || app.name} is missing a valid manifest. Creating a default manifest`);
 		manifest = { ...appConfig };
 	}
 
