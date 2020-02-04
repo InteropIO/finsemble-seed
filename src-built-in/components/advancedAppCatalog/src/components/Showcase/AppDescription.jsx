@@ -4,6 +4,8 @@
 */
 import React from "react";
 
+const DEFAULT_APP_DESCRIPTION = "Get started by adding this component to Finsemble now!";
+
 /**
  * AppShowcase description section
  * @param {object} props Component props
@@ -11,7 +13,8 @@ import React from "react";
  */
 const AppDescription = props => {
 
-	const description = props.description === null ? "Get started by adding this component to Finsemble now!" : props.description;
+	console.log(props);
+	const description = props.description === undefined ? DEFAULT_APP_DESCRIPTION : props.description;
 
 	return (
 		<div className="app-notes description">
