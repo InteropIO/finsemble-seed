@@ -13,7 +13,6 @@ const DEFAULT_APP_DESCRIPTION = "Get started by adding this component to Finsemb
  */
 const AppDescription = props => {
 
-	console.log(props);
 	const description = props.description === undefined ? DEFAULT_APP_DESCRIPTION : props.description;
 
 	return (
