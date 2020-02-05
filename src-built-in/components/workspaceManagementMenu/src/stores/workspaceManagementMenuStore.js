@@ -428,7 +428,7 @@ Actions = {
 	 * @param {any} result
 	 */
 	onAsyncComplete(err, result) {
-		Logger.system.log("workspaceManagementMenuStore: onAsyncComplete");
+		Logger.system.debug("workspaceManagementMenuStore: onAsyncComplete");
 
 		WorkspaceManagementStore.setValue({ field: "newWorkspaceDialogIsActive", value: false });
 		const errMessage = err && err.message;
