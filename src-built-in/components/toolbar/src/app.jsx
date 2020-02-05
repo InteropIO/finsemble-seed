@@ -11,4 +11,21 @@ import onReady from "../../UIAPI/effects/index";
 import ReactDOM from "react-dom";
 import React from "react";
 
-onReady(() => ReactDOM.render(<ToolbarRefactored />, document.getElementById("toolbar_refactored")));
+const ToolbarShell = () => {
+	return (
+		<ToolbarRefactored>
+			New Toolbar. Delete this line when the first component is added.
+			{/* Drag Handle */}
+			{/* Workspace Management Menu */}
+			{/* App Menu */}
+			{/* Favorites Section */}
+			{/* Minimize All */}
+			{/* Reveal All */}
+			{/* Auto Arrange */}
+		</ToolbarRefactored>
+	)
+}
+onReady(() => ReactDOM.render(
+	<ToolbarShell />,
+	document.getElementById("toolbar_refactored"))
+);
