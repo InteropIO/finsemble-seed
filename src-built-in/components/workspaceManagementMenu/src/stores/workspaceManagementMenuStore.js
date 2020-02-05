@@ -349,10 +349,12 @@ Actions = {
 	 * Asks the user if they'd like to save their data, then loads the requested workspace.
 	 */
 	switchToWorkspace: function (data) {
+		// if a workspace prompt is outstanding for a previous switch, immediately return to lock out user from doing another switch (until responding to prompt);
+		// note this prompting flag is cleared in Actions.onAsyncComplete when the previous switch completes (after user responds to the prompt)
 		let prompting = Actions.getIsPromptingUser()
 		Logger.system.log("workspaceManagementMenuStore: switchToWorkspace", prompting ? "prompting" : "not-prompting");
-
 		if (prompting) return;
+
 		Actions.setIsSwitchingWorkspaces(true);
 		Actions.blurWindow();
 		let name = data.name;
