@@ -9,11 +9,11 @@ import { Provider } from 'react-redux';
 import "../../../assets/css/font-finance.css";
 import "../../../assets/css/finsemble.css";
 import store from '../UIAPI/store';
+import DragHandle from './DragHandle';
 
 const ToolbarRefactored = () => {
 	return (<div className="finsemble-toolbar">
-		New Toolbar. Delete this line when the first component is added.
-		{/* Drag Handle */}
+		<DragHandle />
 		{/* Workspace Management Menu */}
 		{/* App Menu */}
 		{/* Favorites Section */}
