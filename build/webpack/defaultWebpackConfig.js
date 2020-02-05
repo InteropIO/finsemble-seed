@@ -61,6 +61,9 @@ module.exports = class WebpackDefaults {
 					},
 					{
 						test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+						issuer: {
+							test: /\.jsx?$/
+						},
 						use: ['@svgr/webpack']
 					},
 					{
