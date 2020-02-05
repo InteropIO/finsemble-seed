@@ -3,7 +3,6 @@
 * All rights reserved.
 */
 import * as React from "react";
-import * as ReactDOM from "react-dom";
 import { Provider } from 'react-redux';
 
 import "./css/linkerWindow.css";
@@ -13,9 +12,9 @@ import store from '../UIAPI/store';
 import { useLinker } from "../UIAPI/hooks/linker";
 
 const LinkerRefactored = () => {
-    const { linker, toggleChannel } = useLinker();
+    const { state, toggleChannel } = useLinker();
 
-	const allChannels = Object.values(linker.channels);
+	const allChannels = Object.values(state.channels);
     const channelElements = allChannels.map(({color, border, name, active, id}) => {
         const groupClass = `linkerGroup ${color}`;
         const style = {
@@ -24,7 +23,7 @@ const LinkerRefactored = () => {
 		}
         return (
             <div key={id} className="channel-wrapper" onClick={() => toggleChannel(id)}>
-                {linker.isAccessibleLinker ? <div className="channel-label">{name}</div> : null}
+                {state.isAccessibleLinker ? <div className="channel-label">{name}</div> : null}
 				<div className={groupClass} style={style}>
 					{active ? <i className="active-linker-group ff-check-mark"></i> : null}
 				</div>

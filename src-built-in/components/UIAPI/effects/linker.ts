@@ -1,6 +1,6 @@
 import store from '../store';
-import { Channel, Channels, NameToId, Linker, linkChannelReturnObject } from '../types';
-import { updateActiveChannels, updateActives } from '../actions/linkerActions';
+import { Channel, Channels, NameToId, LinkerState, linkChannelReturnObject } from '../types';
+// import { updateActiveChannels, updateActives } from '../actions/linkerActions';
 
 /**
  * Link/unlink a channel for the current component.
@@ -21,7 +21,7 @@ export const linkChannel = (channelName: string, isActive: boolean, windowIdenti
             }
             FSBL.Clients.Logger.system.log(`Toggle channel success. Channel name: ${channelName}`);
             const numActiveChannels = data.channels.length;
-            store.dispatch(updateActives(numActiveChannels));
+            // store.dispatch(updateActives(numActiveChannels));
             resolve(data);
         };
         if (!isActive) {
@@ -46,13 +46,13 @@ const showWindow = () => {
  * channel colors), setting up the responder when the linker state changes, and configuring the linker state according to finsemble config.
  * @param initialState The initial state of the linker
  */
-export const initializeLinker = (initialState: Linker) => {
+export const initializeLinker = (initialState: LinkerState) => {
     FSBL.Clients.Logger.system.log(`Initializing the linker state. Current linker state: ${initialState}`);
     finsembleWindow.addEventListener("blurred", hideWindow);
     finsembleWindow.addEventListener("shown", showWindow);
     
     let nextChannelId: number = 0;
-    const initialLinkerState: Linker = Object.assign({}, initialState);
+    const initialLinkerState: LinkerState = Object.assign({}, initialState);
     const initialChannels: Channels = {};
     const initialNametoId: NameToId = {};
 
@@ -73,7 +73,7 @@ export const initializeLinker = (initialState: Linker) => {
         // get all the active channels' ids on the component that user switches to
         const activeChannelIds: any[number] = [];
         activeChannels.forEach((channel: Channel) => {
-            activeChannelIds.push(initialLinkerState.nameToId[channel.name]);
+            // activeChannelIds.push(initialLinkerState.nameToId[channel.name]);
         });
 
         // Updates the initialLinkerState with the new channel information
@@ -93,7 +93,7 @@ export const initializeLinker = (initialState: Linker) => {
         }
         allConfiguredChannels.forEach(addChanneltoInitialState);
         initialLinkerState.channels = initialChannels;
-        initialLinkerState.nameToId = initialNametoId;
+        // initialLinkerState.nameToId = initialNametoId;
 
         const setActiveChannelsCallback = (err: any, msg: any) => {
             if (err) {
@@ -104,7 +104,7 @@ export const initializeLinker = (initialState: Linker) => {
             const updatedChannels = updateChannels(msg.data.channels);
 
             // Update the linker state according to the new channel information
-            store.dispatch(updateActiveChannels(msg.data));
+            // store.dispatch(updateActiveChannels(msg.data));
                         
             const newLinkerState = {
                 ...initialLinkerState,

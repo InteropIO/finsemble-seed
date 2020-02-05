@@ -1,81 +1,52 @@
-import { loop, Cmd } from 'redux-loop';
-
-import { toggleSuccess, toggleFailure, initSuccess } from '../actions/linkerActions';
-import { Linker, LinkerAction, ActionTypes } from '../types';
-import { linkChannel, initializeLinker, cleanUp, fitDOM } from '../effects/linker';
-import { updateToggleChannelSuccessState, updateActiveChannelsState } from '../stateManager/linker';
+import { LinkerState, LinkerAction, ActionTypes, Channel } from '../types';
 import withLogging from '../hoReducers/logging';
+import produce from "immer";
 
 // The linker state before we initialize the linker. The initialize linker function will make calls to the LinkerClient and 
 // fill in the state with the relevant linker information.
-export const initialState: Linker = {
+export const initialState: LinkerState = {
     channels: {},
-    nameToId: {},
     isAccessibleLinker: true,
-    windowIdentifier: {},
-    actives: 0,
-    processingRequest: false
+    windowIdentifier: {}
 };
 
 // The linker's reducer
-export const linker = (state = initialState, action: LinkerAction) => {
+export const linker = produce((state = initialState, action: LinkerAction) => {
     const { type, payload } = action;
-    switch (type) {
-        case ActionTypes.LINKER_INIT:
-            return loop(state, Cmd.run(initializeLinker, {
-                successActionCreator: initSuccess,
-                args: [state]
-            }));
+        switch (type) {
+            case ActionTypes.UPDATE_CHANNEL_STATUS:
+                const {channelId, active} : any = payload;
+                state.channels[channelId].active = active;
+                break;
 
-        case ActionTypes.LINKER_INIT_SUCCESS:
-            const initSuccessState = payload.value;
-            return loop(initSuccessState, Cmd.run(fitDOM));
+            case ActionTypes.UPDATE_CHANNELS:
+               let {channels} : any = payload;
+               state.channels = channels.map((channel: Channel, index :number) => {
+                    return {
+                        id: index,
+                        name: channel.name,
+                        color: channel.color,
+                        border: channel.border,
+                        active: false
+                    }
+                });
+                break;
 
-        case ActionTypes.TOGGLE_CHANNEL_REQUEST:
-            const toggleRequestState: Linker = {
-                ...state,
-                processingRequest: true
-            };
+            case ActionTypes.UPDATE_ACTIVE_CHANNELS:
+               const {channelNames, windowIdentifier} : any = payload;
+               state.windowIdentifier = windowIdentifier;
+               for(const channel of state.channels){
+                    channel.active = channelNames.includes(channel.name)
+                }
+                break;
 
-            const targetChannelName = toggleRequestState.channels[payload.channelID].name,
-                  targetChannelActive = toggleRequestState.channels[payload.channelID].active,
-                  targetWindowIdentifier = toggleRequestState.windowIdentifier;
+            case ActionTypes.SET_ACCESSIBILITY:
+                const {isAccessibleLinker} : any = payload;
+                state.isAccessibleLinker = isAccessibleLinker;
+                break;
+        }
+    })
 
-            const cmd = Cmd.run(linkChannel, {
-                successActionCreator: () => toggleSuccess(payload.channelID),
-                failActionCreator: () => toggleFailure(),
-                args: [targetChannelName, targetChannelActive, targetWindowIdentifier, toggleRequestState.actives]
-            });
-            return loop(toggleRequestState, cmd);
+    const reducer = withLogging("Linker", linker);
 
-        case ActionTypes.TOGGLE_CHANNEL_SUCCESS:
-            const toggleSuccessState = updateToggleChannelSuccessState(state, payload);
-            return toggleSuccessState;
-
-        case ActionTypes.TOGGLE_CHANNEL_FAILURE:
-            const toggleFailureState = {
-                ...state,
-                processingRequest: false
-            };
-            return toggleFailureState;
-
-        case ActionTypes.UPDATE_ACTIVE_CHANNELS:
-            const updateChannelsState = updateActiveChannelsState(state, payload);
-            return updateChannelsState;
-
-        case ActionTypes.UPDATE_ACTIVES:
-            const updateActivesState = {
-                ...state,
-                actives: payload.value
-            };
-            return updateActivesState;
-
-        case ActionTypes.LINKER_CLEANUP:
-            return loop(state, Cmd.run(cleanUp));
-
-        default:
-            return state;
-    }
-}
-
-export default withLogging("Linker", linker);
+export default reducer;

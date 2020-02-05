@@ -1,9 +1,12 @@
 import { combineReducers } from "redux-loop";
-import linker from "./linker";
+import {linker, initialState as initialLinkerState } from "./linker";
 
-const rootReducer = combineReducers({ 
+export const rootReducer = combineReducers({ 
     linker
 });
 
+export const initialState = {
+    linker: initialLinkerState
+}
+
 export type RootState = ReturnType<typeof rootReducer>;
-export default rootReducer;

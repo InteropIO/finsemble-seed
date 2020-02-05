@@ -1,22 +1,21 @@
 import produce from 'immer';
 // @ts-ignore
 import * as clone from 'lodash.clonedeep';
-
-import { Linker, LinkerAction, Channel } from '../types';
+import { LinkerState, LinkerAction, Channel } from '../types';
 
 // Updates the channel's 'active' field
-export const updateToggleChannelSuccessState = (originalState: Linker, payload: LinkerAction["payload"]) => {
+export const updateToggleChannelSuccessState = (originalState: LinkerState, payload: LinkerAction["payload"]) => {
     const toggleSuccessState = produce(originalState, draftState => {
         const channel = draftState.channels[payload.channelID];
         channel.active = !channel.active;
-        draftState.processingRequest = false;
+        // draftState.processingRequest = false;
     });
     return toggleSuccessState;
 }
 
 // Update the channels' 'active' field and the windowIdentifier state information
 // This is triggered by user switching linker window for different components.
-export const updateActiveChannelsState = (originalState: Linker, payload: LinkerAction["payload"]) => {
+export const updateActiveChannelsState = (originalState: LinkerState, payload: LinkerAction["payload"]) => {
     const { updatedActiveChannels, updatedWindowIdentifier } = payload;
     const activeChannelNames: any[string] = [];
     updatedActiveChannels.forEach((channel: Channel) => {

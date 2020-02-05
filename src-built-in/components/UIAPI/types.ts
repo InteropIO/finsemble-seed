@@ -11,14 +11,10 @@ declare global {
 
  /** All available action types */
  export enum ActionTypes {
-    TOGGLE_CHANNEL_REQUEST = "TOGGLE_CHANNEL_REQUEST",
-    TOGGLE_CHANNEL_SUCCESS = "TOGGLE_CHANNEL_SUCCESS",
-    TOGGLE_CHANNEL_FAILURE = "TOGGLE_CHANNEL_FAILURE",
-    LINKER_INIT = "LINKER_INIT",
-    LINKER_INIT_SUCCESS = "LINKER_INIT_SUCCESS",
-    LINKER_CLEANUP = "LINKER_CLEANUP",
+    UPDATE_CHANNEL_STATUS = "UPDATE_CHANNEL_STATUS",
+    UPDATE_CHANNELS = "UPDATE_CHANNELS",
     UPDATE_ACTIVE_CHANNELS = "UPDATE_ACTIVE_CHANNELS",
-    UPDATE_ACTIVES = "UPDATE_ACTIVES",
+    SET_ACCESSIBILITY = "SET_ACCESSIBILITY"
 }
 
 /**
@@ -26,25 +22,19 @@ declare global {
  * different components.
  */
 export interface RootState {
-    linker: Linker
+    linker: LinkerState
 }
 
 /**
  * Linker component type definition
  */
-export interface Linker {
+export interface LinkerState {
     /* The linker channels */
     channels: Channels,
-    /* The map of linker name -> linker channel ID */
-    nameToId: NameToId,
     /* Default to true. If the linker is an accessible linker, its channel labels will be shown along with the color indicators */
     isAccessibleLinker: boolean,
     /* The window identifier for the window that the linker component is on. They have one to one matching relationship */
-    windowIdentifier: object,
-    /* When the UI component is waiting for the response from the service, this will be set to 'true' */
-    processingRequest: boolean,
-    /* The number of the active channels. We allow user to set no more than 6 active lin */
-    actives: number
+    windowIdentifier: object
 }
 /**
  * The map of linker name -> linker channel ID
