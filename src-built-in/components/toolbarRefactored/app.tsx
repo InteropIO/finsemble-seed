@@ -11,9 +11,8 @@ import "../../../assets/css/finsemble.css";
 import store from '../UIAPI/store';
 
 const ToolbarRefactored = () => {
-	return (<div style={{
-		backgroundColor: 'red'
-	}} className="finsemble-toolbar">
+	return (<div className="finsemble-toolbar">
+		New Toolbar. Delete this line when the first component is added.
 		{/* Drag Handle */}
 		{/* Workspace Management Menu */}
 		{/* App Menu */}
