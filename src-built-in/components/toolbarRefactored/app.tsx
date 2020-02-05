@@ -11,22 +11,12 @@ import "../../../assets/css/finsemble.css";
 import store from '../UIAPI/store';
 import DragHandle from './DragHandle';
 
-const ToolbarRefactored = () => {
-	return (<div className="finsemble-toolbar">
-		<DragHandle />
-		{/* Workspace Management Menu */}
-		{/* App Menu */}
-		{/* Favorites Section */}
-		{/* Minimize All */}
-		{/* Reveal All */}
-		{/* Auto Arrange */}
-	</div>)
-}
-
-const Toolbar = () => {
+const Toolbar: React.FunctionComponent = (props) => {
 	return (
 		<Provider store={store}>
-			<ToolbarRefactored />
+			<div className="finsemble-toolbar">
+				{props.children}
+			</div>
 		</Provider>
 	);
 }
