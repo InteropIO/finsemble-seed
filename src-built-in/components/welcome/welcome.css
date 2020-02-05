@@ -5,7 +5,6 @@ body {
 	font-size: var(--procMonitor-font-size);
 	font-weight: var(--procMonitor-font-weight);
 	font-family: var(--font-family);
-	color: var(--procMonitor-font-color);
 	background-color: var(--procMonitor-background-color);
 	user-select: none;
 	background-color: var(--content-background-color);
@@ -37,6 +36,7 @@ body {
 
 h1 {
 	font-weight: var(--font-weight-1);
+	color: var(--procMonitor-font-color);
 }
 
 button {
