@@ -12,7 +12,7 @@ import "../../../assets/css/finsemble.css";
 import store from '../UIAPI/store';
 import { useLinker } from "../UIAPI/hooks/linker";
 
-const LinkerRefactored = () => {
+const Linker = () => {
     const { linker, toggleChannel } = useLinker();
 
 	const allChannels = Object.values(linker.channels);
@@ -39,12 +39,12 @@ const LinkerRefactored = () => {
     );
 }
 
-const Linker = () => {
+const App = () => {
     return (
         <Provider store={store}>
-    		<LinkerRefactored />
+    		<Linker />
   		</Provider>
     );
 }
 
-export default Linker;
+export default App;
