@@ -1,15 +1,29 @@
 import * as React from "react";
-//boom.
+const DRAG_HANDLE_CLASS_NAMES = "cq-drag finsemble-toolbar-drag-handle";
+
+/**
+ * The little bit of UI that the user clicks to move the toolbar around the screen.
+ */
 const DragHandle = () => {
+	/**
+	 * When a user clicks on the drag handle, tell finsemble
+	 * 'hey, we're moving this window now'.
+	 * @param event
+	 */
 	const handleMouseDown = (event: React.MouseEvent) => {
 		FSBL.Clients.WindowClient.startMovingWindow(event);
 	};
+
+	/**
+	 * When the user lifts their mouse, tell finsemble
+	 * 'hey, we're not moving this window any more'
+	 */
 	const handleMouseUp = () => {
 		FSBL.Clients.WindowClient.stopMovingWindow();
 	};
 
 	return (
-		<span className="cq-drag finsemble-toolbar-drag-handle"
+		<span className={DRAG_HANDLE_CLASS_NAMES}
 			onMouseDown={handleMouseDown}
 			onMouseUp={handleMouseUp}
 		>
