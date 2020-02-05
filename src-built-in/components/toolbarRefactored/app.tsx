@@ -9,7 +9,6 @@ import { Provider } from 'react-redux';
 import "../../../assets/css/font-finance.css";
 import "../../../assets/css/finsemble.css";
 import store from '../UIAPI/store';
-import DragHandle from './DragHandle';
 
 const Toolbar: React.FunctionComponent = (props) => {
 	return (
