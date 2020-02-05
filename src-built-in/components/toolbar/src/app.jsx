@@ -11,11 +11,11 @@ import ToolbarRefactored from "../../toolbarRefactored/app.tsx";
 import onReady from "../../UIAPI/effects/index";
 import ReactDOM from "react-dom";
 import React from "react";
-
+import DragHandle from '../../toolbarRefactored/DragHandle';
 const ToolbarShell = () => {
 	return (
 		<ToolbarRefactored>
-			New Toolbar. Delete this line when the first component is added.
+			<DragHandle/>
 			{/* Drag Handle */}
 			{/* Workspace Management Menu */}
 			{/* App Menu */}
