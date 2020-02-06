@@ -49,7 +49,6 @@ export const useWorkspaces = () => {
 	}, []);
 
 	return {
-		activeWorkspaceName: activeWorkspace.name,
-		setActiveWorkspaceName
+		activeWorkspaceName: activeWorkspace.name
 	}
 }
