@@ -3,6 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState, WorkspaceState } from '../types';
 import * as Actions from '../actions/workspaceActions';
 
+/**
+ * A hook for getting the activeWorkspaceName,
+ * and setting the activeWorkspaceName.
+ */
 export const useWorkspaces = () => {
 	const dispatch = useDispatch();
 	const setActiveWorkspaceName = (name:string) => {

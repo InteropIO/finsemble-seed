@@ -1,4 +1,4 @@
-import { WorkspaceState, ActionTypes, WorskpaceActions } from '../types';
+import { WorkspaceState, WorskpaceActions, ActionTypes } from '../types';
 import withLogging from '../hoReducers/logging';
 
 export const initialState: WorkspaceState = {
@@ -22,4 +22,6 @@ export const workspaces = (state: WorkspaceState = initialState, action: Worskpa
 	}
 }
 
+// Wraps the reducer with some logging so that we can debug
+// field reported bugs.
 export default withLogging("Workspaces", workspaces);
