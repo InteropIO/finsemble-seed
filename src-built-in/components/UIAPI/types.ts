@@ -19,6 +19,7 @@ declare global {
     LINKER_CLEANUP = "LINKER_CLEANUP",
     UPDATE_ACTIVE_CHANNELS = "UPDATE_ACTIVE_CHANNELS",
     UPDATE_ACTIVES = "UPDATE_ACTIVES",
+    SET_ACTIVE_WORKSPACE_NAME = "SET_ACTIVE_WORKSPACE"
 }
 
 /**
@@ -26,9 +27,20 @@ declare global {
  * different components.
  */
 export interface RootState {
-    linker: Linker
+    linker: Linker,
+    workspaces: WorkspaceState
 }
 
+/**
+ * Workspace state definition.
+ */
+export interface WorkspaceState {
+    /* Obj representing the active workspace */
+    activeWorkspace: {
+        /* Name of the active workspace */
+        name: string
+    }
+}
 /**
  * Linker component type definition
  */
@@ -92,6 +104,15 @@ export interface LinkerAction {
         /* The window identifier for a certain component */
         updatedWindowIdentifier?: object
     }
+}
+
+export interface WorskpaceActions {
+	/* Action Type */
+	type: string,
+	payload?: {
+		/* Name of workspace to apply action to. */
+		name?: string
+	}
 }
 
 /**

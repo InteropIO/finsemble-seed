@@ -18,7 +18,6 @@ import MinimizeAll from "../components/MinimizeAll";
 import WorkspaceLauncherButton from "../components/WorkspaceLauncherButton";
 import WorkspaceMenuOpener from "../components/WorkspaceMenuOpener"
 import Search from "../components/Search"
-import DragHandle from "../components/DragHandle"
 
 // Support Dynamically Loading External Components
 var customComponents = [];
@@ -166,7 +165,6 @@ export default class Toolbar extends React.Component {
 	render() {
 		if (!this.state.sections) return;
 		return (<FinsembleToolbar onDragStart={this.moveToolbar} onDragEnd={this.onPinDrag}>
-			<DragHandle/>
 			{this.getSections()}
 			<div className='resize-area' />
 		</FinsembleToolbar>);
