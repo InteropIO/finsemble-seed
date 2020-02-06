@@ -21,7 +21,7 @@ produce(state, (draft : LinkerState) => {
                 draft.channels[channelId].active = active;
                 break;
 
-            case ActionTypes.UPDATE_CHANNELS:
+            case ActionTypes.SET_CHANNELS:
                let {channels} : any = payload;
                draft.channels = channels.map((channel: Channel, index :number) => {
                     return {

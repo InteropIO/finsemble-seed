@@ -39,7 +39,7 @@ export const useLinker = () => {
     const setInitialChannels = () => {
         const allChannels : any = FSBL.Clients.LinkerClient.getAllChannels();
         dispatch({
-            type: ActionTypes.UPDATE_CHANNELS,
+            type: ActionTypes.SET_CHANNELS,
             payload: {
                 channels: allChannels
             }
