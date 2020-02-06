@@ -5,16 +5,17 @@
 
 // Static vs Dynamic Toolbar
 // import Toolbar from "./staticToolbar";
-import Toolbar from "./dynamicToolbar";
+// Uncomment below if you want to show the dynamic toolbar on top of the refactored toolbar.
+// import Toolbar from "./dynamicToolbar";
 import ToolbarRefactored from "../../toolbarRefactored/app.tsx";
 import onReady from "../../UIAPI/effects/index";
 import ReactDOM from "react-dom";
 import React from "react";
-
+import DragHandle from '../../toolbarRefactored/DragHandle';
 const ToolbarShell = () => {
 	return (
 		<ToolbarRefactored>
-			New Toolbar. Delete this line when the first component is added.
+			<DragHandle/>
 			{/* Drag Handle */}
 			{/* Workspace Management Menu */}
 			{/* App Menu */}
