@@ -248,8 +248,8 @@ async function addApp(id, cb = Function.prototype) {
 				//Attempt to parse the url response
 				manifest = await urlRes.json();
 			} catch(e) {
-				FSBL.Clients.Logger.system.warn(`${app.title || app.name} is missing a valid manifest or URI that delivers a valid JSON manifest. Creating a default manifest`);
-				manifest = { ...appConfig };
+				FSBL.Clients.Logger.system.warn(`${app.title || app.name} is missing a valid manifest or URI that delivers a valid JSON manifest. Unable to add app`);
+				return cb();
 			}
 		} finally {
 			appConfig.manifest = manifest;
