@@ -10,20 +10,19 @@ export const initialState: LinkerState = {
     windowIdentifier: {}
 };
 
-
 // The linker's reducer
-const reducer = (state = initialState, action: LinkerAction) => 
-produce(state, (draft : LinkerState) => {
-    const { type, payload } = action;
+const reducer = (state = initialState, action: LinkerAction) =>
+    produce(state, (draft: LinkerState) => {
+        const { type, payload } = action;
         switch (type) {
             case ActionTypes.UPDATE_CHANNEL_STATUS:
-                const {channelId, active} : any = payload;
+                const { channelId, active }: any = payload;
                 draft.channels[channelId].active = active;
                 break;
 
             case ActionTypes.SET_CHANNELS:
-               let {channels} : any = payload;
-               draft.channels = channels.map((channel: Channel, index :number) => {
+                let { channels }: any = payload;
+                draft.channels = channels.map((channel: Channel, index: number) => {
                     return {
                         id: index,
                         name: channel.name,
@@ -35,21 +34,18 @@ produce(state, (draft : LinkerState) => {
                 break;
 
             case ActionTypes.UPDATE_ACTIVE_CHANNELS:
-               const {channelNames, windowIdentifier} : any = payload;
-               draft.windowIdentifier = windowIdentifier;
-               for(const channel of Object.values(draft.channels)){
+                const { channelNames, windowIdentifier }: any = payload;
+                draft.windowIdentifier = windowIdentifier;
+                for (const channel of Object.values(draft.channels)) {
                     channel.active = channelNames.includes(channel.name)
                 }
                 break;
 
             case ActionTypes.SET_ACCESSIBILITY:
-                const {isAccessibleLinker} : any = payload;
+                const { isAccessibleLinker }: any = payload;
                 draft.isAccessibleLinker = isAccessibleLinker;
                 break;
         }
     })
 
 export const linker = withLogging("Linker", reducer);
-
-// export default reducer;
-// export const linker = (previousState : any = initialState, action : any) => previousState;
