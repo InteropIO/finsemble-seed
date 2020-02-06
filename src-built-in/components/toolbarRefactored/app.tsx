@@ -50,7 +50,7 @@ const Toolbar: React.FunctionComponent = (props) => {
 		registerShowToolbarHotkey();
 		preventMinimize();
 		publishSystemCheckpoint();
-	});
+	}, []);
 
 	return (
 		<Provider store={store}>
