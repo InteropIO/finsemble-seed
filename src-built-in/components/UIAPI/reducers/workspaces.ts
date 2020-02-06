@@ -10,7 +10,7 @@ export const initialState: WorkspaceState = {
 export const workspaces = (state: WorkspaceState = initialState, action: WorskpaceActions) => {
 	const { type, payload } = action;
 	switch (type) {
-		case ActionTypes.SET_ACTIVE_WORKSPACE_NAME:
+		case ActionTypes.SET_ACTIVE_WORKSPACE:
 			return {
 				...state,
 				activeWorkspace: {
