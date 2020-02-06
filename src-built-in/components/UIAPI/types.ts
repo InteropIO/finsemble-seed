@@ -11,6 +11,7 @@ declare global {
 
  /** All available action types */
  export enum ActionTypes {
+     // Linker action types
     TOGGLE_CHANNEL_REQUEST = "TOGGLE_CHANNEL_REQUEST",
     TOGGLE_CHANNEL_SUCCESS = "TOGGLE_CHANNEL_SUCCESS",
     TOGGLE_CHANNEL_FAILURE = "TOGGLE_CHANNEL_FAILURE",
@@ -19,6 +20,9 @@ declare global {
     LINKER_CLEANUP = "LINKER_CLEANUP",
     UPDATE_ACTIVE_CHANNELS = "UPDATE_ACTIVE_CHANNELS",
     UPDATE_ACTIVES = "UPDATE_ACTIVES",
+
+    // Toolbar action types
+    INITIALIZE_PINS="INITIALIZE_PINS"
 }
 
 /**
