@@ -255,22 +255,26 @@ async function addApp(id, cb = Function.prototype) {
 	}
 
 	let manifest;
-	try {
-		//Attempt to parse a string as JSON
-		manifest = JSON.parse(app.manifest);
-	} catch(e) {
+	if (app.manifestType === "Finsemble") {
 		try {
-			//If parsing fails, assume the manifest is a valid url that will return JSON
-			const urlRes = await fetch(app.manifest, { method: "GET" });
-
-			//Attempt to parse the url response
-			manifest = await urlRes.json();
+			//Attempt to parse a string as JSON
+			manifest = JSON.parse(app.manifest);
 		} catch(e) {
-			FSBL.Clients.Logger.system.warn(`${app.title || app.name} is missing a valid manifest or URI that delivers a valid JSON manifest. Creating a default manifest`);
-			manifest = { ...appConfig };
+			try {
+				//If parsing fails, assume the manifest is a valid url that will return JSON
+				const urlRes = await fetch(app.manifest, { method: "GET" });
+
+				//Attempt to parse the url response
+				manifest = await urlRes.json();
+			} catch(e) {
+				FSBL.Clients.Logger.system.warn(`${app.title || app.name} is missing a valid manifest or URI that delivers a valid JSON manifest. Creating a default manifest`);
+				manifest = { ...appConfig };
+			}
+		} finally {
+			appConfig.manifest = manifest;
 		}
-	} finally {
-		appConfig.manifest = manifest;
+	} else {
+		FSBL.Clients.Logger.system.warn(`${app.title || app.name} does not appear to be a Finsemble manifest. This app cannot be added to Finsemble.`);
 	}
 
 	if (app.friendlyName) {
