@@ -26,6 +26,7 @@ const ToolbarShell = () => {
 		</ToolbarRefactored>
 	)
 }
+
 onReady(() => ReactDOM.render(
 	<ToolbarShell />,
 	document.getElementById("toolbar_refactored"))

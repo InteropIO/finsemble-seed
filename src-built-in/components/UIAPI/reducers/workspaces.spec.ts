@@ -20,7 +20,7 @@ describe('Linker reducer', () => {
 				name: 'Wonky'
 			}
 		}
-		const output = reducer(initialState, Actions.setActiveWorkspaceName('Wonky'));
+		const output = reducer(initialState, Actions.setActiveWorkspace(expectedState.activeWorkspace));
 		assert.deepEqual(output, expectedState);
 	})
 });

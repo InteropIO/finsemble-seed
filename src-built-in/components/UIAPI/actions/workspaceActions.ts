@@ -1,18 +1,16 @@
-import { ActionTypes } from "../types";
+import { WorkspaceState, ActionTypes } from "../types";
 
 /**
- * Change the activeWorkspaceName
- * @param name Name of the active workspace
+ * Change the ActiveWorkspace
+ * @param name of the active workspace
  */
-const setActiveWorkspaceName = (name: string) => {
+const setActiveWorkspace = (activeWorkspace: WorkspaceState['activeWorkspace']) => {
 	return {
-		type: ActionTypes.SET_ACTIVE_WORKSPACE_NAME,
-		payload: {
-			name
-		}
+		type: ActionTypes.SET_ACTIVE_WORKSPACE,
+		payload: activeWorkspace
 	}
 }
 
 export {
-	setActiveWorkspaceName
+	setActiveWorkspace
 }

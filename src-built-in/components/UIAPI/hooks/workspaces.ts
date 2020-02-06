@@ -5,18 +5,18 @@ import * as Actions from '../actions/workspaceActions';
 
 
 /**
- * A hook for getting the activeWorkspaceName,
- * and setting the activeWorkspaceName.
+ * A hook for getting the ActiveWorkspace,
+ * and setting the ActiveWorkspace.
  */
 export const useWorkspaces = () => {
 	const dispatch = useDispatch();
-	const setActiveWorkspaceName = (name:string) => {
-		dispatch(Actions.setActiveWorkspaceName(name));
+	const setActiveWorkspace = (activeWorkspace: WorkspaceState['activeWorkspace']) => {
+		dispatch(Actions.setActiveWorkspace(activeWorkspace));
 	}
 	// Run every time the workspace service pushes out an update.
 	const onWorkspaceUpdate = (err: any, response: any) => {
 		if (response.data && response.data.activeWorkspace) {
-			setActiveWorkspaceName(response.data.activeWorkspace.name);
+			setActiveWorkspace(response.data.activeWorkspace);
 		}
 	}
 	const state:WorkspaceState = useSelector((state: RootState) => state.workspaces);
@@ -33,7 +33,7 @@ export const useWorkspaces = () => {
 	useEffect(() => {
 		const setInitialActiveWorkspace = async () => {
 			const { data: aws } = await FSBL.Clients.WorkspaceClient.getActiveWorkspace();
-			setActiveWorkspaceName(aws.name);
+			setActiveWorkspace(aws);
 		}
 		// When the workspace updates, update the active workspace name.
 		const listenForWorkspaceUpdates = () => {
@@ -49,6 +49,6 @@ export const useWorkspaces = () => {
 	}, []);
 
 	return {
-		activeWorkspaceName: activeWorkspace.name
+		activeWorkspace
 	}
 }
