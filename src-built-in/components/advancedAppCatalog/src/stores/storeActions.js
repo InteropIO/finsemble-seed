@@ -178,25 +178,6 @@ async function getTags() {
 }
 
 /**
- * @param {string} data The data to attempt to parse into JSON
- * @param {string} title The name of the app that is being parsed
- * @param {boolean} logError Whether or not to log an error if the parsing fails
- * @private
- */
-function tryToParseJSON(data, title, logError) {
-	let output;
-	try {
-		output = JSON.parse(data);
-	} catch(e) {
-		if (logError) {
-			FSBL.Clients.Logger.system.warn(`Failure encountered parsing manifest for ${title}. Creating a default manifest`);
-		}
-	} finally {
-		return output;
-	}
-} 
-
-/**
  * Function to "install" an app. Adds the id to a list of installed apps
  * @param {string} name The name of the app
  */
