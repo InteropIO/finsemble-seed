@@ -362,6 +362,8 @@ Actions = {
 		/**
 		 * Actually perform the switch. Happens after we ask the user what they want.
 		 *
+		 * @param {function} callback - invoked on completion of switchTo
+		 *
 		 */
 		function switchWorkspace(callback) {
 			FSBL.Clients.WorkspaceClient.switchTo({
