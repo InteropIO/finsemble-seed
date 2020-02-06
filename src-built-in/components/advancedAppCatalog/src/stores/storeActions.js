@@ -275,6 +275,7 @@ async function addApp(id, cb = Function.prototype) {
 		}
 	} else {
 		FSBL.Clients.Logger.system.warn(`${app.title || app.name} does not appear to be a Finsemble manifest. This app cannot be added to Finsemble.`);
+		return cb();
 	}
 
 	if (app.friendlyName) {
