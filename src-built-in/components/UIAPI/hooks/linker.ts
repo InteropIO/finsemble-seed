@@ -14,13 +14,14 @@ export const useLinker = () => {
         finsembleWindow.addEventListener("blurred", hideWindow);
         finsembleWindow.addEventListener("shown", showWindow);
 		setInitialChannels();
-        observeActiveChannelUpdates();
         initAccessibleLinkerMode();
+        FSBL.Clients.RouterClient.addResponder("Finsemble.LinkerWindow.SetActiveChannels", onActiveChannelsChanged);
         
         return () => {
             FSBL.Clients.Logger.system.log("Linker component is unmounted. Cleaning up the event listeners.");
             finsembleWindow.removeEventListener("blurred", hideWindow);
             finsembleWindow.removeEventListener("shown", showWindow);
+            FSBL.Clients.RouterClient.removeEventListener("Finsemble.LinkerWindow.SetActiveChannels", onActiveChannelsChanged);
         }
     }, []);
 
@@ -45,20 +46,21 @@ export const useLinker = () => {
         })
     }
 
-    const observeActiveChannelUpdates = () => {
-        // If user switches the linker channel for different components, this function would be invoked. It will dispatch another
-        // action to update the linker's state according to the linker setup on the switched component.
-        const setActiveChannelsCallback = (err: any, msg: any) => {
-            if (err) FSBL.Clients.Logger.system.error(`Failed to update the linker state.`);
-            dispatch({
-                type: ActionTypes.UPDATE_ACTIVE_CHANNELS,
-                payload: {
-                    channelNames: msg.data.channels,
-                    windowIdentifier: msg.data.windowIdentifier
-                }
-            })
-        }
-        FSBL.Clients.RouterClient.addResponder("Finsemble.LinkerWindow.SetActiveChannels", setActiveChannelsCallback);
+    /** If user switches the linker channel for different components, this function would be invoked. It will dispatch another
+     *  action to update the linker's state according to the linker setup on the switched component.
+     * 
+     * @param err  error from FSBL
+     * @param msg  msg from FSBL
+     */
+    const onActiveChannelsChanged = (err: any, msg: any) => {
+        if (err) FSBL.Clients.Logger.system.error(`Failed to update the linker state.`);
+        dispatch({
+            type: ActionTypes.UPDATE_ACTIVE_CHANNELS,
+            payload: {
+                channelNames: msg.data.channels,
+                windowIdentifier: msg.data.windowIdentifier
+            }
+        })
     }
 
     const initAccessibleLinkerMode = () => {
