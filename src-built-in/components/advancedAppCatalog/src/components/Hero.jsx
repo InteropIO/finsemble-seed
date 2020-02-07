@@ -38,7 +38,7 @@ export default class Hero extends Component {
 		} else {
 			switch (action) {
 				case "page_down":
-					newActive = (newActive - 1 < 0) ? cards.length-1 : newActive - 1;
+					newActive = (newActive - 1 < 0) ? cards.length - 1 : newActive - 1;
 					break;
 				case "page_up":
 					newActive = (newActive + 1 > cards.length - 1) ? 0 : newActive + 1;
@@ -67,25 +67,28 @@ export default class Hero extends Component {
 		let imageUrl = cards[active].images ? cards[active].images[0].url : "../assets/placeholder.svg";
 
 		let bgImageStyle = {
-			background: "url(" + imageUrl + ") center center / 100% no-repeat scroll"
+			background: "no-repeat left center/contain url(" + imageUrl + ")"
 		};
 
 		return (
 			<div>
 				<div className='hero-main'>
 					<i className='ff-adp-chevron-left' onClick={this.changePage.bind(this, 'page_down')} />
-					<div className='hero_selected_content' onClick={this.openApp} style={bgImageStyle}>
-						<div className='selected-content-title'>
-							<span>{contentTitle}</span>
+					<div className="hero-wrapper" onClick={this.openApp}> 
+						<div className="selected-content-info">
+							<div className='selected-content-title'>
+								{contentTitle}
+							</div>
+							<div className='selected-content-message'>
+								{contentMsg}
+							</div>
 						</div>
-						<div className='selected-content-message'>
-							<div className='selected-content-message-wrapper'>{contentMsg}</div>
-						</div>
+						<div className='hero_selected_content' style={bgImageStyle}></div>
 					</div>
 					<i className='ff-adp-chevron-right' onClick={this.changePage.bind(this, 'page_up')} />
 				</div>
 				<br />
-				{cards.length >= 2 && cards.length <= 10 && 
+				{cards.length >= 2 && cards.length <= 10 &&
 					<div className="paginator">
 						{cards.map((card, i) => {
 							let classes = 'pagination-oval';
@@ -94,7 +97,7 @@ export default class Hero extends Component {
 						})}
 					</div>
 				}
- 			</div>
+			</div>
 		);
 	}
 }
