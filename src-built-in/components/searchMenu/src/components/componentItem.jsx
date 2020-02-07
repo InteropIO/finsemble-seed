@@ -26,7 +26,7 @@ export default class componentItem extends React.Component {
 		const { props } = this;
 		const { item, isActive, onClick } = props;
 		if (item.actions.length <= 1) {
-			return <div className={'resultItem action ' + (isActive ? 'bestmatch active' : '')}>
+			return <div title={item.name} className={'resultItem action ' + (isActive ? 'bestmatch active' : '')}>
 				<div className={'resultName '} onClick={() => {
 					if (!item.actions[0]) return;
 					onClick(item, item.actions[0]);

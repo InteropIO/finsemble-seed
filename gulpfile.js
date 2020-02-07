@@ -1,3 +1,5 @@
+const { launch, connect } = require('hadouken-js-adapter');
+
 (() => {
 	"use strict";
 
@@ -14,8 +16,6 @@
 	const fs = require("fs");
 	const gulp = require("gulp");
 	const prettyHrtime = require("pretty-hrtime");
-	const watch = require("gulp-watch");
-	const openfinLauncher = require("openfin-launcher");
 	const shell = require("shelljs");
 	const path = require("path");
 	const webpack = require("webpack");
@@ -23,7 +23,8 @@
 	const FEA_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-electron-adapter");
 	const FEA_PATH_EXISTS = fs.existsSync(FEA_PATH);
 	const FEA = FEA_PATH_EXISTS ? require("@chartiq/finsemble-electron-adapter/exports") : undefined;
-	const FEAPackager = FEA_PATH_EXISTS ? require("@chartiq/finsemble-electron-adapter/deploy/deploymentHelpers") : undefined;
+	const FEAPackager = FEA ? FEA.packager : undefined;
+	const MAX_NODE_VERSION = '12.13.1';
 
 	// local
 	const extensions = fs.existsSync("./gulpfile-extensions.js") ? require("./gulpfile-extensions.js") : undefined;
@@ -51,6 +52,83 @@
 		console.log(`[${new Date().toLocaleTimeString()}] ${chalk[color][bgcolor](msg)}.`);
 	}
 
+	/** 
+	* Splits a string version with semantic versioning into an object with major, minor and patch versions
+	* Valid inputs are 'X.X.X' or 'vX.X.X'
+	*/
+	const createSemverObject = (version) => {
+		let tempVersionArray;
+		let semverObject;
+		if (typeof version !== 'string') {
+			console.log(`Version must be type string but is ${typeof version}`);
+			return;
+		}
+		// Split the version into a temp array.
+		if (version.startsWith('v')) {
+			tempVersionArray = version.split('v');
+			tempVersionArray = tempVersionArray[1].split('.');
+		} else {
+			tempVersionArray = version.split('.')
+		}
+		if (tempVersionArray.length === 3) {
+
+			// Convert each array element to a number and store in the object.
+			semverObject = {
+				majorVersion: Number(tempVersionArray[0]) || null,
+				minorVersion: Number(tempVersionArray[1]) || null,
+				patchVersion: Number(tempVersionArray[2]) || null,
+			}
+			// If major, minor or patch versions are missing or not a number return nothing
+			if (!semverObject.majorVersion || !semverObject.minorVersion || !semverObject.patchVersion) {
+				return;
+			}
+			return semverObject
+		}
+	}
+
+	/** 
+	* Compares two node version objects
+	* Each object is expected to contain majorVersion, minorVersion, patchVersion
+	*/
+	const compareNodeVersions = (a, b) => {
+		if (a.majorVersion !== b.majorVersion) {
+			return a.majorVersion > b.majorVersion ? 1: -1
+		}
+		if (a.minorVersion !== b.minorVersion) {
+			return a.minorVersion > b.minorVersion ? 1: -1
+		}
+		if (a.patchVersion !== b.patchVersion) {
+			return a.patchVersion > b.patchVersion ? 1: -1
+		}
+		return 0;
+	}
+
+	/** 
+	* Validates the current node version against supported node versions specified in this file
+	* Returns boolean indicating whether current node version is valid
+	* Currently only validates against a max node version which must be in the format 'X.X.X' or 'vX.X.X'
+	*
+	* Note: This method is being used instead of npm engines because of an npm bug where warnings don't print
+	* This bug was resolved in npm 6.12.0 but as that is a very new version of npm and is not linked to node 10.15.3
+	* in nvm we can't assume our users have access to this version.
+	*/
+	const isNodeVersionValid = () => {
+		// Split the current node version into an object with major, minor and patch numbers for easier comparison.
+		// If any of these values are missing, nothing will be returned
+		let currentVersionObject = createSemverObject(process.version);
+		let maxVersionObject = createSemverObject(MAX_NODE_VERSION);
+		
+		// Only allow the check both objects exist and contain major, minor and patch versions. 
+		if (!currentVersionObject || !maxVersionObject) {
+			logToTerminal("Format of node version must be: 'X.X.X', unable to validate node version", "yellow");
+			return true;
+		}
+
+		// Check if the node version is higher than the maximum allowed node version.
+		if (compareNodeVersions(currentVersionObject, maxVersionObject) == 1) return false;
+		return true;
+	}
+
 	let angularComponents;
 	try {
 		angularComponents = require("./build/angular-components.json");
@@ -66,8 +144,6 @@
 
 	// #endregion
 
-	// #region Script variables
-	let watchClose;
 	// If you specify environment variables to child_process, it overwrites all environment variables, including
 	// PATH. So, copy based on our existing env variables.
 	const env = process.env;
@@ -118,6 +194,7 @@
 		return rc;
 	}
 
+
 	// Currently supported desktop agents include "openfin" and "electron". This can be set either
 	// with the environment variable container or by command line argument `npx gulp dev --container:electron`
 	let container = envOrArg("container", "openfin");
@@ -130,6 +207,30 @@
 	// This will get set when the container (Electron or Openfin) is launched. This is used to calculate how long it takes to start up the app.
 	let launchTimestamp = 0;
 
+	/**
+	 * Mody 10/04/2019
+	 * Reads installed Electron's version from FEA repo.
+	 * Another option is to export electron's version in
+	 * deploymentHelpers in FEA. However I'm just avoiding 2 PRs
+	 */
+	const getElectronVersion = () => {
+		// You may run `npm run dev` before running `npm i` inside
+		// finsemble-electron-adapter in that case, the electron
+		// module does not exists.
+		try {
+			const packageFile = require(
+				path.join(
+					FEA_PATH,
+					'node_modules',
+					'electron',
+					'package.json')
+			);
+			return packageFile.version;
+		} catch (error) {
+			logToTerminal(`Failed to get electron's verion from FEA: ${error.message}`, "red");
+			return 'unknown';
+		}
+	};
 	// #endregion
 
 	// #region Task Methods
@@ -375,25 +476,42 @@
 				taskMethods.startServer
 			], done);
 		},
-		launchOpenFin: done => {
+		launchOpenFin: async (done) => {
+			// We are unable to read OpenFin version at the moment.
+			// We request it after hadouken connection.
+			logToTerminal("Using Container: OpenFin", "green");
 			ON_DEATH(() => {
 				killApp("OpenFin", () => {
-
 					if (watchClose) watchClose();
 					process.exit();
 				});
 			});
-
-			openfinLauncher.launchOpenFin({
-				configPath: taskMethods.startupConfig[env.NODE_ENV].serverConfig
-			}).then(() => {
-				// OpenFin has closed so exit gulpfile
+			try {
+				const manifestUrl = taskMethods.startupConfig[env.NODE_ENV].serverConfig;
+				// Once the server is running we can launch OpenFin and retrieve the port.
+				const port = await launch({ manifestUrl });
+				// Use the port to connect and determine when OpenFin exists.
+				const fin = await connect({
+					uuid: 'server-connection',
+					// Connect to the given port.
+					address: `ws://localhost:${port}`,
+					// We want OpenFin to exit as our application exists.
+					nonPersistent: true
+				});
+				const openfinVersion = await fin.System.getVersion();
+				logToTerminal(`Openfin version: ${openfinVersion}`, "green");
 				if (watchClose) watchClose();
+				// Once OpenFin exits we shut down the server.
+				fin.once('disconnected', process.exit);
+			} catch (error) {
+				console.error(`Unable to launch and connect to OpenFin: ${error.message}`);
 				process.exit();
-			});
+			}
+
 			if (done) done();
 		},
 		launchElectron: done => {
+			logToTerminal(`Using Container: Electron@${getElectronVersion()}`, "green");
 			const cfg = taskMethods.startupConfig[env.NODE_ENV];
 			const USING_ELECTRON = container === "electron";
 			if (USING_ELECTRON && !FEA_PATH_EXISTS) {
@@ -402,7 +520,9 @@
 
 			let config = {
 				manifest: cfg.serverConfig,
+				onElectronClose: process.exit,
 				chromiumFlags: JSON.stringify(cfg.chromiumFlags),
+				path: FEA_PATH,
 			}
 
 			// set breakpointOnStart variable so FEA knows whether to pause initial code execution
@@ -453,9 +573,11 @@
 
 			if (!FEAPackager) {
 				console.error("Cannot create installer because Finsemble Electron Adapter is not installed");
-					process.exit(1);
+				process.exit(1);
 			}
 
+			FEAPackager.setFeaPath(FEA_PATH);
+			await FEAPackager.setApplicationFolderName(installerConfig.name);
 			await FEAPackager.setManifestURL(manifestUrl);
 			await FEAPackager.setUpdateURL(updateUrl);
 			await FEAPackager.setChromiumFlags(chromiumFlags || {});
@@ -463,6 +585,9 @@
 			done();
 		},
 		launchApplication: done => {
+			if (!isNodeVersionValid()) {
+				logToTerminal(`Node version: ${process.version} is not supported. Max supported version: ${MAX_NODE_VERSION}`, "red");
+			}
 			logToTerminal("Launching Finsemble", "black", "bgCyan");
 
 			launchTimestamp = Date.now();

@@ -116,7 +116,6 @@ var Actions = {
 			wrappedWindow.addListener("closed", Actions.onCompanionClosed);
 			wrappedWindow.addListener("hidden", Actions.onCompanionHidden);
 			wrappedWindow.addListener("shown", Actions.onCompanionShown);
-			wrappedWindow.addListener("maximized", Actions.onCompanionMaximized);
 			wrappedWindow.addListener("restored", Actions.onCompanionRestored);
 			wrappedWindow.addListener("bringToFront", Actions.onCompanionBringToFront);
 			wrappedWindow.addListener("minimized", Actions.onCompanionMinimized);
@@ -332,7 +331,7 @@ var Actions = {
 		animating = true;
 		if (HeaderStore.getState() === "large") return;
 		HeaderStore.setState("large");
-		let finWindow = fin.desktop.Window.getCurrent();
+		let systemWindow = FSBL.System.Window.getCurrent();
 		let currentBound = HeaderStore.getCompanionBounds();
 		FSBL.Clients.WindowClient.finsembleWindow.updateOptions({
 			"cornerRounding": {
@@ -348,7 +347,7 @@ var Actions = {
 			}
 		};
 		const widenCompanion = (done) => {
-			finWindow.animate({
+			systemWindow.animate({
 				position: {
 					duration: 0,
 					left: expandedBounds.left
@@ -361,7 +360,7 @@ var Actions = {
 			}, done, done);
 		};
 		const expandCompanion = (done) => {
-			finWindow.animate({ size: { duration: 150, height: expandedBounds.height } }, done, done);
+			systemWindow.animate({ size: { duration: 150, height: expandedBounds.height } }, done, done);
 		};
 		const onAnimationCompleted = (err) => {
 			logAnimationError(err);
@@ -384,7 +383,7 @@ var Actions = {
 		HeaderStore.setState("small");
 		if (animating) return cb();
 		animating = true;
-		let finWindow = fin.desktop.Window.getCurrent();
+		let systemWindow = FSBL.System.Window.getCurrent();
 		let currentBound = HeaderStore.getCompanionBounds();
 		FSBL.Clients.WindowClient.finsembleWindow.updateOptions({
 			"cornerRounding": {
@@ -401,11 +400,11 @@ var Actions = {
 			}
 		};
 		const shrinkCompanion = (done) => {
-			finWindow.animate({ size: { duration: 150, height: contractedBounds.height } }, done, done);
+			systemWindow.animate({ size: { duration: 150, height: contractedBounds.height } }, done, done);
 		};
 
 		const centerCompanion = (done) => {
-			finWindow.animate({
+			systemWindow.animate({
 				position: {
 					duration: 0,
 					left: contractedBounds.left,

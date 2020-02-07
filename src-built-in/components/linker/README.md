@@ -10,3 +10,8 @@ The Linker Window is our sample system component that interfaces with the Linker
 ![](./screenshot.png)
 
 
+# Accessible Linker Window
+To enable the accessible version of the Linker window (with text rendered on channel markers for colorblind users), set `finsemble.accessibleLinker = true` in your configuration (which could also be set by a user through an extension to the UserPreferences component).
+
+## What it looks like
+![](./accessible_screenshot.png)
