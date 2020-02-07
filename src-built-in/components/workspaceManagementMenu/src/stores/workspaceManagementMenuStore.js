@@ -365,7 +365,7 @@ Actions = {
 		 * @param {function} callback - invoked on completion of switchTo
 		 *
 		 */
-		function switchWorkspace(callback) {
+		function switchWorkspace(callback = Function.prototype) {
 			FSBL.Clients.WorkspaceClient.switchTo({
 				name: name
 			}, () => {
