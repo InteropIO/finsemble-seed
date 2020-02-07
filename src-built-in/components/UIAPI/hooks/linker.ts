@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from "react";
-import { RootState, LinkerState, ActionTypes, Channel, Channels } from '../types';
+import { RootState, LinkerState, actions, Channel, Channels } from '../types';
 
 // Encapsulate the linker initialization and Redux dispatch functions inside the hook
 export const useLinker = () => {
@@ -9,14 +9,14 @@ export const useLinker = () => {
     const state: LinkerState = useSelector((state: RootState) => state.linker);
 
     useEffect(() => {
-        
+
         FSBL.Clients.Logger.system.log("Linker component is mounted. Initializing.");
         finsembleWindow.addEventListener("blurred", hideWindow);
         finsembleWindow.addEventListener("shown", showWindow);
-		setInitialChannels();
+        setInitialChannels();
         initAccessibleLinkerMode();
         FSBL.Clients.RouterClient.addResponder("Finsemble.LinkerWindow.SetActiveChannels", onActiveChannelsChanged);
-        
+
         return () => {
             FSBL.Clients.Logger.system.log("Linker component is unmounted. Cleaning up the event listeners.");
             finsembleWindow.removeEventListener("blurred", hideWindow);
@@ -37,14 +37,11 @@ export const useLinker = () => {
     };
 
     const setInitialChannels = () => {
-        const allChannels : any = FSBL.Clients.LinkerClient.getAllChannels();
-        dispatch({
-            type: ActionTypes.SET_CHANNELS,
-            payload: {
-                channels: allChannels
-            }
-        })
-    }
+        const allChannels: any = FSBL.Clients.LinkerClient.getAllChannels();
+        dispatch(actions.SET_CHANNELS({
+            channels: allChannels,
+        }));
+    };
 
     /** If user switches the linker channel for different components, this function would be invoked. It will dispatch another
      *  action to update the linker's state according to the linker setup on the switched component.
@@ -54,26 +51,21 @@ export const useLinker = () => {
      */
     const onActiveChannelsChanged = (err: any, msg: any) => {
         if (err) FSBL.Clients.Logger.system.error(`Failed to update the linker state.`);
-        dispatch({
-            type: ActionTypes.UPDATE_ACTIVE_CHANNELS,
-            payload: {
-                channelNames: msg.data.channels,
-                windowIdentifier: msg.data.windowIdentifier
-            }
-        })
+        dispatch(actions.UPDATE_ACTIVE_CHANNELS({
+            channelNames: msg.data.channels,
+            windowIdentifier: msg.data.windowIdentifier,
+        }));
+
     }
 
     const initAccessibleLinkerMode = () => {
         const accessibilityCallback = (err: any, value: boolean) => {
             if (err) FSBL.Clients.Logger.system.error(`Failed to get accessibleLinker value: ${err}`);
-            dispatch({
-                type: ActionTypes.SET_ACCESSIBILITY,
-                payload: {
-                    isAccessibleLinker: true
-                }
-            })
-        };
-        FSBL.Clients.ConfigClient.getValue("finsemble.accessibleLinker", accessibilityCallback);
+            dispatch(actions.SET_ACCESSIBILITY({
+                isAccessibleLinker: true,
+            }));
+            FSBL.Clients.ConfigClient.getValue("finsemble.accessibleLinker", accessibilityCallback);
+        }
     }
 
     const toggleChannel = (channelId: number) => {
@@ -81,15 +73,12 @@ export const useLinker = () => {
         const channelActive = state.channels[channelId].active;
         const windowIdentifier = state.windowIdentifier;
 
-        const linkCallback = (isActive : Boolean) => {
-            return () => dispatch({
-                type: ActionTypes.UPDATE_CHANNEL_STATUS,
-                payload: {
-                    channelId,
-                    active: isActive
-                }
-            })
-        }
+        const linkCallback = (isActive: boolean) => {
+            return () => dispatch(actions.UPDATE_CHANNEL_STATUS({
+                channelId,
+                active: isActive,
+            }));
+        };
 
         if (!channelActive) {
             FSBL.Clients.LinkerClient.linkToChannel(channelName, windowIdentifier, linkCallback(true));
@@ -99,4 +88,5 @@ export const useLinker = () => {
     }
 
     return { state, toggleChannel };
+
 };

@@ -1,8 +1,9 @@
-import { LinkerState, LinkerAction, ActionTypes, Channel } from '../types';
+import { LinkerState, ACTION_TYPES, actions, Channel } from '../types';
 import withLogging from '../hoReducers/logging';
 import produce from "immer";
 
-// The linker state before we initialize the linker. The initialize linker function will make calls to the LinkerClient and 
+// The linker state before we initialize the linker. The initialize linker function will
+// make calls to the LinkerClient and
 // fill in the state with the relevant linker information.
 export const initialState: LinkerState = {
     channels: {},
@@ -11,41 +12,35 @@ export const initialState: LinkerState = {
 };
 
 // The linker's reducer
-const reducer = (state = initialState, action: LinkerAction) =>
+const reducer = (state = initialState, action: ACTION_TYPES) =>
     produce(state, (draft: LinkerState) => {
-        const { type, payload } = action;
-        switch (type) {
-            case ActionTypes.UPDATE_CHANNEL_STATUS:
-                const { channelId, active }: any = payload;
-                draft.channels[channelId].active = active;
-                break;
+        const draft2 = actions.match(action,{
 
-            case ActionTypes.SET_CHANNELS:
-                let { channels }: any = payload;
+            UPDATE_CHANNEL_STATUS:({ channelId, active }) => {
+                draft.channels[channelId].active = active;
+            },
+            SET_CHANNELS: ({ channels }) => {
                 draft.channels = channels.map((channel: Channel, index: number) => {
                     return {
                         id: index,
                         name: channel.name,
                         color: channel.color,
                         border: channel.border,
-                        active: false
+                        active: false,
                     }
                 });
-                break;
-
-            case ActionTypes.UPDATE_ACTIVE_CHANNELS:
-                const { channelNames, windowIdentifier }: any = payload;
+            },
+            UPDATE_ACTIVE_CHANNELS:({ channelNames, windowIdentifier }) => {
                 draft.windowIdentifier = windowIdentifier;
                 for (const channel of Object.values(draft.channels)) {
-                    channel.active = channelNames.includes(channel.name)
+                    channel.active = channelNames.includes(channel.name);
                 }
-                break;
-
-            case ActionTypes.SET_ACCESSIBILITY:
-                const { isAccessibleLinker }: any = payload;
+            },
+            SET_ACCESSIBILITY:({ isAccessibleLinker }) => {
                 draft.isAccessibleLinker = isAccessibleLinker;
-                break;
-        }
-    })
+            },
+            default: a => draft,
+        });
+    });
 
-export const linker = withLogging("Linker", reducer);
+export const linker = withLogging('Linker', reducer);

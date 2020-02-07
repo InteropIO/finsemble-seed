@@ -1,3 +1,5 @@
+import { unionize, ofType, UnionOf } from 'unionize';
+
 // Type definitions for Finsemble UI API 1.0.0
 
 /** Define the global object */
@@ -10,12 +12,17 @@ declare global {
 }
 
  /** All available action types */
- export enum ActionTypes {
-    UPDATE_CHANNEL_STATUS = "UPDATE_CHANNEL_STATUS",
-    SET_CHANNELS = "SET_CHANNELS",
-    UPDATE_ACTIVE_CHANNELS = "UPDATE_ACTIVE_CHANNELS",
-    SET_ACCESSIBILITY = "SET_ACCESSIBILITY"
-}
+ export const actions = unionize({
+    UPDATE_CHANNEL_STATUS: ofType<{channelId: number, active: boolean}>(),
+    SET_CHANNELS: ofType<{channels: Channel[]}>(),
+    UPDATE_ACTIVE_CHANNELS: ofType<{ channelNames: string[], windowIdentifier: any}>(),
+    SET_ACCESSIBILITY: ofType<{isAccessibleLinker: boolean}>()
+}, {
+    tag:'type',
+    value:'payload',
+});
+
+export type ACTION_TYPES = UnionOf<typeof actions>;
 
 /**
  * The root state of the finsemble UI API. It is composed of different states from
@@ -62,26 +69,6 @@ export interface Channel {
     active: boolean,
     /* The color of the channel's border */
     border: string
-}
-
-/**
- * The Linker action object should always include the action type. If you wish to pass in
- * additional values to the reducer through the action, include it in the payload object.
- */
-export interface LinkerAction {
-    /* Action type */
-    type: string,
-    /* Action payload */
-    payload?: {
-        /* Any value you wish to pass to the reducer */
-        value?: any,
-        /* Linker's channel ID */
-        channelID?: number,
-        /* All the active channels for a certain component */
-        updatedActiveChannels?: Array<object>,
-        /* The window identifier for a certain component */
-        updatedWindowIdentifier?: object
-    }
 }
 
 /**
