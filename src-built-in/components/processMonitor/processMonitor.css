@@ -1,4 +1,5 @@
 @import  url('../../../assets/css/_globals.css');
+@import  url('../../../assets/css/_scrollbars.css');
 
 body {
 	margin: 0px;
@@ -8,6 +9,7 @@ body {
 	font-family: var(--font-family);
 	color: var(--procMonitor-font-color);
 	background-color: var(--procMonitor-background-color);
+	user-select: none;
 }
 
 
@@ -175,7 +177,6 @@ body {
 	height: 35px;
 	background-color: var(--button-neutral-background-color);
 	border: solid 1px var(--button-neutral-border-hover-color);
-	color: var(--button-neutral-solid-font-color);
 	display:flex;
 	align-content: center;
 	justify-content: center;
@@ -186,4 +187,20 @@ body {
 .bottom-section {
 	display:flex;
 	justify-content: space-between;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar {
+    width: 9px;
+    background-color: var(--scrollbar-color);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+    cursor: pointer;
+    border-radius: inherit;
+    background-color: rgba(0, 0, 0, 0.2);
 }

@@ -86,6 +86,14 @@ var Actions = {
 		FSBL.Clients.RouterClient.transmit("CentralConsole-Show", true);
 	},
 	/**
+	 * Sends a message to the system manager to show the log.
+	 *
+	 */
+	showSystemLog() {
+		finsembleWindow.hide();
+		FSBL.SystemManagerClient.showSystemLog();
+	},
+	/**
 	 * Spawns the preferences menu.
 	 */
 	spawnPreferences() {
@@ -112,6 +120,7 @@ var Actions = {
 		return new Promise((resolve, reject) => {
 			FSBL.Clients.DialogManager.open("yesNo",
 				{
+					title: "Save your workspace?",
 					question: "Your workspace \"" + FSBL.Clients.WorkspaceClient.activeWorkspace.name + "\" has unsaved changes, would you like to save?"
 				}, async (err, response) => {
 					if (err || response.choice === "affirmative") {
@@ -149,7 +158,7 @@ var Actions = {
 			if (choice !== "cancel") {
 
 				//Reset any server-side sessions or login data necessary to fully log out the user, e.g.
-				/* 
+				/*
 				fetch("/logout", {//Sends our logout message
 					method: "POST",
 					credentials: "include"
@@ -179,7 +188,7 @@ var Actions = {
 			});
 	},
 	spawnDocs() {
-		fin.desktop.System.openUrlWithBrowser("https://www.chartiq.com/tutorials/?slug=finsemble-seed-project", function () {
+		FSBL.System.openUrlWithBrowser("https://www.chartiq.com/tutorials/?slug=finsemble-seed-project", function () {
 			//console.log("successfully launched docs");
 		}, function (err) {
 			//console.log("failed to launch docs");
