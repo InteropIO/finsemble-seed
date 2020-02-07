@@ -236,7 +236,7 @@ async function addApp(id, cb = Function.prototype) {
 	}
 
 	let manifest;
-	if (app.manifestType === "Finsemble") {
+	if (app.manifestType.toLowerCase() === "finsemble") {
 		try {
 			//Attempt to parse a string as JSON
 			manifest = JSON.parse(app.manifest);
@@ -248,14 +248,14 @@ async function addApp(id, cb = Function.prototype) {
 				//Attempt to parse the url response
 				manifest = await urlRes.json();
 			} catch(e) {
-				FSBL.Clients.Logger.system.warn(`${app.title || app.name} is missing a valid manifest or URI that delivers a valid JSON manifest. Unable to add app`);
+				FSBL.Clients.Logger.system.error(`${app.title || app.name} is missing a valid manifest or URI that delivers a valid JSON manifest. Unable to add app`);
 				return cb();
 			}
 		} finally {
 			appConfig.manifest = manifest;
 		}
 	} else {
-		FSBL.Clients.Logger.system.warn(`${app.title || app.name} does not appear to be a Finsemble manifest. This app cannot be added to Finsemble.`);
+		FSBL.Clients.Logger.system.error(`${app.title || app.name} does not appear to be a Finsemble manifest. This app cannot be added to Finsemble.`);
 		return cb();
 	}
 
