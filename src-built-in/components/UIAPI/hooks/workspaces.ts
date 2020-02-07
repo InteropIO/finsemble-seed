@@ -16,6 +16,7 @@ export const useWorkspaces = () => {
 	// Run every time the workspace service pushes out an update.
 	const onWorkspaceUpdate = (err: any, response: any) => {
 		if (response.data && response.data.activeWorkspace) {
+			console.log("onWorkspaceUpdate", response.data.activeWorkspace);
 			setActiveWorkspace(response.data.activeWorkspace);
 		}
 	}
@@ -31,17 +32,9 @@ export const useWorkspaces = () => {
 	 * https://medium.com/javascript-in-plain-english/how-to-use-async-function-in-react-hook-useeffect-typescript-js-6204a788a435
 	 **/
 	useEffect(() => {
-		const setInitialActiveWorkspace = async () => {
-			const { data: aws } = await FSBL.Clients.WorkspaceClient.getActiveWorkspace();
-			setActiveWorkspace(aws);
-		}
 		// When the workspace updates, update the active workspace name.
-		const listenForWorkspaceUpdates = () => {
-			return FSBL.Clients.RouterClient.subscribe("Finsemble.WorkspaceService.update", onWorkspaceUpdate);
-		}
-
-		setInitialActiveWorkspace();
-		const WorkspaceUpdateSubscribeID = listenForWorkspaceUpdates();
+		// We will also get the active workspace as soon as we subscribe.
+		const WorkspaceUpdateSubscribeID = FSBL.Clients.RouterClient.subscribe("Finsemble.WorkspaceService.update", onWorkspaceUpdate);
 
 		return function cleanup() {
 			FSBL.Clients.RouterClient.unsubscribe(WorkspaceUpdateSubscribeID);
