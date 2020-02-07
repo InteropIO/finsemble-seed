@@ -12,9 +12,13 @@ import onReady from "../../UIAPI/effects/index";
 import ReactDOM from "react-dom";
 import React from "react";
 import DragHandle from '../../toolbarRefactored/DragHandle';
+import { dummyExport } from '@chartiq/finsemble-ui';
+
+
 const ToolbarShell = () => {
 	return (
 		<ToolbarRefactored>
+			<dummyExport/>
 			<DragHandle />
 			{/* Drag Handle */}
 			{/* Workspace Management Menu */}
