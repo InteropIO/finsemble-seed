@@ -231,6 +231,21 @@ const { launch, connect } = require('hadouken-js-adapter');
 			return 'unknown';
 		}
 	};
+	/** 
+	* Returns an object containing the absolute paths of the socket certificate files used to secure Finsemble Transport
+	* If both a key and certificate path are not configured nothing is returned.
+	*/
+	const deriveSocketCertificatePaths = () => {
+		const cfg = taskMethods.startupConfig[env.NODE_ENV];
+			let socketCertificatePath;
+			if (cfg.socketCertificateKey && cfg.socketCertificateCert) {
+				socketCertificatePath = { 
+					key: path.resolve(path.join(__dirname, cfg.socketCertificateKey)),
+					cert: path.resolve(path.join(__dirname, cfg.socketCertificateCert))
+				}
+			}
+			return socketCertificatePath;
+	}
 	// #endregion
 
 	// #region Task Methods
@@ -511,25 +526,13 @@ const { launch, connect } = require('hadouken-js-adapter');
 			if (done) done();
 		},
 		launchElectron: done => {
-			console.log(path.resolve(path.join(".", "../finsemble-electron-adapter")))
-			
-			
 			logToTerminal(`Using Container: Electron@${getElectronVersion()}`, "green");
 			const cfg = taskMethods.startupConfig[env.NODE_ENV];
 			const USING_ELECTRON = container === "electron";
 			if (USING_ELECTRON && !FEA_PATH_EXISTS) {
 				throw "Cannot use electron container unless finsemble-electron-adapter optional dependency is installed. Please run npm i @chartiq/finsemble-electron-adapter";
 			}
-
-			let socketCertificatePath
-			console.log(cfg.socketCertificateKey, cfg.socketCertificateCert)
-			if (cfg.socketCertificateKey && cfg.socketCertificateCert) {
-				socketCertificatePath = { 
-					key: path.resolve(path.join(__dirname, cfg.socketCertificateKey)),
-					cert: path.resolve(path.join(__dirname, cfg.socketCertificateCert))
-				}
-			}
-			console.log("certkeypath", socketCertificatePath);
+			const socketCertificatePath = deriveSocketCertificatePaths();
 
 			let config = {
 				manifest: cfg.serverConfig,
@@ -550,8 +553,6 @@ const { launch, connect } = require('hadouken-js-adapter');
 			return FEA.e2oLauncher(config, done);
 		},
 		makeInstaller: async (done) => {
-			//console.log(path.resolve(path.join("./installer""../finsemble"))
-			//return;
 			if (!env.NODE_ENV) throw new Error("NODE_ENV must be set to generate an installer.");
 			function resolveRelativePaths(obj, properties, rootPath) {
 				properties.forEach(prop => {
@@ -591,19 +592,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 				console.error("Cannot create installer because Finsemble Electron Adapter is not installed");
 				process.exit(1);
 			}
-
-			let socketCertificatePath
-			const cfg = taskMethods.startupConfig[env.NODE_ENV];
-			console.log(cfg.socketCertificateKey, cfg.socketCertificateCert)
-			if (cfg.socketCertificateKey && cfg.socketCertificateCert) {
-				socketCertificatePath = { 
-					key: path.resolve(path.join(__dirname, cfg.socketCertificateKey)),
-					cert: path.resolve(path.join(__dirname, cfg.socketCertificateCert))
-				}
-			}
-			console.log("certkeypath", socketCertificatePath);
-			//console.log(installerConfig);
-			//exit
+			const socketCertificatePath = deriveSocketCertificatePaths();
 
 			FEAPackager.setFeaPath(FEA_PATH);
 			await FEAPackager.setApplicationFolderName(installerConfig.name);
