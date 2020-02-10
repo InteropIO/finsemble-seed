@@ -33,9 +33,7 @@ const initialChannels = () => {
 
 describe('Linker reducer', () => {
     // Toggle channel request set the "prosessingRequest" property on the linker state to "true"
-    it('Should handle toggle channel request', () => {
-    });
+    it('Should handle toggle channel request');
+    it('Should handle update active channels');
 
-    it('Should handle update active channels', () => {
-    });
 });

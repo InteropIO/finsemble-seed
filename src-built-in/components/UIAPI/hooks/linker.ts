@@ -76,10 +76,16 @@ export const useLinker = () => {
         const windowIdentifier = state.windowIdentifier;
 
         const linkCallback = (isActive: boolean) => {
-            return () => dispatch(actions.UPDATE_CHANNEL_STATUS({
-                channelId,
-                active: isActive
-            }));
+            return (err:any) => {
+                if (err) {
+                    return FSBL.Clients.Logger.error('Error in linkerHook, linkCallback', err);
+                }
+
+                dispatch(actions.UPDATE_CHANNEL_STATUS({
+                    channelId,
+                    active: isActive
+                }));
+            };
         };
 
         const numberOfActiveChannels = Object.values(state.channels)
@@ -96,9 +102,9 @@ export const useLinker = () => {
         // we're trying to toggle one to be active AND we have not hit our maximum,
         // let the call go through. Otherwise log an error.
         if (deactivating) {
-            FSBL.Clients.LinkerClient.unlinkFromChannel(channelName, windowIdentifier, linkCallback(!channelActive));
+            FSBL.Clients.LinkerClient.unlinkFromChannel(channelName, windowIdentifier, linkCallback(false));
         } else if (activating && allowedToActivateAnotherChannel) {
-            FSBL.Clients.LinkerClient.linkToChannel(channelName, windowIdentifier, linkCallback(!channelActive));
+            FSBL.Clients.LinkerClient.linkToChannel(channelName, windowIdentifier, linkCallback(true));
         } else {
             FSBL.Clients.Logger.error(`Attempted to toggle more than ${MAXIMUM_ALLOWED_ACTIVE_CHANNELS} channels. This could result in an unacceptable UX. Please contact finsemble support if you would like to render more than ${MAXIMUM_ALLOWED_ACTIVE_CHANNELS} linker channels in the window title bar.`)
         }
