@@ -95,7 +95,9 @@ export const useLinker = () => {
         // if we're toggling a channel to be inactive OR
         // we're trying to toggle one to be active AND we have not hit our maximum,
         // let the call go through. Otherwise log an error.
-        if (deactivating || (activating && allowedToActivateAnotherChannel)) {
+        if (deactivating) {
+            FSBL.Clients.LinkerClient.unlinkFromChannel(channelName, windowIdentifier, linkCallback(!channelActive));
+        } else if (activating && allowedToActivateAnotherChannel) {
             FSBL.Clients.LinkerClient.linkToChannel(channelName, windowIdentifier, linkCallback(!channelActive));
         } else {
             FSBL.Clients.Logger.error(`Attempted to toggle more than ${MAXIMUM_ALLOWED_ACTIVE_CHANNELS} channels. This could result in an unacceptable UX. Please contact finsemble support if you would like to render more than ${MAXIMUM_ALLOWED_ACTIVE_CHANNELS} linker channels in the window title bar.`)
