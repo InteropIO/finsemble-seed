@@ -3,13 +3,13 @@ import AppActionsMenu from "./AppActionsMenu";
 import AppTagsList from "./AppTagsList";
 import storeActions from "../stores/StoreActions";
 const DEFAULT_APP_ICON = "ff-component";
+const FAVORITES = "Favorites";
 /**
  * Used to make sure that a user is not waiting for component
  * to spawn after a double click, helps us prevent multiple
  * spawns for the same app.
  */
 export default class AppDefinition extends React.Component {
-
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -17,8 +17,9 @@ export default class AppDefinition extends React.Component {
 		};
 		this.onDragToFolder = this.onDragToFolder.bind(this);
 		this.onItemClick = this.onItemClick.bind(this);
+		this.onAddToFavorite = this.onAddToFavorite.bind(this);
+		this.onRemoveFromFavorite = this.onRemoveFromFavorite.bind(this);
 	}
-
 	/**
 	* Native HTML5 drag and drop
 	**/
@@ -26,7 +27,6 @@ export default class AppDefinition extends React.Component {
 		event.dataTransfer
 			.setData("app", JSON.stringify(this.props.app));
 	}
-
 	/**
 	 * Spawns a component on click
 	 * @param {object} e The Synthetic React event
@@ -42,19 +42,34 @@ export default class AppDefinition extends React.Component {
 			addToWorkspace: true
 		});
 	}
-
+	/**
+	 * Adds app to Favorites folder, then adds pin and hides the menu
+	 */
+	onAddToFavorite(e) {
+		e.stopPropagation();
+		storeActions.addAppToFolder(FAVORITES, this.props.app);
+		storeActions.addPin(this.props.app);
+	}
+	/**
+	 * Removes app from Favorites folder, then removes pin and hides the menu
+	 */
+	onRemoveFromFavorite(e) {
+		e.stopPropagation();
+		storeActions.removeAppFromFolder(FAVORITES, this.props.app);
+		storeActions.removePin(this.props.app);
+	}
 	isFavorite() {
 		let favorites = Object.keys(storeActions.getSingleFolder("Favorites").apps);
 		return favorites.indexOf(this.props.app.appID.toString()) > -1;
 	}
-
 	render() {
 		const app = this.props.app;
 		if (typeof (app.icon) === "undefined" || app.icon === null) app.icon = DEFAULT_APP_ICON;
+		let favoritesActionOnClick = this.isFavorite() ? this.onRemoveFromFavorite : this.onAddToFavorite;
 		return (
 			<div onClick={this.onItemClick} className="app-item link" draggable="true" onDragStart={this.onDragToFolder}>
 				<span className="app-item-title">
-					<span >{app.displayName}</span> {this.isFavorite() && <i className='ff-favorite'></i>}
+					<i onClick={(e) => { favoritesActionOnClick(e); }} style={!this.isFavorite() ? { color: "gray" } : null} className={this.isFavorite() ? 'ff-favorite' : 'ff-star-outline'}></i><span >{app.displayName || app.name}</span>
 				</span>
 				{app.tags.length > 0 &&
 					<AppTagsList tags={app.tags} />}

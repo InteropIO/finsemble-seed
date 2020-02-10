@@ -18,12 +18,20 @@ export default {
 	removeTag,
 	refreshTagSearch,
 	clearTags,
+	clearSearchText,
 	addApp,
 	removeApp,
 	openApp,
 	clearApp,
 	getInstalledApps,
-	getActiveApp
+	getActiveApp,
+	setActiveApp,
+	filterApps,
+	setSearchValue,
+	setForceSearch,
+	getSearchValue,
+	getForceSearch,
+	goHome
 };
 
 let ToolbarStore;
@@ -55,6 +63,8 @@ function initialize(done = Function.prototype) {
 		data.filteredApps = store.values.filteredApps;
 		data.activeTags = store.values.activeTags;
 		data.activeApp = store.values.activeApp;
+		data.searchText = store.values.searchText;
+		data.forceSearch = store.values.forceSearch;
 		data.ADVANCED_APP_LAUNCHER = store.values.defaultFolder;
 
 		store.addListener({ field: "apps" }, (err, dt) => data.apps = dt.value);
@@ -63,6 +73,8 @@ function initialize(done = Function.prototype) {
 		store.addListener({ field: "activeApp" }, (err, dt) => data.activeApp = dt.value);
 		store.addListener({ field: "activeTags" }, (err, dt) => data.activeTags = dt.value);
 		store.addListener({ field: "filteredApps" }, (err, dt) => data.filteredApps = dt.value);
+		store.addListener({ field: "searchText" }, (err, dt) => data.searchText = dt.value);
+		store.addListener({ field: "forceSearch" }, (err, dt) => data.forceSearch = dt.value);
 		getToolbarStore(done);
 	});
 }
@@ -75,97 +87,66 @@ function getToolbarStore(done) {
 }
 
 /**
+ * Return to the App Catalog home page
+ */
+function goHome() {
+	setForceSearch(false);
+	clearFilteredApps();
+	clearApp();
+	clearTags();
+	clearSearchText();	
+}
+
+/**
  * Private function to add an active tag. This will filter apps based on tags
- * NOTE: This will need to use search
  * @param {string} tag The name of the tag
  */
 function _addActiveTag(tag) {
+	let activeTags = data.activeTags;
+	if (!activeTags.includes(tag)) {activeTags.push(tag);}
 
-	let { apps, activeTags } = data;
-
-	activeTags.push(tag);
-
-	let newApps = apps.filter((app) => {
-		for (let i = 0; i < activeTags.length; i++) {
-			let tag = activeTags[i].trim();
-			if (app.tags.includes(tag)) {
-				return true;
-			}
-		}
-	});
-
-	getStore().setValues([
-		{
-			field: "filteredApps",
-			value: newApps
-		},
-		{
-			field: "activeTags",
-			value: activeTags
-		}
-	]);
+	getStore().setValue({ field: "activeTags", value: activeTags }, filterApps());
 }
 
 /**
  * Private function to remove an active tag. This will filter apps based on tags
- * NOTE: This will need to use search
  * @param {string} tag The name of the tag
  */
 function _removeActiveTag(tag) {
-
-	let { activeTags, apps } = data;
-
-	let newActiveTags = activeTags.filter((currentTag) => {
+	data.activeTags = data.activeTags.filter((currentTag) => {
 		return currentTag !== tag;
 	});
 
-	let newApps = apps.filter((app) => {
-		for (let i = 0; i < newActiveTags.length; i++) {
-			let tag = activeTags[i].trim();
-			if (app.tags.includes(tag)) {
-				return true;
-			}
-		}
-	});
-
-	getStore().setValues([{
-		field: "activeTags",
-		value: newActiveTags
-	}, {
-		field: "filteredApps",
-		value: newApps
-	}]);
-}
-
-function _refreshTags() {
-	let { activeTags, apps } = data;
-
-	let newApps = apps.filter((app) => {
-		for (let i = 0; i < activeTags.length; i++) {
-			const tag = activeTags[i].trim();
-			if (app.tags.includes(tag)) {
-				return true;
-			}
-		}
-	});
-
-	getStore().setValues([{
-		field: 'activeTags',
-		value: activeTags
-	}, {
-		field: 'filteredApps',
-		value: newApps
-	}]);
+	getStore().setValue({ field: "activeTags", value: data.activeTags	});
+	filterApps();
 }
 
 /**
  * Clears all active tags
  */
 function _clearActiveTags() {
-	getStore().setValue({
-		field: "activeTags",
-		value: []
-	});
+	getStore().setValue({ field: "activeTags", value: [] });	
+}
+
+
+/**
+ * Send the search text and tags to the appd server and get a list of apps
+ */
+function filterApps() {
+	let { activeTags, searchText } = data;
+	
+
+	if (activeTags.length === 0 && searchText === "") {
+		goHome();
+	} else {
+		appd.search({ text: searchText, tags: activeTags }, (err, data) => {
+			if (err) {
+				Logger.system.error(`FDC3 App search failed!: ${err}`);
+				return;
+			}
+			getStore().setValue({ field: "filteredApps", value: data });
+		});
+	}
 }
 
 /**
@@ -348,6 +329,9 @@ function openApp(id) {
 	}
 }
 
+/**
+ * Clear the activeApp in store
+ */
 function clearApp() {
 	getStore().setValue({
 		field: "activeApp",
@@ -355,8 +339,25 @@ function clearApp() {
 	});
 }
 
+/**
+ * Return activeApp from store
+ *
+ * @returns {string} activeApp
+ */
 function getActiveApp() {
 	return data.activeApp;
+}
+
+/**
+ * Set the activeApp param in store
+ *
+ * @param {*} app
+ */
+function setActiveApp(app) {
+	getStore().setValue({
+		field: "activeApp",
+		value: app
+	});
 }
 
 /**
@@ -381,6 +382,51 @@ function clearFilteredApps() {
 		field: "filteredApps",
 		value: []
 	});
+}
+
+/**
+ * Set the value of the search text in store
+ *
+ * @param {set} val Search string
+ */
+function setSearchValue(val) {
+	getStore().setValue({field: "searchText", value: val})
+}
+
+/**
+ * Get the current value of the text in the store
+ *
+ * @returns {string}  Search string
+ */
+function getSearchValue() {
+	return data.searchText;
+}
+
+/**
+ * Clears the search text in store
+ *
+ */
+function clearSearchText() {
+	getStore().setValue({field: "searchText", value: ""})
+}
+
+/**
+ * Get forceSearch store value
+ *
+ * @returns {boolean} forceSearch
+ */
+function getForceSearch() {
+	return data.forceSearch;
+}
+
+
+/**
+ * Set the forceSearch value
+ *
+ * @param {string} val Boolean value for forceSearch
+ */
+function setForceSearch(val) {
+	getStore().setValue({field: "forceSearch", value: val})
 }
 
 /**
@@ -410,7 +456,7 @@ function removeTag(tag) {
  * Refreshes the active tags search
  */
 function refreshTagSearch() {
-	_refreshTags();
+	filterApps();
 }
 
 /**
@@ -425,28 +471,12 @@ function clearTags() {
  * @param {string} terms The search terms provided by the user
  */
 function searchApps(terms, cb = Function.prototype) {
-	if (!terms || terms.length === 0) {
-		getStore().setValue({
-			field: "filteredApps",
-			value: []
-		});
-		return cb();
-	}
-	let activeTags = getStore().getValue({
-		field: "activeTags"
-	}, err => {
-		if (err) console.warn("Error getting active tags");
-	});
-
-	//TODO: The appd search endpoint returns all apps always
-	appd.search({ text: terms, tags: activeTags }, (err, data) => {
-		if (err) console.log("Failed to search apps");
-		getStore().setValue({
-			field: "filteredApps",
-			value: data
-		});
-		cb();
-	});
+	data.searchText = terms;
+	setForceSearch(true);
+	getStore().setValue({
+		field: "searchText",
+		value: terms
+	}, () => {filterApps(); cb();});
 }
 
 
