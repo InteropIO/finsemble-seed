@@ -97,14 +97,14 @@
         "socket.io": "2.0.4",
         "strip-ansi": "3.0.1",
         "style-loader": "0.19.1",
-        "ts-loader": "3.5.0",
-        "ts-mocha": "^6.0.0",
+        "ts-loader": "^6.2.1",
+        "ts-mocha": "6.0.0",
         "tslint": "5.11.0",
         "typescript": "3.2.4",
         "uglifyjs-webpack-plugin": "1.2.7",
         "url-join": "2.0.5",
         "url-loader": "0.6.2",
-        "webpack": "2.7.0",
+        "webpack": "4.41.5",
         "webpack-dev-middleware": "1.12.2",
         "webpack-glob-entries": "1.0.1"
     }

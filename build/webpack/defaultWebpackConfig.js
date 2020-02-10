@@ -123,6 +123,9 @@ module.exports = class WebpackDefaults {
 				]
 			},
 			plugins: plugins,
+			optimization: {
+				usedExports: true,
+			},
 			output: {
 				filename: "[name].js",
 				sourceMapFilename: "[name].map.js",
