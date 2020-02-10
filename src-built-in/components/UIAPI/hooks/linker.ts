@@ -9,10 +9,9 @@ export const useLinker = () => {
     const state: LinkerState = useSelector((state: RootState) => state.linker);
 
     useEffect(() => {
-
         FSBL.Clients.Logger.system.log("Linker component is mounted. Initializing.");
         finsembleWindow.addEventListener("blurred", hideWindow);
-        finsembleWindow.addEventListener("shown", showWindow);
+        finsembleWindow.addEventListener("shown", focusWindow);
         setInitialChannels();
         initAccessibleLinkerMode();
         FSBL.Clients.RouterClient.addResponder("Finsemble.LinkerWindow.SetActiveChannels", onActiveChannelsChanged);
@@ -20,7 +19,7 @@ export const useLinker = () => {
         return () => {
             FSBL.Clients.Logger.system.log("Linker component is unmounted. Cleaning up the event listeners.");
             finsembleWindow.removeEventListener("blurred", hideWindow);
-            finsembleWindow.removeEventListener("shown", showWindow);
+            finsembleWindow.removeEventListener("shown", focusWindow);
             FSBL.Clients.RouterClient.removeEventListener("Finsemble.LinkerWindow.SetActiveChannels", onActiveChannelsChanged);
         }
     }, []);
@@ -32,7 +31,7 @@ export const useLinker = () => {
     const hideWindow = () => {
         finsembleWindow.hide();
     };
-    const showWindow = () => {
+    const focusWindow = () => {
         finsembleWindow.focus();
     };
 
@@ -45,7 +44,7 @@ export const useLinker = () => {
 
     /** If user switches the linker channel for different components, this function would be invoked. It will dispatch another
      *  action to update the linker's state according to the linker setup on the switched component.
-     * 
+     *
      * @param err  error from FSBL
      * @param msg  msg from FSBL
      */
@@ -55,7 +54,7 @@ export const useLinker = () => {
             channelNames: msg.data.channels,
             windowIdentifier: msg.data.windowIdentifier,
         }));
-
+        msg.sendQueryResponse(null, null);
     }
 
     const initAccessibleLinkerMode = () => {
