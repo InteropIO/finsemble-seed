@@ -15,7 +15,7 @@ import DragHandle from '../../toolbarRefactored/DragHandle';
 const ToolbarShell = () => {
 	return (
 		<ToolbarRefactored>
-			<DragHandle/>
+			<DragHandle />
 			{/* Drag Handle */}
 			{/* Workspace Management Menu */}
 			{/* App Menu */}
@@ -26,6 +26,7 @@ const ToolbarShell = () => {
 		</ToolbarRefactored>
 	)
 }
+
 onReady(() => ReactDOM.render(
 	<ToolbarShell />,
 	document.getElementById("toolbar_refactored"))
