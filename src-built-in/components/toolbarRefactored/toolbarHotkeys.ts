@@ -24,8 +24,8 @@ const bringToolbarToFront = (focus = false) => {
 
 		if (focus) {
 			finsembleWindow.focus();
-			// Leaving this line of code because clearly someone ran into something difficult.
-			// self.Store.setValue({ field: "searchActive", value: false });
+			// @todo when the search component is finished, dispatch the action
+			// that focuses the search field
 		}
 	});
 }
