@@ -1,5 +1,6 @@
-import { WorkspaceState, WorskpaceActions, ActionTypes } from '../types';
+import { WorkspaceState, actions, ACTION_TYPES } from '../types';
 import withLogging from '../hoReducers/logging';
+import produce from "immer";
 
 export const initialState: WorkspaceState = {
 	activeWorkspace: {
@@ -7,19 +8,15 @@ export const initialState: WorkspaceState = {
 	}
 };
 
-export const workspaces = (state: WorkspaceState = initialState, action: WorskpaceActions) => {
-	const { type, payload } = action;
-	switch (type) {
-		case ActionTypes.SET_ACTIVE_WORKSPACE:
-			return {
-				...state,
-				activeWorkspace: {
-					name: payload.name
-				}
-			}
-		default:
-			return state;
-	}
+export const workspaces = (state: WorkspaceState = initialState, action: ACTION_TYPES) => {
+	produce(state, (draft: WorkspaceState) => {
+		actions.match(action, {
+			SET_ACTIVE_WORKSPACE: ({ name }) => {
+				draft.activeWorkspace.name = name;
+			},
+			default: (state) => state
+		});
+	});
 }
 
 // Wraps the reducer with some logging so that we can debug
