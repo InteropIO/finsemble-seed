@@ -31,6 +31,7 @@ export const useLinker = () => {
     const hideWindow = () => {
         finsembleWindow.hide();
     };
+
     const focusWindow = () => {
         finsembleWindow.focus();
     };

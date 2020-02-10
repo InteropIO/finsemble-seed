@@ -21,9 +21,8 @@ declare global {
 
 }, {
     tag:'type',
-    value:'payload',
+    value:'payload'
 });
-
 export type ACTION_TYPES = UnionOf<typeof actions>;
 export enum ActionTypes {
 }

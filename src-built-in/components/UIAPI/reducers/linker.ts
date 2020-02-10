@@ -30,10 +30,10 @@ const reducer = (state = initialState, action: ACTION_TYPES) => {
                 });
             },
             UPDATE_ACTIVE_CHANNELS: ({ channelNames, windowIdentifier }) => {
-                const channelArray = Object.values(channelNames).map(obj => obj.name);
+                const channelNameArray = Object.values(channelNames).map(obj => obj.name);
                 draft.windowIdentifier = windowIdentifier;
                 for (const channel of Object.values(draft.channels)) {
-                    channel.active = channelArray.includes(channel.name);
+                    channel.active = channelNameArray.includes(channel.name);
                 }
             },
             SET_ACCESSIBILITY: ({ isAccessibleLinker }) => {
