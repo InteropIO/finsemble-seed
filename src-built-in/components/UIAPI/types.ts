@@ -16,22 +16,37 @@ declare global {
     UPDATE_CHANNEL_STATUS: ofType<{channelId: number, active: boolean}>(),
     SET_CHANNELS: ofType<{channels: Channel[]}>(),
     UPDATE_ACTIVE_CHANNELS: ofType<{ channelNames: string[], windowIdentifier: any}>(),
-    SET_ACCESSIBILITY: ofType<{isAccessibleLinker: boolean}>()
+    SET_ACCESSIBILITY: ofType<{ isAccessibleLinker: boolean }>(),
+    SET_ACTIVE_WORKSPACE: ofType<{ name?: string }>()
+
 }, {
     tag:'type',
     value:'payload',
 });
 
 export type ACTION_TYPES = UnionOf<typeof actions>;
+export enum ActionTypes {
+}
 
 /**
  * The root state of the finsemble UI API. It is composed of different states from
  * different components.
  */
 export interface RootState {
-    linker: LinkerState
+    linker: LinkerState,
+    workspaces: WorkspaceState
 }
 
+/**
+ * Workspace state definition.
+ */
+export interface WorkspaceState {
+    /* Obj representing the active workspace */
+    activeWorkspace: {
+        /* Name of the active workspace */
+        name: string
+    }
+}
 /**
  * Linker component type definition
  */
@@ -70,6 +85,8 @@ export interface Channel {
     /* The color of the channel's border */
     border: string
 }
+
+
 
 /**
  * The active channels and the window identifier those channels belong to.

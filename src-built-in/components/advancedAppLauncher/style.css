@@ -198,14 +198,20 @@ img {
 }
 
 .complex-menu-action {
-    padding: 5px 5px 5px 28px;
+    padding: 5px 5px 5px 8px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     position: relative;
     border-radius: 0 20px 20px 0;
     height: 24px;
     margin-right: 5px;
+}
+
+.ff-plus-2:before {
+    color: var(--appMenu-leftNav-icon-color);
+    padding: 1px 7px 0px 0px;
+    font-size: 13px;
 }
 
 .complex-menu-action:first-child{
@@ -383,13 +389,6 @@ select:focus, option:focus {
     font-size: var(--tag-font-size);
   }
 
-  .app-item-title .ff-favorite{
-    margin-left: 6px;
-    padding: 0px;
-    font-size: var(--appMenu-font-size);
-    color: var(--appMenu-app-favorite-color);
-  }
-
   .app-item-tags {
     display: flex;
     align-items: center;
@@ -422,10 +421,18 @@ select:focus, option:focus {
     white-space: nowrap;
   }
 
-  .app-item-title i {
-    padding-right: 4px;
-    padding-top: 2px;
-    color: var(--appMenu-app-icon-color);
+  .app-item-title .ff-favorite {
+    padding-top: 1px;
+    padding-right: 7px;
+    font-size: var(--appMenu-font-size);
+    color: var(--appMenu-app-favorite-color);
+  }
+
+  .app-item-title .ff-star-outline {
+    padding-top: 1px;
+    padding-right: 7px;
+    font-size: var(--appMenu-font-size);
+    color: var(--appMenu-app-favorite-color);
   }
 
   .filter-sort {
@@ -526,7 +533,7 @@ select:focus, option:focus {
 }
 
 .add-app-form {
-    background: rgba(13, 17, 19, .9);
+    background: var(--appMenu-background-color);
     width: 100%;
     height: 100%;
     position: absolute;

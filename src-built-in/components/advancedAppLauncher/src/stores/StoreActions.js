@@ -309,7 +309,7 @@ function addPin(pin) {
 			if (componentToToggle.component && componentToToggle.component.windowGroup) { params.groupName = componentToToggle.component.windowGroup; }
 			var thePin = {
 				type: "componentLauncher",
-				label: pin.displayName,
+				label: pin.displayName || pin.name,
 				component: componentToToggle.group ? componentToToggle.list : componentType,
 				fontIcon: fontIcon,
 				icon: imageIcon,

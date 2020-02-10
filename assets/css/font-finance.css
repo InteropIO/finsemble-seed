@@ -167,7 +167,7 @@
   content: "\27";
 }
 .ff-linker:before {
-  content: "\31";
+  content: "\e012";
 }
 .ff-magnet:before {
   content: "\32";
@@ -248,7 +248,7 @@
   content: "\40";
 }
 .ff-share:before {
-  content: "\2a";
+  content: "\e013";
 }
 .ff-hamburger:before {
   content: "\58";
@@ -360,4 +360,10 @@
 }
 .ff-adp-hamburger:before {
   content: "\e011";
+}
+.ff-linker-1:before {
+  content: "\31";
+}
+.ff-plus-2:before {
+  content: "\2a";
 }
