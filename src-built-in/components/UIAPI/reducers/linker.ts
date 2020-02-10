@@ -13,7 +13,7 @@ export const initialState: LinkerState = {
 
 // The linker's reducer
 const reducer = (state = initialState, action: ACTION_TYPES) => {
-    produce(state, (draft: LinkerState) => {
+    return produce(state, (draft: LinkerState) => {
         actions.match(action, {
             UPDATE_CHANNEL_STATUS: ({ channelId, active }) => {
                 draft.channels[channelId].active = active;
