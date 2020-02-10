@@ -1,9 +1,14 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, WorkspaceState } from '../types';
-import * as Actions from '../actions/workspaceActions';
+import { RootState, WorkspaceState, actions } from '../types';
 
-
+declare type WorkspaceUpdate = {
+	data: {
+		activeWorkspace: {
+			name: string
+		}
+	}
+}
 /**
  * A hook for getting the ActiveWorkspace,
  * and setting the ActiveWorkspace.
@@ -11,10 +16,10 @@ import * as Actions from '../actions/workspaceActions';
 export const useWorkspaces = () => {
 	const dispatch = useDispatch();
 	const setActiveWorkspace = (activeWorkspace: WorkspaceState['activeWorkspace']) => {
-		dispatch(Actions.setActiveWorkspace(activeWorkspace));
+		dispatch(actions.SET_ACTIVE_WORKSPACE(activeWorkspace));
 	}
 	// Run every time the workspace service pushes out an update.
-	const onWorkspaceUpdate = (err: any, response: any) => {
+	const onWorkspaceUpdate = (err: any, response: WorkspaceUpdate) => {
 		if (response.data && response.data.activeWorkspace) {
 			console.log("onWorkspaceUpdate", response.data.activeWorkspace);
 			setActiveWorkspace(response.data.activeWorkspace);

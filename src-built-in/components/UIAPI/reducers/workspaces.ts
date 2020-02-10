@@ -4,21 +4,19 @@ import produce from "immer";
 
 export const initialState: WorkspaceState = {
 	activeWorkspace: {
-		name: null
+		name: ''
 	}
 };
 
-export const workspaces = (state: WorkspaceState = initialState, action: ACTION_TYPES) => {
-	produce(state, (draft: WorkspaceState) => {
+export const reducer = (state = initialState, action: ACTION_TYPES) => {
+	return produce(state, (draft: WorkspaceState) => {
 		actions.match(action, {
 			SET_ACTIVE_WORKSPACE: ({ name }) => {
 				draft.activeWorkspace.name = name;
 			},
-			default: (state) => state
+			default: a => draft
 		});
 	});
 }
 
-// Wraps the reducer with some logging so that we can debug
-// field reported bugs.
-export default withLogging("Workspaces", workspaces);
+export const workspaces = withLogging("Workspaces", reducer);

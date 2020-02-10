@@ -12,10 +12,10 @@ export const initialState: LinkerState = {
 };
 
 // The linker's reducer
-const reducer = (state = initialState, action: ACTION_TYPES) =>
+const reducer = (state = initialState, action: ACTION_TYPES) => {
     produce(state, (draft: LinkerState) => {
-        actions.match(action,{
-            UPDATE_CHANNEL_STATUS:({ channelId, active }) => {
+        actions.match(action, {
+            UPDATE_CHANNEL_STATUS: ({ channelId, active }) => {
                 draft.channels[channelId].active = active;
             },
             SET_CHANNELS: ({ channels }) => {
@@ -29,17 +29,18 @@ const reducer = (state = initialState, action: ACTION_TYPES) =>
                     }
                 });
             },
-            UPDATE_ACTIVE_CHANNELS:({ channelNames, windowIdentifier }) => {
+            UPDATE_ACTIVE_CHANNELS: ({ channelNames, windowIdentifier }) => {
                 draft.windowIdentifier = windowIdentifier;
                 for (const channel of Object.values(draft.channels)) {
                     channel.active = channelNames.includes(channel.name);
                 }
             },
-            SET_ACCESSIBILITY:({ isAccessibleLinker }) => {
+            SET_ACCESSIBILITY: ({ isAccessibleLinker }) => {
                 draft.isAccessibleLinker = isAccessibleLinker;
             },
             default: a => draft,
         });
     });
+};
 
 export const linker = withLogging('Linker', reducer);
