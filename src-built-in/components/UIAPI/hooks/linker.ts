@@ -1,6 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from "react";
 import { RootState, LinkerState, actions, Channel, Channels } from '../types';
+// number of allowed active channels to be rendered on the titlebar. Current max is 6.
+const MAXIMUM_ALLOWED_ACTIVE_CHANNELS = 6;
 
 // Encapsulate the linker initialization and Redux dispatch functions inside the hook
 export const useLinker = () => {
@@ -76,14 +78,27 @@ export const useLinker = () => {
         const linkCallback = (isActive: boolean) => {
             return () => dispatch(actions.UPDATE_CHANNEL_STATUS({
                 channelId,
-                active: isActive,
+                active: isActive
             }));
         };
 
-        if (!channelActive) {
-            FSBL.Clients.LinkerClient.linkToChannel(channelName, windowIdentifier, linkCallback(true));
+        const numberOfActiveChannels = Object.values(state.channels)
+            .map(c => c.active)
+            .reduce((a, c) => {
+                return a + c;
+            });
+
+        // We're activating if the channel is currently inactive
+        const activating = !channelActive;
+        const deactivating = channelActive;
+        const allowedToActivateAnotherChannel = numberOfActiveChannels < MAXIMUM_ALLOWED_ACTIVE_CHANNELS;
+        // if we're toggling a channel to be inactive OR
+        // we're trying to toggle one to be active AND we have not hit our maximum,
+        // let the call go through. Otherwise log an error.
+        if (deactivating || (activating && allowedToActivateAnotherChannel)) {
+            FSBL.Clients.LinkerClient.linkToChannel(channelName, windowIdentifier, linkCallback(!channelActive));
         } else {
-            FSBL.Clients.LinkerClient.unlinkFromChannel(channelName, windowIdentifier, linkCallback(false));
+            FSBL.Clients.Logger.error(`Attempted to toggle more than ${MAXIMUM_ALLOWED_ACTIVE_CHANNELS} channels. This could result in an unacceptable UX. Please contact finsemble support if you would like to render more than ${MAXIMUM_ALLOWED_ACTIVE_CHANNELS} linker channels in the window title bar.`)
         }
     }
 

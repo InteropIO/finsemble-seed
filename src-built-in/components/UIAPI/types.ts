@@ -15,7 +15,7 @@ declare global {
  export const actions = unionize({
     UPDATE_CHANNEL_STATUS: ofType<{channelId: number, active: boolean}>(),
     SET_CHANNELS: ofType<{channels: Channel[]}>(),
-    UPDATE_ACTIVE_CHANNELS: ofType<{ channelNames: { name:string, color: string, border: string }[], windowIdentifier: any}>(),
+    UPDATE_ACTIVE_CHANNELS: ofType<{ channelNames: { name:string, color?: string, border?: string }[], windowIdentifier: any}>(),
     SET_ACCESSIBILITY: ofType<{ isAccessibleLinker: boolean }>(),
     SET_ACTIVE_WORKSPACE: ofType<{ name?: string }>()
 

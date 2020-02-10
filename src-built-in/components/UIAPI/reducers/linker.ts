@@ -10,7 +10,6 @@ export const initialState: LinkerState = {
     isAccessibleLinker: true,
     windowIdentifier: {}
 };
-
 // The linker's reducer
 const reducer = (state = initialState, action: ACTION_TYPES) => {
     return produce(state, (draft: LinkerState) => {
@@ -44,4 +43,4 @@ const reducer = (state = initialState, action: ACTION_TYPES) => {
     });
 };
 
-export const linker = withLogging('Linker', reducer);
+export const linker = reducer;
