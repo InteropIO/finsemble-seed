@@ -236,19 +236,18 @@ async function addApp(id, cb = Function.prototype) {
 	}
 
 	let manifest;
+	// Manifest from FDC3 is a string property which can either be a stringified JSON, or a uri which delivers valid JSON.
+	// The catalog will attempt to parse the string as JSON, then fetch from a URL if that fails.
+	// If both paths fail, notify the user that this app can't be added
 	if (app.manifestType.toLowerCase() === "finsemble") {
 		try {
-			//Attempt to parse a string as JSON
 			manifest = JSON.parse(app.manifest);
 		} catch(e) {
 			try {
-				//If parsing fails, assume the manifest is a valid url that will return JSON
 				const urlRes = await fetch(app.manifest, { method: "GET" });
-
-				//Attempt to parse the url response
 				manifest = await urlRes.json();
 			} catch(e) {
-				FSBL.Clients.Logger.system.error(`${app.title || app.name} is missing a valid manifest or URI that delivers a valid JSON manifest. Unable to add app`);
+				FSBL.Clients.Logger.system.error(`${app.title || app.name} is missing a valid manifest or URI that delivers a valid JSON manifest. Unable to add app.`);
 				return cb();
 			}
 		} finally {
