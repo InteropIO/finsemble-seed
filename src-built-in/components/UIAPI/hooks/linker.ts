@@ -102,6 +102,7 @@ export const useLinker = () => {
         } else {
             FSBL.Clients.Logger.error(`Attempted to toggle more than ${MAXIMUM_ALLOWED_ACTIVE_CHANNELS} channels. This could result in an unacceptable UX. Please contact finsemble support if you would like to render more than ${MAXIMUM_ALLOWED_ACTIVE_CHANNELS} linker channels in the window title bar.`)
         }
+        hideWindow();
     }
 
     return { state, toggleChannel };
