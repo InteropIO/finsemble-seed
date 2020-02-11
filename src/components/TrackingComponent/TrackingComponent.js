@@ -1,18 +1,37 @@
 var componentToTrackName = "Notepad"
 var componentToTrack
 
-const FSBLReady = () => {
+const FSBLReady = async () => {
 	try {
-		FSBL.Clients.WindowClient.getBounds((err, bound) => {
-			setTrackingComponentPosition(bound)
+		FSBL.Clients.WindowClient.getBounds(async (err, bound) => {
+			await restoreComponentToTrack(bound)
+			moveComponentToTrack()
 		})
-		showComponentToTrack()
 	} catch (e) {
 		FSBL.Clients.Logger.error(e);
 	}
 }
 
-const showComponentToTrack = () => {
+const restoreComponentToTrack = async (bound) => {
+	await FSBL.Clients.LauncherClient.showWindow({
+		name: componentToTrackName,
+		componentType: componentToTrackName
+	}, {
+		top: bound.top,
+		left: bound.left,
+		width: bound.width,
+		height: bound.height,
+		autoFocus: true,
+		spawnIfNotFound: true
+	}, async (err, windowIdentifier) => {
+		componentToTrack = windowIdentifier.finWindow
+		componentToTrack.restore(() => {
+			componentToTrack.focus()
+		})
+	})
+}
+
+const moveComponentToTrack = () => {
 	// use tracking Component's state
 	FSBL.Clients.WindowClient.getComponentState({
 		field: 'bound',
@@ -27,31 +46,24 @@ const showComponentToTrack = () => {
 	});
 }
 
-const setTrackingComponentPosition = (position) => {
-	FSBL.Clients.LauncherClient.showWindow({
-		name: componentToTrackName,
-		componentType: componentToTrackName
-	}, {
-		top: position.top,
-		left: position.left,
-		width: position.width,
-		height: position.height,
-		autoFocus: true,
-		spawnIfNotFound: true
-	}, (err, windowIdentifier) => {
-		componentToTrack = windowIdentifier.finWindow
-		// Listen to bounds-change-end of componentToTrack
-		componentToTrack.addEventListener("bounds-change-end", (event) => {
-			console.log(event)
-			bounds = event.data;
-			delete bounds.right;
-			delete bounds.bottom
-			//Save bound to trackingComponent's state
-			FSBL.Clients.WindowClient.setComponentState({
-				field: 'bound',
-				value: bounds
-			});
-		});
+const setTrackingComponentPosition = async (position) => {
+	componentToTrack.setBounds(position, () => {
+		componentToTrack.maximize(() => {
+			componentToTrack.restore(() => {
+				//FinsembleWindow to listen bounds-change-end
+				componentToTrack.addEventListener("bounds-change-end", (event) => {
+					bounds = event.data;
+					bounds.monitor = componentToTrack.monitor
+					delete bounds.right;
+					delete bounds.bottom
+					//Save bound to trackingComponent's state
+					FSBL.Clients.WindowClient.setComponentState({
+						field: 'bound',
+						value: bounds
+					});
+				});
+			})
+		})
 	})
 }
 
@@ -64,4 +76,5 @@ if (window.FSBL && FSBL.addEventListener) {
 } else {
 	window.addEventListener("FSBLReady", FSBLReady)
 }
+
 window.addEventListener("unload", onunload)
