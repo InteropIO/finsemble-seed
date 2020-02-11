@@ -24,8 +24,6 @@ declare global {
     value:'payload'
 });
 export type ACTION_TYPES = UnionOf<typeof actions>;
-export enum ActionTypes {
-}
 
 /**
  * The root state of the finsemble UI API. It is composed of different states from

@@ -68,7 +68,7 @@ export const useLinker = () => {
         const accessibilityCallback = (err: any, value: boolean) => {
             if (err) FSBL.Clients.Logger.system.error(`Failed to get accessibleLinker value: ${err}`);
             dispatch(actions.SET_ACCESSIBILITY({
-                isAccessibleLinker: true,
+                isAccessibleLinker: !!value,
             }));
             FSBL.Clients.ConfigClient.getValue("finsemble.accessibleLinker", accessibilityCallback);
         }
