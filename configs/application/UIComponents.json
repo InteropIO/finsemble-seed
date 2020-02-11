@@ -535,41 +535,7 @@
 			"bootParams": {
 				"stage": "earlyuser",
 				"checkpoints": {
-					"searchStoreInit": {
-						"postStartupCompletion": true,
-						"timeout": 30000
-					},
-					"createStores": {
-						"postStartupCompletion": true
-					},
-					"loadMenusFromConfig": {
-						"dependencies": [
-							"createStores"
-						],
-						"postStartupCompletion": true
-					},
-					"addListeners": {
-						"dependencies": [
-							"loadMenusFromConfig"
-						],
-						"postStartupCompletion": true
-					},
-					"setupHotkeys": {
-						"dependencies": [
-							"addListeners"
-						],
-						"postStartupCompletion": true
-					},
-					"listenForWorkspaceUpdates": {
-						"dependencies": [
-							"setupHotkeys"
-						],
-						"postStartupCompletion": true
-					},
-					"addMoreListeners": {
-						"dependencies": [
-							"listenForWorkspaceUpdates"
-						],
+					"initialize": {
 						"postStartupCompletion": true
 					}
 				}
@@ -579,8 +545,8 @@
 				"url": "$applicationRoot/components/toolbar/toolbar.html",
 				"affinity": "systemComponents",
 				"width": 600,
-				"height": 78,
-				"dockedHeight": 78,
+				"height": 39,
+				"dockedHeight": 39,
 				"top": 0,
 				"left": 0,
 				"right": 0,
@@ -589,8 +555,8 @@
 					"top",
 					"bottom"
 				],
-				"maxHeight": 78,
-				"minHeight": 78,
+				"maxHeight": 39,
+				"minHeight": 39,
 				"minWidth": 300,
 				"docked": "top",
 				"canGroup": false,
