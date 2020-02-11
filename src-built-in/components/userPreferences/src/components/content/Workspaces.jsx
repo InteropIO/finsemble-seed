@@ -435,7 +435,8 @@ export default class Workspaces extends React.Component {
 		});
 	}
 	render() {
-		let deleteButtonClasses = "individual-workspace-action delete-workspace",
+			const enableWorkspaceImport = false;
+			let deleteButtonClasses = "individual-workspace-action delete-workspace",
 			exportButtonClasses = "action-button workspace-action-button",
 			renameButtonClasses = "individual-workspace-action",
 			addButtonClasses = "positive-action-button action-button workspace-action-button",
@@ -545,7 +546,7 @@ export default class Workspaces extends React.Component {
 							{this.state.focusedWorkspaceComponentList.length === 0 &&
 								"No components."}
 						</div>
-						{/* <div className="workspace-action-buttons">
+						{enableWorkspaceImport && <div className="workspace-action-buttons">
 							<div title={importTooltip} className={importButtonClasses} onMouseDown={this.handleButtonClicks} onClick={allowImport ? this.openFileDialog : Function.prototype}>
 								<i className="workspace-action-button-icon ff-import"></i>
 								<div>Import</div>
@@ -555,7 +556,7 @@ export default class Workspaces extends React.Component {
 								<div>Export</div>
 							</div>
 
-						</div> */}
+						</div>}
 					</div>
 				</div>
 				<Checkbox
