@@ -472,8 +472,8 @@ const { launch, connect } = require('hadouken-js-adapter');
 
 			let packageJson = require("./package.json");
 			// Overrides from package.json and environment variables
-			installerConfig.version = packageJson.version; 
-			installerConfig.name = process.env.installer_Name || installerConfig.name;
+			installerConfig.version = packageJson.version;
+			installerConfig.name = process.env.installer_Name || packageJson.name;
 			installerConfig.outputDirectory = process.env.installer_outputDirectory || installerConfig.outputDirectory;
 			installerConfig.certificatefile = process.env.installer_certificatefile || installerConfig.certificatefile;
 			installerConfig.certificatePassword = process.env.installer_certificatePassword || installerConfig.certificatePassword;
@@ -482,7 +482,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 			// need absolute paths for certain installer configs
 			installerConfig = resolveRelativePaths(installerConfig, ['icon'], './');
 			const manifestUrl = process.env.manifestUrl || taskMethods.startupConfig[env.NODE_ENV].serverConfig;
-			console.log("Manifest is:" + manifestUrl);			
+			console.log("Manifest is set to: " + manifestUrl);			
 			let updateUrl = taskMethods.startupConfig[env.NODE_ENV].updateUrl;
 			const chromiumFlags = taskMethods.startupConfig[env.NODE_ENV].chromiumFlags;
 
