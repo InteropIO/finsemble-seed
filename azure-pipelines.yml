@@ -29,32 +29,16 @@ steps:
     workingDir: '.'
     customEndpoint: 'ciq'
 
-- powershell: ((Get-Content -path .\configs\other\server-environment-startup.json -Raw) -replace 'http://localhost:3375/configs/openfin/manifest-local.json', "$HOSTING_LOCATION/manifest.json") | Set-Content -Path .\configs\other\server-environment-startup.json
-
 - script: npm run build
   name: build
   displayName: "Run the build"
 
-- script: npm install electron-packager@13.1.1
+- powershell: ((Get-Content -path .\dist\configs\openfin\manifest-local.json -Raw) -replace 'http://localhost:3375', "$HOSTING_LOCATION") | Set-Content -Path .\dist\manifest.json
 
-#- powershell: cat .\configs\other\server-environment-startup.json | %{$_ -replace "http://localhost:3375/configs/openfin/manifest-local.json", "$HOSTING_LOCATION-pr$(System.PullRequest.PullRequestNumber)/manifest.json"} > .\dist\server-environment-startup.json
-#  condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
-
-#- powershell: cat .\configs\openfin\manifest-local.json | %{$_ -replace "http://localhost:3375", "$HOSTING_LOCATION-pr$(System.PullRequest.PullRequestNumber)"} > .\dist\manifest.json
-#  condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
-
-#- powershell: cat .\configs\other\server-environment-startup.json | %{$_ -replace "http://localhost:3375/configs/openfin/manifest-local.json", "$HOSTING_LOCATION/manifest.json"} > .\dist\server-environment-startup.json
-#  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-
-- powershell: ((Get-Content -path .\configs\openfin\manifest-local.json -Raw) -replace 'http://localhost:3375', "$HOSTING_LOCATION") | Set-Content -Path .\dist\manifest.json
-
-#- powershell: cat .\configs\openfin\manifest-local.json | %{$_ -replace "http://localhost:3375", "$HOSTING_LOCATION"} > .\dist\manifest.json
-#  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-
-- script: aws s3 sync .\dist\ $(PUBLISH_LOCATION)-pr$(System.PullRequest.PullRequestNumber)/ --acl public-read
-  env:
-    AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
-    AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
+#- script: aws s3 sync .\dist\ $(PUBLISH_LOCATION)-pr$(System.PullRequest.PullRequestNumber)/ --acl public-read
+#  env:
+#    AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
+#    AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
 #  condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
 
 - script: aws s3 sync .\dist\ $(PUBLISH_LOCATION)/ --acl public-read
@@ -62,6 +46,8 @@ steps:
     AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
     AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
 #  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+
+- script: npm install electron-packager@13.1.1
 
 - script: npm run makeInstaller:prod
   name: makeInstaller
