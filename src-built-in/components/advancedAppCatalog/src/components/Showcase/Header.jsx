@@ -22,24 +22,9 @@ const Header = props => {
 	const addApp = () => {
 
 		if (props.installed) {
-			if (pendingSpawn) return;
-			pendingSpawn = true;
 			const name = props.title || props.name;
-			// If the app has a URL property
-			// For now, this means it was manually added
-			// So lets spawn from URL
-			if (props.url) {
-				FSBL.Clients.LauncherClient.spawn(null, {
-					url: props.url
-				}, () => {
-					pendingSpawn = false;
-				});
-				return;
-			}
 			// Otherwise launch application by name
-			FSBL.Clients.LauncherClient.spawn(name, {}, (err, data) => {
-				pendingSpawn = false;
-			});
+			FSBL.Clients.LauncherClient.spawn(name, {}, () => {});
 		} else {
 			storeActions.addApp(props.appId);
 		}
