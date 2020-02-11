@@ -31,6 +31,10 @@ export const useLinker = () => {
     }, [state])
 
     const hideWindow = () => {
+        // Must blur or you end up having to click twice to show the window.
+        // If you just hide, the first time the user clicks
+        // on the linker button, the blur will trigger, which will hide the window.
+        finsembleWindow.blur();
         finsembleWindow.hide();
     };
 
