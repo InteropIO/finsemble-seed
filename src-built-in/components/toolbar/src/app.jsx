@@ -12,7 +12,6 @@ import onReady from "../../UIAPI/effects/index";
 import ReactDOM from "react-dom";
 import React from "react";
 import DragHandle from '../../toolbarRefactored/DragHandle';
-import '../toolbar.css'
 import { DummyExport } from '@chartiq/finsemble-ui/lib/components/dummyExport'
 
 const ToolbarShell = () => {
