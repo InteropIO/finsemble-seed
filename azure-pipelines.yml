@@ -53,13 +53,13 @@ steps:
   name: makeInstaller
   displayName: "Make a production installer"
 
-- script: aws s3 cp .\pkg\xyzSetup.exe $(PUBLISH_LOCATION)-pr$(System.PullRequest.PullRequestNumber)/ --acl public-read
+- script: aws s3 sync .\pkg\ $(PUBLISH_LOCATION)-pr$(System.PullRequest.PullRequestNumber)/ --acl public-read
   env:
     AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
     AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
 #  condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
 
-- script: aws s3 cp .\pkg\xyzSetup.exe $(PUBLISH_LOCATION)/ --acl public-read
+- script: aws s3 sync .\pkg\ $(PUBLISH_LOCATION)/ --acl public-read
   env:
     AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
     AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
