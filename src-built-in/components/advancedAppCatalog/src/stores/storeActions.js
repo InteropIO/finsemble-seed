@@ -240,7 +240,7 @@ async function addApp(id, cb = Function.prototype) {
 				appConfig = installed[appID] = {
 					appID,
 					tags: app.tags,
-					name: app.title || app.name,
+					name,
 					manifest
 				};
 			} else {

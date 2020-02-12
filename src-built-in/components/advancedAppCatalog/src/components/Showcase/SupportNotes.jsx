@@ -19,7 +19,7 @@ const SupportNotes = props => {
 			<div className="support-content">
 				<span className="showcase-label">Support</span>
 				<div className="support">
-					{props.email}
+					{props.email || "N/A"}
 				</div>
 			</div>
 			<div className="tags-content">

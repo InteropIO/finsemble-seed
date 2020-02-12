@@ -3,7 +3,7 @@
 * All rights reserved.
 */
 import React from "react";
-import { DEFAULT_APP_VERSION } from "./defaults";
+import { DEFAULT_APP_VERSION } from "../defaults";
 
 /**
  * AppShowcase version notes section.

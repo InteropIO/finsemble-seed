@@ -152,7 +152,7 @@ class AppCard extends Component {
 		storeActions.addTag(name);
 	}
 	render() {
-		let imageUrl = this.props.images !== undefined ? this.props.images[0].url : "../assets/placeholder.svg";
+		let imageUrl = (this.props.images && this.props.images[0] && this.props.images[0].url) || "../assets/placeholder.svg";
 
 		let { appName, checkShown, checkHighlighted } = this.state;
 

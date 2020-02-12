@@ -4,7 +4,7 @@
 */
 import React from "react";
 
-const DEFAULT_APP_DESCRIPTION = "Get started by adding this component to Finsemble now!";
+import { DEFAULT_APP_DESCRIPTION } from '../defaults';
 
 /**
  * AppShowcase description section

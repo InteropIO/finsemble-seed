@@ -16,7 +16,7 @@ import ReleaseNotes from "./ReleaseNotes";
 import AppDevNotes from "./AppDevNotes";
 import VersionNotes from "./VersionNotes";
 import SupportNotes from "./SupportNotes";
-import AppCard from "../AppCard";
+import { DEFAULT_EMAIL, DEFAULT_PUBLISHER } from '../defaults';
 
 const imagesInCarousel = 4;
 class AppShowcase extends Component {
@@ -24,7 +24,7 @@ class AppShowcase extends Component {
 		super(props);
 		this.state = {
 			name: this.props.app.title || this.props.app.name,
-			iconUrl: this.props.app.icons !== undefined && this.props.app.icons[0].url !== undefined ? this.props.app.icons[0].url : "../assets/placeholder.svg",
+			iconUrl: (this.props.app.icons && this.props.apps.icons[0] && this.props.app.icons[0].url) || "../assets/placeholder.svg",
 			entitled: this.props.app.entitled ? this.props.app.entitled : false,
 			imageIndex: 0,
 			imageModalOpen: false,
@@ -47,7 +47,7 @@ class AppShowcase extends Component {
 		let index = this.state.imageIndex;
 
 		//We want to increase the image index for the carousel, but if this paging action takes us past the length of the image array, we need to reset
-		if (index + 1 > this.props.app.images.length) {
+		if (this.props.app.images && index + 1 > this.props.app.images.length) {
 			index = 0;
 		} else {
 			index++;
@@ -112,15 +112,17 @@ class AppShowcase extends Component {
 		let { name, iconUrl, imageIndex: index } = this.state;
 
 		let images = [];
-		for (let i = 0; i < imagesInCarousel; i++) {
+		if (this.props.app.images) {
+			for (let i = 0; i < imagesInCarousel; i++) {
 
-			if (index > this.props.app.images.length - 1) {
-				index = 0;
+				if (index > this.props.app.images.length - 1) {
+					index = 0;
+				}
+	
+				let imageUrl = this.props.app.images[index].url || "../assets/placeholder.svg";
+				images.push(imageUrl);
+				index++;
 			}
-
-			let imageUrl = this.props.app.images[index].url !== undefined ? this.props.app.images[index].url : "../assets/placeholder.svg";
-			images.push(imageUrl);
-			index++;
 		}
 		return (
 			<div className="app-showcase">
@@ -144,7 +146,7 @@ class AppShowcase extends Component {
 
 				<ReleaseNotes releaseNotes={this.props.app.releaseNotes} />
 
-				<AppDevNotes email={this.props.app.contactEmail} publisher={this.props.app.publisher} />
+				<AppDevNotes email={this.props.app.contactEmail || DEFAULT_EMAIL} publisher={this.props.app.publisher || DEFAULT_PUBLISHER} />
 
 				<VersionNotes version={this.props.app.version} />
 

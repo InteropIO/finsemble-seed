@@ -3,7 +3,7 @@
 * All rights reserved.
 */
 import React from "react";
-import { DEFAULT_APP_RELEASE_NOTES } from "./defaults";
+import { DEFAULT_APP_RELEASE_NOTES } from "../defaults";
 
 /**
  * AppShowcase release notes section. Display information about app's most recent change notes

@@ -8,6 +8,8 @@
  */
 import React, { Component } from "react";
 
+import { DEFAULT_APP_DESCRIPTION } from './defaults';
+
 /**
  * The hero component at the top of the App Catalog homepage. Display images and textual descriptions of showcased apps
  * @param {object} props Component props
@@ -62,9 +64,9 @@ export default class Hero extends Component {
 
 		let { active } = this.state;
 		let { cards } = this.props;
-		let contentTitle = cards[active].title === undefined ? cards[active].name : cards[active].title
-		let contentMsg = cards[active].description;
-		let imageUrl = cards[active].images ? cards[active].images[0].url : "../assets/placeholder.svg";
+		let contentTitle = cards[active].title || cards[active].name;
+		let contentMsg = cards[active].description || DEFAULT_APP_DESCRIPTION;
+		let imageUrl = (cards[active].images && cards[active].images[0] && cards[active].images[0].url) || "../assets/placeholder.svg";
 
 		let bgImageStyle = {
 			background: "url(" + imageUrl + ") center center / 100% no-repeat scroll"
