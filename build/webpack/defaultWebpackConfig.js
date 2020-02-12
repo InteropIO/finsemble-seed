@@ -122,6 +122,7 @@ module.exports = class WebpackDefaults {
 					}
 				]
 			},
+			mode: env,
 			plugins: plugins,
 			optimization: {
 				usedExports: true,

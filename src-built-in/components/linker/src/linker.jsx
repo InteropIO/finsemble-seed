@@ -5,8 +5,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import LinkerMenu from "@chartiq/finsemble-ui/lib/components/linkerMenu/linkerMenu";
-import onReady from '@chartiq/finsemble-ui/lib/effects/onready';
+
+import { onReady } from '@chartiq/finsemble-ui/lib/effects/onReadyEffects';
+import { LinkerMenu } from "@chartiq/finsemble-ui/lib/components/linker/linkerMenu";
 import "../../../../assets/css/font-finance.css";
 import "../../../../assets/css/finsemble.css";
 import "../css/linkerWindow.css"
