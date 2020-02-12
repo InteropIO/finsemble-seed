@@ -7,18 +7,18 @@
 // import Toolbar from "./staticToolbar";
 // Uncomment below if you want to show the dynamic toolbar on top of the refactored toolbar.
 // import Toolbar from "./dynamicToolbar";
-import ToolbarRefactored from "../../toolbarRefactored/app.tsx";
-import onReady from "../../UIAPI/effects/index";
 import ReactDOM from "react-dom";
 import React from "react";
-import DragHandle from '../../toolbarRefactored/DragHandle';
+import { ToolbarShell } from "@chartiq/finsemble-ui/lib/components/toolbar/ToolbarShell";
+import { onReady } from "@chartiq/finsemble-ui/lib/effects/onReadyEffects";
+import { DragHandle } from '@chartiq/finsemble-ui/lib/components/toolbar/DragHandle'
 import { DummyExport } from '@chartiq/finsemble-ui/lib/components/dummyExport'
-
-const ToolbarShell = () => {
+import '../toolbar.css';
+const Toolbar = () => {
 	return (
-		<ToolbarRefactored>
+		<ToolbarShell>
+			<DragHandle/>
 			<DummyExport/>
-			<DragHandle />
 			{/* Drag Handle */}
 			{/* Workspace Management Menu */}
 			{/* App Menu */}
@@ -26,11 +26,11 @@ const ToolbarShell = () => {
 			{/* Minimize All */}
 			{/* Reveal All */}
 			{/* Auto Arrange */}
-		</ToolbarRefactored>
+		</ToolbarShell>
 	)
 }
 
 onReady(() => ReactDOM.render(
-	<ToolbarShell />,
+	<Toolbar />,
 	document.getElementById("toolbar_refactored"))
 );
