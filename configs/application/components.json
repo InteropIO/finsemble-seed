@@ -86,7 +86,7 @@
                     },
                     "Window Manager": {
                         "persistWindowState": false,
-                        "FSBLHeader": true
+                        "FSBLHeader": false
                     },
                     "Toolbar": {
                         "iconURL": "$applicationRoot/assets/img/notepad.png"
@@ -196,9 +196,12 @@
                 "top": "center",
                 "left": "center",
                 "width": 800,
-                "height": 600
+                "height": 600,
+                "options": {                    
+                    "transparent": true                              
+                }
             },
-            "component": {
+            "component": { 
 				"singleton": true,
 				"preload": false
             },
@@ -215,7 +218,7 @@
                     },
                     "Window Manager": {
                         "title": "TrackingComponent",
-                        "FSBLHeader": true,
+                        "FSBLHeader": false,
                         "persistWindowState": true
                     },
                     "Toolbar": {
