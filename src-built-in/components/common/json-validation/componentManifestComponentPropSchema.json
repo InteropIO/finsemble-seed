@@ -1,0 +1,24 @@
+{
+    "id": "/ComponentManifestComponentProp",
+    "type": "object",
+    "properties": {
+        "displayName": {
+            "type": "string"
+        },
+        "preload": {
+            "type": "string"
+        },
+        "spawnOnStartup": {
+            "type": "boolean"
+        },
+        "spawnOnHotkey": {
+            "type": "boolean"
+        },
+        "singleton": {
+            "type": "boolean"
+        },
+        "showDevConsoleOnVisible": {
+            "type": "boolean"
+        }
+    }
+}

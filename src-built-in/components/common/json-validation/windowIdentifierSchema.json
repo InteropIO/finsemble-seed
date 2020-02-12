@@ -1,0 +1,17 @@
+{
+    "id": "/WindowIdentifier",
+    "type": "object",
+    "properties": {
+        "windowName": {
+            "type": "string",
+            "required": true
+        },
+        "componentType": {
+            "type": "string"
+        },
+        "uuid": {
+            "type": "string"
+        },
+        "windowType": "string"
+    }
+}

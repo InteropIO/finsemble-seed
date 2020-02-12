@@ -1,0 +1,199 @@
+{
+    "id": "/Component",
+    "type": "object",
+    "properties": {
+        "window": {
+            "type": "object",
+            "required": true,
+            "properties": {
+                "addToWorkspace": {
+                    "type": "boolean"
+                },
+                "affinity": {
+                    "type": "string"
+                },
+                "alias": {
+                    "type": "string"
+                },
+                "arguments": {
+                    "type": ["object", "string"]
+                },
+                "argumentsAsQueryString": {
+                    "type": "boolean"
+                },
+                "bottom": {
+                    "type": ["number", "string"]
+                },
+                "canGroup": {
+                    "type": "boolean"
+                },
+                "claimMonitorSpace": {
+                    "type": "boolean"
+                },
+                "component": {
+                    "type": ["object", "string"]
+                },
+                "data": {
+                    "type": ["object", "string"]
+                },
+                "dockOnSpawn": {
+                    "type": "boolean"
+                },
+                "dockedHeight": {
+                    "type": "number"
+                },
+                "env": {
+                    "type": ["object", "string"]
+                },
+                "ephemeral": {
+                    "type": "boolean"
+                },
+                "forceOntoMonitor": {
+                    "type": "boolean"
+                },
+                "groupName": {
+                    "type": "string"
+                },
+                "groupOnSpawn": {
+                    "type": "boolean"
+                },
+                "height": {
+                    "type": ["number", "string"]
+                },
+                "launchingWindow": {
+                    "type": "object"
+                },
+                "left": {
+                    "type": ["number", "string"]
+                },
+                "maxHeight": {
+                    "type": "number"
+                },
+                "maxWidth": {
+                    "type": "number"
+                },
+                "minHeight": {
+                    "type": "number"
+                },
+                "minWidth": {
+                    "type": "number"
+                },
+                "monitor": {
+                    "type": ["string", "number"]
+                },
+                "name": {
+                    "type": "string"
+                },
+                "native": {
+                    "type": "boolean"
+                },
+                "options": {
+                    "type": "object",
+                    "properties": {
+                        "$ref": "/WindowOptions"
+                    }
+                },
+                "path": {
+                    "type": "string"
+                },
+                "position": {
+                    "type": "string"
+                },
+                "relativeWindow": {
+                    "$ref": "/WindowIdentifier"
+                },
+                "right": {
+                    "type": ["number", "string"]
+                },
+                "slave": {
+                    "type": "boolean"
+                },
+                "spawnedByWorkspaceService": {
+                    "type": "boolean"
+                },
+                "staggerPixels": {
+                    "type": "number"
+                },
+                "top": {
+                    "type": ["number", "string"]
+                },
+                "url": {
+                    "type": "string"
+                },
+                "width": {
+                    "type": ["number", "string"]
+                },
+                "windowIdentifier": {
+                    "$ref": "/WindowIdentifier"
+                },
+                "windowType": {
+                    "type": "string",
+                    "pattern": ["WebWindow", "openfin", "openFinWindow", "openFinApplication", "NativeWindow", "assimilation", "assimilated", "native", "FinsembleNativeWindow", "application", "WebApplication", "StackedWindow"]
+                },
+                "dependencies": {
+                    "argumentsAsQueryString": "arguments",
+                    "groupOnSpawn": "relativeWindow"
+                }
+            }
+        },
+        "component": {
+            "$ref": "/ComponentManifestComponentProp"
+        },
+        "foreign": {
+            "$ref": "/ComponentManifestForeignProp"
+        },
+        "components": {
+            "type": "object",
+            "properties": {
+                "App Launcher": {
+                    "type": "object",
+                    "properties": {
+                        "launchableByUser": {
+                            "type": "boolean"
+                        }
+                    }
+                },
+                "Toolbar": {
+                    "type": "object",
+                    "properties": {
+                        "iconURL": {
+                            "type": "string"
+                        },
+                        "iconClass": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "Window Manager": {
+                    "type": "object",
+                    "properties": {
+                        "alwaysOnTopIcon": {
+                            "type": "boolean"
+                        },
+                        "componentCloseTimeout": {
+                            "type": "number"
+                        },
+                        "floatingTitlebarComponent": {
+                            "type": "string"
+                        },
+                        "FSBLHeader": {
+                            "type": "boolean"
+                        },
+                        "hackScrollbar": {
+                            "type": "boolean"
+                        },
+                        "persistWindowState": {
+                            "type": "boolean"
+                        },
+                        "showLinker": {
+                            "type": "boolean"
+                        },
+                        "title": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

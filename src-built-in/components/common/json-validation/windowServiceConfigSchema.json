@@ -1,0 +1,42 @@
+{
+    "id": "/WindowServiceConfig",
+    "type": "object",
+    "properties": {
+        "isArrangeable": {
+            "type": "boolean"
+        },
+        "manageWindowMovement": {
+            "type": "boolean"
+        },
+        "allowAutoArrange": {
+            "type": "boolean"
+        },
+        "ignoreSnappingRequests": {
+            "type": "boolean"
+        },
+        "allowSnapping": {
+            "type": "boolean"
+        },
+        "ignoreTilingAndTabbingRequests": {
+            "type": "boolean"
+        },
+        "allowTabbing": {
+            "type": "boolean"
+        },
+        "allowTiling": {
+            "type": "boolean"
+        },
+        "canGroup": {
+            "type": "boolean"
+        },
+        "allowGrouping": {
+            "type": "boolean"
+        },
+        "canMinimize": {
+            "type": "boolean"
+        },
+        "allowMinimize": {
+            "type": "boolean"
+        }
+    }
+}

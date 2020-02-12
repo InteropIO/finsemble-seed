@@ -1,0 +1,9 @@
+{
+    "id": "/WindowOptions",
+    "type": "object",
+    "properties": {
+        "alwaysOnTop": {
+            "type": "boolean"
+        }
+    }
+}

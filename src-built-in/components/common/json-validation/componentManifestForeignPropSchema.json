@@ -1,0 +1,40 @@
+{
+    "id": "/ComponentManifestForeignProp",
+    "type": "object",
+    "properties": {
+        "services": {
+            "type": "object",
+            "properties": {
+                "dockingService": {
+                    "$ref": "/WindowServiceConfig"
+                },
+                "windowService": {
+                    "$ref": "/WindowServiceConfig"
+                },
+                "workspace": {
+                    "type": "object",
+                    "properties": {
+                        "persistURL": {
+                            "type": "boolean"
+                        },
+                        "persistPath": {
+                            "type": "boolean"
+                        },
+                        "closeWorkspaceTimeout": {
+                            "type": "number"
+                        },
+                        "loadWorkspaceTimeout": {
+                            "type": "number"
+                        },
+                        "closeFailureNotificationMessage": {
+                            "type": "string"
+                        },
+                        "loadFailureNotificationMessage": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
