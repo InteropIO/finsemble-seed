@@ -133,6 +133,11 @@ module.exports = class WebpackDefaults {
 				path: path.resolve(__dirname, '../../dist/')
 			},
 			resolve: {
+				alias: {
+					react: path.resolve('./node_modules/react'),
+					'react-dom': path.resolve('./node_modules/react-dom'),
+					'@babel/runtime': path.resolve('./node_modules/@babel/runtime')
+				},
 				extensions: ['.tsx', '.ts', '.js', '.jsx', '.json', 'scss', 'html'],
 				modules: [
 					'./node_modules'
