@@ -12,8 +12,8 @@
         "//breakpointOnStart": "Whether to pause finsemble-electron-adapter when it starts. Default: false.",
         "breakpointOnStart": false,
         "//socketCertificate": "Uncomment the two lines below to provide custom socket certificate files for FinsembleTransport. Paths must be relative to the finsemble-seed directory.",
-        "//socketCertificateKey": "../example.key",
-        "//socketCertificateCert": "../example.crt"
+        "//socketCertificateKey": "example.key",
+        "//socketCertificateCert": "example.crt"
 
     },
     "production": {
