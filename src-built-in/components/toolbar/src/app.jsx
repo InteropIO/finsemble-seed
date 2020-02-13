@@ -13,21 +13,26 @@ import { ToolbarShell } from "@chartiq/finsemble-ui/lib/components/toolbar/Toolb
 import { onReady } from "@chartiq/finsemble-ui/lib/effects/onReadyEffects";
 import { DragHandle } from '@chartiq/finsemble-ui/lib/components/toolbar/DragHandle'
 import { RevealAll } from '@chartiq/finsemble-ui/lib/components/toolbar/revealAll';
-import { DummyExport } from '@chartiq/finsemble-ui/lib/components/dummyExport'
 import '../toolbar.css';
 const Toolbar = () => {
 	return (
 		<ToolbarShell>
-			<DragHandle />
-			<RevealAll />
-			<DummyExport/>
-			{/* Drag Handle */}
-			{/* Workspace Management Menu */}
-			{/* App Menu */}
-			{/* Favorites Section */}
-			{/* Minimize All */}
-			{/* Reveal All */}
-			{/* Auto Arrange */}
+			<div className="finsemble-toolbar-section left">
+				<DragHandle />
+				{/* Workspace Management Menu */}
+				{/* App Menu */}
+			</div>
+			<div className="finsemble-toolbar-section center">
+				{/* Favorites Section */}
+			</div>
+			<div className="finsemble-toolbar-section right">
+				<RevealAll />
+				{/* Minimize All */}
+				{/* Auto Arrange */}
+			</div>
+
+
+
 		</ToolbarShell>
 	)
 }
