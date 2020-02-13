@@ -12,12 +12,14 @@ import React from "react";
 import { ToolbarShell } from "@chartiq/finsemble-ui/lib/components/toolbar/ToolbarShell";
 import { onReady } from "@chartiq/finsemble-ui/lib/effects/onReadyEffects";
 import { DragHandle } from '@chartiq/finsemble-ui/lib/components/toolbar/DragHandle'
+import { RevealAll } from '@chartiq/finsemble-ui/lib/components/toolbar/revealAll';
 import { DummyExport } from '@chartiq/finsemble-ui/lib/components/dummyExport'
 import '../toolbar.css';
 const Toolbar = () => {
 	return (
 		<ToolbarShell>
-			<DragHandle/>
+			<DragHandle />
+			<RevealAll />
 			<DummyExport/>
 			{/* Drag Handle */}
 			{/* Workspace Management Menu */}

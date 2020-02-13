@@ -74,7 +74,7 @@ span > svg {
     display: block;
 }
 
-.finsemble-toolbar-button[data-hover=true] {
+.finsemble-toolbar-button:hover {
     background: var(--toolbar-button-hover-color);
     border: 1px solid transparent;
     cursor: pointer;
