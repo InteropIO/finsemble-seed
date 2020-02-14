@@ -14,15 +14,17 @@
 				"height": 432
 			},
 			"component": {
-				"inject": false,
+				"displayName": "Welcome Component",
 				"spawnOnStartup": false,
 				"preload": "$applicationRoot/preloads/zoom.js"
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"canGroup": true,
-						"isArrangable": true
+					"windowService": {
+						"allowSnapping": true,
+						"allowGrouping": true,
+						"allowAutoArrange": true,
+						"allowMinimize": true
 					}
 				},
 				"components": {
@@ -33,7 +35,7 @@
 						"showLinker": true,
 						"FSBLHeader": true,
 						"persistWindowState": true,
-						"title": "Welcome"
+						"title": "Welcome to Finsemble"
 					},
 					"Toolbar": {
 						"iconClass": "ff-component"
@@ -56,10 +58,8 @@
 		},
 		"Notepad": {
 			"window": {
-				"id": "Notepad",
-				"native": true,
+				"windowType": "assimilation",
 				"path": "notepad.exe",
-				"url": "",
 				"defaultHeight": 600,
 				"autoShow": true,
 				"resizable": true,
@@ -79,8 +79,8 @@
 			},
 			"foreign": {
 				"services": {
-					"workspaceService": {
-						"isArrangable": true
+					"windowService": {
+						"allowAutoArrange": true
 					}
 				},
 				"components": {
@@ -99,7 +99,7 @@
 		},
 		"Getting Started Tutorial": {
 			"window": {
-				"url": "https://www.chartiq.com/tutorials/?slug=finsemble-seed-project",
+				"url": "https://www.chartiq.com/tutorials/?slug=finsemble",
 				"height": 800,
 				"width": 1000
 			},
@@ -108,8 +108,8 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"isArrangable": true
+					"workspaceService": {
+						"persistURL": true
 					}
 				},
 				"components": {
@@ -117,9 +117,10 @@
 						"launchableByUser": false
 					},
 					"Window Manager": {
-						"persistWindowState": true,
+						"showLinker": false,
 						"FSBLHeader": true,
-						"showLinker": false
+						"persistWindowState": true,
+						"title": "Finsemble Getting Started Tutorial"
 					}
 				}
 			}
@@ -135,8 +136,8 @@
 			"component": {},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"isArrangable": true
+					"workspaceService": {
+						"persistURL": true
 					}
 				},
 				"components": {
@@ -144,9 +145,10 @@
 						"launchableByUser": false
 					},
 					"Window Manager": {
-						"persistWindowState": false,
+						"showLinker": false,
 						"FSBLHeader": true,
-						"showLinker": false
+						"persistWindowState": true,
+						"title": "Finsemble Documentation"
 					}
 				}
 			}
@@ -171,8 +173,8 @@
 			},
 			"foreign": {
 				"services": {
-					"dockingService": {
-						"isArrangable": false
+					"windowService": {
+						"allowAutoArrange": false
 					}
 				},
 				"components": {

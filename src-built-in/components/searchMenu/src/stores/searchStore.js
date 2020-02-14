@@ -6,7 +6,6 @@
 let menuStore;
 import async from "async";
 
-let finWindow = fin.desktop.Window.getCurrent();
 var values = {
 	list: []
 }
@@ -16,7 +15,7 @@ var menuFocused = false;
 var Actions = {
 	initialize: function (cb) {
 		cb();
-		finWindow.addEventListener("shown", () => {
+		finsembleWindow.addEventListener("shown", () => {
 		//console.log("shown", performance.now());
 		})
 	},
@@ -44,13 +43,13 @@ var Actions = {
 		FSBL.Clients.SearchClient.invokeProviderAction(provider);
 		//menuStore.Dispatcher.dispatch({ actionType: "clear", data: "" });
 		//menuStore.setValue({ field: "list", value: [] })
-		return finWindow.hide();
+		return finsembleWindow.hide();
 	},
 	listItemClick(item, action) {
 		FSBL.Clients.SearchClient.invokeItemAction(item, action)
 		//menuStore.Dispatcher.dispatch({ actionType: "clear", data: "" });
 		//menuStore.setValue({ field: "list", value: [] })
-		return finWindow.hide();
+		return finsembleWindow.hide();
 	},
 	actionPress(err, msg) {
 		actionPress(msg.data);
@@ -65,13 +64,13 @@ function createStore(done) {
 	let defaultData = {
 		inFocus: false,
 		list: [],
-		owner: finWindow.name
+		owner: finsembleWindow.name
 	};
 //console.log("add listeners")
-	FSBL.Clients.RouterClient.addListener("SearchMenu." + finWindow.name + ".actionpress", Actions.actionPress);
-	finWindow.addEventListener("blurred", Actions.onBlur);
-	finWindow.addEventListener("reloaded", function () {
-		finWindow.removeEventListener("blurred", Actions.onBlur);
+	FSBL.Clients.RouterClient.addListener("SearchMenu." + finsembleWindow.name + ".actionpress", Actions.actionPress);
+	finsembleWindow.addEventListener("blurred", Actions.onBlur);
+	finsembleWindow.addEventListener("reloaded", function () {
+		finsembleWindow.removeEventListener("blurred", Actions.onBlur);
 		menuStore.removeListener({ field: "list" }, Actions.listChange);
 	})
 //console.log("CreateStore", "Finsemble-SearchStore." + FSBL.Clients.WindowClient.options.customData.spawnData.owner)

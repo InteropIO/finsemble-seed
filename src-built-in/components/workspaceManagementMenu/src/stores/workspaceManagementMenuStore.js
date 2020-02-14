@@ -34,7 +34,7 @@ function uuidv4() {
 		return v.toString(16);
 	});
 }
-let finWindow = fin.desktop.Window.getCurrent();
+
 Actions = {
 	autoSave: (callback) => {
 		let activeName = FSBL.Clients.WorkspaceClient.activeWorkspace.name;
@@ -74,7 +74,7 @@ Actions = {
 			}
 		});
 		WorkspaceManagementGlobalStore.getValue({ field: "owner" }, (err, data) => {
-			if (data !== fin.desktop.Window.getCurrent().name) return;
+			if (data !== finsembleWindow.name) return;
 			WorkspaceManagementGlobalStore.Dispatcher.register(function (action) {
 				switch (action.actionType) {
 					case "switchToWorkspace":
@@ -546,7 +546,8 @@ Actions = {
 		//@todo, look in to using async.retry - we could throw an error and start the whole process over again.
 		if (response.choice !== "cancel" && (!response.value || response.value === "")) {
 			let dialogParams = {
-				question: "Invalid workspace name. Please try again.",
+				title: "Invalid Workspace Name",
+				question: "Workspace names must contain letters or numbers. Please try again.",
 				affirmativeResponseLabel: "OK",
 				showNegativeButton: false,
 				showCancelButton: false
@@ -662,7 +663,7 @@ Actions = {
 	 * Un-focuses from the menu.
 	 */
 	blurWindow: function () {
-		finWindow.blur();
+		finsembleWindow.blur();
 	},
 	/**
 	 * Hides the window.
@@ -683,7 +684,7 @@ function createGlobalStore(done) {
 	StoreClient.createStore({
 		store: "Finsemble-WorkspaceMenu-Global-Store",
 		global: true,
-		values: { owner: fin.desktop.Window.getCurrent().name }
+		values: { owner: finsembleWindow.name }
 	}, function (err, store) {
 		WorkspaceManagementGlobalStore = store;
 		done();

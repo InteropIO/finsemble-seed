@@ -16,17 +16,21 @@
     width: 342px;
     text-align: center;
     padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .fsbl-button-wrapper {
     padding-top: 10px;
+    width: 65%;
     display: flex;
     justify-content: center;
     flex-direction: column;
 }
 
 .fsbl-button {
-    margin: 6px;
+    margin: 15px 6px 6px 6px;
 }
 
 .fsbl-auth-top {
@@ -51,9 +55,7 @@
 }
 
 .fsbl-auth-input {
-    width: 65%;
     padding: 6px 0px;
-    margin: 0px auto;
 }
 
 .fsbl-input-error input {
