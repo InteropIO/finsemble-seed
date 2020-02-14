@@ -12,7 +12,9 @@ import React from "react";
 import { ToolbarShell } from "@chartiq/finsemble-ui/lib/components/toolbar/ToolbarShell";
 import { onReady } from "@chartiq/finsemble-ui/lib/effects/onReadyEffects";
 import { DragHandle } from '@chartiq/finsemble-ui/lib/components/toolbar/DragHandle'
-import { RevealAll } from '@chartiq/finsemble-ui/lib/components/toolbar/revealAll';
+import { RevealAll } from '@chartiq/finsemble-ui/lib/components/toolbar/RevealAll';
+import { MinimizeAll } from '@chartiq/finsemble-ui/lib/components/toolbar/MinimizeAll';
+import {AutoArrange } from '@chartiq/finsemble-ui/lib/components/toolbar/AutoArrange';
 import '../toolbar.css';
 const Toolbar = () => {
 	return (
@@ -26,9 +28,9 @@ const Toolbar = () => {
 				{/* Favorites Section */}
 			</div>
 			<div className="finsemble-toolbar-section right">
+				<MinimizeAll />
+				<AutoArrange />
 				<RevealAll />
-				{/* Minimize All */}
-				{/* Auto Arrange */}
 			</div>
 
 
