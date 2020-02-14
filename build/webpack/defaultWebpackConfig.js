@@ -92,11 +92,27 @@ module.exports = class WebpackDefaults {
 					},
 					{
 						test: /\.js(x)?$/,
-						exclude: [/node_modules/, "/chartiq/"],
-						loader: 'babel-loader',
-						options: {
-							cacheDirectory: './.babel_cache/',
-							presets: ['react', 'stage-1']
+						exclude: /node_modules/,
+						use: {
+							loader: "babel-loader",
+							options: {
+								presets: [
+									["@babel/preset-env", {
+										targets: {
+											browsers: "Chrome 70"
+										},
+										modules: "commonjs"
+									}],
+									"@babel/preset-react"],
+								plugins: [
+									"babel-plugin-add-module-exports",
+									"@babel/plugin-proposal-export-default-from",
+									"@babel/plugin-transform-modules-commonjs",
+									"@babel/plugin-proposal-class-properties",
+									["@babel/plugin-proposal-decorators", { decoratorsBeforeExport: false }],
+									["@babel/plugin-transform-runtime", { regenerator: true }]
+								]
+							}
 						}
 					},
 					{
@@ -106,13 +122,22 @@ module.exports = class WebpackDefaults {
 					}
 				]
 			},
+			mode: env,
 			plugins: plugins,
+			optimization: {
+				usedExports: true,
+			},
 			output: {
 				filename: "[name].js",
 				sourceMapFilename: "[name].map.js",
 				path: path.resolve(__dirname, '../../dist/')
 			},
 			resolve: {
+				alias: {
+					react: path.resolve('./node_modules/react'),
+					'react-dom': path.resolve('./node_modules/react-dom'),
+					'@babel/runtime': path.resolve('./node_modules/@babel/runtime')
+				},
 				extensions: ['.tsx', '.ts', '.js', '.jsx', '.json', 'scss', 'html'],
 				modules: [
 					'./node_modules'

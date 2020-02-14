@@ -19,13 +19,29 @@ module.exports = {
         rules: [
             {
                 test: /\.js(x)?$/,
-                exclude: [/node_modules/, "/chartiq/"],
-                loader: 'babel-loader',
-                options: {
-                    cacheDirectory: './.babel_cache/',
-                    presets: ['react', 'stage-1']
+                exclude: /node_modules/,
+                use: {
+                    loader: "babel-loader",
+                    options: {
+                        presets: [
+                            ["@babel/preset-env", {
+                                targets: {
+                                    browsers: "Chrome 70"
+                                },
+                                modules: "commonjs"
+                            }],
+                            "@babel/preset-react"],
+                        plugins: [
+                            "babel-plugin-add-module-exports",
+                            "@babel/plugin-proposal-export-default-from",
+                            "@babel/plugin-transform-modules-commonjs",
+                            "@babel/plugin-proposal-class-properties",
+                            ["@babel/plugin-proposal-decorators", { decoratorsBeforeExport: false }],
+                            ["@babel/plugin-transform-runtime", { regenerator: true }]
+                        ]
+                    }
                 }
-            }
+            },
         ]
     },
     output: {
