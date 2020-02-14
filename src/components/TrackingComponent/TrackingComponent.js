@@ -28,18 +28,6 @@ const moveComponentToTrackToMousePos = () => {
 				value: currentBounds
 			});
 		})
-		FSBL.Clients.LauncherClient.showWindow({
-			componentType: 'TrackingComponent'
-		}, {
-			top: currentBounds.top,
-			left: currentBounds.left,
-			width: currentBounds.width,
-			height: currentBounds.height,
-			autoFocus: false,
-			spawnIfNotFound: false
-		}, (err, windowIdentifier) => {
-
-		})
 	})
 }
 
