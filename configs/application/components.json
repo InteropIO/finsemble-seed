@@ -198,7 +198,8 @@
                 "width": 800,
                 "height": 600,
                 "options": {                    
-                    "transparent": true                              
+                    "autoShow": false,
+                    "showTaskbarIcon": false                         
                 }
             },
             "component": { 

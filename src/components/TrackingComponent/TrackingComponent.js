@@ -9,8 +9,7 @@ const FSBLReady = async () => {
 			moveComponentToTrack()
 
 			//Add hotkey to move componentToTrack to current move position
-			FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "shift", "m"], moveComponentToTrackToMousePos, () => {
-			})
+			FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "shift", "m"], moveComponentToTrackToMousePos, () => {})
 		})
 	} catch (e) {
 		FSBL.Clients.Logger.error(e);
@@ -18,12 +17,12 @@ const FSBLReady = async () => {
 }
 
 const moveComponentToTrackToMousePos = () => {
-	constgetMousePosition((err, mousePosition)=>{
-		componentToTrack.setBounds(mousePosition,()=>{})
+	constgetMousePosition((err, mousePosition) => {
+		componentToTrack.setBounds(mousePosition, () => {})
 		currentBounds.top = mousePosition.top
 		currentBounds.left = mousePosition.left
 
-		componentToTrack.setBounds(currentBounds, ()=>{
+		componentToTrack.setBounds(currentBounds, () => {
 			FSBL.Clients.WindowClient.setComponentState({
 				field: 'bound',
 				value: currentBounds
@@ -99,7 +98,6 @@ const setTrackingComponentPosition = async (position) => {
 				componentToTrack.addEventListener("bounds-change-end", (event) => {
 					FSBL.Clients.WindowClient.restore()
 					bounds = event.data;
-					bounds.monitor = componentToTrack.monitor
 					delete bounds.right;
 					delete bounds.bottom
 					currentBounds = bounds
@@ -108,20 +106,6 @@ const setTrackingComponentPosition = async (position) => {
 						field: 'bound',
 						value: bounds
 					});
-
-					//Move the trackingComponet behind the componentToTrack
-					FSBL.Clients.LauncherClient.showWindow({
-						componentType: 'TrackingComponent'
-					}, {
-						top: bounds.top,
-						left: bounds.left,
-						width: bounds.width,
-						height: bounds.height,
-						autoFocus: false,
-						spawnIfNotFound: false
-					}, (err, windowIdentifier) => {
-
-					})
 				});
 
 				componentToTrack.addEventListener("closed", (event) => {
