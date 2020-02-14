@@ -1,1 +1,10 @@
-{}
+{
+    "demoComponent1": {
+        "output": "components/demoComponent1/demoComponent1",
+        "entry": "./src/components/demoComponent1/demoComponent1.js"
+    },
+    "demoComponent2": {
+        "output": "components/demoComponent2/demoComponent2",
+        "entry": "./src/components/demoComponent2/demoComponent2.js"
+    }
+}
