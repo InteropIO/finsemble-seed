@@ -19,12 +19,19 @@
             "width": 4,
             "height": 4
         },
-        "alwaysOnTop": false
+        "alwaysOnTop": false,
+        "permissions": {
+            "System": {
+                "downloadAsset": true,
+                "launchExternalProcess": true,
+                "terminateExternalProcess": true
+            }
+        }
     },
     "splashScreenImage": "http://localhost:3375/assets/img/FinsembleSplash.png",
     "runtime": {
         "arguments": "--noerrdialogs  --v=4 --no-sandbox  --framestrategy=frames --winhttp-proxy-resolver",
-        "version": "9.61.36.36",
+        "version": "14.78.48.15",
         "//": "Add these arguments when diagnosing issues",
         "--enable-crash-reporting": "Adding this flag will enable crash reporting to openfin, which has caused memory leaks in some versions.",
         "--diagnostics": "Adding this to the runtimeArguments activates verbose logging and crash reporting.",
