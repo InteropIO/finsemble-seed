@@ -1,0 +1,13 @@
+{
+	"applicationSettings": {
+		"default": {
+			"permissions": {
+				"System": {
+					"downloadAsset": true,
+					"launchExternalProcess": true,
+					"terminateExternalProcess": true
+				}
+			}
+		}
+	}
+}

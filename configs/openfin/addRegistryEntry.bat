@@ -1,0 +1,1 @@
+REG ADD "HKEY_CURRENT_USER\Software\OpenFin\RVM\Settings" /v "DesktopOwnerSettings" /t REG_SZ /d "http://localhost:3375/configs/openfin/desktopOwnerSettings.json" /f
