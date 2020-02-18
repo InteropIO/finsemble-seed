@@ -14,11 +14,13 @@ import { onReady } from "@chartiq/finsemble-ui/lib/effects/onReadyEffects";
 import { DragHandle } from '@chartiq/finsemble-ui/lib/components/toolbar/DragHandle'
 import { DummyExport } from '@chartiq/finsemble-ui/lib/components/dummyExport'
 import '../toolbar.css';
+import { ExampleMenu } from "./exampleMenu";
+
 const Toolbar = () => {
 	return (
 		<ToolbarShell>
 			<DragHandle/>
-			<DummyExport/>
+			<ExampleMenu />
 			{/* Drag Handle */}
 			{/* Workspace Management Menu */}
 			{/* App Menu */}
