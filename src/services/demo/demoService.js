@@ -82,7 +82,7 @@ function demoService() {
 			}, function (err) {
 				Logger.log("Distributed Store has been updated")
 			});
-		}, 5000);
+		}, 10000);
 	}
 
 
@@ -93,9 +93,20 @@ function demoService() {
 
 		return {
 			symbol: 'CIQ',
-			price: Math.random() * 100,
+			price: Math.round((Math.random() * 100) * 100) / 100,
 			dt: new Date()
 		}
+	}
+
+	this.createListener = function () {
+		RouterClient.addListener("demoTransmitChannel2", function (error, response) {
+			if (error) {
+				Logger.error(error)
+			} else {
+				var data = response.data;
+				Logger.log("demoService receive the following data through demoTransmitChannel2:", data)
+			}
+		});
 	}
 
 
@@ -106,7 +117,7 @@ demoService.prototype = new Finsemble.baseService({
 	startupDependencies: {
 		// add any services or clients that should be started before your service
 		services: [ /* "dockingService", "authenticationService" */ ],
-		clients: [ /*"routerClient", "distributedStoreClient"*/]
+		clients: [ /*"routerClient", "distributedStoreClient"*/ ]
 	}
 });
 const serviceInstance = new demoService('demoService');
@@ -115,6 +126,7 @@ serviceInstance.onBaseServiceReady(function (callback) {
 	serviceInstance.createRouterEndpoints();
 	serviceInstance.createDistributedStore();
 	serviceInstance.createDemoGetData();
+	serviceInstance.createListener()
 	Logger.log("demo Service ready");
 	callback();
 });

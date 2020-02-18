@@ -1,0 +1,51 @@
+{
+    "components":{
+        "ag-Grid": {
+            "window": {
+                "url": "$applicationRoot/components/aggrid/index.html",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 800,
+                "height": 600,
+                "title": "ag-Grid",
+                "data": [
+                    {
+                    "topic" : "symbol",
+                    "component" : "News"
+                    }
+                ],
+                "options": {
+                    "securityPolicy": "trusted"
+                  }
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+                    },
+                    "workspace": {
+                        "persistURL": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "showLinker": true,
+                        "title": "ag-Grid"
+                    },
+                    "Toolbar": {
+                        "iconURL": "$applicationRoot/assets/aggrid-logo.png"
+                    }
+                }
+            }
+        }
+    }
+}

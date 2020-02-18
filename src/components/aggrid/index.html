@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script> var __basePath = ''; </script>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+    </style>
+    <script src="https://unpkg.com/ag-grid-enterprise/dist/ag-grid-enterprise.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<html>
+
+    <body style="position: relative;">
+
+        <div class="ag-theme-balham-dark container-quick-search" style="height: 100%; box-sizing: border-box;">
+            <div class="quick-search ag-column-drop-horizontal">
+                <!-- <img src="../../../aggrid-logo.png" /> -->
+                <label><strong>Symbol Search :</strong></label> <input id="quick-filter-box" />
+            </div>
+            <div id="myGrid" style="height: calc(100vh - 50px);" class="ag-theme-balham-dark"></div>
+        </div>
+        <script src="main.js"></script>
+
+    </body>
+
+</html>

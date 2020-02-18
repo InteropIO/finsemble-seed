@@ -161,6 +161,9 @@
 		"$applicationRoot/configs/application/workspaces.json",
 		"$applicationRoot/configs/application/workspaceTemplates.json",
 		"$applicationRoot/configs/application/services.json",
-		"$applicationRoot/configs/application/securityPolicies.json"
+		"$applicationRoot/configs/application/securityPolicies.json",
+		"$applicationRoot/components/aggrid/config.json",
+		"$applicationRoot/components/demoComponent1/config.json",
+		"$applicationRoot/components/demoComponent2/config.json"
 	]
 }

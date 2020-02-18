@@ -6,5 +6,9 @@
     "demoComponent2": {
         "output": "components/demoComponent2/demoComponent2",
         "entry": "./src/components/demoComponent2/demoComponent2.js"
+    },
+    "aggrid":{
+        "output": "components/aggrid/main",
+        "entry": "./src/components/aggrid/main.js"
     }
 }
