@@ -7,13 +7,13 @@ import React from "react";
 import { ToolbarShell, DragHandle } from "@chartiq/finsemble-ui/lib/components";
 
 import '../toolbar.css';
-import { ExampleMenu } from "./exampleMenu";
+import { FileMenu } from "./fileMenu";
 
 const Toolbar = () => {
 	return (
 		<ToolbarShell>
 			<DragHandle/>
-			<ExampleMenu />
+			<FileMenu />
 			{/* Drag Handle */}
 			{/* Workspace Management Menu */}
 			{/* App Menu */}
