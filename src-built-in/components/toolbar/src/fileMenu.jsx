@@ -37,15 +37,16 @@ export const FileMenu = () => {
 		<MenuShell id="mymenu">
 			<MenuActivator>File Menu</MenuActivator>
 			<Menu>
-				<MenuItem onClick={showPreferences}>Preferences</MenuItem>
-				<MenuItem onClick={FSBL.SystemManagerClient.showSystemLog}>
-					System Log
-				</MenuItem>
-				<MenuItem onClick={showCentralLogger}>Central Logger</MenuItem>
-				<MenuItem onClick={showDOcumentation}>Documentation</MenuItem>
-				<MenuItem onClick={FSBL.restartApplication}>Restart</MenuItem>
-				<MenuItem onClick={resetFinsemble}>Reset</MenuItem>
-				<MenuItem onClick={FSBL.shutdownApplication}>Shut Down</MenuItem>
+				<PreferencesItem>Preferences</PreferencesItem>
+				<SystemLogItem>System Log</SystemLogItem>
+				<CentralLoggerItem>Central Logger</CentralLoggerItem>
+				<DocumentationItem>Documentation</DocumentationItem>
+				<RestartItem>Restart</RestartItem>
+				<ResetItem>Reset</ResetItem>
+				<ShutdownItem>Shut Down</ShutdownItem>
+				{/* Add your own menu items like so:
+				 * <MenuItem onClick={...}>Custom Item</MenuItem>
+				 */}
 			</Menu>
 		</MenuShell>
 	);
