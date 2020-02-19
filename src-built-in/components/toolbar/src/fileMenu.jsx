@@ -17,7 +17,7 @@ function showPreferences() {
 	);
 }
 
-function showLonger() {
+function showCentralLogger() {
 	FSBL.Clients.RouterClient.transmit("CentralConsole-Show", true);
 }
 function showDOcumentation() {
@@ -41,7 +41,7 @@ export const FileMenu = () => {
 				<MenuItem onClick={FSBL.SystemManagerClient.showSystemLog}>
 					System Log
 				</MenuItem>
-				<MenuItem onClick={showLonger}>Central Logger</MenuItem>
+				<MenuItem onClick={showCentralLogger}>Central Logger</MenuItem>
 				<MenuItem onClick={showDOcumentation}>Documentation</MenuItem>
 				<MenuItem onClick={FSBL.restartApplication}>Restart</MenuItem>
 				<MenuItem onClick={resetFinsemble}>Reset</MenuItem>
