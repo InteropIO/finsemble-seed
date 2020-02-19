@@ -4,34 +4,6 @@ import { MenuActivator } from "@chartiq/finsemble-ui/lib/components/menu/menuAct
 import { Menu } from "@chartiq/finsemble-ui/lib/components/menu/menu";
 import { MenuItem } from "@chartiq/finsemble-ui/lib/components/menu/menuItem";
 
-function showPreferences() {
-	FSBL.Clients.LauncherClient.showWindow(
-		{
-			componentType: "UserPreferences"
-		},
-		{
-			monitor: "mine",
-			left: "center",
-			top: "center"
-		}
-	);
-}
-
-function showCentralLogger() {
-	FSBL.Clients.RouterClient.transmit("CentralConsole-Show", true);
-}
-function showDOcumentation() {
-	FSBL.System.openUrlWithBrowser(
-		"https://www.chartiq.com/tutorials/?slug=finsemble-seed-project"
-	);
-}
-
-function resetFinsemble() {
-	FSBL.Clients.StorageClient.clearCache(() => {
-		FSBL.restartApplication({ forceRestart: true });
-	});
-}
-
 export const FileMenu = () => {
 	return (
 		<MenuShell id="mymenu">
