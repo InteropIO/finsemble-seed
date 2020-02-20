@@ -5,10 +5,10 @@ import { Menu } from '@chartiq/finsemble-ui/lib/components/menu/menu'
 import { MenuItem } from '@chartiq/finsemble-ui/lib/components/menu/menuItem'
 import { MenuHotKey } from '@chartiq/finsemble-ui/lib/components/menu/menuHotKey'
 
-export const ExampleMenu = () => {
+export const ExampleMenu = ({id}) => {
 	const onClick = () => alert('You clicked');
 	return (
-		<MenuShell id="mymenu">
+		<MenuShell id={id}>
 			<MenuHotKey open={["shift", "down arrow"]}/>
 			<MenuHotKey close={["shift", "up arrow"]}/>
 			<MenuActivator>
