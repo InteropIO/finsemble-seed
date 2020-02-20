@@ -1,4 +1,4 @@
-//Stats to parse from openfin. Comment out statistics if they interest you.
+//Stats to parse. Comment out statistics if they interest you.
 export const SIMPLE_MODE_STATISTICS = [
 	{ label: "CPU", value: "cpuUsage" },
 	{ label: "Memory", value: "workingSetSize" }

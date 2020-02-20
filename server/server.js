@@ -84,24 +84,26 @@
 					e => {
 						handleError(e);
 
-						logToTerminal(outputColor(`Listening on port ${ PORT } `));
+						logToTerminal(outputColor(`Listening on port ${PORT} `));
 
 						global.host = server.address().address;
 						global.port = server.address().port;
-				});
+					});
 
 				app.use(compression());
+
 				// Sample server root set to "/" -- must align with paths throughout
 				app.use("/", express.static(rootDir, options));
 				// Open up the Finsemble Components,services, and clients
 				app.use("/finsemble", express.static(moduleDirectory, options));
+				app.use("/installers", express.static(path.join(__dirname, "..", "installers"), options));
 				// For Assimilation
 				app.use("/hosted", express.static(path.join(__dirname, "..", "hosted"), options));
 
-				// configs/openfin/manifest-local.json and configs/other/server-environment-startup.json
+				// configs/application/manifest-local.json and configs/other/server-environment-startup.json
 				// Make the config public
 				app.use("/configs", express.static("./configs", options));
-
+				app.use("/pkg", express.static('./pkg', options));
 				cb();
 			}
 		};
@@ -135,20 +137,20 @@
 		//Listens for the first time that the config and the serviceManager are retrieved, and logs output to the console.
 		let notified_config = false, notified_sm = false;
 		let serviceManagerRetrievedTimeout;
-		app.get("/configs/openfin/manifest-local.json", (req, res, next) => {
+		app.get("/configs/application/manifest-local.json", (req, res, next) => {
 			if (!notified_config) {
 
 				// Send a timestamp back to the parent process
 				process.send({ "action": "timestamp", "milestone": "Application manifest retrieved", "timestamp": Date.now() });
 				notified_config = true;
 				serviceManagerRetrievedTimeout = setTimeout(() => {
-					logToTerminal(errorColor(`ERROR: Finsemble application manifest has been retrieved from the server, but the Finsemble Service Manager has not. This can be caused by a slow internet connection (e.g., downloading assets). This can also be a symptom that you have a hanging openfin process. Please inspect your task manager to ensure that there are no lingering processes. Alternatively, run 'finsemble-cli kill'`))
+					logToTerminal(errorColor(`ERROR: Finsemble application manifest has been retrieved from the server, but the Finsemble System Manager has not. This can be caused by a slow internet connection (e.g., downloading assets). This can also be a symptom that you have a hanging process. Please inspect your task manager to ensure that there are no lingering processes. Alternatively, run 'finsemble-cli kill'`))
 				}, 10000);
 			}
 			next();
 		});
 
-		app.get("/finsemble/components/system/serviceManager/serviceManager.html", (req, res, next) => {
+		app.get("/finsemble/services/systemManager/systemManager.html", (req, res, next) => {
 			if (!notified_sm) {
 				clearTimeout(serviceManagerRetrievedTimeout);
 

@@ -116,7 +116,6 @@ var Actions = {
 			wrappedWindow.addListener("closed", Actions.onCompanionClosed);
 			wrappedWindow.addListener("hidden", Actions.onCompanionHidden);
 			wrappedWindow.addListener("shown", Actions.onCompanionShown);
-			wrappedWindow.addListener("maximized", Actions.onCompanionMaximized);
 			wrappedWindow.addListener("restored", Actions.onCompanionRestored);
 			wrappedWindow.addListener("bringToFront", Actions.onCompanionBringToFront);
 			wrappedWindow.addListener("minimized", Actions.onCompanionMinimized);
@@ -257,7 +256,13 @@ var Actions = {
 
 		HeaderStore.setCompanionBounds(bounds);
 		if (!bounds.width) bounds.width = bounds.right - bounds.left;
-		FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
+
+		Actions.isWindowVisible(function (err, isVisible) {
+			if (isVisible) {
+				FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
+			}
+		});
+
 		let onBoundsSet = function (err) {
 			if (err) {
 				FSBL.Clients.Logger.error(err);
@@ -281,7 +286,6 @@ var Actions = {
 		FSBL.Clients.WindowClient.finsembleWindow.close({});
 	},
 	onCompanionHidden() {
-
 		Logger.system.debug("Companion window hidden");
 		FSBL.Clients.WindowClient.finsembleWindow.hide();
 	},
@@ -302,7 +306,7 @@ var Actions = {
 				}
 				FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
 			});
-			//@note this was 500, it was lowered to 50 after improvements were made to the eventing system.
+			//@note this was 500, it was lowered to 50 after improvements were made to the event system.
 		}, 50);
 
 	},
@@ -321,13 +325,13 @@ var Actions = {
 		});
 		// Actions.updateWindowPosition();
 	},
-	//Expand the window and set the animate flag. If trying to setbounds at the same time as animate, bounds gets messed up.
+	//Expand the window and set the animate flag. If trying to setBounds at the same time as animate, bounds gets messed up.
 	expandWindow(cb = Function.prototype) {
 		if (animating) return cb();
 		animating = true;
 		if (HeaderStore.getState() === "large") return;
 		HeaderStore.setState("large");
-		let finWindow = fin.desktop.Window.getCurrent();
+		let systemWindow = FSBL.System.Window.getCurrent();
 		let currentBound = HeaderStore.getCompanionBounds();
 		FSBL.Clients.WindowClient.finsembleWindow.updateOptions({
 			"cornerRounding": {
@@ -339,11 +343,11 @@ var Actions = {
 
 		const logAnimationError = (err) => {
 			if (err) {
-				console.error("Erorr in size animation", err);
+				console.error("Error in size animation", err);
 			}
 		};
 		const widenCompanion = (done) => {
-			finWindow.animate({
+			systemWindow.animate({
 				position: {
 					duration: 0,
 					left: expandedBounds.left
@@ -356,7 +360,7 @@ var Actions = {
 			}, done, done);
 		};
 		const expandCompanion = (done) => {
-			finWindow.animate({ size: { duration: 150, height: expandedBounds.height } }, done, done);
+			systemWindow.animate({ size: { duration: 150, height: expandedBounds.height } }, done, done);
 		};
 		const onAnimationCompleted = (err) => {
 			logAnimationError(err);
@@ -379,7 +383,7 @@ var Actions = {
 		HeaderStore.setState("small");
 		if (animating) return cb();
 		animating = true;
-		let finWindow = fin.desktop.Window.getCurrent();
+		let systemWindow = FSBL.System.Window.getCurrent();
 		let currentBound = HeaderStore.getCompanionBounds();
 		FSBL.Clients.WindowClient.finsembleWindow.updateOptions({
 			"cornerRounding": {
@@ -392,15 +396,15 @@ var Actions = {
 
 		const logAnimationError = (err) => {
 			if (err) {
-				console.error("Erorr in size animation", err);
+				console.error("Error in size animation", err);
 			}
 		};
 		const shrinkCompanion = (done) => {
-			finWindow.animate({ size: { duration: 150, height: contractedBounds.height } }, done, done);
+			systemWindow.animate({ size: { duration: 150, height: contractedBounds.height } }, done, done);
 		};
 
 		const centerCompanion = (done) => {
-			finWindow.animate({
+			systemWindow.animate({
 				position: {
 					duration: 0,
 					left: contractedBounds.left,

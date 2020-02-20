@@ -7,9 +7,9 @@ let ToolbarStore, appLauncherStore, windowGroupStore;
 import async from "async";
 var COMPONENT_UPDATE_CHANNEL;
 function uuidv4() {
-	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+	return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
 		var r = Math.random() * 16 | 0,
-			v = c === 'x' ? r : r & 0x3 | 0x8;
+			v = c === "x" ? r : r & 0x3 | 0x8;
 		return v.toString(16);
 	});
 }
@@ -34,7 +34,7 @@ var Actions = {
 				throw new Error(err);
 			}
 			//Each AppLauncher
-			FSBL.Clients.Logger.debug("getComponentList from LauncherClient", response)
+			FSBL.Clients.Logger.debug("getComponentList from LauncherClient", response);
 			Actions.filterComponents(response);
 			if (cb) {
 				cb();
@@ -48,7 +48,7 @@ var Actions = {
 		//When an app launcher button is clicked, it sends over the types of components that the app launcher can spawn. We assign that data to an object in the windowClient, and then use that to render the app launcher.
 		FSBL.Clients.RouterClient.subscribe(COMPONENT_UPDATE_CHANNEL, function (err, response) {
 
-			if (!FSBL.Clients.WindowClient.options.customData.spawnData) FSBL.Clients.WindowClient.options.customData.spawnData = {};
+			if (!FSBL.Clients.WindowClient.options.customData.spawnData) { FSBL.Clients.WindowClient.options.customData.spawnData = {}; }
 			Object.assign(FSBL.Clients.WindowClient.options.customData.spawnData, response.data);
 			if (firstTime) { // only update component list the first time to eliminate re-rendering the menu
 				Actions.getComponentList(cb);
@@ -65,8 +65,9 @@ var Actions = {
 			self.filterComponents(response.data.componentList);
 		});
 	},
-	//get adhoc components that the user created from storage.
+	//get quick components that the user created from storage.
 	getUserDefinedComponentList(cb) {
+		return cb();
 		var self = Actions;
 		FSBL.Clients.StorageClient.get({ topic: "finsemble", key: "userDefinedComponents" }, function (err, response) {
 			var data = response;
@@ -83,7 +84,7 @@ var Actions = {
 			cb();
 		});
 	},
-	//saves adhoc components
+	//saves quick components
 	saveCustomComponents() {
 		var UDCs = {};
 		var components = Object.keys(Actions.componentList);
@@ -117,7 +118,7 @@ var Actions = {
 		appLauncherStore.setValue({ field: "pins", value: filteredPins });
 	},
 	// This filters components based on the mode and list settings in customData
-	// Available settings are list - where you list specfic individual component Types, mode - which piggybacks on config.mode and lists all components where the mode matches
+	// Available settings are list - where you list specific individual component Types, mode - which piggybacks on config.mode and lists all components where the mode matches
 	// If neither mode not list are set, all components are shown
 	// Custom Components are always shown @TODO - make this a setting
 	filterComponents(components) {
@@ -168,31 +169,7 @@ var Actions = {
 			}
 		}
 
-		self.componentList = {}
-		// deal with groups
-		for (let componentType in componentList) {
-			let config = components[componentType];
-			let componentGroups = (config.component && config.component.launchGroups) ? config.component.launchGroups : false;
-			if (componentGroups) {
-				if (!Array.isArray(componentGroups)) {
-					componentGroups = [componentGroups];
-				}
-				for (let componentGroup of componentGroups) {
-					if (!self.componentList[componentGroup]) {
-						self.componentList[componentGroup] = {
-							group: componentGroup,
-							list: {}
-						}
-					}
-					self.componentList[componentGroup].list[componentType] = componentList[componentType];
-					if (componentList[componentType].component.windowGroup) componentList[componentType].params = {
-						groupName: componentList[componentType].component.windowGroup
-					}
-				}
-			}
-			config.component.type = componentType;
-			self.componentList[componentType] = componentList[componentType];
-		}
+		self.componentList = componentList;
 
 		FSBL.Clients.Logger.debug("appLauncher filterComponents", self.componentList, "settings", settings, "customData", FSBL.Clients.WindowClient.options.customData);
 		appLauncherStore.setValue({ field: "componentList", value: self.componentList });
@@ -204,7 +181,7 @@ var Actions = {
 		var fontIcon;
 		try {
 			if (componentToToggle.group) {
-				fontIcon = "ff-ungrid"
+				fontIcon = "ff-ungrid";
 			} else {
 				fontIcon = componentToToggle.foreign.components.Toolbar.iconClass;
 			}
@@ -220,14 +197,22 @@ var Actions = {
 		}
 
 		//No dots allowed in keys in the global store, so escaping dots
-		var componentTypeDotRemove = componentType.replace(/[.]/g, "^DOT^")
 
-		var pins = appLauncherStore.getValue('pins');
+		var pins = appLauncherStore.getValue("pins");
 		let params = { addToWorkspace: true, monitor: "mine" };
-		if (componentToToggle.component && componentToToggle.component.windowGroup) params.groupName = componentToToggle.component.windowGroup;
+		if (componentToToggle.component && componentToToggle.component.windowGroup) {
+			params.groupName = componentToToggle.component.windowGroup;
+		}
+
+		//Component developers can define a display name that will show instead of the component's type.
+		let displayName = componentType;
+		if (componentToToggle.component && componentToToggle.component.displayName) {
+			displayName = componentToToggle.component.displayName;
+		}
+
 		var thePin = {
 			type: "componentLauncher",
-			label: componentType,
+			label: displayName,
 			component: componentToToggle.group ? componentToToggle.list : componentType,
 			fontIcon: fontIcon,
 			icon: imageIcon,
@@ -238,7 +223,7 @@ var Actions = {
 		var wasPinned = false;
 		for (var i = 0; i < pins.length; i++) {
 			var pin = pins[i];
-			if (pin.label === componentType) {
+			if (pin.component === componentType) {
 				pins.splice(i, 1);
 				wasPinned = true;
 				break;
@@ -248,18 +233,22 @@ var Actions = {
 			pins.push(thePin);
 		}
 
+		var componentTypeDotRemove = displayName.replace(/[.]/g, "^DOT^");
+
 		if (wasPinned) {
 			ToolbarStore.removeValue({ field: "pins." + componentTypeDotRemove });
 		} else {
 			ToolbarStore.setValue({ field: "pins." + componentTypeDotRemove, value: thePin });
 		}
 	},
-	//Handler for when the user wants to remove an adhoc component.
+	//Handler for when the user wants to remove a quick component.
 	handleRemoveCustomComponent(componentName) {
 		var self = this;
 		FSBL.Clients.DialogManager.open("yesNo", {
 			title: "Delete this App?",
 			question: "Are you sure you would like to delete \"" + componentName + "\"?",
+			affirmativeResponseLabel: "Delete",
+			showNegativeButton: false
 		}, function (err, response) {
 			// If the user chooses "affirmative" then delete the component.
 			// We should never get an error, but if we do then go ahead and delete the component too.
@@ -300,14 +289,17 @@ var Actions = {
 	},
 	//Hide the window.
 	hideWindow() {
-		fin.desktop.Window.getCurrent().hide();
+		finsembleWindow.hide();
 	},
 	//Spawn a component.
 	launchComponent(config, params, cb) {
 		//Actions.hideWindow();
-		let defaultParams = { addToWorkspace: true, monitor: "mine" };
+		console.log("launchComponent");
+		let defaultParams = { addToWorkspace: true, monitor: "mine", options: { customData: {} } };
 		params = Object.assign(defaultParams, params);
-		if (config.component.windowGroup) params.groupName = config.component.windowGroup;
+		if (!params.options.customData) { params.options.customData = {}; }
+		if (!params.options.customData.component) { params.options.customData.component = {}; }
+		if (config.component.windowGroup) { params.groupName = config.component.windowGroup; }
 		FSBL.Clients.LauncherClient.spawn(config.component.type, params, function (err, windowInfo) {
 			if (cb) {
 				cb(windowInfo.windowIdentifier);
@@ -324,13 +316,13 @@ var Actions = {
 			if (value) {
 				currentGroup = Math.max(...Object.keys(value)) + 1;
 			}
-			let groupName = groupPrefix + '.' + currentGroup;
+			let groupName = groupPrefix + "." + currentGroup;
 			FSBL.Clients.LauncherClient.createWindowGroup({
 				groupName: groupName
 			}, function (err, response) {
 				cb(groupName);
-			})
-		})
+			});
+		});
 	}
 };
 
@@ -391,7 +383,7 @@ var keys = {};
 function setupHotkeys(cb) {
 
 	FSBL.Clients.RouterClient.subscribe("humanInterface.keydown", function (err, response) {
-		if (!keys[response.data.key]) keys[response.data.key] = {};
+		if (!keys[response.data.key]) { keys[response.data.key] = {}; }
 		keys[response.data.key] = true;
 		if (keys[160] && keys[162] && keys[68]) {
 			if (Actions.componentList["Advanced Chart"]) {
@@ -400,7 +392,7 @@ function setupHotkeys(cb) {
 		}
 	});
 	FSBL.Clients.RouterClient.subscribe("humanInterface.keyup", function (err, response) {
-		if (!keys[response.data.key]) keys[response.data.key] = {};
+		if (!keys[response.data.key]) { keys[response.data.key] = {}; }
 		keys[response.data.key] = false;
 	});
 

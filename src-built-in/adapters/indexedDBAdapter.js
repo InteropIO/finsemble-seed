@@ -1,9 +1,17 @@
-import finsemble from "@chartiq/finsemble";
+/**
+ * This file is a copy of the default IndexedDBAdapter adapter, the default storage model used by finsemble-seed.
+ * It's provided as an example. Feel free to modify, add to, or erase parts of it.
+ *
+ * Core Finsemble calls are written with key-value pair databases in mind. If you want to use a different database type, you will need to translate the key/value pairs passed in from finsemble so that you can successfully retrieve them at a later time.
+ */
 
-const BaseStorage = finsemble.models.baseStorage;
-const Logger = finsemble.Clients.Logger;
+/**
+ * We have a baseStorage model that provides some methods, such as `getCombinedKey`, which will return a nice key to save our value under. Example: `Finsemble:defaultUser:finsemble:activeWorkspace`. That key would hold the value of our activeWorkspace.
+ */
+const BaseStorage = require("@chartiq/finsemble").models.baseStorage;
+const Logger = require("@chartiq/finsemble").Clients.Logger;
 
-// Because calls to this storage adapter will likely come from many different windows, we will log successes and 
+// Because calls to this storage adapter will likely come from many different windows, we will log successes and
 // failures in the central logger.
 Logger.start();
 
@@ -18,23 +26,23 @@ const SCHEMA_VERSION = 1;
  */
 let initialized = false;
 
-// #region 
-/** 
- * PolyFill IDBKeyRange for a key prefix search. 
- * 
- * In IndexedDB, Primary keys are ordered, and a key range is used to selectively retrieve them without having 
- * to iterate the whole set and test each. We use string keys built up with various prefixes. This polyfill makes it 
+// #region
+/**
+ * PolyFill IDBKeyRange for a key prefix search.
+ *
+ * In IndexedDB, Primary keys are ordered, and a key range is used to selectively retrieve them without having
+ * to iterate the whole set and test each. We use string keys built up with various prefixes. This polyfill makes it
  * possible to easily retrieve all keys with a specified prefix.
- * 
+ *
  * @param prefix The string by which to filter the primary keys.
  */
 IDBKeyRange.forPrefix = (prefix) => {
-	/** 
-	 * Determines the string that would sort immediately after all strings with the specified prefix and hence can be 
-	 * used as the upper bound for an IDBKeyRange to retrieve all keys with a specified prefix (where the lower bound is 
-	 * the prefix itself). 
-	 * 
-	 * @param key 
+	/**
+	 * Determines the string that would sort immediately after all strings with the specified prefix and hence can be
+	 * used as the upper bound for an IDBKeyRange to retrieve all keys with a specified prefix (where the lower bound is
+	 * the prefix itself).
+	 *
+	 * @param key
 	 */
 	const successor = (key) => {
 		let len = key.length;
@@ -63,13 +71,13 @@ IDBKeyRange.forPrefix = (prefix) => {
 // #endregion
 
 /**
- * IndexDB Storage Adapter.
- * 
- * We have a baseStorage model that provides some methods, such as `getCombinedKey`, which will return a nice key to 
- * save our value under. Example: `Finsemble:defaultUser:finsemble:activeWorkspace`. That key would hold the value of 
+ * IndexedDB Storage Adapter.
+ *
+ * We have a baseStorage model that provides some methods, such as `getCombinedKey`, which will return a nice key to
+ * save our value under. Example: `Finsemble:defaultUser:finsemble:activeWorkspace`. That key would hold the value of
  * our activeWorkspace.
  */
-const IndexedDBAdapter = function () {
+const IndexedDBAdapter = function (uuid) {
 	// #region Initializes a new instance of the IndexedDBAdapter.
 	BaseStorage.call(this, arguments);
 
@@ -84,22 +92,22 @@ const IndexedDBAdapter = function () {
 	 */
 	this.queue = [];
 
-	Logger.system.debug("IndexedDBAdapter init");
-	console.debug("IndexedDBAdapter init");
+	Logger.system.log("IndexedDBAdapter init");
+	console.log("IndexedDBAdapter init");
 
 	// #region Initialize IndexedDB connection.
 	// Open the IndexedDB connection
 	const request = window.indexedDB.open("finsemble", SCHEMA_VERSION);
 
-	// Create the object store if necessary 
+	// Create the object store if necessary
 	request.onupgradeneeded = (event) => {
-		// Save the IDBDatabase interface 
+		// Save the IDBDatabase interface
 		this.db = event.target.result;
 
 		// Create an objectStore for this database
 		const objectStore = this.db.createObjectStore("fsbl", { keyPath: "key" });
 
-		// Use transaction oncomplete to make sure the objectStore creation is 
+		// Use transaction oncomplete to make sure the objectStore creation is
 		// finished before adding data into it.
 		objectStore.transaction.oncomplete = () => {
 			Logger.system.debug("IndexedDBAdapter object store created");
@@ -109,8 +117,8 @@ const IndexedDBAdapter = function () {
 	};
 
 	request.onsuccess = (event) => {
-		Logger.system.debug("IndexedDBAdapter initialized successfully");
-		console.debug("IndexedDBAdapter initialized successfully");
+		Logger.system.log("IndexedDBAdapter initialized successfully");
+		console.log("IndexedDBAdapter initialized successfully");
 
 		this.db = event.target.result;
 		this.releaseQueue();
@@ -125,8 +133,8 @@ const IndexedDBAdapter = function () {
 
 	/**
 	 * Get the prefix used to filter keys for particular topics and key prefixes.
-	 * 
-	 * @param {object} params 
+	 *
+	 * @param {object} params
 	 * @param {string} params.topic The topic
 	 * @param {string} params.keyPrefix The key prefix (optional).
 	 * @private
@@ -153,8 +161,8 @@ const IndexedDBAdapter = function () {
 	 */
 	this.releaseQueue = () => {
 		initialized = true;
-		Logger.system.debug(`IndexedDBAdapter.releaseQueue: ${this.queue.length} commands`);
-		console.debug(`IndexedDBAdapter.releaseQueue: ${this.queue.length} commands`);
+		Logger.system.log(`IndexedDBAdapter.releaseQueue: ${this.queue.length} commands`);
+		console.log(`IndexedDBAdapter.releaseQueue: ${this.queue.length} commands`);
 
 		while (this.queue.length) {
 			const action = this.queue.shift();
@@ -163,7 +171,7 @@ const IndexedDBAdapter = function () {
 	}
 	// #region Interface Methods
 	/**
-	 * This method should be used very, very judiciously. It's essentially a method designed to wipe the database for a 
+	 * This method should be used very, very judiciously. It's essentially a method designed to wipe the database for a
 	 * particular user.
 	 */
 	this.clearCache = (params, cb) => {
@@ -176,31 +184,31 @@ const IndexedDBAdapter = function () {
 
 		const userPreface = this.getUserPreface(this);
 
-		Logger.system.debug("IndexedDBAdapter.clearCache for userPreface=" + userPreface);
-		console.debug("IndexedDBAdapter.clearCache for userPreface=" + userPreface);
+		Logger.system.log("IndexedDBAdapter.clearCache for userPreface=" + userPreface);
+		console.log("IndexedDBAdapter.clearCache for userPreface=" + userPreface);
 
 		const keyRange = IDBKeyRange.forPrefix(userPreface);
 		const objectStore = this.db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
 		const request = objectStore.delete(keyRange);
 
 		request.onsuccess = () => {
-			Logger.system.debug("IndexedDBAdapter.clearCache Success: userPreface=" + userPreface);
-			console.debug("IndexedDBAdapter.clearCache Success: userPreface=" + userPreface);
+			Logger.system.log("IndexedDBAdapter.clearCache Success: userPreface=" + userPreface);
+			console.log("IndexedDBAdapter.clearCache Success: userPreface=" + userPreface);
 
-			cb();
+			cb(null, { status: "success" });
 		};
 
 		request.onerror = (err) => {
 			Logger.system.error("IndexedDBAdapter.clearCache failed Error", err, "userPreface=" + userPreface);
 			console.error("IndexedDBAdapter.clearCache failed Error", err, "userPreface=" + userPreface);
 
-			return cb(err, { status: "failed" });
+			cb(err, { status: "failed" });
 		};
 	}
 
 	/**
 	 * Delete method.
-	 * 
+	 *
 	 * @param {object} params
 	 * @param {string} params.topic A topic under which the data should be stored.
 	 * @param {string} params.key The key whose value is being deleted.
@@ -233,7 +241,7 @@ const IndexedDBAdapter = function () {
 			Logger.system.error("IndexedDBAdapter.delete key=" + combinedKey + ", Error", err);
 			console.error("IndexedDBAdapter.delete key=" + combinedKey + ", Error", err);
 
-			return cb(err, { status: "failed" });
+			cb(err, { status: "failed" });
 		};
 	}
 
@@ -249,8 +257,8 @@ const IndexedDBAdapter = function () {
 			return;
 		}
 
-		Logger.system.debug("IndexedDBAdapter.empty");
-		console.debug("IndexedDBAdapter.empty");
+		Logger.system.log("IndexedDBAdapter.empty");
+		console.log("IndexedDBAdapter.empty");
 
 		const objectStore = this.db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
 		const request = objectStore.clear();
@@ -263,8 +271,8 @@ const IndexedDBAdapter = function () {
 		};
 
 		request.onsuccess = () => {
-			Logger.system.debug("IndexedDBAdapter.empty Success");
-			console.debug("IndexedDBAdapter.empty Success");
+			Logger.system.log("IndexedDBAdapter.empty Success");
+			console.log("IndexedDBAdapter.empty Success");
 
 			cb();
 		};
@@ -272,7 +280,7 @@ const IndexedDBAdapter = function () {
 
 	/**
 	 * Get method.
-	 * 
+	 *
 	 * @param {object} params
 	 * @param {string} params.topic A topic under which the data should be stored.
 	 * @param {string} params.key The key whose value is being set.
@@ -287,7 +295,7 @@ const IndexedDBAdapter = function () {
 		}
 
 		Logger.system.debug("IndexedDBAdapter.get, params: ", params);
-		console.debug("IndexedDBAdapter.get, params: ", params, cb);
+		console.debug("IndexedDBAdapter.get, params: ", params);
 
 		const combinedKey = this.getCombinedKey(this, params);
 		const objectStore = this.db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
@@ -295,7 +303,7 @@ const IndexedDBAdapter = function () {
 
 		request.onsuccess = (event) => {
 			let data;
-			if(event.target.result) data = event.target.result.value;
+			if (event.target.result) data = event.target.result.value;
 
 			Logger.system.debug("IndexedDBAdapter.get for key=" + combinedKey + " data=", data);
 			console.debug("IndexedDBAdapter.get for key=" + combinedKey + " data=", data);
@@ -313,7 +321,7 @@ const IndexedDBAdapter = function () {
 
 	/**
 	 * Returns all keys stored in IndexDB.
-	 * 
+	 *
 	 * @param {object} params
 	 * @param {function} cb
 	 */
@@ -348,13 +356,13 @@ const IndexedDBAdapter = function () {
 			Logger.system.error("Failed to retrieve IndexedDBAdapter.keys keyPreface=" + keyPreface + ", Error", err);
 			console.error("Failed to retrieve IndexedDBAdapter.keys keyPreface=" + keyPreface + ", Error", err);
 
-			return cb(err, { status: "failed" });
+			cb(err, { status: "failed" });
 		};
 	}
 
 	/**
 	 * Save method.
-	 * 
+	 *
 	 * @param {object} params
 	 * @param {string} params.topic A topic under which the data should be stored.
 	 * @param {string} params.key The key whose value is being set.
@@ -395,3 +403,4 @@ const IndexedDBAdapter = function () {
 
 IndexedDBAdapter.prototype = new BaseStorage();
 new IndexedDBAdapter("IndexedDBAdapter");
+module.exports = IndexedDBAdapter;//Allows us to get access to the uninitialized object

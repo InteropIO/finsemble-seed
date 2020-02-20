@@ -8,17 +8,23 @@ var windowTitleBarStore;
 var WindowClient;
 import windowTitleBarStoreDefaults from "./windowTitleBarStoreDefaults";
 import * as async from "async";
-var finWindow = fin.desktop.Window.getCurrent();
-//theses are constants that are set inside of setupStore. so they're declared as vars and not constantsa.
+
+//these are constants that are set inside of setupStore. so they're declared as vars and not constants.
 let constants = {};
 var Actions = {
 	initialize: function () {
 		// This ensures that our config is correct, even if the developer missed some entries
-		var options = FSBL.Clients.WindowClient.options;
+		let options = FSBL.Clients.WindowClient.options;
 		// TODO, this should come from config server (probably via a WindowsClient.getConfig() command), so that live components always have the latest config. Currently this config gets saved with the component via workspace customData.
-		var windowTitleBarConfig = options.customData.foreign.components["Window Manager"];
-		var FSBLHeader = windowTitleBarConfig.FSBLHeader;
-		var self = this;
+		let windowTitleBarConfig = options.customData.foreign.components["Window Manager"];
+		let FSBLHeader = windowTitleBarConfig.FSBLHeader;
+		let self = this;
+		let displayName = null;
+
+		//Display name is first up for display. If it doesn't exist, we look for a default title (or one that's already set on init). If no title, we display the window's name (e.g., '5434-Welcome Component-2321').
+		if (options.customData.component && options.customData.component.displayName) {
+			displayName = options.customData.component.displayName;
+		}
 
 		/**
 		 * The windowTitleBar (header) is dumb. It just reflects the state of the component window. The headerCommandChannel allows the WindowClient to take control of the state of the header. All of the details of listening to window events are handled inside the WindowClient
@@ -41,11 +47,11 @@ var Actions = {
 			]);
 
 
-			// By default, we hack the window's scrollbar so that it displays underneath the header. html.overflow: hidden body.overflow:auto
+			// By default, we hack the window's scroll bar so that it displays underneath the header. html.overflow: hidden body.overflow:auto
 			windowTitleBarStore.setValue({ field: "hackScrollbar", value: (windowTitleBarConfig.hackScrollbar !== false) });
 
 			// Set by calling WindowClient.setTitle() || from config "foreign.components.Window Manager.title"
-			var title = FSBL.Clients.WindowClient.title || windowTitleBarConfig.title;
+			var title = FSBL.Clients.WindowClient.title || windowTitleBarConfig.title || displayName;
 
 			if (title) {
 				FSBL.Clients.WindowClient.setWindowTitle(title)
@@ -56,7 +62,7 @@ var Actions = {
 		 * Handles whether to show the linker button.
 		 */
 		if (windowTitleBarConfig.showLinker) {
-			//Get state (channel memebership) from the linkerClient. Then set the value in the header so that the title bar accurately reflects the state.
+			//Get state (channel membership) from the linkerClient. Then set the value in the header so that the title bar accurately reflects the state.
 			let cb = (err, response) => {
 				if (response.channels) { windowTitleBarStore.setValue({ field: "Linker.channels", value: response.channels }); }
 				windowTitleBarStore.setValue({ field: "Linker.showLinkerButton", value: true });
@@ -140,20 +146,13 @@ var Actions = {
 			]);
 
 			if (isInMovableGroup && !isTopRight) {
-				fin.desktop.Window.getCurrent().updateOptions({ showTaskbarIcon: false });
+				finsembleWindow.updateOptions({ showTaskbarIcon: false });
 			} else {
-				fin.desktop.Window.getCurrent().updateOptions({ showTaskbarIcon: true });
+				finsembleWindow.updateOptions({ showTaskbarIcon: true });
 			}
 		};
 
 		FSBL.Clients.RouterClient.subscribe("Finsemble.WorkspaceService.groupUpdate", onDockingGroupUpdate);
-
-		/**
-		 * Catches a double-click on the title bar. If you don't catch this, openfin will invoke the OS-level maximize, which will put the window on top of the toolbar. `clickMaximize` will fill all of the space that finsemble allows.
-		 */
-		FSBL.Clients.WindowClient.finWindow.addEventListener("maximized", function () {
-			self.clickMaximize();
-		});
 
 		//default title.
 		windowTitleBarStore.setValue({ field: "Main.windowTitle ", value: FSBL.Clients.WindowClient.getWindowTitle() });
@@ -172,7 +171,7 @@ var Actions = {
 			windowTitleBarStore.setValues([{ field: "Main.dockingEnabled", value: dockingConfig.enabled }]);
 
 			// Whether the alwaysOnTop pin shows or not depends first on the global setting (finsemble["Window Manager"].alwaysOnTop) and then
-			// on the specific setting for this component (foreigh.components["Widow Manager"].alwaysOnTop)
+			// on the specific setting for this component (foreign.components["Widow Manager"].alwaysOnTop)
 			let alwaysOnTopIcon = globalWindowManagerConfig.alwaysOnTopIcon;
 			if (windowTitleBarConfig.alwaysOnTopIcon === false || windowTitleBarConfig.alwaysOnTopIcon === true)
 				alwaysOnTopIcon = windowTitleBarConfig.alwaysOnTopIcon;
@@ -186,7 +185,6 @@ var Actions = {
 			} else {
 				//If tabbing is enabled system-wide, look to the global config for its value. Then look to the local component's config.
 
-
 				//This is the global window manager config.
 				if (typeof windowTitleBarConfig.showTabs !== 'boolean') {
 					windowTitleBarStore.setValue({ field: "showTabs", value: globalWindowManagerConfig.showTabs });
@@ -195,6 +193,31 @@ var Actions = {
 				if (windowTitleBarConfig.showTabs || windowTitleBarConfig.showTabs === false) {
 					windowTitleBarStore.setValue({ field: "showTabs", value: windowTitleBarConfig.showTabs });
 				}
+
+				//Once the above has been checked the individual component config is checked for customData.foreign.services[windowService || dockingService][!ignoreTilingAndTabbingRequests || allowTabbing]
+				let showTabs = true;
+				finsembleWindow.getOptions((err, opts) => {
+					if (opts.customData && opts.customData.foreign && opts.customData.foreign.services) {
+						if (opts.customData.foreign.services.windowService) {
+							if (opts.customData.foreign.services.windowService.allowTabbing !== undefined) {
+								showTabs = opts.customData.foreign.services.windowService.allowTabbing;
+							} else if (opts.customData.foreign.services.windowService.ignoreTilingAndTabbingRequests != undefined) {
+								showTabs = !opts.customData.foreign.services.windowService.ignoreTilingAndTabbingRequests;
+							}
+						} else if (opts.customData.foreign.services.dockingService) {
+							if (opts.customData.foreign.services.dockingService.allowTabbing !== undefined) {
+								showTabs = opts.customData.foreign.services.dockingService.allowTabbing;
+							} else if (opts.customData.foreign.services.dockingService.ignoreTilingAndTabbingRequests != undefined) {
+								showTabs = !opts.customData.foreign.services.dockingService.ignoreTilingAndTabbingRequests;
+							}
+						}
+					}
+
+					windowTitleBarStore.setValue({ field: 'showTabs', value: showTabs });
+				});
+
+
+
 			}
 		});
 
@@ -234,7 +257,7 @@ var Actions = {
 		})
 	},
 	/**
-	 * Helper function to sift through all of the data coming from the dockingService. Outputs an array of groups that the window belongs to.
+	 * Helper function to sift through all of the data coming from the windowService. Outputs an array of groups that the window belongs to.
 	 * @todo consider sending targeted messages to windows instead of a bulk update. Will cut down on this kind of code.
 	 */
 	getMyDockingGroups: function (groupData) {
@@ -254,95 +277,14 @@ var Actions = {
 		}
 		return myGroups;
 	},
-	hyperFocus: function (params = {}) {
-
-		function getLinkedWindows(callback) {
-			FSBL.Clients.LinkerClient.getLinkedComponents({ channels: [linkerChannel] }, (err, data) => {
-				let windows = data.map((win) => win.windowName);
-				windowList = windowList.concat(windows);
-				callback();
-			});
-		}
-
-		function getDockedWindows(callback) {
-			function getWindows(groupName, done) {
-				FSBL.Clients.RouterClient.query("DockingService.getWindowsInGroup", { groupName }, (err, response) => {
-					windowList = windowList.concat(response.data);
-					done();
-				});
-			}
-
-			//Get the windows for every list.
-			async.forEach(dockingGroups, getWindows, callback);
-		}
-
-		function getWindowsInAppSuite(callback) {
-			FSBL.Clients.LauncherClient.getGroupsForWindow((err, data) => {
-				function getWindowsInGroup(group, done) {
-					FSBL.Clients.RouterClient.query("LauncherService.getWindowsInGroup", { groupName: group }, (err, response) => {
-						windowList = windowList.concat(response.data);
-						done();
-					});
-				}
-				if (err) return callback(err, null);
-				let groups = data;
-				if (groups) {
-					async.forEach(groups, getWindowsInGroup, callback);
-				} else {
-					callback(null, null);
-				}
-			});
-		}
-
-
-		let { linkerChannel, includeAppSuites, includeDockedGroups } = params;
-		let windowList = [],
-			tasks = [],
-			dockingGroups = [],
-			isGrouped = windowTitleBarStore.getValue({ field: "isGrouped" }),
-			movableGroups = windowTitleBarStore.getValue({ field: "Main.allMovableDockingGroups" });
-
-
-		if (linkerChannel) {
-			tasks.push(getLinkedWindows);
-		}
-
-		if (includeDockedGroups && isGrouped) {
-			dockingGroups = windowTitleBarStore.getValue({ field: "Main.dockingGroups" });
-			if (dockingGroups) {
-				dockingGroups = dockingGroups.filter(grp => grp.isMovable).map(grp => grp.groupName);
-				tasks.push(getDockedWindows);
-			}
-		}
-
-		if (includeAppSuites) {
-			tasks.push(getWindowsInAppSuite);
-		}
-
-		if (tasks.length) {
-			async.parallel(tasks, () => {
-				windowList.forEach(windowName => {
-					movableGroups.forEach((grp) => {
-						if (grp.windowNames.includes(windowName)) {
-							windowList = windowList.concat(grp.windowNames);
-						}
-					});
-				});
-				FSBL.Clients.LauncherClient.hyperFocus({ windowList });
-			});
-		}
-	},
 	onTabListScrollPositionChanged: function (err, response) {
 		windowTitleBarStore.setValue({ field: "tabListTranslateX", value: response.data.translateX });
 	},
 	setTabListScrollPosition: function (translateX) {
 		FSBL.Clients.RouterClient.transmit(constants.TAB_SCROLL_POSITION_CHANGED, { translateX });
 	},
-	hyperfocusDockingGroup: function () {
-		FSBL.Clients.RouterClient.transmit("DockingService.hyperfocusGroup", { windowName: FSBL.Clients.WindowClient.getWindowNameForDocking() });
-	},
 	/**
-	 * Handles messages coming from the windowCclient.
+	 * Handles messages coming from the windowClient.
 	 */
 	remoteStateUpdate: function (command, state) {
 		var key = Object.keys(state)[0];
@@ -466,7 +408,7 @@ var Actions = {
 	closeTab: function (windowIdentifier) {
 		//return Actions.parentWrapper.deleteWindow({ windowIdentifier }) // this will cause the window to be closed but keep the stack intact
 		FSBL.FinsembleWindow.getInstance(windowIdentifier, (err, wrap) => {
-			wrap.close();
+			wrap.close({ removeFromWorkspace: true });
 		});
 	},
 	reorderTab: function (tab, newIndex) {
@@ -547,12 +489,12 @@ var Actions = {
 		if (Actions.parentWrapper) {
 			cb();
 		} else {
-			FSBL.Clients.WindowClient.getStackedWindow(params, (err, response) => {
+			FSBL.Clients.WindowClient.getStackedWindow(params, (err, wrap) => {
 				if (err) {
 					Actions.parentWrapper = null;
 					Actions._setTabs(null)
 				} else {
-					Actions.parentWrapper = FSBL.Clients.WindowClient.finsembleWindow.getParent();
+					Actions.parentWrapper = wrap;
 					Actions.setupStore(cb);
 				}
 			})

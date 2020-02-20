@@ -2,7 +2,6 @@ const timesSeries = require("async/timesSeries");
 let ProcessMonitorStore;
 const asyncEach = require("async/each");
 //Regex code taken from https://gist.github.com/mattheyan/46a230da86a0894a5ff654b9139ec5f2
-const System = fin.desktop.System;
 const DEFAULT_SORT_DIRECTION = "ascending";
 const DEFAULT_STORE_DATA = {
 	viewMode: "simple",
@@ -37,9 +36,9 @@ var Actions = {
 	 * Gets the process list, pulls the statistics out, and renders the app. Also sets up an interval where we'll retrieve more stats from the system.
 	 */
 	getInitialData: function () {
-		System.getProcessList(Actions.extractData);
+		FSBL.System.getProcessList(Actions.extractData);
 		setInterval(() => {
-			System.getProcessList(Actions.extractData);
+			FSBL.System.getProcessList(Actions.extractData);
 		}, 1000);
 	},
 	/**
@@ -65,7 +64,7 @@ var Actions = {
 		}
 
 		ProcessMonitorStore.setValue({ field: "sort", value: newSort }, () => {
-			// When changing sort we'll re-render the UI immediately instead of waiting for the processlist to update. Without this step, it could be 999ms until the next update, which makes the process monitor feel very unresponsive and very bad.
+			// When changing sort we'll re-render the UI immediately instead of waiting for the process list to update. Without this step, it could be 999ms until the next update, which makes the process monitor feel very unresponsive and very bad.
 			procs = Actions.sortProcesses(procs);
 			ProcessMonitorStore.setValue({ field: "processList", value: procs })
 		});
@@ -100,7 +99,7 @@ var Actions = {
 				});
 				return done();
 			}
-			fin.desktop.Application.wrap(proc.uuid).getChildWindows(cws => {
+			FSBL.System.Application.wrap(proc.uuid).getChildWindows(cws => {
 				let childWindows = [];
 				cws.forEach(cw => {
 					//create a simple object so the actual childWindow class isn't stored in the distributed store.
@@ -189,46 +188,43 @@ var Actions = {
 	 * Make the window flash a couple of times so that the user can identify it.
 	 */
 	identifyWindow: function (winID) {
+		if (winID.name.includes("Service")) return;
+
 		const OPACITY_ANIMATION_DURATION = 200;
-		let win = fin.desktop.Window.wrap(winID.uuid, winID.name);
-		let windowState = "hidden";
-		function flash(n, done) {
-			win.animate({
-				opacity: {
-					opacity: 0.5,
-					duration: OPACITY_ANIMATION_DURATION
-				}
-			}, {}, () => {
-				win.animate({
-					opacity: {
-						opacity: 1,
-						duration: OPACITY_ANIMATION_DURATION
-					}
-				}, {}, () => {
-					done(null);
-				});
-			})
-		}
-		win.isShowing(isVisible => {
-			//cache the visible state of the window prior to making it flash. If it was hidden before, hide it when the flashing is done.
-			windowState = isVisible ? "visible" : "hidden";
-			win.show(() => {
-				win.bringToFront(() => {
-					//Flash 5 times, in series.
-					timesSeries(5, flash, () => {
-						if (windowState === "hidden") {
-							win.hide();
-						}
+		FSBL.FinsembleWindow.getInstance({ name: winID.name }, (err, win) => {
+			let windowState = "hidden";
+			function flash(n, done) {
+				setTimeout(() => {
+					win.hide(() => {
+						setTimeout(() => {
+							win.show(() => {
+								done(null);
+							});
+						}, OPACITY_ANIMATION_DURATION / 1.5);
 					});
+				}, OPACITY_ANIMATION_DURATION / 1.5);
+			}
+			win.isShowing((err, isVisible) => {
+				//cache the visible state of the window prior to making it flash. If it was hidden before, hide it when the flashing is done.
+				windowState = isVisible ? "visible" : "hidden";
+				win.show(() => {
+					win.bringToFront(() => {
+						//Flash 5 times, in series.
+						timesSeries(5, flash, () => {
+							if (windowState === "hidden") {
+								win.hide();
+							}
+						});
+					})
 				})
 			})
-		})
+		});
 	},
 	/**
 	 * Terminates a process. Prompts first. If it fails to terminate the process, displays an error message.
 	 */
 	terminateProcess: function (AppIdentifier, force = false, prompt = true) {
-		let app = fin.desktop.Application.wrap(AppIdentifier.uuid, AppIdentifier.name);
+		let app = FSBL.System.Application.wrap(AppIdentifier.uuid, AppIdentifier.name);
 		/**
 		 * This whole routine is a little hectic because of all of the closures - but there's a method to the madness. Here's the logic.
 		 *
@@ -292,8 +288,8 @@ var Actions = {
 		FSBL.Clients.DialogManager.open("yesNo", {
 			title: "Terminate Process?",
 			question: "Terminating the process may close other apps. Are you sure you want to continue?",
-			showCancelButton: false,
-			showNegativeButton: true
+			affirmativeResponseLabel: "Terminate",
+			showNegativeButton: false
 		}, (err, response) => {
 			if (err || response.choice === "affirmative") {
 				politeCloseProcess();
@@ -304,7 +300,7 @@ var Actions = {
 	 * This function exists to make the UI feel snappy. May take a second or so for the window to close properly and for the change to flow to system.getProcessList. To make that lag go away, we immediately render the change.
 	 */
 	removeWindowLocally: function (winID) {
-		let win = fin.desktop.Window.wrap(winID.uuid, winID.name);
+		let win = FSBL.System.Window.wrap(winID.uuid, winID.name);
 		let parentApp = win.getParentApplication();
 		let procs = ProcessMonitorStore.getValue({ field: "processList" });
 		procs = procs.map(proc => {
@@ -320,7 +316,7 @@ var Actions = {
 	 * Try to close the window. If that fails, try to force close the window. If that fails, ask if they'd like to terminate the parent process.
 	 */
 	closeWindow: function (winID, force = false) {
-		let win = fin.desktop.Window.wrap(winID.uuid, winID.name);
+		let win = FSBL.System.Window.wrap(winID.uuid, winID.name);
 		let parentApp = win.getParentApplication();
 
 		//Make the UI feel snappy.
@@ -341,8 +337,8 @@ var Actions = {
 				FSBL.Clients.DialogManager.open("yesNo", {
 					title: "Terminate Process?",
 					question: "The app that you are attempting to close is unresponsive. Would you like to terminate the process? Terminating the process may close other apps.",
-					showCancelButton: false,
-					showNegativeButton: true
+					affirmativeResponseLabel: "Terminate",
+					showNegativeButton: false
 				}, (err, response) => {
 					if (err || response.choice === "affirmative") {
 						return Actions.terminateProcess(parentApp, true)

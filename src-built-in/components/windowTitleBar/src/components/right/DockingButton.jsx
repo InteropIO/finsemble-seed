@@ -11,13 +11,12 @@ export default class DockingButton extends React.Component {
 	constructor(props) {
 		super(props);
 		this.bindEventHandlers();
-        /**
+    /**
 		 * We assign in the constructor instead of via a require at the top of the file because the store is initialized asynchronously.
 		 */
 		windowTitleBarStore = getStore();
 		this.state = {
 			showDockingTooltip: false,
-			dockingEnabled: false,
 			dockingIcon: windowTitleBarStore.getValue({ field: "Main.dockingIcon" }),
 			hoverState: "false"
 		};
@@ -53,7 +52,7 @@ export default class DockingButton extends React.Component {
 	}
 
     /**
-     * Invoked when the store emits a change event. The icon will change. If we're grouped, we show the button that denotes group memebership. If we're just snapped, we show the button that will group attached windows.
+     * Invoked when the store emits a change event. The icon will change. If we're grouped, we show the button that denotes group membership. If we're just snapped, we show the button that will group attached windows.
      *
      * @param {any} err
      * @param {any} response
@@ -78,16 +77,9 @@ export default class DockingButton extends React.Component {
      *
      * @memberof DockingButton
      */
-    onClick(e) {
-        if (this.state.dockingIcon === "ejector" && e.shiftKey) {
-            return HeaderActions.hyperFocus({
-                linkerChannel: null,
-                includeDockedGroups: true,
-                includeAppSuites: false
-            });
-        } else {
-    		HeaderActions.toggleGroup();
-        }
+
+    onClick(e) {        
+		HeaderActions.toggleGroup();
 	}
 
     /**

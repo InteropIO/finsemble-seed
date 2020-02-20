@@ -37,7 +37,7 @@ export default class ScheduledRestart extends React.Component {
     }
 
     /**
-     * Invoked when any prefernece is changed on the userPreferencesStore.
+     * Invoked when any preference is changed on the userPreferencesStore.
      * @param {obj} err
      * @param {data} data
      */
@@ -47,7 +47,7 @@ export default class ScheduledRestart extends React.Component {
         //If scheduledRestart is falsy, set "enabled" to false. I probably could've done !scheduledRestart. Oh well.
         let enabled = typeof scheduledRestart === "object";
         if (enabled) {
-            //This is purely for display. I found that military time forced a scrollbar onto the dropdown that looked bad.
+            //This is purely for display. I found that military time forced a scroll bar onto the dropdown that looked bad.
             scheduledRestart.meridiem = scheduledRestart.hour > 11 ? "PM" : "AM";
         } else {
             scheduledRestart = DEFAULT_RESTART;
@@ -61,8 +61,8 @@ export default class ScheduledRestart extends React.Component {
     toggleEnabled() {
         let { enabled, scheduledRestart } = this.state;
         enabled = !enabled;
-        //If the selectboxes are no longer enabled, reset the scheduled restart time and call a method on the Actions object.
-        //That function will set scheduledRestart to null via the preferences API. But we want our display to look nice, hence the bit where we resett it to the default value.
+        //If the select boxes are no longer enabled, reset the scheduled restart time and call a method on the Actions object.
+        //That function will set scheduledRestart to null via the preferences API. But we want our display to look nice, hence the bit where we reset it to the default value.
         if (!enabled) {
             scheduledRestart = DEFAULT_RESTART;
             this.setState({ enabled, scheduledRestart })
@@ -140,7 +140,7 @@ export default class ScheduledRestart extends React.Component {
     }
     /**
      * Add listener on the store. When the preferences field changes, we change our local state.
-     * Also, get the intiial state from the store.
+     * Also, get the initial state from the store.
      */
     componentDidMount() {
         UserPreferencesStore.addListener({ field: 'preferences' }, this.setPreferences)

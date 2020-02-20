@@ -55,11 +55,11 @@ export default class WorkspaceManagementList extends React.Component {
 			//Separate array for each workspace. This way, the activeWorkspace can be rendered without a trashcan.
 			let workspaceActions = [
 				{
-					iconClass: "ff-delete",
+					iconClass: "ff-adp-trash-outline",
 					method: self.removeWorkspace
 				},
 				{
-					iconClass: "ff-pin",
+					iconClass: "ff-favorite",
 					method: self.togglePin
 				}
 			];
@@ -67,6 +67,8 @@ export default class WorkspaceManagementList extends React.Component {
 			let isPinned = self.props.pinnedWorkspaces.includes(workspace.name);
 			const isSwitchingWorkspaces = WorkspaceManagementMenuStore.getValue("isSwitchingWorkspaces");
 			workspace.isPinned = isPinned;
+			const dragHandle = {iconClass: "ff-adp-hamburger"};
+
 			return (
 				<FinsembleDraggable
 					index={i}
@@ -75,6 +77,7 @@ export default class WorkspaceManagementList extends React.Component {
 					<Workspace
 						key={i}
 						isActiveWorkspace={isActiveWorkspace}
+						dragHandle={dragHandle}
 						workspace={workspace}
 						mainAction={WorkspaceManagementMenuActions.switchToWorkspace}
 						isSwitchingWorkspaces={isSwitchingWorkspaces}

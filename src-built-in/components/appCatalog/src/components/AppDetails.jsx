@@ -36,18 +36,18 @@ export default class AppList extends React.Component {
     }
 
     render() {
-        var self = this;
+        const { item, backClick } = this.props;
         return <div className="AppDetailsContainer">
-            <div onClick={self.props.backClick} className="ff-arrow-back"> Back</div>
+            <div onClick={backClick} className="ff-arrow-back"> Back</div>
             <div className="detailsHeader">
                 <div style={{ backgroundImage: "url(src/assets/logo-placeholder-52.png)" }} className="logo"></div>
                 <div className="titleContainer">
-                    <div className="title">{this.props.item.name}</div>
-                    <div className="vendor">{this.props.item.vendor}</div>
+                    <div className="title">{item.displayName || item.name}</div>
+                    <div className="vendor">{item.vendor}</div>
                 </div>
                 <div onClick={this.itemClick} className="button">Open</div>
             </div>
-            <div >{this.props.item.description}</div>
+            <div >{item.description}</div>
         </div>
     }
 }

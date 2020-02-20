@@ -1,15 +1,17 @@
-var inLogin = true;
+let inLogin = true;
 /************************************************
  * 			SAMPLE AUTHENTICATION
  ************************************************/
-//On ready, check to see if the user has a valid session
-FSBL.Clients.RouterClient.onReady(() => {
-    checkAuthorizationStatus();
-});
+// On ready, check to see if the user has a valid session
+if (window.FSBL && FSBL.addEventListener) {
+	FSBL.addEventListener("onReady", checkAuthorizationStatus);
+} else {
+	window.addEventListener("FSBLReady", checkAuthorizationStatus);
+}
 
-$('#authAction').click(function (e) {
-    var text = inLogin ? "Sign Up" : "Login"
-    var actionLink = inLogin ? "Login" : "Sign Up";
+$('#authAction').click( (e) => {
+    const text = inLogin ? 'Sign Up' : 'Login';
+    const actionLink = inLogin ? 'Login' : 'Sign Up';
     inLogin = !inLogin;
     $('#submitButton').html(text);
     $('#authAction').html(actionLink);
@@ -17,14 +19,17 @@ $('#authAction').click(function (e) {
 
 document.body.addEventListener('keydown', handleKeydown);
 
-//Submits credentials on enter, closes on quit.
-function handleKeydown(e) {
-    if (e.code === 'Enter' && e.shiftKey === false) {
-        processAuthInput();
-    }
-
-    if (e.code === 'Escape') {
-        quit();
+// Submits credentials on enter, closes on quit.
+function handleKeydown(event) {
+    switch (event.code) {
+        case 'Enter':
+        case 'NumpadEnter':
+            !event.shiftKey &&
+                processAuthInput();
+            break;
+        case 'Escape':
+            quit();
+            break;
     }
 }
 
@@ -119,7 +124,8 @@ function getConfig(cb) {
 
 
 function displayErrorMessage() {
-    fin.desktop.Window.getCurrent().show();
+    // Test if finsembleWindow is available here.
+    FSBL.System.Window.getCurrent().show();
     var ERROR_MESSAGE = $('.fsbl-input-error-message');
     var INPUTS = $('.fsbl-auth-input');
     const INPUT_ERROR_CLASS = 'fsbl-input-error';

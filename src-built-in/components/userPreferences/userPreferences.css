@@ -6,6 +6,7 @@ body {
     font-weight: var(--content-font-weight);
     font-family: var(--font-family);
     color: var(--content-font-color);
+    font-size: var(--content-font-size);
 }
 
 img {
@@ -67,7 +68,7 @@ img {
     flex-direction: row;
     align-self: flex-start;
     font-size: var(--content-header-font-size);
-    font-weight: bold;
+    font-weight: var(--font-weight-2);
     color: var(--content-header-font-color);
     margin-bottom: 4px;
 }
@@ -102,6 +103,7 @@ img {
     height: 100%;
     display: flex;
     flex-direction: column;
+    user-select: none;
 }
 
 .complex-menu-header {
@@ -113,6 +115,7 @@ img {
 
 .ff-close {
     cursor: pointer;
+    font-size: var(--content-button-label-font-size);
 }
 
 .ff-close:hover {
@@ -120,8 +123,12 @@ img {
 }
 
 .complex-menu-section-toggle {
-    padding: 4px 30px 4px 0px;
-    padding-left: 30px;
+    padding: 6px 30px;
+    margin-right:6px;
+    border-radius: 0px 20px 20px 0px;
+    height: 22px;
+    display:flex;
+    align-items: center;
 }
 
 .complex-menu-section-toggle:hover {
@@ -165,15 +172,21 @@ img {
     height: 210px;
     overflow-y: auto;
     margin-right: 16px;
+    padding: 5px;
+    border-radius: 3px;
 }
 
 .workspace-item {
-    user-select: none;
     height: 28px;
-    padding: 4px 10px 0 20px;
+    padding: 4px 10px 0px 10px;
     display: flex;
     align-items: center;
     border: 1px solid transparent;
+    border-radius: 20px;
+}
+
+.workspace-item:hover {
+    background-color: var(--content-nav-highlighter-hover);
 }
 
 .workspace-item > div {
@@ -185,56 +198,60 @@ img {
     justify-content: space-between;
 }
 
+.workspace-item .ff-adp-hamburger {
+    color: var(--content-list-drag-icon-color);
+    margin-top: -1px;
+}
+
 .workspace-item > div > .workspace-name {
     width: 250px;
+    height: 16px;
+    padding-left: 1px;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    line-height: 13px;
 }
 
 .individual-workspace-actions {
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: space-between;
     width: 50px;
+    color: var(--content-button-icon-color);
 }
 
 .individual-workspace-action {
     margin-left: 1px;
     cursor: pointer;
-    padding: 2px;
+    padding: 4px;
     height: 17px;
-    border: 1px solid transparent;
-    font-weight: 100 !important;
-}
-
-.individual-workspace-action > i:before {
-    padding-top: 2px;
-}
-
-.ff-delete:hover {
-    background-color: transparent;
+    transition: .2s color;
 }
 
 .individual-workspace-action:hover {
-    border: 1px solid var(--content-button-neutral-border-hover-color);
-    border-radius: 4px;
-    height: 17px;
+    color: var(--content-button-neutral-hover-color);
+}
+
+.individual-workspace-action.disabled-button {
+    border: 0;
 }
 
 .delete-workspace:hover {
-    border: 1px solid var(--content-button-negative-border-hover-color);
+    color: var(--content-close-hover-color);
 }
 
 .active-workspace {
-    font-style: italic;
+    font-weight: 700;
+    color: var(--accent-aware);
 }
 
 .focused-workspace-item {
     background-color: var(--content-list-highlighter);
 }
 
-.auto-start-workspace-item:before {
+/* .auto-start-workspace-item {
     content: "";
     width: 5px;
     height: 5px;
@@ -243,26 +260,33 @@ img {
     margin-left: -15px;
     margin-right: 10px;
     background-color: var(--content-list-item-flagged-color);
+} */
+
+.auto-start-workspace-item {
+    font-style: italic;
 }
 
 .action-button {
     border: 1px solid var(--button-neutral-border-hover-color);
-    padding: .25em 0;
+    padding: .25em 0em;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 16px 0 6px 0;
+    margin: 16px 0px 6px 0px;
+    color: var(--content-button-icon-color);
+    transition: .2s all;
 }
 
 .action-button:hover {
     cursor: pointer;
-    border: solid 1px var(--content-button-neutral-border-hover-color);
+    border: solid 1px var(--content-button-neutral-hover-color);
+    color: var(--content-button-neutral-hover-color);
 }
 
 .disabled-button, .disabled-button:hover {
-    border: 1px solid var(--content-button-disabled-border-color);
     color: var(--content-button-disabled-border-color);
-    cursor: not-allowed;
+    cursor: default;
+    border: 1px solid;
 }
 
 .workspace-action-buttons {
@@ -276,6 +300,7 @@ img {
     font-size: var(--content-button-label-font-size);
     display: flex;
     flex-direction: column;
+    border-radius: 3px;
 }
 
 .workspace-action-button-icon {
@@ -283,25 +308,25 @@ img {
 }
 
 .workspace-item > .workspace-editor {
-    padding-left: 0px;
+    padding-left: 4px;
 }
 
 .workspace-item-editing {
-    border-top: 1px solid var(--content-list-editor-border-color);
-    border-bottom: 1px solid var(--content-list-editor-border-color);
     color: var(--content-list-editor-font-color);
 }
 
 .workspace-editor {
     border: 0;
     font-family: var(--font-family);
+    font-weight: var(--font-weight);
     background-color: transparent;
-    padding-left: 20px;
     height: 100%;
     width: 100%;
+    padding-bottom: 2px;
     font-size: var(--content-font-size);
     outline-color: transparent;
     color: var(--content-list-editor-font-color);
+    line-height: 13px;
 }
 
 .workspace-editor::selection {
@@ -334,6 +359,7 @@ img {
     align-items: center;
     margin-top: 8px;
     margin-left: 12px;
+    width: 270px;
 }
 
 .complex-menu-checkbox {
@@ -367,31 +393,22 @@ img {
     padding: 7px;
     font-size: var(--content-component-list-font-size);
     width: 140px;
-    height: 104px;
+    height: 114px;
     overflow-y: auto;
-    user-select: none;
     color: var(--workspace-component-list-font-color);
-}
-
-.ff-edit {
-    align-self: flex-start;
-}
-
-
-::-webkit-scrollbar-track {
     border-radius: 3px;
 }
 
 ::-webkit-scrollbar {
     width: 5px;
-    background-color: var(--scrollbar-color);
+    background-color: transparent;
     border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb {
     cursor: pointer;
     border-radius: inherit;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: var(--scrollbar-color);
 }
 
 .scheduled-restart {
@@ -403,10 +420,32 @@ img {
 }
 
 .disabled-restart {
-    color: darkgray !important;
+    color: var(--scrollbar-color) !important;
 }
 
 select:focus, option:focus {
     outline: none;
-    background-color: transparent;
+    background-color: var(--content-font-color);
 }
+
+.change-text {
+	color: var(--content-warning-text);
+	font-size: 14px;
+    margin-top: 12px;
+	margin-left: 12px;
+	margin-right: 10px;
+	display: inline-block;
+}
+
+.blue-button {
+	width: 110px;
+	height: 24px;
+	border: 0;
+	background: none;
+	box-shadow: none;
+	background-color: var(--content-restart-button-color);
+	color: var(--content-font-color);
+    font-size: 11px;
+    font-weight: var(--content-font-weight);
+    border-radius: 3px;
+  }

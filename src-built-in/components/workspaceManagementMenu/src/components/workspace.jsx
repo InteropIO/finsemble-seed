@@ -13,7 +13,7 @@ export default class Workspace extends React.Component {
 		this.bindCorrectContext();
 	}
 	/**
-     * This is necessary to make sure that the `this` insid of the callback is correct.
+     * This is necessary to make sure that the `this` inside of the callback is correct.
      *
      * @memberof LinkerButton
      */
@@ -42,19 +42,28 @@ export default class Workspace extends React.Component {
 		let { workspace, itemActions } = this.props;
 		//Remove trashcan for activeWorkspace. Prevents it from being deleted and causing issues.
 		if (this.props.isActiveWorkspace) {
-			let index = itemActions.findIndex(el => el.iconClass.includes('ff-delete'));
-			itemActions.splice(index, 1);
+			let index = itemActions.findIndex(el => el.iconClass.includes('ff-adp-trash-outline'));
+			if (index > -1) itemActions.splice(index, 1);
 		}
 		return itemActions.map(function (action, index) {
 			let classes = "menu-item-action";
 			let iconClasses = action.iconClass;
-			if (workspace.isPinned && iconClasses.includes('pin')) {
+			if (workspace.isPinned && iconClasses.includes('favorite')) {
 				iconClasses += " finsemble-item-pinned";
 			} else {
 				classes += " remove-workspace";
 			}
+			let title="";
+			if (iconClasses.includes('favorite') && workspace.isPinned) {
+				title="Unfavorite"
+			} else {
+				title="Favorite"
+			}
+			if (iconClasses.includes('trash')) {
+				title="Delete"
+			}
 			let label = action.label || "";
-			return (<div key={index} className={classes} onClick={
+			return (<div key={index} title={title} className={classes} onClick={
 				() => {
 					action.method(workspace);
 				}
@@ -72,7 +81,7 @@ export default class Workspace extends React.Component {
 	 * @memberof Workspace
 	 */
 	render() {
-		const { isSwitchingWorkspaces, workspace, isActiveWorkspace } = this.props;
+		const { isSwitchingWorkspaces, workspace, isActiveWorkspace, dragHandle } = this.props;
 		let actionButtons = null;
 
 		//Actions are remove and pin workspace.
@@ -86,7 +95,8 @@ export default class Workspace extends React.Component {
 		return (
 			<FinsembleMenuItem>
 				{showSpinner && <div className="fsbl-loader">Loading...</div> }
-				<FinsembleMenuItemLabel label={workspace.name} className={classes} onClick={this.onClick}/>
+				{dragHandle && dragHandle.iconClass && <div className={dragHandle.iconClass}></div>}
+				<FinsembleMenuItemLabel label={workspace.name} title={workspace.name} className={classes} onClick={this.onClick}/>
 				{actionButtons && <div className="menu-item-actions">
 					{actionButtons}
 				</div>}

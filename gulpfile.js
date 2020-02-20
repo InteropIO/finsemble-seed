@@ -1,3 +1,5 @@
+const { launch, connect } = require('hadouken-js-adapter');
+
 (() => {
 	"use strict";
 
@@ -7,26 +9,124 @@
 	chalk.enabled = true;
 	//setting the level to 1 will force color output.
 	chalk.level = 1;
+	const async = require("async");
 	const { exec, spawn } = require("child_process");
 	const ON_DEATH = require("death")({ debug: false });
 	const del = require("del");
 	const fs = require("fs");
 	const gulp = require("gulp");
 	const prettyHrtime = require("pretty-hrtime");
-	const watch = require("gulp-watch");
-	const openfinLauncher = require("openfin-launcher");
 	const shell = require("shelljs");
 	const path = require("path");
 	const webpack = require("webpack");
+
+	const FEA_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-electron-adapter");
+	const FEA_PATH_EXISTS = fs.existsSync(FEA_PATH);
+	const FEA = FEA_PATH_EXISTS ? require("@chartiq/finsemble-electron-adapter/exports") : undefined;
+	const FEAPackager = FEA ? FEA.packager : undefined;
+	const MAX_NODE_VERSION = '12.13.1';
+
 	// local
 	const extensions = fs.existsSync("./gulpfile-extensions.js") ? require("./gulpfile-extensions.js") : undefined;
-	const async = require("async");
+	const isMacOrNix = process.platform !== "win32";
 	// #endregion
+
+	const killApp = (processName, callback = () => { }) => {
+		const command = isMacOrNix ? `killall -9 ${processName}` : `taskkill /F /IM ${processName.toLowerCase()}.* /T`;
+		const error = isMacOrNix ? "No matching processes belonging to you were found" : `The process "${processName.toLowerCase()}.*" not found.`;
+
+		logToTerminal(`kill: running: ${command}...`);
+
+		exec(command, err => {
+			if (err && !err.includes(error)) {
+				console.error(errorOutColor(err));
+			}
+
+			callback(err);
+		});
+	};
 
 	const logToTerminal = (msg, color = "white", bgcolor = "bgBlack") => {
 		if (!chalk[color]) color = "white";
 		if (!chalk[color][bgcolor]) bgcolor = "bgBlack";
 		console.log(`[${new Date().toLocaleTimeString()}] ${chalk[color][bgcolor](msg)}.`);
+	}
+
+	/** 
+	* Splits a string version with semantic versioning into an object with major, minor and patch versions
+	* Valid inputs are 'X.X.X' or 'vX.X.X'
+	*/
+	const createSemverObject = (version) => {
+		let tempVersionArray;
+		let semverObject;
+		if (typeof version !== 'string') {
+			console.log(`Version must be type string but is ${typeof version}`);
+			return;
+		}
+		// Split the version into a temp array.
+		if (version.startsWith('v')) {
+			tempVersionArray = version.split('v');
+			tempVersionArray = tempVersionArray[1].split('.');
+		} else {
+			tempVersionArray = version.split('.')
+		}
+		if (tempVersionArray.length === 3) {
+
+			// Convert each array element to a number and store in the object.
+			semverObject = {
+				majorVersion: Number(tempVersionArray[0]) || null,
+				minorVersion: Number(tempVersionArray[1]) || null,
+				patchVersion: Number(tempVersionArray[2]) || null,
+			}
+			// If major, minor or patch versions are missing or not a number return nothing
+			if (!semverObject.majorVersion || !semverObject.minorVersion || !semverObject.patchVersion) {
+				return;
+			}
+			return semverObject
+		}
+	}
+
+	/** 
+	* Compares two node version objects
+	* Each object is expected to contain majorVersion, minorVersion, patchVersion
+	*/
+	const compareNodeVersions = (a, b) => {
+		if (a.majorVersion !== b.majorVersion) {
+			return a.majorVersion > b.majorVersion ? 1: -1
+		}
+		if (a.minorVersion !== b.minorVersion) {
+			return a.minorVersion > b.minorVersion ? 1: -1
+		}
+		if (a.patchVersion !== b.patchVersion) {
+			return a.patchVersion > b.patchVersion ? 1: -1
+		}
+		return 0;
+	}
+
+	/** 
+	* Validates the current node version against supported node versions specified in this file
+	* Returns boolean indicating whether current node version is valid
+	* Currently only validates against a max node version which must be in the format 'X.X.X' or 'vX.X.X'
+	*
+	* Note: This method is being used instead of npm engines because of an npm bug where warnings don't print
+	* This bug was resolved in npm 6.12.0 but as that is a very new version of npm and is not linked to node 10.15.3
+	* in nvm we can't assume our users have access to this version.
+	*/
+	const isNodeVersionValid = () => {
+		// Split the current node version into an object with major, minor and patch numbers for easier comparison.
+		// If any of these values are missing, nothing will be returned
+		let currentVersionObject = createSemverObject(process.version);
+		let maxVersionObject = createSemverObject(MAX_NODE_VERSION);
+		
+		// Only allow the check both objects exist and contain major, minor and patch versions. 
+		if (!currentVersionObject || !maxVersionObject) {
+			logToTerminal("Format of node version must be: 'X.X.X', unable to validate node version", "yellow");
+			return true;
+		}
+
+		// Check if the node version is higher than the maximum allowed node version.
+		if (compareNodeVersions(currentVersionObject, maxVersionObject) == 1) return false;
+		return true;
 	}
 
 	let angularComponents;
@@ -36,7 +136,6 @@
 		logToTerminal("No Angular component configuration found", "yellow");
 		angularComponents = null;
 	}
-
 	// #region Constants
 	const startupConfig = require("./configs/other/server-environment-startup");
 
@@ -45,8 +144,6 @@
 
 	// #endregion
 
-	// #region Script variables
-	let watchClose;
 	// If you specify environment variables to child_process, it overwrites all environment variables, including
 	// PATH. So, copy based on our existing env variables.
 	const env = process.env;
@@ -97,11 +194,11 @@
 		return rc;
 	}
 
-	// Currently supported desktop agents include "openfin" and "e2o". This can be set either
-	// with the environment variable CHANNEL_ADAPTER or by command line argument `npx gulp dev --channel_adapter:electron`
-	let channelAdapter = envOrArg("channel_adapter", "openfin");
-	channelAdapter = channelAdapter.toLowerCase();
-	if (channelAdapter === "electron") channelAdapter = "e2o";
+
+	// Currently supported desktop agents include "openfin" and "electron". This can be set either
+	// with the environment variable container or by command line argument `npx gulp dev --container:electron`
+	let container = envOrArg("container", "openfin");
+	container = container.toLowerCase();
 
 	// This is a reference to the server process that is spawned. The server process is located in server/server.js
 	// and is an Express server that runs in its own node process (via spawn() command).
@@ -110,6 +207,30 @@
 	// This will get set when the container (Electron or Openfin) is launched. This is used to calculate how long it takes to start up the app.
 	let launchTimestamp = 0;
 
+	/**
+	 * Mody 10/04/2019
+	 * Reads installed Electron's version from FEA repo.
+	 * Another option is to export electron's version in
+	 * deploymentHelpers in FEA. However I'm just avoiding 2 PRs
+	 */
+	const getElectronVersion = () => {
+		// You may run `npm run dev` before running `npm i` inside
+		// finsemble-electron-adapter in that case, the electron
+		// module does not exists.
+		try {
+			const packageFile = require(
+				path.join(
+					FEA_PATH,
+					'node_modules',
+					'electron',
+					'package.json')
+			);
+			return packageFile.version;
+		} catch (error) {
+			logToTerminal(`Failed to get electron's verion from FEA: ${error.message}`, "red");
+			return 'unknown';
+		}
+	};
 	// #endregion
 
 	// #region Task Methods
@@ -269,6 +390,9 @@
 			const CONTROLS_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-react-controls");
 			const CONTROLS_VERSION = require(path.join(CONTROLS_PATH, "package.json")).version;
 
+			// Check version before require so optionalDependency can stay optional
+			const FEA_VERSION = FEA_PATH_EXISTS ? require(path.join(FEA_PATH, "package.json")).version : undefined;
+
 			function checkLink(params, cb) {
 				let { path, name, version } = params;
 				if (fs.existsSync(path)) {
@@ -307,6 +431,18 @@
 						version: CONTROLS_VERSION
 					}, cb)
 				},
+				(cb) => {
+					if (!FEA_VERSION) {
+						// electron not found so skip check
+						return cb();
+					}
+
+					checkLink({
+						path: FEA_PATH,
+						name: "finsemble-electron-adapter",
+						version: FEA_VERSION
+					}, cb)
+				}
 			], done)
 		},
 
@@ -340,96 +476,134 @@
 				taskMethods.startServer
 			], done);
 		},
-		launchOpenFin: done => {
-			ON_DEATH((signal, err) => {
-				exec("taskkill /F /IM openfin.* /T", (err, stdout, stderr) => {
-					// Only write the error to console if there is one and it is something other than process not found.
-					if (err && err !== 'The process "openfin.*" not found.') {
-						console.error(errorOutColor(err));
-					}
-
+		launchOpenFin: async (done) => {
+			// We are unable to read OpenFin version at the moment.
+			// We request it after hadouken connection.
+			logToTerminal("Using Container: OpenFin", "green");
+			ON_DEATH(() => {
+				killApp("OpenFin", () => {
 					if (watchClose) watchClose();
 					process.exit();
 				});
 			});
-			
-			openfinLauncher.launchOpenFin({
-				configPath: taskMethods.startupConfig[env.NODE_ENV].serverConfig
-			}).then(() => {
-				// OpenFin has closed so exit gulpfile
+			try {
+				const manifestUrl = taskMethods.startupConfig[env.NODE_ENV].serverConfig;
+				// Once the server is running we can launch OpenFin and retrieve the port.
+				const port = await launch({ manifestUrl });
+				// Use the port to connect and determine when OpenFin exists.
+				const fin = await connect({
+					uuid: 'server-connection',
+					// Connect to the given port.
+					address: `ws://localhost:${port}`,
+					// We want OpenFin to exit as our application exists.
+					nonPersistent: true
+				});
+				const openfinVersion = await fin.System.getVersion();
+				logToTerminal(`Openfin version: ${openfinVersion}`, "green");
 				if (watchClose) watchClose();
+				// Once OpenFin exits we shut down the server.
+				fin.once('disconnected', process.exit);
+			} catch (error) {
+				console.error(`Unable to launch and connect to OpenFin: ${error.message}`);
 				process.exit();
-			});
+			}
+
 			if (done) done();
 		},
-		launchE2O: done => {
-			let electronProcess = null;
-			let manifest = taskMethods.startupConfig[env.NODE_ENV].serverConfig;
-			process.env.ELECTRON_DEV = true;
+		launchElectron: done => {
+			logToTerminal(`Using Container: Electron@${getElectronVersion()}`, "green");
+			const cfg = taskMethods.startupConfig[env.NODE_ENV];
+			const USING_ELECTRON = container === "electron";
+			if (USING_ELECTRON && !FEA_PATH_EXISTS) {
+				throw "Cannot use electron container unless finsemble-electron-adapter optional dependency is installed. Please run npm i @chartiq/finsemble-electron-adapter";
+			}
 
-			ON_DEATH((signal, err) => {
-				if (electronProcess) electronProcess.kill();
-			
-				exec("taskkill /F /IM electron.* /T", (err, stdout, stderr) => {
-					// Only write the error to console if there is one and it is something other than process not found.
-					if (err && err !== 'The process "electron.*" not found.') {
-						console.error(errorOutColor(err));
-					}
-			
-					if (watchClose) watchClose();
-					process.exit();
+			let config = {
+				manifest: cfg.serverConfig,
+				onElectronClose: process.exit,
+				chromiumFlags: JSON.stringify(cfg.chromiumFlags),
+				path: FEA_PATH,
+			}
+
+			// set breakpointOnStart variable so FEA knows whether to pause initial code execution
+			process.env.breakpointOnStart = cfg.breakpointOnStart;
+
+			if (!FEA) {
+				console.error("Could not launch ");
+				process.exit(1);
+			}
+
+			return FEA.e2oLauncher(config, done);
+		},
+		makeInstaller: async (done) => {
+			if (!env.NODE_ENV) throw new Error("NODE_ENV must be set to generate an installer.");
+			function resolveRelativePaths(obj, properties, rootPath) {
+				properties.forEach(prop => {
+					obj[prop] = path.resolve(rootPath, obj[prop]);
 				});
-			});
+				return obj;
+			}
 
-			let e2oLocation = "node_modules/@chartiq/e2o";
-			let electronPath = path.join("..", "..", "electron", "dist", "electron.exe");
-			let command = "set ELECTRON_DEV=true && " + electronPath + " index.js --remote-debugging-port=9090 --manifest " + manifest;
-			logToTerminal(command);
-			electronProcess = exec(command,
-				{
-					cwd: e2oLocation
-				}, function (err) {
-					logToTerminal(err);
-					logToTerminal("e2o not installed? Try `npm install`", "red");
-				}
-			);
-			
-			electronProcess.stdout.on("data", function (data) {
-				console.log(data.toString());
-			});
-		
-			electronProcess.stderr.on("data", function (data) {
-				console.error("stderr:", data.toString());
-			});
-		
-			electronProcess.on("close", function (code) {
-				console.log("child process exited with code " + code);
-				process.exit();
-			});
+			// Inline require because this file is so large, it reduces the amount of scrolling the user has to do.
+			let installerConfig = require("./configs/other/installer.json");
 
-			process.on('exit', function () {
-				electronProcess.kill();
-			});	
-			if (done) done();
+			// need absolute paths for certain installer configs
+			installerConfig = resolveRelativePaths(installerConfig, ['icon'], './');
+
+			const manifestUrl = taskMethods.startupConfig[env.NODE_ENV].serverConfig;
+			let updateUrl = taskMethods.startupConfig[env.NODE_ENV].updateUrl;
+			const chromiumFlags = taskMethods.startupConfig[env.NODE_ENV].chromiumFlags;
+
+			// Installer won't work without a proper manifest. Throw a helpful error.
+			if (!manifestUrl) {
+				throw new Error(`Installer misconfigured. No property in 'serverConfig' in configs/other/server-environment-startup.json under ${env.NODE_ENV}. This is required in order to generate the proper config.`)
+			}
+
+			// If an installer is pointing to localhost, it's likely an error. Let the dev know with a helpful error.
+			if (manifestUrl.includes("localhost")) {
+				logToTerminal(`>>>> WARNING: Installer is pointing to a manifest hosted at ${manifestUrl}. Was this accidental?
+				NODE_ENV: ${env.NODE_ENV}`, "yellow");
+			}
+
+			// UpdateURL isn't required, but we let them know in case they're expecting it to work.
+			if (!updateUrl) {
+				logToTerminal(`[Info] Did not find 'updateUrl' in configs/other/server-environment-startup.json under ${env.NODE_ENV}. The application will still work, but it will not update itself with new versions of the finsemble-electron-adapter.`, "white");
+				updateUrl = null;
+			}
+
+			if (!FEAPackager) {
+				console.error("Cannot create installer because Finsemble Electron Adapter is not installed");
+				process.exit(1);
+			}
+
+			FEAPackager.setFeaPath(FEA_PATH);
+			await FEAPackager.setApplicationFolderName(installerConfig.name);
+			await FEAPackager.setManifestURL(manifestUrl);
+			await FEAPackager.setUpdateURL(updateUrl);
+			await FEAPackager.setChromiumFlags(chromiumFlags || {});
+			await FEAPackager.createFullInstaller(installerConfig);
+			done();
 		},
-
 		launchApplication: done => {
+			if (!isNodeVersionValid()) {
+				logToTerminal(`Node version: ${process.version} is not supported. Max supported version: ${MAX_NODE_VERSION}`, "red");
+			}
 			logToTerminal("Launching Finsemble", "black", "bgCyan");
 
 			launchTimestamp = Date.now();
-			if (channelAdapter === "openfin") {
+			if (container === "openfin") {
 				taskMethods.launchOpenFin(done);
 			} else {
-				taskMethods.launchE2O(done);
-			}	
+				taskMethods.launchElectron(done);
+			}
 		},
 
-		logToTerminal: () => {
-			logToTerminal.apply(this, arguments);
-		},
+		logToTerminal: (...args) => logToTerminal.apply(this, args),
+
+		envOrArg: (...args) => envOrArg.apply(this, args),
 
 		/**
-		 * Starts the server, launches the Finsemble application. Use this for a quick launch, for instance when working on e2o.
+		 * Starts the server, launches the Finsemble application. Use this for a quick launch, for instance when working on finsemble-electron-adapter.
 		 */
 		"nobuild:dev": done => {
 			async.series([
@@ -438,7 +612,7 @@
 				taskMethods.launchApplication
 			], done);
 		},
-		
+
 		/**
 		 * Method called after tasks are defined.
 		 * @param done Callback function used to signal function completion to support asynchronous execution. Can

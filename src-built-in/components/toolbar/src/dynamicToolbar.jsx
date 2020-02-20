@@ -44,7 +44,6 @@ export default class Toolbar extends React.Component {
 		super(props);
 		this.state = {
 			sections: ToolbarStore.getSectionsFromMenus(),
-			finWindow: fin.desktop.Window.getCurrent()
 		};
 		this.bindCorrectContext();
 	}
@@ -60,14 +59,12 @@ export default class Toolbar extends React.Component {
 	}
 
 	componentDidMount() {
-		//console.log("this", this)
-		this.state.finWindow.bringToFront();
+		finsembleWindow.bringToFront();
 	}
 
 	componentWillMount() {
 		var self = this;
 		ToolbarStore.setupPinnedHotKeys(function (err, data) {
-			//console.log("data---", data);
 			let pin = self.refs.pinSection.element.childNodes[data - 1];
 			//Goes and finds the toolbar button and clicks it.
 			if (pin.childNodes[0] && pin.childNodes[0].children[0]) {
@@ -114,7 +111,6 @@ export default class Toolbar extends React.Component {
 	 * @returns rendered toolbar
 	 * @memberof Toolbar
 	 */
-
 	getSections() {
 		var sections = [];
 		for (var sectionPosition in this.state.sections) {
@@ -148,8 +144,6 @@ export default class Toolbar extends React.Component {
 			// Add separators to the end for left and the begining for right sections:
 			if (sectionPosition == "right") {
 				buttons.splice(0, 0, <FinsembleToolbarSeparator key={sectionPosition} />);
-			} else if (sectionPosition == "left") {
-				//buttons.push(<FinsembleToolbarSeparator key={sectionPosition} />);
 			}
 
 			var sectionComponent = (<FinsembleToolbarSection
@@ -170,10 +164,9 @@ export default class Toolbar extends React.Component {
 	}
 
 	render() {
-		//console.log("Toolbar Render ");
 		if (!this.state.sections) return;
 		return (<FinsembleToolbar onDragStart={this.moveToolbar} onDragEnd={this.onPinDrag}>
-			<DragHandle />
+			<DragHandle/>
 			{this.getSections()}
 			<div className='resize-area' />
 		</FinsembleToolbar>);

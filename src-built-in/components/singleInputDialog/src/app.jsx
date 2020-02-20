@@ -68,7 +68,7 @@ class SingleInputDialog extends React.Component {
 		}, this.fitAndShow);
 	}
 	/**
-	 * Fits the contents of the DOM to the openfin window, then calls `showDialog`, which positions the dialog on the proper monitor and toggles the visiblity of the window.
+	 * Fits the contents of the DOM to the window, then calls `showDialog`, which positions the dialog on the proper monitor and toggles the visibility of the window.
 	 *
 	 * @memberof SingleInputDialog
 	 */

@@ -62,7 +62,7 @@ function communicateBetweenComponents() {
 /**
  * Everything needs to happen after Finsemble is ready
  */
-if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLready", FSBLReady) }
+if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
 function FSBLReady() {
 	getInitialCustomer();
 	getState();

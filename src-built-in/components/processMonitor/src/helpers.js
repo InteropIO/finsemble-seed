@@ -19,7 +19,7 @@ export function bytesToSize(bytes) {
 };
 
 /**
- * Handler for Array.reduce. It takes the array of statistics and sums each value. This ouputs a nice object that has our total CPU and memory consumption.
+ * Handler for Array.reduce. It takes the array of statistics and sums each value. This outputs a nice object that has our total CPU and memory consumption.
  * @param {*} prev
  * @param {*} curr
  */

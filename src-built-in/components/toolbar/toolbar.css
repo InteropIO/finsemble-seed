@@ -13,7 +13,7 @@ body, html {
     font-weight: var(--toolbar-font-weight);
     font-size: var(--toolbar-font-size);
     color: var(--toolbar-font-color);
-    line-height: var(--toolbar-line-height);
+    line-height: 1.3em;
     vertical-align: middle;
     -webkit-user-select: none;
     overflow: hidden;
@@ -33,13 +33,33 @@ body, html {
     width: auto;
 }
 
+.window-mgmt-left{
+    border-radius: 30px 0 0 30px;
+    padding: 0px 6px 2px 8px;
+}
+.window-mgmt-center{
+    border-radius: 0 0 0 0;
+}
+.window-mgmt-right{
+    border-radius: 0 30px 30px 0;
+    padding: 0px 8px 2px 6px;
+}
+
+.auto-arranged{
+    background-color: var(--accent-primary-1);
+}
+
 .searchSection {
     position: relative;
     max-width: 107px;
     overflow: visible;
     max-height: var(--toolbar-height);
-    width: 30px;
-    padding-top: 0px;
+    width: 14px;
+    margin-bottom: 4px;
+}
+
+.searchSection:hover{
+    background-color: var(--search-hover-background-color);
 }
 
 .left.finsemble-toolbar-section {
@@ -48,7 +68,8 @@ body, html {
 
 .searchContainer {
     display: flex;
-    margin: 0px 5px;
+    margin: 0px 2px;
+    margin-top: -1px;
 }
 
 .searchInput {
@@ -74,9 +95,10 @@ body, html {
 .searchInput.compact {
     content: "";
     padding-left: 9px;
-    width: 23px;
+    width: 31px;
     cursor: pointer;
     color: transparent; /* hide the text when in compact mode */
+    text-shadow: none;
   /*transition: width .5s,background-color 0s .5s;*/;
 }
 
@@ -111,6 +133,7 @@ body, html {
     color: var(--search-input-font-color);
     cursor: initial;
     z-index: 99;
+    text-shadow: none;
 }
 
 img {
@@ -124,12 +147,29 @@ img {
 
 .searchInput::after {
     position: absolute;
-    font-family: font-finance;
-    right: 10px;
-    content: "\2c";
+    right: 26px;
+    top: 3px;
+    font-size: 13px;
+    content: url(../../../assets/img/toolbar/search.svg);
     color: var(--toolbar-font-color); /* make sure magnifying glass is white */
 }
 
 div {
     outline-color: transparent;
+}
+
+.ff-chevron-down {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    order: 1;
+    padding-left: 6px;
+    font-size: 8px;
+    padding-top: 3px;
+    color: var(--font-color-1);
+}
+
+.overflow .ff-chevron-down {
+    padding-left: 0px;
+    padding-right: 1px;
 }

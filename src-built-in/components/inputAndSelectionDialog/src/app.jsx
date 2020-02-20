@@ -57,7 +57,7 @@ class InputAndSelectionDialog extends React.Component {
 			let windowData = templateObject.windowData[i];
 			FSBL.Clients.Logger.system.debug("getComponentTypes loop", windowData);
 			componentType = "Unknown Component";
-			if (windowData) { // current assimulation doesn't fill in windowData, so in this case use "Unknown Component" for component type
+			if (windowData) { // current assimilation doesn't fill in windowData, so in this case use "Unknown Component" for component type
 				componentType = windowData.customData.component.type;
 			} else {
 				componentType = "Unknown Component";
@@ -146,7 +146,7 @@ class InputAndSelectionDialog extends React.Component {
 		}, this.fitAndShow);
 	}
 	/**
-	 * Fits the contents of the DOM to the openfin window, then calls `showDialog`, which positions the dialog on the proper monitor and toggles the visiblity of the window.
+	 * Fits the contents of the DOM to the window, then calls `showDialog`, which positions the dialog on the proper monitor and toggles the visibility of the window.
 	 *
 	 * @memberof InputAndSelectionDialog
 	 */

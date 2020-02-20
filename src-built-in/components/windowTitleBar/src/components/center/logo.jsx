@@ -1,3 +1,9 @@
+/**
+ * This file is no longer used in Finsemble 3.x as of 3.10.
+ * It is left in place in case any external developers are directly referencing it.
+ * This avoids having a completely broken build on upgrading.
+ */
+
 import React from "react";
 export default class Logo extends React.PureComponent {
 	constructor(props) {

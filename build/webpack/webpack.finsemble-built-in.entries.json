@@ -3,6 +3,10 @@
 		"output": "components/appLauncher/appLauncher",
 		"entry": "./src-built-in/components/appLauncher/src/app.jsx"
 	},
+	"advancedAppLauncher": {
+		"output": "components/advancedAppLauncher/index",
+		"entry": "./src-built-in/components/advancedAppLauncher/src/index.jsx"
+	},
 	"authentication": {
 		"output": "components/authentication/authentication",
 		"entry": "./src-built-in/components/authentication/authentication.js"
@@ -27,9 +31,9 @@
 		"output": "components/fileMenu/fileMenu",
 		"entry": "./src-built-in/components/fileMenu/src/app.jsx"
 	},
-	"adhocComponentForm": {
-		"output": "components/adhocComponentForm/adhocComponentForm",
-		"entry": "./src-built-in/components/adhocComponentForm/app.jsx"
+	"quickComponentForm": {
+		"output": "components/quickComponentForm/quickComponentForm",
+		"entry": "./src-built-in/components/quickComponentForm/app.jsx"
 	},
 	"yesNoDialog": {
 		"output": "components/yesNoDialog/yesNoDialog",
@@ -42,10 +46,6 @@
 	"UserPreferences": {
 		"output": "components/userPreferences/userPreferences",
 		"entry": "./src-built-in/components/userPreferences/src/app.jsx"
-	},
-	"appCatalog": {
-		"output": "components/appCatalog/appCatalog",
-		"entry": "./src-built-in/components/appCatalog/src/app.jsx"
 	},
 	"floatingTitlebar": {
 		"output": "components/floatingTitlebar/floatingTitlebar",
@@ -62,6 +62,14 @@
 	"welcome": {
 		"output": "components/welcome/welcome",
 		"entry": "./src-built-in/components/welcome/welcome.js"
+	},
+	"appCatalog": {
+		"output": "components/appCatalog/appCatalog",
+		"entry": "./src-built-in/components/appCatalog/src/app.jsx"
+	},
+	"advancedAppCatalog": {
+		"output": "components/advancedAppCatalog/appCatalog",
+		"entry": "./src-built-in/components/advancedAppCatalog/src/app.jsx"
 	},
 	"nonConfiguredComponent": {
 		"output": "components/nonConfiguredComponent/nonConfiguredComponent",

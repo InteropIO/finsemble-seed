@@ -4,9 +4,11 @@
 */
 import async from "async";
 import * as menuConfig from '../config.json';
-
+import * as storeExports from "../stores/searchStore";
+import _get from 'lodash.get';
+import { PinManager } from "../modules/pinManager"
 import { Actions as SearchActions } from "./searchStore"
-
+const PinManagerInstance = new PinManager();
 var keys = {};
 var storeOwner = false;
 /**
@@ -24,23 +26,65 @@ class _ToolbarStore {
 	 */
 	createStores(done, self) {
 		FSBL.Clients.DistributedStoreClient.createStore({ store: "Finsemble-ToolbarLocal-Store" }, function (err, store) {
+			if (err) { FSBL.Clients.Logger.error(`DistributedStoreClient.createStore failed for store Finsemble-ToolbarLocal-Store, error:`, err); }
+
 			self.Store = store;
 			let monitors = {};
 			function getMonitor(monitorName, done) {
 				FSBL.Clients.LauncherClient.getMonitorInfo({ monitor: monitorName }, (err, monitorInfo) => {
+					if (err) { FSBL.Clients.Logger.error(`LauncherClient.getMonitorInfo failed for monitor ${monitorName}, error:`, err); }
 					monitors[monitorName] = monitorInfo;
 					done();
 				});
 			}
 			function createStore(err, result) {
+				if (err) { FSBL.Clients.Logger.error(`ToolbarStore.createStores Error:`, err); }
 				let values = {};
 				if (monitors.mine && monitors.primary && monitors.mine.deviceId === monitors.primary.deviceId) {
-					values = { mainToolbar: fin.desktop.Window.getCurrent().name };
+					values = { mainToolbar: finsembleWindow.name };
 					storeOwner = true;//until we put creator in by default
 				}
 
+				/**
+				 * When pins are set initially, go through and handle any that
+				 * have had display name changes. Additional, remove any
+				 * components that are no longer in components.json.
+				 *
+				 * @param {*} err
+				 * @param {*} data
+				 * @returns void
+				 */
+				async function onPinsFirstSet(err, data) {
+					const { value: pins } = data;
+
+					// This will be null if there are no pins saved yet.
+					// @early-exit
+					if (!pins) return;
+
+					const { data: components } = await FSBL.Clients.LauncherClient.getComponentList();
+
+					// First we remove any pins that are no longer registered components
+					const filteredPins = PinManagerInstance.removePinsNotInComponentList(components, Object.values(pins));
+
+					// Handle any pins whose components had their displayName changed
+					const finalPins = PinManagerInstance.handleNameChanges(components, filteredPins);
+
+					// convert the array back to an object
+					const pinObject = PinManagerInstance.convertPinArrayToObject(finalPins);
+
+					// We don't want this to fire again
+					self.GlobalStore.removeListener({ field: "pins" }, onPinsFirstSet);
+					self.GlobalStore.setValue({ field: "pins", value: pinObject })
+				}
+
 				FSBL.Clients.DistributedStoreClient.createStore({ store: "Finsemble-Toolbar-Store", global: true, values: values }, function (err, store) {
+					if (err) { FSBL.Clients.Logger.error(`DistributedStoreClient.createStore failed for store Finsemble-Toolbar-Store, error:`, err); }
+
 					self.GlobalStore = store;
+					// There should never be a race condition here because the initial pins are
+					// set inside of the toolbarSection, which is not rendered
+					// until the store is finally finshed initializing
+					self.GlobalStore.addListener({ field: "pins" }, onPinsFirstSet);
 					done();
 				});
 			}
@@ -52,58 +96,6 @@ class _ToolbarStore {
 	 */
 	isStoreOwner() {
 		return storeOwner;
-	}
-	/**
-	 * Retrieves options about self from storage, where applicable
-	 * @param {Function} cb The callback
-	 */
-	retrieveSelfFromStorage(cb) {
-
-		finsembleWindow.getOptions((err, opts) => {
-			console.info("get options", opts);
-			let hasRightProps = () => {
-				return (opts.hasOwnProperty('customData') &&
-					opts.customData.hasOwnProperty('foreign') &&
-					opts.customData.foreign.hasOwnProperty('services') &&
-					opts.customData.foreign.services.hasOwnProperty('workspaceService') && opts.customData.foreign.services.workspaceService.hasOwnProperty('global'));
-			}
-			var isGloballyDocked = hasRightProps() ? opts.customData.foreign.services.workspaceService.global : false;
-
-			finsembleWindow.getComponentState(null, (err, result) => {
-				if (err) {
-					finsembleWindow.show();
-					return cb();
-				}
-
-				let visible = (result && result.hasOwnProperty('visible')) ? result.visible : true;
-				finsembleWindow.getBounds(null, (err, bounds) => {
-					if (!err && bounds && isGloballyDocked) {
-						this.Store.setValue({
-							field: 'window-bounds',
-							value: bounds
-						});
-						finsembleWindow.setBounds(bounds, () => {
-							if (visible) {
-								finsembleWindow.show();
-							}
-						});
-					} else {
-						finsembleWindow.show();
-					}
-					cb(null, result);
-				})
-			});
-		})
-
-	}
-	/**
-	 * Sets the toolbars visibility in memory
-	 */
-	setToolbarVisibilityInMemory(cb = Function.prototype) {
-		FSBL.Clients.WindowClient.setComponentState({
-			field: 'visible',
-			value: true
-		}, cb);
 	}
 	/**
 	 * Set up our hotkeys
@@ -131,6 +123,7 @@ class _ToolbarStore {
 	 */
 	loadMenusFromConfig(done, self) {
 		FSBL.Clients.ConfigClient.getValue({ field: "finsemble.menus" }, function (err, menus) {
+			if (err) { FSBL.Clients.Logger.error(`ConfigClient.getValue failed for finsemble.menus, error:`, err); }
 			if (menus && menus.length) {
 				self.Store.setValue({
 					field: "menus",
@@ -160,33 +153,15 @@ class _ToolbarStore {
 	 */
 	addListeners(done, self) {
 		// menus change - menus come from config
-		FSBL.Clients.DistributedStoreClient.getStore({ store: "Finsemble-Configuration-Store", global: true }, function (err, configStore) {
-			if (configStore) {
-				configStore.addListener({ field: "finsemble.menus" }, function (err, data) {
-					self.Store.setValue({
-						field: "menus",
-						value: data.value
-					});
-					self.getSectionsFromMenus(data.value);
-				});
-			}
-			done();
+		FSBL.Clients.ConfigClient.addListener({ field: "finsemble.menus" }, function (err, data) {
+			if (err) { FSBL.Clients.Logger.error(`DistributedStoreClient.getStore -> configStore.addListener failed for Finsemble-Configuration-Store, error:`, err); }
+			self.Store.setValue({
+				field: "menus",
+				value: data.value
+			});
+			self.getSectionsFromMenus(data.value);
 		});
-
-		let onBoundsSet = (bounds) => {
-			bounds = bounds.data ? bounds.data : bounds;
-			self.Store.setValue({ field: "window-bounds", value: bounds });
-			FSBL.Clients.WindowClient.setComponentState({
-				field: 'window-bounds',
-				value: bounds
-			}, Function.prototype);
-		}
-		let restoreWindow = (e) => {
-			finsembleWindow.restore();
-		}
-		//Immediately restore on maximize.
-		finsembleWindow.addListener("maximized", restoreWindow);
-		finsembleWindow.addListener("bounds-change-end", onBoundsSet)
+		done();
 
 		FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", "t"], () => {
 			self.showToolbarAtFront();
@@ -195,16 +170,39 @@ class _ToolbarStore {
 		FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "alt", "h"], () => {
 			self.hideToolbar();
 		});
+
+		FSBL.System.Window.getCurrent().addEventListener("close-requested", () => this.closeRequestedHandler());
+	}
+
+	/**
+	 * handles a close request by showing the user a dialog prompting for shutdown.
+	 * affirmative will shutdown finsemble, negative will do nothing.
+	 */
+	async closeRequestedHandler() {
+		const args = await this.confirmCloseToolbar();
+		// proceed even if there is an error in case the user selected to shut down. Shut down despite error.
+		// do nothing if there was an error or they chose cancel.
+		if (args.err) {
+			Logger.system.log(`Error received on confirm close: ${args.err}. Continuing.`);
+		}
+		const choice = _get(args, 'result.choice');
+		if (choice === 'affirmative') {
+			FSBL.System.Window.getCurrent().close(true);
+			FSBL.shutdownApplication();
+		}
 	}
 
 	/**
 	 * Function to bring toolbar to front (since dockable toolbar can be hidden)
+	 * The search input box will be open and any previous results will be displayed
 	 * @param {boolean} focus If true, will also focus the toolbar
 	 * @memberof _ToolbarStore
 	 */
 	bringToolbarToFront(focus) {
 		var self = this;
-		finsembleWindow.bringToFront(null, () => {
+		finsembleWindow.bringToFront(null, (err) => {
+			if (err) { FSBL.Clients.Logger.error(`finsembleWindow.bringToFront failed, error:`, err); }
+
 			if (focus) {
 				finsembleWindow.focus();
 				self.Store.setValue({ field: "searchActive", value: false });
@@ -235,17 +233,29 @@ class _ToolbarStore {
 	 * @memberof _ToolbarStore
 	 */
 	onBlur(cb = Function.prototype) {
-		finsembleWindow.setComponentState({
-			field: 'blurred',
-			value: true
-		}, cb);
+		FSBL.Clients.StorageClient.save({ topic: finsembleWindow.name, key: 'blurred', value: true }, cb);
 	}
 
 	onFocus(cb = Function.prototype) {
-		finsembleWindow.setComponentState({
-			field: 'blurred',
-			value: false
-		}, cb);
+		FSBL.Clients.StorageClient.save({ topic: finsembleWindow.name, key: 'blurred', value: false }, cb);
+	}
+
+	/**
+	 * prompts the user to confirm they want to shutdown finsemble
+	 * @return Promise
+	 * @resolve { err, result }
+	 */
+	confirmCloseToolbar = () => {
+		const dialogParams = {
+			title: "Confirm Shutdown",
+			question: "Do you wish to shut down finsemble?",
+			affirmativeResponseLabel: "Shut down",
+			negativeResponseLabel: "Cancel",
+			showCancelButton: false,
+		};
+		return new Promise(resolve => {
+			FSBL.Clients.DialogManager.open("yesNo", dialogParams, (err, result) => resolve({ err, result }));
+		});
 	}
 
 	/**
@@ -258,14 +268,17 @@ class _ToolbarStore {
 		var self = this;
 		if (storeOwner) {
 			let keys = FSBL.Clients.HotkeyClient.keyMap;
-			FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.alt, keys.up], () => {
+			FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.alt, keys.up], (err) => {
+				if (err) { FSBL.Clients.Logger.error(`HotkeyClient.addGlobalHotkey failed, error:`, err); }
 				FSBL.Clients.LauncherClient.bringWindowsToFront()
 			});
-			FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.alt, keys.down], () => {
+			FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.alt, keys.down], (err) => {
+				if (err) { FSBL.Clients.Logger.error(`HotkeyClient.addGlobalHotkey failed, error:`, err); }
 				FSBL.Clients.WorkspaceClient.minimizeAll()
 			});
-			FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.alt, keys.f], () => {
-				self.Store.setValue({ field: "searchActive", value: true });
+			FSBL.Clients.HotkeyClient.addGlobalHotkey([keys.ctrl, keys.alt, keys.f], (err) => {
+				if (err) { FSBL.Clients.Logger.error(`HotkeyClient.addGlobalHotkey failed, error:`, err); }
+				this.bringToolbarToFront(true);
 			});
 		}
 		return cb();
@@ -288,22 +301,30 @@ class _ToolbarStore {
 					self.createStores(done, self);
 				},
 				function (done) {
+					// first ack the previous checkpoint step as done
+					FSBL.SystemManagerClient.publishCheckpointState("Toolbar", "createStores", "completed");
 					self.loadMenusFromConfig(done, self);
 				},
+				FSBL.Clients.ConfigClient.onReady,
 				function (done) {
+					// first ack the previous checkpoint step as done
+					FSBL.SystemManagerClient.publishCheckpointState("Toolbar", "loadMenusFromConfig", "completed");
 					self.addListeners(done, self);
 				},
 				function (done) {
+					// first ack the previous checkpoint step as done
+					FSBL.SystemManagerClient.publishCheckpointState("Toolbar", "addListeners", "completed");
 					self.setupHotkeys(done);
 				},
 				function (done) {
+					// first ack the previous checkpoint step as done
+					FSBL.SystemManagerClient.publishCheckpointState("Toolbar", "setupHotkeys", "completed");
 					self.listenForWorkspaceUpdates();
 					done();
 				},
 				function (done) {
-					self.retrieveSelfFromStorage(done);
-				},
-				function (done) {
+					// first ack the previous checkpoint step as done
+					FSBL.SystemManagerClient.publishCheckpointState("Toolbar", "listenForWorkspaceUpdates", "completed");
 					finsembleWindow.addEventListener('focused', function () {
 						self.onFocus();
 					});
@@ -313,7 +334,9 @@ class _ToolbarStore {
 					done();
 				},
 				function (done) {
-					self.setToolbarVisibilityInMemory(done);
+					// first ack the previous checkpoint step as done
+					FSBL.SystemManagerClient.publishCheckpointState("Toolbar", "addMoreListeners", "completed");
+					done();
 				}
 			],
 			cb
@@ -347,22 +370,13 @@ class _ToolbarStore {
 		this.Store.setValue({ field: "sections", value: sections });
 		return sections;
 	}
-
-	/**
-	 * Shortcut to get values from the local store.
-	 *
-	 * @param {any} field
-	 * @returns
-	 * @memberof _ToolbarStore
-	 */
-	get(field) {
-		return this.Store.getValue({ field: field });
-	}
 	/**
 	 * Provides data to the workspace menu opening button.
 	 */
 	listenForWorkspaceUpdates() {
 		FSBL.Clients.RouterClient.subscribe("Finsemble.WorkspaceService.update", (err, response) => {
+			if (err) { FSBL.Clients.Logger.error(`RouterClient.subscribe failed for Finsemble.WorkspaceService.update, error:`, err); }
+
 			this.setWorkspaceMenuWindowName(response.data.activeWorkspace.name);
 			this.Store.setValue({ field: "activeWorkspaceName", value: response.data.activeWorkspace.name });
 			if (response.data.reason && response.data.reason === "workspace:load:finished") {

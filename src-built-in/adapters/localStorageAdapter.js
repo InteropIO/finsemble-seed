@@ -8,31 +8,38 @@
 /**
  * We have a baseStorage model that provides some methods, such as `getCombinedKey`, which will return a nice key to save our value under. Example: `Finsemble:defaultUser:finsemble:activeWorkspace`. That key would hold the value of our activeWorkspace.
  */
-var BaseStorage = require("@chartiq/finsemble").models.baseStorage;
-var Logger = require("@chartiq/finsemble").Clients.Logger;
-//Because calls to this storage adapter will likely come from many different windows, we will log successes and failures in the central logger.
+const BaseStorage = require("@chartiq/finsemble").models.baseStorage;
+const Logger = require("@chartiq/finsemble").Clients.Logger;
+// Because calls to this storage adapter will likely come from many different windows, we will log successes and failures in the central logger.
 Logger.start();
 
-var LocalStorageAdapter = function (uuid) {
+const LocalStorageAdapter = function (uuid) {
 	BaseStorage.call(this, arguments);
+
+	Logger.system.log("LocalStorageAdapter init");
+	console.log("LocalStorageAdapter init");
+
 	/**
 	 * Save method.
 	 * @param {object} params
 	 * @param {string} params.topic A topic under which the data should be stored.
 	 * @param {string} params.key The key whose value is being set.
 	 * @param {any} params.value The value being saved.
-	 * @param {function} cb callback to be invoked upon save completion
+	 * @param {function} cb Callback to be invoked upon save completion.
 	 */
 	this.save = function (params, cb) {
-		Logger.system.debug("savingggg", params);
-		var combinedKey = this.getCombinedKey(this, params);
+		Logger.system.debug("LocalStorageAdapter.save, params: ", params);
+		console.debug("LocalStorageAdapter.save, params: ", params);
+
+		let combinedKey = this.getCombinedKey(this, params);
 		try {
+			Logger.system.debug("LocalStorageAdapter.save for key=" + combinedKey + " with data=" + params.value);
 			localStorage.setItem(combinedKey, JSON.stringify(params.value));
+			cb(null, { status: "success" });
 		} catch (err) {
-			Logger.system.error("Storage.saving Error", err, "key=" + combinedKey, "value=", params.value);
+			Logger.system.error("LocalStorageAdapter.save Error", err, "key=" + combinedKey, "value=", params.value);
+			cb(err, { status: "failed" });
 		}
-		Logger.system.debug("Storage.save for key=" + combinedKey + " with data=" + params.value);
-		return cb(null, { status: "success" });
 	};
 
 	/**
@@ -40,22 +47,27 @@ var LocalStorageAdapter = function (uuid) {
 	 * @param {object} params
 	 * @param {string} params.topic A topic under which the data should be stored.
 	 * @param {string} params.key The key whose value is being set.
-	 * @param {function} cb callback to be invoked upon completion
+	 * @param {function} cb Callback to be invoked upon completion.
 	 */
 	this.get = function (params, cb) {
-		var combinedKey = this.getCombinedKey(this, params);
+		let combinedKey = this.getCombinedKey(this, params);
+		Logger.system.debug("LocalStorageAdapter.get, params: ", params);
+		console.debug("LocalStorageAdapter.get, params: ", params);
 		try {
-			var data = JSON.parse(localStorage.getItem(combinedKey));
+			let data = JSON.parse(localStorage.getItem(combinedKey));
+			Logger.system.debug("LocalStorageAdapter.get for key=" + combinedKey + " data=", data);
+			console.debug("LocalStorageAdapter.get for key=" + combinedKey + " data=", data);
+			cb(null, data);
 		} catch (err) {
-			Logger.system.error("Storage.getItem Error", err, "key=" + combinedKey);
+			Logger.system.error("LocalStorageAdapter.get key=" + combinedKey + ", Error", err);
+			console.error("LocalStorageAdapter.get key=" + combinedKey + ", Error", err);
+			cb(err, { status: "failed" });
 		}
-		Logger.system.debug("Storage.getItem for key=" + combinedKey + " with data=" + data);
-		return cb(null, data);
 	};
 
-	// return prefix used to filter keys
+	// Return prefix used to filter keys.
 	this.getKeyPreface = function (self, params) {
-		var preface = self.baseName + ":" + self.userName + ":" + params.topic + ":";
+		let preface = self.baseName + ":" + self.userName + ":" + params.topic + ":";
 		if ("keyPrefix" in params) {
 			preface = preface + params.keyPrefix;
 		}
@@ -63,30 +75,59 @@ var LocalStorageAdapter = function (uuid) {
 	};
 
 	/**
-	 * Returns all keys stored in localstorage.
-	 * @param {*} params
-	 * @param {*} cb
+	 * Returns all keys stored in localstorage of a given topic and keyPrefix.
+	 *
+	 * LocalStorage is synchronous, so the callback is optional (the function
+	 * immediately returns the results if the callback is omitted).
+	 *
+	 * @param {*} params An object that must include the topic and keyPrefix of the desired keys.
+	 * @param {*} cb An optional callback that will be passed any errors that occurred and the found keys.
 	 */
 	this.keys = function (params, cb) {
-		const keys = [];
-		const keyPreface = this.getKeyPreface(this, params);
-
-		// regex to find all keys for this topic
-		const keysRegExp = new RegExp(keyPreface + ".*");
-
-		for (let i = 0, len = localStorage.length; i < len; ++i) {
-			const oneKey = localStorage.key(i);
-			
-			// if key is for this topic then save it
-			if (keysRegExp.test(oneKey)) {
-				// Remove keyPreface from the keys returned. Finsemble storage adapter methods add the preface back in.
-				const fsblKey = oneKey.replace(keyPreface, "");
-				keys.push(fsblKey);
+			/**
+			 * Daniel H. 1/3/2019 - Validate.args is still broken, so I'm doing it ad-hoc here.
+			 * @TODO Replace ad-hoc validation with Validate.args. */
+		let errMessage;
+		if (!params) {
+			errMessage = "You must pass params to localStorageAdapter.keys";
+		} else {
+			const missingArgs = params && ["topic", "keyPrefix"].filter(k => !params[k]);
+			if (missingArgs.length) {
+				errMessage = `Missing parameters to localStorageAdapter.keys: ${missingArgs.join(", ")}`;
 			}
 		}
 
-		Logger.system.debug(`Storage.keys for keyPreface=${keyPreface} with keys=`, keys);
-		return cb(null, keys);
+		if (errMessage) {
+			if (cb) {
+				cb(errMessage)
+			} else {
+				throw new Error(errMessage);
+			}
+		}
+
+		const keys = [];
+		const keyPreface = this.getKeyPreface(this, params);
+		try {
+
+			for (let i = 0, len = localStorage.length; i < len; ++i) {
+				const oneKey = localStorage.key(i);
+
+				// If key is for this topic then save it
+				if (oneKey.startsWith(keyPreface)) {
+					// Remove keyPreface from the keys returned. Finsemble storage adapter methods add the preface back in.
+					const fsblKey = oneKey.replace(keyPreface, "");
+					keys.push(fsblKey);
+				}
+			}
+
+			Logger.system.debug(`LocalStorageAdapter.keys for keyPreface=${keyPreface} keys=`, keys);
+			console.debug(`LocalStorageAdapter.get keys keyPreface=${keyPreface} keys=`, keys);
+			cb(null, keys);
+		} catch (err) {
+			Logger.system.error("Failed to retrieve LocalStorageAdapter.keys keyPreface=" + keyPreface + ", Error", err);
+			console.error("Failed to retrieve LocalStorageAdapter.keys keyPreface=" + keyPreface + ", Error", err);
+			cb(err, { status: "failed" });
+		}
 	};
 
 	/**
@@ -94,35 +135,59 @@ var LocalStorageAdapter = function (uuid) {
 	 * @param {object} params
 	 * @param {string} params.topic A topic under which the data should be stored.
 	 * @param {string} params.key The key whose value is being deleted.
-	 * @param {function} cb callback to be invoked upon completion
+	 * @param {function} cb Callback to be invoked upon completion.
 	 */
 	this.delete = function (params, cb) {
-		var combinedKey = this.getCombinedKey(this, params);
-		localStorage.removeItem(combinedKey);
-		Logger.system.debug("Storage.delete for key=" + combinedKey);
-		return cb(null, { status: "success" });
+		let combinedKey = this.getCombinedKey(this, params);
+
+		Logger.system.debug("LocalStorageAdapter.delete for key=" + combinedKey);
+		console.debug("LocalStorageAdapter.delete for key=" + combinedKey);
+
+		try {
+			localStorage.removeItem(combinedKey);
+			Logger.system.debug("LocalStorageAdapter.delete key=" + combinedKey + ", Success");
+			console.debug("LocalStorageAdapter.delete key=" + combinedKey + ", Success");
+			cb(null, { status: "success" });
+		} catch (err) {
+			Logger.system.error("LocalStorageAdapter.delete key=" + combinedKey + ", Error", err);
+			console.error(".delete key=" + combinedKey + ", Error", err);
+			cb(err, { status: "failed" });
+		}
 	};
 
 	/**
 	 * This method should be used very, very judiciously. It's essentially a method designed to wipe the database for a particular user.
 	 */
 	this.clearCache = function (params, cb) {
-	//console.log("clear local cache");
-		var arr = []; // Array to hold the keys
-		// Iterate over localStorage and insert data related to the user into an array.
-		for (var i = 0; i < localStorage.length; i++) {
-		//console.log("localStorage.key(i):::", localStorage.key(i).substring(0, (this.baseName + ":" + this.userName).length));
-			if (localStorage.key(i).substring(0, (this.baseName + ":" + this.userName).length) === this.baseName + ":" + this.userName) {
-				arr.push(localStorage.key(i));
-			}
-		}
+		//console.log("clear local cache");
+		Logger.system.debug("LocalStorageAdapter.clearCache for userPreface=" + userPreface);
+		console.debug("LocalStorageAdapter.clearCache for userPreface=" + userPreface);
 
-		// Iterate over arr and remove the items by key
-		for (var i = 0; i < arr.length; i++) {
-		//console.log("remove Iem", arr[i]);
-			localStorage.removeItem(arr[i]);
+		try {
+			let arr = []; // Array to hold the keys
+			// Iterate over localStorage and insert data related to the user into an array.
+			for (let i = 0; i < localStorage.length; i++) {
+				//console.log("localStorage.key(i):::", localStorage.key(i).substring(0, (this.baseName + ":" + this.userName).length));
+				if (localStorage.key(i).substring(0, (this.baseName + ":" + this.userName).length) === this.baseName + ":" + this.userName) {
+					arr.push(localStorage.key(i));
+				}
+			}
+
+			// Iterate over arr and remove the items by key
+			for (let i = 0; i < arr.length; i++) {
+				//console.log("remove Iem", arr[i]);
+				localStorage.removeItem(arr[i]);
+			}
+			Logger.system.log("LocalStorageAdapter.clearCache Success: userPreface=" + userPreface);
+			console.log("LocalStorageAdapter.clearCache Success: userPreface=" + userPreface);
+
+			cb(null, { status: "success" });
+		} catch (err) {
+			Logger.system.error("LocalStorageAdapter.clearCache failed Error", err, "userPreface=" + userPreface);
+			console.error("LocalStorageAdapter.clearCache failed Error", err, "userPreface=" + userPreface);
+
+			cb(err, { status: "failed" });
 		}
-		return cb();
 	};
 
 	/**
@@ -130,15 +195,24 @@ var LocalStorageAdapter = function (uuid) {
 	 * @param {function} cb
 	 */
 	this.empty = function (cb) {
-		localStorage.clear();
-		Logger.system.debug("Storage.empty");
-		return cb(null, { status: "success" });
-	};
+		Logger.system.log("LocalStorageAdapter.empty");
+		console.log("LocalStorageAdapter.empty");
 
+		try {
+			localStorage.clear();
+			Logger.system.log("LocalStorageAdapter.empty Success");
+			console.log("LocalStorageAdapter.empty Success");
+
+			cb(null, { status: "success" });
+		} catch (err) {
+			Logger.system.error("LocalStorageAdapter.empty failed Error", err);
+			console.error("LocalStorageAdapter.empty failed Error", err);
+			cb(err, { status: "failed" });
+		}
+	};
 };
 
 
 LocalStorageAdapter.prototype = new BaseStorage();
 new LocalStorageAdapter("LocalStorageAdapter");
-
-module.exports = LocalStorageAdapter;//Allows us to get access to the unintialized object
+module.exports = LocalStorageAdapter;//Allows us to get access to the uninitialized object

@@ -37,11 +37,11 @@ export default class componentItem extends React.Component {
 		event.dataTransfer.setDragImage(this.dragImage, 0, 0);
 		event.dataTransfer.setData('text/plain', JSON.stringify({ waitForIdentifier: true, guid: guid }));
 
-	//console.log("starting drag. called starttiling");
+	//console.log("starting drag. called start tiling");
 		FSBL.Clients.WindowClient.startTilingOrTabbing({ waitForIdentifier: true, componentType: component.component.type });
 
 		this.props.itemAction(component, { options: { autoShow: false } }, (identifier) => {
-		//console.log("starting drag. called sendidentifier");
+		//console.log("starting drag. called send identifier");
 			FSBL.Clients.WindowClient.sendIdentifierForTilingOrTabbing({ windowIdentifier: identifier });
 			FSBL.Clients.RouterClient.publish('Finsemble.' + guid, identifier);
 			this.guidIdentifierMap[guid] = identifier;
@@ -51,7 +51,7 @@ export default class componentItem extends React.Component {
 
 	stopDrag(event) {
 		this.dragging = false;
-	//console.log("stopping drag. called stoptiling.");
+	//console.log("stopping drag. called stop tiling.");
 	//console.log(this.guidBeingDragged, this.guidIdentifierMap[this.guidBeingDragged]);
 		delete this.guidIdentifierMap[this.guidBeingDragged];
 		delete this.guidBeingDragged;
@@ -85,6 +85,7 @@ export default class componentItem extends React.Component {
 
 		return (<FinsembleMenuItem
 			label={this.props.name}
+			title={this.props.name}
 			onLabelClick={function () {
 				itemAction(component, {});
 			}}
@@ -102,7 +103,7 @@ export default class componentItem extends React.Component {
 				}
 			}
 			isPinnable={true}
-			pinIcon={'ff-pin'}
+			pinIcon={'ff-favorite'}
 			activePinModifier={'finsemble-item-pinned'}
 			isPinned={this.props.isPinned}
 			pinAction={function () {

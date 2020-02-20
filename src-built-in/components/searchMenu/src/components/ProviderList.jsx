@@ -40,6 +40,6 @@ export default class ProviderList extends React.Component {
 				</div> : null)}
 			</div>
 			{this.props.children}
-		</div >
+		</div>
 	}
 }

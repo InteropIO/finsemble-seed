@@ -13,7 +13,7 @@ module.exports = class WebpackDefaults {
 				new EnvironmentPlugin(['NODE_ENV']),
 				new ProgressPlugin({ profile: false })
 			]
-	
+
 		try {
 			const VENDOR_MANIFEST = require('./vendor-manifest.json');
 			plugins.push(new DllReferencePlugin({
@@ -24,7 +24,7 @@ module.exports = class WebpackDefaults {
 			console.error(`[WEBPACK ERROR:] You have not generated a vendor-manifest for your webpack configuration. This is an important optimization that reduces build times by 30-40%. Please run "npm run build:vendor-manifest", and then run "npm run dev" once more. You are required to build the vendor manifest when you delete your dist folder, when your node modules update, or when you update the Finsemble Seed project.`);
 			process.exit(1);
 		}
-	
+
 		if (env === "production") {
 			// When building the production environment, minify the code.
 			plugins.push(new UglifyJsPlugin());
@@ -60,24 +60,31 @@ module.exports = class WebpackDefaults {
 						loader: 'url-loader'
 					},
 					{
-						test: /\.svg$/,
-						loader: 'url-loader?limit=65000&mimetype=image/svg+xml&name=public/fonts/[name].[ext]'
+						test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+						issuer: {
+							test: /\.jsx?$/
+						},
+						use: ['@svgr/webpack']
+					},
+					{
+						test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+						loader: 'url-loader?limit=65000&mimetype=image/svg+xml&name=/public/fonts/[name].[ext]'
 					},
 					{
 						test: /\.woff$/,
-						loader: 'url-loader?limit=65000&mimetype=application/font-woff&name=public/fonts/[name].[ext]'
+						loader: 'url-loader?limit=65000&mimetype=application/font-woff&name=/public/fonts/[name].[ext]'
 					},
 					{
 						test: /\.woff2$/,
-						loader: 'url-loader?limit=65000&mimetype=application/font-woff2&name=public/fonts/[name].[ext]'
+						loader: 'url-loader?limit=65000&mimetype=application/font-woff2&name=/public/fonts/[name].[ext]'
 					},
 					{
 						test: /\.[ot]tf$/,
-						loader: 'url-loader?limit=65000&mimetype=application/octet-stream&name=public/fonts/[name].[ext]'
+						loader: 'url-loader?limit=65000&mimetype=application/octet-stream&name=/public/fonts/[name].[ext]'
 					},
 					{
 						test: /\.eot$/,
-						loader: 'url-loader?limit=65000&mimetype=application/vnd.ms-fontobject&name=public/fonts/[name].[ext]'
+						loader: 'url-loader?limit=65000&mimetype=application/vnd.ms-fontobject&name=/public/fonts/[name].[ext]'
 					},
 					{
 						test: /semver\.browser\.js/,
@@ -91,6 +98,11 @@ module.exports = class WebpackDefaults {
 							cacheDirectory: './.babel_cache/',
 							presets: ['react', 'stage-1']
 						}
+					},
+					{
+						test: /\.tsx?$/,
+						loader: 'ts-loader',
+						exclude: /node_modules/
 					}
 				]
 			},
@@ -101,7 +113,7 @@ module.exports = class WebpackDefaults {
 				path: path.resolve(__dirname, '../../dist/')
 			},
 			resolve: {
-				extensions: ['.js', '.jsx', '.json', 'scss', 'html'],
+				extensions: ['.tsx', '.ts', '.js', '.jsx', '.json', 'scss', 'html'],
 				modules: [
 					'./node_modules'
 				],

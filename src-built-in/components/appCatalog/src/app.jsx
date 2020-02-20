@@ -37,7 +37,7 @@ class AppCatalog extends React.Component {
 				});
 			}
 		})
-		this.setState({ activeSection: this.props && this.props.activeSection ? this.props.activeSection : '' })//Props did not exist in the contructor
+		this.setState({ activeSection: this.props && this.props.activeSection ? this.props.activeSection : '' })//Props did not exist in the constructor
 	}
 	render() {
 		var self = this;

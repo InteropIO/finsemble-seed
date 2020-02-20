@@ -18,7 +18,7 @@ let defaultData = {
 	newWorkspaceDialogIsActive: false,
 	/**
 	 * State around whether the workspace is currently in the process of switching.
-	 * 
+	 *
 	 * For simplicity, we're storing this in the local store for now, but this precludes
 	 * other components from signaling that the workspace is changing. A consequence,
 	 * for example, is that if you switch workspaces uses a pin on the toolbar instead
@@ -34,7 +34,7 @@ function uuidv4() {
 		return v.toString(16);
 	});
 }
-let finWindow = fin.desktop.Window.getCurrent();
+
 Actions = {
 	autoSave: (callback) => {
 		let activeName = FSBL.Clients.WorkspaceClient.activeWorkspace.name;
@@ -74,7 +74,7 @@ Actions = {
 			}
 		});
 		WorkspaceManagementGlobalStore.getValue({ field: "owner" }, (err, data) => {
-			if (data !== fin.desktop.Window.getCurrent().name) return;
+			if (data !== finsembleWindow.name) return;
 			WorkspaceManagementGlobalStore.Dispatcher.register(function (action) {
 				switch (action.actionType) {
 					case "switchToWorkspace":
@@ -215,7 +215,8 @@ Actions = {
 		let dialogParams = {
 			title: "Delete this workspace?",
 			question: "Are you sure you want to delete the workspace \"" + workspaceName + "\"?",
-			showCancelButton: false,
+			showNegativeButton: false,
+			affirmativeResponseLabel: "Delete",
 			hideModalOnClose: data.hideModalOnClose
 		};
 
@@ -375,7 +376,7 @@ Actions = {
 			let firstMethod = Actions.autoSave,
 				secondMethod = null;
 			if (PROMPT_ON_SAVE === true) {
-				//We want to ask the user to save. But if they're trying to reload the workspace, the mssage needs to be different. The first if block just switches that method.
+				//We want to ask the user to save. But if they're trying to reload the workspace, the message needs to be different. The first if block just switches that method.
 				firstMethod = Actions.askIfUserWantsToSave;
 				if (name === FSBL.Clients.WorkspaceClient.activeWorkspace.name) {
 					firstMethod = askAboutReload;
@@ -500,7 +501,9 @@ Actions = {
 			Logger.system.log("NewWorkspace.spawnDialog start.");
 			let dialogParams = {
 				title: "Save your workspace?",
-				question: `Your workspace "${activeWorkspace.name}" has unsaved changes. Would you like to save?`
+				question: `Your workspace "${activeWorkspace.name}" has unsaved changes. Would you like to save?`,
+				affirmativeResponseLabel: "Save",
+				negativeResponseLabel: "Don't Save"
 			};
 			function onUserInput(err, response) {
 				Logger.system.log("Spawn Dialog callback.");
@@ -543,12 +546,13 @@ Actions = {
 		//@todo, look in to using async.retry - we could throw an error and start the whole process over again.
 		if (response.choice !== "cancel" && (!response.value || response.value === "")) {
 			let dialogParams = {
-				question: "Invalid workspace name. Please try again.",
+				title: "Invalid Workspace Name",
+				question: "Workspace names must contain letters or numbers. Please try again.",
 				affirmativeResponseLabel: "OK",
 				showNegativeButton: false,
 				showCancelButton: false
 			};
-			Actions.spawnDialog("yesNo", dialogParams);
+			Actions.spawnDialog("yesNo", dialogParams, Function.prototype);
 			return callback(new Error("Invalid workspace name."));
 		} else if (response.choice === 'cancel') {
 			return callback(new Error(SAVE_DIALOG_CANCEL_ERROR));
@@ -560,8 +564,8 @@ Actions = {
 		let dialogParams = {
 			title: "Overwrite Workspace?",
 			question: "This will overwrite the saved data for  \"" + workspaceName + "\". Would you like to proceed?",
-			affirmativeResponseLabel: "Yes, overwrite",
-			showCancelButton: false
+			affirmativeResponseLabel: "Overwrite",
+			showNegativeButton: false
 		};
 		function onUserInput(err, response) {
 			if (response.choice === "affirmative") {
@@ -580,8 +584,8 @@ Actions = {
 		let { workspaceExists, workspaceName, template } = params;
 
 		let dialogParams = {
-			title: "Overwrite Workspace?",
-			question: "The workspace \"" + workspaceName + "\" already exists. A new workspace will be created.",
+			title: "New Workspace",
+			question: "The workspace \"" + workspaceName + "\" already exists. A new workspace with a modified name will be created.",
 			affirmativeResponseLabel: "OK",
 			showNegativeButton: false
 		};
@@ -637,7 +641,7 @@ Actions = {
 	 */
 	togglePin: function (workspace) {
 
-		let workspaceName = workspace.name.replace(/[.]/g, "^DOT^"); //No dots allowed in store fieldnames
+		let workspaceName = workspace.name.replace(/[.]/g, "^DOT^"); //No dots allowed in store field names
 		//toggles the pinned state of the component. This change will be broadcast to all toolbars so that the state changes in each component.
 		let pins = Actions.getPins();
 		let thePin = {
@@ -656,10 +660,10 @@ Actions = {
 		}
 	},
 	/**
-	 * Unfocuses from the menu.
+	 * Un-focuses from the menu.
 	 */
 	blurWindow: function () {
-		finWindow.blur();
+		finsembleWindow.blur();
 	},
 	/**
 	 * Hides the window.
@@ -680,7 +684,7 @@ function createGlobalStore(done) {
 	StoreClient.createStore({
 		store: "Finsemble-WorkspaceMenu-Global-Store",
 		global: true,
-		values: { owner: fin.desktop.Window.getCurrent().name }
+		values: { owner: finsembleWindow.name }
 	}, function (err, store) {
 		WorkspaceManagementGlobalStore = store;
 		done();

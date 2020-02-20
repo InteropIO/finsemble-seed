@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
 import { FinsembleDraggable } from "@chartiq/finsemble-react-controls";
-import Logo from "./logo";
 import Title from "../../../../common/windowTitle"
 /**
  * This component is pretty basic. It just takes a bunch of props and renders them.
@@ -39,7 +38,7 @@ export default class Tab extends React.Component {
 	}
 
 	crossedMidline(e, box) {
-		return FSBL.Clients.WindowClient.isPointInBox({ x: e.nativeEvent.screenX, y: e.nativeEvent.screenY }, box);
+		return FSBL.Clients.WindowClient.isPointInBox({ x: e.nativeEvent.clientX, y: e.nativeEvent.clientY }, box);
 	}
 
 	hoverAction(newHoverState) {
@@ -71,7 +70,6 @@ export default class Tab extends React.Component {
 					></div>
 				}
 				<FinsembleHoverDetector edge="top" hoverAction={this.hoverAction.bind(this)} />
-				<Logo windowIdentifier={this.props.windowIdentifier} />
 				<Title titleWidth={this.props.titleWidth} windowIdentifier={this.props.windowIdentifier} />
 				<div className="fsbl-tab-close" onClick={(e) => {
 					e.preventDefault();

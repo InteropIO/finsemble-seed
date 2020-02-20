@@ -22,6 +22,7 @@ body.menu {
 .menu {
     background: var(--menu-content-background-color);
     color: var(--menu-font-color);
+    padding: 5px;
 }
 
 .menu .menu-section {
@@ -29,13 +30,20 @@ body.menu {
     overflow-y: auto;
     list-style-type: none;
     width: 100%;
-    padding-left: 0;
+    padding-left: 0px;
     margin-top: 0px;
     margin-bottom: 0px;
 }
 
 .menu-secondary {
     background: var(--menu-actions-background-color);
+    border-bottom: 4px solid;
+    border-color: var(--core-primary-3);
+    padding-bottom: 4px;
+}
+
+.menu-primary {
+    padding-top: 4px;
 }
 
 .menu-primary .menu-item:hover {
@@ -53,6 +61,8 @@ body.menu {
     padding-right: 10px;
     cursor: pointer;
     position:relative;
+    border-radius: 20px;
+    align-items: center;
 }
 
 .menu-item-function {
@@ -64,12 +74,14 @@ body.menu {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding: 8px 0px;
-    height: 100%;
-    flex: .75;
+    padding-top: 6px;
+    margin: 3px 0px;
+    height: 22px;
+    flex: 1;
+    position: relative;
 }
 
-.menu-item-label-fullwidth {
+.menu-item-fullwidth {
     flex: 1;
 }
 
@@ -82,11 +94,13 @@ body.menu {
 
 .menu-item-action {
     display: flex;
-    padding: 0em .15em;
+    width: 34px;
 }
 
 .menu-item .menu-item-action {
-    align-self: center;
+    align-self: baseline;
+    justify-content: center;
+    color: var(--menu-action-icon-color);
 }
 
 .ff-pin {
@@ -96,51 +110,44 @@ body.menu {
     border: 1px solid transparent;
 } 
 
-.ff-delete {
-    padding: 4px 2px 1px 0px;
+.ff-adp-trash-outline {
+    font-size: var(--menu-font-icon-size);
     width: 22px;
     text-align: center;
-    border: 1px solid transparent;
-}
-
-.ff-delete:hover {
-    color: var(--menu-font-color);
-    background-color: var(--menu-delete-background-hover-color);
-    border-radius: 4px;
 }
 
 .ff-pin:hover {
     color: var(--menu-font-color);
     width: 22px;
-    border: 1px solid var(--menu-pin-border-color);
     border-radius: 4px;
+}
+
+.menu-item-action .ff-favorite {
+    padding: 4px 2px 1px 1px;
+    font-size: var(--menu-font-icon-size);
+    width: 22px;
+    text-align: center;
+} 
+
+.ff-favorite:hover {
+    color: var(--menu-favorite-hover-color);
 }
 
 .finsemble-item-pinned {
-    color: var(--menu-font-color);
+    color: var(--menu-favorite-hover-color);
     width: 22px;
-    background-color: var(--menu-pin-background-color);
-    border-radius: 4px;
 }
 
 .finsemble-item-pinned:hover {
-    color: var(--menu-font-color);
+    color: var(--menu-favorite-active-hover-color);
     width: 22px;
-    background-color: var(--menu-pin-background-hover-color);
     border-radius: 4px;
 }
 
-.ff-delete:hover {
-    color: var(--menu-font-color);
-    background-color: var(--menu-delete-background-hover-color);
-    border-radius: 4px;
+.menu-item-action .ff-adp-trash-outline:hover {
+    color: var(--menu-delete-background-hover-color);
 }
 
-/*
-.app-launcher-pinned:hover {
-	color:   var(--menu-primary-font-color);
-}
-*/
 .ff-new-workspace, .ff-save-1, .ff-saveas-1, .ff-settings, .ff-list {
     padding-right: 7px;
     margin-top: 2px;

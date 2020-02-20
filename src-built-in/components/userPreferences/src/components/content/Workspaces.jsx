@@ -73,8 +73,10 @@ export default class Workspaces extends React.Component {
 			workspaceToLoadOnStart: null,
 			templateName: '',
 			workspaceBeingEdited: '',
-			focusedWorkspaceComponentList: []
-		}
+			focusedWorkspaceComponentList: [],
+			initialAlwaysOnTop: finsembleWindow.windowOptions.alwaysOnTop,
+			alwaysOnTop: finsembleWindow.windowOptions.alwaysOnTop
+		};
 		this.bindCorrectContext();
 		this.addListeners();
 	}
@@ -88,7 +90,7 @@ export default class Workspaces extends React.Component {
 		});
 	}
 	bindCorrectContext() {
-		let methods = ["deleteWorkspace", "addListeners", "setWorkspaceList", "onDragEnd", "startEditingWorkspace", "renameWorkspace", "cancelEdit", "setWorkspaceToLoadOnStart", "setPreferences", "exportWorkspace", "handleButtonClicks", "getFocusedWorkspaceComponentList"];
+		let methods = ["deleteWorkspace", "addListeners", "setWorkspaceList", "onDragEnd", "startEditingWorkspace", "renameWorkspace", "cancelEdit", "setWorkspaceToLoadOnStart", "setPreferences", "exportWorkspace", "handleButtonClicks", "getFocusedWorkspaceComponentList", "changePreferencesAlwaysOnTop", "openFileDialog", "preferencesFocused"];
 		methods.forEach((method) => {
 			this[method] = this[method].bind(this);
 		});
@@ -101,11 +103,28 @@ export default class Workspaces extends React.Component {
 		this.setState({
 			workspaceList: data.value
 		});
-		this.cancelEdit();
 	}
 
 	addListeners() {
 		UserPreferencesStore.addListener({ field: 'WorkspaceList' }, this.setWorkspaceList)
+	}
+
+	/**
+	 * Sets the windowOptions.alwaysOnTop to the value supplied. The preferences component should
+	 * not be always on top when a file dialog is open.
+	 * @param {boolean} alwaysOnTop The value to set finsembleWindow.options.alwaysOnTop
+	 */
+	changePreferencesAlwaysOnTop(alwaysOnTop) {
+		//The initialAlwaysOnTop check is to prevent making a component be alwaysOnTop when the
+		//client may have set it to alwaysOnTop:false in the config. If that's the case, it should
+		//never set its alwaysOnTop to true and should always remain unchanged
+		if (this.state.initialAlwaysOnTop && FSBL.System.container === "Electron") {
+			FSBL.Clients.WindowClient.setAlwaysOnTop(alwaysOnTop, () => {
+				this.setState({
+					alwaysOnTop: alwaysOnTop
+				});
+			});
+		}
 	}
 
 	onDragEnd(changeEvent) {
@@ -130,8 +149,8 @@ export default class Workspaces extends React.Component {
 			let windowData = templateObject.windowData[i];
 			FSBL.Clients.Logger.system.debug("getComponentTypes loop", windowData);
 			componentType = "Unknown Component";
-			if (windowData) { // current assimulation doesn't fill in windowData, so in this case use "Unknown Component" for component type
-				componentType = windowData.customData.component.type;
+			if (windowData) { // current assimilation doesn't fill in windowData, so in this case use "Unknown Component" for component type
+				componentType = windowData.componentType || windowData.customData.component.type;
 			} else {
 				componentType = "Unknown Component";
 			}
@@ -303,10 +322,25 @@ export default class Workspaces extends React.Component {
 	}
 
 	openFileDialog() {
+		//Set alwaysOnTop to false and add an event listener on the window. When focus is regained
+		//then reset always on top
+		this.changePreferencesAlwaysOnTop(false);
+		finsembleWindow.addEventListener('focused', this.preferencesFocused);
 		let inputElement = document.getElementById("file-input");
 		inputElement.addEventListener("change", importWorkspace, false);
 		inputElement.click();
+	}
 
+	/**
+	 * If the event is being listened to, when the preferences component is focused
+	 * it will set always on top to true, and remove the event listener
+	 *
+	 * This is to handle bringing alwaysOnTop back to true when file dialogs are closed
+	 * without changes (also handles bringing back to front after exporting)
+	 */
+	preferencesFocused() {
+		finsembleWindow.removeEventListener('focused', this.preferencesFocused);
+		this.changePreferencesAlwaysOnTop(true);
 	}
 
 	importWorkspace(evt) {
@@ -329,7 +363,7 @@ export default class Workspaces extends React.Component {
 					delete workspaceTemplateDefinition.workspaceTemplates[templateName];
 				}
 				workspaceTemplateDefinition.workspaceTemplates[fileName].name = fileName;
-				FSBL.Clients.WorkspaceClient.addWorkspaceDefinition({ workspaceJSONDefinition: workspaceTemplateDefinition.workspaceTemplates, force: true }, function (err) {
+				FSBL.Clients.WorkspaceClient.addWorkspaceDefinition({ workspaceJSONDefinition: workspaceTemplateDefinition.workspaceTemplates, force: false }, function (err) {
 					if (err) {
 						FSBL.Clients.Logger.info("addWorkspaceTemplateDefinition error", err);
 					}
@@ -361,6 +395,10 @@ export default class Workspaces extends React.Component {
 			});
 		}
 
+		//Set alwaysOnTop to false and add an event listener on the window. When focus is regained
+		//then reset always on top
+		self.changePreferencesAlwaysOnTop(false);
+		finsembleWindow.addEventListener('focused', this.preferencesFocused);
 		//If we're autosaving, autosave, then export.
 		//@todo, put into store. consider moving autosave into workspaceClient.
 		FSBL.Clients.ConfigClient.getValue({ field: "finsemble.preferences.workspaceService.promptUserOnDirtyWorkspace" }, (err, data) => {
@@ -377,8 +415,6 @@ export default class Workspaces extends React.Component {
 			}
 			doExport();
 		});
-
-
 	}
 	handleButtonClicks(e) {
 		if (this.state.adding || this.state.editing) {
@@ -413,8 +449,6 @@ export default class Workspaces extends React.Component {
 
 		if (this.state.focusedWorkspace === FSBL.Clients.WorkspaceClient.activeWorkspace.name) {
 			deleteButtonClasses += " disabled-individual-workspace-action";
-			allowDelete = false;
-			deleteTooltip = "Cannot delete the active workspace";
 		}
 
 		if (this.state.focusedWorkspace === '') {
@@ -443,18 +477,13 @@ export default class Workspaces extends React.Component {
 		let addTooltip = "Add new workspace",
 			importTooltip = "Import workspace from file",
 			exportTooltip = allowExport ? "Export selected workspace" : "No workspace selected",
-			renameTooltip = allowRename ? "Rename" : "No workspace selected";
+			renameTooltip = allowRename ? "Rename" : "Cannot Edit";
 
 		return <div>
 			<input style={{ display: 'none' }} type="file" id="file-input" />
 			<div className="complex-menu-content-row">
 				<div className="workspace-list-header-row">
-					<div className="content-section-header workspace-list-header">
-						<div className="content-section-info">
-							Drag to reorder
-					</div>
-					</div>
-
+					<div className="content-section-header workspace-list-header"></div>
 				</div>
 				<div className="content-section-wrapper">
 					<div ref="WorkspaceList" className="workspace-list">
@@ -489,15 +518,17 @@ export default class Workspaces extends React.Component {
 									}
 									return (
 										<FinsembleDraggable onClick={() => this.setFocusedWorkspace(workspace.name)} wrapperClass={classNames} draggableId={workspace.name} key={i} index={i}>
-											<div className="workspace-name">
+											<div className="ff-adp-hamburger"></div>
+											<div className="workspace-name" title={workspace.name}>
 												{workspace.name}
 											</div>
 											<div className="individual-workspace-actions">
+												{workspace.name !== FSBL.Clients.WorkspaceClient.activeWorkspace.name &&
 												<div title={renameTooltip} className={renameButtonClasses} onMouseDown={this.handleButtonClicks} onClick={
-													allowRename ? () => { this.startEditingWorkspace(workspace.name) } : Function.prototype}><i className="ff-edit"></i></div>
+													allowRename ? () => { this.startEditingWorkspace(workspace.name) } : Function.prototype}><i className="ff-adp-edit"></i></div>}
 												{workspace.name !== FSBL.Clients.WorkspaceClient.activeWorkspace.name &&
 													<div title={deleteTooltip} className={deleteButtonClasses} onMouseDown={this.handleButtonClicks} onClick={
-														allowDelete ? () => { this.deleteWorkspace(workspace.name); } : Function.prototype}><i className="ff-delete"></i></div>}
+														allowDelete ? () => { this.deleteWorkspace(workspace.name); } : Function.prototype}><i className="ff-adp-trash-outline"></i></div>}
 											</div>
 										</FinsembleDraggable>
 									)
@@ -514,7 +545,7 @@ export default class Workspaces extends React.Component {
 							{this.state.focusedWorkspaceComponentList.length === 0 &&
 								"No components."}
 						</div>
-						<div className="workspace-action-buttons">
+						{/* <div className="workspace-action-buttons">
 							<div title={importTooltip} className={importButtonClasses} onMouseDown={this.handleButtonClicks} onClick={allowImport ? this.openFileDialog : Function.prototype}>
 								<i className="workspace-action-button-icon ff-import"></i>
 								<div>Import</div>
@@ -524,7 +555,7 @@ export default class Workspaces extends React.Component {
 								<div>Export</div>
 							</div>
 
-						</div>
+						</div> */}
 					</div>
 				</div>
 				<Checkbox

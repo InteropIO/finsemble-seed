@@ -1,0 +1,3 @@
+{
+	"extends": "@chartiq/tslint-config-chartiq-base"
+}

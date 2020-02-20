@@ -8,6 +8,8 @@ import "./css/linkerWindow.css";
 import "../../../../assets/css/font-finance.css";
 import "../../../../assets/css/finsemble.css";
 import * as storeExports from "./stores/linkerStore";
+import { getChannelLabelFromIndex } from "../../shared/linkerUtil";
+
 let LinkerStore = storeExports.Store;
 let LinkerActions = storeExports.Actions;
 
@@ -17,7 +19,7 @@ class Linker extends React.Component {
 		this.onStoreChanged = this.onStoreChanged.bind(this);
 	}
 	/**
-	 * When the store changes, set the react component's state, forcing a rerender.
+	 * When the store changes, set the react component's state, forcing a re-render.
 	 *
 	 * @param {any} changeEvent
 	 * @memberof Linker
@@ -31,22 +33,35 @@ class Linker extends React.Component {
 				});
 		}
 	}
+
 	/**
-	 * Event handler when the user clicks on a colored rectangle, indicating that they want the attached window to join the channel.
+	 * Event handler when the user clicks on a colored rectangle, indicating channel state should be toggled
 	 *
-	 * @param {any} channel
-	 * @param {any} active
-	 * @returns
+	 * @param {any} channel the linker channel
+	 * @param {any} active true if channel was already active
 	 * @memberof Linker
 	 */
 	channelClicked(channel, active) {
 		var attachedWindowIdentifier = LinkerStore.getAttachedWindowIdentifier();
-		var attachedWindow = fin.desktop.Window.wrap(attachedWindowIdentifier.uuid, attachedWindowIdentifier.windowName);
-		attachedWindow.focus();
 
-		if (!active) return LinkerActions.linkToChannel(channel.name);
-		LinkerActions.unlinkFromChannel(channel.name);
+
+		FSBL.FinsembleWindow.getInstance({ name: attachedWindowIdentifier.windowName }, (err, attachedWindow) => {
+			if (attachedWindow) attachedWindow.focus();
+		});
+
+		if (!active) {
+			LinkerActions.linkToChannel(channel.name);
+		} else {
+			LinkerActions.unlinkFromChannel(channel.name);
+		}
+
+		// Immediately hide linker window when channel clicked.
+		// Note: the focus above on the attached window will typically result in a blur event to the linker window that will also hide; howevever, that blur
+		// event is not received for native windows.
+		finsembleWindow.hide();
+
 	}
+
 	/**
 	 * Hides window on blur.
 	 *
@@ -56,7 +71,7 @@ class Linker extends React.Component {
 		finsembleWindow.hide();
 	}
 	/**
-	 * Fit the contents of the dom to the openfin window's bounds. Also set the component's state.
+	 * Fit the contents of the dom to the window's bounds. Also set the component's state.
 	 *
 	 * @memberof Linker
 	 */
@@ -74,29 +89,44 @@ class Linker extends React.Component {
 	render() {
 		var self = this;
 		//Checkbox inside of a circle. Rendered in the center of a group if the attachedWindow is part of that group.
-		let activeChannelIndicator = (<i className="active-linker-group ff-check-circle"></i>);
+		let activeChannelIndicator = (<i className="active-linker-group ff-check-mark"></i>);
+
+		const getLinkerItemRenderer = (channel, isAccessibleLinker) => {
+			if (!isAccessibleLinker) return null;
+
+			if (channel.label) {
+				return <div className="channel-label">{channel.label}</div>
+			} else {
+				return <div className="channel-label">{"Channel " + getChannelLabelFromIndex(channel.name, FSBL.Clients.LinkerClient.getAllChannels())}</div>
+			}
+		}
+
 		/**
-		 * This function iterates through all of the channels that have registered with the linkerClient. If the attachedWindow belongs to any of them, it renders a checkmark and a circle in the center of the channel's rectangle.
+		 * This function iterates through all of the channels that have registered with the linkerClient. If the attachedWindow belongs to any of them, it renders a check mark and a circle in the center of the channel's rectangle.
 		 **/
-		let channels = FSBL.Clients.LinkerClient.getAllChannels().map(function (item, index) {
+		let channels = FSBL.Clients.LinkerClient.getAllChannels().map(function (channel, index) {
 			//Boolean, whether the attachedWindow belongs to the channel.
-			let activeChannel = self.state.channels.filter(function (g) { return g.name == item.name; }).length;
-			let groupClass = `linkerGroup ${item.label}`;
+			let activeChannel = self.state.channels.filter(function (g) { return g.name == channel.name; }).length;
+			let groupClass = `linkerGroup ${channel.name}`;
 
 			if (activeChannel) {
 				groupClass += " active";
 			}
 
 			let style = {
-				backgroundColor: item.color,
-				border: "1px solid " + item.border
+				backgroundColor: channel.color,
+				border: "1px solid " + channel.border
 			};
-			//returns a group row. It's essentially a colored rectangle.
-			return (<div key={item.name + index} className={groupClass} style={style} onClick={function () {
-				self.channelClicked(item, activeChannel);
-			}}>
-				{activeChannel ? activeChannelIndicator : null}
-			</div>);
+			//returns a group row.
+			return (
+				<div className="channel-wrapper" onClick={function () {
+					self.channelClicked(channel, activeChannel); {/* Circle */ }
+				}}>
+					{getLinkerItemRenderer(channel, LinkerStore.isAccessibleLinker())} {/*Channel Name */}
+					<div key={channel.name + index} className={groupClass} style={style}>
+						{activeChannel ? activeChannelIndicator : null} {/*Check Mark */}
+					</div>
+				</div>);
 		});
 
 		return (
@@ -107,10 +137,24 @@ class Linker extends React.Component {
 	}
 }
 
-fin.desktop.main(function () {
-	if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
-	function FSBLReady() {
-		LinkerStore.initialize();
-		ReactDOM.render(<Linker />, document.getElementById("main"));
-	}
-});
+if (window.FSBL && FSBL.addEventListener) {
+	FSBL.addEventListener("onReady", FSBLReady);
+} else {
+	window.addEventListener("FSBLReady", FSBLReady)
+}
+function FSBLReady() {
+	LinkerStore.initialize();
+	finsembleWindow.addEventListener("shown", () => {
+		/** DH 6/19/2019
+		 * Because Finsemble uses a combination of
+		 * native OS and synthetic window events,
+		 * it's possible for the Linker Window to
+		 * have OS level focus but Finsemble not
+		 * be aware of it. Therefore, we must trigger
+		 * focus manually until we can figure out a
+		 * better way of synchronizing these states.
+		*/
+		finsembleWindow.focus();
+	});
+	ReactDOM.render(<Linker />, document.getElementById("main"));
+}

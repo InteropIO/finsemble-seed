@@ -4,7 +4,7 @@ This is the authentication login screen you see when Finsemble starts with authe
 
 ### Overview
 
-See [Enabling Authentication](https://documentation.chartiq.com/finsemble/tutorial-enablingAuthentication.html) for an overview.
+See [Enabling Authentication](https://documentation.chartiq.com/finsemble/tutorial-Authentication.html) for an overview.
 
 ### What it looks like
 ![](./screenshot.png)

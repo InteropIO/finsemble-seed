@@ -1,24 +1,26 @@
 import React from "react";
 import { FinsembleButton } from "@chartiq/finsemble-react-controls";
+import { ReactComponent as BringToFrontIcon } from '../../../../assets/img/toolbar/bring-to-front.svg'
 
 // Store
 import ToolbarStore from "../stores/toolbarStore";
 
-export default class BringToFront extends React.Component {
-	constructor(props) {
-		super(props);
-	}
-	bringToFront() {
+
+const BringToFront = (props) => {
+	const BringToFront = () => {
 		FSBL.Clients.LauncherClient.bringWindowsToFront({}, () => {
 			ToolbarStore.bringToolbarToFront();
 		});
 	}
-	render() {
-		//console.log('rendero')
-		let tooltip = "Bring all Windows to the Front";
-		let buttonClass = "ff-bring-to-front finsemble-toolbar-button-icon";
-		return (<FinsembleButton className={this.props.classes + " icon-only"} buttonType={["Toolbar"]} title={tooltip} onClick={this.bringToFront}>
-			<i className={buttonClass}></i>
-		</FinsembleButton>);
-	}
-}
+	let wrapperClasses = props.classes + " icon-only window-mgmt-right";
+
+	return (
+		<FinsembleButton className={wrapperClasses} buttonType={["Toolbar"]} title="Reveal All" onClick={BringToFront}>
+			<span>
+				<BringToFrontIcon />
+			</span>
+		</FinsembleButton>
+	)
+};
+
+export default BringToFront;
