@@ -94,7 +94,7 @@ function demoService() {
 		return {
 			symbol: 'CIQ',
 			price: Math.round((Math.random() * 100) * 100) / 100,
-			dt: new Date()
+			dt: new Date().getTime()
 		}
 	}
 

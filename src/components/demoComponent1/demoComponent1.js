@@ -14,10 +14,22 @@ var columnDefs = [
 		hide: false
 	},
 	{
-		headerName: 'Date Time',
+		headerName: 'Date Time (ms)',
 		field: 'dt',
 		hide: false,
-		width: 400
+		width: 180
+	},
+	{
+		headerName: 'Receive Date Time (ms)',
+		field: 'newdt',
+		hide: false,
+		width: 180
+	},
+	{
+		headerName: 'Diff (ms)',
+		field: 'dtdiff',
+		hide: false,
+		width: 100
 	}
 ];
 
@@ -58,6 +70,8 @@ const cellDoubleClickEventHandler = (event) => {
 }
 
 const demoItem1Updated = (err, data) => {
+	data.value.newdt = new Date().getTime()
+	data.value.dtdiff = data.value.newdt-data.value.dt
 	var res = gridOptions.api.updateRowData({
 		add: [data.value]
 	});
