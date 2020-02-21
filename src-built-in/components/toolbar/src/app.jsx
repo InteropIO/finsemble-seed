@@ -14,7 +14,6 @@ const Toolbar = () => {
 		<ToolbarShell>
 			<DragHandle/>
 			<ExampleMenu id="a"/>
-			<ExampleMenu id="b" />
 
 			{/* Drag Handle */}
 			{/* Workspace Management Menu */}

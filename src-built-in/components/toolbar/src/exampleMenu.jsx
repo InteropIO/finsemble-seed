@@ -11,6 +11,7 @@ export const ExampleMenu = ({id}) => {
 		<MenuShell id={id}>
 			<MenuHotKey open={["shift", "down arrow"]}/>
 			<MenuHotKey close={["shift", "up arrow"]}/>
+			<MenuHotKey close={["escape"]}/>
 			<MenuActivator>
 				My menu
 			</MenuActivator>
