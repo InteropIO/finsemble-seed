@@ -1,10 +1,12 @@
 import * as React from "react";
-import { MenuShell, MenuActivator,Menu, Preferences, SystemLog, CentralLogger, Documentation, Restart, Reset, Shutdown } from "@chartiq/finsemble-ui/lib/components";
+import { MenuShell, MenuActivator, Menu, Preferences, SystemLog, CentralLogger, Documentation, Restart, Reset, Quit } from "@chartiq/finsemble-ui/lib/components";
 
 export const FileMenu = () => {
 	return (
 		<MenuShell id="mymenu">
-			<MenuActivator>File Menu</MenuActivator>
+			<MenuActivator>
+				<img className="finsemble-toolbar-brand-logo" src="../../../assets/img/Finsemble_Taskbar_Icon.png" />
+			</MenuActivator>
 			<Menu>
 				<Preferences>Preferences</Preferences>
 				<SystemLog>System Log</SystemLog>
@@ -12,7 +14,7 @@ export const FileMenu = () => {
 				<Documentation>Documentation</Documentation>
 				<Restart>Restart</Restart>
 				<Reset>Reset</Reset>
-				<Shutdown>Shut Down</Shutdown>
+				<Quit>Quit</Quit>
 				{/* To add your own items to the menu, import MenuItem from
 				  * "@chartiq/finsemble-ui/lib/components" and add the following:
 				  * <MenuItem onClick={...}>Your Item</MenuItem>
