@@ -1,10 +1,12 @@
-var componentToTrackName = "Notepad"
+var componentToTrackName
 var componentToTrack
 var currentBounds
 
 const FSBLReady = async () => {
 	try {
 		FSBL.Clients.WindowClient.getBounds(async (err, bound) => {
+			let spawnData = FSBL.Clients.WindowClient.getSpawnData();
+			componentToTrackName = spawnData.componentToTrack
 			await restoreComponentToTrack(bound)
 			moveComponentToTrack()
 
