@@ -3,7 +3,7 @@ import { MenuShell, MenuActivator, Menu, Preferences, SystemLog, CentralLogger, 
 
 export const FileMenu = () => {
 	return (
-		<MenuShell id="mymenu">
+		<MenuShell id="fileMenu">
 			<MenuActivator>
 				<img className="finsemble-toolbar-brand-logo" src="../../../assets/img/Finsemble_Taskbar_Icon.png" />
 			</MenuActivator>
