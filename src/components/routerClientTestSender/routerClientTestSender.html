@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>routerClientTestSender</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" href="routerClientTestSender.css" />
+    <script src="../../vendor.bundle.js"></script>
+    <script src="routerClientTestSender.js"></script>
+  </head>
+  <body>
+    <h1>routerClientTestSender</h1>
+    <div>
+      <label>DataSize: </label>
+      <input id='dataSize' value='100'/>
+      <br/>
+      <label><b>The number of bytes to send in each message</b></label>
+      <br/><br/>
+    </div>
+    <div>
+      <label>TestDuration: </label>
+      <input id='testDuration' value='5000'/>
+      <br/>
+      <label><b>How long to run the test in milliseconds</b></label>
+      <br/><br/>
+    </div>
+    <div>
+      <label>BurstInterval: </label>
+      <input id='burstInterval' value='1'/>
+      <br/>
+      <label><b>The timer interval in milliseconds to send each burst of message (e.g. 1 is every millisecond; 10 is every 10 milliseconds)</b></label>
+      <br/><br/>
+    </div>
+    <div>
+      <label>BurstCount: </label>
+      <input id='burstCount' value='5'/>
+      <br/>
+      <label><b>The number of messages to send in each burst</b></label>
+      <br/><br/>
+    </div>
+    <button id='startTest'>Start Test</button>
+  </body>
+</html>

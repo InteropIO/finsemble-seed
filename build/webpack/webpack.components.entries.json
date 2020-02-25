@@ -1,1 +1,10 @@
-{}
+{
+    "routerClientTestSender": {
+        "output": "components/routerClientTestSender/routerClientTestSender",
+        "entry": "./src/components/routerClientTestSender/routerClientTestSender.js"
+    },
+    "routerClientTestReceiver": {
+        "output": "components/routerClientTestReceiver/routerClientTestReceiver",
+        "entry": "./src/components/routerClientTestReceiver/routerClientTestReceiver.js"
+    }
+}
