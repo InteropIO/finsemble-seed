@@ -4,11 +4,7 @@
 */
 import ReactDOM from "react-dom";
 import React from "react";
-import { ToolbarShell } from "@chartiq/finsemble-ui/lib/components/toolbar/ToolbarShell";
-import { RevealAll } from '@chartiq/finsemble-ui/lib/components/toolbar/RevealAll';
-import { MinimizeAll } from '@chartiq/finsemble-ui/lib/components/toolbar/MinimizeAll';
-import {AutoArrange } from '@chartiq/finsemble-ui/lib/components/toolbar/AutoArrange';
-import { ToolbarShell, DragHandle } from "@chartiq/finsemble-ui/lib/components";
+import { ToolbarShell, DragHandle, RevealAll, MinimizeAll, AutoArrange } from "@chartiq/finsemble-ui/lib/components";
 
 import '../toolbar.css';
 
