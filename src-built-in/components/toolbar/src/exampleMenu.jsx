@@ -72,13 +72,11 @@ export const AdvancedExample = () => {
 			<MenuHotKey close={["escape"]} />
 			<MenuActivator>Advanced</MenuActivator>
 			<Menu>
-				<KeyboardNavigation >
 					<MenuTitle>Skip me</MenuTitle>
 					<MenuItem noclose={true}> 
 					<button onClick={addMenuItem}> Add MenuItem</button>
 					</MenuItem>
 						{items.map(item => item)}
-				</KeyboardNavigation>
 			</Menu>
 		</MenuShell>
 	)
