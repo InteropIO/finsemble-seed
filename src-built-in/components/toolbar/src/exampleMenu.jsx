@@ -67,7 +67,7 @@ export const AdvancedExample = () => {
 		setItems([...items, <MenuItem>New item</MenuItem>])
 	}
 	return (
-		<MenuShell id="advancedMenu">
+		<MenuShell id="advancedMenu" maxHeight={300}>
 			<MenuHotKey close={["escape"]} />
 			<MenuActivator>Advanced</MenuActivator>
 			<Menu>
