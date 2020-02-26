@@ -23,8 +23,7 @@
     --accent-negative: #F26666;
     --accent-negative-1: #DA5C5C;
 
-    --scrollbar-color: var(--core-primary-5);
-
+    --scrollbar-color: white;
     /* Font Variables:  Use these variables to make changes to the global font styles. */
     --font-family: "OpenSans", sans-serif;
 
@@ -148,19 +147,29 @@
     --menu-linker-selected-font-color: var(--font-color);
     --menu-linker-selected-font-size: 12px;
 
+    --entity-badge-default-background-color: var(--core-primary-4);
+    --entity-badge-workspace-background-color: var(--accent-positive);
+    --entity-badge-component-background-color: #0ab2f4;
+
     /* Search Menu */
     --search-menu-font-size: 12px;
+    --search-menu-font-color: var(--core-primary-5);
     --search-input-font-color: black;
     --search-input-background-color: white;
+    --search-input-border-color: var(--core-primary-3);
+    --search-input-focused-border-color: var(--accent-primary);
+    --search-input-clear-search-color: var(--core-primary-5);
+    --search-input-clear-search-hover-color: var(--menu-font-color);
+
     --search-hover-background-color: var(--core-primary-3);
-    
+
     --search-header-font-size: 14px;
     --search-header-font-color: var(--accent-primary);
     --search-header-font-weight: var(--font-weight-2);
 
-    --search-result-font-color: var(--font-color);
+    --search-result-font-color: var(--core-primary-5);
     --search-result-font-weight: var(--font-weight-1);
-    --search-result-highlighter-color: var(--core-primary-2);
+    --search-result-highlighter-color: var(--menu-font-color);
     --search-result-selected-color: var(--core-primary-3);
 
     /* Window Frame */
