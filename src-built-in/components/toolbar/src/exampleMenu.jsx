@@ -4,14 +4,13 @@ import { MenuActivator } from '@chartiq/finsemble-ui/lib/components/menu/menuAct
 import { Menu } from '@chartiq/finsemble-ui/lib/components/menu/menu'
 import { MenuItem } from '@chartiq/finsemble-ui/lib/components/menu/menuItem'
 import { MenuHotKey } from '@chartiq/finsemble-ui/lib/components/menu/menuHotKey'
-import { KeyboardNavigation } from '@chartiq/finsemble-ui/lib/components/menu/keyboardNavigation'
 import { MenuTitle } from '@chartiq/finsemble-ui/lib/components/menu/menuTitle'
 
 const FinsembleIcon = () => {
 	return <img className="finsemble-toolbar-brand-logo" src="../../assets/img/Finsemble_Taskbar_Icon.png" />
 }
 
-const { useState, useEffect } = React;
+const { useState } = React;
 
 export const ExampleMenu = () => {
 	const onClick = () => alert('You clicked');
