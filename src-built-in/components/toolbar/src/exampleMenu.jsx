@@ -35,7 +35,7 @@ export const ExampleMenu = () => {
 
 export const ExampleMenu2 = () => {
 	return (
-		<MenuShell id="mymenu">
+		<MenuShell id="mymenu" className="example2">
 			<MenuHotKey close={["escape"]} />
 			<MenuActivator>
 				My Menu
@@ -72,7 +72,7 @@ export const AdvancedExample = () => {
 			<MenuActivator>Advanced</MenuActivator>
 			<Menu>
 					<MenuTitle>Skip me</MenuTitle>
-					<MenuItem noclose={true}> 
+					<MenuItem className="add-one" noclose={true}> 
 					<button onClick={addMenuItem}> Add MenuItem</button>
 					</MenuItem>
 						{items.map(item => item)}
