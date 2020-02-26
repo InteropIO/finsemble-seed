@@ -45,6 +45,7 @@
     --toolbar-height: 39px;
     --toolbar-brand-logo-width: 14px;
     --toolbar-brand-logo-height: 16px;
+    --toolbar-scroll-button-color: var(--toolbar-font-color);
     --toolbar-favorite-delete-icon: var(--core-primary-5);
     --toolbar-favorite-delete-icon-hover: var(--accent-negative);
     --toolbar-background-color: var(--core-primary);
