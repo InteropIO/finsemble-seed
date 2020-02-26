@@ -4,11 +4,13 @@ const {
 	RouterClient,
 	Logger,
 	StorageClient,
+	WorkspaceClient,
 	LauncherClient
 } = Finsemble.Clients;
 
 Logger.start();
 StorageClient.initialize();
+WorkspaceClient.initialize();
 LauncherClient.initialize();
 
 //Migration config

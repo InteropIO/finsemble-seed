@@ -1,11 +1,11 @@
 {
     "services": {
-        "datamigrationService": {
+        "workspaceDataMigrationService": {
             "useWindow": true,
             "active": true,
             "name": "datamigrationService",
             "visible": false,
-            "html": "$applicationRoot/services/datamigration/datamigration.html"
+            "html": "$applicationRoot/services/workspaceDataMigration/workspaceDataMigration.html"
         }
     }
 }

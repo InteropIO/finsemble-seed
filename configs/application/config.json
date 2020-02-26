@@ -168,7 +168,7 @@
 		"$applicationRoot/configs/application/workspaceTemplates.json",
 		"$applicationRoot/configs/application/services.json",
 		"$applicationRoot/configs/application/securityPolicies.json",
-		"$applicationRoot/components/datamigration/config.json",
-        "$applicationRoot/services/datamigration/config.json"
+		"$applicationRoot/components/workspaceDataMigration/config.json",
+        "$applicationRoot/services/workspaceDataMigration/config.json"
 	]
 }
