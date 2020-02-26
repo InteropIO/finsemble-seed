@@ -18,6 +18,7 @@ const Toolbar = () => {
 			{/* Minimize All */}
 			{/* Reveal All */}
 			{/* Auto Arrange */}
+			<div className="resize-area" ></div>
 		</ToolbarShell>
 	)
 }
