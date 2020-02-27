@@ -190,9 +190,9 @@
                 }
             }
         },
-        "routerClientTestSender": {
+        "LoadtestSender": {
             "window": {
-                "url": "$applicationRoot/components/routerClientTestSender/routerClientTestSender.html",
+                "url": "$applicationRoot/components/LoadtestSender/LoadtestSender.html",
                 "frame": false,
                 "resizable": true,
                 "autoShow": true,
@@ -216,19 +216,19 @@
                         "launchableByUser": true
                     },
                     "Window Manager": {
-                        "title": "routerClientTestSender",
+                        "title": "LoadtestSender",
                         "FSBLHeader": true,
                         "persistWindowState": true
                     },
                     "Toolbar": {
-                        "iconClass": "routerClientTestSender"
+                        "iconClass": "LoadtestSender"
                     }
                 }
             }
         },
-        "routerClientTestReceiver": {
+        "LoadtestReceiver": {
             "window": {
-                "url": "$applicationRoot/components/routerClientTestReceiver/routerClientTestReceiver.html",
+                "url": "$applicationRoot/components/LoadtestReceiver/LoadtestReceiver.html",
                 "frame": false,
                 "resizable": true,
                 "autoShow": true,
@@ -252,12 +252,12 @@
                         "launchableByUser": true
                     },
                     "Window Manager": {
-                        "title": "routerClientTestReceiver",
+                        "title": "LoadtestReceiver",
                         "FSBLHeader": true,
                         "persistWindowState": true
                     },
                     "Toolbar": {
-                        "iconClass": "routerClientTestReceiver"
+                        "iconClass": "LoadtestReceiver"
                     }
                 }
             }

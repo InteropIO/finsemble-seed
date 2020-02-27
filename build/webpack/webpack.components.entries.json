@@ -1,10 +1,10 @@
 {
-    "routerClientTestSender": {
-        "output": "components/routerClientTestSender/routerClientTestSender",
-        "entry": "./src/components/routerClientTestSender/routerClientTestSender.js"
+    "LoadtestSender": {
+        "output": "components/LoadtestSender/LoadtestSender",
+        "entry": "./src/components/LoadtestSender/LoadtestSender.js"
     },
-    "routerClientTestReceiver": {
-        "output": "components/routerClientTestReceiver/routerClientTestReceiver",
-        "entry": "./src/components/routerClientTestReceiver/routerClientTestReceiver.js"
+    "LoadtestReceiver": {
+        "output": "components/LoadtestReceiver/LoadtestReceiver",
+        "entry": "./src/components/LoadtestReceiver/LoadtestReceiver.js"
     }
 }
