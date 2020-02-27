@@ -4,10 +4,9 @@
 */
 import ReactDOM from "react-dom";
 import React from "react";
-import { ToolbarShell, FavoritesShell, DragHandle, RevealAll, MinimizeAll, AutoArrange } from "@chartiq/finsemble-ui/lib/components";
+import { ToolbarShell, FavoritesShell, DragHandle, RevealAll, MinimizeAll, AutoArrange, Search } from "@chartiq/finsemble-ui/lib/components";
 
 import '../toolbar.css';
-import { Search } from '@chartiq/finsemble-ui/lib/components/toolbar/search'
 import { ExampleMenu, ExampleMenu2, AdvancedExample } from "./exampleMenu";
 const Toolbar = () => {
 	return (
