@@ -1,6 +1,0 @@
-{
-    "datamigration": {
-        "output": "components/datamigration/datamigration",
-        "entry": "./src/components/datamigration/datamigration.js"
-    }
-}

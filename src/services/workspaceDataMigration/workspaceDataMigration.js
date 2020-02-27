@@ -14,216 +14,212 @@ WorkspaceClient.initialize();
 LauncherClient.initialize();
 
 //Migration config
-//The name of source storage adapter (e.g. "IndexedDBAdapter")
-const MIGRATE_FROM_ADAPTER = "IndexedDBAdapter";
-//The name of destination storage adapter (i.e. "LocalStorageAdapter" or the name of your custom storage adapter).
-const MIGRATE_TO_ADAPTER = "LocalStorageAdapter";
-// an array of storage topics you wish to migrate (e.g. `["finsemble", "finsemble.workspace"]`)
-// Note: as `finsemble.workspace.cache` is a topic that is very frequently read from and written to, it is not advisable to use an external storage adapter for it.
-const TOPICS_TO_MIGRATE = ["finsemble", "finsemble.workspace"];
+const MIGRATION_NAME = "workspace_migration_20200227";
+
+//Variables used in example migration functions
+//TODO: Customize or replace the variables used in the example migration
+//field checked on each window and used to look up a migration value
+//  (a single top level field of windowData - could be improved with lodash get or similar)
+const MIGRATION_SOURCE_FIELD = "windowName";
+//single field whose value will be set
+//  (a single top level field of windowData - could be improved with lodash set or similar)
+const MIGRATION_DESTINATION_FIELD = "componentType";
+//map of values of the source field to values to set on the destination field
+const MIGRATION_SOURCE_TO_DESTINATION_VALUE_MAP = {
+	"News": "NewsComponentType",
+	"Chart": "ChartComponentType"
+};
 
 /**
- * class DataMigrationService
+ * class WorkspaceDataMigrationService
  * 
  * This class is configurable to migrate data from one storage adapter to another.
  * In this example, IndexedDB data is being migrated to LocalStorage for all internal Finsemble data.
  * 
  */
-class DataMigrationService extends BaseService {
+class WorkspaceDataMigrationService extends BaseService {
 	constructor(args) {
 		super(args);
-		this.adapter = MIGRATE_FROM_ADAPTER;
-		this.newAdapter = MIGRATE_TO_ADAPTER;
 	}
 
 	/**
-	 * retrieveDatabase
-	 * 
-	 * Takes all Storage Adapter topics provided and creates an array of objects for all topics
-	 * Invokes saveAllData afterwards.
-	 * 
-	 * @param {Array} topics The storage topics to be migrated.
+	 * Function that determines whether a window needs to be migrated or not, based on
+	 * the content of the windowData parameter..
+	 * @param {*} windowData 
 	 */
-	retrieveDatabase(topics) {
-		const promiseSet = [];
+	migrationRequired(windowData) {
+		// TODO: Implement a test  to determine whether a window needs to be migrated here, e.g.
+		return windowData[MIGRATION_SOURCE_FIELD] && 
+			(MIGRATION_SOURCE_TO_DESTINATION_VALUE_MAP[windowData[MIGRATION_SOURCE_FIELD]] ? true : false);
 
-		topics.forEach((topic) => {
-			promiseSet.push(new Promise((resolve, reject) => {
-				// Reset to use old storage adapter to retrieve all the user's data
-				StorageClient.setStore({ topic: topic, dataStore: this.adapter }, (err, data) => {
-					if (err) {
-						reject(new Error(err));
-					}
-					resolve();
-				});
-			}).catch((error) => {
-				Logger.error("*** datamigration error", error);
-			}));
-		});
-
-		Promise.all(promiseSet).then(() => {
-			const keysPromises = [];
-
-			topics.forEach((topic) => {
-				keysPromises.push(new Promise((resolve, reject) => {
-					StorageClient.keys({ topic: topic }, (err, keys) => {
-						if (err) {
-							reject(err);
-						}
-						
-						const topickeypairs = [];
-
-						keys.forEach((key) => {
-							topickeypairs.push({ topic: topic, key: key });
-						});
-
-						resolve(topickeypairs);
-					});
-				}).catch((error) => {
-					Logger.error("*** datamigration error", error);
-				}));
-
-				Promise.all(keysPromises).then((allpairs) => {
-					const pairs = allpairs.reduce((acc, curr) => {
-						return [...acc, ...curr];
-					});
-		
-					const valuesPromises = [];
-		
-					pairs.forEach((pair) => {
-						valuesPromises.push(new Promise((resolve, reject) => {
-							StorageClient.get({ topic: pair.topic, key: pair.key }, (err, value) => {
-								if (err) {
-									reject(err);
-								}
-								resolve({topic: pair.topic, key: pair.key, value: value});
-							});
-						}).catch((error) => {
-							Logger.error("*** datamigration error", error);
-						}));
-					});
-		
-					Promise.all(valuesPromises).then((data) => {
-						this.saveAllData(topics, data);
-					});
-				});
-			});
-		});
 	}
 
 	/**
-	 * saveAllData
-	 * 
-	 * Saves data from the old storage adapter into the new one.
-	 * 
-	 * Invoked when all data has been retrieved from the old adapter.
-	 * @param {Array} topics Array of all topics retrieved.
-	 * @param {Array} data Array of all data received from retrieveDatabase
+	 * Migration function applied to each window in the workspace definitions.
+	 * @param {*} windowData 
 	 */
-	saveAllData(topics, dataset) {
-		const promiseSet = [];
+	migrateWindow(windowData) {
+		//check if the MIGRATION_SOURCE_FIELD has a value indicating a migration of the windows config is required
+		if (migrationRequired(windowData)) {
 
-		topics.forEach((topic) => {
-			promiseSet.push(new Promise((resolve, reject) => {
-				// Reset to use new storage adapter
-				StorageClient.setStore({ topic: topic, dataStore: this.newAdapter }, (err, data) => {
-					if (err) {
-						reject(new Error(err));
-					}
-					resolve(data);
-				});
-			}).catch((error) => {
-				Logger.error("*** datamigration error", error);
-			}));
-		});
+			//TODO: implement your migration function that will update the window data
+			//e.g.: update the window object with a new component type
+			windowData[MIGRATION_DESTINATION_FIELD] = MIGRATION_SOURCE_TO_DESTINATION_VALUE_MAP[windowData[MIGRATION_SOURCE_FIELD]];
 
-		Promise.all(promiseSet).then(() => {
-			const saveSet = [];
+			//consider also updating the saved config for the component if you need to
+			// let newConfig = {/* updated component config data you get from somewhere */};
+			// workspaceObj.windowData[w].customData = newConfig;
+
+			return windowData;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Migration function applied to each exported workspace definition.
+	 * @param {*} workspaceName 
+	 * @param {*} workspaceData 
+	 */
+	migrateWorkspace(workspaceName, workspaceData) {
+		let madeChanges = false;
+		let workspaceObj = workspaceData[workspaceName];
+
+		//migrate each window in the workspace and determine if any changes were made
+		for(let w=0; w<workspaceObj.windows.length; w++){
 			
-			saveSet.push(new Promise((resolve, reject) => {
+			//lookup the new componentType for the window somehow - probably using the old window name
+			let windowName = workspaceObj.windows[w];
+			let migratedWindow = migrateWindow(workspaceObj.windowData[w]);
+			if (migratedWindow){
+				workspaceObj.windows[w] = migratedWindow;
+				madeChanges = true;
+			}			
+		}
+		if (madeChanges){
+			workspaceData[workspaceName] = workspaceObj;
+			return workspaceData;
+		} else {
+			return false;
+		}
+	}
 
-				dataset.forEach((datum) => {
-					StorageClient.save({ topic: datum.topic, key: datum.key, value: datum.value }, (err, response) => {
+
+	/**
+	 * Retrieves and migrates all workspaces, saving any changes that are made.
+	 *
+	 */
+	runMigration() {
+		const promiseSet = [];
+
+		//get all workspace names
+		FSBL.Clients.WorkspaceClient.getWorkspaces((err, response) => {
+			let workspaceNames = response;
+			Logger.log("*** Got workspace names", workspaceNames);
+			workspaceNames.forEach(workspaceName => {
+				Logger.log("*** migrating " + workspaceName);
+				//export and migrate each workspace
+				promiseSet.push(new Promise((resolve, reject) => {
+					WorkspaceClient.export({'workspaceName:': workspaceName}, function(err, workspaceDefinition) {
 						if (err) {
 							reject(new Error(err));
+						} else {
+							//migrate workspace
+							let migrated = migrateWorkspace(workspaceName, workspaceDefinition);
+							if (migrated){
+								//import back to replace existing workspace
+								WorkspaceClient.import({workspaceJSONDefinition: migrated, force: true})
+								.then(() => {
+									resolve();
+									Logger.log("*** migrated " + workspaceName);
+								})
+								.catch(err2){
+									reject(new Error(err2));
+								};
+							} else {
+								Logger.log("*** no change from migration of " + workspaceName);
+								resolve();
+							}
+							
 						}
-						resolve(response);
-					});
+					}); 
 				});
-			}).catch((error) => {
-				Logger.error("*** datamigration error", error);
-			}));
-
-			Promise.all(saveSet).then(() => {
-				StorageClient.save({ topic: "finsemble", key: `migrated_from_${this.adapter}`, value: Date.now() });
-				RouterClient.publish("Migration", "end");
 			});
+		});
+		Promise.all(promiseSet)
+		.then(completeMigration)
+		.catch((err) => {
+			Logger.log("*** Migration error: ", err);
 		});
 	}
 
 	/**
-	 * fetchUserStatus
-	 * 
-	 * Determines if the user has been migrated from IndexedDBAdapter (or another storage adapter)
-	 * by checking for a key in the new storage service of "migrated_from_<adapter to migrate from>", 
+	 * Mark the migration completed.
+	 */
+	completeMigration() {
+		//complete migration
+		storageClient.save({ topic: "finsemble", key: `${MIGRATION_NAME}`, value: Date.now() });
+		RouterClient.publish("Migration", "end");
+		Logger.log("*** Migration complete", workspaceNames);
+	}
+
+	/**
+	 * Determines if the user's data has been migrated by checking for a key in storage service of 
+	 * "migrated_from_<adapter to migrate from>", 
 	 * which in this example is "migrated_from_IndexedDBAdapter".
 	 */
 	fetchUserStatus() {
-		StorageClient.get({ topic: "finsemble", key: `migrated_from_${this.adapter}` }, (err, data) => {
+		StorageClient.get({ topic: "finsemble", key: `${MIGRATION_NAME}` }, (err, data) => {
 			if (err) {
-				Logger.log(`Error fetching the user migration status for migration from ${this.adapter}.`);
+				Logger.log(`*** Error fetching the user migration status for migration ${MIGRATION_NAME}.`);
 			}
 
 			if (!data) {
-				// The user does not have a migration record.
-
-				StorageClient.setStore({ topic: "finsemble", dataStore: this.adapter }, (err) => {
+				// The user does not have a migration record - check if they are a new user
+				StorageClient.keys({ topic: "finsemble.workspace" }, (err, keys) => {
 					if (err) {
-						Logger.error("*** datamigration failed to set store", err);
+						Logger.error("*** workspacemigration failed to fetch workspaces", err);
 					}
-					StorageClient.keys({ topic: "finsemble" }, (err, keys) => {
-						if (err) {
-							Logger.error("*** datamigration failed to fetch", err);
-						}
-	
-						if (keys) {
-							// The user has Finsemble records and thus should be migrated.
-							RouterClient.addPubSubResponder("Migration", { "State" : "start"}, {
-								publishCallback: (err, publish) => {
-									if (err) {
-										Logger.error("*** datamigration failed to publish callback", err);
-									}
 
-									if (publish) {
-										publish.sendNotifyToAllSubscribers(null, publish.data);
+					if (keys) {
+						// The user has Finsemble records and thus should be migrated.
+						RouterClient.addPubSubResponder("Migration", { "State" : "start"}, {
+							publishCallback: (err, publish) => {
+								if (err) {
+									Logger.error("*** workspacemigration failed to publish callback", err);
+								}
 
-										if (publish.data == "begin") {
-											Logger.log("*** datamigration begin")
-											this.retrieveDatabase(TOPICS_TO_MIGRATE);
-										}
+								if (publish) {
+									publish.sendNotifyToAllSubscribers(null, publish.data);
+
+									if (publish.data == "begin") {
+										Logger.log("*** workspacemigration begin")
+										this.runMigration();
 									}
 								}
-							});
+							}
+						});
 
-							LauncherClient.spawn("datamigration", {}, () => {
-								RouterClient.publish("Migration", "needed");
+						LauncherClient.spawn("workspacemigration", {}, () => {
+							RouterClient.publish("Migration", "needed");
 
-							});
-						} else {
-							// This is a new user. Set their migration record as 0 so they're not checked again.
-							StorageClient.save({ topic: "finsemble", key: `migrated_from_${this.adapter}`, value: 0 });
-							RouterClient.publish("Migration", "not needed");
-						}
-					});
+						});
+					} else {
+						// This is a new user. Set their migration record as 0 so they're not checked again.
+						StorageClient.save({ topic: "finsemble", key: `${MIGRATION_NAME}`, value: 0 });
+						RouterClient.publish("Migration", "not needed");
+						Logger.log("*** workspacemigration not needed due to lack of saved workspaces");
+					}
 				});
+				
 			}
 		});
 	}
 }
 
-const dms = new DataMigrationService({ 
+const dms = new WorkspaceDataMigrationService({ 
 	startupDependencies: {
-		services: ["authenticationService", "configService", "storageService"]
+		services: ["authenticationService", "configService", "storageService", "workspaceService"]
 	}
 });
 
@@ -232,7 +228,7 @@ dms.onBaseServiceReady((callback) => {
 	
 	RouterClient.subscribe("AuthorizationState", function(err,notify) {
 		if (err) {
-			Logger.error("*** datamigration failed to auth");
+			Logger.error("*** workspacemigration failed to auth");
 		} else {
 			if (!ranMigrationCheck && notify.data.state == "done") {
 				ranMigrationCheck = true;

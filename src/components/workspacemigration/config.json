@@ -1,8 +1,8 @@
 {
     "components": {
-        "datamigration": {
+        "workspacemigration": {
             "window": {
-                "url": "$applicationRoot/components/datamigration/datamigration.html",
+                "url": "$applicationRoot/components/workspacemigration/workspacemigration.html",
                 "frame": false,
                 "resizable": true,
                 "autoShow": false,
@@ -26,12 +26,12 @@
                     },
                     "Window Manager": {
                         "alwaysOnTopIcon": false,
-                        "title": "Data Migration Assistant",
+                        "title": "Workspace Migration Assistant",
                         "FSBLHeader": false,
                         "persistWindowState": false
                     },
                     "Toolbar": {
-                        "iconClass": "datamigration"
+                        "iconClass": "workspacemigration"
                     }
                 }
             }

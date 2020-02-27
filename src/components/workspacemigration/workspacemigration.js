@@ -4,7 +4,7 @@ const FSBLReady = () => {
 		/**
 		 * Subscribe to the pubsub topic "Migration" on the router. 
 		 * 
-		 * The Data Migration Service throws two different pubsub events:
+		 * The Workspace Migration Service throws two different pubsub events:
 		 * 
 		 * 1. "end" - This event will the thrown when the migration is complete. Restart Finsemble.
 		 * 2. "not needed" - Either the user has already been migrated or has no data to migrate. Continue as normal.
