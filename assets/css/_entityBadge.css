@@ -1,0 +1,49 @@
+.entity-badge-wrapper {
+	display: inline-flex;
+	margin-right: 8px;
+	justify-content: center;
+	align-items: center;
+	padding:3px;
+}
+
+.entity-badge {
+	font-weight: bold;
+	padding: 6px;
+	height: 10px;
+	width: 10px;
+	font-size: 9px;
+    color: var(--font-color-2);
+    text-shadow: none;
+}
+
+.entity-badge-wrapper img {
+	width: 21px;
+	height: 21px;
+	position: relative;
+	left: -2px;
+	top: -1px;
+}
+
+.entity-badge-wrapper.entity-with-img {
+	padding-right: 0px;
+	/* Margin is different for images than for the badges because
+	of their padding and other CSS reasons.*/
+	margin-right: 6px;
+}
+
+.entity-workspace {
+	border-radius: 3px;
+	background-color: var(--entity-badge-workspace-background-color);
+}
+
+.entity-component {
+	border-radius: 50%;
+	background-color: var(--entity-badge-component-background-color);
+}
+
+/* Center the font-icons inside of the badge. Only on the toolbar, though. */
+.finsemble-toolbar .entity-badge i {
+	position: relative;
+	top: 2px;
+	left: 1px;
+}
