@@ -11,7 +11,8 @@ export default class Checkbox extends React.Component {
         let style = {};
         if (this.props.disabled) {
             style = {
-                cursor: "not-allowed"
+                cursor: "default",
+                opacity: ".15"
             }
         }
         return <div

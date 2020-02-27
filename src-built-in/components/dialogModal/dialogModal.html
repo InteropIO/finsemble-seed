@@ -25,7 +25,7 @@
             }
         });
         FSBL.Clients.DialogManager.registerModal();
-        fin.desktop.Window.getCurrent().hide();
+        finsembleWindow.hide();
     });
     var drop = function (e) {
         FSBL.Clients.RouterClient.transmit('tabbingDragEnd', { gotDrop: true });

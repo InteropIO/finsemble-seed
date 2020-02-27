@@ -9,4 +9,3 @@ The toolbar uses the config to [compose](https://reactjs.org/docs/composition-vs
 - [Finsemble Toolbar](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleToolbar)
 - [Finsemble Toolbar Section](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleToolbarSection)
 - [Finsemble Button](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleButton)
-- [Finsemble Toolbar Seperator](https://github.com/ChartIQ/finsemble-react-controls/tree/master/FinsembleToolbarSeprator)

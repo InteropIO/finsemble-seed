@@ -3,7 +3,9 @@
         "align": "left",
         "iconClasses": "finsemble-toolbar-brand-logo",
         "icon": "../../assets/img/Finsemble_Taskbar_Icon.png",
-        "menuType": "File Menu"
+        "menuType": "File Menu",
+        "title": "Main Menu",
+        "fontIcon": "ff-chevron-down"
     },
     {
         "align": "left",
@@ -18,19 +20,10 @@
         "type": "reactComponent"
     },
     {
-        "align": "left",
-        "type": "seperator"
-    },
-    {
         "comment": "Change align to add AlwaysOnTop capability",
         "align": "none",
         "type": "reactComponent",
         "reactComponent": "AlwaysOnTop"
-    },
-    {
-        "align": "right",
-        "type": "reactComponent",
-        "reactComponent": "AutoArrange"
     },
     {
         "align": "right",
@@ -43,10 +36,17 @@
         "reactComponent": "BringToFront"
     },
     {
+        "align": "right",
+        "type": "reactComponent",
+        "reactComponent": "AutoArrange"
+    },
+    {
         "align": "left",
         "label": "Apps",
+        "title": "Apps",
         "id": "app-launcher",
-        "comment": "Change menuType to 'My Apps' for a preview of the finsemble app catalog!",
+        "comment": "Change menuType to 'Advanced App Launcher' for a preview of the finsemble app catalog!",
+        "fontIcon": "ff-chevron-down",
         "menuType": "App Launcher"
     },
     {

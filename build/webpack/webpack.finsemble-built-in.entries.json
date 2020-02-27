@@ -3,9 +3,9 @@
 		"output": "components/appLauncher/appLauncher",
 		"entry": "./src-built-in/components/appLauncher/src/app.jsx"
 	},
-	"myApps": {
-		"output": "components/myApps/index",
-		"entry": "./src-built-in/components/myApps/src/index.jsx"
+	"advancedAppLauncher": {
+		"output": "components/advancedAppLauncher/index",
+		"entry": "./src-built-in/components/advancedAppLauncher/src/index.jsx"
 	},
 	"authentication": {
 		"output": "components/authentication/authentication",
@@ -31,9 +31,9 @@
 		"output": "components/fileMenu/fileMenu",
 		"entry": "./src-built-in/components/fileMenu/src/app.jsx"
 	},
-	"adhocComponentForm": {
-		"output": "components/adhocComponentForm/adhocComponentForm",
-		"entry": "./src-built-in/components/adhocComponentForm/app.jsx"
+	"quickComponentForm": {
+		"output": "components/quickComponentForm/quickComponentForm",
+		"entry": "./src-built-in/components/quickComponentForm/app.jsx"
 	},
 	"yesNoDialog": {
 		"output": "components/yesNoDialog/yesNoDialog",
@@ -67,9 +67,9 @@
 		"output": "components/appCatalog/appCatalog",
 		"entry": "./src-built-in/components/appCatalog/src/app.jsx"
 	},
-	"appCatalog2": {
-		"output": "components/appCatalog2/appCatalog",
-		"entry": "./src-built-in/components/appCatalog2/src/app.jsx"
+	"advancedAppCatalog": {
+		"output": "components/advancedAppCatalog/appCatalog",
+		"entry": "./src-built-in/components/advancedAppCatalog/src/app.jsx"
 	},
 	"nonConfiguredComponent": {
 		"output": "components/nonConfiguredComponent/nonConfiguredComponent",
