@@ -26,10 +26,7 @@ const Toolbar = () => {
 				<AutoArrange />
 				<RevealAll />
 			</div>
-			<div className="resize-area" ></div>
-
-
-
+      <div className="resize-area" ></div>
 		</ToolbarShell>
 	)
 }
