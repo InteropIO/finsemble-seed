@@ -23,6 +23,10 @@
 		"output": "components/linker/linker",
 		"entry": "./src-built-in/components/linker/src/linker.jsx"
 	},
+	"workspaceManagementMenu": {
+		"output": "components/workspaceManagementMenu/workspaceManagementMenu",
+		"entry": "./src-built-in/components/workspaceManagementMenu/src/app.jsx"
+	},
 	"fileMenu": {
 		"output": "components/fileMenu/fileMenu",
 		"entry": "./src-built-in/components/fileMenu/src/app.jsx"
