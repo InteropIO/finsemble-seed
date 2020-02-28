@@ -21,6 +21,10 @@ const FSBLReady = () => {
 						document.querySelector("#migrationWarning").classList.add("hidden");
 						document.querySelector("#migrationComplete").classList.remove("hidden");
 						break;
+					case "error":
+						document.querySelector("#migrationError").classList.remove("hidden");
+						document.querySelector("#migrationWarning").classList.add("hidden");
+						break;
 					case "not needed":
 						document.querySelector("#migrationNotNeeded").classList.remove("hidden");
 						document.querySelector("#migrationCheck").classList.add("hidden");
@@ -41,8 +45,13 @@ const FSBLReady = () => {
 		});
 
 		// Force Finsemble to restart
-		document.querySelector("#restart").addEventListener("click", (e) => {
-			FSBL.restartApplication();
+		document.querySelector("#done").addEventListener("click", (e) => {
+			FSBL.Clients.WindowClient.close({ removeFromWorkspace: true, closeWindow: true });
+		});
+
+		// Close the migration window after an error
+		document.querySelector("#close_on_error").addEventListener("click", (e) => {
+			FSBL.Clients.WindowClient.close({ removeFromWorkspace: true, closeWindow: true });
 		});
 
 		// Close the migration window - should not be needed.

@@ -81,9 +81,7 @@
             }
         },
         "importConfig": [
-            "$applicationRoot/configs/application/config.json",
-            "$applicationRoot/components/datamigration/config.json",
-            "$applicationRoot/services/datamigration/config.json"
+            "$applicationRoot/configs/application/config.json"
         ],
         "router": {
             "crossDomainTransport": "IPCBus",

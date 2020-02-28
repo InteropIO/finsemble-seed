@@ -3,9 +3,9 @@
         "workspaceDataMigrationService": {
             "useWindow": true,
             "active": true,
-            "name": "datamigrationService",
+            "name": "workspaceDataMigrationService",
             "visible": false,
-            "html": "$applicationRoot/services/workspaceDataMigration/workspaceDataMigration.html"
+            "html": "$applicationRoot/services/workspaceDataMigration/workspaceDataMigrationService.html"
         }
     }
 }

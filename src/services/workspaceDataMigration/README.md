@@ -1,12 +1,10 @@
 [![Finsemble Logo](https://documentation.chartiq.com/finsemble/styles/img/Finsemble_Logo_Dark.svg)](https://documentation.chartiq.com/finsemble/)
 
-# Finsemble Recipe: Data Migration
+# Finsemble Recipe: Workspace Migration
 
-In some cases, users have been deployed using Chromium's IndexedDB as the default storage adapter, as this is the default for Finsemble's seed project. For more sustainable usage across multiple machines and centralized handling of data, migration to a remote database is often times needed.
+When the Finsemble component configuration changes and a componentType is added or removed, existing workspaces may be affected and also require changes to remain working.
+This recipe, with appropriate modifications, can handle the migration of workspace data for your users.
 
-In other cases, migration from one remote datastore to another is needed. This recipe, with appropriate modifications, can handle both cases.
-
-For the purposes of this example, the **current** datasource will be **IndexedDB**. _N.b._: this recipe does not utilize a remote data adapter. It utilizes **LocalStorage** as a mimic for data migration. It is up to you to create the storage adapter you'd like to use and register it by comparing the recipe to your extant code. [This tutorial](https://documentation.chartiq.com/finsemble/tutorial-storingData.html) has more information on storage adapter fundamentals.
 
 ## Ingredients
 
@@ -17,62 +15,46 @@ src
 ├── adapters
 ├── clients
 ├── components
-│   └── datamigration
+│   └── workspacemigration
 │       ├── config.json
 │       ├── finsemble.webpack.json
-│       ├── datamigration.css
-│       ├── datamigration.html
-│       └── datamigration.js
+│       ├── workspacemigration.css
+│       ├── workspacemigration.html
+│       └── workspacemigration.js
 ├── services
-│   └── datamigration
+│   └── workspaceDataMigration
 │       ├── README.md
 │       ├── config.json
-│       ├── datamigration.html
+│       ├── workspaceDataMigrationService.html
 │       ├── datamigration.png
-│       └── datamigrationService.js
+│       └── workspaceDataMigrationService.js
 └── thirdParty
 ```
 
 
-### Service: `datamigration`
+### Service: `workspaceDataMigration`
 
 **Flowchart**
 
-![Data Migration Flowchart](./datamigration.png)
+![Workspace Migration Flowchart](./datamigration.png)
 
 
-1. If the user has no data (is a new user) or has already been migrated, the Migration Assistant component should not spawn.
-1. If the user has data in the current storage adapter, a simple message displays with warning copy and action buttons.
-1. Upon completion, Finsemble should be restarted.
+1. If the user's data has already been migrated, the Migration Assistant component should not spawn.
+1. Otherwise, a simple message displays with warning copy and action buttons.
+1. Upon completion of a migration, the Migration assistant can be clsoed.
 
-### Data Migration Assistant Component: `datamigration`
+### Workspace Migration Assistant Component: `workspacemigration`
 
-The Migration Assistant component is a basic HTML5 component designed to communicate to the user the state of their data. This component is a sample and is designed to be customized to your needs.   
+The Migration Assistant component is a basic HTML5 component designed to communicate with the user about the migration. This component is a sample and is designed to be customized to your needs. It is not an essential part of the migration process, other than having a button to start the process. Hence, it may be removed or edited such that the migration is conducted automatically. However, at the end of the migration the current workspace must be reloaded; the migration assistant is therefore useful in grabbing the user's attention while that happens so that they do not interact with the workspace before ti is reloaded
 
 ## Directions
 
-1. Copy the `src/services/datamigration` directory from this branch in your Finsemble `src/services` directory.
-1. Copy the `src/components/datamigration` directory from this branch to your Finsemble `src/components` directory.
-1. Modify `configs/application/config.json:servicesConfig.storage` topics to use `LocalStorageAdapter` or your custom storage adapter that you've already created as per [the documentation](https://documentation.chartiq.com/finsemble/tutorial-storingData.html).
-    ```json
-    "storage": {
-			"defaultStorage": "LocalStorageAdapter",
-			"topicToDataStoreAdapters": {
-				"finsemble": "LocalStorageAdapter",
-				"finsemble.workspace": "LocalStorageAdapter",
-				"finsemble.workspace.cache": "IndexedDBAdapter"
-			},
-			"dataStoreAdapters": {
-				"LocalStorageAdapter": "$applicationRoot/adapters/localStorageAdapter.js",
-				"IndexedDBAdapter": "$applicationRoot/adapters/indexedDBAdapter.js"
-			}
-        }
-    }
-    ```
+1. Copy the `src/services/workspaceDataMigration` directory from this branch in your Finsemble `src/services` directory.
+1. Copy the `src/components/workspacemigration` directory from this branch to your Finsemble `src/components` directory.
 
-    Note: as `finsemble.workspace.cache` is a topic that is very frequently read from and written to, it is not advisable to use an external storage adapter for it.
 
-1. Modify `src/services/datamigration/datamigrationService.js` to set which adapter and storage topics you wish to migrate: 
+
+1. Modify `src/services/datamigration/workspaceDataMigrationService.js` to set which adapter and storage topics you wish to migrate: 
     - Set `MIGRATE_FROM_ADAPTER` to the name of source storage adapter (e.g. "IndexedDBAdapter").
     - Set `MIGRATE_TO_ADAPTER` to the name of destination storage adapter (i.e. "LocalStorageAdapter" or the name of your custom storage adapter).
     - Set `TOPICS_TO_MIGRATE` to an array of storage topics you wish to migrate (e.g. `["finsemble", "finsemble.workspace"]`)
