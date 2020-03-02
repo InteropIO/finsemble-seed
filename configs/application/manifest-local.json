@@ -1,14 +1,4 @@
 {
-    "finsemble-electron-adapter": {
-        "logger": {
-            "logLevel": "debug",
-            "transports": {
-                "console": {
-                    "enable": true
-                }
-            }
-        }
-    },
     "devtools_port": 9090,
     "startup_app": {
         "name": "ChartIQ Local",
