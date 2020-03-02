@@ -72,6 +72,7 @@ span > svg {
     letter-spacing: .25px;
     align-content: center;
     display: block;
+    padding-top: 1px;
 }
 
 .finsemble-toolbar-button:hover {
