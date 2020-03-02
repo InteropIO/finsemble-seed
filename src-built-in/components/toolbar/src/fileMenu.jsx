@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { MenuShell, MenuActivator, Menu, Preferences, SystemLog, CentralLogger, Documentation, Restart, Reset, Quit } from "@chartiq/finsemble-ui/lib/components";
 
 export const FileMenu = () => {
