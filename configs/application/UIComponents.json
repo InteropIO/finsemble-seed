@@ -133,41 +133,6 @@
 				}
 			}
 		},
-		"Workspace Management Menu": {
-			"window": {
-				"url": "$applicationRoot/components/workspaceManagementMenu/workspaceManagementMenu.html",
-				"affinity": "systemComponents",
-				"top": 32,
-				"left": 45,
-				"width": 310,
-				"height": 330,
-				"ephemeral": true,
-				"options": {
-					"autoShow": false
-				}
-			},
-			"component": {
-				"spawnOnStartup": false,
-				"category": "system"
-			},
-			"foreign": {
-				"services": {
-					"windowService": {
-						"allowAutoArrange": false,
-						"shouldRegister": false
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"launchableByUser": false
-					},
-					"Window Manager": {
-						"FSBLHeader": false,
-						"persistWindowState": false
-					}
-				}
-			}
-		},
 		"linkerWindow": {
 			"bootParams": {
 				"stage": "earlyuser",
