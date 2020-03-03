@@ -5,6 +5,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import ProcessMonitor from "@chartiq/finsemble-ui/lib/components/processMonitor/index";
+import { ProcessMonitor } from "@chartiq/finsemble-ui/src/components/processMonitor/processMonitor";
 
-ReactDOM.render(<ProcessMonitor />, document.getElementById("ProcessMonitor-component-wrapper"));
+if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
+function FSBLReady() {
+	ReactDOM.render(<ProcessMonitor />, document.getElementById("ProcessMonitor-component-wrapper"));
+}
