@@ -5,6 +5,7 @@
 import ReactDOM from "react-dom";
 import React from "react";
 import { ToolbarShell, DragHandle, FavoritesShell, RevealAll, MinimizeAll, AutoArrange, Search } from "@chartiq/finsemble-ui/lib/components";
+import { FileMenu } from "./fileMenu";
 
 import '../toolbar.css';
 import { ExampleMenu, ExampleMenu2, AdvancedExample } from "./exampleMenu";
@@ -13,10 +14,7 @@ const Toolbar = () => {
 		<ToolbarShell>
 			<div className="finsemble-toolbar-section left">
 				<DragHandle />
-				<ExampleMenu />
-				<Search/>
-				<ExampleMenu2 />
-				<AdvancedExample />
+				<FileMenu />
 				{/* Workspace Management Menu */}
 				{/* App Menu */}
 			</div>
