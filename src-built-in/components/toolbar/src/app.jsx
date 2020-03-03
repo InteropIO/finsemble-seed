@@ -15,6 +15,7 @@ const Toolbar = () => {
 			<div className="finsemble-toolbar-section left">
 				<DragHandle />
 				<FileMenu />
+				<Search/>
 				{/* Workspace Management Menu */}
 				{/* App Menu */}
 			</div>
