@@ -1,5 +1,5 @@
 /*!
-* Copyright 2017 by ChartIQ, Inc.
+* Copyright 2020 by ChartIQ, Inc.
 * All rights reserved.
 * The workspace management menu may be the most complicated component that we have (other than the toolbar). It isn't because workspace management is particularly difficult, it's because there is a lot of user question and answer going on. We don't want to overwrite data without explicit consent, and so the calls get involved. To simplify the code, we are using the `async` library. If you are unfamiliar with this library, see this link: https://caolan.github.io/async/docs.html
 */

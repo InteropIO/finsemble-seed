@@ -1,6 +1,6 @@
 
 /*!
-* Copyright 2017 by ChartIQ, Inc.
+* Copyright 2020 by ChartIQ, Inc.
 * All rights reserved.
 */
 import React from "react";

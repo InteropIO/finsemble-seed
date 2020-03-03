@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 by ChartIQ, Inc.
+ * Copyright 2020 by ChartIQ, Inc.
  * All rights reserved.
  * 
  * FDC3 App directory client, I will be using fetch()

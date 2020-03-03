@@ -1,6 +1,6 @@
 /*!
 * The quick component is a form that will create a new component that the user can spawn from the app launcher.
-* Copyright 2017 by ChartIQ, Inc.
+* Copyright 2020 by ChartIQ, Inc.
 * All rights reserved.
 */
 
