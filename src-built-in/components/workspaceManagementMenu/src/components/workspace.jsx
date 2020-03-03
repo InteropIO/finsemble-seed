@@ -1,5 +1,5 @@
 /*!
-* Copyright 2020 by ChartIQ, Inc.
+* Copyright 2017 - 2020 by ChartIQ, Inc.
 * All rights reserved.
  * This is a single workspace. When clicked, it requests that the app switch to the clicked workspace.
  */
