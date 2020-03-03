@@ -1,4 +1,4 @@
-.entity-badge-wrapper {
+.entity-avatar-wrapper {
 	display: inline-flex;
 	margin-right: 8px;
 	justify-content: center;
@@ -6,7 +6,7 @@
 	padding:3px;
 }
 
-.entity-badge {
+.entity-avatar {
 	font-weight: bold;
 	padding: 6px;
 	height: 10px;
@@ -16,7 +16,7 @@
     text-shadow: none;
 }
 
-.entity-badge-wrapper img {
+.entity-avatar-wrapper img {
 	width: 21px;
 	height: 21px;
 	position: relative;
@@ -24,7 +24,7 @@
 	top: -1px;
 }
 
-.entity-badge-wrapper.entity-with-img {
+.entity-avatar-wrapper.entity-with-img {
 	padding-right: 0px;
 	/* Margin is different for images than for the badges because
 	of their padding and other CSS reasons.*/
@@ -33,16 +33,16 @@
 
 .entity-workspace {
 	border-radius: 3px;
-	background-color: var(--entity-badge-workspace-background-color);
+	background-color: var(--entity-avatar-workspace-background-color);
 }
 
 .entity-component {
 	border-radius: 50%;
-	background-color: var(--entity-badge-component-background-color);
+	background-color: var(--entity-avatar-component-background-color);
 }
 
 /* Center the font-icons inside of the badge. Only on the toolbar, though. */
-.finsemble-toolbar .entity-badge i {
+.finsemble-toolbar .entity-avatar i {
 	position: relative;
 	top: 2px;
 	left: 1px;
