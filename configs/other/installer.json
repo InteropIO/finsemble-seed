@@ -4,7 +4,7 @@
 	"version": "1.0.0",
 	"//outputDirectory": "Path where you would like the executable to be dumped. This is relative to the root of the finsemble-seed",
 	"outputDirectory": "./pkg",
-	"//name": "Name of your application. Will be used for the exe and windows metadata.",
+	"//name": "Name of your application. Will be used for the exe and windows metadata. Only alphanumeric characters, spaces, dashes(-), periods(.), and underscores(_) are allowed",
 	"name": "xyz",
 	"authors": "ChartIQ",
 	"//certificateFile": "The path to an Authenticode Code Signing Certificate",
