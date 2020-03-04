@@ -5,11 +5,13 @@
 		"noImplicitAny": true,
 		"removeComments": true,
 		"preserveConstEnums": true,
-		"sourceMap": true
+		"sourceMap": true,
+		"allowJs": true
 	},
 	"include": [
 		"src/**/*",
-		"src-built-in/**/*"
+		"src-built-in/**/*",
+		"./finsemble/types/**/*"
 	],
 	"exclude": [
 		"node_modules",
