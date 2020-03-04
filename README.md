@@ -24,7 +24,7 @@ The Finsemble seed project provides a basic structure to help developers get up 
 - _src_ - The folder where your Finsemble components should be placed for the Finsemble build process.
 - _src-built-in_ - Includes the source for the default UI components included with the Finsemble seed project. These files can be extended as desired, but, if you do extend these components, we recommend you copy the folder to the _src_ directory to prevent merge conflicts when upgrading the seed project.
     - _src-built-in/adapters_ - Contains an example Storage Adapter that saves data to local storage.
-- _tutorials_ - Contains the source for the components used by our [seed project tutorial](https://www.chartiq.com/tutorials/?slug=finsemble).
+- _tutorials_ - Contains the source for the components used by our seed project tutorial.
 
 ## Upgrading
 If you are moving from a version of the Finsemble seed project older than 2.3, please see the [instructions here](https://github.com/ChartIQ/finsemble-seed/tree/master/migration/2.3).
