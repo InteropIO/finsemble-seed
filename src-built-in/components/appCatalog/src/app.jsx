@@ -10,16 +10,8 @@ import "../../../../assets/css/font-finance.css";
 import "../../../../assets/css/finsemble.css";
 import "../appCatalog.css";
 import "../../complexMenu/menu.css";
-import { AppCatalog } from "@chartiq/finsemble-ui/src/components/appCatalog/appCatalog";
+import { AppCatalog } from "@chartiq/finsemble-ui/lib/components/appCatalog/appCatalog";
 
-if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
-function FSBLReady() {
-	//console.log("App Catalog app onReady");
-	FSBL.Clients.WindowClient.finsembleWindow.updateOptions({ alwaysOnTop: true });
-	FSBL.Clients.DialogManager.showModal();
-	//FSBL.Clients.WindowClient.finsembleWindow.addEventListener("shown", FSBL.Clients.DialogManager.showModal);
-
-	ReactDOM.render(
+ReactDOM.render(
 		<AppCatalog />
 		, document.getElementById("bodyHere"));
-}
