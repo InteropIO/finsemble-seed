@@ -138,7 +138,8 @@ module.exports = class WebpackDefaults {
 					'react-dom': path.resolve('./node_modules/react-dom'),
 					'@babel/runtime': path.resolve('./node_modules/@babel/runtime'),
 					'@chartiq/finsemble-react-controls': path.resolve('./node_modules/@chartiq/finsemble-react-controls'),
-					'async': path.resolve('./node_modules/async')
+					'async': path.resolve('./node_modules/async'),
+					'lodash.debounce': path.resolve('./node_modules/lodash.debounce'),
 				},
 				extensions: ['.tsx', '.ts', '.js', '.jsx', '.json', 'scss', 'html'],
 				modules: [
