@@ -39,7 +39,7 @@
   </div>
   <div>
     <label>BurstInterval: </label>
-    <input id="burstInterval" value="1000" />
+    <input id="burstInterval" value="100" />
     <br />
     <label><b>The timer interval in milliseconds to send each burst of message
         (e.g. 1 is every millisecond; 10 is every 10 milliseconds)</b></label>
@@ -47,7 +47,7 @@
   </div>
   <div>
     <label>BurstCount: </label>
-    <input id="burstCount" value="5" />
+    <input id="burstCount" value="1" />
     <br />
     <label><b>The number of messages to send in each burst</b></label>
     <br /><br />
@@ -55,11 +55,16 @@
   <div>
     <label>Group Message: </label>
     <input id="groupMsgCount" value="1" />
+    <select id="groupMode">
+      <option value="messagegroup">Message</option>
+      <option value="timegroup">Millisecond</option>
+    </select>
     <br />
     <label><b>The number of messages to be grouped to sent</b></label>
     <br /><br />
   </div>
   <button id="startTest">Start Test</button>
+  <div id='result'></div>
 </body>
 
 </html>

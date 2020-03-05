@@ -1,6 +1,5 @@
 agGrid.LicenseManager.setLicenseKey("");
 
-
 var columnDefs = [
 	// these are the row groups, so they are all hidden (they are show in the group column)
 	{
@@ -94,10 +93,11 @@ const FSBLReady = () => {
 				} else if (testRecord.testState === "done") {
 					let endTime = new Date();
 					let totalTime = endTime - startMsg.senderStartTime;
-					let localTotalTime = endTime - receiverStartTime;
+					//let localTotalTime = endTime - receiverStartTime;
 					let messagesPerSecond = (Math.round((localCounter / totalTime) * 1000 * 100) / 100).toFixed(2);
 					let averageDiff = (Math.round((diffTotal / localCounter) * 100) / 100).toFixed(2);
-					let result = 'Total Message Recevied: ' + localCounter + '<br/>' + 'Total Time: ' + totalTime + ' ms<br/>' + 'Total Local Time: ' + localTotalTime + ' ms<br/>' + 'Number of Message per Second: ' + messagesPerSecond + '<br/>' + 'Average Diff: ' + averageDiff + ' ms<br/>'
+					let bandwidth =  (Math.round(((localCounter* startMsg.dataSize)/totalTime *1000) * 100) / 100).toFixed(2);
+					let result = 'Total Message Recevied: ' + localCounter + '<br/>' + 'Total Time: ' + totalTime + ' ms<br/>' + 'Number of Message per Second: ' + messagesPerSecond + '<br/>' + 'Average Diff: ' + averageDiff + ' ms<br/>' + 'Bandwidth: ' + bandwidth + ' bytes/s<br/>'
 					document.getElementById('result').innerHTML = result
 				}
 			} else {
