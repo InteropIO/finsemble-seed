@@ -5,8 +5,7 @@
 * All rights reserved.
 */
 
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { AuthHeader, AuthForm, ErrorMessage, AuthInput, AuthSubmit } from "@chartiq/finsemble-ui/lib/components";
 import useAuth from "@chartiq/finsemble-ui/lib/hooks/useAuth";
@@ -69,4 +68,14 @@ export const Authentication = () => {
     )
 }
 
-ReactDOM.render(<Authentication /> , document.getElementById("authentication"));
+
+function renderAuthComponent() {
+    ReactDOM.render(<Authentication />, document.getElementById("authentication"));
+    FSBL.System.Window.getCurrent().show();
+}
+
+if (window.FSBL && FSBL.addEventListener) {
+	FSBL.addEventListener("onReady", renderAuthComponent);
+} else {
+	window.addEventListener("FSBLReady", renderAuthComponent);
+}
