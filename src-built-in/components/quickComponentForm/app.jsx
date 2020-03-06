@@ -7,7 +7,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 //Finsemble font-icons, general styling, and specific styling.
-import "./quickComponent.css";
 import "../../../assets/css/finsemble.css";
 import { QuickComponentForm } from "@chartiq/finsemble-ui/src/components/quickComponentForm/quickComponentForm";
 
