@@ -10,7 +10,7 @@ import "../../../../assets/css/font-finance.css";
 import "../../../../assets/css/finsemble.css";
 import "../appCatalog.css";
 import "../../complexMenu/menu.css";
-import { AppCatalog } from "@chartiq/finsemble-ui/lib/components/appCatalog/appCatalog";
+import { AppCatalog } from "@chartiq/finsemble-ui/lib/components";
 
 ReactDOM.render(
 		<AppCatalog />
