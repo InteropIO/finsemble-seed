@@ -5,22 +5,21 @@
 import ReactDOM from "react-dom";
 import React from "react";
 import { ToolbarShell, FavoritesShell, DragHandle, RevealAll, MinimizeAll, AutoArrange, Search, AppLauncher, AdvancedAppLauncher, WorkspaceManagementMenu } from "@chartiq/finsemble-ui/lib/components";
+import { FileMenu } from "./fileMenu";
 
 import '../toolbar.css';
 import "../../../../assets/css/font-finance.css";
 import "../../../../assets/css/finsemble.css";
-import { ExampleMenu, ExampleMenu2, AdvancedExample } from "./exampleMenu";
+
 const Toolbar = () => {
 	return (
 		<ToolbarShell>
 			<div className="finsemble-toolbar-section left">
 				<DragHandle />
-				<ExampleMenu />
+				<FileMenu />
 				<Search/>
-				<ExampleMenu2 />
+				<WorkspaceManagementMenu/>
 				<AdvancedAppLauncher />
-				<WorkspaceManagementMenu />
-				{/* App Menu */}
 			</div>
 			<div className="finsemble-toolbar-section center">
 				<FavoritesShell />
@@ -30,10 +29,7 @@ const Toolbar = () => {
 				<AutoArrange />
 				<RevealAll />
 			</div>
-			<div className="resize-area" ></div>
-
-
-
+      <div className="resize-area" ></div>
 		</ToolbarShell>
 	)
 }
