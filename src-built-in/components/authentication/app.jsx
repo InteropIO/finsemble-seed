@@ -15,14 +15,26 @@ export const Authentication = () => {
     const { error, setError } = useState(null);
 
     /*
-     * Replace this function with your own authentication method that makes the call to the user authentication server.
+     * Replace this function with your own authentication method that makes the call to your authentication server.
      */
     const authenticateUser = async () => {
-        const { username, password } = formValues;  // Send this data to the server to validate user input
-        const result = await Promise.resolve({res: "ok"});  // Replace this with your own authentication calls
-        return result;  // the result is an object 
+        // The user form data to be sent to the authentication server.
+        const { username, password } = formValues;
+        // Replace this with your own authentication calls. Currently it will always authenticate no matter what the user input is.
+        const result = await Promise.resolve({res: "ok"});
+        // the result is an object containing a response and an error. For example:
+        // {
+        //     res: "ok",
+        //     error: "Password is not correct"
+        // }
+        return result;
     }
 
+    /**
+     * This function invokes the function that makes the call to the server that verifies user authentication information and
+     * decides whether to authorize the user to the rest of the application or display an error on the authentication form.
+     * @param {func} authenticateUser The function to call to authenticate the user.
+     */
     const onSubmit = async (authenticateUser) => {
         const authResult = await authenticateUser();
         if (authResult.res === "ok") {
@@ -47,13 +59,13 @@ export const Authentication = () => {
                     {error && <ErrorMessage>
                         {error}
                     </ErrorMessage>}
-                    <input 
+                    <AuthInput
                         type="text"
                         name="username"
                         placeholder="Username"
                         onChange={handleChange} 
                     />
-                    <AuthInput 
+                    <AuthInput
                         type="password"
                         name="password"
                         placeholder="Password"
