@@ -1,5 +1,5 @@
 /*!
-* The authentication component is a React component that renders a user form to collect auth info and determine whether to give user access to the rest of finsemble
+* The authentication component is a React component that renders a user form to collect auth info and determine whether to give user access to the rest of Finsemble
 * based on the information provided. 
 * Copyright 2020 by ChartIQ, Inc.
 * All rights reserved.
@@ -11,7 +11,7 @@ import { AuthHeader, AuthForm, ErrorMessage, AuthInput, AuthSubmit } from "@char
 import useAuth from "@chartiq/finsemble-ui/lib/hooks/useAuth";
 
 export const Authentication = () => {
-    const { handleChange, formValues, proceedToAuthorize, quitApplication } = useAuth();
+    const { saveInputChange, formValues, proceedToAuthorize, quitApplication } = useAuth();
     const { error, setError } = useState(null);
 
     /*
@@ -63,13 +63,13 @@ export const Authentication = () => {
                         type="text"
                         name="username"
                         placeholder="Username"
-                        onChange={handleChange} 
+                        onChange={saveInputChange} 
                     />
                     <AuthInput
                         type="password"
                         name="password"
                         placeholder="Password"
-                        onChange={handleChange} 
+                        onChange={saveInputChange} 
                     />
                     <AuthSubmit onClick={() => onSubmit(authenticateUser)} >
                         Login
@@ -80,14 +80,5 @@ export const Authentication = () => {
     )
 }
 
-
-function renderAuthComponent() {
-    ReactDOM.render(<Authentication />, document.getElementById("authentication"));
-    FSBL.System.Window.getCurrent().show();
-}
-
-if (window.FSBL && FSBL.addEventListener) {
-	FSBL.addEventListener("onReady", renderAuthComponent);
-} else {
-	window.addEventListener("FSBLReady", renderAuthComponent);
-}
+ReactDOM.render(<Authentication />, document.getElementById("authentication"));
+FSBL.System.Window.getCurrent().show();
