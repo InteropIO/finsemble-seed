@@ -167,12 +167,12 @@ function loadInstalledComponentsFromStore(cb = Function.prototype) {
 					return componentDone();
 				}
 				// register the component with the launcher service
-				FSBL.Clients.LauncherClient.registerComponent({
+				/*FSBL.Clients.LauncherClient.registerComponent({
 					componentType: component.name,
 					manifest: app.manifest
 				}, (err, response) => {
 					componentDone(err);
-				});
+				});*/
 			});
 		}
 		// We'll load our user defined components here
