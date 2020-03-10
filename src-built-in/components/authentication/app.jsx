@@ -11,7 +11,7 @@ import { AuthHeader, AuthForm, ErrorMessage, AuthInput, AuthSubmit } from "@char
 import useAuth from "@chartiq/finsemble-ui/lib/hooks/useAuth";
 
 export const Authentication = () => {
-    const { saveInputChange, formValues, proceedToAuthorize, quitApplication } = useAuth();
+    const { saveInputChange, formValues, authorize, quitApplication } = useAuth();
     const { error, setError } = useState(null);
 
     /*
@@ -38,7 +38,7 @@ export const Authentication = () => {
     const onSubmit = async (authenticateUser) => {
         const authResult = await authenticateUser();
         if (authResult.res === "ok") {
-            proceedToAuthorize();
+            authorize();
         } else {
             setError(authResult.error);
         }
