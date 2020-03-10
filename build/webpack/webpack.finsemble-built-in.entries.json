@@ -33,7 +33,7 @@
 	},
 	"yesNoDialog": {
 		"output": "components/yesNoDialog/yesNoDialog",
-		"entry": "./src-built-in/components/yesNoDialog/src/app.jsx"
+		"entry": "./src-built-in/components/yesNoDialog/yesNoDialog.jsx"
 	},
 	"singleInputDialog": {
 		"output": "components/singleInputDialog/singleInputDialog",
