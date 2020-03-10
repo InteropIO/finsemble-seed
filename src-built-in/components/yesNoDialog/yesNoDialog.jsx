@@ -9,9 +9,4 @@ import ReactDOM from "react-dom";
 import "../../../assets/css/finsemble.css";
 import { YesNoDialog } from "@chartiq/finsemble-ui/lib/components/yesNoDialog/yesNoDialog";
 
-
-window.yesNoDone = false;
-if (!window.yesNoDone) {
-    window.yesNoDone = true;
-    ReactDOM.render(<YesNoDialog />, document.getElementById("YesNoDialog-component-wrapper"));
-}
+ReactDOM.render(<YesNoDialog />, document.getElementById("YesNoDialog-component-wrapper"));
