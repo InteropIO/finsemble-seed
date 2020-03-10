@@ -6,8 +6,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 //style
 import "../appCatalog.css";
-import { AppMarket } from "@chartiq/finsemble-ui/lib/components";
+import { AppCatalog } from "@chartiq/finsemble-ui/lib/components";
 
 ReactDOM.render(
-	<AppMarket />,
+	<AppCatalog />,
 	document.getElementById("bodyHere"));
