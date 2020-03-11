@@ -1,194 +1,1844 @@
 {
-	"comment": "Sample component configuration",
-	"components": {
-		"Welcome Component": {
-			"window": {
-				"url": "$applicationRoot/components/welcome/welcome.html",
-				"affinity": "workspaceComponents",
-				"frame": false,
-				"resizable": true,
-				"autoShow": true,
-				"top": "center",
-				"left": "center",
-				"width": 400,
-				"height": 432
-			},
-			"component": {
-				"displayName": "Welcome Component",
-				"spawnOnStartup": false,
-				"preload": "$applicationRoot/preloads/zoom.js"
-			},
-			"foreign": {
-				"services": {
-					"windowService": {
-						"allowSnapping": true,
-						"allowGrouping": true,
-						"allowAutoArrange": true,
-						"allowMinimize": true
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"launchableByUser": true
-					},
-					"Window Manager": {
-						"showLinker": true,
-						"FSBLHeader": true,
-						"persistWindowState": true,
-						"title": "Welcome to Finsemble"
-					},
-					"Toolbar": {
-						"iconClass": "ff-component"
-					}
-				}
-			}
-		},
-		"nonConfiguredComponent": {
-			"window": {
-				"url": "$applicationRoot/components/nonConfiguredComponent/nonConfiguredComponent.html",
-				"affinity": "systemComponents",
-				"frame": false,
-				"resizable": true,
-				"autoShow": true,
-				"top": "center",
-				"left": "center",
-				"width": 400,
-				"height": 432
-			}
-		},
-		"Notepad": {
-			"window": {
-				"windowType": "assimilation",
-				"path": "notepad.exe",
-				"defaultHeight": 600,
-				"autoShow": true,
-				"resizable": true,
-				"showTaskbarIcon": false,
-				"contextMenu": true,
-				"addToWorkspace": true,
-				"options": {
-					"alwaysOnTop": false
-				}
-			},
-			"component": {
-				"spawnOnHotkey": [
-					"ctrl",
-					"alt",
-					"n"
-				]
-			},
-			"foreign": {
-				"services": {
-					"windowService": {
-						"allowAutoArrange": true
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"launchableByUser": true
-					},
-					"Window Manager": {
-						"persistWindowState": false,
-						"FSBLHeader": true
-					},
-					"Toolbar": {
-						"iconURL": "$applicationRoot/assets/img/notepad.png"
-					}
-				}
-			}
-		},
-		"Getting Started Tutorial": {
-			"window": {
-				"url": "https://www.chartiq.com/tutorials/?slug=finsemble",
-				"height": 800,
-				"width": 1000
-			},
-			"component": {
-				"spawnOnStartup": false
-			},
-			"foreign": {
-				"services": {
-					"workspaceService": {
-						"persistURL": true
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"launchableByUser": false
-					},
-					"Window Manager": {
-						"showLinker": false,
-						"FSBLHeader": true,
-						"persistWindowState": true,
-						"title": "Finsemble Getting Started Tutorial"
-					}
-				}
-			}
-		},
-		"Finsemble Documentation": {
-			"window": {
-				"url": "http://documentation.chartiq.com/finsemble",
-				"left": "center",
-				"top": "center",
-				"height": 800,
-				"width": 1000
-			},
-			"component": {},
-			"foreign": {
-				"services": {
-					"workspaceService": {
-						"persistURL": true
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"launchableByUser": false
-					},
-					"Window Manager": {
-						"showLinker": false,
-						"FSBLHeader": true,
-						"persistWindowState": true,
-						"title": "Finsemble Documentation"
-					}
-				}
-			}
-		},
-		"defaultAuthentication": {
-			"window": {
-				"url": "$applicationRoot/components/authentication/defaultAuthentication.html",
-				"top": "center",
-				"left": "center",
-				"width": 358,
-				"height": 658,
-				"ephemeral": true,
-				"options": {
-					"autoShow": false
-				}
-			},
-			"component": {
-				"neededClients": [
-					"LauncherClient",
-					"AuthenticationClient",
-					"StorageClient"
-				],
-				"category": "system"
-			},
-			"foreign": {
-				"services": {
-					"windowService": {
-						"allowAutoArrange": false
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"launchableByUser": false
-					},
-					"Window Manager": {
-						"FSBLHeader": false,
-						"persistWindowState": false
-					}
-				}
-			}
-		}
-	}
+    "comment": "Sample component configuration",
+    "components": {
+        "Welcome Component": {
+            "window": {
+                "url": "$applicationRoot/components/welcome/welcome.html",
+                "affinity": "workspaceComponents",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 400,
+                "height": 432
+            },
+            "component": {
+                "displayName": "Welcome Component",
+                "spawnOnStartup": false,
+                "preload": "$applicationRoot/preloads/zoom.js"
+            },
+            "foreign": {
+                "services": {
+                    "windowService": {
+                        "allowSnapping": true,
+                        "allowGrouping": true,
+                        "allowAutoArrange": true,
+                        "allowMinimize": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "showLinker": true,
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "title": "Welcome to Finsemble"
+                    },
+                    "Toolbar": {
+                        "iconClass": "ff-component"
+                    }
+                }
+            }
+        },
+        "nonConfiguredComponent": {
+            "window": {
+                "url": "$applicationRoot/components/nonConfiguredComponent/nonConfiguredComponent.html",
+                "affinity": "systemComponents",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 400,
+                "height": 432
+            }
+        },
+        "Notepad": {
+            "window": {
+                "windowType": "assimilation",
+                "path": "notepad.exe",
+                "defaultHeight": 600,
+                "autoShow": true,
+                "resizable": true,
+                "showTaskbarIcon": false,
+                "contextMenu": true,
+                "addToWorkspace": true,
+                "options": {
+                    "alwaysOnTop": false
+                }
+            },
+            "component": {
+                "spawnOnHotkey": [
+                    "ctrl",
+                    "alt",
+                    "n"
+                ]
+            },
+            "foreign": {
+                "services": {
+                    "windowService": {
+                        "allowAutoArrange": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "persistWindowState": false,
+                        "FSBLHeader": true
+                    },
+                    "Toolbar": {
+                        "iconURL": "$applicationRoot/assets/img/notepad.png"
+                    }
+                }
+            }
+        },
+        "Getting Started Tutorial": {
+            "window": {
+                "url": "https://www.chartiq.com/tutorials/?slug=finsemble",
+                "height": 800,
+                "width": 1000
+            },
+            "component": {
+                "spawnOnStartup": false
+            },
+            "foreign": {
+                "services": {
+                    "workspaceService": {
+                        "persistURL": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": false
+                    },
+                    "Window Manager": {
+                        "showLinker": false,
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "title": "Finsemble Getting Started Tutorial"
+                    }
+                }
+            }
+        },
+        "Finsemble Documentation": {
+            "window": {
+                "url": "http://documentation.chartiq.com/finsemble",
+                "left": "center",
+                "top": "center",
+                "height": 800,
+                "width": 1000
+            },
+            "component": {},
+            "foreign": {
+                "services": {
+                    "workspaceService": {
+                        "persistURL": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": false
+                    },
+                    "Window Manager": {
+                        "showLinker": false,
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "title": "Finsemble Documentation"
+                    }
+                }
+            }
+        },
+        "defaultAuthentication": {
+            "window": {
+                "url": "$applicationRoot/components/authentication/defaultAuthentication.html",
+                "top": "center",
+                "left": "center",
+                "width": 358,
+                "height": 658,
+                "ephemeral": true,
+                "options": {
+                    "autoShow": false
+                }
+            },
+            "component": {
+                "neededClients": [
+                    "LauncherClient",
+                    "AuthenticationClient",
+                    "StorageClient"
+                ],
+                "category": "system"
+            },
+            "foreign": {
+                "services": {
+                    "windowService": {
+                        "allowAutoArrange": false
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": false
+                    },
+                    "Window Manager": {
+                        "FSBLHeader": false,
+                        "persistWindowState": false
+                    }
+                }
+            }
+        },
+        "Finsemble WPF Demo": {
+            "window": {
+                "id": "Finsemble WPF Demo",
+                "windowType": "FinsembleNativeWindow",
+                "alias": "FinsembleWPFDemo",
+                "path": "",
+                "url": "",
+                "autoShow": true,
+                "resizable": true,
+                "showTaskbarIcon": false,
+                "contextMenu": true,
+                "addToWorkspace": true,
+                "options": {
+                    "alwaysOnTop": false
+                }
+            },
+            "component": {
+                "mode": "native",
+                "category": "system"
+            },
+            "foreign": {
+                "services": {
+                    "workspaceService": {
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "persistWindowState": false,
+                        "FSBLHeader": true
+                    },
+                    "Toolbar": {
+                        "iconURL": "$applicationRoot/assets/img/Finsemble_Taskbar_Icon.png"
+                    }
+                }
+            }
+        },
+        "API Test 1": {
+            "window": {
+                "url": "$applicationRoot/components/apitest/test1.html",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "top",
+                "left": "left",
+                "width": 925,
+                "height": "100%"
+            },
+            "component": {
+                "preload": false
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "title": "API Testing 1",
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "showLinker": true
+                    },
+                    "Toolbar": {
+                        "iconClass": "test"
+                    }
+                }
+            }
+        },
+        "API Test 2": {
+            "window": {
+                "url": "$applicationRoot/components/apitest/test2.html",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "top",
+                "right": "right",
+                "width": 925,
+                "height": "100%"
+            },
+            "component": {
+                "preload": false,
+                "advertiseReceivers": "symbol"
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "title": "API Testing 2",
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "showLinker": true
+                    },
+                    "Toolbar": {
+                        "iconClass": "test"
+                    }
+                }
+            }
+        },
+        "toggleWindowTest": {
+            "window": {
+                "url": "$applicationRoot/components/toggleWindowTest/toggleWindowTest.html",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 400,
+                "height": 600
+            },
+            "component": {
+                "preload": false
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "title": "toggleWindowTest",
+                        "FSBLHeader": true,
+                        "persistWindowState": true
+                    },
+                    "Toolbar": {
+                        "iconClass": "toggleWindowTest"
+                    }
+                }
+            }
+        },
+        "Advanced Chart": {
+            "window": {
+                "url": "$applicationRoot/components/chartiq/chart/sample-template-advanced.html",
+                "width": 800,
+                "height": 600,
+                "options": {
+                    "minWidth": 75
+                }
+            },
+            "component": {
+                "mode": "premium",
+                "advertiseReceivers": [
+                    "chartiq.chart",
+                    "symbol"
+                ],
+                "spawnOnHotkey": [
+                    "ctrl",
+                    "alt",
+                    "a"
+                ],
+                "category": "system",
+                "preload": "$applicationRoot/components/chartiq/chartiq.js"
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Toolbar": {
+                        "iconClass": "ff-chart-advanced"
+                    },
+                    "Window Manager": {
+                        "title": "ChartIQ",
+                        "FSBLHeader": {
+                            "bumpElements": {
+                                "absolute": false,
+                                "fixed": false
+                            }
+                        },
+                        "showLinker": true,
+                        "persistWindowState": true
+                    }
+                }
+            }
+        },
+        "PEM01 Welcome Component": {
+            "window": {
+                "url": "$applicationRoot/components/welcome/welcome.html",
+                "affinity": "workspaceComponents",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 400,
+                "height": 432
+            },
+            "component": {
+                "displayName": "Permissions - Window Close Not Restricted",
+                "spawnOnStartup": false,
+                "preload": "$applicationRoot/preloads/zoom.js"
+            },
+            "foreign": {
+                "services": {
+                    "windowService": {
+                        "allowSnapping": true,
+                        "allowGrouping": true,
+                        "allowAutoArrange": true,
+                        "allowMinimize": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "showLinker": true,
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "title": "Permissions - Window Close Not Restricted"
+                    },
+                    "Toolbar": {
+                        "iconClass": "ff-component"
+                    }
+                }
+            }
+        },
+        "PEM02 Welcome Component": {
+            "window": {
+                "url": "$applicationRoot/components/welcome/welcome.html",
+                "affinity": "workspaceComponents",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 400,
+                "height": 432,
+                "options": {
+                    "securityPolicy": "trusted",
+                    "permissions": {
+                        "Window": {
+                            "close": false
+                        }
+                    }
+                }
+            },
+            "component": {
+                "displayName": "Permissions - Window Close Restricted",
+                "spawnOnStartup": false,
+                "preload": "$applicationRoot/preloads/zoom.js"
+            },
+            "foreign": {
+                "services": {
+                    "windowService": {
+                        "allowSnapping": true,
+                        "allowGrouping": true,
+                        "allowAutoArrange": true,
+                        "allowMinimize": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "showLinker": true,
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "title": "Permissions - Window Close Restricted"
+                    },
+                    "Toolbar": {
+                        "iconClass": "ff-component"
+                    }
+                }
+            }
+        },
+        "PEM04 Welcome Component": {
+            "window": {
+                "url": "$applicationRoot/components/welcome/welcome.html",
+                "affinity": "workspaceComponents",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 400,
+                "height": 432,
+                "windowType": "Application",
+                "options": {
+                    "securityPolicy": "trusted",
+                    "permissions": {
+                        "Window": {
+                            "close": false
+                        }
+                    }
+                }
+            },
+            "component": {
+                "displayName": "Permissions - Window Close on windowType: Application is Restricted",
+                "spawnOnStartup": false,
+                "preload": "$applicationRoot/preloads/zoom.js"
+            },
+            "foreign": {
+                "services": {
+                    "windowService": {
+                        "allowSnapping": true,
+                        "allowGrouping": true,
+                        "allowAutoArrange": true,
+                        "allowMinimize": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "showLinker": true,
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "title": "Permissions - Window Close on windowType: Application is Restricted"
+                    },
+                    "Toolbar": {
+                        "iconClass": "ff-component"
+                    }
+                }
+            }
+        },
+        "PEM08 Welcome Component": {
+            "window": {
+                "url": "$applicationRoot/components/welcome/welcome.html",
+                "affinity": "workspaceComponents",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 400,
+                "height": 432,
+                "options": {
+                    "securityPolicy": "trusted"
+                }
+            },
+            "component": {
+                "displayName": "Permissions - Trusted Components Can Exit Finsemble",
+                "spawnOnStartup": false,
+                "preload": "$applicationRoot/preloads/zoom.js"
+            },
+            "foreign": {
+                "services": {
+                    "windowService": {
+                        "allowSnapping": true,
+                        "allowGrouping": true,
+                        "allowAutoArrange": true,
+                        "allowMinimize": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "showLinker": true,
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "title": "Permissions - Trusted Components Can Exit Finsemble"
+                    },
+                    "Toolbar": {
+                        "iconClass": "ff-component"
+                    }
+                }
+            }
+        },
+        "PEM09 Welcome Component": {
+            "window": {
+                "url": "$applicationRoot/components/welcome/welcome.html",
+                "affinity": "workspaceComponents",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 400,
+                "height": 432,
+                "options": {
+                    "securityPolicy": "untrusted"
+                }
+            },
+            "component": {
+                "displayName": "Permissions - Untrusted Components Can Not Exit Finsemble",
+                "spawnOnStartup": false,
+                "preload": "$applicationRoot/preloads/zoom.js"
+            },
+            "foreign": {
+                "services": {
+                    "windowService": {
+                        "allowSnapping": true,
+                        "allowGrouping": true,
+                        "allowAutoArrange": true,
+                        "allowMinimize": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "showLinker": true,
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "title": "Permissions - Untusted Components Can Not Exit Finsemble"
+                    },
+                    "Toolbar": {
+                        "iconClass": "ff-component"
+                    }
+                }
+            }
+        },
+        "PEM10 Welcome Component": {
+            "window": {
+                "url": "$applicationRoot/components/welcome/welcome.html",
+                "affinity": "workspaceComponents",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 400,
+                "height": 432,
+                "options": {
+                    "securityPolicy": "untrusted"
+                }
+            },
+            "component": {
+                "displayName": "Permissions - Untrusted Components Can Load Trusted Preloads",
+                "spawnOnStartup": false,
+                "preload": "$applicationRoot/preloads/zoom.js"
+            },
+            "foreign": {
+                "services": {
+                    "windowService": {
+                        "allowSnapping": true,
+                        "allowGrouping": true,
+                        "allowAutoArrange": true,
+                        "allowMinimize": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "showLinker": true,
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "title": "Permissions - Untrusted Components Can Load Trusted Preloads"
+                    },
+                    "Toolbar": {
+                        "iconClass": "ff-component"
+                    }
+                }
+            }
+        },
+        "[1] Permissions - Browser Permissions Can Be Set At A Component Level": {
+            "window": {
+                "url": "https://www.moviefone.com/new-movie-releases",
+                "affinity": "workspaceComponents",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 800,
+                "height": 432,
+                "options": {
+                    "permissions": {
+                        "Window": {
+                            "chromePermissions": {
+                                "geolocation": false
+                            }
+                        }
+                    }
+                }
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "showLinker": true,
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "title": "[1] Permissions - Browser Permissions Can Be Set At A Component Level"
+                    },
+                    "Toolbar": {
+                        "iconClass": "ff-component"
+                    }
+                }
+            }
+        },
+        "[2] Permissions - Browser Permissions Can Be Set At A Component Level": {
+            "window": {
+                "url": "https://www.moviefone.com/new-movie-releases",
+                "affinity": "workspaceComponents",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 800,
+                "height": 432
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "showLinker": true,
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "title": "[2] Permissions - Browser Permissions Can Be Set At A Component Level"
+                    },
+                    "Toolbar": {
+                        "iconClass": "ff-component"
+                    }
+                }
+            }
+        },
+        "PEM015 Welcome Component": {
+            "window": {
+                "url": "$applicationRoot/components/welcome/welcome.html",
+                "affinity": "workspaceComponents",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 400,
+                "height": 432,
+                "options": {
+                    "securityPolicy": "trusted",
+                    "permissions": {
+                        "Window": {
+                            "close": false
+                        }
+                    }
+                }
+            },
+            "component": {
+                "displayName": "Permissions - Applications Can Minimize Despite Close Restrictions",
+                "spawnOnStartup": false,
+                "preload": "$applicationRoot/preloads/zoom.js"
+            },
+            "foreign": {
+                "services": {
+                    "windowService": {
+                        "allowSnapping": true,
+                        "allowGrouping": true,
+                        "allowAutoArrange": true,
+                        "allowMinimize": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "showLinker": true,
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "title": "Permissions - Applications Can Minimize Despite Close Restrictions"
+                    },
+                    "Toolbar": {
+                        "iconClass": "ff-component"
+                    }
+                }
+            }
+        },
+        "URI Schemes Test": {
+            "window": {
+                "url": "$applicationRoot/components/uriSchemesTest/uriSchemesTest.html",
+                "options": {
+                    "resizable": true,
+                    "autoShow": true,
+                    "alwaysOnTop": false
+                },
+                "top": "center",
+                "left": "center",
+                "width": 600,
+                "height": 600
+            },
+            "component": {
+                "preload": false,
+                "spawnOnStartup": false,
+                "singleton": false,
+                "showDevConsoleOnVisible": false
+            },
+            "foreign": {
+                "services": {
+                    "windowService": {
+                        "manageWindowMovement": true,
+                        "allowAutoArrange": true,
+                        "allowSnapping": true,
+                        "allowTabbing": true,
+                        "allowTiling": true,
+                        "allowGrouping": true,
+                        "allowMinimize": true
+                    },
+                    "workspace": {}
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "alwaysOnTopIcon": true,
+                        "title": "URI Schemes Test",
+                        "persistWindowState": true
+                    },
+                    "Toolbar": {
+                        "iconClass": "uriSchemesTest",
+                        "iconURL": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png"
+                    }
+                }
+            }
+        },
+        "X-Domain (Google)": {
+            "window": {
+                "url": "https://www.google.com",
+                "options": {
+                    "resizable": true,
+                    "autoShow": true,
+                    "alwaysOnTop": false
+                },
+                "top": "center",
+                "left": "center",
+                "width": 600,
+                "height": 600
+            },
+            "component": {
+                "preload": false,
+                "spawnOnStartup": false,
+                "singleton": false,
+                "showDevConsoleOnVisible": false
+            },
+            "foreign": {
+                "services": {
+                    "windowService": {
+                        "manageWindowMovement": true,
+                        "allowAutoArrange": true,
+                        "allowSnapping": true,
+                        "allowTabbing": true,
+                        "allowTiling": true,
+                        "allowGrouping": true,
+                        "allowMinimize": true
+                    },
+                    "workspace": {}
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "alwaysOnTopIcon": true,
+                        "title": "X-Domain (Google)",
+                        "persistWindowState": true
+                    },
+                    "Toolbar": {
+                        "iconClass": "X-Domain (Google)",
+                        "iconURL": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png"
+                    }
+                }
+            }
+        },
+        "X-Domain (Moviefone)": {
+            "window": {
+                "url": "https://www.moviefone.com",
+                "options": {
+                    "resizable": true,
+                    "autoShow": true,
+                    "alwaysOnTop": false
+                },
+                "top": "center",
+                "left": "center",
+                "width": 600,
+                "height": 600
+            },
+            "component": {
+                "preload": false,
+                "spawnOnStartup": false,
+                "singleton": false,
+                "showDevConsoleOnVisible": false
+            },
+            "foreign": {
+                "services": {
+                    "windowService": {
+                        "manageWindowMovement": true,
+                        "allowAutoArrange": true,
+                        "allowSnapping": true,
+                        "allowTabbing": true,
+                        "allowTiling": true,
+                        "allowGrouping": true,
+                        "allowMinimize": true
+                    },
+                    "workspace": {}
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "alwaysOnTopIcon": true,
+                        "title": "X-Domain (Moviefone)",
+                        "persistWindowState": true
+                    },
+                    "Toolbar": {
+                        "iconClass": "X-Domain (Moviefone)",
+                        "iconURL": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png"
+                    }
+                }
+            }
+        },
+        "X-Domain (CNN)": {
+            "window": {
+                "url": "https://www.cnn.com",
+                "options": {
+                    "resizable": true,
+                    "autoShow": true,
+                    "alwaysOnTop": false
+                },
+                "top": "center",
+                "left": "center",
+                "width": 600,
+                "height": 600
+            },
+            "component": {
+                "preload": false,
+                "spawnOnStartup": false,
+                "singleton": false,
+                "showDevConsoleOnVisible": false
+            },
+            "foreign": {
+                "services": {
+                    "windowService": {
+                        "manageWindowMovement": true,
+                        "allowAutoArrange": true,
+                        "allowSnapping": true,
+                        "allowTabbing": true,
+                        "allowTiling": true,
+                        "allowGrouping": true,
+                        "allowMinimize": true
+                    },
+                    "workspace": {}
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "alwaysOnTopIcon": true,
+                        "title": "X-Domain (CNN)",
+                        "persistWindowState": true
+                    },
+                    "Toolbar": {
+                        "iconClass": "X-Domain (CNN)",
+                        "iconURL": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png"
+                    }
+                }
+            }
+        },
+        "X-Domain (GitHub - Default Content Security Policy)": {
+            "window": {
+                "url": "https://github.com",
+                "options": {
+                    "resizable": true,
+                    "autoShow": true,
+                    "alwaysOnTop": false
+                },
+                "top": "center",
+                "left": "center",
+                "width": 600,
+                "height": 600
+            },
+            "component": {
+                "preload": false,
+                "spawnOnStartup": false,
+                "singleton": false,
+                "showDevConsoleOnVisible": false
+            },
+            "foreign": {
+                "services": {
+                    "windowService": {
+                        "manageWindowMovement": true,
+                        "allowAutoArrange": true,
+                        "allowSnapping": true,
+                        "allowTabbing": true,
+                        "allowTiling": true,
+                        "allowGrouping": true,
+                        "allowMinimize": true
+                    },
+                    "workspace": {}
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "alwaysOnTopIcon": true,
+                        "title": "X-Domain (GitHub - Default Content Security Policy)",
+                        "persistWindowState": true
+                    },
+                    "Toolbar": {
+                        "iconClass": "X-Domain (GitHub - Default Content Security Policy)",
+                        "iconURL": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png"
+                    }
+                }
+            }
+        },
+        "X-Domain (GitHub - Custom Content Security Policy)": {
+            "window": {
+                "url": "https://github.com",
+                "options": {
+                    "resizable": true,
+                    "autoShow": true,
+                    "alwaysOnTop": false,
+                    "Content-Security-Policy": [
+                        "*"
+                    ]
+                },
+                "top": "center",
+                "left": "center",
+                "width": 600,
+                "height": 600
+            },
+            "component": {
+                "preload": false,
+                "spawnOnStartup": false,
+                "singleton": false,
+                "showDevConsoleOnVisible": false
+            },
+            "foreign": {
+                "services": {
+                    "windowService": {
+                        "manageWindowMovement": true,
+                        "allowAutoArrange": true,
+                        "allowSnapping": true,
+                        "allowTabbing": true,
+                        "allowTiling": true,
+                        "allowGrouping": true,
+                        "allowMinimize": true
+                    },
+                    "workspace": {}
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "alwaysOnTopIcon": true,
+                        "title": "X-Domain (GitHub - Custom Content Security Policy)",
+                        "persistWindowState": true
+                    },
+                    "Toolbar": {
+                        "iconClass": "X-Domain (GitHub - Custom Content Security Policy)",
+                        "iconURL": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png"
+                    }
+                }
+            }
+        },
+        "X-Domain (GitHub - WWW redirect - Custom Content Security Policy)": {
+            "window": {
+                "url": "https://www.github.com",
+                "options": {
+                    "resizable": true,
+                    "autoShow": true,
+                    "alwaysOnTop": false,
+                    "Content-Security-Policy": [
+                        "*"
+                    ]
+                },
+                "top": "center",
+                "left": "center",
+                "width": 600,
+                "height": 600
+            },
+            "component": {
+                "preload": false,
+                "spawnOnStartup": false,
+                "singleton": false,
+                "showDevConsoleOnVisible": false
+            },
+            "foreign": {
+                "services": {
+                    "windowService": {
+                        "manageWindowMovement": true,
+                        "allowAutoArrange": true,
+                        "allowSnapping": true,
+                        "allowTabbing": true,
+                        "allowTiling": true,
+                        "allowGrouping": true,
+                        "allowMinimize": true
+                    },
+                    "workspace": {}
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "alwaysOnTopIcon": true,
+                        "title": "X-Domain (GitHub - WWW redirect - Custom Content Security Policy)",
+                        "persistWindowState": true
+                    },
+                    "Toolbar": {
+                        "iconClass": "X-Domain (GitHub - WWW redirect - Custom Content Security Policy)",
+                        "iconURL": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png"
+                    }
+                }
+            }
+        },
+        "Welcome.Component": {
+            "window": {
+                "url": "$applicationRoot/components/welcome/welcome.html",
+                "affinity": "workspaceComponents",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 400,
+                "height": 432
+            },
+            "component": {
+                "displayName": "Welcome.Component",
+                "spawnOnStartup": false,
+                "preload": "$applicationRoot/preloads/zoom.js"
+            },
+            "foreign": {
+                "services": {
+                    "windowService": {
+                        "allowSnapping": true,
+                        "allowGrouping": true,
+                        "allowAutoArrange": true,
+                        "allowMinimize": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "showLinker": true,
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "title": "Welcome to Finsemble"
+                    },
+                    "Toolbar": {
+                        "iconClass": "ff-component"
+                    }
+                }
+            }
+        },
+        "Finsemble WPF.Demo": {
+            "window": {
+                "id": "Finsemble WPF.Demo",
+                "windowType": "FinsembleNativeWindow",
+                "alias": "FinsembleWPFDemo",
+                "path": "",
+                "url": "",
+                "autoShow": true,
+                "alwaysOnTop": false,
+                "resizable": true,
+                "showTaskbarIcon": false,
+                "contextMenu": true,
+                "addToWorkspace": true
+            },
+            "component": {
+                "mode": "native",
+                "category": "system"
+            },
+            "foreign": {
+                "services": {
+                    "workspaceService": {
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "persistWindowState": false,
+                        "FSBLHeader": true
+                    },
+                    "Toolbar": {
+                        "iconURL": "$applicationRoot/assets/img/Finsemble_Taskbar_Icon.png"
+                    }
+                }
+            }
+        },
+        "Notepad.Component": {
+            "window": {
+                "windowType": "assimilation",
+                "path": "notepad.exe",
+                "defaultHeight": 600,
+                "autoShow": true,
+                "resizable": true,
+                "showTaskbarIcon": false,
+                "contextMenu": true,
+                "addToWorkspace": true,
+                "options": {
+                    "alwaysOnTop": false
+                }
+            },
+            "component": {},
+            "foreign": {
+                "services": {
+                    "windowService": {
+                        "allowAutoArrange": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "persistWindowState": false,
+                        "FSBLHeader": true
+                    },
+                    "Toolbar": {
+                        "iconURL": "$applicationRoot/assets/img/notepad.png"
+                    }
+                }
+            }
+        },
+        "AOT Icon True Component": {
+            "window": {
+                "url": "$applicationRoot/components/welcome/welcome.html",
+                "affinity": "workspaceComponents",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 400,
+                "height": 432
+            },
+            "component": {
+                "displayName": "AOT Icon True Component",
+                "spawnOnStartup": false,
+                "preload": "$applicationRoot/preloads/zoom.js"
+            },
+            "foreign": {
+                "services": {
+                    "windowService": {
+                        "allowSnapping": true,
+                        "allowGrouping": true,
+                        "allowAutoArrange": true,
+                        "allowMinimize": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "showLinker": true,
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "title": "AOT Icon True",
+                        "alwaysOnTopIcon": true
+                    },
+                    "Toolbar": {
+                        "iconClass": "ff-component"
+                    }
+                }
+            }
+        },
+        "AOT Icon False Component": {
+            "window": {
+                "url": "$applicationRoot/components/welcome/welcome.html",
+                "affinity": "workspaceComponents",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 400,
+                "height": 432
+            },
+            "component": {
+                "displayName": "AOT Icon False Component",
+                "spawnOnStartup": false,
+                "preload": "$applicationRoot/preloads/zoom.js"
+            },
+            "foreign": {
+                "services": {
+                    "windowService": {
+                        "allowSnapping": true,
+                        "allowGrouping": true,
+                        "allowAutoArrange": true,
+                        "allowMinimize": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "showLinker": true,
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "title": "AOT Icon False",
+                        "alwaysOnTopIcon": false
+                    },
+                    "Toolbar": {
+                        "iconClass": "ff-component"
+                    }
+                }
+            }
+        },
+        "AOT True Welcome Component": {
+            "window": {
+                "url": "$applicationRoot/components/welcome/welcome.html",
+                "affinity": "workspaceComponents",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 400,
+                "height": 432,
+                "options": {
+                    "alwaysOnTop": true
+                }
+            },
+            "component": {
+                "displayName": "AOT True Welcome Component",
+                "spawnOnStartup": false,
+                "preload": "$applicationRoot/preloads/zoom.js"
+            },
+            "foreign": {
+                "services": {
+                    "windowService": {
+                        "allowSnapping": true,
+                        "allowGrouping": true,
+                        "allowAutoArrange": true,
+                        "allowMinimize": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "showLinker": true,
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "title": "AOT True"
+                    },
+                    "Toolbar": {
+                        "iconClass": "ff-component"
+                    }
+                }
+            }
+        },
+        "AOT False Welcome Component": {
+            "window": {
+                "url": "$applicationRoot/components/welcome/welcome.html",
+                "affinity": "workspaceComponents",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 400,
+                "height": 432,
+                "options": {
+                    "alwaysOnTop": false
+                }
+            },
+            "component": {
+                "displayName": "AOT False Welcome Component",
+                "spawnOnStartup": false,
+                "preload": "$applicationRoot/preloads/zoom.js"
+            },
+            "foreign": {
+                "services": {
+                    "windowService": {
+                        "allowSnapping": true,
+                        "allowGrouping": true,
+                        "allowAutoArrange": true,
+                        "allowMinimize": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "showLinker": true,
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "title": "AOT False"
+                    },
+                    "Toolbar": {
+                        "iconClass": "ff-component"
+                    }
+                }
+            }
+        },
+        "AOT True Notepad Component": {
+            "window": {
+                "windowType": "assimilation",
+                "path": "notepad.exe",
+                "defaultHeight": 600,
+                "autoShow": true,
+                "resizable": true,
+                "showTaskbarIcon": false,
+                "contextMenu": true,
+                "addToWorkspace": true,
+                "options": {
+                    "alwaysOnTop": true
+                }
+            },
+            "component": {},
+            "foreign": {
+                "services": {
+                    "windowService": {
+                        "allowAutoArrange": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "persistWindowState": false,
+                        "FSBLHeader": true
+                    },
+                    "Toolbar": {
+                        "iconURL": "$applicationRoot/assets/img/notepad.png"
+                    }
+                }
+            }
+        },
+        "AOT False Notepad Component": {
+            "window": {
+                "windowType": "assimilation",
+                "path": "notepad.exe",
+                "defaultHeight": 600,
+                "autoShow": true,
+                "resizable": true,
+                "showTaskbarIcon": false,
+                "contextMenu": true,
+                "addToWorkspace": true,
+                "options": {
+                    "alwaysOnTop": false
+                }
+            },
+            "component": {},
+            "foreign": {
+                "services": {
+                    "windowService": {
+                        "allowAutoArrange": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "persistWindowState": false,
+                        "FSBLHeader": true
+                    },
+                    "Toolbar": {
+                        "iconURL": "$applicationRoot/assets/img/notepad.png"
+                    }
+                }
+            }
+        },
+        "AOT True Finsemble WPF Demo": {
+            "window": {
+                "id": "AOT True Finsemble WPF Demo",
+                "windowType": "FinsembleNativeWindow",
+                "alias": "FinsembleWPFDemo",
+                "path": "",
+                "url": "",
+                "autoShow": true,
+                "resizable": true,
+                "showTaskbarIcon": false,
+                "contextMenu": true,
+                "addToWorkspace": true,
+                "options": {
+                    "alwaysOnTop": true
+                }
+            },
+            "component": {
+                "mode": "native",
+                "category": "system"
+            },
+            "foreign": {
+                "services": {
+                    "workspaceService": {
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "persistWindowState": false,
+                        "FSBLHeader": true
+                    },
+                    "Toolbar": {
+                        "iconURL": "$applicationRoot/assets/img/Finsemble_Taskbar_Icon.png"
+                    }
+                }
+            }
+        },
+        "AOT False Finsemble WPF Demo": {
+            "window": {
+                "id": "AOT True Finsemble WPF Demo",
+                "windowType": "FinsembleNativeWindow",
+                "alias": "FinsembleWPFDemo",
+                "path": "",
+                "url": "",
+                "autoShow": true,
+                "resizable": true,
+                "showTaskbarIcon": false,
+                "contextMenu": true,
+                "addToWorkspace": true,
+                "options": {
+                    "alwaysOnTop": false
+                }
+            },
+            "component": {
+                "mode": "native",
+                "category": "system"
+            },
+            "foreign": {
+                "services": {
+                    "workspaceService": {
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "persistWindowState": false,
+                        "FSBLHeader": true
+                    },
+                    "Toolbar": {
+                        "iconURL": "$applicationRoot/assets/img/Finsemble_Taskbar_Icon.png"
+                    }
+                }
+            }
+        },
+        "MultiWindow-Window1": {
+            "window": {
+                "id": "MultiWindow",
+                "windowType": "FinsembleNativeWindow",
+                "alias": "MultiWindowExample",
+                "url": "",
+                "arguments": "Window1",
+                "defaultHeight": 600,
+                "autoShow": true,
+                "resizable": true,
+                "showTaskbarIcon": false,
+                "contextMenu": true,
+                "addToWorkspace": true
+            },
+            "component": {
+                "mode": "native",
+                "category": "system"
+            },
+            "foreign": {
+                "services": {
+                    "workspaceService": {
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "persistWindowState": false,
+                        "FSBLHeader": true
+                    },
+                    "Toolbar": {
+                        "iconURL": "$applicationRoot/assets/img/notepad.png"
+                    }
+                }
+            }
+        },
+        "MultiWindow-Window2": {
+            "window": {
+                "id": "MultiWindow",
+                "windowType": "FinsembleNativeWindow",
+                "alias": "MultiWindowExample",
+                "url": "",
+                "arguments": "Window2",
+                "defaultHeight": 600,
+                "autoShow": true,
+                "resizable": true,
+                "showTaskbarIcon": false,
+                "contextMenu": true,
+                "addToWorkspace": true
+            },
+            "component": {
+                "mode": "native",
+                "category": "system"
+            },
+            "foreign": {
+                "services": {
+                    "workspaceService": {
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "persistWindowState": false,
+                        "FSBLHeader": true
+                    },
+                    "Toolbar": {
+                        "iconURL": "$applicationRoot/assets/img/notepad.png"
+                    }
+                }
+            }
+        },
+        "MultiWindow-Window3": {
+            "window": {
+                "id": "MultiWindow",
+                "windowType": "FinsembleNativeWindow",
+                "alias": "MultiWindowExample",
+                "url": "",
+                "arguments": "Window3",
+                "defaultHeight": 600,
+                "autoShow": true,
+                "resizable": true,
+                "showTaskbarIcon": false,
+                "contextMenu": true,
+                "addToWorkspace": true
+            },
+            "component": {
+                "mode": "native",
+                "category": "system"
+            },
+            "foreign": {
+                "services": {
+                    "workspaceService": {
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "persistWindowState": false,
+                        "FSBLHeader": true
+                    },
+                    "Toolbar": {
+                        "iconURL": "$applicationRoot/assets/img/notepad.png"
+                    }
+                }
+            }
+        },
+        "MultiWindow-Window4": {
+            "window": {
+                "id": "MultiWindow",
+                "windowType": "FinsembleNativeWindow",
+                "alias": "MultiWindowExample",
+                "url": "",
+                "arguments": "Window4",
+                "defaultHeight": 600,
+                "autoShow": true,
+                "resizable": true,
+                "showTaskbarIcon": false,
+                "contextMenu": true,
+                "addToWorkspace": true
+            },
+            "component": {
+                "mode": "native",
+                "category": "system"
+            },
+            "foreign": {
+                "services": {
+                    "workspaceService": {
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "persistWindowState": false,
+                        "FSBLHeader": true
+                    },
+                    "Toolbar": {
+                        "iconURL": "$applicationRoot/assets/img/notepad.png"
+                    }
+                }
+            }
+        },
+        "X-Domain-Preloads Test": {
+            "window": {
+                "url": "$applicationRoot/components/welcome/welcome.html",
+                "affinity": "workspaceComponents",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 400,
+                "height": 432
+            },
+            "component": {
+                "displayName": "Welcome Component",
+                "spawnOnStartup": false,
+                "preload": "https://files.chartiq.com/zoom.js"
+            },
+            "foreign": {
+                "services": {
+                    "windowService": {
+                        "allowSnapping": true,
+                        "allowGrouping": true,
+                        "allowAutoArrange": true,
+                        "allowMinimize": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "showLinker": true,
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "title": "Welcome to Finsemble"
+                    },
+                    "Toolbar": {
+                        "iconClass": "ff-component"
+                    }
+                }
+            }
+        },
+        "loginTest": {
+            "window": {
+                "url": "$applicationRoot/components/loginTest/loginTest.html",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 400,
+                "height": 400
+            },
+            "component": {
+                "preload": false,
+                "inject": "$applicationRoot/components/loginTest/loginTestInject.js"
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "title": "loginTest",
+                        "FSBLHeader": true,
+                        "persistWindowState": true
+                    },
+                    "Toolbar": {
+                        "iconClass": "loginTest"
+                    }
+                }
+            }
+        },
+        "(AppD) Sample Component": {
+            "window": {
+                "url": "https://www.chartiq.com/tutorials/?slug=finsemble",
+                "height": 800,
+                "width": 1000
+            },
+            "component": {
+                "spawnOnStartup": false
+            },
+            "foreign": {
+                "services": {
+                    "workspaceService": {
+                        "persistURL": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": false
+                    },
+                    "Window Manager": {
+                        "showLinker": false,
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "title": "Finsemble Getting Started Tutorial"
+                    }
+                }
+            }
+        }
+    }
 }
