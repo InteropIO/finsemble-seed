@@ -22,7 +22,7 @@ const Toolbar = () => {
 				{/* App Menu */}
 			</div>
 			<ToolbarSection className="center" minWidth={115}>
-				<div className="divider"></div>
+				<div className="divider"/>
 				<FavoritesShell />
 			</ToolbarSection>
 			<div className="finsemble-toolbar-section right">
