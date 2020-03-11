@@ -26,7 +26,7 @@ const Toolbar = () => {
 				<FavoritesShell />
 			</ToolbarSection>
 			<div className="finsemble-toolbar-section right">
-			<div className="divider"></div>
+			    <div className="divider"/>
 				<MinimizeAll />
 				<AutoArrange />
 				<RevealAll />
