@@ -59,10 +59,6 @@
 		"output": "components/welcome/welcome",
 		"entry": "./src-built-in/components/welcome/welcome.js"
 	},
-	"appCatalog": {
-		"output": "components/appCatalog/appCatalog",
-		"entry": "./src-built-in/components/appCatalog/src/app.jsx"
-	},
 	"advancedAppCatalog": {
 		"output": "components/advancedAppCatalog/appCatalog",
 		"entry": "./src-built-in/components/advancedAppCatalog/src/app.jsx"
