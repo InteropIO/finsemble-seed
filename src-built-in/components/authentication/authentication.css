@@ -10,6 +10,8 @@
     content: url("../../../assets/img/finsembleDarkBG_Solo@1.5x.png");
     width: 154px;
     height: 173px;
+    margin-top: 50px;
+    margin-bottom: 40px;
 }
 
 .form-wrapper {
@@ -63,7 +65,6 @@
 }
 
 .fsbl-input-error-message {
-    display: none;
     color: var(--dialog-input-border-error-color);
     font-size: small;
 }

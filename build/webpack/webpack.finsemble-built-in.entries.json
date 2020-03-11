@@ -9,7 +9,7 @@
 	},
 	"authentication": {
 		"output": "components/authentication/authentication",
-		"entry": "./src-built-in/components/authentication/authentication.js"
+		"entry": "./src-built-in/components/authentication/app.jsx"
 	},
 	"overflowMenu": {
 		"output": "components/overflowMenu/overflowMenu",
