@@ -303,7 +303,7 @@ class WindowTitleBar extends React.Component {
 	onTitleChange(err, response) {
 		let { tabs } = this.state;
 		let myIdentifier = FSBL.Clients.WindowClient.getWindowIdentifier();
-		
+
 		tabs = tabs.map((el) => {
 			if (!el.windowName && el.name) el.windowName = el.name;
 			if (!el.name && el.windowName) el.name = el.windowName;
@@ -441,23 +441,12 @@ class WindowTitleBar extends React.Component {
 	}
 }
 
-function init () {
-	// The following line fixes the CSS issues, weird..
-	const css = require("../../../../assets/css/finsemble.css");
-	// Create the header element
-	const template = document.createElement("div");
-	const FSBLHeader = document.createElement('div')
-		  FSBLHeader.setAttribute('id', 'FSBLHeader')
-	template.appendChild(FSBLHeader)
-	document.body.insertBefore(template.firstChild, document.body.firstChild);
-	storeExports.initialize(function () {
-		HeaderActions = storeExports.Actions;
-		windowTitleBarStore = storeExports.getStore();
-		ReactDOM.render(<WindowTitleBar />, FSBLHeader);
-		// Register with docking manager
-		FSBL.Clients.WindowClient.registerWithDockingManager();
-	});
-}
+const FSBLHeader = document.querySelector('#FSBLHeader');
 
-// we do not need to wait for FSBL ready because this file gets required after FSBL is ready.
-init();
+storeExports.initialize(function () {
+	HeaderActions = storeExports.Actions;
+	windowTitleBarStore = storeExports.getStore();
+	ReactDOM.render(<WindowTitleBar />, FSBLHeader);
+	// Register with docking manager
+	FSBL.Clients.WindowClient.registerWithDockingManager();
+});

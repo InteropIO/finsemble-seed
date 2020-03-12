@@ -1,7 +1,4 @@
 function init() {
-	if (window.headerLoaded) return;
-	window.headerLoaded = true;
-	// Sidd's fix for the react problem when pre-loading the component
 	require("./windowTitleBarComponent.jsx");
 }
 
