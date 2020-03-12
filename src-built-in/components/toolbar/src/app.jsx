@@ -21,7 +21,7 @@ const Toolbar = () => {
 				{/* App Menu */}
 			</ToolbarSection>
 			<ToolbarSection className="center" minWidth={115}>
-				<div className="divider"></div>
+				<div className="divider"/>
 				<FavoritesShell />
 			</ToolbarSection>
 			<ToolbarSection className="right">
