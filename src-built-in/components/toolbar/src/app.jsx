@@ -9,29 +9,28 @@ import { ToolbarShell, DragHandle, FavoritesShell, RevealAll, MinimizeAll, AutoA
 import { FileMenu } from "./fileMenu";
 
 import '../toolbar.css';
-import { ExampleMenu, ExampleMenu2, AdvancedExample } from "./exampleMenu";
 const Toolbar = () => {
 	return (
 		<ToolbarShell>
-			<div className="finsemble-toolbar-section left">
+			<ToolbarSection className="left">
 				<DragHandle />
 				<FileMenu />
-				<Search/>
-				<WorkspaceManagementMenu/>
+				<Search />
+				<WorkspaceManagementMenu />
 				{/* Workspace Management Menu */}
 				{/* App Menu */}
-			</div>
+			</ToolbarSection>
 			<ToolbarSection className="center" minWidth={115}>
 				<div className="divider"></div>
 				<FavoritesShell />
 			</ToolbarSection>
-			<div className="finsemble-toolbar-section right">
-			<div className="divider"></div>
+			<ToolbarSection className="right">
+				<div className="divider"></div>
 				<MinimizeAll />
 				<AutoArrange />
 				<RevealAll />
-			</div>
-      <div className="resize-area" ></div>
+			</ToolbarSection>
+			<div className="resize-area" ></div>
 		</ToolbarShell>
 	)
 }
