@@ -197,7 +197,6 @@ async function addApp(id, cb = Function.prototype) {
 		return app.appId === appID;
 	});
 	const name = app.title || app.name;
-	const folder = data.activeFolder;
 
 	if (app === undefined) {
 		console.warn("App not found.");
@@ -237,7 +236,6 @@ async function addApp(id, cb = Function.prototype) {
 	let folders = data.folders;
 
 	data.folders[ADVANCED_APP_LAUNCHER].apps[appID] = appConfig
-	data.folders[folder].apps[appID] = appConfig
 	FSBL.Clients.LauncherClient.registerComponent({
 		componentType: appConfig.name,
 		manifest: appConfig.manifest
