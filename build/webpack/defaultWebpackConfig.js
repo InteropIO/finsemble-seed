@@ -28,18 +28,6 @@ module.exports = class WebpackDefaults {
 		if (env === "production") {
 			// When building the production environment, minify the code.
 			plugins.push(new UglifyJsPlugin());
-		} else {
-			plugins.push(new hardSource({
-				//root dir here is "dist". Back out so we dump this file into the root.
-				cacheDirectory: '../.webpack-file-cache/[confighash]',
-				// Either an absolute path or relative to webpack's options.context.
-				// Sets webpack's recordsPath if not already set.
-				environmentHash: {
-					root: process.cwd(),
-					directories: [],
-					files: ['package-lock.json'],
-				}
-			}));
 		}
 		return {
 			devtool: 'source-map',
@@ -119,6 +107,12 @@ module.exports = class WebpackDefaults {
 						test: /\.tsx?$/,
 						loader: 'ts-loader',
 						exclude: /node_modules/
+					},
+					  // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
+            {
+							enforce: "pre",
+							test: /\.js$/,
+							loader: "source-map-loader"
 					}
 				]
 			},
