@@ -33,7 +33,7 @@ var columnDefs = [
 		}
 	},
 	{
-		headerName: 'Diff (ms)',
+		headerName: 'Latency (ms)',
 		field: 'dtdiff',
 		hide: false,
 		width: 100
@@ -142,7 +142,7 @@ const FSBLReady = () => {
 									let localTotalTime = endTime - receiverStartTime;
 									let messagesPerSecond = (Math.round((localCounter / totalTime) * 1000 * 100) / 100).toFixed(2);
 									let averageDiff = (Math.round((diffTotal / localCounter) * 100) / 100).toFixed(2);
-									let result = 'Total Message Recevied: ' + localCounter + '<br/>' + 'Total Time: ' + totalTime + ' ms<br/>' + 'Total Local Time: ' + localTotalTime + ' ms<br/>' + 'Number of Message per Second: ' + messagesPerSecond + '<br/>' + 'Average Diff: ' + averageDiff + ' ms<br/>'
+									let result = 'Total Message Recevied: ' + localCounter + '<br/>' + 'Total Time: ' + totalTime + ' ms<br/>' + 'Total Local Time: ' + localTotalTime + ' ms<br/>' + 'Number of Message per Second: ' + messagesPerSecond + '<br/>' + 'Latency: ' + averageDiff + ' ms<br/>'
 									document.getElementById('result').innerHTML = result
 								}
 							}
