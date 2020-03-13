@@ -595,7 +595,7 @@
 				"docked": "top",
 				"canGroup": false,
 				"options": {
-					"autoShow": true,
+					"autoShow": false,
 					"contextMenu": false,
 					"showTaskbarIcon": false,
 					"smallWindow": true,
