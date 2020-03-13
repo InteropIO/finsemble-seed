@@ -417,48 +417,6 @@
 				}
 			}
 		},
-		"inputAndSelection": {
-			"window": {
-				"url": "$applicationRoot/components/inputAndSelectionDialog/inputAndSelectionDialog.html",
-				"affinity": "systemComponents",
-				"width": 587,
-				"height": 358,
-				"position": "absolute",
-				"top": "center",
-				"left": "center",
-				"options": {
-					"resizable": false,
-					"autoShow": false,
-					"alwaysOnTop": true
-				}
-			},
-			"component": {
-				"category": "system",
-				"spawnOnStartup": false
-			},
-			"foreign": {
-				"clients": {
-					"dialogManager": {
-						"isDialog": true
-					}
-				},
-				"services": {
-					"windowService": {
-						"allowAutoArrange": false,
-						"shouldRegister": false
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"launchableByUser": false
-					},
-					"Window Manager": {
-						"FSBLHeader": false,
-						"persistWindowState": false
-					}
-				}
-			}
-		},
 		"dialogModal": {
 			"window": {
 				"url": "$applicationRoot/components/dialogModal/dialogModal.html",
@@ -708,46 +666,6 @@
 						"FSBLHeader": true,
 						"persistWindowState": true,
 						"title": "Process Monitor"
-					}
-				}
-			}
-		},
-		"App Catalog": {
-			"window": {
-				"url": "$applicationRoot/components/appCatalog/appCatalog.html",
-				"affinity": "systemComponents",
-				"frame": false,
-				"top": "center",
-				"left": "center",
-				"width": 800,
-				"height": 600,
-				"options": {
-					"autoShow": true,
-					"resizable": false,
-					"alwaysOnTop": true
-				}
-			},
-			"component": {
-				"category": "system"
-			},
-			"foreign": {
-				"services": {
-					"windowService": {
-						"allowGrouping": false,
-						"allowAutoArrange": false,
-						"shouldRegister": false
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"launchableByUser": false
-					},
-					"Window Manager": {
-						"FSBLHeader": false,
-						"persistWindowState": false
-					},
-					"Toolbar": {
-						"iconClass": "UserPreferences"
 					}
 				}
 			}

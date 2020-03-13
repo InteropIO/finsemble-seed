@@ -31,11 +31,11 @@
 }
 
 .finsemble-toolbar-section.right {
+    margin-left: auto;
     margin-right: 8px;
     justify-content: flex-end;
     order: 2;
-    flex: 1;
-    flex: auto;
+    flex: 0 0 auto;
 }
 
 .finsemble-toolbar-section.left {
@@ -101,10 +101,6 @@ span > svg {
 }
 
 @media screen and (max-width: 385px) {
-    .finsemble-toolbar-section.right {
-        display: none;
-    }
-
     .finsemble-toolbar-section.left .divider:last-of-type {
         display: none;
     }
@@ -115,11 +111,6 @@ span > svg {
     .finsemble-toolbar-section.center {
         display: none;
     }
-
-    .finsemble-toolbar-section.right .divider {
-        display: none;
-    }
-
 }
 
 .finsemble-toolbar-section.left > .finsemble-toolbar-button-label {

@@ -59,10 +59,6 @@
 		"output": "components/welcome/welcome",
 		"entry": "./src-built-in/components/welcome/welcome.js"
 	},
-	"appCatalog": {
-		"output": "components/appCatalog/appCatalog",
-		"entry": "./src-built-in/components/appCatalog/src/app.jsx"
-	},
 	"advancedAppCatalog": {
 		"output": "components/advancedAppCatalog/appCatalog",
 		"entry": "./src-built-in/components/advancedAppCatalog/src/app.jsx"
@@ -73,7 +69,7 @@
 	},
 	"processMonitor": {
 		"output": "components/processMonitor/processMonitor",
-		"entry": "./src-built-in/components/processMonitor/src/app.jsx"
+		"entry": "./src-built-in/components/processMonitor/app.jsx"
 	},
 	"throbber": {
 		"output": "components/throbber/throbber",
