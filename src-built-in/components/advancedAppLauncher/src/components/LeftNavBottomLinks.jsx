@@ -17,16 +17,16 @@ export default class LeftNavBottomLinks extends React.Component {
 		finsembleWindow.getOptions((_, opts) => {
 			const useAppCatalog = (((opts || {}).customData || {}).component || {}).useAppCatalog;
 			if (useAppCatalog) {
-				this.setState({
+				this.setState((prevState) => ({
 					bottomEntries: [
-						...this.state.bottomEntries,
+						...prevState.bottomEntries,
 						{
 							name: "App Catalog",
 							icon: "ff-list",
 							click: "openAppMarket"
 						}
 					]
-				});
+				}));
 			}
 		});
 	}
