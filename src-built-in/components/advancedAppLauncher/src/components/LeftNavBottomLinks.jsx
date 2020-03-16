@@ -14,6 +14,8 @@ export default class LeftNavBottomLinks extends React.Component {
 	}
 
 	componentWillMount() {
+		// If user configures the advanced app launcher to use the app catalog, add app catalog button to the bottom entries of the
+		// advanced app launcher menu.
 		finsembleWindow.getOptions((_, opts) => {
 			const useAppCatalog = (((opts || {}).customData || {}).component || {}).useAppCatalog;
 			if (useAppCatalog) {
