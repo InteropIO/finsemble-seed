@@ -97,7 +97,7 @@ const FSBLReady = () => {
 					let messagesPerSecond = (Math.round((localCounter / totalTime) * 1000 * 100) / 100).toFixed(2);
 					let averageDiff = (Math.round((diffTotal / localCounter) * 100) / 100).toFixed(2);
 					let bandwidth =  (Math.round(((localCounter* startMsg.dataSize)/totalTime *1000) * 100) / 100).toFixed(2);
-					let result = 'Total Message Recevied: ' + localCounter + '<br/>' + 'Total Time: ' + totalTime + ' ms<br/>' + 'Number of Message per Second: ' + messagesPerSecond + '<br/>' + 'Average Diff: ' + averageDiff + ' ms<br/>' + 'Bandwidth: ' + bandwidth + ' bytes/s<br/>'
+					let result = 'Total Message Recevied: ' + localCounter + '<br/>' + 'Total Time: ' + totalTime + ' ms<br/>' + 'Number of Message per Second: ' + messagesPerSecond + '<br/>' + 'Latency: ' + averageDiff + ' ms<br/>' + 'Bandwidth: ' + bandwidth + ' bytes/s<br/>'
 					document.getElementById('result').innerHTML = result
 				}
 			} else {
