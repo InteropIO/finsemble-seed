@@ -49,7 +49,8 @@
 			"component": {
 				"allowQuickComponent": "@TODO",
 				"spawnOnStartup": false,
-				"category": "system"
+				"category": "system",
+				"useAppCatalog": false
 			},
 			"foreign": {
 				"services": {
@@ -782,7 +783,6 @@
 			}
 		},
 		"App Catalog": {
-			"enabled": false,
 			"window": {
 				"url": "$applicationRoot/components/appCatalog/appCatalog.html",
 				"affinity": "systemComponents",

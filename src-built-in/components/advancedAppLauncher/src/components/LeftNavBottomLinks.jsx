@@ -1,27 +1,34 @@
 import React from 'react'
 import { getStore } from '../stores/LauncherStore'
-import * as UIconfig from '../../../../../configs/application/UIComponents.json'
-
-const bottomEntries = [
-	{ name: "New App", icon: "ff-new-workspace", click: "showAddAppForm" },
-	//{ name: 'New Dashboard', icon: 'ff-dashboard-new' },
-];
 
 export default class LeftNavBottomLinks extends React.Component {
 
 	constructor(props) {
 		super(props);
+		this.state = {
+			bottomEntries: [
+				{ name: "New App", icon: "ff-new-workspace", click: "showAddAppForm" },
+				//{ name: 'New Dashboard', icon: 'ff-dashboard-new' },
+			]
+		}
 	}
 
 	componentWillMount() {
-		// If the app catalog is enabled in the config, add app catalog to the bottom entry of the advanced app launcher menu
-		if (UIconfig.components["App Catalog"].enabled) {
-			bottomEntries.push({
-				name: "App Catalog",
-				icon: "ff-list",
-				click: "openAppMarket"
-			})
-		}
+		finsembleWindow.getOptions((_, opts) => {
+			const useAppCatalog = (((opts || {}).customData || {}).component || {}).useAppCatalog;
+			if (useAppCatalog) {
+				this.setState({
+					bottomEntries: [
+						...this.state.bottomEntries,
+						{
+							name: "App Catalog",
+							icon: "ff-list",
+							click: "openAppMarket"
+						}
+					]
+				});
+			}
+		});
 	}
 
 	/**
@@ -42,7 +49,7 @@ export default class LeftNavBottomLinks extends React.Component {
 		return (
 			<div className="bottom">
 				{
-					bottomEntries.map((entry, index) => {
+					this.state.bottomEntries.map((entry, index) => {
 						let handler = entry.click ? this[entry.click] || this.props[entry.click] : Function.prototype;
 						let className = "ff-plus-2 complex-menu-action";
 						return (
