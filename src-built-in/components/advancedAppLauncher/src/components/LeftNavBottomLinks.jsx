@@ -1,11 +1,10 @@
 import React from 'react'
 import { getStore } from '../stores/LauncherStore'
-
+import * as UIconfig from '../../../../../configs/application/UIComponents.json'
 
 const bottomEntries = [
 	{ name: "New App", icon: "ff-new-workspace", click: "showAddAppForm" },
 	//{ name: 'New Dashboard', icon: 'ff-dashboard-new' },
-	// { name: "App Catalog", icon: "ff-list", click: "openAppMarket" }
 ];
 
 export default class LeftNavBottomLinks extends React.Component {
@@ -13,6 +12,18 @@ export default class LeftNavBottomLinks extends React.Component {
 	constructor(props) {
 		super(props);
 	}
+
+	componentWillMount() {
+		// If the app catalog is enabled in the config, add app catalog to the bottom entry of the advanced app launcher menu
+		if (UIconfig.components["App Catalog"].enabled) {
+			bottomEntries.push({
+				name: "App Catalog",
+				icon: "ff-list",
+				click: "openAppMarket"
+			})
+		}
+	}
+
 	/**
 	 * Sets isFormVisible to true in store so that main component
 	 * renders the AddNewAppForm component or removes it

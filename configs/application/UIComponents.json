@@ -782,6 +782,7 @@
 			}
 		},
 		"App Catalog": {
+			"enabled": false,
 			"window": {
 				"url": "$applicationRoot/components/appCatalog/appCatalog.html",
 				"affinity": "systemComponents",
