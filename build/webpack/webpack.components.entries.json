@@ -1,1 +1,6 @@
-{}
+{
+    "oauthRespone": {
+        "output": "components/oauthRespone/oauthRespone",
+        "entry": "./src/components/oauthRespone/oauthRespone.js"
+    }
+}

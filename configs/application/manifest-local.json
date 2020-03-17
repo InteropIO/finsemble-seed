@@ -69,6 +69,7 @@
     ],
     "finsemble": {
         "applicationRoot": "http://localhost:3375",
+        "authRoot": "http://localhost:3375",
         "moduleRoot": "$applicationRoot/finsemble",
         "servicesRoot": "$applicationRoot/finsemble/services",
         "notificationURL": "$applicationRoot/components/notification/notification.html",
@@ -89,6 +90,17 @@
                 "FinsembleTransport": {
                     "serverAddress": "ws://127.0.0.1:3376"
                 }
+            }
+        },
+        "authentication": {
+            "startup": {
+                "adapter": "OAUTH2",
+                "authorization_endpoint": "http://127.0.0.1:8080/auth/realms/dev/protocol/openid-connect/auth",
+                "scope": "openid",
+                "client_id": "finsemble-test",
+                "backchannel_endpoint": "http://127.0.0.1:8080/auth",
+                "redirect_uri": "$applicationRoot/components/oauthRespone/oauthRespone.html",                
+                "component": "oauthRespone"
             }
         }
     }
