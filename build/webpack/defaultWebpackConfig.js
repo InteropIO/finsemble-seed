@@ -104,7 +104,8 @@ module.exports = class WebpackDefaults {
 					},
 					{
 						test: /\.tsx?$/,
-						loader: 'ts-loader'
+						loader: 'ts-loader',
+						exclude: /node_modules/
 					},
 					// All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
 					{
