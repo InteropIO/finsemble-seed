@@ -1,10 +1,10 @@
 import * as React from 'react'
-import { MenuShell } from '@chartiq/finsemble-ui/lib/components/menu/menuShell'
-import { MenuActivator } from '@chartiq/finsemble-ui/lib/components/menu/menuActivator'
-import { Menu } from '@chartiq/finsemble-ui/lib/components/menu/menu'
-import { MenuItem } from '@chartiq/finsemble-ui/lib/components/menu/menuItem'
-import { MenuHotKey } from '@chartiq/finsemble-ui/lib/components/menu/menuHotKey'
-import { MenuTitle } from '@chartiq/finsemble-ui/lib/components/menu/menuTitle'
+import { MenuShell } from '@chartiq/finsemble-ui/react/components/menu/menuShell'
+import { MenuActivator } from '@chartiq/finsemble-ui/react/components/menu/menuActivator'
+import { Menu } from '@chartiq/finsemble-ui/react/components/menu/menu'
+import { MenuItem } from '@chartiq/finsemble-ui/react/components/menu/menuItem'
+import { MenuHotKey } from '@chartiq/finsemble-ui/react/components/menu/menuHotKey'
+import { MenuTitle } from '@chartiq/finsemble-ui/react/components/menu/menuTitle'
 
 const FinsembleIcon = () => {
 	return <img className="finsemble-toolbar-brand-logo" src="../../assets/img/Finsemble_Taskbar_Icon.png" />
@@ -72,7 +72,7 @@ export const AdvancedExample = () => {
 			<MenuActivator>Advanced</MenuActivator>
 			<Menu>
 					<MenuTitle>Skip me</MenuTitle>
-					<MenuItem className="add-one" noclose={true}> 
+					<MenuItem className="add-one" noclose={true}>
 					<button onClick={addMenuItem}> Add MenuItem</button>
 					</MenuItem>
 						{items.map(item => item)}

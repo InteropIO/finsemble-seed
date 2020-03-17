@@ -5,7 +5,7 @@
 import ReactDOM from "react-dom";
 import React from "react";
 
-import { ToolbarShell, DragHandle, FavoritesShell, RevealAll, MinimizeAll, AutoArrange, Search, WorkspaceManagementMenu, ToolbarSection } from "@chartiq/finsemble-ui/lib/components";
+import { ToolbarShell, DragHandle, FavoritesShell, RevealAll, MinimizeAll, AutoArrange, Search, WorkspaceManagementMenu, ToolbarSection } from "@chartiq/finsemble-ui/react/components";
 import { FileMenu } from "./fileMenu";
 
 import '../toolbar.css';
