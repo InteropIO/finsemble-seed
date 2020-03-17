@@ -162,5 +162,25 @@
 		"$applicationRoot/configs/application/workspaceTemplates.json",
 		"$applicationRoot/configs/application/services.json",
 		"$applicationRoot/configs/application/securityPolicies.json"
+	],
+	"menus": [
+		{
+			"align": "left",
+			"iconClasses": "finsemble-toolbar-brand-logo",
+			"icon": "$applicationRoot/assets/img/Finsemble_Taskbar_Icon.png",
+			"menuType": "File Menu"
+		},
+		{
+			"align": "left",
+			"label": "3rd Party",
+			"menuType": "App Launcher",
+			"customData": {
+				"list": [
+					"Adaptable Tools Position Blotter",
+					"Adaptable Tools Price Blotter",
+					"Adaptable Tools Trade Blotter"
+				]
+			}
+		}
 	]
 }
