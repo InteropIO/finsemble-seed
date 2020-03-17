@@ -7,7 +7,7 @@ import ReactDOM from "react-dom";
 // const Test from './test';
 
 import * as storeExports from "./stores/windowTitleBarStore";
-let HeaderActions, windowTitleBarStore;
+let HeaderActions = storeExports.Actions, windowTitleBarStore;
 
 //Parts that make up the windowTitleBar.
 //Left side
@@ -500,7 +500,6 @@ function init() {
 	template.appendChild(FSBLHeader);
 	document.body.insertBefore(template.firstChild, document.body.firstChild);
 	storeExports.initialize(function() {
-		HeaderActions = storeExports.Actions;
 		windowTitleBarStore = storeExports.getStore();
 		ReactDOM.render(<WindowTitleBar />, FSBLHeader);
 	});
