@@ -454,8 +454,6 @@ function init () {
 		HeaderActions = storeExports.Actions;
 		windowTitleBarStore = storeExports.getStore();
 		ReactDOM.render(<WindowTitleBar />, FSBLHeader);
-		// Register with docking manager
-		FSBL.Clients.WindowClient.registerWithDockingManager();
 	});
 }
 

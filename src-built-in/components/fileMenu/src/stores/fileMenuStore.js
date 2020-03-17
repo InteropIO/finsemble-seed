@@ -188,7 +188,7 @@ var Actions = {
 			});
 	},
 	spawnDocs() {
-		FSBL.System.openUrlWithBrowser("https://www.chartiq.com/tutorials/?slug=finsemble-seed-project", function () {
+		FSBL.System.openUrlWithBrowser("https://www.chartiq.com/tutorials/?slug=finsemble", function () {
 			//console.log("successfully launched docs");
 		}, function (err) {
 			//console.log("failed to launch docs");
