@@ -47,10 +47,6 @@
 		"output": "components/floatingTitlebar/floatingTitlebar",
 		"entry": "./src-built-in/components/floatingTitlebar/src/app.jsx"
 	},
-	"inputAndSelectionDialog": {
-		"output": "components/inputAndSelectionDialog/inputAndSelectionDialog",
-		"entry": "./src-built-in/components/inputAndSelectionDialog/src/app.jsx"
-	},
 	"searchMenu": {
 		"output": "components/searchMenu/searchMenu",
 		"entry": "./src-built-in/components/searchMenu/src/app.jsx"
