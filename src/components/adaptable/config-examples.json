@@ -1,0 +1,176 @@
+{
+    "comment": "Sample component configuration",
+    "services": {
+        "blotterdataService": {
+            "bootParams": {
+				"stage": "preuser"
+			},
+            "useWindow": true,
+            "active": true,
+            "file": "$fpe-adaptableRoot/src/examples/services/blotterdata/blotterdataService.js",
+            "visible": false,
+            "html": "$fpe-adaptableRoot/src/examples/services/blotterdata/blotterdata.html",
+            "options": {
+                "securityPolicy": "trusted"
+            }
+        }
+    },
+    "components": {
+        "Adaptable Tools Blotter Receiver": {
+            "window": {
+                "options": {
+                    "securityPolicy": "trusted"
+                },
+                "url": "$fpe-adaptableRoot/src/examples/components/blotterreceiver/blotterreceiver.html",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 800,
+                "height": 600
+            },
+            "component": {
+                "preload": false
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": false
+                    },
+                    "Window Manager": {
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "showLinker": true
+                    },
+                    "Toolbar": {
+                        "iconURL":"$fpe-adaptableRoot/assets/images/AB.png"
+                    }
+                }
+            }
+        },
+        "Adaptable Tools Position Blotter": {
+            "window": {
+                "options": {
+                    "securityPolicy": "trusted"
+                },
+                "url": "$fpe-adaptableRoot/src/examples/components/positionblotter/positionblotter.html",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 800,
+                "height": 600
+            },
+            "component": {
+                "preload": false
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "showLinker": true
+                    },
+                    "Toolbar": {
+                        "iconURL":"$fpe-adaptableRoot/assets/images/AB.png"
+                    }
+                }
+            }
+        },
+        "Adaptable Tools Price Blotter": {
+            "window": {
+                "options": {
+                    "securityPolicy": "trusted"
+                },
+                "url": "$fpe-adaptableRoot/src/examples/components/priceblotter/priceblotter.html",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 800,
+                "height": 600
+            },
+            "component": {
+                "preload": false
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "showLinker": true
+                    },
+                    "Toolbar": {
+                        "iconURL":"$fpe-adaptableRoot/assets/images/AB.png"
+                    }
+                }
+            }
+        },
+        "Adaptable Tools Trade Blotter": {
+            "window": {
+                "options": {
+                    "securityPolicy": "trusted"
+                },
+                "url": "$fpe-adaptableRoot/src/examples/components/tradeblotter/tradeblotter.html",
+                "frame": false,
+                "resizable": true,
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 800,
+                "height": 600
+            },
+            "component": {
+                "preload": false
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "FSBLHeader": true,
+                        "persistWindowState": true,
+                        "showLinker": true
+                    },
+                    "Toolbar": {
+                        "iconURL":"$fpe-adaptableRoot/assets/images/AB.png"
+                    }
+                }
+            }
+        }
+    }
+}

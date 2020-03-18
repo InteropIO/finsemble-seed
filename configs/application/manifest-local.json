@@ -72,6 +72,7 @@
         "moduleRoot": "$applicationRoot/finsemble",
         "servicesRoot": "$applicationRoot/finsemble/services",
         "notificationURL": "$applicationRoot/components/notification/notification.html",
+        "fpe-adaptableRoot": "https://fpe.finsemble.com/ecosystem/additions/components/fpe-adaptable",
         "bootConfig": {
             "onErrorMakeSystemManagerVisible": true,
             "defaults": {
