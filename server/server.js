@@ -22,6 +22,9 @@
 	const fs = require("fs");
 	const path = require("path");
 	const compression = require("compression");
+	const bodyParser = require("body-parser");
+	const request = require("request");
+	
 	// Local
 
 	const handleError = e => {
@@ -159,6 +162,40 @@
 				notified_sm = true;
 			}
 			next();
+		});
+
+		//End point for auth
+		app.use(bodyParser.urlencoded({
+			extended: true
+		}));
+		app.all('/auth_backchannel', function (req, res) {
+			var hostname = req.headers.host;
+			// If behind a proxy, then the hostname will be in the forwarded headers
+			if (req.headers["x-forwarded-host"]) hostname = req.headers["x-forwarded-host"];
+			let { code, grant_type, redirect_uri, client_id} = req.body;
+			let keyCloakHost = '127.0.0.1'
+			let keyCloakPort = 8080
+			let KeycloakTokenEndpoint = '/auth/realms/dev/protocol/openid-connect/token'
+			let keycloarClient_secret = 'f6070b8d-6adb-4dd2-83ca-14be37720436'
+			let params = {
+				code: code,
+				grant_type: grant_type,
+				redirect_uri: redirect_uri,
+				client_id: client_id,
+				client_secret: keycloarClient_secret
+			};
+
+			request.post({
+					url: "http://" + keyCloakHost + ":" + keyCloakPort + KeycloakTokenEndpoint,
+					form: params
+				},
+				function (err, httpResponse, body) {
+					if (err)
+						res.send(err)
+					else
+						res.send(body)
+				}
+			);
 		});
 	}
 	/**
