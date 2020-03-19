@@ -143,8 +143,6 @@ module.exports = taskMethods => {
 	*/
 
 
-	// This is a replacement launchApplication which uses the new Hadouken launcher instead of the older OpenFin launcher
-	// The OpenFin launcher has a known issue that it won't launch if there are multiple rvms running.
 	// However, detecting application closed is unreliable in the newer Hadouken launcher so this will remain optional until a fix is verified.
 	/*
 		taskMethods.launchApplication = done => {
@@ -154,19 +152,6 @@ module.exports = taskMethods => {
 			const ON_DEATH = require("death")({ debug: false });
 			const fs = require("fs");
 			const path = require("path");
-
-			ON_DEATH((signal, err) => {
-				exec("taskkill /F /IM openfin.* /T", (err, stdout, stderr) => {
-					// Only write the error to console if there is one and it is something other than process not found.
-					if (err && err !== 'The process "openfin.*" not found.') {
-						console.error(errorOutColor(err));
-					}
-
-					if (watchClose) watchClose();
-					done();
-					process.exit();
-				});
-			});
 
 			taskMethods.logToTerminal("Launching Finsemble", "black", "bgCyan");
 			//Wipe old stats.
@@ -194,7 +179,6 @@ module.exports = taskMethods => {
 				app.on("closed", () => {
 					taskMethods.logToTerminal("Finsemble application terminated", "black", "bgCyan");
 
-					// OpenFin has closed so exit gulpfile
 					if (watchClose) watchClose();
 
 					// Signal task completion

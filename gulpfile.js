@@ -19,10 +19,8 @@ const { launch, connect } = require('hadouken-js-adapter');
 	const shell = require("shelljs");
 	const path = require("path");
 	const webpack = require("webpack");
-
-	const FEA_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-electron-adapter");
-	const FEA_PATH_EXISTS = fs.existsSync(FEA_PATH);
-	const FEA = FEA_PATH_EXISTS ? require("@chartiq/finsemble-electron-adapter/exports") : undefined;
+	const FEA = require("@chartiq/finsemble-electron-adapter/exports");
+	const FEA_PATH = path.resolve('./node_modules/@chartiq/finsemble-electron-adapter');
 	const FEAPackager = FEA ? FEA.packager : undefined;
 	const MAX_NODE_VERSION = '12.13.1';
 
@@ -31,28 +29,13 @@ const { launch, connect } = require('hadouken-js-adapter');
 	const isMacOrNix = process.platform !== "win32";
 	// #endregion
 
-	const killApp = (processName, callback = () => { }) => {
-		const command = isMacOrNix ? `killall -9 ${processName}` : `taskkill /F /IM ${processName.toLowerCase()}.* /T`;
-		const error = isMacOrNix ? "No matching processes belonging to you were found" : `The process "${processName.toLowerCase()}.*" not found.`;
-
-		logToTerminal(`kill: running: ${command}...`);
-
-		exec(command, err => {
-			if (err && !err.includes(error)) {
-				console.error(errorOutColor(err));
-			}
-
-			callback(err);
-		});
-	};
-
 	const logToTerminal = (msg, color = "white", bgcolor = "bgBlack") => {
 		if (!chalk[color]) color = "white";
 		if (!chalk[color][bgcolor]) bgcolor = "bgBlack";
 		console.log(`[${new Date().toLocaleTimeString()}] ${chalk[color][bgcolor](msg)}.`);
 	}
 
-	/** 
+	/**
 	* Splits a string version with semantic versioning into an object with major, minor and patch versions
 	* Valid inputs are 'X.X.X' or 'vX.X.X'
 	*/
@@ -86,7 +69,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 		}
 	}
 
-	/** 
+	/**
 	* Compares two node version objects
 	* Each object is expected to contain majorVersion, minorVersion, patchVersion
 	*/
@@ -103,7 +86,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 		return 0;
 	}
 
-	/** 
+	/**
 	* Validates the current node version against supported node versions specified in this file
 	* Returns boolean indicating whether current node version is valid
 	* Currently only validates against a max node version which must be in the format 'X.X.X' or 'vX.X.X'
@@ -117,8 +100,8 @@ const { launch, connect } = require('hadouken-js-adapter');
 		// If any of these values are missing, nothing will be returned
 		let currentVersionObject = createSemverObject(process.version);
 		let maxVersionObject = createSemverObject(MAX_NODE_VERSION);
-		
-		// Only allow the check both objects exist and contain major, minor and patch versions. 
+
+		// Only allow the check both objects exist and contain major, minor and patch versions.
 		if (!currentVersionObject || !maxVersionObject) {
 			logToTerminal("Format of node version must be: 'X.X.X', unable to validate node version", "yellow");
 			return true;
@@ -133,7 +116,6 @@ const { launch, connect } = require('hadouken-js-adapter');
 	try {
 		angularComponents = require("./build/angular-components.json");
 	} catch (ex) {
-		logToTerminal("No Angular component configuration found", "yellow");
 		angularComponents = null;
 	}
 	// #region Constants
@@ -194,17 +176,10 @@ const { launch, connect } = require('hadouken-js-adapter');
 		return rc;
 	}
 
-
-	// Currently supported desktop agents include "openfin" and "electron". This can be set either
-	// with the environment variable container or by command line argument `npx gulp dev --container:electron`
-	let container = envOrArg("container", "openfin");
-	container = container.toLowerCase();
-
 	// This is a reference to the server process that is spawned. The server process is located in server/server.js
 	// and is an Express server that runs in its own node process (via spawn() command).
 	let serverProcess = null;
 
-	// This will get set when the container (Electron or Openfin) is launched. This is used to calculate how long it takes to start up the app.
 	let launchTimestamp = 0;
 
 	/**
@@ -251,7 +226,6 @@ const { launch, connect } = require('hadouken-js-adapter');
 		build: done => {
 			async.series([
 				taskMethods.buildWebpack,
-				taskMethods.buildSass,
 				taskMethods.buildAngular
 			], done);
 		},
@@ -294,12 +268,6 @@ const { launch, connect } = require('hadouken-js-adapter');
 				taskMethods.setProdEnvironment,
 				taskMethods.build
 			], done);
-		},
-		/**
-		 * Builds the SASS files for the project.
-		 */
-		buildSass: done => {
-			return done();
 		},
 		/**
 		 * Builds files using webpack.
@@ -391,7 +359,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 			const CONTROLS_VERSION = require(path.join(CONTROLS_PATH, "package.json")).version;
 
 			// Check version before require so optionalDependency can stay optional
-			const FEA_VERSION = FEA_PATH_EXISTS ? require(path.join(FEA_PATH, "package.json")).version : undefined;
+			const FEA_VERSION = require(path.join(FEA_PATH, "package.json")).version;
 
 			function checkLink(params, cb) {
 				let { path, name, version } = params;
@@ -468,7 +436,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 			], done);
 		},
 		/**
-		 * Builds the application and runs the server *without* launching openfin.
+		 * Builds the application and runs the server *without* launching.
 		 */
 		"dev:noLaunch": done => {
 			async.series([
@@ -476,47 +444,10 @@ const { launch, connect } = require('hadouken-js-adapter');
 				taskMethods.startServer
 			], done);
 		},
-		launchOpenFin: async (done) => {
-			// We are unable to read OpenFin version at the moment.
-			// We request it after hadouken connection.
-			logToTerminal("Using Container: OpenFin", "green");
-			ON_DEATH(() => {
-				killApp("OpenFin", () => {
-					if (watchClose) watchClose();
-					process.exit();
-				});
-			});
-			try {
-				const manifestUrl = taskMethods.startupConfig[env.NODE_ENV].serverConfig;
-				// Once the server is running we can launch OpenFin and retrieve the port.
-				const port = await launch({ manifestUrl });
-				// Use the port to connect and determine when OpenFin exists.
-				const fin = await connect({
-					uuid: 'server-connection',
-					// Connect to the given port.
-					address: `ws://localhost:${port}`,
-					// We want OpenFin to exit as our application exists.
-					nonPersistent: true
-				});
-				const openfinVersion = await fin.System.getVersion();
-				logToTerminal(`Openfin version: ${openfinVersion}`, "green");
-				if (watchClose) watchClose();
-				// Once OpenFin exits we shut down the server.
-				fin.once('disconnected', process.exit);
-			} catch (error) {
-				console.error(`Unable to launch and connect to OpenFin: ${error.message}`);
-				process.exit();
-			}
-
-			if (done) done();
-		},
 		launchElectron: done => {
-			logToTerminal(`Using Container: Electron@${getElectronVersion()}`, "green");
+			logToTerminal(`Using Electron@${getElectronVersion()}`, "green");
+
 			const cfg = taskMethods.startupConfig[env.NODE_ENV];
-			const USING_ELECTRON = container === "electron";
-			if (USING_ELECTRON && !FEA_PATH_EXISTS) {
-				throw "Cannot use electron container unless finsemble-electron-adapter optional dependency is installed. Please run npm i @chartiq/finsemble-electron-adapter";
-			}
 
 			let config = {
 				manifest: cfg.serverConfig,
@@ -591,17 +522,10 @@ const { launch, connect } = require('hadouken-js-adapter');
 			logToTerminal("Launching Finsemble", "black", "bgCyan");
 
 			launchTimestamp = Date.now();
-			if (container === "openfin") {
-				taskMethods.launchOpenFin(done);
-			} else {
-				taskMethods.launchElectron(done);
-			}
+			taskMethods.launchElectron(done);
 		},
-
 		logToTerminal: (...args) => logToTerminal.apply(this, args),
-
 		envOrArg: (...args) => envOrArg.apply(this, args),
-
 		/**
 		 * Starts the server, launches the Finsemble application. Use this for a quick launch, for instance when working on finsemble-electron-adapter.
 		 */
@@ -631,7 +555,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 		},
 
 		/**
-		 * Builds the application, starts the server and launches openfin. Use this to test production mode on your local machine.
+		 * Builds the application, starts the server and launches the application. Use this to test production mode on your local machine.
 		 */
 		prod: done => {
 			async.series([
@@ -641,7 +565,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 			], done);
 		},
 		/**
-		 * Builds the application in production mode and starts the server without launching openfin.
+		 * Builds the application in production mode and starts the server without launching the application.
 		 */
 		"prod:nolaunch": done => {
 			async.series([
@@ -656,7 +580,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 			], done);
 		},
 		/**
-		 * Launches the server in dev environment. No build, no openfin launch.
+		 * Launches the server in dev environment. No build, no application launch.
 		 */
 		server: done => {
 			async.series([
@@ -665,7 +589,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 			], done);
 		},
 		/**
-		 * Launches the server in prod environment. No build, no openfin launch.
+		 * Launches the server in prod environment. No build, no application launch.
 		 */
 		"server:prod": done => {
 			async.series([
