@@ -8,7 +8,10 @@
 					"name": "Finsemble-AppLauncher-Store",
 					"foundation": {
 						"appFolders": {
-							"list": ["Advanced App Launcher", "Favorites"],
+							"list": [
+								"Advanced App Launcher",
+								"Favorites"
+							],
 							"folders": {
 								"Advanced App Launcher": {
 									"icon": "ff-component",
@@ -58,7 +61,7 @@
 			"unknownComponent": "nonConfiguredComponent"
 		},
 		"assimilation": {
-			"useOpenFinSpawn": false,
+			"useFeaSpawn": false,
 			"enabled": true,
 			"blacklist": [],
 			"whitelist": [],
@@ -84,7 +87,11 @@
 			}
 		},
 		"logger": {
-			"hotkeyShowCentralLogger": ["ctrl", "shift", "L"]
+			"hotkeyShowCentralLogger": [
+				"ctrl",
+				"shift",
+				"L"
+			]
 		},
 		"storage": {
 			"defaultStorage": "IndexedDBAdapter",
