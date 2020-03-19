@@ -7,7 +7,7 @@ import ReactDOM from "react-dom";
 // const Test from './test';
 
 import * as storeExports from "./stores/windowTitleBarStore";
-let HeaderActions = storeExports.Actions, windowTitleBarStore;
+let HeaderActions = storeExports.Actions;
 
 //Parts that make up the windowTitleBar.
 //Left side
@@ -22,14 +22,15 @@ import AlwaysOnTop from "./components/right/AlwaysOnTop.jsx";
 import TabRegion from "./components/center/TabRegion";
 import "../../../../assets/css/finsemble.css";
 import "../../../../assets/css/_windowTitleBar.css";
+import { StoreConditional } from "./StoreConditional";
 
 /**
  * This is the main window manager component. It's the custom window frame that we add to each window that has useFSBLHeader set to true in its windowDescriptor.
  */
-class WindowTitleBar extends React.Component {
+class WindowTitleBarClass extends React.Component {
 	constructor() {
 		super();
-
+		this.windowTitleBarStore = storeExports.getStore();
 		this.tabBar = null;
 		this.toolbarRight = null;
 
@@ -42,30 +43,30 @@ class WindowTitleBar extends React.Component {
 		};
 
 		this.bindCorrectContext();
-		windowTitleBarStore.getValue({ field: "Maximize.hide" });
+		this.windowTitleBarStore.getValue({ field: "Maximize.hide" });
 		this.dragEndTimeout = null;
 		let activeIdentifier = finsembleWindow.identifier;
-		activeIdentifier.title = windowTitleBarStore.getValue({
+		activeIdentifier.title = this.windowTitleBarStore.getValue({
 			field: "Main.windowTitle"
 		});
 		this.state = {
-			windowTitle: windowTitleBarStore.getValue({ field: "Main.windowTitle" }),
-			minButton: !windowTitleBarStore.getValue({ field: "Minimize.hide" }),
-			maxButton: !windowTitleBarStore.getValue({ field: "Maximize.hide" }),
-			closeButton: !windowTitleBarStore.getValue({ field: "Close.hide" }),
-			showLinkerButton: windowTitleBarStore.getValue({
+			windowTitle: this.windowTitleBarStore.getValue({ field: "Main.windowTitle" }),
+			minButton: !this.windowTitleBarStore.getValue({ field: "Minimize.hide" }),
+			maxButton: !this.windowTitleBarStore.getValue({ field: "Maximize.hide" }),
+			closeButton: !this.windowTitleBarStore.getValue({ field: "Close.hide" }),
+			showLinkerButton: this.windowTitleBarStore.getValue({
 				field: "Linker.showLinkerButton"
 			}),
-			showShareButton: windowTitleBarStore.getValue({
+			showShareButton: this.windowTitleBarStore.getValue({
 				field: "Sharer.emitterEnabled"
 			}),
-			isTopRight: windowTitleBarStore.getValue({ field: "isTopRight" }),
-			alwaysOnTopButton: windowTitleBarStore.getValue({
+			isTopRight: this.windowTitleBarStore.getValue({ field: "isTopRight" }),
+			alwaysOnTopButton: this.windowTitleBarStore.getValue({
 				field: "AlwaysOnTop.show"
 			}),
 			tabs: [activeIdentifier], //array of tabs for this window
-			showTabs: windowTitleBarStore.getValue({ field: "showTabs" }),
-			hackScrollbar: windowTitleBarStore.getValue({ field: "hackScrollbar" }),
+			showTabs: this.windowTitleBarStore.getValue({ field: "showTabs" }),
+			hackScrollbar: this.windowTitleBarStore.getValue({ field: "hackScrollbar" }),
 			allowDragOnCenterRegion: true,
 			activeTab: FSBL.Clients.WindowClient.getWindowIdentifier(),
 			tabBarBoundingBox: {}
@@ -99,7 +100,7 @@ class WindowTitleBar extends React.Component {
 		this.onDoubleClick = this.onDoubleClick.bind(this);
 	}
 	componentWillMount() {
-		windowTitleBarStore.addListeners([
+		this.windowTitleBarStore.addListeners([
 			{ field: "Main.windowTitle", listener: this.onTitleChange },
 			{ field: "Main.showDockingTooltip", listener: this.onShowDockingToolTip },
 			{ field: "Main.dockingIcon", listener: this.onToggleDockingIcon },
@@ -143,7 +144,7 @@ class WindowTitleBar extends React.Component {
 	}
 
 	componentWillUnmount() {
-		windowTitleBarStore.removeListeners([
+		this.windowTitleBarStore.removeListeners([
 			{ field: "Main.windowTitle", listener: this.onTitleChange },
 			{ field: "Main.showDockingTooltip", listener: this.onShowDockingToolTip },
 			{ field: "Main.dockingIcon", listener: this.onToggleDockingIcon },
@@ -445,8 +446,8 @@ class WindowTitleBar extends React.Component {
 				{/* Only render the left section if something is inside of it. The left section has a right-border that we don't want showing willy-nilly. */}
 				{RENDER_LEFT_SECTION && (
 					<div className="fsbl-header-left">
-						{self.state.showLinkerButton ? <Linker /> : null}
-						{self.state.showShareButton ? <Sharer /> : null}
+						<Linker/>
+						<Sharer/>
 					</div>
 				)}
 				{/* center section of the titlebar */}
@@ -468,7 +469,7 @@ class WindowTitleBar extends React.Component {
 						/>
 					)}
 				</div>
-				<div className={rightWrapperClasses} ref={this.setToolbarRight}>
+				<div className={rightWrapperClasses}>
 					{showDockingIcon ? <DockingButton /> : null}
 					{/** DH 11/22/2019
 					 * Because AlwaysOnTop is a "smart" component that registers
@@ -490,19 +491,23 @@ class WindowTitleBar extends React.Component {
 	}
 }
 
+const WindowTitleBar = () => (
+	<StoreConditional condition={() => true}>
+		<WindowTitleBarClass/>
+	</StoreConditional>
+)
+
 function init() {
 	// The following line fixes the CSS issues, weird..
-	const css = require("../../../../assets/css/finsemble.css");
+	require("../../../../assets/css/finsemble.css");
 	// Create the header element
 	const template = document.createElement("div");
 	const FSBLHeader = document.createElement("div");
 	FSBLHeader.setAttribute("id", "FSBLHeader");
 	template.appendChild(FSBLHeader);
 	document.body.insertBefore(template.firstChild, document.body.firstChild);
-	storeExports.initialize(function() {
-		windowTitleBarStore = storeExports.getStore();
-		ReactDOM.render(<WindowTitleBar />, FSBLHeader);
-	});
+	ReactDOM.render(<WindowTitleBar />, FSBLHeader);
+	// Register with docking manager
 }
 
 // we do not need to wait for FSBL ready because this file gets required after FSBL is ready.
