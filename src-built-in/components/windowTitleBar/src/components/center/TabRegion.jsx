@@ -7,7 +7,7 @@ import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
 import { FinsembleDnDContext, FinsembleDroppable } from '@chartiq/finsemble-react-controls';
 import { Store, Actions } from "../../stores/windowTitleBarStore";
 import Title from "../../../../common/windowTitle";
-import * as _throttle from "lodash.throttle";
+import _throttle from "lodash.throttle";
 
 const PLACEHOLDER_TAB = {
     windowName: "",
