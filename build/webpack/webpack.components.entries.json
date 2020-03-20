@@ -1,1 +1,6 @@
-{}
+{
+    "messageSourceTestComponent": {
+        "output": "components/messageSourceTestComponent/messageSourceTestComponent",
+        "entry": "./src/components/messageSourceTestComponent/messageSourceTestComponent.js"
+    }
+}

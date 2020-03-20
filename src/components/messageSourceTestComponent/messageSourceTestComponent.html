@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>messageSourceTestComponent</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="messageSourceTestComponent.css">
+  <script src="../../vendor.bundle.js"></script>
+  <script src="messageSourceTestComponent.js"></script>
+</head>
+
+<body>
+  <div id="container">
+    <div id="bounds"></div>
+    <div class="spacer2"></div>
+    <img src="../../assets/img/finsembleDarkBG_noText.png" id="finsembleLogo" height="50">
+    <div class="spacer2"></div>
+    <h1>Message Source Tester</h1>
+    <div class="spacer3"></div>
+
+    <div id="columns">
+      <div class="column" id="col1">
+        <h2>Listen/Transmit</h2>
+
+        <label class="inputLabel">
+          Channel name
+          <input class="textField" id="channel" value="defaultChannel"></input>
+        </label>
+        <button class="button" id="listenButton" onclick="listen()">Listen</button>
+        <label class="inputLabel">
+          Listeners
+          <ul id="listeners"></ul>
+        </label>
+
+
+        <label class="inputLabel">
+          Message received
+          <textarea class="receivedData" id="receivedMessage" disabled rows=2></textarea>
+        </label>
+
+        <label class="inputLabel">
+          Message envelope
+          <textarea class="receivedData" id="messageEnvelope" disabled rows=9></textarea>
+        </label>
+
+        <label class="inputLabel">
+          Sender details
+          <textarea class="receivedData" id="senderDetails" disabled rows=6></textarea>
+        </label>
+
+        <div class="spacer4"></div>
+        <hr />
+        <div class="spacer4"></div>
+
+        <label class="inputLabel">
+          Channel name
+          <input class="textField" id="transmitChannel" value="defaultChannel"></input>
+        </label>
+
+        <label class="inputLabel">
+          Message content
+          <textarea class="messageContentArea" id="transmitContent" rows=2></textarea>
+        </label>
+        <button class="button" id="transmitButton" onclick="transmit()">Transmit</button>
+
+        <div class="spacer4"></div>
+
+      </div>
+      <div class="column" id="col2">
+        <h2>Query/Response</h2>
+      </div>
+
+      <!-- <div class="column" id="col3">
+        <h2>Pub/Sub</h2>
+      </div> -->
+    </div>
+
+
+  </div>
+</body>
+
+</html>
