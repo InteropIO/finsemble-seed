@@ -21,55 +21,12 @@
     <h1>Message Source Tester</h1>
     <div class="spacer3"></div>
 
-    <div id="columns">
-      <div class="column" id="col1">
+    <div id="headings">
+      <div class="heading active" id="listenTransmitHeading" onclick="window.displayListenTransmit();">
         <h2>Listen/Transmit</h2>
-
-        <label class="inputLabel">
-          Channel name
-          <input class="textField" id="channel" value="defaultChannel"></input>
-        </label>
-        <button class="button" id="listenButton" onclick="listen()">Listen</button>
-        <label class="inputLabel">
-          Listeners
-          <ul id="listeners"></ul>
-        </label>
-
-
-        <label class="inputLabel">
-          Message received
-          <textarea class="receivedData" id="receivedMessage" disabled rows=2></textarea>
-        </label>
-
-        <label class="inputLabel">
-          Message envelope
-          <textarea class="receivedData" id="messageEnvelope" disabled rows=9></textarea>
-        </label>
-
-        <label class="inputLabel">
-          Sender details
-          <textarea class="receivedData" id="senderDetails" disabled rows=6></textarea>
-        </label>
-
-        <div class="spacer4"></div>
-        <hr />
-        <div class="spacer4"></div>
-
-        <label class="inputLabel">
-          Channel name
-          <input class="textField" id="transmitChannel" value="defaultChannel"></input>
-        </label>
-
-        <label class="inputLabel">
-          Message content
-          <textarea class="messageContentArea" id="transmitContent" rows=2></textarea>
-        </label>
-        <button class="button" id="transmitButton" onclick="transmit()">Transmit</button>
-
-        <div class="spacer4"></div>
-
       </div>
-      <div class="column" id="col2">
+
+      <div class="heading" id="queryResponseHeading" onclick="window.displayQueryResponse();">
         <h2>Query/Response</h2>
       </div>
 
@@ -77,6 +34,65 @@
         <h2>Pub/Sub</h2>
       </div> -->
     </div>
+
+    <div class="column" id="listenTransmitCol">
+      <label class="inputLabel">
+        Channel name
+        <input class="textField" id="channel" value="defaultChannel"></input>
+      </label>
+      <button class="button" id="listenButton" onclick="listen()">Listen</button>
+      <label class="inputLabel">
+        Listeners
+        <ul id="listeners"></ul>
+      </label>
+
+
+      <label class="inputLabel grow">
+        Message received
+        <textarea class="receivedData" id="receivedMessage" disabled rows=2></textarea>
+      </label>
+
+      <label class="inputLabel grow">
+        Message envelope
+        <textarea class="receivedData" id="messageEnvelope" disabled rows=9></textarea>
+      </label>
+
+      <label class="inputLabel grow">
+        Sender details
+        <textarea class="receivedData" id="senderDetails" disabled rows=6></textarea>
+      </label>
+
+      <div class="spacer4"></div>
+      <hr />
+      <div class="spacer4"></div>
+
+      <label class="inputLabel">
+        Channel name
+        <input class="textField" id="transmitChannel" value="defaultChannel"></input>
+      </label>
+
+      <label class="inputLabel">
+        Message content
+        <textarea class="messageContentArea" id="transmitContent" rows=2></textarea>
+      </label>
+      <button class="button" id="transmitButton" onclick="transmit()">Transmit</button>
+
+      <div class="spacer4"></div>
+
+    </div>
+
+
+
+    <div class="column hidden" id="queryResponseCol">
+      <h3>Query/Response</h3>
+    </div>
+
+
+  
+    <div class="column hidden" id="pubSubCol">
+      <h3>Pub/Sub</h3>
+    </div>
+
 
 
   </div>
