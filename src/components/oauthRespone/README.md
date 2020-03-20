@@ -1,7 +1,7 @@
 # Integrating Finsemble auth with Keycloak
 
 This recipe intend to provide an example for integrating Keycloak with Finsemble as authentication part.
-To use Keycloak, please download Keycloak from https://www.keycloak.org/downloads.html] and follow their instruction to start and configure Keycloak
+To use Keycloak, please download Keycloak from https://www.keycloak.org/downloads.html and follow their instruction to start and configure Keycloak
 
 To use Keycloak in Finsemble, the following should be added or modified.
 - Manifest.json
@@ -9,6 +9,7 @@ To use Keycloak in Finsemble, the following should be added or modified.
 You have to add `authentication` under `finsemble`
 
 e.g.
+```javascript
 "authentication": {
     "startup": {
         //Default adapter to use
@@ -28,6 +29,7 @@ e.g.
         "component": "oauthRespone"
     }
 }
+```
 
 - oauthResponse
 
