@@ -107,6 +107,13 @@ module.exports = {
         path: path.resolve(__dirname, '../../dist/')
     },
     resolve: {
+        alias: {
+            react: path.resolve('./node_modules/react'),
+            'react-dom': path.resolve('./node_modules/react-dom'),
+            '@babel/runtime': path.resolve('./node_modules/@babel/runtime'),
+            '@chartiq/finsemble-react-controls': path.resolve('./node_modules/@chartiq/finsemble-react-controls'),
+            'async': path.resolve('./node_modules/async')
+        },
         extensions: ['.js', '.jsx', '.json', 'scss', 'html']
     }
 }

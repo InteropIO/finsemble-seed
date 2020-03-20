@@ -302,7 +302,7 @@ class WindowTitleBarClass extends React.Component {
 	onTitleChange(err, response) {
 		let { tabs } = this.state;
 		let myIdentifier = FSBL.Clients.WindowClient.getWindowIdentifier();
-		
+
 		tabs = tabs.map((el) => {
 			if (!el.windowName && el.name) el.windowName = el.name;
 			if (!el.name && el.windowName) el.name = el.windowName;
@@ -398,7 +398,7 @@ class WindowTitleBarClass extends React.Component {
 				{/* Only render the left section if something is inside of it. The left section has a right-border that we don't want showing willy-nilly. */}
 				{RENDER_LEFT_SECTION &&
 					<div className="fsbl-header-left">
-						<Linker /> 
+						<Linker />
 						{self.state.showShareButton ? <Sharer /> : null}
 					</div>
 				}
@@ -456,7 +456,6 @@ export const WindowTitleBar = ({ children }) => {
 		</>
 	)
 }
-alert('foo')
 // The following line fixes the CSS issues, weird..
 const css = require("../../../../assets/css/finsemble.css");
 // Create the header element

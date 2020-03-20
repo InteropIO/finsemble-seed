@@ -1,20 +1,54 @@
 
 import React, { Component } from 'react';
+import _get from 'lodash.get'
+import { EntityAvatar } from '@chartiq/finsemble-ui/lib/components'
+const DEFAULT_AVATAR_INFORMATION = {
+	path: "ff-component",
+	type: "fonticon"
+}
+
+const buildAvatarIconObject = (iconConfig) => {
+	if (!iconConfig) return null;
+	let iconObj = {};
+	if (iconConfig.iconClass) {
+		iconObj.path = iconConfig.iconClass;
+		iconObj.type = "fonticon";
+	} else if (iconConfig.iconURL) {
+		iconObj.path = iconConfig.iconURL;
+		iconObj.type = "url";
+	} else return null
+	return iconObj;
+}
+// import { EntityAvatar } from '@chartiq/finsemble-ui/lib/components'
 class title extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			title: finsembleWindow.name
+			title: finsembleWindow.name,
+			avatarInformation: null
 		}
 		this.getTitle = this.getTitle.bind(this);
 	}
+
 	async getTitle(e = null, identifier = this.props.windowIdentifier) {
 		let { wrap: win } = await FSBL.FinsembleWindow.getInstance(identifier)
 
 		win.getOptions((err, data) => {
-			this.setState({ title: data.title || win.name });
+			const title = data.title || win.name;
+			const avatarIcon = buildAvatarIconObject(_get(data, 'customData.foreign.components.Toolbar' || DEFAULT_AVATAR_INFORMATION));
+
+			const avatarInformation = {
+				name: title,
+				category: "Application",
+				icon: avatarIcon
+			}
+			this.setState({
+				title,
+				avatarInformation
+			});
 		})
 	}
+
 	componentDidMount() {
 		this.getTitle();
 	}
@@ -53,6 +87,7 @@ class title extends Component {
 		} : {};
 		return (
 			<div className="fsbl-tab-title" style={style}>
+				{this.state.avatarInformation && <EntityAvatar entity={this.state.avatarInformation} />}
 				{/* @todo, figure out where we're setting the title to an empty object.... */}
 				{this.state.title}</div>
 		);

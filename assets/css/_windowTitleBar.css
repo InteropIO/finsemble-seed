@@ -530,3 +530,15 @@ html.desktop-active .fsbl-active-tab .fsbl-tab-title {
         max-width:25%;
     }
 }
+
+.entity-avatar {
+    padding:3px;
+    font-size: 7px;
+    position: relative;
+    top: -2px;
+}
+
+.entity-avatar > i {
+    position: relative;
+    top: 1px;
+}
