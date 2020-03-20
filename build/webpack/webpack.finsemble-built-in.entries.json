@@ -21,7 +21,7 @@
 	},
 	"linker": {
 		"output": "components/linker/linker",
-		"entry": "./src-built-in/components/linker/src/linker.jsx"
+		"entry": "./src-built-in/components/linker/linker.jsx"
 	},
 	"quickComponentForm": {
 		"output": "components/quickComponentForm/quickComponentForm",
