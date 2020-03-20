@@ -5,6 +5,7 @@ To use Keycloak, please download Keycloak from https://www.keycloak.org/download
 
 To use Keycloak in Finsemble, the following should be added or modified.
 - Manifest.json
+
 You have to add `authentication` under `finsemble`
 
 e.g.
@@ -29,11 +30,13 @@ e.g.
 }
 
 - oauthResponse
+
 This component is used to handle the auth code sent from Keycloak after correct authenication. 
 The auth code will be sent to the backchannel endpoint by calling FSBL.Clients.AuthenticationClient.completeOAUTH() to retrieve the access token.
 After that, you can add your own logic in the callback of runBusinessLogic() to setup your own credentials structure.
 
 - backchannel_endpoint
+
 This must be setup in your own server to handle the auth code sent from Keycloak.
 In this recipe, you can find sample code in `server/server.js`. The auth code and relative parameters sent Keycloak will then be sent back to Keycloak's token endpoint to retrieve the acces token.
 
