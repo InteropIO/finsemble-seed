@@ -11,10 +11,6 @@
 		"output": "components/authentication/authentication",
 		"entry": "./src-built-in/components/authentication/app.jsx"
 	},
-	"overflowMenu": {
-		"output": "components/overflowMenu/overflowMenu",
-		"entry": "./src-built-in/components/overflowMenu/src/app.jsx"
-	},
 	"toolbar": {
 		"output": "components/toolbar/toolbar",
 		"entry": "./src-built-in/components/toolbar/src/app.jsx"
@@ -42,10 +38,6 @@
 	"floatingTitlebar": {
 		"output": "components/floatingTitlebar/floatingTitlebar",
 		"entry": "./src-built-in/components/floatingTitlebar/src/app.jsx"
-	},
-	"searchMenu": {
-		"output": "components/searchMenu/searchMenu",
-		"entry": "./src-built-in/components/searchMenu/src/app.jsx"
 	},
 	"welcome": {
 		"output": "components/welcome/welcome",
