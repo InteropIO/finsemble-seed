@@ -4,7 +4,7 @@
 */
 import React from "react";
 import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
-import { Store, Actions as HeaderActions } from "../../../../../../../finsemble-ui/src/components/windowTitlebar/stores/windowTitleBarStore";
+import { Store, Actions as HeaderActions } from "../../stores/windowTitleBarStore";
 /**
  * Maximize button. This button is hidden when the window is maximized. In its place is the restore button.
  */

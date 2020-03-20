@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { initialize, Store } from "../../../../../finsemble-ui/src/components/windowTitlebar/stores/windowTitleBarStore";
+import { initialize, Store } from "./stores/windowTitleBarStore";
 
 export const If = ({ children, condition}) => {
     return (

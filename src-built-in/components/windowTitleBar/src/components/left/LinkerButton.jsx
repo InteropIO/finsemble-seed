@@ -7,13 +7,13 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
 import LinkerGroups from "./LinkerGroups";
-import { Store } from "../../../../../../../finsemble-ui/src/components/windowTitlebar/stores/windowTitleBarStore";
+import { Store } from "../../stores/windowTitleBarStore";
 import { ReactComponent as LinkerButtonIcon } from '../../../../../../assets/img/titlebar/linker.svg'
 
 /**
  * Linker button; located on the left side of the windowTitleBar.
  */
-export default class LinkerButton extends React.Component {
+class LinkerButton extends React.Component {
     constructor(props) {
         super(props);
         this.bindCorrectContext();
@@ -163,5 +163,11 @@ export default class LinkerButton extends React.Component {
         </div >);
     }
 }
+const Linker = LinkerButton;
+// const Linker = () => (
+//     <If condition={() => Store.getValue({ field: "Linker.showLinkerButton" })}>
+//         <LinkerButton/>
+//     </If>
+// );
 
-export const Linker = LinkerButton;
+export default Linker;

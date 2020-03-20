@@ -7,11 +7,11 @@ import React from "react";
 import ReactDOM from "react-dom";
 // const Test from './test';
 
-import { initialize, Store, Actions } from "../../../../../finsemble-ui/src/components/windowTitlebar/stores/windowTitleBarStore";
+import { initialize, Store, Actions } from "./stores/windowTitleBarStore";
 
 //Parts that make up the windowTitleBar.
 //Left side
-import {Linker} from "./components/left/LinkerButton";
+import Linker from "./components/left/LinkerButton";
 import Sharer from "./components/left/ShareButton.jsx";
 //Right side
 import Minimize from "./components/right/MinimizeButton.jsx";
@@ -22,12 +22,11 @@ import AlwaysOnTop from "./components/right/AlwaysOnTop.jsx";
 import TabRegion from './components/center/TabRegion'
 import "../../../../assets/css/finsemble.css";
 import "../../../../assets/css/_windowTitleBar.css";
-import { StoreConditional } from "./StoreConditional";
 
 /**
  * This is the main window manager component. It's the custom window frame that we add to each window that has useFSBLHeader set to true in its windowDescriptor.
  */
-class WindowTitleBar extends React.Component {
+class WindowTitleBarClass extends React.Component {
 	constructor() {
 		super();
 
@@ -399,7 +398,7 @@ class WindowTitleBar extends React.Component {
 				{/* Only render the left section if something is inside of it. The left section has a right-border that we don't want showing willy-nilly. */}
 				{RENDER_LEFT_SECTION &&
 					<div className="fsbl-header-left">
-						{self.state.showLinkerButton ? <Linker /> : null}
+						<Linker /> 
 						{self.state.showShareButton ? <Sharer /> : null}
 					</div>
 				}
@@ -441,19 +440,29 @@ class WindowTitleBar extends React.Component {
 	}
 }
 
-function init () {
-	// The following line fixes the CSS issues, weird..
-	const css = require("../../../../assets/css/finsemble.css");
-	// Create the header element
-	const template = document.createElement("div");
-	const FSBLHeader = document.createElement('div')
-		  FSBLHeader.setAttribute('id', 'FSBLHeader')
-	template.appendChild(FSBLHeader)
-	document.body.insertBefore(template.firstChild, document.body.firstChild);
-	initialize(function () {
-		ReactDOM.render(<WindowTitleBar />, FSBLHeader);
-	});
-}
+/**
+ * Delays rendering child components until FSBL comes online.
+ */
+export const WindowTitleBar = ({ children }) => {
+	const [ready, setReady] = React.useState(false);
 
-// we do not need to wait for FSBL ready because this file gets required after FSBL is ready.
-init();
+	React.useEffect(() => {
+		initialize(() => setReady(true));
+	}, []);
+
+	return (
+		<>
+			{ready && (<WindowTitleBarClass/>)}
+		</>
+	)
+}
+alert('foo')
+// The following line fixes the CSS issues, weird..
+const css = require("../../../../assets/css/finsemble.css");
+// Create the header element
+const template = document.createElement("div");
+const FSBLHeader = document.createElement('div')
+FSBLHeader.setAttribute('id', 'FSBLHeader')
+template.appendChild(FSBLHeader)
+document.body.insertBefore(template.firstChild, document.body.firstChild);
+ReactDOM.render(<WindowTitleBar />, FSBLHeader);

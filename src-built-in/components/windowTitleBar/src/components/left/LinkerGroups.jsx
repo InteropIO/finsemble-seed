@@ -4,7 +4,7 @@
 */
 import React from "react";
 import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
-import { Store, Actions as HeaderActions } from "../../../../../../../finsemble-ui/src/components/windowTitlebar/stores/windowTitleBarStore";
+import { Store, Actions as HeaderActions } from "../../stores/windowTitleBarStore";
 import { getChannelLabelFromIndex } from "../../../../shared/linkerUtil";
 let accessibleLinker;
 export default class LinkerGroups extends React.Component {

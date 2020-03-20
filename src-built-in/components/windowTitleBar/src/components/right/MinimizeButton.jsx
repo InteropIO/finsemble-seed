@@ -5,7 +5,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
-import { Store, Actions as HeaderActions } from "../../../../../../../finsemble-ui/src/components/windowTitlebar/stores/windowTitleBarStore";
+import { Store, Actions as HeaderActions } from "../../stores/windowTitleBarStore";
 
 export default class MinimizeButton extends React.Component {
 	constructor(props) {

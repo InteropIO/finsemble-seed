@@ -5,7 +5,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
-import { Store, Actions as HeaderActions } from "../../../../../../../finsemble-ui/src/components/windowTitlebar/stores/windowTitleBarStore";
+import { Store, Actions as HeaderActions } from "../../stores/windowTitleBarStore";
 import { ReactComponent as ShareIcon } from '../../../../../../assets/img/titlebar/share.svg'
 export default class ShareButton extends React.Component {
 	constructor(props) {
