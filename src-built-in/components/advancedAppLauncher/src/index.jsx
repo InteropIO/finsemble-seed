@@ -62,7 +62,7 @@ class AppLauncher extends React.Component {
 	openAppMarket() {
 		FSBL.Clients.LauncherClient.showWindow(
 			{
-				componentType: "Advanced App Catalog"
+				componentType: "App Catalog"
 			},
 			{
 				monitor: "mine",
