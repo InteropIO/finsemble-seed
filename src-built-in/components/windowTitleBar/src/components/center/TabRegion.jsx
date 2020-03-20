@@ -5,7 +5,7 @@ import ReactDOM from "react-dom";
 import Tab from "./tab";
 import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
 import { FinsembleDnDContext, FinsembleDroppable } from '@chartiq/finsemble-react-controls';
-import { Store, Actions } from "../../stores/windowTitleBarStore";
+import { Store, Actions } from "../../../../../../../finsemble-ui/src/components/windowTitlebar/stores/windowTitleBarStore";
 import Title from "../../../../common/windowTitle";
 import _throttle from "lodash.throttle";
 

@@ -11,7 +11,8 @@
 	"include": [
 		"src/**/*",
 		"src-built-in/**/*",
-		"src-built-in/ts/**/*"
+		"src-built-in/ts/**/*",
+		"../finsemble-ui/src/components/windowTitlebar/stores"
 	],
 	"exclude": [
 		"node_modules",

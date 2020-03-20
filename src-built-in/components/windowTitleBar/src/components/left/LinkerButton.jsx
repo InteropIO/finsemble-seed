@@ -7,8 +7,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
 import LinkerGroups from "./LinkerGroups";
-import { getStore, Actions as HeaderActions } from "../../stores/windowTitleBarStore";
+import { getStore, Actions as HeaderActions } from "../../../../../../../finsemble-ui/src/components/windowTitlebar/stores/windowTitleBarStore";
 import { ReactComponent as LinkerButtonIcon } from '../../../../../../assets/img/titlebar/linker.svg'
+import { StoreConditional } from "../../StoreConditional";
 let windowTitleBarStore;
 
 /**
@@ -165,3 +166,5 @@ export default class LinkerButton extends React.Component {
         </div >);
     }
 }
+
+export const Linker = LinkerButton;

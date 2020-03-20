@@ -7,12 +7,12 @@ import React from "react";
 import ReactDOM from "react-dom";
 // const Test from './test';
 
-import * as storeExports from "./stores/windowTitleBarStore";
-let HeaderActions, windowTitleBarStore;
+import * as storeExports from "../../../../../finsemble-ui/src/components/windowTitlebar/stores/windowTitleBarStore";
+let HeaderActions = storeExports.Actions;
 
 //Parts that make up the windowTitleBar.
 //Left side
-import Linker from "./components/left/LinkerButton";
+import {Linker} from "./components/left/LinkerButton";
 import Sharer from "./components/left/ShareButton.jsx";
 //Right side
 import Minimize from "./components/right/MinimizeButton.jsx";
@@ -23,6 +23,7 @@ import AlwaysOnTop from "./components/right/AlwaysOnTop.jsx";
 import TabRegion from './components/center/TabRegion'
 import "../../../../assets/css/finsemble.css";
 import "../../../../assets/css/_windowTitleBar.css";
+import { StoreConditional } from "./StoreConditional";
 
 /**
  * This is the main window manager component. It's the custom window frame that we add to each window that has useFSBLHeader set to true in its windowDescriptor.
@@ -452,7 +453,7 @@ function init () {
 	document.body.insertBefore(template.firstChild, document.body.firstChild);
 	storeExports.initialize(function () {
 		HeaderActions = storeExports.Actions;
-		windowTitleBarStore = storeExports.getStore();
+		window.windowTitleBarStore = storeExports.getStore();
 		ReactDOM.render(<WindowTitleBar />, FSBLHeader);
 	});
 }
