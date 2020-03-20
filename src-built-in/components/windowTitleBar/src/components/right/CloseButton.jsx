@@ -4,8 +4,7 @@
 */
 import React from "react";
 import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
-import { getStore, Actions as HeaderActions } from "../../../../../../../finsemble-ui/src/components/windowTitlebar/stores/windowTitleBarStore";
-let windowTitleBarStore;
+import { Actions as HeaderActions } from "../../../../../../../finsemble-ui/src/components/windowTitlebar/stores/windowTitleBarStore";
 /**
  * Close button, located on the far right of the window Manager.
  */
@@ -16,7 +15,6 @@ export default class CloseButton extends React.Component {
 		/**
 		 * We assign in the constructor instead of via a require at the top of the file because the store is initialized asynchronously.
 		 */
-		windowTitleBarStore = getStore();
 		this.state = { hoverState: "false" };
 	}
 	/**

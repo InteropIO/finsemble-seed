@@ -4,9 +4,8 @@
 */
 import React from "react";
 import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
-import { getStore, Actions as HeaderActions } from "../../../../../../../finsemble-ui/src/components/windowTitlebar/stores/windowTitleBarStore";
+import { Store, Actions as HeaderActions } from "../../../../../../../finsemble-ui/src/components/windowTitlebar/stores/windowTitleBarStore";
 import { getChannelLabelFromIndex } from "../../../../shared/linkerUtil";
-let windowTitleBarStore;
 let accessibleLinker;
 export default class LinkerGroups extends React.Component {
     constructor(props) {
@@ -14,7 +13,6 @@ export default class LinkerGroups extends React.Component {
         /**
 		 * We assign in the constructor instead of via a require at the top of the file because the store is initialized asynchronously.
 		 */
-        windowTitleBarStore = getStore();
         this.bindCorrectContext();
         this.state = {
             channels: FSBL.Clients.LinkerClient.getState().channels,
@@ -47,7 +45,7 @@ export default class LinkerGroups extends React.Component {
                 accessibleLinker: value && typeof value === "boolean" ? value : true
             });
         });
-        windowTitleBarStore.addListener({ field: "Linker.channels" }, this.onChannelChange);
+        Store.addListener({ field: "Linker.channels" }, this.onChannelChange);
     }
 
     /**
@@ -56,7 +54,7 @@ export default class LinkerGroups extends React.Component {
      * @memberof LinkerGroups
      */
     componentWillUnmount() {
-        windowTitleBarStore.removeListener({ field: "Linker.channels" }, this.onChannelChange);
+        Store.removeListener({ field: "Linker.channels" }, this.onChannelChange);
     }
 
     /**

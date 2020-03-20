@@ -4,8 +4,7 @@
 */
 import React from "react";
 import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
-import { getStore, Actions as HeaderActions } from "../../../../../../../finsemble-ui/src/components/windowTitlebar/stores/windowTitleBarStore";
-let windowTitleBarStore;
+import { Store, Actions as HeaderActions } from "../../../../../../../finsemble-ui/src/components/windowTitlebar/stores/windowTitleBarStore";
 /**
  * Maximize button. This button is hidden when the window is maximized. In its place is the restore button.
  */
@@ -16,9 +15,8 @@ export default class MaximizeButton extends React.Component {
 		/**
 		 * We assign in the constructor instead of via a require at the top of the file because the store is initialized asynchronously.
 		 */
-		windowTitleBarStore = getStore();
 		this.state = {
-			maximized: windowTitleBarStore.getValue({ field: "Maximize.maximized" }),
+			maximized: Store.getValue({ field: "Maximize.maximized" }),
 			hoverState: "false"
 		};
 	}

@@ -7,8 +7,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 // const Test from './test';
 
-import * as storeExports from "../../../../../finsemble-ui/src/components/windowTitlebar/stores/windowTitleBarStore";
-let HeaderActions = storeExports.Actions;
+import { initialize, Store, Actions } from "../../../../../finsemble-ui/src/components/windowTitlebar/stores/windowTitleBarStore";
 
 //Parts that make up the windowTitleBar.
 //Left side
@@ -44,22 +43,22 @@ class WindowTitleBar extends React.Component {
 		}
 
 		this.bindCorrectContext();
-		windowTitleBarStore.getValue({ field: "Maximize.hide" });
+		Store.getValue({ field: "Maximize.hide" });
 		this.dragEndTimeout = null;
 		let activeIdentifier = finsembleWindow.identifier;
-		activeIdentifier.title = windowTitleBarStore.getValue({ field: "Main.windowTitle" });
+		activeIdentifier.title = Store.getValue({ field: "Main.windowTitle" });
 		this.state = {
-			windowTitle: windowTitleBarStore.getValue({ field: "Main.windowTitle" }),
-			minButton: !windowTitleBarStore.getValue({ field: "Minimize.hide" }),
-			maxButton: !windowTitleBarStore.getValue({ field: "Maximize.hide" }),
-			closeButton: !windowTitleBarStore.getValue({ field: "Close.hide" }),
-			showLinkerButton: windowTitleBarStore.getValue({ field: "Linker.showLinkerButton" }),
-			showShareButton: windowTitleBarStore.getValue({ field: "Sharer.emitterEnabled" }),
-			isTopRight: windowTitleBarStore.getValue({ field: "isTopRight" }),
-			alwaysOnTopButton: windowTitleBarStore.getValue({ field: "AlwaysOnTop.show" }),
+			windowTitle: Store.getValue({ field: "Main.windowTitle" }),
+			minButton: !Store.getValue({ field: "Minimize.hide" }),
+			maxButton: !Store.getValue({ field: "Maximize.hide" }),
+			closeButton: !Store.getValue({ field: "Close.hide" }),
+			showLinkerButton: Store.getValue({ field: "Linker.showLinkerButton" }),
+			showShareButton: Store.getValue({ field: "Sharer.emitterEnabled" }),
+			isTopRight: Store.getValue({ field: "isTopRight" }),
+			alwaysOnTopButton: Store.getValue({ field: "AlwaysOnTop.show" }),
 			tabs: [activeIdentifier], //array of tabs for this window
-			showTabs: windowTitleBarStore.getValue({ field: "showTabs" }),
-			hackScrollbar: windowTitleBarStore.getValue({ field: "hackScrollbar" }),
+			showTabs: Store.getValue({ field: "showTabs" }),
+			hackScrollbar: Store.getValue({ field: "hackScrollbar" }),
 			allowDragOnCenterRegion: true,
 			activeTab: FSBL.Clients.WindowClient.getWindowIdentifier(),
 			tabBarBoundingBox: {}
@@ -92,7 +91,7 @@ class WindowTitleBar extends React.Component {
 
 	}
 	componentWillMount() {
-		windowTitleBarStore.addListeners([
+		Store.addListeners([
 			{ field: "Main.windowTitle", listener: this.onTitleChange },
 			{ field: "Main.showDockingTooltip", listener: this.onShowDockingToolTip },
 			{ field: "Main.dockingIcon", listener: this.onToggleDockingIcon },
@@ -126,7 +125,7 @@ class WindowTitleBar extends React.Component {
 	}
 
 	componentWillUnmount() {
-		windowTitleBarStore.removeListeners([
+		Store.removeListeners([
 			{ field: "Main.windowTitle", listener: this.onTitleChange },
 			{ field: "Main.showDockingTooltip", listener: this.onShowDockingToolTip },
 			{ field: "Main.dockingIcon", listener: this.onToggleDockingIcon },
@@ -196,7 +195,7 @@ class WindowTitleBar extends React.Component {
 	onDoubleClick() {
 		// Actions.clickMaximize checks the window state
 		// and toggles between maximize and minimize.
-		HeaderActions.clickMaximize();
+		Actions.clickMaximize();
 	}
 	/**
 	 * The dragger is an absolutely positioned element that is superimposed on the actual area that we'd like to drag.
@@ -451,9 +450,7 @@ function init () {
 		  FSBLHeader.setAttribute('id', 'FSBLHeader')
 	template.appendChild(FSBLHeader)
 	document.body.insertBefore(template.firstChild, document.body.firstChild);
-	storeExports.initialize(function () {
-		HeaderActions = storeExports.Actions;
-		window.windowTitleBarStore = storeExports.getStore();
+	initialize(function () {
 		ReactDOM.render(<WindowTitleBar />, FSBLHeader);
 	});
 }

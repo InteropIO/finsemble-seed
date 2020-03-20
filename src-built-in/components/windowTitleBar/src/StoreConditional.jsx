@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { initialize, getStore } from "../../../../../finsemble-ui/src/components/windowTitlebar/stores/windowTitleBarStore";
+import { initialize, Store } from "../../../../../finsemble-ui/src/components/windowTitlebar/stores/windowTitleBarStore";
 
 export const If = ({ children, condition}) => {
     return (
@@ -18,7 +18,7 @@ export const WaitForStore = ({children, condition}) => {
     }, [])  ;
     return (
         <>
-            {ready && condition(getStore()) && children}
+            {ready && condition(Store) && children}
         </>
     )
 }

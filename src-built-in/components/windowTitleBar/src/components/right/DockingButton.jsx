@@ -4,8 +4,7 @@
 */
 import React from "react";
 import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
-import { getStore, Actions as HeaderActions } from "../../../../../../../finsemble-ui/src/components/windowTitlebar/stores/windowTitleBarStore";
-let windowTitleBarStore;
+import { Store, Actions as HeaderActions } from "../../../../../../../finsemble-ui/src/components/windowTitlebar/stores/windowTitleBarStore";
 
 export default class DockingButton extends React.Component {
 	constructor(props) {
@@ -14,10 +13,9 @@ export default class DockingButton extends React.Component {
     /**
 		 * We assign in the constructor instead of via a require at the top of the file because the store is initialized asynchronously.
 		 */
-		windowTitleBarStore = getStore();
 		this.state = {
 			showDockingTooltip: false,
-			dockingIcon: windowTitleBarStore.getValue({ field: "Main.dockingIcon" }),
+			dockingIcon: Store.getValue({ field: "Main.dockingIcon" }),
 			hoverState: "false"
 		};
 	}
@@ -39,7 +37,7 @@ export default class DockingButton extends React.Component {
      * @memberof DockingButton
      */
 	componentWillMount() {
-		windowTitleBarStore.addListeners([{ field: "Main.dockingIcon", listener: this.onStoreChanged }]);
+		Store.addListeners([{ field: "Main.dockingIcon", listener: this.onStoreChanged }]);
 	}
 
     /**
@@ -48,7 +46,7 @@ export default class DockingButton extends React.Component {
      * @memberof DockingButton
      */
 	componentWillUnmount() {
-		windowTitleBarStore.removeListeners([{ field: "Main.dockingIcon", listener: this.onStoreChanged }]);
+		Store.removeListeners([{ field: "Main.dockingIcon", listener: this.onStoreChanged }]);
 	}
 
     /**

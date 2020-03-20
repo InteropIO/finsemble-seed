@@ -7,10 +7,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
 import LinkerGroups from "./LinkerGroups";
-import { getStore, Actions as HeaderActions } from "../../../../../../../finsemble-ui/src/components/windowTitlebar/stores/windowTitleBarStore";
+import { Store } from "../../../../../../../finsemble-ui/src/components/windowTitlebar/stores/windowTitleBarStore";
 import { ReactComponent as LinkerButtonIcon } from '../../../../../../assets/img/titlebar/linker.svg'
-import { StoreConditional } from "../../StoreConditional";
-let windowTitleBarStore;
 
 /**
  * Linker button; located on the left side of the windowTitleBar.
@@ -22,7 +20,6 @@ export default class LinkerButton extends React.Component {
         /**
          * We assign in the constructor instead of via a require at the top of the file because the store is initialized asynchronously.
          */
-        windowTitleBarStore = getStore();
         this.state = {
             channels: {},
             allChannels: {},
@@ -134,10 +131,10 @@ export default class LinkerButton extends React.Component {
      */
     componentWillMount() {
 
-        ////console.log("windowTitleBarStore--", windowTitleBarStore)
-        windowTitleBarStore.addListener({ field: "Linker.channels" }, this.onChannelsChange);
-        windowTitleBarStore.addListener({ field: "Linker.allChannels" }, this.onAllChannelsChange);
-        windowTitleBarStore.addListener({ field: "Linker.showLinkerButton" }, this.onShowLinkerButton);
+        ////console.log("Store--", Store)
+        Store.addListener({ field: "Linker.channels" }, this.onChannelsChange);
+        Store.addListener({ field: "Linker.allChannels" }, this.onAllChannelsChange);
+        Store.addListener({ field: "Linker.showLinkerButton" }, this.onShowLinkerButton);
     }
 
     /**
@@ -146,9 +143,9 @@ export default class LinkerButton extends React.Component {
      * @memberof LinkerButton
      */
     componentWillUnmount() {
-        windowTitleBarStore.removeListener({ field: "Linker.channels" }, this.onChannelsChange);
-        windowTitleBarStore.removeListener({ field: "Linker.allChannels" }, this.onAllChannelsChange);
-        windowTitleBarStore.removeListener({ field: "Linker.showLinkerButton" }, this.onShowLinkerButton);
+        Store.removeListener({ field: "Linker.channels" }, this.onChannelsChange);
+        Store.removeListener({ field: "Linker.allChannels" }, this.onAllChannelsChange);
+        Store.removeListener({ field: "Linker.showLinkerButton" }, this.onShowLinkerButton);
     }
     /**
      * Render method.

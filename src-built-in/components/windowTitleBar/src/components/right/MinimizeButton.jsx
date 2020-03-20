@@ -5,8 +5,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
-import { getStore, Actions as HeaderActions } from "../../../../../../../finsemble-ui/src/components/windowTitlebar/stores/windowTitleBarStore";
-let windowTitleBarStore;
+import { Store, Actions as HeaderActions } from "../../../../../../../finsemble-ui/src/components/windowTitlebar/stores/windowTitleBarStore";
 
 export default class MinimizeButton extends React.Component {
 	constructor(props) {
@@ -15,7 +14,6 @@ export default class MinimizeButton extends React.Component {
 		/**
 		 * We assign in the constructor instead of via a require at the top of the file because the store is initialized asynchronously.
 		 */
-		windowTitleBarStore = getStore();
 		this.state = { hoverState: "false" };
 	}
 

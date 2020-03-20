@@ -5,9 +5,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
-import { getStore, Actions as HeaderActions } from "../../../../../../../finsemble-ui/src/components/windowTitlebar/stores/windowTitleBarStore";
+import { Store, Actions as HeaderActions } from "../../../../../../../finsemble-ui/src/components/windowTitlebar/stores/windowTitleBarStore";
 import { ReactComponent as ShareIcon } from '../../../../../../assets/img/titlebar/share.svg'
-let windowTitleBarStore;
 export default class ShareButton extends React.Component {
 	constructor(props) {
 		super(props);
@@ -15,7 +14,6 @@ export default class ShareButton extends React.Component {
 		/**
  * We assign in the constructor instead of via a require at the top of the file because the store is initialized asynchronously.
  */
-		windowTitleBarStore = getStore();
 
 		this.state = {
 			hoverState: "false"
@@ -48,7 +46,7 @@ export default class ShareButton extends React.Component {
 	 * @memberof ShareButton
 	 */
 	componentWillMount() {
-		windowTitleBarStore.addListener({ field: "Sharer.receiverHandler" }, this.onReceiverhandler);
+		Store.addListener({ field: "Sharer.receiverHandler" }, this.onReceiverhandler);
 	}
 	/**
 	 * Remove listeners from the store.
@@ -56,7 +54,7 @@ export default class ShareButton extends React.Component {
 	 * @memberof ShareButton
 	 */
 	componentWillUnmount() {
-		windowTitleBarStore.removeListener({ field: "Sharer.receiverHandler" }, this.onReceiverhandler);
+		Store.removeListener({ field: "Sharer.receiverHandler" }, this.onReceiverhandler);
 	}
 
 	/**
