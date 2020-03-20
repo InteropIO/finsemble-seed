@@ -1,10 +1,5 @@
 import * as React from 'react'
-import { MenuShell } from '@chartiq/finsemble-ui/react/components/menu/menuShell'
-import { MenuActivator } from '@chartiq/finsemble-ui/react/components/menu/menuActivator'
-import { Menu } from '@chartiq/finsemble-ui/react/components/menu/menu'
-import { MenuItem } from '@chartiq/finsemble-ui/react/components/menu/menuItem'
-import { MenuHotKey } from '@chartiq/finsemble-ui/react/components/menu/menuHotKey'
-import { MenuTitle } from '@chartiq/finsemble-ui/react/components/menu/menuTitle'
+import { MenuShell, MenuActivator, Menu, MenuItem, MenuHotKey, MenuTitle } from '@chartiq/finsemble-ui/react/components/';
 
 const FinsembleIcon = () => {
 	return <img className="finsemble-toolbar-brand-logo" src="../../assets/img/Finsemble_Taskbar_Icon.png" />
