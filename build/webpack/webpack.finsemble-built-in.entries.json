@@ -23,10 +23,6 @@
 		"output": "components/linker/linker",
 		"entry": "./src-built-in/components/linker/src/linker.jsx"
 	},
-	"fileMenu": {
-		"output": "components/fileMenu/fileMenu",
-		"entry": "./src-built-in/components/fileMenu/src/app.jsx"
-	},
 	"quickComponentForm": {
 		"output": "components/quickComponentForm/quickComponentForm",
 		"entry": "./src-built-in/components/quickComponentForm/app.jsx"
