@@ -79,11 +79,8 @@
                 if (!user) {
                   user = credentials.access_token;
                 }
-                // Finish the authentication process
-                FSBL.Clients.RouterClient.transmit(
-                  "AuthenticationService.authorization",
-                  { user: user, credentials: credentials }
-                );
+                // Finish the authentication process by pulishing the credentials so that other componets can access the credentials
+                FSBL.Clients.AuthenticationClient.publishAuthorization(user, credentials)
               }
               OauthClient.closeThisWindow();
             });
