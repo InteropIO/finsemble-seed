@@ -29,7 +29,7 @@
 	},
 	"singleInputDialog": {
 		"output": "components/singleInputDialog/singleInputDialog",
-		"entry": "./src-built-in/components/singleInputDialog/src/app.jsx"
+		"entry": "./src-built-in/components/singleInputDialog/app.jsx"
 	},
 	"UserPreferences": {
 		"output": "components/userPreferences/userPreferences",
@@ -54,9 +54,5 @@
 	"processMonitor": {
 		"output": "components/processMonitor/processMonitor",
 		"entry": "./src-built-in/components/processMonitor/app.jsx"
-	},
-	"throbber": {
-		"output": "components/throbber/throbber",
-		"entry": "./src-built-in/components/throbber/throbber.js"
 	}
 }
