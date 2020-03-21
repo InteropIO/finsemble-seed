@@ -40,7 +40,7 @@
         Channel name
         <input class="textField" id="channel" value="defaultChannel"></input>
       </label>
-      <button class="button" id="listenButton" onclick="listen()">Listen</button>
+      <button class="button" id="listenButton" onclick="window.listen()">Listen</button>
       <label class="inputLabel">
         Listeners
         <ul id="listeners"></ul>
@@ -54,12 +54,12 @@
 
       <label class="inputLabel grow">
         Message envelope
-        <textarea class="receivedData" id="messageEnvelope" disabled rows=9></textarea>
+        <textarea class="receivedData" id="messageEnvelope" disabled rows=8></textarea>
       </label>
 
       <label class="inputLabel grow">
         Sender details
-        <textarea class="receivedData" id="senderDetails" disabled rows=6></textarea>
+        <textarea class="receivedData" id="senderDetails" disabled rows=8></textarea>
       </label>
 
       <div class="spacer4"></div>
@@ -75,7 +75,7 @@
         Message content
         <textarea class="messageContentArea" id="transmitContent" rows=2></textarea>
       </label>
-      <button class="button" id="transmitButton" onclick="transmit()">Transmit</button>
+      <button class="button" id="transmitButton" onclick="window.transmit()">Transmit</button>
 
       <div class="spacer4"></div>
 

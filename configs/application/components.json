@@ -200,8 +200,8 @@
                 },
                 "top": "center",
                 "left": "center",
-                "width": 800,
-                "height": 600
+                "width": 600,
+                "height": 800
             },
             "component": {
                 "preload": false,
