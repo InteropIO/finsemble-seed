@@ -16,8 +16,8 @@ const PLACEHOLDER_TAB = {
 };
 let TAB_WIDTH = 300;
 //Next two items are for calculating how large the title should be within a tab.
-const ICON_AREA = 29;
-const CLOSE_BUTTON_MARGIN = 22;
+const ICON_AREA = 16;
+const CLOSE_BUTTON_MARGIN = 12;
 const MINIMUM_TAB_SIZE = 100;
 export default class TabRegion extends React.Component {
     constructor(props) {
@@ -133,7 +133,7 @@ export default class TabRegion extends React.Component {
             x: e.nativeEvent.screenX,
             y: e.nativeEvent.screenY
         }
-        
+
         const boundingBox = this.state.boundingBox;
         FSBL.Clients.WindowClient.getBounds(
             (err, bounds) => {
@@ -142,7 +142,7 @@ export default class TabRegion extends React.Component {
                     top: boundingBox.top + bounds.top,
                     bottom: boundingBox.bottom + bounds.top,
                     left: boundingBox.left + bounds.left,
-                    right: boundingBox.right + bounds.left 
+                    right: boundingBox.right + bounds.left
                 };
                 if (!FSBL.Clients.WindowClient.isPointInBox(this.mousePositionOnDragEnd, tabRegion)) {
                     setTimeout(() => {
