@@ -89,7 +89,10 @@ class title extends Component {
 			<div className="fsbl-tab-title" style={style}>
 				{this.state.avatarInformation && <EntityAvatar entity={this.state.avatarInformation} />}
 				{/* @todo, figure out where we're setting the title to an empty object.... */}
-				{this.state.title}</div>
+				<div className="title-text">
+					{this.state.title}
+				</div>
+			</div>
 		);
 	}
 }
