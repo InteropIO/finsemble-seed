@@ -112,8 +112,8 @@ const  listenHandlerFn = async (err, response) => {
 origin:              ${response.header.origin == myClientName ? "here" : origin }
 windowName:          ${windowName}
 componentType:       ${componentType}
-configuredUrlOrPath: ${configuredUrlOrPath}
-currentUrl:          ${currentUrl}
+config URL Or path:  ${configuredUrlOrPath}
+spawned with URL:    ${currentUrl}
 `
 	}
 }
@@ -192,8 +192,8 @@ const  queryHandlerFn = async (err, queryMessage) => {
 origin:              ${queryMessage.header.origin == myClientName ? "here" : origin }
 windowName:          ${windowName}
 componentType:       ${componentType}
-configuredUrlOrPath: ${configuredUrlOrPath}
-currentUrl:          ${currentUrl}
+config URL Or path:  ${configuredUrlOrPath}
+spawned with URL:    ${currentUrl}
 `
 		//respond to query
 		var response="Back at ya: " + JSON.stringify(queryMessage.data); // Responses can be objects or strings
@@ -230,8 +230,8 @@ const  responseHandlerFn = async (err, response) => {
 origin:              ${response.header.origin == myClientName ? "here" : origin }
 windowName:          ${windowName}
 componentType:       ${componentType}
-configuredUrlOrPath: ${configuredUrlOrPath}
-currentUrl:          ${currentUrl}
+config URL Or path:  ${configuredUrlOrPath}
+spawned with URL:    ${currentUrl}
 `
 
 }
@@ -259,7 +259,7 @@ window.addResponder = () => {
 		elements.respondersList.appendChild(li);
 
 	} else {
-		console.warn(`Already listening to channel '${channel}', ignoring...`);
+		console.warn(`Already responding to channel '${channel}', ignoring...`);
 	}
 }
 
