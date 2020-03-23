@@ -45,7 +45,7 @@
 	},
 	"floatingTitlebar": {
 		"output": "components/floatingTitlebar/floatingTitlebar",
-		"entry": "./src-built-in/components/floatingTitlebar/src/floatingTitlebar.jsx"
+		"entry": "./src-built-in/components/floatingTitlebar/src/FloatingTitlebar.jsx"
 	},
 	"searchMenu": {
 		"output": "components/searchMenu/searchMenu",
