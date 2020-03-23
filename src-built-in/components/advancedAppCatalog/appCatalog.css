@@ -660,10 +660,6 @@
 }
 
 
-.action-button .ff-adp-trash-outline {
-	font-size: 19px;
-	padding-top: 5px;
-}
 
 
 .app-showcase .header .action-button.open:hover {
@@ -872,9 +868,11 @@
 }
 
 .app-showcase .header .action-button.remove {
-	color: var(--button-negative-background-color);
-	width: 34px;
-	background-color: transparent;
+	background-color: var(--accent-negative);
+}
+
+.app-showcase .header .action-button.remove:hover {
+	background-color: var(--accent-negative-1);
 }
 
 .app-showcase .header .action-button.disabled {
