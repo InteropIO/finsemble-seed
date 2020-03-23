@@ -1,6 +1,6 @@
 import React from 'react';
 import { Actions, Store as UserPreferencesStore } from "../../stores/UserPreferencesStore";
-import Checkbox from '../checkbox';
+import Checkbox from '../Checkbox';
 
 
 const DEFAULT_RESTART = {

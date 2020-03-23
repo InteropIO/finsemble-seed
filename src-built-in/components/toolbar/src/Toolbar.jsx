@@ -5,7 +5,7 @@
 import ReactDOM from "react-dom";
 import React from "react";
 import { ToolbarShell, FavoritesShell, DragHandle, RevealAll, MinimizeAll, AutoArrange, Search, AppLauncher, WorkspaceManagementMenu, ToolbarSection } from "@chartiq/finsemble-ui/react/components";
-import { FileMenu } from "./fileMenu";
+import { FileMenu } from "./FileMenu";
 
 import '../toolbar.css';
 import "../../../../assets/css/font-finance.css";

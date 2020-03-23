@@ -5,11 +5,11 @@
 	},
 	"advancedAppLauncher": {
 		"output": "components/advancedAppLauncher/index",
-		"entry": "./src-built-in/components/advancedAppLauncher/src/index.jsx"
+		"entry": "./src-built-in/components/advancedAppLauncher/src/advancedAppLauncher.jsx"
 	},
 	"authentication": {
 		"output": "components/authentication/authentication",
-		"entry": "./src-built-in/components/authentication/app.jsx"
+		"entry": "./src-built-in/components/authentication/Authentication.jsx"
 	},
 	"overflowMenu": {
 		"output": "components/overflowMenu/overflowMenu",
@@ -17,35 +17,35 @@
 	},
 	"toolbar": {
 		"output": "components/toolbar/toolbar",
-		"entry": "./src-built-in/components/toolbar/src/app.jsx"
+		"entry": "./src-built-in/components/toolbar/src/Toolbar.jsx"
 	},
 	"linker": {
 		"output": "components/linker/linker",
-		"entry": "./src-built-in/components/linker/src/linker.jsx"
+		"entry": "./src-built-in/components/linker/src/Linker.jsx"
 	},
 	"fileMenu": {
 		"output": "components/fileMenu/fileMenu",
-		"entry": "./src-built-in/components/fileMenu/src/app.jsx"
+		"entry": "./src-built-in/components/fileMenu/src/FileMenu.jsx"
 	},
 	"quickComponentForm": {
 		"output": "components/quickComponentForm/quickComponentForm",
-		"entry": "./src-built-in/components/quickComponentForm/app.jsx"
+		"entry": "./src-built-in/components/quickComponentForm/QuickComponentForm.jsx"
 	},
 	"yesNoDialog": {
 		"output": "components/yesNoDialog/yesNoDialog",
-		"entry": "./src-built-in/components/yesNoDialog/yesNoDialog.jsx"
+		"entry": "./src-built-in/components/yesNoDialog/YesNoDialog.jsx"
 	},
 	"singleInputDialog": {
 		"output": "components/singleInputDialog/singleInputDialog",
-		"entry": "./src-built-in/components/singleInputDialog/src/app.jsx"
+		"entry": "./src-built-in/components/singleInputDialog/src/SingleInputDialog.jsx"
 	},
 	"UserPreferences": {
 		"output": "components/userPreferences/userPreferences",
-		"entry": "./src-built-in/components/userPreferences/src/app.jsx"
+		"entry": "./src-built-in/components/userPreferences/src/UserPreferences.jsx"
 	},
 	"floatingTitlebar": {
 		"output": "components/floatingTitlebar/floatingTitlebar",
-		"entry": "./src-built-in/components/floatingTitlebar/src/app.jsx"
+		"entry": "./src-built-in/components/floatingTitlebar/src/FloatingTitlebar.jsx"
 	},
 	"searchMenu": {
 		"output": "components/searchMenu/searchMenu",
@@ -57,7 +57,7 @@
 	},
 	"advancedAppCatalog": {
 		"output": "components/advancedAppCatalog/appCatalog",
-		"entry": "./src-built-in/components/advancedAppCatalog/src/app.jsx"
+		"entry": "./src-built-in/components/advancedAppCatalog/src/AppCatalog.jsx"
 	},
 	"nonConfiguredComponent": {
 		"output": "components/nonConfiguredComponent/nonConfiguredComponent",
@@ -65,7 +65,7 @@
 	},
 	"processMonitor": {
 		"output": "components/processMonitor/processMonitor",
-		"entry": "./src-built-in/components/processMonitor/app.jsx"
+		"entry": "./src-built-in/components/processMonitor/ProcessMonitor.jsx"
 	},
 	"throbber": {
 		"output": "components/throbber/throbber",
