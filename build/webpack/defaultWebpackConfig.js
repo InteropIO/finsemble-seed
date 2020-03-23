@@ -26,7 +26,7 @@ module.exports = class WebpackDefaults {
 
 		if (env === "production") {
 			// When building the production environment, minify the code.
-			plugins.push(new UglifyJsPlugin());
+			// plugins.push(new UglifyJsPlugin());
 		}
 		return {
 			devtool: 'source-map',

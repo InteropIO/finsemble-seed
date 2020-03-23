@@ -16,7 +16,7 @@ let plugins =
 
 if (env === "production") {
     // When building the production environment, minify the code.
-    plugins.push(new UglifyJsPlugin());
+    // plugins.push(new UglifyJsPlugin());
 }
 
 var builtInTitleBarPath = "./src-built-in/components/windowTitleBar/src/windowTitleBar.jsx";
