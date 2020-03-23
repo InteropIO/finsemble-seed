@@ -76,7 +76,7 @@
         <textarea class="messageContentArea" id="transmitContent" rows=2></textarea>
       </label>
       <button class="button" id="transmitButton" onclick="window.transmit()">Transmit</button>
-
+      <button class="button" id="transmitClear" onclick="window.clearTransmit()">Clear</button>
       <div class="spacer4"></div>
 
     </div>
@@ -84,7 +84,65 @@
 
 
     <div class="column hidden" id="queryResponseCol">
-      <h3>Query/Response</h3>
+      <label class="inputLabel">
+        Responder channel name
+        <input class="textField" id="responderChannel" value="defaultChannel"></input>
+      </label>
+      <button class="button" id="addResponderButton" onclick="window.addResponder()">Add responder</button>
+      <label class="inputLabel">
+        Responders
+        <ul id="responders"></ul>
+      </label>
+
+
+      <label class="inputLabel grow">
+        Query received
+        <textarea class="receivedData" id="qrReceivedQuery" disabled rows=1></textarea>
+      </label>
+
+      <label class="inputLabel grow">
+        Query envelope
+        <textarea class="receivedData" id="qrQueryEnvelope" disabled rows=6></textarea>
+      </label>
+
+      <label class="inputLabel grow">
+        Query Sender details
+        <textarea class="receivedData" id="qrQuerySenderDetails" disabled rows=6></textarea>
+      </label>
+
+      <div class="spacer3"></div>
+
+      <label class="inputLabel grow">
+        Response received
+        <textarea class="receivedData" id="qrReceivedResponse" disabled rows=1></textarea>
+      </label>
+
+      <label class="inputLabel grow">
+        Response envelope
+        <textarea class="receivedData" id="qrResponseEnvelope" disabled rows=6></textarea>
+      </label>
+
+      <label class="inputLabel grow">
+        Response Sender details
+        <textarea class="receivedData" id="qrResponseSenderDetails" disabled rows=6></textarea>
+      </label>
+
+      <hr />
+      <div class="spacer4"></div>
+
+      <label class="inputLabel">
+        Channel name
+        <input class="textField" id="queryChannel" value="defaultChannel"></input>
+      </label>
+
+      <label class="inputLabel">
+        Message content
+        <textarea class="messageContentArea" id="queryContent" rows=2></textarea>
+      </label>
+      <button class="button" id="queryButton" onclick="window.query()">Query</button>
+      <button class="button" id="queryClear" onclick="window.clearQuery()">Clear</button>
+
+      <div class="spacer4"></div>
     </div>
 
 
