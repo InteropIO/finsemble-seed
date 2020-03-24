@@ -27,10 +27,6 @@
 		"output": "components/userPreferences/userPreferences",
 		"entry": "./src-built-in/components/userPreferences/src/UserPreferences.jsx"
 	},
-	"floatingTitlebar": {
-		"output": "components/floatingTitlebar/floatingTitlebar",
-		"entry": "./src-built-in/components/floatingTitlebar/src/FloatingTitlebar.jsx"
-	},
 	"welcome": {
 		"output": "components/welcome/welcome",
 		"entry": "./src-built-in/components/welcome/welcome.js"
