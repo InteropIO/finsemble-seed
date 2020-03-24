@@ -1,14 +1,14 @@
 /*!
 * The authentication component is a React component that renders a user form to collect auth info and determine whether to give user access to the rest of Finsemble
-* based on the information provided. 
+* based on the information provided.
 * Copyright 2020 by ChartIQ, Inc.
 * All rights reserved.
 */
 
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
-import { AuthHeader, AuthForm, ErrorMessage, AuthInput, AuthSubmit } from "@chartiq/finsemble-ui/lib/components";
-import useAuth from "@chartiq/finsemble-ui/lib/hooks/useAuth";
+import { AuthHeader, AuthForm, ErrorMessage, AuthInput, AuthSubmit } from "@chartiq/finsemble-ui/react/components";
+import useAuth from "@chartiq/finsemble-ui/react/hooks";
 
 export const Authentication = () => {
     const { saveInputChange, formValues, authorize, quitApplication } = useAuth();
@@ -63,13 +63,13 @@ export const Authentication = () => {
                         type="text"
                         name="username"
                         placeholder="Username"
-                        onChange={saveInputChange} 
+                        onChange={saveInputChange}
                     />
                     <AuthInput
                         type="password"
                         name="password"
                         placeholder="Password"
-                        onChange={saveInputChange} 
+                        onChange={saveInputChange}
                     />
                     <AuthSubmit onClick={() => onSubmit(authenticateUser)} >
                         Login
