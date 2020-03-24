@@ -8,7 +8,10 @@
 					"name": "Finsemble-AppLauncher-Store",
 					"foundation": {
 						"appFolders": {
-							"list": ["Advanced App Launcher", "Favorites"],
+							"list": [
+								"Advanced App Launcher",
+								"Favorites"
+							],
 							"folders": {
 								"Advanced App Launcher": {
 									"icon": "ff-component",
@@ -58,7 +61,7 @@
 			"unknownComponent": "nonConfiguredComponent"
 		},
 		"assimilation": {
-			"useOpenFinSpawn": false,
+			"useFeaSpawn": false,
 			"enabled": true,
 			"blacklist": [],
 			"whitelist": [],
@@ -84,7 +87,11 @@
 			}
 		},
 		"logger": {
-			"hotkeyShowCentralLogger": ["ctrl", "shift", "L"]
+			"hotkeyShowCentralLogger": [
+				"ctrl",
+				"shift",
+				"L"
+			]
 		},
 		"storage": {
 			"defaultStorage": "IndexedDBAdapter",
@@ -113,7 +120,7 @@
 	},
 	"betaFeatures": {},
 	"splinteringConfig": {
-		"comment": "A SplinterAgent is just an openfin application that is capable of spawning specific components/services. If you try to spawn a component/service that one of these agents does not cover, it will be spawned by the defaultAgent. You can also specify maxWindowsPerAgent if you would like to limit your agents to some ceiling. This is useful when you have a particularly heavy component.",
+		"comment": "A SplinterAgent is just an application that is capable of spawning specific components/services. If you try to spawn a component/service that one of these agents does not cover, it will be spawned by the defaultAgent. You can also specify maxWindowsPerAgent if you would like to limit your agents to some ceiling. This is useful when you have a particularly heavy component.",
 		"enabled": true,
 		"splinterAgents": [
 			{

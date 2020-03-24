@@ -2,7 +2,7 @@
  * This file contains a set of overrides that will convert HTML5 window actions to corresponding Finsemble actions.
  * Overrides must be specified for each component via a "preload" script. You do this by adding the preload to the
  * component config like so:
- * 
+ *
  * 	"Your Component": {
   			...
 			"component": {
@@ -26,11 +26,6 @@
 
 var originalWindowOpen = window.open;
 window.open = function (theURL, name, specs, replace) {
-	// For some strange reason, openfin notifications use window.open. So we make an exception for that one case.
-	if (name && name.includes("openfin-child-window")) {
-		originalWindowOpen.call(window, theURL, name, specs, replace);
-		return;
-	}
 	var params = {};
 	if (specs) {
 		let paramList = specs.split(",");
