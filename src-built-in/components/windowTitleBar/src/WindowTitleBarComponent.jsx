@@ -11,11 +11,27 @@ import { WindowTitleBar, initializeTitlebar, windowTitleBarStore } from "@charti
 
 import "../../../../assets/css/finsemble.css";
 import "../../../../assets/css/_windowTitleBar.css";
+import { useTitleBar } from "@chartiq/finsemble-ui/react/hooks";
+import { LinkerButton, ShareButton } from "@chartiq/finsemble-ui/react/components";
 
 /**
  * This is the main window manager component. It's the custom window frame that we add to each window that has useFSBLHeader set to true in its windowDescriptor.
  */
 
+const Titlebar = ({ store, actions }) => {
+	const {
+		showLinkerButton,
+		showShareButton,
+	} = useTitleBar();
+	return (
+		<WindowTitleBar store={store} actions={actions}>
+			<div className="fsbl-header-left">
+				{showLinkerButton && <LinkerButton />}
+				{showShareButton && <ShareButton />}
+			</div>
+		</WindowTitleBar>
+	);
+}
 
 function init () {
 	// The following line fixes the CSS issues, weird..
@@ -28,7 +44,7 @@ function init () {
 	document.body.insertBefore(template.firstChild, document.body.firstChild);
 	initializeTitlebar(function (store, actions) {
 		console.log("============= ", windowTitleBarStore);
-		ReactDOM.render(<WindowTitleBar store={store} actions={actions}/>, FSBLHeader);
+		ReactDOM.render(<Titlebar store={store} actions={actions}/>, FSBLHeader);
 	});
 }
 
