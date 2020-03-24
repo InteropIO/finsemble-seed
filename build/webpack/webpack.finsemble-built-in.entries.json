@@ -1,12 +1,4 @@
 {
-	"appLauncher": {
-		"output": "components/appLauncher/appLauncher",
-		"entry": "./src-built-in/components/appLauncher/src/app.jsx"
-	},
-	"advancedAppLauncher": {
-		"output": "components/advancedAppLauncher/index",
-		"entry": "./src-built-in/components/advancedAppLauncher/src/index.jsx"
-	},
 	"authentication": {
 		"output": "components/authentication/authentication",
 		"entry": "./src-built-in/components/authentication/app.jsx"
