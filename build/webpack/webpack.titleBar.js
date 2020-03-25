@@ -19,9 +19,7 @@ if (env === "production") {
     // plugins.push(new UglifyJsPlugin());
 }
 
-var builtInTitleBarPath = "./src-built-in/components/windowTitleBar/src/windowTitleBar.jsx";
-var customTitleBarPath = "./src/components/windowTitleBar/src/windowTitleBar.jsx";
-var titleBarPath = fs.existsSync(customTitleBarPath) ? customTitleBarPath : builtInTitleBarPath;
+var titleBarPath  = "./src-built-in/components/titlebar/titlebarLoader.jsx";
 module.exports = {
     devtool: 'source-map',
     entry: {
