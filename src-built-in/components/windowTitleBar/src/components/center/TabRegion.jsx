@@ -3,8 +3,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Tab from "./tab";
-import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
-import { FinsembleDnDContext, FinsembleDroppable } from '@chartiq/finsemble-react-controls';
+import { FinsembleHoverDetector } from "@chartiq/finsemble-ui/react/components";
 import { Store, Actions } from "../../stores/windowTitleBarStore";
 import Title from "../../../../common/windowTitle";
 import _throttle from "lodash.throttle";
@@ -133,7 +132,7 @@ export default class TabRegion extends React.Component {
             x: e.nativeEvent.screenX,
             y: e.nativeEvent.screenY
         }
-        
+
         const boundingBox = this.state.boundingBox;
         FSBL.Clients.WindowClient.getBounds(
             (err, bounds) => {
@@ -142,7 +141,7 @@ export default class TabRegion extends React.Component {
                     top: boundingBox.top + bounds.top,
                     bottom: boundingBox.bottom + bounds.top,
                     left: boundingBox.left + bounds.left,
-                    right: boundingBox.right + bounds.left 
+                    right: boundingBox.right + bounds.left
                 };
                 if (!FSBL.Clients.WindowClient.isPointInBox(this.mousePositionOnDragEnd, tabRegion)) {
                     setTimeout(() => {

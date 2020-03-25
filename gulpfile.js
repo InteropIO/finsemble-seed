@@ -355,8 +355,6 @@ const { launch, connect } = require('hadouken-js-adapter');
 			const FINSEMBLE_VERSION = require(path.join(FINSEMBLE_PATH, "package.json")).version;
 			const CLI_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-cli");
 			const CLI_VERSION = require(path.join(CLI_PATH, "package.json")).version;
-			const CONTROLS_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-react-controls");
-			const CONTROLS_VERSION = require(path.join(CONTROLS_PATH, "package.json")).version;
 
 			// Check version before require so optionalDependency can stay optional
 			const FEA_VERSION = require(path.join(FEA_PATH, "package.json")).version;
@@ -390,13 +388,6 @@ const { launch, connect } = require('hadouken-js-adapter');
 						path: CLI_PATH,
 						name: "finsemble-cli",
 						version: CLI_VERSION
-					}, cb)
-				},
-				(cb) => {
-					checkLink({
-						path: CONTROLS_PATH,
-						name: "finsemble-react-controls",
-						version: CONTROLS_VERSION
 					}, cb)
 				},
 				(cb) => {

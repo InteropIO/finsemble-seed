@@ -3,7 +3,7 @@
 * All rights reserved.
 */
 import React from "react";
-import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
+import { FinsembleHoverDetector } from "@chartiq/finsemble-ui/react/components";
 
 /**
  * Always on top button. This button is hidden when the window is maximized. In its place is the restore button.

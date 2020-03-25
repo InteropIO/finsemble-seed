@@ -4,7 +4,7 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
-import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
+import { FinsembleHoverDetector } from "@chartiq/finsemble-ui/react/components";
 import { getStore, Actions as HeaderActions } from "../../stores/windowTitleBarStore";
 import { ReactComponent as ShareIcon } from '../../../../../../assets/img/titlebar/share.svg'
 let windowTitleBarStore;

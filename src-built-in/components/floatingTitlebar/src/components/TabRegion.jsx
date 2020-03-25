@@ -2,7 +2,7 @@
 
 import React from "react";
 import Tab from "./tab";
-import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
+import { FinsembleHoverDetector } from "@chartiq/finsemble-ui/react/components";
 import Logo from "./logo";
 import Title from "../../../common/windowTitle"
 import { Store, Actions } from "../stores/tabbingStore";
@@ -119,7 +119,7 @@ export default class TabRegion extends React.Component {
             x: e.nativeEvent.screenX,
             y: e.nativeEvent.screenY
         }
-        
+
         const boundingBox = this.state.boundingBox;
         FSBL.Clients.WindowClient.getBounds(
             (err, bounds) => {
@@ -128,7 +128,7 @@ export default class TabRegion extends React.Component {
                     top: boundingBox.top + bounds.top,
                     bottom: boundingBox.bottom + bounds.top,
                     left: boundingBox.left + bounds.left,
-                    right: boundingBox.right + bounds.left 
+                    right: boundingBox.right + bounds.left
                 };
                 if (!FSBL.Clients.WindowClient.isPointInBox(this.mousePositionOnDragEnd, tabRegion)) {
                     setTimeout(() => {
@@ -174,9 +174,9 @@ export default class TabRegion extends React.Component {
         FSBL.Clients.Logger.system.debug("Tab drag drop.");
         const identifier = this.extractWindowIdentifier(e);
         // the dropped item is not a tab
-        if (!identifier) return; 
+        if (!identifier) return;
         // If we only have single tab and its the activeTab
-        // and if the dropped window's name is the same as 
+        // and if the dropped window's name is the same as
         // active tab's windowName we cancel tabbing.
         if (
             this.state.tabs.length === 1
