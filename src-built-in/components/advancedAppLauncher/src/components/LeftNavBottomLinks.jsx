@@ -1,4 +1,5 @@
 import React from 'react'
+import _get from 'lodash.get';
 import { getStore } from '../stores/LauncherStore'
 
 export default class LeftNavBottomLinks extends React.Component {
@@ -17,7 +18,7 @@ export default class LeftNavBottomLinks extends React.Component {
 		// If user configures the advanced app launcher to use the app catalog, add app catalog button to the bottom entries of the
 		// advanced app launcher menu.
 		finsembleWindow.getOptions((_, opts) => {
-			const useAppCatalog = (((opts || {}).customData || {}).component || {}).useAppCatalog;
+			const useAppCatalog = _get(opts, 'customData.component.useAppCatalog');
 			if (useAppCatalog) {
 				this.setState((prevState) => ({
 					bottomEntries: [
