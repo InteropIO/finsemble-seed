@@ -1,3 +1,7 @@
+/*!
+* Copyright 2017 - 2020 by ChartIQ, Inc.
+* All rights reserved.
+*/
 @import  url('../../../assets/css/_globals.css');
 
 .appMarket {
@@ -474,7 +478,7 @@
 }
 
 .search-main .search-back:hover {
-	background-color: var(--tag-background-hover-color); 
+	background-color: var(--tag-background-hover-color);
 }
 
 .search-main .tag-selector {
