@@ -151,7 +151,7 @@
 			right: 26px;
 			top: 3px;
 			font-size: 13px;
-			content: url(../../../assets/img/toolbar/search.svg);
+			content: url(../../../assets/img/search.svg);
 			color: var(--toolbar-font-color); /* make sure magnifying glass is white */
 	}
 
