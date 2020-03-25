@@ -1,5 +1,5 @@
 /*!
-* Copyright 2018 by ChartIQ, Inc.
+* Copyright 2017 - 2020 by ChartIQ, Inc.
 * All rights reserved.
 */
 import AppDirectory from "../modules/AppDirectory";
@@ -178,6 +178,15 @@ async function getTags() {
 }
 
 /**
+ * Function to write errors to the log
+ * @param {string} message The log message
+ * @param {string} [protocol] Provide the logging protocol (default is error)
+ */
+function writeToLog(message, protocol = "error") {
+	FSBL.Clients.Logger[protocol](message);
+}
+
+/**
  * Function to "install" an app. Adds the id to a list of installed apps
  * @param {string} name The name of the app
  */
@@ -187,67 +196,46 @@ async function addApp(id, cb = Function.prototype) {
 	let app = apps.find(app => {
 		return app.appId === appID;
 	});
-	const folder = data.activeFolder;
+	const name = app.title || app.name;
 
 	if (app === undefined) {
 		console.warn("App not found.");
-		return;
+		return cb();
 	}
 
-
-	installed[appID] = {
-		appID,
-		tags: app.tags,
-		name: app.title || app.name,
-		url: app.url,
-		type: "component",
-		component: {
-			type: app.title || app.name
-		},
-		window: {
-			windowType: app.windowType || "WebWindow"
-		},
-		foreign: {
-			components: {
-				"App Launcher": {
-					"launchableByUser": true
-				},
-				"Window Manager": {
-					title: app.title || app.name
-				}
+	let manifest, appConfig;
+	// Manifest from FDC3 is a string property which can either be a stringified JSON, or a uri which delivers valid JSON.
+	// The catalog will attempt to parse the string as JSON, then fetch from a URL if that fails.
+	// If both paths fail, notify the user that this app can't be added
+	if (app.manifestType.toLowerCase() === "finsemble") {
+		try {
+			manifest = JSON.parse(app.manifest);
+		} catch(e) {
+			try {
+				const urlRes = await fetch(app.manifest, { method: "GET" });
+				manifest = await urlRes.json();
+			} catch(e) {
+				writeToLog(`${name} is missing a valid manifest or URI that delivers a valid JSON manifest. Unable to add app.`, "error");
+				return cb();
+			}
+		} finally {
+			appConfig = installed[appID] = {
+				appID,
+				tags: app.tags,
+				name,
+				type: "component",
+				manifest
 			}
 		}
-	};
-
-	const appConfig = installed[appID];
-	let applicationRoot = "";
-	if (appConfig.url && appConfig.url.includes("$applicationRoot")) {
-		//we may use this if we put macros in the stored URLs on the FDC3 server. commented out for now.
-		applicationRoot = (await FSBL.Clients.ConfigClient.getValue({ field: "finsemble.applicationRoot" })).data;
-		appConfig.url = appConfig.url.replace("$applicationRoot", "");
-		appConfig.url = applicationRoot + appConfig.url;
-		appConfig.window.url = appConfig.url;
-	}
-
-	if (typeof appConfig.url === "undefined") {
-		//If there is no url, it will be set to the 'unknown component' inside of the Launcher.
-		delete appConfig.url;
-		delete appConfig.window.url;
-	}
-
-	if (typeof app.manifest !== "object") {
-		appConfig.manifest = { ...appConfig };
-	}
-
-	if (app.friendlyName) {
-		appConfig.displayName = app.friendlyName;
+	} else {
+		writeToLog(`${name} does not appear to be a Finsemble manifest. This app cannot be added to Finsemble.`, "error");
+		return cb();
 	}
 
 	let ADVANCED_APP_LAUNCHER = data.defaultFolder;
 	let folders = data.folders;
 
 	data.folders[ADVANCED_APP_LAUNCHER].apps[appID] = appConfig
-	data.folders[folder].apps[appID] = appConfig
 	FSBL.Clients.LauncherClient.registerComponent({
 		componentType: appConfig.name,
 		manifest: appConfig.manifest
