@@ -30,6 +30,31 @@ const  windowNameToDescriptor = async (windowName) => {
 	}
 }
 
+const windowIdentifierToCurrentURL = async (windowIdentifier) => {
+	try{
+		let resp = await FSBL.FinsembleWindow.getInstance(windowIdentifier);
+		if (resp.err) {
+			console.error("Failed to retrieve Finsemble Window! windowIdentifier: ", windowIdentifier, "Error: ", resp.err);
+			return null;
+		} else { 
+			return await new Promise(
+				(resolve, reject) => {
+					resp.wrap.getOptions((err, options) => {
+						if (err) {
+							reject(err);
+						} else {
+							resolve (options.url);
+						}
+					});
+				}
+			);
+		}
+	} catch (err) {
+		console.error("Error occurred while trying to establish current URL! windowIdentifier: ", windowIdentifier, "Error: ", err);
+			return null;
+	}
+}
+
 const componentTypeToConfiguration = async (componentType) => {
 	let resp = await FSBL.Clients.LauncherClient.getComponentDefaultConfig(componentType);
 	if (resp.err) {
@@ -38,6 +63,35 @@ const componentTypeToConfiguration = async (componentType) => {
 	} else { 
 		return resp.data;
 	}
+}
+
+const getSenderDetails = async (origin, lastClient) => {
+	let myClientName = FSBL.Clients.RouterClient.getClientName();
+	let windowName = clientNameToWindowName(origin);
+	let windowDescriptor = await windowNameToDescriptor(windowName);
+	let componentType = null, componentConfig = null, configuredUrlOrPath = null, spawnedWithUrl = null, currentUrl = null;
+	if (windowDescriptor) {
+		componentType = windowDescriptor.componentType;
+		spawnedWithUrl = windowDescriptor.url;
+		componentConfig = componentType ? await componentTypeToConfiguration(componentType) : null;
+		if (componentConfig) {
+			configuredUrlOrPath =  componentConfig.window.url ? componentConfig.window.url : componentConfig.window.path;
+		} else { 
+			configuredUrlOrPath = null; 
+		}
+	}
+	if (componentType && windowName){
+		currentUrl = await windowIdentifierToCurrentURL({componentType: componentType, windowName: windowName});
+	}
+
+	return `last client:         ${lastClient}
+origin:              ${origin == myClientName ? "here" : origin }
+windowName:          ${windowName}
+componentType:       ${componentType}
+config URL Or path:  ${configuredUrlOrPath}
+spawned with URL:    ${spawnedWithUrl}
+current URL:         ${currentUrl}
+	`;
 }
 
 //Ready function that sets up the form
@@ -91,30 +145,9 @@ const  listenHandlerFn = async (err, response) => {
 	} else {
 		elements.receivedMessage.value = JSON.stringify(response.data, null, 4);
 		elements.messageEnvelope.value = JSON.stringify(response.header, null, 4);
-		let myClientName = FSBL.Clients.RouterClient.getClientName();
 		let origin = response.header.origin;
-		let windowName = clientNameToWindowName(origin);
-		let windowDescriptor = await windowNameToDescriptor(windowName);
-		let componentType = null, componentConfig = null, configuredUrlOrPath = null, currentUrl = null;
-		if (windowDescriptor) {
-			componentType = windowDescriptor.componentType;
-			currentUrl = windowDescriptor.url;
-			componentConfig = componentType ? await componentTypeToConfiguration(componentType) : null;
-			if (componentConfig) {
-				configuredUrlOrPath =  componentConfig.window.url ? componentConfig.window.url : componentConfig.window.path;
-			} else { 
-				configuredUrlOrPath = null; 
-			}
-		}
-
-		elements.senderDetails.value = 
-`last client:         ${response.header.lastClient}
-origin:              ${response.header.origin == myClientName ? "here" : origin }
-windowName:          ${windowName}
-componentType:       ${componentType}
-config URL Or path:  ${configuredUrlOrPath}
-spawned with URL:    ${currentUrl}
-`
+		
+		elements.senderDetails.value = await getSenderDetails(origin, response.header.lastClient);
 	}
 }
 
@@ -171,30 +204,10 @@ const  queryHandlerFn = async (err, queryMessage) => {
 	} else {
 		elements.qrReceivedQuery.value = JSON.stringify(queryMessage.data, null, 4);
 		elements.qrQueryEnvelope.value = JSON.stringify(queryMessage.header, null, 4);
-		let myClientName = FSBL.Clients.RouterClient.getClientName();
 		let origin = queryMessage.header.origin;
-		let windowName = clientNameToWindowName(origin);
-		let windowDescriptor = await windowNameToDescriptor(windowName);
-		let componentType = null, componentConfig = null, configuredUrlOrPath = null, currentUrl = null;
-		if (windowDescriptor) {
-			componentType = windowDescriptor.componentType;
-			currentUrl = windowDescriptor.url;
-			componentConfig = componentType ? await componentTypeToConfiguration(componentType) : null;
-			if (componentConfig) {
-				configuredUrlOrPath =  componentConfig.window.url ? componentConfig.window.url : componentConfig.window.path;
-			} else { 
-				configuredUrlOrPath = null; 
-			}
-		}
 
-		elements.qrQuerySenderDetails.value = 
-`last client:         ${queryMessage.header.lastClient}
-origin:              ${queryMessage.header.origin == myClientName ? "here" : origin }
-windowName:          ${windowName}
-componentType:       ${componentType}
-config URL Or path:  ${configuredUrlOrPath}
-spawned with URL:    ${currentUrl}
-`
+		elements.qrQuerySenderDetails.value = await getSenderDetails(origin, queryMessage.header.lastClient);
+
 		//respond to query
 		var response="Back at ya: " + JSON.stringify(queryMessage.data); // Responses can be objects or strings
 		queryMessage.sendQueryResponse(null, response); // The callback must respond, else a timeout will occur on the querying client.
@@ -209,31 +222,10 @@ const  responseHandlerFn = async (err, response) => {
 	}
 	//render results anyway
 	elements.qrResponseEnvelope.value = JSON.stringify(response.header, null, 4);
-	let myClientName = FSBL.Clients.RouterClient.getClientName();
 	let origin = response.header.origin;
-	let windowName = clientNameToWindowName(origin);
-	let windowDescriptor = await windowNameToDescriptor(windowName);
-	let componentType = null, componentConfig = null, configuredUrlOrPath = null, currentUrl = null;
-	if (windowDescriptor) {
-		componentType = windowDescriptor.componentType;
-		currentUrl = windowDescriptor.url;
-		componentConfig = componentType ? await componentTypeToConfiguration(componentType) : null;
-		if (componentConfig) {
-			configuredUrlOrPath =  componentConfig.window.url ? componentConfig.window.url : componentConfig.window.path;
-		} else { 
-			configuredUrlOrPath = null; 
-		}
-	}
+	
 
-	elements.qrResponseSenderDetails.value = 
-`last client:         ${response.header.lastClient}
-origin:              ${response.header.origin == myClientName ? "here" : origin }
-windowName:          ${windowName}
-componentType:       ${componentType}
-config URL Or path:  ${configuredUrlOrPath}
-spawned with URL:    ${currentUrl}
-`
-
+	elements.qrResponseSenderDetails.value = await getSenderDetails(origin, response.header.lastClient);
 }
 
 window.addResponder = () => {
