@@ -1,8 +1,7 @@
 //The title bar can be injected into any component or page - that component or page may not be aware of finsemble, and may not include the vendor.bundle.js file that's required to make the DLL plugin work. This webpack config is to build that component independent of any code splitting done for the rest of the presentation components.
 const path = require('path');
-const fs = require("fs");
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const { DllReferencePlugin, DefinePlugin, ProgressPlugin } = require("webpack");
+const { DefinePlugin } = require("webpack");
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 let plugins =
     [
@@ -11,15 +10,14 @@ let plugins =
                 "NODE_ENV": JSON.stringify(env)
             }
         }),
-        //new ProgressPlugin({ profile: false })
     ]
 
 if (env === "production") {
     // When building the production environment, minify the code.
-    // plugins.push(new UglifyJsPlugin());
+    plugins.push(new UglifyJsPlugin());
 }
 
-var titleBarPath  = "./src-built-in/components/titlebar/titlebarLoader.jsx";
+var titleBarPath  = "./src-built-in/components/titlebar/titlebarLoader.js";
 module.exports = {
     devtool: 'source-map',
     entry: {

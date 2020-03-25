@@ -5,8 +5,8 @@
 import React from "react";
 import { useTitleBar } from "@chartiq/finsemble-ui/react/hooks";
 import { AlwaysOnTop, DockingButton, LinkerButton, ShareButton, initializeTitlebar, TabRegion, CloseButton, MaximizeButton, MinimizeButton,  } from "@chartiq/finsemble-ui/react/components";
-import "../../../../assets/css/finsemble.css";
-import "../../../../assets/css/_windowTitleBar.css";
+import "../../../assets/css/finsemble.css";
+import "../../../assets/css/_windowTitleBar.css";
 
 const Titlebar = () => {
 	const {
