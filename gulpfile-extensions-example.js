@@ -124,7 +124,6 @@ module.exports = taskMethods => {
 
 			const source = [
 				path.join(taskMethods.srcPath, "components", "**", "*.scss"),
-				path.join(__dirname, "src-built-in", "components", "**", "*.scss"),
 			];
 
 			var stream = gulp

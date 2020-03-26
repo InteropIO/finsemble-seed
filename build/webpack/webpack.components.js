@@ -7,7 +7,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const __homename = path.resolve(__dirname, "..", "..");
 
 // The standard webpack files that we always look in
-// webpack.finsemble-built-in.entries.json - src-built-in components
+// webpack.finsemble-built-in.entries.json - src components
 // webpack.components.entries.json - components that have been added with finsemble-cli
 var listOfWebpackEntryFiles = [
 	path.join(__dirname, 'webpack.finsemble-built-in.entries.json'),
@@ -86,20 +86,10 @@ const defaultConfig = require("./defaultWebpackConfig");
 let webpackConfig = new defaultConfig();
 webpackConfig.entry = entries;
 
-// This function iterates through src-built-in and src, building a list of all the directories but eliminating duplicates.
-// In other words, this allows src/components folders to *override* (replace) folders in src-built-in.
+// This function iterates through src, building a list of all the directories but eliminating duplicates.
 function collapseBuiltInFiles() {
 	var combinedList = {}; // contains the final compressed list
-	var builtInPath = path.join(__homename, "src-built-in/components"); // path to built in components
 	var srcPath = path.join(__homename, "src/components"); // path to src components
-
-	// First put all the built in items into our combined list
-	var builtInItems = fs.readdirSync(builtInPath);
-	for (let i = 0; i < builtInItems.length; i++) {
-		let folder = builtInItems[i];
-		combinedList[folder] = path.join(builtInPath, folder);
-		//combinedList[folder] = "./src-built-in/components/" + folder + "/";
-	}
 
 	// Now put all the src items into our combined list. If there's a dup, then it will override the built in
 	var srcItems = fs.readdirSync(srcPath);
@@ -109,9 +99,7 @@ function collapseBuiltInFiles() {
 			// Don't copy a .gitignore folder.
 			continue;
 		}
-
 		combinedList[folder] = path.join(srcPath, folder);
-		//combinedList[folder] = "./src/components/" + folder + "/";
 	}
 	return combinedList;
 }
@@ -119,7 +107,6 @@ function collapseBuiltInFiles() {
 /**
  * Creates the copy-webpack-plugin config.
  * We use this to copy all assets from component folders over to dist.
- * Critically, src-built-in folders are overriden by any src folders with the same name.
  * 
  * TODO, define a way for a component's webpack entry to specify whether it does or doesn't need to have assets copied
  */

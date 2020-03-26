@@ -11,8 +11,7 @@
 	},
 	"include": [
 		"src/**/*",
-		"src-built-in/**/*",
-		"src-built-in/ts/**/*",
+		"src/ts/**/*",
 		"./finsemble/types/**/*"
 	],
 	"exclude": [
