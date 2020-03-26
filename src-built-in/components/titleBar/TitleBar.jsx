@@ -17,7 +17,7 @@ import "../../../assets/css/_windowTitleBar.css";
  * The visibility of each of the controls is controlled by
  * config. For example, setting the
  * "foreign.components.Window Manager.showLinker" property
- * to false will hide the <LinkerButton>.
+ * to false will hide the <LinkerButton/>.
  */
 const TitleBar = () => {
 	const {
