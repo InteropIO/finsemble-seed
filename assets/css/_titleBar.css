@@ -525,11 +525,18 @@ html.desktop-active .fsbl-active-tab .fsbl-tab-title {
     }
 }
 
-/* At 210px, the minimize icon will be removed. */
+/* At 210px, all other icons icon will be removed. */
 @media screen and (min-width: 0px) and (max-width: 210px){
     .fsbl-icon.fsbl-minimize {
         display: none !important;
     }
+    .fsbl-icon.fsbl-always-on-top {
+        display: none !important;
+    }
+    .entity-avatar-wrapper {
+        display: none !important;
+    }
+    
     .fsbl-tabs-multiple .fsbl-header-right {
         padding-left: 30px; /* this will leave some space for window dragging */
     }
