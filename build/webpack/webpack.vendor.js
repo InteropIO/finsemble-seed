@@ -15,7 +15,7 @@ let plugins = [
 
 if (env === "production") {
     // When building the production environment, minify the code.
-    // plugins.push(new UglifyJsPlugin());
+    plugins.push(new UglifyJsPlugin());
 }
 
 module.exports = {
