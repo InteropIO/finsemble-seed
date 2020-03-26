@@ -365,11 +365,18 @@ html.desktop-active .fsbl-icon-highlighted {
     text-align: left;
     padding-left: 1px;
     min-width: 0;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+    color: var(--titlebar-tab-inactive-font-color);
+    display:flex;
+    align-items: center;
+}
+
+/* The block below allows for a flex-child to have text truncated with an ellipsis. */
+.fsbl-tab-title .title-text {
+    flex: 1;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
-    color: var(--titlebar-tab-inactive-font-color);
 }
 
 html.desktop-active .fsbl-active-tab .fsbl-tab-title {
@@ -529,4 +536,16 @@ html.desktop-active .fsbl-active-tab .fsbl-tab-title {
     .fsbl-header-title {
         max-width:25%;
     }
+}
+
+.entity-avatar {
+    padding:3px;
+    font-size: 7px;
+    position: relative;
+    top: -1px;
+}
+
+.entity-avatar > i {
+    position: relative;
+    top: 1px;
 }

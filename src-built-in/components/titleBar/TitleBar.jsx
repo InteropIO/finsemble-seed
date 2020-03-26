@@ -6,7 +6,7 @@ import React from "react";
 import { useTitleBar } from "@chartiq/finsemble-ui/react/hooks";
 import { AlwaysOnTopButton, DockingButton, LinkerButton, ShareButton, initializeTitleBar, TabRegion, CloseButton, MaximizeButton, MinimizeButton,  } from "@chartiq/finsemble-ui/react/components";
 import "../../../assets/css/finsemble.css";
-import "../../../assets/css/_windowTitleBar.css";
+import "../../../assets/css/_titleBar.css";
 
 /**
  * This is the Title Bar component, which is rendered at
@@ -23,7 +23,6 @@ const TitleBar = () => {
 	const {
 		showLinkerButton,
 		showShareButton,
-		showTabRegion,
 		showDockingButton,
 		showAlwaysOnTopButton,
 		showMinimizeButton,
@@ -37,7 +36,9 @@ const TitleBar = () => {
 				{showShareButton && <ShareButton />}
 			</div>
 			<div className="fsbl-header-center">
-				{showTabRegion && <TabRegion/>}
+				{/* If tabbing is disabled, <TabRegion/> will
+					only display the title */}
+				<TabRegion/>
 			</div>
 			<div className="fsbl-header-right">
 				{showDockingButton && <DockingButton />}
