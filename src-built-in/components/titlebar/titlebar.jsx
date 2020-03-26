@@ -4,7 +4,7 @@
 */
 import React from "react";
 import { useTitleBar } from "@chartiq/finsemble-ui/react/hooks";
-import { AlwaysOnTop, DockingButton, LinkerButton, ShareButton, initializeTitlebar, TabRegion, CloseButton, MaximizeButton, MinimizeButton,  } from "@chartiq/finsemble-ui/react/components";
+import { AlwaysOnTopButton, DockingButton, LinkerButton, ShareButton, initializeTitlebar, TabRegion, CloseButton, MaximizeButton, MinimizeButton,  } from "@chartiq/finsemble-ui/react/components";
 import "../../../assets/css/finsemble.css";
 import "../../../assets/css/_windowTitleBar.css";
 
@@ -30,7 +30,7 @@ const Titlebar = () => {
 			</div>
 			<div className="fsbl-header-right">
 				{showDockingButton && <DockingButton />}
-				{showAlwaysOnTopButton && <AlwaysOnTop/>}
+				{showAlwaysOnTopButton && <AlwaysOnTopButton/>}
 				{showMinimizeButton && <MinimizeButton />}
 				{showMaximizeButton && <MaximizeButton />}
 				{showCloseButton && <CloseButton />}
