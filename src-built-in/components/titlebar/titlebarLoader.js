@@ -1,7 +1,7 @@
 function init() {
 	if (window.headerLoaded) return;
 	window.headerLoaded = true;
-	require("./Titlebar.jsx");
+	require("./TitleBar.jsx");
 }
 
 if (window.FSBL && FSBL.addEventListener) {
