@@ -1,5 +1,5 @@
 /*!
-* Copyright 2017 by ChartIQ, Inc.
+* Copyright 2017 - 2020 by ChartIQ, Inc.
 * All rights reserved.
 */
 import React from "react";
@@ -17,7 +17,8 @@ export default class LinkerGroups extends React.Component {
         windowTitleBarStore = getStore();
         this.bindCorrectContext();
         this.state = {
-            channels: FSBL.Clients.LinkerClient.getState().channels
+            channels: FSBL.Clients.LinkerClient.getState().channels,
+            accessibleLinker: false
         };
     }
     /**
@@ -42,7 +43,9 @@ export default class LinkerGroups extends React.Component {
             }
 
             // Default value for accessibleLinker is true.
-            accessibleLinker = (value && typeof value === "boolean") ? value : true;
+            this.setState({
+                accessibleLinker: value && typeof value === "boolean" ? value : true
+            });
         });
         windowTitleBarStore.addListener({ field: "Linker.channels" }, this.onChannelChange);
     }
@@ -74,7 +77,6 @@ export default class LinkerGroups extends React.Component {
      * @memberof LinkerGroups
      */
     onStoreChanged(newState) {
-        //console.log("store changed ", newState);
         this.setState(newState);
     }
 
@@ -93,7 +95,8 @@ export default class LinkerGroups extends React.Component {
      */
     render() {
         let self = this;
-		const getLabel = (channel, accessibleLinker) => {
+        const { accessibleLinker } = this.state;
+		const getLabel = (channel) => {
 			if (!accessibleLinker) {
                 return null;
             } else if (channel.label) {
@@ -112,9 +115,9 @@ export default class LinkerGroups extends React.Component {
          * Iterate through the channels that the window belongs to, render a colored bar to denote channel membership.
          */
         let channels = self.state.channels.map(function (channel, index) {
-            let classNames = `linker-group${accessibleLinker ? " linker-group-accessible" : ""} linker-${channel.label}`;
+            let classNames = `linker-group${accessibleLinker ? ` linker-group-accessible linker-${channel.label}` : ""}`;
             return (<div key={channel.name} className={classNames} title={"Channel " + getChannelLabelFromIndex(channel.name, FSBL.Clients.LinkerClient.getAllChannels())} style={{ background: channel.color }} onMouseUp={function (e) { self.onClick(e, channel.name) }}>
-                {getLabel(channel, accessibleLinker)}
+                {getLabel(channel)}
             </div>);
         });
         return (<div className="linker-groups">

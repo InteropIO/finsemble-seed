@@ -1,5 +1,5 @@
 /*!
-* Copyright 2017 by ChartIQ, Inc.
+* Copyright 2017 - 2020 by ChartIQ, Inc.
 * All rights reserved.
 */
 
@@ -30,14 +30,15 @@ const Header = props => {
 			// So lets spawn from URL
 			if (props.url) {
 				FSBL.Clients.LauncherClient.spawn(null, {
-					url: props.url
+					url: props.url,
+					addToWorkspace:true
 				}, () => {
 					pendingSpawn = false;
 				});
 				return;
 			}
 			// Otherwise launch application by name
-			FSBL.Clients.LauncherClient.spawn(name, {}, (err, data) => {
+			FSBL.Clients.LauncherClient.spawn(name, {addToWorkspace:true}, (err, data) => {
 				pendingSpawn = false;
 			});
 		} else {

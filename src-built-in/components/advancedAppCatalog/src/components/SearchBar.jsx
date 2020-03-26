@@ -1,5 +1,5 @@
 /*!
-* Copyright 2017 by ChartIQ, Inc.
+* Copyright 2017 - 2020 by ChartIQ, Inc.
 * All rights reserved.
 */
 import React, { Component } from "react";
@@ -26,8 +26,8 @@ class SearchBar extends Component {
 		super(props);
 		this.textInput = React.createRef();
 		this.state = {
-			searchValue: "",
-			tagSelectorOpen: false
+			tagSelectorOpen: false,
+			searchText: ""
 		};
 		this.bindCorrectContext();
 	}
@@ -46,15 +46,8 @@ class SearchBar extends Component {
 	 */
 	changeSearch(e) {
 		const { value : searchTerms } = e.target;
-		this.setState({
-			searchValue: searchTerms
-		});
-
-		if (searchTerms !== "") {
-			this.props.search(searchTerms);
-		} else {
-			storeActions.refreshTagSearch();
-		}
+		this.setState({searchText: searchTerms});
+		this.props.search(searchTerms);
 	}
 
 	/**
@@ -93,9 +86,8 @@ class SearchBar extends Component {
 	 * Clears search because 'back' button was clicked
 	 */
 	goHome() {
-		this.setState({
-			searchValue: ""
-		}, this.props.goHome);
+		this.setState({searchText: ""});
+		this.props.goHome();
 	}
 
 	focus() {
@@ -122,13 +114,13 @@ class SearchBar extends Component {
 						</div> : null}
 					<div className="search-input-container">
 						<i className='ff-search'></i>
-						<input className='search-input' required ref={this.textInput}placeholder="Search" type="text" value={this.state.searchValue} onChange={this.changeSearch} />
-						<button class="close-icon" onClick={this.clearSearch} type="reset"></button>
+						<input className='search-input' required ref={this.textInput} placeholder="Search" type="text" value={this.state.searchText} onChange={this.changeSearch} />
+						<button class="close-icon" onClick={this.goHome} type="reset"></button>
 					</div>
 					<TagsMenu active={activeTags} list={this.props.tags} onItemClick={this.selectTag} label={"Tags"} align='right' />
 				</div>
 				<div className='label-bar'>
-					{this.props.activeTags.map((tag, i) => {
+					{activeTags.map((tag, i) => {
 						return (
 							<Tag key={tag} name={tag} removeTag={this.removeTag} />
 						);

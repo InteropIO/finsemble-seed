@@ -38,7 +38,7 @@ export default class Tab extends React.Component {
 	}
 
 	crossedMidline(e, box) {
-		return FSBL.Clients.WindowClient.isPointInBox({ x: e.nativeEvent.screenX, y: e.nativeEvent.screenY }, box);
+		return FSBL.Clients.WindowClient.isPointInBox({ x: e.nativeEvent.clientX, y: e.nativeEvent.clientY }, box);
 	}
 
 	hoverAction(newHoverState) {

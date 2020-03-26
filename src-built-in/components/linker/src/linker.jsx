@@ -1,5 +1,5 @@
 /*!
-* Copyright 2017 by ChartIQ, Inc.
+* Copyright 2017 - 2020 by ChartIQ, Inc.
 * All rights reserved.
 */
 import React from "react";
@@ -33,23 +33,35 @@ class Linker extends React.Component {
 				});
 		}
 	}
+
 	/**
-	 * Event handler when the user clicks on a colored rectangle, indicating that they want the attached window to join the channel.
+	 * Event handler when the user clicks on a colored rectangle, indicating channel state should be toggled
 	 *
-	 * @param {any} channel
-	 * @param {any} active
-	 * @returns
+	 * @param {any} channel the linker channel
+	 * @param {any} active true if channel was already active
 	 * @memberof Linker
 	 */
 	channelClicked(channel, active) {
 		var attachedWindowIdentifier = LinkerStore.getAttachedWindowIdentifier();
+
+
 		FSBL.FinsembleWindow.getInstance({ name: attachedWindowIdentifier.windowName }, (err, attachedWindow) => {
 			if (attachedWindow) attachedWindow.focus();
 		});
 
-		if (!active) return LinkerActions.linkToChannel(channel.name);
-		LinkerActions.unlinkFromChannel(channel.name);
+		if (!active) {
+			LinkerActions.linkToChannel(channel.name);
+		} else {
+			LinkerActions.unlinkFromChannel(channel.name);
+		}
+
+		// Immediately hide linker window when channel clicked.
+		// Note: the focus above on the attached window will typically result in a blur event to the linker window that will also hide; howevever, that blur
+		// event is not received for native windows.
+		finsembleWindow.hide();
+
 	}
+
 	/**
 	 * Hides window on blur.
 	 *

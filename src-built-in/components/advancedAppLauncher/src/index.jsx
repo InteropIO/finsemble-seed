@@ -62,7 +62,7 @@ class AppLauncher extends React.Component {
 	openAppMarket() {
 		FSBL.Clients.LauncherClient.showWindow(
 			{
-				componentType: "App Catalog"
+				componentType: "Advanced App Catalog"
 			},
 			{
 				monitor: "mine",
@@ -97,11 +97,11 @@ if (window.FSBL && FSBL.addEventListener) {
 	window.addEventListener("FSBLReady", FSBLReady);
 }
 
-function FSBLReady(){
+function FSBLReady() {
 	createStore((store) => {
 		storeActions.initialize(() => {
 			ReactDOM.render(<AppLauncher />,
-			document.getElementById("wrapper"));
+				document.getElementById("wrapper"));
 		});
 	});
 }

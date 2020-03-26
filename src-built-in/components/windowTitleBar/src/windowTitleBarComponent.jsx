@@ -1,6 +1,6 @@
 
 /*!
-* Copyright 2017 by ChartIQ, Inc.
+* Copyright 2017 - 2020 by ChartIQ, Inc.
 * All rights reserved.
 */
 import React from "react";
@@ -22,6 +22,7 @@ import Close from "./components/right/CloseButton.jsx";
 import AlwaysOnTop from "./components/right/AlwaysOnTop.jsx";
 import TabRegion from './components/center/TabRegion'
 import "../../../../assets/css/finsemble.css";
+import "../../../../assets/css/_windowTitleBar.css";
 
 /**
  * This is the main window manager component. It's the custom window frame that we add to each window that has useFSBLHeader set to true in its windowDescriptor.
@@ -86,6 +87,7 @@ class WindowTitleBar extends React.Component {
 		this.onTilingStop = this.onTilingStop.bind(this);
 		this.onTilingStart = this.onTilingStart.bind(this);
 		this.resizeDragHandle = this.resizeDragHandle.bind(this);
+		this.onDoubleClick = this.onDoubleClick.bind(this);
 
 	}
 	componentWillMount() {
@@ -181,6 +183,21 @@ class WindowTitleBar extends React.Component {
 	}
 
 	/**
+	 * Called whenever a tab is dropped on a non tab area.
+	 * It won't be called when dropped on a tab that handles handle the event.
+	 */
+	onDropHandler() {
+		FSBL.Clients.WindowClient.cancelTilingOrTabbing({});
+	}
+	/**
+	 * Called when user double clicks on drag handle
+	 */
+	onDoubleClick() {
+		// Actions.clickMaximize checks the window state
+		// and toggles between maximize and minimize.
+		HeaderActions.clickMaximize();
+	}
+	/**
 	 * The dragger is an absolutely positioned element that is superimposed on the actual area that we'd like to drag.
 	 * This is necessary due to a bug in Chromium. Effectively, we need the dragger to change its left position and width
 	 * to match the intended drag area. These dimensions can change whenever the header is re-rendered (for instance when
@@ -206,7 +223,7 @@ class WindowTitleBar extends React.Component {
 			dragHandle.className = "fsbl-drag-handle";
 			dragHandle.onmousedown = (e) => {currentWindow.startMovingWindow(e)}
 			dragHandle.onmouseup = (e) => {currentWindow.stopMovingWindow(e)}
-
+			dragHandle.ondblclick = () => { this.onDoubleClick(); }
 			fsblHeader.insertBefore(dragHandle, fsblHeader.firstChild);
 			var self = this;
 			window.addEventListener("resize", function () {
@@ -378,7 +395,7 @@ class WindowTitleBar extends React.Component {
 		}
 		//See this.allowDragOnCenterRegion for more explanation.
 		return (
-			<div className={headerClasses}>
+			<div className={headerClasses} onDrop={this.onDropHandler.bind(this)}>
 				{/* Only render the left section if something is inside of it. The left section has a right-border that we don't want showing willy-nilly. */}
 				{RENDER_LEFT_SECTION &&
 					<div className="fsbl-header-left">
@@ -437,8 +454,6 @@ function init () {
 		HeaderActions = storeExports.Actions;
 		windowTitleBarStore = storeExports.getStore();
 		ReactDOM.render(<WindowTitleBar />, FSBLHeader);
-		// Register with docking manager
-		FSBL.Clients.WindowClient.registerWithDockingManager();
 	});
 }
 

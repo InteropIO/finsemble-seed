@@ -1,6 +1,6 @@
 {
     "name": "FinsembleSeed",
-    "version": "3.13.0",
+    "version": "4.1.0",
     "description": "",
     "main": "index.js",
     "scripts": {
@@ -29,29 +29,27 @@
     "author": "",
     "license": "apache-2.0",
     "optionalDependencies": {
-        "@chartiq/finsemble-cli": "3.3.1",
-        "@chartiq/finsemble-electron-adapter": "3.13.0",
+        "@chartiq/finsemble-cli": "^3.13.*",
+        "@chartiq/finsemble-electron-adapter": "4.1.0",
         "openfin-launcher": "1.3.12"
     },
     "dependencies": {
-        "@chartiq/finsemble": "3.13.0",
-        "@chartiq/finsemble-cli": "3.3.1",
-        "@chartiq/finsemble-react-controls": "3.12.0",
+        "@chartiq/finsemble": "4.1.0",
+        "@chartiq/finsemble-react-controls": "4.0.*",
         "async": "2.6.2",
         "babel-minify-webpack-plugin": "0.3.1",
-        "lodash.get": "4.4.2",
         "compression": "1.7.3",
         "file-loader": "1.1.11",
         "hadouken-js-adapter": "1.43.1",
         "lodash.clonedeep": "4.5.0",
         "lodash.debounce": "4.0.8",
-        "lodash.get": "^4.4.2",
+        "lodash.get": "4.4.2",
         "lodash.throttle": "4.1.1",
         "nocache": "2.0.0"
     },
     "devDependencies": {
         "@chartiq/tslint-config-chartiq-base": "0.1.3",
-        "@svgr/webpack": "^4.3.2",
+        "@svgr/webpack": "4.3.2",
         "ansi-html": "0.0.7",
         "babel-core": "6.24.1",
         "babel-loader": "7.1.5",

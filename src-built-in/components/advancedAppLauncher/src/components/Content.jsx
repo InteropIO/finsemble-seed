@@ -132,7 +132,7 @@ export default class Content extends React.Component {
 	getNoResultsMessage() {
 		const messages = {
 			search: ["No results found. Please try again."],
-			Favorites: ["There’s nothing here!", <br />, "Add apps and dashboards to Favorites to view them here."],
+			Favorites: ["There’s nothing here!", <br />, "Add apps to Favorites to view them here."],
 			//Dashboards: ['There’s nothing here!', <br />, 'Press “New Dashboard” to construct an Dashboard.'],
 			default: ["There’s nothing here!", <br />, "Add apps to folders to view them here."]
 		};

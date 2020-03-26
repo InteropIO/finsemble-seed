@@ -1,5 +1,5 @@
 /*!
-* Copyright 2018 by ChartIQ, Inc.
+* Copyright 2017 - 2020 by ChartIQ, Inc.
 * All rights reserved.
 */
 export {
@@ -23,6 +23,14 @@ const defaultValues = [
 	{
 		field: "activeApp",
 		value: null
+	},
+	{
+		field: "searchText",
+		value: ""
+	},
+	{
+		field: "forceSearch",
+		value: false
 	}
 ];
 

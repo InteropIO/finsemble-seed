@@ -17,7 +17,7 @@ export default class AddNewFolder extends React.Component {
 
     render() {
         return (<div onClick={this.addNewFolder}
-            className='complex-menu-action'>
+            className='ff-plus-2 complex-menu-action'>
             New Folder
     </div>)
     }

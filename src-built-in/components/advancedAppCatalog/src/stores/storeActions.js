@@ -1,5 +1,5 @@
 /*!
-* Copyright 2018 by ChartIQ, Inc.
+* Copyright 2017 - 2020 by ChartIQ, Inc.
 * All rights reserved.
 */
 import AppDirectory from "../modules/AppDirectory";
@@ -18,12 +18,20 @@ export default {
 	removeTag,
 	refreshTagSearch,
 	clearTags,
+	clearSearchText,
 	addApp,
 	removeApp,
 	openApp,
 	clearApp,
 	getInstalledApps,
-	getActiveApp
+	getActiveApp,
+	setActiveApp,
+	filterApps,
+	setSearchValue,
+	setForceSearch,
+	getSearchValue,
+	getForceSearch,
+	goHome
 };
 
 let ToolbarStore;
@@ -55,6 +63,8 @@ function initialize(done = Function.prototype) {
 		data.filteredApps = store.values.filteredApps;
 		data.activeTags = store.values.activeTags;
 		data.activeApp = store.values.activeApp;
+		data.searchText = store.values.searchText;
+		data.forceSearch = store.values.forceSearch;
 		data.ADVANCED_APP_LAUNCHER = store.values.defaultFolder;
 
 		store.addListener({ field: "apps" }, (err, dt) => data.apps = dt.value);
@@ -63,6 +73,8 @@ function initialize(done = Function.prototype) {
 		store.addListener({ field: "activeApp" }, (err, dt) => data.activeApp = dt.value);
 		store.addListener({ field: "activeTags" }, (err, dt) => data.activeTags = dt.value);
 		store.addListener({ field: "filteredApps" }, (err, dt) => data.filteredApps = dt.value);
+		store.addListener({ field: "searchText" }, (err, dt) => data.searchText = dt.value);
+		store.addListener({ field: "forceSearch" }, (err, dt) => data.forceSearch = dt.value);
 		getToolbarStore(done);
 	});
 }
@@ -75,97 +87,66 @@ function getToolbarStore(done) {
 }
 
 /**
+ * Return to the App Catalog home page
+ */
+function goHome() {
+	setForceSearch(false);
+	clearFilteredApps();
+	clearApp();
+	clearTags();
+	clearSearchText();	
+}
+
+/**
  * Private function to add an active tag. This will filter apps based on tags
- * NOTE: This will need to use search
  * @param {string} tag The name of the tag
  */
 function _addActiveTag(tag) {
+	let activeTags = data.activeTags;
+	if (!activeTags.includes(tag)) {activeTags.push(tag);}
 
-	let { apps, activeTags } = data;
-
-	activeTags.push(tag);
-
-	let newApps = apps.filter((app) => {
-		for (let i = 0; i < activeTags.length; i++) {
-			let tag = activeTags[i].trim();
-			if (app.tags.includes(tag)) {
-				return true;
-			}
-		}
-	});
-
-	getStore().setValues([
-		{
-			field: "filteredApps",
-			value: newApps
-		},
-		{
-			field: "activeTags",
-			value: activeTags
-		}
-	]);
+	getStore().setValue({ field: "activeTags", value: activeTags }, filterApps());
 }
 
 /**
  * Private function to remove an active tag. This will filter apps based on tags
- * NOTE: This will need to use search
  * @param {string} tag The name of the tag
  */
 function _removeActiveTag(tag) {
-
-	let { activeTags, apps } = data;
-
-	let newActiveTags = activeTags.filter((currentTag) => {
+	data.activeTags = data.activeTags.filter((currentTag) => {
 		return currentTag !== tag;
 	});
 
-	let newApps = apps.filter((app) => {
-		for (let i = 0; i < newActiveTags.length; i++) {
-			let tag = activeTags[i].trim();
-			if (app.tags.includes(tag)) {
-				return true;
-			}
-		}
-	});
-
-	getStore().setValues([{
-		field: "activeTags",
-		value: newActiveTags
-	}, {
-		field: "filteredApps",
-		value: newApps
-	}]);
-}
-
-function _refreshTags() {
-	let { activeTags, apps } = data;
-
-	let newApps = apps.filter((app) => {
-		for (let i = o; i < activeTags.length; i++) {
-			const tag = activeTags[i].trim();
-			if (app.tags.includes(tag)) {
-				return true;
-			}
-		}
-	});
-
-	getStore().setValues([{
-		field: 'activeTags',
-		value: activeTags
-	}, {
-		field: 'filteredApps',
-		value: newApps
-	}]);
+	getStore().setValue({ field: "activeTags", value: data.activeTags	});
+	filterApps();
 }
 
 /**
  * Clears all active tags
  */
 function _clearActiveTags() {
-	getStore().setValue({
-		field: "activeTags",
-		value: []
-	});
+	getStore().setValue({ field: "activeTags", value: [] });	
+}
+
+
+/**
+ * Send the search text and tags to the appd server and get a list of apps
+ */
+function filterApps() {
+	let { activeTags, searchText } = data;
+	
+
+	if (activeTags.length === 0 && searchText === "") {
+		goHome();
+	} else {
+		appd.search({ text: searchText, tags: activeTags }, (err, data) => {
+			if (err) {
+				Logger.system.error(`FDC3 App search failed!: ${err}`);
+				return;
+			}
+			getStore().setValue({ field: "filteredApps", value: data });
+		});
+	}
 }
 
 /**
@@ -197,6 +178,15 @@ async function getTags() {
 }
 
 /**
+ * Function to write errors to the log
+ * @param {string} message The log message
+ * @param {string} [protocol] Provide the logging protocol (default is error)
+ */
+function writeToLog(message, protocol = "error") {
+	FSBL.Clients.Logger[protocol](message);
+}
+
+/**
  * Function to "install" an app. Adds the id to a list of installed apps
  * @param {string} name The name of the app
  */
@@ -206,65 +196,46 @@ async function addApp(id, cb = Function.prototype) {
 	let app = apps.find(app => {
 		return app.appId === appID;
 	});
-	const folder = data.activeFolder;
+	const name = app.title || app.name;
 
 	if (app === undefined) {
 		console.warn("App not found.");
-		return;
+		return cb();
 	}
 
-
-	installed[appID] = {
-		appID,
-		tags: app.tags,
-		name: app.title || app.name,
-		url: app.url,
-		type: "component",
-		component: {},
-		window: {
-			windowType: app.windowType || "WebWindow"
-		},
-		foreign: {
-			components: {
-				"App Launcher": {
-					"launchableByUser": true
-				},
-				"Window Manager": {
-					title: app.title || app.name
-				}
+	let manifest, appConfig;
+	// Manifest from FDC3 is a string property which can either be a stringified JSON, or a uri which delivers valid JSON.
+	// The catalog will attempt to parse the string as JSON, then fetch from a URL if that fails.
+	// If both paths fail, notify the user that this app can't be added
+	if (app.manifestType.toLowerCase() === "finsemble") {
+		try {
+			manifest = JSON.parse(app.manifest);
+		} catch(e) {
+			try {
+				const urlRes = await fetch(app.manifest, { method: "GET" });
+				manifest = await urlRes.json();
+			} catch(e) {
+				writeToLog(`${name} is missing a valid manifest or URI that delivers a valid JSON manifest. Unable to add app.`, "error");
+				return cb();
+			}
+		} finally {
+			appConfig = installed[appID] = {
+				appID,
+				tags: app.tags,
+				name,
+				type: "component",
+				manifest
 			}
 		}
-	};
-
-	const appConfig = installed[appID];
-	let applicationRoot = "";
-	if (appConfig.url && appConfig.url.includes("$applicationRoot")) {
-		//we may use this if we put macros in the stored URLs on the FDC3 server. commented out for now.
-		applicationRoot = (await FSBL.Clients.ConfigClient.getValue({ field: "finsemble.applicationRoot" })).data;
-		appConfig.url = appConfig.url.replace("$applicationRoot", "");
-		appConfig.url = applicationRoot + appConfig.url;
-		appConfig.window.url = appConfig.url;
-	}
-
-	if (typeof appConfig.url === "undefined") {
-		//If there is no url, it will be set to the 'unknown component' inside of the Launcher.
-		delete appConfig.url;
-		delete appConfig.window.url;
-	}
-
-	if (typeof app.manifest !== "object") {
-		appConfig.manifest = { ...appConfig };
-	}
-
-	if (app.friendlyName) {
-		appConfig.displayName = app.friendlyName;
+	} else {
+		writeToLog(`${name} does not appear to be a Finsemble manifest. This app cannot be added to Finsemble.`, "error");
+		return cb();
 	}
 
 	let ADVANCED_APP_LAUNCHER = data.defaultFolder;
 	let folders = data.folders;
 
 	data.folders[ADVANCED_APP_LAUNCHER].apps[appID] = appConfig
-	data.folders[folder].apps[appID] = appConfig
 	FSBL.Clients.LauncherClient.registerComponent({
 		componentType: appConfig.name,
 		manifest: appConfig.manifest
@@ -309,10 +280,10 @@ function removeApp(id, cb = Function.prototype) {
 					delete folders[key].apps[id];
 				}
 			}
-	
+
 			//Delete the app from the list
 			delete installed[id];
-	
+
 			getStore().setValues([
 				{
 					field: "appDefinitions",
@@ -346,6 +317,9 @@ function openApp(id) {
 	}
 }
 
+/**
+ * Clear the activeApp in store
+ */
 function clearApp() {
 	getStore().setValue({
 		field: "activeApp",
@@ -353,8 +327,25 @@ function clearApp() {
 	});
 }
 
+/**
+ * Return activeApp from store
+ *
+ * @returns {string} activeApp
+ */
 function getActiveApp() {
 	return data.activeApp;
+}
+
+/**
+ * Set the activeApp param in store
+ *
+ * @param {*} app
+ */
+function setActiveApp(app) {
+	getStore().setValue({
+		field: "activeApp",
+		value: app
+	});
 }
 
 /**
@@ -379,6 +370,51 @@ function clearFilteredApps() {
 		field: "filteredApps",
 		value: []
 	});
+}
+
+/**
+ * Set the value of the search text in store
+ *
+ * @param {set} val Search string
+ */
+function setSearchValue(val) {
+	getStore().setValue({field: "searchText", value: val})
+}
+
+/**
+ * Get the current value of the text in the store
+ *
+ * @returns {string}  Search string
+ */
+function getSearchValue() {
+	return data.searchText;
+}
+
+/**
+ * Clears the search text in store
+ *
+ */
+function clearSearchText() {
+	getStore().setValue({field: "searchText", value: ""})
+}
+
+/**
+ * Get forceSearch store value
+ *
+ * @returns {boolean} forceSearch
+ */
+function getForceSearch() {
+	return data.forceSearch;
+}
+
+
+/**
+ * Set the forceSearch value
+ *
+ * @param {string} val Boolean value for forceSearch
+ */
+function setForceSearch(val) {
+	getStore().setValue({field: "forceSearch", value: val})
 }
 
 /**
@@ -408,7 +444,7 @@ function removeTag(tag) {
  * Refreshes the active tags search
  */
 function refreshTagSearch() {
-	_refreshTags();
+	filterApps();
 }
 
 /**
@@ -423,28 +459,12 @@ function clearTags() {
  * @param {string} terms The search terms provided by the user
  */
 function searchApps(terms, cb = Function.prototype) {
-	if (!terms || terms.length === 0) {
-		getStore().setValue({
-			field: "filteredApps",
-			value: []
-		});
-		return cb();
-	}
-	let activeTags = getStore().getValue({
-		field: "activeTags"
-	}, err => {
-		if (err) console.warn("Error getting active tags");
-	});
-
-	//TODO: The appd search endpoint returns all apps always
-	appd.search({ text: terms, tags: activeTags }, (err, data) => {
-		if (err) console.log("Failed to search apps");
-		getStore().setValue({
-			field: "filteredApps",
-			value: data
-		});
-		cb();
-	});
+	data.searchText = terms;
+	setForceSearch(true);
+	getStore().setValue({
+		field: "searchText",
+		value: terms
+	}, () => {filterApps(); cb();});
 }
 
 
