@@ -1,3 +1,8 @@
+/**
+ * This file is part of the titlebar delivery
+ * mechanism and should not be customized.
+ */
+
 function init() {
 	if (window.headerLoaded) return;
 	window.headerLoaded = true;
