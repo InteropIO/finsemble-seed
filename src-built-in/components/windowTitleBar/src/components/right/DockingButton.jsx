@@ -3,7 +3,7 @@
 * All rights reserved.
 */
 import React from "react";
-import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
+import { FinsembleHoverDetector } from "@chartiq/finsemble-ui/react/components";
 import { getStore, Actions as HeaderActions } from "../../stores/windowTitleBarStore";
 let windowTitleBarStore;
 
@@ -78,7 +78,7 @@ export default class DockingButton extends React.Component {
      * @memberof DockingButton
      */
 
-    onClick(e) {        
+    onClick(e) {
 		HeaderActions.toggleGroup();
 	}
 
