@@ -248,6 +248,238 @@
                     }
                 }
             }
-        }
+        },
+        "launchGroupSpawnerExamplePercentage1": {
+            "window": {
+                "url": "$applicationRoot/components/launchGroupSpawner/launchGroupSpawner.html",
+                "options": {
+                    "resizable": true,
+                    "autoShow": false,
+                    "alwaysOnTop": false
+                },
+                "top": "10%",
+                "left": "10%",
+                "width": "80%",
+                "height": "80%",
+				"addToWorkspace": false,
+                "data": {
+                    "addToWorkspace": true,
+                    "linkerGroup": "auto",
+                    "toSpawn": [
+                        {
+                            "componentType": "Welcome Component",
+                            "spawnOptions": {
+								"top": 0,
+								"left": 0,
+								"height": "50%",
+								"width": "33.33%",
+								"data": {}
+							}
+                        },
+                        {
+                            "componentType": "Welcome Component",
+                            "spawnOptions": {
+								"top": 0,
+								"left": "33.33%",
+								"height": "50%",
+								"width": "33.33%",
+								"data": {}
+							}
+                        },
+                        {
+                            "componentType": "Welcome Component",
+                            "spawnOptions": {
+								"top": 0,
+								"left": "66.66%",
+								"height": "50%",
+								"width": "33.33%",
+								"data": {}
+							}
+                        },
+                        {
+                            "componentType": "Welcome Component",
+                            "spawnOptions": {
+								"top": "50%",
+								"left": 0,
+								"height": "50%",
+								"width": "50%",
+								"data": {}
+							}
+                        },
+                        {
+                            "componentType": "Welcome Component",
+                            "spawnOptions": {
+								"top": 0,
+								"left": "50%",
+								"height": "50%",
+								"width": "50%",
+								"data": {}
+							}
+                        }
+                    ]
+                }
+            },
+            "component": {},
+            "foreign": {
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {},
+                    "Toolbar": {
+                        "iconClass": "launchGroupSpawner",
+                        "iconURL": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png"
+                    }
+                }
+            }
+        },
+        "launchGroupSpawnerExamplePercentage2": {
+            "window": {
+                "url": "$applicationRoot/components/launchGroupSpawner/launchGroupSpawner.html",
+                "options": {
+                    "resizable": true,
+                    "autoShow": false,
+                    "alwaysOnTop": false
+                },
+                "top": 0,
+                "left": 0,
+                "width": "100%",
+                "height": "100%",
+				"addToWorkspace": false,
+                "data": {
+                    "addToWorkspace": true,
+                    "linkerGroup": "auto",
+                    "toSpawn": [
+                        {
+                            "componentType": "Welcome Component",
+                            "spawnOptions": {
+								"top": 0,
+								"left": 0,
+								"height": "50%",
+								"width": "33.33%",
+								"data": {}
+							}
+                        },
+                        {
+                            "componentType": "Welcome Component",
+                            "spawnOptions": {
+								"top": 0,
+								"left": "33.33%",
+								"height": "50%",
+								"width": "33.33%",
+								"data": {}
+							}
+                        },
+                        {
+                            "componentType": "Welcome Component",
+                            "spawnOptions": {
+								"top": 0,
+								"left": "66.66%",
+								"height": "100%",
+								"width": "33.33%",
+								"data": {}
+							}
+                        },
+                        {
+                            "componentType": "Welcome Component",
+                            "spawnOptions": {
+								"top": "50%",
+								"left": 0,
+								"height": "50%",
+								"width": "100%",
+								"data": {}
+							}
+                        }
+                    ]
+                }
+            },
+            "component": {},
+            "foreign": {
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {},
+                    "Toolbar": {
+                        "iconClass": "launchGroupSpawner",
+                        "iconURL": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png"
+                    }
+                }
+            }
+        },
+        "launchGroupSpawnerExamplePercentage3": {
+            "window": {
+                "url": "$applicationRoot/components/launchGroupSpawner/launchGroupSpawner.html",
+                "options": {
+                    "resizable": true,
+                    "autoShow": false,
+                    "alwaysOnTop": false
+                },
+                "top": 0,
+                "left": 0,
+                "width": "100%",
+                "height": "100%",
+				"addToWorkspace": false,
+                "data": {
+                    "addToWorkspace": true,
+                    "linkerGroup": "auto",
+                    "toSpawn": [
+                        {
+                            "componentType": "Welcome Component",
+                            "spawnOptions": {
+								"top": 0,
+								"left": 0,
+								"bottom": "50%",
+								"right": "33.33%",
+								"data": {}
+							}
+                        },
+                        {
+                            "componentType": "Welcome Component",
+                            "spawnOptions": {
+								"top": 0,
+								"left": "33.33%",
+								"bottom": "50%",
+								"right": "66.66%",
+								"data": {}
+							}
+                        },
+                        {
+                            "componentType": "Welcome Component",
+                            "spawnOptions": {
+								"top": 0,
+								"left": "66.66%",
+								"bottom": "100%",
+								"right": "100%",
+								"data": {}
+							}
+                        },
+                        {
+                            "componentType": "Welcome Component",
+                            "spawnOptions": {
+								"top": "50%",
+								"left": 0,
+								"bottom": "100%",
+								"right": "100%",
+								"data": {}
+							}
+                        }
+                    ]
+                }
+            },
+            "component": {},
+            "foreign": {
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {},
+                    "Toolbar": {
+                        "iconClass": "launchGroupSpawner",
+                        "iconURL": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png"
+                    }
+                }
+            }
+		}
     }
 }

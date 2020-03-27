@@ -6,12 +6,26 @@ const FSBLReady = () => {
 		let spawnerData = FSBL.Clients.WindowClient.getSpawnData();
 		if (spawnerData && spawnerData.toSpawn) {
 			//get the spawner's own config and position info (the spawned components will offset from that position)
-			let spawnerConfig = FSBL.Clients.WindowClient.options.customData;
-			let groupTop = spawnerConfig.window.top;
-			let groupLeft = spawnerConfig.window.left;
-			let linkerGroup = spawnerConfig.window.data.linkerGroup;
-
-			spawnComponentGroup(spawnerData.toSpawn, groupTop, groupLeft, linkerGroup);
+			finsembleWindow.getOptions((err,data) => {
+				if(!err) {
+					let spawnerOptions = data;
+					//let spawnerConfig = FSBL.Clients.WindowClient.options.customData;
+			
+					let params = {
+						top: spawnerOptions.top,
+						left: spawnerOptions.left,
+						width: spawnerOptions.width,
+						height: spawnerOptions.height,
+						//linkerGroup: spawnerConfig.window.data.linkerGroup,
+						linkerGroup: spawnerData.linkerGroup,
+						addToWorkspace: spawnerData.addToWorkspace
+					}
+	
+					spawnComponentGroup(spawnerData.toSpawn, params);
+				} else {
+					FSBL.Logger.error("Failed to retrieve spawner's dimensions! Error: ", err);
+				}
+			});
 		} else {
 			FSBL.Logger.error("Received no spawner data, spawnerData: ", spawnerData);
 		}
