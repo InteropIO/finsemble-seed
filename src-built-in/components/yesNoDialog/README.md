@@ -19,9 +19,12 @@ The controls used in this component are documented over in our Finsemble React C
 | affirmativeResponseText | String  | `'Yes'`         |
 | negativeResponseText    | String  | `'No'`          |
 | cancelResponseText      | String  | `'Cancel'`      |
-| includeAffirmative      | Boolean | true            |
-| includeNegative         | Boolean | true            |
-| includeCancel           | Boolean | true            |
+| showNegativeButton      | Boolean | true            |
+| showAffirmativeButton   | Boolean | true            |
+| showCancelButton        | Boolean | true            |
+| hideModalOnClose	      | Boolean | true            |
+| showTimer						    | Boolean | false           |
+| timerDuration           | String  | null            |
 
 **Note, these parameters are passed in as the second parameter to `FSBL.Clients.DialogManager.open`**
 

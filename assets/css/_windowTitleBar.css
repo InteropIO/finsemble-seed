@@ -49,6 +49,7 @@ html:before, html:after, body:before, body:after {
 
 html.desktop-active .fsbl-header {
     background: var(--titleBar-background-active-color);
+    color: var(--titleBar-active-font-color);
 }
 
 .fsbl-header-title {
@@ -222,14 +223,13 @@ html.desktop-active .fsbl-icon-highlighted {
     border-radius: 4px;
     border: 1px solid transparent;
     box-sizing: content-box; /* otherwise any box-sizing on the page can override how our linker appears */
-    color: var(--menu-linker-selected-font-color);
 }
 
 .linker-group-accessible {
     width: 1em !important;
     padding-bottom: 4px;
     margin-bottom: 4px;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.79);
+    color: var(--titleBar-linker-font-color);
 }
 
 .linkerContainer {

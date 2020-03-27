@@ -57,7 +57,7 @@ var Actions = {
 		});
 
 		//Whenever we add or remove a component, this event is fired. We get a list of all components, then filter it out to include only the ones that this particular launcher is capable of spawning.
-		FSBL.Clients.RouterClient.addListener("Launcher.update", function (err, response) {
+		FSBL.Clients.RouterClient.subscribe("Launcher.update", function (err, response) {
 			FSBL.Clients.Logger.debug("list updated", err, response);
 			if (err) {
 				return console.error(err);
