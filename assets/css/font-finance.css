@@ -12,6 +12,19 @@
 
 }
 
+[data-icon]:before {
+  font-family: "font-finance" !important;
+  content: attr(data-icon);
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 [class^="ff-"]:before,
 [class*=" ff-"]:before {
   font-family: "font-finance" !important;
@@ -114,9 +127,6 @@
 }
 .ff-document-2:before {
   content: "\46";
-}
-.ff-dots-vert:before {
-  content: "\48";
 }
 .ff-edit:before {
   content: "\49";
@@ -301,9 +311,6 @@
 .ff-chevron-right:before {
   content: "\e000";
 }
-.ff-dots-horz:before {
-  content: "\47";
-}
 .ff-alert:before {
   content: "\e001";
 }
@@ -366,4 +373,10 @@
 }
 .ff-plus-2:before {
   content: "\2a";
+}
+.ff-dots-horz:before {
+  content: "\47";
+}
+.ff-dots-vert:before {
+  content: "\48";
 }

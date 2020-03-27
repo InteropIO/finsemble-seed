@@ -8,7 +8,10 @@
 	  - finsemble.Window Manager.zoom.min: Minimum zoom level (default 0.2)
 	  - finsemble.Window Manager.zoom.max Maximum zoom level (default 5)
 	- Zoom level being preserved in window state/workspaces
+	- Default zoom level config with-in the component configuration at:
+	  `foreign.components.['Window Manager'].zoomDefault`
 */
+const _get = require("lodash.get");
 
 // This global will contain our current zoom level
 window.fsblZoomLevel = 1;
@@ -75,11 +78,16 @@ const setZoom = (pct) => {
 	FSBL.Clients.WindowClient.setComponentState({ field: "fsbl-zoom", value: window.fsblZoomLevel });
 }
 
+const roundTo1Decimal = (input) => {
+	return Math.round((input + Number.EPSILON) * 10) / 10 ;
+}
+
 /**
  * Zooms the page in one step.
  */
 const zoomIn = () => {
-	window.fsblZoomLevel += window.zoomStep;
+	window.fsblZoomLevel = roundTo1Decimal(window.fsblZoomLevel + window.zoomStep);
+	if  (window.fsblZoomLevel < window.zoomMin) {window.fsblZoomLevel = window.zoomMin;}
 	setZoom(window.fsblZoomLevel);
 }
 
@@ -87,7 +95,8 @@ const zoomIn = () => {
  * Zooms the page out one step.
  */
 const zoomOut = () => {
-	window.fsblZoomLevel -= window.zoomStep;
+	window.fsblZoomLevel = roundTo1Decimal(window.fsblZoomLevel - window.zoomStep);
+	if  (window.fsblZoomLevel > window.zoomMax) {window.fsblZoomLevel = window.zoomMax;}
 	setZoom(window.fsblZoomLevel);
 }
 
@@ -189,7 +198,7 @@ const zoomConfigHandler = (err, zoom) => {
 }
 
 /**
- * Applies the zoom level from the component state.
+ * Applies the zoom level from the component state or default configuration.
  *
  * @param {*} err The error, if one occurred, from getting the zoom level from component state.
  * @param {Number} zoomLevel The zoom level saved in the component.
@@ -197,11 +206,21 @@ const zoomConfigHandler = (err, zoom) => {
 const getZoomLevelHandler = (err, zoomLevel) => {
 	if (err) {
 		FSBL.Clients.Logger.info("No \"fsbl-zoom\" settings found in component state", err);
-	}else if (zoomLevel != null) {
+	} else if (zoomLevel != null) {
+		FSBL.Clients.Logger.info(`Retrieved zoomLevel from state: ${zoomLevel}`);
 		window.fsblZoomLevel = zoomLevel;
 		setZoom(window.fsblZoomLevel);
+	} else {
+		//check for default configuration for zoom level and apply as needed
+		let defaultLevel = _get(FSBL.Clients.WindowClient.options.customData, "foreign.components.['Window Manager'].zoomDefault");
+		if (defaultLevel) {
+			FSBL.Clients.Logger.info(`Retrieved default zoom level from config: ${defaultLevel}`);
+			window.fsblZoomLevel = defaultLevel;
+			setZoom(defaultLevel);
+		} else {
+			FSBL.Clients.Logger.info("No default zoom level retrieved from configuration ");
+		}
 	}
-
 	window.settingInitialZoom = false;
 };
 
@@ -230,7 +249,7 @@ const runZoomHandler = () => {
 	// Updates the component with the zoom level from the previous load, if one exists.
 	FSBL.Clients.WindowClient.getComponentState({ field: "fsbl-zoom" }, getZoomLevelHandler);
 
-	window.addEventListener("wheel", handleWheel, false);
+	window.addEventListener("wheel", handleWheel, {capture: false, passive: false});
 };
 
 // TODO, catch and recall scroll position

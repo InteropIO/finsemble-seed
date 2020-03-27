@@ -1,6 +1,6 @@
 {
     "name": "FinsembleSeed",
-    "version": "4.0.0",
+    "version": "4.1.0",
     "description": "",
     "main": "index.js",
     "scripts": {
@@ -30,12 +30,12 @@
     "author": "",
     "license": "apache-2.0",
     "optionalDependencies": {
-        "@chartiq/finsemble-cli": "3.3.1"
+        "@chartiq/finsemble-cli": "^3.13.*"
     },
     "dependencies": {
-        "@chartiq/finsemble": "4.0.*",
-        "@chartiq/finsemble-cli": "3.13.0",
-        "@chartiq/finsemble-electron-adapter": "4.0.*",
+        "@chartiq/finsemble": "4.1.*",
+        "@chartiq/finsemble-react-controls": "4.0.*",
+        "@chartiq/finsemble-electron-adapter": "4.1.*",
         "@chartiq/finsemble-ui": "file:../finsemble-ui",
         "async": "2.6.2",
         "babel-minify-webpack-plugin": "0.3.1",

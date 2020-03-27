@@ -124,15 +124,11 @@ function collapseBuiltInFiles() {
  * TODO, define a way for a component's webpack entry to specify whether it does or doesn't need to have assets copied
  */
 function createCopyWebpackConfig() {
-	// Copy configs, clients and finsemble library
+	// Copy configs and finsemble library
 	var config = [
 		{
 			from: './configs/',
 			to: './configs/'
-		},
-		{
-			from: './src/clients/',
-			to: './clients/'
 		},
 		{
 			from: './assets/',
