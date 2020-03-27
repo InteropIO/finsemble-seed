@@ -7,8 +7,8 @@
 
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
-import { AuthHeader, AuthForm, ErrorMessage, AuthInput, AuthSubmit } from "@chartiq/finsemble-ui/react/components";
-import useAuth from "@chartiq/finsemble-ui/react/hooks";
+import { AuthHeader, AuthForm, ErrorMessage, AuthInput, AuthSubmit } from "@chartiq/finsemble/ui/components";
+import useAuth from "@chartiq/finsemble/ui/hooks";
 
 export const Authentication = () => {
     const { saveInputChange, formValues, authorize, quitApplication } = useAuth();
