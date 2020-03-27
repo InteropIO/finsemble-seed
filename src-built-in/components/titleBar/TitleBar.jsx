@@ -4,7 +4,7 @@
 */
 import React from "react";
 import { useTitleBar } from "@chartiq/finsemble-ui/react/hooks";
-import { AlwaysOnTopButton, DockingButton, LinkerButton, ShareButton, initializeTitleBar, TabRegion, CloseButton, MaximizeButton, MinimizeButton,  } from "@chartiq/finsemble-ui/react/components";
+import { AlwaysOnTopButton, DockingButton, LinkerButton, ShareButton, mountTitleBar, TabRegion, CloseButton, MaximizeButton, MinimizeButton,  } from "@chartiq/finsemble-ui/react/components";
 import "../../../assets/css/finsemble.css";
 import "../../../assets/css/_titleBar.css";
 
@@ -51,4 +51,8 @@ const TitleBar = () => {
 	);
 }
 
-initializeTitleBar(TitleBar);
+// Because the TitleBar is mounted to dynamically created
+// DOM elements, you must pass in the TitleBar to this function.
+// Doing will so will (asynchronously) register the TitleBar
+// with Finsemble, create the DOM, and mount it.
+mountTitleBar(TitleBar);
