@@ -12,8 +12,11 @@ const FSBLReady = () => {
 					//let spawnerConfig = FSBL.Clients.WindowClient.options.customData;
 			
 					let params = {
-						top: spawnerOptions.top,
-						left: spawnerOptions.left,
+						//make position data relative to the current monitor (and convert bottom/right to distance from those edges)
+						top: spawnerOptions.top - spawnerOptions.monitorDimensions.top,
+						left: spawnerOptions.left - spawnerOptions.monitorDimensions.left,
+						bottom: spawnerOptions.monitorDimensions.bottom - spawnerOptions.bottom,
+						right: spawnerOptions.monitorDimensions.right - spawnerOptions.right,
 						width: spawnerOptions.width,
 						height: spawnerOptions.height,
 						//linkerGroup: spawnerConfig.window.data.linkerGroup,
@@ -21,7 +24,15 @@ const FSBLReady = () => {
 						addToWorkspace: spawnerData.addToWorkspace
 					}
 	
-					spawnComponentGroup(spawnerData.toSpawn, params);
+					spawnComponentGroup(spawnerData.toSpawn, params)
+						.then((spawnResponses) => { 
+							FSBL.Clients.Logger.log("Group components spawn responses:", spawnResponses);
+							//Close the spawner component as its no longer needed
+							FSBL.Clients.WindowClient.close({ removeFromWorkspace: true, closeWindow: true });
+						})
+						.catch((err) => { 
+							FSBL.Clients.Logger.error("Failed to spawn component group, error:", err);
+						});
 				} else {
 					FSBL.Logger.error("Failed to retrieve spawner's dimensions! Error: ", err);
 				}
@@ -29,8 +40,6 @@ const FSBLReady = () => {
 		} else {
 			FSBL.Logger.error("Received no spawner data, spawnerData: ", spawnerData);
 		}
-		FSBL.Clients.WindowClient.close({ removeFromWorkspace: true, closeWindow: true });
-
 	} catch (e) {
 		FSBL.Clients.Logger.error(e);
 	}
