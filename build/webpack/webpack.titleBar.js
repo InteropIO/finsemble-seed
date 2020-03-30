@@ -1,7 +1,8 @@
 //The title bar can be injected into any component or page - that component or page may not be aware of finsemble, and may not include the vendor.bundle.js file that's required to make the DLL plugin work. This webpack config is to build that component independent of any code splitting done for the rest of the presentation components.
 const path = require('path');
+const fs = require("fs");
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const { DefinePlugin } = require("webpack");
+const { DllReferencePlugin, DefinePlugin, ProgressPlugin } = require("webpack");
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 let plugins =
     [
@@ -10,6 +11,7 @@ let plugins =
                 "NODE_ENV": JSON.stringify(env)
             }
         }),
+        //new ProgressPlugin({ profile: false })
     ]
 
 if (env === "production") {
@@ -17,7 +19,7 @@ if (env === "production") {
     plugins.push(new UglifyJsPlugin());
 }
 
-var titleBarPath  = "./src-built-in/components/titlebar/titlebarLoader.js";
+const titleBarPath = "./src/components/windowTitleBar/src/windowTitleBar.jsx";;
 module.exports = {
     devtool: 'source-map',
     entry: {
@@ -103,13 +105,10 @@ module.exports = {
         path: path.resolve(__dirname, '../../dist/')
     },
     resolve: {
-        extensions: ['.js', '.jsx', '.json', 'scss', 'html'],
         alias: {
             react: path.resolve('./node_modules/react'),
-            'react-dom': path.resolve('./node_modules/react-dom'),
-            '@babel/runtime': path.resolve('./node_modules/@babel/runtime'),
-            '@chartiq/finsemble-react-controls': path.resolve('./node_modules/@chartiq/finsemble-react-controls'),
-            'async': path.resolve('./node_modules/async')
+            'react-dom': path.resolve('./node_modules/react-dom')
         },
+        extensions: ['.js', '.jsx', '.json', 'scss', 'html']
     }
 }
