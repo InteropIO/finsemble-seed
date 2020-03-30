@@ -88,7 +88,7 @@ webpackConfig.entry = entries;
 
 // This function iterates through src, building a list of all the directories but eliminating duplicates.
 function collapseBuiltInFiles() {
-	var combinedList = {}; // contains the final compressed list
+	var srcList = {}; // contains the final compressed list
 	var srcPath = path.join(__homename, "src/components"); // path to src components
 
 	// Now put all the src items into our combined list. If there's a dup, then it will override the built in
@@ -99,9 +99,9 @@ function collapseBuiltInFiles() {
 			// Don't copy a .gitignore folder.
 			continue;
 		}
-		combinedList[folder] = path.join(srcPath, folder);
+		srcList[folder] = path.join(srcPath, folder);
 	}
-	return combinedList;
+	return srcList;
 }
 
 /**
