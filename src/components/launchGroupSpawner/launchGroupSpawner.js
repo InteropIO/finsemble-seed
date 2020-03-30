@@ -29,7 +29,7 @@ const FSBLReady = () => {
 		} else {
 			FSBL.Logger.error("Received no spawner data, spawnerData: ", spawnerData);
 		}
-		//FSBL.Clients.WindowClient.close({ removeFromWorkspace: true, closeWindow: true });
+		FSBL.Clients.WindowClient.close({ removeFromWorkspace: true, closeWindow: true });
 
 	} catch (e) {
 		FSBL.Clients.Logger.error(e);
