@@ -40,7 +40,7 @@ export default class AppActionsMenu extends React.Component {
 		// Mody on 12/12/19
 		// window.blur seems to work much better than finsembleWindow's
 		// blurred event. The first, is only fired when you actually click
-		// away from the window, while finsembleWindow's blurred fires even 
+		// away from the window, while finsembleWindow's blurred fires even
 		// when you click inside the window, causing possible race conditions.
 		window.addEventListener("blur", this.handleWindowBlurred);
 	}
@@ -139,14 +139,14 @@ export default class AppActionsMenu extends React.Component {
 	 * from all folders and from apps list
 	 */
 	deleteApp() {
-		storeActions.deleteApp(this.props.app.appID);
+		storeActions.deleteApp(this.props.app.name);
 	}
 
 	renderList() {
 		// The 'View info' action is only visible on apps
 		// that have the source property and with a value of FDC3
 		const apps = storeActions.getAllApps();
-		const app = apps[this.props.app.appID];
+		const app = apps[this.props.app.name];
 		const folder = this.props.folder;
 		let favoritesActionOnClick = this.props.isFavorite ? this.onRemoveFromFavorite : this.onAddToFavorite;
 		let favoritesText = this.props.isFavorite ? "Remove from Favorites" : "Add to Favorites";

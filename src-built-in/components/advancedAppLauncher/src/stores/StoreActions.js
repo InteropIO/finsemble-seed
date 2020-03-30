@@ -104,7 +104,7 @@ function appInAppList(appName) {
 //Update apps in folders with updated config information
 function updateAppsInFolders(cb = Function.prototype) {
 	//Loop through folders and update apps with new info
-	const { ADVANCED_APP_LAUNCHER: advancedAppLauncherFolderName } = getConstants(); 
+	const { ADVANCED_APP_LAUNCHER: advancedAppLauncherFolderName } = getConstants();
 	Object.keys(data.folders).map(folderName => {
 		if (folderName === advancedAppLauncherFolderName) return;
 		else {
@@ -184,9 +184,9 @@ function loadInstalledConfigComponents(cb = Function.prototype) {
 	// Get the list of components from the launcher service
 	FSBL.Clients.LauncherClient.getComponentList((err, componentList) => {
 		let componentNameList = Object.keys(componentList);
-		
+
 		/*
-		 * Update the folders under the "App" menu and delete any apps in the folder 
+		 * Update the folders under the "App" menu and delete any apps in the folder
 		 * that are no longer in the config and are not user defined components.
 		 */
 		const { folders } = data;
@@ -202,7 +202,7 @@ function loadInstalledConfigComponents(cb = Function.prototype) {
 				}
 			})
 		});
-		
+
 		componentNameList.map(componentName => {
 			// If the app is already in our list move on
 			if (appInAppList(componentName)) return;
@@ -391,9 +391,10 @@ function addApp(app = {}, cb) {
 	});
 }
 
-function deleteApp(appID) {
+function deleteApp(name) {
 
-	ToolbarStore.removeValue({ field: "pins." + data.apps[appID].name.replace(/[.]/g, "^DOT^") }, (err, res) => {
+	const appID = data.apps[name].appID;
+	ToolbarStore.removeValue({ field: "pins." + data.apps[name].name.replace(/[.]/g, "^DOT^") }, (err, res) => {
 		if (err) {
 			//TODO: Need to gracefully handle this error. If the pin can't be removed, the app shouldn't either
 			console.warn("Error removing pin for deleted app");
@@ -406,8 +407,8 @@ function deleteApp(appID) {
 			}
 		}
 		// Delete app from the apps list
-		FSBL.Clients.LauncherClient.removeUserDefinedComponent(data.apps[appID], () => {
-			delete data.apps[appID];
+		FSBL.Clients.LauncherClient.removeUserDefinedComponent(data.apps[name], () => {
+			delete data.apps[name];
 			// Save appDefinitions and then folders
 			_setValue("appDefinitions", data.apps, () => {
 				_setFolders();
