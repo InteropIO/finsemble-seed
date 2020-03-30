@@ -1,6 +1,6 @@
 import React from 'react';
 import { WorkspaceManagementMenuStore, Store as UserPreferencesStore } from "../../stores/UserPreferencesStore";
-import { FinsembleDnDContext, FinsembleDraggable, FinsembleDroppable } from '@chartiq/finsemble-react-controls';
+import { FinsembleDnDContext, FinsembleDraggable, FinsembleDroppable } from '@chartiq/finsemble-ui/react/components';
 import Checkbox from '../checkbox';
 import async from 'async';
 class WorkspaceEditor extends React.Component {

@@ -106,6 +106,10 @@ module.exports = {
         path: path.resolve(__dirname, '../../dist/')
     },
     resolve: {
+        alias: {
+            react: path.resolve('./node_modules/react'),
+            'react-dom': path.resolve('./node_modules/react-dom')
+        },
         extensions: ['.js', '.jsx', '.json', 'scss', 'html']
     }
 }

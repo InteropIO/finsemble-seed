@@ -5,7 +5,7 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
-import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
+import { FinsembleHoverDetector } from "@chartiq/finsemble-ui/react/components";
 import LinkerGroups from "./LinkerGroups";
 import { getStore, Actions as HeaderActions } from "../../stores/windowTitleBarStore";
 import { ReactComponent as LinkerButtonIcon } from '../../../../../../assets/img/titlebar/linker.svg'
