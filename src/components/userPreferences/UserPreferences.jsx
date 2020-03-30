@@ -3,16 +3,16 @@
 * All rights reserved.
 */
 import React from "react";
-import { initialize as UserPreferencesStoreInitialize, Store as UserPreferencesStore, Actions as UserPreferencesActions } from "./stores/UserPreferencesStore";
-import "../userPreferences.css";
-import "../../../../assets/css/font-finance.css";
-import "../../../../assets/css/finsemble.css";
+import { initialize as UserPreferencesStoreInitialize, Store as UserPreferencesStore, Actions as UserPreferencesActions } from "./src/stores/UserPreferencesStore";
+import "./userPreferences.css";
+import "../../../assets/css/font-finance.css";
+import "../../../assets/css/finsemble.css";
 
 
 import ReactDOM from "react-dom"
-import LeftNav from './components/LeftNav';
-import ContentSection from './components/ContentSection'
-import * as storeExports from "../../workspaceManagementMenu/src/stores/workspaceManagementMenuStore";
+import LeftNav from './src/components/LeftNav';
+import ContentSection from './src/components/ContentSection'
+import * as storeExports from "../workspaceManagementMenu/src/stores/workspaceManagementMenuStore";
 var WorkspaceManagementMenuGlobalStore;
 class UserPreferences extends React.Component {
 	constructor() {
@@ -37,7 +37,7 @@ class UserPreferences extends React.Component {
 	}
 
 	render() {
-		let navConfig = require('./navSections.json');
+		let navConfig = require('./src/navSections.json');
 		return (<div className="user-preferences" >
 			<div className="complex-menu-wrapper">
 				<LeftNav entries={navConfig.Entries} />
