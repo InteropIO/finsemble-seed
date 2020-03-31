@@ -4,6 +4,10 @@ let elements = {};
 let channels = {};
 //reference to query/response responders
 let responderChannels = {};
+//reference to pubSubResponderTopics
+let pubSubResponderTopics = {};
+//reference to pubSubSubscriberTopics
+let pubSubSubscriberTopics = {};
 //reference to linker dataTypes
 let linkerDataTypes = {};
 
@@ -119,9 +123,11 @@ const FSBLReady = () => {
 		elements.qrColumn = document.getElementById("queryResponseCol");
 		elements.linkerHeader = document.getElementById("linkerHeading");
 		elements.linkerColumn = document.getElementById("linkerCol");
+		elements.pubSubHeader = document.getElementById("pubSubHeading");
+		elements.pubSubColumn = document.getElementById("pubSubCol");
 
-		elements.headers = [elements.ltHeader, elements.qrHeader, elements.linkerHeader];
-		elements.columns = [elements.ltColumn, elements.qrColumn, elements.linkerColumn];
+		elements.headers = [elements.ltHeader, elements.qrHeader, elements.linkerHeader, elements.pubSubHeader];
+		elements.columns = [elements.ltColumn, elements.qrColumn, elements.linkerColumn, elements.pubSubColumn];
 
 		//Listen tranmit elements
 		elements.listenersList = document.getElementById("listeners");
@@ -148,6 +154,24 @@ const FSBLReady = () => {
 
 		elements.queryChannel = document.getElementById("queryChannel");
 		elements.queryContent = document.getElementById("queryContent");
+
+		//pub sub elements
+		elements.pubSubRespondersList = document.getElementById("pubSubRespondersList");
+		elements.pubSubSubscribersList = document.getElementById("pubSubSubscribersList");
+
+		elements.pubSubReceivedMessage = document.getElementById("pubSubReceivedMessage");
+		elements.pubSubMessageEnvelope = document.getElementById("pubSubMessageEnvelope");
+		elements.pubSubSenderDetails = document.getElementById("pubSubSenderDetails");
+
+		elements.pubSubSubscriberReceivedMessage = document.getElementById("pubSubSubscriberReceivedMessage");
+
+		elements.pubSubResponderChannel = document.getElementById("pubSubResponderChannel");
+		elements.pubSubSubscriberChannel = document.getElementById("pubSubSubscriberChannel");
+		
+		elements.pubSubPublishChannel = document.getElementById("pubSubPublishChannel");
+		elements.pubSubPublishContent = document.getElementById("pubSubPublishContent");
+
+
 
 		//linker elements
 		elements.dataTypesList = document.getElementById("dataTypes");
@@ -188,7 +212,7 @@ window.listen = () => {
 		channels[channel] = listenHandlerFn;
 		
 		let li = document.createElement("li");
-		li.id = "li_" + channel;
+		li.id = "li_listen_" + channel;
 		li.appendChild(document.createTextNode(channel));
 
 		let removeButton = document.createElement("button");
@@ -212,7 +236,7 @@ window.removeListener = (channel) => {
 	if (channels[channel]) { 
 		FSBL.Clients.RouterClient.removeListener(channel, channels[channel]);
 		
-		let element = document.getElementById("li_" + channel);
+		let element = document.getElementById("li_listen_" + channel);
 		if (element) {
 			elements.listenersList.removeChild(element);
 		}
@@ -267,7 +291,7 @@ window.addResponder = () => {
 		responderChannels[channel] = responseHandlerFn;
 		
 		let li = document.createElement("li");
-		li.id = "li_" + channel;
+		li.id = "li_queryResponse_" + channel;
 		li.appendChild(document.createTextNode(channel));
 
 		let removeButton = document.createElement("button");
@@ -291,7 +315,7 @@ window.removeResponder = (channel) => {
 	if (responderChannels[channel]) { 
 		FSBL.Clients.RouterClient.removeResponder(channel);
 		
-		let element = document.getElementById("li_" + channel);
+		let element = document.getElementById("li_queryResponse_" + channel);
 		if (element) {
 			elements.respondersList.removeChild(element);
 		}
@@ -303,6 +327,121 @@ window.query = () => {
 	FSBL.Clients.RouterClient.query(queryChannel.value, queryContent.value, responseHandlerFn);
 	console.log(`Queried  channel: ${queryChannel.value}\nMessage: ${queryContent.value}`);
 }
+
+
+//-----------------------------------------------------------------------------------------
+//UI functions related to pub/sub
+const pubSubSubscribeHandlerFn = async (err, response) => {
+	if (err) {
+		elements.pubSubSubscriberReceivedMessage.value = "Error: " + JSON.stringify(err, null, 4);
+	} else {
+		elements.pubSubSubscriberReceivedMessage.value = JSON.stringify(response.data, null, 4);	}
+}
+
+const pubSubPublishHandlerFn = async (err, response) => {
+	if (err) {
+		elements.pubSubReceivedMessage.value = "Error: " + JSON.stringify(err, null, 4);
+	} else {
+		elements.pubSubReceivedMessage.value = JSON.stringify(response.data, null, 4);
+		elements.pubSubMessageEnvelope.value = JSON.stringify(response.header, null, 4);
+		let origin = response.header.origin;
+
+		let myClientName = FSBL.Clients.RouterClient.getClientName();
+		let senderDetails = await getSenderDetails(origin);
+		elements.pubSubSenderDetails.value = renderSenderDetails(senderDetails, myClientName, response.header.lastClient);
+
+		//publish on to the pubSub topic
+		response.sendNotifyToAllSubscribers(null, response.data);
+	}
+}
+
+window.addPubSubResponder = () => {
+	let topic = elements.pubSubResponderChannel.value;
+	if (!pubSubResponderTopics[topic]) {
+		FSBL.Clients.RouterClient.addPubSubResponder(topic, { "State": "start" },
+			{
+				publishCallback: pubSubPublishHandlerFn,
+			});
+		pubSubResponderTopics[topic] = pubSubPublishHandlerFn;
+
+		let li = document.createElement("li");
+		li.id = "li_pubSubResponder_" + topic;
+		li.appendChild(document.createTextNode(topic));
+
+		let removeButton = document.createElement("button");
+		removeButton.className = "removeButton";
+		removeButton.textContent = " X ";
+		removeButton.onclick = (e) => {
+			e.preventDefault();
+			window.removePubSubResponder(topic);
+		};
+
+		li.appendChild(removeButton);
+
+		elements.pubSubRespondersList.appendChild(li);
+
+	} else {
+		console.warn(`Already responding to topic '${topic}', ignoring...`);
+	}
+}
+
+window.removePubSubResponder = (topic) => {
+	if (pubSubResponderTopics[topic]) {
+		FSBL.Clients.RouterClient.removePubSubResponder(topic);
+
+		let element = document.getElementById("li_pubSubResponder_" + topic);
+		if (element) {
+			elements.pubSubRespondersList.removeChild(element);
+		}
+		delete pubSubResponderTopics[topic];
+	}
+}
+
+window.pubSubSubscribe = () => {
+	let topic = elements.pubSubSubscriberChannel.value;
+	if (!pubSubSubscriberTopics[topic]) {
+		let subscriberId = FSBL.Clients.RouterClient.subscribe(topic, pubSubSubscribeHandlerFn);
+		pubSubSubscriberTopics[topic] = subscriberId;
+
+		let li = document.createElement("li");
+		li.id = "li_pubSubSubscriber_" + topic;
+		li.appendChild(document.createTextNode(topic));
+
+		let removeButton = document.createElement("button");
+		removeButton.className = "removeButton";
+		removeButton.textContent = " X ";
+		removeButton.onclick = (e) => {
+			e.preventDefault();
+			window.pubSubUnsubscribe(topic);
+		};
+
+		li.appendChild(removeButton);
+
+		elements.listenersList.appendChild(li);
+
+	} else {
+		console.warn(`Already subscribing to pubSub topic '${topic}', ignoring...`);
+	}
+}
+
+window.pubSubUnsubscribe = (topic) => {
+	if (pubSubSubscriberTopics[topic]) {
+		FSBL.Clients.RouterClient.unsubscribe({ topic: topic, subscribeID: pubSubSubscriberTopics[topic] } );
+
+		let element = document.getElementById("li_pubSubSubscriber_" + topic);
+		if (element) {
+			elements.listenersList.removeChild(element);
+		}
+		delete pubSubSubscriberTopics[topic];
+	}
+}
+
+window.pubSubPublish = () => {
+	FSBL.Clients.RouterClient.publish(pubSubPublishChannel.value, pubSubPublishContent.value);
+	console.log(`Transmitted to channel: ${pubSubPublishChannel.value}\nMessage: ${pubSubPublishContent.value}`);
+}
+
+
 
 //-----------------------------------------------------------------------------------------
 //UI functions related to the Linker
@@ -324,7 +463,7 @@ window.linkerSubscribe = () => {
 		linkerDataTypes[dataType] = linkerSubscribeHandlerFn;
 
 		let li = document.createElement("li");
-		li.id = "li_" + dataType;
+		li.id = "li_linker_" + dataType;
 		li.appendChild(document.createTextNode(dataType));
 
 		let removeButton = document.createElement("button");
@@ -348,7 +487,7 @@ window.linkerUnsubscribe = (dataType) => {
 	if (linkerDataTypes[dataType]) {
 		FSBL.Clients.LinkerClient.unsubscribe(dataType);
 
-		let element = document.getElementById("li_" + dataType);
+		let element = document.getElementById("li_linker_" + dataType);
 		if (element) {
 			elements.dataTypesList.removeChild(element);
 		}
@@ -391,6 +530,10 @@ window.displayLinker = () => {
 	displayType(elements.linkerHeader, elements.linkerColumn);
 }
 
+window.displayPubSub = () => {
+	displayType(elements.pubSubHeader, elements.pubSubColumn);
+}
+
 window.clearTransmit = () => {
 	//Listen tranmit elements
 	//elements.listenersList - don't clear listeners just form elements
@@ -419,6 +562,30 @@ window.clearQuery = () => {
 
 	elements.queryChannel.value = "";
 	elements.queryContent.value = "";
+}
+
+window.clearLinkerPublish = () => {
+	elements.linkerReceivedMessage.value = "";
+	elements.linkerMessageEnvelope.value = "";
+	elements.linkerSenderDetails.value = "";
+	elements.linkerDataType.value = "";
+
+	elements.linkerPublishDataType.value = "";
+	elements.linkerPublishContent.value = "";
+}
+
+window.clearPubSub = () => {
+	elements.pubSubReceivedMessage.value = "";
+	elements.pubSubMessageEnvelope.value = "";
+	elements.pubSubSenderDetails.value = "";
+
+	elements.pubSubSubscriberReceivedMessage.value = "";
+
+	elements.pubSubResponderChannel.value = "";
+	elements.pubSubSubscriberChannel.value = "";
+
+	elements.pubSubPublishChannel.value = "";
+	elements.pubSubPublishContent.value = "";
 }
 
 if (window.FSBL && FSBL.addEventListener) {

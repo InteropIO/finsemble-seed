@@ -16,9 +16,10 @@
   <div id="container">
     <div id="bounds"></div>
     <div class="spacer2"></div>
-    <img src="../../assets/img/finsembleDarkBG_noText.png" id="finsembleLogo" height="50">
-    <div class="spacer2"></div>
-    <h1>Message Source Tester</h1>
+    
+	<h1><img src="../../assets/img/finsembleDarkBG_noText.png" id="finsembleLogo" height="25">
+		&nbsp;
+		Message Source Tester</h1>
     <div class="spacer3"></div>
 
     <div id="headings">
@@ -30,10 +31,15 @@
 			<h2>Query/Response</h2>
 		</div>
 
+		<div class="heading" id="pubSubHeading" onclick="window.displayPubSub();">
+			<h2>Pub/Sub</h2>
+		</div>
+
 		<div class="heading" id="linkerHeading" onclick="window.displayLinker();">
 			<h2>Linker</h2>
 		</div>
 
+		
       <!-- <div class="column" id="col3">
         <h2>Pub/Sub</h2>
       </div> -->
@@ -80,7 +86,7 @@
         <textarea class="messageContentArea" id="transmitContent" rows=2></textarea>
       </label>
       <button class="button" id="transmitButton" onclick="window.transmit()">Transmit</button>
-      <button class="button" id="transmitClear" onclick="window.clearTransmit()">Clear</button>
+      <button class="clearbutton" id="transmitClear" onclick="window.clearTransmit()">Clear</button>
       <div class="spacer4"></div>
 
     </div>
@@ -144,10 +150,82 @@
         <textarea class="messageContentArea" id="queryContent" rows=2></textarea>
       </label>
       <button class="button" id="queryButton" onclick="window.query()">Query</button>
-      <button class="button" id="queryClear" onclick="window.clearQuery()">Clear</button>
+      <button class="clearbutton" id="queryClear" onclick="window.clearQuery()">Clear</button>
 
       <div class="spacer4"></div>
-    </div>
+	</div>
+	
+
+	<div class="column hidden" id="pubSubCol">
+		<label class="inputLabel">
+			Topic name
+			<input class="textField" id="pubSubResponderChannel" value="defaultTopic"></input>
+		</label>
+		<button class="button" id="addPubSubResponderButton" onclick="window.addPubSubResponder()">Add Pub/Sub responder</button>
+		<label class="inputLabel">
+			Pub/Sub Responders
+			<ul id="pubSubRespondersList"></ul>
+		</label>
+
+
+		<label class="inputLabel grow">
+			Message received
+			<textarea class="receivedData" id="pubSubReceivedMessage" disabled rows=2></textarea>
+		</label>
+		
+		<label class="inputLabel grow">
+			Message envelope
+			<textarea class="receivedData" id="pubSubMessageEnvelope" disabled rows=8></textarea>
+		</label>
+		
+		<label class="inputLabel grow">
+			Sender details
+			<textarea class="receivedData" id="pubSubSenderDetails" disabled rows=8></textarea>
+		</label>
+
+
+
+
+
+		<div class="spacer4"></div>
+		<hr />
+		<div class="spacer4"></div>
+	
+		<label class="inputLabel">
+			Topic name
+			<input class="textField" id="pubSubSubscriberChannel" value="defaultTopic"></input>
+		</label>
+		<button class="button" id="addPubSubSubscriberButton" onclick="window.pubSubSubscribe()">Add Pub/Sub subscriber</button>
+		<label class="inputLabel">
+			Pub/Sub Subscribers
+			<ul id="pubSubSubscribersList"></ul>
+		</label>
+
+		<label class="inputLabel grow">
+			Message received
+			<textarea class="receivedData" id="pubSubSubscriberReceivedMessage" disabled rows=2></textarea>
+		</label>
+		
+	
+		<div class="spacer4"></div>
+		<hr />
+		<div class="spacer4"></div>
+	
+		<label class="inputLabel">
+			Topic name
+			<input class="textField" id="pubSubPublishChannel" value="defaultTopic"></input>
+		</label>
+	
+		<label class="inputLabel">
+			Message content
+			<textarea class="messageContentArea" id="pubSubPublishContent" rows=2></textarea>
+		</label>
+		<button class="button" id="transmitButton" onclick="window.pubSubPublish()">Publish</button>
+		<button class="clearbutton" id="transmitClear" onclick="window.clearPubSub()">Clear</button>
+		<div class="spacer4"></div>
+	
+	</div>
+
 
 	<div class="column hidden" id="linkerCol">
 		<label class="inputLabel">
@@ -190,17 +268,10 @@
 			<textarea class="messageContentArea" id="linkerPublishContent" rows=2></textarea>
 		</label>
 		<button class="button" id="linkerPublishButton" onclick="window.linkerPublish()">Publish</button>
-		<button class="button" id="linkerPublishClear" onclick="window.clearLinkerPublish()">Clear</button>
+		<button class="clearbutton" id="linkerPublishClear" onclick="window.clearLinkerPublish()">Clear</button>
 		<div class="spacer4"></div>
 	
 	</div>
-
-  
-    <div class="column hidden" id="pubSubCol">
-      <h3>Pub/Sub</h3>
-    </div>
-
-
 
   </div>
 </body>
