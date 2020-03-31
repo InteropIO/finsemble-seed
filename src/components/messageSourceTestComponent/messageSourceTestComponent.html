@@ -26,9 +26,13 @@
         <h2>Listen/Transmit</h2>
       </div>
 
-      <div class="heading" id="queryResponseHeading" onclick="window.displayQueryResponse();">
-        <h2>Query/Response</h2>
-      </div>
+		<div class="heading" id="queryResponseHeading" onclick="window.displayQueryResponse();">
+			<h2>Query/Response</h2>
+		</div>
+
+		<div class="heading" id="linkerHeading" onclick="window.displayLinker();">
+			<h2>Linker</h2>
+		</div>
 
       <!-- <div class="column" id="col3">
         <h2>Pub/Sub</h2>
@@ -145,6 +149,51 @@
       <div class="spacer4"></div>
     </div>
 
+	<div class="column hidden" id="linkerCol">
+		<label class="inputLabel">
+			Data type
+			<input class="textField" id="datatype" value="defaultDataType"></input>
+		</label>
+		<button class="button" id="linkerSubscribeButton" onclick="window.linkerSubscribe()">Subscribe</button>
+		<label class="inputLabel">
+			Data types
+			<ul id="dataTypes"></ul>
+		</label>
+	
+	
+		<label class="inputLabel grow">
+			Message received
+			<textarea class="receivedData" id="linkerReceivedMessage" disabled rows=1></textarea>
+		</label>
+	
+		<label class="inputLabel grow">
+			Message envelope
+			<textarea class="receivedData" id="linkerMessageEnvelope" disabled rows=8></textarea>
+		</label>
+	
+		<label class="inputLabel grow">
+			Sender details
+			<textarea class="receivedData" id="linkerSenderDetails" disabled rows=8></textarea>
+		</label>
+	
+		<div class="spacer4"></div>
+		<hr />
+		<div class="spacer4"></div>
+	
+		<label class="inputLabel">
+			Data type
+			<input class="textField" id="linkerPublishDataType" value="defaultDataType"></input>
+		</label>
+	
+		<label class="inputLabel">
+			Message content
+			<textarea class="messageContentArea" id="linkerPublishContent" rows=2></textarea>
+		</label>
+		<button class="button" id="linkerPublishButton" onclick="window.linkerPublish()">Publish</button>
+		<button class="button" id="linkerPublishClear" onclick="window.clearLinkerPublish()">Clear</button>
+		<div class="spacer4"></div>
+	
+	</div>
 
   
     <div class="column hidden" id="pubSubCol">

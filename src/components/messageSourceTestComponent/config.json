@@ -39,7 +39,8 @@
 					"Window Manager": {
 						"alwaysOnTopIcon": true,
 						"title": "messageSourceTestComponent",
-						"persistWindowState": true
+						"persistWindowState": true,
+						"showLinker": true
 					},
 					"Toolbar": {
 						"iconClass": "messageSourceTestComponent",

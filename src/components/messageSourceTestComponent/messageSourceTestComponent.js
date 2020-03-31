@@ -4,6 +4,9 @@ let elements = {};
 let channels = {};
 //reference to query/response responders
 let responderChannels = {};
+//reference to linker dataTypes
+let linkerDataTypes = {};
+
 
 //-----------------------------------------------------------------------------------------
 //Utility functions for getting details of message senders
@@ -114,9 +117,11 @@ const FSBLReady = () => {
 		elements.ltColumn = document.getElementById("listenTransmitCol");
 		elements.qrHeader = document.getElementById("queryResponseHeading");
 		elements.qrColumn = document.getElementById("queryResponseCol");
+		elements.linkerHeader = document.getElementById("linkerHeading");
+		elements.linkerColumn = document.getElementById("linkerCol");
 
-		elements.headers = [elements.ltHeader, elements.qrHeader];
-		elements.columns = [elements.ltColumn, elements.qrColumn];
+		elements.headers = [elements.ltHeader, elements.qrHeader, elements.linkerHeader];
+		elements.columns = [elements.ltColumn, elements.qrColumn, elements.linkerColumn];
 
 		//Listen tranmit elements
 		elements.listenersList = document.getElementById("listeners");
@@ -143,6 +148,16 @@ const FSBLReady = () => {
 
 		elements.queryChannel = document.getElementById("queryChannel");
 		elements.queryContent = document.getElementById("queryContent");
+
+		//linker elements
+		elements.dataTypesList = document.getElementById("dataTypes");
+		elements.linkerReceivedMessage = document.getElementById("linkerReceivedMessage");
+		elements.linkerMessageEnvelope = document.getElementById("linkerMessageEnvelope");
+		elements.linkerSenderDetails = document.getElementById("linkerSenderDetails");
+		elements.linkerDataType = document.getElementById("datatype");
+
+		elements.linkerPublishDataType = document.getElementById("linkerPublishDataType");
+		elements.linkerPublishContent = document.getElementById("linkerPublishContent");
 
 		window.elements = elements;
 	} catch (e) {
@@ -289,6 +304,62 @@ window.query = () => {
 	console.log(`Queried  channel: ${queryChannel.value}\nMessage: ${queryContent.value}`);
 }
 
+//-----------------------------------------------------------------------------------------
+//UI functions related to the Linker
+const linkerSubscribeHandlerFn = async (data, envelope) => {
+	elements.linkerReceivedMessage.value = JSON.stringify(data, null, 4);
+	elements.linkerMessageEnvelope.value = JSON.stringify(envelope, null, 4);
+	let origin = envelope.header.origin;
+
+	let myClientName = FSBL.Clients.RouterClient.getClientName();
+	let senderDetails = await getSenderDetails(origin);
+	elements.linkerSenderDetails.value = renderSenderDetails(senderDetails, myClientName, envelope.header.lastClient);
+
+}
+
+window.linkerSubscribe = () => {
+	let dataType = elements.linkerDataType.value;
+	if (!linkerDataTypes[dataType]) {
+		FSBL.Clients.LinkerClient.subscribe(dataType, linkerSubscribeHandlerFn);
+		linkerDataTypes[dataType] = linkerSubscribeHandlerFn;
+
+		let li = document.createElement("li");
+		li.id = "li_" + dataType;
+		li.appendChild(document.createTextNode(dataType));
+
+		let removeButton = document.createElement("button");
+		removeButton.className = "removeButton";
+		removeButton.textContent = " X ";
+		removeButton.onclick = (e) => {
+			e.preventDefault();
+			window.linkerUnsubscribe(dataType);
+		};
+
+		li.appendChild(removeButton);
+
+		elements.dataTypesList.appendChild(li);
+
+	} else {
+		console.warn(`Already subscribed to data type '${dataType}', ignoring...`);
+	}
+}
+
+window.linkerUnsubscribe = (dataType) => {
+	if (linkerDataTypes[dataType]) {
+		FSBL.Clients.LinkerClient.unsubscribe(dataType);
+
+		let element = document.getElementById("li_" + dataType);
+		if (element) {
+			elements.dataTypesList.removeChild(element);
+		}
+		delete linkerDataTypes[dataType];
+	}
+}
+
+window.linkerPublish = () => {
+	FSBL.Clients.LinkerClient.publish({ dataType: linkerPublishDataType.value, data: linkerPublishContent.value });
+	console.log(`Transmitted to channel: ${linkerPublishDataType.value}\nMessage: ${linkerPublishContent.value}`);
+}
 
 //-----------------------------------------------------------------------------------------
 //Util functions for controlling which form is displayed
@@ -313,7 +384,11 @@ window.displayListenTransmit = () => {
 }
 
 window.displayQueryResponse = () => {
-	displayType(elements.qrHeader,elements.qrColumn);
+	displayType(elements.qrHeader, elements.qrColumn);
+}
+
+window.displayLinker = () => {
+	displayType(elements.linkerHeader, elements.linkerColumn);
 }
 
 window.clearTransmit = () => {

@@ -1,7 +1,7 @@
 [![Finsemble Logo](https://documentation.chartiq.com/finsemble/styles/img/Finsemble_Logo_Dark.svg)](https://documentation.chartiq.com/finsemble/)
 
 # Message Source Test Component
-This component is designed to help demonstrate how the header returned with Router messages can be used to track back to the source of each message, allowing a receiving component to validate that it comes from an expected source.
+This component is designed to help demonstrate how the header returned with Router and Linker messages can be used to track back to the source of each message, allowing a receiving component to validate that it comes from an expected source.
 
 ## Extracting header information from Router messages
 Router messages are usually delivered via a handler function, e.g. for Listen/Transmit (Bus-style messages):
@@ -64,6 +64,23 @@ const responseHandlerFn = async (err, response) => {
 }
 
 FSBL.Clients.RouterClient.query(queryChannel, queryContent, responseHandlerFn);
+```
+
+and also for Linker messages (note the slightly different arguments to this function):
+```javascript
+const linkerSubscribeHandlerFn = async (data, envelope) => {
+	//Extract the header details and interpret
+	let origin = envelope.header.origin;
+	let myClientName = FSBL.Clients.RouterClient.getClientName();
+	let senderDetails = await getSenderDetails(origin);
+	elements.senderDetails.value = renderSenderDetails(senderDetails, myClientName, response.header.lastClient);
+
+	//do something with the Linker message
+	...
+	
+}
+
+FSBL.Clients.LinkerClient.subscribe(dataType, linkerSubscribeHandlerFn);
 ```
 
 ## Message source analysis utility functions
