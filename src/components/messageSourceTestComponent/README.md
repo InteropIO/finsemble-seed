@@ -126,15 +126,15 @@ let origin = response.header.origin;
 ```
 
 The test component then makes use of the following utility functions in [messageSourceTestComponent.js](./messageSourceTestComponent.js) to gather more info on that origin:
-- `clientNameToWindowName(clientName)`: 
+- [`clientNameToWindowName(clientName)`](https://github.com/ChartIQ/finsemble-seed/blob/9655e552bdc39cc37c00b4d39549578ff97a7cfa/src/components/messageSourceTestComponent/messageSourceTestComponent.js#L17-L24): 
 RouterClients are named via their window name (itself usually, if not always, derived from the componentType) with 'RouterClient/' prepended. This function simply strips off the 'RouterClient.' and returns the window name.
-- `windowNameToDescriptor(windowName)`: 
+- [`windowNameToDescriptor(windowName)`](https://github.com/ChartIQ/finsemble-seed/blob/9655e552bdc39cc37c00b4d39549578ff97a7cfa/src/components/messageSourceTestComponent/messageSourceTestComponent.js#L26-L39): 
 Uses the Finsemble Launcher API to retrieve an activeDescriptor object for a windowName. The activeDescriptor contains a variety of information about a window, including its componentType (`windowDescriptor.componentType`) and the URL it was spawned with (`windowDescriptor.url`). The URL it was spawned with is important as the `LauncherClient` allows a URL to be overridden when spawning a component, e.g. `FSBL.Clients.LauncherClient.spawn("someComponentType, {url: someURL})`. 
-- `componentTypeToConfiguration(componentType)`: 
+- [`componentTypeToConfiguration(componentType)`](https://github.com/ChartIQ/finsemble-seed/blob/9655e552bdc39cc37c00b4d39549578ff97a7cfa/src/components/messageSourceTestComponent/messageSourceTestComponent.js#L66-L74): 
 The componentType for the sending window extract from the windowDescriptor can also be used to retrieve the original configuration for the component, which includes its configured URL (`componentConfig.window.url`).
-- `windowIdentifierToCurrentURL(windowIdentifier)`: 
+- [`windowIdentifierToCurrentURL(windowIdentifier)`](https://github.com/ChartIQ/finsemble-seed/blob/9655e552bdc39cc37c00b4d39549578ff97a7cfa/src/components/messageSourceTestComponent/messageSourceTestComponent.js#L41-L64): 
 Component instances are often referred to in Finsemble API calls via a windowIdentifier. A windowIdentifier is an object with both windowName and componentType properties (e.g. `{ "windowName": "<windowName>", "componentType": "<componentType>" };`). This function function uses a windowIdentifier to retrieve an options object and then return the current URL of the window, which can be used to determine if the window has navigated to a different URL since it was spawned. 
-- `getSenderDetails(origin)`: 
+- [`getSenderDetails(origin)`](https://github.com/ChartIQ/finsemble-seed/blob/9655e552bdc39cc37c00b4d39549578ff97a7cfa/src/components/messageSourceTestComponent/messageSourceTestComponent.js#L76-L102): 
 Utility function that makes uses of the above functions to gather info on the message origin and return it.
 
 For more information on ComponentTypes, WindowNames and WindowIdentifiers, please see the [Component Types and Window names tutorial](https://documentation.chartiq.com/finsemble/tutorial-ComponentTypesAndWindowNames.html).
