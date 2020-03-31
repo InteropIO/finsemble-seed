@@ -1,7 +1,7 @@
 [![Finsemble Logo](https://documentation.chartiq.com/finsemble/styles/img/Finsemble_Logo_Dark.svg)](https://documentation.chartiq.com/finsemble/)
 
 # Message Source Test Component
-This component is designed to help demonstrate how the header returned with ROuter messages can be used to track back to the source of each message, allowing a receiving component to validate that it comes from an expected source.
+This component is designed to help demonstrate how the header returned with Router messages can be used to track back to the source of each message, allowing a receiving component to validate that it comes from an expected source.
 
 ## Extracting header information from Router messages
 Router messages are usually delivered via a handler function, e.g. for Listen/Transmit (Bus-style messages):
