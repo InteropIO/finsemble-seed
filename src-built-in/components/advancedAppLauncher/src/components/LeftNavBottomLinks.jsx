@@ -1,39 +1,18 @@
 import React from 'react'
-import _get from 'lodash.get';
 import { getStore } from '../stores/LauncherStore'
+
+
+const bottomEntries = [
+	{ name: "New App", icon: "ff-new-workspace", click: "showAddAppForm" },
+	//{ name: 'New Dashboard', icon: 'ff-dashboard-new' },
+	// { name: "App Catalog", icon: "ff-list", click: "openAppMarket" }
+];
 
 export default class LeftNavBottomLinks extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {
-			bottomEntries: [
-				{ name: "New App", icon: "ff-new-workspace", click: "showAddAppForm" },
-				//{ name: 'New Dashboard', icon: 'ff-dashboard-new' },
-			]
-		}
 	}
-
-	componentWillMount() {
-		// If user configures the advanced app launcher to use the app catalog, add app catalog button to the bottom entries of the
-		// advanced app launcher menu.
-		finsembleWindow.getOptions((_, opts) => {
-			const useAppCatalog = _get(opts, 'customData.component.useAppCatalog');
-			if (useAppCatalog) {
-				this.setState((prevState) => ({
-					bottomEntries: [
-						...prevState.bottomEntries,
-						{
-							name: "App Catalog",
-							icon: "ff-list",
-							click: "openAppMarket"
-						}
-					]
-				}));
-			}
-		});
-	}
-
 	/**
 	 * Sets isFormVisible to true in store so that main component
 	 * renders the AddNewAppForm component or removes it
@@ -52,7 +31,7 @@ export default class LeftNavBottomLinks extends React.Component {
 		return (
 			<div className="bottom">
 				{
-					this.state.bottomEntries.map((entry, index) => {
+					bottomEntries.map((entry, index) => {
 						let handler = entry.click ? this[entry.click] || this.props[entry.click] : Function.prototype;
 						let className = "ff-plus-2 complex-menu-action";
 						return (
