@@ -3,8 +3,10 @@
 # Message Source Test Component
 This component is designed to help demonstrate how the header returned with Router and Linker messages can be used to track back to the source of each message, allowing a receiving component to validate that it comes from an expected source.
 
-## Extracting header information from Router messages
-Router messages are usually delivered via a handler function, e.g. for Listen/Transmit (Bus-style messages):
+## Extracting header information from Finsemble API messages
+Router messages are usually delivered via a handler function, passed when the receiver registered with teh relevant API. These handler functions will be passed both the message data and message envelope (header) inidicating the source of the message, allow you to gather more info about that source. 
+
+### RouterClient Listen/Transmit (Bus-style messages)
 
 ```javascript
 const listenHandlerFn = async (err, response) => {
@@ -24,8 +26,10 @@ const listenHandlerFn = async (err, response) => {
 
 FSBL.Clients.RouterClient.addListener(channel, listenHandlerFn);
 ```
-Note that the handler function is passed a `response` value which includes both `header` and `data` fields. The data field carries the message content while the header includes the source information that we wish to analyze. The same is true for messages to or from Query responders:
+Note that the handler function is passed a `response` value which includes both `header` and `data` fields. The data field carries the message content while the header includes the source information that we wish to analyze. 
 
+### RouterClient Query/Response (Used to create local APIs)
+Query/Response messaging delivers queries to query responders registed for a particular channel name. It is possible to gather information on the source of a particular query:
 ```javascript
 const queryHandlerFn = async (err, queryMessage) => {
 	if (err) {
@@ -45,8 +49,7 @@ const queryHandlerFn = async (err, queryMessage) => {
 
 FSBL.Clients.RouterClient.addResponder(channel, queryHandlerFn);
 ```
-
-And for the query itself:
+and validate where the response was sent from (although i iss worth noting that Finsemble will only permit a single responder to be registered for each query channel name):
 ```javascript
 const responseHandlerFn = async (err, response) => {
 	if (err) {
@@ -66,7 +69,8 @@ const responseHandlerFn = async (err, response) => {
 FSBL.Clients.RouterClient.query(queryChannel, queryContent, responseHandlerFn);
 ```
 
-and also for Linker messages (note the slightly different arguments to this function):
+### LinkerClient (User controlled messaging via color channels)
+The linker API is very similar to RouterClient listen/transmit, except that the user has to link components by adding them to the same color channels for messages to be delivered between them.
 ```javascript
 const linkerSubscribeHandlerFn = async (data, envelope) => {
 	//Extract the header details and interpret
@@ -82,6 +86,38 @@ const linkerSubscribeHandlerFn = async (data, envelope) => {
 
 FSBL.Clients.LinkerClient.subscribe(dataType, linkerSubscribeHandlerFn);
 ```
+
+_N.B. the arguments differ slightly from the RouterClient APIs._
+
+### RouterClient Pub/Sub (Stateful PubSub topics)
+The Finsemble RouterClient's PubSub support requires that a PubSub responder is registered begfore it will receive and deliver PubSub messages. This is achieved via the [`RouterClient.addPubSubResponder()`](https://documentation.chartiq.com/finsemble/IRouterClient.html#addPubSubResponder) API call. This API call has a number of optional callback arguments which all functions to be run when clients publish to, subscribe to or unsubscribe from the topic, allowing for fine control over who can listen to the topic and who can publish to it. 
+
+```javascript
+const pubSubPublishHandlerFn = async (err, response) => {
+	if (err) {
+		elements.pubSubReceivedMessage.value = "Error: " + JSON.stringify(err, null, 4);
+	} else {
+		elements.pubSubReceivedMessage.value = JSON.stringify(response.data, null, 4);
+		elements.pubSubMessageEnvelope.value = JSON.stringify(response.header, null, 4);
+		let origin = response.header.origin;
+		let senderDetails = await getSenderDetails(origin);
+
+		//decide whether to allow the message to be published here
+		...
+
+		//publish on to the pubSub topic
+		response.sendNotifyToAllSubscribers(null, response.data);
+	}
+}
+
+let initialTopicState = { "State": "start" };
+FSBL.Clients.RouterClient.addPubSubResponder(topic, initialTopicState,
+	{
+		publishCallback: pubSubPublishHandlerFn,
+	});
+```
+Handlers can be applied for subscribe and unsubscribe operations as well, controlling who can subscribe and unsubscribe from the topic. See the [RouterClient tutorial](https://documentation.chartiq.com/finsemble/tutorial-TheRouter.html#third-supported-model-pubsub) and [API docs](https://documentation.chartiq.com/finsemble/IRouterClient.html#addPubSubResponder) for more info.
+
 
 ## Message source analysis utility functions
 As per the examples above, the origin RouterClient name for a message is easily retrieved from the header:
