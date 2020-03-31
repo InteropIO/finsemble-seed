@@ -5,45 +5,46 @@ let channels = {};
 //reference to query/response responders
 let responderChannels = {};
 
-//Util functions for getting details of message senders
+//-----------------------------------------------------------------------------------------
+//Utility functions for getting details of message senders
 const clientNameToWindowName = (clientName) => {
 	let index = clientName.indexOf(".");
 	if (index > -1) {
-		return clientName.substring(index+1);
+		return clientName.substring(index + 1);
 	} else {
 		return clientName;
 	}
-}
+};
 
-const  windowNameToDescriptor = async (windowName) => {
+const windowNameToDescriptor = async (windowName) => {
 	let resp = await FSBL.Clients.LauncherClient.getActiveDescriptors();
 	if (resp.err) {
 		console.error("Failed to retrieve active descriptors! Error: ", resp.err);
 		return null;
-	} else { 
-		if (resp.data[windowName]){
+	} else {
+		if (resp.data[windowName]) {
 			return resp.data[windowName];
 		} else {
 			console.error(`No active descriptor for windowName '${windowName}'`, resp.err);
 			return null;
 		}
 	}
-}
+};
 
 const windowIdentifierToCurrentURL = async (windowIdentifier) => {
-	try{
+	try {
 		let resp = await FSBL.FinsembleWindow.getInstance(windowIdentifier);
 		if (resp.err) {
 			console.error("Failed to retrieve Finsemble Window! windowIdentifier: ", windowIdentifier, "Error: ", resp.err);
 			return null;
-		} else { 
+		} else {
 			return await new Promise(
 				(resolve, reject) => {
 					resp.wrap.getOptions((err, options) => {
 						if (err) {
 							reject(err);
 						} else {
-							resolve (options.url);
+							resolve(options.url);
 						}
 					});
 				}
@@ -51,22 +52,21 @@ const windowIdentifierToCurrentURL = async (windowIdentifier) => {
 		}
 	} catch (err) {
 		console.error("Error occurred while trying to establish current URL! windowIdentifier: ", windowIdentifier, "Error: ", err);
-			return null;
+		return null;
 	}
-}
+};
 
 const componentTypeToConfiguration = async (componentType) => {
 	let resp = await FSBL.Clients.LauncherClient.getComponentDefaultConfig(componentType);
 	if (resp.err) {
 		console.error(`Failed to retrieve config for component type '${componentType}'! Error: `, resp.err);
 		return null;
-	} else { 
+	} else {
 		return resp.data;
 	}
-}
+};
 
-const getSenderDetails = async (origin, lastClient) => {
-	let myClientName = FSBL.Clients.RouterClient.getClientName();
+const getSenderDetails = async (origin) => {
 	let windowName = clientNameToWindowName(origin);
 	let windowDescriptor = await windowNameToDescriptor(windowName);
 	let componentType = null, componentConfig = null, configuredUrlOrPath = null, spawnedWithUrl = null, currentUrl = null;
@@ -75,25 +75,37 @@ const getSenderDetails = async (origin, lastClient) => {
 		spawnedWithUrl = windowDescriptor.url;
 		componentConfig = componentType ? await componentTypeToConfiguration(componentType) : null;
 		if (componentConfig) {
-			configuredUrlOrPath =  componentConfig.window.url ? componentConfig.window.url : componentConfig.window.path;
-		} else { 
-			configuredUrlOrPath = null; 
+			configuredUrlOrPath = componentConfig.window.url ? componentConfig.window.url : componentConfig.window.path;
+		} else {
+			configuredUrlOrPath = null;
 		}
 	}
-	if (componentType && windowName){
-		currentUrl = await windowIdentifierToCurrentURL({componentType: componentType, windowName: windowName});
+	if (componentType && windowName) {
+		currentUrl = await windowIdentifierToCurrentURL({ componentType: componentType, windowName: windowName });
 	}
 
-	return `last client:         ${lastClient}
-origin:              ${origin == myClientName ? "here" : origin }
-windowName:          ${windowName}
-componentType:       ${componentType}
-config URL Or path:  ${configuredUrlOrPath}
-spawned with URL:    ${spawnedWithUrl}
-current URL:         ${currentUrl}
-	`;
-}
+	return {
+		origin,
+		windowName,
+		componentType,
+		configuredUrlOrPath,
+		spawnedWithUrl,
+		currentUrl
+	};
+};
 
+const renderSenderDetails = (senderDetails, myClientName, lastClient) => {
+	return `last client:         ${senderDetails.lastClient}
+origin:              ${senderDetails.origin == myClientName ? "here" : senderDetails.origin}
+windowName:          ${senderDetails.windowName}
+componentType:       ${senderDetails.componentType}
+config URL Or path:  ${senderDetails.configuredUrlOrPath}
+spawned with URL:    ${senderDetails.spawnedWithUrl}
+current URL:         ${senderDetails.currentUrl}
+	`;
+};
+
+//-----------------------------------------------------------------------------------------
 //Ready function that sets up the form
 const FSBLReady = () => {
 	try {
@@ -138,6 +150,7 @@ const FSBLReady = () => {
 	}
 }
 
+//-----------------------------------------------------------------------------------------
 //UI functions related to listen/transmit
 const  listenHandlerFn = async (err, response) => {
 	if (err) {
@@ -147,7 +160,9 @@ const  listenHandlerFn = async (err, response) => {
 		elements.messageEnvelope.value = JSON.stringify(response.header, null, 4);
 		let origin = response.header.origin;
 		
-		elements.senderDetails.value = await getSenderDetails(origin, response.header.lastClient);
+		let myClientName = FSBL.Clients.RouterClient.getClientName();
+		let senderDetails = await getSenderDetails(origin);
+		elements.senderDetails.value = renderSenderDetails(senderDetails, myClientName, response.header.lastClient);
 	}
 }
 
@@ -195,9 +210,9 @@ window.transmit = () => {
 	console.log(`Transmitted to channel: ${transmitChannel.value}\nMessage: ${transmitContent.value}`);
 }
 
-
+//-----------------------------------------------------------------------------------------
 //UI functions related to query/response
-const  queryHandlerFn = async (err, queryMessage) => {
+const queryHandlerFn = async (err, queryMessage) => {
 	if (err) {
 		elements.qrReceivedQuery.value = "Error: " + JSON.stringify(err, null, 4);
 		
@@ -206,7 +221,9 @@ const  queryHandlerFn = async (err, queryMessage) => {
 		elements.qrQueryEnvelope.value = JSON.stringify(queryMessage.header, null, 4);
 		let origin = queryMessage.header.origin;
 
-		elements.qrQuerySenderDetails.value = await getSenderDetails(origin, queryMessage.header.lastClient);
+		let myClientName = FSBL.Clients.RouterClient.getClientName();
+		let senderDetails = await getSenderDetails(origin);
+		elements.qrQuerySenderDetails.value = renderSenderDetails(senderDetails, myClientName, queryMessage.header.lastClient);
 
 		//respond to query
 		var response="Back at ya: " + JSON.stringify(queryMessage.data); // Responses can be objects or strings
@@ -214,7 +231,7 @@ const  queryHandlerFn = async (err, queryMessage) => {
 	}
 }
 
-const  responseHandlerFn = async (err, response) => {
+const responseHandlerFn = async (err, response) => {
 	if (err) {
 		elements.qrReceivedResponse.value = "Error: " + JSON.stringify(err, null, 4);
 	} else {
@@ -223,9 +240,9 @@ const  responseHandlerFn = async (err, response) => {
 	//render results anyway
 	elements.qrResponseEnvelope.value = JSON.stringify(response.header, null, 4);
 	let origin = response.header.origin;
-	
-
-	elements.qrResponseSenderDetails.value = await getSenderDetails(origin, response.header.lastClient);
+	let myClientName = FSBL.Clients.RouterClient.getClientName();
+	let senderDetails = await getSenderDetails(origin);
+	elements.qrResponseSenderDetails.value = renderSenderDetails(senderDetails, myClientName, response.header.lastClient);
 }
 
 window.addResponder = () => {
@@ -273,7 +290,7 @@ window.query = () => {
 }
 
 
-
+//-----------------------------------------------------------------------------------------
 //Util functions for controlling which form is displayed
 const displayType = (heading, column) => {
 	elements.headers.forEach(aHeader => {
@@ -309,8 +326,6 @@ window.clearTransmit = () => {
 
 	elements.transmitChannel.value = "";
 	elements.transmitContent.value = "";
-
-	
 }
 
 window.clearQuery = () => {
