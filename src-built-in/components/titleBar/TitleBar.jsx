@@ -3,10 +3,7 @@
  * All rights reserved.
  */
 import React from "react";
-// DH 4/1/2020 This is not ideal - we should import from
-// hooks, not /hooks/useTitleBar; however, doing so breaks it.
-// I will be investigating this, and we will fix before release.
-import { useTitleBar } from "@chartiq/finsemble-ui/react/hooks/useTitleBar";
+import { useTitleBar } from "@chartiq/finsemble-ui/react/hooks";
 import { AlwaysOnTopButton, DockingButton, LinkerButton, ShareButton, mountTitleBar, TabRegion, CloseButton, MaximizeButton, MinimizeButton } from "@chartiq/finsemble-ui/react/components";
 import "../../../assets/css/finsemble.css";
 import "../../../assets/css/_titleBar.css";
