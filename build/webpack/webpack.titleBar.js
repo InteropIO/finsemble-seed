@@ -17,7 +17,7 @@ if (env === "production") {
     plugins.push(new UglifyJsPlugin());
 }
 
-var titleBarPath  = "./src-built-in/components/titlebar/titlebarLoader.js";
+const titleBarPath  = "./src-built-in/components/titlebar/titlebarLoader.js";
 module.exports = {
     devtool: 'source-map',
     entry: {
