@@ -90,7 +90,7 @@ FSBL.Clients.LinkerClient.subscribe(dataType, linkerSubscribeHandlerFn);
 _N.B. the arguments differ slightly from the RouterClient APIs._
 
 ### RouterClient Pub/Sub (Stateful PubSub topics)
-The Finsemble RouterClient's PubSub support requires that a PubSub responder is registered begfore it will receive and deliver PubSub messages. This is achieved via the [`RouterClient.addPubSubResponder()`](https://documentation.chartiq.com/finsemble/IRouterClient.html#addPubSubResponder) API call. This API call has a number of optional callback arguments which all functions to be run when clients publish to, subscribe to or unsubscribe from the topic, allowing for fine control over who can listen to the topic and who can publish to it. 
+The Finsemble RouterClient's PubSub support requires that a PubSub responder is registered before it will receive and deliver PubSub messages. This is achieved via the [`RouterClient.addPubSubResponder()`](https://documentation.chartiq.com/finsemble/IRouterClient.html#addPubSubResponder) API call. This API call has a number of optional callback arguments which, if supplied, are run when clients publish to, subscribe to or unsubscribe from the topic, allowing for fine control over who can listen to the topic and who can publish to it. In the below example we supply the publishCallback, allowing us to process messages and determine their source before they are able to update the PubSub state and notify subscribers:
 
 ```javascript
 const pubSubPublishHandlerFn = async (err, response) => {
