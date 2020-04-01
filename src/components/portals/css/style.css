@@ -1,0 +1,177 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #03060a;
+  color: #6884a0;
+  font-size: 12px;
+  font-family: roboto, Arial, Helvetica, sans-serif;
+}
+
+h2,
+h3 {
+  margin-bottom: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+table thead td {
+  border-width: 1px 0 1px 0;
+  border-color: #0f2435;
+  border-style: solid;
+  font-weight: bold;
+  padding:3px;
+}
+
+tr:nth-child(even) {
+  background: #0e161a
+}
+
+tr:nth-child(odd) {
+  background: #090f11
+}
+
+table tr td {
+  height: 30px;
+  vertical-align: middle;
+  padding: 3px;
+}
+
+table td span {
+  width: 60px;
+  padding: 2px 5px;
+}
+
+.down {
+  animation: flash 4s
+}
+
+.down,
+.up {
+  display: inline-block;
+  border-radius: 2px;
+  background: none
+}
+
+.up {
+  animation: flash1 4s
+}
+
+@keyframes flash {
+  10%,
+  to {
+    color: #fff;
+    background-color: rgb(207, 40, 40)
+  }
+}
+
+@keyframes flash1 {
+  10%,
+  to {
+    color: #fff;
+    background-color: #136d45
+  }
+}
+
+.big-number span {
+  display: block;
+  font-size: 16px;
+  text-align: center;
+  padding: 5px 0;
+}
+
+span.high,
+span.medium {
+  display: inline-block;
+  padding: 3px;
+  border-radius: 5px;
+  text-align: center;
+  color: white;
+}
+
+span.high {
+  background-color: rgb(180, 55, 55);
+}
+
+span.medium {
+  background-color: rgb(212, 126, 39);
+}
+
+#root {
+  padding-top: 10px;
+}
+
+.row {
+  display: flex;
+}
+
+.col {
+  border: 1px solid #0b1f2f;
+  position: relative;
+  flex: 1;
+  margin: 7px .5rem .5rem 0;
+}
+
+.col:first-child {
+  margin-left: .5rem;
+}
+
+.col i {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  font-size: 10px;
+  cursor: pointer;
+}
+.checkbox-row {
+  margin: 5px 0;
+}
+.checkbox-row input {
+  margin-right: 5px;
+}
+.row.controls {
+  justify-content: flex-end;
+  margin: 7px;
+}
+.control-button {
+  padding: 5px;
+  background-color: rgb(8, 74, 150);
+  margin: 3px;
+  border-radius: 2px;
+  color: White;
+  cursor: pointer;
+}
+pre {
+  color: #ccc;
+  display: block;
+  padding: 4px;
+  margin: 7px;
+  border: 1px solid rgb(23, 24, 27);
+}
+
+.card-title {
+  cursor: grab;
+  width: 100%;
+  padding: 4px;
+  background-color: #0b1f2f;
+  color: var(--titlebar-active-font-color);
+}
+
+.portal .card-title {
+  cursor: default;
+}
+.card {
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+.single-ticker, .enabled-instruments {
+  padding: 7px;
+}

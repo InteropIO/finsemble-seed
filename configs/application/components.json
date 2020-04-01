@@ -1,6 +1,46 @@
 {
 	"comment": "Sample component configuration",
 	"components": {
+		"React portals": {
+			"window": {
+				"url": "$applicationRoot/components/portals/index.html",
+				"affinity": "workspaceComponents",
+				"frame": false,
+				"resizable": true,
+				"autoShow": true,
+				"top": "center",
+				"left": "center",
+				"width": 800,
+				"height": 559
+			},
+			"component": {
+				"displayName": "React portals POC",
+				"spawnOnStartup": false
+			},
+			"foreign": {
+				"services": {
+					"windowService": {
+						"allowSnapping": true,
+						"allowGrouping": true,
+						"allowAutoArrange": true,
+						"allowMinimize": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"showLinker": true,
+						"FSBLHeader": true,
+						"persistWindowState": true
+					},
+					"Toolbar": {
+						"iconClass": "ff-component"
+					}
+				}
+			}
+		},
 		"Welcome Component": {
 			"window": {
 				"url": "$applicationRoot/components/welcome/welcome.html",
