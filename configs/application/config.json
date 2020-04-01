@@ -80,10 +80,10 @@
 			"undockDisbandsEntireGroup": false,
 			"fillHolesOnUndock": true,
 			"tabbing": {
-				"enabled": true
+				"enabled": false
 			},
 			"tiling": {
-				"enabled": true
+				"enabled": false
 			}
 		},
 		"logger": {
