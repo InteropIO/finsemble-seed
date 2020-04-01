@@ -17,16 +17,4 @@ function init() {
 			//console.log("failed to launch docs");
 		});
 	}
-	FSBL.Clients.DragAndDropClient.setEmitters({
-		emitters: [
-			{
-				type: "symbol",
-				data: {}
-			},
-			{
-				type: "chartiq.chart",
-				data: {}
-			}
-		]
-	});
 }
