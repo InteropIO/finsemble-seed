@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Popout } from "./Popout"
+import { Tearout } from "./Tearout"
 import { EnableDisableSymbols } from "./EnableDisableSymbols"
 import { Ticker } from "./Ticker"
 import '../../../../assets/css/finsemble.css'
@@ -45,30 +45,29 @@ export const App = () => {
                 value: generateTick(state.symbols)
             })
        }, 800)
-
     }, [])
     return (
         <AppContext.Provider value={{ state, dispatch }}>
             <div className="row">
-                <Popout id="id1" width={400} height={200}>
-                   <Ticker />
-                </Popout>
-                <Popout id="id2" width={300}>
+                <Tearout id="id1" width={400} height={200}>
+                     <Ticker />
+                </Tearout>
+                <Tearout id="id2" width={300}>
                     <SingleTicker item={state.symbols[0]} />
-                </Popout>
+                </Tearout>
             </div>
             <div className="row">
-                <Popout id="id3" width={300}>
+                <Tearout id="id3" width={300}>
                     <SingleTicker item={state.symbols[1]} />
-                </Popout>
-                <Popout id="id4" width={200}>
+                </Tearout>
+                <Tearout id="id4" width={200}>
                      <EnableDisableSymbols />
-                </Popout>
+                </Tearout>
             </div>
             <div className="row">
-                <Popout id="5" width={600}>
+                <Tearout id="5" width={600}>
                     <Calendar />
-                </Popout>
+                </Tearout>
             </div>
         </AppContext.Provider>
     )

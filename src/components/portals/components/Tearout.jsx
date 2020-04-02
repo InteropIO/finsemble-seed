@@ -6,7 +6,7 @@ import { ControlButtons } from "./ControlButtons"
 
 import { getMousePosition } from "../helpers"
 
-export const Popout = ({ id, children, width }) => {
+export const Tearout = ({ id, children, width }) => {
     const passedWidth = width
     const { state, dispatch } = useContext(AppContext)
     const poppedOut = state.popouts[id]

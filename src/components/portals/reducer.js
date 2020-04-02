@@ -3,7 +3,6 @@
  */
 export const initialState = {
     childWindows: {},
-    interval: 400,
     popouts: {},
     enabled: ['EURUSD', 'USDCAD', 'USDGBP'],
     symbols: [
