@@ -1,3 +1,6 @@
+/**
+ * Initial state with dummy data
+ */
 export const initialState = {
     childWindows: {},
     interval: 400,
@@ -16,11 +19,7 @@ export const reducer = (state, action) => {
     if (state.isReloading) return state;
     let nextState
     switch (action.type) {
-        case 'interval':
-            nextState = Object.assign({}, state)
-            nextState.interval = action.value
-            return nextState
-        case 'add':
+        case 'popout':
             nextState = Object.assign({}, state)
             nextState.popouts[action.value.id] = action.value
             return nextState
@@ -28,6 +27,7 @@ export const reducer = (state, action) => {
             nextState = Object.assign({}, state)
             delete nextState.popouts[action.value.id]
             return nextState
+            // Restores the application state
         case 'restore':
             return action.value
         case 'ticks':
@@ -53,6 +53,8 @@ export const reducer = (state, action) => {
             typeof FSBL !== "undefined" && FSBL.Clients.WindowClient.setComponentState({ field: 'store', value: safeState });
             nextState.childWindows = childWindows;
             return nextState;
+            // Store a reference to all windows open via window.open
+            // These are the windows that contain a react portal
         case 'addchildwindow':
             nextState = Object.assign({}, state);
             nextState.childWindows[action.value.id] = action.value.childWindow;

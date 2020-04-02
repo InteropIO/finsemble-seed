@@ -3,10 +3,9 @@ import * as ReactDOM from "react-dom";
 import { AppContext } from "./App"
 import { useContext, useState, useEffect } from "react"
 import { injectCSS } from "../copyCSS"
+import { isNullish, getParentWindowBounds } from "../helpers"
+
 let nextTop = 50
-const isNullish = (thing) => {
-    return thing === null || typeof (thing) === "undefined";
-}
 
 export const Portal = ({ children, id, customWidth = 550, customHeight = 210 }) => {
     const { state, dispatch } = useContext(AppContext)
@@ -14,18 +13,6 @@ export const Portal = ({ children, id, customWidth = 550, customHeight = 210 }) 
     const [element, setElement] = useState();
     // The external window where our menu content live
     let childWindow
-    const getParentWindowBounds = async () => {
-        if (typeof FSBL !== "undefined") {
-            const { data } = await finsembleWindow.getBounds();
-            return data;
-        }
-        return {
-            top: window.screenTop,
-            left: window.screenLeft,
-            width: window.outerWidth,
-            height: window.outerHeight
-        }
-    }
     const initWindow = async () => {
         const containerDiv = document.createElement("div");
         containerDiv.classList = "portal";
@@ -50,7 +37,7 @@ export const Portal = ({ children, id, customWidth = 550, customHeight = 210 }) 
 
         // sets the intial bounds
         dispatch({
-            type: 'add',
+            type: 'popout',
             value: {
                 id,
                 top,
@@ -59,6 +46,7 @@ export const Portal = ({ children, id, customWidth = 550, customHeight = 210 }) 
                 height
             }
         });
+        // Save state to persist it on workspace reloads
         dispatch({ type: 'persistState' })
         childWindow.document.body.appendChild(containerDiv);
         setElement(containerDiv);
@@ -82,7 +70,7 @@ export const Portal = ({ children, id, customWidth = 550, customHeight = 210 }) 
             })
             tearoutFinsembleWindow.addEventListener('bounds-change-end', (event) => {
                 dispatch({
-                    type: 'add',
+                    type: 'popout',
                     value: {
                         id,
                         ...event.data
@@ -91,8 +79,12 @@ export const Portal = ({ children, id, customWidth = 550, customHeight = 210 }) 
                 dispatch({ type: 'persistState' });
             })
         })
-        // Copy css from parent to child window
+        /**
+         * injectCSS will copy all embeded css from main application
+         * window to all child windows
+         */
         injectCSS(childWindow)
+        // Make sure that next popout doesn't overlay on and cover previous one
         nextTop = nextTop + 40
     }
 
