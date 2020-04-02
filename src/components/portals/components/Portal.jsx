@@ -4,6 +4,10 @@ import { AppContext } from "./App"
 import { useContext, useState, useEffect } from "react"
 import { injectCSS } from "../copyCSS"
 let nextTop = 50
+const isNullish = (thing) => {
+    return thing === null || typeof (thing) === "undefined";
+}
+
 export const Portal = ({ children, id, customWidth = 550, customHeight = 210 }) => {
     const { state, dispatch } = useContext(AppContext)
     // Container div for React portal
@@ -16,10 +20,11 @@ export const Portal = ({ children, id, customWidth = 550, customHeight = 210 }) 
         const { data: parentWindowBounds } = await finsembleWindow.getBounds();
         // Open the external window.
         const bounds = state.popouts[id]
-        const width = bounds.width || customWidth
-        const height = bounds.height || customHeight
-        const top = bounds.top || nextTop
-        const left = bounds.left || (parentWindowBounds.left - bounds.width)
+        const width = isNullish(bounds.width) ? customWidth : bounds.width;
+        const height = isNullish(bounds.height) ? customHeight : bounds.height;
+        const top = isNullish(bounds.top) ? nextTop : bounds.top;
+        // put the window butted up to the left edge of the parent if the left bound is nullish
+        const left = isNullish(bounds.left) ? (parentWindowBounds.left - bounds.width) : bounds.left;
         childWindow = window.open(undefined, undefined, `width=${width},height=${height},top=${top},left=${left}`);
         // Allows us to access the childWindow outside of the portal. Used
         // in the control panel when the window is popped out.
