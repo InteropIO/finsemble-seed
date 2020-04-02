@@ -43,7 +43,7 @@ export const Popout = ({ id, children, width }) => {
     const renderDOM = () => {
         return (
             <div draggable={!poppedOut} onDragEnd={dragOut} className="col">
-                {!poppedOut && <i title="Pop out" className="ff-chat-popout" onClick={popOut}></i>}
+                {!poppedOut && <i title="Pop out" className="ff-chat-popout" onClick={() => { popOut(); }}></i>}
                 {children}
             </div>
         )

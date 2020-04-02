@@ -167,10 +167,6 @@ pre {
 .portal .card-title {
   cursor: default;
 }
-.card {
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
-}
 
 .single-ticker, .enabled-instruments {
   padding: 7px;

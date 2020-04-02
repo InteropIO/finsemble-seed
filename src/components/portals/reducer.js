@@ -50,6 +50,7 @@ export const reducer = (state, action) => {
             // can't persist childWindow; it's a reference to window.open
             const safeState = Object.assign({}, nextState);
             delete safeState.childWindows;
+            debugger
             typeof FSBL !== "undefined" && FSBL.Clients.WindowClient.setComponentState({ field: 'store', value: safeState });
             nextState.childWindows = childWindows;
             return nextState;
