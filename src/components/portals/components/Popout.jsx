@@ -22,9 +22,10 @@ export const Popout = ({ id, children, width }) => {
                     resolve(position);
                 });
             } else {
+                debugger
                 resolve({
-                    top: e.clientY,
-                    left: e.clientX
+                    top: e.screenY,
+                    left: e.screenX
                 });
             }
 
