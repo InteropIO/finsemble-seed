@@ -91,21 +91,25 @@ export const Popout = ({ id, children, width }) => {
         return (
             <React.Fragment>
                 <div className="col card">
-                    <div className="card-title">
-                        Control Panel for Portal {id}
-                    </div>
-                    <div className="content">
-                        <div className="row controls">
-                            <div className="control-button" onClick={hideChildWindow}>Hide</div>
-                            <div className="control-button" onClick={showChildWindow}>Show</div>
-                            <div className="control-button" onClick={focusChildWindow}>Focus</div>
-                            <div className="control-button" onClick={closeChildWindow}>Close</div>
+                    {typeof FSBL !== "undefined" &&
+                    <React.Fragment>
+                        <div className="card-title">
+                            Control Panel for Portal {id}
                         </div>
-                        <div>
-                            <p>&nbsp;Current Position:</p>
-                            <pre>{JSON.stringify(bounds, null, '  ')}</pre>
+                        <div className="content">
+                            <div className="row controls">
+                                <div className="control-button" onClick={hideChildWindow}>Hide</div>
+                                <div className="control-button" onClick={showChildWindow}>Show</div>
+                                <div className="control-button" onClick={focusChildWindow}>Focus</div>
+                                <div className="control-button" onClick={closeChildWindow}>Close</div>
+                            </div>
+                            <div>
+                                <p>&nbsp;Current Position:</p>
+                                <pre>{JSON.stringify(bounds, null, '  ')}</pre>
+                            </div>
                         </div>
-                    </div>
+                    </React.Fragment>
+                    }
                 </div>
                 <Portal id={id} customWidth={passedWidth}>
                     {renderDOM()}

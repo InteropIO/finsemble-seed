@@ -14,10 +14,22 @@ export const Portal = ({ children, id, customWidth = 550, customHeight = 210 }) 
     const [element, setElement] = useState();
     // The external window where our menu content live
     let childWindow
+    const getParentWindowBounds = async () => {
+        if (typeof FSBL !== "undefined") {
+            const { data } = await finsembleWindow.getBounds();
+            return data;
+        }
+        return {
+            top: window.screenTop,
+            left: window.screenLeft,
+            width: window.outerWidth,
+            height: window.outerHeight
+        }
+    }
     const initWindow = async () => {
         const containerDiv = document.createElement("div");
         containerDiv.classList = "portal";
-        const { data: parentWindowBounds } = await finsembleWindow.getBounds();
+        const parentWindowBounds = await getParentWindowBounds();
         // Open the external window.
         const bounds = state.popouts[id]
         const width = isNullish(bounds.width) ? customWidth : bounds.width;
