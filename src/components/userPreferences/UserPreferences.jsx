@@ -9,7 +9,7 @@ import "../../../assets/css/finsemble.css";
 import "./userPreferences.css";
 import { UserPreferencesShell, LeftNav, ContentSection } from "@chartiq/finsemble-ui/react/components";
 
-// The preference menu entries. It is passed as a prop to the LeftNav component to generate the preference menu section names.
+/** The preference menu entries. It is passed as a prop to the LeftNav component to generate the preference menu section names. */
 const entries = ["General", "Workspaces"];
 
 /*
