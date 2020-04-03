@@ -14,7 +14,7 @@ const entries = ["General", "Workspaces"];
 
 /*
  * Put your customized preference menu components here and pass this object as a prop to the ContentSection component.
- * The key should be the customized component's entry name and the value should be the customized React component.
+ * Each key should be a customized component's entry name and each value should be a customized React component
  * For example, if you have a customized menu component called "Sample" with entry name "My Section", after you import the component to this file, i.e. import { Sample } from "./sample";
  * include this component in this object like so:
  * 
