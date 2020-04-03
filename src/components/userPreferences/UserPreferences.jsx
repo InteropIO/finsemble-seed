@@ -9,12 +9,12 @@ import "../../../assets/css/finsemble.css";
 import "./userPreferences.css";
 import { UserPreferencesShell, LeftNav, ContentSection } from "@chartiq/finsemble-ui/react/components";
 
-// The preference menu entries. It is passed as a prop to the LeftNav component to generate the preference menu section names.
+/** The preference menu entries. It is passed as a prop to the LeftNav component to generate the preference menu section names. */
 const entries = ["General", "Workspaces"];
 
 /*
  * Put your customized preference menu components here and pass this object as a prop to the ContentSection component.
- * The key should be the customized component's entry name and the value should be the customized React component.
+ * Each key should be a customized component's entry name and each value should be a customized React component.
  * For example, if you have a customized menu component called "Sample" with entry name "My Section":
  * 
  * // import the component to this file.
