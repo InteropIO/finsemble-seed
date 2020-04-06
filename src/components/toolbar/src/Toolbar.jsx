@@ -8,8 +8,8 @@ import { ToolbarShell, FavoritesShell, DragHandle, RevealAll, MinimizeAll, AutoA
 import { FileMenu } from "./FileMenu";
 
 import '../toolbar.css';
-import "../../../../assets/css/font-finance.css";
-import "../../../../assets/css/finsemble.css";
+import "@chartiq/finsemble-ui/src/assets/css/font-finance.css";
+import "@chartiq/finsemble-ui/src/assets/css/finsemble.css";
 
 const Toolbar = () => {
 	return (

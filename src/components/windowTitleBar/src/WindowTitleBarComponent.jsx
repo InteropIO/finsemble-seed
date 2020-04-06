@@ -21,7 +21,7 @@ import Maximize from "./components/right/MaximizeButton.jsx";
 import Close from "./components/right/CloseButton.jsx";
 import AlwaysOnTop from "./components/right/AlwaysOnTop.jsx";
 import TabRegion from './components/center/TabRegion'
-import "../../../../assets/css/finsemble.css";
+import "@chartiq/finsemble-ui/src/assets/css/finsemble.css";
 import "../../../../assets/css/_windowTitleBar.css";
 
 /**
@@ -443,7 +443,7 @@ class WindowTitleBar extends React.Component {
 
 function init () {
 	// The following line fixes the CSS issues, weird..
-	const css = require("../../../../assets/css/finsemble.css");
+	const css = require("@chartiq/finsemble-ui/src/assets/css/finsemble.css");
 	// Create the header element
 	const template = document.createElement("div");
 	const FSBLHeader = document.createElement('div')

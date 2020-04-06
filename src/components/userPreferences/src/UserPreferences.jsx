@@ -5,8 +5,8 @@
 import React from "react";
 import { initialize as UserPreferencesStoreInitialize, Store as UserPreferencesStore, Actions as UserPreferencesActions } from "./stores/UserPreferencesStore";
 import "../userPreferences.css";
-import "../../../../assets/css/font-finance.css";
-import "../../../../assets/css/finsemble.css";
+import "@chartiq/finsemble-ui/src/assets/css/font-finance.css";
+import "@chartiq/finsemble-ui/src/assets/css/finsemble.css";
 
 
 import ReactDOM from "react-dom"

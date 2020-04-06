@@ -4,7 +4,7 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
-import "../../../assets/css/finsemble.css";
+import "@chartiq/finsemble-ui/src/assets/css/finsemble.css";
 
 import { SingleInputDialog } from "@chartiq/finsemble-ui/react/components";
 

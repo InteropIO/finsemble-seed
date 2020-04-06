@@ -4,9 +4,11 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
-//style
-import "./appCatalog.css";
+
 import { AppCatalog } from "@chartiq/finsemble-ui/react/components";
+
+import "@chartiq/finsemble-ui/src/assets/css/finsemble.css"
+import "../../../assets/css/_themeWhiteLabel.css";
 
 ReactDOM.render(
 	<AppCatalog />,

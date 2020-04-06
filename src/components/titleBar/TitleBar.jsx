@@ -5,7 +5,7 @@
 import React from "react";
 import { useTitleBar } from "@chartiq/finsemble-ui/react/hooks";
 import { AlwaysOnTopButton, DockingButton, LinkerButton, ShareButton, mountTitleBar, TabRegion, CloseButton, MaximizeButton, MinimizeButton } from "@chartiq/finsemble-ui/react/components";
-import "../../../assets/css/finsemble.css";
+import "@chartiq/finsemble-ui/src/assets/css/finsemble.css";
 import "../../../assets/css/_titleBar.css";
 
 
