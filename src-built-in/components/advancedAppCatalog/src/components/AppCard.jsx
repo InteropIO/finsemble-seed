@@ -157,7 +157,8 @@ class AppCard extends Component {
 		let { appName, checkShown, checkHighlighted } = this.state;
 
 		let imageIconClasses = "ff-check-mark-2";
-		if (this.props.installed || checkHighlighted) imageIconClasses += " highlighted"
+		if (this.props.installed && checkHighlighted) imageIconClasses += " highlighted added";
+		else if (this.props.installed || checkHighlighted) imageIconClasses += " highlighted"
 		else imageIconClasses += " faded";
 
 		let titleClass = this.state.titleUnderlined ? "app-title highlighted" : "app-title";

@@ -269,6 +269,11 @@
 	color: var(--catalog-card-checkmark-selected-color);
 }
 
+.app-card .ff-check-mark-2.highlighted.added {
+	display: block;
+	color: var(--accent-positive-1);
+}
+
 .app-catalog {
 	display: flex;
 	flex-direction: column;
