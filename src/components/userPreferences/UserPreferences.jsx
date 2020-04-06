@@ -7,25 +7,29 @@ import ReactDOM from "react-dom"
 import "../../../assets/css/font-finance.css";
 import "../../../assets/css/finsemble.css";
 import "./userPreferences.css";
-import { UserPreferencesShell, LeftNav, ContentSection } from "@chartiq/finsemble-ui/react/components";
-
-/** The preference menu entries. It is passed as a prop to the LeftNav component to generate the preference menu section names. */
-const entries = ["General", "Workspaces"];
+import { UserPreferencesShell, LeftNav, ContentSection, General, Workspaces } from "@chartiq/finsemble-ui/react/components";
 
 /*
  * Put your customized preference menu components here and pass this object as a prop to the ContentSection component.
- * Each key should be a customized component's entry name and each value should be a customized React component.
+ * Each key should be a use preference component's entry name and each value should be a React component associated with that entry name.
  * For example, if you have a customized menu component called "Sample" with entry name "My Section":
  * 
  * // Import the component to this file.
  * import { Sample } from "./sample";
  * 
- * // Include this component in this object.
- * const customSections = {
- *  "My section": Sample
+ * const sections = {
+ *   "General": General,
+ *   "Workspaces": Workspaces
+ *   "My section": Sample  // Include this component in the "sections" object.
  * };
 */
-const customSections = {};
+const sections = {
+    "General": General,
+    "Workspaces": Workspaces
+};
+
+/** The preference menu entries. It is passed as a prop to the LeftNav component to generate the preference menu section names. */
+const entries = Object.keys(sections);
 
 const UserPreferences = () => {
     // The active section is the section that is currently selected and displayed in the preference menu.
@@ -33,7 +37,7 @@ const UserPreferences = () => {
     return (
         <UserPreferencesShell>
             <LeftNav entries={entries} setActiveEntry={setActiveSection} />
-            <ContentSection activeSection={activeSection} customSections={customSections} />
+            <ContentSection activeSection={activeSection} sections={sections} />
         </UserPreferencesShell>
     )
 }
