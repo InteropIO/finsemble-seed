@@ -17,7 +17,7 @@ const entries = ["General", "Workspaces"];
  * Each key should be a customized component's entry name and each value should be a customized React component.
  * For example, if you have a customized menu component called "Sample" with entry name "My Section":
  * 
- * // import the component to this file.
+ * // Import the component to this file.
  * import { Sample } from "./sample";
  * 
  * // Include this component in this object.
