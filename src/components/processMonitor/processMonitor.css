@@ -1,5 +1,5 @@
-@import  url('../../../assets/css/_globals.css');
-@import  url('../../../assets/css/_scrollbars.css');
+@import '../../../node_modules/@chartiq/finsemble-ui/react/assets/css/_globals.css';
+@import '../../../node_modules/@chartiq/finsemble-ui/react/assets/css/_scrollbars.css';
 
 body {
 	margin: 0px;

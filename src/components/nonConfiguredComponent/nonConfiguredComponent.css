@@ -1,4 +1,4 @@
-@import  url('../../../assets/css/_globals.css');
+@import '../../../node_modules/@chartiq/finsemble-ui/react/assets/css/_globals.css';
 
 body {
 	margin:0px;
