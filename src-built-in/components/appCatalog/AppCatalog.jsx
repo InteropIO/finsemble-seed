@@ -6,7 +6,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 //style
 import "./appCatalog.css";
-import { AppCatalog } from "@chartiq/finsemble/ui/components";
+import { AppCatalog } from "@chartiq/finsemble/ui/react/components";
 
 ReactDOM.render(
 	<AppCatalog />,

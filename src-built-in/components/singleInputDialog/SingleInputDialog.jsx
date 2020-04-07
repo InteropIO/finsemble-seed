@@ -6,7 +6,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "../../../assets/css/finsemble.css";
 
-import { SingleInputDialog } from "@chartiq/finsemble/ui/components";
+import { SingleInputDialog } from "@chartiq/finsemble/ui/react/components";
 
 ReactDOM.render(
 		<SingleInputDialog />,

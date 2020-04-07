@@ -127,7 +127,6 @@ module.exports = class WebpackDefaults {
 			},
 			resolve: {
 				alias: {
-					"@chartiq/finsemble/ui":  path.resolve("./node_modules/@chartiq/finsemble/dist/ui/react"),
 					react: path.resolve('./node_modules/react'),
 					'react-dom': path.resolve('./node_modules/react-dom'),
 					'@babel/runtime': path.resolve('./node_modules/@babel/runtime'),

@@ -7,6 +7,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "../../../assets/css/finsemble.css";
-import { YesNoDialog } from "@chartiq/finsemble/ui/components";
+import { YesNoDialog } from "@chartiq/finsemble/ui/react/components";
 
 ReactDOM.render(<YesNoDialog />, document.getElementById("YesNoDialog-component-wrapper"));

@@ -5,6 +5,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import { ProcessMonitor } from "@chartiq/finsemble/ui/components";
+import { ProcessMonitor } from "@chartiq/finsemble/ui/react/components";
 
 ReactDOM.render(<ProcessMonitor />, document.getElementById("ProcessMonitor-component-wrapper"));
