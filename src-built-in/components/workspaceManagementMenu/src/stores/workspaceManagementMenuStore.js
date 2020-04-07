@@ -261,7 +261,7 @@ Actions = {
 			name: activeWorkspace.name
 		}, function (err, response) {
 			if (cb) {
-				cb();
+				cb(err);
 			}
 		});
 	},
@@ -544,7 +544,21 @@ Actions = {
 	handleSaveDialogResponse(response, callback) {
 		if (response.choice === "affirmative") {
 			//User wants to save, so call the client API.
-			Actions.saveWorkspace(callback);
+			Actions.saveWorkspace((err) => {
+				if (!err) {
+					callback();
+				} else {
+					Actions.spawnDialog("yesNo", {
+						question: "The workspace save failed. Continuing will lose recent changers to this workspace.  Do you want to continue loading the new workspace?"
+					}, (err, response) => {
+						if (response.choice === "affirmative") {
+							callback();
+						} else {
+							callback(new Error(SAVE_DIALOG_CANCEL_ERROR));
+						}
+					});
+				}
+			});
 		} else if (response.choice === "negative") {
 			//Doesn't want to save.
 			callback();
