@@ -7,10 +7,10 @@ import React from "react";
 import { ToolbarShell, FavoritesShell, DragHandle, RevealAll, MinimizeAll, AutoArrange, Search, AppLauncher, WorkspaceManagementMenu, ToolbarSection } from "@chartiq/finsemble-ui/react/components";
 import { FileMenu } from "./FileMenu";
 
-import '../toolbar.css';
 import "@chartiq/finsemble-ui/src/assets/css/font-finance.css";
 import "@chartiq/finsemble-ui/src/assets/css/finsemble.css";
-
+import "../../../../assets/css/_themeWhitelabel.css"
+import '../toolbar.css';
 const Toolbar = () => {
 	return (
 		<ToolbarShell>
