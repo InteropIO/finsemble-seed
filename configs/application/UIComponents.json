@@ -49,8 +49,7 @@
 			"component": {
 				"allowQuickComponent": "@TODO",
 				"spawnOnStartup": false,
-				"category": "system",
-				"useAppCatalog": true
+				"category": "system"
 			},
 			"foreign": {
 				"services": {
