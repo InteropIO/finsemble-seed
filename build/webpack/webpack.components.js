@@ -140,10 +140,6 @@ function createCopyWebpackConfig() {
 			to: './favicon.ico'
 		},
 		*/
-		{
-			from: './node_modules/@chartiq/finsemble/core/dist',
-			to: path.join(__dirname, "../../finsemble/")
-		}
 	];
 
 	// Create a copy entry for each folder in our collapsed list

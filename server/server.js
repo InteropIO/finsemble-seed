@@ -112,7 +112,7 @@
 	// #region Constants
 	const app = express();
 	const rootDir = path.join(__dirname, "..", "dist");
-	const moduleDirectory = path.join(__dirname, "..", "finsemble");
+	const moduleDirectory = path.join(__dirname, "..", "node_modules/@chartiq/finsemble/core/dist");
 	const ONE_DAY = 24 * 3600 * 1000;
 	const cacheAge = process.env.NODE_ENV === "development" ? 0 : ONE_DAY;
 	const PORT = process.env.PORT || 3375;
