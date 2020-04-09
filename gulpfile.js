@@ -19,8 +19,8 @@ const { launch, connect } = require('hadouken-js-adapter');
 	const shell = require("shelljs");
 	const path = require("path");
 	const webpack = require("webpack");
-	const FEA = require("@chartiq/finsemble-electron-adapter/exports");
-	const FEA_PATH = path.resolve('./node_modules/@chartiq/finsemble-electron-adapter');
+	const FEA = require("@chartiq/finsemble/fea/exports");
+	const FEA_PATH = path.resolve('./node_modules/@chartiq/finsemble/fea');
 	const FEAPackager = FEA ? FEA.packager : undefined;
 	const MAX_NODE_VERSION = '12.13.1';
 
@@ -412,18 +412,6 @@ const { launch, connect } = require('hadouken-js-adapter');
 						path: CONTROLS_PATH,
 						name: "finsemble-react-controls",
 						version: CONTROLS_VERSION
-					}, cb)
-				},
-				(cb) => {
-					if (!FEA_VERSION) {
-						// electron not found so skip check
-						return cb();
-					}
-
-					checkLink({
-						path: FEA_PATH,
-						name: "finsemble-electron-adapter",
-						version: FEA_VERSION
 					}, cb)
 				}
 			], done)
