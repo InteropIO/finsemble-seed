@@ -1,16 +1,34 @@
 {
-	"//icon": "Path to an icon to be used for your executable. This is relative to the root of the finsemble-seed",
-	"icon": "./assets/installer/icons/win/icon.ico",
-	"version": "1.0.0",
-	"//outputDirectory": "Path where you would like the executable to be dumped. This is relative to the root of the finsemble-seed",
-	"outputDirectory": "./pkg",
-	"//name": "Name of your application. Will be used for the exe and windows metadata. Only alphanumeric characters, spaces, dashes(-), periods(.), and underscores(_) are allowed",
-	"name": "xyz",
-	"authors": "ChartIQ",
-	"//certificateFile": "The path to an Authenticode Code Signing Certificate",
-	"certificateFile": null,
-	"//certificatePassword": "The password to decrypt the certificate given in certificateFile", 
-	"certificatePassword": null, 
-	"//signWithParams": "Params to pass to signtool. Specifying a time server is recommended (e.g. '/tr http://timestamp.digicert.com'",
-	"signWithParams": null
+	"development": {
+		"//icon": "Path to an icon to be used for your executable. This is relative to the root of the finsemble-seed",
+		"icon": "./assets/installer/icons/win/icon.ico",
+		"version": "1.0.0",
+		"//outputDirectory": "Path where you would like the executable to be dumped. This is relative to the root of the finsemble-seed",
+		"outputDirectory": "./pkg-development",
+		"//name": "Name of your application. Will be used for the exe and windows metadata. Only alphanumeric characters, spaces, dashes(-), periods(.), and underscores(_) are allowed",
+		"name": "xyz-dev",
+		"authors": "ChartIQ",
+		"//certificateFile": "The path to an Authenticode Code Signing Certificate",
+		"certificateFile": null,
+		"//certificatePassword": "The password to decrypt the certificate given in certificateFile",
+		"certificatePassword": null,
+		"//signWithParams": "Params to pass to signtool. Specifying a time server is recommended (e.g. '/tr http://timestamp.digicert.com'",
+		"signWithParams": null
+	},
+	"production": {
+		"//icon": "Path to an icon to be used for your executable. This is relative to the root of the finsemble-seed",
+		"icon": "./assets/installer/icons/win/icon.ico",
+		"version": "1.0.0",
+		"//outputDirectory": "Path where you would like the executable to be dumped. This is relative to the root of the finsemble-seed",
+		"outputDirectory": "./pkg-production",
+		"//name": "Name of your application. Will be used for the exe and windows metadata. Only alphanumeric characters, spaces, dashes(-), periods(.), and underscores(_) are allowed",
+		"name": "xyz-prod",
+		"authors": "ChartIQ",
+		"//certificateFile": "The path to an Authenticode Code Signing Certificate",
+		"certificateFile": null,
+		"//certificatePassword": "The password to decrypt the certificate given in certificateFile",
+		"certificatePassword": null,
+		"//signWithParams": "Params to pass to signtool. Specifying a time server is recommended (e.g. '/tr http://timestamp.digicert.com'",
+		"signWithParams": null
+	}
 }
