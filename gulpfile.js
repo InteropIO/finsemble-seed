@@ -563,6 +563,11 @@ const { launch, connect } = require('hadouken-js-adapter');
 
 			// Inline require because this file is so large, it reduces the amount of scrolling the user has to do.
 			let installerConfig = require("./configs/other/installer.json");
+			
+			//check if we have an installer config matching the environment name, if not assume we just have a single config for all environments
+			if (installerConfig[env.NODE_ENV]) {
+				installerConfig = installerConfig[env.NODE_ENV];
+			}
 
 			// need absolute paths for certain installer configs
 			installerConfig = resolveRelativePaths(installerConfig, ['icon'], './');

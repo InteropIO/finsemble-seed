@@ -34,7 +34,7 @@
 						"launchableByUser": true
 					},
 					"Window Manager": {
-						"alwaysOnTopIcon": true,
+						"alwaysOnTopIcon": false,
 						"showLinker": true,
 						"FSBLHeader": true,
 						"persistWindowState": true,
