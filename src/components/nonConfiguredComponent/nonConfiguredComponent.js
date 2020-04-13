@@ -1,6 +1,3 @@
-
-
-
 if (window.FSBL && FSBL.addEventListener) {
 	FSBL.addEventListener('onReady', init);
 } else {
