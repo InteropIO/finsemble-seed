@@ -57,10 +57,6 @@
 			"staggerPixels": 40,
 			"unknownComponent": "nonConfiguredComponent"
 		},
-		"desktopAgent": {
-			"enabled": true,
-			"channelSyncEnabled": false
-		},
 		"assimilation": {
 			"useOpenFinSpawn": false,
 			"enabled": true,
