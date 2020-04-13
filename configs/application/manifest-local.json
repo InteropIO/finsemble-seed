@@ -72,6 +72,7 @@
         "moduleRoot": "$applicationRoot/finsemble",
         "servicesRoot": "$applicationRoot/finsemble/services",
         "notificationURL": "$applicationRoot/components/notification/notification.html",
+        "fpe-marketearlybirdRoot": "http://fpe.finsemble.com/additions/components/fpe-marketearlybird",
         "bootConfig": {
             "onErrorMakeSystemManagerVisible": true,
             "defaults": {

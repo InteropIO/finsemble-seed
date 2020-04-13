@@ -15,8 +15,7 @@
 			},
 			"component": {
 				"displayName": "Welcome Component",
-				"spawnOnStartup": false,
-				"preload": "$applicationRoot/preloads/zoom.js"
+				"spawnOnStartup": false
 			},
 			"foreign": {
 				"services": {
@@ -25,6 +24,19 @@
 						"allowGrouping": true,
 						"allowAutoArrange": true,
 						"allowMinimize": true
+					},
+					"fdc3": {
+						"intents": [
+							{
+								"name": "search",
+								"displayName": "Search",
+								"contexts": [
+									"instrument",
+									"string"
+								],
+								"customConfig": {}
+							}
+						]
 					}
 				},
 				"components": {
@@ -43,6 +55,58 @@
 				}
 			}
 		},
+		"Market EarlyBird": {
+            "window": {
+                "url": "https://app.marketearlybird.com",
+                "icon": "https://app.marketearlybird.com/img/Earlybird_icon_up.png",
+                "autoShow": true,
+                "top": "center",
+                "left": "center",
+                "width": 500,
+                "height": 800,
+                "options": {
+                    "securityPolicy": "trusted"
+                }
+            },
+            "component": {
+                "inject": "$fpe-marketearlybirdRoot/src/examples/components/main.js"
+            },
+            "foreign": {
+                "services": {
+                    "dockingService": {
+                        "canGroup": true,
+                        "isArrangable": true
+					},
+					"fdc3": {
+						"intents": [
+							{
+								"name": "search",
+								"displayName": "Search",
+								"contexts": [
+									"instrument",
+									"string"
+								],
+								"customConfig": {}
+							}
+						]
+					}
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "showLinker": true,
+                        "alwaysOnTopIcon": true,
+                        "FSBLHeader": true,
+                        "persistWindowState": true
+                    },
+                    "Toolbar": {
+                        "iconURL": "https://app.marketearlybird.com/img/Earlybird_icon_up.png"
+                    }
+                }
+            }
+        },
 		"nonConfiguredComponent": {
 			"window": {
 				"url": "$applicationRoot/components/nonConfiguredComponent/nonConfiguredComponent.html",
