@@ -1,9 +1,7 @@
 //The title bar can be injected into any component or page - that component or page may not be aware of finsemble, and may not include the vendor.bundle.js file that's required to make the DLL plugin work. This webpack config is to build that component independent of any code splitting done for the rest of the presentation components.
 const path = require('path');
-const fs = require("fs");
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const { DllReferencePlugin, DefinePlugin, ProgressPlugin } = require("webpack");
-const hardSource = require("hard-source-webpack-plugin");
+const { DefinePlugin } = require("webpack");
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 let plugins =
     [
@@ -12,29 +10,14 @@ let plugins =
                 "NODE_ENV": JSON.stringify(env)
             }
         }),
-        //new ProgressPlugin({ profile: false })
     ]
 
 if (env === "production") {
     // When building the production environment, minify the code.
     plugins.push(new UglifyJsPlugin());
-} else {
-    plugins.push(new hardSource({
-        //root dir here is "dist". Back out so we dump this file into the root.
-        cacheDirectory: '../.webpack-file-cache/[confighash]',
-        // Either an absolute path or relative to webpack's options.context.
-        // Sets webpack's recordsPath if not already set.
-        environmentHash: {
-            root: process.cwd(),
-            directories: [],
-            files: ['package-lock.json'],
-        }
-    }));
 }
 
-var builtInTitleBarPath = "./src-built-in/components/windowTitleBar/src/windowTitleBar.jsx";
-var customTitleBarPath = "./src/components/windowTitleBar/src/windowTitleBar.jsx";
-var titleBarPath = fs.existsSync(customTitleBarPath) ? customTitleBarPath : builtInTitleBarPath;
+const titleBarPath  = "./src/components/titlebar/titlebarLoader.js";
 module.exports = {
     devtool: 'source-map',
     entry: {
@@ -68,19 +51,19 @@ module.exports = {
             },
             {
                 test: /\.woff$/,
-                loader: 'url-loader?limit=65000&mimetype=application/font-woff&name=public/fonts/[name].[ext]'
+                loader: 'url-loader?limit=65000&mimetype=application/font-woff&name=/public/fonts/[name].[ext]'
             },
             {
                 test: /\.woff2$/,
-                loader: 'url-loader?limit=65000&mimetype=application/font-woff2&name=public/fonts/[name].[ext]'
+                loader: 'url-loader?limit=65000&mimetype=application/font-woff2&name=/public/fonts/[name].[ext]'
             },
             {
                 test: /\.[ot]tf$/,
-                loader: 'url-loader?limit=65000&mimetype=application/octet-stream&name=public/fonts/[name].[ext]'
+                loader: 'url-loader?limit=65000&mimetype=application/octet-stream&name=/public/fonts/[name].[ext]'
             },
             {
                 test: /\.eot$/,
-                loader: 'url-loader?limit=65000&mimetype=application/vnd.ms-fontobject&name=public/fonts/[name].[ext]'
+                loader: 'url-loader?limit=65000&mimetype=application/vnd.ms-fontobject&name=/public/fonts/[name].[ext]'
             },
             {
                 test: /semver\.browser\.js/,
@@ -88,13 +71,29 @@ module.exports = {
             },
             {
                 test: /\.js(x)?$/,
-                exclude: [/node_modules/, "/chartiq/"],
-                loader: 'babel-loader',
-                options: {
-                    cacheDirectory: './.babel_cache/',
-                    presets: ['react', 'stage-1']
+                exclude: /node_modules/,
+                use: {
+                    loader: "babel-loader",
+                    options: {
+                        presets: [
+                            ["@babel/preset-env", {
+                                targets: {
+                                    browsers: "Chrome 70"
+                                },
+                                modules: "commonjs"
+                            }],
+                            "@babel/preset-react"],
+                        plugins: [
+                            "babel-plugin-add-module-exports",
+                            "@babel/plugin-proposal-export-default-from",
+                            "@babel/plugin-transform-modules-commonjs",
+                            "@babel/plugin-proposal-class-properties",
+                            ["@babel/plugin-proposal-decorators", { decoratorsBeforeExport: false }],
+                            ["@babel/plugin-transform-runtime", { regenerator: true }]
+                        ]
+                    }
                 }
-            }
+            },
         ]
     },
     plugins: plugins,
@@ -104,6 +103,12 @@ module.exports = {
         path: path.resolve(__dirname, '../../dist/')
     },
     resolve: {
-        extensions: ['.js', '.jsx', '.json', 'scss', 'html']
+        extensions: ['.js', '.jsx', '.json', 'scss', 'html'],
+        alias: {
+            react: path.resolve('./node_modules/react'),
+            'react-dom': path.resolve('./node_modules/react-dom'),
+            '@babel/runtime': path.resolve('./node_modules/@babel/runtime'),
+            'async': path.resolve('./node_modules/async')
+        },
     }
 }

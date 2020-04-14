@@ -3,7 +3,6 @@
  */
 const React = require("react"),
     ReactDom = require("react-dom"),
-    FinsembleControls = require("@chartiq/finsemble-react-controls"),
     async = require("async");
 
 module.exports = { React, ReactDom, FinsembleControls, async }

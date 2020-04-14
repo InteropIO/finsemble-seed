@@ -21,9 +21,8 @@ The Finsemble seed project provides a basic structure to help developers get up 
 - _configs/other/server-environment-startup.json_ - Used to define the development and production server configurations used by the Finsemble application.
 - _server_ - Contains the server that hosts the built _dist_ folder for development purposes.
     - _server/server-extensions.md_ - Optional file that can be used to add functionality to the development server.
-- _src_ - The folder where your Finsemble components should be placed for the Finsemble build process.
-- _src-built-in_ - Includes the source for the default UI components included with the Finsemble seed project. These files can be extended as desired, but, if you do extend these components, we recommend you copy the folder to the _src_ directory to prevent merge conflicts when upgrading the seed project.
-    - _src-built-in/adapters_ - Contains an example Storage Adapter that saves data to local storage.
+- _src_ - The folder where your Finsemble components should be placed for the Finsemble build process. It also includes the source for the default UI components included with the Finsemble seed project.
+- _src/adapters_ - Contains an example Storage Adapter that saves data to local storage.
 - _tutorials_ - Contains the source for the components used by our seed project tutorial.
 
 ## Upgrading

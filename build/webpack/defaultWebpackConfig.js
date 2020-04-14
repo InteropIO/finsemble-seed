@@ -2,7 +2,6 @@ const path = require('path');
 
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const { DllReferencePlugin, EnvironmentPlugin, ProgressPlugin } = require("webpack");
-const hardSource = require("hard-source-webpack-plugin");
 
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 
@@ -28,18 +27,6 @@ module.exports = class WebpackDefaults {
 		if (env === "production") {
 			// When building the production environment, minify the code.
 			plugins.push(new UglifyJsPlugin());
-		} else {
-			plugins.push(new hardSource({
-				//root dir here is "dist". Back out so we dump this file into the root.
-				cacheDirectory: '../.webpack-file-cache/[confighash]',
-				// Either an absolute path or relative to webpack's options.context.
-				// Sets webpack's recordsPath if not already set.
-				environmentHash: {
-					root: process.cwd(),
-					directories: [],
-					files: ['package-lock.json'],
-				}
-			}));
 		}
 		return {
 			devtool: 'source-map',
@@ -92,27 +79,59 @@ module.exports = class WebpackDefaults {
 					},
 					{
 						test: /\.js(x)?$/,
-						exclude: [/node_modules/, "/chartiq/"],
-						loader: 'babel-loader',
-						options: {
-							cacheDirectory: './.babel_cache/',
-							presets: ['react', 'stage-1']
+						exclude: /node_modules/,
+						use: {
+							loader: "babel-loader",
+							options: {
+								presets: [
+									["@babel/preset-env", {
+										targets: {
+											browsers: "Chrome 70"
+										},
+										modules: "commonjs"
+									}],
+									"@babel/preset-react"],
+								plugins: [
+									"babel-plugin-add-module-exports",
+									"@babel/plugin-proposal-export-default-from",
+									"@babel/plugin-transform-modules-commonjs",
+									"@babel/plugin-proposal-class-properties",
+									["@babel/plugin-proposal-decorators", { decoratorsBeforeExport: false }],
+									["@babel/plugin-transform-runtime", { regenerator: true }]
+								]
+							}
 						}
 					},
 					{
 						test: /\.tsx?$/,
 						loader: 'ts-loader',
 						exclude: /node_modules/
+					},
+					// All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
+					{
+						enforce: "pre",
+						test: /\.js$/,
+						loader: "source-map-loader"
 					}
 				]
 			},
+			mode: env,
 			plugins: plugins,
+			optimization: {
+				usedExports: true,
+			},
 			output: {
 				filename: "[name].js",
 				sourceMapFilename: "[name].map.js",
 				path: path.resolve(__dirname, '../../dist/')
 			},
 			resolve: {
+				alias: {
+					react: path.resolve('./node_modules/react'),
+					'react-dom': path.resolve('./node_modules/react-dom'),
+					'@babel/runtime': path.resolve('./node_modules/@babel/runtime'),
+					'async': path.resolve('./node_modules/async')
+				},
 				extensions: ['.tsx', '.ts', '.js', '.jsx', '.json', 'scss', 'html'],
 				modules: [
 					'./node_modules'
