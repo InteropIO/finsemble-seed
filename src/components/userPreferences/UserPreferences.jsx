@@ -4,10 +4,12 @@
 */
 import React from "react";
 import ReactDOM from "react-dom"
-import "../../../assets/css/font-finance.css";
-import "../../../assets/css/finsemble.css";
-import "./userPreferences.css";
+
 import { UserPreferences, General, Workspaces } from "@chartiq/finsemble-ui/react/components";
+
+import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
+import "../../../assets/css/_themeWhitelabel.css";
+import "./userPreferences.css";
 
 /*
  * Put your customized preference menu components here and pass this object as a prop to the UserPreferences component.
