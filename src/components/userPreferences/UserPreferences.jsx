@@ -9,7 +9,6 @@ import { UserPreferences, General, Workspaces } from "@chartiq/finsemble-ui/reac
 
 import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../assets/css/_themeWhitelabel.css";
-import "./userPreferences.css";
 
 /*
  * Put your customized preference menu components here and pass this object as a prop to the UserPreferences component.
