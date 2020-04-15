@@ -20,7 +20,7 @@ import { UserPreferences, General, Workspaces } from "@chartiq/finsemble-ui/reac
  * const sections = {
  *   "General": General,
  *   "Workspaces": Workspaces
- *   "My section": Sample  // Include this component in the "sections" object.
+ *   "My section": Sample
  * };
 */
 const sections = {
