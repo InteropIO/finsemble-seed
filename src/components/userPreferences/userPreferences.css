@@ -7,7 +7,6 @@ body {
 }
 
 img {
-    user-drag: none;
     user-select: none;
     -moz-user-select: none;
     -webkit-user-drag: none;
@@ -19,7 +18,6 @@ img {
     display: flex;
     height: 100%;
     overflow: hidden;
-    justify-content: flex-start;
 }
 
 .complex-menu-left-nav-header-img {
@@ -35,10 +33,11 @@ img {
     display: flex;
 }
 
-.complex-menu-left-nav {
+.complex-menu-left-nav-preference {
     width: 212px;
     font-size: var(--content-font-size);
     flex-direction: column;
+    justify-content: start;
     color: var(--content-font-color);
     background-color: var(--content-nav-background-color);
 }
@@ -94,13 +93,6 @@ img {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-}
-
-.user-preferences {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    user-select: none;
 }
 
 .complex-menu-header {

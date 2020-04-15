@@ -25,7 +25,7 @@
 	},
 	"UserPreferences": {
 		"output": "components/userPreferences/userPreferences",
-		"entry": "./src/components/userPreferences/src/UserPreferences.jsx"
+		"entry": "./src/components/userPreferences/UserPreferences.jsx"
 	},
 	"welcome": {
 		"output": "components/welcome/welcome",
