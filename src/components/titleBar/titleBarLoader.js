@@ -1,9 +1,14 @@
+/**
+ * This file is part of the titlebar delivery
+ * mechanism and should not be customized.
+ */
+
 function init() {
 	if (window.headerLoaded) return;
 	window.headerLoaded = true;
-	// Sidd's fix for the react problem when pre-loading the component
-	require("./WindowTitleBarComponent.jsx");
+	require("./TitleBar.jsx");
 }
+
 if (window.FSBL && FSBL.addEventListener) {
 	FSBL.addEventListener("onReady", init);
 } else {

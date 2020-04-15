@@ -6,8 +6,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import { LinkerMenu } from "@chartiq/finsemble-ui/react/components";
-import "../../../assets/css/font-finance.css";
-import "../../../assets/css/finsemble.css";
-import "./linkerWindow.css"
+import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
+import "../../../assets/css/_themeWhiteLabel.css";
 
 ReactDOM.render(<LinkerMenu />, document.getElementById("main"));
