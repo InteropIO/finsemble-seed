@@ -81,6 +81,32 @@
 						"iconClass": "ff-component"
 					}
 				}
+			},
+			"childWindowOptions": {
+				"window": {},
+				"component": {
+					"canMaximize": true,
+					"canMinimize": true
+				},
+				"foreign": {
+					"components": {
+						"Window Manager": {
+							"FSBLHeader": true,
+							"title": "Welcome Component Child Window"
+						}
+					},
+					"services": {
+						"windowService": {
+							"allowGrouping": true,
+							"allowSnapping": true,
+							"allowTabbing": true,
+							"allowTiling": true
+						},
+						"workspaceService": {
+							"addToWorkspace": true
+						}
+					}
+				}
 			}
 		},
 		"nonConfiguredComponent": {

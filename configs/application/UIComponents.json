@@ -629,6 +629,35 @@
 						"FSBLHeader": false
 					}
 				}
+			},
+			"childWindowOptions": {
+				"window": {
+					"resizable": false,
+					"maxHeight": null,
+					"minHeight": null
+				},
+				"component": {
+					"canMaximize": true,
+					"canMinimize": true
+				},
+				"foreign": {
+					"components": {
+						"Window Manager": {
+							"FSBLHeader": false
+						}
+					},
+					"services": {
+						"windowService": {
+							"allowGrouping": false,
+							"allowSnapping": false,
+							"allowTabbing": false,
+							"allowTiling": false
+						},
+						"workspaceService": {
+							"addToWorkspace": false
+						}
+					}
+				}
 			}
 		},
 		"windowTitleBar": {
