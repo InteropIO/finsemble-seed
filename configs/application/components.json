@@ -45,9 +45,11 @@
 			"window": {
 				"url": "$applicationRoot/components/welcome/welcome.html",
 				"affinity": "workspaceComponents",
-				"frame": false,
-				"resizable": true,
-				"autoShow": true,
+				"options": {
+					"resizable": true,
+					"autoShow": true,
+					"alwaysOnTop": false
+				},
 				"top": "center",
 				"left": "center",
 				"width": 400,
@@ -72,6 +74,7 @@
 						"launchableByUser": true
 					},
 					"Window Manager": {
+						"alwaysOnTopIcon": true,
 						"showLinker": true,
 						"FSBLHeader": true,
 						"persistWindowState": true,
@@ -113,9 +116,10 @@
 			"window": {
 				"url": "$applicationRoot/components/nonConfiguredComponent/nonConfiguredComponent.html",
 				"affinity": "systemComponents",
-				"frame": false,
-				"resizable": true,
-				"autoShow": true,
+				"options": {
+					"resizable": true,
+					"autoShow": true
+				},
 				"top": "center",
 				"left": "center",
 				"width": 400,
@@ -127,14 +131,12 @@
 				"windowType": "assimilation",
 				"path": "notepad.exe",
 				"defaultHeight": 600,
-				"autoShow": true,
-				"resizable": true,
+				"options": {
+					"autoShow": true
+				},
 				"showTaskbarIcon": false,
 				"contextMenu": true,
-				"addToWorkspace": true,
-				"options": {
-					"alwaysOnTop": false
-				}
+				"addToWorkspace": true
 			},
 			"component": {
 				"spawnOnHotkey": [

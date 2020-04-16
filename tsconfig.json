@@ -5,11 +5,14 @@
 		"noImplicitAny": true,
 		"removeComments": true,
 		"preserveConstEnums": true,
-		"sourceMap": true
+		"sourceMap": true,
+		"jsx": "react",
+		"allowJs": true
 	},
 	"include": [
 		"src/**/*",
-		"src-built-in/**/*"
+		"src/ts/**/*",
+		"./finsemble/types/**/*"
 	],
 	"exclude": [
 		"node_modules",
