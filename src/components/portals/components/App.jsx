@@ -2,7 +2,7 @@ import * as React from "react"
 import { Tearout } from "./Tearout"
 import { EnableDisableSymbols } from "./EnableDisableSymbols"
 import { Ticker } from "./Ticker"
-import '../../../../assets/css/finsemble.css'
+import "@chartiq/finsemble-ui/react/assets/css/finsemble.css"
 import { useEffect } from "react"
 import { generateTick } from "../randomTicks"
 import { SingleTicker } from "./SingleTicker"

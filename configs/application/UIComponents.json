@@ -478,7 +478,8 @@
 				"window": {
 					"resizable": false,
 					"maxHeight": null,
-					"minHeight": null
+					"minHeight": null,
+					"dockable": false
 				},
 				"component": {
 					"canMaximize": true,
@@ -492,10 +493,7 @@
 					},
 					"services": {
 						"windowService": {
-							"allowGrouping": false,
-							"allowSnapping": false,
-							"allowTabbing": false,
-							"allowTiling": false
+							"manageWindowMovement": false
 						},
 						"workspaceService": {
 							"addToWorkspace": false
