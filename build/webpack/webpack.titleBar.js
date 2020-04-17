@@ -96,6 +96,7 @@ module.exports = {
             },
         ]
     },
+    mode: env,
     plugins: plugins,
     output: {
         filename: "[name].js",

@@ -2,7 +2,7 @@ var webpack = require('webpack');
 const path = require('path');
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const { DefinePlugin, EnvironmentPlugin, DllPlugin, ProgressPlugin } = require("webpack");
+const { DefinePlugin, DllPlugin, ProgressPlugin } = require("webpack");
 
 console.log("ENVIRONMENT", env);
 let plugins = [
@@ -10,7 +10,11 @@ let plugins = [
         name: 'vendor_lib',
         path: 'build/webpack/vendor-manifest.json',
     }),
-    new EnvironmentPlugin(['NODE_ENV'])
+    new DefinePlugin({
+        "process.env": {
+            "NODE_ENV": JSON.stringify(env)
+        }
+    }),
 ]
 
 if (env === "production") {

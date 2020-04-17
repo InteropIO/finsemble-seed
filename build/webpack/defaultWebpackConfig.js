@@ -1,7 +1,7 @@
 const path = require('path');
 
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const { DllReferencePlugin, EnvironmentPlugin, ProgressPlugin } = require("webpack");
+const { DllReferencePlugin, DefinePlugin, ProgressPlugin } = require("webpack");
 
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 
@@ -9,7 +9,11 @@ module.exports = class WebpackDefaults {
 	constructor() {
 		let plugins =
 			[
-				new EnvironmentPlugin(['NODE_ENV']),
+				new DefinePlugin({
+					"process.env": {
+							"NODE_ENV": JSON.stringify(env)
+					}
+				}),
 				new ProgressPlugin({ profile: false })
 			]
 
