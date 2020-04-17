@@ -123,7 +123,7 @@ var Actions = {
 	// Custom Components are always shown @TODO - make this a setting
 	filterComponents(components) {
 		var self = this;
-		var settings = FSBL.Clients.WindowClient.options.customData.spawnData;
+		var settings = FSBL.Clients.WindowClient.options.customData.spawnData || {};
 		var componentList = {};
 		var keys = Object.keys(components);
 		if (settings.mode) {
