@@ -18,7 +18,9 @@ export const Portal = ({ children, id, customWidth = 550, customHeight = 210 }) 
         containerDiv.classList = "portal";
         const parentWindowBounds = await getParentWindowBounds();
         // Open the external window.
-        const bounds = state.popouts[id]
+        const bounds = state.popouts[id];
+        // window was closed before we got into here.
+        if (!bounds) return;
         const width = isNullish(bounds.width) ? customWidth : bounds.width;
         const height = isNullish(bounds.height) ? customHeight : bounds.height;
         const top = isNullish(bounds.top) ? nextTop : bounds.top;

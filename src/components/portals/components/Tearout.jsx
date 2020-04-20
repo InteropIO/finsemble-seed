@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import { AppContext } from "./App"
 import { Portal } from "./Portal"
 import { ControlButtons } from "./ControlButtons"
