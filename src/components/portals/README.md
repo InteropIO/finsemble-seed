@@ -58,7 +58,7 @@ Retrieving the bounds of a child window can be done in a couple of ways.
 
 In the browser, you can access `childWindow.screenX` and `childWindow.screenY` (NOTE: These are childWindows, not childFinsembleWindows).
 
-Because of a bug in Electron, these values are off due to scaling issues. Instead, you should use the `finsembleWindow`.
+Because of a problem rationalizing scaled values, screenX and screenY will not line up with finsemble's internal bounds. Instead, you should use the `finsembleWindow`.
 
 ```javascript
   const { data: bounds } = await childFinsembleWindow.getBounds();
