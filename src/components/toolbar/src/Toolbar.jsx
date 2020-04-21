@@ -27,7 +27,6 @@ const Toolbar = () => {
 			<ToolbarSection className="right">
 				<div className="divider"></div>
 				<MinimizeAll />
-				<AutoArrange />
 				<RevealAll />
 			</ToolbarSection>
 			<div className="resize-area" ></div>
