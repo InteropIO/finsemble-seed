@@ -1,6 +1,1 @@
-{
-    "portals": {
-		"output": "components/portals/index",
-		"entry": "./src/components/portals/index.js"
-	}
-}
+{}
