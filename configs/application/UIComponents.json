@@ -473,6 +473,29 @@
 						"FSBLHeader": false
 					}
 				}
+			},
+			"childWindowOptions": {
+				"window": {
+					"resizable": false,
+					"maxHeight": null,
+					"minHeight": null,
+					"dockable": false
+				},
+				"foreign": {
+					"components": {
+						"Window Manager": {
+							"FSBLHeader": false
+						}
+					},
+					"services": {
+						"windowService": {
+							"manageWindowMovement": false
+						},
+						"workspaceService": {
+							"addToWorkspace": false
+						}
+					}
+				}
 			}
 		},
 		"windowTitleBar": {
