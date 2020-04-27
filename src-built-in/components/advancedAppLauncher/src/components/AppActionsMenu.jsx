@@ -148,6 +148,7 @@ export default class AppActionsMenu extends React.Component {
 		const apps = storeActions.getAllApps();
 		const app = apps[this.props.app.appID];
 		const folder = this.props.folder;
+		const canDelete = app.hasOwnProperty('disableUserRemove') ? app.disableUserRemove : true;
 		let favoritesActionOnClick = this.props.isFavorite ? this.onRemoveFromFavorite : this.onAddToFavorite;
 		let favoritesText = this.props.isFavorite ? "Remove from Favorites" : "Add to Favorites";
 		return (
@@ -155,7 +156,7 @@ export default class AppActionsMenu extends React.Component {
 				<ul>
 					<li onClick={favoritesActionOnClick}>{favoritesText}</li>
 					{app.source && app.source === FDC3 && <li onClick={this.onViewInfo}>View Info</li>}
-					{!app.source && <li onClick={this.deleteApp}>Delete App</li>}
+					{!app.source && canDelete && <li onClick={this.deleteApp}>Delete App</li>}
 					{[ADVANCED_APP_LAUNCHER, FAVORITES].indexOf(folder.name) === -1 &&
 						<li onClick={this.onRemove}>Remove from {folder.name}</li>}
 				</ul>

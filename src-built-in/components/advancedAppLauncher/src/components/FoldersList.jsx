@@ -225,6 +225,8 @@ export default class FoldersList extends React.Component {
 			nameField = folderName;
 		}
 
+		const canDelete = folder.hasOwnProperty('disableUserRemove') ? folder.disableUserRemove : false;
+
 		//This DOM will be rendered within a draggable (if the folder can be dragged), and a plain ol div if it cannot be dragged.
 		return (
 			<div onClick={(event) => this.onFolderClicked(event, folderName)}
@@ -236,7 +238,7 @@ export default class FoldersList extends React.Component {
 				</div>
 				{folder.icon === EDITABLE_FOLDER_ICON_CLASS && <span className='folder-action-icons'>
 					<i className='ff-adp-edit' title='Rename' onClick={this.renameFolder.bind(this, folderName)}></i>
-					<i className='ff-adp-trash-outline' title='Delete Folder' onClick={this.deleteFolder.bind(this, folderName)}></i>
+					{canDelete && <i className='ff-adp-trash-outline' title='Delete Folder' onClick={this.deleteFolder.bind(this, folderName)}></i>}
 				</span>}
 			</div>);
 	}
