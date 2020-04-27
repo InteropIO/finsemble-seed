@@ -1,1 +1,6 @@
-{}
+{
+    "demoComponent": {
+        "output": "components/demoComponent/demoComponent",
+        "entry": "./src/components/demoComponent/demoComponent.js"
+    }
+}
