@@ -431,7 +431,7 @@ function addNewFolder(name) {
 	const newFolder = {
 		disableUserRemove: true,
 		icon: "ff-adp-hamburger",
-		apps: []
+		apps: {}
 	};
 	data.folders[folderName] = newFolder;
 	_setFolders(() => {
