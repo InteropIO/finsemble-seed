@@ -20,7 +20,7 @@ const Toolbar = () => {
 				<WorkspaceManagementMenu />
 				<AppLauncher />
 			</ToolbarSection>
-			<ToolbarSection className="center" minWidth={115}>
+			<ToolbarSection className="center" hideBelowWidth={115}>
 				<div className="divider"/>
 				<FavoritesShell />
 			</ToolbarSection>
