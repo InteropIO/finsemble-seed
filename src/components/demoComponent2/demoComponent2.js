@@ -4,34 +4,51 @@ const transmitOnclick = () => {
 	let dt = document.getElementById('dt').value
 	let input = document.getElementById('input').value
 
-
-	FSBL.Clients.RouterClient.transmit("demoTransmitChannel2", {
-		symbol: symbol,
-		price: price,
-		dt: dt,
-		input: input
+	FSBL.Clients.RouterClient.query("demoServiceResponder", {
+		"action": 'sendOrderData',
+		"data": {
+			symbol: symbol,
+			price: price,
+			dt: dt,
+			input: input
+		}
+	}, function (error, response) {
+		if (!error) {
+			alert(response.data.result)
+		} else {
+			FSBL.Clients.Logger.error(error)
+		}
 	});
+
+	FSBL.Clients.RouterClient.transmit("demoTransmitChannel2", );
 }
 
 const FSBLReady = () => {
 	try {
+		// Retrieve spawn data
+		var spawndata = FSBL.Clients.WindowClient.getSpawnData()
+		if(Object.keys(spawndata).length !== 0)
+			handleData(spawndata)
+
 		// Do things with FSBL in here.
 		FSBL.Clients.RouterClient.addListener("demoTransmitChannel1", function (error, response) {
-			if (error) {
-				FSBL.Clients.Logger.error(error)
+			if (!error) {
+				handleData(response.data)
 			} else {
-				var data = response.data;
-				document.getElementById("symbol").value = response.data.symbol
-				document.getElementById("price").value = response.data.price
-				document.getElementById("dt").value = response.data.dt
+				FSBL.Clients.Logger.error(error)
 			}
 		});
 
 		document.getElementById('transmit').addEventListener('click', transmitOnclick)
-
 	} catch (e) {
 		FSBL.Clients.Logger.error(e);
 	}
+}
+
+const handleData = (data) => {
+	document.getElementById("symbol").value = data.symbol
+	document.getElementById("price").value = data.price
+	document.getElementById("dt").value = data.dt
 }
 
 if (window.FSBL && FSBL.addEventListener) {

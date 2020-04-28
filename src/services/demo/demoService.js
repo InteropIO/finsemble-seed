@@ -1,6 +1,5 @@
 const Finsemble = require("@chartiq/finsemble");
 const RouterClient = Finsemble.Clients.RouterClient;
-const DistributedStoreClient = Finsemble.Clients.DistributedStoreClient;
 const Logger = Finsemble.Clients.Logger;
 Logger.start();
 Logger.log("demo Service starting up");
@@ -16,12 +15,12 @@ Logger.log("demo Service starting up");
  */
 function demoService() {
 	const self = this;
-	var store
+	var historyDataArray = []
 
 
 	//You can implement your code to call your own API
-	this.CallDemoAPI = function () {
-		return "API Called";
+	this.getHistoryData = function () {
+		return historyDataArray;
 	}
 
 	/**
@@ -31,15 +30,21 @@ function demoService() {
 	 */
 	this.createRouterEndpoints = function () {
 		//Example router integration which uses a single query responder to expose multiple functions
-		RouterClient.addResponder("demo functions", function (error, queryMessage) {
+		RouterClient.addResponder("demoServiceResponder", function (error, queryMessage) {
 			if (!error) {
-				Logger.log('demo Query: ' + JSON.stringify(queryMessage));
-
-				if (queryMessage.data.query === "CallDemoAPI") {
+				if (queryMessage.data.action === "getHistoryData") {
 					try {
-						queryMessage.sendQueryResponse(null, self.CallDemoAPI());
+						queryMessage.sendQueryResponse(null, self.getHistoryData());
 					} catch (err) {
 						queryMessage.sendQueryResponse(err);
+					}
+				} else if (queryMessage.data.action === "sendOrderData") {
+					try {
+						var data = queryMessage.data.data;
+						Logger.log("demoService receive the following data through demoTransmitChannel2:", data)
+						queryMessage.sendQueryResponse(null, {result:'success'});
+					} catch (err) {
+						queryMessage.sendQueryResponse(err, {result:'error'});
 					}
 				} else {
 					queryMessage.sendQueryResponse("Unknown demo query function: " + queryMessage, null);
@@ -51,38 +56,21 @@ function demoService() {
 		});
 	};
 
-	/*
-		Create demo distributed store
-	*/
-	this.createDistributedStore = function () {
-		DistributedStoreClient.createStore({
-				store: "demoStore",
-				global: true,
-				values: {
-					demoItem1: {},
-					demoItem2: {}
-				}
-			},
-			function (err, storeObject) {
-				self.store = storeObject
-				Logger.log("Distributed Store has been created")
-			}
-		);
+	this.onDataArrive = function (data){
+		// Put data into the array
+		historyDataArray.push(data)
+		// Send the data using router client
+		RouterClient.transmit("demoDataStreamChannel", data);
 	}
 
 	/* 
 		Get dummy data at a certain time inteval
-		Put the dummy data into the distributed store
 	*/
-	this.createDemoGetData = function () {
+	this.createDemoDataStream = function () {
 		setInterval(function () {
-			self.store.setValue({
-				field: "demoItem1",
-				value: self.getExternalData()
-			}, function (err) {
-				Logger.log("Distributed Store has been updated")
-			});
-		}, 10000);
+			var tempdata = self.getExternalData();
+			self.onDataArrive(tempdata)
+		}, 5000);
 	}
 
 
@@ -90,7 +78,6 @@ function demoService() {
 		//Implement your own code to get your own data 
 		//This could a RestfulAPI or ws, etc...
 		//For demo purpose, here will only send dummy random data
-
 		return {
 			symbol: 'CIQ',
 			price: Math.round((Math.random() * 100) * 100) / 100,
@@ -124,8 +111,7 @@ const serviceInstance = new demoService('demoService');
 
 serviceInstance.onBaseServiceReady(function (callback) {
 	serviceInstance.createRouterEndpoints();
-	serviceInstance.createDistributedStore();
-	serviceInstance.createDemoGetData();
+	serviceInstance.createDemoDataStream();
 	serviceInstance.createListener()
 	Logger.log("demo Service ready");
 	callback();

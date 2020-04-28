@@ -63,18 +63,23 @@ const cellDoubleClickEventHandler = (event) => {
 		componentType: "demoComponent2"
 	}, {
 		spawnIfNotFound: true,
-		left: "adjacent"
-	}, ()=>{
+		left: "adjacent",
+		data: event.data
+	}, () => {
 		FSBL.Clients.RouterClient.transmit("demoTransmitChannel1", event.data);
 	});
 }
 
-const demoItem1Updated = (err, data) => {
-	data.value.newdt = new Date().getTime()
-	data.value.dtdiff = data.value.newdt-data.value.dt
+const onNewData = (data) => {
+	data.newdt = new Date().getTime()
+	data.dtdiff = data.newdt - data.dt
 	var res = gridOptions.api.updateRowData({
-		add: [data.value]
+		add: [data]
 	});
+}
+
+const onHistoryDatas = (data) => {
+	var res = gridOptions.api.setRowData(data);
 }
 
 const FSBLReady = () => {
@@ -83,24 +88,25 @@ const FSBLReady = () => {
 		var eGridDiv = document.querySelector('#myGrid');
 		new agGrid.Grid(eGridDiv, gridOptions);
 
-		//Get the global distributed store
-		FSBL.Clients.DistributedStoreClient.getStore({
-				store: "demoStore"
-			},
-			function (err, storeObject) {
-				//Add listener to the store
-				storeObject.addListeners(
-					[{
-						field: "demoItem1",
-						listener: demoItem1Updated
-					}],
-					null,
-					() => {
-						//CB after listener added
-					}
-				);
+		// Query history data
+		FSBL.Clients.RouterClient.query("demoServiceResponder", {
+			"action": 'getHistoryData'
+		}, function (error, response) {
+			if (!error) {
+				onHistoryDatas(response.data);
+			} else {
+				FSBL.Clients.Logger.error(error)
 			}
-		);
+		});
+
+		// Listen to demoDataStreamChannel
+		FSBL.Clients.RouterClient.addListener("demoDataStreamChannel", function (error, response) {
+			if (!error) {
+				onNewData(response.data)
+			} else {
+				FSBL.Clients.Logger.error(error)
+			}
+		});
 	} catch (e) {
 		FSBL.Clients.Logger.error(e);
 	}
