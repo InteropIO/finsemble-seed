@@ -25,10 +25,17 @@ class AppLauncher extends React.Component {
 	}
 
 	componentWillMount() {
-		getStore().addListener({ field: "isFormVisible" }, this.toggleAddNewAppForm);
+		const store = getStore();
+		store.addListener({ field: "isFormVisible" }, this.toggleAddNewAppForm);
 		finsembleWindow.addEventListener("shown", () => {
 			finsembleWindow.focus();
 		});
+		// Delete the search text from the store as searches should not persist over restart.
+		// The deletion is done on startup as a shutdown listener wouldn't trigger on crashes
+		store.setValue({
+			field: "filterText",
+			value: ""
+		})
 	}
 
 	componentWillUnmount() {
@@ -57,6 +64,7 @@ class AppLauncher extends React.Component {
 		}, (error, data) => {
 			error && console.log("Failed to set isFormVisible to false");
 		});
+		get
 	}
 
 	openAppMarket() {
