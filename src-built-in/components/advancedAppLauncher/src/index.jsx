@@ -64,7 +64,6 @@ class AppLauncher extends React.Component {
 		}, (error, data) => {
 			error && console.log("Failed to set isFormVisible to false");
 		});
-		get
 	}
 
 	openAppMarket() {
