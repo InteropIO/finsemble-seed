@@ -148,7 +148,7 @@ export default class AppActionsMenu extends React.Component {
 		const apps = storeActions.getAllApps();
 		const app = apps[this.props.app.appID];
 		const folder = this.props.folder;
-		const canDelete = app.hasOwnProperty('disableUserRemove') ? app.disableUserRemove : true;
+		const canDelete = app.hasOwnProperty('canDelete') ? app.canDelete : true;
 		let favoritesActionOnClick = this.props.isFavorite ? this.onRemoveFromFavorite : this.onAddToFavorite;
 		let favoritesText = this.props.isFavorite ? "Remove from Favorites" : "Add to Favorites";
 		return (

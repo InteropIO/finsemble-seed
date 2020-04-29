@@ -2,11 +2,15 @@ import _get from 'lodash.get';
 import { getStore } from "./LauncherStore";
 import AppDirectory from "../modules/AppDirectory";
 import FDC3 from "../modules/FDC3";
-const async = require("async");
+import { map as asyncMap } from "async";
+import isEqual from "lodash.isequal";
+
+const deepEqual = isEqual;
 let FDC3Client;
 let appd;
 let appDEndpoint;
 let ToolbarStore;
+let PersistenceStore;
 
 export default {
 	initialize,
@@ -40,6 +44,7 @@ export default {
 
 const data = {};
 const ADVANCED_APP_LAUNCHER = "Advanced App Launcher";
+const PERSISTENCE_STORE_NAME = "Finsemble-AppLauncher-Persistence-Store";
 
 
 //returns names of default folders.
@@ -79,16 +84,38 @@ function initialize(callback = Function.prototype) {
 		store.addListener({ field: "isFormVisible" }, (err, dt) => data.isFormVisible = dt.value);
 		store.addListener({ field: "sortBy" }, (err, dt) => data.sortBy = dt.value);
 		store.addListener({ field: "activeLauncherTags" }, (err, dt) => data.tags = dt.value);
-		getToolbarStore((err, response) => {
-			FSBL.Clients.RouterClient.subscribe("Finsemble.Service.State.launcherService", (err, response) => {
-				loadInstalledComponentsFromStore(() => {
-					//We load our stored components(config driven) here
-					loadInstalledConfigComponents(() => {
-						updateAppsInFolders(callback);
+
+		//If config servicesConfig.distributedStore.alwaysRestoreFromFoundation is true, we should skip syncing with persistence and 
+		//continue with the data loaded from the foundation.
+		FSBL.Clients.ConfigClient.getValue({ field: "finsemble.servicesConfig.distributedStore.alwaysRestoreFromFoundation" }, (configErr, restoreFromFoundation) => {
+
+			//Regardless of wether persistence should be synced, the toolbar store needs to be accessed to register apps
+			//Assigning an anonymous function that can be called in either situation
+			const setApps = () => {
+				getToolbarStore(() => {
+					FSBL.Clients.RouterClient.subscribe("Finsemble.Service.State.launcherService", () => {
+						loadInstalledComponentsFromStore(() => {
+							//We load out stored components(config driven) here
+							loadInstalledConfigComponents(() => {
+								updateAppsInFolders(callback);
+							});
+						});
 					});
 				});
+			}
 
-			});
+			if (!restoreFromFoundation) {
+				syncPersistenceStore((err, response) => {
+					if (err) {
+						console.error(err);
+						return;
+					}
+		
+					setApps();
+				});
+			} else {
+				setApps();
+			}
 		});
 	});
 }
@@ -155,7 +182,7 @@ function lazyLoadAppD() {
  * @param {*} cb
  */
 function loadInstalledComponentsFromStore(cb = Function.prototype) {
-	async.map(Object.values(data.apps), (component, componentDone) => {
+	asyncMap(Object.values(data.apps), (component, componentDone) => {
 		// Load FDC3 components here
 		if (component.source && component.source === "FDC3") {
 			lazyLoadAppD();
@@ -238,28 +265,91 @@ function getToolbarStore(done) {
 	});
 }
 
-function _setFolders(cb = Function.prototype) {
-	getStore().setValue({
-		field: "appFolders.folders",
-		value: data.folders
-	}, (error, data) => {
-		if (error) {
-			console.log("Failed to save modified folder list.");
-		} else {
-			cb();
+function syncPersistenceStore(done) {
+
+	FSBL.Clients.ConfigClient.getValue()
+
+
+	//Creating a store will return the store if it already exists
+	FSBL.Clients.DistributedStoreClient.createStore({ global: true, persist: true, store: PERSISTENCE_STORE_NAME }, function (getStoreErr, store) {
+		if (getStoreErr) {
+			console.error(getStoreErr);
+			return;
 		}
+
+		PersistenceStore = store;
+		const dataStore = getStore();
+		const values = dataStore.values;
+
+		asyncMap(Object.keys(dataStore.values), (propKey, propDone) => {
+			PersistenceStore.getValue({ field: propKey }, (getValErr, val) => {
+				if (getValErr) {
+					console.error(getValErr);
+					return propDone(getValErr);
+				}
+
+				let needsFallback = false;
+
+				if (!val) {
+					PersistenceStore.setValue({ field: propKey, value: values[propKey] });
+				} else if (!deepEqual(val, values[propKey])) {
+					FSBL.Clients.Logger.system.warn("Foundational config is attempting to load items which differ from a previous run (may have been removed). Falling back to previous state. Consider updating foundational config or removing it if the project has been seeded to your satisfaction.");
+					needsFallback = true;
+				}
+
+				if (needsFallback) {
+					_setValue(propKey, val, (setValErr, setValRes) => {
+						if (setValErr) {
+							console.error(setValErr);
+							return propDone(setValErr);
+						}
+
+						propDone();
+					});
+				} else {
+					propDone();
+				}
+			});
+		}, (asyncErr) => {
+			if (asyncErr) {
+				console.error(asyncErr);
+				return done(asyncErr);
+			}
+			return done();
+		});
 	});
 }
 
-function _setValue(field, value, cb) {
+function _setFolders(cb = Function.prototype) {
+	_setValue("appFolders.folders", data.folders, (error, data) => {
+		if (error) {
+			console.log("Failed to save modified folder list.");
+		}
+		cb();
+	});
+}
+
+function _setValue(field, value, cb = Function.prototype) {
 	getStore().setValue({
 		field: field,
 		value: value
 	}, (error, data) => {
 		if (error) {
-			console.log("Failed to save. ", field);
+			console.error("Failed to save.", field);
+		}
+
+		//If the foundation config is to be used every time, PersistenceStore will never have been initialized
+		//and this step can be skipped
+		if (PersistenceStore !== undefined) {
+			PersistenceStore.setValue({ field, value }, (persistErr, persistRes) => {
+				if (persistErr) {
+					console.error(persistErr);
+				}
+	
+				cb();
+			});
 		} else {
-			cb && cb();
+			cb();
 		}
 	});
 }
@@ -429,7 +519,8 @@ function addNewFolder(name) {
 	const highestFolderNumber = Math.max.apply(this, newFoldersNums);
 	const folderName = name || `New folder ${highestFolderNumber + 1}`;
 	const newFolder = {
-		disableUserRemove: true,
+		canDelete: true,
+		canEdit: true,
 		icon: "ff-adp-hamburger",
 		apps: []
 	};
@@ -541,7 +632,8 @@ function addTag(tag) {
 	console.log("addTag", tag);
 	data.tags.indexOf(tag) < 0 && data.tags.push(tag);
 	// Update tags in store
-	getStore().setValue({ field: "activeLauncherTags", value: data.tags });
+	_setValue("activeLauncherTags", data.tags);
+	// getStore().setValue({ field: "activeLauncherTags", value: data.tags });
 }
 
 function deleteTag(tag) {
@@ -549,7 +641,8 @@ function deleteTag(tag) {
 	data.tags.splice(data.tags.indexOf(tag), 1);
 	// Update tags in store
 	console.log("deleteTag", data.tags);
-	getStore().setValue({ field: "activeLauncherTags", value: data.tags });
+	_setValue("activeLauncherTags", data.tags);
+	// getStore().setValue({ field: "activeLauncherTags", value: data.tags });
 }
 
 function uuidv4() {
