@@ -265,11 +265,12 @@ function getToolbarStore(done) {
 	});
 }
 
+
+/**
+ * Compares values in the AppLauncher store with a persisted version and restores any keys that have differences
+ * @param {*} done The callback to call when finished 
+ */
 function syncPersistenceStore(done) {
-
-	FSBL.Clients.ConfigClient.getValue()
-
-
 	//Creating a store will return the store if it already exists
 	FSBL.Clients.DistributedStoreClient.createStore({ global: true, persist: true, store: PERSISTENCE_STORE_NAME }, function (getStoreErr, store) {
 		if (getStoreErr) {
