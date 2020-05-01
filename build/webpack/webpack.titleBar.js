@@ -17,11 +17,11 @@ if (env === "production") {
     plugins.push(new UglifyJsPlugin());
 }
 
-const titleBarPath  = "./src/components/titlebar/titlebarLoader.js";
+const windowTitleBarPath  = "./src/components/windowTitleBar/windowTitleBarLoader.js";
 module.exports = {
     devtool: 'source-map',
     entry: {
-        "components/windowTitleBar/windowTitleBar": titleBarPath
+        "components/windowTitleBar/windowTitleBar": windowTitleBarPath
     },
     stats: "minimal",
     module: {

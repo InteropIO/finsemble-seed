@@ -335,8 +335,8 @@ const { launch, connect } = require('hadouken-js-adapter');
 					packFiles(webpackPreloadsConfig, "preload bundle", cb);
 				},
 				(cb) => {
-					const webpackTitleBarConfig = require("./build/webpack/webpack.titleBar.js")
-					packFiles(webpackTitleBarConfig, "titlebar bundle", cb);
+					const webpackWindowTitleBarConfig = require("./build/webpack/webpack.titleBar.js")
+					packFiles(webpackWindowTitleBarConfig, "windowTitleBar bundle", cb);
 				},
 				(cb) => {
 					const webpackServicesConfig = require("./build/webpack/webpack.services.js")
@@ -409,7 +409,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 				},
 				(cb) => {
 					checkLink({
-						path: FINSEMBLE_PATH,
+						path: FINSEMBLE_UI_PATH,
 						name: "finsemble-ui",
 						version: FINSEMBLE_UI_VERSION
 					}, cb)
