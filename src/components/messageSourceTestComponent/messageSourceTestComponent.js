@@ -79,7 +79,7 @@ const getSenderDetails = async (origin) => {
 	let componentType = null, componentConfig = null, configuredUrlOrPath = null, spawnedWithUrl = null, currentUrl = null;
 	if (windowDescriptor) {
 		componentType = windowDescriptor.componentType;
-		spawnedWithUrl = windowDescriptor.url;
+		spawnedWithUrl = windowDescriptor.url ? windowDescriptor.url : windowDescriptor.path;
 		componentConfig = componentType ? await componentTypeToConfiguration(componentType) : null;
 		if (componentConfig) {
 			configuredUrlOrPath = componentConfig.window.url ? componentConfig.window.url : componentConfig.window.path;
@@ -107,7 +107,7 @@ origin:              ${senderDetails.origin == myClientName ? "here" : senderDet
 windowName:          ${senderDetails.windowName}
 componentType:       ${senderDetails.componentType}
 config URL Or path:  ${senderDetails.configuredUrlOrPath}
-spawned with URL:    ${senderDetails.spawnedWithUrl}
+spawned URL Or path: ${senderDetails.spawnedWithUrl}
 current URL:         ${senderDetails.currentUrl}
 	`;
 };
