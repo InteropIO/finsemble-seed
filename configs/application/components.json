@@ -18,7 +18,7 @@
 			"component": {
 				"displayName": "Welcome Component",
 				"spawnOnStartup": false,
-				"preload": "$applicationRoot/preloads/zoom.js"
+				"preload": ["$applicationRoot/preloads/zoom.js", "$applicationRoot/preloads/desktopAgentClient.js"]
 			},
 			"foreign": {
 				"services": {
@@ -27,6 +27,10 @@
 						"allowGrouping": true,
 						"allowAutoArrange": true,
 						"allowMinimize": true
+					},
+					"fdc3": {
+						"intents": [{"name": "fdc3.call"}],
+						"contexts": [{"name": "fdc3.contact"}]
 					}
 				},
 				"components": {

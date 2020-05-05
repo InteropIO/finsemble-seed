@@ -1,6 +1,16 @@
 {
 	"comment": "Top-level application config for development, adding on top of the core config",
 	"accessibleLinker": true,
+	"services": {
+		"desktopAgent": {
+            "useWindow": true,
+            "active": true,
+            "name": "desktopAgent",
+			"file": "$applicationRoot/services/desktopAgent/desktopAgentService.js",
+            "visible": false,
+            "html": "$applicationRoot/services/desktopAgent/desktopAgent.html"
+        }
+    },
 	"servicesConfig": {
 		"distributedStore": {
 			"initialStores": [
