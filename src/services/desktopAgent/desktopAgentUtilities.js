@@ -169,7 +169,6 @@ export function resolveIntent(intent, intentComponentList, activeComponents, con
 	for (const component of Object.values(activeComponents)) {
 		console.log(component.componentType);
 		if(intentComponentList.includes(component.componentType)){
-			// debugger;
 			let match = {
 				"windowIdentifier": activeIds[index],
 				"componentType": component.componentType
@@ -181,6 +180,12 @@ export function resolveIntent(intent, intentComponentList, activeComponents, con
 	}
 
 	console.log("Matches:", activeMatches);
+
+	// If there is an intent listening component online, then publish, otherwise spawn
+	if(activeMatches.length) {
+
+	}
+
 	debugger;
 	// let windowID = Finsemble.Clients.WindowClient.getWindowIdentifier();
 	var data = {
