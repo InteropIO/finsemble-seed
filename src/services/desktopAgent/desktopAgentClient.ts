@@ -1,10 +1,10 @@
-setupFDC3Client = () => {
-	const RouterClient = FSBL.Clients.RouterClient;
-	//FDC3 Desktop Agent V1.0 Functions 8/14/2019
-	FSBL.Clients.DesktopAgentClient = {
-		/**
-		 * open(name: string, context?: Context): Promise<void>;
-		 */
+const setupFDC3Client = () => {
+
+
+	const { RouterClient, WindowClient } = FSBL.Clients;
+
+	const DesktopAgent: DesktopAgent = {
+
 		open: async (name, context) => {
 			Logger.log("Desktop Agent open called");
 			const { err, response } = await RouterClient.query("FDC3.desktopAgent.open", { "name": name, "context": context });
@@ -15,14 +15,7 @@ setupFDC3Client = () => {
 			return response.data;
 		},
 
-		/** findIntent
-		* findIntent(intent: string, context?: Context): Promise<AppIntent>;
-		* returns a single AppIntent:
-		* {
-		*     intent: { name: "StartChat", displayName: "Chat" },
-		*     apps: [{ name: "Skype" }, { name: "Symphony" }, { name: "Slack" }]
-		* }
-		*/
+
 		findIntent: async (intent, context) => {
 			Logger.log("Desktop Agent findIntent called", intent, context);
 			const { err, response } = await RouterClient.query("FDC3.desktopAgent.findIntent", { "intent": intent, "context": context });
@@ -33,9 +26,7 @@ setupFDC3Client = () => {
 			return response.data;
 		},
 
-		/**
-		 * findIntentsByContext(context: Context): Promise<Array<AppIntent>>; 
-		*/
+
 		findIntentsByContext: async (context) => {
 			Logger.log("Desktop Agent open called");
 			const { err, response } = await RouterClient.query("FDC3.desktopAgent.findIntentsByContext", { "context": context });
@@ -46,8 +37,7 @@ setupFDC3Client = () => {
 			return response.data;
 		},
 
-		// broadcast
-		// broadcast(context: Context): void;
+
 		broadcast: async (context) => {
 			Logger.log("Desktop Agent broadcast called");
 			const { err, response } = await RouterClient.query("FDC3.desktopAgent.broadcast", context);
@@ -60,34 +50,31 @@ setupFDC3Client = () => {
 			}
 		},
 
-		// raiseIntent
-		// raiseIntent(intent: string, context: Context, target?: string): Promise<IntentResolution>;
-		raiseIntent: async (intent, context, target) => {
+
+		raiseIntent: async (intent, context, target = "") => {
 			Logger.log("Desktop Agent raiseIntent called");
 			RouterClient.query("FDC3.desktopAgent.raiseIntent", { "intent": intent, "context": context, "target": target }, function (err, response) {
 				// debugger;
 				// Implementation Removed
-				// Router Publish			
+				// Router Publish
 				if (err) {
 					throw (err);
 				}
 				console.log("DesktopAgent.raiseIntent response: ", response.data);
 				return response.data;
 			});
-
 		},
 
-		// addIntentListener
-		// addIntentListener(intent: string, handler: (context: Context) => void): Listener;
+
 		addIntentListener: (intent, handler) => {
 			console.log("Handler Type", ({}).toString.call(handler));
-			var appName = WindowClient.getWindowIdentifier().componentType;
+			const appName = WindowClient.getWindowIdentifier().componentType;
 			console.log("WindowIdentifier: ", appName);
 			//check handler is function
 			if (({}).toString.call(handler) === '[object AsyncFunction]' || ({}).toString.call(handler) === '[object Function]') {
 				//This is a valid handler
 				let channel = appName + intent;
-				RouterClient.subscribe(channel, function (err, response) {
+				RouterClient.subscribe(channel, function (err: Error, response: any) {
 					if (err) {
 						console.log("Error adding IntentListener: ", err);
 					}
@@ -100,8 +87,7 @@ setupFDC3Client = () => {
 			}
 		},
 
-		// addContextListener
-		// addContextListener(handler: (context: Context) => void): Listener;
+
 		addContextListener: async (context) => {
 			Logger.log("Desktop Agent addContextListener called");
 			const { err, response } = await RouterClient.query("desktopAgentAddContextListener", context);
@@ -110,9 +96,22 @@ setupFDC3Client = () => {
 			}
 			Logger.log("DesktopAgent.addContextListener response: ", response.data);
 			return response.data;
-		}
+		},
+
+
+		getSystemChannels: () => { },
+
+
+
+		joinChannel: (channelId) => { },
+
+
+
+		getOrCreateChannel: (channelId) => { }
 
 	}
+
+	FSBL.Clients.DesktopAgentClient = DesktopAgent
 }
 
 // Startup pattern for preload. Preloads can come in any order, so we need to wait on either the window event or the
