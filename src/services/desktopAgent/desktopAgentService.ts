@@ -18,13 +18,19 @@ const queryJSON = require('./objectQuery/queryJSON.js');
 Logger.start();
 Logger.log("Desktop Agent starting up");
 
+
+
 /**
- * The Desktop Agent is defined by the FDC3 
+ * The Desktop Agent is defined by the FDC3
  * @constructor
  */
 
-class desktopAgentService extends BaseService {
-	constructor(params) {
+class DesktopAgentService extends BaseService implements DesktopAgent {
+	constructor(params: {
+		name: string; startupDependencies: {
+			services: string[]; clients: string[];
+		};
+	}) {
 		super(params);
 		this.initialize = this.initialize.bind(this);
 		this.onBaseServiceReady(this.initialize);
@@ -41,7 +47,7 @@ class desktopAgentService extends BaseService {
 	 * Initializes service variables
 	 * @private
 	 */
-	async initialize(cb) {
+	async initialize(cb: () => void) {
 		this.createRouterEndpoints();
 		this.fdc3Configuration = await this.getFDC3Configuration();
 		cb();
@@ -52,7 +58,7 @@ class desktopAgentService extends BaseService {
 	 * @private
 	 */
 	createRouterEndpoints() {
-		RouterClient.addResponder("FDC3.desktopAgent.open", function (error, queryMessage) {
+		RouterClient.addResponder("FDC3.desktopAgent.open", function (error: Error, queryMessage: any) {
 			if (!error) {
 				console.log("Check Open Data Message:", queryMessage.data);
 				if (!queryMessage.data.name) {
@@ -60,7 +66,7 @@ class desktopAgentService extends BaseService {
 					queryMessage.sendQueryResponse("Error, Open requires name: " + queryMessage, null);
 				} else {
 					console.log("Check Open data:", queryMessage.data);
-					this.open(queryMessage.data.name, queryMessage.data.context, (err, response) => {
+					this.open(queryMessage.data.name, queryMessage.data.context, (err: any, response: any) => {
 						console.log("CallBack for Open Occured to send response");
 						queryMessage.sendQueryResponse(err, response);
 					});
@@ -71,7 +77,7 @@ class desktopAgentService extends BaseService {
 			}
 		});
 
-		RouterClient.addResponder("FDC3.desktopAgent.findIntent", function (error, queryMessage) {
+		RouterClient.addResponder("FDC3.desktopAgent.findIntent", function (error: Error, queryMessage: any) {
 			if (!error) {
 				console.log("Validate findIntent Data Message:", queryMessage.data);
 				if (!queryMessage.data.intent) {
@@ -87,7 +93,7 @@ class desktopAgentService extends BaseService {
 			}
 		});
 
-		RouterClient.addResponder("FDC3.desktopAgent.findIntentsByContext", function (error, queryMessage) {
+		RouterClient.addResponder("FDC3.desktopAgent.findIntentsByContext", function (error: Error, queryMessage: any) {
 			if (!error) {
 				console.log("Validate findIntentsByContext Data Message:", queryMessage.data);
 				if (!queryMessage.data.context) {
@@ -103,7 +109,7 @@ class desktopAgentService extends BaseService {
 			}
 		});
 
-		RouterClient.addResponder("FDC3.desktopAgent.broadcast", function (error, queryMessage) {
+		RouterClient.addResponder("FDC3.desktopAgent.broadcast", function (error: Error, queryMessage: any) {
 			if (!error) {
 				console.log("This function executes without error");
 				if (!queryMessage.data) {
@@ -121,7 +127,7 @@ class desktopAgentService extends BaseService {
 			}
 		});
 
-		RouterClient.addResponder("FDC3.desktopAgent.raiseIntent", async (error, queryMessage) => {
+		RouterClient.addResponder("FDC3.desktopAgent.raiseIntent", async (error: Error, queryMessage: any) => {
 			if (!error) {
 				console.log("Check Intent Data Message:", queryMessage.data);
 				if (!queryMessage.data.intent) {
@@ -149,19 +155,15 @@ class desktopAgentService extends BaseService {
 
 	//Begin Implementation
 
-	// open
-	// open(name: string, context?: Context): Promise<void>;
-	open(name, context, callback) {
-		LauncherClient.spawn(name, { data: { context } }, (err, response) => {
+	open(name: string, context?: object) {
+		LauncherClient.spawn(name, { data: { context } }, (err: Error, response: any) => {
 			console.log("FDC3.desktopAgent triggered LauncherClient.spawn");
 			callback(err, response);
 		});
 		return this;
 	}
 
-	// findIntent
-	// findIntent(intent: string, context?: Context): Promise<AppIntent>;
-	findIntent(intent, context) {
+	findIntent(intent: string, context?: Context): Promise<AppIntent> {
 		var appIntentMatches = desktopAgentUtilities.findAllIntentMatchesandFormatResponse(this.fdc3Configuration, intent, context);
 		console.log("All Formatted Matches: ", appIntentMatches);
 
@@ -172,26 +174,20 @@ class desktopAgentService extends BaseService {
 		}
 	}
 
-	// findIntentsByContext
-	// findIntentsByContext(context: Context): Promise<Array<AppIntent>>;
-	findIntentsByContext(context) {
+	findIntentsByContext(context: Context): Promise<Array<AppIntent>> {
 		var appIntentMatches = desktopAgentUtilities.findAllContextMatchesandFormatResponse(this.fdc3Configuration, context);
 		console.log("All Formatted Matches: ", appIntentMatches);
 		return appIntentMatches;
 	}
 
-	// broadcast
-	// broadcast(context: Context): void;
-	broadcast(context) {
+	broadcast(context: any): void {
 		RouterClient.transmit("broadcast", context);
 		return this;
 	}
 
-	// raiseIntent
-	// raiseIntent(intent: string, context: Context, target?: string): Promise<IntentResolution>;
-	async raiseIntent(intent, context, target) {
+	async raiseIntent(intent: string, context: Context, target?: string): Promise<IntentResolution> {
 		let resolvedIntent;
-		const { data: componentList }  = await LauncherClient.getActiveDescriptors();
+		const { data: componentList } = await LauncherClient.getActiveDescriptors();
 		console.log("componentList", componentList);
 		const intentComponentList = desktopAgentUtilities.findAllIntentMatchesandFormatResponse(this.fdc3Configuration, intent, context);
 		console.log("intents:", intentComponentList)
@@ -201,16 +197,29 @@ class desktopAgentService extends BaseService {
 		return { dataType: dataType, data: context };
 	}
 
+	addIntentListener(intent: string, handler: ContextHandler): Listener { };
+
+	addContextListener(contextType: string, handler: ContextHandler): Listener { };
+
+	getSystemChannels(): Promise<Array<Channel>> { };
+
+	joinChannel(channelId: string): Promise<void> { };
+
+	getOrCreateChannel(channelId: string): Promise<Channel> {
+
+	};
+
 }
 
 
-const serviceInstance = new desktopAgentService({
-	name: "desktopAgent",
-	startupDependencies: {
-		// add any services or clients that should be started before your service
-		services: ["authenticationService"],
-		clients: []
-	}
-});
+const serviceInstance = new
+	DesktopAgentService({
+		name: "desktopAgent",
+		startupDependencies: {
+			// add any services or clients that should be started before your service
+			services: ["authenticationService"],
+			clients: []
+		}
+	});
 
 module.exports = serviceInstance;
