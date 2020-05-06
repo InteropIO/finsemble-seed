@@ -3,6 +3,7 @@ import { WorkspaceManagementMenuStore, Store as UserPreferencesStore } from "../
 import { FinsembleDnDContext, FinsembleDraggable, FinsembleDroppable } from '@chartiq/finsemble-react-controls';
 import Checkbox from '../checkbox';
 import async from 'async';
+
 class WorkspaceEditor extends React.Component {
 	constructor(props) {
 		super(props);
@@ -107,6 +108,12 @@ export default class Workspaces extends React.Component {
 
 	addListeners() {
 		UserPreferencesStore.addListener({ field: 'WorkspaceList' }, this.setWorkspaceList)
+	}
+
+	// listens for change events on the file-input element
+	addUploadChangeListener() {
+		let inputElement = document.getElementById("file-input");
+		inputElement.addEventListener("change", importWorkspace, false);
 	}
 
 	/**
@@ -286,6 +293,7 @@ export default class Workspaces extends React.Component {
 		FSBL.Clients.ConfigClient.getPreferences((err, data) => {
 			this.setPreferences(err, { value: data })
 		});
+		this.addUploadChangeListener()
 		UserPreferencesStore.getValue({ field: "WorkspaceList" }, (err, data) => {
 			if (data && data.length) {
 				this.setState({
@@ -327,8 +335,7 @@ export default class Workspaces extends React.Component {
 		this.changePreferencesAlwaysOnTop(false);
 		finsembleWindow.addEventListener('focused', this.preferencesFocused);
 		let inputElement = document.getElementById("file-input");
-		inputElement.addEventListener("change", importWorkspace, false);
-		inputElement.click();
+		inputElement.click()
 	}
 
 	/**
@@ -378,6 +385,7 @@ export default class Workspaces extends React.Component {
 		async.each(files, loadFile, () => {
 			//Clear out files. so if the user imports the same  file back-to-back, the event will fire.
 			inputElement.value = "";
+			this.addUploadChangeListener()
 			FSBL.Clients.Logger.info("Workspaces imported");
 		});
 	}
