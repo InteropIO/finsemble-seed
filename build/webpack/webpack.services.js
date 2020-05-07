@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require("fs");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const glob_entries = require('webpack-glob-entries');
-const services = glob_entries(path.join(__dirname, '../../', "/src/services/**/*.js"));
+const services = glob_entries(path.join(__dirname, '../../', "/src/services/**/*.*s"));
 let entry = {};
 
 //process service files found
