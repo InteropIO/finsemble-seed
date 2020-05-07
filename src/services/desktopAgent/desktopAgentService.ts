@@ -12,8 +12,8 @@ const Logger = Finsemble.Clients.Logger;
 const Globals = window;
 
 
-const desktopAgentUtilities = require('./desktopAgentUtilities.js');
-const queryJSON = require('./objectQuery/queryJSON.js');
+import desktopAgentUtilities from './desktopAgentUtilities'
+// const queryJSON = require('./objectQuery/queryJSON.js');
 
 Logger.start();
 Logger.log("Desktop Agent starting up");
@@ -25,7 +25,7 @@ Logger.log("Desktop Agent starting up");
  * @constructor
  */
 
-class DesktopAgentService extends BaseService implements DesktopAgent {
+class desktopAgentService extends BaseService implements DesktopAgent {
 	constructor(params: {
 		name: string; startupDependencies: {
 			services: string[]; clients: string[];
@@ -36,21 +36,21 @@ class DesktopAgentService extends BaseService implements DesktopAgent {
 		this.onBaseServiceReady(this.initialize);
 		this.start();
 	}
-
-	async getFDC3Configuration() {
-		this.fdc3Configuration = await desktopAgentUtilities.getAllComponentAppSpec();
-		console.log("Find all Intents:", this.fdc3Configuration);
-		return this.fdc3Configuration;
-	}
-
 	/**
 	 * Initializes service variables
 	 * @private
 	 */
 	async initialize(cb: () => void) {
 		this.createRouterEndpoints();
+		Finsemble.Clients.Logger.log("desktopAgent Service ready");
 		this.fdc3Configuration = await this.getFDC3Configuration();
 		cb();
+	}
+
+	async getFDC3Configuration() {
+		this.fdc3Configuration = await desktopAgentUtilities.getAllComponentAppSpec(ConfigClient);
+		console.log("Find all Intents:", this.fdc3Configuration);
+		return this.fdc3Configuration;
 	}
 
 	/**
@@ -213,7 +213,7 @@ class DesktopAgentService extends BaseService implements DesktopAgent {
 
 
 const serviceInstance = new
-	DesktopAgentService({
+	desktopAgentService({
 		name: "desktopAgent",
 		startupDependencies: {
 			// add any services or clients that should be started before your service
@@ -222,4 +222,5 @@ const serviceInstance = new
 		}
 	});
 
+serviceInstance.start();
 module.exports = serviceInstance;

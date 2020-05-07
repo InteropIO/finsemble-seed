@@ -1,9 +1,9 @@
 const _ = require('lodash');
-const Finsemble = require("@chartiq/finsemble");
-const ConfigClient = Finsemble.Clients.ConfigClient;
+// const Finsemble = require("@chartiq/finsemble");
+// const ConfigClient = Finsemble.Clients.ConfigClient;
 
 //AppD Specification Helper Functions
-async function getAllFDC3Config() {
+async function getAllFDC3Config(ConfigClient) {
 	const { data: config } = await ConfigClient.getValue({ field: 'finsemble.components' });
 	return config;
 }
@@ -130,8 +130,8 @@ function findAllContextMatches(fdc3Configuration, context) {
 
 
 //API Utilities
-export async function getAllComponentAppSpec() {
-	let environmentIntents = await getAllFDC3Config()
+export async function getAllComponentAppSpec(ConfigClient) {
+	let environmentIntents = await getAllFDC3Config(ConfigClient)
 	let test = pickDeep(environmentIntents, 'fdc3');
 	console.log(test);
 	let flat = flattenFDC3Config(test);
@@ -159,7 +159,7 @@ export function findAllContextMatchesandFormatResponse(fdc3Configuration, contex
 	return matches;
 }
 
-export function resolveIntent(intent, intentComponentList, activeComponents, context){
+export function resolveIntent(intent, intentComponentList, activeComponents, context) {
 	let index = 0;
 	let activeMatches = [];
 	console.log(intentList);
@@ -168,7 +168,7 @@ export function resolveIntent(intent, intentComponentList, activeComponents, con
 	console.log(intentComponentList);
 	for (const component of Object.values(activeComponents)) {
 		console.log(component.componentType);
-		if(intentComponentList.includes(component.componentType)){
+		if (intentComponentList.includes(component.componentType)) {
 			let match = {
 				"windowIdentifier": activeIds[index],
 				"componentType": component.componentType
@@ -176,13 +176,13 @@ export function resolveIntent(intent, intentComponentList, activeComponents, con
 			activeMatches.push(match);
 			console.log("Match Registered");
 		}
-		index = index + 1;	
+		index = index + 1;
 	}
 
 	console.log("Matches:", activeMatches);
 
 	// If there is an intent listening component online, then publish, otherwise spawn
-	if(activeMatches.length) {
+	if (activeMatches.length) {
 
 	}
 
@@ -201,9 +201,16 @@ export function resolveIntent(intent, intentComponentList, activeComponents, con
 	// if (this.dialogWindow) {
 	// 	Finsemble.Clients.RouterClient.transmit("Close_dialog", true);
 	// }
-	// this.dialogWindow = 
-	Finsemble.Clients.LauncherClient.spawn("Intent Resolver", options);
+	// this.dialogWindow =
+	// Finsemble.Clients.LauncherClient.spawn("Intent Resolver", options);
 	// debugger;
 	// return activeMatches;
 
+}
+
+export default {
+	getAllComponentAppSpec,
+	findAllIntentMatchesandFormatResponse,
+	findAllContextMatchesandFormatResponse,
+	resolveIntent
 }
