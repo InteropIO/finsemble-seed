@@ -6,5 +6,9 @@
 	"zoom": {
 		"output": "preloads/zoom",
 		"entry": "./src-built-in/preloads/zoom.js"
+	},
+	"desktopAgent": {
+		"output": "preloads/desktopAgentClient",
+		"entry": "./src/services/desktopAgent/desktopAgentClient.ts"
 	}
 }
