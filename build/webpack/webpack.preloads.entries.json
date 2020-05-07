@@ -9,6 +9,6 @@
 	},
 	"desktopAgent": {
 		"output": "preloads/desktopAgentClient",
-		"entry": "./src-built-in/preloads/desktopAgentClient.js"
+		"entry": "./src/services/desktopAgent/desktopAgentClient.ts"
 	}
 }
