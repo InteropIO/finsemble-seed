@@ -10,18 +10,18 @@ interface Channel {
     /**
      * Constant that uniquely identifies this channel.
      */
-    public readonly id: string;
+    readonly id: string;
   
     /**
      * Uniquely defines each channel type.
      */
-    public readonly type: string;
+    readonly type: string;
   
     /**
      * Channels may be visualized and selectable by users. DisplayMetadata may be used to provide hints on how to see them.
      * For app channels, displayMetadata would typically not be present
      */
-    public readonly displayMetadata?: DisplayMetadata;
+    readonly displayMetadata?: DisplayMetadata;
   
      /**
      * Broadcasts the given context on this channel. This is equivalent to joining the channel and then calling the 
@@ -32,7 +32,7 @@ interface Channel {
      * 
      * `Error` with a string from the `ChannelError` enumeration.
      */
-    public broadcast(context: Context): void;
+    broadcast(context: Context): void;
   
     /**
      * Returns the last context that was broadcast on this channel. All channels initially have no context, until a 
@@ -49,16 +49,16 @@ interface Channel {
      * 
      * `Error` with a string from the `ChannelError` enumeration.
      */
-    public getCurrentContext(contextType?: string): Promise<Context|null>;
+    getCurrentContext(contextType?: string): Promise<Context|null>;
   
     /**
      * Adds a listener for incoming contexts whenever a broadcast happens on this channel.
      */
-    public addContextListener(handler: ContextHandler): Listener;
+    //addContextListener(handler: ContextHandler): Listener;
   
     /**
      * Adds a listener for incoming contexts of the specified context type whenever a broadcast happens on this channel.
      */
-    public addContextListener(contextType: string, handler: ContextHandler): Listener;
+    addContextListener(contextType: string, handler: ContextHandler): Listener;
   }
   

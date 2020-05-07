@@ -1,46 +1,40 @@
 const setupFDC3Client = () => {
+	const { RouterClient, WindowClient, Logger } = FSBL.Clients;
 
-
-	const { RouterClient, WindowClient } = FSBL.Clients;
-
-	const DesktopAgent: DesktopAgent = {
-
-		open: async (name, context) => {
-			Logger.log("Desktop Agent open called");
-			const { err, response } = await RouterClient.query("FDC3.desktopAgent.open", { "name": name, "context": context });
+	class DesktopAgentClient implements DesktopAgent {
+		async open(name: string, context?: Context) {
+			Logger.log("Desktop Agent open called typescript");
+			const { err, response } = await RouterClient.query("FDC3.desktopAgent.open", { "name": name, "context": context }, ()=> {});
 			if (err) {
 				throw (err);
 			}
 			Logger.log("DesktopAgent.open response: ", response.data);
 			return response.data;
-		},
+		}
 
-
-		findIntent: async (intent, context) => {
+		async findIntent(intent: string, context?: Context) {
 			Logger.log("Desktop Agent findIntent called", intent, context);
-			const { err, response } = await RouterClient.query("FDC3.desktopAgent.findIntent", { "intent": intent, "context": context });
+			const { err, response } = await RouterClient.query("FDC3.desktopAgent.findIntent", { "intent": intent, "context": context }, ()=> {});
 			if (err) {
 				throw (err);
 			}
 			Logger.log("DesktopAgent.FindIntent response: ", response.data);
 			return response.data;
-		},
+		}
 
-
-		findIntentsByContext: async (context) => {
+		async findIntentsByContext(context: Context) {
 			Logger.log("Desktop Agent open called");
-			const { err, response } = await RouterClient.query("FDC3.desktopAgent.findIntentsByContext", { "context": context });
+			const { err, response } = await RouterClient.query("FDC3.desktopAgent.findIntentsByContext", { "context": context }, ()=> {});
 			if (err) {
 				throw (err);
 			}
 			Logger.log("DesktopAgent.findIntentsByContext response: ", response.data);
 			return response.data;
-		},
+		}
 
-
-		broadcast: async (context) => {
+		async broadcast(context: Context) {
 			Logger.log("Desktop Agent broadcast called");
-			const { err, response } = await RouterClient.query("FDC3.desktopAgent.broadcast", context);
+			const { err, response } = await RouterClient.query("FDC3.desktopAgent.broadcast", context, ()=> {});
 			if (err) {
 				Logger.log("DesktopAgent.broadcast ERROR:", err);
 				throw (err);
@@ -48,25 +42,23 @@ const setupFDC3Client = () => {
 				Logger.log("DesktopAgent.broadcast response: ", response.data);
 				return;
 			}
-		},
+		}
 
-
-		raiseIntent: async (intent, context, target = "") => {
+		async raiseIntent(intent: string, context: Context, target?: string) {
 			Logger.log("Desktop Agent raiseIntent called");
-			RouterClient.query("FDC3.desktopAgent.raiseIntent", { "intent": intent, "context": context, "target": target }, function (err, response) {
+			const {err, response} = await RouterClient.query("FDC3.desktopAgent.raiseIntent", { "intent": intent, "context": context, "target": target }, ()=>{});
 				// debugger;
 				// Implementation Removed
 				// Router Publish
-				if (err) {
-					throw (err);
-				}
-				console.log("DesktopAgent.raiseIntent response: ", response.data);
-				return response.data;
-			});
-		},
+			if (err) {
+				throw (err);
+			}
+			console.log("DesktopAgent.raiseIntent response: ", response.data);
+			return response.data;
+		}
 
 
-		addIntentListener: (intent, handler) => {
+		addIntentListener(intent: string, handler: ContextHandler): Listener {
 			console.log("Handler Type", ({}).toString.call(handler));
 			const appName = WindowClient.getWindowIdentifier().componentType;
 			console.log("WindowIdentifier: ", appName);
@@ -74,50 +66,55 @@ const setupFDC3Client = () => {
 			if (({}).toString.call(handler) === '[object AsyncFunction]' || ({}).toString.call(handler) === '[object Function]') {
 				//This is a valid handler
 				let channel = appName + intent;
-				RouterClient.subscribe(channel, function (err: Error, response: any) {
+				const subscribeHandler = (err: Error, response: any) => {
 					if (err) {
 						console.log("Error adding IntentListener: ", err);
 					}
 					handler(response.data.context);
-				});
+				}
+				const subscribeId = RouterClient.subscribe(channel, subscribeHandler);
+				return {
+					unsubscribe: ()=>{
+						RouterClient.unsubscribe(subscribeId);
+					}
+				}
 			} else {
 				//This is not a valid handler
 				Logger.log("addIntentListener: Handler arguement must be [object Function] or [object AsyncFunction]");
-				return handler;
+				throw("invalid handler");
+				//return handler;
 			}
-		},
+		}
 
 
-		addContextListener: async (context) => {
+		addContextListener (contextType: string, handler: ContextHandler): Listener {
 			Logger.log("Desktop Agent addContextListener called");
-			const { err, response } = await RouterClient.query("desktopAgentAddContextListener", context);
-			if (err) {
-				throw (err);
+			//const { err, response } = RouterClient.query("desktopAgentAddContextListener", null, ()=> {});
+			// if (err) {
+			// 	throw (err);
+			// }
+			//Logger.log("DesktopAgent.addContextListener response: ", response.data);
+			return {
+				unsubscribe: () => {
+
+				}
 			}
-			Logger.log("DesktopAgent.addContextListener response: ", response.data);
-			return response.data;
-		},
+		}
 
+		async getSystemChannels(): Promise<Array<Channel>> { return null; }
 
-		getSystemChannels: () => { },
+		async joinChannel(channelId: string) { }
 
-
-
-		joinChannel: (channelId) => { },
-
-
-
-		getOrCreateChannel: (channelId) => { }
+		async getOrCreateChannel(channelId: string): Promise<Channel> { return null; }
 
 	}
-
-	FSBL.Clients.DesktopAgentClient = DesktopAgent
+	(FSBL as any).Clients.DesktopAgentClient = new DesktopAgentClient();
 }
 
 // Startup pattern for preload. Preloads can come in any order, so we need to wait on either the window event or the
 // FSBL event
-if (window.FSBL && FSBL.addEventListener) {
-	FSBL.addEventListener("onReady", setupFDC3Client);
+if ((window as any).FSBL && (FSBL as any).addEventListener) {
+	(FSBL as any).addEventListener("onReady", setupFDC3Client);
 } else {
 	window.addEventListener("FSBLReady", setupFDC3Client);
 }

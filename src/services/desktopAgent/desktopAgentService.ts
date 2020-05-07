@@ -13,6 +13,7 @@ const Globals = window;
 
 
 import desktopAgentUtilities from './desktopAgentUtilities'
+import DesktopAgent from './desktopAgent'
 // const queryJSON = require('./objectQuery/queryJSON.js');
 
 Logger.start();
@@ -25,7 +26,10 @@ Logger.log("Desktop Agent starting up");
  * @constructor
  */
 
-class desktopAgentService extends BaseService implements DesktopAgent {
+class desktopAgentService extends BaseService {
+	desktopAgent: DesktopAgent;
+	channels: { [key: string]: Channel} = {};
+
 	constructor(params: {
 		name: string; startupDependencies: {
 			services: string[]; clients: string[];
@@ -44,6 +48,10 @@ class desktopAgentService extends BaseService implements DesktopAgent {
 		this.createRouterEndpoints();
 		Finsemble.Clients.Logger.log("desktopAgent Service ready");
 		this.fdc3Configuration = await this.getFDC3Configuration();
+		this.desktopAgent = new DesktopAgent({
+			FSBL: Finsemble,
+			fdc3Configuration: this.getFDC3Configuration			
+		})
 		cb();
 	}
 
@@ -58,7 +66,7 @@ class desktopAgentService extends BaseService implements DesktopAgent {
 	 * @private
 	 */
 	createRouterEndpoints() {
-		RouterClient.addResponder("FDC3.desktopAgent.open", function (error: Error, queryMessage: any) {
+		RouterClient.addResponder("FDC3.desktopAgent.open", async (error: Error, queryMessage: any) => {
 			if (!error) {
 				console.log("Check Open Data Message:", queryMessage.data);
 				if (!queryMessage.data.name) {
@@ -66,10 +74,14 @@ class desktopAgentService extends BaseService implements DesktopAgent {
 					queryMessage.sendQueryResponse("Error, Open requires name: " + queryMessage, null);
 				} else {
 					console.log("Check Open data:", queryMessage.data);
-					this.open(queryMessage.data.name, queryMessage.data.context, (err: any, response: any) => {
-						console.log("CallBack for Open Occured to send response");
-						queryMessage.sendQueryResponse(err, response);
-					});
+					try {
+						await this.desktopAgent.open(queryMessage.data.name, queryMessage.data.context)
+						queryMessage.sendQueryResponse(null, null);
+					} catch (err) {
+						queryMessage.sendQueryResponse(err, null);
+					}
+					
+					
 
 				}
 			} else {
@@ -77,14 +89,14 @@ class desktopAgentService extends BaseService implements DesktopAgent {
 			}
 		});
 
-		RouterClient.addResponder("FDC3.desktopAgent.findIntent", function (error: Error, queryMessage: any) {
+		RouterClient.addResponder("FDC3.desktopAgent.findIntent", async (error: Error, queryMessage: any) => {
 			if (!error) {
 				console.log("Validate findIntent Data Message:", queryMessage.data);
 				if (!queryMessage.data.intent) {
 					Logger.error("Desktop Agent - Find Intent without valid intent: ", queryMessage);
 					queryMessage.sendQueryResponse("Error, FindIntent requires intent parameter[1]: " + queryMessage, null);
 				} else {
-					let responseData = this.findIntent(queryMessage.data.intent, queryMessage.data.context);
+					let responseData = this.desktopAgent.findIntent(queryMessage.data.intent, queryMessage.data.context);
 					console.log("CallBack for FindIntent Occured, Informing Client");
 					queryMessage.sendQueryResponse(null, responseData);
 				}
@@ -93,14 +105,14 @@ class desktopAgentService extends BaseService implements DesktopAgent {
 			}
 		});
 
-		RouterClient.addResponder("FDC3.desktopAgent.findIntentsByContext", function (error: Error, queryMessage: any) {
+		RouterClient.addResponder("FDC3.desktopAgent.findIntentsByContext", (error: Error, queryMessage: any) => {
 			if (!error) {
 				console.log("Validate findIntentsByContext Data Message:", queryMessage.data);
 				if (!queryMessage.data.context) {
 					queryMessage.sendQueryResponse("Error, findIntentsByContext requires context parameter: " + queryMessage, null);
 					Logger.error("Desktop Agent - findIntentsByContext without valid context: ", queryMessage);
 				} else {
-					let responseData = this.findIntentsByContext(queryMessage.data.context);
+					let responseData = this.desktopAgent.findIntentsByContext(queryMessage.data.context);
 					console.log("CallBack for findIntentsByContext Occured, Informing Client");
 					queryMessage.sendQueryResponse(null, responseData);
 				}
@@ -109,7 +121,7 @@ class desktopAgentService extends BaseService implements DesktopAgent {
 			}
 		});
 
-		RouterClient.addResponder("FDC3.desktopAgent.broadcast", function (error: Error, queryMessage: any) {
+		RouterClient.addResponder("FDC3.desktopAgent.broadcast", (error: Error, queryMessage: any) => {
 			if (!error) {
 				console.log("This function executes without error");
 				if (!queryMessage.data) {
@@ -119,7 +131,7 @@ class desktopAgentService extends BaseService implements DesktopAgent {
 				} else {
 					Logger.log("Desktop Agent - Broadcast context: ", queryMessage);
 					console.log("Desktop Agent - Broadcast context: ", queryMessage);
-					this.broadcast(queryMessage.data);
+					this.desktopAgent.broadcast(queryMessage.data);
 					queryMessage.sendQueryResponse(null, queryMessage.data);
 				}
 			} else {
@@ -141,7 +153,7 @@ class desktopAgentService extends BaseService implements DesktopAgent {
 					console.log("Check RaiseIntent Data intent:", queryMessage.data.intent);
 					console.log("Check RaiseIntent Data context:", queryMessage.data.context);
 					console.log("Check RaiseIntent Data target:", queryMessage.data.target);
-					let value = await this.raiseIntent(queryMessage.data.intent, queryMessage.data.context, queryMessage.data.target);
+					let value = await this.desktopAgent.raiseIntent(queryMessage.data.intent, queryMessage.data.context, queryMessage.data.target);
 					console.log("CallBack for RaiseIntent Occured, Informing Client");
 					queryMessage.sendQueryResponse(null, value);
 				}
@@ -152,62 +164,6 @@ class desktopAgentService extends BaseService implements DesktopAgent {
 
 		return this;
 	}
-
-	//Begin Implementation
-
-	open(name: string, context?: object) {
-		LauncherClient.spawn(name, { data: { context } }, (err: Error, response: any) => {
-			console.log("FDC3.desktopAgent triggered LauncherClient.spawn");
-			callback(err, response);
-		});
-		return this;
-	}
-
-	findIntent(intent: string, context?: Context): Promise<AppIntent> {
-		var appIntentMatches = desktopAgentUtilities.findAllIntentMatchesandFormatResponse(this.fdc3Configuration, intent, context);
-		console.log("All Formatted Matches: ", appIntentMatches);
-
-		if (Array.isArray(appIntentMatches)) {
-			return appIntentMatches[0];
-		} else {
-			return appIntentMatches;
-		}
-	}
-
-	findIntentsByContext(context: Context): Promise<Array<AppIntent>> {
-		var appIntentMatches = desktopAgentUtilities.findAllContextMatchesandFormatResponse(this.fdc3Configuration, context);
-		console.log("All Formatted Matches: ", appIntentMatches);
-		return appIntentMatches;
-	}
-
-	broadcast(context: any): void {
-		RouterClient.transmit("broadcast", context);
-		return this;
-	}
-
-	async raiseIntent(intent: string, context: Context, target?: string): Promise<IntentResolution> {
-		let resolvedIntent;
-		const { data: componentList } = await LauncherClient.getActiveDescriptors();
-		console.log("componentList", componentList);
-		const intentComponentList = desktopAgentUtilities.findAllIntentMatchesandFormatResponse(this.fdc3Configuration, intent, context);
-		console.log("intents:", intentComponentList)
-		desktopAgentUtilities.resolveIntent(intent, intentComponentList, componentList, context);
-		console.log("return value", resolvedIntent);
-		const dataType = target + intent;
-		return { dataType: dataType, data: context };
-	}
-
-	addIntentListener(intent: string, handler: ContextHandler): Listener { };
-
-	addContextListener(contextType: string, handler: ContextHandler): Listener { };
-
-	getSystemChannels(): Promise<Array<Channel>> { };
-
-	joinChannel(channelId: string): Promise<void> { };
-
-	getOrCreateChannel(channelId: string): Promise<Channel> {
-
-	};
 
 }
 

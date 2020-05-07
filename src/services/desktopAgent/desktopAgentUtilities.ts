@@ -1,24 +1,27 @@
+import FDC3 from "../../../src-built-in/components/advancedAppCatalog/src/modules/FDC3";
+
 const _ = require('lodash');
 // const Finsemble = require("@chartiq/finsemble");
 // const ConfigClient = Finsemble.Clients.ConfigClient;
 
 //AppD Specification Helper Functions
-async function getAllFDC3Config(ConfigClient) {
+async function getAllFDC3Config(ConfigClient: any) {
 	const { data: config } = await ConfigClient.getValue({ field: 'finsemble.components' });
 	return config;
 }
 
-function pickDeep(collection, predicate, thisArg) {
+let predicate;
+function pickDeep(collection: any, predicate: any, thisArg?: any) {
 	if (_.isFunction(predicate)) {
 		predicate = _.iteratee(predicate, thisArg);
 	} else {
-		var keys = _.flatten(_.tail(arguments));
-		predicate = function (val, key) {
+		let keys = _.flatten(_.tail(arguments));
+		predicate = function (val: any, key: any) {
 			return _.includes(keys, key);
 		}
 	}
 
-	return _.transform(collection, function (memo, val, key) {
+	return _.transform(collection, function (memo: any, val: any, key: any) {
 		var include = predicate(val, key);
 		if (!include && _.isObject(val)) {
 			val = pickDeep(val, predicate);
@@ -30,13 +33,13 @@ function pickDeep(collection, predicate, thisArg) {
 	});
 }
 
-function getFDC3(componentConfigObject) {
+function getFDC3(componentConfigObject: any) {
 	return componentConfigObject['foreign']['services']['fdc3'];
 }
 
-function flattenFDC3Config(componentFDC3Configs) {
+function flattenFDC3Config(componentFDC3Configs: any) {
 	console.log(componentFDC3Configs);
-	const flattenedFDC3Config = []
+	const flattenedFDC3Config: any[] = [];
 	Object.keys(componentFDC3Configs).forEach(function (k) {
 		let fdc3 = getFDC3(componentFDC3Configs[k]);
 		const appD = {
@@ -52,14 +55,14 @@ function flattenFDC3Config(componentFDC3Configs) {
 
 
 //App Intent Object Formatting
-function formatAppIntentResponse(filteredResult) {
-	var intentArray = [];
-	var merged = {
+function formatAppIntentResponse(filteredResult: any) {
+	const intentArray: any[] = [];
+	const merged: any = {
 		rows: []
 	};
-	var responseArray = [];
+	let responseArray = [];
 
-	filteredResult.forEach((intent) => {
+	filteredResult.forEach((intent: any) => {
 		let intentName = intent['intent']['name'];
 		let componentName = { name: intent['name'] };
 		let intentDisplayName = intent['intent']['displayName'];
@@ -69,17 +72,18 @@ function formatAppIntentResponse(filteredResult) {
 		}
 		intentArray.push(appIntent);
 	});
-	var mergedResult = [];
-	for (var i = 0; i < intentArray.length; i++) {
+
+	let mergedResult: any[] = [];
+	for (let i = 0; i < intentArray.length; i++) {
 		mergedResult = mergedResult.concat(intentArray[i]);
 	}
 
-	mergedResult.forEach(function (sourceRow) {
-		var mergeId = -1;
-		if (!merged.rows.some(function (row) { return _.isEqual(row['intent'], sourceRow['intent']); })) {
+	for (const sourceRow of mergedResult) {
+		let mergeId = -1;
+		if (!merged.rows.some((row: any) => { return _.isEqual(row['intent'], sourceRow['intent']); })) {
 			merged.rows.push(sourceRow);
 		} else {
-			merged.rows.filter(function (targetRow, index) {
+			merged.rows.filter((targetRow: any, index: number) => {
 				if (_.isEqual(targetRow['intent'], sourceRow['intent'])) {
 					mergeId = index;
 					return sourceRow['intent']
@@ -91,29 +95,29 @@ function formatAppIntentResponse(filteredResult) {
 				mergeId = -1;
 			}
 		}
-	});
+	};
 
 	responseArray = merged.rows;
 	return responseArray;
 }
 
 //Find Intent Helper Functions
-function customClientIntentResultFilter(results) {
+function customClientIntentResultFilter(results: any) {
 	if (results) {
 		return results;
 	}
 }
 
 //Find Intent By Context Helper Functions
-function customClientContextResultFilter(results) {
+function customClientContextResultFilter(results: any) {
 	return results;
 }
 
-function findAllContextMatches(fdc3Configuration, context) {
-	var results = [];
-	fdc3Configuration.forEach(function (element) {
+function findAllContextMatches(fdc3Configuration: any, context: Context) {
+	var results: any = [];
+	fdc3Configuration.forEach(function (element: any) {
 		let intentList = element['fdc3']['intents'];
-		intentList.forEach(function (intent) {
+		intentList.forEach(function (intent: any) {
 			let fdc3Contexts = intent['contexts'];
 			console.log(context);
 			if (fdc3Contexts.includes(context)) {
@@ -130,7 +134,7 @@ function findAllContextMatches(fdc3Configuration, context) {
 
 
 //API Utilities
-export async function getAllComponentAppSpec(ConfigClient) {
+export async function getAllComponentAppSpec(ConfigClient: any) {
 	let environmentIntents = await getAllFDC3Config(ConfigClient)
 	let test = pickDeep(environmentIntents, 'fdc3');
 	console.log(test);
@@ -139,7 +143,7 @@ export async function getAllComponentAppSpec(ConfigClient) {
 	return flat;
 }
 
-export function findAllIntentMatchesandFormatResponse(fdc3Configuration, intent, context) {
+export function findAllIntentMatchesandFormatResponse(fdc3Configuration: any, intent: any, context: Context) {
 	const results = [];
 	for (const element of fdc3Configuration) {
 		let intents = element['fdc3']['intents'];
@@ -154,15 +158,15 @@ export function findAllIntentMatchesandFormatResponse(fdc3Configuration, intent,
 	return results;
 }
 
-export function findAllContextMatchesandFormatResponse(fdc3Configuration, context) {
+export function findAllContextMatchesandFormatResponse(fdc3Configuration: any, context: Context) {
 	let matches = findAllContextMatches(fdc3Configuration, context);
 	return matches;
 }
 
-export function resolveIntent(intent, intentComponentList, activeComponents, context) {
+export function resolveIntent(intent: any, intentComponentList: any[], activeComponents: any[], context: Context) {
 	let index = 0;
 	let activeMatches = [];
-	console.log(intentList);
+	console.log(intentComponentList);
 	let activeIds = Object.keys(activeComponents);
 
 	console.log(intentComponentList);

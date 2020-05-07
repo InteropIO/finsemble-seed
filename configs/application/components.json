@@ -18,7 +18,7 @@
 			"component": {
 				"displayName": "Welcome Component",
 				"spawnOnStartup": false,
-				"preload": ["$applicationRoot/preloads/zoom.js", "$applicationRoot/preloads/desktopAgentClient.js"]
+				"preload": ["$applicationRoot/preloads/zoom.js", "http://localhost:3375/services/desktopAgent/desktopAgentClient.ts.js"]
 			},
 			"foreign": {
 				"services": {
