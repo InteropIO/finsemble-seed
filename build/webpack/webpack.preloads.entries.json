@@ -9,6 +9,6 @@
 	},
 	"fdc3": {
 		"output": "preloads/FDC3Client",
-		"entry": "./src/services/desktopAgent/FDC3Client.ts"
+		"entry": "./src/services/FDC3/FDC3Client.ts"
 	}
 }

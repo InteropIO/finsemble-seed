@@ -88,26 +88,20 @@ export default class D implements DesktopAgent {
 		return null; //new { source: "source", data: context, resolution: "resolved" };
 	}
 
-	private setSystemChannels() {
-		const finsembleLinkerChannels = this.LinkerClient.getAllChannels();
-
-		this.systemChannels = finsembleLinkerChannels.map((linkerChannel: any) => {
-			// TODO: this is just a shell and need to be padded out with the logic
-			const { id, type } = linkerChannel;
-			const channel = new Channel(id, type, null);
-			return channel;
-		});
-	}
-
 	async getSystemChannels(): Promise<Array<Channel>> {
 		const finsembleLinkerChannels = this.LinkerClient.getAllChannels();
 		const channels: Array<Channel> = [];
 
 		for (const finsembleLinkerChannel of finsembleLinkerChannels) {
-			const channel = new Channel(finsembleLinkerChannel.name, "system", {
-				name: finsembleLinkerChannel.name,
-				color: finsembleLinkerChannel.color,
-				glyph: finsembleLinkerChannel.glyph
+			const channel = new Channel({
+				id: finsembleLinkerChannel.name, 
+				type: "system", 
+				displayMetaData: {
+					name: finsembleLinkerChannel.name,
+					color: finsembleLinkerChannel.color,
+					glyph: finsembleLinkerChannel.glyph
+				},
+				FSBL: this.FSBL
 			});
 			channels.push(channel);
 		}

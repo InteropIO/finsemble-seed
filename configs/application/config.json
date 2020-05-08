@@ -2,13 +2,13 @@
 	"comment": "Top-level application config for development, adding on top of the core config",
 	"accessibleLinker": true,
 	"services": {
-		"desktopAgent": {
+		"FDC3": {
             "useWindow": true,
             "active": true,
-            "name": "desktopAgent",
-			"file": "$applicationRoot/services/desktopAgent/FDC3Service.js",
+            "name": "FDC3",
+			"file": "$applicationRoot/services/FDC3/FDC3Service.js",
             "visible": false,
-            "html": "$applicationRoot/services/desktopAgent/desktopAgent.html"
+            "html": "$applicationRoot/services/FDC3/FDC3.html"
         }
     },
 	"servicesConfig": {

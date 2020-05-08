@@ -52,6 +52,10 @@ class FDC3Service extends BaseService {
 			FSBL: Finsemble,
 			fdc3Configuration: this.getFDC3Configuration			
 		})
+		const channels = await this.desktopAgent.getSystemChannels();
+		for (const channel of channels) {
+			this.channels[channel.id] = channel;
+		}
 		cb();
 	}
 
@@ -148,20 +152,21 @@ class FDC3Service extends BaseService {
 		];
 
 		for (const ApiCall of ChannelApiList) {
-			RouterClient.addResponder(`FDC3.Channel.${ApiCall}`, async (err: Error, queryMessage: any) => {	
+			RouterClient.addResponder(`FDC3.Channel.${ApiCall}`, async (err: Error, queryMessage: any) => {
 				try {
+					const channel = this.channels[queryMessage.data.channelId];	
 					let response;
 					switch (ApiCall) {
 						case "addContextListener":
-							response = await this.desktopAgent.addContextListener(queryMessage.data.contextType, () => {
+							response = await channel.addContextListener(queryMessage.data.contextType, () => {
 								// TODO
 							})
 							break;
 						case "broadcast":
-							response = await this.desktopAgent.broadcast(queryMessage.data.context);
+							response = await channel.broadcast(queryMessage.data.context);
 							break;
 						case "getCurrentContext":
-							response = await this.desktopAgent.getOrCreateChannel(queryMessage.data.channelId);
+							response = await channel.getCurrentContext(queryMessage.data.contextType);
 							break;
 					}
 					queryMessage.sendQueryResponse(null, JSON.parse(JSON.stringify(response)));
@@ -177,7 +182,7 @@ class FDC3Service extends BaseService {
 
 const serviceInstance = new
 	FDC3Service({
-		name: "desktopAgent",
+		name: "FDC3",
 		startupDependencies: {
 			// add any services or clients that should be started before your service
 			services: ["authenticationService"],

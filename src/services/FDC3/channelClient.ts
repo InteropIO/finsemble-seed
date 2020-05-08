@@ -28,9 +28,11 @@ export default class C implements Channel {
     }
 
     addContextListener(contextType: string, handler: ContextHandler): Listener {
-        //throw new Error("Method not implemented.");
+        FSBL.Clients.LinkerClient.subscribe(`FDC3.broadcast.${this.id}.${contextType}`, handler);        
         return {
-            unsubscribe: () => {}
+            unsubscribe: () => {
+                FSBL.Clients.LinkerClient.unsubscribe(`FDC3.${contextType}`, handler);
+            }
         }
     }
 
