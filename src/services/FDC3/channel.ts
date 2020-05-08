@@ -2,9 +2,9 @@ export default class C implements Channel {
 	id: string;
 	type: string;
 	displayMetadata?: DisplayMetadata;
-	contexts: {[contextType: string]: Context} = {};
-	currentContext: Context;
-	FSBL: any;
+	private contexts: {[contextType: string]: Context} = {};
+	private currentContext: Context;
+	private FSBL: any;
 
 	constructor(params: any) {
 		this.id = params.id;
@@ -16,9 +16,10 @@ export default class C implements Channel {
 	broadcast(context: Context): void {
 		this.currentContext = context;
 		this.contexts[(context as any).type] = context;
-		FSBL.Clients.LinkerClient.publish({
-			dataType: `FDC3.broadcast.${this.id}.${(context as any).type}`, 
-			data: context
+		this.FSBL.Clients.LinkerClient.publish({
+			dataType: `FDC3.broadcast.${(context as any).type}`, 
+			data: context,
+			channels: [this.id]
 		}, ()=> {});
 	}
 

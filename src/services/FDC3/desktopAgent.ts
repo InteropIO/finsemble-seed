@@ -96,7 +96,7 @@ export default class D implements DesktopAgent {
 			const channel = new Channel({
 				id: finsembleLinkerChannel.name, 
 				type: "system", 
-				displayMetaData: {
+				displayMetadata: {
 					name: finsembleLinkerChannel.name,
 					color: finsembleLinkerChannel.color,
 					glyph: finsembleLinkerChannel.glyph

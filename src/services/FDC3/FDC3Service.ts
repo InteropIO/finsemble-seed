@@ -154,7 +154,7 @@ class FDC3Service extends BaseService {
 		for (const ApiCall of ChannelApiList) {
 			RouterClient.addResponder(`FDC3.Channel.${ApiCall}`, async (err: Error, queryMessage: any) => {
 				try {
-					const channel = this.channels[queryMessage.data.channelId];	
+					const channel = this.channels[queryMessage.data.channel];	
 					let response;
 					switch (ApiCall) {
 						case "addContextListener":

@@ -9,6 +9,7 @@ export default class C implements Channel {
     }
     
     broadcast(context: object): void {
+        debugger;
         FSBL.Clients.RouterClient.query("FDC3.Channel.broadcast", {
             channel: this.id,
             context
@@ -28,10 +29,12 @@ export default class C implements Channel {
     }
 
     addContextListener(contextType: string, handler: ContextHandler): Listener {
-        FSBL.Clients.LinkerClient.subscribe(`FDC3.broadcast.${this.id}.${contextType}`, handler);        
+        // This might not work out the way we expect with the linker because the linker will send this to all channels 
+        FSBL.Clients.LinkerClient.linkToChannel(this.id, finsembleWindow.identifier);
+        FSBL.Clients.LinkerClient.subscribe(`FDC3.broadcast.${contextType}`, handler);        
         return {
             unsubscribe: () => {
-                FSBL.Clients.LinkerClient.unsubscribe(`FDC3.${contextType}`, handler);
+                FSBL.Clients.LinkerClient.unsubscribe(`FDC3.broadcast.${contextType}`, handler);
             }
         }
     }
