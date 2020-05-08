@@ -6,7 +6,7 @@
             "useWindow": true,
             "active": true,
             "name": "desktopAgent",
-			"file": "$applicationRoot/services/desktopAgent/desktopAgentService.js",
+			"file": "$applicationRoot/services/desktopAgent/FDC3Service.js",
             "visible": false,
             "html": "$applicationRoot/services/desktopAgent/desktopAgent.html"
         }

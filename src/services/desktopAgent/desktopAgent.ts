@@ -1,14 +1,16 @@
 import desktopAgentUtilities from "./desktopAgentUtilities";
-import LinkerClient from "../../../finsemble/types/clients/linkerClient";
-import LauncherClient from "../../../finsemble/types/clients/launcherClient";
+//import LinkerClient from "../../../finsemble/types/clients/linkerClient";
+//import LauncherClient from "../../../finsemble/types/clients/launcherClient";
+import Channel from "./channel"
 
 export default class D implements DesktopAgent {
 	fdc3Configuration: any;
 	FSBL: any;
-	LauncherClient: typeof LauncherClient;
-	LinkerClient: typeof LinkerClient;
+	LauncherClient: any; //typeof LauncherClient;
+	LinkerClient: any; //typeof LinkerClient;
 	systemChannels: Array<Channel>;
 	customChannels: Array<Channel>;
+	windowName: string;
 
 	constructor(params: any) {
 		this.fdc3Configuration = params.fdc3Configuration;
@@ -89,42 +91,47 @@ export default class D implements DesktopAgent {
 	private setSystemChannels() {
 		const finsembleLinkerChannels = this.LinkerClient.getAllChannels();
 
-		this.systemChannels = finsembleLinkerChannels.map((linkerChannel) => {
+		this.systemChannels = finsembleLinkerChannels.map((linkerChannel: any) => {
 			// TODO: this is just a shell and need to be padded out with the logic
 			const { id, type } = linkerChannel;
-			const channel = new Channel(id, type);
+			const channel = new Channel(id, type, null);
 			return channel;
 		});
 	}
 
-	getSystemChannels(): Promise<Array<Channel>> {
-		const systemChannelPromise = (resolve: any, reject: any) => {
-			this.systemChannels
-				? resolve(this.systemChannels)
-				: reject("system channels do not exist.");
-		};
-		return new Promise(systemChannelPromise);
+	async getSystemChannels(): Promise<Array<Channel>> {
+		const finsembleLinkerChannels = this.LinkerClient.getAllChannels();
+		const channels: Array<Channel> = [];
+
+		for (const finsembleLinkerChannel of finsembleLinkerChannels) {
+			const channel = new Channel(finsembleLinkerChannel.name, "system", {
+				name: finsembleLinkerChannel.name,
+				color: finsembleLinkerChannel.color,
+				glyph: finsembleLinkerChannel.glyph
+			});
+			channels.push(channel);
+		}
+		return channels;
 	}
 
 	joinChannel(channelId: string): Promise<void> {
-		const windowIdentifier; // TODO: add a way to grab the windowIndentifier
-
-		const callback = (err: string, reponse: any) =>
-			new Promise((resolve, reject) => {
+		const joinChannelPromiseResolver = (resolve: () => void, reject: (err: string) => void) => {
+			this.LinkerClient.linkToChannel(channelId, {name: this.windowName}, (err: any) => {
 				if (err) {
 					reject(`Could not link to channel ${err}`);
 				} else {
-					resolve(reponse);
-				}
+					resolve();
+				}	
 			});
+		};
 
-		LinkerClient.linkToChannel(channelId, windowIdentifier, callback);
-		return null;
+		return new Promise(joinChannelPromiseResolver);
 	}
 
 	private createCustomChannel(channelId: string): Channel {
 		return;
 	}
+
 	getOrCreateChannel(channelId: string): Promise<Channel> {
 		const channel = (resolve: any, reject: any) => {
 			try {

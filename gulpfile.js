@@ -339,7 +339,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 					} else {
 						console.error(errorOutColor("Webpack Error.", err));
 					}
-					if (stats.hasErrors()) {
+					if (stats && stats.hasErrors()) {
 						console.error(errorOutColor(stats.toJson().errors));
 					}
 					// Webpack will call this function every time the bundle is built.
