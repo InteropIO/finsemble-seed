@@ -17,7 +17,7 @@ export default class C implements Channel {
     }
 
     async getCurrentContext(contextType?: string): Promise<object> {
-        const {err, response} = await FSBL.Clients.RouterClient.query("FDC3.Channel.broadcast", {
+        const {err, response} = await FSBL.Clients.RouterClient.query("FDC3.Channel.getCurrentContext", {
             channel: this.id,
             contextType
         }, () => {});
