@@ -238,29 +238,28 @@ function getToolbarStore(done) {
 	});
 }
 
-function _setFolders(cb = Function.prototype) {
-	getStore().setValue({
-		field: "appFolders.folders",
-		value: data.folders
-	}, (error, data) => {
-		if (error) {
-			console.log("Failed to save modified folder list.");
-		} else {
-			cb();
-		}
-	});
-}
-
-function _setValue(field, value, cb) {
+function _setValue(field, value, cb = Function.prototype) {
 	getStore().setValue({
 		field: field,
 		value: value
 	}, (error, data) => {
 		if (error) {
 			console.log("Failed to save. ", field);
+			return cb(error);
 		} else {
 			cb && cb();
 		}
+	});
+}
+
+function _setFolders(cb = Function.prototype) {
+	_setValue("appFolders.folders", data.folders, (err, data) => {
+		if (err) {
+			console.log("Failed to save modified folder list.");
+			return;
+		}
+
+		cb();
 	});
 }
 
@@ -541,7 +540,7 @@ function addTag(tag) {
 	console.log("addTag", tag);
 	data.tags.indexOf(tag) < 0 && data.tags.push(tag);
 	// Update tags in store
-	getStore().setValue({ field: "activeLauncherTags", value: data.tags });
+	_setValue("activeLauncherTags", data.tags);
 }
 
 function deleteTag(tag) {
@@ -549,7 +548,7 @@ function deleteTag(tag) {
 	data.tags.splice(data.tags.indexOf(tag), 1);
 	// Update tags in store
 	console.log("deleteTag", data.tags);
-	getStore().setValue({ field: "activeLauncherTags", value: data.tags });
+	_setValue("activeLauncherTags", data.tags);
 }
 
 function uuidv4() {
