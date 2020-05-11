@@ -28,13 +28,23 @@ export default class C implements Channel {
         }
     }
 
-    addContextListener(contextType: string, handler: ContextHandler): Listener {
-        // This might not work out the way we expect with the linker because the linker will send this to all channels 
+	addContextListener(handler: ContextHandler): Listener;
+	addContextListener(contextType: string, handler: ContextHandler): Listener;
+	addContextListener(contextTypeOrHandler: string | ContextHandler, handler?: ContextHandler): Listener {
         FSBL.Clients.LinkerClient.linkToChannel(this.id, finsembleWindow.identifier);
-        FSBL.Clients.LinkerClient.subscribe(`FDC3.broadcast.${contextType}`, handler);        
-        return {
-            unsubscribe: () => {
-                FSBL.Clients.LinkerClient.unsubscribe(`FDC3.broadcast.${contextType}`, handler);
+        if (typeof contextTypeOrHandler === "string") { // context type specified
+            FSBL.Clients.LinkerClient.subscribe(`FDC3.broadcast.${contextTypeOrHandler}`, handler);
+            return {
+                unsubscribe: () => {
+                    FSBL.Clients.LinkerClient.unsubscribe(`FDC3.broadcast.${contextTypeOrHandler}`, handler);
+                }
+            }    
+        } else { // context type not specified
+            FSBL.Clients.LinkerClient.subscribe(`FDC3.broadcast`, contextTypeOrHandler);
+            return {
+                unsubscribe: () => {
+                    FSBL.Clients.LinkerClient.unsubscribe(`FDC3.broadcast`, contextTypeOrHandler);
+                }
             }
         }
     }

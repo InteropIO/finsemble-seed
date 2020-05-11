@@ -118,7 +118,7 @@ interface DesktopAgent {
     /**
      * Adds a listener for incoming context broadcast from the Desktop Agent.
      */
-    //addContextListener(handler: ContextHandler): Listener;
+    addContextListener(handler: ContextHandler): Listener;
   
     /**
      * Adds a listener for the broadcast of a specific type of context object.

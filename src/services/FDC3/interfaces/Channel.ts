@@ -54,7 +54,7 @@ interface Channel {
     /**
      * Adds a listener for incoming contexts whenever a broadcast happens on this channel.
      */
-    //addContextListener(handler: ContextHandler): Listener;
+    addContextListener(handler: ContextHandler): Listener;
   
     /**
      * Adds a listener for incoming contexts of the specified context type whenever a broadcast happens on this channel.

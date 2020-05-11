@@ -1,13 +1,15 @@
 import desktopAgentUtilities from "./desktopAgentUtilities";
 //import LinkerClient from "../../../finsemble/types/clients/linkerClient";
 //import LauncherClient from "../../../finsemble/types/clients/launcherClient";
-import Channel from "./channel";
+import Channel from "./channel"
 
 export default class D implements DesktopAgent {
 	fdc3Configuration: any;
 	FSBL: any;
 	LauncherClient: any; //typeof LauncherClient;
 	LinkerClient: any; //typeof LinkerClient;
+	systemChannels: Array<Channel> = [];
+	customChannels: Array<Channel> = [];
 	windowName: string;
 
 	constructor(params: any) {
@@ -15,9 +17,13 @@ export default class D implements DesktopAgent {
 		this.FSBL = params.FSBL;
 		this.LinkerClient = this.FSBL.Clients.LinkerClient;
 		this.LauncherClient = this.FSBL.Clients.LauncherClient;
+		// Make sure all existing Linker Channels get added to sytemChannels. Any new channels created later will not.
+		this.getSystemChannels();
 	}
 
-	addContextListener(contextType: string, handler: ContextHandler): Listener {
+	addContextListener(handler: ContextHandler): Listener;
+	addContextListener(contextType: string, handler: ContextHandler): Listener;
+	addContextListener(contextType: string | ContextHandler, handler?: ContextHandler): Listener {
 		throw new Error("Method not implemented.");
 	}
 
@@ -55,8 +61,7 @@ export default class D implements DesktopAgent {
 	}
 
 	broadcast(context: any): void {
-		// TODO: Replace this for the linker
-		FSBL.Clients.RouterClient.transmit("broadcast", context);
+		throw new Error("Use the client.")
 	}
 
 	async raiseIntent(
@@ -87,74 +92,78 @@ export default class D implements DesktopAgent {
 	}
 
 	async getSystemChannels(): Promise<Array<Channel>> {
+		if (this.systemChannels.length) return this.systemChannels;
 		const finsembleLinkerChannels = this.LinkerClient.getAllChannels();
 		const channels: Array<Channel> = [];
 
 		for (const finsembleLinkerChannel of finsembleLinkerChannels) {
 			const channel = new Channel({
-				id: finsembleLinkerChannel.name,
-				type: "system",
+				id: finsembleLinkerChannel.name, 
+				type: "system", 
 				displayMetadata: {
 					name: finsembleLinkerChannel.name,
 					color: finsembleLinkerChannel.color,
-					glyph: finsembleLinkerChannel.glyph,
+					glyph: finsembleLinkerChannel.glyph
 				},
-				FSBL: this.FSBL,
+				FSBL: this.FSBL
 			});
 			channels.push(channel);
 		}
+		this.systemChannels = channels;
 		return channels;
 	}
 
-	joinChannel(channelId: string): Promise<void> {
-		const joinChannelPromiseResolver = (
-			resolve: () => void,
-			reject: (err: string) => void
-		) => {
-			this.LinkerClient.linkToChannel(
-				channelId,
-				{ name: this.windowName },
-				(err: any) => {
-					if (err) {
-						reject(`Could not link to channel ${err}`);
-					} else {
-						resolve();
-					}
-				}
-			);
-		};
+	private findChannel(channelId: string): Channel {
+		const systemChannel = this.systemChannels.find((channel) => channel.id === channelId);
+		if (systemChannel) {
+			return systemChannel;
+		}
+		const customChannel = this.systemChannels.find((channel) => channel.id === channelId);
+		if (customChannel) {
+			return customChannel;
+		}
+		return null;
+	}
 
-		return new Promise(joinChannelPromiseResolver);
+	async joinChannel(channelId: string): Promise<void> {
+		throw new Error("Only Implemented in the Client");
+	}
+
+	private createCustomChannel(channelId: string): Channel {
+		const existingChannel = this.findChannel(channelId);
+		if (existingChannel) {
+			throw new Error(`Channel ${channelId} already exists`);
+		}
+		const channelColor = Math.floor(Math.random()*16777215).toString(16); // generate a random color
+		
+		// There is a bug in the LinkerClient.createChannel that causes it to callback before the channel is created. 
+		// When that is fixed, recommend promisifying the function. Not doing any complex callback async here.
+		// Just remember that this can return before the channel exists so creating and immediately broadcasting might not work.
+		// This is unlikely to cause problems because there need to be subscribers to make that useful.
+		FSBL.Clients.LinkerClient.createChannel({
+			name: channelId,
+			color: channelColor,
+		}, () => {});
+
+		const channel = new Channel({
+			id: channelId, 
+			type: "app", 
+			displayMetadata: {
+				name: channelId,
+				color: channelColor,
+				glyph: null,
+			},
+			FSBL: this.FSBL
+		});
+		return channel;
 	}
 
 	async getOrCreateChannel(channelId: string): Promise<Channel> {
-		const getOrCreateChannelPromiseResolver = async (
-			resolve: any,
-			reject: any
-		) => {
-			try {
-				const systemChannels: Array<Channel> = await this.getSystemChannels();
-				const channelExists: Channel = systemChannels.find(
-					(channel) => channel.id === channelId
-				);
-
-				if (channelExists) {
-					resolve(getOrCreateChannelPromiseResolver);
-				} else {
-					resolve(
-						new Channel({
-							id: channelId,
-							type: "app",
-							displayMetadata: {},
-							FSBL: this.FSBL,
-						})
-					);
-				}
-			} catch (error) {
-				reject(`Error during getting or Creating Channel: ${error}`);
-			}
-		};
-
-		return new Promise(getOrCreateChannelPromiseResolver);
+		const channel = this.findChannel(channelId);
+		if (channel) {
+			return channel;
+		} else {
+			return this.createCustomChannel(channelId);
+		}
 	}
 }
