@@ -1,12 +1,12 @@
 import React from "react";
-import { MenuShell, MenuActivator, Menu, Preferences, SystemLog, CentralLogger, Documentation, Restart, Reset, Quit } from "@chartiq/finsemble-ui/react/components";
+import { MenuShell, MenuToggle, Menu, Preferences, SystemLog, CentralLogger, Documentation, Restart, Reset, Quit } from "@chartiq/finsemble-ui/react/components";
 
 export const FileMenu = () => {
 	return (
 		<MenuShell id="fileMenu">
-			<MenuActivator>
+			<MenuToggle>
 				<img className="finsemble-toolbar-brand-logo" src="../../../assets/img/Finsemble_Taskbar_Icon.png" />
-			</MenuActivator>
+			</MenuToggle>
 			<Menu>
 				<Preferences/>
 				<SystemLog/>
