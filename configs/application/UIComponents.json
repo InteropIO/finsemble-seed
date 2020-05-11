@@ -479,7 +479,8 @@
 					"resizable": false,
 					"maxHeight": null,
 					"minHeight": null,
-					"dockable": false
+					"dockable": false,
+					"show": false
 				},
 				"foreign": {
 					"components": {
