@@ -1,15 +1,13 @@
 import desktopAgentUtilities from "./desktopAgentUtilities";
 //import LinkerClient from "../../../finsemble/types/clients/linkerClient";
 //import LauncherClient from "../../../finsemble/types/clients/launcherClient";
-import Channel from "./channel"
+import Channel from "./channel";
 
 export default class D implements DesktopAgent {
 	fdc3Configuration: any;
 	FSBL: any;
 	LauncherClient: any; //typeof LauncherClient;
 	LinkerClient: any; //typeof LinkerClient;
-	systemChannels: Array<Channel>;
-	customChannels: Array<Channel>;
 	windowName: string;
 
 	constructor(params: any) {
@@ -94,14 +92,14 @@ export default class D implements DesktopAgent {
 
 		for (const finsembleLinkerChannel of finsembleLinkerChannels) {
 			const channel = new Channel({
-				id: finsembleLinkerChannel.name, 
-				type: "system", 
+				id: finsembleLinkerChannel.name,
+				type: "system",
 				displayMetadata: {
 					name: finsembleLinkerChannel.name,
 					color: finsembleLinkerChannel.color,
-					glyph: finsembleLinkerChannel.glyph
+					glyph: finsembleLinkerChannel.glyph,
 				},
-				FSBL: this.FSBL
+				FSBL: this.FSBL,
 			});
 			channels.push(channel);
 		}
@@ -109,38 +107,54 @@ export default class D implements DesktopAgent {
 	}
 
 	joinChannel(channelId: string): Promise<void> {
-		const joinChannelPromiseResolver = (resolve: () => void, reject: (err: string) => void) => {
-			this.LinkerClient.linkToChannel(channelId, {name: this.windowName}, (err: any) => {
-				if (err) {
-					reject(`Could not link to channel ${err}`);
-				} else {
-					resolve();
-				}	
-			});
+		const joinChannelPromiseResolver = (
+			resolve: () => void,
+			reject: (err: string) => void
+		) => {
+			this.LinkerClient.linkToChannel(
+				channelId,
+				{ name: this.windowName },
+				(err: any) => {
+					if (err) {
+						reject(`Could not link to channel ${err}`);
+					} else {
+						resolve();
+					}
+				}
+			);
 		};
 
 		return new Promise(joinChannelPromiseResolver);
 	}
 
-	private createCustomChannel(channelId: string): Channel {
-		return;
-	}
-
-	getOrCreateChannel(channelId: string): Promise<Channel> {
-		const channel = (resolve: any, reject: any) => {
+	async getOrCreateChannel(channelId: string): Promise<Channel> {
+		const getOrCreateChannelPromiseResolver = async (
+			resolve: any,
+			reject: any
+		) => {
 			try {
-				const systemChannels = this.systemChannels.find(
+				const systemChannels: Array<Channel> = await this.getSystemChannels();
+				const channelExists: Channel = systemChannels.find(
 					(channel) => channel.id === channelId
 				);
 
-				resolve(
-					systemChannels ? systemChannels : this.createCustomChannel(channelId)
-				);
+				if (channelExists) {
+					resolve(getOrCreateChannelPromiseResolver);
+				} else {
+					resolve(
+						new Channel({
+							id: channelId,
+							type: "app",
+							displayMetadata: {},
+							FSBL: this.FSBL,
+						})
+					);
+				}
 			} catch (error) {
 				reject(`Error during getting or Creating Channel: ${error}`);
 			}
 		};
 
-		return new Promise(channel);
+		return new Promise(getOrCreateChannelPromiseResolver);
 	}
 }
