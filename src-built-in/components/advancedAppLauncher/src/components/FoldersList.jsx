@@ -212,8 +212,6 @@ export default class FoldersList extends React.Component {
 			className += ' folder-with-icon'
 		}
 
-		const EDITABLE_FOLDER_ICON_CLASS = 'ff-adp-hamburger'
-
 		let nameField;
 		if (folder.icon === EDITABLE_FOLDER_ICON_CLASS && this.state.renamingFolder === folderName) {
 			nameField = <input id="rename" value={this.state.folderNameInput}
@@ -225,6 +223,8 @@ export default class FoldersList extends React.Component {
 			nameField = folderName;
 		}
 
+		const canDelete = folder.canDelete, canEdit = folder.canEdit;
+
 		//This DOM will be rendered within a draggable (if the folder can be dragged), and a plain ol div if it cannot be dragged.
 		return (
 			<div onClick={(event) => this.onFolderClicked(event, folderName)}
@@ -234,10 +234,10 @@ export default class FoldersList extends React.Component {
 					{folder.icon && <i className={folder.icon}></i>}
 					<div className="folder-name">{nameField}</div>
 				</div>
-				{folder.icon === EDITABLE_FOLDER_ICON_CLASS && <span className='folder-action-icons'>
-					<i className='ff-adp-edit' title='Rename' onClick={this.renameFolder.bind(this, folderName)}></i>
-					<i className='ff-adp-trash-outline' title='Delete Folder' onClick={this.deleteFolder.bind(this, folderName)}></i>
-				</span>}
+				<span className='folder-action-icons'>
+					{canEdit && <i className='ff-adp-edit' title='Rename' onClick={this.renameFolder.bind(this, folderName)}></i>}
+					{canDelete && <i className='ff-adp-trash-outline' title='Delete Folder' onClick={this.deleteFolder.bind(this, folderName)}></i>}
+				</span>
 			</div>);
 	}
 	/**

@@ -8,12 +8,17 @@
 					"name": "Finsemble-AppLauncher-Store",
 					"foundation": {
 						"appFolders": {
-							"list": ["Advanced App Launcher", "Favorites"],
+							"list": ["Advanced App Launcher", 
+									 "Favorites",
+									 "CanDeleteCanEdit",
+									 "CanDeleteCantEdit",
+									 "CantDeleteCanEdit",
+									 "CantDeleteCantEdit"],
 							"folders": {
 								"Advanced App Launcher": {
 									"icon": "ff-component",
 									"type": "folder",
-									"disableUserRemove": true,
+									"canDelete": false,
 									"apps": {
 										"1": {
 											"name": "Welcome Component",
@@ -36,7 +41,35 @@
 								"Favorites": {
 									"icon": "ff-favorite",
 									"type": "folder",
-									"disableUserRemove": true,
+									"canDelete": false,
+									"apps": {}
+								},
+								"CanDeleteCanEdit": {
+									"icon": "ff-component",
+									"type": "folder",
+									"canDelete": true,
+									"canEdit": true,
+									"apps": {}
+								},
+								"CanDeleteCantEdit": {
+									"icon": "ff-component",
+									"type": "folder",
+									"canDelete": true,
+									"canEdit": false,
+									"apps": {}
+								},
+								"CantDeleteCanEdit": {
+									"icon": "ff-component",
+									"type": "folder",
+									"canDelete": false,
+									"canEdit": true,
+									"apps": {}
+								},
+								"CantDeleteCantEdit": {
+									"icon": "ff-component",
+									"type": "folder",
+									"canDelete": false,
+									"canEdit": false,
 									"apps": {}
 								}
 							}
