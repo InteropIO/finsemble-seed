@@ -1,6 +1,7 @@
 import Channel from './channelClient';
 export default class DesktopAgentClient implements DesktopAgent {
 	private currentChannel: Channel;
+	private currentChannelContextListeners: Array<Listener> = [];
 
 	async open(name: string, context?: Context) {
 		FSBL.Clients.Logger.log("Desktop Agent open called typescript");
@@ -87,11 +88,14 @@ export default class DesktopAgentClient implements DesktopAgent {
 		if(!this.currentChannel) {
 			throw Error('Please join a channel prior to adding listeners');
 		}
+		let contextListener;
 		if (typeof contextTypeOrHandler === "string") {
-			return this.currentChannel.addContextListener(contextTypeOrHandler, handler);
+			contextListener = this.currentChannel.addContextListener(contextTypeOrHandler, handler);
 		} else {
-			return this.currentChannel.addContextListener(contextTypeOrHandler);
+			contextListener = this.currentChannel.addContextListener(contextTypeOrHandler);
 		}
+		this.currentChannelContextListeners.push(contextListener);
+		return contextListener;
 	}
 
 	async getSystemChannels(): Promise<Array<Channel>> {
@@ -110,9 +114,23 @@ export default class DesktopAgentClient implements DesktopAgent {
 	}
 
 	async joinChannel(channelId: string) {
+		if (this.currentChannel) {
+			await this.leaveCurrentChannel();
+		}
 		const channel = await this.getOrCreateChannel(channelId);
 		FSBL.Clients.LinkerClient.linkToChannel(channel.id, finsembleWindow.identifier);
 		this.currentChannel = channel;
+	}
+
+	async leaveCurrentChannel() {
+		if(this.currentChannel) {
+			this.currentChannel = null;
+			for(let i = this.currentChannelContextListeners.length - 1; i>=0; i++) {
+				this.currentChannelContextListeners[i].unsubscribe();
+				this.currentChannelContextListeners.splice(i, 1);
+			}
+		}
+		FSBL.Clients.LinkerClient.unlinkFromChannel(this.currentChannel.id, finsembleWindow.identifier);
 	}
 
 	async getOrCreateChannel(channelId: string): Promise<Channel> {

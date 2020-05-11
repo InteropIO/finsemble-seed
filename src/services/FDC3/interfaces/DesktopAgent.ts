@@ -147,4 +147,9 @@ interface DesktopAgent {
      * `Error` with a string from the `ChannelError` enumeration.
      */
     getOrCreateChannel(channelId: string): Promise<Channel>;
+
+    /**
+     * This was in the spec but not in the Types. Added.
+     */
+    leaveCurrentChannel() : Promise<void>;
   }

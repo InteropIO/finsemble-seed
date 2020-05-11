@@ -21,10 +21,14 @@ export default class D implements DesktopAgent {
 		this.getSystemChannels();
 	}
 
+	leaveCurrentChannel(): Promise<void> {
+		throw new Error("Method not implemented in Service. Use Client.");
+	}
+
 	addContextListener(handler: ContextHandler): Listener;
 	addContextListener(contextType: string, handler: ContextHandler): Listener;
 	addContextListener(contextType: string | ContextHandler, handler?: ContextHandler): Listener {
-		throw new Error("Method not implemented.");
+		throw new Error("Method not implemented in Service. Use Client.");
 	}
 
 	addIntentListener(intent: string, handler: ContextHandler): Listener {
@@ -140,7 +144,7 @@ export default class D implements DesktopAgent {
 		// When that is fixed, recommend promisifying the function. Not doing any complex callback async here.
 		// Just remember that this can return before the channel exists so creating and immediately broadcasting might not work.
 		// This is unlikely to cause problems because there need to be subscribers to make that useful.
-		FSBL.Clients.LinkerClient.createChannel({
+		this.LinkerClient.createChannel({
 			name: channelId,
 			color: channelColor,
 		}, () => {});
