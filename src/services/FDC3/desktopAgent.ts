@@ -4,6 +4,11 @@ import desktopAgentUtilities from "./desktopAgentUtilities";
 import Channel from "./channel";
 // import * as standardIntents from './intents/standard intents.json'
 
+interface AppIntentContexts {
+	app: AppMetadata,
+	intent: IntentMetadata,
+	contexts: Array<string>
+}
 export default class D implements DesktopAgent {
 	FSBL: any;
 	LauncherClient: any; //typeof LauncherClient;
@@ -12,6 +17,7 @@ export default class D implements DesktopAgent {
 	systemChannels: Array<Channel> = [];
 	customChannels: Array<Channel> = [];
 	appIntents: { [key: string]: AppIntent } = {};
+	appIntentsContext: { [key: string]: { [key: string]: AppIntent } } = {};
 	apps: { [key: string]: AppMetadata } = {};
 	windowName: string;
 
@@ -33,7 +39,7 @@ export default class D implements DesktopAgent {
 			for (const c of Object.values(components)) {
 				const component: any = c; // putting component:any in the loop itself results in it being unknown instead of any.
 				try {
-					const appMetadata = {
+					const appMetadata: AppMetadata = {
 						name: component.component.type,
 						title: component.component.displayName,
 						tooltip: component.component.tooltip,
@@ -42,18 +48,36 @@ export default class D implements DesktopAgent {
 					this.apps[appMetadata.name] = appMetadata;
 					const intents = component.foreign.services.fdc3.intents;
 					if (intents.length) {
-						for (const intent of intents) {
-							if (!this.appIntents[intent]) {
+						for (const intentConfig of intents) {
+							const intent: IntentMetadata = {
+								name: intentConfig.name,
+								displayName: intentConfig.displayName
+							};
+							if (!this.appIntents[intent.name]) {
 								this.appIntents[intent.name] = {
-									intent: intent,
+									intent,
 									apps: []
 								}
 							}
 							this.appIntents[intent.name].apps.push(appMetadata);
+							const contexts = intentConfig.contexts;
+							if (contexts && contexts.length) {
+								for (const context of contexts) {
+									if (!this.appIntentsContext[context]) this.appIntentsContext[context] = {};
+									if (!this.appIntentsContext[context][intent.name]) this.appIntentsContext[context][intent.name] = {
+										intent,
+										apps: []
+									};
+									this.appIntentsContext[context][intent.name].apps.push(appMetadata);
+								}
+							}							
 						}
 					}
 				} catch { }
 			}
+			console.log(this.apps);
+			console.log(this.appIntents);
+			console.log(this.appIntentsContext);
 		});
 	}
 
@@ -85,17 +109,25 @@ export default class D implements DesktopAgent {
 	/** ___________Intents ___________ */
 
 	async findIntent(intent: string, context?: Context): Promise<AppIntent> {
-		return this.appIntents[intent];
+		let appIntent: AppIntent;
+		if (context) {
+			const contextType = (context as any).type;
+			if (this.appIntentsContext[contextType]) {
+				appIntent = this.appIntentsContext[contextType][intent];
+			}
+		} else {
+			appIntent = this.appIntents[intent];
+		}
+		if (appIntent) return appIntent;
+		throw new Error(ResolveError.NoAppsFound);
 	}
 
-	findIntentsByContext(context: Context): Promise<Array<AppIntent>> {
-		return null;
-		// var appIntentMatches = desktopAgentUtilities.findAllContextMatchesandFormatResponse(
-		// 	this.fdc3Configuration,
-		// 	context
-		// );
-		// console.log("All Formatted Matches: ", appIntentMatches);
-		// return appIntentMatches;
+	async findIntentsByContext(context: Context): Promise<Array<AppIntent>> {
+		const intents = this.appIntentsContext[(context as any).type];
+		if (intents) {
+			return Object.values(intents);
+		}
+		throw new Error(ResolveError.NoAppsFound);
 	}
 
 	async raiseIntent(
@@ -177,18 +209,16 @@ export default class D implements DesktopAgent {
 	}
 
 	private findChannel(channelId: string): Channel {
-		const systemChannel = this.systemChannels.find(
-			(channel) => channel.id === channelId
-		);
+		const systemChannel = this.systemChannels.find((channel) => channel.id === channelId);
 		if (systemChannel) {
 			return systemChannel;
 		}
-		const customChannel = this.systemChannels.find(
-			(channel) => channel.id === channelId
-		);
+
+		const customChannel = this.systemChannels.find((channel) => channel.id === channelId);
 		if (customChannel) {
 			return customChannel;
 		}
+
 		return null;
 	}
 
@@ -205,8 +235,8 @@ export default class D implements DesktopAgent {
 		if (existingChannel) {
 			throw new Error(`Channel ${channelId} already exists`);
 		}
-		const channelColor = '#' + Math.floor(Math.random() * 16777215).toString(16); // generate a random color
 
+		const channelColor = '#' + Math.floor(Math.random() * 16777215).toString(16); // generate a random color
 		this.LinkerClient.createChannel({
 			name: channelId,
 			color: channelColor,

@@ -29,8 +29,11 @@
 						"allowMinimize": true
 					},
 					"fdc3": {
-						"intents": [{"name": "fdc3.call"}],
-						"contexts": [{"name": "fdc3.contact"}]
+						"intents": [{
+							"name": "fdc3.call",
+							"displayName": "Call",
+							"contexts": ["fdc3.contact"]
+						}]
 					}
 				},
 				"components": {
