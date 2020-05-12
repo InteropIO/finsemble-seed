@@ -2,23 +2,59 @@ import desktopAgentUtilities from "./desktopAgentUtilities";
 //import LinkerClient from "../../../finsemble/types/clients/linkerClient";
 //import LauncherClient from "../../../finsemble/types/clients/launcherClient";
 import Channel from "./channel";
+// import * as standardIntents from './intents/standard intents.json'
 
 export default class D implements DesktopAgent {
-	fdc3Configuration: any;
 	FSBL: any;
 	LauncherClient: any; //typeof LauncherClient;
 	LinkerClient: any; //typeof LinkerClient;
+	RouterClient: any;
 	systemChannels: Array<Channel> = [];
 	customChannels: Array<Channel> = [];
+	appIntents: { [key: string]: AppIntent } = {};
+	apps: { [key: string]: AppMetadata } = {};
 	windowName: string;
 
 	constructor(params: any) {
-		this.fdc3Configuration = params.fdc3Configuration;
 		this.FSBL = params.FSBL;
 		this.LinkerClient = this.FSBL.Clients.LinkerClient;
 		this.LauncherClient = this.FSBL.Clients.LauncherClient;
-		// Make sure all existing Linker Channels get added to sytemChannels. Any new channels created later will not.
+		this.RouterClient = this.FSBL.Clients.RouterClient;
+		// Make sure all existing Linker Channels get added to systemChannels. Any new channels created later will not.
 		this.getSystemChannels();
+		this.setupApps();
+	}
+
+	private setupApps() {
+		this.RouterClient.subscribe("Launcher.update", (err: any, response: any) => {
+			const components = response.data.componentList;
+			this.appIntents = {};
+			this.apps = {};
+			for (const c of Object.values(components)) {
+				const component: any = c; // putting component:any in the loop itself results in it being unknown instead of any.
+				try {
+					const appMetadata = {
+						name: component.component.type,
+						title: component.component.displayName,
+						tooltip: component.component.tooltip,
+						icons: [component.foreign.components.Toolbar.iconURL]
+					}
+					this.apps[appMetadata.name] = appMetadata;
+					const intents = component.foreign.services.fdc3.intents;
+					if (intents.length) {
+						for (const intent of intents) {
+							if (!this.appIntents[intent]) {
+								this.appIntents[intent.name] = {
+									intent: intent,
+									apps: []
+								}
+							}
+							this.appIntents[intent.name].apps.push(appMetadata);
+						}
+					}
+				} catch { }
+			}
+		});
 	}
 
 	/** ___________Context ___________ */
@@ -49,27 +85,17 @@ export default class D implements DesktopAgent {
 	/** ___________Intents ___________ */
 
 	async findIntent(intent: string, context?: Context): Promise<AppIntent> {
-		var appIntentMatches = desktopAgentUtilities.findAllIntentMatchesandFormatResponse(
-			this.fdc3Configuration,
-			intent,
-			context
-		);
-		console.log("All Formatted Matches: ", appIntentMatches);
-
-		if (Array.isArray(appIntentMatches)) {
-			return appIntentMatches[0];
-		} else {
-			return appIntentMatches;
-		}
+		return this.appIntents[intent];
 	}
 
 	findIntentsByContext(context: Context): Promise<Array<AppIntent>> {
-		var appIntentMatches = desktopAgentUtilities.findAllContextMatchesandFormatResponse(
-			this.fdc3Configuration,
-			context
-		);
-		console.log("All Formatted Matches: ", appIntentMatches);
-		return appIntentMatches;
+		return null;
+		// var appIntentMatches = desktopAgentUtilities.findAllContextMatchesandFormatResponse(
+		// 	this.fdc3Configuration,
+		// 	context
+		// );
+		// console.log("All Formatted Matches: ", appIntentMatches);
+		// return appIntentMatches;
 	}
 
 	async raiseIntent(
@@ -77,26 +103,40 @@ export default class D implements DesktopAgent {
 		context: Context,
 		target?: string
 	): Promise<IntentResolution> {
-		let resolvedIntent;
-		const {
-			data: componentList,
-		}: any = await FSBL.Clients.LauncherClient.getActiveDescriptors();
-		console.log("componentList", componentList);
-		const intentComponentList = desktopAgentUtilities.findAllIntentMatchesandFormatResponse(
-			this.fdc3Configuration,
-			intent,
-			context
-		);
-		console.log("intents:", intentComponentList);
-		desktopAgentUtilities.resolveIntent(
-			intent,
-			intentComponentList,
-			componentList,
-			context
-		);
-		console.log("return value", resolvedIntent);
-		const dataType = target + intent;
-		return null; //new { source: "source", data: context, resolution: "resolved" };
+		if (!this.appIntents[intent]) {
+			throw new Error(ResolveError.NoAppsFound);
+		}
+
+		const availableResolvers = this.appIntents[intent];
+		if (availableResolvers.apps.length === 1) {
+			// if component is open, resolve with open component
+			// else open component
+		} else {
+			// open intent resolver component
+			return null;
+		}
+
+
+		// let resolvedIntent;
+		// const {
+		// 	data: componentList,
+		// }: any = await FSBL.Clients.LauncherClient.getActiveDescriptors();
+		// console.log("componentList", componentList);
+		// const intentComponentList = desktopAgentUtilities.findAllIntentMatchesandFormatResponse(
+		// 	this.fdc3Configuration,
+		// 	intent,
+		// 	context
+		// );
+		// console.log("intents:", intentComponentList);
+		// desktopAgentUtilities.resolveIntent(
+		// 	intent,
+		// 	intentComponentList,
+		// 	componentList,
+		// 	context
+		// );
+		// console.log("return value", resolvedIntent);
+		// const dataType = target + intent;
+		// return null; //new { source: "source", data: context, resolution: "resolved" };
 	}
 
 	addIntentListener(intent: string, handler: ContextHandler): Listener {
@@ -167,17 +207,10 @@ export default class D implements DesktopAgent {
 		}
 		const channelColor = '#' + Math.floor(Math.random() * 16777215).toString(16); // generate a random color
 
-		// There is a bug in the LinkerClient.createChannel that causes it to callback before the channel is created.
-		// When that is fixed, recommend promisifying the function. Not doing any complex callback async here.
-		// Just remember that this can return before the channel exists so creating and immediately broadcasting might not work.
-		// This is unlikely to cause problems because there need to be subscribers to make that useful.
-		this.LinkerClient.createChannel(
-			{
-				name: channelId,
-				color: channelColor,
-			},
-			() => {}
-		);
+		this.LinkerClient.createChannel({
+			name: channelId,
+			color: channelColor,
+		}, () => { });
 
 		const channel = new Channel({
 			id: channelId,
@@ -189,7 +222,8 @@ export default class D implements DesktopAgent {
 			},
 			FSBL: this.FSBL,
 		});
-		
+
+		// There is a bug in the LinkerClient.createChannel that causes it to callback before the channel is created. Just wait so we don't have timing problems
 		await this.wait(100);
 
 		return channel;
