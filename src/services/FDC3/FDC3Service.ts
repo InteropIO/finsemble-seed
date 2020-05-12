@@ -11,15 +11,11 @@ const LinkerClient = Finsemble.Clients.LinkerClient;
 LinkerClient.start();
 const Logger = Finsemble.Clients.Logger;
 
-
-import desktopAgentUtilities from './desktopAgentUtilities'
 import DesktopAgent from './desktopAgent'
 // const queryJSON = require('./objectQuery/queryJSON.js');
 
 Logger.start();
 Logger.log("Desktop Agent starting up");
-
-
 
 /**
  * The Desktop Agent is defined by the FDC3
@@ -47,22 +43,14 @@ class FDC3Service extends BaseService {
 	async initialize(cb: () => void) {
 		this.createRouterEndpoints();
 		Finsemble.Clients.Logger.log("desktopAgent Service ready");
-		this.fdc3Configuration = await this.getFDC3Configuration();
 		this.desktopAgent = new DesktopAgent({
 			FSBL: Finsemble,
-			fdc3Configuration: this.getFDC3Configuration			
 		})
 		const channels = await this.desktopAgent.getSystemChannels();
 		for (const channel of channels) {
 			this.channels[channel.id] = channel;
 		}
 		cb();
-	}
-
-	async getFDC3Configuration() {
-		this.fdc3Configuration = await desktopAgentUtilities.getAllComponentAppSpec(ConfigClient);
-		console.log("Find all Intents:", this.fdc3Configuration);
-		return this.fdc3Configuration;
 	}
 
 	/**
