@@ -42,7 +42,7 @@ export default class D implements DesktopAgent {
 					const appMetadata: AppMetadata = {
 						name: component.component.type,
 						title: component.component.displayName,
-						tooltip: component.component.tooltip,
+						tooltip: component.component.displayName,
 						icons: [component.foreign.components.Toolbar.iconURL]
 					}
 					this.apps[appMetadata.name] = appMetadata;
