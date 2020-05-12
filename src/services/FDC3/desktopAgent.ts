@@ -1,7 +1,7 @@
 import desktopAgentUtilities from "./desktopAgentUtilities";
 //import LinkerClient from "../../../finsemble/types/clients/linkerClient";
 //import LauncherClient from "../../../finsemble/types/clients/launcherClient";
-import Channel from "./channel"
+import Channel from "./channel";
 
 export default class D implements DesktopAgent {
 	fdc3Configuration: any;
@@ -21,24 +21,27 @@ export default class D implements DesktopAgent {
 		this.getSystemChannels();
 	}
 
-	leaveCurrentChannel(): Promise<void> {
-		throw new Error("Method not implemented in Service. Use Client.");
-	}
-
-	addContextListener(handler: ContextHandler): Listener;
-	addContextListener(contextType: string, handler: ContextHandler): Listener;
-	addContextListener(contextType: string | ContextHandler, handler?: ContextHandler): Listener {
-		throw new Error("Method not implemented in Service. Use Client.");
-	}
-
-	addIntentListener(intent: string, handler: ContextHandler): Listener {
-		throw new Error("Method not implemented.");
-	}
-
+	/** ___________Apps ___________ */
 	async open(name: string, context?: object) {
 		console.log("FDC3.desktopAgent triggered LauncherClient.spawn");
 		await FSBL.Clients.LauncherClient.spawn(name, { data: { context } });
 	}
+
+	/** ___________Context ___________ */
+	broadcast(context: any): void {
+		throw new Error("Use the client.");
+	}
+
+	addContextListener(handler: ContextHandler): Listener;
+	addContextListener(contextType: string, handler: ContextHandler): Listener;
+	addContextListener(
+		contextType: string | ContextHandler,
+		handler?: ContextHandler
+	): Listener {
+		throw new Error("Method not implemented in Service. Use Client.");
+	}
+
+	/** ___________Intents ___________ */
 
 	async findIntent(intent: string, context?: Context): Promise<AppIntent> {
 		var appIntentMatches = desktopAgentUtilities.findAllIntentMatchesandFormatResponse(
@@ -62,10 +65,6 @@ export default class D implements DesktopAgent {
 		);
 		console.log("All Formatted Matches: ", appIntentMatches);
 		return appIntentMatches;
-	}
-
-	broadcast(context: any): void {
-		throw new Error("Use the client.")
 	}
 
 	async raiseIntent(
@@ -95,6 +94,21 @@ export default class D implements DesktopAgent {
 		return null; //new { source: "source", data: context, resolution: "resolved" };
 	}
 
+	addIntentListener(intent: string, handler: ContextHandler): Listener {
+		throw new Error("Method not implemented.");
+	}
+
+	/** ___________Channels ___________ */
+
+	async getOrCreateChannel(channelId: string): Promise<Channel> {
+		const channel = this.findChannel(channelId);
+		if (channel) {
+			return channel;
+		} else {
+			return this.createCustomChannel(channelId);
+		}
+	}
+
 	async getSystemChannels(): Promise<Array<Channel>> {
 		if (this.systemChannels.length) return this.systemChannels;
 		const finsembleLinkerChannels = this.LinkerClient.getAllChannels();
@@ -102,14 +116,14 @@ export default class D implements DesktopAgent {
 
 		for (const finsembleLinkerChannel of finsembleLinkerChannels) {
 			const channel = new Channel({
-				id: finsembleLinkerChannel.name, 
-				type: "system", 
+				id: finsembleLinkerChannel.name,
+				type: "system",
 				displayMetadata: {
 					name: finsembleLinkerChannel.name,
 					color: finsembleLinkerChannel.color,
-					glyph: finsembleLinkerChannel.glyph
+					glyph: finsembleLinkerChannel.glyph,
 				},
-				FSBL: this.FSBL
+				FSBL: this.FSBL,
 			});
 			channels.push(channel);
 		}
@@ -118,11 +132,15 @@ export default class D implements DesktopAgent {
 	}
 
 	private findChannel(channelId: string): Channel {
-		const systemChannel = this.systemChannels.find((channel) => channel.id === channelId);
+		const systemChannel = this.systemChannels.find(
+			(channel) => channel.id === channelId
+		);
 		if (systemChannel) {
 			return systemChannel;
 		}
-		const customChannel = this.systemChannels.find((channel) => channel.id === channelId);
+		const customChannel = this.systemChannels.find(
+			(channel) => channel.id === channelId
+		);
 		if (customChannel) {
 			return customChannel;
 		}
@@ -138,36 +156,34 @@ export default class D implements DesktopAgent {
 		if (existingChannel) {
 			throw new Error(`Channel ${channelId} already exists`);
 		}
-		const channelColor = Math.floor(Math.random()*16777215).toString(16); // generate a random color
-		
-		// There is a bug in the LinkerClient.createChannel that causes it to callback before the channel is created. 
+		const channelColor = Math.floor(Math.random() * 16777215).toString(16); // generate a random color
+
+		// There is a bug in the LinkerClient.createChannel that causes it to callback before the channel is created.
 		// When that is fixed, recommend promisifying the function. Not doing any complex callback async here.
 		// Just remember that this can return before the channel exists so creating and immediately broadcasting might not work.
 		// This is unlikely to cause problems because there need to be subscribers to make that useful.
-		this.LinkerClient.createChannel({
-			name: channelId,
-			color: channelColor,
-		}, () => {});
+		this.LinkerClient.createChannel(
+			{
+				name: channelId,
+				color: channelColor,
+			},
+			() => {}
+		);
 
 		const channel = new Channel({
-			id: channelId, 
-			type: "app", 
+			id: channelId,
+			type: "app",
 			displayMetadata: {
 				name: channelId,
 				color: channelColor,
 				glyph: null,
 			},
-			FSBL: this.FSBL
+			FSBL: this.FSBL,
 		});
 		return channel;
 	}
 
-	async getOrCreateChannel(channelId: string): Promise<Channel> {
-		const channel = this.findChannel(channelId);
-		if (channel) {
-			return channel;
-		} else {
-			return this.createCustomChannel(channelId);
-		}
+	leaveCurrentChannel(): Promise<void> {
+		throw new Error("Method not implemented in Service. Use Client.");
 	}
 }
