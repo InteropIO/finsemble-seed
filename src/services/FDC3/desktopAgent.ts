@@ -146,7 +146,7 @@ export default class D implements DesktopAgent {
 		if (target) {
 			// TODO: Verify that target is a valid component for said intent
 			// TODO: How to get IntentResolution from that component?
-			await FSBL.Clients.LauncherClient.spawn(name, { data: { intent, context } });
+			await this.LauncherClient.spawn(name, { data: { intent, context } });
 			return null;
 		}
 
@@ -157,12 +157,14 @@ export default class D implements DesktopAgent {
 			}
 
 			// TODO: create Intent Resolver Component
-			FSBL.Clients.DialogManager.open("Intent Resolver", dialogParams, (err: any, result: IntentResolution) => {
-				if (err) {
-					reject(err);
-				} else {
-					resolve(result);
-				}
+			this.DialogManager.onReady(() => {
+				this.DialogManager.open("Intent Resolver", dialogParams, (err: any, result: IntentResolution) => {
+					if (err) {
+						reject(err);
+					} else {
+						resolve(result);
+					}
+				});
 			});
 		});
 

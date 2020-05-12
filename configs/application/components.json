@@ -198,6 +198,44 @@
 					}
 				}
 			}
+		},
+		"Intent Resolver": {
+			"window": {
+				"url": "$applicationRoot/components/intentResolver/intentResolverModal.html",
+				"resizable": false,
+				"autoShow": true,
+				"width": 400,
+				"height": 336,
+				"ephemeral": true,
+				"slave": false,
+				"left": "adjacent",
+				"dockOnSpawn": true
+			},
+			"component": {
+				"spawnOnStartup": false
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"canGroup": false,
+						"isArrangable": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"showLinker": false,
+						"FSBLHeader": false,
+						"persistWindowState": false,
+						"title": "Intent Resolver"
+					},
+					"Toolbar": {
+						"iconClass": "ff-component"
+					}
+				}
+			}
 		}
 	}
 }

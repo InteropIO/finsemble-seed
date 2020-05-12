@@ -5,16 +5,18 @@
 
 const Finsemble = require("@chartiq/finsemble");
 const BaseService = Finsemble.baseService;
-const ConfigClient = Finsemble.Clients.ConfigClient;
-const RouterClient = Finsemble.Clients.RouterClient;
-const LinkerClient = Finsemble.Clients.LinkerClient;
+const { RouterClient, LinkerClient, DialogManager, WindowClient, LauncherClient, StoreClient, Logger } = Finsemble.Clients;
+
 LinkerClient.start();
-const Logger = Finsemble.Clients.Logger;
+DialogManager.initialize();
+LauncherClient.initialize();
+Logger.start();
+WindowClient.initialize();
 
 import DesktopAgent from './desktopAgent'
 // const queryJSON = require('./objectQuery/queryJSON.js');
 
-Logger.start();
+
 Logger.log("Desktop Agent starting up");
 
 /**
