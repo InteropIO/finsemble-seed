@@ -214,6 +214,22 @@ export default class DesktopAgentClient implements DesktopAgent {
 		this.currentChannel = channel;
 	}
 
+	getCurrentChannel() {
+		const getCurrentChannelPromiseResolver = (
+			resolve: (resolve: Channel) => void,
+			reject: (reject: Error) => void
+		) => {
+			if (this.currentChannel) {
+				resolve(this.currentChannel);
+			} else {
+				reject(
+					new Error("Current Channel is not set, try joining a channel first")
+				);
+			}
+		};
+		return new Promise(getCurrentChannelPromiseResolver);
+	}
+
 	async leaveCurrentChannel() {
 		if (this.currentChannel) {
 			this.currentChannel = null;
