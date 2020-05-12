@@ -9,11 +9,13 @@ interface AppIntentContexts {
 	intent: IntentMetadata,
 	contexts: Array<string>
 }
+
 export default class D implements DesktopAgent {
 	FSBL: any;
 	LauncherClient: any; //typeof LauncherClient;
 	LinkerClient: any; //typeof LinkerClient;
 	RouterClient: any;
+	DialogManager: any;
 	systemChannels: Array<Channel> = [];
 	customChannels: Array<Channel> = [];
 	appIntents: { [key: string]: AppIntent } = {};
@@ -26,6 +28,8 @@ export default class D implements DesktopAgent {
 		this.LinkerClient = this.FSBL.Clients.LinkerClient;
 		this.LauncherClient = this.FSBL.Clients.LauncherClient;
 		this.RouterClient = this.FSBL.Clients.RouterClient;
+		this.DialogManager = this.FSBL.Clients.DialogManager;
+		
 		// Make sure all existing Linker Channels get added to systemChannels. Any new channels created later will not.
 		this.getSystemChannels();
 		this.setupApps();
@@ -130,24 +134,37 @@ export default class D implements DesktopAgent {
 		throw new Error(ResolveError.NoAppsFound);
 	}
 
-	async raiseIntent(
-		intent: string,
-		context: Context,
-		target?: string
-	): Promise<IntentResolution> {
-		if (!this.appIntents[intent]) {
-			throw new Error(ResolveError.NoAppsFound);
+	async raiseIntent(intent: string, context: Context,	target?: string): Promise<IntentResolution> {
+		const appIntent = await this.findIntent(intent, context);
+
+		if(!appIntent) {
+			throw new Error(ResolveError.ResolverUnavailable);
 		}
 
-		const availableResolvers = this.appIntents[intent];
-		if (availableResolvers.apps.length === 1) {
-			// if component is open, resolve with open component
-			// else open component
-		} else {
-			// open intent resolver component
+		// TODO: Do we deal with already open components? Or just launch new ones?
+
+		if (target) {
+			// TODO: Verify that target is a valid component for said intent
+			// TODO: How to get IntentResolution from that component?
+			await FSBL.Clients.LauncherClient.spawn(name, { data: { intent, context } });
 			return null;
 		}
 
+		return new Promise((resolve, reject) => {
+			const dialogParams = {
+				appIntent,
+				context
+			}
+
+			// TODO: create Intent Resolver Component
+			FSBL.Clients.DialogManager.open("Intent Resolver", dialogParams, (err: any, result: IntentResolution) => {
+				if (err) {
+					reject(err);
+				} else {
+					resolve(result);
+				}
+			});
+		});
 
 		// let resolvedIntent;
 		// const {
