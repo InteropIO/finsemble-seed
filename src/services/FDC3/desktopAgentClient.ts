@@ -23,7 +23,7 @@ export default class DesktopAgentClient implements DesktopAgent {
 	}
 
 	/** ___________Context ___________ */
-
+	
 	async broadcast(context: Context) {
 		FSBL.Clients.Logger.log("Desktop Agent broadcast called");
 		if (this.currentChannel) {

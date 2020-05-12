@@ -21,6 +21,11 @@ export default class D implements DesktopAgent {
 		this.getSystemChannels();
 	}
 
+	/** ___________Context ___________ */
+	getCurrentChannel(): Promise<Channel> {
+		throw new Error("Method not implemented in Service. Use Client.");
+	}
+
 	/** ___________Apps ___________ */
 	async open(name: string, context?: object) {
 		console.log("FDC3.desktopAgent triggered LauncherClient.spawn");
@@ -29,7 +34,7 @@ export default class D implements DesktopAgent {
 
 	/** ___________Context ___________ */
 	broadcast(context: any): void {
-		throw new Error("Use the client.");
+		throw new Error("Method not implemented in Service. Use Client.");
 	}
 
 	addContextListener(handler: ContextHandler): Listener;
@@ -105,7 +110,7 @@ export default class D implements DesktopAgent {
 		if (channel) {
 			return channel;
 		} else {
-			return this.createCustomChannel(channelId);
+			return await this.createCustomChannel(channelId);
 		}
 	}
 
@@ -151,12 +156,16 @@ export default class D implements DesktopAgent {
 		throw new Error("Only Implemented in the Client");
 	}
 
-	private createCustomChannel(channelId: string): Channel {
+	private wait(time: number) {
+		return new Promise((resolve) => setTimeout(resolve, time));
+	}
+
+	private async createCustomChannel(channelId: string): Promise<Channel> {
 		const existingChannel = this.findChannel(channelId);
 		if (existingChannel) {
 			throw new Error(`Channel ${channelId} already exists`);
 		}
-		const channelColor = Math.floor(Math.random() * 16777215).toString(16); // generate a random color
+		const channelColor = '#' + Math.floor(Math.random() * 16777215).toString(16); // generate a random color
 
 		// There is a bug in the LinkerClient.createChannel that causes it to callback before the channel is created.
 		// When that is fixed, recommend promisifying the function. Not doing any complex callback async here.
@@ -180,6 +189,9 @@ export default class D implements DesktopAgent {
 			},
 			FSBL: this.FSBL,
 		});
+		
+		await this.wait(100);
+
 		return channel;
 	}
 
