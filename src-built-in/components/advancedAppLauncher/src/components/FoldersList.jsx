@@ -212,8 +212,10 @@ export default class FoldersList extends React.Component {
 			className += ' folder-with-icon'
 		}
 
+		const EDITABLE_FOLDER_ICON_CLASS = 'ff-adp-hamburger'
+
 		let nameField;
-		if (folder.icon === EDITABLE_FOLDER_ICON_CLASS && this.state.renamingFolder === folderName) {
+		if (this.state.renamingFolder === folderName) {
 			nameField = <input id="rename" value={this.state.folderNameInput}
 			onChange={this.changeFolderName}
 			onKeyPress={this.keyPressed} className={this.state.isNameError ? "error" : ""} autoFocus />;
