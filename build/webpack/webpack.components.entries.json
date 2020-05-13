@@ -1,1 +1,6 @@
-{}
+{
+  "intentResolverModal": {
+    "output": "components/intentResolver/intentResolverModal",
+    "entry": "./src/components/intentResolver/intentResolverModal.js"
+  }
+}

@@ -29,7 +29,7 @@ export default class D implements DesktopAgent {
 		this.LauncherClient = this.FSBL.Clients.LauncherClient;
 		this.RouterClient = this.FSBL.Clients.RouterClient;
 		this.DialogManager = this.FSBL.Clients.DialogManager;
-		
+
 		// Make sure all existing Linker Channels get added to systemChannels. Any new channels created later will not.
 		this.getSystemChannels();
 		this.setupApps();
@@ -74,7 +74,7 @@ export default class D implements DesktopAgent {
 									};
 									this.appIntentsContext[context][intent.name].apps.push(appMetadata);
 								}
-							}							
+							}
 						}
 					}
 				} catch { }
@@ -93,7 +93,7 @@ export default class D implements DesktopAgent {
 	/** ___________Apps ___________ */
 	async open(name: string, context?: object) {
 		console.log("FDC3.desktopAgent triggered LauncherClient.spawn");
-		await FSBL.Clients.LauncherClient.spawn(name, { data: { context } });
+		await this.FSBL.Clients.LauncherClient.spawn(name, { data: { context } });
 	}
 
 	/** ___________Context ___________ */
@@ -134,10 +134,10 @@ export default class D implements DesktopAgent {
 		throw new Error(ResolveError.NoAppsFound);
 	}
 
-	async raiseIntent(intent: string, context: Context,	target?: string): Promise<IntentResolution> {
+	async raiseIntent(intent: string, context: Context, target?: string): Promise<IntentResolution> {
 		const appIntent = await this.findIntent(intent, context);
-
-		if(!appIntent) {
+		debugger;
+		if (!appIntent) {
 			throw new Error(ResolveError.ResolverUnavailable);
 		}
 
@@ -150,23 +150,29 @@ export default class D implements DesktopAgent {
 			return null;
 		}
 
-		return new Promise((resolve, reject) => {
-			const dialogParams = {
-				appIntent,
-				context
-			}
+		// return new Promise((resolve, reject) => {
+		// 	const dialogParams = {
+		// 		appIntent,
+		// 		context
+		// 	}
 
-			// TODO: create Intent Resolver Component
-			this.DialogManager.onReady(() => {
-				this.DialogManager.open("Intent Resolver", dialogParams, (err: any, result: IntentResolution) => {
-					if (err) {
-						reject(err);
-					} else {
-						resolve(result);
-					}
-				});
-			});
-		});
+		// TODO: create Intent Resolver Component
+		// this.DialogManager.onReady(() => {
+		// 	this.DialogManager.open("Intent Resolver", dialogParams, (err: any, result: IntentResolution) => {
+		// 		if (err) {
+		// 			reject(err);
+		// 		} else {
+		// 			resolve(result);
+		// 		}
+		// 	});
+		// });
+
+		try {
+			this.LauncherClient.spawn('Intent Resolver', { data: { intent, context, appIntent, source: this.windowName } })
+		} catch (err) {
+			return err
+		}
+		// });
 
 		// let resolvedIntent;
 		// const {

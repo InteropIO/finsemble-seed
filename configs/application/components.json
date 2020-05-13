@@ -12,13 +12,16 @@
 				},
 				"top": "center",
 				"left": "center",
-				"width": 400,
-				"height": 432
+				"width": 432,
+				"height": 470
 			},
 			"component": {
 				"displayName": "Welcome Component",
 				"spawnOnStartup": false,
-				"preload": ["$applicationRoot/preloads/zoom.js", "$applicationRoot/preloads/FDC3Client.js"]
+				"preload": [
+					"$applicationRoot/preloads/zoom.js",
+					"$applicationRoot/preloads/FDC3Client.js"
+				]
 			},
 			"foreign": {
 				"services": {
@@ -29,11 +32,15 @@
 						"allowMinimize": true
 					},
 					"fdc3": {
-						"intents": [{
-							"name": "fdc3.call",
-							"displayName": "Call",
-							"contexts": ["fdc3.contact"]
-						}]
+						"intents": [
+							{
+								"name": "fdc3.call",
+								"displayName": "Call",
+								"contexts": [
+									"fdc3.contact"
+								]
+							}
+						]
 					}
 				},
 				"components": {
@@ -48,7 +55,8 @@
 						"title": "Welcome to Finsemble"
 					},
 					"Toolbar": {
-						"iconClass": "ff-component"
+						"iconClass": "ff-component",
+						"iconURL": "$applicationRoot/assets/img/Finsemble_Taskbar_Icon.png"
 					}
 				}
 			}
