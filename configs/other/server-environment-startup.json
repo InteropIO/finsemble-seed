@@ -10,7 +10,11 @@
         "//electronDebug": "Whether to start the finsemble-electron-adapter in debug mode. Default: true.",
         "electronDebug": true,
         "//breakpointOnStart": "Whether to pause finsemble-electron-adapter when it starts. Default: false.",
-        "breakpointOnStart": false
+        "breakpointOnStart": false,
+        "//socketCertificate": "Uncomment the two lines below to provide custom socket certificate files for FinsembleTransport. Paths must be relative to the finsemble-seed directory.",
+        "//socketCertificateKey": "example.key",
+        "//socketCertificateCert": "example.crt"
+
     },
     "production": {
         "//serverPort": "Port number for your server.",
@@ -29,6 +33,10 @@
         "//chromiumFlags": "set a chromium command line flag in Finsemble Electron Adapter",
         "chromiumFlags": {
             "remote-debugging-port": 9222
-        }
+        },
+        "//socketCertificate": "Uncomment the two lines below to provide custom socket certificate files for FinsembleTransport. Paths must be relative to the finsemble-seed directory.",
+        "//socketCertificateKey": "example.key",
+        "//socketCertificateCert": "example.crt"
+
     }
 }

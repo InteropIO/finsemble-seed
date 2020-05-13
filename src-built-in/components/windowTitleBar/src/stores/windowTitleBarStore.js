@@ -1,6 +1,6 @@
 
 /*!
-* Copyright 2017 by ChartIQ, Inc.
+* Copyright 2017 - 2020 by ChartIQ, Inc.
 * All rights reserved.
 */
 var StoreClient;
@@ -144,12 +144,6 @@ var Actions = {
 				{ field: "isTopRight", value: isTopRight },
 				{ field: "Main.dockingIcon", value: icon }
 			]);
-
-			if (isInMovableGroup && !isTopRight) {
-				finsembleWindow.updateOptions({ showTaskbarIcon: false });
-			} else {
-				finsembleWindow.updateOptions({ showTaskbarIcon: true });
-			}
 		};
 
 		FSBL.Clients.RouterClient.subscribe("Finsemble.WorkspaceService.groupUpdate", onDockingGroupUpdate);
