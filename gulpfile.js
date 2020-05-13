@@ -578,7 +578,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 					installerConfig.certificatePassword = certPassphraseFromEnv.trim();
 				} else {
 					// If a certificate file was provided and a password can't be found, show error and exit
-					throw new Error(`A certificate file was provided but a password cannot be found. Please provide one as plain text in the config or as an environment variable: INSTALLER_CERTIFICATE_PASSPHRASE`);
+					throw new Error(`A certificate file was provided but a password cannot be found. Please provide one as in the config or as an environment variable: INSTALLER_CERTIFICATE_PASSPHRASE`);
 				}
 			}
 
