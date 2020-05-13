@@ -150,29 +150,22 @@ export default class D implements DesktopAgent {
 			return null;
 		}
 
-		// return new Promise((resolve, reject) => {
-		// 	const dialogParams = {
-		// 		appIntent,
-		// 		context
-		// 	}
+		return new Promise((resolve, reject) => {
+			const dialogParams = {
+				intent, context, appIntent, source: this.windowName
+			}
 
-		// TODO: create Intent Resolver Component
-		// this.DialogManager.onReady(() => {
-		// 	this.DialogManager.open("Intent Resolver", dialogParams, (err: any, result: IntentResolution) => {
-		// 		if (err) {
-		// 			reject(err);
-		// 		} else {
-		// 			resolve(result);
-		// 		}
-		// 	});
-		// });
+			// this.LauncherClient.spawn('Intent Resolver', { data: { intent, context, appIntent, source: this.windowName } }
 
-		try {
-			this.LauncherClient.spawn('Intent Resolver', { data: { intent, context, appIntent, source: this.windowName } })
-		} catch (err) {
-			return err
-		}
-		// });
+			// TODO: create Intent Resolver Component
+			this.DialogManager.open("Intent Resolver", dialogParams, (err: any, result: IntentResolution) => {
+				if (err) {
+					reject(err);
+				} else {
+					resolve(result);
+				}
+			});
+		});
 
 		// let resolvedIntent;
 		// const {
