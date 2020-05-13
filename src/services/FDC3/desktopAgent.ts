@@ -157,14 +157,12 @@ export default class D implements DesktopAgent {
 			}
 
 			// TODO: create Intent Resolver Component
-			this.DialogManager.onReady(() => {
-				this.DialogManager.open("Intent Resolver", dialogParams, (err: any, result: IntentResolution) => {
-					if (err) {
-						reject(err);
-					} else {
-						resolve(result);
-					}
-				});
+			this.DialogManager.open("Intent Resolver", dialogParams, (err: any, result: IntentResolution) => {
+				if (err) {
+					reject(err);
+				} else {
+					resolve(result);
+				}
 			});
 		});
 

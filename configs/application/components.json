@@ -221,6 +221,11 @@
 						"isArrangable": false
 					}
 				},
+				"clients": {
+					"dialogManager": {
+						"isDialog": true
+					}
+				},
 				"components": {
 					"App Launcher": {
 						"launchableByUser": false
