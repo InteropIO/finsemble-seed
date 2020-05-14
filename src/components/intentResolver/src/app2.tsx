@@ -14,7 +14,7 @@ export default function App() {
 
   return (
     <div className="resolver__container">
-      <img className="resolver__header" src="./fdc3-intent-header.svg" />
+      <img className="resolver__header" src="./src/fdc3-intent-header.svg" />
       <h2 className="resolver__action"><span className="resolver__action-source">{source}</span> would like to start a <span className="resolver__action-intent">{intent.displayName.toLowerCase()}</span>, open with...</h2>
       <div className="resolver__apps">
 
