@@ -165,6 +165,7 @@ export default class FoldersList extends React.Component {
 	 */
 	attempRename() {
 		const folders = storeActions.getFolders()
+		const deleted = storeActions.getDeleted();
 		const input = this.state.folderNameInput.trim()
 		const oldName = this.state.renamingFolder;
 		let newName = input;
@@ -178,7 +179,7 @@ export default class FoldersList extends React.Component {
 			});
 		}
 		// Names must be unique, folders cant share same names
-		if (folders[newName]) {
+		if (folders[newName] && !deleted.includes(newName)) {
 			let repeatedFolderIndex = 0;
 			do {
 				repeatedFolderIndex++;
@@ -215,7 +216,7 @@ export default class FoldersList extends React.Component {
 		const EDITABLE_FOLDER_ICON_CLASS = 'ff-adp-hamburger'
 
 		let nameField;
-		if (this.state.renamingFolder === folderName) {
+		if (folder.icon === EDITABLE_FOLDER_ICON_CLASS && this.state.renamingFolder === folderName) {
 			nameField = <input id="rename" value={this.state.folderNameInput}
 			onChange={this.changeFolderName}
 			onKeyPress={this.keyPressed} className={this.state.isNameError ? "error" : ""} autoFocus />;

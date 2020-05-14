@@ -19,6 +19,7 @@ export default {
 	deleteApp,
 	deleteTag,
 	reorderFolders,
+	getDeleted,
 	getFolders,
 	getFoldersList,
 	getActiveFolderName,
@@ -61,9 +62,31 @@ function initialize(callback = Function.prototype) {
 		// cache value globally to be used in the event that we need to fetch data for a given component.
 		appDEndpoint = appDirectoryEndpoint;
 		const store = getStore();
+
+		// If the store contains a 'deleted' array the list of folders and apps should be filtered according to it
+		data.deleted = store.values.deleted || [];
+		let folderList, appList = {};
+
+		if (data.deleted.length > 0) {
+			folderList = store.values.appFolders.list.filter(folderName => {
+				return !data.deleted.includes(folderName);
+			});
+
+			console.log("folderList: ", folderList);
+
+			Object.keys(store.values.appDefinitions).map(appName => {
+				if (!data.deleted.includes(appName)) {
+					appList[appName] = store.values.appDefinitions[appName];
+				}
+			});
+
+			_setValue("appFolders.list", folderList);
+			_setValue("appDefinitions", appList);
+		}
+
 		data.folders = store.values.appFolders.folders;
-		data.foldersList = store.values.appFolders.list;
-		data.apps = store.values.appDefinitions;
+		data.foldersList = folderList || store.values.appFolders.list;
+		data.apps = appList || store.values.appDefinitions;
 		data.tags = store.values.activeLauncherTags;
 		data.activeFolder = store.values.activeFolder;
 		data.filterText = store.values.filterText;
@@ -79,6 +102,8 @@ function initialize(callback = Function.prototype) {
 		store.addListener({ field: "isFormVisible" }, (err, dt) => data.isFormVisible = dt.value);
 		store.addListener({ field: "sortBy" }, (err, dt) => data.sortBy = dt.value);
 		store.addListener({ field: "activeLauncherTags" }, (err, dt) => data.tags = dt.value);
+		store.addListener({ field: "deleted" }, (err, dt) => data.deleted = dt.value);
+
 		getToolbarStore((err, response) => {
 			FSBL.Clients.RouterClient.subscribe("Finsemble.Service.State.launcherService", (err, response) => {
 				loadInstalledComponentsFromStore(() => {
@@ -92,6 +117,11 @@ function initialize(callback = Function.prototype) {
 		});
 	});
 }
+
+function getDeleted() {
+	return data.deleted;
+}
+
 //This gets a specific app in FDC3 and returns the results
 function getApp(appID, cb = Function.prototype) {
 	appd.get(appID).then(app => cb(null, app)).catch(err => cb(err));
@@ -417,6 +447,7 @@ function deleteApp(appID) {
 }
 
 function addNewFolder(name) {
+	if (data.deleted.includes(name)) return;
 	// Each new folder is given a number, lets store them here
 	// to get the highest one and then increment
 	const newFoldersNums = [0];
@@ -430,6 +461,8 @@ function addNewFolder(name) {
 	const newFolder = {
 		disableUserRemove: true,
 		icon: "ff-adp-hamburger",
+		canEdit: true,
+		canDelete: true,
 		apps: {}
 	};
 	data.folders[folderName] = newFolder;
@@ -448,11 +481,15 @@ function deleteFolder(folderName) {
 		_setValue("activeFolder", data.activeFolder);
 	}
 
+	const deletedFolders = data.deleted;
+	deletedFolders.push(folderName);
+
 	delete data.folders[folderName] && _setFolders(() => {
 		// Update the order of folders
 		const index = data.foldersList.indexOf(folderName);
 		data.foldersList.splice(index, 1);
 		_setValue("appFolders.list", data.foldersList);
+		_setValue("deleted", deletedFolders);
 	});
 }
 
@@ -464,6 +501,16 @@ function renameFolder(oldName, newName) {
 			return folderName === oldName;
 		});
 		data.foldersList[indexOfOld] = newName;
+
+		// If the name the user is attempting to rename to is the name of an old deleted folder
+		// remove the key from deleted and allow rename
+		if (data.deleted.includes(newName)) {
+			const index = data.deleted.indexOf(newName);
+			const deletedFolders = data.deleted;
+			deletedFolders.splice(index, 1);
+			_setValue("deleted", deletedFolders);
+		}
+
 		_setValue("appFolders.list", data.foldersList);
 		delete data.folders[oldName];
 	});
