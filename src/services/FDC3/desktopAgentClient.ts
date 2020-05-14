@@ -1,7 +1,9 @@
 import Channel from "./channelClient";
-export default class DesktopAgentClient implements DesktopAgent {
+import { EventEmitter } from "events";
+export default class DesktopAgentClient extends EventEmitter implements DesktopAgent {
 	private currentChannel: Channel;
 	private currentChannelContextListeners: Array<Listener> = [];
+	private channelChanging: boolean;
 
 	/** ___________Apps ___________ */
 
@@ -137,12 +139,26 @@ export default class DesktopAgentClient implements DesktopAgent {
 	}
 
 	async joinChannel(channelId: string) {
+		// don't do anything if you are trying to join the same channel
+		if (this.currentChannel && this.currentChannel.id === channelId) return;
+
+		// unsubscribe to everything that was already subscribed
+		let oldChannel;
 		if (this.currentChannel) {
+			oldChannel = this.currentChannel.id;
+			this.channelChanging = true;
 			await this.leaveCurrentChannel();
 		}
+
+		// Join new channel
 		const channel = await this.getOrCreateChannel(channelId);
-		FSBL.Clients.LinkerClient.linkToChannel(channel.id,	finsembleWindow.identifier);
 		this.currentChannel = channel;
+
+		if (oldChannel) this.emit("channelChanged", oldChannel, channelId);
+		if (this.channelChanging) this.channelChanging = false;
+
+		FSBL.Clients.LinkerClient.linkToChannel(channel.id,	finsembleWindow.identifier);
+		
 	}
 
 	async getCurrentChannel() {
@@ -154,13 +170,14 @@ export default class DesktopAgentClient implements DesktopAgent {
 	}
 
 	async leaveCurrentChannel() {
-		if (this.currentChannel) {
-			this.currentChannel = null;
-			for (let i = this.currentChannelContextListeners.length - 1; i >= 0; i++) {
-				this.currentChannelContextListeners[i].unsubscribe();
-				this.currentChannelContextListeners.splice(i, 1);
-			}
+		if (!this.currentChannel) return;
+		const channelId = this.currentChannel.id;
+		this.currentChannel = null;
+		for (let i = this.currentChannelContextListeners.length - 1; i >= 0; i++) {
+			this.currentChannelContextListeners[i].unsubscribe();
+			this.currentChannelContextListeners.splice(i, 1);
 		}
-		FSBL.Clients.LinkerClient.unlinkFromChannel(this.currentChannel.id,	finsembleWindow.identifier);
+		FSBL.Clients.LinkerClient.unlinkFromChannel(channelId,	finsembleWindow.identifier);
+		if (!this.channelChanging) this.emit("leftChannel", channelId);
 	}
 }
