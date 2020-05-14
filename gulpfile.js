@@ -367,8 +367,6 @@ const { launch, connect } = require('hadouken-js-adapter');
 				];
 				configs.forEach(config => {
 					buildWorkers(config, (e, output)=>{
-						console.log("output", output);
-						"Build finished"
 						if(++ret === configs.length){
 							done();
 						}

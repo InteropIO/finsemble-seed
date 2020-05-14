@@ -9,6 +9,9 @@ let plugins =
     [
         new HardSourceWebpackPlugin(
             {
+                info: {
+                    level: 'warn'
+                },
                 cacheDirectory: '../.webpack-file-cache/[confighash]',
             }
         ),
@@ -26,7 +29,7 @@ if (env === "production") {
 
 const titleBarPath  = "./src/components/titlebar/titlebarLoader.js";
 module.exports = {
-    devtool: 'source-map',
+    devtool: env === 'production' ? 'source-map' : 'eval-source-map',
     entry: {
         "components/windowTitleBar/windowTitleBar": titleBarPath
     },

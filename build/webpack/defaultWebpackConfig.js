@@ -16,6 +16,9 @@ module.exports = class WebpackDefaults {
 				}),
 				new HardSourceWebpackPlugin(
 					{
+						info: {
+							level: 'warn'
+						},
 						cacheDirectory: '../.webpack-file-cache/[confighash]',
 					}
 				),
@@ -38,7 +41,7 @@ module.exports = class WebpackDefaults {
 			plugins.push(new UglifyJsPlugin());
 		}
 		return {
-			devtool: 'source-map',
+			devtool: env === 'production' ? 'source-map' : 'eval-source-map',
 			entry: {},
 			stats: "minimal",
 			module: {

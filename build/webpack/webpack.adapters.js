@@ -1,6 +1,7 @@
 const path = require("path");
 const adaptersToBuild = require("./webpack.adapters.entries.json");
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
+const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 
 let entries = {};
 for (let key in adaptersToBuild) {
@@ -9,12 +10,15 @@ for (let key in adaptersToBuild) {
 }
 
 module.exports = {
-    devtool: 'source-map',
+    devtool: env === 'production' ? 'source-map' : 'eval-source-map',
     entry: entries,
     stats: "minimal",
     plugins: [
         new HardSourceWebpackPlugin(
             {
+                info: {
+                    level: 'warn'
+                },
                 cacheDirectory: '../.webpack-file-cache/[confighash]',
             }
         ),
@@ -54,6 +58,6 @@ module.exports = {
         path: path.resolve(__dirname, '../../dist/')
     },
     resolve: {
-        extensions: ['.js', '.jsx', '.json', 'scss', 'html']
+        extensions: ['.js', '.jsx', '.json', 'html']
     },
 };
