@@ -8,9 +8,8 @@ class FDC3Client {
 	constructor() {
 		// create desktopAgents for all current Linker Channels
 		this.updateDesktopAgents();
-
-		// Add listener for linker channel changes to create/destroy desktop agents
-		FSBL.Clients.LinkerClient.onStateChange(() => this.updateDesktopAgents);
+		FSBL.Clients.LinkerClient.linkerStore.addListener({}, () => { this.updateDesktopAgents() });
+		debugger;
 	}
 
 	/**
@@ -19,7 +18,8 @@ class FDC3Client {
 	private updateDesktopAgents() {
 		const state = FSBL.Clients.LinkerClient.getState(finsembleWindow.identifier);
 		const desktopAgentChannels = Object.keys(this.desktopAgentsByChannel);
-		const desktopAgentsToRemove = desktopAgentChannels.filter(channel => !state.channels.includes(channel));
+		const linkerChannels = state.channels.map((channel: any) => channel.name);
+		const desktopAgentsToRemove = desktopAgentChannels.filter(channel => !linkerChannels.includes(channel));
 		for (const channel of desktopAgentsToRemove) {
 			this.desktopAgentsByChannel[channel].leaveCurrentChannel();
 			delete this.desktopAgentsByChannel[channel];
