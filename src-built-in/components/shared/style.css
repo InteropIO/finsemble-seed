@@ -1,31 +1,43 @@
 .tags-menu-wrapper {
-	height: 17px;
-	border-radius: 2px;
+	height: 24px;
+	border-radius: 12px;
 	background: var(--tag-background-color);
 	color: var(--tag-font-color);
-	padding: 0 5px;
-	display: table;
+	padding: 0px 5px 0px 9px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	position: absolute;
-	top: 1px;
-	right: 1px;
 	user-select: none;
 	font-family: var(--font-family);
 	font-size: var(--menu-font-size);
-    font-weight: var(--menu-font-weight);
+	font-weight: var(--tag-font-weight);
+	transition: .2s background;
+}
+
+.tags-menu-wrapper:hover {
+	background-color: var(--tag-background-hover-color);
+}
+
+.filter-sort .tags-menu-wrapper {
+	position: fixed;
+	top: 13px;
+	right: 8px;
 }
 
 /* Different positioning for the catalog vs the launcher. */
 .appMarket .tags-menu-wrapper {
-	top: 11px;
-	right: 9px;
+	top: 8px;
+	right: 22px;
 }
 .tags-menu-wrapper span {
 	line-height: 17px;
-	font-size: 10px;
+	font-size: var(--tag-font-size);
 	cursor: pointer;
 }
 .tags-menu-wrapper span i {
-	margin-right: 5px;
+	padding: 0px 5px;
+	font-size: 6px;
 }
 .tags-menu {
 	z-index: 11;
@@ -37,10 +49,11 @@
 	border-radius: 3px;
   	background-color: var(--tag-background-color);
 	padding: 5px 0px;
+	margin-top: 5px;
 }
 .tags-menu ul {
-	padding: 0;
-	margin: 0;
+	padding: 0px;
+	margin: 0px;
 }
 .tags-menu li {
 	cursor: pointer;
@@ -48,7 +61,7 @@
 	font-size: 11px;
 	list-style: none;
 	color: var(--tag-font-color);
-	padding: 0 10px;
+	padding: 0px 6px;
 	display: flex;
 	align-items: center;
 }
@@ -62,12 +75,12 @@
 }
 
 .app-tag {
-	height: 17px;
-	border-radius: 2px;
+	height: 20px;
+	border-radius: 12px;
 	background-color: var(--tag-background-color);
 	user-select: none;
-	margin: 0 4px 4px 0;
-	padding: 4px 5px 0 5px;
+	margin: 0px 4px 4px 0px;
+	padding: 5px 7px 0px 9px;
 }
 
 .app-tag .tag-content {
@@ -75,7 +88,7 @@
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
-	font-size: 10px;
+	font-size: var(--tag-font-size);
 	font-weight: var(--tag-font-weight);
 	font-family: var(--font-family);
 	font-style: normal;
@@ -88,7 +101,7 @@
 
 .tag-delete {
 	cursor: pointer;
-	padding: 0 2px;
+	padding: 0px 2px;
 	font-size: 8px;
 }
 
@@ -98,4 +111,12 @@
 
 .tag-name {
 	margin-right: 2px;
+}
+
+.tag-content .ff-close {
+	padding-top: 0px;
+}
+
+.label-bar .ff-close{
+	padding-top: 2px;
 }

@@ -44,7 +44,6 @@ export default class Toolbar extends React.Component {
 		super(props);
 		this.state = {
 			sections: ToolbarStore.getSectionsFromMenus(),
-			finWindow: fin.desktop.Window.getCurrent(),
 		};
 		this.bindCorrectContext();
 	}
@@ -60,7 +59,7 @@ export default class Toolbar extends React.Component {
 	}
 
 	componentDidMount() {
-		this.state.finWindow.bringToFront();
+		finsembleWindow.bringToFront();
 	}
 
 	componentWillMount() {
@@ -167,9 +166,9 @@ export default class Toolbar extends React.Component {
 	render() {
 		if (!this.state.sections) return;
 		return (<FinsembleToolbar onDragStart={this.moveToolbar} onDragEnd={this.onPinDrag}>
-      <DragHandle/>
-      {this.getSections()}
-      <div className='resize-area' />
+			<DragHandle/>
+			{this.getSections()}
+			<div className='resize-area' />
 		</FinsembleToolbar>);
 	}
 

@@ -8,8 +8,8 @@ var windowTitleBarStore;
 var WindowClient;
 import windowTitleBarStoreDefaults from "./windowTitleBarStoreDefaults";
 import * as async from "async";
-var finWindow = fin.desktop.Window.getCurrent();
-//theses are constants that are set inside of setupStore. so they're declared as vars and not constants.
+
+//these are constants that are set inside of setupStore. so they're declared as vars and not constants.
 let constants = {};
 var Actions = {
 	initialize: function () {
@@ -146,9 +146,9 @@ var Actions = {
 			]);
 
 			if (isInMovableGroup && !isTopRight) {
-				fin.desktop.Window.getCurrent().updateOptions({ showTaskbarIcon: false });
+				finsembleWindow.updateOptions({ showTaskbarIcon: false });
 			} else {
-				fin.desktop.Window.getCurrent().updateOptions({ showTaskbarIcon: true });
+				finsembleWindow.updateOptions({ showTaskbarIcon: true });
 			}
 		};
 
@@ -257,7 +257,7 @@ var Actions = {
 		})
 	},
 	/**
-	 * Helper function to sift through all of the data coming from the dockingService. Outputs an array of groups that the window belongs to.
+	 * Helper function to sift through all of the data coming from the windowService. Outputs an array of groups that the window belongs to.
 	 * @todo consider sending targeted messages to windows instead of a bulk update. Will cut down on this kind of code.
 	 */
 	getMyDockingGroups: function (groupData) {
@@ -277,92 +277,11 @@ var Actions = {
 		}
 		return myGroups;
 	},
-	hyperFocus: function (params = {}) {
-
-		function getLinkedWindows(callback) {
-			FSBL.Clients.LinkerClient.getLinkedComponents({ channels: [linkerChannel] }, (err, data) => {
-				let windows = data.map((win) => win.windowName);
-				windowList = windowList.concat(windows);
-				callback();
-			});
-		}
-
-		function getDockedWindows(callback) {
-			function getWindows(groupName, done) {
-				FSBL.Clients.RouterClient.query("DockingService.getWindowsInGroup", { groupName }, (err, response) => {
-					windowList = windowList.concat(response.data);
-					done();
-				});
-			}
-
-			//Get the windows for every list.
-			async.forEach(dockingGroups, getWindows, callback);
-		}
-
-		function getWindowsInAppSuite(callback) {
-			FSBL.Clients.LauncherClient.getGroupsForWindow((err, data) => {
-				function getWindowsInGroup(group, done) {
-					FSBL.Clients.RouterClient.query("LauncherService.getWindowsInGroup", { groupName: group }, (err, response) => {
-						windowList = windowList.concat(response.data);
-						done();
-					});
-				}
-				if (err) return callback(err, null);
-				let groups = data;
-				if (groups) {
-					async.forEach(groups, getWindowsInGroup, callback);
-				} else {
-					callback(null, null);
-				}
-			});
-		}
-
-
-		let { linkerChannel, includeAppSuites, includeDockedGroups } = params;
-		let windowList = [],
-			tasks = [],
-			dockingGroups = [],
-			isGrouped = windowTitleBarStore.getValue({ field: "isGrouped" }),
-			movableGroups = windowTitleBarStore.getValue({ field: "Main.allMovableDockingGroups" });
-
-
-		if (linkerChannel) {
-			tasks.push(getLinkedWindows);
-		}
-
-		if (includeDockedGroups && isGrouped) {
-			dockingGroups = windowTitleBarStore.getValue({ field: "Main.dockingGroups" });
-			if (dockingGroups) {
-				dockingGroups = dockingGroups.filter(grp => grp.isMovable).map(grp => grp.groupName);
-				tasks.push(getDockedWindows);
-			}
-		}
-
-		if (includeAppSuites) {
-			tasks.push(getWindowsInAppSuite);
-		}
-
-		if (tasks.length) {
-			async.parallel(tasks, () => {
-				windowList.forEach(windowName => {
-					movableGroups.forEach((grp) => {
-						if (grp.windowNames.includes(windowName)) {
-							windowList = windowList.concat(grp.windowNames);
-						}
-					});
-				});
-				FSBL.Clients.LauncherClient.hyperFocus({ windowList });
-			});
-		}
-	},
 	onTabListScrollPositionChanged: function (err, response) {
 		windowTitleBarStore.setValue({ field: "tabListTranslateX", value: response.data.translateX });
 	},
 	setTabListScrollPosition: function (translateX) {
 		FSBL.Clients.RouterClient.transmit(constants.TAB_SCROLL_POSITION_CHANGED, { translateX });
-	},
-	hyperfocusDockingGroup: function () {
-		FSBL.Clients.RouterClient.transmit("DockingService.hyperfocusGroup", { windowName: FSBL.Clients.WindowClient.getWindowNameForDocking() });
 	},
 	/**
 	 * Handles messages coming from the windowClient.
