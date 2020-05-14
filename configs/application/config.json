@@ -9,12 +9,7 @@
 					"preferPreviousState": true,
 					"foundation": {
 						"appFolders": {
-							"list": ["Advanced App Launcher", 
-									 "Favorites",
-									 "CanDeleteCanEdit",
-									 "CanDeleteCantEdit",
-									 "CantDeleteCanEdit",
-									 "CantDeleteCantEdit"],
+							"list": ["Advanced App Launcher", "Favorites"],
 							"folders": {
 								"Advanced App Launcher": {
 									"icon": "ff-component",
@@ -43,34 +38,6 @@
 									"icon": "ff-favorite",
 									"type": "folder",
 									"canDelete": false,
-									"apps": {}
-								},
-								"CanDeleteCanEdit": {
-									"icon": "ff-component",
-									"type": "folder",
-									"canDelete": true,
-									"canEdit": true,
-									"apps": {}
-								},
-								"CanDeleteCantEdit": {
-									"icon": "ff-component",
-									"type": "folder",
-									"canDelete": true,
-									"canEdit": false,
-									"apps": {}
-								},
-								"CantDeleteCanEdit": {
-									"icon": "ff-component",
-									"type": "folder",
-									"canDelete": false,
-									"canEdit": true,
-									"apps": {}
-								},
-								"CantDeleteCantEdit": {
-									"icon": "ff-component",
-									"type": "folder",
-									"canDelete": false,
-									"canEdit": false,
 									"apps": {}
 								}
 							}
