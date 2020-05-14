@@ -1,5 +1,5 @@
 const path = require('path');
-
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const { DllReferencePlugin, DefinePlugin, ProgressPlugin } = require("webpack");
 
@@ -14,6 +14,11 @@ module.exports = class WebpackDefaults {
 							"NODE_ENV": JSON.stringify(env)
 					}
 				}),
+				new HardSourceWebpackPlugin(
+					{
+						cacheDirectory: '../.webpack-file-cache/[confighash]',
+					}
+				),
 				new ProgressPlugin({ profile: false })
 			]
 
