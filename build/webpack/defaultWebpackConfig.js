@@ -21,8 +21,7 @@ module.exports = class WebpackDefaults {
 						},
 						cacheDirectory: '../.webpack-file-cache/[confighash]',
 					}
-				),
-				new ProgressPlugin({ profile: false })
+				)
 			]
 
 		try {
@@ -95,6 +94,7 @@ module.exports = class WebpackDefaults {
 						use: {
 							loader: "babel-loader",
 							options: {
+								cacheDirectory: '.webpack-file-cache',
 								presets: [
 									["@babel/preset-env", {
 										targets: {

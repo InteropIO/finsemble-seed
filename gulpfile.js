@@ -5,112 +5,23 @@ const { launch, connect } = require('hadouken-js-adapter');
 
 	// #region Imports
 	// NPM
-	const chalk = require("chalk");
-	chalk.enabled = true;
-	//setting the level to 1 will force color output.
-	chalk.level = 1;
 	const async = require("async");
-	const { exec, spawn } = require("child_process");
+	const { spawn } = require("child_process");
 	const ON_DEATH = require("death")({ debug: false });
 	const del = require("del");
 	const fs = require("fs");
 	const gulp = require("gulp");
-	const prettyHrtime = require("pretty-hrtime");
 	const shell = require("shelljs");
 	const path = require("path");
-	const webpack = require("webpack");
 	const FEA = require("@chartiq/finsemble-electron-adapter/exports");
 	const FEA_PATH = path.resolve('./node_modules/@chartiq/finsemble-electron-adapter');
 	const FEAPackager = FEA ? FEA.packager : undefined;
 	const MAX_NODE_VERSION = '12.13.1';
-
-	// local
+	const startupConfig = require("./configs/other/server-environment-startup");
+	const { envOrArg, runWebpackAndCallback, logToTerminal, isNodeVersionValid, runWebpackInParrallel } = require("./build/webpack/buildHelpers");
 	const extensions = fs.existsSync("./gulpfile-extensions.js") ? require("./gulpfile-extensions.js") : undefined;
 	const isMacOrNix = process.platform !== "win32";
 	// #endregion
-
-	const logToTerminal = (msg, color = "white", bgcolor = "bgBlack") => {
-		if (!chalk[color]) color = "white";
-		if (!chalk[color][bgcolor]) bgcolor = "bgBlack";
-		console.log(`[${new Date().toLocaleTimeString()}] ${chalk[color][bgcolor](msg)}.`);
-	}
-
-	/**
-	* Splits a string version with semantic versioning into an object with major, minor and patch versions
-	* Valid inputs are 'X.X.X' or 'vX.X.X'
-	*/
-	const createSemverObject = (version) => {
-		let tempVersionArray;
-		let semverObject;
-		if (typeof version !== 'string') {
-			console.log(`Version must be type string but is ${typeof version}`);
-			return;
-		}
-		// Split the version into a temp array.
-		if (version.startsWith('v')) {
-			tempVersionArray = version.split('v');
-			tempVersionArray = tempVersionArray[1].split('.');
-		} else {
-			tempVersionArray = version.split('.')
-		}
-		if (tempVersionArray.length === 3) {
-
-			// Convert each array element to a number and store in the object.
-			semverObject = {
-				majorVersion: Number(tempVersionArray[0]) || null,
-				minorVersion: Number(tempVersionArray[1]) || null,
-				patchVersion: Number(tempVersionArray[2]) || null,
-			}
-			// If major, minor or patch versions are missing or not a number return nothing
-			if (!semverObject.majorVersion || !semverObject.minorVersion || !semverObject.patchVersion) {
-				return;
-			}
-			return semverObject
-		}
-	}
-
-	/**
-	* Compares two node version objects
-	* Each object is expected to contain majorVersion, minorVersion, patchVersion
-	*/
-	const compareNodeVersions = (a, b) => {
-		if (a.majorVersion !== b.majorVersion) {
-			return a.majorVersion > b.majorVersion ? 1: -1
-		}
-		if (a.minorVersion !== b.minorVersion) {
-			return a.minorVersion > b.minorVersion ? 1: -1
-		}
-		if (a.patchVersion !== b.patchVersion) {
-			return a.patchVersion > b.patchVersion ? 1: -1
-		}
-		return 0;
-	}
-
-	/**
-	* Validates the current node version against supported node versions specified in this file
-	* Returns boolean indicating whether current node version is valid
-	* Currently only validates against a max node version which must be in the format 'X.X.X' or 'vX.X.X'
-	*
-	* Note: This method is being used instead of npm engines because of an npm bug where warnings don't print
-	* This bug was resolved in npm 6.12.0 but as that is a very new version of npm and is not linked to node 10.15.3
-	* in nvm we can't assume our users have access to this version.
-	*/
-	const isNodeVersionValid = () => {
-		// Split the current node version into an object with major, minor and patch numbers for easier comparison.
-		// If any of these values are missing, nothing will be returned
-		let currentVersionObject = createSemverObject(process.version);
-		let maxVersionObject = createSemverObject(MAX_NODE_VERSION);
-
-		// Only allow the check both objects exist and contain major, minor and patch versions.
-		if (!currentVersionObject || !maxVersionObject) {
-			logToTerminal("Format of node version must be: 'X.X.X', unable to validate node version", "yellow");
-			return true;
-		}
-
-		// Check if the node version is higher than the maximum allowed node version.
-		if (compareNodeVersions(currentVersionObject, maxVersionObject) == 1) return false;
-		return true;
-	}
 
 	let angularComponents;
 	try {
@@ -119,10 +30,6 @@ const { launch, connect } = require('hadouken-js-adapter');
 		angularComponents = null;
 	}
 	// #region Constants
-	const startupConfig = require("./configs/other/server-environment-startup");
-
-	//Force colors on terminals.
-	const errorOutColor = chalk.hex("#FF667E");
 
 	// #endregion
 
@@ -143,39 +50,6 @@ const { launch, connect } = require('hadouken-js-adapter');
 	// build for a development environment and not watch for changes.
 	const isRunningDevTask = process.argv[2].startsWith("dev");
 
-	/**
-	 * Returns the value for the given name, looking in (1) environment variables, (2) command line args
-	 * and (3) startupConfig. For instance, `set BLAH_BLAH=electron` or `npx gulp dev --blah_blah:electron`
-	 * This will search for both all caps, all lowercase and camelcase.
-	 * @param {string} name The name to look for in env variables and args
-	 * @param {string} defaultValue The default value to return if the name isn't found as an env variable or arg
-	 */
-	function envOrArg(name, defaultValue) {
-		let lc = name.toLowerCase();
-		let uc = name.toUpperCase();
-		let cc = name.replace(/(-|_)([a-z])/g, function (g) { return g[1].toUpperCase(); });
-
-		// Check environment variables
-		if (env[lc]) return env[lc];
-		if (env[uc]) return env[uc];
-
-		// Check command line arguments
-		lc = "--" + lc + ":";
-		uc = "--" + uc + ":";
-		let rc = null;
-		process.argv.forEach(arg => {
-			if (arg.startsWith(lc)) rc = arg.split(lc)[1];
-			if (arg.startsWith(uc)) rc = arg.split(uc)[1];
-		});
-
-		// Look in startupConfig
-		if (!rc) {
-			rc = startupConfig[env.NODE_ENV][cc] || startupConfig[env.NODE_ENV][lc] || startupConfig[env.NODE_ENV][uc];
-		}
-		rc = rc || defaultValue;
-		return rc;
-	}
-
 	// This is a reference to the server process that is spawned. The server process is located in server/server.js
 	// and is an Express server that runs in its own node process (via spawn() command).
 	let serverProcess = null;
@@ -183,10 +57,6 @@ const { launch, connect } = require('hadouken-js-adapter');
 	let launchTimestamp = 0;
 
 	/**
-	 * Mody 10/04/2019
-	 * Reads installed Electron's version from FEA repo.
-	 * Another option is to export electron's version in
-	 * deploymentHelpers in FEA. However I'm just avoiding 2 PRs
 	 */
 	const getElectronVersion = () => {
 		// You may run `npm run dev` before running `npm i` inside
@@ -212,14 +82,14 @@ const { launch, connect } = require('hadouken-js-adapter');
 	*/
 	const deriveSocketCertificatePaths = () => {
 		const cfg = taskMethods.startupConfig[env.NODE_ENV];
-			let socketCertificatePath;
-			if (cfg.socketCertificateKey && cfg.socketCertificateCert) {
-				socketCertificatePath = {
-					key: path.resolve(path.join(__dirname, cfg.socketCertificateKey)),
-					cert: path.resolve(path.join(__dirname, cfg.socketCertificateCert))
-				}
+		let socketCertificatePath;
+		if (cfg.socketCertificateKey && cfg.socketCertificateCert) {
+			socketCertificatePath = {
+				key: path.resolve(path.join(__dirname, cfg.socketCertificateKey)),
+				cert: path.resolve(path.join(__dirname, cfg.socketCertificateCert))
 			}
-			return socketCertificatePath;
+		}
+		return socketCertificatePath;
 	}
 	// #endregion
 
@@ -289,94 +159,48 @@ const { launch, connect } = require('hadouken-js-adapter');
 		 */
 		buildWebpack: done => {
 			logToTerminal(`Starting webpack. Environment:"${process.env.NODE_ENV}"`)
-			//Helper function that builds webpack, logs errors, and notifies user of start/finish of the webpack task.
-			function packFiles(config, bundleName, callback) {
-				logToTerminal(`Starting to build ${bundleName}`);
-				config.watch = isRunningDevTask;
-				config.bail = true; // Causes webpack to break upon first encountered error. Pretty annoying when build errors scroll off the screen.
-				let startTime = process.hrtime();
-				webpack(config, (err, stats) => {
-					if (!err) {
-						let msg = `Finished building ${bundleName}`;
-						//first run, add nice timer.
-						if (callback) {
-							let end = process.hrtime(startTime);
-							msg += ` after ${chalk.magenta(prettyHrtime(end))}`;
-						}
-						logToTerminal(msg, "cyan");
-					} else {
-						console.error(errorOutColor("Webpack Error.", err));
-					}
-					if (stats.hasErrors()) {
-						console.error(errorOutColor(stats.toJson().errors));
-					}
-					// Webpack will call this function every time the bundle is built.
-					// Webpack is run in "watch" mode which means this function will be called over and over and over.
-					// We only want to invoke the async callback back to the gulp file once - the initial webpack build.
-					if (callback) {
-						callback();
-						callback = undefined;
-					}
-				});
-			}
 
-			const workerFarm = require('worker-farm');
-			const buildWorkers = workerFarm(
-				require.resolve('./build/webpack/build.js')
-			)
-			const webpackAdaptersConfig = require.resolve("./build/webpack/webpack.adapters");
-			const webpackVendorConfig = require.resolve("./build/webpack/webpack.vendor.js")
-			const webpackPreloadsConfig = require.resolve("./build/webpack/webpack.preloads.js")
-			const webpackTitleBarConfig = require.resolve("./build/webpack/webpack.titleBar.js")
-			const webpackServicesConfig = require.resolve("./build/webpack/webpack.services.js")
-			const webpackComponentsConfig = require.resolve("./build/webpack/webpack.components.js")
-			
-			//Requires are done in the function because webpack.components.js will error out if there's no vendor-manifest. The first webpack function generates the vendor manifest.
-				let ret = 0;
-				const configs = [
-					{
-						config: webpackAdaptersConfig, 
-						prettyName: "Adapters",
-						watch: isRunningDevTask
-					},
-					{
-						config: webpackVendorConfig,
-						prettyName: "Vendor",
-						watch: isRunningDevTask
-					}, 
-					{
-						config: webpackPreloadsConfig,
-						prettyName: "Preloads",
-						watch: isRunningDevTask
-					}, 
-					{
-						config: webpackTitleBarConfig,
-						prettyName: "Titlebar",
-						watch: isRunningDevTask
-					}, 
-					{
-						config: webpackServicesConfig,
-						prettyName: "Custom Services",
-						watch: isRunningDevTask
-					}, 
-					{
-						config: webpackComponentsConfig,
-						prettyName: "Components",
-						watch: isRunningDevTask
-					}
-				];
-				configs.forEach(config => {
-					buildWorkers(config, (e, output)=>{
-						if(++ret === configs.length){
-							done();
+
+
+			async.series([
+				(done) => {
+					const configPath = require.resolve("./build/webpack/webpack.vendor.js");
+					const bundleName = "Vendor";
+					const watch = isRunningDevTask;
+					runWebpackAndCallback(configPath, watch, bundleName, done);
+				},
+				(done) => {
+					const watch = isRunningDevTask;
+					const webpackConfigs = [
+						{
+							configPath: require.resolve("./build/webpack/webpack.adapters"),
+							prettyName: "Adapters",
+							watch
+						},
+						{
+							configPath: require.resolve("./build/webpack/webpack.preloads.js"),
+							prettyName: "Preloads",
+							watch
+						},
+						{
+							configPath: require.resolve("./build/webpack/webpack.titleBar.js"),
+							prettyName: "Titlebar",
+							watch
+						},
+						{
+							configPath: require.resolve("./build/webpack/webpack.services.js"),
+							prettyName: "Custom Services",
+							watch
+						},
+						{
+							configPath: require.resolve("./build/webpack/webpack.components.js"),
+							prettyName: "Components",
+							watch
 						}
-					});
-				})
-				// if (webpackServicesConfig) {
-				// 	packFiles(webpackServicesConfig, "services bundle", cb);
-				// } else {
-				// 	cb();
-				// }
+					];
+					runWebpackInParrallel(webpackConfigs, done);
+				}
+			], done)
 		},
 
 		/**
@@ -550,7 +374,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 			done();
 		},
 		launchApplication: done => {
-			if (!isNodeVersionValid()) {
+			if (!isNodeVersionValid(MAX_NODE_VERSION)) {
 				logToTerminal(`Node version: ${process.version} is not supported. Max supported version: ${MAX_NODE_VERSION}`, "red");
 			}
 			logToTerminal("Launching Finsemble", "black", "bgCyan");

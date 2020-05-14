@@ -2,13 +2,13 @@ var webpack = require('webpack');
 const path = require('path');
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const { DefinePlugin, DllPlugin, ProgressPlugin } = require("webpack");
+const { DefinePlugin, DllPlugin } = require("webpack");
 
 console.log("ENVIRONMENT", env);
 let plugins = [
     new DllPlugin({
         name: 'vendor_lib',
-        path: 'build/webpack/vendor-manifest.json',
+        path: path.join(__dirname, 'vendor-manifest.json')
     }),
     new DefinePlugin({
         "process.env": {

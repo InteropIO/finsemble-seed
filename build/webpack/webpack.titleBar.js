@@ -3,7 +3,6 @@ const path = require('path');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const { DefinePlugin } = require("webpack");
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
-
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 let plugins =
     [
@@ -85,6 +84,7 @@ module.exports = {
                 use: {
                     loader: "babel-loader",
                     options: {
+                        cacheDirectory: '.webpack-file-cache',
                         presets: [
                             ["@babel/preset-env", {
                                 targets: {
@@ -122,4 +122,4 @@ module.exports = {
             'async': path.resolve('./node_modules/async')
         },
     }
-}
+};
