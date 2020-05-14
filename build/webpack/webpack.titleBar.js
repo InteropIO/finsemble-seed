@@ -2,16 +2,9 @@
 const path = require('path');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const { DefinePlugin } = require("webpack");
-const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
-
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 let plugins =
     [
-        new HardSourceWebpackPlugin(
-            {
-                cacheDirectory: '../.webpack-file-cache/[confighash]',
-            }
-        ),
         new DefinePlugin({
             "process.env": {
                 "NODE_ENV": JSON.stringify(env)

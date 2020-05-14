@@ -320,59 +320,39 @@ const { launch, connect } = require('hadouken-js-adapter');
 				});
 			}
 
-			const workerFarm = require('worker-farm');
-			const buildWorkers = workerFarm(
-				require.resolve('./build/webpack/build.js')
-			)
-			const webpackAdaptersConfig = require.resolve("./build/webpack/webpack.adapters");
-			const webpackVendorConfig = require.resolve("./build/webpack/webpack.vendor.js")
-			const webpackPreloadsConfig = require.resolve("./build/webpack/webpack.preloads.js")
-			const webpackTitleBarConfig = require.resolve("./build/webpack/webpack.titleBar.js")
-			const webpackServicesConfig = require.resolve("./build/webpack/webpack.services.js")
-			const webpackComponentsConfig = require.resolve("./build/webpack/webpack.components.js")
-			
 			//Requires are done in the function because webpack.components.js will error out if there's no vendor-manifest. The first webpack function generates the vendor manifest.
-				let ret = 0;
-				const configs = [
-					{
-						config: webpackAdaptersConfig, 
-						prettyName: "Adapters"
-					},
-					{
-						config: webpackVendorConfig,
-						prettyName: "Vendor"
-					}, 
-					{
-						config: webpackPreloadsConfig,
-						prettyName: "Preloads"
-					}, 
-					{
-						config: webpackTitleBarConfig,
-						prettyName: "Titlebar"
-					}, 
-					{
-						config: webpackServicesConfig,
-						prettyName: "Custom Services"
-					}, 
-					{
-						config: webpackComponentsConfig,
-						prettyName: "Components"
+			async.series([
+				(cb) => {
+					const webpackAdaptersConfig = require("./build/webpack/webpack.adapters");
+					packFiles(webpackAdaptersConfig, "adapters bundle", cb);
+				},
+				(cb) => {
+					const webpackVendorConfig = require("./build/webpack/webpack.vendor.js")
+					packFiles(webpackVendorConfig, "vendor bundle", cb);
+				},
+				(cb) => {
+					const webpackPreloadsConfig = require("./build/webpack/webpack.preloads.js")
+					packFiles(webpackPreloadsConfig, "preload bundle", cb);
+				},
+				(cb) => {
+					const webpackTitleBarConfig = require("./build/webpack/webpack.titleBar.js")
+					packFiles(webpackTitleBarConfig, "titlebar bundle", cb);
+				},
+				(cb) => {
+					const webpackServicesConfig = require("./build/webpack/webpack.services.js")
+					if (webpackServicesConfig) {
+						packFiles(webpackServicesConfig, "services bundle", cb);
+					} else {
+						cb();
 					}
-				];
-				configs.forEach(config => {
-					buildWorkers(config, (e, output)=>{
-						console.log("output", output);
-						"Build finished"
-						if(++ret === configs.length){
-							done();
-						}
-					});
-				})
-				// if (webpackServicesConfig) {
-				// 	packFiles(webpackServicesConfig, "services bundle", cb);
-				// } else {
-				// 	cb();
-				// }
+				},
+				(cb) => {
+					const webpackComponentsConfig = require("./build/webpack/webpack.components.js")
+					packFiles(webpackComponentsConfig, "component bundle", cb);
+				}
+			],
+				done
+			);
 		},
 
 		/**
