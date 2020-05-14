@@ -9,14 +9,13 @@ const logToTerminal = (msg, color = "white", bgcolor = "bgBlack") => {
     if (!chalk[color][bgcolor]) bgcolor = "bgBlack";
     console.log(`[${new Date().toLocaleTimeString()}] ${chalk[color][bgcolor](msg)}.`);
 }
-const isRunningDevTask = process.argv[2].startsWith("dev");
 
 module.exports = function packFiles(config, callback) {
-    function packFiles(configPath, bundleName, callback) {
+    function packFiles(configPath, watch, bundleName, callback) {
         const config = require(configPath);
         if(!config) return callback();
         logToTerminal(`Starting to build ${bundleName}`);
-        config.watch = isRunningDevTask;
+        config.watch = watch;
         config.bail = true; // Causes webpack to break upon first encountered error. Pretty annoying when build errors scroll off the screen.
         let startTime = process.hrtime();
         webpack(config, (err, stats) => {
@@ -44,5 +43,5 @@ module.exports = function packFiles(config, callback) {
         });
     }
 
-    packFiles(config.config, config.prettyName, callback);
+    packFiles(config.config, config.watch, config.prettyName, callback);
 }

@@ -336,27 +336,33 @@ const { launch, connect } = require('hadouken-js-adapter');
 				const configs = [
 					{
 						config: webpackAdaptersConfig, 
-						prettyName: "Adapters"
+						prettyName: "Adapters",
+						watch: isRunningDevTask
 					},
 					{
 						config: webpackVendorConfig,
-						prettyName: "Vendor"
+						prettyName: "Vendor",
+						watch: isRunningDevTask
 					}, 
 					{
 						config: webpackPreloadsConfig,
-						prettyName: "Preloads"
+						prettyName: "Preloads",
+						watch: isRunningDevTask
 					}, 
 					{
 						config: webpackTitleBarConfig,
-						prettyName: "Titlebar"
+						prettyName: "Titlebar",
+						watch: isRunningDevTask
 					}, 
 					{
 						config: webpackServicesConfig,
-						prettyName: "Custom Services"
+						prettyName: "Custom Services",
+						watch: isRunningDevTask
 					}, 
 					{
 						config: webpackComponentsConfig,
-						prettyName: "Components"
+						prettyName: "Components",
+						watch: isRunningDevTask
 					}
 				];
 				configs.forEach(config => {
