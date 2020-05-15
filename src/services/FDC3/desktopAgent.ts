@@ -115,8 +115,7 @@ export default class D implements DesktopAgent {
 
 	/** ___________Apps ___________ */
 	async open(name: string, context?: object) {
-		console.log("FDC3.desktopAgent triggered LauncherClient.spawn");
-		await this.FSBL.Clients.LauncherClient.spawn(name, { data: { context } });
+		throw new Error("Method not implemented in Service. Use Client.");
 	}
 
 	/** ___________Context ___________ */
