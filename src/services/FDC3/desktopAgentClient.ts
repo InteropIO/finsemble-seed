@@ -1,7 +1,9 @@
 import Channel from "./channelClient";
-export default class DesktopAgentClient implements DesktopAgent {
-	private currentChannel: Channel;
-	private currentChannelContextListeners: Array<Listener> = [];
+import { EventEmitter } from "events";
+export default class DesktopAgentClient extends EventEmitter implements DesktopAgent {
+	#currentChannel: Channel;
+	#currentChannelContextListeners: Array<Listener> = [];
+	#channelChanging: boolean;
 
 	/** ___________Apps ___________ */
 
@@ -21,8 +23,8 @@ export default class DesktopAgentClient implements DesktopAgent {
 	
 	async broadcast(context: Context) {
 		FSBL.Clients.Logger.log("Desktop Agent broadcast called");
-		if (this.currentChannel) {
-			this.currentChannel.broadcast(context);
+		if (this.#currentChannel) {
+			this.#currentChannel.broadcast(context);
 		}
 	}
 
@@ -32,16 +34,16 @@ export default class DesktopAgentClient implements DesktopAgent {
 		contextTypeOrHandler: string | ContextHandler,
 		handler?: ContextHandler
 	): Listener {
-		if (!this.currentChannel) {
+		if (!this.#currentChannel) {
 			throw Error("Please join a channel prior to adding listeners");
 		}
 		let contextListener;
 		if (typeof contextTypeOrHandler === "string") {
-			contextListener = this.currentChannel.addContextListener(contextTypeOrHandler, handler);
+			contextListener = this.#currentChannel.addContextListener(contextTypeOrHandler, handler);
 		} else {
-			contextListener = this.currentChannel.addContextListener(contextTypeOrHandler);
+			contextListener = this.#currentChannel.addContextListener(contextTypeOrHandler);
 		}
-		this.currentChannelContextListeners.push(contextListener);
+		this.#currentChannelContextListeners.push(contextListener);
 		return contextListener;
 	}
 
@@ -137,30 +139,45 @@ export default class DesktopAgentClient implements DesktopAgent {
 	}
 
 	async joinChannel(channelId: string) {
-		if (this.currentChannel) {
+		// don't do anything if you are trying to join the same channel
+		if (this.#currentChannel && this.#currentChannel.id === channelId) return;
+
+		// unsubscribe to everything that was already subscribed
+		let oldChannel;
+		if (this.#currentChannel) {
+			oldChannel = this.#currentChannel.id;
+			this.#channelChanging = true;
 			await this.leaveCurrentChannel();
 		}
+
+		// Join new channel
 		const channel = await this.getOrCreateChannel(channelId);
+		this.#currentChannel = channel;
+
+		if (oldChannel) this.emit("channelChanged", oldChannel, channelId);
+		if (this.#channelChanging) this.#channelChanging = false;
+
 		FSBL.Clients.LinkerClient.linkToChannel(channel.id,	finsembleWindow.identifier);
-		this.currentChannel = channel;
+		
 	}
 
 	async getCurrentChannel() {
-		if (this.currentChannel) {
-			return this.currentChannel;
+		if (this.#currentChannel) {
+			return this.#currentChannel;
 		} else {
 			throw new Error(ChannelError.NoChannelFound);
 		}
 	}
 
 	async leaveCurrentChannel() {
-		if (this.currentChannel) {
-			this.currentChannel = null;
-			for (let i = this.currentChannelContextListeners.length - 1; i >= 0; i++) {
-				this.currentChannelContextListeners[i].unsubscribe();
-				this.currentChannelContextListeners.splice(i, 1);
-			}
+		if (!this.#currentChannel) return;
+		const channelId = this.#currentChannel.id;
+		this.#currentChannel = null;
+		for (let i = this.#currentChannelContextListeners.length - 1; i >= 0; i++) {
+			this.#currentChannelContextListeners[i].unsubscribe();
+			this.#currentChannelContextListeners.splice(i, 1);
 		}
-		FSBL.Clients.LinkerClient.unlinkFromChannel(this.currentChannel.id,	finsembleWindow.identifier);
+		FSBL.Clients.LinkerClient.unlinkFromChannel(channelId,	finsembleWindow.identifier);
+		if (!this.#channelChanging) this.emit("leftChannel", channelId);
 	}
 }

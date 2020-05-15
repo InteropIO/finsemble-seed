@@ -1,6 +1,3 @@
-import desktopAgentUtilities from "./desktopAgentUtilities";
-//import LinkerClient from "../../../finsemble/types/clients/linkerClient";
-//import LauncherClient from "../../../finsemble/types/clients/launcherClient";
 import Channel from "./channel";
 // import * as standardIntents from './intents/standard intents.json'
 
