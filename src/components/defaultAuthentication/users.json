@@ -1,5 +1,5 @@
 {
-    "Light Grey User": {
+    "User1": {
         "components": {
             "Component1": {
                 "window": {
@@ -610,10 +610,9 @@
                     }
                 ]
             }
-        ],
-        "cssOverridePath": "$applicationRoot/components/assets/css/greyUser.css"
+        ]
     },
-    "Q User": {
+    "User2": {
         "components": {
             "Component1": {
                 "window": {
@@ -1224,10 +1223,9 @@
                     }
                 ]
             }
-        ],
-        "cssOverridePath": "$applicationRoot/components/assets/css/qUser.css"
+        ]
     },
-    "Styled User": {
+    "User3": {
         "components": {
             "Component1": {
                 "window": {
@@ -2057,10 +2055,9 @@
                     }
                 ]
             }
-        ],
-        "cssOverridePath": "$applicationRoot/components/assets/css/styledUser.css"
+        ]
     },
-    "userD": {
+    "User4": {
         "components": {
             "Finsemble Documentation": {
                 "window": {
@@ -2400,7 +2397,7 @@
             }
         ]
     },
-    "Floating User": {
+    "User5": {
         "components": {
             "Toolbar": {
                 "window": {
@@ -3059,7 +3056,6 @@
                     }
                 ]
             }
-        ],
-        "cssOverridePath": "$applicationRoot/components/assets/css/qUser.css"
+        ]
     }
 }
