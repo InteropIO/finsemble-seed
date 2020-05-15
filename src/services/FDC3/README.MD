@@ -76,14 +76,14 @@ To get started with the API you will need to use the Finsemble FDC3 DesktopAgent
 <table>
 <thead>
 <tr>
-  <th>API</th><th>Code</th><th>Description</th>
+  <th>API</th><th>Description</th><th>Example</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>open</td>
-  <td> <code>open(name: string, context?: Context): Promise<void></code> </td>
+  <td> <code>open(name: string, context?: Context): Promise&lt;void></code> </td>
   <td>info</td>
+  <td><code>FSBL.Clients.FDC3Client.DesktopAgent.open('')</code></td>
 </tr>
 </tbody>
 </table>
@@ -94,22 +94,23 @@ To get started with the API you will need to use the Finsemble FDC3 DesktopAgent
 <table>
 <thead>
 <tr>
-  <th>API</th><th>Code</th><th>Description</th>
+  <th>API</th><th>Description</th><th>Example</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>broadcast</td>
   <td><code>broadcast(context: Context): void</code></td>
-  <td></td>
+  <td>Send context to the channel the app is currently on.</td>
+  <td><code>example</code></td>
 </tr>
 
 <tr>
-  <td>addContextListener</td>
-  <td><code>addContextListener(handler: ContextHandler): Listener;
-
-  addContextListener(contextType: string, handler: ContextHandler): Listener;</code></td>
-  <td> </td>
+  <td>
+  <code>addContextListener(handler: ContextHandler): Listener;
+  addContextListener(contextType: string, handler: ContextHandler): Listener;</code>
+  </td>
+  <td>description </td>
+  <td>example </td>
 </tr>
 </tbody>
 </table>
@@ -120,32 +121,32 @@ To get started with the API you will need to use the Finsemble FDC3 DesktopAgent
 <table>
 <thead>
 <tr>
-  <th>API</th><th>Code</th><th>Description</th>
+  <th>API</th><th>Description</th><th>Example</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>findIntent</td>
-  <td><code>findIntent(intent: string, context?: Context): Promise<AppIntent>;</code></td>
-  <td></td>
+  <td><code>findIntent(intent: string, context?: Context): Promise&lt;AppIntent>;</code></td>
+  <td>Open an application by name and optionally pass context to be used by that app.</td>
+  <td><code>FSBL.Clients.FDC3Client.DesktopAgent.findIntent("fdc3.call")</code></td>
 </tr>
 
 <tr>
-  <td>findIntentsByContext</td>
-  <td><code>findIntentsByContext(context: Context): Promise<Array<AppIntent>>;</code></td>
+  <td><code>findIntentsByContext(context: Context): Promise&lt;Array&lt;AppIntent>>;</code></td>
   <td></td>
+  <td><code>example</code></td>
 </tr>
 
 <tr>
-  <td>raiseIntent</td>
   <td><code>raiseIntent(intent: string, context: Context, target?: string): Promise<IntentResolution>;</code></td>
   <td></td>
+  <td><code>example</code></td>
 </tr>
 
 <tr>
-  <td>addIntentListener</td>
   <td><code>addIntentListener(intent: string, handler: ContextHandler): Listener;</code></td>
   <td></td>
+  <td><code>example</code></td>
 </tr>
 </tbody>
 </table>
@@ -154,36 +155,52 @@ To get started with the API you will need to use the Finsemble FDC3 DesktopAgent
 
 ### Channel
 
+A channel has this interface:
+```
+interface Channel {
+  // properties
+  id: string;
+  type: string;
+  displayMetadata?: DisplayMetadata;
+
+  // methods
+  broadcast(context: Context): void;
+  getCurrentContext(contextType?: string): Promise<Context|null>;
+  addContextListener(handler: ContextHandler): Listener;
+  addContextListener(contextType: string, handler: ContextHandler): Listener;
+}
+```
+
 <table>
 <thead>
 <tr>
-  <th>API</th><th>Code</th><th>Description</th>
+  <th>API</th><th>Description</th><th>Example</th>
 </tr></thead>
 <tbody>
 <tr>
-  <td>getOrCreateChannel</td>
-  <td> <code> getOrCreateChannel(channelId: string): Promise<Channel>;<void></code> </td>
+  <td> <code> getOrCreateChannel(channelId: string): Promise&lt;Channel></code> </td>
   <td>info</td>
+  <td><code>example</code></td>
 </tr>
 <tr>
-  <td>getSystemChannels</td>
-  <td> <code>getSystemChannels(): Promise<Array<Channel>>;<void></code> </td>
+  <td> <code>getSystemChannels(): Promise&lt;Array&lt;Channel>></code> </td>
   <td>info</td>
+  <td><code>example</code></td>
 </tr>
 <tr>
-  <td>joinChannel</td>
-  <td> <code>joinChannel(channelId: string) : Promise<void>;<void></code> </td>
+  <td> <code>joinChannel(channelId: string): Promise&lt;void></code> </td>
   <td>info</td>
+  <td><code>example</code></td>
 </tr>
 <tr>
-  <td>getCurrentChannel</td>
-  <td> <code>getCurrentChannel() : Promise<void>;</code> </td>
+  <td> <code>getCurrentChannel(): Promise&lt;void></code> </td>
   <td>info</td>
+  <td><code>example</code></td>
 </tr>
 <tr>
-  <td>leaveCurrentChannel</td>
-  <td> <code>leaveCurrentChannel() : Promise<void>;</code> </td>
+  <td> <code>leaveCurrentChannel(): Promise&lt;void></code> </td>
   <td>info</td>
+  <td><code>example</code></td>
 </tr>
 </tbody>
 </table>
