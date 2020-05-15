@@ -17,7 +17,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 	const FEAPackager = FEA ? FEA.packager : undefined;
 	const MAX_NODE_VERSION = '12.13.1';
 	const startupConfig = require("./configs/other/server-environment-startup");
-	const { envOrArg, runWebpackAndCallback, logToTerminal, isNodeVersionValid, runWebpackInParrallel } = require("./build/buildHelpers");
+	const { envOrArg, runWebpackAndCallback, logToTerminal, isNodeVersionValid, runWebpackInParallel } = require("./build/buildHelpers");
 	const extensions = fs.existsSync("./gulpfile-extensions.js") ? require("./gulpfile-extensions.js") : undefined;
 	const isMacOrNix = process.platform !== "win32";
 
@@ -194,7 +194,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 							watch: watchFiles
 						}
 					];
-					runWebpackInParrallel(webpackConfigs, exitOnCompletion, done);
+					runWebpackInParallel(webpackConfigs, exitOnCompletion, done);
 				}
 			], done);
 		},

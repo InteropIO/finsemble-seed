@@ -175,7 +175,7 @@ const envOrArg = (name, defaultValue) => {
  * @param {WebpackParallelConfig[]} WebpackParallelConfigs An array of objects that describe a webpack config
  * @param {Function} done 
  */
-const runWebpackInParrallel = (webpackParallelConfigs, exitOnCompletion, done) => {
+const runWebpackInParallel = (webpackParallelConfigs, exitOnCompletion, done) => {
     let finishedBuilds = 0;
     const parallelWorkers = workerFarm(require.resolve('./buildWorker.js'))
 
@@ -198,5 +198,5 @@ module.exports = {
     compareNodeVersions,
     createSemverObject,
     envOrArg,
-    runWebpackInParrallel
+    runWebpackInParallel
 }
