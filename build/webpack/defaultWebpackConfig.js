@@ -1,7 +1,7 @@
 const path = require('path');
-
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const { DllReferencePlugin, DefinePlugin, ProgressPlugin } = require("webpack");
+const { DllReferencePlugin, DefinePlugin } = require("webpack");
 
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 
@@ -11,10 +11,17 @@ module.exports = class WebpackDefaults {
 			[
 				new DefinePlugin({
 					"process.env": {
-							"NODE_ENV": JSON.stringify(env)
+						"NODE_ENV": JSON.stringify(env)
 					}
 				}),
-				new ProgressPlugin({ profile: false })
+				new HardSourceWebpackPlugin(
+					{
+						info: {
+							level: 'warn'
+						},
+						cacheDirectory: '../.webpack-file-cache/[confighash]',
+					}
+				)
 			]
 
 		try {
@@ -33,7 +40,7 @@ module.exports = class WebpackDefaults {
 			plugins.push(new UglifyJsPlugin());
 		}
 		return {
-			devtool: 'source-map',
+			devtool: env === 'production' ? 'source-map' : 'eval-source-map',
 			entry: {},
 			stats: "minimal",
 			module: {
@@ -87,6 +94,7 @@ module.exports = class WebpackDefaults {
 						use: {
 							loader: "babel-loader",
 							options: {
+								cacheDirectory: '.webpack-file-cache',
 								presets: [
 									["@babel/preset-env", {
 										targets: {

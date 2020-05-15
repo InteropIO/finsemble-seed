@@ -2,9 +2,18 @@
 const path = require('path');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const { DefinePlugin } = require("webpack");
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 let plugins =
     [
+        new HardSourceWebpackPlugin(
+            {
+                info: {
+                    level: 'warn'
+                },
+                cacheDirectory: '../.webpack-file-cache/[confighash]',
+            }
+        ),
         new DefinePlugin({
             "process.env": {
                 "NODE_ENV": JSON.stringify(env)
@@ -17,9 +26,9 @@ if (env === "production") {
     plugins.push(new UglifyJsPlugin());
 }
 
-const titleBarPath  = "./src/components/titlebar/titlebarLoader.js";
+const titleBarPath = "./src/components/titlebar/titlebarLoader.js";
 module.exports = {
-    devtool: 'source-map',
+    devtool: env === 'production' ? 'source-map' : 'eval-source-map',
     entry: {
         "components/windowTitleBar/windowTitleBar": titleBarPath
     },
@@ -75,6 +84,7 @@ module.exports = {
                 use: {
                     loader: "babel-loader",
                     options: {
+                        cacheDirectory: '.webpack-file-cache',
                         presets: [
                             ["@babel/preset-env", {
                                 targets: {
@@ -112,4 +122,4 @@ module.exports = {
             'async': path.resolve('./node_modules/async')
         },
     }
-}
+};
