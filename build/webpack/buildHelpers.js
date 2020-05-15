@@ -167,6 +167,7 @@ const runWebpackInParrallel = (webpackConfigs, done) => {
         });
     })
 }
+
 module.exports = {
     runWebpackAndCallback,
     logToTerminal,

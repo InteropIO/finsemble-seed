@@ -7,7 +7,6 @@ const { launch, connect } = require('hadouken-js-adapter');
 	// NPM
 	const async = require("async");
 	const { spawn } = require("child_process");
-	const ON_DEATH = require("death")({ debug: false });
 	const del = require("del");
 	const fs = require("fs");
 	const gulp = require("gulp");
@@ -76,6 +75,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 			return 'unknown';
 		}
 	};
+
 	/**
 	* Returns an object containing the absolute paths of the socket certificate files used to secure Finsemble Transport
 	* If both a key and certificate path are not configured nothing is returned.
@@ -91,9 +91,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 		}
 		return socketCertificatePath;
 	}
-	// #endregion
 
-	// #region Task Methods
 	/**
 	 * Object containing all of the methods used by the gulp tasks.
 	 */
@@ -159,9 +157,6 @@ const { launch, connect } = require('hadouken-js-adapter');
 		 */
 		buildWebpack: done => {
 			logToTerminal(`Starting webpack. Environment:"${process.env.NODE_ENV}"`)
-
-
-
 			async.series([
 				(done) => {
 					const configPath = require.resolve("./build/webpack/webpack.vendor.js");
@@ -200,7 +195,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 					];
 					runWebpackInParrallel(webpackConfigs, done);
 				}
-			], done)
+			], done);
 		},
 
 		/**
