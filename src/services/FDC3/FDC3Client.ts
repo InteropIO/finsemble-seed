@@ -8,6 +8,7 @@ class FDC3Client {
 	#wait: (time: number) => Promise<unknown>;
 
 	constructor() {
+		this.getOrCreateDesktopAgent("global");
 
 		this.#wait = (time: number) => {
 			return new Promise((resolve) => setTimeout(resolve, time));
@@ -15,7 +16,6 @@ class FDC3Client {
 
 		// create desktopAgents for all current Linker Channels
 		this.#updateDesktopAgents = async (initialRun: boolean = false) => {
-			debugger;
 			const desktopAgentChannels = Object.keys(this.#desktopAgentsByChannel);
 			const linkerState = FSBL.Clients.LinkerClient.getState();
 			const validLinkerChannels = linkerState.channels.map((channel: any) => channel.name);
@@ -35,6 +35,7 @@ class FDC3Client {
 				const desktopAgentsToRemove = desktopAgentChannels.filter(channel => !validLinkerChannels.includes(channel));
 
 				for (const channel of desktopAgentsToRemove) {
+					if (channel === "global") continue;
 					await this.#desktopAgentsByChannel[channel].leaveCurrentChannel();
 					delete this.#desktopAgentsByChannel[channel];
 				}

@@ -157,7 +157,9 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 		if (oldChannel) this.emit("channelChanged", oldChannel, channelId);
 		if (this.#channelChanging) this.#channelChanging = false;
 
-		FSBL.Clients.LinkerClient.linkToChannel(channel.id,	finsembleWindow.identifier);
+		if (channelId !== "global") {
+			FSBL.Clients.LinkerClient.linkToChannel(channel.id,	finsembleWindow.identifier);
+		}
 		
 	}
 
@@ -177,7 +179,9 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 			this.#currentChannelContextListeners[i].unsubscribe();
 			this.#currentChannelContextListeners.splice(i, 1);
 		}
-		FSBL.Clients.LinkerClient.unlinkFromChannel(channelId,	finsembleWindow.identifier);
+		if (channelId !== "global") {
+			FSBL.Clients.LinkerClient.unlinkFromChannel(channelId,	finsembleWindow.identifier);
+		}
 		if (!this.#channelChanging) this.emit("leftChannel", channelId);
 	}
 }

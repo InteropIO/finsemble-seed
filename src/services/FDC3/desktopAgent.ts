@@ -9,19 +9,19 @@ interface AppIntentContexts {
 
 // https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
 const hashFnv32a = (str: string, asString: boolean, seed?: number) => {
-    /*jshint bitwise:false */
-    var i, l,
-        hval = (seed === undefined) ? 0x811c9dc5 : seed;
+	/*jshint bitwise:false */
+	var i, l,
+		hval = (seed === undefined) ? 0x811c9dc5 : seed;
 
-    for (i = 0, l = str.length; i < l; i++) {
-        hval ^= str.charCodeAt(i);
-        hval += (hval << 1) + (hval << 4) + (hval << 7) + (hval << 8) + (hval << 24);
-    }
-    if( asString ){
-        // Convert to 8 digit hex string
-        return ("0000000" + (Math.abs(hval >>> 0)).toString(16)).substr(-6);
-    }
-    return hval >>> 0;
+	for (i = 0, l = str.length; i < l; i++) {
+		hval ^= str.charCodeAt(i);
+		hval += (hval << 1) + (hval << 4) + (hval << 7) + (hval << 8) + (hval << 24);
+	}
+	if (asString) {
+		// Convert to 8 digit hex string
+		return ("0000000" + (Math.abs(hval >>> 0)).toString(16)).substr(-6);
+	}
+	return hval >>> 0;
 }
 
 export default class D implements DesktopAgent {
@@ -36,6 +36,7 @@ export default class D implements DesktopAgent {
 	appIntentsContext: { [key: string]: { [key: string]: AppIntent } } = {};
 	apps: { [key: string]: AppMetadata } = {};
 	windowName: string;
+	globalChannel: Channel;
 
 	constructor(params: any) {
 		this.FSBL = params.FSBL;
@@ -43,6 +44,14 @@ export default class D implements DesktopAgent {
 		this.LauncherClient = this.FSBL.Clients.LauncherClient;
 		this.RouterClient = this.FSBL.Clients.RouterClient;
 		this.DialogManager = this.FSBL.Clients.DialogManager;
+		this.globalChannel = new Channel({
+			id: "global",
+			type: "system",
+			displayMetadata: {
+				name: "global"
+			},
+			FSBL: this.FSBL
+		});
 
 		// Make sure all existing Linker Channels get added to systemChannels. Any new channels created later will not.
 		this.getSystemChannels();
@@ -221,7 +230,7 @@ export default class D implements DesktopAgent {
 	async getSystemChannels(): Promise<Array<Channel>> {
 		if (this.systemChannels.length) return this.systemChannels;
 		const finsembleLinkerChannels = this.LinkerClient.getAllChannels();
-		const channels: Array<Channel> = [];
+		const channels: Array<Channel> = [this.globalChannel];
 
 		for (const finsembleLinkerChannel of finsembleLinkerChannels) {
 			const channel = new Channel({
@@ -236,6 +245,7 @@ export default class D implements DesktopAgent {
 			});
 			channels.push(channel);
 		}
+
 		this.systemChannels = channels;
 		return channels;
 	}
@@ -273,7 +283,6 @@ export default class D implements DesktopAgent {
 			name: channelId,
 			color: channelColor,
 		}, () => { });
-
 		const channel = new Channel({
 			id: channelId,
 			type: "app",
