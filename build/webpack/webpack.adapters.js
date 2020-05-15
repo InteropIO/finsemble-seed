@@ -2,8 +2,6 @@ const path = require("path");
 const adaptersToBuild = require("./webpack.adapters.entries.json");
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
-const SpeedMeasurePlugin = require("speed-measure-webpack-plugin");
-const smp = new SpeedMeasurePlugin();
 let entries = {};
 for (let key in adaptersToBuild) {
 	let component = adaptersToBuild[key];

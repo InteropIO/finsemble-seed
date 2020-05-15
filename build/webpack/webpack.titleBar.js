@@ -26,7 +26,7 @@ if (env === "production") {
     plugins.push(new UglifyJsPlugin());
 }
 
-const titleBarPath  = "./src/components/titlebar/titlebarLoader.js";
+const titleBarPath = "./src/components/titlebar/titlebarLoader.js";
 module.exports = {
     devtool: env === 'production' ? 'source-map' : 'eval-source-map',
     entry: {
