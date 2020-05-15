@@ -7,6 +7,23 @@ interface AppIntentContexts {
 	contexts: Array<string>
 }
 
+// https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
+const hashFnv32a = (str: string, asString: boolean, seed?: number) => {
+    /*jshint bitwise:false */
+    var i, l,
+        hval = (seed === undefined) ? 0x811c9dc5 : seed;
+
+    for (i = 0, l = str.length; i < l; i++) {
+        hval ^= str.charCodeAt(i);
+        hval += (hval << 1) + (hval << 4) + (hval << 7) + (hval << 8) + (hval << 24);
+    }
+    if( asString ){
+        // Convert to 8 digit hex string
+        return ("0000000" + (Math.abs(hval >>> 0)).toString(16)).substr(-6);
+    }
+    return hval >>> 0;
+}
+
 export default class D implements DesktopAgent {
 	FSBL: any;
 	LauncherClient: any; //typeof LauncherClient;
@@ -251,7 +268,7 @@ export default class D implements DesktopAgent {
 			throw new Error(`Channel ${channelId} already exists`);
 		}
 
-		const channelColor = '#' + Math.floor(Math.random() * 16777215).toString(16); // generate a random color
+		const channelColor = '#' + hashFnv32a(channelId, true); // generate a color
 		this.LinkerClient.createChannel({
 			name: channelId,
 			color: channelColor,
