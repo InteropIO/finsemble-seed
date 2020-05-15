@@ -1,7 +1,7 @@
 const path = require('path');
-
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const { DllReferencePlugin, DefinePlugin, ProgressPlugin } = require("webpack");
+const { DllReferencePlugin, DefinePlugin } = require("webpack");
 
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 
@@ -11,7 +11,7 @@ module.exports = class WebpackDefaults {
 			[
 				new DefinePlugin({
 					"process.env": {
-							"NODE_ENV": JSON.stringify(env)
+						"NODE_ENV": JSON.stringify(env)
 					}
 				}),
 				new HardSourceWebpackPlugin(
