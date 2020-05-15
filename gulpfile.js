@@ -151,44 +151,50 @@ const { launch, connect } = require('hadouken-js-adapter');
 		 * Builds files using webpack.
 		 */
 		buildWebpack: done => {
+			const watchFiles = isRunningDevTask;
 			logToTerminal(`Starting webpack. Environment:"${process.env.NODE_ENV}"`)
+			// when we're running our dev tasks, we want to leave the parallel workers up,
+			// working away. When we're building, we want those guys to tear themselves down
+			// so the build doesn't hang indefinitely. If we aren't watching, exit the processes
+			// after building.
+			const exitOnCompletion = !watchFiles;
 			async.series([
+				// Build the vendor bundle first, as other webpack instances will use it to speed
+				// up their compilation time.
 				(done) => {
 					const configPath = require.resolve("./build/webpack/webpack.vendor.js");
 					const bundleName = "Vendor";
-					const watch = isRunningDevTask;
-					runWebpackAndCallback(configPath, watch, bundleName, done);
+					runWebpackAndCallback(configPath, watchFiles, bundleName, done);
 				},
 				(done) => {
-					const watch = isRunningDevTask;
 					const webpackConfigs = [
 						{
 							configPath: require.resolve("./build/webpack/webpack.adapters"),
 							prettyName: "Adapters",
-							watch
+							watch: watchFiles
 						},
 						{
 							configPath: require.resolve("./build/webpack/webpack.preloads.js"),
 							prettyName: "Preloads",
-							watch
+							watch: watchFiles
 						},
 						{
 							configPath: require.resolve("./build/webpack/webpack.titleBar.js"),
 							prettyName: "Titlebar",
-							watch
+							watch: watchFiles
 						},
 						{
 							configPath: require.resolve("./build/webpack/webpack.services.js"),
 							prettyName: "Custom Services",
-							watch
+							watch: watchFiles
 						},
 						{
 							configPath: require.resolve("./build/webpack/webpack.components.js"),
 							prettyName: "Components",
-							watch
+							watch: watchFiles
 						}
 					];
-					runWebpackInParrallel(webpackConfigs, done);
+					runWebpackInParrallel(webpackConfigs, exitOnCompletion, done);
 				}
 			], done);
 		},
