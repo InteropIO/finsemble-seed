@@ -175,13 +175,13 @@ const envOrArg = (name, defaultValue) => {
  * @param {WebpackParallelConfig[]} WebpackParallelConfigs An array of objects that describe a webpack config
  * @param {Function} done 
  */
-const runWebpackInParrallel = (WebpackParallelConfigs, exitOnCompletion, done) => {
+const runWebpackInParrallel = (webpackParallelConfigs, exitOnCompletion, done) => {
     let finishedBuilds = 0;
     const parallelWorkers = workerFarm(require.resolve('./buildWorker.js'))
 
-    WebpackParallelConfigs.forEach(config => {
+    webpackParallelConfigs.forEach(config => {
         parallelWorkers(config, (e, output) => {
-            if (++finishedBuilds === WebpackParallelConfigs.length) {
+            if (++finishedBuilds === webpackParallelConfigs.length) {
                 done();
                 if (exitOnCompletion) {
                     workerFarm.end(parallelWorkers);
