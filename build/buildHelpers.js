@@ -1,12 +1,24 @@
 const webpack = require("webpack");
 const chalk = require("chalk");
+const workerFarm = require('worker-farm');
 const prettyHrtime = require("pretty-hrtime");
 chalk.enabled = true;
 //setting the level to 1 will force color output.
 chalk.level = 1;
 const errorOutColor = chalk.hex("#FF667E");
-const workerFarm = require('worker-farm');
+/**
+ * @typedef WebpackParallelConfig
+ * @property {string} configPath absolute path to the webpack configuration
+ * @property {boolean} watch whether we should watch files or exit upon build
+ * @property {string} prettyName "label" to use when printing out completion messages (e.g., 'Adapters' or 'Vendor')
+ */
 
+/**
+ * Logs a message to the terminal
+ * @param {string} msg Message to output
+ * @param {string} color Color of the text
+ * @param {string} bgcolor Color of the background
+ */
 const logToTerminal = (msg, color = "white", bgcolor = "bgBlack") => {
     if (!chalk[color]) color = "white";
     if (!chalk[color][bgcolor]) bgcolor = "bgBlack";
@@ -155,13 +167,21 @@ const envOrArg = (name, defaultValue) => {
     return rc;
 }
 
-const runWebpackInParrallel = (webpackConfigs, done) => {
-    let ret = 0;
-    const parallelWorkers = workerFarm(require.resolve('./worker.js'))
+/**
+ * Given an array of webpack parallel config objects, this function will spool up a maximum
+ * of N workers (where N is limited by CPU cores). When all of them finish building, the done
+ * callback will be invoked.
+ * 
+ * @param {WebpackParallelConfig[]} WebpackParallelConfigs An array of objects that describe a webpack config
+ * @param {Function} done 
+ */
+const runWebpackInParrallel = (WebpackParallelConfigs, done) => {
+    let finishedBuilds = 0;
+    const parallelWorkers = workerFarm(require.resolve('./buildWorker.js'))
 
-    webpackConfigs.forEach(config => {
+    WebpackParallelConfigs.forEach(config => {
         parallelWorkers(config, (e, output) => {
-            if (++ret === webpackConfigs.length) {
+            if (++finishedBuilds === WebpackParallelConfigs.length) {
                 done();
             }
         });
