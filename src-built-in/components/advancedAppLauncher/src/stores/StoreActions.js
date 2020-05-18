@@ -2,6 +2,7 @@ import _get from 'lodash.get';
 import { getStore } from "./LauncherStore";
 import AppDirectory from "../modules/AppDirectory";
 import FDC3 from "../modules/FDC3";
+import Logger from '../../../../../finsemble/types/clients/logger';
 const async = require("async");
 let FDC3Client;
 let appd;
@@ -280,6 +281,7 @@ function _setValue(field, value, cb = Function.prototype) {
 	}, (error, data) => {
 		if (error) {
 			console.log("Failed to save. ", field);
+			Logger.error("Advanced App Launcher: Failed to save ", field);
 			// TODO
 			// Should probably return with an error so the calling function knows to move on
 			// Don't want to deal with unforseen circumstances by doing that now
