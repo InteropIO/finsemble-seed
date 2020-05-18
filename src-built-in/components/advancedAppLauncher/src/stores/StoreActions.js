@@ -72,8 +72,6 @@ function initialize(callback = Function.prototype) {
 				return !data.deleted.includes(folderName);
 			});
 
-			console.log("folderList: ", folderList);
-
 			Object.keys(store.values.appDefinitions).map(appName => {
 				if (!data.deleted.includes(appName)) {
 					appList[appName] = store.values.appDefinitions[appName];
@@ -86,7 +84,7 @@ function initialize(callback = Function.prototype) {
 
 		data.folders = store.values.appFolders.folders;
 		data.foldersList = folderList || store.values.appFolders.list;
-		data.apps = appList || store.values.appDefinitions;
+		data.apps = Object.keys(appList).length > 0 ? appList : store.values.appDefinitions;
 		data.tags = store.values.activeLauncherTags;
 		data.activeFolder = store.values.activeFolder;
 		data.filterText = store.values.filterText;
@@ -106,6 +104,7 @@ function initialize(callback = Function.prototype) {
 
 		getToolbarStore((err, response) => {
 			FSBL.Clients.RouterClient.subscribe("Finsemble.Service.State.launcherService", (err, response) => {
+				console.log("initialized, calling to load installed components from store");
 				loadInstalledComponentsFromStore(() => {
 					//We load our stored components(config driven) here
 					loadInstalledConfigComponents(() => {
@@ -138,12 +137,22 @@ function updateAppsInFolders(cb = Function.prototype) {
 	Object.keys(data.folders).map(folderName => {
 		if (folderName === advancedAppLauncherFolderName) return;
 		else {
+			console.log("checking non main folders");
 			const folder = data.folders[folderName];
 			Object.values(data.configComponents).map(configComp => {
-				if (Object.keys(folder.apps).includes(configComp.appID)) {
-					data.folders[folderName].apps[configComp.appID] = configComp;
+				let index = -1;
+				folder.apps.map((folderApp, i) => {
+					if (folderApp.appID === configComp.appID) {
+						index = i;
+					}
+				});
+
+				if (index > -1) {
+					data.folders[folderName].apps.splice(index, 1, configComp);
 				}
 			});
+
+			console.log('updated data.folders[folderName]: ', folderName, data.folders[folderName]);
 		}
 	});
 	_setFolders(cb);
@@ -186,6 +195,7 @@ function lazyLoadAppD() {
  */
 function loadInstalledComponentsFromStore(cb = Function.prototype) {
 	async.map(Object.values(data.apps), (component, componentDone) => {
+		console.log("loadInstalledComponentsFromStore component: ", component);
 		// Load FDC3 components here
 		if (component.source && component.source === "FDC3") {
 			lazyLoadAppD();
@@ -223,14 +233,14 @@ function loadInstalledConfigComponents(cb = Function.prototype) {
 		// Get the user defined apps
 		const apps = Object.keys(data.apps);
 		Object.keys(folders).forEach(folderName => {
-			const appsName = Object.keys(folders[folderName]["apps"]);
-			appsName.forEach(appName => {
+			folders[folderName].apps.map((configDefinedApp, i) => {
+				const name = configDefinedApp.name, appID = configDefinedApp.appID;
 				// If the component is not in the config component list and is not a user defined component
-				if (!componentNameList.includes(appName) && !apps.includes(folders[folderName]["apps"][appName]["appID"].toString())) {
+				if (!componentNameList.includes(name) && !apps.includes(appID)) {
 					// Delete app from the folder
-					delete folders[folderName]["apps"][appName];
+					folders[folderName].apps.splice(i, 1);
 				}
-			})
+			});
 		});
 		
 		componentNameList.map(componentName => {
@@ -410,8 +420,8 @@ function addApp(app = {}, cb) {
 		// we need to make sure it gets pinned to the toolbar
 		if (folder === FAVORITES) addPin({ name: app.name });
 		data.apps[appID] = newAppData;
-		data.folders[ADVANCED_APP_LAUNCHER].apps[appID] = newAppData;
-		data.folders[folder].apps[appID] = newAppData;
+		data.folders[ADVANCED_APP_LAUNCHER]["apps"].push(newAppData);
+		data.folders[folder]["apps"].push(newAppData);
 		// Save appDefinitions and then folders
 		_setValue("appDefinitions", data.apps, () => {
 			_setFolders();

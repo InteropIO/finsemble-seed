@@ -225,7 +225,8 @@ async function addApp(id, cb = Function.prototype) {
 				tags: app.tags,
 				name,
 				type: "component",
-				manifest
+				manifest,
+				canDelete: true
 			}
 		}
 	} else {
@@ -236,8 +237,8 @@ async function addApp(id, cb = Function.prototype) {
 	let ADVANCED_APP_LAUNCHER = data.defaultFolder;
 	let folders = data.folders;
 
-	data.folders[ADVANCED_APP_LAUNCHER].apps[appID] = appConfig
-	data.folders[folder].apps[appID] = appConfig
+	data.folders[ADVANCED_APP_LAUNCHER].apps.push(appConfig);
+	if (folder !== ADVANCED_APP_LAUNCHER) data.folders[folder].apps.push(appConfig);
 	FSBL.Clients.LauncherClient.registerComponent({
 		componentType: appConfig.name,
 		manifest: appConfig.manifest
