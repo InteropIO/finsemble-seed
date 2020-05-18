@@ -9,14 +9,22 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 
 	async open(name: string, context?: Context) {
 		FSBL.Clients.Logger.log("Desktop Agent open called typescript");
-		const {	err, response } = await FSBL.Clients.RouterClient.query("FDC3.DesktopAgent.open",	{ name: name, context: context }, () => {});
+
+		// open the component and make it join the current channel
+		const {	err, response } = await FSBL.Clients.LauncherClient.spawn(name, { 
+			data: { 
+				fdc3: { context },
+				linker: (this.#currentChannel.id !== "global") ? { channels: [ this.#currentChannel.id ] } : undefined
+			},
+			
+		}) as any;
 
 		if (err) {
 			throw err;
 		}
 
-		FSBL.Clients.Logger.log("DesktopAgent.open response: ", response.data);
-		return response.data;
+		//FSBL.Clients.Logger.log("DesktopAgent.open response: ", response.data);
+		return response.finWindow;
 	}
 
 	/** ___________Context ___________ */
@@ -37,12 +45,19 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 		if (!this.#currentChannel) {
 			throw Error("Please join a channel prior to adding listeners");
 		}
+		// data sent at open
+		const spawnData = FSBL.Clients.WindowClient.getSpawnData();
+		let context = spawnData?.fdc3?.context;
+		
 		let contextListener;
 		if (typeof contextTypeOrHandler === "string") {
 			contextListener = this.#currentChannel.addContextListener(contextTypeOrHandler, handler);
+			if (context && context.type === contextTypeOrHandler) handler(context);
 		} else {
 			contextListener = this.#currentChannel.addContextListener(contextTypeOrHandler);
+			if (context) contextTypeOrHandler(context);
 		}
+		
 		this.#currentChannelContextListeners.push(contextListener);
 		return contextListener;
 	}
@@ -81,34 +96,21 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 	}
 
 	addIntentListener(intent: string, handler: ContextHandler): Listener {
-		console.log("Handler Type", {}.toString.call(handler));
-		const appName = FSBL.Clients.WindowClient.getWindowIdentifier()
-			.componentType;
-		console.log("WindowIdentifier: ", appName);
-		//check handler is function
-		if (
-			{}.toString.call(handler) === "[object AsyncFunction]" ||
-			{}.toString.call(handler) === "[object Function]"
-		) {
-			//This is a valid handler
-			let channel = appName + intent;
-			const subscribeHandler = (err: Error, response: any) => {
-				if (err) {
-					console.log("Error adding IntentListener: ", err);
-				}
-				handler(response.data.context);
-			};
-			const subscribeId = FSBL.Clients.RouterClient.subscribe(channel, subscribeHandler);
-			return {
-				unsubscribe: () => {
-					FSBL.Clients.RouterClient.unsubscribe(subscribeId);
-				},
-			};
-		} else {
-			//This is not a valid handler
-			FSBL.Clients.Logger.log("addIntentListener: Handler arguement must be [object Function] or [object AsyncFunction]");
-			throw "invalid handler";
-			//return handler;
+		const routerHandler: StandardCallback = (err, response) => {
+			handler(response.data);
+		}
+		
+		// deals with data sent at open
+		const spawnData = FSBL.Clients.WindowClient.getSpawnData();
+		if (intent === spawnData?.fdc3?.intent) {
+			handler(spawnData?.fdc3?.context);
+		}
+
+		FSBL.Clients.RouterClient.addListener(`FDC3.intent.${intent}`, routerHandler);
+		return {
+			unsubscribe: () => {
+				FSBL.Clients.RouterClient.removeListener(`FDC3.intent.${intent}`, routerHandler);
+			}
 		}
 	}
 
@@ -157,7 +159,9 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 		if (oldChannel) this.emit("channelChanged", oldChannel, channelId);
 		if (this.#channelChanging) this.#channelChanging = false;
 
-		FSBL.Clients.LinkerClient.linkToChannel(channel.id,	finsembleWindow.identifier);
+		if (channelId !== "global") {
+			FSBL.Clients.LinkerClient.linkToChannel(channel.id,	finsembleWindow.identifier);
+		}
 		
 	}
 
@@ -177,7 +181,9 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 			this.#currentChannelContextListeners[i].unsubscribe();
 			this.#currentChannelContextListeners.splice(i, 1);
 		}
-		FSBL.Clients.LinkerClient.unlinkFromChannel(channelId,	finsembleWindow.identifier);
+		if (channelId !== "global") {
+			FSBL.Clients.LinkerClient.unlinkFromChannel(channelId,	finsembleWindow.identifier);
+		}
 		if (!this.#channelChanging) this.emit("leftChannel", channelId);
 	}
 }
