@@ -1,6 +1,14 @@
 import DesktopAgent from "./desktopAgentClient";
 import Channel from "./channelClient";
 
+declare global {
+	interface Window {
+		fdc3: DesktopAgent
+	}
+}
+
+const win = window as Window;
+
 class FDC3Client {
 	desktopAgents: Array<DesktopAgent> = [];
 	#desktopAgentsByChannel: { [key: string]: DesktopAgent } = {};
@@ -8,7 +16,12 @@ class FDC3Client {
 	#wait: (time: number) => Promise<unknown>;
 
 	constructor() {
-		this.getOrCreateDesktopAgent("global");
+		const createGlobalAgent = async () => {
+			debugger;
+			win.fdc3 = await this.getOrCreateDesktopAgent("global");
+		}
+		createGlobalAgent();
+		
 
 		this.#wait = (time: number) => {
 			return new Promise((resolve) => setTimeout(resolve, time));
@@ -121,7 +134,7 @@ class FDC3Client {
 
 console.log("FDC3Client");
 const setupFDC3Client = () => {
-	console.log("FDC3Client Ready");
+	console.log("FSBL Ready");
 	(FSBL as any).Clients.FDC3Client = new FDC3Client();
 };
 
