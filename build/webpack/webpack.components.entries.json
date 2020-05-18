@@ -1,6 +1,10 @@
 {
-  "intentResolverModal": {
-    "output": "components/intentResolver/intentResolverModal",
-    "entry": "./src/components/intentResolver/intentResolverModal.js"
-  }
+    "intentResolverModal": {
+        "output": "components/intentResolver/intentResolverModal",
+        "entry": "./src/components/intentResolver/intentResolverModal.js"
+    },
+    "FDC3Tester": {
+        "output": "components/FDC3Tester/FDC3Tester",
+        "entry": "./src/components/FDC3Tester/src/app.jsx"
+    }
 }

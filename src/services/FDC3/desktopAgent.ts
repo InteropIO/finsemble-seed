@@ -172,6 +172,7 @@ export default class D implements DesktopAgent {
 			return null;
 		}
 
+
 		return new Promise((resolve, reject) => {
 			const dialogParams = {
 				intent, context, appIntent, source: this.windowName
