@@ -104,7 +104,6 @@ function initialize(callback = Function.prototype) {
 
 		getToolbarStore((err, response) => {
 			FSBL.Clients.RouterClient.subscribe("Finsemble.Service.State.launcherService", (err, response) => {
-				console.log("initialized, calling to load installed components from store");
 				loadInstalledComponentsFromStore(() => {
 					//We load our stored components(config driven) here
 					loadInstalledConfigComponents(() => {
@@ -137,7 +136,6 @@ function updateAppsInFolders(cb = Function.prototype) {
 	Object.keys(data.folders).map(folderName => {
 		if (folderName === advancedAppLauncherFolderName) return;
 		else {
-			console.log("checking non main folders");
 			const folder = data.folders[folderName];
 			Object.values(data.configComponents).map(configComp => {
 				let index = -1;
@@ -151,8 +149,6 @@ function updateAppsInFolders(cb = Function.prototype) {
 					data.folders[folderName].apps.splice(index, 1, configComp);
 				}
 			});
-
-			console.log('updated data.folders[folderName]: ', folderName, data.folders[folderName]);
 		}
 	});
 	_setFolders(cb);
@@ -195,7 +191,6 @@ function lazyLoadAppD() {
  */
 function loadInstalledComponentsFromStore(cb = Function.prototype) {
 	async.map(Object.values(data.apps), (component, componentDone) => {
-		console.log("loadInstalledComponentsFromStore component: ", component);
 		// Load FDC3 components here
 		if (component.source && component.source === "FDC3") {
 			lazyLoadAppD();
