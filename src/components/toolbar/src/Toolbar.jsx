@@ -6,13 +6,18 @@ import ReactDOM from "react-dom";
 import React from "react";
 import { ToolbarShell, FavoritesShell, DragHandle, RevealAll, MinimizeAll, AutoArrange, Search, AppLauncher, WorkspaceManagementMenu, ToolbarSection } from "@chartiq/finsemble-ui/react/components";
 import { FileMenu } from "./FileMenu";
+import { useHotkey } from "@chartiq/finsemble-ui/react/hooks";
 
 import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../../assets/css/_themeWhitelabel.css"
 
 const Toolbar = () => {
+	useHotkey(["ctrl", "alt", "shift", "r"], () => FSBL.restartApplication() );
+	useHotkey(["ctrl", "alt", "up"], () => FSBL.Clients.LauncherClient.bringWindowsToFront() );
+	useHotkey(["ctrl", "alt", "down"], () => FSBL.Clients.WorkspaceClient.minimizeAll() );
+
 	return (
-		<ToolbarShell>
+		<ToolbarShell hotkeyShow={["ctrl", "alt", "t"]} hotkeyHide={["ctrl", "alt", "h"]} >
 			<ToolbarSection className="left">
 				<DragHandle />
 				<FileMenu />
@@ -34,4 +39,5 @@ const Toolbar = () => {
 	)
 }
 
-ReactDOM.render(<Toolbar />, document.getElementById("toolbar"));
+ReactDOM.render(<FSBL><Toolbar /></FSBL>, document.getElementById("toolbar"));
+
