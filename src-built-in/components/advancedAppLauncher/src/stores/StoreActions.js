@@ -285,7 +285,9 @@ function _setValue(field, value, cb = Function.prototype) {
 	}, (error, data) => {
 		if (error) {
 			console.log("Failed to save. ", field);
-			return cb(error);
+			// TODO
+			// Should probably return with an error so the calling function knows to move on
+			// Don't want to deal with unforseen circumstances by doing that now
 		} else {
 			cb && cb();
 		}
@@ -457,7 +459,6 @@ function deleteApp(appID) {
 }
 
 function addNewFolder(name) {
-	if (data.deleted.includes(name)) return;
 	// Each new folder is given a number, lets store them here
 	// to get the highest one and then increment
 	const newFoldersNums = [0];
