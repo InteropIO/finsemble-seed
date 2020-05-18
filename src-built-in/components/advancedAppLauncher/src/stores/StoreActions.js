@@ -142,7 +142,7 @@ function updateAppsInFolders(cb = Function.prototype) {
 			Object.values(data.configComponents).map(configComp => {
 				let index = -1;
 				folder.apps.map((folderApp, i) => {
-					if (folderApp.appID === configComp.appID) {
+					if (folderApp.appID.trim() === configComp.appID.trim()) {
 						index = i;
 					}
 				});
@@ -474,7 +474,7 @@ function addNewFolder(name) {
 		icon: "ff-adp-hamburger",
 		canEdit: true,
 		canDelete: true,
-		apps: {}
+		apps: []
 	};
 	data.folders[folderName] = newFolder;
 	_setFolders(() => {
