@@ -15,30 +15,30 @@
 									"icon": "ff-component",
 									"type": "folder",
 									"canDelete": false,
-									"apps": {
-										"1": {
+									"apps": [
+										{
 											"name": "Welcome Component",
 											"appID": "welcome-comp"
 										},
-										"2": {
+										{
 											"name": "Getting Started Tutorial",
 											"appID": "2"
 										},
-										"3": {
+										{
 											"name": "Process Monitor",
 											"appID": "pm"
 										},
-										"4": {
+										{
 											"name": "Notepad",
 											"appID": "note"
 										}
-									}
+									]
 								},
 								"Favorites": {
 									"icon": "ff-favorite",
 									"type": "folder",
 									"canDelete": false,
-									"apps": {}
+									"apps": []
 								}
 							}
 						},
