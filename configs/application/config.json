@@ -90,12 +90,13 @@
 			"defaultStorage": "IndexedDBAdapter",
 			"topicToDataStoreAdapters": {
 				"finsemble": "IndexedDBAdapter",
-				"finsemble.workspace": "IndexedDBAdapter",
+				"finsemble.workspace": "MongoStorageAdapter",
 				"finsemble.workspace.cache": "IndexedDBAdapter"
 			},
 			"dataStoreAdapters": {
 				"LocalStorageAdapter": "$applicationRoot/adapters/localStorageAdapter.js",
-				"IndexedDBAdapter": "$applicationRoot/adapters/indexedDBAdapter.js"
+                "IndexedDBAdapter": "$applicationRoot/adapters/indexedDBAdapter.js",
+                "MongoStorageAdapter": "$applicationRoot/adapters/MongoStorageAdapter.js"
 			}
 		}
 	},
