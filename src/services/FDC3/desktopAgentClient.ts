@@ -38,10 +38,7 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 
 	addContextListener(handler: ContextHandler): Listener;
 	addContextListener(contextType: string, handler: ContextHandler): Listener;
-	addContextListener(
-		contextTypeOrHandler: string | ContextHandler,
-		handler?: ContextHandler
-	): Listener {
+	addContextListener(contextTypeOrHandler: string | ContextHandler, handler?: ContextHandler): Listener {
 		if (!this.#currentChannel) {
 			throw Error("Please join a channel prior to adding listeners");
 		}
@@ -57,7 +54,7 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 			contextListener = this.#currentChannel.addContextListener(contextTypeOrHandler);
 			if (context) contextTypeOrHandler(context);
 		}
-		
+
 		this.#currentChannelContextListeners.push(contextListener);
 		return contextListener;
 	}
