@@ -1,9 +1,23 @@
 # FDC3
+Welcome to the Finsemble FDC3 implementation. For those not familiar with FDC3 here is a summary taken from their charter:
+>The mission of the Financial Desktop Connectivity and Collaboration Consortium (FDC3) is to develop specific protocols and taxonomies to advance the ability of desktop applications in financial workflows to interoperate in a plug-and-play fashion, without prior bi-lateral agreements.
+They aim to do this by
 
+The FDC3 revolves around a few core concepts; Apps, Intents and Context.
+Apps - These are the applications that participate in FDC3. You can launch these applications and send data.
+Intents - These are the verbs, what you would like to do e.g. _Launch a chart application_
+Context - The noun, this is the data you want to share with other applications, they will in turn use this.
+
+A good example putting all this together looks like this:
+>Open (_intent_) a Chart (_app_) and send an instrument (_context_).
+
+The Finsemble FDC3 implementation is comprised of four parts:
 - Component Config
 - Preload
 - Client
 - Service
+
+The config is needed to enable Finsemble to understand that your application is built with FDC3 capability.
 
 ## Component Config & Preload
 
@@ -82,8 +96,8 @@ To get started with the API you will need to use the Finsemble FDC3 DesktopAgent
 <tbody>
 <tr>
   <td> <code>open(name: string, context?: Context): Promise&lt;void></code> </td>
-  <td>info</td>
-  <td><code>FSBL.Clients.FDC3Client.DesktopAgent.open('')</code></td>
+  <td>Open a component and optionally send context for it to use.</td>
+  <td><code>FSBL.Clients.FDC3Client.DesktopAgent.open('ChartIQ Chart')</code></td>
 </tr>
 </tbody>
 </table>
@@ -101,7 +115,15 @@ To get started with the API you will need to use the Finsemble FDC3 DesktopAgent
 <tr>
   <td><code>broadcast(context: Context): void</code></td>
   <td>Send context to the channel the app is currently on.</td>
-  <td><code>example</code></td>
+  <td><code>FSBL.Clients.FDC3Client.DesktopAgent.broadcast({
+        type: 'fdc3.instrument',
+        name: 'Microsoft',
+        id: {
+                ticker: 'MSFT',
+                RIC: 'MSFT.OQ',
+                ISIN: 'US5949181045'
+        }
+})</code></td>
 </tr>
 
 <tr>
@@ -109,8 +131,16 @@ To get started with the API you will need to use the Finsemble FDC3 DesktopAgent
   <code>addContextListener(handler: ContextHandler): Listener;
   addContextListener(contextType: string, handler: ContextHandler): Listener;</code>
   </td>
-  <td>description </td>
-  <td>example </td>
+  <td></td>
+  <td><code>FSBL.Clients.FDC3Client.DesktopAgent.addContextListener({
+        type: 'fdc3.instrument',
+        name: 'Microsoft',
+        id: {
+                ticker: 'MSFT',
+                RIC: 'MSFT.OQ',
+                ISIN: 'US5949181045'
+        }
+},context => {context.type === 'fdc3.instrument'})</code> </td>
 </tr>
 </tbody>
 </table>
@@ -128,25 +158,36 @@ To get started with the API you will need to use the Finsemble FDC3 DesktopAgent
 <tr>
   <td><code>findIntent(intent: string, context?: Context): Promise&lt;AppIntent>;</code></td>
   <td>Open an application by name and optionally pass context to be used by that app.</td>
-  <td><code>FSBL.Clients.FDC3Client.DesktopAgent.findIntent("fdc3.call")</code></td>
+  <td><code>FSBL.Clients.FDC3Client.DesktopAgent.findIntent("ViewInstrument")</code></td>
 </tr>
 
 <tr>
   <td><code>findIntentsByContext(context: Context): Promise&lt;Array&lt;AppIntent>>;</code></td>
   <td></td>
-  <td><code>example</code></td>
+  <td><code>FSBL.Clients.FDC3Client.DesktopAgent.findIntentsByContext({ type: "fdc3.instrument" })</code></td>
 </tr>
 
 <tr>
   <td><code>raiseIntent(intent: string, context: Context, target?: string): Promise<IntentResolution>;</code></td>
   <td></td>
-  <td><code>example</code></td>
+  <td><code>FSBL.Clients.FDC3Client.DesktopAgent.raiseIntent("ViewInstrument", {
+        type: 'fdc3.instrument',
+        name: 'Microsoft',
+        id: {
+                ticker: 'MSFT',
+                RIC: 'MSFT.OQ',
+                ISIN: 'US5949181045'
+        }
+});</code></td>
 </tr>
 
 <tr>
   <td><code>addIntentListener(intent: string, handler: ContextHandler): Listener;</code></td>
   <td></td>
-  <td><code>example</code></td>
+  <td><code>FSBL.Clients.FDC3Client.DesktopAgent.addIntentListener(
+"ViewInstrument",
+context => { do something here  }
+)</code></td>
 </tr>
 </tbody>
 </table>
@@ -180,27 +221,27 @@ interface Channel {
 <tr>
   <td> <code> getOrCreateChannel(channelId: string): Promise&lt;Channel></code> </td>
   <td>info</td>
-  <td><code>example</code></td>
+  <td><code>FSBL.Clients.FDC3Client.DesktopAgent.getOrCreateChannel("channel1")</code></td>
 </tr>
 <tr>
   <td> <code>getSystemChannels(): Promise&lt;Array&lt;Channel>></code> </td>
   <td>info</td>
-  <td><code>example</code></td>
+  <td><code>FSBL.Clients.FDC3Client.DesktopAgent.getSystemChannels()</code></td>
 </tr>
 <tr>
   <td> <code>joinChannel(channelId: string): Promise&lt;void></code> </td>
   <td>info</td>
-  <td><code>example</code></td>
+  <td><code>FSBL.Clients.FDC3Client.DesktopAgent.joinChannel('channel1')</code></td>
 </tr>
 <tr>
   <td> <code>getCurrentChannel(): Promise&lt;void></code> </td>
   <td>info</td>
-  <td><code>example</code></td>
+  <td><code>FSBL.Clients.FDC3Client.DesktopAgent.getCurrentChannel()</code></td>
 </tr>
 <tr>
   <td> <code>leaveCurrentChannel(): Promise&lt;void></code> </td>
   <td>info</td>
-  <td><code>example</code></td>
+  <td><code>FSBL.Clients.FDC3Client.DesktopAgent.leaveCurrentChannel()</code></td>
 </tr>
 </tbody>
 </table>
@@ -208,18 +249,15 @@ interface Channel {
 ### Examples:
 
 #### I know the app I want to open (it's a ChartIQ chart), I also need to send the data to this, what do I do?
-  `FSBL.Clients.FDC3Client.DesktopAgent.open('chartiq chart'`
 
-- My component can accept a context of contact how do I listen for anything wanting to send context?
-  - broadcast, add context listener
-- I want to send some instrument data to display a chart but I don't know which apps can handle this, what do I do?
-  - Option 1 - intent resolver
-  - option 2
-- I want to join a multiple applications to a channel, how do I do this?
-  - The end user can join
 
-#### What if the FDC3 context types don't fit with my data?
-You will need to create a custom context type. The only value required is the type -
+#### Is there a list of default context types?
+Yes you can find a list of FDC3 context types here [https://fdc3.finos.org/docs/1.1/context/overview](). FDC3 context types start with "fdc3." .
+
+#### What if the default FDC3 context types don't fit with my data structure?
+You will need to create a custom context type. The only value required is the type(see below).
+
+*Note: When broadcasting a custom context type the receiving application will need to know the content and structure of the context you are sending.*
 ```
 interface Context {
     type: string;
@@ -259,4 +297,3 @@ An example of a finsemble custom type may look like this:
   ]
 }
 ```
-When using a custom context type you will need an application to know to look for this context type or understand how to use it when you broadcast from your component
