@@ -249,6 +249,64 @@
 					}
 				}
 			}
+		},
+		"FDC3Tester": {
+			"window": {
+				"url": "$applicationRoot/components/FDC3Tester/FDC3Tester.html",
+				"options": {
+					"resizable": true,
+					"autoShow": true,
+					"alwaysOnTop": false
+				},
+				"top": "center",
+				"left": "center",
+				"width": 800,
+				"height": 600
+			},
+			"component": {
+				"preload": false,
+				"spawnOnStartup": false,
+				"singleton": false,
+				"showDevConsoleOnVisible": false
+			},
+			"foreign": {
+				"services": {
+					"windowService": {
+						"manageWindowMovement": true,
+						"allowAutoArrange": true,
+						"allowSnapping": true,
+						"allowTabbing": true,
+						"allowTiling": true,
+						"allowGrouping": true,
+						"allowMinimize": true
+					},
+					"fdc3": {
+						"intents": [
+							{
+								"name": "fdc3.instrument",
+								"displayName": "ViewChart",
+								"contexts": [
+									"fdc3.contact"
+								]
+							}
+						]
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"alwaysOnTopIcon": true,
+						"title": "FDC3Tester",
+						"persistWindowState": true
+					},
+					"Toolbar": {
+						"iconClass": "FDC3Tester",
+						"iconURL": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png"
+					}
+				}
+			}
 		}
 	}
 }
