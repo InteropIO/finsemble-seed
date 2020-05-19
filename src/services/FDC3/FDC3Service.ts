@@ -29,7 +29,7 @@ Logger.log("Desktop Agent starting up");
 
 class FDC3Service extends BaseService {
 	desktopAgent: DesktopAgent;
-	channels: { [key: string]: Channel} = {};
+	channels: { [key: string]: Channel } = {};
 
 	constructor(params: {
 		name: string; startupDependencies: {
@@ -84,8 +84,8 @@ class FDC3Service extends BaseService {
 				// 1. One DesktopAgent per window (this is problematic because need to wrap windows, keep track of closing etc. otherwise will run into workspace issues)
 				// 2. Dynamically create a new DesktopAgent each use
 				// 3. Do some things completely in the client
-				this.desktopAgent.windowName =  (queryMessage.header.origin as string).replace("RouterClient.", "");
-				
+				this.desktopAgent.windowName = (queryMessage.header.origin as string).replace("RouterClient.", "");
+
 				try {
 					let response;
 					switch (ApiCall) {
@@ -113,6 +113,7 @@ class FDC3Service extends BaseService {
 							break;
 						case "getOrCreateChannel":
 							response = await this.desktopAgent.getOrCreateChannel(queryMessage.data.channelId);
+							this.channels[queryMessage.data.channelId] = response;
 							break;
 						case "getSystemChannels":
 							response = await this.desktopAgent.getSystemChannels();
@@ -147,7 +148,8 @@ class FDC3Service extends BaseService {
 		for (const ApiCall of ChannelApiList) {
 			RouterClient.addResponder(`FDC3.Channel.${ApiCall}`, async (err: Error, queryMessage: any) => {
 				try {
-					const channel = this.channels[queryMessage.data.channel];	
+					const channel = this.channels[queryMessage.data.channel]
+					if (!channel) throw Error('Channel not found')
 					let response;
 					switch (ApiCall) {
 						case "addContextListener":

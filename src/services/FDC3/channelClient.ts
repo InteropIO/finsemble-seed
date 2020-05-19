@@ -9,7 +9,6 @@ export default class C implements Channel {
     }
 
     broadcast(context: object): void {
-        debugger;
         FSBL.Clients.RouterClient.query("FDC3.Channel.broadcast", {
             channel: this.id,
             context

@@ -158,7 +158,6 @@ export default class D implements DesktopAgent {
 
 	async raiseIntent(intent: string, context: Context, target?: string): Promise<IntentResolution> {
 		const appIntent = await this.findIntent(intent, context);
-		debugger;
 		if (!appIntent) {
 			throw new Error(ResolveError.ResolverUnavailable);
 		}
@@ -256,7 +255,7 @@ export default class D implements DesktopAgent {
 			return systemChannel;
 		}
 
-		const customChannel = this.systemChannels.find((channel) => channel.id === channelId);
+		const customChannel = this.customChannels.find((channel) => channel.id === channelId);
 		if (customChannel) {
 			return customChannel;
 		}
