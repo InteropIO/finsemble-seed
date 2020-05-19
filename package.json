@@ -46,12 +46,14 @@
         "lodash.debounce": "4.0.8",
         "lodash.get": "4.4.2",
         "lodash.throttle": "4.1.1",
-        "nocache": "2.0.0"
+        "nocache": "2.0.0",
+        "react-syntax-highlighter": "^12.2.1"
     },
     "devDependencies": {
         "@chartiq/tslint-config-chartiq-base": "0.1.3",
         "@svgr/webpack": "4.3.2",
         "@types/react": "^16.9.35",
+        "@types/react-syntax-highlighter": "^11.0.4",
         "ansi-html": "0.0.7",
         "babel-core": "6.24.1",
         "babel-loader": "7.1.5",

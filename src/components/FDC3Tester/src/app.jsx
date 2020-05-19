@@ -1,18 +1,21 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Tester from './components/Tester'
+import CodeSnippets from "./components/CodeSnippets";
+import Sender from "./components/Sender";
 
 function FDC3Tester() {
 
 	return (
 		<div>
-
+			<Sender />
+			<Tester />
+			<CodeSnippets />
 		</div>
 	);
 
 }
-//for debugging.
-window.FDC3TesterStore = FDC3TesterStore;
+
 
 // render component when FSBL is ready.
 const FSBLReady = () => {

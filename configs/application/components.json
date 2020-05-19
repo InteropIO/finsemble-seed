@@ -264,7 +264,7 @@
 				"height": 600
 			},
 			"component": {
-				"preload": false,
+				"preload": "$applicationRoot/preloads/FDC3Client.js",
 				"spawnOnStartup": false,
 				"singleton": false,
 				"showDevConsoleOnVisible": false
