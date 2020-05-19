@@ -7,6 +7,7 @@
 
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
+import { FinsembleProvider } from "@chartiq/finsemble-ui/react/components";
 import { AuthHeader, AuthForm, ErrorMessage, AuthInput, AuthSubmit } from "@chartiq/finsemble-ui/react/components";
 import { useAuth } from "@chartiq/finsemble-ui/react/hooks";
 import "@chartiq/finsemble-ui/react/assets/css/finsemble.css"
@@ -58,21 +59,9 @@ export const Authentication = () => {
             <AuthForm>
                 <div className="fsbl-login-logo" alt="Finsemble Sign In"></div>
                 <div className="fsbl-button-wrapper">
-                    {error && <ErrorMessage>
-                        {error}
-                    </ErrorMessage>}
-                    <AuthInput
-                        type="text"
-                        name="username"
-                        placeholder="Username"
-                        onChange={saveInputChange}
-                    />
-                    <AuthInput
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        onChange={saveInputChange}
-                    />
+                    {error && <ErrorMessage>{error}</ErrorMessage>}
+                    <AuthInput type="text" name="username" placeholder="Username" onChange={saveInputChange} />
+                    <AuthInput type="password" name="password" placeholder="Password" onChange={saveInputChange} />
                     <AuthSubmit onClick={() => onSubmit(authenticateUser)} >
                         Login
                     </AuthSubmit>
@@ -82,5 +71,5 @@ export const Authentication = () => {
     )
 }
 
-ReactDOM.render(<Authentication />, document.getElementById("authentication"));
+ReactDOM.render(<FinsembleProvider><Authentication/></FinsembleProvider>, document.getElementById("Authentication-component-wrapper"));
 FSBL.System.Window.getCurrent().show();

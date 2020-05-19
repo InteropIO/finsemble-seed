@@ -2,6 +2,7 @@ import React from "react";
 import { MenuShell, MenuToggle, Menu, Preferences, SystemLog, CentralLogger, Documentation, Restart, Reset, Quit } from "@chartiq/finsemble-ui/react/components";
 
 export const FileMenu = () => {
+
 	return (
 		<MenuShell id="fileMenu">
 			<MenuToggle>
@@ -12,7 +13,7 @@ export const FileMenu = () => {
 				<SystemLog/>
 				<CentralLogger/>
 				<Documentation/>
-				<Restart/>
+				<Restart />
 				<Reset/>
 				<Quit/>
 				{/* To add your own items to the menu, import MenuItem from
