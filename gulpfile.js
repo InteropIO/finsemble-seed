@@ -18,6 +18,9 @@ const { launch, connect } = require('hadouken-js-adapter');
 	const MAX_NODE_VERSION = '12.13.1';
 	const startupConfig = require("./configs/other/server-environment-startup");
 	const { envOrArg, runWebpackAndCallback, logToTerminal, isNodeVersionValid, runWebpackInParallel } = require("./build/buildHelpers");
+	const INSTALLER_CERT_PASS = "INSTALLER_CERTIFICATE_PASSPHRASE";
+
+	// local
 	const extensions = fs.existsSync("./gulpfile-extensions.js") ? require("./gulpfile-extensions.js") : undefined;
 	const isMacOrNix = process.platform !== "win32";
 
@@ -338,6 +341,23 @@ const { launch, connect } = require('hadouken-js-adapter');
 
 			// Inline require because this file is so large, it reduces the amount of scrolling the user has to do.
 			let installerConfig = require("./configs/other/installer.json");
+			
+			//check if we have an installer config matching the environment name, if not assume we just have a single config for all environments
+			if (installerConfig[env.NODE_ENV]) {
+				installerConfig = installerConfig[env.NODE_ENV];
+			}
+
+			if (installerConfig.certificateFile) {
+				const certPassphraseFromEnv = process.env[INSTALLER_CERT_PASS];
+
+				//If a certificate file is provided and a plain text password is not, look for environment variable
+				if (!installerConfig.certificatePassword && certPassphraseFromEnv) {
+					installerConfig.certificatePassword = certPassphraseFromEnv.trim();
+				} else {
+					// If a certificate file was provided and a password can't be found, show error and exit
+					throw new Error(`A certificate file was provided but a password cannot be found. Please provide one in the config or as an environment variable: INSTALLER_CERTIFICATE_PASSPHRASE`);
+				}
+			}
 
 			// need absolute paths for certain installer configs
 			installerConfig = resolveRelativePaths(installerConfig, ['icon'], './');
