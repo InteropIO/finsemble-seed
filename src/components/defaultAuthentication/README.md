@@ -1,6 +1,6 @@
 # Dynamic Configuration Example
 
-This example demonstrates customizing the Finsemble menus and workspaces on a per user basis. In this example, the user configuration is pulled form [_users.json_]("./users.json"), but, in a real application, the user configuration would be pulled from external storage such as a database. 
+This example demonstrates customizing the Finsemble menus and workspaces on a per user basis. In this example, the user configuration is pulled form [_users.json_](users.json), but, in a real application, the user configuration would be pulled from external storage such as a database. 
 
 ## Installation
 
