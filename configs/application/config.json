@@ -112,7 +112,7 @@
 		}
 	},
 	"systemTrayIcon": "$applicationRoot/assets/img/Finsemble_Taskbar_Icon.png",
-	"systemTrayComponent": "File Menu",
+	"systemTrayComponent": "SystemTrayComponent",
 	"Window Manager": {
 		"alwaysOnTopIcon": false,
 		"floatingTitlebarComponent": "Floating Titlebar",
@@ -142,8 +142,7 @@
 					"singleInput",
 					"dialogModal",
 					"UserPreferences",
-					"App Catalog",
-					"searchMenu"
+					"App Catalog"
 				]
 			},
 			{

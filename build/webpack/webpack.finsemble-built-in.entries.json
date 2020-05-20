@@ -42,5 +42,9 @@
 	"processMonitor": {
 		"output": "components/processMonitor/processMonitor",
 		"entry": "./src/components/processMonitor/ProcessMonitor.jsx"
+	},
+	"systemTrayComponent": {
+		"output": "components/systemTrayComponent/systemTrayComponent",
+		"entry": "./src/components/systemTrayComponent/SystemTrayComponent.jsx"
 	}
 }
