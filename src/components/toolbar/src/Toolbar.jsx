@@ -2,13 +2,12 @@
 * Copyright 2017 by ChartIQ, Inc.
 * All rights reserved.
 */
-import ReactDOM from "react-dom";
 import React from "react";
+import ReactDOM from "react-dom";
 import { FinsembleProvider } from "@chartiq/finsemble-ui/react/components";
 import { ToolbarShell, FavoritesShell, DragHandle, RevealAll, MinimizeAll, AutoArrange, Search, AppLauncher, WorkspaceManagementMenu, ToolbarSection } from "@chartiq/finsemble-ui/react/components";
 import { FileMenu } from "./FileMenu";
 import { useHotkey } from "@chartiq/finsemble-ui/react/hooks";
-
 
 import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../../assets/css/_themeWhitelabel.css"
@@ -42,5 +41,5 @@ const Toolbar = () => {
 	)
 }
 
-ReactDOM.render(<FinsembleProvider><Toolbar/></FinsembleProvider>, document.getElementById("Toolbar-component-wrapper"));
+ReactDOM.render(<FinsembleProvider><Toolbar /></FinsembleProvider>, document.getElementById("Toolbar-component-wrapper"));
 

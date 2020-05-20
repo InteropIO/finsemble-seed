@@ -4,14 +4,17 @@
 */
 import React from "react";
 import ReactDOM from "react-dom"
-import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
-import "../../../assets/css/_themeWhitelabel.css";
+import { FinsembleProvider } from "@chartiq/finsemble-ui/react/components";
 import { SystemTrayComponentShell, Preferences, SystemLog, CentralLogger, Documentation, Restart, Reset, Quit } from "@chartiq/finsemble-ui/react/components";
 
+import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
+import "../../../assets/css/_themeWhitelabel.css";
+
 /**
- * This component will be rendered whenever the user right clicks on your application's system tray icon.
- * Feel free to add/remove anything in here. The SystemTrayComponentShell handles setting the height/width
- * of the window. It will also hide the window when it loses focus.
+ * This component displays on right-click in your application's system tray icon.
+ * Feel free to add/remove content or react components.
+ * The SystemTrayComponentShell will automatically adjust the height and width of the window as necessary to display its content.
+ * This component will be hidden when it loses focus but will remain invisibly active.
  */
 const SystemTrayComponent = () => {
     return (
@@ -26,10 +29,7 @@ const SystemTrayComponent = () => {
                 <Quit />
             </div>
         </SystemTrayComponentShell>
-
     )
 }
 
-FSBL.addEventListener('onReady', () => {
-    ReactDOM.render(<SystemTrayComponent />, document.getElementById("system-tray-component-wrapper"));
-});
+ReactDOM.render(<FinsembleProvider><SystemTrayComponent /></FinsembleProvider>, document.getElementById("system-tray-component-wrapper"));
