@@ -33,6 +33,7 @@ const Toolbar = () => {
 			</ToolbarSection>
 			<ToolbarSection className="right">
 				<div className="divider"></div>
+				<AutoArrange />
 				<MinimizeAll />
 				<RevealAll />
 			</ToolbarSection>
