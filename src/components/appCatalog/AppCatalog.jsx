@@ -4,10 +4,8 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
-
+import { FinsembleProvider } from "@chartiq/finsemble-ui/react/components";
 import { AppCatalog } from "@chartiq/finsemble-ui/react/components";
 import "../../../assets/css/_themeWhiteLabel.css";
 
-ReactDOM.render(
-	<AppCatalog />,
-	document.getElementById("bodyHere"));
+ReactDOM.render(<FinsembleProvider><AppCatalog/></FinsembleProvider>, document.getElementById("AppCatalog-component-wrapper"));

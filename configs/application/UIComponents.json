@@ -67,72 +67,6 @@
 				}
 			}
 		},
-		"searchMenu": {
-			"window": {
-				"url": "$applicationRoot/components/searchMenu/searchMenu.html",
-				"affinity": "systemComponents",
-				"top": 32,
-				"left": 45,
-				"width": 350,
-				"height": 330,
-				"ephemeral": true,
-				"options": {
-					"autoShow": false
-				}
-			},
-			"component": {
-				"allowQuickComponent": "@TODO",
-				"spawnOnStartup": false,
-				"category": "system"
-			},
-			"foreign": {
-				"services": {
-					"windowService": {
-						"allowAutoArrange": false,
-						"shouldRegister": false
-					}
-				},
-				"components": {
-					"Window Manager": {
-						"persistWindowState": false,
-						"FSBLHeader": false
-					}
-				}
-			}
-		},
-		"Overflow Menu": {
-			"window": {
-				"url": "$applicationRoot/components/overflowMenu/overflowMenu.html",
-				"affinity": "systemComponents",
-				"top": 32,
-				"left": 45,
-				"width": 350,
-				"height": 330,
-				"ephemeral": true,
-				"options": {
-					"autoShow": false
-				}
-			},
-			"component": {
-				"allowQuickComponent": "@TODO",
-				"spawnOnStartup": false,
-				"category": "system"
-			},
-			"foreign": {
-				"services": {
-					"windowService": {
-						"allowAutoArrange": false,
-						"shouldRegister": false
-					}
-				},
-				"components": {
-					"Window Manager": {
-						"persistWindowState": false,
-						"FSBLHeader": false
-					}
-				}
-			}
-		},
 		"linkerWindow": {
 			"bootParams": {
 				"stage": "earlyuser",
@@ -153,41 +87,6 @@
 			},
 			"component": {
 				"spawnOnStartup": true,
-				"category": "system"
-			},
-			"foreign": {
-				"services": {
-					"windowService": {
-						"allowAutoArrange": false,
-						"shouldRegister": false
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"launchableByUser": false
-					},
-					"Window Manager": {
-						"FSBLHeader": false,
-						"persistWindowState": false
-					}
-				}
-			}
-		},
-		"Window Context Menu": {
-			"window": {
-				"url": "$applicationRoot/components/windowContextMenu/windowContextMenu.html",
-				"affinity": "systemComponents",
-				"top": 0,
-				"left": 100,
-				"width": 125,
-				"height": 80,
-				"ephemeral": true,
-				"options": {
-					"autoShow": false
-				}
-			},
-			"component": {
-				"spawnOnStartup": false,
 				"category": "system"
 			},
 			"foreign": {
@@ -479,7 +378,8 @@
 					"resizable": false,
 					"maxHeight": null,
 					"minHeight": null,
-					"dockable": false
+					"dockable": false,
+					"show": false
 				},
 				"foreign": {
 					"components": {
@@ -684,6 +584,48 @@
 						"persistWindowState": true,
 						"showTabs": false,
 						"title": "App Catalog"
+					}
+				}
+			}
+		},
+		"SystemTrayComponent": {
+			"bootParams": {
+				"stage": "earlyuser",
+				"dependencies": [
+					"Toolbar"
+				]
+			},
+			"window": {
+				"url": "$applicationRoot/components/systemTrayComponent/systemTrayComponent.html",
+				"affinity": "systemComponents",
+				"frame": false,
+				"width": 70,
+				"height": 70,
+				"options": {
+					"autoShow": false,
+					"resizable": false,
+					"alwaysOnTop": true
+				}
+			},
+			"component": {
+				"category": "system",
+				"spawnOnStartup": true
+			},
+			"foreign": {
+				"services": {
+					"windowService": {
+						"allowGrouping": false,
+						"allowAutoArrange": false,
+						"shouldRegister": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"FSBLHeader": false,
+						"persistWindowState": true
 					}
 				}
 			}

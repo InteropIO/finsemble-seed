@@ -3,12 +3,12 @@
  * All rights reserved.
  */
 import React from "react";
-import { useTitleBar } from "@chartiq/finsemble-ui/react/hooks";
-import { AlwaysOnTopButton, DockingButton, LinkerButton, ShareButton, mountTitleBar, TabRegion, CloseButton, MaximizeButton, MinimizeButton } from "@chartiq/finsemble-ui/react/components";
+import { useWindowTitleBar } from "@chartiq/finsemble-ui/react/hooks";
+import { AlwaysOnTopButton, DockingButton, LinkerButton, ShareButton, mountWindowTitleBar, TabRegion, CloseButton, MaximizeButton, MinimizeButton } from "@chartiq/finsemble-ui/react/components";
 import "@chartiq/finsemble-ui/react/assets/css/finsemble.css"
 import "../../../assets/css/_themeWhiteLabel.css";
 /**
- * This is the Title Bar component, which is rendered at
+ * This is the Window Title Bar component, which is rendered at
  * the top of every Finsemble-controlled HTML window.
  * You can customize this template by adding or removing
  * elements and sytling as you see fit.
@@ -18,7 +18,7 @@ import "../../../assets/css/_themeWhiteLabel.css";
  * "foreign.components.Window Manager.showLinker" property
  * to false will hide the <LinkerButton/>.
  */
-const TitleBar = () => {
+const WindowTitleBar = () => {
 	const {
 		showLinkerButton,
 		showShareButton,
@@ -27,7 +27,7 @@ const TitleBar = () => {
 		showMinimizeButton,
 		showMaximizeButton,
 		showCloseButton,
-	} = useTitleBar();
+	} = useWindowTitleBar();
 
 	return (
 		<>
@@ -51,8 +51,8 @@ const TitleBar = () => {
 	);
 };
 
-// Because the TitleBar is mounted to dynamically created
-// DOM elements, you must pass in the TitleBar to this function.
-// Doing will so will (asynchronously) register the TitleBar
+// Because the WindowTitleBar is mounted to dynamically created
+// DOM elements, you must pass in the WindowTitleBar to this function.
+// Doing will so will (asynchronously) register the WindowTitleBar
 // with Finsemble, create the DOM, and mount it.
-mountTitleBar(TitleBar);
+mountWindowTitleBar(WindowTitleBar);

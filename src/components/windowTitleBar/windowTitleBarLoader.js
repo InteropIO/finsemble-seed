@@ -6,7 +6,7 @@
 function init() {
 	if (window.headerLoaded) return;
 	window.headerLoaded = true;
-	require("./TitleBar.jsx");
+	require("./WindowTitleBar.jsx");
 }
 
 if (window.FSBL && FSBL.addEventListener) {

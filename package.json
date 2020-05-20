@@ -81,6 +81,7 @@
         "glob": "7.1.3",
         "gulp": "4.0.0",
         "gulp-watch": "5.0.1",
+        "hard-source-webpack-plugin": "^0.13.1",
         "immer": "5.3.2",
         "merge-stream": "1.0.1",
         "mocha": "7.0.0",

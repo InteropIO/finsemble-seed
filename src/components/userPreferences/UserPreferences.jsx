@@ -4,9 +4,8 @@
 */
 import React from "react";
 import ReactDOM from "react-dom"
-
+import { FinsembleProvider } from "@chartiq/finsemble-ui/react/components";
 import { UserPreferences, General, Workspaces } from "@chartiq/finsemble-ui/react/components";
-
 import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../assets/css/_themeWhitelabel.css";
 
@@ -29,4 +28,4 @@ const sections = {
     "Workspaces": Workspaces
 };
 
-ReactDOM.render(<UserPreferences sections={sections} />, document.getElementById("UserPreferences-component-wrapper"));
+ReactDOM.render(<FinsembleProvider><UserPreferences sections={sections} /></FinsembleProvider>, document.getElementById("UserPreferences-component-wrapper"));

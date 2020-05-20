@@ -211,7 +211,9 @@ const { launch, connect } = require('hadouken-js-adapter');
 		},
 		checkSymbolicLinks: done => {
 			const FINSEMBLE_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble");
+			const FINSEMBLE_UI_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-ui");
 			const FINSEMBLE_VERSION = require(path.join(FINSEMBLE_PATH, "package.json")).version;
+			const FINSEMBLE_UI_VERSION = require(path.join(FINSEMBLE_UI_PATH, "package.json")).version;
 			const CLI_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-cli");
 			const CLI_VERSION = require(path.join(CLI_PATH, "package.json")).version;
 
@@ -247,6 +249,13 @@ const { launch, connect } = require('hadouken-js-adapter');
 						path: CLI_PATH,
 						name: "finsemble-cli",
 						version: CLI_VERSION
+					}, cb)
+				},
+				(cb) => {
+					checkLink({
+						path: FINSEMBLE_UI_PATH,
+						name: "finsemble-ui",
+						version: FINSEMBLE_UI_VERSION
 					}, cb)
 				},
 				(cb) => {
