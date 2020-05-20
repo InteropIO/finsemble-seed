@@ -4,8 +4,8 @@ const { EnvironmentPlugin, ProgressPlugin } = require("webpack");
 
 let entries = {};
 for (let key in preloadFilesToBuild) {
-	let component = preloadFilesToBuild[key];
-	entries[component.output] = component.entry;
+    let component = preloadFilesToBuild[key];
+    entries[component.output] = component.entry;
 }
 
 module.exports = {
@@ -25,6 +25,11 @@ module.exports = {
                     cacheDirectory: './.babel_cache/',
                     presets: ['react', 'stage-1']
                 }
+            },
+            {
+                test: /\.ts(x)?$/,
+                loader: 'ts-loader',
+                exclude: /node_modules/
             }
         ]
     },
@@ -34,6 +39,6 @@ module.exports = {
         path: path.resolve(__dirname, '../../dist/')
     },
     resolve: {
-        extensions: ['.js', '.jsx', '.json', 'scss', 'html']
+        extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', 'scss', 'html']
     },
 };
