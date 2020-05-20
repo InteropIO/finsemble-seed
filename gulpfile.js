@@ -347,11 +347,11 @@ const { launch, connect } = require('hadouken-js-adapter');
 				installerConfig = installerConfig[env.NODE_ENV];
 			}
 
-			if (installerConfig.certificateFile) {
+			if (installerConfig.certificateFile && !installerConfig.certificatePassword) {
 				const certPassphraseFromEnv = process.env[INSTALLER_CERT_PASS];
 
 				//If a certificate file is provided and a plain text password is not, look for environment variable
-				if (!installerConfig.certificatePassword && certPassphraseFromEnv) {
+				if (certPassphraseFromEnv) {
 					installerConfig.certificatePassword = certPassphraseFromEnv.trim();
 				} else {
 					// If a certificate file was provided and a password can't be found, show error and exit
