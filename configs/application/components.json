@@ -44,6 +44,16 @@
 						"iconClass": "ff-component"
 					}
 				}
+			},
+			"childWindowOptions": {
+				"foreign": {
+					"components": {
+						"Window Manager": {
+							"FSBLHeader": true,
+							"title": "Welcome Component Child Window"
+						}
+					}
+				}
 			}
 		},
 		"nonConfiguredComponent": {

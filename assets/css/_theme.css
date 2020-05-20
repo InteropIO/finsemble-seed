@@ -1,5 +1,3 @@
-@import url("./fonts/Roboto/Roboto-Definition.css");
-@import url("./fonts/Open_Sans/OpenSans-Definition.css");
 
 :root {
     /* Color Variables:  Use these variables to make broad-sweeping changes to the colors throughout the application. */
@@ -23,13 +21,13 @@
     --accent-negative: #F26666;
     --accent-negative-1: #DA5C5C;
 
-    --scrollbar-color: var(--core-primary-5);
-
+    --scrollbar-color: white;
     /* Font Variables:  Use these variables to make changes to the global font styles. */
     --font-family: "OpenSans", sans-serif;
 
     --font-color: white;
     --font-color-1: var(--core-primary-5);
+    --font-color-2: black;
 
     --font-weight: 600;
     --font-weight-1: 400;
@@ -45,6 +43,8 @@
     --toolbar-height: 39px;
     --toolbar-brand-logo-width: 14px;
     --toolbar-brand-logo-height: 16px;
+    --toolbar-favorite-delete-icon: var(--core-primary-5);
+    --toolbar-favorite-delete-icon-hover: var(--accent-negative);
     --toolbar-background-color: var(--core-primary);
     --toolbar-button-hover-color: var(--core-primary-3);
     --toolbar-resize-area-color: var(--core-primary-3);
@@ -148,19 +148,29 @@
     --menu-linker-selected-font-color: var(--font-color);
     --menu-linker-selected-font-size: 12px;
 
+    --entity-avatar-default-background-color: var(--core-primary-4);
+    --entity-avatar-workspace-background-color: var(--accent-positive);
+    --entity-avatar-component-background-color: #0ab2f4;
+
     /* Search Menu */
     --search-menu-font-size: 12px;
+    --search-menu-font-color: var(--core-primary-5);
     --search-input-font-color: black;
     --search-input-background-color: white;
+    --search-input-border-color: var(--core-primary-3);
+    --search-input-focused-border-color: var(--accent-primary);
+    --search-input-clear-search-color: var(--core-primary-5);
+    --search-input-clear-search-hover-color: var(--menu-font-color);
+
     --search-hover-background-color: var(--core-primary-3);
-    
+
     --search-header-font-size: 14px;
     --search-header-font-color: var(--accent-primary);
     --search-header-font-weight: var(--font-weight-2);
 
-    --search-result-font-color: var(--font-color);
+    --search-result-font-color: var(--core-primary-5);
     --search-result-font-weight: var(--font-weight-1);
-    --search-result-highlighter-color: var(--core-primary-2);
+    --search-result-highlighter-color: var(--menu-font-color);
     --search-result-selected-color: var(--core-primary-3);
 
     /* Window Frame */
