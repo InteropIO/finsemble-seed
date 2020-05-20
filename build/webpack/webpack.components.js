@@ -6,6 +6,7 @@ const fs = require("fs");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const __homename = path.resolve(__dirname, "..", "..");
 
+
 // The standard webpack files that we always look in
 // webpack.finsemble-built-in.entries.json - src components
 // webpack.components.entries.json - components that have been added with finsemble-cli

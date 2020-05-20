@@ -1,6 +1,7 @@
 const path = require("path");
 const preloadFilesToBuild = require("./webpack.preloads.entries.json");
-const { EnvironmentPlugin, ProgressPlugin } = require("webpack");
+const { EnvironmentPlugin } = require("webpack");
+const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 
 let entries = {};
 for (let key in preloadFilesToBuild) {
@@ -9,10 +10,8 @@ for (let key in preloadFilesToBuild) {
 }
 
 module.exports = {
-    plugins: [
-        //new ProgressPlugin({ profile: false })
-    ],
-    devtool: 'source-map',
+    plugins: [],
+    devtool: env === 'production' ? 'source-map' : 'eval-source-map',
     entry: entries,
     stats: "minimal",
     module: {
@@ -23,6 +22,7 @@ module.exports = {
                 use: {
                     loader: "babel-loader",
                     options: {
+                        cacheDirectory: '.webpack-file-cache',
                         presets: [
                             ["@babel/preset-env", {
                                 targets: {
