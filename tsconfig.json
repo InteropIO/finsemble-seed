@@ -1,0 +1,21 @@
+{
+	"compilerOptions": {
+		"target": "es2017",
+		"module": "commonjs",
+		"noImplicitAny": true,
+		"removeComments": true,
+		"preserveConstEnums": true,
+		"sourceMap": true,
+		"jsx": "react",
+		"allowJs": true
+	},
+	"include": [
+		"src/**/*",
+		"src/ts/**/*",
+		"./finsemble/types/**/*"
+	],
+	"exclude": [
+		"node_modules",
+		"**/*.spec.ts"
+	]
+}

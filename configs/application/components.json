@@ -1,0 +1,206 @@
+{
+	"comment": "Sample component configuration",
+	"components": {
+		"Welcome Component": {
+			"window": {
+				"url": "$applicationRoot/components/welcome/welcome.html",
+				"affinity": "workspaceComponents",
+				"options": {
+					"resizable": true,
+					"autoShow": true,
+					"alwaysOnTop": false
+				},
+				"top": "center",
+				"left": "center",
+				"width": 400,
+				"height": 432
+			},
+			"component": {
+				"displayName": "Welcome Component",
+				"spawnOnStartup": false,
+				"preload": "$applicationRoot/preloads/zoom.js"
+			},
+			"foreign": {
+				"services": {
+					"windowService": {
+						"allowSnapping": true,
+						"allowGrouping": true,
+						"allowAutoArrange": true,
+						"allowMinimize": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"alwaysOnTopIcon": false,
+						"showLinker": true,
+						"FSBLHeader": true,
+						"persistWindowState": true,
+						"title": "Welcome to Finsemble"
+					},
+					"Toolbar": {
+						"iconClass": "ff-component"
+					}
+				}
+			},
+			"childWindowOptions": {
+				"foreign": {
+					"components": {
+						"Window Manager": {
+							"FSBLHeader": true,
+							"title": "Welcome Component Child Window"
+						}
+					}
+				}
+			}
+		},
+		"nonConfiguredComponent": {
+			"window": {
+				"url": "$applicationRoot/components/nonConfiguredComponent/nonConfiguredComponent.html",
+				"affinity": "systemComponents",
+				"options": {
+					"resizable": true,
+					"autoShow": true
+				},
+				"top": "center",
+				"left": "center",
+				"width": 400,
+				"height": 432
+			}
+		},
+		"Notepad": {
+			"window": {
+				"windowType": "assimilation",
+				"path": "notepad.exe",
+				"defaultHeight": 600,
+				"options": {
+					"autoShow": true
+				},
+				"showTaskbarIcon": false,
+				"contextMenu": true,
+				"addToWorkspace": true
+			},
+			"component": {
+				"spawnOnHotkey": [
+					"ctrl",
+					"alt",
+					"n"
+				]
+			},
+			"foreign": {
+				"services": {
+					"windowService": {
+						"allowAutoArrange": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"persistWindowState": false,
+						"FSBLHeader": true
+					},
+					"Toolbar": {
+						"iconURL": "$applicationRoot/assets/img/notepad.png"
+					}
+				}
+			}
+		},
+		"Getting Started Tutorial": {
+			"window": {
+				"url": "https://www.chartiq.com/tutorials/?slug=finsemble",
+				"height": 800,
+				"width": 1000
+			},
+			"component": {
+				"spawnOnStartup": false
+			},
+			"foreign": {
+				"services": {
+					"workspaceService": {
+						"persistURL": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"showLinker": false,
+						"FSBLHeader": true,
+						"persistWindowState": true,
+						"title": "Finsemble Getting Started Tutorial"
+					}
+				}
+			}
+		},
+		"Finsemble Documentation": {
+			"window": {
+				"url": "http://documentation.chartiq.com/finsemble",
+				"left": "center",
+				"top": "center",
+				"height": 800,
+				"width": 1000
+			},
+			"component": {},
+			"foreign": {
+				"services": {
+					"workspaceService": {
+						"persistURL": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"showLinker": false,
+						"FSBLHeader": true,
+						"persistWindowState": true,
+						"title": "Finsemble Documentation"
+					}
+				}
+			}
+		},
+		"defaultAuthentication": {
+			"window": {
+				"url": "$applicationRoot/components/authentication/defaultAuthentication.html",
+				"top": "center",
+				"left": "center",
+				"width": 358,
+				"height": 658,
+				"ephemeral": true,
+				"options": {
+					"autoShow": false
+				}
+			},
+			"component": {
+				"neededClients": [
+					"LauncherClient",
+					"AuthenticationClient",
+					"StorageClient"
+				],
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"windowService": {
+						"allowAutoArrange": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"FSBLHeader": false,
+						"persistWindowState": false
+					}
+				}
+			}
+		}
+	}
+}
