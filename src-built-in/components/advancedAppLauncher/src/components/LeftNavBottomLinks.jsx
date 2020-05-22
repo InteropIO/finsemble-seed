@@ -5,7 +5,7 @@ import { getStore } from '../stores/LauncherStore'
 const bottomEntries = [
 	{ name: "New App", icon: "ff-new-workspace", click: "showAddAppForm" },
 	//{ name: 'New Dashboard', icon: 'ff-dashboard-new' },
-	{ name: "App Catalog", icon: "ff-list", click: "openAppMarket" }
+	// { name: "App Catalog", icon: "ff-list", click: "openAppMarket" }
 ];
 
 export default class LeftNavBottomLinks extends React.Component {
