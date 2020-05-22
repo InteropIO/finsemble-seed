@@ -1,8 +1,8 @@
 import _get from 'lodash.get';
+import { findIndex } from 'lodash';
 import { getStore } from "./LauncherStore";
 import AppDirectory from "../modules/AppDirectory";
 import FDC3 from "../modules/FDC3";
-import Logger from '../../../../../finsemble/types/clients/logger';
 const async = require("async");
 let FDC3Client;
 let appd;
@@ -281,7 +281,7 @@ function _setValue(field, value, cb = Function.prototype) {
 	}, (error, data) => {
 		if (error) {
 			console.log("Failed to save. ", field);
-			Logger.error("Advanced App Launcher: Failed to save ", field);
+			FSBL.Clients.Logger.error("Advanced App Launcher: Failed to save ", field);
 			// TODO
 			// Should probably return with an error so the calling function knows to move on
 			// Don't want to deal with unforseen circumstances by doing that now
@@ -299,6 +299,12 @@ function _setFolders(cb = Function.prototype) {
 		}
 
 		cb();
+	});
+}
+
+function _findAppIndexInFolders(appID, folderName) {
+	return findIndex(data.folders[folderName].apps, app => {
+		return app.appID === appID;
 	});
 }
 
@@ -439,9 +445,8 @@ function deleteApp(appID) {
 		}
 		// Delete app from any folder that has it
 		for (const key in data.folders) {
-			if (data.folders[key].apps[appID]) {
-				delete data.folders[key].apps[appID];
-			}
+			const appIndex = _findAppIndexInFolders(appID, key);
+			data.folders[key].apps.splice(appIndex,  1);
 		}
 		// Delete app from the apps list
 		FSBL.Clients.LauncherClient.removeUserDefinedComponent(data.apps[appID], () => {
@@ -525,16 +530,21 @@ function renameFolder(oldName, newName) {
 }
 
 function addAppToFolder(folderName, app) {
-	data.folders[folderName].apps[app.appID] = {
-		name: app.name,
-		displayName: app.displayName,
-		appID: app.appID
-	};
-	_setFolders();
+	const appIndex = _findAppIndexInFolders(app.appID, folderName);
+
+	if (appIndex < 0) {
+		data.folders[folderName].apps.push({
+			name: app.name, 
+			displayName: app.displayName,
+			appID: app.appID
+		});
+		_setFolders();
+	}
 }
 
 function removeAppFromFolder(folderName, app) {
-	delete data.folders[folderName].apps[app.appID];
+	const appIndex = _findAppIndexInFolders(app.appID, folderName);
+	data.folders[folderName].apps.splice(appIndex, 1);
 	_setFolders();
 }
 /**
