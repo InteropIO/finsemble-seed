@@ -179,7 +179,7 @@ export default class FoldersList extends React.Component {
 			});
 		}
 		// Names must be unique, folders cant share same names
-		if (folders[newName] && !deleted.includes(newName)) {
+		if (folders[newName]) {
 			let repeatedFolderIndex = 0;
 			do {
 				repeatedFolderIndex++;
@@ -237,10 +237,12 @@ export default class FoldersList extends React.Component {
 					{folder.icon && <i className={folder.icon}></i>}
 					<div className="folder-name">{nameField}</div>
 				</div>
+
+				{(canEdit || canDelete) && 
 				<span className='folder-action-icons'>
 					{canEdit && <i className='ff-adp-edit' title='Rename' onClick={this.renameFolder.bind(this, folderName)}></i>}
 					{canDelete && <i className='ff-adp-trash-outline' title='Delete Folder' onClick={this.deleteFolder.bind(this, folderName)}></i>}
-				</span>
+				</span>}
 			</div>);
 	}
 	/**

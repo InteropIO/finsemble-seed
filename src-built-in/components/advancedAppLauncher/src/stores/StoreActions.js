@@ -69,10 +69,14 @@ function initialize(callback = Function.prototype) {
 		let folderList, appList = {};
 
 		if (data.deleted.length > 0) {
-			folderList = store.values.appFolders.list.filter(folderName => {
+			//The folder list will be the folder seeded into the store filtered by any folders
+			//deleted in previous runs
+			folderList = Object.keys(store.values.appFolders.folders).filter(folderName => {
 				return !data.deleted.includes(folderName);
 			});
 
+			//The app list will be the folder seeded into the store filtered by any folders
+			//deleted in previous runs
 			Object.keys(store.values.appDefinitions).map(appName => {
 				if (!data.deleted.includes(appName)) {
 					appList[appName] = store.values.appDefinitions[appName];
@@ -84,7 +88,7 @@ function initialize(callback = Function.prototype) {
 		}
 
 		data.folders = store.values.appFolders.folders;
-		data.foldersList = folderList || store.values.appFolders.list;
+		data.foldersList = folderList || Object.keys(store.values.appFolders.folders);
 		data.apps = Object.keys(appList).length > 0 ? appList : store.values.appDefinitions;
 		data.tags = store.values.activeLauncherTags;
 		data.activeFolder = store.values.activeFolder;
@@ -509,6 +513,7 @@ function deleteFolder(folderName) {
 function renameFolder(oldName, newName) {
 	let oldFolder = data.folders[oldName];
 	data.folders[newName] = oldFolder;
+	delete data.folders[oldName];
 	_setFolders(() => {
 		let indexOfOld = data.foldersList.findIndex((folderName) => {
 			return folderName === oldName;
