@@ -64,7 +64,12 @@ function initialize(callback = Function.prototype) {
 		appDEndpoint = appDirectoryEndpoint;
 		const store = getStore();
 
-		// If the store contains a 'deleted' array the list of folders and apps should be filtered according to it
+		// 'deleted' is a list of folder names/app ids which have been deleted by a user. Finsemble's state
+		// keeps track of these so if the  foundation attempts to re-seed them, they will be excluded
+		// from what is shown to the user
+
+		// 'deleted' can also be empty, which means the user is not preserving previous state and instead 
+		// re-seeds the store everytime the distributed store service starts up
 		data.deleted = store.values.deleted || [];
 		let folderList, appList = {};
 
@@ -77,10 +82,10 @@ function initialize(callback = Function.prototype) {
 
 			//The app list will be the folder seeded into the store filtered by any folders
 			//deleted in previous runs
-			Object.keys(store.values.appDefinitions).map(appName => {
-				const app = store.values.appDefinitions[appName];
+			Object.keys(store.values.appDefinitions).map(appID => {
+				const app = store.values.appDefinitions[appID];
 				if (!data.deleted.includes(app.appID)) {
-					appList[appName] = store.values.appDefinitions[appName];
+					appList[appID] = store.values.appDefinitions[appID];
 				}
 			});
 
@@ -122,6 +127,9 @@ function initialize(callback = Function.prototype) {
 	});
 }
 
+// Deleted contains a list of strings (folder names or appIDs)
+// of folders/apps that have been deleted and should not be returned
+// even if re-seeded by the foundation
 function getDeleted() {
 	return data.deleted;
 }
