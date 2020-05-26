@@ -5,6 +5,7 @@
 import AppDirectory from "../modules/AppDirectory";
 import FDC3 from "../modules/FDC3";
 import { getStore } from "./appStore";
+import { findIndex } from 'lodash';
 import * as path from "path";
 export default {
 	initialize,
@@ -128,6 +129,12 @@ function _clearActiveTags() {
 	getStore().setValue({ field: "activeTags", value: [] });	
 }
 
+function _findAppIndexInFolder(appID, folderName) {
+	return findIndex(data.folders[folderName].apps, app => {
+		return app.appID === appID;
+	});
+}
+
 
 /**
  * Send the search text and tags to the appd server and get a list of apps
@@ -225,7 +232,8 @@ async function addApp(id, cb = Function.prototype) {
 				tags: app.tags,
 				name,
 				type: "component",
-				manifest
+				manifest,
+				canDelete: true
 			}
 		}
 	} else {
@@ -236,8 +244,8 @@ async function addApp(id, cb = Function.prototype) {
 	let ADVANCED_APP_LAUNCHER = data.defaultFolder;
 	let folders = data.folders;
 
-	data.folders[ADVANCED_APP_LAUNCHER].apps[appID] = appConfig
-	data.folders[folder].apps[appID] = appConfig
+	data.folders[ADVANCED_APP_LAUNCHER].apps.push(appConfig);
+	if (folder !== ADVANCED_APP_LAUNCHER) data.folders[folder].apps.push(appConfig);
 	FSBL.Clients.LauncherClient.registerComponent({
 		componentType: appConfig.name,
 		manifest: appConfig.manifest
@@ -278,8 +286,9 @@ function removeApp(id, cb = Function.prototype) {
 			}
 
 			for (const key in data.folders) {
-				if (folders[key].apps[id]) {
-					delete folders[key].apps[id];
+				const appIndex = _findAppIndexInFolder(id, key);
+				if (appIndex > -1) {
+					folders[key].apps.splice(appIndex, 1);
 				}
 			}
 
