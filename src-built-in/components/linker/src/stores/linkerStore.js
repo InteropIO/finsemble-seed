@@ -51,6 +51,8 @@ var LinkerStore = Object.assign({}, EventEmitter.prototype, {
 			}
 
 			self.setState(queryMessage.data);
+			// deal with the case of added linker channels
+			FSBL.Clients.WindowClient.fitToDOM();
 			FSBL.Clients.Logger.system.log("toggle Linker window");
 			queryMessage.sendQueryResponse(null, {});
 		});
