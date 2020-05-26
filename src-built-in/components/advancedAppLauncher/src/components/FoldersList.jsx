@@ -112,7 +112,7 @@ export default class FoldersList extends React.Component {
 			return
 		}
 		//Finally, all good and so we can rename the folder
-		this.attempRename()
+		this.attemptRename()
 	}
 
 	componentWillMount() {
@@ -149,7 +149,7 @@ export default class FoldersList extends React.Component {
 
 	keyPressed(e) {
 		if (e.key === "Enter") {
-			this.attempRename()
+			this.attemptRename()
 		}
 	}
 
@@ -163,9 +163,8 @@ export default class FoldersList extends React.Component {
 	/**
 	 * To be called when user press Enter or when focus is removed
 	 */
-	attempRename() {
+	attemptRename() {
 		const folders = storeActions.getFolders()
-		const deleted = storeActions.getDeleted();
 		const input = this.state.folderNameInput.trim()
 		const oldName = this.state.renamingFolder;
 		let newName = input;
@@ -226,7 +225,8 @@ export default class FoldersList extends React.Component {
 			nameField = folderName;
 		}
 
-		const canDelete = folder.canDelete, canEdit = folder.canEdit;
+		const canDelete = folder.canDelete;
+		const canEdit = folder.canEdit;
 
 		//This DOM will be rendered within a draggable (if the folder can be dragged), and a plain ol div if it cannot be dragged.
 		return (

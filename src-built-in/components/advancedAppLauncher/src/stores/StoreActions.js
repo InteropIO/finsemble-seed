@@ -78,7 +78,8 @@ function initialize(callback = Function.prototype) {
 			//The app list will be the folder seeded into the store filtered by any folders
 			//deleted in previous runs
 			Object.keys(store.values.appDefinitions).map(appName => {
-				if (!data.deleted.includes(appName)) {
+				const app = store.values.appDefinitions[appName];
+				if (!data.deleted.includes(app.appID)) {
 					appList[appName] = store.values.appDefinitions[appName];
 				}
 			});
@@ -234,7 +235,8 @@ function loadInstalledConfigComponents(cb = Function.prototype) {
 		const apps = Object.keys(data.apps);
 		Object.keys(folders).forEach(folderName => {
 			folders[folderName].apps.map((configDefinedApp, i) => {
-				const name = configDefinedApp.name, appID = configDefinedApp.appID;
+				const name = configDefinedApp.name;
+				const appID = configDefinedApp.appID;
 				// If the component is not in the config component list and is not a user defined component
 				if (!componentNameList.includes(name) && !apps.includes(appID)) {
 					// Delete app from the folder
@@ -285,7 +287,7 @@ function _setValue(field, value, cb = Function.prototype) {
 	}, (error, data) => {
 		if (error) {
 			console.log("Failed to save. ", field);
-			FSBL.Clients.Logger.error("Advanced App Launcher: Failed to save ", field);
+			FSBL.Clients.Logger.error(`Advanced App Launcher: Failed to save: ${field}:${value}`);
 			// TODO
 			// Should probably return with an error so the calling function knows to move on
 			// Don't want to deal with unforseen circumstances by doing that now
@@ -452,12 +454,17 @@ function deleteApp(appID) {
 			const appIndex = _findAppIndexInFolders(appID, key);
 			data.folders[key].apps.splice(appIndex,  1);
 		}
+
+		const deleted = getDeleted();
+		deleted.push(appID);
+
 		// Delete app from the apps list
 		FSBL.Clients.LauncherClient.removeUserDefinedComponent(data.apps[appID], () => {
 			delete data.apps[appID];
 			// Save appDefinitions and then folders
 			_setValue("appDefinitions", data.apps, () => {
 				_setFolders();
+				_setValue("deleted", deleted);
 			});
 		});
 
