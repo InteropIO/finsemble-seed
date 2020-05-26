@@ -433,7 +433,7 @@ const { launch, connect } = require('hadouken-js-adapter');
 		 * optionally return an error, if one occurs.
 		 */
 		pre: done => {
-			taskMethods.checkSymbolicLinks();
+			// taskMethods.checkSymbolicLinks();
 			done();
 		},
 

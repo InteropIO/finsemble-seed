@@ -1,12 +1,12 @@
 {
     "name": "FinsembleSeed",
-    "version": "4.2.0",
+    "version": "5.0.0",
     "description": "",
     "main": "index.js",
     "scripts": {
         "build:dev": "gulp build:dev --gulpfile=./gulpfile.js",
         "build": "gulp build:dev --gulpfile=./gulpfile.js",
-        "dev": "gulp dev --gulpfile=./gulpfile.js",
+        "start": "gulp dev --gulpfile=./gulpfile.js",
         "dev-fresh": "gulp dev:fresh --gulpfile=./gulpfile.js",
         "dev:fresh": "gulp dev:fresh --gulpfile=./gulpfile.js",
         "dev:nolaunch": "gulp dev:noLaunch --gulpfile=./gulpfile.js",
@@ -31,12 +31,12 @@
     "author": "",
     "license": "apache-2.0",
     "optionalDependencies": {
-        "@chartiq/finsemble-cli": "^3.13.*"
+        "@chartiq/finsemble-cli": "5.0.0"
     },
     "dependencies": {
-        "@chartiq/finsemble": "4.1.*",
-        "@chartiq/finsemble-electron-adapter": "4.1.*",
-        "@chartiq/finsemble-ui": "file:../finsemble-ui",
+        "@chartiq/finsemble": "5.0.0",
+        "@chartiq/finsemble-electron-adapter": "5.0.0",
+        "@chartiq/finsemble-ui": "5.0.0",
         "async": "2.6.2",
         "babel-minify-webpack-plugin": "0.3.1",
         "compression": "1.7.3",
@@ -46,7 +46,9 @@
         "lodash.debounce": "4.0.8",
         "lodash.get": "4.4.2",
         "lodash.throttle": "4.1.1",
-        "nocache": "2.0.0"
+        "nocache": "2.0.0",
+        "react": "16.13.1",
+        "react-dom": "16.13.1"
     },
     "devDependencies": {
         "@babel/core": "7.6.4",
@@ -61,8 +63,8 @@
         "@svgr/webpack": "4.3.2",
         "@types/chai": "4.2.7",
         "@types/mocha": "5.2.7",
-        "@types/react": "16.9.17",
-        "@types/react-dom": "16.9.4",
+        "@types/react": "16.9.35",
+        "@types/react-dom": "16.9.8",
         "@types/react-redux": "7.1.6",
         "ansi-html": "0.0.7",
         "babel-loader": "8.0.6",
@@ -86,8 +88,6 @@
         "merge-stream": "1.0.1",
         "mocha": "7.0.0",
         "querystring": "0.2.0",
-        "react": "16.8.4",
-        "react-dom": "16.8.4",
         "react-redux": "7.1.3",
         "react-table": "6.8.6",
         "redux": "4.0.5",
