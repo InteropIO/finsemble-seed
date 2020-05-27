@@ -239,7 +239,6 @@ async function addApp(id, cb = Function.prototype) {
 	let folders = data.folders;
 
 	data.folders[ADVANCED_APP_LAUNCHER].apps.push(appConfig);
-	if (folder !== ADVANCED_APP_LAUNCHER) data.folders[folder].apps.push(appConfig);
 	FSBL.Clients.LauncherClient.registerComponent({
 		componentType: appConfig.name,
 		manifest: appConfig.manifest
@@ -280,7 +279,7 @@ function removeApp(id, cb = Function.prototype) {
 			}
 
 			for (const key in data.folders) {
-				const appIndex = findAppIndexInFolder(id, key);
+				const appIndex = findAppIndexInFolder(id, key, data.folders);
 				if (appIndex > -1) {
 					folders[key].apps.splice(appIndex, 1);
 				}

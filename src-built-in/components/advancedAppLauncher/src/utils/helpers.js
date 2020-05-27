@@ -7,8 +7,7 @@ export const findAppIndexInFolder = (appID, folderName) => {
 }
 
 export const isAppInFavorites = (appID) => {
-	const favorites = storeActions.getSingleFolder('Favorites').apps;
-	const index = findAppIndexInFolder(appID, favorites);
+	const index = findAppIndexInFolder(appID, "Favorites");
 
 	if (index < 0)  return false;
 	return true;
