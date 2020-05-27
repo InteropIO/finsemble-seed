@@ -577,7 +577,7 @@ function findAppByField(field, value) {
 
 function getActiveFolder() {
 	const folder = data.folders[data.activeFolder];
-	Object.values(folder.apps).map((app) => {
+	folder.apps.map((app) => {
 		const appData = findAppByField('appID', app.appID)
 		if (!appData) {
 			app.tags = [];
