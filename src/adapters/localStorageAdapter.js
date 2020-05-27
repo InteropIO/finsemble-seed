@@ -9,7 +9,7 @@
  * We have a baseStorage model that provides some methods, such as `getCombinedKey`, which will return a nice key to save our value under. Example: `Finsemble:defaultUser:finsemble:activeWorkspace`. That key would hold the value of our activeWorkspace.
  */
 const BaseStorage = require("@chartiq/finsemble").models.baseStorage;
-const Logger = require("@chartiq/finsemble").Clients.Logger;
+const {Logger} = require("@chartiq/finsemble").Clients;
 // Because calls to this storage adapter will likely come from many different windows, we will log successes and failures in the central logger.
 Logger.start();
 
@@ -34,10 +34,10 @@ const LocalStorageAdapter = function (uuid) {
 		let combinedKey = this.getCombinedKey(this, params);
 		try {
 			Logger.system.debug(
-				"LocalStorageAdapter.save for key=" +
-					combinedKey +
-					" with data=" +
-					params.value
+				`LocalStorageAdapter.save for key=${ 
+					combinedKey 
+					} with data=${ 
+					params.value}`
 			);
 			localStorage.setItem(combinedKey, JSON.stringify(params.value));
 			cb(null, { status: "success" });
@@ -45,7 +45,7 @@ const LocalStorageAdapter = function (uuid) {
 			Logger.system.error(
 				"LocalStorageAdapter.save Error",
 				err,
-				"key=" + combinedKey,
+				`key=${ combinedKey}`,
 				"value=",
 				params.value
 			);
@@ -67,21 +67,21 @@ const LocalStorageAdapter = function (uuid) {
 		try {
 			let data = JSON.parse(localStorage.getItem(combinedKey));
 			Logger.system.debug(
-				"LocalStorageAdapter.get for key=" + combinedKey + " data=",
+				`LocalStorageAdapter.get for key=${ combinedKey } data=`,
 				data
 			);
 			console.debug(
-				"LocalStorageAdapter.get for key=" + combinedKey + " data=",
+				`LocalStorageAdapter.get for key=${ combinedKey } data=`,
 				data
 			);
 			cb(null, data);
 		} catch (err) {
 			Logger.system.error(
-				"LocalStorageAdapter.get key=" + combinedKey + ", Error",
+				`LocalStorageAdapter.get key=${ combinedKey }, Error`,
 				err
 			);
 			console.error(
-				"LocalStorageAdapter.get key=" + combinedKey + ", Error",
+				`LocalStorageAdapter.get key=${ combinedKey }, Error`,
 				err
 			);
 			cb(err, { status: "failed" });
@@ -91,7 +91,7 @@ const LocalStorageAdapter = function (uuid) {
 	// Return prefix used to filter keys.
 	this.getKeyPreface = function (self, params) {
 		let preface =
-			self.baseName + ":" + self.userName + ":" + params.topic + ":";
+			`${self.baseName }:${ self.userName }:${ params.topic }:`;
 		if ("keyPrefix" in params) {
 			preface = preface + params.keyPrefix;
 		}
@@ -157,15 +157,15 @@ const LocalStorageAdapter = function (uuid) {
 			cb(null, keys);
 		} catch (err) {
 			Logger.system.error(
-				"Failed to retrieve LocalStorageAdapter.keys keyPreface=" +
-					keyPreface +
-					", Error",
+				`Failed to retrieve LocalStorageAdapter.keys keyPreface=${ 
+					keyPreface 
+					}, Error`,
 				err
 			);
 			console.error(
-				"Failed to retrieve LocalStorageAdapter.keys keyPreface=" +
-					keyPreface +
-					", Error",
+				`Failed to retrieve LocalStorageAdapter.keys keyPreface=${ 
+					keyPreface 
+					}, Error`,
 				err
 			);
 			cb(err, { status: "failed" });
@@ -182,24 +182,24 @@ const LocalStorageAdapter = function (uuid) {
 	this.delete = function (params, cb) {
 		let combinedKey = this.getCombinedKey(this, params);
 
-		Logger.system.debug("LocalStorageAdapter.delete for key=" + combinedKey);
-		console.debug("LocalStorageAdapter.delete for key=" + combinedKey);
+		Logger.system.debug(`LocalStorageAdapter.delete for key=${ combinedKey}`);
+		console.debug(`LocalStorageAdapter.delete for key=${ combinedKey}`);
 
 		try {
 			localStorage.removeItem(combinedKey);
 			Logger.system.debug(
-				"LocalStorageAdapter.delete key=" + combinedKey + ", Success"
+				`LocalStorageAdapter.delete key=${ combinedKey }, Success`
 			);
 			console.debug(
-				"LocalStorageAdapter.delete key=" + combinedKey + ", Success"
+				`LocalStorageAdapter.delete key=${ combinedKey }, Success`
 			);
 			cb(null, { status: "success" });
 		} catch (err) {
 			Logger.system.error(
-				"LocalStorageAdapter.delete key=" + combinedKey + ", Error",
+				`LocalStorageAdapter.delete key=${ combinedKey }, Error`,
 				err
 			);
-			console.error(".delete key=" + combinedKey + ", Error", err);
+			console.error(`.delete key=${ combinedKey }, Error`, err);
 			cb(err, { status: "failed" });
 		}
 	};
@@ -210,10 +210,10 @@ const LocalStorageAdapter = function (uuid) {
 	this.clearCache = function (params, cb) {
 		//console.log("clear local cache");
 		Logger.system.debug(
-			"LocalStorageAdapter.clearCache for userPreface=" + userPreface
+			`LocalStorageAdapter.clearCache for userPreface=${ userPreface}`
 		);
 		console.debug(
-			"LocalStorageAdapter.clearCache for userPreface=" + userPreface
+			`LocalStorageAdapter.clearCache for userPreface=${ userPreface}`
 		);
 
 		try {
@@ -224,8 +224,8 @@ const LocalStorageAdapter = function (uuid) {
 				if (
 					localStorage
 						.key(i)
-						.substring(0, (this.baseName + ":" + this.userName).length) ===
-					this.baseName + ":" + this.userName
+						.substring(0, (`${this.baseName }:${ this.userName}`).length) ===
+					`${this.baseName }:${ this.userName}`
 				) {
 					arr.push(localStorage.key(i));
 				}
@@ -237,10 +237,10 @@ const LocalStorageAdapter = function (uuid) {
 				localStorage.removeItem(arr[i]);
 			}
 			Logger.system.log(
-				"LocalStorageAdapter.clearCache Success: userPreface=" + userPreface
+				`LocalStorageAdapter.clearCache Success: userPreface=${ userPreface}`
 			);
 			console.log(
-				"LocalStorageAdapter.clearCache Success: userPreface=" + userPreface
+				`LocalStorageAdapter.clearCache Success: userPreface=${ userPreface}`
 			);
 
 			cb(null, { status: "success" });
@@ -248,12 +248,12 @@ const LocalStorageAdapter = function (uuid) {
 			Logger.system.error(
 				"LocalStorageAdapter.clearCache failed Error",
 				err,
-				"userPreface=" + userPreface
+				`userPreface=${ userPreface}`
 			);
 			console.error(
 				"LocalStorageAdapter.clearCache failed Error",
 				err,
-				"userPreface=" + userPreface
+				`userPreface=${ userPreface}`
 			);
 
 			cb(err, { status: "failed" });

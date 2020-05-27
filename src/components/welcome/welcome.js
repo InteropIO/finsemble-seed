@@ -13,10 +13,10 @@ function init() {
 	window.launchTutorial = function launchTutorial() {
 		FSBL.System.openUrlWithBrowser(
 			"https://www.chartiq.com/tutorials/?slug=finsemble",
-			function () {
+			() => {
 				//console.log("successfully launched docs");
 			},
-			function (err) {
+			(err) => {
 				//console.log("failed to launch docs");
 			}
 		);

@@ -124,7 +124,7 @@ const runWebpackAndCallback = (configPath, watch, bundleName, callback) => {
 			//first run, add nice timer.
 			if (callback) {
 				let end = process.hrtime(startTime);
-				msg += ` after ${chalk.magenta(prettyHrtime(end))}`;
+				msg = `${msg } after ${chalk.magenta(prettyHrtime(end))}`;
 			}
 			logToTerminal(msg, "cyan");
 		} else {
@@ -153,17 +153,15 @@ const runWebpackAndCallback = (configPath, watch, bundleName, callback) => {
 const envOrArg = (name, defaultValue) => {
 	let lc = name.toLowerCase();
 	let uc = name.toUpperCase();
-	let cc = name.replace(/(-|_)([a-z])/g, function (g) {
-		return g[1].toUpperCase();
-	});
+	let cc = name.replace(/(-|_)([a-z])/g, (g) => g[1].toUpperCase());
 
 	// Check environment variables
 	if (env[lc]) return env[lc];
 	if (env[uc]) return env[uc];
 
 	// Check command line arguments
-	lc = "--" + lc + ":";
-	uc = "--" + uc + ":";
+	lc = `--${ lc }:`;
+	uc = `--${ uc }:`;
 	let rc = null;
 	process.argv.forEach((arg) => {
 		if (arg.startsWith(lc)) rc = arg.split(lc)[1];

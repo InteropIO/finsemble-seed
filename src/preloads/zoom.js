@@ -84,9 +84,7 @@ const setZoom = (pct) => {
 	});
 };
 
-const roundTo1Decimal = (input) => {
-	return Math.round((input + Number.EPSILON) * 10) / 10;
-};
+const roundTo1Decimal = (input) => Math.round((input + Number.EPSILON) * 10) / 10;
 
 /**
  * Zooms the page in one step.

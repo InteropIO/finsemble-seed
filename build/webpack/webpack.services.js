@@ -14,11 +14,11 @@ for (let key in services) {
 	let splitPath = currentPath.split("/services/");
 	let folder = key.replace("Service", "");
 	//This loop builds up an object where every key is the output directory of the file, and the value is the entry file. Typically we want to preserve the path. For services, we default to putting them in their named folder (below).
-	let entryKey = "services/" + splitPath[1];
+	let entryKey = `services/${ splitPath[1]}`;
 
 	if (key.includes("Service")) {
 		//for service files, we default to service/SERVICENAME/SERVICENAME
-		entryKey = "services/" + folder + "/" + key;
+		entryKey = `services/${ folder }/${ key}`;
 	}
 	entry[entryKey] = currentPath;
 }

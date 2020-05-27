@@ -35,7 +35,7 @@ let defaultData = {
 };
 
 function uuidv4() {
-	return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+	return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
 		var r = (Math.random() * 16) | 0,
 			v = c === "x" ? r : (r & 0x3) | 0x8;
 		return v.toString(16);
@@ -61,7 +61,7 @@ Actions = {
 	},
 	initialize: function () {
 		//Gets the workspace list and sets the value in the store.
-		FSBL.Clients.WorkspaceClient.getWorkspaces(function (err, workspaces) {
+		FSBL.Clients.WorkspaceClient.getWorkspaces((err, workspaces) => {
 			Logger.system.debug(
 				"WorkspaceManagementStore init getWorkspaces",
 				workspaces
@@ -73,10 +73,10 @@ Actions = {
 		});
 
 		//Get the activeWorkspace and set the value. I could have iterated through the workspaces above and found the active one, but this seems simpler.
-		FSBL.Clients.WorkspaceClient.getActiveWorkspace(function (
+		FSBL.Clients.WorkspaceClient.getActiveWorkspace((
 			err,
 			activeWorkspace
-		) {
+		) => {
 			Logger.system.debug(
 				"WorkspaceManagementStore init getActiveWorkspace",
 				activeWorkspace
@@ -93,7 +93,7 @@ Actions = {
 		 */
 		FSBL.Clients.RouterClient.subscribe(
 			"Finsemble.WorkspaceService.update",
-			function (err, response) {
+			(err, response) => {
 				if (response.data && response.data.activeWorkspace) {
 					Logger.system.debug(
 						"WorkspaceManagementStore init update",
@@ -112,7 +112,7 @@ Actions = {
 		);
 		WorkspaceManagementGlobalStore.getValue({ field: "owner" }, (err, data) => {
 			if (data !== finsembleWindow.name) return;
-			WorkspaceManagementGlobalStore.Dispatcher.register(function (action) {
+			WorkspaceManagementGlobalStore.Dispatcher.register((action) => {
 				switch (action.actionType) {
 					case "switchToWorkspace":
 						Logger.system.debug(
@@ -227,7 +227,7 @@ Actions = {
 			FSBL.Clients.WorkspaceClient.createNewWorkspace(
 				workspaceName,
 				{ templateName: template },
-				function (err, response) {
+				(err, response) => {
 					Logger.system.log(
 						"createIt createNewWorkspace response",
 						workspaceName,
@@ -291,9 +291,9 @@ Actions = {
 		let dialogParams = {
 			title: "Delete this workspace?",
 			question:
-				'Are you sure you want to delete the workspace "' +
-				workspaceName +
-				'"?',
+				`Are you sure you want to delete the workspace "${ 
+				workspaceName 
+				}"?`,
 			showNegativeButton: false,
 			affirmativeResponseLabel: "Delete",
 			hideModalOnClose: data.hideModalOnClose,
@@ -332,7 +332,7 @@ Actions = {
 				force: true,
 				name: activeWorkspace.name,
 			},
-			function (err, response) {
+			(err, response) => {
 				if (cb) {
 					cb(err);
 				}
@@ -380,7 +380,7 @@ Actions = {
 					removeOldWorkspace: true,
 					overWriteExistng: true,
 				},
-				function (err, response) {
+				(err, response) => {
 					done();
 				}
 			);
@@ -425,7 +425,7 @@ Actions = {
 					name: workspaceName,
 					force: true,
 				},
-				function (err, response) {
+				(err, response) => {
 					callback(err, response);
 				}
 			);
@@ -460,7 +460,7 @@ Actions = {
 
 		Actions.setIsSwitchingWorkspaces(true);
 		Actions.blurWindow();
-		let name = data.name;
+		let {name} = data;
 		let activeWorkspace = WorkspaceManagementStore.getValue("activeWorkspace");
 		/**
 		 * Actually perform the switch. Happens after we ask the user what they want.
@@ -724,9 +724,9 @@ Actions = {
 		let dialogParams = {
 			title: "Overwrite Workspace?",
 			question:
-				'This will overwrite the saved data for  "' +
-				workspaceName +
-				'". Would you like to proceed?',
+				`This will overwrite the saved data for  "${ 
+				workspaceName 
+				}". Would you like to proceed?`,
 			affirmativeResponseLabel: "Overwrite",
 			showNegativeButton: false,
 		};
@@ -749,9 +749,9 @@ Actions = {
 		let dialogParams = {
 			title: "New Workspace",
 			question:
-				'The workspace "' +
-				workspaceName +
-				'" already exists. A new workspace with a modified name will be created.',
+				`The workspace "${ 
+				workspaceName 
+				}" already exists. A new workspace with a modified name will be created.`,
 			affirmativeResponseLabel: "OK",
 			showNegativeButton: false,
 		};
@@ -779,9 +779,7 @@ Actions = {
 		let workspaceName = response.value;
 		//Array.some will return true for the first element in the array that satisfies the condition. If none are true, it'll go through the entire array. It's essentially a way to short-circuit a for loop. This lets us know if any workspace has the same name that the user is trying to input.
 		let workspaceExists = FSBL.Clients.WorkspaceClient.workspaces.some(
-			(workspace) => {
-				return workspace.name === workspaceName;
-			}
+			(workspace) => workspace.name === workspaceName
 		);
 		callback(null, {
 			workspaceExists,
@@ -806,7 +804,7 @@ Actions = {
 	 * Unpins the workspace from the toolbars.
 	 */
 	removePin: function (name) {
-		ToolbarStore.removeValue({ field: "pins." + name });
+		ToolbarStore.removeValue({ field: `pins.${ name}` });
 	},
 	/**
 	 * If the workspace is pinned, it unpins the workspace. Otherwise, we pin it to the toolbar.
@@ -824,10 +822,10 @@ Actions = {
 		let wasAlreadyPinned = Actions.isPinned(workspace.name);
 
 		if (wasAlreadyPinned) {
-			ToolbarStore.removeValue({ field: "pins." + workspaceName });
+			ToolbarStore.removeValue({ field: `pins.${ workspaceName}` });
 		} else {
 			FSBL.Clients.Logger.perf.log("TogglePin");
-			ToolbarStore.setValue({ field: "pins." + workspaceName, value: thePin });
+			ToolbarStore.setValue({ field: `pins.${ workspaceName}`, value: thePin });
 		}
 	},
 	/**
@@ -847,7 +845,7 @@ Actions = {
 function createLocalStore(done) {
 	StoreClient.createStore(
 		{ store: "Finsemble-WorkspaceMenu-Local-Store", values: defaultData },
-		function (err, store) {
+		(err, store) => {
 			WorkspaceManagementStore = store;
 			done();
 		}
@@ -861,7 +859,7 @@ function createGlobalStore(done) {
 			global: true,
 			values: { owner: finsembleWindow.name },
 		},
-		function (err, store) {
+		(err, store) => {
 			WorkspaceManagementGlobalStore = store;
 			done();
 		}
@@ -878,15 +876,15 @@ function getToolbarStore(done) {
 		(callback, results) => {
 			StoreClient.getStore(
 				{ global: true, store: "Finsemble-Toolbar-Store" },
-				function (err, store) {
+				(err, store) => {
 					console.info("Trying to retrieve toolbarStore.", store);
 					if (!store) return callback(new Error("no store"), null);
 					ToolbarStore = store;
-					store.getValue({ field: "pins" }, function (err, pins) {
+					store.getValue({ field: "pins" }, (err, pins) => {
 						if (pins) Actions.setPins(pins.value);
 					});
 
-					store.addListener({ field: "pins" }, function (err, pins) {
+					store.addListener({ field: "pins" }, (err, pins) => {
 						if (pins) Actions.setPins(pins.value);
 					});
 					callback(null, null);
@@ -923,16 +921,14 @@ function initialize(cb) {
 	Logger = FSBL.Clients.Logger;
 	async.parallel(
 		[createGlobalStore, createLocalStore, getToolbarStore, getPreferences],
-		function () {
+		() => {
 			Actions.initialize();
 			cb(WorkspaceManagementStore);
 		}
 	);
 }
 
-let getStore = () => {
-	return WorkspaceManagementStore;
-};
+let getStore = () => WorkspaceManagementStore;
 
 export { WorkspaceManagementGlobalStore as GlobalStore };
 export { initialize };

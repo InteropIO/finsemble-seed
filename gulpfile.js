@@ -42,7 +42,7 @@ const { launch, connect } = require("hadouken-js-adapter");
 	}
 	// If you specify environment variables to child_process, it overwrites all environment variables, including
 	// PATH. So, copy based on our existing env variables.
-	const env = process.env;
+	const {env} = process;
 
 	if (!env.NODE_ENV) {
 		env.NODE_ENV = "development";
@@ -442,9 +442,8 @@ const { launch, connect } = require("hadouken-js-adapter");
 			installerConfig = resolveRelativePaths(installerConfig, ["icon"], "./");
 
 			const manifestUrl = taskMethods.startupConfig[env.NODE_ENV].serverConfig;
-			let updateUrl = taskMethods.startupConfig[env.NODE_ENV].updateUrl;
-			const chromiumFlags =
-				taskMethods.startupConfig[env.NODE_ENV].chromiumFlags;
+			let {updateUrl} = taskMethods.startupConfig[env.NODE_ENV];
+			const {chromiumFlags} = taskMethods.startupConfig[env.NODE_ENV];
 
 			// Installer won't work without a proper manifest. Throw a helpful error.
 			if (!manifestUrl) {
