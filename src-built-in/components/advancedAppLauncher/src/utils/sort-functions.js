@@ -1,5 +1,4 @@
-import storeActions from '../stores/StoreActions'
-import { findIndex } from 'lodash';
+import { isAppInFavorites } from './helpers';
 
 export default {
 	/**
@@ -32,12 +31,4 @@ export default {
 			return a.name.localeCompare(b.name);
 		});
 	}
-}
-
-const isAppInFavorites = (appID) => {
-	const favorites = storeActions.getSingleFolder('Favorites').apps;
-	const index = findIndex(favorites, favorite => favorite.appID === appID);
-
-	if (index < 0)  return false;
-	return true;
 }

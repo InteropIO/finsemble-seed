@@ -3,6 +3,7 @@ import { findIndex } from 'lodash';
 import { getStore } from "./LauncherStore";
 import AppDirectory from "../modules/AppDirectory";
 import FDC3 from "../modules/FDC3";
+import { findAppIndexInFolder } from '../utils/helpers';
 const async = require("async");
 let FDC3Client;
 let appd;
@@ -316,12 +317,6 @@ function _setFolders(cb = Function.prototype) {
 	});
 }
 
-function _findAppIndexInFolders(appID, folderName) {
-	return findIndex(data.folders[folderName].apps, app => {
-		return app.appID === appID;
-	});
-}
-
 function addPin(pin) {
 	//TODO: This logic may not work for dashboards. Might need to revisit.
 	FSBL.Clients.LauncherClient.getComponentList((err, components) => {
@@ -459,7 +454,7 @@ function deleteApp(appID) {
 		}
 		// Delete app from any folder that has it
 		for (const key in data.folders) {
-			const appIndex = _findAppIndexInFolders(appID, key);
+			const appIndex = findAppIndexInFolder(appID, key);
 			data.folders[key].apps.splice(appIndex,  1);
 		}
 
@@ -550,7 +545,7 @@ function renameFolder(oldName, newName) {
 }
 
 function addAppToFolder(folderName, app) {
-	const appIndex = _findAppIndexInFolders(app.appID, folderName);
+	const appIndex = findAppIndexInFolder(app.appID, folderName);
 
 	if (appIndex < 0) {
 		data.folders[folderName].apps.push({
@@ -563,7 +558,7 @@ function addAppToFolder(folderName, app) {
 }
 
 function removeAppFromFolder(folderName, app) {
-	const appIndex = _findAppIndexInFolders(app.appID, folderName);
+	const appIndex = findAppIndexInFolder(app.appID, folderName);
 	data.folders[folderName].apps.splice(appIndex, 1);
 	_setFolders();
 }
