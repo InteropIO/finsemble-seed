@@ -2,6 +2,7 @@ import React from "react";
 import AppActionsMenu from "./AppActionsMenu";
 import AppTagsList from "./AppTagsList";
 import storeActions from "../stores/StoreActions";
+import { findIndex } from 'lodash';
 const DEFAULT_APP_ICON = "ff-component";
 const FAVORITES = "Favorites";
 /**
@@ -59,8 +60,11 @@ export default class AppDefinition extends React.Component {
 		storeActions.removePin(this.props.app);
 	}
 	isFavorite() {
-		let favorites = Object.keys(storeActions.getSingleFolder("Favorites").apps);
-		return favorites.indexOf(this.props.app.appID.toString()) > -1;
+		let favorites = storeActions.getSingleFolder("Favorites").apps;
+		const favoriteIndex =  findIndex(favorites, (favorite) => {
+			return this.props.app.appID.toString() === favorite.appID.toString();
+		})
+		return favoriteIndex > -1;
 	}
 	render() {
 		const app = this.props.app;
