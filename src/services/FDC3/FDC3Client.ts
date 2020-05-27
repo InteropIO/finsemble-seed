@@ -10,58 +10,95 @@ declare global {
 const win = window as Window;
 
 class FDC3Client {
+	// if strict is true -> one linker channel only and one FDC3 Desktop agent only that is available at window.fdc3
+	#strict: Boolean = true;
 	desktopAgents: Array<DesktopAgent> = [];
-	#desktopAgentsByChannel: { [key: string]: DesktopAgent } = {};
-	#updateDesktopAgents: (initialRun?: boolean) => Promise<void>;
-	#wait: (time: number) => Promise<unknown>;
+	desktopAgentsByChannel: { [key: string]: DesktopAgent } = {};
+	#wait: (time: number) => Promise<unknown> = (time: number) => {
+		return new Promise((resolve) => setTimeout(resolve, time));
+	}
 
 	constructor() {
-		const createGlobalAgent = async () => {
-			win.fdc3 = await this.getOrCreateDesktopAgent("global");
-		}
-		createGlobalAgent();
-
-
-		this.#wait = (time: number) => {
-			return new Promise((resolve) => setTimeout(resolve, time));
-		}
-
-		// create desktopAgents for all current Linker Channels
-		this.#updateDesktopAgents = async (initialRun: boolean = false) => {
-			const desktopAgentChannels = Object.keys(this.#desktopAgentsByChannel);
+		const setupAgents = async () => {
 			const linkerState = FSBL.Clients.LinkerClient.getState();
+			// all valid channels that this component is a member of
 			const validLinkerChannels = linkerState.channels.map((channel: any) => channel.name);
 
-			// work around workspace linker bug
-			if (initialRun) {
-				const linkerChannels = Object.keys(FSBL.Clients.LinkerClient.channels);
-				const channelsToRemove = linkerChannels.filter(channel => !validLinkerChannels.includes(channel));
-				for (const channel of channelsToRemove) {
-					FSBL.Clients.LinkerClient.unlinkFromChannel(channel, finsembleWindow.identifier);
+			// all channels that this component is a member of. Different from valid because this could have joined channels created later
+			let linkerChannels = Object.keys(FSBL.Clients.LinkerClient.channels);
+
+			// in strict mode you can only join one channel
+			if(this.#strict && linkerChannels.length) {
+				linkerChannels = [linkerChannels[0]]
+			}
+			
+			const channelsToRemove = linkerChannels.filter(channel => !validLinkerChannels.includes(channel));
+
+			// Unlink from everything the component should not be a member of
+			for (const channel of channelsToRemove) {
+				FSBL.Clients.LinkerClient.unlinkFromChannel(channel, finsembleWindow.identifier);
+			}
+
+			// Since the linkerClient doesn't really wait properly
+			this.#wait(100);
+
+			if (this.#strict) {
+				if (linkerChannels.length) {
+					win.fdc3 = await this.getOrCreateDesktopAgent(linkerChannels[0]);
+				} else {
+					win.fdc3 = await this.getOrCreateDesktopAgent("global");
 				}
-				this.#wait(100);
+			} else {
+				win.fdc3 = await this.getOrCreateDesktopAgent("global");
 				for (const channel of linkerChannels) {
 					await this.getOrCreateDesktopAgent(channel);
 				}
-			} else {
-				const desktopAgentsToRemove = desktopAgentChannels.filter(channel => !validLinkerChannels.includes(channel));
-
-				for (const channel of desktopAgentsToRemove) {
-					if (channel === "global") continue;
-					await this.#desktopAgentsByChannel[channel].leaveCurrentChannel();
-					delete this.#desktopAgentsByChannel[channel];
-				}
-				for (const channel of validLinkerChannels) {
-					await this.getOrCreateDesktopAgent(channel);
-				}
 			}
+			
+			const updateAgents = async (err: any, response: any) => {
+				// We get here if the user linked to or unlinked from a channel
+				if (this.#strict) {
+					
+					const currentChannel = await win.fdc3.getCurrentChannel();
+					let linkerChannels = Object.keys(FSBL.Clients.LinkerClient.channels);
 
-			this.desktopAgents = Object.values(this.#desktopAgentsByChannel);
-		};
+					// Don't do anything if nothing changed (sometimes this event happens twice and causes all channels to be removed)
+					if (linkerChannels.length === 1 && currentChannel && linkerChannels[0] === currentChannel.id) return;
 
-		this.#updateDesktopAgents(true);
+					// remove current channel
+					if (currentChannel) {
+						linkerChannels = linkerChannels.filter(channel => channel !== currentChannel.id);
+					}
 
-		FSBL.Clients.LinkerClient.linkerStore.addListener({}, async () => { await this.#updateDesktopAgents() });
+					// are we joining a channel or completely leaving channels?
+					if (linkerChannels.length) {
+						await win.fdc3.joinChannel(linkerChannels[0]);
+					}
+				} else {
+					const linkerChannels = Object.keys(FSBL.Clients.LinkerClient.channels);
+					const desktopAgentChannels = Object.keys(this.desktopAgentsByChannel);
+					const desktopAgentsToRemove = desktopAgentChannels.filter(channel => !linkerChannels.includes(channel));
+
+					// remove any desktop agents that need to be removed
+					for (const channel of desktopAgentsToRemove) {
+						if (channel === "global") continue;
+						await this.desktopAgentsByChannel[channel].leaveCurrentChannel();
+						delete this.desktopAgentsByChannel[channel];
+					}
+
+					// get or create any desktop agents that need to be created
+					for (const channel of linkerChannels) {
+						await this.getOrCreateDesktopAgent(channel);
+					}
+					this.desktopAgents = Object.values(this.desktopAgentsByChannel);
+				}
+			};
+
+			FSBL.Clients.LinkerClient.onStateChange(async (err: any, data: any) => { await updateAgents(err, data) });
+		}
+		setupAgents();
+
+		
 	}
 
 	/**
@@ -69,34 +106,39 @@ class FDC3Client {
 	 * @param channel
 	 */
 	async getOrCreateDesktopAgent(channel: string): Promise<DesktopAgent> {
-		if (this.#desktopAgentsByChannel[channel]) {
-			return this.#desktopAgentsByChannel[channel];
+		// Only one desktop agent in strict mode
+		if (this.#strict && this.desktopAgents.length) {
+			await win.fdc3.joinChannel(channel);
+			return win.fdc3;
 		}
+
+		// If the agent already exists, return it
+		if (this.desktopAgentsByChannel[channel]) {
+			return this.desktopAgentsByChannel[channel];
+		}
+
 		// If a desktop agent does not exist, create one
-		const desktopAgent = new DesktopAgent();
+		const desktopAgent = new DesktopAgent(this.#strict, this);
 		await desktopAgent.joinChannel(channel);
-		this.#desktopAgentsByChannel[channel] = desktopAgent;
+		this.desktopAgentsByChannel[channel] = desktopAgent;
 		this.desktopAgents.push(desktopAgent);
 
 		// What if someone directly calls leaveCurrentChannel on the desktopAgent
 		const leaveChannelListener = (leftChannel: string) => {
 			desktopAgent.removeListener("leftChannel", leaveChannelListener);
 			desktopAgent.removeAllListeners();
-			if (this.#desktopAgentsByChannel[leftChannel]) {
-				delete this.#desktopAgentsByChannel[leftChannel];
-				this.desktopAgents = Object.values(this.#desktopAgentsByChannel);
+			if (this.desktopAgentsByChannel[leftChannel]) {
+				delete this.desktopAgentsByChannel[leftChannel];
+				this.desktopAgents = Object.values(this.desktopAgentsByChannel);
 			}
 		}
 		desktopAgent.addListener("leftChannel", leaveChannelListener);
 
 		// What if someone changes the channel by calling joinChannel
 		desktopAgent.addListener("channelChanged", (oldChannel, newChannel) => {
-			delete this.#desktopAgentsByChannel[oldChannel];
-			if (this.#desktopAgentsByChannel[newChannel]) {
-				this.#desktopAgentsByChannel[newChannel].leaveCurrentChannel();
-			}
-			this.#desktopAgentsByChannel[newChannel] = desktopAgent;
-			this.desktopAgents = Object.values(this.#desktopAgentsByChannel);
+			delete this.desktopAgentsByChannel[oldChannel];
+			this.desktopAgentsByChannel[newChannel] = desktopAgent;
+			this.desktopAgents = Object.values(this.desktopAgentsByChannel);
 		})
 		return desktopAgent;
 	}

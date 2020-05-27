@@ -3,7 +3,18 @@ import { EventEmitter } from "events";
 export default class DesktopAgentClient extends EventEmitter implements DesktopAgent {
 	#currentChannel: Channel;
 	#currentChannelContextListeners: Array<Listener> = [];
-	#channelChanging: boolean;
+	#channelChanging: Boolean;
+	#wait: (time: number) => Promise<void> = (time: number) => {
+		return new Promise((resolve) => setTimeout(resolve, time));
+	};
+	#strict: Boolean;
+	#FDC3Client: any;
+
+	constructor(strict: Boolean, FDC3Client: any) {
+		super();
+		this.#strict = strict;
+		this.#FDC3Client = FDC3Client;
+	}
 
 	/** ___________Apps ___________ */
 
@@ -138,14 +149,27 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 	}
 
 	async joinChannel(channelId: string) {
+		if (!this.#strict) {
+			// Are we already on this channel?
+			const linkerChannels = Object.keys(FSBL.Clients.LinkerClient.channels);
+			if (linkerChannels.includes(channelId)) {
+				throw new Error("A Desktop Agent Already exists on this Channel");
+			}
+		}
+
 		// don't do anything if you are trying to join the same channel
 		if (this.#currentChannel && this.#currentChannel.id === channelId) return;
+
+		
+		if (this.#channelChanging) {
+			throw new Error("Currently in process of changing channels. Rejecting this request. " + channelId);
+		}
 
 		// unsubscribe to everything that was already subscribed
 		let oldChannel;
 		if (this.#currentChannel) {
 			oldChannel = this.#currentChannel.id;
-			this.#channelChanging = true;
+			this.#channelChanging = true
 			await this.leaveCurrentChannel();
 		}
 
@@ -154,10 +178,15 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 		this.#currentChannel = channel;
 
 		if (oldChannel) this.emit("channelChanged", oldChannel, channelId);
-		if (this.#channelChanging) this.#channelChanging = false;
 
 		if (channelId !== "global") {
 			FSBL.Clients.LinkerClient.linkToChannel(channel.id,	finsembleWindow.identifier);
+			this.#wait(100);
+		}
+
+		if (this.#channelChanging) {
+			console.log("done Changing channel to ", channelId);
+			this.#channelChanging = false;
 		}
 		
 	}
@@ -166,7 +195,7 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 		if (this.#currentChannel) {
 			return this.#currentChannel;
 		} else {
-			throw new Error(ChannelError.NoChannelFound);
+			return null;
 		}
 	}
 
@@ -178,9 +207,12 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 			this.#currentChannelContextListeners[i].unsubscribe();
 			this.#currentChannelContextListeners.splice(i, 1);
 		}
+		
 		if (channelId !== "global") {
 			FSBL.Clients.LinkerClient.unlinkFromChannel(channelId,	finsembleWindow.identifier);
+			this.#wait(100);
 		}
+
 		if (!this.#channelChanging) this.emit("leftChannel", channelId);
 	}
 }
