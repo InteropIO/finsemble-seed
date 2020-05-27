@@ -15,7 +15,7 @@ export default function Tester() {
   useEffect(() => {
     const setUp = async () => {
 
-      const fdc3Client: DesktopAgent = await FSBL.Clients.FDC3Client.getOrCreateDesktopAgent("crims")
+      const fdc3Client: DesktopAgent = await (FSBL.Clients as any).FDC3Client.getOrCreateDesktopAgent("crims")
 
       const channel: Channel = await fdc3Client.getOrCreateChannel('crims')
 

@@ -8,7 +8,7 @@ export default function Sender() {
 
   const sendFDC3Data = async (channelID: string, context: Context) => {
     // setup of desktop agent
-    let fdc3Client = await FSBL.Clients.FDC3Client.getOrCreateDesktopAgent("crims")
+    let fdc3Client = await (FSBL.Clients as any).FDC3Client.getOrCreateDesktopAgent("crims")
 
     // new channel
     let channel = await fdc3Client.getOrCreateChannel(channelID)
@@ -24,7 +24,7 @@ export default function Sender() {
   }
 
   const handleSubmit = (e: any) => {
-    sendFDC3Data(channel, contextData)
+    //sendFDC3Data(channel, contextData)
     e.preventDefault()
   }
   return (
