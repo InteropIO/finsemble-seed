@@ -60,7 +60,7 @@ export default class AppDefinition extends React.Component {
 		storeActions.removePin(this.props.app);
 	}
 	isFavorite() {
-		let favorites = storeActions.getSingleFolder("Favorites").apps;
+		const favorites = storeActions.getSingleFolder("Favorites").apps;
 		const favoriteIndex =  findIndex(favorites, (favorite) => {
 			return this.props.app.appID.toString() === favorite.appID.toString();
 		})
