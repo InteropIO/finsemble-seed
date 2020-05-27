@@ -1,11 +1,16 @@
 /*!
-* Copyright 2017 by ChartIQ, Inc.
-* All rights reserved.
-*/
+ * Copyright 2017 by ChartIQ, Inc.
+ * All rights reserved.
+ */
 import React from "react";
 import ReactDOM from "react-dom";
 import { FinsembleProvider } from "@chartiq/finsemble-ui/react/components";
 import { AppCatalog } from "@chartiq/finsemble-ui/react/components";
 import "../../../assets/css/_themeWhiteLabel.css";
 
-ReactDOM.render(<FinsembleProvider><AppCatalog/></FinsembleProvider>, document.getElementById("AppCatalog-component-wrapper"));
+ReactDOM.render(
+	<FinsembleProvider>
+		<AppCatalog />
+	</FinsembleProvider>,
+	document.getElementById("AppCatalog-component-wrapper")
+);

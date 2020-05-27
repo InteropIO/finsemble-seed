@@ -4,8 +4,18 @@
  */
 import React from "react";
 import { useWindowTitleBar } from "@chartiq/finsemble-ui/react/hooks";
-import { AlwaysOnTopButton, DockingButton, LinkerButton, ShareButton, mountWindowTitleBar, TabRegion, CloseButton, MaximizeButton, MinimizeButton } from "@chartiq/finsemble-ui/react/components";
-import "@chartiq/finsemble-ui/react/assets/css/finsemble.css"
+import {
+	AlwaysOnTopButton,
+	DockingButton,
+	LinkerButton,
+	ShareButton,
+	mountWindowTitleBar,
+	TabRegion,
+	CloseButton,
+	MaximizeButton,
+	MinimizeButton,
+} from "@chartiq/finsemble-ui/react/components";
+import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../assets/css/_themeWhiteLabel.css";
 /**
  * This is the Window Title Bar component, which is rendered at

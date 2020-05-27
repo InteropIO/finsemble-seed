@@ -63,18 +63,12 @@ window.open = function (theURL, name, specs, replace) {
 		}
 	});
 	return w;
-}
+};
 
 /**
  * Overrides the browser's built in alerting. Native alerts are synchronous. They cause the application to cease functioning
  * and they create an ugly pop up window. Instead, we funnel these alerts through notifications.
  */
 window.alert = function (message) {
-	FSBL.UserNotification.alert(
-		"alert",
-		"",
-		"ALWAYS",
-		message,
-		{}
-	);
-}
+	FSBL.UserNotification.alert("alert", "", "ALWAYS", message, {});
+};

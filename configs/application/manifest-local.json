@@ -1,60 +1,58 @@
 {
-    "devtools_port": 9090,
-    "startup_app": {
-        "name": "ChartIQ Local",
-        "url": "http://localhost:3375/finsemble/services/systemManager/systemManager.html",
-        "uuid": "Finsemble",
-        "requireHandshake": true,
-        "applicationIcon": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png",
-        "defaultTop": 75,
-        "defaultLeft": 200,
-        "defaultHeight": 950,
-        "defaultWidth": 700,
-        "showTaskbarIcon": true,
-        "autoShow": false,
-        "frame": true,
-        "resizable": true,
-        "maximizable": false,
-        "delay_connection": true,
-        "contextMenu": true,
-        "cornerRounding": {
-            "width": 4,
-            "height": 4
-        },
-        "alwaysOnTop": false
-    },
-    "splashScreenImage": "http://localhost:3375/assets/img/FinsembleSplash.png",
-    "appAssets": [
-        {
-            "src": "https://assets.finsemble.com/assimilation/assimilation_4.2.0.0.zip",
-            "version": "4.2.0",
-            "alias": "assimilation",
-            "target": "AssimilationMain.exe"
-        }
-    ],
-    "finsemble": {
-        "applicationRoot": "http://localhost:3375",
-        "moduleRoot": "$applicationRoot/finsemble",
-        "servicesRoot": "$applicationRoot/finsemble/services",
-        "notificationURL": "$applicationRoot/components/notification/notification.html",
-        "bootConfig": {
-            "onErrorMakeSystemManagerVisible": true,
-            "defaults": {
-                "startServiceTimeout": 10000,
-                "startComponentTimeout": 15000,
-                "startTaskTimeout": 10000
-            }
-        },
-        "importConfig": [
-            "$applicationRoot/configs/application/config.json"
-        ],
-        "router": {
-            "crossDomainTransport": "IPCBus",
-            "transportSettings": {
-                "FinsembleTransport": {
-                    "serverAddress": "ws://127.0.0.1:3376"
-                }
-            }
-        }
-    }
+	"devtools_port": 9090,
+	"startup_app": {
+		"name": "ChartIQ Local",
+		"url": "http://localhost:3375/finsemble/services/systemManager/systemManager.html",
+		"uuid": "Finsemble",
+		"requireHandshake": true,
+		"applicationIcon": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png",
+		"defaultTop": 75,
+		"defaultLeft": 200,
+		"defaultHeight": 950,
+		"defaultWidth": 700,
+		"showTaskbarIcon": true,
+		"autoShow": false,
+		"frame": true,
+		"resizable": true,
+		"maximizable": false,
+		"delay_connection": true,
+		"contextMenu": true,
+		"cornerRounding": {
+			"width": 4,
+			"height": 4
+		},
+		"alwaysOnTop": false
+	},
+	"splashScreenImage": "http://localhost:3375/assets/img/FinsembleSplash.png",
+	"appAssets": [
+		{
+			"src": "https://assets.finsemble.com/assimilation/assimilation_4.2.0.0.zip",
+			"version": "4.2.0",
+			"alias": "assimilation",
+			"target": "AssimilationMain.exe"
+		}
+	],
+	"finsemble": {
+		"applicationRoot": "http://localhost:3375",
+		"moduleRoot": "$applicationRoot/finsemble",
+		"servicesRoot": "$applicationRoot/finsemble/services",
+		"notificationURL": "$applicationRoot/components/notification/notification.html",
+		"bootConfig": {
+			"onErrorMakeSystemManagerVisible": true,
+			"defaults": {
+				"startServiceTimeout": 10000,
+				"startComponentTimeout": 15000,
+				"startTaskTimeout": 10000
+			}
+		},
+		"importConfig": ["$applicationRoot/configs/application/config.json"],
+		"router": {
+			"crossDomainTransport": "IPCBus",
+			"transportSettings": {
+				"FinsembleTransport": {
+					"serverAddress": "ws://127.0.0.1:3376"
+				}
+			}
+		}
+	}
 }

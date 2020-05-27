@@ -1,14 +1,20 @@
 /*!
-* Copyright 2017 - 2020 by ChartIQ, Inc.
-* All rights reserved.
-* The workspace management menu may be the most complicated component that we have (other than the toolbar). It isn't because workspace management is particularly difficult, it's because there is a lot of user question and answer going on. We don't want to overwrite data without explicit consent, and so the calls get involved. To simplify the code, we are using the `async` library. If you are unfamiliar with this library, see this link: https://caolan.github.io/async/docs.html
-*/
+ * Copyright 2017 - 2020 by ChartIQ, Inc.
+ * All rights reserved.
+ * The workspace management menu may be the most complicated component that we have (other than the toolbar). It isn't because workspace management is particularly difficult, it's because there is a lot of user question and answer going on. We don't want to overwrite data without explicit consent, and so the calls get involved. To simplify the code, we are using the `async` library. If you are unfamiliar with this library, see this link: https://caolan.github.io/async/docs.html
+ */
 import async from "async";
 //When a user cancels the save workspace dialog, we throw an error, which short-circuits the async call.
 const SAVE_DIALOG_CANCEL_ERROR = "Cancel";
 const NEGATIVE = "Negative";
 let PROMPT_ON_SAVE = false;
-let WorkspaceManagementStore, Actions, WindowClient, StoreClient, Logger, ToolbarStore, WorkspaceManagementGlobalStore;
+let WorkspaceManagementStore,
+	Actions,
+	WindowClient,
+	StoreClient,
+	Logger,
+	ToolbarStore,
+	WorkspaceManagementGlobalStore;
 //Initial data for the store.
 let defaultData = {
 	activeWorkspace: {},
@@ -29,9 +35,9 @@ let defaultData = {
 };
 
 function uuidv4() {
-	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-		var r = Math.random() * 16 | 0,
-			v = c === 'x' ? r : r & 0x3 | 0x8;
+	return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+		var r = (Math.random() * 16) | 0,
+			v = c === "x" ? r : (r & 0x3) | 0x8;
 		return v.toString(16);
 	});
 }
@@ -40,12 +46,15 @@ Actions = {
 	autoSave: (callback) => {
 		let activeName = FSBL.Clients.WorkspaceClient.activeWorkspace.name;
 		if (!PROMPT_ON_SAVE) {
-			FSBL.Clients.WorkspaceClient.saveAs({
-				name: activeName,
-				force: true
-			}, (err, response) => {
-				callback(err);
-			});
+			FSBL.Clients.WorkspaceClient.saveAs(
+				{
+					name: activeName,
+					force: true,
+				},
+				(err, response) => {
+					callback(err);
+				}
+			);
 		} else {
 			callback(null);
 		}
@@ -53,45 +62,84 @@ Actions = {
 	initialize: function () {
 		//Gets the workspace list and sets the value in the store.
 		FSBL.Clients.WorkspaceClient.getWorkspaces(function (err, workspaces) {
-			Logger.system.debug("WorkspaceManagementStore init getWorkspaces", workspaces);
-			WorkspaceManagementStore.setValue({ field: "WorkspaceList", value: workspaces });
+			Logger.system.debug(
+				"WorkspaceManagementStore init getWorkspaces",
+				workspaces
+			);
+			WorkspaceManagementStore.setValue({
+				field: "WorkspaceList",
+				value: workspaces,
+			});
 		});
 
 		//Get the activeWorkspace and set the value. I could have iterated through the workspaces above and found the active one, but this seems simpler.
-		FSBL.Clients.WorkspaceClient.getActiveWorkspace(function (err, activeWorkspace) {
-			Logger.system.debug("WorkspaceManagementStore init getActiveWorkspace", activeWorkspace);
-			WorkspaceManagementStore.setValue({ field: "activeWorkspace", value: activeWorkspace });
+		FSBL.Clients.WorkspaceClient.getActiveWorkspace(function (
+			err,
+			activeWorkspace
+		) {
+			Logger.system.debug(
+				"WorkspaceManagementStore init getActiveWorkspace",
+				activeWorkspace
+			);
+			WorkspaceManagementStore.setValue({
+				field: "activeWorkspace",
+				value: activeWorkspace,
+			});
 		});
 
 		/**
 		 * We listen here for any workspace updates, and pass them to the store.
 		 * **NOTE**: You may notice that the signature of this callback is different from the previous ones. In this case we receive a `response`, instead of `workspaces` or `activeWorkspace`. This is because this callback is for a `RouterClient` message. The functions above are callbacks to `WorkspaceClient` API calls.
 		 */
-		FSBL.Clients.RouterClient.subscribe("Finsemble.WorkspaceService.update", function (err, response) {
-			if (response.data && response.data.activeWorkspace) {
-				Logger.system.debug("WorkspaceManagementStore init update", response.data);
-				WorkspaceManagementStore.setValue({ field: "activeWorkspace", value: response.data.activeWorkspace });
-				WorkspaceManagementStore.setValue({ field: "WorkspaceList", value: response.data.workspaces });
+		FSBL.Clients.RouterClient.subscribe(
+			"Finsemble.WorkspaceService.update",
+			function (err, response) {
+				if (response.data && response.data.activeWorkspace) {
+					Logger.system.debug(
+						"WorkspaceManagementStore init update",
+						response.data
+					);
+					WorkspaceManagementStore.setValue({
+						field: "activeWorkspace",
+						value: response.data.activeWorkspace,
+					});
+					WorkspaceManagementStore.setValue({
+						field: "WorkspaceList",
+						value: response.data.workspaces,
+					});
+				}
 			}
-		});
+		);
 		WorkspaceManagementGlobalStore.getValue({ field: "owner" }, (err, data) => {
 			if (data !== finsembleWindow.name) return;
 			WorkspaceManagementGlobalStore.Dispatcher.register(function (action) {
 				switch (action.actionType) {
 					case "switchToWorkspace":
-						Logger.system.debug("WorkspaceManagementStore switchToWorkspace", action.data);
+						Logger.system.debug(
+							"WorkspaceManagementStore switchToWorkspace",
+							action.data
+						);
 						Actions.switchToWorkspace(action.data);
 						break;
 					case "reorderWorkspace":
-						Logger.system.debug("WorkspaceManagementStore reorderWorkspace", action.data);
+						Logger.system.debug(
+							"WorkspaceManagementStore reorderWorkspace",
+							action.data
+						);
 						Actions.reorderWorkspaceList(action.data);
 						break;
 					case "removeWorkspace":
-						Logger.system.debug("WorkspaceManagementStore removeWorkspace", action.data);
+						Logger.system.debug(
+							"WorkspaceManagementStore removeWorkspace",
+							action.data
+						);
 						Actions.removeWorkspace(action.data);
 						break;
 					case "renameWorkspace":
-						Logger.system.debug("WorkspaceManagementStore renameWorkspace", action.data);
+						Logger.system.debug(
+							"WorkspaceManagementStore renameWorkspace",
+							action.data
+						);
 						Actions.renameWorkspace(action.data);
 						break;
 				}
@@ -120,13 +168,19 @@ Actions = {
 		return WorkspaceManagementStore.getValue("isSwitchingWorkspaces");
 	},
 	setIsSwitchingWorkspaces: function (val) {
-		return WorkspaceManagementStore.setValue({ field: "isSwitchingWorkspaces", value: val });
+		return WorkspaceManagementStore.setValue({
+			field: "isSwitchingWorkspaces",
+			value: val,
+		});
 	},
 	getIsPromptingUser: function () {
 		return WorkspaceManagementStore.getValue("isPromptingUser");
 	},
 	setIsPromptingUser: function (val) {
-		return WorkspaceManagementStore.setValue({ field: "isPromptingUser", value: val });
+		return WorkspaceManagementStore.setValue({
+			field: "isPromptingUser",
+			value: val,
+		});
 	},
 	setPins: function (pins) {
 		if (pins) {
@@ -137,9 +191,11 @@ Actions = {
 					pinnedWorkspaces.push(item);
 				}
 			}
-			WorkspaceManagementStore.setValue({ field: "pins", value: pinnedWorkspaces });
+			WorkspaceManagementStore.setValue({
+				field: "pins",
+				value: pinnedWorkspaces,
+			});
 		}
-
 	},
 	/**
 	 * Sets the height of the menu.
@@ -159,25 +215,38 @@ Actions = {
 	newWorkspace: function () {
 		let newWorkspaceName;
 		Logger.system.log("New Workspace - start.");
-		let newWorkspaceDialogIsActive = WorkspaceManagementStore.getValue("newWorkspaceDialogIsActive");
+		let newWorkspaceDialogIsActive = WorkspaceManagementStore.getValue(
+			"newWorkspaceDialogIsActive"
+		);
 		let activeWorkspace = WorkspaceManagementStore.getValue("activeWorkspace");
 
 		//Creates the new workspace.
 		function createIt(params, cb) {
 			Logger.system.log("createIt", params);
 			let { workspaceName, template } = params;
-			FSBL.Clients.WorkspaceClient.createNewWorkspace(workspaceName, { templateName: template }, function (err, response) {
-				Logger.system.log("createIt createNewWorkspace response", workspaceName, template, response);
-				newWorkspaceName = response.workspaceName;
-				if (cb) {
-					cb(null, newWorkspaceName);
+			FSBL.Clients.WorkspaceClient.createNewWorkspace(
+				workspaceName,
+				{ templateName: template },
+				function (err, response) {
+					Logger.system.log(
+						"createIt createNewWorkspace response",
+						workspaceName,
+						template,
+						response
+					);
+					newWorkspaceName = response.workspaceName;
+					if (cb) {
+						cb(null, newWorkspaceName);
+					}
 				}
-			});
+			);
 		}
 
-
 		if (!newWorkspaceDialogIsActive) {
-			WorkspaceManagementStore.setValue({ field: "newWorkspaceDialogIsActive", value: true });
+			WorkspaceManagementStore.setValue({
+				field: "newWorkspaceDialogIsActive",
+				value: true,
+			});
 		}
 
 		Actions.blurWindow();
@@ -188,16 +257,15 @@ Actions = {
 			Actions.checkIfWorkspaceAlreadyExists,
 			Actions.askIfUserWantsNewWorkspace,
 			createIt,
-			Actions.notifyUserOfNewWorkspace
+			Actions.notifyUserOfNewWorkspace,
 		];
 		if (PROMPT_ON_SAVE) {
 			tasks = [
 				Actions.askIfUserWantsToSave,
-				Actions.handleSaveDialogResponse
+				Actions.handleSaveDialogResponse,
 			].concat(tasks);
 		}
 		async.waterfall(tasks, Actions.onAsyncComplete);
-
 	},
 	/**
 	 * Handles the workflow for removing a workspace.
@@ -210,21 +278,25 @@ Actions = {
 		//don't allow user to delete active workspace.
 		if (FSBL.Clients.WorkspaceClient.activeworkspaceName === workspaceName) {
 			let dialogParams = {
-				question: "Workspace cannot be deleted while it is in use. Please switch workspaces and try again.",
+				question:
+					"Workspace cannot be deleted while it is in use. Please switch workspaces and try again.",
 				affirmativeResponseLabel: "OK",
 				showNegativeButton: false,
 				showCancelButton: false,
-				hideModalOnClose: data.hideModalOnClose
+				hideModalOnClose: data.hideModalOnClose,
 			};
 			return Actions.spawnDialog("yesNo", dialogParams);
 		}
 
 		let dialogParams = {
 			title: "Delete this workspace?",
-			question: "Are you sure you want to delete the workspace \"" + workspaceName + "\"?",
+			question:
+				'Are you sure you want to delete the workspace "' +
+				workspaceName +
+				'"?',
 			showNegativeButton: false,
 			affirmativeResponseLabel: "Delete",
-			hideModalOnClose: data.hideModalOnClose
+			hideModalOnClose: data.hideModalOnClose,
 		};
 
 		/**
@@ -232,20 +304,19 @@ Actions = {
 		 */
 		function onUserInput(err, response) {
 			if (response.choice === "affirmative") {
-
 				if (Actions.isPinned(workspaceName)) {
 					Actions.removePin(workspaceName);
 					let thePin = {
 						type: "workspaceSwitcher",
-						label: workspaceName
+						label: workspaceName,
 					};
 					FSBL.Clients.RouterClient.transmit("Toolbar.pinsUpdate", {
 						pin: thePin,
-						change: "remove"
+						change: "remove",
 					});
 				}
 				FSBL.Clients.WorkspaceClient.remove({
-					name: workspaceName
+					name: workspaceName,
 				});
 			}
 		}
@@ -256,25 +327,37 @@ Actions = {
 	 */
 	saveWorkspace: function (cb) {
 		let activeWorkspace = WorkspaceManagementStore.getValue("activeWorkspace");
-		FSBL.Clients.WorkspaceClient.saveAs({
-			force: true,
-			name: activeWorkspace.name
-		}, function (err, response) {
-			if (cb) {
-				cb(err);
+		FSBL.Clients.WorkspaceClient.saveAs(
+			{
+				force: true,
+				name: activeWorkspace.name,
+			},
+			function (err, response) {
+				if (cb) {
+					cb(err);
+				}
 			}
-		});
+		);
 	},
 	reorderWorkspaceList: function (changeEvent) {
 		if (!changeEvent.destination) return;
-		let workspaces = JSON.parse(JSON.stringify(WorkspaceManagementStore.getValue({ field: 'WorkspaceList' })));
-		let workspaceToMove = JSON.parse(JSON.stringify(workspaces[changeEvent.source.index]));
+		let workspaces = JSON.parse(
+			JSON.stringify(
+				WorkspaceManagementStore.getValue({ field: "WorkspaceList" })
+			)
+		);
+		let workspaceToMove = JSON.parse(
+			JSON.stringify(workspaces[changeEvent.source.index])
+		);
 		workspaces.splice(changeEvent.source.index, 1);
 		workspaces.splice(changeEvent.destination.index, 0, workspaceToMove);
 		FSBL.Clients.WorkspaceClient.setWorkspaces({
-			workspaces: workspaces
+			workspaces: workspaces,
 		});
-		WorkspaceManagementStore.setValue({ field: "WorkspaceList", value: workspaces });
+		WorkspaceManagementStore.setValue({
+			field: "WorkspaceList",
+			value: workspaces,
+		});
 	},
 	renameWorkspace: function ({ oldName, newName }) {
 		function saveIt(workspaceName, done) {
@@ -282,68 +365,85 @@ Actions = {
 				Actions.removePin(oldName);
 				let thePin = {
 					type: "workspaceSwitcher",
-					label: oldName
+					label: oldName,
 				};
 				FSBL.Clients.RouterClient.transmit("Toolbar.pinsUpdate", {
 					pin: thePin,
-					change: "remove"
+					change: "remove",
 				});
 			}
 
-			FSBL.Clients.WorkspaceClient.rename({
-				oldName: oldName,
-				newName: workspaceName,
-				removeOldWorkspace: true,
-				overWriteExistng: true
-			}, function (err, response) {
-				done();
-			});
-		}
-		async.waterfall([
-			Actions.checkIfWorkspaceAlreadyExists.bind(null, { value: newName }),
-			(result, callback) => {
-				if (result.workspaceExists) {
-					callback(null, FSBL.Clients.WorkspaceClient.getWorkspaceName(newName));
-				} else {
-					callback(null, newName);
+			FSBL.Clients.WorkspaceClient.rename(
+				{
+					oldName: oldName,
+					newName: workspaceName,
+					removeOldWorkspace: true,
+					overWriteExistng: true,
+				},
+				function (err, response) {
+					done();
 				}
-			},
-			saveIt,
-		], Actions.onAsyncComplete);
+			);
+		}
+		async.waterfall(
+			[
+				Actions.checkIfWorkspaceAlreadyExists.bind(null, { value: newName }),
+				(result, callback) => {
+					if (result.workspaceExists) {
+						callback(
+							null,
+							FSBL.Clients.WorkspaceClient.getWorkspaceName(newName)
+						);
+					} else {
+						callback(null, newName);
+					}
+				},
+				saveIt,
+			],
+			Actions.onAsyncComplete
+		);
 	},
 	showPreferences: function () {
-		FSBL.Clients.LauncherClient.showWindow({
-			componentType: "UserPreferences"
-		},
+		FSBL.Clients.LauncherClient.showWindow(
+			{
+				componentType: "UserPreferences",
+			},
 			{
 				monitor: "mine",
 				left: "center",
-				top: "center"
-			});
+				top: "center",
+			}
+		);
 	},
 	/**
 	 * Ask the user for a name, make sure it doesn't already exist, then save.
 	 */
 	saveWorkspaceAs: function () {
 		function saveIt(workspaceName, callback) {
-			FSBL.Clients.WorkspaceClient.saveAs({
-				name: workspaceName,
-				force: true
-			}, function (err, response) {
-				callback(err, response);
-			});
+			FSBL.Clients.WorkspaceClient.saveAs(
+				{
+					name: workspaceName,
+					force: true,
+				},
+				function (err, response) {
+					callback(err, response);
+				}
+			);
 		}
 
 		Logger.system.log("SaveWorkspaceAs clicked.");
 
-		async.waterfall([
-			Actions.autoSave,
-			Actions.spawnSaveAsDialog,
-			Actions.validateWorkspaceInput,
-			Actions.checkIfWorkspaceAlreadyExists,
-			Actions.askAboutOverwrite,
-			saveIt,
-		], Actions.onAsyncComplete);
+		async.waterfall(
+			[
+				Actions.autoSave,
+				Actions.spawnSaveAsDialog,
+				Actions.validateWorkspaceInput,
+				Actions.checkIfWorkspaceAlreadyExists,
+				Actions.askAboutOverwrite,
+				saveIt,
+			],
+			Actions.onAsyncComplete
+		);
 	},
 	/**
 	 * Asks the user if they'd like to save their data, then loads the requested workspace.
@@ -351,8 +451,11 @@ Actions = {
 	switchToWorkspace: function (data) {
 		// if a workspace prompt is outstanding for a previous switch, immediately return to lock out user from doing another switch (until responding to prompt);
 		// note this prompting flag is cleared in Actions.onAsyncComplete when the previous switch completes (after user responds to the prompt)
-		let prompting = Actions.getIsPromptingUser()
-		Logger.system.log("workspaceManagementMenuStore: switchToWorkspace", prompting ? "prompting" : "not-prompting");
+		let prompting = Actions.getIsPromptingUser();
+		Logger.system.log(
+			"workspaceManagementMenuStore: switchToWorkspace",
+			prompting ? "prompting" : "not-prompting"
+		);
 		if (prompting) return;
 
 		Actions.setIsSwitchingWorkspaces(true);
@@ -366,21 +469,29 @@ Actions = {
 		 *
 		 */
 		function switchWorkspace(callback = Function.prototype) {
-			FSBL.Clients.WorkspaceClient.switchTo({
-				name: name
-			}, () => {
+			FSBL.Clients.WorkspaceClient.switchTo(
+				{
+					name: name,
+				},
+				() => {
 					Actions.setIsSwitchingWorkspaces(false);
 					callback();
-			});
+				}
+			);
 		}
 		/**
 		 * Make sure the user wants to do what they say that they want to do.
 		 * @param {any} callback
 		 */
 		function askAboutReload(callback) {
-			Actions.spawnDialog("yesNo", {
-				question: "You are about to reload this workspace. Do you wish to save your changes?"
-			}, callback);
+			Actions.spawnDialog(
+				"yesNo",
+				{
+					question:
+						"You are about to reload this workspace. Do you wish to save your changes?",
+				},
+				callback
+			);
 		}
 
 		/**
@@ -432,9 +543,16 @@ Actions = {
 	onAsyncComplete(err, result) {
 		Logger.system.debug("workspaceManagementMenuStore: onAsyncComplete");
 
-		WorkspaceManagementStore.setValue({ field: "newWorkspaceDialogIsActive", value: false });
+		WorkspaceManagementStore.setValue({
+			field: "newWorkspaceDialogIsActive",
+			value: false,
+		});
 		const errMessage = err && err.message;
-		if (errMessage && errMessage !== NEGATIVE && errMessage !== SAVE_DIALOG_CANCEL_ERROR) {
+		if (
+			errMessage &&
+			errMessage !== NEGATIVE &&
+			errMessage !== SAVE_DIALOG_CANCEL_ERROR
+		) {
 			//handle error.
 			Logger.system.error(err);
 		}
@@ -442,7 +560,6 @@ Actions = {
 		//Unlock the UI.
 		Actions.setIsSwitchingWorkspaces(false);
 		Actions.setIsPromptingUser(false);
-
 	},
 	/**
 	 * NOTE: Leaving this function here until we figure out notifications.
@@ -480,7 +597,7 @@ Actions = {
 			inputLabel: "Enter a name for your new workspace.",
 			affirmativeResponseLabel: "Confirm",
 			showCancelButton: false,
-			showNegativeButton: false
+			showNegativeButton: false,
 		};
 
 		Actions.spawnDialog("singleInput", dialogParams, onUserInput);
@@ -507,7 +624,7 @@ Actions = {
 			inputLabel: "Enter a name for your new workspace.",
 			affirmativeResponseLabel: "Confirm",
 			showCancelButton: false,
-			showNegativeButton: false
+			showNegativeButton: false,
 		};
 
 		Actions.spawnDialog("singleInput", dialogParams, onUserInput);
@@ -523,7 +640,7 @@ Actions = {
 				title: "Save your workspace?",
 				question: `Your workspace "${activeWorkspace.name}" has unsaved changes. Would you like to save?`,
 				affirmativeResponseLabel: "Save",
-				negativeResponseLabel: "Don't Save"
+				negativeResponseLabel: "Don't Save",
 			};
 			function onUserInput(err, response) {
 				Logger.system.log("Spawn Dialog callback.");
@@ -548,15 +665,20 @@ Actions = {
 				if (!err) {
 					callback();
 				} else {
-					Actions.spawnDialog("yesNo", {
-						question: "The workspace save failed. Continuing will lose recent changers to this workspace.  Do you want to continue loading the new workspace?"
-					}, (err, response) => {
-						if (response.choice === "affirmative") {
-							callback();
-						} else {
-							callback(new Error(SAVE_DIALOG_CANCEL_ERROR));
+					Actions.spawnDialog(
+						"yesNo",
+						{
+							question:
+								"The workspace save failed. Continuing will lose recent changers to this workspace.  Do you want to continue loading the new workspace?",
+						},
+						(err, response) => {
+							if (response.choice === "affirmative") {
+								callback();
+							} else {
+								callback(new Error(SAVE_DIALOG_CANCEL_ERROR));
+							}
 						}
-					});
+					);
 				}
 			});
 		} else if (response.choice === "negative") {
@@ -578,17 +700,21 @@ Actions = {
 		Logger.system.log("spawnWorkspaceInput", response);
 		//If user wants to proceed but gave an invalid name, tell them that they messed up, then die.
 		//@todo, look in to using async.retry - we could throw an error and start the whole process over again.
-		if (response.choice !== "cancel" && (!response.value || response.value === "")) {
+		if (
+			response.choice !== "cancel" &&
+			(!response.value || response.value === "")
+		) {
 			let dialogParams = {
 				title: "Invalid Workspace Name",
-				question: "Workspace names must contain letters or numbers. Please try again.",
+				question:
+					"Workspace names must contain letters or numbers. Please try again.",
 				affirmativeResponseLabel: "OK",
 				showNegativeButton: false,
-				showCancelButton: false
+				showCancelButton: false,
 			};
 			Actions.spawnDialog("yesNo", dialogParams, Function.prototype);
 			return callback(new Error("Invalid workspace name."));
-		} else if (response.choice === 'cancel') {
+		} else if (response.choice === "cancel") {
 			return callback(new Error(SAVE_DIALOG_CANCEL_ERROR));
 		}
 		callback(null, response);
@@ -597,9 +723,12 @@ Actions = {
 		let { workspaceExists, workspaceName } = params;
 		let dialogParams = {
 			title: "Overwrite Workspace?",
-			question: "This will overwrite the saved data for  \"" + workspaceName + "\". Would you like to proceed?",
+			question:
+				'This will overwrite the saved data for  "' +
+				workspaceName +
+				'". Would you like to proceed?',
 			affirmativeResponseLabel: "Overwrite",
-			showNegativeButton: false
+			showNegativeButton: false,
 		};
 		function onUserInput(err, response) {
 			if (response.choice === "affirmative") {
@@ -619,9 +748,12 @@ Actions = {
 
 		let dialogParams = {
 			title: "New Workspace",
-			question: "The workspace \"" + workspaceName + "\" already exists. A new workspace with a modified name will be created.",
+			question:
+				'The workspace "' +
+				workspaceName +
+				'" already exists. A new workspace with a modified name will be created.',
 			affirmativeResponseLabel: "OK",
-			showNegativeButton: false
+			showNegativeButton: false,
 		};
 
 		function onUserInput(err, response) {
@@ -646,10 +778,16 @@ Actions = {
 	checkIfWorkspaceAlreadyExists(response, callback) {
 		let workspaceName = response.value;
 		//Array.some will return true for the first element in the array that satisfies the condition. If none are true, it'll go through the entire array. It's essentially a way to short-circuit a for loop. This lets us know if any workspace has the same name that the user is trying to input.
-		let workspaceExists = FSBL.Clients.WorkspaceClient.workspaces.some(workspace => {
-			return workspace.name === workspaceName;
+		let workspaceExists = FSBL.Clients.WorkspaceClient.workspaces.some(
+			(workspace) => {
+				return workspace.name === workspaceName;
+			}
+		);
+		callback(null, {
+			workspaceExists,
+			workspaceName,
+			template: response.template,
 		});
-		callback(null, { workspaceExists, workspaceName, template: response.template });
 	},
 	/*********************************************************************************************
 	 *
@@ -662,7 +800,7 @@ Actions = {
 	isPinned: function (name) {
 		let pins = Actions.getPins();
 		//Array.some will return true for the first element in the array that satisfies the condition. If none are true, it'll go through the entire array. It's essentially a way to short-circuit a for loop.
-		return pins.some(pin => pin.label === name);
+		return pins.some((pin) => pin.label === name);
 	},
 	/**
 	 * Unpins the workspace from the toolbars.
@@ -674,15 +812,14 @@ Actions = {
 	 * If the workspace is pinned, it unpins the workspace. Otherwise, we pin it to the toolbar.
 	 */
 	togglePin: function (workspace) {
-
 		let workspaceName = workspace.name.replace(/[.]/g, "^DOT^"); //No dots allowed in store field names
 		//toggles the pinned state of the component. This change will be broadcast to all toolbars so that the state changes in each component.
 		let pins = Actions.getPins();
 		let thePin = {
 			type: "workspaceSwitcher",
 			label: workspace.name,
-			toolbarSection: 'center',
-			uuid: uuidv4()
+			toolbarSection: "center",
+			uuid: uuidv4(),
 		};
 		let wasAlreadyPinned = Actions.isPinned(workspace.name);
 
@@ -708,52 +845,71 @@ Actions = {
 };
 
 function createLocalStore(done) {
-	StoreClient.createStore({ store: "Finsemble-WorkspaceMenu-Local-Store", values: defaultData }, function (err, store) {
-		WorkspaceManagementStore = store;
-		done();
-	});
+	StoreClient.createStore(
+		{ store: "Finsemble-WorkspaceMenu-Local-Store", values: defaultData },
+		function (err, store) {
+			WorkspaceManagementStore = store;
+			done();
+		}
+	);
 }
 
 function createGlobalStore(done) {
-	StoreClient.createStore({
-		store: "Finsemble-WorkspaceMenu-Global-Store",
-		global: true,
-		values: { owner: finsembleWindow.name }
-	}, function (err, store) {
-		WorkspaceManagementGlobalStore = store;
-		done();
-	});
+	StoreClient.createStore(
+		{
+			store: "Finsemble-WorkspaceMenu-Global-Store",
+			global: true,
+			values: { owner: finsembleWindow.name },
+		},
+		function (err, store) {
+			WorkspaceManagementGlobalStore = store;
+			done();
+		}
+	);
 }
 
 function getToolbarStore(done) {
 	//Try for a second to get the toolbar. The toolbar creates the store on startup. if this component comes up first, we'll still get our store.
-	async.retry({
-		times: 10,
-		interval: 100
-	}, (callback, results) => {
-		StoreClient.getStore({ global: true, store: "Finsemble-Toolbar-Store" }, function (err, store) {
-			console.info("Trying to retrieve toolbarStore.", store);
-			if (!store) return callback(new Error("no store"), null);
-			ToolbarStore = store;
-			store.getValue({ field: "pins" }, function (err, pins) {
-				if (pins) Actions.setPins(pins.value);
-			});
+	async.retry(
+		{
+			times: 10,
+			interval: 100,
+		},
+		(callback, results) => {
+			StoreClient.getStore(
+				{ global: true, store: "Finsemble-Toolbar-Store" },
+				function (err, store) {
+					console.info("Trying to retrieve toolbarStore.", store);
+					if (!store) return callback(new Error("no store"), null);
+					ToolbarStore = store;
+					store.getValue({ field: "pins" }, function (err, pins) {
+						if (pins) Actions.setPins(pins.value);
+					});
 
-			store.addListener({ field: "pins" }, function (err, pins) {
-				if (pins) Actions.setPins(pins.value);
-			});
-			callback(null, null);
-		});
-	}, done);
+					store.addListener({ field: "pins" }, function (err, pins) {
+						if (pins) Actions.setPins(pins.value);
+					});
+					callback(null, null);
+				}
+			);
+		},
+		done
+	);
 }
 
 function getPreferences(done) {
-	FSBL.Clients.ConfigClient.getValue({ field: "finsemble.preferences.workspaceService.promptUserOnDirtyWorkspace" }, (err, data) => {
-		let prompt = data;
-		//default to false.
-		PROMPT_ON_SAVE = prompt === null ? PROMPT_ON_SAVE : prompt;
-		done();
-	});
+	FSBL.Clients.ConfigClient.getValue(
+		{
+			field:
+				"finsemble.preferences.workspaceService.promptUserOnDirtyWorkspace",
+		},
+		(err, data) => {
+			let prompt = data;
+			//default to false.
+			PROMPT_ON_SAVE = prompt === null ? PROMPT_ON_SAVE : prompt;
+			done();
+		}
+	);
 }
 
 /**
@@ -772,15 +928,13 @@ function initialize(cb) {
 			cb(WorkspaceManagementStore);
 		}
 	);
-
-
 }
 
 let getStore = () => {
 	return WorkspaceManagementStore;
 };
 
-export { WorkspaceManagementGlobalStore as GlobalStore }
+export { WorkspaceManagementGlobalStore as GlobalStore };
 export { initialize };
 export { WorkspaceManagementStore as Store };
 export { Actions };

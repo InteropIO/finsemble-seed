@@ -10,25 +10,26 @@
  * Once completed, rename this file gulpfile-extensions.js. The Finsemble build process will then begin
  * processing this file during builds.
  */
-module.exports = taskMethods => {
+module.exports = (taskMethods) => {
 	"use strict";
 
 	const gulp = require("gulp");
 	const ON_DEATH = require("death")({ debug: false });
-	const path = require('path');
+	const path = require("path");
 	const { exec } = require("child_process");
-	const chalk = require('chalk');
+	const chalk = require("chalk");
 	//Force colors on terminals.
 	const errorOutColor = chalk.hex("#FF667E");
 	let watchClose;
 
 	/** -------------------------------------- PRE ----------------------------------------
-	* You can use this section to run code that should execute *before* any gulp tasks run.
-	* For instance, if you need to spin up a server or run a shell command, do it here.
-	*/
-	let preOriginal = taskMethods.pre
+	 * You can use this section to run code that should execute *before* any gulp tasks run.
+	 * For instance, if you need to spin up a server or run a shell command, do it here.
+	 */
+	let preOriginal = taskMethods.pre;
 	taskMethods.pre = (done) => {
-		preOriginal(() => { // Call the built-in tasks from gulpfile.js
+		preOriginal(() => {
+			// Call the built-in tasks from gulpfile.js
 			// <------  Put your code to run "pre" tasks here
 			done();
 		});
@@ -141,7 +142,6 @@ module.exports = taskMethods => {
 		};
 	*/
 
-
 	// However, detecting application closed is unreliable in the newer Hadouken launcher so this will remain optional until a fix is verified.
 	/*
 		taskMethods.launchApplication = done => {
@@ -210,7 +210,6 @@ module.exports = taskMethods => {
 	 *
 	 */
 	taskMethods.post = (done) => {
-
 		// Example, add a new gulp task that first calls the built in "build" task and then does something of your choosing
 		/*
 		gulp.task("myTask", gulp.series("build"), function (done) {
@@ -231,5 +230,5 @@ module.exports = taskMethods => {
 		*/
 
 		done();
-	}
+	};
 };

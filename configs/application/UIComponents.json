@@ -70,9 +70,7 @@
 		"linkerWindow": {
 			"bootParams": {
 				"stage": "earlyuser",
-				"dependencies": [
-					"Toolbar"
-				]
+				"dependencies": ["Toolbar"]
 			},
 			"window": {
 				"url": "$applicationRoot/components/linker/linker.html",
@@ -177,9 +175,7 @@
 		"yesNo": {
 			"bootParams": {
 				"stage": "earlyuser",
-				"dependencies": [
-					"Toolbar"
-				]
+				"dependencies": ["Toolbar"]
 			},
 			"window": {
 				"url": "$applicationRoot/components/yesNoDialog/yesNoDialog.html",
@@ -225,9 +221,7 @@
 		"singleInput": {
 			"bootParams": {
 				"stage": "earlyuser",
-				"dependencies": [
-					"Toolbar"
-				]
+				"dependencies": ["Toolbar"]
 			},
 			"window": {
 				"url": "$applicationRoot/components/singleInputDialog/singleInputDialog.html",
@@ -327,10 +321,7 @@
 				"left": 0,
 				"right": 0,
 				"position": "available",
-				"dockable": [
-					"top",
-					"bottom"
-				],
+				"dockable": ["top", "bottom"],
 				"maxHeight": 39,
 				"minHeight": 39,
 				"minWidth": 300,
@@ -431,9 +422,7 @@
 		"UserPreferences": {
 			"bootParams": {
 				"stage": "earlyuser",
-				"dependencies": [
-					"Toolbar"
-				]
+				"dependencies": ["Toolbar"]
 			},
 			"window": {
 				"url": "$applicationRoot/components/userPreferences/userPreferences.html",
@@ -591,9 +580,7 @@
 		"SystemTrayComponent": {
 			"bootParams": {
 				"stage": "earlyuser",
-				"dependencies": [
-					"Toolbar"
-				]
+				"dependencies": ["Toolbar"]
 			},
 			"window": {
 				"url": "$applicationRoot/components/systemTrayComponent/systemTrayComponent.html",

@@ -9,13 +9,6 @@
 		"jsx": "react",
 		"allowJs": true
 	},
-	"include": [
-		"src/**/*",
-		"src/ts/**/*",
-		"./finsemble/types/**/*"
-	],
-	"exclude": [
-		"node_modules",
-		"**/*.spec.ts"
-	]
+	"include": ["src/**/*", "src/ts/**/*", "./finsemble/types/**/*"],
+	"exclude": ["node_modules", "**/*.spec.ts"]
 }
