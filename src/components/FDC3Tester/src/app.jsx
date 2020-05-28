@@ -1,11 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Tester from './components/Tester'
+import Tester from "./components/Tester";
 import CodeSnippets from "./components/CodeSnippets";
 import Sender from "./components/Sender";
 
 function FDC3Tester() {
-
 	return (
 		<div>
 			<Sender />
@@ -13,9 +12,7 @@ function FDC3Tester() {
 			<CodeSnippets />
 		</div>
 	);
-
 }
-
 
 // render component when FSBL is ready.
 const FSBLReady = () => {
