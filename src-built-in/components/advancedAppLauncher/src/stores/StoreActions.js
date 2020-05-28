@@ -382,7 +382,7 @@ function getFoldersList() {
 }
 
 function getAllApps() {
-	let mergedApps = Object.assign({}, data.apps, data.configComponents);;
+	let mergedApps = Object.assign({}, data.apps, data.configComponents);
 	return mergedApps;
 }
 
@@ -395,6 +395,7 @@ function getSingleFolder(folderName) {
 }
 
 function reorderFolders(destIndex, srcIndex) {
+	console.log('destIndex: ', destIndex);
 	//There are two types of folders: Those that can be arranged, and those that cannot. We don't want to reorder the folders relative to the unorderable folders. Split them out, and then combine them after doing the filtering/swapping.
 	const dragDisabled = getDragDisabled();
 	const unorderableFolders = data.foldersList.filter(folderName => dragDisabled.includes(folderName));
@@ -407,6 +408,14 @@ function reorderFolders(destIndex, srcIndex) {
 		movedFolder,
 		...remainingItems.slice(srcIndex)
 	];
+
+	data.foldersList.map((folderName, i) => {
+		if (data.folders[folderName].order) {
+			data.folders[folderName].order = i;
+		}
+	});
+
+	_setValue("appFolders.folders", data.folders);
 	_setValue("appFolders.list", data.foldersList);
 	return data.foldersList;
 }
@@ -490,7 +499,8 @@ function addNewFolder(name) {
 		icon: "ff-adp-hamburger",
 		canEdit: true,
 		canDelete: true,
-		apps: []
+		apps: [],
+		order: Object.keys(data.folders).length
 	};
 	data.folders[folderName] = newFolder;
 	_setFolders(() => {
@@ -524,6 +534,13 @@ function renameFolder(oldName, newName) {
 	let oldFolder = data.folders[oldName];
 	data.folders[newName] = oldFolder;
 	delete data.folders[oldName];
+
+	// If the folder being renamed is the activeFolder, activeFolder needs to be set
+	// to the new folder name
+	if (data.activeFolder === oldName) {
+		_setValue('activeFolder', newName);
+	}
+
 	_setFolders(() => {
 		let indexOfOld = data.foldersList.findIndex((folderName) => {
 			return folderName === oldName;
@@ -540,7 +557,6 @@ function renameFolder(oldName, newName) {
 		}
 
 		_setValue("appFolders.list", data.foldersList);
-		delete data.folders[oldName];
 	});
 }
 

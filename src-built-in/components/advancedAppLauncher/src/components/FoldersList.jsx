@@ -32,8 +32,23 @@ export default class FoldersList extends React.Component {
 		this.onFocusRemove = this.onFocusRemove.bind(this)
 		this.onDragEnd = this.onDragEnd.bind(this);
 		this.onMouseMove = this.onMouseMove.bind(this);
+		this.animateErrorInput = this.animateErrorInput.bind(this);
 		// The last known mouse Y position
 		this.mouseY = null;
+
+		//Reference to a folder name input in error
+		this.errorInput = React.createRef();
+	}
+
+	animateErrorInput() {
+		if  (this.errorInput) {
+			console.log('error input: ', this.errorInput);
+			this.errorInput.current.classList.remove('error');
+			const flickerInput = setTimeout(() => {
+				this.errorInput.current.classList.add('error');
+				clearTimeout(flickerInput);
+			}, 500);
+		}
 	}
 
 	/**
@@ -96,6 +111,10 @@ export default class FoldersList extends React.Component {
 	}
 
 	onFocusRemove(event) {
+		if (this.state.isNameError) {
+			this.animateErrorInput();
+		}
+
 		// We don't want to hide the input if user clicked on it
 		// We only hide when the click is anywhere else in the document
 		if (event.target.id === 'rename') {
@@ -128,10 +147,13 @@ export default class FoldersList extends React.Component {
 	renameFolder(name, e) {
 		e.preventDefault();
 		e.stopPropagation();
-		this.setState({
-			renamingFolder: name
-		})
-		this.addClickListener()
+
+		if (!this.state.isNameError) {
+			this.setState({
+				renamingFolder: name
+			});
+			this.addClickListener()
+		}
 	}
 
 	changeFolderName(e) {
@@ -218,7 +240,7 @@ export default class FoldersList extends React.Component {
 		if (folder.icon === EDITABLE_FOLDER_ICON_CLASS && this.state.renamingFolder === folderName) {
 			nameField = <input id="rename" value={this.state.folderNameInput}
 			onChange={this.changeFolderName}
-			onKeyPress={this.keyPressed} className={this.state.isNameError ? "error" : ""} autoFocus />;
+			onKeyPress={this.keyPressed} className={this.state.isNameError ? "error" : ""} autoFocus ref={this.state.isNameError ? this.errorInput : null} />;
 		} else if (folderName === "Advanced App Launcher") {
 			nameField = "App Launcher"
 		} else {
@@ -262,8 +284,25 @@ export default class FoldersList extends React.Component {
 	 * Renders all folders that can be reordered (user created folders).
 	 */
 	renderOrderableFolders() {
-		let orderableFolders = this.state.foldersList.filter(folderName => !dragDisabled.includes(folderName));
 		const folders = storeActions.getFolders()
+		let orderableFolders = this.state.foldersList.filter(folderName => !dragDisabled.includes(folderName));
+
+		
+		//Sort folders by order
+		orderableFolders = orderableFolders.sort((name1, name2) => {
+			const folder1 = folders[name1];
+			const folder2 = folders[name2];
+			if (folder1.order && folder2.order) {
+				if (folder1.order > folder2.order) {
+					return 1;
+				} else if (folder1.order < folder2.order) {
+					return -1;
+				}
+			} 
+
+			return 0;
+		});
+		
 		return orderableFolders.map((folderName, index) => {
 			const folder = folders[folderName]
 			return (<FinsembleDraggable
