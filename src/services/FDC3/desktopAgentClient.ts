@@ -1,8 +1,15 @@
 import Channel from "./channelClient";
 import { EventEmitter } from "events";
+
+interface ContextTypeAndHandler {
+	contextTypeOrHandler: string | ContextHandler, 
+	handler?: ContextHandler,
+	listener: Listener
+}
 export default class DesktopAgentClient extends EventEmitter implements DesktopAgent {
 	#currentChannel: Channel;
 	#currentChannelContextListeners: Array<Listener> = [];
+	#contextHandlers: { [key: string]: ContextTypeAndHandler } = {};
 	#channelChanging: Boolean;
 	#wait: (time: number) => Promise<void> = (time: number) => {
 		return new Promise((resolve) => setTimeout(resolve, time));
@@ -51,23 +58,34 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 	addContextListener(contextType: string, handler: ContextHandler): Listener;
 	addContextListener(contextTypeOrHandler: string | ContextHandler, handler?: ContextHandler): Listener {
 		if (!this.#currentChannel) {
-			throw Error("Please join a channel prior to adding listeners");
+			console.warn("No channels have been joined");
 		}
+
 		// data sent at open
 		const spawnData = FSBL.Clients.WindowClient.getSpawnData();
 		let context = spawnData?.fdc3?.context;
-		
-		let contextListener;
-		if (typeof contextTypeOrHandler === "string") {
-			contextListener = this.#currentChannel.addContextListener(contextTypeOrHandler, handler);
-			if (context && context.type === contextTypeOrHandler) handler(context);
-		} else {
-			contextListener = this.#currentChannel.addContextListener(contextTypeOrHandler);
-			if (context) contextTypeOrHandler(context);
+
+		let contextListener = null;
+		if (this.#currentChannel) {
+			if (typeof contextTypeOrHandler === "string") {
+				contextListener = this.#currentChannel.addContextListener(contextTypeOrHandler, handler);
+			} else {
+				contextListener = this.#currentChannel.addContextListener(contextTypeOrHandler);
+			}
 		}
 
-		this.#currentChannelContextListeners.push(contextListener);
-		return contextListener;
+		const contextHandlerId = Date.now() + "_" + Math.random();
+		this.#contextHandlers[contextHandlerId] = {
+			contextTypeOrHandler, handler,
+			listener: contextListener
+		}
+
+		return {
+			unsubscribe: () => {
+				this.#contextHandlers[contextHandlerId].listener?.unsubscribe();
+				delete this.#contextHandlers[contextHandlerId];
+			}
+		}
 	}
 
 	/** ___________Intents ___________ */
@@ -177,6 +195,18 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 		const channel = await this.getOrCreateChannel(channelId);
 		this.#currentChannel = channel;
 
+		const contextHandlerIds = Object.keys(this.#contextHandlers);
+		for (const contextHandlerId of contextHandlerIds) {
+			const contextHandler = this.#contextHandlers[contextHandlerId]
+			let contextListener;
+			if (typeof contextHandler.contextTypeOrHandler === "string") {
+				contextListener = this.#currentChannel.addContextListener(contextHandler.contextTypeOrHandler, contextHandler.handler);
+			} else {
+				contextListener = this.#currentChannel.addContextListener(contextHandler.contextTypeOrHandler);
+			}
+			contextHandler.listener = contextListener;
+		}
+
 		if (oldChannel) this.emit("channelChanged", oldChannel, channelId);
 
 		if (channelId !== "global") {
@@ -203,9 +233,12 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 		if (!this.#currentChannel) return;
 		const channelId = this.#currentChannel.id;
 		this.#currentChannel = null;
-		for (let i = this.#currentChannelContextListeners.length - 1; i >= 0; i++) {
-			this.#currentChannelContextListeners[i].unsubscribe();
-			this.#currentChannelContextListeners.splice(i, 1);
+
+		const contextHandlerIds = Object.keys(this.#contextHandlers);
+		for (const contextHandlerId of contextHandlerIds) {
+			const contextHandler = this.#contextHandlers[contextHandlerId]
+			contextHandler.listener.unsubscribe();
+			contextHandler.listener = null;
 		}
 		
 		if (channelId !== "global") {
