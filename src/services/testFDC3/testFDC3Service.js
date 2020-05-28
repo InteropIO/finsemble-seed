@@ -16,7 +16,7 @@ Finsemble.Clients.LinkerClient.initialize();
 // Finsemble.Clients.HotkeyClient.initialize();
 // Finsemble.Clients.SearchClient.initialize();
 // Finsemble.Clients.StorageClient.initialize();
-// Finsemble.Clients.WindowClient.initialize();
+Finsemble.Clients.WindowClient.initialize();
 // Finsemble.Clients.WorkspaceClient.initialize();
 
 // NOTE: When adding the above clients to a service, be sure to add them to the start up dependencies.
@@ -35,7 +35,8 @@ class testFDC3Service extends Finsemble.baseService {
 				// If the service is using another service directly via an event listener or a responder, that service
 				// should be listed as a service start up dependency.
 				services: [
-					"FDC3"
+					"FDC3",
+					"FDC3Service"
 					// "assimilationService",
 					// "authenticationService",
 					// "configService",
@@ -58,10 +59,10 @@ class testFDC3Service extends Finsemble.baseService {
 					// "dragAndDropClient",
 					// "hotkeyClient",
 					// "launcherClient",
-					"linkerClient"
+					"linkerClient",
 					// "searchClient
 					// "storageClient",
-					// "windowClient",
+					"windowClient",
 					// "workspaceClient",
 				]
 			}
@@ -80,15 +81,14 @@ class testFDC3Service extends Finsemble.baseService {
 	readyHandler(callback) {
 		this.createRouterEndpoints();
 		Finsemble.Clients.Logger.log("TestFDC3 Service ready");
+		this.setUpFDC3()
 		callback();
 
-		// setTimeout(() => {
-		this.setUpFDC3()
-		// }, 2000);
 	}
 
 	async setUpFDC3() {
 		log("hit FDC3Setup")
+		log(Finsemble.Clients.WindowClient.getWindowIdentifier())
 		try {
 			this.FDC3DesktopAgent = await new FDC3Client(Finsemble)
 			this.FDC3 = await this.FDC3DesktopAgent.getOrCreateDesktopAgent('service')
@@ -98,6 +98,10 @@ class testFDC3Service extends Finsemble.baseService {
 			const channelList = await FDC3.getSystemChannels()
 			log(FDC3)
 			log(channelList)
+			channelList[1].addContextListener((data) => {
+				log('listening to context on ' + channelList[1].id)
+				log(data)
+			})
 		} catch (err) {
 			error(err)
 		}
