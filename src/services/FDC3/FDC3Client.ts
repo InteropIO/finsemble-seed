@@ -14,8 +14,11 @@ class FDC3Client {
 	#desktopAgentsByChannel: { [key: string]: DesktopAgent } = {};
 	#updateDesktopAgents: (initialRun?: boolean) => Promise<void>;
 	#wait: (time: number) => Promise<unknown>;
+	FSBL: any;
 
-	constructor() {
+	constructor(Finsemble: typeof FSBL) {
+		this.FSBL = Finsemble
+
 		const createGlobalAgent = async () => {
 			win.fdc3 = await this.getOrCreateDesktopAgent("global");
 		}
@@ -29,15 +32,15 @@ class FDC3Client {
 		// create desktopAgents for all current Linker Channels
 		this.#updateDesktopAgents = async (initialRun: boolean = false) => {
 			const desktopAgentChannels = Object.keys(this.#desktopAgentsByChannel);
-			const linkerState = FSBL.Clients.LinkerClient.getState();
+			const linkerState = this.FSBL.Clients.LinkerClient.getState();
 			const validLinkerChannels = linkerState.channels.map((channel: any) => channel.name);
 
 			// work around workspace linker bug
 			if (initialRun) {
-				const linkerChannels = Object.keys(FSBL.Clients.LinkerClient.channels);
+				const linkerChannels = Object.keys(this.FSBL.Clients.LinkerClient.channels);
 				const channelsToRemove = linkerChannels.filter(channel => !validLinkerChannels.includes(channel));
 				for (const channel of channelsToRemove) {
-					FSBL.Clients.LinkerClient.unlinkFromChannel(channel, finsembleWindow.identifier);
+					this.FSBL.Clients.LinkerClient.unlinkFromChannel(channel, this.FSBL.Clients.WindowClient.getWindowIdentifier());
 				}
 				this.#wait(100);
 				for (const channel of linkerChannels) {
@@ -61,7 +64,7 @@ class FDC3Client {
 
 		this.#updateDesktopAgents(true);
 
-		FSBL.Clients.LinkerClient.linkerStore.addListener({}, async () => { await this.#updateDesktopAgents() });
+		this.FSBL.Clients.LinkerClient.linkerStore.addListener({}, async () => { await this.#updateDesktopAgents() });
 	}
 
 	/**
@@ -73,7 +76,7 @@ class FDC3Client {
 			return this.#desktopAgentsByChannel[channel];
 		}
 		// If a desktop agent does not exist, create one
-		const desktopAgent = new DesktopAgent();
+		const desktopAgent = new DesktopAgent(this.FSBL);
 		await desktopAgent.joinChannel(channel);
 		this.#desktopAgentsByChannel[channel] = desktopAgent;
 		this.desktopAgents.push(desktopAgent);
@@ -117,7 +120,7 @@ class FDC3Client {
 	 * Ability to get system channels without having to create a desktop agent.
 	 */
 	async getSystemChannels() {
-		const { err, response } = await FSBL.Clients.RouterClient.query("FDC3.DesktopAgent.getSystemChannels", null, () => { });
+		const { err, response } = await this.FSBL.Clients.RouterClient.query("FDC3.DesktopAgent.getSystemChannels", null, () => { });
 		if (err) {
 			throw err;
 		}
@@ -134,7 +137,7 @@ class FDC3Client {
 console.log("FDC3Client");
 const setupFDC3Client = () => {
 	console.log("FSBL Ready");
-	(FSBL as any).Clients.FDC3Client = new FDC3Client();
+	(FSBL as any).Clients.FDC3Client = new FDC3Client(FSBL);
 };
 
 // Startup pattern for preload. Preloads can come in any order, so we need to wait on either the window event or the
@@ -144,3 +147,5 @@ if ((window as any).FSBL && (FSBL as any).addEventListener) {
 } else {
 	window.addEventListener("FSBLReady", setupFDC3Client);
 }
+
+export default FDC3Client;

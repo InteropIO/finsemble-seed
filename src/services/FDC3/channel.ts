@@ -29,7 +29,7 @@ export default class C implements Channel {
 			this.FSBL.Clients.RouterClient.transmit(`FDC3.broadcast.${(context as any).type}`, context);
 
 			// Broadcast to listeners listening to everything on a channel
-			FSBL.Clients.RouterClient.transmit(`FDC3.broadcast`, context);
+			this.FSBL.Clients.RouterClient.transmit(`FDC3.broadcast`, context);
 		} else {
 			// Broadcast to listeners that are listening on specific contexts
 			this.FSBL.Clients.LinkerClient.publish({

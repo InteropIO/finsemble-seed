@@ -1,16 +1,6 @@
 {
 	"comment": "Top-level application config for development, adding on top of the core config",
 	"accessibleLinker": true,
-	"services": {
-		"FDC3": {
-            "useWindow": true,
-            "active": true,
-            "name": "FDC3",
-			"file": "$applicationRoot/services/FDC3/FDC3Service.js",
-            "visible": false,
-            "html": "$applicationRoot/services/FDC3/FDC3.html"
-        }
-    },
 	"servicesConfig": {
 		"distributedStore": {
 			"initialStores": [
@@ -18,7 +8,10 @@
 					"name": "Finsemble-AppLauncher-Store",
 					"foundation": {
 						"appFolders": {
-							"list": ["Advanced App Launcher", "Favorites"],
+							"list": [
+								"Advanced App Launcher",
+								"Favorites"
+							],
 							"folders": {
 								"Advanced App Launcher": {
 									"icon": "ff-component",
@@ -94,7 +87,11 @@
 			}
 		},
 		"logger": {
-			"hotkeyShowCentralLogger": ["ctrl", "shift", "L"]
+			"hotkeyShowCentralLogger": [
+				"ctrl",
+				"shift",
+				"L"
+			]
 		},
 		"storage": {
 			"defaultStorage": "IndexedDBAdapter",
