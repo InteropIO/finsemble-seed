@@ -7,7 +7,7 @@ export default class C implements Channel {
         this.id = params.id;
         this.type = params.type;
         this.displayMetadata = params.displayMetadata;
-        this.FSBL = params.FSBL
+        this.FSBL = window.FSBL || params.FSBL
     }
 
     broadcast(context: object): void {
@@ -51,7 +51,7 @@ export default class C implements Channel {
                 }
             }
         }
-        this.FSBL.Clients.LinkerClient.linkToChannel(this.id, finsembleWindow.identifier);
+        this.FSBL.Clients.LinkerClient.linkToChannel(this.id, this.FSBL.Clients.WindowClient.getWindowIdentifier());
         if (typeof contextTypeOrHandler === "string") { // context type specified
             this.FSBL.Clients.LinkerClient.subscribe(`FDC3.broadcast.${contextTypeOrHandler}`, handler);
             return {

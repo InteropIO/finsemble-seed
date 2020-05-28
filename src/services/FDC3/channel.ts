@@ -11,13 +11,18 @@ export default class C implements Channel {
 	displayMetadata?: DisplayMetadata;
 	private contexts: { [contextType: string]: Context } = {};
 	private currentContext: Context;
-	private FSBL: any;
+	#FSBL: any;
+	RouterClient: any;
+	LinkerClient: any;
 
 	constructor(params: Params) {
 		this.id = params.id;
 		this.type = params.type;
 		this.displayMetadata = params.displayMetadata;
-		this.FSBL = params.FSBL;
+		this.#FSBL = window.FSBL || params.FSBL;
+		const { RouterClient, LinkerClient } = this.#FSBL.Clients
+		this.RouterClient = RouterClient;
+		this.LinkerClient = LinkerClient;
 	}
 
 	broadcast(context: Context): void {
@@ -26,20 +31,20 @@ export default class C implements Channel {
 
 		if (this.id === "global") {
 			// Broadcast to listeners that are listening on specific contexts
-			this.FSBL.Clients.RouterClient.transmit(`FDC3.broadcast.${(context as any).type}`, context);
+			this.RouterClient.transmit(`FDC3.broadcast.${(context as any).type}`, context);
 
 			// Broadcast to listeners listening to everything on a channel
-			this.FSBL.Clients.RouterClient.transmit(`FDC3.broadcast`, context);
+			this.RouterClient.transmit(`FDC3.broadcast`, context);
 		} else {
 			// Broadcast to listeners that are listening on specific contexts
-			this.FSBL.Clients.LinkerClient.publish({
+			this.LinkerClient.publish({
 				dataType: `FDC3.broadcast.${(context as any).type}`,
 				data: context,
 				channels: [this.id],
 			}, () => { });
 
 			// Broadcast to listeners listening to everything on a channel
-			this.FSBL.Clients.LinkerClient.publish({
+			this.LinkerClient.publish({
 				dataType: `FDC3.broadcast`,
 				data: context,
 				channels: [this.id],
