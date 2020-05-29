@@ -24,12 +24,13 @@ export default class FoldersList extends React.Component {
 		}
 		// Reference to ontainer element of folder list
 		this.listDiv = React.createRef();
-		this.renameFolder = this.renameFolder.bind(this)
-		this.changeFolderName = this.changeFolderName.bind(this)
-		this.onFoldersListUpdate = this.onFoldersListUpdate.bind(this)
-		this.keyPressed = this.keyPressed.bind(this)
-		this.deleteFolder = this.deleteFolder.bind(this)
-		this.onFocusRemove = this.onFocusRemove.bind(this)
+		this.renameFolder = this.renameFolder.bind(this);
+		this.changeFolderName = this.changeFolderName.bind(this);
+		this.cancelEdit = this.cancelEdit.bind(this);
+		this.onFoldersListUpdate = this.onFoldersListUpdate.bind(this);
+		this.keyPressed = this.keyPressed.bind(this);
+		this.deleteFolder = this.deleteFolder.bind(this);
+		this.onFocusRemove = this.onFocusRemove.bind(this);
 		this.onDragEnd = this.onDragEnd.bind(this);
 		this.onMouseMove = this.onMouseMove.bind(this);
 		this.animateErrorInput = this.animateErrorInput.bind(this);
@@ -41,14 +42,22 @@ export default class FoldersList extends React.Component {
 	}
 
 	animateErrorInput() {
-		if  (this.errorInput) {
-			console.log('error input: ', this.errorInput);
+		if  (this.errorInput.current) {
 			this.errorInput.current.classList.remove('error');
 			const flickerInput = setTimeout(() => {
 				this.errorInput.current.classList.add('error');
 				clearTimeout(flickerInput);
 			}, 500);
 		}
+	}
+	
+	cancelEdit() {
+		console.log('canceling edit');
+		this.setState({
+			renamingFolder: null,
+			isNameError: false,
+			folderNameInput: ''
+		});
 	}
 
 	/**
@@ -117,7 +126,7 @@ export default class FoldersList extends React.Component {
 
 		// We don't want to hide the input if user clicked on it
 		// We only hide when the click is anywhere else in the document
-		if (event.target.id === 'rename') {
+		if (event.target.id === 'rename' || event.target.id === 'cancel-edit') {
 			return
 		}
 		// If focus removed and nothing was type, then just hide
@@ -234,21 +243,41 @@ export default class FoldersList extends React.Component {
 			className += ' folder-with-icon'
 		}
 
-		const EDITABLE_FOLDER_ICON_CLASS = 'ff-adp-hamburger'
+		const canDelete = folder.canDelete;
+		const canEdit = folder.canEdit;
+
+		let isEditing = false;
 
 		let nameField;
-		if (folder.icon === EDITABLE_FOLDER_ICON_CLASS && this.state.renamingFolder === folderName) {
+		if (this.state.renamingFolder === folderName && canEdit) {
 			nameField = <input id="rename" value={this.state.folderNameInput}
 			onChange={this.changeFolderName}
 			onKeyPress={this.keyPressed} className={this.state.isNameError ? "error" : ""} autoFocus ref={this.state.isNameError ? this.errorInput : null} />;
+			isEditing = true;
 		} else if (folderName === "Advanced App Launcher") {
 			nameField = "App Launcher"
 		} else {
 			nameField = folderName;
 		}
 
-		const canDelete = folder.canDelete;
-		const canEdit = folder.canEdit;
+		let buttons = null;
+		if (canEdit || canDelete) {
+			if (isEditing) {
+				buttons = (
+					<span className='folder-action-icons'>
+						{canDelete && <i id='confirm-edit' className='ff-check-mark-2' title='Accept Rename' onClick={this.renameFolder.bind(this, folderName)}></i>}
+						{canEdit && <i id='cancel-edit' className='ff-close' title='Cancel' onClick={this.cancelEdit}></i>}
+					</span>
+				);
+			} else {
+				buttons = (
+					<span className='folder-action-icons'>
+						{canEdit && <i className='ff-adp-edit' title='Rename' onClick={this.renameFolder.bind(this, folderName)}></i>}
+						{canDelete && <i className='ff-adp-trash-outline' title='Delete Folder' onClick={this.deleteFolder.bind(this, folderName)}></i>}
+					</span>
+				);
+			}
+		}
 
 		//This DOM will be rendered within a draggable (if the folder can be dragged), and a plain ol div if it cannot be dragged.
 		return (
@@ -259,12 +288,7 @@ export default class FoldersList extends React.Component {
 					{folder.icon && <i className={folder.icon}></i>}
 					<div className="folder-name">{nameField}</div>
 				</div>
-
-				{(canEdit || canDelete) && 
-				<span className='folder-action-icons'>
-					{canEdit && <i className='ff-adp-edit' title='Rename' onClick={this.renameFolder.bind(this, folderName)}></i>}
-					{canDelete && <i className='ff-adp-trash-outline' title='Delete Folder' onClick={this.deleteFolder.bind(this, folderName)}></i>}
-				</span>}
+				{buttons}
 			</div>);
 	}
 	/**
@@ -286,23 +310,6 @@ export default class FoldersList extends React.Component {
 	renderOrderableFolders() {
 		const folders = storeActions.getFolders()
 		let orderableFolders = this.state.foldersList.filter(folderName => !dragDisabled.includes(folderName));
-
-		
-		//Sort folders by order
-		orderableFolders = orderableFolders.sort((name1, name2) => {
-			const folder1 = folders[name1];
-			const folder2 = folders[name2];
-			if (folder1.order && folder2.order) {
-				if (folder1.order > folder2.order) {
-					return 1;
-				} else if (folder1.order < folder2.order) {
-					return -1;
-				}
-			} 
-
-			return 0;
-		});
-		
 		return orderableFolders.map((folderName, index) => {
 			const folder = folders[folderName]
 			return (<FinsembleDraggable

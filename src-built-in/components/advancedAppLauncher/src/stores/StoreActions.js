@@ -66,19 +66,40 @@ function initialize(callback = Function.prototype) {
 		const store = getStore();
 
 		// 'deleted' is a list of folder names/app ids which have been deleted by a user. Finsemble's state
-		// keeps track of these so if the  foundation attempts to re-seed them, they will be excluded
+		// keeps track of these so if the foundation attempts to re-seed them, they will be excluded
 		// from what is shown to the user
 
 		// 'deleted' can also be empty, which means the user is not preserving previous state and instead 
 		// re-seeds the store everytime the distributed store service starts up
 		data.deleted = store.values.deleted || [];
+		data.folders = store.values.appFolders.folders;
 		let folderList, appList = {};
 
 		if (data.deleted.length > 0) {
 			//The folder list will be the folder seeded into the store filtered by any folders
 			//deleted in previous runs
-			folderList = Object.keys(store.values.appFolders.folders).filter(folderName => {
+			folderList = Object.keys(data.folders).filter(folderName => {
 				return !data.deleted.includes(folderName);
+			}).sort((name1, name2) => {
+				// Order in folder nav is determined by the order of the folder names in
+				// the folderList. Sorting them now by the folder object's "order" prop
+				// in appFolders.folders
+
+				const folder1 = data.folders[name1];
+				const folder2 = data.folders[name2];
+
+				if (folder1.order && folder2.order) {
+					const order1 = folder1.order;
+					const order2 = folder2.order;
+
+					if (order1 > order2) {
+						return 1;
+					} else if (order1 < order2) {
+						return -1;
+					}
+				}
+				
+				return 0;
 			});
 
 			//The app list will be the folder seeded into the store filtered by any folders
@@ -94,7 +115,6 @@ function initialize(callback = Function.prototype) {
 			_setValue("appDefinitions", appList);
 		}
 
-		data.folders = store.values.appFolders.folders;
 		data.foldersList = folderList || Object.keys(store.values.appFolders.folders);
 		data.apps = Object.keys(appList).length > 0 ? appList : store.values.appDefinitions;
 		data.tags = store.values.activeLauncherTags;
@@ -395,7 +415,6 @@ function getSingleFolder(folderName) {
 }
 
 function reorderFolders(destIndex, srcIndex) {
-	console.log('destIndex: ', destIndex);
 	//There are two types of folders: Those that can be arranged, and those that cannot. We don't want to reorder the folders relative to the unorderable folders. Split them out, and then combine them after doing the filtering/swapping.
 	const dragDisabled = getDragDisabled();
 	const unorderableFolders = data.foldersList.filter(folderName => dragDisabled.includes(folderName));
@@ -415,8 +434,8 @@ function reorderFolders(destIndex, srcIndex) {
 		}
 	});
 
-	_setValue("appFolders.folders", data.folders);
 	_setValue("appFolders.list", data.foldersList);
+	_setValue("appFolders.folders", data.folders);
 	return data.foldersList;
 }
 
@@ -525,7 +544,15 @@ function deleteFolder(folderName) {
 		// Update the order of folders
 		const index = data.foldersList.indexOf(folderName);
 		data.foldersList.splice(index, 1);
+
+		data.foldersList.map((folderName, i) => {
+			if (data.folders[folderName].order) {
+				data.folders[folderName].order = i;
+			}
+		});
+
 		_setValue("appFolders.list", data.foldersList);
+		_setValue("appFolders.folders", data.folders);
 		_setValue("deleted", deletedFolders);
 	});
 }
