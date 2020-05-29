@@ -90,7 +90,7 @@ class testFDC3Service extends Finsemble.baseService {
 		log("hit FDC3Setup")
 		log(Finsemble.Clients.WindowClient.getWindowIdentifier())
 		try {
-			this.FDC3DesktopAgent = await new FDC3Client(Finsemble)
+			this.FDC3DesktopAgent = new FDC3Client(Finsemble)
 			this.FDC3 = await this.FDC3DesktopAgent.getOrCreateDesktopAgent('service')
 
 			const FDC3 = this.FDC3
