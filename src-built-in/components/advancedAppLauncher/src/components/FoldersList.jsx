@@ -185,7 +185,7 @@ export default class FoldersList extends React.Component {
 		if (oldName.trim() === newName.trim()) nameChanged = false;
 
 		// Names must be unique, folders cant share same names
-		if (folders[newName] && nameChanged) {
+		if (folders[newName]) {
 			let repeatedFolderIndex = 0;
 			do {
 				repeatedFolderIndex++;
