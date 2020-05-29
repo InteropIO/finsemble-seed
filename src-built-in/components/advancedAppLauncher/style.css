@@ -148,6 +148,7 @@ img {
     color: var(--appMenu-icon-color);
     display: flex;
     justify-content: space-between;
+    align-self: center;
     align-items: center;
     width: 45px;
 }
@@ -160,6 +161,22 @@ img {
     padding-top: 2px;
     padding-right: 4px;
     transition: .2s all;
+}
+
+.folder-action-icons .ff-check-mark-2 {
+    transition: .2s all;
+    color: var(--accent-positive);
+}
+
+.folder-action-icons .ff-close {
+    padding-top: 2px;
+    padding-right: 4px;
+    transition: .2s all;
+    color: var(--accent-negative);
+}
+
+.folder-action-icons .ff-close:hover {
+    color: var(--accent-negative-1);
 }
 
 .folder-action-icons .ff-adp-trash-outline:hover {
