@@ -57,7 +57,7 @@ window.open = function (theURL, name, specs, replace) {
 	var w;
 	FSBL.Clients.LauncherClient.spawn(null, params, (err, response) => {
 		if (err) {
-			console.error(`nativeOverrides.js window.open patch error: ${ err}`);
+			console.error(`nativeOverrides.js window.open patch error: ${err}`);
 		} else {
 			w = response.finWindow;
 		}

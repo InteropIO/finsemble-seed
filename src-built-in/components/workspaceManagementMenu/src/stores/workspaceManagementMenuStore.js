@@ -73,10 +73,7 @@ Actions = {
 		});
 
 		//Get the activeWorkspace and set the value. I could have iterated through the workspaces above and found the active one, but this seems simpler.
-		FSBL.Clients.WorkspaceClient.getActiveWorkspace((
-			err,
-			activeWorkspace
-		) => {
+		FSBL.Clients.WorkspaceClient.getActiveWorkspace((err, activeWorkspace) => {
 			Logger.system.debug(
 				"WorkspaceManagementStore init getActiveWorkspace",
 				activeWorkspace
@@ -290,10 +287,7 @@ Actions = {
 
 		let dialogParams = {
 			title: "Delete this workspace?",
-			question:
-				`Are you sure you want to delete the workspace "${ 
-				workspaceName 
-				}"?`,
+			question: `Are you sure you want to delete the workspace "${workspaceName}"?`,
 			showNegativeButton: false,
 			affirmativeResponseLabel: "Delete",
 			hideModalOnClose: data.hideModalOnClose,
@@ -460,7 +454,7 @@ Actions = {
 
 		Actions.setIsSwitchingWorkspaces(true);
 		Actions.blurWindow();
-		let {name} = data;
+		let { name } = data;
 		let activeWorkspace = WorkspaceManagementStore.getValue("activeWorkspace");
 		/**
 		 * Actually perform the switch. Happens after we ask the user what they want.
@@ -723,10 +717,7 @@ Actions = {
 		let { workspaceExists, workspaceName } = params;
 		let dialogParams = {
 			title: "Overwrite Workspace?",
-			question:
-				`This will overwrite the saved data for  "${ 
-				workspaceName 
-				}". Would you like to proceed?`,
+			question: `This will overwrite the saved data for  "${workspaceName}". Would you like to proceed?`,
 			affirmativeResponseLabel: "Overwrite",
 			showNegativeButton: false,
 		};
@@ -748,10 +739,7 @@ Actions = {
 
 		let dialogParams = {
 			title: "New Workspace",
-			question:
-				`The workspace "${ 
-				workspaceName 
-				}" already exists. A new workspace with a modified name will be created.`,
+			question: `The workspace "${workspaceName}" already exists. A new workspace with a modified name will be created.`,
 			affirmativeResponseLabel: "OK",
 			showNegativeButton: false,
 		};
@@ -804,7 +792,7 @@ Actions = {
 	 * Unpins the workspace from the toolbars.
 	 */
 	removePin: function (name) {
-		ToolbarStore.removeValue({ field: `pins.${ name}` });
+		ToolbarStore.removeValue({ field: `pins.${name}` });
 	},
 	/**
 	 * If the workspace is pinned, it unpins the workspace. Otherwise, we pin it to the toolbar.
@@ -822,10 +810,10 @@ Actions = {
 		let wasAlreadyPinned = Actions.isPinned(workspace.name);
 
 		if (wasAlreadyPinned) {
-			ToolbarStore.removeValue({ field: `pins.${ workspaceName}` });
+			ToolbarStore.removeValue({ field: `pins.${workspaceName}` });
 		} else {
 			FSBL.Clients.Logger.perf.log("TogglePin");
-			ToolbarStore.setValue({ field: `pins.${ workspaceName}`, value: thePin });
+			ToolbarStore.setValue({ field: `pins.${workspaceName}`, value: thePin });
 		}
 	},
 	/**

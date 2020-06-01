@@ -9,7 +9,7 @@
  * We have a baseStorage model that provides some methods, such as `getCombinedKey`, which will return a nice key to save our value under. Example: `Finsemble:defaultUser:finsemble:activeWorkspace`. That key would hold the value of our activeWorkspace.
  */
 const BaseStorage = require("@chartiq/finsemble").models.baseStorage;
-const {Logger} = require("@chartiq/finsemble").Clients;
+const { Logger } = require("@chartiq/finsemble").Clients;
 
 // Because calls to this storage adapter will likely come from many different windows, we will log successes and
 // failures in the central logger.
@@ -193,9 +193,9 @@ const IndexedDBAdapter = function (uuid) {
 		const userPreface = this.getUserPreface(this);
 
 		Logger.system.log(
-			`IndexedDBAdapter.clearCache for userPreface=${ userPreface}`
+			`IndexedDBAdapter.clearCache for userPreface=${userPreface}`
 		);
-		console.log(`IndexedDBAdapter.clearCache for userPreface=${ userPreface}`);
+		console.log(`IndexedDBAdapter.clearCache for userPreface=${userPreface}`);
 
 		const keyRange = IDBKeyRange.forPrefix(userPreface);
 		const objectStore = this.db
@@ -205,10 +205,10 @@ const IndexedDBAdapter = function (uuid) {
 
 		request.onsuccess = () => {
 			Logger.system.log(
-				`IndexedDBAdapter.clearCache Success: userPreface=${ userPreface}`
+				`IndexedDBAdapter.clearCache Success: userPreface=${userPreface}`
 			);
 			console.log(
-				`IndexedDBAdapter.clearCache Success: userPreface=${ userPreface}`
+				`IndexedDBAdapter.clearCache Success: userPreface=${userPreface}`
 			);
 
 			cb(null, { status: "success" });
@@ -218,12 +218,12 @@ const IndexedDBAdapter = function (uuid) {
 			Logger.system.error(
 				"IndexedDBAdapter.clearCache failed Error",
 				err,
-				`userPreface=${ userPreface}`
+				`userPreface=${userPreface}`
 			);
 			console.error(
 				"IndexedDBAdapter.clearCache failed Error",
 				err,
-				`userPreface=${ userPreface}`
+				`userPreface=${userPreface}`
 			);
 
 			cb(err, { status: "failed" });
@@ -248,8 +248,8 @@ const IndexedDBAdapter = function (uuid) {
 
 		const combinedKey = this.getCombinedKey(this, params);
 
-		Logger.system.debug(`IndexedDBAdapter.delete for key=${ combinedKey}`);
-		console.debug(`IndexedDBAdapter.delete for key=${ combinedKey}`);
+		Logger.system.debug(`IndexedDBAdapter.delete for key=${combinedKey}`);
+		console.debug(`IndexedDBAdapter.delete for key=${combinedKey}`);
 
 		const objectStore = this.db
 			.transaction(["fsbl"], "readwrite")
@@ -258,22 +258,19 @@ const IndexedDBAdapter = function (uuid) {
 
 		request.onsuccess = () => {
 			Logger.system.debug(
-				`IndexedDBAdapter.delete key=${ combinedKey }, Success`
+				`IndexedDBAdapter.delete key=${combinedKey}, Success`
 			);
-			console.debug(`IndexedDBAdapter.delete key=${ combinedKey }, Success`);
+			console.debug(`IndexedDBAdapter.delete key=${combinedKey}, Success`);
 
 			cb(null, { status: "success" });
 		};
 
 		request.onerror = (err) => {
 			Logger.system.error(
-				`IndexedDBAdapter.delete key=${ combinedKey }, Error`,
+				`IndexedDBAdapter.delete key=${combinedKey}, Error`,
 				err
 			);
-			console.error(
-				`IndexedDBAdapter.delete key=${ combinedKey }, Error`,
-				err
-			);
+			console.error(`IndexedDBAdapter.delete key=${combinedKey}, Error`, err);
 
 			cb(err, { status: "failed" });
 		};
@@ -344,23 +341,20 @@ const IndexedDBAdapter = function (uuid) {
 			if (event.target.result) data = event.target.result.value;
 
 			Logger.system.debug(
-				`IndexedDBAdapter.get for key=${ combinedKey } data=`,
+				`IndexedDBAdapter.get for key=${combinedKey} data=`,
 				data
 			);
-			console.debug(
-				`IndexedDBAdapter.get for key=${ combinedKey } data=`,
-				data
-			);
+			console.debug(`IndexedDBAdapter.get for key=${combinedKey} data=`, data);
 
 			cb(null, data);
 		};
 
 		request.onerror = (err) => {
 			Logger.system.error(
-				`IndexedDBAdapter.get key=${ combinedKey }, Error`,
+				`IndexedDBAdapter.get key=${combinedKey}, Error`,
 				err
 			);
-			console.error(`IndexedDBAdapter.get key=${ combinedKey }, Error`, err);
+			console.error(`IndexedDBAdapter.get key=${combinedKey}, Error`, err);
 
 			cb(err, { status: "failed" });
 		};
@@ -408,15 +402,11 @@ const IndexedDBAdapter = function (uuid) {
 
 		request.onerror = (err) => {
 			Logger.system.error(
-				`Failed to retrieve IndexedDBAdapter.keys keyPreface=${ 
-					keyPreface 
-					}, Error`,
+				`Failed to retrieve IndexedDBAdapter.keys keyPreface=${keyPreface}, Error`,
 				err
 			);
 			console.error(
-				`Failed to retrieve IndexedDBAdapter.keys keyPreface=${ 
-					keyPreface 
-					}, Error`,
+				`Failed to retrieve IndexedDBAdapter.keys keyPreface=${keyPreface}, Error`,
 				err
 			);
 

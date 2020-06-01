@@ -148,7 +148,7 @@ function createCopyWebpackConfig() {
 	for (let name in folders) {
 		config.push({
 			from: folders[name],
-			to: `./components/${ name}`,
+			to: `./components/${name}`,
 			ignore: ["node_modules/**/*", "**/*/node_modules/**/*"],
 		});
 	}

@@ -124,7 +124,7 @@ const runWebpackAndCallback = (configPath, watch, bundleName, callback) => {
 			//first run, add nice timer.
 			if (callback) {
 				let end = process.hrtime(startTime);
-				msg = `${msg } after ${chalk.magenta(prettyHrtime(end))}`;
+				msg = `${msg} after ${chalk.magenta(prettyHrtime(end))}`;
 			}
 			logToTerminal(msg, "cyan");
 		} else {
@@ -160,8 +160,8 @@ const envOrArg = (name, defaultValue) => {
 	if (env[uc]) return env[uc];
 
 	// Check command line arguments
-	lc = `--${ lc }:`;
-	uc = `--${ uc }:`;
+	lc = `--${lc}:`;
+	uc = `--${uc}:`;
 	let rc = null;
 	process.argv.forEach((arg) => {
 		if (arg.startsWith(lc)) rc = arg.split(lc)[1];
