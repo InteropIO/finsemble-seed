@@ -168,6 +168,7 @@ export default class FoldersList extends React.Component {
 		const input = this.state.folderNameInput.trim()
 		const oldName = this.state.renamingFolder;
 		let newName = input;
+
 		// Check user input to make sure its at least 1 character
 		// made of string, number or both
 		if (!/^([a-zA-Z0-9\s]{1,})$/.test(input)) {
@@ -177,6 +178,12 @@ export default class FoldersList extends React.Component {
 				isNameError: true
 			});
 		}
+
+		// Check if the submission is the same text as the old name.
+		// If false, renaming will be skipped
+		let nameChanged = true;
+		if (oldName.trim() === newName.trim()) nameChanged = false;
+
 		// Names must be unique, folders cant share same names
 		if (folders[newName]) {
 			let repeatedFolderIndex = 0;
@@ -191,7 +198,9 @@ export default class FoldersList extends React.Component {
 			renamingFolder: null,
 			isNameError: false
 		}, () => {
-			storeActions.renameFolder(oldName, newName)
+			if (nameChanged) {
+				storeActions.renameFolder(oldName, newName)
+			}
 			// No need for the click listener any more
 			this.removeClickListener()
 		})
