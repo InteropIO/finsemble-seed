@@ -12,7 +12,7 @@
 	},
 	"include": [
 		"src/**/*",
-		"src-built-in/**/*",
+		"src-built-in/**/*.ts",
 		"./finsemble/types/**/*"
 	],
 	"exclude": [

@@ -1,10 +1,19 @@
 body {
-	margin:0px;
+	margin: 0px;
 	background-color: #1d1d1d;
 	color: #d2d2d2;
 }
 
-#FDC3Tester-component-wrapper{
+#FDC3Tester-component-wrapper {
 	padding: 10px;
 	font-family: roboto;
+}
+
+form {
+	position: relative;
+	width: 740px;
+	height: 498px;
+	padding: 1em;
+	box-sizing: border-box;
+	display: grid;
 }
