@@ -2,12 +2,12 @@ interface Params {
 	id: string;
 	type: string;
 	displayMetadata: {};
-	FSBL: any;
+	FSBL: typeof FSBL;
 }
 
 declare global {
 	interface Window {
-		FSBL: any
+		FSBL: typeof FSBL
 	}
 }
 
@@ -19,7 +19,7 @@ export default class C implements Channel {
 	displayMetadata?: DisplayMetadata;
 	private contexts: { [contextType: string]: Context } = {};
 	private currentContext: Context;
-	#FSBL: any;
+	#FSBL: typeof FSBL;
 
 	constructor(params: Params) {
 		this.id = params.id;
