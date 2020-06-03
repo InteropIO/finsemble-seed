@@ -1,6 +1,6 @@
 declare global {
 	interface Window {
-		FSBL: any
+		FSBL: typeof FSBL
 	}
 }
 

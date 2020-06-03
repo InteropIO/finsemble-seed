@@ -1,7 +1,9 @@
 import _get from 'lodash.get';
+import { findIndex } from 'lodash';
 import { getStore } from "./LauncherStore";
 import AppDirectory from "../modules/AppDirectory";
 import FDC3 from "../modules/FDC3";
+import { findAppIndexInFolder } from '../utils/helpers';
 const async = require("async");
 let FDC3Client;
 let appd;
@@ -19,6 +21,7 @@ export default {
 	deleteApp,
 	deleteTag,
 	reorderFolders,
+	getDeleted,
 	getFolders,
 	getFoldersList,
 	getActiveFolderName,
@@ -61,9 +64,39 @@ function initialize(callback = Function.prototype) {
 		// cache value globally to be used in the event that we need to fetch data for a given component.
 		appDEndpoint = appDirectoryEndpoint;
 		const store = getStore();
+
+		// 'deleted' is a list of folder names/app ids which have been deleted by a user. Finsemble's state
+		// keeps track of these so if the  foundation attempts to re-seed them, they will be excluded
+		// from what is shown to the user
+
+		// 'deleted' can also be empty, which means the user is not preserving previous state and instead 
+		// re-seeds the store everytime the distributed store service starts up
+		data.deleted = store.values.deleted || [];
+		let folderList, appList = {};
+
+		if (data.deleted.length > 0) {
+			//The folder list will be the folder seeded into the store filtered by any folders
+			//deleted in previous runs
+			folderList = Object.keys(store.values.appFolders.folders).filter(folderName => {
+				return !data.deleted.includes(folderName);
+			});
+
+			//The app list will be the folder seeded into the store filtered by any folders
+			//deleted in previous runs
+			Object.keys(store.values.appDefinitions).map(appID => {
+				const app = store.values.appDefinitions[appID];
+				if (!data.deleted.includes(app.appID)) {
+					appList[appID] = store.values.appDefinitions[appID];
+				}
+			});
+
+			_setValue("appFolders.list", folderList);
+			_setValue("appDefinitions", appList);
+		}
+
 		data.folders = store.values.appFolders.folders;
-		data.foldersList = store.values.appFolders.list;
-		data.apps = store.values.appDefinitions;
+		data.foldersList = folderList || Object.keys(store.values.appFolders.folders);
+		data.apps = Object.keys(appList).length > 0 ? appList : store.values.appDefinitions;
 		data.tags = store.values.activeLauncherTags;
 		data.activeFolder = store.values.activeFolder;
 		data.filterText = store.values.filterText;
@@ -79,6 +112,8 @@ function initialize(callback = Function.prototype) {
 		store.addListener({ field: "isFormVisible" }, (err, dt) => data.isFormVisible = dt.value);
 		store.addListener({ field: "sortBy" }, (err, dt) => data.sortBy = dt.value);
 		store.addListener({ field: "activeLauncherTags" }, (err, dt) => data.tags = dt.value);
+		store.addListener({ field: "deleted" }, (err, dt) => data.deleted = dt.value);
+
 		getToolbarStore((err, response) => {
 			FSBL.Clients.RouterClient.subscribe("Finsemble.Service.State.launcherService", (err, response) => {
 				loadInstalledComponentsFromStore(() => {
@@ -92,6 +127,14 @@ function initialize(callback = Function.prototype) {
 		});
 	});
 }
+
+// Deleted contains a list of strings (folder names or appIDs)
+// of folders/apps that have been deleted and should not be returned
+// even if re-seeded by the foundation
+function getDeleted() {
+	return data.deleted;
+}
+
 //This gets a specific app in FDC3 and returns the results
 function getApp(appID, cb = Function.prototype) {
 	appd.get(appID).then(app => cb(null, app)).catch(err => cb(err));
@@ -110,8 +153,15 @@ function updateAppsInFolders(cb = Function.prototype) {
 		else {
 			const folder = data.folders[folderName];
 			Object.values(data.configComponents).map(configComp => {
-				if (Object.keys(folder.apps).includes(configComp.appID)) {
-					data.folders[folderName].apps[configComp.appID] = configComp;
+				let index = -1;
+				folder.apps.map((folderApp, i) => {
+					if (folderApp.appID.trim() === configComp.appID.trim()) {
+						index = i;
+					}
+				});
+
+				if (index > -1) {
+					data.folders[folderName].apps.splice(index, 1, configComp);
 				}
 			});
 		}
@@ -193,14 +243,15 @@ function loadInstalledConfigComponents(cb = Function.prototype) {
 		// Get the user defined apps
 		const apps = Object.keys(data.apps);
 		Object.keys(folders).forEach(folderName => {
-			const appsName = Object.keys(folders[folderName]["apps"]);
-			appsName.forEach(appName => {
+			folders[folderName].apps.map((configDefinedApp, i) => {
+				const name = configDefinedApp.name;
+				const appID = configDefinedApp.appID;
 				// If the component is not in the config component list and is not a user defined component
-				if (!componentNameList.includes(appName) && !apps.includes(folders[folderName]["apps"][appName]["appID"].toString())) {
+				if (!componentNameList.includes(name) && !apps.includes(appID)) {
 					// Delete app from the folder
-					delete folders[folderName]["apps"][appName];
+					folders[folderName].apps.splice(i, 1);
 				}
-			})
+			});
 		});
 		
 		componentNameList.map(componentName => {
@@ -238,29 +289,31 @@ function getToolbarStore(done) {
 	});
 }
 
-function _setFolders(cb = Function.prototype) {
-	getStore().setValue({
-		field: "appFolders.folders",
-		value: data.folders
-	}, (error, data) => {
-		if (error) {
-			console.log("Failed to save modified folder list.");
-		} else {
-			cb();
-		}
-	});
-}
-
-function _setValue(field, value, cb) {
+function _setValue(field, value, cb = Function.prototype) {
 	getStore().setValue({
 		field: field,
 		value: value
 	}, (error, data) => {
 		if (error) {
 			console.log("Failed to save. ", field);
+			FSBL.Clients.Logger.error(`Advanced App Launcher: Failed to save: ${field}:${value}`);
+			// TODO
+			// Should probably return with an error so the calling function knows to move on
+			// Don't want to deal with unforseen circumstances by doing that now
 		} else {
 			cb && cb();
 		}
+	});
+}
+
+function _setFolders(cb = Function.prototype) {
+	_setValue("appFolders.folders", data.folders, (err, data) => {
+		if (err) {
+			console.log("Failed to save modified folder list.");
+			return;
+		}
+
+		cb();
 	});
 }
 
@@ -381,8 +434,8 @@ function addApp(app = {}, cb) {
 		// we need to make sure it gets pinned to the toolbar
 		if (folder === FAVORITES) addPin({ name: app.name });
 		data.apps[appID] = newAppData;
-		data.folders[ADVANCED_APP_LAUNCHER].apps[appID] = newAppData;
-		data.folders[folder].apps[appID] = newAppData;
+		data.folders[ADVANCED_APP_LAUNCHER]["apps"].push(newAppData);
+		data.folders[folder]["apps"].push(newAppData);
 		// Save appDefinitions and then folders
 		_setValue("appDefinitions", data.apps, () => {
 			_setFolders();
@@ -401,16 +454,20 @@ function deleteApp(appID) {
 		}
 		// Delete app from any folder that has it
 		for (const key in data.folders) {
-			if (data.folders[key].apps[appID]) {
-				delete data.folders[key].apps[appID];
-			}
+			const appIndex = findAppIndexInFolder(appID, key);
+			data.folders[key].apps.splice(appIndex,  1);
 		}
+
+		const deleted = getDeleted();
+		deleted.push(appID);
+
 		// Delete app from the apps list
 		FSBL.Clients.LauncherClient.removeUserDefinedComponent(data.apps[appID], () => {
 			delete data.apps[appID];
 			// Save appDefinitions and then folders
 			_setValue("appDefinitions", data.apps, () => {
 				_setFolders();
+				_setValue("deleted", deleted);
 			});
 		});
 
@@ -431,7 +488,9 @@ function addNewFolder(name) {
 	const newFolder = {
 		disableUserRemove: true,
 		icon: "ff-adp-hamburger",
-		apps: {}
+		canEdit: true,
+		canDelete: true,
+		apps: []
 	};
 	data.folders[folderName] = newFolder;
 	_setFolders(() => {
@@ -449,38 +508,58 @@ function deleteFolder(folderName) {
 		_setValue("activeFolder", data.activeFolder);
 	}
 
+	const deletedFolders = data.deleted;
+	deletedFolders.push(folderName);
+
 	delete data.folders[folderName] && _setFolders(() => {
 		// Update the order of folders
 		const index = data.foldersList.indexOf(folderName);
 		data.foldersList.splice(index, 1);
 		_setValue("appFolders.list", data.foldersList);
+		_setValue("deleted", deletedFolders);
 	});
 }
 
 function renameFolder(oldName, newName) {
 	let oldFolder = data.folders[oldName];
 	data.folders[newName] = oldFolder;
+	delete data.folders[oldName];
 	_setFolders(() => {
 		let indexOfOld = data.foldersList.findIndex((folderName) => {
 			return folderName === oldName;
 		});
 		data.foldersList[indexOfOld] = newName;
+
+		// If the name the user is attempting to rename to is the name of an old deleted folder
+		// remove the key from deleted and allow rename
+		if (data.deleted.includes(newName)) {
+			const index = data.deleted.indexOf(newName);
+			const deletedFolders = data.deleted;
+			deletedFolders.splice(index, 1);
+			_setValue("deleted", deletedFolders);
+		}
+
 		_setValue("appFolders.list", data.foldersList);
 		delete data.folders[oldName];
 	});
 }
 
 function addAppToFolder(folderName, app) {
-	data.folders[folderName].apps[app.appID] = {
-		name: app.name,
-		displayName: app.displayName,
-		appID: app.appID
-	};
-	_setFolders();
+	const appIndex = findAppIndexInFolder(app.appID, folderName);
+
+	if (appIndex < 0) {
+		data.folders[folderName].apps.push({
+			name: app.name, 
+			displayName: app.displayName,
+			appID: app.appID
+		});
+		_setFolders();
+	}
 }
 
 function removeAppFromFolder(folderName, app) {
-	delete data.folders[folderName].apps[app.appID];
+	const appIndex = findAppIndexInFolder(app.appID, folderName);
+	data.folders[folderName].apps.splice(appIndex, 1);
 	_setFolders();
 }
 /**
@@ -493,7 +572,7 @@ function findAppByField(field, value) {
 
 function getActiveFolder() {
 	const folder = data.folders[data.activeFolder];
-	Object.values(folder.apps).map((app) => {
+	folder.apps.map((app) => {
 		const appData = findAppByField('appID', app.appID)
 		if (!appData) {
 			app.tags = [];
@@ -541,7 +620,7 @@ function addTag(tag) {
 	console.log("addTag", tag);
 	data.tags.indexOf(tag) < 0 && data.tags.push(tag);
 	// Update tags in store
-	getStore().setValue({ field: "activeLauncherTags", value: data.tags });
+	_setValue("activeLauncherTags", data.tags);
 }
 
 function deleteTag(tag) {
@@ -549,7 +628,7 @@ function deleteTag(tag) {
 	data.tags.splice(data.tags.indexOf(tag), 1);
 	// Update tags in store
 	console.log("deleteTag", data.tags);
-	getStore().setValue({ field: "activeLauncherTags", value: data.tags });
+	_setValue("activeLauncherTags", data.tags);
 }
 
 function uuidv4() {

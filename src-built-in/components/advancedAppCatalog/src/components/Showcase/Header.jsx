@@ -38,7 +38,7 @@ const Header = props => {
 				return;
 			}
 			// Otherwise launch application by name
-			FSBL.Clients.LauncherClient.spawn(name, {addToWorkspace:true}, (err, data) => {
+			FSBL.Clients.LauncherClient.spawn(props.name, {addToWorkspace:true}, (err, data) => {
 				pendingSpawn = false;
 			});
 		} else {
@@ -65,7 +65,7 @@ const Header = props => {
 					) : (
 							<span className="action-button-label">
 								Add
-						</span>
+							</span>
 						)}
 				</button>
 				{props.installed && <button className={props.entitled ? "action-button remove" : "action-button remove disabled"} disabled={!props.entitled} onClick={removeApp}>
