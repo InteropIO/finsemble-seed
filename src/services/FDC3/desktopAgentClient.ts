@@ -16,7 +16,7 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 	};
 	#strict: Boolean;
 	#FDC3Client: any;
-	#FSBL: any;
+	#FSBL: typeof FSBL;
 
 	constructor(strict: Boolean, FDC3Client: any, Finsemble?: typeof FSBL) {
 		super();
@@ -71,8 +71,10 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 		if (this.#currentChannel) {
 			if (typeof contextTypeOrHandler === "string") {
 				contextListener = this.#currentChannel.addContextListener(contextTypeOrHandler, handler);
+				if (context) handler(context);
 			} else {
 				contextListener = this.#currentChannel.addContextListener(contextTypeOrHandler);
+				if (context) contextTypeOrHandler(context);
 			}
 		}
 

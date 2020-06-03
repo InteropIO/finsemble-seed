@@ -4,7 +4,7 @@ import Channel from "./channelClient";
 declare global {
 	interface Window {
 		fdc3: DesktopAgent,
-		FSBL: any
+		FSBL: typeof FSBL
 	}
 }
 
@@ -18,7 +18,7 @@ class FDC3Client {
 	#wait: (time: number) => Promise<unknown> = (time: number) => {
 		return new Promise((resolve) => setTimeout(resolve, time));
 	}
-	#FSBL: any;
+	#FSBL: typeof FSBL;
 
 	constructor(Finsemble?: typeof FSBL) {
 		this.#FSBL = win.FSBL || Finsemble
