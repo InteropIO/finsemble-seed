@@ -45,7 +45,7 @@ class FDC3Client {
 			}
 
 			// Since the linkerClient doesn't really wait properly
-			this.#wait(100);
+			await this.#wait(50);
 
 			if (this.#strict) {
 				if (linkerChannels.length) {
@@ -61,9 +61,10 @@ class FDC3Client {
 			}
 
 			const updateAgents = async (err: any, response: any) => {
-				this.#log("FDC3Client: updateAgents");
+				this.#log("FDC3Client: updateAgents", err, response);
 				// We get here if the user linked to or unlinked from a channel
 				if (this.#strict) {
+					if (win.fdc3.isChannelChanging) return;
 					const currentChannel = await win.fdc3.getCurrentChannel();
 					let linkerChannels = Object.keys(this.#FSBL.Clients.LinkerClient.channels);
 

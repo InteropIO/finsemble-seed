@@ -181,6 +181,10 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 
 	async joinChannel(channelId: string) {
 		this.#log("DesktopAgentClient: joinChanel", channelId);
+
+		// don't do anything if you are trying to join the same channel
+		if (this.#currentChannel && this.#currentChannel.id === channelId) return;
+
 		if (!this.#strict) {
 			// Are we already on this channel?
 			const linkerChannels = Object.keys(this.#FSBL.Clients.LinkerClient.channels);
@@ -188,10 +192,6 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 				throw new Error("A Desktop Agent Already exists on this Channel");
 			}
 		}
-
-		// don't do anything if you are trying to join the same channel
-		if (this.#currentChannel && this.#currentChannel.id === channelId) return;
-
 
 		if (this.#channelChanging) {
 			throw new Error("Currently in process of changing channels. Rejecting this request. " + channelId);
@@ -202,7 +202,7 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 		if (this.#currentChannel) {
 			oldChannel = this.#currentChannel.id;
 			this.#channelChanging = true
-			await this.leaveCurrentChannel();
+			await this.leaveCurrentChannel(); 
 		}
 
 		// Join new channel
@@ -225,7 +225,7 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 
 		if (channelId !== "global") {
 			this.#FSBL.Clients.LinkerClient.linkToChannel(channel.id, this.#FSBL.Clients.WindowClient.getWindowIdentifier());
-			this.#wait(100);
+			await this.#wait(50);
 		}
 
 		if (this.#channelChanging) {
@@ -236,7 +236,7 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 	}
 
 	async getCurrentChannel() {
-		this.#log("DesktopAgentClient: getCurrentChannel");
+		this.#log("DesktopAgentClient: getCurrentChannel", this.#currentChannel);
 		if (this.#currentChannel) {
 			return this.#currentChannel;
 		} else {
@@ -245,7 +245,7 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 	}
 
 	async leaveCurrentChannel() {
-		this.#log("DesktopAgentClient: leaveCurrentChannel");
+		this.#log("DesktopAgentClient: leaveCurrentChannel", this.#currentChannel);
 		if (!this.#currentChannel) return;
 		const channelId = this.#currentChannel.id;
 		this.#currentChannel = null;
@@ -259,7 +259,7 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 
 		if (channelId !== "global") {
 			this.#FSBL.Clients.LinkerClient.unlinkFromChannel(channelId, this.#FSBL.Clients.WindowClient.getWindowIdentifier());
-			this.#wait(100);
+			await this.#wait(50);
 		}
 
 		if (!this.#channelChanging) this.emit("leftChannel", channelId);
