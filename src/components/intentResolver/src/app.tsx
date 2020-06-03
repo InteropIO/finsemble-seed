@@ -1,3 +1,15 @@
+/**
+ * Steps:
+ *
+ *
+ *
+ */
+
+
+
+
+
+
 import * as React from 'react'
 // import { FinsembleDialog } from "@chartiq/finsemble-react-controls";
 import "../intentResolverModal.css";
@@ -31,6 +43,7 @@ export default function App() {
 
 
   const actionIntent = (app: AppMetadata) => {
+    // TODO: change to fdc3.open()
     FSBL.Clients.LauncherClient.spawn(app.name, { data: { context: intentData.context } },
       () => {
         console.log(sendQueryResponse)

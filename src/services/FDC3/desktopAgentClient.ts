@@ -2,7 +2,7 @@ import Channel from "./channelClient";
 import { EventEmitter } from "events";
 
 interface ContextTypeAndHandler {
-	contextTypeOrHandler: string | ContextHandler, 
+	contextTypeOrHandler: string | ContextHandler,
 	handler?: ContextHandler,
 	listener: Listener
 }
@@ -117,6 +117,7 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 			() => { }
 		);
 		if (err) {
+			this.#FSBL.Clients.Logger.error(err)
 			throw err;
 		}
 		console.log("DesktopAgent.raiseIntent response: ", response.data);

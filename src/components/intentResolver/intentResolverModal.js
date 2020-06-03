@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import App from './src/app2'
+import App from './src/app'
 
 function FinsembleReady() {
   ReactDOM.render(
