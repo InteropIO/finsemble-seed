@@ -265,8 +265,8 @@ export default class FoldersList extends React.Component {
 			if (isEditing) {
 				buttons = (
 					<span className='folder-action-icons'>
-						{canDelete && <i id='confirm-edit' className='ff-check-mark-2' title='Accept Rename' onClick={this.renameFolder.bind(this, folderName)}></i>}
-						{canEdit && <i id='cancel-edit' className='ff-close' title='Cancel' onClick={this.cancelEdit}></i>}
+						<i id='confirm-edit' className='ff-check-mark-2' title='Accept Rename' onClick={this.renameFolder.bind(this, folderName)}></i>
+						<i id='cancel-edit' className='ff-close' title='Cancel' onClick={this.cancelEdit}></i>
 					</span>
 				);
 			} else {
