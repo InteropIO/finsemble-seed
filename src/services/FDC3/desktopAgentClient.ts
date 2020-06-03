@@ -8,7 +8,6 @@ interface ContextTypeAndHandler {
 }
 export default class DesktopAgentClient extends EventEmitter implements DesktopAgent {
 	#currentChannel: Channel;
-	#currentChannelContextListeners: Array<Listener> = [];
 	#contextHandlers: { [key: string]: ContextTypeAndHandler } = {};
 	#channelChanging: Boolean;
 	#wait: (time: number) => Promise<void> = (time: number) => {
@@ -17,18 +16,24 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 	#strict: Boolean;
 	#FDC3Client: any;
 	#FSBL: typeof FSBL;
+	#log: any = console.log; //this.#FSBL.Clients.Logger.log;
 
 	constructor(strict: Boolean, FDC3Client: any, Finsemble?: typeof FSBL) {
 		super();
 		this.#strict = strict;
 		this.#FDC3Client = FDC3Client;
-		this.#FSBL = Finsemble
+		this.#FSBL = Finsemble;
+		
+	}
+
+	get isChannelChanging() {
+		return this.#channelChanging;
 	}
 
 	/** ___________Apps ___________ */
 
 	async open(name: string, context?: Context) {
-		this.#FSBL.Clients.Logger.log("Desktop Agent open called typescript");
+		this.#log("DesktopAgentClient: open", name, context);
 
 		// open the component and make it join the current channel
 		const { err, response } = await this.#FSBL.Clients.LauncherClient.spawn(name, {
@@ -50,7 +55,7 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 	/** ___________Context ___________ */
 
 	async broadcast(context: Context) {
-		this.#FSBL.Clients.Logger.log("Desktop Agent broadcast called");
+		this.#log("DesktopAgentClient: broadcast", context);
 		if (this.#currentChannel) {
 			this.#currentChannel.broadcast(context);
 		}
@@ -59,6 +64,8 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 	addContextListener(handler: ContextHandler): Listener;
 	addContextListener(contextType: string, handler: ContextHandler): Listener;
 	addContextListener(contextTypeOrHandler: string | ContextHandler, handler?: ContextHandler): Listener {
+		this.#log("DesktopAgentClient: addContextListener", contextTypeOrHandler, handler);
+
 		if (!this.#currentChannel) {
 			console.warn("No channels have been joined");
 		}
@@ -94,27 +101,27 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 
 	/** ___________Intents ___________ */
 	async findIntent(intent: string, context?: Context) {
-		this.#FSBL.Clients.Logger.log("Desktop Agent findIntent called", intent, context);
+		this.#log("DesktopAgentClient: findIntent", intent, context);
 		const { err, response } = await this.#FSBL.Clients.RouterClient.query("FDC3.DesktopAgent.findIntent", { intent, context }, () => { });
 		if (err) {
 			throw err;
 		}
-		this.#FSBL.Clients.Logger.log("DesktopAgent.FindIntent response: ", response.data);
+		this.#log("DesktopAgent.FindIntent response: ", response.data);
 		return response.data;
 	}
 
 	async findIntentsByContext(context: Context) {
-		this.#FSBL.Clients.Logger.log("Desktop Agent open called");
+		this.#log("DesktopAgentClient: findIntentsByContext", context);
 		const { err, response } = await this.#FSBL.Clients.RouterClient.query("FDC3.DesktopAgent.findIntentsByContext", { context }, () => { });
 		if (err) {
 			throw err;
 		}
-		this.#FSBL.Clients.Logger.log("DesktopAgent.findIntentsByContext response: ", response.data);
+		this.#log("DesktopAgent.findIntentsByContext response: ", response.data);
 		return response.data;
 	}
 
 	async raiseIntent(intent: string, context: Context, target?: string) {
-		this.#FSBL.Clients.Logger.log("Desktop Agent raiseIntent called");
+		this.#log("DesktopAgentClient: raiseIntent", intent, context, target);
 		const { err, response } = await this.#FSBL.Clients.RouterClient.query("FDC3.DesktopAgent.raiseIntent", { intent, context, target },
 			() => { }
 		);
@@ -126,6 +133,7 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 	}
 
 	addIntentListener(intent: string, handler: ContextHandler): Listener {
+		this.#log("DesktopAgentClient: addIntentListener", intent, handler);
 		const routerHandler: StandardCallback = (err, response) => {
 			handler(response.data);
 		}
@@ -146,22 +154,22 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 
 	/** ___________Channels ___________ */
 	async getOrCreateChannel(channelId: string): Promise<Channel> {
-		this.#FSBL.Clients.Logger.log("Desktop Agent getOrCreateChannel called typescript");
+		this.#log("DesktopAgentClient: getOrCreateChannel", channelId);
 		const { err, response } = await this.#FSBL.Clients.RouterClient.query("FDC3.DesktopAgent.getOrCreateChannel", { channelId }, () => { });
 		if (err) {
 			throw err;
 		}
-		this.#FSBL.Clients.Logger.log("DesktopAgent.getOrCreateChannel response: ", response.data);
+		this.#log("DesktopAgent.getOrCreateChannel response: ", response.data);
 		return new Channel(response.data);
 	}
 
 	async getSystemChannels(): Promise<Array<Channel>> {
-		this.#FSBL.Clients.Logger.log("Desktop Agent getSystemChannels called typescript");
+		this.#log("DesktopAgentClient: getSystemChannels");
 		const { err, response } = await this.#FSBL.Clients.RouterClient.query("FDC3.DesktopAgent.getSystemChannels", null, () => { });
 		if (err) {
 			throw err;
 		}
-		this.#FSBL.Clients.Logger.log("DesktopAgent.getSystemChannels response: ", response.data);
+		this.#log("DesktopAgent.getSystemChannels response: ", response.data);
 		const channels: Array<Channel> = [];
 		for (let channelObject of response.data) {
 			channelObject = { ...channelObject, FSBL: this.#FSBL }
@@ -172,6 +180,7 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 	}
 
 	async joinChannel(channelId: string) {
+		this.#log("DesktopAgentClient: joinChanel", channelId);
 		if (!this.#strict) {
 			// Are we already on this channel?
 			const linkerChannels = Object.keys(this.#FSBL.Clients.LinkerClient.channels);
@@ -227,6 +236,7 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 	}
 
 	async getCurrentChannel() {
+		this.#log("DesktopAgentClient: getCurrentChannel");
 		if (this.#currentChannel) {
 			return this.#currentChannel;
 		} else {
@@ -235,6 +245,7 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 	}
 
 	async leaveCurrentChannel() {
+		this.#log("DesktopAgentClient: leaveCurrentChannel");
 		if (!this.#currentChannel) return;
 		const channelId = this.#currentChannel.id;
 		this.#currentChannel = null;

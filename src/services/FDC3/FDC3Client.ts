@@ -19,10 +19,12 @@ class FDC3Client {
 		return new Promise((resolve) => setTimeout(resolve, time));
 	}
 	#FSBL: typeof FSBL;
+	#log: any = console.log; //this.#FSBL.Clients.Logger.log;
 
 	constructor(Finsemble?: typeof FSBL) {
 		this.#FSBL = win.FSBL || Finsemble
 		const setupAgents = async () => {
+			this.#log("FDC3Client: setupAgents");
 			const linkerState = this.#FSBL.Clients.LinkerClient.getState();
 			// all valid channels that this component is a member of
 			const validLinkerChannels = linkerState.channels.map((channel: any) => channel.name);
@@ -59,9 +61,9 @@ class FDC3Client {
 			}
 
 			const updateAgents = async (err: any, response: any) => {
+				this.#log("FDC3Client: updateAgents");
 				// We get here if the user linked to or unlinked from a channel
 				if (this.#strict) {
-
 					const currentChannel = await win.fdc3.getCurrentChannel();
 					let linkerChannels = Object.keys(this.#FSBL.Clients.LinkerClient.channels);
 
@@ -108,6 +110,7 @@ class FDC3Client {
 	 * @param channel
 	 */
 	async getOrCreateDesktopAgent(channel: string): Promise<DesktopAgent> {
+		this.#log("FDC3Client: getOrCreateDesktopAgent", channel);
 		// Only one desktop agent in strict mode
 		if (this.#strict && this.desktopAgents.length) {
 			await win.fdc3.joinChannel(channel);
@@ -150,6 +153,7 @@ class FDC3Client {
 	 * @param context
 	 */
 	broadcast(context: Context) {
+		this.#log("FDC3Client: broadcast", context);
 		for (const desktopAgent of this.desktopAgents) {
 			try {
 				desktopAgent.broadcast(context);
@@ -161,6 +165,7 @@ class FDC3Client {
 	 * Ability to get system channels without having to create a desktop agent.
 	 */
 	async getSystemChannels() {
+		this.#log("FDC3Client: getSystemChannels");
 		const { err, response } = await this.#FSBL.Clients.RouterClient.query("FDC3.DesktopAgent.getSystemChannels", null, () => { });
 		if (err) {
 			throw err;
