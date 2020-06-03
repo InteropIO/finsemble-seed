@@ -575,9 +575,8 @@ select:focus, option:focus {
 	position: absolute;
 	z-index:1;
 	right: 68px;
-	top: -21px;
+	top: 13px;
     bottom: 0;
-    margin: auto;
 	padding: 3px 3px 2px 2px;
 	border-radius: 50%;
 	text-align: center;

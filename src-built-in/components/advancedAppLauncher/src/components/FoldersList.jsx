@@ -112,7 +112,7 @@ export default class FoldersList extends React.Component {
 			return
 		}
 		//Finally, all good and so we can rename the folder
-		this.attempRename()
+		this.attemptRename()
 	}
 
 	componentWillMount() {
@@ -149,7 +149,7 @@ export default class FoldersList extends React.Component {
 
 	keyPressed(e) {
 		if (e.key === "Enter") {
-			this.attempRename()
+			this.attemptRename()
 		}
 	}
 
@@ -163,7 +163,7 @@ export default class FoldersList extends React.Component {
 	/**
 	 * To be called when user press Enter or when focus is removed
 	 */
-	attempRename() {
+	attemptRename() {
 		const folders = storeActions.getFolders()
 		const input = this.state.folderNameInput.trim()
 		const oldName = this.state.renamingFolder;
@@ -225,6 +225,9 @@ export default class FoldersList extends React.Component {
 			nameField = folderName;
 		}
 
+		const canDelete = folder.canDelete;
+		const canEdit = folder.canEdit;
+
 		//This DOM will be rendered within a draggable (if the folder can be dragged), and a plain ol div if it cannot be dragged.
 		return (
 			<div onClick={(event) => this.onFolderClicked(event, folderName)}
@@ -234,9 +237,11 @@ export default class FoldersList extends React.Component {
 					{folder.icon && <i className={folder.icon}></i>}
 					<div className="folder-name">{nameField}</div>
 				</div>
-				{folder.icon === EDITABLE_FOLDER_ICON_CLASS && <span className='folder-action-icons'>
-					<i className='ff-adp-edit' title='Rename' onClick={this.renameFolder.bind(this, folderName)}></i>
-					<i className='ff-adp-trash-outline' title='Delete Folder' onClick={this.deleteFolder.bind(this, folderName)}></i>
+
+				{(canEdit || canDelete) && 
+				<span className='folder-action-icons'>
+					{canEdit && <i className='ff-adp-edit' title='Rename' onClick={this.renameFolder.bind(this, folderName)}></i>}
+					{canDelete && <i className='ff-adp-trash-outline' title='Delete Folder' onClick={this.deleteFolder.bind(this, folderName)}></i>}
 				</span>}
 			</div>);
 	}
