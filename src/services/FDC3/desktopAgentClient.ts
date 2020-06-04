@@ -23,7 +23,7 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 		this.#strict = strict;
 		this.#FDC3Client = FDC3Client;
 		this.#FSBL = Finsemble;
-		
+
 	}
 
 	get isChannelChanging() {
@@ -123,13 +123,13 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 	async raiseIntent(intent: string, context: Context, target?: string) {
 		this.#log("DesktopAgentClient: raiseIntent", intent, context, target);
 		const { err, response } = await this.#FSBL.Clients.RouterClient.query("FDC3.DesktopAgent.raiseIntent", { intent, context, target },
-			() => { }
+			(...data) => { this.#FSBL.Clients.Logger.error(data) }
 		);
 		if (err) {
 			this.#FSBL.Clients.Logger.error(err)
 			throw err;
 		}
-		console.log("DesktopAgent.raiseIntent response: ", response.data);
+		console.log("DesktopAgent.raiseIntent response: ", response);
 		return response.data;
 	}
 
@@ -203,7 +203,7 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 		if (this.#currentChannel) {
 			oldChannel = this.#currentChannel.id;
 			this.#channelChanging = true
-			await this.leaveCurrentChannel(); 
+			await this.leaveCurrentChannel();
 		}
 
 		// Join new channel

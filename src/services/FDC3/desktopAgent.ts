@@ -25,7 +25,7 @@ const hashFnv32a = (str: string, asString: boolean, seed?: number) => {
 }
 
 export default class D implements DesktopAgent {
-	FSBL: any;
+	FSBL: typeof FSBL;
 	LauncherClient: any; //typeof LauncherClient;
 	LinkerClient: any; //typeof LinkerClient;
 	RouterClient: any;
@@ -60,26 +60,40 @@ export default class D implements DesktopAgent {
 
 	private setupApps() {
 		this.RouterClient.subscribe("Launcher.update", (err: any, response: any) => {
-			const components = response.data.componentList;
+			if (err) throw Error(err)
+
 			this.appIntents = {};
 			this.apps = {};
-			for (const c of Object.values(components)) {
-				const component: any = c; // putting component:any in the loop itself results in it being unknown instead of any.
+
+			const components: { component: any, foreign: any }[] = Object.values(response.data.componentList);
+
+
+			for (const componentConfig of components) {
+				// const component: any = c; // putting component:any in the loop itself results in it being unknown instead of any.
+				const { component, foreign } = componentConfig
 				try {
+					// component needs to have a name
+					if (!component?.type) throw Error("Component does not have a type")
+
+
 					const appMetadata: AppMetadata = {
-						name: component.component.type,
-						title: component.component.displayName,
-						tooltip: component.component.displayName,
-						icons: [component.foreign.components.Toolbar.iconURL]
+						name: component?.type,
+						title: component?.displayName,
+						tooltip: component?.displayName,
+						icons: [foreign?.components?.Toolbar?.iconURL]
 					}
 					this.apps[appMetadata.name] = appMetadata;
-					const intents = component.foreign.services.fdc3.intents;
-					if (intents.length) {
+
+
+					const intents = foreign?.services?.fdc3?.intents;
+					if (intents && intents.length) {
 						for (const intentConfig of intents) {
 							const intent: IntentMetadata = {
 								name: intentConfig.name,
 								displayName: intentConfig.displayName
 							};
+
+							// add the intent if it does not exist then push the metadata to it
 							if (!this.appIntents[intent.name]) {
 								this.appIntents[intent.name] = {
 									intent,
@@ -87,20 +101,35 @@ export default class D implements DesktopAgent {
 								}
 							}
 							this.appIntents[intent.name].apps.push(appMetadata);
+
+
+
 							const contexts = intentConfig.contexts;
 							if (contexts && contexts.length) {
+
 								for (const context of contexts) {
-									if (!this.appIntentsContext[context]) this.appIntentsContext[context] = {};
-									if (!this.appIntentsContext[context][intent.name]) this.appIntentsContext[context][intent.name] = {
-										intent,
-										apps: []
-									};
+
+									if (!this.appIntentsContext[context]) {
+										this.appIntentsContext[context] = {};
+									}
+
+									if (!this.appIntentsContext[context][intent.name]) {
+										this.appIntentsContext[context][intent.name] = {
+											intent,
+											apps: []
+										};
+									}
+
 									this.appIntentsContext[context][intent.name].apps.push(appMetadata);
 								}
 							}
+
 						}
+
 					}
-				} catch { }
+				} catch (err) {
+					this.FSBL.Clients.Logger.error("setupAppsError: " + err)
+				}
 			}
 			console.log(this.apps);
 			console.log(this.appIntents);
@@ -135,6 +164,7 @@ export default class D implements DesktopAgent {
 	/** ___________Intents ___________ */
 
 	async findIntent(intent: string, context?: Context): Promise<AppIntent> {
+		debugger
 		let appIntent: AppIntent;
 		if (context) {
 			const contextType = (context as any).type;
@@ -145,7 +175,8 @@ export default class D implements DesktopAgent {
 			appIntent = this.appIntents[intent];
 		}
 		if (appIntent) return appIntent;
-		throw new Error(ResolveError.NoAppsFound);
+		debugger
+		throw new Error("ResolveError.NoAppsFound");
 	}
 
 	async findIntentsByContext(context: Context): Promise<Array<AppIntent>> {
