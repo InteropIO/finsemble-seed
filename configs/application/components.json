@@ -69,7 +69,8 @@
 					"autoShow": true
 				},
 				"showTaskbarIcon": false,
-				"contextMenu": true
+				"contextMenu": true,
+				"addToWorkspace": true
 			},
 			"component": {
 				"spawnOnHotkey": [
