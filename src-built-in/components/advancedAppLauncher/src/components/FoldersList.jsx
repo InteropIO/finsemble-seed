@@ -130,7 +130,7 @@ export default class FoldersList extends React.Component {
 		e.stopPropagation();
 		this.setState({
 			renamingFolder: name
-		})
+		});
 		this.addClickListener()
 	}
 
@@ -212,10 +212,11 @@ export default class FoldersList extends React.Component {
 			className += ' folder-with-icon'
 		}
 
-		const EDITABLE_FOLDER_ICON_CLASS = 'ff-adp-hamburger'
+		const canDelete = folder.canDelete;
+		const canEdit = folder.canEdit;
 
 		let nameField;
-		if (folder.icon === EDITABLE_FOLDER_ICON_CLASS && this.state.renamingFolder === folderName) {
+		if (this.state.renamingFolder === folderName && canEdit) {
 			nameField = <input id="rename" value={this.state.folderNameInput}
 			onChange={this.changeFolderName}
 			onKeyPress={this.keyPressed} className={this.state.isNameError ? "error" : ""} autoFocus />;
@@ -224,9 +225,6 @@ export default class FoldersList extends React.Component {
 		} else {
 			nameField = folderName;
 		}
-
-		const canDelete = folder.canDelete;
-		const canEdit = folder.canEdit;
 
 		//This DOM will be rendered within a draggable (if the folder can be dragged), and a plain ol div if it cannot be dragged.
 		return (
