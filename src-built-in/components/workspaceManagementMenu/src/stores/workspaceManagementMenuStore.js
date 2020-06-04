@@ -1,5 +1,5 @@
 /*!
-* Copyright 2017 by ChartIQ, Inc.
+* Copyright 2017 - 2020 by ChartIQ, Inc.
 * All rights reserved.
 * The workspace management menu may be the most complicated component that we have (other than the toolbar). It isn't because workspace management is particularly difficult, it's because there is a lot of user question and answer going on. We don't want to overwrite data without explicit consent, and so the calls get involved. To simplify the code, we are using the `async` library. If you are unfamiliar with this library, see this link: https://caolan.github.io/async/docs.html
 */
@@ -25,6 +25,7 @@ let defaultData = {
 	 * of the workspace management menu, the spinner doesn't show up.
 	 */
 	isSwitchingWorkspaces: false,
+	isPromptingUser: false,
 };
 
 function uuidv4() {
@@ -120,6 +121,12 @@ Actions = {
 	},
 	setIsSwitchingWorkspaces: function (val) {
 		return WorkspaceManagementStore.setValue({ field: "isSwitchingWorkspaces", value: val });
+	},
+	getIsPromptingUser: function () {
+		return WorkspaceManagementStore.getValue("isPromptingUser");
+	},
+	setIsPromptingUser: function (val) {
+		return WorkspaceManagementStore.setValue({ field: "isPromptingUser", value: val });
 	},
 	setPins: function (pins) {
 		if (pins) {
@@ -342,7 +349,12 @@ Actions = {
 	 * Asks the user if they'd like to save their data, then loads the requested workspace.
 	 */
 	switchToWorkspace: function (data) {
-		if (Actions.getIsSwitchingWorkspaces()) return;
+		// if a workspace prompt is outstanding for a previous switch, immediately return to lock out user from doing another switch (until responding to prompt);
+		// note this prompting flag is cleared in Actions.onAsyncComplete when the previous switch completes (after user responds to the prompt)
+		let prompting = Actions.getIsPromptingUser()
+		Logger.system.log("workspaceManagementMenuStore: switchToWorkspace", prompting ? "prompting" : "not-prompting");
+		if (prompting) return;
+
 		Actions.setIsSwitchingWorkspaces(true);
 		Actions.blurWindow();
 		let name = data.name;
@@ -350,12 +362,15 @@ Actions = {
 		/**
 		 * Actually perform the switch. Happens after we ask the user what they want.
 		 *
+		 * @param {function} callback - invoked on completion of switchTo
+		 *
 		 */
-		function switchWorkspace() {
+		function switchWorkspace(callback = Function.prototype) {
 			FSBL.Clients.WorkspaceClient.switchTo({
 				name: name
 			}, () => {
-				Actions.setIsSwitchingWorkspaces(false);
+					Actions.setIsSwitchingWorkspaces(false);
+					callback();
 			});
 		}
 		/**
@@ -373,6 +388,7 @@ Actions = {
 		 */
 		let tasks = [];
 		if (activeWorkspace.isDirty) {
+			Actions.setIsPromptingUser(true);
 			let firstMethod = Actions.autoSave,
 				secondMethod = null;
 			if (PROMPT_ON_SAVE === true) {
@@ -414,6 +430,8 @@ Actions = {
 	 * @param {any} result
 	 */
 	onAsyncComplete(err, result) {
+		Logger.system.debug("workspaceManagementMenuStore: onAsyncComplete");
+
 		WorkspaceManagementStore.setValue({ field: "newWorkspaceDialogIsActive", value: false });
 		const errMessage = err && err.message;
 		if (errMessage && errMessage !== NEGATIVE && errMessage !== SAVE_DIALOG_CANCEL_ERROR) {
@@ -423,6 +441,8 @@ Actions = {
 
 		//Unlock the UI.
 		Actions.setIsSwitchingWorkspaces(false);
+		Actions.setIsPromptingUser(false);
+
 	},
 	/**
 	 * NOTE: Leaving this function here until we figure out notifications.

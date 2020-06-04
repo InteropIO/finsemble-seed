@@ -1,5 +1,5 @@
 /*!
-* Copyright 2017 by ChartIQ, Inc.
+* Copyright 2017 - 2020 by ChartIQ, Inc.
 * All rights reserved.
 */
 import React from "react";
@@ -15,11 +15,11 @@ const Toast = props => {
 
 	switch (props.installationActionTaken) {
 		case "add":
-			messageContent = "Application Added";
+			messageContent = "App Added";
 			classes += " success";
 			break;
 		case "remove":
-			messageContent = "Application Removed";
+			messageContent = "App Removed";
 			classes += " error";
 			break;
 		default:

@@ -229,7 +229,7 @@ html.desktop-active .fsbl-icon-highlighted {
     width: 1em !important;
     padding-bottom: 4px;
     margin-bottom: 4px;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.79);
+    color: var(--titleBar-linker-font-color);
 }
 
 .linkerContainer {

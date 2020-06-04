@@ -6,6 +6,8 @@ import TagsList from './TagsList'
 import {getStore} from '../stores/LauncherStore'
 import storeActions from '../stores/StoreActions'
 
+let store;
+
 export default class FilterSort extends React.Component {
 
 	constructor(props) {
@@ -14,13 +16,15 @@ export default class FilterSort extends React.Component {
 			tags: [],
 			search: ''
 		}
-		this.onSearch = this.onSearch.bind(this)
+		this.onSearch = this.onSearch.bind(this);
+		this.setStateValues = this.setStateValues.bind(this);
+		store = getStore();
 	}
 
-	async setStateValues(){
+	setStateValues(){
 		this.setState({
 			tags: storeActions.getAllAppsTags()
-		})
+		});
 	}
 
 	onSearch(event) {
@@ -49,7 +53,12 @@ export default class FilterSort extends React.Component {
 	}
 
 	componentDidMount(){
-		this.setStateValues()
+		this.setStateValues();
+		store.addListener({ field: "appFolders.folders" }, this.setStateValues);
+	}
+
+	componentWillUnmount() {
+		store.removeListener({ field: "appFolders.folders" }, this.setStateValues);
 	}
 
 	render() {

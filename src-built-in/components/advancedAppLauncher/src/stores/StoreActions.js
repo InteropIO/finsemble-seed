@@ -166,13 +166,6 @@ function loadInstalledComponentsFromStore(cb = Function.prototype) {
 					console.error("there was an error loading from FDC3", component, err);
 					return componentDone();
 				}
-				// register the component with the launcher service
-				FSBL.Clients.LauncherClient.registerComponent({
-					componentType: component.name,
-					manifest: app.manifest
-				}, (err, response) => {
-					componentDone(err);
-				});
 			});
 		}
 		// We'll load our user defined components here
@@ -438,7 +431,7 @@ function addNewFolder(name) {
 	const newFolder = {
 		disableUserRemove: true,
 		icon: "ff-adp-hamburger",
-		apps: []
+		apps: {}
 	};
 	data.folders[folderName] = newFolder;
 	_setFolders(() => {

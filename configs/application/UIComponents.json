@@ -613,8 +613,9 @@
 				"services": {
 					"windowService": {
 						"allowAutoArrange": false,
-						"ignoreSnappingRequests": true,
-						"ignoreTilingAndTabbingRequests": true
+						"allowSnapping": false,
+						"allowTabbing": false,
+						"allowTiling": false
 					},
 					"workspaceService": {
 						"global": true

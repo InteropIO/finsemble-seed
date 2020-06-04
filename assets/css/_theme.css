@@ -62,6 +62,7 @@
     --titleBar-font-weight: var(--font-weight);
     --titleBar-active-font-color: var(--font-color);  /* Not in use by default */
     --titleBar-inactive-font-color: var(--font-color-1);
+    --titleBar-linker-font-color: black;
 
     --titleBar-background-inactive-color: var(--core-primary);
     --titleBar-background-active-color: var(--core-primary);
