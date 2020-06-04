@@ -1,6 +1,5 @@
 //  config settings
 const path = require("path");
-const glob_entries = require("webpack-glob-entries");
 const webpack = require("webpack");
 const fs = require("fs");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
@@ -125,10 +124,6 @@ function createCopyWebpackConfig() {
 		{
 			from: "./configs/",
 			to: "./configs/",
-		},
-		{
-			from: "./assets/",
-			to: "./assets/",
 		},
 		/* // Enabling this causes the favicon to show up as a background image in localhost:9090
 		{

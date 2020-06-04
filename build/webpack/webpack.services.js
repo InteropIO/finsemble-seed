@@ -3,7 +3,7 @@ const fs = require("fs");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const glob_entries = require("webpack-glob-entries");
 const services = glob_entries(
-	path.join(__dirname, "../../", "/src/services/**/*.js")
+	path.join(__dirname, "../../", "/src/services/**/*.(js,ts)")
 );
 let entry = {};
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";

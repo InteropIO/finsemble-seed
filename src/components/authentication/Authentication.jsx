@@ -17,7 +17,7 @@ import {
 } from "@chartiq/finsemble-ui/react/components";
 import { useAuth } from "@chartiq/finsemble-ui/react/hooks";
 import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
-import "../../../assets/css/_themeWhiteLabel.css";
+import "../../../assets/css/theme.css";
 
 export const Authentication = () => {
 	const { saveInputChange, formValues, authorize, quitApplication } = useAuth();

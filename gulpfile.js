@@ -185,6 +185,11 @@ const { launch, connect } = require("hadouken-js-adapter");
 					(done) => {
 						const webpackConfigs = [
 							{
+								configPath: require.resolve("./build/webpack/webpack.assets"),
+								prettyName: "Assets",
+								watch: watchFiles,
+							},
+							{
 								configPath: require.resolve("./build/webpack/webpack.adapters"),
 								prettyName: "Adapters",
 								watch: watchFiles,
@@ -620,7 +625,7 @@ const { launch, connect } = require("hadouken-js-adapter");
 
 			// Prints server errors to your terminal.
 			serverProcess.stderr.on("data", (data) => {
-				console.error(errorOutColor(`ERROR: ${data}`));
+				console.error(`ERROR: ${data}`);
 			});
 		},
 
@@ -644,7 +649,7 @@ const { launch, connect } = require("hadouken-js-adapter");
 	// #region Task definitions
 	const defineTasks = (err) => {
 		if (err) {
-			console.error(errorOutColor(err));
+			console.error(err);
 			process.exit(1);
 		}
 
@@ -660,7 +665,7 @@ const { launch, connect } = require("hadouken-js-adapter");
 
 		taskMethods.post((err) => {
 			if (err) {
-				console.error(errorOutColor(err));
+				console.error(err);
 				process.exit(1);
 			}
 		});

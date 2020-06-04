@@ -1,3 +1,5 @@
+@import url("../../../assets/css/theme.css");
+
 body {
 	margin: 0px;
 	font-size: var(--procMonitor-font-size);

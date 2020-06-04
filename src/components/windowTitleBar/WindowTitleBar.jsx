@@ -16,7 +16,8 @@ import {
 	MinimizeButton,
 } from "@chartiq/finsemble-ui/react/components";
 import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
-import "../../../assets/css/_themeWhiteLabel.css";
+import "../../../assets/css/theme.css";
+
 /**
  * This is the Window Title Bar component, which is rendered at
  * the top of every Finsemble-controlled HTML window.

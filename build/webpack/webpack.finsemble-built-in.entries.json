@@ -1,4 +1,8 @@
 {
+	"finsemble.css": {
+		"output": "assets/css/finsemble",
+		"entry": "./assets/css/finsemble.css"
+	},
 	"authentication": {
 		"output": "components/authentication/authentication",
 		"entry": "./src/components/authentication/Authentication.jsx"
@@ -26,10 +30,6 @@
 	"UserPreferences": {
 		"output": "components/userPreferences/userPreferences",
 		"entry": "./src/components/userPreferences/UserPreferences.jsx"
-	},
-	"welcome": {
-		"output": "components/welcome/welcome",
-		"entry": "./src/components/welcome/welcome.js"
 	},
 	"appCatalog": {
 		"output": "components/appCatalog/appCatalog",

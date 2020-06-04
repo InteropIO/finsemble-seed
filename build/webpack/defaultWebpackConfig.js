@@ -47,12 +47,16 @@ module.exports = class WebpackDefaults {
 			module: {
 				rules: [
 					{
-						test: /\.css$/,
-						use: ["style-loader", "css-loader"],
-					},
-					{
-						test: /\.scss$/,
-						use: ["style-loader", "css-loader", "sass-loader"],
+						test: /\.s?css$/i,
+						use: [
+							"style-loader",
+							{
+								loader: "css-loader",
+								options: {
+									sourceMap: env !== "production",
+								},
+							},
+						],
 					},
 					{
 						test: /\.png|img$/,
@@ -128,7 +132,7 @@ module.exports = class WebpackDefaults {
 						},
 					},
 					{
-						test: /\.tsx?$/,
+						test: /\.ts(x)?$/,
 						loader: "ts-loader",
 						exclude: /node_modules/,
 					},
@@ -157,7 +161,16 @@ module.exports = class WebpackDefaults {
 					"@babel/runtime": path.resolve("./node_modules/@babel/runtime"),
 					async: path.resolve("./node_modules/async"),
 				},
-				extensions: [".tsx", ".ts", ".js", ".jsx", ".json", "scss", "html"],
+				extensions: [
+					".tsx",
+					".ts",
+					".js",
+					".jsx",
+					".json",
+					".scss",
+					".css",
+					".html",
+				],
 				modules: ["./node_modules"],
 			},
 		};

@@ -130,14 +130,12 @@ const runWebpackAndCallback = (configPath, watch, bundleName, callback) => {
 		} else {
 			console.error(errorOutColor("Webpack Error.", err));
 		}
-		if (stats.hasErrors()) {
-			console.error(errorOutColor(stats.toJson().errors));
-		}
+
 		// Webpack will call this function every time the bundle is built.
 		// Webpack is run in "watch" mode which means this function will be called over and over and over.
 		// We only want to invoke the async callback back to the gulp file once - the initial webpack build.
 		if (callback) {
-			callback();
+			callback(err);
 			callback = undefined;
 		}
 	});
@@ -193,7 +191,14 @@ const runWebpackInParallel = (
 	done
 ) => {
 	let finishedBuilds = 0;
-	const parallelWorkers = workerFarm(require.resolve("./buildWorker.js"));
+	// We set maxRetries to zero in order to avoid an infinite loop if a build process fails.
+	// workerFarm is probably the wrong tool for the job here. A simple thread forking mechanism
+	// is all that's needed but maybe we can get parallelism for free by using a site builder
+	// https://nodejs.org/api/worker_threads.html
+	const parallelWorkers = workerFarm(
+		{ maxRetries: 0 },
+		require.resolve("./buildWorker.js")
+	);
 
 	webpackParallelConfigs.forEach((config) => {
 		parallelWorkers(config, (e, output) => {

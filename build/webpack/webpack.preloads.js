@@ -49,6 +49,11 @@ module.exports = {
 					},
 				},
 			},
+			{
+				test: /\.ts(x)?$/,
+				loader: "ts-loader",
+				exclude: /node_modules/,
+			},
 		],
 	},
 	output: {
@@ -57,6 +62,6 @@ module.exports = {
 		path: path.resolve(__dirname, "../../dist/"),
 	},
 	resolve: {
-		extensions: [".js", ".jsx", ".json", "scss", "html"],
+		extensions: [".ts", ".tsx", ".js", ".jsx", ".json", "scss", "html"],
 	},
 };

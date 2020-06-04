@@ -6,7 +6,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { FinsembleProvider } from "@chartiq/finsemble-ui/react/components";
 import { AppCatalog } from "@chartiq/finsemble-ui/react/components";
-import "../../../assets/css/_themeWhiteLabel.css";
+import "../../../assets/css/theme.css";
 
 ReactDOM.render(
 	<FinsembleProvider>

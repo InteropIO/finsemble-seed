@@ -7,7 +7,7 @@ import ReactDOM from "react-dom";
 import { FinsembleProvider } from "@chartiq/finsemble-ui/react/components";
 import { SingleInputDialog } from "@chartiq/finsemble-ui/react/components";
 import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
-import "../../../assets/css/_themeWhiteLabel.css";
+import "../../../assets/css/theme.css";
 
 ReactDOM.render(
 	<FinsembleProvider>

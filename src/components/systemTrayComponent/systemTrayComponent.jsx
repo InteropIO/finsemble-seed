@@ -15,9 +15,8 @@ import {
 	Reset,
 	Quit,
 } from "@chartiq/finsemble-ui/react/components";
-
 import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
-import "../../../assets/css/_themeWhitelabel.css";
+import "../../../assets/css/theme.css";
 
 /**
  * This component displays on right-click in your application's system tray icon.
@@ -25,21 +24,19 @@ import "../../../assets/css/_themeWhitelabel.css";
  * The SystemTrayComponentShell will automatically adjust the height and width of the window as necessary to display its content.
  * This component will be hidden when it loses focus but will remain invisibly active.
  */
-const SystemTrayComponent = () => {
-	return (
-		<SystemTrayComponentShell padding={{ width: 80 }}>
-			<div className="menu menu-primary">
-				<Preferences />
-				<SystemLog />
-				<CentralLogger />
-				<Documentation />
-				<Restart />
-				<Reset />
-				<Quit />
-			</div>
-		</SystemTrayComponentShell>
-	);
-};
+const SystemTrayComponent = () => (
+	<SystemTrayComponentShell padding={{ width: 80 }}>
+		<div className="menu menu-primary">
+			<Preferences />
+			<SystemLog />
+			<CentralLogger />
+			<Documentation />
+			<Restart />
+			<Reset />
+			<Quit />
+		</div>
+	</SystemTrayComponentShell>
+);
 
 ReactDOM.render(
 	<FinsembleProvider>
