@@ -44,6 +44,7 @@ config.plugins.push(
  */
 config.entry = {
 	"assets/css/finsemble": "./assets/css/finsemble.css",
+	"assets/css/font-finance": "./assets/css/font-finance.css",
 };
 
 /**
@@ -55,7 +56,7 @@ config.entry = {
  * This can be ignored, or removed if desired: https://stackoverflow.com/questions/50430534/how-to-skip-javascript-output-in-webpack-4
  */
 config.module.rules.push({
-	test: /finsemble\.css$/,
+	test: /\.css$/,
 	use: [
 		{
 			loader: MiniCssExtractPlugin.loader,
