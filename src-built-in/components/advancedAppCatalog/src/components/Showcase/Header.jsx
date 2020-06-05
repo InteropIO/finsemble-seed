@@ -38,7 +38,7 @@ const Header = props => {
 				return;
 			}
 			// Otherwise launch application by name
-			FSBL.Clients.LauncherClient.spawn(name, {addToWorkspace:true}, (err, data) => {
+			FSBL.Clients.LauncherClient.spawn(name.trim(), {addToWorkspace:true}, (err, data) => {
 				pendingSpawn = false;
 			});
 		} else {

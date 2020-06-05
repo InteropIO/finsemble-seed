@@ -232,18 +232,19 @@ function loadInstalledComponentsFromStore(cb = Function.prototype) {
 			// get the app info so we can load it into the launcher
 			return getApp(component.appID, (err, app) => {
 				if (err) {// don't want to kill this;
-					deleteApp(component.appID);
 					console.error("there was an error loading from FDC3", component, err);
 					return componentDone();
 				}
+				componentDone();
 			});
 		}
 		// We'll load our user defined components here
 		FSBL.Clients.LauncherClient.addUserDefinedComponent(component, (compAddErr) => {
 			if (compAddErr) {
 				console.warn("Failed to add new app:", compAddErr);
+				return componentDone(compAddErr);
 			}
-			componentDone(compAddErr);
+			componentDone();
 		});
 	}, (err) => {
 		cb(err);
