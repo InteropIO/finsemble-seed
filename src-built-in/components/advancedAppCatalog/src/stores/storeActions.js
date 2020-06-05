@@ -224,11 +224,10 @@ async function addApp(id, cb = Function.prototype) {
 			appConfig = installed[appID] = {
 				appID,
 				tags: app.tags,
-				name: name.trim(),
+				name,
 				type: "component",
 				manifest,
-				canDelete: true,
-				source: "FDC3"
+				canDelete: true
 			}
 		}
 	} else {
