@@ -164,7 +164,6 @@ export default class D implements DesktopAgent {
 	/** ___________Intents ___________ */
 
 	async findIntent(intent: string, context?: Context): Promise<AppIntent> {
-		debugger
 		let appIntent: AppIntent;
 		if (context) {
 			const contextType = (context as any).type;
@@ -175,7 +174,6 @@ export default class D implements DesktopAgent {
 			appIntent = this.appIntents[intent];
 		}
 		if (appIntent) return appIntent;
-		debugger
 		throw new Error("ResolveError.NoAppsFound");
 	}
 
@@ -207,9 +205,6 @@ export default class D implements DesktopAgent {
 			const dialogParams = {
 				intent, context, appIntent, source: this.windowName
 			}
-
-			// this.LauncherClient.spawn('Intent Resolver', { data: { intent, context, appIntent, source: this.windowName } }
-
 			// TODO: create Intent Resolver Component
 			this.DialogManager.open("Intent Resolver", dialogParams, (err: any, result: IntentResolution) => {
 				if (err) {
@@ -219,27 +214,6 @@ export default class D implements DesktopAgent {
 				}
 			});
 		});
-
-		// let resolvedIntent;
-		// const {
-		// 	data: componentList,
-		// }: any = await FSBL.Clients.LauncherClient.getActiveDescriptors();
-		// console.log("componentList", componentList);
-		// const intentComponentList = desktopAgentUtilities.findAllIntentMatchesandFormatResponse(
-		// 	this.fdc3Configuration,
-		// 	intent,
-		// 	context
-		// );
-		// console.log("intents:", intentComponentList);
-		// desktopAgentUtilities.resolveIntent(
-		// 	intent,
-		// 	intentComponentList,
-		// 	componentList,
-		// 	context
-		// );
-		// console.log("return value", resolvedIntent);
-		// const dataType = target + intent;
-		// return null; //new { source: "source", data: context, resolution: "resolved" };
 	}
 
 	addIntentListener(intent: string, handler: ContextHandler): Listener {
