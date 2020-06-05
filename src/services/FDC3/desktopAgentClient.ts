@@ -104,6 +104,7 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 		this.#log("DesktopAgentClient: findIntent", intent, context);
 		const { err, response } = await this.#FSBL.Clients.RouterClient.query("FDC3.DesktopAgent.findIntent", { intent, context }, () => { });
 		if (err) {
+			this.#FSBL.Clients.Logger.error(err)
 			throw err;
 		}
 		this.#log("DesktopAgent.FindIntent response: ", response.data);
@@ -129,7 +130,7 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 			this.#FSBL.Clients.Logger.error(err)
 			throw err;
 		}
-		console.log("DesktopAgent.raiseIntent response: ", response);
+		this.#FSBL.Clients.Logger.log("DesktopAgent.raiseIntent response: ", response);
 		return response.data;
 	}
 
