@@ -39,7 +39,7 @@ export default class AppDefinition extends React.Component {
 			finsembleWindow.hide();
 		}, 100);
 		const name = this.props.app.title || this.props.app.name;
-		FSBL.Clients.LauncherClient.spawn(name, {
+		FSBL.Clients.LauncherClient.spawn(name.trim(), {
 			addToWorkspace: true
 		});
 	}
