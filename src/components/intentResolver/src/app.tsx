@@ -84,7 +84,7 @@ export default async function App() {
   // The list is of intentApps are Finsemble component types.
   const getOpenApps = async (apps: Array<AppMetadata>): Promise<AppComponent[]> => {
     try {
-      const { err, data } = await LauncherClient.getActiveDescriptors()
+      const { err, data }: any = await LauncherClient.getActiveDescriptors()
 
       if (err) throw Error(err)
 
