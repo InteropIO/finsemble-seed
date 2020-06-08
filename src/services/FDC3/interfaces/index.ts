@@ -6,20 +6,20 @@
 type Context = object;
 type ContextHandler = (context: Context) => void;
 
-enum OpenError {
+const enum OpenError {
   AppNotFound = "AppNotFound",
   ErrorOnLaunch = "ErrorOnLaunch",
   AppTimeout = "AppTimeout",
   ResolverUnavailable = "ResolverUnavailable"
 }
 
-enum ResolveError {
+const enum ResolveError {
   NoAppsFound = "NoAppsFound",
   ResolverUnavailable = "ResolverUnavailable",
   ResolverTimeout = "ResolverTimeout"
 }
 
-enum ChannelError {
+const enum ChannelError {
   NoChannelFound = "NoChannelFound",
   AccessDenied = "AccessDenied",
   CreationFailed = "CreationFailed"

@@ -29,7 +29,7 @@ export default class D implements DesktopAgent {
 	LauncherClient: any; //typeof LauncherClient;
 	LinkerClient: any; //typeof LinkerClient;
 	RouterClient: any;
-	DialogManager: any;
+	DialogManager: typeof FSBL.Clients.DialogManager;
 	systemChannels: Array<Channel> = [];
 	customChannels: Array<Channel> = [];
 	appIntents: { [key: string]: AppIntent } = {};
@@ -174,7 +174,7 @@ export default class D implements DesktopAgent {
 			appIntent = this.appIntents[intent];
 		}
 		if (appIntent) return appIntent;
-		throw new Error("ResolveError.NoAppsFound");
+		throw new Error(ResolveError.NoAppsFound);
 	}
 
 	async findIntentsByContext(context: Context): Promise<Array<AppIntent>> {
@@ -191,28 +191,23 @@ export default class D implements DesktopAgent {
 			throw new Error(ResolveError.ResolverUnavailable);
 		}
 
-		// TODO: Do we deal with already open components? Or just launch new ones?
-
-		if (target) {
-			// TODO: Verify that target is a valid component for said intent
-			// TODO: How to get IntentResolution from that component?
-			await this.LauncherClient.spawn(name, { data: { intent, context } });
-			return null;
-		}
-
-
 		return new Promise((resolve, reject) => {
+
 			const dialogParams = {
-				intent, context, appIntent, source: this.windowName
+				appIntent, context, target: target || null, source: this.windowName
 			}
-			// TODO: create Intent Resolver Component
-			this.DialogManager.open("Intent Resolver", dialogParams, (err: any, result: IntentResolution) => {
-				if (err) {
-					reject(err);
+			// Launch intent resolver component
+			// TODO: move the result inline type to ts type
+			this.DialogManager.open("IntentResolver", dialogParams, (result: { success: boolean, intentResolution: IntentResolution }) => {
+				const { success, intentResolution } = result
+				if (!success) {
+					reject("Intent could not be resolved");
 				} else {
-					resolve(result);
+					resolve(intentResolution);
 				}
 			});
+
+
 		});
 	}
 
