@@ -2,7 +2,7 @@
   "components": {
     "IntentResolver": {
       "window": {
-        "url": "$applicationRoot/components/intentResolver/intentResolverModal.html",
+        "url": "$applicationRoot/components/intentResolver/intentResolver.html",
         "width": 420,
         "height": 420,
         "top": "center",

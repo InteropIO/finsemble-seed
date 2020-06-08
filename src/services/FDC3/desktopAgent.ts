@@ -197,7 +197,6 @@ export default class D implements DesktopAgent {
 				appIntent, context, target: target || null, source: this.windowName
 			}
 			// Launch intent resolver component
-			// TODO: move the result inline type to ts type
 			this.DialogManager.open("IntentResolver", dialogParams, (result: { success: boolean, intentResolution: IntentResolution }) => {
 				const { success, intentResolution } = result
 				if (!success) {

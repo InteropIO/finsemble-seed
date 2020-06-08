@@ -1,3 +1,10 @@
+import * as React from 'react'
+// import { FinsembleDialog } from "@chartiq/finsemble-react-controls";
+import "../intentResolver.css";
+import CloseIcon from './CloseIcon';
+const { useState, useEffect } = React
+
+
 /**
  * Steps:
  *
@@ -27,22 +34,17 @@ const exampleIntent: AppIntent = {
 
   Use Array.prototype.map() to map the values of an array to a function or property name. Use Array.prototype.reduce() to create an object, where the keys are produced from the mapped results.
    */
-const groupBy = (arr: Array<any>, fn: Function | any): { [key: string]: Array<any> } =>
-  arr.map(typeof fn === 'function' ? fn : val => val[fn]).reduce((acc: any, val: any, i: number): any => {
-    acc[val] = (acc[val] || []).concat(arr[i]);
-    return acc;
-  }, {} as { [key: string]: Array<any> });
+const groupBy = (arr: Array<any>, fn: Function | any): any =>
+  arr
+    .map(typeof fn === 'function' ? fn : val => val[fn])
+    .reduce((acc: any, val: any, i: number): any => {
+      acc[val] = (acc[val] || []).concat(arr[i]);
+      return acc;
+    }, {});
 
-type AppComponent = [componentName: string, componentType: string, componentIcons: string[]]
+type AppComponent = [string, string, string[]]
 
 type FinsembleComponent = { [key: string]: any }
-
-
-import * as React from 'react'
-// import { FinsembleDialog } from "@chartiq/finsemble-react-controls";
-import "../intentResolverModal.css";
-import CloseIcon from './CloseIcon';
-const { useState, useEffect } = React
 
 export default async function App() {
   const [intent, setIntent] = useState<IntentMetadata>(null)
@@ -83,6 +85,7 @@ export default async function App() {
   const getOpenApps = async (apps: Array<AppMetadata>): Promise<AppComponent[]> => {
     try {
       const { err, data } = await LauncherClient.getActiveDescriptors()
+
       if (err) throw Error(err)
 
       const components = Object.values(data)
@@ -107,16 +110,17 @@ export default async function App() {
 
 
   //
-  getOpenApps(apps).then((apps): { [key: string]: any[] } =>
-    groupBy(apps, ([name, type]: [string, string]) => type)
-  )
+  getOpenApps(apps)
+    .then((apps): { [key: string]: any[] } =>
+      groupBy(apps, ([name, type]: [string, string]) => type)
+    )
 
 
   const o = (windowName: string, context: Context) => {
     const windowIdentifier: WindowIdentifier = {
       windowName
     }
-    LauncherClient.showWindow(windowIdentifier, { data: context }, cb)
+    // LauncherClient.showWindow(windowIdentifier, { data: context }, cb)
   }
 
   return (
