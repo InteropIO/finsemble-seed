@@ -4,6 +4,7 @@ import "../intentResolver.css";
 import CloseIcon from './CloseIcon';
 const { useState, useEffect } = React
 
+const { DialogManager, LauncherClient, Logger } = FSBL.Clients
 
 /**
  * Steps:
@@ -27,6 +28,13 @@ const exampleIntent: AppIntent = {
     }
   ]
 }
+type FinsembleComponent = { [key: string]: any }
+
+interface FinsembleIntentApp extends AppMetadata {
+  type: string
+}
+
+
 
 
 /**
@@ -34,30 +42,23 @@ const exampleIntent: AppIntent = {
 
   Use Array.prototype.map() to map the values of an array to a function or property name. Use Array.prototype.reduce() to create an object, where the keys are produced from the mapped results.
    */
-const groupBy = (arr: Array<any>, fn: Function | any): any =>
-  arr
-    .map(typeof fn === 'function' ? fn : val => val[fn])
-    .reduce((acc: any, val: any, i: number): any => {
-      acc[val] = (acc[val] || []).concat(arr[i]);
-      return acc;
-    }, {});
+const groupBy = (arr: any[], fn: string | number) =>
+  arr.map(typeof fn === 'function' ? fn : val => val[fn]).reduce((acc, val, i) => {
+    acc[val] = (acc[val] || []).concat(arr[i]);
+    return acc;
+  }, {});
 
-type AppComponent = [string, string, string[]]
 
-type FinsembleComponent = { [key: string]: any }
-
-export default async function App() {
+export default function App() {
   const [intent, setIntent] = useState<IntentMetadata>(null)
   const [apps, setApps] = useState<Array<AppMetadata>>([])
   const [context, setContext] = useState<Context>()
   const [source, setSource] = useState<string>(null)
   const [target, setTarget] = useState<string>()
-
-  const { DialogManager, LauncherClient, Logger } = FSBL.Clients
-
+  const [openApps, setOpenApps] = useState<{ [key: string]: FinsembleIntentApp[] }>()
 
   useEffect(() => {
-    // TODO: loop through the apps and get active descriptors if they include the type of component as the app name
+
 
     DialogManager.registerDialogCallback((err: any, res: any) => {
       if (err) throw Error(err)
@@ -65,7 +66,8 @@ export default async function App() {
       //TODO: Fix: dialog was not displaying so using show
       finsembleWindow.show({})
 
-      console.log(res)
+      Logger.log("_____INTENT:", res)
+      console.log("_____INTENT:", res)
 
       const { appIntent, context, source, target }: { appIntent: AppIntent, context: Context, source: string, target: string } = res.data
       const { apps, intent } = appIntent
@@ -75,6 +77,12 @@ export default async function App() {
       setSource(source)
       setTarget(target)
 
+      getOpenApps(apps)
+        .then(
+          // group the list of apps by the component type ie. WelcomeComponents:[]
+          (apps): { [key: string]: FinsembleIntentApp[] } => groupBy(apps, 'type'))
+        .then((res) => setOpenApps(res))
+
     });
 
   }, [])
@@ -82,7 +90,7 @@ export default async function App() {
 
   // Grab all Finsemble's open components and match them to the list of apps.
   // The list is of intentApps are Finsemble component types.
-  const getOpenApps = async (apps: Array<AppMetadata>): Promise<AppComponent[]> => {
+  const getOpenApps = async (apps: Array<AppMetadata>): Promise<FinsembleIntentApp[]> => {
     try {
       const { err, data }: any = await LauncherClient.getActiveDescriptors()
 
@@ -90,14 +98,19 @@ export default async function App() {
 
       const components = Object.values(data)
       // Get all the open components that match the apps list
-      const openApps: Array<AppComponent> = components.filter(
+      const openApps: Array<FinsembleIntentApp> = components.filter(
         (component: FinsembleComponent) =>
           // if the component matches with an app of the same name return it
           apps.some(
             (app: AppMetadata): boolean => app.name === component.customData.component.type
           )
       ).map(
-        (component: FinsembleComponent): AppComponent => [component.name, component.componentType, [component.url, component.customData?.foreign?.components?.Toolbar?.iconURL]]
+        (component: FinsembleComponent): FinsembleIntentApp => {
+          const {
+            name, componentType, icon } = component
+          const iconURL = component.customData?.foreign?.components?.Toolbar?.iconURL
+          return { name, type: componentType, icons: [icon, iconURL] }
+        }
       )
 
       return openApps
@@ -107,13 +120,6 @@ export default async function App() {
       return err
     }
   }
-
-
-  //
-  getOpenApps(apps)
-    .then((apps): { [key: string]: any[] } =>
-      groupBy(apps, ([name, type]: [string, string]) => type)
-    )
 
 
   const o = (windowName: string, context: Context) => {
@@ -129,18 +135,32 @@ export default async function App() {
       <CloseIcon className="resolver__close" onClick={() => {
         DialogManager.respondToOpener({ action: 'close' })
       }} />
-      <h2 className="resolver__action"><span className="resolver__action-source">{source}</span> would like to start a <span className="resolver__action-intent">{intent.displayName}</span>, open with...</h2>
+      <h2 className="resolver__action"><span className="resolver__action-source">{source}</span> would like to start a <span className="resolver__action-intent">{intent?.displayName}</span>, open with...</h2>
       <div className="resolver__apps">
 
         {
-          (await getOpenApps(apps)).map(
-            ([name, type, icons]: AppComponent) => (
-              <button key={name} onClick={() => fdc3.open(type, context)}>
-                <img src={`${icons[0] || "./src/launch.svg"}`} />
-                <p>{name}</p>
-              </button>
+          openApps &&
+          Object.entries(openApps)
+            .map(([componentType, appList]: [string, FinsembleIntentApp[]]) => (
+              <div key={componentType} >
+                <h2>{componentType}</h2>
+                <ul>
+                  {appList.map(({ name, type, icons }) => (
+                    <button key={name} onClick={() => fdc3.open(name, context)}>
+                      <img src={`${icons[0] || "./src/launch.svg"}`} />
+                      <p>{name}</p>
+                    </button>
+                  ))
+                  }
+                  <button onClick={() => fdc3.open(componentType, context)}>
+                    {/* <img src={`${icons[0] || "./src/launch.svg"}`} /> */}
+                    <p>Open a new {componentType}</p>
+                  </button>
+                </ul>
+              </div>
             )
-          )
+            )
+
         }
 
       </div>

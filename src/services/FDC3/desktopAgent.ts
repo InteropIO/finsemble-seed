@@ -197,7 +197,8 @@ export default class D implements DesktopAgent {
 				appIntent, context, target: target || null, source: this.windowName
 			}
 			// Launch intent resolver component
-			this.DialogManager.open("IntentResolver", dialogParams, (result: { success: boolean, intentResolution: IntentResolution }) => {
+			this.DialogManager.open("intentResolverModal", dialogParams, (result: { success: boolean, intentResolution: IntentResolution }) => {
+				console.log(result)
 				const { success, intentResolution } = result
 				if (!success) {
 					reject("Intent could not be resolved");
