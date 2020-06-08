@@ -34,10 +34,17 @@
 					"fdc3": {
 						"intents": [
 							{
-								"name": "fdc3.call",
+								"name": "StartCall",
 								"displayName": "Call",
 								"contexts": [
 									"fdc3.contact"
+								]
+							},
+							{
+								"name": "ViewChart",
+								"displayName": "View Chart",
+								"contexts": [
+									"fdc3.instrument"
 								]
 							}
 						]

@@ -8,13 +8,6 @@
             "file": "$applicationRoot/services/FDC3/FDC3Service.js",
             "visible": false,
             "html": "$applicationRoot/services/FDC3/FDC3.html"
-        },
-        "testFDC3Service": {
-            "useWindow": true,
-            "active": true,
-            "name": "testFDC3Service",
-            "visible": false,
-            "html": "$applicationRoot/services/testFDC3/testFDC3.html"
         }
     }
 }
