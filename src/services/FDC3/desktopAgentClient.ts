@@ -142,7 +142,7 @@ export default class DesktopAgentClient extends EventEmitter implements DesktopA
 
 		// deals with data sent at open
 		const spawnData = this.#FSBL.Clients.WindowClient.getSpawnData();
-		if (intent === spawnData?.fdc3?.intent) {
+		if (intent === spawnData?.fdc3?.intent?.name) {
 			handler(spawnData?.fdc3?.context);
 		}
 

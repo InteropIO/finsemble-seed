@@ -4,7 +4,7 @@ import "../intentResolver.css";
 import CloseIcon from './CloseIcon';
 const { useState, useEffect } = React
 
-const { DialogManager, LauncherClient, Logger } = FSBL.Clients
+const { DialogManager, LauncherClient, Logger, RouterClient } = FSBL.Clients
 
 /**
  * Steps:
@@ -122,11 +122,13 @@ export default function App() {
   }
 
 
-  const o = (windowName: string, context: Context) => {
-    const windowIdentifier: WindowIdentifier = {
-      windowName
-    }
-    // LauncherClient.showWindow(windowIdentifier, { data: context }, cb)
+  const o = (windowIdentifier: WindowIdentifier, context: Context) => {
+    LauncherClient.showWindow(
+      windowIdentifier, {}, (err: any, data: any) => {
+        if (!err) RouterClient.transmit(`FDC3.intent.${intent.name}`, context);
+      })
+
+
   }
 
   return (
@@ -146,13 +148,13 @@ export default function App() {
                 <h2>{componentType}</h2>
                 <ul>
                   {appList.map(({ name, type, icons }) => (
-                    <button key={name} onClick={() => fdc3.open(name, context)}>
-                      <img src={`${icons[0] || "./src/launch.svg"}`} />
+                    <button key={name} onClick={() => o({ windowName: name, componentType: type }, context)}>
+                      <img src={`${icons[0] || icons[1] || "./src/launch.svg"}`} />
                       <p>{name}</p>
                     </button>
                   ))
                   }
-                  <button onClick={() => fdc3.open(componentType, context)}>
+                  <button onClick={() => LauncherClient.spawn(componentType, { data: { fdc3: { intent, context } } })}>
                     {/* <img src={`${icons[0] || "./src/launch.svg"}`} /> */}
                     <p>Open a new {componentType}</p>
                   </button>

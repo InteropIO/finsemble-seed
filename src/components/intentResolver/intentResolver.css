@@ -65,3 +65,12 @@ padding:0;
 .resolver__apps > button >  p:hover{
     color: #0A8CF4;
 }
+
+button {
+background: none;
+border: 0;
+padding: 0;
+color: white;
+cursor: pointer;
+display: inline-block;
+}

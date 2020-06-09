@@ -3,6 +3,14 @@ window.quitFinsemble = function quitFinsemble() {
 	FSBL.shutdownApplication();
 }
 
+window.addEventListener("fdc3Ready", () => {
+	console.log('_____fdc3 ready')
+	fdc3.addIntentListener('ViewChart', (context) => {
+		// { fdc3: { context } }
+		console.log(context)
+	})
+})
+
 if (window.FSBL && FSBL.addEventListener) {
 	FSBL.addEventListener('onReady', init);
 } else {
@@ -10,6 +18,7 @@ if (window.FSBL && FSBL.addEventListener) {
 }
 
 function init() {
+
 	window.launchTutorial = function launchTutorial() {
 		FSBL.System.openUrlWithBrowser("https://www.chartiq.com/tutorials/?slug=finsemble", function () {
 			//console.log("successfully launched docs");

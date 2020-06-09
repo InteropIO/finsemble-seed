@@ -16,7 +16,7 @@
       "component": {
         "preload": "$applicationRoot/preloads/FDC3Client.js",
         "spawnOnStartup": false,
-        "singleton": false,
+        "singleton": true,
         "showDevConsoleOnVisible": false
       },
       "foreign": {

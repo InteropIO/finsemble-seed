@@ -53,6 +53,9 @@ class FDC3Client {
 				} else {
 					win.fdc3 = await this.getOrCreateDesktopAgent("global");
 				}
+				const fdc3Ready = new Event("fdc3Ready");
+				window.dispatchEvent(fdc3Ready);
+
 			} else {
 				win.fdc3 = await this.getOrCreateDesktopAgent("global");
 				for (const channel of linkerChannels) {
@@ -186,6 +189,7 @@ console.log("FDC3Client");
 const setupFDC3Client = () => {
 	console.log("FSBL Ready");
 	(FSBL as any).Clients.FDC3Client = new FDC3Client();
+
 };
 
 // Startup pattern for preload. Preloads can come in any order, so we need to wait on either the window event or the
