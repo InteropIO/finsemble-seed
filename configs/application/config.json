@@ -1,5 +1,6 @@
 {
 	"comment": "Top-level application config for development, adding on top of the core config",
+	"accessibleLinker": true,
 	"servicesConfig": {
 		"distributedStore": {
 			"initialStores": [
@@ -7,12 +8,9 @@
 					"name": "Finsemble-AppLauncher-Store",
 					"foundation": {
 						"appFolders": {
-							"list": [
-								"My Apps",
-								"Favorites"
-							],
+							"list": ["Advanced App Launcher", "Favorites"],
 							"folders": {
-								"My Apps": {
+								"Advanced App Launcher": {
 									"icon": "ff-component",
 									"type": "folder",
 									"disableUserRemove": true,
@@ -49,7 +47,7 @@
 						"activeLauncherTags": [],
 						"filterText": "",
 						"filterTags": [],
-						"activeFolder": "My Apps",
+						"activeFolder": "Advanced App Launcher",
 						"sortBy": "Alphabetical"
 					}
 				}
@@ -79,18 +77,14 @@
 			"undockDisbandsEntireGroup": false,
 			"fillHolesOnUndock": true,
 			"tabbing": {
-				"enabled": true
+				"enabled": false
 			},
 			"tiling": {
-				"enabled": true
+				"enabled": false
 			}
 		},
 		"logger": {
-			"hotkeyShowCentralLogger": [
-				"ctrl",
-				"shift",
-				"L"
-			]
+			"hotkeyShowCentralLogger": ["ctrl", "shift", "L"]
 		},
 		"storage": {
 			"defaultStorage": "IndexedDBAdapter",
@@ -114,6 +108,11 @@
 	"systemTrayComponent": "File Menu",
 	"Window Manager": {
 		"alwaysOnTopIcon": false,
+		"autoHideIcon": {
+			"defaultSetting": true,
+			"timeout": 2000,
+			"resetMargin": true
+		},
 		"floatingTitlebarComponent": "Floating Titlebar",
 		"deliveryMechanism": "preload"
 	},
@@ -134,7 +133,7 @@
 					"dialogTemplate",
 					"dialogTest",
 					"File Menu",
-					"AdhocComponentForm",
+					"QuickComponentForm",
 					"Process Monitor",
 					"Docking Move Mask",
 					"yesNo",
@@ -162,11 +161,12 @@
 	"globalHotkeys": {},
 	"//": "importConfig contains components that are necessary to start Finsemble. All other components are loaded dynamically. See server/auth/test.json",
 	"importConfig": [
-		"$applicationRoot/configs/application/presentationComponents.json",
+		"$applicationRoot/configs/application/UIComponents.json",
 		"$applicationRoot/configs/application/components.json",
 		"$applicationRoot/configs/application/workspaces.json",
 		"$applicationRoot/configs/application/workspaceTemplates.json",
 		"$applicationRoot/configs/application/services.json",
-		"$applicationRoot/configs/application/securityPolicies.json"
+		"$applicationRoot/configs/application/securityPolicies.json",
+		"$applicationRoot/components/launchGroupSpawner/config.json"
 	]
 }

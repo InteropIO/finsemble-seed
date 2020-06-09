@@ -22,7 +22,7 @@ export default class WorkspaceLauncherButton extends React.Component {
 
 	render() {
 		return (<FinsembleButton edge="top bottom" buttonType={["Toolbar"]} onClick={this.onClick}>
-			<FinsembleFontIcon className="finsemble-toolbar-button-icon pinned-icon pinned-workspace-icon" icon="ff-workspace"/>
+			<FinsembleFontIcon className="finsemble-toolbar-button-icon pinned-icon pinned-workspace-icon" icon="ff-adp-workspace"/>
 			<FinsembleButtonLabel className="finsemble-toolbar-button-label" align="right" label={this.props.label}/>
 		</FinsembleButton>);
 	}

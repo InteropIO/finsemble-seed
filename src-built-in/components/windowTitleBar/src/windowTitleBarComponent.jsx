@@ -19,10 +19,11 @@ import Minimize from "./components/right/MinimizeButton.jsx";
 import DockingButton from "./components/right/DockingButton.jsx";
 import Maximize from "./components/right/MaximizeButton.jsx";
 import Close from "./components/right/CloseButton.jsx";
-import BringSuiteToFront from "./components/right/BringSuiteToFront.jsx";
 import AlwaysOnTop from "./components/right/AlwaysOnTop.jsx";
+import AutoHide from "./components/right/AutoHide.jsx";
 import TabRegion from './components/center/TabRegion'
 import "../../../../assets/css/finsemble.css";
+import "../../../../assets/css/_windowTitleBar.css";
 
 /**
  * This is the main window manager component. It's the custom window frame that we add to each window that has useFSBLHeader set to true in its windowDescriptor.
@@ -56,6 +57,7 @@ class WindowTitleBar extends React.Component {
 			showShareButton: windowTitleBarStore.getValue({ field: "Sharer.emitterEnabled" }),
 			isTopRight: windowTitleBarStore.getValue({ field: "isTopRight" }),
 			alwaysOnTopButton: windowTitleBarStore.getValue({ field: "AlwaysOnTop.show" }),
+			autoHideButton: windowTitleBarStore.getValue({ field: "AutoHide.show" }),
 			tabs: [activeIdentifier], //array of tabs for this window
 			showTabs: windowTitleBarStore.getValue({ field: "showTabs" }),
 			hackScrollbar: windowTitleBarStore.getValue({ field: "hackScrollbar" }),
@@ -75,6 +77,7 @@ class WindowTitleBar extends React.Component {
 		this.onToggleDockingIcon = this.onToggleDockingIcon.bind(this);
 		this.onDockingEnabledChanged = this.onDockingEnabledChanged.bind(this);
 		this.onAlwaysOnTopChanged = this.onAlwaysOnTopChanged.bind(this);
+		this.onAutoHideChanged = this.onAutoHideChanged.bind(this);
 		this.showLinkerButton = this.showLinkerButton.bind(this);
 		this.isTopRight = this.isTopRight.bind(this);
 		this.allowDragOnCenterRegion = this.allowDragOnCenterRegion.bind(this);
@@ -87,6 +90,7 @@ class WindowTitleBar extends React.Component {
 		this.onTilingStop = this.onTilingStop.bind(this);
 		this.onTilingStart = this.onTilingStart.bind(this);
 		this.resizeDragHandle = this.resizeDragHandle.bind(this);
+		this.onDoubleClick = this.onDoubleClick.bind(this);
 
 	}
 	componentWillMount() {
@@ -96,6 +100,7 @@ class WindowTitleBar extends React.Component {
 			{ field: "Main.dockingIcon", listener: this.onToggleDockingIcon },
 			{ field: "Main.dockingEnabled", listener: this.onDockingEnabledChanged },
 			{ field: "AlwaysOnTop.show", listener: this.onAlwaysOnTopChanged },
+			{ field: "AutoHide.show", listener: this.onAutoHideChanged },
 			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton },
 			{ field: "Sharer.emitterEnabled", listener: this.onShareEmitterChanged },
 			{ field: "isTopRight", listener: this.isTopRight },
@@ -108,7 +113,6 @@ class WindowTitleBar extends React.Component {
 		//console.log("Adding listener for stopTilingOrTabbing.");
 		FSBL.Clients.RouterClient.addListener("DockingService.stopTilingOrTabbing", this.allowDragOnCenterRegion);
 		FSBL.Clients.RouterClient.addListener("DockingService.cancelTilingOrTabbing", this.allowDragOnCenterRegion);
-
 	}
 
 	componentDidMount() {
@@ -130,6 +134,7 @@ class WindowTitleBar extends React.Component {
 			{ field: "Main.dockingIcon", listener: this.onToggleDockingIcon },
 			{ field: "Main.dockingEnabled", listener: this.onDockingEnabledChanged },
 			{ field: "AlwaysOnTop.show", listener: this.onAlwaysOnTopChanged },
+			{ field: "AutoHide.show", listener: this.onAutoHideChanged },
 			{ field: "Linker.showLinkerButton", listener: this.showLinkerButton },
 			{ field: "Sharer.emitterEnabled", listener: this.onShareEmitterChanged },
 			{ field: "isTopRight", listener: this.isTopRight },
@@ -140,6 +145,7 @@ class WindowTitleBar extends React.Component {
 		//console.log("Removing listener from the router.");
 		FSBL.Clients.RouterClient.removeListener("DockingService.startTilingOrTabbing", this.disallowDragOnCenterRegion);
 		FSBL.Clients.RouterClient.removeListener("DockingService.stopTilingOrTabbing", this.allowDragOnCenterRegion);
+		FSBL.Clients.RouterClient.removeListener("DockingService.cancelTilingOrTabbing", this.allowDragOnCenterRegion);
 	}
 
 	/**
@@ -182,6 +188,21 @@ class WindowTitleBar extends React.Component {
 	}
 
 	/**
+	 * Called whenever a tab is dropped on a non tab area.
+	 * It won't be called when dropped on a tab that handles handle the event.
+	 */
+	onDropHandler() {
+		FSBL.Clients.WindowClient.cancelTilingOrTabbing({});
+	}
+	/**
+	 * Called when user double clicks on drag handle
+	 */
+	onDoubleClick() {
+		// Actions.clickMaximize checks the window state
+		// and toggles between maximize and minimize.
+		HeaderActions.clickMaximize();
+	}
+	/**
 	 * The dragger is an absolutely positioned element that is superimposed on the actual area that we'd like to drag.
 	 * This is necessary due to a bug in Chromium. Effectively, we need the dragger to change its left position and width
 	 * to match the intended drag area. These dimensions can change whenever the header is re-rendered (for instance when
@@ -202,9 +223,12 @@ class WindowTitleBar extends React.Component {
 		// Create the dragger if it doesn't already exist
 		let dragHandle = document.querySelector(".fsbl-drag-handle");
 		if (!dragHandle) {
+			const currentWindow = fin.desktop.Window.getCurrent();
 			dragHandle = document.createElement("div");
 			dragHandle.className = "fsbl-drag-handle";
-
+			dragHandle.onmousedown = (e) => {currentWindow.startMovingWindow(e)}
+			dragHandle.onmouseup = (e) => {currentWindow.stopMovingWindow(e)}
+			dragHandle.ondblclick = () => { this.onDoubleClick(); }
 			fsblHeader.insertBefore(dragHandle, fsblHeader.firstChild);
 			var self = this;
 			window.addEventListener("resize", function () {
@@ -321,6 +345,9 @@ class WindowTitleBar extends React.Component {
 	onAlwaysOnTopChanged(err, response) {
 		this.setState({ alwaysOnTopButton: response.value });
 	}
+	onAutoHideChanged(err, response) {
+		this.setState({ autoHideButton: response.value });
+	}
 	onStoreChanged(newState) {
 		this.setState(newState);
 	}
@@ -376,7 +403,7 @@ class WindowTitleBar extends React.Component {
 		}
 		//See this.allowDragOnCenterRegion for more explanation.
 		return (
-			<div className={headerClasses}>
+			<div className={headerClasses} onDrop={this.onDropHandler.bind(this)}>
 				{/* Only render the left section if something is inside of it. The left section has a right-border that we don't want showing willy-nilly. */}
 				{RENDER_LEFT_SECTION &&
 					<div className="fsbl-header-left">
@@ -403,10 +430,18 @@ class WindowTitleBar extends React.Component {
 
 				</div>
 				<div className={rightWrapperClasses} ref={this.setToolbarRight}>
-					{this.state.alwaysOnTopButton && showMinimizeIcon ? <AlwaysOnTop /> : null}
-					<BringSuiteToFront />
-					{this.state.minButton && showMinimizeIcon ? <Minimize /> : null}
 					{showDockingIcon ? <DockingButton /> : null}
+					{/** DH 11/22/2019
+					 * Because AlwaysOnTop is a "smart" component that registers
+					 * event handlers, etc., it's not a good idea to constantly mount
+					 * and unmount it. To prevent this, we pass in a "visible" prop that,
+					 * if false, sets "display: none". Ideally, AlwaysOnTop should be a "dumb"
+					 * component, and all the event handlers, etc. should be registered in a parent component,
+					 * as this simplifies the UI and allows React to better optimize under the hood.
+					 */}
+					<AlwaysOnTop visible={this.state.alwaysOnTopButton && showMinimizeIcon}/>
+					<AutoHide visible={this.state.autoHideButton}/>
+					{this.state.minButton && showMinimizeIcon ? <Minimize /> : null}
 					{this.state.maxButton ? <Maximize /> : null}
 					{this.state.closeButton ? <Close /> : null}
 				</div>

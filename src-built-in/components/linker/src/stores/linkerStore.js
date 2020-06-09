@@ -30,6 +30,9 @@ var LinkerStore = Object.assign({}, EventEmitter.prototype, {
 	getState: function () {
 		return this.values;
 	},
+	isAccessibleLinker: function () {
+		return this.accessibleLinker;
+	},
 	setState: function (state) {
 		this.values.channels = state.channels;
 		if (state.windowIdentifier) {
@@ -47,9 +50,18 @@ var LinkerStore = Object.assign({}, EventEmitter.prototype, {
 				return FSBL.Clients.Logger.system.error("Failed to add Finsemble.LinkerWindow.SetActiveChannels Responder: ", error);
 			}
 
-			self.setState( queryMessage.data);
+			self.setState(queryMessage.data);
 			FSBL.Clients.Logger.system.log("toggle Linker window");
 			queryMessage.sendQueryResponse(null, {});
+		});
+
+		FSBL.Clients.ConfigClient.getValue("finsemble.accessibleLinker", (err, value) => {
+			if (err) {
+				console.err("Error getting accessibleLinker value", err);
+			}
+
+			// Default value for accessibleLinker is true.
+			self.accessibleLinker = (value && typeof value === "boolean") ? value : true;
 		});
 	}
 });

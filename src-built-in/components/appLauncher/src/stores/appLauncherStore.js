@@ -65,7 +65,7 @@ var Actions = {
 			self.filterComponents(response.data.componentList);
 		});
 	},
-	//get adhoc components that the user created from storage.
+	//get quick components that the user created from storage.
 	getUserDefinedComponentList(cb) {
 		return cb();
 		var self = Actions;
@@ -84,7 +84,7 @@ var Actions = {
 			cb();
 		});
 	},
-	//saves adhoc components
+	//saves quick components
 	saveCustomComponents() {
 		var UDCs = {};
 		var components = Object.keys(Actions.componentList);
@@ -169,33 +169,7 @@ var Actions = {
 			}
 		}
 
-		self.componentList = {};
-		// deal with groups
-		for (let componentType in componentList) {
-			let config = components[componentType];
-			let componentGroups = (config.component && config.component.launchGroups) ? config.component.launchGroups : false;
-			if (componentGroups) {
-				if (!Array.isArray(componentGroups)) {
-					componentGroups = [componentGroups];
-				}
-				for (let componentGroup of componentGroups) {
-					if (!self.componentList[componentGroup]) {
-						self.componentList[componentGroup] = {
-							group: componentGroup,
-							list: {}
-						};
-					}
-					self.componentList[componentGroup].list[componentType] = componentList[componentType];
-					if (componentList[componentType].component.windowGroup) {
-						componentList[componentType].params = {
-							groupName: componentList[componentType].component.windowGroup
-						};
-					};
-				}
-			}
-			config.component.type = componentType;
-			self.componentList[componentType] = componentList[componentType];
-		}
+		self.componentList = componentList;
 
 		FSBL.Clients.Logger.debug("appLauncher filterComponents", self.componentList, "settings", settings, "customData", FSBL.Clients.WindowClient.options.customData);
 		appLauncherStore.setValue({ field: "componentList", value: self.componentList });
@@ -267,7 +241,7 @@ var Actions = {
 			ToolbarStore.setValue({ field: "pins." + componentTypeDotRemove, value: thePin });
 		}
 	},
-	//Handler for when the user wants to remove an adhoc component.
+	//Handler for when the user wants to remove a quick component.
 	handleRemoveCustomComponent(componentName) {
 		var self = this;
 		FSBL.Clients.DialogManager.open("yesNo", {
@@ -315,7 +289,7 @@ var Actions = {
 	},
 	//Hide the window.
 	hideWindow() {
-		fin.desktop.Window.getCurrent().hide();
+		finsembleWindow.hide();
 	},
 	//Spawn a component.
 	launchComponent(config, params, cb) {

@@ -110,13 +110,13 @@ img {
     width: 170px;
     height: 104px;
     background-color: var(--content-card-background-color);
-    box-shadow: 0 1px 4px 0 rgba(136, 136, 136, 0.5);
 }
 
 .appHeader {
     margin-top: 9px;
     display: flex;
     flex: 1;
+    padding: 4px;
     cursor: pointer;
 }
 

@@ -50,9 +50,9 @@ class AppLauncher extends React.Component {
 		});
 	}
 
-	openAdHoc() {
-		//FSBL.Clients.LauncherClient.spawn("AdhocComponentForm", { monitor: "mine" });
-		FSBL.Clients.DialogManager.open("AdhocComponentForm", {}, () => { });
+	openQuickComponent() {
+		//FSBL.Clients.LauncherClient.spawn("QuickComponentForm", { monitor: "mine" });
+		FSBL.Clients.DialogManager.open("QuickComponentForm", {}, () => { });
 	}
 
 	openAppCatalog() {
@@ -74,13 +74,13 @@ class AppLauncher extends React.Component {
 		return (<FinsembleMenu>
 			<FinsembleMenuSection className="menu-secondary">
 				{<FinsembleMenuItem>
-					<FinsembleMenuItemLabel onClick={this.openAdHoc}>
-						<i className="ff-new-workspace"></i> New App
+					<FinsembleMenuItemLabel onClick={this.openQuickComponent}>
+						New App
 					</FinsembleMenuItemLabel>
 				</FinsembleMenuItem> }
 				<FinsembleMenuItem>
 					<FinsembleMenuItemLabel onClick={this.openAppCatalog}>
-						<i className="ff-list"></i> App Catalog
+						App Catalog
 					</FinsembleMenuItemLabel>
 				</FinsembleMenuItem>
 			</FinsembleMenuSection>
@@ -89,16 +89,20 @@ class AppLauncher extends React.Component {
 	}
 }
 
-fin.desktop.main(function () {
-	if (window.FSBL && FSBL.addEventListener) {     FSBL.addEventListener("onReady", FSBLReady); } else {     window.addEventListener("FSBLReady", FSBLReady) } function FSBLReady () {
-		// var Test = require('./test');
-	//console.log("appLauncher app onReady");
 
-		storeExports.initialize(function (store) {
-			appLauncherStore = store;
-			ReactDOM.render(
-				<AppLauncher />
-				, document.getElementById("bodyHere"));
-		});
-	}
-});
+if (window.FSBL && FSBL.addEventListener) {
+	FSBL.addEventListener("onReady", FSBLReady);
+} else {
+	window.addEventListener("FSBLReady", FSBLReady)
+}
+
+function FSBLReady() {
+	// var Test = require('./test');
+	//console.log("appLauncher app onReady");
+	storeExports.initialize(function (store) {
+		appLauncherStore = store;
+		ReactDOM.render(
+			<AppLauncher />
+			, document.getElementById("bodyHere"));
+	});
+}
