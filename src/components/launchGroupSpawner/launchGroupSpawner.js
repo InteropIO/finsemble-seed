@@ -6,24 +6,30 @@ const FSBLReady = () => {
 		let spawnerData = FSBL.Clients.WindowClient.getSpawnData();
 		if (spawnerData && spawnerData.toSpawn) {
 			//get the spawner's own config and position info (the spawned components will offset from that position)
-			finsembleWindow.getOptions((err,data) => {
+			finsembleWindow.getOptions(async (err,data) => {
 				if(!err) {
 					let spawnerOptions = data;
 					//let spawnerConfig = FSBL.Clients.WindowClient.options.customData;
-			
+
+                    spawnerOptions.bottom = spawnerOptions.defaultTop + spawnerOptions.defaultHeight;
+                    spawnerOptions.right = spawnerOptions.defaultLeft + spawnerOptions.defaultWidth;
+                    if (!spawnerOptions.monitorDimensions) {
+                        const monitor = await FSBL.Clients.LauncherClient.getMonitor(finsembleWindow.windowIdentifier);
+                        spawnerOptions.monitorDimensions = monitor.availableRect;
+                    }
 					let params = {
 						//make position data relative to the current monitor (and convert bottom/right to distance from those edges)
-						top: spawnerOptions.top - spawnerOptions.monitorDimensions.top,
-						left: spawnerOptions.left - spawnerOptions.monitorDimensions.left,
+						top: spawnerOptions.defaultTop - spawnerOptions.monitorDimensions.top,
+						left: spawnerOptions.defaultLeft - spawnerOptions.monitorDimensions.left,
 						bottom: spawnerOptions.monitorDimensions.bottom - spawnerOptions.bottom,
 						right: spawnerOptions.monitorDimensions.right - spawnerOptions.right,
-						width: spawnerOptions.width,
-						height: spawnerOptions.height,
+						width: spawnerOptions.defaultWidth,
+						height: spawnerOptions.defaultHeight,
 						//linkerGroup: spawnerConfig.window.data.linkerGroup,
 						linkerGroup: spawnerData.linkerGroup,
 						addToWorkspace: spawnerData.addToWorkspace
-					}
-	
+                    }
+
 					spawnComponentGroup(spawnerData.toSpawn, params)
 						.then((spawnResponses) => { 
 							FSBL.Clients.Logger.log("Group components spawn responses:", spawnResponses);
@@ -49,4 +55,4 @@ if (window.FSBL && FSBL.addEventListener) {
 	FSBL.addEventListener("onReady", FSBLReady)
 } else {
 	window.addEventListener("FSBLReady", FSBLReady)
-}
+} 

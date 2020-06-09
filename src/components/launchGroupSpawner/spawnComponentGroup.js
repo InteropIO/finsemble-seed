@@ -49,7 +49,7 @@ const spawnComponentGroup = function(componentsToSpawn, groupParams) {
 	if (groupParams.linkerGroup == 'auto'){
 		groupParams.linkerGroup = pickLeastUsedLinkerGroup();
 	}
-	
+
 	let compsToSpawn = processConfig(componentsToSpawn, groupParams);
 	FSBL.Clients.Logger.log(`Spawning component group at top: ${groupParams.top}, left: ${groupParams.left}, width: ${groupParams.width}, height: ${groupParams.height}, linkerGroup: ${groupParams.linkerGroup} and config:`, componentsToSpawn);
 	return Promise.all(compsToSpawn.map(function(aComp) {
@@ -90,7 +90,7 @@ const processConfig = function(componentsToSpawn, groupParams) {
 		(groupParams.right != undefined && (isNaN(groupParams.right) || groupParams.right < 0)) ||
 		(groupParams.width != undefined && (isNaN(groupParams.width) || groupParams.width < 0)) ||
 		(groupParams.height != undefined && (isNaN(groupParams.height) || groupParams.height < 0))) {
-		throw new Error("Group dimensions and positions must be specified in pixels relative to the current monitor, problem component: \n" + JSON.stringify(element, null, 2));
+		throw new Error("Group dimensions and positions must be specified in pixels relative to the current monitor, problem component: \n" + JSON.stringify(groupParams, null, 2));
 	}
 
 	//check all components have position and size info
@@ -128,7 +128,7 @@ const processConfig = function(componentsToSpawn, groupParams) {
 		//  N.B. Rounding of coordinates is awkward and must be done correctly to avoid overlaps...
 		comp.spawnOptions.top = processCoordinateOrDimension(comp.spawnOptions.top, groupParams.top, groupParams.height, Math.round);
 		comp.spawnOptions.left = processCoordinateOrDimension(comp.spawnOptions.left, groupParams.left, groupParams.width, Math.round);
-		
+
 		//interpret bottom and right as spawn does - distance from the bottom and right edges
 		comp.spawnOptions.bottom = processCoordinateOrDimension(comp.spawnOptions.bottom, groupParams.bottom, groupParams.height, Math.round);
 		comp.spawnOptions.right = processCoordinateOrDimension(comp.spawnOptions.right, groupParams.right, groupParams.width, Math.round);
@@ -204,4 +204,4 @@ const pickLeastUsedLinkerGroup = function(){
     return leastGroup;
 };
 
-export { spawnComponentGroup as default };
+export { spawnComponentGroup as default }; 
