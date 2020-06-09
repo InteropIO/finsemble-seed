@@ -195,13 +195,11 @@ const LocalStorageAdapter = function(uuid) {
 	 * This method should be used very, very judiciously. It's essentially a method designed to wipe the database for a particular user.
 	 */
 	this.clearCache = function(params, cb) {
-		//console.log("clear local cache");
-		Logger.system.debug(
-			`LocalStorageAdapter.clearCache for userPreface=${userPreface}`
-		);
-		console.debug(
-			`LocalStorageAdapter.clearCache for userPreface=${userPreface}`
-		);
+		/** DH 6/9/2020 - This code was broken with references to undefined variables, so I infer
+		 * this is a dead code path and can probably .
+		 */
+		Logger.system.debug(`LocalStorageAdapter.clearCache`);
+		console.debug(`LocalStorageAdapter.clearCache`);
 
 		try {
 			let arr = []; // Array to hold the keys
@@ -223,25 +221,13 @@ const LocalStorageAdapter = function(uuid) {
 				//console.log("remove Iem", arr[i]);
 				localStorage.removeItem(arr[i]);
 			}
-			Logger.system.log(
-				`LocalStorageAdapter.clearCache Success: userPreface=${userPreface}`
-			);
-			console.log(
-				`LocalStorageAdapter.clearCache Success: userPreface=${userPreface}`
-			);
+			Logger.system.log(`LocalStorageAdapter.clearCache Success`);
+			console.log(`LocalStorageAdapter.clearCache Success`);
 
 			cb(null, { status: "success" });
 		} catch (err) {
-			Logger.system.error(
-				"LocalStorageAdapter.clearCache failed Error",
-				err,
-				`userPreface=${userPreface}`
-			);
-			console.error(
-				"LocalStorageAdapter.clearCache failed Error",
-				err,
-				`userPreface=${userPreface}`
-			);
+			Logger.system.error("LocalStorageAdapter.clearCache failed Error", err);
+			console.error("LocalStorageAdapter.clearCache failed Error", err);
 
 			cb(err, { status: "failed" });
 		}
