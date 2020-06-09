@@ -15,6 +15,12 @@ body {
     grid-template-columns: 20px 1fr 1fr 20px;
     grid-template-rows:155px 65px 1fr 40px;
 }
+
+.resolver__close{
+    right: 0;
+    position: absolute;
+    padding: 6px;
+}
 .resolver__header {
     grid-row:1;
     grid-column:2/3;
@@ -41,6 +47,13 @@ body {
     border-radius: 13px;
     padding:15px;
 }
+.resolver__apps--dark {
+    grid-row: 3;
+    grid-column: 2/4;
+    background: rgba(0, 0, 0, 0.18);
+    border-radius: 6px;
+    padding: 15px;
+}
 
 .resolver__apps > button  {
 max-width: 70px;
@@ -65,6 +78,64 @@ padding:0;
 .resolver__apps > button >  p:hover{
     color: #0A8CF4;
 }
+/* individual apps */
+
+.app{
+    display: grid;
+    width: 300px;
+    grid-template-columns: 82px 1fr;
+    grid-column-gap: 12px;
+    background: #1e66d233;
+    border-radius: 17px;
+    grid-template-rows: 1fr;
+    justify-items: center;
+    align-items: center;
+}
+.app__header{
+    margin: 0px;
+    padding: 7px 0px;
+    width: 100%;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    grid-column: 1;
+    justify-self: baseline;
+}
+.app__type {
+    font-size: 0.6em;
+    margin: 0;
+    padding: 0;
+    text-overflow: ellipsis;
+    text-align: center;
+}
+.app__icon{
+    max-width: 25px;
+    margin: 0;
+    padding: 0;
+}
+.app__list {
+    grid-column: 2;
+}
+
+.app__list > p {
+    margin:0;
+    padding:0;
+    font-size:0.6em;
+}
+.app__list > ul {
+    display: contents;
+}
+.app__list > ul > li {
+    display: block;
+}
+.app__list > ul > li > button {
+    font-size: 0.6em;
+}
+.app__new {
+    fill: #1bf17e;
+    width: 20px;
+    cursor: pointer;
+}
 
 button {
 background: none;
@@ -72,5 +143,4 @@ border: 0;
 padding: 0;
 color: white;
 cursor: pointer;
-display: inline-block;
 }

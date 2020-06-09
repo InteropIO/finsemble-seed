@@ -5,8 +5,8 @@
         "url": "$applicationRoot/components/intentResolver/intentResolver.html",
         "options": {
           "resizable": false,
-          "autoShow": true,
-          "alwaysOnTop": false
+          "autoShow": false,
+          "alwaysOnTop": true
         },
         "top": "center",
         "left": "center",
@@ -15,7 +15,7 @@
       },
       "component": {
         "preload": "$applicationRoot/preloads/FDC3Client.js",
-        "spawnOnStartup": false,
+        "spawnOnStartup": true,
         "singleton": true,
         "showDevConsoleOnVisible": false
       },

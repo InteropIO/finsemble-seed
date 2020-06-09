@@ -2,6 +2,7 @@ import * as React from 'react'
 // import { FinsembleDialog } from "@chartiq/finsemble-react-controls";
 import "../intentResolver.css";
 import CloseIcon from './CloseIcon';
+import AddBoxIcon from './AddBoxIcon';
 const { useState, useEffect } = React
 
 const { DialogManager, LauncherClient, Logger, RouterClient } = FSBL.Clients
@@ -121,44 +122,70 @@ export default function App() {
     }
   }
 
+  /**
+   * show an open app and send the context via the router
+   * */
+  const openAppWithIntent = (action: "show" | "spawn", data: { componentType: string; intent?: IntentMetadata; context: Context; name?: string; }) => {
+    const { intent, name, context, componentType } = data
 
-  const o = (windowIdentifier: WindowIdentifier, context: Context) => {
-    LauncherClient.showWindow(
-      windowIdentifier, {}, (err: any, data: any) => {
-        if (!err) RouterClient.transmit(`FDC3.intent.${intent.name}`, context);
-      })
+    if (action === "spawn") {
+      LauncherClient.spawn(componentType, { data: { fdc3: { intent, context } } }, (err: any, data: any) => {
+        const success = err ? false : true
 
+        DialogManager.respondToOpener({ success, intent, context, source, target })
+      }
+      )
+    }
 
+    if (action === "show") {
+      LauncherClient.showWindow(
+        { windowName: name, componentType }, {}, (err: any, data: any) => {
+          const success = err ? false : true
+          if (!err) {
+
+            RouterClient.transmit(`FDC3.intent.${intent.name}`, context);
+
+            DialogManager.respondToOpener({ success, intent, context, source, target })
+          }
+        })
+    }
   }
 
   return (
     <div className="resolver__container">
       <img className="resolver__header" src="./src/fdc3-intent-header.svg" />
-      <CloseIcon className="resolver__close" onClick={() => {
-        DialogManager.respondToOpener({ action: 'close' })
-      }} />
-      <h2 className="resolver__action"><span className="resolver__action-source">{source}</span> would like to start a <span className="resolver__action-intent">{intent?.displayName}</span>, open with...</h2>
+      <CloseIcon className="resolver__close" onClick={() =>
+        DialogManager.respondToOpener({ error: true })} />
+      <h2 className="resolver__action"><span className="resolver__action-source">{source}</span> would like to action the intent: <span className="resolver__action-intent">{intent?.displayName}</span>, open with...</h2>
       <div className="resolver__apps">
 
         {
           openApps &&
           Object.entries(openApps)
             .map(([componentType, appList]: [string, FinsembleIntentApp[]]) => (
-              <div key={componentType} >
-                <h2>{componentType}</h2>
-                <ul>
-                  {appList.map(({ name, type, icons }) => (
-                    <button key={name} onClick={() => o({ windowName: name, componentType: type }, context)}>
-                      <img src={`${icons[0] || icons[1] || "./src/launch.svg"}`} />
-                      <p>{name}</p>
-                    </button>
-                  ))
-                  }
-                  <button onClick={() => LauncherClient.spawn(componentType, { data: { fdc3: { intent, context } } })}>
-                    {/* <img src={`${icons[0] || "./src/launch.svg"}`} /> */}
-                    <p>Open a new {componentType}</p>
-                  </button>
-                </ul>
+              <div className="app" key={componentType} >
+                <div className="app__header">
+                  <img className="app__icon" src={`${appList[0].icons[0] || appList[0].icons[1] || "./src/launch.svg"}`} />
+                  <h3 className="app__type">{componentType}</h3>
+                  <AddBoxIcon className="app__new" onClick={() => openAppWithIntent("spawn", { componentType, intent, context })
+                  } />
+                </div>
+                <div className="app__list">
+                  <p>Open Apps:</p>
+                  <hr></hr>
+                  <ul>
+                    {appList.map(({ name, type, icons }) => (
+                      <li>
+                        <button key={name} onClick={() => openAppWithIntent("show", { name, componentType: type, context, intent })
+                        }>
+                          {name}
+                        </button>
+                      </li>
+                    ))
+                    }
+                  </ul>
+                </div>
+
               </div>
             )
             )
