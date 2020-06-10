@@ -37,14 +37,14 @@
 			}
 		}
 
-		var init = function () {
-			document.querySelector("#closer").addEventListener("click", function () {
+		var init = function() {
+			document.querySelector("#closer").addEventListener("click", function() {
 				var notification = fin.desktop.Notification.getCurrent();
 				notification.close();
 			});
 		};
 
-		document.addEventListener("DOMContentLoaded", function () {
+		document.addEventListener("DOMContentLoaded", function() {
 			init();
 		});
 	</script>

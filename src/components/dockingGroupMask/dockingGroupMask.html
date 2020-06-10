@@ -9,7 +9,7 @@
 
 	<body>
 		<script type="text/javascript">
-			var drop = function (e) {
+			var drop = function(e) {
 				FSBL.Clients.RouterClient.transmit("tabbingDragEnd", { gotDrop: true });
 				FSBL.Clients.WindowClient.stopTilingOrTabbing({
 					mousePosition: {
@@ -20,7 +20,7 @@
 				});
 			};
 
-			var dragOver = function (e) {
+			var dragOver = function(e) {
 				e.preventDefault();
 				return false;
 			};

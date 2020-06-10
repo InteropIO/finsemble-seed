@@ -77,7 +77,7 @@ IDBKeyRange.forPrefix = (prefix) => {
  * save our value under. Example: `Finsemble:defaultUser:finsemble:activeWorkspace`. That key would hold the value of
  * our activeWorkspace.
  */
-const IndexedDBAdapter = function (uuid) {
+const IndexedDBAdapter = function(uuid) {
 	// #region Initializes a new instance of the IndexedDBAdapter.
 	BaseStorage.call(this, arguments);
 

@@ -254,7 +254,7 @@ const runZoomHandler = () => {
 	//Override FEA window zoom function to do nothing
 	//which prevents manual use of this function which conflicts with zoom preload
 	//N.B. window.options.accelerator.zoom setting is not affected by this and will still conflict with Zoom preload if set
-	FSBL.Clients.WindowClient.getCurrentWindow().setZoomLevel = function (
+	FSBL.Clients.WindowClient.getCurrentWindow().setZoomLevel = function(
 		level,
 		callback,
 		errorCallback

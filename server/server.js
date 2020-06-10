@@ -142,7 +142,7 @@
 	let options = { maxAge: cacheAge };
 	//This will prevent config files from being cached by the server, allowing an application restart instead of a rebuild.
 	if (cacheAge === 0) {
-		options.setHeaders = function (res, path, stat) {
+		options.setHeaders = function(res, path, stat) {
 			res.set("cache-control", "no-cache");
 		};
 	}
