@@ -1,0 +1,21 @@
+#notification-icon__wrapper {
+	top: 9px;
+	position: relative;
+	display: flex;
+	clip-path: inset(0 0 0 0 round 12%);
+	width: 40px;
+	height: 22px;
+}
+.notification-number {
+	width: 100%;
+	height: 100%;
+	justify-content: center;
+	display: inline-flex;
+	align-items: center;
+}
+#notification-icon_vector {
+	fill: white;
+	padding-top: 8px;
+	margin-right: -2px;
+	cursor: pointer;
+}

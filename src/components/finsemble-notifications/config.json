@@ -1,0 +1,9 @@
+{
+	"importConfig": [
+		"$applicationRoot/components/finsemble-notifications/components/notification-center/config.json",
+		"$applicationRoot/components/finsemble-notifications/components/notification-drawer/config.json",
+		"$applicationRoot/components/finsemble-notifications/components/notification-toasts/config.json",
+		"$applicationRoot/components/finsemble-notifications/components/notification-toaster/config.json",
+		"$applicationRoot/components/finsemble-notifications/services/notification/config.json"
+	]
+}

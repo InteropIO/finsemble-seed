@@ -1,0 +1,185 @@
+@import "../../../../../assets/css/_notification.css";
+body {
+	margin: 0px;
+	background-color: rgb(28, 42, 54);
+	color: white;
+	font-size: var(--procMonitor-font-size);
+	font-weight: var(--procMonitor-font-weight);
+	font-family: var(--font-family);
+}
+.notification {
+	font-family: "Open Sans", sans-serif;
+	max-width: 400px;
+	min-width: 200px;
+	color: white;
+	background-color: #333333;
+	display: grid;
+	grid-auto-rows: auto;
+	padding: 10px;
+	font-size: 13px;
+	box-shadow: 2px 2px 5px 2px #b9b9b9;
+}
+.detail-area {
+	display: grid;
+	grid-template-columns: 20px var(--fr-test) auto 5px;
+	grid-column-gap: 20px;
+	justify-items: flex-start;
+	margin-bottom: 10px;
+}
+.content-area {
+	display: grid;
+	grid-column-gap: 15px;
+	grid-template-columns: auto 1fr;
+	justify-items: start;
+	margin-bottom: 10px;
+}
+.content-area img {
+	width: 40px;
+	border-radius: 10px;
+}
+.action-area {
+	display: flex;
+	justify-content: flex-end;
+	padding: 5px;
+	color: yellow;
+	height: 20px;
+}
+.action-area > button {
+	margin-right: 10px;
+	background-color: rgba(255, 255, 255, 0);
+	border: 0px;
+	color: yellow;
+	height: 30px;
+	cursor: pointer;
+}
+.action-area > button:hover {
+	animation-duration: 0.6s;
+	animation-name: fadeIn;
+}
+
+@keyframes fadeIn {
+	0% {
+		background-color: rgba(126, 126, 19, 0);
+	}
+	100% {
+		background-color: rgb(126, 126, 19);
+	}
+}
+
+#notification-center__header {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	align-items: center;
+	background-color: #203344;
+	border-bottom: 1px solid #f0f8ff0f;
+	padding: 0px 12px;
+	margin-bottom: 12px;
+}
+#notification-center__notifications {
+	font-size: 11px;
+	text-align: center;
+	margin-right: 3em;
+}
+
+#notification-center__notification-detail {
+	border-top: 1px solid white;
+	border-bottom: 1px solid white;
+	position: sticky;
+	top: 0;
+	align-self: flex-start;
+}
+
+#notification-center__search {
+	justify-self: end;
+}
+#notification-center__search input {
+	height: 1.5em;
+	min-width: 150px;
+	width: 36%;
+	justify-self: end;
+	direction: ltr;
+	font: inherit;
+	color: currentColor;
+	border: 0;
+	height: 1.1875em;
+	margin: 0;
+	display: block;
+	min-width: 0;
+	background: none;
+	box-sizing: content-box;
+	animation-name: MuiInputBase-keyframes-auto-fill-cancel;
+	padding: 8px 8px 8px 35px;
+	width: 120px;
+	transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+	position: relative;
+	vertical-align: top;
+	background-color: #ffffff24;
+	border-radius: 3px;
+}
+
+#notification-center__search svg {
+	height: 20px;
+	position: absolute;
+	padding: 5px;
+	margin-top: 0em;
+}
+
+.notification-center__notifications__rows {
+	display: grid;
+	padding: 4px;
+	grid-template-columns: repeat(5, minmax(20px, 1fr));
+	overflow-wrap: break-word;
+	grid-column-gap: 12px;
+	border: 1px solid #5a5a5a7a;
+	cursor: pointer;
+}
+
+#main-content {
+	display: flex;
+	margin: 15px;
+}
+
+#notification-center__notification-filter-panel {
+	width: 100%;
+}
+
+.notification-center__notifications__rows:nth-child(1) {
+	background: #366791;
+	cursor: auto;
+	align-self: flex-start;
+	position: sticky;
+	top: 0;
+}
+
+#notification-center__notification-detail > h3 {
+	background-color: #366791;
+	padding: 10px;
+}
+
+.notification-center__notifications__rows:nth-child(even) {
+	background-color: #32577129;
+}
+
+.notification-center__notifications__rows:nth-child(n):hover {
+	background: #368c91cc;
+	cursor: pointer;
+}
+.notification-center__notifications__rows:nth-child(1):hover {
+	background: #366791;
+	cursor: auto;
+}
+
+img#close-icon {
+	position: absolute;
+	right: 0;
+	top: 22px;
+	cursor: pointer;
+	filter: opacity(0.5);
+	height: 19px;
+	margin-right: 2px;
+}
+
+img#close-icon:hover {
+	background: #b1b1b1;
+	border-radius: 16px;
+}

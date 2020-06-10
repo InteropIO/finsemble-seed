@@ -1,0 +1,109 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap");
+@import "../shared/styles/animations.css";
+@import "../../../../../assets/css/_notification.css";
+
+:root {
+	--notification-primary-color: #262d38;
+	--notification-secondary-color: black;
+	--notification-contrast-color: white;
+
+	--notification-background-color: var(--notification-primary-color);
+	--notification-font-family: "Roboto-Condensed", sans-serif;
+	--notification-font-color: var(--notification-contrast-color);
+}
+
+body {
+	margin: 0px;
+	position: absolute;
+	bottom: 0;
+	overflow: hidden;
+	width: 100%;
+}
+#toasts-drawer {
+	display: flex;
+	flex-direction: column-reverse;
+	align-items: flex-end;
+}
+.notification {
+	margin-left: 0px;
+	margin-bottom: 6px;
+	padding-top: 9px;
+	margin-right: 15px;
+	font-family: var(--notification-font-family);
+	width: 328px;
+	color: var(--notification-font-color);
+	background-color: var(--notification-background-color);
+	display: grid;
+	grid-auto-rows: auto;
+	padding: 10px;
+	font-size: 13px;
+	box-shadow: 3px 3px 2px 0px #00000030;
+}
+.notification hr {
+	width: 100%;
+}
+.detail-area {
+	--fr-test: 1fr;
+	display: grid;
+	grid-template-columns: 20px var(--fr-test) auto 11px;
+	grid-column-gap: 20px;
+	justify-items: flex-start;
+	margin-bottom: 10px;
+}
+.detail-area img {
+	height: 16px;
+	padding-top: 1px;
+}
+img#close-icon {
+	filter: invert(1);
+	margin-top: -7px;
+	cursor: pointer;
+}
+img#close-icon:hover {
+	filter: invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);
+}
+.detail-area_time {
+	font-size: 12px;
+}
+.detail-area_type {
+	font-weight: 60;
+}
+.content-area {
+	display: grid;
+	grid-column-gap: 15px;
+	grid-template-columns: auto 1fr;
+	justify-items: start;
+	margin-bottom: 10px;
+	align-items: center;
+}
+.content-area img {
+	height: 40px;
+	border-radius: 10px;
+}
+.action-area {
+	display: flex;
+	color: var(--notification-font-color);
+}
+.action-area > button {
+	margin-right: 10px;
+	background-color: rgba(255, 255, 255, 0);
+	border: 0px;
+	color: var(--notification-font-color);
+	height: 20px;
+	cursor: pointer;
+}
+.action-area > button:hover {
+	animation-duration: 0.6s;
+	animation-name: fadeIn;
+	animation-fill-mode: forwards;
+	border-radius: 2px;
+}
+
+@keyframes fadeIn {
+	0% {
+		background-color: rgba(126, 126, 19, 0);
+	}
+	100% {
+		background-color: rgb(126, 126, 19);
+	}
+}

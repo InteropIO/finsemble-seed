@@ -170,6 +170,12 @@
 		"$applicationRoot/configs/application/workspaceTemplates.json",
 		"$applicationRoot/configs/application/services.json",
 		"$applicationRoot/configs/application/securityPolicies.json",
-		"$applicationRoot/components/intentResolver/config.json"
+		"$applicationRoot/components/intentResolver/config.json",
+		"$applicationRoot/components/finsemble-notifications/components/notification-center/config.json",
+		"$applicationRoot/components/finsemble-notifications/components/notification-drawer/config.json",
+		"$applicationRoot/components/finsemble-notifications/components/notification-toasts/config.json",
+		"$applicationRoot/components/finsemble-notifications/components/notification-toaster/config.json",
+		"$applicationRoot/components/finsemble-notifications/services/notification/config.json",
+		"$applicationRoot/components/finsemble-notifications/components/notify/config.json"
 	]
 }
