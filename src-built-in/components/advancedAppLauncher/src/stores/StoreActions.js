@@ -525,6 +525,7 @@ function renameFolder(oldName, newName) {
 	let oldFolder = data.folders[oldName];
 	data.folders[newName] = oldFolder;
 	delete data.folders[oldName];
+
 	_setFolders(() => {
 		let indexOfOld = data.foldersList.findIndex((folderName) => {
 			return folderName === oldName;
@@ -538,6 +539,12 @@ function renameFolder(oldName, newName) {
 			const deletedFolders = data.deleted;
 			deletedFolders.splice(index, 1);
 			_setValue("deleted", deletedFolders);
+		}
+
+		// If the active folder is the folder being renamed, change that value
+		if (data.activeFolder === oldName) {
+			data.activeFolder = newName;
+			_setValue("activeFolder", data.activeFolder);
 		}
 
 		_setValue("appFolders.list", data.foldersList);
