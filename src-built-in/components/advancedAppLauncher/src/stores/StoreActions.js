@@ -420,7 +420,8 @@ function addApp(app = {}, cb) {
 		tags: app.tags !== "" ? app.tags.split(",") : [],
 		name: app.name,
 		url: app.url,
-		type: "component"
+		type: "component",
+		canDelete: true // Users can delete quick components
 	};
 	const { FAVORITES } = getConstants();
 
