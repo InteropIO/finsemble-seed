@@ -1,88 +1,114 @@
 /*!
- * The authentication component is a React component that renders a user form to collect auth info and determine whether to give user access to the rest of Finsemble
- * based on the information provided.
  * Copyright 2020 by ChartIQ, Inc.
  * All rights reserved.
+ *
+ * This is a sample Finsemble Authentication Component written using React hooks. It is meant as a starting point
+ * for you to build your own Authentication Component. Use the `useAuth()` react hook, or the Finsemble client API
+ * to interact with Finsemble's authentication capabilities.
+ *
+ * See https://documentation.chartiq.com/finsemble/tutorial-Authentication.html for a tutorial on how to use authentication.
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { FinsembleProvider } from "@chartiq/finsemble-ui/react/components";
-import {
-	AuthHeader,
-	AuthForm,
-	ErrorMessage,
-	AuthInput,
-	AuthSubmit,
-} from "@chartiq/finsemble-ui/react/components";
-import { useAuth } from "@chartiq/finsemble-ui/react/hooks";
+import { useAuth, useAuthSimulator } from "@chartiq/finsemble-ui/react/hooks";
 import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
+import "@chartiq/finsemble-ui/react/assets/css/authentication.css";
 import "../../../assets/css/theme.css";
 
 export const Authentication = () => {
-	const { saveInputChange, formValues, authorize, quitApplication } = useAuth();
-	const { error, setError } = useState(null);
+	const [username, setUsername] = useState("");
+	const [password, setPassword] = useState("");
+	const [payload, setPayload] = useState(null);
+	const [error, setError] = useState(null);
+	const { quitApplication, publishAuthorization } = useAuth();
+	const { sendToServer } = useAuthSimulator();
 
-	/*
-	 * Replace this function with your own authentication method that makes the call to your authentication server.
+	/**
+	 * With React Hooks we must use `useEffect()` for effects such as server calls. Here, we use
+	 * the "payload" state as a way to trigger an effect to authenticate the user against a back
+	 * end server. Whenever the value of payload changes, this effect will run. The value of payload
+	 * changes when the form is submitted (see <form> element in the jsx).
+	 *
+	 * In this example we're using Finsemble's useAuthSimulator() hook to simulate a back end server.
+	 * This hook will allow any username/password combination by returning {result:"ok"}. But it will
+	 * return {error: "error text"} if either username or password are left blank.
 	 */
-	const authenticateUser = async () => {
-		// The user form data to be sent to the authentication server.
-		const { username, password } = formValues;
-		// Replace this with your own authentication calls. Currently it will always authenticate no matter what the user input is.
-		const result = await Promise.resolve({ res: "ok" });
-		// the result is an object containing a response and an error. For example:
-		// {
-		//     res: "ok",
-		//     error: "Password is not correct"
-		// }
-		return result;
+	useEffect(() => {
+		if (!payload) return;
+		const authenticate = async () => {
+			const response = await sendToServer(payload.username, payload.password);
+			if (response.result === "ok") {
+				/**
+				 * This is the most important step. Once your back end server has authenticated the user
+				 * call publishAuthorization() from the useAuth() hook. The first parameter (username) is
+				 * required. The second parameter (credentials) is option. Credentials can contain anything
+				 * that is useful for session management, such as user ID, tokens, etc.
+				 */
+				publishAuthorization(payload.username, { username: payload.username });
+			} else {
+				setError(response.error);
+			}
+		};
+
+		authenticate();
+	}, [payload]);
+
+	const submit = () => {
+		setPayload({ username: username, password: password });
 	};
 
 	/**
-	 * This function invokes the function that makes the call to the server that verifies user authentication information and
-	 * decides whether to authorize the user to the rest of the application or display an error on the authentication form.
-	 * @param {func} authenticateUser The function to call to authenticate the user.
+	 * What follows is a cookie-cutter form written in React Hooks style. There is nothing here that
+	 * is proprietary to Finsemble. Your form should be built as needed to support your login process.
+	 * CSS Styles are imported from "Authentication.css" (see imports above).
 	 */
-	const onSubmit = async (authenticateUser) => {
-		const authResult = await authenticateUser();
-		if (authResult.res === "ok") {
-			authorize();
-		} else {
-			setError(authResult.error);
-		}
-	};
-
 	return (
 		<>
-			<AuthHeader>
-				<img className="fsbl-logo" />
+			<div className="fsbl-auth-top">
+				<img className="fsbl-company-logo" />
 				<div className="fsbl-close">
 					<i className="ff-close" onClick={quitApplication}></i>
 				</div>
-			</AuthHeader>
+			</div>
 
-			<AuthForm>
-				<div className="fsbl-login-logo" alt="Finsemble Sign In"></div>
-				<div className="fsbl-button-wrapper">
-					{error && <ErrorMessage>{error}</ErrorMessage>}
-					<AuthInput
+			<div className="fsbl-auth-wrapper">
+				<div className="fsbl-auth-logo" alt="Sign In"></div>
+				{error && <div className="fsbl-input-error-message">{error}</div>}
+				<form
+					onSubmit={(event) => {
+						submit();
+						event.preventDefault();
+					}}
+				>
+					<input
+						className="fsbl-auth-input"
 						type="text"
 						name="username"
 						placeholder="Username"
-						onChange={saveInputChange}
+						value={username}
+						onChange={(event) => {
+							setUsername(event.target.value);
+						}}
 					/>
-					<AuthInput
+
+					<input
+						className="fsbl-auth-input"
 						type="password"
 						name="password"
 						placeholder="Password"
-						onChange={saveInputChange}
+						value={password}
+						onChange={(event) => {
+							setPassword(event.target.value);
+						}}
 					/>
-					<AuthSubmit onClick={() => onSubmit(authenticateUser)}>
+
+					<button type="submit" className="fsbl-button fsbl-button-affirmative">
 						Login
-					</AuthSubmit>
-				</div>
-			</AuthForm>
+					</button>
+				</form>
+			</div>
 		</>
 	);
 };
@@ -93,4 +119,3 @@ ReactDOM.render(
 	</FinsembleProvider>,
 	document.getElementById("Authentication-component-wrapper")
 );
-FSBL.System.Window.getCurrent().show();
