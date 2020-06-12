@@ -31,7 +31,8 @@ config.plugins.push(new CopyWebpackPlugin(
 	[
 		{
 			from: './src/services/',
-			to: './services/'
+			to: './services/',
+			ignore: ['*.ts', '*.js', '*.jsx', '*.tsx'],
 		}
 	]
 ));

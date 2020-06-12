@@ -113,7 +113,7 @@ module.exports = class WebpackDefaults {
 				path: path.resolve(__dirname, '../../dist/')
 			},
 			resolve: {
-				extensions: ['.tsx', '.ts', '.js', '.jsx', '.json', 'scss', 'html'],
+				extensions: ['.js', '.jsx', '.tsx', '.ts', '.json', 'scss', 'html'],
 				modules: [
 					'./node_modules'
 				],
