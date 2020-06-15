@@ -45,14 +45,6 @@
 				"startTaskTimeout": 10000
 			}
 		},
-		"importConfig": ["$applicationRoot/configs/application/config.json"],
-		"router": {
-			"crossDomainTransport": "IPCBus",
-			"transportSettings": {
-				"FinsembleTransport": {
-					"serverAddress": "ws://127.0.0.1:3376"
-				}
-			}
-		}
+		"importConfig": ["$applicationRoot/configs/application/config.json"]
 	}
 }

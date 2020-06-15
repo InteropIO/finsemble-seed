@@ -58,7 +58,10 @@ IDBKeyRange.forPrefix = (prefix) => {
 			--len;
 		}
 
-		return UPPER_BOUND.STRING;
+		/** DH 6/9/2020 - I infer this is a dead code path, because
+		 * it previously returned a undefined variable.
+		 */
+		return [];
 	};
 
 	const upperKey = successor(prefix);

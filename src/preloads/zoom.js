@@ -271,7 +271,8 @@ const runZoomHandler = () => {
 		(err, componentConfig) => {
 			// Read component config for zoom
 			try {
-				zoomConfig = componentConfig.foreign.components["Window Manager"].zoom;
+				const zoomConfig =
+					componentConfig.foreign.components["Window Manager"].zoom;
 				if (zoomConfig) {
 					return zoomConfigHandler(null, zoomConfig);
 				}

@@ -5,4 +5,4 @@ const React = require("react"),
 	ReactDom = require("react-dom"),
 	async = require("async");
 
-module.exports = { React, ReactDom, FinsembleControls, async };
+module.exports = { React, ReactDom, async };

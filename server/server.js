@@ -127,7 +127,7 @@
 	// #endregion
 	const logToTerminal = (msg, color = "white", bgcolor = "bgBlack") => {
 		if (!chalk[color]) color = "white";
-		if (!chalk[color][bgcolor]) bg = "black";
+		if (!chalk[color][bgcolor]) bgcolor = "black";
 		console.log(
 			`[${new Date().toLocaleTimeString()}] ${chalk[color][bgcolor](msg)}.`
 		);

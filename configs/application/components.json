@@ -161,16 +161,16 @@
 				}
 			}
 		},
-		"defaultAuthentication": {
+		"Authentication": {
 			"window": {
-				"url": "$applicationRoot/components/authentication/defaultAuthentication.html",
+				"url": "$applicationRoot/components/authentication/Authentication.html",
 				"top": "center",
 				"left": "center",
 				"width": 358,
 				"height": 658,
 				"ephemeral": true,
 				"options": {
-					"autoShow": false
+					"autoShow": true
 				}
 			},
 			"component": {
