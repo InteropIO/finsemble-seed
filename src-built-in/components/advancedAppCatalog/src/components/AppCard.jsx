@@ -1,11 +1,11 @@
 /*!
-* Copyright 2017 - 2020 by ChartIQ, Inc.
-* All rights reserved.
-*/
+ * Copyright 2017 - 2020 by ChartIQ, Inc.
+ * All rights reserved.
+ */
 import React, { Component } from "react";
 
 //data
-import storeActions from '../stores/storeActions';
+import storeActions from "../stores/storeActions";
 
 /**
  * The card that displays on any page with information about an app. Clicking on it will lead to the AppShowcase or install (if the check is clicked)
@@ -26,7 +26,7 @@ class AppCard extends Component {
 			appName: this.props.title || this.props.name,
 			id: this.props.appId,
 			entitled: this.props.entitled ? this.props.entitled : false,
-			tags: this.props.tags
+			tags: this.props.tags,
 		};
 		this.bindCorrectContext();
 	}
@@ -47,7 +47,7 @@ class AppCard extends Component {
 			let newTags = this.state.tags.slice(0, 2);
 			newTags.push("more");
 			this.setState({
-				tags: newTags
+				tags: newTags,
 			});
 		}
 	}
@@ -56,15 +56,15 @@ class AppCard extends Component {
 	 */
 	toggleHighlight() {
 		this.setState({
-			checkHighlighted: !this.state.checkHighlighted
-		})
+			checkHighlighted: !this.state.checkHighlighted,
+		});
 	}
 	/**
 	 * Toggles the 'highlight' state of the app title. On mouse over, the title is underlined to show that its a link
 	 */
 	toggleTitleUnderline() {
 		this.setState({
-			titleUnderlined: !this.state.titleUnderlined
+			titleUnderlined: !this.state.titleUnderlined,
 		});
 	}
 	/**
@@ -72,7 +72,7 @@ class AppCard extends Component {
 	 */
 	showCheck() {
 		this.setState({
-			checkShown: true
+			checkShown: true,
 		});
 	}
 	/**
@@ -82,13 +82,13 @@ class AppCard extends Component {
 		if (this.state.awaitingInstall) {
 			// If an add/remove is taking place and this is called, toggle the check after the action completes
 			this.setState({
-				toggleCheckAfterAction: true
+				toggleCheckAfterAction: true,
 			});
 		} else {
 			//Don't hide if installed. Stay green and showing
 			if (!this.props.installed) {
 				this.setState({
-					checkShown: false
+					checkShown: false,
 				});
 			}
 		}
@@ -106,15 +106,18 @@ class AppCard extends Component {
 	addApp(e) {
 		e.preventDefault();
 		e.stopPropagation();
-		this.setState({
-			awaitingInstall: true
-		}, () => {
-			storeActions.addApp(this.state.id, (err) => {
-				this.setState({
-					awaitingInstall: false
+		this.setState(
+			{
+				awaitingInstall: true,
+			},
+			() => {
+				storeActions.addApp(this.state.id, (err) => {
+					this.setState({
+						awaitingInstall: false,
+					});
 				});
-			});
-		});
+			}
+		);
 	}
 	/**
 	 * Prevents bubbling (which would open the app showcase), then calls to remove an app
@@ -123,23 +126,26 @@ class AppCard extends Component {
 	removeApp(e) {
 		e.preventDefault();
 		e.stopPropagation();
-		this.setState({
-			awaitingInstall: true
-		}, () => {
-			storeActions.removeApp(this.state.id, (err) => {
-				if (this.state.toggleCheckAfterAction) {
-					this.setState({
-						awaitingInstall: false,
-						toggleCheckAfterAction: false,
-						checkShown: !this.state.checkShown
-					});
-				} else {
-					this.setState({
-						awaitingInstall: false
-					});
-				}
-			});
-		});
+		this.setState(
+			{
+				awaitingInstall: true,
+			},
+			() => {
+				storeActions.removeApp(this.state.id, (err) => {
+					if (this.state.toggleCheckAfterAction) {
+						this.setState({
+							awaitingInstall: false,
+							toggleCheckAfterAction: false,
+							checkShown: !this.state.checkShown,
+						});
+					} else {
+						this.setState({
+							awaitingInstall: false,
+						});
+					}
+				});
+			}
+		);
 	}
 	/**
 	 * Prevents bubbling (which would open the app showcase), then calls to add a filtering tag
@@ -152,43 +158,87 @@ class AppCard extends Component {
 		storeActions.addTag(name);
 	}
 	render() {
-		let imageUrl = this.props.images !== undefined ? this.props.images[0].url : "../assets/placeholder.svg";
+		let imageUrl =
+			this.props.images !== undefined
+				? this.props.images[0].url
+				: "../assets/placeholder.svg";
 
 		let { appName, checkShown, checkHighlighted } = this.state;
 
 		let imageIconClasses = "ff-check-mark-2";
-		if (this.props.installed || checkHighlighted) imageIconClasses += " highlighted"
+		if (this.props.installed || checkHighlighted)
+			imageIconClasses += " highlighted";
 		else imageIconClasses += " faded";
 
-		let titleClass = this.state.titleUnderlined ? "app-title highlighted" : "app-title";
+		let titleClass = this.state.titleUnderlined
+			? "app-title highlighted"
+			: "app-title";
 
 		let entitled = this.state.entitled ? " entitled" : "";
 
 		let appAction = this.props.installed ? this.removeApp : this.addApp;
 
 		return (
-			<div className='app-card' onClick={this.openAppShowcase} onMouseEnter={this.showCheck} onMouseLeave={this.hideCheck}>
+			<div
+				className="app-card"
+				onClick={this.openAppShowcase}
+				onMouseEnter={this.showCheck}
+				onMouseLeave={this.hideCheck}
+			>
 				<div className="app-image-container">
-					{!entitled || !checkShown ? null : <i className={imageIconClasses} onMouseEnter={this.toggleHighlight} onMouseLeave={this.toggleHighlight} onClick={appAction}></i>}
-					<img className={'app-image' + entitled} src={imageUrl} />
-					<div className={titleClass} onMouseEnter={this.toggleTitleUnderline} onMouseLeave={this.toggleTitleUnderline}>{appName}</div>
+					{!entitled || !checkShown ? null : (
+						<i
+							className={imageIconClasses}
+							onMouseEnter={this.toggleHighlight}
+							onMouseLeave={this.toggleHighlight}
+							onClick={appAction}
+						></i>
+					)}
+					<img className={"app-image" + entitled} src={imageUrl} />
+					<div
+						className={titleClass}
+						onMouseEnter={this.toggleTitleUnderline}
+						onMouseLeave={this.toggleTitleUnderline}
+					>
+						{appName}
+					</div>
 				</div>
-				<div className='footer' ref={(el) => { this.footer = el; }}>
+				<div
+					className="footer"
+					ref={(el) => {
+						this.footer = el;
+					}}
+				>
 					<span className={"app-tags" + entitled}>
 						<i className="ff-tag"></i>
-						<span className='tag-names' ref={(el) => { this.tagNamesList = el; }}>
+						<span
+							className="tag-names"
+							ref={(el) => {
+								this.tagNamesList = el;
+							}}
+						>
 							{this.state.tags.map((tag, i) => {
 								if (tag === "more") {
 									return (
-										<span key={3} className='tag-name' style={{ cursor: 'pointer', textDecoration: 'underline' }} onClick={this.openAppShowcase}>
+										<span
+											key={3}
+											className="tag-name"
+											style={{ cursor: "pointer", textDecoration: "underline" }}
+											onClick={this.openAppShowcase}
+										>
 											More
 										</span>
 									);
 								}
 
 								return (
-									<span key={i} className='tag-name' onClick={this.addTag.bind(this, tag)}>
-										{tag[0].toUpperCase() + tag.substring(1)}{i !== this.props.tags.length - 1 ? ", " : null}
+									<span
+										key={i}
+										className="tag-name"
+										onClick={this.addTag.bind(this, tag)}
+									>
+										{tag[0].toUpperCase() + tag.substring(1)}
+										{i !== this.props.tags.length - 1 ? ", " : null}
 									</span>
 								);
 							})}

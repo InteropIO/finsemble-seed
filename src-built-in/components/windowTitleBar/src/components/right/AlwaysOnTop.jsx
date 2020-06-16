@@ -1,7 +1,7 @@
 /*!
-* Copyright 2017 - 2020 by ChartIQ, Inc.
-* All rights reserved.
-*/
+ * Copyright 2017 - 2020 by ChartIQ, Inc.
+ * All rights reserved.
+ */
 import React from "react";
 import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
 
@@ -21,7 +21,7 @@ export default class AlwaysOnTop extends React.Component {
 	}
 
 	componentWillMount() {
-		this.setState({alwaysOnTop: false });
+		this.setState({ alwaysOnTop: false });
 		finsembleWindow.isAlwaysOnTop(null, (err, alwaysOnTop) => {
 			this.setState({ alwaysOnTop });
 		});
@@ -36,7 +36,10 @@ export default class AlwaysOnTop extends React.Component {
 	}
 
 	componentWillUnmount() {
-		finsembleWindow.removeEventListener("alwaysOnTop", this.alwaysOnTopListener);
+		finsembleWindow.removeEventListener(
+			"alwaysOnTop",
+			this.alwaysOnTopListener
+		);
 	}
 
 	changeAlwaysOnTop() {
@@ -44,11 +47,11 @@ export default class AlwaysOnTop extends React.Component {
 	}
 
 	/**
-     * When your mouse enters/leaves the hoverDetector, this function is invoked.
-     *
-     * @param {any} newHoverState
-     * @memberof LinkerButton
-     */
+	 * When your mouse enters/leaves the hoverDetector, this function is invoked.
+	 *
+	 * @param {any} newHoverState
+	 * @memberof LinkerButton
+	 */
 	hoverAction(newHoverState) {
 		this.setState({ hoverState: newHoverState });
 	}
@@ -62,7 +65,8 @@ export default class AlwaysOnTop extends React.Component {
 	render() {
 		let iconClasses = "ff-always-on-top ";
 		let wrapClasses = "fsbl-icon ";
-		if (this.state && this.state.alwaysOnTop) wrapClasses += "fsbl-icon-highlighted ";
+		if (this.state && this.state.alwaysOnTop)
+			wrapClasses += "fsbl-icon-highlighted ";
 		let tooltip = "Always on Top";
 
 		return (
@@ -72,9 +76,11 @@ export default class AlwaysOnTop extends React.Component {
 				title={tooltip}
 				data-hover={this.state.hoverState}
 				onClick={this.changeAlwaysOnTop}
-				style={this.state.visible ? {} : { display: "none" }}>
+				style={this.state.visible ? {} : { display: "none" }}
+			>
 				<FinsembleHoverDetector edge="top" hoverAction={this.hoverAction} />
 				<i className={iconClasses}></i>
-			</div>);
+			</div>
+		);
 	}
 }

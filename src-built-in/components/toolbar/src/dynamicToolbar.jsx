@@ -1,11 +1,16 @@
 /*!
-* Copyright 2017 - 2020 by ChartIQ, Inc.
-* All rights reserved.
-*/
+ * Copyright 2017 - 2020 by ChartIQ, Inc.
+ * All rights reserved.
+ */
 import React from "react";
 import ReactDOM from "react-dom";
 // Toolbar Components
-import { FinsembleToolbar, FinsembleButton, FinsembleToolbarSection, FinsembleToolbarSeparator } from "@chartiq/finsemble-react-controls";
+import {
+	FinsembleToolbar,
+	FinsembleButton,
+	FinsembleToolbarSection,
+	FinsembleToolbarSeparator,
+} from "@chartiq/finsemble-react-controls";
 
 // Store
 import ToolbarStore from "../stores/toolbarStore";
@@ -16,9 +21,9 @@ import AlwaysOnTop from "../components/AlwaysOnTop";
 import BringToFront from "../components/BringToFront";
 import MinimizeAll from "../components/MinimizeAll";
 import WorkspaceLauncherButton from "../components/WorkspaceLauncherButton";
-import WorkspaceMenuOpener from "../components/WorkspaceMenuOpener"
-import Search from "../components/Search"
-import DragHandle from "../components/DragHandle"
+import WorkspaceMenuOpener from "../components/WorkspaceMenuOpener";
+import Search from "../components/Search";
+import DragHandle from "../components/DragHandle";
 
 // Support Dynamically Loading External Components
 var customComponents = [];
@@ -35,8 +40,8 @@ import "../../../../assets/css/font-finance.css";
 import "../../../../assets/css/finsemble.css";
 
 var pinnableItems = {
-	"componentLauncher": FinsembleButton,
-	"workspaceSwitcher": WorkspaceLauncherButton
+	componentLauncher: FinsembleButton,
+	workspaceSwitcher: WorkspaceLauncherButton,
 };
 
 export default class Toolbar extends React.Component {
@@ -64,22 +69,27 @@ export default class Toolbar extends React.Component {
 
 	componentWillMount() {
 		var self = this;
-		ToolbarStore.setupPinnedHotKeys(function (err, data) {
+		ToolbarStore.setupPinnedHotKeys(function(err, data) {
 			let pin = self.refs.pinSection.element.childNodes[data - 1];
 			//Goes and finds the toolbar button and clicks it.
 			if (pin.childNodes[0] && pin.childNodes[0].children[0]) {
 				pin.childNodes[0].children[0].click();
 			}
 		});
-		ToolbarStore.Store.addListener({ field: "sections" }, this.onSectionsUpdate);
+		ToolbarStore.Store.addListener(
+			{ field: "sections" },
+			this.onSectionsUpdate
+		);
 	}
 
 	componentWillUnmount() {
-		ToolbarStore.Store.removeListener({ field: "sections" }, this.onSectionsUpdate);
+		ToolbarStore.Store.removeListener(
+			{ field: "sections" },
+			this.onSectionsUpdate
+		);
 	}
 
 	onPinDrag(changeEvent) {
-
 		let pins = this.refs.pinSection.state.pins;
 		let newPins = JSON.parse(JSON.stringify(pins));
 		let { destination, source } = changeEvent;
@@ -100,7 +110,10 @@ export default class Toolbar extends React.Component {
 			return obj;
 		}
 		this.refs.pinSection.setState({ pins: newPins });
-		ToolbarStore.GlobalStore.setValue({ field: 'pins', value: pinsToObj(newPins) });
+		ToolbarStore.GlobalStore.setValue({
+			field: "pins",
+			value: pinsToObj(newPins),
+		});
 	}
 
 	/**
@@ -126,16 +139,44 @@ export default class Toolbar extends React.Component {
 						break;
 					case "reactComponent":
 						let Component = customComponents[button.reactComponent];
-						buttonComponent = <Component key={i} {...button} className={"finsemble-toolbar-button"} />;
+						buttonComponent = (
+							<Component
+								key={i}
+								{...button}
+								className={"finsemble-toolbar-button"}
+							/>
+						);
 						break;
 					case "workspaceSwitcher":
-						buttonComponent = <WorkspaceLauncherButton key={i} {...button}></WorkspaceLauncherButton>;
+						buttonComponent = (
+							<WorkspaceLauncherButton
+								key={i}
+								{...button}
+							></WorkspaceLauncherButton>
+						);
 						break;
 					case "componentLauncher":
-						buttonComponent = <FinsembleButton id={button.id} iconClasses="pinned-icon" buttonType={["AppLauncher", "Toolbar"]} dockedTop={true} key={i} {...button}></FinsembleButton>;
+						buttonComponent = (
+							<FinsembleButton
+								id={button.id}
+								iconClasses="pinned-icon"
+								buttonType={["AppLauncher", "Toolbar"]}
+								dockedTop={true}
+								key={i}
+								{...button}
+							></FinsembleButton>
+						);
 						break;
 					case "menuLauncher":
-						buttonComponent = <FinsembleButton preSpawn={true} buttonType={["MenuLauncher", "Toolbar"]} dockedTop={true} key={i} {...button}></FinsembleButton>;
+						buttonComponent = (
+							<FinsembleButton
+								preSpawn={true}
+								buttonType={["MenuLauncher", "Toolbar"]}
+								dockedTop={true}
+								key={i}
+								{...button}
+							></FinsembleButton>
+						);
 						break;
 				}
 				buttons.push(buttonComponent);
@@ -143,21 +184,28 @@ export default class Toolbar extends React.Component {
 
 			// Add separators to the end for left and the begining for right sections:
 			if (sectionPosition == "right") {
-				buttons.splice(0, 0, <FinsembleToolbarSeparator key={sectionPosition} />);
+				buttons.splice(
+					0,
+					0,
+					<FinsembleToolbarSeparator key={sectionPosition} />
+				);
 			}
 
-			var sectionComponent = (<FinsembleToolbarSection
-				key={i}
-				arrangeable={sectionPosition === "center"}
-				ref="pinSection"
-				name={sectionPosition}
-				pinnableItems={pinnableItems}
-				className={sectionPosition}
-				key={sectionPosition}
-				handleOverflow={sectionPosition === "center"}
-				handlePins={sectionPosition === "center"}>
-				{buttons}
-			</FinsembleToolbarSection>);
+			var sectionComponent = (
+				<FinsembleToolbarSection
+					key={i}
+					arrangeable={sectionPosition === "center"}
+					ref="pinSection"
+					name={sectionPosition}
+					pinnableItems={pinnableItems}
+					className={sectionPosition}
+					key={sectionPosition}
+					handleOverflow={sectionPosition === "center"}
+					handlePins={sectionPosition === "center"}
+				>
+					{buttons}
+				</FinsembleToolbarSection>
+			);
 			sections.push(sectionComponent);
 		}
 		return sections;
@@ -165,13 +213,17 @@ export default class Toolbar extends React.Component {
 
 	render() {
 		if (!this.state.sections) return;
-		return (<FinsembleToolbar onDragStart={this.moveToolbar} onDragEnd={this.onPinDrag}>
-			<DragHandle/>
-			{this.getSections()}
-			<div className='resize-area' />
-		</FinsembleToolbar>);
+		return (
+			<FinsembleToolbar
+				onDragStart={this.moveToolbar}
+				onDragEnd={this.onPinDrag}
+			>
+				<DragHandle />
+				{this.getSections()}
+				<div className="resize-area" />
+			</FinsembleToolbar>
+		);
 	}
-
 }
 
 if (window.FSBL && FSBL.addEventListener) {
@@ -180,9 +232,7 @@ if (window.FSBL && FSBL.addEventListener) {
 	window.addEventListener("FSBLReady", FSBLReady);
 }
 function FSBLReady() {
-	ToolbarStore.initialize(function () {
-		ReactDOM.render(
-			<Toolbar />
-			, document.getElementById("toolbar_parent"));
+	ToolbarStore.initialize(function() {
+		ReactDOM.render(<Toolbar />, document.getElementById("toolbar_parent"));
 	});
 }

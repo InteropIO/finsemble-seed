@@ -38,7 +38,7 @@ const showPopup = (pct) => {
 		popup.style.zoom = 1;
 
 		const span = document.querySelector("#zoom-popup-text");
-		span.innerHTML = `${Math.floor(pct * 100)}%`
+		span.innerHTML = `${Math.floor(pct * 100)}%`;
 
 		popup.style.display = "block";
 
@@ -48,9 +48,12 @@ const showPopup = (pct) => {
 			window.timerHandle = null;
 		}
 
-		window.timerHandle = setTimeout(() => popup.style.display = "none", window.zoomTimeout);
+		window.timerHandle = setTimeout(
+			() => (popup.style.display = "none"),
+			window.zoomTimeout
+		);
 	}
-}
+};
 /**
  * Sets the zoom by setting the CSS "zoom" value on the body.
  *
@@ -65,40 +68,50 @@ const setZoom = (pct) => {
 		pct = window.zoomMax;
 	}
 
-	document.querySelectorAll("body > *").forEach((el) => el.style.zoom = pct);
+	document.querySelectorAll("body > *").forEach((el) => (el.style.zoom = pct));
 
 	const FSBLHeader = document.querySelector("#FSBLHeader");
 	if (FSBLHeader) {
 		FSBLHeader.style.zoom = 1;
 	}
 
-	if(!window.settingInitialZoom) showPopup(pct);
+	if (!window.settingInitialZoom) showPopup(pct);
 
 	// Zoom levels are saved as component state "fsbl-zoom"
-	FSBL.Clients.WindowClient.setComponentState({ field: "fsbl-zoom", value: window.fsblZoomLevel });
-}
+	FSBL.Clients.WindowClient.setComponentState({
+		field: "fsbl-zoom",
+		value: window.fsblZoomLevel,
+	});
+};
 
-const roundTo1Decimal = (input) => {
-	return Math.round((input + Number.EPSILON) * 10) / 10 ;
-}
+const roundTo1Decimal = (input) =>
+	Math.round((input + Number.EPSILON) * 10) / 10;
 
 /**
  * Zooms the page in one step.
  */
 const zoomIn = () => {
-	window.fsblZoomLevel = roundTo1Decimal(window.fsblZoomLevel + window.zoomStep);
-	if  (window.fsblZoomLevel < window.zoomMin) {window.fsblZoomLevel = window.zoomMin;} 
+	window.fsblZoomLevel = roundTo1Decimal(
+		window.fsblZoomLevel + window.zoomStep
+	);
+	if (window.fsblZoomLevel < window.zoomMin) {
+		window.fsblZoomLevel = window.zoomMin;
+	}
 	setZoom(window.fsblZoomLevel);
-}
+};
 
 /**
  * Zooms the page out one step.
  */
 const zoomOut = () => {
-	window.fsblZoomLevel = roundTo1Decimal(window.fsblZoomLevel - window.zoomStep);
-	if  (window.fsblZoomLevel > window.zoomMax) {window.fsblZoomLevel = window.zoomMax;}
+	window.fsblZoomLevel = roundTo1Decimal(
+		window.fsblZoomLevel - window.zoomStep
+	);
+	if (window.fsblZoomLevel > window.zoomMax) {
+		window.fsblZoomLevel = window.zoomMax;
+	}
 	setZoom(window.fsblZoomLevel);
-}
+};
 
 /**
  * Resets the zoom level to 100%.
@@ -106,13 +119,13 @@ const zoomOut = () => {
 const resetZoom = () => {
 	window.fsblZoomLevel = 1;
 	setZoom(window.fsblZoomLevel);
-}
+};
 
 const handleWheel = (event) => {
-	  const e = window.event || event;
-	  //if Control key was held down while scrolling mouse wheel interpret as zoom
-	if (e.ctrlKey){
-		if (e.wheelDelta > 0){
+	const e = window.event || event;
+	//if Control key was held down while scrolling mouse wheel interpret as zoom
+	if (e.ctrlKey) {
+		if (e.wheelDelta > 0) {
 			zoomIn();
 		} else if (e.wheelDelta < 0) {
 			zoomOut();
@@ -170,7 +183,7 @@ const insertPopUp = () => {
 	popup.appendChild(zoomInBtn);
 
 	document.body.appendChild(popup);
-}
+};
 
 /**
  * Handles the zoom configuration.
@@ -195,7 +208,7 @@ const zoomConfigHandler = (err, zoom) => {
 	window.zoomStep = zoom.step ? zoom.step : window.zoomStep;
 	window.zoomMin = zoom.min ? zoom.min : window.zoomMin;
 	window.zoomMax = zoom.max ? zoom.max : window.zoomMax;
-}
+};
 
 /**
  * Applies the zoom level from the component state or default configuration.
@@ -205,20 +218,30 @@ const zoomConfigHandler = (err, zoom) => {
  */
 const getZoomLevelHandler = (err, zoomLevel) => {
 	if (err) {
-		FSBL.Clients.Logger.info("No \"fsbl-zoom\" settings found in component state", err);
+		FSBL.Clients.Logger.info(
+			'No "fsbl-zoom" settings found in component state',
+			err
+		);
 	} else if (zoomLevel != null) {
 		FSBL.Clients.Logger.info(`Retrieved zoomLevel from state: ${zoomLevel}`);
 		window.fsblZoomLevel = zoomLevel;
 		setZoom(window.fsblZoomLevel);
 	} else {
 		//check for default configuration for zoom level and apply as needed
-		let defaultLevel = _get(FSBL.Clients.WindowClient.options.customData, "foreign.components.['Window Manager'].zoomDefault");
-		if (defaultLevel) { 
-			FSBL.Clients.Logger.info(`Retrieved default zoom level from config: ${defaultLevel}`);
+		let defaultLevel = _get(
+			FSBL.Clients.WindowClient.options.customData,
+			"foreign.components.['Window Manager'].zoomDefault"
+		);
+		if (defaultLevel) {
+			FSBL.Clients.Logger.info(
+				`Retrieved default zoom level from config: ${defaultLevel}`
+			);
 			window.fsblZoomLevel = defaultLevel;
-			setZoom(defaultLevel); 
+			setZoom(defaultLevel);
 		} else {
-			FSBL.Clients.Logger.info("No default zoom level retrieved from configuration ");
+			FSBL.Clients.Logger.info(
+				"No default zoom level retrieved from configuration "
+			);
 		}
 	}
 	window.settingInitialZoom = false;
@@ -229,29 +252,40 @@ const getZoomLevelHandler = (err, zoomLevel) => {
  */
 const runZoomHandler = () => {
 	//Override OpenFin zoom function to do nothing
-	  //which prevents manual use of this function which conflicts with zoom preload
-	  //N.B. window.options.accelerator.zoom setting is not affected by this and will still conflict with Zoom preload if set
-	FSBL.Clients.WindowClient.getCurrentWindow().setZoomLevel = function(level, callback, errorCallback) { callback(); }
+	//which prevents manual use of this function which conflicts with zoom preload
+	//N.B. window.options.accelerator.zoom setting is not affected by this and will still conflict with Zoom preload if set
+	FSBL.Clients.WindowClient.getCurrentWindow().setZoomLevel = function(
+		level,
+		callback,
+		errorCallback
+	) {
+		callback();
+	};
 
 	// Insert the zoom pop up, if needed.
 	insertPopUp();
 
 	// Update the zoom configuration.
-	FSBL.Clients.LauncherClient.getComponentDefaultConfig(FSBL.Clients.WindowClient.getWindowIdentifier().componentType, (err, componentConfig) => {
-		// Read component config for zoom
-		try {
-			zoomConfig = componentConfig.foreign.components["Window Manager"].zoom;
-			if (zoomConfig) {
-				return zoomConfigHandler(null, zoomConfig);
+	FSBL.Clients.LauncherClient.getComponentDefaultConfig(
+		FSBL.Clients.WindowClient.getWindowIdentifier().componentType,
+		(err, componentConfig) => {
+			// Read component config for zoom
+			try {
+				zoomConfig = componentConfig.foreign.components["Window Manager"].zoom;
+				if (zoomConfig) {
+					return zoomConfigHandler(null, zoomConfig);
+				}
+			} catch (e) {
+				// component config does not have foreign or foreign.components
 			}
-		} catch(e) {
-			// component config does not have foreign or foreign.components
-		}
 
-		// If component doesn't have a config, read global config for zoom
-		FSBL.Clients.ConfigClient.getValue({ field: "finsemble.Window Manager.zoom" }, zoomConfigHandler);	
-		
-	});
+			// If component doesn't have a config, read global config for zoom
+			FSBL.Clients.ConfigClient.getValue(
+				{ field: "finsemble.Window Manager.zoom" },
+				zoomConfigHandler
+			);
+		}
+	);
 
 	// Create hot keys for zooming.
 	FSBL.Clients.HotkeyClient.addBrowserHotkey(["ctrl", "="], zoomIn);
@@ -261,9 +295,15 @@ const runZoomHandler = () => {
 	FSBL.Clients.HotkeyClient.addBrowserHotkey(["ctrl", "0"], resetZoom);
 
 	// Updates the component with the zoom level from the previous load, if one exists.
-	FSBL.Clients.WindowClient.getComponentState({ field: "fsbl-zoom" }, getZoomLevelHandler);
+	FSBL.Clients.WindowClient.getComponentState(
+		{ field: "fsbl-zoom" },
+		getZoomLevelHandler
+	);
 
-	window.addEventListener("wheel", handleWheel, {capture: false, passive: false});
+	window.addEventListener("wheel", handleWheel, {
+		capture: false,
+		passive: false,
+	});
 };
 
 // TODO, catch and recall scroll position

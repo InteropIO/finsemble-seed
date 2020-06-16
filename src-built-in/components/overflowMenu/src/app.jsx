@@ -1,7 +1,7 @@
 /*!
-* Copyright 2017 - 2020 by ChartIQ, Inc.
-* All rights reserved.
-*/
+ * Copyright 2017 - 2020 by ChartIQ, Inc.
+ * All rights reserved.
+ */
 import React from "react";
 import ReactDOM from "react-dom";
 import "../../../../assets/css/finsemble.css";
@@ -18,15 +18,23 @@ class OverflowMenu extends React.Component {
 	}
 
 	render() {
-		return <FinsembleOverflowMenu onStateChange={this.fitDOM} overflowMenuStore={this.props.overflowMenuStore} />;
+		return (
+			<FinsembleOverflowMenu
+				onStateChange={this.fitDOM}
+				overflowMenuStore={this.props.overflowMenuStore}
+			/>
+		);
 	}
-
 }
 
-if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
+if (window.FSBL && FSBL.addEventListener) {
+	FSBL.addEventListener("onReady", FSBLReady);
+} else {
+	window.addEventListener("FSBLReady", FSBLReady);
+}
 function FSBLReady() {
 	ReactDOM.render(
-		<OverflowMenu overflowMenuStore="OverflowMenuStore"/>
-		, document.getElementById("bodyHere"));
-
+		<OverflowMenu overflowMenuStore="OverflowMenuStore" />,
+		document.getElementById("bodyHere")
+	);
 }

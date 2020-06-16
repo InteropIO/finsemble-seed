@@ -1,10 +1,13 @@
 /*!
-* Copyright 2017 - 2020 by ChartIQ, Inc.
-* All rights reserved.
-*/
+ * Copyright 2017 - 2020 by ChartIQ, Inc.
+ * All rights reserved.
+ */
 import React from "react";
 import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
-import { getStore, Actions as HeaderActions } from "../../stores/windowTitleBarStore";
+import {
+	getStore,
+	Actions as HeaderActions,
+} from "../../stores/windowTitleBarStore";
 let windowTitleBarStore;
 /**
  * Close button, located on the far right of the window Manager.
@@ -36,11 +39,11 @@ export default class CloseButton extends React.Component {
 		HeaderActions.clickClose();
 	}
 	/**
-     * When your mouse enters/leaves the hoverDetector, this function is invoked.
-     *
-     * @param {any} newHoverState
-     * @memberof LinkerButton
-     */
+	 * When your mouse enters/leaves the hoverDetector, this function is invoked.
+	 *
+	 * @param {any} newHoverState
+	 * @memberof LinkerButton
+	 */
 	hoverAction(newHoverState) {
 		this.setState({ hoverState: newHoverState });
 	}
@@ -51,9 +54,20 @@ export default class CloseButton extends React.Component {
 	 * @memberof CloseButton
 	 */
 	render() {
-		return (<div onClick={this.onClick} className="fsbl-icon fsbl-close" data-hover={this.state.hoverState} title="Close" id="fsbl-window-close">
-			<FinsembleHoverDetector edge="top right" hoverAction={this.hoverAction} />
-			<i className="ff-close"></i>
-		</div>);
+		return (
+			<div
+				onClick={this.onClick}
+				className="fsbl-icon fsbl-close"
+				data-hover={this.state.hoverState}
+				title="Close"
+				id="fsbl-window-close"
+			>
+				<FinsembleHoverDetector
+					edge="top right"
+					hoverAction={this.hoverAction}
+				/>
+				<i className="ff-close"></i>
+			</div>
+		);
 	}
 }

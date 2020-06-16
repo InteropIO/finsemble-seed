@@ -1,7 +1,7 @@
 /*!
-* Copyright 2017 - 2020 by ChartIQ, Inc.
-* All rights reserved.
-*/
+ * Copyright 2017 - 2020 by ChartIQ, Inc.
+ * All rights reserved.
+ */
 import React from "react";
 
 //components
@@ -18,8 +18,7 @@ import AppCard from "./AppCard";
  * @param {func} props.openAppShowcase See AppCard.jsx
  * @param {func} props.addTag Parent function to add a filtering tag
  */
-const AppResults = props => {
-
+const AppResults = (props) => {
 	/**
 	 * Function to take the incoming apps and any filtering tags and filter the list.
 	 * If there are no tags, we'll use all of the cards supplied
@@ -72,26 +71,21 @@ const AppResults = props => {
 		return cardRows;
 	};
 
-	if (cardsForShowcase.length === 0) return (<EmptyResults />);
+	if (cardsForShowcase.length === 0) return <EmptyResults />;
 
 	let cardRows = getCardRows();
 
 	return (
-		<div className='app-results'>
-			<table className='app-results-table'>
+		<div className="app-results">
+			<table className="app-results-table">
 				<tbody>
 					{cardRows.map((row, i) => {
-						return (
-							<tr key={"tablerow-" + i}>
-								{row}
-							</tr>
-						);
+						return <tr key={"tablerow-" + i}>{row}</tr>;
 					})}
 				</tbody>
 			</table>
 		</div>
 	);
-
 };
 
 export default AppResults;

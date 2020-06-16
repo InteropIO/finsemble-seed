@@ -1,7 +1,7 @@
 /*!
-* Copyright 2017 - 2020 by ChartIQ, Inc.
-* All rights reserved.
-*/
+ * Copyright 2017 - 2020 by ChartIQ, Inc.
+ * All rights reserved.
+ */
 import React from "react";
 import ReactDOM from "react-dom";
 import * as storeExports from "./stores/workspaceManagementMenuStore";
@@ -24,7 +24,7 @@ class WorkspaceManagementMenu extends React.Component {
 		this.state = {
 			WorkspaceList: WorkspaceManagementMenuActions.getWorkspaceList(),
 			activeWorkspace: WorkspaceManagementMenuActions.getActiveWorkspace(),
-			pinnedWorkspaces: this.convertPinnedWorkspacesToArray()
+			pinnedWorkspaces: this.convertPinnedWorkspacesToArray(),
 		};
 	}
 	bindCorrectContext() {
@@ -42,17 +42,20 @@ class WorkspaceManagementMenu extends React.Component {
 	}
 
 	onStoreChange() {
-		this.setState({
-			WorkspaceList: WorkspaceManagementMenuActions.getWorkspaceList(),
-			activeWorkspace: WorkspaceManagementMenuActions.getActiveWorkspace()
-		}, function () {
-			WorkspaceManagementMenuActions.setHeight();
-		});
+		this.setState(
+			{
+				WorkspaceList: WorkspaceManagementMenuActions.getWorkspaceList(),
+				activeWorkspace: WorkspaceManagementMenuActions.getActiveWorkspace(),
+			},
+			function() {
+				WorkspaceManagementMenuActions.setHeight();
+			}
+		);
 	}
 
 	onPinChange() {
 		this.setState({
-			pinnedWorkspaces: this.convertPinnedWorkspacesToArray()
+			pinnedWorkspaces: this.convertPinnedWorkspacesToArray(),
 		});
 	}
 
@@ -61,7 +64,7 @@ class WorkspaceManagementMenu extends React.Component {
 			{ field: "WorkspaceList", listener: this.onStoreChange },
 			{ field: "activeWorkspace", listener: this.onStoreChange },
 			{ field: "isSwitchingWorkspaces", listener: this.onStoreChange },
-			{ field: "pins", listener: this.onPinChange }
+			{ field: "pins", listener: this.onPinChange },
 		]);
 	}
 
@@ -69,31 +72,37 @@ class WorkspaceManagementMenu extends React.Component {
 		WorkspaceManagementMenuStore.removeListeners([
 			{ field: "WorkspaceList", listener: this.onStoreChange },
 			{ field: "activeWorkspace", listener: this.onStoreChange },
-			{ field: "pins", listener: this.onPinChange }
+			{ field: "pins", listener: this.onPinChange },
 		]);
 	}
 
 	render() {
 		var self = this;
-		return (<FinsembleMenu>
-			<WorkspaceActions />
-			<WorkspaceList
-				activeWorkspace={self.state.activeWorkspace}
-				workspaces={self.state.WorkspaceList}
-				pinnedWorkspaces={self.state.pinnedWorkspaces} />
-		</FinsembleMenu>);
-
+		return (
+			<FinsembleMenu>
+				<WorkspaceActions />
+				<WorkspaceList
+					activeWorkspace={self.state.activeWorkspace}
+					workspaces={self.state.WorkspaceList}
+					pinnedWorkspaces={self.state.pinnedWorkspaces}
+				/>
+			</FinsembleMenu>
+		);
 	}
 }
 
-
-if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
+if (window.FSBL && FSBL.addEventListener) {
+	FSBL.addEventListener("onReady", FSBLReady);
+} else {
+	window.addEventListener("FSBLReady", FSBLReady);
+}
 function FSBLReady() {
 	//console.log("WorkspaceManagementMenu onReady");
-	storeExports.initialize(function (store) {
+	storeExports.initialize(function(store) {
 		WorkspaceManagementMenuStore = store;
 		ReactDOM.render(
-			<WorkspaceManagementMenu />
-			, document.getElementById("workspaceManagementMenu-component-wrapper"));
+			<WorkspaceManagementMenu />,
+			document.getElementById("workspaceManagementMenu-component-wrapper")
+		);
 	});
 }

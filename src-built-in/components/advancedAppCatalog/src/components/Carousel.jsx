@@ -1,14 +1,14 @@
 /*!
-* Copyright 2017 - 2020 by ChartIQ, Inc.
-* All rights reserved.
-*/
+ * Copyright 2017 - 2020 by ChartIQ, Inc.
+ * All rights reserved.
+ */
 import React, { Component } from "react";
 
 //data
-import storeActions from '../stores/storeActions';
+import storeActions from "../stores/storeActions";
 
 //components
-import AppCard from './AppCard';
+import AppCard from "./AppCard";
 /**
  * A carousel of AppCards
  * @param {object} props Component props
@@ -21,8 +21,8 @@ export default class Carousel extends Component {
 		super(props);
 		this.state = {
 			firstIndex: 0,
-			titleHighlighted: false
-		}
+			titleHighlighted: false,
+		};
 		this.bindCorrectContext();
 		if (this.props.cards.length < 3) this.notEnoughCards();
 	}
@@ -46,7 +46,7 @@ export default class Carousel extends Component {
 		}
 
 		this.setState({
-			firstIndex: index
+			firstIndex: index,
 		});
 	}
 	/**
@@ -61,7 +61,7 @@ export default class Carousel extends Component {
 		}
 
 		this.setState({
-			firstIndex: index
+			firstIndex: index,
 		});
 	}
 	/**
@@ -70,7 +70,7 @@ export default class Carousel extends Component {
 	 */
 	highlightTitle(highlight) {
 		this.setState({
-			titleHighlighted: highlight
+			titleHighlighted: highlight,
 		});
 	}
 	/**
@@ -83,7 +83,9 @@ export default class Carousel extends Component {
 	 * Spits out a warning if the number of cards supplied to the carousel is < 3
 	 */
 	notEnoughCards() {
-		console.warn('Less than 3 card supplied. This carousel will not display optimally');
+		console.warn(
+			"Less than 3 card supplied. This carousel will not display optimally"
+		);
 	}
 	/**
 	 * Function to build the items in the carousel
@@ -103,13 +105,14 @@ export default class Carousel extends Component {
 		return displayCards;
 	}
 	render() {
-
 		let displayCards = this.buildCarousel();
 		let titleClass = "carousel-title";
 		if (this.state.titleHighlighted) titleClass += " highlight";
 
-		let chevron_left_style = 'ff-adp-chevron-left', chevron_right_style = 'ff-adp-chevron-right';
-		let left_click = this.pageDown, right_click = this.pageUp;
+		let chevron_left_style = "ff-adp-chevron-left",
+			chevron_right_style = "ff-adp-chevron-right";
+		let left_click = this.pageDown,
+			right_click = this.pageUp;
 
 		if (this.state.firstIndex + 2 >= this.props.cards.length - 1) {
 			chevron_right_style += " disabled";
@@ -124,14 +127,27 @@ export default class Carousel extends Component {
 		return (
 			<div className="carousel-main">
 				<div className="carousel-header">
-					<div className={titleClass} onClick={this.seeMore} onMouseEnter={this.highlightTitle.bind(this, true)} onMouseLeave={this.highlightTitle.bind(this, false)}>{this.props.tag[0].toUpperCase() + this.props.tag.substring(1)}</div>
-					<button className="see-more" onClick={this.seeMore}><span className='button-label'>See More</span></button>
+					<div
+						className={titleClass}
+						onClick={this.seeMore}
+						onMouseEnter={this.highlightTitle.bind(this, true)}
+						onMouseLeave={this.highlightTitle.bind(this, false)}
+					>
+						{this.props.tag[0].toUpperCase() + this.props.tag.substring(1)}
+					</div>
+					<button className="see-more" onClick={this.seeMore}>
+						<span className="button-label">See More</span>
+					</button>
 				</div>
 				<div className="carousel-content">
 					<i className={chevron_left_style} onClick={left_click} />
 					{displayCards.map((card, i) => {
 						return (
-							<AppCard key={(card.title || card.name) + i} {...card} viewAppShowcase={this.props.viewAppShowcase} />
+							<AppCard
+								key={(card.title || card.name) + i}
+								{...card}
+								viewAppShowcase={this.props.viewAppShowcase}
+							/>
 						);
 					})}
 					<i className={chevron_right_style} onClick={right_click} />

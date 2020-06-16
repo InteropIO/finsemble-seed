@@ -1,7 +1,7 @@
 /*!
-* Copyright 2017 - 2020 by ChartIQ, Inc.
-* All rights reserved.
-*/
+ * Copyright 2017 - 2020 by ChartIQ, Inc.
+ * All rights reserved.
+ */
 
 // Static vs Dynamic Toolbar
 import Toolbar from "./dynamicToolbar";

@@ -1,58 +1,60 @@
-import React from  'react'
-import SearchBox from './SearchBox'
-import TagsMenu from '../../../shared/TagsMenu';
-import SortBy from './SortBy'
-import TagsList from './TagsList'
-import {getStore} from '../stores/LauncherStore'
-import storeActions from '../stores/StoreActions'
+import React from "react";
+import SearchBox from "./SearchBox";
+import TagsMenu from "../../../shared/TagsMenu";
+import SortBy from "./SortBy";
+import TagsList from "./TagsList";
+import { getStore } from "../stores/LauncherStore";
+import storeActions from "../stores/StoreActions";
 
 let store;
 
 export default class FilterSort extends React.Component {
-
 	constructor(props) {
-		super(props)
+		super(props);
 		this.state = {
 			tags: [],
-			search: ''
-		}
+			search: "",
+		};
 		this.onSearch = this.onSearch.bind(this);
 		this.setStateValues = this.setStateValues.bind(this);
 		store = getStore();
 	}
 
-	setStateValues(){
+	setStateValues() {
 		this.setState({
-			tags: storeActions.getAllAppsTags()
+			tags: storeActions.getAllAppsTags(),
 		});
 	}
 
 	onSearch(event) {
-		this.setState({
-			search: event.target.value
-		}, () => {
-			getStore().setValue({
-				field: 'filterText',
-				value: this.state.search
-			})
-		})
+		this.setState(
+			{
+				search: event.target.value,
+			},
+			() => {
+				getStore().setValue({
+					field: "filterText",
+					value: this.state.search,
+				});
+			}
+		);
 	}
 
 	/**
-	* Add tag to list in local store
-	* so that other components get notified
-	**/
+	 * Add tag to list in local store
+	 * so that other components get notified
+	 **/
 	onTagClick(tag) {
 		let tags = storeActions.getTags();
 
 		if (tags.includes(tag)) {
 			storeActions.deleteTag(tag);
 		} else {
-			storeActions.addTag(tag)
+			storeActions.addTag(tag);
 		}
 	}
 
-	componentDidMount(){
+	componentDidMount() {
 		this.setStateValues();
 		store.addListener({ field: "appFolders.folders" }, this.setStateValues);
 	}
@@ -73,8 +75,9 @@ export default class FilterSort extends React.Component {
 					align="right"
 					list={this.state.tags}
 					active={activeTags}
-					onItemClick={this.onTagClick}/>
+					onItemClick={this.onTagClick}
+				/>
 			</div>
-			)
+		);
 	}
 }

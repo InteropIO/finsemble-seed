@@ -1,7 +1,7 @@
 /*!
-* Copyright 2017 - 2020 by ChartIQ, Inc.
-* All rights reserved.
-*/
+ * Copyright 2017 - 2020 by ChartIQ, Inc.
+ * All rights reserved.
+ */
 
 import React from "react";
 import ReactDOM from "react-dom";
@@ -20,11 +20,8 @@ import {
 	FinsembleMenuItemLabel,
 	FinsembleMenuLabel,
 	FinsembleMenuSection,
-	FinsembleMenuSectionLabel
+	FinsembleMenuSectionLabel,
 } from "@chartiq/finsemble-react-controls";
-
-
-
 
 /**
  * This is our application launcher. It is opened from a button in our sample toolbar, and it handles the launching of finsemble components.
@@ -38,71 +35,73 @@ class AppLauncher extends React.Component {
 
 		this.state = {
 			dimensions: {},
-			componentList: {}
+			componentList: {},
 		};
 	}
 
 	componentWillMount() {
 		var self = this;
 		//Focus on the window when it is shown so that a click elsewhere will trigger a blur.
-		finsembleWindow.addEventListener("shown", function () {
+		finsembleWindow.addEventListener("shown", function() {
 			finsembleWindow.focus();
 		});
 	}
 
 	openQuickComponent() {
 		//FSBL.Clients.LauncherClient.spawn("QuickComponentForm", { monitor: "mine" });
-		FSBL.Clients.DialogManager.open("QuickComponentForm", {}, () => { });
+		FSBL.Clients.DialogManager.open("QuickComponentForm", {}, () => {});
 	}
 
 	openAppCatalog() {
 		FSBL.Clients.LauncherClient.showWindow(
 			{
-				componentType: "App Catalog"
+				componentType: "App Catalog",
 			},
 			{
 				monitor: "mine",
 				staggerPixels: 0,
 				spawnIfNotFound: true,
 				left: "center",
-				top: "center"
-			});
+				top: "center",
+			}
+		);
 	}
 
 	render() {
 		var self = this;
-		return (<FinsembleMenu>
-			<FinsembleMenuSection className="menu-secondary">
-				{<FinsembleMenuItem>
-					<FinsembleMenuItemLabel onClick={this.openQuickComponent}>
-						New App
-					</FinsembleMenuItemLabel>
-				</FinsembleMenuItem> }
-				<FinsembleMenuItem>
-					<FinsembleMenuItemLabel onClick={this.openAppCatalog}>
-						App Catalog
-					</FinsembleMenuItemLabel>
-				</FinsembleMenuItem>
-			</FinsembleMenuSection>
-			<ComponentList />
-		</FinsembleMenu>);
+		return (
+			<FinsembleMenu>
+				<FinsembleMenuSection className="menu-secondary">
+					{
+						<FinsembleMenuItem>
+							<FinsembleMenuItemLabel onClick={this.openQuickComponent}>
+								New App
+							</FinsembleMenuItemLabel>
+						</FinsembleMenuItem>
+					}
+					<FinsembleMenuItem>
+						<FinsembleMenuItemLabel onClick={this.openAppCatalog}>
+							App Catalog
+						</FinsembleMenuItemLabel>
+					</FinsembleMenuItem>
+				</FinsembleMenuSection>
+				<ComponentList />
+			</FinsembleMenu>
+		);
 	}
 }
-
 
 if (window.FSBL && FSBL.addEventListener) {
 	FSBL.addEventListener("onReady", FSBLReady);
 } else {
-	window.addEventListener("FSBLReady", FSBLReady)
+	window.addEventListener("FSBLReady", FSBLReady);
 }
 
 function FSBLReady() {
 	// var Test = require('./test');
 	//console.log("appLauncher app onReady");
-	storeExports.initialize(function (store) {
+	storeExports.initialize(function(store) {
 		appLauncherStore = store;
-		ReactDOM.render(
-			<AppLauncher />
-			, document.getElementById("bodyHere"));
+		ReactDOM.render(<AppLauncher />, document.getElementById("bodyHere"));
 	});
 }

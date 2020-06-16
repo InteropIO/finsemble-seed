@@ -1,7 +1,7 @@
 /*!
-* Copyright 2017 - 2020 by ChartIQ, Inc.
-* All rights reserved.
-*/
+ * Copyright 2017 - 2020 by ChartIQ, Inc.
+ * All rights reserved.
+ */
 
 import React from "react";
 import ReactDOM from "react-dom";
@@ -11,7 +11,6 @@ import "../../../../assets/css/finsemble.css";
 import "../appCatalog.css";
 import ComplexMenu from "../../complexMenu/ComplexMenu";
 import AppContent from "./components/AppContent";
-
 
 /**
  * This is our application launcher. It is opened from a button in our sample toolbar, and it handles the launching of finsemble components.
@@ -24,7 +23,7 @@ class AppCatalog extends React.Component {
 		super(props);
 		this.state = {
 			loaded: false,
-			headerImgUrl: ""
+			headerImgUrl: "",
 		};
 	}
 	componentWillMount() {
@@ -36,29 +35,43 @@ class AppCatalog extends React.Component {
 					// headerImgUrl: config.startup_app.applicationIcon
 				});
 			}
-		})
-		this.setState({ activeSection: this.props && this.props.activeSection ? this.props.activeSection : '' })//Props did not exist in the constructor
+		});
+		this.setState({
+			activeSection:
+				this.props && this.props.activeSection ? this.props.activeSection : "",
+		}); //Props did not exist in the constructor
 	}
 	render() {
 		var self = this;
 		if (!this.state.loaded) return null;
 		return (
-			<ComplexMenu headerImgUrl={this.state.headerImgUrl} title="App Catalog" activeSection="Apps" navOptions={[{
-				label: "Apps",
-				content: <AppContent installed={true} />
-			}]} />
+			<ComplexMenu
+				headerImgUrl={this.state.headerImgUrl}
+				title="App Catalog"
+				activeSection="Apps"
+				navOptions={[
+					{
+						label: "Apps",
+						content: <AppContent installed={true} />,
+					},
+				]}
+			/>
 		);
 	}
 }
 
-if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
+if (window.FSBL && FSBL.addEventListener) {
+	FSBL.addEventListener("onReady", FSBLReady);
+} else {
+	window.addEventListener("FSBLReady", FSBLReady);
+}
 function FSBLReady() {
 	//console.log("App Catalog app onReady");
-	FSBL.Clients.WindowClient.finsembleWindow.updateOptions({ alwaysOnTop: true });
+	FSBL.Clients.WindowClient.finsembleWindow.updateOptions({
+		alwaysOnTop: true,
+	});
 	FSBL.Clients.DialogManager.showModal();
 	//FSBL.Clients.WindowClient.finsembleWindow.addEventListener("shown", FSBL.Clients.DialogManager.showModal);
 
-	ReactDOM.render(
-		<AppCatalog />
-		, document.getElementById("bodyHere"));
+	ReactDOM.render(<AppCatalog />, document.getElementById("bodyHere"));
 }

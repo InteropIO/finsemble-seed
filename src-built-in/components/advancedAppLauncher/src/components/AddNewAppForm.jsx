@@ -2,20 +2,21 @@ import React from "react";
 import storeActions from "../stores/StoreActions";
 import {
 	FinsembleDialogTextInput,
-	FinsembleDialogButton
+	FinsembleDialogButton,
 } from "@chartiq/finsemble-react-controls";
 
 const FORM_DEFAULTS = {
 	name: "",
 	tags: "",
-	url: ""
+	url: "",
 };
 const VALIDATION_DEFAULTS = {
 	name: true,
-	url: true
+	url: true,
 };
 
-const INVALID_NAME_MSG = "Name cannot be empty or be a duplicate of an existing component.";
+const INVALID_NAME_MSG =
+	"Name cannot be empty or be a duplicate of an existing component.";
 const INVALID_URL_MSG = "URL must be valid (e.g., http://www.google.com).";
 /**
  * A component that has a form to accept new app properties
@@ -25,7 +26,6 @@ const INVALID_URL_MSG = "URL must be valid (e.g., http://www.google.com).";
  * @example <AddNewAppForm onDone={this.someHandlerFunction}></AddNewAppForm>
  */
 export default class AddNewAppForm extends React.Component {
-
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -33,7 +33,7 @@ export default class AddNewAppForm extends React.Component {
 			form: Object.assign({}, FORM_DEFAULTS),
 			validation: Object.assign({}, VALIDATION_DEFAULTS),
 			//changed to true after the user submits (if they submit bad information). This gives updated information on keypress.
-			validateOnInputChange: false
+			validateOnInputChange: false,
 		};
 
 		this.onSubmit = this.onSubmit.bind(this);
@@ -51,21 +51,20 @@ export default class AddNewAppForm extends React.Component {
 	 */
 	onSubmit() {
 		let validName = this.validateName(this.state.form.name);
-		let validURL = this.validateURL(this.
-			state.form.url);
+		let validURL = this.validateURL(this.state.form.url);
 		if (!validName || !validURL) {
 			this.setState({
 				validation: {
 					url: validURL,
-					name: validName
+					name: validName,
 				},
-				validateOnInputChange: true
+				validateOnInputChange: true,
 			});
 			return;
 		}
 		this.setState({
 			validation: Object.assign({}, VALIDATION_DEFAULTS),
-			validateOnInputChange: false
+			validateOnInputChange: false,
 		});
 
 		this.fixURL();
@@ -77,33 +76,33 @@ export default class AddNewAppForm extends React.Component {
 				this.setState({
 					validation: {
 						name: false,
-						url: true
-					}
-				})
+						url: true,
+					},
+				});
 			} else {
 				this.done();
 			}
 		});
 	}
 	/**
-     * Clears all form inputs
-     */
+	 * Clears all form inputs
+	 */
 	onClear() {
 		document.getElementById("new-app").reset();
 		this.setState({
-			form: Object.assign({}, FORM_DEFAULTS)
+			form: Object.assign({}, FORM_DEFAULTS),
 		});
 	}
 	/**
-     * Just cancel and do not add the app
-     */
+	 * Just cancel and do not add the app
+	 */
 	onCancel() {
 		this.done();
 	}
 	/**
-     * Calls the passed onDone property to let the parent component
-     * know that we finished processing user's request (submit/cancel)
-     */
+	 * Calls the passed onDone property to let the parent component
+	 * know that we finished processing user's request (submit/cancel)
+	 */
 	done() {
 		if (this.props.onDone && typeof this.props.onDone === "function") {
 			this.props.onDone();
@@ -123,7 +122,7 @@ export default class AddNewAppForm extends React.Component {
 			validation.url = this.validateURL(form.url);
 		}
 		this.setState({
-			form
+			form,
 		});
 	}
 	/**
@@ -137,7 +136,7 @@ export default class AddNewAppForm extends React.Component {
 			validation.name = this.validateName(form.name);
 		}
 		this.setState({
-			form
+			form,
 		});
 	}
 	/**
@@ -151,7 +150,7 @@ export default class AddNewAppForm extends React.Component {
 		try {
 			new URL(url);
 			return true;
-		} catch(e) {
+		} catch (e) {
 			return false;
 		}
 	}
@@ -161,7 +160,7 @@ export default class AddNewAppForm extends React.Component {
 	 * @param {keyboardEvent} e
 	 */
 	validateName(name) {
-		return !(name === "") || /^[0-9a-zA-Z_.-\s]+$/.test(name)
+		return !(name === "") || /^[0-9a-zA-Z_.-\s]+$/.test(name);
 	}
 
 	/**
@@ -204,26 +203,49 @@ export default class AddNewAppForm extends React.Component {
 
 	render() {
 		const form = this.state.form;
-		return (<div className="add-app-form controls-wrapper">
-			<form id="new-app">
-				<FinsembleDialogTextInput inputLabel="App Name" onInputChange={this.onAppNameChanged} placeholder="App Name" autoFocus={true} />
-				{!this.state.validation.name &&
-					<div className="input-error">{INVALID_NAME_MSG}</div>}
-				<FinsembleDialogTextInput inputLabel="App URL" onInputChange={this.onURLChanged} placeholder="App URL" defaultValue="https://" />
-				{!this.state.validation.url &&
-					<div className="input-error">{INVALID_URL_MSG}</div>}
-				<div className="button-wrapper">
-					<FinsembleDialogButton className="fsbl-button-neutral" onClick={this.onClear}>
-						Clear
-					</FinsembleDialogButton>
-					<FinsembleDialogButton className="fsbl-button-neutral" onClick={this.onCancel}>
-						Cancel
-					</FinsembleDialogButton>
-					<FinsembleDialogButton className="fsbl-button-affirmative" onClick={this.onSubmit}>
-						Submit
-					</FinsembleDialogButton>
-				</div>
-			</form>
-		</div>);
+		return (
+			<div className="add-app-form controls-wrapper">
+				<form id="new-app">
+					<FinsembleDialogTextInput
+						inputLabel="App Name"
+						onInputChange={this.onAppNameChanged}
+						placeholder="App Name"
+						autoFocus={true}
+					/>
+					{!this.state.validation.name && (
+						<div className="input-error">{INVALID_NAME_MSG}</div>
+					)}
+					<FinsembleDialogTextInput
+						inputLabel="App URL"
+						onInputChange={this.onURLChanged}
+						placeholder="App URL"
+						defaultValue="https://"
+					/>
+					{!this.state.validation.url && (
+						<div className="input-error">{INVALID_URL_MSG}</div>
+					)}
+					<div className="button-wrapper">
+						<FinsembleDialogButton
+							className="fsbl-button-neutral"
+							onClick={this.onClear}
+						>
+							Clear
+						</FinsembleDialogButton>
+						<FinsembleDialogButton
+							className="fsbl-button-neutral"
+							onClick={this.onCancel}
+						>
+							Cancel
+						</FinsembleDialogButton>
+						<FinsembleDialogButton
+							className="fsbl-button-affirmative"
+							onClick={this.onSubmit}
+						>
+							Submit
+						</FinsembleDialogButton>
+					</div>
+				</form>
+			</div>
+		);
 	}
 }

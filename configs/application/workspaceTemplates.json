@@ -1,13 +1,11 @@
 {
 	"workspaceTemplates": {
-		"Blank Template":
-			{
-				"name": "Blank Template",
-				"description": "Empty template with no components",
-				"windows": [],
-				"groups": {},
-				"windowData": []
-			}
+		"Blank Template": {
+			"name": "Blank Template",
+			"description": "Empty template with no components",
+			"windows": [],
+			"groups": {},
+			"windowData": []
+		}
 	}
 }
-

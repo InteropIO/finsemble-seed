@@ -1,15 +1,23 @@
 /*!
-* Copyright 2017 - 2020 by ChartIQ, Inc.
-* All rights reserved.
-*/
+ * Copyright 2017 - 2020 by ChartIQ, Inc.
+ * All rights reserved.
+ */
 import React from "react";
 import ReactDOM from "react-dom";
 import "../inputAndSelectionDialog.css";
 import "../../../../assets/css/font-finance.css";
 import "../../../../assets/css/finsemble.css";
-import { FinsembleDialog, FinsembleDialogQuestion, FinsembleDialogTextInput, FinsembleDialogButton } from "@chartiq/finsemble-react-controls";
-import { FinsembleDnDContext, FinsembleDraggable, FinsembleDroppable } from '@chartiq/finsemble-react-controls';
-
+import {
+	FinsembleDialog,
+	FinsembleDialogQuestion,
+	FinsembleDialogTextInput,
+	FinsembleDialogButton,
+} from "@chartiq/finsemble-react-controls";
+import {
+	FinsembleDnDContext,
+	FinsembleDraggable,
+	FinsembleDroppable,
+} from "@chartiq/finsemble-react-controls";
 
 /**
  * This is our input dialog for new workspace templates. The user selection the template to use plus enters a new workspace name.
@@ -31,7 +39,7 @@ class InputAndSelectionDialog extends React.Component {
 			currentDescription: "",
 			focusedTemplateName: "Blank Template",
 			inputWorkspaceValue: "",
-			invalidWorkspace: false
+			invalidWorkspace: false,
 		};
 		document.body.addEventListener("keydown", this.handleKeydownOnBody);
 	}
@@ -49,7 +57,10 @@ class InputAndSelectionDialog extends React.Component {
 	// returns all the component types of a template definition to display to user for additional info. If multiple components with same type, then instead of listing each
 	// individually, only one entry will be returned with the count in parentheses.
 	getComponentTypes(templateObject) {
-		FSBL.Clients.Logger.system.debug("getComponentTypes templateObject", templateObject);
+		FSBL.Clients.Logger.system.debug(
+			"getComponentTypes templateObject",
+			templateObject
+		);
 		var componentType;
 		var componentMap = {};
 		var annotatedComponentList = [];
@@ -57,7 +68,8 @@ class InputAndSelectionDialog extends React.Component {
 			let windowData = templateObject.windowData[i];
 			FSBL.Clients.Logger.system.debug("getComponentTypes loop", windowData);
 			componentType = "Unknown Component";
-			if (windowData) { // current assimilation doesn't fill in windowData, so in this case use "Unknown Component" for component type
+			if (windowData) {
+				// current assimilation doesn't fill in windowData, so in this case use "Unknown Component" for component type
 				componentType = windowData.customData.component.type;
 			} else {
 				componentType = "Unknown Component";
@@ -76,9 +88,12 @@ class InputAndSelectionDialog extends React.Component {
 			if (identicalCount > 1) {
 				annotatedName = annotatedName + ` (${identicalCount})`;
 			}
-			annotatedComponentList.push(annotatedName)
+			annotatedComponentList.push(annotatedName);
 		}
-		FSBL.Clients.Logger.system.debug("getComponentTypes", annotatedComponentList);
+		FSBL.Clients.Logger.system.debug(
+			"getComponentTypes",
+			annotatedComponentList
+		);
 		return annotatedComponentList;
 	}
 
@@ -86,8 +101,8 @@ class InputAndSelectionDialog extends React.Component {
 		var self = this;
 		var componentTypeMap = {};
 
-		FSBL.Clients.WorkspaceClient.getTemplates(function (templates) {
-			self.setState({ templateDefinitions: templates })
+		FSBL.Clients.WorkspaceClient.getTemplates(function(templates) {
+			self.setState({ templateDefinitions: templates });
 			FSBL.Clients.Logger.debug("refreshData with templates", templates);
 
 			let templateNames = Object.keys(templates);
@@ -97,9 +112,12 @@ class InputAndSelectionDialog extends React.Component {
 				componentTypeMap[aName] = self.getComponentTypes(aTemplate);
 			}
 
-			self.setState({ componentTypeMap })
+			self.setState({ componentTypeMap });
 			self.setFocusedTemplateInfo(self.state.focusedTemplateName);
-			FSBL.Clients.Logger.debug("refreshData with componentTypeMap", componentTypeMap);
+			FSBL.Clients.Logger.debug(
+				"refreshData with componentTypeMap",
+				componentTypeMap
+			);
 			callback && callback();
 		});
 	}
@@ -138,12 +156,22 @@ class InputAndSelectionDialog extends React.Component {
 		this.refreshData();
 
 		let data = response.data;
-		this.setState({
-			hideModalOnClose: typeof data.hideModalOnClose === "undefined" ? true : data.hideModalOnClose,
-			inputLabel: data.inputLabel,
-			templateDefinitions: data.templateDefinitions || this.state.templateDefinitions,
-			showCancelButton: typeof data.showCancelButton === "undefined" ? false : data.showCancelButton
-		}, this.fitAndShow);
+		this.setState(
+			{
+				hideModalOnClose:
+					typeof data.hideModalOnClose === "undefined"
+						? true
+						: data.hideModalOnClose,
+				inputLabel: data.inputLabel,
+				templateDefinitions:
+					data.templateDefinitions || this.state.templateDefinitions,
+				showCancelButton:
+					typeof data.showCancelButton === "undefined"
+						? false
+						: data.showCancelButton,
+			},
+			this.fitAndShow
+		);
 	}
 	/**
 	 * Fits the contents of the DOM to the window, then calls `showDialog`, which positions the dialog on the proper monitor and toggles the visibility of the window.
@@ -151,7 +179,7 @@ class InputAndSelectionDialog extends React.Component {
 	 * @memberof InputAndSelectionDialog
 	 */
 	fitAndShow() {
-		FSBL.Clients.WindowClient.fitToDOM(null, function () {
+		FSBL.Clients.WindowClient.fitToDOM(null, function() {
 			FSBL.Clients.DialogManager.showDialog();
 		});
 	}
@@ -164,7 +192,7 @@ class InputAndSelectionDialog extends React.Component {
 	sendResponse(response) {
 		if (response === "affirmative" && this.state.inputWorkspaceValue === "") {
 			this.setState({
-				invalidWorkspace: true
+				invalidWorkspace: true,
 			});
 			this.refs.WorkspaceInput.focus();
 			return;
@@ -174,16 +202,18 @@ class InputAndSelectionDialog extends React.Component {
 			value: this.state.inputWorkspaceValue,
 			template: this.state.focusedTemplateName,
 			choice: response,
-			hideModalOnClose: this.state.hideModalOnClose
+			hideModalOnClose: this.state.hideModalOnClose,
 		});
 
 		this.setState({
 			inputWorkspaceValue: null,
 			focusedTemplateName: null,
-			invalidWorkspace: false
+			invalidWorkspace: false,
 		});
 		this.refs.WorkspaceInput.focus();
-		Array.from(document.querySelectorAll("input")).forEach((el) => el.value = "");
+		Array.from(document.querySelectorAll("input")).forEach(
+			(el) => (el.value = "")
+		);
 	}
 	/**
 	 * onChange handler. When the user types, we keep the value up to date in the dialog's state.
@@ -194,26 +224,27 @@ class InputAndSelectionDialog extends React.Component {
 	setInputWorkpaceName(e) {
 		this.setState({
 			inputWorkspaceValue: e.target.value,
-			invalidWorkspace: false
+			invalidWorkspace: false,
 		});
 	}
 
 	// when a template is selected by user, update all the related state
 	setFocusedTemplateInfo(focusedTemplateName, click) {
-		var currentDescription = self.state.templateDefinitions[focusedTemplateName].description;
+		var currentDescription =
+			self.state.templateDefinitions[focusedTemplateName].description;
 		var currentComponents = self.state.componentTypeMap[focusedTemplateName];
 		if (click) {
 			this.setState({
 				inputWorkspaceValue: focusedTemplateName,
-				invalidWorkspace: false
+				invalidWorkspace: false,
 			});
 		}
 		this.setState({
 			focusedTemplateName,
 			currentDescription,
 			currentComponents,
-			focusedTemplateName
-		})
+			focusedTemplateName,
+		});
 
 		self.fitAndShow();
 	}
@@ -241,72 +272,107 @@ class InputAndSelectionDialog extends React.Component {
 				userInputTimeout={1000 * 60 * 5}
 				behaviorOnResponse="hide"
 				onShowRequested={this.onShowRequested}
-				isModal={false}>
+				isModal={false}
+			>
 				<div className="content-main-wrapper">
 					<div className="content-section-header">Templates</div>
 					<div className="content-main-row">
 						<div className="content-main-column templates-column">
 							<div ref="TemplateList" className="template-list">
-								{Object.keys(this.state.templateDefinitions).map((templateName, i) => {
-									let baseClass = "workspace-item template-item ";
-									let classNames = baseClass;
-									if (this.state.focusedTemplateName === templateName) {
-										classNames += " focused-workspace-item";
+								{Object.keys(this.state.templateDefinitions).map(
+									(templateName, i) => {
+										let baseClass = "workspace-item template-item ";
+										let classNames = baseClass;
+										if (this.state.focusedTemplateName === templateName) {
+											classNames += " focused-workspace-item";
+										}
+
+										return (
+											<div
+												className={classNames}
+												key={i}
+												onClick={() =>
+													this.setFocusedTemplateInfo(templateName, true)
+												}
+											>
+												{this.truncatedTemplaceName(templateName)}
+											</div>
+										);
 									}
-
-									return (
-										<div className={classNames} key={i} onClick={() => this.setFocusedTemplateInfo(templateName, true)}>
-											{this.truncatedTemplaceName(templateName)}
-										</div>
-									)
-
-								})}
+								)}
 							</div>
 						</div>
 						<div className="content-main-column components-column">
 							{this.state.currentComponents.length > 0 &&
 								this.state.currentComponents.map((componentName, i) => {
-									return (<div key={i} className="content-section-components-name">
-										{this.truncatedComponentName(componentName)}
-									</div>);
+									return (
+										<div key={i} className="content-section-components-name">
+											{this.truncatedComponentName(componentName)}
+										</div>
+									);
 								})}
-							{this.state.currentComponents.length === 0 &&
+							{this.state.currentComponents.length === 0 && (
 								<div className="content-section-components-name">
 									No components.
-								</div>}
+								</div>
+							)}
 						</div>
 					</div>
 					<div className="content-main-row">
-						<div className="content-section-description-wrapper" title={this.state.currentDescription || "No description."}>
-							<i className="ff-info"></i>{this.state.currentDescription || "No description."}
+						<div
+							className="content-section-description-wrapper"
+							title={this.state.currentDescription || "No description."}
+						>
+							<i className="ff-info"></i>
+							{this.state.currentDescription || "No description."}
 						</div>
 					</div>
 					<div className="content-section-header">Name</div>
 					<div className="content-main-row workspace-input-row">
 						<div className={workspaceInputClasses}>
-							<input ref="WorkspaceInput" autoFocus={true} placeholder={"New Workspace"} maxLength="40" value={this.state.inputWorkspaceValue} onChange={this.setInputWorkpaceName} />
+							<input
+								ref="WorkspaceInput"
+								autoFocus={true}
+								placeholder={"New Workspace"}
+								maxLength="40"
+								value={this.state.inputWorkspaceValue}
+								onChange={this.setInputWorkpaceName}
+							/>
 						</div>
 						<div className="action-buttons-wrapper">
-							<div className="action-button workspace-action-button" onClick={() => { this.sendResponse("cancel"); }}>
+							<div
+								className="action-button workspace-action-button"
+								onClick={() => {
+									this.sendResponse("cancel");
+								}}
+							>
 								{this.state.cancelResponseLabel}
 							</div>
-							<div className="action-button workspace-action-button affirmative-button" onClick={() => { this.sendResponse("affirmative"); }}>
+							<div
+								className="action-button workspace-action-button affirmative-button"
+								onClick={() => {
+									this.sendResponse("affirmative");
+								}}
+							>
 								{this.state.affirmativeResponseLabel}
 							</div>
 						</div>
 					</div>
-
-
 				</div>
 			</FinsembleDialog>
-		)
+		);
 	}
 }
 
 //render component when FSBL is ready.
-if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
+if (window.FSBL && FSBL.addEventListener) {
+	FSBL.addEventListener("onReady", FSBLReady);
+} else {
+	window.addEventListener("FSBLReady", FSBLReady);
+}
 function FSBLReady() {
 	ReactDOM.render(
-		<InputAndSelectionDialog />
-		, document.getElementById("inputAndSelectionDialog-component-wrapper"));
+		<InputAndSelectionDialog />,
+		document.getElementById("inputAndSelectionDialog-component-wrapper")
+	);
 }

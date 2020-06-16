@@ -1,39 +1,37 @@
 /*!
-* Copyright 2017 - 2020 by ChartIQ, Inc.
-* All rights reserved.
-*/
+ * Copyright 2017 - 2020 by ChartIQ, Inc.
+ * All rights reserved.
+ */
 
-let menuStore;
 import async from "async";
+let menuStore;
 
 var values = {
-	list: []
-}
+	list: [],
+};
 var actionPress;
 
 var menuFocused = false;
 var Actions = {
-	initialize: function (cb) {
+	initialize: function(cb) {
 		cb();
 		finsembleWindow.addEventListener("shown", () => {
-		//console.log("shown", performance.now());
-		})
+			//console.log("shown", performance.now());
+		});
 	},
 	getList() {
 		return values.list;
 	},
 	listChange(err, data) {
-	//console.log("list", data)
+		//console.log("list", data)
 		if (!data.value) {
 			values.list = [];
-
-
 		} else {
 			values.list = data.value;
 		}
 
 		if (values.list.length) {
-			menuStore.setValue({ field: "menuShown", value: true })
+			menuStore.setValue({ field: "menuShown", value: true });
 		}
 	},
 	onBlur() {
@@ -46,7 +44,7 @@ var Actions = {
 		return finsembleWindow.hide();
 	},
 	listItemClick(item, action) {
-		FSBL.Clients.SearchClient.invokeItemAction(item, action)
+		FSBL.Clients.SearchClient.invokeItemAction(item, action);
 		//menuStore.Dispatcher.dispatch({ actionType: "clear", data: "" });
 		//menuStore.setValue({ field: "list", value: [] })
 		return finsembleWindow.hide();
@@ -56,40 +54,45 @@ var Actions = {
 	},
 	setActionPress(func) {
 		actionPress = func;
-	}
+	},
 };
-
 
 function createStore(done) {
 	let defaultData = {
 		inFocus: false,
 		list: [],
-		owner: finsembleWindow.name
+		owner: finsembleWindow.name,
 	};
-//console.log("add listeners")
-	FSBL.Clients.RouterClient.addListener("SearchMenu." + finsembleWindow.name + ".actionpress", Actions.actionPress);
+	//console.log("add listeners")
+	FSBL.Clients.RouterClient.addListener(
+		`SearchMenu.${finsembleWindow.name}.actionpress`,
+		Actions.actionPress
+	);
 	finsembleWindow.addEventListener("blurred", Actions.onBlur);
-	finsembleWindow.addEventListener("reloaded", function () {
+	finsembleWindow.addEventListener("reloaded", () => {
 		finsembleWindow.removeEventListener("blurred", Actions.onBlur);
 		menuStore.removeListener({ field: "list" }, Actions.listChange);
-	})
-//console.log("CreateStore", "Finsemble-SearchStore." + FSBL.Clients.WindowClient.options.customData.spawnData.owner)
+	});
+	//console.log("CreateStore", "Finsemble-SearchStore." + FSBL.Clients.WindowClient.options.customData.spawnData.owner)
 
-	FSBL.Clients.DistributedStoreClient.createStore({ store: "Finsemble-SearchStore-" + FSBL.Clients.WindowClient.options.customData.spawnData.owner, values: defaultData, global: true },
-		function (err, store) {
+	FSBL.Clients.DistributedStoreClient.createStore(
+		{
+			store: `Finsemble-SearchStore-${FSBL.Clients.WindowClient.options.customData.spawnData.owner}`,
+			values: defaultData,
+			global: true,
+		},
+		(err, store) => {
 			menuStore = store;
 			store.addListener({ field: "list" }, Actions.listChange);
 
 			done();
-		});
+		}
+	);
 }
 
-
 function initialize(cb) {
-//console.log("init store", FSBL.Clients.WindowClient.options.customData.spawnData.owner)
-	async.parallel([
-		createStore,
-	], function (err) {
+	//console.log("init store", FSBL.Clients.WindowClient.options.customData.spawnData.owner)
+	async.parallel([createStore], (err) => {
 		if (err) {
 			console.error(err);
 		}
@@ -97,9 +100,7 @@ function initialize(cb) {
 	});
 }
 
-let getStore = () => {
-	return menuStore;
-};
+let getStore = () => menuStore;
 
 export { initialize };
 export { menuStore as Store };

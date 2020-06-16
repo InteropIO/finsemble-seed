@@ -1,20 +1,24 @@
 var chai = require("chai");
-var assert = chai.assert;
-var should = chai.should;
-var expect = chai.expect;
-var RouterClient = FSBL.Clients.RouterClient;
-var LauncherClient = FSBL.Clients.LauncherClient;
-if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
+var { assert } = chai;
+var { should } = chai;
+var { expect } = chai;
+var { RouterClient } = FSBL.Clients;
+var { LauncherClient } = FSBL.Clients;
+if (window.FSBL && FSBL.addEventListener) {
+	FSBL.addEventListener("onReady", FSBLReady);
+} else {
+	window.addEventListener("FSBLReady", FSBLReady);
+}
 function FSBLReady() {
 	var parentWindow, TESTRUNNER_CHANNEL_NAME;
-	FSBL.Utils.getWindowDescriptor().then(function (windowDescriptor) {
+	FSBL.Utils.getWindowDescriptor().then((windowDescriptor) => {
 		var data = windowDescriptor.customData;
 		if (data) {
 			if (data.window) {
 				parentWindow = fin.desktop.Window.wrap(data.uuid, data.window);
 				TESTRUNNER_CHANNEL_NAME = `TestRunner.${parentWindow.name}.Linker`;
 				function chooseColor(color) {
-					return new Promise(function (resolve, reject) {
+					return new Promise((resolve, reject) => {
 						let button = document.querySelector(`.${color}`);
 						try {
 							button.click();
@@ -25,11 +29,15 @@ function FSBLReady() {
 					});
 				}
 				function getLinkerGroupClasses() {
-					return new Promise(function (resolve, reject) {
-						resolve(Array.from(document.querySelectorAll(".linkerGroup")).map((el)=>el.className));
+					return new Promise((resolve, reject) => {
+						resolve(
+							Array.from(document.querySelectorAll(".linkerGroup")).map(
+								(el) => el.className
+							)
+						);
 					});
 				}
-				RouterClient.addResponder(TESTRUNNER_CHANNEL_NAME, function (err, message) {
+				RouterClient.addResponder(TESTRUNNER_CHANNEL_NAME, (err, message) => {
 					function sendSuccess(data) {
 						message.sendQueryResponse(null, data || "Success");
 					}
@@ -45,18 +53,18 @@ function FSBLReady() {
 					if (err) {
 						return;
 					}
-					let data = message.data;
+					let { data } = message;
 					switch (data.test) {
-					case "chooseColor":
-						chooseColor(data.color)
+						case "chooseColor":
+							chooseColor(data.color)
 								.then(sendSuccess)
 								.catch(sendError);
-						break;
-					case "getLinkerGroupClasses":
-						getLinkerGroupClasses(data.color)
+							break;
+						case "getLinkerGroupClasses":
+							getLinkerGroupClasses(data.color)
 								.then(sendSuccess)
 								.catch(sendError);
-						break;
+							break;
 					}
 				});
 			}

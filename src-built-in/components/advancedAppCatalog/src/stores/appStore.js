@@ -1,48 +1,47 @@
 /*!
-* Copyright 2017 - 2020 by ChartIQ, Inc.
-* All rights reserved.
-*/
-export {
-	createStore,
-	getStore
-};
+ * Copyright 2017 - 2020 by ChartIQ, Inc.
+ * All rights reserved.
+ */
+export { createStore, getStore };
 
 const defaultValues = [
 	{
 		field: "apps",
-		value: []
+		value: [],
 	},
 	{
 		field: "filteredApps",
-		value: []
+		value: [],
 	},
 	{
 		field: "activeTags",
-		value: []
+		value: [],
 	},
 	{
 		field: "activeApp",
-		value: null
+		value: null,
 	},
 	{
 		field: "searchText",
-		value: ""
+		value: "",
 	},
 	{
 		field: "forceSearch",
-		value: false
-	}
+		value: false,
+	},
 ];
-
 
 let appCatalogStore;
 
 function createStore(cb) {
-	FSBL.Clients.DistributedStoreClient.getStore({ store: "Finsemble-AppLauncher-Store", global: true }, (err, store) => {
-		appCatalogStore = store;
-		appCatalogStore.setValues(defaultValues);
-		cb(null, appCatalogStore);
-	});
+	FSBL.Clients.DistributedStoreClient.getStore(
+		{ store: "Finsemble-AppLauncher-Store", global: true },
+		(err, store) => {
+			appCatalogStore = store;
+			appCatalogStore.setValues(defaultValues);
+			cb(null, appCatalogStore);
+		}
+	);
 }
 
 function getStore() {

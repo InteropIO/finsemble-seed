@@ -1,8 +1,8 @@
 /*!
-* Copyright 2017 - 2020 by ChartIQ, Inc.
-* All rights reserved.
-*
-*/
+ * Copyright 2017 - 2020 by ChartIQ, Inc.
+ * All rights reserved.
+ *
+ */
 
 import React from "react";
 import storeActions from "../stores/StoreActions";
@@ -16,11 +16,10 @@ const FDC3 = "FDC3";
  * etc on each app in the list
  */
 export default class AppActionsMenu extends React.Component {
-
 	constructor(props) {
 		super(props);
 		this.state = {
-			isVisible: false
+			isVisible: false,
 		};
 		// Bind correct context
 		this.onAddToFavorite = this.onAddToFavorite.bind(this);
@@ -32,7 +31,6 @@ export default class AppActionsMenu extends React.Component {
 		this.deleteApp = this.deleteApp.bind(this);
 		this.handleClickOutside = this.handleClickOutside.bind(this);
 		this.handleWindowBlurred = this.handleWindowBlurred.bind(this);
-
 	}
 
 	componentDidMount() {
@@ -40,7 +38,7 @@ export default class AppActionsMenu extends React.Component {
 		// Mody on 12/12/19
 		// window.blur seems to work much better than finsembleWindow's
 		// blurred event. The first, is only fired when you actually click
-		// away from the window, while finsembleWindow's blurred fires even 
+		// away from the window, while finsembleWindow's blurred fires even
 		// when you click inside the window, causing possible race conditions.
 		window.addEventListener("blur", this.handleWindowBlurred);
 	}
@@ -56,7 +54,7 @@ export default class AppActionsMenu extends React.Component {
 			e.preventDefault();
 		}
 		this.setState({
-			isVisible: !this.state.isVisible
+			isVisible: !this.state.isVisible,
 		});
 	}
 
@@ -84,35 +82,34 @@ export default class AppActionsMenu extends React.Component {
 		this.toggleMenu();
 		FSBL.Clients.LauncherClient.showWindow(
 			{
-				componentType: "App Catalog"
+				componentType: "App Catalog",
 			},
 			{
 				monitor: "mine",
 				staggerPixels: 0,
 				spawnIfNotFound: true,
 				left: "center",
-				top: "center"
-			}, (error) => {
+				top: "center",
+			},
+			(error) => {
 				// Publish this event so that catalog knows
 				// what app we want to view
-
 
 				//NOTE: While not ideal, without a small delay (when having to launch the app catalog) the app catalog wont receive the message as it will still be initializing
 				setTimeout(() => {
 					FSBL.Clients.RouterClient.transmit("viewApp", {
-						app: this.props.app
+						app: this.props.app,
 					});
 				}, 250);
-			});
+			}
+		);
 	}
 	/**
 	 * Calls the storeActions.removeAppFromFolder to remove
 	 * an app from the currently selected folder
 	 */
 	onRemove() {
-		storeActions.removeAppFromFolder(
-			this.props.folder.name,
-			this.props.app);
+		storeActions.removeAppFromFolder(this.props.folder.name, this.props.app);
 		this.toggleMenu();
 	}
 
@@ -123,14 +120,14 @@ export default class AppActionsMenu extends React.Component {
 	handleClickOutside(e) {
 		if (this.menuRef && !this.menuRef.contains(e.target)) {
 			this.setState({
-				isVisible: false
+				isVisible: false,
 			});
 		}
 	}
 
 	handleWindowBlurred() {
 		this.setState({
-			isVisible: false
+			isVisible: false,
 		});
 	}
 
@@ -148,24 +145,39 @@ export default class AppActionsMenu extends React.Component {
 		const apps = storeActions.getAllApps();
 		const app = apps[this.props.app.appID];
 		const folder = this.props.folder;
-		let favoritesActionOnClick = this.props.isFavorite ? this.onRemoveFromFavorite : this.onAddToFavorite;
-		let favoritesText = this.props.isFavorite ? "Remove from Favorites" : "Add to Favorites";
+		let favoritesActionOnClick = this.props.isFavorite
+			? this.onRemoveFromFavorite
+			: this.onAddToFavorite;
+		let favoritesText = this.props.isFavorite
+			? "Remove from Favorites"
+			: "Add to Favorites";
 		return (
 			<div className="actions-menu" style={{ right: 0 }}>
 				<ul>
 					<li onClick={favoritesActionOnClick}>{favoritesText}</li>
-					{app.source && app.source === FDC3 && <li onClick={this.onViewInfo}>View Info</li>}
-					{!app.source && app.canDelete && <li onClick={this.deleteApp}>Delete App</li>}
-					{[ADVANCED_APP_LAUNCHER, FAVORITES].indexOf(folder.name) === -1 &&
-						<li onClick={this.onRemove}>Remove from {folder.name}</li>}
+					{app.source && app.source === FDC3 && (
+						<li onClick={this.onViewInfo}>View Info</li>
+					)}
+					{!app.source && app.canDelete && (
+						<li onClick={this.deleteApp}>Delete App</li>
+					)}
+					{[ADVANCED_APP_LAUNCHER, FAVORITES].indexOf(folder.name) === -1 && (
+						<li onClick={this.onRemove}>Remove from {folder.name}</li>
+					)}
 				</ul>
 			</div>
 		);
 	}
 	render() {
 		return (
-			<div ref={this.setMenuRef} className="actions-menu-wrapper" onClick={this.toggleMenu}>
-				<span><i className="ff-dots-vert" /></span>
+			<div
+				ref={this.setMenuRef}
+				className="actions-menu-wrapper"
+				onClick={this.toggleMenu}
+			>
+				<span>
+					<i className="ff-dots-vert" />
+				</span>
 				{this.state.isVisible && this.renderList()}
 			</div>
 		);

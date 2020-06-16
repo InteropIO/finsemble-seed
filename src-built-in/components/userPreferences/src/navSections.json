@@ -1,12 +1,12 @@
 {
-    "Entries": [
-        {
-            "name": "general",
-            "label": "General"
-        },
-        {
-            "name": "workspaces",
-            "label": "Workspaces"
-        }
-    ]
+	"Entries": [
+		{
+			"name": "general",
+			"label": "General"
+		},
+		{
+			"name": "workspaces",
+			"label": "Workspaces"
+		}
+	]
 }

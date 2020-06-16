@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 export default class Timer extends React.Component {
-    constructor(props) {
+	constructor(props) {
 		super(props);
 		this.state = {
-			timerDuration: props.timerDuration
-		}
+			timerDuration: props.timerDuration,
+		};
 	}
 	//Every second, subtract a second.
 	componentWillMount() {
@@ -14,15 +14,13 @@ export default class Timer extends React.Component {
 				this.props.ontimerDurationExpiration();
 			} else {
 				this.setState({
-					timerDuration: newTime
+					timerDuration: newTime,
 				});
 			}
-		}, 1000)
+		}, 1000);
 	}
 	//Countdown clock.
-    render() {
-		return (<div>
-			Time Remaining: {this.state.timerDuration / 1000}
-         </div>)
-    }
+	render() {
+		return <div>Time Remaining: {this.state.timerDuration / 1000}</div>;
+	}
 }

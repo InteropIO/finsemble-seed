@@ -1,7 +1,7 @@
 /*!
-* Copyright 2017 - 2020 by ChartIQ, Inc.
-* All rights reserved.
-*/
+ * Copyright 2017 - 2020 by ChartIQ, Inc.
+ * All rights reserved.
+ */
 import React from "react";
 import { DEFAULT_APP_RELEASE_NOTES } from "./defaults";
 
@@ -10,7 +10,7 @@ import { DEFAULT_APP_RELEASE_NOTES } from "./defaults";
  * @param {object} props Component props
  * @param {string} props.releaseNotes The release notes
  */
-const ReleaseNotes = props => {
+const ReleaseNotes = (props) => {
 	return (
 		<div className="app-notes release-notes">
 			<span className="showcase-label">Release Notes</span>
@@ -19,6 +19,6 @@ const ReleaseNotes = props => {
 			</div>
 		</div>
 	);
-}
+};
 
 export default ReleaseNotes;

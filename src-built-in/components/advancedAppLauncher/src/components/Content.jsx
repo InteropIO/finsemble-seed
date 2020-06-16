@@ -12,7 +12,6 @@ window.storeActions = storeActions;
 let store;
 
 export default class Content extends React.Component {
-
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -20,7 +19,7 @@ export default class Content extends React.Component {
 			tags: storeActions.getTags(),
 			sortBy: storeActions.getSortBy(),
 			filterText: storeActions.getSearchText(),
-			folder: storeActions.getActiveFolder()
+			folder: storeActions.getActiveFolder(),
 		};
 		this.onSort = this.onSort.bind(this);
 		this.onSearch = this.onSearch.bind(this);
@@ -38,7 +37,6 @@ export default class Content extends React.Component {
 		} else {
 			apps = folder.apps;
 		}
-
 
 		if (!folder || !apps) {
 			return [];
@@ -62,7 +60,9 @@ export default class Content extends React.Component {
 		return apps.filter((app) => {
 			for (let i = 0; i < this.state.tags.length; i++) {
 				let tag = this.state.tags[i];
-				if (!app.tags.includes(tag)) { return false;; };
+				if (!app.tags.includes(tag)) {
+					return false;
+				}
 			}
 			return true;
 		});
@@ -70,25 +70,25 @@ export default class Content extends React.Component {
 
 	onActiveFolderChanged(error, data) {
 		this.setState({
-			folder: storeActions.getActiveFolder()
+			folder: storeActions.getActiveFolder(),
 		});
 	}
 
 	onSearch(error, data) {
 		this.setState({
-			filterText: data.value
+			filterText: data.value,
 		});
 	}
 
 	onSort(error, data) {
 		this.setState({
-			sortBy: data.value
+			sortBy: data.value,
 		});
 	}
 
 	onTagsUpdate(error, data) {
 		this.setState({
-			tags: data.value
+			tags: data.value,
 		});
 	}
 	/**
@@ -98,10 +98,9 @@ export default class Content extends React.Component {
 	 */
 	onAppListUpdate(error, data) {
 		this.setState({
-			folder: storeActions.getActiveFolder()
+			folder: storeActions.getActiveFolder(),
 		});
 	}
-
 
 	componentDidMount() {
 		//this.setStateValues();
@@ -132,13 +131,25 @@ export default class Content extends React.Component {
 	getNoResultsMessage() {
 		const messages = {
 			search: ["No results found. Please try again."],
-			Favorites: ["There’s nothing here!", <br />, "Add apps to Favorites to view them here."],
+			Favorites: [
+				"There’s nothing here!",
+				<br />,
+				"Add apps to Favorites to view them here.",
+			],
 			//Dashboards: ['There’s nothing here!', <br />, 'Press “New Dashboard” to construct an Dashboard.'],
-			default: ["There’s nothing here!", <br />, "Add apps to folders to view them here."]
+			default: [
+				"There’s nothing here!",
+				<br />,
+				"Add apps to folders to view them here.",
+			],
 		};
-		if (!this.state.folder) { return ["Loading data...", <br />]; }
+		if (!this.state.folder) {
+			return ["Loading data...", <br />];
+		}
 		// User is searching so we need the search message
-		if (this.state.filterText || this.state.tags.length) { return messages.search; };
+		if (this.state.filterText || this.state.tags.length) {
+			return messages.search;
+		}
 		// Now let's check which folder is currently active
 		switch (this.state.folder.name) {
 			case "Favorites":
@@ -156,9 +167,14 @@ export default class Content extends React.Component {
 		return (
 			<div className="complex-menu-content-row">
 				<FilterSort></FilterSort>
-				<div className="item-wrapper">{apps.length ? apps : <NoAppsFound message={this.getNoResultsMessage()} />}</div>
+				<div className="item-wrapper">
+					{apps.length ? (
+						apps
+					) : (
+						<NoAppsFound message={this.getNoResultsMessage()} />
+					)}
+				</div>
 			</div>
 		);
 	}
-
 }

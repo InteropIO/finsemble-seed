@@ -1,11 +1,18 @@
 /*!
-* Copyright 2017 - 2020 by ChartIQ, Inc.
-* All rights reserved.
+ * Copyright 2017 - 2020 by ChartIQ, Inc.
+ * All rights reserved.
  * This is the list of actions the user can take; it's placed above the list of workspaces..
  */
 import React from "react";
-import { FinsembleMenuItem, FinsembleMenuItemLabel, FinsembleMenuSection } from "@chartiq/finsemble-react-controls";
-import { getStore, Actions as WorkspaceManagementMenuActions } from "../stores/workspaceManagementMenuStore";
+import {
+	FinsembleMenuItem,
+	FinsembleMenuItemLabel,
+	FinsembleMenuSection,
+} from "@chartiq/finsemble-react-controls";
+import {
+	getStore,
+	Actions as WorkspaceManagementMenuActions,
+} from "../stores/workspaceManagementMenuStore";
 
 export default class WorkspaceActions extends React.Component {
 	constructor() {
@@ -14,18 +21,19 @@ export default class WorkspaceActions extends React.Component {
 			{
 				method: this.createWorkspace,
 				label: "New Workspace",
-				id: "NewWorkspace"
+				id: "NewWorkspace",
 			},
 			{
 				method: this.saveWorkspace,
 				label: "Save",
-				id: "SaveWorkspace"
+				id: "SaveWorkspace",
 			},
 			{
 				method: this.saveWorkspaceAs,
 				label: "Save As",
-				id: "SaveWorkspaceAs"
-			}];
+				id: "SaveWorkspaceAs",
+			},
+		];
 	}
 
 	/**
@@ -60,7 +68,6 @@ export default class WorkspaceActions extends React.Component {
 	showPreferences() {
 		WorkspaceManagementMenuActions.blurWindow();
 		WorkspaceManagementMenuActions.showPreferences();
-
 	}
 	/**
 	 * Render method.
@@ -72,15 +79,22 @@ export default class WorkspaceActions extends React.Component {
 		/**
 		 * Iterates through the list of actions defined in the constructor, creating an `li` for each.
 		 */
-		var workspaceActions = this.userActions.map(function (action, index) {
-			return (<FinsembleMenuItem key={index}>
-				<FinsembleMenuItemLabel onClick={action.method} className='menu-item-fullwidth workspace-action'>
-					<i className={action.iconClass}></i> {action.label}
-				</FinsembleMenuItemLabel>
-			</FinsembleMenuItem>);
+		var workspaceActions = this.userActions.map(function(action, index) {
+			return (
+				<FinsembleMenuItem key={index}>
+					<FinsembleMenuItemLabel
+						onClick={action.method}
+						className="menu-item-fullwidth workspace-action"
+					>
+						<i className={action.iconClass}></i> {action.label}
+					</FinsembleMenuItemLabel>
+				</FinsembleMenuItem>
+			);
 		});
-		return (<FinsembleMenuSection className='menu-secondary workspace-actions'>
-			{workspaceActions}
-		</FinsembleMenuSection>);
+		return (
+			<FinsembleMenuSection className="menu-secondary workspace-actions">
+				{workspaceActions}
+			</FinsembleMenuSection>
+		);
 	}
 }

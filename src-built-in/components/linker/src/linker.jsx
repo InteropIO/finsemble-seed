@@ -1,7 +1,7 @@
 /*!
-* Copyright 2017 - 2020 by ChartIQ, Inc.
-* All rights reserved.
-*/
+ * Copyright 2017 - 2020 by ChartIQ, Inc.
+ * All rights reserved.
+ */
 import React from "react";
 import ReactDOM from "react-dom";
 import "./css/linkerWindow.css";
@@ -29,7 +29,7 @@ class Linker extends React.Component {
 			case "state":
 				this.setState({
 					channels: LinkerStore.getChannels(),
-					attachedWindowIdentifier: LinkerStore.getAttachedWindowIdentifier()
+					attachedWindowIdentifier: LinkerStore.getAttachedWindowIdentifier(),
 				});
 		}
 	}
@@ -44,10 +44,12 @@ class Linker extends React.Component {
 	channelClicked(channel, active) {
 		var attachedWindowIdentifier = LinkerStore.getAttachedWindowIdentifier();
 
-
-		FSBL.FinsembleWindow.getInstance({ name: attachedWindowIdentifier.windowName }, (err, attachedWindow) => {
-			if (attachedWindow) attachedWindow.focus();
-		});
+		FSBL.FinsembleWindow.getInstance(
+			{ name: attachedWindowIdentifier.windowName },
+			(err, attachedWindow) => {
+				if (attachedWindow) attachedWindow.focus();
+			}
+		);
 
 		if (!active) {
 			LinkerActions.linkToChannel(channel.name);
@@ -59,7 +61,6 @@ class Linker extends React.Component {
 		// Note: the focus above on the attached window will typically result in a blur event to the linker window that will also hide; howevever, that blur
 		// event is not received for native windows.
 		finsembleWindow.hide();
-
 	}
 
 	/**
@@ -80,7 +81,7 @@ class Linker extends React.Component {
 		LinkerStore.addListener(["stateChanged"], this.onStoreChanged);
 		this.setState({
 			channels: LinkerStore.getChannels(),
-			attachedWindowIdentifier: LinkerStore.getAttachedWindowIdentifier()
+			attachedWindowIdentifier: LinkerStore.getAttachedWindowIdentifier(),
 		});
 	}
 	componentDidMount() {
@@ -89,24 +90,39 @@ class Linker extends React.Component {
 	render() {
 		var self = this;
 		//Checkbox inside of a circle. Rendered in the center of a group if the attachedWindow is part of that group.
-		let activeChannelIndicator = (<i className="active-linker-group ff-check-mark"></i>);
+		let activeChannelIndicator = (
+			<i className="active-linker-group ff-check-mark"></i>
+		);
 
 		const getLinkerItemRenderer = (channel, isAccessibleLinker) => {
 			if (!isAccessibleLinker) return null;
 
 			if (channel.label) {
-				return <div className="channel-label">{channel.label}</div>
+				return <div className="channel-label">{channel.label}</div>;
 			} else {
-				return <div className="channel-label">{"Channel " + getChannelLabelFromIndex(channel.name, FSBL.Clients.LinkerClient.getAllChannels())}</div>
+				return (
+					<div className="channel-label">
+						{"Channel " +
+							getChannelLabelFromIndex(
+								channel.name,
+								FSBL.Clients.LinkerClient.getAllChannels()
+							)}
+					</div>
+				);
 			}
-		}
+		};
 
 		/**
 		 * This function iterates through all of the channels that have registered with the linkerClient. If the attachedWindow belongs to any of them, it renders a check mark and a circle in the center of the channel's rectangle.
 		 **/
-		let channels = FSBL.Clients.LinkerClient.getAllChannels().map(function (channel, index) {
+		let channels = FSBL.Clients.LinkerClient.getAllChannels().map(function(
+			channel,
+			index
+		) {
 			//Boolean, whether the attachedWindow belongs to the channel.
-			let activeChannel = self.state.channels.filter(function (g) { return g.name == channel.name; }).length;
+			let activeChannel = self.state.channels.filter(function(g) {
+				return g.name == channel.name;
+			}).length;
 			let groupClass = `linkerGroup ${channel.name}`;
 
 			if (activeChannel) {
@@ -115,32 +131,36 @@ class Linker extends React.Component {
 
 			let style = {
 				backgroundColor: channel.color,
-				border: "1px solid " + channel.border
+				border: "1px solid " + channel.border,
 			};
 			//returns a group row.
 			return (
-				<div className="channel-wrapper" onClick={function () {
-					self.channelClicked(channel, activeChannel); {/* Circle */ }
-				}}>
-					{getLinkerItemRenderer(channel, LinkerStore.isAccessibleLinker())} {/*Channel Name */}
+				<div
+					className="channel-wrapper"
+					onClick={function() {
+						self.channelClicked(channel, activeChannel);
+						{
+							/* Circle */
+						}
+					}}
+				>
+					{getLinkerItemRenderer(channel, LinkerStore.isAccessibleLinker())}{" "}
+					{/*Channel Name */}
 					<div key={channel.name + index} className={groupClass} style={style}>
 						{activeChannel ? activeChannelIndicator : null} {/*Check Mark */}
 					</div>
-				</div>);
+				</div>
+			);
 		});
 
-		return (
-			<div className="linkerContainer">
-				{channels}
-			</div>
-		);
+		return <div className="linkerContainer">{channels}</div>;
 	}
 }
 
 if (window.FSBL && FSBL.addEventListener) {
 	FSBL.addEventListener("onReady", FSBLReady);
 } else {
-	window.addEventListener("FSBLReady", FSBLReady)
+	window.addEventListener("FSBLReady", FSBLReady);
 }
 function FSBLReady() {
 	LinkerStore.initialize();
@@ -153,7 +173,7 @@ function FSBLReady() {
 		 * be aware of it. Therefore, we must trigger
 		 * focus manually until we can figure out a
 		 * better way of synchronizing these states.
-		*/
+		 */
 		finsembleWindow.focus();
 	});
 	ReactDOM.render(<Linker />, document.getElementById("main"));

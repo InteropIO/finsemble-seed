@@ -4,20 +4,19 @@
  * Given an array of pins and a component list, it'll do the work for you.
  */
 declare type Pin = {
-	component?: string,
-	fontIcon: string,
-	icon: string,
-	index: number,
-	label: string,
+	component?: string;
+	fontIcon: string;
+	icon: string;
+	index: number;
+	label: string;
 	params: {
-		addToWorkspace: Boolean,
-		monitor: string | number
-	}
-	toolbarSection: string
-	type: string
-	uuid: string
-}
-
+		addToWorkspace: Boolean;
+		monitor: string | number;
+	};
+	toolbarSection: string;
+	type: string;
+	uuid: string;
+};
 
 /**
  * @todo handle dynamic component registration.
@@ -68,7 +67,7 @@ export class PinManager {
 			}
 
 			return pin;
-		})
+		});
 	}
 
 	/**
@@ -86,7 +85,6 @@ export class PinManager {
 				return pin.component in componentList;
 			}
 			return true;
-		})
+		});
 	}
-
 }

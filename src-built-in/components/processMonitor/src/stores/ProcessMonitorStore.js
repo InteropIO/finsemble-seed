@@ -7,26 +7,29 @@ const DEFAULT_STORE_DATA = {
 	viewMode: "simple",
 	sort: {
 		field: "name",
-		direction: "ascending"
-	}
-}
+		direction: "ascending",
+	},
+};
 
 function createLocalStore(done) {
-	FSBL.Clients.DistributedStoreClient.createStore({
-		store: "Finsemble-ProcessMonitor-Local-Store",
-		values: DEFAULT_STORE_DATA
-	}, function (err, store) {
-		ProcessMonitorStore = store;
-		module.exports.Store = store;
-		done();
-	});
+	FSBL.Clients.DistributedStoreClient.createStore(
+		{
+			store: "Finsemble-ProcessMonitor-Local-Store",
+			values: DEFAULT_STORE_DATA,
+		},
+		(err, store) => {
+			ProcessMonitorStore = store;
+			module.exports.Store = store;
+			done();
+		}
+	);
 }
 
 var Actions = {
 	/**
 	 * Creates the local store, then gets the first cut at stats for the process list.
 	 */
-	initialize: function (cb) {
+	initialize: function(cb) {
 		createLocalStore(() => {
 			Actions.getInitialData();
 			cb();
@@ -35,7 +38,7 @@ var Actions = {
 	/**
 	 * Gets the process list, pulls the statistics out, and renders the app. Also sets up an interval where we'll retrieve more stats from the system.
 	 */
-	getInitialData: function () {
+	getInitialData: function() {
 		FSBL.System.getProcessList(Actions.extractData);
 		setInterval(() => {
 			FSBL.System.getProcessList(Actions.extractData);
@@ -44,7 +47,7 @@ var Actions = {
 	/**
 	 * Sets the sort field; if it's the same field as we had previously, we flip the sort direction.
 	 */
-	setSort: function (field) {
+	setSort: function(field) {
 		let currentSort = ProcessMonitorStore.getValue({ field: "sort" });
 		let procs = ProcessMonitorStore.getValue({ field: "processList" });
 		let newSort;
@@ -59,30 +62,29 @@ var Actions = {
 		} else {
 			newSort = {
 				field,
-				direction: DEFAULT_SORT_DIRECTION
-			}
+				direction: DEFAULT_SORT_DIRECTION,
+			};
 		}
 
 		ProcessMonitorStore.setValue({ field: "sort", value: newSort }, () => {
 			// When changing sort we'll re-render the UI immediately instead of waiting for the process list to update. Without this step, it could be 999ms until the next update, which makes the process monitor feel very unresponsive and very bad.
 			procs = Actions.sortProcesses(procs);
-			ProcessMonitorStore.setValue({ field: "processList", value: procs })
+			ProcessMonitorStore.setValue({ field: "processList", value: procs });
 		});
-
 	},
 	/**
 	 * Extracts data from the process list (via the createDataModel function), and then sets the processList value on the store. This causes the UI to re-render.
 	 */
-	extractData: function (processes) {
+	extractData: function(processes) {
 		Actions.createDataModel(processes, (procs) => {
 			//set store.
-			ProcessMonitorStore.setValue({ field: "processList", value: procs })
+			ProcessMonitorStore.setValue({ field: "processList", value: procs });
 		});
 	},
 	/**
 	 * Converts the system.getProcessList response into something that's easily render-able.
 	 */
-	createDataModel: function (processes, cb) {
+	createDataModel: function(processes, cb) {
 		let procs = [];
 		//@todo, potential optimization: get child windows once, and listen on a close/create event. As it stands, getCWs is pretty performant.
 		let mode = ProcessMonitorStore.getValue({ field: "viewMode" });
@@ -92,41 +94,51 @@ var Actions = {
 		 * @param {function} done
 		 */
 		function getChildWindows(proc, done) {
-			if (mode === "simple" && (proc.name.toLowerCase().includes("service") || proc.name.toLowerCase().includes("system"))) {
+			if (
+				mode === "simple" &&
+				(proc.name.toLowerCase().includes("service") ||
+					proc.name.toLowerCase().includes("system"))
+			) {
 				procs.push({
 					statistics: proc,
-					visible: false
+					visible: false,
 				});
 				return done();
 			}
-			FSBL.System.Application.wrap(proc.uuid).getChildWindows(cws => {
+			FSBL.System.Application.wrap(proc.uuid).getChildWindows((cws) => {
 				let childWindows = [];
-				cws.forEach(cw => {
+				cws.forEach((cw) => {
 					//create a simple object so the actual childWindow class isn't stored in the distributed store.
 					childWindows.push({
 						name: cw.name,
-						uuid: cw.uuid
+						uuid: cw.uuid,
 					});
-				})
+				});
 				//Alphabetize the CWs.
 				childWindows.sort((a, b) => {
-					if (a.name.toLowerCase() < b.name.toLowerCase())
-						return -1;
-					if (a.name.toLowerCase() > b.name.toLowerCase())
-						return 1;
+					if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+					if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
 					return 0;
 				});
 				//Don't want any service windows or systemComponent windows.
-				if (mode === "simple" && childWindows.some(cw => cw.name.toLowerCase().includes("service") || cw.name.toLowerCase().includes("system"))) return done();
+				if (
+					mode === "simple" &&
+					childWindows.some(
+						(cw) =>
+							cw.name.toLowerCase().includes("service") ||
+							cw.name.toLowerCase().includes("system")
+					)
+				)
+					return done();
 				if (childWindows.length === 0) {
 					//Hack until we have a better abstraction
 					if (proc.name.toLowerCase().includes("agent")) return done();
-					childWindows = [{ uuid: proc.uuid, name: proc.name }]
+					childWindows = [{ uuid: proc.uuid, name: proc.name }];
 				}
 				procs.push({
 					statistics: proc,
 					childWindows,
-					visible: true
+					visible: true,
 				});
 				done();
 			});
@@ -136,14 +148,13 @@ var Actions = {
 			cb(procs);
 		}
 
-
 		//For each process, get the child window list, and then sort them based on the currently active column.
 		asyncEach(processes, getChildWindows, sort);
 	},
 	/**
 	 * Sorting function. Handles ascending and descending.
 	 */
-	sortProcesses: function (procs) {
+	sortProcesses: function(procs) {
 		let currentSort = ProcessMonitorStore.getValue({ field: "sort" });
 		let sortFN = (a, b) => {
 			let aValue = a.statistics[currentSort.field];
@@ -157,28 +168,24 @@ var Actions = {
 				bValue = bValue.toLowerCase();
 			}
 			if (currentSort.direction === "ascending") {
-				if (aValue < bValue)
-					return -1;
-				if (aValue > bValue)
-					return 1;
+				if (aValue < bValue) return -1;
+				if (aValue > bValue) return 1;
 				return 0;
 			}
 
-			if (aValue > bValue)
-				return -1;
-			if (aValue < bValue)
-				return 1;
+			if (aValue > bValue) return -1;
+			if (aValue < bValue) return 1;
 			return 0;
-		}
+		};
 		return procs.sort(sortFN);
 	},
 	/**
 	 * Toggles advanced/simple mode
 	 */
-	toggleViewMode: function () {
+	toggleViewMode: function() {
 		let mode = ProcessMonitorStore.getValue({ field: "viewMode" });
 		if (mode === "advanced") {
-			mode = "simple"
+			mode = "simple";
 		} else {
 			mode = "advanced";
 		}
@@ -187,7 +194,7 @@ var Actions = {
 	/**
 	 * Make the window flash a couple of times so that the user can identify it.
 	 */
-	identifyWindow: function (winID) {
+	identifyWindow: function(winID) {
 		if (winID.name.includes("Service")) return;
 
 		const OPACITY_ANIMATION_DURATION = 200;
@@ -215,16 +222,19 @@ var Actions = {
 								win.hide();
 							}
 						});
-					})
-				})
-			})
+					});
+				});
+			});
 		});
 	},
 	/**
 	 * Terminates a process. Prompts first. If it fails to terminate the process, displays an error message.
 	 */
-	terminateProcess: function (AppIdentifier, force = false, prompt = true) {
-		let app = FSBL.System.Application.wrap(AppIdentifier.uuid, AppIdentifier.name);
+	terminateProcess: function(AppIdentifier, force = false, prompt = true) {
+		let app = FSBL.System.Application.wrap(
+			AppIdentifier.uuid,
+			AppIdentifier.name
+		);
 		/**
 		 * This whole routine is a little hectic because of all of the closures - but there's a method to the madness. Here's the logic.
 		 *
@@ -241,8 +251,8 @@ var Actions = {
 			var onCloseSuccess = () => {
 				clearTimeout(closeTimeout);
 			};
-			app.close(force, onCloseSuccess, onCloseFailure)
-		}
+			app.close(force, onCloseSuccess, onCloseFailure);
+		};
 
 		let forceCloseProcess = () => {
 			//If the process fails to close in 4 seconds, we will call this method again, but try to force close it.
@@ -254,18 +264,23 @@ var Actions = {
 				clearTimeout(closeTimeout);
 			};
 			app.close(force, onCloseSuccess, onCloseFailure);
-		}
+		};
 
 		let terminateProcess = () => {
 			//Should never get into here, but just in case the process is hung, we'll show an error message to the user.
 			app.terminate(true, onCloseSuccess, () => {
-				FSBL.Clients.DialogManager.open("yesNo", {
-					title: "Error",
-					question: "The process that you are attempting to close is unresponsive. Please contact support.",
-					affirmativeButtonLabel: "Okay",
-					showCancelButton: false,
-					showNegativeButton: false
-				}, Function.prototype);
+				FSBL.Clients.DialogManager.open(
+					"yesNo",
+					{
+						title: "Error",
+						question:
+							"The process that you are attempting to close is unresponsive. Please contact support.",
+						affirmativeButtonLabel: "Okay",
+						showCancelButton: false,
+						showNegativeButton: false,
+					},
+					Function.prototype
+				);
 			});
 		};
 
@@ -285,37 +300,44 @@ var Actions = {
 		}
 
 		//Ask user if they're sure. If they says "yes", close it.
-		FSBL.Clients.DialogManager.open("yesNo", {
-			title: "Terminate Process?",
-			question: "Terminating the process may close other apps. Are you sure you want to continue?",
-			affirmativeResponseLabel: "Terminate",
-			showNegativeButton: false
-		}, (err, response) => {
-			if (err || response.choice === "affirmative") {
-				politeCloseProcess();
+		FSBL.Clients.DialogManager.open(
+			"yesNo",
+			{
+				title: "Terminate Process?",
+				question:
+					"Terminating the process may close other apps. Are you sure you want to continue?",
+				affirmativeResponseLabel: "Terminate",
+				showNegativeButton: false,
+			},
+			(err, response) => {
+				if (err || response.choice === "affirmative") {
+					politeCloseProcess();
+				}
 			}
-		});
+		);
 	},
 	/**
 	 * This function exists to make the UI feel snappy. May take a second or so for the window to close properly and for the change to flow to system.getProcessList. To make that lag go away, we immediately render the change.
 	 */
-	removeWindowLocally: function (winID) {
+	removeWindowLocally: function(winID) {
 		let win = FSBL.System.Window.wrap(winID.uuid, winID.name);
 		let parentApp = win.getParentApplication();
 		let procs = ProcessMonitorStore.getValue({ field: "processList" });
-		procs = procs.map(proc => {
+		procs = procs.map((proc) => {
 			if (proc.statistics.uuid === parentApp.uuid) {
-				let cwIndex = proc.childWindows.findIndex(cw => cw.name === winID.name);
-				proc.childWindows.splice(cwIndex, 1)
+				let cwIndex = proc.childWindows.findIndex(
+					(cw) => cw.name === winID.name
+				);
+				proc.childWindows.splice(cwIndex, 1);
 			}
 			return proc;
-		})
+		});
 		ProcessMonitorStore.setValue({ field: "processList", value: procs });
 	},
 	/**
 	 * Try to close the window. If that fails, try to force close the window. If that fails, ask if they'd like to terminate the parent process.
 	 */
-	closeWindow: function (winID, force = false) {
+	closeWindow: function(winID, force = false) {
 		let win = FSBL.System.Window.wrap(winID.uuid, winID.name);
 		let parentApp = win.getParentApplication();
 
@@ -334,22 +356,27 @@ var Actions = {
 		var onCloseFailure = () => {
 			//If Actions.closeWindow was called with force === true, and the close failed, give the user the opportunity to terminate the process.
 			if (force) {
-				FSBL.Clients.DialogManager.open("yesNo", {
-					title: "Terminate Process?",
-					question: "The app that you are attempting to close is unresponsive. Would you like to terminate the process? Terminating the process may close other apps.",
-					affirmativeResponseLabel: "Terminate",
-					showNegativeButton: false
-				}, (err, response) => {
-					if (err || response.choice === "affirmative") {
-						return Actions.terminateProcess(parentApp, true)
+				FSBL.Clients.DialogManager.open(
+					"yesNo",
+					{
+						title: "Terminate Process?",
+						question:
+							"The app that you are attempting to close is unresponsive. Would you like to terminate the process? Terminating the process may close other apps.",
+						affirmativeResponseLabel: "Terminate",
+						showNegativeButton: false,
+					},
+					(err, response) => {
+						if (err || response.choice === "affirmative") {
+							return Actions.terminateProcess(parentApp, true);
+						}
 					}
-				});
+				);
 			} else {
 				Actions.closeWindow(winID, true);
 			}
 		};
-		win.close(force, onCloseSuccess, onCloseFailure)
-	}
+		win.close(force, onCloseSuccess, onCloseFailure);
+	},
 };
 
 module.exports.Store = ProcessMonitorStore;

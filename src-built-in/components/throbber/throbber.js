@@ -1,6 +1,6 @@
 console.log("PRELOAD: throbber.js");
 
-document.addEventListener('DOMContentLoaded', showThrobber);	
+document.addEventListener("DOMContentLoaded", showThrobber);
 
 function showThrobber() {
 	document.body.innerHTML += `<style>
@@ -533,11 +533,9 @@ svg {
 </div>
 
 `;
-
-
-};
-
-window.removeFinsembleThrobber = function () {
-	var throbber = document.getElementById("finsemble-throbber");
-	if(throbber) throbber.style.display = "none"
 }
+
+window.removeFinsembleThrobber = function() {
+	var throbber = document.getElementById("finsemble-throbber");
+	if (throbber) throbber.style.display = "none";
+};

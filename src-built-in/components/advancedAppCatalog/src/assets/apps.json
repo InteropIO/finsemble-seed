@@ -16,10 +16,7 @@
 				"tooltip": "Pizza!!!"
 			}
 		],
-		"tags": [
-			"newrelease",
-			"Pizza"
-		],
+		"tags": ["newrelease", "Pizza"],
 		"contactEmail": "jim@chartiq.com",
 		"supportEmail": "dnicolai@chartiq.com",
 		"publisher": "ChartIQ",
@@ -61,10 +58,7 @@
 				"tooltip": "Notepad"
 			}
 		],
-		"tags": [
-			"Notepad",
-			"productivity"
-		],
+		"tags": ["Notepad", "productivity"],
 		"contactEmail": "jim@chartiq.com",
 		"supportEmail": "dnicolai@chartiq.com",
 		"publisher": "ChartIQ",
@@ -108,11 +102,7 @@
 				"tooltip": "Sad"
 			}
 		],
-		"tags": [
-			"Success",
-			"Memory",
-			"Sad"
-		],
+		"tags": ["Success", "Memory", "Sad"],
 		"contactEmail": "jim@chartiq.com",
 		"supportEmail": "dnicolai@chartiq.com",
 		"publisher": "ChartIQ",
@@ -175,10 +165,7 @@
 				"tooltip": "Bork bork bork"
 			}
 		],
-		"tags": [
-			"death",
-			"Pizza"
-		],
+		"tags": ["death", "Pizza"],
 		"contactEmail": "jim@chartiq.com",
 		"supportEmail": "dnicolai@chartiq.com",
 		"publisher": "ChartIQ",

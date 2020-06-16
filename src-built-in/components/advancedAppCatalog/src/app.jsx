@@ -1,7 +1,7 @@
 /*!
-* Copyright 2017 - 2020 by ChartIQ, Inc.
-* All rights reserved.
-*/
+ * Copyright 2017 - 2020 by ChartIQ, Inc.
+ * All rights reserved.
+ */
 import React from "react";
 import ReactDOM from "react-dom";
 
@@ -27,7 +27,7 @@ export default class AppMarket extends React.Component {
 			serverError: false,
 			installed: [],
 			tags: [],
-			installationActionTaken: null
+			installationActionTaken: null,
 		};
 		this.bindCorrectContext();
 	}
@@ -39,7 +39,9 @@ export default class AppMarket extends React.Component {
 		this.removeTag = this.removeTag.bind(this);
 		this.changeSearch = this.changeSearch.bind(this);
 		this.openAppShowcase = this.openAppShowcase.bind(this);
-		this.stopShowingInstalledNotification = this.stopShowingInstalledNotification.bind(this);
+		this.stopShowingInstalledNotification = this.stopShowingInstalledNotification.bind(
+			this
+		);
 		this.compileAddedInfo = this.compileAddedInfo.bind(this);
 		this.getPageContents = this.getPageContents.bind(this);
 		this.determineActivePage = this.determineActivePage.bind(this);
@@ -53,34 +55,55 @@ export default class AppMarket extends React.Component {
 		//For more information on async react rendering, see here
 		//https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html
 
-		this.setState({
-			isLoading: true
-		}, () => {
-			this._asyncAppRequest = storeActions.getApps().then(apps => {
-				this.setState({
-					apps,
-					isLoading: false
-				});
-			}).catch((err) => {
-				this.setState({
-					serverError: true
-				}, () => {
-					FSBL.Clients.Logger.error("Error connecting to FDC3 AppD server.", err);
-				});
-			});
-		});
+		this.setState(
+			{
+				isLoading: true,
+			},
+			() => {
+				this._asyncAppRequest = storeActions
+					.getApps()
+					.then((apps) => {
+						this.setState({
+							apps,
+							isLoading: false,
+						});
+					})
+					.catch((err) => {
+						this.setState(
+							{
+								serverError: true,
+							},
+							() => {
+								FSBL.Clients.Logger.error(
+									"Error connecting to FDC3 AppD server.",
+									err
+								);
+							}
+						);
+					});
+			}
+		);
 
-		this._asyncTagsRequest = storeActions.getTags().then(tags => {
-			this.setState({
-				tags
+		this._asyncTagsRequest = storeActions
+			.getTags()
+			.then((tags) => {
+				this.setState({
+					tags,
+				});
+			})
+			.catch((err) => {
+				this.setState(
+					{
+						serverError: true,
+					},
+					() => {
+						FSBL.Clients.Logger.error(
+							"Error retrieving tags from FDC3 AppD server.",
+							err
+						);
+					}
+				);
 			});
-		}).catch((err) => {
-			this.setState({
-				serverError: true
-			}, () => {
-				FSBL.Clients.Logger.error("Error retrieving tags from FDC3 AppD server.", err);
-			});
-		});
 	}
 
 	componentDidMount() {
@@ -93,12 +116,15 @@ export default class AppMarket extends React.Component {
 		let installed = storeActions.getInstalledApps();
 
 		this.setState({
-			installed: Object.keys(installed)
+			installed: Object.keys(installed),
 		});
 	}
 
 	componentWillUnmount() {
-		getStore().removeListener({ field: "appDefinitions" }, this.addedAppsChanged);
+		getStore().removeListener(
+			{ field: "appDefinitions" },
+			this.addedAppsChanged
+		);
 		getStore().removeListener({ field: "filteredApps" }, this.update);
 		getStore().removeListener({ field: "activeTags" }, this.update);
 		getStore().removeListener({ field: "activeApp" }, this.openAppShowcase);
@@ -121,21 +147,30 @@ export default class AppMarket extends React.Component {
 
 	addedAppsChanged() {
 		let action;
-		if (this.state.installed.length > Object.keys(storeActions.getInstalledApps()).length) {
+		if (
+			this.state.installed.length >
+			Object.keys(storeActions.getInstalledApps()).length
+		) {
 			//If the components installed apps is greater than that of the store, that means an app was removed
 			action = "remove";
-		} else if (this.state.installed.length < Object.keys(storeActions.getInstalledApps()).length) {
+		} else if (
+			this.state.installed.length <
+			Object.keys(storeActions.getInstalledApps()).length
+		) {
 			//If the component's installed apps is less than that of the store, that means an app was added
 			action = "add";
 		}
 
 		if (action) {
-			this.setState({
-				installationActionTaken: action,
-				installed: Object.keys(storeActions.getInstalledApps())
-			}, () => {
-				setTimeout(this.stopShowingInstalledNotification, 1500);
-			});
+			this.setState(
+				{
+					installationActionTaken: action,
+					installed: Object.keys(storeActions.getInstalledApps()),
+				},
+				() => {
+					setTimeout(this.stopShowingInstalledNotification, 1500);
+				}
+			);
 		}
 	}
 
@@ -241,7 +276,7 @@ export default class AppMarket extends React.Component {
 	 */
 	stopShowingInstalledNotification() {
 		this.setState({
-			installationActionTaken: null
+			installationActionTaken: null,
 		});
 	}
 
@@ -254,7 +289,7 @@ export default class AppMarket extends React.Component {
 	 */
 	openAppShowcase() {
 		let app = storeActions.getActiveApp();
-		
+
 		if (app !== null) {
 			storeActions.setForceSearch(false);
 			storeActions.clearTags();
@@ -271,7 +306,7 @@ export default class AppMarket extends React.Component {
 	 */
 	compileAddedInfo(filtered) {
 		let { installed } = this.state;
-		let forceSearch =  storeActions.getForceSearch();
+		let forceSearch = storeActions.getForceSearch();
 		let apps;
 		if (filtered || forceSearch) {
 			apps = storeActions.getFilteredApps();
@@ -293,84 +328,107 @@ export default class AppMarket extends React.Component {
 		const filteredApps = this.getFilteredApps();
 		const activeTags = this.getActiveTags();
 		let activePage = this.determineActivePage();
-		let apps = this.compileAddedInfo((filteredApps.length > 0));
+		let apps = this.compileAddedInfo(filteredApps.length > 0);
 		//Force default case if activepage isn't search and apps.length is 0
 		if (apps.length === 0 && activePage !== "appSearch") activePage = -1;
 		switch (activePage) {
 			case "home":
 				return (
-					<Home cards={apps} seeMore={this.addTag} addApp={this.addApp} removeApp={this.removeApp} addTag={this.addTag} viewAppShowcase={this.navigateToShowcase} />
+					<Home
+						cards={apps}
+						seeMore={this.addTag}
+						addApp={this.addApp}
+						removeApp={this.removeApp}
+						addTag={this.addTag}
+						viewAppShowcase={this.navigateToShowcase}
+					/>
 				);
 			case "appSearch":
 				return (
-					<AppResults cards={apps} tags={activeTags} addApp={this.addApp} removeApp={this.removeApp} viewAppShowcase={this.navigateToShowcase} addTag={this.addTag} />
+					<AppResults
+						cards={apps}
+						tags={activeTags}
+						addApp={this.addApp}
+						removeApp={this.removeApp}
+						viewAppShowcase={this.navigateToShowcase}
+						addTag={this.addTag}
+					/>
 				);
 			case "showcase":
 				let app = this.compileAddedInfo(false).find((app) => {
 					return this.getActiveApp() === app.appId;
 				});
 				return (
-					<AppShowcase app={app} addApp={this.addApp} removeApp={this.removeApp} addTag={this.addTag} />
+					<AppShowcase
+						app={app}
+						addApp={this.addApp}
+						removeApp={this.removeApp}
+						addTag={this.addTag}
+					/>
 				);
 			default:
-				return (
-					<div></div>
-				);
+				return <div></div>;
 		}
 	}
 	render() {
-
 		let { tags } = this.state;
 		let page = this.determineActivePage();
 		let pageContents = this.getPageContents();
 
 		return (
 			<div>
-				{this.state.serverError && 
-					<div className='server-error'>
+				{this.state.serverError && (
+					<div className="server-error">
 						<br />
 						<br />
 						<span>Catalog contents are currently unavailable.</span>
 						<br />
-						<span>Please check your connection or consult your System Admin.</span>
+						<span>
+							Please check your connection or consult your System Admin.
+						</span>
 					</div>
-				}
-				{this.state.apps.length === 0 && !this.state.isLoading &&
-					<div className='server-error'>
+				)}
+				{this.state.apps.length === 0 && !this.state.isLoading && (
+					<div className="server-error">
 						<br />
 						<br />
 						<span>There are no apps available in this catalog.</span>
 						<br />
 						<span>Please contact your System Admin.</span>
 					</div>
-				}
-				{this.state.apps.length > 0 &&
+				)}
+				{this.state.apps.length > 0 && (
 					<div>
-						<SearchBar hidden={page === "showcase" ? true : false} backButton={page !== "home"} tags={tags} activeTags={this.getActiveTags} tagSelected={this.addTag}
-						removeTag={this.removeTag} goHome={this.goHome} installationActionTaken={this.state.installationActionTaken}
-						search={this.changeSearch} isViewingApp={this.isActiveApp} />
-						<div className="market_content">
-							{pageContents}
-						</div>
+						<SearchBar
+							hidden={page === "showcase" ? true : false}
+							backButton={page !== "home"}
+							tags={tags}
+							activeTags={this.getActiveTags}
+							tagSelected={this.addTag}
+							removeTag={this.removeTag}
+							goHome={this.goHome}
+							installationActionTaken={this.state.installationActionTaken}
+							search={this.changeSearch}
+							isViewingApp={this.isActiveApp}
+						/>
+						<div className="market_content">{pageContents}</div>
 					</div>
-				}
+				)}
 			</div>
 		);
 	}
 }
 
-if (window.FSBL && FSBL.addEventListener) { 
-	FSBL.addEventListener("onReady", FSBLReady); 
-} else { 
+if (window.FSBL && FSBL.addEventListener) {
+	FSBL.addEventListener("onReady", FSBLReady);
+} else {
 	window.addEventListener("FSBLReady", FSBLReady);
 }
 
 function FSBLReady() {
 	createStore((store) => {
 		storeActions.initialize(() => {
-			ReactDOM.render(
-				<AppMarket />,
-				document.getElementById("bodyHere"));
+			ReactDOM.render(<AppMarket />, document.getElementById("bodyHere"));
 		});
 	});
 }

@@ -1,5 +1,5 @@
-@import  url('../../../assets/css/_globals.css');
-@import  url('../../../assets/css/_scrollbars.css');
+@import url("../../../assets/css/_globals.css");
+@import url("../../../assets/css/_scrollbars.css");
 
 body {
 	margin: 0px;
@@ -11,7 +11,6 @@ body {
 	background-color: var(--procMonitor-background-color);
 	user-select: none;
 }
-
 
 .high-usage {
 	background-color: var(--procMonitor-negative-background-color);
@@ -31,7 +30,7 @@ body {
 	text-align: right;
 	padding: 3px 4px;
 	cursor: pointer;
-	transition: all .25s ease;
+	transition: all 0.25s ease;
 }
 
 .terminate:hover {
@@ -50,7 +49,8 @@ body {
 	overflow-y: auto;
 }
 
-.process-row, .list-header {
+.process-row,
+.list-header {
 	display: flex;
 	flex-direction: row;
 }
@@ -68,7 +68,8 @@ body {
 	/*Account for scrollbar.*/
 }
 
-.process-name, .list-header-name {
+.process-name,
+.list-header-name {
 	width: 40%;
 }
 
@@ -78,7 +79,8 @@ body {
 	padding-left: 7px;
 }
 
-.process-statistics, .list-header-statistic-labels {
+.process-statistics,
+.list-header-statistic-labels {
 	width: 60%;
 	display: flex;
 	align-items: center;
@@ -87,7 +89,7 @@ body {
 
 .list-header-statistic-label {
 	flex: 1;
-	padding: .5em;
+	padding: 0.5em;
 	display: inline-flex;
 	justify-content: center;
 	cursor: pointer;
@@ -127,7 +129,9 @@ body {
 	display: flex;
 }
 
-.summary-statistics-wrapper, .summary-statistics, .summary-statistics-labels {
+.summary-statistics-wrapper,
+.summary-statistics,
+.summary-statistics-labels {
 	display: flex;
 }
 
@@ -177,7 +181,7 @@ body {
 	height: 35px;
 	background-color: var(--button-neutral-background-color);
 	border: solid 1px var(--button-neutral-border-hover-color);
-	display:flex;
+	display: flex;
 	align-content: center;
 	justify-content: center;
 	align-items: center;
@@ -185,22 +189,22 @@ body {
 }
 
 .bottom-section {
-	display:flex;
+	display: flex;
 	justify-content: space-between;
 }
 
 ::-webkit-scrollbar-track {
-    border-radius: 3px;
+	border-radius: 3px;
 }
 
 ::-webkit-scrollbar {
-    width: 9px;
-    background-color: var(--scrollbar-color);
-    border-radius: 3px;
+	width: 9px;
+	background-color: var(--scrollbar-color);
+	border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb {
-    cursor: pointer;
-    border-radius: inherit;
-    background-color: rgba(0, 0, 0, 0.2);
+	cursor: pointer;
+	border-radius: inherit;
+	background-color: rgba(0, 0, 0, 0.2);
 }

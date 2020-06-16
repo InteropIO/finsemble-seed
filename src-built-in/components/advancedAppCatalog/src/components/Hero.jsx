@@ -1,7 +1,7 @@
 /*!
-* Copyright 2017 - 2020 by ChartIQ, Inc.
-* All rights reserved.
-*/
+ * Copyright 2017 - 2020 by ChartIQ, Inc.
+ * All rights reserved.
+ */
 /**
  * This component is the name of a component and a pin that will pin that component to all toolbars.
  *
@@ -17,8 +17,8 @@ export default class Hero extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			active: 0
-		}
+			active: 0,
+		};
 		this.bindCorrectContext();
 	}
 	bindCorrectContext() {
@@ -38,10 +38,10 @@ export default class Hero extends Component {
 		} else {
 			switch (action) {
 				case "page_down":
-					newActive = (newActive - 1 < 0) ? cards.length - 1 : newActive - 1;
+					newActive = newActive - 1 < 0 ? cards.length - 1 : newActive - 1;
 					break;
 				case "page_up":
-					newActive = (newActive + 1 > cards.length - 1) ? 0 : newActive + 1;
+					newActive = newActive + 1 > cards.length - 1 ? 0 : newActive + 1;
 					break;
 				default:
 					break;
@@ -49,7 +49,7 @@ export default class Hero extends Component {
 		}
 
 		this.setState({
-			active: newActive
+			active: newActive,
 		});
 	}
 	/**
@@ -59,44 +59,56 @@ export default class Hero extends Component {
 		this.props.viewAppShowcase(this.props.cards[this.state.active].appId);
 	}
 	render() {
-
 		let { active } = this.state;
 		let { cards } = this.props;
-		let contentTitle = cards[active].title === undefined ? cards[active].name : cards[active].title
+		let contentTitle =
+			cards[active].title === undefined
+				? cards[active].name
+				: cards[active].title;
 		let contentMsg = cards[active].description;
-		let imageUrl = cards[active].images ? cards[active].images[0].url : "../assets/placeholder.svg";
+		let imageUrl = cards[active].images
+			? cards[active].images[0].url
+			: "../assets/placeholder.svg";
 
 		let bgImageStyle = {
-			background: "no-repeat left center/contain url(" + imageUrl + ")"
+			background: "no-repeat left center/contain url(" + imageUrl + ")",
 		};
 
 		return (
 			<div>
-				<div className='hero-main'>
-					<i className='ff-adp-chevron-left' onClick={this.changePage.bind(this, 'page_down')} />
-					<div className="hero-wrapper" onClick={this.openApp}> 
+				<div className="hero-main">
+					<i
+						className="ff-adp-chevron-left"
+						onClick={this.changePage.bind(this, "page_down")}
+					/>
+					<div className="hero-wrapper" onClick={this.openApp}>
 						<div className="selected-content-info">
-							<div className='selected-content-title'>
-								{contentTitle}
-							</div>
-							<div className='selected-content-message'>
-								{contentMsg}
-							</div>
+							<div className="selected-content-title">{contentTitle}</div>
+							<div className="selected-content-message">{contentMsg}</div>
 						</div>
-						<div className='hero_selected_content' style={bgImageStyle}></div>
+						<div className="hero_selected_content" style={bgImageStyle}></div>
 					</div>
-					<i className='ff-adp-chevron-right' onClick={this.changePage.bind(this, 'page_up')} />
+					<i
+						className="ff-adp-chevron-right"
+						onClick={this.changePage.bind(this, "page_up")}
+					/>
 				</div>
 				<br />
-				{cards.length >= 2 && cards.length <= 10 &&
+				{cards.length >= 2 && cards.length <= 10 && (
 					<div className="paginator">
 						{cards.map((card, i) => {
-							let classes = 'pagination-oval';
+							let classes = "pagination-oval";
 							if (i === active) classes += " active";
-							return (<div key={i} className={classes} onClick={this.changePage.bind(this, i)} />);
+							return (
+								<div
+									key={i}
+									className={classes}
+									onClick={this.changePage.bind(this, i)}
+								/>
+							);
 						})}
 					</div>
-				}
+				)}
 			</div>
 		);
 	}

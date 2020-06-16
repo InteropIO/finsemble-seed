@@ -1,7 +1,7 @@
 /*!
-* Copyright 2017 - 2020 by ChartIQ, Inc.
-* All rights reserved.
-*/
+ * Copyright 2017 - 2020 by ChartIQ, Inc.
+ * All rights reserved.
+ */
 import React, { Component } from "react";
 
 //data
@@ -24,11 +24,15 @@ class AppShowcase extends Component {
 		super(props);
 		this.state = {
 			name: this.props.app.title || this.props.app.name,
-			iconUrl: this.props.app.icons !== undefined && this.props.app.icons[0].url !== undefined ? this.props.app.icons[0].url : "../assets/placeholder.svg",
+			iconUrl:
+				this.props.app.icons !== undefined &&
+				this.props.app.icons[0].url !== undefined
+					? this.props.app.icons[0].url
+					: "../assets/placeholder.svg",
 			entitled: this.props.app.entitled ? this.props.app.entitled : false,
 			imageIndex: 0,
 			imageModalOpen: false,
-			modalImage: null
+			modalImage: null,
 		};
 		this.bindCorrectContext();
 	}
@@ -53,9 +57,8 @@ class AppShowcase extends Component {
 			index++;
 		}
 
-
 		this.setState({
-			imageIndex: index
+			imageIndex: index,
 		});
 	}
 	/**
@@ -72,7 +75,7 @@ class AppShowcase extends Component {
 		}
 
 		this.setState({
-			imageIndex: index
+			imageIndex: index,
 		});
 	}
 	/**
@@ -89,7 +92,7 @@ class AppShowcase extends Component {
 	openModal(url) {
 		this.setState({
 			modalImage: url,
-			imageModalOpen: true
+			imageModalOpen: true,
 		});
 	}
 	/**
@@ -98,7 +101,7 @@ class AppShowcase extends Component {
 	closeModal() {
 		this.setState({
 			imageModalOpen: false,
-			modalImage: null
+			modalImage: null,
 		});
 	}
 	/**
@@ -113,12 +116,14 @@ class AppShowcase extends Component {
 
 		let images = [];
 		for (let i = 0; i < imagesInCarousel; i++) {
-
 			if (index > this.props.app.images.length - 1) {
 				index = 0;
 			}
 
-			let imageUrl = this.props.app.images[index].url !== undefined ? this.props.app.images[index].url : "../assets/placeholder.svg";
+			let imageUrl =
+				this.props.app.images[index].url !== undefined
+					? this.props.app.images[index].url
+					: "../assets/placeholder.svg";
 			images.push(imageUrl);
 			index++;
 		}
@@ -130,25 +135,42 @@ class AppShowcase extends Component {
 				{!this.state.entitled && (
 					<div className="app-warning">
 						<span className="app-warning-wrapper">
-							<span className='app-warning-text'>
-								You don't have permission to add this App. <a href='#'>Contact your administrator</a> to request permission.
+							<span className="app-warning-text">
+								You don't have permission to add this App.{" "}
+								<a href="#">Contact your administrator</a> to request
+								permission.
 							</span>
 						</span>
 					</div>
 				)}
-				<Header iconUrl={iconUrl} entitled={this.state.entitled} {...this.props.app} />
+				<Header
+					iconUrl={iconUrl}
+					entitled={this.state.entitled}
+					{...this.props.app}
+				/>
 
-				<ImageCarousel nextImage={this.nextImage} previousImage={this.previousImage} openModal={this.openModal} images={images} />
+				<ImageCarousel
+					nextImage={this.nextImage}
+					previousImage={this.previousImage}
+					openModal={this.openModal}
+					images={images}
+				/>
 
 				<AppDescription description={this.props.app.description} />
 
 				<ReleaseNotes releaseNotes={this.props.app.releaseNotes} />
 
-				<AppDevNotes email={this.props.app.contactEmail} publisher={this.props.app.publisher} />
+				<AppDevNotes
+					email={this.props.app.contactEmail}
+					publisher={this.props.app.publisher}
+				/>
 
 				<VersionNotes version={this.props.app.version} />
 
-				<SupportNotes email={this.props.app.supportEmail} tags={this.props.app.tags} />
+				<SupportNotes
+					email={this.props.app.supportEmail}
+					tags={this.props.app.tags}
+				/>
 			</div>
 		);
 	}

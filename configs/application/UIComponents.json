@@ -171,9 +171,7 @@
 		"linkerWindow": {
 			"bootParams": {
 				"stage": "earlyuser",
-				"dependencies": [
-					"Toolbar"
-				]
+				"dependencies": ["Toolbar"]
 			},
 			"window": {
 				"url": "$applicationRoot/components/linker/linker.html",
@@ -359,9 +357,7 @@
 		"yesNo": {
 			"bootParams": {
 				"stage": "earlyuser",
-				"dependencies": [
-					"Toolbar"
-				]
+				"dependencies": ["Toolbar"]
 			},
 			"window": {
 				"url": "$applicationRoot/components/yesNoDialog/yesNoDialog.html",
@@ -407,9 +403,7 @@
 		"singleInput": {
 			"bootParams": {
 				"stage": "earlyuser",
-				"dependencies": [
-					"Toolbar"
-				]
+				"dependencies": ["Toolbar"]
 			},
 			"window": {
 				"url": "$applicationRoot/components/singleInputDialog/singleInputDialog.html",
@@ -543,33 +537,23 @@
 						"postStartupCompletion": true
 					},
 					"loadMenusFromConfig": {
-						"dependencies": [
-							"createStores"
-						],
+						"dependencies": ["createStores"],
 						"postStartupCompletion": true
 					},
 					"addListeners": {
-						"dependencies": [
-							"loadMenusFromConfig"
-						],
+						"dependencies": ["loadMenusFromConfig"],
 						"postStartupCompletion": true
 					},
 					"setupHotkeys": {
-						"dependencies": [
-							"addListeners"
-						],
+						"dependencies": ["addListeners"],
 						"postStartupCompletion": true
 					},
 					"listenForWorkspaceUpdates": {
-						"dependencies": [
-							"setupHotkeys"
-						],
+						"dependencies": ["setupHotkeys"],
 						"postStartupCompletion": true
 					},
 					"addMoreListeners": {
-						"dependencies": [
-							"listenForWorkspaceUpdates"
-						],
+						"dependencies": ["listenForWorkspaceUpdates"],
 						"postStartupCompletion": true
 					}
 				}
@@ -585,10 +569,7 @@
 				"left": 0,
 				"right": 0,
 				"position": "available",
-				"dockable": [
-					"top",
-					"bottom"
-				],
+				"dockable": ["top", "bottom"],
 				"maxHeight": 39,
 				"minHeight": 39,
 				"minWidth": 300,
@@ -665,9 +646,7 @@
 		"UserPreferences": {
 			"bootParams": {
 				"stage": "earlyuser",
-				"dependencies": [
-					"Toolbar"
-				]
+				"dependencies": ["Toolbar"]
 			},
 			"window": {
 				"url": "$applicationRoot/components/userPreferences/userPreferences.html",

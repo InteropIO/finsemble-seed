@@ -1,4 +1,3 @@
-
 /**
  * Copyright 2017 - 2020 by ChartIQ, Inc.
  * All rights reserved.
@@ -9,75 +8,81 @@
  */
 export default class FDC3 {
 	constructor(config = {}, creds = {}) {
-		if (!config.url)
-		{throw new Error("Please specify the url of the app directory.");};
+		if (!config.url) {
+			throw new Error("Please specify the url of the app directory.");
+		}
 		this.creds = creds;
 		this.config = {
-			url: config.url.replace(/\/+$/, "")
+			url: config.url.replace(/\/+$/, ""),
 		};
 	}
+
 	/**
-     * Http get wrapper
-     * @param {string} path The restful method path
-     * @param {function} done The callback function
-     */
+	 * Http get wrapper
+	 * @param {string} path The restful method path
+	 * @param {function} done The callback function
+	 */
 	_get(path, done) {
 		fetch(this.config.url + path, {
-			method: "GET"
-
-		}).then((response) => {
-			response.json().then((data) => {
-				// We are expecting 200 here for data
-				if (response.status !== 200) {
-					// We have a problem, data as error message
-					done(data);
-				} else {
-					// All good, no problem
-					done(null, data);
-				}
+			method: "GET",
+		})
+			.then((response) => {
+				response.json().then((data) => {
+					// We are expecting 200 here for data
+					if (response.status !== 200) {
+						// We have a problem, data as error message
+						done(data);
+					} else {
+						// All good, no problem
+						done(null, data);
+					}
+				});
+			})
+			.catch((error) => {
+				done({
+					message: `Request failed ${error.message}`,
+				});
 			});
-		}).catch((error) => {
-			done({
-				message: `Request failed ${error.message}`
-			});
-		});
 	}
 
 	/**
-     *
-     * @param {string} path The restful method path
-     * @param {object} params The post data
-     * @param {function} done The callback function
-     */
+	 *
+	 * @param {string} path The restful method path
+	 * @param {object} params The post data
+	 * @param {function} done The callback function
+	 */
 	_post(path, params, done) {
 		fetch(this.config.url + path, {
 			method: "POST",
 			credentials: "include",
 			body: JSON.stringify(params),
 			headers: {
-				"Content-Type": "application/json"
-			}
-		}).then((response) => {
-			response.json().then((data) => {
-				// We are expecting 200 here for data
-				if (response.status !== 200) {
-					// We have a problem, data as error message
-					done(data);
-				} else {
-					// All good, no problem
-					done(null, data);
-				}
+				"Content-Type": "application/json",
+			},
+		})
+			.then((response) => {
+				response.json().then((data) => {
+					// We are expecting 200 here for data
+					if (response.status !== 200) {
+						// We have a problem, data as error message
+						done(data);
+					} else {
+						// All good, no problem
+						done(null, data);
+					}
+				});
+			})
+			.catch((error) => {
+				done({
+					message: `Request failed ${error.message}`,
+				});
 			});
-		}).catch((error) => {
-			done({
-				message: `Request failed ${error.message}`
-			});
-		});
 	}
+
 	/**
-     * Returns all applications
-     * @param {function} callback The optional callback function
-     */
+	 * Returns all applications
+	 * @param {function} callback The optional callback function
+	 */
 	getAll(callback) {
 		return new Promise((resolve, reject) => {
 			this._get("/apps/", (error, data) => {
@@ -92,13 +97,14 @@ export default class FDC3 {
 			});
 		});
 	}
+
 	/**
-     * Returns a single application in results
-     * @param {string} appId The app id
-     */
+	 * Returns a single application in results
+	 * @param {string} appId The app id
+	 */
 	get(appId, callback) {
 		return new Promise((resolve, reject) => {
-			this._get("/apps/" + appId, (error, data) => {
+			this._get(`/apps/${appId}`, (error, data) => {
 				if (error) {
 					reject(error);
 				} else {
@@ -110,10 +116,11 @@ export default class FDC3 {
 			});
 		});
 	}
+
 	/**
-     * Returns unique tags
-     * @param {function} callback The optional callback function
-     */
+	 * Returns unique tags
+	 * @param {function} callback The optional callback function
+	 */
 	getTags(callback) {
 		return new Promise((resolve, reject) => {
 			this._get("/tags/", (error, data) => {
@@ -128,12 +135,13 @@ export default class FDC3 {
 			});
 		});
 	}
+
 	/**
-     * Returns a list of applications based on text and filter
-     * @param {object} params The search criteria
-     * @param {function} callback The callback function
-     * @example search({text: 'blah', filter: {tag: 'newrelease'}})
-     */
+	 * Returns a list of applications based on text and filter
+	 * @param {object} params The search criteria
+	 * @param {function} callback The callback function
+	 * @example search({text: 'blah', filter: {tag: 'newrelease'}})
+	 */
 	search(params, callback) {
 		return new Promise((resolve, reject) => {
 			this._post("/apps/search", params, (error, data) => {

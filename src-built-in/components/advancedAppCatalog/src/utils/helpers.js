@@ -1,5 +1,4 @@
-import { findIndex } from 'lodash';
+import { findIndex } from "lodash";
 
-export const findAppIndexInFolder = (appID, folderName, folders) => {
-    return findIndex(folders[folderName].apps, app => app.appID === appID);
-}
+export const findAppIndexInFolder = (appID, folderName, folders) =>
+	findIndex(folders[folderName].apps, (app) => app.appID === appID);

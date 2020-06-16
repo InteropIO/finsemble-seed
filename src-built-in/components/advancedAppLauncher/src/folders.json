@@ -13,38 +13,28 @@
 					{
 						"name": "Welcome",
 						"type": "component",
-						"tags": [
-							"newrelease"
-						],
+						"tags": ["newrelease"],
 						"displayName": "The Welcome Component",
 						"icon": "ff-home-2"
 					},
 					{
 						"name": "Getting Started Tutorial",
 						"type": "component",
-						"tags": [
-							"newrelease"
-						],
+						"tags": ["newrelease"],
 						"displayName": "Learn finsemble!",
 						"icon": "ff-component"
 					},
 					{
 						"name": "Process Monitor",
 						"type": "component",
-						"tags": [
-							"bad information", "don't click here"
-						],
+						"tags": ["bad information", "don't click here"],
 						"displayName": "Process Monitor",
 						"icon": "ff-chart-alt-1"
 					},
 					{
 						"name": "Notepad",
 						"type": "component",
-						"tags": [
-							"assimilation",
-							"wizardry",
-							"TESLA"
-						],
+						"tags": ["assimilation", "wizardry", "TESLA"],
 						"displayName": "Notepad!!!",
 						"icon": "ff-saveas-2"
 					}
@@ -59,9 +49,7 @@
 					{
 						"name": "Process Monitor",
 						"type": "component",
-						"tags": [
-							"bad information", "don't click here"
-						],
+						"tags": ["bad information", "don't click here"],
 						"displayName": "Process Monitor"
 					}
 				]

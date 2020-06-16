@@ -1,7 +1,7 @@
 /*!
-* Copyright 2017 - 2020 by ChartIQ, Inc.
-* All rights reserved.
-*/
+ * Copyright 2017 - 2020 by ChartIQ, Inc.
+ * All rights reserved.
+ */
 import React from "react";
 
 /**
@@ -9,7 +9,7 @@ import React from "react";
  * @param {object} props Component props
  * @param {string} props.description The app description
  */
-const AppDescription = props => {
+const AppDescription = (props) => {
 	return (
 		<div className="app-notes description">
 			<span className="showcase-label">Description</span>
@@ -18,6 +18,6 @@ const AppDescription = props => {
 			</div>
 		</div>
 	);
-}
+};
 
 export default AppDescription;

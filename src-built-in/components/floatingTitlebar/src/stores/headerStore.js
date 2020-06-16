@@ -1,7 +1,7 @@
 /*!
-* Copyright 2017 - 2020 by ChartIQ, Inc.
-* All rights reserved.
-*/
+ * Copyright 2017 - 2020 by ChartIQ, Inc.
+ * All rights reserved.
+ */
 import { EventEmitter } from "events";
 import series from "async/series";
 
@@ -10,23 +10,20 @@ let values = {
 	state: "small",
 	headerConfigs: {},
 	companionWindow: null,
-	moving: false
+	moving: false,
 };
 const COMPANION_EXPANDED_HEIGHT = 25;
 const COMPANION_CONTRACTED_HEIGHT = 10;
 const COMPANION_CONTRACTED_WIDTH = 86;
-let Logger = FSBL.Clients.Logger;
+let { Logger } = FSBL.Clients;
 let animating = false;
 let updateBoundsAfterAnimate = false;
 var HeaderStore = Object.assign({}, EventEmitter.prototype, {
-
 	/**
 	 * Sets initial values for the store.
 	 * @todo convert to the DistributedStoreClient.
 	 */
-	initialize: function () {
-
-	},
+	initialize: function() {},
 	getCompanionWindow() {
 		return values.companionWindow;
 	},
@@ -53,57 +50,74 @@ var HeaderStore = Object.assign({}, EventEmitter.prototype, {
 	},
 	getCompanionBounds() {
 		return values.companionBounds;
-	}
+	},
 });
-let localParent = null;//
+let localParent = null; //
 var Actions = {
 	initialize(cb = Function.prototype) {
 		HeaderStore.initialize();
 		var spData = FSBL.Clients.WindowClient.getSpawnData();
 		//'parent' here refers to the native window that we've befriended.
-		FSBL.FinsembleWindow.getInstance(spData.parent, function (err, wrappedWindow) {
+		FSBL.FinsembleWindow.getInstance(spData.parent, (err, wrappedWindow) => {
 			HeaderStore.setCompanionWindow(wrappedWindow);
 			var onParentSet = async (e) => {
 				let { data } = e;
 				console.log(data);
 				if (!localParent && data.parentName) {
-					let { wrap } = await FSBL.FinsembleWindow.getInstance({ name: data.parentName });
+					let { wrap } = await FSBL.FinsembleWindow.getInstance({
+						name: data.parentName,
+					});
 					localParent = wrap;
 
-					localParent.addListener("startedMoving", Actions.onCompanionStartedMoving);
-					localParent.addListener("stoppedMoving", Actions.onCompanionStoppedMoving);
-					localParent.addListener("bringToFront", Actions.onCompanionBringToFront);
+					localParent.addListener(
+						"startedMoving",
+						Actions.onCompanionStartedMoving
+					);
+					localParent.addListener(
+						"stoppedMoving",
+						Actions.onCompanionStoppedMoving
+					);
+					localParent.addListener(
+						"bringToFront",
+						Actions.onCompanionBringToFront
+					);
 					localParent.addListener("bounds-set", Actions.onBoundsChanged);
 
 					wrappedWindow.getBounds((err, bounds) => {
 						Actions.onBoundsChanged({
-							data: bounds
-						})
-					})
+							data: bounds,
+						});
+					});
 					Actions.isWindowVisible((err, isVisible) => {
 						if (!isVisible) {
 							Actions.onCompanionHidden();
 						}
 					});
-
 				}
-
-
 			};
 			var onParentCleared = () => {
 				Logger.system.debug("Companion window onParentCleared");
 				FSBL.Clients.WindowClient.finsembleWindow.show();
 				FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
 				if (localParent) {
-					localParent.removeListener("startedMoving", Actions.onCompanionStartedMoving);
-					localParent.removeListener("stoppedMoving", Actions.onCompanionStoppedMoving);
-					localParent.removeListener("bringToFront", Actions.onCompanionBringToFront);
+					localParent.removeListener(
+						"startedMoving",
+						Actions.onCompanionStartedMoving
+					);
+					localParent.removeListener(
+						"stoppedMoving",
+						Actions.onCompanionStoppedMoving
+					);
+					localParent.removeListener(
+						"bringToFront",
+						Actions.onCompanionBringToFront
+					);
 					localParent = null;
 					wrappedWindow.show();
 				}
-
 			};
-			Actions.isWindowVisible((err, isVisible) => {// check on init. Mainly for workspace reload
+			Actions.isWindowVisible((err, isVisible) => {
+				// check on init. Mainly for workspace reload
 				if (!isVisible) {
 					Actions.onCompanionHidden();
 				}
@@ -117,13 +131,23 @@ var Actions = {
 			wrappedWindow.addListener("hidden", Actions.onCompanionHidden);
 			wrappedWindow.addListener("shown", Actions.onCompanionShown);
 			wrappedWindow.addListener("restored", Actions.onCompanionRestored);
-			wrappedWindow.addListener("bringToFront", Actions.onCompanionBringToFront);
+			wrappedWindow.addListener(
+				"bringToFront",
+				Actions.onCompanionBringToFront
+			);
 			wrappedWindow.addListener("minimized", Actions.onCompanionMinimized);
-			wrappedWindow.addListener("startedMoving", Actions.onCompanionStartedMoving);
-			wrappedWindow.addListener("stoppedMoving", Actions.onCompanionStoppedMoving);
+			wrappedWindow.addListener(
+				"startedMoving",
+				Actions.onCompanionStartedMoving
+			);
+			wrappedWindow.addListener(
+				"stoppedMoving",
+				Actions.onCompanionStoppedMoving
+			);
 			wrappedWindow.addListener("focused", Actions.onCompanionFocused);
 
-			wrappedWindow.getBounds({}, function (err, bounds) {// set the bounds and then show the window
+			wrappedWindow.getBounds({}, (err, bounds) => {
+				// set the bounds and then show the window
 				if (!bounds.width) bounds.width = bounds.right - bounds.left;
 				//console.log("start bounds", bounds, Actions.getContractedBounds(bounds));
 				HeaderStore.setCompanionBounds(bounds);
@@ -131,38 +155,41 @@ var Actions = {
 				newBounds.persistBounds = false;
 				FSBL.Clients.WindowClient.finsembleWindow.setBounds(
 					newBounds,
-					function (err) {
-						Actions.updateWindowPosition();//hack for small window
+					(err) => {
+						Actions.updateWindowPosition(); //hack for small window
 						if (spData.showOnSpawn && !wrappedWindow.parentWindow) {
-							FSBL.Clients.WindowClient.finsembleWindow.show(false, function () {
+							FSBL.Clients.WindowClient.finsembleWindow.show(false, () => {
 								FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
 							});
 						} else {
-							Actions.isWindowVisible(function (err, isVisible) {
+							Actions.isWindowVisible((err, isVisible) => {
 								if (isVisible)
-									FSBL.Clients.WindowClient.finsembleWindow.show(false, function () {
+									FSBL.Clients.WindowClient.finsembleWindow.show(false, () => {
 										FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
 									});
 							});
 						}
 						cb();
-					}, function () { });
+					},
+					() => {}
+				);
 			});
-
-
 		});
 	},
 	//check to see if the current window is the visible window
 	isWindowVisible(cb = Function.prototype) {
 		let wrappedWindow = HeaderStore.getCompanionWindow();
 		if (localParent) {
-			localParent.getStore(function (store) {
-				store.getValues(function (err, response) {
+			localParent.getStore((store) => {
+				store.getValues((err, response) => {
 					if (response) {
 						if (!localParent) {
 							return cb(null, true);
 						}
-						if (response[localParent.windowName].descriptor.visibleWindowIdentifier.windowName === wrappedWindow.windowName) {
+						if (
+							response[localParent.windowName].descriptor
+								.visibleWindowIdentifier.windowName === wrappedWindow.windowName
+						) {
 							return cb(null, true);
 						}
 						return cb(null, false);
@@ -175,10 +202,10 @@ var Actions = {
 	},
 	getContractedBounds(bounds) {
 		return {
-			left: bounds.left + (bounds.width / 2) - (COMPANION_CONTRACTED_WIDTH / 2),
+			left: bounds.left + bounds.width / 2 - COMPANION_CONTRACTED_WIDTH / 2,
 			width: COMPANION_CONTRACTED_WIDTH,
 			height: COMPANION_CONTRACTED_HEIGHT,
-			top: bounds.top
+			top: bounds.top,
 		};
 	},
 	getExpandedBounds(bounds) {
@@ -186,7 +213,7 @@ var Actions = {
 			left: bounds.left,
 			width: bounds.width,
 			height: COMPANION_EXPANDED_HEIGHT,
-			top: bounds.top
+			top: bounds.top,
 		};
 	},
 	onBoundsChanged(params) {
@@ -195,7 +222,7 @@ var Actions = {
 		if (HeaderStore.getState() === "small") {
 			let newBounds = Actions.getContractedBounds(bounds);
 			newBounds.persistBounds = false;
-			FSBL.Clients.WindowClient.finsembleWindow.setBounds(newBounds, function (err) {
+			FSBL.Clients.WindowClient.finsembleWindow.setBounds(newBounds, (err) => {
 				if (err) {
 					FSBL.Clients.Logger.error("CompanionWindow setBounds error", err);
 				}
@@ -204,7 +231,7 @@ var Actions = {
 			let newBounds = Actions.getExpandedBounds(bounds);
 			newBounds.persistBounds = false;
 
-			FSBL.Clients.WindowClient.finsembleWindow.setBounds(newBounds, function (err) {
+			FSBL.Clients.WindowClient.finsembleWindow.setBounds(newBounds, (err) => {
 				if (err) {
 					FSBL.Clients.Logger.error("CompanionWindow setBounds error", err);
 				}
@@ -225,7 +252,7 @@ var Actions = {
 		Actions.updateWindowPosition(evt);
 		if (HeaderStore.getMoving()) return;
 		if (localParent) {
-			Actions.isWindowVisible(function (err, isVisible) {
+			Actions.isWindowVisible((err, isVisible) => {
 				if (isVisible) {
 					Logger.system.debug("Companion window show from stop");
 					FSBL.Clients.WindowClient.finsembleWindow.show();
@@ -250,20 +277,22 @@ var Actions = {
 			return;
 		}
 		if (!params) {
-			return HeaderStore.getCompanionWindow().getBounds({}, (err, bounds) => { this.updateWindowPosition({ data: bounds }); })
+			return HeaderStore.getCompanionWindow().getBounds({}, (err, bounds) => {
+				this.updateWindowPosition({ data: bounds });
+			});
 		}
 		let bounds = params.data;
 
 		HeaderStore.setCompanionBounds(bounds);
 		if (!bounds.width) bounds.width = bounds.right - bounds.left;
 
-		Actions.isWindowVisible(function (err, isVisible) {
+		Actions.isWindowVisible((err, isVisible) => {
 			if (isVisible) {
 				FSBL.Clients.WindowClient.finsembleWindow.bringToFront();
 			}
 		});
 
-		let onBoundsSet = function (err) {
+		let onBoundsSet = function(err) {
 			if (err) {
 				FSBL.Clients.Logger.error(err);
 			}
@@ -273,13 +302,19 @@ var Actions = {
 		if (HeaderStore.getState() === "small") {
 			let newBounds = Actions.getContractedBounds(bounds);
 			newBounds.persistBounds = false;
-			return FSBL.Clients.WindowClient.finsembleWindow.setBounds(newBounds, onBoundsSet);
+			return FSBL.Clients.WindowClient.finsembleWindow.setBounds(
+				newBounds,
+				onBoundsSet
+			);
 		}
 
 		let newBounds = Actions.getExpandedBounds(bounds);
 		newBounds.persistBounds = false;
-		return FSBL.Clients.WindowClient.finsembleWindow.setBounds(newBounds, { persistBounds: false }, onBoundsSet);
-
+		return FSBL.Clients.WindowClient.finsembleWindow.setBounds(
+			newBounds,
+			{ persistBounds: false },
+			onBoundsSet
+		);
 	},
 	onCompanionClosed() {
 		Logger.system.debug("Companion window closed");
@@ -298,7 +333,7 @@ var Actions = {
 		Logger.system.debug("Companion window BTF");
 		if (HeaderStore.getMoving()) return;
 		setTimeout(() => {
-			Actions.isWindowVisible(function (err, isVisible) {
+			Actions.isWindowVisible((err, isVisible) => {
 				console.debug("Companion show.......", isVisible);
 				if (isVisible) {
 					console.debug("Companion show.......");
@@ -308,7 +343,6 @@ var Actions = {
 			});
 			//@note this was 500, it was lowered to 50 after improvements were made to the event system.
 		}, 50);
-
 	},
 	onCompanionMinimized() {
 		Logger.system.debug("Companion window minimized");
@@ -334,10 +368,10 @@ var Actions = {
 		let systemWindow = FSBL.System.Window.getCurrent();
 		let currentBound = HeaderStore.getCompanionBounds();
 		FSBL.Clients.WindowClient.finsembleWindow.updateOptions({
-			"cornerRounding": {
-				"height": 0,
-				"width": 0
-			}
+			cornerRounding: {
+				height: 0,
+				width: 0,
+			},
 		});
 		let expandedBounds = Actions.getExpandedBounds(currentBound);
 
@@ -347,20 +381,28 @@ var Actions = {
 			}
 		};
 		const widenCompanion = (done) => {
-			systemWindow.animate({
-				position: {
-					duration: 0,
-					left: expandedBounds.left
+			systemWindow.animate(
+				{
+					position: {
+						duration: 0,
+						left: expandedBounds.left,
+					},
+					size: {
+						duration: 0,
+						width: expandedBounds.width,
+						height: COMPANION_CONTRACTED_HEIGHT,
+					},
 				},
-				size: {
-					duration: 0,
-					width: expandedBounds.width,
-					height: COMPANION_CONTRACTED_HEIGHT
-				}
-			}, done, done);
+				done,
+				done
+			);
 		};
 		const expandCompanion = (done) => {
-			systemWindow.animate({ size: { duration: 150, height: expandedBounds.height } }, done, done);
+			systemWindow.animate(
+				{ size: { duration: 150, height: expandedBounds.height } },
+				done,
+				done
+			);
 		};
 		const onAnimationCompleted = (err) => {
 			logAnimationError(err);
@@ -372,10 +414,7 @@ var Actions = {
 			}
 			cb();
 		};
-		series([
-			widenCompanion,
-			expandCompanion
-		], onAnimationCompleted);
+		series([widenCompanion, expandCompanion], onAnimationCompleted);
 	},
 	//Contract the window and set the animate flag.
 	contractWindow(cb = Function.prototype) {
@@ -386,10 +425,10 @@ var Actions = {
 		let systemWindow = FSBL.System.Window.getCurrent();
 		let currentBound = HeaderStore.getCompanionBounds();
 		FSBL.Clients.WindowClient.finsembleWindow.updateOptions({
-			"cornerRounding": {
-				"height": 0,
-				"width": 0
-			}
+			cornerRounding: {
+				height: 0,
+				width: 0,
+			},
 		});
 
 		const contractedBounds = Actions.getContractedBounds(currentBound);
@@ -400,21 +439,29 @@ var Actions = {
 			}
 		};
 		const shrinkCompanion = (done) => {
-			systemWindow.animate({ size: { duration: 150, height: contractedBounds.height } }, done, done);
+			systemWindow.animate(
+				{ size: { duration: 150, height: contractedBounds.height } },
+				done,
+				done
+			);
 		};
 
 		const centerCompanion = (done) => {
-			systemWindow.animate({
-				position: {
-					duration: 0,
-					left: contractedBounds.left,
-					top: contractedBounds.top
+			systemWindow.animate(
+				{
+					position: {
+						duration: 0,
+						left: contractedBounds.left,
+						top: contractedBounds.top,
+					},
+					size: {
+						duration: 0,
+						width: contractedBounds.width,
+					},
 				},
-				size: {
-					duration: 0,
-					width: contractedBounds.width
-				}
-			}, done, done);
+				done,
+				done
+			);
 		};
 
 		const onAnimationCompleted = (err) => {
@@ -427,13 +474,9 @@ var Actions = {
 			cb();
 		};
 
-		series([
-			shrinkCompanion,
-			centerCompanion
-		], onAnimationCompleted);
-	}
+		series([shrinkCompanion, centerCompanion], onAnimationCompleted);
+	},
 };
-
 
 export { HeaderStore as Store };
 export { Actions };

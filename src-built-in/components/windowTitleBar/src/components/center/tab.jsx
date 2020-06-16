@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { FinsembleHoverDetector } from "@chartiq/finsemble-react-controls";
 import { FinsembleDraggable } from "@chartiq/finsemble-react-controls";
-import Title from "../../../../common/windowTitle"
+import Title from "../../../../common/windowTitle";
 /**
  * This component is pretty basic. It just takes a bunch of props and renders them.
  */
@@ -15,15 +15,14 @@ export default class Tab extends React.Component {
 		this.state = {
 			hoverState: "false",
 			tabLogo: {},
-			title: ""
+			title: "",
 		};
 		this.tabbingState = false;
 	}
 
-
 	onDragLeave(e) {
 		this.tabbingState = false;
-		FSBL.Clients.RouterClient.publish('Finsemble.AmTabbing', false);
+		FSBL.Clients.RouterClient.publish("Finsemble.AmTabbing", false);
 	}
 
 	onDragOver(e) {
@@ -32,13 +31,16 @@ export default class Tab extends React.Component {
 			this.props.onTabDraggedOver(e, this.props.windowIdentifier);
 		}
 		if (!this.tabbingState) {
-			FSBL.Clients.RouterClient.publish('Finsemble.AmTabbing', true);
+			FSBL.Clients.RouterClient.publish("Finsemble.AmTabbing", true);
 			this.tabbingState = true;
 		}
 	}
 
 	crossedMidline(e, box) {
-		return FSBL.Clients.WindowClient.isPointInBox({ x: e.nativeEvent.clientX, y: e.nativeEvent.clientY }, box);
+		return FSBL.Clients.WindowClient.isPointInBox(
+			{ x: e.nativeEvent.clientX, y: e.nativeEvent.clientY },
+			box
+		);
 	}
 
 	hoverAction(newHoverState) {
@@ -47,15 +49,15 @@ export default class Tab extends React.Component {
 
 	render() {
 		let style = {
-			width: this.props.tabWidth
-		}
+			width: this.props.tabWidth,
+		};
 		return (
 			<div
 				ref="Me"
 				onDrop={this.props.onDrop}
 				onClick={this.props.onClick}
 				onDragStart={(e) => {
-					this.props.onDragStart(e, this.props.windowIdentifier)
+					this.props.onDragStart(e, this.props.windowIdentifier);
 				}}
 				onDragEnd={this.props.onDragEnd}
 				draggable={true}
@@ -63,19 +65,29 @@ export default class Tab extends React.Component {
 				data-hover={this.state.hoverState}
 				style={style}
 			>
-				{this.props.listenForDragOver &&
-					<div className="tab-drop-region"
+				{this.props.listenForDragOver && (
+					<div
+						className="tab-drop-region"
 						onDragOver={this.onDragOver}
 						onDragLeave={this.onDragLeave}
 					></div>
-				}
-				<FinsembleHoverDetector edge="top" hoverAction={this.hoverAction.bind(this)} />
-				<Title titleWidth={this.props.titleWidth} windowIdentifier={this.props.windowIdentifier} />
-				<div className="fsbl-tab-close" onClick={(e) => {
-					e.preventDefault();
-					e.stopPropagation();
-					this.props.onTabClose(e);
-				}}>
+				)}
+				<FinsembleHoverDetector
+					edge="top"
+					hoverAction={this.hoverAction.bind(this)}
+				/>
+				<Title
+					titleWidth={this.props.titleWidth}
+					windowIdentifier={this.props.windowIdentifier}
+				/>
+				<div
+					className="fsbl-tab-close"
+					onClick={(e) => {
+						e.preventDefault();
+						e.stopPropagation();
+						this.props.onTabClose(e);
+					}}
+				>
 					<i className="ff-close"></i>
 				</div>
 			</div>

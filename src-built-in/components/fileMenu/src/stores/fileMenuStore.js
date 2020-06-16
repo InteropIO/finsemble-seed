@@ -1,7 +1,7 @@
 /*!
-* Copyright 2017 - 2020 by ChartIQ, Inc.
-* All rights reserved.
-*/
+ * Copyright 2017 - 2020 by ChartIQ, Inc.
+ * All rights reserved.
+ */
 import { EventEmitter } from "events";
 let PROMPT_ON_DIRTY = false;
 const constants = {
@@ -14,23 +14,34 @@ var FileMenuStore = Object.assign({}, EventEmitter.prototype, {
 	 * Sets initial values for the store.
 	 * @todo convert to the DistributedStoreClient.
 	 */
-	initialize: function () {
+	initialize: function() {
 		var self = this;
-		if (window.FSBL && FSBL.addEventListener) { FSBL.addEventListener("onReady", FSBLReady); } else { window.addEventListener("FSBLReady", FSBLReady) }
+		if (window.FSBL && FSBL.addEventListener) {
+			FSBL.addEventListener("onReady", FSBLReady);
+		} else {
+			window.addEventListener("FSBLReady", FSBLReady);
+		}
 		function FSBLReady() {
 			self.emit("initialized");
-			FSBL.Clients.HotkeyClient.addGlobalHotkey(["ctrl", "shift", "alt", "r"], FSBL.restartApplication);
-			FSBL.Clients.ConfigClient.getValue({ field: "finsemble" }, function (err, config) {
-				self.finsembleConfig = config;
-				let prompt;
-				try {
-					prompt = config.preferences.workspaceService.promptUserOnDirtyWorkspace;
-				} catch (e) {
-					prompt = false;
+			FSBL.Clients.HotkeyClient.addGlobalHotkey(
+				["ctrl", "shift", "alt", "r"],
+				FSBL.restartApplication
+			);
+			FSBL.Clients.ConfigClient.getValue(
+				{ field: "finsemble" },
+				(err, config) => {
+					self.finsembleConfig = config;
+					let prompt;
+					try {
+						prompt =
+							config.preferences.workspaceService.promptUserOnDirtyWorkspace;
+					} catch (e) {
+						prompt = false;
+					}
+					//Default to false.
+					PROMPT_ON_DIRTY = typeof prompt === null ? PROMPT_ON_DIRTY : prompt;
 				}
-				//Default to false.
-				PROMPT_ON_DIRTY = typeof prompt === null ? PROMPT_ON_DIRTY : prompt;
-			});
+			);
 		}
 	},
 	finsembleConfig: null,
@@ -44,24 +55,28 @@ var FileMenuStore = Object.assign({}, EventEmitter.prototype, {
 	},
 	hideWindow() {
 		finsembleWindow.hide();
-	}
+	},
 });
 var keys = {};
 function setupHotKeys() {
-	FSBL.Clients.RouterClient.subscribe("humanInterface.keydown", function (err, response) {
-		if (!keys[response.data.key]) keys[response.data.key] = {};
-		keys[response.data.key] = true;
-		if (keys[162] && keys[81]) {
-			//console.log("call---quit")
-
+	FSBL.Clients.RouterClient.subscribe(
+		"humanInterface.keydown",
+		(err, response) => {
+			if (!keys[response.data.key]) keys[response.data.key] = {};
+			keys[response.data.key] = true;
+			if (keys[162] && keys[81]) {
+				//console.log("call---quit")
+			}
 		}
-	});
-	FSBL.Clients.RouterClient.subscribe("humanInterface.keyup", function (err, response) {
-		if (!keys[response.data.key]) keys[response.data.key] = {};
-		keys[response.data.key] = false;
-	});
-
-};
+	);
+	FSBL.Clients.RouterClient.subscribe(
+		"humanInterface.keyup",
+		(err, response) => {
+			if (!keys[response.data.key]) keys[response.data.key] = {};
+			keys[response.data.key] = false;
+		}
+	);
+}
 var Actions = {
 	hideWindow() {
 		finsembleWindow.hide();
@@ -71,7 +86,7 @@ var Actions = {
 	 */
 	restart() {
 		finsembleWindow.hide();
-		Actions.saveWorkspace().then(function (choice) {
+		Actions.saveWorkspace().then((choice) => {
 			if (choice !== "cancel") {
 				FSBL.restartApplication();
 			}
@@ -98,13 +113,16 @@ var Actions = {
 	 */
 	spawnPreferences() {
 		finsembleWindow.hide();
-		FSBL.Clients.LauncherClient.showWindow({
-			componentType: "UserPreferences"
-		}, {
+		FSBL.Clients.LauncherClient.showWindow(
+			{
+				componentType: "UserPreferences",
+			},
+			{
 				monitor: "mine",
 				left: "center",
-				top: "center"
-			});
+				top: "center",
+			}
+		);
 	},
 	/**
 	 * Called on shutdown (if the workspace is dirty).
@@ -113,16 +131,20 @@ var Actions = {
 	 * @returns
 	 */
 	saveWorkspace() {
-		if (!(PROMPT_ON_DIRTY && FSBL.Clients.WorkspaceClient.activeWorkspace.isDirty)) {
+		if (
+			!(PROMPT_ON_DIRTY && FSBL.Clients.WorkspaceClient.activeWorkspace.isDirty)
+		) {
 			return Promise.resolve();
 		}
 
 		return new Promise((resolve, reject) => {
-			FSBL.Clients.DialogManager.open("yesNo",
+			FSBL.Clients.DialogManager.open(
+				"yesNo",
 				{
 					title: "Save your workspace?",
-					question: "Your workspace \"" + FSBL.Clients.WorkspaceClient.activeWorkspace.name + "\" has unsaved changes, would you like to save?"
-				}, async (err, response) => {
+					question: `Your workspace "${FSBL.Clients.WorkspaceClient.activeWorkspace.name}" has unsaved changes, would you like to save?`,
+				},
+				async (err, response) => {
 					if (err || response.choice === "affirmative") {
 						try {
 							await FSBL.Clients.WorkspaceClient.save();
@@ -131,7 +153,8 @@ var Actions = {
 						}
 					}
 					resolve(response.choice);
-				});
+				}
+			);
 		});
 	},
 	/**
@@ -141,12 +164,11 @@ var Actions = {
 		finsembleWindow.hide();
 		//FSBL.shutdownApplication();
 		Actions.saveWorkspace().then((choice) => {
-			if (choice === 'cancel') {
+			if (choice === "cancel") {
 				return;
 			}
 			FSBL.shutdownApplication();
 		});
-
 	},
 	/**
 	 * Logs out of the application.
@@ -154,9 +176,8 @@ var Actions = {
 	 */
 	logout() {
 		finsembleWindow.hide();
-		Actions.saveWorkspace().then(function (choice) {
+		Actions.saveWorkspace().then((choice) => {
 			if (choice !== "cancel") {
-
 				//Reset any server-side sessions or login data necessary to fully log out the user, e.g.
 				/*
 				fetch("/logout", {//Sends our logout message
@@ -173,27 +194,33 @@ var Actions = {
 	 * Clears cache and restarts the application.
 	 */
 	clearCacheRestart() {
-		FSBL.Clients.StorageClient.clearCache(function () {
+		FSBL.Clients.StorageClient.clearCache(() => {
 			FSBL.restartApplication({ forceRestart: true });
 		});
 	},
 	spawnAbout() {
-		FSBL.Clients.LauncherClient.showWindow({
-			componentType: "About Finsemble"
-		},
+		FSBL.Clients.LauncherClient.showWindow(
+			{
+				componentType: "About Finsemble",
+			},
 			{
 				monitor: "mine",
 				left: "center",
-				top: "center"
-			});
+				top: "center",
+			}
+		);
 	},
 	spawnDocs() {
-		FSBL.System.openUrlWithBrowser("https://www.chartiq.com/tutorials/?slug=finsemble", function () {
-			//console.log("successfully launched docs");
-		}, function (err) {
-			//console.log("failed to launch docs");
-		});
-	}
+		FSBL.System.openUrlWithBrowser(
+			"https://www.chartiq.com/tutorials/?slug=finsemble",
+			() => {
+				//console.log("successfully launched docs");
+			},
+			(err) => {
+				//console.log("failed to launch docs");
+			}
+		);
+	},
 };
 
 FileMenuStore.initialize();

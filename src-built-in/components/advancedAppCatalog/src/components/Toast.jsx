@@ -1,7 +1,7 @@
 /*!
-* Copyright 2017 - 2020 by ChartIQ, Inc.
-* All rights reserved.
-*/
+ * Copyright 2017 - 2020 by ChartIQ, Inc.
+ * All rights reserved.
+ */
 import React from "react";
 
 /**
@@ -9,9 +9,10 @@ import React from "react";
  * @param {object} props Component props
  * @param {string} props.installationActionTaken String containing the action that occurred
  */
-const Toast = props => {
+const Toast = (props) => {
 	let classes = "toast-content";
-	let icon = null, messageContent = null;
+	let icon = null,
+		messageContent = null;
 
 	switch (props.installationActionTaken) {
 		case "add":
@@ -30,7 +31,7 @@ const Toast = props => {
 	if (messageContent !== null) {
 		return (
 			<div className={classes}>
-				<span className='toast'>
+				<span className="toast">
 					<i className={icon} />
 					&nbsp;&nbsp;{messageContent}
 				</span>
@@ -39,6 +40,6 @@ const Toast = props => {
 	} else {
 		return null;
 	}
-}
+};
 
 export default Toast;

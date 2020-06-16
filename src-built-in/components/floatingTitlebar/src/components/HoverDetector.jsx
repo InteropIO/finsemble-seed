@@ -1,7 +1,7 @@
 /*!
-* Copyright 2017 - 2020 by ChartIQ, Inc.
-* All rights reserved.
-*/
+ * Copyright 2017 - 2020 by ChartIQ, Inc.
+ * All rights reserved.
+ */
 import React from "react";
 
 /**
@@ -10,7 +10,7 @@ import React from "react";
  * in the parent class to call to toggle the hover state. Also requires the property "edge" which can be "right","left" or "top" depending on the location
  * of the parent div in the header bar.
  */
-export default class HoverDetector extends React.Component{
+export default class HoverDetector extends React.Component {
 	constructor(props) {
 		super(props);
 		this.bindCorrectContext();
@@ -50,9 +50,12 @@ export default class HoverDetector extends React.Component{
 		let edge = this.props.edge || "top";
 		let iconClass = "fsbl-hover-detector-" + edge;
 
-		return (<div onMouseEnter={this.onMouseEnter}
-			onMouseLeave={this.onMouseLeave}
-			className={iconClass}
-		></div>);
+		return (
+			<div
+				onMouseEnter={this.onMouseEnter}
+				onMouseLeave={this.onMouseLeave}
+				className={iconClass}
+			></div>
+		);
 	}
 }

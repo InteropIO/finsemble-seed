@@ -12,7 +12,7 @@
 	font-family: var(--font-family);
 	font-size: var(--menu-font-size);
 	font-weight: var(--tag-font-weight);
-	transition: .2s background;
+	transition: 0.2s background;
 }
 
 .tags-menu-wrapper:hover {
@@ -41,13 +41,13 @@
 }
 .tags-menu {
 	z-index: 11;
-    top: 22px;
+	top: 22px;
 	position: absolute;
 	width: 130px;
 	max-height: 200px;
 	overflow-y: auto;
 	border-radius: 3px;
-  	background-color: var(--tag-background-color);
+	background-color: var(--tag-background-color);
 	padding: 5px 0px;
 	margin-top: 5px;
 }
@@ -117,6 +117,6 @@
 	padding-top: 0px;
 }
 
-.label-bar .ff-close{
+.label-bar .ff-close {
 	padding-top: 2px;
 }

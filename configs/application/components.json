@@ -73,11 +73,7 @@
 				"addToWorkspace": true
 			},
 			"component": {
-				"spawnOnHotkey": [
-					"ctrl",
-					"alt",
-					"n"
-				]
+				"spawnOnHotkey": ["ctrl", "alt", "n"]
 			},
 			"foreign": {
 				"services": {

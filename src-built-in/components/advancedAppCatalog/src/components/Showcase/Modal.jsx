@@ -1,7 +1,7 @@
 /*!
-* Copyright 2017 - 2020 by ChartIQ, Inc.
-* All rights reserved.
-*/
+ * Copyright 2017 - 2020 by ChartIQ, Inc.
+ * All rights reserved.
+ */
 import React from "react";
 
 /**
@@ -10,7 +10,7 @@ import React from "react";
  * @param {func} props.closeModal Parent function to close the modal. Actual display is handled by CSS
  * @param {object} props.children The inner contents (elements) of the array
  */
-const Modal = props => {
+const Modal = (props) => {
 	let modalClassName = "modal";
 	if (props.open) {
 		modalClassName += " open";
@@ -20,11 +20,9 @@ const Modal = props => {
 
 	return (
 		<div className={modalClassName} onClick={props.closeModal}>
-			<div className="modal-main">
-				{props.children}
-			</div>
+			<div className="modal-main">{props.children}</div>
 		</div>
 	);
-}
+};
 
 export default Modal;
