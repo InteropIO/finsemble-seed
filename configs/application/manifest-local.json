@@ -45,6 +45,7 @@
 				"startTaskTimeout": 10000
 			}
 		},
+		"router" : {},
 		"importConfig": ["$applicationRoot/configs/application/config.json"]
 	}
 }
