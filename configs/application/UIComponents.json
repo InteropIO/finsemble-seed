@@ -1,5 +1,4 @@
 {
-	"comment": "Sample component config, including app launcher, menus, etc.",
 	"components": {
 		"App Launcher": {
 			"window": {
