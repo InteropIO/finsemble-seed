@@ -42,7 +42,8 @@
 		"hadouken-js-adapter": "1.43.1",
 		"lodash.get": "4.4.2",
 		"react": "16.13.1",
-		"react-dom": "16.13.1"
+		"react-dom": "16.13.1",
+		"superagent": "5.2.2"
 	},
 	"devDependencies": {
 		"@babel/core": "7.6.4",
