@@ -1,0 +1,56 @@
+{
+	"components": {
+		"notification-center": {
+			"window": {
+				"name": "notification-center",
+				"url": "$applicationRoot/components/finsemble-notifications/components/notification-center/notification-center.html",
+				"frame": false,
+				"top": "center",
+				"left": "center",
+				"width": 800,
+				"height": 800,
+				"monitor": "primary",
+				"options": {
+					"resizable": true,
+					"autoShow": false
+				},
+				"data": {
+					"notifications": {
+						"notificationsHistory": true
+					}
+				}
+			},
+			"component": {
+				"preload": false,
+				"spawnOnStartup": true,
+				"singleton": true
+			},
+			"foreign": {
+				"services": {
+					"windowService": {
+						"allowAutoArrange": true,
+						"allowSnapping": true,
+						"allowTabbing": true,
+						"allowTiling": true,
+						"allowGrouping": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"title": "notification-center",
+						"FSBLHeader": {
+							"hideMinimize": true
+						},
+						"persistWindowState": true
+					},
+					"Toolbar": {
+						"iconClass": "ff-component"
+					}
+				}
+			}
+		}
+	}
+}

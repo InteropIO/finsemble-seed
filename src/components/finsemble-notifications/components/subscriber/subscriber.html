@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" />
+		<title>Subscribe to Finsemble!</title>
+		<meta content="" name="description" />
+		<meta content="width=device-width, initial-scale=1" name="viewport" />
+		<link href="subscriber.css" rel="stylesheet" type="text/css" />
+		<script src="subscriber.js"></script>
+		<style>
+			.snoozed {
+				display: none;
+			}
+
+			.dismissed {
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="container">
+			<div id="bounds"></div>
+			<h1>Subscribe notifications!</h1>
+			<div style="display:block; width: 100%; text-align: center; margin-bottom: 10px">
+				<button id="unsubscribe">Unsubscribe</button>
+			</div>
+			<div style="display:block; width: 100%; text-align: center; margin-bottom: 10px">
+				<input id="fetch-from-date" type="text" />
+			</div>
+			<div style="display:block; width: 100%; text-align: center; margin-bottom: 10px">
+				<button id="fetch-history">Fetch History</button>
+			</div>
+			<div style="display:block; width: 100%; text-align: center; margin-bottom: 10px">
+				<button id="clear-list">Clear List</button>
+			</div>
+			<div id="notification-list"></div>
+		</div>
+	</body>
+</html>

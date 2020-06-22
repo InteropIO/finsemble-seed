@@ -1,0 +1,48 @@
+{
+  "components": {
+    "intentResolverModal": {
+      "window": {
+        "url": "$applicationRoot/components/intentResolver/intentResolver.html",
+        "options": {
+          "resizable": false,
+          "autoShow": false,
+          "alwaysOnTop": true
+        },
+        "top": "center",
+        "left": "center",
+        "width": 800,
+        "height": 600
+      },
+      "component": {
+        "preload": "$applicationRoot/preloads/FDC3Client.js",
+        "spawnOnStartup": true,
+        "singleton": true,
+        "showDevConsoleOnVisible": false
+      },
+      "foreign": {
+        "services": {
+          "windowService": {}
+        },
+        "clients": {
+          "dialogManager": {
+            "isDialog": true
+          }
+        },
+        "components": {
+          "App Launcher": {
+            "launchableByUser": false
+          },
+          "Window Manager": {
+            "FSBLHeader": false,
+            "title": "intentResolverModal",
+            "persistWindowState": false
+          },
+          "Toolbar": {
+            "iconClass": "intentResolverModal",
+            "iconURL": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png"
+          }
+        }
+      }
+    }
+  }
+}

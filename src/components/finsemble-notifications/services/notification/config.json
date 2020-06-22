@@ -1,0 +1,11 @@
+{
+	"services": {
+		"notificationService": {
+			"useWindow": true,
+			"active": true,
+			"name": "notificationService",
+			"visible": false,
+			"html": "$applicationRoot/components/finsemble-notifications/services/notification/notification.html"
+		}
+	}
+}

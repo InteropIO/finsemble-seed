@@ -1,0 +1,397 @@
+{
+	"components": {
+		"Simple Chart": {
+			"window": {
+				"url": "https://finsemble.chartiq.com/components/widgets/simpleChart/simpleChart.html",
+				"width": 500,
+				"height": 410
+			},
+			"component": {
+				"preload": "$applicationRoot/preloads/FDC3Client.js",
+				"mode": "premium",
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Toolbar": {
+						"iconClass": "ff-chart-simple"
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": true,
+						"persistWindowState": true
+					}
+				}
+			}
+		},
+		"Rates": {
+			"window": {
+				"listName": "Rates",
+				"url": "$applicationRoot/components/widgets/rates/rates.html",
+				"width": 500,
+				"height": 220
+			},
+			"component": {
+				"preload": "$applicationRoot/preloads/FDC3Client.js",
+				"mode": "premium",
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Toolbar": {
+						"iconClass": "ff-document-2"
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": false,
+						"persistWindowState": true
+					}
+				}
+			}
+		},
+		"Rates Chart": {
+			"window": {
+				"listName": "Rates Chart",
+				"url": "$applicationRoot/components/widgets/ratesChart/ratesChart.html",
+				"width": 500,
+				"height": 260
+			},
+			"component": {
+				"preload": "$applicationRoot/preloads/FDC3Client.js",
+				"mode": "premium",
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Toolbar": {
+						"iconClass": "ff-chart-simple"
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": false,
+						"persistWindowState": true
+					}
+				}
+			}
+		},
+		"Markets Overview": {
+			"window": {
+				"listName": "Markets Overview",
+				"url": "https://finsemble.chartiq.com/components/widgets/marketsOverview/marketsOverview.html",
+				"width": 815,
+				"height": 600
+			},
+			"component": {
+				"preload": "$applicationRoot/preloads/FDC3Client.js",
+				"mode": "premium",
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Toolbar": {
+						"iconClass": "ff-overview"
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": false,
+						"persistWindowState": true
+					}
+				}
+			}
+		},
+		"Market Charts": {
+			"window": {
+				"listName": "Market Charts",
+				"url": "https://finsemble.chartiq.com/components/widgets/marketCharts/marketCharts.html",
+				"width": 815,
+				"height": 200
+			},
+			"component": {
+				"preload": "$applicationRoot/preloads/FDC3Client.js",
+				"mode": "premium",
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Toolbar": {
+						"iconClass": "ff-chart-alt-1"
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": false,
+						"persistWindowState": true
+					}
+				}
+			}
+		},
+		"Top Movers": {
+			"window": {
+				"url": "https://finsemble.chartiq.com/components/widgets/topMovers/topMovers.html",
+				"width": 950,
+				"height": 410
+			},
+			"component": {
+				"preload": "$applicationRoot/preloads/FDC3Client.js",
+				"mode": "premium",
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Toolbar": {
+						"iconClass": "ff-chart-alt-2"
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": false,
+						"persistWindowState": true
+					}
+				}
+			}
+		},
+		"News": {
+			"window": {
+				"listName": "News",
+				"url": "$applicationRoot/components/widgets/news/news.html",
+				"width": 354,
+				"height": 600
+			},
+			"component": {
+				"preload": "$applicationRoot/preloads/FDC3Client.js",
+				"mode": "premium",
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					},
+					"fdc3": {
+						"intents": [
+							{
+								"name": "ViewChart",
+								"displayName": "ViewChart",
+								"contexts": [
+									"fdc3.instrument"
+								]
+							}
+						]
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Toolbar": {
+						"iconClass": "ff-news",
+						"iconURL": "$applicationRoot/components/widgets/news/news.svg"
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": true,
+						"persistWindowState": true
+					}
+				}
+			}
+		},
+		"Financials": {
+			"window": {
+				"url": "$applicationRoot/components/widgets/financials/financials.html",
+				"width": 660,
+				"height": 410
+			},
+			"component": {
+				"preload": "$applicationRoot/preloads/FDC3Client.js",
+				"mode": "premium",
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					},
+					"fdc3": {
+						"intents": [
+							{
+								"name": "ViewChart",
+								"displayName": "ViewChart",
+								"contexts": [
+									"fdc3.instrument"
+								]
+							}
+						]
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Toolbar": {
+						"iconClass": "ff-chart-pie",
+						"iconURL": "$applicationRoot/components/widgets/financials/financials.svg"
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": true,
+						"persistWindowState": true
+					}
+				}
+			}
+		},
+		"Insider Trades": {
+			"window": {
+				"listName": "Insiders",
+				"url": "https://finsemble.chartiq.com/components/widgets/insiders/insiders.html",
+				"width": 660,
+				"height": 410
+			},
+			"component": {
+				"preload": "$applicationRoot/preloads/FDC3Client.js",
+				"mode": "premium",
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Toolbar": {
+						"iconClass": "ff-insiders-2"
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": true,
+						"persistWindowState": true
+					}
+				}
+			}
+		},
+		"Company": {
+			"window": {
+				"url": "$applicationRoot/components/widgets/fundamentals/fundamentals.html",
+				"width": 500,
+				"height": 410
+			},
+			"component": {
+				"preload": "$applicationRoot/preloads/FDC3Client.js"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					},
+					"fdc3": {
+						"intents": [
+							{
+								"name": "ViewChart",
+								"displayName": "ViewChart",
+								"contexts": [
+									"fdc3.instrument"
+								]
+							}
+						]
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Toolbar": {
+						"iconClass": "ff-company",
+						"iconURL": "$applicationRoot/components/widgets/fundamentals/company.svg"
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": true,
+						"persistWindowState": true
+					}
+				}
+			}
+		},
+		"Fundamental Chart": {
+			"window": {
+				"listName": "Fundamental Chart",
+				"url": "https://finsemble.chartiq.com/components/widgets/fundamentalsChart/fundamentalsChart.html",
+				"width": 500,
+				"height": 410
+			},
+			"component": {
+				"preload": "$applicationRoot/preloads/FDC3Client.js",
+				"mode": "premium",
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Toolbar": {
+						"iconClass": "ff-chart-alt-1"
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": true,
+						"persistWindowState": true
+					}
+				}
+			}
+		}
+	}
+}

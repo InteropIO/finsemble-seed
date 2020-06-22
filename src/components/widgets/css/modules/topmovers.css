@@ -1,0 +1,15 @@
+.ciq-topmovers-nav-charttype {
+	float: right
+}
+
+.ciq-TopMovers tr th:nth-child(2) {
+    text-align: right;
+}
+
+.ciq-TopMovers tr th:nth-child(3) {
+    text-align: right;
+}
+
+#ciq-subsub-div2 h2 {
+    display: none;
+}

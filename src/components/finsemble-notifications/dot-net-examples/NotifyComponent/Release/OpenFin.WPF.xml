@@ -1,0 +1,260 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>OpenFin.WPF</name>
+    </assembly>
+    <members>
+        <member name="T:Openfin.WPF.EmbeddedView">
+            <summary>
+            Interaction logic for EmbeddedViewControl.xaml
+            </summary>
+            <summary>
+            EmbeddedView
+            </summary>
+        </member>
+        <member name="M:Openfin.WPF.EmbeddedView.#ctor">
+            <summary>
+            Initializes a new instance of the EmbeddedView class.
+            </summary>
+        </member>
+        <member name="P:Openfin.WPF.EmbeddedView.OffScreenRenderMode">
+            <summary>
+            Gets or sets the OffScreenRenderMode of the EmbeddedView control.
+            </summary>
+        </member>
+        <member name="P:Openfin.WPF.EmbeddedView.OffScreenRenderInterval">
+            <summary>
+            Gets or sets the interval between successive off-screen rendering frames.
+            </summary>
+        </member>
+        <member name="M:Openfin.WPF.EmbeddedView.SuspendPainting">
+            <summary>
+            Suspends painting of the EmbeddedView host UserControl.
+            </summary>
+        </member>
+        <member name="M:Openfin.WPF.EmbeddedView.ResumePainting">
+            <summary>
+            Resumes painting of the EmbeddedView host UserControl.
+            </summary>
+        </member>
+        <member name="P:Openfin.WPF.EmbeddedView.AutoScale">
+            <summary>
+            Controls if the Embedded View resizes with its parent container
+            </summary>
+        </member>
+        <member name="P:Openfin.WPF.EmbeddedView.IsReady">
+            <summary>
+            Is The Embedded View ready
+            </summary>
+        </member>
+        <member name="P:Openfin.WPF.EmbeddedView.OpenfinWindow">
+            <summary>
+            The OpenFin Window embedded as part of this control.
+            </summary>
+        </member>
+        <member name="P:Openfin.WPF.EmbeddedView.OpenfinApplication">
+            <summary>
+            The OpenFin Application that owns the OpenFin Window embedded as part of this control.
+            </summary>
+        </member>
+        <member name="P:Openfin.WPF.EmbeddedView.OpenfinRuntime">
+            <summary>
+            The OpenFin Runtime Instance. 
+            </summary>
+        </member>
+        <member name="M:Openfin.WPF.EmbeddedView.Initialize(Openfin.Desktop.RuntimeOptions,Openfin.Desktop.ApplicationOptions)">
+            <summary>
+            Provide the application options, this will create an OpenFin application and use the Main Window as the Embedded View.
+            </summary>
+            <param name="runtimeOptions">Runtime Options being used</param>
+            <param name="appOptions">Application options for the new OpenFin Application to be created</param>
+        </member>
+        <member name="M:Openfin.WPF.EmbeddedView.Initialize(Openfin.Desktop.RuntimeOptions,Openfin.Desktop.Window)">
+            <summary>
+            Provide the OpenFin Window object, this will embed the existing Window.
+            </summary>
+            <param name="runtimeOptions">Runtime Options being used</param>
+            <param name="window">Window object to be embedded</param>
+        </member>
+        <member name="M:Openfin.WPF.EmbeddedView.Initialize(Openfin.Desktop.RuntimeOptions,Openfin.Desktop.Application,Openfin.Desktop.WindowOptions)">
+            <summary>
+            Provide the application instance and WindowOptions, this will create an OpenFin Window in a per application shared GPU process
+            </summary>
+            <param name="runtimeOptions">Runtime Options being used</param>
+            <param name="application">OpenFin Application that will share the GPU Process with this window.</param>
+            <param name="windowOptions">Window Options for the new OpenFin Window to be created</param>
+        </member>
+        <member name="M:Openfin.WPF.EmbeddedView.Close">
+            <summary>
+            Closes the Embedded View
+            </summary>
+        </member>
+        <member name="P:Openfin.WPF.EmbeddedView.OnReady">
+            <summary>
+            Event will be raised when the OpenFin Window has loaded the content and has rendered.
+            </summary>
+        </member>
+        <member name="E:Openfin.WPF.EmbeddedView.Ready">
+            <summary>
+            Event will be raised when the OpenFin Window has loaded the content and has rendered.
+            </summary>
+        </member>
+        <member name="P:Openfin.WPF.EmbeddedView.OnForcedClosed">
+            <summary>
+            Event will be raised when the OpenFin Window has been closed by means other than the Close method (WM_DESTROY for example)
+            </summary>
+        </member>
+        <member name="E:Openfin.WPF.EmbeddedView.ForceClosed">
+            <summary>
+            Event will be raised when the OpenFin Window has been closed by means other than the Close method (WM_DESTROY for example)
+            </summary>
+        </member>
+        <member name="P:Openfin.WPF.EmbeddedView.OnNavigationRejected">
+            <summary>
+            Event will be raised if content navigation rules have determined that the requested URL is not valid.
+            </summary>
+        </member>
+        <member name="E:Openfin.WPF.EmbeddedView.NavigationRejected">
+            <summary>
+            Event will be raised if content navigation rules have determined that the requested URL is not valid.
+            </summary>
+        </member>
+        <member name="M:Openfin.WPF.EmbeddedView.Dispose(System.Boolean)">
+            <summary>
+            Disposes of the resources used by the EmbeddedView.
+            </summary>
+            <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        </member>
+        <member name="M:Openfin.WPF.EmbeddedView.Dispose">
+            <summary>
+            Releases all unmanged resources used by the UserControl.
+            </summary>
+        </member>
+        <member name="M:Openfin.WPF.EmbeddedView.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:Openfin.WPF.NamespaceDoc">
+            <summary>
+            OpenFin WPF EmbeddedView and Utilities.
+            </summary>
+        </member>
+        <member name="T:Openfin.WPF.OffScreenRenderMode">
+            <summary>
+            Specifies the WPF Off Screen Render mode
+            </summary>
+        </member>
+        <member name="F:Openfin.WPF.OffScreenRenderMode.None">
+            <summary>
+            Do not render the EmbeddedView off screen.
+            </summary>
+        </member>
+        <member name="F:Openfin.WPF.OffScreenRenderMode.Auto">
+            <summary>
+            Perform off screen rendering on the EmbeddedView until it receives focus or the mouse cursor is hovering over it.
+            </summary>
+        </member>
+        <member name="F:Openfin.WPF.OffScreenRenderMode.Full">
+            <summary>
+            Reserved for future use.
+            </summary>
+        </member>
+        <member name="T:Openfin.WPF.OsrWindow">
+            <summary>
+            Interaction logic for OsrWindow.xaml
+            </summary>
+        </member>
+        <member name="M:Openfin.WPF.OsrWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:Openfin.WPF.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Openfin.WPF.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Openfin.WPF.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="T:Openfin.WPF.Utils">
+            <summary>
+            Will Invoke the action on the UI thread.
+            </summary>
+        </member>
+        <member name="M:Openfin.WPF.Utils.InvokeOnUiThreadIfRequired(System.Windows.Controls.Control,System.Action)">
+            <summary>
+            Will Invoke the action on the UI thread.
+            </summary>
+            <param name="control">A Control </param>
+            <param name="action">Action to invoke on the UI thread</param>
+        </member>
+        <member name="M:Openfin.WPF.Utils.ToKeyCode(System.Windows.Input.Key)">
+            <summary>
+            Converts a WPF Key value into its equivalent WinForms key code.
+            </summary>
+            <param name="key">The WPF Key value to convert.</param>
+            <returns>The Winforms key code.</returns>
+        </member>
+        <member name="M:Openfin.WPF.Utils.IsControl(System.Windows.Input.KeyEventArgs)">
+            <summary>
+            Checks if the given KeyEventArgs value includes the left or right Control key.
+            </summary>
+            <param name="args">The key args.</param>
+            <returns><c>true</c> if either Control key is pressed. <c>false</c> otherwise.</returns>
+        </member>
+        <member name="M:Openfin.WPF.Utils.IsAlt(System.Windows.Input.KeyEventArgs)">
+            <summary>
+            Checks if the given KeyEventArgs value includes the left or right Alt key.
+            </summary>
+            <param name="args">The key args.</param>
+            <returns><c>true</c> if either Alt key is pressed. <c>false</c> otherwise.</returns>
+        </member>
+        <member name="M:Openfin.WPF.Utils.IsShift(System.Windows.Input.KeyEventArgs)">
+            <summary>
+            Checks if the given KeyEventArgs value includes the left or right Shift key.
+            </summary>
+            <param name="args">The key args.</param>
+            <returns><c>true</c> if either Shift key is pressed. <c>false</c> otherwise.</returns>
+        </member>
+        <member name="T:XamlGeneratedNamespace.GeneratedInternalTypeHelper">
+            <summary>
+            GeneratedInternalTypeHelper
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateInstance(System.Type,System.Globalization.CultureInfo)">
+            <summary>
+            CreateInstance
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.GetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            GetPropertyValue
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.SetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            SetPropertyValue
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateDelegate(System.Type,System.Object,System.String)">
+            <summary>
+            CreateDelegate
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.AddEventHandler(System.Reflection.EventInfo,System.Object,System.Delegate)">
+            <summary>
+            AddEventHandler
+            </summary>
+        </member>
+    </members>
+</doc>

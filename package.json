@@ -36,16 +36,23 @@
     "dependencies": {
         "@chartiq/finsemble": "4.2.*",
         "@chartiq/finsemble-react-controls": "4.0.*",
+        "@types/lodash.get": "^4.4.6",
+        "@types/react": "^16.9.38",
         "async": "2.6.2",
         "babel-minify-webpack-plugin": "0.3.1",
         "compression": "1.7.3",
+        "date-fns": "^2.14.0",
         "file-loader": "1.1.11",
         "hadouken-js-adapter": "1.43.1",
+        "immutable": "^4.0.0-rc.12",
         "lodash.clonedeep": "4.5.0",
         "lodash.debounce": "4.0.8",
-        "lodash.get": "4.4.2",
+        "lodash.get": "^4.4.2",
         "lodash.throttle": "4.1.1",
-        "nocache": "2.0.0"
+        "nocache": "2.0.0",
+        "react-transition-group": "^4.4.1",
+        "searchjs": "^1.0.2",
+        "uuid": "^8.1.0"
     },
     "devDependencies": {
         "@chartiq/tslint-config-chartiq-base": "0.1.3",

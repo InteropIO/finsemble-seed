@@ -1,0 +1,13 @@
+{
+  "comment": "Houses config for any custom services that you'd like to import into Finsemble.",
+  "services": {
+    "FDC3": {
+      "useWindow": true,
+      "active": true,
+      "name": "FDC3",
+      "file": "$applicationRoot/services/FDC3/FDC3Service.js",
+      "visible": false,
+      "html": "$applicationRoot/services/FDC3/FDC3.html"
+    }
+  }
+}

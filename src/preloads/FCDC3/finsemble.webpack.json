@@ -1,0 +1,6 @@
+{
+  "tester": {
+    "output": "preloads/FDC3Client",
+    "entry": "./src/services/FDC3/FDC3Client.ts"
+  }
+}

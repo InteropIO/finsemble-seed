@@ -1,0 +1,62 @@
+{
+	"components": {
+		"notification-toasts": {
+			"window": {
+				"name": "notification-toasts",
+				"url": "$applicationRoot/components/finsemble-notifications/components/notification-toasts/notification-toasts.html",
+				"forceOntoMonitor": true,
+				"bottom": 0,
+				"right": 0,
+				"width": 370,
+				"height": "100%",
+				"minHeight": 30,
+				"position": "available",
+				"data": {
+					"notifications": {
+						"filter": {
+							"include": [],
+							"exclude": []
+						},
+						"position": {
+							"bottom": 0,
+							"right": 0,
+							"monitor": 0
+						},
+						"animation": {
+							"displayDuration": 10000,
+							"animateIn": "slide-in-right",
+							"animateOut": "slide-out-right"
+						}
+					}
+				},
+				"options": {
+					"transparent": true,
+					"alwaysOnTop": true,
+					"autoShow": true,
+					"resizable": false,
+					"showTaskbarIcon": false
+				}
+			},
+			"component": {
+				"preload": false,
+				"spawnOnStartup": true,
+				"singleton": true
+			},
+			"foreign": {
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"title": "notification-toasts",
+						"FSBLHeader": false,
+						"persistWindowState": true
+					},
+					"Toolbar": {
+						"iconClass": "notification-toasts"
+					}
+				}
+			}
+		}
+	}
+}

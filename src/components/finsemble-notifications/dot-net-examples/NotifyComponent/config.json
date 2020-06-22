@@ -1,0 +1,58 @@
+{
+	"components": {
+		"WPFNotifyComponent_Debug": {
+			"window": {
+				"id": "WPFNotifyComponent_Debug",
+				"windowType": "native",
+				"path": "$wpfNotificationExampleBase/components/finsemble-notifications/dot-net-examples/NotifyComponent/Debug/NotifyComponent.exe",
+				"autoShow": true,
+				"addToWorkspace": true
+			},
+			"foreign": {
+				"services": {
+					"workspaceService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"showLinker": false
+					},
+					"Toolbar": {
+						"iconClass": "ff-list"
+					}
+				}
+			}
+		},
+		"WPFNotifyComponent_Release": {
+			"window": {
+				"id": "WPFNotifyComponent_Release",
+				"windowType": "native",
+				"path": "$wpfNotificationExampleBase/components/finsemble-notifications/dot-net-examples/NotifyComponent/Release/NotifyComponent.exe",
+				"autoShow": true,
+				"addToWorkspace": true
+			},
+			"foreign": {
+				"services": {
+					"workspaceService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"showLinker": false
+					},
+					"Toolbar": {
+						"iconClass": "ff-list"
+					}
+				}
+			}
+		}
+	}
+}
