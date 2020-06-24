@@ -1,5 +1,3 @@
-const { launch, connect } = require("hadouken-js-adapter");
-
 (() => {
 	"use strict";
 

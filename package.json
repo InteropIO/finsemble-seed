@@ -38,7 +38,6 @@
 		"@chartiq/finsemble-ui": "5.0.0",
 		"async": "2.6.2",
 		"compression": "1.7.3",
-		"hadouken-js-adapter": "1.43.1",
 		"lodash.get": "4.4.2",
 		"react": "16.13.1",
 		"react-dom": "16.13.1",
