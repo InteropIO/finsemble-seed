@@ -1,5 +1,5 @@
 {
-	"comment": "Top-level application config for development, adding on top of the core config",
+	"$schema": "../schemas/finsemble.schema.json",
 	"accessibleLinker": true,
 	"servicesConfig": {
 		"distributedStore": {

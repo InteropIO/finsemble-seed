@@ -1,5 +1,5 @@
 {
-	"comment": "Sample component configuration",
+	"$schema": "../schemas/components.schema.json",
 	"components": {
 		"Welcome Component": {
 			"window": {

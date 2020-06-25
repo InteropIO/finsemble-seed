@@ -1,4 +1,5 @@
 {
+	"$schema": "../schemas/manifest.schema.json",
 	"devtools_port": 9090,
 	"startup_app": {
 		"name": "ChartIQ Local",
@@ -37,6 +38,7 @@
 		"moduleRoot": "$applicationRoot/finsemble",
 		"servicesRoot": "$applicationRoot/finsemble/services",
 		"notificationURL": "$applicationRoot/components/notification/notification.html",
+		"configSchemaURL": "$applicationRoot/configs/schemas/allConfig.schema.json",
 		"bootConfig": {
 			"onErrorMakeSystemManagerVisible": true,
 			"defaults": {
