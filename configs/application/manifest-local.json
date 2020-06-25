@@ -26,7 +26,7 @@
 	"splashScreenImage": "http://localhost:3375/assets/img/FinsembleSplash.png",
 	"appAssets": [
 		{
-			"src": "https://assets.finsemble.com/assimilation/dev/assimilation.zip",
+			"src": "https://assets.finsemble.com/assimilation/dev/pr/assimilation.zip",
 			"version": "5.0.0.1",
 			"alias": "assimilation",
 			"target": "AssimilationMain.exe"
