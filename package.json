@@ -4,8 +4,7 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"build:dev": "gulp build:dev --gulpfile=./gulpfile.js",
-		"build": "gulp build:dev --gulpfile=./gulpfile.js",
+		"build:seed": "gulp build:dev --gulpfile=./gulpfile.js",
 		"start": "gulp dev --gulpfile=./gulpfile.js",
 		"dev-fresh": "gulp dev:fresh --gulpfile=./gulpfile.js",
 		"dev:fresh": "gulp dev:fresh --gulpfile=./gulpfile.js",
