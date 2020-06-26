@@ -1,8 +1,6 @@
 import React from "react";
+import { Menu } from "@chartiq/finsemble-ui/react/components/Menu";
 import {
-	MenuShell,
-	MenuToggle,
-	Menu,
 	Preferences,
 	SystemLog,
 	CentralLogger,
@@ -10,28 +8,28 @@ import {
 	Restart,
 	Reset,
 	Quit,
-} from "@chartiq/finsemble-ui/react/components";
+} from "@chartiq/finsemble-ui/react/components/System";
 
 export const FileMenu = () => (
-	<MenuShell id="fileMenu">
-		<MenuToggle>
+	<Menu
+		id="fileMenu"
+		title={
 			<img
 				className="finsemble-toolbar-brand-logo"
 				src="../../../assets/img/Finsemble_Taskbar_Icon.png"
 			/>
-		</MenuToggle>
-		<Menu>
-			<Preferences />
-			<SystemLog />
-			<CentralLogger />
-			<Documentation />
-			<Restart />
-			<Reset />
-			<Quit />
-			{/* To add your own items to the menu, import MenuItem from
-			 * "@chartiq/finsemble-ui/react/components" and add the following:
-			 * <MenuItem onClick={...}>Your Item</MenuItem>
-			 */}
-		</Menu>
-	</MenuShell>
+		}
+	>
+		<Preferences />
+		<SystemLog />
+		<CentralLogger />
+		<Documentation />
+		<Restart />
+		<Reset />
+		<Quit />
+		{/* To add your own items to the menu, import MenuItem from
+		 * "@chartiq/finsemble-ui/react/components" and add the following:
+		 * <MenuItem onClick={...}>Your Item</MenuItem>
+		 */}
+	</Menu>
 );

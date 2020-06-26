@@ -3,48 +3,43 @@
  * All rights reserved.
  */
 import React from "react";
-import { useWindowTitleBar } from "@chartiq/finsemble-ui/react/hooks";
+import ReactDOM from "react-dom";
+import { FinsembleProvider } from "@chartiq/finsemble-ui/react/components/FinsembleProvider";
 import {
 	AlwaysOnTopButton,
 	DockingButton,
 	LinkerButton,
 	ShareButton,
-	mountWindowTitleBar,
 	TabRegion,
 	CloseButton,
 	MaximizeButton,
 	MinimizeButton,
-} from "@chartiq/finsemble-ui/react/components";
+	WindowTitleBarShell,
+} from "@chartiq/finsemble-ui/react/components/WindowTitleBar";
 import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../assets/css/theme.css";
 
 /**
  * This is the Window Title Bar component, which is rendered at
- * the top of every Finsemble-controlled HTML window.
- * You can customize this template by adding or removing
- * elements and sytling as you see fit.
+ * the top of every HTML window.
  *
- * The visibility of each of the controls is controlled by
+ * You can customize this template by adding or removing
+ * elements and styling as you see fit.
+ *
+ * The visibility of each of the controls can be controlled by
  * config. For example, setting the
  * "foreign.components.Window Manager.showLinker" property
  * to false will hide the <LinkerButton/>.
+ *
+ * Other buttons are dynamic, such as <DockingButton> which will only
+ * appear when windows are docked or can be docked.
  */
 const WindowTitleBar = () => {
-	const {
-		showLinkerButton,
-		showShareButton,
-		showDockingButton,
-		showAlwaysOnTopButton,
-		showMinimizeButton,
-		showMaximizeButton,
-		showCloseButton,
-	} = useWindowTitleBar();
-
 	return (
-		<>
+		<WindowTitleBarShell>
 			<div className="fsbl-header-left">
-				{showLinkerButton && <LinkerButton />}
-				{showShareButton && <ShareButton />}
+				<LinkerButton />
+				<ShareButton />
 			</div>
 			<div className="fsbl-header-center">
 				{/* If tabbing is disabled, <TabRegion/> will
@@ -52,18 +47,34 @@ const WindowTitleBar = () => {
 				<TabRegion />
 			</div>
 			<div className="fsbl-header-right">
-				{showDockingButton && <DockingButton />}
-				{showAlwaysOnTopButton && <AlwaysOnTopButton />}
-				{showMinimizeButton && <MinimizeButton />}
-				{showMaximizeButton && <MaximizeButton />}
-				{showCloseButton && <CloseButton />}
+				<DockingButton />
+				<AlwaysOnTopButton />
+				<MinimizeButton />
+				<MaximizeButton />
+				<CloseButton />
 			</div>
-		</>
+		</WindowTitleBarShell>
 	);
 };
 
-// Because the WindowTitleBar is mounted to dynamically created
-// DOM elements, you must pass in the WindowTitleBar to this function.
-// Doing will so will (asynchronously) register the WindowTitleBar
-// with Finsemble, create the DOM, and mount it.
-mountWindowTitleBar(WindowTitleBar);
+const setUpDOMContainer = () => {
+	// Check if the page already has a spot for the header
+	let fsblHeader = document.getElementById("FSBLHeader");
+	if (fsblHeader) return;
+
+	// If there's no existing spot, then we create one
+	const wrapper = document.createElement("div");
+	fsblHeader = document.createElement("div");
+	fsblHeader.setAttribute("id", "FSBLHeader");
+	wrapper.appendChild(fsblHeader);
+	document.body.insertBefore(wrapper.firstChild, document.body.firstChild);
+};
+
+setUpDOMContainer();
+
+ReactDOM.render(
+	<FinsembleProvider>
+		<WindowTitleBar />
+	</FinsembleProvider>,
+	document.getElementById("FSBLHeader")
+);
