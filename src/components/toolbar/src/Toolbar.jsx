@@ -15,6 +15,7 @@ import {
 	AutoArrange,
 	Search,
 	AdvancedAppLauncherMenu,
+	AppLauncher,
 	WorkspaceManagementMenu,
 	ToolbarSection,
 } from "@chartiq/finsemble-ui/react/components/Toolbar";
@@ -22,6 +23,8 @@ import { FileMenu } from "./FileMenu";
 import { useHotkey } from "@chartiq/finsemble-ui/react/hooks/useHotkey";
 import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../../assets/css/theme.css";
+
+FSBL.debug = true;
 
 const Toolbar = () => {
 	useHotkey(["ctrl", "alt", "shift", "r"], () => FSBL.restartApplication());
@@ -43,6 +46,7 @@ const Toolbar = () => {
 				<Search openHotkey={["ctrl", "alt", "f"]} />
 				<WorkspaceManagementMenu />
 				<AdvancedAppLauncherMenu enableQuickComponents={true} />
+				<AppLauncher enableQuickComponents={true} />
 			</ToolbarSection>
 			<ToolbarSection className="center" hideBelowWidth={115}>
 				<div className="divider" />
