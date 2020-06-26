@@ -147,37 +147,57 @@ const insertPopUp = () => {
 	// Create popup div, with ID, class and text
 	popup = document.createElement("div");
 	popup.id = "zoom-popup";
-	popup.className = "fsbl-zoom-popup";
+	popup.style.display = "none";
+	popup.style.position = "absolute";
+	popup.style.top = "0px";
+	popup.style.right = "10px";
+	popup.style.padding = "5px";
+	popup.style.background = "grey";
+	popup.style.color = "white";
+	popup.style.opacity = "80%";
 
 	const heading = document.createElement("div");
 	heading.className = "fsbl-zoom-popup-heading";
+	heading.style.marginLeft = "4px";
+	heading.style.marginBottom = "4px";
 	popup.appendChild(heading);
 
 	const title = document.createElement("span");
 	title.className = "fsbl-zoom-popup-title";
+	title.style.marginLeft = "0px";
 	title.appendChild(document.createTextNode("Zoom:"));
 	heading.appendChild(title);
 
 	// Create Div to contain the zoom level text
 	const span = document.createElement("span");
 	span.className = "fsbl-zoom-popup-text";
+	span.style.marginLeft = "3px";
 	span.id = "zoom-popup-text";
 	heading.appendChild(span);
 
 	// Create zoom out button
 	const zoomOutBtn = document.createElement("button");
+	zoomOutBtn.style.width = "unset";
+	zoomOutBtn.style.padding = "1px 5px 1px 5px";
+	zoomOutBtn.style.margin = "0px 2px 0px 2px";
 	zoomOutBtn.appendChild(document.createTextNode("-"));
 	zoomOutBtn.onclick = zoomOut;
 	popup.appendChild(zoomOutBtn);
 
 	// Create reset button
 	const resetBtn = document.createElement("button");
+	resetBtn.style.width = "unset";
+	resetBtn.style.padding = "1px 5px 1px 5px";
+	resetBtn.style.margin = "0px 2px 0px 2px";
 	resetBtn.appendChild(document.createTextNode("Reset"));
 	resetBtn.onclick = resetZoom;
 	popup.appendChild(resetBtn);
 
 	// Create zoom in button
 	const zoomInBtn = document.createElement("button");
+	zoomInBtn.style.width = "unset";
+	zoomInBtn.style.padding = "1px 5px 1px 5px";
+	zoomInBtn.style.margin = "0px 2px 0px 2px";
 	zoomInBtn.appendChild(document.createTextNode("+"));
 	zoomInBtn.onclick = zoomIn;
 	popup.appendChild(zoomInBtn);
@@ -254,7 +274,7 @@ const runZoomHandler = () => {
 	//Override FEA window zoom function to do nothing
 	//which prevents manual use of this function which conflicts with zoom preload
 	//N.B. window.options.accelerator.zoom setting is not affected by this and will still conflict with Zoom preload if set
-	FSBL.Clients.WindowClient.getCurrentWindow().setZoomLevel = function(
+	FSBL.Clients.WindowClient.getCurrentWindow().setZoomLevel = function (
 		level,
 		callback,
 		errorCallback
