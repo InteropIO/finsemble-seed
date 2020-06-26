@@ -14,8 +14,10 @@ import { Restart } from "@chartiq/finsemble-ui/react/components/System";
 import { Reset } from "@chartiq/finsemble-ui/react/components/System";
 import { Quit } from "@chartiq/finsemble-ui/react/components/System";
 import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
+import "@chartiq/finsemble-ui/react/assets/css/menus.css";
 import "../../../assets/css/theme.css";
 
+FSBL.debug = true;
 /**
  * This component displays on right-click in your application's system tray icon.
  * Feel free to add/remove content or react components.
@@ -24,7 +26,7 @@ import "../../../assets/css/theme.css";
  */
 const SystemTrayComponent = () => (
 	<SystemTrayComponentShell padding={{ width: 80 }}>
-		<div className="menu menu-primary">
+		<div className="menu">
 			<Preferences />
 			<SystemLog />
 			<CentralLogger />
