@@ -22,9 +22,9 @@ steps:
   displayName: "Run the build"
 
 - script: npm run makeInstaller:dev
-  name: makeInstaller
+  name: makeInstallerdev
   displayName: "Make a dev installer"
 
 - script: npm run makeInstaller:prod
-  name: makeInstaller
+  name: makeInstallerprod
   displayName: "Make a production installer"
