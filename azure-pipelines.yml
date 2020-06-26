@@ -12,16 +12,8 @@ pool:
 steps:
 - task: NodeTool@0
   inputs:
-    versionSpec: '10.15.3'
+    versionSpec: '12'
   displayName: 'Install Node.js'
-
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '3.6'
-    architecture: 'x64'
-
-- script: pip install awscli
-  displayName: 'Install tools'
 
 - task: Npm@1
   inputs:
@@ -33,34 +25,6 @@ steps:
   name: build
   displayName: "Run the build"
 
-- powershell: ((Get-Content -path .\dist\configs\openfin\manifest-local.json -Raw) -replace 'http://localhost:3375', "$HOSTING_LOCATION") | Set-Content -Path .\dist\manifest.json
-
-#- script: aws s3 sync .\dist\ $(PUBLISH_LOCATION)-pr$(System.PullRequest.PullRequestNumber)/ --acl public-read
-#  env:
-#    AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
-#    AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
-#  condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
-
-- script: aws s3 sync .\dist\ $(PUBLISH_LOCATION)/ --acl public-read
-  env:
-    AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
-    AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
-#  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-
-- script: npm install electron-packager@13.1.1
-
 - script: npm run makeInstaller:prod
   name: makeInstaller
   displayName: "Make a production installer"
-
-- script: aws s3 sync .\pkg\ $(PUBLISH_LOCATION)-pr$(System.PullRequest.PullRequestNumber)/ --acl public-read
-  env:
-    AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
-    AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
-#  condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
-
-- script: aws s3 sync .\pkg\ $(PUBLISH_LOCATION)/ --acl public-read
-  env:
-    AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
-    AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
-#  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
