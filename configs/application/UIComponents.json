@@ -1,4 +1,5 @@
 {
+	"$schema": "../schemas/components.schema.json",
 	"components": {
 		"App Launcher": {
 			"window": {

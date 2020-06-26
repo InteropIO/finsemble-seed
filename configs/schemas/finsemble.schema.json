@@ -1,8 +1,111 @@
 {
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"title": "Finsemble Configuration",
-	"$ref": "#/definitions/Finsemble_Config",
+	"$ref": "#/definitions/fileSchemas",
 	"definitions": {
+		"fileSchemas": {
+			"anyOf": [
+				{
+					"$ref": "#/definitions/componentsFile"
+				},
+				{
+					"$ref": "#/definitions/servicesFile"
+				},
+				{
+					"$ref": "#/definitions/manifestFile"
+				},
+				{
+					"$ref": "#/definitions/Finsemble_Config"
+				}
+			]
+		},
+		"manifestFile": {
+			"type": "object",
+			"properties": {
+				"devtools_port": {
+					"description": "Manifest property to set Chromium devTools port. ",
+					"type": "number"
+				},
+				"startup_app": {
+					"$ref": "#/definitions/startup_app"
+				},
+				"splashScreenImage": {
+					"description": "Manifest URL for splash screen to display on startup.",
+					"type": "string",
+					"format": "uri"
+				},
+				"appAssets": {
+					"title": "appAssets",
+					"description": "Manifest array of external assets to be automatially loading by FEA. ",
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"src": {
+								"type": "string",
+								"format": "uri"
+							},
+							"version": {
+								"type": "string"
+							},
+							"alias": {
+								"type": "string"
+							},
+							"target": {
+								"type": "string"
+							}
+						},
+						"requiredPlaceHolder": [
+							"src",
+							"version",
+							"alias",
+							"target"
+						]
+					}
+				},
+				"finsemble": {
+					"$ref": "#/definitions/manifestFileFinsemble"
+				}
+			},
+			"required": [
+				"startup_app",
+				"finsemble"
+			]
+		},
+		"componentsFile": {
+			"description": "This is the component schema path",
+			"type": "object",
+			"properties": {
+				"$schema": {
+					"type": "string"
+				},
+				"components": {
+					"description": "config for components",
+					"type": "object",
+					"additionalProperties": {
+						"$ref": "#/definitions/component"
+					}
+				}
+			},
+			"additionalProperties": false
+		},
+		"servicesFile": {
+			"description": "This is the component schema path",
+			"type": "object",
+			"properties": {
+				"$schema": {
+					"type": "string"
+				},
+				"services": {
+					"description": "config for components",
+					"type": "object",
+					"additionalProperties": {
+						"$ref": "#/definitions/service"
+					}
+				}
+			},
+			"additionalProperties": false
+		},
 		"Manifest": {
 			"type": "object",
 			"properties": {
@@ -58,7 +161,7 @@
 		},
 		"Finsemble_Config": {
 			"title": "finsemble",
-			"description": "Finsemble's configuration.",
+			"description": "this is the finsembe schema path",
 			"type": "object",
 			"properties": {
 				"$schema": {
@@ -293,7 +396,6 @@
 				"servicesRoot",
 				"notificationURL",
 				"bootConfig",
-				"router",
 				"bootTasks",
 				"system",
 				"thirdPartyRoot",
@@ -366,10 +468,101 @@
 				"configSchemaURL",
 				"notificationURL",
 				"bootConfig",
-				"router",
 				"bootTasks",
 				"system"
 			]
+		},
+		"manifestFileFinsemble": {
+			"title": "finsemble",
+			"description": "this is the finsembe schema path",
+			"type": "object",
+			"properties": {
+				"$schema": {
+					"type": "string"
+				},
+				"applicationRoot": {
+					"description": "(PUBLIC) Should point to the root of your application. Finsemble will use this to build URLs internally.",
+					"type": "string",
+					"format": "uri",
+					"default": "https://localhost:3375"
+				},
+				"moduleRoot": {
+					"description": "(PUBLIC) Where you are serving the Finsemble core library from. This is important for resolving URLs internally.",
+					"type": "string",
+					"default": "https://localhost:3375/finsemble"
+				},
+				"servicesRoot": {
+					"description": "(PRIVATE) Default location of core services. ",
+					"type": "string",
+					"format": "uri"
+				},
+				"notificationURL": {
+					"type": "string",
+					"format": "uri"
+				},
+				"bootConfig": {
+					"$ref": "#/definitions/boot_config"
+				},
+				"router": {
+					"$ref": "#/definitions/router"
+				},
+				"workspaceTemplates": {
+					"title": "workspaceTemplates",
+					"type": "object",
+					"properties": {
+						"Blank Template": {
+							"$ref": "#/definitions/object_29"
+						}
+					}
+				},
+				"configSchemaURL": {
+					"description": "(PUBLIC) URL of this schema.  Used for run-time verification of configuration. ",
+					"type": "string",
+					"format": "uri"
+				},
+				"importConfig": {
+					"description": "(PUBLIC) Defines an array of JSON URLs to be imported into the top-level finsemble object. Note that this will overwrite any existing config settings, with two exceptions:\r\n\r\nNew services defined under finsemble.services will be added to the list of existing services (as opposed to replacing the existing list of services).\r\n\r\nNew components defined under finsemble.components will be added to the list of existing components (as opposed to replacing the list of existing components).",
+					"type": "array",
+					"items": {
+						"type": "string",
+						"format": "uri"
+					},
+					"examples": [
+						[
+							"$applicationRoot/configs/application/UIComponents.json",
+							"$applicationRoot/configs/application/components.json"
+						]
+					]
+				},
+				"importThirdPartyConfig": {
+					"description": "(PUBLIC) This import is essentially the same as importConfig with one notable difference: the imported configuration settings cannot overwrite any existing settings. In this case, the settings for any potential overwrite will be discarded with a warning message written to the Config Service's log.",
+					"type": "array",
+					"items": [
+						{
+							"type": "string",
+							"format": "uri"
+						}
+					],
+					"additionalItems": false
+				},
+				"systemTrayIcon": {
+					"description": "(PUBLIC)",
+					"type": "string"
+				},
+				"systemTrayComponent": {
+					"description": "(PUBLIC)",
+					"type": "string"
+				},
+				"globalHotkeys": {
+					"description": "(PUBLIC)",
+					"type": "object"
+				}
+			},
+			"required": [
+				"applicationRoot",
+				"moduleRoot"
+			],
+			"additionalProperties": false
 		},
 		"components": {
 			"title": "components",
@@ -444,6 +637,7 @@
 			}
 		},
 		"component": {
+			"description": "single component config",
 			"type": "object",
 			"properties": {
 				"bootParams": {
@@ -517,11 +711,7 @@
 			"type": "object",
 			"properties": {
 				"workspaceService": {
-					"anyOf": [
-						{
-							"$ref": "#/definitions/service"
-						}
-					]
+					"$ref": "#/definitions/service"
 				},
 				"storageService": {
 					"$ref": "#/definitions/service"
@@ -533,14 +723,7 @@
 					"$ref": "#/definitions/service"
 				},
 				"windowService": {
-					"anyOf": [
-						{
-							"$ref": "#/definitions/service"
-						},
-						{
-							"$ref": "#/definitions/foreign_services"
-						}
-					]
+					"$ref": "#/definitions/service"
 				},
 				"authenticationService": {
 					"$ref": "#/definitions/service"
@@ -1772,7 +1955,15 @@
 			"type": "object",
 			"properties": {
 				"stage": {
-					"type": "string"
+					"type": "string",
+					"enum": [
+						"microkernel",
+						"kernel",
+						"authentication",
+						"preuser",
+						"earlyuser",
+						"user"
+					]
 				},
 				"stopOnFailure": {
 					"type": "boolean"
@@ -1784,7 +1975,7 @@
 					"type": "string"
 				},
 				"customFailureMessage": {
-					"type": "null"
+					"type": "string"
 				},
 				"timeout": {
 					"type": "number"

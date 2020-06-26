@@ -1,5 +1,5 @@
 {
-	"$schema": "../schemas/manifest.schema.json",
+	"$schema": "../schemas/finsemble.schema.json",
 	"devtools_port": 9090,
 	"startup_app": {
 		"name": "ChartIQ Local",
@@ -38,7 +38,7 @@
 		"moduleRoot": "$applicationRoot/finsemble",
 		"servicesRoot": "$applicationRoot/finsemble/services",
 		"notificationURL": "$applicationRoot/components/notification/notification.html",
-		"configSchemaURL": "$applicationRoot/configs/schemas/allConfig.schema.json",
+		"configSchemaURL": "$applicationRoot/configs/schemas/finsemble.schema.json",
 		"bootConfig": {
 			"onErrorMakeSystemManagerVisible": true,
 			"defaults": {
@@ -47,7 +47,6 @@
 				"startTaskTimeout": 10000
 			}
 		},
-		"router" : {},
 		"importConfig": ["$applicationRoot/configs/application/config.json"]
 	}
 }
