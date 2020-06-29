@@ -1,25 +1,25 @@
 {
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"title": "Finsemble Configuration",
-	"$ref": "#/definitions/fileSchemas",
+	"$ref": "#/definitions/FileSubschemas",
 	"definitions": {
-		"fileSchemas": {
+		"FileSubschemas": {
 			"anyOf": [
 				{
-					"$ref": "#/definitions/componentsFile"
+					"$ref": "#/definitions/ComponentsFileSubschema"
 				},
 				{
-					"$ref": "#/definitions/servicesFile"
+					"$ref": "#/definitions/ServicesFileSubschema"
 				},
 				{
-					"$ref": "#/definitions/manifestFile"
+					"$ref": "#/definitions/ManifestFileSubschema"
 				},
 				{
-					"$ref": "#/definitions/Finsemble_Config"
+					"$ref": "#/definitions/FinsembleSubschema"
 				}
 			]
 		},
-		"manifestFile": {
+		"ManifestFileSubschema": {
 			"type": "object",
 			"properties": {
 				"devtools_port": {
@@ -72,7 +72,7 @@
 				"finsemble"
 			]
 		},
-		"componentsFile": {
+		"ComponentsFileSubschema": {
 			"description": "This is the component schema path",
 			"type": "object",
 			"properties": {
@@ -89,7 +89,7 @@
 			},
 			"additionalProperties": false
 		},
-		"servicesFile": {
+		"ServicesFileSubschema": {
 			"description": "This is the component schema path",
 			"type": "object",
 			"properties": {
@@ -106,7 +106,60 @@
 			},
 			"additionalProperties": false
 		},
-		"Manifest": {
+		"BootSubschema": {
+			"title": "finsemble",
+			"description": "SYSTEM",
+			"type": "object",
+			"properties": {
+				"applicationRoot": {
+					"type": "string",
+					"format": "uri"
+				},
+				"moduleRoot": {
+					"type": "string"
+				},
+				"servicesRoot": {
+					"type": "string"
+				},
+				"thirdPartyRoot": {
+					"type": "string"
+				},
+				"configVersion": {
+					"type": "string"
+				},
+				"configSchemaURL": {
+					"type": "string"
+				},
+				"notificationURL": {
+					"type": "string"
+				},
+				"bootConfig": {
+					"$ref": "#/definitions/boot_config"
+				},
+				"router": {
+					"$ref": "#/definitions/router"
+				},
+				"bootTasks": {
+					"$ref": "#/definitions/bootTasks"
+				},
+				"system": {
+					"$ref": "#/definitions/system"
+				}
+			},
+			"required": [
+				"applicationRoot",
+				"moduleRoot",
+				"servicesRoot",
+				"thirdPartyRoot",
+				"configVersion",
+				"configSchemaURL",
+				"notificationURL",
+				"bootConfig",
+				"bootTasks",
+				"system"
+			]
+		},
+		"ManifestSubschema": {
 			"type": "object",
 			"properties": {
 				"devtools_port": {
@@ -151,7 +204,7 @@
 					}
 				},
 				"finsemble": {
-					"$ref": "#/definitions/Finsemble_Config"
+					"$ref": "#/definitions/FinsembleSubschema"
 				}
 			},
 			"required": [
@@ -159,7 +212,7 @@
 				"finsemble"
 			]
 		},
-		"Finsemble_Config": {
+		"FinsembleSubschema": {
 			"title": "finsemble",
 			"description": "this is the finsembe schema path",
 			"type": "object",
@@ -172,6 +225,10 @@
 					"type": "string",
 					"format": "uri",
 					"default": "https://localhost:3375"
+				},
+				"authentication": {
+					"description": "This is where the authentication profiles are kept. There can be an authentication profile if authentication is enabled through the special “STARTUP” profile, but they can also be used independently by components for oauth.",
+					"type": "object"
 				},
 				"moduleRoot": {
 					"description": "(PUBLIC) Where you are serving the Finsemble core library from. This is important for resolving URLs internally.",
@@ -208,7 +265,7 @@
 					"type": "object",
 					"properties": {
 						"Blank Template": {
-							"$ref": "#/definitions/object_29"
+							"$ref": "#/definitions/blankWorkspaceTemplate"
 						}
 					}
 				},
@@ -276,7 +333,7 @@
 					"type": "object",
 					"properties": {
 						"distributedStore": {
-							"$ref": "#/definitions/object_21"
+							"$ref": "#/definitions/distributedStoreRecord"
 						},
 						"launcher": {
 							"title": "launcher",
@@ -295,16 +352,108 @@
 							]
 						},
 						"assimilation": {
-							"$ref": "#/definitions/object_48"
+							"$ref": "#/definitions/serviceAssimilationConfig"
 						},
 						"docking": {
-							"$ref": "#/definitions/object_22"
+							"title": "docking",
+							"description": "Configs specific to the docking service",
+							"type": "object",
+							"properties": {
+								"enabled": {
+									"type": "boolean"
+								},
+								"groupTileBuffer": {
+									"type": "number"
+								},
+								"headerHeight": {
+									"type": "number"
+								},
+								"MINIMUM_WIDTH": {
+									"type": "number"
+								},
+								"requireRectangularityForGroupResize": {
+									"type": "boolean"
+								},
+								"undockDisbandsEntireGroup": {
+									"type": "boolean"
+								},
+								"fillHolesOnUndock": {
+									"type": "boolean"
+								},
+								"tabbing": {
+									"$ref": "#/definitions/serviceAssimilationConfig"
+								},
+								"tiling": {
+									"$ref": "#/definitions/serviceAssimilationConfig"
+								}
+							},
+							"required": [
+								"enabled",
+								"groupTileBuffer",
+								"headerHeight",
+								"MINIMUM_WIDTH",
+								"requireRectangularityForGroupResize",
+								"undockDisbandsEntireGroup",
+								"fillHolesOnUndock",
+								"tabbing",
+								"tiling"
+							]
 						},
 						"logger": {
-							"$ref": "#/definitions/object_23"
+							"title": "logger",
+							"type": "object",
+							"properties": {
+								"hotkeyShowCentralLogger": {
+									"$ref": "#/definitions/array_01"
+								}
+							},
+							"additionalProperties": false
 						},
 						"storage": {
-							"$ref": "#/definitions/object_24"
+							"title": "storage",
+							"type": "object",
+							"properties": {
+								"defaultStorage": {
+									"type": "string"
+								},
+								"topicToDataStoreAdapters": {
+									"title": "topicToDataStoreAdapters",
+									"type": "object",
+									"properties": {
+										"finsemble": {
+											"type": "string"
+										},
+										"finsemble.workspace": {
+											"type": "string"
+										},
+										"finsemble.workspace.cache": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"finsemble",
+										"finsemble.workspace",
+										"finsemble.workspace.cache"
+									]
+								},
+								"dataStoreAdapters": {
+									"title": "dataStoreAdapters",
+									"type": "object",
+									"properties": {
+										"LocalStorageAdapter": {
+											"type": "string"
+										},
+										"IndexedDBAdapter": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"required": [
+								"defaultStorage",
+								"topicToDataStoreAdapters",
+								"dataStoreAdapters"
+							]
 						}
 					}
 				},
@@ -372,7 +521,7 @@
 					"description": "(PUBLIC)",
 					"type": "array",
 					"items": {
-						"$ref": "#/definitions/object_29"
+						"$ref": "#/definitions/blankWorkspaceTemplate"
 					}
 				},
 				"components": {
@@ -419,59 +568,6 @@
 			],
 			"additionalProperties": false
 		},
-		"Finsemble_Boot_Config": {
-			"title": "finsemble",
-			"description": "SYSTEM",
-			"type": "object",
-			"properties": {
-				"applicationRoot": {
-					"type": "string",
-					"format": "uri"
-				},
-				"moduleRoot": {
-					"type": "string"
-				},
-				"servicesRoot": {
-					"type": "string"
-				},
-				"thirdPartyRoot": {
-					"type": "string"
-				},
-				"configVersion": {
-					"type": "string"
-				},
-				"configSchemaURL": {
-					"type": "string"
-				},
-				"notificationURL": {
-					"type": "string"
-				},
-				"bootConfig": {
-					"$ref": "#/definitions/boot_config"
-				},
-				"router": {
-					"$ref": "#/definitions/router"
-				},
-				"bootTasks": {
-					"$ref": "#/definitions/bootTasks"
-				},
-				"system": {
-					"$ref": "#/definitions/system"
-				}
-			},
-			"required": [
-				"applicationRoot",
-				"moduleRoot",
-				"servicesRoot",
-				"thirdPartyRoot",
-				"configVersion",
-				"configSchemaURL",
-				"notificationURL",
-				"bootConfig",
-				"bootTasks",
-				"system"
-			]
-		},
 		"manifestFileFinsemble": {
 			"title": "finsemble",
 			"description": "this is the finsembe schema path",
@@ -511,7 +607,7 @@
 					"type": "object",
 					"properties": {
 						"Blank Template": {
-							"$ref": "#/definitions/object_29"
+							"$ref": "#/definitions/blankWorkspaceTemplate"
 						}
 					}
 				},
@@ -688,7 +784,7 @@
 							"$ref": "#/definitions/service"
 						},
 						{
-							"$ref": "#/definitions/object_40"
+							"$ref": "#/definitions/webPreferences"
 						},
 						{
 							"$ref": "#/definitions/object_43"
@@ -699,7 +795,39 @@
 					]
 				},
 				"foreign": {
-					"$ref": "#/definitions/foreign"
+					"title": "foreign",
+					"type": "object",
+					"properties": {
+						"agentLabel": {
+							"type": "string"
+						},
+						"clients": {
+							"title": "clients",
+							"type": "object",
+							"properties": {
+								"dialogManager": {
+									"title": "dialogManager",
+									"type": "object",
+									"properties": {
+										"isDialog": {
+											"type": "boolean"
+										}
+									},
+									"additionalProperties": false
+								}
+							},
+							"additionalProperties": false
+						},
+						"services": {
+							"type": "object",
+							"additionalProperties": {
+								"$ref": "#/definitions/foreign_services"
+							}
+						},
+						"components": {
+							"$ref": "#/definitions/foreign_components"
+						}
+					}
 				},
 				"childWindowOptions": {
 					"$ref": "#/definitions/component"
@@ -776,22 +904,15 @@
 					]
 				},
 				"window": {
-					"anyOf": [
-						{
-							"$ref": "#/definitions/object_06"
-						},
-						{
-							"$ref": "#/definitions/component_window"
-						}
-					]
+					"$ref": "#/definitions/loggerServiceWindow"
 				},
 				"config": {
 					"anyOf": [
 						{
-							"$ref": "#/definitions/object_47"
+							"$ref": "#/definitions/serviceWindowServiceConfig"
 						},
 						{
-							"$ref": "#/definitions/object_48"
+							"$ref": "#/definitions/serviceAssimilationConfig"
 						}
 					]
 				},
@@ -825,67 +946,6 @@
 				"file"
 			],
 			"additionalProperties": false
-		},
-		"object_01": {
-			"type": "object",
-			"properties": {
-				"name": {
-					"type": "string"
-				},
-				"url": {
-					"type": "string",
-					"format": "uri"
-				},
-				"uuid": {
-					"type": "string"
-				},
-				"requireHandshake": {
-					"type": "boolean"
-				},
-				"applicationIcon": {
-					"type": "string",
-					"format": "uri"
-				},
-				"defaultTop": {
-					"type": "number"
-				},
-				"defaultLeft": {
-					"type": "number"
-				},
-				"defaultHeight": {
-					"type": "number"
-				},
-				"defaultWidth": {
-					"type": "number"
-				},
-				"showTaskbarIcon": {
-					"type": "boolean"
-				},
-				"autoShow": {
-					"type": "boolean"
-				},
-				"frame": {
-					"type": "boolean"
-				},
-				"resizable": {
-					"type": "boolean"
-				},
-				"maximizable": {
-					"type": "boolean"
-				},
-				"delay_connection": {
-					"type": "boolean"
-				},
-				"contextMenu": {
-					"type": "boolean"
-				},
-				"cornerRounding": {
-					"$ref": "#/definitions/component_window"
-				},
-				"alwaysOnTop": {
-					"type": "boolean"
-				}
-			}
 		},
 		"startup_app": {
 			"description": "Manifest property for the initial startup app, which reference Finemble's System Manager.",
@@ -990,34 +1050,6 @@
 			},
 			"additionalProperties": false
 		},
-		"object_03": {
-			"title": "transportSettings",
-			"description": "The specific setting for certain transports.",
-			"type": "object",
-			"properties": {
-				"FinsembleTransport": {
-					"title": "FinsembleTransport",
-					"description": " Configuration for the FinsembleTransport (IAC) if choosen as the communication mechanism for cross-domain components. IAC uses WebSocket as its communication protocol.",
-					"type": "object",
-					"properties": {
-						"serverAddress": {
-							"description": "URI for the WebSocket server. To use a secure connection, use 'wss://localhost.chartiq.com:3376'",
-							"type": "string",
-							"format": "uri",
-							"default": "ws://127.0.0.1:3376"
-						}
-					},
-					"required": [
-						"serverAddress"
-					]
-				}
-			},
-			"required": [
-				"FinsembleTransport"
-			],
-			"default": {
-			}
-		},
 		"bootTasks": {
 			"title": "bootTasks",
 			"description": "(PRIVATE) Startup configutation of internal boot tasks. ",
@@ -1089,12 +1121,40 @@
 					"default": "SharedWorker"
 				},
 				"transportSettings": {
-					"$ref": "#/definitions/object_03"
+					"$ref": "#/definitions/transportSettings"
 				}
 			},
 			"additionalProperties": false
 		},
-		"object_06": {
+		"transportSettings": {
+			"title": "transportSettings",
+			"description": "The specific setting for certain transports.",
+			"type": "object",
+			"properties": {
+				"FinsembleTransport": {
+					"title": "FinsembleTransport",
+					"description": " Configuration for the FinsembleTransport (IAC) if choosen as the communication mechanism for cross-domain components. IAC uses WebSocket as its communication protocol.",
+					"type": "object",
+					"properties": {
+						"serverAddress": {
+							"description": "URI for the WebSocket server. To use a secure connection, use 'wss://localhost.chartiq.com:3376'",
+							"type": "string",
+							"format": "uri",
+							"default": "ws://127.0.0.1:3376"
+						}
+					},
+					"required": [
+						"serverAddress"
+					]
+				}
+			},
+			"required": [
+				"FinsembleTransport"
+			],
+			"default": {
+			}
+		},
+		"loggerServiceWindow": {
 			"title": "window",
 			"type": "object",
 			"properties": {
@@ -1276,46 +1336,6 @@
 			],
 			"additionalProperties": false
 		},
-		"object_10": {
-			"description": "(PUBLIC)",
-			"type": "object"
-		},
-		"object_12": {
-			"title": "Window",
-			"type": "object",
-			"properties": {
-				"executeJavaScript": {
-					"type": "boolean"
-				},
-				"webPreferences": {
-					"$ref": "#/definitions/object_40"
-				}
-			}
-		},
-		"object_13": {
-			"title": "untrusted",
-			"type": "object",
-			"properties": {
-				"System": {
-					"title": "System",
-					"type": "object",
-					"properties": {
-						"clearCache": {
-							"type": "boolean"
-						},
-						"exit": {
-							"type": "boolean"
-						},
-						"launchExternalProcess": {
-							"type": "boolean"
-						}
-					}
-				},
-				"Window": {
-					"$ref": "#/definitions/object_12"
-				}
-			}
-		},
 		"security_policies": {
 			"title": "securityPolicies",
 			"description": "(PUBLIC)",
@@ -1325,14 +1345,80 @@
 					"type": "string"
 				},
 				"trusted": {
-					"$ref": "#/definitions/object_10"
+					"$ref": "#/definitions/genericObject"
 				},
 				"untrusted": {
-					"$ref": "#/definitions/object_13"
+					"title": "untrusted",
+					"type": "object",
+					"properties": {
+						"System": {
+							"title": "System",
+							"type": "object",
+							"properties": {
+								"clearCache": {
+									"type": "boolean"
+								},
+								"exit": {
+									"type": "boolean"
+								},
+								"launchExternalProcess": {
+									"type": "boolean"
+								}
+							}
+						},
+						"Window": {
+							"title": "Window",
+							"type": "object",
+							"properties": {
+								"executeJavaScript": {
+									"type": "boolean"
+								},
+								"webPreferences": {
+									"$ref": "#/definitions/webPreferences"
+								}
+							}
+						}
+					}
 				}
 			}
 		},
-		"object_15": {
+		"launcherFoldersAndDefinitions": {
+			"title": "foundation",
+			"type": "object",
+			"properties": {
+				"appFolders": {
+					"$ref": "#/definitions/launcherListsAndFolders"
+				},
+				"appDefinitions": {
+					"$ref": "#/definitions/genericObject"
+				}
+			}
+		},
+		"launcherListsAndFolders": {
+			"title": "appFolders",
+			"type": "object",
+			"properties": {
+				"list": {
+					"$ref": "#/definitions/array_01"
+				},
+				"folders": {
+					"$ref": "#/definitions/launcherAndFavorites"
+				}
+			}
+		},
+		"launcherAndFavorites": {
+			"title": "folders",
+			"type": "object",
+			"properties": {
+				"Advanced App Launcher": {
+					"$ref": "#/definitions/appDefinition"
+				},
+				"Favorites": {
+					"$ref": "#/definitions/appDefinition"
+				}
+			}
+		},
+		"appDefinition": {
 			"type": "object",
 			"properties": {
 				"icon": {
@@ -1368,81 +1454,7 @@
 				}
 			}
 		},
-		"object_16": {
-			"title": "folders",
-			"type": "object",
-			"properties": {
-				"Advanced App Launcher": {
-					"$ref": "#/definitions/object_15"
-				},
-				"Favorites": {
-					"$ref": "#/definitions/object_15"
-				}
-			}
-		},
-		"object_17": {
-			"title": "appFolders",
-			"type": "object",
-			"properties": {
-				"list": {
-					"$ref": "#/definitions/array_01"
-				},
-				"folders": {
-					"$ref": "#/definitions/object_16"
-				}
-			}
-		},
-		"object_18": {
-			"title": "foundation",
-			"type": "object",
-			"properties": {
-				"appFolders": {
-					"$ref": "#/definitions/object_17"
-				},
-				"appDefinitions": {
-					"$ref": "#/definitions/object_10"
-				}
-			}
-		},
-		"object_19": {
-			"title": "default",
-			"type": "object",
-			"properties": {
-				"activeLauncherTags": {
-					"$ref": "#/definitions/array_02"
-				},
-				"filterText": {
-					"type": "string"
-				},
-				"filterTags": {
-					"$ref": "#/definitions/array_02"
-				},
-				"activeFolder": {
-					"type": "string"
-				},
-				"sortBy": {
-					"type": "string"
-				}
-			}
-		},
-		"object_20": {
-			"type": "object",
-			"properties": {
-				"name": {
-					"type": "string"
-				},
-				"preferPreviousState": {
-					"type": "boolean"
-				},
-				"foundation": {
-					"$ref": "#/definitions/object_18"
-				},
-				"default": {
-					"$ref": "#/definitions/object_19"
-				}
-			}
-		},
-		"object_21": {
+		"distributedStoreRecord": {
 			"title": "distributedStore",
 			"type": "object",
 			"properties": {
@@ -1451,7 +1463,39 @@
 					"description": "Foundations for any stores which should be seeded on startup",
 					"type": "array",
 					"items": {
-						"$ref": "#/definitions/object_20"
+						"type": "object",
+						"properties": {
+							"name": {
+								"type": "string"
+							},
+							"preferPreviousState": {
+								"type": "boolean"
+							},
+							"foundation": {
+								"$ref": "#/definitions/launcherFoldersAndDefinitions"
+							},
+							"default": {
+								"title": "default",
+								"type": "object",
+								"properties": {
+									"activeLauncherTags": {
+										"$ref": "#/definitions/array_02"
+									},
+									"filterText": {
+										"type": "string"
+									},
+									"filterTags": {
+										"$ref": "#/definitions/array_02"
+									},
+									"activeFolder": {
+										"type": "string"
+									},
+									"sortBy": {
+										"type": "string"
+									}
+								}
+							}
+						}
 					}
 				}
 			},
@@ -1459,188 +1503,7 @@
 				"initialStores"
 			]
 		},
-		"object_22": {
-			"title": "docking",
-			"description": "Configs specific to the docking service",
-			"type": "object",
-			"properties": {
-				"enabled": {
-					"type": "boolean"
-				},
-				"groupTileBuffer": {
-					"type": "number"
-				},
-				"headerHeight": {
-					"type": "number"
-				},
-				"MINIMUM_WIDTH": {
-					"type": "number"
-				},
-				"requireRectangularityForGroupResize": {
-					"type": "boolean"
-				},
-				"undockDisbandsEntireGroup": {
-					"type": "boolean"
-				},
-				"fillHolesOnUndock": {
-					"type": "boolean"
-				},
-				"tabbing": {
-					"$ref": "#/definitions/object_48"
-				},
-				"tiling": {
-					"$ref": "#/definitions/object_48"
-				}
-			},
-			"required": [
-				"enabled",
-				"groupTileBuffer",
-				"headerHeight",
-				"MINIMUM_WIDTH",
-				"requireRectangularityForGroupResize",
-				"undockDisbandsEntireGroup",
-				"fillHolesOnUndock",
-				"tabbing",
-				"tiling"
-			]
-		},
-		"object_23": {
-			"title": "logger",
-			"type": "object",
-			"properties": {
-				"hotkeyShowCentralLogger": {
-					"$ref": "#/definitions/array_01"
-				}
-			},
-			"additionalProperties": false
-		},
-		"object_24": {
-			"title": "storage",
-			"type": "object",
-			"properties": {
-				"defaultStorage": {
-					"type": "string"
-				},
-				"topicToDataStoreAdapters": {
-					"title": "topicToDataStoreAdapters",
-					"type": "object",
-					"properties": {
-						"finsemble": {
-							"type": "string"
-						},
-						"finsemble.workspace": {
-							"type": "string"
-						},
-						"finsemble.workspace.cache": {
-							"type": "string"
-						}
-					},
-					"required": [
-						"finsemble",
-						"finsemble.workspace",
-						"finsemble.workspace.cache"
-					]
-				},
-				"dataStoreAdapters": {
-					"title": "dataStoreAdapters",
-					"type": "object",
-					"properties": {
-						"LocalStorageAdapter": {
-							"type": "string"
-						},
-						"IndexedDBAdapter": {
-							"type": "string"
-						}
-					}
-				}
-			},
-			"required": [
-				"defaultStorage",
-				"topicToDataStoreAdapters",
-				"dataStoreAdapters"
-			]
-		},
-		"object_25": {
-			"title": "servicesConfig",
-			"description": "Configurations that override the defaults for Finsemble's built-in services.",
-			"type": "object",
-			"properties": {
-				"distributedStore": {
-					"$ref": "#/definitions/object_21"
-				},
-				"launcher": {
-					"title": "launcher",
-					"type": "object",
-					"properties": {
-						"staggerPixels": {
-							"type": "number"
-						},
-						"unknownComponent": {
-							"type": "string"
-						}
-					},
-					"required": [
-						"staggerPixels",
-						"unknownComponent"
-					]
-				},
-				"assimilation": {
-					"$ref": "#/definitions/object_48"
-				},
-				"docking": {
-					"$ref": "#/definitions/object_22"
-				},
-				"logger": {
-					"$ref": "#/definitions/object_23"
-				},
-				"storage": {
-					"$ref": "#/definitions/object_24"
-				}
-			}
-		},
-		"object_26": {
-			"title": "foreign",
-			"type": "object",
-			"properties": {
-				"components": {
-					"anyOf": [
-						{
-							"$ref": "#/definitions/array_01"
-						},
-						{
-							"$ref": "#/definitions/component_names"
-						}
-					]
-				}
-			}
-		},
-		"object_27": {
-			"type": "object",
-			"properties": {
-				"agentLabel": {
-					"type": "string"
-				},
-				"services": {
-					"$ref": "#/definitions/array_01"
-				}
-			}
-		},
-		"object_28": {
-			"title": "splinteringConfig",
-			"type": "object",
-			"properties": {
-				"comment": {
-					"type": "string"
-				},
-				"enabled": {
-					"type": "boolean"
-				},
-				"splinterAgents": {
-					"$ref": "#/definitions/array_03"
-				}
-			}
-		},
-		"object_29": {
+		"blankWorkspaceTemplate": {
 			"title": "Blank Template",
 			"type": "object",
 			"properties": {
@@ -1657,7 +1520,7 @@
 					"type": "string"
 				},
 				"groups": {
-					"$ref": "#/definitions/object_10"
+					"$ref": "#/definitions/genericObject"
 				},
 				"windowData": {
 					"$ref": "#/definitions/array_02"
@@ -1681,48 +1544,6 @@
 					}
 				}
 			}
-		},
-		"object_32": {
-			"title": "clients",
-			"type": "object",
-			"properties": {
-				"dialogManager": {
-					"title": "dialogManager",
-					"type": "object",
-					"properties": {
-						"isDialog": {
-							"type": "boolean"
-						}
-					},
-					"additionalProperties": false
-				}
-			},
-			"additionalProperties": false
-		},
-		"foreign": {
-			"title": "foreign",
-			"type": "object",
-			"properties": {
-				"agentLabel": {
-					"type": "string"
-				},
-				"clients": {
-					"$ref": "#/definitions/object_32"
-				},
-				"services": {
-					"type": "object",
-					"additionalProperties": {
-						"$ref": "#/definitions/foreign_services"
-					}
-				},
-				"components": {
-					"$ref": "#/definitions/foreign_components"
-				}
-			}
-		},
-		"object_34": {
-			"title": "checkpoints",
-			"type": "object"
 		},
 		"component_window": {
 			"title": "window",
@@ -1800,6 +1621,18 @@
 						},
 						"maximizable": {
 							"type": "boolean"
+						},
+						"cornerRounding": {
+							"$ref": "#/definitions/component_window"
+						},
+						"opacity": {
+							"type": "number"
+						},
+						"resizable": {
+							"type": "boolean"
+						},
+						"alwaysOnTop": {
+							"type": "boolean"
 						}
 					}
 				},
@@ -1845,34 +1678,7 @@
 				"type": "string"
 			}
 		},
-		"object_39": {
-			"title": "options",
-			"type": "object",
-			"properties": {
-				"cornerRounding": {
-					"$ref": "#/definitions/component_window"
-				},
-				"opacity": {
-					"type": "number"
-				},
-				"showTaskbarIcon": {
-					"type": "boolean"
-				},
-				"autoShow": {
-					"type": "boolean"
-				},
-				"resizable": {
-					"type": "boolean"
-				},
-				"alwaysOnTop": {
-					"type": "boolean"
-				},
-				"smallWindow": {
-					"type": "boolean"
-				}
-			}
-		},
-		"object_40": {
+		"webPreferences": {
 			"type": "object",
 			"properties": {
 				"displayName": {
@@ -1889,7 +1695,7 @@
 				}
 			}
 		},
-		"object_41": {
+		"componentForeignComponentsWindowManager": {
 			"title": "Window Manager",
 			"type": "object",
 			"properties": {
@@ -1987,7 +1793,8 @@
 					}
 				},
 				"checkpoints": {
-					"$ref": "#/definitions/object_34"
+					"title": "checkpoints",
+					"type": "object"
 				}
 			},
 			"additionalProperties": false
@@ -2001,7 +1808,7 @@
 			},
 			"additionalProperties": false
 		},
-		"object_47": {
+		"serviceWindowServiceConfig": {
 			"title": "config",
 			"type": "object",
 			"properties": {
@@ -2069,14 +1876,14 @@
 					"type": "boolean"
 				},
 				"tabbing": {
-					"$ref": "#/definitions/object_48"
+					"$ref": "#/definitions/serviceAssimilationConfig"
 				},
 				"tiling": {
-					"$ref": "#/definitions/object_48"
+					"$ref": "#/definitions/serviceAssimilationConfig"
 				}
 			}
 		},
-		"object_48": {
+		"serviceAssimilationConfig": {
 			"type": "object",
 			"properties": {
 				"enabled": {
@@ -2241,13 +2048,37 @@
 			"items": {
 				"anyOf": [
 					{
-						"$ref": "#/definitions/object_26"
+						"title": "foreign",
+						"type": "object",
+						"properties": {
+							"components": {
+								"anyOf": [
+									{
+										"$ref": "#/definitions/array_01"
+									},
+									{
+										"$ref": "#/definitions/component_names"
+									}
+								]
+							}
+						}
 					},
 					{
-						"$ref": "#/definitions/object_27"
+						"type": "object",
+						"properties": {
+							"agentLabel": {
+								"type": "string"
+							},
+							"services": {
+								"$ref": "#/definitions/array_01"
+							}
+						}
 					}
 				]
 			}
+		},
+		"genericObject": {
+			"type": "object"
 		},
 		"booleanOrStringArray": {
 			"type": [
