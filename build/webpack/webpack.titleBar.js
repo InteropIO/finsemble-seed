@@ -34,15 +34,19 @@ module.exports = {
 	module: {
 		rules: [
 			{
-				test: /\.css$/,
-				use: ["style-loader", "css-loader"],
+				test: /\.s?css$/i,
+				use: [
+					"style-loader",
+					{
+						loader: "css-loader",
+						options: {
+							sourceMap: env !== "production",
+						},
+					},
+				],
 			},
 			{
-				test: /\.scss$/,
-				use: ["style-loader", "css-loader", "sass-loader"],
-			},
-			{
-				test: /\.png|img$/,
+				test: /\.(png|img|ttf|ottf|eot|woff|woff2)$/,
 				loader: "url-loader",
 			},
 			{
@@ -51,31 +55,6 @@ module.exports = {
 					test: /\.jsx?$/,
 				},
 				use: ["@svgr/webpack"],
-			},
-			{
-				test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-				loader:
-					"url-loader?limit=65000&mimetype=image/svg+xml&name=/public/fonts/[name].[ext]",
-			},
-			{
-				test: /\.woff$/,
-				loader:
-					"url-loader?limit=65000&mimetype=application/font-woff&name=/public/fonts/[name].[ext]",
-			},
-			{
-				test: /\.woff2$/,
-				loader:
-					"url-loader?limit=65000&mimetype=application/font-woff2&name=/public/fonts/[name].[ext]",
-			},
-			{
-				test: /\.[ot]tf$/,
-				loader:
-					"url-loader?limit=65000&mimetype=application/octet-stream&name=/public/fonts/[name].[ext]",
-			},
-			{
-				test: /\.eot$/,
-				loader:
-					"url-loader?limit=65000&mimetype=application/vnd.ms-fontobject&name=/public/fonts/[name].[ext]",
 			},
 			{
 				test: /semver\.browser\.js/,

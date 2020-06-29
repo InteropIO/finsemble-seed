@@ -59,7 +59,7 @@ module.exports = class WebpackDefaults {
 						],
 					},
 					{
-						test: /\.png|img$/,
+						test: /\.(png|img|ttf|ottf|eot|woff|woff2)$/,
 						loader: "url-loader",
 					},
 					{
@@ -71,28 +71,7 @@ module.exports = class WebpackDefaults {
 					},
 					{
 						test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-						loader:
-							"url-loader?limit=65000&mimetype=image/svg+xml&name=/public/fonts/[name].[ext]",
-					},
-					{
-						test: /\.woff$/,
-						loader:
-							"url-loader?limit=65000&mimetype=application/font-woff&name=/public/fonts/[name].[ext]",
-					},
-					{
-						test: /\.woff2$/,
-						loader:
-							"url-loader?limit=65000&mimetype=application/font-woff2&name=/public/fonts/[name].[ext]",
-					},
-					{
-						test: /\.[ot]tf$/,
-						loader:
-							"url-loader?limit=65000&mimetype=application/octet-stream&name=/public/fonts/[name].[ext]",
-					},
-					{
-						test: /\.eot$/,
-						loader:
-							"url-loader?limit=65000&mimetype=application/vnd.ms-fontobject&name=/public/fonts/[name].[ext]",
+						loader: "url-loader",
 					},
 					{
 						test: /semver\.browser\.js/,
