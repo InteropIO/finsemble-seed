@@ -46,15 +46,8 @@ module.exports = {
 				],
 			},
 			{
-				test: /\.(png|img|ttf|ottf|eot|woff|woff2)$/,
+				test: /\.(png|img|ttf|ottf|eot|woff|woff2|svg)$/,
 				loader: "url-loader",
-			},
-			{
-				test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-				issuer: {
-					test: /\.jsx?$/,
-				},
-				use: ["@svgr/webpack"],
 			},
 			{
 				test: /semver\.browser\.js/,
