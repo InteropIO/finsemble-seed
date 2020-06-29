@@ -21,20 +21,19 @@ FSBL.debug = true;
 /**
  * This component displays on right-click in your application's system tray icon.
  * Feel free to add/remove content or react components.
- * The SystemTrayComponentShell will automatically adjust the height and width of the window as necessary to display its content.
+ * The SystemTrayComponentShell will automatically adjust the height of the window as necessary to display its content.
+ * Use the component's config setting to adjust the window width if necessary.
  * This component will be hidden when it loses focus but will remain invisibly active.
  */
 const SystemTrayComponent = () => (
-	<SystemTrayComponentShell padding={{ width: 80 }}>
-		<div className="menu">
-			<Preferences />
-			<SystemLog />
-			<CentralLogger />
-			<Documentation />
-			<Restart />
-			<Reset />
-			<Quit />
-		</div>
+	<SystemTrayComponentShell>
+		<Preferences />
+		<SystemLog />
+		<CentralLogger />
+		<Documentation />
+		<Restart />
+		<Reset />
+		<Quit />
 	</SystemTrayComponentShell>
 );
 

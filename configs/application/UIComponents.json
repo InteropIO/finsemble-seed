@@ -586,9 +586,8 @@
 			"window": {
 				"url": "$applicationRoot/components/systemTrayComponent/systemTrayComponent.html",
 				"affinity": "systemComponents",
-				"frame": false,
-				"width": 70,
-				"height": 70,
+				"width": 150,
+				"height": 40,
 				"options": {
 					"autoShow": false,
 					"resizable": false,
