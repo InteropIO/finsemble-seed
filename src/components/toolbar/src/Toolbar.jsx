@@ -5,7 +5,7 @@
 
 import React from "react";
 import ReactDOM from "react-dom";
-import { FinsembleProvider } from "@chartiq/finsemble-ui/react/components";
+import { FinsembleProvider } from "@chartiq/finsemble-ui/react/components/FinsembleProvider";
 import {
 	ToolbarShell,
 	FavoritesShell,
@@ -14,12 +14,12 @@ import {
 	MinimizeAll,
 	AutoArrange,
 	Search,
-	AppLauncher,
+	AdvancedAppLauncherMenu,
 	WorkspaceManagementMenu,
 	ToolbarSection,
-} from "@chartiq/finsemble-ui/react/components";
+} from "@chartiq/finsemble-ui/react/components/Toolbar";
 import { FileMenu } from "./FileMenu";
-import { useHotkey } from "@chartiq/finsemble-ui/react/hooks";
+import { useHotkey } from "@chartiq/finsemble-ui/react/hooks/useHotkey";
 import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../../assets/css/theme.css";
 
@@ -42,7 +42,7 @@ const Toolbar = () => {
 				<FileMenu />
 				<Search openHotkey={["ctrl", "alt", "f"]} />
 				<WorkspaceManagementMenu />
-				<AppLauncher />
+				<AdvancedAppLauncherMenu enableQuickComponents={true} />
 			</ToolbarSection>
 			<ToolbarSection className="center" hideBelowWidth={115}>
 				<div className="divider" />

@@ -4,8 +4,7 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"build:dev": "gulp build:dev --gulpfile=./gulpfile.js",
-		"build": "gulp build:dev --gulpfile=./gulpfile.js",
+		"build:seed": "gulp build:dev --gulpfile=./gulpfile.js",
 		"start": "gulp dev --gulpfile=./gulpfile.js",
 		"dev-fresh": "gulp dev:fresh --gulpfile=./gulpfile.js",
 		"dev:fresh": "gulp dev:fresh --gulpfile=./gulpfile.js",
@@ -42,7 +41,8 @@
 		"hadouken-js-adapter": "1.43.1",
 		"lodash.get": "4.4.2",
 		"react": "16.13.1",
-		"react-dom": "16.13.1"
+		"react-dom": "16.13.1",
+		"superagent": "5.2.2"
 	},
 	"devDependencies": {
 		"@babel/core": "7.6.4",
@@ -75,7 +75,7 @@
 		"style-loader": "1.2.1",
 		"ts-mocha": "6.0.0",
 		"tslint": "5.11.0",
-		"typescript": "3.2.4",
+		"typescript": "3.9.3",
 		"uglifyjs-webpack-plugin": "1.2.7",
 		"url-loader": "4.1.0",
 		"webpack": "4.43.0",

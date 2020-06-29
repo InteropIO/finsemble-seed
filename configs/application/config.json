@@ -1,6 +1,7 @@
 {
 	"$schema": "../schemas/finsemble.schema.json",
 	"accessibleLinker": true,
+	"authentication": {},
 	"servicesConfig": {
 		"distributedStore": {
 			"initialStores": [
