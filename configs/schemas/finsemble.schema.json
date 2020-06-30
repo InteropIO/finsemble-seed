@@ -4,6 +4,7 @@
 	"$ref": "#/definitions/FileSubschemas",
 	"definitions": {
 		"FileSubschemas": {
+			"description": "A set of \"Any of\" schemas mapping to the set of Finsemble's config files.  Supports VSCode Intellisense integration for each file. ",
 			"anyOf": [
 				{
 					"$ref": "#/definitions/ComponentsFileSubschema"
@@ -20,6 +21,7 @@
 			]
 		},
 		"ManifestFileSubschema": {
+			"description": "Subschema corresponding to the manifest file to suppport VSCode Intellisense.. ",
 			"type": "object",
 			"properties": {
 				"devtools_port": {
@@ -27,7 +29,7 @@
 					"type": "number"
 				},
 				"startup_app": {
-					"$ref": "#/definitions/startup_app"
+					"$ref": "#/definitions/manifestStartup_app"
 				},
 				"splashScreenImage": {
 					"description": "Manifest URL for splash screen to display on startup.",
@@ -64,7 +66,96 @@
 					}
 				},
 				"finsemble": {
-					"$ref": "#/definitions/manifestFileFinsemble"
+					"title": "finsemble",
+					"description": "this is the finsembe schema path",
+					"type": "object",
+					"properties": {
+						"$schema": {
+							"type": "string"
+						},
+						"applicationRoot": {
+							"description": "(PUBLIC) Should point to the root of your application. Finsemble will use this to build URLs internally.",
+							"type": "string",
+							"format": "uri",
+							"default": "https://localhost:3375"
+						},
+						"moduleRoot": {
+							"description": "(PUBLIC) Where you are serving the Finsemble core library from. This is important for resolving URLs internally.",
+							"type": "string",
+							"default": "https://localhost:3375/finsemble"
+						},
+						"servicesRoot": {
+							"description": "(PRIVATE) Default location of core services. ",
+							"type": "string",
+							"format": "uri"
+						},
+						"notificationURL": {
+							"type": "string",
+							"format": "uri"
+						},
+						"bootConfig": {
+							"$ref": "#/definitions/boot_config"
+						},
+						"router": {
+							"$ref": "#/definitions/router"
+						},
+						"workspaceTemplates": {
+							"title": "workspaceTemplates",
+							"type": "object",
+							"properties": {
+								"Blank Template": {
+									"$ref": "#/definitions/blankWorkspaceTemplate"
+								}
+							}
+						},
+						"configSchemaURL": {
+							"description": "(PUBLIC) URL of this schema.  Used for run-time verification of configuration. ",
+							"type": "string",
+							"format": "uri"
+						},
+						"importConfig": {
+							"description": "(PUBLIC) Defines an array of JSON URLs to be imported into the top-level finsemble object. Note that this will overwrite any existing config settings, with two exceptions:\r\n\r\nNew services defined under finsemble.services will be added to the list of existing services (as opposed to replacing the existing list of services).\r\n\r\nNew components defined under finsemble.components will be added to the list of existing components (as opposed to replacing the list of existing components).",
+							"type": "array",
+							"items": {
+								"type": "string",
+								"format": "uri"
+							},
+							"examples": [
+								[
+									"$applicationRoot/configs/application/UIComponents.json",
+									"$applicationRoot/configs/application/components.json"
+								]
+							]
+						},
+						"importThirdPartyConfig": {
+							"description": "(PUBLIC) This import is essentially the same as importConfig with one notable difference: the imported configuration settings cannot overwrite any existing settings. In this case, the settings for any potential overwrite will be discarded with a warning message written to the Config Service's log.",
+							"type": "array",
+							"items": [
+								{
+									"type": "string",
+									"format": "uri"
+								}
+							],
+							"additionalItems": false
+						},
+						"systemTrayIcon": {
+							"description": "(PUBLIC)",
+							"type": "string"
+						},
+						"systemTrayComponent": {
+							"description": "(PUBLIC)",
+							"type": "string"
+						},
+						"globalHotkeys": {
+							"description": "(PUBLIC)",
+							"type": "object"
+						}
+					},
+					"required": [
+						"applicationRoot",
+						"moduleRoot"
+					],
+					"additionalProperties": false
 				}
 			},
 			"required": [
@@ -73,7 +164,7 @@
 			]
 		},
 		"ComponentsFileSubschema": {
-			"description": "This is the component schema path",
+			"description": "Subschema corresponding to a file containing component config to suppport VSCode Intellisense.. ",
 			"type": "object",
 			"properties": {
 				"$schema": {
@@ -90,7 +181,7 @@
 			"additionalProperties": false
 		},
 		"ServicesFileSubschema": {
-			"description": "This is the component schema path",
+			"description": "Subschema corresponding to a file containing service config to suppport VSCode Intellisense.. ",
 			"type": "object",
 			"properties": {
 				"$schema": {
@@ -108,7 +199,7 @@
 		},
 		"BootSubschema": {
 			"title": "finsemble",
-			"description": "SYSTEM",
+			"description": "Subschema for config required to boot finsemble",
 			"type": "object",
 			"properties": {
 				"applicationRoot": {
@@ -160,6 +251,7 @@
 			]
 		},
 		"ManifestSubschema": {
+			"description": "Highest level subschema, including manifest and finsemble",
 			"type": "object",
 			"properties": {
 				"devtools_port": {
@@ -167,7 +259,7 @@
 					"type": "number"
 				},
 				"startup_app": {
-					"$ref": "#/definitions/startup_app"
+					"$ref": "#/definitions/manifestStartup_app"
 				},
 				"splashScreenImage": {
 					"description": "Manifest URL for splash screen to display on startup.",
@@ -214,7 +306,7 @@
 		},
 		"FinsembleSubschema": {
 			"title": "finsemble",
-			"description": "this is the finsembe schema path",
+			"description": "subschema for all finsemble config",
 			"type": "object",
 			"properties": {
 				"$schema": {
@@ -381,10 +473,22 @@
 									"type": "boolean"
 								},
 								"tabbing": {
-									"$ref": "#/definitions/serviceAssimilationConfig"
+									"type": "object",
+									"properties": {
+										"enabled": {
+											"type": "boolean",
+											"default": false
+										}
+									}
 								},
 								"tiling": {
-									"$ref": "#/definitions/serviceAssimilationConfig"
+									"type": "object",
+									"properties": {
+										"enabled": {
+											"type": "boolean",
+											"default": false
+										}
+									}
 								}
 							},
 							"required": [
@@ -395,7 +499,6 @@
 								"requireRectangularityForGroupResize",
 								"undockDisbandsEntireGroup",
 								"fillHolesOnUndock",
-								"tabbing",
 								"tiling"
 							]
 						},
@@ -404,7 +507,16 @@
 							"type": "object",
 							"properties": {
 								"hotkeyShowCentralLogger": {
-									"$ref": "#/definitions/array_01"
+									"description": "Sets the hotkey for showing the Central Logger. Leave this config out to disable the hotkey.",
+									"type": "array",
+									"items": {
+										"type": "string"
+									},
+									"default": [
+										"ctrl",
+										"shift",
+										"L"
+									]
 								}
 							},
 							"additionalProperties": false
@@ -568,96 +680,366 @@
 			],
 			"additionalProperties": false
 		},
-		"manifestFileFinsemble": {
-			"title": "finsemble",
-			"description": "this is the finsembe schema path",
+		"manifestStartup_app": {
+			"description": "Manifest property for the initial startup app, which reference Finemble's System Manager.",
 			"type": "object",
 			"properties": {
-				"$schema": {
+				"name": {
 					"type": "string"
 				},
-				"applicationRoot": {
-					"description": "(PUBLIC) Should point to the root of your application. Finsemble will use this to build URLs internally.",
-					"type": "string",
-					"format": "uri",
-					"default": "https://localhost:3375"
-				},
-				"moduleRoot": {
-					"description": "(PUBLIC) Where you are serving the Finsemble core library from. This is important for resolving URLs internally.",
-					"type": "string",
-					"default": "https://localhost:3375/finsemble"
-				},
-				"servicesRoot": {
-					"description": "(PRIVATE) Default location of core services. ",
+				"url": {
 					"type": "string",
 					"format": "uri"
 				},
-				"notificationURL": {
+				"uuid": {
+					"type": "string"
+				},
+				"requireHandshake": {
+					"type": "boolean"
+				},
+				"applicationIcon": {
 					"type": "string",
 					"format": "uri"
 				},
-				"bootConfig": {
-					"$ref": "#/definitions/boot_config"
+				"defaultTop": {
+					"type": "number"
 				},
-				"router": {
-					"$ref": "#/definitions/router"
+				"defaultLeft": {
+					"type": "number"
 				},
-				"workspaceTemplates": {
-					"title": "workspaceTemplates",
-					"type": "object",
-					"properties": {
-						"Blank Template": {
-							"$ref": "#/definitions/blankWorkspaceTemplate"
-						}
-					}
+				"defaultHeight": {
+					"type": "number"
 				},
-				"configSchemaURL": {
-					"description": "(PUBLIC) URL of this schema.  Used for run-time verification of configuration. ",
-					"type": "string",
-					"format": "uri"
+				"defaultWidth": {
+					"type": "number"
 				},
-				"importConfig": {
-					"description": "(PUBLIC) Defines an array of JSON URLs to be imported into the top-level finsemble object. Note that this will overwrite any existing config settings, with two exceptions:\r\n\r\nNew services defined under finsemble.services will be added to the list of existing services (as opposed to replacing the existing list of services).\r\n\r\nNew components defined under finsemble.components will be added to the list of existing components (as opposed to replacing the list of existing components).",
-					"type": "array",
-					"items": {
-						"type": "string",
-						"format": "uri"
-					},
-					"examples": [
-						[
-							"$applicationRoot/configs/application/UIComponents.json",
-							"$applicationRoot/configs/application/components.json"
-						]
-					]
+				"showTaskbarIcon": {
+					"type": "boolean"
 				},
-				"importThirdPartyConfig": {
-					"description": "(PUBLIC) This import is essentially the same as importConfig with one notable difference: the imported configuration settings cannot overwrite any existing settings. In this case, the settings for any potential overwrite will be discarded with a warning message written to the Config Service's log.",
-					"type": "array",
-					"items": [
-						{
-							"type": "string",
-							"format": "uri"
-						}
-					],
-					"additionalItems": false
+				"autoShow": {
+					"type": "boolean"
 				},
-				"systemTrayIcon": {
-					"description": "(PUBLIC)",
-					"type": "string"
+				"frame": {
+					"type": "boolean"
 				},
-				"systemTrayComponent": {
-					"description": "(PUBLIC)",
-					"type": "string"
+				"resizable": {
+					"type": "boolean"
 				},
-				"globalHotkeys": {
-					"description": "(PUBLIC)",
-					"type": "object"
+				"maximizable": {
+					"type": "boolean"
+				},
+				"delay_connection": {
+					"type": "boolean"
+				},
+				"contextMenu": {
+					"type": "boolean"
+				},
+				"cornerRounding": {
+					"$ref": "#/definitions/component_window"
+				},
+				"alwaysOnTop": {
+					"type": "boolean"
 				}
 			},
 			"required": [
-				"applicationRoot",
-				"moduleRoot"
+				"name",
+				"url",
+				"uuid"
+			]
+		},
+		"system": {
+			"title": "system",
+			"description": "Core configuration for system. Much of this is boot config.",
+			"type": "object",
+			"properties": {
+				"FSBLVersion": {
+					"type": "string"
+				},
+				"gitHash": {
+					"type": "string"
+				},
+				"finsembleLibraryPath": {
+					"type": "string"
+				},
+				"premiumRoot": {
+					"type": "string"
+				},
+				"systemTrayIcon": {
+					"type": "string"
+				},
+				"addFSBLWrappers": {
+					"type": "boolean"
+				},
+				"saveLogToFileOnShutDown": {
+					"type": "boolean"
+				},
+				"scheduledRestart": {
+					"type": "boolean"
+				},
+				"isolateCrossDomainComponents": {
+					"type": "boolean"
+				},
+				"requiredServicesConfig": {
+					"title": "requiredServicesConfig",
+					"description": "Core System Configuration that is typically never modified by users. ",
+					"type": "object",
+					"properties": {
+						"routerService": {
+							"type": "object",
+							"properties": {
+								"bootParams": {
+									"$ref": "#/definitions/bootParamsProperties"
+								},
+								"spawnAs": {
+									"type": "string"
+								},
+								"name": {
+									"type": "string"
+								},
+								"html": {
+									"type": "string"
+								},
+								"file": {
+									"type": "string"
+								}
+							},
+							"additionalProperties": false
+						},
+						"loggerService": {
+							"type": "object",
+							"properties": {
+								"bootParams": {
+									"$ref": "#/definitions/bootParamsProperties"
+								},
+								"spawnAs": {
+									"type": "string"
+								},
+								"name": {
+									"type": "string"
+								},
+								"html": {
+									"type": "string"
+								},
+								"file": {
+									"type": "string"
+								}
+							}
+						},
+						"dataStoreService": {
+							"type": "object",
+							"properties": {
+								"bootParams": {
+									"$ref": "#/definitions/bootParamsProperties"
+								},
+								"spawnAs": {
+									"type": "string"
+								},
+								"name": {
+									"type": "string"
+								},
+								"html": {
+									"type": "string"
+								},
+								"file": {
+									"type": "string"
+								}
+							},
+							"additionalProperties": false
+						},
+						"configService": {
+							"type": "object",
+							"properties": {
+								"bootParams": {
+									"$ref": "#/definitions/bootParamsProperties"
+								},
+								"spawnAs": {
+									"type": "string"
+								},
+								"name": {
+									"type": "string"
+								},
+								"html": {
+									"type": "string"
+								},
+								"file": {
+									"type": "string"
+								},
+								"changeApplicationStateBeforeLoad": {
+									"type": "string"
+								},
+								"changeApplicationStateAfterLoad": {
+									"type": "string"
+								}
+							},
+							"additionalProperties": false
+						}
+					},
+					"required": [
+						"routerService",
+						"loggerService",
+						"dataStoreService",
+						"configService"
+					],
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"FSBLVersion",
+				"gitHash",
+				"finsembleLibraryPath",
+				"premiumRoot",
+				"systemTrayIcon",
+				"addFSBLWrappers",
+				"saveLogToFileOnShutDown",
+				"scheduledRestart",
+				"isolateCrossDomainComponents",
+				"requiredServicesConfig"
 			],
+			"additionalProperties": false
+		},
+		"bootTasks": {
+			"title": "bootTasks",
+			"description": "Startup configutation of internal boot tasks. ",
+			"type": "object",
+			"properties": {
+				"initializeDeepLinkingTask": {
+					"$ref": "#/definitions/bootParams"
+				},
+				"initializeRouterTask": {
+					"$ref": "#/definitions/bootParams"
+				},
+				"initializeFinsemblePubsubTask": {
+					"$ref": "#/definitions/bootParams"
+				},
+				"initializeSystemStateHandersTask": {
+					"$ref": "#/definitions/bootParams"
+				},
+				"updateServiceLauncherConfigTask": {
+					"$ref": "#/definitions/bootParams"
+				},
+				"testTask_initializeSplinterAgentPool": {
+					"$ref": "#/definitions/bootParams"
+				},
+				"waitForAuthenticatedTask": {
+					"$ref": "#/definitions/bootParams"
+				},
+				"initializeSystemManagerAPITask": {
+					"$ref": "#/definitions/bootParams"
+				},
+				"startLoggerTask": {
+					"$ref": "#/definitions/bootParams"
+				},
+				"loadUserDefinedComponentsTask": {
+					"$ref": "#/definitions/bootParams"
+				},
+				"loadFDC3InstalledComponentsTask": {
+					"$ref": "#/definitions/bootParams"
+				},
+				"loadSystemTrayIconTask": {
+					"$ref": "#/definitions/bootParams"
+				},
+				"registerHotkeysTask": {
+					"$ref": "#/definitions/bootParams"
+				},
+				"setupSearchLauncherTask": {
+					"$ref": "#/definitions/bootParams"
+				},
+				"checkForScheduledRestartTask": {
+					"$ref": "#/definitions/bootParams"
+				}
+			},
+			"additionalProperties": {
+				"$ref": "#/definitions/bootParams"
+			}
+		},
+		"boot_config": {
+			"title": "bootConfig",
+			"description": "(PUBLIC) Boot/startup configuration parameter used by the System Manager.",
+			"type": "object",
+			"properties": {
+				"onErrorMakeSystemManagerVisible": {
+					"type": "boolean",
+					"default": true
+				},
+				"defaults": {
+					"title": "defaults",
+					"type": "object",
+					"properties": {
+						"startServiceTimeout": {
+							"type": "number",
+							"minimum": 0,
+							"maximum": 999999,
+							"default": 10000
+						},
+						"startComponentTimeout": {
+							"type": "number",
+							"minimum": 0,
+							"default": 15000
+						},
+						"startTaskTimeout": {
+							"type": "number",
+							"minimum": 0,
+							"maximum": 999999,
+							"default": 10000
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"additionalProperties": false
+		},
+		"bootParams": {
+			"description": "(PUBLIC) Startup boot parameters for services, components, and boot tasks",
+			"type": "object",
+			"properties": {
+				"bootParams": {
+					"$ref": "#/definitions/bootParamsProperties"
+				}
+			},
+			"additionalProperties": false
+		},
+		"bootParamsProperties": {
+			"title": "bootParams",
+			"description": "Boot parameter properties",
+			"type": "object",
+			"properties": {
+				"stage": {
+					"type": "string",
+					"enum": [
+						"microkernel",
+						"kernel",
+						"authentication",
+						"preuser",
+						"earlyuser",
+						"user"
+					]
+				},
+				"stopOnFailure": {
+					"type": "boolean"
+				},
+				"autoStart": {
+					"type": "boolean"
+				},
+				"condition": {
+					"type": "string"
+				},
+				"customFailureMessage": {
+					"type": "string"
+				},
+				"timeout": {
+					"type": "number"
+				},
+				"dependencies": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"checkpoints": {
+					"title": "checkpoints",
+					"type": "object"
+				}
+			},
 			"additionalProperties": false
 		},
 		"components": {
@@ -737,62 +1119,56 @@
 			"type": "object",
 			"properties": {
 				"bootParams": {
-					"$ref": "#/definitions/boot_params"
+					"$ref": "#/definitions/bootParamsProperties"
 				},
 				"window": {
 					"$ref": "#/definitions/component_window"
 				},
 				"component": {
-					"anyOf": [
-						{
-							"title": "component",
-							"type": "object",
-							"properties": {
-								"category": {
-									"type": "string"
-								},
-								"spawnOnStartup": {
-									"type": "boolean"
-								},
-								"spawnOnAllMonitors": {
-									"type": "boolean"
-								},
-								"canMinimize": {
-									"type": "boolean"
-								},
-								"canMaximize": {
-									"type": "boolean"
-								}
+					"type": "object",
+					"properties": {
+						"category": {
+							"type": "string"
+						},
+						"spawnOnStartup": {
+							"type": "boolean"
+						},
+						"spawnOnAllMonitors": {
+							"type": "boolean"
+						},
+						"canMinimize": {
+							"type": "boolean"
+						},
+						"canMaximize": {
+							"type": "boolean"
+						},
+						"allowQuickComponent": {
+							"type": "string"
+						},
+						"neededClients": {
+							"type": "array",
+							"items": {
+								"type": "string"
 							}
 						},
-						{
-							"title": "component",
-							"type": "object",
-							"properties": {
-								"allowQuickComponent": {
-									"type": "string"
-								},
-								"spawnOnStartup": {
-									"type": "boolean"
-								},
-								"category": {
-									"type": "string"
-								}
+						"displayName": {
+							"type": "string"
+						},
+						"spawnOnStartup": {
+							"type": "boolean"
+						},
+						"preload": {
+							"type": "string"
+						},
+						"spawnOnHotkey": {
+							"description": "Defines the hotkey",
+							"type": "array",
+							"items": {
+								"type": "string"
 							}
-						},
-						{
-							"$ref": "#/definitions/service"
-						},
-						{
-							"$ref": "#/definitions/webPreferences"
-						},
-						{
-							"$ref": "#/definitions/object_43"
-						},
-						{
-							"$ref": "#/definitions/object_44"
 						}
-					]
+					},
+					"additionalProperties": false
 				},
 				"foreign": {
 					"title": "foreign",
@@ -821,11 +1197,48 @@
 						"services": {
 							"type": "object",
 							"additionalProperties": {
-								"$ref": "#/definitions/foreign_services"
+								"title": "windowService",
+								"type": "object",
+								"properties": {
+									"global": {
+										"type": "boolean"
+									},
+									"allowSnapping": {
+										"type": "boolean"
+									},
+									"allowGrouping": {
+										"type": "boolean"
+									},
+									"allowAutoArrange": {
+										"type": "boolean"
+									},
+									"allowTabbing": {
+										"type": "boolean"
+									},
+									"allowTiling": {
+										"type": "boolean"
+									},
+									"allowMinimize": {
+										"type": "boolean"
+									},
+									"shouldRegister": {
+										"type": "boolean"
+									},
+									"manageWindowMovement": {
+										"type": "boolean"
+									},
+									"persistURL": {
+										"type": "boolean"
+									},
+									"addToWorkspace": {
+										"type": "boolean"
+									}
+								},
+								"additionalProperties": false
 							}
 						},
 						"components": {
-							"$ref": "#/definitions/foreign_components"
+							"type": "object"
 						}
 					}
 				},
@@ -878,10 +1291,11 @@
 			}
 		},
 		"service": {
+			"description": "Configuration for one service",
 			"type": "object",
 			"properties": {
 				"bootParams": {
-					"$ref": "#/definitions/boot_params"
+					"$ref": "#/definitions/bootParamsProperties"
 				},
 				"name": {
 					"type": "string"
@@ -904,12 +1318,125 @@
 					]
 				},
 				"window": {
-					"$ref": "#/definitions/loggerServiceWindow"
+					"title": "window",
+					"description": "Logger service's window config",
+					"type": "object",
+					"properties": {
+						"defaultWidth": {
+							"type": "number"
+						},
+						"defaultHeight": {
+							"type": "number"
+						},
+						"accelerator": {
+							"title": "accelerator",
+							"type": "object",
+							"properties": {
+								"zoom": {
+									"type": "boolean"
+								},
+								"reload": {
+									"type": "boolean"
+								},
+								"devtools": {
+									"type": "boolean"
+								}
+							}
+						},
+						"contextMenu": {
+							"type": "boolean"
+						}
+					}
 				},
 				"config": {
 					"anyOf": [
 						{
-							"$ref": "#/definitions/serviceWindowServiceConfig"
+							"title": "windowServiceConfig",
+							"description": "Service config specific to window service",
+							"type": "object",
+							"properties": {
+								"BUFFER_SIZE": {
+									"type": "number"
+								},
+								"RESIZE_EVENT_THROTTLE_PERIOD": {
+									"type": "number"
+								},
+								"MINIMUM_WIDTH": {
+									"type": "number"
+								},
+								"MINIMUM_HEIGHT": {
+									"type": "number"
+								},
+								"GROUP_MODE": {
+									"title": "GROUP_MODE",
+									"type": "object",
+									"properties": {
+										"enabled": {
+											"type": "boolean"
+										},
+										"behavior": {
+											"type": "string"
+										}
+									}
+								},
+								"DEBUG": {
+									"type": "boolean"
+								},
+								"ALLOW_GROUPS_TO_SNAP": {
+									"type": "boolean"
+								},
+								"SNAPPING_OPACITY": {
+									"type": "number"
+								},
+								"groupTileBuffer": {
+									"type": "number"
+								},
+								"headerHeight": {
+									"type": "number"
+								},
+								"heartbeatResponseTimeoutDefaults": {
+									"title": "heartbeatResponseTimeoutDefaults",
+									"type": "object",
+									"properties": {
+										"min": {
+											"type": "number"
+										},
+										"max": {
+											"type": "number"
+										},
+										"crashed": {
+											"type": "number"
+										},
+										"possiblyCrashed": {
+											"type": "number"
+										},
+										"notResponding": {
+											"type": "number"
+										}
+									}
+								},
+								"enableWindowsAeroSnap": {
+									"type": "boolean"
+								},
+								"tabbing": {
+									"type": "object",
+									"properties": {
+										"enabled": {
+											"type": "boolean",
+											"default": true
+										}
+									}
+								},
+								"tiling": {
+									"type": "object",
+									"properties": {
+										"enabled": {
+											"type": "boolean",
+											"default": true
+										}
+									}
+								}
+							}
 						},
 						{
 							"$ref": "#/definitions/serviceAssimilationConfig"
@@ -917,26 +1444,10 @@
 					]
 				},
 				"channels": {
-					"title": "channels",
+					"description": "Only used in Linker Service",
 					"type": "array",
 					"items": {
-						"type": "object",
-						"properties": {
-							"name": {
-								"type": "string"
-							},
-							"color": {
-								"type": "string"
-							},
-							"border": {
-								"type": "string"
-							}
-						},
-						"required": [
-							"name",
-							"color",
-							"border"
-						]
+						"type": "object"
 					}
 				}
 			},
@@ -947,162 +1458,44 @@
 			],
 			"additionalProperties": false
 		},
-		"startup_app": {
-			"description": "Manifest property for the initial startup app, which reference Finemble's System Manager.",
+		"serviceAssimilationConfig": {
+			"title": "assimilationConfig",
+			"description": "Service config specific to assimilation service",
 			"type": "object",
 			"properties": {
-				"name": {
-					"type": "string"
-				},
-				"url": {
-					"type": "string",
-					"format": "uri"
-				},
-				"uuid": {
-					"type": "string"
-				},
-				"requireHandshake": {
+				"enabled": {
 					"type": "boolean"
 				},
-				"applicationIcon": {
-					"type": "string",
-					"format": "uri"
-				},
-				"defaultTop": {
+				"port": {
 					"type": "number"
 				},
-				"defaultLeft": {
+				"useFeaSpawn": {
+					"type": "boolean"
+				},
+				"throttle": {
 					"type": "number"
 				},
-				"defaultHeight": {
+				"blacklist": {
+					"type": "array"
+				},
+				"whitelist": {
+					"type": "array"
+				},
+				"onlySpawned": {
+					"type": "boolean"
+				},
+				"focusDelay": {
 					"type": "number"
 				},
-				"defaultWidth": {
+				"eventIgnore": {
 					"type": "number"
 				},
-				"showTaskbarIcon": {
-					"type": "boolean"
+				"hotkeyTimeout": {
+					"type": "number"
 				},
-				"autoShow": {
-					"type": "boolean"
-				},
-				"frame": {
-					"type": "boolean"
-				},
-				"resizable": {
-					"type": "boolean"
-				},
-				"maximizable": {
-					"type": "boolean"
-				},
-				"delay_connection": {
-					"type": "boolean"
-				},
-				"contextMenu": {
-					"type": "boolean"
-				},
-				"cornerRounding": {
-					"$ref": "#/definitions/component_window"
-				},
-				"alwaysOnTop": {
+				"hideTitleBars": {
 					"type": "boolean"
 				}
-			},
-			"required": [
-				"name",
-				"url",
-				"uuid"
-			]
-		},
-		"boot_config": {
-			"title": "bootConfig",
-			"description": "(PUBLIC) Boot/startup configuration parameter used by the System Manager.",
-			"type": "object",
-			"properties": {
-				"onErrorMakeSystemManagerVisible": {
-					"type": "boolean",
-					"default": true
-				},
-				"defaults": {
-					"title": "defaults",
-					"type": "object",
-					"properties": {
-						"startServiceTimeout": {
-							"type": "number",
-							"minimum": 0,
-							"maximum": 999999,
-							"default": 10000
-						},
-						"startComponentTimeout": {
-							"type": "number",
-							"minimum": 0,
-							"default": 15000
-						},
-						"startTaskTimeout": {
-							"type": "number",
-							"minimum": 0,
-							"maximum": 999999,
-							"default": 10000
-						}
-					},
-					"additionalProperties": false
-				}
-			},
-			"additionalProperties": false
-		},
-		"bootTasks": {
-			"title": "bootTasks",
-			"description": "(PRIVATE) Startup configutation of internal boot tasks. ",
-			"type": "object",
-			"properties": {
-				"initializeDeepLinkingTask": {
-					"$ref": "#/definitions/bootParams"
-				},
-				"initializeRouterTask": {
-					"$ref": "#/definitions/bootParams"
-				},
-				"initializeFinsemblePubsubTask": {
-					"$ref": "#/definitions/bootParams"
-				},
-				"initializeSystemStateHandersTask": {
-					"$ref": "#/definitions/bootParams"
-				},
-				"updateServiceLauncherConfigTask": {
-					"$ref": "#/definitions/bootParams"
-				},
-				"testTask_initializeSplinterAgentPool": {
-					"$ref": "#/definitions/bootParams"
-				},
-				"waitForAuthenticatedTask": {
-					"$ref": "#/definitions/bootParams"
-				},
-				"initializeSystemManagerAPITask": {
-					"$ref": "#/definitions/bootParams"
-				},
-				"startLoggerTask": {
-					"$ref": "#/definitions/bootParams"
-				},
-				"loadUserDefinedComponentsTask": {
-					"$ref": "#/definitions/bootParams"
-				},
-				"loadFDC3InstalledComponentsTask": {
-					"$ref": "#/definitions/bootParams"
-				},
-				"loadSystemTrayIconTask": {
-					"$ref": "#/definitions/bootParams"
-				},
-				"registerHotkeysTask": {
-					"$ref": "#/definitions/bootParams"
-				},
-				"setupSearchLauncherTask": {
-					"$ref": "#/definitions/bootParams"
-				},
-				"checkForScheduledRestartTask": {
-					"$ref": "#/definitions/bootParams"
-				}
-			},
-			"additionalProperties": {
-				"$ref": "#/definitions/bootParams"
 			}
 		},
 		"router": {
@@ -1121,231 +1514,46 @@
 					"default": "SharedWorker"
 				},
 				"transportSettings": {
-					"$ref": "#/definitions/transportSettings"
-				}
-			},
-			"additionalProperties": false
-		},
-		"transportSettings": {
-			"title": "transportSettings",
-			"description": "The specific setting for certain transports.",
-			"type": "object",
-			"properties": {
-				"FinsembleTransport": {
-					"title": "FinsembleTransport",
-					"description": " Configuration for the FinsembleTransport (IAC) if choosen as the communication mechanism for cross-domain components. IAC uses WebSocket as its communication protocol.",
+					"title": "transportSettings",
+					"description": "The specific setting for certain transports.",
 					"type": "object",
 					"properties": {
-						"serverAddress": {
-							"description": "URI for the WebSocket server. To use a secure connection, use 'wss://localhost.chartiq.com:3376'",
-							"type": "string",
-							"format": "uri",
-							"default": "ws://127.0.0.1:3376"
+						"FinsembleTransport": {
+							"title": "FinsembleTransport",
+							"description": " Configuration for the FinsembleTransport (IAC) if choosen as the communication mechanism for cross-domain components. IAC uses WebSocket as its communication protocol.",
+							"type": "object",
+							"properties": {
+								"serverAddress": {
+									"description": "URI for the WebSocket server. To use a secure connection, use 'wss://localhost.chartiq.com:3376'",
+									"type": "string",
+									"format": "uri",
+									"default": "ws://127.0.0.1:3376"
+								}
+							},
+							"required": [
+								"serverAddress"
+							]
 						}
 					},
 					"required": [
-						"serverAddress"
-					]
-				}
-			},
-			"required": [
-				"FinsembleTransport"
-			],
-			"default": {
-			}
-		},
-		"loggerServiceWindow": {
-			"title": "window",
-			"type": "object",
-			"properties": {
-				"defaultWidth": {
-					"type": "number"
-				},
-				"defaultHeight": {
-					"type": "number"
-				},
-				"accelerator": {
-					"title": "accelerator",
-					"type": "object",
-					"properties": {
-						"zoom": {
-							"type": "boolean"
-						},
-						"reload": {
-							"type": "boolean"
-						},
-						"devtools": {
-							"type": "boolean"
-						}
+						"FinsembleTransport"
+					],
+					"default": {
 					}
-				},
-				"contextMenu": {
-					"type": "boolean"
-				}
-			}
-		},
-		"requiredServices": {
-			"title": "requiredServicesConfig",
-			"type": "object",
-			"properties": {
-				"routerService": {
-					"type": "object",
-					"properties": {
-						"bootParams": {
-							"$ref": "#/definitions/boot_params"
-						},
-						"spawnAs": {
-							"type": "string"
-						},
-						"name": {
-							"type": "string"
-						},
-						"html": {
-							"type": "string"
-						},
-						"file": {
-							"type": "string"
-						}
-					},
-					"additionalProperties": false
-				},
-				"loggerService": {
-					"type": "object",
-					"properties": {
-						"bootParams": {
-							"$ref": "#/definitions/boot_params"
-						},
-						"spawnAs": {
-							"type": "string"
-						},
-						"name": {
-							"type": "string"
-						},
-						"html": {
-							"type": "string"
-						},
-						"file": {
-							"type": "string"
-						}
-					}
-				},
-				"dataStoreService": {
-					"type": "object",
-					"properties": {
-						"bootParams": {
-							"$ref": "#/definitions/boot_params"
-						},
-						"spawnAs": {
-							"type": "string"
-						},
-						"name": {
-							"type": "string"
-						},
-						"html": {
-							"type": "string"
-						},
-						"file": {
-							"type": "string"
-						}
-					},
-					"additionalProperties": false
-				},
-				"configService": {
-					"type": "object",
-					"properties": {
-						"bootParams": {
-							"$ref": "#/definitions/boot_params"
-						},
-						"spawnAs": {
-							"type": "string"
-						},
-						"name": {
-							"type": "string"
-						},
-						"html": {
-							"type": "string"
-						},
-						"file": {
-							"type": "string"
-						},
-						"changeApplicationStateBeforeLoad": {
-							"type": "string"
-						},
-						"changeApplicationStateAfterLoad": {
-							"type": "string"
-						}
-					},
-					"additionalProperties": false
 				}
 			},
-			"required": [
-				"routerService",
-				"loggerService",
-				"dataStoreService",
-				"configService"
-			],
-			"additionalProperties": false
-		},
-		"system": {
-			"title": "system",
-			"description": "(PRIVATE) Core configuration for system. Much of this is boot config.",
-			"type": "object",
-			"properties": {
-				"FSBLVersion": {
-					"type": "string"
-				},
-				"gitHash": {
-					"type": "string"
-				},
-				"finsembleLibraryPath": {
-					"type": "string"
-				},
-				"premiumRoot": {
-					"type": "string"
-				},
-				"systemTrayIcon": {
-					"type": "string"
-				},
-				"addFSBLWrappers": {
-					"type": "boolean"
-				},
-				"saveLogToFileOnShutDown": {
-					"type": "boolean"
-				},
-				"scheduledRestart": {
-					"type": "boolean"
-				},
-				"isolateCrossDomainComponents": {
-					"type": "boolean"
-				},
-				"requiredServicesConfig": {
-					"$ref": "#/definitions/requiredServices"
-				}
-			},
-			"required": [
-				"FSBLVersion",
-				"gitHash",
-				"finsembleLibraryPath",
-				"premiumRoot",
-				"systemTrayIcon",
-				"addFSBLWrappers",
-				"saveLogToFileOnShutDown",
-				"scheduledRestart",
-				"isolateCrossDomainComponents",
-				"requiredServicesConfig"
-			],
 			"additionalProperties": false
 		},
 		"security_policies": {
 			"title": "securityPolicies",
-			"description": "(PUBLIC)",
+			"description": "(PUBLIC) FEA security policy",
 			"type": "object",
 			"properties": {
 				"//trusted": {
 					"type": "string"
 				},
 				"trusted": {
-					"$ref": "#/definitions/genericObject"
+					"type": "object"
 				},
 				"untrusted": {
 					"title": "untrusted",
@@ -1374,83 +1582,22 @@
 									"type": "boolean"
 								},
 								"webPreferences": {
-									"$ref": "#/definitions/webPreferences"
+									"displayName": {
+										"type": "string"
+									},
+									"spawnOnStartup": {
+										"type": "boolean"
+									},
+									"preload": {
+										"type": [
+											"string",
+											"boolean"
+										]
+									}
 								}
 							}
 						}
 					}
-				}
-			}
-		},
-		"launcherFoldersAndDefinitions": {
-			"title": "foundation",
-			"type": "object",
-			"properties": {
-				"appFolders": {
-					"$ref": "#/definitions/launcherListsAndFolders"
-				},
-				"appDefinitions": {
-					"$ref": "#/definitions/genericObject"
-				}
-			}
-		},
-		"launcherListsAndFolders": {
-			"title": "appFolders",
-			"type": "object",
-			"properties": {
-				"list": {
-					"$ref": "#/definitions/array_01"
-				},
-				"folders": {
-					"$ref": "#/definitions/launcherAndFavorites"
-				}
-			}
-		},
-		"launcherAndFavorites": {
-			"title": "folders",
-			"type": "object",
-			"properties": {
-				"Advanced App Launcher": {
-					"$ref": "#/definitions/appDefinition"
-				},
-				"Favorites": {
-					"$ref": "#/definitions/appDefinition"
-				}
-			}
-		},
-		"appDefinition": {
-			"type": "object",
-			"properties": {
-				"icon": {
-					"type": "string"
-				},
-				"type": {
-					"type": "string"
-				},
-				"canDelete": {
-					"type": "boolean"
-				},
-				"apps": {
-					"anyOf": [
-						{
-							"title": "apps",
-							"type": "array",
-							"items": {
-								"type": "object",
-								"properties": {
-									"name": {
-										"type": "string"
-									},
-									"appID": {
-										"type": "string"
-									}
-								}
-							}
-						},
-						{
-							"$ref": "#/definitions/array_02"
-						}
-					]
 				}
 			}
 		},
@@ -1472,20 +1619,50 @@
 								"type": "boolean"
 							},
 							"foundation": {
-								"$ref": "#/definitions/launcherFoldersAndDefinitions"
+								"title": "foundation",
+								"type": "object",
+								"properties": {
+									"appFolders": {
+										"title": "appFolders",
+										"type": "object",
+										"properties": {
+											"list": {
+												"type": "array",
+												"items": {
+													"type": "string"
+												}
+											},
+											"folders": {
+												"title": "folders",
+												"type": "object",
+												"properties": {
+													"Advanced App Launcher": {
+														"$ref": "#/definitions/foundationFoldersAppDefinition"
+													},
+													"Favorites": {
+														"$ref": "#/definitions/foundationFoldersAppDefinition"
+													}
+												}
+											}
+										}
+									},
+									"appDefinitions": {
+										"type": "object"
+									}
+								}
 							},
 							"default": {
 								"title": "default",
 								"type": "object",
 								"properties": {
 									"activeLauncherTags": {
-										"$ref": "#/definitions/array_02"
+										"type": "array"
 									},
 									"filterText": {
 										"type": "string"
 									},
 									"filterTags": {
-										"$ref": "#/definitions/array_02"
+										"type": "array"
 									},
 									"activeFolder": {
 										"type": "string"
@@ -1502,6 +1679,34 @@
 			"required": [
 				"initialStores"
 			]
+		},
+		"foundationFoldersAppDefinition": {
+			"type": "object",
+			"properties": {
+				"icon": {
+					"type": "string"
+				},
+				"type": {
+					"type": "string"
+				},
+				"canDelete": {
+					"type": "boolean"
+				},
+				"apps": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"name": {
+								"type": "string"
+							},
+							"appID": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			}
 		},
 		"blankWorkspaceTemplate": {
 			"title": "Blank Template",
@@ -1520,10 +1725,10 @@
 					"type": "string"
 				},
 				"groups": {
-					"$ref": "#/definitions/genericObject"
+					"type": "object"
 				},
 				"windowData": {
-					"$ref": "#/definitions/array_02"
+					"type": "array"
 				},
 				"windows": {
 					"title": "windows",
@@ -1586,13 +1791,27 @@
 					"type": "string"
 				},
 				"dockable": {
-					"$ref": "#/definitions/booleanOrStringArray"
+					"type": [
+						"array",
+						"boolean"
+					],
+					"items": {
+						"type": "string"
+					}
 				},
 				"maxHeight": {
-					"$ref": "#/definitions/nullOrNumber"
+					"type": [
+						"number",
+						"boolean",
+						"null"
+					]
 				},
 				"minHeight": {
-					"$ref": "#/definitions/nullOrNumber"
+					"type": [
+						"number",
+						"boolean",
+						"null"
+					]
 				},
 				"minWidth": {
 					"type": "number"
@@ -1639,9 +1858,6 @@
 				"frame": {
 					"type": "boolean"
 				},
-				"//": {
-					"type": "string"
-				},
 				"ephemeral": {
 					"type": "boolean"
 				},
@@ -1677,470 +1893,6 @@
 			"items": {
 				"type": "string"
 			}
-		},
-		"webPreferences": {
-			"type": "object",
-			"properties": {
-				"displayName": {
-					"type": "string"
-				},
-				"spawnOnStartup": {
-					"type": "boolean"
-				},
-				"preload": {
-					"type": [
-						"string",
-						"boolean"
-					]
-				}
-			}
-		},
-		"componentForeignComponentsWindowManager": {
-			"title": "Window Manager",
-			"type": "object",
-			"properties": {
-				"alwaysOnTopIcon": {
-					"type": "boolean"
-				},
-				"showLinker": {
-					"type": "boolean"
-				},
-				"FSBLHeader": {
-					"anyOf": [
-						{
-							"type": "boolean"
-						},
-						{
-							"title": "FSBLHeader",
-							"type": "object",
-							"properties": {
-								"hideMaximize": {
-									"type": "boolean"
-								}
-							}
-						}
-					]
-				},
-				"showTabs": {
-					"type": "boolean"
-				},
-				"persistWindowState": {
-					"type": "boolean"
-				},
-				"title": {
-					"type": "string"
-				}
-			}
-		},
-		"object_43": {
-			"title": "component",
-			"type": "object",
-			"properties": {
-				"spawnOnHotkey": {
-					"$ref": "#/definitions/array_01"
-				}
-			}
-		},
-		"object_44": {
-			"title": "component",
-			"type": "object",
-			"propertyNames": {
-				"$ref": "#/definitions/object_43"
-			},
-			"properties": {
-				"neededClients": {
-					"$ref": "#/definitions/array_01"
-				},
-				"category": {
-					"type": "string"
-				}
-			}
-		},
-		"boot_params": {
-			"title": "bootParams",
-			"type": "object",
-			"properties": {
-				"stage": {
-					"type": "string",
-					"enum": [
-						"microkernel",
-						"kernel",
-						"authentication",
-						"preuser",
-						"earlyuser",
-						"user"
-					]
-				},
-				"stopOnFailure": {
-					"type": "boolean"
-				},
-				"autoStart": {
-					"type": "boolean"
-				},
-				"condition": {
-					"type": "string"
-				},
-				"customFailureMessage": {
-					"type": "string"
-				},
-				"timeout": {
-					"type": "number"
-				},
-				"dependencies": {
-					"type": "array",
-					"items": {
-						"type": "string"
-					}
-				},
-				"checkpoints": {
-					"title": "checkpoints",
-					"type": "object"
-				}
-			},
-			"additionalProperties": false
-		},
-		"bootParams": {
-			"type": "object",
-			"properties": {
-				"bootParams": {
-					"$ref": "#/definitions/boot_params"
-				}
-			},
-			"additionalProperties": false
-		},
-		"serviceWindowServiceConfig": {
-			"title": "config",
-			"type": "object",
-			"properties": {
-				"BUFFER_SIZE": {
-					"type": "number"
-				},
-				"RESIZE_EVENT_THROTTLE_PERIOD": {
-					"type": "number"
-				},
-				"MINIMUM_WIDTH": {
-					"type": "number"
-				},
-				"MINIMUM_HEIGHT": {
-					"type": "number"
-				},
-				"GROUP_MODE": {
-					"title": "GROUP_MODE",
-					"type": "object",
-					"properties": {
-						"enabled": {
-							"type": "boolean"
-						},
-						"behavior": {
-							"type": "string"
-						}
-					}
-				},
-				"DEBUG": {
-					"type": "boolean"
-				},
-				"ALLOW_GROUPS_TO_SNAP": {
-					"type": "boolean"
-				},
-				"SNAPPING_OPACITY": {
-					"type": "number"
-				},
-				"groupTileBuffer": {
-					"type": "number"
-				},
-				"headerHeight": {
-					"type": "number"
-				},
-				"heartbeatResponseTimeoutDefaults": {
-					"title": "heartbeatResponseTimeoutDefaults",
-					"type": "object",
-					"properties": {
-						"min": {
-							"type": "number"
-						},
-						"max": {
-							"type": "number"
-						},
-						"crashed": {
-							"type": "number"
-						},
-						"possiblyCrashed": {
-							"type": "number"
-						},
-						"notResponding": {
-							"type": "number"
-						}
-					}
-				},
-				"enableWindowsAeroSnap": {
-					"type": "boolean"
-				},
-				"tabbing": {
-					"$ref": "#/definitions/serviceAssimilationConfig"
-				},
-				"tiling": {
-					"$ref": "#/definitions/serviceAssimilationConfig"
-				}
-			}
-		},
-		"serviceAssimilationConfig": {
-			"type": "object",
-			"properties": {
-				"enabled": {
-					"type": "boolean"
-				},
-				"port": {
-					"type": "number"
-				},
-				"useFeaSpawn": {
-					"type": "boolean"
-				},
-				"throttle": {
-					"type": "number"
-				},
-				"blacklist": {
-					"$ref": "#/definitions/array_02"
-				},
-				"whitelist": {
-					"$ref": "#/definitions/array_02"
-				},
-				"onlySpawned": {
-					"type": "boolean"
-				},
-				"focusDelay": {
-					"type": "number"
-				},
-				"eventIgnore": {
-					"type": "number"
-				},
-				"hotkeyTimeout": {
-					"type": "number"
-				},
-				"hideTitleBars": {
-					"type": "boolean"
-				}
-			}
-		},
-		"service2": {
-			"type": "object",
-			"properties": {
-				"workspaceService": {
-					"anyOf": [
-						{
-							"$ref": "#/definitions/service"
-						},
-						{
-							"title": "workspaceService",
-							"type": "object",
-							"properties": {
-								"global": {
-									"type": "boolean"
-								}
-							}
-						},
-						{
-							"title": "workspaceService",
-							"type": "object",
-							"properties": {
-								"persistURL": {
-									"type": "boolean"
-								}
-							}
-						},
-						{
-							"$ref": "#/definitions/component_window"
-						}
-					]
-				},
-				"storageService": {
-					"$ref": "#/definitions/service"
-				},
-				"linkerService": {
-					"$ref": "#/definitions/service"
-				},
-				"searchService": {
-					"$ref": "#/definitions/service"
-				},
-				"windowService": {
-					"anyOf": [
-						{
-							"$ref": "#/definitions/service"
-						},
-						{
-							"title": "windowService",
-							"type": "object",
-							"properties": {
-								"allowSnapping": {
-									"type": "boolean"
-								},
-								"allowGrouping": {
-									"type": "boolean"
-								},
-								"allowAutoArrange": {
-									"type": "boolean"
-								},
-								"allowTabbing": {
-									"type": "boolean"
-								},
-								"allowTiling": {
-									"type": "boolean"
-								},
-								"allowMinimize": {
-									"type": "boolean"
-								}
-							}
-						},
-						{
-							"title": "windowService",
-							"type": "object",
-							"properties": {
-								"allowGrouping": {
-									"type": "boolean"
-								},
-								"allowAutoArrange": {
-									"type": "boolean"
-								},
-								"shouldRegister": {
-									"type": "boolean"
-								}
-							}
-						},
-						{
-							"title": "windowService",
-							"type": "object",
-							"properties": {
-								"manageWindowMovement": {
-									"type": "boolean"
-								}
-							}
-						}
-					]
-				},
-				"authenticationService": {
-					"$ref": "#/definitions/service"
-				},
-				"assimilationService": {
-					"$ref": "#/definitions/service"
-				},
-				"hotkeysService": {
-					"$ref": "#/definitions/service"
-				}
-			}
-		},
-		"array_01": {
-			"description": "Sets the hotkey for showing the Central Logger. Leave this config out to disable the hotkey.",
-			"type": "array",
-			"items": {
-				"type": "string"
-			},
-			"default": [
-				"ctrl",
-				"shift",
-				"L"
-			]
-		},
-		"array_02": {
-			"type": "array"
-		},
-		"array_03": {
-			"title": "splinterAgents",
-			"type": "array",
-			"items": {
-				"anyOf": [
-					{
-						"title": "foreign",
-						"type": "object",
-						"properties": {
-							"components": {
-								"anyOf": [
-									{
-										"$ref": "#/definitions/array_01"
-									},
-									{
-										"$ref": "#/definitions/component_names"
-									}
-								]
-							}
-						}
-					},
-					{
-						"type": "object",
-						"properties": {
-							"agentLabel": {
-								"type": "string"
-							},
-							"services": {
-								"$ref": "#/definitions/array_01"
-							}
-						}
-					}
-				]
-			}
-		},
-		"genericObject": {
-			"type": "object"
-		},
-		"booleanOrStringArray": {
-			"type": [
-				"array",
-				"boolean"
-			],
-			"items": {
-				"type": "string"
-			}
-		},
-		"nullOrNumber": {
-			"type": [
-				"number",
-				"boolean",
-				"null"
-			]
-		},
-		"NewDefinition": {
-		},
-		"foreign_components": {
-			"description": "TBD",
-			"type": "object"
-		},
-		"foreign_services": {
-			"title": "windowService",
-			"type": "object",
-			"properties": {
-				"global": {
-					"type": "boolean"
-				},
-				"allowSnapping": {
-					"type": "boolean"
-				},
-				"allowGrouping": {
-					"type": "boolean"
-				},
-				"allowAutoArrange": {
-					"type": "boolean"
-				},
-				"allowTabbing": {
-					"type": "boolean"
-				},
-				"allowTiling": {
-					"type": "boolean"
-				},
-				"allowMinimize": {
-					"type": "boolean"
-				},
-				"shouldRegister": {
-					"type": "boolean"
-				},
-				"manageWindowMovement": {
-					"type": "boolean"
-				},
-				"persistURL": {
-					"type": "boolean"
-				},
-				"addToWorkspace": {
-					"type": "boolean"
-				}
-			},
-			"additionalProperties": false
 		}
 	}
 }
