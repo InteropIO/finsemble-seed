@@ -104,7 +104,7 @@
 							"type": "object",
 							"properties": {
 								"Blank Template": {
-									"$ref": "#/definitions/blankWorkspaceTemplate"
+									"$ref": "#/definitions/workspaceTemplate"
 								}
 							}
 						},
@@ -357,7 +357,7 @@
 					"type": "object",
 					"properties": {
 						"Blank Template": {
-							"$ref": "#/definitions/blankWorkspaceTemplate"
+							"$ref": "#/definitions/workspaceTemplate"
 						}
 					}
 				},
@@ -396,7 +396,61 @@
 					"additionalItems": false
 				},
 				"securityPolicies": {
-					"$ref": "#/definitions/security_policies"
+					"title": "securityPolicies",
+					"description": "(PUBLIC) FEA security policy",
+					"type": "object",
+					"properties": {
+						"//trusted": {
+							"type": "string"
+						},
+						"trusted": {
+							"type": "object"
+						},
+						"untrusted": {
+							"title": "untrusted",
+							"type": "object",
+							"properties": {
+								"System": {
+									"title": "System",
+									"type": "object",
+									"properties": {
+										"clearCache": {
+											"type": "boolean"
+										},
+										"exit": {
+											"type": "boolean"
+										},
+										"launchExternalProcess": {
+											"type": "boolean"
+										}
+									}
+								},
+								"Window": {
+									"title": "Window",
+									"type": "object",
+									"properties": {
+										"executeJavaScript": {
+											"type": "boolean"
+										},
+										"webPreferences": {
+											"displayName": {
+												"type": "string"
+											},
+											"spawnOnStartup": {
+												"type": "boolean"
+											},
+											"preload": {
+												"type": [
+													"string",
+													"boolean"
+												]
+											}
+										}
+									}
+								}
+							}
+						}
+					}
 				},
 				"securityPolicyRules": {
 					"title": "securityPolicyRules",
@@ -425,7 +479,83 @@
 					"type": "object",
 					"properties": {
 						"distributedStore": {
-							"$ref": "#/definitions/distributedStoreRecord"
+							"title": "distributedStore",
+							"type": "object",
+							"properties": {
+								"initialStores": {
+									"title": "initialStores",
+									"description": "Foundations for any stores which should be seeded on startup",
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"name": {
+												"type": "string"
+											},
+											"preferPreviousState": {
+												"type": "boolean"
+											},
+											"foundation": {
+												"title": "foundation",
+												"type": "object",
+												"properties": {
+													"appFolders": {
+														"title": "appFolders",
+														"type": "object",
+														"properties": {
+															"list": {
+																"type": "array",
+																"items": {
+																	"type": "string"
+																}
+															},
+															"folders": {
+																"title": "folders",
+																"type": "object",
+																"properties": {
+																	"Advanced App Launcher": {
+																		"$ref": "#/definitions/foldersAppDefinition"
+																	},
+																	"Favorites": {
+																		"$ref": "#/definitions/foldersAppDefinition"
+																	}
+																}
+															}
+														}
+													},
+													"appDefinitions": {
+														"type": "object"
+													}
+												}
+											},
+											"default": {
+												"title": "default",
+												"type": "object",
+												"properties": {
+													"activeLauncherTags": {
+														"type": "array"
+													},
+													"filterText": {
+														"type": "string"
+													},
+													"filterTags": {
+														"type": "array"
+													},
+													"activeFolder": {
+														"type": "string"
+													},
+													"sortBy": {
+														"type": "string"
+													}
+												}
+											}
+										}
+									}
+								}
+							},
+							"required": [
+								"initialStores"
+							]
 						},
 						"launcher": {
 							"title": "launcher",
@@ -633,7 +763,7 @@
 					"description": "(PUBLIC)",
 					"type": "array",
 					"items": {
-						"$ref": "#/definitions/blankWorkspaceTemplate"
+						"$ref": "#/definitions/workspaceTemplate"
 					}
 				},
 				"components": {
@@ -746,6 +876,52 @@
 				"url",
 				"uuid"
 			]
+		},
+		"router": {
+			"title": "router",
+			"description": "(PUBLIC) Configurations for Router's communication mechanism.",
+			"type": "object",
+			"properties": {
+				"crossDomainTransport": {
+					"description": "The interface for communicating between cross-domain components - When set to `IPCBus`, the default,, all cross-domain components will use IPC to communicate. When set to `FinsembleTransport`, cross-domain components will use IAC. You might switch the `crossDomainTransport` if you are having connection issues involving firewalls, your CSP, etc. Available values are 'IPCBus' and 'FinsembleTransport'.",
+					"type": "string",
+					"default": "IPCBus"
+				},
+				"sameDomainTransport": {
+					"description": "The transport for components and services with Finsemble's domain. ",
+					"type": "string",
+					"default": "SharedWorker"
+				},
+				"transportSettings": {
+					"title": "transportSettings",
+					"description": "The specific setting for certain transports.",
+					"type": "object",
+					"properties": {
+						"FinsembleTransport": {
+							"title": "FinsembleTransport",
+							"description": " Configuration for the FinsembleTransport (IAC) if choosen as the communication mechanism for cross-domain components. IAC uses WebSocket as its communication protocol.",
+							"type": "object",
+							"properties": {
+								"serverAddress": {
+									"description": "URI for the WebSocket server. To use a secure connection, use 'wss://localhost.chartiq.com:3376'",
+									"type": "string",
+									"format": "uri",
+									"default": "ws://127.0.0.1:3376"
+								}
+							},
+							"required": [
+								"serverAddress"
+							]
+						}
+					},
+					"required": [
+						"FinsembleTransport"
+					],
+					"default": {
+					}
+				}
+			},
+			"additionalProperties": false
 		},
 		"system": {
 			"title": "system",
@@ -1632,230 +1808,9 @@
 				}
 			}
 		},
-		"router": {
-			"title": "router",
-			"description": "(PUBLIC) Configurations for Router's communication mechanism.",
-			"type": "object",
-			"properties": {
-				"crossDomainTransport": {
-					"description": "The interface for communicating between cross-domain components - When set to `IPCBus`, the default,, all cross-domain components will use IPC to communicate. When set to `FinsembleTransport`, cross-domain components will use IAC. You might switch the `crossDomainTransport` if you are having connection issues involving firewalls, your CSP, etc. Available values are 'IPCBus' and 'FinsembleTransport'.",
-					"type": "string",
-					"default": "IPCBus"
-				},
-				"sameDomainTransport": {
-					"description": "The transport for components and services with Finsemble's domain. ",
-					"type": "string",
-					"default": "SharedWorker"
-				},
-				"transportSettings": {
-					"title": "transportSettings",
-					"description": "The specific setting for certain transports.",
-					"type": "object",
-					"properties": {
-						"FinsembleTransport": {
-							"title": "FinsembleTransport",
-							"description": " Configuration for the FinsembleTransport (IAC) if choosen as the communication mechanism for cross-domain components. IAC uses WebSocket as its communication protocol.",
-							"type": "object",
-							"properties": {
-								"serverAddress": {
-									"description": "URI for the WebSocket server. To use a secure connection, use 'wss://localhost.chartiq.com:3376'",
-									"type": "string",
-									"format": "uri",
-									"default": "ws://127.0.0.1:3376"
-								}
-							},
-							"required": [
-								"serverAddress"
-							]
-						}
-					},
-					"required": [
-						"FinsembleTransport"
-					],
-					"default": {
-					}
-				}
-			},
-			"additionalProperties": false
-		},
-		"security_policies": {
-			"title": "securityPolicies",
-			"description": "(PUBLIC) FEA security policy",
-			"type": "object",
-			"properties": {
-				"//trusted": {
-					"type": "string"
-				},
-				"trusted": {
-					"type": "object"
-				},
-				"untrusted": {
-					"title": "untrusted",
-					"type": "object",
-					"properties": {
-						"System": {
-							"title": "System",
-							"type": "object",
-							"properties": {
-								"clearCache": {
-									"type": "boolean"
-								},
-								"exit": {
-									"type": "boolean"
-								},
-								"launchExternalProcess": {
-									"type": "boolean"
-								}
-							}
-						},
-						"Window": {
-							"title": "Window",
-							"type": "object",
-							"properties": {
-								"executeJavaScript": {
-									"type": "boolean"
-								},
-								"webPreferences": {
-									"displayName": {
-										"type": "string"
-									},
-									"spawnOnStartup": {
-										"type": "boolean"
-									},
-									"preload": {
-										"type": [
-											"string",
-											"boolean"
-										]
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"cornerRounding": {
-			"properties": {
-				"width": {
-					"type": "number",
-					"default": 0
-				},
-				"height": {
-					"type": "number",
-					"default": 0
-				}
-			}
-		},
-		"distributedStoreRecord": {
-			"title": "distributedStore",
-			"type": "object",
-			"properties": {
-				"initialStores": {
-					"title": "initialStores",
-					"description": "Foundations for any stores which should be seeded on startup",
-					"type": "array",
-					"items": {
-						"type": "object",
-						"properties": {
-							"name": {
-								"type": "string"
-							},
-							"preferPreviousState": {
-								"type": "boolean"
-							},
-							"foundation": {
-								"title": "foundation",
-								"type": "object",
-								"properties": {
-									"appFolders": {
-										"title": "appFolders",
-										"type": "object",
-										"properties": {
-											"list": {
-												"type": "array",
-												"items": {
-													"type": "string"
-												}
-											},
-											"folders": {
-												"title": "folders",
-												"type": "object",
-												"properties": {
-													"Advanced App Launcher": {
-														"$ref": "#/definitions/foundationFoldersAppDefinition"
-													},
-													"Favorites": {
-														"$ref": "#/definitions/foundationFoldersAppDefinition"
-													}
-												}
-											}
-										}
-									},
-									"appDefinitions": {
-										"type": "object"
-									}
-								}
-							},
-							"default": {
-								"title": "default",
-								"type": "object",
-								"properties": {
-									"activeLauncherTags": {
-										"type": "array"
-									},
-									"filterText": {
-										"type": "string"
-									},
-									"filterTags": {
-										"type": "array"
-									},
-									"activeFolder": {
-										"type": "string"
-									},
-									"sortBy": {
-										"type": "string"
-									}
-								}
-							}
-						}
-					}
-				}
-			},
-			"required": [
-				"initialStores"
-			]
-		},
-		"foundationFoldersAppDefinition": {
-			"type": "object",
-			"properties": {
-				"icon": {
-					"type": "string"
-				},
-				"type": {
-					"type": "string"
-				},
-				"canDelete": {
-					"type": "boolean"
-				},
-				"apps": {
-					"type": "array",
-					"items": {
-						"type": "object",
-						"properties": {
-							"name": {
-								"type": "string"
-							},
-							"appID": {
-								"type": "string"
-							}
-						}
-					}
-				}
-			}
-		},
-		"blankWorkspaceTemplate": {
-			"title": "Blank Template",
+		"workspaceTemplate": {
+			"title": "Workspace Template",
+			"description": "Template for config specified workspace",
 			"type": "object",
 			"properties": {
 				"version": {
@@ -1890,6 +1845,49 @@
 							},
 							"defaultTop": {
 								"type": "number"
+							}
+						}
+					}
+				}
+			}
+		},
+
+		"cornerRounding": {
+			"description": "Specifies corner rounding for a window",
+			"properties": {
+				"width": {
+					"type": "number",
+					"default": 0
+				},
+				"height": {
+					"type": "number",
+					"default": 0
+				}
+			}
+		},
+		"foldersAppDefinition": {
+			"description": "Definition for AdvanceAppLauncher application folder",
+			"type": "object",
+			"properties": {
+				"icon": {
+					"type": "string"
+				},
+				"type": {
+					"type": "string"
+				},
+				"canDelete": {
+					"type": "boolean"
+				},
+				"apps": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"name": {
+								"type": "string"
+							},
+							"appID": {
+								"type": "string"
 							}
 						}
 					}
