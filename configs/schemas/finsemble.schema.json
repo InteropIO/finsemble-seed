@@ -735,7 +735,7 @@
 					"type": "boolean"
 				},
 				"cornerRounding": {
-					"$ref": "#/definitions/component_window"
+					"$ref": "#/definitions/cornerRounding"
 				},
 				"alwaysOnTop": {
 					"type": "boolean"
@@ -1122,7 +1122,141 @@
 					"$ref": "#/definitions/bootParamsProperties"
 				},
 				"window": {
-					"$ref": "#/definitions/component_window"
+					"title": "window",
+					"type": "object",
+					"properties": {
+						"id": {
+							"type": "string"
+						},
+						"url": {
+							"type": "string"
+						},
+						"affinity": {
+							"type": "string"
+						},
+						"width": {
+							"type": "number"
+						},
+						"height": {
+							"type": "number"
+						},
+						"dockedHeight": {
+							"type": "number"
+						},
+						"top": {
+							"type": [
+								"string",
+								"number"
+							]
+						},
+						"left": {
+							"type": [
+								"string",
+								"number"
+							]
+						},
+						"right": {
+							"type": "number"
+						},
+						"position": {
+							"type": "string"
+						},
+						"dockable": {
+							"type": [
+								"array",
+								"boolean"
+							],
+							"items": {
+								"type": "string"
+							}
+						},
+						"maxHeight": {
+							"type": [
+								"number",
+								"boolean",
+								"null"
+							]
+						},
+						"minHeight": {
+							"type": [
+								"number",
+								"boolean",
+								"null"
+							]
+						},
+						"minWidth": {
+							"type": "number"
+						},
+						"docked": {
+							"type": "string"
+						},
+						"canGroup": {
+							"type": "boolean"
+						},
+						"options": {
+							"title": "options",
+							"type": "object",
+							"properties": {
+								"autoShow": {
+									"type": "boolean"
+								},
+								"contextMenu": {
+									"type": "boolean"
+								},
+								"showTaskbarIcon": {
+									"type": "boolean"
+								},
+								"smallWindow": {
+									"type": "boolean"
+								},
+								"maximizable": {
+									"type": "boolean"
+								},
+								"cornerRounding": {
+									"$ref": "#/definitions/cornerRounding"
+								},
+								"opacity": {
+									"type": "number"
+								},
+								"resizable": {
+									"type": "boolean"
+								},
+								"alwaysOnTop": {
+									"type": "boolean"
+								}
+							}
+						},
+						"frame": {
+							"type": "boolean"
+						},
+						"ephemeral": {
+							"type": "boolean"
+						},
+						"resizable": {
+							"type": "boolean"
+						},
+						"showTaskbarIcon": {
+							"type": "boolean"
+						},
+						"show": {
+							"type": "boolean"
+						},
+						"windowType": {
+							"type": "string"
+						},
+						"path": {
+							"type": "string"
+						},
+						"defaultHeight": {
+							"type": "number"
+						},
+						"contextMenu": {
+							"type": "boolean"
+						},
+						"addToWorkspace": {
+							"type": "boolean"
+						}
+					}
 				},
 				"component": {
 					"type": "object",
@@ -1601,6 +1735,18 @@
 				}
 			}
 		},
+		"cornerRounding": {
+			"properties": {
+				"width": {
+					"type": "number",
+					"default": 0
+				},
+				"height": {
+					"type": "number",
+					"default": 0
+				}
+			}
+		},
 		"distributedStoreRecord": {
 			"title": "distributedStore",
 			"type": "object",
@@ -1748,150 +1894,6 @@
 						}
 					}
 				}
-			}
-		},
-		"component_window": {
-			"title": "window",
-			"type": "object",
-			"properties": {
-				"id": {
-					"type": "string"
-				},
-				"url": {
-					"type": "string"
-				},
-				"affinity": {
-					"type": "string"
-				},
-				"width": {
-					"type": "number"
-				},
-				"height": {
-					"type": "number"
-				},
-				"dockedHeight": {
-					"type": "number"
-				},
-				"top": {
-					"type": [
-						"string",
-						"number"
-					]
-				},
-				"left": {
-					"type": [
-						"string",
-						"number"
-					]
-				},
-				"right": {
-					"type": "number"
-				},
-				"position": {
-					"type": "string"
-				},
-				"dockable": {
-					"type": [
-						"array",
-						"boolean"
-					],
-					"items": {
-						"type": "string"
-					}
-				},
-				"maxHeight": {
-					"type": [
-						"number",
-						"boolean",
-						"null"
-					]
-				},
-				"minHeight": {
-					"type": [
-						"number",
-						"boolean",
-						"null"
-					]
-				},
-				"minWidth": {
-					"type": "number"
-				},
-				"docked": {
-					"type": "string"
-				},
-				"canGroup": {
-					"type": "boolean"
-				},
-				"options": {
-					"title": "options",
-					"type": "object",
-					"properties": {
-						"autoShow": {
-							"type": "boolean"
-						},
-						"contextMenu": {
-							"type": "boolean"
-						},
-						"showTaskbarIcon": {
-							"type": "boolean"
-						},
-						"smallWindow": {
-							"type": "boolean"
-						},
-						"maximizable": {
-							"type": "boolean"
-						},
-						"cornerRounding": {
-							"$ref": "#/definitions/component_window"
-						},
-						"opacity": {
-							"type": "number"
-						},
-						"resizable": {
-							"type": "boolean"
-						},
-						"alwaysOnTop": {
-							"type": "boolean"
-						}
-					}
-				},
-				"frame": {
-					"type": "boolean"
-				},
-				"ephemeral": {
-					"type": "boolean"
-				},
-				"resizable": {
-					"type": "boolean"
-				},
-				"showTaskbarIcon": {
-					"type": "boolean"
-				},
-				"show": {
-					"type": "boolean"
-				},
-				"windowType": {
-					"type": "string"
-				},
-				"path": {
-					"type": "string"
-				},
-				"defaultHeight": {
-					"type": "number"
-				},
-				"contextMenu": {
-					"type": "boolean"
-				},
-				"addToWorkspace": {
-					"type": "boolean"
-				}
-			}
-		},
-		"component_names": {
-			"title": "components names",
-			"type": "array",
-			"items": {
-				"type": "string"
 			}
 		}
 	}
