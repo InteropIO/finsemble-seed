@@ -1,27 +1,26 @@
 {
 	"$schema": "http://json-schema.org/draft-07/schema#",
-	"title": "Finsemble Configuration",
-	"$ref": "#/definitions/FileSubschemas",
-	"definitions": {
-		"FileSubschemas": {
-			"description": "A set of \"Any of\" schemas mapping to the set of Finsemble's config files.  Supports VSCode Intellisense integration for each file. ",
-			"anyOf": [
-				{
-					"$ref": "#/definitions/ComponentsFileSubschema"
-				},
-				{
-					"$ref": "#/definitions/ServicesFileSubschema"
-				},
-				{
-					"$ref": "#/definitions/ManifestFileSubschema"
-				},
-				{
-					"$ref": "#/definitions/FinsembleSubschema"
-				}
-			]
+	"title": "Finsemble Schemas",
+	"description": "Finsemble Schemas supporting run-time validation and VSCode Intellisense",
+	"items": false,
+	"additionalProperties": false,
+	"anyOf": [
+		{
+			"$ref": "#/definitions/ComponentsFileSubschema"
 		},
+		{
+			"$ref": "#/definitions/ServicesFileSubschema"
+		},
+		{
+			"$ref": "#/definitions/ManifestFileSubschema"
+		},
+		{
+			"$ref": "#/definitions/FinsembleSubschema"
+		}
+	],
+	"definitions": {
 		"ManifestFileSubschema": {
-			"description": "Subschema corresponding to the manifest file to suppport VSCode Intellisense.. ",
+			"description": "Subschema corresponding to the manifest file to suppport VSCode Intellisense. NOTE: there is some duplication here with the full schema definition. ",
 			"type": "object",
 			"properties": {
 				"devtools_port": {
@@ -29,7 +28,7 @@
 					"type": "number"
 				},
 				"startup_app": {
-					"$ref": "#/definitions/manifestStartup_app"
+					"$ref": "#/definitions/manifestStartupApp"
 				},
 				"splashScreenImage": {
 					"description": "Manifest URL for splash screen to display on startup.",
@@ -67,7 +66,7 @@
 				},
 				"finsemble": {
 					"title": "finsemble",
-					"description": "this is the finsembe schema path",
+					"description": "NOTE: This partially duplicates FinsembleConfig with many optional properties",
 					"type": "object",
 					"properties": {
 						"$schema": {
@@ -149,6 +148,9 @@
 						"globalHotkeys": {
 							"description": "(PUBLIC)",
 							"type": "object"
+						},
+						"custom": {
+							"$ref": "#/definitions/finsembleCustom"
 						}
 					},
 					"required": [
@@ -259,7 +261,7 @@
 					"type": "number"
 				},
 				"startup_app": {
-					"$ref": "#/definitions/manifestStartup_app"
+					"$ref": "#/definitions/manifestStartupApp"
 				},
 				"splashScreenImage": {
 					"description": "Manifest URL for splash screen to display on startup.",
@@ -306,7 +308,7 @@
 		},
 		"FinsembleSubschema": {
 			"title": "finsemble",
-			"description": "subschema for all finsemble config",
+			"description": "subschema for all finsemble config (except manifest)",
 			"type": "object",
 			"properties": {
 				"$schema": {
@@ -779,6 +781,9 @@
 				"//": {
 					"description": "(DEPRECATED) Comment string inserted into config.",
 					"type": "string"
+				},
+				"custom": {
+					"$ref": "#/definitions/finsembleCustom"
 				}
 			},
 			"required": [
@@ -810,7 +815,7 @@
 			],
 			"additionalProperties": false
 		},
-		"manifestStartup_app": {
+		"manifestStartupApp": {
 			"description": "Manifest property for the initial startup app, which reference Finemble's System Manager.",
 			"type": "object",
 			"properties": {
@@ -1554,6 +1559,9 @@
 				},
 				"childWindowOptions": {
 					"$ref": "#/definitions/component"
+				},
+				"custom": {
+					"$ref": "#/definitions/componentCustom"
 				}
 			}
 		},
@@ -1759,6 +1767,9 @@
 					"items": {
 						"type": "object"
 					}
+				},
+				"custom": {
+					"$ref": "#/definitions/serviceCustom"
 				}
 			},
 			"required": [
@@ -1851,7 +1862,6 @@
 				}
 			}
 		},
-
 		"cornerRounding": {
 			"description": "Specifies corner rounding for a window",
 			"properties": {
@@ -1893,6 +1903,14 @@
 					}
 				}
 			}
+		},
+		"finsembleCustom": {
+			"description": "schema for finsemble.custom to support customer extensions"
+		},
+		"componentCustom": {
+			"description": "schema for finsemble.comp to support customer extensions"
+		},
+		"serviceCustom": {
 		}
 	}
 }
