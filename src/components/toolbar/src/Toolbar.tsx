@@ -24,8 +24,6 @@ import { useHotkey } from "@chartiq/finsemble-ui/react/hooks/useHotkey";
 import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../../assets/css/theme.css";
 
-FSBL.debug = true;
-
 const Toolbar = () => {
 	useHotkey(["ctrl", "alt", "shift", "r"], () => FSBL.restartApplication());
 	useHotkey(["ctrl", "alt", "up"], () =>
@@ -67,5 +65,5 @@ ReactDOM.render(
 	<FinsembleProvider>
 		<Toolbar />
 	</FinsembleProvider>,
-	document.getElementById("Toolbar-component-wrapper")
+	document.getElementById("Toolbar-tsx")
 );

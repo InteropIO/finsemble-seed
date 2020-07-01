@@ -73,7 +73,8 @@ const setUpDOMContainer = () => {
 	fsblHeader = document.createElement("div");
 	fsblHeader.setAttribute("id", "FSBLHeader");
 	wrapper.appendChild(fsblHeader);
-	document.body.insertBefore(wrapper.firstChild, document.body.firstChild);
+	if (wrapper.firstChild)
+		document.body.insertBefore(wrapper.firstChild, document.body.firstChild);
 };
 
 setUpDOMContainer();

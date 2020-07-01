@@ -24,11 +24,11 @@ if (env === "production") {
 }
 
 const windowTitleBarPath =
-	"./src/components/windowTitleBar/windowTitleBarLoader.js";
+	"./src/components/WindowTitleBar/windowTitleBarLoader.js";
 module.exports = {
 	devtool: env === "production" ? "source-map" : "eval-source-map",
 	entry: {
-		"components/windowTitleBar/windowTitleBar": windowTitleBarPath,
+		"components/WindowTitleBar/WindowTitleBar": windowTitleBarPath,
 	},
 	stats: "minimal",
 	module: {
@@ -86,6 +86,11 @@ module.exports = {
 					},
 				},
 			},
+			{
+				test: /\.ts(x)?$/,
+				loader: "ts-loader",
+				exclude: /node_modules/,
+			},
 		],
 	},
 	mode: env,
@@ -96,7 +101,7 @@ module.exports = {
 		path: path.resolve(__dirname, "../../dist/"),
 	},
 	resolve: {
-		extensions: [".js", ".jsx", ".json", "scss", "html"],
+		extensions: [".ts", ".tsx", ".js", ".jsx", ".json", "scss", "html"],
 		alias: {
 			react: path.resolve("./node_modules/react"),
 			"react-dom": path.resolve("./node_modules/react-dom"),

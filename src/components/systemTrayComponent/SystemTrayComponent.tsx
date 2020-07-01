@@ -17,7 +17,6 @@ import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
 import "@chartiq/finsemble-ui/react/assets/css/menus.css";
 import "../../../assets/css/theme.css";
 
-FSBL.debug = true;
 /**
  * This component displays on right-click in your application's system tray icon.
  * Feel free to add/remove content or react components.
@@ -41,5 +40,5 @@ ReactDOM.render(
 	<FinsembleProvider>
 		<SystemTrayComponent />
 	</FinsembleProvider>,
-	document.getElementById("system-tray-component-wrapper")
+	document.getElementById("SystemTrayComponent-tsx")
 );

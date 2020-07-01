@@ -21,8 +21,11 @@ import "../../../assets/css/theme.css";
 export const Authentication = () => {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
-	const [payload, setPayload] = useState(null);
-	const [error, setError] = useState(null);
+	const [payload, setPayload] = useState<{
+		username: string;
+		password: string;
+	} | null>(null);
+	const [error, setError] = useState<string | null>(null);
 	const { quitApplication, publishAuthorization } = useAuth();
 	const { sendToServer } = useAuthSimulator();
 
@@ -38,6 +41,7 @@ export const Authentication = () => {
 	 */
 	useEffect(() => {
 		if (!payload) return;
+
 		const authenticate = async () => {
 			const response = await sendToServer(payload.username, payload.password);
 			if (response.result === "ok") {
@@ -48,7 +52,7 @@ export const Authentication = () => {
 				 * that is useful for session management, such as user ID, tokens, etc.
 				 */
 				publishAuthorization(payload.username, { username: payload.username });
-			} else {
+			} else if (response.error) {
 				setError(response.error);
 			}
 		};
@@ -75,7 +79,7 @@ export const Authentication = () => {
 			</div>
 
 			<div className="fsbl-auth-wrapper">
-				<div className="fsbl-auth-logo" alt="Sign In"></div>
+				<div className="fsbl-auth-logo"></div>
 				{error && <div className="fsbl-input-error-message">{error}</div>}
 				<form
 					onSubmit={(event) => {
@@ -118,5 +122,5 @@ ReactDOM.render(
 	<FinsembleProvider>
 		<Authentication />
 	</FinsembleProvider>,
-	document.getElementById("Authentication-component-wrapper")
+	document.getElementById("Authentication-tsx")
 );
