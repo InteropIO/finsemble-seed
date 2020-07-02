@@ -1,4 +1,5 @@
 {
+	"comment": "Sample component configuration",
 	"$schema": "../schemas/finsemble.schema.json",
 	"components": {
 		"Welcome Component": {
