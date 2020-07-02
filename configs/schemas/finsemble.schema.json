@@ -2,13 +2,20 @@
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"title": "Finsemble Configuration",
 	"description": "A set of \"Any of\" schemas mapping to the set of Finsemble's config files.  Supports VSCode Intellisense integration for each file. ",
-	"items": false,
+	"items": [
+		{
+		}
+	],
+	"additionalItems": false,
 	"anyOf": [
 		{
 			"$ref": "#/definitions/ComponentsFileSubschema"
 		},
 		{
 			"$ref": "#/definitions/ServicesFileSubschema"
+		},
+		{
+			"$ref": "#/definitions/SecrityPolicyFileSubschema"
 		},
 		{
 			"$ref": "#/definitions/ManifestFileSubschema"
@@ -19,7 +26,7 @@
 	],
 	"definitions": {
 		"ManifestFileSubschema": {
-			"description": "Subschema corresponding to the manifest file to support VSCode Intellisense. NOTE: there is some duplication here with the full schema definition. ",
+			"description": "Subschema corresponding to the manifest file, to support VSCode Intellisense. NOTE: there is some duplication here with the full schema definition. ",
 			"type": "object",
 			"properties": {
 				"devtools_port": {
@@ -165,7 +172,7 @@
 			]
 		},
 		"ComponentsFileSubschema": {
-			"description": "Subschema corresponding to a file containing component config to support VSCode Intellisense.. ",
+			"description": "Subschema corresponding to a file containing component config, to support VSCode Intellisense.. ",
 			"type": "object",
 			"properties": {
 				"$schema": {
@@ -182,7 +189,7 @@
 			"additionalProperties": false
 		},
 		"ServicesFileSubschema": {
-			"description": "Subschema corresponding to a file containing service config to support VSCode Intellisense.. ",
+			"description": "Subschema corresponding to a file containing service config, to support VSCode Intellisense.. ",
 			"type": "object",
 			"properties": {
 				"$schema": {
@@ -197,6 +204,20 @@
 				}
 			},
 			"additionalProperties": false
+		},
+		"SecrityPolicyFileSubschema": {
+			"description": "Subschema corresponding to the security policies file, to support VSCode Intellisense.. ",
+			"items": [
+				{
+				}
+			],
+			"additionalItems": false,
+			"properties": {
+				"securityPolicies": {
+				},
+				"securityPolicyRules": {
+				}
+			}
 		},
 		"ManifestSubschema": {
 			"description": "Highest level subschema, including manifest and finsemble",
@@ -448,74 +469,10 @@
 					"additionalItems": false
 				},
 				"securityPolicies": {
-					"title": "securityPolicies",
-					"description": "(PUBLIC) FEA security policy",
-					"type": "object",
-					"properties": {
-						"//trusted": {
-							"type": "string"
-						},
-						"trusted": {
-							"type": "object"
-						},
-						"untrusted": {
-							"title": "untrusted",
-							"type": "object",
-							"properties": {
-								"System": {
-									"title": "System",
-									"type": "object",
-									"properties": {
-										"clearCache": {
-											"type": "boolean"
-										},
-										"exit": {
-											"type": "boolean"
-										},
-										"launchExternalProcess": {
-											"type": "boolean"
-										}
-									}
-								},
-								"Window": {
-									"title": "Window",
-									"type": "object",
-									"properties": {
-										"executeJavaScript": {
-											"type": "boolean"
-										},
-										"webPreferences": {
-											"displayName": {
-												"type": "string"
-											},
-											"spawnOnStartup": {
-												"type": "boolean"
-											},
-											"preload": {
-												"type": [
-													"string",
-													"boolean"
-												]
-											}
-										}
-									}
-								}
-							}
-						}
-					}
+					"$ref": "#/definitions/securityPolicies"
 				},
 				"securityPolicyRules": {
-					"title": "securityPolicyRules",
-					"description": "(PUBLIC)",
-					"type": "object",
-					"properties": {
-						"crossDomain": {
-							"type": "string"
-						},
-						"sameDomain": {
-							"type": "string"
-						}
-					},
+					"$ref": "#/definitions/securityPolicyRules",
 					"requiredPlaceHolder": [
 						"crossDomain",
 						"sameDomain"
@@ -1952,6 +1909,68 @@
 					}
 				}
 			}
+		},
+		"securityPolicies": {
+			"title": "securityPolicies",
+			"description": "(PUBLIC) FEA security policy",
+			"type": "object",
+			"properties": {
+				"//trusted": {
+					"type": "string"
+				},
+				"trusted": {
+					"type": "object"
+				},
+				"untrusted": {
+					"title": "untrusted",
+					"type": "object",
+					"properties": {
+						"System": {
+							"title": "System",
+							"type": "object",
+							"properties": {
+								"clearCache": {
+									"type": "boolean"
+								},
+								"exit": {
+									"type": "boolean"
+								},
+								"launchExternalProcess": {
+									"type": "boolean"
+								}
+							}
+						},
+						"Window": {
+							"title": "Window",
+							"type": "object",
+							"properties": {
+								"executeJavaScript": {
+									"type": "boolean"
+								},
+								"webPreferences": {
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"securityPolicyRules": {
+			"title": "securityPolicyRules",
+			"description": "(PUBLIC)",
+			"type": "object",
+			"properties": {
+				"crossDomain": {
+					"type": "string"
+				},
+				"sameDomain": {
+					"type": "string"
+				}
+			},
+			"requiredPlaceHolder": [
+				"crossDomain",
+				"sameDomain"
+			]
 		},
 		"finsembleCustom": {
 			"description": "Schema for finsemble.custom to support customer extensions"

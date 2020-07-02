@@ -1,5 +1,5 @@
 {
-	"$schema": "../schemas/components.schema.json",
+	"$schema": "../schemas/finsemble.schema.json",
 	"components": {
 		"App Launcher": {
 			"window": {
