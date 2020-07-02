@@ -1,9 +1,8 @@
 {
 	"$schema": "http://json-schema.org/draft-07/schema#",
-	"title": "Finsemble Schemas",
-	"description": "Finsemble Schemas supporting run-time validation and VSCode Intellisense",
+	"title": "Finsemble Configuration",
+	"description": "A set of \"Any of\" schemas mapping to the set of Finsemble's config files.  Supports VSCode Intellisense integration for each file. ",
 	"items": false,
-	"additionalProperties": false,
 	"anyOf": [
 		{
 			"$ref": "#/definitions/ComponentsFileSubschema"
@@ -20,7 +19,7 @@
 	],
 	"definitions": {
 		"ManifestFileSubschema": {
-			"description": "Subschema corresponding to the manifest file to suppport VSCode Intellisense. NOTE: there is some duplication here with the full schema definition. ",
+			"description": "Subschema corresponding to the manifest file to support VSCode Intellisense. NOTE: there is some duplication here with the full schema definition. ",
 			"type": "object",
 			"properties": {
 				"devtools_port": {
@@ -37,7 +36,7 @@
 				},
 				"appAssets": {
 					"title": "appAssets",
-					"description": "Manifest array of external assets to be automatially loading by FEA. ",
+					"description": "Manifest array of external assets to be automatically loading by FEA. ",
 					"type": "array",
 					"items": {
 						"type": "object",
@@ -166,7 +165,7 @@
 			]
 		},
 		"ComponentsFileSubschema": {
-			"description": "Subschema corresponding to a file containing component config to suppport VSCode Intellisense.. ",
+			"description": "Subschema corresponding to a file containing component config to support VSCode Intellisense.. ",
 			"type": "object",
 			"properties": {
 				"$schema": {
@@ -183,7 +182,7 @@
 			"additionalProperties": false
 		},
 		"ServicesFileSubschema": {
-			"description": "Subschema corresponding to a file containing service config to suppport VSCode Intellisense.. ",
+			"description": "Subschema corresponding to a file containing service config to support VSCode Intellisense.. ",
 			"type": "object",
 			"properties": {
 				"$schema": {
@@ -198,59 +197,6 @@
 				}
 			},
 			"additionalProperties": false
-		},
-		"BootSubschema": {
-			"title": "finsemble",
-			"description": "Subschema for config required to boot finsemble",
-			"type": "object",
-			"properties": {
-				"applicationRoot": {
-					"type": "string",
-					"format": "uri"
-				},
-				"moduleRoot": {
-					"type": "string"
-				},
-				"servicesRoot": {
-					"type": "string"
-				},
-				"thirdPartyRoot": {
-					"type": "string"
-				},
-				"configVersion": {
-					"type": "string"
-				},
-				"configSchemaURL": {
-					"type": "string"
-				},
-				"notificationURL": {
-					"type": "string"
-				},
-				"bootConfig": {
-					"$ref": "#/definitions/boot_config"
-				},
-				"router": {
-					"$ref": "#/definitions/router"
-				},
-				"bootTasks": {
-					"$ref": "#/definitions/bootTasks"
-				},
-				"system": {
-					"$ref": "#/definitions/system"
-				}
-			},
-			"required": [
-				"applicationRoot",
-				"moduleRoot",
-				"servicesRoot",
-				"thirdPartyRoot",
-				"configVersion",
-				"configSchemaURL",
-				"notificationURL",
-				"bootConfig",
-				"bootTasks",
-				"system"
-			]
 		},
 		"ManifestSubschema": {
 			"description": "Highest level subschema, including manifest and finsemble",
@@ -270,7 +216,7 @@
 				},
 				"appAssets": {
 					"title": "appAssets",
-					"description": "Manifest array of external assets to be automatially loading by FEA. ",
+					"description": "Manifest array of external assets to be automatically loading by FEA. ",
 					"type": "array",
 					"items": {
 						"type": "object",
@@ -306,9 +252,113 @@
 				"finsemble"
 			]
 		},
+		"BootManifestSubschema": {
+			"description": "The boot subschema, including manifest and partial finsemble",
+			"type": "object",
+			"properties": {
+				"devtools_port": {
+					"description": "Manifest property to set Chromium devTools port. ",
+					"type": "number"
+				},
+				"startup_app": {
+					"$ref": "#/definitions/manifestStartupApp"
+				},
+				"splashScreenImage": {
+					"description": "Manifest URL for splash screen to display on startup.",
+					"type": "string",
+					"format": "uri"
+				},
+				"appAssets": {
+					"title": "appAssets",
+					"description": "Manifest array of external assets to be automatically loading by FEA. ",
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"src": {
+								"type": "string",
+								"format": "uri"
+							},
+							"version": {
+								"type": "string"
+							},
+							"alias": {
+								"type": "string"
+							},
+							"target": {
+								"type": "string"
+							}
+						},
+						"requiredPlaceHolder": [
+							"src",
+							"version",
+							"alias",
+							"target"
+						]
+					}
+				},
+				"finsemble": {
+					"title": "finsemble",
+					"description": "Subschema for config required to boot finsemble",
+					"type": "object",
+					"properties": {
+						"applicationRoot": {
+							"type": "string",
+							"format": "uri"
+						},
+						"moduleRoot": {
+							"type": "string"
+						},
+						"servicesRoot": {
+							"type": "string"
+						},
+						"thirdPartyRoot": {
+							"type": "string"
+						},
+						"configVersion": {
+							"type": "string"
+						},
+						"configSchemaURL": {
+							"type": "string"
+						},
+						"notificationURL": {
+							"type": "string"
+						},
+						"bootConfig": {
+							"$ref": "#/definitions/boot_config"
+						},
+						"router": {
+							"$ref": "#/definitions/router"
+						},
+						"bootTasks": {
+							"$ref": "#/definitions/bootTasks"
+						},
+						"system": {
+							"$ref": "#/definitions/system"
+						}
+					},
+					"required": [
+						"applicationRoot",
+						"moduleRoot",
+						"servicesRoot",
+						"thirdPartyRoot",
+						"configVersion",
+						"configSchemaURL",
+						"notificationURL",
+						"bootConfig",
+						"bootTasks",
+						"system"
+					]
+				}
+			},
+			"required": [
+				"startup_app",
+				"finsemble"
+			]
+		},
 		"FinsembleSubschema": {
 			"title": "finsemble",
-			"description": "subschema for all finsemble config (except manifest)",
+			"description": "Subschema for all finsemble config (without the manifest)",
 			"type": "object",
 			"properties": {
 				"$schema": {
@@ -699,7 +749,8 @@
 								"dataStoreAdapters"
 							]
 						}
-					}
+					},
+					"additionalProperties": false
 				},
 				"preferences": {
 					"title": "preferences",
@@ -816,7 +867,7 @@
 			"additionalProperties": false
 		},
 		"manifestStartupApp": {
-			"description": "Manifest property for the initial startup app, which reference Finemble's System Manager.",
+			"description": "Manifest property for the initial startup app, which reference Finsemble's System Manager.",
 			"type": "object",
 			"properties": {
 				"name": {
@@ -904,7 +955,7 @@
 					"properties": {
 						"FinsembleTransport": {
 							"title": "FinsembleTransport",
-							"description": " Configuration for the FinsembleTransport (IAC) if choosen as the communication mechanism for cross-domain components. IAC uses WebSocket as its communication protocol.",
+							"description": " Configuration for the FinsembleTransport (IAC) if chosen as the communication mechanism for cross-domain components. IAC uses WebSocket as its communication protocol.",
 							"type": "object",
 							"properties": {
 								"serverAddress": {
@@ -1469,9 +1520,6 @@
 						"displayName": {
 							"type": "string"
 						},
-						"spawnOnStartup": {
-							"type": "boolean"
-						},
 						"preload": {
 							"type": "string"
 						},
@@ -1563,7 +1611,8 @@
 				"custom": {
 					"$ref": "#/definitions/componentCustom"
 				}
-			}
+			},
+			"additionalProperties": false
 		},
 		"services": {
 			"description": "(PUBLIC) Configurations for services",
@@ -1905,12 +1954,13 @@
 			}
 		},
 		"finsembleCustom": {
-			"description": "schema for finsemble.custom to support customer extensions"
+			"description": "Schema for finsemble.custom to support customer extensions"
 		},
 		"componentCustom": {
-			"description": "schema for finsemble.comp to support customer extensions"
+			"description": "Schema for finsemble.components.someComponent to support customer extensions"
 		},
 		"serviceCustom": {
+			"description": "Schema for finsemble.services.someServices to support customer extensions"
 		}
 	}
 }
