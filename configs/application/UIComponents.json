@@ -1,5 +1,6 @@
 {
 	"comment": "Sample component config, including app launcher, menus, etc.",
+	"$schema": "../schemas/finsemble.schema.json",
 	"components": {
 		"App Launcher": {
 			"window": {
