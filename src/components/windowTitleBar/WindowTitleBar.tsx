@@ -7,7 +7,7 @@ import ReactDOM from "react-dom";
 import { FinsembleProvider } from "@chartiq/finsemble-ui/react/components/FinsembleProvider";
 import {
 	AlwaysOnTopButton,
-	DockingButton,
+	GroupingButton,
 	LinkerButton,
 	ShareButton,
 	TabRegion,
@@ -37,7 +37,7 @@ import "../../../assets/css/theme.css";
  * "foreign.components.Window Manager.showLinker" property
  * to false will hide the <LinkerButton/>.
  *
- * Other buttons are dynamic, such as <DockingButton> which will only
+ * Other buttons are dynamic, such as <GroupingButton> which will only
  * appear when windows are docked or can be docked.
  */
 const WindowTitleBar = () => {
@@ -53,7 +53,7 @@ const WindowTitleBar = () => {
 				<TabRegion />
 			</div>
 			<div className="fsbl-header-right">
-				<DockingButton />
+				<GroupingButton />
 				<AlwaysOnTopButton />
 				<MinimizeButton />
 				<MaximizeButton />

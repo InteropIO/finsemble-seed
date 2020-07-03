@@ -2,72 +2,6 @@
 	"comment": "Sample component config, including app launcher, menus, etc.",
 	"$schema": "../schemas/finsemble.schema.json",
 	"components": {
-		"App Launcher": {
-			"window": {
-				"url": "$applicationRoot/components/appLauncher/appLauncher.html",
-				"affinity": "systemComponents",
-				"top": 0,
-				"left": 0,
-				"width": 310,
-				"height": 400,
-				"ephemeral": true,
-				"options": {
-					"autoShow": false
-				}
-			},
-			"component": {
-				"allowQuickComponent": "@TODO",
-				"spawnOnStartup": false,
-				"category": "system"
-			},
-			"foreign": {
-				"services": {
-					"windowService": {
-						"allowAutoArrange": false,
-						"shouldRegister": false
-					}
-				},
-				"components": {
-					"Window Manager": {
-						"persistWindowState": false,
-						"FSBLHeader": false
-					}
-				}
-			}
-		},
-		"Advanced App Launcher": {
-			"window": {
-				"url": "$applicationRoot/components/advancedAppLauncher/index.html",
-				"top": 0,
-				"left": 0,
-				"width": 700,
-				"height": 467,
-				"ephemeral": true,
-				"options": {
-					"autoShow": false
-				}
-			},
-			"component": {
-				"allowQuickComponent": "@TODO",
-				"spawnOnStartup": false,
-				"category": "system"
-			},
-			"foreign": {
-				"services": {
-					"windowService": {
-						"allowAutoArrange": false,
-						"shouldRegister": false
-					}
-				},
-				"components": {
-					"Window Manager": {
-						"persistWindowState": false,
-						"FSBLHeader": false,
-						"title": "Advanced App Launcher"
-					}
-				}
-			}
-		},
 		"linkerWindow": {
 			"bootParams": {
 				"stage": "earlyuser",
@@ -458,51 +392,6 @@
 					"Window Manager": {
 						"FSBLHeader": false,
 						"persistWindowState": true
-					},
-					"Toolbar": {
-						"iconClass": "UserPreferences"
-					}
-				}
-			}
-		},
-		"Floating Titlebar": {
-			"window": {
-				"url": "$applicationRoot/components/floatingTitlebar/floatingTitlebar.html",
-				"affinity": "systemComponents",
-				"frame": false,
-				"top": "center",
-				"left": "center",
-				"width": 30,
-				"height": 30,
-				"options": {
-					"cornerRounding": {
-						"height": 0,
-						"width": 0
-					},
-					"showTaskbarIcon": false,
-					"autoShow": false,
-					"resizable": false,
-					"alwaysOnTop": false,
-					"smallWindow": true
-				}
-			},
-			"component": {
-				"category": "system"
-			},
-			"foreign": {
-				"services": {
-					"windowService": {
-						"allowGrouping": true,
-						"allowAutoArrange": false
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"launchableByUser": false
-					},
-					"Window Manager": {
-						"FSBLHeader": false,
-						"persistWindowState": false
 					},
 					"Toolbar": {
 						"iconClass": "UserPreferences"
