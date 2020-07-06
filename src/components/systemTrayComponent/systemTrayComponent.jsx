@@ -4,17 +4,15 @@
  */
 import React from "react";
 import ReactDOM from "react-dom";
-import { FinsembleProvider } from "@chartiq/finsemble-ui/react/components";
-import {
-	SystemTrayComponentShell,
-	Preferences,
-	SystemLog,
-	CentralLogger,
-	Documentation,
-	Restart,
-	Reset,
-	Quit,
-} from "@chartiq/finsemble-ui/react/components";
+import { FinsembleProvider } from "@chartiq/finsemble-ui/react/components/FinsembleProvider";
+import { SystemTrayComponentShell } from "@chartiq/finsemble-ui/react/components/System";
+import { Preferences } from "@chartiq/finsemble-ui/react/components/System";
+import { SystemLog } from "@chartiq/finsemble-ui/react/components/System";
+import { CentralLogger } from "@chartiq/finsemble-ui/react/components/System";
+import { Documentation } from "@chartiq/finsemble-ui/react/components/System";
+import { Restart } from "@chartiq/finsemble-ui/react/components/System";
+import { Reset } from "@chartiq/finsemble-ui/react/components/System";
+import { Quit } from "@chartiq/finsemble-ui/react/components/System";
 import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../assets/css/theme.css";
 
