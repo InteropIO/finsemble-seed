@@ -4,15 +4,14 @@
  */
 import React from "react";
 import ReactDOM from "react-dom";
-
-import { LinkerMenu } from "@chartiq/finsemble-ui/react/components/Linker";
 import { FinsembleProvider } from "@chartiq/finsemble-ui/react/components/FinsembleProvider";
+import { SingleInputDialog } from "@chartiq/finsemble-ui/react/components/Dialog";
 import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../assets/css/theme.css";
 
 ReactDOM.render(
 	<FinsembleProvider>
-		<LinkerMenu />
+		<SingleInputDialog />
 	</FinsembleProvider>,
-	document.getElementById("Linker-component-wrapper")
+	document.getElementById("SingleInputDialog-tsx")
 );

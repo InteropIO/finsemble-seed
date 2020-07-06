@@ -1,3 +1,4 @@
+/* eslint-disable quote-props */
 /*!
  * Copyright 2017 - 2020 by ChartIQ, Inc.
  * All rights reserved.
@@ -36,5 +37,5 @@ ReactDOM.render(
 	<FinsembleProvider>
 		<UserPreferences sections={sections} />
 	</FinsembleProvider>,
-	document.getElementById("UserPreferences-component-wrapper")
+	document.getElementById("UserPreferences-tsx")
 );

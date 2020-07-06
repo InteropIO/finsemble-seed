@@ -1,79 +1,14 @@
 {
 	"comment": "Sample component config, including app launcher, menus, etc.",
+	"$schema": "../schemas/finsemble.schema.json",
 	"components": {
-		"App Launcher": {
-			"window": {
-				"url": "$applicationRoot/components/appLauncher/appLauncher.html",
-				"affinity": "systemComponents",
-				"top": 0,
-				"left": 0,
-				"width": 310,
-				"height": 400,
-				"ephemeral": true,
-				"options": {
-					"autoShow": false
-				}
-			},
-			"component": {
-				"allowQuickComponent": "@TODO",
-				"spawnOnStartup": false,
-				"category": "system"
-			},
-			"foreign": {
-				"services": {
-					"windowService": {
-						"allowAutoArrange": false,
-						"shouldRegister": false
-					}
-				},
-				"components": {
-					"Window Manager": {
-						"persistWindowState": false,
-						"FSBLHeader": false
-					}
-				}
-			}
-		},
-		"Advanced App Launcher": {
-			"window": {
-				"url": "$applicationRoot/components/advancedAppLauncher/index.html",
-				"top": 0,
-				"left": 0,
-				"width": 700,
-				"height": 467,
-				"ephemeral": true,
-				"options": {
-					"autoShow": false
-				}
-			},
-			"component": {
-				"allowQuickComponent": "@TODO",
-				"spawnOnStartup": false,
-				"category": "system"
-			},
-			"foreign": {
-				"services": {
-					"windowService": {
-						"allowAutoArrange": false,
-						"shouldRegister": false
-					}
-				},
-				"components": {
-					"Window Manager": {
-						"persistWindowState": false,
-						"FSBLHeader": false,
-						"title": "Advanced App Launcher"
-					}
-				}
-			}
-		},
 		"linkerWindow": {
 			"bootParams": {
 				"stage": "earlyuser",
 				"dependencies": ["Toolbar"]
 			},
 			"window": {
-				"url": "$applicationRoot/components/linker/linker.html",
+				"url": "$applicationRoot/components/Linker/Linker.html",
 				"affinity": "systemComponents",
 				"width": 132,
 				"height": 232,
@@ -107,7 +42,7 @@
 		},
 		"QuickComponentForm": {
 			"window": {
-				"url": "$applicationRoot/components/quickComponentForm/quickComponentForm.html",
+				"url": "$applicationRoot/components/QuickComponentForm/QuickComponentForm.html",
 				"affinity": "systemComponents",
 				"width": 550,
 				"height": 175,
@@ -178,7 +113,7 @@
 				"dependencies": ["Toolbar"]
 			},
 			"window": {
-				"url": "$applicationRoot/components/yesNoDialog/yesNoDialog.html",
+				"url": "$applicationRoot/components/YesNoDialog/YesNoDialog.html",
 				"affinity": "systemComponents",
 				"width": 500,
 				"height": 223,
@@ -224,7 +159,7 @@
 				"dependencies": ["Toolbar"]
 			},
 			"window": {
-				"url": "$applicationRoot/components/singleInputDialog/singleInputDialog.html",
+				"url": "$applicationRoot/components/SingleInputDialog/SingleInputDialog.html",
 				"affinity": "systemComponents",
 				"width": 480,
 				"height": 154,
@@ -312,7 +247,7 @@
 			},
 			"window": {
 				"id": "launcher",
-				"url": "$applicationRoot/components/toolbar/toolbar.html",
+				"url": "$applicationRoot/components/Toolbar/Toolbar.html",
 				"affinity": "systemComponents",
 				"width": 600,
 				"height": 39,
@@ -392,7 +327,7 @@
 		"windowTitleBar": {
 			"window": {
 				"//": "This is never called as a component. It is compiled to js and then injected into other components",
-				"url": "$applicationRoot/components/windowTitleBar/windowTitleBar.js",
+				"url": "$applicationRoot/components/WindowTitleBar/WindowTitleBar.js",
 				"top": "center",
 				"left": "center",
 				"width": 358,
@@ -425,7 +360,7 @@
 				"dependencies": ["Toolbar"]
 			},
 			"window": {
-				"url": "$applicationRoot/components/userPreferences/userPreferences.html",
+				"url": "$applicationRoot/components/UserPreferences/UserPreferences.html",
 				"affinity": "systemComponents",
 				"frame": false,
 				"top": "center",
@@ -464,54 +399,9 @@
 				}
 			}
 		},
-		"Floating Titlebar": {
-			"window": {
-				"url": "$applicationRoot/components/floatingTitlebar/floatingTitlebar.html",
-				"affinity": "systemComponents",
-				"frame": false,
-				"top": "center",
-				"left": "center",
-				"width": 30,
-				"height": 30,
-				"options": {
-					"cornerRounding": {
-						"height": 0,
-						"width": 0
-					},
-					"showTaskbarIcon": false,
-					"autoShow": false,
-					"resizable": false,
-					"alwaysOnTop": false,
-					"smallWindow": true
-				}
-			},
-			"component": {
-				"category": "system"
-			},
-			"foreign": {
-				"services": {
-					"windowService": {
-						"allowGrouping": true,
-						"allowAutoArrange": false
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"launchableByUser": false
-					},
-					"Window Manager": {
-						"FSBLHeader": false,
-						"persistWindowState": false
-					},
-					"Toolbar": {
-						"iconClass": "UserPreferences"
-					}
-				}
-			}
-		},
 		"Process Monitor": {
 			"window": {
-				"url": "$applicationRoot/components/processMonitor/processMonitor.html",
+				"url": "$applicationRoot/components/ProcessMonitor/ProcessMonitor.html",
 				"affinity": "workspaceComponents",
 				"width": 600,
 				"height": 700
@@ -539,7 +429,7 @@
 		},
 		"Advanced App Catalog": {
 			"window": {
-				"url": "$applicationRoot/components/appCatalog/appCatalog.html",
+				"url": "$applicationRoot/components/AppCatalog/AppCatalog.html",
 				"affinity": "systemComponents",
 				"width": 600,
 				"height": 700,
@@ -583,11 +473,10 @@
 				"dependencies": ["Toolbar"]
 			},
 			"window": {
-				"url": "$applicationRoot/components/systemTrayComponent/systemTrayComponent.html",
+				"url": "$applicationRoot/components/SystemTrayComponent/SystemTrayComponent.html",
 				"affinity": "systemComponents",
-				"frame": false,
-				"width": 70,
-				"height": 70,
+				"width": 150,
+				"height": 40,
 				"options": {
 					"autoShow": false,
 					"resizable": false,

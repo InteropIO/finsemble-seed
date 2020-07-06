@@ -24,58 +24,30 @@ if (env === "production") {
 }
 
 const windowTitleBarPath =
-	"./src/components/windowTitleBar/windowTitleBarLoader.js";
+	"./src/components/WindowTitleBar/windowTitleBarLoader.js";
 module.exports = {
 	devtool: env === "production" ? "source-map" : "eval-source-map",
 	entry: {
-		"components/windowTitleBar/windowTitleBar": windowTitleBarPath,
+		"components/WindowTitleBar/WindowTitleBar": windowTitleBarPath,
 	},
 	stats: "minimal",
 	module: {
 		rules: [
 			{
-				test: /\.css$/,
-				use: ["style-loader", "css-loader"],
+				test: /\.s?css$/i,
+				use: [
+					"style-loader",
+					{
+						loader: "css-loader",
+						options: {
+							sourceMap: env !== "production",
+						},
+					},
+				],
 			},
 			{
-				test: /\.scss$/,
-				use: ["style-loader", "css-loader", "sass-loader"],
-			},
-			{
-				test: /\.png|img$/,
+				test: /\.(png|img|ttf|ottf|eot|woff|woff2|svg)$/,
 				loader: "url-loader",
-			},
-			{
-				test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-				issuer: {
-					test: /\.jsx?$/,
-				},
-				use: ["@svgr/webpack"],
-			},
-			{
-				test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-				loader:
-					"url-loader?limit=65000&mimetype=image/svg+xml&name=/public/fonts/[name].[ext]",
-			},
-			{
-				test: /\.woff$/,
-				loader:
-					"url-loader?limit=65000&mimetype=application/font-woff&name=/public/fonts/[name].[ext]",
-			},
-			{
-				test: /\.woff2$/,
-				loader:
-					"url-loader?limit=65000&mimetype=application/font-woff2&name=/public/fonts/[name].[ext]",
-			},
-			{
-				test: /\.[ot]tf$/,
-				loader:
-					"url-loader?limit=65000&mimetype=application/octet-stream&name=/public/fonts/[name].[ext]",
-			},
-			{
-				test: /\.eot$/,
-				loader:
-					"url-loader?limit=65000&mimetype=application/vnd.ms-fontobject&name=/public/fonts/[name].[ext]",
 			},
 			{
 				test: /semver\.browser\.js/,
@@ -114,6 +86,11 @@ module.exports = {
 					},
 				},
 			},
+			{
+				test: /\.ts(x)?$/,
+				loader: "ts-loader",
+				exclude: /node_modules/,
+			},
 		],
 	},
 	mode: env,
@@ -124,7 +101,7 @@ module.exports = {
 		path: path.resolve(__dirname, "../../dist/"),
 	},
 	resolve: {
-		extensions: [".js", ".jsx", ".json", "scss", "html"],
+		extensions: [".ts", ".tsx", ".js", ".jsx", ".json", "scss", "html"],
 		alias: {
 			react: path.resolve("./node_modules/react"),
 			"react-dom": path.resolve("./node_modules/react-dom"),

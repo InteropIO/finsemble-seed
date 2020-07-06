@@ -4,47 +4,47 @@
 		"entry": "./assets/css/finsemble.css"
 	},
 	"authentication": {
-		"output": "components/authentication/authentication",
-		"entry": "./src/components/authentication/Authentication.jsx"
+		"output": "components/Authentication/Authentication",
+		"entry": "./src/components/Authentication/Authentication.tsx"
 	},
 	"toolbar": {
-		"output": "components/toolbar/toolbar",
-		"entry": "./src/components/toolbar/src/Toolbar.jsx"
+		"output": "components/Toolbar/Toolbar",
+		"entry": "./src/components/Toolbar/src/Toolbar.tsx"
 	},
 	"linker": {
-		"output": "components/linker/linker",
-		"entry": "./src/components/linker/Linker.jsx"
+		"output": "components/Linker/Linker",
+		"entry": "./src/components/Linker/Linker.tsx"
 	},
 	"quickComponentForm": {
-		"output": "components/quickComponentForm/quickComponentForm",
-		"entry": "./src/components/quickComponentForm/QuickComponentForm.jsx"
+		"output": "components/QuickComponentForm/QuickComponentForm",
+		"entry": "./src/components/QuickComponentForm/QuickComponentForm.tsx"
 	},
 	"yesNoDialog": {
-		"output": "components/yesNoDialog/yesNoDialog",
-		"entry": "./src/components/yesNoDialog/YesNoDialog.jsx"
+		"output": "components/YesNoDialog/YesNoDialog",
+		"entry": "./src/components/YesNoDialog/YesNoDialog.tsx"
 	},
 	"singleInputDialog": {
-		"output": "components/singleInputDialog/singleInputDialog",
-		"entry": "./src/components/singleInputDialog/SingleInputDialog.jsx"
+		"output": "components/SingleInputDialog/SingleInputDialog",
+		"entry": "./src/components/SingleInputDialog/SingleInputDialog.tsx"
 	},
 	"UserPreferences": {
-		"output": "components/userPreferences/userPreferences",
-		"entry": "./src/components/userPreferences/UserPreferences.jsx"
+		"output": "components/UserPreferences/UserPreferences",
+		"entry": "./src/components/UserPreferences/UserPreferences.tsx"
 	},
 	"appCatalog": {
-		"output": "components/appCatalog/appCatalog",
-		"entry": "./src/components/appCatalog/AppCatalog.jsx"
+		"output": "components/AppCatalog/AppCatalog",
+		"entry": "./src/components/AppCatalog/AppCatalog.tsx"
 	},
 	"nonConfiguredComponent": {
 		"output": "components/nonConfiguredComponent/nonConfiguredComponent",
 		"entry": "./src/components/nonConfiguredComponent/nonConfiguredComponent.js"
 	},
 	"processMonitor": {
-		"output": "components/processMonitor/processMonitor",
-		"entry": "./src/components/processMonitor/ProcessMonitor.jsx"
+		"output": "components/ProcessMonitor/ProcessMonitor",
+		"entry": "./src/components/ProcessMonitor/ProcessMonitor.tsx"
 	},
 	"systemTrayComponent": {
-		"output": "components/systemTrayComponent/systemTrayComponent",
-		"entry": "./src/components/systemTrayComponent/SystemTrayComponent.jsx"
+		"output": "components/SystemTrayComponent/SystemTrayComponent",
+		"entry": "./src/components/SystemTrayComponent/SystemTrayComponent.tsx"
 	}
 }

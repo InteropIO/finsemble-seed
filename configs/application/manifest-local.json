@@ -1,4 +1,5 @@
 {
+	"$schema": "../schemas/finsemble.schema.json",
 	"devtools_port": 9090,
 	"startup_app": {
 		"name": "ChartIQ Local",
@@ -37,6 +38,7 @@
 		"moduleRoot": "$applicationRoot/finsemble",
 		"servicesRoot": "$applicationRoot/finsemble/services",
 		"notificationURL": "$applicationRoot/components/notification/notification.html",
+		"configSchemaURL": "$applicationRoot/configs/schemas/finsemble.schema.json",
 		"bootConfig": {
 			"onErrorMakeSystemManagerVisible": true,
 			"defaults": {
@@ -45,14 +47,15 @@
 				"startTaskTimeout": 10000
 			}
 		},
-		"importConfig": ["$applicationRoot/configs/application/config.json"],
 		"router": {
 			"crossDomainTransport": "IPCBus",
+			"sameDomainTransport": "SharedWorker",
 			"transportSettings": {
 				"FinsembleTransport": {
 					"serverAddress": "ws://127.0.0.1:3376"
 				}
 			}
-		}
+		},
+		"importConfig": ["$applicationRoot/configs/application/config.json"]
 	}
 }
