@@ -33,15 +33,9 @@
 		"@chartiq/finsemble-cli": "5.0.0"
 	},
 	"dependencies": {
-		"@chartiq/finsemble": "5.0.0",
 		"@chartiq/finsemble-electron-adapter": "5.0.0",
-		"@chartiq/finsemble-ui": "5.0.0",
 		"async": "2.6.2",
-		"compression": "1.7.3",
-		"lodash.get": "4.4.2",
-		"react": "16.13.1",
-		"react-dom": "16.13.1",
-		"superagent": "5.2.2"
+		"compression": "1.7.3"
 	},
 	"devDependencies": {
 		"@babel/core": "7.6.4",
@@ -53,6 +47,8 @@
 		"@babel/preset-env": "7.8.7",
 		"@babel/preset-react": "7.9.4",
 		"@babel/runtime": "^7.8.4",
+		"@chartiq/finsemble": "5.0.0",
+		"@chartiq/finsemble-ui": "5.0.0",
 		"@types/mocha": "5.2.7",
 		"@types/react-dom": "16.9.8",
 		"@types/react-redux": "7.1.6",
@@ -70,6 +66,8 @@
 		"mini-css-extract-plugin": "^0.9.0",
 		"mocha": "7.0.0",
 		"pretty-hrtime": "^1.0.3",
+		"react": "16.13.1",
+		"react-dom": "16.13.1",
 		"rimraf": "3.0.2",
 		"shelljs": "0.8.3",
 		"source-map-loader": "1.0.0",
