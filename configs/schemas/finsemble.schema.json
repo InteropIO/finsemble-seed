@@ -2,10 +2,7 @@
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"title": "Finsemble Configuration",
 	"description": "A set of \"Any of\" schemas mapping to the set of Finsemble's config files.  Supports VSCode Intellisense integration for each file. ",
-	"items": [
-		{
-		}
-	],
+	"items": [{}],
 	"additionalItems": false,
 	"anyOf": [
 		{
@@ -62,12 +59,7 @@
 								"type": "string"
 							}
 						},
-						"requiredPlaceHolder": [
-							"src",
-							"version",
-							"alias",
-							"target"
-						]
+						"requiredPlaceHolder": ["src", "version", "alias", "target"]
 					}
 				},
 				"finsemble": {
@@ -159,17 +151,11 @@
 							"$ref": "#/definitions/finsembleCustom"
 						}
 					},
-					"required": [
-						"applicationRoot",
-						"moduleRoot"
-					],
+					"required": ["applicationRoot", "moduleRoot"],
 					"additionalProperties": false
 				}
 			},
-			"required": [
-				"startup_app",
-				"finsemble"
-			]
+			"required": ["startup_app", "finsemble"]
 		},
 		"ComponentsFileSubschema": {
 			"description": "Subschema corresponding to a file containing component config, to support VSCode Intellisense.. ",
@@ -207,16 +193,11 @@
 		},
 		"SecrityPolicyFileSubschema": {
 			"description": "Subschema corresponding to the security policies file, to support VSCode Intellisense.. ",
-			"items": [
-				{
-				}
-			],
+			"items": [{}],
 			"additionalItems": false,
 			"properties": {
-				"securityPolicies": {
-				},
-				"securityPolicyRules": {
-				}
+				"securityPolicies": {},
+				"securityPolicyRules": {}
 			}
 		},
 		"ManifestSubschema": {
@@ -256,22 +237,14 @@
 								"type": "string"
 							}
 						},
-						"requiredPlaceHolder": [
-							"src",
-							"version",
-							"alias",
-							"target"
-						]
+						"requiredPlaceHolder": ["src", "version", "alias", "target"]
 					}
 				},
 				"finsemble": {
 					"$ref": "#/definitions/FinsembleSubschema"
 				}
 			},
-			"required": [
-				"startup_app",
-				"finsemble"
-			]
+			"required": ["startup_app", "finsemble"]
 		},
 		"BootManifestSubschema": {
 			"description": "The boot subschema, including manifest and partial finsemble",
@@ -310,12 +283,7 @@
 								"type": "string"
 							}
 						},
-						"requiredPlaceHolder": [
-							"src",
-							"version",
-							"alias",
-							"target"
-						]
+						"requiredPlaceHolder": ["src", "version", "alias", "target"]
 					}
 				},
 				"finsemble": {
@@ -372,10 +340,7 @@
 					]
 				}
 			},
-			"required": [
-				"startup_app",
-				"finsemble"
-			]
+			"required": ["startup_app", "finsemble"]
 		},
 		"FinsembleSubschema": {
 			"title": "finsemble",
@@ -473,10 +438,7 @@
 				},
 				"securityPolicyRules": {
 					"$ref": "#/definitions/securityPolicyRules",
-					"requiredPlaceHolder": [
-						"crossDomain",
-						"sameDomain"
-					]
+					"requiredPlaceHolder": ["crossDomain", "sameDomain"]
 				},
 				"accessibleLinker": {
 					"description": "(PUBLIC)",
@@ -562,9 +524,7 @@
 									}
 								}
 							},
-							"required": [
-								"initialStores"
-							]
+							"required": ["initialStores"]
 						},
 						"launcher": {
 							"title": "launcher",
@@ -577,10 +537,7 @@
 									"type": "string"
 								}
 							},
-							"required": [
-								"staggerPixels",
-								"unknownComponent"
-							]
+							"required": ["staggerPixels", "unknownComponent"]
 						},
 						"assimilation": {
 							"$ref": "#/definitions/serviceAssimilationConfig"
@@ -651,11 +608,7 @@
 									"items": {
 										"type": "string"
 									},
-									"default": [
-										"ctrl",
-										"shift",
-										"L"
-									]
+									"default": ["ctrl", "shift", "L"]
 								}
 							},
 							"additionalProperties": false
@@ -884,11 +837,7 @@
 					"type": "boolean"
 				}
 			},
-			"required": [
-				"name",
-				"url",
-				"uuid"
-			]
+			"required": ["name", "url", "uuid"]
 		},
 		"router": {
 			"title": "router",
@@ -922,16 +871,11 @@
 									"default": "ws://127.0.0.1:3376"
 								}
 							},
-							"required": [
-								"serverAddress"
-							]
+							"required": ["serverAddress"]
 						}
 					},
-					"required": [
-						"FinsembleTransport"
-					],
-					"default": {
-					}
+					"required": ["FinsembleTransport"],
+					"default": {}
 				}
 			},
 			"additionalProperties": false
@@ -1333,16 +1277,10 @@
 							"type": "number"
 						},
 						"top": {
-							"type": [
-								"string",
-								"number"
-							]
+							"type": ["string", "number"]
 						},
 						"left": {
-							"type": [
-								"string",
-								"number"
-							]
+							"type": ["string", "number"]
 						},
 						"right": {
 							"type": "number"
@@ -1351,27 +1289,16 @@
 							"type": "string"
 						},
 						"dockable": {
-							"type": [
-								"array",
-								"boolean"
-							],
+							"type": ["array", "boolean"],
 							"items": {
 								"type": "string"
 							}
 						},
 						"maxHeight": {
-							"type": [
-								"number",
-								"boolean",
-								"null"
-							]
+							"type": ["number", "boolean", "null"]
 						},
 						"minHeight": {
-							"type": [
-								"number",
-								"boolean",
-								"null"
-							]
+							"type": ["number", "boolean", "null"]
 						},
 						"minWidth": {
 							"type": "number"
@@ -1637,9 +1564,7 @@
 				},
 				"category": {
 					"type": "string",
-					"enum": [
-						"system"
-					]
+					"enum": ["system"]
 				},
 				"window": {
 					"title": "window",
@@ -1778,11 +1703,7 @@
 					"$ref": "#/definitions/serviceCustom"
 				}
 			},
-			"required": [
-				"spawnAs",
-				"html",
-				"file"
-			],
+			"required": ["spawnAs", "html", "file"],
 			"additionalProperties": false
 		},
 		"serviceAssimilationConfig": {
@@ -1947,8 +1868,7 @@
 								"executeJavaScript": {
 									"type": "boolean"
 								},
-								"webPreferences": {
-								}
+								"webPreferences": {}
 							}
 						}
 					}
@@ -1967,10 +1887,7 @@
 					"type": "string"
 				}
 			},
-			"requiredPlaceHolder": [
-				"crossDomain",
-				"sameDomain"
-			]
+			"requiredPlaceHolder": ["crossDomain", "sameDomain"]
 		},
 		"finsembleCustom": {
 			"description": "Schema for finsemble.custom to support customer extensions"
