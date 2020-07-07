@@ -113,7 +113,7 @@
 				"dependencies": ["Toolbar"]
 			},
 			"window": {
-				"url": "$applicationRoot/components/YesNoDialog/YesNoDialog.html",
+				"url": "$applicationRoot/components/YesNoDialog/yesNoDialog.html",
 				"affinity": "systemComponents",
 				"width": 500,
 				"height": 223,
@@ -159,7 +159,7 @@
 				"dependencies": ["Toolbar"]
 			},
 			"window": {
-				"url": "$applicationRoot/components/SingleInputDialog/singleinputDialog.html",
+				"url": "$applicationRoot/components/SingleInputDialog/singleInputDialog.html",
 				"affinity": "systemComponents",
 				"width": 480,
 				"height": 154,
