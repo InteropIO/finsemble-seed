@@ -1,31 +1,17 @@
 {
 	"$schema": "http://json-schema.org/draft-07/schema#",
-	"title": "Finsemble Configuration",
-	"description": "A set of \"Any of\" schemas mapping to the set of Finsemble's config files.  Supports VSCode Intellisense integration for each file. ",
-	"items": [{}],
-	"additionalItems": false,
-	"anyOf": [
-		{
-			"$ref": "#/definitions/ComponentsFileSubschema"
-		},
-		{
-			"$ref": "#/definitions/ServicesFileSubschema"
-		},
-		{
-			"$ref": "#/definitions/SecrityPolicyFileSubschema"
-		},
-		{
-			"$ref": "#/definitions/ManifestFileSubschema"
-		},
-		{
-			"$ref": "#/definitions/FinsembleSubschema"
-		}
-	],
+	"$ref": "#/definitions/ManifestSubschema",
 	"definitions": {
 		"ManifestFileSubschema": {
-			"description": "Subschema corresponding to the manifest file, to support VSCode Intellisense. NOTE: there is some duplication here with the full schema definition. ",
+			"description": "Subschema corresponding to a file containing the manifest config, to support VSCode Intellisense.. ",
 			"type": "object",
 			"properties": {
+				"$schema": {
+					"type": "string"
+				},
+				"comment": {
+					"type": "string"
+				},
 				"devtools_port": {
 					"description": "Manifest property to set Chromium devTools port. ",
 					"type": "number"
@@ -39,56 +25,27 @@
 					"format": "uri"
 				},
 				"appAssets": {
-					"title": "appAssets",
-					"description": "Manifest array of external assets to be automatically loading by FEA. ",
-					"type": "array",
-					"items": {
-						"type": "object",
-						"properties": {
-							"src": {
-								"type": "string",
-								"format": "uri"
-							},
-							"version": {
-								"type": "string"
-							},
-							"alias": {
-								"type": "string"
-							},
-							"target": {
-								"type": "string"
-							}
-						},
-						"requiredPlaceHolder": ["src", "version", "alias", "target"]
-					}
+					"$ref": "#/definitions/appAssets"
 				},
 				"finsemble": {
 					"title": "finsemble",
-					"description": "NOTE: This partially duplicates FinsembleConfig with many optional properties",
+					"description": "Copy of Finsemble object tto verify manifest File",
 					"type": "object",
 					"properties": {
-						"$schema": {
+						"applicationRoot": {
 							"type": "string"
 						},
-						"applicationRoot": {
-							"description": "(PUBLIC) Should point to the root of your application. Finsemble will use this to build URLs internally.",
-							"type": "string",
-							"format": "uri",
-							"default": "https://localhost:3375"
-						},
 						"moduleRoot": {
-							"description": "(PUBLIC) Where you are serving the Finsemble core library from. This is important for resolving URLs internally.",
-							"type": "string",
-							"default": "https://localhost:3375/finsemble"
+							"type": "string"
 						},
 						"servicesRoot": {
-							"description": "(PRIVATE) Default location of core services. ",
-							"type": "string",
-							"format": "uri"
+							"type": "string"
+						},
+						"configSchemaURL": {
+							"type": "string"
 						},
 						"notificationURL": {
-							"type": "string",
-							"format": "uri"
+							"type": "string"
 						},
 						"bootConfig": {
 							"$ref": "#/definitions/boot_config"
@@ -96,66 +53,47 @@
 						"router": {
 							"$ref": "#/definitions/router"
 						},
-						"workspaceTemplates": {
-							"title": "workspaceTemplates",
-							"type": "object",
-							"properties": {
-								"Blank Template": {
-									"$ref": "#/definitions/workspaceTemplate"
-								}
-							}
-						},
-						"configSchemaURL": {
-							"description": "(PUBLIC) URL of this schema.  Used for run-time verification of configuration. ",
-							"type": "string",
-							"format": "uri"
-						},
 						"importConfig": {
-							"description": "(PUBLIC) Defines an array of JSON URLs to be imported into the top-level finsemble object. Note that this will overwrite any existing config settings, with two exceptions:\r\n\r\nNew services defined under finsemble.services will be added to the list of existing services (as opposed to replacing the existing list of services).\r\n\r\nNew components defined under finsemble.components will be added to the list of existing components (as opposed to replacing the list of existing components).",
-							"type": "array",
-							"items": {
-								"type": "string",
-								"format": "uri"
-							},
-							"examples": [
-								[
-									"$applicationRoot/configs/application/UIComponents.json",
-									"$applicationRoot/configs/application/components.json"
-								]
-							]
+							"$ref": "#/definitions/importConfig"
 						},
 						"importThirdPartyConfig": {
-							"description": "(PUBLIC) This import is essentially the same as importConfig with one notable difference: the imported configuration settings cannot overwrite any existing settings. In this case, the settings for any potential overwrite will be discarded with a warning message written to the Config Service's log.",
-							"type": "array",
-							"items": [
-								{
-									"type": "string",
-									"format": "uri"
-								}
-							],
-							"additionalItems": false
-						},
-						"systemTrayIcon": {
-							"description": "(PUBLIC)",
-							"type": "string"
-						},
-						"systemTrayComponent": {
-							"description": "(PUBLIC)",
-							"type": "string"
-						},
-						"globalHotkeys": {
-							"description": "(PUBLIC)",
-							"type": "object"
+							"$ref": "#/definitions/importThirdPartyConfig"
 						},
 						"custom": {
-							"$ref": "#/definitions/finsembleCustom"
 						}
 					},
-					"required": ["applicationRoot", "moduleRoot"],
-					"additionalProperties": false
+					"required": [
+						"applicationRoot",
+						"moduleRoot",
+						"servicesRoot",
+						"configSchemaURL",
+						"notificationURL",
+						"bootConfig"
+					]
+				},
+				"custom": {
 				}
 			},
-			"required": ["startup_app", "finsemble"]
+			"required": [
+				"startup_app",
+				"finsemble"
+			],
+			"additionalProperties": false
+		},
+		"UIComponentsFileSubschema": {
+			"description": "Subschema corresponding to a file containing UI component config, to support VSCode Intellisense.. ",
+			"type": "object",
+			"properties": {
+				"$schema": {
+					"type": "string"
+				},
+				"comment": {
+				},
+				"components": {
+					"$ref": "#/definitions/components"
+				}
+			},
+			"additionalProperties": false
 		},
 		"ComponentsFileSubschema": {
 			"description": "Subschema corresponding to a file containing component config, to support VSCode Intellisense.. ",
@@ -163,6 +101,8 @@
 			"properties": {
 				"$schema": {
 					"type": "string"
+				},
+				"comment": {
 				},
 				"components": {
 					"description": "config for components",
@@ -181,6 +121,9 @@
 				"$schema": {
 					"type": "string"
 				},
+				"comment": {
+					"type": "string"
+				},
 				"services": {
 					"description": "config for components",
 					"type": "object",
@@ -191,22 +134,193 @@
 			},
 			"additionalProperties": false
 		},
-		"SecrityPolicyFileSubschema": {
-			"description": "Subschema corresponding to the security policies file, to support VSCode Intellisense.. ",
-			"items": [{}],
-			"additionalItems": false,
+		"ApplicationConfigFileSubschema": {
+			"title": "finsemble",
+			"description": "Subschema for all application config (typically application/config.json)",
+			"type": "object",
 			"properties": {
-				"securityPolicies": {},
-				"securityPolicyRules": {}
-			}
+				"$schema": {
+					"type": "string"
+				},
+				"comment": {
+					"description": "(DEPRECATED) Comment string inserted into config.",
+					"type": "string"
+				},
+				"authentication": {
+					"$ref": "#/definitions/authenticationProfile"
+				},
+				"workspaceTemplates": {
+					"$ref": "#/definitions/blankWorkspaceTemplate"
+				},
+				"importConfig": {
+					"$ref": "#/definitions/importConfig"
+				},
+				"importThirdPartyConfig": {
+					"$ref": "#/definitions/importThirdPartyConfig"
+				},
+				"securityPolicies": {
+					"$ref": "#/definitions/securityPolicies"
+				},
+				"securityPolicyRules": {
+					"$ref": "#/definitions/securityPolicyRules",
+					"requiredPlaceHolder": [
+						"crossDomain",
+						"sameDomain"
+					]
+				},
+				"accessibleLinker": {
+					"description": "(PUBLIC)",
+					"type": "boolean"
+				},
+				"servicesConfig": {
+					"$ref": "#/definitions/servicesConfig"
+				},
+				"preferences": {
+					"$ref": "#/definitions/preferences"
+				},
+				"systemTrayIcon": {
+					"description": "(PUBLIC)",
+					"type": "string"
+				},
+				"systemTrayComponent": {
+					"description": "(PUBLIC)",
+					"type": "string"
+				},
+				"Window Manager": {
+					"$ref": "#/definitions/windowManager"
+				},
+				"//appDirectoryEndpoint": {
+					"type": "string"
+				},
+				"appDirectoryEndpoint": {
+					"type": "string"
+				},
+				"globalHotkeys": {
+					"description": "(PUBLIC)",
+					"type": "object"
+				},
+				"workspaces": {
+					"$ref": "#/definitions/workspacesArray"
+				},
+				"components": {
+					"$ref": "#/definitions/components"
+				},
+				"services": {
+					"$ref": "#/definitions/services"
+				},
+				"//": {
+					"description": "(DEPRECATED) Comment string inserted into config.",
+					"type": "string"
+				},
+				"custom": {
+				}
+			},
+			"required": [
+				"accessibleLinker"
+			],
+			"additionalProperties": false
+		},
+		"SecurityPolicyFileSubschema": {
+			"description": "Subschema corresponding to the security policies file, to support VSCode Intellisense.. ",
+			"type": "object",
+			"properties": {
+				"$schema": {
+				},
+				"comment": {
+					"type": "string"
+				},
+				"securityPolicies": {
+					"$ref": "#/definitions/securityPolicies"
+				},
+				"securityPolicyRules": {
+					"$ref": "#/definitions/securityPolicyRules"
+				}
+			},
+			"required": [
+				"securityPolicies",
+				"securityPolicyRules"
+			],
+			"additionalProperties": false
+		},
+		"WorkspacesFileSubschema": {
+			"description": "Subschema corresponding to the security policies file, to support VSCode Intellisense.. ",
+			"type": "object",
+			"properties": {
+				"$schema": {
+				},
+				"comment": {
+					"type": "string"
+				},
+				"workspaces": {
+					"$ref": "#/definitions/workspacesArray"
+				}
+			},
+			"required": [
+				"workspaces"
+			],
+			"additionalProperties": false
+		},
+		"CoreConfigFileSubschema": {
+			"description": "Subschema corresponding to a file containing the manifest config, to support VSCode Intellisense.. ",
+			"type": "object",
+			"properties": {
+				"$schema": {
+					"type": "string"
+				},
+				"comment": {
+					"type": "string"
+				},
+				"bootTasks": {
+					"$ref": "#/definitions/bootTasks"
+				},
+				"system": {
+					"$ref": "#/definitions/system"
+				},
+				"servicesRoot": {
+					"type": "string"
+				},
+				"thirdPartyRoot": {
+					"type": "string"
+				},
+				"configVersion": {
+					"type": "string"
+				},
+				"workspaceTemplates": {
+					"$ref": "#/definitions/blankWorkspaceTemplate"
+				},
+				"betaFeatures": {
+					"description": "(PRIVATE) (DEPRECATED)",
+					"type": "object"
+				},
+				"importConfig": {
+					"$ref": "#/definitions/importConfig"
+				}
+			},
+			"required": [
+				"bootTasks",
+				"system",
+				"servicesRoot",
+				"thirdPartyRoot",
+				"configVersion",
+				"betaFeatures",
+				"importConfig"
+			],
+			"additionalProperties": false
 		},
 		"ManifestSubschema": {
 			"description": "Highest level subschema, including manifest and finsemble",
 			"type": "object",
 			"properties": {
+				"$schema": {
+					"type": "string"
+				},
+				"comment": {
+					"type": "string"
+				},
 				"devtools_port": {
 					"description": "Manifest property to set Chromium devTools port. ",
-					"type": "number"
+					"type": "number",
+					"default": 9090
 				},
 				"startup_app": {
 					"$ref": "#/definitions/manifestStartupApp"
@@ -217,39 +331,33 @@
 					"format": "uri"
 				},
 				"appAssets": {
-					"title": "appAssets",
-					"description": "Manifest array of external assets to be automatically loading by FEA. ",
-					"type": "array",
-					"items": {
-						"type": "object",
-						"properties": {
-							"src": {
-								"type": "string",
-								"format": "uri"
-							},
-							"version": {
-								"type": "string"
-							},
-							"alias": {
-								"type": "string"
-							},
-							"target": {
-								"type": "string"
-							}
-						},
-						"requiredPlaceHolder": ["src", "version", "alias", "target"]
-					}
+					"$ref": "#/definitions/appAssets"
 				},
 				"finsemble": {
 					"$ref": "#/definitions/FinsembleSubschema"
+				},
+				"finsemble-electron-adapter": {
+					"$ref": "#/definitions/electronAdapter"
+				},
+				"custom": {
 				}
 			},
-			"required": ["startup_app", "finsemble"]
+			"required": [
+				"startup_app",
+				"finsemble"
+			],
+			"additionalProperties": false
 		},
 		"BootManifestSubschema": {
 			"description": "The boot subschema, including manifest and partial finsemble",
 			"type": "object",
 			"properties": {
+				"$schema": {
+					"type": "string"
+				},
+				"comment": {
+					"type": "string"
+				},
 				"devtools_port": {
 					"description": "Manifest property to set Chromium devTools port. ",
 					"type": "number"
@@ -270,8 +378,7 @@
 						"type": "object",
 						"properties": {
 							"src": {
-								"type": "string",
-								"format": "uri"
+								"type": "string"
 							},
 							"version": {
 								"type": "string"
@@ -292,8 +399,7 @@
 					"type": "object",
 					"properties": {
 						"applicationRoot": {
-							"type": "string",
-							"format": "uri"
+							"type": "string"
 						},
 						"moduleRoot": {
 							"type": "string"
@@ -338,9 +444,18 @@
 						"bootTasks",
 						"system"
 					]
+				},
+				"finsemble-electron-adapter": {
+					"$ref": "#/definitions/electronAdapter"
+				},
+				"custom": {
 				}
 			},
-			"required": ["startup_app", "finsemble"]
+			"required": [
+				"startup_app",
+				"finsemble"
+			],
+			"additionalProperties": false
 		},
 		"FinsembleSubschema": {
 			"title": "finsemble",
@@ -353,12 +468,10 @@
 				"applicationRoot": {
 					"description": "(PUBLIC) Should point to the root of your application. Finsemble will use this to build URLs internally.",
 					"type": "string",
-					"format": "uri",
 					"default": "https://localhost:3375"
 				},
 				"authentication": {
-					"description": "This is where the authentication profiles are kept. There can be an authentication profile if authentication is enabled through the special “STARTUP” profile, but they can also be used independently by components for oauth.",
-					"type": "object"
+					"$ref": "#/definitions/authenticationProfile"
 				},
 				"moduleRoot": {
 					"description": "(PUBLIC) Where you are serving the Finsemble core library from. This is important for resolving URLs internally.",
@@ -367,12 +480,10 @@
 				},
 				"servicesRoot": {
 					"description": "(PRIVATE) Default location of core services. ",
-					"type": "string",
-					"format": "uri"
+					"type": "string"
 				},
 				"notificationURL": {
-					"type": "string",
-					"format": "uri"
+					"type": "string"
 				},
 				"bootConfig": {
 					"$ref": "#/definitions/boot_config"
@@ -391,13 +502,7 @@
 					"type": "string"
 				},
 				"workspaceTemplates": {
-					"title": "workspaceTemplates",
-					"type": "object",
-					"properties": {
-						"Blank Template": {
-							"$ref": "#/definitions/workspaceTemplate"
-						}
-					}
+					"$ref": "#/definitions/blankWorkspaceTemplate"
 				},
 				"configVersion": {
 					"description": "(PUBLIC) Version of this schema. ",
@@ -405,272 +510,33 @@
 				},
 				"configSchemaURL": {
 					"description": "(PUBLIC) URL of this schema.  Used for run-time verification of configuration. ",
-					"type": "string",
-					"format": "uri"
+					"type": "string"
 				},
 				"importConfig": {
-					"description": "(PUBLIC) Defines an array of JSON URLs to be imported into the top-level finsemble object. Note that this will overwrite any existing config settings, with two exceptions:\r\n\r\nNew services defined under finsemble.services will be added to the list of existing services (as opposed to replacing the existing list of services).\r\n\r\nNew components defined under finsemble.components will be added to the list of existing components (as opposed to replacing the list of existing components).",
-					"type": "array",
-					"items": {
-						"type": "string",
-						"format": "uri"
-					},
-					"examples": [
-						[
-							"$applicationRoot/configs/application/UIComponents.json",
-							"$applicationRoot/configs/application/components.json"
-						]
-					]
+					"$ref": "#/definitions/importConfig"
 				},
 				"importThirdPartyConfig": {
-					"description": "(PUBLIC) This import is essentially the same as importConfig with one notable difference: the imported configuration settings cannot overwrite any existing settings. In this case, the settings for any potential overwrite will be discarded with a warning message written to the Config Service's log.",
-					"type": "array",
-					"items": [
-						{
-							"type": "string",
-							"format": "uri"
-						}
-					],
-					"additionalItems": false
+					"$ref": "#/definitions/importThirdPartyConfig"
 				},
 				"securityPolicies": {
 					"$ref": "#/definitions/securityPolicies"
 				},
 				"securityPolicyRules": {
 					"$ref": "#/definitions/securityPolicyRules",
-					"requiredPlaceHolder": ["crossDomain", "sameDomain"]
+					"requiredPlaceHolder": [
+						"crossDomain",
+						"sameDomain"
+					]
 				},
 				"accessibleLinker": {
 					"description": "(PUBLIC)",
 					"type": "boolean"
 				},
 				"servicesConfig": {
-					"title": "servicesConfig",
-					"description": "(PUBLIC) Configurations that override the defaults for Finsemble's built-in services.",
-					"type": "object",
-					"properties": {
-						"distributedStore": {
-							"title": "distributedStore",
-							"type": "object",
-							"properties": {
-								"initialStores": {
-									"title": "initialStores",
-									"description": "Foundations for any stores which should be seeded on startup",
-									"type": "array",
-									"items": {
-										"type": "object",
-										"properties": {
-											"name": {
-												"type": "string"
-											},
-											"preferPreviousState": {
-												"type": "boolean"
-											},
-											"foundation": {
-												"title": "foundation",
-												"type": "object",
-												"properties": {
-													"appFolders": {
-														"title": "appFolders",
-														"type": "object",
-														"properties": {
-															"list": {
-																"type": "array",
-																"items": {
-																	"type": "string"
-																}
-															},
-															"folders": {
-																"title": "folders",
-																"type": "object",
-																"properties": {
-																	"Advanced App Launcher": {
-																		"$ref": "#/definitions/foldersAppDefinition"
-																	},
-																	"Favorites": {
-																		"$ref": "#/definitions/foldersAppDefinition"
-																	}
-																}
-															}
-														}
-													},
-													"appDefinitions": {
-														"type": "object"
-													}
-												}
-											},
-											"default": {
-												"title": "default",
-												"type": "object",
-												"properties": {
-													"activeLauncherTags": {
-														"type": "array"
-													},
-													"filterText": {
-														"type": "string"
-													},
-													"filterTags": {
-														"type": "array"
-													},
-													"activeFolder": {
-														"type": "string"
-													},
-													"sortBy": {
-														"type": "string"
-													}
-												}
-											}
-										}
-									}
-								}
-							},
-							"required": ["initialStores"]
-						},
-						"launcher": {
-							"title": "launcher",
-							"type": "object",
-							"properties": {
-								"staggerPixels": {
-									"type": "number"
-								},
-								"unknownComponent": {
-									"type": "string"
-								}
-							},
-							"required": ["staggerPixels", "unknownComponent"]
-						},
-						"assimilation": {
-							"$ref": "#/definitions/serviceAssimilationConfig"
-						},
-						"docking": {
-							"title": "docking",
-							"description": "Configs specific to the docking service",
-							"type": "object",
-							"properties": {
-								"enabled": {
-									"type": "boolean"
-								},
-								"groupTileBuffer": {
-									"type": "number"
-								},
-								"headerHeight": {
-									"type": "number"
-								},
-								"MINIMUM_WIDTH": {
-									"type": "number"
-								},
-								"requireRectangularityForGroupResize": {
-									"type": "boolean"
-								},
-								"undockDisbandsEntireGroup": {
-									"type": "boolean"
-								},
-								"fillHolesOnUndock": {
-									"type": "boolean"
-								},
-								"tabbing": {
-									"type": "object",
-									"properties": {
-										"enabled": {
-											"type": "boolean",
-											"default": false
-										}
-									}
-								},
-								"tiling": {
-									"type": "object",
-									"properties": {
-										"enabled": {
-											"type": "boolean",
-											"default": false
-										}
-									}
-								}
-							},
-							"required": [
-								"enabled",
-								"groupTileBuffer",
-								"headerHeight",
-								"MINIMUM_WIDTH",
-								"requireRectangularityForGroupResize",
-								"undockDisbandsEntireGroup",
-								"fillHolesOnUndock",
-								"tiling"
-							]
-						},
-						"logger": {
-							"title": "logger",
-							"type": "object",
-							"properties": {
-								"hotkeyShowCentralLogger": {
-									"description": "Sets the hotkey for showing the Central Logger. Leave this config out to disable the hotkey.",
-									"type": "array",
-									"items": {
-										"type": "string"
-									},
-									"default": ["ctrl", "shift", "L"]
-								}
-							},
-							"additionalProperties": false
-						},
-						"storage": {
-							"title": "storage",
-							"type": "object",
-							"properties": {
-								"defaultStorage": {
-									"type": "string"
-								},
-								"topicToDataStoreAdapters": {
-									"title": "topicToDataStoreAdapters",
-									"type": "object",
-									"properties": {
-										"finsemble": {
-											"type": "string"
-										},
-										"finsemble.workspace": {
-											"type": "string"
-										},
-										"finsemble.workspace.cache": {
-											"type": "string"
-										}
-									},
-									"required": [
-										"finsemble",
-										"finsemble.workspace",
-										"finsemble.workspace.cache"
-									]
-								},
-								"dataStoreAdapters": {
-									"title": "dataStoreAdapters",
-									"type": "object",
-									"properties": {
-										"LocalStorageAdapter": {
-											"type": "string"
-										},
-										"IndexedDBAdapter": {
-											"type": "string"
-										}
-									}
-								}
-							},
-							"required": [
-								"defaultStorage",
-								"topicToDataStoreAdapters",
-								"dataStoreAdapters"
-							]
-						}
-					},
-					"additionalProperties": false
+					"$ref": "#/definitions/servicesConfig"
 				},
 				"preferences": {
-					"title": "preferences",
-					"description": "(PUBLIC)",
-					"type": "object",
-					"properties": {
-						"promptUserOnDirtyWorkspace": {
-							"type": "boolean"
-						}
-					}
+					"$ref": "#/definitions/preferences"
 				},
 				"systemTrayIcon": {
 					"description": "(PUBLIC)",
@@ -681,30 +547,7 @@
 					"type": "string"
 				},
 				"Window Manager": {
-					"title": "Window Manager",
-					"description": "(PUBLIC) Global settings for the window title bar.",
-					"type": "object",
-					"properties": {
-						"alwaysOnTopIcon": {
-							"description": "When set to `true`, all windows can be pinned so that they are always on top (like a sticky note). You can override this setting for specific components in their config.",
-							"type": "boolean",
-							"default": false
-						},
-						"floatingTitlebarComponent": {
-							"type": "string"
-						},
-						"deliveryMechanism": {
-							"description": "Which delivery method to use for scripts (e.g., FSBL, title bar, etc.) - Valid values are:\r\n\"injection\" - Injects the code into the window.",
-							"type": "string",
-							"default": "injection"
-						},
-						"zoom": {
-							"description": "(TBD)"
-						},
-						"componentCloseTimeout": {
-							"description": "TBD"
-						}
-					}
+					"$ref": "#/definitions/windowManager"
 				},
 				"betaFeatures": {
 					"description": "(PRIVATE) (DEPRECATED)",
@@ -714,20 +557,14 @@
 					"type": "string"
 				},
 				"appDirectoryEndpoint": {
-					"type": "string",
-					"format": "uri"
+					"type": "string"
 				},
 				"globalHotkeys": {
 					"description": "(PUBLIC)",
 					"type": "object"
 				},
 				"workspaces": {
-					"title": "workspaces",
-					"description": "(PUBLIC)",
-					"type": "array",
-					"items": {
-						"$ref": "#/definitions/workspaceTemplate"
-					}
+					"$ref": "#/definitions/workspacesArray"
 				},
 				"components": {
 					"$ref": "#/definitions/components"
@@ -744,7 +581,6 @@
 					"type": "string"
 				},
 				"custom": {
-					"$ref": "#/definitions/finsembleCustom"
 				}
 			},
 			"required": [
@@ -784,8 +620,7 @@
 					"type": "string"
 				},
 				"url": {
-					"type": "string",
-					"format": "uri"
+					"type": "string"
 				},
 				"uuid": {
 					"type": "string"
@@ -794,8 +629,7 @@
 					"type": "boolean"
 				},
 				"applicationIcon": {
-					"type": "string",
-					"format": "uri"
+					"type": "string"
 				},
 				"defaultTop": {
 					"type": "number"
@@ -839,6 +673,334 @@
 			},
 			"required": ["name", "url", "uuid"]
 		},
+		"appAssets": {
+			"title": "appAssets",
+			"description": "Manifest array of external assets to be automatically loading by FEA. ",
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"src": {
+						"type": "string",
+						"format": "uri"
+					},
+					"version": {
+						"type": "string"
+					},
+					"alias": {
+						"type": "string"
+					},
+					"target": {
+						"type": "string"
+					}
+				},
+				"requiredPlaceHolder": [
+					"src",
+					"version",
+					"alias",
+					"target"
+				]
+			}
+		},
+		"windowManager": {
+			"title": "Window Manager",
+			"description": "(PUBLIC) Global settings for the window title bar.",
+			"type": "object",
+			"properties": {
+				"alwaysOnTopIcon": {
+					"description": "When set to `true`, all windows can be pinned so that they are always on top (like a sticky note). You can override this setting for specific components in their config.",
+					"type": "boolean",
+					"default": false
+				},
+				"floatingTitlebarComponent": {
+					"type": "string"
+				},
+				"deliveryMechanism": {
+					"description": "Which delivery method to use for scripts (e.g., FSBL, title bar, etc.) - Valid values are:\r\n\"injection\" - Injects the code into the window.",
+					"type": "string",
+					"default": "injection"
+				},
+				"zoom": {
+					"description": "(TBD)"
+				},
+				"componentCloseTimeout": {
+					"description": "TBD"
+				}
+			}
+		},
+		"authenticationProfile": {
+			"description": "This is where the authentication profiles are kept. There can be an authentication profile if authentication is enabled through the special “STARTUP” profile, but they can also be used independently by components for oauth.",
+			"type": "object"
+		},
+		"blankWorkspaceTemplate": {
+			"title": "workspaceTemplates",
+			"type": "object",
+			"properties": {
+				"Blank Template": {
+					"$ref": "#/definitions/workspaceTemplate"
+				}
+			}
+		},
+		"preferences": {
+			"title": "preferences",
+			"description": "(PUBLIC) User Perferences",
+			"type": "object",
+			"properties": {
+				"promptUserOnDirtyWorkspace": {
+					"type": "boolean"
+				}
+			}
+		},
+		"servicesConfig": {
+			"title": "servicesConfig",
+			"description": "(PUBLIC) Configurations that override the defaults for Finsemble's built-in services.",
+			"type": "object",
+			"properties": {
+				"distributedStore": {
+					"title": "distributedStore",
+					"type": "object",
+					"properties": {
+						"initialStores": {
+							"title": "initialStores",
+							"description": "Foundations for any stores which should be seeded on startup",
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									},
+									"preferPreviousState": {
+										"type": "boolean"
+									},
+									"foundation": {
+										"title": "foundation",
+										"type": "object",
+										"properties": {
+											"appFolders": {
+												"title": "appFolders",
+												"type": "object",
+												"properties": {
+													"list": {
+														"type": "array",
+														"items": {
+															"type": "string"
+														}
+													},
+													"folders": {
+														"title": "folders",
+														"type": "object",
+														"properties": {
+															"Advanced App Launcher": {
+																"$ref": "#/definitions/foldersAppDefinition"
+															},
+															"Favorites": {
+																"$ref": "#/definitions/foldersAppDefinition"
+															}
+														}
+													}
+												}
+											},
+											"appDefinitions": {
+												"type": "object"
+											}
+										}
+									},
+									"default": {
+										"title": "default",
+										"type": "object",
+										"properties": {
+											"activeLauncherTags": {
+												"type": "array"
+											},
+											"filterText": {
+												"type": "string"
+											},
+											"filterTags": {
+												"type": "array"
+											},
+											"activeFolder": {
+												"type": "string"
+											},
+											"sortBy": {
+												"type": "string"
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"required": [
+						"initialStores"
+					]
+				},
+				"launcher": {
+					"title": "launcher",
+					"type": "object",
+					"properties": {
+						"staggerPixels": {
+							"type": "number"
+						},
+						"unknownComponent": {
+							"type": "string"
+						}
+					},
+					"required": [
+						"staggerPixels",
+						"unknownComponent"
+					]
+				},
+				"assimilation": {
+					"$ref": "#/definitions/serviceAssimilationConfig"
+				},
+				"docking": {
+					"title": "docking",
+					"description": "Configs specific to the docking service",
+					"type": "object",
+					"properties": {
+						"enabled": {
+							"type": "boolean"
+						},
+						"groupTileBuffer": {
+							"type": "number"
+						},
+						"headerHeight": {
+							"type": "number"
+						},
+						"MINIMUM_WIDTH": {
+							"type": "number"
+						},
+						"requireRectangularityForGroupResize": {
+							"type": "boolean"
+						},
+						"undockDisbandsEntireGroup": {
+							"type": "boolean"
+						},
+						"fillHolesOnUndock": {
+							"type": "boolean"
+						},
+						"tabbing": {
+							"type": "object",
+							"properties": {
+								"enabled": {
+									"type": "boolean",
+									"default": false
+								}
+							}
+						},
+						"tiling": {
+							"type": "object",
+							"properties": {
+								"enabled": {
+									"type": "boolean",
+									"default": false
+								}
+							}
+						}
+					},
+					"required": [
+						"enabled",
+						"groupTileBuffer",
+						"headerHeight",
+						"MINIMUM_WIDTH",
+						"requireRectangularityForGroupResize",
+						"undockDisbandsEntireGroup",
+						"fillHolesOnUndock",
+						"tiling"
+					]
+				},
+				"logger": {
+					"title": "logger",
+					"type": "object",
+					"properties": {
+						"hotkeyShowCentralLogger": {
+							"description": "Sets the hotkey for showing the Central Logger. Leave this config out to disable the hotkey.",
+							"type": "array",
+							"items": {
+								"type": "string"
+							},
+							"default": [
+								"ctrl",
+								"shift",
+								"L"
+							]
+						}
+					},
+					"additionalProperties": false
+				},
+				"storage": {
+					"title": "storage",
+					"type": "object",
+					"properties": {
+						"defaultStorage": {
+							"type": "string"
+						},
+						"topicToDataStoreAdapters": {
+							"title": "topicToDataStoreAdapters",
+							"type": "object",
+							"properties": {
+								"finsemble": {
+									"type": "string"
+								},
+								"finsemble.workspace": {
+									"type": "string"
+								},
+								"finsemble.workspace.cache": {
+									"type": "string"
+								}
+							},
+							"required": [
+								"finsemble",
+								"finsemble.workspace",
+								"finsemble.workspace.cache"
+							]
+						},
+						"dataStoreAdapters": {
+							"title": "dataStoreAdapters",
+							"type": "object",
+							"properties": {
+								"LocalStorageAdapter": {
+									"type": "string"
+								},
+								"IndexedDBAdapter": {
+									"type": "string"
+								}
+							}
+						}
+					},
+					"required": [
+						"defaultStorage",
+						"topicToDataStoreAdapters",
+						"dataStoreAdapters"
+					]
+				}
+			},
+			"additionalProperties": false
+		},
+		"importConfig": {
+			"description": "(PUBLIC) Defines an array of JSON URLs to be imported into the top-level finsemble object. Note that this will overwrite any existing config settings, with two exceptions:\r\n\r\nNew services defined under finsemble.services will be added to the list of existing services (as opposed to replacing the existing list of services).\r\n\r\nNew components defined under finsemble.components will be added to the list of existing components (as opposed to replacing the list of existing components).",
+			"type": "array",
+			"items": {
+				"type": "string"
+			},
+			"examples": [
+				[
+					"$applicationRoot/configs/application/UIComponents.json",
+					"$applicationRoot/configs/application/components.json"
+				]
+			]
+		},
+		"importThirdPartyConfig": {
+			"description": "(PUBLIC) This import is essentially the same as importConfig with one notable difference: the imported configuration settings cannot overwrite any existing settings. In this case, the settings for any potential overwrite will be discarded with a warning message written to the Config Service's log.",
+			"type": "array",
+			"items": [
+				{
+					"type": "string"
+				}
+			],
+			"additionalItems": false
+		},
 		"router": {
 			"title": "router",
 			"description": "(PUBLIC) Configurations for Router's communication mechanism.",
@@ -867,7 +1029,6 @@
 								"serverAddress": {
 									"description": "URI for the WebSocket server. To use a secure connection, use 'wss://localhost.chartiq.com:3376'",
 									"type": "string",
-									"format": "uri",
 									"default": "ws://127.0.0.1:3376"
 								}
 							},
@@ -1258,6 +1419,9 @@
 					"title": "window",
 					"type": "object",
 					"properties": {
+						"//": {
+							"type": "string"
+						},
 						"id": {
 							"type": "string"
 						},
@@ -1372,7 +1536,8 @@
 						"addToWorkspace": {
 							"type": "boolean"
 						}
-					}
+					},
+					"additionalProperties": false
 				},
 				"component": {
 					"type": "object",
@@ -1413,6 +1578,8 @@
 							"items": {
 								"type": "string"
 							}
+						},
+						"custom": {
 						}
 					},
 					"additionalProperties": false
@@ -1486,6 +1653,8 @@
 						},
 						"components": {
 							"type": "object"
+						},
+						"custom": {
 						}
 					}
 				},
@@ -1493,7 +1662,6 @@
 					"$ref": "#/definitions/component"
 				},
 				"custom": {
-					"$ref": "#/definitions/componentCustom"
 				}
 			},
 			"additionalProperties": false
@@ -1555,12 +1723,10 @@
 					"type": "string"
 				},
 				"html": {
-					"type": "string",
-					"format": "uri"
+					"type": "string"
 				},
 				"file": {
-					"type": "string",
-					"format": "uri"
+					"type": "string"
 				},
 				"category": {
 					"type": "string",
@@ -1700,7 +1866,6 @@
 					}
 				},
 				"custom": {
-					"$ref": "#/definitions/serviceCustom"
 				}
 			},
 			"required": ["spawnAs", "html", "file"],
@@ -1746,21 +1911,29 @@
 				}
 			}
 		},
+		"workspacesArray": {
+			"title": "workspaces",
+			"description": "(PUBLIC)",
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/workspaceTemplate"
+			}
+		},
 		"workspaceTemplate": {
 			"title": "Workspace Template",
 			"description": "Template for config specified workspace",
 			"type": "object",
 			"properties": {
-				"version": {
-					"type": "string"
-				},
 				"name": {
 					"type": "string"
 				},
-				"description": {
+				"type": {
 					"type": "string"
 				},
-				"type": {
+				"version": {
+					"type": "string"
+				},
+				"description": {
 					"type": "string"
 				},
 				"groups": {
@@ -1786,8 +1959,14 @@
 							}
 						}
 					}
+				},
+				"custom": {
 				}
-			}
+			},
+			"required": [
+				"name"
+			],
+			"additionalProperties": false
 		},
 		"cornerRounding": {
 			"description": "Specifies corner rounding for a window",
@@ -1889,14 +2068,9 @@
 			},
 			"requiredPlaceHolder": ["crossDomain", "sameDomain"]
 		},
-		"finsembleCustom": {
-			"description": "Schema for finsemble.custom to support customer extensions"
-		},
-		"componentCustom": {
-			"description": "Schema for finsemble.components.someComponent to support customer extensions"
-		},
-		"serviceCustom": {
-			"description": "Schema for finsemble.services.someServices to support customer extensions"
+		"electronAdapter": {
+			"description": "Electron Adapter's config (that is dynamically added to manifest)",
+			"type": "object"
 		}
 	}
 }

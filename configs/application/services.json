@@ -1,4 +1,4 @@
 {
-	"$schema": "../schemas/finsemble.schema.json",
+	"$schema": "../schemas/fileBasedSchemas/servicesFile.schema.json",
 	"services": {}
 }

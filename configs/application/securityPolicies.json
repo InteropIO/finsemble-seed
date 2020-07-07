@@ -1,5 +1,5 @@
 {
-	"$schema": "../schemas/finsemble.schema.json",
+	"$schema": "../schemas/fileBasedSchemas/securityPoliciesFile.schema.json",
 	"securityPolicies": {
 		"//trusted": "By default, the trusted policy allows access to every API endpoint.",
 		"trusted": {},
