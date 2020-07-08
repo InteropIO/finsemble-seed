@@ -1,8 +1,20 @@
-//  config settings
 const path = require("path");
-const webpack = require("webpack");
 const fs = require("fs");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const { DllReferencePlugin } = require("webpack");
+const { generateDefaultConfig } = require("./defaultWebpackConfig");
+
+let VENDOR_MANIFEST = null;
+try {
+	VENDOR_MANIFEST = require("./vendor-manifest.json");
+} catch (e) {
+	//This should never happen. Vendor-manifest is built automatically by the DLLPlugin. But it's here just in case.
+	console.error(
+		`[WEBPACK ERROR:] vendor-manifest.json not found. Check to ensure that webpack.vendor.js is running before any other webpack processes and that DLLPlugin is configured correctly.`
+	);
+	process.exit(1);
+}
+
 const __homename = path.resolve(__dirname, "..", "..");
 
 // The standard webpack files that we always look in
@@ -90,24 +102,23 @@ for (let key in componentsToBuild) {
 }
 
 // Set up an actual webpack config object. Start with a default that we've set up, then add our entries
-const defaultConfig = require("./defaultWebpackConfig");
-let webpackConfig = new defaultConfig();
+let webpackConfig = generateDefaultConfig();
 webpackConfig.entry = entries;
 
 // This function iterates through src, building a list of all the directories but eliminating duplicates.
 function collapseBuiltInFiles() {
 	var srcList = {}; // contains the final compressed list
-	var srcPath = path.join(__homename, "src/components"); // path to src components
+	let componentSrcPath = path.join(__homename, "src/components"); // path to src components
 
 	// Now put all the src items into our combined list. If there's a dup, then it will override the built in
-	var srcItems = fs.readdirSync(srcPath);
+	var srcItems = fs.readdirSync(componentSrcPath);
 	for (let i = 0; i < srcItems.length; i++) {
 		let folder = srcItems[i];
 		if (folder === ".gitignore") {
 			// Don't copy a .gitignore folder.
 			continue;
 		}
-		srcList[folder] = path.join(srcPath, folder);
+		srcList[folder] = path.join(componentSrcPath, folder);
 	}
 	return srcList;
 }
@@ -151,5 +162,10 @@ function createCopyWebpackConfig() {
 }
 
 webpackConfig.plugins.push(new CopyWebpackPlugin(createCopyWebpackConfig()));
+webpackConfig.plugins.push(
+	new DllReferencePlugin({
+		manifest: VENDOR_MANIFEST,
+	})
+);
 
 module.exports = webpackConfig;

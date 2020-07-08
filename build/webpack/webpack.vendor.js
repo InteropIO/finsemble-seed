@@ -1,4 +1,3 @@
-var webpack = require("webpack");
 const path = require("path");
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
@@ -22,6 +21,9 @@ if (env === "production") {
 	plugins.push(new UglifyJsPlugin());
 }
 
+/**
+ * Entries come from seed/build/webpack/vendor.js
+ */
 module.exports = {
 	entry: {
 		vendor: [path.join(__dirname, "./vendor")],
