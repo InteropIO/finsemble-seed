@@ -4,12 +4,12 @@
  */
 import React from "react";
 import ReactDOM from "react-dom";
-import { FinsembleProvider } from "@chartiq/finsemble-ui/react/components";
+import { FinsembleProvider } from "@chartiq/finsemble-ui/react/components/FinsembleProvider";
 import {
 	UserPreferences,
 	General,
 	Workspaces,
-} from "@chartiq/finsemble-ui/react/components";
+} from "@chartiq/finsemble-ui/react/components/UserPreferences";
 import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../assets/css/theme.css";
 

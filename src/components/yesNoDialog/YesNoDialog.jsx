@@ -6,8 +6,8 @@
 
 import React from "react";
 import ReactDOM from "react-dom";
-import { FinsembleProvider } from "@chartiq/finsemble-ui/react/components";
-import { YesNoDialog } from "@chartiq/finsemble-ui/react/components";
+import { FinsembleProvider } from "@chartiq/finsemble-ui/react/components/FinsembleProvider";
+import { YesNoDialog } from "@chartiq/finsemble-ui/react/components/Dialog";
 import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../assets/css/theme.css";
 
