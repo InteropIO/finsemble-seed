@@ -110,8 +110,7 @@
 	"systemTrayComponent": "SystemTrayComponent",
 	"Window Manager": {
 		"alwaysOnTopIcon": false,
-		"floatingTitlebarComponent": "Floating Titlebar",
-		"deliveryMechanism": "preload"
+		"floatingTitlebarComponent": "Floating Titlebar"
 	},
 	"betaFeatures": {},
 	"splinteringConfig": {
