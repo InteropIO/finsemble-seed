@@ -8,7 +8,7 @@
 				"dependencies": ["Toolbar"]
 			},
 			"window": {
-				"url": "$applicationRoot/components/Linker/Linker.html",
+				"url": "$applicationRoot/components/linker/linker.html",
 				"affinity": "systemComponents",
 				"width": 132,
 				"height": 232,
@@ -42,7 +42,7 @@
 		},
 		"QuickComponentForm": {
 			"window": {
-				"url": "$applicationRoot/components/QuickComponentForm/QuickComponentForm.html",
+				"url": "$applicationRoot/components/quickComponentForm/quickComponentForm.html",
 				"affinity": "systemComponents",
 				"width": 550,
 				"height": 175,
@@ -113,7 +113,7 @@
 				"dependencies": ["Toolbar"]
 			},
 			"window": {
-				"url": "$applicationRoot/components/YesNoDialog/YesNoDialog.html",
+				"url": "$applicationRoot/components/yesNoDialog/yesNoDialog.html",
 				"affinity": "systemComponents",
 				"width": 500,
 				"height": 223,
@@ -159,7 +159,7 @@
 				"dependencies": ["Toolbar"]
 			},
 			"window": {
-				"url": "$applicationRoot/components/SingleInputDialog/SingleInputDialog.html",
+				"url": "$applicationRoot/components/singleInputDialog/singleInputDialog.html",
 				"affinity": "systemComponents",
 				"width": 480,
 				"height": 154,
@@ -247,7 +247,7 @@
 			},
 			"window": {
 				"id": "launcher",
-				"url": "$applicationRoot/components/Toolbar/Toolbar.html",
+				"url": "$applicationRoot/components/toolbar/toolbar.html",
 				"affinity": "systemComponents",
 				"width": 600,
 				"height": 39,
@@ -327,7 +327,7 @@
 		"windowTitleBar": {
 			"window": {
 				"//": "This is never called as a component. It is compiled to js and then injected into other components",
-				"url": "$applicationRoot/components/WindowTitleBar/WindowTitleBar.js",
+				"url": "$applicationRoot/components/windowTitleBar/WindowTitleBar.js",
 				"top": "center",
 				"left": "center",
 				"width": 358,
@@ -360,7 +360,7 @@
 				"dependencies": ["Toolbar"]
 			},
 			"window": {
-				"url": "$applicationRoot/components/UserPreferences/UserPreferences.html",
+				"url": "$applicationRoot/components/userPreferences/userPreferences.html",
 				"affinity": "systemComponents",
 				"frame": false,
 				"top": "center",
@@ -401,7 +401,7 @@
 		},
 		"Process Monitor": {
 			"window": {
-				"url": "$applicationRoot/components/ProcessMonitor/ProcessMonitor.html",
+				"url": "$applicationRoot/components/processMonitor/processMonitor.html",
 				"affinity": "workspaceComponents",
 				"width": 600,
 				"height": 700
@@ -429,7 +429,7 @@
 		},
 		"Advanced App Catalog": {
 			"window": {
-				"url": "$applicationRoot/components/AppCatalog/AppCatalog.html",
+				"url": "$applicationRoot/components/appCatalog/appCatalog.html",
 				"affinity": "systemComponents",
 				"width": 600,
 				"height": 700,
@@ -473,7 +473,7 @@
 				"dependencies": ["Toolbar"]
 			},
 			"window": {
-				"url": "$applicationRoot/components/SystemTrayComponent/SystemTrayComponent.html",
+				"url": "$applicationRoot/components/systemTrayComponent/systemTrayComponent.html",
 				"affinity": "systemComponents",
 				"width": 150,
 				"height": 40,

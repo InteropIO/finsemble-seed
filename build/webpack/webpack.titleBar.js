@@ -9,8 +9,8 @@
 const { generateDefaultConfig } = require("./defaultWebpackConfig");
 
 const entries = {
-	"components/WindowTitleBar/WindowTitleBar":
-		"./src/components/WindowTitleBar/windowTitleBarLoader.js",
+	"components/windowTitleBar/WindowTitleBar":
+		"./src/components/windowTitleBar/windowTitleBarLoader.js",
 };
 
 let webpackConfig = generateDefaultConfig();
