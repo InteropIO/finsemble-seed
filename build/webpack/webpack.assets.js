@@ -5,14 +5,14 @@
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const { generateDefaultConfig } = require("./defaultWebpackConfig");
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 
 /**
  * First retrieve the seed project's default webpack configuration. We will use this
  * as the base for building our assets directory.
  */
-const defaultWebpackConfig = require("./defaultWebpackConfig");
-let config = new defaultWebpackConfig();
+let config = generateDefaultConfig();
 
 /**
  * Load the plugins that we use. We'll use MiniCssExtractPlugin to generate static CSS files.

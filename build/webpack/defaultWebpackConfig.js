@@ -1,178 +1,180 @@
 const path = require("path");
 const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
-const { DllReferencePlugin, DefinePlugin } = require("webpack");
+const { DefinePlugin } = require("webpack");
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 
-module.exports = class WebpackDefaults {
-	constructor() {
-		let plugins = [
-			new DefinePlugin({
-				"process.env": {
-					NODE_ENV: JSON.stringify(env),
-				},
-			}),
-			new HardSourceWebpackPlugin({
-				info: {
-					level: "warn",
-				},
-				cacheDirectory: "../.webpack-file-cache/[confighash]",
-			}),
-		];
-
-		try {
-			const VENDOR_MANIFEST = require("./vendor-manifest.json");
-			plugins.push(
-				new DllReferencePlugin({
-					manifest: VENDOR_MANIFEST,
-				})
-			);
-		} catch (e) {
-			//This should never happen. Vendor-manifest is built prior to files being built. But it's here just in case.
-			console.error(
-				`[WEBPACK ERROR:] You have not generated a vendor-manifest for your webpack configuration. This is an important optimization that reduces build times by 30-40%. Please run "npm run build:vendor-manifest", and then run "npm run dev" once more. You are required to build the vendor manifest when you delete your dist folder, when your node modules update, or when you update the Finsemble Seed project.`
-			);
-			process.exit(1);
-		}
-
-		if (env === "production") {
-			// When building the production environment, minify the code.
-			plugins.push(new UglifyJsPlugin());
-		}
-		return {
-			devtool: env === "production" ? "source-map" : "eval-source-map",
-			entry: {},
-			stats: "minimal",
-			module: {
-				rules: [
-					{
-						test: /\.s?css$/i,
-						use: [
-							"style-loader",
-							{
-								loader: "css-loader",
-								options: {
-									sourceMap: env !== "production",
-								},
-							},
-						],
-					},
-					{
-						test: /\.png|img$/,
-						loader: "url-loader",
-					},
-					{
-						test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-						issuer: {
-							test: /\.jsx?$/,
-						},
-						use: ["@svgr/webpack"],
-					},
-					{
-						test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-						loader:
-							"url-loader?limit=65000&mimetype=image/svg+xml&name=/public/fonts/[name].[ext]",
-					},
-					{
-						test: /\.woff$/,
-						loader:
-							"url-loader?limit=65000&mimetype=application/font-woff&name=/public/fonts/[name].[ext]",
-					},
-					{
-						test: /\.woff2$/,
-						loader:
-							"url-loader?limit=65000&mimetype=application/font-woff2&name=/public/fonts/[name].[ext]",
-					},
-					{
-						test: /\.[ot]tf$/,
-						loader:
-							"url-loader?limit=65000&mimetype=application/octet-stream&name=/public/fonts/[name].[ext]",
-					},
-					{
-						test: /\.eot$/,
-						loader:
-							"url-loader?limit=65000&mimetype=application/vnd.ms-fontobject&name=/public/fonts/[name].[ext]",
-					},
-					{
-						test: /semver\.browser\.js/,
-						use: ["imports?define=>undefined"],
-					},
-					{
-						test: /\.js(x)?$/,
-						exclude: /node_modules/,
-						use: {
-							loader: "babel-loader",
-							options: {
-								cacheDirectory: ".webpack-file-cache",
-								presets: [
-									[
-										"@babel/preset-env",
-										{
-											targets: {
-												browsers: "Chrome 70",
-											},
-											modules: "commonjs",
-										},
-									],
-									"@babel/preset-react",
-								],
-								plugins: [
-									"babel-plugin-add-module-exports",
-									"@babel/plugin-proposal-export-default-from",
-									"@babel/plugin-transform-modules-commonjs",
-									"@babel/plugin-proposal-class-properties",
-									[
-										"@babel/plugin-proposal-decorators",
-										{ decoratorsBeforeExport: false },
-									],
-									["@babel/plugin-transform-runtime", { regenerator: true }],
-								],
-							},
-						},
-					},
-					{
-						test: /\.ts(x)?$/,
-						loader: "ts-loader",
-						exclude: /node_modules/,
-					},
-					// All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-					{
-						enforce: "pre",
-						test: /\.js$/,
-						loader: "source-map-loader",
-					},
-				],
+/**
+ * This rule will compile all imported CSS files into local <style> tags which are inlined into .js files.
+ * When in development, sourceMap may cause style-loader to convert to <link> tags. This seems to vary from
+ * version to version of style-loader.
+ */
+const CSS_RULE = {
+	test: /\.s?css$/i,
+	use: [
+		"style-loader",
+		{
+			loader: "css-loader",
+			options: {
+				sourceMap: env !== "production",
 			},
-			mode: env,
-			plugins: plugins,
-			optimization: {
-				usedExports: true,
-			},
-			output: {
-				filename: "[name].js",
-				sourceMapFilename: "[name].map.js",
-				path: path.resolve(__dirname, "../../dist/"),
-			},
-			resolve: {
-				alias: {
-					react: path.resolve("./node_modules/react"),
-					"react-dom": path.resolve("./node_modules/react-dom"),
-					"@babel/runtime": path.resolve("./node_modules/@babel/runtime"),
-					async: path.resolve("./node_modules/async"),
-				},
-				extensions: [
-					".tsx",
-					".ts",
-					".js",
-					".jsx",
-					".json",
-					".scss",
-					".css",
-					".html",
-				],
-				modules: ["./node_modules"],
-			},
-		};
-	}
+		},
+	],
 };
+
+/**
+ * This rule will inline all images, svg and font files into base64 local entries. There is no size limit
+ * on these files. Small size limits may prevent custom fonts from being displayed in Toolbar menu drop downs.
+ */
+const IMAGE_AND_FONT_RULE = {
+	test: /\.(png|img|ttf|ottf|eot|woff|woff2|svg)$/,
+	loader: "url-loader",
+};
+
+/**
+ * This is a rule for compiling JSX files using babel.
+ */
+const JSX_RULE = {
+	test: /\.js(x)?$/,
+	exclude: /node_modules/,
+	use: {
+		loader: "babel-loader",
+		options: {
+			cacheDirectory: ".webpack-file-cache",
+			presets: [
+				[
+					"@babel/preset-env",
+					{
+						targets: {
+							browsers: "Chrome 70",
+						},
+						modules: "commonjs",
+					},
+				],
+				"@babel/preset-react",
+			],
+			plugins: [
+				"babel-plugin-add-module-exports",
+				"@babel/plugin-proposal-export-default-from",
+				"@babel/plugin-transform-modules-commonjs",
+				"@babel/plugin-proposal-class-properties",
+				[
+					"@babel/plugin-proposal-decorators",
+					{ decoratorsBeforeExport: false },
+				],
+				["@babel/plugin-transform-runtime", { regenerator: true }],
+			],
+		},
+	},
+};
+
+/**
+ * This rule will compile all .ts and .tsx files. ts-loader uses tsc. Modify the .tsconfig file to change typescript compilation behavior.
+ */
+const TSX_RULE = {
+	test: /\.ts(x)?$/,
+	loader: "ts-loader",
+	exclude: /node_modules/,
+};
+
+/**
+ * This rule allows webpack to transfer source maps from imported libraries, combining them into the source map for the actual file that
+ * it is bundling. This gives developers the ability to debug all the way down into imports from node_modules.
+ */
+const SOURCE_MAPS_RULE = {
+	enforce: "pre",
+	test: /\.js$/,
+	loader: "source-map-loader",
+};
+
+/**
+ * The DefinePlugin is used to set environment variables that are used by gulpfile.js tasks.
+ *
+ * The HardSourceWebpackPlugin implements incremental compilation. This greatly speeds up build time. Use `npm dev clean` to erase cache files in case of any build problems.
+ */
+let plugins = [
+	new DefinePlugin({
+		"process.env": {
+			NODE_ENV: JSON.stringify(env),
+		},
+	}),
+	new HardSourceWebpackPlugin({
+		info: {
+			level: "warn",
+		},
+		cacheDirectory: "../.webpack-file-cache/[confighash]",
+	}),
+];
+
+/**
+ * When in production mode, the Uglify plugin will be used to minify output code.
+ */
+if (env === "production") {
+	// When building the production environment, minify the code.
+	plugins.push(new UglifyJsPlugin());
+}
+
+/**
+ * Uncomment this plugin if you want to analyze bundle size. Separate tabs should open in chrome browser for each webpack script.
+ */
+//plugins.push(new BundleAnalyzerPlugin({ analyzerMode: "static" }));
+
+/**
+ * Aliases ensure that singleton libraries, such as react-dom, are only imported once.
+ * When external libraries themselves depend upon react-dom, it becomes possible for webpack to include more
+ * than one instance of the library which confuses react-dom. The alias webpack entry will
+ * ensure that all unpacked dependencies point to the same physical import.
+ *
+ * These imports are also packed using DllPlugin into vendor.bundle.js in order to speed loading times for commonly used imports.
+ */
+const aliases = {
+	"@babel/runtime": path.resolve("./node_modules/@babel/runtime"),
+	async: path.resolve("./node_modules/async"),
+	react: path.resolve("./node_modules/react"),
+	"react-dom": path.resolve("./node_modules/react-dom"),
+};
+
+const generateDefaultConfig = () => {
+	return {
+		devtool: env === "production" ? "source-map" : "eval-source-map",
+		entry: {},
+		stats: "minimal",
+		module: {
+			rules: [
+				CSS_RULE,
+				IMAGE_AND_FONT_RULE,
+				JSX_RULE,
+				TSX_RULE,
+				SOURCE_MAPS_RULE,
+			],
+		},
+		mode: env,
+		plugins: plugins,
+		optimization: {
+			usedExports: true,
+		},
+		output: {
+			filename: "[name].js",
+			sourceMapFilename: "[name].map.js",
+			path: path.resolve(__dirname, "../../dist/"),
+		},
+		resolve: {
+			alias: aliases,
+			extensions: [
+				".tsx",
+				".ts",
+				".js",
+				".jsx",
+				".json",
+				".scss",
+				".css",
+				".html",
+			],
+			modules: ["./node_modules"],
+		},
+	};
+};
+
+module.exports = { generateDefaultConfig };

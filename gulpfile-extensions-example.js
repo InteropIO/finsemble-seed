@@ -142,61 +142,6 @@ module.exports = (taskMethods) => {
 		};
 	*/
 
-	// However, detecting application closed is unreliable in the newer Hadouken launcher so this will remain optional until a fix is verified.
-	/*
-		taskMethods.launchApplication = done => {
-			// Local manifest is used to read the UUID for launching the Finsemble application
-			const manifestLocal = require("./configs/application/manifest-local.json");
-			const { launch, connect } = require("hadouken-js-adapter");
-			const ON_DEATH = require("death")({ debug: false });
-			const fs = require("fs");
-			const path = require("path");
-
-			taskMethods.logToTerminal("Launching Finsemble", "black", "bgCyan");
-			//Wipe old stats.
-			fs.writeFileSync(path.join(__dirname, "server", "stats.json"), JSON.stringify({}), "utf-8");
-
-			let startTime = Date.now();
-			fs.writeFileSync(path.join(__dirname, "server", "stats.json"), JSON.stringify({ startTime }), "utf-8");
-			async function launchAndConnect(manifestUrl, uuid) {
-				// launching an application returns the port number used, this port number will be used to connect to the runtime
-				const port = await launch({ manifestUrl });
-
-				// address to connect to the runtime using the port
-				const address = `ws://localhost:${port}`;
-
-				// unique UUID used to launch an application, this must be different from the uuid the application uses
-				const launchUUID = `${uuid}-${Math.floor(1000 * Math.random())}`;
-
-				// use the websocket address and uuid to connect to the runtime
-				const fin = await connect({ address, uuid: launchUUID });
-
-				// get an instance of the application using wrap and the UUID set in the config file
-				const app = await fin.Application.wrap({ uuid });
-
-				// listen to the closed event on the application to run code when it closes
-				app.on("closed", () => {
-					taskMethods.logToTerminal("Finsemble application terminated", "black", "bgCyan");
-
-					if (watchClose) watchClose();
-
-					// Signal task completion
-					done();
-
-					process.exit();
-				});
-			}
-
-			const manifestUrl = taskMethods.startupConfig[env.NODE_ENV].serverConfig;
-
-			// Get the UUID from the *manifestLocal* manifest file (./configs/application/manifest-local.json).
-			// If you're testing against any NODE_Env other than development, make sure the UUID in your manifest is the same as in manifest-local (i.e. "uuid": "Finsemble" )
-			const uuid = manifestLocal.startup_app.uuid;
-
-			launchAndConnect(manifestUrl, uuid);
-		},
-	*/
-
 	/** ---------------------------------------- TASKS ----------------------------------------------
 	 * Here is where you can override the actual gulp tasks. For instance, npm run dev, npm run build, etc.
 	 * You'll find these all in the "defineTasks" section in gulpfile.js.
