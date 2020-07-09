@@ -2,6 +2,7 @@ const path = require("path");
 const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const { DefinePlugin } = require("webpack");
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 
@@ -79,7 +80,8 @@ const TSX_RULE = {
 };
 
 /**
- * This rule will create source maps for compiled .js files.
+ * This rule allows webpack to transfer source maps from imported libraries, combining them into the source map for the actual file that
+ * it is bundling. This gives developers the ability to debug all the way down into imports from node_modules.
  */
 const SOURCE_MAPS_RULE = {
 	enforce: "pre",
@@ -113,6 +115,11 @@ if (env === "production") {
 	// When building the production environment, minify the code.
 	plugins.push(new UglifyJsPlugin());
 }
+
+/**
+ * Uncomment this plugin if you want to analyze bundle size. Separate tabs should open in chrome browser for each webpack script.
+ */
+//plugins.push(new BundleAnalyzerPlugin({ analyzerMode: "static" }));
 
 /**
  * Aliases ensure that singleton libraries, such as react-dom, are only imported once.
