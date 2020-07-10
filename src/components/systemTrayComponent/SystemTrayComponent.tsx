@@ -14,25 +14,25 @@ import { Restart } from "@chartiq/finsemble-ui/react/components/System";
 import { Reset } from "@chartiq/finsemble-ui/react/components/System";
 import { Quit } from "@chartiq/finsemble-ui/react/components/System";
 import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
+import "@chartiq/finsemble-ui/react/assets/css/menus.css";
 import "../../../assets/css/theme.css";
 
 /**
  * This component displays on right-click in your application's system tray icon.
  * Feel free to add/remove content or react components.
- * The SystemTrayComponentShell will automatically adjust the height and width of the window as necessary to display its content.
+ * The SystemTrayComponentShell will automatically adjust the height of the window as necessary to display its content.
+ * Use the component's config setting to adjust the window width if necessary.
  * This component will be hidden when it loses focus but will remain invisibly active.
  */
 const SystemTrayComponent = () => (
-	<SystemTrayComponentShell padding={{ width: 80 }}>
-		<div className="menu menu-primary">
-			<Preferences />
-			<SystemLog />
-			<CentralLogger />
-			<Documentation />
-			<Restart />
-			<Reset />
-			<Quit />
-		</div>
+	<SystemTrayComponentShell>
+		<Preferences />
+		<SystemLog />
+		<CentralLogger />
+		<Documentation />
+		<Restart />
+		<Reset />
+		<Quit />
 	</SystemTrayComponentShell>
 );
 
@@ -40,5 +40,5 @@ ReactDOM.render(
 	<FinsembleProvider>
 		<SystemTrayComponent />
 	</FinsembleProvider>,
-	document.getElementById("system-tray-component-wrapper")
+	document.getElementById("SystemTrayComponent-tsx")
 );

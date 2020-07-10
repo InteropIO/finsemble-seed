@@ -7,6 +7,7 @@
 	"//name": "Name of your application. Will be used for the exe and windows metadata. Only alphanumeric characters, spaces, dashes(-), periods(.), and underscores(_) are allowed",
 	"name": "xyz",
 	"authors": "ChartIQ",
+	"description": "Finsemble",
 	"//certificateFile": "The path to an Authenticode Code Signing Certificate",
 	"certificateFile": null,
 	"//certificatePassword": "The password to decrypt the certificate given in certificateFile",

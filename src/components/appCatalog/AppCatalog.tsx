@@ -12,5 +12,5 @@ ReactDOM.render(
 	<FinsembleProvider>
 		<AppCatalog />
 	</FinsembleProvider>,
-	document.getElementById("AppCatalog-component-wrapper")
+	document.getElementById("AppCatalog-tsx")
 );

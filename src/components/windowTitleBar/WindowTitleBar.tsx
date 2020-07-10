@@ -7,7 +7,7 @@ import ReactDOM from "react-dom";
 import { FinsembleProvider } from "@chartiq/finsemble-ui/react/components/FinsembleProvider";
 import {
 	AlwaysOnTopButton,
-	DockingButton,
+	GroupingButton,
 	LinkerButton,
 	ShareButton,
 	TabRegion,
@@ -16,6 +16,12 @@ import {
 	MinimizeButton,
 	WindowTitleBarShell,
 } from "@chartiq/finsemble-ui/react/components/WindowTitleBar";
+
+/**
+ * The following css import assumes that WindowTitleBar is running in a BrowserView.
+ * If not running in a BrowserView then some of the CSS directives may conflict with
+ * your content. You can remove this line and manually import CSS files from @chartiq/finsemble-ui as necessary.
+ */
 import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../assets/css/theme.css";
 
@@ -31,7 +37,7 @@ import "../../../assets/css/theme.css";
  * "foreign.components.Window Manager.showLinker" property
  * to false will hide the <LinkerButton/>.
  *
- * Other buttons are dynamic, such as <DockingButton> which will only
+ * Other buttons are dynamic, such as <GroupingButton> which will only
  * appear when windows are docked or can be docked.
  */
 const WindowTitleBar = () => {
@@ -47,7 +53,7 @@ const WindowTitleBar = () => {
 				<TabRegion />
 			</div>
 			<div className="fsbl-header-right">
-				<DockingButton />
+				<GroupingButton />
 				<AlwaysOnTopButton />
 				<MinimizeButton />
 				<MaximizeButton />
@@ -67,7 +73,8 @@ const setUpDOMContainer = () => {
 	fsblHeader = document.createElement("div");
 	fsblHeader.setAttribute("id", "FSBLHeader");
 	wrapper.appendChild(fsblHeader);
-	document.body.insertBefore(wrapper.firstChild, document.body.firstChild);
+	if (wrapper.firstChild)
+		document.body.insertBefore(wrapper.firstChild, document.body.firstChild);
 };
 
 setUpDOMContainer();

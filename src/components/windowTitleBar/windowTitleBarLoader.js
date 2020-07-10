@@ -4,5 +4,5 @@
  */
 
 window.addEventListener("DOMContentLoaded", () => {
-	require("./WindowTitleBar.jsx");
+	require("./WindowTitleBar.tsx");
 });
