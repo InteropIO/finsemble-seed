@@ -1,4 +1,12 @@
 {
     "comment": "Houses config for any custom services that you'd like to import into Finsemble.",
-    "services": {}
+    "services": {
+        "testService": {
+            "useWindow": true,
+            "active": true,
+            "name": "testService",
+            "visible": false,
+            "html": "$applicationRoot/services/test/test.html"
+        }
+    }
 }
