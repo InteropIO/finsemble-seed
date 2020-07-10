@@ -15,6 +15,7 @@ import {
 	AutoArrange,
 	Search,
 	AdvancedAppLauncherMenu,
+	AppLauncher,
 	WorkspaceManagementMenu,
 	ToolbarSection,
 } from "@chartiq/finsemble-ui/react/components/Toolbar";
@@ -43,6 +44,7 @@ const Toolbar = () => {
 				<Search openHotkey={["ctrl", "alt", "f"]} />
 				<WorkspaceManagementMenu />
 				<AdvancedAppLauncherMenu enableQuickComponents={true} />
+				<AppLauncher enableQuickComponents={true} />
 			</ToolbarSection>
 			<ToolbarSection className="center" hideBelowWidth={115}>
 				<div className="divider" />
@@ -63,5 +65,5 @@ ReactDOM.render(
 	<FinsembleProvider>
 		<Toolbar />
 	</FinsembleProvider>,
-	document.getElementById("Toolbar-component-wrapper")
+	document.getElementById("Toolbar-tsx")
 );
