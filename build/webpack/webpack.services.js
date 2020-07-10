@@ -1,12 +1,11 @@
 const path = require("path");
-const fs = require("fs");
+const { generateDefaultConfig } = require("./defaultWebpackConfig");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const glob_entries = require("webpack-glob-entries");
 const services = glob_entries(
 	path.join(__dirname, "../../", "/src/services/**/*.(js,ts)")
 );
 let entry = {};
-const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 
 //process service files found
 for (let key in services) {
@@ -27,8 +26,7 @@ if (Object.keys(entry).length === 0) {
 	return (module.exports = null); //If we don't have services there is no need to create an entry json
 }
 
-const defaultWebpackConfig = require("./defaultWebpackConfig");
-let config = new defaultWebpackConfig();
+let config = generateDefaultConfig();
 config.entry = entry;
 config.plugins.push(
 	new CopyWebpackPlugin([

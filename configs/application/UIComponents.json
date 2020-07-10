@@ -1,72 +1,7 @@
 {
 	"comment": "Sample component config, including app launcher, menus, etc.",
+	"$schema": "../schemas/fileBasedSchemas/uiComponentsFile.schema.json",
 	"components": {
-		"App Launcher": {
-			"window": {
-				"url": "$applicationRoot/components/appLauncher/appLauncher.html",
-				"affinity": "systemComponents",
-				"top": 0,
-				"left": 0,
-				"width": 310,
-				"height": 400,
-				"ephemeral": true,
-				"options": {
-					"autoShow": false
-				}
-			},
-			"component": {
-				"allowQuickComponent": "@TODO",
-				"spawnOnStartup": false,
-				"category": "system"
-			},
-			"foreign": {
-				"services": {
-					"windowService": {
-						"allowAutoArrange": false,
-						"shouldRegister": false
-					}
-				},
-				"components": {
-					"Window Manager": {
-						"persistWindowState": false,
-						"FSBLHeader": false
-					}
-				}
-			}
-		},
-		"Advanced App Launcher": {
-			"window": {
-				"url": "$applicationRoot/components/advancedAppLauncher/index.html",
-				"top": 0,
-				"left": 0,
-				"width": 700,
-				"height": 467,
-				"ephemeral": true,
-				"options": {
-					"autoShow": false
-				}
-			},
-			"component": {
-				"allowQuickComponent": "@TODO",
-				"spawnOnStartup": false,
-				"category": "system"
-			},
-			"foreign": {
-				"services": {
-					"windowService": {
-						"allowAutoArrange": false,
-						"shouldRegister": false
-					}
-				},
-				"components": {
-					"Window Manager": {
-						"persistWindowState": false,
-						"FSBLHeader": false,
-						"title": "Advanced App Launcher"
-					}
-				}
-			}
-		},
 		"linkerWindow": {
 			"bootParams": {
 				"stage": "earlyuser",
@@ -392,7 +327,7 @@
 		"windowTitleBar": {
 			"window": {
 				"//": "This is never called as a component. It is compiled to js and then injected into other components",
-				"url": "$applicationRoot/components/windowTitleBar/windowTitleBar.js",
+				"url": "$applicationRoot/components/windowTitleBar/WindowTitleBar.js",
 				"top": "center",
 				"left": "center",
 				"width": 358,
@@ -457,51 +392,6 @@
 					"Window Manager": {
 						"FSBLHeader": false,
 						"persistWindowState": true
-					},
-					"Toolbar": {
-						"iconClass": "UserPreferences"
-					}
-				}
-			}
-		},
-		"Floating Titlebar": {
-			"window": {
-				"url": "$applicationRoot/components/floatingTitlebar/floatingTitlebar.html",
-				"affinity": "systemComponents",
-				"frame": false,
-				"top": "center",
-				"left": "center",
-				"width": 30,
-				"height": 30,
-				"options": {
-					"cornerRounding": {
-						"height": 0,
-						"width": 0
-					},
-					"showTaskbarIcon": false,
-					"autoShow": false,
-					"resizable": false,
-					"alwaysOnTop": false,
-					"smallWindow": true
-				}
-			},
-			"component": {
-				"category": "system"
-			},
-			"foreign": {
-				"services": {
-					"windowService": {
-						"allowGrouping": true,
-						"allowAutoArrange": false
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"launchableByUser": false
-					},
-					"Window Manager": {
-						"FSBLHeader": false,
-						"persistWindowState": false
 					},
 					"Toolbar": {
 						"iconClass": "UserPreferences"
@@ -585,9 +475,8 @@
 			"window": {
 				"url": "$applicationRoot/components/systemTrayComponent/systemTrayComponent.html",
 				"affinity": "systemComponents",
-				"frame": false,
-				"width": 70,
-				"height": 70,
+				"width": 150,
+				"height": 40,
 				"options": {
 					"autoShow": false,
 					"resizable": false,
