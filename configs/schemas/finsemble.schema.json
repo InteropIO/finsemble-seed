@@ -59,6 +59,16 @@
 						"importThirdPartyConfig": {
 							"$ref": "#/definitions/importThirdPartyConfig"
 						},
+						"splashScreenImage": {
+							"description": "URL to use for splash screen image when starting Finsemble.",
+							"type": "string",
+							"default": "http://localhost:3375/assets/img/FinsembleSplash.png"
+						},
+						"splashScreenTimeout": {
+							"description": "Amount of time (in milliseconds) to show the splash screen",
+							"type": "number",
+							"default": 6000
+						},
 						"custom": {}
 					},
 					"required": [
@@ -69,6 +79,11 @@
 						"notificationURL",
 						"bootConfig"
 					]
+				},
+				"allowEvalInPreload": {
+					"description": "Set to `true` to delete `unsafe-eval` and `script-src directives` from the content security policy.",
+					"type": "boolean",
+					"default": false
 				},
 				"custom": {}
 			},
@@ -169,7 +184,7 @@
 					"$ref": "#/definitions/preferences"
 				},
 				"systemTrayIcon": {
-					"description": "(PUBLIC)",
+					"description": "(PUBLIC) Sets the location of the system tray icon (lower right corner of the terminal)",
 					"type": "string"
 				},
 				"systemTrayComponent": {
@@ -197,6 +212,33 @@
 				},
 				"services": {
 					"$ref": "#/definitions/services"
+				},
+				"feaURLWhitelist": {
+					"description": "A regex pattern that represents a URL whitelist. If set, components will **only** be able to navigate to URLs that match the regex pattern.",
+					"type": "string"
+				},
+				"failedComponentCloseNotification": {
+					"description": "If true throw a notification when a component fails to close within the time limit specified in `finsemble[\"Window Manager\"].componentCloseTimeout`",
+					"type": "boolean",
+					"default": false
+				},
+				"initialWorkspace": {
+					"description": "The workspace name specified by this config will be the first one presented to an end user the very first time they start the smart desktop. This overrides the default behavior set by the config: finsemble.workspaces. After the very first instance of the smart desktop, Finsemble will load the last workspace loaded or any workspace specified by user preferences.",
+					"type": "string"
+				},
+				"shutdownTimeout": {
+					"description": "Amount of time (in milliseconds) to give services to shutdown before forcibly quitting the application. Components get 2 seconds less than services.",
+					"type": "number",
+					"minimum": 0,
+					"default": 10000
+				},
+				"scheduledRestart": {
+					"description": "Set Finsemble to automatically restart. These values can be overriden by the user through user preferences.\r\nhour 0 - The hour when Finsemble should restart. This is in 24 hour time according to the user's local machine's timezone.\r\nminute 0 - The minute when Finsemble should restart.\r\ndialogTimeout 10000 - When it is time to restart, the user is presented with a dialog to confirm or cancel. Since resets occur at night while the machine is unattended, most often the dialog will time out and Finsemble will reset. The `dialogTimeout` specifies how long to wait for a user response in milliseconds.",
+					"type": "boolean",
+					"default": false
+				},
+				"stackedWindow": {
+					"$ref": "#/definitions/stackedWindow"
 				},
 				"//": {
 					"description": "(DEPRECATED) Comment string inserted into config.",
@@ -319,7 +361,12 @@
 				"finsemble-electron-adapter": {
 					"$ref": "#/definitions/electronAdapter"
 				},
-				"custom": {}
+				"custom": {},
+				"allowEvalInPreload": {
+					"description": "Set to `true` to delete `unsafe-eval` and `script-src directives` from the content security policy.",
+					"type": "boolean",
+					"default": false
+				}
 			},
 			"required": ["startup_app", "finsemble"],
 			"additionalProperties": false
@@ -508,7 +555,7 @@
 					"$ref": "#/definitions/preferences"
 				},
 				"systemTrayIcon": {
-					"description": "(PUBLIC)",
+					"description": "(PUBLIC) Sets the location of the system tray icon (lower right corner of the terminal)",
 					"type": "string"
 				},
 				"systemTrayComponent": {
@@ -540,6 +587,56 @@
 				},
 				"services": {
 					"$ref": "#/definitions/services"
+				},
+				"feaURLWhitelist": {
+					"description": "A regex pattern that represents a URL whitelist. If set, components will **only** be able to navigate to URLs that match the regex pattern.",
+					"type": "string"
+				},
+				"cssOverridePath": {
+					"description": "(DEPRECATED)",
+					"type": "string"
+				},
+				"debugServiceDelay": {
+					"description": "(DEPRECATED)",
+					"type": "number"
+				},
+				"failedComponentCloseNotification": {
+					"description": "If true throw a notification when a component fails to close within the time limit specified in `finsemble[\"Window Manager\"].componentCloseTimeout`",
+					"type": "boolean",
+					"default": false
+				},
+				"initialWorkspace": {
+					"description": "The workspace name specified by this config will be the first one presented to an end user the very first time they start the smart desktop. This overrides the default behavior set by the config: finsemble.workspaces. After the very first instance of the smart desktop, Finsemble will load the last workspace loaded or any workspace specified by user preferences.",
+					"type": "string"
+				},
+				"isAuthEnabled": {
+					"description": "(DEPRECATED)",
+					"type": "boolean",
+					"default": false
+				},
+				"shutdownTimeout": {
+					"description": "Amount of time (in milliseconds) to give services to shutdown before forcibly quitting the application. Components get 2 seconds less than services.",
+					"type": "number",
+					"minimum": 0,
+					"default": 10000
+				},
+				"splashScreenImage": {
+					"description": "URL to use for splash screen image when starting Finsemble.",
+					"type": "string",
+					"default": "http://localhost:3375/assets/img/FinsembleSplash.png"
+				},
+				"splashScreenTimeout": {
+					"description": "Amount of time (in milliseconds) to show the splash screen",
+					"type": "number",
+					"default": 6000
+				},
+				"scheduledRestart": {
+					"description": "Set Finsemble to automatically restart. These values can be overriden by the user through user preferences.\r\nhour 0 - The hour when Finsemble should restart. This is in 24 hour time according to the user's local machine's timezone.\r\nminute 0 - The minute when Finsemble should restart.\r\ndialogTimeout 10000 - When it is time to restart, the user is presented with a dialog to confirm or cancel. Since resets occur at night while the machine is unattended, most often the dialog will time out and Finsemble will reset. The `dialogTimeout` specifies how long to wait for a user response in milliseconds.",
+					"type": "boolean",
+					"default": false
+				},
+				"stackedWindow": {
+					"$ref": "#/definitions/stackedWindow"
 				},
 				"comment": {
 					"description": "(DEPRECATED) Comment string inserted into config.",
@@ -681,10 +778,35 @@
 				"deliveryMechanism": {
 					"description": "Which delivery method to use for scripts (e.g., FSBL, title bar, etc.) - Valid values are:\r\n\"injection\" - Injects the code into the window.",
 					"type": "string",
+					"enum": ["injection", "preload"],
 					"default": "injection"
 				},
 				"zoom": {
-					"description": "(TBD)"
+					"description": "Configuration for the zoom.js preload",
+					"type": "object",
+					"properties": {
+						"timeout": {
+							"description": "The number of milliseconds the zoom pop up should be displayed before it is hidden.",
+							"type": "number",
+							"default": 3000
+						},
+						"step": {
+							"description": "How much the zoom should increase or decrease when zooming in or out.",
+							"type": "number",
+							"default": 0.1
+						},
+						"max": {
+							"description": "The maximum allowed zoom level.",
+							"type": "number",
+							"default": 5.0
+						},
+						"min": {
+							"description": "The minimum allowed zoom level.",
+							"type": "number",
+							"default": 0.2
+						}
+					},
+					"additionalProperties": false
 				},
 				"componentCloseTimeout": {
 					"description": "TBD"
@@ -710,7 +832,9 @@
 			"type": "object",
 			"properties": {
 				"promptUserOnDirtyWorkspace": {
-					"type": "boolean"
+					"description": "When set to `false`, the user's workspace automatically saves to the last configuration when switching workspaces or closing Finsemble. When set to `true`, the user is prompted to save the current workspace configuration.",
+					"type": "boolean",
+					"default": true
 				}
 			}
 		},
@@ -723,6 +847,23 @@
 					"title": "distributedStore",
 					"type": "object",
 					"properties": {
+						"spawnsAs": {
+							"$ref": "#/definitions/spawnAs"
+						},
+						"affinity": {
+							"description": "Only applicable for `spawnAs: \"window\"`. When set, the service window will be given process affinity based on the string passed in. This allows aggregation of services to a specific browser process.",
+							"type": "string"
+						},
+						"visible": {
+							"description": "Set this to `true` in order to reveal the hidden service window. This can be useful for debugging services.",
+							"type": "boolean",
+							"default": false
+						},
+						"active": {
+							"description": "Set this to `false` to disable the service.",
+							"type": "boolean",
+							"default": true
+						},
 						"initialStores": {
 							"title": "initialStores",
 							"description": "Foundations for any stores which should be seeded on startup",
@@ -794,29 +935,31 @@
 							}
 						}
 					},
-					"required": ["initialStores"]
-				},
-				"launcher": {
-					"title": "launcher",
-					"type": "object",
-					"properties": {
-						"staggerPixels": {
-							"type": "number"
-						},
-						"unknownComponent": {
-							"type": "string"
-						}
-					},
-					"required": ["staggerPixels", "unknownComponent"]
-				},
-				"assimilation": {
-					"$ref": "#/definitions/serviceAssimilationConfig"
+					"required": ["initialStores"],
+					"additionalProperties": false
 				},
 				"docking": {
 					"title": "docking",
 					"description": "Configs specific to the docking service",
 					"type": "object",
 					"properties": {
+						"spawnsAs": {
+							"$ref": "#/definitions/spawnAs"
+						},
+						"affinity": {
+							"description": "Only applicable for `spawnAs: \"window\"`. When set, the service window will be given process affinity based on the string passed in. This allows aggregation of services to a specific browser process.",
+							"type": "string"
+						},
+						"visible": {
+							"description": "Set this to `true` in order to reveal the hidden service window. This can be useful for debugging services.",
+							"type": "boolean",
+							"default": false
+						},
+						"active": {
+							"description": "Set this to `false` to disable the service.",
+							"type": "boolean",
+							"default": true
+						},
 						"enabled": {
 							"type": "boolean"
 						},
@@ -824,37 +967,106 @@
 							"type": "number"
 						},
 						"headerHeight": {
-							"type": "number"
+							"description": "This defines the height of the window title bar.",
+							"type": "number",
+							"default": 32
+						},
+						"headerWidth": {
+							"description": "This defines the width of the window title bar.",
+							"type": "number",
+							"default": 32
+						},
+						"MINIMUM_HEIGHT": {
+							"description": "The smallest height to allow a window to shrink on resize.",
+							"type": "number",
+							"default": 28
 						},
 						"MINIMUM_WIDTH": {
-							"type": "number"
+							"description": "The smallest width to allow a window to shrink on resize.",
+							"type": "number",
+							"default": 98
 						},
 						"requireRectangularityForGroupResize": {
-							"type": "boolean"
+							"description": " If a group of windows forms a rectangle, it can be resized. By turning this to `false`, the user can resize any shaped group by grabbing a corner that is not on another window's edge.",
+							"type": "boolean",
+							"default": true
 						},
 						"undockDisbandsEntireGroup": {
-							"type": "boolean"
+							"description": "By default, when a user clicks the \"Undock\" button in the title bar, it will leave the group without destroying that group. Set this value to `true` if you would like to eliminate the group when the user clicks the \"Undock\" button.",
+							"type": "boolean",
+							"default": false
 						},
 						"fillHolesOnUndock": {
-							"type": "boolean"
+							"description": "If set to `true`, a rectangular group will maintain its rectangularity when windows leave the group.",
+							"type": "boolean",
+							"default": true
 						},
 						"tabbing": {
 							"type": "object",
 							"properties": {
 								"enabled": {
+									"description": "Allows windows to tab onto each other.",
 									"type": "boolean",
 									"default": false
 								}
-							}
+							},
+							"additionalProperties": false
 						},
 						"tiling": {
 							"type": "object",
 							"properties": {
 								"enabled": {
+									"description": "Allows windows to tile onto each other.",
 									"type": "boolean",
 									"default": false
 								}
-							}
+							},
+							"additionalProperties": false
+						},
+						"ALLOW_GROUPS_TO_SNAP": {
+							"description": "Allows groups to snap to one another.",
+							"type": "boolean",
+							"default": true
+						},
+						"BUFFER_SIZE": {
+							"description": "The zone around a window that will cause it to snap to other windows. This value is in pixels.",
+							"type": "number",
+							"default": 20
+						},
+						"enableWindowsAeroSnap ": {
+							"description": "If `true`, windows aero snap keyboard shortcuts (WINDOWS KEY + UP, RIGHT, DOWN, or LEFT arrow key) will move the current window when pressed. Windows will move the window and Finsemble will respond by updating bounds within the Window Service. If `false` (default), these actions will be cancelled by Finsemble.",
+							"type": "boolean",
+							"default": false
+						},
+						"fillHolesOnUndock ": {
+							"description": "If set to `true`, a rectangular group will maintain its rectangularity when windows leave the group.",
+							"default": true
+						},
+						"GROUP_MODE": {
+							"type": "object",
+							"properties": {
+								"enabled": {
+									"description": "Whether to allow windows to group to one another.",
+									"type": "boolean",
+									"default": true
+								},
+								"behavior ": {
+									"type": "string",
+									"enum": ["explicit", "implicit"],
+									"default": "explicit"
+								}
+							},
+							"additionalProperties": false
+						},
+						"RESIZE_EVENT_THROTTLE_PERIOD": {
+							"description": "Value (in milliseconds) to throttle resize events. If you find that the quantity of resize events is causing poor performance, tweak this value until you are happy with the performance.",
+							"type": "number",
+							"default": 0
+						},
+						"SNAPPING_OPACITY": {
+							"description": "The opacity windows change to when other windows encroach on their buffer zone.",
+							"type": "number",
+							"default": 0.8
 						}
 					},
 					"required": [
@@ -866,12 +1078,80 @@
 						"undockDisbandsEntireGroup",
 						"fillHolesOnUndock",
 						"tiling"
-					]
+					],
+					"additionalProperties": false
+				},
+				"launcher": {
+					"title": "launcher",
+					"type": "object",
+					"properties": {
+						"spawnsAs": {
+							"$ref": "#/definitions/spawnAs"
+						},
+						"affinity": {
+							"description": "Only applicable for `spawnAs: \"window\"`. When set, the service window will be given process affinity based on the string passed in. This allows aggregation of services to a specific browser process.",
+							"type": "string"
+						},
+						"visible": {
+							"description": "Set this to `true` in order to reveal the hidden service window. This can be useful for debugging services.",
+							"type": "boolean",
+							"default": false
+						},
+						"active": {
+							"description": "Set this to `false` to disable the service.",
+							"type": "boolean",
+							"default": true
+						},
+						"concurrentSpawnLimit": {
+							"description": "This specifies the number of components that can be spawned concurrently during Workspace load. The default is machine's number of processor cores divided by 2. <b>More than one window per core can potentially cause performance issues on processor-intensive components. Defaults to the machine's number of processor cores divided by 2",
+							"type": "number",
+							"minimum": 1
+						},
+						"staggerPixels": {
+							"type": "number"
+						},
+						"unknownComponent": {
+							"type": "string"
+						},
+						"search": {
+							"description": "Allows you to control the component search built into finsemble",
+							"type": "object",
+							"properties": {
+								"enabled": {
+									"description": "Set to false to disable component search.",
+									"type": "boolean",
+									"default": true
+								},
+								"options": {
+									"description": "An object containing fuse.js configuration options."
+								}
+							},
+							"additionalProperties": false
+						}
+					},
+					"required": ["staggerPixels", "unknownComponent"]
 				},
 				"logger": {
 					"title": "logger",
 					"type": "object",
 					"properties": {
+						"spawnsAs": {
+							"$ref": "#/definitions/spawnAs"
+						},
+						"affinity": {
+							"description": "Only applicable for `spawnAs: \"window\"`. When set, the service window will be given process affinity based on the string passed in. This allows aggregation of services to a specific browser process.",
+							"type": "string"
+						},
+						"visible": {
+							"description": "Set this to `true` in order to reveal the hidden service window. This can be useful for debugging services.",
+							"type": "boolean",
+							"default": false
+						},
+						"active": {
+							"description": "Set this to `false` to disable the service.",
+							"type": "boolean",
+							"default": true
+						},
 						"hotkeyShowCentralLogger": {
 							"description": "Sets the hotkey for showing the Central Logger. Leave this config out to disable the hotkey.",
 							"type": "array",
@@ -887,47 +1167,132 @@
 					"title": "storage",
 					"type": "object",
 					"properties": {
-						"defaultStorage": {
+						"spawnsAs": {
+							"$ref": "#/definitions/spawnAs"
+						},
+						"affinity": {
+							"description": "Only applicable for `spawnAs: \"window\"`. When set, the service window will be given process affinity based on the string passed in. This allows aggregation of services to a specific browser process.",
 							"type": "string"
+						},
+						"visible": {
+							"description": "Set this to `true` in order to reveal the hidden service window. This can be useful for debugging services.",
+							"type": "boolean",
+							"default": false
+						},
+						"active": {
+							"description": "Set this to `false` to disable the service.",
+							"type": "boolean",
+							"default": true
+						},
+						"defaultStorage": {
+							"description": "The default storage model to use when saving and loading data.",
+							"type": "string",
+							"default": "IndexedDBAdapter"
+						},
+						"dataStoreAdapters": {
+							"title": "dataStoreAdapters",
+							"description": "Storage adapters that the storage service will load up on application startup.",
+							"type": "object",
+							"properties": {
+								"LocalStorageAdapter": {
+									"description": "local storage adapter .js file",
+									"type": "string",
+									"default": "$applicationRoot/adapters/localStorageAdapter.js"
+								},
+								"IndexedDBAdapter": {
+									"description": "indexedDB adapter .js file",
+									"type": "string",
+									"default": "$applicationRoot/adapters/indexedDBAdapter.js"
+								}
+							}
 						},
 						"topicToDataStoreAdapters": {
 							"title": "topicToDataStoreAdapters",
 							"type": "object",
 							"properties": {
 								"finsemble": {
-									"type": "string"
+									"description": "Which storage adapter to use when persisting non-workspace-related information.",
+									"type": "string",
+									"default": "IndexedDBAdapter"
 								},
 								"finsemble.workspace": {
-									"type": "string"
+									"description": "Which storage adapter to use when persisting workspace-related information.",
+									"type": "string",
+									"default": "IndexedDBAdapter"
 								},
 								"finsemble.workspace.cache": {
-									"type": "string"
+									"description": "Which storage adapter to use when caching workspace-related information.",
+									"type": "string",
+									"default": "IndexedDBAdapter"
 								}
 							},
 							"required": [
 								"finsemble",
 								"finsemble.workspace",
 								"finsemble.workspace.cache"
-							]
-						},
-						"dataStoreAdapters": {
-							"title": "dataStoreAdapters",
-							"type": "object",
-							"properties": {
-								"LocalStorageAdapter": {
-									"type": "string"
-								},
-								"IndexedDBAdapter": {
-									"type": "string"
-								}
-							}
+							],
+							"additionalProperties": false
 						}
 					},
 					"required": [
 						"defaultStorage",
-						"topicToDataStoreAdapters",
-						"dataStoreAdapters"
+						"dataStoreAdapters",
+						"topicToDataStoreAdapters"
 					]
+				},
+				"workspace": {
+					"type": "object",
+					"properties": {
+						"spawnsAs": {
+							"$ref": "#/definitions/spawnAs"
+						},
+						"affinity": {
+							"description": "Only applicable for `spawnAs: \"window\"`. When set, the service window will be given process affinity based on the string passed in. This allows aggregation of services to a specific browser process.",
+							"type": "string"
+						},
+						"visible": {
+							"description": "Set this to `true` in order to reveal the hidden service window. This can be useful for debugging services.",
+							"type": "boolean",
+							"default": false
+						},
+						"active": {
+							"description": "Set this to `false` to disable the service.",
+							"type": "boolean",
+							"default": true
+						},
+						"persistURL": {
+							"description": "A global config for component URL persistence. When true, components automatically save their last URL instead of using the one in the config. The component config will overwrite the global config.",
+							"default": false
+						},
+						"closeWorkspaceTimeout": {
+							"description": "Number of miliseconds the workspace service should wait for all of the windows to close when switching to another workspace. Workspaces are locked until a close action completes or times out. If this timeout value is exceeded the user will be provided with a notification and an empty workspace will be loaded. Set to null for no timeout.",
+							"type": "number",
+							"default": 30000
+						},
+						"closeFailureNotificationMessage": {
+							"description": "Override the default notification message that appears to the end user when closeWorkspaceTimeout is triggered. Set to \"\" to stop a message from being sent.",
+							"type": "string"
+						},
+						"search": {
+							"description": "Allows you to control the workspace search built into finsemble",
+							"type": "object",
+							"properties": {
+								"enabled": {
+									"description": "Set to false to disable workspace search.",
+									"type": "boolean",
+									"default": true
+								},
+								"options": {
+									"description": "An object containing fuse.js configuration options."
+								}
+							},
+							"additionalProperties": false
+						}
+					},
+					"additionalProperties": false
+				},
+				"assimilation": {
+					"$ref": "#/definitions/serviceAssimilationConfig"
 				}
 			},
 			"additionalProperties": false
@@ -963,11 +1328,13 @@
 				"crossDomainTransport": {
 					"description": "The interface for communicating between cross-domain components - When set to `IPCBus`, the default,, all cross-domain components will use IPC to communicate. When set to `FinsembleTransport`, cross-domain components will use IAC. You might switch the `crossDomainTransport` if you are having connection issues involving firewalls, your CSP, etc. Available values are 'IPCBus' and 'FinsembleTransport'.",
 					"type": "string",
+					"enum": ["IPCBus", "SharedWorker", "FinsembleTransport"],
 					"default": "IPCBus"
 				},
 				"sameDomainTransport": {
 					"description": "The transport for components and services with Finsemble's domain. ",
 					"type": "string",
+					"enum": ["IPCBus", "SharedWorker", "FinsembleTransport"],
 					"default": "SharedWorker"
 				},
 				"transportSettings": {
@@ -993,7 +1360,18 @@
 					"default": {}
 				}
 			},
-			"additionalProperties": false
+			"additionalProperties": false,
+			"example": {
+				"router": {
+					"crossDomainTransport": "IPCBus",
+					"sameDomainTransport": "SharedWorker",
+					"transportSettings": {
+						"FinsembleTransport": {
+							"serverAddress": "ws://127.0.0.1:3376"
+						}
+					}
+				}
+			}
 		},
 		"system": {
 			"title": "system",
@@ -1050,8 +1428,7 @@
 								"file": {
 									"type": "string"
 								}
-							},
-							"additionalProperties": false
+							}
 						},
 						"loggerService": {
 							"type": "object",
@@ -1826,17 +2203,40 @@
 			"description": "Service config specific to assimilation service",
 			"type": "object",
 			"properties": {
+				"spawnsAs": {
+					"$ref": "#/definitions/spawnAs"
+				},
+				"affinity": {
+					"description": "Only applicable for `spawnAs: \"window\"`. When set, the service window will be given process affinity based on the string passed in. This allows aggregation of services to a specific browser process.",
+					"type": "string"
+				},
+				"visible": {
+					"description": "Set this to `true` in order to reveal the hidden service window. This can be useful for debugging services.",
+					"type": "boolean",
+					"default": false
+				},
+				"active": {
+					"description": "Set this to `false` to disable the service.",
+					"type": "boolean",
+					"default": true
+				},
 				"enabled": {
-					"type": "boolean"
+					"description": "Set to true to turn on Assimilation",
+					"type": "boolean",
+					"default": true
 				},
 				"port": {
-					"type": "number"
+					"description": "Assimilation communicates with Finsemble's HTML services via a WebSocket. Set the port here.",
+					"type": "number",
+					"default": 8392
 				},
 				"useFeaSpawn": {
 					"type": "boolean"
 				},
 				"throttle": {
-					"type": "number"
+					"description": "Windows sends dozens of events per second when a window is moved. This value tells the application how often to collect those events. You may see performance degradations if you set the throttle below 5.",
+					"type": "number",
+					"default": 15
 				},
 				"blacklist": {
 					"type": "array"
@@ -1845,25 +2245,32 @@
 					"type": "array"
 				},
 				"onlySpawned": {
-					"type": "boolean"
+					"description": "This Boolean tells assimilation whether it should restrict its scope to external applications spawned by Finsemble. If true, only applications launched from Finsemble will be controlled. If false, it will try to control the movements of all windows on the desktop.",
+					"type": "boolean",
+					"default": true
 				},
 				"focusDelay": {
-					"type": "number"
+					"description": "Sets the delay (in miliseconds) between the focus event being received and the actual focusing of the window. This is necessary because the focus event is called simultaneously with minimize/restore events, which causes issues with docking groups.",
+					"type": "number",
+					"default": 30
 				},
 				"eventIgnore": {
-					"type": "number"
+					"description": "Sets the threshold (in miliseconds) from the previous event before which focus/restore events are dropped. Certain sequences of minimize/restore/focus events can create an unwanted loop of events; therefore, restore and focus events are throttled with this property.",
+					"type": "number",
+					"default": 50
 				},
 				"hotkeyTimeout": {
 					"type": "number"
 				},
 				"hideTitleBars": {
+					"description": " Set to true to hide all Finsemble title bars for native applications.",
 					"type": "boolean"
 				}
 			}
 		},
 		"workspacesArray": {
 			"title": "workspaces",
-			"description": "(PUBLIC)",
+			"description": "(PUBLIC)  An array of workspaces to be presented to the user the first time they start Finsemble. By default, the first workspace listed in the array will be the one first presented to an end user the first time they load their smart desktop.",
 			"type": "array",
 			"items": {
 				"$ref": "#/definitions/workspaceTemplate"
@@ -1956,6 +2363,24 @@
 					}
 				}
 			}
+		},
+		"stackedWindow": {
+			"description": "Configuration for tabbed and tiled windows",
+			"type": "object",
+			"properties": {
+				"addReadyTimeout": {
+					"description": "Sets the time in miliseconds for a tabbed/tiled windows to become ready.",
+					"type": "number",
+					"default": 6500
+				}
+			},
+			"additionalProperties": false
+		},
+		"spawnAs": {
+			"description": "\"window\" - Spawns the service as a child window of the Service Manager. \"process\" - Spawns the service in its own browser process (a.k.a. application). This gives the service dedicated CPU to maximize concurrency. \"script\" - Spawns the service as a script running in the Service Manager window. This minimizes memory footprint. This setting can only be used with the following services: assimilation, storage, hotkeys, linker, search and workspace.",
+			"type": "string",
+			"enum": ["window", "process", "script"],
+			"default": "window"
 		},
 		"securityPolicies": {
 			"title": "securityPolicies",
