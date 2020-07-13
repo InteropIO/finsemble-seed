@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"build:prod": "gulp build:prod --gulpfile=./gulpfile.js",
-		"build:seed": "gulp build:dev --gulpfile=./gulpfile.js",
+		"build:seed": "npm run clean && gulp build:dev --gulpfile=./gulpfile.js",
 		"clean": "gulp clean --gulpfile=./gulpfile.js",
 		"dev-fresh": "gulp dev:fresh --gulpfile=./gulpfile.js",
 		"dev:fresh": "gulp dev:fresh --gulpfile=./gulpfile.js",
