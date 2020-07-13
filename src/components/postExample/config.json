@@ -1,0 +1,111 @@
+{
+    "components": {
+      "postExample": {
+		"window": {
+			"url": "$applicationRoot/components/postExample/postExample.html",
+			"affinity": "workspaceComponents",
+			"options": {
+				"resizable": true,
+				"autoShow": true,
+				"alwaysOnTop": false,
+				"backgroundColor": "#fff",
+				"securityPolicy": "trusted"
+			},
+			"top": "center",
+			"left": "center",
+			"width": 400,
+			"height": 432,
+			"data": {
+				"url": "http://httpbin.org/post",
+				"method": "POST",
+				"data": "some example data",
+				"data2": "more example data",
+				"data3": 1234
+			}
+		},
+		"component": {
+			"displayName": "Post Example Component",
+			"spawnOnStartup": false,
+			"preload": [
+				"$applicationRoot/components/postExample/postExample.js"
+			],
+			"category": "system"
+		},
+		"foreign": {
+			"services": {
+				"windowService": {
+					"allowSnapping": true,
+					"allowGrouping": true,
+					"allowAutoArrange": true,
+					"allowMinimize": true
+				}
+			},
+			"components": {
+				"App Launcher": {
+					"launchableByUser": true
+				},
+				"Window Manager": {
+					"alwaysOnTopIcon": false,
+					"showLinker": true,
+					"FSBLHeader": true,
+					"persistWindowState": true,
+					"title": "Post Example"
+				},
+				"Toolbar": {
+					"iconClass": "ff-component"
+				}
+			}
+		}
+	},
+	"postExample-manual": {
+		"window": {
+			"url": "$applicationRoot/components/postExample/postExample.html",
+			"affinity": "workspaceComponents",
+			"options": {
+				"resizable": true,
+				"autoShow": true,
+				"alwaysOnTop": false,
+				"backgroundColor": "#fff",
+				"securityPolicy": "trusted"
+			},
+			"top": "center",
+			"left": "center",
+			"width": 400,
+			"height": 432
+		},
+		"component": {
+			"displayName": "Post Example Component - manual",
+			"spawnOnStartup": false,
+			"preload": [
+				"$applicationRoot/components/postExample/postExample.js"
+			],
+			"category": "system"
+		},
+		"foreign": {
+			"services": {
+				"windowService": {
+					"allowSnapping": true,
+					"allowGrouping": true,
+					"allowAutoArrange": true,
+					"allowMinimize": true
+				}
+			},
+			"components": {
+				"App Launcher": {
+					"launchableByUser": true
+				},
+				"Window Manager": {
+					"alwaysOnTopIcon": false,
+					"showLinker": true,
+					"FSBLHeader": true,
+					"persistWindowState": true,
+					"title": "Post Example"
+				},
+				"Toolbar": {
+					"iconClass": "ff-component"
+				}
+			}
+		}
+	}
+    }
+  }
