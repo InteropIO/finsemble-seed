@@ -234,6 +234,7 @@
 		clean: (done) => {
 			del(taskMethods.distPath, { force: true });
 			del(".babel_cache", { force: true });
+			del("finsemble", { force: true });
 			del(path.join(__dirname, "build/webpack/vendor-manifest.json"), {
 				force: true,
 			});
