@@ -1,5 +1,5 @@
 /*!
-* Copyright 2017 by ChartIQ, Inc.
+* Copyright 2017 - 2020 by ChartIQ, Inc.
 * All rights reserved.
  * This is the list of actions the user can take; it's placed above the list of workspaces..
  */

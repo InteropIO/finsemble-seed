@@ -1,4 +1,4 @@
-import storeActions from '../stores/StoreActions'
+import { isAppInFavorites } from './helpers';
 
 export default {
 	/**
@@ -16,10 +16,9 @@ export default {
 	 * for apps that are in Favorite folder
 	 */
 	Favorites: (list) => {
-		const favorites = storeActions.getSingleFolder('Favorites').apps;
 		return list.sort((a, b) => {
-			const aInFavorites = a.appID in favorites;
-			const bInFavorites = b.appID in favorites;
+			const aInFavorites = isAppInFavorites(a.appID);
+			const bInFavorites = isAppInFavorites(b.appID);
 			// a component being in favorites means it is "less than" another component not in favorites, so return -1
 			if (aInFavorites && !bInFavorites) 
 			{

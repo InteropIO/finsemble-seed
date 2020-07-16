@@ -1,5 +1,5 @@
 /*!
-* Copyright 2017 by ChartIQ, Inc.
+* Copyright 2017 - 2020 by ChartIQ, Inc.
 * All rights reserved.
 */
 import React, { Component } from "react";
@@ -136,7 +136,7 @@ class AppShowcase extends Component {
 						</span>
 					</div>
 				)}
-				<Header iconUrl={iconUrl} name={this.props.app.name} entitled={this.state.entitled} installed={this.props.app.installed} appId={this.props.app.appId} />
+				<Header iconUrl={iconUrl} entitled={this.state.entitled} {...this.props.app} />
 
 				<ImageCarousel nextImage={this.nextImage} previousImage={this.previousImage} openModal={this.openModal} images={images} />
 

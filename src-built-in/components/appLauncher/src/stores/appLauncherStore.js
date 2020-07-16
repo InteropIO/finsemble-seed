@@ -1,5 +1,5 @@
 /*!
-* Copyright 2017 by ChartIQ, Inc.
+* Copyright 2017 - 2020 by ChartIQ, Inc.
 * All rights reserved.
 */
 
@@ -57,7 +57,7 @@ var Actions = {
 		});
 
 		//Whenever we add or remove a component, this event is fired. We get a list of all components, then filter it out to include only the ones that this particular launcher is capable of spawning.
-		FSBL.Clients.RouterClient.addListener("Launcher.update", function (err, response) {
+		FSBL.Clients.RouterClient.subscribe("Launcher.update", function (err, response) {
 			FSBL.Clients.Logger.debug("list updated", err, response);
 			if (err) {
 				return console.error(err);
@@ -126,6 +126,11 @@ var Actions = {
 		var settings = FSBL.Clients.WindowClient.options.customData.spawnData;
 		var componentList = {};
 		var keys = Object.keys(components);
+		// these settings should never be null, but they are on startup, which causes a type error.  Needs further investigation.
+		if (!settings) {
+			settings = {};
+			FSBL.Clients.Logger.system.warn("appLauncherStore.js: null settings");
+		}
 		if (settings.mode) {
 			if (!Array.isArray(settings.mode)) { settings.mode = [settings.mode]; }
 			keys.forEach((componentType) => {

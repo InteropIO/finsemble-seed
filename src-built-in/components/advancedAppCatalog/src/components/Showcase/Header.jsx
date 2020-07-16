@@ -1,5 +1,5 @@
 /*!
-* Copyright 2017 by ChartIQ, Inc.
+* Copyright 2017 - 2020 by ChartIQ, Inc.
 * All rights reserved.
 */
 
@@ -30,14 +30,15 @@ const Header = props => {
 			// So lets spawn from URL
 			if (props.url) {
 				FSBL.Clients.LauncherClient.spawn(null, {
-					url: props.url
+					url: props.url,
+					addToWorkspace:true
 				}, () => {
 					pendingSpawn = false;
 				});
 				return;
 			}
 			// Otherwise launch application by name
-			FSBL.Clients.LauncherClient.spawn(name, {}, (err, data) => {
+			FSBL.Clients.LauncherClient.spawn(name.trim(), {addToWorkspace:true}, (err, data) => {
 				pendingSpawn = false;
 			});
 		} else {
@@ -64,11 +65,13 @@ const Header = props => {
 					) : (
 							<span className="action-button-label">
 								Add
-						</span>
+							</span>
 						)}
 				</button>
 				{props.installed && <button className={props.entitled ? "action-button remove" : "action-button remove disabled"} disabled={!props.entitled} onClick={removeApp}>
-					<div className='ff-adp-trash-outline' title='Remove App'/>
+					<div title='Remove App'>
+						<span className="action-button-label">Remove</span>
+					</div>
 				</button>}
 			</div>
 		</div>

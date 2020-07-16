@@ -112,7 +112,7 @@ export default class FoldersList extends React.Component {
 			return
 		}
 		//Finally, all good and so we can rename the folder
-		this.attempRename()
+		this.attemptRename()
 	}
 
 	componentWillMount() {
@@ -130,7 +130,7 @@ export default class FoldersList extends React.Component {
 		e.stopPropagation();
 		this.setState({
 			renamingFolder: name
-		})
+		});
 		this.addClickListener()
 	}
 
@@ -149,7 +149,7 @@ export default class FoldersList extends React.Component {
 
 	keyPressed(e) {
 		if (e.key === "Enter") {
-			this.attempRename()
+			this.attemptRename()
 		}
 	}
 
@@ -163,7 +163,7 @@ export default class FoldersList extends React.Component {
 	/**
 	 * To be called when user press Enter or when focus is removed
 	 */
-	attempRename() {
+	attemptRename() {
 		const folders = storeActions.getFolders()
 		const input = this.state.folderNameInput.trim()
 		const oldName = this.state.renamingFolder;
@@ -212,10 +212,11 @@ export default class FoldersList extends React.Component {
 			className += ' folder-with-icon'
 		}
 
-		const EDITABLE_FOLDER_ICON_CLASS = 'ff-adp-hamburger'
+		const canDelete = folder.canDelete;
+		const canEdit = folder.canEdit;
 
 		let nameField;
-		if (folder.icon === EDITABLE_FOLDER_ICON_CLASS && this.state.renamingFolder === folderName) {
+		if (this.state.renamingFolder === folderName && canEdit) {
 			nameField = <input id="rename" value={this.state.folderNameInput}
 			onChange={this.changeFolderName}
 			onKeyPress={this.keyPressed} className={this.state.isNameError ? "error" : ""} autoFocus />;
@@ -234,9 +235,11 @@ export default class FoldersList extends React.Component {
 					{folder.icon && <i className={folder.icon}></i>}
 					<div className="folder-name">{nameField}</div>
 				</div>
-				{folder.icon === EDITABLE_FOLDER_ICON_CLASS && <span className='folder-action-icons'>
-					<i className='ff-adp-edit' title='Rename' onClick={this.renameFolder.bind(this, folderName)}></i>
-					<i className='ff-adp-trash-outline' title='Delete Folder' onClick={this.deleteFolder.bind(this, folderName)}></i>
+
+				{(canEdit || canDelete) && 
+				<span className='folder-action-icons'>
+					{canEdit && <i className='ff-adp-edit' title='Rename' onClick={this.renameFolder.bind(this, folderName)}></i>}
+					{canDelete && <i className='ff-adp-trash-outline' title='Delete Folder' onClick={this.deleteFolder.bind(this, folderName)}></i>}
 				</span>}
 			</div>);
 	}
