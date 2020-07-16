@@ -1,8 +1,4 @@
 {
-	"finsemble.css": {
-		"output": "assets/css/finsemble",
-		"entry": "./assets/css/finsemble.css"
-	},
 	"authentication": {
 		"output": "components/authentication/Authentication",
 		"entry": "./src/components/authentication/Authentication.tsx"
