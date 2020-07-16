@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"build:prod": "gulp build:prod --gulpfile=./gulpfile.js",
-		"build:seed": "gulp build:dev --gulpfile=./gulpfile.js",
+		"build:seed": "npm run clean && gulp build:dev --gulpfile=./gulpfile.js",
 		"clean": "gulp clean --gulpfile=./gulpfile.js",
 		"dev-fresh": "gulp dev:fresh --gulpfile=./gulpfile.js",
 		"dev:fresh": "gulp dev:fresh --gulpfile=./gulpfile.js",
@@ -21,9 +21,9 @@
 		"server": "gulp server --gulpfile=./gulpfile.js",
 		"server:prod": "gulp server:prod --gulpfile=./gulpfile.js",
 		"start": "gulp dev --gulpfile=./gulpfile.js",
-		"test": "npx ts-mocha ./src/**/*.spec.ts",
-		"tslint": "./node_modules/tslint/bin/tslint -c tslint.json src/**/*.ts",
-		"tslint:fix": "./node_modules/tslint/bin/tslint -c tslint.json src/**/*.ts --fix",
+		"test": "npx ts-mocha \"./src/**/*.spec.ts\"",
+		"tslint": "./node_modules/tslint/bin/tslint -c \"tslint.json src/**/*.ts\"",
+		"tslint:fix": "./node_modules/tslint/bin/tslint -c \"tslint.json src/**/*.ts\" --fix",
 		"update-finsemble": "npm update @chartiq/finsemble && npm update -g @chartiq/finsemble-cli"
 	},
 	"author": "",
