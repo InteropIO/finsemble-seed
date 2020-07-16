@@ -36,7 +36,7 @@ export default class Content extends React.Component {
 		if (folder.name === ADVANCED_APP_LAUNCHER) {
 			apps = Object.values(storeActions.getAllApps());
 		} else {
-			apps = Object.values(folder.apps);
+			apps = folder.apps;
 		}
 
 
