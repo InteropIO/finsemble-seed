@@ -154,6 +154,11 @@ function validateFolderDataStructure() {
 	Object.keys(data.folders).map(folderName => {
 		const folder = data.folders[folderName];
 		if (!Array.isArray(folder.apps)) {
+			const warning = "Advanced App Launcher distributed store foundation appears to use incorrect format. Please ensure all folders[folderName].apps are arrays instead of objects";
+			// If the structure is wrong, notify the user in hopes that the foundation will be fixed
+			FSBL.Clients.Logger.warn(warning);
+			FSBL.UserNotification.alert("system", "ONCE-SINCE-STARTUP", "Distributed Store Type Mismatch", warning);
+			
 			const newApps = [];
 			Object.values(folder.apps).map(app => {
 				newApps.push(app);
