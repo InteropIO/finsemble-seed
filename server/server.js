@@ -121,8 +121,19 @@
 	const app = express();
 	const rootDir = path.join(__dirname, "..", "dist");
 	const moduleDirectory = path.join(__dirname, "..", "finsemble");
+	const cacheAge = 0;
+
+	/**
+	 * In development *you must* have a cache age of zero otherwise you'll really be wondering why your code changes aren't taking effect!
+	 * 
+	 * But, in production environments you wouldn't want the cache age to be zero because that would cause pages to be constantly reloading for your end users
+	 * resulting in very poor performance. Industry standard is to set the "stale" period to 24 hours. You can do that with the following lines of code.
+	 * In a continuous deployment environment you will need to configure your server for cache-busting which is beyond the scope of a simple express server.
+	 
 	const ONE_DAY = 24 * 3600 * 1000;
 	const cacheAge = process.env.NODE_ENV === "development" ? 0 : ONE_DAY;
+	*/
+
 	const PORT = process.env.PORT || 3375;
 	// #endregion
 	const logToTerminal = (msg, color = "white", bgcolor = "bgBlack") => {
@@ -142,7 +153,7 @@
 	let options = { maxAge: cacheAge };
 	//This will prevent config files from being cached by the server, allowing an application restart instead of a rebuild.
 	if (cacheAge === 0) {
-		options.setHeaders = function(res, path, stat) {
+		options.setHeaders = function (res, path, stat) {
 			res.set("cache-control", "no-cache");
 		};
 	}

@@ -1,4 +1,0 @@
-/* Build the project to generate a static copy in "/dist/assets/css/finsemble.css".
-You can then look inside that file to see all of the available CSS.
-*/
-@import url("~@chartiq/finsemble-ui/react/assets/css/finsemble.css");

@@ -16,7 +16,7 @@ export const FileMenu = () => (
 		title={
 			<img
 				className="finsemble-toolbar-brand-logo"
-				src="../../../assets/img/Finsemble_Taskbar_Icon.png"
+				src="../../assets/img/Finsemble_Taskbar_Icon.png"
 			/>
 		}
 	>

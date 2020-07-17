@@ -239,6 +239,8 @@
 				force: true,
 			});
 			del(".webpack-file-cache", { force: true });
+			del("installer-tmp", { force: true });
+			del("finsemble", { force: true });
 			done();
 		},
 		checkSymbolicLinks: (done) => {
@@ -537,7 +539,9 @@
 			// taskMethods.checkSymbolicLinks();
 			done();
 		},
-
+		launch: (done) => {
+			async.series([taskMethods.launchApplication], done);
+		},
 		/**
 		 * Builds the application, starts the server and launches the application. Use this to test production mode on your local machine.
 		 */

@@ -127,6 +127,20 @@ const runWebpackAndCallback = (configPath, watch, bundleName, callback) => {
 				msg = `${msg} after ${chalk.magenta(prettyHrtime(end))}`;
 			}
 			logToTerminal(msg, "cyan");
+
+			const info = stats.toJson();
+
+			if (stats.hasErrors()) {
+				logToTerminal(`WEBPACK ERRORS: ${configPath}`, "red");
+				console.error(info.errors);
+			}
+
+			/* Uncomment to see webpack warnings.
+			if (stats.hasWarnings()) {
+				logToTerminal(`WEBPACK WARNINGS: ${configPath}`, "yellow");
+				console.warn(info.warnings);
+			}
+			*/
 		} else {
 			console.error(errorOutColor("Webpack Error.", err));
 		}
