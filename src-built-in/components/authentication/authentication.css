@@ -1,9 +1,9 @@
 /* TODO: Use Finsemble CSS variables */
 
 .fsbl-logo {
-    content: url("../../../assets/img/ciq-banner-black-100x25.png");
+    content: url("../../../assets/img/cosaic-banner-100x20.png");
     width: 100px;
-    height: 25px;
+    height: 20px;
 }
 
 .fsbl-login-logo {
