@@ -199,7 +199,7 @@
 		},
 		"Authentication": {
 			"window": {
-				"url": "$applicationRoot/components/Authentication/Authentication.html",
+				"url": "$applicationRoot/components/authentication/Authentication.html",
 				"top": "center",
 				"left": "center",
 				"width": 358,
