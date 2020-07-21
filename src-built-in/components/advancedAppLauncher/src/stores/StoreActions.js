@@ -154,7 +154,7 @@ function validateFolderDataStructure() {
 	Object.keys(data.folders).map(folderName => {
 		const folder = data.folders[folderName];
 		if (!Array.isArray(folder.apps)) {
-			const warning = "Application Launcher Persistent Store has data stored in deprecated format";
+			const warning = "Application Launcher Persistent Store has data stored in deprecated format. Please check distributedStore configs";
 			// If the structure is wrong, notify the user in hopes that the foundation will be fixed
 			FSBL.Clients.Logger.warn(warning);
 			FSBL.UserNotification.alert("system", "ONCE-SINCE-STARTUP", "Distributed Store Type Mismatch", warning);
