@@ -101,10 +101,10 @@ var Actions = {
 		FSBL.Clients.LauncherClient.showWindow({
 			componentType: "UserPreferences"
 		}, {
-				monitor: "mine",
-				left: "center",
-				top: "center"
-			});
+			monitor: "mine",
+			left: "center",
+			top: "center"
+		});
 	},
 	/**
 	 * Called on shutdown (if the workspace is dirty).
@@ -113,11 +113,13 @@ var Actions = {
 	 * @returns
 	 */
 	saveWorkspace() {
-		if (!(PROMPT_ON_DIRTY && FSBL.Clients.WorkspaceClient.activeWorkspace.isDirty)) {
+		if (!PROMPT_ON_DIRTY) {
 			return Promise.resolve();
 		}
 
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
+			const isDirty = await FSBL.Clients.WorkspaceClient.isWorkspaceDirty();
+			if (!isDirty) return resolve();
 			FSBL.Clients.DialogManager.open("yesNo",
 				{
 					title: "Save your workspace?",
