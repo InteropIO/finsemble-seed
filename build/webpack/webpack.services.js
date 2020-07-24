@@ -3,7 +3,7 @@ const { generateDefaultConfig } = require("./defaultWebpackConfig");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const glob_entries = require("webpack-glob-entries");
 const services = glob_entries(
-	path.join(__dirname, "../../", "/src/services/**/*.(js,ts)")
+	path.join(__dirname, "../../", "/src/services/**/*.@(js|ts)")
 );
 let entry = {};
 
