@@ -25,12 +25,18 @@ const CSS_RULE = {
 };
 
 /**
- * This rule will inline all images, svg and font files into base64 local entries. There is no size limit
- * on these files. Small size limits may prevent custom fonts from being displayed in Toolbar menu drop downs.
+ * This rule will convert imported images and fonts into standalone assets.
+ * The assets are compiled into /assets/file-loader/ to distinguish them from static assets.
+ * See webpack url-loader to convert this into inlining as desired.
  */
 const IMAGE_AND_FONT_RULE = {
 	test: /\.(png|img|ttf|ottf|eot|woff|woff2|svg)$/,
-	loader: "url-loader",
+	use: {
+		loader: "file-loader",
+		options: {
+			name: "/assets/file-loader/[name].[ext]",
+		},
+	},
 };
 
 /**

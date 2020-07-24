@@ -15,6 +15,7 @@ import { FinsembleProvider } from "@chartiq/finsemble-ui/react/components/Finsem
 import { useAuth } from "@chartiq/finsemble-ui/react/hooks/useAuth";
 import { useAuthSimulator } from "@chartiq/finsemble-ui/react/hooks/useAuth";
 import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
+import "@chartiq/finsemble-ui/react/assets/css/dialogs.css";
 import "@chartiq/finsemble-ui/react/assets/css/authentication.css";
 import "../../../assets/css/theme.css";
 

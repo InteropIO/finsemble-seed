@@ -24,7 +24,7 @@
 		},
 		"alwaysOnTop": false
 	},
-	"splashScreenImage": "http://localhost:3375/assets/img/FinsembleSplash.png",
+	"splashScreenImage": "http://localhost:3375/assets/img/FinsembleSplash.svg",
 	"appAssets": [
 		{
 			"src": "https://assets.finsemble.com/assimilation/dev/pr/assimilation.zip",
