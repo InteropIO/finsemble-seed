@@ -15,13 +15,11 @@
 		"./node_modules/@chartiq/finsemble-electron-adapter"
 	);
 	const FEAPackager = FEA ? FEA.packager : undefined;
-	const MAX_NODE_VERSION = "12.13.1";
 	const startupConfig = require("./configs/other/server-environment-startup");
 	const {
 		envOrArg,
 		runWebpackAndCallback,
 		logToTerminal,
-		isNodeVersionValid,
 		runWebpackInParallel,
 	} = require("./build/buildHelpers");
 	const INSTALLER_CERT_PASS = "INSTALLER_CERTIFICATE_PASSPHRASE";
@@ -494,12 +492,6 @@
 			done();
 		},
 		launchApplication: (done) => {
-			if (!isNodeVersionValid(MAX_NODE_VERSION)) {
-				logToTerminal(
-					`Node version: ${process.version} is not supported. Max supported version: ${MAX_NODE_VERSION}`,
-					"red"
-				);
-			}
 			logToTerminal("Launching Finsemble", "black", "bgCyan");
 
 			launchTimestamp = Date.now();

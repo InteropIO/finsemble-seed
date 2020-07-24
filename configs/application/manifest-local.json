@@ -2,7 +2,7 @@
 	"$schema": "../schemas/fileBasedSchemas/manifestFile.schema.json",
 	"devtools_port": 9090,
 	"startup_app": {
-		"name": "ChartIQ Local",
+		"name": "Cosaic Local",
 		"url": "http://localhost:3375/finsemble/services/systemManager/systemManager.html",
 		"uuid": "Finsemble",
 		"requireHandshake": true,
