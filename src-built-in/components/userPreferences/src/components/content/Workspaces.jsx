@@ -3,7 +3,6 @@ import { WorkspaceManagementMenuStore, Store as UserPreferencesStore, Actions as
 import { FinsembleDnDContext, FinsembleDraggable, FinsembleDroppable } from '@chartiq/finsemble-react-controls';
 import Checkbox from '../checkbox';
 import async from 'async';
-import { Actions } from '../../../../processMonitor/src/stores/ProcessMonitorStore';
 class WorkspaceEditor extends React.Component {
 	constructor(props) {
 		super(props);
