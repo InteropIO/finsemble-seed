@@ -1,8 +1,9 @@
 import React from 'react';
-import { WorkspaceManagementMenuStore, Store as UserPreferencesStore } from "../../stores/UserPreferencesStore";
+import { WorkspaceManagementMenuStore, Store as UserPreferencesStore, Actions as UserPreferencesActions } from "../../stores/UserPreferencesStore";
 import { FinsembleDnDContext, FinsembleDraggable, FinsembleDroppable } from '@chartiq/finsemble-react-controls';
 import Checkbox from '../checkbox';
 import async from 'async';
+import { Actions } from '../../../../processMonitor/src/stores/ProcessMonitorStore';
 class WorkspaceEditor extends React.Component {
 	constructor(props) {
 		super(props);
@@ -274,7 +275,6 @@ export default class Workspaces extends React.Component {
 	}
 	setPreferences(err, data) {
 		if (!data && !data.value) return;
-		console.log("Set preferences", data.value);
 		this.setState({
 			workspaceToLoadOnStart: data.value['finsemble.initialWorkspace'],
 			focusedWorkspace: data.value['finsemble.initialWorkspace']
@@ -307,6 +307,7 @@ export default class Workspaces extends React.Component {
 				if (err) {
 					console.error(err);
 				}
+
 				if (typeof cb === "function") {
 					cb();
 				}
