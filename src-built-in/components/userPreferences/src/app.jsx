@@ -31,6 +31,9 @@ class UserPreferences extends React.Component {
 		UserPreferencesStore.addListener({ field: "activeSection" }, this.setActiveSection);
 	}
 	setActiveSection(err, data) {
+		// Update workspaces every time the view changes to get up-to-date information
+		UserPreferencesActions.getWorkspaces();
+		
 		this.setState({
 			activeSection: data.value
 		});
