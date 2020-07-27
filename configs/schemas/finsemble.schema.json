@@ -1023,6 +1023,11 @@
 							},
 							"additionalProperties": false
 						},
+						"enableWindowsAeroSnap": {
+							"description": "If set to `true`, enable Window's Aero Snap.",
+							"type": "boolean",
+							"default": true
+						},
 						"ALLOW_GROUPS_TO_SNAP": {
 							"description": "Allows groups to snap to one another.",
 							"type": "boolean",
@@ -1766,19 +1771,19 @@
 							"type": "number"
 						},
 						"height": {
-							"type": "number"
+							"type": ["number", "string"]
 						},
 						"dockedHeight": {
 							"type": "number"
 						},
 						"top": {
-							"type": ["string", "number"]
+							"type": ["string", "number", "null"]
 						},
 						"left": {
-							"type": ["string", "number"]
+							"type": ["string", "number", "null"]
 						},
 						"right": {
-							"type": "number"
+							"type": ["string", "number", "null"]
 						},
 						"position": {
 							"type": "string"
@@ -1792,11 +1797,14 @@
 						"maxHeight": {
 							"type": ["number", "boolean", "null"]
 						},
+						"maxWidth": {
+							"type": ["number", "boolean", "null"]
+						},
 						"minHeight": {
 							"type": ["number", "boolean", "null"]
 						},
 						"minWidth": {
-							"type": "number"
+							"type": ["number", "boolean", "null"]
 						},
 						"docked": {
 							"type": "string"
@@ -1840,6 +1848,9 @@
 						"frame": {
 							"type": "boolean"
 						},
+						"autoShow": {
+							"type": "boolean"
+						},
 						"ephemeral": {
 							"type": "boolean"
 						},
@@ -1855,7 +1866,13 @@
 						"windowType": {
 							"type": "string"
 						},
+						"alias": {
+							"type": "string"
+						},
 						"path": {
+							"type": "string"
+						},
+						"arguments": {
 							"type": "string"
 						},
 						"defaultHeight": {
@@ -1876,6 +1893,15 @@
 						"category": {
 							"type": "string"
 						},
+						"mode": {
+							"type": "string"
+						},
+						"advertiseReceivers": {
+							"type": ["array", "string"],
+							"items": {
+								"type": "string"
+							}
+						},
 						"spawnOnStartup": {
 							"type": "boolean"
 						},
@@ -1886,6 +1912,12 @@
 							"type": "boolean"
 						},
 						"canMaximize": {
+							"type": "boolean"
+						},
+						"singleton": {
+							"type": "boolean"
+						},
+						"showDevConsoleOnVisible": {
 							"type": "boolean"
 						},
 						"allowQuickComponent": {
@@ -1901,7 +1933,10 @@
 							"type": "string"
 						},
 						"preload": {
-							"type": "string"
+							"type": ["boolean", "string"]
+						},
+						"inject": {
+							"type": ["boolean", "string"]
 						},
 						"spawnOnHotkey": {
 							"description": "Defines the hotkey",
@@ -1940,42 +1975,55 @@
 						},
 						"services": {
 							"type": "object",
-							"additionalProperties": {
-								"title": "windowService",
-								"type": "object",
-								"properties": {
-									"global": {
-										"type": "boolean"
-									},
-									"allowSnapping": {
-										"type": "boolean"
-									},
-									"allowGrouping": {
-										"type": "boolean"
-									},
-									"allowAutoArrange": {
-										"type": "boolean"
-									},
-									"allowTabbing": {
-										"type": "boolean"
-									},
-									"allowTiling": {
-										"type": "boolean"
-									},
-									"allowMinimize": {
-										"type": "boolean"
-									},
-									"shouldRegister": {
-										"type": "boolean"
-									},
-									"manageWindowMovement": {
-										"type": "boolean"
-									},
-									"persistURL": {
-										"type": "boolean"
-									},
-									"addToWorkspace": {
-										"type": "boolean"
+							"properties": {
+								"windowService": {
+									"type": "object",
+									"properties": {
+										"global": {
+											"type": "boolean"
+										},
+										"allowSnapping": {
+											"type": "boolean"
+										},
+										"isArrangable": {
+											"type": "boolean"
+										},
+										"allowGrouping": {
+											"type": "boolean"
+										},
+										"allowAutoArrange": {
+											"type": "boolean"
+										},
+										"allowTabbing": {
+											"type": "boolean"
+										},
+										"allowTiling": {
+											"type": "boolean"
+										},
+										"allowMinimize": {
+											"type": "boolean"
+										},
+										"shouldRegister": {
+											"type": "boolean"
+										},
+										"manageWindowMovement": {
+											"type": "boolean"
+										},
+										"persistURL": {
+											"type": "boolean"
+										},
+										"addToWorkspace": {
+											"type": "boolean"
+										}
+									}
+								},
+								"dockingService": {
+									"type": "object",
+									"properties": {
+										"canGroup": {
+											"type": "boolean"
+										},
+										"additionalProperties": false
 									}
 								},
 								"additionalProperties": false
@@ -1984,7 +2032,8 @@
 						"components": {
 							"type": "object"
 						},
-						"custom": {}
+						"custom": {},
+						"additionalProperties": false
 					}
 				},
 				"childWindowOptions": {

@@ -28,8 +28,8 @@
 		"tslint:fix": "./node_modules/tslint/bin/tslint -c \"tslint.json src/**/*.ts\" --fix",
 		"update-finsemble": "npm update @chartiq/finsemble && npm update -g @chartiq/finsemble-cli"
 	},
-	"author": "",
-	"license": "apache-2.0",
+	"author": "Cosaic",
+	"license": "SEE LICENSE IN LICENSE",
 	"optionalDependencies": {
 		"@chartiq/finsemble-cli": "5.0.0"
 	},
