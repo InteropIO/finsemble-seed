@@ -51,7 +51,10 @@ export default class WorkspaceManagementList extends React.Component {
 	render() {
 		let self = this;
 
-		let workspaces = this.props.workspaces.map(function (workspace, i) {
+		let workspaces = this.props.workspaces.map(function (workspaceName, i) {
+			const workspace = {
+				name: workspaceName
+			};
 			//Separate array for each workspace. This way, the activeWorkspace can be rendered without a trashcan.
 			let workspaceActions = [
 				{
