@@ -52,7 +52,7 @@ Actions = {
 	},
 	initialize: function () {
 		//Gets the workspace list and sets the value in the store.
-		FSBL.Clients.WorkspaceClient.getWorkspaces(function (err, workspaces) {
+		FSBL.Clients.WorkspaceClient.getWorkspaceNames(function (err, workspaces) {
 			Logger.system.debug("WorkspaceManagementStore init getWorkspaces", workspaces);
 			WorkspaceManagementStore.setValue({ field: "WorkspaceList", value: workspaces });
 		});
@@ -267,12 +267,17 @@ Actions = {
 	},
 	reorderWorkspaceList: function (changeEvent) {
 		if (!changeEvent.destination) return;
-		let workspaces = JSON.parse(JSON.stringify(WorkspaceManagementStore.getValue({ field: 'WorkspaceList' })));
-		let workspaceToMove = JSON.parse(JSON.stringify(workspaces[changeEvent.source.index]));
+		let workspaces = WorkspaceManagementStore.getValue({ field: 'WorkspaceList' });
+		let workspaceToMove = workspaces[changeEvent.source.index];
 		workspaces.splice(changeEvent.source.index, 1);
 		workspaces.splice(changeEvent.destination.index, 0, workspaceToMove);
+		const workspacesWithExpectedStructure = workspaces.map((WSName) => {
+			return {
+				name: WSName
+			};
+		});
 		FSBL.Clients.WorkspaceClient.setWorkspaces({
-			workspaces: workspaces
+			workspaces: workspacesWithExpectedStructure
 		});
 		WorkspaceManagementStore.setValue({ field: "WorkspaceList", value: workspaces });
 	},
