@@ -166,7 +166,7 @@ function validateFolderDataStructure() {
 			folder.apps = newApps;
 		}
 	});
-	_setFolders(data.folders);
+	_setFolders();
 }
 
 //Update apps in folders with updated config information
