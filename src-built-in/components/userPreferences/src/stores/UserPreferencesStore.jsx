@@ -1,8 +1,15 @@
 const async = require('async');
 
 var UserPreferencesStore, WorkspaceManagementMenuStore;
+
+let updateConstants;
+
 var Actions = {
 	initialize: function () {
+		FSBL.Clients.WorkspaceClient.getWorkspaceActions(function (err, constants) {
+			updateConstants = constants;
+		});
+
 		FSBL.Clients.ConfigClient.getPreferences(function (err, data) {
 			UserPreferencesStore.setValue({ field:'preferences', value: data });
 		});
@@ -24,8 +31,32 @@ var Actions = {
 		FSBL.Clients.RouterClient.subscribe("Finsemble.WorkspaceService.update", function (err, response) {
 			if (response.data && response.data.activeWorkspace) {
 				UserPreferencesStore.setValue({ field: "activeWorkspace", value: response.data.activeWorkspace });
-				UserPreferencesStore.setValue({ field: "WorkspaceList", value: response.data.workspaces });
+				if (updateConstants) {
+					switch (response.data.reason) {
+						case updateConstants.GET_ACTIVE_WORKSPACE:
+						case updateConstants.NEW_WORKSPACE:
+						case updateConstants.IMPORT:
+						case updateConstants.SAVE:
+						case updateConstants.SAVE_AS:
+						case updateConstants.REMOVE:
+						case updateConstants.SWITCH_TO:
+						case updateConstants.SET_WORKSPACE_ORDER:
+						case updateConstants.ADD_WINDOW:
+						case updateConstants.REMOVE_WINDOW:
+						case updateConstants.RENAME:
+							Actions.getWorkspaces();
+							break;
+						default:
+							break;
+					}
+				}
 			}
+		});
+	},
+	getWorkspaces(cb = Function.prototype) {
+		//Gets the workspace list and sets the value in the store.
+		FSBL.Clients.WorkspaceClient.getWorkspaces(function (err, workspaces) {
+			UserPreferencesStore.setValue({ field: "WorkspaceList", value: workspaces });
 		});
 	},
 	exportWorkspace: function (selectedWorkspace) {

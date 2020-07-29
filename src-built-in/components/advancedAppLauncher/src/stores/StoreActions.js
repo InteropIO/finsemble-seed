@@ -95,6 +95,7 @@ function initialize(callback = Function.prototype) {
 		}
 
 		data.folders = store.values.appFolders.folders;
+		validateFolderDataStructure();
 		data.foldersList = folderList || Object.keys(store.values.appFolders.folders);
 		data.apps = Object.keys(appList).length > 0 ? appList : store.values.appDefinitions;
 		data.tags = store.values.activeLauncherTags;
@@ -144,6 +145,30 @@ function appInAppList(appName) {
 	let app = findAppByField('name', appName);
 	return Boolean(app);
 }
+
+/**
+ * Ensures all 'apps' properties on folders conform
+ * to the new structure (Array vs object)
+ */
+function validateFolderDataStructure() {
+	Object.keys(data.folders).map(folderName => {
+		const folder = data.folders[folderName];
+		if (!Array.isArray(folder.apps)) {
+			const warning = "Application Launcher Persistent Store has data stored in deprecated format. Please check distributedStore configs";
+			// If the structure is wrong, notify the user in hopes that the foundation will be fixed
+			FSBL.Clients.Logger.warn(warning);
+			FSBL.UserNotification.alert("system", "ONCE-SINCE-STARTUP", "Distributed Store Type Mismatch", warning);
+			
+			const newApps = [];
+			Object.values(folder.apps).map(app => {
+				newApps.push(app);
+			});
+			folder.apps = newApps;
+		}
+	});
+	_setFolders();
+}
+
 //Update apps in folders with updated config information
 function updateAppsInFolders(cb = Function.prototype) {
 	//Loop through folders and update apps with new info
