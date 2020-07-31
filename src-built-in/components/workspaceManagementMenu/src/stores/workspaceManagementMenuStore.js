@@ -652,7 +652,7 @@ Actions = {
 		let workspaceName = response.value;
 		//Array.some will return true for the first element in the array that satisfies the condition. If none are true, it'll go through the entire array. It's essentially a way to short-circuit a for loop. This lets us know if any workspace has the same name that the user is trying to input.
 		let workspaceExists = FSBL.Clients.WorkspaceClient.workspaces.some(workspace => {
-			return workspace.name === workspaceName;
+			return workspace === workspaceName;
 		});
 		callback(null, { workspaceExists, workspaceName, template: response.template });
 	},
