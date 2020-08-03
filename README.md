@@ -2,7 +2,7 @@
 
 # Finsemble Seed Project
 
-To get started with Finsemble, check out the [seed project tutorial](https://www.chartiq.com/tutorials/?slug=finsemble). This tutorial walks you through setting up the seed project and introduces you to the basic concepts of developing a Finsemble smart desktop.
+To get started with Finsemble, check out the [seed project tutorial](https://www.chartiq.com/tutorials/?slug=finsemble). This tutorial walks you through setting up the seed project and introduces you to the basic concepts of developing a Finsemble SmartDesktop.
 
 For everything you need to know about Finsemble, including our API documentation, check out the [developer documentation](https://documentation.chartiq.com/finsemble).
 
@@ -13,7 +13,7 @@ The Finsemble seed project provides a basic structure to help developers get up 
 - _gulpfile.js_ - The main gulpfile for the project includes the basic tasks used to build and run a Finsemble application for development.
 - _gulpfile-extensions-example.js_ (optional) - File that can be used to add/modify the functionality of the gulpfile. This file is included to prevent conflicts when upgrading your base project.
 - _build/webpack_ - Includes all of the files used by the seed project to build the application.
-  - _webpack.finsemble-built-in.entries.json_ - This specifies the entry and output files for the files built for a default Finsemble smart desktop.
+  - _webpack.finsemble-built-in.entries.json_ - This specifies the entry and output files for the files built for a default Finsemble SmartDesktop.
   - _webpack.components.entries.json_ - This file is where developer-added files should be listed. This file is empty in the base Finsemble seed project to prevent merge conflicts when updating the seed project.
   - _webpack.adapters.entries.json_ - This file is for any storage adapters that need to be built. They are no longer housed in the same webpack configuration as components, as they cannot use the same plugins as components use.
 - _assets_ - Contains the CSS and images used to create Finsemble's look and feel.

@@ -69,8 +69,7 @@
 							"type": "number",
 							"default": 6000
 						},
-						"custom": {
-						}
+						"custom": {}
 					},
 					"required": [
 						"applicationRoot",
@@ -86,13 +85,9 @@
 					"type": "boolean",
 					"default": false
 				},
-				"custom": {
-				}
+				"custom": {}
 			},
-			"required": [
-				"startup_app",
-				"finsemble"
-			],
+			"required": ["startup_app", "finsemble"],
 			"additionalProperties": false
 		},
 		"UIComponentsFileSubschema": {
@@ -102,8 +97,7 @@
 				"$schema": {
 					"type": "string"
 				},
-				"comment": {
-				},
+				"comment": {},
 				"components": {
 					"$ref": "#/definitions/components"
 				}
@@ -117,8 +111,7 @@
 				"$schema": {
 					"type": "string"
 				},
-				"comment": {
-				},
+				"comment": {},
 				"components": {
 					"description": "config for components",
 					"type": "object",
@@ -178,10 +171,7 @@
 				},
 				"securityPolicyRules": {
 					"$ref": "#/definitions/securityPolicyRules",
-					"requiredPlaceHolder": [
-						"crossDomain",
-						"sameDomain"
-					]
+					"requiredPlaceHolder": ["crossDomain", "sameDomain"]
 				},
 				"accessibleLinker": {
 					"description": "(PUBLIC)",
@@ -233,7 +223,7 @@
 					"default": false
 				},
 				"initialWorkspace": {
-					"description": "The workspace name specified by this config will be the first one presented to an end user the very first time they start the smart desktop. This overrides the default behavior set by the config: finsemble.workspaces. After the very first instance of the smart desktop, Finsemble will load the last workspace loaded or any workspace specified by user preferences.",
+					"description": "The workspace name specified by this config will be the first one presented to an end user the very first time they start the SmartDesktop. This overrides the default behavior set by the config: finsemble.workspaces. After the very first instance of the SmartDesktop, Finsemble will load the last workspace loaded or any workspace specified by user preferences.",
 					"type": "string"
 				},
 				"shutdownTimeout": {
@@ -254,20 +244,16 @@
 					"description": "(DEPRECATED) Comment string inserted into config.",
 					"type": "string"
 				},
-				"custom": {
-				}
+				"custom": {}
 			},
-			"required": [
-				"accessibleLinker"
-			],
+			"required": ["accessibleLinker"],
 			"additionalProperties": false
 		},
 		"SecurityPolicyFileSubschema": {
 			"description": "Subschema corresponding to the security policies file, to support VSCode Intellisense.. ",
 			"type": "object",
 			"properties": {
-				"$schema": {
-				},
+				"$schema": {},
 				"comment": {
 					"type": "string"
 				},
@@ -278,18 +264,14 @@
 					"$ref": "#/definitions/securityPolicyRules"
 				}
 			},
-			"required": [
-				"securityPolicies",
-				"securityPolicyRules"
-			],
+			"required": ["securityPolicies", "securityPolicyRules"],
 			"additionalProperties": false
 		},
 		"WorkspacesFileSubschema": {
 			"description": "Subschema corresponding to the security policies file, to support VSCode Intellisense.. ",
 			"type": "object",
 			"properties": {
-				"$schema": {
-				},
+				"$schema": {},
 				"comment": {
 					"type": "string"
 				},
@@ -297,9 +279,7 @@
 					"$ref": "#/definitions/workspacesArray"
 				}
 			},
-			"required": [
-				"workspaces"
-			],
+			"required": ["workspaces"],
 			"additionalProperties": false
 		},
 		"CoreConfigFileSubschema": {
@@ -381,18 +361,14 @@
 				"finsemble-electron-adapter": {
 					"$ref": "#/definitions/electronAdapter"
 				},
-				"custom": {
-				},
+				"custom": {},
 				"allowEvalInPreload": {
 					"description": "Set to `true` to delete `unsafe-eval` and `script-src directives` from the content security policy.",
 					"type": "boolean",
 					"default": false
 				}
 			},
-			"required": [
-				"startup_app",
-				"finsemble"
-			],
+			"required": ["startup_app", "finsemble"],
 			"additionalProperties": false
 		},
 		"BootManifestSubschema": {
@@ -437,12 +413,7 @@
 								"type": "string"
 							}
 						},
-						"requiredPlaceHolder": [
-							"src",
-							"version",
-							"alias",
-							"target"
-						]
+						"requiredPlaceHolder": ["src", "version", "alias", "target"]
 					}
 				},
 				"finsemble": {
@@ -500,13 +471,9 @@
 				"finsemble-electron-adapter": {
 					"$ref": "#/definitions/electronAdapter"
 				},
-				"custom": {
-				}
+				"custom": {}
 			},
-			"required": [
-				"startup_app",
-				"finsemble"
-			],
+			"required": ["startup_app", "finsemble"],
 			"additionalProperties": false
 		},
 		"FinsembleSubschema": {
@@ -575,10 +542,7 @@
 				},
 				"securityPolicyRules": {
 					"$ref": "#/definitions/securityPolicyRules",
-					"requiredPlaceHolder": [
-						"crossDomain",
-						"sameDomain"
-					]
+					"requiredPlaceHolder": ["crossDomain", "sameDomain"]
 				},
 				"accessibleLinker": {
 					"description": "(PUBLIC)",
@@ -642,7 +606,7 @@
 					"default": false
 				},
 				"initialWorkspace": {
-					"description": "The workspace name specified by this config will be the first one presented to an end user the very first time they start the smart desktop. This overrides the default behavior set by the config: finsemble.workspaces. After the very first instance of the smart desktop, Finsemble will load the last workspace loaded or any workspace specified by user preferences.",
+					"description": "The workspace name specified by this config will be the first one presented to an end user the very first time they start the SmartDesktop. This overrides the default behavior set by the config: finsemble.workspaces. After the very first instance of the SmartDesktop, Finsemble will load the last workspace loaded or any workspace specified by user preferences.",
 					"type": "string"
 				},
 				"isAuthEnabled": {
@@ -682,8 +646,7 @@
 					"description": "(DEPRECATED) Comment string inserted into config.",
 					"type": "string"
 				},
-				"custom": {
-				}
+				"custom": {}
 			},
 			"required": [
 				"applicationRoot",
@@ -773,11 +736,7 @@
 					"type": "boolean"
 				}
 			},
-			"required": [
-				"name",
-				"url",
-				"uuid"
-			]
+			"required": ["name", "url", "uuid"]
 		},
 		"appAssets": {
 			"title": "appAssets",
@@ -800,12 +759,7 @@
 						"type": "string"
 					}
 				},
-				"requiredPlaceHolder": [
-					"src",
-					"version",
-					"alias",
-					"target"
-				]
+				"requiredPlaceHolder": ["src", "version", "alias", "target"]
 			}
 		},
 		"windowManager": {
@@ -824,10 +778,7 @@
 				"deliveryMechanism": {
 					"description": "Which delivery method to use for scripts (e.g., FSBL, title bar, etc.) - Valid values are:\r\n\"injection\" - Injects the code into the window.",
 					"type": "string",
-					"enum": [
-						"injection",
-						"preload"
-					],
+					"enum": ["injection", "preload"],
 					"default": "injection"
 				},
 				"zoom": {
@@ -984,9 +935,7 @@
 							}
 						}
 					},
-					"required": [
-						"initialStores"
-					],
+					"required": ["initialStores"],
 					"additionalProperties": false
 				},
 				"docking": {
@@ -1108,10 +1057,7 @@
 								},
 								"behavior ": {
 									"type": "string",
-									"enum": [
-										"explicit",
-										"implicit"
-									],
+									"enum": ["explicit", "implicit"],
 									"default": "explicit"
 								}
 							},
@@ -1188,10 +1134,7 @@
 							"additionalProperties": false
 						}
 					},
-					"required": [
-						"staggerPixels",
-						"unknownComponent"
-					]
+					"required": ["staggerPixels", "unknownComponent"]
 				},
 				"logger": {
 					"title": "logger",
@@ -1220,11 +1163,7 @@
 							"items": {
 								"type": "string"
 							},
-							"default": [
-								"ctrl",
-								"shift",
-								"L"
-							]
+							"default": ["ctrl", "shift", "L"]
 						}
 					},
 					"additionalProperties": false
@@ -1394,21 +1333,13 @@
 				"crossDomainTransport": {
 					"description": "The interface for communicating between cross-domain components - When set to `IPCBus`, the default,, all cross-domain components will use IPC to communicate. When set to `FinsembleTransport`, cross-domain components will use IAC. You might switch the `crossDomainTransport` if you are having connection issues involving firewalls, your CSP, etc. Available values are 'IPCBus' and 'FinsembleTransport'.",
 					"type": "string",
-					"enum": [
-						"IPCBus",
-						"SharedWorker",
-						"FinsembleTransport"
-					],
+					"enum": ["IPCBus", "SharedWorker", "FinsembleTransport"],
 					"default": "IPCBus"
 				},
 				"sameDomainTransport": {
 					"description": "The transport for components and services with Finsemble's domain. ",
 					"type": "string",
-					"enum": [
-						"IPCBus",
-						"SharedWorker",
-						"FinsembleTransport"
-					],
+					"enum": ["IPCBus", "SharedWorker", "FinsembleTransport"],
 					"default": "SharedWorker"
 				},
 				"transportSettings": {
@@ -1427,16 +1358,11 @@
 									"default": "ws://127.0.0.1:3376"
 								}
 							},
-							"required": [
-								"serverAddress"
-							]
+							"required": ["serverAddress"]
 						}
 					},
-					"required": [
-						"FinsembleTransport"
-					],
-					"default": {
-					}
+					"required": ["FinsembleTransport"],
+					"default": {}
 				}
 			},
 			"additionalProperties": false,
@@ -1845,70 +1771,41 @@
 							"type": "number"
 						},
 						"height": {
-							"type": [ "number", "string" ]
+							"type": ["number", "string"]
 						},
 						"dockedHeight": {
 							"type": "number"
 						},
 						"top": {
-							"type": [
-								"string",
-								"number",
-								"null"
-							]
+							"type": ["string", "number", "null"]
 						},
 						"left": {
-							"type": [
-								"string",
-								"number",
-								"null"
-							]
+							"type": ["string", "number", "null"]
 						},
 						"right": {
-							"type": [
-								"string",
-								"number",
-								"null"
-							]					},
+							"type": ["string", "number", "null"]
+						},
 						"position": {
 							"type": "string"
 						},
 						"dockable": {
-							"type": [
-								"array",
-								"boolean"
-							],
+							"type": ["array", "boolean"],
 							"items": {
 								"type": "string"
 							}
 						},
 						"maxHeight": {
-							"type": [
-								"number",
-								"boolean",
-								"null"
-							]
+							"type": ["number", "boolean", "null"]
 						},
 						"maxWidth": {
-							"type": [
-								"number",
-								"boolean",
-								"null"
-							]
+							"type": ["number", "boolean", "null"]
 						},
 						"minHeight": {
-							"type": [
-								"number",
-								"boolean",
-								"null"
-							]
+							"type": ["number", "boolean", "null"]
 						},
 						"minWidth": {
-							"type": [
-								"number",
-								"boolean",
-								"null"
-							]						},
+							"type": ["number", "boolean", "null"]
+						},
 						"docked": {
 							"type": "string"
 						},
@@ -2000,10 +1897,11 @@
 							"type": "string"
 						},
 						"advertiseReceivers": {
-							"type": [ "array", "string" ],
+							"type": ["array", "string"],
 							"items": {
 								"type": "string"
-							}						},
+							}
+						},
 						"spawnOnStartup": {
 							"type": "boolean"
 						},
@@ -2035,10 +1933,10 @@
 							"type": "string"
 						},
 						"preload": {
-							"type": [ "boolean", "string" ]
+							"type": ["boolean", "string"]
 						},
 						"inject": {
-							"type": [ "boolean", "string" ]
+							"type": ["boolean", "string"]
 						},
 						"spawnOnHotkey": {
 							"description": "Defines the hotkey",
@@ -2047,8 +1945,7 @@
 								"type": "string"
 							}
 						},
-						"custom": {
-						}
+						"custom": {}
 					},
 					"additionalProperties": false
 				},
@@ -2121,13 +2018,13 @@
 									}
 								},
 								"dockingService": {
-								"type": "object",
-								"properties": {
-									"canGroup": {
-										"type": "boolean"
-									},
-									"additionalProperties": false
-								}
+									"type": "object",
+									"properties": {
+										"canGroup": {
+											"type": "boolean"
+										},
+										"additionalProperties": false
+									}
 								},
 								"additionalProperties": false
 							}
@@ -2135,16 +2032,14 @@
 						"components": {
 							"type": "object"
 						},
-						"custom": {
-						},
+						"custom": {},
 						"additionalProperties": false
 					}
 				},
 				"childWindowOptions": {
 					"$ref": "#/definitions/component"
 				},
-				"custom": {
-				}
+				"custom": {}
 			},
 			"additionalProperties": false
 		},
@@ -2212,9 +2107,7 @@
 				},
 				"category": {
 					"type": "string",
-					"enum": [
-						"system"
-					]
+					"enum": ["system"]
 				},
 				"window": {
 					"title": "window",
@@ -2349,14 +2242,9 @@
 						"type": "object"
 					}
 				},
-				"custom": {
-				}
+				"custom": {}
 			},
-			"required": [
-				"spawnAs",
-				"html",
-				"file"
-			],
+			"required": ["spawnAs", "html", "file"],
 			"additionalProperties": false
 		},
 		"serviceAssimilationConfig": {
@@ -2431,7 +2319,7 @@
 		},
 		"workspacesArray": {
 			"title": "workspaces",
-			"description": "(PUBLIC)  An array of workspaces to be presented to the user the first time they start Finsemble. By default, the first workspace listed in the array will be the one first presented to an end user the first time they load their smart desktop.",
+			"description": "(PUBLIC)  An array of workspaces to be presented to the user the first time they start Finsemble. By default, the first workspace listed in the array will be the one first presented to an end user the first time they load their SmartDesktop.",
 			"type": "array",
 			"items": {
 				"$ref": "#/definitions/workspaceTemplate"
@@ -2478,12 +2366,9 @@
 						}
 					}
 				},
-				"custom": {
-				}
+				"custom": {}
 			},
-			"required": [
-				"name"
-			],
+			"required": ["name"],
 			"additionalProperties": false
 		},
 		"cornerRounding": {
@@ -2543,11 +2428,7 @@
 		"spawnAs": {
 			"description": "\"window\" - Spawns the service as a child window of the Service Manager. \"process\" - Spawns the service in its own browser process (a.k.a. application). This gives the service dedicated CPU to maximize concurrency. \"script\" - Spawns the service as a script running in the Service Manager window. This minimizes memory footprint. This setting can only be used with the following services: assimilation, storage, hotkeys, linker, search and workspace.",
 			"type": "string",
-			"enum": [
-				"window",
-				"process",
-				"script"
-			],
+			"enum": ["window", "process", "script"],
 			"default": "window"
 		},
 		"securityPolicies": {
@@ -2587,8 +2468,7 @@
 								"executeJavaScript": {
 									"type": "boolean"
 								},
-								"webPreferences": {
-								}
+								"webPreferences": {}
 							}
 						}
 					}
@@ -2607,10 +2487,7 @@
 					"type": "string"
 				}
 			},
-			"requiredPlaceHolder": [
-				"crossDomain",
-				"sameDomain"
-			]
+			"requiredPlaceHolder": ["crossDomain", "sameDomain"]
 		},
 		"electronAdapter": {
 			"description": "Electron Adapter's config (that is dynamically added to manifest)",
