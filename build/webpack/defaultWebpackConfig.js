@@ -106,13 +106,22 @@ let plugins = [
 			NODE_ENV: JSON.stringify(env),
 		},
 	}),
-	new HardSourceWebpackPlugin({
-		info: {
-			level: "warn",
-		},
-		cacheDirectory: "../.webpack-file-cache/[confighash]",
-	}),
 ];
+
+/**
+ * HardSourceWebpackPlugin is currently not working correctly on Mac when using non-default cache folder.
+ * https://github.com/mzgoddard/hard-source-webpack-plugin/issues/456
+ */
+if (process.platform !== "darwin") {
+	plugins.push(
+		new HardSourceWebpackPlugin({
+			info: {
+				level: "warn",
+			},
+			cacheDirectory: "../.webpack-file-cache/[confighash]",
+		})
+	);
+}
 
 /**
  * When in production mode, the Uglify plugin will be used to minify output code.
