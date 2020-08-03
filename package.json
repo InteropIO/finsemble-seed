@@ -1,6 +1,6 @@
 {
 	"name": "finsemble-seed",
-	"version": "5.0.0-1",
+	"version": "5.0.0-2",
 	"description": "",
 	"main": "index.js",
 	"scripts": {
@@ -31,7 +31,7 @@
 	"author": "Cosaic",
 	"license": "SEE LICENSE IN LICENSE",
 	"optionalDependencies": {
-		"@chartiq/finsemble-cli": "^5.0.0-1"
+		"@chartiq/finsemble-cli": "^5.0.0-2"
 	},
 	"dependencies": {
 		"@chartiq/finsemble-electron-adapter": "^5.0.0-1",
@@ -48,8 +48,8 @@
 		"@babel/preset-env": "7.8.7",
 		"@babel/preset-react": "7.9.4",
 		"@babel/runtime": "^7.8.4",
-		"@chartiq/finsemble": "^5.0.0-1",
-		"@chartiq/finsemble-ui": "^5.0.0-1",
+		"@chartiq/finsemble": "^5.0.0-2",
+		"@chartiq/finsemble-ui": "^5.0.0-2",
 		"@types/mocha": "5.2.7",
 		"@types/react-dom": "16.9.8",
 		"@types/react-redux": "7.1.6",
