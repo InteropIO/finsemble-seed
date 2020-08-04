@@ -1023,11 +1023,6 @@
 							},
 							"additionalProperties": false
 						},
-						"enableWindowsAeroSnap": {
-							"description": "If set to `true`, enable Window's Aero Snap.",
-							"type": "boolean",
-							"default": true
-						},
 						"ALLOW_GROUPS_TO_SNAP": {
 							"description": "Allows groups to snap to one another.",
 							"type": "boolean",
@@ -1072,6 +1067,22 @@
 							"description": "The opacity windows change to when other windows encroach on their buffer zone.",
 							"type": "number",
 							"default": 0.8
+						},
+						"claimSpace": {
+							"description": "Settings for claiming space on Desktop at the operating System level. Windows Only.",
+							"type": "object",
+							"properties": {
+								"enabled": {
+									"description": "If true, docked windows will behave like the Windows Taskbar and claimed space on the operating system",
+									"type": "boolean",
+									"default": true
+								},
+								"alwaysOnTop": {
+									"description": "If true, docked windows that claim space will be always on top when docked",
+									"type": "boolean",
+									"default": false
+								}
+							}
 						}
 					},
 					"required": [
@@ -2108,6 +2119,12 @@
 				"category": {
 					"type": "string",
 					"enum": ["system"]
+				},
+				"visible": {
+					"type": "boolean"
+				},
+				"debugServiceDelay": {
+					"type": "integer"
 				},
 				"window": {
 					"title": "window",
