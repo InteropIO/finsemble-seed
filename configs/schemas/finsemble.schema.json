@@ -223,7 +223,7 @@
 					"default": false
 				},
 				"initialWorkspace": {
-					"description": "The workspace name specified by this config will be the first one presented to an end user the very first time they start the smart desktop. This overrides the default behavior set by the config: finsemble.workspaces. After the very first instance of the smart desktop, Finsemble will load the last workspace loaded or any workspace specified by user preferences.",
+					"description": "The workspace name specified by this config will be the first one presented to an end user the very first time they start the SmartDesktop. This overrides the default behavior set by the config: finsemble.workspaces. After the very first instance of the SmartDesktop, Finsemble will load the last workspace loaded or any workspace specified by user preferences.",
 					"type": "string"
 				},
 				"shutdownTimeout": {
@@ -606,7 +606,7 @@
 					"default": false
 				},
 				"initialWorkspace": {
-					"description": "The workspace name specified by this config will be the first one presented to an end user the very first time they start the smart desktop. This overrides the default behavior set by the config: finsemble.workspaces. After the very first instance of the smart desktop, Finsemble will load the last workspace loaded or any workspace specified by user preferences.",
+					"description": "The workspace name specified by this config will be the first one presented to an end user the very first time they start the SmartDesktop. This overrides the default behavior set by the config: finsemble.workspaces. After the very first instance of the SmartDesktop, Finsemble will load the last workspace loaded or any workspace specified by user preferences.",
 					"type": "string"
 				},
 				"isAuthEnabled": {
@@ -2336,7 +2336,7 @@
 		},
 		"workspacesArray": {
 			"title": "workspaces",
-			"description": "(PUBLIC)  An array of workspaces to be presented to the user the first time they start Finsemble. By default, the first workspace listed in the array will be the one first presented to an end user the first time they load their smart desktop.",
+			"description": "(PUBLIC)  An array of workspaces to be presented to the user the first time they start Finsemble. By default, the first workspace listed in the array will be the one first presented to an end user the first time they load their SmartDesktop.",
 			"type": "array",
 			"items": {
 				"$ref": "#/definitions/workspaceTemplate"

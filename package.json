@@ -1,6 +1,6 @@
 {
 	"name": "finsemble-seed",
-	"version": "5.0.0",
+	"version": "5.0.0-2",
 	"description": "",
 	"main": "index.js",
 	"scripts": {
@@ -31,10 +31,10 @@
 	"author": "Cosaic",
 	"license": "SEE LICENSE IN LICENSE",
 	"optionalDependencies": {
-		"@chartiq/finsemble-cli": "5.0.0"
+		"@chartiq/finsemble-cli": "^5.0.0-2"
 	},
 	"dependencies": {
-		"@chartiq/finsemble-electron-adapter": "5.0.0",
+		"@chartiq/finsemble-electron-adapter": "^5.0.0-1",
 		"async": "2.6.2",
 		"compression": "1.7.3"
 	},
@@ -48,8 +48,8 @@
 		"@babel/preset-env": "7.8.7",
 		"@babel/preset-react": "7.9.4",
 		"@babel/runtime": "^7.8.4",
-		"@chartiq/finsemble": "5.0.0",
-		"@chartiq/finsemble-ui": "5.0.0",
+		"@chartiq/finsemble": "^5.0.0-2",
+		"@chartiq/finsemble-ui": "^5.0.0-2",
 		"@types/mocha": "5.2.7",
 		"@types/react-dom": "16.9.8",
 		"@types/react-redux": "7.1.6",
@@ -79,8 +79,8 @@
 		"uglifyjs-webpack-plugin": "1.2.7",
 		"url-loader": "4.1.0",
 		"webpack": "4.43.0",
-		"webpack-cli": "latest",
 		"webpack-bundle-analyzer": "3.8.0",
+		"webpack-cli": "latest",
 		"webpack-glob-entries": "^1.0.1",
 		"worker-farm": "1.7.0"
 	}
