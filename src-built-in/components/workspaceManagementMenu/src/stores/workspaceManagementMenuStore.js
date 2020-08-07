@@ -353,7 +353,7 @@ Actions = {
 	/**
 	 * Asks the user if they'd like to save their data, then loads the requested workspace.
 	 */
-	switchToWorkspace: function (data) {
+	switchToWorkspace: async function (data) {
 		// if a workspace prompt is outstanding for a previous switch, immediately return to lock out user from doing another switch (until responding to prompt);
 		// note this prompting flag is cleared in Actions.onAsyncComplete when the previous switch completes (after user responds to the prompt)
 		let prompting = Actions.getIsPromptingUser()
@@ -392,7 +392,7 @@ Actions = {
 		 * If the workspace is dirty, we need to do more than if it's clean. We don't want users to lose unsaved work.
 		 */
 		let tasks = [];
-		if (activeWorkspace.isDirty) {
+		if (await FSBL.Clients.WorkspaceClient.isWorkspaceDirty()) {
 			Actions.setIsPromptingUser(true);
 			let firstMethod = Actions.autoSave,
 				secondMethod = null;
@@ -520,9 +520,9 @@ Actions = {
 	/**
 	 * Asks the user if they'd like to save their workspace if it's different from what's in storage. If the workspace is clean, we just invoke the callback.
 	 */
-	askIfUserWantsToSave: function (callback) {
+	askIfUserWantsToSave: async function (callback) {
 		let activeWorkspace = WorkspaceManagementStore.getValue("activeWorkspace");
-		if (activeWorkspace.isDirty) {
+		if (await FSBL.Clients.WorkspaceClient.isWorkspaceDirty()) {
 			Logger.system.log("NewWorkspace.spawnDialog start.");
 			let dialogParams = {
 				title: "Save your workspace?",
