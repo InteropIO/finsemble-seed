@@ -1,18 +1,17 @@
 {
 	"comment": "Top-level application config for development, adding on top of the core config",
+	"$schema": "../schemas/fileBasedSchemas/applicationConfigFile.schema.json",
 	"accessibleLinker": true,
+	"authentication": {},
 	"servicesConfig": {
 		"distributedStore": {
 			"initialStores": [
 				{
 					"name": "Finsemble-AppLauncher-Store",
-					"preferPreviousState": false,
+					"preferPreviousState": true,
 					"foundation": {
 						"appFolders": {
-							"list": [
-								"Advanced App Launcher",
-								"Favorites"
-							],
+							"list": ["Advanced App Launcher", "Favorites"],
 							"folders": {
 								"Advanced App Launcher": {
 									"icon": "ff-component",
@@ -88,11 +87,7 @@
 			}
 		},
 		"logger": {
-			"hotkeyShowCentralLogger": [
-				"ctrl",
-				"shift",
-				"L"
-			]
+			"hotkeyShowCentralLogger": ["ctrl", "shift", "L"]
 		},
 		"storage": {
 			"defaultStorage": "IndexedDBAdapter",
@@ -112,56 +107,17 @@
 			"promptUserOnDirtyWorkspace": true
 		}
 	},
-	"systemTrayIcon": "$applicationRoot/assets/img/Finsemble_Taskbar_Icon.png",
+	"systemTrayIcon": "$applicationRoot/assets/img/Finsemble_SystemTray_Icon.png",
 	"systemTrayComponent": "SystemTrayComponent",
 	"Window Manager": {
 		"alwaysOnTopIcon": false,
 		"floatingTitlebarComponent": "Floating Titlebar",
 		"deliveryMechanism": "preload"
 	},
-	"betaFeatures": {},
-	"splinteringConfig": {
-		"comment": "A SplinterAgent is just an application that is capable of spawning specific components/services. If you try to spawn a component/service that one of these agents does not cover, it will be spawned by the defaultAgent. You can also specify maxWindowsPerAgent if you would like to limit your agents to some ceiling. This is useful when you have a particularly heavy component.",
-		"enabled": true,
-		"splinterAgents": [
-			{
-				"agentLabel": "systemComponents",
-				"components": [
-					"Toolbar",
-					"App Launcher",
-					"Workspace Management Menu",
-					"linkerWindow",
-					"defaultAuthentication",
-					"dialogSignOn",
-					"dialogTemplate",
-					"dialogTest",
-					"File Menu",
-					"QuickComponentForm",
-					"Process Monitor",
-					"Docking Move Mask",
-					"yesNo",
-					"singleInput",
-					"dialogModal",
-					"UserPreferences",
-					"App Catalog"
-				]
-			},
-			{
-				"agentLabel": "Tier2",
-				"services": [
-					"launcherService",
-					"authenticationService",
-					"workspaceService",
-					"storageService",
-					"searchService"
-				]
-			}
-		]
-	},
 	"//appDirectoryEndpoint": "If you'd like to test the server locally, point 'appDirectoryEndpoint' to http://localhost:3030/v1/ and make sure to run the AppD project.",
 	"appDirectoryEndpoint": "https://fpe.finsemble.com/v1/",
 	"globalHotkeys": {},
-	"//": "importConfig contains components that are necessary to start Finsemble. All other components are loaded dynamically. See server/auth/test.json",
+	"//": "this importConfig contains components that are necessary to start Finsemble. All other components are loaded dynamically. See server/auth/test.json",
 	"importConfig": [
 		"$applicationRoot/configs/application/UIComponents.json",
 		"$applicationRoot/configs/application/components.json",

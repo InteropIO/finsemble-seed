@@ -1,20 +1,16 @@
-@import  url('../../../assets/css/_themeWhitelabel.css');
+@import url("../../../assets/css/finsemble.css");
+@import url("../../../assets/css/theme.css");
 
 body {
-	margin:0px;
-	font-size: var(--procMonitor-font-size);
-	font-weight: var(--procMonitor-font-weight);
-	font-family: var(--font-family);
-	background-color: var(--procMonitor-background-color);
+	margin: 0px;
 	user-select: none;
-	background-color: var(--content-background-color);
 }
 
 #container {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	align-items:center;
+	align-items: center;
 }
 
 .spacer1 {
@@ -24,7 +20,6 @@ body {
 .spacer2 {
 	height: 15px;
 }
-
 
 .spacer3 {
 	height: 15px;
@@ -41,31 +36,29 @@ h1 {
 
 button {
 	width: 200px;
-    text-align: center !important;
-    margin: 0px auto;
-    max-width: 2000px;
-    -webkit-appearance:none;
-    background-color: var(--button-affirmative-background-color);
-    color: #FFF;
-    font-family: var(--font-family);
+	text-align: center !important;
+	margin: 0px auto;
+	max-width: 2000px;
+	-webkit-appearance: none;
+	background-color: var(--button-affirmative-background-color);
+	color: #fff;
 	font-weight: 400;
 	font-size: 125%;
-    border: 0px;
-    border-radius: 4px;
-    padding: 10px 15px;
-    vertical-align: middle;
-	transition: all .2s ease;
-
+	border: 0px;
+	border-radius: 4px;
+	padding: 10px 15px;
+	vertical-align: middle;
+	transition: all 0.2s ease;
 }
 button:hover {
 	background-color: var(--button-affirmative-background-hover-color);
 	cursor: pointer;
-	transition: all .2s ease;
+	transition: all 0.2s ease;
 }
 
 #quitFS {
 	color: #ee5c5c;
-	background-color: #FFFFFF;
+	background-color: #ffffff;
 	font-size: 100%;
 	width: 140px;
 }

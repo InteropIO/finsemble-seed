@@ -1,6 +1,52 @@
 {
 	"comment": "Sample component configuration",
+	"$schema": "../schemas/fileBasedSchemas/componentsFile.schema.json",
 	"components": {
+		"google": {
+			"window": {
+				"url": "http://www.google.com",
+				"affinity": "workspaceComponents",
+				"options": {
+					"resizable": true,
+					"autoShow": true,
+					"alwaysOnTop": false
+				},
+				"top": "center",
+				"left": "center",
+				"width": 400,
+				"height": 432
+			},
+			"component": {
+				"displayName": "Google",
+				"spawnOnStartup": false,
+				"preload": "$applicationRoot/preloads/zoom.js"
+			},
+			"foreign": {
+				"services": {
+					"windowService": {
+						"allowSnapping": true,
+						"allowGrouping": true,
+						"allowAutoArrange": true,
+						"allowMinimize": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"alwaysOnTopIcon": false,
+						"showLinker": true,
+						"FSBLHeader": true,
+						"persistWindowState": true,
+						"title": "Welcome to Google"
+					},
+					"Toolbar": {
+						"iconClass": "ff-component"
+					}
+				}
+			}
+		},
 		"Welcome Component": {
 			"window": {
 				"url": "$applicationRoot/components/welcome/welcome.html",
@@ -44,16 +90,6 @@
 						"iconClass": "ff-component"
 					}
 				}
-			},
-			"childWindowOptions": {
-				"foreign": {
-					"components": {
-						"Window Manager": {
-							"FSBLHeader": true,
-							"title": "Welcome Component Child Window"
-						}
-					}
-				}
 			}
 		},
 		"nonConfiguredComponent": {
@@ -83,11 +119,7 @@
 				"addToWorkspace": true
 			},
 			"component": {
-				"spawnOnHotkey": [
-					"ctrl",
-					"alt",
-					"n"
-				]
+				"spawnOnHotkey": ["ctrl", "alt", "n"]
 			},
 			"foreign": {
 				"services": {
@@ -165,16 +197,16 @@
 				}
 			}
 		},
-		"defaultAuthentication": {
+		"Authentication": {
 			"window": {
-				"url": "$applicationRoot/components/authentication/defaultAuthentication.html",
+				"url": "$applicationRoot/components/authentication/Authentication.html",
 				"top": "center",
 				"left": "center",
 				"width": 358,
-				"height": 658,
+				"height": 460,
 				"ephemeral": true,
 				"options": {
-					"autoShow": false
+					"autoShow": true
 				}
 			},
 			"component": {

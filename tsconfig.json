@@ -1,21 +1,17 @@
 {
 	"compilerOptions": {
-		"target": "es2017",
-		"module": "commonjs",
-		"noImplicitAny": true,
-		"removeComments": true,
-		"preserveConstEnums": true,
-		"sourceMap": true,
+		"allowJs": true,
+		"allowSyntheticDefaultImports": true,
 		"jsx": "react",
-		"allowJs": true
+		"moduleResolution": "node",
+		"noImplicitAny": true,
+		"preserveConstEnums": true,
+		"removeComments": true,
+		"sourceMap": true,
+		"strict": true,
+		"target": "es2017",
+		"typeRoots": ["node_modules/@types", "node_modules/@chartiq"]
 	},
-	"include": [
-		"src/**/*",
-		"src/ts/**/*",
-		"./finsemble/types/**/*"
-	],
-	"exclude": [
-		"node_modules",
-		"**/*.spec.ts"
-	]
+	"include": ["src/**/*"],
+	"exclude": []
 }

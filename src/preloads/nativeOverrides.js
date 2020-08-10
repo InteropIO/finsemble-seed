@@ -25,7 +25,7 @@
  */
 
 var originalWindowOpen = window.open;
-window.open = function (theURL, name, specs, replace) {
+window.open = function(theURL, name, specs, replace) {
 	var params = {};
 	if (specs) {
 		let paramList = specs.split(",");
@@ -55,26 +55,20 @@ window.open = function (theURL, name, specs, replace) {
 	params.url = u.href;
 
 	var w;
-	FSBL.Clients.LauncherClient.spawn(null, params, function (err, response) {
+	FSBL.Clients.LauncherClient.spawn(null, params, (err, response) => {
 		if (err) {
-			console.error("nativeOverrides.js window.open patch error: " + err);
+			console.error(`nativeOverrides.js window.open patch error: ${err}`);
 		} else {
 			w = response.finWindow;
 		}
 	});
 	return w;
-}
+};
 
 /**
  * Overrides the browser's built in alerting. Native alerts are synchronous. They cause the application to cease functioning
  * and they create an ugly pop up window. Instead, we funnel these alerts through notifications.
  */
-window.alert = function (message) {
-	FSBL.UserNotification.alert(
-		"alert",
-		"",
-		"ALWAYS",
-		message,
-		{}
-	);
-}
+window.alert = function(message) {
+	FSBL.UserNotification.alert("alert", "", "ALWAYS", message, {});
+};
