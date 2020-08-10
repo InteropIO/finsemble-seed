@@ -443,7 +443,11 @@
 			}
 
 			// need absolute paths for certain installer configs
-			installerConfig = resolveRelativePaths(installerConfig, ["icon"], "./");
+			installerConfig = resolveRelativePaths(
+				installerConfig,
+				["icon", "macIcon", "background"],
+				"./"
+			);
 
 			const manifestUrl = taskMethods.startupConfig[env.NODE_ENV].serverConfig;
 			let { updateUrl } = taskMethods.startupConfig[env.NODE_ENV];
