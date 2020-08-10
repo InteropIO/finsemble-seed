@@ -170,8 +170,7 @@
 					"$ref": "#/definitions/securityPolicies"
 				},
 				"securityPolicyRules": {
-					"$ref": "#/definitions/securityPolicyRules",
-					"requiredPlaceHolder": ["crossDomain", "sameDomain"]
+					"$ref": "#/definitions/securityPolicyRules"
 				},
 				"accessibleLinker": {
 					"description": "(PUBLIC)",
@@ -412,8 +411,7 @@
 							"target": {
 								"type": "string"
 							}
-						},
-						"requiredPlaceHolder": ["src", "version", "alias", "target"]
+						}
 					}
 				},
 				"finsemble": {
@@ -541,8 +539,7 @@
 					"$ref": "#/definitions/securityPolicies"
 				},
 				"securityPolicyRules": {
-					"$ref": "#/definitions/securityPolicyRules",
-					"requiredPlaceHolder": ["crossDomain", "sameDomain"]
+					"$ref": "#/definitions/securityPolicyRules"
 				},
 				"accessibleLinker": {
 					"description": "(PUBLIC)",
@@ -758,8 +755,7 @@
 					"target": {
 						"type": "string"
 					}
-				},
-				"requiredPlaceHolder": ["src", "version", "alias", "target"]
+				}
 			}
 		},
 		"windowManager": {
@@ -2486,8 +2482,7 @@
 				"sameDomain": {
 					"type": "string"
 				}
-			},
-			"requiredPlaceHolder": ["crossDomain", "sameDomain"]
+			}
 		},
 		"electronAdapter": {
 			"description": "Electron Adapter's config (that is dynamically added to manifest)",
