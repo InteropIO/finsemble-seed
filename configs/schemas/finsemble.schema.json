@@ -232,9 +232,7 @@
 					"default": 10000
 				},
 				"scheduledRestart": {
-					"description": "Set Finsemble to automatically restart. These values can be overriden by the user through user preferences.\r\nhour 0 - The hour when Finsemble should restart. This is in 24 hour time according to the user's local machine's timezone.\r\nminute 0 - The minute when Finsemble should restart.\r\ndialogTimeout 10000 - When it is time to restart, the user is presented with a dialog to confirm or cancel. Since resets occur at night while the machine is unattended, most often the dialog will time out and Finsemble will reset. The `dialogTimeout` specifies how long to wait for a user response in milliseconds.",
-					"type": "boolean",
-					"default": false
+					"$ref": "#/definitions/scheduledRestart"
 				},
 				"stackedWindow": {
 					"$ref": "#/definitions/stackedWindow"
@@ -628,9 +626,7 @@
 					"default": 6000
 				},
 				"scheduledRestart": {
-					"description": "Set Finsemble to automatically restart. These values can be overriden by the user through user preferences.\r\nhour 0 - The hour when Finsemble should restart. This is in 24 hour time according to the user's local machine's timezone.\r\nminute 0 - The minute when Finsemble should restart.\r\ndialogTimeout 10000 - When it is time to restart, the user is presented with a dialog to confirm or cancel. Since resets occur at night while the machine is unattended, most often the dialog will time out and Finsemble will reset. The `dialogTimeout` specifies how long to wait for a user response in milliseconds.",
-					"type": "boolean",
-					"default": false
+					"$ref": "#/definitions/scheduledRestart"
 				},
 				"stackedWindow": {
 					"$ref": "#/definitions/stackedWindow"
@@ -1401,7 +1397,7 @@
 					"type": "boolean"
 				},
 				"scheduledRestart": {
-					"type": "boolean"
+					"$ref": "#/definitions/scheduledRestart"
 				},
 				"isolateCrossDomainComponents": {
 					"type": "boolean"
@@ -1808,6 +1804,9 @@
 						"canGroup": {
 							"type": "boolean"
 						},
+						"alwaysOnTop": {
+							"type": "boolean"
+						},
 						"options": {
 							"title": "options",
 							"type": "object",
@@ -1908,6 +1907,9 @@
 							"type": "boolean"
 						},
 						"canMaximize": {
+							"type": "boolean"
+						},
+						"useAppCatalog": {
 							"type": "boolean"
 						},
 						"singleton": {
@@ -2240,8 +2242,18 @@
 				},
 				"custom": {}
 			},
-			"required": ["spawnAs", "html", "file"],
+			"required": [
+				"html"
+			],
 			"additionalProperties": false
+		},
+		"scheduledRestart": {
+			"description": "Set Finsemble to automatically restart. These values can be overriden by the user through user preferences.\r\nhour 0 - The hour when Finsemble should restart. This is in 24 hour time according to the user's local machine's timezone.\r\nminute 0 - The minute when Finsemble should restart.\r\ndialogTimeout 10000 - When it is time to restart, the user is presented with a dialog to confirm or cancel. Since resets occur at night while the machine is unattended, most often the dialog will time out and Finsemble will reset. The `dialogTimeout` specifies how long to wait for a user response in milliseconds.",
+			"type": [
+				"boolean",
+				"object"
+			],
+			"default": false
 		},
 		"serviceAssimilationConfig": {
 			"title": "assimilationConfig",
