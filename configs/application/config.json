@@ -60,7 +60,11 @@
 		},
 		"launcher": {
 			"staggerPixels": 40,
-			"unknownComponent": "nonConfiguredComponent"
+			"unknownComponent": "nonConfiguredComponent",
+			"defaultPreloads": {
+				"//useBrowserView": "preloads CSS into all BrowserView windows. Used to enable a scrim for drag shared data",
+				"useBrowserView": ["$applicationRoot/preloads/browserViewCss.js"]
+			}
 		},
 		"assimilation": {
 			"useFeaSpawn": false,
