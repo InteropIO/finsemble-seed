@@ -461,9 +461,7 @@
 				process.env.manifesturl ||
 				taskMethods.startupConfig[env.NODE_ENV].serverConfig;
 			console.log("The manifest location is: ", manifestUrl);
-			let updateUrl =
-				process.env.updateurl ??
-				taskMethods.startupConfig[env.NODE_ENV]?.updateUrl;
+			let { updateUrl } = taskMethods.startupConfig[env.NODE_ENV];
 			const { chromiumFlags } = taskMethods.startupConfig[env.NODE_ENV];
 
 			// Installer won't work without a proper manifest. Throw a helpful error.
