@@ -422,10 +422,15 @@
 			let seedpackagejson = require("./package.json");
 			// Command line overrides
 
-			installerConfig.name = process.env.installername || installerConfig.name
-			installerConfig.version = process.env.installerversion || installerConfig.version || seedpackagejson.version
-			installerConfig.authors = process.env.installerauthors || installerConfig.authors
-			installerConfig.description = process.env.installerdescription || installerConfig.description
+			installerConfig.name = process.env.installername || installerConfig.name;
+			installerConfig.version =
+				process.env.installerversion ||
+				installerConfig.version ||
+				seedpackagejson.version;
+			installerConfig.authors =
+				process.env.installerauthors || installerConfig.authors;
+			installerConfig.description =
+				process.env.installerdescription || installerConfig.description;
 
 			//check if we have an installer config matching the environment name, if not assume we just have a single config for all environments
 			if (installerConfig[env.NODE_ENV]) {
@@ -451,11 +456,13 @@
 
 			// need absolute paths for certain installer configs
 			installerConfig = resolveRelativePaths(installerConfig, ["icon"], "./");
-			
-			const manifestUrl = process.env.manifesturl || taskMethods.startupConfig[env.NODE_ENV].serverConfig;
-			console.log("The manifest location is: ", manifestUrl)
-			console.log(installerConfig)
-			let { updateUrl } = process.env.updateurl || taskMethods.startupConfig[env.NODE_ENV];
+
+			const manifestUrl =
+				process.env.manifesturl ||
+				taskMethods.startupConfig[env.NODE_ENV].serverConfig;
+			console.log("The manifest location is: ", manifestUrl);
+			let { updateUrl } =
+				process.env.updateurl || taskMethods.startupConfig[env.NODE_ENV];
 			const { chromiumFlags } = taskMethods.startupConfig[env.NODE_ENV];
 
 			// Installer won't work without a proper manifest. Throw a helpful error.
