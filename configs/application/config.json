@@ -49,6 +49,8 @@
 					"default": {
 						"activeLauncherTags": [],
 						"filterText": "",
+						"activeTags": [],
+						"filteredApps": [],
 						"filterTags": [],
 						"activeFolder": "Advanced App Launcher",
 						"sortBy": "Alphabetical"
