@@ -34,7 +34,7 @@ const IMAGE_AND_FONT_RULE = {
 	use: {
 		loader: "file-loader",
 		options: {
-			name: "../../assets/file-loader/[name].[ext]",
+			name: "/assets/file-loader/[name].[ext]",
 		},
 	},
 };
