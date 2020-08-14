@@ -1021,11 +1021,6 @@
 							},
 							"additionalProperties": false
 						},
-						"enableWindowsAeroSnap": {
-							"description": "If set to `true`, enable Window's Aero Snap.",
-							"type": "boolean",
-							"default": true
-						},
 						"ALLOW_GROUPS_TO_SNAP": {
 							"description": "Allows groups to snap to one another.",
 							"type": "boolean",
