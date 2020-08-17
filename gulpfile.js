@@ -60,29 +60,6 @@
 	let launchTimestamp = 0;
 
 	/**
-	 */
-	const getElectronVersion = () => {
-		// You may run `npm run dev` before running `npm i` inside
-		// finsemble-electron-adapter in that case, the electron
-		// module does not exists.
-		try {
-			const packageFile = require(path.join(
-				FEA_PATH,
-				"node_modules",
-				"electron",
-				"package.json"
-			));
-			return packageFile.version;
-		} catch (error) {
-			logToTerminal(
-				`Failed to get electron's verion from FEA: ${error.message}`,
-				"red"
-			);
-			return "unknown";
-		}
-	};
-
-	/**
 	 * Returns an object containing the absolute paths of the socket certificate files used to secure Finsemble Transport
 	 * If both a key and certificate path are not configured nothing is returned.
 	 */
@@ -384,8 +361,6 @@
 			async.series([taskMethods["build:dev"], taskMethods.startServer], done);
 		},
 		launchElectron: (done) => {
-			logToTerminal(`Using Electron@${getElectronVersion()}`, "green");
-
 			const cfg = taskMethods.startupConfig[env.NODE_ENV];
 
 			const socketCertificatePath = deriveSocketCertificatePaths();

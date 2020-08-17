@@ -18,7 +18,7 @@ import {
 	AppLauncher,
 	WorkspaceManagementMenu,
 	ToolbarSection,
-} from "@chartiq/finsemble-ui/react/components/Toolbar";
+} from "@chartiq/finsemble-ui/react/components/toolbar";
 import { FileMenu } from "./FileMenu";
 import { useHotkey } from "@chartiq/finsemble-ui/react/hooks/useHotkey";
 import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";

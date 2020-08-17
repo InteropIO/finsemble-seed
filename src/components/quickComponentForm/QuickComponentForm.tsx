@@ -7,7 +7,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { FinsembleProvider } from "@chartiq/finsemble-ui/react/components/FinsembleProvider";
-import { QuickComponentForm } from "@chartiq/finsemble-ui/react/components/QuickComponentForm";
+import { QuickComponentForm } from "@chartiq/finsemble-ui/react/components/quickComponentForm";
 import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../assets/css/theme.css";
 
