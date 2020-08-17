@@ -11,7 +11,6 @@
 	- Default zoom level config with-in the component configuration at:
 	  `foreign.components.['Window Manager'].zoomDefault`
 */
-const _get = require("lodash.get");
 
 // This global will contain our current zoom level
 window.fsblZoomLevel = 1;
@@ -248,10 +247,10 @@ const getZoomLevelHandler = (err, zoomLevel) => {
 		setZoom(window.fsblZoomLevel);
 	} else {
 		//check for default configuration for zoom level and apply as needed
-		let defaultLevel = _get(
-			FSBL.Clients.WindowClient.options.customData,
-			"foreign.components.['Window Manager'].zoomDefault"
-		);
+		let defaultLevel =
+			FSBL?.Clients?.WindowClient?.options?.customData?.foreign?.components?.[
+				"Window Manager"
+			]?.zoomDefault;
 		if (defaultLevel) {
 			FSBL.Clients.Logger.info(
 				`Retrieved default zoom level from config: ${defaultLevel}`

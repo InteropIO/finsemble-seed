@@ -55,6 +55,7 @@
 		"@types/react-redux": "7.1.6",
 		"babel-loader": "8.1.0",
 		"babel-plugin-add-module-exports": "1.0.2",
+		"case-sensitive-paths-webpack-plugin": "2.2.0",
 		"chalk": "2.3.2",
 		"copy-webpack-plugin": "4.5.4",
 		"css-loader": "3.5.3",

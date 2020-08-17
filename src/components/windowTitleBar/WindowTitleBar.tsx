@@ -15,7 +15,7 @@ import {
 	MaximizeButton,
 	MinimizeButton,
 	WindowTitleBarShell,
-} from "@chartiq/finsemble-ui/react/components/WindowTitleBar";
+} from "@chartiq/finsemble-ui/react/components/windowTitleBar";
 
 /**
  * The following css import assumes that WindowTitleBar is running in a BrowserView.

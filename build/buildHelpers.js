@@ -34,40 +34,48 @@ const runWebpackAndCallback = (configPath, watch, bundleName, callback) => {
 	config.watch = watch;
 	config.bail = true; // Causes webpack to break upon first encountered error. Pretty annoying when build errors scroll off the screen.
 	let startTime = process.hrtime();
-	webpack(config, (err, stats) => {
-		if (!err) {
-			let msg = `Finished building ${bundleName}`;
-			//first run, add nice timer.
-			if (callback) {
-				let end = process.hrtime(startTime);
-				msg = `${msg} after ${chalk.magenta(prettyHrtime(end))}`;
-			}
-			logToTerminal(msg, "cyan");
-
-			const info = stats.toJson();
-
-			if (stats.hasErrors()) {
-				logToTerminal(`WEBPACK ERRORS: ${configPath}`, "red");
-				console.error(info.errors);
-			}
-
-			/* Uncomment to see webpack warnings.
-			if (stats.hasWarnings()) {
-				logToTerminal(`WEBPACK WARNINGS: ${configPath}`, "yellow");
-				console.warn(info.warnings);
-			}
-			*/
-		} else {
-			console.error(errorOutColor("Webpack Error.", err));
-		}
-
+	const finish = () => {
 		// Webpack will call this function every time the bundle is built.
 		// Webpack is run in "watch" mode which means this function will be called over and over and over.
 		// We only want to invoke the async callback back to the gulp file once - the initial webpack build.
 		if (callback) {
-			callback(err);
+			callback();
 			callback = undefined;
 		}
+	};
+	webpack(config, (err, stats) => {
+		// err is a fatal webpack error. stats.hasErrors represents compilation errors,
+		// which are not fatal. Exit on fatal errors.
+		if (err) {
+			logToTerminal(`FATAL WEBPACK ERROR: ${err.stack || err}`, "red");
+			if (err.details) {
+				logToTerminal(`ERROR DETAILS: ${err.details}`, "red");
+			}
+			return finish();
+		}
+
+		let msg = `Finished building ${bundleName}`;
+		//first run, add nice timer.
+		if (callback) {
+			let end = process.hrtime(startTime);
+			msg = `${msg} after ${chalk.magenta(prettyHrtime(end))}`;
+		}
+		logToTerminal(msg, "cyan");
+
+		const info = stats.toJson();
+
+		if (stats.hasErrors()) {
+			logToTerminal(`WEBPACK ERRORS: ${configPath}`, "red");
+			console.error(info.errors);
+		}
+
+		/* Uncomment to see webpack warnings.
+		if (stats.hasWarnings()) {
+			logToTerminal(`WEBPACK WARNINGS: ${configPath}`, "yellow");
+			console.warn(info.warnings);
+		}
+		*/
+		finish();
 	});
 };
 
