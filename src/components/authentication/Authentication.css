@@ -20,9 +20,9 @@
     text-align: center;
 }
 
-.fsbl-copyright a {
+a, a:hover, a:active, a:visited {
     text-decoration: none;
-    text-decoration-color: var(--dialog-font-color);
+    color: var(--dialog-font-color);
 }
 
 div.registration {
@@ -33,5 +33,5 @@ div.registration {
 
 div.registration label {
     text-align: right;
-    padding-top: 15px;
+    padding-top: 10px;
 }
