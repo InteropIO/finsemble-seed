@@ -50,6 +50,12 @@ export const Authentication = () => {
 	 * return {error: "error text"} if either username or password are left blank.
 	 */
 	useEffect(() => {
+		// Check whether user has already registered
+		const username = localStorage.getItem("username");
+		if (username) {
+			publishAuthorization(username, { username });
+		}
+
 		if (!payload) return;
 
 		const authenticate = async () => {
@@ -57,6 +63,9 @@ export const Authentication = () => {
 			alert(JSON.stringify(payload, null, "\t"));
 			const response = await sendToServer(payload.firstName, payload.lastName);
 			if (response.result === "ok") {
+				// save username to prevent having to register again.
+				localStorage.setItem("username", payload.firstName);
+
 				/**
 				 * This is the most important step. Once your back end server has authenticated the user
 				 * call publishAuthorization() from the useAuth() hook. The first parameter (username) is
@@ -182,7 +191,11 @@ export const Authentication = () => {
 						Submit
 					</button>
 				</form>
-				<div className="fsbl-copyright">© 2020 Cosaic, Inc. All Rights Reserved | <a href="https://cosaic.io/privacy-policy/">Privacy Policy</a> | <a href="https://cosaic.io/developer-license-agreement/">Developer License Agreement</a></div>
+				<div className="fsbl-copyright">
+					© 2020 Cosaic, Inc. All Rights Reserved |
+					<a onClick={() => fin.desktop.System.openUrlWithBrowser("https://cosaic.io/privacy-policy/")}>Privacy Policy</a> |
+					<a onClick={() => fin.desktop.System.openUrlWithBrowser("https://cosaic.io/developer-license-agreement/")}>Developer License Agreement</a>
+				</div>
 			</div>
 		</>
 	);
