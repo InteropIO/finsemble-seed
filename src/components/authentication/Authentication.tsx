@@ -18,13 +18,22 @@ import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
 import "@chartiq/finsemble-ui/react/assets/css/dialogs.css";
 import "@chartiq/finsemble-ui/react/assets/css/authentication.css";
 import "../../../assets/css/theme.css";
+import "./Authentication.css"
 
 export const Authentication = () => {
-	const [username, setUsername] = useState("");
-	const [password, setPassword] = useState("");
+	const [firstName, setFirstName] = useState("");
+	const [lastName, setLastName] = useState("");
+	const [jobTitle, setJobTitle] = useState("");
+	const [company, setCompany] = useState("");
+	const [email, setEmail] = useState("");
+	const [phone, setPhone] = useState("");
 	const [payload, setPayload] = useState<{
-		username: string;
-		password: string;
+		firstName: string;
+		lastName: string;
+		jobTitle: string;
+		company: string;
+		email: string;
+		phone: string;
 	} | null>(null);
 	const [error, setError] = useState<string | null>(null);
 	const { quitApplication, publishAuthorization } = useAuth();
@@ -44,7 +53,9 @@ export const Authentication = () => {
 		if (!payload) return;
 
 		const authenticate = async () => {
-			const response = await sendToServer(payload.username, payload.password);
+			// TODO: Implement sendToServer
+			alert(JSON.stringify(payload, null, "\t"));
+			const response = await sendToServer(payload.firstName, payload.lastName);
 			if (response.result === "ok") {
 				/**
 				 * This is the most important step. Once your back end server has authenticated the user
@@ -52,7 +63,7 @@ export const Authentication = () => {
 				 * required. The second parameter (credentials) is option. Credentials can contain anything
 				 * that is useful for session management, such as user ID, tokens, etc.
 				 */
-				publishAuthorization(payload.username, { username: payload.username });
+				publishAuthorization(payload.firstName, { username: payload.firstName });
 			} else if (response.error) {
 				setError(response.error);
 			}
@@ -62,7 +73,14 @@ export const Authentication = () => {
 	}, [payload]);
 
 	const submit = () => {
-		setPayload({ username: username, password: password });
+		setPayload({
+			firstName: firstName,
+			lastName: lastName,
+			jobTitle: jobTitle,
+			company: company,
+			email: email,
+			phone: phone
+		});
 	};
 
 	/**
@@ -81,6 +99,7 @@ export const Authentication = () => {
 
 			<div className="fsbl-auth-wrapper">
 				<div className="fsbl-auth-logo"></div>
+				<div className="fsbl-auth-welcome">Thank you for downloading Finsemble. Please register to begin your evaluation.</div>
 				{error && <div className="fsbl-input-error-message">{error}</div>}
 				<form
 					onSubmit={(event) => {
@@ -88,32 +107,82 @@ export const Authentication = () => {
 						event.preventDefault();
 					}}
 				>
-					<input
-						className="fsbl-auth-input"
-						type="text"
-						name="username"
-						placeholder="Username"
-						value={username}
-						onChange={(event) => {
-							setUsername(event.target.value);
-						}}
-					/>
+					<div className="registration">
+						<label>First Name*</label>
+						<input
+							className="fsbl-auth-input"
+							type="text"
+							name="first-name"
+							required
+							value={firstName}
+							onChange={(event) => {
+								setFirstName(event.target.value);
+							}}
+						/>
+						<label>Last Name*</label>
+						<input
+							className="fsbl-auth-input"
+							type="text"
+							name="last-name"
+							required
+							value={lastName}
+							onChange={(event) => {
+								setLastName(event.target.value);
+							}}
+						/>
 
-					<input
-						className="fsbl-auth-input"
-						type="password"
-						name="password"
-						placeholder="Password"
-						value={password}
-						onChange={(event) => {
-							setPassword(event.target.value);
-						}}
-					/>
+						<label>Job Title*</label>
+						<input
+							className="fsbl-auth-input"
+							type="text"
+							name="job-title"
+							required
+							value={jobTitle}
+							onChange={(event) => {
+								setJobTitle(event.target.value);
+							}}
+						/>
 
+						<label>Company*</label>
+						<input
+							className="fsbl-auth-input"
+							type="text"
+							name="company"
+							required
+							value={company}
+							onChange={(event) => {
+								setCompany(event.target.value);
+							}}
+						/>
+
+						<label>Email*</label>
+						<input
+							className="fsbl-auth-input"
+							type="email"
+							name="email"
+							value={email}
+							required
+							onChange={(event) => {
+								setEmail(event.target.value);
+							}}
+						/>
+
+						<label>Phone</label>
+						<input
+							className="fsbl-auth-input"
+							type="tel"
+							name="phone"
+							value={phone}
+							onChange={(event) => {
+								setPhone(event.target.value);
+							}}
+						/>
+					</div>
 					<button type="submit" className="fsbl-button fsbl-button-affirmative">
-						Login
+						Submit
 					</button>
 				</form>
+				<div className="fsbl-copyright">© 2020 Cosaic, Inc. All Rights Reserved | <a href="">Privacy Policy</a> | <a href="">Developer License Agreement</a></div>
 			</div>
 		</>
 	);
