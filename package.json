@@ -40,7 +40,6 @@
         "babel-minify-webpack-plugin": "0.3.1",
         "compression": "1.7.3",
         "file-loader": "1.1.11",
-        "hadouken-js-adapter": "1.43.1",
         "lodash.clonedeep": "4.5.0",
         "lodash.debounce": "4.0.8",
         "lodash.get": "4.4.2",
