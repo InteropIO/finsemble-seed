@@ -1,5 +1,3 @@
-const { launch, connect } = require('hadouken-js-adapter');
-
 (() => {
 	"use strict";
 
@@ -491,40 +489,6 @@ const { launch, connect } = require('hadouken-js-adapter');
 				taskMethods["build:dev"],
 				taskMethods.startServer
 			], done);
-		},
-		launchOpenFin: async (done) => {
-			// We are unable to read OpenFin version at the moment.
-			// We request it after hadouken connection.
-			logToTerminal("Using Container: OpenFin", "green");
-			ON_DEATH(() => {
-				killApp("OpenFin", () => {
-					if (watchClose) watchClose();
-					process.exit();
-				});
-			});
-			try {
-				const manifestUrl = taskMethods.startupConfig[env.NODE_ENV].serverConfig;
-				// Once the server is running we can launch OpenFin and retrieve the port.
-				const port = await launch({ manifestUrl });
-				// Use the port to connect and determine when OpenFin exists.
-				const fin = await connect({
-					uuid: 'server-connection',
-					// Connect to the given port.
-					address: `ws://localhost:${port}`,
-					// We want OpenFin to exit as our application exists.
-					nonPersistent: true
-				});
-				const openfinVersion = await fin.System.getVersion();
-				logToTerminal(`Openfin version: ${openfinVersion}`, "green");
-				if (watchClose) watchClose();
-				// Once OpenFin exits we shut down the server.
-				fin.once('disconnected', process.exit);
-			} catch (error) {
-				console.error(`Unable to launch and connect to OpenFin: ${error.message}`);
-				process.exit();
-			}
-
-			if (done) done();
 		},
 		launchElectron: done => {
 			logToTerminal(`Using Container: Electron@${getElectronVersion()}`, "green");
