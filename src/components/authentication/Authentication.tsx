@@ -182,7 +182,7 @@ export const Authentication = () => {
 						Submit
 					</button>
 				</form>
-				<div className="fsbl-copyright">© 2020 Cosaic, Inc. All Rights Reserved | <a href="">Privacy Policy</a> | <a href="">Developer License Agreement</a></div>
+				<div className="fsbl-copyright">© 2020 Cosaic, Inc. All Rights Reserved | <a href="https://cosaic.io/privacy-policy/">Privacy Policy</a> | <a href="https://cosaic.io/developer-license-agreement/">Developer License Agreement</a></div>
 			</div>
 		</>
 	);
