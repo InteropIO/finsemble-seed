@@ -1031,7 +1031,7 @@
 							"type": "number",
 							"default": 20
 						},
-						"enableWindowsAeroSnap ": {
+						"enableWindowsAeroSnap": {
 							"description": "If `true`, windows aero snap keyboard shortcuts (WINDOWS KEY + UP, RIGHT, DOWN, or LEFT arrow key) will move the current window when pressed. Windows will move the window and Finsemble will respond by updating bounds within the Window Service. If `false` (default), these actions will be cancelled by Finsemble.",
 							"type": "boolean",
 							"default": false
@@ -2207,7 +2207,8 @@
 									}
 								},
 								"enableWindowsAeroSnap": {
-									"type": "boolean"
+									"type": "boolean",
+									"default": false
 								},
 								"tabbing": {
 									"type": "object",
