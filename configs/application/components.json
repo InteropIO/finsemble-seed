@@ -206,7 +206,7 @@
 				"height": 530,
 				"ephemeral": true,
 				"options": {
-					"autoShow": true
+					"autoShow": false
 				}
 			},
 			"component": {

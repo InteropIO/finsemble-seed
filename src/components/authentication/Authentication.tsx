@@ -53,7 +53,14 @@ export const Authentication = () => {
 		// Check whether user has already registered
 		const username = localStorage.getItem("username");
 		if (username) {
+			// User has already registered
 			publishAuthorization(username, { username });
+		} else {
+			// Hiding splash screen because it can sometimes obscure the registration form.
+			FSBL.System.hideSplashScreen();
+
+			// Show registration form for user to register.
+			FSBL.Clients.WindowClient.getCurrentWindow().show();
 		}
 
 		if (!payload) return;
@@ -193,8 +200,8 @@ export const Authentication = () => {
 				</form>
 				<div className="fsbl-copyright">
 					© 2020 Cosaic, Inc. All Rights Reserved |
-					<a onClick={() => fin.desktop.System.openUrlWithBrowser("https://cosaic.io/privacy-policy/")}>Privacy Policy</a> |
-					<a onClick={() => fin.desktop.System.openUrlWithBrowser("https://cosaic.io/developer-license-agreement/")}>Developer License Agreement</a>
+					<a onClick={() => FSBL.System.openUrlWithBrowser("https://cosaic.io/privacy-policy/")}>Privacy Policy</a> |
+					<a onClick={() => FSBL.System.openUrlWithBrowser("https://cosaic.io/developer-license-agreement/")}>Developer License Agreement</a>
 				</div>
 			</div>
 		</>
