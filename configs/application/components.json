@@ -203,7 +203,7 @@
 				"top": "center",
 				"left": "center",
 				"width": 400,
-				"height": 530,
+				"height": 500,
 				"ephemeral": true,
 				"options": {
 					"autoShow": false
