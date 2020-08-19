@@ -123,7 +123,7 @@ export const Authentication = () => {
 						event.preventDefault();
 					}}
 				>
-					<div className="registration">
+					<div className="fsbl-registration">
 						<label>First Name*</label>
 						<input
 							className="fsbl-auth-input"
@@ -200,8 +200,8 @@ export const Authentication = () => {
 				</form>
 				<div className="fsbl-copyright">
 					© 2020 Cosaic, Inc. All Rights Reserved |
-					<a onClick={() => FSBL.System.openUrlWithBrowser("https://cosaic.io/privacy-policy/")}>Privacy Policy</a> |
-					<a onClick={() => FSBL.System.openUrlWithBrowser("https://cosaic.io/developer-license-agreement/")}>Developer License Agreement</a>
+					<div className="fsbl-link" onClick={() => FSBL.System.openUrlWithBrowser("https://cosaic.io/privacy-policy/")}>Privacy Policy</div> |
+					<div className="fsbl-link" onClick={() => FSBL.System.openUrlWithBrowser("https://cosaic.io/developer-license-agreement/")}>Developer License Agreement</div>
 				</div>
 			</div>
 		</>

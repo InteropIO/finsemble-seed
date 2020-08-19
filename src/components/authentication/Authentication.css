@@ -20,18 +20,17 @@
     text-align: center;
 }
 
-a, a:hover, a:active, a:visited {
-    text-decoration: none;
-    color: var(--dialog-font-color);
+.fsbl-link {
+    display: inline-block
 }
 
-div.registration {
+div.fsbl-registration {
     display: grid;
     grid-template-columns: max-content max-content;
     grid-gap: 5px;
 }
 
-div.registration label {
+div.fsbl-registration label {
     text-align: right;
     padding-top: 10px;
 }
