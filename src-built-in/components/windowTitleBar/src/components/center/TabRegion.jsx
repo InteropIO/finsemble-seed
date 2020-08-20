@@ -138,8 +138,10 @@ export default class TabRegion extends React.Component {
         FSBL.Clients.WindowClient.getBounds(
             (err, bounds) => {
                 // We ONLY want to know if we're in the tab region!
+                // The window drag region prevents a tab from being dropped on the very top pixel
+                // so adding a single pixel to the tab region fixes the calculation for isPointInBox
                 const tabRegion = {
-                    top: boundingBox.top + bounds.top,
+                    top: boundingBox.top + bounds.top + 1,
                     bottom: boundingBox.bottom + bounds.top,
                     left: boundingBox.left + bounds.left,
                     right: boundingBox.right + bounds.left 
