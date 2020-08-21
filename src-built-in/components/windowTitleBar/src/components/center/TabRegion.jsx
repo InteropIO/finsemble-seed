@@ -198,7 +198,6 @@ export default class TabRegion extends React.Component {
         if (!identifier) return; // the dropped item is not a tab
         if (this.state.tabs.length === 1 && identifier.windowName === finsembleWindow.name) return FSBL.Clients.WindowClient.cancelTilingOrTabbing();
         FSBL.Clients.WindowClient.stopTilingOrTabbing({ allowDropOnSelf: true, action: "tabbing" }, () => {
-            console.log("Tab drag drop. post stop");
             FSBL.Clients.RouterClient.transmit("tabbingDragEnd", { success: true });
             if (identifier && identifier.windowName) {
                 //console.log("DROP", identifier);
