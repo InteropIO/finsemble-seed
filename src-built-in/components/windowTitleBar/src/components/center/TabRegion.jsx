@@ -125,6 +125,7 @@ export default class TabRegion extends React.Component {
 	 * @memberof windowTitleBar
 	 */
     stopDrag(e) {
+        console.log("Stop Drag")
         // We don't want onDropHandler() in windowTitleBarComponent.jsx
         // to handle this drop event, so we call event.stopPropagation().
         e.stopPropagation();
@@ -138,15 +139,14 @@ export default class TabRegion extends React.Component {
         FSBL.Clients.WindowClient.getBounds(
             (err, bounds) => {
                 // We ONLY want to know if we're in the tab region!
-                // The window drag region prevents a tab from being dropped on the very top pixel
-                // so adding a single pixel to the tab region fixes the calculation for isPointInBox
                 const tabRegion = {
-                    top: boundingBox.top + bounds.top + 1,
+                    top: boundingBox.top + bounds.top,
                     bottom: boundingBox.bottom + bounds.top,
                     left: boundingBox.left + bounds.left,
                     right: boundingBox.right + bounds.left 
                 };
                 if (!FSBL.Clients.WindowClient.isPointInBox(this.mousePositionOnDragEnd, tabRegion)) {
+                    // allow for a 50ms delay so this message goes after a drop message from a target window if tabbing
                     setTimeout(() => {
                         FSBL.Clients.WindowClient.stopTilingOrTabbing({ mousePosition: this.mousePositionOnDragEnd });
                     }, 50);
@@ -154,6 +154,13 @@ export default class TabRegion extends React.Component {
                         iAmDragging: false
                     });
                     this.onWindowResize();
+                } else {
+                    // sometimes a tab gets dropped in a bad spot where no action gets taken and we get stuck in tiling mode
+                    // to make sure nothing bad happens, call cancel after a similar 50ms delay
+                    // If some action was taken, this will be ignored by Finsemble
+                    setTimeout(() => {
+                        FSBL.Clients.WindowClient.cancelTilingOrTabbing();
+                    }, 50);
                 }
             }
         );
@@ -192,6 +199,7 @@ export default class TabRegion extends React.Component {
         if (!identifier) return; // the dropped item is not a tab
         if (this.state.tabs.length === 1 && identifier.windowName === finsembleWindow.name) return FSBL.Clients.WindowClient.cancelTilingOrTabbing();
         FSBL.Clients.WindowClient.stopTilingOrTabbing({ allowDropOnSelf: true, action: "tabbing" }, () => {
+            console.log("Tab drag drop. post stop");
             FSBL.Clients.RouterClient.transmit("tabbingDragEnd", { success: true });
             if (identifier && identifier.windowName) {
                 //console.log("DROP", identifier);
