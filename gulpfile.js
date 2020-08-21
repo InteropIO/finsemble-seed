@@ -22,7 +22,7 @@
 	const FEA_PATH_EXISTS = fs.existsSync(FEA_PATH);
 	const FEA = FEA_PATH_EXISTS ? require("@chartiq/finsemble-electron-adapter/exports") : undefined;
 	const FEAPackager = FEA ? FEA.packager : undefined;
-	const MAX_NODE_VERSION = '12.13.1';
+	const MAX_NODE_VERSION = '12.99.99';
 	const INSTALLER_CERT_PASS = "INSTALLER_CERTIFICATE_PASSPHRASE";
 
 	// local
