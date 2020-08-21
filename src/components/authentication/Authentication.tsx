@@ -13,7 +13,6 @@ import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { FinsembleProvider } from "@chartiq/finsemble-ui/react/components/FinsembleProvider";
 import { useAuth } from "@chartiq/finsemble-ui/react/hooks/useAuth";
-import { useAuthSimulator } from "@chartiq/finsemble-ui/react/hooks/useAuth";
 import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
 import "@chartiq/finsemble-ui/react/assets/css/dialogs.css";
 import "@chartiq/finsemble-ui/react/assets/css/authentication.css";
@@ -37,17 +36,12 @@ export const Authentication = () => {
 	} | null>(null);
 	const [error, setError] = useState<string | null>(null);
 	const { quitApplication, publishAuthorization } = useAuth();
-	const { sendToServer } = useAuthSimulator();
 
 	/**
 	 * With React Hooks we must use `useEffect()` for effects such as server calls. Here, we use
 	 * the "payload" state as a way to trigger an effect to authenticate the user against a back
 	 * end server. Whenever the value of payload changes, this effect will run. The value of payload
 	 * changes when the form is submitted (see <form> element in the jsx).
-	 *
-	 * In this example we're using Finsemble's useAuthSimulator() hook to simulate a back end server.
-	 * This hook will allow any username/password combination by returning {result:"ok"}. But it will
-	 * return {error: "error text"} if either username or password are left blank.
 	 */
 	useEffect(() => {
 		// Check whether user has already registered
@@ -55,6 +49,9 @@ export const Authentication = () => {
 		if (username) {
 			// User has already registered
 			publishAuthorization(username, { username });
+
+			// Close authentication window
+			FSBL.Clients.WindowClient.getCurrentWindow().close();
 		} else {
 			// Hiding splash screen because it can sometimes obscure the registration form.
 			FSBL.System.hideSplashScreen();
@@ -66,23 +63,21 @@ export const Authentication = () => {
 		if (!payload) return;
 
 		const authenticate = async () => {
-			// TODO: Implement sendToServer
-			alert(JSON.stringify(payload, null, "\t"));
-			const response = await sendToServer(payload.firstName, payload.lastName);
-			if (response.result === "ok") {
-				// save username to prevent having to register again.
-				localStorage.setItem("username", payload.firstName);
+			await sendToServer();
 
-				/**
-				 * This is the most important step. Once your back end server has authenticated the user
-				 * call publishAuthorization() from the useAuth() hook. The first parameter (username) is
-				 * required. The second parameter (credentials) is option. Credentials can contain anything
-				 * that is useful for session management, such as user ID, tokens, etc.
-				 */
-				publishAuthorization(payload.firstName, { username: payload.firstName });
-			} else if (response.error) {
-				setError(response.error);
-			}
+			// save username to prevent having to register again.
+			localStorage.setItem("username", payload.firstName);
+
+			/**
+			 * This is the most important step. Once your back end server has authenticated the user
+			 * call publishAuthorization() from the useAuth() hook. The first parameter (username) is
+			 * required. The second parameter (credentials) is option. Credentials can contain anything
+			 * that is useful for session management, such as user ID, tokens, etc.
+			 */
+			publishAuthorization(payload.firstName, { username: payload.firstName });
+
+			// Close authentication window
+			FSBL.Clients.WindowClient.getCurrentWindow().close();
 		};
 
 		authenticate();
@@ -98,6 +93,28 @@ export const Authentication = () => {
 			phone: phone
 		});
 	};
+
+	const sendToServer = async () => {
+		// encode payload into body string
+		let body = "";
+		Object.keys(payload).forEach(key => {
+			const encodedValue = encodeURIComponent(payload[key]);
+			if (body.length > 0) {
+				body += "&";
+			}
+			body += `${key}=${encodedValue}`;
+		});
+
+		// Send user information to server
+		await fetch("https://go.cosaic.io/l/834693/2020-08-21/61q65", {
+			"headers": {
+				"content-type": "application/x-www-form-urlencoded",
+			},
+			"body": body,
+			"method": "POST",
+			"mode": "no-cors"
+		});
+	}
 
 	/**
 	 * What follows is a cookie-cutter form written in React Hooks style. There is nothing here that
