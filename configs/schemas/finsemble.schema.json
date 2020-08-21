@@ -1157,6 +1157,47 @@
 								"type": "string"
 							},
 							"default": ["ctrl", "shift", "L"]
+						},
+						"defaultClientLogLevels": {
+							"description": "Sets the default logging state of each client in the Central Logger if no previous state is found",
+							"type": "object",
+							"properties": {
+								"Error": {
+									"description": "Set to 'true' to see 'Error' as a default client logging level",
+									"type": "boolean",
+									"default": true
+								},
+								"Warn": {
+									"description": "Set 'true' to see 'Warn' as a default client logging level",
+									"type": "boolean",
+									"default": true
+								},
+								"Info": {
+									"description": "Set to 'true' to see 'Info' as a default client logging level",
+									"type": "boolean",
+									"default": false
+								},
+								"Log": {
+									"description": "Set to 'true' to see 'Log' as a default client logging level",
+									"type": "boolean",
+									"default": true
+								},
+								"Debug": {
+									"description": "Set to 'true' to see 'Debug' as a default client logging level",
+									"type": "boolean",
+									"default": false
+								},
+								"Verbose": {
+									"description": "Set to 'true' to see 'Verbose' as a default client logging level",
+									"type": "boolean",
+									"default": false
+								},
+								"LocalOnly": {
+									"description": "Set to 'true' to see 'LocalOnly' as a default client logging level",
+									"type": "boolean",
+									"default": false
+								}
+							}
 						}
 					},
 					"additionalProperties": false
