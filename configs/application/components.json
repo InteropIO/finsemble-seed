@@ -202,6 +202,43 @@
 				"url": "$applicationRoot/components/authentication/Authentication.html",
 				"top": "center",
 				"left": "center",
+				"width": 358,
+				"height": 460,
+				"ephemeral": true,
+				"options": {
+					"autoShow": true
+				}
+			},
+			"component": {
+				"neededClients": [
+					"LauncherClient",
+					"AuthenticationClient",
+					"StorageClient"
+				],
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"windowService": {
+						"allowAutoArrange": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"FSBLHeader": false,
+						"persistWindowState": false
+					}
+				}
+			}
+		},
+		"Registration": {
+			"window": {
+				"url": "$applicationRoot/components/registration/Registration.html",
+				"top": "center",
+				"left": "center",
 				"width": 400,
 				"height": 500,
 				"ephemeral": true,

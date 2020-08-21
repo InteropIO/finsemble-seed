@@ -5,7 +5,7 @@
 	"authentication": {
 		"startup": {
 			"adapter": "PASSWORD",
-			"component": "Authentication"
+			"component": "Registration"
 		}
 	},
 	"servicesConfig": {

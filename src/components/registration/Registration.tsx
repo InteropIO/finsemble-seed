@@ -1,12 +1,6 @@
 /*!
  * Copyright 2020 by ChartIQ, Inc.
  * All rights reserved.
- *
- * This is a sample Finsemble Authentication Component written using React hooks. It is meant as a starting point
- * for you to build your own Authentication Component. Use the `useAuth()` react hook, or the Finsemble client API
- * to interact with Finsemble's authentication capabilities.
- *
- * See https://documentation.chartiq.com/finsemble/tutorial-Authentication.html for a tutorial on how to use authentication.
  */
 
 import React, { useState, useEffect } from "react";
@@ -17,9 +11,9 @@ import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
 import "@chartiq/finsemble-ui/react/assets/css/dialogs.css";
 import "@chartiq/finsemble-ui/react/assets/css/authentication.css";
 import "../../../assets/css/theme.css";
-import "./Authentication.css"
+import "./Registration.css"
 
-export const Authentication = () => {
+export const Registration = () => {
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [jobTitle, setJobTitle] = useState("");
@@ -34,7 +28,6 @@ export const Authentication = () => {
 		email: string;
 		phone: string;
 	} | null>(null);
-	const [error, setError] = useState<string | null>(null);
 	const { quitApplication, publishAuthorization } = useAuth();
 
 	/**
@@ -50,7 +43,7 @@ export const Authentication = () => {
 			// User has already registered
 			publishAuthorization(username, { username });
 
-			// Close authentication window
+			// Close registration window
 			FSBL.Clients.WindowClient.getCurrentWindow().close();
 		} else {
 			// Hiding splash screen because it can sometimes obscure the registration form.
@@ -62,8 +55,8 @@ export const Authentication = () => {
 
 		if (!payload) return;
 
-		const authenticate = async () => {
-			await sendToServer();
+		const register = async () => {
+			await sendToServer(payload);
 
 			// save username to prevent having to register again.
 			localStorage.setItem("username", payload.firstName);
@@ -76,11 +69,11 @@ export const Authentication = () => {
 			 */
 			publishAuthorization(payload.firstName, { username: payload.firstName });
 
-			// Close authentication window
+			// Close registration window
 			FSBL.Clients.WindowClient.getCurrentWindow().close();
 		};
 
-		authenticate();
+		register();
 	}, [payload]);
 
 	const submit = () => {
@@ -94,7 +87,7 @@ export const Authentication = () => {
 		});
 	};
 
-	const sendToServer = async () => {
+	const sendToServer = async (payload: any) => {
 		// encode payload into body string
 		let body = "";
 		Object.keys(payload).forEach(key => {
@@ -119,7 +112,7 @@ export const Authentication = () => {
 	/**
 	 * What follows is a cookie-cutter form written in React Hooks style. There is nothing here that
 	 * is proprietary to Finsemble. Your form should be built as needed to support your login process.
-	 * CSS Styles are imported from "Authentication.css" (see imports above).
+	 * CSS Styles are imported from "Registration.css" (see imports above).
 	 */
 	return (
 		<>
@@ -133,7 +126,6 @@ export const Authentication = () => {
 			<div className="fsbl-auth-wrapper">
 				<div className="fsbl-auth-logo"></div>
 				<div className="fsbl-auth-welcome">Thank you for downloading Finsemble. Please register to begin your evaluation.</div>
-				{error && <div className="fsbl-input-error-message">{error}</div>}
 				<form
 					onSubmit={(event) => {
 						submit();
@@ -216,7 +208,7 @@ export const Authentication = () => {
 					</button>
 				</form>
 				<div className="fsbl-copyright">
-					© 2020 Cosaic, Inc. All Rights Reserved |
+					© 2020 <div className="fsbl-link" onClick={() => FSBL.System.openUrlWithBrowser("https://cosaic.io/")}>Cosaic, Inc</div>. All Rights Reserved |
 					<div className="fsbl-link" onClick={() => FSBL.System.openUrlWithBrowser("https://cosaic.io/privacy-policy/")}>Privacy Policy</div> |
 					<div className="fsbl-link" onClick={() => FSBL.System.openUrlWithBrowser("https://cosaic.io/developer-license-agreement/")}>Developer License Agreement</div>
 				</div>
@@ -227,7 +219,7 @@ export const Authentication = () => {
 
 ReactDOM.render(
 	<FinsembleProvider>
-		<Authentication />
+		<Registration />
 	</FinsembleProvider>,
-	document.getElementById("Authentication-tsx")
+	document.getElementById("Registration-tsx")
 );
