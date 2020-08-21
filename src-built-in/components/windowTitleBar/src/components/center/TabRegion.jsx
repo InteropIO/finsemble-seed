@@ -125,7 +125,6 @@ export default class TabRegion extends React.Component {
 	 * @memberof windowTitleBar
 	 */
     stopDrag(e) {
-        console.log("Stop Drag")
         // We don't want onDropHandler() in windowTitleBarComponent.jsx
         // to handle this drop event, so we call event.stopPropagation().
         e.stopPropagation();
