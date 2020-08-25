@@ -38,42 +38,47 @@ export const Registration = () => {
 	 */
 	useEffect(() => {
 		// Check whether user has already registered
-		const username = localStorage.getItem("username");
-		if (username) {
-			// User has already registered
-			publishAuthorization(username, { username });
+		let username = localStorage.getItem("username");
+		fin.desktop.System.getEnvironmentVariable("NODE_ENV", (env) => {
+			if (username || env !== "development") {
+				// If user has already registered, or not in development environment, don't show registration form
+				username = username ? username : "default";
 
-			// Close registration window
-			FSBL.Clients.WindowClient.getCurrentWindow().close();
-		} else {
-			// Hiding splash screen because it can sometimes obscure the registration form.
-			FSBL.System.hideSplashScreen();
+				// User has already registered
+				publishAuthorization(username, { username });
 
-			// Show registration form for user to register.
-			FSBL.Clients.WindowClient.getCurrentWindow().show();
-		}
+				// Close registration window
+				FSBL.Clients.WindowClient.getCurrentWindow().close();
+			} else {
+				// Hiding splash screen because it can sometimes obscure the registration form.
+				FSBL.System.hideSplashScreen();
 
-		if (!payload) return;
+				// Show registration form for user to register.
+				FSBL.Clients.WindowClient.getCurrentWindow().show();
+			}
 
-		const register = async () => {
-			await sendToServer(payload);
+			if (!payload) return;
 
-			// save username to prevent having to register again.
-			localStorage.setItem("username", payload.firstName);
+			const register = async () => {
+				await sendToServer(payload);
 
-			/**
-			 * This is the most important step. Once your back end server has authenticated the user
-			 * call publishAuthorization() from the useAuth() hook. The first parameter (username) is
-			 * required. The second parameter (credentials) is option. Credentials can contain anything
-			 * that is useful for session management, such as user ID, tokens, etc.
-			 */
-			publishAuthorization(payload.firstName, { username: payload.firstName });
+				// save username to prevent having to register again.
+				localStorage.setItem("username", payload.firstName);
 
-			// Close registration window
-			FSBL.Clients.WindowClient.getCurrentWindow().close();
-		};
+				/**
+				 * This is the most important step. Once your back end server has authenticated the user
+				 * call publishAuthorization() from the useAuth() hook. The first parameter (username) is
+				 * required. The second parameter (credentials) is option. Credentials can contain anything
+				 * that is useful for session management, such as user ID, tokens, etc.
+				 */
+				publishAuthorization(payload.firstName, { username: payload.firstName });
 
-		register();
+				// Close registration window
+				FSBL.Clients.WindowClient.getCurrentWindow().close();
+			};
+
+			register();
+		});
 	}, [payload]);
 
 	const submit = () => {
