@@ -2,7 +2,12 @@
 	"comment": "Top-level application config for development, adding on top of the core config",
 	"$schema": "../schemas/fileBasedSchemas/applicationConfigFile.schema.json",
 	"accessibleLinker": true,
-	"authentication": {},
+	"authentication": {
+		"startup": {
+			"adapter": "PASSWORD",
+			"component": "Registration"
+		}
+	},
 	"servicesConfig": {
 		"distributedStore": {
 			"initialStores": [
