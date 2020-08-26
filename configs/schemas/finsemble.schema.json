@@ -53,6 +53,9 @@
 						"router": {
 							"$ref": "#/definitions/router"
 						},
+						"logger": {
+							"$ref": "#/definitions/logger"
+						},
 						"importConfig": {
 							"$ref": "#/definitions/importConfig"
 						},
@@ -505,6 +508,9 @@
 				},
 				"router": {
 					"$ref": "#/definitions/router"
+				},
+				"logger": {
+					"$ref": "#/definitions/logger"
 				},
 				"bootTasks": {
 					"$ref": "#/definitions/bootTasks"
@@ -1031,7 +1037,7 @@
 							"type": "number",
 							"default": 20
 						},
-						"enableWindowsAeroSnap ": {
+						"enableWindowsAeroSnap": {
 							"description": "If `true`, windows aero snap keyboard shortcuts (WINDOWS KEY + UP, RIGHT, DOWN, or LEFT arrow key) will move the current window when pressed. Windows will move the window and Finsemble will respond by updating bounds within the Window Service. If `false` (default), these actions will be cancelled by Finsemble.",
 							"type": "boolean",
 							"default": false
@@ -1173,6 +1179,9 @@
 								"type": "string"
 							},
 							"default": ["ctrl", "shift", "L"]
+						},
+						"defaultClientLogLevels": {
+							"$ref": "#/definitions/loggerClientLogLevels"
 						}
 					},
 					"additionalProperties": false
@@ -2229,7 +2238,8 @@
 									}
 								},
 								"enableWindowsAeroSnap": {
-									"type": "boolean"
+									"type": "boolean",
+									"default": false
 								},
 								"tabbing": {
 									"type": "object",
@@ -2517,6 +2527,57 @@
 		"electronAdapter": {
 			"description": "Electron Adapter's config (that is dynamically added to manifest)",
 			"type": "object"
+		},
+		"loggerClientLogLevels": {
+			"description": "Sets the default logging state of each client in the Central Logger if no previous state is found",
+			"type": "object",
+			"properties": {
+				"Error": {
+					"description": "Set to 'true' to see 'Error' as a default client logging level",
+					"type": "boolean",
+					"default": true
+				},
+				"Warn": {
+					"description": "Set 'true' to see 'Warn' as a default client logging level",
+					"type": "boolean",
+					"default": true
+				},
+				"Info": {
+					"description": "Set to 'true' to see 'Info' as a default client logging level",
+					"type": "boolean",
+					"default": false
+				},
+				"Log": {
+					"description": "Set to 'true' to see 'Log' as a default client logging level",
+					"type": "boolean",
+					"default": true
+				},
+				"Debug": {
+					"description": "Set to 'true' to see 'Debug' as a default client logging level",
+					"type": "boolean",
+					"default": false
+				},
+				"Verbose": {
+					"description": "Set to 'true' to see 'Verbose' as a default client logging level",
+					"type": "boolean",
+					"default": false
+				},
+				"LocalOnly": {
+					"description": "Set to 'true' to see 'LocalOnly' as a default client logging level",
+					"type": "boolean",
+					"default": false
+				}
+			}
+		},
+		"logger": {
+			"title": "Logger configuartion",
+			"description": "(PUBLIC)",
+			"type": "object",
+			"properties": {
+				"defaultClientLogLevels": {
+					"ref": "#/definitions/loggerClientLogLevels"
+				}
+			}
 		}
 	}
 }

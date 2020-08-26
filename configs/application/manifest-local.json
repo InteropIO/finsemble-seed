@@ -56,6 +56,17 @@
 				}
 			}
 		},
+		"logger": {
+			"defaultClientLogLevels": {
+				"Error": true,
+				"Warn": true,
+				"Info": false,
+				"Log": true,
+				"Debug": false,
+				"Verbose": false,
+				"LocalOnly": false
+			}
+		},
 		"importConfig": ["$applicationRoot/configs/application/config.json"]
 	}
 }
