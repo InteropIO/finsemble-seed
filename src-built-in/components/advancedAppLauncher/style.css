@@ -51,8 +51,26 @@ img {
 }
 
 .complex-menu-section-toggle #rename.error {
-    border-bottom: 1px solid var(--appMenu-search-input-error-color);
+    border-bottom: solid 1px var(--appMenu-search-input-error-color);
+    animation-name: animate_error;
+    animation-duration: 900ms;
+    animation-iteration-count: 2;
+    animation-timing-function: linear;
 }
+
+@keyframes animate_error {
+    0% {
+        /* border-bottom: solid 1px var(--appMenu-search-input-active-color); */
+        border-bottom: solid 1px var(--appMenu-search-input-error-color);
+    }
+    50% {
+        border-bottom: solid 1px var(--appMenu-search-input-active-color);
+    }
+    100% {
+        border-bottom: 1px solid var(--appMenu-search-input-error-color);
+    }
+}
+
 
 .complex-menu-wrapper {
     display: flex;
@@ -130,6 +148,7 @@ img {
     color: var(--appMenu-icon-color);
     display: flex;
     justify-content: space-between;
+    align-self: center;
     align-items: center;
     width: 45px;
 }
@@ -142,6 +161,22 @@ img {
     padding-top: 2px;
     padding-right: 4px;
     transition: .2s all;
+}
+
+.folder-action-icons .ff-check-mark-2 {
+    transition: .2s all;
+    color: var(--accent-positive);
+}
+
+.folder-action-icons .ff-close {
+    padding-top: 2px;
+    padding-right: 4px;
+    transition: .2s all;
+    color: var(--accent-negative);
+}
+
+.folder-action-icons .ff-close:hover {
+    color: var(--accent-negative-1);
 }
 
 .folder-action-icons .ff-adp-trash-outline:hover {
@@ -396,12 +431,14 @@ select:focus, option:focus {
     overflow: hidden;
     text-overflow: ellipsis;
     width: 390px;
+    margin-left: 30px;
     font-weight: var(--appMenu-tag-font-weight);
   }
 
   .app-item-tags i {
     padding-right: 6px;
     padding-top: 3px;
+    color: var(--core-primary-5);
   }
 
   .app-item:hover {
@@ -432,7 +469,7 @@ select:focus, option:focus {
     padding-top: 1px;
     padding-right: 7px;
     font-size: var(--appMenu-font-size);
-    color: var(--appMenu-app-favorite-color);
+    color: var(--core-primary-5);
   }
 
   .filter-sort {
@@ -573,9 +610,8 @@ select:focus, option:focus {
 	position: absolute;
 	z-index:1;
 	right: 68px;
-	top: -21px;
+	top: 13px;
     bottom: 0;
-    margin: auto;
 	padding: 3px 3px 2px 2px;
 	border-radius: 50%;
 	text-align: center;

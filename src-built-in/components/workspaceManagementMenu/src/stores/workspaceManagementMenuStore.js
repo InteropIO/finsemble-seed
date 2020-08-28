@@ -52,7 +52,7 @@ Actions = {
 	},
 	initialize: function () {
 		//Gets the workspace list and sets the value in the store.
-		FSBL.Clients.WorkspaceClient.getWorkspaces(function (err, workspaces) {
+		FSBL.Clients.WorkspaceClient.getWorkspaceNames(function (err, workspaces) {
 			Logger.system.debug("WorkspaceManagementStore init getWorkspaces", workspaces);
 			WorkspaceManagementStore.setValue({ field: "WorkspaceList", value: workspaces });
 		});
@@ -261,18 +261,23 @@ Actions = {
 			name: activeWorkspace.name
 		}, function (err, response) {
 			if (cb) {
-				cb();
+				cb(err);
 			}
 		});
 	},
 	reorderWorkspaceList: function (changeEvent) {
 		if (!changeEvent.destination) return;
-		let workspaces = JSON.parse(JSON.stringify(WorkspaceManagementStore.getValue({ field: 'WorkspaceList' })));
-		let workspaceToMove = JSON.parse(JSON.stringify(workspaces[changeEvent.source.index]));
+		let workspaces = WorkspaceManagementStore.getValue({ field: 'WorkspaceList' });
+		let workspaceToMove = workspaces[changeEvent.source.index];
 		workspaces.splice(changeEvent.source.index, 1);
 		workspaces.splice(changeEvent.destination.index, 0, workspaceToMove);
+		const workspacesWithExpectedStructure = workspaces.map((WSName) => {
+			return {
+				name: WSName
+			};
+		});
 		FSBL.Clients.WorkspaceClient.setWorkspaces({
-			workspaces: workspaces
+			workspaces: workspacesWithExpectedStructure
 		});
 		WorkspaceManagementStore.setValue({ field: "WorkspaceList", value: workspaces });
 	},
@@ -544,7 +549,21 @@ Actions = {
 	handleSaveDialogResponse(response, callback) {
 		if (response.choice === "affirmative") {
 			//User wants to save, so call the client API.
-			Actions.saveWorkspace(callback);
+			Actions.saveWorkspace((err) => {
+				if (!err) {
+					callback();
+				} else {
+					Actions.spawnDialog("yesNo", {
+						question: "The workspace save failed. Continuing will lose recent changers to this workspace.  Do you want to continue loading the new workspace?"
+					}, (err, response) => {
+						if (response.choice === "affirmative") {
+							callback();
+						} else {
+							callback(new Error(SAVE_DIALOG_CANCEL_ERROR));
+						}
+					});
+				}
+			});
 		} else if (response.choice === "negative") {
 			//Doesn't want to save.
 			callback();
@@ -633,7 +652,7 @@ Actions = {
 		let workspaceName = response.value;
 		//Array.some will return true for the first element in the array that satisfies the condition. If none are true, it'll go through the entire array. It's essentially a way to short-circuit a for loop. This lets us know if any workspace has the same name that the user is trying to input.
 		let workspaceExists = FSBL.Clients.WorkspaceClient.workspaces.some(workspace => {
-			return workspace.name === workspaceName;
+			return workspace === workspaceName;
 		});
 		callback(null, { workspaceExists, workspaceName, template: response.template });
 	},

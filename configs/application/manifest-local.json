@@ -46,7 +46,7 @@
         "startMenuRootFolder": "ChartIQ Local"
     },
     "dialogSettings": {
-        "logo": "http://localhost:3375/assets/img/ciq-banner-100x25.png",
+        "logo": "http://localhost:3375/assets/img/cosaic-banner-100x20.png",
         "bgColor": 4280109424,
         "textColor": 4293521652,
         "progressBarBgColor": 4294967295,
@@ -61,8 +61,8 @@
     "fileName": "ChartIQ-local-installer",
     "appAssets": [
         {
-            "src": "https://assets.finsemble.com/assimilation/assimilation_4.2.0.0.zip",
-            "version": "4.2.0",
+            "src": "https://assets.finsemble.com/assimilation/assimilation_4.4.1.0.zip",
+            "version": "4.4.1",
             "alias": "assimilation",
             "target": "AssimilationMain.exe"
         }
