@@ -38,6 +38,8 @@
 	};
 
 	window.onload = () => {
+		FSBL.System.hideSplashScreen();
+
 		// Populate dropdown with available users
 		const select = document.getElementById("user");
 		Object.keys(users).forEach((key, index) => {
