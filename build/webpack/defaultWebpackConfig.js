@@ -3,7 +3,7 @@ const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const { DefinePlugin } = require("webpack");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
-
+const CaseSensitivePathsPlugin = require("case-sensitive-paths-webpack-plugin");
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 
 /**
@@ -106,6 +106,7 @@ let plugins = [
 			NODE_ENV: JSON.stringify(env),
 		},
 	}),
+	new CaseSensitivePathsPlugin(),
 ];
 
 /**

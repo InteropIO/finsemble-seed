@@ -1,5 +1,5 @@
 import React from "react";
-import { Menu } from "@chartiq/finsemble-ui/react/components/Menu";
+import { Menu } from "@chartiq/finsemble-ui/react/components/menu";
 import {
 	Preferences,
 	SystemLog,

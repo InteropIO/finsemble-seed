@@ -27,8 +27,8 @@
 	"splashScreenImage": "http://localhost:3375/assets/img/FinsembleSplash.svg",
 	"appAssets": [
 		{
-			"src": "https://assets.finsemble.com/assimilation/assimilation_4.2.0.0.zip",
-			"version": "4.2.0",
+			"src": "https://assets.finsemble.com/assimilation/dev/pr/assimilation.zip",
+			"version": "5.0.0.2",
 			"alias": "assimilation",
 			"target": "AssimilationMain.exe"
 		}
@@ -54,6 +54,17 @@
 				"FinsembleTransport": {
 					"serverAddress": "ws://127.0.0.1:3376"
 				}
+			}
+		},
+		"logger": {
+			"defaultClientLogLevels": {
+				"Error": true,
+				"Warn": true,
+				"Info": false,
+				"Log": true,
+				"Debug": false,
+				"Verbose": false,
+				"LocalOnly": false
 			}
 		},
 		"importConfig": ["$applicationRoot/configs/application/config.json"]

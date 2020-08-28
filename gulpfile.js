@@ -60,29 +60,6 @@
 	let launchTimestamp = 0;
 
 	/**
-	 */
-	const getElectronVersion = () => {
-		// You may run `npm run dev` before running `npm i` inside
-		// finsemble-electron-adapter in that case, the electron
-		// module does not exists.
-		try {
-			const packageFile = require(path.join(
-				FEA_PATH,
-				"node_modules",
-				"electron",
-				"package.json"
-			));
-			return packageFile.version;
-		} catch (error) {
-			logToTerminal(
-				`Failed to get electron's verion from FEA: ${error.message}`,
-				"red"
-			);
-			return "unknown";
-		}
-	};
-
-	/**
 	 * Returns an object containing the absolute paths of the socket certificate files used to secure Finsemble Transport
 	 * If both a key and certificate path are not configured nothing is returned.
 	 */
@@ -384,8 +361,6 @@
 			async.series([taskMethods["build:dev"], taskMethods.startServer], done);
 		},
 		launchElectron: (done) => {
-			logToTerminal(`Using Electron@${getElectronVersion()}`, "green");
-
 			const cfg = taskMethods.startupConfig[env.NODE_ENV];
 
 			const socketCertificatePath = deriveSocketCertificatePaths();
@@ -419,6 +394,18 @@
 
 			// Inline require because this file is so large, it reduces the amount of scrolling the user has to do.
 			let installerConfig = require("./configs/other/installer.json");
+			let seedpackagejson = require("./package.json");
+			// Command line overrides
+
+			installerConfig.name = process.env.installername || installerConfig.name;
+			installerConfig.version =
+				process.env.installerversion ||
+				installerConfig.version ||
+				seedpackagejson.version;
+			installerConfig.authors =
+				process.env.installerauthors || installerConfig.authors;
+			installerConfig.description =
+				process.env.installerdescription || installerConfig.description;
 
 			//check if we have an installer config matching the environment name, if not assume we just have a single config for all environments
 			if (installerConfig[env.NODE_ENV]) {
@@ -449,7 +436,10 @@
 				"./"
 			);
 
-			const manifestUrl = taskMethods.startupConfig[env.NODE_ENV].serverConfig;
+			const manifestUrl =
+				process.env.manifesturl ||
+				taskMethods.startupConfig[env.NODE_ENV].serverConfig;
+			console.log("The manifest location is: ", manifestUrl);
 			let { updateUrl } = taskMethods.startupConfig[env.NODE_ENV];
 			const { chromiumFlags } = taskMethods.startupConfig[env.NODE_ENV];
 

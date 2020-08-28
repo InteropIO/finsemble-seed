@@ -5,7 +5,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { FinsembleProvider } from "@chartiq/finsemble-ui/react/components/FinsembleProvider";
-import { AppCatalog } from "@chartiq/finsemble-ui/react/components/AppCatalog";
+import { AppCatalog } from "@chartiq/finsemble-ui/react/components/appCatalog";
 import "../../../assets/css/theme.css";
 
 ReactDOM.render(

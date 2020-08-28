@@ -49,6 +49,8 @@
 					"default": {
 						"activeLauncherTags": [],
 						"filterText": "",
+						"activeTags": [],
+						"filteredApps": [],
 						"filterTags": [],
 						"activeFolder": "Advanced App Launcher",
 						"sortBy": "Alphabetical"
@@ -58,7 +60,11 @@
 		},
 		"launcher": {
 			"staggerPixels": 40,
-			"unknownComponent": "nonConfiguredComponent"
+			"unknownComponent": "nonConfiguredComponent",
+			"defaultPreloads": {
+				"//browserViews": "preloads CSS into all BrowserView windows. Used to enable a scrim for drag shared data",
+				"browserViews": ["$applicationRoot/preloads/browserViewCss.js"]
+			}
 		},
 		"assimilation": {
 			"useFeaSpawn": false,
@@ -111,8 +117,7 @@
 	"systemTrayComponent": "SystemTrayComponent",
 	"Window Manager": {
 		"alwaysOnTopIcon": false,
-		"floatingTitlebarComponent": "Floating Titlebar",
-		"deliveryMechanism": "preload"
+		"floatingTitlebarComponent": "Floating Titlebar"
 	},
 	"//appDirectoryEndpoint": "If you'd like to test the server locally, point 'appDirectoryEndpoint' to http://localhost:3030/v1/ and make sure to run the AppD project.",
 	"appDirectoryEndpoint": "https://fpe.finsemble.com/v1/",

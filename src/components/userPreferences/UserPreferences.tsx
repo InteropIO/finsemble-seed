@@ -10,7 +10,7 @@ import {
 	UserPreferences,
 	General,
 	Workspaces,
-} from "@chartiq/finsemble-ui/react/components/UserPreferences";
+} from "@chartiq/finsemble-ui/react/components/userPreferences";
 import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../assets/css/theme.css";
 
