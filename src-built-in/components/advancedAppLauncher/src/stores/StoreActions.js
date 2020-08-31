@@ -466,7 +466,7 @@ function reorderFolders(destIndex, srcIndex) {
 }
 
 function addApp(app = {}, cb) {
-	const appID = (new Date()).getTime();
+	const appID = (new Date()).getTime() + "";
 	const folder = data.activeFolder;
 	const newAppData = {
 		appID,
