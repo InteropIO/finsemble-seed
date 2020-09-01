@@ -11,7 +11,9 @@
 		"breakpointOnStart": false,
 		"//socketCertificate": "Uncomment the two lines below to provide custom socket certificate files for FinsembleTransport. Paths must be relative to the finsemble-seed directory.",
 		"//socketCertificateKey": "example.key",
-		"//socketCertificateCert": "example.crt"
+		"//socketCertificateCert": "example.crt",
+		"//webpackPublicPath": "Change the key below to 'webpackPublicPath' to serve assets from a subdirectory.",
+		"///webpackPublicPath": "/directory/mySubDirectory"
 	},
 	"production": {
 		"//serverPort": "Port number for your server.",
@@ -31,6 +33,8 @@
 		},
 		"//socketCertificate": "Uncomment the two lines below to provide custom socket certificate files for FinsembleTransport. Paths must be relative to the finsemble-seed directory.",
 		"//socketCertificateKey": "example.key",
-		"//socketCertificateCert": "example.crt"
+		"//socketCertificateCert": "example.crt",
+		"//webpackPublicPath": "Uncomment the line below to serve assets from a subdirectory.",
+		"///webpackPublicPath": "/directory/mySubDirectory"
 	}
 }

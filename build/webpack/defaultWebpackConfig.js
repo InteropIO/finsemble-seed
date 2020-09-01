@@ -4,6 +4,7 @@ const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const { DefinePlugin } = require("webpack");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const CaseSensitivePathsPlugin = require("case-sensitive-paths-webpack-plugin");
+const { getWebpackPublicPathVariable } = require("../buildHelpers");
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 
 /**
@@ -34,7 +35,8 @@ const IMAGE_AND_FONT_RULE = {
 	use: {
 		loader: "file-loader",
 		options: {
-			name: "/assets/file-loader/[name].[ext]",
+			name: "[name].[ext]",
+			outputPath: "/assets/file-loader/",
 		},
 	},
 };
@@ -175,6 +177,10 @@ const generateDefaultConfig = () => {
 			filename: "[name].js",
 			sourceMapFilename: "[name].map.js",
 			path: path.resolve(__dirname, "../../dist/"),
+			// if you want to serve assets from a subdirectory, you need
+			// to set WEBPACK_PUBLIC_PATH on process.env, or set webpackPublicPath
+			// in `server-environment-startup.json` for your given environment
+			publicPath: getWebpackPublicPathVariable(),
 		},
 		resolve: {
 			alias: aliases,
