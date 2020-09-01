@@ -24,6 +24,11 @@ import { useHotkey } from "@chartiq/finsemble-ui/react/hooks/useHotkey";
 import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../../assets/css/theme.css";
 
+/**
+ * Note: Set `FSBL.debug = true` if you need to reload the toolbar during development.
+ * By default, it prevents the system from closing it so that users aren't lost without
+ * a main window into finsemble functionality.
+ */
 const Toolbar = () => {
 	useHotkey(["ctrl", "alt", "shift", "r"], () => FSBL.restartApplication());
 	useHotkey(["ctrl", "alt", "up"], () =>
