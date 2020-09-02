@@ -1,6 +1,6 @@
 const FSBLReady = () => {
 	try {
-		require("@chartiq/finsemble-ui/react/assets/css/finsemble.css");
+		require("@cosaic/finsemble-ui/react/assets/css/finsemble.css");
 	} catch (e) {
 		// @ts-ignore
 		FSBL.Clients.Logger.error(e);

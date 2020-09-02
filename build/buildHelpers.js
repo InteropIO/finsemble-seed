@@ -150,9 +150,43 @@ const runWebpackInParallel = (
 	});
 };
 
+/**
+ * Retrieves webpack public path from config. This is used when serving finsemble from a subdirectory instead of at the root
+ * of a host.
+ */
+const getWebpackPublicPathFromConfig = () => {
+	const config = require("../configs/other/server-environment-startup.json");
+	const { NODE_ENV } = process.env;
+	if (config[NODE_ENV]) {
+		return config[NODE_ENV].webpackPublicPath;
+	} else {
+		console.error(
+			`Cannot find webpack public path for environment ${NODE_ENV}`
+		);
+		return;
+	}
+};
+
+/**
+ * Optional override for CI systems.
+ */
+const getWebpackPublicPathFromEnv = () => process.env.WEBPACK_PUBLIC_PATH;
+
+/**
+ * Returns an Environment variable, a config setting, or undefined.
+ */
+const getWebpackPublicPathVariable = () => {
+	const webpackPublicPathEnv = getWebpackPublicPathFromEnv();
+	// if we have it set on the ENV, overwrite config
+	if (webpackPublicPathEnv) return webpackPublicPathEnv;
+	// if the variable is set in config, use that. Otherwise, public path will be undefined
+	return getWebpackPublicPathFromConfig();
+};
+
 module.exports = {
 	runWebpackAndCallback,
 	logToTerminal,
 	envOrArg,
 	runWebpackInParallel,
+	getWebpackPublicPathVariable,
 };
