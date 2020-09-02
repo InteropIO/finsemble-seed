@@ -5,9 +5,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import { LinkerMenu } from "@chartiq/finsemble-ui/react/components/linker";
-import { FinsembleProvider } from "@chartiq/finsemble-ui/react/components/FinsembleProvider";
-import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
+import { LinkerMenu } from "@cosaic/finsemble-ui/react/components/linker";
+import { FinsembleProvider } from "@cosaic/finsemble-ui/react/components/FinsembleProvider";
+import "@cosaic/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../assets/css/theme.css";
 
 ReactDOM.render(

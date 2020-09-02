@@ -8,8 +8,8 @@
 /**
  * We have a baseStorage model that provides some methods, such as `getCombinedKey`, which will return a nice key to save our value under. Example: `Finsemble:defaultUser:finsemble:activeWorkspace`. That key would hold the value of our activeWorkspace.
  */
-const BaseStorage = require("@chartiq/finsemble").models.baseStorage;
-const { Logger } = require("@chartiq/finsemble").Clients;
+const BaseStorage = require("@cosaic/finsemble-core").models.baseStorage;
+const { Logger } = require("@cosaic/finsemble-core").Clients;
 
 // Because calls to this storage adapter will likely come from many different windows, we will log successes and
 // failures in the central logger.
@@ -80,7 +80,7 @@ IDBKeyRange.forPrefix = (prefix) => {
  * save our value under. Example: `Finsemble:defaultUser:finsemble:activeWorkspace`. That key would hold the value of
  * our activeWorkspace.
  */
-const IndexedDBAdapter = function(uuid) {
+const IndexedDBAdapter = function (uuid) {
 	// #region Initializes a new instance of the IndexedDBAdapter.
 	BaseStorage.call(this, arguments);
 

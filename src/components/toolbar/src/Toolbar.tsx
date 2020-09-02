@@ -5,7 +5,7 @@
 
 import React from "react";
 import ReactDOM from "react-dom";
-import { FinsembleProvider } from "@chartiq/finsemble-ui/react/components/FinsembleProvider";
+import { FinsembleProvider } from "@cosaic/finsemble-ui/react/components/FinsembleProvider";
 import {
 	ToolbarShell,
 	FavoritesShell,
@@ -18,10 +18,10 @@ import {
 	AppLauncher,
 	WorkspaceManagementMenu,
 	ToolbarSection,
-} from "@chartiq/finsemble-ui/react/components/toolbar";
+} from "@cosaic/finsemble-ui/react/components/toolbar";
 import { FileMenu } from "./FileMenu";
-import { useHotkey } from "@chartiq/finsemble-ui/react/hooks/useHotkey";
-import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
+import { useHotkey } from "@cosaic/finsemble-ui/react/hooks/useHotkey";
+import "@cosaic/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../../assets/css/theme.css";
 
 /**
