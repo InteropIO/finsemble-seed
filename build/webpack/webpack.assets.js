@@ -1,6 +1,6 @@
 /**
  * This webpack configuration is responsible for building the "assets" directory.
- * This is just a matter of copying files. First, files from @chartiq/finsemble-ui's assets directory
+ * This is just a matter of copying files. First, files from @cosaic/finsemble-ui's assets directory
  * are copied into dist. Then the seed's assets folder is copied over.
  *
  * Note, webpack isn't really the right tool to be doing this but it gives us "watch" capability.
@@ -23,7 +23,7 @@ let config = generateDefaultConfig();
 config.plugins.push(
 	new CopyWebpackPlugin([
 		{
-			from: "./node_modules/@chartiq/finsemble-ui/react/assets/",
+			from: "./node_modules/@cosaic/finsemble-ui/react/assets/",
 			to: "./assets/",
 		},
 		{

@@ -11,12 +11,12 @@
 
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
-import { FinsembleProvider } from "@chartiq/finsemble-ui/react/components/FinsembleProvider";
-import { useAuth } from "@chartiq/finsemble-ui/react/hooks/useAuth";
-import { useAuthSimulator } from "@chartiq/finsemble-ui/react/hooks/useAuth";
-import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
-import "@chartiq/finsemble-ui/react/assets/css/dialogs.css";
-import "@chartiq/finsemble-ui/react/assets/css/authentication.css";
+import { FinsembleProvider } from "@cosaic/finsemble-ui/react/components/FinsembleProvider";
+import { useAuth } from "@cosaic/finsemble-ui/react/hooks/useAuth";
+import { useAuthSimulator } from "@cosaic/finsemble-ui/react/hooks/useAuth";
+import "@cosaic/finsemble-ui/react/assets/css/finsemble.css";
+import "@cosaic/finsemble-ui/react/assets/css/dialogs.css";
+import "@cosaic/finsemble-ui/react/assets/css/authentication.css";
 import "../../../assets/css/theme.css";
 
 export const Authentication = () => {

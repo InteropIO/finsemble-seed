@@ -8,12 +8,12 @@
 /**
  * We have a baseStorage model that provides some methods, such as `getCombinedKey`, which will return a nice key to save our value under. Example: `Finsemble:defaultUser:finsemble:activeWorkspace`. That key would hold the value of our activeWorkspace.
  */
-const BaseStorage = require("@chartiq/finsemble").models.baseStorage;
-const { Logger } = require("@chartiq/finsemble").Clients;
+const BaseStorage = require("@cosaic/finsemble-core").models.baseStorage;
+const { Logger } = require("@cosaic/finsemble-core").Clients;
 // Because calls to this storage adapter will likely come from many different windows, we will log successes and failures in the central logger.
 Logger.start();
 
-const LocalStorageAdapter = function(uuid) {
+const LocalStorageAdapter = function (uuid) {
 	BaseStorage.call(this, arguments);
 
 	Logger.system.log("LocalStorageAdapter init");
@@ -27,7 +27,7 @@ const LocalStorageAdapter = function(uuid) {
 	 * @param {any} params.value The value being saved.
 	 * @param {function} cb Callback to be invoked upon save completion.
 	 */
-	this.save = function(params, cb) {
+	this.save = function (params, cb) {
 		Logger.system.debug("LocalStorageAdapter.save, params: ", params);
 		console.debug("LocalStorageAdapter.save, params: ", params);
 
@@ -57,7 +57,7 @@ const LocalStorageAdapter = function(uuid) {
 	 * @param {string} params.key The key whose value is being set.
 	 * @param {function} cb Callback to be invoked upon completion.
 	 */
-	this.get = function(params, cb) {
+	this.get = function (params, cb) {
 		let combinedKey = this.getCombinedKey(this, params);
 		Logger.system.debug("LocalStorageAdapter.get, params: ", params);
 		console.debug("LocalStorageAdapter.get, params: ", params);
@@ -83,7 +83,7 @@ const LocalStorageAdapter = function(uuid) {
 	};
 
 	// Return prefix used to filter keys.
-	this.getKeyPreface = function(self, params) {
+	this.getKeyPreface = function (self, params) {
 		let preface = `${self.baseName}:${self.userName}:${params.topic}:`;
 		if ("keyPrefix" in params) {
 			preface = preface + params.keyPrefix;
@@ -100,7 +100,7 @@ const LocalStorageAdapter = function(uuid) {
 	 * @param {*} params An object that must include the topic and keyPrefix of the desired keys.
 	 * @param {*} cb An optional callback that will be passed any errors that occurred and the found keys.
 	 */
-	this.keys = function(params, cb) {
+	this.keys = function (params, cb) {
 		/**
 		 * Daniel H. 1/3/2019 - Validate.args is still broken, so I'm doing it ad-hoc here.
 		 * @TODO Replace ad-hoc validation with Validate.args. */
@@ -168,7 +168,7 @@ const LocalStorageAdapter = function(uuid) {
 	 * @param {string} params.key The key whose value is being deleted.
 	 * @param {function} cb Callback to be invoked upon completion.
 	 */
-	this.delete = function(params, cb) {
+	this.delete = function (params, cb) {
 		let combinedKey = this.getCombinedKey(this, params);
 
 		Logger.system.debug(`LocalStorageAdapter.delete for key=${combinedKey}`);
@@ -194,7 +194,7 @@ const LocalStorageAdapter = function(uuid) {
 	/**
 	 * This method should be used very, very judiciously. It's essentially a method designed to wipe the database for a particular user.
 	 */
-	this.clearCache = function(params, cb) {
+	this.clearCache = function (params, cb) {
 		/** DH 6/9/2020 - This code was broken with references to undefined variables, so I infer
 		 * this is a dead code path and can probably .
 		 */
@@ -237,7 +237,7 @@ const LocalStorageAdapter = function(uuid) {
 	 * Wipes the storage container.
 	 * @param {function} cb
 	 */
-	this.empty = function(cb) {
+	this.empty = function (cb) {
 		Logger.system.log("LocalStorageAdapter.empty");
 		console.log("LocalStorageAdapter.empty");
 
