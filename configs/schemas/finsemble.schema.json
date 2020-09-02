@@ -72,6 +72,12 @@
 							"type": "number",
 							"default": 6000
 						},
+						"shutdownTimeout": {
+							"description": "Amount of time (in milliseconds) to give services to shutdown before forcibly quitting the application. Components get 2 seconds less than services.",
+							"type": "number",
+							"minimum": 10000,
+							"default": 30000
+						},
 						"custom": {}
 					},
 					"required": [
@@ -227,12 +233,6 @@
 				"initialWorkspace": {
 					"description": "The workspace name specified by this config will be the first one presented to an end user the very first time they start the SmartDesktop. This overrides the default behavior set by the config: finsemble.workspaces. After the very first instance of the SmartDesktop, Finsemble will load the last workspace loaded or any workspace specified by user preferences.",
 					"type": "string"
-				},
-				"shutdownTimeout": {
-					"description": "Amount of time (in milliseconds) to give services to shutdown before forcibly quitting the application. Components get 2 seconds less than services.",
-					"type": "number",
-					"minimum": 0,
-					"default": 10000
 				},
 				"scheduledRestart": {
 					"$ref": "#/definitions/scheduledRestart"
@@ -452,6 +452,12 @@
 						},
 						"system": {
 							"$ref": "#/definitions/system"
+						},
+						"shutdownTimeout": {
+							"description": "Amount of time (in milliseconds) to give services to shutdown before forcibly quitting the application. Components get 2 seconds less than services.",
+							"type": "number",
+							"minimum": 10000,
+							"default": 30000
 						}
 					},
 					"required": [
@@ -618,8 +624,8 @@
 				"shutdownTimeout": {
 					"description": "Amount of time (in milliseconds) to give services to shutdown before forcibly quitting the application. Components get 2 seconds less than services.",
 					"type": "number",
-					"minimum": 0,
-					"default": 10000
+					"minimum": 10000,
+					"default": 30000
 				},
 				"splashScreenImage": {
 					"description": "URL to use for splash screen image when starting Finsemble.",
