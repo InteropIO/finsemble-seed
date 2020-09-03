@@ -1,4 +1,4 @@
-[![Finsemble SmartDesktop](./assets/img/Finsemble_Logo_Dark.svg)](https://documentation.chartiq.com/finsemble/)
+[![Finsemble SmartDesktop](./assets/img/Finsemble_Logo_Dark.svg)](https://docs-preview.finsemble.com/)
 
 # Finsemble Seed 🌱
 
@@ -16,7 +16,7 @@ your own SmartDesktop and <del>rule the world</del> turbocharge your workflow.
 - If you're in a hurry, check out our [2 minute intro](https://www.youtube.com/watch?v=Y_CL7nrowL8)
 - If you're developer and want the nitty-gritty details, check out our [talk at CovalenceConf 2020](https://www.youtube.com/watch?v=3dNzaNN3unA&t=377s).
 - Once you've got the gist, checkout the
-  [developer documentation](https://documentation.chartiq.com/finsemble/)
+  [developer documentation](https://docs-preview.finsemble.com/)
   for the full details.
 
 ## Getting Started
@@ -54,11 +54,11 @@ You can see a detailed breakdown of the project structure
 
 Everything else there is to know about Finsemble and how to build on it can be
 found in our
-[developer documentation](https://documentation.chartiq.com/finsemble).
+[developer documentation](https://docs-preview.finsemble.com/).
 
 ## Getting Help
 
-Having trouble? Perhaps we've covered it in the [FAQ](https://documentation.chartiq.com/finsemble/tutorial-FAQ.html).
+Having trouble? Perhaps we've covered it in the [FAQ](https://docs-preview.finsemble.com/tutorial-FAQ.html).
 
 Still having trouble? Shoot us a line at support@finsemble.com! We'll be happy
 to help.
