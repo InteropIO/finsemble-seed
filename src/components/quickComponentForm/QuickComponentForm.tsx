@@ -6,9 +6,9 @@
 
 import React from "react";
 import ReactDOM from "react-dom";
-import { FinsembleProvider } from "@cosaic/finsemble-ui/react/components/FinsembleProvider";
-import { QuickComponentForm } from "@cosaic/finsemble-ui/react/components/quickComponentForm";
-import "@cosaic/finsemble-ui/react/assets/css/finsemble.css";
+import { FinsembleProvider } from "@finsemble/finsemble-ui/react/components/FinsembleProvider";
+import { QuickComponentForm } from "@finsemble/finsemble-ui/react/components/quickComponentForm";
+import "@finsemble/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../assets/css/theme.css";
 
 ReactDOM.render(

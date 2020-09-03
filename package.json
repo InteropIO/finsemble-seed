@@ -26,15 +26,15 @@
 		"test": "npx ts-mocha \"./src/**/*.spec.ts\"",
 		"tslint": "./node_modules/tslint/bin/tslint -c \"tslint.json src/**/*.ts\"",
 		"tslint:fix": "./node_modules/tslint/bin/tslint -c \"tslint.json src/**/*.ts\" --fix",
-		"update-finsemble": "npm update @cosaic/finsemble-core && npm update -g @cosaic/finsemble-cli"
+		"update-finsemble": "npm update @finsemble/finsemble-core && npm update -g @finsemble/finsemble-cli"
 	},
 	"author": "Cosaic",
 	"license": "SEE LICENSE IN LICENSE",
 	"optionalDependencies": {
-		"@cosaic/finsemble-cli": "^5.0.0-2"
+		"@finsemble/finsemble-cli": "^5.0.0-2"
 	},
 	"dependencies": {
-		"@cosaic/finsemble-electron-adapter": "^5.0.0-1",
+		"@finsemble/finsemble-electron-adapter": "^5.0.0-1",
 		"async": "2.6.2",
 		"compression": "1.7.3"
 	},
@@ -48,8 +48,8 @@
 		"@babel/preset-env": "7.8.7",
 		"@babel/preset-react": "7.9.4",
 		"@babel/runtime": "^7.8.4",
-		"@cosaic/finsemble-core": "^5.0.0-2",
-		"@cosaic/finsemble-ui": "^5.0.0-4",
+		"@finsemble/finsemble-core": "^5.0.0-2",
+		"@finsemble/finsemble-ui": "^5.0.0-4",
 		"@types/mocha": "5.2.7",
 		"@types/react-dom": "16.9.8",
 		"@types/react-redux": "7.1.6",

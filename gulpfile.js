@@ -10,9 +10,9 @@
 	const gulp = require("gulp");
 	const shell = require("shelljs");
 	const path = require("path");
-	const FEA = require("@cosaic/finsemble-electron-adapter/exports");
+	const FEA = require("@finsemble/finsemble-electron-adapter/exports");
 	const FEA_PATH = path.resolve(
-		"./node_modules/@cosaic/finsemble-electron-adapter"
+		"./node_modules/@finsemble/finsemble-electron-adapter"
 	);
 	const FEAPackager = FEA ? FEA.packager : undefined;
 	const startupConfig = require("./configs/other/server-environment-startup");
@@ -222,13 +222,13 @@
 			const FINSEMBLE_PATH = path.join(
 				__dirname,
 				"node_modules",
-				"@cosaic",
+				"@finsemble",
 				"finsemble"
 			);
 			const FINSEMBLE_UI_PATH = path.join(
 				__dirname,
 				"node_modules",
-				"@cosaic",
+				"@finsemble",
 				"finsemble-ui"
 			);
 			const FINSEMBLE_VERSION = require(path.join(
@@ -242,7 +242,7 @@
 			const CLI_PATH = path.join(
 				__dirname,
 				"node_modules",
-				"@cosaic",
+				"@finsemble",
 				"finsemble-cli"
 			);
 			const CLI_VERSION = require(path.join(CLI_PATH, "package.json")).version;
@@ -261,7 +261,7 @@
 							);
 						} else {
 							logToTerminal(
-								`Using: @cosaic/${name} @Version ${version}`,
+								`Using: @finsemble/${name} @Version ${version}`,
 								"magenta"
 							);
 						}

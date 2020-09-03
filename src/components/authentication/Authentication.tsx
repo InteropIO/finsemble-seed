@@ -11,12 +11,12 @@
 
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
-import { FinsembleProvider } from "@cosaic/finsemble-ui/react/components/FinsembleProvider";
-import { useAuth } from "@cosaic/finsemble-ui/react/hooks/useAuth";
-import { useAuthSimulator } from "@cosaic/finsemble-ui/react/hooks/useAuth";
-import "@cosaic/finsemble-ui/react/assets/css/finsemble.css";
-import "@cosaic/finsemble-ui/react/assets/css/dialogs.css";
-import "@cosaic/finsemble-ui/react/assets/css/authentication.css";
+import { FinsembleProvider } from "@finsemble/finsemble-ui/react/components/FinsembleProvider";
+import { useAuth } from "@finsemble/finsemble-ui/react/hooks/useAuth";
+import { useAuthSimulator } from "@finsemble/finsemble-ui/react/hooks/useAuth";
+import "@finsemble/finsemble-ui/react/assets/css/finsemble.css";
+import "@finsemble/finsemble-ui/react/assets/css/dialogs.css";
+import "@finsemble/finsemble-ui/react/assets/css/authentication.css";
 import "../../../assets/css/theme.css";
 
 export const Authentication = () => {
