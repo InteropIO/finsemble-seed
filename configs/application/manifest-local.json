@@ -91,5 +91,8 @@
                 }
             }
         }
+    },
+    "finsemble-electron-adapter": {
+        "disableZoom": true
     }
 }
