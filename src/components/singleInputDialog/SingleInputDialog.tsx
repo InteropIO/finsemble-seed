@@ -5,7 +5,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { FinsembleProvider } from "@finsemble/finsemble-ui/react/components/FinsembleProvider";
-import { SingleInputDialog } from "@finsemble/finsemble-ui/react/components/Dialog";
+import { SingleInputDialog } from "@finsemble/finsemble-ui/react/components/singleInputDialog";
 import "@finsemble/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../assets/css/theme.css";
 

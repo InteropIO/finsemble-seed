@@ -15,7 +15,7 @@ import {
 	AutoArrange,
 	Search,
 	AdvancedAppLauncherMenu,
-	AppLauncher,
+	AppLauncherMenu,
 	WorkspaceManagementMenu,
 	ToolbarSection,
 } from "@finsemble/finsemble-ui/react/components/toolbar";
@@ -49,7 +49,7 @@ const Toolbar = () => {
 				<Search openHotkey={["ctrl", "alt", "f"]} />
 				<WorkspaceManagementMenu />
 				<AdvancedAppLauncherMenu enableQuickComponents={true} />
-				<AppLauncher enableQuickComponents={true} />
+				<AppLauncherMenu enableQuickComponents={true} />
 			</ToolbarSection>
 			<ToolbarSection className="center" hideBelowWidth={115}>
 				<div className="divider" />

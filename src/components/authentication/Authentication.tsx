@@ -12,8 +12,7 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { FinsembleProvider } from "@finsemble/finsemble-ui/react/components/FinsembleProvider";
-import { useAuth } from "@finsemble/finsemble-ui/react/hooks/useAuth";
-import { useAuthSimulator } from "@finsemble/finsemble-ui/react/hooks/useAuth";
+import { useAuth, useAuthSimulator } from "@finsemble/finsemble-ui/react/hooks";
 import "@finsemble/finsemble-ui/react/assets/css/finsemble.css";
 import "@finsemble/finsemble-ui/react/assets/css/dialogs.css";
 import "@finsemble/finsemble-ui/react/assets/css/authentication.css";

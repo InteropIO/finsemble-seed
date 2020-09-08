@@ -8,7 +8,7 @@ import {
 	Restart,
 	Reset,
 	Quit,
-} from "@finsemble/finsemble-ui/react/components/System";
+} from "@finsemble/finsemble-ui/react/components/system";
 
 export const FileMenu = () => (
 	<Menu
