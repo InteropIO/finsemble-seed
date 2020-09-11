@@ -143,7 +143,7 @@ function createCopyWebpackConfig() {
 		},
 		*/
 		{
-			from: "./node_modules/@cosaic/finsemble-core/dist",
+			from: "./node_modules/@finsemble/finsemble-core/dist",
 			to: path.join(__dirname, "../../finsemble/"),
 		},
 	];

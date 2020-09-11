@@ -5,7 +5,7 @@
 
 import React from "react";
 import ReactDOM from "react-dom";
-import { FinsembleProvider } from "@cosaic/finsemble-ui/react/components/FinsembleProvider";
+import { FinsembleProvider } from "@finsemble/finsemble-ui/react/components/FinsembleProvider";
 import {
 	ToolbarShell,
 	FavoritesShell,
@@ -15,13 +15,13 @@ import {
 	AutoArrange,
 	Search,
 	AdvancedAppLauncherMenu,
-	AppLauncher,
+	AppLauncherMenu,
 	WorkspaceManagementMenu,
 	ToolbarSection,
-} from "@cosaic/finsemble-ui/react/components/toolbar";
+} from "@finsemble/finsemble-ui/react/components/toolbar";
 import { FileMenu } from "./FileMenu";
-import { useHotkey } from "@cosaic/finsemble-ui/react/hooks/useHotkey";
-import "@cosaic/finsemble-ui/react/assets/css/finsemble.css";
+import { useHotkey } from "@finsemble/finsemble-ui/react/hooks/useHotkey";
+import "@finsemble/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../../assets/css/theme.css";
 
 /**
@@ -49,7 +49,7 @@ const Toolbar = () => {
 				<Search openHotkey={["ctrl", "alt", "f"]} />
 				<WorkspaceManagementMenu />
 				<AdvancedAppLauncherMenu enableQuickComponents={true} />
-				<AppLauncher enableQuickComponents={true} />
+				<AppLauncherMenu enableQuickComponents={true} />
 			</ToolbarSection>
 			<ToolbarSection className="center" hideBelowWidth={115}>
 				<div className="divider" />

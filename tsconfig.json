@@ -12,8 +12,8 @@
 		"target": "es2017",
 		"typeRoots": [
 			"node_modules/@types",
-			"node_modules/@cosaic/finsemble/types",
-			"node_modules/@cosaic/finsemble-ui/react/types"
+			"node_modules/@finsemble/finsemble-core/types",
+			"node_modules/@finsemble/finsemble-ui/react/types"
 		]
 	},
 	"include": ["src/**/*"],
