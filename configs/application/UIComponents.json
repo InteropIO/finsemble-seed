@@ -254,6 +254,52 @@
 				}
 			}
 		},
+		"SystemTrayComponent": {
+			"window": {
+				"url": "$applicationRoot/components/fileMenu/fileMenu.html?",
+				"top": 0,
+				"left": 100,
+				"width": 125,
+				"height": 80,
+				"ephemeral": true,
+				"options": {
+					"autoShow": false
+				}
+			},
+			"component": {
+				"title": "@TODO",
+				"menuItems": [
+					"@TODO config not yet implemented",
+					{
+						"label": "Documentation",
+						"url": "https://documentation.chartiq.com/finsemble"
+					},
+					{
+						"label": "Quit",
+						"method": "quitApplication"
+					}
+				],
+				"spawnOnStartup": false,
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"windowService": {
+						"allowAutoArrange": false,
+						"shouldRegister": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"FSBLHeader": false,
+						"persistWindowState": false
+					}
+				}
+			}
+		},
 		"Window Context Menu": {
 			"window": {
 				"url": "$applicationRoot/components/windowContextMenu/windowContextMenu.html",

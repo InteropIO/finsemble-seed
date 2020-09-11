@@ -20,7 +20,7 @@
         "server": "gulp server --gulpfile=./gulpfile.js",
         "server:prod": "gulp server:prod --gulpfile=./gulpfile.js",
         "clean": "gulp clean --gulpfile=./gulpfile.js",
-        "update-finsemble": "npm update @chartiq/finsemble && npm update -g @chartiq/finsemble-cli",
+        "update-finsemble": "npm update @finsemble/finsemble-core && npm update -g @finsemble/finsemble-cli",
         "finsemble-cli": "finsemble-cli",
         "tslint": "./node_modules/tslint/bin/tslint -c tslint.json src-built-in/**/*.ts",
         "tslint:fix": "./node_modules/tslint/bin/tslint -c tslint.json src-built-in/**/*.ts --fix",
@@ -29,12 +29,12 @@
     "author": "",
     "license": "apache-2.0",
     "optionalDependencies": {
-        "@chartiq/finsemble-cli": "^3.13.*",
-        "@chartiq/finsemble-electron-adapter": "5.0.0-3",
+        "@finsemble/finsemble-cli": "5.0.0-beta.3",
+        "@finsemble/finsemble-electron-adapter": "5.0.0-beta.3",
         "openfin-launcher": "1.3.12"
     },
     "dependencies": {
-        "@chartiq/finsemble": "5.0.0-5",
+        "@finsemble/finsemble-core": "5.0.0-5",
         "@chartiq/finsemble-react-controls": "4.0.*",
         "async": "2.6.2",
         "babel-minify-webpack-plugin": "0.3.1",

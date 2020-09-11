@@ -18,9 +18,9 @@
 	const path = require("path");
 	const webpack = require("webpack");
 
-	const FEA_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-electron-adapter");
+	const FEA_PATH = path.join(__dirname, "node_modules", "@finsemble", "finsemble-electron-adapter");
 	const FEA_PATH_EXISTS = fs.existsSync(FEA_PATH);
-	const FEA = FEA_PATH_EXISTS ? require("@chartiq/finsemble-electron-adapter/exports") : undefined;
+	const FEA = FEA_PATH_EXISTS ? require("@finsemble/finsemble-electron-adapter/exports") : undefined;
 	const FEAPackager = FEA ? FEA.packager : undefined;
 	const MAX_NODE_VERSION = '12.99.99';
 	const INSTALLER_CERT_PASS = "INSTALLER_CERTIFICATE_PASSPHRASE";
@@ -397,9 +397,9 @@
 			done();
 		},
 		checkSymbolicLinks: done => {
-			const FINSEMBLE_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble");
+			const FINSEMBLE_PATH = path.join(__dirname, "node_modules", "@finsemble", "finsemble-core");
 			const FINSEMBLE_VERSION = require(path.join(FINSEMBLE_PATH, "package.json")).version;
-			const CLI_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-cli");
+			const CLI_PATH = path.join(__dirname, "node_modules", "@finsemble", "finsemble-cli");
 			const CLI_VERSION = require(path.join(CLI_PATH, "package.json")).version;
 			const CONTROLS_PATH = path.join(__dirname, "node_modules", "@chartiq", "finsemble-react-controls");
 			const CONTROLS_VERSION = require(path.join(CONTROLS_PATH, "package.json")).version;
@@ -414,7 +414,7 @@
 						if (str) {
 							logToTerminal(`LINK DETECTED: ${name}. @Version ${version} Path: ${str}.`, "yellow");
 						} else {
-							logToTerminal(`Using: @chartiq/${name} @Version ${version}`, "magenta");
+							logToTerminal(`Using: @finsemble/${name} @Version ${version}`, "magenta");
 						}
 						cb();
 					});
@@ -495,7 +495,7 @@
 			const cfg = taskMethods.startupConfig[env.NODE_ENV];
 			const USING_ELECTRON = container === "electron";
 			if (USING_ELECTRON && !FEA_PATH_EXISTS) {
-				throw "Cannot use electron container unless finsemble-electron-adapter optional dependency is installed. Please run npm i @chartiq/finsemble-electron-adapter";
+				throw "Cannot use electron container unless finsemble-electron-adapter optional dependency is installed. Please run npm i @finsemble/finsemble-electron-adapter";
 			}
 			const socketCertificatePath = deriveSocketCertificatePaths();
 
