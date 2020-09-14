@@ -34,12 +34,12 @@ const runWebpackAndCallback = (configPath, watch, bundleName, callback) => {
 	config.watch = watch;
 	config.bail = true; // Causes webpack to break upon first encountered error. Pretty annoying when build errors scroll off the screen.
 	let startTime = process.hrtime();
-	const finish = () => {
+	const finish = (err) => {
 		// Webpack will call this function every time the bundle is built.
 		// Webpack is run in "watch" mode which means this function will be called over and over and over.
 		// We only want to invoke the async callback back to the gulp file once - the initial webpack build.
 		if (callback) {
-			callback();
+			callback(err);
 			callback = undefined;
 		}
 	};
@@ -51,7 +51,7 @@ const runWebpackAndCallback = (configPath, watch, bundleName, callback) => {
 			if (err.details) {
 				logToTerminal(`ERROR DETAILS: ${err.details}`, "red");
 			}
-			return finish();
+			return finish(err);
 		}
 
 		let msg = `Finished building ${bundleName}`;
@@ -141,7 +141,7 @@ const runWebpackInParallel = (
 	webpackParallelConfigs.forEach((config) => {
 		parallelWorkers(config, (e, output) => {
 			if (++finishedBuilds === webpackParallelConfigs.length) {
-				done();
+				done(e);
 				if (exitOnCompletion) {
 					workerFarm.end(parallelWorkers);
 				}
