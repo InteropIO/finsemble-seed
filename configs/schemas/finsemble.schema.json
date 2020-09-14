@@ -1387,6 +1387,11 @@
 					},
 					"required": ["FinsembleTransport"],
 					"default": {}
+				},
+				"promptBeforeAllowingExternalApps": {
+					"title": "promptBeforeAllowingExternalApps",
+					"type": "boolean",
+					"default": false
 				}
 			},
 			"additionalProperties": false,
