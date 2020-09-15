@@ -62,8 +62,7 @@
 			"staggerPixels": 40,
 			"unknownComponent": "nonConfiguredComponent",
 			"defaultPreloads": {
-				"//browserViews": "preloads CSS into all BrowserView windows. Used to enable a scrim for drag shared data",
-				"browserViews": ["$applicationRoot/preloads/browserViewCss.js"]
+				"//": "Add preloads that will be injected into each browserView."
 			}
 		},
 		"assimilation": {
