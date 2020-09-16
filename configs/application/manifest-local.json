@@ -90,6 +90,17 @@
                     "serverAddress": "ws://127.0.0.1:3376"
                 }
             }
+        },
+        "logger": {
+            "defaultClientLogLevels": {
+                "Error": true, 
+                "Warn": true, 
+                "Info": false, 
+                "Log": true, 
+                "Debug": false, 
+                "Verbose": false, 
+                "LocalOnly": false
+            }
         }
     }
 }
