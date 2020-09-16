@@ -1,6 +1,6 @@
 {
 	"name": "finsemble-seed",
-	"version": "5.0.0-3",
+	"version": "5.0.0-4",
 	"description": "",
 	"main": "index.js",
 	"scripts": {
@@ -48,8 +48,8 @@
 		"@babel/preset-env": "7.8.7",
 		"@babel/preset-react": "7.9.4",
 		"@babel/runtime": "^7.8.4",
-		"@finsemble/finsemble-core": "^5.0.0-3",
-		"@finsemble/finsemble-ui": "^5.0.0-3",
+		"@finsemble/finsemble-core": "^5.0.0-4",
+		"@finsemble/finsemble-ui": "^5.0.0-4",
 		"@types/mocha": "5.2.7",
 		"@types/react-dom": "16.9.8",
 		"@types/react-redux": "7.1.6",
