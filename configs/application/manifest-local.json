@@ -93,6 +93,6 @@
         }
     },
     "finsemble-electron-adapter": {
-        "disableZoom": true
+        "disableZoom": false
     }
 }
