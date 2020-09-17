@@ -21,16 +21,18 @@ let config = generateDefaultConfig();
  */
 
 config.plugins.push(
-	new CopyWebpackPlugin([
-		{
-			from: "./node_modules/@finsemble/finsemble-ui/react/assets/",
-			to: "./assets/",
-		},
-		{
-			from: "./assets/",
-			to: "./assets/",
-		},
-	])
+	new CopyWebpackPlugin({
+		patterns: [
+			{
+				from: "./node_modules/@finsemble/finsemble-ui/react/assets/",
+				to: "./assets/",
+			},
+			{
+				from: "./assets/",
+				to: "./assets/",
+			},
+		],
+	})
 );
 
 /**

@@ -1,6 +1,5 @@
 const path = require("path");
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const { DefinePlugin, DllPlugin } = require("webpack");
 
 console.log("ENVIRONMENT", env);
@@ -15,11 +14,6 @@ let plugins = [
 		},
 	}),
 ];
-
-if (env === "production") {
-	// When building the production environment, minify the code.
-	plugins.push(new UglifyJsPlugin());
-}
 
 /**
  * Entries come from seed/build/webpack/vendor.js

@@ -5,7 +5,6 @@
 	// NPM
 	const async = require("async");
 	const { spawn } = require("child_process");
-	const del = require("del");
 	const fs = require("fs");
 	const gulp = require("gulp");
 	const shell = require("shelljs");
@@ -207,15 +206,16 @@
 		 * Cleans the project folder of generated files.
 		 */
 		clean: (done) => {
-			del(taskMethods.distPath, { force: true });
-			del(".babel_cache", { force: true });
-			del("finsemble", { force: true });
-			del(path.join(__dirname, "build/webpack/vendor-manifest.json"), {
-				force: true,
-			});
-			del(".webpack-file-cache", { force: true });
-			del("installer-tmp", { force: true });
-			del("finsemble", { force: true });
+			shell.rm("-rf", taskMethods.distPath);
+			shell.rm("-rf", ".babel_cache");
+			shell.rm("-rf", "finsemble");
+			shell.rm(
+				"-rf",
+				path.join(__dirname, "build/webpack/vendor-manifest.json")
+			);
+			shell.rm("-rf", ".webpack-file-cache");
+			shell.rm("-rf", "installer-tmp");
+			shell.rm("-rf", "finsemble");
 			done();
 		},
 		checkSymbolicLinks: (done) => {

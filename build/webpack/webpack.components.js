@@ -131,31 +131,35 @@ function collapseBuiltInFiles() {
  */
 function createCopyWebpackConfig() {
 	// Copy configs and finsemble library
-	var config = [
-		{
-			from: "./configs/",
-			to: "./configs/",
-		},
-		/* // Enabling this causes the favicon to show up as a background image in localhost:9090
+	var config = {
+		patterns: [
+			{
+				from: "./configs/",
+				to: "./configs/",
+			},
+			/* // Enabling this causes the favicon to show up as a background image in localhost:9090
 		{
 			from: './assets/img/favicon.ico',
 			to: './favicon.ico'
 		},
 		*/
-		{
-			from: "./node_modules/@finsemble/finsemble-core/dist",
-			to: path.join(__dirname, "../../finsemble/"),
-		},
-	];
+			{
+				from: "./node_modules/@finsemble/finsemble-core/dist",
+				to: path.join(__dirname, "../../finsemble/"),
+			},
+		],
+	};
 
 	// Create a copy entry for each folder in our collapsed list
 	// ignore node_modules/* and */node_modules/*
 	var folders = collapseBuiltInFiles();
 	for (let name in folders) {
-		config.push({
+		config.patterns.push({
 			from: folders[name],
 			to: `./components/${name}`,
-			ignore: ["node_modules/**/*", "**/*/node_modules/**/*"],
+			globOptions: {
+				ignore: ["node_modules/**/*", "**/*/node_modules/**/*"],
+			},
 		});
 	}
 	return config;
