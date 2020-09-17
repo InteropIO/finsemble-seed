@@ -102,5 +102,8 @@
                 "LocalOnly": false
             }
         }
+    },
+    "finsemble-electron-adapter": {
+        "disableZoom": false
     }
 }
