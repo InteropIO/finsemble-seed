@@ -67,7 +67,7 @@
 		"hard-source-webpack-plugin": "0.13.1",
 		"pretty-hrtime": "^1.0.3",
 		"rimraf": "3.0.2",
-		"shelljs": "0.8.3",
+		"shelljs": "0.8.4",
 		"source-map-loader": "1.0.1",
 		"style-loader": "1.2.1",
 		"ts-loader": "^7.0.5",
