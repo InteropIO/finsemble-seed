@@ -4,9 +4,9 @@
  */
 import React from "react";
 import ReactDOM from "react-dom";
-import { FinsembleProvider } from "@chartiq/finsemble-ui/react/components/FinsembleProvider";
-import { ProcessMonitor } from "@chartiq/finsemble-ui/react/components/ProcessMonitor";
-import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
+import { FinsembleProvider } from "@finsemble/finsemble-ui/react/components/FinsembleProvider";
+import { ProcessMonitor } from "@finsemble/finsemble-ui/react/components/processMonitor";
+import "@finsemble/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../assets/css/theme.css";
 
 ReactDOM.render(

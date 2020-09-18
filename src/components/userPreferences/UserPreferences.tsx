@@ -5,13 +5,13 @@
  */
 import React from "react";
 import ReactDOM from "react-dom";
-import { FinsembleProvider } from "@chartiq/finsemble-ui/react/components/FinsembleProvider";
+import { FinsembleProvider } from "@finsemble/finsemble-ui/react/components/FinsembleProvider";
 import {
 	UserPreferences,
 	General,
 	Workspaces,
-} from "@chartiq/finsemble-ui/react/components/UserPreferences";
-import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
+} from "@finsemble/finsemble-ui/react/components/userPreferences";
+import "@finsemble/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../assets/css/theme.css";
 
 /*

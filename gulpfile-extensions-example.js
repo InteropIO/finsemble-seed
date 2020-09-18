@@ -58,7 +58,7 @@ module.exports = (taskMethods) => {
 			});
 		});
 
-		let FEALocation = "node_modules/@chartiq/finsemble-electron-adapter";
+		let FEALocation = "node_modules/@finsemble/finsemble-electron-adapter";
 		const electronPath = path.join(__dirname, FEALocation, "node_modules", "electron", "dist", "electron.exe");
 		let debug = taskMethods.envOrArg("electronDebug");
 		let debugArg = "";

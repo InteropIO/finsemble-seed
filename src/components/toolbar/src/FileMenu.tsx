@@ -1,5 +1,5 @@
 import React from "react";
-import { Menu } from "@chartiq/finsemble-ui/react/components/Menu";
+import { Menu } from "@finsemble/finsemble-ui/react/components/menu";
 import {
 	Preferences,
 	SystemLog,
@@ -8,7 +8,7 @@ import {
 	Restart,
 	Reset,
 	Quit,
-} from "@chartiq/finsemble-ui/react/components/System";
+} from "@finsemble/finsemble-ui/react/components/system";
 
 export const FileMenu = () => (
 	<Menu
@@ -28,7 +28,7 @@ export const FileMenu = () => (
 		<Reset />
 		<Quit />
 		{/* To add your own items to the menu, import MenuItem from
-		 * "@chartiq/finsemble-ui/react/components" and add the following:
+		 * "@finsemble/finsemble-ui/react/components" and add the following:
 		 * <MenuItem onClick={...}>Your Item</MenuItem>
 		 */}
 	</Menu>

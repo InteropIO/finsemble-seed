@@ -34,33 +34,7 @@ const runWebpackAndCallback = (configPath, watch, bundleName, callback) => {
 	config.watch = watch;
 	config.bail = true; // Causes webpack to break upon first encountered error. Pretty annoying when build errors scroll off the screen.
 	let startTime = process.hrtime();
-	webpack(config, (err, stats) => {
-		if (!err) {
-			let msg = `Finished building ${bundleName}`;
-			//first run, add nice timer.
-			if (callback) {
-				let end = process.hrtime(startTime);
-				msg = `${msg} after ${chalk.magenta(prettyHrtime(end))}`;
-			}
-			logToTerminal(msg, "cyan");
-
-			const info = stats.toJson();
-
-			if (stats.hasErrors()) {
-				logToTerminal(`WEBPACK ERRORS: ${configPath}`, "red");
-				console.error(info.errors);
-			}
-
-			/* Uncomment to see webpack warnings.
-			if (stats.hasWarnings()) {
-				logToTerminal(`WEBPACK WARNINGS: ${configPath}`, "yellow");
-				console.warn(info.warnings);
-			}
-			*/
-		} else {
-			console.error(errorOutColor("Webpack Error.", err));
-		}
-
+	const finish = (err) => {
 		// Webpack will call this function every time the bundle is built.
 		// Webpack is run in "watch" mode which means this function will be called over and over and over.
 		// We only want to invoke the async callback back to the gulp file once - the initial webpack build.
@@ -68,6 +42,40 @@ const runWebpackAndCallback = (configPath, watch, bundleName, callback) => {
 			callback(err);
 			callback = undefined;
 		}
+	};
+	webpack(config, (err, stats) => {
+		// err is a fatal webpack error. stats.hasErrors represents compilation errors,
+		// which are not fatal. Exit on fatal errors.
+		if (err) {
+			logToTerminal(`FATAL WEBPACK ERROR: ${err.stack || err}`, "red");
+			if (err.details) {
+				logToTerminal(`ERROR DETAILS: ${err.details}`, "red");
+			}
+			return finish(err);
+		}
+
+		let msg = `Finished building ${bundleName}`;
+		//first run, add nice timer.
+		if (callback) {
+			let end = process.hrtime(startTime);
+			msg = `${msg} after ${chalk.magenta(prettyHrtime(end))}`;
+		}
+		logToTerminal(msg, "cyan");
+
+		const info = stats.toJson();
+
+		if (stats.hasErrors()) {
+			logToTerminal(`WEBPACK ERRORS: ${configPath}`, "red");
+			console.error(info.errors);
+		}
+
+		/* Uncomment to see webpack warnings.
+		if (stats.hasWarnings()) {
+			logToTerminal(`WEBPACK WARNINGS: ${configPath}`, "yellow");
+			console.warn(info.warnings);
+		}
+		*/
+		finish();
 	});
 };
 
@@ -133,7 +141,7 @@ const runWebpackInParallel = (
 	webpackParallelConfigs.forEach((config) => {
 		parallelWorkers(config, (e, output) => {
 			if (++finishedBuilds === webpackParallelConfigs.length) {
-				done();
+				done(e);
 				if (exitOnCompletion) {
 					workerFarm.end(parallelWorkers);
 				}
@@ -142,9 +150,43 @@ const runWebpackInParallel = (
 	});
 };
 
+/**
+ * Retrieves webpack public path from config. This is used when serving finsemble from a subdirectory instead of at the root
+ * of a host.
+ */
+const getWebpackPublicPathFromConfig = () => {
+	const config = require("../configs/other/server-environment-startup.json");
+	const { NODE_ENV } = process.env;
+	if (config[NODE_ENV]) {
+		return config[NODE_ENV].webpackPublicPath;
+	} else {
+		console.error(
+			`Cannot find webpack public path for environment ${NODE_ENV}`
+		);
+		return;
+	}
+};
+
+/**
+ * Optional override for CI systems.
+ */
+const getWebpackPublicPathFromEnv = () => process.env.WEBPACK_PUBLIC_PATH;
+
+/**
+ * Returns an Environment variable, a config setting, or undefined.
+ */
+const getWebpackPublicPathVariable = () => {
+	const webpackPublicPathEnv = getWebpackPublicPathFromEnv();
+	// if we have it set on the ENV, overwrite config
+	if (webpackPublicPathEnv) return webpackPublicPathEnv;
+	// if the variable is set in config, use that. Otherwise, public path will be undefined
+	return getWebpackPublicPathFromConfig();
+};
+
 module.exports = {
 	runWebpackAndCallback,
 	logToTerminal,
 	envOrArg,
 	runWebpackInParallel,
+	getWebpackPublicPathVariable,
 };

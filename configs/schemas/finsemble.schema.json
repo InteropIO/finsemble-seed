@@ -53,6 +53,9 @@
 						"router": {
 							"$ref": "#/definitions/router"
 						},
+						"logger": {
+							"$ref": "#/definitions/logger"
+						},
 						"importConfig": {
 							"$ref": "#/definitions/importConfig"
 						},
@@ -68,6 +71,12 @@
 							"description": "Amount of time (in milliseconds) to show the splash screen",
 							"type": "number",
 							"default": 6000
+						},
+						"shutdownTimeout": {
+							"description": "Amount of time (in milliseconds) to give services to shutdown before forcibly quitting the application. Components get 2 seconds less than services.",
+							"type": "number",
+							"minimum": 10000,
+							"default": 30000
 						},
 						"custom": {}
 					},
@@ -170,8 +179,7 @@
 					"$ref": "#/definitions/securityPolicies"
 				},
 				"securityPolicyRules": {
-					"$ref": "#/definitions/securityPolicyRules",
-					"requiredPlaceHolder": ["crossDomain", "sameDomain"]
+					"$ref": "#/definitions/securityPolicyRules"
 				},
 				"accessibleLinker": {
 					"description": "(PUBLIC)",
@@ -226,16 +234,8 @@
 					"description": "The workspace name specified by this config will be the first one presented to an end user the very first time they start the SmartDesktop. This overrides the default behavior set by the config: finsemble.workspaces. After the very first instance of the SmartDesktop, Finsemble will load the last workspace loaded or any workspace specified by user preferences.",
 					"type": "string"
 				},
-				"shutdownTimeout": {
-					"description": "Amount of time (in milliseconds) to give services to shutdown before forcibly quitting the application. Components get 2 seconds less than services.",
-					"type": "number",
-					"minimum": 0,
-					"default": 10000
-				},
 				"scheduledRestart": {
-					"description": "Set Finsemble to automatically restart. These values can be overriden by the user through user preferences.\r\nhour 0 - The hour when Finsemble should restart. This is in 24 hour time according to the user's local machine's timezone.\r\nminute 0 - The minute when Finsemble should restart.\r\ndialogTimeout 10000 - When it is time to restart, the user is presented with a dialog to confirm or cancel. Since resets occur at night while the machine is unattended, most often the dialog will time out and Finsemble will reset. The `dialogTimeout` specifies how long to wait for a user response in milliseconds.",
-					"type": "boolean",
-					"default": false
+					"$ref": "#/definitions/scheduledRestart"
 				},
 				"stackedWindow": {
 					"$ref": "#/definitions/stackedWindow"
@@ -412,8 +412,7 @@
 							"target": {
 								"type": "string"
 							}
-						},
-						"requiredPlaceHolder": ["src", "version", "alias", "target"]
+						}
 					}
 				},
 				"finsemble": {
@@ -453,6 +452,12 @@
 						},
 						"system": {
 							"$ref": "#/definitions/system"
+						},
+						"shutdownTimeout": {
+							"description": "Amount of time (in milliseconds) to give services to shutdown before forcibly quitting the application. Components get 2 seconds less than services.",
+							"type": "number",
+							"minimum": 10000,
+							"default": 30000
 						}
 					},
 					"required": [
@@ -510,6 +515,9 @@
 				"router": {
 					"$ref": "#/definitions/router"
 				},
+				"logger": {
+					"$ref": "#/definitions/logger"
+				},
 				"bootTasks": {
 					"$ref": "#/definitions/bootTasks"
 				},
@@ -541,8 +549,7 @@
 					"$ref": "#/definitions/securityPolicies"
 				},
 				"securityPolicyRules": {
-					"$ref": "#/definitions/securityPolicyRules",
-					"requiredPlaceHolder": ["crossDomain", "sameDomain"]
+					"$ref": "#/definitions/securityPolicyRules"
 				},
 				"accessibleLinker": {
 					"description": "(PUBLIC)",
@@ -617,8 +624,8 @@
 				"shutdownTimeout": {
 					"description": "Amount of time (in milliseconds) to give services to shutdown before forcibly quitting the application. Components get 2 seconds less than services.",
 					"type": "number",
-					"minimum": 0,
-					"default": 10000
+					"minimum": 10000,
+					"default": 30000
 				},
 				"splashScreenImage": {
 					"description": "URL to use for splash screen image when starting Finsemble.",
@@ -631,9 +638,7 @@
 					"default": 6000
 				},
 				"scheduledRestart": {
-					"description": "Set Finsemble to automatically restart. These values can be overriden by the user through user preferences.\r\nhour 0 - The hour when Finsemble should restart. This is in 24 hour time according to the user's local machine's timezone.\r\nminute 0 - The minute when Finsemble should restart.\r\ndialogTimeout 10000 - When it is time to restart, the user is presented with a dialog to confirm or cancel. Since resets occur at night while the machine is unattended, most often the dialog will time out and Finsemble will reset. The `dialogTimeout` specifies how long to wait for a user response in milliseconds.",
-					"type": "boolean",
-					"default": false
+					"$ref": "#/definitions/scheduledRestart"
 				},
 				"stackedWindow": {
 					"$ref": "#/definitions/stackedWindow"
@@ -758,8 +763,7 @@
 					"target": {
 						"type": "string"
 					}
-				},
-				"requiredPlaceHolder": ["src", "version", "alias", "target"]
+				}
 			}
 		},
 		"windowManager": {
@@ -923,6 +927,12 @@
 											"filterTags": {
 												"type": "array"
 											},
+											"activeTags": {
+												"type": "array"
+											},
+											"filteredApps": {
+												"type": "array"
+											},
 											"activeFolder": {
 												"type": "string"
 											},
@@ -1023,11 +1033,6 @@
 							},
 							"additionalProperties": false
 						},
-						"enableWindowsAeroSnap": {
-							"description": "If set to `true`, enable Window's Aero Snap.",
-							"type": "boolean",
-							"default": true
-						},
 						"ALLOW_GROUPS_TO_SNAP": {
 							"description": "Allows groups to snap to one another.",
 							"type": "boolean",
@@ -1038,7 +1043,7 @@
 							"type": "number",
 							"default": 20
 						},
-						"enableWindowsAeroSnap ": {
+						"enableWindowsAeroSnap": {
 							"description": "If `true`, windows aero snap keyboard shortcuts (WINDOWS KEY + UP, RIGHT, DOWN, or LEFT arrow key) will move the current window when pressed. Windows will move the window and Finsemble will respond by updating bounds within the Window Service. If `false` (default), these actions will be cancelled by Finsemble.",
 							"type": "boolean",
 							"default": false
@@ -1072,6 +1077,22 @@
 							"description": "The opacity windows change to when other windows encroach on their buffer zone.",
 							"type": "number",
 							"default": 0.8
+						},
+						"claimSpace": {
+							"description": "Settings for claiming space on Desktop at the operating System level. Windows Only.",
+							"type": "object",
+							"properties": {
+								"enabled": {
+									"description": "If true, docked windows will behave like the Windows Taskbar and claimed space on the operating system",
+									"type": "boolean",
+									"default": true
+								},
+								"alwaysOnTop": {
+									"description": "If true, docked windows that claim space will be always on top when docked",
+									"type": "boolean",
+									"default": false
+								}
+							}
 						}
 					},
 					"required": [
@@ -1164,6 +1185,9 @@
 								"type": "string"
 							},
 							"default": ["ctrl", "shift", "L"]
+						},
+						"defaultClientLogLevels": {
+							"$ref": "#/definitions/loggerClientLogLevels"
 						}
 					},
 					"additionalProperties": false
@@ -1405,7 +1429,7 @@
 					"type": "boolean"
 				},
 				"scheduledRestart": {
-					"type": "boolean"
+					"$ref": "#/definitions/scheduledRestart"
 				},
 				"isolateCrossDomainComponents": {
 					"type": "boolean"
@@ -1812,6 +1836,9 @@
 						"canGroup": {
 							"type": "boolean"
 						},
+						"alwaysOnTop": {
+							"type": "boolean"
+						},
 						"options": {
 							"title": "options",
 							"type": "object",
@@ -1912,6 +1939,9 @@
 							"type": "boolean"
 						},
 						"canMaximize": {
+							"type": "boolean"
+						},
+						"useAppCatalog": {
 							"type": "boolean"
 						},
 						"singleton": {
@@ -2109,6 +2139,12 @@
 					"type": "string",
 					"enum": ["system"]
 				},
+				"visible": {
+					"type": "boolean"
+				},
+				"debugServiceDelay": {
+					"type": "integer"
+				},
 				"window": {
 					"title": "window",
 					"description": "Logger service's window config",
@@ -2208,7 +2244,8 @@
 									}
 								},
 								"enableWindowsAeroSnap": {
-									"type": "boolean"
+									"type": "boolean",
+									"default": false
 								},
 								"tabbing": {
 									"type": "object",
@@ -2244,8 +2281,13 @@
 				},
 				"custom": {}
 			},
-			"required": ["spawnAs", "html", "file"],
+			"required": ["html"],
 			"additionalProperties": false
+		},
+		"scheduledRestart": {
+			"description": "Set Finsemble to automatically restart. These values can be overriden by the user through user preferences.\r\nhour 0 - The hour when Finsemble should restart. This is in 24 hour time according to the user's local machine's timezone.\r\nminute 0 - The minute when Finsemble should restart.\r\ndialogTimeout 10000 - When it is time to restart, the user is presented with a dialog to confirm or cancel. Since resets occur at night while the machine is unattended, most often the dialog will time out and Finsemble will reset. The `dialogTimeout` specifies how long to wait for a user response in milliseconds.",
+			"type": ["boolean", "object"],
+			"default": false
 		},
 		"serviceAssimilationConfig": {
 			"title": "assimilationConfig",
@@ -2486,12 +2528,62 @@
 				"sameDomain": {
 					"type": "string"
 				}
-			},
-			"requiredPlaceHolder": ["crossDomain", "sameDomain"]
+			}
 		},
 		"electronAdapter": {
 			"description": "Electron Adapter's config (that is dynamically added to manifest)",
 			"type": "object"
+		},
+		"loggerClientLogLevels": {
+			"description": "Sets the default logging state of each client in the Central Logger if no previous state is found",
+			"type": "object",
+			"properties": {
+				"Error": {
+					"description": "Set to 'true' to see 'Error' as a default client logging level",
+					"type": "boolean",
+					"default": true
+				},
+				"Warn": {
+					"description": "Set 'true' to see 'Warn' as a default client logging level",
+					"type": "boolean",
+					"default": true
+				},
+				"Info": {
+					"description": "Set to 'true' to see 'Info' as a default client logging level",
+					"type": "boolean",
+					"default": false
+				},
+				"Log": {
+					"description": "Set to 'true' to see 'Log' as a default client logging level",
+					"type": "boolean",
+					"default": true
+				},
+				"Debug": {
+					"description": "Set to 'true' to see 'Debug' as a default client logging level",
+					"type": "boolean",
+					"default": false
+				},
+				"Verbose": {
+					"description": "Set to 'true' to see 'Verbose' as a default client logging level",
+					"type": "boolean",
+					"default": false
+				},
+				"LocalOnly": {
+					"description": "Set to 'true' to see 'LocalOnly' as a default client logging level",
+					"type": "boolean",
+					"default": false
+				}
+			}
+		},
+		"logger": {
+			"title": "Logger configuartion",
+			"description": "(PUBLIC)",
+			"type": "object",
+			"properties": {
+				"defaultClientLogLevels": {
+					"ref": "#/definitions/loggerClientLogLevels"
+				}
+			}
 		}
 	}
 }

@@ -5,7 +5,7 @@
 
 import React from "react";
 import ReactDOM from "react-dom";
-import { FinsembleProvider } from "@chartiq/finsemble-ui/react/components/FinsembleProvider";
+import { FinsembleProvider } from "@finsemble/finsemble-ui/react/components/FinsembleProvider";
 import {
 	ToolbarShell,
 	FavoritesShell,
@@ -15,15 +15,20 @@ import {
 	AutoArrange,
 	Search,
 	AdvancedAppLauncherMenu,
-	AppLauncher,
+	AppLauncherMenu,
 	WorkspaceManagementMenu,
 	ToolbarSection,
-} from "@chartiq/finsemble-ui/react/components/Toolbar";
+} from "@finsemble/finsemble-ui/react/components/toolbar";
 import { FileMenu } from "./FileMenu";
-import { useHotkey } from "@chartiq/finsemble-ui/react/hooks/useHotkey";
-import "@chartiq/finsemble-ui/react/assets/css/finsemble.css";
+import { useHotkey } from "@finsemble/finsemble-ui/react/hooks/useHotkey";
+import "@finsemble/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../../assets/css/theme.css";
 
+/**
+ * Note: Set `FSBL.debug = true` if you need to reload the toolbar during development.
+ * By default, it prevents the system from closing it so that users aren't lost without
+ * a main window into finsemble functionality.
+ */
 const Toolbar = () => {
 	useHotkey(["ctrl", "alt", "shift", "r"], () => FSBL.restartApplication());
 	useHotkey(["ctrl", "alt", "up"], () =>
@@ -44,7 +49,7 @@ const Toolbar = () => {
 				<Search openHotkey={["ctrl", "alt", "f"]} />
 				<WorkspaceManagementMenu />
 				<AdvancedAppLauncherMenu enableQuickComponents={true} />
-				<AppLauncher enableQuickComponents={true} />
+				<AppLauncherMenu enableQuickComponents={true} />
 			</ToolbarSection>
 			<ToolbarSection className="center" hideBelowWidth={115}>
 				<div className="divider" />

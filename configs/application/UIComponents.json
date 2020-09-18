@@ -265,7 +265,7 @@
 				"options": {
 					"autoShow": false,
 					"contextMenu": false,
-					"showTaskbarIcon": false,
+					"showTaskbarIcon": true,
 					"smallWindow": true,
 					"maximizable": false
 				}

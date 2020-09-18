@@ -10,9 +10,9 @@
 	const gulp = require("gulp");
 	const shell = require("shelljs");
 	const path = require("path");
-	const FEA = require("@chartiq/finsemble-electron-adapter/exports");
+	const FEA = require("@finsemble/finsemble-electron-adapter/exports");
 	const FEA_PATH = path.resolve(
-		"./node_modules/@chartiq/finsemble-electron-adapter"
+		"./node_modules/@finsemble/finsemble-electron-adapter"
 	);
 	const FEAPackager = FEA ? FEA.packager : undefined;
 	const startupConfig = require("./configs/other/server-environment-startup");
@@ -222,13 +222,13 @@
 			const FINSEMBLE_PATH = path.join(
 				__dirname,
 				"node_modules",
-				"@chartiq",
+				"@finsemble",
 				"finsemble"
 			);
 			const FINSEMBLE_UI_PATH = path.join(
 				__dirname,
 				"node_modules",
-				"@chartiq",
+				"@finsemble",
 				"finsemble-ui"
 			);
 			const FINSEMBLE_VERSION = require(path.join(
@@ -242,7 +242,7 @@
 			const CLI_PATH = path.join(
 				__dirname,
 				"node_modules",
-				"@chartiq",
+				"@finsemble",
 				"finsemble-cli"
 			);
 			const CLI_VERSION = require(path.join(CLI_PATH, "package.json")).version;
@@ -261,7 +261,7 @@
 							);
 						} else {
 							logToTerminal(
-								`Using: @chartiq/${name} @Version ${version}`,
+								`Using: @finsemble/${name} @Version ${version}`,
 								"magenta"
 							);
 						}
@@ -394,6 +394,18 @@
 
 			// Inline require because this file is so large, it reduces the amount of scrolling the user has to do.
 			let installerConfig = require("./configs/other/installer.json");
+			let seedpackagejson = require("./package.json");
+			// Command line overrides
+
+			installerConfig.name = process.env.installername || installerConfig.name;
+			installerConfig.version =
+				process.env.installerversion ||
+				installerConfig.version ||
+				seedpackagejson.version;
+			installerConfig.authors =
+				process.env.installerauthors || installerConfig.authors;
+			installerConfig.description =
+				process.env.installerdescription || installerConfig.description;
 
 			//check if we have an installer config matching the environment name, if not assume we just have a single config for all environments
 			if (installerConfig[env.NODE_ENV]) {
@@ -420,7 +432,10 @@
 			// need absolute paths for certain installer configs
 			installerConfig = resolveRelativePaths(installerConfig, ["icon"], "./");
 
-			const manifestUrl = taskMethods.startupConfig[env.NODE_ENV].serverConfig;
+			const manifestUrl =
+				process.env.manifesturl ||
+				taskMethods.startupConfig[env.NODE_ENV].serverConfig;
+			console.log("The manifest location is: ", manifestUrl);
 			let { updateUrl } = taskMethods.startupConfig[env.NODE_ENV];
 			const { chromiumFlags } = taskMethods.startupConfig[env.NODE_ENV];
 
