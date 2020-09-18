@@ -2,9 +2,28 @@
 	"comment": "Sample component configuration",
 	"$schema": "../schemas/fileBasedSchemas/componentsFile.schema.json",
 	"components": {
-		"accountDetail": {
+		"Account Detail": {
 			"window": {
 				"url": "https://documentation.chartiq.com/finsemble/tutorials/components/accountDetail/accountDetail.html"
+			},
+			"foreign": {
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					}
+				}
+			}
+		},
+		"Account Statement": {
+			"window": {
+				"url": "https://documentation.chartiq.com/finsemble/tutorials/components/accountStatement/accountStatement.html"
+			},
+			"foreign": {
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					}
+				}
 			}
 		},
 		"Welcome Component": {
