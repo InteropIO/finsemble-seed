@@ -2,49 +2,9 @@
 	"comment": "Sample component configuration",
 	"$schema": "../schemas/fileBasedSchemas/componentsFile.schema.json",
 	"components": {
-		"google": {
+		"accountDetail": {
 			"window": {
-				"url": "http://www.google.com",
-				"affinity": "workspaceComponents",
-				"options": {
-					"resizable": true,
-					"autoShow": true,
-					"alwaysOnTop": false
-				},
-				"top": "center",
-				"left": "center",
-				"width": 400,
-				"height": 432
-			},
-			"component": {
-				"displayName": "Google",
-				"spawnOnStartup": false,
-				"preload": "$applicationRoot/preloads/zoom.js"
-			},
-			"foreign": {
-				"services": {
-					"windowService": {
-						"allowSnapping": true,
-						"allowGrouping": true,
-						"allowAutoArrange": true,
-						"allowMinimize": true
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"launchableByUser": true
-					},
-					"Window Manager": {
-						"alwaysOnTopIcon": false,
-						"showLinker": true,
-						"FSBLHeader": true,
-						"persistWindowState": true,
-						"title": "Welcome to Google"
-					},
-					"Toolbar": {
-						"iconClass": "ff-component"
-					}
-				}
+				"url": "https://documentation.chartiq.com/finsemble/tutorials/components/accountDetail/accountDetail.html"
 			}
 		},
 		"Welcome Component": {
@@ -119,7 +79,11 @@
 				"addToWorkspace": true
 			},
 			"component": {
-				"spawnOnHotkey": ["ctrl", "alt", "n"]
+				"spawnOnHotkey": [
+					"ctrl",
+					"alt",
+					"n"
+				]
 			},
 			"foreign": {
 				"services": {
