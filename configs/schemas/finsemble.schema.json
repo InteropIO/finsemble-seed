@@ -89,6 +89,18 @@
 						"bootConfig"
 					]
 				},
+				"finsemble-electron-adapter": {
+					"title": "finsemble-electron-adapter",
+					"description": "Manifest settings for finsemble-electron-adapter",
+					"type": "object",
+					"properties": {
+						"useDOMBasedMovement": {
+							"description": "Set to false to use native window movement with Electron",
+							"type": "boolean",
+							"default": true
+						}
+					}
+				},
 				"allowEvalInPreload": {
 					"description": "Set to `true` to delete `unsafe-eval` and `script-src directives` from the content security policy.",
 					"type": "boolean",

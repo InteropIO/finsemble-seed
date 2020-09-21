@@ -69,5 +69,8 @@
 			}
 		},
 		"importConfig": ["$applicationRoot/configs/application/config.json"]
+	},
+	"finsemble-electron-adapter": {
+		"useDOMBasedMovement": true
 	}
 }
