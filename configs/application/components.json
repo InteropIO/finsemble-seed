@@ -1,6 +1,6 @@
 {
 	"comment": "Sample component configuration",
-	"$schema": "../schemas/fileBasedSchemas/componentsFile.schema.json",
+	"$schema": "../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/componentsFile.schema.json",
 	"components": {
 		"google": {
 			"window": {

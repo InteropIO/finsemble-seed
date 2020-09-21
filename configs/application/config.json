@@ -1,6 +1,6 @@
 {
 	"comment": "Top-level application config for development, adding on top of the core config",
-	"$schema": "../schemas/fileBasedSchemas/applicationConfigFile.schema.json",
+	"$schema": "../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/applicationConfigFile.schema.json",
 	"accessibleLinker": true,
 	"authentication": {},
 	"servicesConfig": {
