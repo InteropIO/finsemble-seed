@@ -1,6 +1,6 @@
 {
 	"comment": "Top-level application config for development, adding on top of the core config",
-	"$schema": "../schemas/fileBasedSchemas/applicationConfigFile.schema.json",
+	"$schema": "../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/applicationConfigFile.schema.json",
 	"accessibleLinker": true,
 	"authentication": {},
 	"servicesConfig": {
@@ -62,8 +62,7 @@
 			"staggerPixels": 40,
 			"unknownComponent": "nonConfiguredComponent",
 			"defaultPreloads": {
-				"//browserViews": "preloads CSS into all BrowserView windows. Used to enable a scrim for drag shared data",
-				"browserViews": ["$applicationRoot/preloads/browserViewCss.js"]
+				"//": "Add preloads that will be injected into each browserView."
 			}
 		},
 		"assimilation": {

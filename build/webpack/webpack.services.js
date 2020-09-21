@@ -29,12 +29,14 @@ if (Object.keys(entry).length === 0) {
 let config = generateDefaultConfig();
 config.entry = entry;
 config.plugins.push(
-	new CopyWebpackPlugin([
-		{
-			from: "./src/services/",
-			to: "./services/",
-		},
-	])
+	new CopyWebpackPlugin({
+		patterns: [
+			{
+				from: "./src/services/",
+				to: "./services/",
+			},
+		],
+	})
 );
 
 module.exports = config;

@@ -1,5 +1,5 @@
 {
-	"$schema": "../schemas/fileBasedSchemas/manifestFile.schema.json",
+	"$schema": "../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/manifestFile.schema.json",
 	"devtools_port": 9090,
 	"startup_app": {
 		"name": "Cosaic Local",
@@ -38,7 +38,7 @@
 		"moduleRoot": "$applicationRoot/finsemble",
 		"servicesRoot": "$applicationRoot/finsemble/services",
 		"notificationURL": "$applicationRoot/components/notification/notification.html",
-		"configSchemaURL": "$applicationRoot/configs/schemas/finsemble.schema.json",
+		"configSchemaURL": "$moduleRoot/configs/schemas/finsemble.schema.json",
 		"bootConfig": {
 			"onErrorMakeSystemManagerVisible": true,
 			"defaults": {

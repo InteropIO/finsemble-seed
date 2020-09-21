@@ -1,6 +1,5 @@
 const path = require("path");
 const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const { DefinePlugin } = require("webpack");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const CaseSensitivePathsPlugin = require("case-sensitive-paths-webpack-plugin");
@@ -124,14 +123,6 @@ if (process.platform !== "darwin") {
 			cacheDirectory: "../.webpack-file-cache/[confighash]",
 		})
 	);
-}
-
-/**
- * When in production mode, the Uglify plugin will be used to minify output code.
- */
-if (env === "production") {
-	// When building the production environment, minify the code.
-	plugins.push(new UglifyJsPlugin());
 }
 
 /**

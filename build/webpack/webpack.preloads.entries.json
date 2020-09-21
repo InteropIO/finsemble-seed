@@ -6,9 +6,5 @@
 	"zoom": {
 		"output": "preloads/zoom",
 		"entry": "./src/preloads/zoom.js"
-	},
-	"browserViewCss": {
-		"output": "preloads/browserViewCss",
-		"entry": "./src/preloads/browserViewCss.js"
 	}
 }
