@@ -26,17 +26,13 @@ your own SmartDesktop and <del>rule the world</del> turbocharge your workflow.
    git clone https://github.com/chartiq/finsemble-seed
    ```
 2. 📦 Install the deps
-
-   (Note, we recommend using the [Yarn Package Manager](https://yarnpkg.com/) - it's fast and reliable. But you can also use npm.)
-
    ```
    cd finsemble-seed
-   yarn install
+   npm install
    ```
-
 3. 🚀 Start it!
    ```
-   yarn start
+   npm start
    ```
 
 Go ahead and take it for a spin!

@@ -33,7 +33,9 @@
 		"@finsemble/finsemble-cli": "^5.0.0-4"
 	},
 	"dependencies": {
+		"@finsemble/finsemble-core": "^5.0.0-4",
 		"@finsemble/finsemble-electron-adapter": "^5.0.0-4",
+		"@finsemble/finsemble-ui": "^5.0.0-4",
 		"async": "2.6.2",
 		"compression": "1.7.3",
 		"express": "4.16.4",
@@ -50,9 +52,6 @@
 		"@babel/preset-env": "7.8.7",
 		"@babel/preset-react": "7.9.4",
 		"@babel/runtime": "^7.8.4",
-		"@finsemble/finsemble-core": "^5.0.0-4",
-		"@finsemble/finsemble-ui": "^5.0.0-4",
-		"@types/mocha": "5.2.7",
 		"@types/react-dom": "16.9.8",
 		"babel-loader": "8.1.0",
 		"babel-plugin-add-module-exports": "1.0.2",
