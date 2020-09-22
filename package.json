@@ -23,7 +23,6 @@
 		"server": "gulp server --gulpfile=./gulpfile.js",
 		"server:prod": "gulp server:prod --gulpfile=./gulpfile.js",
 		"start": "gulp dev --gulpfile=./gulpfile.js",
-		"test": "npx ts-mocha \"./src/**/*.spec.ts\"",
 		"tslint": "./node_modules/tslint/bin/tslint -c \"tslint.json src/**/*.ts\"",
 		"tslint:fix": "./node_modules/tslint/bin/tslint -c \"tslint.json src/**/*.ts\" --fix",
 		"update-finsemble": "npm update @finsemble/finsemble-core && npm update -g @finsemble/finsemble-cli"
