@@ -22,7 +22,7 @@
 		"prod:nolaunch": "gulp prod:nolaunch --gulpfile=./gulpfile.js",
 		"server": "gulp server --gulpfile=./gulpfile.js",
 		"server:prod": "gulp server:prod --gulpfile=./gulpfile.js",
-		"start": "gulp dev --gulpfile=./gulpfile.js",
+		"start": "set EVAL_FORM=yes&& gulp dev --gulpfile=./gulpfile.js",
 		"tslint": "./node_modules/tslint/bin/tslint -c \"tslint.json src/**/*.ts\"",
 		"tslint:fix": "./node_modules/tslint/bin/tslint -c \"tslint.json src/**/*.ts\" --fix",
 		"update-finsemble": "npm update @finsemble/finsemble-core && npm update -g @finsemble/finsemble-cli"
