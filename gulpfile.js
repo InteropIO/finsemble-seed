@@ -223,7 +223,7 @@
 				__dirname,
 				"node_modules",
 				"@finsemble",
-				"finsemble"
+				"finsemble-core"
 			);
 			const FINSEMBLE_UI_PATH = path.join(
 				__dirname,

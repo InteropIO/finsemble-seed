@@ -42,5 +42,9 @@
 	"systemTrayComponent": {
 		"output": "components/systemTrayComponent/SystemTrayComponent",
 		"entry": "./src/components/systemTrayComponent/SystemTrayComponent.tsx"
+	},
+	"registration": {
+		"output": "components/registration/Registration",
+		"entry": "./src/components/registration/Registration.tsx"
 	}
 }

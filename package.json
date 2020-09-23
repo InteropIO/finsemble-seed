@@ -22,8 +22,7 @@
 		"prod:nolaunch": "gulp prod:nolaunch --gulpfile=./gulpfile.js",
 		"server": "gulp server --gulpfile=./gulpfile.js",
 		"server:prod": "gulp server:prod --gulpfile=./gulpfile.js",
-		"start": "gulp dev --gulpfile=./gulpfile.js",
-		"test": "npx ts-mocha \"./src/**/*.spec.ts\"",
+		"start": "set EVAL_FORM=yes&& gulp dev --gulpfile=./gulpfile.js",
 		"tslint": "./node_modules/tslint/bin/tslint -c \"tslint.json src/**/*.ts\"",
 		"tslint:fix": "./node_modules/tslint/bin/tslint -c \"tslint.json src/**/*.ts\" --fix",
 		"update-finsemble": "npm update @finsemble/finsemble-core && npm update -g @finsemble/finsemble-cli"
@@ -34,7 +33,9 @@
 		"@finsemble/finsemble-cli": "^5.0.0-4"
 	},
 	"dependencies": {
+		"@finsemble/finsemble-core": "^5.0.0-4",
 		"@finsemble/finsemble-electron-adapter": "^5.0.0-4",
+		"@finsemble/finsemble-ui": "^5.0.0-4",
 		"async": "2.6.2",
 		"compression": "1.7.3",
 		"express": "4.16.4",
@@ -51,9 +52,6 @@
 		"@babel/preset-env": "7.8.7",
 		"@babel/preset-react": "7.9.4",
 		"@babel/runtime": "^7.8.4",
-		"@finsemble/finsemble-core": "^5.0.0-4",
-		"@finsemble/finsemble-ui": "^5.0.0-4",
-		"@types/mocha": "5.2.7",
 		"@types/react-dom": "16.9.8",
 		"babel-loader": "8.1.0",
 		"babel-plugin-add-module-exports": "1.0.2",
@@ -62,7 +60,7 @@
 		"copy-webpack-plugin": "6.1.0",
 		"css-loader": "3.5.3",
 		"death": "1.1.0",
-		"file-loader": "1.1.11",
+		"file-loader": "6.1.0",
 		"gulp": "4.0.0",
 		"hard-source-webpack-plugin": "0.13.1",
 		"pretty-hrtime": "^1.0.3",
