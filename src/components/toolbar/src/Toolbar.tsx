@@ -48,7 +48,8 @@ const Toolbar = () => {
 				<FileMenu />
 				<Search openHotkey={["ctrl", "alt", "f"]} />
 				<WorkspaceManagementMenu />
-				<AdvancedAppLauncherMenu enableQuickComponents={true} />
+				{/* Uncomment the following to enable the AdvancedAppLauncherMenu*/}
+				{/* <AdvancedAppLauncherMenu enableQuickComponents={true} /> */}
 				<AppLauncherMenu enableQuickComponents={true} />
 			</ToolbarSection>
 			<ToolbarSection className="center" hideBelowWidth={115}>
