@@ -28,7 +28,7 @@
 	"appAssets": [
 		{
 			"src": "https://assets.finsemble.com/assimilation/assimilation_5.0.1.0.zip",
-			"version": "5.0.0.2",
+			"version": "5.0.1.0",
 			"alias": "assimilation",
 			"target": "AssimilationMain.exe"
 		}
