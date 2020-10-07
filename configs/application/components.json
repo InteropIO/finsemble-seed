@@ -19,7 +19,8 @@
 			"component": {
 				"displayName": "Welcome Component",
 				"spawnOnStartup": false,
-				"preload": "$applicationRoot/preloads/zoom.js"
+				"preload": "$applicationRoot/preloads/zoom.js",
+				"enableGrpc": true
 			},
 			"foreign": {
 				"services": {
