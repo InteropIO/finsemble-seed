@@ -1,6 +1,6 @@
 {
 	"name": "finsemble-seed",
-	"version": "5.1.0",
+	"version": "5.1.0-0",
 	"description": "",
 	"main": "index.js",
 	"scripts": {
@@ -30,12 +30,12 @@
 	"author": "Cosaic",
 	"license": "SEE LICENSE IN LICENSE",
 	"optionalDependencies": {
-		"@finsemble/finsemble-cli": "5.0.*"
+		"@finsemble/finsemble-cli": "^5.1.0"
 	},
 	"dependencies": {
-		"@finsemble/finsemble-core": "5.0.*",
-		"@finsemble/finsemble-electron-adapter": "5.0.*",
-		"@finsemble/finsemble-ui": "5.0.*",
+		"@finsemble/finsemble-core": "^5.1.0",
+		"@finsemble/finsemble-electron-adapter": "^5.1.0",
+		"@finsemble/finsemble-ui": "^5.1.0",
 		"async": "2.6.2",
 		"compression": "1.7.3",
 		"express": "4.16.4",
