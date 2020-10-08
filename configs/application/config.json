@@ -4,8 +4,8 @@
 	"accessibleLinker": true,
 	"authentication": {
 		"startup": {
-			"adapter": "PASSWORD",
-			"component": "Registration"
+			 "adapter": "PASSWORD",
+			 "component": "defaultAuthentication"
 		}
 	},
 	"servicesConfig": {

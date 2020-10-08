@@ -152,7 +152,7 @@
 				}
 			}
 		},
-		"Authentication": {
+		"defaultAuthentication": {
 			"window": {
 				"url": "$applicationRoot/components/defaultAuthentication/defaultAuthentication.html",
 				"top": "center",

@@ -67,12 +67,6 @@
 				"LocalOnly": false
 			}
         },
-        "authentication": {
-            "startup": {
-                 "adapter": "PASSWORD",
-                 "component": "defaultAuthentication"
-            }
-        },
 		"importConfig": ["$applicationRoot/configs/application/config.json"]
 	}
 }
