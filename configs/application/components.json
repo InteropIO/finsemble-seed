@@ -98,7 +98,7 @@
 		},
 		"Getting Started Tutorial": {
 			"window": {
-				"url": "https://www.chartiq.com/tutorials/?slug=finsemble",
+				"url": "https://documentation.finsemble.com/tutorial-gettingStarted.html",
 				"height": 800,
 				"width": 1000
 			},
