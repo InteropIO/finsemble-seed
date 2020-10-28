@@ -1,5 +1,6 @@
 {
 	"comment": "Sample component configuration",
+	"$schema": "../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/componentsFile.schema.json",
 	"components": {
 		"Welcome Component": {
 			"window": {
@@ -73,11 +74,7 @@
 				"addToWorkspace": true
 			},
 			"component": {
-				"spawnOnHotkey": [
-					"ctrl",
-					"alt",
-					"n"
-				]
+				"spawnOnHotkey": ["ctrl", "alt", "n"]
 			},
 			"foreign": {
 				"services": {
@@ -101,7 +98,7 @@
 		},
 		"Getting Started Tutorial": {
 			"window": {
-				"url": "https://www.chartiq.com/tutorials/?slug=finsemble",
+				"url": "https://documentation.finsemble.com/tutorial-gettingStarted.html",
 				"height": 800,
 				"width": 1000
 			},
@@ -155,13 +152,50 @@
 				}
 			}
 		},
-		"defaultAuthentication": {
+		"Authentication": {
 			"window": {
-				"url": "$applicationRoot/components/authentication/defaultAuthentication.html",
+				"url": "$applicationRoot/components/authentication/Authentication.html",
 				"top": "center",
 				"left": "center",
 				"width": 358,
-				"height": 658,
+				"height": 460,
+				"ephemeral": true,
+				"options": {
+					"autoShow": true
+				}
+			},
+			"component": {
+				"neededClients": [
+					"LauncherClient",
+					"AuthenticationClient",
+					"StorageClient"
+				],
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"windowService": {
+						"allowAutoArrange": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"FSBLHeader": false,
+						"persistWindowState": false
+					}
+				}
+			}
+		},
+		"Registration": {
+			"window": {
+				"url": "$applicationRoot/components/registration/registration.html",
+				"top": "center",
+				"left": "center",
+				"width": 400,
+				"height": 500,
 				"ephemeral": true,
 				"options": {
 					"autoShow": false
