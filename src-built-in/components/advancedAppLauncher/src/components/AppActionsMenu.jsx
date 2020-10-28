@@ -1,5 +1,5 @@
 /*!
-* Copyright 2018 by ChartIQ, Inc.
+* Copyright 2017 - 2020 by ChartIQ, Inc.
 * All rights reserved.
 *
 */
@@ -155,7 +155,7 @@ export default class AppActionsMenu extends React.Component {
 				<ul>
 					<li onClick={favoritesActionOnClick}>{favoritesText}</li>
 					{app.source && app.source === FDC3 && <li onClick={this.onViewInfo}>View Info</li>}
-					{!app.source && <li onClick={this.deleteApp}>Delete App</li>}
+					{!app.source && app.canDelete && <li onClick={this.deleteApp}>Delete App</li>}
 					{[ADVANCED_APP_LAUNCHER, FAVORITES].indexOf(folder.name) === -1 &&
 						<li onClick={this.onRemove}>Remove from {folder.name}</li>}
 				</ul>

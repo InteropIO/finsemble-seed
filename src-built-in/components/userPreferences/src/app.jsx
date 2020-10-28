@@ -1,5 +1,5 @@
 /*!
-* Copyright 2017 by ChartIQ, Inc.
+* Copyright 2017 - 2020 by ChartIQ, Inc.
 * All rights reserved.
 */
 import React from "react";
@@ -31,6 +31,9 @@ class UserPreferences extends React.Component {
 		UserPreferencesStore.addListener({ field: "activeSection" }, this.setActiveSection);
 	}
 	setActiveSection(err, data) {
+		// Update workspaces every time the view changes to get up-to-date information
+		UserPreferencesActions.getWorkspaces();
+		
 		this.setState({
 			activeSection: data.value
 		});

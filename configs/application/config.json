@@ -6,6 +6,7 @@
 			"initialStores": [
 				{
 					"name": "Finsemble-AppLauncher-Store",
+					"preferPreviousState": true,
 					"foundation": {
 						"appFolders": {
 							"list": ["Advanced App Launcher", "Favorites"],
@@ -13,31 +14,31 @@
 								"Advanced App Launcher": {
 									"icon": "ff-component",
 									"type": "folder",
-									"disableUserRemove": true,
-									"apps": {
-										"1": {
+									"canDelete": false,
+									"apps": [
+										{
 											"name": "Welcome Component",
 											"appID": "welcome-comp"
 										},
-										"2": {
+										{
 											"name": "Getting Started Tutorial",
 											"appID": "2"
 										},
-										"3": {
+										{
 											"name": "Process Monitor",
 											"appID": "pm"
 										},
-										"4": {
+										{
 											"name": "Notepad",
 											"appID": "note"
 										}
-									}
+									]
 								},
 								"Favorites": {
 									"icon": "ff-favorite",
 									"type": "folder",
-									"disableUserRemove": true,
-									"apps": {}
+									"canDelete": false,
+									"apps": []
 								}
 							}
 						},
@@ -104,7 +105,7 @@
 			"promptUserOnDirtyWorkspace": true
 		}
 	},
-	"systemTrayIcon": "$applicationRoot/assets/img/Finsemble_Taskbar_Icon.png",
+	"systemTrayIcon": "$applicationRoot/assets/img/Finsemble_SystemTray_Icon.png",
 	"systemTrayComponent": "File Menu",
 	"Window Manager": {
 		"alwaysOnTopIcon": false,

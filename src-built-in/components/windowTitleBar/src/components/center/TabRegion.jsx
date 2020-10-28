@@ -145,6 +145,7 @@ export default class TabRegion extends React.Component {
                     right: boundingBox.right + bounds.left 
                 };
                 if (!FSBL.Clients.WindowClient.isPointInBox(this.mousePositionOnDragEnd, tabRegion)) {
+                    // allow for a 50ms delay so this message goes after a drop message from a target window if tabbing
                     setTimeout(() => {
                         FSBL.Clients.WindowClient.stopTilingOrTabbing({ mousePosition: this.mousePositionOnDragEnd });
                     }, 50);
@@ -152,6 +153,13 @@ export default class TabRegion extends React.Component {
                         iAmDragging: false
                     });
                     this.onWindowResize();
+                } else {
+                    // sometimes a tab gets dropped in a bad spot where no action gets taken and we get stuck in tiling mode
+                    // to make sure nothing bad happens, call cancel after a similar 50ms delay
+                    // If some action was taken, this will be ignored by Finsemble
+                    setTimeout(() => {
+                        FSBL.Clients.WindowClient.cancelTilingOrTabbing();
+                    }, 50);
                 }
             }
         );

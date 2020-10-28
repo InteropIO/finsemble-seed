@@ -1,5 +1,5 @@
 /*!
-* Copyright 2017 by ChartIQ, Inc.
+* Copyright 2017 - 2020 by ChartIQ, Inc.
 * All rights reserved.
 * The workspace management menu may be the most complicated component that we have (other than the toolbar). It isn't because workspace management is particularly difficult, it's because there is a lot of user question and answer going on. We don't want to overwrite data without explicit consent, and so the calls get involved. To simplify the code, we are using the `async` library. If you are unfamiliar with this library, see this link: https://caolan.github.io/async/docs.html
 */
@@ -25,6 +25,7 @@ let defaultData = {
 	 * of the workspace management menu, the spinner doesn't show up.
 	 */
 	isSwitchingWorkspaces: false,
+	isPromptingUser: false,
 };
 
 function uuidv4() {
@@ -51,7 +52,7 @@ Actions = {
 	},
 	initialize: function () {
 		//Gets the workspace list and sets the value in the store.
-		FSBL.Clients.WorkspaceClient.getWorkspaces(function (err, workspaces) {
+		FSBL.Clients.WorkspaceClient.getWorkspaceNames(function (err, workspaces) {
 			Logger.system.debug("WorkspaceManagementStore init getWorkspaces", workspaces);
 			WorkspaceManagementStore.setValue({ field: "WorkspaceList", value: workspaces });
 		});
@@ -120,6 +121,12 @@ Actions = {
 	},
 	setIsSwitchingWorkspaces: function (val) {
 		return WorkspaceManagementStore.setValue({ field: "isSwitchingWorkspaces", value: val });
+	},
+	getIsPromptingUser: function () {
+		return WorkspaceManagementStore.getValue("isPromptingUser");
+	},
+	setIsPromptingUser: function (val) {
+		return WorkspaceManagementStore.setValue({ field: "isPromptingUser", value: val });
 	},
 	setPins: function (pins) {
 		if (pins) {
@@ -254,18 +261,23 @@ Actions = {
 			name: activeWorkspace.name
 		}, function (err, response) {
 			if (cb) {
-				cb();
+				cb(err);
 			}
 		});
 	},
 	reorderWorkspaceList: function (changeEvent) {
 		if (!changeEvent.destination) return;
-		let workspaces = JSON.parse(JSON.stringify(WorkspaceManagementStore.getValue({ field: 'WorkspaceList' })));
-		let workspaceToMove = JSON.parse(JSON.stringify(workspaces[changeEvent.source.index]));
+		let workspaces = WorkspaceManagementStore.getValue({ field: 'WorkspaceList' });
+		let workspaceToMove = workspaces[changeEvent.source.index];
 		workspaces.splice(changeEvent.source.index, 1);
 		workspaces.splice(changeEvent.destination.index, 0, workspaceToMove);
+		const workspacesWithExpectedStructure = workspaces.map((WSName) => {
+			return {
+				name: WSName
+			};
+		});
 		FSBL.Clients.WorkspaceClient.setWorkspaces({
-			workspaces: workspaces
+			workspaces: workspacesWithExpectedStructure
 		});
 		WorkspaceManagementStore.setValue({ field: "WorkspaceList", value: workspaces });
 	},
@@ -342,7 +354,12 @@ Actions = {
 	 * Asks the user if they'd like to save their data, then loads the requested workspace.
 	 */
 	switchToWorkspace: function (data) {
-		if (Actions.getIsSwitchingWorkspaces()) return;
+		// if a workspace prompt is outstanding for a previous switch, immediately return to lock out user from doing another switch (until responding to prompt);
+		// note this prompting flag is cleared in Actions.onAsyncComplete when the previous switch completes (after user responds to the prompt)
+		let prompting = Actions.getIsPromptingUser()
+		Logger.system.log("workspaceManagementMenuStore: switchToWorkspace", prompting ? "prompting" : "not-prompting");
+		if (prompting) return;
+
 		Actions.setIsSwitchingWorkspaces(true);
 		Actions.blurWindow();
 		let name = data.name;
@@ -350,12 +367,15 @@ Actions = {
 		/**
 		 * Actually perform the switch. Happens after we ask the user what they want.
 		 *
+		 * @param {function} callback - invoked on completion of switchTo
+		 *
 		 */
-		function switchWorkspace() {
+		function switchWorkspace(callback = Function.prototype) {
 			FSBL.Clients.WorkspaceClient.switchTo({
 				name: name
 			}, () => {
-				Actions.setIsSwitchingWorkspaces(false);
+					Actions.setIsSwitchingWorkspaces(false);
+					callback();
 			});
 		}
 		/**
@@ -373,6 +393,7 @@ Actions = {
 		 */
 		let tasks = [];
 		if (activeWorkspace.isDirty) {
+			Actions.setIsPromptingUser(true);
 			let firstMethod = Actions.autoSave,
 				secondMethod = null;
 			if (PROMPT_ON_SAVE === true) {
@@ -414,6 +435,8 @@ Actions = {
 	 * @param {any} result
 	 */
 	onAsyncComplete(err, result) {
+		Logger.system.debug("workspaceManagementMenuStore: onAsyncComplete");
+
 		WorkspaceManagementStore.setValue({ field: "newWorkspaceDialogIsActive", value: false });
 		const errMessage = err && err.message;
 		if (errMessage && errMessage !== NEGATIVE && errMessage !== SAVE_DIALOG_CANCEL_ERROR) {
@@ -423,6 +446,8 @@ Actions = {
 
 		//Unlock the UI.
 		Actions.setIsSwitchingWorkspaces(false);
+		Actions.setIsPromptingUser(false);
+
 	},
 	/**
 	 * NOTE: Leaving this function here until we figure out notifications.
@@ -524,7 +549,21 @@ Actions = {
 	handleSaveDialogResponse(response, callback) {
 		if (response.choice === "affirmative") {
 			//User wants to save, so call the client API.
-			Actions.saveWorkspace(callback);
+			Actions.saveWorkspace((err) => {
+				if (!err) {
+					callback();
+				} else {
+					Actions.spawnDialog("yesNo", {
+						question: "The workspace save failed. Continuing will lose recent changers to this workspace.  Do you want to continue loading the new workspace?"
+					}, (err, response) => {
+						if (response.choice === "affirmative") {
+							callback();
+						} else {
+							callback(new Error(SAVE_DIALOG_CANCEL_ERROR));
+						}
+					});
+				}
+			});
 		} else if (response.choice === "negative") {
 			//Doesn't want to save.
 			callback();
@@ -613,7 +652,7 @@ Actions = {
 		let workspaceName = response.value;
 		//Array.some will return true for the first element in the array that satisfies the condition. If none are true, it'll go through the entire array. It's essentially a way to short-circuit a for loop. This lets us know if any workspace has the same name that the user is trying to input.
 		let workspaceExists = FSBL.Clients.WorkspaceClient.workspaces.some(workspace => {
-			return workspace.name === workspaceName;
+			return workspace === workspaceName;
 		});
 		callback(null, { workspaceExists, workspaceName, template: response.template });
 	},
