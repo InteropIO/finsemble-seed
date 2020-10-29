@@ -4,9 +4,9 @@ This recipe intend to provide an example for integrating Keycloak with Finsemble
 To use Keycloak, please download Keycloak from https://www.keycloak.org/downloads.html and follow their instruction to start and configure Keycloak
 
 To use Keycloak in Finsemble, the following should be added or modified.
-- Manifest.json
+- config.json
 
-You have to add `authentication` under `finsemble`
+You have to add `authentication` attribute. Please see the example in config.json and the following.
 
 e.g.
 ```javascript
@@ -25,7 +25,7 @@ e.g.
         // The page should be redirected to after authenication
         // This page will then pass the auth code from keycloak to the backchannel endpoint
         "redirect_uri": "$applicationRoot/components/oauthRespone/oauthRespone.html",
-        // The auth component                
+        // The auth component
         "component": "oauthRespone"
     }
 }
@@ -41,4 +41,3 @@ After that, you can add your own logic in the callback of runBusinessLogic() to 
 
 This must be setup in your own server to handle the auth code sent from Keycloak.
 In this recipe, you can find sample code in `server/server.js`. The auth code and relative parameters sent Keycloak will then be sent back to Keycloak's token endpoint to retrieve the acces token.
-

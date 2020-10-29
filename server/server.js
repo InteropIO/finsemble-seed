@@ -219,7 +219,7 @@
 			let keyCloakPort = 8080
 			let KeycloakTokenEndpoint = '/auth/realms/dev/protocol/openid-connect/token'
 			// Your Keycloak client secret, you can set get in the admin page of Keycloak
-			let keycloarClient_secret = 'f6070b8d-6adb-4dd2-83ca-14be37720436'
+			let keycloakClient_secret = 'f6070b8d-6adb-4dd2-83ca-14be37720436'
 			
 			// The params to be sent back to Keycloak to retrieve the access_token
 			let params = {
@@ -227,7 +227,7 @@
 				grant_type: grant_type,
 				redirect_uri: redirect_uri,
 				client_id: client_id,
-				client_secret: keycloarClient_secret
+				client_secret: keycloakClient_secret
 			};
 
 			// Send post request to Keycloak token endpoint and pass back the response to Finsemble client
