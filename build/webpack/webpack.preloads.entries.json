@@ -6,5 +6,9 @@
 	"zoom": {
 		"output": "preloads/zoom",
 		"entry": "./src/preloads/zoom.js"
+	},
+	"hideSplashScreen": {
+		"output": "preloads/hideSplashScreen",
+		"entry": "./src/preloads/hideSplashScreen.js"
 	}
 }

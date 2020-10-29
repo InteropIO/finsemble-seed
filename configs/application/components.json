@@ -241,7 +241,7 @@
                 }
             },
             "component": {
-                "preload": false,
+                "preload": "$applicationRoot/preloads/hideSplashScreen.js",
                 "neededClients": [
                     "LauncherClient",
                     "AuthenticationClient",
@@ -261,7 +261,7 @@
                     },
                     "Window Manager": {
                         "title": "oauthRespone",
-                        "FSBLHeader": true,
+                        "FSBLHeader": false,
                         "persistWindowState": true
                     },
                     "Toolbar": {
