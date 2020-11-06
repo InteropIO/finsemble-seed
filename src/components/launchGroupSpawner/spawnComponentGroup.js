@@ -52,11 +52,6 @@
  * 			"spawnOptions": {"top": 0, "left": "40%", "height": "50%", "width": "60%", "data": {}}
  * 		},
  * 		{
- * 			"componentType": "Welcome Component",
- * 			"spawnOptions": {"top": "50%", "left": 0, "height": "50%", "width": "100%", "data": {})
- * 			}
- * 		},
- * 		{
  * 			"components": [
  * 				{
  *		 			"componentType": "Welcome Component",
