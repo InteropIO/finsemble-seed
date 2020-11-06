@@ -38,22 +38,23 @@
 							}
 						},
 						{
-							"componentType": "Welcome Component",
+							"components": [{
+								"componentType": "Welcome Component",
+								"spawnOptions": {
+									"data": {}
+								}
+							},
+							{
+								"componentType": "Process Monitor",
+								"spawnOptions": {
+									"data": {}
+								}
+							}],
 							"spawnOptions": {
 								"top": 300,
 								"left": 0,
 								"height": 300,
-								"width": 200,
-								"data": {}
-							}
-						},
-						{
-							"componentType": "Welcome Component",
-							"spawnOptions": {
-								"top": 300,
-								"left": 200,
-								"height": 300,
-								"width": 400,
+								"width": 600,
 								"data": {}
 							}
 						},
@@ -70,7 +71,9 @@
 					]
 				}
 			},
-			"component": {},
+			"component": {
+				"mode": "example"
+			},
 			"foreign": {
 				"components": {
 					"App Launcher": {
@@ -111,23 +114,25 @@
 							}
 						},
 						{
-							"componentType": "Welcome Component",
+							"components": [
+								{
+									"componentType": "Welcome Component",
+									"spawnOptions": {
+										"data": {}
+									}
+								},
+								{
+									"componentType": "Process Monitor",
+									"spawnOptions": {
+										"data": {}
+									}
+								}
+							],
 							"spawnOptions": {
 								"top": 250,
 								"left": 0,
 								"height": 250,
-								"width": 300,
-								"data": {}
-							}
-						},
-						{
-							"componentType": "Welcome Component",
-							"spawnOptions": {
-								"top": 250,
-								"left": 300,
-								"height": 250,
-								"width": 300,
-								"data": {}
+								"width": 600
 							}
 						},
 						{
@@ -153,7 +158,9 @@
 					]
 				}
 			},
-			"component": {},
+			"component": {
+				"mode": "example"
+			},
 			"foreign": {
 				"components": {
 					"App Launcher": {
@@ -193,23 +200,25 @@
 							}
 						},
 						{
-							"componentType": "Welcome Component",
+							"components": [
+								{
+									"componentType": "Welcome Component",
+									"spawnOptions": {
+										"data": {}
+									}
+								},
+								{
+									"componentType": "Process Monitor",
+									"spawnOptions": {
+										"data": {}
+									}
+								}
+							],
 							"spawnOptions": {
 								"top": 250,
 								"left": 0,
 								"height": 250,
-								"width": 300,
-								"data": {}
-							}
-						},
-						{
-							"componentType": "Welcome Component",
-							"spawnOptions": {
-								"top": 250,
-								"left": 300,
-								"height": 250,
-								"width": 300,
-								"data": {}
+								"width": 600
 							}
 						},
 						{
@@ -235,7 +244,67 @@
 					]
 				}
 			},
-			"component": {},
+			"component": {
+				"mode": "example"
+			},
+			"foreign": {
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {},
+					"Toolbar": {
+						"iconClass": "launchGroupSpawner",
+						"iconURL": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png"
+					}
+				}
+			}
+		},
+		"launchGroupSpawnerExampleJustTabs": {
+			"window": {
+				"url": "$applicationRoot/components/launchGroupSpawner/launchGroupSpawner.html",
+				"options": {
+					"resizable": true,
+					"autoShow": false,
+					"alwaysOnTop": false
+				},
+				"top": 100,
+				"left": 400,
+				"width": 500,
+				"height": 600,
+				"addToWorkspace": false,
+				"data": {
+					"linkerGroup": "auto",
+					"toSpawn": [
+						{
+							"components": [
+								{
+									"componentType": "Welcome Component",
+									"spawnOptions": {
+										"data": {}
+									}
+								},
+								{
+									"componentType": "Process Monitor",
+									"spawnOptions": {
+										"data": {}
+									}
+								}
+							],
+							"spawnOptions": {
+								"top": 0,
+								"left": 0,
+								"height": "100%",
+								"width": "100%",
+								"data": {}
+							}
+						}
+					]
+				}
+			},
+			"component": {
+				"mode": "example"
+			},
 			"foreign": {
 				"components": {
 					"App Launcher": {
@@ -297,29 +366,34 @@
 							}
 						},
 						{
-							"componentType": "Welcome Component",
+							"components": [
+								{
+									"componentType": "Welcome Component",
+									"spawnOptions": {
+										"data": {}
+									}
+								},
+								{
+									"componentType": "Process Monitor",
+									"spawnOptions": {
+										"data": {}
+									}
+								}
+							],
 							"spawnOptions": {
 								"top": "50%",
 								"left": 0,
 								"height": "50%",
-								"width": "50%",
-								"data": {}
-							}
-						},
-						{
-							"componentType": "Welcome Component",
-							"spawnOptions": {
-								"top": "50%",
-								"left": "50%",
-								"height": "50%",
-								"width": "50%",
+								"width": "100%",
 								"data": {}
 							}
 						}
 					]
 				}
 			},
-			"component": {},
+			"component": {
+				"mode": "example"
+			},
 			"foreign": {
 				"components": {
 					"App Launcher": {
@@ -393,7 +467,9 @@
 					]
 				}
 			},
-			"component": {},
+			"component": {
+				"mode": "example"
+			},
 			"foreign": {
 				"components": {
 					"App Launcher": {
@@ -467,7 +543,9 @@
 					]
 				}
 			},
-			"component": {},
+			"component": {
+				"mode": "example"
+			},
 			"foreign": {
 				"components": {
 					"App Launcher": {

@@ -2,9 +2,13 @@
  * Spawn multiple components, via an array of Objects defining the componentType and spawnOptions 
  * to pass to LauncherClient.spawn. The spawned components are grouped automatically.
  * 
- * @param {Array} componentsToSpawn An array of objects with componentType and spawnOptions values. 
- * Most arguments that are normally passed to spawn are supported, although positioning will be 
- * interpreted as relative to the group's coordinates and dimensions.
+ * @param {Array} componentsToSpawn An array of objects defining the components to spawn. Each entry may either represent
+ * a single component in the form `{componentType, spawnOptions}` or a tabbed window of components in the form 
+ * `{components, spawnOptions}`, where `components` is an array of single component definitions (again in the form 
+ * `{componentType, spawnOptions}`).  
+ * Most arguments that are normally passed to `LauncherClient.spawn` are supported, although positioning will be 
+ * interpreted as relative to the group's coordinates and dimensions for single components and ignored for tabbed
+ * components (as these use the position specified in the group's spawnOptions).
  * @param {Object} groupParams Parameters defining the group size, position and linker channel on the current monitor (rather than relative to the virtual monitor - hence, the top/left corner should always be 0,0)
  * @param {number} groupParams.top The top coordinate of the group from which each component's top is offset
  * @param {number} groupParams.left The left coordinate of the group from which each component's left is offset.
@@ -23,10 +27,19 @@
  * 			"spawnOptions": {"top": 0, "left": 300, "height": 400, "width": 500, "data": {}}
  * 		},
  * 		{
- * 			"componentType": "Welcome Component",
- * 			"spawnOptions": {"top": 400, "left": 0, "height": 400, "width": 800, "data": {})
- * 			}
- * 		}];
+ * 			"components": [
+ * 				{
+ *		 			"componentType": "Welcome Component",
+ * 					"spawnOptions": {"data": {}}
+ *				},
+ *				{
+ *		 			"componentType": "Welcome Component",
+ * 					"spawnOptions": {"data": {}}
+ *				}
+ * 			],
+ * 			"spawnOptions": {"top": 400, "left": 0, "height": 400, "width": 800}
+ * 		}
+ * }];
  * let promise = spawnComponentGroup(toSpawn, {top: 200, left: 200, linkerGroup:'auto'});
  * 
  * @example
@@ -42,8 +55,21 @@
  * 			"componentType": "Welcome Component",
  * 			"spawnOptions": {"top": "50%", "left": 0, "height": "50%", "width": "100%", "data": {})
  * 			}
+ * 		},
+ * 		{
+ * 			"components": [
+ * 				{
+ *		 			"componentType": "Welcome Component",
+ * 					"spawnOptions": {"data": {}}
+ *				},
+ *				{
+ *		 			"componentType": "Welcome Component",
+ * 					"spawnOptions": {"data": {}}
+ *				}
+ * 			],
+ * 			"spawnOptions": {"top": "50%", "left": 0, "height": "50%", "width": "100%"}
  * 		}];
- * let promise = spawnComponentGroup(toSpawn, {top: 200, left: 200, width: "90%", height: "90%", linkerGroup:'auto'});
+ * let promise = spawnComponentGroup(toSpawn, {top: "center", left: "center", width: "90%", height: "90%", linkerGroup:'auto'});
  */
 const spawnComponentGroup = function(componentsToSpawn, groupParams) {
 	if (groupParams.linkerGroup == 'auto'){
@@ -53,17 +79,87 @@ const spawnComponentGroup = function(componentsToSpawn, groupParams) {
 	let compsToSpawn = processConfig(componentsToSpawn, groupParams);
 	FSBL.Clients.Logger.log(`Spawning component group at top: ${groupParams.top}, left: ${groupParams.left}, width: ${groupParams.width}, height: ${groupParams.height}, linkerGroup: ${groupParams.linkerGroup} and config:`, componentsToSpawn);
 	return Promise.all(compsToSpawn.map(function(aComp) {
-		if (groupParams.linkerGroup) { 
-			if (!aComp.spawnOptions.data) { aComp.spawnOptions.data = {}; }
-			aComp.spawnOptions.data.linker = { channels: [groupParams.linkerGroup]};
+		if (aComp.componentType) {
+			//single component
+			if (groupParams.linkerGroup) { 
+				if (!aComp.spawnOptions.data) { aComp.spawnOptions.data = {}; }
+				aComp.spawnOptions.data.linker = { channels: [groupParams.linkerGroup]};
+			}
+			FSBL.Clients.Logger.log(`Spawning ${aComp.componentType} with options: ${JSON.stringify(aComp.spawnOptions, null, 2)}`);
+			return FSBL.Clients.LauncherClient.spawn(aComp.componentType, aComp.spawnOptions);
+		} else if(aComp.components) {
+			//tabbed components
+			return spawnTabbedGroup(aComp.components, aComp.spawnOptions, groupParams.linkerGroup);
+		} else {
+			//config error...
+			FSBL.Clients.Logger.error("Component specified had neither a componentType or components value, unable to spawn.\nProblem element:\n" + JSON.stringify(aComp, null, 2));
+			return null;
 		}
-		FSBL.Clients.Logger.log(`Spawning ${aComp.componentType} with options: ${JSON.stringify(aComp.spawnOptions, null, 2)}`);
-		return FSBL.Clients.LauncherClient.spawn(aComp.componentType, aComp.spawnOptions);
 	})).then(function(spawnResponses){
 		//tell the first component to form a group 
 		FSBL.Clients.Logger.log("forming group on:", spawnResponses[0].response.windowIdentifier);
 		FSBL.Clients.RouterClient.transmit("DockingService.formGroup", { windowName: spawnResponses[0].response.windowIdentifier.windowName });
 		return spawnResponses;
+	});
+}
+
+/**
+ * Spawn multiple components as a tabbed group.
+ * The spawned components are may also be added to a 
+ * linker channel automatically.
+ * 
+ * @param {Array} componentsToSpawn An array of Objects of the form `{componentType, spawnOptions}` defining the components to spawn. 
+ * @param {object} params Spawn parameters for the group, expected to include positioning (top/left) and sizing (width/height) information for the group.
+ * @param {string} linkerGroup (Optional) The name of the linker group to add the spawned components to.
+ * @returns {Array} An array of the responses from each spawn command [{err, response},...]
+ * @example 
+ * let toSpawn = ["Welcome Component","Welcome Component","Welcome Component"];
+ * let promise = spawnTabbedGroup(toSpawn, {top: 100, left: 200, width: 400, height: 600}}, 'auto');
+ */
+const spawnTabbedGroup = function(componentsToSpawn, params, linkerGroup) {
+	FSBL.Clients.Logger.log(`Spawning tabbed component group (${JSON.stringify(componentsToSpawn)}) with parameters`, params);
+	
+	let response = {};
+
+	
+	if (linkerGroup) { 
+		if (!params.data) { params.data = {}; }
+		params.data.linker = { channels: [linkerGroup]};
+	}
+	return Promise.all(componentsToSpawn.map(function(aComp) {
+		//apply positional config from the group options to form full options for each component
+		let componentParams = Object.assign({}, aComp.spawnOptions);
+		delete componentParams.top, componentParams.left, componentParams.bottom, componentParams.right, componentParams.width, componentParams.height, componentParams.monitor;
+		componentParams = Object.assign(componentParams, params);
+
+		FSBL.Clients.Logger.info(`Spawning ${aComp.componentType} with options: ${JSON.stringify(componentParams, null, 2)}`);
+		return FSBL.Clients.LauncherClient.spawn(aComp.componentType, componentParams);
+	})).then(function(spawnResponses){
+		FSBL.Clients.Logger.info("Spawn responses:", spawnResponses);
+		let winIds = [];
+		//collect up window identifiers
+		spawnResponses.forEach((item,index) => {
+			if (item.err) {
+				FSBL.Clients.Logger.error("Error spawning " + componentsToSpawn[index] + ", err: ", item.err)
+			}
+			winIds[index] = item.response.windowIdentifier;
+		});
+
+		//form a tabbed window
+		FSBL.Clients.Logger.info("Forming tabbed window");
+		let tabbedParams = Object.assign({}, params);
+		tabbedParams = Object.assign(tabbedParams, {
+			windowType: "StackedWindow", 
+			data: { windowIdentifiers: winIds }, 
+			options: { newStack: true }
+		});
+
+		response.spawnResponses = spawnResponses;
+		return FSBL.Clients.LauncherClient.spawn("StackedWindow", tabbedParams);
+	}).then(function(stackedWindowResponse){
+		//pack up responses and return
+		response.stackedWindowResponse = stackedWindowResponse;
+		return response;
 	});
 }
 
@@ -100,7 +196,7 @@ const processConfig = function(componentsToSpawn, groupParams) {
 			(!element.spawnOptions.width && (element.spawnOptions.left == undefined || element.spawnOptions.right == undefined)) ||
 			(!element.spawnOptions.height && (element.spawnOptions.top == undefined || element.spawnOptions.bottom == undefined))
 			){
-			throw new Error("Incomplete config for component within group (a position and size must be derivable from the config), groupParams provided: \n" + JSON.stringify(groupParams, null, 2));
+			throw new Error("Incomplete config for component within group (a position and size must be derivable from the config), groupParams provided: \n" + JSON.stringify(groupParams, null, 2)+ "\nproblem component:\n" + JSON.stringify(element, null, 2));
 		}
 	});
 
