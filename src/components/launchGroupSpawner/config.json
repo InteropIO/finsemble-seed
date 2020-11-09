@@ -9,7 +9,7 @@
 					"autoShow": false,
 					"alwaysOnTop": false
 				},
-				"top": 100,
+				"top": 0,
 				"left": 400,
 				"width": 200,
 				"height": 200,
@@ -95,7 +95,7 @@
 					"autoShow": false,
 					"alwaysOnTop": false
 				},
-				"top": 50,
+				"top": 0,
 				"left": 100,
 				"width": 200,
 				"height": 200,
@@ -182,7 +182,7 @@
 					"autoShow": false,
 					"alwaysOnTop": false
 				},
-				"top": 50,
+				"top": 0,
 				"left": 100,
 				"width": 200,
 				"height": 200,
@@ -268,7 +268,7 @@
 					"autoShow": false,
 					"alwaysOnTop": false
 				},
-				"top": 100,
+				"top": 0,
 				"left": 400,
 				"width": 500,
 				"height": 600,
@@ -326,7 +326,7 @@
 					"autoShow": false,
 					"alwaysOnTop": false
 				},
-				"top": "10%",
+				"top": "0%",
 				"left": "10%",
 				"width": "80%",
 				"height": "80%",
