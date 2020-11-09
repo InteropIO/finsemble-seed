@@ -19,8 +19,8 @@ const FSBLReady = () => {
                     }
 					let params = {
 						//make position data relative to the current monitor (and convert bottom/right to distance from those edges)
-						top: spawnerOptions.defaultTop // - spawnerOptions.monitorDimensions.top, /* disabled due to changes in Finsemble claimed space) */ 
-						left: spawnerOptions.defaultLeft// - spawnerOptions.monitorDimensions.left, /* disabled due to changes in Finsemble claimed space) */
+						top: spawnerOptions.defaultTop, // - spawnerOptions.monitorDimensions.top, /* disabled due to changes in Finsemble claimed space) */ 
+						left: spawnerOptions.defaultLeft, // - spawnerOptions.monitorDimensions.left, /* disabled due to changes in Finsemble claimed space) */
 						bottom: spawnerOptions.monitorDimensions.bottom - spawnerOptions.bottom,
 						right: spawnerOptions.monitorDimensions.right - spawnerOptions.right,
 						width: spawnerOptions.defaultWidth,
