@@ -47,10 +47,7 @@ const showPopup = (pct) => {
 			window.timerHandle = null;
 		}
 
-		window.timerHandle = setTimeout(
-			() => (popup.style.display = "none"),
-			window.zoomTimeout
-		);
+		window.timerHandle = setTimeout(() => (popup.style.display = "none"), window.zoomTimeout);
 	}
 };
 /**
@@ -83,16 +80,13 @@ const setZoom = (pct) => {
 	});
 };
 
-const roundTo1Decimal = (input) =>
-	Math.round((input + Number.EPSILON) * 10) / 10;
+const roundTo1Decimal = (input) => Math.round((input + Number.EPSILON) * 10) / 10;
 
 /**
  * Zooms the page in one step.
  */
 const zoomIn = () => {
-	window.fsblZoomLevel = roundTo1Decimal(
-		window.fsblZoomLevel + window.zoomStep
-	);
+	window.fsblZoomLevel = roundTo1Decimal(window.fsblZoomLevel + window.zoomStep);
 	if (window.fsblZoomLevel < window.zoomMin) {
 		window.fsblZoomLevel = window.zoomMin;
 	}
@@ -103,9 +97,7 @@ const zoomIn = () => {
  * Zooms the page out one step.
  */
 const zoomOut = () => {
-	window.fsblZoomLevel = roundTo1Decimal(
-		window.fsblZoomLevel - window.zoomStep
-	);
+	window.fsblZoomLevel = roundTo1Decimal(window.fsblZoomLevel - window.zoomStep);
 	if (window.fsblZoomLevel > window.zoomMax) {
 		window.fsblZoomLevel = window.zoomMax;
 	}
@@ -237,10 +229,7 @@ const zoomConfigHandler = (err, zoom) => {
  */
 const getZoomLevelHandler = (err, zoomLevel) => {
 	if (err) {
-		FSBL.Clients.Logger.info(
-			'No "fsbl-zoom" settings found in component state',
-			err
-		);
+		FSBL.Clients.Logger.info('No "fsbl-zoom" settings found in component state', err);
 	} else if (zoomLevel != null) {
 		FSBL.Clients.Logger.info(`Retrieved zoomLevel from state: ${zoomLevel}`);
 		window.fsblZoomLevel = zoomLevel;
@@ -248,19 +237,13 @@ const getZoomLevelHandler = (err, zoomLevel) => {
 	} else {
 		//check for default configuration for zoom level and apply as needed
 		let defaultLevel =
-			FSBL?.Clients?.WindowClient?.options?.customData?.foreign?.components?.[
-				"Window Manager"
-			]?.zoomDefault;
+			FSBL?.Clients?.WindowClient?.options?.customData?.foreign?.components?.["Window Manager"]?.zoomDefault;
 		if (defaultLevel) {
-			FSBL.Clients.Logger.info(
-				`Retrieved default zoom level from config: ${defaultLevel}`
-			);
+			FSBL.Clients.Logger.info(`Retrieved default zoom level from config: ${defaultLevel}`);
 			window.fsblZoomLevel = defaultLevel;
 			setZoom(defaultLevel);
 		} else {
-			FSBL.Clients.Logger.info(
-				"No default zoom level retrieved from configuration "
-			);
+			FSBL.Clients.Logger.info("No default zoom level retrieved from configuration ");
 		}
 	}
 	window.settingInitialZoom = false;
@@ -273,11 +256,7 @@ const runZoomHandler = () => {
 	//Override FEA window zoom function to do nothing
 	//which prevents manual use of this function which conflicts with zoom preload
 	//N.B. window.options.accelerator.zoom setting is not affected by this and will still conflict with Zoom preload if set
-	FSBL.Clients.WindowClient.getCurrentWindow().setZoomLevel = function (
-		level,
-		callback,
-		errorCallback
-	) {
+	FSBL.Clients.WindowClient.getCurrentWindow().setZoomLevel = function (level, callback, errorCallback) {
 		callback();
 	};
 
@@ -290,8 +269,7 @@ const runZoomHandler = () => {
 		(err, componentConfig) => {
 			// Read component config for zoom
 			try {
-				const zoomConfig =
-					componentConfig.foreign.components["Window Manager"].zoom;
+				const zoomConfig = componentConfig.foreign.components["Window Manager"].zoom;
 				if (zoomConfig) {
 					return zoomConfigHandler(null, zoomConfig);
 				}
@@ -300,10 +278,7 @@ const runZoomHandler = () => {
 			}
 
 			// If component doesn't have a config, read global config for zoom
-			FSBL.Clients.ConfigClient.getValue(
-				{ field: "finsemble.Window Manager.zoom" },
-				zoomConfigHandler
-			);
+			FSBL.Clients.ConfigClient.getValue({ field: "finsemble.Window Manager.zoom" }, zoomConfigHandler);
 		}
 	);
 
@@ -315,10 +290,7 @@ const runZoomHandler = () => {
 	FSBL.Clients.HotkeyClient.addBrowserHotkey(["ctrl", "0"], resetZoom);
 
 	// Updates the component with the zoom level from the previous load, if one exists.
-	FSBL.Clients.WindowClient.getComponentState(
-		{ field: "fsbl-zoom" },
-		getZoomLevelHandler
-	);
+	FSBL.Clients.WindowClient.getComponentState({ field: "fsbl-zoom" }, getZoomLevelHandler);
 
 	window.addEventListener("wheel", handleWheel, {
 		capture: false,

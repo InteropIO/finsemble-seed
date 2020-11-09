@@ -98,15 +98,9 @@
 					app.use("/", express.static(rootDir, options));
 					// Open up the Finsemble Components,services, and clients
 					app.use("/finsemble", express.static(moduleDirectory, options));
-					app.use(
-						"/installers",
-						express.static(path.join(__dirname, "..", "installers"), options)
-					);
+					app.use("/installers", express.static(path.join(__dirname, "..", "installers"), options));
 					// For Assimilation
-					app.use(
-						"/hosted",
-						express.static(path.join(__dirname, "..", "hosted"), options)
-					);
+					app.use("/hosted", express.static(path.join(__dirname, "..", "hosted"), options));
 
 					// configs/application/manifest-local.json and configs/other/server-environment-startup.json
 					// Make the config public
@@ -125,11 +119,11 @@
 
 	/**
 	 * In development *you must* have a cache age of zero otherwise you'll really be wondering why your code changes aren't taking effect!
-	 * 
+	 *
 	 * But, in production environments you wouldn't want the cache age to be zero because that would cause pages to be constantly reloading for your end users
 	 * resulting in very poor performance. Industry standard is to set the "stale" period to 24 hours. You can do that with the following lines of code.
 	 * In a continuous deployment environment you will need to configure your server for cache-busting which is beyond the scope of a simple express server.
-	 
+
 	const ONE_DAY = 24 * 3600 * 1000;
 	const cacheAge = process.env.NODE_ENV === "development" ? 0 : ONE_DAY;
 	*/
@@ -139,16 +133,10 @@
 	const logToTerminal = (msg, color = "white", bgcolor = "bgBlack") => {
 		if (!chalk[color]) color = "white";
 		if (!chalk[color][bgcolor]) bgcolor = "black";
-		console.log(
-			`[${new Date().toLocaleTimeString()}] ${chalk[color][bgcolor](msg)}.`
-		);
+		console.log(`[${new Date().toLocaleTimeString()}] ${chalk[color][bgcolor](msg)}.`);
 	};
 
-	logToTerminal(
-		outputColor(
-			`Server serving from ${rootDir} with caching maxAge = ${cacheAge} ms.`
-		)
-	);
+	logToTerminal(outputColor(`Server serving from ${rootDir} with caching maxAge = ${cacheAge} ms.`));
 
 	let options = { maxAge: cacheAge };
 	//This will prevent config files from being cached by the server, allowing an application restart instead of a rebuild.
@@ -175,7 +163,7 @@
 				serviceManagerRetrievedTimeout = setTimeout(() => {
 					logToTerminal(
 						errorColor(
-							`ERROR: Finsemble application manifest has been retrieved from the server, but the Finsemble System Manager has not. This can be caused by a slow internet connection (e.g., downloading assets). This can also be a symptom that you have a hanging process. Please inspect your task manager to ensure that there are no lingering processes. Alternatively, run 'finsemble-cli kill'`
+							`ERROR: Finsemble application manifest has been retrieved from the server, but the Finsemble System Manager has not. This can be caused by an incorrectly formatted manifest file or a slow internet connection (e.g., downloading assets). \n\nFirst confirm your manifest file is good.  \n\nSince this can also be a symptom that you have a hanging process, second inspect your task manager to ensure that there are no lingering processes. \nLingering processes can be killed by running 'finsemble-cli kill'`
 						)
 					);
 				}, 10000);
@@ -183,23 +171,20 @@
 			next();
 		});
 
-		app.get(
-			"/finsemble/services/systemManager/systemManager.html",
-			(req, res, next) => {
-				if (!notified_sm) {
-					clearTimeout(serviceManagerRetrievedTimeout);
+		app.get("/finsemble/services/systemManager/systemManager.html", (req, res, next) => {
+			if (!notified_sm) {
+				clearTimeout(serviceManagerRetrievedTimeout);
 
-					// Send a timestamp back to the parent process
-					process.send({
-						action: "timestamp",
-						milestone: "Application started",
-						timestamp: Date.now(),
-					});
-					notified_sm = true;
-				}
-				next();
+				// Send a timestamp back to the parent process
+				process.send({
+					action: "timestamp",
+					milestone: "Application started",
+					timestamp: Date.now(),
+				});
+				notified_sm = true;
 			}
-		);
+			next();
+		});
 	}
 	/**
 	 * Builds the server.
