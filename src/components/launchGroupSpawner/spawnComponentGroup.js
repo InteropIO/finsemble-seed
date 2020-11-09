@@ -226,24 +226,9 @@ const processConfig = function(componentsToSpawn, groupParams) {
 
 		comp.spawnOptions.height = processCoordinateOrDimension(comp.spawnOptions.height, 0, groupParams.height, Math.round);
 		comp.spawnOptions.width = processCoordinateOrDimension(comp.spawnOptions.width, 0, groupParams.width, Math.round);
-
-		//mitigate oddities with bottom/right positioning
-		//TODO replace this - but note it needs the monitor dimensions and right/bottom are specified from the right/bottom edges of the monitor
-		// if (comp.spawnOptions.left != undefined && comp.spawnOptions.right != undefined && !comp.spawnOptions.width){
-		// 	comp.spawnOptions.width = comp.spawnOptions.right - comp.spawnOptions.left;
-		// 	delete comp.spawnOptions.right;
-		// } else if (comp.spawnOptions.right != undefined && comp.spawnOptions.width){
-		// 	comp.spawnOptions.left = comp.spawnOptions.right - comp.spawnOptions.width;
-		// 	delete comp.spawnOptions.right;
-		// }
-
-		// if (comp.spawnOptions.top != undefined && comp.spawnOptions.bottom != undefined && !comp.spawnOptions.height){
-		// 	comp.spawnOptions.height = comp.spawnOptions.bottom - comp.spawnOptions.top;
-		// 	delete comp.spawnOptions.bottom;
-		// } else if (comp.spawnOptions.bottom != undefined && comp.spawnOptions.height){
-		// 	comp.spawnOptions.top = comp.spawnOptions.bottom - comp.spawnOptions.height;
-		// 	delete comp.spawnOptions.bottom;
-		// }
+		
+		//base positioning on absolute monitor coordinates (rather than available space)
+		comp.spawnOptions.position = "monitor";
 
 		//ensure the spawned components are added to the workspace (if they are supposed to be)
 		comp.spawnOptions.addToWorkspace = addToWorkspace;
