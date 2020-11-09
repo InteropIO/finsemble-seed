@@ -67,10 +67,7 @@ const JSX_RULE = {
 				"@babel/plugin-proposal-export-default-from",
 				"@babel/plugin-transform-modules-commonjs",
 				"@babel/plugin-proposal-class-properties",
-				[
-					"@babel/plugin-proposal-decorators",
-					{ decoratorsBeforeExport: false },
-				],
+				["@babel/plugin-proposal-decorators", { decoratorsBeforeExport: false }],
 				["@babel/plugin-transform-runtime", { regenerator: true }],
 			],
 		},
@@ -151,13 +148,7 @@ const generateDefaultConfig = () => {
 		entry: {},
 		stats: "minimal",
 		module: {
-			rules: [
-				CSS_RULE,
-				IMAGE_AND_FONT_RULE,
-				JSX_RULE,
-				TSX_RULE,
-				SOURCE_MAPS_RULE,
-			],
+			rules: [CSS_RULE, IMAGE_AND_FONT_RULE, JSX_RULE, TSX_RULE, SOURCE_MAPS_RULE],
 		},
 		mode: env,
 		plugins: plugins,
@@ -175,16 +166,7 @@ const generateDefaultConfig = () => {
 		},
 		resolve: {
 			alias: aliases,
-			extensions: [
-				".tsx",
-				".ts",
-				".js",
-				".jsx",
-				".json",
-				".scss",
-				".css",
-				".html",
-			],
+			extensions: [".tsx", ".ts", ".js", ".jsx", ".json", ".scss", ".css", ".html"],
 			modules: ["./node_modules"],
 		},
 	};

@@ -22,9 +22,7 @@ const errorOutColor = chalk.hex("#FF667E");
 const logToTerminal = (msg, color = "white", bgcolor = "bgBlack") => {
 	if (!chalk[color]) color = "white";
 	if (!chalk[color][bgcolor]) bgcolor = "bgBlack";
-	console.log(
-		`[${new Date().toLocaleTimeString()}] ${chalk[color][bgcolor](msg)}.`
-	);
+	console.log(`[${new Date().toLocaleTimeString()}] ${chalk[color][bgcolor](msg)}.`);
 };
 
 const runWebpackAndCallback = (configPath, watch, bundleName, callback) => {
@@ -106,10 +104,7 @@ const envOrArg = (name, defaultValue) => {
 
 	// Look in startupConfig
 	if (!rc) {
-		rc =
-			startupConfig[env.NODE_ENV][cc] ||
-			startupConfig[env.NODE_ENV][lc] ||
-			startupConfig[env.NODE_ENV][uc];
+		rc = startupConfig[env.NODE_ENV][cc] || startupConfig[env.NODE_ENV][lc] || startupConfig[env.NODE_ENV][uc];
 	}
 	rc = rc || defaultValue;
 	return rc;
@@ -123,20 +118,13 @@ const envOrArg = (name, defaultValue) => {
  * @param {WebpackParallelConfig[]} WebpackParallelConfigs An array of objects that describe a webpack config
  * @param {Function} done
  */
-const runWebpackInParallel = (
-	webpackParallelConfigs,
-	exitOnCompletion,
-	done
-) => {
+const runWebpackInParallel = (webpackParallelConfigs, exitOnCompletion, done) => {
 	let finishedBuilds = 0;
 	// We set maxRetries to zero in order to avoid an infinite loop if a build process fails.
 	// workerFarm is probably the wrong tool for the job here. A simple thread forking mechanism
 	// is all that's needed but maybe we can get parallelism for free by using a site builder
 	// https://nodejs.org/api/worker_threads.html
-	const parallelWorkers = workerFarm(
-		{ maxRetries: 0 },
-		require.resolve("./buildWorker.js")
-	);
+	const parallelWorkers = workerFarm({ maxRetries: 0 }, require.resolve("./buildWorker.js"));
 
 	webpackParallelConfigs.forEach((config) => {
 		parallelWorkers(config, (e, output) => {
@@ -160,9 +148,7 @@ const getWebpackPublicPathFromConfig = () => {
 	if (config[NODE_ENV]) {
 		return config[NODE_ENV].webpackPublicPath;
 	} else {
-		console.error(
-			`Cannot find webpack public path for environment ${NODE_ENV}`
-		);
+		console.error(`Cannot find webpack public path for environment ${NODE_ENV}`);
 		return;
 	}
 };
