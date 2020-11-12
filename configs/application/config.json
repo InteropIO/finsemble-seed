@@ -9,8 +9,8 @@
 			"scope": "openid",
 			"client_id": "finsemble-test",
 			"backchannel_endpoint": "$applicationRoot/auth_backchannel",
-			"redirect_uri": "$applicationRoot/components/oauthRespone/oauthRespone.html",                
-			"component": "oauthRespone"
+			"redirect_uri": "$applicationRoot/components/keyclockRespone/keyclockRespone.html",                
+			"component": "keyclockRespone"
 		}
 	},
 	"servicesConfig": {

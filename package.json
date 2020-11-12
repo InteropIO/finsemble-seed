@@ -40,7 +40,8 @@
 		"compression": "1.7.3",
 		"express": "4.16.4",
 		"react": "16.13.1",
-		"react-dom": "16.13.1"
+		"react-dom": "16.13.1",
+		"request": "^2.88.2"
 	},
 	"devDependencies": {
 		"@babel/core": "7.6.4",

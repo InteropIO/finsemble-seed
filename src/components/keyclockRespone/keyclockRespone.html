@@ -75,10 +75,8 @@
               // In the special case of "startup" then we publish the authorization, which releases Finsemble and lets is start
               if (credentials.config.name === "startup") {
                 // "sub" is the user ID provided by the OP. Not all OP's support this. If not supported, then we just set the user to the access token.
-                const user = credentials.sub;
-                if (!user) {
-                  user = credentials.access_token;
-                }
+                const user = credentials.sub || credentials.access_token;
+
                 // Finish the authentication process by pulishing the credentials so that other componets can access the credentials
                 FSBL.Clients.AuthenticationClient.publishAuthorization(user, credentials)
               }

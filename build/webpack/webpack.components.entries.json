@@ -1,6 +1,6 @@
 {
     "oauthRespone": {
-        "output": "components/oauthRespone/oauthRespone",
-        "entry": "./src/components/oauthRespone/oauthRespone.js"
+        "output": "components/keyclockRespone/keyclockRespone",
+        "entry": "./src/components/keyclockRespone/keyclockRespone.js"
     }
 }

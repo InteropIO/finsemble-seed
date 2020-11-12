@@ -226,9 +226,9 @@
 				}
 			}
         },
-        "oauthRespone": {
+        "keyclockRespone": {
             "window": {
-                "url": "$applicationRoot/components/oauthRespone/oauthRespone.html",
+                "url": "$applicationRoot/components/keyclockRespone/keyclockRespone.html",
                 "frame": false,
                 "resizable": true,
                 "autoShow": true,
@@ -260,12 +260,12 @@
                         "launchableByUser": false
                     },
                     "Window Manager": {
-                        "title": "oauthRespone",
+                        "title": "keyclockRespone",
                         "FSBLHeader": false,
                         "persistWindowState": true
                     },
                     "Toolbar": {
-                        "iconClass": "oauthRespone"
+                        "iconClass": "keyclockRespone"
                     }
                 }
             }
