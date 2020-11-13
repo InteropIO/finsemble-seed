@@ -263,7 +263,7 @@
 				"docked": "top",
 				"canGroup": false,
 				"options": {
-					"autoShow": false,
+					"autoShow": true,
 					"contextMenu": false,
 					"showTaskbarIcon": true,
 					"smallWindow": true,

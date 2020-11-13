@@ -13,12 +13,7 @@ import {
 export const FileMenu = () => (
 	<Menu
 		id="fileMenu"
-		title={
-			<img
-				className="finsemble-toolbar-brand-logo"
-				src="../../assets/img/Finsemble_Taskbar_Icon.png"
-			/>
-		}
+		title={<img className="finsemble-toolbar-brand-logo" src="../../assets/img/Finsemble_Taskbar_Icon.png" />}
 	>
 		<Preferences />
 		<SystemLog />

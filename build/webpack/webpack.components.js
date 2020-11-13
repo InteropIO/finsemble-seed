@@ -43,12 +43,7 @@ const recursiveFind = (base, searchFilename, files, result) => {
 	files.forEach((file) => {
 		const newBase = path.join(base, file);
 		if (fs.statSync(newBase).isDirectory()) {
-			result = recursiveFind(
-				newBase,
-				searchFilename,
-				fs.readdirSync(newBase),
-				result
-			);
+			result = recursiveFind(newBase, searchFilename, fs.readdirSync(newBase), result);
 		} else {
 			if (path.basename(file) === searchFilename) {
 				result.push(newBase);
@@ -60,9 +55,7 @@ const recursiveFind = (base, searchFilename, files, result) => {
 };
 
 // For each file in the directory (src/*)
-listOfWebpackEntryFiles.push(
-	...recursiveFind(srcPath, "finsemble.webpack.json")
-);
+listOfWebpackEntryFiles.push(...recursiveFind(srcPath, "finsemble.webpack.json"));
 
 // Compile all of those files into a single webpack entries object "componentsToBuild"
 // If a file doesn't exist, then no big deal ": {}"
@@ -79,10 +72,7 @@ listOfWebpackEntryFiles.forEach((filename) => {
 			const entryPath = path.relative(__homename, path.dirname(filename));
 			additionalComponents[assetNoSuffix] = {
 				output: path.join(outputPath, assetNoSuffix).replace(/\\/g, "/"),
-				entry: `.${path.sep}${path.join(entryPath, assetName)}`.replace(
-					/\\/g,
-					"/"
-				),
+				entry: `.${path.sep}${path.join(entryPath, assetName)}`.replace(/\\/g, "/"),
 			};
 		});
 	} else {

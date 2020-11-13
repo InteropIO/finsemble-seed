@@ -14,8 +14,8 @@
 	<body />
 
 	<script>
-		FSBL.addEventListener("onReady", function() {
-			document.body.addEventListener("keydown", function(e) {
+		FSBL.addEventListener("onReady", function () {
+			document.body.addEventListener("keydown", function (e) {
 				if (e.code === "Escape") {
 					FSBL.Clients.DialogManager.hideModal();
 				}
@@ -23,7 +23,7 @@
 			FSBL.Clients.DialogManager.registerModal();
 			finsembleWindow.hide();
 		});
-		var drop = function(e) {
+		var drop = function (e) {
 			FSBL.Clients.RouterClient.transmit("tabbingDragEnd", { gotDrop: true });
 			FSBL.Clients.WindowClient.stopTilingOrTabbing({
 				mousePosition: {
@@ -33,7 +33,7 @@
 			});
 		};
 
-		var dragOver = function(e) {
+		var dragOver = function (e) {
 			e.preventDefault();
 			return false;
 		};

@@ -13,7 +13,9 @@ import "@finsemble/finsemble-ui/react/assets/css/authentication.css";
 import "../../../assets/css/theme.css";
 import "./registration.css";
 
+const bringToFront = () => FSBL.Clients.WindowClient.bringWindowToFront();
 export const Registration = () => {
+	useEffect(bringToFront, []);
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [jobTitle, setJobTitle] = useState("");
@@ -48,13 +50,13 @@ export const Registration = () => {
 				publishAuthorization(username, { username });
 
 				// Close registration window
-				FSBL.Clients.WindowClient.getCurrentWindow().close();
+				finsembleWindow.close();
 			} else {
 				// Hiding splash screen because it can sometimes obscure the registration form.
 				FSBL.System.hideSplashScreen();
 
 				// Show registration form for user to register.
-				FSBL.Clients.WindowClient.getCurrentWindow().show();
+				finsembleWindow.show();
 			}
 
 			if (!payload) return;
@@ -75,8 +77,8 @@ export const Registration = () => {
 					username: payload.firstName,
 				});
 
-				// Close registration window
-				FSBL.Clients.WindowClient.getCurrentWindow().close();
+				// Close registration window.
+				finsembleWindow.close();
 			};
 
 			register();
@@ -133,8 +135,7 @@ export const Registration = () => {
 			<div className="fsbl-auth-wrapper">
 				<div className="fsbl-auth-logo"></div>
 				<div className="fsbl-auth-welcome">
-					Thank you for downloading Finsemble. Please register to begin your
-					evaluation.
+					Thank you for downloading Finsemble. Please register to begin your evaluation.
 				</div>
 				<form
 					onSubmit={(event) => {
@@ -219,31 +220,20 @@ export const Registration = () => {
 				</form>
 				<div className="fsbl-copyright">
 					© 2020{" "}
-					<div
-						className="fsbl-link"
-						onClick={() => FSBL.System.openUrlWithBrowser("https://cosaic.io/")}
-					>
+					<div className="fsbl-link" onClick={() => FSBL.System.openUrlWithBrowser("https://cosaic.io/")}>
 						Cosaic, Inc
 					</div>
 					. All Rights Reserved |
 					<div
 						className="fsbl-link"
-						onClick={() =>
-							FSBL.System.openUrlWithBrowser(
-								"https://cosaic.io/privacy-policy/"
-							)
-						}
+						onClick={() => FSBL.System.openUrlWithBrowser("https://cosaic.io/privacy-policy/")}
 					>
 						Privacy Policy
 					</div>{" "}
 					|
 					<div
 						className="fsbl-link"
-						onClick={() =>
-							FSBL.System.openUrlWithBrowser(
-								"https://cosaic.io/developer-license-agreement/"
-							)
-						}
+						onClick={() => FSBL.System.openUrlWithBrowser("https://cosaic.io/developer-license-agreement/")}
 					>
 						Developer License Agreement
 					</div>
