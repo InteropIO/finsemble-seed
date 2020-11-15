@@ -13,9 +13,11 @@
 				"left": 400,
 				"width": 200,
 				"height": 200,
-				"addToWorkspace": false,
+				"addToWorkspace": true,
 				"data": {
+					"addToWorkspace": true,
 					"linkerGroup": "auto",
+					"closeComponentsTogether": true,
 					"toSpawn": [
 						{
 							"componentType": "Welcome Component",
@@ -38,18 +40,7 @@
 							}
 						},
 						{
-							"components": [{
-								"componentType": "Welcome Component",
-								"spawnOptions": {
-									"data": {}
-								}
-							},
-							{
-								"componentType": "Process Monitor",
-								"spawnOptions": {
-									"data": {}
-								}
-							}],
+							"componentType": "Process Monitor",
 							"spawnOptions": {
 								"top": 300,
 								"left": 0,
@@ -99,8 +90,9 @@
 				"left": 100,
 				"width": 200,
 				"height": 200,
-				"addToWorkspace": false,
+				"addToWorkspace": true,
 				"data": {
+					"addToWorkspace": true,
 					"linkerGroup": "group6",
 					"toSpawn": [
 						{
@@ -186,8 +178,9 @@
 				"left": 100,
 				"width": 200,
 				"height": 200,
-				"addToWorkspace": false,
+				"addToWorkspace": true,
 				"data": {
+					"addToWorkspace": true,
 					"toSpawn": [
 						{
 							"componentType": "Welcome Component",
@@ -272,8 +265,9 @@
 				"left": 400,
 				"width": 500,
 				"height": 600,
-				"addToWorkspace": false,
+				"addToWorkspace": true,
 				"data": {
+					"addToWorkspace": true,
 					"linkerGroup": "auto",
 					"toSpawn": [
 						{
@@ -330,10 +324,11 @@
 				"left": "10%",
 				"width": "80%",
 				"height": "80%",
-				"addToWorkspace": false,
+				"addToWorkspace": true,
 				"data": {
 					"addToWorkspace": true,
 					"linkerGroup": "auto",
+					"closeComponentsTogether": true,
 					"toSpawn": [
 						{
 							"componentType": "Welcome Component",
@@ -495,7 +490,7 @@
 				"left": 0,
 				"width": "100%",
 				"height": "100%",
-				"addToWorkspace": false,
+				"addToWorkspace": true,
 				"data": {
 					"addToWorkspace": true,
 					"linkerGroup": "auto",

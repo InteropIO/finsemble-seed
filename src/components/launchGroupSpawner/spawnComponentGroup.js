@@ -66,7 +66,7 @@
  * 		}];
  * let promise = spawnComponentGroup(toSpawn, {top: "center", left: "center", width: "90%", height: "90%", linkerGroup:'auto'});
  */
-const spawnComponentGroup = function(componentsToSpawn, groupParams) {
+const spawnComponentGroup = async function(componentsToSpawn, groupParams) {
 	if (groupParams.linkerGroup == 'auto'){
 		groupParams.linkerGroup = pickLeastUsedLinkerGroup();
 	}
@@ -111,7 +111,7 @@ const spawnComponentGroup = function(componentsToSpawn, groupParams) {
  * let toSpawn = ["Welcome Component","Welcome Component","Welcome Component"];
  * let promise = spawnTabbedGroup(toSpawn, {top: 100, left: 200, width: 400, height: 600}}, 'auto');
  */
-const spawnTabbedGroup = function(componentsToSpawn, params, linkerGroup) {
+const spawnTabbedGroup = async function(componentsToSpawn, params, linkerGroup) {
 	FSBL.Clients.Logger.log(`Spawning tabbed component group (${JSON.stringify(componentsToSpawn)}) with parameters`, params);
 	
 	let response = {};
@@ -280,4 +280,106 @@ const pickLeastUsedLinkerGroup = function(){
     return leastGroup;
 };
 
-export { spawnComponentGroup as default }; 
+/**
+ * Extracts the windowIdentifers from the spawnResponses array
+ * returned by spawnComponentGroup().
+ * @param {*} spawnResponses Object returned by spawnComponentGroup.
+ */
+const getWindowIdentifiers = function(spawnResponses) {
+	let winIds = [];
+	let stacks = [];
+	spawnResponses.forEach(aResponse => {
+		if (aResponse?.spawnResponses){
+			//tabbed window
+			aResponse.spawnResponses.forEach(tabResponse => {
+				if (tabResponse?.response?.windowIdentifier) {
+					winIds.push(tabResponse?.response?.windowIdentifier);
+				}
+			});
+			if (aResponse?.stackedWindowResponse?.windowIdentifier){
+				stacks.push(aResponse?.stackedWindowResponse?.windowIdentifier);
+			}
+		} else {
+			if (aResponse?.response?.windowIdentifier) {
+				winIds.push(aResponse?.response?.windowIdentifier);
+			}
+		}
+	});
+	return { windowIdentifiers: winIds, stackedWindowIdentifiers: stacks};
+};
+
+/**
+ * Sets up window closed listener for each component, using the arrays of
+ * window and stackedWindow identifiers returned by getWindowIdentifiers(). 
+ * The handler function is called when any of the component windows closes. 
+ * As this will likely be used to close all components an option allows 
+ * the handler to only be called once.
+ * 
+ * @param {*} identifiers Object returned by getWindowIdentifiers().
+ * @param {*} onlyOnce If true, the handler function will only ever be called once.
+ * @param {*} handler Handler function to be called when a component closes. 
+ */
+const setupCloseListeners = function(identifiers, onlyOnce, handler) {
+	const { windowIdentifiers, stackedWindowIdentifiers } = identifiers;
+	
+	//wrap the handler function so that it only gets called once if all the 
+	// components are trying to close.
+	let closing = false;
+	let handlerWrapper = () => {
+		if (!onlyOnce || !closing) {
+			closing = true;
+			handler();
+		}
+	};
+
+	if (windowIdentifiers && windowIdentifiers.length > 0) {
+		windowIdentifiers.forEach(winId => {
+			FSBL.FinsembleWindow.getInstance(winId, (err, wrap) => {
+				wrap.addEventListener("closed", handlerWrapper);
+			});
+		});
+	}
+
+	if (stackedWindowIdentifiers && stackedWindowIdentifiers.length > 0) {
+		stackedWindowIdentifiers.forEach(winId => {
+			FSBL.FinsembleWindow.getInstance(winId, (err, wrap) => {
+				wrap.addEventListener("closed", handlerWrapper);
+			});
+		});
+	}
+};
+
+/**
+ * Closes all the windows, using the identifiers Object returned by
+ * getWindowIdentifiers() with the window identifiers for each window
+ * spawned.
+ *
+ * @param {*} identifiers Object returned by getWindowIdentifiers().
+ */
+const closeAllWindows = function(identifiers) {
+	const { windowIdentifiers, stackedWindowIdentifiers } = identifiers;
+	
+	//close the component windows
+	if (windowIdentifiers && windowIdentifiers.length > 0) {
+		windowIdentifiers.forEach(winId => {
+			FSBL.FinsembleWindow.getInstance(winId, (err, wrap) => {
+				try{
+					wrap.close({ removeFromWorkspace: true, closeWindow: true });
+				} catch { }
+			});
+		});
+	}
+
+	//close any stacked windows
+	if (stackedWindowIdentifiers && stackedWindowIdentifiers.length > 0) {
+		stackedWindowIdentifiers.forEach(winId => {
+			FSBL.FinsembleWindow.getInstance(winId, (err, wrap) => {
+				try{
+					wrap.close({ removeFromWorkspace: true, closeWindow: true });
+				} catch { }
+			});
+		});
+	}
+}
+
+export { spawnComponentGroup, getWindowIdentifiers, setupCloseListeners, closeAllWindows }; 
