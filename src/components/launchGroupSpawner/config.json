@@ -269,6 +269,7 @@
 				"data": {
 					"addToWorkspace": true,
 					"linkerGroup": "auto",
+					"closeComponentsTogether": true,
 					"toSpawn": [
 						{
 							"components": [
