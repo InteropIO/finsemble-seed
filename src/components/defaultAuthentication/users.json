@@ -4,9 +4,11 @@
             "Component1": {
                 "window": {
                     "url": "$applicationRoot/components/welcome/welcome.html",
-                    "frame": false,
-                    "resizable": true,
-                    "autoShow": true,
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "top": "center",
                     "left": "center",
                     "width": 400,
@@ -41,9 +43,11 @@
             "Component2": {
                 "window": {
                     "url": "$applicationRoot/components/welcome/welcome.html",
-                    "frame": false,
-                    "resizable": true,
-                    "autoShow": true,
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "top": "center",
                     "left": "center",
                     "width": 400,
@@ -78,9 +82,11 @@
             "Component3": {
                 "window": {
                     "url": "$applicationRoot/components/welcome/welcome.html",
-                    "frame": false,
-                    "resizable": true,
-                    "autoShow": true,
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "top": "center",
                     "left": "center",
                     "width": 400,
@@ -115,9 +121,11 @@
             "Component4": {
                 "window": {
                     "url": "$applicationRoot/components/welcome/welcome.html",
-                    "frame": false,
-                    "resizable": true,
-                    "autoShow": true,
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "top": "center",
                     "left": "center",
                     "width": 400,
@@ -152,9 +160,11 @@
             "Component5": {
                 "window": {
                     "url": "$applicationRoot/components/welcome/welcome.html",
-                    "frame": false,
-                    "resizable": true,
-                    "autoShow": true,
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "top": "center",
                     "left": "center",
                     "width": 400,
@@ -189,9 +199,11 @@
             "Component6": {
                 "window": {
                     "url": "$applicationRoot/components/welcome/welcome.html",
-                    "frame": false,
-                    "resizable": true,
-                    "autoShow": true,
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "top": "center",
                     "left": "center",
                     "width": 400,
@@ -226,9 +238,11 @@
             "Component7": {
                 "window": {
                     "url": "$applicationRoot/components/welcome/welcome.html",
-                    "frame": false,
-                    "resizable": true,
-                    "autoShow": true,
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "top": "center",
                     "left": "center",
                     "width": 400,
@@ -263,9 +277,11 @@
             "Component8": {
                 "window": {
                     "url": "$applicationRoot/components/welcome/welcome.html",
-                    "frame": false,
-                    "resizable": true,
-                    "autoShow": true,
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "top": "center",
                     "left": "center",
                     "width": 400,
@@ -300,9 +316,11 @@
             "Component9": {
                 "window": {
                     "url": "$applicationRoot/components/welcome/welcome.html",
-                    "frame": false,
-                    "resizable": true,
-                    "autoShow": true,
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "top": "center",
                     "left": "center",
                     "width": 400,
@@ -337,9 +355,11 @@
             "Component0": {
                 "window": {
                     "url": "$applicationRoot/components/welcome/welcome.html",
-                    "frame": false,
-                    "resizable": true,
-                    "autoShow": true,
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "top": "center",
                     "left": "center",
                     "width": 400,
@@ -374,9 +394,11 @@
             "Admin": {
                 "window": {
                     "url": "$applicationRoot/components/welcome/welcome.html",
-                    "frame": false,
-                    "resizable": true,
-                    "autoShow": true,
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "top": "center",
                     "left": "center",
                     "width": 400,
@@ -411,9 +433,11 @@
             "User 1": {
                 "window": {
                     "url": "$applicationRoot/components/welcome/welcome.html",
-                    "frame": false,
-                    "resizable": true,
-                    "autoShow": true,
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "top": "center",
                     "left": "center",
                     "width": 400,
@@ -448,9 +472,11 @@
             "User 2": {
                 "window": {
                     "url": "$applicationRoot/components/welcome/welcome.html",
-                    "frame": false,
-                    "resizable": true,
-                    "autoShow": true,
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "top": "center",
                     "left": "center",
                     "width": 400,
@@ -485,9 +511,11 @@
             "User 3": {
                 "window": {
                     "url": "$applicationRoot/components/welcome/welcome.html",
-                    "frame": false,
-                    "resizable": true,
-                    "autoShow": true,
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "top": "center",
                     "left": "center",
                     "width": 400,
@@ -596,9 +624,11 @@
             "Component1": {
                 "window": {
                     "url": "$applicationRoot/components/welcome/welcome.html",
-                    "frame": false,
-                    "resizable": true,
-                    "autoShow": true,
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "top": "center",
                     "left": "center",
                     "width": 400,
@@ -632,9 +662,11 @@
             "Component2": {
                 "window": {
                     "url": "$applicationRoot/components/welcome/welcome.html",
-                    "frame": false,
-                    "resizable": true,
-                    "autoShow": true,
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "top": "center",
                     "left": "center",
                     "width": 400,
@@ -668,9 +700,11 @@
             "Component3": {
                 "window": {
                     "url": "$applicationRoot/components/welcome/welcome.html",
-                    "frame": false,
-                    "resizable": true,
-                    "autoShow": true,
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "top": "center",
                     "left": "center",
                     "width": 400,
@@ -704,9 +738,11 @@
             "Component4": {
                 "window": {
                     "url": "$applicationRoot/components/welcome/welcome.html",
-                    "frame": false,
-                    "resizable": true,
-                    "autoShow": true,
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "top": "center",
                     "left": "center",
                     "width": 400,
@@ -740,9 +776,11 @@
             "Component6": {
                 "window": {
                     "url": "$applicationRoot/components/welcome/welcome.html",
-                    "frame": false,
-                    "resizable": true,
-                    "autoShow": true,
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "top": "center",
                     "left": "center",
                     "width": 400,
@@ -776,9 +814,11 @@
             "Component7": {
                 "window": {
                     "url": "$applicationRoot/components/welcome/welcome.html",
-                    "frame": false,
-                    "resizable": true,
-                    "autoShow": true,
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "top": "center",
                     "left": "center",
                     "width": 400,
@@ -812,9 +852,11 @@
             "Component8": {
                 "window": {
                     "url": "$applicationRoot/components/welcome/welcome.html",
-                    "frame": false,
-                    "resizable": true,
-                    "autoShow": true,
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "top": "center",
                     "left": "center",
                     "width": 400,
@@ -848,9 +890,11 @@
             "Component9": {
                 "window": {
                     "url": "$applicationRoot/components/welcome/welcome.html",
-                    "frame": false,
-                    "resizable": true,
-                    "autoShow": true,
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "top": "center",
                     "left": "center",
                     "width": 400,
@@ -884,9 +928,11 @@
             "Component0": {
                 "window": {
                     "url": "$applicationRoot/components/welcome/welcome.html",
-                    "frame": false,
-                    "resizable": true,
-                    "autoShow": true,
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "top": "center",
                     "left": "center",
                     "width": 400,
@@ -920,9 +966,11 @@
             "ComponentA": {
                 "window": {
                     "url": "$applicationRoot/components/welcome/welcome.html",
-                    "frame": false,
-                    "resizable": true,
-                    "autoShow": true,
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "top": "center",
                     "left": "center",
                     "width": 400,
@@ -956,9 +1004,11 @@
             "ComponentB": {
                 "window": {
                     "url": "$applicationRoot/components/welcome/welcome.html",
-                    "frame": false,
-                    "resizable": true,
-                    "autoShow": true,
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "top": "center",
                     "left": "center",
                     "width": 400,
@@ -992,9 +1042,11 @@
             "ComponentC": {
                 "window": {
                     "url": "$applicationRoot/components/welcome/welcome.html",
-                    "frame": false,
-                    "resizable": true,
-                    "autoShow": true,
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "top": "center",
                     "left": "center",
                     "width": 400,
@@ -1028,9 +1080,11 @@
             "ComponentD": {
                 "window": {
                     "url": "$applicationRoot/components/welcome/welcome.html",
-                    "frame": false,
-                    "resizable": true,
-                    "autoShow": true,
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "top": "center",
                     "left": "center",
                     "width": 400,
@@ -1064,9 +1118,11 @@
             "ComponentE": {
                 "window": {
                     "url": "$applicationRoot/components/welcome/welcome.html",
-                    "frame": false,
-                    "resizable": true,
-                    "autoShow": true,
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "top": "center",
                     "left": "center",
                     "width": 400,
@@ -1100,9 +1156,11 @@
             "ComponentF": {
                 "window": {
                     "url": "$applicationRoot/components/welcome/welcome.html",
-                    "frame": false,
-                    "resizable": true,
-                    "autoShow": true,
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "top": "center",
                     "left": "center",
                     "width": 400,
@@ -1136,9 +1194,11 @@
             "ComponentG": {
                 "window": {
                     "url": "$applicationRoot/components/welcome/welcome.html",
-                    "frame": false,
-                    "resizable": true,
-                    "autoShow": true,
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "top": "center",
                     "left": "center",
                     "width": 400,
@@ -1172,9 +1232,11 @@
             "ComponentH": {
                 "window": {
                     "url": "$applicationRoot/components/welcome/welcome.html",
-                    "frame": false,
-                    "resizable": true,
-                    "autoShow": true,
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "top": "center",
                     "left": "center",
                     "width": 400,
@@ -1208,9 +1270,11 @@
             "ComponentI": {
                 "window": {
                     "url": "$applicationRoot/components/welcome/welcome.html",
-                    "frame": false,
-                    "resizable": true,
-                    "autoShow": true,
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "top": "center",
                     "left": "center",
                     "width": 400,
@@ -1244,9 +1308,11 @@
             "ComponentJ": {
                 "window": {
                     "url": "$applicationRoot/components/welcome/welcome.html",
-                    "frame": false,
-                    "resizable": true,
-                    "autoShow": true,
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "top": "center",
                     "left": "center",
                     "width": 400,
@@ -1405,6 +1471,11 @@
             "Component 1": {
                 "window": {
                     "url": "https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html",
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "height": 800,
                     "width": 1000
                 },
@@ -1429,6 +1500,11 @@
             "Component 2": {
                 "window": {
                     "url": "https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html",
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "height": 800,
                     "width": 1000
                 },
@@ -1453,6 +1529,11 @@
             "Component 3": {
                 "window": {
                     "url": "https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html",
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "height": 800,
                     "width": 1000
                 },
@@ -1477,6 +1558,11 @@
             "Component 4": {
                 "window": {
                     "url": "https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html",
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "height": 800,
                     "width": 1000
                 },
@@ -1501,6 +1587,11 @@
             "Component 5": {
                 "window": {
                     "url": "https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html",
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "height": 800,
                     "width": 1000
                 },
@@ -1525,6 +1616,11 @@
             "Component 6": {
                 "window": {
                     "url": "https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html",
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "height": 800,
                     "width": 1000
                 },
@@ -1549,6 +1645,11 @@
             "Component 7": {
                 "window": {
                     "url": "https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html",
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "height": 800,
                     "width": 1000
                 },
@@ -1573,6 +1674,11 @@
             "Component 8": {
                 "window": {
                     "url": "https://documentation.chartiq.com/finsemble/tutorial-gettingStarted.html",
+                    "options": {
+                        "frame": false,
+                        "resizable": true,
+                        "autoShow": true
+                    },
                     "height": 800,
                     "width": 1000
                 },
