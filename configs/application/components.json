@@ -59,6 +59,9 @@
 				"left": "center",
 				"width": 400,
 				"height": 432
+			},
+			"component": {
+				"category": "system"
 			}
 		},
 		"Notepad": {
