@@ -356,30 +356,48 @@ const setupCloseListeners = function(identifiers, onlyOnce, handler) {
  *
  * @param {*} identifiers Object returned by getWindowIdentifiers().
  */
-const closeAllWindows = function(identifiers) {
+const closeAllWindows = async function(identifiers) {
 	const { windowIdentifiers, stackedWindowIdentifiers } = identifiers;
 	
+	const closeAWindow = async function(winId){
+		console.log("closing " + winId.name);
+		let response = await FSBL.FinsembleWindow.getInstance(winId);
+		if(!response.wrap) {
+			console.warn("No wrap returned during close for " + winId.name);
+		} else {
+			let wrap = response.wrap;
+			if (wrap.parentWindow){
+				//remove from the tabbed window before closing
+				await wrap.parentWindow.removeWindow({ 
+					windowIdentifier: winId, 
+					noDocking: true, 
+					noVisible: true, 
+					waitChildClose: true, 
+					closeWindow: true, 
+					noCloseStack: false 
+				});
+				try {
+					wrap.close({ removeFromWorkspace: true, closeWindow: true });
+					console.log("closed window in stack " + winId.name);
+				} catch { }
+			} else {
+				try{
+					wrap.close({ removeFromWorkspace: true, closeWindow: true })
+					console.log("closed window NOT in stack " + winId.name);
+				} catch { }
+			}
+		}
+	};
+
 	//close the component windows
 	if (windowIdentifiers && windowIdentifiers.length > 0) {
-		windowIdentifiers.forEach(winId => {
-			FSBL.FinsembleWindow.getInstance(winId, (err, wrap) => {
-				try{
-					wrap.close({ removeFromWorkspace: true, closeWindow: true });
-				} catch { }
-			});
-		});
+		//do not use forEach or it will make the promises execute concurrently, we need to do this serially
+		for (let winId of windowIdentifiers) {
+			await closeAWindow(winId);
+		}
 	}
 
-	//close any stacked windows
-	if (stackedWindowIdentifiers && stackedWindowIdentifiers.length > 0) {
-		stackedWindowIdentifiers.forEach(winId => {
-			FSBL.FinsembleWindow.getInstance(winId, (err, wrap) => {
-				try{
-					wrap.close({ removeFromWorkspace: true, closeWindow: true });
-				} catch { }
-			});
-		});
-	}
+	// No need to close stacked windows, they closed themselves when we remove the windows from them
 }
 
 export { spawnComponentGroup, getWindowIdentifiers, setupCloseListeners, closeAllWindows }; 

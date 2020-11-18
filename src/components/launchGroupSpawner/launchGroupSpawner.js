@@ -69,8 +69,8 @@ const FSBLReady = () => {
 											}});
 
 										//set up listeners on each window so that we can close them all together
-										setupCloseListeners(identifiers, true, () => {
-											closeAllWindows(identifiers);
+										setupCloseListeners(identifiers, true, async () => {
+											await closeAllWindows(identifiers);
 											//Close the spawner component as its no longer needed
 											FSBL.Clients.WindowClient.close({ removeFromWorkspace: true, closeWindow: true });
 										});
