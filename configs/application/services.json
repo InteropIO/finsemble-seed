@@ -1,4 +1,15 @@
 {
 	"$schema": "../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/servicesFile.schema.json",
-	"services": {}
+	"services": {
+		"custom": {
+			"bootParams": {
+				"stage": "preuser",
+				"dependencies": []
+			},
+			"name": "custom",
+			"html": "$applicationRoot/services/custom/custom.html",
+			"file": "$applicationRoot/services/custom/customService.js",
+			"visible": false
+		}
+	}
 }
