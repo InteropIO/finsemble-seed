@@ -15,7 +15,7 @@ Finsemble.Clients.Logger.log("protocolService Service starting up");
 // Finsemble.Clients.SearchClient.initialize();
 // Finsemble.Clients.StorageClient.initialize();
 // Finsemble.Clients.WindowClient.initialize();
-// Finsemble.Clients.WorkspaceClient.initialize();
+Finsemble.Clients.WorkspaceClient.initialize();
 
 /**
  * Add service description here
@@ -43,7 +43,7 @@ class protocolService extends Finsemble.baseService {
 					// "searchClient
 					// "storageClient",
 					// "windowClient",
-					// "workspaceClient",
+					"workspaceClient",
 				],
 			},
 		});
@@ -60,12 +60,75 @@ class protocolService extends Finsemble.baseService {
 	readyHandler(callback) {
 		this.createRouterEndpoints();
 		Finsemble.Clients.Logger.log("protocolService Service ready");
-		Finsemble.System.addEventListener("protocol-handler-triggered", (data) => {
-			// listen to the workspace and add it
-			console.log(data.url);
-			console.log("protocol-handler-triggered")
-		});
+		this.workspaceShareImport()
 		callback();
+	}
+
+	workspaceShareImport() {
+		// listen to the incoming request from protocol URL
+		Finsemble.System.addEventListener("protocol-handler-triggered", async (data) => {
+
+			try {
+
+				// turn this into a URL to get the query params and path
+				let protocolURL = new URL(data.url)
+				console.log(protocolURL);
+
+				// check to ensure we only listen to "sharedworkspace" as the protocol handler will accept any path
+				if (protocolURL.pathname.includes("sharedworkspace")) {
+
+					// check both username and workspace have been passed as queryParams
+					if (protocolURL.has("username") && protocolURL.has("workspace")) {
+
+						const username = protocolService.get("username")
+						const workspaceName = protocolService.get("workspace")
+						const workspace = await fetchWorkspace({ username, workspaceName })
+						if (workspace) {
+							addWorkspace(workspace)
+						} else {
+							console.warn("no workspace found")
+						}
+					}
+
+					// if you want to use a UUID instead
+					else if (protocolURL.has("UUID")) {
+
+						const UUID = protocolService.get("UUID")
+						const workspace = await fetchWorkspace({ UUID })
+						if (workspace) {
+							addWorkspace(workspace)
+						} else {
+							console.warn("no workspace found")
+						}
+					}
+				}
+
+			} catch (error) {
+				console.error(error)
+			}
+		});
+
+		async function fetchWorkspace({ UUID, workspaceName, userName }) {
+			// fetch from different locations depending on if we want to use our finsemble storage or UUID
+			if (UUID) {
+				const response = await fetch(`https://s3.console.aws.amazon.com/s3/object/cs-send.finsemble.com?region=us-east-1&prefix=files/ChrisWorkspace.json`)
+				console.log(response)
+				return response.json()
+			} else {
+				fetch(`http://example.com/finsemblestorage/${userName}/${workspaceName}`)
+			}
+		}
+
+		// workspace needs to be javascript object
+		function addWorkspace(workspace) {
+			Finsemble.Clients.WorkspaceClient.import({ force: true, workspaceJSONDefinition: workspace }, (err, response) => {
+				if (err) {
+					console.error(err)
+				} else {
+					console.log(response);
+				}
+			})
+		}
 	}
 
 	// Implement service functionality
