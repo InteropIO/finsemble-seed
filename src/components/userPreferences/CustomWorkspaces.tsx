@@ -101,7 +101,6 @@ const ExportFileLink = ({ workspaceName }: { workspaceName: string }): ReactElem
           downloadURL = encodeURIComponent(jsonString)
         }
 
-        console.log(downloadURL);
         setDownloadLink(downloadURL)
       } catch (error) {
         console.error(error);
@@ -139,7 +138,6 @@ const ShareWorkspace = ({ workspaceName }: { workspaceName: string }) => {
       // use the storage client details in the protocol handler
       const protocolLink = storageClientDataAsLink(workspaceName)
 
-      console.log(workspace);
       copyToClipboard(protocolLink)
     } catch (error) {
       console.error(error);
@@ -149,11 +147,11 @@ const ShareWorkspace = ({ workspaceName }: { workspaceName: string }) => {
 
   return (
     <div>
-      <ShareIcon onClick={generateShareLink} />
+      <ShareIcon onClick={generateShareLink} style={{ cursor: "pointer" }} />
       <div>
         {/*
         email
-        mailto:chriscoyier@gmail.com?subject=Important!&body=Hi.
+        mailto:example@gmail.com?subject=Important!&body=Hi.
          */}
         {/* link */}
       </div>
