@@ -1,14 +1,14 @@
 {
 	"$schema": "../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/servicesFile.schema.json",
 	"services": {
-		"custom": {
+		"protocol": {
 			"bootParams": {
 				"stage": "preuser",
 				"dependencies": []
 			},
-			"name": "custom",
-			"html": "$applicationRoot/services/custom/custom.html",
-			"file": "$applicationRoot/services/custom/customService.js",
+			"name": "protocol",
+			"html": "$applicationRoot/services/protocol/protocol.html",
+			"file": "$applicationRoot/services/protocol/protocolService.js",
 			"visible": false
 		}
 	}

@@ -1,7 +1,7 @@
 const Finsemble = require("@finsemble/finsemble-core");
 
 Finsemble.Clients.Logger.start();
-Finsemble.Clients.Logger.log("customService Service starting up");
+Finsemble.Clients.Logger.log("protocolService Service starting up");
 
 // Add and initialize any other clients you need to use (services are initialized by the system, clients are not):
 // Finsemble.Clients.AuthenticationClient.initialize();
@@ -20,9 +20,9 @@ Finsemble.Clients.Logger.log("customService Service starting up");
 /**
  * Add service description here
  */
-class customService extends Finsemble.baseService {
+class protocolService extends Finsemble.baseService {
 	/**
-	 * Initializes a new instance of the customServiceService class.
+	 * Initializes a new instance of the protocolServiceService class.
 	 */
 	constructor() {
 		super({
@@ -59,7 +59,12 @@ class customService extends Finsemble.baseService {
 	 */
 	readyHandler(callback) {
 		this.createRouterEndpoints();
-		Finsemble.Clients.Logger.log("customService Service ready");
+		Finsemble.Clients.Logger.log("protocolService Service ready");
+		Finsemble.System.addEventListener("protocol-handler-triggered", (data) => {
+			// listen to the workspace and add it
+			console.log(data.url);
+			console.log("protocol-handler-triggered")
+		});
 		callback();
 	}
 
@@ -74,12 +79,12 @@ class customService extends Finsemble.baseService {
 	 */
 	createRouterEndpoints() {
 		// Add responder for myFunction
-		Finsemble.Clients.RouterClient.addResponder("customService.myFunction", (err, message) => {
+		Finsemble.Clients.RouterClient.addResponder("protocolService.myFunction", (err, message) => {
 			if (err) {
-				return Finsemble.Clients.Logger.error("Failed to setup customService.myFunction responder", err);
+				return Finsemble.Clients.Logger.error("Failed to setup protocolService.myFunction responder", err);
 			}
 
-			Finsemble.Clients.Logger.log(`customService Query: ${JSON.stringify(message)}`);
+			Finsemble.Clients.Logger.log(`protocolService Query: ${JSON.stringify(message)}`);
 
 			try {
 				// Data in query message can be passed as parameters to a method in the service.
@@ -95,6 +100,6 @@ class customService extends Finsemble.baseService {
 	}
 }
 
-const serviceInstance = new customService();
+const serviceInstance = new protocolService();
 
 serviceInstance.start();
