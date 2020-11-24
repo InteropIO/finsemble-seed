@@ -48,6 +48,33 @@ const CAPTURE_LOG_CATEGORIES = {
  */
 const SORT_MESSAGES = false;
 
+/**
+ * Message formatting function which converts each log message from Finsemble's format to the format you wish to transmit.
+ * Incoming log message format:
+ *		[
+ *			{
+ *				"category": "system",				//Log message type: system, dev or perf
+ *				"logClientName": "Finsemble",		//The registered name of the logger instance
+ *				"logType": "Log",					//Log level: Error, Warning, Log, Info, Debug, Verbose
+ *				"logData": "[\"SERVICE LIFECYCLE: STATE CHANGE: Service initializing\",\"windowService\"]",
+ *													//JSON encoded array of message and data components of the log message
+ *													//N.B. maybe be prefixed by string "*** Logging Error: ""
+ *				"logTimestamp": 1544090028391.6226	//Log message timestamp for ordering use
+ *			},
+ *			{...},
+ *			...
+ *		]
+ */
+const FORMAT_MESSAGE = function (log_message) {
+	//TODO: add any necessary message format changes here
+
+	return log_message;
+};
+
+/** Where to transmit the logs to. */
+//TODO: Update to your logging endpoint
+const LOGGING_ENDPOINT = "http://somedomain.com/loggingendpoint";
+
 // Add and initialize any other clients you need to use (services are initialized by the system, clients are not):
 // Finsemble.Clients.AuthenticationClient.initialize();
 // Finsemble.Clients.ConfigClient.initialize();
@@ -148,11 +175,13 @@ class customService extends Finsemble.baseService {
 		clearTimeout(this.timeout);
     //trim batch array to length
 		let toTransmit = this.logBatch;
-		toTransmit.splice(this.currBatchSize, this.logBatch.length - this.currBatchSize);
+		if (toTransmit) {
+			toTransmit.splice(this.currBatchSize, this.logBatch.length - this.currBatchSize);
+		}
 
     //reset
 		this.timeout = null;
-		this.logBatch = new Array(batchAllocSize);
+		this.logBatch = new Array(this.batchAllocSize);
 		this.currBatchSize = 0;
 
     // Sort the batch by timestamp if necessary.
@@ -164,28 +193,24 @@ class customService extends Finsemble.baseService {
     //TODO: Customize batch transmission here
     console.debug("Batch to transmit: " + JSON.stringify(toTransmit, null, 2));
 
-		console.log(JSON.stringify({
-      logMessages: toTransmit
-		}))
 
-
-		// fetch(this.LOGGING_ENDPOINT, {
-		//   method: 'POST', // or 'PUT'
-		//   headers: {
-		//     'Content-Type': 'application/json',
-		//   },
-		//   body: JSON.stringify({
-		//     logMessages: toTransmit
-		//   }),
-		//   credentials: 'include'
-		// })
-		//   .then(response => response.json())
-		//   .then(data => {
-		//     console.log('Success:', data);
-		//   })
-		//   .catch((error) => {
-		//     console.error('Error:', error);
-		//   });
+		fetch(LOGGING_ENDPOINT, {
+			method: 'POST', // or 'PUT'
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+		    logMessages: toTransmit
+			}),
+			credentials: 'include'
+		})
+			.then(response => response.json())
+			.then(data => {
+				console.log('Success:', data);
+			})
+			.catch((error) => {
+				console.error('Error:', error);
+			});
 	}
 
   /**
@@ -194,7 +219,7 @@ class customService extends Finsemble.baseService {
    */
 	createRouterEndpoints() {
 		// Add responder for myFunction
-		RouterClient.addListener("logger.service.logMessages", (error, logMessage) => {
+		Finsemble.Clients.RouterClient.addListener("logger.service.logMessages", (error, logMessage) => {
       if (!error) {
 				this.addToBatch(logMessage.data);
       } else {

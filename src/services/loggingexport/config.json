@@ -3,7 +3,7 @@
         "loggingexportService": {
             "useWindow": true,
             "active": true,
-            "name": "loggingexportService",
+            "name": "loggingexport",
             "visible": false,
             "html": "$applicationRoot/services/loggingexport/loggingexport.html"
         }
