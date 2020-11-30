@@ -5,6 +5,7 @@ import { Highlight } from "./Highlight";
 import { SearchQuery } from "../../../node_modules/@finsemble/finsemble-ui/react/types/searchTypes";
 import { Favorite } from "../../../node_modules/@finsemble/finsemble-ui/react/types/favoriteTypes";
 import { FavoriteMaker } from "../../../node_modules/@finsemble/finsemble-ui/react/components/favorites/FavoriteMaker";
+import CustomSearchResult from "./CustomSearchResult";
 export const SearchResult = (props: { data: any; searchQuery: SearchQuery; resetSearch: () => void }) => {
 	const { data, searchQuery, resetSearch } = props;
 
@@ -35,12 +36,18 @@ export const SearchResult = (props: { data: any; searchQuery: SearchQuery; reset
 		icon: icon,
 	};
 
+	const SimpleResult = () => (
+		<>
+			<Icon {...icon} />
+			<Highlight text={data.name} matchAgainst={searchQuery || ""} />
+			<FavoriteMaker className="menu-item-row-push-right" {...favorite} />
+		</>
+	)
+
 	return (
 		<MenuItem onClick={onSeachResultClicked}>
-			<div className="menu-item-row">
-				<Icon {...icon} />
-				<Highlight text={data.name} matchAgainst={searchQuery || ""} />
-				<FavoriteMaker className="menu-item-row-push-right" {...favorite} />
+			<div style={{ height: "auto" }} className="menu-item-row">
+				{!data.type.includes("weather") ? <SimpleResult /> : <CustomSearchResult data={data} searchQuery={searchQuery} />}
 			</div>
 		</MenuItem>
 	);

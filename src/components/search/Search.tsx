@@ -2,10 +2,10 @@ import * as React from "react";
 import { Menu,MenuProps } from "../../../node_modules/@finsemble/finsemble-ui/react/components/menu/Menu"
 import { SearchResults } from "./SearchResults";
 import { SearchInput } from "./SearchInput";
-import "../../assets/css/search.css";
+// import "../../../node_modules/@finsemble/finsemble-ui/react/assets/assets/css/search.css";
 
 const Search: React.FunctionComponent<MenuProps> = ({
-	width = 293,
+	width = 350,
 	className = "search-menu",
 	id = "SearchMenu",
 	...otherProps

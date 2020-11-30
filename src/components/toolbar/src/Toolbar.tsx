@@ -24,6 +24,9 @@ import "@finsemble/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../../assets/css/theme.css";
 import { Search } from "../../search"
 
+
+
+
 /**
  * Note: Set `FSBL.debug = true` if you need to reload the toolbar during development.
  * By default, it prevents the system from closing it so that users aren't lost without
@@ -66,3 +69,4 @@ ReactDOM.render(
 	</FinsembleProvider>,
 	document.getElementById("Toolbar-tsx")
 );
+

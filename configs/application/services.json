@@ -1,4 +1,13 @@
 {
-	"$schema": "../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/servicesFile.schema.json",
-	"services": {}
+    "$schema": "../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/servicesFile.schema.json",
+    "services": {
+        "customSearchService": {
+            "bootParams": {
+                "stage": "preuser",
+                "dependencies": []
+            },
+            "name": "customSearchService",
+            "html": "$applicationRoot/services/customSearch/customSearch.html"
+        }
+    }
 }

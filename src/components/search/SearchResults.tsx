@@ -2,7 +2,8 @@ import * as React from "react";
 import { SearchProviderResults } from "./SearchProviderResults";
 import { SearchBestMatch } from "./SearchBestMatch";
 import { useSearch } from "../../../node_modules/@finsemble/finsemble-ui/react/hooks/useSearch";
-import "../../assets/css/menus.css";
+// import "../../../node_modules/@finsemble/finsemble-ui/react/assets/assets/css/menus.css";
+
 
 export const SearchResults: React.FunctionComponent = () => {
 	const { searchResults, searchQuery } = useSearch();

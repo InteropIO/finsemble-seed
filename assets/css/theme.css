@@ -43,3 +43,12 @@ See https://documentation.chartiq.com/finsemble/tutorial-UIComponents.html#css
     --font-size: 12px;
 */
 }
+
+
+
+.search-provider-results > .menu-item {
+    height:auto;
+}
+.search-provider-results > div > .menu-item {
+    height:auto;
+}
