@@ -33,6 +33,7 @@
 		"@finsemble/finsemble-cli": "5.1.*"
 	},
 	"dependencies": {
+		"@chartiq/fpe-router": "^1.1.1",
 		"@finsemble/finsemble-core": "5.1.*",
 		"@finsemble/finsemble-electron-adapter": "5.1.*",
 		"@finsemble/finsemble-ui": "5.1.*",

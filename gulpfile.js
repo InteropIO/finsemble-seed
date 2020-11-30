@@ -168,6 +168,11 @@
 								prettyName: "Components",
 								watch: watchFiles,
 							},
+							{
+								configPath: require.resolve("./build/webpack/webpack.finsemble-test.js"),
+								prettyName: "Finsemble-Test",
+								watch: watchFiles,
+							},
 						];
 						runWebpackInParallel(webpackConfigs, exitOnCompletion, done);
 					},
