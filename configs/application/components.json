@@ -74,7 +74,8 @@
 				},
 				"showTaskbarIcon": false,
 				"contextMenu": true,
-				"addToWorkspace": true
+				"addToWorkspace": true,
+				"native": true
 			},
 			"component": {
 				"spawnOnHotkey": ["ctrl", "alt", "n"]
