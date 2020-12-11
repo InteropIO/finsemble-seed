@@ -1,4 +1,13 @@
 {
-	"$schema": "../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/servicesFile.schema.json",
-	"services": {}
+    "$schema": "../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/servicesFile.schema.json",
+    "services": {
+        "OfficeAddinService": {
+            "bootParams": {
+                "stage": "preuser",
+                "dependencies": []
+            },
+            "name": "OfficeAddinService",
+            "html": "$applicationRoot/services/OfficeAddin/OfficeAddin.html"
+        }
+    }
 }
