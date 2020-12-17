@@ -1,4 +1,13 @@
 {
-	"$schema": "../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/servicesFile.schema.json",
-	"services": {}
+    "$schema": "../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/servicesFile.schema.json",
+    "services": {
+        "OpenFIGIService": {
+            "bootParams": {
+                "stage": "preuser",
+                "dependencies": []
+            },
+            "name": "OpenFIGIService",
+            "html": "$applicationRoot/services/OpenFIGI/OpenFIGI.html"
+        }
+    }
 }
