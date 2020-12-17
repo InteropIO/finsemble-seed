@@ -1,3 +1,4 @@
+// type imports for typescript
 import { ResponderMessage } from "clients/IRouterClient";
 import { FigiRequest, Finsemble } from "./OpenFIGITypes";
 
@@ -6,8 +7,24 @@ const Finsemble: Finsemble = require("@finsemble/finsemble-core");
 Finsemble.Clients.Logger.start();
 Finsemble.Clients.Logger.log("OpenFIGI Service starting up");
 
-/**
- * Add service description here
+
+/*
+OpenFIGIService:
+	This service allows a Finsemble component to send a request to get a FIGI from the OpenFIGI api https://api.openfigi.com/api
+
+  How it works:
+  - Service sets up a query responder for "OpenFIGI"
+	- This responder will pass data to the getOpenFigi method on OpenFIGIService. This method will make a fetch request to the openFIGI api and return the correct FIGI code(s)
+
+  Example call to the service from a component:
+  ```
+  FSBL.Clients.RouterClient.query(
+		"OpenFIGI",
+		{"idType":"TICKER", "idValue":"IBM"},
+		(err,response)=>console.log(response)
+		)
+
+  ```
  */
 class OpenFIGIService extends Finsemble.baseService {
 

@@ -1,3 +1,8 @@
+/*
+This file is the type declaration file for the OpenFIGIService, if using vanilla javascript you can delete this file.
+*/
+
+
 import { ICentralLogger } from "clients/ICentralLogger";
 import { IRouterClient } from "clients/IRouterClient";
 
