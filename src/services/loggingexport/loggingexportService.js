@@ -1,23 +1,23 @@
 /**
  * Simple log export service example which captures messages of specified categories and levels
  * and transmits them to a remote API in batch, once a certain batch size or timeout is reached.
- * 
+ *
  * The service will come up as soon as possible during finsemble startup - but will inevitably
  * not be able to capture some of the earliest log messages.
- * 
+ *
  * Look for //TODO: comments for where to customize the service to your needs
- * 
+ *
  * N.B. Be wary of adding too many Logger messages within this service as it will of course receive
  * back to transmit onwards.
  */
-const Finsemble = require("@chartiq/finsemble");
+const Finsemble = require("@finsemble/finsemble-core");
 const Request = require("superagent");
 
 const RouterClient = Finsemble.Clients.RouterClient;
 const Logger = Finsemble.Clients.Logger;
 Logger.start();
 
-// #region Settings 
+// #region Settings
 /** Transmit queued messages when their number reaches or exceeds this amount. */
 const BATCH_SIZE = 100;
 
@@ -42,8 +42,8 @@ const CAPTURE_LOG_CATEGORIES = {
 
 /**
  * Value indicating whether log messages should be sorted by timestamp.
- * 
- * Note that, due to the async nature of logging, you might still send a later batch containing messages with a lower 
+ *
+ * Note that, due to the async nature of logging, you might still send a later batch containing messages with a lower
  * logTimestamp. Hence, it is best to avoid sorting messages in this service if messages will be sorted elsewhere.
  */
 const SORT_MESSAGES = false;
@@ -51,7 +51,7 @@ const SORT_MESSAGES = false;
 /**
  * Message formatting function which converts each log message from Finsemble's format to the format you wish to transmit.
  * Incoming log message format:
- *		[										
+ *		[
  *			{
  *				"category": "system",				//Log message type: system, dev or perf
  *				"logClientName": "Finsemble",		//The registered name of the logger instance
@@ -60,7 +60,7 @@ const SORT_MESSAGES = false;
  *													//JSON encoded array of message and data components of the log message
  *													//N.B. maybe be prefixed by string "*** Logging Error: ""
  *				"logTimestamp": 1544090028391.6226	//Log message timestamp for ordering use
- *			}, 
+ *			},
  *			{...},
  *			...
  *		]
@@ -78,9 +78,9 @@ const LOGGING_ENDPOINT = "http://somedomain.com/loggingendpoint";
 // #endregion
 
 /**
- * Log messages arrive in small batches from each logger and must be added to an export batch and 
- * transmitted. 
- * 
+ * Log messages arrive in small batches from each logger and must be added to an export batch and
+ * transmitted.
+ *
  * @constructor
  */
 function LoggingExportService() {
@@ -157,7 +157,7 @@ function LoggingExportService() {
 	}
 
 	/**
-	 * Create a router listener for log messages. 
+	 * Create a router listener for log messages.
 	 * @private
 	 */
 	this.createRouterEndpoints = function () {
