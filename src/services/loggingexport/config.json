@@ -1,8 +1,7 @@
 {
+    "$schema": "../../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/servicesFile.schema.json",
     "services": {
         "loggingexportService": {
-            "useWindow": true,
-            "active": true,
             "name": "loggingexportService",
             "visible": false,
             "html": "$applicationRoot/services/loggingexport/loggingexport.html"
