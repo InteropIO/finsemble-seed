@@ -32,15 +32,15 @@ class LoggingExportService extends Finsemble.baseService {
 
 /** Log levels of messsages to capture. Valid values: Error, Warning, Log, Info, Debug, Verbose */
 	CAPTURE_LOG_LEVELS = {
-  "Log": true,
-  "Warn": true,
-  "Error": true
+	"Log": true,
+	"Warn": true,
+	"Error": true
 };
 
 /** Log categories of messages to capture. Valid values: system, dev or perf */
 	CAPTURE_LOG_CATEGORIES = {
-  "system": true,
-  "dev": true
+	"system": true,
+	"dev": true
 };
 
 /**
@@ -74,10 +74,10 @@ class LoggingExportService extends Finsemble.baseService {
 		this.onBaseServiceReady(this.readyHandler);
 	}
 
-  /**
-   * Fired when the service is ready for initialization
-   * @param {function} callback
-   */
+	/**
+	 * Fired when the service is ready for initialization
+	 * @param {function} callback
+	 */
 	readyHandler(callback) {
 		// start listening for logs
 		this.centralLoggerLogConsumer();
@@ -108,59 +108,59 @@ class LoggingExportService extends Finsemble.baseService {
 		return logMessage;
 	}
 
-  /**
+	/**
  * Add an incoming array of log messages to the batch and transmit if thresholds met.
  * @private
  */
 	addToBatch(dataArr) {
-    if (dataArr) {
+		if (dataArr) {
 			for (let i = 0; i < dataArr.length; i++) {
 				const message = dataArr[i];
 
 				// only capture the log messages that meet the category and type we set
 				if (this.CAPTURE_LOG_CATEGORIES[message.category] && this.CAPTURE_LOG_LEVELS[message.logType]) {
 					this.logBatch[this.currBatchSize++] = this.formatMessage(message);
-        }
+				}
 				else {
 					// skip the logs that don't meet the requirements
 					console.debug("discarding message", message);
-        }
-      }
+				}
+			}
 
 			if (this.currBatchSize >= this.BATCH_SIZE) {
 				this.transmitBatch();
 			} else if (!this.timeout) { //always transmit batch within minimum this.timeout
 				this.timeout = setTimeout(this.transmitBatch, this.TIMEOUT_MILLISECS);
-      }
-    } else {
-      Logger.warn("Tried to add an invalid data array to log batch", dataArr);
-    }
-  }
+			}
+		} else {
+			Logger.warn("Tried to add an invalid data array to log batch", dataArr);
+		}
+	}
 
-  /**
+	/**
  * Transmit the batch to the remote log collection endpoint.
  * @private
  */
 	transmitBatch() {
 		clearTimeout(this.timeout);
-    //trim batch array to length
+		//trim batch array to length
 		let toTransmit = this.logBatch;
 		if (toTransmit) {
 			toTransmit.splice(this.currBatchSize, this.logBatch.length - this.currBatchSize);
 		}
 
-    //reset
+		//reset
 		this.timeout = null;
 		this.logBatch = new Array(this.batchAllocSize);
 		this.currBatchSize = 0;
 
-    // Sort the batch by timestamp if necessary.
+		// Sort the batch by timestamp if necessary.
 		if (this.SORT_MESSAGES) {
-      toTransmit.sort((a, b) => a.logTimestamp - b.logTimestamp);
-    }
+			toTransmit.sort((a, b) => a.logTimestamp - b.logTimestamp);
+		}
 
-    //transmit batch
-    //TODO: Customize batch transmission here
+		//transmit batch
+		//TODO: Customize batch transmission here
 		console.debug("Batch to transmit: " + JSON.stringify(toTransmit, null, 2));
 
 		// the call to your endpoint here
@@ -170,7 +170,7 @@ class LoggingExportService extends Finsemble.baseService {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-		    logMessages: toTransmit
+				logMessages: toTransmit
 			}),
 			credentials: 'include'
 		})
@@ -183,18 +183,18 @@ class LoggingExportService extends Finsemble.baseService {
 			});
 	}
 
-  /**
-   * Create a router listener for log messages.
-   * @private
-   */
+	/**
+	 * Create a router listener for log messages.
+	 * @private
+	 */
 	centralLoggerLogConsumer() {
 		// collect the logs from the central logger and send them to be processed
 		Finsemble.Clients.RouterClient.addListener("logger.service.logMessages", (error, logMessage) => {
-      if (!error) {
+			if (!error) {
 				this.addToBatch(logMessage.data);
-      } else {
-        Logger.error("Failed to setup LoggingExportService listener", error);
-      }
+			} else {
+				Logger.error("Failed to setup LoggingExportService listener", error);
+			}
 		});
 	}
 }
