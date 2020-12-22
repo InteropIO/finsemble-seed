@@ -1,0 +1,53 @@
+{
+	"components": {
+		"Advanced Chart": {
+			"window": {
+				"url": "$applicationRoot/components/chartiq/chartiq/technical-analysis-chart.html",
+				"width": 800,
+				"height": 600,
+				"options": {
+					"minWidth": 75,
+					"securityPolicy": "trusted"
+				},
+				"affinity": "charts"
+			},
+			"component": {
+				"mode": "premium",
+				"advertiseReceivers": [
+					"chartiq.chart",
+					"symbol"
+				],
+				"spawnOnHotkey": [
+					"ctrl",
+					"alt",
+					"a"
+				],
+				"category": "system",
+				"preload": [
+					"$applicationRoot/components/chartiq/chartiq.js"
+				]
+			},
+			"foreign": {
+				"services": {
+					"windowService": {
+						"allowAutoArrange": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Toolbar": {
+						"iconURL": "$applicationRoot/components/chartiq/IQ-icon.png"
+					},
+					"Window Manager": {
+						"title": "ChasrtIQ",
+						"FSBLHeader": true,
+						"showLinker": true,
+						"persistWindowState": true
+					}
+				}
+			}
+		}
+	}
+}

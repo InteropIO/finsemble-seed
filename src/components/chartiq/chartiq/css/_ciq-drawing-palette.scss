@@ -1,0 +1,1339 @@
+// Default theme colors
+$DEFAULT-active: #575757 !default;
+$DEFAULT-inactive: #8d949a !default;
+$DEFAULT-selected: #398dff !default;
+$DEFAULT-highlight: #efefef !default;
+$DEFAULT-separator: #666 !default;
+$DEFAULT-text: #666 !default;
+$DEFAULT-icon: #8d949a !default;
+$DEFAULT-background: #f1f3f3;
+// Dark Theme colors
+$DARK-active: #fff;
+$DARK-inactive: #8d949a;
+$DARK-selected: #398dff;
+$DARK-highlight: #263949;
+$DARK-separator: #ccc;
+$DARK-text: #ddd;
+$DARK-icon: #8d949a;
+$DARK-background: #19252f;
+
+$ICON_SIZE: 20px;
+$MINI_ICON_SIZE: 16px;
+$PALETTE_MAIN_GRID_WIDTH: 69px;
+$PALETTE_MAIN_LIST_WIDTH: 230px;
+
+// FIX - prevent mouse instructions sticky from appearing in mobile{
+cq-context[ciq-mobile] .mStickyRightClick .mouseDeleteInstructions{
+	display: none !important;
+}
+
+cq-drawing-palette{
+	display: block;
+	width: $PALETTE_MAIN_GRID_WIDTH; /* size of palette can be adjusted. be sure to set .palette-settings left property accordingly */
+	height: 500px; /* default height. necessary to float the palette above the chart w/o obstructing it with the palette container set the height in a resize event to match container */
+	overflow: visible;
+	//border-right: solid 1px rgba(0,0,0,0.1);
+	background: $DEFAULT-background;
+	.#{$DARK} &{
+		//border-right: solid 1px rgba(255,255,255,0.1);
+		background: $DARK-background;
+	}
+
+	.tool-context-menu{
+		display: none;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: auto;
+		z-index: 100;
+		transform: translateY(-100%);
+		background: $DEFAULT-main;
+		.#{$DARK} &{
+			background: $DARK-main;
+		}
+		border: solid 1px rgba(0,0,0,0.3);
+		box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+		.#{$DARK} &{
+			border: solid 1px rgba(255,255,255,0.3);
+			box-shadow: 2px 2px 5px rgba(255, 255, 255, 0.1);
+		}
+
+		.menu-item{
+			white-space: pre;
+			margin: 2px;
+			padding: 5px 10px;
+
+			&:hover{
+				background-color: $DEFAULT-highlight;
+				.#{$DARK} &{
+					background-color: $DARK-highlight;
+				}
+			}
+		}
+	}
+
+	cq-separator {
+		margin: 5px 4px;
+		border-color: $DEFAULT-separator;
+		.#{$DARK} &{
+			border-color: $DARK-separator;
+		}
+	}
+
+	cq-menu-dropdown{
+		width: auto;
+	}
+
+	.mini-widget-group {
+
+		margin-left: 4px;
+		margin-bottom: 8px;
+
+		.ciq-mini-widget{
+			width:16px;
+			margin: 0 0 4px 2px;
+			padding-bottom:16px; /* account for border when squaring off the button */
+
+			.icon{
+				width: $MINI_ICON_SIZE;
+				padding-bottom: $MINI_ICON_SIZE;
+			}
+
+			&[cq-view="attach"]{
+				display: none;
+			}
+		}
+	}
+
+	&[docked=false]{
+		.ciq-mini-widget[cq-view="detach"]{
+			display: none;
+		}
+		.ciq-mini-widget[cq-view="attach"]{
+			display: inline-block;
+		}
+	}
+
+	.primary-tool-group{
+		cq-menu{
+			display: inline-block;
+			float:none;
+			width: 82%;
+			margin: 6% 0 6% 9%;
+
+			cq-context[ciq-mobile] &.ciq-select{
+				display: block;
+				position: relative;
+
+				cq-menu-dropdown{
+					width: 100px;
+				}
+			}
+		}
+	}
+
+	.tool-group{
+		position: relative;
+		height: calc(100% - 150px);
+		margin-left: 3px;
+		z-index: 0;
+
+		cq-seperator{
+			margin-left: 0;
+		}
+	}
+	&[docked=false] .tool-group{
+		height: calc(100% - 165px);
+	}
+
+	.ciq-tool, .ciq-mini-widget{
+		display: inline-block;
+		position: relative;
+		width:$ICON_SIZE;
+		height: 0;
+		box-sizing: border-box;
+		margin: 4px 0 4px 6px;
+		padding: 0;
+		padding-bottom:$ICON_SIZE;
+		border: solid 1px transparent;
+		cursor: pointer;
+		transition: none;
+		background: transparent;
+		overflow: visible;
+		&:hover{
+			background-color: $DEFAULT-highlight;
+			.#{$DARK} &{
+				background-color: $DARK-highlight;
+			}
+		}
+
+		.icon{
+			display:inline-block;
+			position: relative;
+			width: $ICON_SIZE;
+			margin: 0;
+			padding-bottom: $ICON_SIZE;
+			pointer-events: none;
+		}
+
+		&:hover .icon{
+			border-color: $DEFAULT-highlight;
+			.#{$DARK} &{
+				border-color: $DARK-highlight;
+			}
+		}
+
+		.selected .icon{
+			background: $DEFAULT-selected;
+			.#{$DARK} &{
+				background: $DARK-selected;
+			}
+		}
+
+		label{
+			display: inline-block;
+			z-index: 2000000; /* set unusually high to float over prettier scrollbar */
+			position: absolute;
+			top: calc(#{$ICON_SIZE} + 5px);
+			left: 50%;
+			width: auto;
+			padding: 3px 5px;
+			font-size: 10px;
+			line-height: 1em;
+			font-weight: 400;
+			white-space: normal;
+			color:$DEFAULT-bg;
+			background:$DEFAULT-selected;
+			border:solid 1px darken( $DEFAULT-bg, 8% );
+			@include border-radius($soft-corners);
+			transition: opacity .25s 0.5s;
+			cursor: pointer;
+			opacity: 0;
+			visibility: hidden;
+			overflow: hidden;
+			pointer-events: none;
+		}
+
+		&:hover label{
+			opacity: 1;
+			visibility: visible;
+		}
+
+	}
+
+	cq-scroll{
+		width: 100%;
+		height: calc(100% - 42px);
+
+		&.ps-container:hover > .ps-scrollbar-y-rail:hover,
+		&.ps-container.ps-in-scrolling.ps-y > .ps-scrollbar-y-rail,
+		&.ps-container:hover.ps-in-scrolling.ps-y > .ps-scrollbar-y-rail  {
+			background-color: rgba(255,255,255,0.15);
+			opacity: 0.9;
+			box-shadow: inset 1px 1px 5px rgba(0,0,0,0.5);
+		}
+	}
+
+	////////////////////////////////////////////////////////////////////
+	// Grid View
+	////////////////////////////////////////////////////////////////////
+	.break-lg &.grid, .break-md &.grid{
+		.ciq-tool{
+			label{
+				max-width: 64px;
+				left: 0;
+				width: auto;
+			}
+		}
+		.ciq-tool.odd{
+			label{
+				left: auto;
+				right: 0;
+			}
+		}
+	}
+
+	////////////////////////////////////////////////////////////////////
+	// List View
+	////////////////////////////////////////////////////////////////////
+	&.list, .break-sm &{ /* always display list mode on small screens */
+
+			width: $PALETTE_MAIN_LIST_WIDTH;
+
+			cq-separator {
+				margin: 3% 0;
+			}
+
+			.mini-widget-group{
+				.ciq-mini-widget{
+					margin: 0 0 0 3%;
+
+					//Leave this in for when we eventually have a 'detach' button
+					&:nth-of-type(n+3){
+						float:right;
+						margin-right: 3%;
+					}
+				}
+			}
+
+			.primary-tool-group{
+				cq-menu{
+					float:left;
+					width: 27%;
+					margin: 1% 0 3% 3%;
+				}
+				.ciq-tool{
+					margin: 0 0 0 3%;
+				}
+			}
+
+			.tool-group{
+				height: calc(100% - 85px);
+
+				.ciq-tool{
+					width: 100%;
+					height: 40px;
+					margin: 0;
+					padding: 5px 0;
+
+					.icon{
+						margin: 3px 3%;
+					}
+
+					// By default, the labels are styled as tool-tips. Most of these styles override for list view
+					label{
+						display: inline-block;
+						position: static;
+						width:auto;
+						margin-left: 5px;
+						padding: 0;
+						font-size: 1.15em;
+						line-height: 2em;
+						color:$DEFAULT-active;
+						.#{$DARK} &{
+							color: $DARK-active;
+						}
+						background: transparent;
+						border: none;
+						overflow: hidden;
+						opacity: 1;
+						visibility: visible;
+						transition: none;
+					}
+
+					&:hover label{
+						padding: 0;
+						border:none;
+					}
+
+					&.active label{
+						color: $DEFAULT-selected;
+						font-weight: bold;
+					}
+				}
+
+				cq-scroll {
+					height: calc(100% - 60px);
+				}
+			}
+			&[docked=false] .tool-group{
+				height: calc(100% - 100px);
+			}
+
+		.palette-settings{
+			left: calc(#{$PALETTE_MAIN_LIST_WIDTH} + 5px);
+			width: calc(100% - 280px);
+		}
+	}
+
+	////////////////////////////////////////////////////////////////////
+	// Tool Group Filters
+	////////////////////////////////////////////////////////////////////
+	.tool-group{
+		cq-scroll .ciq-tool{
+			display:none;
+		}
+
+		&[tool-group-filter=all] .ciq-tool{
+			display: inline-block;
+		}
+
+		// Group filter line is required for compatibility with previous templates
+		// The setting lines aligns with display value of Favorites
+		&[tool-group-filter=favorite] [cq-tool-group*=favorite],
+		&[tool-group-filter=favorites] [cq-tool-group*=favorite]{
+			display: inline-block;
+		}
+
+		&[tool-group-filter=text] [cq-tool-group*=text]{
+			display: inline-block;
+		}
+		&[tool-group-filter=statistics] [cq-tool-group*=statistics]{
+			display: inline-block;
+		}
+		&[tool-group-filter=technicals] [cq-tool-group*=technicals]{
+			display: inline-block;
+		}
+		&[tool-group-filter=fibonacci] [cq-tool-group*=fibonacci]{
+			display: inline-block;
+		}
+		// Group filter line is required for compatibility with previous templates
+		// The setting lines aligns with display value of Lines
+		&[tool-group-filter=line] [cq-tool-group*=line],
+		&[tool-group-filter=lines] [cq-tool-group*=line]{
+			display: inline-block;
+		}
+		// Group filter marker is required for compatibility with previous templates
+		// The setting markers aligns with display value of Markers
+		&[tool-group-filter=marking] [cq-tool-group*=marking],
+		&[tool-group-filter=markings] [cq-tool-group*=marking]{
+			display: inline-block;
+		}
+
+	}
+
+	////////////////////////////////////////////////////////////////////
+	// Icons
+	////////////////////////////////////////////////////////////////////
+
+	@mixin tool-sheet-offset($tool-index) {
+		background-position: 0 $tool-index * -$ICON_SIZE;
+	}
+	@mixin miniwidget-sheet-offset($widget-index) {
+		background-position: 0 $widget-index * -$MINI_ICON_SIZE;
+	}
+
+	.ciq-tool{
+
+		.icon{
+			background: transparent url('img/stx-sprite-drawing-tools-black.svg') top left no-repeat;
+			background-size: cover;
+			background-position: 0 0;
+
+			.#{$DARK} &{
+				background-image: url('img/stx-sprite-drawing-tools-white.svg');
+			}
+
+			&.annotation{
+				background-position: 0 0;
+			}
+			&.callout{
+				@include tool-sheet-offset(2);
+			}
+			&.average{
+				@include tool-sheet-offset(1);
+			}
+			&.channel{
+				@include tool-sheet-offset(3);
+			}
+			&.continuous{
+				@include tool-sheet-offset(9);
+			}
+			&.crossline{
+				@include tool-sheet-offset(4);
+			}
+			&.freeform{
+				@include tool-sheet-offset(5);
+			}
+			&.ellipse{
+				@include tool-sheet-offset(11);
+			}
+			&.retracement{
+				@include tool-sheet-offset(12);
+			}
+			&.fibprojection{
+				@include tool-sheet-offset(13);
+			}
+			&.fibarc{
+				@include tool-sheet-offset(14);
+			}
+			&.fibfan{
+				@include tool-sheet-offset(15);
+			}
+			&.fibtimezone{
+				@include tool-sheet-offset(16);
+			}
+			&.gannfan{
+				@include tool-sheet-offset(17);
+			}
+			&.gartley{
+				@include tool-sheet-offset(18);
+			}
+			&.horizontal{
+				@include tool-sheet-offset(6);
+			}
+			&.line{
+				@include tool-sheet-offset(7);
+			}
+			&.pitchfork{
+				@include tool-sheet-offset(19);
+			}
+			&.quadrant{
+				@include tool-sheet-offset(20);
+			}
+			&.ray{
+				@include tool-sheet-offset(21);
+			}
+			&.rectangle{
+				@include tool-sheet-offset(22);
+			}
+			&.regression{
+				@include tool-sheet-offset(23);
+			}
+			&.segment{
+				@include tool-sheet-offset(8);
+			}
+			&.arrow{
+				@include tool-sheet-offset(29);
+			}
+			&.check{
+				@include tool-sheet-offset(24);
+			}
+			&.xcross{
+				@include tool-sheet-offset(25);
+			}
+			&.focusarrow{
+				@include tool-sheet-offset(26);
+			}
+			&.heart{
+				@include tool-sheet-offset(27);
+			}
+			&.star{
+				@include tool-sheet-offset(28);
+			}
+			&.speedarc{
+				@include tool-sheet-offset(30);
+			}
+			&.speedline{
+				@include tool-sheet-offset(34);
+			}
+			&.timecycle{
+				@include tool-sheet-offset(31);
+			}
+			&.tirone{
+				@include tool-sheet-offset(32);
+			}
+			&.trendline{
+				@include tool-sheet-offset(33);
+			}
+			&.vertical{
+				@include tool-sheet-offset(10);
+			}
+			&.undo{
+				@include tool-sheet-offset(39);
+			}
+			&.redo{
+				@include tool-sheet-offset(40);
+			}
+			&.pointer{
+				@include tool-sheet-offset(41);
+			}
+			&.measure{
+				@include tool-sheet-offset(35);
+			}
+			&.clear{
+				@include tool-sheet-offset(37);
+			}
+			&.restore{
+				@include tool-sheet-offset(36);
+			}
+			&.elliottwave,
+			&.elliott {
+				@include tool-sheet-offset(50);
+			}
+
+		}
+		&.active{
+			.icon{
+				background-image: url('img/stx-sprite-drawing-tools-blue.svg');
+			}
+		}
+		&:active{
+			.icon{
+				background-image: url('img/stx-sprite-drawing-tools-blue.svg');
+			}
+		}
+	}
+
+	.ciq-mini-widget{
+
+		.icon{
+			background: transparent url('img/stx-sprite-palette-miniwidgets-black.svg') top left no-repeat;
+			background-size: $MINI_ICON_SIZE;
+			background-position: 0 0;
+
+			.#{$DARK} &{
+				background-image: url('img/stx-sprite-palette-miniwidgets-white.svg');
+			}
+		}
+	}
+	// Hilite the active view button
+	&.list .mini-widget-group .ciq-mini-widget[cq-view="list"],
+	&.grid .mini-widget-group .ciq-mini-widget[cq-view="grid"],
+	& .ciq-mini-widget.active,
+	& .ciq-mini-widget:active{
+		.icon{
+			background-image: url('img/stx-sprite-palette-miniwidgets-blue.svg');
+		}
+	}
+
+	.mini-widget-group .ciq-mini-widget[cq-view="list"] .icon{
+		@include miniwidget-sheet-offset(1);
+	}
+	.mini-widget-group .ciq-mini-widget[cq-view="grid"] .icon{
+		@include miniwidget-sheet-offset(0);
+	}
+	.mini-widget-group .ciq-mini-widget[cq-view="detach"] .icon{
+		@include miniwidget-sheet-offset(2);
+	}
+	.mini-widget-group .ciq-mini-widget[cq-view="attach"] .icon{
+		@include miniwidget-sheet-offset(3);
+	}
+	.mini-widget-group .ciq-mini-widget .icon.magnet{
+		@include miniwidget-sheet-offset(6);
+	}
+	.mini-widget-group .ciq-mini-widget .icon.clear{
+		@include miniwidget-sheet-offset(8);
+	}
+	.mini-widget-group .ciq-mini-widget .icon.restore{
+		@include miniwidget-sheet-offset(7);
+	}
+
+
+	.mini-widget-group.mini-widget-foot{
+
+		margin-bottom: 4px;
+
+		.ciq-mini-widget{
+			float: none;
+			margin: 0 0 4px 0;
+			width: 16px;
+			padding-bottom: 20px;
+
+			label{
+				width: auto;
+				height: auto;
+				// Position bottom labels above the icon because we can't count on there being a footer in the page to create space below.
+				transform: translateY(-20px);
+				top: auto;
+				bottom: 0;
+			}
+
+			.icon{
+				background-position-x: center;
+			}
+
+			.icon.magnet{
+				border: none;
+				height: 0;
+				margin-top: 3px;
+			}
+		}
+
+		.ciq-mini-widget.ciq-magnet.strong{
+			border-bottom: solid 1px #398dff;
+		}
+	}
+
+	&.list .mini-widget-group.mini-widget-foot,
+	.break-sm & .mini-widget-group.mini-widget-foot{
+
+		margin: 5px 0;
+    float: left;
+    left: 50%;
+    position: absolute;
+    width: 165px;
+    transform: translateX(-50%);
+
+		.ciq-mini-widget{
+			float: none;
+			margin: 0 15px 4px 15px;
+			transform-origin: center;
+			transform: scale(1.5);
+
+			label{
+				width: auto;
+				height: auto;
+				transform: scale(0.75) translateY(-20px);
+			}
+
+			.icon{
+				width: 14px;
+				padding-bottom: 14px;
+
+			}
+
+			.icon.magnet{
+				//border: none;
+				height: 0;
+			}
+		}
+
+	}
+
+
+	////////////////////////////////////////////////////////////////////
+	// Favorites
+	////////////////////////////////////////////////////////////////////
+
+	.ciq-tool .fav-marker{
+		content: ' ';
+		display: none;
+		position: absolute;
+		bottom: -5px;
+		right: -5px;
+		width: 12px;
+		height: 12px;
+		background: transparent url('img/stx-sprite-drawing-tools-black.svg') top left no-repeat;
+		.#{$DARK} &{
+			background-image: url('img/stx-sprite-drawing-tools-white.svg');
+		}
+		background-size: 100%;
+		background-position: 0 -576px;
+		pointer-events: none;
+	}
+
+	&.list .ciq-tool .fav-marker,
+	.break-sm &.grid .ciq-tool .fav-marker {
+		display: block;
+		bottom: auto;
+		right: 15px;
+		width: 18px;
+		height: 18px;
+		background-position: 0 -504px;
+		top: 10px;
+		pointer-events: auto;
+	}
+
+	.ciq-tool[cq-tool-group*=favorite] .fav-marker{
+		display:block;
+		background-image: url('img/stx-sprite-drawing-tools-blue.svg');
+		background-position: 0 -576px;
+	}
+
+	&.list .ciq-tool[cq-tool-group*=favorite] .fav-marker{
+		background-position: 0 -865px;
+	}
+
+}
+
+
+
+
+cq-drawing-settings{
+		min-height: 35px;
+		line-height: 34px;
+		background: $DEFAULT-background;
+		.#{$DARK} &{
+			background: $DARK-background;
+		}
+
+		&[hide="true"]{
+			display: none;
+
+			.break-sm &{
+				display: block;
+			}
+		}
+
+		.mini-widget-group {
+
+			margin: 1px 10px 0 0;
+			float:left;
+
+			.ciq-mini-widget{
+				display: inline-block;
+				position: relative;
+				height: 0;
+				box-sizing: border-box;
+				padding: 0;
+				border: solid 1px transparent;
+				cursor: pointer;
+				transition: none;
+				background: transparent;
+				overflow: visible;
+				width:16px;
+				margin: 0 0 4px 2px;
+				padding-bottom:16px; /* account for border when squaring off the button */
+				&:hover{
+					background-color: $DEFAULT-highlight;
+					.#{$DARK} &{
+						background-color: $DARK-highlight;
+					}
+				}
+
+				.icon{
+					display:inline-block;
+					position: relative;
+					margin: 0;
+					pointer-events: none;
+
+					background: transparent url('img/stx-sprite-drawing-tools-black.svg') top left no-repeat;
+					background-size: cover;
+					background-position: 0 0;
+					width: 100%;
+					padding-bottom:100%;
+
+					.#{$DARK} &{
+						background-image: url('img/stx-sprite-drawing-tools-white.svg');
+					}
+				}
+
+				&:hover .icon{
+					border-color: $DEFAULT-highlight;
+					.#{$DARK} &{
+						border-color: $DARK-highlight;
+					}
+				}
+
+				.selected .icon{
+					background: $DEFAULT-selected;
+					.#{$DARK} &{
+						background: $DARK-selected;
+					}
+				}
+
+				label{
+					display: inline-block;
+					z-index: 100;
+					position: absolute;
+					top: calc(#{$ICON_SIZE} + 5px);
+					left: 50%;
+					width: calc(32px);
+					padding: 3px 5px;
+					font-size: 10px;
+					line-height: 1em;
+					font-weight: 400;
+					white-space: normal;
+					color:$DEFAULT-bg;
+					background:$DEFAULT-selected;
+					border:solid 1px darken( $DEFAULT-bg, 8% );
+					@include border-radius($soft-corners);
+					transition: opacity .25s 0.5s;
+					cursor: pointer;
+					opacity: 0;
+					visibility: hidden;
+					overflow: hidden;
+					pointer-events: none;
+				}
+
+				&:hover label{
+					opacity: 1;
+					visibility: visible;
+				}
+
+				*{
+					position: absolute;
+				}
+
+				&[cq-view="attach"],{
+					display: none;
+				}
+
+			}
+
+			.break-sm &{
+				display:none;
+			}
+
+		}
+
+		.mini-widget-group .ciq-mini-widget[cq-view="detach"] .icon{
+			background-position: 0 -630px; /* position is set manually here because background is scaled */
+		}
+		.mini-widget-group .ciq-mini-widget[cq-view="attach"] .icon{
+			background-position: 0 -645px; /* position is set manually here because background is scaled */
+		}
+
+		&[docked="false"]{
+			.ciq-mini-widget[cq-view="detach"]{
+				display: none;
+			}
+			.ciq-mini-widget[cq-view="attach"]{
+				display: inline-block;
+			}
+		}
+
+		cq-toolbar-settings {
+			float: left;
+
+			div[cq-toolbar-action="done_edit"] {
+				display: block;
+				background-image: url(img/stx-sprite-ui.svg) !important;
+				background-position: -575px -50px;
+				padding-right: 5px;
+			}
+		}
+
+		cq-tooltip{
+			line-height: 1;
+		}
+
+		.drawing-settings-wrapper{
+			height: auto;
+			width: inherit;
+			float: left;
+			padding: 7px 10px 5px 25px;
+			box-sizing: border-box;
+			position: relative;
+			line-height: 32px;
+
+			.break-sm &{
+				padding-left: 0;
+				padding-bottom: 7px;
+			}
+
+		}
+
+		&[docked="true"] .drawing-settings-wrapper{
+			padding-left: 10px;
+		}
+
+		.ciq-mobile-palette-toggle{
+			display:none;
+			padding-right: 0;
+			text-transform: uppercase;
+
+			span{
+				position: relative;
+				padding-right: 25px;
+			}
+		}
+
+		.ciq-heading { /* Background and line color headings */
+			float: left;
+			line-height: 32px;
+			font-size: 11px;
+			text-transform: uppercase;
+			font-family:$heading-font;
+			color:mix(#000, $DEFAULT-background, 40% );
+			margin: 0;
+
+			.#{$DARK} & {color:mix(#fff, $DARK-background, 40% );}
+
+			span.shortcut{
+				display:none;
+			}
+		}
+
+		.ciq-checkbox {
+			.#{$DARK} & span {border-color:lighten( $DARK-background, 30% );}
+			#{$hovering} .#{$DARK} &:hover span {border-color:lighten( $DARK-background, 50% );}
+		}
+
+		@mixin tool-sheet-offset($tool-index) {
+			background-position: 0 $tool-index * -$ICON_SIZE;
+		}
+
+		cq-clickable[cq-fib-settings]{
+			line-height: 22px;
+			margin-top:4px;
+		}
+
+		.ciq-icon-btn{
+			display: inline-block;
+
+			&.cq-icon-gear{
+				cursor: pointer;
+				width: $ICON_SIZE;
+				padding-bottom:$ICON_SIZE;
+				color: transparent;
+				background: transparent url('img/stx-sprite-drawing-tools-black.svg') top left no-repeat;
+				background-size: cover;
+				@include tool-sheet-offset(47);
+
+				.#{$DARK} &{
+					background-image: url('img/stx-sprite-drawing-tools-white.svg');
+				}
+
+				&.active{
+					.icon{
+						background-image: url('img/stx-sprite-drawing-tools-blue.svg');
+					}
+				}
+
+			}
+		}
+
+		cq-measure .mMeasure {
+			display: block;
+			float: left;
+			transform: translate(-50%, 0);
+			position: absolute;
+			left: 50%;
+			bottom: -29px;
+			width: auto;
+			height: 27px;
+			margin: 10px 0 0;
+			padding: 0 2%;
+			line-height: 27px;
+			text-align: left;
+			font-weight: bold;
+			background: rgba(21, 31, 40, 0.95);
+			color: #fff;
+			border: solid 1px rgba(16,28,35, 1);
+			border-top: none;
+			transition: height 0.15s ease-out, bottom 0.15s ease-out, color 0.15s ease-out 0.15s;
+		}
+
+		cq-measure .mMeasure:empty{
+			bottom: 0;
+			width: 0;
+			height: 0;
+			color: transparent;
+			border: none;
+		}
+
+		.break-sm cq-measure .mMeasure{
+			transform: translate(0,0);
+			left: auto;
+			right: 0;
+		}
+
+	&:not([cq-drawing-edit="none"]) .ciq-drawing-edit-hidden,
+	&[cq-drawing-edit="none"] .ciq-drawing-edit-only {
+		display: none;
+	}
+
+	&:not([cq-drawing-edit="none"]) cq-wave-parameters {
+		display: none;
+	}
+
+	cq-context[ciq-mobile] & cq-line-style.ciq-active,
+	cq-context[ciq-mobile] & cq-menu.ciq-select,
+	.break-sm & cq-line-style.ciq-active,
+	.break-sm & cq-menu.ciq-select{
+		display: block;
+    position: relative;
+	}
+
+	/*  Measuring tool */
+	cq-measure .mMeasure {
+		display: block;
+		position: absolute;
+		left: 50%;
+		bottom: -29px;
+		transform: translate(-50%, 0);
+		width: auto;
+		min-width: 150px;
+		height: 27px;
+		float: left;
+		margin: 10px 0 0;
+		padding: 0 2%;
+		line-height: 27px;
+		text-align: center;
+		font-weight: bold;
+		background: rgba(21, 31, 40, 0.95);
+		color: #fff;
+		transition: height 0.15s ease-out, bottom 0.15s ease-out, color 0.15s ease-out 0.15s;
+		opacity: 1;
+		border: solid 1px rgba(16,28,35, 1);
+		border-top: none;
+	}
+
+	cq-measure .mMeasure:empty{
+		width: 0;
+		height: 0;
+		bottom: 0;
+		color: transparent;
+		border: none;
+	}
+
+	.break-sm cq-measure .mMeasure{
+		left: auto;
+		right: 0;
+		transform: translate(0,0);
+	}
+}
+
+
+
+
+cq-palette-dock{
+	display: none; /* default state is hidden overridden by toolbar-on class */
+	z-index: 100;
+	position: absolute;
+
+	.toolbar-on & {// Show Toolbar
+		display: block;
+	}
+
+	// Port poorly scoped styles from cq-toolbar
+	.ciq-select {/* Menu Triggers */
+		float: left;
+		margin-left: 6px;
+
+		> span:after{
+			right: 10px;
+		}
+		#{$hovering} &:hover,
+		&:active,
+		&.stxMenuActive {color:$DEFAULT-text;}
+
+		.#{$DARK} & {
+			background:none;
+			border-color:lighten( $DARK-background, 10% );
+		}
+		#{$hovering} .#{$DARK} &:hover,
+		.#{$DARK} &:active,
+		.#{$DARK} &.stxMenuActive {color:$DARK-active;}
+	}
+
+	.ciq-select:not(:hover):not(:active):not(.stxMenuActive) {/* Remove borders from "select" Menus in annotation section */
+		border-color:transparent;
+	}
+
+	.ciq-color {
+		margin-top: 4px;
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+	}
+	// end cq-toolbar styles
+
+
+////////////////////////////////////////////////////////////////////
+// Detached palette
+////////////////////////////////////////////////////////////////////
+
+	& [orientation=horizontal]{
+		border-bottom: solid 1px rgba(0,0,0,0.3);
+
+		.#{$DARK} &{
+			border-bottom: solid 1px rgba(255,255,255,0.3);
+		}
+	}
+	& [orientation=vertical]{
+		border-right: solid 1px rgba(0,0,0,0.3);
+
+		.#{$DARK} &{
+			border-right: solid 1px rgba(255,255,255,0.3);
+		}
+	}
+
+	& .palette-main[docked=false]{
+		.tool-group{
+			height: calc(100% - 200px);
+		}
+	}
+	&.list{
+		& .palette-main[docked=false]{
+			.tool-group{
+				height: calc(100% - 110px);
+			}
+		}
+	}
+
+	& [docked=false]{
+		border: solid 1px rgba(0,0,0,0.3);
+		box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+		transition: box-shadow 75ms;
+
+		.#{$DARK} &{
+			border: solid 1px rgba(255,255,255,0.3);
+			box-shadow: 0px 0px 3px rgba(255, 255, 255, 0.05);
+		}
+
+		&.dragging{
+			box-shadow: 5px 5px 10px rgba(0,0,0,0.2);
+
+			.#{$DARK} &{
+				box-shadow: 2px 2px 10px rgba(200, 210, 255, 0.25);
+			}
+		}
+	}
+}
+
+cq-palette-dock{
+	width: 100%;
+	height: 0;
+	overflow: visible;
+
+	&.dragging, &.context{
+		height:100%;
+	}
+
+	.palette-dock-container{
+		height: 0;
+	}
+}
+
+cq-drawing-palette, cq-drawing-settings{
+	position: absolute;
+	display:block;
+
+	.palette-container{
+		position: relative;
+		width: 100%;
+		height: 100%;
+		float: left;
+	}
+
+	&[orientation="vertical"] .palette-container{
+		margin-top: 10px; /* Add a small margin at the top when docked */
+	}
+
+	.drag-strip, .resize-strip{
+		display: none;
+	}
+
+	&[docked="false"]{
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 1;
+
+		&[orientation="horizontal"]{
+			width: auto !important; /* override the full-chart width set by the palette dock when undocked */
+
+			.drag-strip{
+				width: 20px;
+				height: 100%;
+				z-index: 100;
+				position: absolute;
+				background-image: url('img/palette-drag-strip.svg');
+			}
+
+			.resize-strip{
+				width: 2px;
+				height: 100%;
+				top: 0;
+				left: auto;
+				right: 0;
+			}
+		}
+
+		&[orientation="vertical"]{
+			.drag-strip{
+				background-image: url('img/palette-drag-strip-horizontal.svg');
+				background-position: center;
+				background-size: contain;
+			}
+		}
+
+		.palette-container{
+			margin-top: 0;
+		}
+
+		.drag-strip, .resize-strip{
+			display: block;
+			height: 20px;
+			width: 100%;
+			margin-bottom: 5px;
+			background-color: rgba(0,0,0,0.1);
+			background-size: 100%;
+			background-position: center;
+			background-repeat: no-repeat;
+		}
+
+		.drag-strip{
+			cursor: move;
+		}
+
+		.resize-strip{
+			position: absolute;
+			bottom: 0;
+			margin-bottom: 0;
+			height: 4px;
+		}
+		&[orientation="vertical"] .resize-strip{
+			cursor: ns-resize;
+		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////
+// mobile
+////////////////////////////////////////////////////////////////////
+
+cq-drawing-settings{
+	.break-sm &{
+			left: 0;
+			width:100%;
+
+			.drawing-settings-wrapper{
+				margin-left:0;
+
+				.ciq-mobile-palette-toggle{
+					display:initial;
+				}
+				.ciq-active-tool-label{
+					display: none;
+				}
+				.shortcut{
+					display:none;
+				}
+			}
+	}
+}
+
+cq-drawing-palette{
+
+	.break-sm &{
+
+		z-index: 99 !important;
+		position: absolute;
+		top:40px !important;
+		line-height: 35px;
+
+		.palette-container{
+			margin-top: 0;
+
+			cq-separator:first-of-type{
+				margin-top: 0;
+				border-color: rgba(255, 255, 255, 0.3);
+			}
+
+			cq-menu.ciq-select{
+				display: block;
+				position: relative;
+
+				cq-menu-dropdown{
+					right: auto;
+					top: 27px;
+					margin: 0;
+				}
+			}
+		}
+
+		.mini-widget-group{
+			display: none;
+
+			&.mini-widget-foot{
+				display: block;
+				margin-top: 10px;
+			}
+		}
+
+		.primary-tool-group{
+			margin-top: 10px;
+			// cq-menu{
+			// 	display:none;
+			// }
+		}
+
+		.tool-group{
+			height: calc(100% - 75px);
+			cq-scroll{
+				height: calc(100% - 55px);
+			}
+		}
+
+		&.palette-hide{
+			display:none;
+			width: 0;
+		}
+
+		.shortcut{
+			display:none;
+		}
+	}
+
+	.break-sm.#{$DARK} &{
+		.tool-group .ciq-tool label{
+			color: $DARK-active;
+			max-width: initial;
+		}
+	}
+
+}

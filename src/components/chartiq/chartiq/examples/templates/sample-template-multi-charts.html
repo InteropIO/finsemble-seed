@@ -1,0 +1,101 @@
+<!doctype html>
+<!--
+This is a fully functional example showing how to load two charts on a single page using the
+cq-instant-chart web component.
+
+This template requires the Technical Analysis package. If you are using a different package, some
+features may not work.
+-->
+<html>
+<head>
+
+<meta charset="utf-8" />
+<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1" />
+<link rel="stylesheet" type="text/css" href="css/normalize.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="css/page-defaults.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="css/stx-chart.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="css/chartiq.css" media="screen" />
+<style>
+	.left {
+		height: 100%;
+		position: absolute;
+		width: 50%;
+	}
+	.right {
+		left: 50%;
+		height: 100%;
+		position: absolute;
+		width: 50%;
+	}
+</style>
+<title>Multi Charts - Powered by ChartIQ</title>
+</head>
+
+<body>
+	<!-- A unique id for each cq-instant-chart element is required for saving and restoring the layout. -->
+	<div class="column left"><cq-instant-chart tmpl-src="examples/templates/partials/sample-template-advanced-context.html" id="chart0" symbol="AAPL"></cq-instant-chart></div>
+	<div class="column right"><cq-instant-chart tmpl-src="examples/templates/partials/sample-template-advanced-context.html" id="chart1" symbol="MSFT"></cq-instant-chart></div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+<script src="js/thirdparty/custom-elements.min.js"></script> <!-- Legacy Edge support for webcomponents -->
+
+<script type="module" crossorigin="use-credentials">
+// This inline script acts as the entry point, without creating a separate external file.
+
+import "./js/advanced.js";
+import "./js/addOns.js";
+import { CIQ } from "./js/components.js";
+
+/* Template-specific imports */
+import getDefaultConfig from "./js/defaultConfiguration.js";
+
+import PerfectScrollbar from "./js/thirdparty/perfect-scrollbar.esm.js";
+
+import quotefeed from "./examples/feeds/quoteFeedSimulator.js";
+import "./examples/feeds/symbolLookupChartIQ.js";
+
+import "./examples/markets/marketDefinitionsSample.js";
+import "./examples/markets/marketSymbologySample.js";
+
+import marker from "./examples/markers/markersSample.js";
+import "./examples/markers/tradeAnalyticsSample.js";
+import "./examples/markers/videoSample.js";
+
+import "./examples/translations/translationSample.js";
+
+function chartReadyHandler(e) {
+	const { node, params, callbacks } = e.detail;
+	const { initialSymbol, restore } = params;
+	// Avoid object spread for MS Edge Legacy
+	const enabledAddOns = CIQ.clone(params);
+	delete enabledAddOns.initialSymbol;
+	delete enabledAddOns.restore;
+
+	// Create and customize default configuration
+	const config = getDefaultConfig({
+		markerSample: marker.MarkersSample,
+		scrollStyle: PerfectScrollbar,
+		quoteFeed: quotefeed
+	});
+
+	// Set callbacks, initial symbol, storage flag, enabled addOns
+	CIQ.extend(config, {
+		callbacks,
+		initialSymbol,
+		restore,
+		enabledAddOns
+	});
+
+	// Create chart
+	node.stx = config.createChart(node);
+}
+
+// Handler will receive signal from instant-chart component before continuing
+document.body.addEventListener("signal-chart-ready", chartReadyHandler);
+document.querySelectorAll("[cq-event-flag]").forEach(function (el) {
+	chartReadyHandler(el.signalEvent);
+});
+</script>
+</body>
+</html>

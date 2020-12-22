@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta
+			name="viewport"
+			content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1"
+		/>
+		<!-- for high pixel devices -->
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="css/stx-chart.css"
+			media="screen"
+		/>
+
+		<link rel="stylesheet" href="plugins/activetrader/cryptoiq.css" />
+
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="css/chartiq.css"
+			media="screen"
+		/>
+
+		<style>
+			body {
+				overflow-y: hidden !important;
+			}
+		</style>
+	</head>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+	<body>
+		<cq-context class="ciq-night">
+			<cq-ui-manager></cq-ui-manager>
+			<div
+				class="chartContainer"
+				style="width: 100%; height: 100%; position: relative"
+			>
+				<cq-tradehistory cq-active>
+					<cq-tradehistory-table>
+						<cq-scroll cq-no-resize>
+							<cq-tradehistory-body maxrows="500"></cq-tradehistory-body>
+						</cq-scroll>
+					</cq-tradehistory-table>
+					<template>
+						<cq-item>
+							<div col="time">Time</div>
+							<div col="qty">Qty</div>
+							<div col="price">Price</div>
+							<div col="amount">Amount</div>
+						</cq-item>
+					</template>
+				</cq-tradehistory>
+			</div>
+		</cq-context>
+
+		<script type="module" crossorigin="use-credentials">
+			import "./js/advanced.js";
+			import "./js/addOns.js";
+			import { CIQ } from "./js/components.js";
+			import "./plugins/activetrader/cryptoiq.js";
+			import "./examples/feeds/L2_simulator.js";
+			import getDefaultConfig from "./js/defaultConfiguration.js";
+			import PerfectScrollbar from "./js/thirdparty/perfect-scrollbar.esm.js";
+			import quoteFeedSimulator from "./examples/feeds/quoteFeedSimulator.js";
+			import "./examples/feeds/symbolLookupChartIQ.js";
+			import "./examples/markets/marketDefinitionsSample.js";
+			import "./examples/markets/marketSymbologySample.js";
+			import "./examples/translations/translationSample.js";
+			
+			const stxx = new CIQ.ChartEngine({
+				container: document.querySelector(".chartContainer"),
+			});
+
+			// variable scoping for integration
+			window.context = {
+				stxx,
+				CIQ,
+			};
+
+			// instantiation
+			let UIContext = new CIQ.UI.Context(stxx, $("cq-context,[cq-context]"));
+			UIContext.setLookupDriver(new CIQ.ChartEngine.Driver.Lookup.ChartIQ());
+			CIQ.simulateL2({
+				stx: stxx,
+				onInterval: 1000,
+			});
+		</script>
+	</body>
+</html>

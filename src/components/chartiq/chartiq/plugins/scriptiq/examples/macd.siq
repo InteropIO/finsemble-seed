@@ -1,0 +1,17 @@
+study 'Custom MACD'
+
+field = input('Field', 'field')
+fast = input('Fast MA Period', 12)
+slow = input('Slow MA Period', 26)
+period = input('Signal Period', 9)
+
+fastMA = ema(field, fast)
+slowMA = ema(field, slow)
+
+macd = fastMA - slowMA
+signal = ma(macd, period)
+
+plot(macd, color: 'blue')
+plot(signal, color: 'orange')
+
+histogram(macd - signal, colorIncreasing: '#00dd00', colorDecreasing: '#ff0000') if signal?

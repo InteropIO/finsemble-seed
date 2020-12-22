@@ -1,0 +1,778 @@
+<!-- Note: This template requires the Term Structure plugin.  -->
+<cq-ui-manager></cq-ui-manager>
+<cq-color-picker>
+	<cq-colors></cq-colors>
+	<cq-overrides>
+		<template>
+			<div class="ciq-btn"></div>
+		</template>
+	</cq-overrides>
+</cq-color-picker>
+
+<div class="ciq-nav">
+	<cq-menu class="ciq-search">
+		<cq-lookup cq-keystroke-claim cq-keystroke-default cq-uppercase cq-exchanges="futures,govt,muni,corp">
+			<cq-lookup-input cq-no-close>
+				<input type="text" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="none" name="symbol" placeholder="">
+				<cq-lookup-icon></cq-lookup-icon>
+			</cq-lookup-input>
+			<cq-lookup-results>
+				<cq-lookup-filters cq-no-close>
+					<cq-filter class="true">ALL</cq-filter>
+					<cq-filter>BONDS</cq-filter>
+					<cq-filter>FUTURES</cq-filter>
+				</cq-lookup-filters>
+				<cq-scroll></cq-scroll>
+			</cq-lookup-results>
+		</cq-lookup>
+	</cq-menu>
+
+
+
+	<!-- enables the more button when in break-sm mode -->
+	<div class="sidenav-toggle ciq-toggles">
+		<cq-toggle class="ciq-sidenav" cq-member="sidenav" cq-toggles="sidenavOn,sidenavOff"><span></span>
+			<cq-tooltip>More</cq-tooltip>
+		</cq-toggle>
+	</div>
+
+	<div class="termstructure-ui">
+		<div class="icon-toggles ciq-toggles ciq-datepicker-container">
+			<cq-menu class="ciq-datepicker-toggle">
+				<span class="ciq-datepicker-icon"></span>
+				<cq-datepicker>
+					<div class="datepicker nav-datepicker"></div>
+					<div class="ciq-datepicker-btn-wrapper">
+						<div class="ciq-btn">CURRENT DATE</div>
+					</div>
+				</cq-datepicker>
+			</cq-menu>
+		</div>
+	
+		<div class="ciq-dropdowns">
+			<cq-menu class="ciq-menu">
+				<cq-clickable stxbind="Layout.dataField" class="ciq-datafield-span">Yield</cq-clickable>
+				<cq-menu-dropdown class="ciq-value-dropdown">
+					<cq-item stxtap="Layout.setDataField('yield')">Yield</cq-item>
+					<cq-item stxtap="Layout.setDataField('bid')">Bid</cq-item>
+					<cq-item stxtap="Layout.setDataField('mid')">Mid</cq-item>
+					<cq-item stxtap="Layout.setDataField('ask')">Ask</cq-item>
+				</cq-menu-dropdown>
+			</cq-menu>
+		</div>
+	</div>
+
+	<!-- any entry in this div will be shown in the side navigation bar in break-sm mode -->
+	<div class="icon-toggles ciq-toggles">
+		<!-- <cq-toggle class="ciq-draw"><span></span><cq-tooltip>Draw</cq-tooltip></cq-toggle> -->
+		<cq-toggle class="ciq-CH" cq-member="crosshair"><span></span><cq-tooltip>Crosshair</cq-tooltip></cq-toggle>
+		<!-- <cq-toggle class="ciq-HU" cq-member="headsUp" cq-toggles="dynamic,static,null"><span></span><cq-tooltip>Info</cq-tooltip></cq-toggle> -->
+	</div>
+
+	<div class="ciq-menu-section">
+		<div class="ciq-dropdowns">
+
+			<cq-menu class="ciq-menu ciq-preferences collapse">
+				<span></span>
+				<cq-menu-dropdown>
+					<cq-menu-dropdown-section class="chart-preferences">
+						<cq-heading>Options</cq-heading>
+						<cq-item>
+							<div stxsetget="Layout.Shading()" class="ciq-active">Shading<span class="ciq-checkbox ciq-active"><span></span></span></div>
+						</cq-item>
+						<cq-item>
+							<div stxsetget="Layout.XAxisScaling()" class="ciq-active">X-Axis Scaling<span class="ciq-checkbox ciq-active"><span></span></span></div>
+						</cq-item>
+						<cq-item>
+							<div stxsetget="Layout.UpdateAnimations()">Update Animations<span class="ciq-checkbox ciq-active"><span></span></span></div>
+						</cq-item>
+						<cq-item>
+							<div stxsetget="Layout.UpdateStamp()">Show Update Stamp<span class="ciq-checkbox ciq-active"><span></span></span></div>
+						</cq-item>
+						<cq-item>
+							<span class="ciq-edit" stxtap="Layout.showFreshnessEdit()"></span>
+							<div stxsetget="Layout.FreshPoints()">Recent Updates<span class="ciq-checkbox ciq-active"><span></span></span></div>
+						</cq-item>
+						<cq-separator></cq-separator>
+					</cq-menu-dropdown-section>
+
+					<cq-menu-dropdown-section>
+						<cq-heading>Themes</cq-heading>
+						<cq-themes>
+							<cq-themes-builtin cq-no-close>
+								<template>
+									<cq-item></cq-item>
+								</template>
+							</cq-themes-builtin>
+							<cq-themes-custom cq-no-close>
+								<template>
+									<cq-theme-custom>
+										<cq-item>
+											<cq-label></cq-label>
+											<cq-close></cq-close>
+										</cq-item>
+									</cq-theme-custom>
+								</template>
+							</cq-themes-custom>
+						</cq-themes>
+					</cq-menu-dropdown-section>
+				</cq-menu-dropdown>
+			</cq-menu>
+		</div>
+		<div class="trade-toggles ciq-toggles">
+			<cq-toggle class="tfc-ui sidebar stx-trade"><span></span><cq-tooltip>Trade</cq-tooltip></cq-toggle>
+			<cq-toggle class="tc-ui stx-tradingcentral"><span></span><cq-tooltip>Analysis</cq-tooltip></cq-toggle>
+		</div>
+	</div>
+
+</div>
+<!-- End Navbar -->
+
+<!-- custom tag for scriptiq only works when plugin is loaded -->
+<cq-scriptiq class="scriptiq-ui"></cq-scriptiq>
+
+<!-- custom tag for tradingcentral only works when plugin is loaded -->
+<cq-tradingcentral class="tc-ui" token="leWp5sKSbV7sENXba2EUXQ==" partner="647" disabled></cq-tradingcentral>
+
+<div class="ciq-chart-area">
+	<div class="ciq-chart">
+
+		<cq-palette-dock>
+			<div class="palette-dock-container">
+				<cq-drawing-palette class="palette-drawing grid palette-hide" docked="true" orientation="vertical" min-height="300" cq-drawing-edit="none">
+					<div class="palette-container">
+						<div class="drag-strip"></div>
+							<div class="mini-widget-group">
+									<cq-item class="ciq-mini-widget" cq-view="list" stxtap="changeView('list')"><span class="icon"></span><label>List View</label></cq-item>
+									<cq-item class="ciq-mini-widget" cq-view="grid" stxtap="changeView('grid')"><span class="icon"></span><label>Grid View</label></cq-item>
+									<cq-item class="ciq-mini-widget" cq-view="detach" stxtap="detach()"><span class="icon"></span><label>Detach</label></cq-item>
+									<cq-item class="ciq-mini-widget" cq-view="attach" stxtap="dock()"><span class="icon"></span><label>Attach</label></cq-item>
+							</div>
+							<cq-separator></cq-separator>
+							<div class="primary-tool-group">
+								<cq-item class="ciq-tool active" cq-tool="notool" stxtap="tool()"><span class="icon pointer"></span><label>No Tool</label></cq-item>
+								<cq-item class="ciq-tool" cq-tool="measure" stxtap="tool()"><span class="icon measure"></span><label>Measure</label></cq-item>
+								<cq-undo class="ciq-tool"><span class="icon undo"></span><label>Undo</label></cq-undo>
+								<cq-redo class="ciq-tool"><span class="icon redo"></span><label>Redo</label></cq-redo>
+								<cq-menu class="ciq-select">
+									<span cq-tool-group-selection>All</span>
+									<cq-menu-dropdown class="ciq-tool-group-selection">
+										<cq-item stxtap="setToolGroup('all')" cq-tool-group="all">All</cq-item>
+										<cq-item stxtap="setToolGroup('favorite')" cq-tool-group="favorite">Favorites</cq-item>
+										<cq-item stxtap="setToolGroup('text')" cq-tool-group="text">Text</cq-item>
+										<cq-item stxtap="setToolGroup('statistics')" cq-tool-group="statistics">Statistics</cq-item>
+										<cq-item stxtap="setToolGroup('technicals')" cq-tool-group="technicals">Technicals</cq-item>
+										<cq-item stxtap="setToolGroup('fibonacci')" cq-tool-group="fibonacci">Fibonacci</cq-item>
+										<cq-item stxtap="setToolGroup('marking')" cq-tool-group="marking">Markings</cq-item>
+										<cq-item stxtap="setToolGroup('line')" cq-tool-group="line">Lines</cq-item>
+									</cq-menu-dropdown>
+								</cq-menu>
+							</div>
+							<cq-separator></cq-separator>
+							<div class="tool-group" tool-group-filter="all">
+								<cq-scroll cq-no-resize>
+									<cq-item class="ciq-tool" cq-tool="annotation" cq-tool-group="text" stxtap="tool()"><span class="icon annotation"></span><label>Annotation</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="callout" cq-tool-group="text" stxtap="tool()"><span class="icon callout"></span><label>Callout</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="average" cq-tool-group="statistics" stxtap="tool()"><span class="icon average"></span><label>Average Line</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="channel" cq-tool-group="line" stxtap="tool()"><span class="icon channel"></span><label>Channel</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="continuous" cq-tool-group="line" stxtap="tool()"><span class="icon continuous"></span><label>Continuous</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="crossline" cq-tool-group="line" stxtap="tool()"><span class="icon crossline"></span><label>Crossline</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="freeform" cq-tool-group="line" stxtap="tool()"><span class="icon freeform"></span><label>Doodle</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="ellipse" cq-tool-group="marking" stxtap="tool()"><span class="icon ellipse"></span><label>Ellipse</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="retracement" cq-tool-group="fibonacci" stxtap="tool()"><span class="icon retracement"></span><label>Fib Retracement</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="fibprojection" cq-tool-group="fibonacci" stxtap="tool()"><span class="icon fibprojection"></span><label>Fib Projection</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="fibarc" cq-tool-group="fibonacci" stxtap="tool()"><span class="icon fibarc"></span><label>Fib Arc</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="fibfan" cq-tool-group="fibonacci" stxtap="tool()"><span class="icon fibfan"></span><label>Fib Fan</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="fibtimezone" cq-tool-group="fibonacci" stxtap="tool()"><span class="icon fibtimezone"></span><label>Fib Time Zone</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="gannfan" cq-tool-group="technicals" stxtap="tool()"><span class="icon gannfan"></span><label>Gann Fan</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="gartley" cq-tool-group="technicals" stxtap="tool()"><span class="icon gartley"></span><label>Gartley</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="horizontal" cq-tool-group="line" stxtap="tool()"><span class="icon horizontal"></span><label>Horizontal</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="line" cq-tool-group="line" stxtap="tool()"><span class="icon line"></span><label>Line</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="pitchfork" cq-tool-group="technicals" stxtap="tool()"><span class="icon pitchfork"></span><label>Pitchfork</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="quadrant" cq-tool-group="statistics" stxtap="tool()"><span class="icon quadrant"></span><label>Quadrant Lines</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="ray" cq-tool-group="line" stxtap="tool()"><span class="icon ray"></span><label>Ray</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="rectangle" cq-tool-group="marking" stxtap="tool()"><span class="icon rectangle"></span><label>Rectangle</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="regression" cq-tool-group="statistics" stxtap="tool()"><span class="icon regression"></span><label>Regression Line</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="segment" cq-tool-group="line" stxtap="tool()"><span class="icon segment"></span><label>Segment</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="arrow" cq-tool-group="marking" stxtap="tool()"><span class="icon arrow"></span><label>Arrow</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="check" cq-tool-group="marking" stxtap="tool()"><span class="icon check"></span><label>Check</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="xcross" cq-tool-group="marking" stxtap="tool()"><span class="icon xcross"></span><label>Cross</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="focusarrow" cq-tool-group="marking" stxtap="tool()"><span class="icon focusarrow"></span><label>Focus</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="heart" cq-tool-group="marking" stxtap="tool()"><span class="icon heart"></span><label>Heart</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="star" cq-tool-group="marking" stxtap="tool()"><span class="icon star"></span><label>Star</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="speedarc" cq-tool-group="technicals" stxtap="tool()"><span class="icon speedarc"></span><label>Speed Resistance Arc</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="speedline" cq-tool-group="technicals" stxtap="tool()"><span class="icon speedline"></span><label>Speed Resistance Line</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="timecycle" cq-tool-group="technicals" stxtap="tool()"><span class="icon timecycle"></span><label>Time Cycle</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="tirone" cq-tool-group="statistics" stxtap="tool()"><span class="icon tirone"></span><label>Tirone Levels</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="trendline" cq-tool-group="text" stxtap="tool()"><span class="icon trendline"></span><label>Trend Line</label></cq-item>
+									<cq-item class="ciq-tool" cq-tool="vertical" cq-tool-group="line" stxtap="tool()"><span class="icon vertical"></span><label>Vertical</label></cq-item>
+								</cq-scroll>
+								<cq-separator></cq-separator>
+								<div class="mini-widget-group mini-widget-foot">
+									<cq-toggle class="ciq-mini-widget ciq-magnet" cq-member="preferences.magnet" cq-toggles="true,75,false"><span class="icon magnet"></span><label>Magnet</label></cq-toggle>
+									<cq-item class="ciq-mini-widget" stxtap="clearDrawings()"><span class="icon clear"></span><label>Clear Drawings</label></cq-item>
+									<cq-item class="ciq-mini-widget" stxtap="restoreDefaultConfig(true)"><span class="icon restore"></span><label>Restore Default Parameters</label></cq-item>
+								</div>
+							</div>
+						<div class="resize-strip"></div>
+					</div>
+				</cq-drawing-palette>
+
+				<cq-drawing-settings class="palette-settings" docked="true" hide="true" orientation="horizontal" min-height="40" cq-drawing-edit="none">
+					<div class="palette-container">
+						<div class="drag-strip"></div>
+							<div class="drawing-settings-wrapper">
+									<div class="mini-widget-group">
+										<cq-item class="ciq-mini-widget" cq-view="detach" stxtap="detach()"><span class="icon"></span><label>Detach</label></cq-item>
+										<cq-item class="ciq-mini-widget" cq-view="attach" stxtap="dock()"><span class="icon"></span><label>Attach</label></cq-item>
+									</div>
+								<cq-clickable class="ciq-select ciq-mobile-palette-toggle" stxtap="togglePalette()"><span>Select Tool</span></cq-clickable>
+								<div class="ciq-active-tool-label ciq-heading"></div>
+								<cq-toolbar-settings>
+									<cq-fill-color cq-section class="ciq-color" stxbind="getFillColor()" stxtap="pickFillColor()">
+										<span></span>
+									</cq-fill-color>
+									<div>
+										<cq-line-color cq-section cq-overrides="auto" class="ciq-color" stxbind="getLineColor()" stxtap="pickLineColor()"><span></span></cq-line-color>
+										<cq-line-style cq-section>
+											<cq-menu class="ciq-select">
+												<span cq-line-style class="ciq-line ciq-selected"></span>
+												<cq-menu-dropdown class="ciq-line-style-menu">
+													<cq-item stxtap="setLine(1,'solid')"><span class="ciq-line-style-option ciq-solid-1"></span></cq-item>
+													<cq-item stxtap="setLine(3,'solid')"><span class="ciq-line-style-option ciq-solid-3"></span></cq-item>
+													<cq-item stxtap="setLine(5,'solid')"><span class="ciq-line-style-option ciq-solid-5"></span></cq-item>
+													<cq-item stxtap="setLine(1,'dotted')"><span class="ciq-line-style-option ciq-dotted-1"></span></cq-item>
+													<cq-item stxtap="setLine(3,'dotted')"><span class="ciq-line-style-option ciq-dotted-3"></span></cq-item>
+													<cq-item stxtap="setLine(5,'dotted')"><span class="ciq-line-style-option ciq-dotted-5"></span></cq-item>
+													<cq-item stxtap="setLine(1,'dashed')"><span class="ciq-line-style-option ciq-dashed-1"></span></cq-item>
+													<cq-item stxtap="setLine(3,'dashed')"><span class="ciq-line-style-option ciq-dashed-3"></span></cq-item>
+													<cq-item stxtap="setLine(5,'dashed')"><span class="ciq-line-style-option ciq-dashed-5"></span></cq-item>
+													<cq-item stxtap="setLine(0,'none')" class="ciq-none">None</cq-item>
+												</cq-menu-dropdown>
+											</cq-menu>
+										</cq-line-style>
+									</div>
+
+									<cq-cvp-controller cq-section cq-cvp-header="1"></cq-cvp-controller>
+									<cq-cvp-controller cq-section cq-cvp-header="2"></cq-cvp-controller>
+									<cq-cvp-controller cq-section cq-cvp-header="3"></cq-cvp-controller>
+
+									<template cq-cvp-controller>
+										<div cq-section>
+											<div class="ciq-heading">Dev 1</div>
+											<span stxtap="toggleActive()" class="ciq-checkbox">
+												<span></span>
+											</span>
+										</div>
+										<cq-line-color cq-section cq-overrides="auto" class="ciq-color" stxbind="getColor()" stxtap="pickColor()">
+											<span></span>
+										</cq-line-color>
+										<cq-line-style cq-section>
+											<cq-menu class="ciq-select">
+												<span cq-cvp-line-style class="ciq-line ciq-selected"></span>
+												<cq-menu-dropdown class="ciq-line-style-menu">
+													<cq-item stxtap="setStyle(1, 'solid')"><span class="ciq-line-style-option ciq-solid-1"></span></cq-item>
+													<cq-item stxtap="setStyle(3, 'solid')"><span class="ciq-line-style-option ciq-solid-3"></span></cq-item>
+													<cq-item stxtap="setStyle(5, 'solid')"><span class="ciq-line-style-option ciq-solid-5"></span></cq-item>
+													<cq-item stxtap="setStyle(1, 'dotted')"><span class="ciq-line-style-option ciq-dotted-1"></span></cq-item>
+													<cq-item stxtap="setStyle(3, 'dotted')"><span class="ciq-line-style-option ciq-dotted-3"></span></cq-item>
+													<cq-item stxtap="setStyle(5, 'dotted')"><span class="ciq-line-style-option ciq-dotted-5"></span></cq-item>
+													<cq-item stxtap="setStyle(1, 'dashed')"><span class="ciq-line-style-option ciq-dashed-1"></span></cq-item>
+													<cq-item stxtap="setStyle(3, 'dashed')"><span class="ciq-line-style-option ciq-dashed-3"></span></cq-item>
+													<cq-item stxtap="setStyle(5, 'dashed')"><span class="ciq-line-style-option ciq-dashed-5"></span></cq-item>
+												</cq-menu-dropdown>
+											</cq-menu>
+										</cq-line-style>
+									</template>
+
+									<cq-axis-label cq-section>
+										<div class="ciq-heading">Axis Label:</div>
+										<span stxtap="toggleAxisLabel()" class="ciq-checkbox ciq-active"><span></span></span>
+									</cq-axis-label>
+									<cq-annotation cq-section>
+										<cq-annotation-italic stxtap="toggleFontStyle('italic')" class="ciq-btn" style="font-style:italic;">I</cq-annotation-italic>
+										<cq-annotation-bold stxtap="toggleFontStyle('bold')" class="ciq-btn" style="font-weight:bold;">B</cq-annotation-bold>
+										<cq-menu class="ciq-select">
+											<span cq-font-size>12px</span>
+											<cq-menu-dropdown class="ciq-font-size">
+												<cq-item stxtap="setFontSize('8px')">8</cq-item>
+												<cq-item stxtap="setFontSize('10px')">10</cq-item>
+												<cq-item stxtap="setFontSize('12px')">12</cq-item>
+												<cq-item stxtap="setFontSize('13px')">13</cq-item>
+												<cq-item stxtap="setFontSize('14px')">14</cq-item>
+												<cq-item stxtap="setFontSize('16px')">16</cq-item>
+												<cq-item stxtap="setFontSize('20px')">20</cq-item>
+												<cq-item stxtap="setFontSize('28px')">28</cq-item>
+												<cq-item stxtap="setFontSize('36px')">36</cq-item>
+												<cq-item stxtap="setFontSize('48px')">48</cq-item>
+												<cq-item stxtap="setFontSize('64px')">64</cq-item>
+											</cq-menu-dropdown>
+										</cq-menu>
+										<cq-menu class="ciq-select">
+											<span cq-font-family>Default</span>
+											<cq-menu-dropdown class="ciq-font-family">
+												<cq-item stxtap="setFontFamily('Default')">Default</cq-item>
+												<cq-item stxtap="setFontFamily('Helvetica')">Helvetica</cq-item>
+												<cq-item stxtap="setFontFamily('Courier')">Courier</cq-item>
+												<cq-item stxtap="setFontFamily('Garamond')">Garamond</cq-item>
+												<cq-item stxtap="setFontFamily('Palatino')">Palatino</cq-item>
+												<cq-item stxtap="setFontFamily('Times New Roman')">Times New Roman</cq-item>
+											</cq-menu-dropdown>
+										</cq-menu>
+									</cq-annotation>
+									<cq-clickable cq-fib-settings cq-selector="cq-fib-settings-dialog" cq-method="open" cq-section><span class="ciq-icon-btn cq-icon-gear"><cq-tooltip>Settings</cq-tooltip></span></cq-clickable>
+									<div class="ciq-drawing-edit-only" cq-section>
+										<div cq-toolbar-action="done_edit" stxtap="DrawingEdit.endEdit('close')" cq-section><cq-tooltip>Done Editing</cq-tooltip></div>
+									</div>
+									<div class="ciq-drawing-edit-hidden" cq-section>
+										<div cq-toolbar-action="save" stxtap="saveConfig()" cq-section><div cq-toolbar-dirty></div><cq-tooltip>Save Config</cq-tooltip></div>
+										<div cq-toolbar-action="restore" stxtap="restoreDefaultConfig()" cq-section><cq-tooltip>Restore Config</cq-tooltip></div>
+									</div>
+								</cq-toolbar-settings>
+								<cq-measure><span class="mMeasure"></span></cq-measure>
+							</div>
+						<div class="resize-strip"></div>
+					</div>
+				</cq-drawing-settings>
+			</div>
+		</cq-palette-dock>
+
+
+		<div class="chartContainer">
+
+			<stx-hu-tooltip>
+				<stx-hu-tooltip-field field="DT">
+					<stx-hu-tooltip-field-name>Date/Time</stx-hu-tooltip-field-name>
+					<stx-hu-tooltip-field-value></stx-hu-tooltip-field-value>
+				</stx-hu-tooltip-field>
+				<stx-hu-tooltip-field field="Close">
+					<stx-hu-tooltip-field-name></stx-hu-tooltip-field-name>
+					<stx-hu-tooltip-field-value></stx-hu-tooltip-field-value>
+				</stx-hu-tooltip-field>
+			</stx-hu-tooltip>
+
+			<cq-chart-title cq-marker cq-browser-tab>
+				<cq-symbol></cq-symbol>
+				<cq-chart-price>
+					<cq-chart-title-date class="ciq-chart-title-date"></cq-chart-title-date>
+					<cq-chart-title-date class="ciq-chart-title-time"></cq-chart-title-date>
+				</cq-chart-price>
+			</cq-chart-title>
+			<cq-loader></cq-loader>
+
+			<cq-curve-comparison cq-marker class="ciq-comparison ciq-entity-comparison">
+				<cq-menu class="cq-comparison-new">
+					<cq-comparison-tap-capture>
+						<cq-comparison-add-label class="ciq-no-share">
+							<cq-comparison-plus></cq-comparison-plus><span>Compare</span><span>...</span>
+						</cq-comparison-add-label>
+						<cq-menu class="ciq-comparison-curve-menu">
+							<cq-menu-dropdown class="ciq-value-dropdown">
+								<cq-item stxtap="Layout.showEntityComparison()">Add Entity</cq-item>
+								<cq-item stxtap="Layout.showHistoricalComparisonDialog()">Add Historical</cq-item>
+							</cq-menu-dropdown>
+						</cq-menu>
+						<cq-comparison-add>
+							<cq-comparison-lookup-frame>
+								<cq-lookup cq-keystroke-claim cq-keystroke-default cq-uppercase cq-exchanges="futures,govt,muni,corp">
+									<cq-lookup-input cq-no-close>
+										<input type="text" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="none" name="symbol" placeholder="">
+										<cq-lookup-icon></cq-lookup-icon>
+									</cq-lookup-input>
+									<cq-lookup-results>
+										<cq-lookup-filters cq-no-close>
+											<cq-filter class="true">ALL</cq-filter>
+											<cq-filter>BONDS</cq-filter>
+											<cq-filter>FUTURES</cq-filter>
+										</cq-lookup-filters>
+										<cq-scroll></cq-scroll>
+									</cq-lookup-results>
+								</cq-lookup>
+							</cq-comparison-lookup-frame>
+							<cq-swatch cq-no-close></cq-swatch>
+							<span><cq-accept-btn class="stx-btn">ADD</cq-accept-btn></span>
+						</cq-comparison-add>
+					</cq-comparison-tap-capture>
+				</cq-menu>
+			</cq-curve-comparison>
+
+			<cq-study-legend cq-marker-label="Plots" cq-clone-to-panels="Plots" cq-panel-only cq-marker cq-hovershow cq-content-keys="cq-label,cq-comparison-label">
+				<cq-curve-comparison>
+					<cq-curve-comparison-key cq-panel-only cq-all-series>
+						<template cq-comparison-item>
+							<cq-comparison-item>
+								<cq-swatch cq-overrides="auto"></cq-swatch>
+								<cq-comparison-label>AAPL</cq-comparison-label>
+								<!-- cq-comparison-price displays the current price with color animation -->
+								<cq-comparison-price cq-animate></cq-comparison-price>
+								<!-- cq-comparison-tick-price displays the price for the active crosshair item -->
+								<!-- <cq-comparison-tick-price></cq-comparison-tick-price>	-->
+								<cq-comparison-loader></cq-comparison-loader>
+								<div class="ciq-close"></div>
+							</cq-comparison-item>
+						</template>
+					</cq-curve-comparison-key>
+				</cq-curve-comparison>
+				<template cq-study-legend>
+					<cq-item>
+						<cq-label></cq-label>
+						<span class="ciq-edit"></span>
+						<div class="ciq-icon ciq-close"></div>
+					</cq-item>
+				</template>
+			</cq-study-legend>
+			
+		</div>
+		<!-- End Chart Container -->
+	</div>
+	<!-- End Chart Box -->
+</div>
+<!-- End Chart Area -->
+
+
+<!-- Markers/Events -->
+<div class="stx-marker-templates" style="left: -1000px; visibility:hidden;">
+	<!-- Abstract Markers. You can remove this unless you actually need a helicopter. Seriously though, markers can be anything you want them to be! -->
+	<div class="abstract">
+		<div class="stx-marker abstract">
+			<div class="stx-marker-content">
+				<div class="sample">
+					<div stage>
+						<div helicopter>
+							<div propeller style="height: 160px;">
+								<div spinner style="-webkit-transform-origin: 40px 0 0; transform-origin: 40px 0 0;">
+									<div style="-webkit-transform: rotateY(0deg) translateX(40px); transform: rotateY(0deg) translateX(40px);"></div>
+									<div style="-webkit-transform: rotateY(-90deg) translateX(40px); transform: rotateY(-90deg) translateX(40px);"></div>
+									<div style="-webkit-transform: rotateY(-180deg) translateX(40px); transform: rotateY(-180deg) translateX(40px);"></div>
+									<div style="-webkit-transform: rotateY(-270deg) translateX(40px); transform: rotateY(-270deg) translateX(40px);"></div>
+								</div>
+							</div>
+							<div heli-body></div>
+						</div>
+					</div>
+					<div class="text">This is an example of a complex marker which can contain html, video, images, css, and animations.</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- End Marker/Events -->
+
+<!-- Attribution component -->
+<cq-attribution>
+	<template>
+		<cq-attrib-container>
+			<cq-attrib-source></cq-attrib-source>&nbsp;
+			<cq-attrib-quote-type></cq-attrib-quote-type>
+		</cq-attrib-container>
+	</template>
+</cq-attribution>
+
+
+<cq-hu-dynamic>
+		<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 215 140" enable-background="new 0 0 215 140" xml:space="preserve">
+		<defs>
+			<filter id="ciq-hu-shadow" height="130%">
+				<feGaussianBlur in="SourceAlpha" stdDeviation="1"/>
+				<feOffset dx="0" dy="1" result="offsetblur"/>
+				<feComponentTransfer>
+					<feFuncA type="linear" slope="0.2"/>
+				</feComponentTransfer>
+				<feMerge>
+					<feMergeNode/>
+					<feMergeNode in="SourceGraphic"/>
+				</feMerge>
+			</filter>
+		</defs>
+		<polygon class="ciq-hu-bg" fill="#2A51D0" points="198.4,124.4 1,124.4 1,1 214,1 214,137.8" filter="url(#ciq-hu-shadow)"/>
+		<path class="ciq-hu-stroke" fill="#398DFF" d="M213,2v133.6l-13.7-11.8l-0.6-0.5H198H2V2H213 M215,0H0v125.4h198l17,14.6V0L215,0z"/>
+	</svg>
+	<div>
+		<cq-hu-col1>
+			<cq-hu-date></cq-hu-date>
+			<cq-hu-price></cq-hu-price>
+			<cq-volume-grouping>
+				<div>Volume</div>
+				<div><cq-volume-visual></cq-volume-visual></div>
+				<div><cq-hu-volume></cq-hu-volume><cq-volume-rollup></cq-volume-rollup></div>
+			</cq-volume-grouping>
+		</cq-hu-col1>
+		<cq-hu-col2>
+			<div>Open</div><cq-hu-open></cq-hu-open>
+			<div>Close</div><cq-hu-close></cq-hu-close>
+			<div>High</div><cq-hu-high></cq-hu-high>
+			<div>Low</div><cq-hu-low></cq-hu-low>
+		</cq-hu-col2>
+	</div>
+
+</cq-hu-dynamic>
+
+<div class="ciq-footer">
+	<cq-share-button>
+		<div stxtap="tap();">Share</div>
+	</cq-share-button>
+</div>
+
+<!-- End Footer -->
+
+<cq-dialog>
+    <cq-view-dialog>
+	    <h4>Save View</h4>
+	    <div stxtap="close()" class="ciq-icon ciq-close"></div>
+	    <div style="text-align:center;margin-top:10px;">
+		    <i>Enter name of view:</i>
+		    <p>
+		    	<input spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="none" maxlength="40" placeholder="Name"><br>
+		    </p>
+		    <span class="ciq-btn" stxtap="save()">Save</span>
+		</div>
+	</cq-view-dialog>
+</cq-dialog>
+
+<cq-dialog>
+	<cq-freshness-dialog>
+		<h4 class="title">Set Highlight Duration</h4>
+		<cq-close></cq-close>
+		<div style="text-align:center;margin-top:10px;">
+			<div>
+				<i>Enter number of minutes and hit "Enter"</i>
+				<p>
+				<input name="freshness" stxtap="Layout.setFreshnessEdit()">
+				</p>
+			</div>
+			<p>or</p>
+			<div class="ciq-btn" stxtap="Layout.setFreshnessEdit('auto')">Auto Select</div>
+		</div>
+	</cq-freshness-dialog>
+</cq-dialog>
+
+<cq-dialog>
+	<cq-historical-comparison-dialog>
+		<h4 class="title">Set Historical Comparison</h4>
+		<cq-close></cq-close>
+		<div class="ciq-dialog-color-option">
+			<div class="ciq-heading">Color</div>
+			<cq-swatch></cq-swatch>
+		</div>
+		<hr>
+		<div class="ciq-options-group" style="margin-top:10px;">
+			<cq-item stxtap="select()" class="ciq-active">1 Day Ago<span class="ciq-radio"><span></span></span></cq-item>
+			<cq-item stxtap="select()">1 Week Ago<span class="ciq-radio"><span></span></span></cq-item>
+			<cq-item stxtap="select()">1 Month Ago<span class="ciq-radio"><span></span></span></cq-item>
+			<cq-item stxtap="select()">1 Year Ago<span class="ciq-radio"><span></span></span></cq-item>
+			<cq-item stxtap="select()">3 Years Ago<span class="ciq-radio"><span></span></span></cq-item>
+			<cq-item stxtap="select('custom')">Custom...</cq-item>
+		</div>
+		<cq-datepicker>
+			<div class="datepicker comparison-datepicker"></div>
+		</cq-datepicker>
+		<div stxtap="done()" style="display:flex;justify-content:center;"><div class="ciq-btn">Done</div></div>
+	</cq-historical-comparison-dialog>
+</cq-dialog>
+
+<cq-dialog>
+	<cq-drawing-context>
+		<div stxtap="DrawingEdit.text()" cq-edit-text>Edit Text</div>
+		<div stxtap="DrawingEdit.edit()">Edit Settings</div>
+		<div stxtap="DrawingEdit.clone()">Clone Drawing</div>
+		<cq-menu stxtap="resize()" cq-close-top="cq-dialog[cq-drawing-context]">
+			<cq-menu-dropdown cq-no-scroll="true" class="context-menu-right">
+				<cq-item stxtap="DrawingEdit.reorderLayer('top')">Bring to Top</cq-item>
+				<cq-item stxtap="DrawingEdit.reorderLayer('up')">Bring Forward</cq-item>
+				<cq-item stxtap="DrawingEdit.reorderLayer('down')">Send Backward</cq-item>
+				<cq-item stxtap="DrawingEdit.reorderLayer('bottom')">Send to Bottom</cq-item>
+			</cq-menu-dropdown>
+			<!-- element here so that <cq-menu-dropdown> can keep "top: auto;" -->
+			<div>Layer Management<div class="context-button-right-arrow"></div></div>
+		</cq-menu>
+		<div stxtap="DrawingEdit.remove()">Delete Drawing</div>
+	</cq-drawing-context>
+</cq-dialog>
+
+<cq-dialog>
+	<cq-study-context>
+		<div stxtap="StudyEdit.edit()">Edit Settings...</div>
+		<div stxtap="StudyEdit.remove()">Delete Study</div>
+	</cq-study-context>
+</cq-dialog>
+
+<cq-dialog>
+	<!-- If time-series chart is available, set `cq-time-series` to "true" to toggle on time-series related options -->
+	<cq-curve-context cq-time-series="false">
+		<div stxtap="CurveEdit.launchTimeSeries()">Launch Time Series</div>
+	</cq-curve-context>
+</cq-dialog>
+
+<cq-dialog>
+	<cq-fib-settings-dialog>
+		<h4 class="title">Settings</h4>
+		<cq-scroll cq-no-maximize>
+			<cq-fibonacci-settings>
+				<template cq-fibonacci-setting>
+					<cq-fibonacci-setting>
+						<div class="ciq-heading"></div>
+						<div class="stx-data">
+							<input type="checkbox">
+						</div>
+					</cq-fibonacci-setting>
+				</template>
+			</cq-fibonacci-settings>
+			<div cq-custom-fibonacci-setting>
+				<input class="ciq-heading" type="text">%
+				<div class="ciq-btn stx-data" stxtap="add()">Add</div>
+			</div>
+		</cq-scroll>
+		<div class="ciq-dialog-cntrls">
+			<div class="ciq-btn" stxtap="close()">Done</div>
+		</div>
+	</cq-fib-settings-dialog>
+</cq-dialog>
+
+<cq-dialog>
+	<cq-study-dialog cq-study-axis cq-study-panel="alias">
+		<h4 class="title">Study</h4>
+		<cq-scroll cq-no-maximize>
+			<cq-study-inputs>
+				<template cq-study-input>
+					<cq-study-input>
+						<div class="ciq-heading"></div>
+						<div class="stx-data">
+							<template cq-menu>
+								<cq-menu class="ciq-select">
+									<cq-selected></cq-selected>
+									<cq-menu-dropdown cq-lift></cq-menu-dropdown>
+								</cq-menu>
+							</template>
+						</div>
+					</cq-study-input>
+					<hr>
+				</template>
+			</cq-study-inputs>
+			<cq-study-outputs>
+				<template cq-study-output>
+					<cq-study-output>
+						<div class="ciq-heading"></div>
+						<cq-swatch cq-overrides="auto"></cq-swatch>
+					</cq-study-output>
+					<hr>
+				</template>
+			</cq-study-outputs>
+			<cq-study-parameters>
+				<template cq-study-parameters>
+					<cq-study-parameter>
+						<div class="ciq-heading"></div>
+						<div class="stx-data"><cq-swatch cq-overrides="auto"></cq-swatch>
+							<template cq-menu>
+								<cq-menu class="ciq-select">
+									<cq-selected></cq-selected>
+									<cq-menu-dropdown cq-lift></cq-menu-dropdown>
+								</cq-menu>
+							</template>
+						</div>
+					</cq-study-parameter>
+					<hr>
+				</template>
+			</cq-study-parameters>
+		</cq-scroll>
+		<div class="ciq-dialog-cntrls">
+			<div class="ciq-btn" stxtap="close()">Done</div>
+		</div>
+	</cq-study-dialog>
+</cq-dialog>
+
+<cq-dialog>
+	<cq-theme-dialog>
+		<h4 class="title">Create Custom Theme</h4>
+		<cq-close></cq-close>
+		<cq-scroll cq-no-maximize>
+			<cq-section>
+				<cq-placeholder>Candle Color
+					<cq-theme-piece cq-piece="cu"><cq-swatch cq-overrides="Hollow"></cq-swatch></cq-theme-piece>
+					<cq-theme-piece cq-piece="cd"><cq-swatch cq-overrides="Hollow"></cq-swatch></cq-theme-piece>
+				</cq-placeholder>
+				<cq-placeholder>Candle Wick
+					<cq-theme-piece cq-piece="wu"><cq-swatch></cq-swatch></cq-theme-piece>
+					<cq-theme-piece cq-piece="wd"><cq-swatch></cq-swatch></cq-theme-piece>
+				</cq-placeholder>
+				<cq-placeholder>Candle Border
+					<cq-theme-piece cq-piece="bu"><cq-swatch cq-overrides="No Border"></cq-swatch></cq-theme-piece>
+					<cq-theme-piece cq-piece="bd"><cq-swatch cq-overrides="No Border"></cq-swatch></cq-theme-piece>
+				</cq-placeholder>
+				<cq-separator></cq-separator>
+				<cq-placeholder>Line/Bar Chart
+					<cq-theme-piece cq-piece="lc"><cq-swatch></cq-swatch></cq-theme-piece>
+				</cq-placeholder>
+				<cq-separator></cq-separator>
+				<cq-placeholder>Mountain Base
+					<cq-theme-piece cq-piece="mb"><cq-swatch></cq-swatch></cq-theme-piece>
+				</cq-placeholder>
+				<cq-placeholder>Mountain Peak
+					<cq-theme-piece cq-piece="mc"><cq-swatch></cq-swatch></cq-theme-piece>
+				</cq-placeholder>
+			</cq-section>
+			<cq-section>
+				<cq-placeholder>Background
+					<cq-theme-piece cq-piece="bg"><cq-swatch></cq-swatch></cq-theme-piece>
+				</cq-placeholder>
+				<cq-placeholder>Grid Lines
+					<cq-theme-piece cq-piece="gl"><cq-swatch></cq-swatch></cq-theme-piece>
+				</cq-placeholder>
+				<cq-placeholder>Date Dividers
+					<cq-theme-piece cq-piece="dd"><cq-swatch></cq-swatch></cq-theme-piece>
+				</cq-placeholder>
+				<cq-placeholder>Axis Text<cq-theme-piece cq-piece="at"><cq-swatch></cq-swatch></cq-theme-piece>
+				</cq-placeholder>
+			</cq-section>
+			<cq-action>
+				<input><div stxtap="save()" class="ciq-btn">Save</div>
+			</cq-action>
+		</cq-scroll>
+	</cq-theme-dialog>
+</cq-dialog>
+
+<cq-dialog>
+	<cq-timezone-dialog>
+		<h4 class="title">Choose Timezone</h4>
+		<cq-close></cq-close>
+
+		<p>To set your timezone use the location button below, or scroll through the following list...</p>
+		<p class="currentUserTimeZone"></p>
+    <div class="detect">
+    <div class="ciq-btn" stxtap="removeTimezone()">Use My Current Location</div>
+    </div>
+    <div class="timezoneDialogWrapper" style="max-height:360px; overflow: auto;">
+	        <ul>
+	          <li class="timezoneTemplate" style="display:none;cursor:pointer;"></li>
+	        </ul>
+        </div>
+    <div class="instruct">(Scroll for more options)</div>
+	</cq-timezone-dialog>
+</cq-dialog>
+
+<cq-dialog>
+	<cq-language-dialog>
+		<h4 class="title">Choose language</h4>
+		<cq-close></cq-close>
+		<cq-languages>
+			<template><div><cq-flag></cq-flag><cq-language-name></cq-language-name></div></template>
+		</cq-languages>
+	</cq-language-dialog>
+</cq-dialog>
+
+<cq-dialog>
+	<cq-share-dialog>
+		<h4 class="title">Share Your Chart</h4>
+		<cq-close></cq-close>
+		<div cq-share-dialog-div>
+			<cq-separator></cq-separator>
+			<cq-share-create class="ciq-btn" stxtap="share()">Create Image</cq-share-create>
+			<cq-share-generating>Generating Image</cq-share-generating>
+			<cq-share-uploading>Uploading Image</cq-share-uploading>
+			<div class="share-link-div"></div>
+			<cq-share-copy class="ciq-btn" stxtap="copy()">Copy Link to Clipboard</cq-share-copy>
+			<cq-share-copied>Link Copied!</cq-share-copied>
+		</div>
+	</cq-share-dialog>
+</cq-dialog>
+
+<cq-side-panel></cq-side-panel>

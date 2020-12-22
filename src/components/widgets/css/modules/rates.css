@@ -1,0 +1,14 @@
+.ciq-Rates table {
+	border-top: 2px solid #65727B;
+}
+
+.ciq-Rates .ciq-rates-table-div {
+    clear: both;
+    padding-top: 5px;
+}
+
+.ciq-Rates h3 {
+    display: none;
+}
+
+

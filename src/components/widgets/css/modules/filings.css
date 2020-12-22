@@ -1,0 +1,154 @@
+.ciq-Filings .dataTables_wrapper {
+	background: none;
+}
+.ciq-Filings table.dataTable tbody tr {
+	background-color:transparent;
+}
+.ciq-Filings tr th:nth-child(1){
+	text-align: left;
+	padding-left: 0px;
+}
+.ciq-Filings tr th:nth-child(2), .ciq-Filings tr th:nth-child(3){
+	text-align: right;
+	padding-right: 15px;
+}
+.ciq-Filings .dataTables_wrapper .dataTables_length {
+	color: inherit;
+}
+
+.ciq-Filings .dataTables_length select {
+	-webkit-appearance: none;
+	font-weight: 400;
+	height: 100%;
+	width: 28px;
+	border: 0px;
+	color: #4495D1;
+	border-radius: 0px;
+	padding: -5px 0px;
+	margin: 0px 2px;
+	background: url("../img/select_desc.svg") no-repeat right transparent;
+	background-size: 10px 6px;
+}
+.ciq-Filings .dataTables_filter label {
+	color: #fff;
+}
+.ciq-Filings .dataTables_filter input {
+	-webkit-appearance: none;
+	background: transparent;
+	border: 0px transparent;
+	border-bottom: 1px solid #4495D1;
+	box-shadow: none;
+	color: #fff;
+}
+.ciq-Filings .dataTables_filter input:focus {
+	outline: none;
+}
+
+.ciq-Filings .dataTables_wrapper table tbody td a:after {
+	content: url("../img/dropdown_caret.svg");
+	height: 13px;
+	width: 12px;
+	vertical-align: baseline;
+	display: inline-block;
+	padding-top: 0px;
+	margin-left: 5px;
+	-ms-transform: rotate(-90deg); /* IE 9 */
+    -webkit-transform: rotate(-90deg); /* Chrome, Safari, Opera */
+    transform: rotate(-90deg);
+}
+
+.ciq-Filings table.dataTable thead th {
+	border-bottom: 2px solid;
+	border-color: #4495D1 !important;
+	font-weight: 400;
+	text-transform: uppercase;
+	color: #4495D1;
+}
+.ciq-Filings table.dataTable thead  th:nth-child(1).sorting {
+	background: url(../img/select_both.svg) no-repeat left transparent;
+	background-position: 80px 50%;
+	background-size: 8px 10px;
+}
+.ciq-Filings table.dataTable thead th:nth-child(1).sorting_asc  {
+	background: url(../img/select_asc.svg) no-repeat left transparent;
+	background-position: 80px 50%;
+	background-size: 8px 5px;
+}
+.ciq-Filings table.dataTable thead th:nth-child(1).sorting_desc {
+	background: url(../img/select_desc.svg) no-repeat left transparent;
+	background-position: 80px 50%;
+	background-size: 8px 5px;
+}
+.ciq-Filings table.dataTable thead  th:nth-child(2).sorting, .ciq-Filings table.dataTable thead  th:nth-child(3).sorting {
+	background: url(../img/select_both.svg) no-repeat right transparent;
+	background-size: 8px 10px;
+}
+.ciq-Filings table.dataTable thead th:nth-child(2).sorting_asc, .ciq-Filings table.dataTable thead th:nth-child(3).sorting_asc  {
+	background: url(../img/select_asc.svg) no-repeat right transparent;
+	background-size: 8px 5px;
+}
+.ciq-Filings table.dataTable thead th:nth-child(2).sorting_desc,.ciq-Filings table.dataTable thead th:nth-child(3).sorting_desc {
+	background: url(../img/select_desc.svg) no-repeat right transparent;
+	background-size: 8px 5px;
+}
+.ciq-Filings table.dataTable.no-footer {
+	border-bottom: 2px solid;
+	border-color: #4495D1;
+}
+.ciq-Filings .dataTables_wrapper tbody td a{
+	font-size: 1.1em !important;
+	font-weight: 300;
+	text-decoration: none;
+}
+.ciq-Filings .dataTables_wrapper .dataTables_paginate .paginate_button {
+	font-weight: 400;
+	border: 0px !important;
+	color: #fff;
+}
+.ciq-Filings .dataTables_wrapper .dataTables_info {
+	color: #fff;
+}
+.ciq-Filings .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+	background: #4495D1 !important;
+	border: 0px !important;
+	color: #fff !important;
+}
+.ciq-Filings .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+	background: #4495D1 !important;
+	border: 0px !important;
+}
+.ciq-Filings .dataTables_wrapper .paginate_button.disabled:hover {
+	background: transparent !important;
+	border: 0px !important;
+}
+.ciq-Filings .dataTables_wrapper .dataTables_paginate .paginate_button {
+	color: #fff !important;
+}
+.ciq-Filings .dataTables_info {
+	padding-left: 0px;
+}
+.ciq-Filings .dataTables_wrapper tbody td:nth-child(1){
+	padding-left: 0px;
+}
+.ciq-Filings .dataTables_wrapper tbody td:nth-child(2), .ciq-Filings .dataTables_wrapper tbody td:nth-child(3){
+	text-align: right;
+	padding-right: 0px;
+}
+.ciq-Filings .dataTables_wrapper tbody,  {
+	background: transparent;
+}
+.ciq-Filings table.dataTable.display tbody td {
+	border-top: 1px solid rgba(68, 149, 209, .5);
+}
+.ciq-Filings table.dataTable.display tbody tr.odd {
+	background-color: transparent;
+}
+.ciq-Filings table.dataTable.display tbody tr:hover {
+	background-color: rgba(68, 149, 209, .05);
+}
+.ciq-Filings table.dataTable.display tbody tr>.sorting_1, table.dataTable.order-column.stripe tbody tr>.sorting_1  {
+	background: rgba(0, 0, 0, 0) !important;
+}
+.ciq-Filings table.dataTable .sorting_desc thead th  {
+	border-bottom-color: #4495D1;
+}

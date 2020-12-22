@@ -1,0 +1,179 @@
+{
+    "comment": "ActiveTrader ",
+    "components": {
+        "Order Book": {
+            "window": {
+                "url": "$applicationRoot/components/chartiq/chartiq/orderBook.html",
+                "top": "center",
+                "left": "center",
+                "width": 800,
+                "height": 602,
+                "addToWorkspace": true,
+                "options": {
+                    "securityPolicy": "trusted"
+                },
+                "affinity": "charts"
+            },
+            "component": {
+                "mode": "example",
+                "inject": false,
+                "spawnOnStartup": false,
+                "category": "system",
+                "preload": [
+                    "$applicationRoot/components/chartiq/active-trader/active-trader-orderbook.js"
+                ]
+            },
+            "foreign": {
+                "services": {
+                    "windowService": {
+                        "canGroup": true,
+                        "manageWindowMovement": true,
+                        "allowAutoArrange": true,
+                        "allowTabbing": true,
+                        "allowTiling": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "showLinker": true,
+                        "FSBLHeader": {
+                            "component": "windowTitleBar",
+                            "bumpElements": {
+                                "fixed": "0Positioned",
+                                "absolute": "0Positioned",
+                                "bumpBy": "0px"
+                            },
+                            "bodyMarginTop": "0px",
+                            "forceHeaderHeight": false
+                        },
+                        "persistWindowState": true,
+                        "title": "Order Book - EURUSD",
+                        "hackScrollbar": false
+                    },
+                    "Toolbar": {
+                        "iconURL": "$applicationRoot/components/chartiq/IQ-icon.png"
+                    }
+                }
+            }
+        },
+        "Market Depth": {
+            "window": {
+                "url": "$applicationRoot/components/chartiq/chartiq/marketWatch.html",
+                "top": "center",
+                "left": "center",
+                "width": 800,
+                "height": 602,
+                "addToWorkspace": true,
+                "options": {
+                    "securityPolicy": "trusted"
+                },
+                "affinity": "charts"
+            },
+            "component": {
+                "mode": "example",
+                "inject": false,
+                "spawnOnStartup": false,
+                "category": "system",
+                "preload": [
+                    "$applicationRoot/components/chartiq/active-trader/active-trader-marketdepth.js"
+                ]
+            },
+            "foreign": {
+                "services": {
+                    "windowService": {
+                        "canGroup": true,
+                        "manageWindowMovement": true,
+                        "allowAutoArrange": true,
+                        "allowTabbing": true,
+                        "allowTiling": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "showLinker": true,
+                        "FSBLHeader": {
+                            "component": "windowTitleBar",
+                            "bumpElements": {
+                                "fixed": "0Positioned",
+                                "absolute": "0Positioned",
+                                "bumpBy": "0px"
+                            },
+                            "bodyMarginTop": "0px",
+                            "forceHeaderHeight": false
+                        },
+                        "persistWindowState": true,
+                        "title": "Market Depth - EURUSD",
+                        "hackScrollbar": false
+                    },
+                    "Toolbar": {
+                        "iconURL": "$applicationRoot/components/chartiq/IQ-icon.png"
+                    }
+                }
+            }
+        },
+        "Trade History": {
+            "window": {
+                "url": "$applicationRoot/components/chartiq/chartiq/tradehistory.html",
+                "top": "center",
+                "left": "center",
+                "width": 430,
+                "height": 602,
+                "addToWorkspace": true,
+                "options": {
+                    "securityPolicy": "trusted"
+                },
+                "affinity": "charts"
+            },
+            "component": {
+                "inject": false,
+                "spawnOnStartup": false,
+                "mode": "example",
+                "category": "system",
+                "preload": [
+                    "$applicationRoot/components/chartiq/active-trader/active-trader-tradehistory.js"
+                ]
+            },
+            "foreign": {
+                "services": {
+                    "windowService": {
+                        "canGroup": true,
+                        "manageWindowMovement": true,
+                        "allowAutoArrange": true,
+                        "allowTabbing": true,
+                        "allowTiling": true
+                    }
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "showLinker": true,
+                        "FSBLHeader": {
+                            "component": "windowTitleBar",
+                            "bumpElements": {
+                                "fixed": "0Positioned",
+                                "absolute": "0Positioned",
+                                "bumpBy": "0px"
+                            },
+                            "bodyMarginTop": "0px",
+                            "forceHeaderHeight": false
+                        },
+                        "persistWindowState": true,
+                        "title": "Trade History - EURUSD",
+                        "hackScrollbar": false
+                    },
+                    "Toolbar": {
+                        "iconURL": "$applicationRoot/components/chartiq/IQ-icon.png"
+                    }
+                }
+            }
+        }
+    }
+}

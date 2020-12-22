@@ -1,0 +1,23 @@
+@charset "UTF-8";
+
+body .timespanevent-ui {
+	display: inherit;
+}
+
+/* --------------------------------------------------------- Tooltip --------------------------------------------------------- */
+cq-tse-tooltip {
+	position: absolute;
+	left: -50000px;
+	z-index: 4;
+	white-space: nowrap;
+	border-radius: 1px;
+	border: solid 1px #e4e4e4;
+	background-color: #398dff;
+	color: white;
+	height: 12px;
+	font-size: 10px;
+	text-align: center;	
+	fill: #f8f8f8;
+    opacity: 1;
+    padding: 2px;
+}

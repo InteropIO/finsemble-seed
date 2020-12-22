@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="27px" height="27px" viewBox="0 0 27 27" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 62 (91390) - https://sketch.com -->
+    <title>ew-circle</title>
+    <desc>Created with Sketch.</desc>
+    <g id="ew-circle" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="Rectangle-Copy-3" x="0" y="0" width="27" height="27"></rect>
+        <g id="circle-black" transform="translate(6.000000, 6.000000)" fill="#000000" fill-rule="nonzero">
+            <path d="M7.5,0.5 C3.63400675,0.5 0.5,3.63400675 0.5,7.5 C0.5,11.3659932 3.63400675,14.5 7.5,14.5 C11.3659932,14.5 14.5,11.3659932 14.5,7.5 C14.5,3.63400675 11.3659932,0.5 7.5,0.5 Z M7.5,1.5 C10.8137085,1.5 13.5,4.1862915 13.5,7.5 C13.5,10.8137085 10.8137085,13.5 7.5,13.5 C4.1862915,13.5 1.5,10.8137085 1.5,7.5 C1.5,4.1862915 4.1862915,1.5 7.5,1.5 Z" id="Oval-Copy"></path>
+        </g>
+        <polygon id="Path-Copy-2" fill="#000000" fill-rule="nonzero" points="14.4169922 17 14.4169922 9.890625 12 10.1542969 12 10.8476562 13.4550781 10.828125 13.4550781 17"></polygon>
+    </g>
+</svg>

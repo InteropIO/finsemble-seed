@@ -1,0 +1,98 @@
+{
+	"components": {
+		"News": {
+			"window": {
+				"listName": "News",
+				"url": "$applicationRoot/components/widgets/news/news.html",
+				"width": 354,
+				"height": 600,
+				"affinity": "widgets"
+			},
+			"component": {
+				"mode": "premium",
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Toolbar": {
+						"iconClass": "ff-news"
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": true,
+						"persistWindowState": true
+					}
+				}
+			}
+		},
+		"Financials": {
+			"window": {
+				"url": "$applicationRoot/components/widgets/financials/financials.html",
+				"width": 660,
+				"height": 410,
+				"affinity": "widgets"
+			},
+			"component": {
+				"mode": "premium",
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Toolbar": {
+						"iconClass": "ff-chart-pie"
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": true,
+						"persistWindowState": true
+					}
+				}
+			}
+		},
+		"Company": {
+			"window": {
+				"url": "$applicationRoot/components/widgets/fundamentals/fundamentals.html",
+				"width": 500,
+				"height": 410,
+				"affinity": "widgets"
+			},
+			"component": {},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"isArrangable": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Toolbar": {
+						"iconClass": "ff-company"
+					},
+					"Window Manager": {
+						"FSBLHeader": true,
+						"showLinker": true,
+						"persistWindowState": true
+					}
+				}
+			}
+		}
+	}
+}

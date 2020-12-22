@@ -90,10 +90,10 @@
 			"undockDisbandsEntireGroup": false,
 			"fillHolesOnUndock": true,
 			"tabbing": {
-				"enabled": false
+				"enabled": true
 			},
 			"tiling": {
-				"enabled": false
+				"enabled": true
 			}
 		},
 		"logger": {
@@ -133,6 +133,9 @@
 		"$applicationRoot/configs/application/workspaces.json",
 		"$applicationRoot/configs/application/services.json",
 		"$applicationRoot/configs/application/securityPolicies.json",
-		"$applicationRoot/components/panopticon/config.json"
+		"$applicationRoot/components/panopticon/config.json",
+		"$applicationRoot/components/widgets/config.json",
+		"$applicationRoot/components/chartiq/config.json",
+		"$applicationRoot/components/chartiq/active-trader/config.json"
 	]
 }

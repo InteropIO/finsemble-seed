@@ -1,0 +1,78 @@
+/* Research Page Interactive Chart Quote Section */
+.ciq-Quote {
+  font-weight: 100 !important;
+  font-size: 1.5em;
+  text-transform: uppercase;
+  text-overflow: ellipsis;
+  float: left;
+}
+.ciq-Quote h2, .ciq-Quote h2 span {
+  font-family: "Roboto Condensed";
+  font-weight: 500;
+  font-size: 1.3em !important;
+  border-bottom: 0px transparent !important;
+  color: #fff;
+  margin: 0px;
+  float: none;
+  padding-right: 5px;
+}
+.ciq-Quote.small h2, .ciq-Quote h2 span {
+  font-size: 0.95em !important;
+  border-bottom: 0px transparent !important;
+  color: #fff
+}
+.ciq-Quote.medium h2, .ciq-Quote h2 span {
+  font-size: 1.1em !important;
+  border-bottom: 0px transparent !important;
+  color: #fff
+}
+.ciq-Quote.medium .ciq-sym-price,.ciq-Quote.medium .ciq-sym-change{
+  font-size: 1.2em;
+}
+.ciq-Quote.large .ciq-sym-price,.ciq-Quote.large .ciq-sym-change{
+  font-size: 1.3em;
+}
+.ciq-Quote.xlarge .ciq-sym-price,.ciq-Quote.xlarge .ciq-sym-change{
+  font-size: 1.3em;
+}
+.ciq-Quote .ciq-sym-price {
+  float: left;
+  padding-bottom: 0px !important;
+}
+.ciq-Quote p {
+  display: none;
+}
+.ciq-Quote .ciq-sym-change div:nth-child(1) {
+  display: none !important;
+}
+.ciq-Quote .arrow.up {
+  background: url("../img/ciq-uparrow.svg") no-repeat;
+  background-position: center;
+  width: 25px;
+  height: 1.0em;
+  padding-left: 1.25em;
+}
+.ciq-Quote .arrow.down {
+  background: url("../img/ciq-downarrow.svg") no-repeat;
+  background-position: center;
+  width: 25px;
+  height: 1.0em;
+  padding-left: 1.25em;
+}
+.ciq-Quote div:nth-child(1) {
+  float: left;
+  padding-right: 15px;
+}
+.ciq-Quote div:nth-child(2) {
+  float: left;
+  vertical-align: bottom;
+}
+.ciq-Quote div:nth-child(3) {
+  float: left;
+  vertical-align: bottom;
+}
+.ciq-Quote .ciq-sym-price {
+  font-size: .75em;
+}
+.ciq-Quote .ciq-sym-change {
+  font-size: .75em;

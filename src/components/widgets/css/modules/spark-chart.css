@@ -1,0 +1,822 @@
+
+@charset "UTF-8";
+
+/* CSS Document */
+
+
+
+.ciq-SparkChart {
+	padding: 10px;
+}
+
+.ciq-SparkChart .chartContainer {
+	display: block;
+	font-size: 12px;
+	position: relative;
+	/* chart container must be relative for internal DOM elements to be correct */
+}
+
+
+/* --------------------------------------------------------- BUTTONS --------------------------------------------------------- */
+
+
+/* Basic Buttons */
+
+.ciq-SparkChart .stx-btn {
+	/* Inactive Button */
+	display: none;
+
+}
+
+
+/* Panel Buttons */
+
+.ciq-SparkChart .stx-btn-panel,
+.ciq-SparkChart .stx-btn-panel span {
+	/* Button Defaults */
+	display: none;
+}
+
+
+.ciq-SparkChart .stx_chart_controls {
+	/* Chart Control module */
+	display: none;
+}
+
+.ciq-SparkChart #chartSize {
+	/* Chart size container */
+	display: none;
+}
+
+.ciq-SparkChart .stx_jump_today {
+	/* Button  jumping to today's data */
+	display: none;
+}
+
+
+/* --------------------------------------------------------- PANEL CONTROL TEMPLATES --------------------------------------------------------- */
+
+.ciq-SparkChart .stx-baseline-handle {
+	/* used for dragging the baseline up and down */
+	display: none;
+}
+
+.ciq-SparkChart .stx-ico-handle {
+	/* The div that allows users to ajust the panels */
+	position: absolute;
+	left: 0%;
+	height: 6px;
+	width: 100%;
+	overflow: hidden;
+	cursor: ns-resize;
+	z-index: 30;
+}
+
+.ciq-SparkChart .stx-ico-handle:active {
+	/* Use the vertical resize when adjusting panels */
+	cursor: ns-resize;
+}
+
+.ciq-SparkChart .stx-panel-control {
+	/* Panel Control buttons template */
+	position: absolute;
+	top: 10px;
+	left: 0px;
+	overflow: hidden;
+	z-index: 30;
+	display: none;
+}
+
+.ciq-SparkChart .ciq-SparkChart .stx-panel-control * {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.ciq-SparkChart .stx-panel-control.stx-show {
+	display: inline-block;
+}
+
+.ciq-SparkChart .stx-panel-title {
+	/* Panel/Chart Titles */
+	display: none !important;
+	top: 0px;
+	font-family: "", sans-serif !important;
+	font-weight: 100;
+	color: #444;
+	float: left;
+	display: inline-block;
+	color: #333;
+	padding: 0;
+	line-height: 22px;
+	font-size: 1.7em;
+	text-align: left;
+	text-transform: uppercase;
+	/*-webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, .2);*/
+	/*-moz-box-shadow: 0px 1px 2px rgba(0, 0, 0, .2);*/
+	/*box-shadow: 0px 1px 1px rgba(0, 0, 0, .2);*/
+	/* Messes up Android WebView pre-4.3 */
+}
+
+.ciq-SparkChart .stx-panel-control .stx-btn {
+	/* Float all icons so they stay in line on the left */
+	float: left;
+}
+
+
+/* ------------------------------------------------------- CHART OVERLAY ELEMENTS ------------------------------------------------------ */
+
+.ciq-SparkChart #mSticky,
+.ciq-SparkChart #showMeasure {
+	/* These are the small divs that come up when you hover over a drawing or study overlay */
+	display: none;
+	background: #efefef;
+	border: solid #ddd 1px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	color: #666;
+	font-size: 11px;
+	/*text-transform: capitalize;*/
+	white-space: nowrap;
+	z-index: 40;
+}
+
+.ciq-SparkChart #mSticky,
+.ciq-SparkChart #vectorTrashCan,
+.ciq-SparkChart #overlayTrashCan,
+.ciq-SparkChart #showMeasure,
+.ciq-SparkChart .overlayEdit {
+	position: absolute;
+	z-index: 40;
+}
+
+#mStickyInterior,
+#sMeasure {
+	/* Drawing and study info div contents*/
+	margin: 0px;
+	padding: 5px 10px 5px 10px;
+	display: inline-block;
+	float: left;
+}
+
+.ciq-SparkChart .overlayEdit.stx-btn,
+.ciq-SparkChart #overlayTrashCan.stx-btn,
+.ciq-SparkChart #vectorTrashCan.stx-btn {
+	/* Drawing and study info div delete button wrappers for mobile */
+	background: none;
+	cursor: pointer;
+	display: inline-block;
+	text-align: center;
+	width: 30px;
+	height: 27px;
+	/*	padding:0px; */
+	border: none;
+}
+
+.ciq-SparkChart .overlayEdit.stx-btn span,
+.ciq-SparkChart #overlayTrashCan.stx-btn span,
+.ciq-SparkChart #vectorTrashCan.stx-btn span {
+	/* Drawing and study info div delete button content */
+	display: block;
+	margin: 0 0 0 5px;
+	width: 23px;
+	height: 23px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	overflow: hidden;
+	text-indent: 100px;
+	background: #efefef;
+	border: solid #ddd 1px;
+	background-image: url(img/stx-sprite-panels.svg);
+	background-position: -401px -26px;
+}
+
+.ciq-SparkChart .overlayEdit {
+	opacity: 0;
+}
+
+.ciq-SparkChart #overlayTrashCan {
+	margin-left: 5px;
+}
+
+
+/* To enable editing of overlay studies on mobile. You'll need to also implement stxx.callbacks.studyOverlayEdit
+.overlayEdit {
+	margin-left: 5px;
+	opacity: 1;
+}
+#overlayTrashCan {
+	margin-left: 34px;
+}
+*/
+
+.ciq-SparkChart .no-svg .overlayEdit.stx-btn span,
+.ciq-SparkChart .no-svg #overlayTrashCan.stx-btn span,
+.ciq-SparkChart .no-svg #vectorTrashCan.stx-btn span {
+	/* Button Icons for non SVG browsers */
+	background-image: url(img/stx-sprite-panels.png);
+}
+
+.ciq-SparkChart #mouseDeleteInstructions {
+	margin: 0px;
+	padding: 5px 10px 5px 10px;
+	display: block;
+	clear: both;
+	font-size: xx-small;
+}
+
+.ciq-SparkChart #mouseDeleteText,
+.ciq-SparkChart #mouseManageText {
+	display: none;
+}
+
+.ciq-SparkChart .rightclick_drawing #mouseDeleteText {
+	display: inline;
+}
+
+.ciq-SparkChart .rightclick_series #mouseDeleteText {
+	display: inline;
+}
+
+.ciq-SparkChart .rightclick_study #mouseDeleteText {
+	display: inline;
+}
+
+.ciq-SparkChart .stx-loader {
+	/* Loading image size and placement */
+	position: absolute;
+	top: 280px;
+	left: 50%;
+	margin-left: -20px;
+	width: 40px;
+	height: 40px;
+	z-index: 50;
+}
+
+
+/* ---------------------------------------------------------- RANGE FINDER STYLES --------------------------------------------------------- */
+
+.ciq-SparkChart .ciq-range-nav {
+	float: right;
+	top: 0;
+	margin-top: 4px;
+}
+
+.ciq-SparkChart .ciq-range-nav li:hover,
+.ciq-SparkChart .ciq-range-nav a:hover,
+.ciq-SparkChart .ciq-range-nav:hover {
+	cursor: pointer !important;
+}
+
+.ciq-SparkChart .ciq-range-nav li {
+	text-align: center;
+	display: inline-block;
+	float: left;
+	margin: 0 3px 0 3px;
+	padding: 0px;
+	line-height: 17px;
+	font-size: 12px;
+	border: 0px;
+	cursor: pointer;
+	color: #333333;
+	color: rgba(51, 51, 51, 0.75);
+	border: none;
+}
+
+.ciq-SparkChart .ciq-range-nav a:after {
+	content: '';
+	text-align: center;
+	display: block;
+	margin: auto;
+	margin-top: 2px;
+	height: 3px;
+	width: 0px;
+	background: transparent;
+	transition: width .3s ease, background-color .3s ease;
+}
+
+.ciq-SparkChart .ciq-range-nav a:after {
+	height: 3px;
+	width: 0px;
+	background: transparent;
+	transition: width .3s ease, background-color .3s ease;
+}
+
+.ciq-SparkChart .ciq-range-nav a:hover:after {
+	width: 100%;
+	background: #4495d1;
+}
+
+.ciq-SparkChart .ciq-range-nav a:after {
+	width: 100%;
+	background: #4495d1;
+}
+
+
+/* --------------------------------------------------------- CHART ELEMENT STYLES --------------------------------------------------------- */
+
+
+/* -------- Current Price label (Floating last price on y-axis)-------- */
+
+.ciq-SparkChart .stx_current_hr_up {
+	/* 'Up' color for current chart value */
+	display: none;
+}
+
+.ciq-SparkChart .stx_current_hr_down {
+	/* 'Down' color for current chart value */
+	display: none;
+}
+
+
+/* -------- Axis Styles -------- */
+
+.ciq-SparkChart .stx_xaxis {
+	/* x-axis date styles */
+	display: none;
+}
+
+.ciq-SparkChart .stx_xaxis_dark {
+	/* x-axis date divider styles */
+	display: none;
+}
+
+.ciq-SparkChart .stx_yaxis {
+	/* y-axis price styles */
+	display: none;
+	font-size: 10px;
+	font-weight: 100;
+	color: #666;
+}
+
+
+/* -------- Crosshairs lines and labels-------- */
+
+.ciq-SparkChart .stx-float-date {
+	/* Crosshair Floating x-axis date label*/
+	position: absolute;
+	font-size: 10px;
+	z-index: 30;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	color: #fff;
+	padding: 1px 6px;
+	text-align: center;
+	width: 70px;
+	background-color: #333;
+}
+
+.ciq-SparkChart .stx-float-price {
+	/* Corsshair Floating y-axis value label*/
+	color: #fff;
+	background-color: #333;
+}
+
+.ciq-SparkChart .stx_crosshair {
+	/* Standard Crosshair lines color */
+	position: absolute;
+	z-index: 10;
+	background-color: #999;
+}
+
+.ciq-SparkChart .stx_crosshair_drawing {
+	/* Darker crosshairs lines when drawing */
+	position: absolute;
+	z-index: 10;
+	background-color: #333;
+}
+
+.ciq-SparkChart #crossY,
+.ciq-SparkChart .stx_crosshair_y {
+	/* Vertical Crosshair line size */
+	left: 0px;
+	height: 1px;
+	width: 98%;
+	margin-top: -1px;
+	/* since we're using border-top to draw the actual line */
+}
+
+.ciq-SparkChart #crossX,
+.ciq-SparkChart .stx_crosshair_x {
+	/* Horizontal Crosshair line size */
+	top: 0px;
+	width: 1px;
+	height: 100%;
+}
+
+.ciq-SparkChart .stx-crosshair-on {
+	/* Crosshair pointer icon */
+	cursor: crosshair;
+}
+
+
+/* -------- Chart and Study Panel Styling -------- */
+
+.ciq-SparkChart .stx_panels {
+	/* Panel Title text */
+	font-size: 10px;
+	color: white;
+}
+
+.ciq-SparkChart .stx_panel_background {
+	/* Panel Title background */
+	color: #7c878b;
+}
+
+.ciq-SparkChart .stx_panel_border {
+	/* Divider between panels */
+	width: 1px;
+	color: #cccccc;
+}
+
+.ciq-SparkChart .stx_panel_drag {
+	/* Darker Divider between panels when resizing */
+	width: 2px;
+	color: #666;
+}
+
+.ciq-SparkChart .stx_solo_lit span {
+	/* Add background to expand button when toggled on */
+	background-color: #b1b7b8;
+	color: #ffffff;
+	opacity: 1;
+}
+
+
+/* -------- Chart Grid -------- */
+
+.ciq-SparkChart .stx_grid {
+	/* Default Grid */
+	color: #efefef;
+	opacity: 1;
+}
+
+.ciq-SparkChart .stx_grid_dark {
+	/* Default Grid dividers */
+	color: #cccccc;
+	opacity: .9;
+}
+
+.ciq-SparkChart .stx_grid_border {
+	/* Default Grid borders */
+	color: #999999;
+}
+
+
+/* -------- Chart Type Styles -------- */
+
+.ciq-SparkChart .stx_line_chart {
+	/* Default width for line Charts */
+	width: 1px;
+}
+
+.ciq-SparkChart .stx_bar_chart,
+.ciq-SparkChart .stx_bar_up,
+.ciq-SparkChart .stx_bar_down,
+.ciq-SparkChart .stx_bar_even {
+	/* Default width for bar Charts */
+	width: 1px;
+}
+
+
+/* Default color for line and bar Charts */
+
+.ciq-SparkChart .stx_line_chart,
+.ciq-SparkChart .stx_bar_chart {
+	color: #000;
+}
+
+.ciq-SparkChart .stx_bar_down {
+	/* Down Bar color */
+	/* color: #b82c0c; */
+	color: #FF3232;
+	/* CIQ Brand 2016 */
+}
+
+.ciq-SparkChart .stx_bar_up {
+	/* Up Bar color */
+	/* color: #8cc176; */
+	color: #28BF00;
+	/* CIQ Brand 2016 */
+}
+
+.ciq-SparkChart .stx_baseline_delta_mountain {
+	/* Default color for baseline delta mountain Charts */
+	background-color: transparent;
+	/* background color for mountain. If IE8 support is needed use #5CC7C0 instead as rgba is not supported*/
+	color: transparent;
+	/* Optional gradient. If IE8 support is needed use #EFF9F9 instead as rgba is not supported */
+	padding: 3px;
+	/* Optional padding between the baseline and the mountain shading*/
+}
+
+.ciq-SparkChart .stx_colored_mountain_chart {
+	/* Default color for colored mountain Charts */
+	background-color: rgba(163, 102, 255, .5);
+	/* background color for mountain. If IE8 support is needed use #5CC7C0 instead as rgba is not supported*/
+	color: rgba(163, 102, 255, .01);
+	/* Optional gradient. If IE8 support is needed use #EFF9F9 instead as rgba is not supported */
+	width: 2px;
+	/* Optional line width */
+	padding: 4px;
+	/* Optional padding between the baseline and the mountain shading*/
+}
+
+.ciq-SparkChart .stx_mountain_chart {
+	/* Default color for mountain Charts */
+	background-color: rgba(102, 202, 196, .5);
+	/* background color for mountain. If IE8 support is needed use #5CC7C0 instead as rgba is not supported*/
+	color: rgba(102, 202, 196, .01);
+	/* Optional gradient. If IE8 support is needed use #EFF9F9 instead as rgba is not supported */
+	border: #66CAC4;
+	/* Optional line color */
+	width: 1px;
+	/* Optional line width */
+}
+
+
+/*.stx_mountain_chart.color {width:24px;}*/
+
+.ciq-SparkChart .stx_histogram_down {
+	/* Down Bar color */
+	/* color: #b82c0c; */
+	color: #FF3232;
+	/* CIQ Brand 2016 */
+	border-left-color: #000000;
+}
+
+.ciq-SparkChart .stx_histogram_up {
+	/* Up Bar color */
+	/* color: #8cc176; */
+	color: #28BF00;
+	/* CIQ Brand 2016 */
+	border-left-color: #000000;
+}
+
+.ciq-SparkChart .stx_histogram_even {
+	/* Even Bar color */
+	color: #999999;
+	border-left-color: #000000;
+}
+
+.ciq-SparkChart .stx_highlight_vector {
+	/* change the color and weight of drawings and study overlays on hover */
+	color: red;
+	width: 3px;
+}
+
+.ciq-SparkChart .stx_candle_shadow,
+.ciq-SparkChart .stx_bar_even {
+	/* Candle wick color */
+	color: #2e383b;
+}
+
+
+/******* Optionally use .stx_candle_shadow_up and .stx_candle_shadow_down to change shadow/wick color for up/down candles
+ .stx_candle_shadow_up {
+	color:#8cc176;
+}
+.stx_candle_shadow_down {
+	color:#b82c0c;
+}
+********/
+
+.ciq-SparkChart .stx_candle_down,
+.ciq-SparkChart .stx_line_down {
+	/* Down Candle color */
+	color: #FF3232;
+	border-left-color: #000000;
+}
+
+.ciq-SparkChart .stx_candle_up,
+.ciq-SparkChart .stx_line_up {
+	/* Up Candle color */
+	/* color: #8cc176; */
+	color: #28BF00;
+	/* CIQ Brand 2016 */
+	border-left-color: #000000;
+}
+
+.ciq-SparkChart .stx_hollow_candle_down {
+	color: #FF3232;
+}
+
+.ciq-SparkChart .stx_hollow_candle_up {
+	color: #8cc176;
+}
+
+.ciq-SparkChart .stx_hollow_candle_even {
+	color: #888888;
+}
+
+.ciq-SparkChart .stx_baseline {
+	/* color of baseline (dashed horizontal line) */
+	color: #ffffff;
+	display: none;
+}
+
+.ciq-SparkChart .stx_baseline_down {
+	/* under area color */
+	/* color: #b82c0c; */
+	color: #FF3232;
+	/* CIQ Brand 2016 */
+	width: 1px;
+}
+
+.ciq-SparkChart .stx_baseline_up {
+	/* over area color */
+	/* color: #8cc176; */
+	color: #28BF00;
+	/* CIQ Brand 2016 */
+	width: 1px;
+}
+
+.ciq-SparkChart .stx_kagi_down {
+	/* Kagi chart width and color for downtrend */
+	color: #FF0000;
+	width: 1px;
+}
+
+.ciq-SparkChart .stx_kagi_up {
+	/* Kagi chart width and color for uptrend */
+	color: #00FF00;
+	width: 3px;
+}
+
+.stx_pandf_down {
+	/* P&F chart color, padding, width for downtrend */
+	color: #FF0000;
+	padding: 2px 0px 2px 0px;
+	width: 2px;
+}
+
+.ciq-SparkChart .stx_pandf_up {
+	/* P&F chart color, padding, width for uptrend */
+	color: #00FF00;
+	padding: 2px 0px 2px 0px;
+	width: 2px;
+}
+
+.ciq-SparkChart .stx_volume_up {
+	/* Up Volume color */
+	color: #8cc176;
+}
+
+.ciq-SparkChart .stx_volume_down {
+	/* Down volume color */
+	color: #FF3232;
+}
+
+
+/* Volume underlay styles */
+
+.ciq-SparkChart .stx_volume_underlay_up {
+	color: rgb(140, 193, 118);
+	opacity: .3;
+	border-left-color: rgb(0, 0, 0);
+}
+
+.ciq-SparkChart .stx_volume_underlay_down {
+	color: rgb(184, 45, 12);
+	opacity: .3;
+	border-left-color: rgb(0, 0, 0);
+}
+
+
+/* Volume profile styles */
+
+.ciq-SparkChart .stx_volume_profile {
+	opacity: .3;
+	border-color: rgb(0, 0, 0);
+}
+
+
+/* Line color for projections */
+
+.ciq-SparkChart .stx_projection_new {
+	/* Line color for active line when drawing projections */
+	color: blue;
+}
+
+.ciq-SparkChart .stx_gaps {
+	/* Transparent gaps overlay style */
+	color: #b1b7b8;
+	opacity: .3;
+}
+
+.ciq-SparkChart .stx_histogram {
+	/* Default color for histograms */
+	color: #000000;
+	opacity: .2;
+}
+
+
+/* -------- Annotations -------- */
+
+.ciq-SparkChart .stx_annotation {
+	/* Annotation styles */
+	font-size: 13px;
+	background: transparent;
+	border: none;
+	box-shadow: none;
+	padding: 0px 6px;
+	outline: none;
+	color: #333;
+	resize: none;
+	z-index: 1000;
+}
+
+.ciq-SparkChart .stx_annotation_bg {
+	/* Annotation backgrounds */
+	color: #f5f5f5;
+}
+
+.ciq-SparkChart .stx_annotation_highlight {
+	/* Annotation highlight color */
+	color: white;
+}
+
+.ciq-SparkChart .stx_annotation_highlight_bg {
+	/* Annotation highlight background color */
+	color: #3d4447;
+}
+
+.ciq-SparkChart #annotationSave,
+.ciq-SparkChart #annotationCancel,
+.ciq-SparkChart .stx-btn.stx_annotation_save,
+.ciq-SparkChart .stx-btn.stx_annotation_cancel {
+	/* Annotation Buttons */
+	position: absolute;
+	display: none;
+	font-size: 11px;
+	-webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, .2);
+	-moz-box-shadow: 0px 1px 2px rgba(0, 0, 0, .2);
+	box-shadow: 0px 1px 2px rgba(0, 0, 0, .2);
+	z-index: 50;
+	background-color: #ffffff;
+}
+
+.ciq-SparkChart #annotationCancel,
+.ciq-SparkChart .stx_annotation_cancel {
+	margin-left: 10px;
+}
+
+.ciq-SparkChart .stx_watermark {
+	/* Optional watermark style */
+	font-size: 16px;
+	color: transparent;
+}
+
+.ciq-SparkChart .stx_fib_levels {
+	/* Text for fibonacci values */
+	font-size: 12px;
+	color: transparent;
+}
+
+
+/* -------- Text for shared charts -------- */
+
+.ciq-SparkChart .stx_share {
+	font-size: 14px;
+	font-family: "Roboto", sans-serif;
+	color: #000000;
+	width: 1px;
+}
+
+.ciq-SparkChart .stx_share_symbol {
+	font-size: 14px;
+	font-family: "Roboto", sans-serif;
+	font-weight: 700;
+}
+
+.ciq-SparkChart .stx-holder {
+	display: block;
+	position: absolute;
+	overflow: hidden;
+	z-index: 19;
+}
+
+.ciq-SparkChart .stx-subholder {
+	position: absolute;
+	overflow: hidden;
+}
+
+
+/* -------- Colors for session shading -------- */
+
+.ciq-SparkChart .stx_market_session.divider {
+	background-color: rgba(0, 255, 0, 0.8);
+	width: 1px;
+}
+
+.ciq-SparkChart .stx_market_session.pre {
+	background-color: rgba(255, 255, 0, 0.1);
+}
+
+.ciq-SparkChart .stx_market_session.post {
+	background-color: rgba(0, 0, 255, 0.2);
+}

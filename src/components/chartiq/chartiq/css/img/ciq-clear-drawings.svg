@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 19.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="-118 -131 512 512" style="enable-background:new -118 -131 512 512;" xml:space="preserve">
+<g id="Layer_3_1_">
+	<g id="Broom_1_">
+		<g>
+			<path d="M308.4,174.7l23.6-23.6c14.1-14.1,14.1-36.9,0-51l-63.7-63.7l-0.1-0.1L380-75.5c5-5,5-13.2,0-18.2l-20.2-20.1
+				c-5-5-13.2-5-18.2,0L229.9-2.1l-63.7-63.7c-14.1-14.1-36.9-14.1-51,0L91.5-42L308.4,174.7z"/>
+			<path d="M297.3,185.8l-63.1,108.6c-6.2,6.2-16.5,6.2-22.7,0L-51.1,77.1c-6.2-6.2-6.2-16.5,0-22.7L80.2-31.5L297.3,185.8z"/>
+		</g>
+	</g>
+</g>
+<g id="Layer_2">
+	<rect x="-118.9" y="70.6" width="28.9" height="49"/>
+	<rect x="-118.9" y="153.6" width="28.9" height="49"/>
+	<rect x="-118.9" y="236.5" width="28.9" height="49"/>
+	<path d="M335.9,8h30l0,28.8h28.9V13C394.9-5.8,379.7-21,361-21h-25V8z"/>
+	<rect x="-26" y="347.1" width="56.5" height="28.9"/>
+	<rect x="366" y="70.6" width="28.9" height="49"/>
+	<path d="M-90,36.7V8h30V-21h-25c-18.7,0-33.9,15.2-33.9,33.9v23.8H-90z"/>
+	<rect x="64.5" y="347.1" width="56.5" height="28.9"/>
+	<path d="M366,319.5l0,27.6h-30V376h25c18.7,0,33.9-15.2,33.9-33.9v-22.6H366z"/>
+	<path d="M-59.9,347.1h-30v-27.6h-28.9v22.6c0,18.7,15.2,33.9,33.9,33.9h25V347.1z"/>
+	<rect x="366" y="153.6" width="28.9" height="49"/>
+	<rect x="245.4" y="347.1" width="56.5" height="28.9"/>
+	<rect x="155" y="347.1" width="56.5" height="28.9"/>
+	<rect x="366" y="236.5" width="28.9" height="49"/>
+	<polygon points="30.6,-18.7 30.6,-21 -26,-21 -26,8 -17.7,8 	"/>
+</g>
+</svg>

@@ -1,0 +1,261 @@
+.#{$LIGHT} .stx-btn.click.up, .#{$DARK} .stx-btn.click.up {
+	background: rgba(139,194,115,.6);
+}
+.#{$LIGHT} .stx-btn.click.down, .#{$DARK} .stx-btn.click.down {
+	background: rgba(236,85,60,.6);
+}
+#{$hovering} .#{$LIGHT} .stx-btn.click.up:hover, #{$hovering} .#{$LIGHT} .stx-btn.click.down:hover {
+	border-color: #000;
+	color:#000;
+}
+#{$hovering} .#{$DARK} .stx-btn.click.up:hover, #{$hovering} .#{$DARK} .stx-btn.click.down:hover {
+	border-color: #fff;
+	color:#fff;
+}
+/* --------------------------------------------------------- Light Theme --------------------------------------------------------- */
+
+.#{$LIGHT} .stx-trade-ticket-toggle.open {background-position:-20px -560px;}
+.#{$LIGHT} .stx-trade-ticket-toggle.close {background-position:-20px -580px;}
+
+/* MIN SIDE PANEL */
+.#{$LIGHT} .stx-trade-panel {
+	border-right-color: rgba(0,0,0,.1);
+	background:#fff;
+	}
+	
+/* Ticket Panel Nav */
+.#{$LIGHT} .stx-trade-panel ul.stx-nav a {color:#666;}
+#{$hovering} .#{$LIGHT} .stx-trade-panel ul.stx-nav a:hover,
+.#{$LIGHT} .stx-trade-panel ul.stx-nav a:active {color:#333; background:rgba(0,0,0, .03)}
+
+/* Order Icons Nav */
+#{$hovering} .#{$LIGHT} ul.stx-orders li:hover,
+.#{$LIGHT} ul.stx-orders li:active {border-color:rgba(0,0,0,.05);}
+.#{$LIGHT} ul.stx-orders li.active,
+#{$hovering} .#{$LIGHT} ul.stx-orders li.active:hover {border-color:rgba(0,0,0,.1);}
+
+.#{$LIGHT} ul.stx-orders li.active a,
+#{$hovering} .#{$LIGHT} ul.stx-orders li.active:hover a {background-color:rgba(0,0,0, .05);}
+#{$hovering} .#{$LIGHT} ul.stx-orders a:hover,
+.#{$LIGHT} ul.stx-orders a:active {background-color:rgba(0,0,0, .01);}
+
+.#{$LIGHT} .stx-orders li.stx-market a {background-position:0px 0px;}
+.#{$LIGHT} .stx-orders li.stx-buy a {background-position:0px -40px;}
+.#{$LIGHT} .stx-orders li.stx-sell a {background-position:0px -80px;}
+.#{$LIGHT} .stx-orders li.stx-short a {background-position:0px -280px;}
+.#{$LIGHT} .stx-orders li.stx-cover a {background-position:0px -240px;}
+.#{$LIGHT} .stx-orders li.stx-strangle a {background-position:0px -120px;}
+.#{$LIGHT} .stx-orders li.stx-straddle a {background-position:0px -160px;}
+.#{$LIGHT} .stx-orders li.stx-bracket a {background-position:0px -200px;}
+
+/* MAX SIDE PANEL */
+.#{$LIGHT} .stx-panel-module .stx-head-bar {
+	background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#efefef));
+	background: -moz-linear-gradient(top, #fff, #efefef);
+	background: -ms-linear-gradient(top, #fff, #efefef);
+	background: -o-linear-gradient(top, #fff, #efefef);
+	border-top:1px solid #efefef;
+	}
+	
+.#{$LIGHT} .stx-panel-module .stx-head-bar h4 {color:#666;}
+.#{$LIGHT} .stx-panel-module .stx-head-bar a {color: #999999;}
+
+#{$hovering} .#{$LIGHT} .stx-panel-module .stx-head-bar span.stx-switch-account:hover a,
+.#{$LIGHT} .stx-panel-module .stx-head-bar span.stx-switch-account:active a {color:#666}
+	
+/*.#{$LIGHT} .stx-panel-module .stx-section {border-bottom:1px solid #efefef;}*/
+.#{$LIGHT} .stx-trade-account .stx-section {border-top:1px solid #efefef;}
+.#{$LIGHT} .stx-panel-module .stx-section h4 {color:#999;}
+
+.#{$LIGHT} .stx-panel-module th {color:#999;}
+.#{$LIGHT} .stx-panel-module td {color:#666;}
+.#{$LIGHT} .stx-panel-module td.total {color:#000;}
+
+.#{$LIGHT} .stx-panel-module .stx-divider td {background:#efefef;}
+
+.#{$LIGHT} .stx-panel-module .stx-current-orders tr.tfc-current-symbol td:nth-of-type(3) {
+	color:#000;
+}
+
+#{$hovering} .#{$LIGHT} table.stx-current-position tr.tfc-position:hover td:nth-of-type(1):not(.tfc-not-found),
+#{$hovering} .#{$LIGHT} table.stx-current-position tr.tfc-lots-position.sym:hover td:nth-of-type(1):not(.tfc-not-found),
+.#{$LIGHT} table.stx-current-position tr.tfc-position:active td:nth-of-type(1):not(.tfc-not-found),
+.#{$LIGHT} table.stx-current-position tr.tfc-lots-position.sym:active td:nth-of-type(1):not(.tfc-not-found) {
+	color: #000000;
+	font-weight:bold;
+	/*background-color:#ffffff;*/
+}
+
+#{$hovering} .#{$LIGHT} table.stx-current-orders tr.tfc-symbol:hover td:nth-of-type(3),
+.#{$LIGHT} table.stx-current-orders tr.tfc-symbol:active td:nth-of-type(3) {
+	color: #000000;
+	font-weight:bold;
+	background-color:transparent;
+	z-index:1000;
+}
+
+/* Drag Lines and Prices */
+#{$hovering} .#{$LIGHT} .tfc.drag-price-line:hover {background:rgba(0,0,0,.07)}
+.#{$LIGHT} .tfc.drag-price-line.dragging {cursor:ns-resize; background:rgba(0,0,0,.07)}
+
+/* THE ORDERS */
+.#{$LIGHT} .tfc-neutral {background-color: rgba(0,0,0,.05);}
+.#{$LIGHT} .stx-trade-panel ul.stx-account {border-top:1px solid #efefef;}
+.#{$LIGHT} .stx-trade-panel ul.stx-account li span:first-child {
+	font-size:11px;    
+	color:#999;
+}
+.#{$LIGHT} .stx-trade-panel ul.stx-account li span:last-child {
+	color: #333;
+    font-size: 11px;
+}
+.#{$LIGHT} .tfc-market-section.complex .wrapper {background:#f8f8f8;}
+.#{$LIGHT} .market-order.create-order .complex .stx-head {color:#666}
+.#{$LIGHT} .market-order.create-order .tfc-market-section.complex .col1 {border-right:1px solid #ddd;}
+
+#{$hovering} .#{$LIGHT} .stx-trade-current .stx-head-bar:hover,
+.#{$LIGHT} .stx-trade-current .stx-head-bar.dragging {background:rgba(0,0,0,.07);}
+
+#{$hovering} .#{$LIGHT} .stx-trade-positions .stx-head-bar li.tfc-positions-view:hover {
+	border:solid 1px rgba(0,0,0,.05);
+	background-color:rgba(0,0,0,.05);
+}
+.#{$LIGHT} .stx-trade-positions .stx-head-bar li.tfc-positions-view.active { 
+	border:solid 1px rgba(0,0,0,.1);
+	background-color:rgba(0,0,0,.1);
+}
+.#{$LIGHT} .stx-trade-positions .stx-head-bar li.tfc-positions-view{
+	color:#666;
+}
+
+/* --------------------------------------------------------- Dark Theme --------------------------------------------------------- */
+
+.#{$DARK} .stx-trade-ticket-toggle.open {background-position:-20px -600px;}
+.#{$DARK} .stx-trade-ticket-toggle.close {background-position:-20px -620px;}
+
+/* MIN SIDE PANEL */
+.#{$DARK} .stx-trade-panel {
+	border-right-color: rgba(255,255,255,.1);
+	background:none;
+	}
+	
+/* Ticket Panel Nav */
+.#{$DARK} .stx-trade-panel ul.stx-nav a {color:#999;}
+#{$hovering} .#{$DARK} .stx-trade-panel ul.stx-nav a:hover,
+.#{$DARK} .stx-trade-panel ul.stx-nav a:active {color:#ccc; background:rgba(255, 255, 255, .05)}
+
+/* Order Icons Nav */
+#{$hovering} .#{$DARK} ul.stx-orders li:hover,
+.#{$DARK} ul.stx-orders li:active {border-color:rgba(255, 255, 255,.05);}
+.#{$DARK} ul.stx-orders li.active,
+#{$hovering} .#{$DARK} ul.stx-orders li.active:hover {border-color:rgba(255, 255, 255,.1);}
+
+.#{$DARK} ul.stx-orders li.active a,
+#{$hovering} .#{$DARK} ul.stx-orders li.active:hover a {background-color:rgba(255, 255, 255, .1);}
+#{$hovering} .#{$DARK} ul.stx-orders a:hover,
+.#{$DARK} ul.stx-orders a:active {background-color:rgba(255,255,255, .05);}
+
+.#{$DARK} .stx-orders li.stx-market a {background-position:-40px 0px;}
+.#{$DARK} .stx-orders li.stx-buy a {background-position:-40px -40px;}
+.#{$DARK} .stx-orders li.stx-sell a {background-position:-40px -80px;}
+.#{$DARK} .stx-orders li.stx-short a {background-position:-40px -280px;}
+.#{$DARK} .stx-orders li.stx-cover a {background-position:-40px -240px;}
+.#{$DARK} .stx-orders li.stx-strangle a {background-position:-40px -120px;}
+.#{$DARK} .stx-orders li.stx-straddle a {background-position:-40px -160px;}
+.#{$DARK} .stx-orders li.stx-bracket a {background-position:-40px -200px;}
+
+/* MAX SIDE PANEL */
+.#{$DARK} .stx-panel-module .stx-head-bar {
+	background: #1b1f21;
+	border-top:1px solid #2d3334;
+	}
+
+.#{$DARK} .stx-panel-module .stx-head-bar h4 {color:#999;}
+.#{$DARK} .stx-panel-module .stx-head-bar a {color: #666;}
+
+#{$hovering} .#{$DARK} .stx-panel-module .stx-head-bar span.stx-switch-account:hover a,
+.#{$DARK} .stx-panel-module .stx-head-bar span.stx-switch-account:active a {color:#999}
+
+/*.#{$DARK} .stx-panel-module .stx-section {border-bottom:1px solid #2d3334;}*/
+.#{$DARK} .stx-trade-account .stx-section {border-top:1px solid #333;}
+
+.#{$DARK} .stx-panel-module .stx-section h4 {color:#666;}
+
+.#{$DARK} .stx-panel-module th {color:#999;}
+.#{$DARK} .stx-panel-module td {color:#ccc;}
+.#{$DARK} .stx-panel-module td.total {color:#fff;}
+
+.#{$DARK} .stx-panel-module .stx-divider td {background:#333;}
+	
+.#{$DARK} .stx-panel-module .stx-current-position tr.tfc-current-symbol td:nth-of-type(1),
+.#{$DARK} .stx-panel-module .stx-current-orders tr.tfc-current-symbol td:nth-of-type(3) {
+	color:#fff;
+}
+
+#{$hovering} .#{$DARK} table.stx-current-position tr.tfc-position:hover td:nth-of-type(1):not(.tfc-not-found),
+#{$hovering} .#{$DARK} table.stx-current-position tr.tfc-lots-position.sym:hover td:nth-of-type(1):not(.tfc-not-found),
+.#{$DARK} table.stx-current-position tr.tfc-position:active td:nth-of-type(1):not(.tfc-not-found),
+.#{$DARK} table.stx-current-position tr.tfc-lots-position.sym:active td:nth-of-type(1):not(.tfc-not-found) {
+	color: #fff;
+	font-weight:bold;
+	background-color:transparent;
+}
+
+#{$hovering} .#{$DARK} table.stx-current-orders tr.tfc-symbol:hover td:nth-of-type(3),
+.#{$DARK} table.stx-current-orders tr.tfc-symbol:active td:nth-of-type(3) {
+	color: #ffffff;
+	font-weight:bold;
+	background-color:transparent;
+	z-index:1000;
+}
+
+/* Drag Lines and Prices */
+#{$hovering} .#{$DARK} .tfc.drag-price-line:hover {background:rgba(255,255,255,.08)}
+.#{$DARK} .tfc.drag-price-line.dragging {cursor:ns-resize; background:rgba(255,255,255,.08)}
+
+/* THE ORDERS */
+.#{$DARK} .tfc-neutral {background-color: rgba(255,255,255,.05);}
+
+.#{$DARK} .stx-trade-panel ul.stx-account {border-top:1px solid #333;}
+
+.#{$DARK} .stx-trade-panel ul.stx-account li span:first-child {
+	font-size:11px;    
+	color:#eee;
+}
+.#{$DARK} .stx-trade-panel ul.stx-account li span:last-child {
+	color: #999;
+    font-size: 11px;
+}
+.#{$DARK} .tfc-market-section.complex .wrapper {background:#222;}
+.#{$DARK} .market-order.create-order .complex .stx-head {color:#999}
+.#{$DARK} .market-order.create-order .complex .stx-label {color:#666}
+.#{$DARK} .market-order.create-order .tfc-market-section.complex .col1 {border-right:1px solid #444;}
+
+#{$hovering} .#{$DARK} .stx-trade-current .stx-head-bar:hover,
+.#{$DARK} .stx-trade-current .stx-head-bar.dragging {background:rgba(255,255,255,.08);}
+
+.#{$DARK} .stx-trade-positions .stx-current-position .stx-btn.click:not(.up):not(.down),
+.#{$DARK} .stx-trade-positions .stx-head-bar .stx-btn.click {
+	color: #999;
+	background-color: #1F1F1F;
+	border-color: #333;
+}
+.#{$DARK} .stx-trade-positions .stx-current-position .stx-btn.click:active:not(.up):not(.down),
+#{$hovering} .#{$DARK} .stx-trade-positions .stx-current-position .stx-btn.click:hover:not(.up):not(.down),
+.#{$DARK} .stx-trade-positions .stx-head-bar .stx-btn.click:active,
+#{$hovering} .#{$DARK} .stx-trade-positions .stx-head-bar .stx-btn.click:hover {
+	border-color: #666;
+	color: #fff;
+}
+
+#{$hovering} .#{$DARK} .stx-trade-positions .stx-head-bar li.tfc-positions-view:hover {
+	border:solid 1px rgba(255,255,255,.05);
+	background-color:rgba(255,255,255,.05);
+}
+.#{$DARK} .stx-trade-positions .stx-head-bar li.tfc-positions-view.active { 
+	border:solid 1px rgba(255,255,255,.1);
+	background-color:rgba(255,255,255,.1);
+}
+.#{$DARK} .stx-trade-positions .stx-head-bar li.tfc-positions-view{
+	color:#999;
+}

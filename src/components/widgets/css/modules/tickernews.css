@@ -1,0 +1,487 @@
+.ciq-date,
+.ciq-news-head,
+.ciq-news-body,
+.ciq-news-source,
+.ciq-news-img {
+	margin: 0;
+}
+
+.ciq-TickerNews h3{
+	display: none;
+}
+
+/* line 449, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+
+.ciq-date {
+	font-size: 11px;
+	text-transform: uppercase;
+	color: #888;
+	width: 55px;
+}
+
+
+/* line 455, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+
+.ciq-news-source {
+	font-size: 11px;
+	font-weight: 100;
+	font-style: italic;
+	color: #888;
+}
+
+
+/* line 461, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+
+.ciq-news-head a,
+.ciq-news-head a:hover,
+.ciq-news-head a:active {
+	color: #323F48;
+}
+
+
+/* line 466, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+
+.ciq-news-link,
+.ciq-news-quote {
+	font-size: 10px;
+	text-transform: uppercase;
+	margin: 0 0 5px;
+}
+
+
+/* line 471, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+
+.ciq-news-quote {
+	margin: 0;
+}
+
+
+/* line 474, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+
+.ciq-news ul {
+	padding-left: 0px;
+	display: block;
+	position: relative;
+}
+
+
+/* line 478, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+
+.ciq-news li {
+	display: block;
+	clear: both;
+	padding: 10px;
+	cursor: pointer;
+	/*border-top: 1px solid;
+	border-color: #000000;
+	border-color: rgba(0, 0, 0, 0.075);
+	-webkit-transition: background 0.2s, border 0.2s, padding-bottom 0.2s, padding-top 0.2s;
+	-moz-transition: background 0.2s, border 0.2s, padding-bottom 0.2s, padding-top 0.2s;
+	-ms-transition: background 0.2s, border 0.2s, padding-bottom 0.2s, padding-top 0.2s;
+	-o-transition: background 0.2s, border 0.2s, padding-bottom 0.2s, padding-top 0.2s;
+	transition: background 0.2s, border 0.2s, padding-bottom 0.2s, padding-top 0.2s;*/
+}
+
+
+/* line 487, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+
+/*.ciq-news li:last-child {
+	border-bottom: 1px solid;
+	border-color: #000000;
+	border-color: rgba(0, 0, 0, 0.075);
+}*/
+
+.ciq-news li:nth-child(odd) {
+	background: #18252e
+}
+
+.ciq-news li:nth-child(even) {
+	background: #25323B
+}
+
+.ciq-news ul {
+	border-bottom: 2px solid #65727B;
+	border-top: 2px solid #65727B;
+}
+
+/* line 493, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+
+.ciq-news li:hover 
+{
+	background: #323F48 
+}
+
+.ciq-news-DISABLE li:active,
+.ciq-news-DISABLE li.active {
+	background: -moz-linear-gradient(left, transparent 0%, rgba(0, 0, 0, 0.02) 20%, rgba(0, 0, 0, 0.02) 80%, transparent 100%);
+	/* FF3.6+ */
+	background: -webkit-gradient(linear, left top, right top, color-stop(0%, transparent), color-stop(20%, rgba(0, 0, 0, 0.02)), color-stop(80%, rgba(0, 0, 0, 0.02)), color-stop(100%, transparent));
+	/* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(left, transparent 0%, rgba(0, 0, 0, 0.02) 20%, rgba(0, 0, 0, 0.02) 80%, transparent 100%);
+	/* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(left, transparent 0%, rgba(0, 0, 0, 0.02) 20%, rgba(0, 0, 0, 0.02) 80%, transparent 100%);
+	/* Opera 11.10+ */
+	background: -ms-linear-gradient(left, transparent 0%, rgba(0, 0, 0, 0.02) 20%, rgba(0, 0, 0, 0.02) 80%, transparent 100%);
+	/* IE10+ */
+	background: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.02) 20%, rgba(0, 0, 0, 0.02) 80%, transparent 100%);
+	/* W3C */
+	filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#00000000', GradientType=1);
+	/* IE6-9 */
+	border-top: 1px solid #4495d1;
+}
+
+
+/* line 502, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+
+.ciq-news .ciq-date {
+	float: left;
+	/*width: 60px;*/
+	white-space: nowrap;
+}
+
+
+/* line 506, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+
+.ciq-news .ciq-date span {
+	float: left;
+	line-height: 18px;
+	white-space: nowrap;
+}
+
+
+/* line 511, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+
+.ciq-news .ciq-date .date {
+	display: inline-block;
+	margin-right: 4px;
+}
+
+
+/* line 512, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+
+.ciq-news .ciq-date.today .date {
+	display: none;
+}
+
+
+/* line 513, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+
+.ciq-news .ciq-date .time {
+	display: none;
+}
+
+
+/* line 514, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+
+.ciq-news .ciq-news-source {
+	display: inline-block;
+	float: right;
+}
+
+
+/* line 515, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+
+.ciq-news .ciq-date.today .time {
+	display: inline-block;
+}
+
+
+/* line 517, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+
+.ciq-news .ciq-news-head {
+	margin: 0 0 0 60px;
+	font-size: 14px;
+	line-height: 18px;
+	font-weight: normal;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+
+/* line 529, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+
+.ciq-news .ciq-news-body,
+.ciq-news .ciq-news-img,
+.ciq-news .ciq-news-link,
+.ciq-news .ciq-news-quote {
+	display: none;
+}
+
+
+/* line 534, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+
+.ciq-news li.active {
+	padding: 5px 5px 10px 15px;
+	margin: 12px 0px 12px 0px;
+	border: 0px;
+	cursor: default;
+	/* background-color: transparent;
+  background-color: rgba(0, 0, 0, 0.02);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#05000000,endColorstr=#05000000); */
+	zoom: 1;
+	/* -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2) ;
+  -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2) ;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2) ; */
+  border-left-width: 6px;
+    border-style: solid;
+    /*-webkit-border-image: 
+      -webkit-gradient(linear, 0 0, 0 100%, from(black), to(rgba(0, 0, 0, 0))) 1 100%;
+    -webkit-border-image: 
+      -webkit-linear-gradient(rgba(58, 123, 213, 1), rgba(0, 210, 255, 1)) 1 100%;
+    -moz-border-image:
+      -moz-linear-gradient(rgba(58, 123, 213, 1), rgba(0, 210, 255, 1)) 1 100%;    
+    -o-border-image:
+      -o-linear-gradient(rgba(58, 123, 213, 1), rgba(0, 210, 255, 1)) 1 100%;
+    border-image:
+      linear-gradient(to bottom, rgba(58, 123, 213, 1), rgba(0, 210, 255, 1)) 1 100%;*/
+	border-color: #4495D1;
+}
+
+
+/* line 541, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+
+.active .ciq-news-main {
+	display: table;
+	clear: both;
+}
+
+
+/* line 545, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+
+.active .ciq-news-main > div {
+	display: table-row;
+}
+
+
+/* line 548, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+
+.active .ciq-news-content,
+.active .ciq-news-img {
+	display: table-cell;
+	float: none;
+	vertical-align: top;
+}
+.ciq-news.small .active .ciq-news-content,
+.ciq-news.small .active .ciq-news-img {
+	display: block;
+	float: none;
+	vertical-align: top;
+}
+
+
+/* line 553, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+
+.active .ciq-date {
+	width: auto;
+}
+
+
+/* line 556, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+
+.active .ciq-date .time,
+.active .ciq-date.today .date,
+.active .ciq-date .date {
+	display: inline;
+	overflow: hidden;
+	width: auto;
+}
+
+
+/* line 558, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+
+.active .ciq-date .date:after {
+	content: ", ";
+	display: inline-block;
+}
+
+
+/* line 560, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+
+.active .ciq-news-source {
+	float: right;
+	padding-left: 1em;
+	display: inline-block;
+	text-align: left;
+}
+
+
+/* line 567, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+.ciq-news-content h4 {
+	font-weight: 500;
+	font-size: 11pt;
+	margin-top: 0px;
+	padding-top: 10px;
+	line-height: 1.3em;
+	margin-bottom: .3em;
+}
+
+.active .ciq-news-content {
+	padding: 0px 20px 20px 0px;
+}
+
+.active .ciq-news-content h4 {
+	font-family: "Roboto";
+	font-size: 16pt;
+	color: #fff;
+	font-weight: 500;
+}
+
+
+/* line 570, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+
+  .medium .active .ciq-news-img {
+  	max-width: 100%;
+    width: 100%;
+  }
+  .medium .active .ciq-news-content {
+  	max-width: 100%;
+  	width: 100%;
+  }
+
+/* line 576, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+
+.active .ciq-news-img a {
+	display: block;
+	width: 100%;
+	max-height: 160px;
+	overflow: hidden;
+	border: solid 1px rgba(0, 0, 0, 0.1);
+}
+
+
+/* line 583, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+
+
+
+/* line 588, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+
+.active .ciq-news-head {
+	font-size: 22px;
+	clear: left;
+	margin: 5px 0 5px 0;
+	font-weight: bold;
+	font-weight: 500;
+	white-space: normal;
+	line-height: normal;
+}
+
+
+/* line 598, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+
+.active .ciq-news-head a {
+	color: #888;
+}
+
+
+/* line 599, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+
+.active .ciq-news-body {
+	display: block;
+	font-size: 13px;
+	line-height: 20px;
+	margin: 0 0 10px 0;
+}
+
+
+/* line 606, /Users/dalalsid/GitHub/widgets/htdocs/widget/widget/css/ciq-widget.scss */
+
+.active .ciq-news-link,
+.active .ciq-news-quote {
+	display: block;
+}
+
+.active .ciq-news-link a {
+	font-weight: 100;
+	color: #4495d1;
+	text-decoration: none;
+	font-size: 9pt;
+	padding-right: 8px;
+}
+.active .ciq-news-link a:hover {
+	text-decoration: none;
+}
+.active .ciq-news-link a:hover:after {
+	text-decoration: none;
+	border-bottom: none;
+}
+.active .ciq-news-link a:after {
+	content: " >";
+	color: #999;
+}
+.active .ciq-news-link span a:after {
+	content: url("../img/chart_link.svg");
+	display: inline-block;
+    width: 12px; 
+    height: 12px;
+    margin-left: 3px;
+    vertical-align: middle;
+}
+.active .ciq-news-source,
+.active .ciq-date {
+	font-size: 9pt;
+	color: #888;
+	font-weight: 100;
+}
+
+.ciq-news.small .ciq-news-source {
+	float:right;
+		width: auto;
+		padding-top: 0px;
+	}
+.ciq-news.small .active .ciq-news-source {
+	float:right;
+		width: auto;
+		padding-top: 0px;
+		padding-left: 0px;
+	}
+.ciq-news.xlarge .ciq-news-img img { 
+  width: auto;
+  height: 100%;
+}
+.ciq-news.xlarge .ciq-news-img {
+	position: relative;
+	width: 170px;
+	height: 105px;
+	overflow: hidden;
+	margin-top: 10px;
+	margin-right: 20px;
+	float:left;
+}
+.ciq-news.large .ciq-news-img img { 
+  width: auto;
+  height: 100%;
+}
+.ciq-news.large .ciq-news-img {
+	position: relative;
+	width: 150px;
+	height: 115px;
+	overflow: hidden;
+	margin-top: 10px;
+	margin-right: 20px;
+	float:left;
+}
+.ciq-news.medium .ciq-news-img img { 
+  width: auto;
+  height: 100%;
+}
+.ciq-news.medium .ciq-news-img {
+	position: relative;
+	width: 145px;
+	height: 165px;
+	overflow: hidden;
+	margin-top: 10px;
+	margin-right: 20px;
+	float:left;
+}
+.ciq-news.small .ciq-news-img img { 
+  width: 100%;
+  height: auto;
+}
+.ciq-news.small .ciq-news-img {
+	position: relative;
+	width: 100%;
+	height: 150px;
+	overflow: hidden;
+	margin-top: 20px;
+}

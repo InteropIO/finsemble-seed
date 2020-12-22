@@ -1,0 +1,6 @@
+[
+	"chartiq.js",
+	"active-trader/active-trader-orderbook.js",
+	"active-trader/active-trader-tradehistory.js",
+	"active-trader/active-trader-marketdepth.js"
+]

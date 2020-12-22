@@ -1,0 +1,41 @@
+body .video_markers-ui {
+	display: inherit;
+}
+
+.stx-marker.highlight.square 
+.stx-marker-video.stx-marker-expand {
+	width: 320px;
+	max-height: 400px;
+	padding: 4px;
+}
+
+.stx-marker-video.stx-marker-expand .ciq-close {
+	float: right;
+}
+
+.stx-marker-video video {
+	width: 100%;
+}
+
+.stx-marker.video .stx-visual {
+	background-color: #eee;
+	background-image: url(../../css/img/stx-sprite-ui.svg);
+	background-position: -725px -28px;
+	border: solid 1px #027598;
+	border-radius: 2px;
+	width: 24px;
+	height: 20px;
+	opacity: .95;
+}
+
+.stx-marker.video .stx-visual:hover {
+	opacity: 1;
+}
+
+.ciq-night .stx-marker.video .stx-visual {
+	background-color: #222;
+}
+
+.stx-marker.video.square.highlight .stx-visual:after {
+	height: 32px;
+}

@@ -1,0 +1,40 @@
+.ciq-Financials .ciq-nav-term {
+	float:right;
+}
+
+.ciq-Financials h3 {
+	display: none; 
+}
+
+.ciq-Financials td {
+	border: 0px;
+}
+
+.ciq-Financials .ciq-subtotal td {
+	font-size: 15px;
+}
+
+.ciq-Financials .ciq-total td {
+	font-size: 15px;
+	font-weight: bold;
+}
+
+.ciq-Financials tr th {
+	text-align: right;
+}
+
+.ciq-Financials tr th:nth-child(1) {
+	text-align: left;
+}
+
+.ciq-Financials tr:nth-child(1) th {
+	border-bottom: 0px;
+}
+
+.ciq-Financials table tr:nth-child(even) {
+	background: #18252e
+}
+
+.ciq-Financials table tr.ciq-total {
+	background: #212D35
+}

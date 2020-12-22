@@ -1,0 +1,8 @@
+.ciq-OptionChain select {
+    background: transparent;
+    color: #fff
+}
+
+.ciq-OptionChain option {
+    color: black
+}

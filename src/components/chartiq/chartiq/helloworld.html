@@ -1,0 +1,47 @@
+<!doctype html>
+<!--
+This file provides an example of the most basic way to load a chart into an HTML page. It includes no UI.
+-->
+<html>
+<head>
+<!-- Set the display for mobile devices. -->
+<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+
+<!-- Reference the default style sheet. -->
+<link rel="stylesheet" type="text/css" href="css/stx-chart.css" media="screen" />
+</head>
+
+<body>
+
+<!--
+Create the chart container. The container can be positioned anywhere on your web page and sized any way you wish,
+but the CSS position property must have the value "relative".
+-->
+<div class="chartContainer" style="width:800px;height:460px;position:relative;"></div>
+
+<script type="module" crossorigin="use-credentials">
+// This inline script acts as the entry point, without creating a separate external file.
+
+// Reference a file of statically defined chart data.
+import sample5min from "./examples/data/STX_SAMPLE_5MIN.js";
+
+// Reference the charting library.
+import { CIQ } from "./js/chartiq.js";
+
+// Instantiate a CIQ.ChartEngine object, the main object for creating charts.
+let stxx = new CIQ.ChartEngine({
+	container: document.querySelector(".chartContainer")
+});
+
+// Display the chart.  The five-minute periodicity matches the sample data.
+stxx.loadChart("SPY", {
+	masterData: sample5min,
+	periodicity: {
+		period: 1,
+		interval: 5,
+		timeUnit: "minute"
+	}
+});
+</script>
+</body>
+</html>

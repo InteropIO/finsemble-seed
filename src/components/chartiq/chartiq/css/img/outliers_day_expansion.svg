@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="15px" height="20px" viewBox="0 0 15 20" enable-background="new 0 0 15 20" xml:space="preserve">
+<title>outliers_expansion</title>
+<desc>Created with Sketch.</desc>
+<g id="Break-Scale">
+	<g id="outliers_buttons-darkSlateBorders--day" transform="translate(-75.000000, -26.000000)">
+		<g id="outliers_expansion" transform="translate(76.000000, 27.000000)">
+			<path id="Rectangle" fill="#F8F8F8" stroke="#4C5668" d="M6,0h1c3.313,0,6,2.687,6,6v6c0,3.313-2.687,6-6,6H6
+				c-3.313,0-6-2.687-6-6V6C0,2.687,2.687,0,6,0z"/>
+			<g id="icon_x2F_arrow-skinny_x2F_down" transform="translate(4.000000, 3.000000)">
+				<polyline id="Path" fill="none" stroke="#4C5668" points="5,9 2.5,12 0,9 				"/>
+				<polyline id="Path-Copy" fill="none" stroke="#4C5668" points="0,3 2.5,0 5,3 				"/>
+				<line id="Path_1_" fill="none" stroke="#4C5668" x1="2.5" y1="11.5" x2="2.5" y2="0"/>
+			</g>
+		</g>
+	</g>
+</g>
+</svg>

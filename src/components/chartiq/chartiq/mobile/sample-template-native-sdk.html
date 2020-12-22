@@ -1,0 +1,117 @@
+<!doctype html>
+<!--
+This file is intended to be used together with the ios or android Github sample seed projects. Do not call directly as a web page.
+It provides a simple html application that can be put into a mobile WebView to interface with our javascript bridge library (nativeSdkBridge.js).
+To use, move into the root directory of the library package.
+-->
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1" />
+<link rel="stylesheet" type="text/css" href="css/normalize.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="css/page-defaults.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="css/stx-chart.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="css/chartiq.css" media="screen" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<style>
+	.ciq-chart-area {
+		padding: 0;
+		top: 0;
+		bottom: 0;
+	}
+</style>
+</head>
+<body>
+<cq-context>
+<div class="ciq-chart-area">
+	<div class="ciq-chart">
+		<div class="chartContainer">
+			<cq-loader></cq-loader>
+		</div>
+		<!-- End Chart Container -->
+	</div>
+	<!-- End Chart Box -->
+</div>
+<!-- End Chart Area -->
+</cq-context>
+<script src="mobile/thirdparty/hammer.js"></script>
+<script type="module" crossorigin="use-credentials">
+// This inline script acts as the entry point, without creating a separate external file.
+import "./js/advanced.js";
+import "./js/components.js";
+/* Template-specific imports */
+import getDefaultConfig from "./js/defaultConfiguration.js";
+import PerfectScrollbar from "./js/thirdparty/perfect-scrollbar.esm.js";
+import "./examples/markets/marketDefinitionsSample.js";
+import "./examples/markets/marketSymbologySample.js";
+import "./examples/translations/translationSample.js";
+import "./mobile/js/nativeSdkAccessibility.js";
+import { CIQ } from "./mobile/js/nativeSdkBridge.js";
+// Create and customize default configuration
+CIQ.MobileBridge.determineOs();
+var quoteFeedNativeBridge = {
+	fetch: function(parameters, cb){
+		function completion(cb){
+			return function(err, results){
+				if(err){
+					cb({error:err});
+				}else{
+					cb(results);
+				}
+			};
+		}
+		// This should call the native ios or android interface.
+		// For sample app, instantiate an interface that connects to the simulator.
+		// Call the completion closure with a completionHandler (or other mechanism).
+		// Make sure this is done asynchronously so the UI doesn't hang.
+		// Completion assumes the results are in correct JSON format.
+		CIQ.MobileBridge.nativeQuoteFeed(parameters, cb);
+	},
+	fetchInitialData: function(symbol, suggestedStartDate, suggestedEndDate, params, cb) {
+		var parameters = {
+			func: "pullInitialData",
+			symbol: symbol,
+			period: params.period,
+			timeUnit: params.interval,
+			start: suggestedStartDate,
+			end: suggestedEndDate
+		};
+		this.fetch(parameters, cb);
+	},
+	fetchUpdateData: function(symbol, startDate, params, cb) {
+		var parameters = {
+			func: "pullUpdate",
+			symbol: symbol,
+			period: params.period,
+			timeUnit: params.interval,
+			start: startDate
+		};
+		this.fetch(parameters, cb);
+	},
+	fetchPaginationData: function(symbol, suggestedStartDate, endDate, params, cb) {
+		var parameters = {
+			func: "pullPagination",
+			symbol: symbol,
+			period: params.period,
+			timeUnit: params.interval,
+			start: suggestedStartDate,
+			end: endDate
+		};
+		this.fetch(parameters, cb);
+	}
+};
+CIQ.MobileBridge.setQuoteFeedInBridge(quoteFeedNativeBridge);
+// NOTE: if you are using a push mechanism for your data comment out the quotefeed line and set the dataMethod to 'push' in the client side code
+const config = getDefaultConfig({
+	scrollStyle: PerfectScrollbar,
+	quoteFeed: quoteFeedNativeBridge
+});
+let stx = config.createChart();
+if(stx) {
+	stx.minimumZoomTicks=5; // default zoom ticks doesn't allow seconds to appear on the x-axis when in portrait mode
+	CIQ.MobileBridge.setChartEngineInBridge(stx); // set the chart engine instance for the nativeSdkBridge scripts
+	CIQ.MobileBridge.setChartAvailable(true); // lets the mobile bridge know that the chart is finished loading
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<cq-orderbook>
+	<cq-close></cq-close>
+	<cq-orderbook-table reverse>
+		<cq-scroll cq-no-claim>
+			<cq-orderbook-bids></cq-orderbook-bids>
+		</cq-scroll>
+	</cq-orderbook-table>
+	<cq-orderbook-table>
+		<cq-scroll cq-no-claim>
+			<cq-orderbook-asks></cq-orderbook-asks>
+		</cq-scroll>
+	</cq-orderbook-table>
+	<template>
+		<cq-item cq-size-shading>
+			<div col="price">Price</div>
+			<div col="size">Size</div>
+			<div col="cum_size">Total Size</div>
+			<div col="amount">Amount</div>
+			<div col="cum_amount">Total Amount</div>
+			<!--<div col="shading"></div>-->
+		</cq-item>
+	</template>
+</cq-orderbook>

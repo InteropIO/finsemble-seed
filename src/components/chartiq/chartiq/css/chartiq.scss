@@ -1,0 +1,120 @@
+/*
+ Edit (and rename) this file to implement your own style.
+ Please avoid editing the imported _ciq...scss files so that you can receive upgrades without having to reimplement your changes.
+ Instead, override any styles from within this file, or substitute the includes with your own.
+
+ _ciq-components.scss contains the main styles for the ChartIQ component library.
+ Set your theme colors, fonts, etc in this file.
+
+ _ciq-night.scss contains css overrides for a night (dark) theme.
+ Use this as a template for building additional themes.
+
+ _ciq-extras.scss includes styling for ChartIQ plugins.
+ You may not require this at all.
+
+ There are some additional scss files pertaining to specific features as well; they can be removed if not used:
+
+ _ciq-full-screen.scss - used for FullScreen add-on
+ _ciq-outliers.scss - used for Outliers add-on
+ _ciq-drawing-palette.scss - used for drawingPalette webcomponent
+ _perfect-scrollbar.scss - used for PerfectScrollbar styling of scroll webcomponent
+
+
+ Run sass to generate a css file from this file and the included _ciq files.
+ Include that css in your html.
+ */
+
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700,500,100,300,400italic|Roboto+Condensed:400,700,300');
+
+$base-font:			'Roboto', sans-serif !default;
+$heading-font:		'Roboto Condensed', sans-serif !default;
+
+$font-size-base:		12px !default;
+$font-size-button:		11px !default;
+$font-size-toolbar:		14px !default;
+
+$soft-corners: 1px !default; // Set to zero to eliminate soft corners
+
+$nav-height: 45px !default;
+$footer-height: 45px !default;
+
+/* Hovering selectors */
+
+$INTERACTION-ATTR: ciq-last-interaction;
+$mouse: mouse;
+$touch: touch;
+$hovering: "html:not([#{$INTERACTION-ATTR}='#{$touch}'])";
+$touching: "html[#{$INTERACTION-ATTR}='#{$touch}']";
+
+/* Default (Light) Theme */
+
+$DEFAULT-main:				#fff !default;
+$DEFAULT-accent: 			#398dff !default;
+$DEFAULT-bg:				#f8f8f8 !default;
+$DEFAULT-menu-bg:			#fff !default;
+$DEFAULT-submenu-bg:		#f3f3f3 !default;
+$DEFAULT-hu-bg:				#ffffff !default;
+$DEFAULT-text:				#000 !default;
+$DEFAULT-text-subtle:		#999 !default;
+$DEFAULT-text-medium:		#666 !default;
+$DEFAULT-text-strong:		#000 !default;
+$DEFAULT-border-subtle:		#ddd !default;
+$DEFAULT-border-medium:		#ccc !default;
+$DEFAULT-border-strong:		#999 !default;
+
+@mixin text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+     -moz-border-radius: $radius;
+      -ms-border-radius: $radius;
+          border-radius: $radius;
+}
+
+@mixin user-select($select) {
+	-webkit-user-select: $select;
+	   -moz-user-select: $select;
+	    -ms-user-select: $select;
+	        user-select: $select;
+}
+
+@mixin box-shadow($top, $left, $blur, $color, $inset:"") {
+   -webkit-box-shadow:$top $left $blur $color #{$inset};
+      -moz-box-shadow:$top $left $blur $color #{$inset};
+           box-shadow:$top $left $blur $color #{$inset};
+}
+
+
+@mixin box-sizing($box) {
+	-webkit-box-sizing: $box;
+       -moz-box-sizing: $box;
+            box-sizing: $box;
+}
+
+@mixin rotate($degrees) {
+	-webkit-transform: rotate($degrees) scale(1);  /* Saf3.1+, Chrome */
+	-moz-transform: rotate($degrees) scale(1);  /* FF3.5+ */
+	-ms-transform: rotate($degrees) scale(1);  /* IE9 */
+	-o-transform: rotate($degrees) scale(1);  /* Opera 10.5 */
+	transform: rotate($degrees) scale(1);
+}
+
+/* include main components */
+@import "ciq-components";
+/* Night theme. Use this as a base if you wish to design your own themes. */
+@import "ciq-night";
+/* Plugins and other pieces */
+@import "ciq-extras";
+/* Drawing palette */
+@import "ciq-drawing-palette";
+/* Full Screen Mode */
+@import "ciq-full-screen";
+/* Outlier markers */
+@import "ciq-outliers";
+/* PerfectScrollbar */
+@import "perfect-scrollbar";
+// Add an import for your overrides here and then recompile the SASS

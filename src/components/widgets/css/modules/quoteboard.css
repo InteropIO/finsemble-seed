@@ -1,0 +1,164 @@
+td.delete {
+    text-align: center;
+}
+.ciq-QuoteBoard .dataTables_wrapper {
+	background: none;
+}
+.ciq-QuoteBoard tr th:nth-child(1){
+	text-align: left;
+	padding-left: 0px;
+}
+.ciq-QuoteBoard tr th, .ciq-QuoteBoard tr th{
+	text-align: right;
+	padding-right: 15px;
+}
+.ciq-QuoteBoard table.dataTable tbody tr{
+	background-color: transparent !important;
+	background: transparent !important;
+}
+.ciq-QuoteBoard .ciq-range-nav ul {
+	margin-left: 0px !important;
+	padding-left: 0px !important;
+	left: 0px !important;
+}
+.ciq-QuoteBoard .ciq-range-nav li {
+	padding: 4px 8px;
+	border: 1px solid #4495d1;
+	margin-right: -1px;
+}
+.ciq-QuoteBoard .ciq-range-nav li.active {
+	color: #afdee4 !important;
+}
+.ciq-QuoteBoard .dataTables_length select {
+	-webkit-appearance: none;
+	font-weight: 400;
+	height: 100%;
+	width: 28px;
+	border: 0px;
+	color: #4495D1;
+	border-radius: 0px;
+	padding: -5px 0px;
+	margin: 0px 2px;
+	background: url("../img/select_desc.svg") no-repeat right transparent;
+	background-size: 10px 6px;
+}
+.ciq-QuoteBoard .dataTables_filter label {
+	font-weight: 400;
+	color: #4495D1;
+}
+
+.ciq-QuoteBoard .dataTables_wrapper table tbody td a:after {
+	content: url("../img/dropdown_caret.svg");
+	height: 13px;
+	width: 12px;
+	vertical-align: baseline;
+	display: inline-block;
+	padding-top: 0px;
+	margin-left: 5px;
+	-ms-transform: rotate(-90deg); /* IE 9 */
+    -webkit-transform: rotate(-90deg); /* Chrome, Safari, Opera */
+    transform: rotate(-90deg);
+}
+
+.ciq-QuoteBoard table.dataTable thead th {
+	border-bottom: 2px solid;
+	border-color: #4495D1 !important;
+	font-weight: 400;
+	text-transform: uppercase;
+	color: #4495D1;
+}
+.ciq-QuoteBoard table.dataTable thead  th.sorting, .ciq-QuoteBoard table.dataTable thead  th:nth-child(3).sorting {
+	background: url(../img/select_both.svg) no-repeat right transparent;
+	background-size: 8px 10px;
+}
+.ciq-QuoteBoard table.dataTable thead th.sorting_asc, .ciq-QuoteBoard table.dataTable thead th:nth-child(3).sorting_asc  {
+	background: url(../img/select_asc.svg) no-repeat right transparent;
+	background-size: 8px 5px;
+}
+.ciq-QuoteBoard table.dataTable thead th.sorting_desc,.ciq-QuoteBoard table.dataTable thead th:nth-child(3).sorting_desc {
+	background: url(../img/select_desc.svg) no-repeat right transparent;
+	background-size: 8px 5px;
+}
+.ciq-QuoteBoard table.dataTable thead  th:nth-child(1).sorting {
+	background: url(../img/select_both.svg) no-repeat left transparent;
+	background-position: 60px 50%;
+	background-size: 8px 10px;
+}
+.ciq-QuoteBoard table.dataTable thead th:nth-child(1).sorting_asc  {
+	background: url(../img/select_asc.svg) no-repeat left transparent;
+	background-position: 60px 50%;
+	background-size: 8px 5px;
+}
+.ciq-QuoteBoard table.dataTable thead th:nth-child(1).sorting_desc {
+	background: url(../img/select_desc.svg) no-repeat left transparent;
+	background-position: 60px 50%;
+	background-size: 8px 5px;
+}
+.ciq-QuoteBoard table.dataTable thead  th:nth-child(2).sorting, .ciq-QuoteBoard table.dataTable thead  th:nth-child(3).sorting {
+	background: url(../img/select_both.svg) no-repeat right transparent;
+	background-size: 8px 10px;
+}
+.ciq-QuoteBoard table.dataTable thead th:nth-child(2).sorting_asc, .ciq-QuoteBoard table.dataTable thead th:nth-child(3).sorting_asc  {
+	background: url(../img/select_asc.svg) no-repeat right transparent;
+	background-size: 8px 5px;
+}
+.ciq-QuoteBoard table.dataTable thead th:nth-child(2).sorting_desc,.ciq-QuoteBoard table.dataTable thead th:nth-child(3).sorting_desc {
+	background: url(../img/select_desc.svg) no-repeat right transparent;
+	background-size: 8px 5px;
+}
+.ciq-QuoteBoard table.dataTable.no-footer {
+	border-bottom: 2px solid;
+	border-color: #4495D1;
+}
+.ciq-QuoteBoard .dataTables_wrapper tbody td a{
+	font-size: 1.1em !important;
+	font-weight: 300;
+	text-decoration: none;
+}
+.ciq-QuoteBoard .paginate_button {
+	font-weight: 400;
+	border: 0px !important;
+}
+.ciq-QuoteBoard .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+	background: #4495D1 !important;
+	border: 0px !important;
+	color: #fff !important;
+
+}
+.ciq-QuoteBoard .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+	background: #4495D1 !important;
+	border: 0px !important;
+}
+.ciq-QuoteBoard .dataTables_wrapper .paginate_button.disabled:hover {
+	background: transparent !important;
+	border: 0px !important;
+}
+.ciq-QuoteBoard .dataTables_info {
+	padding-left: 0px;
+}
+.ciq-QuoteBoard .dataTables_wrapper tbody td{
+	text-align: right;
+	padding-right: 0px;
+}
+.ciq-QuoteBoard .dataTables_wrapper tbody td:nth-child(1){
+	padding-left: 0px;
+	text-align: left;
+}
+.ciq-QuoteBoard .dataTables_wrapper tbody,  {
+	background: transparent;
+}
+.ciq-QuoteBoard table.dataTable.display tbody td {
+	border-top: 1px solid rgba(78, 159, 229, .5);
+}
+.ciq-QuoteBoard table.dataTable.display tbody tr.odd {
+	background-color: transparent;
+}
+.ciq-QuoteBoard table.dataTable.display tbody tr:hover {
+	background-color: rgba(78, 159, 229, .15) !important;
+}
+.ciq-QuoteBoard table.dataTable.display tbody tr>.sorting_1, table.dataTable.order-column.stripe tbody tr>.sorting_1  {
+	background: rgba(0, 0, 0, 0) !important;
+}
+.ciq-QuoteBoard table.dataTable .sorting_desc thead th  {
+	border-bottom-color: #4495D1;
+}
