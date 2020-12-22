@@ -1,6 +1,6 @@
 {
 	"name": "finsemble-seed",
-	"version": "5.1.1",
+	"version": "5.2.0",
 	"description": "",
 	"main": "index.js",
 	"scripts": {
@@ -30,12 +30,12 @@
 	"author": "Cosaic",
 	"license": "SEE LICENSE IN LICENSE",
 	"optionalDependencies": {
-		"@finsemble/finsemble-cli": "5.1.*"
+		"@finsemble/finsemble-cli": "5.2.*"
 	},
 	"dependencies": {
-		"@finsemble/finsemble-core": "5.1.*",
-		"@finsemble/finsemble-electron-adapter": "5.1.*",
-		"@finsemble/finsemble-ui": "5.1.*",
+		"@finsemble/finsemble-core": "5.2.*",
+		"@finsemble/finsemble-electron-adapter": "5.2.*",
+		"@finsemble/finsemble-ui": "5.2.*",
 		"async": "3.2.0",
 		"compression": "1.7.3",
 		"express": "4.16.4",
@@ -67,6 +67,7 @@
 		"rimraf": "3.0.2",
 		"shelljs": "0.8.4",
 		"source-map-loader": "1.0.1",
+		"tree-kill": "1.2.2",
 		"style-loader": "2.0.0",
 		"ts-loader": "^8.0.4",
 		"tslint": "6.1.3",
