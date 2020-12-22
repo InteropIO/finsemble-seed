@@ -1,0 +1,240 @@
+{
+	"comment": "Sample component configuration",
+	"components": {
+		"Panopticon Basic": {
+			"window": {
+				"options": {
+					"securityPolicy": "trusted",
+					"frame": false,
+					"resizable": true,
+					"autoShow": true
+				},
+				"url": "http://54.198.237.192:8082/panopticon/",
+				"top": "center",
+				"left": "center",
+				"width": 800,
+				"height": 600
+			},
+			"component": {
+				"displayName": "Panopticon Basic",
+				"spawnOnStartup": false,
+				"category": "system",
+				"mode": "panopticon",
+				"preload": "$applicationRoot/preloads/zoom.js"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"canGroup": true,
+						"isArrangable": true
+					},
+					"workspace": {
+						"persistURL": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"title": "Panopticon (Basic)",
+						"FSBLHeader": true,
+						"persistWindowState": true,
+						"showLinker": true
+					},
+					"Toolbar": {
+						"iconURL": "$applicationRoot/components/panopticon/Altair_icon.png"
+					}
+				}
+			}
+		},
+		"Panopticon": {
+			"window": {
+				"options": {
+					"securityPolicy": "trusted",
+					"frame": false,
+					"resizable": true,
+					"autoShow": true
+				},
+				"url": "http://54.198.237.192:8082/panopticon/",
+				"top": "center",
+				"left": "center",
+				"width": 800,
+				"height": 600
+			},
+			"component": {
+				"preload": ["$applicationRoot/components/panopticon/panopticon_preload.js","$applicationRoot/preloads/zoom.js"],
+				"displayName": "Panopticon",
+				"spawnOnStartup": false,
+				"category": "system",
+				"mode": "panopticon"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"canGroup": true,
+						"isArrangable": true
+					},
+					"workspace": {
+						"persistURL": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"title": "Panopticon",
+						"FSBLHeader": true,
+						"persistWindowState": true,
+						"showLinker": true
+					},
+					"Toolbar": {
+						"iconURL": "$applicationRoot/components/panopticon/Altair_icon.png"
+					}
+				}
+			}
+		},
+		"Panopticon Equity Monitoring": {
+			"window": {
+				"options": {
+					"securityPolicy": "trusted",
+					"frame": false,
+					"resizable": true,
+					"autoShow": true
+				},
+				"url": "http://54.198.237.192:8082/panopticon/workbook/#/Demo%5CEquity%20Monitoring/Desk%20Positions",
+				"top": "center",
+				"left": "center",
+				"width": 800,
+				"height": 600
+			},
+			"component": {
+				"preload": ["$applicationRoot/components/panopticon/panopticon_preload.js","$applicationRoot/preloads/zoom.js"],
+				"displayName": "Panopticon Equity Monitoring",
+				"spawnOnStartup": false,
+				"category": "system",
+				"mode": "panopticon"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"canGroup": true,
+						"isArrangable": true
+					},
+					"workspace": {
+						"persistURL": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"title": "Panopticon Equity Monitoring",
+						"FSBLHeader": true,
+						"persistWindowState": true,
+						"showLinker": true
+					},
+					"Toolbar": {
+						"iconURL": "$applicationRoot/components/panopticon/Altair_icon.png"
+					}
+				}
+			}
+		},
+		"Panopticon Intra-day positions": {
+			"window": {
+				"options": {
+					"securityPolicy": "trusted",
+					"frame": false,
+					"resizable": true,
+					"autoShow": true
+				},
+				"url": "http://54.198.237.192:8082/panopticon/workbook/#/Demo%5CEquity%20Monitoring/IntraDay%20Position%20History",
+				"top": "center",
+				"left": "center",
+				"width": 800,
+				"height": 600
+			},
+			"component": {
+				"preload": ["$applicationRoot/components/panopticon/panopticon_preload.js","$applicationRoot/preloads/zoom.js"],
+				"displayName": "Panopticon Intra-day positions",
+				"spawnOnStartup": false,
+				"category": "system",
+				"mode": "panopticon"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"canGroup": true,
+						"isArrangable": true
+					},
+					"workspace": {
+						"persistURL": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"title": "Panopticon Intra-day positions",
+						"FSBLHeader": true,
+						"persistWindowState": true,
+						"showLinker": true
+					},
+					"Toolbar": {
+						"iconURL": "$applicationRoot/components/panopticon/Altair_icon.png"
+					}
+				}
+			}
+		},
+		"Panopticon FX RFQs": {
+			"window": {
+				"options": {
+					"securityPolicy": "trusted",
+					"frame": false,
+					"resizable": true,
+					"autoShow": true
+				},
+				"url": "http://54.198.237.192:8082/panopticon/workbook/#/Demo%5CFX%20RFQs/RFQs%20Dashboard",
+				"top": "center",
+				"left": "center",
+				"width": 800,
+				"height": 600
+			},
+			"component": {
+				"preload": ["$applicationRoot/components/panopticon/panopticon_preload.js","$applicationRoot/preloads/zoom.js"],
+				"displayName": "Panopticon FX RFQs",
+				"spawnOnStartup": false,
+				"category": "system",
+				"mode": "panopticon"
+			},
+			"foreign": {
+				"services": {
+					"dockingService": {
+						"canGroup": true,
+						"isArrangable": true
+					},
+					"workspace": {
+						"persistURL": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"title": "Panopticon: FX RFQs",
+						"FSBLHeader": true,
+						"persistWindowState": true,
+						"showLinker": true
+					},
+					"Toolbar": {
+						"iconURL": "$applicationRoot/components/panopticon/Altair_icon.png"
+					}
+				}
+			}
+		}
+	}
+}
