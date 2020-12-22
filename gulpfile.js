@@ -9,6 +9,7 @@
 	const gulp = require("gulp");
 	const shell = require("shelljs");
 	const path = require("path");
+	const treeKill = require("tree-kill");
 	const FEA = require("@finsemble/finsemble-electron-adapter/exports");
 	const FEA_PATH = path.resolve("./node_modules/@finsemble/finsemble-electron-adapter");
 	const FEAPackager = FEA ? FEA.packager : undefined;
@@ -292,17 +293,33 @@
 		launchElectron: (done) => {
 			const cfg = taskMethods.startupConfig[env.NODE_ENV];
 
+			/**
+			 * handleElectronClose() gets called when Electron is closed, in other words when the user quits Finsemble from the file menu or some other way.
+			 * When Electron is closed, we will want to terminate this gulp process, and also make certain that any other child
+			 * processes that we've spun up are closed (such as server.js or watch processes).
+			 *
+			 * On Unix (Mac) child processes are not automatically killed when the current process exits, so we use "treeKill"
+			 * to ensure that all child processes are killed off. Otherwise, those processes would show up as stray "node" processes in ActivityMonitor/ps
+			 * and eventually eat up memory.
+			 *
+			 * treeKill makes use of shell commands (taskkill and pgrep) because Node doesn't currently support the concept of process groups.
+			 * The result is that this gulp process will terminate with an error that _isn't really_ an error, which yarn/npm will pick up and print out "Command failed with exit code 1".
+			 * Orchestrating a graceful exit to avoid that error would involve rearchitecting the entire gulp process or forking treeKill, so on Unix/Mac we allow the spurious error.
+			 */
+			const handleElectronClose = () => {
+				if (isMacOrNix) treeKill(process.pid);
+				else process.exit(0);
+			};
+
 			const socketCertificatePath = deriveSocketCertificatePaths();
 			let config = {
 				manifest: cfg.serverConfig,
-				onElectronClose: process.exit,
+				onElectronClose: handleElectronClose,
 				chromiumFlags: JSON.stringify(cfg.chromiumFlags),
 				path: FEA_PATH,
 				socketCertificatePath,
+				breakpointOnStart: cfg.breakpointOnStart,
 			};
-
-			// set breakpointOnStart variable so FEA knows whether to pause initial code execution
-			process.env.breakpointOnStart = cfg.breakpointOnStart;
 
 			if (!FEA) {
 				console.error("Could not launch ");
