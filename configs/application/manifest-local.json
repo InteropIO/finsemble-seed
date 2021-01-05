@@ -55,7 +55,7 @@
 					"serverAddress": "ws://127.0.0.1:3376"
 				}
 			},
-			"promptBeforeAllowingExternalApps": true
+			"promptBeforeAllowingExternalApps": false
 		},
 		"logger": {
 			"defaultClientLogLevels": {

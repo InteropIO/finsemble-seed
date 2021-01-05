@@ -441,7 +441,8 @@
 			},
 			"component": {
 				"category": "system",
-				"spawnOnStartup": false
+				"spawnOnStartup": false,
+				"canMaximize": false
 			},
 			"foreign": {
 				"services": {
