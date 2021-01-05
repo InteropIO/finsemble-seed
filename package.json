@@ -36,11 +36,13 @@
 		"@finsemble/finsemble-core": "5.1.*",
 		"@finsemble/finsemble-electron-adapter": "5.1.*",
 		"@finsemble/finsemble-ui": "5.1.*",
+		"@types/uuid": "^8.3.0",
 		"async": "3.2.0",
 		"compression": "1.7.3",
 		"express": "4.16.4",
 		"react": "16.13.1",
-		"react-dom": "16.13.1"
+		"react-dom": "16.13.1",
+		"uuid": "^8.3.2"
 	},
 	"devDependencies": {
 		"@babel/core": "7.6.4",

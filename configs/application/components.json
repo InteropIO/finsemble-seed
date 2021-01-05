@@ -238,46 +238,6 @@
                     }
                 }
             }
-        },
-        "ExcelTester": {
-            "window": {
-                "url": "$applicationRoot/components/ExcelTester/ExcelTester.html",
-                "options": {
-                    "resizable": true,
-                    "autoShow": true,
-                    "alwaysOnTop": false
-                },
-                "width": 800,
-                "height": 600
-            },
-            "component": {
-                "preload": false,
-                "spawnOnStartup": false
-            },
-            "foreign": {
-                "services": {
-                    "windowService": {
-                        "manageWindowMovement": true,
-                        "allowAutoArrange": true,
-                        "allowSnapping": true,
-                        "allowTabbing": true,
-                        "allowTiling": true,
-                        "allowGrouping": true,
-                        "allowMinimize": true
-                    },
-                    "workspace": {}
-                },
-                "components": {
-                    "App Launcher": {
-                        "launchableByUser": true
-                    },
-                    "Window Manager": {
-                        "alwaysOnTopIcon": true,
-                        "title": "ExcelTester",
-                        "persistWindowState": true
-                    }
-                }
-            }
         }
     }
 }

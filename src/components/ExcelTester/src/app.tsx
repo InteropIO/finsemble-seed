@@ -5,9 +5,11 @@ import "@finsemble/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../../assets/css/theme.css";
 
 const ExcelTester = () => {
-	console.log("My code is running");
 	/* Your functional react component code here */
-
+	FSBL.Clients.RouterClient.query('OFFICE_ADDIN_REGISTER', {actions:['GET_EXCEL_FILE_LIST']}, (err, res)=>{
+		console.log(res)
+		FSBL.Clients.RouterClient.query(res.data.data[0].id, {}, (err,res)=>{console.log(res)})
+	})
 	return <>{/*Your render code here*/}</>;
 };
 
