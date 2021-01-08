@@ -240,12 +240,12 @@ export default class OfficeAddinService extends Finsemble.baseService {
 
 	register = (data: any): any => {
 		let actions = data.actions
-		let returnArray: { id: string; action: string; }[] = []
+		let returnArray: { id: string; action: string; file:ExcelFile|null; }[] = []
 		actions.forEach((action: any) => {
 			switch (action) {
 				case 'GET_EXCEL_FILE_LIST':
 					let uuid = this.getUuid()
-					returnArray.push({ id: uuid, action: action })
+					returnArray.push({ id: uuid, action: action, file:null })
 					this.addResponder(uuid, this.getExcelFileList)
 
 
