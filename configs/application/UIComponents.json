@@ -263,7 +263,7 @@
 				"docked": "top",
 				"canGroup": false,
 				"options": {
-					"autoShow": false,
+					"autoShow": true,
 					"contextMenu": false,
 					"showTaskbarIcon": true,
 					"smallWindow": true,
@@ -441,7 +441,8 @@
 			},
 			"component": {
 				"category": "system",
-				"spawnOnStartup": false
+				"spawnOnStartup": false,
+				"canMaximize": false
 			},
 			"foreign": {
 				"services": {

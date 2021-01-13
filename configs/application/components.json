@@ -59,6 +59,13 @@
 				"left": "center",
 				"width": 400,
 				"height": 432
+			},
+			"foreign": {
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					}
+				}
 			}
 		},
 		"Notepad": {
@@ -98,7 +105,7 @@
 		},
 		"Getting Started Tutorial": {
 			"window": {
-				"url": "https://www.chartiq.com/tutorials/?slug=finsemble",
+				"url": "https://documentation.finsemble.com/tutorial-gettingStarted.html",
 				"height": 800,
 				"width": 1000
 			},
@@ -160,16 +167,13 @@
 				"width": 358,
 				"height": 460,
 				"ephemeral": true,
+				"alwaysOnTop": true,
 				"options": {
 					"autoShow": true
 				}
 			},
 			"component": {
-				"neededClients": [
-					"LauncherClient",
-					"AuthenticationClient",
-					"StorageClient"
-				],
+				"neededClients": ["LauncherClient", "AuthenticationClient", "StorageClient"],
 				"category": "system"
 			},
 			"foreign": {
@@ -197,16 +201,13 @@
 				"width": 400,
 				"height": 500,
 				"ephemeral": true,
+				"alwaysOnTop": true,
 				"options": {
 					"autoShow": false
 				}
 			},
 			"component": {
-				"neededClients": [
-					"LauncherClient",
-					"AuthenticationClient",
-					"StorageClient"
-				],
+				"neededClients": ["LauncherClient", "AuthenticationClient", "StorageClient"],
 				"category": "system"
 			},
 			"foreign": {

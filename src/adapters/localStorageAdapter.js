@@ -33,19 +33,11 @@ const LocalStorageAdapter = function (uuid) {
 
 		let combinedKey = this.getCombinedKey(this, params);
 		try {
-			Logger.system.debug(
-				`LocalStorageAdapter.save for key=${combinedKey} with data=${params.value}`
-			);
+			Logger.system.debug(`LocalStorageAdapter.save for key=${combinedKey} with data=${params.value}`);
 			localStorage.setItem(combinedKey, JSON.stringify(params.value));
 			cb(null, { status: "success" });
 		} catch (err) {
-			Logger.system.error(
-				"LocalStorageAdapter.save Error",
-				err,
-				`key=${combinedKey}`,
-				"value=",
-				params.value
-			);
+			Logger.system.error("LocalStorageAdapter.save Error", err, `key=${combinedKey}`, "value=", params.value);
 			cb(err, { status: "failed" });
 		}
 	};
@@ -63,20 +55,11 @@ const LocalStorageAdapter = function (uuid) {
 		console.debug("LocalStorageAdapter.get, params: ", params);
 		try {
 			let data = JSON.parse(localStorage.getItem(combinedKey));
-			Logger.system.debug(
-				`LocalStorageAdapter.get for key=${combinedKey} data=`,
-				data
-			);
-			console.debug(
-				`LocalStorageAdapter.get for key=${combinedKey} data=`,
-				data
-			);
+			Logger.system.debug(`LocalStorageAdapter.get for key=${combinedKey} data=`, data);
+			console.debug(`LocalStorageAdapter.get for key=${combinedKey} data=`, data);
 			cb(null, data);
 		} catch (err) {
-			Logger.system.error(
-				`LocalStorageAdapter.get key=${combinedKey}, Error`,
-				err
-			);
+			Logger.system.error(`LocalStorageAdapter.get key=${combinedKey}, Error`, err);
 			console.error(`LocalStorageAdapter.get key=${combinedKey}, Error`, err);
 			cb(err, { status: "failed" });
 		}
@@ -108,12 +91,9 @@ const LocalStorageAdapter = function (uuid) {
 		if (!params) {
 			errMessage = "You must pass params to localStorageAdapter.keys";
 		} else {
-			const missingArgs =
-				params && ["topic", "keyPrefix"].filter((k) => !params[k]);
+			const missingArgs = params && ["topic", "keyPrefix"].filter((k) => !params[k]);
 			if (missingArgs.length) {
-				errMessage = `Missing parameters to localStorageAdapter.keys: ${missingArgs.join(
-					", "
-				)}`;
+				errMessage = `Missing parameters to localStorageAdapter.keys: ${missingArgs.join(", ")}`;
 			}
 		}
 
@@ -139,24 +119,12 @@ const LocalStorageAdapter = function (uuid) {
 				}
 			}
 
-			Logger.system.debug(
-				`LocalStorageAdapter.keys for keyPreface=${keyPreface} keys=`,
-				keys
-			);
-			console.debug(
-				`LocalStorageAdapter.get keys keyPreface=${keyPreface} keys=`,
-				keys
-			);
+			Logger.system.debug(`LocalStorageAdapter.keys for keyPreface=${keyPreface} keys=`, keys);
+			console.debug(`LocalStorageAdapter.get keys keyPreface=${keyPreface} keys=`, keys);
 			cb(null, keys);
 		} catch (err) {
-			Logger.system.error(
-				`Failed to retrieve LocalStorageAdapter.keys keyPreface=${keyPreface}, Error`,
-				err
-			);
-			console.error(
-				`Failed to retrieve LocalStorageAdapter.keys keyPreface=${keyPreface}, Error`,
-				err
-			);
+			Logger.system.error(`Failed to retrieve LocalStorageAdapter.keys keyPreface=${keyPreface}, Error`, err);
+			console.error(`Failed to retrieve LocalStorageAdapter.keys keyPreface=${keyPreface}, Error`, err);
 			cb(err, { status: "failed" });
 		}
 	};
@@ -176,16 +144,11 @@ const LocalStorageAdapter = function (uuid) {
 
 		try {
 			localStorage.removeItem(combinedKey);
-			Logger.system.debug(
-				`LocalStorageAdapter.delete key=${combinedKey}, Success`
-			);
+			Logger.system.debug(`LocalStorageAdapter.delete key=${combinedKey}, Success`);
 			console.debug(`LocalStorageAdapter.delete key=${combinedKey}, Success`);
 			cb(null, { status: "success" });
 		} catch (err) {
-			Logger.system.error(
-				`LocalStorageAdapter.delete key=${combinedKey}, Error`,
-				err
-			);
+			Logger.system.error(`LocalStorageAdapter.delete key=${combinedKey}, Error`, err);
 			console.error(`.delete key=${combinedKey}, Error`, err);
 			cb(err, { status: "failed" });
 		}
@@ -207,9 +170,7 @@ const LocalStorageAdapter = function (uuid) {
 			for (let i = 0; i < localStorage.length; i++) {
 				//console.log("localStorage.key(i):::", localStorage.key(i).substring(0, (this.baseName + ":" + this.userName).length));
 				if (
-					localStorage
-						.key(i)
-						.substring(0, `${this.baseName}:${this.userName}`.length) ===
+					localStorage.key(i).substring(0, `${this.baseName}:${this.userName}`.length) ===
 					`${this.baseName}:${this.userName}`
 				) {
 					arr.push(localStorage.key(i));

@@ -43,12 +43,7 @@ const recursiveFind = (base, searchFilename, files, result) => {
 	files.forEach((file) => {
 		const newBase = path.join(base, file);
 		if (fs.statSync(newBase).isDirectory()) {
-			result = recursiveFind(
-				newBase,
-				searchFilename,
-				fs.readdirSync(newBase),
-				result
-			);
+			result = recursiveFind(newBase, searchFilename, fs.readdirSync(newBase), result);
 		} else {
 			if (path.basename(file) === searchFilename) {
 				result.push(newBase);
@@ -60,9 +55,7 @@ const recursiveFind = (base, searchFilename, files, result) => {
 };
 
 // For each file in the directory (src/*)
-listOfWebpackEntryFiles.push(
-	...recursiveFind(srcPath, "finsemble.webpack.json")
-);
+listOfWebpackEntryFiles.push(...recursiveFind(srcPath, "finsemble.webpack.json"));
 
 // Compile all of those files into a single webpack entries object "componentsToBuild"
 // If a file doesn't exist, then no big deal ": {}"
@@ -74,15 +67,15 @@ listOfWebpackEntryFiles.forEach((filename) => {
 	if (Array.isArray(entries)) {
 		// Process arrays (finsemble.webpack.json files) by automatically building the output & entry fields that webpack needs
 		entries.forEach((assetName) => {
-			const outputPath = path.relative(srcPath, path.dirname(filename));
+			const dirName = path.dirname(filename);
+			const outputPath = path.relative(srcPath, dirName);
 			const assetNoSuffix = assetName.replace(/\.[^/.]+$/, ""); // Remove the .js or .jsx extension
-			const entryPath = path.relative(__homename, path.dirname(filename));
-			additionalComponents[assetNoSuffix] = {
-				output: path.join(outputPath, assetNoSuffix).replace(/\\/g, "/"),
-				entry: `.${path.sep}${path.join(entryPath, assetName)}`.replace(
-					/\\/g,
-					"/"
-				),
+			const entryPath = path.relative(__homename, dirName);
+			const output = path.join(outputPath, assetNoSuffix).replace(/\\/g, "/");
+			//ensure key is unique
+			additionalComponents[output] = {
+				output: output,
+				entry: `.${path.sep}${path.join(entryPath, assetName)}`.replace(/\\/g, "/"),
 			};
 		});
 	} else {

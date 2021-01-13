@@ -12,7 +12,7 @@ if (window.FSBL && FSBL.addEventListener) {
 function init() {
 	window.launchTutorial = function launchTutorial() {
 		FSBL.System.openUrlWithBrowser(
-			"https://www.chartiq.com/tutorials/?slug=finsemble",
+			"https://documentation.finsemble.com/tutorial-gettingStarted.html",
 			() => {
 				//console.log("successfully launched docs");
 			},

@@ -27,8 +27,8 @@
 	"splashScreenImage": "http://localhost:3375/assets/img/FinsembleSplash.svg",
 	"appAssets": [
 		{
-			"src": "https://assets.finsemble.com/assimilation/dev/pr/assimilation.zip",
-			"version": "5.0.0.2",
+			"src": "https://assets.finsemble.com/assimilation/assimilation_5.1.0.0.zip",
+			"version": "5.1.0.0",
 			"alias": "assimilation",
 			"target": "AssimilationMain.exe"
 		}
@@ -54,7 +54,8 @@
 				"FinsembleTransport": {
 					"serverAddress": "ws://127.0.0.1:3376"
 				}
-			}
+			},
+			"promptBeforeAllowingExternalApps": false
 		},
 		"logger": {
 			"defaultClientLogLevels": {
@@ -67,6 +68,12 @@
 				"LocalOnly": false
 			}
 		},
+		"custom": {
+			"//": "Customer macros definitions must go here (e.g. 'myApplicationRoot' so it can be referenced elsewhere as '$myApplicationRoot'), along with other custom config at this level."
+		},
 		"importConfig": ["$applicationRoot/configs/application/config.json"]
+	},
+	"finsemble-electron-adapter": {
+		"useDOMBasedMovement": true
 	}
 }

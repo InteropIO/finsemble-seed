@@ -6,7 +6,7 @@
  * for you to build your own Authentication Component. Use the `useAuth()` react hook, or the Finsemble client API
  * to interact with Finsemble's authentication capabilities.
  *
- * See https://documentation.chartiq.com/finsemble/tutorial-Authentication.html for a tutorial on how to use authentication.
+ * See https://documentation.finsemble.com/tutorial-Authentication.html for a tutorial on how to use authentication.
  */
 
 import React, { useState, useEffect } from "react";
@@ -18,7 +18,10 @@ import "@finsemble/finsemble-ui/react/assets/css/dialogs.css";
 import "@finsemble/finsemble-ui/react/assets/css/authentication.css";
 import "../../../assets/css/theme.css";
 
+const bringToFront = () => FSBL.Clients.WindowClient.bringWindowToFront();
 export const Authentication = () => {
+	// Make sure this dialog shows on top of the splash screen
+	useEffect(bringToFront, []);
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [payload, setPayload] = useState<{
