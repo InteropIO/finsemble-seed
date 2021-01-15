@@ -7,11 +7,13 @@ import makeAnimated from 'react-select/animated';
 import { getExcelFileListThunk } from "./../redux/actions/actions";
 import { GET_EXCEL_FILE_LIST } from './../redux/actions/actionTypes';
 import { action } from './../types/types';
+import { useState } from "react";
 
 const animatedComponents = makeAnimated();
 
 const ExcelFileList = (props: any) => {
-    const { excelFileList, offAddInServiceActions, getExcelFileList } = props;
+    const { excelFileList, offAddInServiceActions, getExcelFileList, setSelectedFiles } = props;
+    let [selectedFiles] = useState()
 
     return (
         <div className="">
@@ -30,6 +32,8 @@ const ExcelFileList = (props: any) => {
                     else
                         getExcelFileList('')
                 }}
+                onChange={setSelectedFiles}
+                value={selectedFiles}
             />
         </div>
     );

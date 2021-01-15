@@ -9,9 +9,14 @@ const initialState = {
 export default (state = initialState, action: OfficeAddinActionType) => {
     switch (action.type) {
         case OFFICE_ADDIN_REGISTER: {
+
+            let result = [...state.offAddInServiceActions, ...action.payload.regsiteredActions].reduce((res:Array<action>, data, index, arr) => {
+                res.push(data);
+                return res;
+              }, [])
             return {
                 ...state,
-                offAddInServiceActions: action.payload.regsiteredActions
+                offAddInServiceActions: result
             }   
         }
         default:

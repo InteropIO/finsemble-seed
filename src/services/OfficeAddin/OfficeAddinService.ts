@@ -240,15 +240,20 @@ export default class OfficeAddinService extends Finsemble.baseService {
 
 	register = (data: any): any => {
 		let actions = data.actions
-		let returnArray: { id: string; action: string; file:ExcelFile|null; }[] = []
+		let returnArray: { id: string; action: string; file: ExcelFile|null; }[] = []
 		actions.forEach((action: any) => {
 			switch (action) {
 				case 'GET_EXCEL_FILE_LIST':
-					let uuid = this.getUuid()
-					returnArray.push({ id: uuid, action: action, file:null })
-					this.addResponder(uuid, this.getExcelFileList)
-
-
+					let get_excel_file_list_uuid = this.getUuid()
+					returnArray.push({ id: get_excel_file_list_uuid, action: action, file: null })
+					this.addResponder(get_excel_file_list_uuid, this.getExcelFileList)
+					break;
+				case 'GET_EXCEL_CELL_DATA':
+					data.excelFiles.forEach((excelFile:ExcelFile)=>{
+						let get_excel_cell_data_uuid = this.getUuid()
+						returnArray.push({ id: get_excel_cell_data_uuid, action: action, file: excelFile })
+						this.addResponder(get_excel_cell_data_uuid, this.getExecelCellData)
+					})
 					break;
 				default:
 					break;
@@ -259,6 +264,10 @@ export default class OfficeAddinService extends Finsemble.baseService {
 
 	getExcelFileList = (data: any): Array<ExcelFile> => {
 		return this.fileList;
+	}
+
+	getExecelCellData = (data:any) => {
+		console.log('GET_EXCEL_CELL_DATA', data)
 	}
 }
 

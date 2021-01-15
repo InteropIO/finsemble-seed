@@ -4,22 +4,54 @@ import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk"
 
 import ExcelFileList from "./ExcelFileList";
-import { getExcelFileListThunk } from "./../redux/actions/actions";
-import { GET_EXCEL_FILE_LIST } from './../redux/actions/actionTypes';
+import ExcelFile from "../types/ExcelFile";
+import { useState } from "react";
+import GetExcelCellsModal from "./GetExcelCellsModal";
 
 
 
 const ExcelTester = (props: any) => {
-    const { getExcelFileList,offAddInServiceActions } = props;
+    const { getExcelFileList, offAddInServiceActions } = props;
+    let [selectedFiles, setSelectedFiless] = useState<Array<ExcelFile>>()
+    let setSelectedFiles = (selectedFilesParam: Array<ExcelFile>) => {
+        setSelectedFiless(selectedFilesParam);
+    }
+    let [getExecelCellsModalVisible, setGetExecelCellsModalVisible] = useState("none")
+
+    window.onclick = (event: any) => {
+        if (event.target.className == 'modal') {
+            setGetExecelCellsModalVisible("none");
+
+        }
+    }
+
+    const getCellDataOnClick = () => {
+        if (selectedFiles)
+            if (selectedFiles.length > 0) {
+                setGetExecelCellsModalVisible(getExecelCellsModalVisible == 'none' ? 'block' : 'none')
+            } else {
+                alert('Please select at least 1 file!')
+            }
+        else {
+            alert('Please select at least 1 file!')
+        }
+    }
 
     return (
         <div>
-            <ExcelFileList />
+            <ExcelFileList setSelectedFiles={setSelectedFiles} />
+            <button onClick={getCellDataOnClick}>Get Excel Cells Data</button>
+
+
+
+
+
+            <GetExcelCellsModal selectedFiles={selectedFiles} modalVisible={getExecelCellsModalVisible} />
         </div>
     );
 };
 
-const mapStateToProps = (state:any, ownProps:any) => {
+const mapStateToProps = (state: any, ownProps: any) => {
     const { officeAddinServiceActionsReducer } = state
     return { offAddInServiceActions: officeAddinServiceActionsReducer.offAddInServiceActions }
 }

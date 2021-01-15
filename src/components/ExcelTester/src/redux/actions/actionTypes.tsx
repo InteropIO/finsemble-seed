@@ -1,6 +1,7 @@
 import ExcelFile from "../../types/ExcelFile"
 
 export const GET_EXCEL_FILE_LIST = 'GET_EXCEL_FILE_LIST'
+export const GET_EXCEL_CELL_DATA = 'GET_EXCEL_CELL_DATA'
 
 export const OFFICE_ADDIN_REGISTER = 'OFFICE_ADDIN_REGISTER'
 
