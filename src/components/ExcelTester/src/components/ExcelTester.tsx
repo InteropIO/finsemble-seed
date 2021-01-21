@@ -3,63 +3,80 @@ import { connect } from "react-redux";
 import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk"
 
-import ExcelFileList from "./ExcelFileList";
+import ActiveExcelFileList from "./ActiveExcelFileList";
 import ExcelFile from "../types/ExcelFile";
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import GetExcelCellsModal from "./GetExcelCellsModal";
-
+import PreviousExcelFileList from "./PreviousExcelFileList";
+import { setGetExcelCellDataActionModalDisplay, setSelectedActiveExcelFiles, setSelectedPreviousExcelFiles } from "../redux/actions/actions";
 
 
 const ExcelTester = (props: any) => {
-    const { getExcelFileList, offAddInServiceActions } = props;
-    let [selectedFiles, setSelectedFiless] = useState<Array<ExcelFile>>()
-    let setSelectedFiles = (selectedFilesParam: Array<ExcelFile>) => {
-        setSelectedFiless(selectedFilesParam);
-    }
-    let [getExecelCellsModalVisible, setGetExecelCellsModalVisible] = useState("none")
+    const { offAddInServiceActions } = props;
+    const { selectedActiveExcelFiles, clearSelectedActiveExcelFiles } = props;
+    const { selectedPreviousExcelFiles, clearSelectedPreviousExcelFiles } = props;
+    const { setGetExecelCellsModalDisplay } = props
 
-    window.onclick = (event: any) => {
-        if (event.target.className == 'modal') {
-            setGetExecelCellsModalVisible("none");
+    useEffect(() => {
+        window.onclick = (event: any) => {
+            if (event.target.className == 'modal') {
+                setGetExecelCellsModalDisplay('none')
 
+                clearSelectedActiveExcelFiles()
+            }
+        }
+    }, [])
+
+    const getCellDataOnClick = () => {
+        if (selectedActiveExcelFiles.length > 0) {
+            setGetExecelCellsModalDisplay('block')
+        } else {
+            alert('Please select at least 1 file!')
         }
     }
 
-    const getCellDataOnClick = () => {
-        if (selectedFiles)
-            if (selectedFiles.length > 0) {
-                setGetExecelCellsModalVisible(getExecelCellsModalVisible == 'none' ? 'block' : 'none')
-            } else {
-                alert('Please select at least 1 file!')
-            }
-        else {
+    const spawnExcelFile = () => {
+        if (selectedPreviousExcelFiles.length > 0) {
+            selectedPreviousExcelFiles.forEach((selectedPreviousFile: ExcelFile) => {
+                FSBL.Clients.LauncherClient.spawn('Excel', { arguments: `${selectedPreviousFile.filePath} /lfinsemble-excel-test` });
+            })
+            clearSelectedPreviousExcelFiles()
+        } else {
             alert('Please select at least 1 file!')
         }
     }
 
     return (
         <div>
-            <ExcelFileList setSelectedFiles={setSelectedFiles} />
+            <ActiveExcelFileList />
             <button onClick={getCellDataOnClick}>Get Excel Cells Data</button>
 
+            <br /><br />
 
+            <PreviousExcelFileList />
+            <button onClick={spawnExcelFile}>Spawn Excel File</button> <br />
 
+            <br /><br />
 
-
-            <GetExcelCellsModal selectedFiles={selectedFiles} modalVisible={getExecelCellsModalVisible} />
+            <GetExcelCellsModal />
         </div>
     );
 };
 
 const mapStateToProps = (state: any, ownProps: any) => {
-    const { officeAddinServiceActionsReducer } = state
-    return { offAddInServiceActions: officeAddinServiceActionsReducer.offAddInServiceActions }
+    const { officeAddinServiceActionsReducer, excelFilesReducer } = state
+    return {
+        offAddInServiceActions: officeAddinServiceActionsReducer.offAddInServiceActions,
+        selectedActiveExcelFiles: excelFilesReducer.selectedActiveExcelFiles,
+        selectedPreviousExcelFiles: excelFilesReducer.selectedPreviousExcelFiles
+    }
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-    //dispatch(getExcelFileListThunk(''))
     return {
-
+        clearSelectedPreviousExcelFiles: () => dispatch(setSelectedPreviousExcelFiles([])),
+        clearSelectedActiveExcelFiles: () => dispatch(setSelectedActiveExcelFiles([])),
+        setGetExecelCellsModalDisplay: (display: String) => dispatch(setGetExcelCellDataActionModalDisplay(display)),
     };
 };
 

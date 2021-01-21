@@ -8,8 +8,8 @@
   width: 100%; /* Full width */
   height: 100%; /* Full height */
   overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.9); /* Black w/ opacity */
 }
 
 /* Modal Content */
@@ -35,4 +35,22 @@
   color: #000;
   text-decoration: none;
   cursor: pointer;
+}
+
+.modalLabel {
+  display: inline-block;
+  width: 100px;
+  text-align: left;
+}
+
+label {
+  display: inline-block;
+  width: 200px;
+  text-align: left;
+}
+
+#resultCellDataTextArea {
+  width: 95%;
+  height: 65%;
+  resize: none;
 }
