@@ -133,6 +133,6 @@
 		"$applicationRoot/configs/application/workspaces.json",
 		"$applicationRoot/configs/application/services.json",
 		"$applicationRoot/configs/application/securityPolicies.json",
-		"$applicationRoot/services/loggingExport/config.json"
+		"$applicationRoot/services/loggingexport/config.json"
 	]
 }
