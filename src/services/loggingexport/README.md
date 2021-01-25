@@ -24,4 +24,4 @@ so that you have files:
 }
 ```
 
-3. Run `npm run dev` to build and run Finsemble.
+3. Run `yarn dev` or `npm run dev` to build and run Finsemble.
