@@ -71,7 +71,10 @@
 		"custom": {
 			"//": "Customer macros definitions must go here (e.g. 'myApplicationRoot' so it can be referenced elsewhere as '$myApplicationRoot'), along with other custom config at this level."
 		},
-		"importConfig": ["$applicationRoot/configs/application/config.json"]
+		"importConfig": [
+			"$applicationRoot/configs/application/config.json",
+			"$applicationRoot/services/loggingexport/config.json"
+		]
 	},
 	"finsemble-electron-adapter": {
 		"useDOMBasedMovement": true

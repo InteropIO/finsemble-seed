@@ -10,7 +10,6 @@
  * N.B. Be wary of adding too many Logger messages within this service as it will of course receive
  * back to transmit onwards.
  */
-
 const Finsemble = require("@finsemble/finsemble-core");
 
 Finsemble.Clients.Logger.start();
@@ -137,7 +136,7 @@ class LoggingExportService extends Finsemble.baseService {
 		}
 	}
 
-	/**
+/**
  * Transmit the batch to the remote log collection endpoint.
  * @private
  */
