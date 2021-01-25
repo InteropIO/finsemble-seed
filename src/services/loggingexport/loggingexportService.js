@@ -1,6 +1,6 @@
 /**
  * Simple log export service example which captures messages of specified categories and levels
- * and transmits them to a remote API in batch, once a certain batch size or timeout is reached.
+ * and transmits them to a remote API in batch, once a certain batch size or this.timeout is reached.
  *
  * The service will come up as soon as possible during finsemble startup - but will inevitably
  * not be able to capture some of the earliest log messages.
@@ -11,31 +11,33 @@
  * back to transmit onwards.
  */
 const Finsemble = require("@finsemble/finsemble-core");
-const Request = require("superagent");
 
-const RouterClient = Finsemble.Clients.RouterClient;
-const Logger = Finsemble.Clients.Logger;
-Logger.start();
+Finsemble.Clients.Logger.start();
+Finsemble.Clients.Logger.log("customService Service starting up");
 
-// #region Settings
+
+
+class LoggingExportService extends Finsemble.baseService {
+
+	// #region Settings
 /** Transmit queued messages when their number reaches or exceeds this amount. */
-const BATCH_SIZE = 100;
+	BATCH_SIZE = 100;
 
 /** Wait at most this number of milliseconds after first message in batch is received before transmitting.*/
-const TIMEOUT_MILLISECS = 30 * 1000;
+	TIMEOUT_MILLISECS = 30 * 1000;
 
 /** Wait at most this number of milliseconds for batch transmission to complete */
-const TRANSMIT_TIMEOUT_MILLISECS = 10 * 1000;
+	TRANSMIT_TIMEOUT_MILLISECS = 10 * 1000;
 
 /** Log levels of messsages to capture. Valid values: Error, Warning, Log, Info, Debug, Verbose */
-const CAPTURE_LOG_LEVELS = {
+	CAPTURE_LOG_LEVELS = {
 	"Log": true,
 	"Warn": true,
 	"Error": true
 };
 
 /** Log categories of messages to capture. Valid values: system, dev or perf */
-const CAPTURE_LOG_CATEGORIES = {
+	CAPTURE_LOG_CATEGORIES = {
 	"system": true,
 	"dev": true
 };
@@ -46,93 +48,113 @@ const CAPTURE_LOG_CATEGORIES = {
  * Note that, due to the async nature of logging, you might still send a later batch containing messages with a lower
  * logTimestamp. Hence, it is best to avoid sorting messages in this service if messages will be sorted elsewhere.
  */
-const SORT_MESSAGES = false;
-
-/**
- * Message formatting function which converts each log message from Finsemble's format to the format you wish to transmit.
- * Incoming log message format:
- *		[
- *			{
- *				"category": "system",				//Log message type: system, dev or perf
- *				"logClientName": "Finsemble",		//The registered name of the logger instance
- *				"logType": "Log",					//Log level: Error, Warning, Log, Info, Debug, Verbose
- *				"logData": "[\"SERVICE LIFECYCLE: STATE CHANGE: Service initializing\",\"windowService\"]",
- *													//JSON encoded array of message and data components of the log message
- *													//N.B. maybe be prefixed by string "*** Logging Error: ""
- *				"logTimestamp": 1544090028391.6226	//Log message timestamp for ordering use
- *			},
- *			{...},
- *			...
- *		]
- */
-const FORMAT_MESSAGE = function (log_message) {
-	//TODO: add any necessary message format changes here
-
-	return log_message;
-};
+	SORT_MESSAGES = false;
 
 /** Where to transmit the logs to. */
 //TODO: Update to your logging endpoint
-const LOGGING_ENDPOINT = "http://somedomain.com/loggingendpoint";
+	LOGGING_ENDPOINT = "http://somedomain.com/loggingendpoint";
 
-// #endregion
+	constructor() {
+		super({
+			// Declare any client dependencies that must be available before your service starts up.
+			startupDependencies: {
+				clients: [],
+			}
+		});
 
-/**
- * Log messages arrive in small batches from each logger and must be added to an export batch and
- * transmitted.
- *
- * @constructor
- */
-function LoggingExportService() {
-	const self = this;
-	const batchAllocSize = BATCH_SIZE + 10;   //add a small amount of leeway on batch size
+		this.batchAllocSize = this.BATCH_SIZE + 10;   //add a small amount of leeway on batch size
 
-	let timeout = null;
-	let logBatch = new Array(batchAllocSize); //pre-init the batch array to reduce array allocations
-	let currBatchSize = 0;
+		this.timeout = null;
+		this.logBatch = new Array(this.batchAllocSize); //pre-init the batch array to reduce array allocations
+		this.currBatchSize = 0;
+
+		this.readyHandler = this.readyHandler.bind(this);
+
+		this.onBaseServiceReady(this.readyHandler);
+	}
 
 	/**
-	 * Add an incoming array of log messages to the batch and transmit if thresholds met.
-	 * @private
+	 * Fired when the service is ready for initialization
+	 * @param {function} callback
 	 */
-	this.addToBatch = function (dataArr) {
+	readyHandler(callback) {
+		// start listening for logs
+		this.centralLoggerLogConsumer();
+		Finsemble.Clients.Logger.log("customService Service ready");
+		callback();
+	}
+	/**
+	 * Message formatting function which converts each log message from Finsemble's format to the format you wish to transmit.
+	 */
+	formatMessage(logMessage) {
+		/* Example Incoming log message format:
+*		[
+*			{
+*				"category": "system",				//Log message type: system, dev or perf
+*				"logClientName": "Finsemble",		//The registered name of the logger instance
+*				"logType": "Log",					//Log level: Error, Warning, Log, Info, Debug, Verbose
+*				"logData": "[\"SERVICE LIFECYCLE: STATE CHANGE: Service initializing\",\"windowService\"]",
+*													//JSON encoded array of message and data components of the log message
+*													//N.B. maybe be prefixed by string "*** Logging Error: ""
+*				"logTimestamp": 1544090028391.6226	//Log message timestamp for ordering use
+*			},
+*			{...},
+*			...
+*		]
+*/
+
+		//TODO: add any necessary message format changes here
+		return logMessage;
+	}
+
+	/**
+ * Add an incoming array of log messages to the batch and transmit if thresholds met.
+ * @private
+ */
+	addToBatch(dataArr) {
 		if (dataArr) {
-			for (let m = 0; m < dataArr.length; m++) {
-				if (CAPTURE_LOG_CATEGORIES[dataArr[m].category] && CAPTURE_LOG_LEVELS[dataArr[m].logType]) {
-					logBatch[currBatchSize++] = FORMAT_MESSAGE(dataArr[m]);
+			for (let i = 0; i < dataArr.length; i++) {
+				const message = dataArr[i];
+
+				// only capture the log messages that meet the category and type we set
+				if (this.CAPTURE_LOG_CATEGORIES[message.category] && this.CAPTURE_LOG_LEVELS[message.logType]) {
+					this.logBatch[this.currBatchSize++] = this.formatMessage(message);
 				}
 				else {
-					console.debug("discarding message", dataArr[m]);
+					// skip the logs that don't meet the requirements
+					console.debug("discarding message", message);
 				}
 			}
 
-			if (currBatchSize >= BATCH_SIZE) {
-				self.transmitBatch();
-			} else if (!timeout) { //always transmit batch within minimum timeout
-				timeout = setTimeout(self.transmitBatch, TIMEOUT_MILLISECS);
+			if (this.currBatchSize >= this.BATCH_SIZE) {
+				this.transmitBatch();
+			} else if (!this.timeout) { //always transmit batch within minimum this.timeout
+				this.timeout = setTimeout(this.transmitBatch, this.TIMEOUT_MILLISECS);
 			}
 		} else {
 			Logger.warn("Tried to add an invalid data array to log batch", dataArr);
 		}
 	}
 
-	/**
-	 * Transmit the batch to the remote log collection endpoint.
-	 * @private
-	 */
-	this.transmitBatch = function () {
-		clearTimeout(timeout);
+/**
+ * Transmit the batch to the remote log collection endpoint.
+ * @private
+ */
+	transmitBatch() {
+		clearTimeout(this.timeout);
 		//trim batch array to length
-		let toTransmit = logBatch;
-		toTransmit.splice(currBatchSize, logBatch.length - currBatchSize);
+		let toTransmit = this.logBatch;
+		if (toTransmit) {
+			toTransmit.splice(this.currBatchSize, this.logBatch.length - this.currBatchSize);
+		}
 
 		//reset
-		timeout = null;
-		logBatch = new Array(batchAllocSize);
-		currBatchSize = 0;
+		this.timeout = null;
+		this.logBatch = new Array(this.batchAllocSize);
+		this.currBatchSize = 0;
 
 		// Sort the batch by timestamp if necessary.
-		if (SORT_MESSAGES) {
+		if (this.SORT_MESSAGES) {
 			toTransmit.sort((a, b) => a.logTimestamp - b.logTimestamp);
 		}
 
@@ -140,19 +162,23 @@ function LoggingExportService() {
 		//TODO: Customize batch transmission here
 		console.debug("Batch to transmit: " + JSON.stringify(toTransmit, null, 2));
 
-		// See SuperAgent docs for request options: https://visionmedia.github.io/superagent/
-		Request
-			.post(LOGGING_ENDPOINT)
-			.withCredentials()		// set this for CORS requests
-			.type("json")
-			.send({
+		// the call to your endpoint here
+		fetch(this.LOGGING_ENDPOINT, {
+			method: 'POST', // or 'PUT'
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
 				logMessages: toTransmit
+			}),
+			credentials: 'include'
+		})
+			.then(response => response.json())
+			.then(data => {
+				console.log('Success:', data);
 			})
-			.then(res => {
-				console.log("Log batch transmitted: ", res);
-			})
-			.catch(err => {
-				console.error("Log batch transmission failure: ", err);
+			.catch((error) => {
+				console.error('Error:', error);
 			});
 	}
 
@@ -160,32 +186,18 @@ function LoggingExportService() {
 	 * Create a router listener for log messages.
 	 * @private
 	 */
-	this.createRouterEndpoints = function () {
-		RouterClient.addListener("logger.service.logMessages", function (error, logMessage) {
+	centralLoggerLogConsumer() {
+		// collect the logs from the central logger and send them to be processed
+		Finsemble.Clients.RouterClient.addListener("logger.service.logMessages", (error, logMessage) => {
 			if (!error) {
-				self.addToBatch(logMessage.data);
+				this.addToBatch(logMessage.data);
 			} else {
 				Logger.error("Failed to setup LoggingExportService listener", error);
 			}
 		});
-	};
-
-	return this;
-};
-
-LoggingExportService.prototype = new Finsemble.baseService({
-	startupDependencies: {
-		// Don't depend on any clients or services so that we start-up ASAP
-		services: [],
-		clients: []
 	}
-});
-const serviceInstance = new LoggingExportService("loggingExportService");
+}
 
-serviceInstance.onBaseServiceReady(function (callback) {
-	serviceInstance.createRouterEndpoints();
-	callback();
-});
+const serviceInstance = new LoggingExportService();
 
 serviceInstance.start();
-module.exports = serviceInstance;
