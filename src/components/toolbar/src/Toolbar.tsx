@@ -123,12 +123,8 @@ const AppLaunchers: FunctionComponent<AppLaunchersProps> = (props) => {
  */
 const Toolbar = () => {
 	useHotkey(["ctrl", "alt", "shift", "r"], () => FSBL.restartApplication());
-	useHotkey(["ctrl", "alt", "up"], () =>
-		FSBL.Clients.LauncherClient.bringWindowsToFront()
-	);
-	useHotkey(["ctrl", "alt", "down"], () =>
-		window.FSBL.Clients.WorkspaceClient.minimizeAll()
-	);
+	useHotkey(["ctrl", "alt", "up"], () => FSBL.Clients.LauncherClient.bringWindowsToFront());
+	useHotkey(["ctrl", "alt", "down"], () => window.FSBL.Clients.WorkspaceClient.minimizeAll());
 
 	/* #region retrieve Finsemble config for dynamically configured menus */
 	const [dynamicMenus, setDynamicMenus] = useState([] as any[]);
@@ -150,10 +146,7 @@ const Toolbar = () => {
 	/* endregion */
 
 	return (
-		<ToolbarShell
-			hotkeyShow={["ctrl", "alt", "t"]}
-			hotkeyHide={["ctrl", "alt", "h"]}
-		>
+		<ToolbarShell hotkeyShow={["ctrl", "alt", "t"]} hotkeyHide={["ctrl", "alt", "h"]}>
 			<ToolbarSection className="left">
 				<DragHandle />
 				<FileMenu />

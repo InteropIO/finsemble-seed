@@ -9,24 +9,16 @@
 	const gulp = require("gulp");
 	const shell = require("shelljs");
 	const path = require("path");
+	const treeKill = require("tree-kill");
 	const FEA = require("@finsemble/finsemble-electron-adapter/exports");
-	const FEA_PATH = path.resolve(
-		"./node_modules/@finsemble/finsemble-electron-adapter"
-	);
+	const FEA_PATH = path.resolve("./node_modules/@finsemble/finsemble-electron-adapter");
 	const FEAPackager = FEA ? FEA.packager : undefined;
 	const startupConfig = require("./configs/other/server-environment-startup");
-	const {
-		envOrArg,
-		runWebpackAndCallback,
-		logToTerminal,
-		runWebpackInParallel,
-	} = require("./build/buildHelpers");
+	const { envOrArg, runWebpackAndCallback, logToTerminal, runWebpackInParallel } = require("./build/buildHelpers");
 	const INSTALLER_CERT_PASS = "INSTALLER_CERTIFICATE_PASSPHRASE";
 
 	// local
-	const extensions = fs.existsSync("./gulpfile-extensions.js")
-		? require("./gulpfile-extensions.js")
-		: undefined;
+	const extensions = fs.existsSync("./gulpfile-extensions.js") ? require("./gulpfile-extensions.js") : undefined;
 	const isMacOrNix = process.platform !== "win32";
 
 	let angularComponents;
@@ -96,11 +88,7 @@
 			let processRow = (row) => {
 				const compName = row.source.split("/").pop();
 				const cwd = path.join(__dirname, row.source);
-				const outputPath = path.join(
-					__dirname,
-					row.source,
-					row["output-directory"]
-				);
+				const outputPath = path.join(__dirname, row.source, row["output-directory"]);
 				const command = `ng build --base-href "/angular-components/${compName}/" --outputPath "${outputPath}"`;
 
 				// switch to components folder
@@ -109,10 +97,7 @@
 				logToTerminal(`Executing: ${command}\nin directory: ${cwd}`);
 
 				const output = shell.exec(command);
-				logToTerminal(
-					`Built Angular Component, exit code = ${output.code}`,
-					"green"
-				);
+				logToTerminal(`Built Angular Component, exit code = ${output.code}`, "green");
 				shell.cd(dir);
 			};
 
@@ -148,9 +133,7 @@
 					// Build the vendor bundle first, as other webpack instances will use it to speed
 					// up their compilation time.
 					(done) => {
-						const configPath = require.resolve(
-							"./build/webpack/webpack.vendor.js"
-						);
+						const configPath = require.resolve("./build/webpack/webpack.vendor.js");
 						const bundleName = "Vendor";
 						runWebpackAndCallback(configPath, watchFiles, bundleName, done);
 					},
@@ -167,30 +150,22 @@
 								watch: watchFiles,
 							},
 							{
-								configPath: require.resolve(
-									"./build/webpack/webpack.preloads.js"
-								),
+								configPath: require.resolve("./build/webpack/webpack.preloads.js"),
 								prettyName: "Preloads",
 								watch: watchFiles,
 							},
 							{
-								configPath: require.resolve(
-									"./build/webpack/webpack.titleBar.js"
-								),
+								configPath: require.resolve("./build/webpack/webpack.titleBar.js"),
 								prettyName: "Titlebar",
 								watch: watchFiles,
 							},
 							{
-								configPath: require.resolve(
-									"./build/webpack/webpack.services.js"
-								),
+								configPath: require.resolve("./build/webpack/webpack.services.js"),
 								prettyName: "Custom Services",
 								watch: watchFiles,
 							},
 							{
-								configPath: require.resolve(
-									"./build/webpack/webpack.components.js"
-								),
+								configPath: require.resolve("./build/webpack/webpack.components.js"),
 								prettyName: "Components",
 								watch: watchFiles,
 							},
@@ -209,42 +184,18 @@
 			shell.rm("-rf", taskMethods.distPath);
 			shell.rm("-rf", ".babel_cache");
 			shell.rm("-rf", "finsemble");
-			shell.rm(
-				"-rf",
-				path.join(__dirname, "build/webpack/vendor-manifest.json")
-			);
+			shell.rm("-rf", path.join(__dirname, "build/webpack/vendor-manifest.json"));
 			shell.rm("-rf", ".webpack-file-cache");
 			shell.rm("-rf", "installer-tmp");
 			shell.rm("-rf", "finsemble");
 			done();
 		},
 		checkSymbolicLinks: (done) => {
-			const FINSEMBLE_PATH = path.join(
-				__dirname,
-				"node_modules",
-				"@finsemble",
-				"finsemble-core"
-			);
-			const FINSEMBLE_UI_PATH = path.join(
-				__dirname,
-				"node_modules",
-				"@finsemble",
-				"finsemble-ui"
-			);
-			const FINSEMBLE_VERSION = require(path.join(
-				FINSEMBLE_PATH,
-				"package.json"
-			)).version;
-			const FINSEMBLE_UI_VERSION = require(path.join(
-				FINSEMBLE_UI_PATH,
-				"package.json"
-			)).version;
-			const CLI_PATH = path.join(
-				__dirname,
-				"node_modules",
-				"@finsemble",
-				"finsemble-cli"
-			);
+			const FINSEMBLE_PATH = path.join(__dirname, "node_modules", "@finsemble", "finsemble-core");
+			const FINSEMBLE_UI_PATH = path.join(__dirname, "node_modules", "@finsemble", "finsemble-ui");
+			const FINSEMBLE_VERSION = require(path.join(FINSEMBLE_PATH, "package.json")).version;
+			const FINSEMBLE_UI_VERSION = require(path.join(FINSEMBLE_UI_PATH, "package.json")).version;
+			const CLI_PATH = path.join(__dirname, "node_modules", "@finsemble", "finsemble-cli");
 			const CLI_VERSION = require(path.join(CLI_PATH, "package.json")).version;
 
 			// Check version before require so optionalDependency can stay optional
@@ -255,23 +206,14 @@
 				if (fs.existsSync(path)) {
 					fs.readlink(path, (err, str) => {
 						if (str) {
-							logToTerminal(
-								`LINK DETECTED: ${name}. @Version ${version} Path: ${str}.`,
-								"yellow"
-							);
+							logToTerminal(`LINK DETECTED: ${name}. @Version ${version} Path: ${str}.`, "yellow");
 						} else {
-							logToTerminal(
-								`Using: @finsemble/${name} @Version ${version}`,
-								"magenta"
-							);
+							logToTerminal(`Using: @finsemble/${name} @Version ${version}`, "magenta");
 						}
 						cb();
 					});
 				} else {
-					logToTerminal(
-						`MISSING FINSEMBLE DEPENDENCY!: ${name}.\nPath: ${path}`,
-						"red"
-					);
+					logToTerminal(`MISSING FINSEMBLE DEPENDENCY!: ${name}.\nPath: ${path}`, "red");
 					process.exit(1);
 				}
 			}
@@ -331,26 +273,14 @@
 		 * Builds the application, starts the server, launches the Finsemble application and watches for file changes.
 		 */
 		dev: (done) => {
-			async.series(
-				[
-					taskMethods["build:dev"],
-					taskMethods.startServer,
-					taskMethods.launchApplication,
-				],
-				done
-			);
+			async.series([taskMethods["build:dev"], taskMethods.startServer, taskMethods.launchApplication], done);
 		},
 		/**
 		 * Wipes the babel cache and webpack cache, clears dist, rebuilds the application, and starts the server.
 		 */
 		"dev:fresh": (done) => {
 			async.series(
-				[
-					taskMethods.setDevEnvironment,
-					taskMethods.rebuild,
-					taskMethods.startServer,
-					taskMethods.launchApplication,
-				],
+				[taskMethods.setDevEnvironment, taskMethods.rebuild, taskMethods.startServer, taskMethods.launchApplication],
 				done
 			);
 		},
@@ -363,17 +293,33 @@
 		launchElectron: (done) => {
 			const cfg = taskMethods.startupConfig[env.NODE_ENV];
 
+			/**
+			 * handleElectronClose() gets called when Electron is closed, in other words when the user quits Finsemble from the file menu or some other way.
+			 * When Electron is closed, we will want to terminate this gulp process, and also make certain that any other child
+			 * processes that we've spun up are closed (such as server.js or watch processes).
+			 *
+			 * On Unix (Mac) child processes are not automatically killed when the current process exits, so we use "treeKill"
+			 * to ensure that all child processes are killed off. Otherwise, those processes would show up as stray "node" processes in ActivityMonitor/ps
+			 * and eventually eat up memory.
+			 *
+			 * treeKill makes use of shell commands (taskkill and pgrep) because Node doesn't currently support the concept of process groups.
+			 * The result is that this gulp process will terminate with an error that _isn't really_ an error, which yarn/npm will pick up and print out "Command failed with exit code 1".
+			 * Orchestrating a graceful exit to avoid that error would involve rearchitecting the entire gulp process or forking treeKill, so on Unix/Mac we allow the spurious error.
+			 */
+			const handleElectronClose = () => {
+				if (isMacOrNix) treeKill(process.pid);
+				else process.exit(0);
+			};
+
 			const socketCertificatePath = deriveSocketCertificatePaths();
 			let config = {
 				manifest: cfg.serverConfig,
-				onElectronClose: process.exit,
+				onElectronClose: handleElectronClose,
 				chromiumFlags: JSON.stringify(cfg.chromiumFlags),
 				path: FEA_PATH,
 				socketCertificatePath,
+				breakpointOnStart: cfg.breakpointOnStart,
 			};
-
-			// set breakpointOnStart variable so FEA knows whether to pause initial code execution
-			process.env.breakpointOnStart = cfg.breakpointOnStart;
 
 			if (!FEA) {
 				console.error("Could not launch ");
@@ -383,8 +329,7 @@
 			return FEA.e2oLauncher(config, done);
 		},
 		makeInstaller: async (done) => {
-			if (!env.NODE_ENV)
-				throw new Error("NODE_ENV must be set to generate an installer.");
+			if (!env.NODE_ENV) throw new Error("NODE_ENV must be set to generate an installer.");
 			function resolveRelativePaths(obj, properties, rootPath) {
 				properties.forEach((prop) => {
 					obj[prop] = path.resolve(rootPath, obj[prop]);
@@ -398,24 +343,16 @@
 			// Command line overrides
 
 			installerConfig.name = process.env.installername || installerConfig.name;
-			installerConfig.version =
-				process.env.installerversion ||
-				installerConfig.version ||
-				seedpackagejson.version;
-			installerConfig.authors =
-				process.env.installerauthors || installerConfig.authors;
-			installerConfig.description =
-				process.env.installerdescription || installerConfig.description;
+			installerConfig.version = process.env.installerversion || installerConfig.version || seedpackagejson.version;
+			installerConfig.authors = process.env.installerauthors || installerConfig.authors;
+			installerConfig.description = process.env.installerdescription || installerConfig.description;
 
 			//check if we have an installer config matching the environment name, if not assume we just have a single config for all environments
 			if (installerConfig[env.NODE_ENV]) {
 				installerConfig = installerConfig[env.NODE_ENV];
 			}
 
-			if (
-				installerConfig.certificateFile &&
-				!installerConfig.certificatePassword
-			) {
+			if (installerConfig.certificateFile && !installerConfig.certificatePassword) {
 				const certPassphraseFromEnv = process.env[INSTALLER_CERT_PASS];
 
 				//If a certificate file is provided and a plain text password is not, look for environment variable
@@ -430,11 +367,9 @@
 			}
 
 			// need absolute paths for certain installer configs
-			installerConfig = resolveRelativePaths(installerConfig, ["icon"], "./");
+			installerConfig = resolveRelativePaths(installerConfig, ["icon", "macIcon", "background"], "./");
 
-			const manifestUrl =
-				process.env.manifesturl ||
-				taskMethods.startupConfig[env.NODE_ENV].serverConfig;
+			const manifestUrl = process.env.manifesturl || taskMethods.startupConfig[env.NODE_ENV].serverConfig;
 			console.log("The manifest location is: ", manifestUrl);
 			let { updateUrl } = taskMethods.startupConfig[env.NODE_ENV];
 			const { chromiumFlags } = taskMethods.startupConfig[env.NODE_ENV];
@@ -465,9 +400,7 @@
 			}
 
 			if (!FEAPackager) {
-				console.error(
-					"Cannot create installer because Finsemble Electron Adapter is not installed"
-				);
+				console.error("Cannot create installer because Finsemble Electron Adapter is not installed");
 				process.exit(1);
 			}
 			const socketCertificatePath = deriveSocketCertificatePaths();
@@ -493,14 +426,7 @@
 		 * Starts the server, launches the Finsemble application. Use this for a quick launch, for instance when working on finsemble-electron-adapter.
 		 */
 		"nobuild:dev": (done) => {
-			async.series(
-				[
-					taskMethods.setDevEnvironment,
-					taskMethods.startServer,
-					taskMethods.launchApplication,
-				],
-				done
-			);
+			async.series([taskMethods.setDevEnvironment, taskMethods.startServer, taskMethods.launchApplication], done);
 		},
 
 		/**
@@ -528,14 +454,7 @@
 		 * Builds the application, starts the server and launches the application. Use this to test production mode on your local machine.
 		 */
 		prod: (done) => {
-			async.series(
-				[
-					taskMethods["build:prod"],
-					taskMethods.startServer,
-					taskMethods.launchApplication,
-				],
-				done
-			);
+			async.series([taskMethods["build:prod"], taskMethods.startServer, taskMethods.launchApplication], done);
 		},
 		/**
 		 * Builds the application in production mode and starts the server without launching the application.
@@ -550,19 +469,13 @@
 		 * Launches the server in dev environment. No build, no application launch.
 		 */
 		server: (done) => {
-			async.series(
-				[taskMethods.setDevEnvironment, taskMethods.startServer],
-				done
-			);
+			async.series([taskMethods.setDevEnvironment, taskMethods.startServer], done);
 		},
 		/**
 		 * Launches the server in prod environment. No build, no application launch.
 		 */
 		"server:prod": (done) => {
-			async.series(
-				[taskMethods.setProdEnvironment, taskMethods.startServer],
-				done
-			);
+			async.series([taskMethods.setProdEnvironment, taskMethods.startServer], done);
 		},
 		/**
 		 * Starts the server.
@@ -604,9 +517,7 @@
 				}
 			});
 
-			serverProcess.on("exit", (code) =>
-				logToTerminal(`Server closed: exit code ${code}`, "magenta")
-			);
+			serverProcess.on("exit", (code) => logToTerminal(`Server closed: exit code ${code}`, "magenta"));
 
 			// Prints server errors to your terminal.
 			serverProcess.stderr.on("data", (data) => {
@@ -641,8 +552,7 @@
 		// Convert every taskMethod into a gulp task that can be run
 		for (var taskName in taskMethods) {
 			var task = taskMethods[taskName];
-			if (typeof task === "function")
-				gulp.task(taskName, taskMethods[taskName]);
+			if (typeof task === "function") gulp.task(taskName, taskMethods[taskName]);
 		}
 
 		// By default run dev
