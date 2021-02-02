@@ -108,7 +108,8 @@
 			},
 			"dataStoreAdapters": {
 				"LocalStorageAdapter": "$applicationRoot/adapters/localStorageAdapter.js",
-				"IndexedDBAdapter": "$applicationRoot/adapters/indexedDBAdapter.js"
+				"IndexedDBAdapter": "$applicationRoot/adapters/indexedDBAdapter.js",
+				"awsAdapter": "$applicationRoot/adapters/awsAdapter.js"
 			}
 		}
 	},

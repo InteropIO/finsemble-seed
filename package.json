@@ -37,6 +37,7 @@
 		"@finsemble/finsemble-electron-adapter": "5.1.*",
 		"@finsemble/finsemble-ui": "5.1.*",
 		"async": "3.2.0",
+		"aws-sdk": "^2.803.0",
 		"compression": "1.7.3",
 		"express": "4.16.4",
 		"react": "16.13.1",

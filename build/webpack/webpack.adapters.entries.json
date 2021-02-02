@@ -6,5 +6,9 @@
 	"indexDBAdapter": {
 		"output": "adapters/indexedDBAdapter",
 		"entry": "./src/adapters/indexedDBAdapter.js"
+	},
+	"awsAdapter": {
+		"output": "adapters/awsAdapter",
+		"entry": "./src/adapters/awsAdapter.ts"
 	}
 }
