@@ -54,3 +54,12 @@ label {
   height: 65%;
   resize: none;
 }
+
+#resultTextarea {
+  width: 95%;
+  height: 30vh;
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 10px;
+  margin-right: 10px;
+}

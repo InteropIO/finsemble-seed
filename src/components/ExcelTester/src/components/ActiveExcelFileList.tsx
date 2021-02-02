@@ -5,7 +5,7 @@ import { ThunkDispatch } from "redux-thunk"
 import Select from "react-select";
 import makeAnimated from 'react-select/animated';
 import { registerActionThunk, setSelectedActiveExcelFiles } from "../redux/actions/actions";
-import { GET_ACTIVE_EXCEL_FILES, SUBSCRIBE_ACTIVE_EXCEL_FILES } from '../redux/actions/actionTypes';
+import * as CONSTANTS from '../redux/actions/actionTypes';
 import { useEffect } from "react";
 import ExcelFile from "../types/ExcelFile";
 
@@ -22,8 +22,8 @@ const ActiveExcelFileList = (props: any) => {
     const animatedComponents = makeAnimated();
 
     useEffect(() => {
-        registerAction(SUBSCRIBE_ACTIVE_EXCEL_FILES)
-        registerAction(GET_ACTIVE_EXCEL_FILES)
+        registerAction(CONSTANTS.SUBSCRIBE_ACTIVE_EXCEL_FILES)
+        registerAction(CONSTANTS.GET_ACTIVE_EXCEL_FILES)
     }, [])
 
     return (

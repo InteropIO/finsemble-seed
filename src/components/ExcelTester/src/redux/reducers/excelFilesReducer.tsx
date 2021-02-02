@@ -1,4 +1,5 @@
-import { GET_ACTIVE_EXCEL_FILES, GET_EXCEL_CELL_DATA, ExcelFileListActionType, GET_PREVIOUS_EXCEL_FILES, SET_SELECTED_PREVIOUS_EXCEL_FILES, SET_SELECTED_ACTIVE_EXCEL_FILES, GET_EXCEL_CELL_DATA_MODAL_DISPLAY } from '../actions/actionTypes';
+import * as CONSTANTS from '../actions/actionTypes';
+import { ExcelFileListActionType } from '../actions/actionTypes'
 import ExcelFile from './../../types/ExcelFile';
 
 const initialState = {
@@ -7,23 +8,24 @@ const initialState = {
   previousExcelFiles: Array<ExcelFile>(),
   selectedPreviousFiles: Array<ExcelFile>(),
   getExcelCellDataModalDisplay: "none",
-  excelCellData: {}
+  excelCellData: {},
+  sheetChangeEvent: {}
 }
 
 export default (state = initialState, action: ExcelFileListActionType) => {
   switch (action.type) {
-    case GET_ACTIVE_EXCEL_FILES:
+    case CONSTANTS.GET_ACTIVE_EXCEL_FILES:
       return {
         ...state,
         activeExcelFiles: action.payload.activeExcelFiles
       };
-    case SET_SELECTED_ACTIVE_EXCEL_FILES:
+    case CONSTANTS.SET_SELECTED_ACTIVE_EXCEL_FILES:
       return {
         ...state,
         selectedActiveExcelFiles: action.payload.selectedActiveExcelFiles
       };
 
-    case GET_PREVIOUS_EXCEL_FILES:
+    case CONSTANTS.GET_PREVIOUS_EXCEL_FILES:
       // Filter out current active excel file
       let filteredPreviousExcelFiles: Array<ExcelFile> = []
       action.payload.previousExcelFiles.forEach((previousExcelFile) => {
@@ -38,24 +40,33 @@ export default (state = initialState, action: ExcelFileListActionType) => {
         previousExcelFiles: filteredPreviousExcelFiles
       };
 
-    case SET_SELECTED_PREVIOUS_EXCEL_FILES:
+    case CONSTANTS.SET_SELECTED_PREVIOUS_EXCEL_FILES:
       return {
         ...state,
         selectedPreviousExcelFiles: action.payload.selectedPreviousExcelFiles
       };
 
-    case GET_EXCEL_CELL_DATA:
+    case CONSTANTS.GET_EXCEL_CELL_DATA:
       return {
         ...state,
         excelCellData: action.payload.excelCellData
       };
 
-    case GET_EXCEL_CELL_DATA_MODAL_DISPLAY:
+    case CONSTANTS.GET_EXCEL_CELL_DATA_MODAL_DISPLAY:
       return {
         ...state,
         getExcelCellDataModalDisplay: action.payload.getExcelCellDataModalDisplay
       };
-
+    case CONSTANTS.SET_EXCEL_CELL_DATA_MODAL_DISPLAY:
+      return {
+        ...state,
+        setExcelCellDataModalDisplay: action.payload.setExcelCellDataModalDisplay
+      };
+    case CONSTANTS.SHEET_CHANGE:
+      return{
+        ...state,
+        sheetChangeEvent: action.payload.sheetChangeEvent
+      }
     default:
       return state;
   }

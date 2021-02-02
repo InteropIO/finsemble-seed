@@ -3,86 +3,81 @@ import { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk";
-import { getExcelCellDataThunk, registerActionThunk, setGetExcelCellDataActionModalDisplay, setSelectedActiveExcelFiles } from "../redux/actions/actions";
+import { setExcelCellDataThunk, registerActionThunk, setSelectedActiveExcelFiles, setSetExcelCellDataActionModalDisplay } from "../redux/actions/actions";
 import ExcelFile from "../types/ExcelFile";
 import { ExcelAction } from "../types/types";
-import * as CONSTANTS from './../redux/actions/actionTypes';
+import * as CONSTANTS from '../redux/actions/actionTypes';
 
 
 
-const GetExcelCellsModal = (props: any) => {
+const SetExcelCellsModal = (props: any) => {
     let { selectedActiveExcelFiles, clearSelectedActiveExcelFiles } = props;
-    let { offAddInServiceActions, getExcelCellData, registerAction, excelCellData } = props;
-    let { modalDisplay, setGetExecelCellsModalDisplay } = props
+    let { offAddInServiceActions, setExcelCellData, registerAction } = props;
+    let { modalDisplay, setSetExecelCellsModalDisplay } = props
 
-    let [getExcelCellDataActions, setGetExcelCellDatActions] = useState<Array<ExcelAction>>([])
+    let [setExcelCellDataActions, setSetExcelCellDatActions] = useState<Array<ExcelAction>>([])
     let [startCell, setStartCell] = useState("A1")
-    let [endCell, setEndCell] = useState("B2")
+    let [endCell, setEndCell] = useState("C3")
     let [sheetName, setSheetName] = useState("Sheet1")
-    let [resultCellData, setResultCellData] = useState("")
+    let [cellData, setCellData] = useState([['A1', 'B1', 'C1'], ['A2', 'B2', 'C2'], ['A3', 'B3', 'C3']])
 
     useEffect(() => {
         if (modalDisplay == 'block') {
-            setResultCellData('')
-            if (getExcelCellDataActions.length > 0) {
+            if (setExcelCellDataActions.length > 0) {
                 // Check if there are any saveworkbook actions for each selected file
-                let newGetCellDataActions = false
-                let tempGetCellDataActions: Array<ExcelAction> = []
+                let newSetCellDataActions = false
+                let tempSetCellDataActions: Array<ExcelAction> = []
                 selectedActiveExcelFiles.forEach((selectedActiveExcelFile: ExcelFile) => {
-                    let tempGetCellDataAction = offAddInServiceActions.find((offAddInServiceAction: ExcelAction) => {
-                        return offAddInServiceAction.file?.fileName === selectedActiveExcelFile.fileName && offAddInServiceAction.action === CONSTANTS.GET_EXCEL_CELL_DATA
+                    let tempSetCellDataAction = offAddInServiceActions.find((offAddInServiceAction: ExcelAction) => {
+                        return offAddInServiceAction.file?.fileName === selectedActiveExcelFile.fileName && offAddInServiceAction.action === CONSTANTS.SET_EXCEL_CELL_DATA
                     })
                     // If there are no actions, register one 
-                    if (!tempGetCellDataAction){
-                        registerAction(CONSTANTS.GET_EXCEL_CELL_DATA, [selectedActiveExcelFile])
-                        newGetCellDataActions = true
+                    if (!tempSetCellDataAction){
+                        registerAction(CONSTANTS.SET_EXCEL_CELL_DATA, [selectedActiveExcelFile])
+                        newSetCellDataActions = true
                     } else {
-                        tempGetCellDataAction.file = selectedActiveExcelFile
-                        tempGetCellDataActions.push(tempGetCellDataAction)
+                        tempSetCellDataAction.file = selectedActiveExcelFile
+                        tempSetCellDataActions.push(tempSetCellDataAction)
                     }
                 });
-                if(!newGetCellDataActions){
-                    setGetExcelCellDatActions(tempGetCellDataActions)
+                if(!newSetCellDataActions){
+                    setSetExcelCellDatActions(tempSetCellDataActions)
                 }
             } else {
                 // Register action
-                registerAction(CONSTANTS.GET_EXCEL_CELL_DATA, selectedActiveExcelFiles)
+                registerAction(CONSTANTS.SET_EXCEL_CELL_DATA, selectedActiveExcelFiles)
             }  
         }
     }, [modalDisplay]);
 
     useEffect(() => {
         if (selectedActiveExcelFiles) {
-            let tempGetExcelCellDataActions: Array<ExcelAction> = []
+            let tempSetExcelCellDataActions: Array<ExcelAction> = []
             offAddInServiceActions.find((offAddInServiceAction: ExcelAction) => {
                 let tempFile = selectedActiveExcelFiles.find((excelFile: ExcelFile) => {
                     return excelFile.fileName === offAddInServiceAction.file?.fileName
                 })
-                if (offAddInServiceAction.action === CONSTANTS.GET_EXCEL_CELL_DATA && tempFile)
-                    tempGetExcelCellDataActions.push(offAddInServiceAction)
+                if (offAddInServiceAction.action === CONSTANTS.SET_EXCEL_CELL_DATA && tempFile)
+                    tempSetExcelCellDataActions.push(offAddInServiceAction)
                 return false
             })
 
-            if (tempGetExcelCellDataActions.length > 0) {
-                setGetExcelCellDatActions(tempGetExcelCellDataActions)
+            if (tempSetExcelCellDataActions.length > 0) {
+                setSetExcelCellDatActions(tempSetExcelCellDataActions)
             }
         }
 
     }, [offAddInServiceActions]);
 
-    useEffect(() => {
-        setResultCellData(resultCellData + JSON.stringify(excelCellData, null, "\t") + '\n')
-    }, [excelCellData])
-
-    const getExcelDataBtnOnClick = () => {
-        setResultCellData('')
-        getExcelCellDataActions?.forEach((getExcelCellDataAction: ExcelAction) => {
-            getExcelCellData(getExcelCellDataAction.id, getExcelCellDataAction.file, startCell, endCell, sheetName)
+    const setExcelDataBtnOnClick = () => {
+        console.log(setExcelCellDataActions)
+        setExcelCellDataActions?.forEach((setExcelCellDataAction: ExcelAction) => {
+            setExcelCellData(setExcelCellDataAction.id, setExcelCellDataAction.file, startCell, endCell, sheetName, cellData)
         })
     }
 
     const closeBtnOnClick = () => {
-        setGetExecelCellsModalDisplay('none');
+        setSetExecelCellsModalDisplay('none');
         clearSelectedActiveExcelFiles()
     }
 
@@ -90,7 +85,7 @@ const GetExcelCellsModal = (props: any) => {
         <div className="modal" style={{ display: modalDisplay }}>
             <div className="modal-content">
                 <span className="close" onClick={closeBtnOnClick}>&times;</span>
-                <h3>Get Excel Cell Data</h3>
+                <h3>Set Excel Cell Data</h3>
                 <div className="block">
                     <label className="modalLabel">Start Cell</label>
                     <input value={startCell} onChange={(e) => { setStartCell(e.target.value) }} />
@@ -102,10 +97,10 @@ const GetExcelCellsModal = (props: any) => {
                 <div className="block">
                     <label className="modalLabel">Sheet Name</label>
                     <input value={sheetName} onChange={(e) => { setSheetName(e.target.value) }} />
-                    <button onClick={getExcelDataBtnOnClick}>Get</button>
+                    <button onClick={setExcelDataBtnOnClick}>Set</button>
                 </div>
                 <br />
-                <textarea id='resultCellDataTextArea' value={resultCellData} onChange={(e) => { }} readOnly></textarea>
+                <textarea id='resultCellDataTextArea' value={JSON.stringify(cellData, null, "\t")} onChange={(e) => { setCellData(JSON.parse(e.target.value))}}></textarea>
             </div>
         </div >
     )
@@ -114,7 +109,7 @@ const GetExcelCellsModal = (props: any) => {
 const mapStateToProps = (state: any, ownProps: any) => {
     const { officeAddinServiceActionsReducer, excelFilesReducer } = state
     return {
-        modalDisplay: excelFilesReducer.getExcelCellDataModalDisplay,
+        modalDisplay: excelFilesReducer.setExcelCellDataModalDisplay,
         selectedActiveExcelFiles: excelFilesReducer.selectedActiveExcelFiles,
         excelCellData: excelFilesReducer.excelCellData,
         offAddInServiceActions: officeAddinServiceActionsReducer.offAddInServiceActions
@@ -123,15 +118,14 @@ const mapStateToProps = (state: any, ownProps: any) => {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     return {
-        getExcelCellData: (actionId: string, excelFile: ExcelFile, startCell: String, endCell: String, sheetName: String) => dispatch(getExcelCellDataThunk(actionId, excelFile, startCell, endCell, sheetName)),
+        setExcelCellData: (actionId: string, excelFile: ExcelFile, startCell: String, endCell: String, sheetName: String, values: Array<Array<String>>) => dispatch(setExcelCellDataThunk(actionId, excelFile, startCell, endCell, sheetName, values)),
         registerAction: (action: string, excelFiles: Array<ExcelFile>) => dispatch(registerActionThunk(action, excelFiles)),
         clearSelectedActiveExcelFiles: () => dispatch(setSelectedActiveExcelFiles([])),
-        setGetExecelCellsModalDisplay: (display: String) => dispatch(setGetExcelCellDataActionModalDisplay(display)),
-
+        setSetExecelCellsModalDisplay: (display: String) => dispatch(setSetExcelCellDataActionModalDisplay(display)),
     };
 };
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(GetExcelCellsModal);
+)(SetExcelCellsModal);

@@ -1,6 +1,7 @@
 import ExcelFile from "./types/ExcelFile";
 import { v4 as uuidV4 } from "uuid";
 import { ExcelAction } from "./types/types";
+import * as CONSTANTS from "./config/const";
 
 const Finsemble = require("@finsemble/finsemble-core");
 
@@ -75,11 +76,11 @@ export default class OfficeAddinService extends Finsemble.baseService {
    */
   createRouterEndpoints() {
     this.RouterClient.addListener(
-      "finsemble-excel-event",
+      CONSTANTS.FINSEMBLE_EXCEL_EVENT,
       this.handleExcelEvent
     );
     setInterval(this.checkActiveExcelFiles, 1000);
-    this.addResponder("OFFICE_ADDIN_REGISTER", this.register);
+    this.addResponder(CONSTANTS.OFFICE_ADDIN_REGISTER, this.register);
   }
 
   /**
@@ -101,7 +102,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
         console.log(res.data);
 
         switch (res.data.event) {
-          case "ADDIN_OPENED":
+          case CONSTANTS.ADDIN_OPENED:
             let file = this.activeExcelFiles.find((file) => {
               return file.fileName == res.data.fileName;
             });
@@ -124,16 +125,6 @@ export default class OfficeAddinService extends Finsemble.baseService {
             }
 
             this.transmitActiveFilesChange();
-
-            //Finsemble.Clients.RouterClient.query(`${this.fileList[0].fileName}-${this.fileList[0].timestamp}-query`, { action:'GET_CELL_DATA', row:1, col:1, sheetName: 'Sheet1' }, this.handleQueryResponse);
-            //Finsemble.Clients.RouterClient.query(`${this.fileList[0].fileName}-${this.fileList[0].timestamp}-query`, { action:'SET_RANGE_DATA', startCell:'A1', endCell:'A1', values:[['test']], sheetName: 'Sheet1' }, this.handleQueryResponse);
-            //Finsemble.Clients.RouterClient.query(`${this.fileList[0].fileName}-${this.fileList[0].timestamp}-query`, { action:'SET_RANGE_DATA', startCell:'A1', endCell:'C1', values:[['A1', 'B1', 'C1']], sheetName: 'Sheet1' }, this.handleQueryResponse);
-            //Finsemble.Clients.RouterClient.query(`${this.fileList[0].fileName}-${this.fileList[0].timestamp}-query`, { action:'SET_RANGE_DATA', startCell:'A1', endCell:'C3', values:[['A1', 'B1', 'C1'], ['A2', 'B2', 'C2'], ['A3', 'B3', 'C3']], sheetName: 'Sheet1' }, this.handleQueryResponse);
-            //Finsemble.Clients.RouterClient.query(`${this.fileList[0].fileName}-${this.fileList[0].timestamp}-query`, { action:'GET_RANGE_DATA', startCell:'A1', endCell:'C3', sheetName: 'Sheet1' }, this.handleQueryResponse);
-            //Finsemble.Clients.RouterClient.query(`${this.fileList[0].fileName}-${this.fileList[0].timestamp}-query`, { action:'CREATE_WORKSHEET', worksheetName: 'test5'},this.handleQueryResponse)
-            //Finsemble.Clients.RouterClient.query(`${this.fileList[0].fileName}-${this.fileList[0].timestamp}-query`, { action:'CREATE_WORKBOOK'},this.handleQueryResponse)
-            //Finsemble.Clients.RouterClient.query(`${this.fileList[0].fileName}-${this.fileList[0].timestamp}-query`, { action:'SAVE_WORKBOOK'},this.handleQueryResponse)
-            //Finsemble.Clients.RouterClient.query(`${this.fileList[0].fileName}-${this.fileList[0].timestamp}-query`, { action:'CLOSE_WORKBOOK'},this.handleQueryResponse)
 
             break;
           default:
@@ -251,8 +242,17 @@ export default class OfficeAddinService extends Finsemble.baseService {
       if (!res.originatedHere()) {
         let event = res.data.event;
         switch (event) {
-          case "SHEET_CHANGE_HANDLER_ADDED":
-            console.log("SHEET_CHANGE_HANDLER_ADDED");
+          case CONSTANTS.SHEET_CHANGE:
+            let tempActions = this.excelActions.filter((action) => {
+              return action.action === CONSTANTS.SUBSCRIBE_SHEET_CHANGE && action.file?.fileName === res.data.fileName;
+            });
+            tempActions.forEach((action) => {
+              Finsemble.Clients.RouterClient.transmit(action.id, {
+                event: res.data.eventObj,
+                fileName: res.data.fileName
+              });
+            });
+
             break;
           default:
             console.log(res.data);
@@ -289,11 +289,8 @@ export default class OfficeAddinService extends Finsemble.baseService {
   };
 
   transmitActiveFilesChange = () => {
-    let tempActions: Array<ExcelAction> = [];
-    this.excelActions.forEach((action) => {
-      if (action.action === "SUBSCRIBE_ACTIVE_EXCEL_FILES") {
-        tempActions.push(action);
-      }
+    let tempActions = this.excelActions.filter((action) => {
+      return action.action === CONSTANTS.SUBSCRIBE_ACTIVE_EXCEL_FILES;
     });
     tempActions.forEach((action) => {
       Finsemble.Clients.RouterClient.transmit(action.id, {
@@ -311,7 +308,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
     }[] = [];
     actions.forEach((action: string) => {
       switch (action) {
-        case "GET_ACTIVE_EXCEL_FILES":
+        case CONSTANTS.GET_ACTIVE_EXCEL_FILES:
           let get_excel_files_uuid = this.getUuid();
           returnArray.push({
             id: get_excel_files_uuid,
@@ -320,7 +317,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
           });
           this.addResponder(get_excel_files_uuid, this.getExcelFiles);
           break;
-        case "SUBSCRIBE_ACTIVE_EXCEL_FILES":
+        case CONSTANTS.SUBSCRIBE_ACTIVE_EXCEL_FILES:
           let sub_excel_files_uuid = this.getUuid();
           let tempAction: ExcelAction = {
             id: sub_excel_files_uuid,
@@ -330,7 +327,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
           returnArray.push(tempAction);
           this.excelActions.push(tempAction);
           break;
-        case "GET_EXCEL_CELL_DATA":
+        case CONSTANTS.GET_EXCEL_CELL_DATA:
           data.excelFiles.forEach((excelFile: ExcelFile) => {
             let get_excel_cell_data_uuid = this.getUuid();
             returnArray.push({
@@ -339,6 +336,48 @@ export default class OfficeAddinService extends Finsemble.baseService {
               file: excelFile,
             });
             this.addResponder(get_excel_cell_data_uuid, this.getExecelCellData);
+          });
+          break;
+        case CONSTANTS.SAVE_EXCEL_WORKBOOK:
+          data.excelFiles.forEach((excelFile: ExcelFile) => {
+            let save_excel_workbook_uuid = this.getUuid();
+            returnArray.push({
+              id: save_excel_workbook_uuid,
+              action: action,
+              file: excelFile,
+            });
+            this.addResponder(save_excel_workbook_uuid, this.saveExcelWorkbook);
+          });
+          break;
+        case CONSTANTS.SET_EXCEL_CELL_DATA:
+          data.excelFiles.forEach((excelFile: ExcelFile) => {
+            let get_excel_cell_data_uuid = this.getUuid();
+            returnArray.push({
+              id: get_excel_cell_data_uuid,
+              action: action,
+              file: excelFile,
+            });
+            this.addResponder(get_excel_cell_data_uuid, this.setExecelCellData);
+          });
+          break;
+        case CONSTANTS.SUBSCRIBE_SHEET_CHANGE:
+          data.excelFiles.forEach((excelFile: ExcelFile) => {
+            let tempSubSheetChangeAction = this.excelActions.find((tempAction: ExcelAction) =>{
+              return tempAction.action === CONSTANTS.SUBSCRIBE_SHEET_CHANGE && tempAction.file?.fileName === excelFile.fileName
+            })
+            if(!tempSubSheetChangeAction){
+              let sub_sheet_change_uuid = this.getUuid();
+              let tempSheetChangeAction: ExcelAction = {
+                id: sub_sheet_change_uuid,
+                action: action,
+                file: excelFile,
+              };
+              returnArray.push(tempSheetChangeAction);
+              this.excelActions.push(tempSheetChangeAction);
+              this.addSheetChangeHandler(excelFile);
+            } else {
+              returnArray.push(tempSubSheetChangeAction)
+            }
           });
           break;
         default:
@@ -353,14 +392,63 @@ export default class OfficeAddinService extends Finsemble.baseService {
   };
 
   getExecelCellData = async (data: any) => {
+    console.log(
+      "getExecelCellData",
+      `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`
+    );
     let res = await this.RouterClient.query(
       `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`,
       {
-        action: "GET_RANGE_DATA",
+        action: CONSTANTS.GET_RANGE_DATA,
         startCell: data.startCell,
         endCell: data.endCell,
         sheetName: data.sheetName,
       },
+      (err: any, res: any) => {}
+    );
+    return res.response.data;
+  };
+
+  setExecelCellData = async (data: any) => {
+    console.log(
+      "setExecelCellData",
+      `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`
+    );
+    let res = await this.RouterClient.query(
+      `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`,
+      {
+        action: CONSTANTS.SET_RANGE_DATA,
+        startCell: data.startCell,
+        endCell: data.endCell,
+        sheetName: data.sheetName,
+        values: data.values,
+      },
+      (err: any, res: any) => {}
+    );
+    return res.response.data;
+  };
+
+  saveExcelWorkbook = async (data: any) => {
+    console.log(
+      "saveExcelWorkbook",
+      `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`
+    );
+    let res = await this.RouterClient.query(
+      `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`,
+      { action: "SAVE_WORKBOOK" },
+      (err: any, res: any) => {}
+    );
+    return res.response.data;
+  };
+
+  addSheetChangeHandler = async (file: ExcelFile) => {
+    console.log(
+      "addSheetChangeHandler",
+      `query-${file.fileName}-${file.createTimestamp}`
+    );
+    let res = await this.RouterClient.query(
+      `query-${file.fileName}-${file.createTimestamp}`,
+      { action: "SUBSCRIBE_SHEET_CHANGE" },
       (err: any, res: any) => {}
     );
     return res.response.data;
