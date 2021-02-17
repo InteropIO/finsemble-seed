@@ -20,7 +20,14 @@ export const SET_EXCEL_CELL_DATA = 'SET_EXCEL_CELL_DATA'
 export const SET_EXCEL_CELL_DATA_MODAL_DISPLAY = 'SET_EXCEL_CELL_DATA_MODAL_DISPLAY'
 
 export const SHEET_CHANGE = "SHEET_CHANGE"
+
 export const GET_WORKSHEET_LIST = "GET_WORKSHEET_LIST"
+export const SET_TARGET_WORKSHEET = "SET_TARGET_WORKSHEET"
+export const SET_OPEN_WORKSHEET = ' "SET_OPEN_WORKSHEET"'
+export const SET_SELECTED_CLIPBOARD_DATA = 'SET_SELECTED_CLIPBOARD_DATA'
+export const SET_START_CELL = 'SET_START_CELL'
+export const SET_END_CELL = 'SET_END_CELL'
+export const COPY_TO_EXCEL = "COPY_TO_EXCEL"
 
 interface OfficeAddinRegisterAction {
     type: typeof OFFICE_ADDIN_REGISTER,
@@ -39,7 +46,7 @@ interface GetActiveExcelFilesAction {
 interface SetSelectedActiveExcelFilesAction {
     type: typeof SET_SELECTED_ACTIVE_EXCEL_FILES,
     payload: {
-        selectedActiveExcelFiles: Array<ExcelFile>
+        selectedActiveExcelFile: ExcelFile
     }
 }
 interface GetPreviousExcelFilesAction {
@@ -84,5 +91,47 @@ interface SheetChange {
     }
 }
 
+interface GetWorksheetList {
+    type: typeof GET_WORKSHEET_LIST,
+    payload: {
+        worksheetList: Array<String>
+    }
+}
+
+interface SetTargetWorksheet {
+    type: typeof SET_TARGET_WORKSHEET
+    payload: {
+        targetWorksheet: ""
+    }
+}
+
+interface SetOpenWorksheet {
+    type: typeof SET_OPEN_WORKSHEET
+    payload: {
+        openWorksheet: ""
+    }
+}
+
+interface setSelectedClipboardData {
+    type: typeof SET_SELECTED_CLIPBOARD_DATA,
+    payload: {
+        selectedClipboardData: {}
+    }
+}
+
+interface setStartCell {
+    type: typeof SET_START_CELL,
+    payload: {
+        startCell: ''
+    }
+}
+
+interface setEndCell {
+    type: typeof SET_END_CELL,
+    payload: {
+        endCell: ''
+    }
+}
+
 export type OfficeAddinActionType = OfficeAddinRegisterAction
-export type ExcelFileListActionType = SheetChange | SetGetExcelCellDataActionModalDisplay | SetSelectedActiveExcelFilesAction | GetActiveExcelFilesAction | GetExcelCellDataAction | GetPreviousExcelFilesAction | SetSelectedPreviousExcelFilesAction | SetSetExcelCellDataActionModalDisplay
+export type ExcelFileListActionType = setEndCell | setStartCell | setSelectedClipboardData | SetOpenWorksheet | SetTargetWorksheet | GetWorksheetList | SheetChange | SetGetExcelCellDataActionModalDisplay | SetSelectedActiveExcelFilesAction | GetActiveExcelFilesAction | GetExcelCellDataAction | GetPreviousExcelFilesAction | SetSelectedPreviousExcelFilesAction | SetSetExcelCellDataActionModalDisplay

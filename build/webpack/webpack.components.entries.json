@@ -2,5 +2,9 @@
     "ExcelTester": {
         "output": "components/ExcelTester/ExcelTester",
         "entry": "./src/components/ExcelTester/src/app.tsx"
+    },
+    "CopyToExcelDialog": {
+        "output": "components/CopyToExcelDialog/CopyToExcelDialog",
+        "entry": "./src/components/CopyToExcelDialog/src/app.tsx"
     }
 }

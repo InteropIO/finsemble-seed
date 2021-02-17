@@ -244,12 +244,15 @@ export default class OfficeAddinService extends Finsemble.baseService {
         switch (event) {
           case CONSTANTS.SHEET_CHANGE:
             let tempActions = this.excelActions.filter((action) => {
-              return action.action === CONSTANTS.SUBSCRIBE_SHEET_CHANGE && action.file?.fileName === res.data.fileName;
+              return (
+                action.action === CONSTANTS.SUBSCRIBE_SHEET_CHANGE &&
+                action.file?.fileName === res.data.fileName
+              );
             });
             tempActions.forEach((action) => {
               Finsemble.Clients.RouterClient.transmit(action.id, {
                 event: res.data.eventObj,
-                fileName: res.data.fileName
+                fileName: res.data.fileName,
               });
             });
 
@@ -362,10 +365,15 @@ export default class OfficeAddinService extends Finsemble.baseService {
           break;
         case CONSTANTS.SUBSCRIBE_SHEET_CHANGE:
           data.excelFiles.forEach((excelFile: ExcelFile) => {
-            let tempSubSheetChangeAction = this.excelActions.find((tempAction: ExcelAction) =>{
-              return tempAction.action === CONSTANTS.SUBSCRIBE_SHEET_CHANGE && tempAction.file?.fileName === excelFile.fileName
-            })
-            if(!tempSubSheetChangeAction){
+            let tempSubSheetChangeAction = this.excelActions.find(
+              (tempAction: ExcelAction) => {
+                return (
+                  tempAction.action === CONSTANTS.SUBSCRIBE_SHEET_CHANGE &&
+                  tempAction.file?.fileName === excelFile.fileName
+                );
+              }
+            );
+            if (!tempSubSheetChangeAction) {
               let sub_sheet_change_uuid = this.getUuid();
               let tempSheetChangeAction: ExcelAction = {
                 id: sub_sheet_change_uuid,
@@ -376,8 +384,30 @@ export default class OfficeAddinService extends Finsemble.baseService {
               this.excelActions.push(tempSheetChangeAction);
               this.addSheetChangeHandler(excelFile);
             } else {
-              returnArray.push(tempSubSheetChangeAction)
+              returnArray.push(tempSubSheetChangeAction);
             }
+          });
+          break;
+        case CONSTANTS.GET_WORKSHEET_LIST:
+          data.excelFiles.forEach((excelFile: ExcelFile) => {
+            let get_worksheet_list_uuid = this.getUuid();
+            returnArray.push({
+              id: get_worksheet_list_uuid,
+              action: action,
+              file: excelFile,
+            });
+            this.addResponder(get_worksheet_list_uuid, this.getWorksheetList);
+          });
+          break;
+        case CONSTANTS.COPY_TO_EXCEL:
+          data.excelFiles.forEach((excelFile: ExcelFile) => {
+            let copy_to_excel_uuid = this.getUuid();
+            returnArray.push({
+              id: copy_to_excel_uuid,
+              action: action,
+              file: excelFile,
+            });
+            this.addResponder(copy_to_excel_uuid, this.copyToExcel);
           });
           break;
         default:
@@ -402,7 +432,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
         action: CONSTANTS.GET_RANGE_DATA,
         startCell: data.startCell,
         endCell: data.endCell,
-        sheetName: data.sheetName,
+        worksheetName: data.worksheetName,
       },
       (err: any, res: any) => {}
     );
@@ -420,7 +450,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
         action: CONSTANTS.SET_RANGE_DATA,
         startCell: data.startCell,
         endCell: data.endCell,
-        sheetName: data.sheetName,
+        worksheetName: data.worksheetName,
         values: data.values,
       },
       (err: any, res: any) => {}
@@ -435,7 +465,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
     );
     let res = await this.RouterClient.query(
       `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`,
-      { action: "SAVE_WORKBOOK" },
+      { action: CONSTANTS.SAVE_EXCEL_WORKBOOK },
       (err: any, res: any) => {}
     );
     return res.response.data;
@@ -449,6 +479,40 @@ export default class OfficeAddinService extends Finsemble.baseService {
     let res = await this.RouterClient.query(
       `query-${file.fileName}-${file.createTimestamp}`,
       { action: "SUBSCRIBE_SHEET_CHANGE" },
+      (err: any, res: any) => {}
+    );
+    return res.response.data;
+  };
+
+  getWorksheetList = async (data: any) => {
+    console.log(
+      "getWorksheetList",
+      `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`
+    );
+    let res = await this.RouterClient.query(
+      `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`,
+      { action: CONSTANTS.GET_WORKSHEET_LIST },
+      (err: any, res: any) => {}
+    );
+    return res.response.data.worksheetList;
+  };
+
+  copyToExcel = async (data: any) => {
+    console.log(
+      "copyToExcel",
+      `query-${data.targetExcelFile.fileName}-${data.targetExcelFile.createTimestamp}`
+    );
+    console.log(data);
+    let res = await this.RouterClient.query(
+      `query-${data.targetExcelFile.fileName}-${data.targetExcelFile.createTimestamp}`,
+      {
+        action: CONSTANTS.COPY_TO_EXCEL,
+        targeWorksheet: data.targeWorksheet,
+        startCell: data.startCell,
+        endCell: data.endCell,
+        openWorksheet: data.openWorksheet,
+        data: data.data,
+      },
       (err: any, res: any) => {}
     );
     return res.response.data;

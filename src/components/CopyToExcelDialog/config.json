@@ -1,0 +1,46 @@
+{
+    "comment": "Excel Integration Component",
+    "$schema": "../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/componentsFile.schema.json",
+    "components": {
+        "CopyToExcelDialog": {
+            "window": {
+                "url": "$applicationRoot/components/CopyToExcelDialog/CopyToExcelDialog.html",
+                "options": {
+                    "resizable": true,
+                    "autoShow": true,
+                    "alwaysOnTop": false
+                },
+                "width": 400,
+                "height": 600
+            },
+            "component": {
+                "preload": false,
+                "spawnOnStartup": false
+            },
+            "foreign": {
+                "services": {
+                    "windowService": {
+                        "manageWindowMovement": true,
+                        "allowAutoArrange": true,
+                        "allowSnapping": true,
+                        "allowTabbing": true,
+                        "allowTiling": true,
+                        "allowGrouping": true,
+                        "allowMinimize": true
+                    },
+                    "workspace": {}
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "alwaysOnTopIcon": true,
+                        "title": "CopyToExcelDialog",
+                        "persistWindowState": true
+                    }
+                }
+            }
+        }
+    }
+}

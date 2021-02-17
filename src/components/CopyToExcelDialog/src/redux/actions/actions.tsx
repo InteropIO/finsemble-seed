@@ -5,7 +5,7 @@ import * as CONSTANTS from './actionTypes';
 import ExcelFile from './../../types/ExcelFile';
 
 
-export const officeAddinRegister = (regsiteredActions: [], status: String) => {
+export const officeAddinRegister = (regsiteredActions: [], status: string) => {
     return {
         type: CONSTANTS.OFFICE_ADDIN_REGISTER,
         payload: {
@@ -55,6 +55,9 @@ export const registerActionThunk = (action: string, excelFiles?: Array<ExcelFile
                                 FSBL.Clients.WindowClient.setComponentState({ field: 'previousExcelFiles', value: res.data.ACTIVE_EXCEL_FILES })
                                 dispatch(getPreviousExcelFiles(res.data.ACTIVE_EXCEL_FILES))
                             }
+                            dispatch(setSelectedActiveExcelFile(null))
+                            dispatch(setOpenWorksheet(null))
+                            dispatch(setTargetWorksheet(null))
                         })
                     }
                 });
@@ -127,11 +130,11 @@ export const setSelectedPreviousExcelFiles = (selectedPreviousExcelFiles: Array<
     }
 }
 
-export const setSelectedActiveExcelFiles = (selectedActiveExcelFiles: Array<ExcelFile>) => {
+export const setSelectedActiveExcelFile = (selectedActiveExcelFile: ExcelFile | null) => {
     return {
         type: CONSTANTS.SET_SELECTED_ACTIVE_EXCEL_FILES,
         payload: {
-            selectedActiveExcelFiles: selectedActiveExcelFiles
+            selectedActiveExcelFile: selectedActiveExcelFile
         }
     }
 }
@@ -145,14 +148,14 @@ export const getExcelCellData = (excelCellData: any) => {
     }
 }
 
-export const getExcelCellDataThunk = (actionId: string, excelFile: ExcelFile, startCell: String, endCell: String, worksheetName: String): ThunkAction<void, RootState, null, Action<string>> => async dispatch => {
+export const getExcelCellDataThunk = (actionId: string, excelFile: ExcelFile, startCell: string, endCell: string, sheetName: string): ThunkAction<void, RootState, null, Action<string>> => async dispatch => {
     // Retrieve excel cell data from service 
-    FSBL.Clients.RouterClient.query(actionId, { excelFile: excelFile, startCell: startCell, endCell: endCell, worksheetName: worksheetName }, (err, res) => {
+    FSBL.Clients.RouterClient.query(actionId, { excelFile: excelFile, startCell: startCell, endCell: endCell, sheetName: sheetName }, (err, res) => {
         dispatch(getExcelCellData(res.data.data))
     })
 };
 
-export const setGetExcelCellDataActionModalDisplay = (modalDisplay: String) => {
+export const setGetExcelCellDataActionModalDisplay = (modalDisplay: string) => {
     return {
         type: CONSTANTS.GET_EXCEL_CELL_DATA_MODAL_DISPLAY,
         payload: {
@@ -176,7 +179,7 @@ export const saveExcelWorkbookResult = (saveWorkbookResult: any) => {
     }
 }
 
-export const setSetExcelCellDataActionModalDisplay = (modalDisplay: String) => {
+export const setSetExcelCellDataActionModalDisplay = (modalDisplay: string) => {
     return {
         type: CONSTANTS.SET_EXCEL_CELL_DATA_MODAL_DISPLAY,
         payload: {
@@ -185,9 +188,81 @@ export const setSetExcelCellDataActionModalDisplay = (modalDisplay: String) => {
     }
 }
 
-export const setExcelCellDataThunk = (actionId: string, excelFile: ExcelFile, startCell: String, endCell: String, worksheetName: String, values: Array<Array<String>>): ThunkAction<void, RootState, null, Action<string>> => async dispatch => {
+export const setExcelCellDataThunk = (actionId: string, excelFile: ExcelFile, startCell: string, endCell: string, sheetName: string, values: Array<Array<string>>): ThunkAction<void, RootState, null, Action<string>> => async dispatch => {
     // Retrieve excel cell data from service 
-    FSBL.Clients.RouterClient.query(actionId, { excelFile: excelFile, startCell: startCell, endCell: endCell, worksheetName: worksheetName, values: values }, (err, res) => {
+    FSBL.Clients.RouterClient.query(actionId, { excelFile: excelFile, startCell: startCell, endCell: endCell, sheetName: sheetName, values: values }, (err, res) => {
+        console.log(res)
+        //dispatch(getExcelCellData(res.data.data))
+    })
+};
+
+export const getWorksheetListThunk = (actionId: string, excelFile: ExcelFile): ThunkAction<void, RootState, null, Action<string>> => async dispatch => {
+    if (actionId != '')
+        FSBL.Clients.RouterClient.query(actionId, { excelFile: excelFile }, (err, res) => {
+            dispatch(getWorksheetList(res.data.data))
+        });
+    else {
+        dispatch(getWorksheetList([]))
+    }
+}
+
+export const getWorksheetList = (worksheetList: Array<string>) => {
+    return {
+        type: CONSTANTS.GET_WORKSHEET_LIST,
+        payload: {
+            worksheetList: worksheetList
+        }
+    }
+}
+
+export const setTargetWorksheet = (targetWorksheet: any) => {
+    return {
+        type: CONSTANTS.SET_TARGET_WORKSHEET,
+        payload: {
+            targetWorksheet: targetWorksheet
+        }
+    }
+}
+
+export const setOpenWorksheet = (openWorksheet: any) => {
+    return {
+        type: CONSTANTS.SET_OPEN_WORKSHEET,
+        payload: {
+            openWorksheet: openWorksheet
+        }
+    }
+}
+
+export const setSelectedClipboardData = (selectedClipboardData: any) => {
+    return {
+        type: CONSTANTS.SET_SELECTED_CLIPBOARD_DATA,
+        payload: {
+            selectedClipboardData: selectedClipboardData
+        }
+    }
+}
+
+export const setStartCell = (startCell: string) => {
+    return {
+        type: CONSTANTS.SET_START_CELL,
+        payload: {
+            startCell: startCell
+        }
+    }
+}
+
+export const setEndCell = (endCell: string) => {
+    return {
+        type: CONSTANTS.SET_END_CELL,
+        payload: {
+            endCell: endCell
+        }
+    }
+}
+
+export const copyToExcel = (actionId: string, targetExcelFile: ExcelFile, targeWorksheet: string, startCell: string, endCell: string, openWorksheet: string, data: []): ThunkAction<void, RootState, null, Action<string>> => async dispatch => {
+    console.log(actionId, targetExcelFile, targeWorksheet, startCell, endCell, openWorksheet, data)
+    FSBL.Clients.RouterClient.query(actionId, { targetExcelFile: targetExcelFile, targeWorksheet: targeWorksheet, startCell: startCell, endCell: endCell, openWorksheet: openWorksheet, data: data }, (err, res) => {
         console.log(res)
         //dispatch(getExcelCellData(res.data.data))
     })

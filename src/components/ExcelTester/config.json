@@ -1,5 +1,5 @@
 {
-    "comment": "Symphony Integration Component",
+    "comment": "Excel Integration Tester Component",
     "$schema": "../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/componentsFile.schema.json",
     "components": {
         "ExcelTester": {
