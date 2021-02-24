@@ -10,7 +10,11 @@
 	const shell = require("shelljs");
 	const path = require("path");
 	const treeKill = require("tree-kill");
-	const FEA = require("@finsemble/finsemble-electron-adapter/exports");
+	let FEA;
+	// Internal Cosaic development: exports doesn't exist when running yarn clean
+	try {
+		FEA = require("@finsemble/finsemble-electron-adapter/exports");
+	} catch (e) {}
 	const FEA_PATH = path.resolve("./node_modules/@finsemble/finsemble-electron-adapter");
 	const FEAPackager = FEA ? FEA.packager : undefined;
 	const startupConfig = require("./configs/other/server-environment-startup");
@@ -290,6 +294,7 @@
 		"dev:noLaunch": (done) => {
 			async.series([taskMethods["build:dev"], taskMethods.startServer], done);
 		},
+
 		launchElectron: (done) => {
 			const cfg = taskMethods.startupConfig[env.NODE_ENV];
 
@@ -316,10 +321,12 @@
 				manifest: cfg.serverConfig,
 				onElectronClose: handleElectronClose,
 				chromiumFlags: JSON.stringify(cfg.chromiumFlags),
-				path: FEA_PATH,
 				socketCertificatePath,
 				breakpointOnStart: cfg.breakpointOnStart,
 			};
+
+			// Copy any command line args from server-environment-startup.json
+			config.args = taskMethods.startupConfig[env.NODE_ENV]["args"];
 
 			if (!FEA) {
 				console.error("Could not launch ");
