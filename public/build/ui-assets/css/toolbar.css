@@ -24,6 +24,7 @@
 	color: var(--toolbar-font-color);
 	align-content: center;
 	height: var(--toolbar-height);
+	text-shadow: 0 1px 1px var(--font-shadow);
 }
 
 .finsemble-toolbar svg path {
@@ -333,6 +334,7 @@ img.pinned-icon {
 	width: 31px;
 	cursor: pointer;
 	color: transparent; /* hide the text when in compact mode */
+	text-shadow: none;
 	/*transition: width .5s,background-color 0s .5s;*/
 }
 
@@ -367,6 +369,7 @@ img.pinned-icon {
 	color: var(--search-input-font-color);
 	cursor: initial;
 	z-index: 99;
+	text-shadow: none;
 }
 
 img {

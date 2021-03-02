@@ -115,6 +115,7 @@ html.desktop-active .title-text {
 	transition: background-color 0.2s ease;
 	border-top-left-radius: 10px;
 	border-top-right-radius: 10px;
+	text-shadow: 0 1px 1px var(--font-shadow);
 }
 
 .fsbl-header-title[data-hover="true"] {
@@ -423,6 +424,7 @@ html.desktop-active .fsbl-icon-highlighted {
 	text-align: left;
 	padding-left: 1px;
 	min-width: 0;
+	text-shadow: 0 1px 1px var(--font-shadow);
 	color: var(--titlebar-tab-inactive-font-color);
 	display: flex;
 	align-items: center;

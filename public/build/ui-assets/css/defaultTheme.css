@@ -25,13 +25,13 @@
 	--accent-negative: #f26666;
 	--accent-negative-1: #b54f4f;
 
-	--scrollbar-color: #ffffff;
+	--scrollbar-color: white;
 	/* Font Variables:  Use these variables to make changes to the global font styles. */
 	--font-family: "OpenSans", sans-serif;
 
-	--font-color: #ffffff;
+	--font-color: white;
 	--font-color-1: var(--core-primary-5);
-	--font-color-2: #000000;
+	--font-color-2: black;
 	--font-shadow: rgba(0, 0, 0, 0.5);
 
 	--font-weight: 600;
@@ -227,7 +227,7 @@
 	--content-button-label-font-size: var(--font-size);
 	--content-button-disabled-border-color: var(--core-primary-2);
 	--content-button-icon-color: var(--font-color-1);
-	--content-button-neutral-hover-color: var(--core-primary-4);
+	--content-button-neutral-hover-color: white;
 
 	--content-checkbox-check-color: var(--font-color);
 	--content-checkbox-background-color: var(--accent-primary);
@@ -281,7 +281,7 @@
 	--catalog-toast-background-color: var(--core-primary);
 	--catalog-background-color: var(--core-primary-1);
 	--catalog-pagination-dots-color: var(--core-primary-3);
-	--catalog-pagination-dots-active-color: var(--core-primary-4);
+	--catalog-pagination-dots-active-color: white;
 	--catalog-hero-border-color: transparent;
 	--catalog-hero-background-color: var(--core-primary-2);
 	--catalog-card-background-color: var(--core-primary);
@@ -322,7 +322,7 @@
 	--appMenu-search-input-inactive-color: var(--core-primary-3);
 	--appMenu-search-input-active-color: var(--accent-primary-1);
 	--appMenu-search-input-error-color: var(--accent-negative);
-	--appMenu-edit-icon-hover-color: var(--core-primary-4);
+	--appMenu-edit-icon-hover-color: white;
 	--appMenu-separator-color: var(--core-primary-3);
 	--appMenu-icon-color: var(--font-color-1);
 }
