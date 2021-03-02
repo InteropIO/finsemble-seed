@@ -23,7 +23,7 @@ const PreviousExcelFileList = (props: any) => {
     }
 
     const { previousExcelFiles, getPreviousExcelFiles } = props;
-    const { setSelectedFiles, selectedFiels } = props;
+    const { setSelectedFiles, selectedFiles } = props;
 
     return (
         <div className='previousFileListDiv'>
@@ -40,7 +40,7 @@ const PreviousExcelFileList = (props: any) => {
                 }}
                 options={previousExcelFiles}
                 onChange={setSelectedFiles}
-                value={selectedFiels}
+                value={selectedFiles}
             />
         </div>
     )
@@ -50,7 +50,7 @@ const mapStateToProps = (state: any, ownProps: any) => {
     const { officeAddinServiceActionsReducer, excelFilesReducer } = state
     return {
         previousExcelFiles: excelFilesReducer.previousExcelFiles,
-        selectedFiels: excelFilesReducer.selectedPreviousExcelFiles,
+        selectedFiles: excelFilesReducer.selectedPreviousExcelFiles,
         offAddInServiceActions: officeAddinServiceActionsReducer.offAddInServiceActions
     }
 }

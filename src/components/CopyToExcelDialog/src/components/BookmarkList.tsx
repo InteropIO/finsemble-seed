@@ -1,12 +1,13 @@
 import * as React from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Select from "react-select";
 import makeAnimated from 'react-select/animated';
 import ExcelFile from "../types/ExcelFile";
 import { connect } from "react-redux";
 import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk"
-import { getPreviousExcelFilesThunk, setSelectedPreviousExcelFiles } from "../redux/actions/actions";
+import { getPreviousExcelFilesThunk, setSelectedBookmark, setSelectedPreviousExcelFiles } from "../redux/actions/actions";
+import { Bookmark } from "../types/types";
 
 const BookmarkList = (props: any) => {
     const animatedComponents = makeAnimated();
@@ -17,25 +18,29 @@ const BookmarkList = (props: any) => {
         })
     }
 
-    const { previousExcelFiles, getPreviousExcelFiles } = props;
-    const { setSelectedFiles, selectedFiels } = props;
+    const { selectedBookmark, setSelectedBookmark } = props;
+
+    const [bookmarkList, setBookmarkList] = useState(Array<Bookmark>())
+
+    useEffect(() => {
+        FSBL.Clients.DistributedStoreClient.getStore({ store: "excelBookmarkStore" }, (err, store) => {
+            store.getValue({ field: 'bookmarks' }, (err, data: Array<Bookmark>) => { setBookmarkList(data) });
+            store.addListener({ field: 'bookmarks' }, (err, data) => { setBookmarkList(data.value) });
+        })
+    }, [])
 
     return (
         <div className="bookmarkListDiv">
             <label htmlFor="excelFileList">Bookmark List</label>
             <Select
-                isMulti
                 styles={customStyles}
-                closeMenuOnSelect={false}
+                closeMenuOnSelect={true}
                 components={animatedComponents}
-                getOptionLabel={({ fileName }) => fileName}
-                getOptionValue={({ filePath }) => filePath}
-                onMenuOpen={() => {
-                    getPreviousExcelFiles()
-                }}
-                options={previousExcelFiles}
-                onChange={setSelectedFiles}
-                value={selectedFiels}
+                getOptionLabel={({ bookmarkName }) => bookmarkName}
+                getOptionValue={({ bookmarkName }) => bookmarkName}
+                options={bookmarkList}
+                onChange={setSelectedBookmark}
+                value={selectedBookmark}
             />
         </div>
     )
@@ -44,16 +49,13 @@ const BookmarkList = (props: any) => {
 const mapStateToProps = (state: any, ownProps: any) => {
     const { officeAddinServiceActionsReducer, excelFilesReducer } = state
     return {
-        previousExcelFiles: excelFilesReducer.previousExcelFiles,
-        selectedFiels: excelFilesReducer.selectedPreviousExcelFiles,
-        offAddInServiceActions: officeAddinServiceActionsReducer.offAddInServiceActions
+        selectedBookmark: excelFilesReducer.selectedBookmark,
     }
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     return {
-        getPreviousExcelFiles: () => dispatch(getPreviousExcelFilesThunk()),
-        setSelectedFiles: (selectedPreviousExcelFiles: Array<ExcelFile>) => dispatch(setSelectedPreviousExcelFiles(selectedPreviousExcelFiles)),
+        setSelectedBookmark: (selectedBookmark: Bookmark) => dispatch(setSelectedBookmark(selectedBookmark)),
     };
 };
 

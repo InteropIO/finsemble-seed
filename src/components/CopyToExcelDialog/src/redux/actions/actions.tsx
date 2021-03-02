@@ -3,6 +3,7 @@ import { ThunkAction } from "redux-thunk";
 import { RootState } from "./../store"
 import * as CONSTANTS from './actionTypes';
 import ExcelFile from './../../types/ExcelFile';
+import { Bookmark } from "../../types/types";
 
 
 export const officeAddinRegister = (regsiteredActions: [], status: string) => {
@@ -197,10 +198,11 @@ export const setExcelCellDataThunk = (actionId: string, excelFile: ExcelFile, st
 };
 
 export const getWorksheetListThunk = (actionId: string, excelFile: ExcelFile): ThunkAction<void, RootState, null, Action<string>> => async dispatch => {
-    if (actionId != '')
+    if (actionId != ''){
         FSBL.Clients.RouterClient.query(actionId, { excelFile: excelFile }, (err, res) => {
             dispatch(getWorksheetList(res.data.data))
         });
+    }
     else {
         dispatch(getWorksheetList([]))
     }
@@ -242,28 +244,32 @@ export const setSelectedClipboardData = (selectedClipboardData: any) => {
     }
 }
 
-export const setStartCell = (startCell: string) => {
+export const setRange = (range: string) => {
     return {
-        type: CONSTANTS.SET_START_CELL,
+        type: CONSTANTS.SET_RANGE,
         payload: {
-            startCell: startCell
+            range: range
         }
     }
 }
 
-export const setEndCell = (endCell: string) => {
-    return {
-        type: CONSTANTS.SET_END_CELL,
-        payload: {
-            endCell: endCell
-        }
-    }
-}
-
-export const copyToExcel = (actionId: string, targetExcelFile: ExcelFile, targeWorksheet: string, startCell: string, endCell: string, openWorksheet: string, data: []): ThunkAction<void, RootState, null, Action<string>> => async dispatch => {
-    console.log(actionId, targetExcelFile, targeWorksheet, startCell, endCell, openWorksheet, data)
-    FSBL.Clients.RouterClient.query(actionId, { targetExcelFile: targetExcelFile, targeWorksheet: targeWorksheet, startCell: startCell, endCell: endCell, openWorksheet: openWorksheet, data: data }, (err, res) => {
-        console.log(res)
-        //dispatch(getExcelCellData(res.data.data))
-    })
+export const copyToExcel = (actionId: string, targetExcelFile: ExcelFile, targeWorksheet: string, range: string, openWorksheet: string, data: []): ThunkAction<void, RootState, null, Action<string>> => async dispatch => {
+    console.log(actionId, targetExcelFile, targeWorksheet, range, openWorksheet, data)
+    
+    
+    
+    
+    // FSBL.Clients.RouterClient.query(actionId, { targetExcelFile: targetExcelFile, targeWorksheet: targeWorksheet, startCell: startCell, endCell: endCell, openWorksheet: openWorksheet, data: data }, (err, res) => {
+    //     console.log(res)
+    //     //dispatch(getExcelCellData(res.data.data))
+    // })
 };
+
+export const setSelectedBookmark = (selectedBookmark: Bookmark) => {
+    return {
+        type: CONSTANTS.SET_SELECTED_BOOKMARK,
+        payload: {
+            selectedBookmark: selectedBookmark
+        }
+    }
+}

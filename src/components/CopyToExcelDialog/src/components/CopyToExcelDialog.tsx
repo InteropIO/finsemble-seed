@@ -3,15 +3,13 @@ import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk"
-import { copyToExcel, getWorksheetList, registerActionThunk, setSelectedActiveExcelFile, setSelectedClipboardData, setSelectedPreviousExcelFiles } from "../redux/actions/actions";
+import { copyToExcel, getWorksheetList, registerActionThunk, setSelectedActiveExcelFile, setSelectedClipboardData, setSelectedPreviousExcelFiles, setRange, setTargetWorksheet } from "../redux/actions/actions";
 import ExcelFile from "../types/ExcelFile";
 
 import ActiveExcelFileList from "./ActiveExcelFileList";
 import PreviousExcelFileList from "./PreviousExcelFileList";
 import BookmarkList from "./BookmarkList"
-import StartCellInput from "./StartCellInput";
-import EndCellInput from "./EndCellInput";
-import CreateBookmark from "./CreateBookmark";
+import Range from "./Range";
 import OpenWorksheetList from "./OpenWorksheetList";
 import TargetWorksheetList from "./TargetWorksheetList";
 import * as CONSTANTS from "../redux/actions/actionTypes";
@@ -19,13 +17,15 @@ import { ExcelAction } from "../../../ExcelTester/src/types/types";
 
 
 const CopyToExcelDialog = (props: any) => {
-    const { selectedActiveExcelFile } = props;
+    const { selectedActiveExcelFile, setSelectedActiveExcelFile } = props;
     const { selectedPreviousExcelFiles, clearSelectedPreviousExcelFiles } = props;
     const { clipboardData, setSelectedClipboardData } = props
     const { copyToExcel } = props
-    const { targetWorksheet, startCell, endCell, openWorksheet } = props
+    const { targetWorksheet, range, openWorksheet } = props
     const { offAddInServiceActions } = props;
     const { registerCopyToExcel } = props;
+    const { selectedBookmark, setSelectedWorksheet } = props
+    const { setRange } = props;
 
     const spawnExcelFile = () => {
         if (selectedPreviousExcelFiles.length > 0) {
@@ -44,24 +44,33 @@ const CopyToExcelDialog = (props: any) => {
         })
         if (tempCopyToExcelActions.length > 0) {
             tempCopyToExcelActions.forEach((tempCopyToExcelAction: ExcelAction) => {
-                copyToExcel(tempCopyToExcelAction.id, selectedActiveExcelFile, targetWorksheet, startCell, endCell, openWorksheet, clipboardData)
+                copyToExcel(tempCopyToExcelAction.id, selectedActiveExcelFile, targetWorksheet, range, openWorksheet, clipboardData)
             })
         }
 
     }, [offAddInServiceActions])
 
     const loadBookmark = () => {
+        setSelectedActiveExcelFile(selectedBookmark.excelFile)
+        setSelectedWorksheet(selectedBookmark.targetWorksheet)
+        setRange(selectedBookmark.range)
 
+        console.log(selectedBookmark)
+        // let range = selectedBookmark.range.substring(selectedBookmark.range.indexOf('!') + 1, selectedBookmark.range.length)
+        // let startCell = range.split(':')[0]
+        // let endCell = range.split(':')[1]
+        // setStartCell(startCell)
+        // setEndCell(endCell)
     }
 
-    const copyToExceOnClickl = () => {
+    const pasteToExceOnClickl = () => {
         // Need to implement to check logic
         let tempCopyToExcelActions = offAddInServiceActions.filter((offAddInServiceAction: ExcelAction) => {
             return offAddInServiceAction.action === CONSTANTS.COPY_TO_EXCEL && offAddInServiceAction.file?.fileName === selectedActiveExcelFile.fileName
         })
         if (tempCopyToExcelActions.length > 0) {
             tempCopyToExcelActions.forEach((tempCopyToExcelAction: ExcelAction) => {
-                copyToExcel(tempCopyToExcelAction.id, selectedActiveExcelFile, targetWorksheet, startCell, endCell, openWorksheet, clipboardData)
+                //pasteToExcel(tempCopyToExcelAction.id, selectedActiveExcelFile, targetWorksheet, range, openWorksheet, clipboardData)
             })
         } else {
             registerCopyToExcel([selectedActiveExcelFile])
@@ -81,19 +90,28 @@ const CopyToExcelDialog = (props: any) => {
             <div>
                 <BookmarkList />
                 <button onClick={loadBookmark}>Load</button>
+                <br /><br />
             </div>
-            <br />
+
             <div>
                 <ActiveExcelFileList />
-                <TargetWorksheetList />
-                <StartCellInput />
-                <EndCellInput />
-                <OpenWorksheetList />
-                <button onClick={copyToExceOnClickl}>Copy</button>
+                <br /><br /><br />
             </div>
 
-            <CreateBookmark />
+            <div>
+                <TargetWorksheetList />
+                <Range />
+                <button onClick={() => { }}>Focus</button>
+                <button onClick={() => { }}>Copy</button>
+                <button onClick={() => { }}>Clear</button>
+                <br />
+            </div>
 
+            <div>
+                <OpenWorksheetList />
+                <button onClick={pasteToExceOnClickl}>Paste</button>
+
+            </div>
         </div>
     );
 };
@@ -107,8 +125,8 @@ const mapStateToProps = (state: any, ownProps: any) => {
         clipboardData: excelFilesReducer.selectedClipboardData,
         targetWorksheet: excelFilesReducer.targetWorksheet,
         openWorksheet: excelFilesReducer.openWorksheet,
-        startCell: excelFilesReducer.startCell,
-        endCell: excelFilesReducer.endCell
+        range: excelFilesReducer.range,
+        selectedBookmark: excelFilesReducer.selectedBookmark,
     }
 }
 
@@ -118,7 +136,10 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
         clearSelectedPreviousExcelFiles: () => dispatch(setSelectedPreviousExcelFiles([])),
         clearSelectedActiveExcelFiles: () => dispatch(setSelectedActiveExcelFile(null)),
         setSelectedClipboardData: (clipboardData: {}) => dispatch(setSelectedClipboardData(clipboardData)),
-        copyToExcel: (actionId: string, targetExcelFile: ExcelFile, targeWorksheet: string, startCell: string, endCell: string, openWorksheet: string, data: []) => { dispatch(copyToExcel(actionId, targetExcelFile, targeWorksheet, startCell, endCell, openWorksheet, data)) }
+        pasteToExcel: (actionId: string, targetExcelFile: ExcelFile, targeWorksheet: string, range: string, openWorksheet: string, data: []) => dispatch(copyToExcel(actionId, targetExcelFile, targeWorksheet, range, openWorksheet, data)),
+        setSelectedActiveExcelFile: (selectedActiveFile: ExcelFile) => dispatch(setSelectedActiveExcelFile(selectedActiveFile)),
+        setSelectedWorksheet: (selectedWorksheet: {}) => dispatch(setTargetWorksheet(selectedWorksheet)),
+        setRange: (range: string) => dispatch(setRange(range)),
     };
 };
 

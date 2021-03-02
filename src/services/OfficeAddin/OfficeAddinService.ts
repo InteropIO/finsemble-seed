@@ -2,6 +2,7 @@ import ExcelFile from "./types/ExcelFile";
 import { v4 as uuidV4 } from "uuid";
 import { ExcelAction } from "./types/types";
 import * as CONSTANTS from "./config/const";
+import { Bookmark } from "../../components/CopyToExcelDialog/src/types/types";
 
 const Finsemble = require("@finsemble/finsemble-core");
 
@@ -28,7 +29,7 @@ Finsemble.Clients.Logger.log("OfficeAddin Service starting up");
 export default class OfficeAddinService extends Finsemble.baseService {
   private activeExcelFiles: Array<ExcelFile> = [];
   private excelActions: Array<ExcelAction> = [];
-
+  private bookmarkStore: any;
   /**
    * Initializes a new instance of the OfficeAddinService class.
    */
@@ -61,6 +62,13 @@ export default class OfficeAddinService extends Finsemble.baseService {
   }
 
   /**
+   * Generates a UUID
+   */
+  protected getUuid(): string {
+    return uuidV4();
+  }
+
+  /**
    * Fired when the service is ready for initialization
    * @param {function} callback
    */
@@ -79,16 +87,64 @@ export default class OfficeAddinService extends Finsemble.baseService {
       CONSTANTS.FINSEMBLE_EXCEL_EVENT,
       this.handleExcelEvent
     );
+    this.addResponder(CONSTANTS.FINSEMBLE_EXCEL_EVENT, this.handleExcelQuery);
     setInterval(this.checkActiveExcelFiles, 1000);
     this.addResponder(CONSTANTS.OFFICE_ADDIN_REGISTER, this.register);
+
+    //Finsemble.Clients.DistributedStoreClient.removeStore({ store: "excelBookmarkStore", global: true }, function (err, bool) {});
+    Finsemble.Clients.DistributedStoreClient.getStore(
+      { store: "excelBookmarkStore" },
+      this.getBookmarkStoreCb
+    );
   }
 
-  /**
-   * Generates a UUID
-   */
-  protected getUuid(): string {
-    return uuidV4();
-  }
+  getBookmarkStoreCb: StandardCallback = (err, storeObject) => {
+    if (!err) {
+      console.log('Store exist', storeObject)
+      this.bookmarkStore = storeObject;
+    } else {
+      Finsemble.Clients.DistributedStoreClient.createStore(
+        {
+          store: "excelBookmarkStore",
+          global: true,
+          persist: true,
+          values: { bookmarks: [] },
+        },
+        this.createBookmarkStoreCb
+      );
+    }
+  };
+
+  createBookmarkStoreCb: StandardCallback = (err, storeObject) => {
+    if (!err) {
+      console.log('Store created', storeObject)
+      this.bookmarkStore = storeObject;
+    } else {
+    }
+  };
+
+  handleExcelQuery = async (data: any) => {
+    console.log("handleExcelQuery", data);
+
+    switch (data.event) {
+      case "GET_COMPONENT_LIST":
+        let list = await Finsemble.Clients.LauncherClient.getComponentList(
+          (err: StandardError, list: any) => {}
+        );
+        let tempList: Array<{}> = [];
+        for (var key of Object.keys(list.data)) {
+          if (
+            list.data[key].foreign.components["App Launcher"].launchableByUser
+          ) {
+            tempList.push({ key: key, text: key });
+          }
+        }
+        return tempList;
+        break;
+      default:
+        break;
+    }
+  };
 
   handleExcelEvent: StandardCallback = (err, res) => {
     if (err) {
@@ -99,7 +155,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
     } else {
       if (!res.originatedHere()) {
         // Only handle messages not from the service ifself
-        console.log(res.data);
+        console.log("handleExcelEvent", res.data);
 
         switch (res.data.event) {
           case CONSTANTS.ADDIN_OPENED:
@@ -125,7 +181,6 @@ export default class OfficeAddinService extends Finsemble.baseService {
             }
 
             this.transmitActiveFilesChange();
-
             break;
           default:
             break;
@@ -240,6 +295,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
       );
     } else {
       if (!res.originatedHere()) {
+        console.log("handleExcelFileEvent", res.data);
         let event = res.data.event;
         switch (event) {
           case CONSTANTS.SHEET_CHANGE:
@@ -256,6 +312,34 @@ export default class OfficeAddinService extends Finsemble.baseService {
               });
             });
 
+            break;
+          case CONSTANTS.CREATE_BOOKMARK:
+            let bookmarkToCreate = res.data.eventObj
+            console.log(bookmarkToCreate)
+            this.bookmarkStore.getValue("bookmarks", (err, bookmarks: Array<Bookmark>) => {
+              if (!err) {
+                let excelFile = this.activeExcelFiles.filter((file)=>{
+                  return file.fileName === bookmarkToCreate.fileName
+                })
+                bookmarkToCreate.excelFile = excelFile[0]
+
+                let result = bookmarks.filter((bookmark, index) => {
+                  if (bookmark.bookmarkName === res.data.eventObj.bookmarkName) {
+                    bookmarks[index] = bookmarkToCreate;
+                  }
+                  return (
+                    bookmark.bookmarkName === res.data.eventObj.bookmarkName
+                  );
+                });
+                if (result.length == 0) {
+                  bookmarks.push(bookmarkToCreate);
+                }
+                this.bookmarkStore.setValue({
+                  field: "bookmarks",
+                  value: bookmarks,
+                });
+              }
+            });
             break;
           default:
             console.log(res.data);

@@ -2,16 +2,16 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk";
-import { setStartCell } from "../redux/actions/actions";
+import { setRange } from "../redux/actions/actions";
 
-const StartCellInput = (props: any) => {
-    const { startCell, setStartCell } = props
+const Range = (props: any) => {
+    const { range, setRange } = props
 
     return (
-        <div className={'cellInputDiv'}>
+        <div className={'rangeInputDiv'}>
             <br />
-            <label htmlFor="startCellInput">Start Cell</label>
-            <input id='startCellInput' className={'cellInput'} value={startCell} onChange={(e) => { setStartCell(e.target.value) }} />
+            <label htmlFor="rangeInput">Range</label>
+            <input id='rangeInput' className={'rangeInput'} value={range} onChange={(e) => { setRange(e.target.value) }} />
         </div>
     )
 }
@@ -19,17 +19,17 @@ const StartCellInput = (props: any) => {
 const mapStateToProps = (state: any, ownProps: any) => {
     const { officeAddinServiceActionsReducer, excelFilesReducer } = state
     return {
-        startCell: excelFilesReducer.startCell
+        range: excelFilesReducer.range
     }
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     return {
-        setStartCell: (startCell: string) => dispatch(setStartCell(startCell)),
+        setRange: (range: string) => dispatch(setRange(range)),
     };
 };
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(StartCellInput);
+)(Range);

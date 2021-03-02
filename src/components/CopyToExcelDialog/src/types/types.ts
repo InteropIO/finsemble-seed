@@ -5,3 +5,11 @@ export interface ExcelAction {
     id: string
     file: ExcelFile | null
 }
+
+export interface Bookmark {
+    worksheet: string
+    range: string
+    bookmarkName: string
+    fileName: string
+    excelFile: ExcelFile
+}

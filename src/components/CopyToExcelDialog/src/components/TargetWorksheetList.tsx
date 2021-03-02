@@ -41,7 +41,7 @@ const TargetWorksheetList = (props: any) => {
     }, [offAddInServiceActions])
 
     return (
-        <div style={{ float: 'left', width: '50%' }}>
+        <div style={{ float: 'left', width: '30%' }}>
             <label htmlFor="excelFileList">Target Worksheet</label>
             <Select
                 styles={customStyles}

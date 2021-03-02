@@ -14,8 +14,8 @@ const initialState = {
   targetWorksheet: null,
   openWorkSheet: null,
   selectedClipboardData: [['A1', 'B1', 'C1'], ['A2', 'B2', 'C2'], ['A3', 'B3', 'C3']],
-  startCell: 'A1',
-  endCell: 'C3'
+  range: 'A1:C3',
+  selectedBookmark: {}
 }
 
 export default (state = initialState, action: ExcelFileListActionType) => {
@@ -88,16 +88,16 @@ export default (state = initialState, action: ExcelFileListActionType) => {
         ...state,
         openWorksheet: action.payload.openWorksheet
       };
-    case CONSTANTS.SET_START_CELL:
+    case CONSTANTS.SET_RANGE:
       return {
         ...state,
-        startCell: action.payload.startCell
+        range: action.payload.range
       };
-    case CONSTANTS.SET_END_CELL:
+    case CONSTANTS.SET_SELECTED_BOOKMARK:
       return {
         ...state,
-        endCell: action.payload.endCell
-      };
+        selectedBookmark: action.payload.selectedBookmark
+      }
     default:
       return state;
   }
