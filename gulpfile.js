@@ -9,6 +9,7 @@
 	const gulp = require("gulp");
 	const shell = require("shelljs");
 	const path = require("path");
+	const parseArgs = require("minimist");
 	const treeKill = require("tree-kill");
 	let FEA;
 	// Internal Cosaic development: exports doesn't exist when running yarn clean
@@ -17,8 +18,8 @@
 	} catch (e) {}
 	const FEA_PATH = path.resolve("./node_modules/@finsemble/finsemble-electron-adapter");
 	const FEAPackager = FEA ? FEA.packager : undefined;
-	const startupConfig = require("./configs/other/server-environment-startup");
-	const { envOrArg, runWebpackAndCallback, logToTerminal, runWebpackInParallel } = require("./build/buildHelpers");
+	const startupConfig = require("./public/configs/other/server-environment-startup");
+	const { envOrArg, runWebpackAndCallback, logToTerminal, runWebpackInParallel } = require("./webpack/buildHelpers");
 	const INSTALLER_CERT_PASS = "INSTALLER_CERTIFICATE_PASSPHRASE";
 
 	// local
@@ -27,7 +28,7 @@
 
 	let angularComponents;
 	try {
-		angularComponents = require("./build/angular-components.json");
+		angularComponents = require("./webpack/angular-components.json");
 	} catch (ex) {
 		angularComponents = null;
 	}
@@ -77,7 +78,7 @@
 		/**
 		 * Attach some variables to the taskMethods so that they are available to gulp-extensions.
 		 */
-		distPath: path.join(__dirname, "dist"),
+		distPath: path.join(__dirname, "common"),
 		srcPath: path.join(__dirname, "src"),
 		startupConfig: startupConfig,
 
@@ -137,39 +138,34 @@
 					// Build the vendor bundle first, as other webpack instances will use it to speed
 					// up their compilation time.
 					(done) => {
-						const configPath = require.resolve("./build/webpack/webpack.vendor.js");
+						const configPath = require.resolve("./webpack/webpack.vendor.js");
 						const bundleName = "Vendor";
 						runWebpackAndCallback(configPath, watchFiles, bundleName, done);
 					},
 					(done) => {
 						const webpackConfigs = [
 							{
-								configPath: require.resolve("./build/webpack/webpack.assets"),
-								prettyName: "Assets",
-								watch: watchFiles,
-							},
-							{
-								configPath: require.resolve("./build/webpack/webpack.adapters"),
+								configPath: require.resolve("./webpack/webpack.adapters"),
 								prettyName: "Adapters",
 								watch: watchFiles,
 							},
 							{
-								configPath: require.resolve("./build/webpack/webpack.preloads.js"),
+								configPath: require.resolve("./webpack/webpack.preloads.js"),
 								prettyName: "Preloads",
 								watch: watchFiles,
 							},
 							{
-								configPath: require.resolve("./build/webpack/webpack.titleBar.js"),
+								configPath: require.resolve("./webpack/webpack.titleBar.js"),
 								prettyName: "Titlebar",
 								watch: watchFiles,
 							},
 							{
-								configPath: require.resolve("./build/webpack/webpack.services.js"),
+								configPath: require.resolve("./webpack/webpack.services.js"),
 								prettyName: "Custom Services",
 								watch: watchFiles,
 							},
 							{
-								configPath: require.resolve("./build/webpack/webpack.components.js"),
+								configPath: require.resolve("./webpack/webpack.components.js"),
 								prettyName: "Components",
 								watch: watchFiles,
 							},
@@ -188,10 +184,12 @@
 			shell.rm("-rf", taskMethods.distPath);
 			shell.rm("-rf", ".babel_cache");
 			shell.rm("-rf", "finsemble");
-			shell.rm("-rf", path.join(__dirname, "build/webpack/vendor-manifest.json"));
+			shell.rm("-rf", path.join(__dirname, "webpack/vendor-manifest.json"));
 			shell.rm("-rf", ".webpack-file-cache");
 			shell.rm("-rf", "installer-tmp");
 			shell.rm("-rf", "finsemble");
+			shell.rm("-rf", "public/build");
+			shell.rm("-rf", "pkg");
 			done();
 		},
 		checkSymbolicLinks: (done) => {
@@ -294,7 +292,35 @@
 		"dev:noLaunch": (done) => {
 			async.series([taskMethods["build:dev"], taskMethods.startServer], done);
 		},
+		/**
+		 * Builds the application and then launches FEA in jumpstart mode. In the future
+		 * the launching should be directly from the electron-adapter directory but that
+		 * would currently be complex due to the need to catch webpack compile events from
+		 * another process.
+		 */
+		jumpstart: (done) => {
+			const startFEA = (doneFEA) => {
+				const handleElectronClose = () => {
+					if (isMacOrNix) treeKill(process.pid);
+					else process.exit(0);
+				};
 
+				let config = {
+					onElectronClose: handleElectronClose,
+					args: ["--desktopProjectDevMode"],
+				};
+
+				// Use `yarn jumpstart --reset` to copy the seed over the current default project
+				const args = parseArgs(process.argv);
+				if (args["reset"]) config.args.push("--reset-default-project");
+				if (args["update"]) config.args.push("--update-project-from-template");
+				const envargs = taskMethods.startupConfig[env.NODE_ENV]["args"];
+				if (envargs) config.args = config.args.concat(envargs);
+
+				FEA.e2oLauncher(config, doneFEA);
+			};
+			async.series([taskMethods.setDevEnvironment, taskMethods.build], startFEA, done);
+		},
 		launchElectron: (done) => {
 			const cfg = taskMethods.startupConfig[env.NODE_ENV];
 
@@ -345,7 +371,7 @@
 			}
 
 			// Inline require because this file is so large, it reduces the amount of scrolling the user has to do.
-			let installerConfig = require("./configs/other/installer.json");
+			let installerConfig = require("./public/configs/other/installer.json");
 			let seedpackagejson = require("./package.json");
 			// Command line overrides
 
@@ -484,12 +510,23 @@
 		"server:prod": (done) => {
 			async.series([taskMethods.setProdEnvironment, taskMethods.startServer], done);
 		},
+		startServer: async (done) => {
+			const root = path.join(__dirname, "public");
+			const port = process.env.PORT ? parseInt(process.env.PORT) : 3375;
+			logToTerminal(`Serving files from directory ${root}`, "white");
+			const { server, app } = await FEA.Server.start({ root, port });
+			logToTerminal(`Listening on port ${port}`, "white");
+			server.on("error", (err) => {
+				console.log(err.message);
+			});
+			if (done) done();
+		},
 		/**
 		 * Starts the server.
 		 *
 		 * @param {function} done Function called when execution has completed.
 		 */
-		startServer: (done) => {
+		startServerOld: (done) => {
 			const serverPath = path.join(__dirname, "server", "server.js");
 
 			serverProcess = spawn(

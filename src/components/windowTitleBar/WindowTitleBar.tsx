@@ -22,8 +22,8 @@ import {
  * If not running in a BrowserView then some of the CSS directives may conflict with
  * your content. You can remove this line and manually import CSS files from @finsemble/finsemble-ui as necessary.
  */
-import "@finsemble/finsemble-ui/react/assets/css/finsemble.css";
-import "../../../assets/css/theme.css";
+import "@finsemble/finsemble-ui/react/ui-assets/css/finsemble.css";
+import "../../../public/assets/css/theme.css";
 
 /**
  * This is the Window Title Bar component, which is rendered at

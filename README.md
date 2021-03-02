@@ -27,8 +27,7 @@ world</del> turbocharge your workflow.
 2. 📦 Install the deps
 
    (Note, we recommend using the [Yarn Package Manager](https://yarnpkg.com/) - it's fast and reliable. But you can also
-   use npm. **If using npm you must use a version >= 7.x.x. Lower versions will encounter errors regarding changing
-   folder names with missing permissions**)
+   use npm.)
 
    ```
    cd finsemble-seed
