@@ -1,0 +1,69 @@
+/*!
+ * icons.css
+ * Copyright 2017 - 2020 by ChartIQ, Inc.
+ * All rights reserved.
+ */
+
+.icon-avatar-wrapper {
+	display: inline-flex;
+	margin-right: 8px;
+	justify-content: center;
+	align-items: center;
+	padding: 3px;
+}
+
+.icon-avatar {
+	font-weight: bold;
+	padding: 6px;
+	height: 10px;
+	width: 10px;
+	font-size: 9px;
+	color: var(--font-color-2);
+}
+
+.icon-avatar-wrapper img {
+	width: 21px;
+	height: 21px;
+	position: relative;
+	left: -2px;
+	top: -1px;
+}
+
+.icon-avatar-wrapper.entity-with-img {
+	padding-right: 0px;
+	/* Margin is different for images than for the badges because
+	of their padding and other CSS reasons.*/
+	margin-right: 6px;
+}
+
+.icon-avatar[data-category="Workspace"] {
+	border-radius: 3px;
+	background-color: var(--icon-avatar-workspace-background-color);
+}
+
+.icon-avatar[data-category="Application"] {
+	border-radius: 50%;
+	background-color: var(--icon-avatar-component-background-color);
+}
+
+/* Center the font-icons inside of the badge. Only on the toolbar, though. */
+.finsemble-toolbar .icon-avatar i {
+	position: relative;
+	top: 2px;
+}
+
+.fsbl-tab-title .icon-avatar i {
+	position: relative;
+	top: 1px;
+	left: 1px;
+}
+
+/* Grant TitleBar icons active-window colors */
+html.desktop-active .fsbl-tab-title .icon-avatar {
+	background-color: var(--icon-avatar-component-background-color);
+}
+
+.fsbl-tab-title .icon-avatar {
+	background-color: var(--icon-avatar-component-inactive-background-color);
+	transition: background-color 300ms ease-in-out;
+}

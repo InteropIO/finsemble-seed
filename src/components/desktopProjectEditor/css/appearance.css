@@ -1,0 +1,115 @@
+.appearance-options {
+}
+
+.appearance-options legend {
+	user-select: none;
+}
+
+.appearance-options-field {
+	display: flex;
+}
+
+.appearance-options label {
+	display: inline-block;
+	width: 50%;
+}
+
+.theme-edit {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	bottom: 0px;
+	right: 0px;
+	width: 100%;
+	height: 100%;
+	background-color: #171a20;
+}
+
+.theme-color-picker-text {
+	width: 6em;
+}
+
+.color-picker .current-color {
+	width: 3em;
+	height: 3em;
+	border: 1px solid #ccc;
+}
+
+.color-picker .current-color-popup {
+	position: absolute;
+}
+
+.theme-settings {
+}
+
+.theme-settings h2 {
+	margin-top: 2em;
+	margin-bottom: 2em;
+	border-bottom: 2px solid #ccc;
+}
+
+.theme-settings legend {
+	font-weight: bold;
+}
+
+.theme-settings {
+}
+
+.theme-settings h2 {
+	margin-top: 2em;
+	margin-bottom: 2em;
+	border-bottom: 2px solid #ccc;
+}
+
+.theme-settings legend {
+	font-weight: bold;
+}
+
+.appearance-options {
+	margin-bottom: 3em;
+}
+
+.appearance-options-field {
+	display: flex;
+	align-items: center;
+	margin-bottom: 0.5em;
+}
+
+.appearance-options-field label {
+	width: 33.3%;
+	opacity: 75%;
+}
+
+.appearance-options-header {
+	display: flex;
+	align-items: center;
+	margin-bottom: 1em;
+}
+
+.appearance-options-header legend {
+	font-size: 1.25em;
+	margin-right: 1em;
+}
+
+.theme-settings-actions {
+	display: block;
+	text-align: right;
+	margin-bottom: 3em;
+}
+
+.theme-settings-actions button {
+	margin-left: 0.9em;
+	display: inline-block;
+}
+
+.theme-settings-reset-action {
+	background-color: #f26666;
+}
+
+.theme-settings-save-action {
+	background-color: #42a5ba;
+}
+
+.theme-color-picker-text {
+	margin-left: 1em;
+}

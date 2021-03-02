@@ -1,0 +1,129 @@
+/*!
+ * search.css
+ * Copyright 2017 - 2020 by ChartIQ, Inc.
+ * All rights reserved.
+ */
+
+.search-menu .menu .menu-item {
+	color: var(--search-result-font-color);
+}
+
+.search-menu .no-hover:hover,
+.search-menu .no-hover:focus {
+	background: transparent;
+	cursor: default;
+}
+
+.search-menu .informational-state {
+	justify-content: center;
+	font-style: italic;
+	padding-top: 10px;
+	margin-left: -17px;
+}
+
+.search-menu .search-icon-wrapper {
+	color: var(--menu-font-color);
+}
+
+.search-menu .search-input {
+	font-family: var(--font-family);
+	font-weight: var(--font-weight);
+	background: transparent;
+	border-top: none;
+	border-left: none;
+	border-right: none;
+	border-bottom: 1px solid var(--search-input-border-color);
+	margin-left: 11px;
+	width: calc(100% - 43px);
+	color: var(--search-menu-font-color);
+	transition: border-bottom 0.2 ease-in;
+}
+
+.search-menu .search-input:focus {
+	border-bottom: 1px solid var(--search-input-focused-border-color);
+	outline: none;
+}
+
+.search-menu .highlight {
+	text-decoration: underline;
+	color: var(--search-result-highlighter-color);
+	margin: 0px 3px;
+}
+
+.search-title {
+	display: flex;
+	flex-direction: row;
+	position: relative;
+	padding: 10px 10px 10px 14px;
+	margin: 0px 5px;
+	font-weight: var(--font-weight-2);
+	color: var(--search-menu-header-color);
+	background: transparent;
+	text-transform: uppercase;
+	user-select: none;
+}
+
+.search-title .provider-title {
+	font-size: var(--search-menu-font-size);
+	vertical-align: middle;
+	color: var(--menu-font-color);
+	text-transform: none;
+	position: right;
+	margin-left: 8px;
+}
+
+.arrow_right_grey {
+	width: 10px;
+	height: 9px;
+	object-fit: contain;
+	font-size: var(--search-menu-font-size);
+	margin-left: 4px;
+	color: var(--menu-font-color);
+	display: inline;
+}
+
+.search-actions {
+	display: flex;
+	margin-top: 8px;
+	margin-bottom: 8px;
+}
+
+.actionButton {
+	border: 1px solid var(--button-neutral-border-color);
+	padding: 3px;
+	display: inline-block;
+	text-align: center;
+	outline: none;
+	text-decoration: none;
+}
+
+.search-menu .clear-search {
+	font-size: 9px;
+	border-radius: 50%;
+	display: inline-flex;
+	color: var(--search-input-clear-search-color);
+}
+
+.search-menu .clear-search:hover {
+	color: var(--search-input-clear-search-hover-color);
+	cursor: pointer;
+}
+
+.search-menu .menu-item {
+	font-weight: var(--font-weight);
+}
+
+.search-menu .search-provider-results {
+	padding-bottom: 7px;
+}
+
+.finsemble-toolbar-button .ff-search,
+.finsemble-toolbar-button .menu-toggle-small > i {
+	position: relative;
+	top: 2px;
+	left: -2px;
+}
+
+.menu-active {
+	background-color: var(--toolbar-button-hover-color);
+}

@@ -1,0 +1,320 @@
+.app-list-table {
+	width: 100%;
+}
+
+.app-list-table.hidden {
+	display: none;
+}
+
+.app-list-table th {
+	text-align: left;
+	border-bottom: 1px solid #979797;
+	padding: 1em;
+	font-weight: bold;
+}
+
+.app-list-table .app-name {
+	display: block;
+	color: #fff;
+	text-decoration: none;
+	padding: 0.7em;
+	font-weight: bold;
+	border-radius: 1.45em;
+	transition: all 0.25s;
+}
+
+.app-list-table .app-actions {
+	width: 2.8em;
+	text-align: center;
+}
+
+.app-list-table .app-actions button {
+	font-size: 1.2em;
+}
+
+.app-list-table .app-actions button:hover {
+	fill: #f26666;
+}
+
+.app-list-table .app-name:hover {
+	background-color: #3d4455;
+}
+
+.app-delete-icon::before {
+	width: 15px;
+	height: 16px;
+	display: inline-block;
+	content: "";
+	-webkit-mask: url(../svg/icon-delete.svg) no-repeat 50% 50%;
+	mask: url(../svg/icon-delete.svg) no-repeat 50% 50%;
+	-webkit-mask-size: cover;
+	mask-size: cover;
+	background-color: #acb2c0;
+	cursor: pointer;
+}
+.app-delete-icon:hover::before {
+	background-color: red;
+}
+
+.app-edit {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	bottom: 0px;
+	right: 0px;
+	width: 100%;
+	height: 100%;
+	background-color: #171a20;
+}
+
+.app-edit-actions {
+	display: flex;
+	justify-content: space-between;
+	margin: 0.65em 3em;
+}
+
+.app-edit-fieldset {
+	border: 0px;
+	padding: 0px;
+}
+
+.app-edit-fieldset legend {
+	font-size: 1.1em;
+	user-select: none;
+	font-weight: normal;
+	width: 100%;
+}
+
+.app-edit-fieldset label {
+	font-size: 1em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	user-select: none;
+	font-weight: 600;
+	opacity: 75%;
+}
+
+.app-edit-field {
+	display: flex;
+	align-items: center;
+	margin: 0.9em 4.2em;
+}
+
+.app-edit-field label {
+	width: 10em;
+	flex-grow: 0;
+	opacity: 75%;
+}
+
+.app-edit-field input {
+	flex-grow: 1;
+	max-width: 25rem;
+}
+
+.app-edit-field textarea {
+	flex-grow: 1;
+	min-height: 6rem;
+	max-width: 25rem;
+}
+
+.app-size-fieldset {
+	border: 0px;
+	padding: 0px;
+	margin-left: 2em;
+	margin-top: 0.25em;
+}
+
+.app-size-input {
+	margin: 0em 0.5em;
+}
+
+.app-size-fieldset legend {
+	float: left;
+	margin-right: 2em;
+	font-weight: 600;
+}
+
+.app-size-field {
+	position: relative;
+	padding-right: 2em;
+	float: left;
+	clear: right;
+}
+
+/* .app-size-field .unit {
+	position: absolute;
+	top: 0.5rem;
+	right: 0.5rem;
+} */
+
+.app-size-field input {
+	max-width: 2.9em;
+}
+
+button.app-add-new {
+	margin-left: 3px;
+}
+
+button.app-edit-remove {
+	background-color: #f26666;
+}
+
+.app-edit-remove:hover {
+	background-color: #b54f4f;
+}
+
+button.app-edit-save {
+	background-color: #42a5ba;
+	margin-left: 1em;
+}
+
+button.app-edit-save:hover {
+	background-color: #36788b;
+}
+
+button.app-edit-next {
+	color: #fff;
+	background-color: #42a5ba;
+}
+
+button.app-edit-next:hover {
+	background-color: #36788b;
+}
+
+button.app-edit-save[disabled],
+button.app-edit-next[disabled] {
+	color: #acb2c0;
+	background-color: #3d4455;
+}
+
+.setup-type-container {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	bottom: 0px;
+	right: 0px;
+	width: 100%;
+	height: 100%;
+	background-color: #171a20;
+}
+
+.setup-type-container .tile-type-buttons,
+.app-edit .tile-type-buttons {
+	max-width: 30em;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 1em;
+}
+
+.setup-type-heading {
+}
+
+.tile-type-buttons {
+	display: flex;
+	width: 100%;
+	justify-content: space-around;
+}
+
+.tile-type-button.app-wizard:before {
+	content: url("../svg/icons-app-wizard.svg");
+}
+
+.tile-type-button.app-manual:before {
+	content: url("../svg/icons-app-manual.svg");
+}
+
+.tile-type-button.app-web:before {
+	content: url("../svg/icons-app-web.svg");
+}
+
+.tile-type-button.app-native:before {
+	content: url("../svg/icons-app-native.svg");
+}
+
+.tile-type-button.active {
+	border-color: #42a5ba;
+}
+
+.tile-type-button.active:hover {
+	border-color: #42a5ba;
+}
+
+.app-trial-wrapper {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	margin-top: 0.7em;
+}
+
+.app-edit-success-content {
+	margin-left: 2em;
+}
+
+.app-edit-success-content button {
+	background-color: #373b43;
+	margin-left: 0.9em;
+}
+
+.app-edit-success-actions {
+	text-align: right;
+}
+
+.app-edit-success-actions button {
+	display: inline-block;
+	background-color: #42a5ba;
+}
+
+.app-edit-success-actions button:hover {
+	background-color: #36788b;
+}
+
+.app-edit-type-fields {
+	display: flex;
+	margin: 0.9em 4.2em;
+}
+
+.app-edit-type-fields span {
+	width: 10em;
+	flex-grow: 0;
+}
+.app-edit-type-field {
+	display: flex;
+	margin-left: 1.7em;
+}
+
+.app-edit-field.description {
+	align-items: flex-start;
+}
+
+.app-edit-field.app-size label {
+	margin-top: 0.6em;
+}
+
+.app-list-empty {
+	padding: 4.25em 3em;
+	border-radius: 4px;
+	border: dashed 2px var(--core-primary-3);
+	margin-top: 1.2em;
+}
+
+.app-setup-url-field {
+	display: block;
+	margin: 2em 3em;
+}
+
+.app-setup-url-field label {
+	display: block;
+	margin-bottom: 0.5em;
+}
+
+.app-setup-url-field input[type="text"] {
+	background-color: var(--core-primary);
+	border-bottom: 2px solid var(--core-primary-3);
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.app-url-container input,
+.app-url-container div {
+	display: block;
+}

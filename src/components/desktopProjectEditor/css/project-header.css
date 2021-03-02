@@ -1,0 +1,92 @@
+.project-header {
+	font-size: 1.2em;
+	padding: 1rem 2.5rem;
+	background-color: #22262f;
+	display: flex;
+	align-items: center;
+	height: 3.8rem;
+	overflow: hidden;
+	border-top: 1px black solid;
+	margin-top: 1px;
+}
+
+.project-name-container::before {
+	content: url(../svg/icons-edit.svg);
+	margin-left: -1em;
+	margin-right: 0.5em;
+	opacity: 0;
+	transition: opacity 0.25s;
+	flex-grow: 0;
+}
+
+.is-editing-project-name .project-name-container::before {
+	opacity: 1;
+}
+
+.project-name-field {
+	font-size: inherit;
+}
+
+.project-name-field input[type="text"] {
+	font-size: 16px;
+	font-weight: bold;
+	transition: border-color 0.25s;
+	padding: 0.25rem 0em 0em;
+	border-color: transparent;
+	min-width: 15em;
+	max-width: 20em;
+	height: 2em;
+}
+
+.project-name-field input[type="text"]:hover,
+.project-name-field input[type="text"]:focus {
+	cursor: text;
+	border-color: #42a5ba;
+}
+
+.project-name-field input[type="text"]::placeholder {
+	color: #fff;
+}
+
+.project-name-field input[type="text"]:focus::placeholder {
+	color: rgba(255, 255, 255, 0.75);
+}
+
+.project-name-actions {
+	opacity: 0;
+	padding: 0.75em;
+	z-index: 100;
+}
+
+.name-edit-confirm::before {
+	content: url(../svg/icons-confirm.svg);
+}
+
+.name-edit-cancel::before {
+	content: url(../svg/icons-cancel.svg);
+}
+
+.is-editing-project-name .project-name-actions {
+	opacity: 1;
+}
+
+.is-editing-project-name .project-name-container::before {
+	opacity: 1;
+}
+
+.is-editing-project-name input[type="text"] {
+	cursor: text;
+	border-color: #42a5ba;
+}
+
+.project-name-actions button:disabled {
+	opacity: 0.25;
+}
+
+.is-editing-project-name.is-invalid-project-name input[type="text"] {
+	border-color: #da5c5c;
+}
+
+.is-invalid-project-name input {
+	color: #da5c5c;
+}

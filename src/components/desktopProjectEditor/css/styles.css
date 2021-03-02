@@ -1,0 +1,271 @@
+body,
+html {
+	padding: 0px;
+	margin: 0px;
+	width: 100vw;
+	height: 100vh;
+	font-size: 13px;
+	background-color: #22262f;
+}
+
+p {
+	opacity: 75%;
+	margin-left: 1em;
+	line-height: 1.7em;
+}
+
+h2 {
+	margin: 0em;
+}
+
+* {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+*,
+*::after,
+*::before {
+	-webkit-user-select: none;
+	-webkit-user-drag: none;
+	-webkit-app-region: no-drag;
+	cursor: default;
+}
+
+button {
+	border-radius: 3px;
+	font-family: OpenSans;
+	font-weight: 600;
+	padding: 0.5em 1em;
+	background-color: transparent;
+	border: 0px solid transparent;
+	color: #fff;
+	font-size: 0.9rem;
+	transition: all 0.2s ease-in;
+	cursor: pointer;
+}
+
+input {
+	cursor: pointer;
+}
+
+.tile-type-button {
+	width: 13.6em;
+	height: 8.5em;
+	flex-grow: 0;
+	flex-shrink: 0;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding-top: 1.3em;
+	margin: 0.5em 0.5em;
+	background-color: #373b43;
+	border-radius: 0.5em;
+	font-size: 1.1em;
+	transition: all 0.25s;
+	border: 2px solid transparent;
+}
+
+.tile-type-button:hover {
+	border-color: #36788b;
+}
+
+.tile-type-button div {
+	margin-top: 1em;
+}
+
+button:focus {
+	outline: transparent;
+}
+
+button.rounded {
+	border-radius: 2em;
+	background-color: #373b43;
+	padding: 1.1em 1em 1.2em 1em;
+	display: flex;
+	height: 1em;
+	font-size: 12px;
+	justify-content: space-around;
+	align-items: center;
+	z-index: 100;
+	transition: all 0.2s ease-in;
+}
+
+button.rounded:hover {
+	background-color: #22262f;
+}
+
+button[type="submit"] {
+	background-color: #42a5ba;
+}
+
+.ghost-button:hover {
+	text-decoration: underline;
+}
+
+fieldset {
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
+}
+
+legend {
+	margin: 0px;
+	padding: 0px;
+}
+
+input[type="text"] {
+	border: 0px transparent solid;
+	border-bottom: 2px solid transparent;
+}
+
+textarea {
+	padding: 1em 0em;
+	border: 0;
+	border-bottom: 2px transparent solid;
+}
+
+input[type="text"],
+textarea {
+	font-family: OpenSans;
+	font-size: 0.9em;
+	height: 2.9em;
+	padding-left: 0.5em;
+	color: #fff;
+	border-bottom: 2px solid #3d4455;
+	background-color: #22262f;
+	transition: all 0.2s ease-in;
+}
+
+input[type="text"]:focus,
+textarea:focus {
+	outline: none;
+	border-color: #42a5ba;
+}
+
+input[type="text"][aria-invalid="true"] {
+	border-bottom: 2px solid #f26666;
+}
+
+.invalid-message {
+	font-size: 10px;
+	color: #f26666;
+	display: block;
+}
+
+.config-container {
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	max-width: 100%;
+	max-height: 100%;
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+}
+
+.project-container {
+	display: flex;
+	flex-grow: 1;
+	max-height: 100%;
+	overflow: auto;
+}
+
+.icon {
+	fill: currentColor;
+	font-size: inherit;
+	width: 1em;
+	padding-top: 100%;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: contain;
+	image-rendering: pixelated;
+}
+
+.icon svg {
+	fill: inherit;
+}
+
+/* width: 8px, per @DanNicolai */
+::-webkit-scrollbar {
+	width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+	background: none;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: #f1f1f1;
+	border-radius: 3px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+	background: #555;
+}
+
+input[type="file"] {
+	font-family: OpenSans;
+	font-size: 1em;
+	font-weight: 600;
+}
+
+input[type="color"] {
+	-webkit-appearance: none;
+	border: 1px solid black;
+	width: 36px;
+	height: 36px;
+	padding: 0;
+}
+
+/* https://stackoverflow.com/questions/51997640/how-to-set-border-radius-for-color-tags-color-picker */
+input[type="color"]::-webkit-color-swatch-wrapper {
+	padding: 0;
+	border: none;
+	border-radius: 5px;
+	background-clip: padding-box;
+}
+
+input[type="color"]:first-child {
+	padding: 0;
+	margin: 0;
+	border: none;
+	box-shadow: none;
+	border-radius: 100px;
+	background: none;
+	margin-bottom: 20px;
+}
+
+input[type="color"]::-webkit-color-swatch {
+	border: none;
+	border-radius: 4px;
+}
+input[type="color"]:nth-child(2) {
+	padding: 0;
+	margin: 0;
+	border: none;
+	box-shadow: none;
+	border-radius: 100px;
+	background: black;
+	outline: none;
+}
+input[type="color" i] {
+	border-radius: 4px;
+	border: none;
+}
+
+@import url("./nav.css");
+@import url("./views.css");
+@import url("./tooltip.css");
+@import url("./user-settings.css");
+@import url("./getting-started.css");
+@import url("./export.css");
+@import url("./file-input.css");
+@import url("./project-assets.css");
+@import url("./project-header.css");
+@import url("./file-path.css");

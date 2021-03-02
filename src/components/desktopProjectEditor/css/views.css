@@ -1,0 +1,50 @@
+.view-container {
+	flex-grow: 1;
+	height: 100%;
+	overflow-x: hidden;
+	overflow-y: auto;
+	position: relative;
+	background-color: #171a20;
+	border-radius: 20px 0 0 0;
+}
+
+.view-header {
+	display: flex;
+	margin: 2rem 0rem 1.4rem 2.1rem;
+}
+
+.view-title {
+	padding: 0px 0px 4px 0px;
+	width: 100%;
+	margin: 0px;
+	user-select: none;
+	position: relative;
+	font-size: 2.3rem;
+	box-sizing: border-box;
+	font-weight: bold;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+}
+
+.view-title button {
+	margin-right: 0.9rem;
+}
+
+.view-title::after {
+	content: " ";
+	display: block;
+	position: absolute;
+	top: 100%;
+	width: 100%;
+	height: 0.15rem;
+	margin-top: 0.5rem;
+	background-color: #42a5ba;
+}
+
+.view-content {
+	margin: 0em 2.1rem;
+}
+
+@import url("./applications.css");
+@import url("./appearance.css");

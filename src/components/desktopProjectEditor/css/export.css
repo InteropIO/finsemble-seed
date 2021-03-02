@@ -1,0 +1,202 @@
+form.export-details .project-details {
+	margin-left: 2em;
+	margin-bottom: 2em;
+}
+
+form.export-details button {
+	float: right;
+	margin-top: 1em;
+}
+
+.export-details-field {
+	display: flex;
+	align-items: center;
+	margin-bottom: 1em;
+}
+
+.export-details-field label {
+	width: 8em;
+	margin: 0.8em 1.5em;
+}
+
+/* .export-details-field input[type="text"],
+.export-details-field textarea {
+	flex-grow: 1;
+} */
+
+.export-details-field input[type="text"] {
+	width: 20em;
+}
+
+.export-methods {
+	display: flex;
+	margin-top: 4em;
+	margin-left: -1.8em;
+	margin-right: -1.8em;
+}
+
+.export-methods .export-method {
+	padding: 1.8em;
+	min-height: 20em;
+	display: flex;
+	justify-content: flex-start;
+	flex-direction: column;
+	flex-basis: 0;
+	flex-grow: 1;
+	position: relative; /* Creating an offset parent for the buttons in these blocks */
+}
+
+.export-publish-url {
+	text-align: center;
+	display: flex;
+	align-items: center;
+	padding-left: 25px;
+}
+
+.export-publish-url input {
+	width: 428px;
+}
+
+.export-method:first-child {
+	border-right: 1px solid #979797;
+}
+
+.export-method-actions button {
+	display: block;
+	position: absolute;
+	bottom: 1em;
+	right: 2em;
+}
+
+.export-method h2 {
+	margin-bottom: 1.6em;
+}
+
+.export-publish-uploaded h2 {
+	color: #2cc13f;
+}
+
+.export-publish-uploaded p {
+	margin-left: 2em;
+	margin-top: 2em;
+}
+
+.export-publish-uploaded input[type="text"] {
+	background-color: #22262f;
+}
+
+.export-publish-progress-indicator {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.export-publish-progress-indicator > div {
+	width: 5em;
+}
+
+.export-publish-progress {
+	padding-left: 60px;
+}
+
+.publish-progress-container {
+	display: flex;
+	margin-top: 0.9em;
+	margin-bottom: 0.9em;
+	margin-left: 8em;
+	align-items: center;
+}
+
+.publish-progress-icon {
+	margin-right: 0.9em;
+}
+
+.publish-progress-text {
+	opacity: 75%;
+}
+
+.publish-progress-indicator {
+	width: 1.5em;
+	height: 1.5em;
+	margin-top: -0.5em;
+	margin-right: 0.5em;
+}
+
+.publish-progress-pending {
+	border: 0.25em solid #ccc;
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 1em;
+	opacity: 0.5;
+	animation: progress-pending 1s ease-in-out infinite;
+}
+
+.export-publish-has-error .publish-progress-pending {
+	opacity: 0;
+	animation: none;
+}
+
+.publish-progress-error::before {
+	content: url(../svg/icons-cancel.svg);
+}
+
+.publish-progress-success::before {
+	content: url(../svg/icons-confirm.svg);
+}
+
+@keyframes progress-pending {
+	0% {
+		opacity: 0.5;
+	}
+	50% {
+		opacity: 0.75;
+	}
+}
+
+.export-next {
+	background-color: #42a5ba;
+}
+
+.export-next:hover {
+	background-color: #36788b;
+}
+
+.export-method-button {
+	background-color: #42a5ba;
+}
+
+.export-method-button:hover {
+	background-color: #36788b;
+}
+
+.export-publish-error button:not(:last-child) {
+	margin-right: 1em;
+}
+.copy:before {
+	cursor: pointer;
+	width: 20px;
+	height: 23px;
+	display: inline-block;
+	content: "";
+	-webkit-mask: url(../svg/icon-copy.svg) no-repeat 50% 50%;
+	mask: url(../svg/icon-copy.svg) no-repeat 50% 50%;
+	-webkit-mask-size: cover;
+	mask-size: cover;
+	background-color: #acb2c0;
+	cursor: pointer;
+}
+.copy:hover:before {
+	background-color: white;
+}
+
+button#tryAgain {
+	background-color: #42a5ba;
+	color: #fff;
+}
+
+button#tryAgain:hover {
+	background-color: #36788b;
+}
+.export-error-actions {
+	float: right;
+}

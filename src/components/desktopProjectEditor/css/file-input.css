@@ -1,0 +1,43 @@
+.file-input-container {
+	display: flex;
+	align-items: center;
+	flex-grow: 1;
+}
+
+.file-input-actions {
+	position: relative;
+}
+
+.file-input-actions button {
+	margin-right: 1em;
+	background-color: #373b43;
+}
+
+.file-input-actions input[type="file"] {
+	opacity: 0;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0px;
+	left: 0px;
+	bottom: 0px;
+	right: 0px;
+	z-index: 1;
+}
+
+.file-input-value {
+	flex-grow: 1;
+}
+
+.file-input-value input {
+	width: 100%;
+	max-width: 33em;
+}
+
+.file-input-status {
+	margin-left: 1em;
+}
+
+.file-input-error {
+	color: #f26666;
+}

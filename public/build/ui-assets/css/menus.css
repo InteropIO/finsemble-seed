@@ -1,0 +1,185 @@
+/*!
+ * menus.css
+ * Copyright 2017 - 2020 by ChartIQ, Inc.
+ * All rights reserved.
+ */
+
+html.menu-portal ::-webkit-scrollbar-track {
+	border-radius: 3px;
+	background-color: transparent;
+}
+
+html.menu-portal ::-webkit-scrollbar {
+	width: 5px;
+	background-color: transparent;
+	border-radius: 3px;
+}
+
+html.menu-portal ::-webkit-scrollbar-thumb {
+	cursor: pointer;
+	border-radius: 9px;
+	background-color: var(--scrollbar-color);
+}
+
+/* In menu portals, the body will have attribute of `resizing` equal to true
+until the MenuAutoResizer has completed its first run. This is style entry is
+used to hide the scrollbar during initial load, which otherwise would cause a white flash.
+
+This attribute is never set for menus with a fixed height (e.g. <MenuShell height="100">)
+*/
+
+html.menu-portal body {
+	overflow-y: auto;
+	padding: 0px;
+	margin: 0px;
+	background: var(--toolbar-background-color);
+}
+
+html.menu-portal body[resizing="true"],
+html.menu-portal body.menu-no-scroll {
+	overflow-y: hidden;
+}
+
+[data-react-beautiful-dnd-drag-handle="0"] {
+	outline: none;
+}
+
+.menu-header {
+	display: flex;
+	flex-direction: row;
+}
+
+.menu {
+	background: var(--menu-content-background-color);
+	color: var(--menu-font-color);
+	padding: 10px 0;
+}
+
+.advancedAppLauncher .menu {
+	padding: 0;
+}
+
+.menu .menu-section {
+	overflow-x: hidden;
+	overflow-y: auto;
+	list-style-type: none;
+	width: 100%;
+	padding-left: 0px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+.menu-secondary {
+	background: var(--menu-actions-background-color);
+	border-bottom: 4px solid;
+	border-color: var(--core-primary-3);
+	padding-bottom: 4px;
+}
+
+/**
+The "focused" attribute is set during keyboard navigation.
+*/
+
+.menu-item[focused],
+.menu-item:hover,
+.menu-item:focus,
+.finsemble-toolbar-button:hover {
+	background: var(--menu-content-hover-color);
+	outline: none;
+}
+
+.menu-secondary .menu-item:hover {
+	background: var(--menu-actions-hover-color);
+}
+
+.menu-item {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding-left: 14px;
+	margin: 0px 5px;
+	cursor: pointer;
+	position: relative;
+	border-radius: 20px;
+	height: 34px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	user-select: none;
+}
+
+.menu-item .ff-adp-hamburger {
+	color: var(--menu-dragHandle-color);
+	padding: 3px 7px 0px 0px;
+	cursor: grab;
+}
+
+.workspace-list {
+	padding-top: 4px;
+}
+
+.menu-item .workspace-name {
+	text-overflow: ellipsis;
+	overflow: hidden;
+	user-select: none;
+}
+
+/* Prevents star from turning orange */
+.ff-favorite {
+	color: var(--menu-action-icon-color);
+}
+
+.ff-favorite:hover {
+	color: var(--menu-favorite-hover-color);
+}
+
+.favorited > .ff-favorite {
+	color: var(--menu-favorite-hover-color);
+}
+
+.favorited > .ff-favorite:hover {
+	color: var(--menu-favorite-active-hover-color);
+}
+
+.menu-item-row {
+	display: flex;
+	height: 100%;
+	width: 100%;
+	align-items: center;
+}
+
+.menu-item-row .app-name {
+	text-overflow: ellipsis;
+}
+
+.menu-item-row-push-right {
+	display: inline-flex;
+	margin-left: auto;
+}
+
+/* padding for favorite makers and trashcans */
+.menu-item-row-push-right > * {
+	padding: 0px 10px;
+}
+
+.ff-adp-trash-outline:hover {
+	color: var(--menu-delete-background-hover-color);
+}
+
+.menu-toggle-small {
+	display: none;
+}
+
+@media screen and (max-width: 333px) {
+	.menu-toggle-small {
+		display: inline-flex;
+	}
+	.menu-toggle-large {
+		display: none;
+	}
+}
+
+/* Remove border around system tray menu */
+.system-tray {
+	margin: 0px;
+}

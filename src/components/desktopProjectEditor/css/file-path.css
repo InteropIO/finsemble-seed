@@ -1,0 +1,16 @@
+.file-path-container {
+	display: flex;
+	max-width: 20em;
+}
+
+.file-path-container span {
+	max-width: 75%;
+	overflow: hidden;
+}
+
+.file-input-reset-button-container {
+	flex-grow: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}

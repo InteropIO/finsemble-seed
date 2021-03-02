@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="10" height="13" viewBox="0 0 10 13">
+    <defs>
+        <filter id="cjxnbb0uza" width="222.6%" height="342.4%" x="-62.6%" y="-101.3%" filterUnits="objectBoundingBox">
+            <feMorphology in="SourceAlpha" operator="dilate" radius=".75" result="shadowSpreadOuter1"/>
+            <feOffset dy="1" in="shadowSpreadOuter1" result="shadowOffsetOuter1"/>
+            <feMorphology in="SourceAlpha" radius="1" result="shadowInner"/>
+            <feOffset dy="1" in="shadowInner" result="shadowInner"/>
+            <feComposite in="shadowOffsetOuter1" in2="shadowInner" operator="out" result="shadowOffsetOuter1"/>
+            <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="1"/>
+            <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0"/>
+        </filter>
+        <path id="umsw7mkwqb" d="M-1.886 1.886L1.536 5.115 5.216 1.886"/>
+    </defs>
+    <g fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g>
+            <g>
+                <g transform="translate(-6 -6) translate(10 8.844) matrix(0 -1 -1 0 5.402 5.402)">
+                    <use fill="#000" filter="url(#cjxnbb0uza)" xlink:href="#umsw7mkwqb"/>
+                    <use stroke="#ECEDEF" stroke-width="1.5" xlink:href="#umsw7mkwqb"/>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

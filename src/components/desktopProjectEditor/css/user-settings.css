@@ -1,0 +1,55 @@
+.user-settings-fields {
+}
+
+.user-settings-fields legend {
+}
+
+.user-settings-fields p {
+	display: block;
+	margin-left: 2em;
+	width: 40em;
+}
+
+.user-setting-field {
+	margin-left: 2em;
+	margin-bottom: 1em;
+	width: 40em;
+	display: flex;
+	align-items: center;
+}
+
+.user-setting-field label {
+	width: 10em;
+	text-align: right;
+	margin-right: 1.2em;
+}
+
+.user-setting-field input[type="text"] {
+	width: 20em;
+}
+
+.user-setting-field input[type="text"]:focus {
+	border-color: #42a5ba;
+}
+
+.user-settings-actions {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+.user-settings-actions button.skip-button {
+	margin-right: 1em;
+}
+
+.user-settings-actions button.save-button {
+	background-color: #42a5ba;
+}
+
+.user-settings-actions button.save-button:hover {
+	background-color: #36788b;
+}
+
+.user-settings-actions button.save-button[disabled] {
+	background-color: #373b43;
+}

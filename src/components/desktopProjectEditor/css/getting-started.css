@@ -1,0 +1,38 @@
+.getting-started-actions {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+	flex-wrap: wrap;
+}
+
+.getting-started-action {
+	width: 13.6em;
+	height: 9.2em;
+	flex-grow: 0;
+	flex-shrink: 0;
+	justify-content: center;
+	align-items: center;
+	margin: 0.5em 0.5em;
+	white-space: nowrap;
+	background-color: #373b43;
+	border-radius: 0.5em;
+	font-size: 1.2em;
+	transition: all 0.25s;
+	border: 2px solid transparent;
+}
+
+.tile-type-button:hover {
+	border-color: #36788b;
+}
+
+.tile-type-button.add-application:before {
+	content: url("../svg/icons-welcome-application.svg");
+}
+
+.tile-type-button.edit-theme:before {
+	content: url("../svg/icons-welcome-theme.svg");
+}
+
+.tile-type-button.export:before {
+	content: url("../svg/icons-welcome-export.svg");
+}
