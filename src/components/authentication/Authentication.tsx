@@ -17,6 +17,13 @@ import "@finsemble/finsemble-ui/react/assets/css/finsemble.css";
 import "@finsemble/finsemble-ui/react/assets/css/dialogs.css";
 import "@finsemble/finsemble-ui/react/assets/css/authentication.css";
 import "../../../assets/css/theme.css";
+import {
+	addAppsToFinsemble, addAppsToFolders,
+	convertAppDToManifest,
+	getAppDListing,
+	getAppDUrl,
+	getFolderList, getNewConfig, updateStore,
+} from "./AppDToManifest";
 
 const bringToFront = () => FSBL.Clients.WindowClient.bringWindowToFront();
 export const Authentication = () => {
@@ -54,6 +61,16 @@ export const Authentication = () => {
 				 * required. The second parameter (credentials) is option. Credentials can contain anything
 				 * that is useful for session management, such as user ID, tokens, etc.
 				 */
+
+				const appDUrl = await getAppDUrl();
+				const appDListing = await getAppDListing(appDUrl);
+				const componentManifest = await convertAppDToManifest(appDListing);
+				await addAppsToFinsemble(componentManifest);
+				const newConfig = await getNewConfig(componentManifest, appDListing);
+				await addAppsToFolders(newConfig);
+				// The same username you are going to publish Authorisation with
+				await updateStore(payload.username, newConfig);
+
 				publishAuthorization(payload.username, { username: payload.username });
 			} else if (response.error) {
 				setError(response.error);
