@@ -142,7 +142,8 @@ export const getNewConfig = async (components:any, appDListing:any[]) => {
 										if(folder.apps.every((app:any) => app.appId !== appListing.appId)) {
 											folder.apps.push({
 												appID: appListing.appId,
-												name: appListing.name
+												name: appListing.appId,
+												displayName: appListing.name
 											})
 										}
 									}
