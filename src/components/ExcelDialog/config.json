@@ -2,9 +2,9 @@
     "comment": "Excel Integration Component",
     "$schema": "../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/componentsFile.schema.json",
     "components": {
-        "CopyToExcelDialog": {
+        "ExcelDialog": {
             "window": {
-                "url": "$applicationRoot/components/CopyToExcelDialog/CopyToExcelDialog.html",
+                "url": "$applicationRoot/components/ExcelDialog/ExcelDialog.html",
                 "options": {
                     "resizable": true,
                     "autoShow": true,
@@ -36,7 +36,7 @@
                     },
                     "Window Manager": {
                         "alwaysOnTopIcon": true,
-                        "title": "CopyToExcelDialog",
+                        "title": "ExcelDialog",
                         "persistWindowState": true
                     }
                 }

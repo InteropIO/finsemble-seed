@@ -13,3 +13,8 @@ export interface Bookmark {
     fileName: string
     excelFile: ExcelFile
 }
+
+export interface Worksheet {
+    id: string
+    name: string
+}

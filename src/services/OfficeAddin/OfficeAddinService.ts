@@ -483,15 +483,15 @@ export default class OfficeAddinService extends Finsemble.baseService {
             this.addResponder(get_worksheet_list_uuid, this.getWorksheetList);
           });
           break;
-        case CONSTANTS.COPY_TO_EXCEL:
+        case CONSTANTS.PASTE_TO_EXCEL:
           data.excelFiles.forEach((excelFile: ExcelFile) => {
-            let copy_to_excel_uuid = this.getUuid();
+            let paste_to_excel_uuid = this.getUuid();
             returnArray.push({
-              id: copy_to_excel_uuid,
+              id: paste_to_excel_uuid,
               action: action,
               file: excelFile,
             });
-            this.addResponder(copy_to_excel_uuid, this.copyToExcel);
+            this.addResponder(paste_to_excel_uuid, this.pasteToExcel);
           });
           break;
         default:
@@ -581,19 +581,17 @@ export default class OfficeAddinService extends Finsemble.baseService {
     return res.response.data.worksheetList;
   };
 
-  copyToExcel = async (data: any) => {
+  pasteToExcel = async (data: any) => {
     console.log(
-      "copyToExcel",
+      "pasteToExcel",
       `query-${data.targetExcelFile.fileName}-${data.targetExcelFile.createTimestamp}`
     );
-    console.log(data);
     let res = await this.RouterClient.query(
       `query-${data.targetExcelFile.fileName}-${data.targetExcelFile.createTimestamp}`,
       {
-        action: CONSTANTS.COPY_TO_EXCEL,
+        action: CONSTANTS.PASTE_TO_EXCEL,
         targeWorksheet: data.targeWorksheet,
-        startCell: data.startCell,
-        endCell: data.endCell,
+        range: data.range,
         openWorksheet: data.openWorksheet,
         data: data.data,
       },

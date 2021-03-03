@@ -3,7 +3,7 @@ import { ThunkAction } from "redux-thunk";
 import { RootState } from "./../store"
 import * as CONSTANTS from './actionTypes';
 import ExcelFile from './../../types/ExcelFile';
-import { Bookmark } from "../../types/types";
+import { Bookmark, Worksheet } from "../../types/types";
 
 
 export const officeAddinRegister = (regsiteredActions: [], status: string) => {
@@ -198,7 +198,7 @@ export const setExcelCellDataThunk = (actionId: string, excelFile: ExcelFile, st
 };
 
 export const getWorksheetListThunk = (actionId: string, excelFile: ExcelFile): ThunkAction<void, RootState, null, Action<string>> => async dispatch => {
-    if (actionId != ''){
+    if (actionId != '') {
         FSBL.Clients.RouterClient.query(actionId, { excelFile: excelFile }, (err, res) => {
             dispatch(getWorksheetList(res.data.data))
         });
@@ -217,7 +217,7 @@ export const getWorksheetList = (worksheetList: Array<string>) => {
     }
 }
 
-export const setTargetWorksheet = (targetWorksheet: any) => {
+export const setTargetWorksheet = (targetWorksheet: Worksheet | null) => {
     return {
         type: CONSTANTS.SET_TARGET_WORKSHEET,
         payload: {
@@ -226,7 +226,7 @@ export const setTargetWorksheet = (targetWorksheet: any) => {
     }
 }
 
-export const setOpenWorksheet = (openWorksheet: any) => {
+export const setOpenWorksheet = (openWorksheet: Worksheet | null) => {
     return {
         type: CONSTANTS.SET_OPEN_WORKSHEET,
         payload: {
@@ -253,16 +253,17 @@ export const setRange = (range: string) => {
     }
 }
 
-export const copyToExcel = (actionId: string, targetExcelFile: ExcelFile, targeWorksheet: string, range: string, openWorksheet: string, data: []): ThunkAction<void, RootState, null, Action<string>> => async dispatch => {
+export const pasteToExcel = (actionId: string, targetExcelFile: ExcelFile, targeWorksheet: string, range: string, openWorksheet: string, data: []): ThunkAction<void, RootState, null, Action<string>> => async dispatch => {
     console.log(actionId, targetExcelFile, targeWorksheet, range, openWorksheet, data)
-    
-    
-    
-    
-    // FSBL.Clients.RouterClient.query(actionId, { targetExcelFile: targetExcelFile, targeWorksheet: targeWorksheet, startCell: startCell, endCell: endCell, openWorksheet: openWorksheet, data: data }, (err, res) => {
-    //     console.log(res)
-    //     //dispatch(getExcelCellData(res.data.data))
-    // })
+
+    let startCell = range.split(':')[0]
+    let endCell = range.split(':')[1]
+
+    let calculatedRnage = range
+    FSBL.Clients.RouterClient.query(actionId, { targetExcelFile: targetExcelFile, targeWorksheet: targeWorksheet, range: calculatedRnage, openWorksheet: openWorksheet, data: data }, (err, res) => {
+        console.log(res)
+        //dispatch(getExcelCellData(res.data.data))
+    })
 };
 
 export const setSelectedBookmark = (selectedBookmark: Bookmark) => {

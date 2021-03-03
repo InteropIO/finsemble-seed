@@ -4,7 +4,7 @@
         "entry": "./src/components/ExcelTester/src/app.tsx"
     },
     "CopyToExcelDialog": {
-        "output": "components/CopyToExcelDialog/CopyToExcelDialog",
-        "entry": "./src/components/CopyToExcelDialog/src/app.tsx"
+        "output": "components/ExcelDialog/ExcelDialog",
+        "entry": "./src/components/ExcelDialog/src/app.tsx"
     }
 }
