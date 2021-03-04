@@ -8,9 +8,9 @@ import { FinsembleProvider } from "@finsemble/finsemble-ui/react/components/Fins
 import { SystemTrayComponentShell, SystemLog, Preferences } from "@finsemble/finsemble-ui/react/components/system";
 import { CentralLogger, Documentation } from "@finsemble/finsemble-ui/react/components/system";
 import { Restart, Reset, Quit } from "@finsemble/finsemble-ui/react/components/system";
-import "@finsemble/finsemble-ui/react/assets/css/finsemble.css";
-import "@finsemble/finsemble-ui/react/assets/css/menus.css";
-import "../../../assets/css/theme.css";
+import "@finsemble/finsemble-ui/react/ui-assets/css/finsemble.css";
+import "@finsemble/finsemble-ui/react/ui-assets/css/menus.css";
+import "../../../public/assets/css/theme.css";
 
 /**
  * This component displays on right-click in your application's system tray icon.

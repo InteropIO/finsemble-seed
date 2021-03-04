@@ -4,7 +4,7 @@ Below is a brief outline of what's included in the seed project.
 
 - _assets_ - Contains the CSS and images used to create the SmartDesktop's look and feel.
 
-- _build/webpack_ - Includes all of the files used by the seed project to build the application.
+- _webpack_ - Includes all of the files used by the seed project to build
 
   - _webpack.finsemble-built-in.entries.json_ - Specifies the entry and output files for the files built for a default
     SmartDesktop.

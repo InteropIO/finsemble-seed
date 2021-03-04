@@ -1,0 +1,66 @@
+{
+	"comment": "This json file is added to the manifest by FEA, only when running in desktopProject mode",
+	"components": {
+		"desktopProjectEditor": {
+			"window": {
+				"url": "$applicationRoot/components/desktopProjectEditor/desktopProjectEditor.html",
+				"affinity": "workspaceComponents",
+				"options": {
+					"resizable": true,
+					"autoShow": true,
+					"alwaysOnTop": false,
+					"addToWorkspace": true
+				},
+				"top": "center",
+				"left": "center",
+				"width": 800,
+				"height": 650
+			},
+			"component": {
+				"displayName": "Desktop Project Editor",
+				"singleton": true,
+				"spawnOnStartup": false,
+				"injectTheme": false
+			},
+			"foreign": {
+				"services": {
+					"windowService": {
+						"allowSnapping": false,
+						"allowGrouping": false,
+						"allowAutoArrange": false
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": true
+					},
+					"Window Manager": {
+						"alwaysOnTopIcon": false,
+						"showLinker": false,
+						"FSBLHeader": true,
+						"persistWindowState": true,
+						"title": "Desktop Project Editor"
+					},
+					"Toolbar": {
+						"iconClass": "ff-component"
+					}
+				}
+			}
+		}
+	},
+	"workspaces": [
+		{
+			"version": "1.0.0",
+			"name": "Build A Desktop",
+			"type": "workspace",
+			"default": true,
+			"permanent": true,
+			"groups": {},
+			"windows": [
+				{
+					"componentType": "desktopProjectEditor"
+				}
+			]
+		}
+	]
+}

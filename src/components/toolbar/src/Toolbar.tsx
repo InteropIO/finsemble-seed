@@ -5,6 +5,7 @@
 
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
+import { MenuObjType, MenuType } from "@finsemble/finsemble-ui/react/types/desktopProjectEditorTypes";
 import { FinsembleProvider } from "@finsemble/finsemble-ui/react/components/FinsembleProvider";
 import {
 	ToolbarShell,
@@ -12,19 +13,16 @@ import {
 	DragHandle,
 	RevealAll,
 	MinimizeAll,
-	NotificationControl,
 	AutoArrange,
 	Search,
-	Dashbar,
-	AdvancedAppLauncherMenu,
 	AppLauncherMenu,
 	WorkspaceManagementMenu,
 	ToolbarSection,
 } from "@finsemble/finsemble-ui/react/components/toolbar";
 import { FileMenu } from "./FileMenu";
 import { useHotkey } from "@finsemble/finsemble-ui/react/hooks/useHotkey";
-import "@finsemble/finsemble-ui/react/assets/css/finsemble.css";
-import "../../../../assets/css/theme.css";
+import "@finsemble/finsemble-ui/react/ui-assets/css/finsemble.css";
+import "../../../../public/assets/css/theme.css";
 
 /**
  * Note: Set `FSBL.debug = true` if you need to reload the toolbar during development.
@@ -38,6 +36,14 @@ const Toolbar = () => {
 
 	const [useDOMBasedMovement, setDOMBasedMovement] = useState(true);
 
+	const [menus, setMenus] = useState<MenuType>({});
+
+	const updateMenu = () => {
+		FSBL.Clients.ConfigClient.getValue("finsemble.toolbarMenus").then(({ data }: { err: any; data: any }) => {
+			setMenus(data);
+		});
+	};
+
 	useEffect(() => {
 		async function fetchManifest() {
 			const response = await FSBL.Clients.ConfigClient.getValue("finsemble-electron-adapter.useDOMBasedMovement");
@@ -46,6 +52,11 @@ const Toolbar = () => {
 		}
 
 		fetchManifest();
+
+		updateMenu();
+
+		// Listen for notifications that the menu has changed
+		FSBL.Clients.ConfigClient.addListener({ field: "finsemble.toolbarMenus" }, updateMenu);
 	}, []);
 
 	return (
@@ -58,6 +69,18 @@ const Toolbar = () => {
 				{/* Uncomment the following to enable the AdvancedAppLauncherMenu*/}
 				{/* <AdvancedAppLauncherMenu enableQuickComponents={true} /> */}
 				<AppLauncherMenu enableQuickComponents={true} />
+				{Object.values(menus)
+					.filter((menuObj: MenuObjType) => menuObj.applications.length > 0)
+					.sort((a: MenuObjType, b: MenuObjType) => a.position - b.position)
+					.map((menuObj: MenuObjType, index: number) => (
+						<AppLauncherMenu
+							key={index}
+							id={`AppLauncher-${index}`}
+							title={menuObj.displayName}
+							componentFilter={menuObj.applications}
+							suppressFavorites={true}
+						/>
+					))}
 			</ToolbarSection>
 			<ToolbarSection className="center" hideBelowWidth={115}>
 				<div className="divider" />
@@ -68,7 +91,6 @@ const Toolbar = () => {
 				<AutoArrange />
 				<MinimizeAll />
 				<RevealAll />
-				<NotificationControl />
 			</ToolbarSection>
 			<div className="resize-area"></div>
 		</ToolbarShell>
@@ -78,7 +100,6 @@ const Toolbar = () => {
 ReactDOM.render(
 	<FinsembleProvider>
 		<Toolbar />
-		<Dashbar />
 	</FinsembleProvider>,
 	document.getElementById("Toolbar-tsx")
 );

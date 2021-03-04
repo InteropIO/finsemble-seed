@@ -6,14 +6,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { FinsembleProvider } from "@finsemble/finsemble-ui/react/components/FinsembleProvider";
-import {
-	UserPreferences,
-	General,
-	Workspaces,
-	DashbarEditor,
-} from "@finsemble/finsemble-ui/react/components/userPreferences";
-import "@finsemble/finsemble-ui/react/assets/css/finsemble.css";
-import "../../../assets/css/theme.css";
+import { UserPreferences, General, Workspaces } from "@finsemble/finsemble-ui/react/components/userPreferences";
+import "@finsemble/finsemble-ui/react/ui-assets/css/finsemble.css";
+import "../../../public/assets/css/theme.css";
 
 /*
  * Put your customized preference menu components here and pass this object as a prop to the UserPreferences component.
@@ -32,7 +27,6 @@ import "../../../assets/css/theme.css";
 const sections = {
 	General: General,
 	Workspaces: Workspaces,
-	Dashbar: DashbarEditor,
 };
 
 ReactDOM.render(
