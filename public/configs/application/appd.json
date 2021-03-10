@@ -1,0 +1,93 @@
+{
+	"comment": "AppD component config",
+	"$schema": "",
+	"appd": {
+		"Example Charts App": {
+			"appId": "Example Charts App",
+			"name": "Example Charts App",
+			"type": "component",
+			"description": "Visualize market data in the leading technical chart.",
+			"manifest": {
+				"window": {
+					"url": "https://salesdemo-dev.finsemble.com/components/chartiq/chartiq/technical-analysis-chart.html",
+					"width": 800,
+					"height": 600,
+					"options": {
+						"minWidth": 75,
+						"securityPolicy": "trusted"
+					}
+				},
+				"foreign": {
+					"services": { "dockingService": { "isArrangable": true } },
+					"components": {
+						"App Launcher": { "launchableByUser": true },
+						"Toolbar": { "iconClass": "ff-chart-advanced" },
+						"Window Manager": { "FSBLHeader": true, "showLinker": true, "persistWindowState": true }
+					}
+				},
+				"component": {
+					"preload": ["https://salesdemo-dev.finsemble.com/components/chartiq/chartiq.js"]
+				}
+			},
+			"manifestType": "finsemble",
+			"version": "1.0.0",
+			"releaseNotes": "This is the only version.",
+			"tooltip": "ChartIQ Advanced Chart",
+			"images": [
+				{
+					"url": "https://i.imgur.com/10C3LdH.png",
+					"tooltip": "Candle Chart"
+				}
+			],
+			"tags": ["charts", "market data", "visualization", "graphics"],
+			"contactEmail": "info@cosaic.io",
+			"supportEmail": "support@finsemble.com",
+			"publisher": "Cosaic",
+			"icons": [
+				{
+					"url": "https://i.imgur.com/mpBdiHd.png"
+				}
+			]
+		},
+		"Example News App": {
+			"appId": "Example News App",
+			"name": "Example News App",
+			"type": "component",
+			"description": "Financial news headlines.",
+			"manifest": {
+				"window": {
+					"url": "https://finsemble.chartiq.com/components/widgets/news/news.html",
+					"width": 354,
+					"height": 600
+				},
+				"foreign": {
+					"services": { "dockingService": { "isArrangable": true } },
+					"components": {
+						"App Launcher": { "launchableByUser": true },
+						"Toolbar": { "iconClass": "ff-news" },
+						"Window Manager": { "FSBLHeader": true, "showLinker": true, "persistWindowState": true }
+					}
+				}
+			},
+			"manifestType": "finsemble",
+			"version": "1.0.0",
+			"releaseNotes": "This is the only version of News",
+			"tooltip": "News",
+			"images": [
+				{
+					"url": "https://i.imgur.com/6oZjqP7.png",
+					"tooltip": "News"
+				}
+			],
+			"tags": ["news"],
+			"contactEmail": "info@cosaic.io",
+			"supportEmail": "support@finsemble.com",
+			"publisher": "Cosaic",
+			"icons": [
+				{
+					"url": "https://i.imgur.com/gHfwucS.png"
+				}
+			]
+		}
+	}
+}
