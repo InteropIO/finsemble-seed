@@ -20,6 +20,11 @@ const initialState = {
 
 export default (state = initialState, action: ExcelFileListActionType) => {
   switch (action.type) {
+    case CONSTANTS.SET_SELECTED_CLIPBOARD_DATA:
+      return {
+        ...state,
+        selectedClipboardData: action.payload.selectedClipboardData
+      }
     case CONSTANTS.GET_ACTIVE_EXCEL_FILES:
       return {
         ...state,

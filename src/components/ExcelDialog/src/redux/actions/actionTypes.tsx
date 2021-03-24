@@ -26,9 +26,16 @@ export const SET_TARGET_WORKSHEET = "SET_TARGET_WORKSHEET"
 export const SET_OPEN_WORKSHEET = ' "SET_OPEN_WORKSHEET"'
 export const SET_SELECTED_CLIPBOARD_DATA = 'SET_SELECTED_CLIPBOARD_DATA'
 export const SET_RANGE = 'SET_RANGE'
-export const PASTE_TO_EXCEL = "PASTE_TO_EXCEL"
 
 export const SET_SELECTED_BOOKMARK = 'SET_SELECTED_BOOKMARK'
+
+export const PASTE_TO_EXCEL = "PASTE_TO_EXCEL"
+export const FOCUS_RANGE = 'FOCUS_RANGE'
+export const CLEAR_RANGE = 'CLEAR_RANGE'
+export const COPY_RANGE = 'COPY_RANGE'
+
+export const BROADCAST_DATA = 'BROADCAST_DATA'
+
 
 interface OfficeAddinRegisterAction {
     type: typeof OFFICE_ADDIN_REGISTER,

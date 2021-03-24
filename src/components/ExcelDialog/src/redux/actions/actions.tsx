@@ -15,7 +15,7 @@ export const officeAddinRegister = (regsiteredActions: [], status: string) => {
     }
 }
 
-export const registerActionThunk = (action: string, excelFiles?: Array<ExcelFile>): ThunkAction<void, RootState, null, Action<string>> => async dispatch => {
+export const registerActionThunk = (action: string, excelFiles?: Array<ExcelFile>, params?: any): ThunkAction<void, RootState, null, Action<string>> => async dispatch => {
     FSBL.Clients.RouterClient.query(CONSTANTS.OFFICE_ADDIN_REGISTER, { actions: [action], excelFiles: excelFiles }, (err, res) => {
         dispatch(officeAddinRegister(res.data.data, res.data.status))
         switch (action) {
@@ -72,6 +72,25 @@ export const registerActionThunk = (action: string, excelFiles?: Array<ExcelFile
                         dispatch(sheetChangeEvent(eventObj))
                     }
                 })
+                break;
+            case CONSTANTS.BROADCAST_DATA:
+                FSBL.Clients.RouterClient.addListener(res.data.data[0].id, (err, res: any) => {
+                    if (res) {
+                        dispatch(setSelectedClipboardData(res.data.data.values))
+                    }
+                })
+                break;
+            case CONSTANTS.CLEAR_RANGE:
+                dispatch(clearRange(res.data.data[0].id, params?.targetExcelFile, params?.targetWorksheet, params?.range))
+                break;
+            case CONSTANTS.FOCUS_RANGE:
+                dispatch(focusRange(res.data.data[0].id, params?.targetExcelFile, params?.targetWorksheet, params?.range))
+                break;
+            case CONSTANTS.COPY_RANGE:
+                dispatch(copyRange(res.data.data[0].id, params?.targetExcelFile, params?.targetWorksheet, params?.range))
+                break;
+            case CONSTANTS.PASTE_TO_EXCEL:
+                dispatch(pasteToExcel(res.data.data[0].id, params?.targetExcelFile, params?.targetWorksheet, params?.range, params.data))
                 break;
             default:
                 break;
@@ -235,7 +254,7 @@ export const setOpenWorksheet = (openWorksheet: Worksheet | null) => {
     }
 }
 
-export const setSelectedClipboardData = (selectedClipboardData: any) => {
+export const setSelectedClipboardData = (selectedClipboardData: []) => {
     return {
         type: CONSTANTS.SET_SELECTED_CLIPBOARD_DATA,
         payload: {
@@ -253,18 +272,46 @@ export const setRange = (range: string) => {
     }
 }
 
-export const pasteToExcel = (actionId: string, targetExcelFile: ExcelFile, targeWorksheet: string, range: string, openWorksheet: string, data: []): ThunkAction<void, RootState, null, Action<string>> => async dispatch => {
-    console.log(actionId, targetExcelFile, targeWorksheet, range, openWorksheet, data)
-
+export const pasteToExcel = (actionId: string, targetExcelFile: ExcelFile, targeWorksheet: Worksheet, range: string, data: string[][]): ThunkAction<void, RootState, null, Action<string>> => async dispatch => {
     let startCell = range.split(':')[0]
     let endCell = range.split(':')[1]
-
-    let calculatedRnage = range
-    FSBL.Clients.RouterClient.query(actionId, { targetExcelFile: targetExcelFile, targeWorksheet: targeWorksheet, range: calculatedRnage, openWorksheet: openWorksheet, data: data }, (err, res) => {
-        console.log(res)
-        //dispatch(getExcelCellData(res.data.data))
+    let targetColNum = convertExcelColToNum(strRemoveNum(endCell)) - convertExcelColToNum(strRemoveNum(startCell)) + 1
+    let targetRowNum = strRemoveChar(endCell) - strRemoveChar(startCell) + 1
+    let targetRange = range
+    if (data.length != targetRowNum || data[0].length != targetColNum) {
+        if (!strRemoveChar(startCell)) {
+            startCell += '1'
+        }
+        let targetEndCell = ''
+        if (data[0].length > 0) {
+            targetEndCell = convertNumToExcelCol(convertExcelColToNum(strRemoveNum(startCell)) - 1 + data[0].length - 1) + (data.length - 1 + strRemoveChar(startCell))
+        }
+        targetRange = startCell + ':' + targetEndCell
+    }
+    FSBL.Clients.RouterClient.query(actionId, { targetExcelFile: targetExcelFile, targeWorksheet: targeWorksheet, range: targetRange, data: data }, (err, res) => {
+        //console.log(res)
     })
 };
+
+export const focusRange = (actionId: string, targetExcelFile: ExcelFile, targeWorksheet: Worksheet, range: string): ThunkAction<void, RootState, null, Action<string>> => async dispatch => {
+    FSBL.Clients.RouterClient.query(actionId, { targetExcelFile: targetExcelFile, targeWorksheet: targeWorksheet, range: range }, (err, res) => {
+        //console.log(res)
+    })
+}
+
+export const copyRange = (actionId: string, targetExcelFile: ExcelFile, targeWorksheet: Worksheet, range: string): ThunkAction<void, RootState, null, Action<string>> => async dispatch => {
+    FSBL.Clients.RouterClient.query(actionId, { targetExcelFile: targetExcelFile, targeWorksheet: targeWorksheet, range: range }, (err, res) => {
+        if (res.data.data.data) {
+            dispatch(setSelectedClipboardData(res.data.data.data))
+        }
+    })
+}
+
+export const clearRange = (actionId: string, targetExcelFile: ExcelFile, targeWorksheet: Worksheet, range: string): ThunkAction<void, RootState, null, Action<string>> => async dispatch => {
+    FSBL.Clients.RouterClient.query(actionId, { targetExcelFile: targetExcelFile, targeWorksheet: targeWorksheet, range: range }, (err, res) => {
+        //console.log(res)
+    })
+}
 
 export const setSelectedBookmark = (selectedBookmark: Bookmark) => {
     return {
@@ -273,4 +320,35 @@ export const setSelectedBookmark = (selectedBookmark: Bookmark) => {
             selectedBookmark: selectedBookmark
         }
     }
+}
+
+const convertNumToExcelCol = (n: number) => {
+    var ordA = 'a'.charCodeAt(0);
+    var ordZ = 'z'.charCodeAt(0);
+    var len = ordZ - ordA + 1;
+
+    var s = "";
+    while (n >= 0) {
+        s = String.fromCharCode(n % len + ordA) + s;
+        n = Math.floor(n / len) - 1;
+    }
+    return s.toUpperCase();
+}
+
+const convertExcelColToNum = (val: string) => {
+    var base = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', i, j, result = 0;
+
+    for (i = 0, j = val.length - 1; i < val.length; i += 1, j -= 1) {
+        result += Math.pow(base.length, j) * (base.indexOf(val[i]) + 1);
+    }
+
+    return result;
+};
+
+const strRemoveNum = (str: string) => {
+    return str.replace(/[0-9]/g, '');
+}
+
+const strRemoveChar = (str: string) => {
+    return parseInt(str.replace(/^\D+/g, ''));
 }

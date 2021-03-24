@@ -9,6 +9,7 @@ import { getWorksheetListThunk, registerActionThunk, setTargetWorksheet } from "
 import * as CONSTANTS from "../redux/actions/actionTypes";
 import { useEffect, useState } from "react";
 import { ExcelAction } from "../../../ExcelTester/src/types/types";
+import { Worksheet } from "../types/types";
 
 const TargetWorksheetList = (props: any) => {
     const animatedComponents = makeAnimated();
@@ -41,7 +42,7 @@ const TargetWorksheetList = (props: any) => {
     }, [offAddInServiceActions])
 
     return (
-        <div style={{ float: 'left', width: '30%' }}>
+        <div style={{ float: 'left', width: '70%' }}>
             <label htmlFor="excelFileList">Target Worksheet</label>
             <Select
                 styles={customStyles}
@@ -90,7 +91,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     return {
         registerGetWorksheetList: (excelFiles: Array<ExcelFile>) => dispatch(registerActionThunk(CONSTANTS.GET_WORKSHEET_LIST, excelFiles)),
         getWorksheetList: (actionId: string, excelFile: ExcelFile) => dispatch(getWorksheetListThunk(actionId, excelFile)),
-        setSelectedWorksheet: (selectedWorksheet: {}) => dispatch(setTargetWorksheet(selectedWorksheet)),
+        setSelectedWorksheet: (selectedWorksheet: Worksheet) => dispatch(setTargetWorksheet(selectedWorksheet)),
     };
 };
 

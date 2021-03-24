@@ -2,7 +2,7 @@ import ExcelFile from "./types/ExcelFile";
 import { v4 as uuidV4 } from "uuid";
 import { ExcelAction } from "./types/types";
 import * as CONSTANTS from "./config/const";
-import { Bookmark } from "../../components/CopyToExcelDialog/src/types/types";
+import { Bookmark } from "../../components/ExcelDialog/src/types/types";
 
 const Finsemble = require("@finsemble/finsemble-core");
 
@@ -100,7 +100,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
 
   getBookmarkStoreCb: StandardCallback = (err, storeObject) => {
     if (!err) {
-      console.log('Store exist', storeObject)
+      console.log("Store exist", storeObject);
       this.bookmarkStore = storeObject;
     } else {
       Finsemble.Clients.DistributedStoreClient.createStore(
@@ -117,7 +117,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
 
   createBookmarkStoreCb: StandardCallback = (err, storeObject) => {
     if (!err) {
-      console.log('Store created', storeObject)
+      console.log("Store created", storeObject);
       this.bookmarkStore = storeObject;
     } else {
     }
@@ -163,6 +163,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
               return file.fileName == res.data.fileName;
             });
 
+            let fileToSend = file;
             if (!file) {
               let newExcelfile = new ExcelFile(
                 res.data.fileName,
@@ -175,12 +176,35 @@ export default class OfficeAddinService extends Finsemble.baseService {
                 `${res.data.fileName}-event`,
                 this.handleExcelFileEvent
               );
+              fileToSend = newExcelfile;
             } else {
               file.createTimestamp = res.data.timestamp;
               file.aliveTimestamp = res.data.timestamp;
             }
 
+            this.bookmarkStore.getValue(
+              "bookmarks",
+              (err, bookmarks: Array<Bookmark>) => {
+                if (!err) {
+                  this.sendBookmarks({
+                    targetExcelFile: fileToSend,
+                    bookmarks: bookmarks,
+                  });
+                }
+              }
+            );
+
             this.transmitActiveFilesChange();
+            break;
+          case CONSTANTS.BROADCAST_DATA:
+            let tempActions = this.excelActions.filter((action) => {
+              return action.action === CONSTANTS.BROADCAST_DATA;
+            });
+            tempActions.forEach((action) => {
+              Finsemble.Clients.RouterClient.transmit(action.id, {
+                data: res.data,
+              });
+            });
             break;
           default:
             break;
@@ -314,32 +338,67 @@ export default class OfficeAddinService extends Finsemble.baseService {
 
             break;
           case CONSTANTS.CREATE_BOOKMARK:
-            let bookmarkToCreate = res.data.eventObj
-            console.log(bookmarkToCreate)
-            this.bookmarkStore.getValue("bookmarks", (err, bookmarks: Array<Bookmark>) => {
-              if (!err) {
-                let excelFile = this.activeExcelFiles.filter((file)=>{
-                  return file.fileName === bookmarkToCreate.fileName
-                })
-                bookmarkToCreate.excelFile = excelFile[0]
+            let bookmarkToCreate = res.data.eventObj;
+            this.bookmarkStore.getValue(
+              "bookmarks",
+              (err, bookmarks: Array<Bookmark>) => {
+                if (!err) {
+                  let excelFile = this.activeExcelFiles.filter((file) => {
+                    return file.fileName === bookmarkToCreate.fileName;
+                  });
+                  bookmarkToCreate.excelFile = excelFile[0];
 
-                let result = bookmarks.filter((bookmark, index) => {
-                  if (bookmark.bookmarkName === res.data.eventObj.bookmarkName) {
-                    bookmarks[index] = bookmarkToCreate;
+                  let result = bookmarks.filter((bookmark, index) => {
+                    if (
+                      bookmark.bookmarkName === res.data.eventObj.bookmarkName
+                    ) {
+                      bookmarks[index] = bookmarkToCreate;
+                    }
+                    return (
+                      bookmark.bookmarkName === res.data.eventObj.bookmarkName
+                    );
+                  });
+                  if (result.length == 0) {
+                    bookmarks.push(bookmarkToCreate);
                   }
-                  return (
-                    bookmark.bookmarkName === res.data.eventObj.bookmarkName
-                  );
-                });
-                if (result.length == 0) {
-                  bookmarks.push(bookmarkToCreate);
+                  this.bookmarkStore.setValue({
+                    field: "bookmarks",
+                    value: bookmarks,
+                  });
+                  this.sendBookmarks({
+                    targetExcelFile: bookmarkToCreate.excelFile,
+                    bookmarks: bookmarks,
+                  });
                 }
-                this.bookmarkStore.setValue({
-                  field: "bookmarks",
-                  value: bookmarks,
-                });
               }
-            });
+            );
+            break;
+
+          case CONSTANTS.DELETE_BOOKMARK:
+            let bookmarkToDelete = res.data.eventObj;
+            this.bookmarkStore.getValue(
+              "bookmarks",
+              (err, bookmarks: Array<Bookmark>) => {
+                if (!err) {
+                  let filteredBookmarks = bookmarks.filter(
+                    (tempBookmark: Bookmark) => {
+                      return (
+                        tempBookmark.bookmarkName !==
+                        bookmarkToDelete.bookmarkName
+                      );
+                    }
+                  );
+                  this.bookmarkStore.setValue({
+                    field: "bookmarks",
+                    value: filteredBookmarks,
+                  });
+                  this.sendBookmarks({
+                    targetExcelFile: bookmarkToDelete.excelFile,
+                    bookmarks: filteredBookmarks,
+                  });
+                }
+              }
+            );
             break;
           default:
             console.log(res.data);
@@ -413,6 +472,16 @@ export default class OfficeAddinService extends Finsemble.baseService {
           };
           returnArray.push(tempAction);
           this.excelActions.push(tempAction);
+          break;
+        case CONSTANTS.BROADCAST_DATA:
+          let broadcast_data_uuid = this.getUuid();
+          let broadcast_data_action: ExcelAction = {
+            id: broadcast_data_uuid,
+            action: action,
+            file: null,
+          };
+          returnArray.push(broadcast_data_action);
+          this.excelActions.push(broadcast_data_action);
           break;
         case CONSTANTS.GET_EXCEL_CELL_DATA:
           data.excelFiles.forEach((excelFile: ExcelFile) => {
@@ -492,6 +561,39 @@ export default class OfficeAddinService extends Finsemble.baseService {
               file: excelFile,
             });
             this.addResponder(paste_to_excel_uuid, this.pasteToExcel);
+          });
+          break;
+        case CONSTANTS.FOCUS_RANGE:
+          data.excelFiles.forEach((excelFile: ExcelFile) => {
+            let focus_range_uuid = this.getUuid();
+            returnArray.push({
+              id: focus_range_uuid,
+              action: action,
+              file: excelFile,
+            });
+            this.addResponder(focus_range_uuid, this.focusRange);
+          });
+          break;
+        case CONSTANTS.CLEAR_RANGE:
+          data.excelFiles.forEach((excelFile: ExcelFile) => {
+            let clear_range_uuid = this.getUuid();
+            returnArray.push({
+              id: clear_range_uuid,
+              action: action,
+              file: excelFile,
+            });
+            this.addResponder(clear_range_uuid, this.clearRange);
+          });
+          break;
+        case CONSTANTS.COPY_RANGE:
+          data.excelFiles.forEach((excelFile: ExcelFile) => {
+            let copy_range_uuid = this.getUuid();
+            returnArray.push({
+              id: copy_range_uuid,
+              action: action,
+              file: excelFile,
+            });
+            this.addResponder(copy_range_uuid, this.copyRange);
           });
           break;
         default:
@@ -594,6 +696,73 @@ export default class OfficeAddinService extends Finsemble.baseService {
         range: data.range,
         openWorksheet: data.openWorksheet,
         data: data.data,
+      },
+      (err: any, res: any) => {}
+    );
+    return res.response.data;
+  };
+
+  focusRange = async (data: any) => {
+    console.log(
+      "focusRange",
+      `query-${data.targetExcelFile.fileName}-${data.targetExcelFile.createTimestamp}`
+    );
+    let res = await this.RouterClient.query(
+      `query-${data.targetExcelFile.fileName}-${data.targetExcelFile.createTimestamp}`,
+      {
+        action: CONSTANTS.FOCUS_RANGE,
+        targeWorksheet: data.targeWorksheet,
+        range: data.range,
+      },
+      (err: any, res: any) => {}
+    );
+    return res.response.data;
+  };
+
+  clearRange = async (data: any) => {
+    console.log(
+      "clearRange",
+      `query-${data.targetExcelFile.fileName}-${data.targetExcelFile.createTimestamp}`
+    );
+    let res = await this.RouterClient.query(
+      `query-${data.targetExcelFile.fileName}-${data.targetExcelFile.createTimestamp}`,
+      {
+        action: CONSTANTS.CLEAR_RANGE,
+        targeWorksheet: data.targeWorksheet,
+        range: data.range,
+      },
+      (err: any, res: any) => {}
+    );
+    return res.response.data;
+  };
+
+  copyRange = async (data: any) => {
+    console.log(
+      "copyRange",
+      `query-${data.targetExcelFile.fileName}-${data.targetExcelFile.createTimestamp}`
+    );
+    let res = await this.RouterClient.query(
+      `query-${data.targetExcelFile.fileName}-${data.targetExcelFile.createTimestamp}`,
+      {
+        action: CONSTANTS.COPY_RANGE,
+        targeWorksheet: data.targeWorksheet,
+        range: data.range,
+      },
+      (err: any, res: any) => {}
+    );
+    return res.response.data.result;
+  };
+
+  sendBookmarks = async (data: any) => {
+    console.log(
+      "sendBookmarks",
+      `query-${data.targetExcelFile.fileName}-${data.targetExcelFile.createTimestamp}`
+    );
+    let res = await this.RouterClient.query(
+      `query-${data.targetExcelFile.fileName}-${data.targetExcelFile.createTimestamp}`,
+      {
+        action: CONSTANTS.SEND_BOOKMARKS,
+        bookmarks: data.bookmarks,
       },
       (err: any, res: any) => {}
     );

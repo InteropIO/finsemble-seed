@@ -21,7 +21,7 @@ const ActiveExcelFileList = (props: any) => {
         container:(provided: any, state: any) => ({
             ...provided,
             float: 'left',
-            width: '80%'
+            width: '100%'
         }),
     }
     const animatedComponents = makeAnimated();
