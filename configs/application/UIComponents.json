@@ -506,6 +506,134 @@
 					}
 				}
 			}
+		},
+		"NotificationsCenter": {
+			"bootParams": {
+				"stage": "earlyuser",
+				"dependencies": ["Toolbar"]
+			},
+			"window": {
+				"url": "$applicationRoot/components/notificationsCenter/notificationsCenter.html",
+				"forceOntoMonitor": true,
+				"top": 0,
+				"right": 0,
+				"width": 428,
+				"maxWidth": 428,
+				"minWidth": 428,
+				"height": "100%",
+				"position": "available",
+				"monitor": "primary",
+				"addToWorkspace": false,
+				"options": {
+					"transparent": false,
+					"alwaysOnTop": true,
+					"autoShow": false,
+					"resizable": true,
+					"showTaskbarIcon": false,
+					"maximizable": false,
+					"isEvergreen": false
+				},
+				"data": {
+					"notifications": {
+						"applyMuteFilters": false,
+						"notificationsHistory": true
+					}
+				}
+			},
+			"component": {
+				"preload": false,
+				"spawnOnStartup": true,
+				"singleton": true,
+				"category": "system",
+				"canMaximize": false
+			},
+			"foreign": {
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"title": "notification-center",
+						"FSBLHeader": {
+							"hideMaximize": true,
+							"hideClose": false,
+							"hideMinimize": true
+						},
+						"disableBrowserView": true
+					},
+					"Toolbar": {
+						"iconClass": "notification-center"
+					}
+				},
+				"services": {
+					"windowService": {
+						"allowAutoArrange": false,
+						"allowSnapping": false,
+						"allowTabbing": false,
+						"allowTiling": false,
+						"allowGrouping": false,
+						"allowMinimize": false
+					}
+				}
+			}
+		},
+		"NotificationsToasts": {
+			"bootParams": {
+				"stage": "earlyuser",
+				"dependencies": ["Toolbar"]
+			},
+			"window": {
+				"name": "notifications-toasts",
+				"url": "$applicationRoot/components/notificationsToasts/notificationsToasts.html",
+				"options": {
+					"transparent": false,
+					"alwaysOnTop": true,
+					"autoShow": false,
+					"resizable": false,
+					"showTaskbarIcon": false
+				},
+				"forceOntoMonitor": true,
+				"top": 0,
+				"right": 0,
+				"width": 428,
+				"height": "100%",
+				"position": "available",
+				"data": {
+					"notifications": {
+						"applyMuteFilters": true
+					}
+				}
+			},
+			"component": {
+				"preload": false,
+				"spawnOnStartup": true,
+				"singleton": true,
+				"category": "system"
+			},
+			"foreign": {
+				"services": {
+					"windowService": {
+						"manageWindowMovement": true,
+						"allowAutoArrange": false,
+						"allowSnapping": false,
+						"allowTabbing": false,
+						"allowTiling": false,
+						"allowGrouping": false,
+						"allowMinimize": false
+					},
+					"workspace": {}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"FSBLHeader": false,
+						"title": "NotificationsToasts",
+						"persistWindowState": true
+					}
+				}
+			}
 		}
 	}
 }

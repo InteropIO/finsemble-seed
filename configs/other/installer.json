@@ -17,5 +17,7 @@
 	"//background": "Path to the image used as the background for a Mac installer",
 	"background": "./assets/img/background.png",
 	"//macIcon": "Path to the icon to be used on Mac",
-	"macIcon": "./assets/img/installer_icon.icns"
+	"macIcon": "./assets/img/installer_icon.icns",
+	"//loadingGif": "Path to the GIF image to display during installation",
+	"loadingGif": "./assets/img/installer-image.gif"
 }
