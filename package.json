@@ -31,12 +31,12 @@
 	"author": "Cosaic",
 	"license": "SEE LICENSE IN LICENSE",
 	"optionalDependencies": {
-		"@finsemble/finsemble-cli": "^10.0.0-beta.4"
+		"@finsemble/finsemble-cli": "^6.0.0-beta.4"
 	},
 	"dependencies": {
-		"@finsemble/finsemble-core": "^10.0.0-beta.4",
-		"@finsemble/finsemble-electron-adapter": "^10.0.0-beta.4",
-		"@finsemble/finsemble-ui": "^10.0.0-beta.4",
+		"@finsemble/finsemble-core": "^6.0.0-beta.4",
+		"@finsemble/finsemble-electron-adapter": "^6.0.0-beta.4",
+		"@finsemble/finsemble-ui": "^6.0.0-beta.4",
 		"async": "3.2.0",
 		"compression": "1.7.3",
 		"express": "4.16.4",
