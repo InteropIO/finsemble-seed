@@ -13,15 +13,18 @@ import {
 	DragHandle,
 	RevealAll,
 	MinimizeAll,
+	NotificationControl,
 	AutoArrange,
 	Search,
+	Dashbar,
+	AdvancedAppLauncherMenu,
 	AppLauncherMenu,
 	WorkspaceManagementMenu,
 	ToolbarSection,
 } from "@finsemble/finsemble-ui/react/components/toolbar";
 import { FileMenu } from "./FileMenu";
 import { useHotkey } from "@finsemble/finsemble-ui/react/hooks/useHotkey";
-import "@finsemble/finsemble-ui/react/ui-assets/css/finsemble.css";
+import "@finsemble/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../../public/assets/css/theme.css";
 
 /**
@@ -91,6 +94,7 @@ const Toolbar = () => {
 				<AutoArrange />
 				<MinimizeAll />
 				<RevealAll />
+				<NotificationControl />
 			</ToolbarSection>
 			<div className="resize-area"></div>
 		</ToolbarShell>
@@ -100,6 +104,7 @@ const Toolbar = () => {
 ReactDOM.render(
 	<FinsembleProvider>
 		<Toolbar />
+		<Dashbar />
 	</FinsembleProvider>,
 	document.getElementById("Toolbar-tsx")
 );

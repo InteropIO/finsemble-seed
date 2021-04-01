@@ -1,4 +1,4 @@
-[![Finsemble SmartDesktop](./public/assets/img/Finsemble+Cosaic.svg)](https://documentation.finsemble.com/)
+[![Finsemble SmartDesktop](./assets/img/Finsemble+Cosaic.svg)](https://documentation.finsemble.com/)
 
 # Finsemble Seed 🌱
 

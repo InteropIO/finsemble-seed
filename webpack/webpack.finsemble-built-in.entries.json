@@ -50,5 +50,13 @@
 	"desktopProjectEditor": {
 		"output": "components/desktopProjectEditor/desktopProjectEditor",
 		"entry": "./src/components/desktopProjectEditor/desktopProjectEditor.tsx"
+	},
+	"NotificationsCenter": {
+		"output": "components/notificationsCenter/NotificationsCenter",
+		"entry": "./src/components/notificationsCenter/NotificationsCenter.tsx"
+	},
+	"NotificationsToasts": {
+		"output": "components/notificationsToasts/NotificationsToasts",
+		"entry": "./src/components/notificationsToasts/NotificationsToasts.tsx"
 	}
 }

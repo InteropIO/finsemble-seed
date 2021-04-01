@@ -25,10 +25,10 @@ const CSS_RULE = {
 
 /**
  * This rule will convert imported images and fonts into standalone assets.
- * The assets are compiled into /ui-assets/file-loader/ to distinguish them from static assets.
+ * The assets are compiled into /assets/file-loader/ to distinguish them from static assets.
  * See webpack url-loader to convert this into inlining as desired.
  *
- * The publicPath defaults to /build/ui-assets/file-loader directory but it gets there via a relative
+ * The publicPath defaults to /build/assets/file-loader directory but it gets there via a relative
  * path, so that your app can be deployed in a subdirectory. If you have components that lie in a directory
  * structure that has multiple levels, then use __webpack_public_path__ to transform that public path.
  *
@@ -47,8 +47,8 @@ const IMAGE_AND_FONT_RULE = {
 		loader: "file-loader",
 		options: {
 			name: "[name].[ext]",
-			outputPath: "/ui-assets/file-loader/",
-			publicPath: "../../ui-assets/file-loader",
+			outputPath: "/assets/file-loader/",
+			publicPath: "../../assets/file-loader",
 			postTransformPublicPath: (p) => `__webpack_public_path__ + ${p}`,
 		},
 	},

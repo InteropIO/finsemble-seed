@@ -6,7 +6,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { FinsembleProvider } from "@finsemble/finsemble-ui/react/components/FinsembleProvider";
 import { ProcessMonitor } from "@finsemble/finsemble-ui/react/components/processMonitor";
-import "@finsemble/finsemble-ui/react/ui-assets/css/finsemble.css";
+import "@finsemble/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../public/assets/css/theme.css";
 
 ReactDOM.render(

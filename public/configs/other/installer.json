@@ -19,5 +19,5 @@
 	"//loadingGif": "Path to the image used as the splash for a Windows installer. Must be a gif file.",
 	"loadingGif": "./public/assets/img/installer-image-windows.gif",
 	"//macIcon": "Path to the icon to be used on Mac",
-	"macIcon": "./public/assets/img/installer_icon.icns"
+	"macIcon": "./assets/img/installer_icon.icns"
 }

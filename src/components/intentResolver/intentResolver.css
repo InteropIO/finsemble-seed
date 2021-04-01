@@ -1,0 +1,251 @@
+body {
+	margin: 0px;
+	font-family: var(--font-family);
+	color: white;
+}
+.resolver {
+	background: linear-gradient(180deg, rgba(0, 0, 0, 0.017) 53.17%, rgba(10, 140, 244, 0.0969) 100%), #171a20;
+}
+.resolver__container {
+	height: 100%;
+	min-height: 100vh;
+	display: grid;
+	grid-template-columns: 20px 1fr 1fr 20px;
+	grid-template-rows: 155px 65px 1fr 40px;
+}
+
+.resolver__close {
+	right: 0;
+	position: absolute;
+	padding: 6px;
+}
+.resolver__header {
+	grid-row: 1;
+	grid-column: 2/3;
+	margin-top: 20px;
+}
+.resolver__action {
+	grid-row: 2;
+	font-size: 12px;
+	grid-column: 2/4;
+	margin-bottom: 0;
+}
+.resolver__action-source {
+	color: #0a8cf4;
+}
+.resolver__action-intent {
+	color: #9cc24a;
+	font-weight: bold;
+}
+
+.resolver__app-area {
+	grid-row: 3;
+	grid-column: 2/4;
+	background: rgba(0, 0, 0, 0.18);
+	border-radius: 6px;
+	padding: 15px;
+	display: grid;
+	grid-auto-columns: max-content;
+	grid-auto-flow: column;
+	grid-gap: 12px;
+	grid-auto-rows: min-content;
+}
+
+.resolver__apps {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	width: 90vw;
+}
+
+.resolver__apps > button {
+	max-width: 70px;
+	background-color: #ffe4c400;
+	border: none;
+	font-size: 10px;
+	text-align: center;
+	color: white;
+	cursor: pointer;
+	margin: 0;
+	padding: 0;
+}
+
+.resolver__apps > button > img {
+	width: 24px;
+	/* max-height: 30px; */
+}
+.resolver__apps > button > p {
+	margin: 0;
+}
+
+.resolver__apps > button > p:hover {
+	color: #0a8cf4;
+}
+/* individual apps */
+
+.app {
+	display: grid;
+	grid-template-columns: 80px;
+	grid-column-gap: 12px;
+	/* background: #1e66d233; */
+	border-radius: 17px;
+	grid-template-rows: 1fr;
+	justify-items: center;
+	align-items: baseline;
+	cursor: pointer;
+	margin: 0;
+	padding: 0;
+	grid-row: 1;
+	margin: 10px;
+	height: 81px;
+}
+.app__header {
+	margin: 0px;
+	display: grid;
+	justify-items: center;
+	grid-row: 1/2;
+	padding-top: 18px;
+}
+.app__type {
+	font-size: 0.8em;
+	margin: 0;
+	padding: 0;
+	text-overflow: ellipsis;
+	text-align: center;
+	overflow-wrap: break-word;
+	max-width: 65px;
+	margin-top: 5px;
+}
+.app__icon {
+	/* max-width: 25px; */
+	height: 30px;
+	margin: 0;
+	padding: 0;
+}
+.app__list {
+	z-index: 2;
+	position: fixed;
+	width: 200px;
+	background: #171a1f;
+	margin: 0;
+	padding: 7px;
+	height: auto;
+	border-radius: 8px 8px 0 0;
+	right: 25px;
+	bottom: 0;
+	height: max-content;
+	box-shadow: -3px 2px 4px 2px #00000070;
+	display: flex;
+	flex-direction: column;
+	max-height: 90vh;
+	overflow: auto;
+}
+.app__list > h2 {
+	font-size: 1.2em;
+	color: var(--accent-primary);
+}
+.app__list > h3 {
+	font-size: 1em;
+	color: var(--font-color);
+	margin-top: -3px;
+}
+
+.app__list > p {
+	margin: 0;
+	padding: 0;
+	font-size: 0.6em;
+}
+.app__list > ul {
+	display: contents;
+}
+.app__list > ul > li {
+	display: block;
+}
+.app__list > ul > li > button {
+	font-size: 0.6em;
+	min-height: 32px;
+}
+.app__list > ul > li > button > svg {
+	height: 16px;
+	padding: 3px;
+}
+
+.app__new {
+	background: #0a8cf4;
+	width: 68px;
+	cursor: pointer;
+	margin-top: 10px;
+	display: flex;
+	padding: 4px;
+	justify-content: center;
+	align-items: center;
+	font-size: 0.8em;
+	/* border: 1px solid white; */
+	border-radius: 5px;
+	align-self: center;
+}
+button > span {
+	font-size: 1.3em;
+	margin-left: 10px;
+}
+button {
+	border: 0;
+	color: white;
+	cursor: pointer;
+	background: #36788b59;
+	border-radius: 6px;
+	margin: 7px 5px;
+	width: 100%;
+	padding: 5px;
+	display: flex;
+	align-items: center;
+}
+
+button.app__new {
+	padding: 5px;
+}
+button.app__new > svg {
+	height: 16px;
+}
+button.app__new:hover {
+	background: #339ef5;
+}
+
+.app__icon--apps-list {
+	height: 20px;
+	margin-right: 4px;
+}
+.app__list--close-button {
+	align-self: flex-end;
+	position: absolute;
+	width: 13px;
+	cursor: pointer;
+}
+
+.app__count-icon {
+	color: #009688;
+	font-size: 1em;
+	position: relative;
+	right: -27px;
+	top: -58px;
+}
+
+.app__count-icon > svg {
+}
+.app__count-icon > svg > path {
+	fill: #009688;
+}
+
+.SVGBadge-svg {
+	height: 18px;
+	position: relative;
+	margin: 0;
+	padding: 0;
+	top: -50px;
+	right: -25px;
+}
+.SVGBadge-svgBackground {
+	fill: #89ef93;
+}
+.SVGBadge-number {
+}

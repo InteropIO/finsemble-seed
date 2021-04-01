@@ -5,6 +5,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { FinsembleProvider } from "@finsemble/finsemble-ui/react/components/FinsembleProvider";
+
 import {
 	AlwaysOnTopButton,
 	GroupingButton,
@@ -22,7 +23,7 @@ import {
  * If not running in a BrowserView then some of the CSS directives may conflict with
  * your content. You can remove this line and manually import CSS files from @finsemble/finsemble-ui as necessary.
  */
-import "@finsemble/finsemble-ui/react/ui-assets/css/finsemble.css";
+import "@finsemble/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../public/assets/css/theme.css";
 
 /**

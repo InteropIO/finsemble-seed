@@ -98,6 +98,28 @@ for (let key in componentsToBuild) {
 let webpackConfig = generateDefaultConfig();
 webpackConfig.entry = entries;
 
+/**
+ * Recursively gets all of the files in a folder.
+ * @param {string} dirPath
+ * @param {Array} arrayOfFiles
+ */
+const getAllFiles = (dirPath, arrayOfFiles) => {
+	const files = fs.readdirSync(dirPath);
+
+	arrayOfFiles = arrayOfFiles || [];
+
+	files.forEach((file) => {
+		const filePath = path.join(dirPath, file);
+		if (fs.statSync(filePath).isDirectory()) {
+			arrayOfFiles = getAllFiles(filePath, arrayOfFiles);
+		} else {
+			arrayOfFiles.push(path.join(__dirname, filePath));
+		}
+	});
+
+	return arrayOfFiles;
+};
+
 // This function iterates through src, building a list of all the directories but eliminating duplicates.
 function collapseBuiltInFiles() {
 	const srcList = {}; // contains the final compressed list
@@ -114,7 +136,7 @@ function collapseBuiltInFiles() {
 
 		// Don't copy empty folders
 		const folderPath = path.join(componentSrcPath, folder);
-		const folderItems = fs.readdirSync(folderPath);
+		const folderItems = getAllFiles(folderPath);
 
 		if (folderItems.length > 0) {
 			srcList[folder] = folderPath;
@@ -134,8 +156,8 @@ function createCopyWebpackConfig() {
 	var config = {
 		patterns: [
 			{
-				from: "./node_modules/@finsemble/finsemble-ui/react/ui-assets/",
-				to: "./ui-assets/",
+				from: "./node_modules/@finsemble/finsemble-ui/react/assets/",
+				to: "./assets/",
 			},
 			{
 				from: "./node_modules/@finsemble/finsemble-core/dist",

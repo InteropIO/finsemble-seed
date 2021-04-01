@@ -6,8 +6,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { FinsembleProvider } from "@finsemble/finsemble-ui/react/components/FinsembleProvider";
-import { UserPreferences, General, Workspaces } from "@finsemble/finsemble-ui/react/components/userPreferences";
-import "@finsemble/finsemble-ui/react/ui-assets/css/finsemble.css";
+import {
+	UserPreferences,
+	General,
+	Workspaces,
+	DashbarEditor,
+	Notifications,
+} from "@finsemble/finsemble-ui/react/components/userPreferences";
+import "@finsemble/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../public/assets/css/theme.css";
 
 /*
@@ -27,6 +33,8 @@ import "../../../public/assets/css/theme.css";
 const sections = {
 	General: General,
 	Workspaces: Workspaces,
+	Dashbar: DashbarEditor,
+	Notifications: Notifications,
 };
 
 ReactDOM.render(

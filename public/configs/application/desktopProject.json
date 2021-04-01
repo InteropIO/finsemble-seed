@@ -36,7 +36,6 @@
 					},
 					"Window Manager": {
 						"alwaysOnTopIcon": false,
-						"showLinker": false,
 						"FSBLHeader": true,
 						"persistWindowState": true,
 						"title": "Desktop Project Editor"

@@ -18,7 +18,9 @@
 		<script>
 			/** Class for handling oAuth returns */
 			class HandleOauth {
-				constructor() {}
+				constructor(dpeEnabled) {
+					this.dpeEnabled = dpeEnabled;
+				}
 
 				/**
 				 *  closeThisWindow
@@ -45,6 +47,11 @@
 				 */
 				showError(reason) {
 					document.querySelector("#error").innerHTML = `Oauth Failed: ${reason}`;
+
+					if (this.dpeEnabled) {
+						FSBL.Clients.RouterClient.transmit("DPE-Auth-Test-Response", { err: reason });
+						this.closeThisWindow();
+					}
 				}
 
 				/**
@@ -61,39 +68,67 @@
 				}
 			}
 
-			const OauthClient = new HandleOauth();
+			function onReady() {
+				FSBL.Clients.DesktopProjectClient.isEnabled().then((dpeEnabled) => {
+					// check if Desktop Project Editor mode is currently enabled
+					// if enabled, this window must be from test auth,
+					// so we report back and close it
 
-			FSBL.Clients.AuthenticationClient.completeOAUTH(null, null, (err, response) => {
-				if (err) {
-					OauthClient.showError(err);
-				} else {
-					const credentials = response;
-					OauthClient.runBusinessLogic(credentials, () => {
-						// In the special case of "startup" then we publish the authorization, which releases Finsemble and lets is start
-						if (credentials.config.name === "startup") {
-							// "sub" is the user ID provided by the OP. Not all OP's support this. If not supported, then we just set the user to the access token.
-							const user = credentials.sub;
-							if (!user) {
-								user = credentials.access_token;
-							}
-							// Finish the authentication process
-							FSBL.Clients.RouterClient.transmit("AuthenticationService.authorization", {
-								user: user,
-								credentials: credentials,
-							});
+					const OauthClient = new HandleOauth(dpeEnabled);
+
+					window.location.href.replace(/&error_description=([^&]*)/, (str, err) => {
+						if (err) {
+							const message = decodeURIComponent(err.replace(/\+/g, " "));
+
+							OauthClient.showError(message);
+
+							throw new Error(message);
 						}
-						OauthClient.closeThisWindow();
 					});
-				}
-			});
+
+					if (dpeEnabled) {
+						FSBL.Clients.RouterClient.transmit("DPE-Auth-Test-Response", { err: null });
+
+						OauthClient.closeThisWindow();
+					} else {
+						FSBL.Clients.AuthenticationClient.completeOAUTH(null, null, (err, response) => {
+							if (err) {
+								OauthClient.showError(err);
+							} else {
+								const credentials = response;
+								OauthClient.runBusinessLogic(credentials, () => {
+									// In the special case of "startup" then we publish the authorization, which releases Finsemble and lets is start
+									if (credentials.config.name === "startup") {
+										// "sub" is the user ID provided by the OP. Not all OP's support this. If not supported, then we just set the user to the access token.
+										const user = credentials.sub || credentials.access_token || credentials.code;
+
+										// Finish the authentication process
+										FSBL.Clients.RouterClient.transmit("AuthenticationService.authorization", {
+											user: user,
+											credentials: credentials,
+										});
+									}
+									OauthClient.closeThisWindow();
+								});
+							}
+						});
+					}
+				});
+			}
+
+			if (window.FSBL) {
+				window.FSBL.addEventListener("onReady", onReady);
+			} else {
+				window.addEventListener("FSBLReady", onReady);
+			}
 		</script>
 		<link
 			href="https://fonts.googleapis.com/css?family=Roboto:400,700,500,100,300,400italic|Roboto+Condensed:400,700,300"
 			rel="stylesheet"
 			type="text/css"
 		/>
-		<link rel="stylesheet" type="text/css" href="../../assets/css/finsemble.css" />
-		<link rel="stylesheet" type="text/css" href="../../assets/css/font-finance.css" />
+		<link rel="stylesheet" type="text/css" href="../../ui-assets/css/finsemble.css" />
+		<link rel="stylesheet" type="text/css" href="../../ui-assets/css/font-finance.css" />
 	</head>
 
 	<body class="dialog">
@@ -127,7 +162,7 @@
 			}
 		</style>
 		<div class="fsbl-auth-top">
-			<img class="fsbl-logo" src="../../assets/img/cosaic-banner-100x20.png" width="100" height="25" />
+			<img class="fsbl-logo" src="../../ui-assets/img/cosaic-banner-100x20.png" width="100" height="25" />
 			<div class="fsbl-close" id="FSBL-close" onclick="OauthClient.closeThisWindow()">
 				<i class="ff-close" style="color: #666;"></i>
 			</div>
