@@ -22,7 +22,7 @@ export const SET_EXCEL_CELL_DATA_MODAL_DISPLAY = 'SET_EXCEL_CELL_DATA_MODAL_DISP
 export const SHEET_CHANGE = "SHEET_CHANGE"
 
 export const GET_WORKSHEET_LIST = "GET_WORKSHEET_LIST"
-export const SET_TARGET_WORKSHEET = "SET_TARGET_WORKSHEET"
+export const SET_SELECTED_WORKSHEET = "SET_SELECTED_WORKSHEET"
 export const SET_OPEN_WORKSHEET = ' "SET_OPEN_WORKSHEET"'
 export const SET_SELECTED_CLIPBOARD_DATA = 'SET_SELECTED_CLIPBOARD_DATA'
 export const SET_RANGE = 'SET_RANGE'
@@ -35,6 +35,7 @@ export const CLEAR_RANGE = 'CLEAR_RANGE'
 export const COPY_RANGE = 'COPY_RANGE'
 
 export const BROADCAST_DATA = 'BROADCAST_DATA'
+export const CHANGE_SUBSCRIPTION = 'CHANGE_SUBSCRIPTION'
 
 
 interface OfficeAddinRegisterAction {
@@ -106,10 +107,10 @@ interface GetWorksheetList {
     }
 }
 
-interface SetTargetWorksheet {
-    type: typeof SET_TARGET_WORKSHEET
+interface SetSelectedWorksheet {
+    type: typeof SET_SELECTED_WORKSHEET
     payload: {
-        targetWorksheet: ""
+        selectedWorksheet: ""
     }
 }
 
@@ -142,4 +143,4 @@ interface setSelectedBookmark {
 }
 
 export type OfficeAddinActionType = OfficeAddinRegisterAction
-export type ExcelFileListActionType = setSelectedBookmark | setRange | setSelectedClipboardData | SetOpenWorksheet | SetTargetWorksheet | GetWorksheetList | SheetChange | SetGetExcelCellDataActionModalDisplay | SetSelectedActiveExcelFilesAction | GetActiveExcelFilesAction | GetExcelCellDataAction | GetPreviousExcelFilesAction | SetSelectedPreviousExcelFilesAction | SetSetExcelCellDataActionModalDisplay
+export type ExcelFileListActionType = setSelectedBookmark | setRange | setSelectedClipboardData | SetOpenWorksheet | SetSelectedWorksheet | GetWorksheetList | SheetChange | SetGetExcelCellDataActionModalDisplay | SetSelectedActiveExcelFilesAction | GetActiveExcelFilesAction | GetExcelCellDataAction | GetPreviousExcelFilesAction | SetSelectedPreviousExcelFilesAction | SetSetExcelCellDataActionModalDisplay

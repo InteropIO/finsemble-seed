@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk"
-import { getWorksheetList, registerActionThunk, setSelectedActiveExcelFile, setSelectedClipboardData, setSelectedPreviousExcelFiles, setRange, setTargetWorksheet, pasteToExcel, focusRange, clearRange, copyRange } from "../redux/actions/actions";
+import { registerActionThunk, setSelectedActiveExcelFile, setSelectedClipboardData, setSelectedPreviousExcelFiles, setRange, pasteToExcel, focusRange, clearRange, copyRange, setSelectedWorksheet } from "../redux/actions/actions";
 import ExcelFile from "../types/ExcelFile";
 
 import ActiveExcelFileList from "./ActiveExcelFileList";
@@ -12,8 +12,7 @@ import BookmarkList from "./BookmarkList"
 import Range from "./Range";
 import TargetWorksheetList from "./TargetWorksheetList";
 import * as CONSTANTS from "../redux/actions/actionTypes";
-import { ExcelAction } from "../../../ExcelTester/src/types/types";
-import { Worksheet } from "../types/types";
+import { ExcelAction, Worksheet } from "../../../../services/OfficeAddin/types/types";
 
 
 const ExcelDialog = (props: any) => {
@@ -21,9 +20,9 @@ const ExcelDialog = (props: any) => {
     const { selectedPreviousExcelFiles, clearSelectedPreviousExcelFiles } = props;
     const { clipboardData, setSelectedClipboardData } = props
     const { pasteToExcel } = props
-    const { targetWorksheet, range } = props
+    const { selectedWorksheet, range } = props
     const { offAddInServiceActions } = props;
-    const { registerPasteToExcel, registerFocusRange, registerCopyRange, registerClearRange, registerBroadcastData } = props;
+    const { registerPasteToExcel, registerFocusRange, registerCopyRange, registerClearRange, registerBroadcastData, resgisterChangeSubscription } = props;
     const { selectedBookmark, setSelectedWorksheet } = props
     const { setRange } = props;
     const { activeExcelFiles } = props
@@ -50,7 +49,7 @@ const ExcelDialog = (props: any) => {
         })
         if (excelFile.length > 0) {
             setSelectedActiveExcelFile(excelFile[0])
-            setSelectedWorksheet(selectedBookmark.targetWorksheet)
+            setSelectedWorksheet(selectedBookmark.worksheet)
             setRange(selectedBookmark.range)
         }
     }
@@ -62,10 +61,10 @@ const ExcelDialog = (props: any) => {
         })
         if (tempCopyToExcelActions.length > 0) {
             tempCopyToExcelActions.forEach((tempCopyToExcelAction: ExcelAction) => {
-                pasteToExcel(tempCopyToExcelAction.id, selectedActiveExcelFile, targetWorksheet, range, clipboardData)
+                pasteToExcel(tempCopyToExcelAction.id, selectedActiveExcelFile, selectedWorksheet, range, clipboardData)
             })
         } else {
-            registerPasteToExcel([selectedActiveExcelFile], { targetExcelFile: selectedActiveExcelFile, targetWorksheet: targetWorksheet, range: range, data: clipboardData })
+            registerPasteToExcel([selectedActiveExcelFile], { excelFile: selectedActiveExcelFile, worksheet: selectedWorksheet, range: range, data: clipboardData })
         }
     }
 
@@ -75,10 +74,10 @@ const ExcelDialog = (props: any) => {
         })
         if (tempCopyToExcelActions.length > 0) {
             tempCopyToExcelActions.forEach((tempCopyToExcelAction: ExcelAction) => {
-                focusRange(tempCopyToExcelAction.id, selectedActiveExcelFile, targetWorksheet, range)
+                focusRange(tempCopyToExcelAction.id, selectedActiveExcelFile, selectedWorksheet, range)
             })
         } else {
-            registerFocusRange([selectedActiveExcelFile], { targetExcelFile: selectedActiveExcelFile, targetWorksheet: targetWorksheet, range: range })
+            registerFocusRange([selectedActiveExcelFile], { excelFile: selectedActiveExcelFile, worksheet: selectedWorksheet, range: range })
         }
     }
 
@@ -88,10 +87,10 @@ const ExcelDialog = (props: any) => {
         })
         if (tempCopyToExcelActions.length > 0) {
             tempCopyToExcelActions.forEach((tempCopyToExcelAction: ExcelAction) => {
-                copyRange(tempCopyToExcelAction.id, selectedActiveExcelFile, targetWorksheet, range)
+                copyRange(tempCopyToExcelAction.id, selectedActiveExcelFile, selectedWorksheet, range)
             })
         } else {
-            registerCopyRange([selectedActiveExcelFile], { targetExcelFile: selectedActiveExcelFile, targetWorksheet: targetWorksheet, range: range })
+            registerCopyRange([selectedActiveExcelFile], { excelFile: selectedActiveExcelFile, worksheet: selectedWorksheet, range: range })
         }
     }
 
@@ -101,10 +100,23 @@ const ExcelDialog = (props: any) => {
         })
         if (tempCopyToExcelActions.length > 0) {
             tempCopyToExcelActions.forEach((tempCopyToExcelAction: ExcelAction) => {
-                clearRange(tempCopyToExcelAction.id, selectedActiveExcelFile, targetWorksheet, range)
+                clearRange(tempCopyToExcelAction.id, selectedActiveExcelFile, selectedWorksheet, range)
             })
         } else {
-            registerClearRange([selectedActiveExcelFile], { targetExcelFile: selectedActiveExcelFile, targetWorksheet: targetWorksheet, range: range })
+            registerClearRange([selectedActiveExcelFile], { excelFile: selectedActiveExcelFile, worksheet: selectedWorksheet, range: range })
+        }
+    }
+
+    const subscribeOnClick = () => {
+        let tempCopyToExcelActions = offAddInServiceActions.filter((offAddInServiceAction: ExcelAction) => {
+            return offAddInServiceAction.action === CONSTANTS.CHANGE_SUBSCRIPTION && offAddInServiceAction.file?.fileName === selectedActiveExcelFile.fileName && offAddInServiceAction?.bookmark?.name === selectedBookmark.name
+        })
+        if (tempCopyToExcelActions.length == 0) {
+            if (range != '')
+                resgisterChangeSubscription([selectedActiveExcelFile], { bookmark: selectedBookmark })
+            else
+                resgisterChangeSubscription([selectedActiveExcelFile], {})
+
         }
     }
 
@@ -141,7 +153,7 @@ const ExcelDialog = (props: any) => {
                 <button onClick={copyRangeOnclick}>Copy</button>
                 <button onClick={clearRangeOnclick}>Clear</button>
                 <button onClick={pasteToExceOnClick}>Paste</button>
-
+                <button onClick={subscribeOnClick}>Subscribe</button>
             </div>
         </div>
     );
@@ -154,7 +166,7 @@ const mapStateToProps = (state: any, ownProps: any) => {
         selectedActiveExcelFile: excelFilesReducer.selectedActiveExcelFile,
         selectedPreviousExcelFiles: excelFilesReducer.selectedPreviousExcelFiles,
         clipboardData: excelFilesReducer.selectedClipboardData,
-        targetWorksheet: excelFilesReducer.targetWorksheet,
+        selectedWorksheet: excelFilesReducer.selectedWorksheet,
         range: excelFilesReducer.range,
         selectedBookmark: excelFilesReducer.selectedBookmark,
         activeExcelFiles: excelFilesReducer.activeExcelFiles,
@@ -167,18 +179,18 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
         registerFocusRange: (excelFiles: Array<ExcelFile>, params: {}) => dispatch(registerActionThunk(CONSTANTS.FOCUS_RANGE, excelFiles, params)),
         registerCopyRange: (excelFiles: Array<ExcelFile>, params: {}) => dispatch(registerActionThunk(CONSTANTS.COPY_RANGE, excelFiles, params)),
         registerClearRange: (excelFiles: Array<ExcelFile>, params: {}) => dispatch(registerActionThunk(CONSTANTS.CLEAR_RANGE, excelFiles, params)),
+        resgisterChangeSubscription: (excelFiles: Array<ExcelFile>, params: {}) => dispatch(registerActionThunk(CONSTANTS.CHANGE_SUBSCRIPTION, excelFiles, params)),
         registerBroadcastData: () => dispatch(registerActionThunk(CONSTANTS.BROADCAST_DATA)),
         clearSelectedPreviousExcelFiles: () => dispatch(setSelectedPreviousExcelFiles([])),
         clearSelectedActiveExcelFiles: () => dispatch(setSelectedActiveExcelFile(null)),
         setSelectedClipboardData: (clipboardData: []) => dispatch(setSelectedClipboardData(clipboardData)),
         setSelectedActiveExcelFile: (selectedActiveFile: ExcelFile) => dispatch(setSelectedActiveExcelFile(selectedActiveFile)),
-        setSelectedWorksheet: (selectedWorksheet: Worksheet) => dispatch(setTargetWorksheet(selectedWorksheet)),
+        setSelectedWorksheet: (selectedWorksheet: Worksheet) => dispatch(setSelectedWorksheet(selectedWorksheet)),
         setRange: (range: string) => dispatch(setRange(range)),
-        pasteToExcel: (actionId: string, targetExcelFile: ExcelFile, targeWorksheet: Worksheet, range: string, data: []) => dispatch(pasteToExcel(actionId, targetExcelFile, targeWorksheet, range, data)),
-        focusRange: (actionId: string, targetExcelFile: ExcelFile, targeWorksheet: Worksheet, range: string) => dispatch(focusRange(actionId, targetExcelFile, targeWorksheet, range)),
-        copyRange: (actionId: string, targetExcelFile: ExcelFile, targeWorksheet: Worksheet, range: string) => dispatch(copyRange(actionId, targetExcelFile, targeWorksheet, range)),
-        clearRange: (actionId: string, targetExcelFile: ExcelFile, targeWorksheet: Worksheet, range: string) => dispatch(clearRange(actionId, targetExcelFile, targeWorksheet, range)),
-
+        pasteToExcel: (actionId: string, excelFile: ExcelFile, targeWorksheet: Worksheet, range: string, data: []) => dispatch(pasteToExcel(actionId, excelFile, targeWorksheet, range, data)),
+        focusRange: (actionId: string, excelFile: ExcelFile, targeWorksheet: Worksheet, range: string) => dispatch(focusRange(actionId, excelFile, targeWorksheet, range)),
+        copyRange: (actionId: string, excelFile: ExcelFile, targeWorksheet: Worksheet, range: string) => dispatch(copyRange(actionId, excelFile, targeWorksheet, range)),
+        clearRange: (actionId: string, excelFile: ExcelFile, targeWorksheet: Worksheet, range: string) => dispatch(clearRange(actionId, excelFile, targeWorksheet, range)),
     };
 };
 

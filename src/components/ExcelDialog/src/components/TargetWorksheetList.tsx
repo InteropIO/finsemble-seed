@@ -5,11 +5,11 @@ import ExcelFile from "../types/ExcelFile";
 import { connect } from "react-redux";
 import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk"
-import { getWorksheetListThunk, registerActionThunk, setTargetWorksheet } from "../redux/actions/actions";
+import { getWorksheetListThunk, registerActionThunk, setSelectedWorksheet } from "../redux/actions/actions";
 import * as CONSTANTS from "../redux/actions/actionTypes";
 import { useEffect, useState } from "react";
 import { ExcelAction } from "../../../ExcelTester/src/types/types";
-import { Worksheet } from "../types/types";
+import { Worksheet } from "../../../../services/OfficeAddin/types/types";
 
 const TargetWorksheetList = (props: any) => {
     const animatedComponents = makeAnimated();
@@ -82,7 +82,7 @@ const mapStateToProps = (state: any, ownProps: any) => {
     return {
         selectedActiveExcelFile: excelFilesReducer.selectedActiveExcelFile,
         worksheetList: excelFilesReducer.worksheetList,
-        selectedWorksheet: excelFilesReducer.targetWorksheet,
+        selectedWorksheet: excelFilesReducer.selectedWorksheet,
         offAddInServiceActions: officeAddinServiceActionsReducer.offAddInServiceActions
     }
 }
@@ -91,7 +91,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     return {
         registerGetWorksheetList: (excelFiles: Array<ExcelFile>) => dispatch(registerActionThunk(CONSTANTS.GET_WORKSHEET_LIST, excelFiles)),
         getWorksheetList: (actionId: string, excelFile: ExcelFile) => dispatch(getWorksheetListThunk(actionId, excelFile)),
-        setSelectedWorksheet: (selectedWorksheet: Worksheet) => dispatch(setTargetWorksheet(selectedWorksheet)),
+        setSelectedWorksheet: (selectedWorksheet: Worksheet) => dispatch(setSelectedWorksheet(selectedWorksheet)),
     };
 };
 

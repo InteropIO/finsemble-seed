@@ -3,7 +3,7 @@ import { ThunkAction } from "redux-thunk";
 import { RootState } from "./../store"
 import * as CONSTANTS from './actionTypes';
 import ExcelFile from './../../types/ExcelFile';
-import { Bookmark, Worksheet } from "../../types/types";
+import { Bookmark, Worksheet } from "../../../../../services/OfficeAddin/types/types";
 
 
 export const officeAddinRegister = (regsiteredActions: [], status: string) => {
@@ -16,7 +16,7 @@ export const officeAddinRegister = (regsiteredActions: [], status: string) => {
 }
 
 export const registerActionThunk = (action: string, excelFiles?: Array<ExcelFile>, params?: any): ThunkAction<void, RootState, null, Action<string>> => async dispatch => {
-    FSBL.Clients.RouterClient.query(CONSTANTS.OFFICE_ADDIN_REGISTER, { actions: [action], excelFiles: excelFiles }, (err, res) => {
+    FSBL.Clients.RouterClient.query(CONSTANTS.OFFICE_ADDIN_REGISTER, { actions: [action], excelFiles: excelFiles, params: params }, (err, res) => {
         dispatch(officeAddinRegister(res.data.data, res.data.status))
         switch (action) {
             case CONSTANTS.GET_ACTIVE_EXCEL_FILES:
@@ -58,18 +58,17 @@ export const registerActionThunk = (action: string, excelFiles?: Array<ExcelFile
                             }
                             dispatch(setSelectedActiveExcelFile(null))
                             dispatch(setOpenWorksheet(null))
-                            dispatch(setTargetWorksheet(null))
+                            dispatch(setSelectedWorksheet(null))
                         })
                     }
                 });
                 break
 
-            case CONSTANTS.SUBSCRIBE_SHEET_CHANGE:
+            case CONSTANTS.CHANGE_SUBSCRIPTION:
                 FSBL.Clients.RouterClient.addListener(res.data.data[0].id, (err, res: any) => {
                     if (res) {
                         let eventObj = res.data.event
-                        eventObj.fileName = res.data.fileName
-                        dispatch(sheetChangeEvent(eventObj))
+                        dispatch(setSelectedClipboardData(eventObj))
                     }
                 })
                 break;
@@ -81,16 +80,16 @@ export const registerActionThunk = (action: string, excelFiles?: Array<ExcelFile
                 })
                 break;
             case CONSTANTS.CLEAR_RANGE:
-                dispatch(clearRange(res.data.data[0].id, params?.targetExcelFile, params?.targetWorksheet, params?.range))
+                dispatch(clearRange(res.data.data[0].id, params?.excelFile, params?.worksheet, params?.range))
                 break;
             case CONSTANTS.FOCUS_RANGE:
-                dispatch(focusRange(res.data.data[0].id, params?.targetExcelFile, params?.targetWorksheet, params?.range))
+                dispatch(focusRange(res.data.data[0].id, params?.excelFile, params?.worksheet, params?.range))
                 break;
             case CONSTANTS.COPY_RANGE:
-                dispatch(copyRange(res.data.data[0].id, params?.targetExcelFile, params?.targetWorksheet, params?.range))
+                dispatch(copyRange(res.data.data[0].id, params?.excelFile, params?.worksheet, params?.range))
                 break;
             case CONSTANTS.PASTE_TO_EXCEL:
-                dispatch(pasteToExcel(res.data.data[0].id, params?.targetExcelFile, params?.targetWorksheet, params?.range, params.data))
+                dispatch(pasteToExcel(res.data.data[0].id, params?.excelFile, params?.worksheet, params?.range, params.data))
                 break;
             default:
                 break;
@@ -236,11 +235,11 @@ export const getWorksheetList = (worksheetList: Array<string>) => {
     }
 }
 
-export const setTargetWorksheet = (targetWorksheet: Worksheet | null) => {
+export const setSelectedWorksheet = (selectedWorksheet: Worksheet | null) => {
     return {
-        type: CONSTANTS.SET_TARGET_WORKSHEET,
+        type: CONSTANTS.SET_SELECTED_WORKSHEET,
         payload: {
-            targetWorksheet: targetWorksheet
+            selectedWorksheet: selectedWorksheet
         }
     }
 }
@@ -272,7 +271,7 @@ export const setRange = (range: string) => {
     }
 }
 
-export const pasteToExcel = (actionId: string, targetExcelFile: ExcelFile, targeWorksheet: Worksheet, range: string, data: string[][]): ThunkAction<void, RootState, null, Action<string>> => async dispatch => {
+export const pasteToExcel = (actionId: string, excelFile: ExcelFile, worksheet: Worksheet, range: string, data: string[][]): ThunkAction<void, RootState, null, Action<string>> => async dispatch => {
     let startCell = range.split(':')[0]
     let endCell = range.split(':')[1]
     let targetColNum = convertExcelColToNum(strRemoveNum(endCell)) - convertExcelColToNum(strRemoveNum(startCell)) + 1
@@ -288,27 +287,27 @@ export const pasteToExcel = (actionId: string, targetExcelFile: ExcelFile, targe
         }
         targetRange = startCell + ':' + targetEndCell
     }
-    FSBL.Clients.RouterClient.query(actionId, { targetExcelFile: targetExcelFile, targeWorksheet: targeWorksheet, range: targetRange, data: data }, (err, res) => {
+    FSBL.Clients.RouterClient.query(actionId, { excelFile: excelFile, worksheet: worksheet, range: targetRange, data: data }, (err, res) => {
         //console.log(res)
     })
 };
 
-export const focusRange = (actionId: string, targetExcelFile: ExcelFile, targeWorksheet: Worksheet, range: string): ThunkAction<void, RootState, null, Action<string>> => async dispatch => {
-    FSBL.Clients.RouterClient.query(actionId, { targetExcelFile: targetExcelFile, targeWorksheet: targeWorksheet, range: range }, (err, res) => {
+export const focusRange = (actionId: string, excelFile: ExcelFile, worksheet: Worksheet, range: string): ThunkAction<void, RootState, null, Action<string>> => async dispatch => {
+    FSBL.Clients.RouterClient.query(actionId, { excelFile: excelFile, worksheet: worksheet, range: range }, (err, res) => {
         //console.log(res)
     })
 }
 
-export const copyRange = (actionId: string, targetExcelFile: ExcelFile, targeWorksheet: Worksheet, range: string): ThunkAction<void, RootState, null, Action<string>> => async dispatch => {
-    FSBL.Clients.RouterClient.query(actionId, { targetExcelFile: targetExcelFile, targeWorksheet: targeWorksheet, range: range }, (err, res) => {
+export const copyRange = (actionId: string, excelFile: ExcelFile, worksheet: Worksheet, range: string): ThunkAction<void, RootState, null, Action<string>> => async dispatch => {
+    FSBL.Clients.RouterClient.query(actionId, { excelFile: excelFile, worksheet: worksheet, range: range }, (err, res) => {
         if (res.data.data.data) {
             dispatch(setSelectedClipboardData(res.data.data.data))
         }
     })
 }
 
-export const clearRange = (actionId: string, targetExcelFile: ExcelFile, targeWorksheet: Worksheet, range: string): ThunkAction<void, RootState, null, Action<string>> => async dispatch => {
-    FSBL.Clients.RouterClient.query(actionId, { targetExcelFile: targetExcelFile, targeWorksheet: targeWorksheet, range: range }, (err, res) => {
+export const clearRange = (actionId: string, excelFile: ExcelFile, worksheet: Worksheet, range: string): ThunkAction<void, RootState, null, Action<string>> => async dispatch => {
+    FSBL.Clients.RouterClient.query(actionId, { excelFile: excelFile, worksheet: worksheet, range: range }, (err, res) => {
         //console.log(res)
     })
 }

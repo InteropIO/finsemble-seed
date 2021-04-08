@@ -11,7 +11,7 @@ const initialState = {
   excelCellData: {},
   sheetChangeEvent: {},
   worksheetList: [],
-  targetWorksheet: null,
+  selectedWorksheet: null,
   openWorkSheet: null,
   selectedClipboardData: [['A1', 'B1', 'C1'], ['A2', 'B2', 'C2'], ['A3', 'B3', 'C3']],
   range: 'A1:C3',
@@ -83,10 +83,10 @@ export default (state = initialState, action: ExcelFileListActionType) => {
         ...state,
         worksheetList: action.payload.worksheetList
       }
-    case CONSTANTS.SET_TARGET_WORKSHEET:
+    case CONSTANTS.SET_SELECTED_WORKSHEET:
       return {
         ...state,
-        targetWorksheet: action.payload.targetWorksheet
+        selectedWorksheet: action.payload.selectedWorksheet
       };
     case CONSTANTS.SET_OPEN_WORKSHEET:
       return {

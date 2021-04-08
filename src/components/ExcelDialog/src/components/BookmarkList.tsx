@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk"
 import { getPreviousExcelFilesThunk, setSelectedBookmark, setSelectedPreviousExcelFiles } from "../redux/actions/actions";
-import { Bookmark } from "../types/types";
+import { Bookmark } from "../../../../services/OfficeAddin/types/types";
 
 const BookmarkList = (props: any) => {
     const animatedComponents = makeAnimated();
@@ -23,9 +23,9 @@ const BookmarkList = (props: any) => {
     const [bookmarkList, setBookmarkList] = useState(Array<Bookmark>())
 
     useEffect(() => {
-        FSBL.Clients.DistributedStoreClient.getStore({ store: "excelBookmarkStore" }, (err, store) => {
-            store.getValue({ field: 'bookmarks' }, (err, data: Array<Bookmark>) => { setBookmarkList(data) });
-            store.addListener({ field: 'bookmarks' }, (err, data) => { setBookmarkList(data.value) });
+        FSBL.Clients.DistributedStoreClient.getStore({ store: "excelBookmarkStore" }, (err: any, store: any) => {
+            store.getValue({ field: 'bookmarks' }, (err: any, data: Array<Bookmark>) => { setBookmarkList(data) });
+            store.addListener({ field: 'bookmarks' }, (err: any, data: any) => { setBookmarkList(data.value) });
         })
     }, [])
 
@@ -36,8 +36,8 @@ const BookmarkList = (props: any) => {
                 styles={customStyles}
                 closeMenuOnSelect={true}
                 components={animatedComponents}
-                getOptionLabel={({ bookmarkName }) => bookmarkName}
-                getOptionValue={({ bookmarkName }) => bookmarkName}
+                getOptionLabel={({ name }) => name}
+                getOptionValue={({ name }) => name}
                 options={bookmarkList}
                 onChange={setSelectedBookmark}
                 value={selectedBookmark}
