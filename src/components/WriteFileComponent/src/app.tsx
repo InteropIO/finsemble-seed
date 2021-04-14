@@ -8,8 +8,14 @@ const WriteFileComponent = () => {
 	/* Your functional react component code here */
 	const [clipboardData, setClipboardData] = useState('test')
 
-	const getClipboardOnclick = () => {
+	const getClipboardTextOnclick = () => {
 		FSBL.System.Clipboard.readText((clipboardData: string) => {
+			setClipboardData(clipboardData)
+		})
+	}
+
+	const getClipboardHTMLOnclick = () => {
+		FSBL.System.Clipboard.readHTML((clipboardData: string) => {
 			setClipboardData(clipboardData)
 		})
 	}
@@ -32,7 +38,8 @@ const WriteFileComponent = () => {
 	return (
 		<div>
 			<textarea value={clipboardData} onChange={(e) => { setClipboardData(e.target.value) }} style={{ width: '100%', height: '150px' }}></textarea>
-			<button onClick={getClipboardOnclick}>Get Clipboard</button>
+			<button onClick={getClipboardTextOnclick}>Get Clipboard Text</button>
+			<button onClick={getClipboardHTMLOnclick}>Get Clipboard HTML</button>
 			<button onClick={dlAsFileOnclick}>Download as File</button>
 		</div>
 	);
