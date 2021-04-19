@@ -1,7 +1,8 @@
 import ExcelFile from "./types/ExcelFile";
 import { v4 as uuidV4 } from "uuid";
-import { Bookmark, ExcelAction } from "./types/types";
 import * as CONSTANTS from "./config/const";
+import ExcelAction from "./types/ExcelAction";
+import Bookmark from "./types/Bookmark";
 
 const Finsemble = require("@finsemble/finsemble-core");
 
@@ -159,14 +160,17 @@ export default class OfficeAddinService extends Finsemble.baseService {
         switch (res.data.event) {
           case CONSTANTS.ADDIN_OPENED:
             let file = this.activeExcelFiles.find((file) => {
-              return file.fileName == res.data.fileName;
+              return (
+                file.fileName === res.data.fileName &&
+                file.filePath === res.data.filePath
+              );
             });
 
             let fileToSend = file;
             if (!file) {
               let newExcelfile = new ExcelFile(
                 res.data.fileName,
-                res.data.fileUrl,
+                res.data.filePath,
                 res.data.timestamp,
                 res.data.timestamp
               );
@@ -188,7 +192,6 @@ export default class OfficeAddinService extends Finsemble.baseService {
               (err: any, bookmarks: Array<Bookmark>) => {
                 if (!err) {
                   this.sendBookmarks({
-                    excelFile: fileToSend,
                     bookmarks: bookmarks,
                   });
                 }
@@ -328,7 +331,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
             let changeAddress = res.data.eventObj.address;
             let changeWorksheet = res.data.eventObj.worksheet;
             let tempActions = this.excelActions.filter((action) => {
-              if(action.bookmark)
+              if (action.bookmark)
                 return (
                   action.action === CONSTANTS.CHANGE_SUBSCRIPTION &&
                   action.file?.fileName === res.data.fileName &&
@@ -336,11 +339,11 @@ export default class OfficeAddinService extends Finsemble.baseService {
                   checkRangeInRange(changeAddress, action.bookmark?.range)
                 );
               else
-              return (
-                action.action === CONSTANTS.CHANGE_SUBSCRIPTION &&
-                action.file?.fileName === res.data.fileName &&
-                checkRangeInRange(changeAddress, null)
-              );
+                return (
+                  action.action === CONSTANTS.CHANGE_SUBSCRIPTION &&
+                  action.file?.fileName === res.data.fileName &&
+                  checkRangeInRange(changeAddress, null)
+                );
             });
             tempActions.forEach((action) => {
               Finsemble.Clients.RouterClient.transmit(action.id, {
@@ -350,6 +353,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
             });
 
             break;
+
           case CONSTANTS.CREATE_BOOKMARK:
             let bookmarkToCreate = res.data.eventObj;
             this.bookmarkStore.getValue(
@@ -360,22 +364,45 @@ export default class OfficeAddinService extends Finsemble.baseService {
                     return file.fileName === bookmarkToCreate.excelFileName;
                   });
                   bookmarkToCreate.excelFile = excelFile[0];
+                  bookmarkToCreate.id = this.getUuid();
+                  bookmarks.push(bookmarkToCreate);
 
-                  let result = bookmarks.filter((bookmark, index) => {
-                    if (bookmark.name === res.data.eventObj.name) {
-                      bookmarks[index] = bookmarkToCreate;
-                    }
-                    return bookmark.name === res.data.eventObj.name;
-                  });
-                  if (result.length == 0) {
-                    bookmarks.push(bookmarkToCreate);
-                  }
                   this.bookmarkStore.setValue({
                     field: "bookmarks",
                     value: bookmarks,
                   });
                   this.sendBookmarks({
-                    excelFile: bookmarkToCreate.excelFile,
+                    bookmarks: bookmarks,
+                  });
+                }
+              }
+            );
+            break;
+          case CONSTANTS.EDIT_BOOKMARK:
+            let bookmarkToEdit = res.data.eventObj;
+            this.bookmarkStore.getValue(
+              "bookmarks",
+              (err: any, bookmarks: Array<Bookmark>) => {
+                if (!err) {
+                  let excelFile = this.activeExcelFiles.filter((file) => {
+                    return file.fileName === bookmarkToEdit.excelFileName;
+                  });
+                  bookmarkToEdit.excelFile = excelFile[0];
+                  let result = bookmarks.filter((bookmark, index) => {
+                    if (bookmark.id === res.data.eventObj.id) {
+                      bookmarks[index].name = bookmarkToEdit.name;
+                      bookmarks[index].range = bookmarkToEdit.range;
+                      bookmarks[index].openEndedRange =
+                        bookmarkToEdit.openEndedRange;
+                      bookmarks[index].worksheet = bookmarkToEdit.worksheet;
+                    }
+                    return bookmark.id === res.data.eventObj.id;
+                  });
+                  this.bookmarkStore.setValue({
+                    field: "bookmarks",
+                    value: bookmarks,
+                  });
+                  this.sendBookmarks({
                     bookmarks: bookmarks,
                   });
                 }
@@ -399,7 +426,6 @@ export default class OfficeAddinService extends Finsemble.baseService {
                     value: filteredBookmarks,
                   });
                   this.sendBookmarks({
-                    excelFile: bookmarkToDelete.excelFile,
                     bookmarks: filteredBookmarks,
                   });
                 }
@@ -415,6 +441,46 @@ export default class OfficeAddinService extends Finsemble.baseService {
                 `query-${tempFile.fileName}-${tempFile.createTimestamp}`,
                 { action: CONSTANTS.OPEN_CREATE_BOOKMARK_PANEL },
                 (err: any, res: any) => {}
+              );
+            }
+            break;
+          case CONSTANTS.OPEN_EXCEL_FILE:
+            let currentFile = this.activeExcelFiles.find((file) => {
+              return file.fileName == res.data.eventObj.fileName;
+            });
+            if (!currentFile) {
+              Finsemble.Clients.LauncherClient.spawn("Excel", {
+                autoFocus: true,
+                arguments: `${res.data.eventObj.filePath} /x /a FinsembleExcel`,
+              });
+            } else {
+              Finsemble.Clients.LauncherClient.getActiveDescriptors(
+                (error, response) => {
+                  if (!error) {
+                    let activeDescriptors = response;
+                    for (let componentId in activeDescriptors) {
+                      if (activeDescriptors.hasOwnProperty(componentId)) {
+                        if (componentId.match(/Excel-.*-Finsemble/g)) {
+                          if (
+                            activeDescriptors[componentId].arguments.includes(
+                              res.data.eventObj.filePath
+                            )
+                          ) {
+                            setTimeout(() => {
+                              console.log(activeDescriptors[componentId]);
+                              Finsemble.Clients.WorkspaceClient.bringWindowsToFront(
+                                activeDescriptors[componentId]
+                              );
+                              this.saveExcelWorkbook({
+                                excelFile: currentFile,
+                              });
+                            }, 500);
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
               );
             }
 
@@ -796,23 +862,25 @@ export default class OfficeAddinService extends Finsemble.baseService {
   };
 
   sendBookmarks = async (data: any) => {
-    console.log(
-      "sendBookmarks",
-      `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`
-    );
-    let res = await this.RouterClient.query(
-      `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`,
-      {
-        action: CONSTANTS.SEND_BOOKMARKS,
-        bookmarks: data.bookmarks,
-      },
-      (err: any, res: any) => {}
-    );
-    return res.response.data;
+    this.activeExcelFiles.forEach(async (activeExcelFile) => {
+      let res = await this.RouterClient.query(
+        `query-${activeExcelFile.fileName}-${activeExcelFile.createTimestamp}`,
+        {
+          action: CONSTANTS.SEND_BOOKMARKS,
+          bookmarks: data.bookmarks,
+        },
+        (err: any, res: any) => {}
+      );
+    });
+
+    return "";
   };
 }
 
-const checkRangeInRange = (range: string, targetRange: string | undefined| null) => {
+const checkRangeInRange = (
+  range: string,
+  targetRange: string | undefined | null
+) => {
   console.log(range, targetRange);
   if (targetRange) {
     if (range.indexOf(":") > 0) {

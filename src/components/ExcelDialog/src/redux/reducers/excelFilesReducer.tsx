@@ -1,6 +1,6 @@
+import ExcelFile from '../../../../../services/OfficeAddin/types/ExcelFile';
 import * as CONSTANTS from '../actions/actionTypes';
 import { ExcelFileListActionType } from '../actions/actionTypes'
-import ExcelFile from '../../types/ExcelFile';
 
 const initialState = {
   activeExcelFiles: Array<ExcelFile>(),

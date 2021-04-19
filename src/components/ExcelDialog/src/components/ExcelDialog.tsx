@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk"
 import { registerActionThunk, setSelectedActiveExcelFile, setSelectedClipboardData, setSelectedPreviousExcelFiles, setRange, pasteToExcel, focusRange, clearRange, copyRange, setSelectedWorksheet } from "../redux/actions/actions";
-import ExcelFile from "../types/ExcelFile";
 
 import ActiveExcelFileList from "./ActiveExcelFileList";
 import PreviousExcelFileList from "./PreviousExcelFileList";
@@ -12,7 +11,9 @@ import BookmarkList from "./BookmarkList"
 import Range from "./Range";
 import TargetWorksheetList from "./TargetWorksheetList";
 import * as CONSTANTS from "../redux/actions/actionTypes";
-import { ExcelAction, Worksheet } from "../../../../services/OfficeAddin/types/types";
+import Worksheet from "../../../../services/OfficeAddin/types/Worksheet";
+import ExcelAction from "../../../../services/OfficeAddin/types/ExcelAction";
+import ExcelFile from "../../../../services/OfficeAddin/types/ExcelFile";
 
 
 const ExcelDialog = (props: any) => {

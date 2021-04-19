@@ -1,4 +1,4 @@
-import ExcelFile from "../../types/ExcelFile"
+import ExcelFile from "../../../../../services/OfficeAddin/types/ExcelFile"
 
 export const OFFICE_ADDIN_REGISTER = 'OFFICE_ADDIN_REGISTER'
 

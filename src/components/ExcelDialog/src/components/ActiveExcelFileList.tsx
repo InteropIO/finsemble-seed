@@ -7,7 +7,7 @@ import makeAnimated from 'react-select/animated';
 import { registerActionThunk, setSelectedActiveExcelFile } from "../redux/actions/actions";
 import * as CONSTANTS from '../redux/actions/actionTypes';
 import { useEffect } from "react";
-import ExcelFile from "../types/ExcelFile";
+import ExcelFile from "../../../../services/OfficeAddin/types/ExcelFile";
 
 const ActiveExcelFileList = (props: any) => {
     const { registerAction } = props;

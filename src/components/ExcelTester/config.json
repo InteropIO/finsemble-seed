@@ -52,7 +52,7 @@
 				},
 				"showTaskbarIcon": false,
 				"contextMenu": true,
-                "addToWorkspace": false,
+                "addToWorkspace": true,
                 "windowTitleWhiteList": ".*(Excel).*",
 		        "windowTitleBlackList": "Opening.*"
 			},

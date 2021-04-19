@@ -1,14 +1,14 @@
 import * as React from "react";
 import Select from "react-select";
 import makeAnimated from 'react-select/animated';
-import ExcelFile from "../types/ExcelFile";
 import { connect } from "react-redux";
 import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk"
 import { getWorksheetListThunk, registerActionThunk, setOpenWorksheet } from "../redux/actions/actions";
 import * as CONSTANTS from "../redux/actions/actionTypes";
 import { useEffect, useState } from "react";
-import { ExcelAction } from "../../../ExcelTester/src/types/types";
+import ExcelAction from "../../../../services/OfficeAddin/types/ExcelAction";
+import ExcelFile from "../../../../services/OfficeAddin/types/ExcelFile";
 
 const OpenWorksheetList = (props: any) => {
     const animatedComponents = makeAnimated();

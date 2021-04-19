@@ -1,9 +1,11 @@
 import { Action } from "redux";
 import { ThunkAction } from "redux-thunk";
+import Bookmark from "../../../../../services/OfficeAddin/types/Bookmark";
+import ExcelFile from "../../../../../services/OfficeAddin/types/ExcelFile";
+import Worksheet from "../../../../../services/OfficeAddin/types/Worksheet";
 import { RootState } from "./../store"
 import * as CONSTANTS from './actionTypes';
-import ExcelFile from './../../types/ExcelFile';
-import { Bookmark, Worksheet } from "../../../../../services/OfficeAddin/types/types";
+
 
 
 export const officeAddinRegister = (regsiteredActions: [], status: string) => {
@@ -53,6 +55,7 @@ export const registerActionThunk = (action: string, excelFiles?: Array<ExcelFile
                                 dispatch(getPreviousExcelFiles(previousExcelFiles))
                             } else {
                                 // If no previous excel files
+                                console.log(res.data.ACTIVE_EXCEL_FILES)
                                 FSBL.Clients.WindowClient.setComponentState({ field: 'previousExcelFiles', value: res.data.ACTIVE_EXCEL_FILES })
                                 dispatch(getPreviousExcelFiles(res.data.ACTIVE_EXCEL_FILES))
                             }

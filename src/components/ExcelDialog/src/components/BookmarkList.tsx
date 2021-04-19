@@ -2,12 +2,11 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import Select from "react-select";
 import makeAnimated from 'react-select/animated';
-import ExcelFile from "../types/ExcelFile";
 import { connect } from "react-redux";
 import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk"
 import { getPreviousExcelFilesThunk, setSelectedBookmark, setSelectedPreviousExcelFiles } from "../redux/actions/actions";
-import { Bookmark } from "../../../../services/OfficeAddin/types/types";
+import Bookmark from "../../../../services/OfficeAddin/types/Bookmark";
 
 const BookmarkList = (props: any) => {
     const animatedComponents = makeAnimated();

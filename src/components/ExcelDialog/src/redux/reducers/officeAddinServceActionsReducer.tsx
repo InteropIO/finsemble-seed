@@ -1,4 +1,4 @@
-import { ExcelAction } from '../../types/types';
+import ExcelAction from '../../../../../services/OfficeAddin/types/ExcelAction';
 import { OFFICE_ADDIN_REGISTER, OfficeAddinActionType } from '../actions/actionTypes';
 
 const initialState = {
