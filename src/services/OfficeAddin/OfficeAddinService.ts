@@ -466,11 +466,14 @@ export default class OfficeAddinService extends Finsemble.baseService {
                               res.data.eventObj.filePath
                             )
                           ) {
-                            setTimeout(() => {
+                            setTimeout(async () => {
                               console.log(activeDescriptors[componentId]);
-                              Finsemble.Clients.WorkspaceClient.bringWindowsToFront(
-                                activeDescriptors[componentId]
-                              );
+
+                              let {wrap} = await Finsemble.FinsembleWindow.getInstance(activeDescriptors[componentId]);
+                              wrap.bringToFront()
+                              // Finsemble.Clients.WorkspaceClient.bringWindowsToFront(
+                              //   activeDescriptors[componentId]
+                              // );
                               this.saveExcelWorkbook({
                                 excelFile: currentFile,
                               });
