@@ -96,6 +96,25 @@ export default class OfficeAddinService extends Finsemble.baseService {
       { store: "excelBookmarkStore" },
       this.getBookmarkStoreCb
     );
+
+    //Save all Excel files before worksapce reload.
+    Finsemble.Clients.WorkspaceClient.addEventListener(
+      "close-requested",
+      (event) => {
+        event.wait();
+        //tell excel to save
+        this.activeExcelFiles.forEach(async (file, index, object) => {
+          console.log('Saveing file ', file)
+          let res = await this.RouterClient.query(
+            `query-${file.fileName}-${file.createTimestamp}`,
+            { action: CONSTANTS.SAVE_EXCEL_WORKBOOK },
+            (err: any, res: any) => {
+              if (index == this.activeExcelFiles.length - 1) event.done();
+            }
+          );
+        });
+      }
+    );
   }
 
   getBookmarkStoreCb: StandardCallback = (err, storeObject) => {
@@ -467,13 +486,12 @@ export default class OfficeAddinService extends Finsemble.baseService {
                             )
                           ) {
                             setTimeout(async () => {
-                              console.log(activeDescriptors[componentId]);
-
-                              let {wrap} = await Finsemble.FinsembleWindow.getInstance(activeDescriptors[componentId]);
-                              wrap.bringToFront()
-                              // Finsemble.Clients.WorkspaceClient.bringWindowsToFront(
-                              //   activeDescriptors[componentId]
-                              // );
+                              let {
+                                wrap,
+                              } = await Finsemble.FinsembleWindow.getInstance(
+                                activeDescriptors[componentId]
+                              );
+                              wrap.bringToFront();
                               this.saveExcelWorkbook({
                                 excelFile: currentFile,
                               });

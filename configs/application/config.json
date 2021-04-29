@@ -131,7 +131,6 @@
 		"$applicationRoot/configs/application/workspaces.json",
 		"$applicationRoot/configs/application/services.json",
 		"$applicationRoot/configs/application/securityPolicies.json",
-		"$applicationRoot/components/ExcelTester/config.json",
 		"$applicationRoot/components/ExcelDialog/config.json"
 	]
 }
