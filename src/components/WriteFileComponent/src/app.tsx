@@ -3,14 +3,18 @@ import ReactDOM from "react-dom";
 import { FinsembleProvider } from "@finsemble/finsemble-ui/react/components/FinsembleProvider";
 import "@finsemble/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../../assets/css/theme.css";
+import ContentTypeDetector from "./ContentTypeDetector"
 
 const WriteFileComponent = () => {
 	/* Your functional react component code here */
 	const [clipboardData, setClipboardData] = useState('test')
+	const contentTypeDetector = new ContentTypeDetector(['SEDOL', 'CUSIP', 'ISIN', 'FDC3CONTACT', 'FDC3CONTACTLIST', 'FDC3COUNTRY', 'FDC3INSTRUMENT', 'FDC3INSTRUMENTLIST', 'FDC3ORGANIZATION', 'FDC3PORTFOLIO', 'FDC3POSITION', 'JSON', 'CSV', 'NUMBER'])
 
 	const getClipboardTextOnclick = () => {
+		contentTypeDetector.test()
 		FSBL.System.Clipboard.readText((clipboardData: string) => {
 			setClipboardData(clipboardData)
+			console.log(contentTypeDetector.detect(clipboardData))
 		})
 	}
 
@@ -33,7 +37,6 @@ const WriteFileComponent = () => {
 		tempLink.click();
 		window.URL.revokeObjectURL(objectUrl);
 	}
-
 
 	return (
 		<div>
