@@ -43,10 +43,6 @@
 		"output": "components/systemTrayComponent/SystemTrayComponent",
 		"entry": "./src/components/systemTrayComponent/SystemTrayComponent.tsx"
 	},
-	"registration": {
-		"output": "components/registration/Registration",
-		"entry": "./src/components/registration/Registration.tsx"
-	},
 	"NotificationsCenter": {
 		"output": "components/notificationsCenter/NotificationsCenter",
 		"entry": "./src/components/notificationsCenter/NotificationsCenter.tsx"
