@@ -11,6 +11,7 @@ import {
 	General,
 	Workspaces,
 	DashbarEditor,
+	Notifications,
 } from "@finsemble/finsemble-ui/react/components/userPreferences";
 import "@finsemble/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../assets/css/theme.css";
@@ -33,6 +34,7 @@ const sections = {
 	General: General,
 	Workspaces: Workspaces,
 	Dashbar: DashbarEditor,
+	Notifications: Notifications,
 };
 
 ReactDOM.render(

@@ -508,6 +508,10 @@
 			}
 		},
 		"NotificationsCenter": {
+			"bootParams": {
+				"stage": "earlyuser",
+				"dependencies": ["Toolbar"]
+			},
 			"window": {
 				"url": "$applicationRoot/components/notificationsCenter/notificationsCenter.html",
 				"forceOntoMonitor": true,
@@ -521,7 +525,7 @@
 				"monitor": "primary",
 				"addToWorkspace": false,
 				"options": {
-					"transparent": true,
+					"transparent": false,
 					"alwaysOnTop": true,
 					"autoShow": false,
 					"resizable": true,
@@ -532,8 +536,7 @@
 				"data": {
 					"notifications": {
 						"applyMuteFilters": false,
-						"notificationsHistory": true,
-						"newNotificationHighlightSeconds": 180
+						"notificationsHistory": true
 					}
 				}
 			},
@@ -575,13 +578,17 @@
 			}
 		},
 		"NotificationsToasts": {
+			"bootParams": {
+				"stage": "earlyuser",
+				"dependencies": ["Toolbar"]
+			},
 			"window": {
 				"name": "notifications-toasts",
 				"url": "$applicationRoot/components/notificationsToasts/notificationsToasts.html",
 				"options": {
-					"transparent": true,
+					"transparent": false,
 					"alwaysOnTop": true,
-					"autoShow": true,
+					"autoShow": false,
 					"resizable": false,
 					"showTaskbarIcon": false
 				},
@@ -590,7 +597,12 @@
 				"right": 0,
 				"width": 428,
 				"height": "100%",
-				"position": "available"
+				"position": "available",
+				"data": {
+					"notifications": {
+						"applyMuteFilters": true
+					}
+				}
 			},
 			"component": {
 				"preload": false,
