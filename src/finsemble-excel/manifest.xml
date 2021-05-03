@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0" xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="TaskPaneApp">
+  <Id>20af74fa-1623-49d3-a621-e5969b76f374</Id>
+  <Version>1.0.0.0</Version>
+  <ProviderName>Cosaic</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+  <Requirements>
+    <Sets DefaultMinVersion="1.1">
+      <Set Name="SharedRuntime" MinVersion="1.1"/>
+    </Sets>
+  </Requirements>
+  <DisplayName DefaultValue="Finsemble-Excel"/>
+  <Description DefaultValue="Finsemble Excel Addin"/>
+  <IconUrl DefaultValue="http://localhost:3375/finsemble-excel/assets/icon-32.png"/>
+  <HighResolutionIconUrl DefaultValue="http://localhost:3375/finsemble-excel/assets/icon-64.png"/>
+  <SupportUrl DefaultValue="https://www.contoso.com/help"/>
+  <AppDomains>
+    <AppDomain>http://localhost:3375</AppDomain>
+  </AppDomains>
+  <Hosts>
+    <Host Name="Workbook"/>
+  </Hosts>
+  <DefaultSettings>
+    <SourceLocation DefaultValue="http://localhost:3375/finsemble-excel/taskpane.html"/>
+  </DefaultSettings>
+  <Permissions>ReadWriteDocument</Permissions>
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
+    <EquivalentAddins>
+      <EquivalentAddin>
+        <ProgId>FinsembleExcel</ProgId>
+        <Type>COM</Type>
+      </EquivalentAddin>
+    </EquivalentAddins>
+    <Hosts>
+      <Host xsi:type="Workbook">
+        <Runtimes>
+          <Runtime resid="Taskpane.Url" lifetime="long" />
+        </Runtimes>
+        <DesktopFormFactor>
+          <GetStarted>
+            <Title resid="GetStarted.Title"/>
+            <Description resid="GetStarted.Description"/>
+            <LearnMoreUrl resid="GetStarted.LearnMoreUrl"/>
+          </GetStarted>
+          <FunctionFile resid="Taskpane.Url"/>
+
+          <ExtensionPoint xsi:type="ContextMenu">
+            <OfficeMenu id="ContextMenuCell">
+              <Control xsi:type="Menu" id="myMenuID">
+                <Label resid="TaskpaneButton.Label" />
+                <Supertip>
+                    <Title resid="TaskpaneButton.Label" />
+                    <Description resid="TaskpaneButton.Tooltip" />
+                </Supertip>
+                <Icon>
+                  <bt:Image size="16" resid="Icon.16x16"/>
+                  <bt:Image size="32" resid="Icon.32x32"/>
+                  <bt:Image size="80" resid="Icon.80x80"/>
+                </Icon>
+                <Items>
+                  <Item id="showTaskPaneItem">
+                    <Label resid="TaskpaneButton.Label"/>
+                    <Supertip>
+                      <Title resid="TaskpaneButton.Label" />
+                      <Description resid="TaskpaneButton.Tooltip" />
+                    </Supertip>
+                    <Icon>
+                      <bt:Image size="16" resid="Icon.16x16"/>
+                      <bt:Image size="32" resid="Icon.32x32"/>
+                      <bt:Image size="80" resid="Icon.80x80"/>
+                    </Icon>
+                    <Action xsi:type="ShowTaskpane">
+                      <TaskpaneId>Office.AutoShowTaskpaneWithDocument</TaskpaneId>
+                      <SourceLocation resid="Taskpane.Url"/>
+                    </Action>
+                  </Item>
+                  <Item id="spawnItem">
+                    <Label resid="Spawn.Label"/>
+                    <Supertip>
+                      <Title resid="Spawn.Label" />
+                      <Description resid="Spawn.Tooltip" />
+                    </Supertip>
+                    <Icon>
+                      <bt:Image size="16" resid="Icon.16x16"/>
+                      <bt:Image size="32" resid="Icon.32x32"/>
+                      <bt:Image size="80" resid="Icon.80x80"/>
+                    </Icon>
+                    <Action xsi:type="ExecuteFunction">
+                      <FunctionName>spawn</FunctionName>
+                    </Action>
+                  </Item>
+                  <Item id="broadcastDataItem">
+                    <Label resid="BroadcastData.Label"/>
+                    <Supertip>
+                      <Title resid="BroadcastData.Label" />
+                      <Description resid="BroadcastData.Tooltip" />
+                    </Supertip>
+                    <Icon>
+                      <bt:Image size="16" resid="Icon.16x16"/>
+                      <bt:Image size="32" resid="Icon.32x32"/>
+                      <bt:Image size="80" resid="Icon.80x80"/>
+                    </Icon>
+                    <Action xsi:type="ExecuteFunction">
+                      <FunctionName>broadcastData</FunctionName>
+                    </Action>
+                  </Item>
+                  <Item id="createBookmarkItem">
+                    <Label resid="CreateBookmark.Label"/>
+                    <Supertip>
+                      <Title resid="CreateBookmark.Label" />
+                      <Description resid="CreateBookmark.Tooltip" />
+                    </Supertip>
+                    <Icon>
+                      <bt:Image size="16" resid="Icon.16x16"/>
+                      <bt:Image size="32" resid="Icon.32x32"/>
+                      <bt:Image size="80" resid="Icon.80x80"/>
+                    </Icon>
+                    <Action xsi:type="ExecuteFunction">
+                      <FunctionName>createBookmark</FunctionName>
+                    </Action>
+                  </Item>
+                </Items>
+              </Control>
+          </OfficeMenu>
+          </ExtensionPoint>
+
+          <ExtensionPoint xsi:type="PrimaryCommandSurface">
+            <OfficeTab id="TabHome">
+              <Group id="CommandsGroup">
+                <Label resid="CommandsGroup.Label"/>
+                <Icon>
+                  <bt:Image size="16" resid="Icon.16x16"/>
+                  <bt:Image size="32" resid="Icon.32x32"/>
+                  <bt:Image size="80" resid="Icon.80x80"/>
+                </Icon>
+                <Control xsi:type="Button" id="TaskpaneButton">
+                  <Label resid="TaskpaneButton.Label"/>
+                  <Supertip>
+                    <Title resid="TaskpaneButton.Label"/>
+                    <Description resid="TaskpaneButton.Tooltip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16x16"/>
+                    <bt:Image size="32" resid="Icon.32x32"/>
+                    <bt:Image size="80" resid="Icon.80x80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>Office.AutoShowTaskpaneWithDocument</TaskpaneId>
+                    <SourceLocation resid="Taskpane.Url"/>
+                  </Action>
+                </Control>
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+      </Host>
+    </Hosts>
+    <Resources>
+      <bt:Images>
+        <bt:Image id="Icon.16x16" DefaultValue="http://localhost:3375/finsemble-excel/assets/icon-16.png"/>
+        <bt:Image id="Icon.32x32" DefaultValue="http://localhost:3375/finsemble-excel/assets/icon-32.png"/>
+        <bt:Image id="Icon.80x80" DefaultValue="http://localhost:3375/finsemble-excel/assets/icon-80.png"/>
+      </bt:Images>
+      <bt:Urls>
+        <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://go.microsoft.com/fwlink/?LinkId=276812"/>
+        <bt:Url id="Commands.Url" DefaultValue="http://localhost:3375/finsemble-excel/commands.html"/>
+        <bt:Url id="Taskpane.Url" DefaultValue="http://localhost:3375/finsemble-excel/taskpane.html"/>
+      </bt:Urls>
+      <bt:ShortStrings>
+        <bt:String id="GetStarted.Title" DefaultValue="Get started with your sample add-in!"/>
+        <bt:String id="CommandsGroup.Label" DefaultValue="Commands Group"/>
+        <bt:String id="TaskpaneButton.Label" DefaultValue="Finsemble Excel"/>
+        <bt:String id="Spawn.Label" DefaultValue="Spawn"/>
+        <bt:String id="BroadcastData.Label" DefaultValue="Broadcast Data"/>
+        <bt:String id="CreateBookmark.Label" DefaultValue="Create Bookmark"/>
+      </bt:ShortStrings>
+      <bt:LongStrings>
+        <bt:String id="GetStarted.Description" DefaultValue="Finsemble-Excel loaded succesfully. Go to the HOME tab and click the 'Finsemble-Excel' button to get started."/>
+        <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Click to Open Finsemble-Excel"/>
+        <bt:String id="Spawn.Tooltip" DefaultValue="Click to Spawn"/>
+        <bt:String id="BroadcastData.Tooltip" DefaultValue="Click to Broadcast Data"/>
+        <bt:String id="CreateBookmark.Tooltip" DefaultValue="Click to Create Bookmark"/>
+      </bt:LongStrings>
+    </Resources>
+  </VersionOverrides>
+</OfficeApp>
