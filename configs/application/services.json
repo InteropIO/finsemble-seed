@@ -2,8 +2,10 @@
     "comment": "Houses config for any custom services that you'd like to import into Finsemble.",
     "services": {
         "shutdownService": {
-            "useWindow": true,
-            "active": true,
+            "bootParams": {
+                "stage": "preuser",
+                "dependencies": []
+            },
             "name": "shutdownService",
             "visible": false,
             "html": "$applicationRoot/services/shutdown/shutdown.html"
