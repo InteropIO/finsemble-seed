@@ -70,5 +70,16 @@ window.open = function (theURL, name, specs, replace) {
  * and they create an ugly pop up window. Instead, we funnel these alerts through notifications.
  */
 window.alert = function (message) {
-	FSBL.UserNotification.alert("alert", "", "ALWAYS", message, {});
+	const notification = new FSBL.Clients.NotificationClient.Notification();
+	notification.source = "Finsemble";
+	notification.title = "Alert";
+	notification.details = message;
+	notification.actions = [
+		{
+			buttonText: "OK",
+			type: FSBL.Clients.NotificationClient.ActionTypes.DISMISS,
+			markAsRead: true,
+		},
+	];
+	FSBL.Clients.NotificationClient.notify(notification);
 };
