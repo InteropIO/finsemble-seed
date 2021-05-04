@@ -1,29 +1,36 @@
-const Finsemble = require("@chartiq/finsemble");
+//replace with import when ready
+const Finsemble = require("@finsemble/finsemble-core");
+const BaseService = Finsemble.baseService;
 const {
 	RouterClient,
 	Logger,
 	WorkspaceClient,
 	DialogManager,
-	ConfigClient
+	ConfigClient,
 } = Finsemble.Clients;
 
 Logger.start();
-Logger.log("shutdown Service starting up");
 
-// Add and initialize any other clients you need to use
-// (services are initialized by the system, clients are not)
 WorkspaceClient.initialize();
 ConfigClient.initialize();
 DialogManager.initialize();
+DialogManager.createStore(() => {});
 
-/**
- *
- * @constructor
- */
-function shutdownService() {
-	let shutDownTimer = null;
+class ShutdownService extends BaseService {
+	shutDownTimer = null;
+	/**
+	 * Initializes a new instance of the SeinfeldService class.
+	 * @constructor
+	 */
+	constructor() {
+		super({
+			startupDependencies: {
+				clients: ["configClient", "workspaceClient", "dialogManager"],
+			},
+		});
+	}
 
-	this.shutdownFunction = function() {
+	shutdownFunction() {
 		/**
 		 * Saves workspace and if it is dirty then  fires off a message shutting down the application.
 		 */
@@ -45,7 +52,7 @@ function shutdownService() {
 							showTimer: true,
 							timerDuration: 60000,
 							showNegativeButton: false,
-							affirmativeResponseLabel: "Shutdown Now"
+							affirmativeResponseLabel: "Shutdown Now",
 						},
 						async (err, response) => {
 							if (err) reject(err);
@@ -75,7 +82,7 @@ function shutdownService() {
 		 * @param {Object} config
 		 * @returns {number} timeInMs - milliseconds
 		 */
-		const setShutdownTimer = config => {
+		const setShutdownTimer = (config) => {
 			const daysUntilShutdown = (restartDay, today) => {
 				const shutdownIsToday = restartDay - today === 0;
 				const shutdownIsNextWeek = restartDay - today < 0;
@@ -125,17 +132,17 @@ function shutdownService() {
 			} else if (config) {
 				const shutdownTimer = setShutdownTimer(config);
 				// countdown timer until the shutdown
-				shutDownTimer = setTimeout(async () => {
+				this.shutDownTimer = setTimeout(async () => {
 					// if the user cancels the event then don't shutdown
 					if ((await saveWorkspace()) === "cancel") return;
 					// code to shutdown Finsemble
 					RouterClient.transmit("Application.shutdown");
 				}, shutdownTimer);
-				shutDownTimer;
+				this.shutDownTimer;
 			} else {
-				if (shutDownTimer) {
+				if (this.shutDownTimer) {
 					// clear the timer just in case there is an existing one set up
-					clearTimeout(shutDownTimer);
+					clearTimeout(this.shutDownTimer);
 				}
 			}
 		};
@@ -175,22 +182,10 @@ function shutdownService() {
 				shutdownFinsemble(err, config.value);
 			}
 		);
-	};
-
-	return this;
-}
-
-shutdownService.prototype = new Finsemble.baseService({
-	startupDependencies: {
-		// add any services or clients that should be started before your service
-		services: [],
-		clients: ["configClient", "workspaceClient", "dialogManager"]
 	}
-});
-const serviceInstance = new shutdownService("shutdownService");
-
-serviceInstance.onBaseServiceReady(function(callback) {
-	// serviceInstance.createRouterEndpoints();
+}
+const serviceInstance = new ShutdownService("shutdownService");
+serviceInstance.onBaseServiceReady((callback) => {
 	Logger.log("shutdown Service ready");
 	serviceInstance.shutdownFunction();
 	callback();
