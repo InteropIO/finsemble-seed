@@ -1,0 +1,24 @@
+{
+    "comment": "Houses config for any custom services that you'd like to import into Finsemble.",
+    "services": {
+        "shutdownService": {
+            "bootParams": {
+                "stage": "user",
+                "dependencies": []
+            },
+            "name": "shutdownService",
+            "visible": false,
+            "html": "$applicationRoot/services/shutdown/shutdown.html"
+        }
+    },
+	"custom": {
+		"scheduledShutdown": {
+			"//dayOfWeek": "0-6 (Sunday - Saturday), uncomment the value below to only shutdown on the specified day of the week",
+			"//dayOfWeek": 3,
+			"//hour": "24hour format e.g 5pm = 17 but 9am = 9 **not** 09",
+			"hour": 12,
+			"//minute": "0-60 - again single digits must be 1 not 01",
+			"minute": 29
+		}
+	}
+}

@@ -1,19 +1,21 @@
 
 
 ## Scheduled Shutdown Example ##
-Some organizations shutdown or restart their machines at specified times of the week to ensure updates etc. are deployed. It can be advantageous to have Finsemble shutdown prior to that, particularly for native components that need to save state (and don't use Finsemble's proactive approach to state saving). This recipe provides a service that reads config for when to shutdown and implements the shutdown with a 60 second countdown dialog and workspace save.
+Some organizations shutdown or restart their machines at specified times of the day or week to ensure updates etc. are deployed. It can be advantageous to have Finsemble shutdown prior to that, particularly for native components that need to save state (and don't use Finsemble's proactive approach to state saving). This recipe provides a service that reads config for when to shutdown and implements the shutdown with a 60 second countdown dialog and workspace save.
 
 ### Installation ###
 
- 1. Add the shutdown service files to your */src/services* directory (the folder includes one HTML and one JS file)
+ 1. Add the shutdown service files to your */src/services* directory
  2. In your *configs/application/services.json* file add the shutdownService object to services.
 ```
 {
     "comment": "Houses config for any custom services that you'd like to import into Finsemble.",
     "services": {
         "shutdownService": {
-            "useWindow": true,
-            "active": true,
+            "bootParams": {
+                "stage": "preuser",
+                "dependencies": []
+            },
             "name": "shutdownService",
             "visible": false,
             "html": "$applicationRoot/services/shutdown/shutdown.html"
@@ -21,13 +23,22 @@ Some organizations shutdown or restart their machines at specified times of the 
     }
 }
 ```
-
+OR
+Import the included config.json file by adding it to `importConfig` array in *configs/application/config.json*:
+```
+	...
+	"importConfig": [
+		...
+		"$applicationRoot/services/shutdown/config.json"
+	]
+}
+```
 
 
 ### Usage ###
 **Important:**
 
-***day:***  0-6 (Sunday - Saturday)
+***dayOfWeek:***  0-6 (Sunday - Saturday), omit this config entirely if you wish to shutdown every day at the configured time
 
 ***hour:***  24hour format **e.g** 5pm = 17 but 9am = 9 **not** 09
 
@@ -40,19 +51,13 @@ There are two options available set the shutdown service:
 
 **Option 1:** 
 
-Inside *configs/openfin/manifest-local.json* inside the finsemble object add the **scheduledShutdown** object.
+Inside the `finsemble.custom` element of your configuration (which can be defined in your manifest file, *configs/application/config.json* file or the included *services/shutdown/config.json* file), add the **scheduledShutdown** object. E.g.:
+In the manifest:
 ```
 "finsemble": {
-	"applicationRoot": "http://localhost:3375",
-	"moduleRoot": "$applicationRoot/finsemble",
-	"servicesRoot": "$applicationRoot/finsemble/services",
-	"notificationURL": "$applicationRoot/components/notification/notification.html",
-	"importConfig": ["$applicationRoot/configs/application/config.json"],
-	"IAC": {
-		"serverAddress": "ws://127.0.0.1:3376"
-	},
+	...
 	"scheduledShutdown": {
-		"day": 2,
+		"dayOfWeek": 2,
 		"hour": 17,
 		"minute": 5
 	}
