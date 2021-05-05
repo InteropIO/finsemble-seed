@@ -8,13 +8,15 @@ import ContentTypeDetector from "./ContentTypeDetector"
 const WriteFileComponent = () => {
 	/* Your functional react component code here */
 	const [clipboardData, setClipboardData] = useState('test')
+	const [contentType, setContentType] = useState('')
+
 	const contentTypeDetector = new ContentTypeDetector(['SEDOL', 'CUSIP', 'ISIN', 'FDC3CONTACT', 'FDC3CONTACTLIST', 'FDC3COUNTRY', 'FDC3INSTRUMENT', 'FDC3INSTRUMENTLIST', 'FDC3ORGANIZATION', 'FDC3PORTFOLIO', 'FDC3POSITION', 'JSON', 'CSV', 'NUMBER'])
 
 	const getClipboardTextOnclick = () => {
-		contentTypeDetector.test()
+		//contentTypeDetector.test()
 		FSBL.System.Clipboard.readText((clipboardData: string) => {
 			setClipboardData(clipboardData)
-			console.log(contentTypeDetector.detect(clipboardData))
+			setContentType(contentTypeDetector.detect(clipboardData))
 		})
 	}
 
@@ -44,6 +46,7 @@ const WriteFileComponent = () => {
 			<button onClick={getClipboardTextOnclick}>Get Clipboard Text</button>
 			<button onClick={getClipboardHTMLOnclick}>Get Clipboard HTML</button>
 			<button onClick={dlAsFileOnclick}>Download as File</button>
+			<div>Content Type: {contentType}</div>
 		</div>
 	);
 };

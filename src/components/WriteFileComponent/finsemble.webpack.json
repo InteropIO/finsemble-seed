@@ -1,0 +1,6 @@
+{
+  "WriteFileComponent": {
+      "output": "components/WriteFileComponent/WriteFileComponent",
+      "entry": "./src/components/WriteFileComponent/src/app.tsx"
+  }
+}

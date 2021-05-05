@@ -2,7 +2,7 @@
   "comment": "WriteFileComponent component configuration",
   "$schema": "../../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/componentsFile.schema.json",
   "components": {
-    "WriteFileComponent - Trusted": {
+    "WriteFileComponent": {
       "window": {
         "url": "$applicationRoot/components/WriteFileComponent/WriteFileComponent.html",
         "options": {
@@ -15,7 +15,7 @@
         "height": 300
       },
       "component": {
-        "preload": ["$applicationRoot/preloads/preload.js", "$applicationRoot/preloads/zoom.js"],
+        "preload": [],
         "spawnOnStartup": false
       },
       "foreign": {
@@ -38,47 +38,6 @@
           "Window Manager": {
             "alwaysOnTopIcon": true,
             "title": "WriteFileComponent - Trusted",
-            "persistWindowState": true
-          }
-        }
-      }
-    },
-    "WriteFileComponent - Untrusted": {
-      "window": {
-        "url": "$applicationRoot/components/WriteFileComponent/WriteFileComponent.html",
-        "options": {
-          "resizable": true,
-          "autoShow": true,
-          "alwaysOnTop": false,
-          "securityPolicy": "untrusted"
-        },
-        "width": 400,
-        "height": 300
-      },
-      "component": {
-        "preload": ["$applicationRoot/preloads/preload.js", "$applicationRoot/preloads/zoom.js"],
-        "spawnOnStartup": false
-      },
-      "foreign": {
-        "services": {
-          "windowService": {
-            "manageWindowMovement": true,
-            "allowAutoArrange": true,
-            "allowSnapping": true,
-            "allowTabbing": true,
-            "allowTiling": true,
-            "allowGrouping": true,
-            "allowMinimize": true
-          },
-          "workspace": {}
-        },
-        "components": {
-          "App Launcher": {
-            "launchableByUser": true
-          },
-          "Window Manager": {
-            "alwaysOnTopIcon": true,
-            "title": "WriteFileComponent - Untrusted",
             "persistWindowState": true
           }
         }

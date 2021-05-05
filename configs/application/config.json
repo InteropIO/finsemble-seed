@@ -3,6 +3,10 @@
 	"$schema": "../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/applicationConfigFile.schema.json",
 	"accessibleLinker": true,
 	"authentication": {
+		"startup": {
+			"adapter": "PASSWORD",
+			"component": "Registration"
+		}
 	},
 	"servicesConfig": {
 		"distributedStore": {
