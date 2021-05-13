@@ -75,6 +75,14 @@ export const registerActionThunk = (action: string, excelFiles?: Array<ExcelFile
                     }
                 })
                 break;
+            case CONSTANTS.SELECTION_SUBSCRIPTION:
+                FSBL.Clients.RouterClient.addListener(res.data.data[0].id, (err, res: any) => {
+                    if (res) {
+                        let eventObj = res.data.event
+                        dispatch(setSelectedClipboardData(eventObj))
+                    }
+                })
+                break;
             case CONSTANTS.BROADCAST_DATA:
                 FSBL.Clients.RouterClient.addListener(res.data.data[0].id, (err, res: any) => {
                     if (res) {

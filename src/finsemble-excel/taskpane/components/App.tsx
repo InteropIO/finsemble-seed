@@ -8,9 +8,9 @@ import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 import Header from "./Header";
 import Progress from "./Progress";
 // images references in the manifest
-import "./../../assets/icon-16.png";
-import "./../../assets/icon-32.png";
-import "./../../assets/icon-80.png";
+import "./../../assets/finsemble-logo-16.png";
+import "./../../assets/finsemble-logo-32.png";
+import "./../../assets/finsemble-logo-80.png";
 /* global Button, console, Excel, Header, HeroList, HeroListItem, Progress */
 
 import AppState from './../types/AppState';
@@ -148,6 +148,8 @@ export default class App extends React.Component<AppProps, AppState> {
       worksheet.load("items/name");
       return context.sync()
         .then(() => {
+          finsembleRouter.transmit(`${this.state.fileName}-event`, { event: 'SELECTION_CHANGE', eventObj: { address: selectedRange.address, worksheet: worksheet }, fileName: this.state.fileName })
+
           this.setState({ worksheet: worksheet.id })
           let range = selectedRange.address.split('!')[1]
           if (this.state.openEndedRange) {
@@ -438,7 +440,7 @@ export default class App extends React.Component<AppProps, AppState> {
     }).catch(console.log);
   }
 
-  
+
 
   rangeTextOnChanged = (_e, newText) => {
     this.setState({ range: newText });
@@ -516,9 +518,9 @@ export default class App extends React.Component<AppProps, AppState> {
   renderItemColumn = (bookmark: Bookmark, _index: number, column: IColumn) => {
     switch (column.key) {
       case 'bookmarkName':
-        return <div style={{height:'30px'}}>
-          
-            <div>{bookmark.name}</div>
+        return <div style={{ height: '30px' }}>
+
+          <div>{bookmark.name}</div>
           <TooltipHost
             content={bookmark.excelFile.filePath}
             id={bookmark.id}
@@ -527,7 +529,7 @@ export default class App extends React.Component<AppProps, AppState> {
           </TooltipHost>
         </div>;
       case 'action':
-        return <div style={{height:'30px'}}>
+        return <div style={{ height: '30px' }}>
           <IconButton iconProps={{ iconName: 'Edit' }} title="Edit" ariaLabel="Edit" onClick={() => { this.editBookmarkOnclick(bookmark) }} />
           <IconButton iconProps={{ iconName: 'Delete' }} title="Delete" ariaLabel="Delete" onClick={() => { this.deleteBookmarkOnclick(bookmark) }} />
         </div>;

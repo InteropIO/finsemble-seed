@@ -23,7 +23,7 @@ const ExcelDialog = (props: any) => {
     const { pasteToExcel } = props
     const { selectedWorksheet, range } = props
     const { offAddInServiceActions } = props;
-    const { registerPasteToExcel, registerFocusRange, registerCopyRange, registerClearRange, registerBroadcastData, resgisterChangeSubscription } = props;
+    const { registerPasteToExcel, registerFocusRange, registerCopyRange, registerClearRange, registerBroadcastData, resgisterChangeSubscription, resgisterSelectionSubscription } = props;
     const { selectedBookmark, setSelectedWorksheet } = props
     const { setRange } = props;
     const { activeExcelFiles } = props
@@ -44,7 +44,7 @@ const ExcelDialog = (props: any) => {
         registerBroadcastData()
     }, [])
 
-    const loadBookmarkOnclick = () => {
+    useEffect(() => {
         let excelFile = activeExcelFiles.filter((file: ExcelFile) => {
             return file.fileName === selectedBookmark.excelFile.fileName
         })
@@ -53,7 +53,7 @@ const ExcelDialog = (props: any) => {
             setSelectedWorksheet(selectedBookmark.worksheet)
             setRange(selectedBookmark.range)
         }
-    }
+    }, [selectedBookmark])
 
     const pasteToExceOnClick = () => {
         // Need to implement to check logic
@@ -108,16 +108,45 @@ const ExcelDialog = (props: any) => {
         }
     }
 
-    const subscribeOnClick = () => {
-        let tempCopyToExcelActions = offAddInServiceActions.filter((offAddInServiceAction: ExcelAction) => {
-            return offAddInServiceAction.action === CONSTANTS.CHANGE_SUBSCRIPTION && offAddInServiceAction.file?.fileName === selectedActiveExcelFile.fileName && offAddInServiceAction?.bookmark?.name === selectedBookmark.name
-        })
-        if (tempCopyToExcelActions.length == 0) {
-            if (range != '')
-                resgisterChangeSubscription([selectedActiveExcelFile], { bookmark: selectedBookmark })
-            else
-                resgisterChangeSubscription([selectedActiveExcelFile], {})
+    const subscribeValueOnClick = () => {
+        if (selectedActiveExcelFile || selectedBookmark) {
+            if (selectedBookmark) {
+                let tempCopyToExcelActions = offAddInServiceActions.filter((offAddInServiceAction: ExcelAction) => {
+                    return offAddInServiceAction.action === CONSTANTS.CHANGE_SUBSCRIPTION && offAddInServiceAction.file?.fileName === selectedActiveExcelFile.fileName && offAddInServiceAction?.bookmark?.name === selectedBookmark.name
+                })
+                if (tempCopyToExcelActions.length == 0)
+                    resgisterChangeSubscription([selectedActiveExcelFile], { bookmark: selectedBookmark })
+            } else {
+                // no bookmark selected
+                let tempCopyToExcelActions = offAddInServiceActions.filter((offAddInServiceAction: ExcelAction) => {
+                    return offAddInServiceAction.action === CONSTANTS.CHANGE_SUBSCRIPTION && offAddInServiceAction.file?.fileName === selectedActiveExcelFile.fileName
+                })
+                if (tempCopyToExcelActions.length == 0)
+                    resgisterChangeSubscription([selectedActiveExcelFile], {})
+            }
+        } else {
+            alert('Please either select a bookmark or an active Excel file.')
+        }
+    }
 
+    const subscribeSelectrionOnClick = () => {
+        if (selectedActiveExcelFile || selectedBookmark) {
+            if (selectedBookmark) {
+                let tempCopyToExcelActions = offAddInServiceActions.filter((offAddInServiceAction: ExcelAction) => {
+                    return offAddInServiceAction.action === CONSTANTS.SELECTION_SUBSCRIPTION && offAddInServiceAction.file?.fileName === selectedActiveExcelFile.fileName && offAddInServiceAction?.bookmark?.name === selectedBookmark.name
+                })
+                if (tempCopyToExcelActions.length == 0)
+                    resgisterSelectionSubscription([selectedActiveExcelFile], { bookmark: selectedBookmark })
+            } else {
+                // no bookmark selected
+                let tempCopyToExcelActions = offAddInServiceActions.filter((offAddInServiceAction: ExcelAction) => {
+                    return offAddInServiceAction.action === CONSTANTS.SELECTION_SUBSCRIPTION && offAddInServiceAction.file?.fileName === selectedActiveExcelFile.fileName
+                })
+                if (tempCopyToExcelActions.length == 0)
+                    resgisterSelectionSubscription([selectedActiveExcelFile], {})
+            }
+        } else {
+            alert('Please either select a bookmark or an active Excel file.')
         }
     }
 
@@ -128,24 +157,24 @@ const ExcelDialog = (props: any) => {
 
             <div>
                 <PreviousExcelFileList />
-                <button onClick={spawnExcelFileOnclick}>Spawn</button>
-            </div>
-
-            <div>
-                <BookmarkList />
-                <button onClick={loadBookmarkOnclick}>Load</button>
+                <button style={{ marginTop: '35px' }} onClick={spawnExcelFileOnclick}>Spawn</button>
                 <br /><br />
             </div>
 
             <div>
+                <BookmarkList />
+            </div>
+
+            <div>
                 <ActiveExcelFileList />
-                <br /><br /><br />
+                <button onClick={subscribeValueOnClick}>Subscribe Value</button>
+                <button onClick={subscribeSelectrionOnClick}>Subscribe Selection</button>
+                <br /><br />
             </div>
 
             <div>
                 <TargetWorksheetList />
                 <Range />
-
                 <br />
             </div>
 
@@ -154,7 +183,6 @@ const ExcelDialog = (props: any) => {
                 <button onClick={copyRangeOnclick}>Copy</button>
                 <button onClick={clearRangeOnclick}>Clear</button>
                 <button onClick={pasteToExceOnClick}>Paste</button>
-                <button onClick={subscribeOnClick}>Subscribe</button>
             </div>
         </div>
     );
@@ -181,6 +209,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
         registerCopyRange: (excelFiles: Array<ExcelFile>, params: {}) => dispatch(registerActionThunk(CONSTANTS.COPY_RANGE, excelFiles, params)),
         registerClearRange: (excelFiles: Array<ExcelFile>, params: {}) => dispatch(registerActionThunk(CONSTANTS.CLEAR_RANGE, excelFiles, params)),
         resgisterChangeSubscription: (excelFiles: Array<ExcelFile>, params: {}) => dispatch(registerActionThunk(CONSTANTS.CHANGE_SUBSCRIPTION, excelFiles, params)),
+        resgisterSelectionSubscription: (excelFiles: Array<ExcelFile>, params: {}) => dispatch(registerActionThunk(CONSTANTS.SELECTION_SUBSCRIPTION, excelFiles, params)),
         registerBroadcastData: () => dispatch(registerActionThunk(CONSTANTS.BROADCAST_DATA)),
         clearSelectedPreviousExcelFiles: () => dispatch(setSelectedPreviousExcelFiles([])),
         clearSelectedActiveExcelFiles: () => dispatch(setSelectedActiveExcelFile(null)),

@@ -104,7 +104,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
         event.wait();
         //tell excel to save
         this.activeExcelFiles.forEach(async (file, index, object) => {
-          console.log('Saveing file ', file)
+          console.log("Saveing file ", file);
           let res = await this.RouterClient.query(
             `query-${file.fileName}-${file.createTimestamp}`,
             { action: CONSTANTS.SAVE_EXCEL_WORKBOOK },
@@ -370,7 +370,31 @@ export default class OfficeAddinService extends Finsemble.baseService {
                 fileName: res.data.fileName,
               });
             });
-
+            break;
+          case CONSTANTS.SELECTION_CHANGE:
+            let selectionAddress = res.data.eventObj.address.split("!")[1];
+            let selectionWorksheet = res.data.eventObj.worksheet;
+            let tempSelectionActions = this.excelActions.filter((action) => {
+              if (action.bookmark)
+                return (
+                  action.action === CONSTANTS.SELECTION_SUBSCRIPTION &&
+                  action.file?.fileName === res.data.fileName &&
+                  action.bookmark?.worksheet.id === selectionWorksheet.id &&
+                  checkRangeInRange(selectionAddress, action.bookmark?.range)
+                );
+              else
+                return (
+                  action.action === CONSTANTS.SELECTION_SUBSCRIPTION &&
+                  action.file?.fileName === res.data.fileName &&
+                  checkRangeInRange(selectionAddress, null)
+                );
+            });
+            tempSelectionActions.forEach((action) => {
+              Finsemble.Clients.RouterClient.transmit(action.id, {
+                event: res.data.eventObj,
+                fileName: res.data.fileName,
+              });
+            });
             break;
 
           case CONSTANTS.CREATE_BOOKMARK:
@@ -663,6 +687,19 @@ export default class OfficeAddinService extends Finsemble.baseService {
             this.excelActions.push(changeSubscriptionAction);
           });
           break;
+        case CONSTANTS.SELECTION_SUBSCRIPTION:
+          data.excelFiles.forEach((excelFile: ExcelFile) => {
+            let selection_subscription_uuid = this.getUuid();
+            let selectionSubscriptionAction: ExcelAction = {
+              id: selection_subscription_uuid,
+              action: action,
+              file: excelFile,
+              bookmark: data.params.bookmark,
+            };
+            returnArray.push(selectionSubscriptionAction);
+            this.excelActions.push(selectionSubscriptionAction);
+          });
+          break;
         case CONSTANTS.GET_WORKSHEET_LIST:
           data.excelFiles.forEach((excelFile: ExcelFile) => {
             let get_worksheet_list_uuid = this.getUuid();
@@ -902,10 +939,19 @@ const checkRangeInRange = (
   range: string,
   targetRange: string | undefined | null
 ) => {
-  console.log(range, targetRange);
   if (targetRange) {
     if (range.indexOf(":") > 0) {
       // range in format A1:C3
+      let topLeft = range.split(":")[0];
+      let bottomRight = range.split(":")[1];
+      let topRight = strRemoveNum(bottomRight) + strRemoveChar(topLeft);
+      let bottomLeft = strRemoveNum(topLeft) + strRemoveChar(bottomRight);
+      return (
+        checkRangeInRange(topLeft, targetRange) ||
+        checkRangeInRange(bottomRight, targetRange) ||
+        checkRangeInRange(topRight, targetRange) ||
+        checkRangeInRange(bottomLeft, targetRange)
+      );
     } else {
       // range in format A1
       let rangeCol = convertExcelColToNum(strRemoveNum(range));

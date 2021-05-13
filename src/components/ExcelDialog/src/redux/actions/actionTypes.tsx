@@ -36,6 +36,7 @@ export const COPY_RANGE = 'COPY_RANGE'
 
 export const BROADCAST_DATA = 'BROADCAST_DATA'
 export const CHANGE_SUBSCRIPTION = 'CHANGE_SUBSCRIPTION'
+export const SELECTION_SUBSCRIPTION = 'SELECTION_SUBSCRIPTION'
 
 
 interface OfficeAddinRegisterAction {

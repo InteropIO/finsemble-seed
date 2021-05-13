@@ -14,7 +14,12 @@ const BookmarkList = (props: any) => {
         option: (provided: any, state: any) => ({
             ...provided,
             color: 'black'
-        })
+        }),
+        container:(provided: any, state: any) => ({
+            ...provided,
+            float: 'left',
+            width: '100%',
+        }),
     }
 
     const { selectedBookmark, setSelectedBookmark } = props;
