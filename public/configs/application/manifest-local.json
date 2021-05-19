@@ -1,0 +1,68 @@
+{
+	"$schema": "../../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/manifestFile.schema.json",
+	"devtools_port": 9090,
+	"startup_app": {
+		"name": "Finsemble",
+		"url": "../../build/finsemble/services/systemManager/systemManager.html",
+		"applicationIcon": "../../assets/img/Finsemble_Taskbar_Icon.png",
+		"uuid": "Finsemble",
+		"requireHandshake": true
+	},
+	"splashScreenImage": "../../assets/img/FinsembleSplash.png",
+	"splashScreenTimeout": 3000,
+	"appAssets": [
+		{
+			"src": "https://assets.finsemble.com/assimilation/assimilation_5.1.0.0.zip",
+			"version": "5.1.0.0",
+			"alias": "assimilation",
+			"target": "AssimilationMain.exe"
+		}
+	],
+	"finsemble": {
+		"documentRoot": "../../",
+		"configRoot": "../../configs",
+		"applicationRoot": "../../build",
+		"moduleRoot": "../../build/finsemble",
+		"servicesRoot": "../../build/finsemble/services",
+		"notificationURL": "$applicationRoot/components/notification/notification.html",
+		"configSchemaURL": "$moduleRoot/configs/schemas/finsemble.schema.json",
+		"systemTrayIcon": "../../assets/img/Finsemble_SystemTray_Icon.png",
+		"bootConfig": {
+			"onErrorMakeSystemManagerVisible": true,
+			"defaults": {
+				"startServiceTimeout": 10000,
+				"startComponentTimeout": 15000,
+				"startTaskTimeout": 10000
+			}
+		},
+		"router": {
+			"crossDomainTransport": "IPCBus",
+			"sameDomainTransport": "SharedWorker",
+			"transportSettings": {
+				"FinsembleTransport": {
+					"serverAddress": "ws://127.0.0.1:3376"
+				}
+			},
+			"promptBeforeAllowingExternalApps": false
+		},
+		"logger": {
+			"defaultClientLogLevels": {
+				"Error": true,
+				"Warn": true,
+				"Info": false,
+				"Log": true,
+				"Debug": false,
+				"Verbose": false,
+				"LocalOnly": false
+			}
+		},
+		"custom": {
+			"//": "Customer macros definitions must go here (e.g. 'myApplicationRoot' so it can be referenced elsewhere as '$myApplicationRoot'), along with other custom config at this level."
+		},
+		"importConfig": ["../../configs/application/config.json"]
+	},
+	"finsemble-electron-adapter": {
+		"useDOMBasedMovement": true,
+		"allowedManifestDomains": ["*"]
+	}
+}
