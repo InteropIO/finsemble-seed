@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { FinsembleProvider } from "@finsemble/finsemble-ui/react/components/FinsembleProvider";
 import {
@@ -12,8 +12,10 @@ import {
 	DragHandle,
 	RevealAll,
 	MinimizeAll,
+	NotificationControl,
 	AutoArrange,
 	Search,
+	Dashbar,
 	AdvancedAppLauncherMenu,
 	AppLauncherMenu,
 	WorkspaceManagementMenu,
@@ -34,10 +36,22 @@ const Toolbar = () => {
 	useHotkey(["ctrl", "alt", "up"], () => FSBL.Clients.LauncherClient.bringWindowsToFront());
 	useHotkey(["ctrl", "alt", "down"], () => window.FSBL.Clients.WorkspaceClient.minimizeAll());
 
+	const [useDOMBasedMovement, setDOMBasedMovement] = useState(true);
+
+	useEffect(() => {
+		async function fetchManifest() {
+			const response = await FSBL.Clients.ConfigClient.getValue("finsemble-electron-adapter.useDOMBasedMovement");
+			const { data: manifestValue } = response;
+			if (manifestValue !== null) setDOMBasedMovement(manifestValue);
+		}
+
+		fetchManifest();
+	}, []);
+
 	return (
 		<ToolbarShell hotkeyShow={["ctrl", "alt", "t"]} hotkeyHide={["ctrl", "alt", "h"]}>
 			<ToolbarSection className="left">
-				<DragHandle />
+				<DragHandle useDOMBasedMovement={useDOMBasedMovement} />
 				<FileMenu />
 				<Search openHotkey={["ctrl", "alt", "f"]} />
 				<WorkspaceManagementMenu />
@@ -54,6 +68,7 @@ const Toolbar = () => {
 				<AutoArrange />
 				<MinimizeAll />
 				<RevealAll />
+				<NotificationControl />
 			</ToolbarSection>
 			<div className="resize-area"></div>
 		</ToolbarShell>
@@ -63,6 +78,7 @@ const Toolbar = () => {
 ReactDOM.render(
 	<FinsembleProvider>
 		<Toolbar />
+		<Dashbar />
 	</FinsembleProvider>,
 	document.getElementById("Toolbar-tsx")
 );

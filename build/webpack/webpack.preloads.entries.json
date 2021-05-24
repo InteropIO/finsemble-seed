@@ -6,5 +6,9 @@
 	"zoom": {
 		"output": "preloads/zoom",
 		"entry": "./src/preloads/zoom.js"
+	},
+	"registration": {
+		"output": "preloads/registration",
+		"entry": "./src/preloads/registration.js"
 	}
 }
