@@ -1,7 +1,7 @@
 .settings/
 .project
 node_modules
-dist/
+public/build/
 .vscode
 .idea
 .DS_Store
@@ -15,10 +15,11 @@ crash_service.exe
 debug.log
 -
 built
-finsemble/
+server
+public/finsemble/
 .webpack-file-cache
 .babel_cache
-build/webpack/vendor-manifest.json
+webpack/vendor-manifest.json
 server/stats.json
 package-lock.json
 installer-tmp/

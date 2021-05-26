@@ -34,7 +34,7 @@ setTimeout(() => {
 	if (buttons.length == 1) {
 		buttons[0].onclick = () => {
 			// Wait briefly for page to render before checking the registration
-			setTimeout(registrationHandler, 2000);
+			setTimeout(registrationHandler, 500);
 		};
 	}
 
@@ -42,13 +42,13 @@ setTimeout(() => {
 
 	const nbsp = document.createTextNode("\u00A0");
 	buttonRowDiv.appendChild(nbsp);
-	
+
 	const closeButton = document.createElement("button");
 	closeButton.setAttribute("class", "hs-form__actions__submit");
 	closeButton.appendChild(document.createTextNode("Close"));
 	closeButton.onclick = () => FSBL.System.exit();
 	buttonRowDiv.appendChild(closeButton);
-}, 2000);
+}, 500);
 
 // Startup pattern for preload. Preloads can come in any order, so we need to wait on either the window event or the
 // FSBL event
