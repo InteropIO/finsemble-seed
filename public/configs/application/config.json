@@ -1,0 +1,142 @@
+{
+	"comment": "Top-level application config for development, adding on top of the core config",
+	"$schema": "../../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/applicationConfigFile.schema.json",
+	"accessibleLinker": true,
+	"authentication": {
+		"startup": {
+			"adapter": "PASSWORD",
+			"component": "Registration"
+		}
+	},
+	"servicesConfig": {
+		"distributedStore": {
+			"initialStores": [
+				{
+					"name": "Finsemble-AppLauncher-Store",
+					"preferPreviousState": true,
+					"foundation": {
+						"appFolders": {
+							"list": ["Advanced App Launcher", "Favorites"],
+							"folders": {
+								"Advanced App Launcher": {
+									"icon": "ff-component",
+									"type": "folder",
+									"canDelete": false,
+									"apps": [
+										{
+											"name": "Welcome Component",
+											"appID": "welcome-comp"
+										},
+										{
+											"name": "Getting Started Tutorial",
+											"appID": "2"
+										},
+										{
+											"name": "Process Monitor",
+											"appID": "pm"
+										},
+										{
+											"name": "Notepad",
+											"appID": "note"
+										}
+									]
+								},
+								"Favorites": {
+									"icon": "ff-favorite",
+									"type": "folder",
+									"canDelete": false,
+									"apps": []
+								}
+							}
+						},
+						"appDefinitions": {}
+					},
+					"default": {
+						"activeLauncherTags": [],
+						"filterText": "",
+						"activeTags": [],
+						"filteredApps": [],
+						"filterTags": [],
+						"activeFolder": "Advanced App Launcher",
+						"sortBy": "Alphabetical"
+					}
+				}
+			]
+		},
+		"launcher": {
+			"staggerPixels": 40,
+			"unknownComponent": "nonConfiguredComponent",
+			"defaultPreloads": {
+				"//": "Add preloads that will be injected into each browserView."
+			}
+		},
+		"assimilation": {
+			"useFeaSpawn": false,
+			"enabled": true,
+			"blacklist": [],
+			"whitelist": [],
+			"onlySpawned": true,
+			"throttle": 10,
+			"focusDelay": 30,
+			"eventIgnore": 50,
+			"hideTitleBars": false
+		},
+		"docking": {
+			"enabled": true,
+			"groupTileBuffer": 30,
+			"headerHeight": 32,
+			"MINIMUM_WIDTH": 175,
+			"requireRectangularityForGroupResize": true,
+			"undockDisbandsEntireGroup": true,
+			"fillHolesOnUndock": true,
+			"tabbing": {
+				"enabled": true
+			},
+			"tiling": {
+				"enabled": false
+			}
+		},
+		"linker": {
+			"enabled": false
+		},
+		"logger": {
+			"hotkeyShowCentralLogger": ["ctrl", "shift", "L"]
+		},
+		"storage": {
+			"defaultStorage": "IndexedDBAdapter",
+			"topicToDataStoreAdapters": {
+				"finsemble": "IndexedDBAdapter",
+				"finsemble.workspace": "IndexedDBAdapter",
+				"finsemble.workspace.cache": "IndexedDBAdapter"
+			},
+			"dataStoreAdapters": {
+				"LocalStorageAdapter": "$applicationRoot/adapters/localStorageAdapter.js",
+				"IndexedDBAdapter": "$applicationRoot/adapters/indexedDBAdapter.js"
+			}
+		}
+	},
+	"preferences": {
+		"workspaceService": {
+			"promptUserOnDirtyWorkspace": true
+		}
+	},
+	"//systemTrayIcon": "System Tray icons must be defined in config.json, so that the icon will actually appear in the system tray. Note that this file will overwrite ./manifest-local.json",
+	"systemTrayIcon": "$applicationRoot/../assets/img/Finsemble_SystemTray_Icon.png",
+	"systemTrayComponent": "SystemTrayComponent",
+	"Window Manager": {
+		"alwaysOnTopIcon": false,
+		"floatingTitlebarComponent": "Floating Titlebar"
+	},
+	"globalHotkeys": {},
+	"//": "this importConfig contains components that are necessary to start Finsemble. All other components are loaded dynamically. See server/auth/test.json",
+	"importConfig": [
+		"$configRoot/application/appd.json",
+		"$configRoot/application/UIComponents.json",
+		"$configRoot/application/components.json",
+		"$configRoot/application/workspaces.json",
+		"$configRoot/application/services.json",
+		"$configRoot/application/securityPolicies.json",
+		"$configRoot/application/dashbarConfig.json"
+	],
+	"toolbarMenus": {}
+}

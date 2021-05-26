@@ -16,7 +16,7 @@ import { useAuth, useAuthSimulator } from "@finsemble/finsemble-ui/react/hooks";
 import "@finsemble/finsemble-ui/react/assets/css/finsemble.css";
 import "@finsemble/finsemble-ui/react/assets/css/dialogs.css";
 import "@finsemble/finsemble-ui/react/assets/css/authentication.css";
-import "../../../assets/css/theme.css";
+import "../../../public/assets/css/theme.css";
 
 const bringToFront = () => FSBL.Clients.WindowClient.bringWindowToFront();
 export const Authentication = () => {
