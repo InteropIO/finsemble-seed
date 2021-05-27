@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 import { FinsembleProvider } from "@finsemble/finsemble-ui/react/components/FinsembleProvider";
 import {
@@ -24,7 +24,7 @@ import {
 import { FileMenu } from "./FileMenu";
 import { useHotkey } from "@finsemble/finsemble-ui/react/hooks/useHotkey";
 import "@finsemble/finsemble-ui/react/assets/css/finsemble.css";
-import "../../../../assets/css/theme.css";
+import "../../../../public/assets/css/theme.css";
 
 /**
  * Note: Set `FSBL.debug = true` if you need to reload the toolbar during development.
@@ -36,28 +36,17 @@ const Toolbar = () => {
 	useHotkey(["ctrl", "alt", "up"], () => FSBL.Clients.LauncherClient.bringWindowsToFront());
 	useHotkey(["ctrl", "alt", "down"], () => window.FSBL.Clients.WorkspaceClient.minimizeAll());
 
-	const [useDOMBasedMovement, setDOMBasedMovement] = useState(true);
-
-	useEffect(() => {
-		async function fetchManifest() {
-			const response = await FSBL.Clients.ConfigClient.getValue("finsemble-electron-adapter.useDOMBasedMovement");
-			const { data: manifestValue } = response;
-			if (manifestValue !== null) setDOMBasedMovement(manifestValue);
-		}
-
-		fetchManifest();
-	}, []);
-
 	return (
 		<ToolbarShell hotkeyShow={["ctrl", "alt", "t"]} hotkeyHide={["ctrl", "alt", "h"]}>
 			<ToolbarSection className="left">
-				<DragHandle useDOMBasedMovement={useDOMBasedMovement} />
+				<DragHandle />
 				<FileMenu />
 				<Search openHotkey={["ctrl", "alt", "f"]} />
 				<WorkspaceManagementMenu />
 				{/* Uncomment the following to enable the AdvancedAppLauncherMenu*/}
-				{/* <AdvancedAppLauncherMenu enableQuickComponents={true} /> */}
-				<AppLauncherMenu enableQuickComponents={true} />
+				{/* <AdvancedAppLauncherMenu /> */}
+				<AppLauncherMenu />
+				<AppLauncherMenu dynamic={true} />
 			</ToolbarSection>
 			<ToolbarSection className="center" hideBelowWidth={115}>
 				<div className="divider" />
