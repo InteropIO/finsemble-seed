@@ -368,11 +368,20 @@ const setupCloseListeners = async (identifiers) => {
 		});
 	}
 
+	// The Workspace is switching/closing let it do it's own thing naturally
+	FSBL.Clients.WorkspaceClient.addEventListener("close-requested", (event) => {
+		event.wait();
+		for (const wrapElement of wraps) {
+			wrapElement.removeEventListener("close-requested", closeHandler);
+		}
+		event.done();
+	})
+
 	if (stackedWindowIdentifiers && stackedWindowIdentifiers.length > 0) {
 		stackedWindowIdentifiers.forEach(winId => {
 			FSBL.FinsembleWindow.getInstance(winId, (err, wrap) => {
 				wraps.push(wrap);
-				wrap.addEventListener("close-requested", handlerWrapper);
+				wrap.addEventListener("close-requested", closeHandler);
 			});
 		});
 	}
