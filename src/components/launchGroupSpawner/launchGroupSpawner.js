@@ -1,11 +1,23 @@
 /**
  * Component used to spawn groups of other component windows, using configuration
  * provided as spawn data. Can also be used to listening for components closing
- * and will close all other components in the group. To ensure that components can 
+ * and will close all other components in the group. To ensure that components can
  * be closed together after being rehydrated from a workspace, this component
  * should also be added to the workspace.
  */
-import { spawnComponentGroup, getWindowIdentifiers, setupCloseListeners, closeAllWindows } from './spawnComponentGroup'
+import {
+	getWindowIdentifiers,
+	setupCloseListeners,
+	spawnComponentGroup
+} from './spawnComponentGroup'
+
+const developerReady = () => {
+	FSBL.System.showDeveloperTools(null, finsembleWindow.name, null, ()=> {
+		setTimeout(() => {
+			FSBLReady()
+		}, 2000)
+	})
+}
 
 const FSBLReady = () => {
 	try {
@@ -13,20 +25,16 @@ const FSBLReady = () => {
 			field: 'state',
 		}, (err, state) => {
 			if (!err && state) { //loading from a workspace
-			   let {identifiers, spawnerData} = state;
+				let {identifiers, spawnerData} = state;
 				//set up listeners on each window so that we can close them all together
-				setupCloseListeners(identifiers, true, () => {
-					closeAllWindows(identifiers);
-					//Close the spawner component as its no longer needed
-					FSBL.Clients.WindowClient.close({ removeFromWorkspace: true, closeWindow: true });
-				});
-		    } else { //new spawn
+				setupCloseListeners(identifiers);
+			} else { //new spawn
 				//get the spawner configuration provided in spawn data.
 				let spawnerData = FSBL.Clients.WindowClient.getSpawnData();
 				if (spawnerData && spawnerData.toSpawn) {
 					//get the spawner's own config and position info (the spawned components will offset from that position)
-					finsembleWindow.getOptions(async (err,data) => {
-						if(!err) {
+					finsembleWindow.getOptions(async (err, data) => {
+						if (!err) {
 							let spawnerOptions = data;
 							//let spawnerConfig = FSBL.Clients.WindowClient.options.customData;
 
@@ -38,7 +46,7 @@ const FSBLReady = () => {
 							}
 							let params = {
 								//make position data relative to the current monitor (and convert bottom/right to distance from those edges)
-								top: spawnerOptions.defaultTop, // - spawnerOptions.monitorDimensions.top, /* disabled due to changes in Finsemble claimed space) */ 
+								top: spawnerOptions.defaultTop, // - spawnerOptions.monitorDimensions.top, /* disabled due to changes in Finsemble claimed space) */
 								left: spawnerOptions.defaultLeft, // - spawnerOptions.monitorDimensions.left, /* disabled due to changes in Finsemble claimed space) */
 								bottom: spawnerOptions.monitorDimensions.bottom - spawnerOptions.bottom,
 								right: spawnerOptions.monitorDimensions.right - spawnerOptions.right,
@@ -49,37 +57,30 @@ const FSBLReady = () => {
 							}
 
 							spawnComponentGroup(spawnerData.toSpawn, params)
-								.then((spawnResponses) => { 
+								.then((spawnResponses) => {
 									FSBL.Clients.Logger.log("Group components spawn responses:", spawnResponses);
-									
+
 									if (spawnerData.closeComponentsTogether) {
 										// get the windowIdentifiers for each of the windows spawned
 										let identifiers = getWindowIdentifiers(spawnResponses);
 
 										console.log("identifiers:", identifiers);
 										console.log("spawnerData:", spawnerData);
-										
 
 										//save as state in the workspace
 										FSBL.Clients.WindowClient.setComponentState({
-											field: "state", 
+											field: "state",
 											value: {
 												identifiers: identifiers,
 												spawnerData: spawnerData
 											}});
-
-										//set up listeners on each window so that we can close them all together
-										setupCloseListeners(identifiers, true, async () => {
-											await closeAllWindows(identifiers);
-											//Close the spawner component as its no longer needed
-											FSBL.Clients.WindowClient.close({ removeFromWorkspace: true, closeWindow: true });
-										});
+										setupCloseListeners(identifiers);
 									} else {
 										//Close the spawner component as its no longer needed
-										FSBL.Clients.WindowClient.close({ removeFromWorkspace: true, closeWindow: true });
+										FSBL.Clients.WindowClient.close({removeFromWorkspace: true, closeWindow: true});
 									}
 								})
-								.catch((err) => { 
+								.catch((err) => {
 									FSBL.Clients.Logger.error("Failed to spawn component group, error:", err);
 								});
 						} else {
@@ -90,7 +91,7 @@ const FSBLReady = () => {
 					FSBL.Logger.error("Received no spawner data, spawnerData: ", spawnerData);
 				}
 			}
-	    });
+		});
 	} catch (e) {
 		FSBL.Clients.Logger.error(e);
 	}
@@ -100,4 +101,4 @@ if (window.FSBL && FSBL.addEventListener) {
 	FSBL.addEventListener("onReady", FSBLReady)
 } else {
 	window.addEventListener("FSBLReady", FSBLReady)
-} 
+}

@@ -1,23 +1,23 @@
 /**
- * Spawn multiple components, via an array of Objects defining the componentType and spawnOptions 
+ * Spawn multiple components, via an array of Objects defining the componentType and spawnOptions
  * to pass to LauncherClient.spawn. The spawned components are grouped automatically.
- * 
+ *
  * @param {Array} componentsToSpawn An array of objects defining the components to spawn. Each entry may either represent
- * a single component in the form `{componentType, spawnOptions}` or a tabbed window of components in the form 
- * `{components, spawnOptions}`, where `components` is an array of single component definitions (again in the form 
- * `{componentType, spawnOptions}`).  
- * Most arguments that are normally passed to `LauncherClient.spawn` are supported, although positioning will be 
+ * a single component in the form `{componentType, spawnOptions}` or a tabbed window of components in the form
+ * `{components, spawnOptions}`, where `components` is an array of single component definitions (again in the form
+ * `{componentType, spawnOptions}`).
+ * Most arguments that are normally passed to `LauncherClient.spawn` are supported, although positioning will be
  * interpreted as relative to the group's coordinates and dimensions for single components and ignored for tabbed
  * components (as these use the position specified in the group's spawnOptions).
  * @param {Object} groupParams Parameters defining the group size, position and linker channel on the current monitor (rather than relative to the virtual monitor - hence, the top/left corner should always be 0,0)
  * @param {number} groupParams.top The top coordinate of the group from which each component's top is offset
  * @param {number} groupParams.left The left coordinate of the group from which each component's left is offset.
- * @param {number} groupParams.width (Optional) The width of the group, required if the size or position of components in the group are expressed as a percentage of the group size. 
+ * @param {number} groupParams.width (Optional) The width of the group, required if the size or position of components in the group are expressed as a percentage of the group size.
  * @param {number} groupParams.height (Optional) The height of the group, required if the size or position of components in the group are expressed as a percentage of the group size.
  * @param {boolean} groupParams.addToWorkspace (Default: true) Add the spawned components to the workspace
  * @param {string} groupParams.linkerGroup (Optional) The name of the linker group to add the spawned components to or 'auto' to automatically select an empty (or the least populated) linker group.
  * @returns {Array} An array of the responses from each spawn command [{err, response},...]
- * @example 
+ * @example
  * let toSpawn = [{
  * 			"componentType": "Welcome Component",
  * 			"spawnOptions": {"top": 0, "left": 0, "height": 400, "width": 300, "data": {}}
@@ -41,7 +41,7 @@
  * 		}
  * }];
  * let promise = spawnComponentGroup(toSpawn, {top: 200, left: 200, linkerGroup:'auto'});
- * 
+ *
  * @example
  * let toSpawn = [{
  * 			"componentType": "Welcome Component",
@@ -76,7 +76,7 @@ const spawnComponentGroup = async function(componentsToSpawn, groupParams) {
 	return Promise.all(compsToSpawn.map(function(aComp) {
 		if (aComp.componentType) {
 			//single component
-			if (groupParams.linkerGroup) { 
+			if (groupParams.linkerGroup) {
 				if (!aComp.spawnOptions.data) { aComp.spawnOptions.data = {}; }
 				aComp.spawnOptions.data.linker = { channels: [groupParams.linkerGroup]};
 			}
@@ -91,7 +91,7 @@ const spawnComponentGroup = async function(componentsToSpawn, groupParams) {
 			return null;
 		}
 	})).then(function(spawnResponses){
-		//tell the first component to form a group 
+		//tell the first component to form a group
 		FSBL.Clients.Logger.log("forming group on:", spawnResponses[0].response.windowIdentifier);
 		FSBL.Clients.RouterClient.transmit("DockingService.formGroup", { windowName: spawnResponses[0].response.windowIdentifier.windowName });
 		return spawnResponses;
@@ -100,24 +100,24 @@ const spawnComponentGroup = async function(componentsToSpawn, groupParams) {
 
 /**
  * Spawn multiple components as a tabbed group.
- * The spawned components are may also be added to a 
+ * The spawned components are may also be added to a
  * linker channel automatically.
- * 
- * @param {Array} componentsToSpawn An array of Objects of the form `{componentType, spawnOptions}` defining the components to spawn. 
+ *
+ * @param {Array} componentsToSpawn An array of Objects of the form `{componentType, spawnOptions}` defining the components to spawn.
  * @param {object} params Spawn parameters for the group, expected to include positioning (top/left) and sizing (width/height) information for the group.
  * @param {string} linkerGroup (Optional) The name of the linker group to add the spawned components to.
  * @returns {Array} An array of the responses from each spawn command [{err, response},...]
- * @example 
+ * @example
  * let toSpawn = ["Welcome Component","Welcome Component","Welcome Component"];
  * let promise = spawnTabbedGroup(toSpawn, {top: 100, left: 200, width: 400, height: 600}}, 'auto');
  */
 const spawnTabbedGroup = async function(componentsToSpawn, params, linkerGroup) {
 	FSBL.Clients.Logger.log(`Spawning tabbed component group (${JSON.stringify(componentsToSpawn)}) with parameters`, params);
-	
+
 	let response = {};
 
-	
-	if (linkerGroup) { 
+
+	if (linkerGroup) {
 		if (!params.data) { params.data = {}; }
 		params.data.linker = { channels: [linkerGroup]};
 	}
@@ -144,8 +144,8 @@ const spawnTabbedGroup = async function(componentsToSpawn, params, linkerGroup) 
 		FSBL.Clients.Logger.info("Forming tabbed window");
 		let tabbedParams = Object.assign({}, params);
 		tabbedParams = Object.assign(tabbedParams, {
-			windowType: "StackedWindow", 
-			data: { windowIdentifiers: winIds }, 
+			windowType: "StackedWindow",
+			data: { windowIdentifiers: winIds },
 			options: { newStack: true }
 		});
 
@@ -161,7 +161,7 @@ const spawnTabbedGroup = async function(componentsToSpawn, params, linkerGroup) 
 /**
  * Process the arguments provide for each component and offset their position from the groupTop and groupLeft.
  * @param {Array} componentsToSpawn An array of objects defining the componentType and spawnOptions to pass to LauncherClient.spawn for each component
- * @param {Object} groupParams Parameters defining the group size, position and linker channel. Note that the group's position and size must be specified in pixels and relative to the current monitor (rather than using % based sizing or coordinates in the virtual monitor space). 
+ * @param {Object} groupParams Parameters defining the group size, position and linker channel. Note that the group's position and size must be specified in pixels and relative to the current monitor (rather than using % based sizing or coordinates in the virtual monitor space).
  * @param {number} groupParams.top The top coordinate of the group (relative to the current monitor) from which each component's top is offset
  * @param {number} groupParams.left The left coordinate of the group (relative to the current monitor) from which each component's left is offset.
  * @param {number} groupParams.bottom (Optional) The bottom coordinate of the group (relative to the current monitor) from which each component's bottom is offset. Note this is interpreted in the same way as when passed to spawn, i.e. the distance from the bottom (rather than top) edge. Required if any of hte group's components will use 'bottom' in its positioning arguments.
@@ -186,11 +186,11 @@ const processConfig = function(componentsToSpawn, groupParams) {
 
 	//check all components have position and size info
 	componentsToSpawn.forEach(element => {
-		if ((element.spawnOptions.top == undefined && element.spawnOptions.bottom == undefined) || 
+		if ((element.spawnOptions.top == undefined && element.spawnOptions.bottom == undefined) ||
 			(!element.spawnOptions.left == undefined && element.spawnOptions.right == undefined) ||
 			(!element.spawnOptions.width && (element.spawnOptions.left == undefined || element.spawnOptions.right == undefined)) ||
 			(!element.spawnOptions.height && (element.spawnOptions.top == undefined || element.spawnOptions.bottom == undefined))
-			){
+		){
 			throw new Error("Incomplete config for component within group (a position and size must be derivable from the config), groupParams provided: \n" + JSON.stringify(groupParams, null, 2)+ "\nproblem component:\n" + JSON.stringify(element, null, 2));
 		}
 	});
@@ -214,7 +214,7 @@ const processConfig = function(componentsToSpawn, groupParams) {
 	}
 
 	//process the array of components to set position arguments
-	return componentsToSpawn.map(function (comp){ 
+	return componentsToSpawn.map(function (comp){
 		//process spawnOptions, convert any % based args into pixel coordinates, offset by group position
 		//  N.B. Rounding of coordinates is awkward and must be done correctly to avoid overlaps...
 		comp.spawnOptions.top = processCoordinateOrDimension(comp.spawnOptions.top, groupParams.top, groupParams.height, Math.round);
@@ -226,7 +226,7 @@ const processConfig = function(componentsToSpawn, groupParams) {
 
 		comp.spawnOptions.height = processCoordinateOrDimension(comp.spawnOptions.height, 0, groupParams.height, Math.round);
 		comp.spawnOptions.width = processCoordinateOrDimension(comp.spawnOptions.width, 0, groupParams.width, Math.round);
-		
+
 		//base positioning on absolute monitor coordinates (rather than available space)
 		comp.spawnOptions.position = "monitor";
 
@@ -247,7 +247,7 @@ const processCoordinateOrDimension = function(value, groupBasisCoordinate, group
 		return groupBasisCoordinate + value;
 	} else {
 		return undefined;
-	} 
+	}
 }
 
 /**
@@ -255,29 +255,29 @@ const processCoordinateOrDimension = function(value, groupBasisCoordinate, group
  * @returns {string} The name of the first, least populated Linker group.
  */
 const pickLeastUsedLinkerGroup = function(){
-    let groups = FSBL.Clients.LinkerClient.getAllGroups();
-    let components = FSBL.Clients.LinkerClient.getLinkedWindows({});
-    let used = {};
-    components.forEach(comp => {
-        comp.channels.forEach(channel => {
-            if (used[channel]){ used[channel]++; }
-            else { used[channel] = 1; }
-        });
-    });
-    console.log("Linker group membership: ", used);
-    let leastGroup = groups[0].name;
-    let least = (used[groups[0].name] ? used[groups[0].name] : 0);
-    for (let g=0; g<groups.length; g++) { 
-        let groupName = groups[g].name;
-        if (!used[groupName]) { 
-            leastGroup = groupName; 
-            break; 
-        } else if (used[groupName] < least) {
-            leastGroup = groupName; 
-            least = used[groupName];
-        }
-    }
-    return leastGroup;
+	let groups = FSBL.Clients.LinkerClient.getAllGroups();
+	let components = FSBL.Clients.LinkerClient.getLinkedWindows({});
+	let used = {};
+	components.forEach(comp => {
+		comp.channels.forEach(channel => {
+			if (used[channel]){ used[channel]++; }
+			else { used[channel] = 1; }
+		});
+	});
+	console.log("Linker group membership: ", used);
+	let leastGroup = groups[0].name;
+	let least = (used[groups[0].name] ? used[groups[0].name] : 0);
+	for (let g=0; g<groups.length; g++) {
+		let groupName = groups[g].name;
+		if (!used[groupName]) {
+			leastGroup = groupName;
+			break;
+		} else if (used[groupName] < least) {
+			leastGroup = groupName;
+			least = used[groupName];
+		}
+	}
+	return leastGroup;
 };
 
 /**
@@ -293,15 +293,15 @@ const getWindowIdentifiers = function(spawnResponses) {
 			//tabbed window
 			aResponse.spawnResponses.forEach(tabResponse => {
 				if (tabResponse?.response?.windowIdentifier) {
-					winIds.push(tabResponse?.response?.windowIdentifier);
+					winIds.push(tabResponse.response.windowIdentifier);
 				}
 			});
-			if (aResponse?.stackedWindowResponse?.windowIdentifier){
-				stacks.push(aResponse?.stackedWindowResponse?.windowIdentifier);
+			if (aResponse?.stackedWindowResponse?.response?.windowIdentifier) {
+				stacks.push(aResponse.stackedWindowResponse.response.windowIdentifier);
 			}
 		} else {
 			if (aResponse?.response?.windowIdentifier) {
-				winIds.push(aResponse?.response?.windowIdentifier);
+				winIds.push(aResponse.response.windowIdentifier);
 			}
 		}
 	});
@@ -310,44 +310,82 @@ const getWindowIdentifiers = function(spawnResponses) {
 
 /**
  * Sets up window closed listener for each component, using the arrays of
- * window and stackedWindow identifiers returned by getWindowIdentifiers(). 
- * The handler function is called when any of the component windows closes. 
- * As this will likely be used to close all components an option allows 
+ * window and stackedWindow identifiers returned by getWindowIdentifiers().
+ * The handler function is called when any of the component windows closes.
+ * As this will likely be used to close all components an option allows
  * the handler to only be called once.
- * 
+ *
  * @param {*} identifiers Object returned by getWindowIdentifiers().
- * @param {*} onlyOnce If true, the handler function will only ever be called once.
- * @param {*} handler Handler function to be called when a component closes. 
  */
-const setupCloseListeners = function(identifiers, onlyOnce, handler) {
+const setupCloseListeners = async (identifiers) => {
 	const { windowIdentifiers, stackedWindowIdentifiers } = identifiers;
-	
-	//wrap the handler function so that it only gets called once if all the 
-	// components are trying to close.
-	let closing = false;
-	let handlerWrapper = () => {
-		if (!onlyOnce || !closing) {
-			closing = true;
-			handler();
+	const wraps = [];
+
+	const closeHandler = async (event) => {
+		event.wait();
+		const { response } = await FSBL.Clients.RouterClient.query("DockingService.getGroupsForWindow", {name: event.source});
+		// Is the closed window part of a group
+		if(response.data && Array.isArray(response.data) && response.data.length) {
+			let movableGroup;
+
+			for (const group of response.data) {
+				// Check if the groups is docking group
+				if(FSBL.Clients.WorkspaceClient.activeWorkspace?.groups[group]?.isMovable) {
+					movableGroup = group;
+					break;
+				}
+			}
+
+			const wrapsToClose = [];
+			if(movableGroup) {
+				// Find out which windows are in the group
+				for (const wrapElement of wraps) {
+					const {response : groupsResponse} = await FSBL.Clients.RouterClient.query("DockingService.getGroupsForWindow", {name: wrapElement.name});
+					if(groupsResponse.data && Array.isArray(groupsResponse.data) && groupsResponse.data.length && groupsResponse.data.includes(movableGroup)) {
+						wrapsToClose.push(wrapElement);
+					}
+				}
+			}
+
+			for (const wrapElement of wrapsToClose) {
+				wrapElement.removeEventListener("close-requested", closeHandler);
+			}
+			// debugger;
+			await closeAllWindows(wrapsToClose, event.source);
+			FSBL.Clients.WindowClient.close({removeFromWorkspace: true, closeWindow: true});
 		}
+		event.done();
 	};
 
 	if (windowIdentifiers && windowIdentifiers.length > 0) {
 		windowIdentifiers.forEach(winId => {
-			FSBL.FinsembleWindow.getInstance(winId, (err, wrap) => {
-				wrap.addEventListener("closed", handlerWrapper);
+			FSBL.FinsembleWindow.getInstance(winId, async (err, wrap) => {
+				if(!wrap.parentWindow) {
+					wraps.push(wrap);
+					wrap.addEventListener("close-requested", closeHandler);
+				}
 			});
 		});
 	}
 
+	// The Workspace is switching/closing let it do it's own thing naturally
+	FSBL.Clients.WorkspaceClient.addEventListener("close-requested", (event) => {
+		event.wait();
+		for (const wrapElement of wraps) {
+			wrapElement.removeEventListener("close-requested", closeHandler);
+		}
+		event.done();
+	})
+
 	if (stackedWindowIdentifiers && stackedWindowIdentifiers.length > 0) {
 		stackedWindowIdentifiers.forEach(winId => {
 			FSBL.FinsembleWindow.getInstance(winId, (err, wrap) => {
-				wrap.addEventListener("closed", handlerWrapper);
+				wraps.push(wrap);
+				wrap.addEventListener("close-requested", closeHandler);
 			});
 		});
 	}
-};
+}
 
 /**
  * Closes all the windows, using the identifiers Object returned by
@@ -356,48 +394,17 @@ const setupCloseListeners = function(identifiers, onlyOnce, handler) {
  *
  * @param {*} identifiers Object returned by getWindowIdentifiers().
  */
-const closeAllWindows = async function(identifiers) {
-	const { windowIdentifiers, stackedWindowIdentifiers } = identifiers;
-	
-	const closeAWindow = async function(winId){
-		console.log("closing " + winId.name);
-		let response = await FSBL.FinsembleWindow.getInstance(winId);
-		if(!response.wrap) {
-			console.warn("No wrap returned during close for " + winId.name);
-		} else {
-			let wrap = response.wrap;
-			if (wrap.parentWindow){
-				//remove from the tabbed window before closing
-				await wrap.parentWindow.removeWindow({ 
-					windowIdentifier: winId, 
-					noDocking: true, 
-					noVisible: true, 
-					waitChildClose: true, 
-					closeWindow: true, 
-					noCloseStack: false 
-				});
-				try {
-					wrap.close({ removeFromWorkspace: true, closeWindow: true });
-					console.log("closed window in stack " + winId.name);
-				} catch { }
-			} else {
-				try{
-					wrap.close({ removeFromWorkspace: true, closeWindow: true })
-					console.log("closed window NOT in stack " + winId.name);
-				} catch { }
-			}
-		}
+const closeAllWindows = async function(wrapsToClose) {
+	const closeAWindow = async function(wrap) {
+		try{
+			wrap.close({ removeFromWorkspace: true, closeWindow: true })
+			console.log("closed window NOT in stack " + winId.name);
+		} catch { }
 	};
 
-	//close the component windows
-	if (windowIdentifiers && windowIdentifiers.length > 0) {
-		//do not use forEach or it will make the promises execute concurrently, we need to do this serially
-		for (let winId of windowIdentifiers) {
-			await closeAWindow(winId);
-		}
+	for (let wrap of wrapsToClose) {
+		closeAWindow(wrap)
 	}
-
-	// No need to close stacked windows, they closed themselves when we remove the windows from them
 }
 
-export { spawnComponentGroup, getWindowIdentifiers, setupCloseListeners, closeAllWindows }; 
+export { spawnComponentGroup, getWindowIdentifiers, setupCloseListeners };
