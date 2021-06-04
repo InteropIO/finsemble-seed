@@ -1,0 +1,6 @@
+{
+  "InitiateWorkflow": {
+      "output": "components/InitiateWorkflow/InitiateWorkflow",
+      "entry": "./src/components/InitiateWorkflow/src/app.tsx"
+  }
+}

@@ -3,10 +3,7 @@
 	"$schema": "../../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/applicationConfigFile.schema.json",
 	"accessibleLinker": true,
 	"authentication": {
-		"startup": {
-			"adapter": "PASSWORD",
-			"component": "Registration"
-		}
+
 	},
 	"servicesConfig": {
 		"distributedStore": {
@@ -136,7 +133,9 @@
 		"$configRoot/application/workspaces.json",
 		"$configRoot/application/services.json",
 		"$configRoot/application/securityPolicies.json",
-		"$configRoot/application/dashbarConfig.json"
+		"$configRoot/application/dashbarConfig.json",
+		"$applicationRoot/components/InitiateWorkflow/appd.json",
+		"$applicationRoot/services/Workflow/config.json"
 	],
 	"toolbarMenus": {}
 }

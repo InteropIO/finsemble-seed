@@ -1,0 +1,11 @@
+{
+    "$schema": "../../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/servicesFile.schema.json",
+    "services": {
+        "Workflow": {
+            "name": "Workflow",
+            "file": "$applicationRoot/services/Workflow/WorkflowService.js",
+            "visible": false,
+            "html": "$applicationRoot/services/Workflow/Workflow.html"
+        }
+    }
+}

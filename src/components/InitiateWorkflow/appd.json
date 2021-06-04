@@ -1,0 +1,36 @@
+{
+    "comment": "InitiateWorkflow AppD component config",
+    "$schema": "",
+    "appd": {
+        "InitiateWorkflow": {
+            "appId": "InitiateWorkflow",
+            "name": "InitiateWorkflow",
+            "manifest": {
+                "window": {
+                    "url": "$applicationRoot/components/InitiateWorkflow/InitiateWorkflow.html",
+                    "width": 470,
+                    "height": 560,
+                    "options": {
+                        "resizable": false,
+                        "autoShow": true,
+                        "alwaysOnTop": false
+                    }
+                },
+                "component": {
+                    "preload": false
+                },
+                "foreign": {
+                    "components": {
+                        "App Launcher": {
+                            "launchableByUser": false
+                        },
+                        "Window Manager": {
+                            "persistWindowState": true,
+                            "FSBLHeader": false
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

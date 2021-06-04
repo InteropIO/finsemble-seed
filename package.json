@@ -36,9 +36,11 @@
   "dependencies": {
     "@finsemble/finsemble-core": "6.0.0-beta.10",
     "@finsemble/finsemble-electron-adapter": "6.0.0-beta.10",
-    "@finsemble/finsemble-ui": "6.0.0-beta.10",
+    "@finsemble/finsemble-ui": ".\\finsemble-finsemble-ui-v6.0.6-beta.3.tgz",
     "async": "3.2.0",
+    "classnames": "^2.3.1",
     "compression": "1.7.3",
+    "detect-csv": "^1.1.0",
     "express": "4.16.4",
     "react": "17.0.1",
     "react-dom": "17.0.1"
