@@ -15,7 +15,7 @@ const contentTypeDetecter = new ContentTypeDetecter(['SEDOL', 'CUSIP', 'ISIN', '
 
 const inputTypes = [
     {
-        id: "tabDelimitedCSV",
+        id: "CSV",
         name: "Tab Delimited CSV",
         format: "table",
         validators: null,
@@ -115,14 +115,15 @@ const workflows = [
     },
 ];
 
-// {"type":"fdc3.order", {}}
-
 
 const InitiateWorkflowComponet = (props: any) => {
-    let data = {"type":"fdc3.instrument","name":"Apple","id":{"ticker":"aapl","ISIN":"US0378331005","CUSIP":"037833100","FIGI":"BBG000B9XRY4"}}
+    // let testFDC3INSTRUMENT = '{"type":"fdc3.instrument","name":"Apple","id":{"ticker":"aapl","ISIN":"US0378331005","CUSIP":"037833100","FIGI":"BBG000B9XRY4"}}'
+    // [["a1","b1","c1"],["a2","b2","c2"]]
+    // {"type":"fdc3.order", {}}
+
 
     let [autofocusTab, setAutofocusTab] = useState<0 | 1>(0)
-    let [inputValue, setInputValue] = useState<string>("")
+    let [inputValue, setInputValue] = useState<any>()
     let [selectInputId, setSelectInputId] = useState<string>("")
 
     useEffect(() => {
@@ -130,14 +131,11 @@ const InitiateWorkflowComponet = (props: any) => {
         if (spawndata.mode == 'clipboard') {
             setAutofocusTab(0)
             FSBL.System.Clipboard.readText((clipboardData: string) => {
+                console.log("clipboardData: ", clipboardData, 'Type:', contentTypeDetecter.detect(clipboardData))
+                // setSelectInputId('CSV')
+                // setInputValue([["a1","b1","c1"],["a2","b2","c2"]])       
                 setSelectInputId(contentTypeDetecter.detect(clipboardData))
-                // console.log(JSON.parse(clipboardData))
-                console.log(data)
-                setInputValue(clipboardData)                // if(JSON.parse(clipboardData)){
-                //     setInputValue(JSON.parse(clipboardData))
-                // } else {
-                //     setInputValue(clipboardData)
-                // }
+                setInputValue(clipboardData)         
             })
         } else if (spawndata.mode == 'input') {
             setAutofocusTab(1)
@@ -157,7 +155,7 @@ const InitiateWorkflowComponet = (props: any) => {
 
     return (
         <div id='InitiateWorkflow'>
-            <InitiateWorkflow inputTypes={inputTypes} workflows={workflows} onClose={onClose} onWorkflowInit={onWorkflowInit} value={data} selectedInputId={selectInputId} autofocusTab={autofocusTab} />
+            <InitiateWorkflow inputTypes={inputTypes} workflows={workflows} onClose={onClose} onWorkflowInit={onWorkflowInit} value={inputValue} selectedInputId={selectInputId} autofocusTab={autofocusTab} />
         </div>
     );
 };
