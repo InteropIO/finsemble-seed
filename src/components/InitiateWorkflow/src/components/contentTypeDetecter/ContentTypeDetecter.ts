@@ -222,6 +222,19 @@ export class ContentTypeDetecter {
     return detect(content) ? true : false;
   }
 
+  csvToArray(string: string): string[][] {
+    const newline = "\n";
+    const delimiter = "	";
+    let array: string[][] = [];
+    let rows = string.split(newline);
+    rows.pop();
+    rows.forEach((values: string) => {
+      let tempArray: string[] = values.split("	");
+      array.push(tempArray);
+    });
+    return array;
+  }
+
   number(content: string): boolean {
     let numberPattern = /^\d+$/;
     if (content.match(numberPattern)) {
@@ -235,6 +248,7 @@ export class ContentTypeDetecter {
     let testcases = [];
     //testcases.push('')
     testcases.push("A1,B1,C1\nA2,B2,C2\nA3,B3,C3");
+    testcases.push("A1	B1	C1\nA2	B2	C2\nA3	B3	C3");
     testcases.push("123");
     testcases.push("456");
     testcases.push("test");

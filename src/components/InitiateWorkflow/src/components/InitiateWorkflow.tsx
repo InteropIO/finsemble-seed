@@ -117,11 +117,6 @@ const workflows = [
 
 
 const InitiateWorkflowComponet = (props: any) => {
-    // let testFDC3INSTRUMENT = '{"type":"fdc3.instrument","name":"Apple","id":{"ticker":"aapl","ISIN":"US0378331005","CUSIP":"037833100","FIGI":"BBG000B9XRY4"}}'
-    // [["a1","b1","c1"],["a2","b2","c2"]]
-    // {"type":"fdc3.order", {}}
-
-
     let [autofocusTab, setAutofocusTab] = useState<0 | 1>(0)
     let [inputValue, setInputValue] = useState<any>()
     let [selectInputId, setSelectInputId] = useState<string>("")
@@ -131,11 +126,18 @@ const InitiateWorkflowComponet = (props: any) => {
         if (spawndata.mode == 'clipboard') {
             setAutofocusTab(0)
             FSBL.System.Clipboard.readText((clipboardData: string) => {
-                console.log("clipboardData: ", clipboardData, 'Type:', contentTypeDetecter.detect(clipboardData))
-                // setSelectInputId('CSV')
-                // setInputValue([["a1","b1","c1"],["a2","b2","c2"]])       
-                setSelectInputId(contentTypeDetecter.detect(clipboardData))
-                setInputValue(clipboardData)         
+                let contentType = contentTypeDetecter.detect(clipboardData)
+                console.log("clipboardData: ", clipboardData, 'Type: ', contentType)
+
+                setSelectInputId(contentType)
+                if(contentType === 'CSV')
+                    setInputValue(contentTypeDetecter.csvToArray(clipboardData))
+                else
+                    setInputValue(clipboardData)
+
+                // setTimeout(()=>{
+                //     setInputValue(clipboardData)
+                // },2000)
             })
         } else if (spawndata.mode == 'input') {
             setAutofocusTab(1)
