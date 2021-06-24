@@ -105,7 +105,21 @@ const registerWorkflows = (workflowsConfigValue: any[]) => {
     Finsemble.Clients.HotkeyClient.addGlobalHotkey(
       workflowConfig.macroKeys,
       () => {
-        runWorkflowConfig(workflowConfig);
+        Finsemble.Clients.LauncherClient.showWindow(
+          { componentType: "InitiateWorkflow" },
+          {
+            spawnIfNotFound: true,
+            data: { 
+              mode: "input",
+              workflow: workflowConfig
+            },
+            addToWorkspace: false,
+            autoFocus: true,
+            left: "center",
+            top: "center",
+          },
+          (err: any, res: any) => {}
+        );
       },
       () => {}
     );
@@ -125,7 +139,7 @@ const generateFakeWorkflowIfEmpty = (err: any, response: any) => {
     {
       id: "123",
       name: "My Test Workflow",
-      inputTypeId: null,
+      inputTypeId: "STRING",
       inputSources: [],
       macroKeys: ["Ctrl", "Shift", "V"],
       sequences: [
@@ -145,7 +159,7 @@ const generateFakeWorkflowIfEmpty = (err: any, response: any) => {
           ]
         }
       ],
-      validationMessage: null
+      validationMessage: ""
     },
     {
       id: "456",
@@ -170,7 +184,7 @@ const generateFakeWorkflowIfEmpty = (err: any, response: any) => {
           ]
         }
       ],
-      validationMessage: null
+      validationMessage: ""
     }
   ] as Workflow[];
   
@@ -180,7 +194,7 @@ const generateFakeWorkflowIfEmpty = (err: any, response: any) => {
   });
 }
 
-const runWorkflowConfig = async (workflowsConfigValue: any) => {
+export const runWorkflowConfig = async (workflowsConfigValue: any) => {
   const {sequences} = workflowsConfigValue;
 
   // Each workflow sequence will go in, well, in a sequence

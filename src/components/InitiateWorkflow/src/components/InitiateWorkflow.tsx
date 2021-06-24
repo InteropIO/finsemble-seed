@@ -1,14 +1,11 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { connect } from "react-redux";
-import { AnyAction } from "redux";
-import { ThunkDispatch } from "redux-thunk"
 import { InitiateWorkflow } from '@finsemble/finsemble-ui/react/components/InitiateWorkflow/InitiateWorkflow'
 import { ExecuteWorkflow, InputType, InputValue, Workflow } from "@finsemble/finsemble-ui/react/types/workflowTypes";
 import { ContentTypeDetecter } from "./contentTypeDetecter/ContentTypeDetecter"
 import { default as fdc3InstrumentSchema } from "./contentTypeDetecter/schema/instrument.schema.json";
 import { default as fdc3ContextSchema } from "./contentTypeDetecter/schema/context.schema.json";
-
+import {runWorkflowConfig} from "../../../../services/Workflow/WorkflowService";
 
 
 const contentTypeDetecter = new ContentTypeDetecter(['SEDOL', 'CUSIP', 'ISIN', 'FDC3CONTACT', 'FDC3CONTACTLIST', 'FDC3COUNTRY', 'FDC3INSTRUMENT', 'FDC3INSTRUMENTLIST', 'FDC3ORGANIZATION', 'FDC3PORTFOLIO', 'FDC3POSITION', 'JSON', 'CSV', 'NUMBER'])
@@ -58,7 +55,7 @@ const inputTypes = [
     }
 ];
 
-const workflows = [
+const defaultWorkflows = [
     {
         id: "analyzeISIN",
         inputTypeId: "ISIN",
@@ -115,14 +112,21 @@ const workflows = [
     },
 ];
 
+const onClose = () => {
+    console.log("onClose");
+    FSBL.Clients.WindowClient.close({ removeFromWorkspace: true, closeWindow: true });
+}
+
 
 const InitiateWorkflowComponet = (props: any) => {
-    let [autofocusTab, setAutofocusTab] = useState<0 | 1>(0)
-    let [inputValue, setInputValue] = useState<any>()
-    let [selectInputId, setSelectInputId] = useState<string>("")
+    let [autofocusTab, setAutofocusTab] = useState<0 | 1>(0);
+    let [inputValue, setInputValue] = useState<any>();
+    let [selectInputId, setSelectInputId] = useState<string>("");
+    const [workflows, setWorkflows] = useState(defaultWorkflows);
 
     useEffect(() => {
         let spawndata = FSBL.Clients.WindowClient.getSpawnData()
+        console.log(spawndata);
         if (spawndata.mode == 'clipboard') {
             setAutofocusTab(0)
             FSBL.System.Clipboard.readText((clipboardData: string) => {
@@ -142,15 +146,21 @@ const InitiateWorkflowComponet = (props: any) => {
         } else if (spawndata.mode == 'input') {
             setAutofocusTab(1)
         }
-    }, [])
 
-    const onClose = () => {
-        console.log('onClose')
-        FSBL.Clients.WindowClient.close({ removeFromWorkspace: true, closeWindow: true });
-    }
-
+        if(spawndata.workflow){
+            setWorkflows([spawndata.workflow]);
+        }
+    }, []);
+    
     const onWorkflowInit: ExecuteWorkflow = (inputValue: InputValue, inputType: InputType, workflow: Workflow) => {
         console.log('onWorkflowInit')
+        console.log(inputValue, inputType, workflow);
+        
+        // Run the workflow, based on code that was written in the WorkflowService
+        // I don't know how to call code in a service, so this throws an error.
+        // TODO: Call the code from the service correctly
+        // // runWorkflowConfig(workflow);
+
         //finsembleWindow.hide();
         return { success: true, actionResults: [[{ success: true }]] }
     }
