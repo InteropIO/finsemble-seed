@@ -57,9 +57,7 @@
 			}
 		},
 		"custom": {
-			"//": "Customer macros definitions must go here (e.g. 'myApplicationRoot' so it can be referenced elsewhere as '$myApplicationRoot'), along with other custom config at this level.",
-			"initiateWorkflowClipboard": ["ctrl", "shift", "C"],
-			"initiateWorkflowInput": ["ctrl", "shift", "A"]
+			"//": "Customer macros definitions must go here (e.g. 'myApplicationRoot' so it can be referenced elsewhere as '$myApplicationRoot'), along with other custom config at this level."
 		},
 		"importConfig": ["../../configs/application/config.json"]
 	},

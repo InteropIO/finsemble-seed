@@ -57,6 +57,15 @@
 						"activeFolder": "Advanced App Launcher",
 						"sortBy": "Alphabetical"
 					}
+				},
+				{
+					"name": "WorkflowStore",
+					"preferPreviousState": true,
+					"foundation": {
+						"initiateWorkflowClipboard": ["ctrl", "shift", "C"],
+						"initiateWorkflowInput": ["ctrl", "shift", "A"],
+						"workflows": []
+					}
 				}
 			]
 		},

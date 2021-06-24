@@ -6,59 +6,11 @@ import { ThunkDispatch } from "redux-thunk"
 import { InitiateWorkflow } from '@finsemble/finsemble-ui/react/components/InitiateWorkflow/InitiateWorkflow'
 import { ExecuteWorkflow, InputType, InputValue, Workflow } from "@finsemble/finsemble-ui/react/types/workflowTypes";
 import { ContentTypeDetecter } from "./contentTypeDetecter/ContentTypeDetecter"
-import { default as fdc3InstrumentSchema } from "./contentTypeDetecter/schema/instrument.schema.json";
-import { default as fdc3ContextSchema } from "./contentTypeDetecter/schema/context.schema.json";
-
-
+import { inputTypes } from "./InputTypes"
 
 const contentTypeDetecter = new ContentTypeDetecter(['SEDOL', 'CUSIP', 'ISIN', 'FDC3CONTACT', 'FDC3CONTACTLIST', 'FDC3COUNTRY', 'FDC3INSTRUMENT', 'FDC3INSTRUMENTLIST', 'FDC3ORGANIZATION', 'FDC3PORTFOLIO', 'FDC3POSITION', 'JSON', 'CSV', 'NUMBER'])
 
-const inputTypes = [
-    {
-        id: "CSV",
-        name: "Tab Delimited CSV",
-        format: "table",
-        validators: null,
-        schemaURL: null,
-    },
-    {
-        id: "ISIN",
-        name: "ISIN code",
-        format: "text",
-        validators: [contentTypeDetecter.isin.bind(contentTypeDetecter)],
-        schemaURL: null,
-    },
-    {
-        id: "CUSIP",
-        name: "CUSIP code",
-        format: "text",
-        validators: [contentTypeDetecter.cusip.bind(contentTypeDetecter)],
-        schemaURL: null,
-    },
-    {
-        id: "FDC3INSTRUMENT",
-        name: "fdc3.instrument",
-        format: "json",
-        validators: [],
-        schemaURL: new URL("https://fdc3.finos.org/schemas/next/instrument.schema.json"),
-    },
-    {
-        id: "FDC3ORDER",
-        name: "fdc3.order",
-        format: "json",
-        validators: [],
-        schemaURL: fdc3ContextSchema
-    },
-    {
-        id: "STRING",
-        name: "String",
-        format: "text",
-        validators: [],
-        schemaURL: null
-    }
-];
-
-const workflows = [
+const testWorkflows = [
     {
         id: "analyzeISIN",
         inputTypeId: "ISIN",
@@ -120,8 +72,11 @@ const InitiateWorkflowComponet = (props: any) => {
     let [autofocusTab, setAutofocusTab] = useState<0 | 1>(0)
     let [inputValue, setInputValue] = useState<any>()
     let [selectInputId, setSelectInputId] = useState<string>("")
+    let [workflows, setWorkflows] = useState([])
+    let workflowStore;
 
     useEffect(() => {
+        console.log(inputTypes)
         let spawndata = FSBL.Clients.WindowClient.getSpawnData()
         if (spawndata.mode == 'clipboard') {
             setAutofocusTab(0)
@@ -142,6 +97,18 @@ const InitiateWorkflowComponet = (props: any) => {
         } else if (spawndata.mode == 'input') {
             setAutofocusTab(1)
         }
+        FSBL.Clients.DistributedStoreClient.getStore({ store: "WorkflowStore" }, (err, store) => {
+            if(err){
+                FSBL.Clients.Logger.error("Failed to get WorkflowStore", err)
+            } else {
+                workflowStore = store
+                console.log(workflowStore)
+                workflowStore.getValue('workflows', (err, value)=>{
+                    setWorkflows(value)
+                })
+            }
+        })
+
     }, [])
 
     const onClose = () => {

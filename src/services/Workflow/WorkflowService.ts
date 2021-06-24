@@ -3,6 +3,8 @@
  * All rights reserved.
  */
 
+import {workflows} from "./const/Workflows"
+
 const Finsemble = require("@finsemble/finsemble-core");
 const BaseService = Finsemble.baseService;
 const {
@@ -24,6 +26,8 @@ DistributedStoreClient.initialize();
 Logger.log("WorkflowService starting up");
 
 class WorkflowService extends BaseService {
+  workflowStore: any;
+
   constructor(params: {
     name: string;
     startupDependencies: {
@@ -33,6 +37,8 @@ class WorkflowService extends BaseService {
   }) {
     super(params);
     this.initialize = this.initialize.bind(this);
+    this.setupWorkflowSetting = this.setupWorkflowSetting.bind(this)
+    this.createHotkeys = this.createHotkeys.bind(this)
     this.onBaseServiceReady(this.initialize);
     this.start();
     //Logger.log("WorkflowService started");
@@ -41,9 +47,8 @@ class WorkflowService extends BaseService {
    * Initializes service variables
    * @private
    */
-  async initialize(cb: () => void) {
+  async initialize(cb: () => void) {   
     this.createRouterEndpoints();
-
     console.log("WorkflowService initialized");
     cb();
   }
@@ -54,31 +59,61 @@ class WorkflowService extends BaseService {
    */
   createRouterEndpoints() {
     console.log("createRouterEndpoints");
-
+    this.setupWorkflowSetting()
     this.createHotkeys();
+  }
+
+  setupWorkflowSetting() {
+    Finsemble.Clients.DistributedStoreClient.getStore({ store: "WorkflowStore" }, (err, workflowStore) => {
+      if(err){
+        Logger.error("Failed to get WorkflowStore", err)
+      } else {
+        this.workflowStore = workflowStore
+        this.workflowStore.setValue(
+          { field: "workflows", value: workflows },
+          (err) => {
+            if(err){
+              Logger.error("Failed to set WorkflowStore values", err)
+            }
+          }
+        );
+        this.workflowStore.addListeners(['initiateWorkflowClipboard','initiateWorkflowInput'], this.createHotkeys, ()=>{
+          Logger.info("initiateWorkflowClipboard / initiateWorkflowInput changed, register hotkeys")
+        });
+      }
+    });
   }
 
   createHotkeys() {
     Finsemble.Clients.HotkeyClient.removeAllHotkeys(() => {});
-    Finsemble.Clients.ConfigClient.getValues(
-      ["finsemble.custom.initiateWorkflowClipboard", "finsemble.custom.initiateWorkflowInput"],
-      (err, values) => {
-        if (err) {
-          console.log(err);
-        } else {
-          Finsemble.Clients.HotkeyClient.addGlobalHotkey(
-            values['finsemble.custom.initiateWorkflowClipboard'],
-            showInitiateComponentClipboard,
-            () => {}
-          );
-          Finsemble.Clients.HotkeyClient.addGlobalHotkey(
-            values['finsemble.custom.initiateWorkflowInput'],
-            showInitiateComponentInput,
-            () => {}
-          );
-        }
+    Finsemble.Clients.DistributedStoreClient.getStore({ store: "WorkflowStore" }, (err, workflowStore) => {
+      if(err){
+        Logger.error("Failed to get WorkflowStore", err)
+      } else {
+        workflowStore.getValues(
+          [
+            { field: "initiateWorkflowClipboard"},
+            { field: "initiateWorkflowInput"}
+          ],
+          (err, values) => {
+            if(err){
+              Logger.error("Failed to get WorkflowStore values", err)
+            } else {
+              Finsemble.Clients.HotkeyClient.addGlobalHotkey(
+                values.initiateWorkflowClipboard,
+                showInitiateComponentClipboard,
+                () => {}
+              );
+              Finsemble.Clients.HotkeyClient.addGlobalHotkey(
+                values.initiateWorkflowInput,
+                showInitiateComponentInput,
+                () => {}
+              );
+            }
+          }
+        );
       }
-    );
+    });
   }
 }
 
