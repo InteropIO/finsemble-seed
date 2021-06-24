@@ -2,8 +2,11 @@
  * Copyright 2017 by ChartIQ, Inc.
  * All rights reserved.
  */
+import { Workflow } from "./actions/workflowTypes";
 import {testApplication} from "./actions/TestActions";
-import { Workflow, WorkflowAction } from "./actions/workflowTypes";
+import {excelApplication} from "./actions/ExcelActions";
+import {bloombergApplication} from "./actions/BloombergActions";
+
 const Finsemble = require("@finsemble/finsemble-core");
 const BaseService = Finsemble.baseService;
 const {
@@ -26,7 +29,7 @@ DistributedStoreClient.initialize();
 
 Logger.log("WorkflowService starting up");
 
-const availableApplications = [testApplication];
+const availableApplications = [testApplication, excelApplication, bloombergApplication];
 
 class WorkflowService extends BaseService {
   constructor(params: {
@@ -50,8 +53,6 @@ class WorkflowService extends BaseService {
     this.createRouterEndpoints();
 
     console.log("WorkflowService initialized");
-    // Confirm that testApplication was imported
-    testApplication.actionTypes[0].execute({typeId: "basic"});
     ConfigClient.addListener({field: "finsemble.custom.workflow"}, (err: any, data: any) => {
       if(err === null){
         registerWorkflows(data.value);
