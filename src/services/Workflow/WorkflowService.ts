@@ -180,7 +180,7 @@ const generateFakeWorkflowIfEmpty = (err: any, response: any) => {
   });
 }
 
-const runWorkflowConfig = (workflowsConfigValue: any) => {
+const runWorkflowConfig = async (workflowsConfigValue: any) => {
   const {sequences} = workflowsConfigValue;
 
   // Each workflow sequence will go in, well, in a sequence
@@ -192,7 +192,7 @@ const runWorkflowConfig = (workflowsConfigValue: any) => {
     for(const action of actions){
       // Figure out with application action matches this workflow sequence action
       const actionToExecute = workflowAction?.actionTypes.find((item) => (item.id === action.typeId));
-      const result = actionToExecute?.execute(action, "Example input value");
+      const result = await actionToExecute?.execute(action, "Example input value");
 
       // Report errors
       if(result?.success !== true){

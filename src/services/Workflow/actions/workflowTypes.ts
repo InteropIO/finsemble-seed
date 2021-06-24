@@ -1,4 +1,4 @@
-import { HotkeyCombination } from "./hotkeyTypes";
+export type HotkeyCombination = Array<string>;
 
 /**
  * Enum defining valid values for `InputType.format` which define the form that the data comes in.
@@ -136,7 +136,7 @@ export interface WorkflowActionType {
 	/** Validate that an action's options have been fully and correctly set.*/
 	validate: (options: WorkflowActionOption[], action: WorkflowAction) => ValidationResult;
 	/** Perform the action as configured. */
-	execute: (action: WorkflowAction, inputValue?: InputValue) => ActionResult;
+	execute: (action: WorkflowAction, inputValue?: InputValue) => Promise<ActionResult>;
 }
 
 /** Type representing an instance of a configured WorkflowActionType.

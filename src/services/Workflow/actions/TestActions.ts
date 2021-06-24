@@ -14,10 +14,10 @@ export const testApplication: WorkflowApplication = {
 			outputType: null, //no output produced
 			subActionTypes: null, //no output and hence no sub-actions
 			validate: defaultOptionValidator, //On save validate that valid settings were provided
-			execute: (action: WorkflowAction, inputValue?: InputValue): ActionResult => {
+			execute: (action: WorkflowAction, inputValue?: InputValue): Promise<ActionResult> => new Promise((resolve, reject) => {
 				console.log("You called testApplication action 'basic'");
-				return { success: true};
-			},
+				resolve({ success: true});
+			}),
 		},
 		{
 			id: "basic_options",
@@ -27,10 +27,10 @@ export const testApplication: WorkflowApplication = {
 			outputType: null, //no output produced
 			subActionTypes: null, //no output and hence no sub-actions
 			validate: defaultOptionValidator, //On save validate that valid settings were provided
-			execute: (action: WorkflowAction, inputValue?: InputValue): ActionResult => {
+			execute: (action: WorkflowAction, inputValue?: InputValue): Promise<ActionResult> => new Promise((resolve, reject) => {
 				console.log(`testApplication action 'basic_options' with options: `, action.optionValues);
-				return { success: true};
-			},
+				resolve({ success: true});
+			}),
 		},
 		{
 			id: "basic_inputs",
@@ -40,10 +40,10 @@ export const testApplication: WorkflowApplication = {
 			outputType: null, //no output produced
 			subActionTypes: null, //no output and hence no sub-actions
 			validate: defaultOptionValidator, //On save validate that valid settings were provided
-			execute: (action: WorkflowAction, inputValue?: InputValue): ActionResult => {
+			execute: (action: WorkflowAction, inputValue?: InputValue): Promise<ActionResult> => new Promise((resolve, reject) => {
 				console.log(`testApplication action 'basic_inputs' with inputs:`, inputValue);
-				return { success: true};
-			},
+				resolve({ success: true});
+			}),
 		},
 		{
 			id: "basic_errors",
@@ -53,10 +53,10 @@ export const testApplication: WorkflowApplication = {
 			outputType: null, //no output produced
 			subActionTypes: null, //no output and hence no sub-actions
 			validate: defaultOptionValidator, //On save validate that valid settings were provided
-			execute: (action: WorkflowAction, inputValue?: InputValue): ActionResult => {
+			execute: (action: WorkflowAction, inputValue?: InputValue): Promise<ActionResult> => new Promise((resolve, reject) => {
 				console.error(`testApplication action 'basic_errors' with inputs`);
-				return { success: false, message: "This is a drill"};
-			},
+				resolve({ success: false, message: "This is a drill"});
+			}),
 		},
 	],
 };
