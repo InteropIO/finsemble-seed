@@ -70,6 +70,14 @@ class WorkflowService extends BaseService {
   createRouterEndpoints() {
     console.log("createRouterEndpoints");
 
+    Finsemble.Clients.RouterClient.addResponder("Workflow.runWorkflow", (err: any, message: any) => {
+      if(err){
+        return Finsemble.Clients.Logger.error("Failed to set up Workflow.runWorkflow responder", err);
+      }
+
+      runWorkflowConfig(message.data.workflow, message.sendQueryResponse);
+    });
+
     this.createHotkeys();
   }
 
@@ -194,7 +202,7 @@ const generateFakeWorkflowIfEmpty = (err: any, response: any) => {
   });
 }
 
-export const runWorkflowConfig = async (workflowsConfigValue: any) => {
+export const runWorkflowConfig = async (workflowsConfigValue: any, cb?: Function) => {
   const {sequences} = workflowsConfigValue;
 
   // Each workflow sequence will go in, well, in a sequence
@@ -212,10 +220,14 @@ export const runWorkflowConfig = async (workflowsConfigValue: any) => {
       if(result?.success !== true){
         console.log(`There was an error when executing action. Error message: ${result?.message}`);
         console.log("Executing action:", action);
+        cb?.(result?.message);
         return;
       }
     }
   }
+
+  // Everything completed successfully
+  cb?.(null);
 }
 
 const showInitiateComponentClipboard = () => {

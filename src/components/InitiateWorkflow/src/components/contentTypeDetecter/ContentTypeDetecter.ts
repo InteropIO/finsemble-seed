@@ -1,34 +1,35 @@
+// @ts-ignore
 import detect from "detect-csv";
 import Ajv from "ajv";
-import { default as fdc3ContextSchema } from "./schema/context.schema.json";
-import { default as fdc3ContactSchema } from "./schema/contact.schema.json";
-import { default as fdc3ContactListSchema } from "./schema/contactList.schema.json";
-import { default as fdc3CountrySchema } from "./schema/country.schema.json";
-import { default as fdc3InstrumentSchema } from "./schema/instrument.schema.json";
-import { default as fdc3InstrumentListSchema } from "./schema/instrumentList.schema.json";
-import { default as fdc3OrganizationSchema } from "./schema/organization.schema.json";
-import { default as fdc3PortfolioSchema } from "./schema/portfolio.schema.json";
-import { default as fdc3PositionSchema } from "./schema/position.schema.json";
+const { fdc3ContextSchema } = require("./schema/context.schema.json");
+const { fdc3ContactSchema } = require("./schema/contact.schema.json");
+const { fdc3ContactListSchema } = require("./schema/contactList.schema.json");
+const { fdc3CountrySchema } = require("./schema/country.schema.json");
+const { fdc3InstrumentSchema } = require("./schema/instrument.schema.json");
+const { fdc3InstrumentListSchema } = require("./schema/instrumentList.schema.json");
+const { fdc3OrganizationSchema } = require("./schema/organization.schema.json");
+const { fdc3PortfolioSchema } = require("./schema/portfolio.schema.json");
+const { fdc3PositionSchema } = require("./schema/position.schema.json");
 
 export class ContentTypeDetecter {
   [index: string]: any;
   typeToDetect: string[];
-  ajv: Ajv;
+  // ajv: Ajv;
   constructor(typeToDetect: string[]) {
     this.typeToDetect = typeToDetect;
-    this.ajv = new Ajv({
-      schemas: [
-        fdc3ContextSchema,
-        fdc3ContactSchema,
-        fdc3ContactListSchema,
-        fdc3CountrySchema,
-        fdc3InstrumentSchema,
-        fdc3InstrumentListSchema,
-        fdc3OrganizationSchema,
-        fdc3PortfolioSchema,
-        fdc3PositionSchema,
-      ],
-    });
+    // this.ajv = new Ajv({
+    //   schemas: [
+    //     fdc3ContextSchema,
+        // fdc3ContactSchema,
+        // fdc3ContactListSchema,
+        // fdc3CountrySchema,
+        // fdc3InstrumentSchema,
+        // fdc3InstrumentListSchema,
+        // fdc3OrganizationSchema,
+        // fdc3PortfolioSchema,
+        // fdc3PositionSchema,
+    //   ],
+    // });
   }
 
   detect(content: string): string {

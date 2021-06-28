@@ -2,13 +2,12 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { InitiateWorkflow } from '@finsemble/finsemble-ui/react/components/InitiateWorkflow/InitiateWorkflow'
 import { ExecuteWorkflow, InputType, InputValue, Workflow } from "@finsemble/finsemble-ui/react/types/workflowTypes";
-import { ContentTypeDetecter } from "./contentTypeDetecter/ContentTypeDetecter"
-import { default as fdc3InstrumentSchema } from "./contentTypeDetecter/schema/instrument.schema.json";
-import { default as fdc3ContextSchema } from "./contentTypeDetecter/schema/context.schema.json";
-import {runWorkflowConfig} from "../../../../services/Workflow/WorkflowService";
+// import { ContentTypeDetecter } from "./contentTypeDetecter/ContentTypeDetecter"
+// const {fdc3InstrumentSchema } = require("./contentTypeDetecter/schema/instrument.schema.json");
+const {fdc3ContextSchema } = require("./contentTypeDetecter/schema/context.schema.json");
 
 
-const contentTypeDetecter = new ContentTypeDetecter(['SEDOL', 'CUSIP', 'ISIN', 'FDC3CONTACT', 'FDC3CONTACTLIST', 'FDC3COUNTRY', 'FDC3INSTRUMENT', 'FDC3INSTRUMENTLIST', 'FDC3ORGANIZATION', 'FDC3PORTFOLIO', 'FDC3POSITION', 'JSON', 'CSV', 'NUMBER'])
+// const contentTypeDetecter = new ContentTypeDetecter(['SEDOL', 'CUSIP', 'ISIN', 'FDC3CONTACT', 'FDC3CONTACTLIST', 'FDC3COUNTRY', 'FDC3INSTRUMENT', 'FDC3INSTRUMENTLIST', 'FDC3ORGANIZATION', 'FDC3PORTFOLIO', 'FDC3POSITION', 'JSON', 'CSV', 'NUMBER'])
 
 const inputTypes = [
     {
@@ -22,14 +21,16 @@ const inputTypes = [
         id: "ISIN",
         name: "ISIN code",
         format: "text",
-        validators: [contentTypeDetecter.isin.bind(contentTypeDetecter)],
+        validators: null,
+        // validators: [contentTypeDetecter.isin.bind(contentTypeDetecter)],
         schemaURL: null,
     },
     {
         id: "CUSIP",
         name: "CUSIP code",
         format: "text",
-        validators: [contentTypeDetecter.cusip.bind(contentTypeDetecter)],
+        validators: null,
+        // validators: [contentTypeDetecter.cusip.bind(contentTypeDetecter)],
         schemaURL: null,
     },
     {
@@ -44,7 +45,7 @@ const inputTypes = [
         name: "fdc3.order",
         format: "json",
         validators: [],
-        schemaURL: fdc3ContextSchema
+        schemaURL: fdc3ContextSchema as URL
     },
     {
         id: "STRING",
@@ -53,7 +54,7 @@ const inputTypes = [
         validators: [],
         schemaURL: null
     }
-];
+] as InputType[];
 
 const defaultWorkflows = [
     {
@@ -110,7 +111,7 @@ const defaultWorkflows = [
         macroKeys: ["Control", "Shift", "e"],
         validationMessage: "",
     },
-];
+] as Workflow[];
 
 const onClose = () => {
     console.log("onClose");
@@ -122,27 +123,27 @@ const InitiateWorkflowComponet = (props: any) => {
     let [autofocusTab, setAutofocusTab] = useState<0 | 1>(0);
     let [inputValue, setInputValue] = useState<any>();
     let [selectInputId, setSelectInputId] = useState<string>("");
-    const [workflows, setWorkflows] = useState(defaultWorkflows);
+    const [workflows, setWorkflows] = useState<Workflow[]>(defaultWorkflows);
 
     useEffect(() => {
         let spawndata = FSBL.Clients.WindowClient.getSpawnData()
         console.log(spawndata);
         if (spawndata.mode == 'clipboard') {
             setAutofocusTab(0)
-            FSBL.System.Clipboard.readText((clipboardData: string) => {
-                let contentType = contentTypeDetecter.detect(clipboardData)
-                console.log("clipboardData: ", clipboardData, 'Type: ', contentType)
+            // FSBL.System.Clipboard.readText("", (clipboardData: string) => {
+            //     let contentType = contentTypeDetecter.detect(clipboardData)
+            //     console.log("clipboardData: ", clipboardData, 'Type: ', contentType)
 
-                setSelectInputId(contentType)
-                if(contentType === 'CSV')
-                    setInputValue(contentTypeDetecter.csvToArray(clipboardData))
-                else
-                    setInputValue(clipboardData)
+            //     setSelectInputId(contentType)
+            //     if(contentType === 'CSV')
+            //         setInputValue(contentTypeDetecter.csvToArray(clipboardData))
+            //     else
+            //         setInputValue(clipboardData)
 
-                // setTimeout(()=>{
-                //     setInputValue(clipboardData)
-                // },2000)
-            })
+            //     // setTimeout(()=>{
+            //     //     setInputValue(clipboardData)
+            //     // },2000)
+            // })
         } else if (spawndata.mode == 'input') {
             setAutofocusTab(1)
         }
@@ -154,14 +155,13 @@ const InitiateWorkflowComponet = (props: any) => {
     
     const onWorkflowInit: ExecuteWorkflow = (inputValue: InputValue, inputType: InputType, workflow: Workflow) => {
         console.log('onWorkflowInit')
-        console.log(inputValue, inputType, workflow);
-        
-        // Run the workflow, based on code that was written in the WorkflowService
-        // I don't know how to call code in a service, so this throws an error.
-        // TODO: Call the code from the service correctly
-        // // runWorkflowConfig(workflow);
 
-        //finsembleWindow.hide();
+        FSBL.Clients.RouterClient.query("Workflow.runWorkflow", {workflow}, (err, response) => {
+            if(err === null){
+                finsembleWindow.close();
+            }
+        });
+
         return { success: true, actionResults: [[{ success: true }]] }
     }
 
@@ -172,17 +172,4 @@ const InitiateWorkflowComponet = (props: any) => {
     );
 };
 
-export default InitiateWorkflowComponet
-
-// const mapStateToProps = (state: any, ownProps: any) => {
-//     return {}
-// }
-
-// const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-//     return {};
-// };
-
-// export default connect(
-//     mapStateToProps,
-//     mapDispatchToProps
-// )(InitiateWorkflowComponet);
+export default InitiateWorkflowComponet;

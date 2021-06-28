@@ -42,7 +42,7 @@ const Toolbar = () => {
 				<DragHandle />
 				<FileMenu />
 				<Search openHotkey={["ctrl", "alt", "f"]} />
-				<WorkspaceManagementMenu />
+				{/* <WorkspaceManagementMenu /> */}
 				{/* Uncomment the following to enable the AdvancedAppLauncherMenu*/}
 				{/* <AdvancedAppLauncherMenu /> */}
 				<AppLauncherMenu dynamic={true} />

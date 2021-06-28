@@ -1,4 +1,21 @@
 {
-	"$schema": "../../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/servicesFile.schema.json",
-	"services": {}
+    "$schema": "../../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/servicesFile.schema.json",
+    "services": {
+        "WorkflowService": {
+            "bootParams": {
+                "stage": "preuser",
+                "dependencies": []
+            },
+            "name": "WorkflowService",
+            "html": "$applicationRoot/services/Workflow/Workflow.html"
+        },
+        "dummyService": {
+            "bootParams": {
+                "stage": "preuser",
+                "dependencies": []
+            },
+            "name": "dummyService",
+            "html": "$applicationRoot/services/dummy/dummy.html"
+        }
+    }
 }
