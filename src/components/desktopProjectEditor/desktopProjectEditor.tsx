@@ -17,11 +17,14 @@ ReactDOM.render(
 		<DesktopProjectEditor
 			{...{
 				views,
-				getConfig: (params, callback) => FSBL.Clients.ConfigClient.get(params, callback),
+				getConfig: (params: any, callback: any) => FSBL.Clients.ConfigClient.getValues(params, callback),
 				resetProject: () => desktopProjectClient.resetProject(),
 				getDPServerInfo: () => desktopProjectClient.getDPServerInfo(),
+				getProjectSettings: () => desktopProjectClient.getProjectSettings(),
 				updateProjectSettings: (settings: any) => desktopProjectClient.updateProjectSettings(settings),
 				onThemeUpdated: (callback: any) => FSBL.Clients.DesktopProjectClient.onThemeUpdated(callback),
+				selectProjectPath: () => desktopProjectClient.selectProjectPath(),
+				restartFinsemble: () => FSBL.System.Application.getCurrent().restart(),
 			}}
 		/>
 	</FinsembleProvider>,

@@ -51,7 +51,8 @@
 		"linkerWindow": {
 			"bootParams": {
 				"stage": "earlyuser",
-				"dependencies": ["Toolbar"]
+				"dependencies": ["Toolbar"],
+				"timeout": 15000
 			},
 			"window": {
 				"url": "$applicationRoot/components/linker/linker.html",
@@ -156,7 +157,8 @@
 		"yesNo": {
 			"bootParams": {
 				"stage": "earlyuser",
-				"dependencies": ["Toolbar"]
+				"dependencies": ["Toolbar"],
+				"timeout": 15000
 			},
 			"window": {
 				"url": "$applicationRoot/components/yesNoDialog/yesNoDialog.html",
@@ -517,7 +519,8 @@
 		"SystemTrayComponent": {
 			"bootParams": {
 				"stage": "earlyuser",
-				"dependencies": ["Toolbar"]
+				"dependencies": ["Toolbar"],
+				"timeout": 15000
 			},
 			"window": {
 				"url": "$applicationRoot/components/systemTrayComponent/systemTrayComponent.html",
@@ -627,7 +630,8 @@
 		"NotificationsToasts": {
 			"bootParams": {
 				"stage": "earlyuser",
-				"dependencies": ["Toolbar"]
+				"dependencies": ["Toolbar"],
+				"timeout": 15000
 			},
 			"window": {
 				"name": "notifications-toasts",

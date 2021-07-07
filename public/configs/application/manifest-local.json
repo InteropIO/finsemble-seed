@@ -17,7 +17,7 @@
 		}
 	],
 	"finsemble": {
-		"systemTrayIcon": "../../assets/img/Finsemble_SystemTray_Icon.png",
+		"systemTrayIcon": "$documentRoot/assets/img/Finsemble_SystemTray_Icon.png",
 		"waitForUpdate": false,
 		"bootConfig": {
 			"onErrorMakeSystemManagerVisible": true,

@@ -54,6 +54,23 @@ const IMAGE_AND_FONT_RULE = {
 	},
 };
 
+const SVG_RULE = {
+	test: /\.svg$/,
+	use: [
+		{
+			loader: "@svgr/webpack",
+			options: {
+				svgoConfig: {
+					plugins: {
+						removeViewBox: false,
+					},
+				},
+			},
+		},
+		"file-loader",
+	],
+};
+
 /**
  * This is a rule for compiling JSX files using babel.
  */
@@ -162,7 +179,7 @@ const generateDefaultConfig = () => {
 		entry: {},
 		stats: "minimal",
 		module: {
-			rules: [CSS_RULE, IMAGE_AND_FONT_RULE, JSX_RULE, TSX_RULE, SOURCE_MAPS_RULE],
+			rules: [CSS_RULE, SVG_RULE, IMAGE_AND_FONT_RULE, JSX_RULE, TSX_RULE, SOURCE_MAPS_RULE],
 		},
 		mode: env,
 		plugins: plugins,

@@ -17,13 +17,20 @@
 				},
 				"foreign": {
 					"components": {
-						"App Launcher": { "launchableByUser": true },
-						"Toolbar": { "iconClass": "ff-chart-advanced" },
-						"Window Manager": { "FSBLHeader": true, "persistWindowState": true }
+						"App Launcher": {
+							"launchableByUser": true
+						},
+						"Toolbar": {
+							"iconClass": "ff-chart-advanced"
+						},
+						"Window Manager": {
+							"FSBLHeader": true,
+							"persistWindowState": true
+						}
 					}
 				},
 				"interop": {
-					"rewire": [
+					"selectConnect": [
 						{
 							"contextType": "layout",
 							"fwd": "#Workspace"
@@ -57,10 +64,6 @@
 					"name": "ViewChart",
 					"displayName": "View Chart",
 					"contexts": ["fdc3.instrument"]
-				},
-				{
-					"name": "ViewChartStudy",
-					"displayName": "View Chart Study"
 				}
 			]
 		},
@@ -76,13 +79,20 @@
 				},
 				"foreign": {
 					"components": {
-						"App Launcher": { "launchableByUser": true },
-						"Toolbar": { "iconURL": "https://assets.finsemble.com/components/ag-grid/ag-grid-logo.png" },
-						"Window Manager": { "FSBLHeader": true, "persistWindowState": true }
+						"App Launcher": {
+							"launchableByUser": true
+						},
+						"Toolbar": {
+							"iconURL": "https://assets.finsemble.com/components/ag-grid/ag-grid-logo.png"
+						},
+						"Window Manager": {
+							"FSBLHeader": true,
+							"persistWindowState": true
+						}
 					}
 				},
 				"interop": {
-					"rewire": [
+					"selectConnect": [
 						{
 							"contextType": "fdc3.instrument",
 							"cc": "#Workspace"
