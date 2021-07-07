@@ -10,7 +10,7 @@ import { CentralLogger, Documentation } from "@finsemble/finsemble-ui/react/comp
 import { Restart, Reset, Quit } from "@finsemble/finsemble-ui/react/components/system";
 import "@finsemble/finsemble-ui/react/assets/css/finsemble.css";
 import "@finsemble/finsemble-ui/react/assets/css/menus.css";
-import "../../../assets/css/theme.css";
+import "../../../public/assets/css/theme.css";
 
 /**
  * This component displays on right-click in your application's system tray icon.

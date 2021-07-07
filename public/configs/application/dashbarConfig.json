@@ -1,0 +1,5 @@
+{
+	"$schema": "../../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/dashbarFile.schema.json",
+	"comment": "For more information on configuring and setting up the Dashbar, see https://documentation.finsemble.com/tutorial-toolbar.html#dashbar",
+	"availableDashbarItems": {}
+}
