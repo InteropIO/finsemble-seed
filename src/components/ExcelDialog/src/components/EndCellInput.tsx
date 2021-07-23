@@ -2,7 +2,6 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk";
-import { setEndCell } from "../redux/actions/actions";
 
 const EndCellInput = (props: any) => {
     const { endCell, setEndCell } = props;
@@ -17,7 +16,7 @@ const EndCellInput = (props: any) => {
 }
 
 const mapStateToProps = (state: any, ownProps: any) => {
-    const { officeAddinServiceActionsReducer, excelFilesReducer } = state
+    const { excelFilesReducer } = state
     return {
         endCell: excelFilesReducer.endCell
     }
@@ -25,7 +24,6 @@ const mapStateToProps = (state: any, ownProps: any) => {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     return {
-        setEndCell: (endCell: string) => dispatch(setEndCell(endCell)),
     };
 };
 

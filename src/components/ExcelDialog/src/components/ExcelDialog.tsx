@@ -1,154 +1,129 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { connect } from "react-redux";
 import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk"
-import { registerActionThunk, setSelectedActiveExcelFile, setSelectedClipboardData, setSelectedPreviousExcelFiles, setRange, pasteToExcel, focusRange, clearRange, copyRange, setSelectedWorksheet } from "../redux/actions/actions";
+import { setSelectedActiveExcelFile, setSelectedClipboardData, setSelectedPreviousExcelFiles, setRange, setSelectedWorksheet } from "../redux/actions/actions";
 
 import ActiveExcelFileList from "./ActiveExcelFileList";
 import PreviousExcelFileList from "./PreviousExcelFileList";
 import BookmarkList from "./BookmarkList"
 import Range from "./Range";
 import TargetWorksheetList from "./TargetWorksheetList";
-import * as CONSTANTS from "../redux/actions/actionTypes";
-import Worksheet from "../../../../services/OfficeAddin/types/Worksheet";
-import ExcelAction from "../../../../services/OfficeAddin/types/ExcelAction";
+import ExcelWorksheet from "../../../../services/OfficeAddin/types/ExcelWorksheet";
 import ExcelFile from "../../../../services/OfficeAddin/types/ExcelFile";
-
 
 const ExcelDialog = (props: any) => {
     const { selectedActiveExcelFile, setSelectedActiveExcelFile } = props;
     const { selectedPreviousExcelFiles, clearSelectedPreviousExcelFiles } = props;
     const { clipboardData, setSelectedClipboardData } = props
-    const { pasteToExcel } = props
     const { selectedWorksheet, range } = props
-    const { offAddInServiceActions } = props;
-    const { registerPasteToExcel, registerFocusRange, registerCopyRange, registerClearRange, registerBroadcastData, resgisterChangeSubscription, resgisterSelectionSubscription } = props;
     const { selectedBookmark, setSelectedWorksheet } = props
     const { setRange } = props;
-    const { activeExcelFiles } = props
-    const { focusRange, copyRange, clearRange } = props
 
     const spawnExcelFileOnclick = () => {
         if (selectedPreviousExcelFiles.length > 0) {
             selectedPreviousExcelFiles.forEach((selectedPreviousFile: ExcelFile) => {
-                FSBL.Clients.LauncherClient.spawn('Excel', { arguments: `${selectedPreviousFile.filePath} /x /a FinsembleExcel` });
+                FSBL.Clients.OfficeAddinClient.openExcelFile(selectedPreviousFile)
             })
             clearSelectedPreviousExcelFiles()
         } else {
             alert('Please select at least 1 file!')
         }
     }
-
+    
     useEffect(() => {
-        registerBroadcastData()
-    }, [])
-
-    useEffect(() => {
-        let excelFile = activeExcelFiles.filter((file: ExcelFile) => {
-            return file.fileName === selectedBookmark.excelFile.fileName
-        })
-        if (excelFile.length > 0) {
-            setSelectedActiveExcelFile(excelFile[0])
-            setSelectedWorksheet(selectedBookmark.worksheet)
-            setRange(selectedBookmark.range)
+        if(selectedBookmark){
+            let activeExcelFiles = FSBL.Clients.OfficeAddinClient.getActiveExcelFiles();
+            let excelFile = activeExcelFiles.filter((file: ExcelFile) => {
+                return file.fileName === selectedBookmark.excelFile.fileName
+            })
+            if (excelFile.length > 0) {
+                setSelectedActiveExcelFile(excelFile[0])
+                setSelectedWorksheet(selectedBookmark.worksheet)
+                setRange(selectedBookmark.range)
+            }
         }
     }, [selectedBookmark])
 
     const pasteToExceOnClick = () => {
-        // Need to implement to check logic
-        let tempCopyToExcelActions = offAddInServiceActions.filter((offAddInServiceAction: ExcelAction) => {
-            return offAddInServiceAction.action === CONSTANTS.PASTE_TO_EXCEL && offAddInServiceAction.file?.fileName === selectedActiveExcelFile.fileName
-        })
-        if (tempCopyToExcelActions.length > 0) {
-            tempCopyToExcelActions.forEach((tempCopyToExcelAction: ExcelAction) => {
-                pasteToExcel(tempCopyToExcelAction.id, selectedActiveExcelFile, selectedWorksheet, range, clipboardData)
-            })
-        } else {
-            registerPasteToExcel([selectedActiveExcelFile], { excelFile: selectedActiveExcelFile, worksheet: selectedWorksheet, range: range, data: clipboardData })
+        if(selectedActiveExcelFile){
+            FSBL.Clients.OfficeAddinClient.setExcelRange({excelFile: selectedActiveExcelFile, range: range, values:clipboardData, worksheet:selectedWorksheet})
+                .then((values)=>{
+                    console.log(values)
+                })
         }
     }
 
     const focusRangeOnclick = () => {
-        let tempCopyToExcelActions = offAddInServiceActions.filter((offAddInServiceAction: ExcelAction) => {
-            return offAddInServiceAction.action === CONSTANTS.FOCUS_RANGE && offAddInServiceAction.file?.fileName === selectedActiveExcelFile.fileName
-        })
-        if (tempCopyToExcelActions.length > 0) {
-            tempCopyToExcelActions.forEach((tempCopyToExcelAction: ExcelAction) => {
-                focusRange(tempCopyToExcelAction.id, selectedActiveExcelFile, selectedWorksheet, range)
-            })
-        } else {
-            registerFocusRange([selectedActiveExcelFile], { excelFile: selectedActiveExcelFile, worksheet: selectedWorksheet, range: range })
+        if(selectedActiveExcelFile){
+            FSBL.Clients.OfficeAddinClient.focusExcelRange({excelFile: selectedActiveExcelFile, range:range, worksheet:selectedWorksheet})
+                .then((values)=>{
+                    console.log(values)
+                })
         }
     }
 
     const copyRangeOnclick = () => {
-        let tempCopyToExcelActions = offAddInServiceActions.filter((offAddInServiceAction: ExcelAction) => {
-            return offAddInServiceAction.action === CONSTANTS.COPY_RANGE && offAddInServiceAction.file?.fileName === selectedActiveExcelFile.fileName
-        })
-        if (tempCopyToExcelActions.length > 0) {
-            tempCopyToExcelActions.forEach((tempCopyToExcelAction: ExcelAction) => {
-                copyRange(tempCopyToExcelAction.id, selectedActiveExcelFile, selectedWorksheet, range)
-            })
-        } else {
-            registerCopyRange([selectedActiveExcelFile], { excelFile: selectedActiveExcelFile, worksheet: selectedWorksheet, range: range })
+        if(selectedActiveExcelFile){
+            FSBL.Clients.OfficeAddinClient.getExcelRange({excelFile: selectedActiveExcelFile, range:range, worksheet:selectedWorksheet})
+                .then((res)=>{
+                    setSelectedClipboardData(res.values)
+                })
         }
     }
 
     const clearRangeOnclick = () => {
-        let tempCopyToExcelActions = offAddInServiceActions.filter((offAddInServiceAction: ExcelAction) => {
-            return offAddInServiceAction.action === CONSTANTS.CLEAR_RANGE && offAddInServiceAction.file?.fileName === selectedActiveExcelFile.fileName
-        })
-        if (tempCopyToExcelActions.length > 0) {
-            tempCopyToExcelActions.forEach((tempCopyToExcelAction: ExcelAction) => {
-                clearRange(tempCopyToExcelAction.id, selectedActiveExcelFile, selectedWorksheet, range)
-            })
-        } else {
-            registerClearRange([selectedActiveExcelFile], { excelFile: selectedActiveExcelFile, worksheet: selectedWorksheet, range: range })
+        if(selectedActiveExcelFile){
+            FSBL.Clients.OfficeAddinClient.clearExcelRange({excelFile: selectedActiveExcelFile, range: range, worksheet: selectedWorksheet})
+                .then((values)=>{
+                    console.log(values)
+                })
         }
     }
 
     const subscribeValueOnClick = () => {
-        if (selectedActiveExcelFile || selectedBookmark) {
-            if (selectedBookmark) {
-                let tempCopyToExcelActions = offAddInServiceActions.filter((offAddInServiceAction: ExcelAction) => {
-                    return offAddInServiceAction.action === CONSTANTS.CHANGE_SUBSCRIPTION && offAddInServiceAction.file?.fileName === selectedActiveExcelFile.fileName && offAddInServiceAction?.bookmark?.name === selectedBookmark.name
-                })
-                if (tempCopyToExcelActions.length == 0)
-                    resgisterChangeSubscription([selectedActiveExcelFile], { bookmark: selectedBookmark })
-            } else {
-                // no bookmark selected
-                let tempCopyToExcelActions = offAddInServiceActions.filter((offAddInServiceAction: ExcelAction) => {
-                    return offAddInServiceAction.action === CONSTANTS.CHANGE_SUBSCRIPTION && offAddInServiceAction.file?.fileName === selectedActiveExcelFile.fileName
-                })
-                if (tempCopyToExcelActions.length == 0)
-                    resgisterChangeSubscription([selectedActiveExcelFile], {})
-            }
+        if (selectedActiveExcelFile) {
+            FSBL.Clients.OfficeAddinClient.onSheetValueChanged({excelFiles: [selectedActiveExcelFile], worksheet: selectedWorksheet, range: range}, (event)=>{
+                console.log(event)
+                setSelectedClipboardData(event.details)
+            })
+            .then((values)=>{
+                console.log(values)
+            })
         } else {
             alert('Please either select a bookmark or an active Excel file.')
         }
     }
 
-    const subscribeSelectrionOnClick = () => {
-        if (selectedActiveExcelFile || selectedBookmark) {
-            if (selectedBookmark) {
-                let tempCopyToExcelActions = offAddInServiceActions.filter((offAddInServiceAction: ExcelAction) => {
-                    return offAddInServiceAction.action === CONSTANTS.SELECTION_SUBSCRIPTION && offAddInServiceAction.file?.fileName === selectedActiveExcelFile.fileName && offAddInServiceAction?.bookmark?.name === selectedBookmark.name
-                })
-                if (tempCopyToExcelActions.length == 0)
-                    resgisterSelectionSubscription([selectedActiveExcelFile], { bookmark: selectedBookmark })
-            } else {
-                // no bookmark selected
-                let tempCopyToExcelActions = offAddInServiceActions.filter((offAddInServiceAction: ExcelAction) => {
-                    return offAddInServiceAction.action === CONSTANTS.SELECTION_SUBSCRIPTION && offAddInServiceAction.file?.fileName === selectedActiveExcelFile.fileName
-                })
-                if (tempCopyToExcelActions.length == 0)
-                    resgisterSelectionSubscription([selectedActiveExcelFile], {})
-            }
+    const subscribeSelectionOnClick = () => {
+        if (selectedActiveExcelFile) {
+            FSBL.Clients.OfficeAddinClient.onSheetSelectionChanged({excelFiles: [selectedActiveExcelFile], worksheet: selectedWorksheet, range: range}, (event)=>{
+                console.log(event)
+                setRange(event.range)
+            })
+            .then((values)=>{
+                console.log(values)
+            })
         } else {
             alert('Please either select a bookmark or an active Excel file.')
         }
     }
+
+    const subscribeBroadcastOnClick = () => {
+        if (selectedActiveExcelFile) {
+            FSBL.Clients.OfficeAddinClient.onSheetBroadcastValues({excelFiles: [selectedActiveExcelFile], worksheet: selectedWorksheet, range: range}, (event)=>{
+                setSelectedClipboardData(event.values)
+            })
+            .then((values)=>{
+                console.log(values)
+            })
+        } else {
+            alert('Please either select a bookmark or an active Excel file.')
+        }
+    }
+
+
 
     return (
         <div id='ExcelDialog'>
@@ -167,8 +142,7 @@ const ExcelDialog = (props: any) => {
 
             <div>
                 <ActiveExcelFileList />
-                <button onClick={subscribeValueOnClick}>Subscribe Value</button>
-                <button onClick={subscribeSelectrionOnClick}>Subscribe Selection</button>
+
                 <br /><br />
             </div>
 
@@ -183,44 +157,34 @@ const ExcelDialog = (props: any) => {
                 <button onClick={copyRangeOnclick}>Copy</button>
                 <button onClick={clearRangeOnclick}>Clear</button>
                 <button onClick={pasteToExceOnClick}>Paste</button>
+                <button onClick={subscribeValueOnClick}>Subscribe Value</button>
+                <button onClick={subscribeSelectionOnClick}>Subscribe Selection</button>
+                <button onClick={subscribeBroadcastOnClick}>Subscribe Broadcast</button>
             </div>
         </div>
     );
 };
 
 const mapStateToProps = (state: any, ownProps: any) => {
-    const { officeAddinServiceActionsReducer, excelFilesReducer } = state
+    const { excelFilesReducer } = state
     return {
-        offAddInServiceActions: officeAddinServiceActionsReducer.offAddInServiceActions,
         selectedActiveExcelFile: excelFilesReducer.selectedActiveExcelFile,
         selectedPreviousExcelFiles: excelFilesReducer.selectedPreviousExcelFiles,
         clipboardData: excelFilesReducer.selectedClipboardData,
         selectedWorksheet: excelFilesReducer.selectedWorksheet,
         range: excelFilesReducer.range,
         selectedBookmark: excelFilesReducer.selectedBookmark,
-        activeExcelFiles: excelFilesReducer.activeExcelFiles,
     }
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     return {
-        registerPasteToExcel: (excelFiles: Array<ExcelFile>, params: {}) => dispatch(registerActionThunk(CONSTANTS.PASTE_TO_EXCEL, excelFiles, params)),
-        registerFocusRange: (excelFiles: Array<ExcelFile>, params: {}) => dispatch(registerActionThunk(CONSTANTS.FOCUS_RANGE, excelFiles, params)),
-        registerCopyRange: (excelFiles: Array<ExcelFile>, params: {}) => dispatch(registerActionThunk(CONSTANTS.COPY_RANGE, excelFiles, params)),
-        registerClearRange: (excelFiles: Array<ExcelFile>, params: {}) => dispatch(registerActionThunk(CONSTANTS.CLEAR_RANGE, excelFiles, params)),
-        resgisterChangeSubscription: (excelFiles: Array<ExcelFile>, params: {}) => dispatch(registerActionThunk(CONSTANTS.CHANGE_SUBSCRIPTION, excelFiles, params)),
-        resgisterSelectionSubscription: (excelFiles: Array<ExcelFile>, params: {}) => dispatch(registerActionThunk(CONSTANTS.SELECTION_SUBSCRIPTION, excelFiles, params)),
-        registerBroadcastData: () => dispatch(registerActionThunk(CONSTANTS.BROADCAST_DATA)),
         clearSelectedPreviousExcelFiles: () => dispatch(setSelectedPreviousExcelFiles([])),
         clearSelectedActiveExcelFiles: () => dispatch(setSelectedActiveExcelFile(null)),
         setSelectedClipboardData: (clipboardData: []) => dispatch(setSelectedClipboardData(clipboardData)),
         setSelectedActiveExcelFile: (selectedActiveFile: ExcelFile) => dispatch(setSelectedActiveExcelFile(selectedActiveFile)),
-        setSelectedWorksheet: (selectedWorksheet: Worksheet) => dispatch(setSelectedWorksheet(selectedWorksheet)),
-        setRange: (range: string) => dispatch(setRange(range)),
-        pasteToExcel: (actionId: string, excelFile: ExcelFile, targeWorksheet: Worksheet, range: string, data: []) => dispatch(pasteToExcel(actionId, excelFile, targeWorksheet, range, data)),
-        focusRange: (actionId: string, excelFile: ExcelFile, targeWorksheet: Worksheet, range: string) => dispatch(focusRange(actionId, excelFile, targeWorksheet, range)),
-        copyRange: (actionId: string, excelFile: ExcelFile, targeWorksheet: Worksheet, range: string) => dispatch(copyRange(actionId, excelFile, targeWorksheet, range)),
-        clearRange: (actionId: string, excelFile: ExcelFile, targeWorksheet: Worksheet, range: string) => dispatch(clearRange(actionId, excelFile, targeWorksheet, range)),
+        setSelectedWorksheet: (selectedWorksheet: ExcelWorksheet) => dispatch(setSelectedWorksheet(selectedWorksheet)),
+        setRange: (range: string) => dispatch(setRange(range))
     };
 };
 

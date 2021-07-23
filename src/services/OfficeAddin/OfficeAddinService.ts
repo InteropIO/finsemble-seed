@@ -2,7 +2,7 @@ import ExcelFile from "./types/ExcelFile";
 import { v4 as uuidV4 } from "uuid";
 import * as CONSTANTS from "./config/const";
 import ExcelAction from "./types/ExcelAction";
-import Bookmark from "./types/Bookmark";
+import ExcelBookmark from "./types/ExcelBookmark";
 
 const Finsemble = require("@finsemble/finsemble-core");
 
@@ -99,22 +99,34 @@ export default class OfficeAddinService extends Finsemble.baseService {
 
     //Save all Excel files before worksapce reload.
     Finsemble.Clients.WorkspaceClient.addEventListener(
-      "close-requested",
-      (event) => {
-        event.wait();
-        //tell excel to save
-        this.activeExcelFiles.forEach(async (file, index, object) => {
-          console.log("Saveing file ", file);
-          let res = await this.RouterClient.query(
-            `query-${file.fileName}-${file.createTimestamp}`,
-            { action: CONSTANTS.SAVE_EXCEL_WORKBOOK },
-            (err: any, res: any) => {
-              if (index == this.activeExcelFiles.length - 1) event.done();
-            }
-          );
-        });
-      }
+      "close-requested", this.handleWorkspaceClosed.bind(this)
     );
+    Finsemble.Clients.WorkspaceClient.addEventListener(
+      "save-requested", this.handleWorkspaceClosed.bind(this)
+    );
+    Finsemble.Clients.WorkspaceClient.addEventListener(
+      "save-complete", this.handleWorkspaceClosed.bind(this)
+    );
+    Finsemble.Clients.WorkspaceClient.addEventListener(
+      "save-failed", this.handleWorkspaceClosed.bind(this)
+    );
+
+  }
+  
+  handleWorkspaceClosed (event) {
+    event.wait();
+    //tell excel to save
+    this.activeExcelFiles.forEach(async (file, index, object) => {
+      console.log("Saveing file ", file);
+      let res = await this.RouterClient.query(
+        `query-${file.fileName}-${file.createTimestamp}`,
+        { action: CONSTANTS.SAVE_EXCEL_WORKBOOK },
+        (err: any, res: any) => {
+          if (index == this.activeExcelFiles.length - 1) 
+            event.done();
+        }
+      );
+    });
   }
 
   getBookmarkStoreCb: StandardCallback = (err, storeObject) => {
@@ -159,7 +171,6 @@ export default class OfficeAddinService extends Finsemble.baseService {
           }
         }
         return tempList;
-        break;
       default:
         break;
     }
@@ -177,7 +188,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
         console.log("handleExcelEvent", res.data);
 
         switch (res.data.event) {
-          case CONSTANTS.ADDIN_OPENED:
+          case CONSTANTS.EXCEL_ADDIN_LOADED:
             let file = this.activeExcelFiles.find((file) => {
               return (
                 file.fileName === res.data.fileName &&
@@ -200,15 +211,17 @@ export default class OfficeAddinService extends Finsemble.baseService {
               );
               fileToSend = newExcelfile;
               this.addSheetChangeHandler(fileToSend);
+              this.transmitActiveFilesChange(fileToSend);
             } else {
               file.createTimestamp = res.data.timestamp;
               file.aliveTimestamp = res.data.timestamp;
               this.addSheetChangeHandler(file);
+              this.transmitActiveFilesChange(file);
             }
 
             this.bookmarkStore.getValue(
               "bookmarks",
-              (err: any, bookmarks: Array<Bookmark>) => {
+              (err: any, bookmarks: Array<ExcelBookmark>) => {
                 if (!err) {
                   this.sendBookmarks({
                     bookmarks: bookmarks,
@@ -217,33 +230,13 @@ export default class OfficeAddinService extends Finsemble.baseService {
               }
             );
 
-            this.transmitActiveFilesChange();
             break;
-          case CONSTANTS.BROADCAST_DATA:
-            let tempActions = this.excelActions.filter((action) => {
-              return action.action === CONSTANTS.BROADCAST_DATA;
-            });
-            tempActions.forEach((action) => {
-              Finsemble.Clients.RouterClient.transmit(action.id, {
-                data: res.data,
-              });
-            });
-            break;
-
           default:
             break;
         }
       }
     }
   };
-
-  // handleQueryResponse: StandardCallback = (err, res) => {
-  // 	if (!err) {
-  // 		console.log(res);
-  // 	} else {
-  // 		console.log(err)
-  // 	}
-  // }
 
   query(
     channel: string,
@@ -346,57 +339,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
         console.log("handleExcelFileEvent", res.data);
         let event = res.data.event;
         switch (event) {
-          case CONSTANTS.SHEET_CHANGE:
-            let changeAddress = res.data.eventObj.address;
-            let changeWorksheet = res.data.eventObj.worksheet;
-            let tempActions = this.excelActions.filter((action) => {
-              if (action.bookmark)
-                return (
-                  action.action === CONSTANTS.CHANGE_SUBSCRIPTION &&
-                  action.file?.fileName === res.data.fileName &&
-                  action.bookmark?.worksheet.id === changeWorksheet.id &&
-                  checkRangeInRange(changeAddress, action.bookmark?.range)
-                );
-              else
-                return (
-                  action.action === CONSTANTS.CHANGE_SUBSCRIPTION &&
-                  action.file?.fileName === res.data.fileName &&
-                  checkRangeInRange(changeAddress, null)
-                );
-            });
-            tempActions.forEach((action) => {
-              Finsemble.Clients.RouterClient.transmit(action.id, {
-                event: res.data.eventObj,
-                fileName: res.data.fileName,
-              });
-            });
-            break;
-          case CONSTANTS.SELECTION_CHANGE:
-            let selectionAddress = res.data.eventObj.address.split("!")[1];
-            let selectionWorksheet = res.data.eventObj.worksheet;
-            let tempSelectionActions = this.excelActions.filter((action) => {
-              if (action.bookmark)
-                return (
-                  action.action === CONSTANTS.SELECTION_SUBSCRIPTION &&
-                  action.file?.fileName === res.data.fileName &&
-                  action.bookmark?.worksheet.id === selectionWorksheet.id &&
-                  checkRangeInRange(selectionAddress, action.bookmark?.range)
-                );
-              else
-                return (
-                  action.action === CONSTANTS.SELECTION_SUBSCRIPTION &&
-                  action.file?.fileName === res.data.fileName &&
-                  checkRangeInRange(selectionAddress, null)
-                );
-            });
-            tempSelectionActions.forEach((action) => {
-              Finsemble.Clients.RouterClient.transmit(action.id, {
-                event: res.data.eventObj,
-                fileName: res.data.fileName,
-              });
-            });
-            break;
-
+          // Bookmark event
           case CONSTANTS.CREATE_BOOKMARK:
             let bookmarkToCreate = res.data.eventObj;
             this.bookmarkStore.getValue(
@@ -528,7 +471,101 @@ export default class OfficeAddinService extends Finsemble.baseService {
                 }
               );
             }
-
+            break;
+          
+            // Excel events
+          case CONSTANTS.SHEET_SELECTION_CHANGE:
+            let selectionRange = res.data.eventObj.range;
+            let selectionWorksheet = res.data.eventObj.worksheet;
+            let tempSelectionActions = this.excelActions.filter((action) => {
+              if(action.action === CONSTANTS.SUBSCRIBE_SHEET_SELECTION_CHANGE){
+                if(action.file){
+                  if (action.bookmark){
+                    if(action.bookmark.range){
+                      return action.bookmark?.worksheet.name === selectionWorksheet.name && checkRangeInRange(selectionRange, action.bookmark?.range)
+                    } else {
+                      return (
+                        action.bookmark?.worksheet.name === selectionWorksheet.name
+                      );
+                    }
+                  } else {
+                    return (
+                      action.file?.fileName === res.data.fileName
+                    );
+                  }
+                } else {
+                  return true
+                }
+              }
+            });
+            tempSelectionActions.forEach((action) => {
+              Finsemble.Clients.RouterClient.transmit(action.id, {
+                eventObj: res.data.eventObj,
+                excelFile: {fileName: res.data.fileName},
+              });
+            });
+            break;
+          case CONSTANTS.SHEET_VALUES_CHANGE:
+            let tempValueChangeRange = res.data.eventObj.range;
+            let tempValueChangeWorksheet = res.data.eventObj.worksheet;
+            let tempValueChangeActions = this.excelActions.filter((action) => {
+              if(action.action === CONSTANTS.SUBSCRIBE_SHEET_VALUE_CHANGE){
+                if(action.file){
+                  if (action.bookmark){
+                    if(action.bookmark.range){
+                      return action.bookmark?.worksheet.name === tempValueChangeWorksheet.name && checkRangeInRange(tempValueChangeRange, action.bookmark?.range)
+                    } else {
+                      return (
+                        action.bookmark?.worksheet.name === tempValueChangeWorksheet.name
+                      );
+                    }
+                  } else {
+                    return (
+                      action.file?.fileName === res.data.fileName
+                    );
+                  }
+                } else {
+                  return true 
+                }
+              }
+            });
+            tempValueChangeActions.forEach((action) => {
+              Finsemble.Clients.RouterClient.transmit(action.id, {
+                eventObj: res.data.eventObj,
+                excelFile: {fileName: res.data.fileName},
+              });
+            });
+            break;
+          case CONSTANTS.SHEET_BROADCAST_VALUES:
+            let tempBroadcastValuesRange = res.data.eventObj.range;
+            let tempBroadcastValuesWorksheet = res.data.eventObj.worksheet;
+            let tempBroadcastValuesActions = this.excelActions.filter((action) => {
+              if(action.action === CONSTANTS.SUBSCRIBE_SHEET_BROADCAST_VALUES){
+                if(action.file){
+                  if (action.bookmark){
+                    if(action.bookmark.range){
+                      return action.bookmark?.worksheet.name === tempBroadcastValuesWorksheet.name && checkRangeInRange(tempBroadcastValuesRange, action.bookmark?.range)
+                    } else {
+                      return (
+                        action.bookmark?.worksheet.name === tempBroadcastValuesWorksheet.name
+                      );
+                    }
+                  } else {
+                    return (
+                      action.file?.fileName === res.data.fileName
+                    );
+                  }
+                } else {
+                  return true 
+                }
+              }
+            });
+            tempBroadcastValuesActions.forEach((action) => {
+              Finsemble.Clients.RouterClient.transmit(action.id, {
+                eventObj: res.data.eventObj,
+                excelFile: {fileName: res.data.fileName},
+              });
+            });
             break;
           default:
             console.log(res.data);
@@ -559,19 +596,29 @@ export default class OfficeAddinService extends Finsemble.baseService {
         );
         object.splice(index, 1);
 
-        this.transmitActiveFilesChange();
+        this.transmitActiveFilesChange(file);
       }
     });
   };
 
-  transmitActiveFilesChange = () => {
+  transmitActiveFilesChange = (changedFile) => {
     let tempActions = this.excelActions.filter((action) => {
-      return action.action === CONSTANTS.SUBSCRIBE_ACTIVE_EXCEL_FILES;
+      return action.action === CONSTANTS.SUBSCRIBE_ACTIVE_EXCEL_FILES_CHANGE;
     });
     tempActions.forEach((action) => {
-      Finsemble.Clients.RouterClient.transmit(action.id, {
-        ACTIVE_EXCEL_FILES: this.activeExcelFiles,
-      });
+      if(!action.file){
+        Finsemble.Clients.RouterClient.transmit(action.id, {
+          changedFile: changedFile,
+          ACTIVE_EXCEL_FILES: this.activeExcelFiles,
+        });
+      } else {
+        if(changedFile.fileName === action.file.fileName){
+          Finsemble.Clients.RouterClient.transmit(action.id, {
+            changedFile: changedFile,
+            ACTIVE_EXCEL_FILES: this.activeExcelFiles,
+          });
+        }
+      }
     });
   };
 
@@ -593,113 +640,6 @@ export default class OfficeAddinService extends Finsemble.baseService {
           });
           this.addResponder(get_excel_files_uuid, this.getExcelFiles);
           break;
-        case CONSTANTS.SUBSCRIBE_ACTIVE_EXCEL_FILES:
-          let sub_excel_files_uuid = this.getUuid();
-          let tempAction: ExcelAction = {
-            id: sub_excel_files_uuid,
-            action: action,
-            file: null,
-            bookmark: null,
-          };
-          returnArray.push(tempAction);
-          this.excelActions.push(tempAction);
-          break;
-        case CONSTANTS.BROADCAST_DATA:
-          let broadcast_data_uuid = this.getUuid();
-          let broadcast_data_action: ExcelAction = {
-            id: broadcast_data_uuid,
-            action: action,
-            file: null,
-            bookmark: null,
-          };
-          returnArray.push(broadcast_data_action);
-          this.excelActions.push(broadcast_data_action);
-          break;
-        case CONSTANTS.GET_EXCEL_CELL_DATA:
-          data.excelFiles.forEach((excelFile: ExcelFile) => {
-            let get_excel_cell_data_uuid = this.getUuid();
-            returnArray.push({
-              id: get_excel_cell_data_uuid,
-              action: action,
-              file: excelFile,
-            });
-            this.addResponder(get_excel_cell_data_uuid, this.getExecelCellData);
-          });
-          break;
-        case CONSTANTS.SAVE_EXCEL_WORKBOOK:
-          data.excelFiles.forEach((excelFile: ExcelFile) => {
-            let save_excel_workbook_uuid = this.getUuid();
-            returnArray.push({
-              id: save_excel_workbook_uuid,
-              action: action,
-              file: excelFile,
-            });
-            this.addResponder(save_excel_workbook_uuid, this.saveExcelWorkbook);
-          });
-          break;
-        case CONSTANTS.SET_EXCEL_CELL_DATA:
-          data.excelFiles.forEach((excelFile: ExcelFile) => {
-            let get_excel_cell_data_uuid = this.getUuid();
-            returnArray.push({
-              id: get_excel_cell_data_uuid,
-              action: action,
-              file: excelFile,
-            });
-            this.addResponder(get_excel_cell_data_uuid, this.setExecelCellData);
-          });
-          break;
-        case CONSTANTS.SUBSCRIBE_SHEET_CHANGE:
-          data.excelFiles.forEach((excelFile: ExcelFile) => {
-            let tempSubSheetChangeAction = this.excelActions.find(
-              (tempAction: ExcelAction) => {
-                return (
-                  tempAction.action === CONSTANTS.SUBSCRIBE_SHEET_CHANGE &&
-                  tempAction.file?.fileName === excelFile.fileName
-                );
-              }
-            );
-            if (!tempSubSheetChangeAction) {
-              let sub_sheet_change_uuid = this.getUuid();
-              let tempSheetChangeAction: ExcelAction = {
-                id: sub_sheet_change_uuid,
-                action: action,
-                file: excelFile,
-                bookmark: null,
-              };
-              returnArray.push(tempSheetChangeAction);
-              this.excelActions.push(tempSheetChangeAction);
-              this.addSheetChangeHandler(excelFile);
-            } else {
-              returnArray.push(tempSubSheetChangeAction);
-            }
-          });
-          break;
-        case CONSTANTS.CHANGE_SUBSCRIPTION:
-          data.excelFiles.forEach((excelFile: ExcelFile) => {
-            let change_subscription_uuid = this.getUuid();
-            let changeSubscriptionAction: ExcelAction = {
-              id: change_subscription_uuid,
-              action: action,
-              file: excelFile,
-              bookmark: data.params.bookmark,
-            };
-            returnArray.push(changeSubscriptionAction);
-            this.excelActions.push(changeSubscriptionAction);
-          });
-          break;
-        case CONSTANTS.SELECTION_SUBSCRIPTION:
-          data.excelFiles.forEach((excelFile: ExcelFile) => {
-            let selection_subscription_uuid = this.getUuid();
-            let selectionSubscriptionAction: ExcelAction = {
-              id: selection_subscription_uuid,
-              action: action,
-              file: excelFile,
-              bookmark: data.params.bookmark,
-            };
-            returnArray.push(selectionSubscriptionAction);
-            this.excelActions.push(selectionSubscriptionAction);
-          });
-          break;
         case CONSTANTS.GET_WORKSHEET_LIST:
           data.excelFiles.forEach((excelFile: ExcelFile) => {
             let get_worksheet_list_uuid = this.getUuid();
@@ -711,18 +651,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
             this.addResponder(get_worksheet_list_uuid, this.getWorksheetList);
           });
           break;
-        case CONSTANTS.PASTE_TO_EXCEL:
-          data.excelFiles.forEach((excelFile: ExcelFile) => {
-            let paste_to_excel_uuid = this.getUuid();
-            returnArray.push({
-              id: paste_to_excel_uuid,
-              action: action,
-              file: excelFile,
-            });
-            this.addResponder(paste_to_excel_uuid, this.pasteToExcel);
-          });
-          break;
-        case CONSTANTS.FOCUS_RANGE:
+        case CONSTANTS.FOCUS_EXCEL_RANGE:
           data.excelFiles.forEach((excelFile: ExcelFile) => {
             let focus_range_uuid = this.getUuid();
             returnArray.push({
@@ -730,10 +659,10 @@ export default class OfficeAddinService extends Finsemble.baseService {
               action: action,
               file: excelFile,
             });
-            this.addResponder(focus_range_uuid, this.focusRange);
+            this.addResponder(focus_range_uuid, this.focusExcelRange);
           });
           break;
-        case CONSTANTS.CLEAR_RANGE:
+        case CONSTANTS.CLEAR_EXCEL_RANGE:
           data.excelFiles.forEach((excelFile: ExcelFile) => {
             let clear_range_uuid = this.getUuid();
             returnArray.push({
@@ -741,19 +670,232 @@ export default class OfficeAddinService extends Finsemble.baseService {
               action: action,
               file: excelFile,
             });
-            this.addResponder(clear_range_uuid, this.clearRange);
+            this.addResponder(clear_range_uuid, this.clearExcelRange);
           });
           break;
-        case CONSTANTS.COPY_RANGE:
+        case CONSTANTS.GET_EXCEL_RANGE:
           data.excelFiles.forEach((excelFile: ExcelFile) => {
-            let copy_range_uuid = this.getUuid();
+            let get_excel_range_uuid = this.getUuid();
             returnArray.push({
-              id: copy_range_uuid,
+              id: get_excel_range_uuid,
               action: action,
               file: excelFile,
             });
-            this.addResponder(copy_range_uuid, this.copyRange);
+            this.addResponder(get_excel_range_uuid, this.getExcelRange);
           });
+          break;
+        case CONSTANTS.SET_EXCEL_RANGE:
+          data.excelFiles.forEach((excelFile: ExcelFile) => {
+            let set_excel_range_uuid = this.getUuid();
+            returnArray.push({
+              id: set_excel_range_uuid,
+              action: action,
+              file: excelFile,
+            });
+            this.addResponder(set_excel_range_uuid, this.setExcelRange);
+          });
+          break;
+        case CONSTANTS.SET_ACTIVE_WORKSHEET:
+          data.excelFiles.forEach((excelFile: ExcelFile) => {
+            let set_active_worksheet_uuid = this.getUuid();
+            returnArray.push({
+              id: set_active_worksheet_uuid,
+              action: action,
+              file: excelFile,
+            });
+            this.addResponder(set_active_worksheet_uuid, this.setActiveWorksheet);
+          });
+          break;
+        case CONSTANTS.GET_ACTIVE_WORKSHEET:
+          data.excelFiles.forEach((excelFile: ExcelFile) => {
+            let get_active_worksheet_uuid = this.getUuid();
+            returnArray.push({
+              id: get_active_worksheet_uuid,
+              action: action,
+              file: excelFile,
+            });
+            this.addResponder(get_active_worksheet_uuid, this.getActiveWorksheet);
+          });
+          break;
+        case CONSTANTS.CREATE_WORKSHEET:
+          data.excelFiles.forEach((excelFile: ExcelFile) => {
+            let create_worksheet_uuid = this.getUuid();
+            returnArray.push({
+              id: create_worksheet_uuid,
+              action: action,
+              file: excelFile,
+            });
+            this.addResponder(create_worksheet_uuid, this.createWorksheet);
+          });
+          break;
+        case CONSTANTS.DELETE_WORKSHEET:
+          data.excelFiles.forEach((excelFile: ExcelFile) => {
+            let delete_worksheet_uuid = this.getUuid();
+            returnArray.push({
+              id: delete_worksheet_uuid,
+              action: action,
+              file: excelFile,
+            });
+            this.addResponder(delete_worksheet_uuid, this.deleteWorksheet);
+          });
+          break;
+        case CONSTANTS.HIDE_WORKSHEET:
+          data.excelFiles.forEach((excelFile: ExcelFile) => {
+            let hide_worksheet_uuid = this.getUuid();
+            returnArray.push({
+              id: hide_worksheet_uuid,
+              action: action,
+              file: excelFile,
+            });
+            this.addResponder(hide_worksheet_uuid, this.hideWorksheet);
+          });
+          break;
+        case CONSTANTS.UNHIDE_WORKSHEET:
+          data.excelFiles.forEach((excelFile: ExcelFile) => {
+            let unhide_worksheet_uuid = this.getUuid();
+            returnArray.push({
+              id: unhide_worksheet_uuid,
+              action: action,
+              file: excelFile,
+            });
+            this.addResponder(unhide_worksheet_uuid, this.unhideWorksheet);
+          });
+          break; 
+        case CONSTANTS.SAVE_EXCEL_WORKBOOK:
+          data.excelFiles.forEach((excelFile: ExcelFile) => {
+            let save_excel_workbook_uuid = this.getUuid();
+            returnArray.push({
+              id: save_excel_workbook_uuid,
+              action: action,
+              file: excelFile,
+            });
+            this.addResponder(save_excel_workbook_uuid, this.saveExcelWorkbook);
+          });
+          break;
+        // Subscribe to events
+        case CONSTANTS.SUBSCRIBE_ACTIVE_EXCEL_FILES_CHANGE:
+          if(data.excelFiles){
+            data.excelFiles.forEach((excelFile: ExcelFile) => {
+              let sub_active_excel_file_change_uuid = this.getUuid();
+              let subActiveExcelFilesChangeAction: ExcelAction = {
+                id: sub_active_excel_file_change_uuid,
+                action: action,
+                file: excelFile,
+                bookmark: null,
+              };
+              returnArray.push(subActiveExcelFilesChangeAction);
+              this.excelActions.push(subActiveExcelFilesChangeAction);
+            });
+          } else {
+            let sub_active_excel_file_change_uuid = this.getUuid();
+            let subActiveExcelFilesChangeAction: ExcelAction = {
+              id: sub_active_excel_file_change_uuid,
+              action: action,
+              file: null,
+              bookmark: null,
+            };
+            returnArray.push(subActiveExcelFilesChangeAction);
+            this.excelActions.push(subActiveExcelFilesChangeAction);
+          }
+          break;
+        case CONSTANTS.SUBSCRIBE_SHEET_SELECTION_CHANGE:
+          let tempSelectionBookmark;
+          if(data.worksheet){
+            tempSelectionBookmark = {
+              worksheet: data.worksheet,
+              range: data.range
+            }
+          }
+
+          if(data.excelFiles){
+            data.excelFiles.forEach((excelFile: ExcelFile) => {
+              let sub_selection_change_uuid = this.getUuid();
+              let subSelectionChangeAction: ExcelAction = {
+                id: sub_selection_change_uuid,
+                action: action,
+                file: excelFile,
+                bookmark: tempSelectionBookmark,
+              };
+              returnArray.push(subSelectionChangeAction);
+              this.excelActions.push(subSelectionChangeAction);
+            });
+          } else {
+            let sub_selection_change_uuid = this.getUuid();
+            let subSelectionChangeAction: ExcelAction = {
+              id: sub_selection_change_uuid,
+              action: action,
+              file: null,
+              bookmark: tempSelectionBookmark,
+            };
+            returnArray.push(subSelectionChangeAction);
+            this.excelActions.push(subSelectionChangeAction);
+          }
+          break;
+        case CONSTANTS.SUBSCRIBE_SHEET_VALUE_CHANGE:
+          let tempValueChangeBookmark;
+          if(data.worksheet){
+            tempValueChangeBookmark = {
+              worksheet: data.worksheet,
+              range: data.range
+            }
+          }
+
+          if(data.excelFiles){
+            data.excelFiles.forEach((excelFile: ExcelFile) => {
+              let sub_value_change_uuid = this.getUuid();
+              let subValueChangeAction: ExcelAction = {
+                id: sub_value_change_uuid,
+                action: action,
+                file: excelFile,
+                bookmark: tempValueChangeBookmark,
+              };
+              returnArray.push(subValueChangeAction);
+              this.excelActions.push(subValueChangeAction);
+            });
+          } else {
+            let sub_value_change_uuid = this.getUuid();
+            let subValueChangeAction: ExcelAction = {
+              id: sub_value_change_uuid,
+              action: action,
+              file: null,
+              bookmark: tempValueChangeBookmark,
+            };
+            returnArray.push(subValueChangeAction);
+            this.excelActions.push(subValueChangeAction);
+          }
+          break;
+        case CONSTANTS.SUBSCRIBE_SHEET_BROADCAST_VALUES:
+          let tempBroadcstValueBookmark;
+          if(data.worksheet){
+            tempBroadcstValueBookmark = {
+              worksheet: data.worksheet,
+              range: data.range
+            }
+          }
+
+          if(data.excelFiles){
+            data.excelFiles.forEach((excelFile: ExcelFile) => {
+              let sub_broadcst_value_uuid = this.getUuid();
+              let subBroadcstValueAction: ExcelAction = {
+                id: sub_broadcst_value_uuid,
+                action: action,
+                file: excelFile,
+                bookmark: tempBroadcstValueBookmark,
+              };
+              returnArray.push(subBroadcstValueAction);
+              this.excelActions.push(subBroadcstValueAction);
+            });
+          } else {
+            let sub_broadcst_value_uuid = this.getUuid();
+            let subBroadcstValueAction: ExcelAction = {
+              id: sub_broadcst_value_uuid,
+              action: action,
+              file: null,
+              bookmark: tempBroadcstValueBookmark,
+            };
+            returnArray.push(subBroadcstValueAction);
+            this.excelActions.push(subBroadcstValueAction);
+          }
           break;
         default:
           break;
@@ -764,43 +906,6 @@ export default class OfficeAddinService extends Finsemble.baseService {
 
   getExcelFiles = (data: any): Array<ExcelFile> => {
     return this.activeExcelFiles;
-  };
-
-  getExecelCellData = async (data: any) => {
-    console.log(
-      "getExecelCellData",
-      `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`
-    );
-    let res = await this.RouterClient.query(
-      `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`,
-      {
-        action: CONSTANTS.GET_RANGE_DATA,
-        startCell: data.startCell,
-        endCell: data.endCell,
-        worksheetName: data.worksheetName,
-      },
-      (err: any, res: any) => {}
-    );
-    return res.response.data;
-  };
-
-  setExecelCellData = async (data: any) => {
-    console.log(
-      "setExecelCellData",
-      `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`
-    );
-    let res = await this.RouterClient.query(
-      `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`,
-      {
-        action: CONSTANTS.SET_RANGE_DATA,
-        startCell: data.startCell,
-        endCell: data.endCell,
-        worksheetName: data.worksheetName,
-        values: data.values,
-      },
-      (err: any, res: any) => {}
-    );
-    return res.response.data;
   };
 
   saveExcelWorkbook = async (data: any) => {
@@ -842,33 +947,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
     return res.response.data.worksheetList;
   };
 
-  pasteToExcel = async (data: any) => {
-    console.log(
-      "pasteToExcel",
-      `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`
-    );
-    console.log({
-      action: CONSTANTS.PASTE_TO_EXCEL,
-      excelFile: data.excelFile,
-      range: data.range,
-      worksheet: data.worksheet,
-      data: data.data,
-    });
-    let res = await this.RouterClient.query(
-      `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`,
-      {
-        action: CONSTANTS.PASTE_TO_EXCEL,
-        excelFile: data.excelFile,
-        range: data.range,
-        worksheet: data.worksheet,
-        data: data.data,
-      },
-      (err: any, res: any) => {}
-    );
-    return res.response.data;
-  };
-
-  focusRange = async (data: any) => {
+  focusExcelRange = async (data: any) => {
     console.log(
       "focusRange",
       `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`
@@ -876,7 +955,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
     let res = await this.RouterClient.query(
       `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`,
       {
-        action: CONSTANTS.FOCUS_RANGE,
+        action: CONSTANTS.FOCUS_EXCEL_RANGE,
         worksheet: data.worksheet,
         range: data.range,
       },
@@ -885,7 +964,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
     return res.response.data;
   };
 
-  clearRange = async (data: any) => {
+  clearExcelRange = async (data: any) => {
     console.log(
       "clearRange",
       `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`
@@ -893,7 +972,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
     let res = await this.RouterClient.query(
       `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`,
       {
-        action: CONSTANTS.CLEAR_RANGE,
+        action: CONSTANTS.CLEAR_EXCEL_RANGE,
         worksheet: data.worksheet,
         range: data.range,
       },
@@ -902,21 +981,135 @@ export default class OfficeAddinService extends Finsemble.baseService {
     return res.response.data;
   };
 
-  copyRange = async (data: any) => {
+  getExcelRange = async (data: any) => {
     console.log(
-      "copyRange",
+      "getExcelRange",
       `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`
     );
     let res = await this.RouterClient.query(
       `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`,
       {
-        action: CONSTANTS.COPY_RANGE,
+        action: CONSTANTS.GET_EXCEL_RANGE,
         worksheet: data.worksheet,
         range: data.range,
       },
       (err: any, res: any) => {}
     );
-    return res.response.data.result;
+    console.log(res.response.data)
+    return res.response.data;
+  };
+
+  setExcelRange = async (data: any) => {
+    console.log(
+      "setExcelRange",
+      `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`
+    );
+    let res = await this.RouterClient.query(
+      `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`,
+      {
+        action: CONSTANTS.SET_EXCEL_RANGE,
+        worksheet: data.worksheet,
+        range: data.range,
+        values: data.values
+      },
+      (err: any, res: any) => {}
+    );
+    return res.response.data;
+  };
+
+  setActiveWorksheet = async (data: any) => {
+    console.log(
+      "setActiveWorksheet",
+      `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`
+    );
+    let res = await this.RouterClient.query(
+      `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`,
+      {
+        action: CONSTANTS.SET_ACTIVE_WORKSHEET,
+        worksheet: data.worksheet
+      },
+      (err: any, res: any) => {}
+    );
+    return res.response.data;
+  };
+
+  getActiveWorksheet = async (data: any) => {
+    console.log(
+      "getActiveWorksheet",
+      `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`
+    );
+    let res = await this.RouterClient.query(
+      `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`,
+      {
+        action: CONSTANTS.GET_ACTIVE_WORKSHEET
+      },
+      (err: any, res: any) => {}
+    );
+    return res.response.data;
+  };
+
+  createWorksheet = async (data: any) => {
+    console.log(
+      "createWorksheet",
+      `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`
+    );
+    let res = await this.RouterClient.query(
+      `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`,
+      {
+        action: CONSTANTS.CREATE_WORKSHEET,
+        worksheet: data.worksheet
+      },
+      (err: any, res: any) => {}
+    );
+    return res.response.data;
+  };
+
+  deleteWorksheet = async (data: any) => {
+    console.log(
+      "deleteWorksheet",
+      `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`
+    );
+    let res = await this.RouterClient.query(
+      `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`,
+      {
+        action: CONSTANTS.DELETE_WORKSHEET,
+        worksheet: data.worksheet
+      },
+      (err: any, res: any) => {}
+    );
+    return res.response.data;
+  };
+
+  hideWorksheet = async (data: any) => {
+    console.log(
+      "hideWorksheet",
+      `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`
+    );
+    let res = await this.RouterClient.query(
+      `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`,
+      {
+        action: CONSTANTS.HIDE_WORKSHEET,
+        worksheet: data.worksheet
+      },
+      (err: any, res: any) => {}
+    );
+    return res.response.data;
+  };
+
+  unhideWorksheet = async (data: any) => {
+    console.log(
+      "unhideWorksheet",
+      `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`
+    );
+    let res = await this.RouterClient.query(
+      `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`,
+      {
+        action: CONSTANTS.UNHIDE_WORKSHEET,
+        worksheet: data.worksheet
+      },
+      (err: any, res: any) => {}
+    );
+    return res.response.data;
   };
 
   sendBookmarks = async (data: any) => {
@@ -924,7 +1117,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
       let res = await this.RouterClient.query(
         `query-${activeExcelFile.fileName}-${activeExcelFile.createTimestamp}`,
         {
-          action: CONSTANTS.SEND_BOOKMARKS,
+          action: CONSTANTS.BOOKMARK_LIST,
           bookmarks: data.bookmarks,
         },
         (err: any, res: any) => {}

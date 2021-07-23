@@ -5,8 +5,8 @@ import makeAnimated from 'react-select/animated';
 import { connect } from "react-redux";
 import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk"
-import { getPreviousExcelFilesThunk, setSelectedBookmark, setSelectedPreviousExcelFiles } from "../redux/actions/actions";
-import Bookmark from "../../../../services/OfficeAddin/types/Bookmark";
+import { setSelectedBookmark } from "../redux/actions/actions";
+import ExcelBookmark from "../../../../services/OfficeAddin/types/ExcelBookmark";
 
 const BookmarkList = (props: any) => {
     const animatedComponents = makeAnimated();
@@ -24,11 +24,11 @@ const BookmarkList = (props: any) => {
 
     const { selectedBookmark, setSelectedBookmark } = props;
 
-    const [bookmarkList, setBookmarkList] = useState(Array<Bookmark>())
+    const [bookmarkList, setBookmarkList] = useState(Array<ExcelBookmark>())
 
     useEffect(() => {
         FSBL.Clients.DistributedStoreClient.getStore({ store: "excelBookmarkStore" }, (err: any, store: any) => {
-            store.getValue({ field: 'bookmarks' }, (err: any, data: Array<Bookmark>) => { setBookmarkList(data) });
+            store.getValue({ field: 'bookmarks' }, (err: any, data: Array<ExcelBookmark>) => { setBookmarkList(data) });
             store.addListener({ field: 'bookmarks' }, (err: any, data: any) => { setBookmarkList(data.value) });
         })
     }, [])
@@ -59,7 +59,7 @@ const mapStateToProps = (state: any, ownProps: any) => {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     return {
-        setSelectedBookmark: (selectedBookmark: Bookmark) => dispatch(setSelectedBookmark(selectedBookmark)),
+        setSelectedBookmark: (selectedBookmark: ExcelBookmark) => dispatch(setSelectedBookmark(selectedBookmark)),
     };
 };
 

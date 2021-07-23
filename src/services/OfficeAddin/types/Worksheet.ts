@@ -1,4 +1,4 @@
 export default interface Worksheet {
-    id: string
+    id?: string
     name: string
 }

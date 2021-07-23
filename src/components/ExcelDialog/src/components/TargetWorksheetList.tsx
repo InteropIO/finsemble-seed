@@ -4,12 +4,9 @@ import makeAnimated from 'react-select/animated';
 import { connect } from "react-redux";
 import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk"
-import { getWorksheetListThunk, registerActionThunk, setSelectedWorksheet } from "../redux/actions/actions";
-import * as CONSTANTS from "../redux/actions/actionTypes";
+import { setSelectedWorksheet } from "../redux/actions/actions";
 import { useEffect, useState } from "react";
-import ExcelFile from "../../../../services/OfficeAddin/types/ExcelFile";
-import ExcelAction from "../../../../services/OfficeAddin/types/ExcelAction";
-import Worksheet from "../../../../services/OfficeAddin/types/Worksheet";
+import ExcelWorksheet from "../../../../services/OfficeAddin/types/ExcelWorksheet";
 
 const TargetWorksheetList = (props: any) => {
     const animatedComponents = makeAnimated();
@@ -20,26 +17,17 @@ const TargetWorksheetList = (props: any) => {
         })
     }
 
-    const { worksheetList, getWorksheetList } = props;
+    const [ worksheetList, setWorksheetList] = useState(Array<ExcelWorksheet>())
     const { selectedWorksheet, setSelectedWorksheet } = props;
     const { selectedActiveExcelFile } = props;
-    const { offAddInServiceActions } = props;
-    const { registerGetWorksheetList } = props;
-
-    let [getWorksheetListActions, setGetWorksheetListActions] = useState<Array<ExcelAction>>([])
 
     useEffect(() => {
-        let tempGetWorksheetListActions = offAddInServiceActions.filter((offAddInServiceAction: ExcelAction) => {
-            return offAddInServiceAction.action === CONSTANTS.GET_WORKSHEET_LIST && offAddInServiceAction.file?.fileName === selectedActiveExcelFile.fileName
-        })
-        if (tempGetWorksheetListActions.length > 0) {
-            setGetWorksheetListActions(tempGetWorksheetListActions)
-            tempGetWorksheetListActions.forEach((getWorksheetListAction: ExcelAction) => {
-                getWorksheetList(getWorksheetListAction.id, getWorksheetListAction.file)
-            })
-        }
-
-    }, [offAddInServiceActions])
+        if(selectedActiveExcelFile)
+            FSBL.Clients.OfficeAddinClient.getWorksheetList({excelFile: selectedActiveExcelFile})
+                .then((worksheetList)=>{
+                    setWorksheetList(worksheetList)
+                })
+    }, [selectedActiveExcelFile])
 
     return (
         <div style={{ float: 'left', width: '70%' }}>
@@ -50,25 +38,7 @@ const TargetWorksheetList = (props: any) => {
                 components={animatedComponents}
                 getOptionLabel={({ name }) => name}
                 getOptionValue={({ id }) => id}
-                onMenuOpen={() => {
-                    setSelectedWorksheet("")
-                    if (selectedActiveExcelFile) {
-                        let newAction = false
-                        let tempGetWorksheetListAction = getWorksheetListActions.find((offAddInServiceAction: ExcelAction) => {
-                            return offAddInServiceAction.file?.fileName === selectedActiveExcelFile.fileName && offAddInServiceAction.action === CONSTANTS.GET_WORKSHEET_LIST
-                        })
-
-                        if (!tempGetWorksheetListAction) {
-                            newAction = true
-                            registerGetWorksheetList([selectedActiveExcelFile])
-                        } else {
-                            getWorksheetList(tempGetWorksheetListAction.id, selectedActiveExcelFile);
-                        }
-
-                    } else {
-                        getWorksheetList("", []);
-                    }
-                }}
+                onMenuOpen={() => { }}
                 options={worksheetList}
                 onChange={setSelectedWorksheet}
                 value={selectedWorksheet}
@@ -78,20 +48,16 @@ const TargetWorksheetList = (props: any) => {
 }
 
 const mapStateToProps = (state: any, ownProps: any) => {
-    const { officeAddinServiceActionsReducer, excelFilesReducer } = state
+    const { excelFilesReducer } = state
     return {
         selectedActiveExcelFile: excelFilesReducer.selectedActiveExcelFile,
-        worksheetList: excelFilesReducer.worksheetList,
         selectedWorksheet: excelFilesReducer.selectedWorksheet,
-        offAddInServiceActions: officeAddinServiceActionsReducer.offAddInServiceActions
     }
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     return {
-        registerGetWorksheetList: (excelFiles: Array<ExcelFile>) => dispatch(registerActionThunk(CONSTANTS.GET_WORKSHEET_LIST, excelFiles)),
-        getWorksheetList: (actionId: string, excelFile: ExcelFile) => dispatch(getWorksheetListThunk(actionId, excelFile)),
-        setSelectedWorksheet: (selectedWorksheet: Worksheet) => dispatch(setSelectedWorksheet(selectedWorksheet)),
+        setSelectedWorksheet: (selectedWorksheet: ExcelWorksheet) => dispatch(setSelectedWorksheet(selectedWorksheet)),
     };
 };
 

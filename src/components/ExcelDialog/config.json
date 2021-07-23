@@ -14,7 +14,7 @@
                 "height": 600
             },
             "component": {
-                "preload": false,
+                "preload": ["$applicationRoot/services/OfficeAddin/OfficeAddinClientPreload.ts.js"],
                 "spawnOnStartup": false
             },
             "foreign": {

@@ -17,7 +17,6 @@ module.exports = {
       'office-ui-fabric-react'
     ],
     taskpane: [
-      'react-hot-loader/patch',
       './src/finsemble-excel/taskpane/index.tsx',
     ],
     commands: './src/finsemble-excel/commands/commands.ts'

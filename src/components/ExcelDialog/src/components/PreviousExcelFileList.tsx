@@ -1,11 +1,11 @@
 import * as React from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Select from "react-select";
 import makeAnimated from 'react-select/animated';
 import { connect } from "react-redux";
 import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk"
-import { getPreviousExcelFilesThunk, setSelectedPreviousExcelFiles } from "../redux/actions/actions";
+import { setSelectedPreviousExcelFiles } from "../redux/actions/actions";
 import ExcelFile from "../../../../services/OfficeAddin/types/ExcelFile";
 
 const PreviousExcelFileList = (props: any) => {
@@ -22,8 +22,19 @@ const PreviousExcelFileList = (props: any) => {
         }),
     }
 
-    const { previousExcelFiles, getPreviousExcelFiles } = props;
     const { setSelectedFiles, selectedFiles } = props;
+    const [previousExcelFiles, setPreviousExcelFiles] = useState(Array<ExcelFile>());
+
+    const getPreviousExcelFiles = () => {
+        let tempPreviousExcelFiles:Array<ExcelFile> = [];
+        let activeExcelFiles:Array<ExcelFile> = FSBL.Clients.OfficeAddinClient.getActiveExcelFiles();
+        FSBL.Clients.OfficeAddinClient.getPreviousExcelFiles().forEach((previousExcelFile: ExcelFile)=>{
+            if(!activeExcelFiles.includes(previousExcelFile))
+                tempPreviousExcelFiles.push(previousExcelFile)
+        })
+
+        setPreviousExcelFiles(tempPreviousExcelFiles)
+    }
 
     return (
         <div className='previousFileListDiv'>
@@ -47,17 +58,14 @@ const PreviousExcelFileList = (props: any) => {
 }
 
 const mapStateToProps = (state: any, ownProps: any) => {
-    const { officeAddinServiceActionsReducer, excelFilesReducer } = state
+    const { excelFilesReducer } = state
     return {
-        previousExcelFiles: excelFilesReducer.previousExcelFiles,
         selectedFiles: excelFilesReducer.selectedPreviousExcelFiles,
-        offAddInServiceActions: officeAddinServiceActionsReducer.offAddInServiceActions
     }
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     return {
-        getPreviousExcelFiles: () => dispatch(getPreviousExcelFilesThunk()),
         setSelectedFiles: (selectedPreviousExcelFiles: Array<ExcelFile>) => dispatch(setSelectedPreviousExcelFiles(selectedPreviousExcelFiles)),
     };
 };

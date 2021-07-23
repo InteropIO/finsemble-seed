@@ -25,30 +25,10 @@ export default (state = initialState, action: ExcelFileListActionType) => {
         ...state,
         selectedClipboardData: action.payload.selectedClipboardData
       }
-    case CONSTANTS.GET_ACTIVE_EXCEL_FILES:
-      return {
-        ...state,
-        activeExcelFiles: action.payload.activeExcelFiles
-      };
     case CONSTANTS.SET_SELECTED_ACTIVE_EXCEL_FILES:
       return {
         ...state,
         selectedActiveExcelFile: action.payload.selectedActiveExcelFile
-      };
-
-    case CONSTANTS.GET_PREVIOUS_EXCEL_FILES:
-      // Filter out current active excel file
-      let filteredPreviousExcelFiles: Array<ExcelFile> = []
-      action.payload.previousExcelFiles.forEach((previousExcelFile) => {
-        let tempExcelFile = state.activeExcelFiles.find((activeExcelFile) => {
-          return activeExcelFile.fileName === previousExcelFile.fileName
-        })
-        if (!tempExcelFile)
-          filteredPreviousExcelFiles.push(previousExcelFile)
-      })
-      return {
-        ...state,
-        previousExcelFiles: filteredPreviousExcelFiles
       };
 
     case CONSTANTS.SET_SELECTED_PREVIOUS_EXCEL_FILES:
@@ -77,11 +57,6 @@ export default (state = initialState, action: ExcelFileListActionType) => {
       return {
         ...state,
         sheetChangeEvent: action.payload.sheetChangeEvent
-      }
-    case CONSTANTS.GET_WORKSHEET_LIST:
-      return {
-        ...state,
-        worksheetList: action.payload.worksheetList
       }
     case CONSTANTS.SET_SELECTED_WORKSHEET:
       return {

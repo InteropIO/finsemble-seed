@@ -17,7 +17,7 @@ const Range = (props: any) => {
 }
 
 const mapStateToProps = (state: any, ownProps: any) => {
-    const { officeAddinServiceActionsReducer, excelFilesReducer } = state
+    const { excelFilesReducer } = state
     return {
         range: excelFilesReducer.range
     }

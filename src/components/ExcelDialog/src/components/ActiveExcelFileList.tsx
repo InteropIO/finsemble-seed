@@ -4,14 +4,12 @@ import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk"
 import Select from "react-select";
 import makeAnimated from 'react-select/animated';
-import { registerActionThunk, setSelectedActiveExcelFile } from "../redux/actions/actions";
-import * as CONSTANTS from '../redux/actions/actionTypes';
-import { useEffect } from "react";
+import { setSelectedActiveExcelFile } from "../redux/actions/actions";
+import { useEffect, useState } from "react";
 import ExcelFile from "../../../../services/OfficeAddin/types/ExcelFile";
 
 const ActiveExcelFileList = (props: any) => {
-    const { registerAction } = props;
-    const { activeExcelFiles } = props;
+    const [activeExcelFiles, setActiveExcelFiles] = useState(Array<ExcelFile>());
     const { selectedActiveExcelFile, setSelectedActiveExcelFile } = props;
     const customStyles = {
         option: (provided: any, state: any) => ({
@@ -27,8 +25,10 @@ const ActiveExcelFileList = (props: any) => {
     const animatedComponents = makeAnimated();
 
     useEffect(() => {
-        registerAction(CONSTANTS.SUBSCRIBE_ACTIVE_EXCEL_FILES)
-        registerAction(CONSTANTS.GET_ACTIVE_EXCEL_FILES)
+        setActiveExcelFiles(FSBL.Clients.OfficeAddinClient.getActiveExcelFiles())
+        FSBL.Clients.OfficeAddinClient.onActiveExcelFilesChange({}, (res)=>{
+            setActiveExcelFiles(res.activeExcelFiles)
+        })
     }, [])
 
     return (
@@ -50,7 +50,7 @@ const ActiveExcelFileList = (props: any) => {
 }
 
 const mapStateToProps = (state: any, ownProps: any) => {
-    const { officeAddinServiceActionsReducer, excelFilesReducer } = state
+    const { excelFilesReducer } = state
     return {
         activeExcelFiles: excelFilesReducer.activeExcelFiles,
         selectedActiveExcelFile: excelFilesReducer.selectedActiveExcelFile
@@ -60,7 +60,6 @@ const mapStateToProps = (state: any, ownProps: any) => {
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     return {
         setSelectedActiveExcelFile: (selectedActiveFile: ExcelFile) => dispatch(setSelectedActiveExcelFile(selectedActiveFile)),
-        registerAction: (action: string) => dispatch(registerActionThunk(action))
     };
 };
 

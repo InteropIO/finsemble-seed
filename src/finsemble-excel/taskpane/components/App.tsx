@@ -17,14 +17,15 @@ import AppState from './../types/AppState';
 import AppProps from './../types/AppProps';
 import Bookmark from './../types/Bookmark';
 
-import FpeRouter from '@chartiq/fpe-router';
-const finsembleRouter = FpeRouter.router;
-console.log("Finsemble Router Ready:", finsembleRouter);
+import OfficeAddinClient from "./OfficeAddinClient";
+
 
 
 //const editTooltipId = useId('editTooltipId');
 //const removeTooltipId = useId('removeTooltipId');
 export default class App extends React.Component<AppProps, AppState> {
+  officeAddinClient;
+
   constructor(props, context) {
     super(props, context);
     this.state = {
@@ -69,10 +70,7 @@ export default class App extends React.Component<AppProps, AppState> {
       });
 
       if (fileName != "") {
-        // Tell Finsemble this Excel is opened
-        let timestamp = new Date().getTime()
-        finsembleRouter.transmit('finsemble-excel-event', { event: 'ADDIN_OPENED', filePath: filePath, fileName: fileName, timestamp: timestamp })
-        finsembleRouter.addResponder(`query-${fileName}-${timestamp}`, this.handleExcelQuery);
+        this.officeAddinClient = new OfficeAddinClient(fileName, filePath, this.bookmarkListEventHandler.bind(this), this.openBookmarkPanelHandler.bind(this))
 
         // Add selection change event handler
         Excel.run((context) => {
@@ -119,6 +117,14 @@ export default class App extends React.Component<AppProps, AppState> {
     });
   }
 
+  bookmarkListEventHandler = (res) => {
+    this.setState(res)
+  }
+
+  openBookmarkPanelHandler = (res) => {
+    this.setState(res)
+  }
+
   handleWorksheetsChanged = (_event: any) => {
     return Excel.run((context) => {
       var worksheets = context.workbook.worksheets;
@@ -148,8 +154,6 @@ export default class App extends React.Component<AppProps, AppState> {
       worksheet.load("items/name");
       return context.sync()
         .then(() => {
-          finsembleRouter.transmit(`${this.state.fileName}-event`, { event: 'SELECTION_CHANGE', eventObj: { address: selectedRange.address, worksheet: worksheet }, fileName: this.state.fileName })
-
           this.setState({ worksheet: worksheet.id })
           let range = selectedRange.address.split('!')[1]
           if (this.state.openEndedRange) {
@@ -165,282 +169,6 @@ export default class App extends React.Component<AppProps, AppState> {
         });
     }).catch(console.log);
   }
-
-  handleSheetChange = (event) => {
-    return Excel.run((context) => {
-      let worksheet = context.workbook.worksheets.getItem(event.worksheetId);
-      worksheet.load("items/name");
-      return context.sync().then(() => {
-        event.worksheet = worksheet
-        finsembleRouter.transmit(`${this.state.fileName}-event`, { event: 'SHEET_CHANGE', eventObj: event, fileName: this.state.fileName })
-      })
-    }).catch(console.log);
-  }
-
-  handleExcelQuery = (err, queryMsg) => {
-    if (!err) {
-      switch (queryMsg.data.action) {
-        case 'HEALTH_CHECK':
-          queryMsg.sendQueryResponse(null, { action: queryMsg.data.action, result: 'DONE', timestamp: new Date().getTime() });
-          break;
-        case 'GET_CELL_DATA':
-          this.getCellData(queryMsg, queryMsg.data.row, queryMsg.data.col, queryMsg.data.worksheetName)
-          break;
-        case 'GET_RANGE_DATA':
-          this.getRangeData(queryMsg, queryMsg.data.startCell, queryMsg.data.endCell, queryMsg.data.worksheetName)
-          break
-        case 'SET_RANGE_DATA':
-          this.setRangeData(queryMsg, queryMsg.data.startCell, queryMsg.data.endCell, queryMsg.data.values, queryMsg.data.worksheetName)
-          break;
-        case 'CREATE_WORKSHEET':
-          this.createWorksheet(queryMsg, queryMsg.data.worksheetName)
-          break;
-        case 'CREATE_WORKBOOK':
-          this.createWorkbook(queryMsg)
-          break;
-        case 'SAVE_EXCEL_WORKBOOK':
-          this.saveWorkbook(queryMsg)
-          break;
-        case 'CLOSE_WORKBOOK':
-          this.closeWorkbook(queryMsg)
-          break;
-        case 'SUBSCRIBE_SHEET_CHANGE':
-          this.addExecelOnDataChangeEventHandler(queryMsg)
-          break;
-        case 'GET_WORKSHEET_LIST':
-          this.getWorksheetList(queryMsg)
-          break;
-        case 'SET_ACTIVE_WORKSHEET':
-          this.setActiveWorksheet(queryMsg, queryMsg.data.worksheetName)
-          break;
-        case 'PASTE_TO_EXCEL':
-          this.pasteToExcel(queryMsg, queryMsg.data.worksheet, queryMsg.data.range, queryMsg.data.data)
-          break;
-        case 'FOCUS_RANGE':
-          this.focusRange(queryMsg, queryMsg.data.worksheet, queryMsg.data.range)
-          break
-        case 'CLEAR_RANGE':
-          this.clearRange(queryMsg, queryMsg.data.worksheet, queryMsg.data.range)
-          break
-        case 'COPY_RANGE':
-          this.copyRange(queryMsg, queryMsg.data.worksheet, queryMsg.data.range)
-          break
-        case 'SEND_BOOKMARKS':
-          this.setState({ bookmarks: queryMsg.data.bookmarks })
-          break;
-        case 'OPEN_CREATE_BOOKMARK_PANEL':
-          this.setState({ btnLabel: 'Create', pivotSelectedKey: '1' })
-          break;
-        default:
-          queryMsg.sendQueryResponse(null, { field1: "handleExcelQueryResponse" });
-          break;
-      }
-    }
-  }
-
-
-  setRangeData = async (queryMsg, startCell, endCell, values, worksheetName) => {
-    Excel.run(function (context) {
-      let sheet;
-      if (worksheetName) {
-        sheet = context.workbook.worksheets.getItem(worksheetName);
-      } else {
-        sheet = context.workbook.worksheets.getActiveWorksheet();
-      }
-
-      var range = sheet.getRange(`${startCell}:${endCell}`);
-      range.values = values;
-      range.format.autofitColumns();
-
-      return context.sync().then(() => {
-        queryMsg.sendQueryResponse(null, { action: queryMsg.data.action, result: 'done' });
-      });
-    }).catch(console.log);
-  }
-
-
-  getCellData = async (queryMsg, row: number, col: number, worksheetName: string) => {
-    await Excel.run((context) => {
-      let sheet;
-      if (worksheetName) {
-        sheet = context.workbook.worksheets.getItem(worksheetName);
-      } else {
-        sheet = context.workbook.worksheets.getActiveWorksheet();
-      }
-
-      let cell = sheet.getCell(row, col);
-      cell.load("address, values");
-      return context.sync()
-        .then(() => {
-          queryMsg.sendQueryResponse(null, { fileName: this.state.fileName, row: row, col: col, action: queryMsg.data.action, address: cell.address, values: cell.values[0][0] });
-        })
-    }).catch(console.log);
-  }
-
-  getRangeData = async (queryMsg, startCell: string, endCell: string, worksheetName: string) => {
-    await Excel.run((context) => {
-      let sheet;
-      if (worksheetName) {
-        sheet = context.workbook.worksheets.getItem(worksheetName);
-      } else {
-        sheet = context.workbook.worksheets.getActiveWorksheet();
-      }
-
-      let range = sheet.getRange(startCell + ":" + endCell);
-      range.load("address, values");
-      return context.sync()
-        .then(() => {
-
-          queryMsg.sendQueryResponse(null, { fileName: this.state.fileName, worksheetName: worksheetName, action: queryMsg.data.action, address: range.address, values: range.values });
-        })
-    }).catch(console.log);
-  }
-
-  createWorksheet = async (queryMsg, worksheetName: string) => {
-    Excel.run((context) => {
-      var sheets = context.workbook.worksheets;
-      var sheet = sheets.add(worksheetName);
-      sheet.activate();
-      sheet.load("name, position");
-      return context.sync()
-        .then(function () {
-          queryMsg.sendQueryResponse(null, { action: queryMsg.data.action, result: `Added worksheet named "${sheet.name}" in position ${sheet.position}` });
-        });
-    }).catch(console.log);
-  }
-
-  createWorkbook = async (queryMsg) => {
-    Excel.createWorkbook();
-    queryMsg.sendQueryResponse(null, { action: queryMsg.data.action, result: `CREATED` });
-  }
-
-  saveWorkbook = async (queryMsg) => {
-    Excel.run((context) => {
-      context.workbook.save(Excel.SaveBehavior.save);
-      return context.sync()
-        .then(() => {
-          queryMsg.sendQueryResponse(null, { action: queryMsg.data.action, result: `SAVED`, file: this.state.fileName });
-        })
-    }).catch(console.log);
-  }
-
-  closeWorkbook = async (queryMsg) => {
-    Excel.run((context) => {
-      context.workbook.close(Excel.CloseBehavior.save);
-      queryMsg.sendQueryResponse(null, { action: queryMsg.data.action, result: `CLOSED` });
-      return context.sync()
-    }).catch(console.log);
-  }
-
-  addExecelOnDataChangeEventHandler = async (queryMsg) => {
-    await Excel.run((context) => {
-      // let worksheet;
-      // if (queryMsg.worksheet) {
-      //   worksheet = context.workbook.worksheets.getItem(queryMsg.worksheet.name);
-      // } else {
-      //   worksheet = context.workbook.worksheets.getActiveWorksheet();
-      // }
-      context.workbook.worksheets.onChanged.add(this.handleSheetChange);
-      queryMsg.sendQueryResponse(null, { action: queryMsg.data.action, result: `SUBSCRIBED` });
-      return context.sync()
-    }).catch(console.log);
-  }
-
-  getWorksheetList = async (queryMsg) => {
-    Excel.run((context) => {
-      var sheets = context.workbook.worksheets;
-      sheets.load("items/name");
-
-      return context.sync()
-        .then(() => {
-          let sheetArray = []
-          sheets.items.forEach(function (sheet) {
-            sheetArray.push(sheet);
-          });
-          queryMsg.sendQueryResponse(null, { action: queryMsg.data.action, worksheetList: sheetArray });
-        });
-    }).catch(console.log);
-  }
-
-  setActiveWorksheet = async (queryMsg, worksheetName) => {
-    Excel.run(function (context) {
-      var sheet = context.workbook.worksheets.getItem(worksheetName);
-      sheet.activate();
-      sheet.load("name");
-
-      return context.sync()
-        .then(function () {
-          queryMsg.sendQueryResponse(null, { action: queryMsg.data.action, result: 'done' });
-        });
-    }).catch(console.log);
-  }
-
-  pasteToExcel = async (queryMsg, worksheet, range, data) => {
-    await Excel.run((context) => {
-      let targetWorksheet = context.workbook.worksheets.getItem(worksheet.name);
-      let targetRange = targetWorksheet.getRange(range);
-      targetRange.values = data;
-      targetRange.format.autofitColumns();
-      targetRange.select();
-      context.workbook.save(Excel.SaveBehavior.save);
-      targetWorksheet.load("name");
-      targetWorksheet.activate();
-      return context.sync()
-        .then(() => {
-          queryMsg.sendQueryResponse(null, { action: queryMsg.data.action, result: 'done' });
-        });
-    }).catch(console.log);
-  }
-
-  focusRange = async (queryMsg, targeWorksheet, targetRange) => {
-    Excel.run(function (context) {
-      var sheet = context.workbook.worksheets.getItem(targeWorksheet.name);
-      sheet.activate();
-      sheet.load("name");
-      var range = sheet.getRange(targetRange);
-      range.select();
-
-      return context.sync()
-        .then(function () {
-          queryMsg.sendQueryResponse(null, { action: queryMsg.data.action, result: 'done' });
-        });
-    }).catch(console.log);
-  }
-
-  clearRange = async (queryMsg, targeWorksheet, targetRange) => {
-    Excel.run(function (context) {
-      var sheet = context.workbook.worksheets.getItem(targeWorksheet.name);
-      sheet.activate();
-      sheet.load("name");
-      var range = sheet.getRange(targetRange);
-      range.select();
-      range.clear();
-      context.workbook.save(Excel.SaveBehavior.save);
-
-      return context.sync()
-        .then(function () {
-          queryMsg.sendQueryResponse(null, { action: queryMsg.data.action, result: 'done' });
-        });
-    }).catch(console.log);
-  }
-
-  copyRange = async (queryMsg, targeWorksheet, targetRange) => {
-    Excel.run(function (context) {
-      var sheet = context.workbook.worksheets.getItem(targeWorksheet.name);
-      sheet.activate();
-      sheet.load("name");
-      var range = sheet.getRange(targetRange);
-      range.select();
-      range.load("address, values");
-
-      return context.sync()
-        .then(function () {
-          queryMsg.sendQueryResponse(null, { action: queryMsg.data.action, result: { range: range.address, data: range.values } });
-        });
-    }).catch(console.log);
-  }
-
-
 
   rangeTextOnChanged = (_e, newText) => {
     this.setState({ range: newText });
@@ -484,10 +212,10 @@ export default class App extends React.Component<AppProps, AppState> {
             //edit bookmark
             let tempBookmark = this.state.bookmarkToEdit
             tempBookmark.worksheet = worksheet
-            tempBookmark.range = this.state.range,
-              tempBookmark.name = this.state.bookmarkName
+            tempBookmark.range = this.state.range
+            tempBookmark.name = this.state.bookmarkName
             tempBookmark.openEndedRange = this.state.openEndedRange
-            finsembleRouter.transmit(`${this.state.fileName}-event`, { event: 'EDIT_BOOKMARK', eventObj: tempBookmark })
+            this.officeAddinClient.editBookmark(tempBookmark)
           } else {
             //create bookmark
             let bookmark = {
@@ -498,7 +226,7 @@ export default class App extends React.Component<AppProps, AppState> {
               excelFileName: this.state.fileName,
               excelFilePath: this.state.filePath
             }
-            finsembleRouter.transmit(`${this.state.fileName}-event`, { event: 'CREATE_BOOKMARK', eventObj: bookmark })
+            this.officeAddinClient.createBookmark(bookmark)
           }
           this.setState({ btnLabel: 'Create', pivotSelectedKey: '0', bookmarkName: "", openEndedRange: false })
         })
@@ -512,7 +240,15 @@ export default class App extends React.Component<AppProps, AppState> {
   deleteBookmarkOnclick = (bookmark: Bookmark) => {
     let filteredBookmarks = this.state.bookmarks.filter((tempBookmark: Bookmark) => { return tempBookmark.name !== bookmark.name })
     this.setState({ bookmarks: filteredBookmarks })
-    finsembleRouter.transmit(`${this.state.fileName}-event`, { event: 'DELETE_BOOKMARK', eventObj: bookmark })
+    this.officeAddinClient.deleteBookmark(bookmark)
+  }
+
+  openExcelFile = (fileName: string, filePath: string) => {
+    this.officeAddinClient.openExcelFile(fileName, filePath)
+  }
+
+  onPivotClicked = (item?: PivotItem) => {
+    this.setState({ pivotSelectedKey: item.props.itemKey, btnLabel: 'Create', bookmarkName: this.state.fileName.split('.')[0] + '_', openEndedRange: false, bookmarkToEdit: null })
   }
 
   renderItemColumn = (bookmark: Bookmark, _index: number, column: IColumn) => {
@@ -537,15 +273,6 @@ export default class App extends React.Component<AppProps, AppState> {
         return <span></span>;
     }
   }
-
-  openExcelFile = (fileName: string, filePath: string) => {
-    finsembleRouter.transmit(`${this.state.fileName}-event`, { event: 'OPEN_EXCEL_FILE', eventObj: { fileName: fileName, filePath: filePath } })
-  }
-
-  onPivotClicked = (item?: PivotItem) => {
-    this.setState({ pivotSelectedKey: item.props.itemKey, btnLabel: 'Create', bookmarkName: this.state.fileName.split('.')[0] + '_', openEndedRange: false, bookmarkToEdit: null })
-  }
-
 
   render() {
     const { title, isOfficeInitialized } = this.props;

@@ -38,14 +38,6 @@ export const BROADCAST_DATA = 'BROADCAST_DATA'
 export const CHANGE_SUBSCRIPTION = 'CHANGE_SUBSCRIPTION'
 export const SELECTION_SUBSCRIPTION = 'SELECTION_SUBSCRIPTION'
 
-
-interface OfficeAddinRegisterAction {
-    type: typeof OFFICE_ADDIN_REGISTER,
-    payload: {
-        regsiteredActions: []
-    }
-}
-
 interface GetActiveExcelFilesAction {
     type: typeof GET_ACTIVE_EXCEL_FILES,
     payload: {
@@ -101,13 +93,6 @@ interface SheetChange {
     }
 }
 
-interface GetWorksheetList {
-    type: typeof GET_WORKSHEET_LIST,
-    payload: {
-        worksheetList: Array<String>
-    }
-}
-
 interface SetSelectedWorksheet {
     type: typeof SET_SELECTED_WORKSHEET
     payload: {
@@ -143,5 +128,4 @@ interface setSelectedBookmark {
     }
 }
 
-export type OfficeAddinActionType = OfficeAddinRegisterAction
 export type ExcelFileListActionType = setSelectedBookmark | setRange | setSelectedClipboardData | SetOpenWorksheet | SetSelectedWorksheet | GetWorksheetList | SheetChange | SetGetExcelCellDataActionModalDisplay | SetSelectedActiveExcelFilesAction | GetActiveExcelFilesAction | GetExcelCellDataAction | GetPreviousExcelFilesAction | SetSelectedPreviousExcelFilesAction | SetSetExcelCellDataActionModalDisplay

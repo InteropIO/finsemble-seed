@@ -51,13 +51,20 @@ const spawn = (event: Office.AddinCommands.Event) => {
 
 const broadcastData = (event: Office.AddinCommands.Event) => {
   Excel.run(context => {
+    let worksheet = context.workbook.worksheets.getActiveWorksheet();
+    worksheet.load("items/name");
     let range = context.workbook.getSelectedRange();
     range.load("address, values");
     return context.sync().then(() => {
-      finsembleRouter.transmit("finsemble-excel-event", {
-        event: "BROADCAST_DATA",
-        range: range.address,
-        values: range.values
+      finsembleRouter.transmit(`${fileName}-event`, {
+        event: "SHEET_BROADCAST_VALUES",
+        eventObj: {
+          worksheet: worksheet,
+          range: range.address.split("!")[1],
+          values: range.values,
+          params: {value:"test"}
+        },
+        fileName: fileName
       });
       event.completed();
     });

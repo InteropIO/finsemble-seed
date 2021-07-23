@@ -8,11 +8,17 @@ import ExcelDialog from "./components/ExcelDialog";
 import store from "./redux/store";
 import "./app.css";
 
-ReactDOM.render(
-	<FinsembleProvider>
-		<Provider store={store}>
-			<ExcelDialog />
-		</Provider>
-	</FinsembleProvider>,
-	document.getElementById("ExcelDialog-tsx")
-);
+const OfficeAddinClientReady = () => {
+	console.log("OfficeAddinClientReady")
+	ReactDOM.render(
+		<FinsembleProvider>
+			<Provider store={store}>
+				<ExcelDialog />
+			</Provider>
+		</FinsembleProvider>,
+		document.getElementById("ExcelDialog-tsx")
+	);
+}
+
+window.addEventListener("OfficeAddinClientReady", OfficeAddinClientReady);
+

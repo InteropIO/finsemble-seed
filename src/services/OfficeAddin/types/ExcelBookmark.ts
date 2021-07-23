@@ -1,9 +1,9 @@
 import ExcelFile from "./ExcelFile";
-import Worksheet from "./Worksheet";
+import ExcelWorksheet from "./ExcelWorksheet";
 
-export default interface Bookmark {
+export default interface ExcelBookmark {
     id?: string
-    worksheet: Worksheet
+    worksheet: ExcelWorksheet
     range?: string
     name?: string
     openEndedRange?: boolean
