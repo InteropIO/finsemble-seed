@@ -23,8 +23,8 @@ const TargetWorksheetList = (props: any) => {
 
     useEffect(() => {
         if(selectedActiveExcelFile)
-            FSBL.Clients.OfficeAddinClient.getWorksheetList({excelFile: selectedActiveExcelFile})
-                .then((worksheetList)=>{
+            (FSBL as any).Clients.OfficeAddinClient.getWorksheetList({excelFile: selectedActiveExcelFile})
+                .then((worksheetList: Array<ExcelWorksheet>)=>{
                     setWorksheetList(worksheetList)
                 })
     }, [selectedActiveExcelFile])

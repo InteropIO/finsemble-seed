@@ -34,14 +34,30 @@
     "@finsemble/finsemble-cli": "6.0.0"
   },
   "dependencies": {
+    "@chartiq/fpe-router": "^1.2.0",
     "@finsemble/finsemble-core": "6.0.0",
     "@finsemble/finsemble-electron-adapter": "6.0.0",
     "@finsemble/finsemble-ui": "6.0.0",
+    "@types/office-js": "^1.0.195",
+    "@types/office-runtime": "^1.0.20",
+    "@types/react-hot-loader": "^4.1.1",
     "async": "3.2.0",
+    "clean-webpack-plugin": "^4.0.0-alpha.0",
     "compression": "1.7.3",
+    "core-js": "^3.16.0",
+    "es6-promise": "^4.2.8",
     "express": "4.16.4",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "html-webpack-plugin": "4.5.0",
+    "office-ui-fabric-react": "^7.174.0",
     "react": "17.0.1",
-    "react-dom": "17.0.1"
+    "react-dom": "^17.0.2",
+    "react-hot-loader": "^4.13.0",
+    "react-redux": "^7.2.4",
+    "react-select": "^4.3.1",
+    "redux": "^4.1.0",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "7.6.4",

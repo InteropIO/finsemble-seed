@@ -11,17 +11,17 @@
   </Requirements>
   <DisplayName DefaultValue="Finsemble-Excel"/>
   <Description DefaultValue="Finsemble Excel Addin"/>
-  <IconUrl DefaultValue="https://localhost.chartiq.com:3375/finsemble-excel/assets/finsemble-logo-32.png"/>
-  <HighResolutionIconUrl DefaultValue="https://localhost.chartiq.com:3375/finsemble-excel/assets/finsemble-logo-64.png"/>
+  <IconUrl DefaultValue="http://localhost:3375/build/finsemble-excel/assets/finsemble-logo-32.png"/>
+  <HighResolutionIconUrl DefaultValue="https://localhost:3375/build/finsemble-excel/assets/finsemble-logo-64.png"/>
   <SupportUrl DefaultValue="https://github.com/ChartIQ/finsemble-excel"/>
   <AppDomains>
-    <AppDomain>https://localhost.chartiq.com:3375</AppDomain>
+    <AppDomain>http://localhost:3375</AppDomain>
   </AppDomains>
   <Hosts>
     <Host Name="Workbook"/>
   </Hosts>
   <DefaultSettings>
-    <SourceLocation DefaultValue="https://localhost.chartiq.com:3375/finsemble-excel/taskpane.html"/>
+    <SourceLocation DefaultValue="http://localhost:3375/build/finsemble-excel/taskpane.html"/>
   </DefaultSettings>
   <Permissions>ReadWriteDocument</Permissions>
   <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
@@ -157,14 +157,14 @@
     </Hosts>
     <Resources>
       <bt:Images>
-        <bt:Image id="finsemble-logo-16x16" DefaultValue="https://localhost.chartiq.com:3375/finsemble-excel/assets/finsemble-logo-16.png"/>
-        <bt:Image id="finsemble-logo-32x32" DefaultValue="https://localhost.chartiq.com:3375/finsemble-excel/assets/finsemble-logo-32.png"/>
-        <bt:Image id="finsemble-logo-80x80" DefaultValue="https://localhost.chartiq.com:3375/finsemble-excel/assets/finsemble-logo-80.png"/>
+        <bt:Image id="finsemble-logo-16x16" DefaultValue="http://localhost:3375/build/finsemble-excel/assets/finsemble-logo-16.png"/>
+        <bt:Image id="finsemble-logo-32x32" DefaultValue="http://localhost:3375/build/finsemble-excel/assets/finsemble-logo-32.png"/>
+        <bt:Image id="finsemble-logo-80x80" DefaultValue="http://localhost:3375/build/finsemble-excel/assets/finsemble-logo-80.png"/>
       </bt:Images>
       <bt:Urls>
         <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://github.com/ChartIQ/finsemble-excel"/>
-        <bt:Url id="Commands.Url" DefaultValue="https://localhost.chartiq.com:3375/finsemble-excel/commands.html"/>
-        <bt:Url id="Taskpane.Url" DefaultValue="https://localhost.chartiq.com:3375/finsemble-excel/taskpane.html"/>
+        <bt:Url id="Commands.Url" DefaultValue="http://localhost:3375/build/finsemble-excel/commands.html"/>
+        <bt:Url id="Taskpane.Url" DefaultValue="http://localhost:3375/build/finsemble-excel/taskpane.html"/>
       </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="GetStarted.Title" DefaultValue="Get started with your Finsemble-Excel"/>

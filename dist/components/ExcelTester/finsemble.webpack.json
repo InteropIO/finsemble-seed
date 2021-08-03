@@ -1,6 +1,0 @@
-{
-  "ExcelTester": {
-    "output": "components/ExcelTester/ExcelTester",
-    "entry": "./src/components/ExcelTester/src/app.tsx"
-  }
-}

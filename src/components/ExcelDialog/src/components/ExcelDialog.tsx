@@ -24,7 +24,7 @@ const ExcelDialog = (props: any) => {
     const spawnExcelFileOnclick = () => {
         if (selectedPreviousExcelFiles.length > 0) {
             selectedPreviousExcelFiles.forEach((selectedPreviousFile: ExcelFile) => {
-                FSBL.Clients.OfficeAddinClient.openExcelFile(selectedPreviousFile)
+                FSBL.Clients.LauncherClient.spawn('Excel', { arguments: `${selectedPreviousFile.filePath} /x /a FinsembleExcel` });
             })
             clearSelectedPreviousExcelFiles()
         } else {
@@ -34,7 +34,7 @@ const ExcelDialog = (props: any) => {
     
     useEffect(() => {
         if(selectedBookmark){
-            let activeExcelFiles = FSBL.Clients.OfficeAddinClient.getActiveExcelFiles();
+            let activeExcelFiles = (FSBL as any).Clients.OfficeAddinClient.getActiveExcelFiles();
             let excelFile = activeExcelFiles.filter((file: ExcelFile) => {
                 return file.fileName === selectedBookmark.excelFile.fileName
             })
@@ -48,8 +48,8 @@ const ExcelDialog = (props: any) => {
 
     const pasteToExceOnClick = () => {
         if(selectedActiveExcelFile){
-            FSBL.Clients.OfficeAddinClient.setExcelRange({excelFile: selectedActiveExcelFile, range: range, values:clipboardData, worksheet:selectedWorksheet})
-                .then((values)=>{
+            (FSBL as any).Clients.OfficeAddinClient.setExcelRange({excelFile: selectedActiveExcelFile, range: range, values:clipboardData, worksheet:selectedWorksheet})
+                .then((values: any)=>{
                     console.log(values)
                 })
         }
@@ -57,8 +57,8 @@ const ExcelDialog = (props: any) => {
 
     const focusRangeOnclick = () => {
         if(selectedActiveExcelFile){
-            FSBL.Clients.OfficeAddinClient.focusExcelRange({excelFile: selectedActiveExcelFile, range:range, worksheet:selectedWorksheet})
-                .then((values)=>{
+            (FSBL as any).Clients.OfficeAddinClient.focusExcelRange({excelFile: selectedActiveExcelFile, range:range, worksheet:selectedWorksheet})
+                .then((values: any)=>{
                     console.log(values)
                 })
         }
@@ -66,8 +66,8 @@ const ExcelDialog = (props: any) => {
 
     const copyRangeOnclick = () => {
         if(selectedActiveExcelFile){
-            FSBL.Clients.OfficeAddinClient.getExcelRange({excelFile: selectedActiveExcelFile, range:range, worksheet:selectedWorksheet})
-                .then((res)=>{
+            (FSBL as any).Clients.OfficeAddinClient.getExcelRange({excelFile: selectedActiveExcelFile, range:range, worksheet:selectedWorksheet})
+                .then((res: any)=>{
                     setSelectedClipboardData(res.values)
                 })
         }
@@ -75,8 +75,8 @@ const ExcelDialog = (props: any) => {
 
     const clearRangeOnclick = () => {
         if(selectedActiveExcelFile){
-            FSBL.Clients.OfficeAddinClient.clearExcelRange({excelFile: selectedActiveExcelFile, range: range, worksheet: selectedWorksheet})
-                .then((values)=>{
+            (FSBL as any).Clients.OfficeAddinClient.clearExcelRange({excelFile: selectedActiveExcelFile, range: range, worksheet: selectedWorksheet})
+                .then((values: any)=>{
                     console.log(values)
                 })
         }
@@ -84,13 +84,13 @@ const ExcelDialog = (props: any) => {
 
     const subscribeValueOnClick = () => {
         if (selectedActiveExcelFile) {
-            FSBL.Clients.OfficeAddinClient.onSheetValueChanged({excelFiles: [selectedActiveExcelFile], worksheet: selectedWorksheet, range: range}, (event)=>{
+            (FSBL as any).Clients.OfficeAddinClient.onSheetValueChanged({excelFiles: [selectedActiveExcelFile], worksheet: selectedWorksheet, range: range}, (err: any, event: any)=>{
                 console.log(event)
                 setSelectedClipboardData(event.details)
             })
-            .then((values)=>{
-                console.log(values)
-            })
+                .then((values: any)=>{
+                    console.log(values)
+                })
         } else {
             alert('Please either select a bookmark or an active Excel file.')
         }
@@ -98,13 +98,13 @@ const ExcelDialog = (props: any) => {
 
     const subscribeSelectionOnClick = () => {
         if (selectedActiveExcelFile) {
-            FSBL.Clients.OfficeAddinClient.onSheetSelectionChanged({excelFiles: [selectedActiveExcelFile], worksheet: selectedWorksheet, range: range}, (event)=>{
+            (FSBL as any).Clients.OfficeAddinClient.onSheetSelectionChanged({excelFiles: [selectedActiveExcelFile], worksheet: selectedWorksheet, range: range}, (err: any, event: any)=>{
                 console.log(event)
                 setRange(event.range)
             })
-            .then((values)=>{
-                console.log(values)
-            })
+                .then((values: any)=>{
+                    console.log(values)
+                })
         } else {
             alert('Please either select a bookmark or an active Excel file.')
         }
@@ -112,10 +112,10 @@ const ExcelDialog = (props: any) => {
 
     const subscribeBroadcastOnClick = () => {
         if (selectedActiveExcelFile) {
-            FSBL.Clients.OfficeAddinClient.onSheetBroadcastValues({excelFiles: [selectedActiveExcelFile], worksheet: selectedWorksheet, range: range}, (event)=>{
+            (FSBL as any).Clients.OfficeAddinClient.onSheetBroadcastValues({excelFiles: [selectedActiveExcelFile], worksheet: selectedWorksheet, range: range}, (err: any, event: any)=>{
                 setSelectedClipboardData(event.values)
             })
-            .then((values)=>{
+            .then((values: any)=>{
                 console.log(values)
             })
         } else {

@@ -2,7 +2,7 @@ import OfficeAddinClient from "./OfficeAddinClient";
 
 const setupOfficeAdddinClient = () => {
     console.log("Setting up OfficeAddinClient");
-	FSBL.Clients.OfficeAddinClient = new OfficeAddinClient(FSBL);
+    (FSBL as any).Clients.OfficeAddinClient = new OfficeAddinClient(FSBL.Clients.RouterClient, FSBL.Clients.Logger, FSBL.Clients.DistributedStoreClient);
 };
 
 

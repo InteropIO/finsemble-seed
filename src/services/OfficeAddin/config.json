@@ -5,7 +5,10 @@
             "name": "OfficeAddinService",
             "visible": false,
             "showDevConsoleOnVisible": false,
-            "html": "$applicationRoot/services/OfficeAddin/OfficeAddin.html"
+            "html": "$applicationRoot/services/OfficeAddin/OfficeAddin.html",
+            "bootParams":{
+                "stage": "preuser"
+            }
         }
     }
 }

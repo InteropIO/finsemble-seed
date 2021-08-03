@@ -3,30 +3,22 @@ import { Checkbox, DefaultButton, DetailsList, IColumn, IconButton, Label, Link,
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
-//import { useId } from '@uifabric/react-hooks';
 
 import Header from "./Header";
-import Progress from "./Progress";
-// images references in the manifest
 import "./../../assets/finsemble-logo-16.png";
 import "./../../assets/finsemble-logo-32.png";
 import "./../../assets/finsemble-logo-80.png";
-/* global Button, console, Excel, Header, HeroList, HeroListItem, Progress */
 
 import AppState from './../types/AppState';
 import AppProps from './../types/AppProps';
-import Bookmark from './../types/Bookmark';
 
 import OfficeAddinClient from "./OfficeAddinClient";
+import ExcelBookmark from "../../../services/OfficeAddin/types/ExcelBookmark";
 
-
-
-//const editTooltipId = useId('editTooltipId');
-//const removeTooltipId = useId('removeTooltipId');
 export default class App extends React.Component<AppProps, AppState> {
-  officeAddinClient;
+  officeAddinClient: OfficeAddinClient;
 
-  constructor(props, context) {
+  constructor(props: any, context: any) {
     super(props, context);
     this.state = {
       fileName: "",
@@ -117,11 +109,11 @@ export default class App extends React.Component<AppProps, AppState> {
     });
   }
 
-  bookmarkListEventHandler = (res) => {
+  bookmarkListEventHandler = (res: any) => {
     this.setState(res)
   }
 
-  openBookmarkPanelHandler = (res) => {
+  openBookmarkPanelHandler = (res: any) => {
     this.setState(res)
   }
 
@@ -170,36 +162,41 @@ export default class App extends React.Component<AppProps, AppState> {
     }).catch(console.log);
   }
 
-  rangeTextOnChanged = (_e, newText) => {
-    this.setState({ range: newText });
+  rangeTextOnChanged = (_event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue: string | undefined) => {
+    if(newValue)
+      this.setState({ range: newValue });
   }
 
-  openEndedRangeCheckboxOnChanged = (_e, isChecked) => {
-    this.setState({ openEndedRange: isChecked })
-    Excel.run((context) => {
-      var selectedRange = context.workbook.getSelectedRange();
-      selectedRange.load("address");
-      return context.sync()
-        .then(() => {
-          let range = selectedRange.address.split('!')[1]
-          if (isChecked) {
-            if (range.indexOf(':') > 0) {
-              let newRange = range.substring(0, range.indexOf(':') + 1) + range.substring(range.indexOf(':') + 1, range.length).replace(new RegExp("[0-9]", "g"), "")
-              this.setState({ range: newRange })
+  openEndedRangeCheckboxOnChanged = (_event: React.FormEvent<HTMLElement | HTMLInputElement> | undefined, isChecked: boolean  | undefined) => {
+    if(isChecked){
+      this.setState({ openEndedRange: isChecked })
+      Excel.run((context) => {
+        var selectedRange = context.workbook.getSelectedRange();
+        selectedRange.load("address");
+        return context.sync()
+          .then(() => {
+            let range = selectedRange.address.split('!')[1]
+            if (isChecked) {
+              if (range.indexOf(':') > 0) {
+                let newRange = range.substring(0, range.indexOf(':') + 1) + range.substring(range.indexOf(':') + 1, range.length).replace(new RegExp("[0-9]", "g"), "")
+                this.setState({ range: newRange })
+              }
+            } else {
+              this.setState({ range: range })
             }
-          } else {
-            this.setState({ range: range })
-          }
-        });
-    }).catch(console.log);
+          });
+      }).catch(console.log);
+    }
   }
 
-  bookmarkNameTextOnChanged = (_e, newText) => {
-    this.setState({ bookmarkName: newText })
+  bookmarkNameTextOnChanged = (_event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newText: string | undefined) => {
+    if(newText)
+      this.setState({ bookmarkName: newText })
   }
 
-  targetWorksheetDropdownOnchange = (_e, item) => {
-    this.setState({ worksheet: item.key.toString() });
+  targetWorksheetDropdownOnchange = (_event: React.FormEvent<HTMLDivElement>, item?: IDropdownOption | undefined, _index?: number | undefined) => {
+    if(item)
+      this.setState({ worksheet: item.key.toString() });
   }
 
   createEditBookmarkOnclick = () => {
@@ -233,56 +230,58 @@ export default class App extends React.Component<AppProps, AppState> {
     }).catch(console.log);
   }
 
-  editBookmarkOnclick = (bookmark: Bookmark) => {
-    this.setState({ bookmarkToEdit: bookmark, btnLabel: 'Edit', pivotSelectedKey: '1', bookmarkName: bookmark.name, range: bookmark.range, worksheet: bookmark.worksheet.id, openEndedRange: bookmark.openEndedRange })
+  editBookmarkOnclick = (bookmark: ExcelBookmark) => {
+    if(bookmark.worksheet.id)
+      this.setState({ bookmarkToEdit: bookmark, btnLabel: 'Edit', pivotSelectedKey: '1', bookmarkName: bookmark.name, range: bookmark.range, worksheet: bookmark.worksheet.id, openEndedRange: bookmark.openEndedRange })
   }
 
-  deleteBookmarkOnclick = (bookmark: Bookmark) => {
-    let filteredBookmarks = this.state.bookmarks.filter((tempBookmark: Bookmark) => { return tempBookmark.name !== bookmark.name })
+  deleteBookmarkOnclick = (bookmark: ExcelBookmark) => {
+    let filteredBookmarks = this.state.bookmarks.filter((tempBookmark: ExcelBookmark) => { return tempBookmark.name !== bookmark.name })
     this.setState({ bookmarks: filteredBookmarks })
     this.officeAddinClient.deleteBookmark(bookmark)
   }
 
-  openExcelFile = (fileName: string, filePath: string) => {
-    this.officeAddinClient.openExcelFile(fileName, filePath)
+  openExcelFile = (fileName: string  | undefined, filePath: string  | undefined) => {
+    if(fileName && filePath)
+      this.officeAddinClient.openExcelFile(fileName, filePath)
   }
 
-  onPivotClicked = (item?: PivotItem) => {
-    this.setState({ pivotSelectedKey: item.props.itemKey, btnLabel: 'Create', bookmarkName: this.state.fileName.split('.')[0] + '_', openEndedRange: false, bookmarkToEdit: null })
+  onPivotClicked = (item?: PivotItem, _ev?: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    if(item){
+      if(item.props.itemKey){
+        this.setState({ pivotSelectedKey: item.props.itemKey, btnLabel: 'Create', bookmarkName: this.state.fileName.split('.')[0] + '_', openEndedRange: false, bookmarkToEdit: null })
+      }
+    }
   }
+  
+  renderItemColumn = (bookmark: ExcelBookmark, _index: number| undefined, column: IColumn | undefined) => {
+    if(column){
+      switch (column.key) {
+        case 'bookmarkName':
+          return <div style={{ height: '30px' }}>
 
-  renderItemColumn = (bookmark: Bookmark, _index: number, column: IColumn) => {
-    switch (column.key) {
-      case 'bookmarkName':
-        return <div style={{ height: '30px' }}>
-
-          <div>{bookmark.name}</div>
-          <TooltipHost
-            content={bookmark.excelFile.filePath}
-            id={bookmark.id}
-          >
-            <div>{bookmark.excelFile.fileName == this.state.fileName ? '' : <Link onClick={() => { this.openExcelFile(bookmark.excelFile.fileName, bookmark.excelFile.filePath) }}>{bookmark.excelFile.fileName}</Link>}</div>
-          </TooltipHost>
-        </div>;
-      case 'action':
-        return <div style={{ height: '30px' }}>
-          <IconButton iconProps={{ iconName: 'Edit' }} title="Edit" ariaLabel="Edit" onClick={() => { this.editBookmarkOnclick(bookmark) }} />
-          <IconButton iconProps={{ iconName: 'Delete' }} title="Delete" ariaLabel="Delete" onClick={() => { this.deleteBookmarkOnclick(bookmark) }} />
-        </div>;
-      default:
-        return <span></span>;
+            <div>{bookmark.name}</div>
+            <TooltipHost
+              content={bookmark.excelFile?.filePath}
+              id={bookmark.id}
+            >
+              <div>{bookmark.excelFile?.fileName == this.state.fileName ? '' : <Link onClick={() => { this.openExcelFile(bookmark.excelFile?.fileName, bookmark.excelFile?.filePath) }}>{bookmark.excelFile?.fileName}</Link>}</div>
+            </TooltipHost>
+          </div>;
+        case 'action':
+          return <div style={{ height: '30px' }}>
+            <IconButton iconProps={{ iconName: 'Edit' }} title="Edit" ariaLabel="Edit" onClick={() => { this.editBookmarkOnclick(bookmark) }} />
+            <IconButton iconProps={{ iconName: 'Delete' }} title="Delete" ariaLabel="Delete" onClick={() => { this.deleteBookmarkOnclick(bookmark) }} />
+          </div>;
+        default:
+          return <span></span>;
+      }
+    } else {
+      return <span></span>;
     }
   }
 
   render() {
-    const { title, isOfficeInitialized } = this.props;
-
-    if (!isOfficeInitialized) {
-      return (
-        <Progress title={title} logo="assets/Finsemble_Logo_Dark.svg" message="Please sideload your addin to see app body." />
-      );
-    }
-
     return (
       <div>
         <Header logo="assets/Finsemble_Logo_Dark.svg" title={this.props.title} message="Finsemble-Excel" />
@@ -303,7 +302,7 @@ export default class App extends React.Component<AppProps, AppState> {
           <PivotItem headerText="Bookmark" itemKey="1" >
             <Stack tokens={{ childrenGap: 10 }} verticalAlign="end" styles={this.stackStyles}>
               <Stack horizontal tokens={{ childrenGap: 30 }} verticalAlign="end">
-                <Label>Excel File: {this.state.bookmarkToEdit ? this.state.bookmarkToEdit.excelFile.fileName : this.state.fileName}</Label>
+                <Label>Excel File: {this.state.bookmarkToEdit ? this.state.bookmarkToEdit.excelFile?.fileName : this.state.fileName}</Label>
               </Stack>
               <Stack horizontal tokens={{ childrenGap: 30 }} verticalAlign="end">
                 <TextField autoFocus label="Name" placeholder="Input your bookmark name" value={this.state.bookmarkName} onChange={this.bookmarkNameTextOnChanged} styles={{ root: { width: '100%' } }} />

@@ -19,8 +19,10 @@
     ],
     "pretty": true,
     "typeRoots": [
-      "node_modules/@types"
-    ]
+      "node_modules/@types",
+			"office-js"
+    ],
+    "types": [ "@types/office-js", "node"]
   },
   "exclude": [
     "node_modules"

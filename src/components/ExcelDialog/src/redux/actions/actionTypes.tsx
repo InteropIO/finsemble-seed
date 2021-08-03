@@ -128,4 +128,4 @@ interface setSelectedBookmark {
     }
 }
 
-export type ExcelFileListActionType = setSelectedBookmark | setRange | setSelectedClipboardData | SetOpenWorksheet | SetSelectedWorksheet | GetWorksheetList | SheetChange | SetGetExcelCellDataActionModalDisplay | SetSelectedActiveExcelFilesAction | GetActiveExcelFilesAction | GetExcelCellDataAction | GetPreviousExcelFilesAction | SetSelectedPreviousExcelFilesAction | SetSetExcelCellDataActionModalDisplay
+export type ExcelFileListActionType = setSelectedBookmark | setRange | setSelectedClipboardData | SetOpenWorksheet | SetSelectedWorksheet  | SheetChange | SetGetExcelCellDataActionModalDisplay | SetSelectedActiveExcelFilesAction | GetActiveExcelFilesAction | GetExcelCellDataAction | GetPreviousExcelFilesAction | SetSelectedPreviousExcelFilesAction | SetSetExcelCellDataActionModalDisplay

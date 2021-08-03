@@ -25,8 +25,8 @@ const ActiveExcelFileList = (props: any) => {
     const animatedComponents = makeAnimated();
 
     useEffect(() => {
-        setActiveExcelFiles(FSBL.Clients.OfficeAddinClient.getActiveExcelFiles())
-        FSBL.Clients.OfficeAddinClient.onActiveExcelFilesChange({}, (res)=>{
+        setActiveExcelFiles((FSBL as any).Clients.OfficeAddinClient.getActiveExcelFiles());
+        (FSBL as any).Clients.OfficeAddinClient.onActiveExcelFilesChange({}, (err: any, res: any)=>{
             setActiveExcelFiles(res.activeExcelFiles)
         })
     }, [])

@@ -1,6 +1,0 @@
-{
-  "CopyToExcelDialog": {
-    "output": "components/ExcelDialog/ExcelDialog",
-    "entry": "./src/components/ExcelDialog/src/app.tsx"
-  }
-}

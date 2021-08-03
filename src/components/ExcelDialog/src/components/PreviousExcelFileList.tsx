@@ -27,8 +27,8 @@ const PreviousExcelFileList = (props: any) => {
 
     const getPreviousExcelFiles = () => {
         let tempPreviousExcelFiles:Array<ExcelFile> = [];
-        let activeExcelFiles:Array<ExcelFile> = FSBL.Clients.OfficeAddinClient.getActiveExcelFiles();
-        FSBL.Clients.OfficeAddinClient.getPreviousExcelFiles().forEach((previousExcelFile: ExcelFile)=>{
+        let activeExcelFiles:Array<ExcelFile> = (FSBL as any).Clients.OfficeAddinClient.getActiveExcelFiles();
+        (FSBL as any).Clients.OfficeAddinClient.getPreviousExcelFiles().forEach((previousExcelFile: ExcelFile)=>{
             if(!activeExcelFiles.includes(previousExcelFile))
                 tempPreviousExcelFiles.push(previousExcelFile)
         })

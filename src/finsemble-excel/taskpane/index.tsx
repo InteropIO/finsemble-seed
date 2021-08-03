@@ -11,7 +11,7 @@ let isOfficeInitialized = false;
 
 const title = "Finsemble-Excel Task Pane Add-in";
 
-const render = Component => {
+const render = (Component: any) => {
   ReactDOM.render(
       <Component title={title} isOfficeInitialized={isOfficeInitialized} />,
     document.getElementById("container")

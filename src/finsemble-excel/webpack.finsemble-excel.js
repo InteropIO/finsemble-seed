@@ -22,7 +22,7 @@ module.exports = {
     commands: './src/finsemble-excel/commands/commands.ts'
   },
   output: {
-    path: path.resolve(__dirname, '../../dist/finsemble-excel')
+    path: path.resolve(__dirname, '../../public/build/finsemble-excel')
   },
   mode: "development",
   resolve: {

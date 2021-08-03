@@ -3,6 +3,7 @@ import { v4 as uuidV4 } from "uuid";
 import * as CONSTANTS from "./config/const";
 import ExcelAction from "./types/ExcelAction";
 import ExcelBookmark from "./types/ExcelBookmark";
+import ExcelWorksheet from "./types/ExcelWorksheet";
 
 const Finsemble = require("@finsemble/finsemble-core");
 
@@ -112,8 +113,8 @@ export default class OfficeAddinService extends Finsemble.baseService {
     );
 
   }
-  
-  handleWorkspaceClosed (event) {
+
+  handleWorkspaceClosed(event: any) {
     event.wait();
     //tell excel to save
     this.activeExcelFiles.forEach(async (file, index, object) => {
@@ -122,7 +123,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
         `query-${file.fileName}-${file.createTimestamp}`,
         { action: CONSTANTS.SAVE_EXCEL_WORKBOOK },
         (err: any, res: any) => {
-          if (index == this.activeExcelFiles.length - 1) 
+          if (index == this.activeExcelFiles.length - 1)
             event.done();
         }
       );
@@ -160,7 +161,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
     switch (data.event) {
       case "GET_COMPONENT_LIST":
         let list = await Finsemble.Clients.LauncherClient.getComponentList(
-          (err: StandardError, list: any) => {}
+          (err: StandardError, list: any) => { }
         );
         let tempList: Array<{}> = [];
         for (var key of Object.keys(list.data)) {
@@ -210,12 +211,10 @@ export default class OfficeAddinService extends Finsemble.baseService {
                 this.handleExcelFileEvent
               );
               fileToSend = newExcelfile;
-              this.addSheetChangeHandler(fileToSend);
               this.transmitActiveFilesChange(fileToSend);
             } else {
               file.createTimestamp = res.data.timestamp;
               file.aliveTimestamp = res.data.timestamp;
-              this.addSheetChangeHandler(file);
               this.transmitActiveFilesChange(file);
             }
 
@@ -254,7 +253,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
         const response = await this.RouterClient.query(
           channelPrefix + channel,
           data,
-          () => {} // Ignoring callback. Use the promise to get the result
+          () => { } // Ignoring callback. Use the promise to get the result
         );
 
         if (response.err) {
@@ -344,7 +343,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
             let bookmarkToCreate = res.data.eventObj;
             this.bookmarkStore.getValue(
               "bookmarks",
-              (err: any, bookmarks: Array<Bookmark>) => {
+              (err: any, bookmarks: Array<ExcelBookmark>) => {
                 if (!err) {
                   let excelFile = this.activeExcelFiles.filter((file) => {
                     return file.fileName === bookmarkToCreate.excelFileName;
@@ -368,7 +367,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
             let bookmarkToEdit = res.data.eventObj;
             this.bookmarkStore.getValue(
               "bookmarks",
-              (err: any, bookmarks: Array<Bookmark>) => {
+              (err: any, bookmarks: Array<ExcelBookmark>) => {
                 if (!err) {
                   let excelFile = this.activeExcelFiles.filter((file) => {
                     return file.fileName === bookmarkToEdit.excelFileName;
@@ -400,10 +399,10 @@ export default class OfficeAddinService extends Finsemble.baseService {
             let bookmarkToDelete = res.data.eventObj;
             this.bookmarkStore.getValue(
               "bookmarks",
-              (err: any, bookmarks: Array<Bookmark>) => {
+              (err: any, bookmarks: Array<ExcelBookmark>) => {
                 if (!err) {
                   let filteredBookmarks = bookmarks.filter(
-                    (tempBookmark: Bookmark) => {
+                    (tempBookmark: ExcelBookmark) => {
                       return tempBookmark.name !== bookmarkToDelete.name;
                     }
                   );
@@ -426,7 +425,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
               this.RouterClient.query(
                 `query-${tempFile.fileName}-${tempFile.createTimestamp}`,
                 { action: CONSTANTS.OPEN_CREATE_BOOKMARK_PANEL },
-                (err: any, res: any) => {}
+                (err: any, res: any) => { }
               );
             }
             break;
@@ -441,7 +440,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
               });
             } else {
               Finsemble.Clients.LauncherClient.getActiveDescriptors(
-                (error, response) => {
+                (error: any, response: any) => {
                   if (!error) {
                     let activeDescriptors = response;
                     for (let componentId in activeDescriptors) {
@@ -472,36 +471,41 @@ export default class OfficeAddinService extends Finsemble.baseService {
               );
             }
             break;
-          
-            // Excel events
+
+          // Excel events
           case CONSTANTS.SHEET_SELECTION_CHANGE:
             let selectionRange = res.data.eventObj.range;
             let selectionWorksheet = res.data.eventObj.worksheet;
             let tempSelectionActions = this.excelActions.filter((action) => {
-              if(action.action === CONSTANTS.SUBSCRIBE_SHEET_SELECTION_CHANGE){
-                if(action.file){
-                  if (action.bookmark){
-                    if(action.bookmark.range){
-                      return action.bookmark?.worksheet.name === selectionWorksheet.name && checkRangeInRange(selectionRange, action.bookmark?.range)
+              if (action.action === CONSTANTS.SUBSCRIBE_SHEET_SELECTION_CHANGE) {
+                if (action.file) {
+                  if (action.bookmark) {
+                    if(action.bookmark.worksheet){
+                      if(action.bookmark.range){
+                        return action.bookmark?.worksheet.name === selectionWorksheet.name && checkRangeInRange(selectionRange, action.bookmark?.range)
+                      } else {
+                        return action.bookmark?.worksheet.name === selectionWorksheet.name
+                      }
                     } else {
-                      return (
-                        action.bookmark?.worksheet.name === selectionWorksheet.name
-                      );
+                      if(action.bookmark.range){
+                        return  checkRangeInRange(selectionRange, action.bookmark?.range)
+                      } else {
+                        return true
+                      }
                     }
                   } else {
                     return (
                       action.file?.fileName === res.data.fileName
                     );
                   }
-                } else {
-                  return true
-                }
+                } 
+                return false;
               }
             });
             tempSelectionActions.forEach((action) => {
               Finsemble.Clients.RouterClient.transmit(action.id, {
                 eventObj: res.data.eventObj,
-                excelFile: {fileName: res.data.fileName},
+                excelFile: { fileName: res.data.fileName },
               });
             });
             break;
@@ -509,30 +513,35 @@ export default class OfficeAddinService extends Finsemble.baseService {
             let tempValueChangeRange = res.data.eventObj.range;
             let tempValueChangeWorksheet = res.data.eventObj.worksheet;
             let tempValueChangeActions = this.excelActions.filter((action) => {
-              if(action.action === CONSTANTS.SUBSCRIBE_SHEET_VALUE_CHANGE){
-                if(action.file){
-                  if (action.bookmark){
-                    if(action.bookmark.range){
-                      return action.bookmark?.worksheet.name === tempValueChangeWorksheet.name && checkRangeInRange(tempValueChangeRange, action.bookmark?.range)
+              if (action.action === CONSTANTS.SUBSCRIBE_SHEET_VALUE_CHANGE) {
+                if (action.file) {
+                  if (action.bookmark) {
+                    if(action.bookmark.worksheet){
+                      if(action.bookmark.range){
+                        return action.bookmark?.worksheet.name === tempValueChangeWorksheet.name && checkRangeInRange(tempValueChangeRange, action.bookmark?.range)
+                      } else {
+                        return action.bookmark?.worksheet.name === tempValueChangeWorksheet.name
+                      }
                     } else {
-                      return (
-                        action.bookmark?.worksheet.name === tempValueChangeWorksheet.name
-                      );
+                      if(action.bookmark.range){
+                        return  checkRangeInRange(tempValueChangeRange, action.bookmark?.range)
+                      } else {
+                        return true
+                      }
                     }
                   } else {
                     return (
                       action.file?.fileName === res.data.fileName
                     );
                   }
-                } else {
-                  return true 
-                }
+                } 
+                return false;
               }
             });
             tempValueChangeActions.forEach((action) => {
               Finsemble.Clients.RouterClient.transmit(action.id, {
                 eventObj: res.data.eventObj,
-                excelFile: {fileName: res.data.fileName},
+                excelFile: { fileName: res.data.fileName },
               });
             });
             break;
@@ -540,30 +549,35 @@ export default class OfficeAddinService extends Finsemble.baseService {
             let tempBroadcastValuesRange = res.data.eventObj.range;
             let tempBroadcastValuesWorksheet = res.data.eventObj.worksheet;
             let tempBroadcastValuesActions = this.excelActions.filter((action) => {
-              if(action.action === CONSTANTS.SUBSCRIBE_SHEET_BROADCAST_VALUES){
-                if(action.file){
-                  if (action.bookmark){
-                    if(action.bookmark.range){
-                      return action.bookmark?.worksheet.name === tempBroadcastValuesWorksheet.name && checkRangeInRange(tempBroadcastValuesRange, action.bookmark?.range)
+              if (action.action === CONSTANTS.SUBSCRIBE_SHEET_BROADCAST_VALUES) {
+                if (action.file) {
+                  if (action.bookmark) {
+                    if(action.bookmark.worksheet){
+                      if(action.bookmark.range){
+                        return action.bookmark?.worksheet.name === tempBroadcastValuesWorksheet.name && checkRangeInRange(tempBroadcastValuesRange, action.bookmark?.range)
+                      } else {
+                        return action.bookmark?.worksheet.name === tempBroadcastValuesWorksheet.name
+                      }
                     } else {
-                      return (
-                        action.bookmark?.worksheet.name === tempBroadcastValuesWorksheet.name
-                      );
+                      if(action.bookmark.range){
+                        return  checkRangeInRange(tempBroadcastValuesRange, action.bookmark?.range)
+                      } else {
+                        return true
+                      }
                     }
                   } else {
                     return (
                       action.file?.fileName === res.data.fileName
                     );
                   }
-                } else {
-                  return true 
-                }
+                } 
+                return false;
               }
             });
             tempBroadcastValuesActions.forEach((action) => {
               Finsemble.Clients.RouterClient.transmit(action.id, {
                 eventObj: res.data.eventObj,
-                excelFile: {fileName: res.data.fileName},
+                excelFile: { fileName: res.data.fileName },
               });
             });
             break;
@@ -601,18 +615,18 @@ export default class OfficeAddinService extends Finsemble.baseService {
     });
   };
 
-  transmitActiveFilesChange = (changedFile) => {
+  transmitActiveFilesChange = (changedFile: ExcelFile) => {
     let tempActions = this.excelActions.filter((action) => {
       return action.action === CONSTANTS.SUBSCRIBE_ACTIVE_EXCEL_FILES_CHANGE;
     });
     tempActions.forEach((action) => {
-      if(!action.file){
+      if (!action.file) {
         Finsemble.Clients.RouterClient.transmit(action.id, {
           changedFile: changedFile,
           ACTIVE_EXCEL_FILES: this.activeExcelFiles,
         });
       } else {
-        if(changedFile.fileName === action.file.fileName){
+        if (changedFile.fileName === action.file.fileName) {
           Finsemble.Clients.RouterClient.transmit(action.id, {
             changedFile: changedFile,
             ACTIVE_EXCEL_FILES: this.activeExcelFiles,
@@ -760,7 +774,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
             });
             this.addResponder(unhide_worksheet_uuid, this.unhideWorksheet);
           });
-          break; 
+          break;
         case CONSTANTS.SAVE_EXCEL_WORKBOOK:
           data.excelFiles.forEach((excelFile: ExcelFile) => {
             let save_excel_workbook_uuid = this.getUuid();
@@ -774,7 +788,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
           break;
         // Subscribe to events
         case CONSTANTS.SUBSCRIBE_ACTIVE_EXCEL_FILES_CHANGE:
-          if(data.excelFiles){
+          if (data.excelFiles) {
             data.excelFiles.forEach((excelFile: ExcelFile) => {
               let sub_active_excel_file_change_uuid = this.getUuid();
               let subActiveExcelFilesChangeAction: ExcelAction = {
@@ -799,17 +813,17 @@ export default class OfficeAddinService extends Finsemble.baseService {
           }
           break;
         case CONSTANTS.SUBSCRIBE_SHEET_SELECTION_CHANGE:
-          let tempSelectionBookmark;
-          if(data.worksheet){
-            tempSelectionBookmark = {
-              worksheet: data.worksheet,
-              range: data.range
-            }
-          }
-
-          if(data.excelFiles){
+          if (data.excelFiles) {
             data.excelFiles.forEach((excelFile: ExcelFile) => {
               let sub_selection_change_uuid = this.getUuid();
+              let tempSelectionBookmark: ExcelBookmark = {
+                id: this.getUuid(),
+                name: "",
+                worksheet: data.worksheet,
+                range: data.range,
+                openEndedRange: false,
+                excelFile: excelFile
+              }
               let subSelectionChangeAction: ExcelAction = {
                 id: sub_selection_change_uuid,
                 action: action,
@@ -821,6 +835,14 @@ export default class OfficeAddinService extends Finsemble.baseService {
             });
           } else {
             let sub_selection_change_uuid = this.getUuid();
+            let tempSelectionBookmark: ExcelBookmark = {
+              id: this.getUuid(),
+              name: "",
+              worksheet: data.worksheet,
+              range: data.range,
+              openEndedRange: false,
+              excelFile: null
+            }
             let subSelectionChangeAction: ExcelAction = {
               id: sub_selection_change_uuid,
               action: action,
@@ -832,17 +854,25 @@ export default class OfficeAddinService extends Finsemble.baseService {
           }
           break;
         case CONSTANTS.SUBSCRIBE_SHEET_VALUE_CHANGE:
-          let tempValueChangeBookmark;
-          if(data.worksheet){
+          let tempValueChangeBookmark: { worksheet: ExcelWorksheet; range: string; };
+          if (data.worksheet) {
             tempValueChangeBookmark = {
               worksheet: data.worksheet,
               range: data.range
             }
           }
 
-          if(data.excelFiles){
+          if (data.excelFiles) {
             data.excelFiles.forEach((excelFile: ExcelFile) => {
               let sub_value_change_uuid = this.getUuid();
+              let tempValueChangeBookmark: ExcelBookmark = {
+                id: this.getUuid(),
+                name: "",
+                worksheet: data.worksheet,
+                range: data.range,
+                openEndedRange: false,
+                excelFile: excelFile
+              }
               let subValueChangeAction: ExcelAction = {
                 id: sub_value_change_uuid,
                 action: action,
@@ -854,6 +884,14 @@ export default class OfficeAddinService extends Finsemble.baseService {
             });
           } else {
             let sub_value_change_uuid = this.getUuid();
+            let tempValueChangeBookmark: ExcelBookmark = {
+              id: this.getUuid(),
+              name: "",
+              worksheet: data.worksheet,
+              range: data.range,
+              openEndedRange: false,
+              excelFile: null
+            }
             let subValueChangeAction: ExcelAction = {
               id: sub_value_change_uuid,
               action: action,
@@ -865,17 +903,19 @@ export default class OfficeAddinService extends Finsemble.baseService {
           }
           break;
         case CONSTANTS.SUBSCRIBE_SHEET_BROADCAST_VALUES:
-          let tempBroadcstValueBookmark;
-          if(data.worksheet){
-            tempBroadcstValueBookmark = {
-              worksheet: data.worksheet,
-              range: data.range
-            }
-          }
 
-          if(data.excelFiles){
+
+          if (data.excelFiles) {
             data.excelFiles.forEach((excelFile: ExcelFile) => {
               let sub_broadcst_value_uuid = this.getUuid();
+              let tempBroadcstValueBookmark: ExcelBookmark = {
+                id: this.getUuid(),
+                name: "",
+                worksheet: data.worksheet,
+                range: data.range,
+                openEndedRange: false,
+                excelFile: excelFile
+              }
               let subBroadcstValueAction: ExcelAction = {
                 id: sub_broadcst_value_uuid,
                 action: action,
@@ -887,6 +927,14 @@ export default class OfficeAddinService extends Finsemble.baseService {
             });
           } else {
             let sub_broadcst_value_uuid = this.getUuid();
+            let tempBroadcstValueBookmark: ExcelBookmark = {
+              id: this.getUuid(),
+              name: "",
+              worksheet: data.worksheet,
+              range: data.range,
+              openEndedRange: false,
+              excelFile: null
+            }
             let subBroadcstValueAction: ExcelAction = {
               id: sub_broadcst_value_uuid,
               action: action,
@@ -916,20 +964,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
     let res = await this.RouterClient.query(
       `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`,
       { action: CONSTANTS.SAVE_EXCEL_WORKBOOK },
-      (err: any, res: any) => {}
-    );
-    return res.response.data;
-  };
-
-  addSheetChangeHandler = async (file: ExcelFile) => {
-    console.log(
-      "addSheetChangeHandler",
-      `query-${file.fileName}-${file.createTimestamp}`
-    );
-    let res = await this.RouterClient.query(
-      `query-${file.fileName}-${file.createTimestamp}`,
-      { action: "SUBSCRIBE_SHEET_CHANGE" },
-      (err: any, res: any) => {}
+      (err: any, res: any) => { }
     );
     return res.response.data;
   };
@@ -942,7 +977,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
     let res = await this.RouterClient.query(
       `query-${data.excelFile.fileName}-${data.excelFile.createTimestamp}`,
       { action: CONSTANTS.GET_WORKSHEET_LIST },
-      (err: any, res: any) => {}
+      (err: any, res: any) => { }
     );
     return res.response.data.worksheetList;
   };
@@ -959,7 +994,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
         worksheet: data.worksheet,
         range: data.range,
       },
-      (err: any, res: any) => {}
+      (err: any, res: any) => { }
     );
     return res.response.data;
   };
@@ -976,7 +1011,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
         worksheet: data.worksheet,
         range: data.range,
       },
-      (err: any, res: any) => {}
+      (err: any, res: any) => { }
     );
     return res.response.data;
   };
@@ -993,7 +1028,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
         worksheet: data.worksheet,
         range: data.range,
       },
-      (err: any, res: any) => {}
+      (err: any, res: any) => { }
     );
     console.log(res.response.data)
     return res.response.data;
@@ -1012,7 +1047,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
         range: data.range,
         values: data.values
       },
-      (err: any, res: any) => {}
+      (err: any, res: any) => { }
     );
     return res.response.data;
   };
@@ -1028,7 +1063,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
         action: CONSTANTS.SET_ACTIVE_WORKSHEET,
         worksheet: data.worksheet
       },
-      (err: any, res: any) => {}
+      (err: any, res: any) => { }
     );
     return res.response.data;
   };
@@ -1043,7 +1078,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
       {
         action: CONSTANTS.GET_ACTIVE_WORKSHEET
       },
-      (err: any, res: any) => {}
+      (err: any, res: any) => { }
     );
     return res.response.data;
   };
@@ -1059,7 +1094,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
         action: CONSTANTS.CREATE_WORKSHEET,
         worksheet: data.worksheet
       },
-      (err: any, res: any) => {}
+      (err: any, res: any) => { }
     );
     return res.response.data;
   };
@@ -1075,7 +1110,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
         action: CONSTANTS.DELETE_WORKSHEET,
         worksheet: data.worksheet
       },
-      (err: any, res: any) => {}
+      (err: any, res: any) => { }
     );
     return res.response.data;
   };
@@ -1091,7 +1126,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
         action: CONSTANTS.HIDE_WORKSHEET,
         worksheet: data.worksheet
       },
-      (err: any, res: any) => {}
+      (err: any, res: any) => { }
     );
     return res.response.data;
   };
@@ -1107,7 +1142,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
         action: CONSTANTS.UNHIDE_WORKSHEET,
         worksheet: data.worksheet
       },
-      (err: any, res: any) => {}
+      (err: any, res: any) => { }
     );
     return res.response.data;
   };
@@ -1120,7 +1155,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
           action: CONSTANTS.BOOKMARK_LIST,
           bookmarks: data.bookmarks,
         },
-        (err: any, res: any) => {}
+        (err: any, res: any) => { }
       );
     });
 
@@ -1131,7 +1166,7 @@ export default class OfficeAddinService extends Finsemble.baseService {
 const checkRangeInRange = (
   range: string,
   targetRange: string | undefined | null
-) => {
+): boolean => {
   if (targetRange) {
     if (range.indexOf(":") > 0) {
       // range in format A1:C3

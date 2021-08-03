@@ -1,6 +1,6 @@
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { IColumn } from 'office-ui-fabric-react';
-import Bookmark from './Bookmark'
+import ExcelBookmark from '../../../services/OfficeAddin/types/ExcelBookmark';
 
 export default interface AppState {
     fileName: string;
@@ -11,8 +11,8 @@ export default interface AppState {
     worksheetList: IDropdownOption[];
     worksheet: string;
     bookmarkCol: IColumn[];
-    bookmarks: Bookmark[];
+    bookmarks: ExcelBookmark[];
     pivotSelectedKey: string;
     btnLabel: string;
-    bookmarkToEdit: Bookmark;
+    bookmarkToEdit: ExcelBookmark | null;
 }

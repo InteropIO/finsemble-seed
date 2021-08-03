@@ -10,8 +10,8 @@
  * Once completed, rename this file gulpfile-extensions.js. The Finsemble build process will then begin
  * processing this file during builds.
  */
- const { runWebpackInParallel } = require("./build/buildHelpers");
 
+ const { runWebpackAndCallback } = require("./webpack/buildHelpers");
 
 module.exports = (taskMethods) => {
 	"use strict";
@@ -159,24 +159,37 @@ module.exports = (taskMethods) => {
 	 * https://github.com/gulpjs/gulp/blob/master/docs/API.md#gulptaskname-fn
 	 *
 	 */
-	 taskMethods.post = (done) => { // Example, add a new gulp task that first calls the built in "build" task and then does something of your choosing
-		let buildWebpackOriginal = taskMethods.buildWebpack;
-		gulp.task("buildWebpack", buildWebpackOriginal(() => {
-			// do symphony build here			
-			const watchFiles = process.argv[2].startsWith("dev");;
-			const exitOnCompletion = !watchFiles;
-			const webpackConfigs = [
-				{
-					configPath: require.resolve(
-						"./src/finsemble-excel/webpack.finsemble-excel.js"
-					),
-					prettyName: "Finsemble-Excel",
-					watch: watchFiles,
-				},
-			];
-			runWebpackInParallel(webpackConfigs, exitOnCompletion, done);
-		}));
-		done();
-	}
 
+	//  taskMethods.post = (done) => { // Example, add a new gulp task that first calls the built in "build" task and then does something of your choosing
+	// 	let buildWebpackOriginal = taskMethods.buildWebpack;
+	// 	gulp.task("buildWebpack", buildWebpackOriginal(() => {
+	// 		// do symphony build here			
+	// 		const watchFiles = process.argv[2].startsWith("dev");;
+	// 		const exitOnCompletion = !watchFiles;
+	// 		const webpackConfigs = [
+	// 			{
+	// 				configPath: require.resolve(
+	// 					"./src/finsemble-excel/webpack.finsemble-excel.js"
+	// 				),
+	// 				prettyName: "Finsemble-Excel",
+	// 				watch: watchFiles,
+	// 			},
+	// 		];
+	// 		runWebpackInParallel(webpackConfigs, exitOnCompletion, done);
+	// 	}));
+	// 	done();
+	// }
+
+
+	
+	let buildWebpackOriginal = taskMethods.buildWebpack;
+	taskMethods["buildWebpack"] = (done) => {
+		buildWebpackOriginal(() => {
+			// do Excel build here
+			const watchFiles = process.argv[2].startsWith("dev");
+			const exitOnCompletion = !watchFiles;
+			const configPath = require.resolve("./src/finsemble-excel/webpack.finsemble-excel.js");
+			runWebpackAndCallback(configPath, watchFiles, "Finsemble-Excel", done);
+		});
+	};
 };

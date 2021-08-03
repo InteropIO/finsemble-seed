@@ -1,6 +1,6 @@
 export default interface IFile {
-    fileName: String;
-    filePath: String;
+    fileName: string;
+    filePath: string;
     createTimestamp: number;
     aliveTimestamp: number;
 }
