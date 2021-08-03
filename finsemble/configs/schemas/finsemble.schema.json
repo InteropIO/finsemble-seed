@@ -1,0 +1,3306 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$ref": "#/definitions/ManifestSubschema",
+	"definitions": {
+		"ManifestFileSubschema": {
+			"description": "Subschema corresponding to a file containing the manifest config, to support VSCode Intellisense.. ",
+			"type": "object",
+			"properties": {
+				"$schema": {
+					"type": "string"
+				},
+				"comment": {
+					"type": "string"
+				},
+				"devtools_port": {
+					"description": "Manifest property to set Chromium devTools port. ",
+					"type": "number"
+				},
+				"startup_app": {
+					"$ref": "#/definitions/manifestStartupApp"
+				},
+				"splashScreenImage": {
+					"$ref": "#/definitions/splashScreenImage"
+				},
+				"splashScreenTimeout": {
+					"$ref": "#/definitions/splashScreenTimeout"
+				},
+				"removePathInSpawnExternalApps": {
+					"description": "Set to false to allow spawning by path",
+					"type": "boolean"
+				},
+				"disableWMICalls": {
+					"description": "Set to true to disable calls made using WMIC",
+					"type": "boolean"
+				},
+				"appAssets": {
+					"$ref": "#/definitions/appAssets"
+				},
+				"finsemble": {
+					"title": "finsemble",
+					"description": "Copy of Finsemble object tto verify manifest File",
+					"type": "object",
+					"properties": {
+						"applicationRoot": {
+							"type": "string"
+						},
+						"moduleRoot": {
+							"type": "string"
+						},
+						"servicesRoot": {
+							"type": "string"
+						},
+						"configSchemaURL": {
+							"type": "string"
+						},
+						"notificationURL": {
+							"type": "string"
+						},
+						"availableDashbarItems": {
+							"type": "object",
+							"description": "Available dashbar items to list in dashbar user preferences",
+							"patternProperties": {
+								"[a-zA-Z0-9]": {
+									"$ref": "#/definitions/dashbarItem"
+								}
+							},
+							"additionalProperties": false
+						},
+						"bootConfig": {
+							"$ref": "#/definitions/boot_config"
+						},
+						"router": {
+							"$ref": "#/definitions/router"
+						},
+						"logger": {
+							"$ref": "#/definitions/logger"
+						},
+						"importConfig": {
+							"$ref": "#/definitions/importConfig"
+						},
+						"importThirdPartyConfig": {
+							"$ref": "#/definitions/importThirdPartyConfig"
+						},
+						"shutdownTimeout": {
+							"description": "Amount of time (in milliseconds) to give services to shutdown before forcibly quitting the application. Components get 2 seconds less than services.",
+							"type": "number",
+							"minimum": 10000,
+							"default": 30000
+						},
+						"trustedPreloads": {
+							"$ref": "#/definitions/trustedPreloadsArray"
+						},
+						"autoSignOn": {
+							"description": "Provides configuration and credentials for automatically signing a user into specified web applications",
+
+							"type": "object",
+							"deprecated": true,
+							"properties": {
+								"hardcoded": {
+									"type": "object"
+								}
+							}
+						},
+						"custom": {}
+					},
+					"required": [
+						"applicationRoot",
+						"moduleRoot",
+						"servicesRoot",
+						"configSchemaURL",
+						"notificationURL",
+						"bootConfig"
+					]
+				},
+				"finsemble-electron-adapter": {
+					"description": "Configuration for the Electron Adapter",
+					"title": "finsemble-electron-adapter",
+					"type": "object",
+					"properties": {
+						"manifests": {
+							"description": "Allow the ability to specify manifest environments at run time by adding entries for each environment",
+							"type": "object",
+							"example": {
+								"manifests": {
+									"dev": "http://localhost:3375/configs/application/manifest-local-dev.json",
+									"qa": "http://localhost:3375/configs/application/manifest-local-qa.json"
+								}
+							}
+						},
+						"useDOMBasedMovement": {
+							"description": "Set to false to use native window movement with Electron",
+							"type": "boolean",
+							"default": true
+						},
+						"allowedManifestDomains": {
+							"description": "Allow the ability to specify manifest urls at run time by setting the allowed domains where the hostname matches one of the entries. Every subdomain needs an entry. Wildcards are not allowed.",
+							"type": "array",
+							"items": {
+								"type": "string"
+							},
+							"examples": [
+								{
+									"allowedManifestDomains": ["finsemble.com", "cosaic.io"]
+								}
+							]
+						}
+					}
+				},
+				"allowEvalInPreload": {
+					"description": "Set to `true` to delete `unsafe-eval` and `script-src directives` from the content security policy.",
+					"type": "boolean",
+					"default": false
+				},
+				"Content-Security-Policy": {
+					"description": "Overwrite the default content security policy for all components. Replace `respect-server-defined-csp` with a custom policy string to activate",
+					"type": "string",
+					"default": "respect-server-defined-csp"
+				},
+				"custom": {}
+			},
+			"required": ["startup_app", "finsemble"],
+			"additionalProperties": false
+		},
+		"UIComponentsFileSubschema": {
+			"description": "Subschema corresponding to a file containing UI component config, to support VSCode Intellisense.. ",
+			"type": "object",
+			"properties": {
+				"$schema": {
+					"type": "string"
+				},
+				"comment": {},
+				"components": {
+					"$ref": "#/definitions/components"
+				}
+			},
+			"additionalProperties": false
+		},
+		"ComponentsFileSubschema": {
+			"description": "Subschema corresponding to a file containing component config, to support VSCode Intellisense.. ",
+			"type": "object",
+			"properties": {
+				"$schema": {
+					"type": "string"
+				},
+				"comment": {},
+				"components": {
+					"description": "config for components",
+					"type": "object",
+					"additionalProperties": {
+						"$ref": "#/definitions/component"
+					}
+				}
+			},
+			"additionalProperties": false
+		},
+		"ServicesFileSubschema": {
+			"description": "Subschema corresponding to a file containing service config, to support VSCode Intellisense.. ",
+			"type": "object",
+			"properties": {
+				"$schema": {
+					"type": "string"
+				},
+				"comment": {
+					"type": "string"
+				},
+				"services": {
+					"description": "config for components",
+					"type": "object",
+					"additionalProperties": {
+						"$ref": "#/definitions/service"
+					}
+				}
+			},
+			"additionalProperties": false
+		},
+		"ApplicationConfigFileSubschema": {
+			"title": "finsemble",
+			"description": "Subschema for all application config (typically application/config.json)",
+			"type": "object",
+			"properties": {
+				"$schema": {
+					"type": "string"
+				},
+				"comment": {
+					"description": "(DEPRECATED) Comment string inserted into config.",
+					"type": "string"
+				},
+				"authentication": {
+					"$ref": "#/definitions/authenticationProfile"
+				},
+				"workspaceTemplates": {
+					"$ref": "#/definitions/blankWorkspaceTemplate"
+				},
+				"importConfig": {
+					"$ref": "#/definitions/importConfig"
+				},
+				"importThirdPartyConfig": {
+					"$ref": "#/definitions/importThirdPartyConfig"
+				},
+				"securityPolicies": {
+					"$ref": "#/definitions/securityPolicies"
+				},
+				"securityPolicyRules": {
+					"$ref": "#/definitions/securityPolicyRules"
+				},
+				"accessibleLinker": {
+					"description": "(PUBLIC)",
+					"type": "boolean"
+				},
+				"servicesConfig": {
+					"$ref": "#/definitions/servicesConfig"
+				},
+				"preferences": {
+					"$ref": "#/definitions/preferences"
+				},
+				"systemTrayIcon": {
+					"description": "(PUBLIC) Sets the location of the system tray icon (lower right corner of the terminal)",
+					"type": "string"
+				},
+				"systemTrayComponent": {
+					"description": "(PUBLIC)",
+					"type": "string"
+				},
+				"Window Manager": {
+					"$ref": "#/definitions/windowManager"
+				},
+				"//appDirectoryEndpoint": {
+					"type": "string"
+				},
+				"appDirectoryEndpoint": {
+					"type": "string"
+				},
+				"globalHotkeys": {
+					"description": "(PUBLIC)",
+					"type": "object"
+				},
+				"workspaces": {
+					"$ref": "#/definitions/workspacesArray"
+				},
+				"components": {
+					"$ref": "#/definitions/components"
+				},
+				"services": {
+					"$ref": "#/definitions/services"
+				},
+				"feaURLWhitelist": {
+					"description": "A regex pattern that represents a URL whitelist. If set, components will **only** be able to navigate to URLs that match the regex pattern.",
+					"type": "string"
+				},
+				"failedComponentCloseNotification": {
+					"description": "If true throw a notification when a component fails to close within the time limit specified in `finsemble[\"Window Manager\"].componentCloseTimeout`",
+					"type": "boolean",
+					"default": false
+				},
+				"initialWorkspace": {
+					"description": "The workspace name specified by this config will be the first one presented to an end user the very first time they start the SmartDesktop. This overrides the default behavior set by the config: finsemble.workspaces. After the very first instance of the SmartDesktop, Finsemble will load the last workspace loaded or any workspace specified by user preferences.",
+					"type": "string"
+				},
+				"scheduledRestart": {
+					"$ref": "#/definitions/scheduledRestart"
+				},
+				"stackedWindow": {
+					"$ref": "#/definitions/stackedWindow"
+				},
+				"//": {
+					"description": "(DEPRECATED) Comment string inserted into config.",
+					"type": "string"
+				},
+				"custom": {}
+			},
+			"required": ["accessibleLinker"],
+			"additionalProperties": false
+		},
+		"SecurityPolicyFileSubschema": {
+			"description": "Subschema corresponding to the security policies file, to support VSCode Intellisense.. ",
+			"type": "object",
+			"properties": {
+				"$schema": {},
+				"comment": {
+					"type": "string"
+				},
+				"securityPolicies": {
+					"$ref": "#/definitions/securityPolicies"
+				},
+				"securityPolicyRules": {
+					"$ref": "#/definitions/securityPolicyRules"
+				}
+			},
+			"required": ["securityPolicies", "securityPolicyRules"],
+			"additionalProperties": false
+		},
+		"WorkspacesFileSubschema": {
+			"description": "Subschema corresponding to the security policies file, to support VSCode Intellisense.. ",
+			"type": "object",
+			"properties": {
+				"$schema": {},
+				"comment": {
+					"type": "string"
+				},
+				"workspaces": {
+					"$ref": "#/definitions/workspacesArray"
+				}
+			},
+			"required": ["workspaces"],
+			"additionalProperties": false
+		},
+		"CoreConfigFileSubschema": {
+			"description": "Subschema corresponding to a file containing the manifest config, to support VSCode Intellisense.. ",
+			"type": "object",
+			"properties": {
+				"$schema": {
+					"type": "string"
+				},
+				"comment": {
+					"type": "string"
+				},
+				"bootTasks": {
+					"$ref": "#/definitions/bootTasks"
+				},
+				"system": {
+					"$ref": "#/definitions/system"
+				},
+				"servicesRoot": {
+					"type": "string"
+				},
+				"thirdPartyRoot": {
+					"type": "string"
+				},
+				"configVersion": {
+					"type": "string"
+				},
+				"workspaceTemplates": {
+					"$ref": "#/definitions/blankWorkspaceTemplate"
+				},
+				"betaFeatures": {
+					"description": "(PRIVATE) (DEPRECATED)",
+					"type": "object"
+				},
+				"importConfig": {
+					"$ref": "#/definitions/importConfig"
+				},
+				"deprecatedConfig": {
+					"$ref": "#/definitions/deprecatedConfig"
+				}
+			},
+			"required": [
+				"bootTasks",
+				"system",
+				"servicesRoot",
+				"thirdPartyRoot",
+				"configVersion",
+				"betaFeatures",
+				"importConfig"
+			],
+			"additionalProperties": false
+		},
+		"ManifestSubschema": {
+			"description": "(PUBLIC) Highest level manifest object, which includes \"finsemble\" configuration",
+			"type": "object",
+			"properties": {
+				"$schema": {
+					"type": "string"
+				},
+				"comment": {
+					"type": "string"
+				},
+				"devtools_port": {
+					"description": "Manifest property to set Chromium devTools port. ",
+					"type": "number",
+					"default": 9090
+				},
+				"startup_app": {
+					"$ref": "#/definitions/manifestStartupApp"
+				},
+				"splashScreenImage": {
+					"$ref": "#/definitions/splashScreenImage"
+				},
+				"splashScreenTimeout": {
+					"$ref": "#/definitions/splashScreenTimeout"
+				},
+				"removePathInSpawnExternalApps": {
+					"description": "Set to false to allow spawning by path",
+					"type": "boolean"
+				},
+				"disableWMICalls": {
+					"description": "Set to true to disable calls made using WMIC",
+					"type": "boolean"
+				},
+				"appAssets": {
+					"$ref": "#/definitions/appAssets"
+				},
+				"finsemble": {
+					"$ref": "#/definitions/FinsembleSubschema"
+				},
+				"finsemble-electron-adapter": {
+					"$ref": "#/definitions/electronAdapter"
+				},
+				"custom": {},
+				"allowEvalInPreload": {
+					"description": "Set to `true` to delete `unsafe-eval` and `script-src directives` from the content security policy.",
+					"type": "boolean",
+					"default": false
+				},
+				"Content-Security-Policy": {
+					"description": "Overwrite the default content security policy for all components. Replace `respect-server-defined-csp` with a custom policy string to activate",
+					"type": "string",
+					"default": "respect-server-defined-csp"
+				}
+			},
+			"required": ["startup_app", "finsemble"],
+			"additionalProperties": false
+		},
+		"BootManifestSubschema": {
+			"description": "The boot subschema, including manifest and partial finsemble",
+			"type": "object",
+			"properties": {
+				"$schema": {
+					"type": "string"
+				},
+				"comment": {
+					"type": "string"
+				},
+				"devtools_port": {
+					"description": "Manifest property to set Chromium devTools port. ",
+					"type": "number"
+				},
+				"startup_app": {
+					"$ref": "#/definitions/manifestStartupApp"
+				},
+				"splashScreenImage": {
+					"$ref": "#/definitions/splashScreenImage"
+				},
+				"splashScreenTimeout": {
+					"$ref": "#/definitions/splashScreenTimeout"
+				},
+				"removePathInSpawnExternalApps": {
+					"description": "Set to false to allow spawning by path",
+					"type": "boolean"
+				},
+				"disableWMICalls": {
+					"description": "Set to true to disable calls made using WMIC",
+					"type": "boolean"
+				},
+				"appAssets": {
+					"title": "appAssets",
+					"description": "Manifest array of external assets to be automatically loading by FEA. ",
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"src": {
+								"type": "string"
+							},
+							"version": {
+								"type": "string"
+							},
+							"alias": {
+								"type": "string"
+							},
+							"target": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"finsemble": {
+					"title": "finsemble",
+					"description": "Subschema for config required to boot finsemble",
+					"type": "object",
+					"properties": {
+						"applicationRoot": {
+							"type": "string"
+						},
+						"moduleRoot": {
+							"type": "string"
+						},
+						"servicesRoot": {
+							"type": "string"
+						},
+						"thirdPartyRoot": {
+							"type": "string"
+						},
+						"configVersion": {
+							"type": "string"
+						},
+						"configSchemaURL": {
+							"type": "string"
+						},
+						"notificationURL": {
+							"type": "string"
+						},
+						"bootConfig": {
+							"$ref": "#/definitions/boot_config"
+						},
+						"router": {
+							"$ref": "#/definitions/router"
+						},
+						"bootTasks": {
+							"$ref": "#/definitions/bootTasks"
+						},
+						"system": {
+							"$ref": "#/definitions/system"
+						},
+						"shutdownTimeout": {
+							"description": "Amount of time (in milliseconds) to give services to shutdown before forcibly quitting the application. Components get 2 seconds less than services.",
+							"type": "number",
+							"minimum": 10000,
+							"default": 30000
+						},
+						"deprecatedConfig": {
+							"$ref": "#/definitions/deprecatedConfig"
+						}
+					},
+					"required": [
+						"applicationRoot",
+						"moduleRoot",
+						"servicesRoot",
+						"thirdPartyRoot",
+						"configVersion",
+						"configSchemaURL",
+						"notificationURL",
+						"bootConfig",
+						"bootTasks",
+						"system"
+					]
+				},
+				"finsemble-electron-adapter": {
+					"$ref": "#/definitions/electronAdapter"
+				},
+				"allowEvalInPreload": {
+					"description": "Set to `true` to delete `unsafe-eval` and `script-src directives` from the content security policy.",
+					"type": "boolean",
+					"default": false
+				},
+				"Content-Security-Policy": {
+					"description": "Overwrite the default content security policy for all components. Replace `respect-server-defined-csp` with a custom policy string to activate",
+					"type": "string",
+					"default": "respect-server-defined-csp"
+				},
+				"custom": {}
+			},
+			"required": ["startup_app", "finsemble"],
+			"additionalProperties": false
+		},
+		"FinsembleSubschema": {
+			"title": "finsemble",
+			"description": "Subschema for all finsemble config (without the manifest)",
+			"type": "object",
+			"properties": {
+				"$schema": {
+					"type": "string"
+				},
+				"applicationRoot": {
+					"description": "(PUBLIC) Should point to the root of your application. Finsemble will use this to build URLs internally.",
+					"type": "string",
+					"default": "https://localhost:3375"
+				},
+				"authentication": {
+					"$ref": "#/definitions/authenticationProfile"
+				},
+				"moduleRoot": {
+					"description": "(PUBLIC) Where you are serving the Finsemble core library from. This is important for resolving URLs internally.",
+					"type": "string",
+					"default": "https://localhost:3375/finsemble"
+				},
+				"servicesRoot": {
+					"description": "(PRIVATE) Default location of core services. ",
+					"type": "string"
+				},
+				"notificationURL": {
+					"description": "(PUBLIC)",
+					"type": "string"
+				},
+				"availableDashbarItems": {
+					"type": "object",
+					"description": "Available dashbar items to list in dashbar user preferences",
+					"patternProperties": {
+						"[a-zA-Z0-9]": {
+							"$ref": "#/definitions/dashbarItem"
+						}
+					},
+					"additionalProperties": false
+				},
+				"bootConfig": {
+					"$ref": "#/definitions/boot_config"
+				},
+				"router": {
+					"$ref": "#/definitions/router"
+				},
+				"trustedPreloads": {
+					"$ref": "#/definitions/trustedPreloadsArray"
+				},
+				"logger": {
+					"$ref": "#/definitions/logger"
+				},
+				"bootTasks": {
+					"$ref": "#/definitions/bootTasks"
+				},
+				"system": {
+					"$ref": "#/definitions/system"
+				},
+				"thirdPartyRoot": {
+					"description": "(PRIVATE) (DEPRECATED) Required location of third-party services. ",
+					"type": "string"
+				},
+				"workspaceTemplates": {
+					"$ref": "#/definitions/blankWorkspaceTemplate"
+				},
+				"configVersion": {
+					"description": "(PUBLIC) Version of this schema. ",
+					"type": "string"
+				},
+				"configSchemaURL": {
+					"description": "(PUBLIC) URL of this schema.  Used for run-time verification of configuration. ",
+					"type": "string"
+				},
+				"importConfig": {
+					"$ref": "#/definitions/importConfig"
+				},
+				"importThirdPartyConfig": {
+					"$ref": "#/definitions/importThirdPartyConfig"
+				},
+				"securityPolicies": {
+					"$ref": "#/definitions/securityPolicies"
+				},
+				"securityPolicyRules": {
+					"$ref": "#/definitions/securityPolicyRules"
+				},
+				"accessibleLinker": {
+					"description": "(PUBLIC)",
+					"type": "boolean"
+				},
+				"servicesConfig": {
+					"$ref": "#/definitions/servicesConfig"
+				},
+				"preferences": {
+					"$ref": "#/definitions/preferences"
+				},
+				"systemTrayIcon": {
+					"description": "(PUBLIC) Sets the location of the system tray icon (lower right corner of the terminal)",
+					"type": "string"
+				},
+				"systemTrayComponent": {
+					"description": "(PUBLIC)",
+					"type": "string"
+				},
+				"Window Manager": {
+					"$ref": "#/definitions/windowManager"
+				},
+				"betaFeatures": {
+					"description": "(PRIVATE) (DEPRECATED)",
+					"type": "object"
+				},
+				"//appDirectoryEndpoint": {
+					"description": "(PRIVATE)",
+					"type": "string"
+				},
+				"appDirectoryEndpoint": {
+					"type": "string"
+				},
+				"globalHotkeys": {
+					"description": "(PUBLIC)",
+					"type": "object"
+				},
+				"workspaces": {
+					"$ref": "#/definitions/workspacesArray"
+				},
+				"components": {
+					"$ref": "#/definitions/components"
+				},
+				"services": {
+					"$ref": "#/definitions/services"
+				},
+				"feaURLWhitelist": {
+					"description": "A regex pattern that represents a URL whitelist. If set, components will **only** be able to navigate to URLs that match the regex pattern.",
+					"type": "string"
+				},
+				"cssOverridePath": {
+					"description": "(DEPRECATED)",
+					"type": "string"
+				},
+				"debugServiceDelay": {
+					"description": "(DEPRECATED)",
+					"type": "number"
+				},
+				"failedComponentCloseNotification": {
+					"description": "If true throw a notification when a component fails to close within the time limit specified in `finsemble[\"Window Manager\"].componentCloseTimeout`",
+					"type": "boolean",
+					"default": false
+				},
+				"initialWorkspace": {
+					"description": "The workspace name specified by this config will be the first one presented to an end user the very first time they start the SmartDesktop. This overrides the default behavior set by the config: finsemble.workspaces. After the very first instance of the SmartDesktop, Finsemble will load the last workspace loaded or any workspace specified by user preferences.",
+					"type": "string"
+				},
+				"isAuthEnabled": {
+					"description": "(DEPRECATED)",
+					"type": "boolean",
+					"default": false
+				},
+				"shutdownTimeout": {
+					"description": "Amount of time (in milliseconds) to give services to shutdown before forcibly quitting the application. Components get 2 seconds less than services.",
+					"type": "number",
+					"minimum": 10000,
+					"default": 30000
+				},
+				"scheduledRestart": {
+					"$ref": "#/definitions/scheduledRestart"
+				},
+				"stackedWindow": {
+					"$ref": "#/definitions/stackedWindow"
+				},
+				"menus": {
+					"description": "Legacy config to configure menus. Still used in some configuration examples",
+					"$ref": "#/definitions/menus"
+				},
+				"configSetDone": {
+					"type": "boolean"
+				},
+				"comment": {
+					"description": "(DEPRECATED) Comment string inserted into config.",
+					"type": "string"
+				},
+				"//": {
+					"description": "(DEPRECATED) Comment string inserted into config.",
+					"type": "string"
+				},
+				"deprecatedConfig": {
+					"$ref": "#/definitions/deprecatedConfig"
+				},
+				"custom": {}
+			},
+			"required": [
+				"applicationRoot",
+				"moduleRoot",
+				"servicesRoot",
+				"notificationURL",
+				"bootConfig",
+				"bootTasks",
+				"system",
+				"thirdPartyRoot",
+				"workspaceTemplates",
+				"configSchemaURL",
+				"securityPolicies",
+				"securityPolicyRules",
+				"accessibleLinker",
+				"servicesConfig",
+				"preferences",
+				"systemTrayIcon",
+				"systemTrayComponent",
+				"Window Manager",
+				"betaFeatures",
+				"globalHotkeys",
+				"workspaces",
+				"components",
+				"services"
+			],
+			"additionalProperties": false
+		},
+		"manifestStartupApp": {
+			"description": "Manifest property for the initial startup app, which reference Finsemble's System Manager.",
+			"type": "object",
+			"properties": {
+				"name": {
+					"type": "string"
+				},
+				"url": {
+					"type": "string"
+				},
+				"uuid": {
+					"type": "string"
+				},
+				"requireHandshake": {
+					"type": "boolean"
+				},
+				"applicationIcon": {
+					"type": "string"
+				},
+				"defaultTop": {
+					"type": "number"
+				},
+				"defaultLeft": {
+					"type": "number"
+				},
+				"defaultHeight": {
+					"type": "number"
+				},
+				"defaultWidth": {
+					"type": "number"
+				},
+				"showTaskbarIcon": {
+					"type": "boolean"
+				},
+				"autoShow": {
+					"type": "boolean"
+				},
+				"frame": {
+					"type": "boolean"
+				},
+				"resizable": {
+					"type": "boolean"
+				},
+				"maximizable": {
+					"type": "boolean"
+				},
+				"delay_connection": {
+					"type": "boolean"
+				},
+				"contextMenu": {
+					"type": "boolean"
+				},
+				"cornerRounding": {
+					"$ref": "#/definitions/cornerRounding"
+				},
+				"alwaysOnTop": {
+					"type": "boolean"
+				}
+			},
+			"required": ["name", "url", "uuid"],
+			"example": {
+				"startup_app": {
+					"name": "ChartIQ Local",
+					"url": "http://localhost:3375/finsemble/services/systemManager/systemManager.html",
+					"uuid": "Finsemble",
+					"requireHandshake": true,
+					"applicationIcon": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png",
+					"defaultTop": 75,
+					"defaultLeft": 200,
+					"defaultHeight": 950,
+					"defaultWidth": 700,
+					"showTaskbarIcon": true,
+					"autoShow": false,
+					"frame": true,
+					"resizable": true,
+					"maximizable": false,
+					"delay_connection": true,
+					"contextMenu": true,
+					"cornerRounding": {
+						"width": 4,
+						"height": 4
+					},
+					"alwaysOnTop": false
+				}
+			}
+		},
+		"appAssets": {
+			"title": "appAssets",
+			"description": "Manifest array of external assets to be automatically loading by FEA. ",
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"src": {
+						"type": "string",
+						"format": "uri"
+					},
+					"version": {
+						"type": "string"
+					},
+					"alias": {
+						"type": "string"
+					},
+					"target": {
+						"type": "string"
+					}
+				}
+			}
+		},
+		"windowManager": {
+			"title": "Window Manager",
+			"description": "(PUBLIC) Global settings for the window title bar.",
+			"type": "object",
+			"properties": {
+				"alwaysOnTopIcon": {
+					"description": "When set to `true`, all windows can be pinned so that they are always on top (like a sticky note). You can override this setting for specific components in their config.",
+					"type": "boolean",
+					"default": false
+				},
+				"FSBLHeader": {
+					"description": "Configuration for the FSBL Header in the titlebar of a component",
+					"type": ["boolean", "object"],
+					"default": true,
+					"properties": {
+						"hideMaximize": {
+							"description": "Value indicating whether the maximize button is hidden in the component titlebar",
+							"type": "boolean",
+							"default": false
+						},
+						"hideMinimize": {
+							"description": "Value indicating whether the minimize button is hidden in the component titlebar",
+							"type": "boolean",
+							"default": false
+						},
+						"hideClose": {
+							"description": "Value indicating whether the close button is hidden in the component titlebar",
+							"type": "boolean",
+							"default": false
+						}
+					}
+				},
+				"floatingTitlebarComponent": {
+					"type": "string"
+				},
+				"deliveryMechanism": {
+					"description": "Which delivery method to use for scripts (e.g., FSBL, title bar, etc.) - Valid values are:\r\n\"injection\" - Injects the code into the window.",
+					"type": "string",
+					"enum": ["injection", "preload"],
+					"default": "injection"
+				},
+				"zoom": {
+					"description": "Configuration for the zoom.js preload",
+					"type": "object",
+					"properties": {
+						"timeout": {
+							"description": "The number of milliseconds the zoom pop up should be displayed before it is hidden.",
+							"type": "number",
+							"default": 3000
+						},
+						"step": {
+							"description": "How much the zoom should increase or decrease when zooming in or out.",
+							"type": "number",
+							"default": 0.1
+						},
+						"max": {
+							"description": "The maximum allowed zoom level.",
+							"type": "number",
+							"default": 5.0
+						},
+						"min": {
+							"description": "The minimum allowed zoom level.",
+							"type": "number",
+							"default": 0.2
+						}
+					},
+					"additionalProperties": false
+				},
+				"componentCloseTimeout": {
+					"description": "TBD"
+				}
+			}
+		},
+		"authenticationProfile": {
+			"description": "This is where the authentication profiles are kept. There can be an authentication profile if authentication is enabled through the special “STARTUP” profile, but they can also be used independently by components for oauth.",
+			"type": "object"
+		},
+		"blankWorkspaceTemplate": {
+			"title": "workspaceTemplates",
+			"type": "object",
+			"properties": {
+				"Blank Template": {
+					"$ref": "#/definitions/workspaceTemplate"
+				}
+			}
+		},
+		"preferences": {
+			"title": "preferences",
+			"description": "(PUBLIC) User Perferences",
+			"type": "object",
+			"properties": {
+				"promptUserOnDirtyWorkspace": {
+					"description": "When set to `false`, the user's workspace automatically saves to the last configuration when switching workspaces or closing Finsemble. When set to `true`, the user is prompted to save the current workspace configuration.",
+					"type": "boolean",
+					"default": true
+				}
+			}
+		},
+		"servicesConfig": {
+			"title": "servicesConfig",
+			"description": "(PUBLIC) Configurations that override the defaults for Finsemble's built-in services.",
+			"type": "object",
+			"properties": {
+				"distributedStore": {
+					"title": "distributedStore",
+					"type": "object",
+					"description": "Distributed Store configuration",
+					"properties": {
+						"spawnsAs": {
+							"$ref": "#/definitions/spawnAs"
+						},
+						"affinity": {
+							"description": "Only applicable for `spawnAs: \"window\"`. When set, the service window will be given process affinity based on the string passed in. This allows aggregation of services to a specific browser process.",
+							"type": "string"
+						},
+						"visible": {
+							"description": "Set this to `true` in order to reveal the hidden service window. This can be useful for debugging services.",
+							"type": "boolean",
+							"default": false
+						},
+						"active": {
+							"description": "Set this to `false` to disable the service.",
+							"type": "boolean",
+							"default": true
+						},
+						"initialStores": {
+							"title": "initialStores",
+							"description": "Foundations for any stores which should be seeded on startup",
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									},
+									"preferPreviousState": {
+										"type": "boolean"
+									},
+									"foundation": {
+										"title": "foundation",
+										"type": "object",
+										"properties": {
+											"appFolders": {
+												"title": "appFolders",
+												"type": "object",
+												"properties": {
+													"list": {
+														"type": "array",
+														"items": {
+															"type": "string"
+														}
+													},
+													"folders": {
+														"title": "folders",
+														"type": "object",
+														"properties": {
+															"Advanced App Launcher": {
+																"$ref": "#/definitions/foldersAppDefinition"
+															},
+															"Favorites": {
+																"$ref": "#/definitions/foldersAppDefinition"
+															}
+														}
+													}
+												}
+											},
+											"appDefinitions": {
+												"type": "object"
+											}
+										}
+									},
+									"default": {
+										"title": "default",
+										"type": "object",
+										"properties": {
+											"activeLauncherTags": {
+												"type": "array"
+											},
+											"filterText": {
+												"type": "string"
+											},
+											"filterTags": {
+												"type": "array"
+											},
+											"activeTags": {
+												"type": "array"
+											},
+											"filteredApps": {
+												"type": "array"
+											},
+											"activeFolder": {
+												"type": "string"
+											},
+											"sortBy": {
+												"type": "string"
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"required": ["initialStores"],
+					"additionalProperties": false
+				},
+				"docking": {
+					"title": "docking",
+					"description": "Configs specific to the docking service",
+					"type": "object",
+					"properties": {
+						"alwaysOnTopLevel": {
+							"type": "string",
+							"default": "normal"
+						},
+						"spawnsAs": {
+							"$ref": "#/definitions/spawnAs"
+						},
+						"affinity": {
+							"description": "Only applicable for `spawnAs: \"window\"`. When set, the service window will be given process affinity based on the string passed in. This allows aggregation of services to a specific browser process.",
+							"type": "string"
+						},
+						"visible": {
+							"description": "Set this to `true` in order to reveal the hidden service window. This can be useful for debugging services.",
+							"type": "boolean",
+							"default": false
+						},
+						"active": {
+							"description": "Set this to `false` to disable the service.",
+							"type": "boolean",
+							"default": true
+						},
+						"enabled": {
+							"type": "boolean"
+						},
+						"groupTileBuffer": {
+							"type": "number"
+						},
+						"headerHeight": {
+							"description": "This defines the height of the window title bar.",
+							"type": "number",
+							"default": 32
+						},
+						"headerWidth": {
+							"description": "This defines the width of the window title bar.",
+							"type": "number",
+							"default": 32
+						},
+						"MINIMUM_HEIGHT": {
+							"description": "The smallest height to allow a window to shrink on resize.",
+							"type": "number",
+							"default": 28
+						},
+						"MINIMUM_WIDTH": {
+							"description": "The smallest width to allow a window to shrink on resize.",
+							"type": "number",
+							"default": 98
+						},
+						"requireRectangularityForGroupResize": {
+							"description": " If a group of windows forms a rectangle, it can be resized. By turning this to `false`, the user can resize any shaped group by grabbing a corner that is not on another window's edge.",
+							"type": "boolean",
+							"default": true
+						},
+						"undockDisbandsEntireGroup": {
+							"description": "By default, when a user clicks the \"Undock\" button in the title bar, it will leave the group without destroying that group. Set this value to `true` if you would like to eliminate the group when the user clicks the \"Undock\" button.",
+							"type": "boolean",
+							"default": false
+						},
+						"fillHolesOnUndock": {
+							"description": "If set to `true`, a rectangular group will maintain its rectangularity when windows leave the group.",
+							"type": "boolean",
+							"default": true
+						},
+						"tabbing": {
+							"type": "object",
+							"properties": {
+								"enabled": {
+									"description": "Allows windows to tab onto each other.",
+									"type": "boolean",
+									"default": false
+								}
+							},
+							"additionalProperties": false
+						},
+						"tiling": {
+							"type": "object",
+							"properties": {
+								"enabled": {
+									"description": "Allows windows to tile onto each other.",
+									"type": "boolean",
+									"default": false
+								}
+							},
+							"additionalProperties": false
+						},
+						"ALLOW_GROUPS_TO_SNAP": {
+							"description": "Allows groups to snap to one another.",
+							"type": "boolean",
+							"default": true
+						},
+						"BUFFER_SIZE": {
+							"description": "The zone around a window that will cause it to snap to other windows. This value is in pixels.",
+							"type": "number",
+							"default": 20
+						},
+						"enableWindowsAeroSnap": {
+							"description": "If `true`, windows aero snap keyboard shortcuts (WINDOWS KEY + UP, RIGHT, DOWN, or LEFT arrow key) will move the current window when pressed. Windows will move the window and Finsemble will respond by updating bounds within the Window Service. If `false` (default), these actions will be cancelled by Finsemble.",
+							"type": "boolean",
+							"default": false
+						},
+						"fillHolesOnUndock ": {
+							"description": "If set to `true`, a rectangular group will maintain its rectangularity when windows leave the group.",
+							"default": true
+						},
+						"GROUP_MODE": {
+							"type": "object",
+							"properties": {
+								"enabled": {
+									"description": "Whether to allow windows to group to one another.",
+									"type": "boolean",
+									"default": true
+								},
+								"behavior ": {
+									"type": "string",
+									"enum": ["explicit", "implicit"],
+									"default": "explicit"
+								}
+							},
+							"additionalProperties": false
+						},
+						"RESIZE_EVENT_THROTTLE_PERIOD": {
+							"description": "Value (in milliseconds) to throttle resize events. If you find that the quantity of resize events is causing poor performance, tweak this value until you are happy with the performance.",
+							"type": "number",
+							"default": 0
+						},
+						"SNAPPING_OPACITY": {
+							"description": "The opacity windows change to when other windows encroach on their buffer zone.",
+							"type": "number",
+							"default": 0.8
+						},
+						"claimSpace": {
+							"description": "Settings for claiming space on Desktop at the operating System level. Windows Only.",
+							"type": "object",
+							"properties": {
+								"enabled": {
+									"description": "If true, docked windows will behave like the Windows Taskbar and claimed space on the operating system",
+									"type": "boolean",
+									"default": true
+								},
+								"alwaysOnTop": {
+									"description": "If true, docked windows that claim space will be always on top when docked",
+									"type": "boolean",
+									"default": false
+								}
+							}
+						},
+						"allowAppropriatedWindowsToGroup": {
+							"description": "Allow Appropriated Windows (Freestanding Applications and windows opened with window.open) to group",
+							"type": "boolean",
+							"default": false
+						}
+					},
+					"required": [
+						"enabled",
+						"groupTileBuffer",
+						"headerHeight",
+						"MINIMUM_WIDTH",
+						"requireRectangularityForGroupResize",
+						"undockDisbandsEntireGroup",
+						"fillHolesOnUndock",
+						"tiling"
+					],
+					"additionalProperties": false
+				},
+				"launcher": {
+					"title": "launcher",
+					"type": "object",
+					"description": "Launcher Service config options",
+					"properties": {
+						"spawnsAs": {
+							"$ref": "#/definitions/spawnAs"
+						},
+						"affinity": {
+							"description": "Only applicable for `spawnAs: \"window\"`. When set, the service window will be given process affinity based on the string passed in. This allows aggregation of services to a specific browser process.",
+							"type": "string"
+						},
+						"visible": {
+							"description": "Set this to `true` in order to reveal the hidden service window. This can be useful for debugging services.",
+							"type": "boolean",
+							"default": false
+						},
+						"active": {
+							"description": "Set this to `false` to disable the service.",
+							"type": "boolean",
+							"default": true
+						},
+						"concurrentSpawnLimit": {
+							"description": "This specifies the number of components that can be spawned concurrently during Workspace load. The default is machine's number of processor cores divided by 2. More than one window per core can potentially cause performance issues on processor-intensive components. Defaults to the machine's number of processor cores divided by 2",
+							"type": "number",
+							"minimum": 1
+						},
+						"staggerPixels": {
+							"type": "number"
+						},
+						"unknownComponent": {
+							"type": "string"
+						},
+						"search": {
+							"description": "Allows you to control the component search built into finsemble",
+							"type": "object",
+							"properties": {
+								"enabled": {
+									"description": "Set to false to disable component search.",
+									"type": "boolean",
+									"default": true
+								},
+								"options": {
+									"description": "An object containing fuse.js configuration options."
+								}
+							},
+							"additionalProperties": false
+						}
+					},
+					"required": ["staggerPixels", "unknownComponent"]
+				},
+				"logger": {
+					"title": "logger",
+					"type": "object",
+					"description": "Central Logger config options",
+					"properties": {
+						"spawnsAs": {
+							"$ref": "#/definitions/spawnAs"
+						},
+						"affinity": {
+							"description": "Only applicable for `spawnAs: \"window\"`. When set, the service window will be given process affinity based on the string passed in. This allows aggregation of services to a specific browser process.",
+							"type": "string"
+						},
+						"visible": {
+							"description": "Set this to `true` in order to reveal the hidden service window. This can be useful for debugging services.",
+							"type": "boolean",
+							"default": false
+						},
+						"active": {
+							"description": "Set this to `false` to disable the service.",
+							"type": "boolean",
+							"default": true
+						},
+						"hotkeyShowCentralLogger": {
+							"description": "Sets the hotkey for showing the Central Logger. Leave this config out to disable the hotkey.",
+							"type": "array",
+							"items": {
+								"type": "string"
+							},
+							"default": ["ctrl", "shift", "L"]
+						},
+						"defaultClientLogLevels": {
+							"$ref": "#/definitions/loggerClientLogLevels"
+						}
+					},
+					"additionalProperties": false
+				},
+				"storage": {
+					"title": "storage",
+					"type": "object",
+					"description": "Storage Service config options",
+					"properties": {
+						"spawnsAs": {
+							"$ref": "#/definitions/spawnAs"
+						},
+						"affinity": {
+							"description": "Only applicable for `spawnAs: \"window\"`. When set, the service window will be given process affinity based on the string passed in. This allows aggregation of services to a specific browser process.",
+							"type": "string"
+						},
+						"visible": {
+							"description": "Set this to `true` in order to reveal the hidden service window. This can be useful for debugging services.",
+							"type": "boolean",
+							"default": false
+						},
+						"active": {
+							"description": "Set this to `false` to disable the service.",
+							"type": "boolean",
+							"default": true
+						},
+						"defaultStorage": {
+							"description": "The default storage model to use when saving and loading data.",
+							"type": "string",
+							"default": "IndexedDBAdapter"
+						},
+						"dataStoreAdapters": {
+							"title": "dataStoreAdapters",
+							"description": "Storage adapters that the storage service will load up on application startup.",
+							"type": "object",
+							"properties": {
+								"LocalStorageAdapter": {
+									"description": "local storage adapter .js file",
+									"type": "string",
+									"default": "$applicationRoot/adapters/localStorageAdapter.js"
+								},
+								"IndexedDBAdapter": {
+									"description": "indexedDB adapter .js file",
+									"type": "string",
+									"default": "$applicationRoot/adapters/indexedDBAdapter.js"
+								}
+							}
+						},
+						"topicToDataStoreAdapters": {
+							"title": "topicToDataStoreAdapters",
+							"type": "object",
+							"properties": {
+								"finsemble": {
+									"description": "Which storage adapter to use when persisting non-workspace-related information.",
+									"type": "string",
+									"default": "IndexedDBAdapter"
+								},
+								"finsemble.workspace": {
+									"description": "Which storage adapter to use when persisting workspace-related information.",
+									"type": "string",
+									"default": "IndexedDBAdapter"
+								},
+								"finsemble.workspace.cache": {
+									"description": "Which storage adapter to use when caching workspace-related information.",
+									"type": "string",
+									"default": "IndexedDBAdapter"
+								},
+								"finsemble.notifications": {
+									"description": "Sets the storage adapter for notification persistence",
+									"type": "string",
+									"default": "IndexedDBAdapter"
+								}
+							},
+							"required": ["finsemble", "finsemble.workspace", "finsemble.workspace.cache"]
+						}
+					},
+					"required": ["defaultStorage", "dataStoreAdapters", "topicToDataStoreAdapters"]
+				},
+				"workspace": {
+					"type": "object",
+					"description": "Workspace Service config options",
+					"properties": {
+						"spawnsAs": {
+							"$ref": "#/definitions/spawnAs"
+						},
+						"affinity": {
+							"description": "Only applicable for `spawnAs: \"window\"`. When set, the service window will be given process affinity based on the string passed in. This allows aggregation of services to a specific browser process.",
+							"type": "string"
+						},
+						"visible": {
+							"description": "Set this to `true` in order to reveal the hidden service window. This can be useful for debugging services.",
+							"type": "boolean",
+							"default": false
+						},
+						"active": {
+							"description": "Set this to `false` to disable the service.",
+							"type": "boolean",
+							"default": true
+						},
+						"persistURL": {
+							"description": "A global config for component URL persistence. When true, components automatically save their last URL instead of using the one in the config. The component config will overwrite the global config.",
+							"default": false
+						},
+						"closeWorkspaceTimeout": {
+							"description": "Number of miliseconds the workspace service should wait for all of the windows to close when switching to another workspace. Workspaces are locked until a close action completes or times out. If this timeout value is exceeded the user will be provided with a notification and an empty workspace will be loaded. Set to null for no timeout.",
+							"type": "number",
+							"default": 30000
+						},
+						"closeFailureNotificationMessage": {
+							"description": "Override the default notification message that appears to the end user when closeWorkspaceTimeout is triggered. Set to \"\" to stop a message from being sent.",
+							"type": "string"
+						},
+						"disableDirtyShutdownCheck": {
+							"description": "Disable the check for dirty shutdown when Workspace Service starts that causes the last active workspace to be used",
+							"type": "boolean"
+						},
+						"search": {
+							"description": "Allows you to control the workspace search built into finsemble",
+							"type": "object",
+							"properties": {
+								"enabled": {
+									"description": "Set to false to disable workspace search.",
+									"type": "boolean",
+									"default": true
+								},
+								"options": {
+									"description": "An object containing fuse.js configuration options."
+								}
+							},
+							"additionalProperties": false
+						}
+					},
+					"additionalProperties": false
+				},
+				"assimilation": {
+					"$ref": "#/definitions/serviceAssimilationConfig"
+				},
+				"notifications": {
+					"description": "configs specific to the notifications service",
+					"type": "object",
+					"properties": {
+						"notificationsCenterComponentType": {
+							"description": "The notifications center component type",
+							"type": "string",
+							"default": "NotificationsCenter"
+						},
+						"defaultSnoozePeriodSeconds": {
+							"description": "The default snooze period for notifications",
+							"type": "number",
+							"default": 300
+						},
+						"newNotificationHaloPeriodSeconds": {
+							"description": "The default period for new notifications halo",
+							"type": "number",
+							"default": 180
+						},
+						"maxNotificationsToRetain": {
+							"description": "The maximum number of notifications the service should store in memory",
+							"type": "number",
+							"default": 1000
+						},
+						"disableDotOnToolbarIcon": {
+							"type": "boolean",
+							"default": false
+						},
+						"showDotOnToolbarIconForMutedNotifications": {
+							"type": "boolean",
+							"default": false
+						},
+						"maxNotificationRetentionPeriodSeconds": {
+							"description": "The maximum amount of time to retain notifications in seconds",
+							"type": "number",
+							"default": 604800
+						},
+						"informationalNotificationToastPeriodSeconds": {
+							"description": "The number of seconds a toast will show for informational notifications (Any notifications without actions)",
+							"type": "number",
+							"default": 45
+						},
+						"proxyToWebApiFilter": {
+							"description": "Broadcast any notifications that match this filter to the Notification Web API to appear in the OS.",
+							"type": ["object", "boolean"],
+							"oneOf": [
+								{ "enum": [false] },
+								{
+									"properties": {
+										"include": {
+											"type": ["array", "boolean"],
+											"oneOf": [
+												{
+													"items": { "$ref": "#/definitions/notification" }
+												},
+												{ "enum": [false] }
+											]
+										},
+										"exclude": {
+											"type": ["array", "boolean"],
+											"oneOf": [
+												{
+													"items": { "$ref": "#/definitions/notification" }
+												},
+												{ "enum": [false] }
+											]
+										}
+									}
+								}
+							]
+						},
+						"defaultDismissButtonText": {
+							"description": "If the service needs to add dismiss actions to the button. The text will default to the value set here as a last resort. There is a hardcoded value if this not set.",
+							"type": "string",
+							"default": "Dismiss"
+						},
+						"types": {
+							"description": "'types' provide a way of setting default values on notifications based on the INotification.type",
+							"type": "object",
+							"properties": {
+								"default": {
+									"description": "'default' is a reserved name. If there any notifications with notification.type that do not match any of the keys in the config. The values in default will be applied.",
+									"$ref": "#/definitions/notificationType"
+								}
+							},
+							"additionalProperties": {
+								"$ref": "#/definitions/notificationType"
+							}
+						},
+						"applyNotificationOverrides": {
+							"description": "The applyNotificationOverrides enables Finsemble to display notifications triggered by a browser view.",
+							"type": "boolean",
+							"default": false
+						}
+					},
+					"additionalProperties": false
+				},
+				"window": {
+					"title": "window",
+					"type": "object",
+					"description": "Window Service config options",
+					"properties": {
+						"additionalWorkspaceFields": {
+							"description": "Additional fields for window data that are allowed to be stored in the Workspace",
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						},
+						"ignoreFieldsForDirtyingWorkspace": {
+							"description": "Changes in these fields do not cause workspaces to be dirty",
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			},
+			"additionalProperties": false
+		},
+		"importConfig": {
+			"description": "(PUBLIC) Defines an array of JSON URLs to be imported into the top-level finsemble object. Note that this will overwrite any existing config settings, with two exceptions: New services defined under finsemble.services will be added to the list of existing services (as opposed to replacing the existing list of services). New components defined under finsemble.components will be added to the list of existing components (as opposed to replacing the list of existing components).",
+			"type": "array",
+			"items": {
+				"type": "string"
+			},
+			"examples": [
+				[
+					"$applicationRoot/configs/application/UIComponents.json",
+					"$applicationRoot/configs/application/components.json"
+				]
+			]
+		},
+		"importThirdPartyConfig": {
+			"description": "(PUBLIC) This import is essentially the same as importConfig with one notable difference: the imported configuration settings cannot overwrite any existing settings. In this case, the settings for any potential overwrite will be discarded with a warning message written to the Config Service's log.",
+			"type": "array",
+			"items": [
+				{
+					"type": "string"
+				}
+			],
+			"additionalItems": false
+		},
+		"trustedPreloadsArray": {
+			"description": "An array of URLs for preload files that should be considered 'trusted' and can therefore be preloaded into any component. All URLs must be fully qualified and point to a JavaScript file.",
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"router": {
+			"title": "router",
+			"description": "(PUBLIC) Configurations for Router's communication mechanism.",
+			"type": "object",
+			"properties": {
+				"crossDomainTransport": {
+					"description": "The interface for communicating between cross-domain components - When set to `IPCBus`, the default,, all cross-domain components will use IPC to communicate. When set to `FinsembleTransport`, cross-domain components will use IAC. You might switch the `crossDomainTransport` if you are having connection issues involving firewalls, your CSP, etc. Available values are 'IPCBus' and 'FinsembleTransport'.",
+					"type": "string",
+					"enum": ["IPCBus", "SharedWorker", "FinsembleTransport"],
+					"default": "IPCBus"
+				},
+				"sameDomainTransport": {
+					"description": "The transport for components and services with Finsemble's domain. ",
+					"type": "string",
+					"enum": ["IPCBus", "SharedWorker", "FinsembleTransport"],
+					"default": "SharedWorker"
+				},
+				"transportSettings": {
+					"title": "transportSettings",
+					"description": "The specific setting for certain transports.",
+					"type": "object",
+					"properties": {
+						"FinsembleTransport": {
+							"title": "FinsembleTransport",
+							"description": " Configuration for the FinsembleTransport (IAC) if chosen as the communication mechanism for cross-domain components. IAC uses WebSocket as its communication protocol.",
+							"type": "object",
+							"properties": {
+								"serverAddress": {
+									"description": "URI for the WebSocket server. To use a secure connection, use 'wss://localhost.chartiq.com:3376'",
+									"type": "string",
+									"default": "ws://127.0.0.1:3376"
+								}
+							},
+							"required": ["serverAddress"]
+						}
+					},
+					"required": ["FinsembleTransport"],
+					"default": {}
+				},
+				"promptBeforeAllowingExternalApps": {
+					"title": "promptBeforeAllowingExternalApps",
+					"type": "boolean",
+					"default": false
+				}
+			},
+			"additionalProperties": false,
+			"example": {
+				"router": {
+					"crossDomainTransport": "IPCBus",
+					"sameDomainTransport": "SharedWorker",
+					"transportSettings": {
+						"FinsembleTransport": {
+							"serverAddress": "ws://127.0.0.1:3376"
+						}
+					}
+				}
+			}
+		},
+		"system": {
+			"title": "system",
+			"description": "(PRIVATE) Core configuration for system. Much of this is boot config.",
+			"type": "object",
+			"properties": {
+				"FSBLVersion": {
+					"type": "string"
+				},
+				"gitHash": {
+					"type": "string"
+				},
+				"finsembleLibraryPath": {
+					"type": "string"
+				},
+				"premiumRoot": {
+					"type": "string"
+				},
+				"systemTrayIcon": {
+					"type": "string"
+				},
+				"addFSBLWrappers": {
+					"type": "boolean"
+				},
+				"saveLogToFileOnShutDown": {
+					"type": "boolean"
+				},
+				"scheduledRestart": {
+					"$ref": "#/definitions/scheduledRestart"
+				},
+				"isolateCrossDomainComponents": {
+					"type": "boolean"
+				},
+				"requiredServicesConfig": {
+					"title": "requiredServicesConfig",
+					"description": "Core System Configuration that is typically never modified by users. ",
+					"type": "object",
+					"properties": {
+						"routerService": {
+							"type": "object",
+							"properties": {
+								"bootParams": {
+									"$ref": "#/definitions/bootParamsProperties"
+								},
+								"spawnAs": {
+									"type": "string"
+								},
+								"name": {
+									"type": "string"
+								},
+								"visible": {
+									"type": "boolean"
+								},
+								"html": {
+									"type": "string"
+								},
+								"file": {
+									"type": "string"
+								}
+							}
+						},
+						"loggerService": {
+							"type": "object",
+							"properties": {
+								"bootParams": {
+									"$ref": "#/definitions/bootParamsProperties"
+								},
+								"spawnAs": {
+									"type": "string"
+								},
+								"name": {
+									"type": "string"
+								},
+								"visible": {
+									"type": "boolean"
+								},
+								"html": {
+									"type": "string"
+								},
+								"file": {
+									"type": "string"
+								}
+							}
+						},
+						"dataStoreService": {
+							"type": "object",
+							"properties": {
+								"bootParams": {
+									"$ref": "#/definitions/bootParamsProperties"
+								},
+								"spawnAs": {
+									"type": "string"
+								},
+								"name": {
+									"type": "string"
+								},
+								"visible": {
+									"type": "boolean"
+								},
+								"html": {
+									"type": "string"
+								},
+								"file": {
+									"type": "string"
+								}
+							},
+							"additionalProperties": false
+						},
+						"configService": {
+							"type": "object",
+							"properties": {
+								"bootParams": {
+									"$ref": "#/definitions/bootParamsProperties"
+								},
+								"spawnAs": {
+									"type": "string"
+								},
+								"name": {
+									"type": "string"
+								},
+								"visible": {
+									"type": "boolean"
+								},
+								"html": {
+									"type": "string"
+								},
+								"file": {
+									"type": "string"
+								},
+								"changeApplicationStateBeforeLoad": {
+									"type": "string"
+								},
+								"changeApplicationStateAfterLoad": {
+									"type": "string"
+								}
+							},
+							"additionalProperties": false
+						}
+					},
+					"required": ["routerService", "loggerService", "dataStoreService", "configService"],
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"FSBLVersion",
+				"gitHash",
+				"finsembleLibraryPath",
+				"premiumRoot",
+				"systemTrayIcon",
+				"addFSBLWrappers",
+				"saveLogToFileOnShutDown",
+				"scheduledRestart",
+				"isolateCrossDomainComponents",
+				"requiredServicesConfig"
+			],
+			"additionalProperties": false
+		},
+		"bootTasks": {
+			"title": "bootTasks",
+			"description": "(PRIVATE) Startup configuration of internal boot tasks. ",
+			"type": "object",
+			"properties": {
+				"initializeDeepLinkingTask": {
+					"$ref": "#/definitions/bootParams"
+				},
+				"initializeRouterTask": {
+					"$ref": "#/definitions/bootParams"
+				},
+				"initializeFinsemblePubsubTask": {
+					"$ref": "#/definitions/bootParams"
+				},
+				"initializeSystemStateHandersTask": {
+					"$ref": "#/definitions/bootParams"
+				},
+				"updateServiceLauncherConfigTask": {
+					"$ref": "#/definitions/bootParams"
+				},
+				"testTask_initializeSplinterAgentPool": {
+					"$ref": "#/definitions/bootParams"
+				},
+				"waitForAuthenticatedTask": {
+					"$ref": "#/definitions/bootParams"
+				},
+				"initializeSystemManagerAPITask": {
+					"$ref": "#/definitions/bootParams"
+				},
+				"startLoggerTask": {
+					"$ref": "#/definitions/bootParams"
+				},
+				"loadUserDefinedComponentsTask": {
+					"$ref": "#/definitions/bootParams"
+				},
+				"loadFDC3InstalledComponentsTask": {
+					"$ref": "#/definitions/bootParams"
+				},
+				"loadSystemTrayIconTask": {
+					"$ref": "#/definitions/bootParams"
+				},
+				"registerHotkeysTask": {
+					"$ref": "#/definitions/bootParams"
+				},
+				"setupSearchLauncherTask": {
+					"$ref": "#/definitions/bootParams"
+				},
+				"checkForScheduledRestartTask": {
+					"$ref": "#/definitions/bootParams"
+				}
+			},
+			"additionalProperties": {
+				"$ref": "#/definitions/bootParams"
+			}
+		},
+		"boot_config": {
+			"title": "bootConfig",
+			"description": "(PUBLIC) Boot/startup configuration parameters used by the System Manager.",
+			"type": "object",
+			"properties": {
+				"onErrorMakeSystemManagerVisible": {
+					"type": "boolean",
+					"default": true
+				},
+				"defaults": {
+					"title": "defaults",
+					"type": "object",
+					"description": "Default startup-up properties for System Manager",
+					"properties": {
+						"startServiceTimeout": {
+							"description": "Default timeout value in milliseconds for services",
+							"type": "number",
+							"minimum": 0,
+							"maximum": 999999,
+							"default": 15000
+						},
+						"startComponentTimeout": {
+							"description": "Default timeout value in milliseconds for components",
+							"type": "number",
+							"minimum": 0,
+							"default": 15000
+						},
+						"startTaskTimeout": {
+							"type": "number",
+							"minimum": 0,
+							"maximum": 999999,
+							"default": 10000
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"additionalProperties": false,
+			"example": {
+				"bootConfig": {
+					"defaults": {
+						"startServiceTimeout": 10000,
+						"startComponentTimeout": 15000
+					}
+				}
+			}
+		},
+		"bootParams": {
+			"description": "Startup boot parameters for services, components, and boot tasks",
+			"type": "object",
+			"properties": {
+				"bootParams": {
+					"$ref": "#/definitions/bootParamsProperties"
+				}
+			},
+			"additionalProperties": false
+		},
+		"bootParamsProperties": {
+			"title": "bootParams",
+			"description": "Boot parameter properties",
+			"type": "object",
+			"properties": {
+				"stage": {
+					"type": "string",
+					"enum": ["microkernel", "kernel", "authentication", "preuser", "earlyuser", "user"]
+				},
+				"stopOnFailure": {
+					"type": "boolean"
+				},
+				"autoStart": {
+					"type": "boolean"
+				},
+				"customFailureMessage": {
+					"type": "string"
+				},
+				"timeout": {
+					"type": "number"
+				},
+				"dependencies": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"checkpoints": {
+					"title": "checkpoints",
+					"type": "object"
+				}
+			},
+			"additionalProperties": false
+		},
+		"dashbarItem": {
+			"title": "dashbarItem",
+			"description": "Dashbar item properties",
+			"type": "object",
+			"properties": {
+				"title": {
+					"type": "string"
+				},
+				"url": {
+					"type": "string"
+				},
+				"width": {
+					"type": "integer"
+				}
+			},
+			"required": ["title", "url"]
+		},
+		"components": {
+			"title": "components",
+			"description": "(PUBLIC) Set of component configurations",
+			"type": "object",
+			"properties": {},
+			"required": [
+				"Toolbar",
+				"windowTitleBar",
+				"QuickComponentForm",
+				"Docking Move Mask",
+				"yesNo",
+				"singleInput",
+				"dialogModal",
+				"UserPreferences",
+				"SystemTrayComponent",
+				"linkerWindow",
+				"Process Monitor",
+				"nonConfiguredComponent"
+			],
+			"additionalProperties": {
+				"$ref": "#/definitions/component"
+			}
+		},
+		"component": {
+			"description": "<b>[component name]</b> The name of the component you are configuring",
+			"title": "component",
+			"type": "object",
+			"forceDefaults": false,
+			"properties": {
+				"bootParams": {
+					"$ref": "#/definitions/bootParamsProperties"
+				},
+				"window": {
+					"title": "window",
+					"type": "object",
+					"properties": {
+						"//": {
+							"type": "string"
+						},
+						"id": {
+							"type": "string"
+						},
+						"url": {
+							"type": "string"
+						},
+						"affinity": {
+							"type": "string"
+						},
+						"width": {
+							"type": ["number", "string"]
+						},
+						"height": {
+							"type": ["number", "string"]
+						},
+						"dockedHeight": {
+							"type": "number"
+						},
+						"top": {
+							"type": ["string", "number", "null"]
+						},
+						"left": {
+							"type": ["string", "number", "null"]
+						},
+						"right": {
+							"type": ["string", "number", "null"]
+						},
+						"bottom": {
+							"type": ["string", "number", "null"]
+						},
+						"position": {
+							"type": "string",
+							"enum": ["available", "monitor", "relative", "virtual", "absolute"]
+						},
+						"dockable": {
+							"type": ["array", "boolean"],
+							"items": {
+								"type": "string"
+							}
+						},
+						"maxHeight": {
+							"type": ["number", "boolean", "null"]
+						},
+						"maxWidth": {
+							"type": ["number", "boolean", "null"]
+						},
+						"minHeight": {
+							"type": ["number", "boolean", "null"]
+						},
+						"minWidth": {
+							"type": ["number", "boolean", "null"]
+						},
+						"docked": {
+							"type": "string"
+						},
+						"canGroup": {
+							"type": "boolean"
+						},
+						"alwaysOnTop": {
+							"type": "boolean"
+						},
+						"name": {
+							"type": "string"
+						},
+						"forceOntoMonitor": {
+							"type": ["boolean", "string"],
+							"enum": [true, false, "availableRect", "monitorRect"]
+						},
+						"monitor": {
+							"type": ["number", "string"]
+						},
+						"data": {
+							"type": ["array", "boolean", "integer", "null", "number", "object", "string"]
+						},
+						"options": {
+							"title": "options",
+							"type": "object",
+							"properties": {
+								"autoShow": {
+									"type": "boolean"
+								},
+								"contextMenu": {
+									"type": "boolean"
+								},
+								"showTaskbarIcon": {
+									"type": "boolean"
+								},
+								"smallWindow": {
+									"type": "boolean"
+								},
+								"maximizable": {
+									"type": "boolean"
+								},
+								"cornerRounding": {
+									"$ref": "#/definitions/cornerRounding"
+								},
+								"opacity": {
+									"type": "number"
+								},
+								"resizable": {
+									"type": "boolean"
+								},
+								"alwaysOnTop": {
+									"type": "boolean"
+								},
+								"isEvergreen": {
+									"type": "boolean"
+								}
+							}
+						},
+						"frame": {
+							"type": "boolean"
+						},
+						"autoShow": {
+							"type": "boolean"
+						},
+						"ephemeral": {
+							"type": "boolean"
+						},
+						"resizable": {
+							"type": "boolean"
+						},
+						"showTaskbarIcon": {
+							"type": "boolean"
+						},
+						"show": {
+							"type": "boolean"
+						},
+						"windowType": {
+							"type": "string"
+						},
+						"alias": {
+							"type": "string"
+						},
+						"path": {
+							"type": "string"
+						},
+						"arguments": {
+							"type": "string"
+						},
+						"defaultHeight": {
+							"type": "number"
+						},
+						"addToWorkspace": {
+							"type": "boolean"
+						},
+						"closeComponentsTogether": {
+							"type": "boolean"
+						},
+						"toSpawn": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"components": {
+										"type": "array",
+										"items": {
+											"componentType": {
+												"type": "string"
+											},
+											"spawnOptions": {
+												"$ref": "#/definitions/spawnOptions"
+											}
+										},
+										"spawnOptions": {
+											"$ref": "#/definitions/spawnOptions"
+										}
+									},
+									"componentType": {
+										"type": "string"
+									},
+									"spawnOptions": {
+										"$ref": "#/definitions/spawnOptions"
+									}
+								}
+							},
+							"examples": [
+								[
+									{
+										"componentType": "Welcome Component",
+										"spawnOptions": {
+											"top": 0,
+											"left": 0,
+											"height": 250,
+											"width": 600,
+											"data": {}
+										}
+									},
+									{
+										"components": [
+											{
+												"componentType": "Welcome Component",
+												"spawnOptions": {
+													"data": {}
+												}
+											},
+											{
+												"componentType": "Process Monitor",
+												"spawnOptions": {
+													"data": {}
+												}
+											}
+										],
+										"spawnOptions": {
+											"top": 250,
+											"left": 0,
+											"height": 250,
+											"width": 600
+										}
+									},
+									{
+										"componentType": "Welcome Component",
+										"spawnOptions": {
+											"top": 500,
+											"left": 0,
+											"height": 200,
+											"width": 600,
+											"data": {}
+										}
+									},
+									{
+										"componentType": "Process Monitor",
+										"spawnOptions": {
+											"top": 0,
+											"left": 600,
+											"height": 700,
+											"width": 300,
+											"data": {}
+										}
+									}
+								]
+							]
+						}
+					},
+					"additionalProperties": true
+				},
+				"component": {
+					"type": "object",
+					"properties": {
+						"category": {
+							"type": "string"
+						},
+						"mode": {
+							"type": "string"
+						},
+						"advertiseReceivers": {
+							"type": ["array", "string"],
+							"items": {
+								"type": "string"
+							}
+						},
+						"spawnOnStartup": {
+							"type": "boolean"
+						},
+						"spawnOnAllMonitors": {
+							"type": "boolean"
+						},
+						"canMinimize": {
+							"type": "boolean"
+						},
+						"canMaximize": {
+							"type": "boolean"
+						},
+						"useAppCatalog": {
+							"type": "boolean"
+						},
+						"singleton": {
+							"type": "boolean"
+						},
+						"showDevConsoleOnVisible": {
+							"type": "boolean"
+						},
+						"allowQuickComponent": {
+							"type": "string"
+						},
+						"neededClients": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						},
+						"displayName": {
+							"type": "string"
+						},
+						"preload": {
+							"type": ["boolean", "string", "array"],
+							"items": {
+								"type": "string"
+							}
+						},
+						"inject": {
+							"type": ["boolean", "string"]
+						},
+						"spawnOnHotkey": {
+							"description": "Defines the hotkey",
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						},
+						"enableGrpc": {
+							"description": "Enables GRPC. Can be used from Browserview based components. grpc is a global variable available at window.grpc or at fin.grpc. Note: sandbox is disabled for these components.",
+							"type": "boolean"
+						},
+						"custom": {}
+					},
+					"additionalProperties": false
+				},
+				"foreign": {
+					"title": "foreign",
+					"type": "object",
+					"properties": {
+						"agentLabel": {
+							"type": "string"
+						},
+						"clients": {
+							"title": "clients",
+							"type": "object",
+							"properties": {
+								"dialogManager": {
+									"title": "dialogManager",
+									"type": "object",
+									"properties": {
+										"isDialog": {
+											"type": "boolean"
+										}
+									},
+									"additionalProperties": false
+								}
+							},
+							"additionalProperties": false
+						},
+						"services": {
+							"type": "object",
+							"properties": {
+								"windowService": {
+									"type": "object",
+									"properties": {
+										"global": {
+											"type": "boolean"
+										},
+										"allowSnapping": {
+											"type": "boolean"
+										},
+										"isArrangable": {
+											"type": "boolean"
+										},
+										"allowGrouping": {
+											"type": "boolean"
+										},
+										"allowAutoArrange": {
+											"type": "boolean"
+										},
+										"allowTabbing": {
+											"type": "boolean"
+										},
+										"allowTiling": {
+											"type": "boolean"
+										},
+										"allowMinimize": {
+											"type": "boolean"
+										},
+										"shouldRegister": {
+											"type": "boolean"
+										},
+										"manageWindowMovement": {
+											"type": "boolean"
+										},
+										"persistURL": {
+											"type": "boolean"
+										},
+										"addToWorkspace": {
+											"type": "boolean"
+										}
+									}
+								},
+								"dockingService": {
+									"type": "object",
+									"properties": {
+										"canGroup": {
+											"type": "boolean"
+										},
+										"additionalProperties": false
+									}
+								},
+								"additionalProperties": false
+							}
+						},
+						"components": {
+							"type": "object",
+							"properties": {
+								"App Launcher": {
+									"type": "object",
+									"properties": {
+										"launchableByUser": {
+											"type": "boolean",
+											"default": false
+										}
+									},
+									"default": {}
+								}
+							},
+							"default": {}
+						},
+						"custom": {},
+						"additionalProperties": false
+					},
+					"default": {}
+				},
+				"childWindowOptions": {
+					"$ref": "#/definitions/component"
+				},
+				"custom": {}
+			},
+			"additionalProperties": false
+		},
+		"services": {
+			"description": "(PUBLIC) set of service configurations",
+			"type": "object",
+			"properties": {
+				"workspaceService": {
+					"description": "(PRIVATE)",
+					"$ref": "#/definitions/service"
+				},
+				"storageService": {
+					"description": "(PRIVATE)",
+					"$ref": "#/definitions/service"
+				},
+				"linkerService": {
+					"description": "(PRIVATE)",
+					"$ref": "#/definitions/service"
+				},
+				"searchService": {
+					"description": "(PRIVATE)",
+					"$ref": "#/definitions/service"
+				},
+				"windowService": {
+					"description": "(PRIVATE)",
+					"$ref": "#/definitions/service"
+				},
+				"authenticationService": {
+					"description": "(PRIVATE)",
+					"$ref": "#/definitions/service"
+				},
+				"assimilationService": {
+					"description": "(PRIVATE)",
+					"$ref": "#/definitions/service"
+				},
+				"hotkeysService": {
+					"description": "(PRIVATE)",
+					"$ref": "#/definitions/service"
+				}
+			},
+			"required": [
+				"workspaceService",
+				"storageService",
+				"linkerService",
+				"searchService",
+				"windowService",
+				"authenticationService",
+				"assimilationService",
+				"hotkeysService"
+			],
+			"additionalProperties": {
+				"$ref": "#/definitions/service"
+			}
+		},
+		"service": {
+			"description": "<b>[service name]</b> The name of the service you are configuring",
+			"type": "object",
+			"properties": {
+				"bootParams": {
+					"$ref": "#/definitions/bootParamsProperties"
+				},
+				"name": {
+					"description": "name of service",
+					"type": "string"
+				},
+				"spawnAs": {
+					"type": "string"
+				},
+				"visible": {
+					"description": "if true then spawn service window visible",
+					"type": "boolean",
+					"default": false
+				},
+				"html": {
+					"type": "string"
+				},
+				"file": {
+					"type": "string"
+				},
+				"category": {
+					"type": "string",
+					"enum": ["system"]
+				},
+				"showDevConsoleOnVisible": {
+					"type": "boolean"
+				},
+				"debugServiceDelay": {
+					"type": "integer"
+				},
+				"window": {
+					"title": "window",
+					"description": "Logger service's window config",
+					"type": "object",
+					"properties": {
+						"defaultWidth": {
+							"type": "number"
+						},
+						"defaultHeight": {
+							"type": "number"
+						},
+						"accelerator": {
+							"title": "accelerator",
+							"type": "object",
+							"properties": {
+								"zoom": {
+									"type": "boolean"
+								},
+								"reload": {
+									"type": "boolean"
+								},
+								"devtools": {
+									"type": "boolean"
+								}
+							}
+						},
+						"contextMenu": {
+							"type": "boolean"
+						}
+					}
+				},
+				"config": {
+					"anyOf": [
+						{
+							"title": "windowServiceConfig",
+							"description": "Service config specific to window service",
+							"type": "object",
+							"properties": {
+								"BUFFER_SIZE": {
+									"type": "number"
+								},
+								"RESIZE_EVENT_THROTTLE_PERIOD": {
+									"type": "number"
+								},
+								"MINIMUM_WIDTH": {
+									"type": "number"
+								},
+								"MINIMUM_HEIGHT": {
+									"type": "number"
+								},
+								"GROUP_MODE": {
+									"title": "GROUP_MODE",
+									"type": "object",
+									"properties": {
+										"enabled": {
+											"type": "boolean"
+										},
+										"behavior": {
+											"type": "string"
+										}
+									}
+								},
+								"DEBUG": {
+									"type": "boolean"
+								},
+								"ALLOW_GROUPS_TO_SNAP": {
+									"type": "boolean"
+								},
+								"SNAPPING_OPACITY": {
+									"type": "number"
+								},
+								"groupTileBuffer": {
+									"type": "number"
+								},
+								"headerHeight": {
+									"type": "number"
+								},
+								"heartbeatResponseTimeoutDefaults": {
+									"title": "heartbeatResponseTimeoutDefaults",
+									"type": "object",
+									"properties": {
+										"min": {
+											"type": "number"
+										},
+										"max": {
+											"type": "number"
+										},
+										"crashed": {
+											"type": "number"
+										},
+										"possiblyCrashed": {
+											"type": "number"
+										},
+										"notResponding": {
+											"type": "number"
+										}
+									}
+								},
+								"enableWindowsAeroSnap": {
+									"type": "boolean",
+									"default": false
+								},
+								"tabbing": {
+									"type": "object",
+									"properties": {
+										"enabled": {
+											"type": "boolean",
+											"default": true
+										}
+									}
+								},
+								"tiling": {
+									"type": "object",
+									"properties": {
+										"enabled": {
+											"type": "boolean",
+											"default": true
+										}
+									}
+								}
+							}
+						},
+						{
+							"$ref": "#/definitions/serviceAssimilationConfig"
+						}
+					]
+				},
+				"channels": {
+					"description": "Only used in Linker Service",
+					"type": "array",
+					"items": {
+						"type": "object"
+					}
+				},
+				"custom": {}
+			},
+			"required": ["html"],
+			"additionalProperties": false
+		},
+		"scheduledRestart": {
+			"description": "Set Finsemble to automatically restart. These values can be overriden by the user through user preferences.\r\nhour 0 - The hour when Finsemble should restart. This is in 24 hour time according to the user's local machine's timezone.\r\nminute 0 - The minute when Finsemble should restart.\r\ndialogTimeout 10000 - When it is time to restart, the user is presented with a dialog to confirm or cancel. Since resets occur at night while the machine is unattended, most often the dialog will time out and Finsemble will reset. The `dialogTimeout` specifies how long to wait for a user response in milliseconds.",
+			"type": ["boolean", "object"],
+			"default": false
+		},
+		"serviceAssimilationConfig": {
+			"title": "assimilationConfig",
+			"description": "Service config specific to assimilation service",
+			"type": "object",
+			"properties": {
+				"spawnsAs": {
+					"$ref": "#/definitions/spawnAs"
+				},
+				"affinity": {
+					"description": "Only applicable for `spawnAs: \"window\"`. When set, the service window will be given process affinity based on the string passed in. This allows aggregation of services to a specific browser process.",
+					"type": "string"
+				},
+				"visible": {
+					"description": "Set this to `true` in order to reveal the hidden service window. This can be useful for debugging services.",
+					"type": "boolean",
+					"default": false
+				},
+				"active": {
+					"description": "Set this to `false` to disable the service.",
+					"type": "boolean",
+					"default": true
+				},
+				"enabled": {
+					"description": "Set to true to turn on Assimilation",
+					"type": "boolean",
+					"default": true
+				},
+				"port": {
+					"description": "Assimilation communicates with Finsemble's HTML services via a WebSocket. Set the port here.",
+					"type": "number",
+					"default": 8392
+				},
+				"useFeaSpawn": {
+					"type": "boolean"
+				},
+				"throttle": {
+					"description": "Windows sends dozens of events per second when a window is moved. This value tells the application how often to collect those events. You may see performance degradations if you set the throttle below 5.",
+					"type": "number",
+					"default": 15
+				},
+				"blacklist": {
+					"type": "array"
+				},
+				"whitelist": {
+					"type": "array"
+				},
+				"onlySpawned": {
+					"description": "This Boolean tells assimilation whether it should restrict its scope to external applications spawned by Finsemble. If true, only applications launched from Finsemble will be controlled. If false, it will try to control the movements of all windows on the desktop.",
+					"type": "boolean",
+					"default": true
+				},
+				"focusDelay": {
+					"description": "Sets the delay (in miliseconds) between the focus event being received and the actual focusing of the window. This is necessary because the focus event is called simultaneously with minimize/restore events, which causes issues with docking groups.",
+					"type": "number",
+					"default": 30
+				},
+				"eventIgnore": {
+					"description": "Sets the threshold (in miliseconds) from the previous event before which focus/restore events are dropped. Certain sequences of minimize/restore/focus events can create an unwanted loop of events; therefore, restore and focus events are throttled with this property.",
+					"type": "number",
+					"default": 50
+				},
+				"hotkeyTimeout": {
+					"type": "number"
+				},
+				"hideTitleBars": {
+					"description": " Set to true to hide all Finsemble title bars for native applications.",
+					"type": "boolean"
+				}
+			}
+		},
+		"workspacesArray": {
+			"title": "workspaces",
+			"description": "(PUBLIC)  An array of workspaces to be presented to the user the first time they start Finsemble. By default, the first workspace listed in the array will be the one first presented to an end user the first time they load their SmartDesktop.",
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/workspaceTemplate"
+			}
+		},
+		"workspaceTemplate": {
+			"title": "Workspace Template",
+			"description": "Template for config specified workspace",
+			"type": "object",
+			"properties": {
+				"name": {
+					"type": "string"
+				},
+				"type": {
+					"type": "string"
+				},
+				"version": {
+					"type": "string"
+				},
+				"description": {
+					"type": "string"
+				},
+				"groups": {
+					"type": "object"
+				},
+				"windowData": {
+					"type": "array"
+				},
+				"windows": {
+					"title": "windows",
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"componentType": {
+								"type": "string"
+							},
+							"defaultLeft": {
+								"type": "number"
+							},
+							"defaultTop": {
+								"type": "number"
+							}
+						}
+					}
+				},
+				"components": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"type": {
+								"type": "string"
+							},
+							"options": {
+								"type": "object",
+								"properties": {
+									"top": {
+										"type": "number"
+									},
+									"bottom": {
+										"type": "number"
+									},
+									"left": {
+										"type": "number"
+									},
+									"right": {
+										"type": "number"
+									}
+								}
+							}
+						}
+					}
+				},
+				"custom": {}
+			},
+			"required": ["name"],
+			"additionalProperties": false
+		},
+		"cornerRounding": {
+			"description": "Specifies corner rounding for a window",
+			"properties": {
+				"width": {
+					"type": "number",
+					"default": 0
+				},
+				"height": {
+					"type": "number",
+					"default": 0
+				}
+			}
+		},
+		"foldersAppDefinition": {
+			"description": "Definition for AdvanceAppLauncher application folder",
+			"type": "object",
+			"properties": {
+				"icon": {
+					"type": "string"
+				},
+				"type": {
+					"type": "string"
+				},
+				"canDelete": {
+					"type": "boolean"
+				},
+				"apps": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"name": {
+								"type": "string"
+							},
+							"appID": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			}
+		},
+		"menus": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"type": {
+						"type": "string"
+					},
+					"align": {
+						"type": "string"
+					},
+					"label": {
+						"type": "string"
+					},
+					"menuType": {
+						"type": "string"
+					},
+					"customData": {
+						"type": "object",
+						"properties": {
+							"mode": {
+								"type": "string"
+							},
+							"list": {
+								"type": "array",
+								"items:": {
+									"type": "string"
+								}
+							}
+						}
+					},
+					"fontIcon": {
+						"type": "string"
+					},
+					"icon": {
+						"type": "string"
+					}
+				}
+			}
+		},
+		"notification": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"type": "string"
+				},
+				"source": {
+					"type": "string"
+				},
+				"timeout": {
+					"type": "number"
+				},
+				"headerLogo": {
+					"type": "string"
+				},
+				"contentLogo": {
+					"type": "string"
+				},
+				"cssClassName": {
+					"type": "string"
+				},
+				"meta": {
+					"type": "object",
+					"additionalProperties": true
+				}
+			}
+		},
+		"notificationType": {
+			"description": "object Type. The values inside this object will only be applied to notifications with the property 'type' set to the key value.",
+			"type": "object",
+			"properties": {
+				"defaultDismissButtonText": {
+					"description": "Will add a dismiss action to the Notification if one is not already set.",
+					"type": "string",
+					"default": "Dismiss"
+				},
+				"showDismissAction": {
+					"description": "Add a dismiss action to the notification if one does not exists. Default set to false.",
+					"type": "boolean",
+					"default": false
+				},
+				"defaults": {
+					"description": "For any values on a notification not already set, these default values will be set on the Notification object. All fields in here should match those in the INotification interface",
+					"type": "object",
+					"$ref": "#/definitions/notification",
+					"additionalProperties": false
+				}
+			},
+			"additionalProperties": false
+		},
+		"stackedWindow": {
+			"description": "Configuration for tabbed and tiled windows",
+			"type": "object",
+			"properties": {
+				"addReadyTimeout": {
+					"description": "Sets the time in miliseconds for a tabbed/tiled windows to become ready.",
+					"type": "number",
+					"default": 6500
+				}
+			},
+			"additionalProperties": false
+		},
+		"spawnAs": {
+			"description": "\"window\" - Spawns the service as a child window of the Service Manager. \"process\" - Spawns the service in its own browser process (a.k.a. application). This gives the service dedicated CPU to maximize concurrency. \"script\" - Spawns the service as a script running in the Service Manager window. This minimizes memory footprint. This setting can only be used with the following services: assimilation, storage, hotkeys, linker, search and workspace.",
+			"type": "string",
+			"enum": ["window", "process", "script"],
+			"default": "window"
+		},
+		"securityPolicies": {
+			"title": "securityPolicies",
+			"description": "(PUBLIC) FEA security policy",
+			"type": "object",
+			"properties": {
+				"//trusted": {
+					"type": "string"
+				},
+				"trusted": {
+					"type": "object"
+				},
+				"untrusted": {
+					"title": "untrusted",
+					"type": "object",
+					"properties": {
+						"System": {
+							"title": "System",
+							"type": "object",
+							"properties": {
+								"clearCache": {
+									"type": "boolean"
+								},
+								"exit": {
+									"type": "boolean"
+								},
+								"launchExternalProcess": {
+									"type": "boolean"
+								}
+							}
+						},
+						"Window": {
+							"title": "Window",
+							"type": "object",
+							"properties": {
+								"executeJavaScript": {
+									"type": "boolean"
+								},
+								"webPreferences": {}
+							}
+						}
+					}
+				}
+			}
+		},
+		"securityPolicyRules": {
+			"title": "securityPolicyRules",
+			"description": "(PUBLIC)",
+			"type": "object",
+			"properties": {
+				"crossDomain": {
+					"type": "string"
+				},
+				"sameDomain": {
+					"type": "string"
+				}
+			}
+		},
+		"electronAdapter": {
+			"description": "Electron Adapter's config (that is dynamically added to manifest)",
+			"type": "object"
+		},
+		"loggerClientLogLevels": {
+			"description": "Sets the default logging state of each client in the Central Logger if no previous state is found",
+			"type": "object",
+			"properties": {
+				"Error": {
+					"description": "Set to 'true' to see 'Error' as a default client logging level",
+					"type": "boolean",
+					"default": true
+				},
+				"Warn": {
+					"description": "Set 'true' to see 'Warn' as a default client logging level",
+					"type": "boolean",
+					"default": true
+				},
+				"Info": {
+					"description": "Set to 'true' to see 'Info' as a default client logging level",
+					"type": "boolean",
+					"default": false
+				},
+				"Log": {
+					"description": "Set to 'true' to see 'Log' as a default client logging level",
+					"type": "boolean",
+					"default": true
+				},
+				"Debug": {
+					"description": "Set to 'true' to see 'Debug' as a default client logging level",
+					"type": "boolean",
+					"default": false
+				},
+				"Verbose": {
+					"description": "Set to 'true' to see 'Verbose' as a default client logging level",
+					"type": "boolean",
+					"default": false
+				},
+				"LocalOnly": {
+					"description": "Set to 'true' to see 'LocalOnly' as a default client logging level",
+					"type": "boolean",
+					"default": false
+				}
+			}
+		},
+		"logger": {
+			"title": "Logger configuration",
+			"description": "(PUBLIC)",
+			"type": "object",
+			"properties": {
+				"defaultClientLogLevels": {
+					"ref": "#/definitions/loggerClientLogLevels"
+				}
+			}
+		},
+		"deprecatedConfig": {
+			"type": "array",
+			"description": "(PUBLIC) contains operations to handle deprecated config",
+			"examples": [
+				[
+					{
+						"versionDeprecated": "5.1",
+						"operation": "logMessage",
+						"description": "example of only logging message for deprecated config",
+						"property": "finsemble.logger.defaultClientLogLevels.Info",
+						"userMessage": "Please upgrade property to new config schema.",
+						"userMessageType": "error"
+					},
+					{
+						"versionDeprecated": "5.1",
+						"operation": "removeProperty",
+						"description": "example of removing a deprecated property",
+						"property": "finsemble.testXYZ",
+						"userMessageType": "error"
+					},
+					{
+						"versionDeprecated": "5.1",
+						"operation": "setValue",
+						"description": "example of updating a specific value to a new specific value",
+						"property": "finsemble.unknownComponent",
+						"ifOldValue": "nonConfiguredComponent",
+						"newValue": "unknownComponent",
+						"userMessage": "Please upgrade to new config schema.",
+						"userMessageType": "warn"
+					},
+					{
+						"versionDeprecated": "5.1",
+						"operation": "moveProperty",
+						"description": "renames a leave property",
+						"oldProperty": "finsemble.servicesConfig.launcher.staggerPixels",
+						"newProperty": "finsemble.servicesConfig.launcher.windowStaggerOffset",
+						"userMessage": "Please upgrade to new config schema."
+					},
+					{
+						"versionDeprecated": "5.1",
+						"operation": "moveProperty",
+						"oldProperty": "finsemble.components.*.window.url",
+						"newProperty": "finsemble.components.*.window.uri",
+						"description": "a set of object properties can be referenced with wildcards",
+						"removeOld": false,
+						"userMessageType": "error"
+					},
+					{
+						"versionDeprecated": "5.1",
+						"operation": "moveProperty",
+						"oldProperty": "finsemble.components.*.foreign.services.*.allowAutoArrange",
+						"newProperty": "finsemble.components.*.foreign.services.*.autoArrangeEnabled",
+						"description": "multiple wildcards can be used",
+						"removeOld": false,
+						"userMessageType": "error",
+						"when": {
+							"bootConfig": false,
+							"mainConfig": true,
+							"dynamicConfig": false
+						}
+					}
+				]
+			],
+			"items": {
+				"type": "object",
+				"description": "List of run-time operations to migrate deprecated config.",
+				"required": ["versionDeprecated", "operation"],
+				"properties": {
+					"versionDeprecated": {
+						"type": "string",
+						"description": "the Finsemble version the property was deprecated under."
+					},
+					"operation": {
+						"type": "string",
+						"enum": ["logMessage", "setValue", "removeProperty", "moveProperty"],
+						"title": "The operation schema",
+						"description": "the operation to perform"
+					},
+					"description": {
+						"type": "string",
+						"description": "for additional info to describe the deprecated-config operation."
+					},
+					"property": {
+						"type": "string",
+						"description": "For logMessage, setValue, and removeProperty this contains the property path to operate on."
+					},
+					"oldProperty": {
+						"type": "string",
+						"description": "For moveProperty, this contains the source path of the deprecatedProperty to move. Wildcards within the path"
+					},
+					"newProperty": {
+						"type": "string",
+						"description": "For moveProperty, this contains the target path that oldProperty will be moved to."
+					},
+					"removeOld": {
+						"type": "boolean",
+						"description": "For moveProperty, if true then remove oldProperty after moving to new. Use false if customer code references old config location (which should be rare).",
+						"default": true
+					},
+					"clone": {
+						"type": "boolean",
+						"description": "For moveProperty, if true then clone oldProperty before moving to new. Only set to false if removeOld is false and value change dynamically.",
+						"default": false
+					},
+					"userMessage": {
+						"type": "string",
+						"description": "Additional log message to explain the handling of this deprecated config."
+					},
+					"userMessageType": {
+						"type": "string",
+						"enum": ["error", "warn", "log"],
+						"description": "The log type to use when logging this operation.",
+						"default": "warn"
+					},
+					"when": {
+						"type": "object",
+						"description": "When within Finsemble the operation should be invoked.",
+						"required": ["bootConfig", "mainConfig", "dynamicConfig"],
+						"properties": {
+							"bootConfig": {
+								"type": "boolean",
+								"description": "if true then invoke before bootConfig is validated in the System Manager.",
+								"default": true
+							},
+							"mainConfig": {
+								"type": "boolean",
+								"description": "if true then invoke before full config is validated in the Config Service.",
+								"default": true
+							},
+							"dynamicConfig": {
+								"type": "boolean",
+								"description": "if true then invoke after dynamical config is added within the Config Service, but before revalidation.",
+								"default": true
+							}
+						}
+					}
+				}
+			}
+		},
+		"splashScreenTimeout": {
+			"title": "Splash screen timeout",
+			"description": "Amount of time (in milliseconds) to show the splash screen",
+			"type": "number",
+			"default": 0
+		},
+		"disableWMICalls": {
+			"description": "Set to true to disable calls made using WMIC",
+			"type": "boolean"
+		},
+		"splashScreenImage": {
+			"title": "Splash screen image",
+			"description": "URL to use for splash screen image when starting Finsemble.",
+			"type": "string",
+			"default": "http://localhost:3375/assets/img/FinsembleSplash.svg"
+		},
+		"spawnOptions": {
+			"title": "Spawn Options",
+			"description": "Minimal definition for component spawn options",
+			"type": "object",
+			"properties": {
+				"top": {
+					"type": ["number", "string"]
+				},
+				"left": {
+					"type": ["number", "string"]
+				},
+				"height": {
+					"type": ["number", "string"]
+				},
+				"width": {
+					"type": ["number", "string"]
+				},
+				"data": {
+					"type": "object"
+				}
+			}
+		}
+	}
+}

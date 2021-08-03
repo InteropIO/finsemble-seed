@@ -4,21 +4,24 @@
 	// #region Imports
 	// NPM
 	const async = require("async");
-	const { spawn } = require("child_process");
 	const fs = require("fs");
 	const gulp = require("gulp");
 	const shell = require("shelljs");
 	const path = require("path");
+	const parseArgs = require("minimist");
 	const treeKill = require("tree-kill");
 	let FEA;
 	// Internal Cosaic development: exports doesn't exist when running yarn clean
 	try {
 		FEA = require("@finsemble/finsemble-electron-adapter/exports");
-	} catch (e) {}
+	} catch (e) {
+		console.error(`Error in require fea exports: ${e}`);
+	}
 	const FEA_PATH = path.resolve("./node_modules/@finsemble/finsemble-electron-adapter");
 	const FEAPackager = FEA ? FEA.packager : undefined;
-	const startupConfig = require("./configs/other/server-environment-startup");
-	const { envOrArg, runWebpackAndCallback, logToTerminal, runWebpackInParallel } = require("./build/buildHelpers");
+	console.log(`FEAPackager ${FEAPackager}`);
+	const startupConfig = require("./public/configs/other/server-environment-startup");
+	const { envOrArg, runWebpackAndCallback, logToTerminal, runWebpackInParallel } = require("./webpack/buildHelpers");
 	const INSTALLER_CERT_PASS = "INSTALLER_CERTIFICATE_PASSPHRASE";
 
 	// local
@@ -27,7 +30,7 @@
 
 	let angularComponents;
 	try {
-		angularComponents = require("./build/angular-components.json");
+		angularComponents = require("./webpack/angular-components.json");
 	} catch (ex) {
 		angularComponents = null;
 	}
@@ -35,22 +38,21 @@
 	// PATH. So, copy based on our existing env variables.
 	const { env } = process;
 
-	if (!env.NODE_ENV) {
-		env.NODE_ENV = "development";
-	}
+	// "environment" is used within this gulp file to reference environment configs. Default to development if not set
+	// on the command line or the NODE_ENV variable
+	let environment = envOrArg("environment") || env.NODE_ENV || "development";
+
+	// webpack build processes require NODE_ENV to be set
+	env.NODE_ENV = environment;
 
 	if (!env.PORT) {
-		env.PORT = startupConfig[env.NODE_ENV].serverPort;
+		env.PORT = startupConfig[environment].serverPort;
 	}
 
 	// This variable controls whether the build should watch files for changes. This `startsWith` catches all of the
 	// tasks that are dev * (dev, dev: fresh, dev: nolaunch), but excludes build:dev because it is intended to only
 	// build for a development environment and not watch for changes.
 	const isRunningDevTask = process.argv[2].startsWith("dev");
-
-	// This is a reference to the server process that is spawned. The server process is located in server/server.js
-	// and is an Express server that runs in its own node process (via spawn() command).
-	let serverProcess = null;
 
 	let launchTimestamp = 0;
 
@@ -59,7 +61,7 @@
 	 * If both a key and certificate path are not configured nothing is returned.
 	 */
 	const deriveSocketCertificatePaths = () => {
-		const cfg = taskMethods.startupConfig[env.NODE_ENV];
+		const cfg = taskMethods.startupConfig[environment];
 		let socketCertificatePath;
 		if (cfg.socketCertificateKey && cfg.socketCertificateCert) {
 			socketCertificatePath = {
@@ -77,7 +79,7 @@
 		/**
 		 * Attach some variables to the taskMethods so that they are available to gulp-extensions.
 		 */
-		distPath: path.join(__dirname, "dist"),
+		distPath: path.join(__dirname, "common"),
 		srcPath: path.join(__dirname, "src"),
 		startupConfig: startupConfig,
 
@@ -93,7 +95,7 @@
 				const compName = row.source.split("/").pop();
 				const cwd = path.join(__dirname, row.source);
 				const outputPath = path.join(__dirname, row.source, row["output-directory"]);
-				const command = `ng build --base-href "/angular-components/${compName}/" --outputPath "${outputPath}"`;
+				const command = `ng build --base-href "/angular-components/${compName}/" --output-path "${outputPath}"`;
 
 				// switch to components folder
 				const dir = shell.pwd();
@@ -126,7 +128,7 @@
 		 */
 		buildWebpack: (done) => {
 			const watchFiles = isRunningDevTask;
-			logToTerminal(`Starting webpack. Environment:"${process.env.NODE_ENV}"`);
+			logToTerminal(`Starting webpack. Environment:"${environment}"`);
 			// when we're running our dev tasks, we want to leave the parallel workers up,
 			// working away. When we're building, we want those guys to tear themselves down
 			// so the build doesn't hang indefinitely. If we aren't watching, exit the processes
@@ -137,39 +139,34 @@
 					// Build the vendor bundle first, as other webpack instances will use it to speed
 					// up their compilation time.
 					(done) => {
-						const configPath = require.resolve("./build/webpack/webpack.vendor.js");
+						const configPath = require.resolve("./webpack/webpack.vendor.js");
 						const bundleName = "Vendor";
 						runWebpackAndCallback(configPath, watchFiles, bundleName, done);
 					},
 					(done) => {
 						const webpackConfigs = [
 							{
-								configPath: require.resolve("./build/webpack/webpack.assets"),
-								prettyName: "Assets",
-								watch: watchFiles,
-							},
-							{
-								configPath: require.resolve("./build/webpack/webpack.adapters"),
+								configPath: require.resolve("./webpack/webpack.adapters"),
 								prettyName: "Adapters",
 								watch: watchFiles,
 							},
 							{
-								configPath: require.resolve("./build/webpack/webpack.preloads.js"),
+								configPath: require.resolve("./webpack/webpack.preloads.js"),
 								prettyName: "Preloads",
 								watch: watchFiles,
 							},
 							{
-								configPath: require.resolve("./build/webpack/webpack.titleBar.js"),
+								configPath: require.resolve("./webpack/webpack.titleBar.js"),
 								prettyName: "Titlebar",
 								watch: watchFiles,
 							},
 							{
-								configPath: require.resolve("./build/webpack/webpack.services.js"),
+								configPath: require.resolve("./webpack/webpack.services.js"),
 								prettyName: "Custom Services",
 								watch: watchFiles,
 							},
 							{
-								configPath: require.resolve("./build/webpack/webpack.components.js"),
+								configPath: require.resolve("./webpack/webpack.components.js"),
 								prettyName: "Components",
 								watch: watchFiles,
 							},
@@ -188,10 +185,12 @@
 			shell.rm("-rf", taskMethods.distPath);
 			shell.rm("-rf", ".babel_cache");
 			shell.rm("-rf", "finsemble");
-			shell.rm("-rf", path.join(__dirname, "build/webpack/vendor-manifest.json"));
+			shell.rm("-rf", path.join(__dirname, "webpack/vendor-manifest.json"));
 			shell.rm("-rf", ".webpack-file-cache");
 			shell.rm("-rf", "installer-tmp");
 			shell.rm("-rf", "finsemble");
+			shell.rm("-rf", "public/build");
+			shell.rm("-rf", "pkg");
 			done();
 		},
 		checkSymbolicLinks: (done) => {
@@ -294,9 +293,37 @@
 		"dev:noLaunch": (done) => {
 			async.series([taskMethods["build:dev"], taskMethods.startServer], done);
 		},
+		/**
+		 * Builds the application and then launches FEA in jumpstart mode. In the future
+		 * the launching should be directly from the electron-adapter directory but that
+		 * would currently be complex due to the need to catch webpack compile events from
+		 * another process.
+		 */
+		jumpstart: (done) => {
+			const startFEA = (doneFEA) => {
+				const handleElectronClose = () => {
+					if (isMacOrNix) treeKill(process.pid);
+					else process.exit(0);
+				};
 
+				let config = {
+					onElectronClose: handleElectronClose,
+					args: ["--desktopProjectDevMode"],
+				};
+
+				// Use `yarn jumpstart --reset` to copy the seed over the current default project
+				const args = parseArgs(process.argv);
+				if (args["reset"]) config.args.push("--reset-default-project");
+				if (args["update"]) config.args.push("--update-project-from-template");
+				const envargs = taskMethods.startupConfig[environment]["args"];
+				if (envargs) config.args = config.args.concat(envargs);
+
+				FEA.e2oLauncher(config, doneFEA);
+			};
+			async.series([taskMethods.setDevEnvironment, taskMethods.build], startFEA, done);
+		},
 		launchElectron: (done) => {
-			const cfg = taskMethods.startupConfig[env.NODE_ENV];
+			const cfg = taskMethods.startupConfig[environment];
 
 			/**
 			 * handleElectronClose() gets called when Electron is closed, in other words when the user quits Finsemble from the file menu or some other way.
@@ -326,7 +353,7 @@
 			};
 
 			// Copy any command line args from server-environment-startup.json
-			config.args = taskMethods.startupConfig[env.NODE_ENV]["args"];
+			config.args = taskMethods.startupConfig[environment]["args"];
 
 			if (!FEA) {
 				console.error("Could not launch ");
@@ -336,16 +363,25 @@
 			return FEA.e2oLauncher(config, done);
 		},
 		makeInstaller: async (done) => {
-			if (!env.NODE_ENV) throw new Error("NODE_ENV must be set to generate an installer.");
 			function resolveRelativePaths(obj, properties, rootPath) {
 				properties.forEach((prop) => {
-					obj[prop] = path.resolve(rootPath, obj[prop]);
+					if (obj[prop]) {
+						obj[prop] = path.resolve(rootPath, obj[prop]);
+					} else {
+						console.warn(
+							`Path for property '${prop}' was not resolved as it did not exist in the installer configuration.\nInstaller configuration: ${JSON.stringify(
+								obj,
+								null,
+								2
+							)}`
+						);
+					}
 				});
 				return obj;
 			}
 
 			// Inline require because this file is so large, it reduces the amount of scrolling the user has to do.
-			let installerConfig = require("./configs/other/installer.json");
+			let installerConfig = require("./public/configs/other/installer.json");
 			let seedpackagejson = require("./package.json");
 			// Command line overrides
 
@@ -355,8 +391,8 @@
 			installerConfig.description = process.env.installerdescription || installerConfig.description;
 
 			//check if we have an installer config matching the environment name, if not assume we just have a single config for all environments
-			if (installerConfig[env.NODE_ENV]) {
-				installerConfig = installerConfig[env.NODE_ENV];
+			if (installerConfig[environment]) {
+				installerConfig = installerConfig[environment];
 			}
 
 			if (installerConfig.certificateFile && !installerConfig.certificatePassword) {
@@ -376,15 +412,15 @@
 			// need absolute paths for certain installer configs
 			installerConfig = resolveRelativePaths(installerConfig, ["icon", "macIcon", "background"], "./");
 
-			const manifestUrl = process.env.manifesturl || taskMethods.startupConfig[env.NODE_ENV].serverConfig;
+			const manifestUrl = process.env.manifesturl || taskMethods.startupConfig[environment].serverConfig;
 			console.log("The manifest location is: ", manifestUrl);
-			let { updateUrl } = taskMethods.startupConfig[env.NODE_ENV];
-			const { chromiumFlags } = taskMethods.startupConfig[env.NODE_ENV];
+			let { updateUrl } = taskMethods.startupConfig[environment];
+			const { chromiumFlags } = taskMethods.startupConfig[environment];
 
 			// Installer won't work without a proper manifest. Throw a helpful error.
 			if (!manifestUrl) {
 				throw new Error(
-					`Installer misconfigured. No property in 'serverConfig' in configs/other/server-environment-startup.json under ${env.NODE_ENV}. This is required in order to generate the proper config.`
+					`Installer misconfigured. No property in 'serverConfig' in configs/other/server-environment-startup.json under ${environment}. This is required in order to generate the proper config.`
 				);
 			}
 
@@ -392,7 +428,7 @@
 			if (manifestUrl.includes("localhost")) {
 				logToTerminal(
 					`>>>> WARNING: Installer is pointing to a manifest hosted at ${manifestUrl}. Was this accidental?
-				NODE_ENV: ${env.NODE_ENV}`,
+				environment (e.g. NODE_ENV) == ${environment}`,
 					"yellow"
 				);
 			}
@@ -400,7 +436,7 @@
 			// UpdateURL isn't required, but we let them know in case they're expecting it to work.
 			if (!updateUrl) {
 				logToTerminal(
-					`[Info] Did not find 'updateUrl' in configs/other/server-environment-startup.json under ${env.NODE_ENV}. The application will still work, but it will not update itself with new versions of the finsemble-electron-adapter.`,
+					`[Info] Did not find 'updateUrl' in configs/other/server-environment-startup.json under ${environment}. The application will still work, but it will not update itself with new versions of the finsemble-electron-adapter.`,
 					"white"
 				);
 				updateUrl = null;
@@ -484,61 +520,25 @@
 		"server:prod": (done) => {
 			async.series([taskMethods.setProdEnvironment, taskMethods.startServer], done);
 		},
-		/**
-		 * Starts the server.
-		 *
-		 * @param {function} done Function called when execution has completed.
-		 */
-		startServer: (done) => {
-			const serverPath = path.join(__dirname, "server", "server.js");
-
-			serverProcess = spawn(
-				"node",
-				[
-					serverPath,
-					{
-						stdio: "inherit",
-					},
-				],
-				{
-					env: env,
-					stdio: [process.stdin, process.stdout, "pipe", "ipc"],
-				}
-			);
-
-			serverProcess.on("message", (data) => {
-				if (!data || !data.action) {
-					console.log("Unproperly formatted message from server:", data);
-					return;
-				}
-				if (data.action === "serverStarted") {
-					done();
-				} else if (data.action === "serverFailed") {
-					process.exit(1);
-				} else if (data.action === "timestamp") {
-					// The server process can send timestamps back to us. We will output the results here.
-					let duration = (data.timestamp - launchTimestamp) / 1000;
-					logToTerminal(`${data.milestone} ${duration}s after launch`);
-				} else {
-					console.log("Unhandled message from server: ", data);
-				}
+		startServer: async (done) => {
+			const root = path.join(__dirname, "public");
+			const port = process.env.PORT ? parseInt(process.env.PORT) : 3375;
+			logToTerminal(`Serving files from directory ${root}`, "white");
+			const { server, app } = await FEA.Server.start({ root, port });
+			logToTerminal(`Listening on port ${port}`, "white");
+			server.on("error", (err) => {
+				console.log(err.message);
 			});
-
-			serverProcess.on("exit", (code) => logToTerminal(`Server closed: exit code ${code}`, "magenta"));
-
-			// Prints server errors to your terminal.
-			serverProcess.stderr.on("data", (data) => {
-				console.error(`ERROR: ${data}`);
-			});
+			if (done) done();
 		},
 
 		setDevEnvironment: (done) => {
-			process.env.NODE_ENV = "development";
+			process.env.NODE_ENV = environment = "development";
 			done();
 		},
 
 		setProdEnvironment: (done) => {
-			process.env.NODE_ENV = "production";
+			process.env.NODE_ENV = environment = "production";
 			done();
 		},
 	};

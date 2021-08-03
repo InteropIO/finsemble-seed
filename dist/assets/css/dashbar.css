@@ -1,0 +1,63 @@
+.finsemble-dashbar {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	overflow: hidden;
+}
+
+.finsemble-dashbar .cq-drag.finsemble-toolbar-drag-handle {
+	display: flex;
+	align-items: center;
+}
+
+.finsemble-dashbar .cq-drag.finsemble-toolbar-drag-handle-native-movement {
+	display: flex;
+	align-items: center;
+}
+
+.finsemble-dashbar-section {
+	display: flex;
+	flex-direction: row;
+}
+
+.finsemble-dashbar-section.rearrange-region {
+	cursor: pointer;
+}
+
+.finsemble-dashbar-item {
+	pointer-events: auto;
+}
+
+.finsemble-dashbar-item-pointer-disable {
+	pointer-events: none;
+}
+
+.dashbar-item-frame {
+	display: flex;
+	flex-direction: column;
+}
+
+.dashbar-item-frame span {
+	display: flex;
+	width: 100%;
+	justify-content: center;
+	color: var(--content-header-font-color);
+	font-weight: var(--toolbar-font-weight);
+	font-size: var(--toolbar-font-size);
+}
+
+.add-dashbar-item-button {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100px;
+	height: auto;
+	border: 1px solid white;
+	cursor: pointer;
+	margin: 0 10px 0 10px;
+}
+
+.add-dashbar-item-button span {
+	padding: 10px;
+	cursor: pointer;
+}

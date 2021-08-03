@@ -1,0 +1,85 @@
+{
+    "comment": "Excel Integration Component",
+    "$schema": "../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/componentsFile.schema.json",
+    "components": {
+        "ExcelDialog": {
+            "window": {
+                "url": "$applicationRoot/components/ExcelDialog/ExcelDialog.html",
+                "options": {
+                    "resizable": true,
+                    "autoShow": true,
+                    "alwaysOnTop": false
+                },
+                "width": 400,
+                "height": 600
+            },
+            "component": {
+                "preload": ["$applicationRoot/services/OfficeAddin/OfficeAddinClientPreload.ts.js"],
+                "spawnOnStartup": false
+            },
+            "foreign": {
+                "services": {
+                    "windowService": {
+                        "manageWindowMovement": true,
+                        "allowAutoArrange": true,
+                        "allowSnapping": true,
+                        "allowTabbing": true,
+                        "allowTiling": true,
+                        "allowGrouping": true,
+                        "allowMinimize": true
+                    },
+                    "workspace": {}
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": true
+                    },
+                    "Window Manager": {
+                        "alwaysOnTopIcon": true,
+                        "title": "ExcelDialog",
+                        "persistWindowState": true
+                    }
+                }
+            }
+        },
+        "Excel": {
+            "window": {
+				"windowType": "assimilation",
+                "path": "C:\\Program Files\\Microsoft Office\\root\\Office16\\EXCEL.exe",
+				"defaultHeight": 600,
+				"options": {
+                    "autoShow": true
+				},
+				"showTaskbarIcon": false,
+				"contextMenu": true,
+                "addToWorkspace": true,
+                "windowTitleWhiteList": ".*(Excel).*",
+		        "windowTitleBlackList": "Opening.*"
+			},
+            "foreign": {
+                "services": {
+                    "windowService": {
+                        "manageWindowMovement": true,
+                        "allowAutoArrange": true,
+                        "allowSnapping": true,
+                        "allowTabbing": true,
+                        "allowTiling": true,
+                        "allowGrouping": true,
+                        "allowMinimize": true
+                    },
+                    "workspace": {}
+                },
+                "components": {
+                    "App Launcher": {
+                        "launchableByUser": false
+                    },
+                    "Window Manager": {
+                        "alwaysOnTopIcon": true,
+                        "title": "Excel",
+                        "persistWindowState": true
+                    }
+                }
+            }
+        }
+    }
+}

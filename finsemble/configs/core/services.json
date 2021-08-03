@@ -1,0 +1,191 @@
+{
+	"$schema": "../schemas/fileBasedSchemas/servicesFile.schema.json",
+	"services": {
+		"workspaceService": {
+			"bootParams": {
+				"stage": "preuser",
+				"stopOnFailure": false,
+				"autoStart": true,
+				"timeout": 10000,
+				"dependencies": ["loadUserDefinedComponentsTask", "loadFDC3InstalledComponentsTask", "assimilationService"]
+			},
+			"spawnAs": "window",
+			"name": "workspaceService",
+			"html": "$servicesRoot/workspace/workspace.html",
+			"file": "$servicesRoot/workspace/workspaceService.js",
+			"category": "system"
+		},
+		"storageService": {
+			"bootParams": {
+				"stage": "kernel",
+				"dependencies": ["testTask_initializeSplinterAgentPool"]
+			},
+			"spawnAs": "window",
+			"name": "storageService",
+			"html": "$servicesRoot/storage/storage.html",
+			"file": "$servicesRoot/storage/storageService.js",
+			"category": "system"
+		},
+		"linkerService": {
+			"bootParams": {
+				"stage": "kernel",
+				"dependencies": ["windowService", "storageService"],
+				"stopOnFailure": false
+			},
+			"spawnAs": "window",
+			"name": "linkerService",
+			"html": "$servicesRoot/linker/linker.html",
+			"file": "$servicesRoot/linker/linkerService.js",
+			"category": "system",
+			"channels": [
+				{
+					"name": "group1",
+					"color": "#8781BD",
+					"border": "#797381"
+				},
+				{
+					"name": "group2",
+					"color": "#FFE035",
+					"border": "#FFD803"
+				},
+				{
+					"name": "group3",
+					"color": "#89D803",
+					"border": "#71CE47"
+				},
+				{
+					"name": "group4",
+					"color": "#FE6262",
+					"border": "#F83B3B"
+				},
+				{
+					"name": "group5",
+					"color": "#2DACFF",
+					"border": "#039BFF"
+				},
+				{
+					"name": "group6",
+					"color": "#FFA200",
+					"border": "#F29A01"
+				}
+			]
+		},
+		"searchService": {
+			"bootParams": {
+				"stage": "kernel",
+				"dependencies": ["windowService"],
+				"stopOnFailure": false
+			},
+			"spawnAs": "window",
+			"name": "searchService",
+			"html": "$servicesRoot/search/search.html",
+			"file": "$servicesRoot/search/searchService.js",
+			"category": "system"
+		},
+		"windowService": {
+			"bootParams": {
+				"stage": "kernel",
+				"dependencies": []
+			},
+			"spawnAs": "window",
+			"name": "windowService",
+			"html": "$servicesRoot/window/windowService.html",
+			"file": "$servicesRoot/window/windowService.js",
+			"config": {
+				"BUFFER_SIZE": 20,
+				"RESIZE_EVENT_THROTTLE_PERIOD": 0,
+				"MINIMUM_WIDTH": 98,
+				"MINIMUM_HEIGHT": 28,
+				"GROUP_MODE": {
+					"enabled": true,
+					"behavior": "explicit"
+				},
+				"DEBUG": true,
+				"ALLOW_GROUPS_TO_SNAP": true,
+				"SNAPPING_OPACITY": 0.8,
+				"groupTileBuffer": 30,
+				"headerHeight": 32,
+				"heartbeatResponseTimeoutDefaults": {
+					"min": 5000,
+					"max": 1800000,
+					"crashed": 60000,
+					"possiblyCrashed": 10000,
+					"notResponding": 5000
+				},
+				"enableWindowsAeroSnap": false,
+				"tabbing": {
+					"enabled": true
+				},
+				"tiling": {
+					"enabled": true
+				},
+				"claimSpace": {
+					"enabled": true,
+					"alwaysOnTop": false
+				}
+			},
+			"category": "system"
+		},
+		"authenticationService": {
+			"bootParams": {
+				"stage": "authentication",
+				"timeout": 36000000,
+				"dependencies": ["assimilationService"]
+			},
+			"spawnAs": "window",
+			"name": "authenticationService",
+			"html": "$servicesRoot/authentication/authentication.html",
+			"file": "$servicesRoot/authentication/authenticationService.js",
+			"category": "system"
+		},
+		"assimilationService": {
+			"bootParams": {
+				"stage": "kernel",
+				"dependencies": ["windowService", "storageService"],
+				"stopOnFailure": false
+			},
+			"spawnAs": "window",
+			"name": "assimilationService",
+			"html": "$servicesRoot/assimilation/assimilation.html",
+			"file": "$servicesRoot/assimilation/assimilationService.js",
+			"category": "system",
+			"config": {
+				"enabled": true,
+				"port": 8392,
+				"useFeaSpawn": false,
+				"throttle": 15,
+				"blacklist": [],
+				"whitelist": [],
+				"onlySpawned": true,
+				"focusDelay": 30,
+				"eventIgnore": 50,
+				"hotkeyTimeout": 60000,
+				"hideTitleBars": false
+			}
+		},
+		"hotkeysService": {
+			"bootParams": {
+				"stage": "preuser",
+				"dependencies": ["assimilationService"],
+				"stopOnFailure": false
+			},
+			"spawnAs": "window",
+			"name": "hotkeysService",
+			"html": "$servicesRoot/hotkeys/hotkeys.html",
+			"file": "$servicesRoot/hotkeys/hotkeysService.js",
+			"category": "system"
+		},
+		"notificationService": {
+			"bootParams": {
+				"stage": "preuser",
+				"stopOnFailure": false,
+				"dependencies": ["configService", "storageService"]
+			},
+			"spawnAs": "window",
+			"name": "notificationService",
+			"html": "$servicesRoot/notification/notification.html",
+			"file": "$servicesRoot/notification/notificationService.js",
+			"category": "system"
+		}
+	}
+}

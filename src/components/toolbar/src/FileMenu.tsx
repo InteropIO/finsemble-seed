@@ -1,5 +1,6 @@
 import React from "react";
 import { Menu } from "@finsemble/finsemble-ui/react/components/menu";
+import { ToolbarIcon } from "@finsemble/finsemble-ui/react/components/toolbar";
 import {
 	Preferences,
 	SystemLog,
@@ -10,17 +11,18 @@ import {
 	Quit,
 } from "@finsemble/finsemble-ui/react/components/system";
 
+// In the below Menu's image/icon, Date.now is added as a query string on the icon url to ensure the page is not cached
 export const FileMenu = () => (
 	<Menu
 		id="fileMenu"
-		title={<img className="finsemble-toolbar-brand-logo" src="../../assets/img/Finsemble_Taskbar_Icon.png" />}
+		title={
+			<ToolbarIcon className="finsemble-toolbar-brand-logo" src={`../../../assets/img/Finsemble_Toolbar_Icon.png`} />
+		}
 	>
 		<Preferences />
-		<SystemLog />
 		<CentralLogger />
 		<Documentation />
 		<Restart />
-		<Reset />
 		<Quit />
 		{/* To add your own items to the menu, import MenuItem from
 		 * "@finsemble/finsemble-ui/react/components" and add the following:

@@ -1,0 +1,23 @@
+/*!
+ * formElements.css
+ * Copyright 2017 - 2020 by ChartIQ, Inc.
+ * All rights reserved.
+ */
+
+.form-group {
+	/* display: flex; */
+	flex-direction: row;
+	margin: 16px 0px;
+	padding-right: 5px;
+	justify-content: center;
+}
+
+.form-group label {
+	padding-top: 7px;
+	flex: 0.4;
+}
+
+.form-group input,
+.form-group select {
+	flex: 0.65;
+}

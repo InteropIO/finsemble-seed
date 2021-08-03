@@ -1,0 +1,205 @@
+{
+	"$schema": "../schemas/fileBasedSchemas/coreConfigFile.schema.json",
+	"bootTasks": {
+		"initializeDeepLinkingTask": {
+			"bootParams": {
+				"stage": "microkernel"
+			}
+		},
+		"initializeRouterTask": {
+			"bootParams": {
+				"stage": "microkernel",
+				"dependencies": ["initializeDeepLinkingTask"]
+			}
+		},
+		"initializeFinsemblePubsubTask": {
+			"bootParams": {
+				"stage": "microkernel",
+				"dependencies": ["initializeRouterTask"]
+			}
+		},
+		"initializeSystemStateHandersTask": {
+			"bootParams": {
+				"stage": "microkernel",
+				"dependencies": ["initializeRouterTask"]
+			}
+		},
+		"updateServiceLauncherConfigTask": {
+			"bootParams": {
+				"stage": "microkernel",
+				"dependencies": ["configService"]
+			}
+		},
+		"testTask_initializeSplinterAgentPool": {
+			"bootParams": {
+				"stage": "kernel"
+			}
+		},
+		"waitForUpdateDownloadTask": {
+			"bootParams": {
+				"stage": "kernel",
+				"dependencies": ["configService"],
+				"timeout": 300000
+			}
+		},
+		"waitForAuthenticatedTask": {
+			"bootParams": {
+				"stage": "authentication",
+				"dependencies": ["authenticationService"],
+				"timeout": 36000000
+			}
+		},
+		"initializeSystemManagerAPITask": {
+			"bootParams": {
+				"stage": "microkernel",
+				"dependencies": ["initializeRouterTask"]
+			}
+		},
+		"startLoggerTask": {
+			"bootParams": {
+				"stage": "microkernel",
+				"dependencies": ["loggerService"]
+			}
+		},
+		"loadUserDefinedComponentsTask": {
+			"bootParams": {
+				"stage": "preuser",
+				"stopOnFailure": false,
+				"autoStart": true
+			}
+		},
+		"loadFDC3InstalledComponentsTask": {
+			"bootParams": {
+				"stage": "preuser",
+				"stopOnFailure": false,
+				"autoStart": true
+			}
+		},
+		"loadSystemTrayIconTask": {
+			"bootParams": {
+				"stage": "user",
+				"stopOnFailure": false,
+				"autoStart": true
+			}
+		},
+		"registerHotkeysTask": {
+			"bootParams": {
+				"stage": "user",
+				"stopOnFailure": false,
+				"autoStart": true
+			}
+		},
+		"setupSearchLauncherTask": {
+			"bootParams": {
+				"stage": "user",
+				"stopOnFailure": false,
+				"autoStart": true
+			}
+		},
+		"checkForScheduledRestartTask": {
+			"bootParams": {
+				"stage": "user",
+				"stopOnFailure": false,
+				"autoStart": true
+			}
+		},
+		"hideSplashScreenTask": {
+			"bootParams": {
+				"stage": "user",
+				"stopOnFailure": false,
+				"autoStart": true
+			}
+		}
+	},
+	"system": {
+		"FSBLVersion": "5.4.1",
+		"gitHash": "265d5a8eb1ea5a66951dba65e37c7bd85c4283c1",
+		"finsembleLibraryPath": "$moduleRoot/FSBL.js",
+		"premiumRoot": "$moduleRoot",
+		"systemTrayIcon": "$moduleRoot/assets/img/Finsemble_SystemTray_Icon.png",
+		"addFSBLWrappers": false,
+		"saveLogToFileOnShutDown": false,
+		"scheduledRestart": false,
+		"isolateCrossDomainComponents": true,
+		"requiredServicesConfig": {
+			"routerService": {
+				"bootParams": {
+					"stage": "microkernel",
+					"autoStart": false
+				},
+				"spawnAs": "process",
+				"name": "routerService",
+				"html": "$servicesRoot/router/router.html",
+				"file": "$servicesRoot/router/routerService.js"
+			},
+			"loggerService": {
+				"bootParams": {
+					"stage": "microkernel",
+					"dependencies": ["initializeSystemStateHandersTask"]
+				},
+				"spawnAs": "window",
+				"frame": true,
+				"window": {
+					"defaultWidth": 1400,
+					"defaultHeight": 900,
+					"accelerator": {
+						"zoom": true,
+						"reload": true,
+						"devtools": true
+					},
+					"contextMenu": false
+				},
+				"name": "loggerService",
+				"html": "$servicesRoot/logger/logger.html",
+				"file": "$servicesRoot/logger/loggerService.js",
+				"showWarningForLogStates": ["Info", "Debug", "Verbose"],
+				"defaultClientLogLevels": {
+					"Error": true,
+					"Warn": true,
+					"Info": false,
+					"Log": true,
+					"Debug": false,
+					"Verbose": false,
+					"LocalOnly": false
+				}
+			},
+			"dataStoreService": {
+				"bootParams": {
+					"stage": "microkernel",
+					"dependencies": ["loggerService"]
+				},
+				"spawnAs": "window",
+				"name": "dataStoreService",
+				"html": "$servicesRoot/dataStore/dataStore.html",
+				"file": "$servicesRoot/dataStore/dataStoreService.js"
+			},
+			"configService": {
+				"bootParams": {
+					"stage": "microkernel",
+					"dependencies": ["dataStoreService"]
+				},
+				"spawnAs": "window",
+				"changeApplicationStateBeforeLoad": "configuring",
+				"changeApplicationStateAfterLoad": "initializing",
+				"name": "configService",
+				"html": "$servicesRoot/config/config.html",
+				"file": "$servicesRoot/config/configService.js"
+			}
+		}
+	},
+	"servicesRoot": "$moduleRoot/services",
+	"thirdPartyRoot": "$moduleRoot/thirdParty",
+	"configVersion": "5.0.0",
+	"workspaceTemplates": {
+		"Blank Template": {
+			"name": "Blank Template",
+			"description": "Empty workspace template.",
+			"windows": [],
+			"groups": {},
+			"windowData": []
+		}
+	},
+	"betaFeatures": {},
+	"deprecatedConfig": [],
+	"importConfig": ["$moduleRoot/configs/core/services.json", "$moduleRoot/configs/core/securityPolicies.json"]
+}

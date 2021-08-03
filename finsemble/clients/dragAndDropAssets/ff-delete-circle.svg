@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>ff-delete-circle</title>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="ff-delete-circle" fill="#FFFFFF" fill-rule="nonzero">
+            <path d="M8.8,15.8 C8.6,15.8 8.4,15.7 8.3,15.6 C8,15.3 8,14.8 8.3,14.5 L14.4,8.3 C14.7,8 15.2,8 15.5,8.3 C15.8,8.6 15.8,9.1 15.5,9.4 L9.4,15.6 C9.2,15.7 9,15.8 8.8,15.8" id="Path"></path>
+            <path d="M14.9,15.8 C14.7,15.8 14.5,15.7 14.4,15.6 L8.3,9.4 C8,9.1 8,8.6 8.3,8.3 C8.6,8 9.1,8 9.4,8.3 L15.5,14.5 C15.8,14.8 15.8,15.3 15.5,15.6 C15.3,15.7 15.1,15.8 14.9,15.8" id="Path"></path>
+            <path d="M11.6,1.6 C6.1,1.6 1.6,6.2 1.6,11.7 C1.6,17.3 6.1,21.8 11.6,21.8 C17.1,21.8 21.6,17.2 21.6,11.7 C21.6,6.1 17.1,1.6 11.6,1.6 Z M11.6,23.4 C5.2,23.4 0,18.1 0,11.7 C0,5.3 5.2,0 11.6,0 C18,0 23.2,5.2 23.2,11.7 C23.2,18.2 17.9,23.4 11.6,23.4 L11.6,23.4 Z" id="Shape"></path>
+        </g>
+    </g>
+</svg>
