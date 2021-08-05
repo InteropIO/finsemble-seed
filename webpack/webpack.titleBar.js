@@ -12,7 +12,7 @@ const entries = {
 	"components/windowTitleBar/WindowTitleBar": "./src/components/windowTitleBar/windowTitleBarLoader.js",
 };
 
-let webpackConfig = generateDefaultConfig();
+let webpackConfig = generateDefaultConfig("titlebar");
 webpackConfig.entry = entries;
 
 module.exports = webpackConfig;
