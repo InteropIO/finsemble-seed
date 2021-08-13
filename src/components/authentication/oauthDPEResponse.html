@@ -18,8 +18,8 @@
 		<script>
 			/** Class for handling oAuth returns */
 			class HandleOauth {
-				constructor(dpeEnabled) {
-					this.dpeEnabled = dpeEnabled;
+				constructor(sddEnabled) {
+					this.sddEnabled = sddEnabled;
 				}
 
 				/**
@@ -33,9 +33,9 @@
 				closeThisWindow() {
 					FSBL.Clients.AuthenticationClient.getCurrentCredentials((err, credentials) => {
 						// On close, shutdown finsemble if authentication wasn't completed or successful
-						// Unless we're in DPE mode, in which case this window is an auth config dry-run test
+						// Unless we're in SDD mode, in which case this window is an auth config dry-run test
 
-						if (!this.dpeEnabled && !credentials) {
+						if (!this.sddEnabled && !credentials) {
 							FSBL.shutdownApplication();
 						} else {
 							FSBL.Clients.WindowClient.getCurrentWindow().close();
@@ -51,8 +51,8 @@
 				showError(reason) {
 					document.querySelector("#error").innerHTML = `Oauth Failed: ${reason}`;
 
-					if (this.dpeEnabled) {
-						FSBL.Clients.RouterClient.transmit("DPE-Auth-Test-Response", { err: reason });
+					if (this.sddEnabled) {
+						FSBL.Clients.RouterClient.transmit("SDD-Auth-Test-Response", { err: reason });
 						this.closeThisWindow();
 					}
 				}
@@ -72,12 +72,12 @@
 			}
 
 			function onReady() {
-				FSBL.Clients.DesktopProjectClient.isEnabled().then((dpeEnabled) => {
-					// check if Desktop Project Editor mode is currently enabled
+				FSBL.Clients.SmartDesktopClient.isEnabled().then((sddEnabled) => {
+					// check if Smart Desktop Designer mode is currently enabled
 					// if enabled, this window must be from test auth,
 					// so we report back and close it
 
-					const OauthClient = new HandleOauth(dpeEnabled);
+					const OauthClient = new HandleOauth(sddEnabled);
 
 					// store on Window so preloads/authentication has access to this info
 					window.authCompleted = false;
@@ -92,8 +92,8 @@
 						}
 					});
 
-					if (dpeEnabled) {
-						FSBL.Clients.RouterClient.transmit("DPE-Auth-Test-Response", { err: null });
+					if (sddEnabled) {
+						FSBL.Clients.RouterClient.transmit("SDD-Auth-Test-Response", { err: null });
 
 						OauthClient.closeThisWindow();
 					} else {

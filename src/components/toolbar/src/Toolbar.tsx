@@ -25,6 +25,7 @@ import { FileMenu } from "./FileMenu";
 import { useHotkey } from "@finsemble/finsemble-ui/react/hooks/useHotkey";
 import "@finsemble/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../../public/assets/css/theme.css";
+import { DashbarView } from "@finsemble/finsemble-ui/react/types/dashbarTypes";
 
 /**
  * Note: Set `FSBL.debug = true` if you need to reload the toolbar during development.
@@ -64,10 +65,28 @@ const Toolbar = () => {
 	);
 };
 
+const handleWidgetTitleClick = (widget: DashbarView) => {
+	if (widget.raiseIntentOptions) {
+		FSBL.Interop.raiseIntent(
+			widget.raiseIntentOptions.intent,
+			widget.raiseIntentOptions.context,
+			widget.raiseIntentOptions.targetApp
+		);
+	}
+};
+
+const widgetTitleGenerator = (widget: DashbarView, titleRef: React.MutableRefObject<null>) => {
+	return (
+		<div ref={titleRef} onClick={() => handleWidgetTitleClick(widget)}>
+			<span dangerouslySetInnerHTML={{ __html: widget.title }}></span>
+		</div>
+	);
+};
+
 ReactDOM.render(
 	<FinsembleProvider>
 		<Toolbar />
-		<Dashbar />
+		<Dashbar widgetTitleGenerator={widgetTitleGenerator} />
 	</FinsembleProvider>,
 	document.getElementById("Toolbar-tsx")
 );
