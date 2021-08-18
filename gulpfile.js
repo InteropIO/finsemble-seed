@@ -308,7 +308,7 @@
 
 				let config = {
 					onElectronClose: handleElectronClose,
-					args: ["--desktopProjectDevMode"],
+					args: ["--smartDesktopDevMode"],
 				};
 
 				// Use `yarn jumpstart --reset` to copy the seed over the current default project

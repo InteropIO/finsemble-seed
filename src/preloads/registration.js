@@ -30,6 +30,7 @@ const registrationHandler = () => {
 
 // Wait briefly for page to render before looking for the submit button
 setTimeout(() => {
+	// Add registration handler to submit button. Need to add this to trigger another registration check after submit
 	const buttons = document.getElementsByTagName("button");
 	if (buttons.length == 1) {
 		buttons[0].onclick = () => {
@@ -38,16 +39,18 @@ setTimeout(() => {
 		};
 	}
 
+	// Add close button
 	const buttonRowDiv = document.getElementsByClassName("hs-form__actions")[0];
+	if (buttonRowDiv !== null) {
+		const nbsp = document.createTextNode("\u00A0");
+		buttonRowDiv.appendChild(nbsp);
 
-	const nbsp = document.createTextNode("\u00A0");
-	buttonRowDiv.appendChild(nbsp);
-
-	const closeButton = document.createElement("button");
-	closeButton.setAttribute("class", "hs-form__actions__submit");
-	closeButton.appendChild(document.createTextNode("Close"));
-	closeButton.onclick = () => FSBL.System.exit();
-	buttonRowDiv.appendChild(closeButton);
+		const closeButton = document.createElement("button");
+		closeButton.setAttribute("class", "hs-form__actions__submit");
+		closeButton.appendChild(document.createTextNode("Close"));
+		closeButton.onclick = () => FSBL.System.exit();
+		buttonRowDiv.appendChild(closeButton);
+	}
 }, 500);
 
 // Startup pattern for preload. Preloads can come in any order, so we need to wait on either the window event or the

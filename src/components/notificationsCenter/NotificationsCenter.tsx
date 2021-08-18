@@ -9,9 +9,15 @@ import { NotificationsCenter } from "@finsemble/finsemble-ui/react/components/no
 import "@finsemble/finsemble-ui/react/assets/css/finsemble.css";
 import "../../../public/assets/css/theme.css";
 
+// Example custom notification card import
+// import {CustomNotificationCard, CustomNotificationCenterRow} from "./CustomNotificationComponentsExample";
+
 ReactDOM.render(
 	<FinsembleProvider>
-		<NotificationsCenter />
+		<NotificationsCenter
+		// notificationCard={CustomNotificationCard}
+		// notificationListRow={CustomNotificationCenterRow}
+		/>
 	</FinsembleProvider>,
 	document.getElementById("notifications-center")
 );

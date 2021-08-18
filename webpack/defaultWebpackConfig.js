@@ -1,8 +1,9 @@
 const path = require("path");
-const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
-const { DefinePlugin } = require("webpack");
-const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const CaseSensitivePathsPlugin = require("case-sensitive-paths-webpack-plugin");
+const { DefinePlugin } = require("webpack");
+// Uncomment this line to check the size of bundles
+//const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
+
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
 
 /**
@@ -54,6 +55,23 @@ const IMAGE_AND_FONT_RULE = {
 	},
 };
 
+const SVG_RULE = {
+	test: /\.svg$/,
+	use: [
+		{
+			loader: "@svgr/webpack",
+			options: {
+				svgoConfig: {
+					plugins: {
+						removeViewBox: false,
+					},
+				},
+			},
+		},
+		"file-loader",
+	],
+};
+
 /**
  * This is a rule for compiling JSX files using babel.
  */
@@ -63,26 +81,17 @@ const JSX_RULE = {
 	use: {
 		loader: "babel-loader",
 		options: {
-			cacheDirectory: ".webpack-file-cache",
 			presets: [
 				[
 					"@babel/preset-env",
 					{
 						targets: {
-							browsers: "Chrome 70",
+							browsers: "Chrome 85",
 						},
 						modules: "commonjs",
 					},
 				],
 				"@babel/preset-react",
-			],
-			plugins: [
-				"babel-plugin-add-module-exports",
-				"@babel/plugin-proposal-export-default-from",
-				"@babel/plugin-transform-modules-commonjs",
-				"@babel/plugin-proposal-class-properties",
-				["@babel/plugin-proposal-decorators", { decoratorsBeforeExport: false }],
-				["@babel/plugin-transform-runtime", { regenerator: true }],
 			],
 		},
 	},
@@ -122,21 +131,6 @@ let plugins = [
 ];
 
 /**
- * HardSourceWebpackPlugin is currently not working correctly on Mac when using non-default cache folder.
- * https://github.com/mzgoddard/hard-source-webpack-plugin/issues/456
- */
-if (process.platform !== "darwin") {
-	plugins.push(
-		new HardSourceWebpackPlugin({
-			info: {
-				level: "warn",
-			},
-			cacheDirectory: "../.webpack-file-cache/[confighash]",
-		})
-	);
-}
-
-/**
  * Uncomment this plugin if you want to analyze bundle size. Separate tabs should open in chrome browser for each webpack script.
  */
 //plugins.push(new BundleAnalyzerPlugin({ analyzerMode: "static" }));
@@ -156,13 +150,28 @@ const aliases = {
 	"react-dom": path.resolve("./node_modules/react-dom"),
 };
 
-const generateDefaultConfig = () => {
+let counter = 0;
+
+const generateDefaultConfig = (name) => {
+	counter = counter + 1;
 	return {
 		devtool: env === "production" ? "source-map" : "eval-source-map",
 		entry: {},
+		cache: {
+			type: "filesystem",
+			cacheDirectory: path.resolve(__dirname, `../.webpack-file-cache/${env}`),
+			name: name || `cache.${counter}`,
+		},
+		snapshot: {
+			/**
+			 * This is necessary so that webpack watches @finsemble node_modules for channges.
+			 * Without this, the build/finsemble directory will not be copied on symlink updates.
+			 */
+			managedPaths: [],
+		},
 		stats: "minimal",
 		module: {
-			rules: [CSS_RULE, IMAGE_AND_FONT_RULE, JSX_RULE, TSX_RULE, SOURCE_MAPS_RULE],
+			rules: [CSS_RULE, SVG_RULE, IMAGE_AND_FONT_RULE, JSX_RULE, TSX_RULE, SOURCE_MAPS_RULE],
 		},
 		mode: env,
 		plugins: plugins,
@@ -171,8 +180,10 @@ const generateDefaultConfig = () => {
 		},
 		output: {
 			filename: "[name].js",
-			sourceMapFilename: "[name].map.js",
 			path: path.resolve(__dirname, "../public/build/"),
+			// Without this line WP5 gives an error "automatic publicpath is not supported in this browser" when
+			// trying to preload windowTitleBar.js into a window.open. It's not clear why the publicPath from file-loader isn't enough.
+			publicPath: "../../assets/file-loader",
 		},
 		resolve: {
 			alias: aliases,
