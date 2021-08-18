@@ -95,7 +95,7 @@ for (let key in componentsToBuild) {
 }
 
 // Set up an actual webpack config object. Start with a default that we've set up, then add our entries
-let webpackConfig = generateDefaultConfig();
+let webpackConfig = generateDefaultConfig("components");
 webpackConfig.entry = entries;
 
 /**

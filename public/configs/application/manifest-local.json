@@ -6,7 +6,6 @@
 		"uuid": "Finsemble",
 		"requireHandshake": true
 	},
-	"splashScreenImage": "../../assets/img/FinsembleSplash.png",
 	"splashScreenTimeout": 3000,
 	"appAssets": [
 		{

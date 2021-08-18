@@ -24,7 +24,7 @@ if (Object.keys(entry).length === 0) {
 	return (module.exports = null); //If we don't have services there is no need to create an entry json
 }
 
-let config = generateDefaultConfig();
+let config = generateDefaultConfig("services");
 config.entry = entry;
 config.plugins.push(
 	new CopyWebpackPlugin({

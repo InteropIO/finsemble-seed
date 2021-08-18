@@ -7,7 +7,7 @@ for (let key in adaptersToBuild) {
 	entries[component.output] = component.entry;
 }
 
-let webpackConfig = generateDefaultConfig();
+let webpackConfig = generateDefaultConfig("adapters");
 webpackConfig.entry = entries;
 
 module.exports = webpackConfig;

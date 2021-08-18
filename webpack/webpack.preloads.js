@@ -7,7 +7,7 @@ for (let key in preloadsToBuild) {
 	entries[component.output] = component.entry;
 }
 
-let webpackConfig = generateDefaultConfig();
+let webpackConfig = generateDefaultConfig("preloads");
 webpackConfig.entry = entries;
 
 module.exports = webpackConfig;

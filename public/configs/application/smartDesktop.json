@@ -1,9 +1,9 @@
 {
-	"comment": "This json file is added to the manifest by FEA, only when running in desktopProject mode. Note, these apps will not appear in the DPE!",
+	"comment": "This json file is added to the manifest by FEA, only when running in smartDesktop mode. Note, these apps will not appear in the SDD!",
 	"components": {
-		"desktopProjectEditor": {
+		"smartDesktopDesigner": {
 			"window": {
-				"url": "$applicationRoot/components/desktopProjectEditor/desktopProjectEditor.html",
+				"url": "$applicationRoot/components/smartDesktopDesigner/smartDesktopDesigner.html",
 				"affinity": "workspaceComponents",
 				"options": {
 					"resizable": true,
@@ -17,10 +17,9 @@
 				"height": 700
 			},
 			"component": {
-				"displayName": "Desktop Project Editor",
+				"displayName": "Smart Desktop Designer",
 				"singleton": true,
-				"spawnOnStartup": false,
-				"injectTheme": false
+				"spawnOnStartup": false
 			},
 			"foreign": {
 				"services": {
@@ -38,7 +37,7 @@
 						"alwaysOnTopIcon": false,
 						"FSBLHeader": true,
 						"persistWindowState": true,
-						"title": "Desktop Project Editor"
+						"title": "Smart Desktop Designer"
 					},
 					"Toolbar": {
 						"iconClass": "ff-component"
@@ -57,7 +56,7 @@
 			"groups": {},
 			"windows": [
 				{
-					"componentType": "desktopProjectEditor"
+					"componentType": "smartDesktopDesigner"
 				}
 			]
 		}
